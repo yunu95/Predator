@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# 특별히 내부 파일들을 이그노어하고 싶지 않은 경우
+!Lib/
