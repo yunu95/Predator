@@ -1,0 +1,187 @@
+<mxfile host="app.diagrams.net" modified="2023-09-07T14:20:41.743Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Whale/3.22.205.14 Safari/537.36" etag="E_LPqdYZrTu_yZvyRwrO" version="21.7.2" type="device">
+  <diagram name="페이지-1" id="sd0D5KRdytbwOKLxfxHe">
+    <mxGraphModel dx="1983" dy="1093" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="EVI08XrI1tssHhHpUUFV-3" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="510" y="694" as="sourcePoint" />
+            <mxPoint x="510" y="40" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-4" value="김성찬" style="rounded=0;whiteSpace=wrap;html=1;fontSize=24;" vertex="1" parent="1">
+          <mxGeometry x="330" y="10" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-5" value="이윤우" style="rounded=0;whiteSpace=wrap;html=1;fontSize=24;" vertex="1" parent="1">
+          <mxGeometry x="570" y="10" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-6" value="김상준" style="rounded=0;whiteSpace=wrap;html=1;fontSize=24;" vertex="1" parent="1">
+          <mxGeometry x="770" y="10" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-7" value="박규현" style="rounded=0;whiteSpace=wrap;html=1;fontSize=24;" vertex="1" parent="1">
+          <mxGeometry x="995" y="10" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-8" value="&lt;h1&gt;개발 사이클 정립기간&lt;/h1&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="30" y="90" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-10" value="&lt;h1&gt;자기계발 기간&lt;/h1&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="20" y="960" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-11" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="940" y="674" as="sourcePoint" />
+            <mxPoint x="940" y="20" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-12" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="720" y="684" as="sourcePoint" />
+            <mxPoint x="720" y="30" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-13" value="&lt;span style=&quot;font-size: 18px;&quot;&gt;애자일 개발에 적합하게 JIRA 기능을 추려 정리&lt;br&gt;(일정관리 기능을 특히 자세히)&lt;br&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="745" y="110" width="170" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-14" value="&lt;span style=&quot;font-size: 18px;&quot;&gt;Jenkins - JIRA 연동&lt;br&gt;(깊은 이해 수반 필요 X)&lt;br&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="110" width="195" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-16" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="40" y="710" width="1170" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-9" value="&lt;h1&gt;프로토 타이핑 기간&lt;/h1&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="EVI08XrI1tssHhHpUUFV-16">
+          <mxGeometry y="4" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-15" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;" edge="1" parent="EVI08XrI1tssHhHpUUFV-16">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="260" as="sourcePoint" />
+            <mxPoint x="1150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-17" value="&lt;span style=&quot;font-size: 18px;&quot;&gt;Git -JIRA 연동&lt;br&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="970" y="120" width="170" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-18" value="" style="edgeStyle=elbowEdgeStyle;elbow=horizontal;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="EVI08XrI1tssHhHpUUFV-4" target="EVI08XrI1tssHhHpUUFV-14">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="440" as="sourcePoint" />
+            <mxPoint x="420" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-19" value="" style="edgeStyle=elbowEdgeStyle;elbow=horizontal;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="EVI08XrI1tssHhHpUUFV-5" target="EVI08XrI1tssHhHpUUFV-13">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="80" as="sourcePoint" />
+            <mxPoint x="400" y="120" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="630" y="110" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-20" value="" style="edgeStyle=elbowEdgeStyle;elbow=horizontal;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="EVI08XrI1tssHhHpUUFV-6" target="EVI08XrI1tssHhHpUUFV-13">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="640" y="80" as="sourcePoint" />
+            <mxPoint x="761" y="145" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-21" value="" style="edgeStyle=elbowEdgeStyle;elbow=horizontal;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="EVI08XrI1tssHhHpUUFV-7" target="EVI08XrI1tssHhHpUUFV-17">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="675" y="80" as="sourcePoint" />
+            <mxPoint x="790" y="155" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1055" y="110" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-23" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="EVI08XrI1tssHhHpUUFV-14" target="EVI08XrI1tssHhHpUUFV-13">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="440" as="sourcePoint" />
+            <mxPoint x="660" y="240" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="570" y="208" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-24" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.587;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="EVI08XrI1tssHhHpUUFV-13" target="EVI08XrI1tssHhHpUUFV-25">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="950" y="300" as="sourcePoint" />
+            <mxPoint x="780" y="290" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="820" y="260" />
+              <mxPoint x="830" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-25" value="&lt;span style=&quot;font-size: 18px;&quot;&gt;JIRA에 2024년 3월까지의 월별 일정 정리, &lt;br&gt;2023년 10월까지의 주별 일정 정리, &lt;br&gt;2023년 9월의 일별 일정 정리&lt;br&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="280" width="920" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-26" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.373;entryY=-0.03;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="EVI08XrI1tssHhHpUUFV-13" target="EVI08XrI1tssHhHpUUFV-25">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="840" y="250" as="sourcePoint" />
+            <mxPoint x="840" y="320" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="700" y="250" />
+              <mxPoint x="840" y="330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-27" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.832;entryY=-0.05;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="EVI08XrI1tssHhHpUUFV-17" target="EVI08XrI1tssHhHpUUFV-25">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="798" y="250" as="sourcePoint" />
+            <mxPoint x="1220" y="210" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1150" y="230" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-28" value="&lt;span style=&quot;font-size: 18px;&quot;&gt;Git과 Jenkins, JIRA가 모두 연동된 상태에서 개발의 한 사이클이 돌아가는지 검증&lt;br&gt;- 브랜치 생성, 브랜치 푸시 등의 Git 이벤트가 JIRA와 연동되는지 확인&lt;br&gt;- Jenkins가 잘 작동되는지 브랜치 풀 리퀘스트를 때려서 확인, 빌드 불가한 상태와 가능한 상태로 두번 커밋해 확인&lt;br&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="450" width="920" height="156" as="geometry" />
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-29" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;entryX=0.112;entryY=-0.001;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.112;exitY=1.013;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="EVI08XrI1tssHhHpUUFV-25" target="EVI08XrI1tssHhHpUUFV-28">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="389" y="380" as="sourcePoint" />
+            <mxPoint x="390.91999999999973" y="451.9559999999998" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="395.12" y="407.9" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-30" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1060" y="420" as="sourcePoint" />
+            <mxPoint x="1060" y="450" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1000" y="380" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-31" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;entryX=0.59;entryY=-0.021;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.59;exitY=0.974;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="EVI08XrI1tssHhHpUUFV-25" target="EVI08XrI1tssHhHpUUFV-28">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="820" y="370" as="sourcePoint" />
+            <mxPoint x="416" y="406" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="840" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-32" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=0.37;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.369;entryY=-0.028;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="EVI08XrI1tssHhHpUUFV-25" target="EVI08XrI1tssHhHpUUFV-28">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="424" y="371" as="sourcePoint" />
+            <mxPoint x="630" y="380" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="629" y="410" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EVI08XrI1tssHhHpUUFV-34" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=0.012;exitY=0.845;exitDx=0;exitDy=0;entryX=0.112;entryY=-0.016;entryDx=0;entryDy=0;entryPerimeter=0;exitPerimeter=0;" edge="1" parent="1" source="EVI08XrI1tssHhHpUUFV-13" target="EVI08XrI1tssHhHpUUFV-25">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="398" y="190" as="sourcePoint" />
+            <mxPoint x="755" y="218" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="580" y="218" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
