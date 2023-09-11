@@ -1,0 +1,26 @@
+\doxysection{\+\_\+\+Yunu\+GIObjects.\+h}
+\hypertarget{___yunu_g_i_objects_8h_source}{}\label{___yunu_g_i_objects_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}SingletonClass.h"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}YunuGraphicsInterface.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{using\ namespace\ }std;}
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace\ }yunutyEngine}
+\DoxyCodeLine{00008\ \{}
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keyword}{namespace\ }graphics}
+\DoxyCodeLine{00010\ \ \ \ \ \{}
+\DoxyCodeLine{00011\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classyunuty_engine_1_1graphics_1_1___yunu_g_i_objects}{\_YunuGIObjects}}\ :\ \textcolor{keyword}{public}\ SingletonClass<\_YunuGIObjects>}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \ \ \ \ yunuGI::GIPtr<yunuGI::I3DRenderer>\ renderer;}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ yunuGI::GIPtr<yunuGI::IFactory>\ factory;}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ yunuGI::GIPtr<yunuGI::IEventHandler>\ eventHandler;}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ yunuGI::GIPtr<yunuGI::IResourceManager>\ resourceManager;}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ LoadDll(\textcolor{keyword}{const}\ std::wstring\&\ dllFileName);}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00020\ \ \ \ \ \}}
+\DoxyCodeLine{00021\ \}}
+
+\end{DoxyCode}
