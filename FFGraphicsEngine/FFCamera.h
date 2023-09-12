@@ -13,7 +13,7 @@ public:
 	Matrix matPerspectiveProjection = {};
 	Matrix matOrthographicProjection = {};
 
-private:
+//private:
 	float m_near = 1.f;
 	float m_far = 1000.f;
 	float m_fov = XM_PI / 4.f;

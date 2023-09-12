@@ -5,7 +5,7 @@
 
 namespace yunuGIAdapter
 {
-	class StaticMeshAdapter : public yunuGIAdapter::RenderableAdapter, public yunuGI::IStaticMesh
+	class StaticMeshAdapter : public yunuGIAdapter::RenderableAdapter, public yunuGI::IStaticMeshRenderer
 	{
 	public:
 		StaticMeshAdapter() :RenderableAdapter() { }

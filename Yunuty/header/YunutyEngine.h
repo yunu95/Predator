@@ -58,7 +58,7 @@
 #include "YunutyGraphicsEventHandler.h"
 #include "IYunuGIDebugCube.h"
 #include "IYunuGIUIImage.h"
-#include "StaticMesh.h"
+#include "StaticMeshRenderer.h"
 #include "YunutySkinnedMesh.h"
 #include "DebugCube.h"
 #include "UIImage.h"

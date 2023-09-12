@@ -102,7 +102,7 @@ void DeferredRenderer::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pD
     pig2->SetScaleMatrix(0.07f);
     IRenderableObject::renderables.emplace_back(pig2);*/
 
-	//StaticMesh* genji = new StaticMesh(m_d3dDevice.Get(), m_d3dImmediateContext.Get(), RasterizerState::SolidRS.Get());
+	//StaticMeshRenderer* genji = new StaticMeshRenderer(m_d3dDevice.Get(), m_d3dImmediateContext.Get(), RasterizerState::SolidRS.Get());
 	//genji->LoadDiffuseTexture(L"Textures/000000002405_reverse.dds");
 	//genji->LoadNormalTexture(L"Textures/000000002406_b_reverse.dds");
 	//genji->LoadStaticMesh((LPSTR)"ASEFile/genji_blender.ASE");
@@ -110,7 +110,7 @@ void DeferredRenderer::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pD
 	//genji->SetName("genji1");
 	//IRenderableObject::renderables.emplace(genji);
 
-	//   StaticMesh* genji2 = new StaticMesh(m_d3dDevice.Get(), m_d3dImmediateContext.Get(), m_solidRS.Get());
+	//   StaticMeshRenderer* genji2 = new StaticMeshRenderer(m_d3dDevice.Get(), m_d3dImmediateContext.Get(), m_solidRS.Get());
 	   //genji2->LoadDiffuseTexture(L"Textures/000000002405_reverse.dds");
 	   //genji2->LoadNormalTexture(L"Textures/000000002406_b_reverse.dds");
 	   //genji2->LoadStaticMesh((LPSTR)"ASEFile/genji_blender.ASE");
@@ -119,7 +119,7 @@ void DeferredRenderer::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pD
 	//   genji2->SetName("genji2");
 	//   IRenderableObject::renderables.emplace_back(genji2);
 
-	   //StaticMesh* genji3 = new StaticMesh(m_d3dDevice.Get(), m_d3dImmediateContext.Get(), m_solidRS.Get());
+	   //StaticMeshRenderer* genji3 = new StaticMeshRenderer(m_d3dDevice.Get(), m_d3dImmediateContext.Get(), m_solidRS.Get());
 	   //genji3->LoadDiffuseTexture(L"Textures/000000002405_reverse.dds");
 	   //genji3->LoadNormalTexture(L"Textures/000000002406_b_reverse.dds");
 	   //genji3->LoadStaticMesh((LPSTR)"ASEFile/genji_blender.ASE");
@@ -128,7 +128,7 @@ void DeferredRenderer::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pD
 	   //genji3->SetName("genji3");
 	   //IRenderableObject::renderables.emplace_back(genji3);
 
-	   //StaticMesh* fox2 = new StaticMesh(m_d3dDevice.Get(), m_d3dImmediateContext.Get(), m_solidRS.Get());
+	   //StaticMeshRenderer* fox2 = new StaticMeshRenderer(m_d3dDevice.Get(), m_d3dImmediateContext.Get(), m_solidRS.Get());
 	   //fox2->LoadDiffuseTexture(L"Textures/fox_reverse.dds");
 	   //fox2->LoadNormalTexture(L"Textures/000000002406_b.dds");
 	   //fox2->LoadStaticMesh((LPSTR)"FBXFile/static_fox.fbx");

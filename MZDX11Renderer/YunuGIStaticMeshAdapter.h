@@ -5,15 +5,15 @@
 #include "IYunuGIRenderable.h"
 #include "IRenderableObject.h"
 #include "YunuGIRenderableAdapter.h"
-#include "StaticMesh.h"
+#include "StaticMeshRenderer.h"
 #include "MZUtility.h"
 
 namespace yunuGIAdapter
 {
-	class StaticMeshAdapter : public yunuGIAdapter::RenderableAdapter, public yunuGI::IStaticMesh
+	class StaticMeshAdapter : public yunuGIAdapter::RenderableAdapter, public yunuGI::IStaticMeshRenderer
 	{
 	public:
-		StaticMeshAdapter(StaticMesh* obj)
+		StaticMeshAdapter(StaticMeshRenderer* obj)
 			:RenderableAdapter(obj), m_pStaticMesh(obj)
 		{
 		}
@@ -48,6 +48,6 @@ namespace yunuGIAdapter
 		virtual void LoadNormalMap(const char* fileName) { m_pStaticMesh->LoadNormalTexture(MZUtility::GetWString(fileName).c_str()); }
 		virtual void SetPickingMode(bool isPickingModeOn) { m_pStaticMesh->SetPickingMode(isPickingModeOn); }
 	private:
-		StaticMesh* m_pStaticMesh;
+		StaticMeshRenderer* m_pStaticMesh;
 	};
 }

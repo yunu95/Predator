@@ -2,7 +2,7 @@ module;
 #include "YunutyEngine.h"
 export module htkg.InGame.StaticMeshWrapper;
 
-export class StaticMeshWrapper : public graphics::StaticMesh
+export class StaticMeshWrapper : public graphics::StaticMeshRenderer
 {
 public:
     string meshFilePath;
@@ -24,7 +24,7 @@ public:
 	}
     virtual void Update()
     {
-        graphics::StaticMesh::Update();
+        graphics::StaticMeshRenderer::Update();
         GetGameObject()->setName(meshFilePath);
     }
 	string lastMesh;

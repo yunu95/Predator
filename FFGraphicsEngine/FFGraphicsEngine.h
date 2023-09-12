@@ -40,7 +40,7 @@ public:
 	GraphicsDescriptorHeap* GetGraphicsDescriptor() { return m_graphicsDescriptor; }
 	ComputeDescriptorHeap* GetComputeDescriptor() { return m_computeDescriptor; }
 
-	ConstantBuffer* GetConstantBuffer(CONSTANT_BUFFER_TYPE p_type) { return m_constantBuffers[static_cast<uint8>(p_type)]; }
+	ConstantBuffer* GetConstantBuffer(FF::CONSTANT_BUFFER_TYPE p_type) { return m_constantBuffers[static_cast<uint8>(p_type)]; }
 
 	WindowInfo& GetWindow() { return	m_windowInfo; }
 

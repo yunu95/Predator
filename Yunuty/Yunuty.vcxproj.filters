@@ -190,38 +190,11 @@
     <Filter Include="yunutyEngine\math\_XMMath">
       <UniqueIdentifier>{2ba41ab1-6fe9-4e82-8ac9-d0af2c4f2d93}</UniqueIdentifier>
     </Filter>
-    <Filter Include="yunutyEngine\Graphics\Component">
-      <UniqueIdentifier>{dc9dca2d-583b-4051-8023-d5c338b0b084}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="yunutyEngine\Graphics\Component\EventHandler">
-      <UniqueIdentifier>{39262cbb-c668-4600-b300-660871260453}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="yunutyEngine\Graphics\Component\Camera">
-      <UniqueIdentifier>{9cfaf4a2-73e4-48d6-b400-7afb17beba93}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="yunutyEngine\Graphics\Component\Renderable">
-      <UniqueIdentifier>{24d7cd58-f29b-4d4e-b4a9-3d08c7cf0ca7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="yunutyEngine\Graphics\_YunuGIObjects">
       <UniqueIdentifier>{b071b057-71e3-4529-a494-a1674dd3d4f3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="yunutyEngine\Graphics\Component\StaticMesh">
-      <UniqueIdentifier>{8dd8de7e-5789-4805-88db-ad338a587a26}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="yunutyEngine\Graphics\Component\UI">
-      <UniqueIdentifier>{ae867125-056e-408a-9a7b-cc305c13dec1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="yunutyEngine\Graphics\Renderer">
       <UniqueIdentifier>{550429e6-aba7-423e-9974-70733eea6d19}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="yunutyEngine\Graphics\Component\DebugObject">
-      <UniqueIdentifier>{dc303d69-efd4-4911-b3c6-44622cca4814}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="yunutyEngine\Graphics\Component\DebugObject\DebugCube">
-      <UniqueIdentifier>{a9685ec6-806d-49fe-bf01-ccfdd92f8596}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="yunutyEngine\Graphics\Component\SkinnedMesh">
-      <UniqueIdentifier>{fc00bea1-cbc2-4fe8-91ff-5823930dfbdc}</UniqueIdentifier>
     </Filter>
     <Filter Include="yunutyEngine\Graphics\Renderer">
       <UniqueIdentifier>{550429e6-aba7-423e-9974-70733eea6d19}</UniqueIdentifier>
@@ -241,10 +214,37 @@
     <Filter Include="yunutyEngine\yunutyUtility\StringConversion">
       <UniqueIdentifier>{58eb6b24-afc1-4b30-8777-3c0a4c296281}</UniqueIdentifier>
     </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component">
+      <UniqueIdentifier>{dc9dca2d-583b-4051-8023-d5c338b0b084}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\EventHandler">
+      <UniqueIdentifier>{39262cbb-c668-4600-b300-660871260453}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\Camera">
+      <UniqueIdentifier>{9cfaf4a2-73e4-48d6-b400-7afb17beba93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\Renderable">
+      <UniqueIdentifier>{24d7cd58-f29b-4d4e-b4a9-3d08c7cf0ca7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\StaticMesh">
+      <UniqueIdentifier>{8dd8de7e-5789-4805-88db-ad338a587a26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\UI">
+      <UniqueIdentifier>{ae867125-056e-408a-9a7b-cc305c13dec1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\DebugObject">
+      <UniqueIdentifier>{dc303d69-efd4-4911-b3c6-44622cca4814}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\DebugObject\DebugCube">
+      <UniqueIdentifier>{a9685ec6-806d-49fe-bf01-ccfdd92f8596}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\SkinnedMesh">
+      <UniqueIdentifier>{fc00bea1-cbc2-4fe8-91ff-5823930dfbdc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
-      <Filter>yunutyEngine\Graphics\Component\Camera</Filter>
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\Camera</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>yunutyEngine\GameObject</Filter>
@@ -366,31 +366,31 @@
     <ClCompile Include="AudioSource.cpp">
       <Filter>Deprecated\Source Files%28Deprecated%29</Filter>
     </ClCompile>
-    <ClCompile Include="StaticMesh.cpp">
-      <Filter>yunutyEngine\Graphics\Component\StaticMesh</Filter>
+    <ClCompile Include="StaticMeshRenderer.cpp">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\StaticMesh</Filter>
     </ClCompile>
     <ClCompile Include="YunutyRenderable.cpp">
-      <Filter>yunutyEngine\Graphics\Component\Renderable</Filter>
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\Renderable</Filter>
     </ClCompile>
     <ClCompile Include="YunutyGraphicsEventHandler.cpp">
-      <Filter>yunutyEngine\Graphics\Component\EventHandler</Filter>
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\EventHandler</Filter>
     </ClCompile>
     <ClCompile Include="DebugCube.cpp">
-      <Filter>yunutyEngine\Graphics\Component\DebugObject\DebugCube</Filter>
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\DebugObject\DebugCube</Filter>
     </ClCompile>
     <ClCompile Include="UIImage.cpp">
-      <Filter>yunutyEngine\Graphics\Component\UI</Filter>
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\UI</Filter>
     </ClCompile>
     <ClCompile Include="UIText.cpp">
-      <Filter>yunutyEngine\Graphics\Component\UI</Filter>
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\UI</Filter>
     </ClCompile>
     <ClCompile Include="YunutySkinnedMesh.cpp">
-      <Filter>yunutyEngine\Graphics\Component\SkinnedMesh</Filter>
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\SkinnedMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\Camera.h">
-      <Filter>yunutyEngine\Graphics\Component\Camera</Filter>
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\Camera</Filter>
     </ClInclude>
     <ClInclude Include="header\GameObject.h">
       <Filter>yunutyEngine\GameObject</Filter>
@@ -536,26 +536,26 @@
     <ClInclude Include="_XMMath.h">
       <Filter>yunutyEngine\math\_XMMath</Filter>
     </ClInclude>
-    <ClInclude Include="header\StaticMesh.h">
-      <Filter>yunutyEngine\Graphics\Component\StaticMesh</Filter>
+    <ClInclude Include="header\StaticMeshRenderer.h">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\StaticMesh</Filter>
     </ClInclude>
     <ClInclude Include="header\YunutyRenderable.h">
-      <Filter>yunutyEngine\Graphics\Component\Renderable</Filter>
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\Renderable</Filter>
     </ClInclude>
     <ClInclude Include="header\YunutyGraphicsEventHandler.h">
-      <Filter>yunutyEngine\Graphics\Component\EventHandler</Filter>
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\EventHandler</Filter>
     </ClInclude>
     <ClInclude Include="header\UIImage.h">
-      <Filter>yunutyEngine\Graphics\Component\UI</Filter>
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\UI</Filter>
     </ClInclude>
     <ClInclude Include="header\UIText.h">
-      <Filter>yunutyEngine\Graphics\Component\UI</Filter>
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\UI</Filter>
     </ClInclude>
     <ClInclude Include="header\DebugCube.h">
-      <Filter>yunutyEngine\Graphics\Component\DebugObject\DebugCube</Filter>
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\DebugObject\DebugCube</Filter>
     </ClInclude>
     <ClInclude Include="header\YunutySkinnedMesh.h">
-      <Filter>yunutyEngine\Graphics\Component\SkinnedMesh</Filter>
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\SkinnedMesh</Filter>
     </ClInclude>
     <ClInclude Include="header\YunutyGenericHash.h">
       <Filter>yunutyEngine\yunutyUtility\GenericHash</Filter>

@@ -170,7 +170,6 @@
     <ClInclude Include="IYunuGIUIImage.h" />
     <ClInclude Include="IYunuGIUIObject.h" />
     <ClInclude Include="IYunuGIUIText.h" />
-    <ClInclude Include="IYunuGraphicsInterface.h" />
     <ClInclude Include="YGCameraAdapter.h" />
     <ClInclude Include="YGDebugCubeAdapter.h" />
     <ClInclude Include="YGDebugSphereAdapter.h" />
@@ -190,7 +189,7 @@
     <ClInclude Include="IYunuGIFactory.h" />
     <ClInclude Include="IYunuGIMaterial.h" />
     <ClInclude Include="IYunuGISkinnedMesh.h" />
-    <ClInclude Include="IYunuGIStaticMesh.h" />
+    <ClInclude Include="IYunuGIStaticMeshRenderer.h" />
     <ClInclude Include="IYunuGITexture.h" />
     <ClInclude Include="IUnknown.h" />
     <ClInclude Include="IYunuGI3DRenderer.h" />

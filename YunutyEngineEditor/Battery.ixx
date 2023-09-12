@@ -13,7 +13,7 @@ public:
     graphics::UIText* energyLeftText{ nullptr };
     Battery()
     {
-        auto staticMeshComp = GetGameObject()->AddComponent<graphics::StaticMesh>();
+        auto staticMeshComp = GetGameObject()->AddComponent<graphics::StaticMeshRenderer>();
 
         staticMeshComp->GetTransform()->scale = Vector3d(0.023, 0.023, 0.023);
         staticMeshComp->GetTransform()->rotation = Vector3d(-90, 0, 0);

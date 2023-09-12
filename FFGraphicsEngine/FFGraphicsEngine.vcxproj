@@ -269,6 +269,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="YGExports.cpp" />
+    <ClCompile Include="YGStaticMeshAdapter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\Shader\boss.hlsli" />

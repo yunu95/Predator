@@ -9,12 +9,12 @@ export class Arrow : public Component
 public:
     Arrow()
     {
-        arrowBody = GetGameObject()->AddGameObject()->AddComponent<graphics::StaticMesh>();
+        arrowBody = GetGameObject()->AddGameObject()->AddComponent<graphics::StaticMeshRenderer>();
         arrowBody->GetGameObject()->setName("arrow body");
         arrowBody->GetGI().LoadDiffuseMap("Textures/red.dds");
         arrowBody->GetGI().LoadMesh("FBXFile/frontRectangle.fbx");
 
-        arrowHead = GetGameObject()->AddGameObject()->AddComponent<graphics::StaticMesh>();
+        arrowHead = GetGameObject()->AddGameObject()->AddComponent<graphics::StaticMeshRenderer>();
         arrowHead->GetGameObject()->setName("arrow head");
         arrowHead->GetGI().LoadDiffuseMap("Textures/red.dds");
         arrowHead->GetGI().LoadMesh("FBXFile/frontTriangle.fbx");
@@ -43,6 +43,6 @@ public:
         return arrow;
     }
 private:
-    graphics::StaticMesh* arrowBody{ nullptr };
-    graphics::StaticMesh* arrowHead{ nullptr };
+    graphics::StaticMeshRenderer* arrowBody{ nullptr };
+    graphics::StaticMeshRenderer* arrowHead{ nullptr };
 };

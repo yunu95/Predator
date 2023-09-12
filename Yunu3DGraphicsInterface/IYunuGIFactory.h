@@ -1,5 +1,5 @@
 #pragma once
-#include "IYunuGIStaticMesh.h"
+#include "IYunuGIStaticMeshRenderer.h"
 #include "IYunuGISkinnedMesh.h"
 #include "IYunuGIDirectionalLight.h"
 #include "IYunuGICamera.h"
@@ -18,7 +18,7 @@ namespace yunuGI
     {
     public:
         virtual yunuGI::ICamera* CreateCamera(const yunuGI::ICameraDesc& desc) = 0;
-        virtual yunuGI::IStaticMesh* CreateStaticMesh(const yunuGI::IStaticMeshDesc& desc) = 0;
+        virtual yunuGI::IStaticMeshRenderer* CreateStaticMesh(const yunuGI::IStaticMeshRendererDesc& desc) = 0;
         virtual yunuGI::ISkinnedMesh* CreateSkinnedMesh(const yunuGI::ISkinnedMeshDesc& desc)=0;
         virtual yunuGI::IDebugCube* CreateDebugCube(const yunuGI::IDebugCubeDesc& desc) = 0;
         virtual yunuGI::IUIImage* CreateUIImage(const yunuGI::IUIImageDesc& desc) = 0;

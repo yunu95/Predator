@@ -3,7 +3,7 @@
 #include "Component.h"
 #include "Rect.h"
 #include "YunuGraphicsInterface.h"
-#include "IYunuGIStaticMesh.h"
+#include "IYunuGIStaticMeshRenderer.h"
 #include "YunutyRenderable.h"
 
 // 카메라는 화면에 게임상에 존재하는 모든 그래픽 요소들을 출력하는 데에 쓰이는 객체입니다. 
@@ -18,12 +18,12 @@
 namespace yunutyEngine::graphics
 {
     class YunutyCycle;
-    class YUNUTY_API StaticMesh : public Renderable<yunuGI::IStaticMesh>
+    class YUNUTY_API StaticMeshRenderer : public Renderable<yunuGI::IStaticMeshRenderer>
     {
     protected:
     public:
         // GI는 Graphics Interface라는 뜻임.
-        yunuGI::IStaticMesh& GetGI() { return Renderable<yunuGI::IStaticMesh>::GetGI(); }
-        StaticMesh();
+        yunuGI::IStaticMeshRenderer& GetGI() { return Renderable<yunuGI::IStaticMeshRenderer>::GetGI(); }
+        StaticMeshRenderer();
     };
 }

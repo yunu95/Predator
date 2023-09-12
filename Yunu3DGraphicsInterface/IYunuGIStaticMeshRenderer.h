@@ -5,7 +5,7 @@
 
 namespace yunuGI
 {
-	class IStaticMesh : virtual public yunuGI::IRenderable
+	class IStaticMeshRenderer : virtual public yunuGI::IRenderable
 	{
 	public:
 		virtual void LoadMesh(const char* fileName) = 0;
@@ -14,7 +14,7 @@ namespace yunuGI
 		virtual void SetPickingMode(bool isPickingModeOn) = 0;
 	};
 
-	struct IStaticMeshDesc
+	struct IStaticMeshRendererDesc
 	{
 	};
 }

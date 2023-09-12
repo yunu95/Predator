@@ -8,7 +8,7 @@ export class Destination : public Component
 public:
     Destination()
     {
-        auto staticMeshComp = GetGameObject()->AddComponent<graphics::StaticMesh>();
+        auto staticMeshComp = GetGameObject()->AddComponent<graphics::StaticMeshRenderer>();
         staticMeshComp->GetTransform()->position = Vector3d(0, 0.265, 0.0);
         staticMeshComp->GetTransform()->scale = Vector3d(0.012, 0.012, 0.012);
         staticMeshComp->GetTransform()->rotation = Vector3d(90, 0, 0.000);

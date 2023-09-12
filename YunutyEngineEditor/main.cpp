@@ -269,7 +269,7 @@ int main(int, char**)
     //testObjectComp->GetTransform()->scale = Vector3d(0.3f, 0.3f, 0.0f);
 
     //auto testObject = Scene::getCurrentScene()->AddGameObject();
-    //auto testObjectComp = testObject->AddComponent<yunutyEngine::graphics::StaticMesh>();
+    //auto testObjectComp = testObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
     //testObjectComp->GetGI().LoadMesh("ASEFile/Rob02Trang.ASE");
     //testObjectComp->GetGI().LoadNormalMap("Textures/Rob02_Normal_reverse.dds");
     //testObjectComp->GetGI().LoadDiffuseMap("Textures/Rob02Blue_AlbedoTransparency_reverse.dds");

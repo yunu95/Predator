@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Yunuty", "Yunuty\Yunuty.vcxproj", "{60308F48-95FA-432C-849D-B74BE6CCCE60}"
 	ProjectSection(ProjectDependencies) = postProject
-		{614C4D2C-201C-4767-9507-79734AD63F4B} = {614C4D2C-201C-4767-9507-79734AD63F4B}
+		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED} = {51D3296C-AD97-4D80-ADD3-C4254A93C5ED}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Yunu3DGraphicsInterface", "Yunu3DGraphicsInterface\Yunu3DGraphicsEngine.vcxproj", "{9E096B24-E24D-4BFC-9A4D-64C93013BC39}"

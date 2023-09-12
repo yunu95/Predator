@@ -66,6 +66,10 @@ void yunutyEngine::graphics::Renderer::LoadFile(const char* fileName)
 {
     _YunuGIObjects::SingleInstance().resourceManager->LoadFile(fileName);
 }
+void yunutyEngine::graphics::Renderer::SetResolution(unsigned int width, unsigned int height)
+{
+    _YunuGIObjects::SingleInstance().renderer->ResizeResolution(width, height);
+}
 void yunutyEngine::graphics::Renderer::SetAfterRenderAction(const function<void()>& action)
 {
     afterRenderAction = action;

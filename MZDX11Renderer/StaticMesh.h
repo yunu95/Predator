@@ -12,12 +12,12 @@ class DebugCube;
 /// <summary>
 /// 2023.07.07 MJKIM
 /// </summary>
-class StaticMesh : public IMeshObject
+class StaticMeshRenderer : public IMeshObject
 {
 public:
-	//StaticMesh();
-	StaticMesh(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, ID3D11RasterizerState* pRS);
-	~StaticMesh();
+	//StaticMeshRenderer();
+	StaticMeshRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, ID3D11RasterizerState* pRS);
+	~StaticMeshRenderer();
 
 public:
 	virtual void Update(MZCamera* pCamera, float deltaTime) override;

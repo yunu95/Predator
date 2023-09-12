@@ -185,7 +185,7 @@ public:
         tile->_col = col;
         std::string boardIndex = std::to_string(row) + "," + std::to_string(col);
         tileObj->setName("board " + boardIndex);
-        tile->tileMesh = tileObj->AddComponent<yunutyEngine::graphics::StaticMesh>();
+        tile->tileMesh = tileObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
         tile->tileMesh->GetGI().LoadMesh(resourcesID::platformFBX.c_str());
         tile->tileMesh->GetGI().LoadDiffuseMap(resourcesID::platformDiffuseTex.c_str());
         tile->tileMesh->GetGI().LoadNormalMap(resourcesID::platformNormalTex.c_str());
