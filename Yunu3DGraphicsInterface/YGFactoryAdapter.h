@@ -21,7 +21,7 @@ namespace yunuGIAdapter
 		virtual yunuGI::ICamera* CreateCamera(const yunuGI::ICameraDesc& desc) {
 			return new yunuGIAdapter::CameraAdapter();
 		}
-		virtual yunuGI::IStaticMesh* CreateStaticMesh(const yunuGI::IStaticMeshDesc& desc)
+		virtual yunuGI::IStaticMeshRenderer* CreateStaticMesh(const yunuGI::IStaticMeshRendererDesc& desc)
 		{
 			return new StaticMeshAdapter{};
 		}

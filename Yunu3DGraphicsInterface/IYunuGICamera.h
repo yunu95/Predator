@@ -15,6 +15,8 @@ namespace yunuGI
         virtual void SetNear(float near) = 0;
         // 카메라 절두체의 far 플레인까지의 거리를 정의한다.
         virtual void SetFar(float far) = 0;
+        // 카메라의 해상도를 조절한다.
+        virtual void SetResolution(float width,float height) = 0;
         // 카메라를 메인 카메라로 만든다.
         virtual void SetAsMain() =0;
     };

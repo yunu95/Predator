@@ -129,6 +129,7 @@ int main(int, char**)
 	//yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"MZDX11Renderer.dll");
 	yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"FFGraphicsEngine.dll");
 	yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(releaseHwnd);
+	yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(1280,800);
 	yunutyEngine::graphics::Renderer::SingleInstance().LoadFile("FBX/BossDoor/BossDoor.fbx");
 	
 	ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
@@ -152,7 +153,7 @@ int main(int, char**)
 		}
 	};*/
 	auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMesh>();
+	auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 	//staticMeshObj->AddComponent<FlappyBird>();
 	staticMesh->GetGI().LoadMesh("ASEFile/genji_blender.ASE");
 	staticMesh->GetGI().LoadDiffuseMap("Textures/000000002405_reverse.dds");

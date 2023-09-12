@@ -9,4 +9,5 @@
 #include "YunuGIPtr.h"
 #include "IYunuGIEventHandler.h"
 #include "IYunuGIRenderable.h"
+#include "IYunuGIStaticMeshRenderer.h"
 #include "IYunuGIResourceManager.h"

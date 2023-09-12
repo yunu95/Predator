@@ -51,6 +51,8 @@ namespace yunutyEngine
             void LoadFiles(const char* rootPath);
             // 파일을 로드합니다. 파일을 그래픽스 파일로 인지할 수 없을 경우, 해당 파일을 무시합니다.
             void LoadFile(const char* fileName);
+            // 해상도 조정 함수
+            void SetResolution(unsigned int width, unsigned int height);
             // 렌더링이 끝난 직후 호출할 콜백함수를 지정합니다.
             void SetAfterRenderAction(const function<void()>& action);
 

@@ -429,7 +429,7 @@ void InspectorPanel::DrawComponentInfo<StaticMeshWrapper>(StaticMeshWrapper* ins
 {
 	float cursorPosY = ImGui::GetCursorPosY();
 
-	DrawCenterColorText("StaticMesh");
+	DrawCenterColorText("StaticMeshRenderer");
 
 	CopyStaticMesh(instance);
 

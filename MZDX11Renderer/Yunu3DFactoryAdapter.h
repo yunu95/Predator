@@ -3,7 +3,7 @@
 #include "YunuGraphicsInterface.h"
 #include "MZDX11Renderer.h"
 #include "Yunu3DCameraAdapter.h"
-#include "StaticMesh.h"
+#include "StaticMeshRenderer.h"
 #include "YunuGIStaticMeshAdapter.h"
 #include "SkinnedMesh.h"
 #include "YunuGISkinnedMeshAdapter.h"
@@ -26,9 +26,9 @@ namespace yunuGIAdapter
 
 		}
 		//{ return new CameraAdapter(); }
-		virtual yunuGI::IStaticMesh* CreateStaticMesh(const yunuGI::IStaticMeshDesc& desc)
+		virtual yunuGI::IStaticMeshRenderer* CreateStaticMesh(const yunuGI::IStaticMeshRendererDesc& desc)
 		{
-			StaticMesh* staticMesh{ new StaticMesh(DeferredRenderer::Instance.Get().GetDevice(), DeferredRenderer::Instance.Get().GetDeviceContext(), RasterizerState::SolidRS.Get()) };
+			StaticMeshRenderer* staticMesh{ new StaticMeshRenderer(DeferredRenderer::Instance.Get().GetDevice(), DeferredRenderer::Instance.Get().GetDeviceContext(), RasterizerState::SolidRS.Get()) };
 			return new StaticMeshAdapter{staticMesh};
 		}
 		virtual yunuGI::ISkinnedMesh* CreateSkinnedMesh(const yunuGI::ISkinnedMeshDesc& desc)

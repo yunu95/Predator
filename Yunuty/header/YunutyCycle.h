@@ -1,3 +1,10 @@
+/*****************************************************************
+ * \file   YunutyCycle.h
+ * \brief  
+ * 
+ * \author KOCCA23
+ * \date   September 2023
+ *********************************************************************/
 #pragma once
 #include <thread>
 #include "Object.h"
@@ -13,6 +20,9 @@
 namespace yunutyEngine
 {
     class Component;
+    /**
+     * \brief 사이클은 게임 엔진의 메인스레드의 구동을 제어하는 싱글톤 클래스이다.
+     */
     class YUNUTY_API YunutyCycle : Object
     {
     private:

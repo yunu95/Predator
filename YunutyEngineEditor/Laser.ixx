@@ -8,10 +8,10 @@ export class Robot;
 export class Button;
 export struct Laser : public yunutyEngine::Component, public IButtonInteractable
 {
-    graphics::StaticMesh* laserMesh{ nullptr };
+    graphics::StaticMeshRenderer* laserMesh{ nullptr };
     Laser()
     {
-        auto staticMeshComp = GetGameObject()->AddGameObject()->AddComponent<graphics::StaticMesh>();
+        auto staticMeshComp = GetGameObject()->AddGameObject()->AddComponent<graphics::StaticMeshRenderer>();
         staticMeshComp->GetTransform()->scale = Vector3d(0.010, 0.010, 0.010);
         staticMeshComp->GetTransform()->rotation = Vector3d(90, 270,180.000);
         staticMeshComp->GetGI().LoadMesh(resourcesID::laserASE.c_str());
@@ -20,7 +20,7 @@ export struct Laser : public yunutyEngine::Component, public IButtonInteractable
         staticMeshComp->GetGI().LoadNormalMap(resourcesID::laserNormalTex.c_str());
         staticMeshComp->GetGI().SetPickingMode(false);
 
-        laserMesh = staticMeshComp->GetGameObject()->AddGameObject()->AddComponent<graphics::StaticMesh>();
+        laserMesh = staticMeshComp->GetGameObject()->AddGameObject()->AddComponent<graphics::StaticMeshRenderer>();
         laserMesh->GetTransform()->position = Vector3d{ 30,0,50 };
         laserMesh->GetTransform()->scale = Vector3d{ 0.3,0.3,20 };
         laserMesh->GetTransform()->rotation = Vector3d{ 0,90,0 };

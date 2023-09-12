@@ -71,7 +71,7 @@
     <ClInclude Include="IYunuGISkinnedMesh.h">
       <Filter>Header Files\Renderable</Filter>
     </ClInclude>
-    <ClInclude Include="IYunuGIStaticMesh.h">
+    <ClInclude Include="IYunuGIStaticMeshRenderer.h">
       <Filter>Header Files\Renderable</Filter>
     </ClInclude>
     <ClInclude Include="IYunuGIMaterial.h">
@@ -126,9 +126,6 @@
       <Filter>IUserInterface</Filter>
     </ClInclude>
     <ClInclude Include="YunuGraphicsInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IYunuGraphicsInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="YGCameraAdapter.h">

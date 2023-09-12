@@ -129,7 +129,7 @@ public:
     //constexpr static float standardScaleInv = 1/0.0065;
     // Serialize ¥ÎªÛ¿Ã æ∆¥‘.
     int _row{ 0 }, _col{ 0 };
-    graphics::StaticMesh* tileMesh{ nullptr };
+    graphics::StaticMeshRenderer* tileMesh{ nullptr };
     Stage* _stage{ nullptr };
     bool _isDangerous{ false };
     Robot* _robot{ nullptr };

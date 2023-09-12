@@ -40,7 +40,7 @@ public:
 
     Robot()
     {
-        auto staticMeshComp = GetGameObject()->AddComponent<graphics::StaticMesh>();
+        auto staticMeshComp = GetGameObject()->AddComponent<graphics::StaticMeshRenderer>();
         staticMeshComp->GetGI().LoadMesh(resourcesID::robotFBX.c_str());
         staticMeshComp->GetGI().LoadDiffuseMap(resourcesID::robotDiffuseTex.c_str());
         staticMeshComp->GetGI().LoadNormalMap(resourcesID::robotNormalTex.c_str());

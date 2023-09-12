@@ -209,7 +209,7 @@
     <ClCompile Include="SoundSystem.cpp" />
     <ClCompile Include="SoundChannel.cpp" />
     <ClCompile Include="Random.cpp" />
-    <ClCompile Include="StaticMesh.cpp" />
+    <ClCompile Include="StaticMeshRenderer.cpp" />
     <ClCompile Include="UIImage.cpp" />
     <ClCompile Include="UIText.cpp" />
     <ClCompile Include="YunutyGraphicsEventHandler.cpp" />
@@ -243,7 +243,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\DebugCube.h" />
-    <ClInclude Include="header\StaticMesh.h" />
+    <ClInclude Include="header\StaticMeshRenderer.h" />
     <ClInclude Include="header\UIImage.h" />
     <ClInclude Include="header\UIText.h" />
     <ClInclude Include="header\YunutyGraphicsEventHandler.h" />

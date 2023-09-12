@@ -1,4 +1,4 @@
-#include "StaticMesh.h"
+#include "StaticMeshRenderer.h"
 #include "MZCamera.h"
 #include "DDSTextureLoader.h"
 #include "MeshData.h"
@@ -8,7 +8,7 @@
 #include "DebugCube.h"
 
 
-StaticMesh::StaticMesh(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, ID3D11RasterizerState* pRS)
+StaticMeshRenderer::StaticMeshRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, ID3D11RasterizerState* pRS)
     : m_d3dDevice(pDevice), m_d3dImmediateContext(pDeviceContext), m_pRS(pRS),
     mDiffuseMapSRV(0), mNormalMapSRV(0), m_world{ XMMatrixIdentity() }
 {
@@ -18,7 +18,7 @@ StaticMesh::StaticMesh(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContex
     m_material.Specular = XMFLOAT4(0.8f, 0.8f, 0.8f, 16.0f);
 }
 
-//StaticMesh::StaticMesh()
+//StaticMeshRenderer::StaticMeshRenderer()
 //	://IRenderableObject(),
 //	m_VB(nullptr), m_IB(nullptr), //m_FX(nullptr), m_effectTech(nullptr), m_fxWorldViewProj(nullptr), m_inputLayout(nullptr),
 //	m_world(), m_view(), m_proj()
@@ -26,21 +26,21 @@ StaticMesh::StaticMesh(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContex
 //
 //}
 
-StaticMesh::~StaticMesh()
+StaticMeshRenderer::~StaticMeshRenderer()
 {
     if (mDiffuseMapSRV)
         SafeRelease(mDiffuseMapSRV);
 }
 
 
-void StaticMesh::SetWorldTM(const XMMATRIX& tm)
+void StaticMeshRenderer::SetWorldTM(const XMMATRIX& tm)
 {
     m_world = tm;
     if (m_debugCube != nullptr)
         m_debugCube->SetWorldTM(m_world);
 }
 
-void StaticMesh::SetActive(bool isActive)
+void StaticMeshRenderer::SetActive(bool isActive)
 {
     m_isActive = isActive;
     if (m_debugCube != nullptr)
@@ -48,7 +48,7 @@ void StaticMesh::SetActive(bool isActive)
 }
 
 // ASE 파서에서 버텍스 정보, 인덱스 정보를 얻어온다.
-void StaticMesh::LoadStaticMesh(LPCSTR filename)		// 기하구조로부터 버텍스/인덱스버퍼를 만든다.
+void StaticMeshRenderer::LoadStaticMesh(LPCSTR filename)		// 기하구조로부터 버텍스/인덱스버퍼를 만든다.
 {
     if (strcmp(filename, meshID.c_str()) == 0)
         return;
@@ -249,14 +249,14 @@ void StaticMesh::LoadStaticMesh(LPCSTR filename)		// 기하구조로부터 버텍스/인덱�
 
     //ReleaseASEParser(m_pASEParser);
 }
-void StaticMesh::LoadDiffuseTexture(const WCHAR* filename)
+void StaticMeshRenderer::LoadDiffuseTexture(const WCHAR* filename)
 {
     ID3D11Resource* texResource = nullptr;
     HR(CreateDDSTextureFromFile(m_d3dDevice.Get(),
         filename, &texResource, &mDiffuseMapSRV));
     SafeRelease(texResource);	// view saves reference
 }
-void StaticMesh::LoadNormalTexture(const WCHAR* filename)
+void StaticMeshRenderer::LoadNormalTexture(const WCHAR* filename)
 {
     ID3D11Resource* normalMapResource = nullptr;
     HR(CreateDDSTextureFromFile(m_d3dDevice.Get(),
@@ -264,7 +264,7 @@ void StaticMesh::LoadNormalTexture(const WCHAR* filename)
     SafeRelease(normalMapResource);
 }
 
-bool StaticMesh::Pick(MZCamera* pCamera, float x, float y)
+bool StaticMeshRenderer::Pick(MZCamera* pCamera, float x, float y)
 {
     if (!m_isActive)
         return false;
@@ -332,7 +332,7 @@ bool StaticMesh::Pick(MZCamera* pCamera, float x, float y)
     return false;
 }
 
-void StaticMesh::Update(MZCamera* pCamera, float deltaTime)
+void StaticMeshRenderer::Update(MZCamera* pCamera, float deltaTime)
 {
     if (!m_isActive)
         return;
@@ -347,7 +347,7 @@ void StaticMesh::Update(MZCamera* pCamera, float deltaTime)
         m_debugCube->Update(pCamera, deltaTime);
 }
 
-void StaticMesh::RenderToTexture()
+void StaticMeshRenderer::RenderToTexture()
 {
     if (!m_isActive)
         return;
