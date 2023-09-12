@@ -1064,6 +1064,14 @@ void ResourceManager::CreateDefaultMaterial()
 	//	material->SetVec4(0, Vec4(0.f,1.f,0.f,1.f));
 	//	m_mapMaterial.insert({ L"BoundaryDebug",material });
 	//}
+	{
+		// 디퍼드이면서 그림자 출력
+		Shader* shader = GetShader(L"Deferred");
+		Material* material = new Material(m_device, m_constantBuffers, m_graphicsDescriptorHeap, m_computeDescriptorHeap, m_computeCommandQueue);
+		material->SetName(L"Deferred");
+		material->SetShader(shader);
+		m_mapMaterial.insert({ L"Deferred" ,material });
+	}
 
 	// Deferred Position
 	{
