@@ -695,7 +695,16 @@ void RenderSystem::Render_Object(vector<tuple<Matrix, wstring, MATERIAL_DESC, ws
 	for (auto& object : p_renderObjects)
 	{
 		Mesh* mesh = ResourceManager::GetInstance()->GetMesh(get<1>(object));
-		Material* material = ResourceManager::GetInstance()->GetMaterial(get<2>(object), get<3>(object));
+		Material* material = nullptr;
+		if (get<3>(object).empty())
+		{
+			material = ResourceManager::GetInstance()->GetMaterial(L"Deferred");
+		}
+		else
+		{
+			material = ResourceManager::GetInstance()->GetMaterial(get<2>(object), get<3>(object));
+		}
+			
 
 		if (!frustum->ContainSphere(get<0>(object), mesh->GetBoundRadius()))
 		{
