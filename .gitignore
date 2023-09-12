@@ -17,7 +17,7 @@
 mono_crash.*
 
 # Build results
-*/[Dd]ebug/*
+**/[Dd]ebug/*
 */[Dd]ebugPublic/*
 */[Rr]elease/*
 */[Rr]eleases/*
@@ -29,7 +29,8 @@ mono_crash.*
 !Lib/[Ww][Ii][Nn]32/*
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
-!RuntimeDependency/*
+!*/RuntimeDependency/*
+!*/RuntimeDependency/x64/*
 [Ii]ntermediate/
 [Bb]in/
 [Oo]bj/
