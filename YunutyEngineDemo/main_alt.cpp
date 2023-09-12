@@ -155,9 +155,9 @@ int main(int, char**)
 	auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 	//staticMeshObj->AddComponent<FlappyBird>();
-	staticMesh->GetGI().LoadMesh("ASEFile/genji_blender.ASE");
-	staticMesh->GetGI().LoadDiffuseMap("Textures/000000002405_reverse.dds");
-	staticMesh->GetGI().LoadNormalMap("Textures/000000002406_b_reverse.dds");
+	staticMesh->GetGI().LoadMesh("Cube");
+	//staticMesh->GetGI().LoadDiffuseMap("Textures/000000002405_reverse.dds");
+	//staticMesh->GetGI().LoadNormalMap("Textures/000000002406_b_reverse.dds");
 
 	yunutyEngine::YunutyCycle::SingleInstance().autoRendering = false;
 	yunutyEngine::YunutyCycle::SingleInstance().Play();

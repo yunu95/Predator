@@ -45,15 +45,29 @@ namespace yunuGIAdapter
             // static mesh를 모두 렌더한다.
             for (auto each : StaticMeshAdapter::instances)
             {
-                for (auto i = 0; i < each->m_materials.size(); i++)
+                if (each->m_materials.empty())
                 {
+                    wstring emptyWstr{};
                     FFGraphicsEngine::Instance.Get().DrawMesh(
                         each->m_WTM,
                         each->m_mesh,
-                        each->m_material,
-                        each->m_materials[i].materialName,
-                        i
+                        {},
+                        emptyWstr,
+                        0
                     );
+                }
+                else
+                {
+                    for (auto i = 0; i < each->m_materials.size(); i++)
+                    {
+                        FFGraphicsEngine::Instance.Get().DrawMesh(
+                            each->m_WTM,
+                            each->m_mesh,
+                            each->m_material,
+                            each->m_materials[i].materialName,
+                            i
+                        );
+                    }
                 }
             }
 
