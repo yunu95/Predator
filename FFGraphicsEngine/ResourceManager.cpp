@@ -71,6 +71,9 @@ void ResourceManager::CrateDefaultResource()
 {
 	CreateMesh(L"Rectangle");
 	CreateMesh(L"Cube");
+	CreateMesh(L"Sphere");
+	CreateMesh(L"Capsule");
+	CreateMesh(L"Cyilnder");
 	CreateDefaultShader();
 	CreateDefaultMaterial();
 }
@@ -960,6 +963,16 @@ void ResourceManager::CreateDefaultShader()
 		m_mapShader.insert({ L"Forward",shader });
 	}
 
+	// 디버그용 셰이더
+	{
+		Shader* shader = new Shader();
+		ShaderInfo info = {};
+		info.shaderType = SHADER_TYPE::FORWARD;
+		info.rasterizerType = RASTERIZER_TYPE::WIREFRAME;
+		shader->CreateGraphicsShader(m_device, m_rootSignature, m_graphicsCommandQueue, m_computeCommandQueue, L"Shader\\debug.hlsli", info);
+		m_mapShader.insert({ L"Debug",shader });
+	}
+
 	// Deferred 정보용 셰이더
 	{
 		Shader* shader = new Shader();
@@ -1075,6 +1088,18 @@ void ResourceManager::CreateDefaultMaterial()
 	//	material->SetVec4(0, Vec4(0.f,1.f,0.f,1.f));
 	//	m_mapMaterial.insert({ L"BoundaryDebug",material });
 	//}
+
+	{
+		Shader* shader = GetShader(L"DirLight");
+		Material* material = new Material(m_device, m_constantBuffers, m_graphicsDescriptorHeap, m_computeDescriptorHeap, m_computeCommandQueue);
+		MATERIAL_DESC desc;
+		desc.shader = L"Shader\\lightingDirectional.hlsli";
+		desc.texture[0] = L"D_Position";
+		desc.texture[1] = L"D_Normal";
+		material->SetMaterialDesc(desc);
+		m_mapMaterial.insert({ L"DirLight", material });
+	}
+
 	{
 		// 디퍼드이면서 그림자 출력
 		Shader* shader = GetShader(L"Deferred");
@@ -1091,6 +1116,15 @@ void ResourceManager::CreateDefaultMaterial()
 		material->SetName(L"Forward");
 		material->SetShader(shader);
 		m_mapMaterial.insert({ L"Forward" ,material });
+	}
+
+	{
+		// 디버그
+		Shader* shader = GetShader(L"Debug");
+		Material* material = new Material(m_device, m_constantBuffers, m_graphicsDescriptorHeap, m_computeDescriptorHeap, m_computeCommandQueue);
+		material->SetName(L"Debug");
+		material->SetShader(shader);
+		m_mapMaterial.insert({ L"Debug" ,material });
 	}
 
 	// Deferred Position
