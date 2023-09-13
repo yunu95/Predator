@@ -17,27 +17,36 @@
 mono_crash.*
 
 # Build results
-**/[Dd]ebug/*
-**/[Dd]ebugPublic/*
-**/[Rr]elease/*
-**/[Rr]eleases/*
-**/x64/*
-!Lib/x64/*
-!**/[Rr]untime[Dd]ependency/x64/*
-**/x86/*
-!Lib/x86/*
-!**/[Rr]untime[Dd]ependency/x86/*
-**/[Ww][Ii][Nn]32/*
-!Lib/[Ww][Ii][Nn]32/*
-!**/[Rr]untime[Dd]ependency/[Ww][Ii][Nn]32/*
-[Aa][Rr][Mm]/
-[Aa][Rr][Mm]64/
-[Ii]ntermediate/
+[Dd]ebug
+[Dd]ebugPublic
+[Rr]elease
+[Rr]eleases
+x64
+x86
+[Ww][Ii][Nn]32
+[Aa][Rr][Mm]
+[Aa][Rr][Mm]64
+[Ii]ntermediate
 [Bb]in/
 [Oo]bj/
 [Oo]ut/
 [Ll]og/
 [Ll]ogs/
+
+# exception per environment
+!Lib/x64
+!Lib/x64/[Dd]ebug
+!Lib/x64/[Rr]elease
+!Lib/[Ww][Ii][Nn]32
+!Lib/[Ww][Ii][Nn]32/[Dd]ebug
+!Lib/[Ww][Ii][Nn]32/[Rr]elease
+!**/[Rr]untime[Dd]ependency/x64
+!**/[Rr]untime[Dd]ependency/x64/[Dd]ebug
+!**/[Rr]untime[Dd]ependency/x64/[Rr]elease
+!**/[Rr]untime[Dd]ependency/[Ww][Ii][Nn]32
+!**/[Rr]untime[Dd]ependency/[Ww][Ii][Nn]32/[Dd]ebug
+!**/[Rr]untime[Dd]ependency/[Ww][Ii][Nn]32/[Rr]elease
+
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -137,6 +146,9 @@ $tf/
 _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
+
+# swap files, backup files
+*.swp
 
 # TeamCity is a build add-in
 _TeamCity*
@@ -367,6 +379,3 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-
-# 특별히 내부 파일들을 이그노어하고 싶지 않은 경우
-!Lib/
