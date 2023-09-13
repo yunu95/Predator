@@ -22,13 +22,14 @@ mono_crash.*
 **/[Rr]elease/*
 **/[Rr]eleases/*
 **/x64/*
-!**/dd/x64/*
-!**/asdawd/x64/*
 !Lib/x64/*
+!**/[Rr]untime[Dd]ependency/x64/*
 **/x86/*
 !Lib/x86/*
+!**/[Rr]untime[Dd]ependency/x86/*
 **/[Ww][Ii][Nn]32/*
 !Lib/[Ww][Ii][Nn]32/*
+!**/[Rr]untime[Dd]ependency/[Ww][Ii][Nn]32/*
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 [Ii]ntermediate/
