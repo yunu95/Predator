@@ -220,8 +220,8 @@ namespace FF
 
     struct FFMATERIAL_DESC
     {
-        std::wstring materialName;
-        std::wstring shader;
+        std::wstring materialName{L"Forward"};
+        std::wstring shader{L"Forward"};
         std::array<std::wstring, 4> texture;
         std::array<int, 4> intParams;
         std::array<float, 4> floatParams;

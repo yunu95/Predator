@@ -70,6 +70,7 @@ void ResourceManager::Init(Device* p_device, GraphicsCommandQueue* p_graphicsCom
 void ResourceManager::CrateDefaultResource()
 {
 	CreateMesh(L"Rectangle");
+	CreateMesh(L"Cube");
 	CreateDefaultShader();
 	CreateDefaultMaterial();
 }
@@ -949,6 +950,16 @@ void ResourceManager::CreateDefaultShader()
 		m_mapShader.insert({ L"Deferred",shader });
 	}
 
+	// 포워드용 셰이더
+	{
+		Shader* shader = new Shader();
+		ShaderInfo info = {};
+		info.shaderType = SHADER_TYPE::FORWARD;
+		shader->SetShaderInfo(info);
+		shader->CreateGraphicsShader(m_device, m_rootSignature, m_graphicsCommandQueue, m_computeCommandQueue, L"Shader\\forward.hlsli", info);
+		m_mapShader.insert({ L"Forward",shader });
+	}
+
 	// Deferred 정보용 셰이더
 	{
 		Shader* shader = new Shader();
@@ -1071,6 +1082,15 @@ void ResourceManager::CreateDefaultMaterial()
 		material->SetName(L"Deferred");
 		material->SetShader(shader);
 		m_mapMaterial.insert({ L"Deferred" ,material });
+	}
+
+	{
+		// 포워드
+		Shader* shader = GetShader(L"Forward");
+		Material* material = new Material(m_device, m_constantBuffers, m_graphicsDescriptorHeap, m_computeDescriptorHeap, m_computeCommandQueue);
+		material->SetName(L"Forward");
+		material->SetShader(shader);
+		m_mapMaterial.insert({ L"Forward" ,material });
 	}
 
 	// Deferred Position

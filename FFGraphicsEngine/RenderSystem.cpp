@@ -698,7 +698,7 @@ void RenderSystem::Render_Object(vector<tuple<Matrix, wstring, MATERIAL_DESC, ws
 		Material* material = nullptr;
 		if (get<3>(object).empty())
 		{
-			material = ResourceManager::GetInstance()->GetMaterial(L"Deferred");
+			material = ResourceManager::GetInstance()->GetMaterial(L"Forward");
 		}
 		else
 		{
@@ -708,7 +708,7 @@ void RenderSystem::Render_Object(vector<tuple<Matrix, wstring, MATERIAL_DESC, ws
 
 		if (!frustum->ContainSphere(get<0>(object), mesh->GetBoundRadius()))
 		{
-			continue;
+			//continue;
 		}
 
 		TransformParams transformParams = {};
