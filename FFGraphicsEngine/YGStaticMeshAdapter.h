@@ -52,6 +52,10 @@ namespace yunuGIAdapter
 			}
 			m_materials[materialIndex].materialName = materialName;
 		}
+		void SetMesh(std::wstring mesh)
+		{
+			m_mesh = mesh;
+		}
 	private:
 	};
 }

@@ -16,5 +16,6 @@ namespace yunuGI
         virtual void SetColor(int materialIndex, yunuGI::Color color) =0;
         virtual void SetShader(int materialIndex, std::wstring shaderKey) =0;
         virtual void SetMaterialName(int materialIndex, std::wstring materialKey) =0;
+        virtual void SetMesh(std::wstring mesh) = 0;
     };
 }
