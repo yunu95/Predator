@@ -32,6 +32,7 @@ namespace yunuGIAdapter
 
             LightParams lightParams = {};
             LightInfo info;
+            //info.lightType = 0;
             info.position = FF::FFVec4{ 0.f,0.f,0.f };
             info.direction = FF::FFVec4{ 1.f, 0.f, 1.f };
             info.color.diffuse = FF::FFVec4(1.0f, 1.0f, 1.0f, 0.f);
@@ -63,7 +64,7 @@ namespace yunuGIAdapter
                         FFGraphicsEngine::Instance.Get().DrawMesh(
                             each->m_WTM,
                             each->m_mesh,
-                            each->m_material,
+                            each->m_materials[i],
                             each->m_materials[i].materialName,
                             i
                         );
