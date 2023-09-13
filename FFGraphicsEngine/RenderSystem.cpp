@@ -81,7 +81,7 @@ void RenderSystem::Render()
 	SortObject();
 
 	// 그림자 렌더 (쉐도우 맵 만들기임)
-	RenderShadow();
+	//RenderShadow();
 
 	// 디퍼드 렌더
 	Render_Deferred();
@@ -696,7 +696,7 @@ void RenderSystem::Render_Object(vector<tuple<Matrix, wstring, MATERIAL_DESC, ws
 	{
 		Mesh* mesh = ResourceManager::GetInstance()->GetMesh(get<1>(object));
 		Material* material = nullptr;
-		if (get<3>(object).empty())
+		if (get<2>(object).materialName.empty())
 		{
 			material = ResourceManager::GetInstance()->GetMaterial(L"Forward");
 		}
