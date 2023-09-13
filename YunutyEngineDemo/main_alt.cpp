@@ -156,6 +156,9 @@ int main(int, char**)
 	auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 	//staticMeshObj->AddComponent<FlappyBird>();
 	staticMesh->GetGI().LoadMesh("Cube");
+	staticMesh->GetGI().SetColor(0,yunuGI::Color{ 0,1,0,0 });
+	staticMesh->GetGI().SetShader(0, L"Debug");
+	staticMesh->GetGI().SetMaterialName(0, L"Forward");
 	//staticMesh->GetGI().LoadDiffuseMap("Textures/000000002405_reverse.dds");
 	//staticMesh->GetGI().LoadNormalMap("Textures/000000002406_b_reverse.dds");
 
