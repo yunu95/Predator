@@ -18,19 +18,20 @@ mono_crash.*
 
 # Build results
 **/[Dd]ebug/*
-*/[Dd]ebugPublic/*
-*/[Rr]elease/*
-*/[Rr]eleases/*
-*/x64/*
+**/[Dd]ebugPublic/*
+**/[Rr]elease/*
+**/[Rr]eleases/*
+**/x64/*
 !Lib/x64/*
-*/x86/*
+!**/[Rr]untime[Dd]ependency/x64/*
+**/x86/*
 !Lib/x86/*
-*/[Ww][Ii][Nn]32/*
+!**/[Rr]untime[Dd]ependency/x86/*
+**/[Ww][Ii][Nn]32/*
 !Lib/[Ww][Ii][Nn]32/*
+!**/[Rr]untime[Dd]ependency/[Ww][Ii][Nn]32/*
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
-!*/RuntimeDependency/*
-!*/RuntimeDependency/x64/*
 [Ii]ntermediate/
 [Bb]in/
 [Oo]bj/
