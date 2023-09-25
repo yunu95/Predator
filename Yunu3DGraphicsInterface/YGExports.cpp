@@ -1,5 +1,4 @@
 #include "YunuGraphicsInterface.h"
-#include "YGAdapter.h"
 #include "YGFactoryAdapter.h"
 #include "YGResourceManagerAdapter.h"
 #include "YGEventHandlerAdapter.h"

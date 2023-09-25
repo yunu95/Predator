@@ -5,7 +5,7 @@
 #include "YGEventHandlerAdapter.h"
 #include "YunuGIGlobal.h"
 
-//#include "YunuGIRendererAdapter.h"
+//#include "YGRendererAdapter.h"
 
 extern "C"
 {

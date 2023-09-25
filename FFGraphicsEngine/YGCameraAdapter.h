@@ -1,8 +1,5 @@
 #pragma once
 #include "IYunuGICamera.h"
-#include "FFCamera.h"
-#include "CameraManager.h"
-#include "Frustum.h"
 
 namespace yunuGIAdapter
 {

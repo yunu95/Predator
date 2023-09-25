@@ -3,6 +3,7 @@
 #include "YunuGIMatrix4x4.h"
 #include "YunuGIColor.h"
 #include "IUnknown.h"
+#include <string>
 
 namespace yunuGI
 {

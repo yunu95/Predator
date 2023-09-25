@@ -1,0 +1,13 @@
+#pragma once
+#include "YGCameraAdapter.h"
+#include "YGDebugCubeAdapter.h"
+#include "YGDebugSphereAdapter.h"
+#include "YGEventHandlerAdapter.h"
+#include "YGFactoryAdapter.h"
+#include "YGRenderableAdapter.h"
+#include "YGRendererAdapter.h"
+#include "YGResourceManagerAdapter.h"
+#include "YGSkinnedMeshAdapter.h"
+#include "YGStaticMeshAdapter.h"
+#include "YGUIImageAdapter.h"
+#include "YGUITextAdapter.h"
