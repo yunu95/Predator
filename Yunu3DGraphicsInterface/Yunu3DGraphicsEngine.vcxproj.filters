@@ -178,4 +178,9 @@
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="YGExports.cpp">
+      <Filter>AdapterTemplate</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>
