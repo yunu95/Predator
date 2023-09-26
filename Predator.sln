@@ -25,6 +25,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MZParser", "MZParser\MZPars
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FFGraphicsEngine", "FFGraphicsEngine\FFGraphicsEngine.vcxproj", "{51D3296C-AD97-4D80-ADD3-C4254A93C5ED}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InWanderLand", "InWanderLand\InWanderLand.vcxproj", "{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED} = {51D3296C-AD97-4D80-ADD3-C4254A93C5ED}
+		{60308F48-95FA-432C-849D-B74BE6CCCE60} = {60308F48-95FA-432C-849D-B74BE6CCCE60}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -107,6 +113,18 @@ Global
 		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED}.Release|x64.Build.0 = Release|x64
 		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED}.Release|x86.ActiveCfg = Release|Win32
 		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED}.Release|x86.Build.0 = Release|Win32
+		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Debug|x64.ActiveCfg = Debug|x64
+		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Debug|x64.Build.0 = Debug|x64
+		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Debug|x86.ActiveCfg = Debug|Win32
+		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Debug|x86.Build.0 = Debug|Win32
+		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Dist|x64.ActiveCfg = Debug|x64
+		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Dist|x64.Build.0 = Debug|x64
+		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Dist|x86.ActiveCfg = Debug|Win32
+		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Dist|x86.Build.0 = Debug|Win32
+		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Release|x64.ActiveCfg = Release|x64
+		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Release|x64.Build.0 = Release|x64
+		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Release|x86.ActiveCfg = Release|Win32
+		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
