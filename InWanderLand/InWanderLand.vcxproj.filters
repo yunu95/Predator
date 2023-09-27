@@ -7,6 +7,12 @@
     <Filter Include="sources">
       <UniqueIdentifier>{08e36723-ce4f-4cff-9662-c40801cf1acf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dotween">
+      <UniqueIdentifier>{f412aa5f-6d0c-4d12-886c-cc62b5a8eeaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts">
+      <UniqueIdentifier>{121d28b6-c354-41fd-9b67-492aa15aa2b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShakyCam.h" />
@@ -25,6 +31,19 @@
     <ClInclude Include="..\Include\ImGui\imgui_internal.h">
       <Filter>imgui</Filter>
     </ClInclude>
+    <ClInclude Include="Dotween.h">
+      <Filter>Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="DotweenTimer.h">
+      <Filter>Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="DotweenTimerPool.h">
+      <Filter>Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="Easing.h">
+      <Filter>Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShakyCam.cpp" />
@@ -55,5 +74,18 @@
     <ClCompile Include="main.cpp">
       <Filter>sources</Filter>
     </ClCompile>
+    <ClCompile Include="Dotween.cpp">
+      <Filter>Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="DotweenTimer.cpp">
+      <Filter>Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="DotweenTimerPool.cpp">
+      <Filter>Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="Easing.cpp">
+      <Filter>Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
 </Project>

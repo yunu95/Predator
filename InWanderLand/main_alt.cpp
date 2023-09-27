@@ -6,7 +6,9 @@
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
 #include "YunutyEngine.h"
-#include "ShakyCam.h"   
+#include "ShakyCam.h"
+#include "Player.h"
+#include "Dotween.h"
 #include <d3d11.h>
 #include <tchar.h>
 #include <map>
@@ -152,17 +154,57 @@ int main(int, char**)
                 currentSpeed = flapSpeed;
         }
     };*/
-    auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+
+#pragma region 
+    auto playerGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    auto playerMesh = playerGameObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
     //staticMeshObj->AddComponent<FlappyBird>();
-    staticMesh->GetGI().LoadMesh("Capsule");
-    staticMesh->GetGI().SetMesh(L"Capsule");
-    staticMesh->GetGI().SetColor(0, yunuGI::Color{ 0, 1, 0, 0 });
-    staticMesh->GetGI().SetShader(0, L"Debug");
-    staticMesh->GetGI().SetMaterialName(0, L"Forward");
-    staticMeshObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{1, 0, 0});
+    playerMesh->GetGI().LoadMesh("Capsule");
+    playerMesh->GetGI().SetMesh(L"Capsule");
+    playerMesh->GetGI().SetColor(0, yunuGI::Color{ 0, 1, 0, 0 });
+    playerMesh->GetGI().SetShader(0, L"Debug");
+    playerMesh->GetGI().SetMaterialName(0, L"Forward");
+    playerGameObject->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{1, 0, 0});
     //staticMesh->GetGI().LoadDiffuseMap("Textures/000000002405_reverse.dds");
     //staticMesh->GetGI().LoadNormalMap("Textures/000000002406_b_reverse.dds");
+
+    Dotween* dotweenComponent = playerGameObject->AddComponent<Dotween>();
+    dotweenComponent->DOMove(Vector3d(10, 10, 10), 10.f);
+    dotweenComponent->DORotate(Vector3d(0, 180, 0), 10.f);
+#pragma endregion
+
+#pragma region 
+	auto playerRangeObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+
+	auto playerRangeCollider2d = playerRangeObject->AddComponent<CircleCollider2D>();
+
+	auto playerRangeMesh = playerRangeObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	playerRangeMesh->GetGI().LoadMesh("Sphere");
+	playerRangeMesh->GetGI().SetMesh(L"Sphere");
+	playerRangeMesh->GetGI().SetColor(0, yunuGI::Color{ 1, 0, 0, 0 });
+	playerRangeMesh->GetGI().SetShader(0, L"Forward");
+	playerRangeMesh->GetGI().SetMaterialName(0, L"Forward");
+
+	playerRangeObject->GetTransform()->scale = Vector2d(10, 10);
+    playerRangeObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
+    playerRangeObject->SetParent(playerGameObject);
+
+#pragma endregion
+
+
+
+#pragma region Floor
+    auto floorGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    auto floorMesh = floorGameObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	floorMesh->GetGI().LoadMesh("Cube");
+	floorMesh->GetGI().SetMesh(L"Cube");
+	floorMesh->GetGI().SetColor(0, yunuGI::Color{ 1, 1, 1, 0 });
+	floorMesh->GetGI().SetShader(0, L"Forward");
+	floorMesh->GetGI().SetMaterialName(0, L"Forward");
+
+    floorGameObject->GetTransform()->scale = Vector3d(100, 1, 100);
+#pragma endregion
+
 
     yunutyEngine::YunutyCycle::SingleInstance().autoRendering = false;
     yunutyEngine::YunutyCycle::SingleInstance().Play();
