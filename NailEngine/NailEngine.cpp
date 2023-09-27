@@ -5,6 +5,12 @@
 #include "ResourceBuilder.h"
 #include "Device.h"
 #include "SwapChain.h"
+#include "ConstantBuffer.h"
+
+#include "Struct.h"
+#include "ResourceManager.h"
+
+#include "RenderSystem.h"
 
 LazyObjects<NailEngine> NailEngine::Instance;
 
@@ -15,14 +21,18 @@ void NailEngine::Init(UINT64 hWnd)
 	this->device = std::make_shared<Device>();
 	this->device->Init();
 	ResourceBuilder::Instance.Get().device = this->device;
-	
+
 	this->swapChain = std::make_shared<SwapChain>();
 	this->swapChain->Init(this->hWnd, this->width, this->height);
 	ResourceBuilder::Instance.Get().swapChain = this->swapChain;
+
+	ResourceManager::Instance.Get().CreateDefaultResource();
+	CreateConstantBuffer();
 }
 
 void NailEngine::Render()
 {
+	
 	// Begin
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetViewports(1, &ResourceBuilder::Instance.Get().swapChain->GetViewPort());
 
@@ -48,7 +58,7 @@ void NailEngine::Render()
 
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->OMSetDepthStencilState(pDepthStencilState, 1);
 
-	const float red[] = { 0.f, 0.f, 1.f, 1.f };
+	const float red[] = { 1.f, 0.f, 0.f, 1.f };
 
 	// 렌더 타겟 뷰를 바인딩하고, 뎁스 스텐실 버퍼를 출력 병합기 단계에 바인딩한다.
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->OMSetRenderTargets(1,
@@ -59,15 +69,42 @@ void NailEngine::Render()
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->ClearRenderTargetView(ResourceBuilder::Instance.Get().swapChain->GetRTV().Get(), red);
 	// 뎁스 스텐실뷰를 초기화한다.
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->ClearDepthStencilView(ResourceBuilder::Instance.Get().swapChain->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
-	
+
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetState(0);
+
+	RenderSystem::Instance.Get().RenderObject();
 
 	// End
 	ResourceBuilder::Instance.Get().swapChain->GetSwapChain().Get()->Present(1, 0);
+
+	for (auto& iter : this->constantBuffers)
+	{
+		iter->Clear();
+	}
 }
 
 void NailEngine::SetResolution(unsigned int width, unsigned int height)
 {
 	this->width = width;
 	this->height = height;
+}
+
+std::shared_ptr<ConstantBuffer>& NailEngine::GetConstantBuffer(unsigned int index)
+{
+	return this->constantBuffers[index];
+}
+
+void NailEngine::CreateConstantBuffer()
+{
+	{
+		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
+		_constantBuffer->CraeteConstantBuffer(sizeof(MatrixBuffer), 256);
+		this->constantBuffers.emplace_back(_constantBuffer);
+	}
+
+	{
+		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
+		_constantBuffer->CraeteConstantBuffer(sizeof(MaterialBuffer), 256);
+		this->constantBuffers.emplace_back(_constantBuffer);
+	}
 }

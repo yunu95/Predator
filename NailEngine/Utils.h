@@ -1,4 +1,8 @@
 #pragma once
+#define _HAS_STD_BYTE 0
+
+#include <Windows.h>
+#include <string>
 
 template <class T>
 class LazyObjects
