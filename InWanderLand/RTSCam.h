@@ -1,11 +1,14 @@
 #pragma once
 #include "YunutyEngine.h"
+#include "DebugBeacon.h"
 using namespace yunutyEngine;
 
 class RTSCam :public yunutyEngine::graphics::Camera
 {
 protected:
-    bool roamingMode = true;
+    bool roamingMode = false;
+    function<void(Vector3d)> groundLeftClickCallback{[](Vector3d){}};
+    function<void(Vector3d)> groundRightClickCallback{[](Vector3d){}};
     void Update()
     {
         if (Input::isKeyPushed(KeyCode::Tab))
@@ -13,7 +16,7 @@ protected:
 
         if (!roamingMode)
         {
-            float cameraSpeed = 10.0f;
+            float cameraSpeed = 5.0f;
             Camera::Update();
             Vector3d deltaDirection = Vector3d::zero;
 
@@ -35,7 +38,7 @@ protected:
         }
         else
         {
-            float cameraSpeed = 10.0f;
+            float cameraSpeed = 1.0f;
             Camera::Update();
             Vector3d deltaPosition = Vector3d::zero;
 
@@ -82,6 +85,33 @@ protected:
 
             GetTransform()->position += deltaPosition.Normalized() * Time::GetDeltaTime() * cameraSpeed;
         }
+
+        if (!roamingMode && (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick)))
+        {
+            Vector3d projectedPoint;
+            auto resolution = graphics::Renderer::SingleInstance().GetResolution();
+            auto centeredPosition = Input::getMouseScreenPositionNormalized();
+            centeredPosition.x -= 0.5;
+            centeredPosition.y -= 0.5;
+            centeredPosition.y *= -1;
+            // 카메라 해상도가 1280, 800일때 near plane의 가로가 1.28, 0.8임.
+            auto forward = GetTransform()->GetWorldRotation().Forward();
+            auto right = GetTransform()->GetWorldRotation().Right();
+            auto up = GetTransform()->GetWorldRotation().Up();
+            projectedPoint = GetTransform()->GetWorldPosition() +
+                forward * expectedPlaneDistance() +
+                right * centeredPosition.x * 0.001 * resolution.x * expectedPlaneDistance() +
+                up * centeredPosition.y * 0.001 * resolution.y * expectedPlaneDistance();
+
+            DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?
+                yunuGI::Color::red() : yunuGI::Color::blue(), { 0.2,0.2,0.2 });
+            if (Input::isKeyPushed(KeyCode::MouseLeftClick))
+                groundLeftClickCallback(projectedPoint);
+            else
+                groundRightClickCallback(projectedPoint);
+        }
     }
+private:
+    float expectedPlaneDistance() { return abs(GetTransform()->GetWorldPosition().z); };
 };
 

@@ -11,6 +11,7 @@
 #include "RoamingCam.h"   
 #include "RTSCam.h"   
 #include "DebugTilePlane.h"
+#include "DebugBeacon.h"
 #include <d3d11.h>
 #include <tchar.h>
 #include <map>
@@ -153,6 +154,7 @@ int main(int, char**)
     //camSwitcher->cams.push_back(roamingCam);
     camSwitcher->cams.push_back(rtsCam);
 
+    DebugBeacon::PlaceBeacon({0,1,-0.5});
     /*class FlappyBird : public Component
     {
     protected:
