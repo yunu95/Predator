@@ -136,6 +136,9 @@
     <ClCompile Include="YGStaticMeshAdapter.cpp">
       <Filter>YGAdapters</Filter>
     </ClCompile>
+    <ClCompile Include="YGCameraAdapter.cpp">
+      <Filter>YGAdapters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsPch.h">

@@ -42,6 +42,7 @@ void yunutyEngine::graphics::Renderer::SetOutputWindow(const HWND& hwnd)
     auto renderer = _YunuGIObjects::SingleInstance().renderer.Get();
     assert(renderer != nullptr, L"그래픽스 렌더러가 없는 상태입니다!");
     renderer->SetOutputWindow(reinterpret_cast<unsigned long long>(hwnd));
+    Input::GetInstance()->mainWnd = hwnd;
 }
 void yunutyEngine::graphics::Renderer::LoadFiles(const char* rootPath)
 {
@@ -66,8 +67,14 @@ void yunutyEngine::graphics::Renderer::LoadFile(const char* fileName)
 {
     _YunuGIObjects::SingleInstance().resourceManager->LoadFile(fileName);
 }
+Vector2i yunutyEngine::graphics::Renderer::GetResolution()
+{
+    return resolution;
+}
 void yunutyEngine::graphics::Renderer::SetResolution(unsigned int width, unsigned int height)
 {
+    resolution.x = width;
+    resolution.y = height;
     _YunuGIObjects::SingleInstance().renderer->ResizeResolution(width, height);
 }
 void yunutyEngine::graphics::Renderer::SetAfterRenderAction(const function<void()>& action)
