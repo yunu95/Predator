@@ -22,6 +22,9 @@
     <Filter Include="DebugPlane">
       <UniqueIdentifier>{028fb8ff-0f7e-465c-894d-222249262cc3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DebugBeacon">
+      <UniqueIdentifier>{12a9b6c6-374f-4024-a2c3-3d67deff9469}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShakyCam.h" />
@@ -54,6 +57,9 @@
     </ClInclude>
     <ClInclude Include="DebugTilePlane.h">
       <Filter>DebugPlane</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugBeacon.h">
+      <Filter>DebugBeacon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

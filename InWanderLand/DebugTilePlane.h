@@ -25,7 +25,7 @@ public:
         {
             for (int j = 0; j < width; j++)
             {
-                Vector3d position = GetTransform()->GetWorldPosition() + Vector3d(i - halveWidth, j - halveHeight, 0);
+                Vector3d position = GetTransform()->GetWorldPosition() + Vector3d(i - halveWidth, j - halveHeight, 0.5);
                 auto tile = Scene::getCurrentScene()->AddGameObject();
                 auto staticMesh = tile->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
                 staticMesh->GetGI().LoadMesh("Cube");

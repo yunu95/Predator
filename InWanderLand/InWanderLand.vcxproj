@@ -196,6 +196,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="..\Include\ImGui\imgui.h" />
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
     <ClInclude Include="CamSwitcher.h" />
+    <ClInclude Include="DebugBeacon.h" />
     <ClInclude Include="DebugTilePlane.h" />
     <ClInclude Include="RequestDetourTest.h" />
     <ClInclude Include="RoamingCam.h" />
