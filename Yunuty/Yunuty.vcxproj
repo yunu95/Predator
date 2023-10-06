@@ -102,7 +102,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>YunutyEngine.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)FMOD\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(SolutionDir)Include\;$(SolutionDir)Include\FMOD\;$(ProjectDir)header\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FMOD\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(SolutionDir)Include\;$(SolutionDir)Include\FMOD\;$(ProjectDir)header\;$(SolutionDir)Include\Detour;$(SolutionDir)Include\DetourCrowd;$(SolutionDir)Include\DetourDebugUtils;$(SolutionDir)Include\DetourTileCache;$(SolutionDir)Include\Recast</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <IncludeInUnityFile>true</IncludeInUnityFile>
     </ClCompile>
@@ -110,10 +110,11 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Bin\$(Platform)\$(Configuration)\;$(SolutionDir)Lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Rpcrt4.lib;fmod32_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Rpcrt4.lib;Recast.lib;Detour.lib;DetourCrowd.lib;DetourTileCache.lib;DebugUtils.lib;fmod32_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K</Command>
+      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
+xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -126,7 +127,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>YunutyEngine.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)FMOD\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(SolutionDir)Include\;$(SolutionDir)Include\FMOD\;$(ProjectDir)header\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FMOD\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(SolutionDir)Include\;$(SolutionDir)Include\FMOD\;$(ProjectDir)header\;$(SolutionDir)Include\Detour;$(SolutionDir)Include\DetourCrowd;$(SolutionDir)Include\DetourDebugUtils;$(SolutionDir)Include\DetourTileCache;$(SolutionDir)Include\Recast</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <IncludeInUnityFile>true</IncludeInUnityFile>
     </ClCompile>
@@ -136,10 +137,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Bin\$(Platform)\$(Configuration)\;$(SolutionDir)Lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Rpcrt4.lib;fmod32_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Rpcrt4.lib;Recast.lib;Detour.lib;DetourCrowd.lib;DetourTileCache.lib;DebugUtils.lib;fmod32_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K</Command>
+      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
+xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -148,7 +150,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;USE_PLAIN_PTR;_DEBUG;_CONSOLE;YUNUTY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)FMOD\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(SolutionDir)Include\;$(SolutionDir)Include\FMOD\;$(ProjectDir)header\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FMOD\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(SolutionDir)Include\;$(SolutionDir)Include\FMOD\;$(ProjectDir)header\;$(SolutionDir)Include\Detour;$(SolutionDir)Include\DetourCrowd;$(SolutionDir)Include\DetourDebugUtils;$(SolutionDir)Include\DetourTileCache;$(SolutionDir)Include\Recast</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>YunutyEngine.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -159,10 +161,11 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Bin\$(Platform)\$(Configuration)\;$(SolutionDir)Lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Rpcrt4.lib;fmod64_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Rpcrt4.lib;Recast.lib;Detour.lib;DetourCrowd.lib;DetourTileCache.lib;DebugUtils.lib;fmod64_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K</Command>
+      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
+xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -173,7 +176,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;USE_PLAIN_PTR;NDEBUG;_CONSOLE;YUNUTY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)FMOD\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(SolutionDir)Include\;$(SolutionDir)Include\FMOD\;$(ProjectDir)header\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FMOD\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(SolutionDir)Include\;$(SolutionDir)Include\FMOD\;$(ProjectDir)header\;$(SolutionDir)Include\Detour;$(SolutionDir)Include\DetourCrowd;$(SolutionDir)Include\DetourDebugUtils;$(SolutionDir)Include\DetourTileCache;$(SolutionDir)Include\Recast</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>YunutyEngine.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -185,10 +188,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Bin\$(Platform)\$(Configuration)\;$(SolutionDir)Lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Rpcrt4.lib;fmod64_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Rpcrt4.lib;Recast.lib;Detour.lib;DetourCrowd.lib;DetourTileCache.lib;DebugUtils.lib;fmod64_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K</Command>
+      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
+xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

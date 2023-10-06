@@ -9,11 +9,13 @@ namespace yunuGIAdapter
     class CameraAdapter : public yunuGI::ICamera
     {
     public:
-        static CameraAdapter* instance;
+        //static CameraAdapter* mainCam{nullptr};
         CameraAdapter() {};
         virtual ~CameraAdapter() {};
         virtual void SetWorldTM(const yunuGI::Matrix4x4& tm) override
         {
+            //if (this != mainCam)
+                //return;
             static_assert(sizeof(Matrix) == sizeof(decltype(tm)));
             CameraManager::GetInstance().GetCamera(0)->CalculateMatrix(
                 reinterpret_cast<const Matrix&>(tm)
@@ -44,6 +46,8 @@ namespace yunuGIAdapter
 
         virtual void SetAsMain() override
         {
+            //mainCam = this;
         };
+    private:
     };
 }

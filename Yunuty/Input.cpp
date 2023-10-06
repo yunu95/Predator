@@ -122,21 +122,37 @@ void Input::Update()
 }
 bool Input::m_isKeyDown(KeyCode keyCode)
 {
+    //if (mainWnd != 0 && GetForegroundWindow() != mainWnd)
+        //return false;
     return keyDownSet.find(keyCode) != keyDownSet.end();
 }
 bool Input::m_isKeyPushed(KeyCode keyCode)
 {
+    //if (mainWnd != 0 && GetForegroundWindow() != mainWnd)
+        //return false;
     return keyPushedSet.find(keyCode) != keyPushedSet.end();
 }
 bool Input::m_isKeyLifted(KeyCode keyCode)
 {
+    //if (mainWnd != 0 && GetForegroundWindow() != mainWnd)
+        //return false;
     return keyLiftedSet.find(keyCode) != keyLiftedSet.end();
 }
 Vector2d yunutyEngine::Input::getMouseScreenPosition()
 {
     POINT point;
     GetCursorPos(&point);
+    ScreenToClient(GetInstance()->mainWnd, &point);
     return Vector2d(point.x, point.y);
+}
+Vector2d yunutyEngine::Input::getMouseScreenPositionNormalized()
+{
+    Vector2d ret = getMouseScreenPosition();
+    RECT wndRect;
+    GetClientRect(GetInstance()->mainWnd, &wndRect);
+    ret.x /= wndRect.right - wndRect.left;
+    ret.y /= wndRect.bottom - wndRect.top;
+    return ret;
 }
 
 // 해당 키코드와 일치하는 키가 눌러져 있다면 참을, 눌러져 있지 않다면 거짓을 반환합니다.

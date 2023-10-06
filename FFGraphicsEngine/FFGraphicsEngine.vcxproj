@@ -268,6 +268,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="TableDescriptorHeap.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeManager.cpp" />
+    <ClCompile Include="YGCameraAdapter.cpp" />
     <ClCompile Include="YGExports.cpp" />
     <ClCompile Include="YGStaticMeshAdapter.cpp" />
   </ItemGroup>
