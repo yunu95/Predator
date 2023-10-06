@@ -1,0 +1,1 @@
+#include "YGCameraAdapter.h"
