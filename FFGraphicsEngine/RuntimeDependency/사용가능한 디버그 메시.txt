@@ -1,0 +1,6 @@
+Capsule
+Cylinder
+Cube
+Sphere
+Rectangle
+Line
