@@ -70,13 +70,12 @@ protected:
                     rot.Forward() +
                     dMousePos.x * rotationSpeedFactor * rot.Right() +
                     -dMousePos.y * rotationSpeedFactor * rot.Up();
-                Vector3d newRight =
-                    //Vector3d::right +
-                    rot.Right() +
-                    dMousePos.x * rotationSpeedFactor * -rot.Forward();
-                Vector3d newUp =
-                    rot.Up() +
-                    -dMousePos.y * rotationSpeedFactor * -rot.Forward();
+                //Vector3d newRight =
+                //    //Vector3d::right +
+                //    rot.Right() +
+                //    dMousePos.x * rotationSpeedFactor * -rot.Forward();
+                Vector3d newUp = rot.Up() + -dMousePos.y * rotationSpeedFactor * -rot.Forward();
+                Vector3d newRight = Vector3d::Cross(Vector3d::up, newForward);
                 //GetTransform()->rotation = Quaternion::MakeWithAxes(euler);
                 GetTransform()->rotation = Quaternion::MakeWithAxes(newRight, newUp, newForward);
             }
