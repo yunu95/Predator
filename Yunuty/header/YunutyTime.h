@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include <queue>
 #include <chrono>
 
 #ifdef YUNUTY_EXPORTS

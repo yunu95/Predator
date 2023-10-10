@@ -12,6 +12,8 @@
 #include "RTSCam.h"   
 #include "DebugTilePlane.h"
 #include "DebugBeacon.h"
+#include "Zealot.h"
+#include "Zergling.h"
 #include <d3d11.h>
 #include <tchar.h>
 #include <map>
@@ -145,10 +147,43 @@ int main(int, char**)
     //camObj->GetTransform()->position = Vector3d(0, 0, -5);
     //auto roamingCam = camObj->AddComponent<RoamingCam>();
 
-    auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//staticMeshObj->AddComponent<FlappyBird>();
+	staticMesh->GetGI().LoadMesh("Capsule");
+	staticMesh->GetGI().SetMesh(L"Capsule");
+	staticMesh->GetGI().SetColor(0, yunuGI::Color{ 0, 1, 0, 0 });
+	staticMesh->GetGI().SetShader(0, L"Debug");
+	staticMesh->GetGI().SetMaterialName(0, L"Forward");
+	staticMeshObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ 0, 0, 0 });
+	auto zealotComp = staticMeshObj->AddComponent<Zealot>();
+	auto zealotDetectCollider = staticMeshObj->AddComponent<BoxCollider2D>();
+	zealotDetectCollider->SetWidth(3.0);
+	zealotDetectCollider->SetHeight(3.0);
+	//staticMesh->GetGI().LoadDiffuseMap("Textures/000000002405_reverse.dds");
+	//staticMesh->GetGI().LoadNormalMap("Textures/000000002406_b_reverse.dds");
 
-    camObj2->GetTransform()->position = Vector3d(0, 0, -5);
-    auto rtsCam = camObj2->AddComponent<RTSCam>();
+	auto enemyObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	auto enemyMesh = enemyObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//staticMeshObj->AddComponent<FlappyBird>();
+	enemyMesh->GetGI().LoadMesh("Capsule");
+	enemyMesh->GetGI().SetMesh(L"Capsule");
+	enemyMesh->GetGI().SetColor(0, yunuGI::Color{ 0, 0, 1, 0 });
+	enemyMesh->GetGI().SetShader(0, L"Debug");
+	enemyMesh->GetGI().SetMaterialName(0, L"Forward");
+	enemyObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ 12.5, 0, 0 });
+	auto zerglingComp = enemyObj->AddComponent<Zergling>();
+	auto zerglingHitbox = enemyObj->AddComponent<BoxCollider2D>();
+	zerglingHitbox->SetWidth(2.0);
+	zerglingHitbox->SetHeight(2.0);
+
+	auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	camObj2->GetTransform()->position = Vector3d(0, 0, -15);
+	auto rtsCam = camObj2->AddComponent<RTSCam>();
+    rtsCam->groundLeftClickCallback = [&](Vector3d clickedPosition)
+    {
+        staticMeshObj->GetComponent<Zealot>()->SetDestination(clickedPosition);
+    };
 
     auto camSwitcher = camObj2->AddComponent<CamSwitcher>();
     //camSwitcher->cams.push_back(roamingCam);

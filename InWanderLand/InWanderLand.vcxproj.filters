@@ -25,6 +25,12 @@
     <Filter Include="DebugBeacon">
       <UniqueIdentifier>{12a9b6c6-374f-4024-a2c3-3d67deff9469}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Creatures">
+      <UniqueIdentifier>{605ddaf4-661b-47d4-b24d-c39eb08784ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Creatures\Interface">
+      <UniqueIdentifier>{e64316a1-c9d4-4ce9-9b47-1a2d6c6abdd6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShakyCam.h" />
@@ -60,6 +66,18 @@
     </ClInclude>
     <ClInclude Include="DebugBeacon.h">
       <Filter>DebugBeacon</Filter>
+    </ClInclude>
+    <ClInclude Include="ICreature.h">
+      <Filter>Creatures\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="IGrounded.h">
+      <Filter>Creatures\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Zealot.h">
+      <Filter>Creatures</Filter>
+    </ClInclude>
+    <ClInclude Include="Zergling.h">
+      <Filter>Creatures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +120,15 @@
     </ClCompile>
     <ClCompile Include="RequestDetourTest.cpp">
       <Filter>RecastDetourTest</Filter>
+    </ClCompile>
+    <ClCompile Include="IGrounded.cpp">
+      <Filter>Creatures\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Zealot.cpp">
+      <Filter>Creatures</Filter>
+    </ClCompile>
+    <ClCompile Include="Zergling.cpp">
+      <Filter>Creatures</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
