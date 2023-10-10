@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="IMaterial.h" />
     <ClInclude Include="IYunuGIDebugCube.h" />
     <ClInclude Include="IYunuGIDebugObject.h" />
     <ClInclude Include="IYunuGIDebugSphere.h" />
@@ -175,6 +176,7 @@
     <ClInclude Include="YGDebugSphereAdapter.h" />
     <ClInclude Include="YGEventHandlerAdapter.h" />
     <ClInclude Include="YGFactoryAdapter.h" />
+    <ClInclude Include="YGMaterialAdapter.h" />
     <ClInclude Include="YGRenderableAdapter.h" />
     <ClInclude Include="YGRendererAdapter.h" />
     <ClInclude Include="YGResourceManagerAdapter.h" />

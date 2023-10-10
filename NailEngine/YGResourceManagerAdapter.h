@@ -16,7 +16,7 @@ namespace yunuGIAdapter
         virtual std::vector<std::string> GetSkeletonKeys() const override { return std::vector<std::string>{}; }
         virtual std::vector<std::string> GetTextureKeys() const override { return std::vector<std::string>{}; }
         virtual std::vector<std::string> AnimationKeys() const override { return std::vector<std::string>{}; }
-        virtual void LoadFile(const char* filePath) override
+        virtual void LoadFile(const char* filePath)const override
         {
             std::wstring ext = std::filesystem::path(filePath).extension();
 
@@ -29,7 +29,12 @@ namespace yunuGIAdapter
                 ResourceManager::Instance.Get().CreateShader(wFilePath);
             }
         };
-        virtual void UnloadResources() override
+        virtual yunuGI::IMaterial* CreateMaterial(yunuGI::MaterialDesc& materialDesc) const
+        {
+            return ResourceManager::Instance.Get().CrateMaterial(materialDesc);
+        };
+
+        virtual void UnloadResources()const override
         {
         };
     };

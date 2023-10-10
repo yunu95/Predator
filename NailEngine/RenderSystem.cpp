@@ -12,36 +12,27 @@ using namespace DirectX::PackedVector;
 #include "Material.h"
 #include "Mesh.h"
 
+#include "NailCamera.h"
+#include "RenderableManager.h"
+#include "IRenderable.h"
+
 LazyObjects<RenderSystem> RenderSystem::Instance;
 
 void RenderSystem::RenderObject()
 {
-	MatrixBuffer matrixBuffer;
-	matrixBuffer.WTM = DirectX::XMMatrixIdentity();
+	auto& renderableSet = RenderableManager::Instance.Get().GetRenderableSet();
 
-	DirectX::SimpleMath::Vector3 pos = {0.f,0.f,2.f};
-	DirectX::SimpleMath::Vector3 target = {0.f,0.f,0.f};
-	DirectX::SimpleMath::Vector3 up = {0.f,1.f,0.f};
+	for (auto& e : renderableSet)
+	{
+		MatrixBuffer matrixBuffer;
+		matrixBuffer.WTM = e->GetWorldTM();
+		matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+		matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+		matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 
-	DirectX::XMMATRIX viewMatrix = DirectX::XMMatrixLookAtLH(
-		DirectX::XMLoadFloat3(&pos),
-		DirectX::XMLoadFloat3(&target),
-		DirectX::XMLoadFloat3(&up)
-	);
+		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer),0);
 
-	float aspectRatio = 1280 / 800; // 화면 가로 세로 비율
-	float fieldOfView = DirectX::XMConvertToRadians(45.0f); // 시야각 (45도)
-	float nearClip = 1.0f; // 가까운 클리핑 평면
-	float farClip = 1000.0f; // 원격 클리핑 평면
-
-	// Projection Matrix를 생성합니다.
-	DirectX::XMMATRIX projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fieldOfView, aspectRatio, nearClip, farClip);
-
-	matrixBuffer.VTM = viewMatrix;
-	matrixBuffer.PTM = projectionMatrix;
-
-	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer));
-	
-	ResourceManager::Instance.Get().GetMaterial(L"DefaultMaterial")->PushGraphicsData();
-	ResourceManager::Instance.Get().GetMesh(L"Cube")->Render();
+		ResourceManager::Instance.Get().GetMaterial(e->GetMaterial()->GetMaterialName())->PushGraphicsData();
+		ResourceManager::Instance.Get().GetMesh(e->GetMeshName())->Render();
+	}
 }

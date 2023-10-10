@@ -10,6 +10,9 @@ public:
 	virtual void UnBind() override;
 
 private:
+	void CreateInputLayout();
+
+private:
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
 	Microsoft::WRL::ComPtr<ID3DBlob> vsBuffer;
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> vs;

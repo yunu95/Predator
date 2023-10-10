@@ -14,10 +14,10 @@ public:
 	void Init(HWND hWnd, int width, int height);
 
 #pragma region Getter
-	Microsoft::WRL::ComPtr<IDXGISwapChain1> GetSwapChain() { return swapChain; }
+	Microsoft::WRL::ComPtr<IDXGISwapChain1>& GetSwapChain() { return swapChain; }
 	D3D11_VIEWPORT& GetViewPort() { return vp; }
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> GetRTV() { return RTV; }
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> GetDSV() { return DSV; }
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>& GetRTV() { return RTV; }
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView>& GetDSV() { return DSV; }
 
 #pragma endregion
 

@@ -11,3 +11,4 @@
 #include "IYunuGIRenderable.h"
 #include "IYunuGIStaticMeshRenderer.h"
 #include "IYunuGIResourceManager.h"
+#include "IMaterial.h"

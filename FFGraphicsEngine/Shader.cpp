@@ -339,7 +339,7 @@ void Shader::SetPipelineState()
 	}
 
 	D3D12_RENDER_TARGET_BLEND_DESC& rt = m_pipelineDesc.BlendState.RenderTarget[0];
-
+	
 
 	// SrcBlend = Pixel Shader
 	// DestBlend = RenderTarget

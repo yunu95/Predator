@@ -36,11 +36,12 @@ void SwapChain::Init(HWND hWnd, int width, int height)
 	_sd.Stereo = FALSE;
 	_sd.SampleDesc.Count = 1;
 	_sd.SampleDesc.Quality = 0;
-	_sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	_sd.BufferUsage = DXGI_USAGE_BACK_BUFFER | DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	_sd.BufferCount = 2;
-	_sd.Scaling = DXGI_SCALING_NONE;
+	_sd.Scaling = DXGI_SCALING_STRETCH;
 	_sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
-	_sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	_sd.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
+	_sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH | DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
 
 	Microsoft::WRL::ComPtr<IDXGIDevice2> _dxgiDevice;
 	_hr = ResourceBuilder::Instance.Get().device->GetDevice().As(&_dxgiDevice);
@@ -63,7 +64,7 @@ void SwapChain::Init(HWND hWnd, int width, int height)
 		&_sd,
 		0,
 		nullptr,
-		&this->swapChain);
+		this->swapChain.GetAddressOf());
 	assert(_hr == S_OK);
 
 	// RTV »ý¼º
