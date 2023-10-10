@@ -127,10 +127,10 @@ int main(int, char**)
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     //yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"YunuDX11Renderer.dll");
     //yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"MZDX11Renderer.dll");
-    yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"FFGraphicsEngine.dll");
-    yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(releaseHwnd);
+    yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
     yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(1280, 800);
-    yunutyEngine::graphics::Renderer::SingleInstance().LoadFile("FBX/BossDoor/BossDoor.fbx");
+    yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(releaseHwnd);
+    //yunutyEngine::graphics::Renderer::SingleInstance().LoadFile("FBX/BossDoor/BossDoor.fbx");
 
     ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 
@@ -152,15 +152,12 @@ int main(int, char**)
                 currentSpeed = flapSpeed;
         }
     };*/
-    auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
     //staticMeshObj->AddComponent<FlappyBird>();
-    staticMesh->GetGI().LoadMesh("Capsule");
-    staticMesh->GetGI().SetMesh(L"Capsule");
-    staticMesh->GetGI().SetColor(0, yunuGI::Color{ 0, 1, 0, 0 });
-    staticMesh->GetGI().SetShader(0, L"Debug");
-    staticMesh->GetGI().SetMaterialName(0, L"Forward");
-    staticMeshObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{1, 0, 0});
+	auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	staticMesh->GetGI().LoadMesh("Cube");
+	staticMesh->GetGI().GetMaterial()->SetPixelShader(L"DebugPS.cso");
+	staticMeshObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ 1,3,10 });
     //staticMesh->GetGI().LoadDiffuseMap("Textures/000000002405_reverse.dds");
     //staticMesh->GetGI().LoadNormalMap("Textures/000000002406_b_reverse.dds");
 

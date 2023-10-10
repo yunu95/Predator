@@ -9,9 +9,8 @@ namespace yunuGI
 	{
 	public:
 		virtual void LoadMesh(const char* fileName) = 0;
-		virtual void LoadDiffuseMap(const char* fileName) = 0;
-		virtual void LoadNormalMap(const char* fileName) = 0;
 		virtual void SetPickingMode(bool isPickingModeOn) = 0;
+
 	};
 
 	struct IStaticMeshRendererDesc
