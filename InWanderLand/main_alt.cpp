@@ -5,6 +5,7 @@
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
+#include "Editor/EditorLayer.h"
 #include "YunutyEngine.h"
 #include "ShakyCam.h"   
 #include <d3d11.h>
@@ -225,12 +226,11 @@ int main(int, char**)
     otherTexture->Release();
     map<void*, ID3D11ShaderResourceView*> srvs;
 
-
     // Main loop
     bool done = false;
     while (!done)
     {
-        yunutyEngine::graphics::Renderer::SingleInstance().ManualRender();
+        //yunutyEngine::graphics::Renderer::SingleInstance().ManualRender();
         MSG msg;
         while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
         {
@@ -241,98 +241,23 @@ int main(int, char**)
         }
         if (done)
             break;
+
+        /// Editor 관련 영역, Release Mode 에서는 구현 안되도록 처리
+#ifdef _DEBUG
+        Editor::EditorLayer editorLayer;
+        editorLayer.Initialize();
+
+        //Start the Dear ImGui frame
+        ImGui_ImplDX11_NewFrame();
+        ImGui_ImplWin32_NewFrame();
+        ImGui::NewFrame();
+
+        //editorLayer.Update();
+        editorLayer.Render();
+
+        ImGui::Render();
+#endif
     }
-
-
-    //while (!done)
-    //{
-    //	yunutyEngine::graphics::Renderer::SingleInstance().ManualRender();
-    //	MSG msg;
-    //	while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
-    //	{
-    //		::TranslateMessage(&msg);
-    //		::DispatchMessage(&msg);
-    //		if (msg.message == WM_QUIT)
-    //			done = true;
-    //	}
-    //	if (done)
-    //		break;
-
-    //	//Start the Dear ImGui frame
-    //	ImGui_ImplDX11_NewFrame();
-    //	ImGui_ImplWin32_NewFrame();
-    //	ImGui::NewFrame();
-
-    //	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-    //	if (show_demo_window)
-    //		ImGui::ShowDemoWindow(&show_demo_window);
-
-    //	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-    //	{
-    //		static float f = 0.0f;
-    //		static int counter = 0;
-
-    //		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-    //		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-    //		ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-    //		ImGui::Checkbox("Another Window", &show_another_window);
-
-    //		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-    //		ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-    //		if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-    //		{
-    //			counter++;
-    //			otherDC->ClearRenderTargetView(rtv, (counter % 2 == 0) ? color_red : color_blue);
-    //			otherDC->Flush();
-    //		}
-    //		ImGui::SameLine();
-    //		ImGui::Text("counter = %d", counter);
-
-    //		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    //		ImGui::Text("pointer = %p", (yunutyEngine::graphics::Renderer::SingleInstance().QuerySharedOutputHandle()));
-    //		ImGui::Image(GetSRV(yunutyEngine::graphics::Renderer::SingleInstance().QuerySharedOutputHandle()), { 1280,800 });
-    //		//ImGui::Image(static_cast<void*>(tempSrv), { 1920,1080 });
-    //		//ImGui::Image(static_cast<void*>(yunutyEngine::graphics::Renderer::SingleInstance().QueryD3D11RenderOutputSRV()), { 1920,1080 });
-    //		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    //		ImGui::End();
-    //	}
-
-    //	// 3. Show another simple window.
-    //	if (show_another_window)
-    //	{
-    //		ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-    //		ImGui::Text("Hello from another window!");
-    //		ImGui::Image(GetSRV(yunutyEngine::graphics::Renderer::SingleInstance().QuerySharedOutputHandle()), { 1280,800 });
-    //		if (ImGui::Button("Close Me"))
-    //			show_another_window = false;
-    //		//ImGui::Image(GetSRV(yunutyEngine::graphics::Renderer::SingleInstance().QuerySharedOutputHandle()), { 100,100 });
-    //		ImGui::End();
-    //	}
-
-    //	// Rendering
-    //	ImGui::Render();
-    //	const float clear_color_with_alpha[4] = { clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w };
-    //	g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
-    //	g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color_with_alpha);
-    //	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-    //	// Update and Render additional Platform Windows
-    //	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    //	{
-    //		ImGui::UpdatePlatformWindows();
-    //		ImGui::RenderPlatformWindowsDefault();
-    //	}
-
-    //	if (yunutyEngine::Input::isKeyDown(KeyCode::MouseLeftClick))
-    //	{
-    //		//yunutyEngine::graphics::Renderer::SingleInstance().InvokeClickEvent(x, y);
-    //	}
-
-    //	//g_pSwapChain->Present(1, 0); // Present with vsync
-    //	g_pSwapChain->Present(0, 0); // Present without vsync
-    //}
 
     // Cleanup
     ImGui_ImplDX11_Shutdown();
