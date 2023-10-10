@@ -8,7 +8,7 @@ namespace yunuGIAdapter
 	class StaticMeshAdapter : public yunuGIAdapter::RenderableAdapter, public yunuGI::IStaticMeshRenderer
 	{
 	public:
-		StaticMeshAdapter() :RenderableAdapter() { }
+		StaticMeshAdapter() : RenderableAdapter() {}
 		virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM) { };
 		virtual void SetActive(bool isActive) {};
 		virtual void LoadMesh(const char* fileName) {};

@@ -6,7 +6,7 @@ using namespace DirectX::PackedVector;
 
 struct Vertex
 {
-	DirectX::SimpleMath::Vector4 pos;
+	DirectX::SimpleMath::Vector3 pos;
 	DirectX::SimpleMath::Vector4 color;
 };
 
@@ -15,6 +15,7 @@ struct MatrixBuffer
 	DirectX::SimpleMath::Matrix WTM;
 	DirectX::SimpleMath::Matrix VTM;
 	DirectX::SimpleMath::Matrix PTM;
+	DirectX::SimpleMath::Matrix WVP;
 };
 
 struct MaterialBuffer

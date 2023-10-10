@@ -32,7 +32,6 @@ void NailEngine::Init(UINT64 hWnd)
 
 void NailEngine::Render()
 {
-	
 	// Begin
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetViewports(1, &ResourceBuilder::Instance.Get().swapChain->GetViewPort());
 
@@ -58,19 +57,39 @@ void NailEngine::Render()
 
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->OMSetDepthStencilState(pDepthStencilState, 1);
 
-	const float red[] = { 1.f, 0.f, 0.f, 1.f };
-
-	// 렌더 타겟 뷰를 바인딩하고, 뎁스 스텐실 버퍼를 출력 병합기 단계에 바인딩한다.
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->OMSetRenderTargets(1,
-		ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
-		ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
+	const float red[] = { 0.f, 0.5f, 0.f, 1.f };
 
 	// 렌더 타겟뷰를 내가 지정한 값으로 픽셀을 다 초기화하여 지운다.
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->ClearRenderTargetView(ResourceBuilder::Instance.Get().swapChain->GetRTV().Get(), red);
 	// 뎁스 스텐실뷰를 초기화한다.
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->ClearDepthStencilView(ResourceBuilder::Instance.Get().swapChain->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetState(0);
+	//// renderstate 객체를 만들자
+	//D3D11_RASTERIZER_DESC rasterizerDesc = { };
+	//rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+	//rasterizerDesc.CullMode = D3D11_CULL_BACK;
+	//rasterizerDesc.FrontCounterClockwise = false;
+	//rasterizerDesc.DepthBias = 0;
+	//rasterizerDesc.DepthBiasClamp = 0.0f;
+	//rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+	//rasterizerDesc.DepthClipEnable = true;
+	//rasterizerDesc.ScissorEnable = false;
+	//rasterizerDesc.MultisampleEnable = false;
+	//rasterizerDesc.AntialiasedLineEnable = false;
+
+	////Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
+	//ID3D11RasterizerState* rasterizerState;
+	//ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
+
+	////_context->RSSetState(rasterizerState.Get());
+	////ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetState(rasterizerState);
+
+	///ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetState(0);
+
+	// 렌더 타겟 뷰를 바인딩하고, 뎁스 스텐실 버퍼를 출력 병합기 단계에 바인딩한다.
+	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->OMSetRenderTargets(1,
+		ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
+		ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
 
 	RenderSystem::Instance.Get().RenderObject();
 

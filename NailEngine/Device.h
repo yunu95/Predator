@@ -10,8 +10,8 @@ public:
 	void Init();
 
 #pragma region Getter
-	Microsoft::WRL::ComPtr<ID3D11Device> GetDevice() { return this->device; }
-	Microsoft::WRL::ComPtr<ID3D11DeviceContext> GetDeviceContext() { return deviceContext; }
+	Microsoft::WRL::ComPtr<ID3D11Device>& GetDevice() { return this->device; }
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext>& GetDeviceContext() { return deviceContext; }
 #pragma endregion
 
 private:

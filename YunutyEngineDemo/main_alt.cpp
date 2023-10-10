@@ -24,6 +24,8 @@ void CreateRenderTarget();
 void CleanupRenderTarget();
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+void CreateResource();
+
 ID3D11ShaderResourceView* GetSRV(void* handle)
 {
 	static std::map<void*, ID3D11ShaderResourceView*> srvs;
@@ -50,39 +52,40 @@ ID3D11ShaderResourceView* GetSRV(void* handle)
 // Main code
 int main(int, char**)
 {
+	
 	// Create application window
 	//ImGui_ImplWin32_EnableDpiAwareness();
 	WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("ImGui Example"), NULL };
 	::RegisterClassEx(&wc);
-	HWND hwnd = ::CreateWindow(wc.lpszClassName, _T("Dear ImGui DirectX11 Example"), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+	//HWND hwnd = ::CreateWindow(wc.lpszClassName, _T("Dear ImGui DirectX11 Example"), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
 	HWND releaseHwnd = ::CreateWindow(wc.lpszClassName, _T("Release version game window"), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
 
-	::ShowWindow(hwnd, SW_SHOWDEFAULT);
-	::UpdateWindow(hwnd);
+	//::ShowWindow(hwnd, SW_SHOWDEFAULT);
+	//::UpdateWindow(hwnd);
 
 	::ShowWindow(releaseHwnd, SW_SHOWDEFAULT);
 	::UpdateWindow(releaseHwnd);
 
 	// Initialize Direct3D
-	if (!CreateDeviceD3D(hwnd))
-	{
-		CleanupDeviceD3D();
-		::UnregisterClass(wc.lpszClassName, wc.hInstance);
-		throw std::runtime_error(std::string("failed to create d3d device!"));
-	}
+	//if (!CreateDeviceD3D(hwnd))
+	//{
+	//	CleanupDeviceD3D();
+	//	::UnregisterClass(wc.lpszClassName, wc.hInstance);
+	//	throw std::runtime_error(std::string("failed to create d3d device!"));
+	//}
 
-	// Show the window
-	::ShowWindow(hwnd, SW_SHOWDEFAULT);
-	::UpdateWindow(hwnd);
+	//// Show the window
+	//::ShowWindow(hwnd, SW_SHOWDEFAULT);
+	//::UpdateWindow(hwnd);
 
 	// Setup Dear ImGui context
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+	//IMGUI_CHECKVERSION();
+	//ImGui::CreateContext();
+	//ImGuiIO& io = ImGui::GetIO(); (void)io;
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+	//io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+	//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 	//io.ConfigViewportsNoAutoMerge = true;
 	//io.ConfigViewportsNoTaskBarIcon = true;
 	//io.ConfigViewportsNoDefaultParent = true;
@@ -92,19 +95,19 @@ int main(int, char**)
 	//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI: Experimental.
 
 	// Setup Dear ImGui style
-	ImGui::StyleColorsDark();
+	//ImGui::StyleColorsDark();
 	//ImGui::StyleColorsClassic();
 
 	// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
-	ImGuiStyle& style = ImGui::GetStyle();
-	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-	{
-		style.WindowRounding = 0.0f;
-		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-	}
+	//ImGuiStyle& style = ImGui::GetStyle();
+	//if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	//{
+	//	style.WindowRounding = 0.0f;
+	//	style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+	//}
 
 	// Setup Platform/Renderer backends
-	ImGui_ImplWin32_Init(hwnd);
+	//ImGui_ImplWin32_Init(hwnd);
 
 	// Load Fonts
 	// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
@@ -122,112 +125,112 @@ int main(int, char**)
 	//IM_ASSERT(font != NULL);
 
 	// Our state
-	bool show_demo_window = true;
-	bool show_another_window = true;
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
-	//yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"YunuDX11Renderer.dll");
-	//yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"MZDX11Renderer.dll");
-	//yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"FFGraphicsEngine.dll");
-	//yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"FFGraphicsEngine.dll");
+	//bool show_demo_window = true;
+	//bool show_another_window = true;
+	//ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	//
+	////yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"YunuDX11Renderer.dll");
+	////yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"MZDX11Renderer.dll");
+	////yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"FFGraphicsEngine.dll");
+	////yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"FFGraphicsEngine.dll");
 	yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
-	yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(1280,800);
+	yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(1280, 800);
 	yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(releaseHwnd);
-	//yunutyEngine::graphics::Renderer::SingleInstance().LoadFile("FBX/BossDoor/BossDoor.fbx");
-	
-	ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
+	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 	yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	camObj->AddComponent<ShakyCam>()->SetCameraMain();
 
-	/*class FlappyBird : public Component
 	{
-	protected:
-		float gravity = -9.81;
-		float currentSpeed{ 0 };
-		float flapSpeed = 25;
-		virtual void Update()override
-		{
-			GetTransform()->position.y += currentSpeed * Time::GetDeltaTime();
-			currentSpeed += gravity * Time::GetDeltaTime();
-			if (Input::isKeyPushed(KeyCode::Space))
-				currentSpeed = flapSpeed;
-		}
-	};*/
-	auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	//staticMeshObj->AddComponent<FlappyBird>();
-	staticMesh->GetGI().LoadMesh("Capsule");
-	/*staticMesh->GetGI().SetMesh(L"Capsule");
-	staticMesh->GetGI().SetColor(0,yunuGI::Color{ 0,1,0,0 });
-	staticMesh->GetGI().SetShader(0, L"Debug");
-	staticMesh->GetGI().SetMaterialName(0, L"Forward");*/
-	staticMeshObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{1,0,0});
-	//staticMesh->GetGI().LoadDiffuseMap("Textures/000000002405_reverse.dds");
-	//staticMesh->GetGI().LoadNormalMap("Textures/000000002406_b_reverse.dds");
+		auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		staticMesh->GetGI().LoadMesh("Cube");
+		staticMesh->GetGI().GetMaterial()->SetPixelShader(L"DebugPS.cso");
+		staticMeshObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ 1,3,10 });
+		camObj->GetComponent<ShakyCam>()->SetObject(&staticMesh->GetGI());
+	}
+	{
+		auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		staticMesh->GetGI().LoadMesh("Sphere");
+		staticMeshObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ 0,0,0 });
+	}
+	{
+		auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		staticMesh->GetGI().LoadMesh("Capsule");
+		staticMeshObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ 5,0,0 });
+	}
+	{
+		auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		staticMesh->GetGI().LoadMesh("Cylinder");
+		staticMeshObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ -5,0,0 });
+	}
 
 	yunutyEngine::YunutyCycle::SingleInstance().autoRendering = false;
 	yunutyEngine::YunutyCycle::SingleInstance().Play();
 
-	ID3D11Device* otherDevice{ nullptr };
-	ID3D11DeviceContext* otherDC{ nullptr };
-	D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &otherDevice, nullptr, &otherDC);
-
-	ID3D11Texture2D* otherTexture{ nullptr };
-	ID3D11ShaderResourceView* tempSrv{ nullptr };
-	D3D11_TEXTURE2D_DESC desc
-	{
-		.Width = 100,
-		.Height = 100,
-		.MipLevels = 1,
-		.ArraySize = 1,
-		.Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
-		.SampleDesc{.Count = 1},
-		.Usage = D3D11_USAGE_DEFAULT,
-		.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET,
-		.CPUAccessFlags = 0,
-		.MiscFlags = D3D11_RESOURCE_MISC_SHARED,
-	};
-	otherDevice->CreateTexture2D(&desc, nullptr, &otherTexture);
-	ID3D11RenderTargetView* rtv;
-	D3D11_RENDER_TARGET_VIEW_DESC rtvDesc
-	{
-		.Format = desc.Format,
-		.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D,
-		.Texture2D{.MipSlice = 0}
-	};
-	otherDevice->CreateRenderTargetView(otherTexture, &rtvDesc, &rtv);
-	float color_red[]{ 0,1,0,1 };
-	float color_blue[]{ 0,0,1,1 };
-	otherDC->ClearRenderTargetView(rtv, color_red);
-	otherDC->Flush();
-	HANDLE sharedHandle{ nullptr };
-	IDXGIResource* dxgiResource{ nullptr };
-	otherTexture->QueryInterface<IDXGIResource>(&dxgiResource);
-	dxgiResource->GetSharedHandle(&sharedHandle);
-	dxgiResource->Release();
-
-	ID3D11Resource* receivedResource{ nullptr };
-	g_pd3dDevice->OpenSharedResource(sharedHandle, IID_PPV_ARGS(&receivedResource));
-	ID3D11Texture2D* receivedTexture{ nullptr };
-	receivedResource->QueryInterface(&receivedTexture);
+	///ID3D11Device* otherDevice{ nullptr };
+	///ID3D11DeviceContext* otherDC{ nullptr };
+	///D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &otherDevice, nullptr, &otherDC);
+	///
+	///ID3D11Texture2D* otherTexture{ nullptr };
+	///ID3D11ShaderResourceView* tempSrv{ nullptr };
+	///D3D11_TEXTURE2D_DESC desc
+	///{
+	///	.Width = 100,
+	///	.Height = 100,
+	///	.MipLevels = 1,
+	///	.ArraySize = 1,
+	///	.Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
+	///	.SampleDesc{.Count = 1},
+	///	.Usage = D3D11_USAGE_DEFAULT,
+	///	.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET,
+	///	.CPUAccessFlags = 0,
+	///	.MiscFlags = D3D11_RESOURCE_MISC_SHARED,
+	///};
+	///otherDevice->CreateTexture2D(&desc, nullptr, &otherTexture);
+	///ID3D11RenderTargetView* rtv;
+	///D3D11_RENDER_TARGET_VIEW_DESC rtvDesc
+	///{
+	///	.Format = desc.Format,
+	///	.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D,
+	///	.Texture2D{.MipSlice = 0}
+	///};
+	///otherDevice->CreateRenderTargetView(otherTexture, &rtvDesc, &rtv);
+	///float color_red[]{ 0,1,0,1 };
+	///float color_blue[]{ 0,0,1,1 };
+	///otherDC->ClearRenderTargetView(rtv, color_red);
+	///otherDC->Flush();
+	///HANDLE sharedHandle{ nullptr };
+	///IDXGIResource* dxgiResource{ nullptr };
+	///otherTexture->QueryInterface<IDXGIResource>(&dxgiResource);
+	///dxgiResource->GetSharedHandle(&sharedHandle);
+	///dxgiResource->Release();
+	///
+	///ID3D11Resource* receivedResource{ nullptr };
+	///g_pd3dDevice->OpenSharedResource(sharedHandle, IID_PPV_ARGS(&receivedResource));
+	///ID3D11Texture2D* receivedTexture{ nullptr };
+	///receivedResource->QueryInterface(&receivedTexture);
 
 	//g_pd3dDevice->CreateShaderResourceView(sharedTexture2D, &srvDesc, &tempSrv);
-	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc
-	{
-		.Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
-		.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D,
-		.Texture2D
-		{
-			.MostDetailedMip = 0,
-			.MipLevels = desc.MipLevels,
-		},
-	};
-	g_pd3dDevice->CreateShaderResourceView(receivedTexture, &srvDesc, &tempSrv);
-	otherTexture->Release();
-	map<void*, ID3D11ShaderResourceView*> srvs;
+	///D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc
+	///{
+	///	.Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
+	///	.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D,
+	///	.Texture2D
+	///	{
+	///		.MostDetailedMip = 0,
+	///		.MipLevels = desc.MipLevels,
+	///	},
+	///};
+	///g_pd3dDevice->CreateShaderResourceView(receivedTexture, &srvDesc, &tempSrv);
+	///otherTexture->Release();
+	///map<void*, ID3D11ShaderResourceView*> srvs;
 
+	CreateResource();
 
 	// Main loop
 	bool done = false;
@@ -244,94 +247,101 @@ int main(int, char**)
 		}
 		if (done)
 			break;
-	
+
 
 		//Start the Dear ImGui frame
-		ImGui_ImplDX11_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
-
-		// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-		if (show_demo_window)
-			ImGui::ShowDemoWindow(&show_demo_window);
+		///ImGui_ImplDX11_NewFrame();
+		///ImGui_ImplWin32_NewFrame();
+		///ImGui::NewFrame();
+		///
+		///// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+		///if (show_demo_window)
+		///	ImGui::ShowDemoWindow(&show_demo_window);
 
 		// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-		{
-			static float f = 0.0f;
-			static int counter = 0;
+		//{
+		//	static float f = 0.0f;
+		//	static int counter = 0;
 
-			ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+		//	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
 
-			ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-			ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-			ImGui::Checkbox("Another Window", &show_another_window);
+		//	ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+		//	ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+		//	ImGui::Checkbox("Another Window", &show_another_window);
 
-			ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-			ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+		//	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+		//	ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
-			if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-			{
-				counter++;
-				otherDC->ClearRenderTargetView(rtv, (counter % 2 == 0) ? color_red : color_blue);
-				otherDC->Flush();
-			}
-			ImGui::SameLine();
-			ImGui::Text("counter = %d", counter);
+		//	if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+		//	{
+		//		counter++;
+		//		otherDC->ClearRenderTargetView(rtv, (counter % 2 == 0) ? color_red : color_blue);
+		//		otherDC->Flush();
+		//	}
+		//	ImGui::SameLine();
+		//	ImGui::Text("counter = %d", counter);
 
-			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-			ImGui::Text("pointer = %p", (yunutyEngine::graphics::Renderer::SingleInstance().QuerySharedOutputHandle()));
-			ImGui::Image(GetSRV(yunutyEngine::graphics::Renderer::SingleInstance().QuerySharedOutputHandle()), { 1280,800 });
-			//ImGui::Image(static_cast<void*>(tempSrv), { 1920,1080 });
-			//ImGui::Image(static_cast<void*>(yunutyEngine::graphics::Renderer::SingleInstance().QueryD3D11RenderOutputSRV()), { 1920,1080 });
-			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-			ImGui::End();
-		}
+		//	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		//	ImGui::Text("pointer = %p", (yunutyEngine::graphics::Renderer::SingleInstance().QuerySharedOutputHandle()));
+		//	ImGui::Image(GetSRV(yunutyEngine::graphics::Renderer::SingleInstance().QuerySharedOutputHandle()), { 1280,800 });
+		//	//ImGui::Image(static_cast<void*>(tempSrv), { 1920,1080 });
+		//	//ImGui::Image(static_cast<void*>(yunutyEngine::graphics::Renderer::SingleInstance().QueryD3D11RenderOutputSRV()), { 1920,1080 });
+		//	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		//	ImGui::End();
+		//}
 
-		// 3. Show another simple window.
-		if (show_another_window)
-		{
-			ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-			ImGui::Text("Hello from another window!");
-			ImGui::Image(GetSRV(yunutyEngine::graphics::Renderer::SingleInstance().QuerySharedOutputHandle()), { 1280,800 });
-			if (ImGui::Button("Close Me"))
-				show_another_window = false;
-			//ImGui::Image(GetSRV(yunutyEngine::graphics::Renderer::SingleInstance().QuerySharedOutputHandle()), { 100,100 });
-			ImGui::End();
-		}
+		//// 3. Show another simple window.
+		//if (show_another_window)
+		//{
+		//	ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+		//	ImGui::Text("Hello from another window!");
+		//	ImGui::Image(GetSRV(yunutyEngine::graphics::Renderer::SingleInstance().QuerySharedOutputHandle()), { 1280,800 });
+		//	if (ImGui::Button("Close Me"))
+		//		show_another_window = false;
+		//	//ImGui::Image(GetSRV(yunutyEngine::graphics::Renderer::SingleInstance().QuerySharedOutputHandle()), { 100,100 });
+		//	ImGui::End();
+		//}
 
-		// Rendering
-		ImGui::Render();
-		const float clear_color_with_alpha[4] = { clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w };
-		g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
-		g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color_with_alpha);
-		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+		//// Rendering
+		//ImGui::Render();
+		//const float clear_color_with_alpha[4] = { clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w };
+		//g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
+		//g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color_with_alpha);
+		//ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-		// Update and Render additional Platform Windows
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-		}
+		//// Update and Render additional Platform Windows
+		//if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		//{
+		//	ImGui::UpdatePlatformWindows();
+		//	ImGui::RenderPlatformWindowsDefault();
+		//}
 
-		if (yunutyEngine::Input::isKeyDown(KeyCode::MouseLeftClick))
-		{
-			//yunutyEngine::graphics::Renderer::SingleInstance().InvokeClickEvent(x, y);
-		}
+		//if (yunutyEngine::Input::isKeyDown(KeyCode::MouseLeftClick))
+		//{
+		//	//yunutyEngine::graphics::Renderer::SingleInstance().InvokeClickEvent(x, y);
+		//}
 
-		//g_pSwapChain->Present(1, 0); // Present with vsync
-		g_pSwapChain->Present(0, 0); // Present without vsync
+		////g_pSwapChain->Present(1, 0); // Present with vsync
+		//g_pSwapChain->Present(0, 0); // Present without vsync
 	}
 
 	// Cleanup
-	ImGui_ImplDX11_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
-
-	CleanupDeviceD3D();
-	::DestroyWindow(hwnd);
-	::UnregisterClass(wc.lpszClassName, wc.hInstance);
+	//ImGui_ImplDX11_Shutdown();
+	//ImGui_ImplWin32_Shutdown();
+	//ImGui::DestroyContext();
+	//
+	//CleanupDeviceD3D();
+	//::DestroyWindow(hwnd);
+	//::UnregisterClass(wc.lpszClassName, wc.hInstance);
 
 	return 0;
+}
+
+void CreateResource()
+{
+	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+
 }
 
 // Helper functions

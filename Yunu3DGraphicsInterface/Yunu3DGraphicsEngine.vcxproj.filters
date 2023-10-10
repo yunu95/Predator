@@ -51,6 +51,9 @@
     <Filter Include="AdapterTemplate">
       <UniqueIdentifier>{6592b14a-5084-42f0-a3ec-99883003788a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\IMaterial">
+      <UniqueIdentifier>{cb7f02e4-25af-40b5-a109-d2162b39915e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IYunuGI3DRenderer.h">
@@ -162,6 +165,12 @@
       <Filter>AdapterTemplate</Filter>
     </ClInclude>
     <ClInclude Include="YGUITextAdapter.h">
+      <Filter>AdapterTemplate</Filter>
+    </ClInclude>
+    <ClInclude Include="IMaterial.h">
+      <Filter>Header Files\IMaterial</Filter>
+    </ClInclude>
+    <ClInclude Include="YGMaterialAdapter.h">
       <Filter>AdapterTemplate</Filter>
     </ClInclude>
   </ItemGroup>

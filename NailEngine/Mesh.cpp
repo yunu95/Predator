@@ -17,7 +17,7 @@ void Mesh::Init(const std::vector<Vertex>& vertexVec, const std::vector<unsigned
 
 void Mesh::Render()
 {
-	unsigned int stride = sizeof(MatrixBuffer);
+	unsigned int stride = sizeof(Vertex);
 	unsigned int offset = 0;
 
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->IASetVertexBuffers(0, 1, this->vertexBuffer.GetAddressOf(), &stride, &offset);
@@ -31,14 +31,14 @@ void Mesh::CreateVertexBuffer()
 {
 	D3D11_BUFFER_DESC _vertexBufferDesc;
 	_vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	_vertexBufferDesc.ByteWidth = sizeof(MatrixBuffer) * this->vertexCount;
+	_vertexBufferDesc.ByteWidth = sizeof(Vertex) * this->vertexCount;
 	_vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	_vertexBufferDesc.CPUAccessFlags = 0;
 	_vertexBufferDesc.MiscFlags = 0;
 	_vertexBufferDesc.StructureByteStride = 0;
 
 	D3D11_SUBRESOURCE_DATA _vertexData;
-	_vertexData.pSysMem = &this->vertexVec;
+	_vertexData.pSysMem = &(this->vertexVec[0]);
 	_vertexData.SysMemPitch = 0;
 	_vertexData.SysMemSlicePitch = 0;
 
@@ -56,7 +56,7 @@ void Mesh::CreateIndexBuffer()
 	_indexBufferDesc.StructureByteStride = 0;
 
 	D3D11_SUBRESOURCE_DATA _indexData;
-	_indexData.pSysMem = &this->indexVec;
+	_indexData.pSysMem = &(this->indexVec[0]);
 	_indexData.SysMemPitch = 0;
 	_indexData.SysMemSlicePitch = 0;
 

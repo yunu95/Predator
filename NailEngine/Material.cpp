@@ -7,9 +7,7 @@
 #include "Shader.h"
 
 Material::Material()
-	:	vs{ L"Shader/VS/VertexShader.hlsl" },
-		ps{ L"Shader/PS/PixelShader.hlsl" },
-		textures{}
+	: materialDesc{}
 {
 
 }
@@ -21,7 +19,10 @@ Material::~Material()
 
 void Material::PushGraphicsData()
 {
-	NailEngine::Instance.Get().GetConstantBuffer(1)->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer));
+	//NailEngine::Instance.Get().GetConstantBuffer(1)->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer));
+
+	assert(!vs.empty());
+	assert(!ps.empty());
 
 	ResourceManager::Instance.Get().GetShader(vs)->Bind();
 	ResourceManager::Instance.Get().GetShader(ps)->Bind();
