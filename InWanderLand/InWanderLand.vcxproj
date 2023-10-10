@@ -210,8 +210,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="RequestDetourTest.h" />
     <ClInclude Include="RoamingCam.h" />
     <ClInclude Include="RTSCam.h" />
-    <ClInclude Include="RequestDetourTest.h" />
-    <ClInclude Include="CamSwitcher.h" />
     <ClInclude Include="ShakyCam.h" />
   </ItemGroup>
   <ItemGroup>
