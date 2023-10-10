@@ -5,7 +5,7 @@ using namespace yunutyEngine;
 
 class RTSCam :public yunutyEngine::graphics::Camera
 {
-protected:
+public:
     bool roamingMode = false;
     function<void(Vector3d)> groundLeftClickCallback{[](Vector3d){}};
     function<void(Vector3d)> groundRightClickCallback{[](Vector3d){}};
@@ -86,6 +86,7 @@ protected:
             GetTransform()->position += deltaPosition.Normalized() * Time::GetDeltaTime() * cameraSpeed;
         }
 
+        // 스크린 스페이스 -> 월드 스페이스를 구하는 로직
         if (!roamingMode && (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick)))
         {
             Vector3d projectedPoint;

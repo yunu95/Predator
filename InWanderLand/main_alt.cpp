@@ -14,6 +14,11 @@
 #include "RTSCam.h"   
 #include "DebugTilePlane.h"
 #include "DebugBeacon.h"
+#include "CamSwitcher.h"   
+#include "RoamingCam.h"   
+#include "RTSCam.h"   
+#include "DebugTilePlane.h"
+#include "DebugBeacon.h"
 #include <d3d11.h>
 #include <tchar.h>
 #include <map>
