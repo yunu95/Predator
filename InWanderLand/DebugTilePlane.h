@@ -29,10 +29,10 @@ public:
                 auto tile = Scene::getCurrentScene()->AddGameObject();
                 auto staticMesh = tile->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
                 staticMesh->GetGI().LoadMesh("Cube");
-                staticMesh->GetGI().SetMesh(L"Cube");
-                staticMesh->GetGI().SetColor(0, ((i + j) % 2 == 0 ? colorA : colorB));
-                staticMesh->GetGI().SetShader(0, L"Forward");
-                staticMesh->GetGI().SetMaterialName(0, L"Forward");
+                //staticMesh->GetGI().SetMesh(L"Cube");
+                //staticMesh->GetGI().SetColor(0, ((i + j) % 2 == 0 ? colorA : colorB));
+                //staticMesh->GetGI().SetShader(0, L"Forward");
+                //staticMesh->GetGI().SetMaterialName(0, L"Forward");
                 tile->GetTransform()->SetWorldPosition(position);
                 staticMesh->GetTransform()->scale = Vector3d(1, 1, 1);
             }

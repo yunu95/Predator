@@ -21,33 +21,32 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{9e096b24-e24d-4bfc-9a4d-64c93013bc39}</ProjectGuid>
-    <RootNamespace>Yunu3DGraphicsEngine</RootNamespace>
+    <ProjectGuid>{2bd97f71-c51d-4422-a416-2b78779e9d80}</ProjectGuid>
+    <RootNamespace>NailEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Yunu3DGraphicsInterface</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Utility</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Utility</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Utility</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Utility</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -72,35 +71,42 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>Intermediate\$(Platform)\$(Configuration)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(SolutionDir)Yunu3DGraphicsInterface;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>Intermediate\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(SolutionDir)Yunu3DGraphicsInterface;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>Intermediate\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)Yunu3DGraphicsInterface;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)Bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>Intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(SolutionDir)Yunu3DGraphicsInterface;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>Intermediate\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;YunuDX11DLL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)header</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>YunuDX11Renderer.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>D3D11.lib;dxgi.lib;D3DCompiler.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
+xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -108,35 +114,38 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;YunuDX11DLL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)header</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>YunuDX11Renderer.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;YunuDX11DLL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)header</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>YunuDX11Renderer.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>D3D11.lib;dxgi.lib;D3DCompiler.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0
+xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -144,33 +153,43 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;YunuDX11DLL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)header</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>YunuDX11Renderer.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="IMaterial.h" />
-    <ClInclude Include="IYunuGIDebugCube.h" />
-    <ClInclude Include="IYunuGIDebugObject.h" />
-    <ClInclude Include="IYunuGIDebugSphere.h" />
-    <ClInclude Include="IYunuGIRenderable.h" />
-    <ClInclude Include="IYunuGIDirectionalLight.h" />
-    <ClInclude Include="IYunuGIEventHandler.h" />
-    <ClInclude Include="IYunuGIPointLight.h" />
-    <ClInclude Include="IYunuGISpotLight.h" />
-    <ClInclude Include="IYunuGIUIImage.h" />
-    <ClInclude Include="IYunuGIUIObject.h" />
-    <ClInclude Include="IYunuGIUIText.h" />
+    <ClInclude Include="ConstantBuffer.h" />
+    <ClInclude Include="Device.h" />
+    <ClInclude Include="IRenderable.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="MaterialWrapper.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="NailCamera.h" />
+    <ClInclude Include="NailEngine.h" />
+    <ClInclude Include="PixelShader.h" />
+    <ClInclude Include="RenderableManager.h" />
+    <ClInclude Include="RenderSystem.h" />
+    <ClInclude Include="ResourceBuilder.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="SimpleMath.h" />
+    <ClInclude Include="StaticMesh.h" />
+    <ClInclude Include="Struct.h" />
+    <ClInclude Include="SwapChain.h" />
+    <ClInclude Include="Utils.h" />
+    <ClInclude Include="VertexShader.h" />
+    <ClInclude Include="YGAdapter.h" />
     <ClInclude Include="YGCameraAdapter.h" />
     <ClInclude Include="YGDebugCubeAdapter.h" />
     <ClInclude Include="YGDebugSphereAdapter.h" />
@@ -184,30 +203,54 @@
     <ClInclude Include="YGStaticMeshAdapter.h" />
     <ClInclude Include="YGUIImageAdapter.h" />
     <ClInclude Include="YGUITextAdapter.h" />
-    <ClInclude Include="YunuGIColor.h" />
-    <ClInclude Include="YunuGIMatrix4x4.h" />
-    <ClInclude Include="IYunuGIResourceManager.h" />
-    <ClInclude Include="IYunuGICamera.h" />
-    <ClInclude Include="IYunuGIFactory.h" />
-    <ClInclude Include="IYunuGIMaterial.h" />
-    <ClInclude Include="IYunuGISkinnedMesh.h" />
-    <ClInclude Include="IYunuGIStaticMeshRenderer.h" />
-    <ClInclude Include="IYunuGITexture.h" />
-    <ClInclude Include="IUnknown.h" />
-    <ClInclude Include="IYunuGI3DRenderer.h" />
-    <ClInclude Include="YunuGIGlobal.h" />
-    <ClInclude Include="YunuGIPtr.h" />
-    <ClInclude Include="YunuGraphicsInterface.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Yunu3DGraphicsEngine.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="small.ico" />
-    <Image Include="Yunu3DGraphicsEngine.ico" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClCompile Include="ConstantBuffer.cpp" />
+    <ClCompile Include="Device.cpp" />
+    <ClCompile Include="IRenderable.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="NailCamera.cpp" />
+    <ClCompile Include="NailEngine.cpp" />
+    <ClCompile Include="PixelShader.cpp" />
+    <ClCompile Include="RenderableManager.cpp" />
+    <ClCompile Include="RenderSystem.cpp" />
+    <ClCompile Include="ResourceBuilder.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="StaticMesh.cpp" />
+    <ClCompile Include="SwapChain.cpp" />
+    <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="YGExports.cpp" />
+    <ClCompile Include="YGMaterialAdapter.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="RuntimeDependency\resources\Shader\DebugPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\DefaultPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\DefaultVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="RuntimeDependency\resources\Shader\Buffers.hlsli" />
+    <None Include="SimpleMath.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

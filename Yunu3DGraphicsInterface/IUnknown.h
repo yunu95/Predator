@@ -5,6 +5,6 @@ namespace yunuGI
     class IUnknown 
     {
     public:
-        virtual ~IUnknown() {}
+        virtual ~IUnknown() { }
     };
 }
