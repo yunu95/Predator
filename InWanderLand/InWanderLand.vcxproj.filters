@@ -10,6 +10,9 @@
     <Filter Include="Editor">
       <UniqueIdentifier>{a8da4320-0b8b-4bf9-8101-466d6da6cfeb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Panel">
+      <UniqueIdentifier>{076edac7-36b3-4f60-9a8d-fe25c71eb05e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShakyCam.h" />
@@ -27,6 +30,27 @@
     </ClInclude>
     <ClInclude Include="..\Include\ImGui\imgui_internal.h">
       <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\EditorLayer.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\Panel\EditorPanel.h">
+      <Filter>Editor\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\Panel\Panel_GameView.h">
+      <Filter>Editor\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\Panel\Panel_Hierarchy.h">
+      <Filter>Editor\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\Panel\Panel_Inspector.h">
+      <Filter>Editor\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\Panel\Panel_MiniMap.h">
+      <Filter>Editor\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\Panel\Panel_SceneView.h">
+      <Filter>Editor\Panel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +81,27 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\EditorLayer.cpp">
+      <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Panel\EditorPanel.cpp">
+      <Filter>Editor\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Panel\Panel_GameView.cpp">
+      <Filter>Editor\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Panel\Panel_Hierarchy.cpp">
+      <Filter>Editor\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Panel\Panel_Inspector.cpp">
+      <Filter>Editor\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Panel\Panel_MiniMap.cpp">
+      <Filter>Editor\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Panel\Panel_SceneView.cpp">
+      <Filter>Editor\Panel</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

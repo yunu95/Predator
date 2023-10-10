@@ -175,6 +175,13 @@
     <ClInclude Include="..\Include\ImGui\imconfig.h" />
     <ClInclude Include="..\Include\ImGui\imgui.h" />
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
+    <ClInclude Include="Editor\EditorLayer.h" />
+    <ClInclude Include="Editor\Panel\EditorPanel.h" />
+    <ClInclude Include="Editor\Panel\Panel_GameView.h" />
+    <ClInclude Include="Editor\Panel\Panel_Hierarchy.h" />
+    <ClInclude Include="Editor\Panel\Panel_Inspector.h" />
+    <ClInclude Include="Editor\Panel\Panel_MiniMap.h" />
+    <ClInclude Include="Editor\Panel\Panel_SceneView.h" />
     <ClInclude Include="ShakyCam.h" />
   </ItemGroup>
   <ItemGroup>
@@ -185,6 +192,13 @@
     <ClCompile Include="..\Include\ImGui\imgui_draw.cpp" />
     <ClCompile Include="..\Include\ImGui\imgui_tables.cpp" />
     <ClCompile Include="..\Include\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="Editor\EditorLayer.cpp" />
+    <ClCompile Include="Editor\Panel\EditorPanel.cpp" />
+    <ClCompile Include="Editor\Panel\Panel_GameView.cpp" />
+    <ClCompile Include="Editor\Panel\Panel_Hierarchy.cpp" />
+    <ClCompile Include="Editor\Panel\Panel_Inspector.cpp" />
+    <ClCompile Include="Editor\Panel\Panel_MiniMap.cpp" />
+    <ClCompile Include="Editor\Panel\Panel_SceneView.cpp" />
     <ClCompile Include="main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
