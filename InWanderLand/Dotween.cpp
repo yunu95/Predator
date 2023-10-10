@@ -307,7 +307,7 @@ Dotween& Dotween::DOLookAt(Transform* lookTransform, double p_duration, bool isY
 
 	//m_doLookTweenTimer->Start();
 	//m_doLookTweenTimer->duration = p_duration;
-	//m_doLookTweenTimer->onUpdate = [=]()
+	//m_doLookTweenTimer->onUpdate = [=]()distanceVector.Normalized()
 	//{
 	//	double degreePerFrame = finalDegree / (m_doLookTweenTimer->duration);
 	//	if (tempPos - tempLookPos != Vector3D(0,0,0) && !isnan(degreePerFrame))

@@ -22,6 +22,7 @@
 #include <d3d11.h>
 #include <tchar.h>
 #include <map>
+#include <algorithm>
 
 // Data
 static ID3D11Device* g_pd3dDevice = NULL;
@@ -154,7 +155,8 @@ int main(int, char**)
 
     auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
-    camObj2->GetTransform()->position = Vector3d(0, 0, -5);
+    camObj2->GetTransform()->position = Vector3d(0, 0, -30);
+    // 지면의 좌클릭, 우클릭에 대한 콜백은 아래의 RTSCam 인스턴스에 등록할 수 있다.
     auto rtsCam = camObj2->AddComponent<RTSCam>();
 
     auto camSwitcher = camObj2->AddComponent<CamSwitcher>();
@@ -177,7 +179,7 @@ int main(int, char**)
         }
     };*/
 
-#pragma region 
+#pragma region Player
     auto playerGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     auto playerMesh = playerGameObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
     //staticMeshObj->AddComponent<FlappyBird>();
@@ -187,19 +189,61 @@ int main(int, char**)
     playerMesh->GetGI().SetShader(0, L"Debug");
     playerMesh->GetGI().SetMaterialName(0, L"Forward");
     playerGameObject->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{1, 0, 0});
+    playerGameObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
     //staticMesh->GetGI().LoadDiffuseMap("Textures/000000002405_reverse.dds");
     //staticMesh->GetGI().LoadNormalMap("Textures/000000002406_b_reverse.dds");
+
+    // 체크무늬로 xy 평면을 초기화하는 클래스다.
     auto tilePlane = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugTilePlane>();
     tilePlane->width = 10;
     tilePlane->height = 10;
     tilePlane->SetTiles();
 
     Dotween* dotweenComponent = playerGameObject->AddComponent<Dotween>();
-    dotweenComponent->DOMove(Vector3d(10, 10, 10), 10.f);
-    dotweenComponent->DORotate(Vector3d(0, 180, 0), 10.f);
+	//dotweenComponent->DOMove(Vector3d(10, 0, 10), 10.f);
+	//dotweenComponent->DORotate(Vector3d(0, 180, 0), 10.f);
+
+
+	// 지면에 대한  좌클릭의 콜백 함수를 정의한다.
+	rtsCam->groundLeftClickCallback = [=](Vector3d position) {
+        // Before moving, Make player look at position.
+        Vector3d distanceVector = position - playerGameObject->GetTransform()->GetWorldPosition();
+  //      Vector3d axis = Vector3d::Cross(playerGameObject->GetTransform()->rotation.Forward(), distanceVector);
+
+
+  //      double dotAngle = Vector3d::Dot(playerGameObject->GetTransform()->rotation.Forward(), distanceVector);
+		//double sq = (sqrt(pow(playerGameObject->GetTransform()->rotation.Forward().x, 2) + pow(playerGameObject->GetTransform()->rotation.Forward().y, 2)) *
+		//	sqrt(pow(distanceVector.x, 2) + pow(distanceVector.y, 2)));
+  //      double finalAngle = acos(std::clamp(dotAngle / sq, -1.0, 1.0));
+  //      double finalDegree = (finalAngle) * 57.2958f;
+
+  //      if (axis.z > 0)
+  //          finalDegree *= -1;
+
+  //      if (!isnan(finalDegree))
+        playerGameObject->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(distanceVector.Normalized(), playerGameObject->GetTransform()->rotation.Up()));
+
+        dotweenComponent->DOMove(position, 4);
+
+	};
+
 #pragma endregion
 
-#pragma region 
+#pragma region Player Front Object
+    auto playerFrontobject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    auto playerFrontMesh = playerFrontobject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	playerFrontMesh->GetGI().LoadMesh("Cube");
+	playerFrontMesh->GetGI().SetMesh(L"Cube");
+	playerFrontMesh->GetGI().SetColor(0, yunuGI::Color{ 0, 1, 0, 0 });
+	playerFrontMesh->GetGI().SetShader(0, L"Forward");
+	playerFrontMesh->GetGI().SetMaterialName(0, L"Forward");
+    
+    playerFrontobject->SetParent(playerGameObject);
+    playerFrontobject->GetTransform()->scale = Vector3d(3, 3, 3);
+    playerFrontobject->GetTransform()->SetWorldPosition(Vector3d(-3, 0, 0));
+#pragma endregion
+
+#pragma region Attack Range As 2D Collider
 	auto playerRangeObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
 	auto playerRangeCollider2d = playerRangeObject->AddComponent<CircleCollider2D>();
@@ -216,21 +260,6 @@ int main(int, char**)
     playerRangeObject->SetParent(playerGameObject);
 
 #pragma endregion
-
-
-
-#pragma region Floor
-    auto floorGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    auto floorMesh = floorGameObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	floorMesh->GetGI().LoadMesh("Cube");
-	floorMesh->GetGI().SetMesh(L"Cube");
-	floorMesh->GetGI().SetColor(0, yunuGI::Color{ 1, 1, 1, 0 });
-	floorMesh->GetGI().SetShader(0, L"Forward");
-	floorMesh->GetGI().SetMaterialName(0, L"Forward");
-
-    floorGameObject->GetTransform()->scale = Vector3d(100, 1, 100);
-#pragma endregion
-
 
     yunutyEngine::YunutyCycle::SingleInstance().autoRendering = false;
     yunutyEngine::YunutyCycle::SingleInstance().Play();
