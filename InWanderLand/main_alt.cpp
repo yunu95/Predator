@@ -9,6 +9,11 @@
 #include "ShakyCam.h"
 #include "Player.h"
 #include "Dotween.h"
+#include "CamSwitcher.h"   
+#include "RoamingCam.h"   
+#include "RTSCam.h"   
+#include "DebugTilePlane.h"
+#include "DebugBeacon.h"
 #include <d3d11.h>
 #include <tchar.h>
 #include <map>
@@ -137,9 +142,21 @@ int main(int, char**)
     ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-    auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    camObj->AddComponent<ShakyCam>()->SetCameraMain();
 
+    //auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    //camObj->GetTransform()->position = Vector3d(0, 0, -5);
+    //auto roamingCam = camObj->AddComponent<RoamingCam>();
+
+    auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+
+    camObj2->GetTransform()->position = Vector3d(0, 0, -5);
+    auto rtsCam = camObj2->AddComponent<RTSCam>();
+
+    auto camSwitcher = camObj2->AddComponent<CamSwitcher>();
+    //camSwitcher->cams.push_back(roamingCam);
+    camSwitcher->cams.push_back(rtsCam);
+
+    DebugBeacon::PlaceBeacon({0,1,-0.5});
     /*class FlappyBird : public Component
     {
     protected:
@@ -167,6 +184,10 @@ int main(int, char**)
     playerGameObject->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{1, 0, 0});
     //staticMesh->GetGI().LoadDiffuseMap("Textures/000000002405_reverse.dds");
     //staticMesh->GetGI().LoadNormalMap("Textures/000000002406_b_reverse.dds");
+    auto tilePlane = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugTilePlane>();
+    tilePlane->width = 10;
+    tilePlane->height = 10;
+    tilePlane->SetTiles();
 
     Dotween* dotweenComponent = playerGameObject->AddComponent<Dotween>();
     dotweenComponent->DOMove(Vector3d(10, 10, 10), 10.f);

@@ -121,3 +121,7 @@ Quaternion Quaternion::MakeWithAxes(const Vector3f& right, const Vector3f& up, c
         static_cast<double>(quat.m128_f32[2])
     );
 }
+Quaternion Quaternion::Identity()
+{
+    return Quaternion(1, 0, 0, 0);
+}

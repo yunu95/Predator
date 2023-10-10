@@ -13,6 +13,24 @@
     <Filter Include="Scripts">
       <UniqueIdentifier>{121d28b6-c354-41fd-9b67-492aa15aa2b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RTSCam">
+      <UniqueIdentifier>{4d58ffff-525b-4e6d-a64c-bf1f311430a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RoamingCam">
+      <UniqueIdentifier>{2d512d5b-fcbf-459a-af2e-e0419a2af7d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CamSwitcher">
+      <UniqueIdentifier>{bf3324c5-849e-4c7f-af17-eeb0a882cc19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RecastDetourTest">
+      <UniqueIdentifier>{56c19951-ac88-4ad2-9b55-db6f941240e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugPlane">
+      <UniqueIdentifier>{028fb8ff-0f7e-465c-894d-222249262cc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugBeacon">
+      <UniqueIdentifier>{12a9b6c6-374f-4024-a2c3-3d67deff9469}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShakyCam.h" />
@@ -44,6 +62,24 @@
       <Filter>Dotween</Filter>
     </ClInclude>
     <ClInclude Include="Player.h" />
+    <ClInclude Include="RTSCam.h">
+      <Filter>RTSCam</Filter>
+    </ClInclude>
+    <ClInclude Include="RoamingCam.h">
+      <Filter>RoamingCam</Filter>
+    </ClInclude>
+    <ClInclude Include="CamSwitcher.h">
+      <Filter>CamSwitcher</Filter>
+    </ClInclude>
+    <ClInclude Include="RequestDetourTest.h">
+      <Filter>RecastDetourTest</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugTilePlane.h">
+      <Filter>DebugPlane</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugBeacon.h">
+      <Filter>DebugBeacon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShakyCam.cpp" />
@@ -87,5 +123,17 @@
       <Filter>Dotween</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="RTSCam.cpp">
+      <Filter>RTSCam</Filter>
+    </ClCompile>
+    <ClCompile Include="RoamingCam.cpp">
+      <Filter>RoamingCam</Filter>
+    </ClCompile>
+    <ClCompile Include="CamSwitcher.cpp">
+      <Filter>CamSwitcher</Filter>
+    </ClCompile>
+    <ClCompile Include="RequestDetourTest.cpp">
+      <Filter>RecastDetourTest</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
