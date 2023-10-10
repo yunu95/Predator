@@ -20,7 +20,7 @@ Zealot::Zealot()
 void Zealot::Idle()
 {
 	// Idle Animation
-	GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().SetColor(0, yunuGI::Color{ 0, 1, 0, 0 });
+	GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 1, 0, 0 });
 	// 사용자의 이동 명령 입력이 들어오면 Move 상태로 전환
 	if (yunutyEngine::Input::isKeyDown(KeyCode::MouseLeftClick))
 	{
@@ -40,7 +40,7 @@ void Zealot::Idle()
 void Zealot::Move()
 {
 	// Move Animation
-	GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().SetColor(0, yunuGI::Color{ 1, 1, 0, 0 });
+	GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{1, 1, 0, 0});
 
 	if (yunutyEngine::Input::isKeyDown(KeyCode::MouseLeftClick))
 	{
@@ -72,7 +72,7 @@ void Zealot::Attack()
 	if (m_isAttack)
 	{
 		// Attack Animation
-		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().SetColor(0, yunuGI::Color{ 1, 0, 0, 0 });
+		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 0, 0 });
 		// Damage
 	}
 	// 공격모션 끝나면 IDLE로 전환해줘야 함.
@@ -81,7 +81,7 @@ void Zealot::Attack()
 void Zealot::Chase()
 {
 	// Chase Animation
-	GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().SetColor(0, yunuGI::Color{ 1, 0, 1, 0 });
+	GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 1, 0 });
 	if (m_isChase && !m_isMove)
 	{
 		// 적이 있는 위치에서 내 위치를 뺀다.
@@ -109,7 +109,7 @@ void Zealot::Chase()
 void Zealot::Die()
 {
 	// Die Animation
-	GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().SetColor(0, yunuGI::Color{ 1, 1, 1, 0 });
+	GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 1, 1, 0 });
 }
 
 void Zealot::moveToDestination(Vector3d targetPos)

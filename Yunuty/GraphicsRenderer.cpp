@@ -7,6 +7,7 @@
 #include "YunuGraphicsInterface.h"
 #include "YunutyGraphicsEventHandler.h"
 #include "YunutyRenderable.h"
+#include "YGRendererAdapter.h"
 #include <filesystem>
 #include <assert.h>
 

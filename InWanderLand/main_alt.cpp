@@ -134,10 +134,10 @@ int main(int, char**)
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     //yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"YunuDX11Renderer.dll");
     //yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"MZDX11Renderer.dll");
-    yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"FFGraphicsEngine.dll");
-    yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(releaseHwnd);
+    yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
     yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(1280, 800);
-    yunutyEngine::graphics::Renderer::SingleInstance().LoadFile("FBX/BossDoor/BossDoor.fbx");
+    yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(releaseHwnd);
+    //yunutyEngine::graphics::Renderer::SingleInstance().LoadFile("FBX/BossDoor/BossDoor.fbx");
 
     ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 
@@ -151,10 +151,10 @@ int main(int, char**)
 	auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 	//staticMeshObj->AddComponent<FlappyBird>();
 	staticMesh->GetGI().LoadMesh("Capsule");
-	staticMesh->GetGI().SetMesh(L"Capsule");
-	staticMesh->GetGI().SetColor(0, yunuGI::Color{ 0, 1, 0, 0 });
-	staticMesh->GetGI().SetShader(0, L"Debug");
-	staticMesh->GetGI().SetMaterialName(0, L"Forward");
+	//staticMesh->GetGI().SetMesh(L"Capsule");
+	staticMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 1, 0, 0 });
+	//staticMesh->GetGI().SetShader(0, L"Debug");
+	//staticMesh->GetGI().SetMaterialName(0, L"Forward");
 	staticMeshObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ 0, 0, 0 });
 	auto zealotComp = staticMeshObj->AddComponent<Zealot>();
 	auto zealotDetectCollider = staticMeshObj->AddComponent<BoxCollider2D>();
@@ -167,10 +167,10 @@ int main(int, char**)
 	auto enemyMesh = enemyObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 	//staticMeshObj->AddComponent<FlappyBird>();
 	enemyMesh->GetGI().LoadMesh("Capsule");
-	enemyMesh->GetGI().SetMesh(L"Capsule");
-	enemyMesh->GetGI().SetColor(0, yunuGI::Color{ 0, 0, 1, 0 });
-	enemyMesh->GetGI().SetShader(0, L"Debug");
-	enemyMesh->GetGI().SetMaterialName(0, L"Forward");
+	//enemyMesh->GetGI().SetMesh(L"Capsule");
+	enemyMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });
+	//enemyMesh->GetGI().SetShader(0, L"Debug");
+	//enemyMesh->GetGI().SetMaterialName(0, L"Forward");
 	enemyObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ 12.5, 0, 0 });
 	auto zerglingComp = enemyObj->AddComponent<Zergling>();
 	auto zerglingHitbox = enemyObj->AddComponent<BoxCollider2D>();
@@ -189,7 +189,7 @@ int main(int, char**)
     //camSwitcher->cams.push_back(roamingCam);
     camSwitcher->cams.push_back(rtsCam);
 
-    DebugBeacon::PlaceBeacon({0,1,-0.5});
+    //DebugBeacon::PlaceBeacon({0,1,-0.5});
     /*class FlappyBird : public Component
     {
     protected:
@@ -204,6 +204,14 @@ int main(int, char**)
                 currentSpeed = flapSpeed;
         }
     };*/
+    //staticMeshObj->AddComponent<FlappyBird>();
+	//auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//staticMesh->GetGI().LoadMesh("Cube");
+	//staticMesh->GetGI().GetMaterial()->SetPixelShader(L"DebugPS.cso");
+	//staticMeshObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ 1,3,10 });
+    //staticMesh->GetGI().LoadDiffuseMap("Textures/000000002405_reverse.dds");
+    //staticMesh->GetGI().LoadNormalMap("Textures/000000002406_b_reverse.dds");
     auto tilePlane = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugTilePlane>();
     tilePlane->width = 10;
     tilePlane->height = 10;

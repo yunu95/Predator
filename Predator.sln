@@ -4,12 +4,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Yunuty", "Yunuty\Yunuty.vcxproj", "{60308F48-95FA-432C-849D-B74BE6CCCE60}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2BD97F71-C51D-4422-A416-2B78779E9D80} = {2BD97F71-C51D-4422-A416-2B78779E9D80}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Yunu3DGraphicsInterface", "Yunu3DGraphicsInterface\Yunu3DGraphicsEngine.vcxproj", "{9E096B24-E24D-4BFC-9A4D-64C93013BC39}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "YunutyEngineDemo", "YunutyEngineDemo\YunutyEditor.vcxproj", "{9F316E83-5AE5-4939-A723-305A94F48005}"
 	ProjectSection(ProjectDependencies) = postProject
-		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED} = {51D3296C-AD97-4D80-ADD3-C4254A93C5ED}
+		{2BD97F71-C51D-4422-A416-2B78779E9D80} = {2BD97F71-C51D-4422-A416-2B78779E9D80}
 		{60308F48-95FA-432C-849D-B74BE6CCCE60} = {60308F48-95FA-432C-849D-B74BE6CCCE60}
 	EndProjectSection
 EndProject
@@ -20,12 +23,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "YunutyEditor", "YunutyEngin
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MZParser", "MZParser\MZParser.vcxproj", "{D12CCAD3-1057-4D9C-9487-34676BE37033}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FFGraphicsEngine", "FFGraphicsEngine\FFGraphicsEngine.vcxproj", "{51D3296C-AD97-4D80-ADD3-C4254A93C5ED}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InWanderLand", "InWanderLand\InWanderLand.vcxproj", "{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{60308F48-95FA-432C-849D-B74BE6CCCE60} = {60308F48-95FA-432C-849D-B74BE6CCCE60}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NailEngine", "NailEngine\NailEngine.vcxproj", "{2BD97F71-C51D-4422-A416-2B78779E9D80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,18 +100,6 @@ Global
 		{D12CCAD3-1057-4D9C-9487-34676BE37033}.Release|x64.Build.0 = Release|x64
 		{D12CCAD3-1057-4D9C-9487-34676BE37033}.Release|x86.ActiveCfg = Release|Win32
 		{D12CCAD3-1057-4D9C-9487-34676BE37033}.Release|x86.Build.0 = Release|Win32
-		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED}.Debug|x64.ActiveCfg = Debug|x64
-		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED}.Debug|x64.Build.0 = Debug|x64
-		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED}.Debug|x86.ActiveCfg = Debug|Win32
-		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED}.Debug|x86.Build.0 = Debug|Win32
-		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED}.Dist|x64.ActiveCfg = Debug|x64
-		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED}.Dist|x64.Build.0 = Debug|x64
-		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED}.Dist|x86.ActiveCfg = Debug|Win32
-		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED}.Dist|x86.Build.0 = Debug|Win32
-		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED}.Release|x64.ActiveCfg = Release|x64
-		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED}.Release|x64.Build.0 = Release|x64
-		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED}.Release|x86.ActiveCfg = Release|Win32
-		{51D3296C-AD97-4D80-ADD3-C4254A93C5ED}.Release|x86.Build.0 = Release|Win32
 		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Debug|x64.ActiveCfg = Debug|x64
 		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Debug|x64.Build.0 = Debug|x64
 		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Debug|x86.ActiveCfg = Debug|Win32
@@ -121,6 +112,18 @@ Global
 		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Release|x64.Build.0 = Release|x64
 		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Release|x86.ActiveCfg = Release|Win32
 		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Release|x86.Build.0 = Release|Win32
+		{2BD97F71-C51D-4422-A416-2B78779E9D80}.Debug|x64.ActiveCfg = Debug|x64
+		{2BD97F71-C51D-4422-A416-2B78779E9D80}.Debug|x64.Build.0 = Debug|x64
+		{2BD97F71-C51D-4422-A416-2B78779E9D80}.Debug|x86.ActiveCfg = Debug|Win32
+		{2BD97F71-C51D-4422-A416-2B78779E9D80}.Debug|x86.Build.0 = Debug|Win32
+		{2BD97F71-C51D-4422-A416-2B78779E9D80}.Dist|x64.ActiveCfg = Debug|x64
+		{2BD97F71-C51D-4422-A416-2B78779E9D80}.Dist|x64.Build.0 = Debug|x64
+		{2BD97F71-C51D-4422-A416-2B78779E9D80}.Dist|x86.ActiveCfg = Debug|Win32
+		{2BD97F71-C51D-4422-A416-2B78779E9D80}.Dist|x86.Build.0 = Debug|Win32
+		{2BD97F71-C51D-4422-A416-2B78779E9D80}.Release|x64.ActiveCfg = Release|x64
+		{2BD97F71-C51D-4422-A416-2B78779E9D80}.Release|x64.Build.0 = Release|x64
+		{2BD97F71-C51D-4422-A416-2B78779E9D80}.Release|x86.ActiveCfg = Release|Win32
+		{2BD97F71-C51D-4422-A416-2B78779E9D80}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

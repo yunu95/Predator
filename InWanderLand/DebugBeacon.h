@@ -20,10 +20,10 @@ public:
         debugBeacon->maxScale = scale;
         debugBeacon->duration = duration;
         staticMesh->GetGI().LoadMesh("Sphere");
-        staticMesh->GetGI().SetMesh(L"Sphere");
-        staticMesh->GetGI().SetColor(0, color);
-        staticMesh->GetGI().SetShader(0, L"Forward");
-        staticMesh->GetGI().SetMaterialName(0, L"Forward");
+        //staticMesh->GetGI().SetMesh(L"Sphere");
+        staticMesh->GetGI().GetMaterial()->SetColor(color);
+        //staticMesh->GetGI().SetShader(0, L"Forward");
+        //staticMesh->GetGI().SetMaterialName(0, L"Forward");
         gameObject->GetTransform()->scale = Vector3d(0, 0, 0);
         gameObject->GetTransform()->position = position;
         return debugBeacon;
