@@ -111,9 +111,8 @@
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
-
-xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K</Command>
+      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0
+xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -132,9 +131,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
-
-xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K</Command>
+      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0
+xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -158,9 +156,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
-
-xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K</Command>
+      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0
+xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -184,9 +181,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
-
-xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K</Command>
+      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0
+xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
