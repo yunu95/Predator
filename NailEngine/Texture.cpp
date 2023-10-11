@@ -30,7 +30,7 @@ void Texture::LoadTexture(const std::wstring& texturePath)
 		image.GetImageCount(), image.GetMetadata(), SRV.GetAddressOf());
 }
 
-void Texture::Bind()
+void Texture::Bind(unsigned int slot)
 {
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->PSSetShaderResources(0, 1, this->SRV.GetAddressOf());
+	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->PSSetShaderResources(slot, 1, this->SRV.GetAddressOf());
 }

@@ -9,7 +9,7 @@ class Texture
 {
 public:
 	void LoadTexture(const std::wstring& texturePath);
-	void Bind();
+	void Bind(unsigned int slot);
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> SRV;
