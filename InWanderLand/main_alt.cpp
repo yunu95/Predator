@@ -132,10 +132,10 @@ int main(int, char**)
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     //yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"YunuDX11Renderer.dll");
     //yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"MZDX11Renderer.dll");
-    yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"FFGraphicsEngine.dll");
-    yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(releaseHwnd);
+    yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
     yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(1280, 800);
-    yunutyEngine::graphics::Renderer::SingleInstance().LoadFile("FBX/BossDoor/BossDoor.fbx");
+    yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(releaseHwnd);
+    //yunutyEngine::graphics::Renderer::SingleInstance().LoadFile("FBX/BossDoor/BossDoor.fbx");
 
     ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 

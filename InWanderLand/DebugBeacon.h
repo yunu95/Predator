@@ -20,7 +20,6 @@ public:
         debugBeacon->maxScale = scale;
         debugBeacon->duration = duration;
         staticMesh->GetGI().LoadMesh("Sphere");
-        staticMesh->GetGI().SetMesh(L"Sphere");
         staticMesh->GetGI().SetColor(0, color);
         staticMesh->GetGI().SetShader(0, L"Forward");
         staticMesh->GetGI().SetMaterialName(0, L"Forward");
