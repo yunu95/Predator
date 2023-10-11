@@ -4,20 +4,22 @@
 #include "SimpleMath.h"
 using namespace DirectX::PackedVector;
 
+#include "Struct.h"
+
 #include "NailEngine.h"
 #include "ConstantBuffer.h"
 #include "ResourceManager.h"
 #include "Shader.h"
 #include "Texture.h"
 
-#include "Struct.h"
+
 
 unsigned int yunuGIAdapter::MaterialAdapter::id = 0;
 
 yunuGIAdapter::MaterialAdapter::MaterialAdapter()
 	: vs{L"DefaultVS.cso"}
 	, ps{ L"DefaultPS.cso" }
-	, color{1.f,1.f,1.f,1.f}
+	, color {1.f,1.f,1.f,1.f} 
 {
 	id++;
 }
@@ -30,17 +32,13 @@ yunuGIAdapter::MaterialAdapter::MaterialAdapter(const MaterialAdapter& rhs)
 	this->vs = rhs.vs;
 	this->ps = rhs.ps;
 	this->textures = rhs.textures;
+	this->useTextures = rhs.useTextures;
 
 	id++;
 }
 
 void yunuGIAdapter::MaterialAdapter::SetMaterialName(const std::wstring& materialName)
 {
-	if (this->materialDesc.materialName != materialName)
-	{
-		
-	}
-
 	this->materialDesc.materialName = materialName;
 }
 
@@ -57,6 +55,7 @@ void yunuGIAdapter::MaterialAdapter::SetPixelShader(const std::wstring& pixelSha
 void yunuGIAdapter::MaterialAdapter::SetTexture(yunuGI::Texture_Type textureType, const std::wstring& texture)
 {
 	this->textures[static_cast<int>(textureType)] = texture;
+	this->useTextures[static_cast<int>(textureType)] = 1;
 }
 
 void yunuGIAdapter::MaterialAdapter::SetColor(const yunuGI::Color& color)
@@ -77,19 +76,23 @@ void yunuGIAdapter::MaterialAdapter::SetMaterialDesc(const yunuGI::MaterialDesc&
 
 void yunuGIAdapter::MaterialAdapter::PushGraphicsData()
 {
-	MaterialBuffer materialBuffer;
-	materialBuffer.color = reinterpret_cast<DirectX::SimpleMath::Vector4&>(this->color);
-	NailEngine::Instance.Get().GetConstantBuffer(1)->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer),1);
-
 	for (unsigned int i = 0; i < textures.size(); ++i)
 	{
 		if (this->textures[i].empty())
 		{
+			this->useTextures[i] = 0;
 			continue;
 		}
 
+		this->useTextures[i] = 1;
 		ResourceManager::Instance.Get().GetTexture(this->textures[i])->Bind(i);
 	}
+
+	MaterialBuffer materialBuffer;
+	materialBuffer.color = reinterpret_cast<DirectX::SimpleMath::Vector4&>(this->color);
+	materialBuffer.useTexture = this->useTextures;
+
+	NailEngine::Instance.Get().GetConstantBuffer(1)->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer),1);
 
 	ResourceManager::Instance.Get().GetShader(vs)->Bind();
 	ResourceManager::Instance.Get().GetShader(ps)->Bind();

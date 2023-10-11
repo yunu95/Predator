@@ -1,4 +1,5 @@
 #include "Buffers.hlsli"
+#include "Utils.hlsli"
 
 struct PixelIn
 {
@@ -9,7 +10,14 @@ struct PixelIn
 
 float4 main(PixelIn input) : SV_TARGET
 {
-    return input.color * materialColor;
+    if (UseTexture(useAlbedo))
+    {
+        return AlbedoMap.Sample(sam, input.uv);
+    }
+    else
+    {
+        return input.color * materialColor;
+    }
 }
 
 // ShaderInfo

@@ -4,6 +4,8 @@
 #include "SimpleMath.h"
 using namespace DirectX::PackedVector;
 
+#include <array>
+
 struct Vertex
 {
 	DirectX::SimpleMath::Vector3 pos;
@@ -22,4 +24,6 @@ struct MatrixBuffer
 struct MaterialBuffer
 {
 	DirectX::SimpleMath::Vector4 color{1.f,1.f,1.f,1.f};
+
+	std::array<unsigned int, 7> useTexture;
 };

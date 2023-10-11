@@ -12,6 +12,14 @@ cbuffer MatrixBuffer : register(b0)
 cbuffer MaterialBuffer : register(b1)
 {
     float4 materialColor;
+    
+    uint useAlbedo;
+    uint useNormal;
+    uint useARM;
+    uint useHeight;
+    uint useEmission;
+    uint useTemp0;
+    uint useTemp1;
 };
 
 Texture2D AlbedoMap : register(t0);
