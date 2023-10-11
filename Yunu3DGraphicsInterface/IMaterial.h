@@ -5,6 +5,7 @@
 
 #include <string>
 
+// MAX_TEXTURE를 바꾸면 NailEngine의 Struct.h의 array size를 바꿔줘야한다.
 #define MAX_TEXTURE 7
 
 namespace yunuGI

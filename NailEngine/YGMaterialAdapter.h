@@ -33,6 +33,7 @@ protected:
 		std::wstring vs;
 		std::wstring ps;
 		std::array<std::wstring, MAX_TEXTURE> textures;
+		std::array<unsigned int, MAX_TEXTURE> useTextures;
 
 		static unsigned int id;
 	};
