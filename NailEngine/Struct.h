@@ -8,6 +8,7 @@ struct Vertex
 {
 	DirectX::SimpleMath::Vector3 pos;
 	DirectX::SimpleMath::Vector4 color;
+	DirectX::SimpleMath::Vector2 uv;
 };
 
 struct MatrixBuffer

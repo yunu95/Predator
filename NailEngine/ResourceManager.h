@@ -11,7 +11,7 @@
 
 class Shader;
 class Mesh;
-//class Material;
+class Texture;
 class yunuGIAdapter::MaterialAdapter;
 
 class ResourceManager
@@ -28,18 +28,21 @@ public:
 	void CreateMesh(const std::wstring& mesh);
 	yunuGI::IMaterial* CrateMaterial(yunuGI::MaterialDesc& materialDesc);
 	yunuGIAdapter::MaterialAdapter* CreateInstanceMaterial(yunuGIAdapter::MaterialAdapter* material);
+	void CreateTexture(const std::wstring& texturePath);
 #pragma endregion
 
 #pragma region Getter
 	std::shared_ptr<yunuGIAdapter::MaterialAdapter>& GetMaterial(const std::wstring& materialName);
 	std::shared_ptr<Shader>& GetShader(const std::wstring& shaderPath);
 	std::shared_ptr<Mesh>& GetMesh(const std::wstring& meshName);
+	std::shared_ptr<Texture>& GetTexture(const std::wstring& textureName);
 #pragma endregion
 
 private:
 	void CreateDefaultShader();
 	void CreateDefaultMesh();
 	void CreateDefaultMaterial();
+	void CreateDefaultTexture();
 
 #pragma region LoadMesh
 	void LoadCubeMesh();
@@ -53,6 +56,7 @@ private:
 
 private:
 	std::unordered_map<std::wstring, std::shared_ptr<Shader>> shaderMap;
+	std::unordered_map<std::wstring, std::shared_ptr<Texture>> textureMap;
 	std::unordered_map<std::wstring, std::shared_ptr<Mesh>> meshMap;
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGIAdapter::MaterialAdapter>> materialMap;
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGIAdapter::MaterialAdapter>> instanceMaterialMap;

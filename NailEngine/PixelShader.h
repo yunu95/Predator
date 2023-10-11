@@ -13,11 +13,13 @@ private:
 	void CreateRasterizerState();
 	void CreateShaderState(const std::wstring& shaderPath);
 	void CreateRasterizerState(const std::string& fileContent);
+	void CreateSamplerState();
 
 private:
 	Microsoft::WRL::ComPtr<ID3DBlob> psBuffer;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> ps;
 
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState;
 };
 
