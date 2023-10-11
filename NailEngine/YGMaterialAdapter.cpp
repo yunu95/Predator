@@ -81,14 +81,14 @@ void yunuGIAdapter::MaterialAdapter::PushGraphicsData()
 	materialBuffer.color = reinterpret_cast<DirectX::SimpleMath::Vector4&>(this->color);
 	NailEngine::Instance.Get().GetConstantBuffer(1)->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer),1);
 
-	for (auto& e : textures)
+	for (unsigned int i = 0; i < textures.size(); ++i)
 	{
-		if (e.empty())
+		if (this->textures[i].empty())
 		{
 			continue;
 		}
 
-		ResourceManager::Instance.Get().GetTexture(e)->Bind();
+		ResourceManager::Instance.Get().GetTexture(this->textures[i])->Bind(i);
 	}
 
 	ResourceManager::Instance.Get().GetShader(vs)->Bind();
