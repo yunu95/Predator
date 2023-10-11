@@ -5,7 +5,7 @@ using namespace yunutyEngine;
 
 class RTSCam :public yunutyEngine::graphics::Camera
 {
-protected:
+public:
     bool roamingMode = false;
     function<void(Vector3d)> groundLeftClickCallback{[](Vector3d){}};
     function<void(Vector3d)> groundRightClickCallback{[](Vector3d){}};
