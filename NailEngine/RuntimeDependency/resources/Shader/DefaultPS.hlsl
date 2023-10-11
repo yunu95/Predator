@@ -9,9 +9,7 @@ struct PixelIn
 
 float4 main(PixelIn input) : SV_TARGET
 {
-    float4 color;
-    color = AlbedoMap.Sample(sam, input.uv);
-    return color;
+    return input.color * materialColor;
 }
 
 // ShaderInfo
