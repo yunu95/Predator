@@ -8,6 +8,7 @@ using namespace DirectX::PackedVector;
 #include "ConstantBuffer.h"
 #include "ResourceManager.h"
 #include "Shader.h"
+#include "Texture.h"
 
 #include "Struct.h"
 
@@ -53,9 +54,9 @@ void yunuGIAdapter::MaterialAdapter::SetPixelShader(const std::wstring& pixelSha
 	this->ps = pixelShader;
 }
 
-void yunuGIAdapter::MaterialAdapter::SetTexture(const int index, const std::wstring& texture)
+void yunuGIAdapter::MaterialAdapter::SetTexture(yunuGI::Texture_Type textureType, const std::wstring& texture)
 {
-	this->textures[index] = texture;
+	this->textures[static_cast<int>(textureType)] = texture;
 }
 
 void yunuGIAdapter::MaterialAdapter::SetColor(const yunuGI::Color& color)
@@ -79,6 +80,16 @@ void yunuGIAdapter::MaterialAdapter::PushGraphicsData()
 	MaterialBuffer materialBuffer;
 	materialBuffer.color = reinterpret_cast<DirectX::SimpleMath::Vector4&>(this->color);
 	NailEngine::Instance.Get().GetConstantBuffer(1)->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer),1);
+
+	for (auto& e : textures)
+	{
+		if (e.empty())
+		{
+			continue;
+		}
+
+		ResourceManager::Instance.Get().GetTexture(e)->Bind();
+	}
 
 	ResourceManager::Instance.Get().GetShader(vs)->Bind();
 	ResourceManager::Instance.Get().GetShader(ps)->Bind();

@@ -156,7 +156,8 @@ int main(int, char**)
 	auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 	staticMesh->GetGI().LoadMesh("Cube");
-	staticMesh->GetGI().GetMaterial()->SetPixelShader(L"DebugPS.cso");
+	///staticMesh->GetGI().GetMaterial()->SetPixelShader(L"DebugPS.cso");
+    staticMesh->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, L"Texture/zoro.jpg");
 	staticMeshObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ 1,3,10 });
     //staticMesh->GetGI().LoadDiffuseMap("Textures/000000002405_reverse.dds");
     //staticMesh->GetGI().LoadNormalMap("Textures/000000002406_b_reverse.dds");
