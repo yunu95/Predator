@@ -25,9 +25,9 @@ public:
 		GetVariation()->SetPixelShader(pixelShader);
 	};
 
-	virtual void SetTexture(const int index, const std::wstring& texture) override
+	virtual void SetTexture(yunuGI::Texture_Type textureType, const std::wstring& texture) override
 	{
-		GetVariation()->SetTexture(index, texture);
+		GetVariation()->SetTexture(textureType, texture);
 	};
 
 	virtual void SetColor(const yunuGI::Color& color) override

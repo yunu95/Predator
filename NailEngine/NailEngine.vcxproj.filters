@@ -55,6 +55,9 @@
     <Filter Include="GraphicsEngine\RenderableManager\IRenderable\StaticMesh">
       <UniqueIdentifier>{fb7b53f2-4e24-4663-9aba-e3fbaf21b85b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource\Texture">
+      <UniqueIdentifier>{db20820c-deef-4b80-b972-92338038b52e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -159,6 +162,9 @@
     <ClInclude Include="MaterialWrapper.h">
       <Filter>Resource\Material</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Resource\Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -214,6 +220,9 @@
     </ClCompile>
     <ClCompile Include="YGMaterialAdapter.cpp">
       <Filter>AdaptorInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Resource\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
