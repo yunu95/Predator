@@ -30,12 +30,13 @@ public:
             if (yunutyEngine::Input::isKeyDown(KeyCode::D) || lastMousePos.x > 1)
                 deltaDirection += Vector3d::right;
             if (yunutyEngine::Input::isKeyDown(KeyCode::W) || lastMousePos.y < 0)
-                deltaDirection += Vector3d::up;
+                deltaDirection += Vector3d::forward;
             if (yunutyEngine::Input::isKeyDown(KeyCode::S) || lastMousePos.y > 1)
-                deltaDirection -= Vector3d::up;
+                deltaDirection -= Vector3d::forward;
 
             GetTransform()->position += deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed;
-            GetTransform()->rotation = Quaternion::Identity();
+            Quaternion quat = Quaternion::MakeWithForwardUp(Vector3d::down,Vector3d::forward);
+            GetTransform()->rotation = quat;
         }
         else
         {
@@ -104,8 +105,8 @@ public:
                 right * centeredPosition.x * 0.001 * resolution.x * expectedPlaneDistance() +
                 up * centeredPosition.y * 0.001 * resolution.y * expectedPlaneDistance();
 
-            DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?
-                yunuGI::Color::red() : yunuGI::Color::blue(), { 0.2,0.2,0.2 });
+            if (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick))
+                DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?  yunuGI::Color::red() : yunuGI::Color::blue(), { 0.2,0.2,0.2 });
             if (Input::isKeyPushed(KeyCode::MouseLeftClick))
                 groundLeftClickCallback(projectedPoint);
             else if (Input::isKeyPushed(KeyCode::MouseRightClick))
@@ -115,6 +116,6 @@ public:
         }
     }
 private:
-    float expectedPlaneDistance() { return abs(GetTransform()->GetWorldPosition().z); };
+    float expectedPlaneDistance() { return abs(GetTransform()->GetWorldPosition().y); };
 };
 
