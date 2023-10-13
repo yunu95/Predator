@@ -285,6 +285,9 @@ void ResourceManager::LoadSphereMesh()
 	// ºÏ±Ø
 	v.pos = DirectX::SimpleMath::Vector3{ 0.0f, radius, 0.0f };
 	v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
+	v.uv = DirectX::SimpleMath::Vector2(0.5f, 0.0f);
+	v.normal = v.pos;
+	v.normal.Normalize();
 	vec.push_back(v);
 
 	float stackAngle = DirectX::XM_PI / stackCount;
@@ -307,6 +310,11 @@ void ResourceManager::LoadSphereMesh()
 			v.pos.y = radius * cosf(phi);
 			v.pos.z = radius * sinf(phi) * sinf(theta);
 
+			v.uv = DirectX::SimpleMath::Vector2(deltaU * x, deltaV * y);
+
+			v.normal = v.pos;
+			v.normal.Normalize();
+
 			v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
 
 			vec.push_back(v);
@@ -316,6 +324,9 @@ void ResourceManager::LoadSphereMesh()
 	// ³²±Ø
 	v.pos = DirectX::SimpleMath::Vector3{ 0.0f, -radius, 0.0f };
 	v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
+	v.uv = DirectX::SimpleMath::Vector2(0.5f, 1.0f);
+	v.normal = v.pos;
+	v.normal.Normalize();
 	vec.push_back(v);
 
 	std::vector<unsigned int> idx(36);

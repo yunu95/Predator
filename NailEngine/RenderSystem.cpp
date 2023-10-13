@@ -19,6 +19,8 @@ using namespace DirectX::PackedVector;
 #include "ILight.h"
 #include "LightManager.h"
 
+#include "NailCamera.h"
+
 LazyObjects<RenderSystem> RenderSystem::Instance;
 
 void RenderSystem::PushLightData()
@@ -29,20 +31,42 @@ void RenderSystem::PushLightData()
 
 	unsigned int i = 0;
 
-	auto temp = sizeof(LightInfo);
-
 	for (auto& e : lightSet)
 	{
-		params.lights[i] = e->GetLightInfo();
-		params.lights[i].angle = 24.f;
+		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Directional))
+		{
+			params.lights[i] = e->GetLightInfo();
+			params.lights[i].direction = e->GetLightInfo().direction;
+		}
+		else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
+		{
+
+		}
+		else if(e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Spot))
+		{
+
+		}
+		
 		i++;
 	}
 
 	NailEngine::Instance.Get().GetConstantBuffer(2)->PushGraphicsData(&params, sizeof(LightParams), 2);
 }
 
+void RenderSystem::PushCameraData()
+{
+	CameraBuffer buffer;
+	DirectX::SimpleMath::Vector3 pos;
+	DirectX::SimpleMath::Vector3 scale;
+	DirectX::SimpleMath::Quaternion quat;
+	NailCamera::Instance.Get().GetWTM().Decompose(scale, quat, pos);
+	buffer.position = pos;
+	NailEngine::Instance.Get().GetConstantBuffer(3)->PushGraphicsData(&buffer, sizeof(CameraBuffer), 3);
+}
+
 void RenderSystem::RenderObject()
 {
+	PushCameraData();
 	PushLightData();
 
 	auto& renderableSet = RenderableManager::Instance.Get().GetRenderableSet();

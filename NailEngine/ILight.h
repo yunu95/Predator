@@ -16,19 +16,19 @@ enum class LightType
 struct LightColor
 {
 	DirectX::SimpleMath::Vector4 diffuse{1.f,0.f,0.f,1.f};
-	DirectX::SimpleMath::Vector4 ambient{ 0.f,0.f,0.f,0.f };
+	DirectX::SimpleMath::Vector4 ambient{ 0.1f,0.1f,0.1f,1.f };
 	DirectX::SimpleMath::Vector4 specular{ 0.f,0.f,0.f,0.f };
 };
 
 struct LightInfo
 {
-	unsigned int lightType;
 	LightColor color;
 	DirectX::SimpleMath::Vector4 position;
 	DirectX::SimpleMath::Vector4 direction;
+	unsigned int lightType;
 	float range;
 	float angle;
-	float padding;
+	unsigned int padding;
 };
 
 struct LightParams

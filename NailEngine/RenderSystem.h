@@ -10,6 +10,7 @@ public:
 
 public:
 	void PushLightData();
+	void PushCameraData();
 	void RenderObject();
 };
 
