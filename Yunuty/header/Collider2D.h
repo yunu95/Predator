@@ -45,9 +45,13 @@ namespace yunutyEngine
         virtual bool isOverlappingWith(const BoxCollider2D* other) const = 0;
         virtual bool isOverlappingWith(const CircleCollider2D* other) const = 0;
         virtual bool isOverlappingWith(const LineCollider2D* other) const = 0;
+        static void SetIsOnXYPlane(bool onXYPlane);
+        static bool GetIsOnXYPlane();
     private:
         // called by yunuty cycle
         static void InvokeCollisionEvents();
+        // onXYPlane이 참이면 모든 콜라이더들은 XY평면에 존재하는 것이고, 거짓이면 XZ 평면에 존재하는 것이다.
+        static bool isOnXYPlane;
     protected:
         static unordered_set<Collider2D*> colliders2D;
         unordered_set<Collider2D*> overlappedColliders;
@@ -60,10 +64,10 @@ namespace yunutyEngine
         static bool isOverlapping(const BoxCollider2D* a, const CircleCollider2D* b);
         static bool isOverlapping(const CircleCollider2D* b, const BoxCollider2D* a) { return isOverlapping(a, b); }
         static bool isOverlapping(const BoxCollider2D* a, const LineCollider2D* b);
-        static bool isOverlapping(const LineCollider2D* b, const BoxCollider2D* a) { return isOverlapping(a,b); }
+        static bool isOverlapping(const LineCollider2D* b, const BoxCollider2D* a) { return isOverlapping(a, b); }
         static bool isOverlapping(const CircleCollider2D* a, const CircleCollider2D* b);
         static bool isOverlapping(const CircleCollider2D* a, const LineCollider2D* b);
-        static bool isOverlapping(const LineCollider2D* b, const CircleCollider2D* a) { return isOverlapping(a,b); }
+        static bool isOverlapping(const LineCollider2D* b, const CircleCollider2D* a) { return isOverlapping(a, b); }
         static bool isOverlapping(const LineCollider2D* a, const LineCollider2D* b);
 
         friend YunutyCycle;

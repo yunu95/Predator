@@ -7,6 +7,7 @@ using namespace yunutyEngine;
 
 unordered_set<Collider2D*> Collider2D::colliders2D;
 unique_ptr<Collider2D::QuadTreeNode> Collider2D::QuadTreeNode::rootNode = nullptr;
+bool Collider2D::isOnXYPlane = true;
 
 struct PairHash {
     template <class T1, class T2>
@@ -49,7 +50,7 @@ void Collider2D::InvokeCollisionEvents()
             if (!rectInitialized)
             {
                 left = right = pos.x;
-                top = bottom = pos.y;
+                top = bottom = isOnXYPlane ? pos.y : pos.z;
                 rectInitialized = true;
                 continue;
             }
@@ -143,7 +144,7 @@ void Collider2D::InvokeCollisionEvents()
                         if (colliderA->overlappedColliders.find(colliderB) == colliderA->overlappedColliders.end())
                         {
                             colliderA->overlappedColliders.insert(colliderB);
-                           for (auto each : colliderA->GetGameObject()->GetIndexedComponents())
+                            for (auto each : colliderA->GetGameObject()->GetIndexedComponents())
                                 each->OnCollisionEnter2D(collisionOnA);
 
                             colliderB->overlappedColliders.insert(colliderA);
@@ -266,8 +267,13 @@ bool Collider2D::isOverlapping(const BoxCollider2D* a, const LineCollider2D* b)
 
 bool Collider2D::isOverlapping(const CircleCollider2D* a, const CircleCollider2D* b)
 {
-    Vector2d aPos = a->GetTransform()->GetWorldPosition();
-    Vector2d bPos = b->GetTransform()->GetWorldPosition();
+    Vector3d aPos = a->GetTransform()->GetWorldPosition();
+    Vector3d bPos = b->GetTransform()->GetWorldPosition();
+    if (isOnXYPlane)
+        aPos.z = bPos.z = 0;
+    else
+        aPos.y = bPos.y = 0;
+
     return (aPos - bPos).Magnitude() < a->radius + b->radius;
 }
 
@@ -279,6 +285,14 @@ bool Collider2D::isOverlapping(const CircleCollider2D* a, const LineCollider2D* 
 bool Collider2D::isOverlapping(const LineCollider2D* a, const LineCollider2D* b)
 {
     return false;
+}
+void Collider2D::SetIsOnXYPlane(bool onXYPlane)
+{
+    Collider2D::isOnXYPlane = onXYPlane;
+}
+bool Collider2D::GetIsOnXYPlane()
+{
+    return Collider2D::isOnXYPlane;
 }
 
 
