@@ -12,6 +12,8 @@
 
 #include "RenderSystem.h"
 
+#include "ILight.h"
+
 LazyObjects<NailEngine> NailEngine::Instance;
 
 void NailEngine::Init(UINT64 hWnd)
@@ -124,6 +126,12 @@ void NailEngine::CreateConstantBuffer()
 	{
 		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
 		_constantBuffer->CraeteConstantBuffer(sizeof(MaterialBuffer), 256);
+		this->constantBuffers.emplace_back(_constantBuffer);
+	}
+
+	{
+		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
+		_constantBuffer->CraeteConstantBuffer(sizeof(LightParams), 1);
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
 }

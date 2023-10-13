@@ -58,6 +58,15 @@
     <Filter Include="Resource\Texture">
       <UniqueIdentifier>{db20820c-deef-4b80-b972-92338038b52e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Light">
+      <UniqueIdentifier>{00b3b583-dc75-40dc-b537-2acd344dd505}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Light\ILight">
+      <UniqueIdentifier>{623d0d1a-35e3-4b2e-a440-8253d8d26e16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Light\DirectionalLight">
+      <UniqueIdentifier>{3b1aad02-90c8-4d9f-8bea-7acfc5c8335b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -165,6 +174,27 @@
     <ClInclude Include="Texture.h">
       <Filter>Resource\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="YGDirectionalLightAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="YGPointLightAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="YGSpotLightAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="IYunuMeshRenderer.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="ILight.h">
+      <Filter>Light\ILight</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>Light\DirectionalLight</Filter>
+    </ClInclude>
+    <ClInclude Include="LightManager.h">
+      <Filter>Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -223,6 +253,12 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Resource\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp">
+      <Filter>Light\DirectionalLight</Filter>
+    </ClCompile>
+    <ClCompile Include="LightManager.cpp">
+      <Filter>Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

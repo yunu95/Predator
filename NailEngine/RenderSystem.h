@@ -9,6 +9,7 @@ public:
 	friend LazyObjects<RenderSystem>;
 
 public:
+	void PushLightData();
 	void RenderObject();
 };
 

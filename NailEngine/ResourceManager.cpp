@@ -213,35 +213,35 @@ void ResourceManager::LoadCubeMesh()
 	std::vector<Vertex> vec(24);
 
 	// ¾Õ¸é
-	vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f));
-	vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f));
-	vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f));
-	vec[3] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f));
+	vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+	vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+	vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+	vec[3] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
 	// µÞ¸é
-	vec[4] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f));
-	vec[5] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f));
-	vec[6] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f));
-	vec[7] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f));
+	vec[4] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+	vec[5] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+	vec[6] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+	vec[7] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
 	// À­¸é
-	vec[8] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f));
-	vec[9] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f));
-	vec[10] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f), DirectX::SimpleMath::Vector2(1.f,0.f));
-	vec[11] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f), DirectX::SimpleMath::Vector2(1.f,1.f));
+	vec[8] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
+	vec[9] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
+	vec[10] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.f, 0.f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
+	vec[11] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.f, 1.f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
 	// ¾Æ·§¸é
-	vec[12] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f));
-	vec[13] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f));
-	vec[14] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f));
-	vec[15] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f));
+	vec[12] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
+	vec[13] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
+	vec[14] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
+	vec[15] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
 	// ¿ÞÂÊ¸é
-	vec[16] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f),DirectX::SimpleMath::Vector2(0.0f, 1.0f));
-	vec[17] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f),DirectX::SimpleMath::Vector2(0.0f, 0.0f));
-	vec[18] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f),DirectX::SimpleMath::Vector2(1.0f, 0.0f));
-	vec[19] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f),DirectX::SimpleMath::Vector2(1.0f, 1.0f));
+	vec[16] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
+	vec[17] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
+	vec[18] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
+	vec[19] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
 	// ¿À¸¥ÂÊ¸é
-	vec[20] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f),DirectX::SimpleMath::Vector2(0.0f, 1.0f));
-	vec[21] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f),DirectX::SimpleMath::Vector2(0.0f, 0.0f));
-	vec[22] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f),DirectX::SimpleMath::Vector2(1.0f, 0.0f));
-	vec[23] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f),DirectX::SimpleMath::Vector2(1.0f, 1.0f));
+	vec[20] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+	vec[21] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+	vec[22] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+	vec[23] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
 
 	std::vector<unsigned int> idx(36);
 
@@ -401,7 +401,7 @@ void ResourceManager::LoadCapsuleMesh()
 	// »ó´Ü ¹Ý±¸ Á¤Á¡
 	vertices.push_back(Vertex{
 		DirectX::SimpleMath::Vector3{0.0f, radius + height * 0.5f, 0.0f},
-		DirectX::SimpleMath::Vector4{1.f, 1.f, 1.f, 1.f}});
+		DirectX::SimpleMath::Vector4{1.f, 1.f, 1.f, 1.f} });
 
 	for (int i = 1; i <= stackCount; i++)
 	{
@@ -445,16 +445,16 @@ void ResourceManager::LoadCapsuleMesh()
 			float y = ysize + height * 0.5f;
 			float z = xzsize * cosf(zTheta);
 
-			vertices.push_back(Vertex{ 
+			vertices.push_back(Vertex{
 				DirectX::SimpleMath::Vector3(x, -y, z),
 				DirectX::SimpleMath::Vector4(1.f, 1.f,1.f,1.f) }
 			);
 		}
 	}
 
-	vertices.push_back(Vertex{ 
+	vertices.push_back(Vertex{
 		DirectX::SimpleMath::Vector3{0.0f, -(radius + height * 0.5f), 0.0f},
-		DirectX::SimpleMath::Vector4(1.f, 1.f,1.f,1.f)}
+		DirectX::SimpleMath::Vector4(1.f, 1.f,1.f,1.f) }
 	);
 
 	// »ó´Ü ¹Ý±¸ ÀÎµ¦½º
@@ -549,14 +549,14 @@ void ResourceManager::LoadCylinderMesh()
 
 	// Á¤»ó Á¤Á¡
 	vertices.push_back(Vertex{
-		DirectX::SimpleMath::Vector3{0.0f, height * 0.5f, 0.0f}, 
-		DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f}}
+		DirectX::SimpleMath::Vector3{0.0f, height * 0.5f, 0.0f},
+		DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f} }
 	);
 
 	// ¹Ù´Ú Á¤Á¡
 	vertices.push_back(Vertex{
 		DirectX::SimpleMath::Vector3{0.0f, -height * 0.5f, 0.0f},
-		DirectX::SimpleMath::Vector4{1.f, 1.f, 1.f,1.f}}
+		DirectX::SimpleMath::Vector4{1.f, 1.f, 1.f,1.f} }
 	);
 
 	// À­¸é
@@ -568,7 +568,7 @@ void ResourceManager::LoadCylinderMesh()
 		float y = height * 0.5f;
 		float z = radius * cosf(zTheta);
 
-		vertices.push_back(Vertex{ 
+		vertices.push_back(Vertex{
 			DirectX::SimpleMath::Vector3{x, y, z},
 			DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f} }
 		);
@@ -585,7 +585,7 @@ void ResourceManager::LoadCylinderMesh()
 
 		vertices.push_back(Vertex{
 			DirectX::SimpleMath::Vector3{x, -y, z},
-			DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f }}
+			DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f } }
 		);
 	}
 

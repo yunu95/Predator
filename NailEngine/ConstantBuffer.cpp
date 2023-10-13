@@ -6,6 +6,8 @@
 #include "ResourceBuilder.h"
 #include "Device.h"
 
+#include "ILight.h"
+
 ConstantBuffer::ConstantBuffer()
 	: mappedBuffer{nullptr},
 	currentIndex{0}
@@ -44,6 +46,9 @@ void ConstantBuffer::PushGraphicsData(void* data, unsigned int size, unsigned in
 {
 	assert(this->currentIndex < this->count);
 	assert(this->size == ((size + 15) & ~15));
+
+	LightParams* temp = (LightParams*)data;
+	LightParams temp2 = *temp;
 
 	D3D11_MAPPED_SUBRESOURCE _subResource;
 

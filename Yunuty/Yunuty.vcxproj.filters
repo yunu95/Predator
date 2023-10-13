@@ -241,6 +241,9 @@
     <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\SkinnedMesh">
       <UniqueIdentifier>{fc00bea1-cbc2-4fe8-91ff-5823930dfbdc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\DirectionalLight">
+      <UniqueIdentifier>{a954b19f-8264-41ea-acbe-f5d770dde448}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -386,6 +389,9 @@
     </ClCompile>
     <ClCompile Include="YunutySkinnedMesh.cpp">
       <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\SkinnedMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\DirectionalLight</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -568,6 +574,9 @@
     </ClInclude>
     <ClInclude Include="header\YunutyStringConversion.h">
       <Filter>yunutyEngine\yunutyUtility\StringConversion</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\DirectionalLight</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

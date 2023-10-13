@@ -1,6 +1,5 @@
 #pragma once
 #include <unordered_map>
-#include <DirectXMath.h>
 #include "YunuGraphicsInterface.h"
 #include "YGRenderableAdapter.h"
 
