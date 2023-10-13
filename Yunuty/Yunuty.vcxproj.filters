@@ -256,6 +256,9 @@
     <Filter Include="yunutyEngine\NavigationSystem\RecastDetour\source">
       <UniqueIdentifier>{31ca7e3b-bf9e-45c6-85ef-ad47e47ca082}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ClientTemplate">
+      <UniqueIdentifier>{c2f86423-113b-4f7e-bb77-e530e31e8781}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">

@@ -30,7 +30,7 @@ public:
                 auto staticMesh = tile->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
                 staticMesh->GetGI().LoadMesh("Cube");
                 //staticMesh->GetGI().SetMesh(L"Cube");
-                //staticMesh->GetGI().SetColor(0, ((i + j) % 2 == 0 ? colorA : colorB));
+                staticMesh->GetGI().GetMaterial()->SetColor(((i + j) % 2 == 0 ? colorA : colorB));
                 //staticMesh->GetGI().SetShader(0, L"Forward");
                 //staticMesh->GetGI().SetMaterialName(0, L"Forward");
                 tile->GetTransform()->SetWorldPosition(position);

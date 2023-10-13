@@ -25,6 +25,12 @@
     <Filter Include="DebugBeacon">
       <UniqueIdentifier>{12a9b6c6-374f-4024-a2c3-3d67deff9469}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TerrainEditor">
+      <UniqueIdentifier>{bdeb32c3-9345-46aa-9876-48fd5865c87c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugMeshes">
+      <UniqueIdentifier>{63795638-a23d-4b7e-a43d-3da8d1088678}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShakyCam.h" />
@@ -60,6 +66,12 @@
     </ClInclude>
     <ClInclude Include="DebugBeacon.h">
       <Filter>DebugBeacon</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainEditor.h">
+      <Filter>TerrainEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugMeshes.h">
+      <Filter>DebugMeshes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

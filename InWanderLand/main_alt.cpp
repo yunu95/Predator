@@ -12,6 +12,7 @@
 #include "RTSCam.h"   
 #include "DebugTilePlane.h"
 #include "DebugBeacon.h"
+#include "DebugMeshes.h"
 #include <d3d11.h>
 #include <tchar.h>
 #include <map>
