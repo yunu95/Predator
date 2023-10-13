@@ -11,6 +11,7 @@ struct Vertex
 	DirectX::SimpleMath::Vector3 pos;
 	DirectX::SimpleMath::Vector4 color;
 	DirectX::SimpleMath::Vector2 uv;
+	DirectX::SimpleMath::Vector3 normal;
 };
 
 struct MatrixBuffer
@@ -19,6 +20,7 @@ struct MatrixBuffer
 	DirectX::SimpleMath::Matrix VTM;
 	DirectX::SimpleMath::Matrix PTM;
 	DirectX::SimpleMath::Matrix WVP;
+	DirectX::SimpleMath::Matrix WorldInvTrans;
 };
 
 struct MaterialBuffer

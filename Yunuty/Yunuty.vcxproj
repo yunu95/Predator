@@ -199,6 +199,7 @@
     <ClCompile Include="Collider2D.cpp" />
     <ClCompile Include="Curve.cpp" />
     <ClCompile Include="DebugCube.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="GameObjectPool.cpp" />
     <ClCompile Include="LineCollider2D.cpp" />
     <ClCompile Include="MetaData.cpp" />
@@ -242,6 +243,7 @@
     <ClCompile Include="_YunuGIObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="header\DebugCube.h" />
     <ClInclude Include="header\StaticMeshRenderer.h" />
     <ClInclude Include="header\UIImage.h" />

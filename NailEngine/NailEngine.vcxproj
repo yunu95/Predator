@@ -175,7 +175,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
   <ItemGroup>
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="Device.h" />
+    <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="ILight.h" />
     <ClInclude Include="IRenderable.h" />
+    <ClInclude Include="IYunuMeshRenderer.h" />
+    <ClInclude Include="LightManager.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialWrapper.h" />
     <ClInclude Include="Mesh.h" />
@@ -198,13 +202,16 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="YGCameraAdapter.h" />
     <ClInclude Include="YGDebugCubeAdapter.h" />
     <ClInclude Include="YGDebugSphereAdapter.h" />
+    <ClInclude Include="YGDirectionalLightAdapter.h" />
     <ClInclude Include="YGEventHandlerAdapter.h" />
     <ClInclude Include="YGFactoryAdapter.h" />
     <ClInclude Include="YGMaterialAdapter.h" />
+    <ClInclude Include="YGPointLightAdapter.h" />
     <ClInclude Include="YGRenderableAdapter.h" />
     <ClInclude Include="YGRendererAdapter.h" />
     <ClInclude Include="YGResourceManagerAdapter.h" />
     <ClInclude Include="YGSkinnedMeshAdapter.h" />
+    <ClInclude Include="YGSpotLightAdapter.h" />
     <ClInclude Include="YGStaticMeshAdapter.h" />
     <ClInclude Include="YGUIImageAdapter.h" />
     <ClInclude Include="YGUITextAdapter.h" />
@@ -212,7 +219,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
   <ItemGroup>
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="Device.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="IRenderable.cpp" />
+    <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="NailCamera.cpp" />

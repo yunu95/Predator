@@ -16,10 +16,35 @@ using namespace DirectX::PackedVector;
 #include "RenderableManager.h"
 #include "IRenderable.h"
 
+#include "ILight.h"
+#include "LightManager.h"
+
 LazyObjects<RenderSystem> RenderSystem::Instance;
+
+void RenderSystem::PushLightData()
+{
+	auto& lightSet = LightManager::Instance.Get().GetLightList();
+	LightParams params;
+	params.lightCount = LightManager::Instance.Get().GetLightCount();
+
+	unsigned int i = 0;
+
+	auto temp = sizeof(LightInfo);
+
+	for (auto& e : lightSet)
+	{
+		params.lights[i] = e->GetLightInfo();
+		params.lights[i].angle = 24.f;
+		i++;
+	}
+
+	NailEngine::Instance.Get().GetConstantBuffer(2)->PushGraphicsData(&params, sizeof(LightParams), 2);
+}
 
 void RenderSystem::RenderObject()
 {
+	PushLightData();
+
 	auto& renderableSet = RenderableManager::Instance.Get().GetRenderableSet();
 
 	for (auto& e : renderableSet)
@@ -29,6 +54,7 @@ void RenderSystem::RenderObject()
 		matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
 		matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
 		matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+		matrixBuffer.WorldInvTrans = e->GetWorldTM().Invert().Transpose();
 
 		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer),0);
 

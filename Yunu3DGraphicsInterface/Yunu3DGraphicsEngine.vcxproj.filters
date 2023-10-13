@@ -173,6 +173,30 @@
     <ClInclude Include="YGMaterialAdapter.h">
       <Filter>AdapterTemplate</Filter>
     </ClInclude>
+    <ClInclude Include="ILight.h">
+      <Filter>Header Files\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="YunuVector3.h">
+      <Filter>raw</Filter>
+    </ClInclude>
+    <ClInclude Include="YunuVector4.h">
+      <Filter>raw</Filter>
+    </ClInclude>
+    <ClInclude Include="YGDirectionalLightAdapter.h">
+      <Filter>AdapterTemplate</Filter>
+    </ClInclude>
+    <ClInclude Include="YGPointLightAdapter.h">
+      <Filter>AdapterTemplate</Filter>
+    </ClInclude>
+    <ClInclude Include="YGSpotLightAdapter.h">
+      <Filter>AdapterTemplate</Filter>
+    </ClInclude>
+    <ClInclude Include="YGLightAdapter.h">
+      <Filter>AdapterTemplate</Filter>
+    </ClInclude>
+    <ClInclude Include="IYunuMeshRenderer.h">
+      <Filter>Header Files\Renderable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Yunu3DGraphicsEngine.rc">
