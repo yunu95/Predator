@@ -29,3 +29,9 @@ struct MaterialBuffer
 
 	std::array<unsigned int, 7> useTexture;
 };
+
+struct CameraBuffer
+{
+	DirectX::SimpleMath::Vector3 position;
+	float padding;
+};

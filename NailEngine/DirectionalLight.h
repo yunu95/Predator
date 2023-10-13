@@ -12,5 +12,6 @@ public:
 
 public:
 	void SetLightDirection(DirectX::SimpleMath::Vector4& direction);
+	DirectX::SimpleMath::Vector4& GetDirection();
 };
 

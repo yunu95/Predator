@@ -33,13 +33,13 @@ struct LightColor
 
 struct LightInfo
 {
-    unsigned int lightType;
     LightColor color;
     float4 position;
     float4 direction;
+    int lightType;
     float range;
     float angle;
-    float padding;
+    int padding;
 };
 
 cbuffer LightParams : register(b2)
@@ -50,6 +50,13 @@ cbuffer LightParams : register(b2)
 };
 
 //
+
+cbuffer CameraBuffer : register(b3)
+{
+    float3 cameraPos;
+    float pad;
+};
+
 Texture2D AlbedoMap : register(t0);
 Texture2D NormalMap : register(t1);
 

@@ -22,6 +22,7 @@ public:
 
 	DirectX::SimpleMath::Matrix& GetVTM() { return this->vtm; }
 	DirectX::SimpleMath::Matrix& GetPTM() { return this->ptm; }
+	DirectX::SimpleMath::Matrix& GetWTM() { return this->wtm; }
 
 private:
 	DirectX::SimpleMath::Matrix wtm;

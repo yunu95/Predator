@@ -146,21 +146,24 @@ int main(int, char**)
     //camObj->GetTransform()->position = Vector3d(0, 0, -5);
     //auto roamingCam = camObj->AddComponent<RoamingCam>();
 
+    // 카메라
     {
         auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        camObj2->GetTransform()->position = Vector3d(0, 0, 0);
         camObj2->AddComponent<RTSCam>();
     }
+    // 큐브
 	{
 		auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		camObj2->GetTransform()->position = Vector3d(0, 0, 5);
 		auto renderer = camObj2->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
         renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1.f,0.f,0.f,1.f });
-        renderer->GetGI().LoadMesh("Cube");
+        renderer->GetGI().LoadMesh("Sphere");
+        //renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, L"Texture/zoro.jpg");
 	}
+    // 라이트
 	{
 		auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		camObj2->GetTransform()->position = Vector3d(0, 0, -5);
+        camObj2->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{0.f,80.f,0.f} });
 		auto renderer = camObj2->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 	}
 

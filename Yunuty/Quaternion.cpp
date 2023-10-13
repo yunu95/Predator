@@ -21,7 +21,6 @@ Quaternion::Quaternion(const Vector3d& euler)
 }
 Quaternion& Quaternion::operator=(const Vector3d& euler)
 {
-    ;
     double cr = cos(euler.x * math::Deg2Rad * 0.5);
     double sr = sin(euler.x * math::Deg2Rad * 0.5);
     double cp = cos(euler.y * math::Deg2Rad * 0.5);

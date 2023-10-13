@@ -19,3 +19,8 @@ void DirectionalLight::SetLightDirection(DirectX::SimpleMath::Vector4& direction
 {
 	this->lightInfo.direction = direction;
 }
+
+DirectX::SimpleMath::Vector4& DirectionalLight::GetDirection()
+{
+	return this->lightInfo.direction;
+}

@@ -134,4 +134,10 @@ void NailEngine::CreateConstantBuffer()
 		_constantBuffer->CraeteConstantBuffer(sizeof(LightParams), 1);
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
+
+	{
+		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
+		_constantBuffer->CraeteConstantBuffer(sizeof(CameraBuffer), 256);
+		this->constantBuffers.emplace_back(_constantBuffer);
+	}
 }
