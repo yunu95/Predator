@@ -197,11 +197,13 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
     <ClInclude Include="CamSwitcher.h" />
     <ClInclude Include="DebugBeacon.h" />
+    <ClInclude Include="DebugMeshes.h" />
     <ClInclude Include="DebugTilePlane.h" />
     <ClInclude Include="RequestDetourTest.h" />
     <ClInclude Include="RoamingCam.h" />
     <ClInclude Include="RTSCam.h" />
     <ClInclude Include="ShakyCam.h" />
+    <ClInclude Include="TerrainEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp" />

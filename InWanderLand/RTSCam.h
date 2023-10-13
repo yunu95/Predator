@@ -7,8 +7,9 @@ class RTSCam :public yunutyEngine::graphics::Camera
 {
 public:
     bool roamingMode = false;
-    function<void(Vector3d)> groundLeftClickCallback{[](Vector3d){}};
-    function<void(Vector3d)> groundRightClickCallback{[](Vector3d){}};
+    function<void(Vector3d)> groundLeftClickCallback{[](Vector3d) {}};
+    function<void(Vector3d)> groundRightClickCallback{[](Vector3d) {}};
+    function<void(Vector3d)> groundHoveringClickCallback{[](Vector3d) {}};
     void Update()
     {
         if (Input::isKeyPushed(KeyCode::Tab))
@@ -86,7 +87,7 @@ public:
             GetTransform()->position += deltaPosition.Normalized() * Time::GetDeltaTime() * cameraSpeed;
         }
 
-        if (!roamingMode && (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick)))
+        if (!roamingMode)
         {
             Vector3d projectedPoint;
             auto resolution = graphics::Renderer::SingleInstance().GetResolution();
@@ -107,8 +108,10 @@ public:
                 yunuGI::Color::red() : yunuGI::Color::blue(), { 0.2,0.2,0.2 });
             if (Input::isKeyPushed(KeyCode::MouseLeftClick))
                 groundLeftClickCallback(projectedPoint);
-            else
+            else if (Input::isKeyPushed(KeyCode::MouseRightClick))
                 groundRightClickCallback(projectedPoint);
+
+            groundHoveringClickCallback(projectedPoint);
         }
     }
 private:
