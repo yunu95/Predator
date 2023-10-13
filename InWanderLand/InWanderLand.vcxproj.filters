@@ -31,6 +31,12 @@
     <Filter Include="DebugMeshes">
       <UniqueIdentifier>{63795638-a23d-4b7e-a43d-3da8d1088678}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RTSTerrain">
+      <UniqueIdentifier>{35902296-3a53-47ef-a7ac-de94b5000e79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PeriodicAction">
+      <UniqueIdentifier>{d31814ce-faa7-415f-8b5a-672e90071988}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShakyCam.h" />
@@ -72,6 +78,12 @@
     </ClInclude>
     <ClInclude Include="DebugMeshes.h">
       <Filter>DebugMeshes</Filter>
+    </ClInclude>
+    <ClInclude Include="PeriodicAction.h">
+      <Filter>PeriodicAction</Filter>
+    </ClInclude>
+    <ClInclude Include="RTSTerrain.h">
+      <Filter>RTSTerrain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -199,9 +199,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="DebugBeacon.h" />
     <ClInclude Include="DebugMeshes.h" />
     <ClInclude Include="DebugTilePlane.h" />
+    <ClInclude Include="PeriodicAction.h" />
     <ClInclude Include="RequestDetourTest.h" />
     <ClInclude Include="RoamingCam.h" />
     <ClInclude Include="RTSCam.h" />
+    <ClInclude Include="RTSTerrain.h" />
     <ClInclude Include="ShakyCam.h" />
     <ClInclude Include="TerrainEditor.h" />
   </ItemGroup>
