@@ -11,9 +11,33 @@ struct PixelIn
 
 float4 main(PixelIn input) : SV_TARGET
 {
-    float4 albedo = AlbedoMap.Sample(sam, input.uv);
+    float4 albedo;
     float4 color;
-    //float4 color = float4(1.f, 1.f, 1.f, 1.f);
+    if(useAlbedo)
+    {
+        albedo = AlbedoMap.Sample(sam, input.uv);
+        
+        float3 lightDir = -lights[0].direction;
+        float intensity = saturate(dot(input.normal, lightDir));
+    
+        color = saturate(lights[0].color.diffuse * intensity);
+    
+        color = color * albedo;
+
+        return color;
+    }
+    else
+    {
+        float4 lightColor;
+        float3 lightDir = -lights[0].direction;
+        float intensity = saturate(dot(input.normal, lightDir));
+    
+        lightColor = saturate(lights[0].color.diffuse * intensity);
+    
+        color = input.color * materialColor * lightColor;
+
+        return color;
+    }
 
     LightColor totalColor = (LightColor) 0.f;
 

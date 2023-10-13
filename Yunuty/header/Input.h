@@ -22,6 +22,10 @@
 using namespace std;
 namespace yunutyEngine
 {
+    namespace graphics
+    {
+        class Renderer;
+    }
     class YUNUTY_API Input :
         public GlobalComponent
     {
@@ -30,7 +34,10 @@ namespace yunutyEngine
         static bool isKeyPushed(KeyCode keyCode);
         static bool isKeyLifted(KeyCode keyCode);
         static Vector2d getMouseScreenPosition();
+        static Vector2d getMouseScreenPositionNormalized();
         static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    protected:
+        virtual void Update()override;
     private:
         static Input* instance;
         static Input* GetInstance();
@@ -43,7 +50,8 @@ namespace yunutyEngine
         bool m_isKeyPushed(KeyCode keyCode);
         bool m_isKeyLifted(KeyCode keyCode);
         virtual ~Input();
-    protected:
-        virtual void Update()override;
+        HWND mainWnd{ 0 };
+
+        friend graphics::Renderer;
     };
 }

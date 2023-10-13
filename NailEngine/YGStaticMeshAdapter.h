@@ -23,6 +23,11 @@ namespace yunuGIAdapter
 			material->SetRenderable(this->renderable);
 		}
 
+		~StaticMeshAdapter()
+		{
+			RenderableManager::Instance.Get().PopRenderableObject(renderable);
+		}
+
 		virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)
 		{
 			renderable->SetWorldTM(reinterpret_cast<const DirectX::SimpleMath::Matrix&>(worldTM));

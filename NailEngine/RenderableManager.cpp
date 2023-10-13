@@ -6,3 +6,8 @@ void RenderableManager::PushRenderableObject(std::shared_ptr<IRenderable> render
 {
 	this->renderableSet.insert(renderable);
 }
+
+void RenderableManager::PopRenderableObject(std::shared_ptr<IRenderable> renderable)
+{
+	this->renderableSet.erase(renderable);
+}
