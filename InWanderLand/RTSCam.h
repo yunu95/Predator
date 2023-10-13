@@ -104,8 +104,9 @@ public:
                 right * centeredPosition.x * 0.001 * resolution.x * expectedPlaneDistance() +
                 up * centeredPosition.y * 0.001 * resolution.y * expectedPlaneDistance();
 
-            DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?
-                yunuGI::Color::red() : yunuGI::Color::blue(), { 0.2,0.2,0.2 });
+            if (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick))
+                DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?
+                    yunuGI::Color::red() : yunuGI::Color::blue(), { 0.2,0.2,0.2 });
             if (Input::isKeyPushed(KeyCode::MouseLeftClick))
                 groundLeftClickCallback(projectedPoint);
             else if (Input::isKeyPushed(KeyCode::MouseRightClick))
