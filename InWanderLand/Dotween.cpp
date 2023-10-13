@@ -24,32 +24,19 @@ void Dotween::Awake()
 
 void Dotween::Update()
 {
-	for (auto itr = m_dotweenTimerMap.begin(); itr != m_dotweenTimerMap.end();)
+	for (int i = 0; i < TimerIndex::End; i++)
 	{
-		itr->first->Update();
+		if (dotweenTimerArray[i] != nullptr)
+		{
+			dotweenTimerArray[i]->Update();
 
-		if (itr->first->isDone == true)
-		{
-			DotweenTimerPool::GetInstance()->ReturnDotweenTimer(itr->first);
-			itr = m_dotweenTimerMap.erase(itr);
-		}
-		else
-		{
-			itr++;
+			if (dotweenTimerArray[i]->isDone == true)
+			{
+				DotweenTimerPool::GetInstance()->ReturnDotweenTimer(dotweenTimerArray[i]);
+				dotweenTimerArray[i] = nullptr;
+			}
 		}
 	}
-
-	//for (const auto& pair : m_dotweenTimerMap)
-	//	pair.first->Update();
-
-	//for (auto e : m_dotweenTimerMap)
-	//{
-	//	e->first->Update();
-
-	//}
-	
-	//for (auto e : m_dotweenTimerVector)
-	//	e->Update();
 }
 
 Dotween& Dotween::DOMove(Vector3d endPosition, double p_duration)
@@ -104,7 +91,7 @@ Dotween& Dotween::DOMove(Vector3d endPosition, double p_duration)
 	};
 
 	tempTimer = m_doMovetweenTimer;
-	m_dotweenTimerMap.insert({ tempTimer, m_doMovetweenTimer->isDone });
+	dotweenTimerArray[TimerIndex::MoveTimer] = tempTimer;
 
 	/// 자기 자신을 반환해준다...뒤에 SetDelay, SetEase 등을 위해
 	return *this;
@@ -155,7 +142,7 @@ Dotween& Dotween::DOScale(Vector3d endScale, double p_duration)
 	};
 
 	tempTimer = m_doScaletweenTimer;
-	m_dotweenTimerMap.insert({ tempTimer, m_doScaletweenTimer->isDone });
+	dotweenTimerArray[TimerIndex::ScaleTimer] = tempTimer;
 
 	return *this;
 }
@@ -229,7 +216,7 @@ Dotween& Dotween::DORotate(Vector3d endRotation, double p_duration)
 	};
 
 	tempTimer = m_doRotatetweenTimer;
-	m_dotweenTimerMap.insert({ tempTimer, m_doRotatetweenTimer->isDone });
+	dotweenTimerArray[TimerIndex::RotateTimer] = tempTimer;
 
 	return *this;
 }
@@ -256,7 +243,7 @@ Dotween& Dotween::DOQRotate(Vector3d axis, double angle, double p_duration)
 	};
 
 	tempTimer = m_doQrotatetweenTimer;
-	m_dotweenTimerMap.insert({ tempTimer, m_doQrotatetweenTimer->isDone });
+	dotweenTimerArray[TimerIndex::RotateTimer] = tempTimer;
 
 	return *this;
 }
@@ -334,7 +321,8 @@ Dotween& Dotween::DOCustom(double p_duration)
 	m_doCustomTweenTimer->duration = p_duration;
 
 	tempTimer = m_doCustomTweenTimer;
-	m_dotweenTimerMap.insert({ tempTimer, m_doCustomTweenTimer->isDone });
+	dotweenTimerArray[TimerIndex::CustomTimer] = tempTimer;
+
 	return *this;
 }
 
@@ -345,7 +333,8 @@ Dotween& Dotween::DONothing(double p_duration)
 	m_doNothingTweenTimer->duration = p_duration;
 
 	tempTimer = m_doNothingTweenTimer;
-	m_dotweenTimerMap.insert({ tempTimer, m_doNothingTweenTimer->isDone });
+	dotweenTimerArray[TimerIndex::NothingTimer] = tempTimer;
+
 	return *this;
 
 }
@@ -390,7 +379,7 @@ Dotween& Dotween::DOShakePosition(double p_duration, double strength /*= 1.5f*/,
 	};
 
 	tempTimer = m_doShaketweenTimer;
-	m_dotweenTimerMap.insert({ tempTimer, m_doShaketweenTimer->isDone });
+	dotweenTimerArray[TimerIndex::ShakeTimer] = tempTimer;
 
 	return *this;
 }
@@ -470,21 +459,21 @@ double Dotween::AdjustRotation(double& rot)
 }
 
 
-void Dotween::clearDotweenTimerMap()
-{
-	if (tempTimer != nullptr)
-	{
-		tempTimer->onCompleteFunction = []() {};
-		tempTimer->onExpiration = []() {};
-		tempTimer->onUpdate = []() {};
-	}
-
-	auto it = m_dotweenTimerMap.begin();
-	while (it != m_dotweenTimerMap.end())
-	{
-		it->first->onUpdate = []() {};
-		it->first->onExpiration = []() {};
-		it->first->onCompleteFunction = []() {};
-		it++;
-	}
-}
+//void Dotween::clearDotweenTimerMap()
+//{
+//	if (tempTimer != nullptr)
+//	{
+//		tempTimer->onCompleteFunction = []() {};
+//		tempTimer->onExpiration = []() {};
+//		tempTimer->onUpdate = []() {};
+//	}
+//
+//	auto it = m_dotweenTimerMap.begin();
+//	while (it != m_dotweenTimerMap.end())
+//	{
+//		it->first->onUpdate = []() {};
+//		it->first->onExpiration = []() {};
+//		it->first->onCompleteFunction = []() {};
+//		it++;
+//	}
+//}

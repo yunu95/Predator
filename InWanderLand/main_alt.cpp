@@ -24,6 +24,8 @@
 #include <map>
 #include <algorithm>
 
+#include "RangeSystem.h"
+
 // Data
 static ID3D11Device* g_pd3dDevice = NULL;
 static ID3D11DeviceContext* g_pd3dDeviceContext = NULL;
@@ -154,8 +156,10 @@ int main(int, char**)
     //auto roamingCam = camObj->AddComponent<RoamingCam>();
 
     auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    camObj2->setName("Camera");
 
     camObj2->GetTransform()->position = Vector3d(0, 0, -30);
+	//camObj2->GetTransform()->SetWorldRotation(Vector3d(90, 90, 0));
     // 지면의 좌클릭, 우클릭에 대한 콜백은 아래의 RTSCam 인스턴스에 등록할 수 있다.
     auto rtsCam = camObj2->AddComponent<RTSCam>();
 
@@ -181,82 +185,174 @@ int main(int, char**)
 
 #pragma region Player
     auto playerGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    playerGameObject->setName("Player");
+
     auto playerMesh = playerGameObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    //staticMeshObj->AddComponent<FlappyBird>();
     playerMesh->GetGI().LoadMesh("Capsule");
+    playerMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 1, 1, 0 });
+
+    auto playerComponent = playerGameObject->AddComponent<Player>();
+
+    //auto playerCollider = playerGameObject->AddComponent<Collider>();
 
     playerGameObject->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{1, 0, 0});
     playerGameObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
-	auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	staticMesh->GetGI().LoadMesh("Cube");
-	staticMesh->GetGI().GetMaterial()->SetPixelShader(L"DebugPS.cso");
-	staticMeshObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ 1,3,10 });
-    //staticMesh->GetGI().LoadDiffuseMap("Textures/000000002405_reverse.dds");
-    //staticMesh->GetGI().LoadNormalMap("Textures/000000002406_b_reverse.dds");
-
-    // 체크무늬로 xy 평면을 초기화하는 클래스다.
-    auto tilePlane = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugTilePlane>();
-    tilePlane->width = 10;
-    tilePlane->height = 10;
-    tilePlane->SetTiles();
 
     Dotween* dotweenComponent = playerGameObject->AddComponent<Dotween>();
-	//dotweenComponent->DOMove(Vector3d(10, 0, 10), 10.f);
-	//dotweenComponent->DORotate(Vector3d(0, 180, 0), 10.f);
-
 
 	// 지면에 대한  좌클릭의 콜백 함수를 정의한다.
-	rtsCam->groundLeftClickCallback = [=](Vector3d position) {
+	rtsCam->groundLeftClickCallback = [=](Vector3d position)
+    {
         // Before moving, Make player look at position.
         Vector3d distanceVector = position - playerGameObject->GetTransform()->GetWorldPosition();
-  //      Vector3d axis = Vector3d::Cross(playerGameObject->GetTransform()->rotation.Forward(), distanceVector);
 
+        playerGameObject->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(distanceVector.Normalized(), playerGameObject->GetTransform()->rotation.Right()));
+        playerGameObject->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(distanceVector.Normalized(), playerGameObject->GetTransform()->rotation.Right()));
 
-  //      double dotAngle = Vector3d::Dot(playerGameObject->GetTransform()->rotation.Forward(), distanceVector);
-		//double sq = (sqrt(pow(playerGameObject->GetTransform()->rotation.Forward().x, 2) + pow(playerGameObject->GetTransform()->rotation.Forward().y, 2)) *
-		//	sqrt(pow(distanceVector.x, 2) + pow(distanceVector.y, 2)));
-  //      double finalAngle = acos(std::clamp(dotAngle / sq, -1.0, 1.0));
-  //      double finalDegree = (finalAngle) * 57.2958f;
-
-  //      if (axis.z > 0)
-  //          finalDegree *= -1;
-
-  //      if (!isnan(finalDegree))
-        playerGameObject->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(distanceVector.Normalized(), playerGameObject->GetTransform()->rotation.Up()));
-
-        dotweenComponent->DOMove(position, 4);
+        float speed = 3.0f;
+        
+        dotweenComponent->DOMove(position, distanceVector.Magnitude() / speed);
 
 	};
 
 #pragma endregion
 
-#pragma region Player Front Object
-    auto playerFrontobject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    auto playerFrontMesh = playerFrontobject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	playerFrontMesh->GetGI().LoadMesh("Cube");
-
-    
-    playerFrontobject->SetParent(playerGameObject);
-    playerFrontobject->GetTransform()->scale = Vector3d(3, 3, 3);
-    playerFrontobject->GetTransform()->SetWorldPosition(Vector3d(-3, 0, 0));
+#pragma region Check Pattern Tiles
+	//// 체크무늬로 xy 평면을 초기화하는 클래스다.
+	auto tilePlane = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugTilePlane>();
+    tilePlane->GetGameObject()->setName("tilePlane");
+	tilePlane->width = 10;
+	tilePlane->height = 10;
+	tilePlane->SetTiles();
 #pragma endregion
 
-#pragma region Attack Range As 2D Collider
-	auto playerRangeObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+#pragma region Player Front Object
+ //   auto playerFrontobject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+ //   auto playerFrontMesh = playerFrontobject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//playerFrontMesh->GetGI().LoadMesh("Cube");
+ //   playerFrontMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });
 
-	auto playerRangeCollider2d = playerRangeObject->AddComponent<CircleCollider2D>();
 
-	auto playerRangeMesh = playerRangeObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	playerRangeMesh->GetGI().LoadMesh("Sphere");
+ //   
+ //   playerFrontobject->GetTransform()->scale = Vector3d(3, 3, 3);
+ //   //playerFrontobject->GetTransform()->SetWorldPosition(Vector3d(-3, 0, 0));
+ //   playerFrontobject->GetTransform()->SetWorldPosition(playerGameObject->GetTransform()->rotation.Forward() * 2);
+	//playerFrontobject->SetParent(playerGameObject);
+
+#pragma endregion
+
+#pragma region Player Identyfication RangeSystem
+	auto playerIDRangeObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    playerIDRangeObject->setName("Player Identyfication RangeSystem");
+
+	auto playerIDRangeCollider2d = playerIDRangeObject->AddComponent<CircleCollider2D>();
+    float playerIDRangeRadius = 3.0f;
+    playerIDRangeCollider2d->SetRadius(playerIDRangeRadius);
+
+    auto playerIDRangeSystem = playerIDRangeObject->AddComponent<RangeSystem>();
+    playerIDRangeSystem->SetUnitGameObject(playerGameObject);
+    playerIDRangeSystem->SetRangeType("Identification");
+
+
+	auto playerIDRangeMesh = playerIDRangeObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	playerIDRangeMesh->GetGI().LoadMesh("Sphere");
 	//playerRangeMesh->GetGI().SetMesh(L"Sphere");
-	//playerRangeMesh->GetGI().SetColor(0, yunuGI::Color{ 1, 0, 0, 0 });
+	playerIDRangeMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });
 	//playerRangeMesh->GetGI().SetShader(0, L"Forward");
 	//playerRangeMesh->GetGI().SetMaterialName(0, L"Forward");
 
-	playerRangeObject->GetTransform()->scale = Vector2d(10, 10);
-    playerRangeObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
-    playerRangeObject->SetParent(playerGameObject);
+    playerIDRangeObject->GetTransform()->scale = Vector2d(playerIDRangeRadius * 2, playerIDRangeRadius * 2);
+	playerIDRangeObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
+    playerIDRangeObject->SetParent(playerGameObject);
+
+#pragma endregion
+
+#pragma region Player Attack Range
+	auto playerAttackRangeObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    playerAttackRangeObject->setName("playerRange2DCollider");
+
+	auto playerAttackRangeCollider2d = playerAttackRangeObject->AddComponent<CircleCollider2D>();
+	float playerAttackRangeRadius = 1.0f;
+    playerAttackRangeCollider2d->SetRadius(playerIDRangeRadius);
+
+	auto playerAttackRangeSystem = playerAttackRangeObject->AddComponent<RangeSystem>();
+    playerAttackRangeSystem->SetUnitGameObject(playerGameObject);
+    playerAttackRangeSystem->SetRangeType("Identification");
+
+
+	auto playerAttackRangeMesh = playerAttackRangeObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+    playerAttackRangeMesh->GetGI().LoadMesh("Sphere");
+	//playerRangeMesh->GetGI().SetMesh(L"Sphere");
+    playerAttackRangeMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 0, 0 });
+	//playerRangeMesh->GetGI().SetShader(0, L"Forward");
+	//playerRangeMesh->GetGI().SetMaterialName(0, L"Forward");
+
+	playerAttackRangeObject->GetTransform()->scale = Vector2d(playerAttackRangeRadius * 2, playerAttackRangeRadius * 2);
+	playerAttackRangeObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
+	playerAttackRangeObject->SetParent(playerGameObject);
+
+#pragma endregion
+
+#pragma region Enemy Unit
+    auto ememyUnitObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    ememyUnitObject->setName("enemyUnit");
+    auto enemyMesh = ememyUnitObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+   
+    auto enemytempComponent = ememyUnitObject->AddComponent<Unit>();
+
+    enemyMesh->GetGI().LoadMesh("Capsule");
+    enemyMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 1, 0 });
+    ememyUnitObject->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ -10, 0, 0 });
+    ememyUnitObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
+#pragma endregion
+
+#pragma region Enemy Identyfication Range
+	auto enemyIDRangeObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    enemyIDRangeObject->setName("enemyRange2DCollider");
+
+	auto enemyIDRangeCollider2d = enemyIDRangeObject->AddComponent<CircleCollider2D>();
+    float enemyIDRangeRadius = 3.0f;
+	enemyIDRangeCollider2d->SetRadius(enemyIDRangeRadius);
+
+    auto enemyIDRangeSystem = enemyIDRangeObject->AddComponent<RangeSystem>();
+    enemyIDRangeSystem->SetUnitGameObject(ememyUnitObject);
+    enemyIDRangeSystem->SetRangeType("Identification");
+
+	auto enemyIDRangeMesh = enemyIDRangeObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+    enemyIDRangeMesh->GetGI().LoadMesh("Sphere");
+	//playerRangeMesh->GetGI().SetMesh(L"Sphere");
+    enemyIDRangeMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });
+    //enemyIDRangeMesh->GetGI().GetMaterial()->SetPixelShader(L"Forward");
+	//playerRangeMesh->GetGI().SetMaterialName(0, L"Forward");
+
+    enemyIDRangeObject->GetTransform()->scale = Vector2d(enemyIDRangeRadius * 2, enemyIDRangeRadius * 2);
+	enemyIDRangeObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
+	enemyIDRangeObject->SetParent(ememyUnitObject);
+
+#pragma endregion
+
+#pragma region Enemy Attack Range
+	auto enemyAttackRangeObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    enemyAttackRangeObject->setName("enemyRange2DCollider");
+
+	auto enemyAttackRangeCollider2d = enemyAttackRangeObject->AddComponent<CircleCollider2D>();
+	float enemyAttackRangeRadius = 1.0f;
+    enemyAttackRangeCollider2d->SetRadius(enemyAttackRangeRadius);
+
+	auto enemyAttackRangeSystem = enemyAttackRangeObject->AddComponent<RangeSystem>();
+    enemyAttackRangeSystem->SetUnitGameObject(ememyUnitObject);
+    enemyAttackRangeSystem->SetRangeType("Identification");
+
+	auto enemyAttackRangeMesh = enemyAttackRangeObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+    enemyAttackRangeMesh->GetGI().LoadMesh("Sphere");
+	//playerRangeMesh->GetGI().SetMesh(L"Sphere");
+    enemyAttackRangeMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 0, 0 });
+	//playerRangeMesh->GetGI().SetShader(0, L"Forward");
+	//playerRangeMesh->GetGI().SetMaterialName(0, L"Forward");
+
+	enemyAttackRangeObject->GetTransform()->scale = Vector2d(enemyAttackRangeRadius * 2, enemyAttackRangeRadius * 2);
+	enemyAttackRangeObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
+	enemyAttackRangeObject->SetParent(ememyUnitObject);
 
 #pragma endregion
 

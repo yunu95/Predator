@@ -21,6 +21,17 @@ using std::vector;
 
 class DotweenTimer;
 
+enum TimerIndex
+{
+	MoveTimer,
+	RotateTimer,
+	ScaleTimer,
+	CustomTimer,
+	NothingTimer,
+	ShakeTimer,
+	End
+};
+
 class Dotween : public Component
 {
 public:
@@ -55,16 +66,18 @@ public:
 
 	Dotween& InitDotweenTimer();		// 해당 dotweenTimer를 초기화해주는 함수
 
-	std::map<DotweenTimer*, bool> m_dotweenTimerMap;
+	//std::map<DotweenTimer*, bool> m_dotweenTimerMap;
+
 
 	// DO 함수가 호출될 때마다 function을 넣어주기 위한 임시 객체.
 	// 어차피 대입될 객체 delete 될 것이기 때문에 따로 delete 하지 않는다.
+	DotweenTimer* dotweenTimerArray[TimerIndex::End] = {nullptr,};
 	DotweenTimer* tempTimer;
 
 	// 각도가 0~360도가 아닐 때 0~360으로 조정해주는 함수. 
 	double AdjustRotation(double& rot);
 
-	void clearDotweenTimerMap();
+	//void clearDotweenTimerMap();
 
 private:
 	Vector3d randPos;

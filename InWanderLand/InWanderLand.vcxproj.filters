@@ -7,9 +7,6 @@
     <Filter Include="sources">
       <UniqueIdentifier>{08e36723-ce4f-4cff-9662-c40801cf1acf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dotween">
-      <UniqueIdentifier>{f412aa5f-6d0c-4d12-886c-cc62b5a8eeaf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scripts">
       <UniqueIdentifier>{121d28b6-c354-41fd-9b67-492aa15aa2b0}</UniqueIdentifier>
     </Filter>
@@ -31,6 +28,15 @@
     <Filter Include="DebugBeacon">
       <UniqueIdentifier>{12a9b6c6-374f-4024-a2c3-3d67deff9469}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GHComponents">
+      <UniqueIdentifier>{68ccfbdd-83a9-4083-b6a0-7794bda5e09e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GHComponents\Dotween">
+      <UniqueIdentifier>{f412aa5f-6d0c-4d12-886c-cc62b5a8eeaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GHComponents\IRangeAction">
+      <UniqueIdentifier>{c5e170ca-14c5-4a76-99f7-69d515abc7b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShakyCam.h" />
@@ -50,18 +56,17 @@
       <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="Dotween.h">
-      <Filter>Dotween</Filter>
+      <Filter>GHComponents\Dotween</Filter>
     </ClInclude>
     <ClInclude Include="DotweenTimer.h">
-      <Filter>Dotween</Filter>
+      <Filter>GHComponents\Dotween</Filter>
     </ClInclude>
     <ClInclude Include="DotweenTimerPool.h">
-      <Filter>Dotween</Filter>
+      <Filter>GHComponents\Dotween</Filter>
     </ClInclude>
     <ClInclude Include="Easing.h">
-      <Filter>Dotween</Filter>
+      <Filter>GHComponents\Dotween</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h" />
     <ClInclude Include="RTSCam.h">
       <Filter>RTSCam</Filter>
     </ClInclude>
@@ -79,6 +84,21 @@
     </ClInclude>
     <ClInclude Include="DebugBeacon.h">
       <Filter>DebugBeacon</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>GHComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="IRangeAction.h">
+      <Filter>GHComponents\IRangeAction</Filter>
+    </ClInclude>
+    <ClInclude Include="RangeSystem.h">
+      <Filter>GHComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="FSM.h">
+      <Filter>GHComponents\IRangeAction</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>GHComponents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -111,18 +131,17 @@
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="Dotween.cpp">
-      <Filter>Dotween</Filter>
+      <Filter>GHComponents\Dotween</Filter>
     </ClCompile>
     <ClCompile Include="DotweenTimer.cpp">
-      <Filter>Dotween</Filter>
+      <Filter>GHComponents\Dotween</Filter>
     </ClCompile>
     <ClCompile Include="DotweenTimerPool.cpp">
-      <Filter>Dotween</Filter>
+      <Filter>GHComponents\Dotween</Filter>
     </ClCompile>
     <ClCompile Include="Easing.cpp">
-      <Filter>Dotween</Filter>
+      <Filter>GHComponents\Dotween</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="RTSCam.cpp">
       <Filter>RTSCam</Filter>
     </ClCompile>
@@ -134,6 +153,18 @@
     </ClCompile>
     <ClCompile Include="RequestDetourTest.cpp">
       <Filter>RecastDetourTest</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>GHComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="IRangeAction.cpp">
+      <Filter>GHComponents\IRangeAction</Filter>
+    </ClCompile>
+    <ClCompile Include="RangeSystem.cpp">
+      <Filter>GHComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>GHComponents</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

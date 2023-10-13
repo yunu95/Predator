@@ -24,14 +24,18 @@ public:
                 cameraSpeed = 20.0f;
 
             auto lastMousePos = yunutyEngine::Input::getMouseScreenPositionNormalized();
-            if (yunutyEngine::Input::isKeyDown(KeyCode::A) || lastMousePos.x < 0)
+            if (yunutyEngine::Input::isKeyDown(KeyCode::A)/* || lastMousePos.x < 0*/)
                 deltaDirection -= Vector3d::right;
-            if (yunutyEngine::Input::isKeyDown(KeyCode::D) || lastMousePos.x > 1)
+            if (yunutyEngine::Input::isKeyDown(KeyCode::D)/* || lastMousePos.x > 1*/)
                 deltaDirection += Vector3d::right;
-            if (yunutyEngine::Input::isKeyDown(KeyCode::W) || lastMousePos.y < 0)
+            if (yunutyEngine::Input::isKeyDown(KeyCode::W)/* || lastMousePos.y < 0*/)
                 deltaDirection += Vector3d::up;
-            if (yunutyEngine::Input::isKeyDown(KeyCode::S) || lastMousePos.y > 1)
+            if (yunutyEngine::Input::isKeyDown(KeyCode::S)/* || lastMousePos.y > 1*/)
                 deltaDirection -= Vector3d::up;
+			if (yunutyEngine::Input::isKeyDown(KeyCode::Q))
+				deltaDirection += Vector3d::forward;
+			if (yunutyEngine::Input::isKeyDown(KeyCode::E))
+				deltaDirection -= Vector3d::forward;
 
             GetTransform()->position += deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed;
             GetTransform()->rotation = Quaternion::Identity();
