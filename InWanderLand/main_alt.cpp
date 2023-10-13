@@ -141,6 +141,7 @@ int main(int, char**)
     ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+    yunutyEngine::Collider2D::SetIsOnXYPlane(false);
 
     //auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     //camObj->GetTransform()->position = Vector3d(0, 0, -5);
@@ -148,34 +149,18 @@ int main(int, char**)
 
     auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
-    camObj2->GetTransform()->position = Vector3d(0, 0, -5);
     auto rtsCam = camObj2->AddComponent<RTSCam>();
+    rtsCam->GetTransform()->position = Vector3d(0, 5, 0);
 
     auto camSwitcher = camObj2->AddComponent<CamSwitcher>();
     //camSwitcher->cams.push_back(roamingCam);
     camSwitcher->cams.push_back(rtsCam);
 
-    DebugBeacon::PlaceBeacon({0,1,-0.5});
-    /*class FlappyBird : public Component
-    {
-    protected:
-        float gravity = -9.81;
-        float currentSpeed{ 0 };
-        float flapSpeed = 25;
-        virtual void Update()override
-        {
-            GetTransform()->position.y += currentSpeed * Time::GetDeltaTime();
-            currentSpeed += gravity * Time::GetDeltaTime();
-            if (Input::isKeyPushed(KeyCode::Space))
-                currentSpeed = flapSpeed;
-        }
-    };*/
     auto tilePlane = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugTilePlane>();
     tilePlane->width = 10;
     tilePlane->height = 10;
     tilePlane->SetTiles();
 
-    yunutyEngine::YunutyCycle::SingleInstance().autoRendering = false;
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 
     ID3D11Device* otherDevice{ nullptr };
@@ -241,7 +226,6 @@ int main(int, char**)
     bool done = false;
     while (!done)
     {
-        yunutyEngine::graphics::Renderer::SingleInstance().ManualRender();
         MSG msg;
         while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
         {
