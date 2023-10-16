@@ -22,6 +22,7 @@ namespace yunutyEngine
         friend Collider2D;
     private:
         double radius=0;
+        
     public:
         virtual double GetArea()const override;
         virtual bool isOverlappingWith(const Collider2D* other)const override;

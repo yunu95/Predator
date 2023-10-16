@@ -37,3 +37,4 @@ Interval CircleCollider2D::projectedInterval(const Vector2d& v)const
     auto projectedCenter = Vector2d::Dot(GetTransform()->GetWorldPosition(), v);
     return Interval::FromRadius(projectedCenter, radius * GetTransform()->GetWorldScale().x);
 }
+

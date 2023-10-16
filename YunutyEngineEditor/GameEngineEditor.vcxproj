@@ -222,7 +222,6 @@
     <ClCompile Include="StaticMeshWrapper.ixx" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Tile.ixx" />
-    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Timer.ixx" />
     <ClCompile Include="ui.ixx" />
     <ClCompile Include="Editor_SceneManager.ixx" />

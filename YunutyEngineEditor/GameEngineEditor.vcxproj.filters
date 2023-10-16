@@ -151,9 +151,6 @@
     <ClCompile Include="Timer.ixx">
       <Filter>how to kill god\Timer</Filter>
     </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>how to kill god\Timer</Filter>
-    </ClCompile>
     <ClCompile Include="Laser.cpp">
       <Filter>how to kill god\InGame\Laser</Filter>
     </ClCompile>

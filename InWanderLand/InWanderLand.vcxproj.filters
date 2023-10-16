@@ -7,6 +7,12 @@
     <Filter Include="sources">
       <UniqueIdentifier>{08e36723-ce4f-4cff-9662-c40801cf1acf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dotween">
+      <UniqueIdentifier>{f412aa5f-6d0c-4d12-886c-cc62b5a8eeaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts">
+      <UniqueIdentifier>{121d28b6-c354-41fd-9b67-492aa15aa2b0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="RTSCam">
       <UniqueIdentifier>{4d58ffff-525b-4e6d-a64c-bf1f311430a2}</UniqueIdentifier>
     </Filter>
@@ -31,6 +37,12 @@
     <Filter Include="Creatures\Interface">
       <UniqueIdentifier>{e64316a1-c9d4-4ce9-9b47-1a2d6c6abdd6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{fbd7ef02-7d9f-41be-af81-dc11e40feab7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MouseDragRect">
+      <UniqueIdentifier>{dbe205eb-d26c-41d9-837a-d994cff12ea1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShakyCam.h" />
@@ -49,6 +61,19 @@
     <ClInclude Include="..\Include\ImGui\imgui_internal.h">
       <Filter>imgui</Filter>
     </ClInclude>
+    <ClInclude Include="Dotween.h">
+      <Filter>Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="DotweenTimer.h">
+      <Filter>Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="DotweenTimerPool.h">
+      <Filter>Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="Easing.h">
+      <Filter>Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h" />
     <ClInclude Include="RTSCam.h">
       <Filter>RTSCam</Filter>
     </ClInclude>
@@ -67,17 +92,17 @@
     <ClInclude Include="DebugBeacon.h">
       <Filter>DebugBeacon</Filter>
     </ClInclude>
-    <ClInclude Include="ICreature.h">
+    <ClInclude Include="IUnit.h">
       <Filter>Creatures\Interface</Filter>
     </ClInclude>
-    <ClInclude Include="IGrounded.h">
-      <Filter>Creatures\Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="Zealot.h">
+    <ClInclude Include="CommonUnit.h">
       <Filter>Creatures</Filter>
     </ClInclude>
-    <ClInclude Include="Zergling.h">
-      <Filter>Creatures</Filter>
+    <ClInclude Include="Timer.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseDragRect.h">
+      <Filter>MouseDragRect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +134,19 @@
     <ClCompile Include="main.cpp">
       <Filter>sources</Filter>
     </ClCompile>
+    <ClCompile Include="Dotween.cpp">
+      <Filter>Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="DotweenTimer.cpp">
+      <Filter>Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="DotweenTimerPool.cpp">
+      <Filter>Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="Easing.cpp">
+      <Filter>Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="RTSCam.cpp">
       <Filter>RTSCam</Filter>
     </ClCompile>
@@ -121,14 +159,14 @@
     <ClCompile Include="RequestDetourTest.cpp">
       <Filter>RecastDetourTest</Filter>
     </ClCompile>
-    <ClCompile Include="IGrounded.cpp">
-      <Filter>Creatures\Interface</Filter>
-    </ClCompile>
-    <ClCompile Include="Zealot.cpp">
+    <ClCompile Include="CommonUnit.cpp">
       <Filter>Creatures</Filter>
     </ClCompile>
-    <ClCompile Include="Zergling.cpp">
-      <Filter>Creatures</Filter>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseDragRect.cpp">
+      <Filter>MouseDragRect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <vector>
 #include <unordered_set>
+#include <string>
 #include "Component.h"
 #include "Vector2.h"
 #include "Vector3.h"
@@ -40,14 +41,17 @@ namespace yunutyEngine
             vector<Collider2D*> colliders;
         };
         const unordered_set<Collider2D*>& GetOverlappedColliders() const;
+        string GetTag() const { return tag; }
         virtual double GetArea() const = 0;
         virtual bool isOverlappingWith(const Collider2D* other) const = 0;
         virtual bool isOverlappingWith(const BoxCollider2D* other) const = 0;
         virtual bool isOverlappingWith(const CircleCollider2D* other) const = 0;
         virtual bool isOverlappingWith(const LineCollider2D* other) const = 0;
+        void SetTag(string str) { this->tag = str; };
     private:
         // called by yunuty cycle
         static void InvokeCollisionEvents();
+        string tag = "";
     protected:
         static unordered_set<Collider2D*> colliders2D;
         unordered_set<Collider2D*> overlappedColliders;
