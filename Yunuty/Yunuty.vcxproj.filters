@@ -262,6 +262,9 @@
     <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\DirectionalLight">
       <UniqueIdentifier>{a954b19f-8264-41ea-acbe-f5d770dde448}</UniqueIdentifier>
     </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\PointLight">
+      <UniqueIdentifier>{e7184d7f-9039-432f-85a3-bf93a71654b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -467,6 +470,9 @@
     </ClCompile>
     <ClCompile Include="DirectionalLight.cpp">
       <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\DirectionalLight</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\PointLight</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -704,8 +710,11 @@
     <ClInclude Include="ValueHistory.h">
       <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
     </ClInclude>
-    <ClInclude Include="DirectionalLight.h">
+    <ClInclude Include="header\DirectionalLight.h">
       <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\DirectionalLight</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\PointLight</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
