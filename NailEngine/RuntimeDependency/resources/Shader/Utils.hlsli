@@ -12,31 +12,48 @@ bool UseTexture(uint useTexture)
     return false;
 }
 
-LightColor CalculateLight(int lightIndex, float3 normal, float3 pos)
+LightColor CalculateLight(int lightIndex, float3 normal, float3 viewDirection, float4 pos)
 {
     LightColor color = (LightColor) 0.f;
 
     float3 viewLightDir = (float3) 0.f;
 
-    float diffuseRatio = 0.f;
-    float specularRatio = 0.f;
+    float diffuseFactor = 0.f;
+    float specularFactor = 0.f;
     float distanceRatio = 1.f;
-
-     viewLightDir = normalize(mul(float4(lights[lightIndex].direction.xyz, 0.f), VTM).xyz);
-    diffuseRatio = saturate(dot(-viewLightDir, normal));
     
-    float3 reflectionDir = normalize(viewLightDir + 2 * (saturate(dot(-viewLightDir, normal)) * normal));
-    float3 eyeDir = normalize(pos);
-    specularRatio = saturate(dot(-eyeDir, reflectionDir));
-    specularRatio = pow(specularRatio, 2);
+    if(lights[lightIndex].lightType == 0)
+    {
+        diffuseFactor = saturate(dot(-lights[lightIndex].direction, float4(normal, 0.f)));
+    
+        if (diffuseFactor > 0.f)
+        {
+            float3 reflection = normalize(reflect(lights[lightIndex].direction, float4(normal, 0.f)));
+            specularFactor = pow(max(dot(reflection, viewDirection), 0.f), 32.f);
+        }
+    }
+    else if (lights[lightIndex].lightType == 1)
+    {
+        float3 lightVec = lights[lightIndex].position - pos;
+        
+        float d = length(lightVec);
+        diffuseFactor = saturate(dot(-lights[lightIndex].direction, float4(normal, 0.f)));
+        float3 reflection = normalize(reflect(lights[lightIndex].direction, float4(normal, 0.f)));
+        specularFactor = pow(max(dot(reflection, viewDirection), 0.f), 32.f);
+        if (d > lights[lightIndex].range)
+        {
+            diffuseFactor = 0;
+            specularFactor = 0;
+        }
+        lightVec /= d;
+        
+        distanceRatio = 1.f / pow(d, 2);
+    }
+   
 
-    color.diffuse = lights[lightIndex].color.diffuse * diffuseRatio * distanceRatio;
+    color.diffuse = lights[lightIndex].color.diffuse * diffuseFactor * distanceRatio;
     color.ambient = lights[lightIndex].color.ambient * distanceRatio;
-    color.specular = lights[lightIndex].color.specular * specularRatio * distanceRatio;
-
-    //color.diffuse = float4(1.f, 0.f, 0.f, 0.f);
-    //color.ambient = float4(1.f, 0.f, 0.f, 0.f);
-    //color.specular = float4(1.f, 0.f, 0.f, 0.f);
+    color.specular = lights[lightIndex].color.specular * specularFactor * distanceRatio;
     
     return color;
 }

@@ -12,27 +12,37 @@ struct PixelIn
 
 float4 main(PixelIn input) : SV_TARGET
 {
-    float4 ambient = lights[0].color.ambient;
-    float4 diffuse = float4(0.f, 0.f, 0.f, 0.f);
-    float4 spec = float4(0.f, 0.f, 0.f, 0.f);
+    //float4 ambient = lights[0].color.ambient;
+    //float4 diffuse = float4(0.f, 0.f, 0.f, 0.f);
+    //float4 spec = float4(0.f, 0.f, 0.f, 0.f);
 
-    float3 lightVec = normalize(-lights[0].direction);
+    //float3 lightVec = normalize(-lights[0].direction);
 
-    float diffuseFactor = dot(lightVec, input.normal);
+    //float diffuseFactor = dot(lightVec, input.normal);
 
 	
-    if (diffuseFactor > 0.f)
-    {
-        //float3 reflection = normalize(2 * diffuseFactor * input.normal - lightVec);
-        float3 reflection = normalize(reflect(-lightVec, input.normal));
+    //if (diffuseFactor > 0.f)
+    //{
+    //    //float3 reflection = normalize(2 * diffuseFactor * input.normal - lightVec);
+    //    float3 reflection = normalize(reflect(-lightVec, input.normal));
 
-        float specFactor = pow(max(dot(reflection, input.viewDirection), 0.f), 32.f);
+    //    float specFactor = pow(max(dot(reflection, input.viewDirection), 0.f), 32.f);
         
-        diffuse = diffuseFactor * lights[0].color.diffuse;
-        spec = specFactor * lights[0].color.specular;
+    //    diffuse = diffuseFactor * lights[0].color.diffuse;
+    //    spec = specFactor * lights[0].color.specular;
+    //}
+    
+    LightColor totalColor = (LightColor) 0.f;
+
+    for (int i = 0; i < lightCount; ++i)
+    {
+        LightColor color = CalculateLight(i, input.normal, input.viewDirection, input.pos);
+        totalColor.diffuse += color.diffuse;
+        totalColor.ambient += color.ambient;
+        totalColor.specular += color.specular;
     }
     
-    float4 retColor = materialColor * (ambient + diffuse) + spec;
+    float4 retColor = materialColor * (totalColor.ambient + totalColor.diffuse) + totalColor.specular;
     
     return retColor;
     

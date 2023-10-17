@@ -2,6 +2,7 @@
 #include "IYunuGIStaticMeshRenderer.h"
 #include "IYunuGISkinnedMesh.h"
 #include "IYunuGIDirectionalLight.h"
+#include "IYunuGIPointLight.h"
 #include "IYunuGICamera.h"
 #include "IYunuGIDebugCube.h"
 #include "IYunuGIUIImage.h"
@@ -24,5 +25,6 @@ namespace yunuGI
         virtual yunuGI::IUIImage* CreateUIImage(const yunuGI::IUIImageDesc& desc) = 0;
         virtual yunuGI::IUIText* CreateUIText(const yunuGI::IUITextDesc& desc) = 0;
         virtual yunuGI::IDirectionalLight* CreateDirectionalLight(const yunuGI::IDirectionalLightDesc& desc) = 0;
+        virtual yunuGI::IPointLight* CreatePointLight(const yunuGI::IPointLightDesc& desc) = 0;
     };
 }

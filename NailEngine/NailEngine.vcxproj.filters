@@ -67,6 +67,9 @@
     <Filter Include="Light\DirectionalLight">
       <UniqueIdentifier>{3b1aad02-90c8-4d9f-8bea-7acfc5c8335b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Light\PointLight">
+      <UniqueIdentifier>{bc32e237-2f44-4d6a-88cb-f4420a7aa97e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -195,6 +198,9 @@
     <ClInclude Include="LightManager.h">
       <Filter>Light</Filter>
     </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>Light\PointLight</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -259,6 +265,9 @@
     </ClCompile>
     <ClCompile Include="LightManager.cpp">
       <Filter>Light</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>Light\PointLight</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

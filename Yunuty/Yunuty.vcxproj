@@ -277,6 +277,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Sample.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -365,8 +366,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="ConvexVolumeTool.h" />
     <ClInclude Include="CrowdTool.h" />
     <ClInclude Include="Filelist.h" />
-    <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="header\DebugCube.h" />
+    <ClInclude Include="header\DirectionalLight.h" />
     <ClInclude Include="header\StaticMeshRenderer.h" />
     <ClInclude Include="header\UIImage.h" />
     <ClInclude Include="header\UIText.h" />
@@ -383,6 +384,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="NavMeshTesterTool.h" />
     <ClInclude Include="OffMeshConnectionTool.h" />
     <ClInclude Include="PerfTimer.h" />
+    <ClInclude Include="PointLight.h" />
     <ClInclude Include="Sample.h" />
     <ClInclude Include="SampleInterfaces.h" />
     <ClInclude Include="Sample_Debug.h" />

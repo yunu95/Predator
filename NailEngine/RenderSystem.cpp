@@ -33,14 +33,15 @@ void RenderSystem::PushLightData()
 
 	for (auto& e : lightSet)
 	{
+		params.lights[i] = e->GetLightInfo();
+
 		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Directional))
 		{
-			params.lights[i] = e->GetLightInfo();
 			params.lights[i].direction = e->GetLightInfo().direction;
 		}
 		else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{
-
+			params.lights[i].range = e->GetLightInfo().range;
 		}
 		else if(e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Spot))
 		{
