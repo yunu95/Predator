@@ -157,7 +157,7 @@ int main(int, char**)
 		camObj2->GetTransform()->position = Vector3d(0, 0, 5);
 		auto renderer = camObj2->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
         renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1.f,0.f,0.f,1.f });
-        renderer->GetGI().LoadMesh("Sphere");
+        renderer->GetGI().LoadMesh("Cylinder");
         //renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, L"Texture/zoro.jpg");
 	}
     // ∂Û¿Ã∆Æ
