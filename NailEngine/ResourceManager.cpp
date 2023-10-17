@@ -561,13 +561,17 @@ void ResourceManager::LoadCylinderMesh()
 	// Á¤»ó Á¤Á¡
 	vertices.push_back(Vertex{
 		DirectX::SimpleMath::Vector3{0.0f, height * 0.5f, 0.0f},
-		DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f} }
+		DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f},
+		DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
+		DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
 	);
 
 	// ¹Ù´Ú Á¤Á¡
 	vertices.push_back(Vertex{
 		DirectX::SimpleMath::Vector3{0.0f, -height * 0.5f, 0.0f},
-		DirectX::SimpleMath::Vector4{1.f, 1.f, 1.f,1.f} }
+		DirectX::SimpleMath::Vector4{1.f, 1.f, 1.f,1.f} ,
+		DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
+		DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
 	);
 
 	// À­¸é
@@ -581,7 +585,9 @@ void ResourceManager::LoadCylinderMesh()
 
 		vertices.push_back(Vertex{
 			DirectX::SimpleMath::Vector3{x, y, z},
-			DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f} }
+			DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f},
+			DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
+			DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
 		);
 	}
 
@@ -596,7 +602,9 @@ void ResourceManager::LoadCylinderMesh()
 
 		vertices.push_back(Vertex{
 			DirectX::SimpleMath::Vector3{x, -y, z},
-			DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f } }
+			DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f },
+			DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
+			DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
 		);
 	}
 

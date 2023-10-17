@@ -4,7 +4,7 @@
 struct PixelIn
 {
     float4 pos : SV_Position;
-    float4 color : Color;
+    float4 color : COLOR;
     float2 uv : TEXCOORD0;
     float3 normal : NORMAL;
     float3 viewDirection : TEXCOORD1;
@@ -12,24 +12,30 @@ struct PixelIn
 
 float4 main(PixelIn input) : SV_TARGET
 {
-    float4 albedo = materialColor;
-    float4 color = lights[0].color.ambient;
-    float4 specular = lights[0].color.specular;
-    float3 lightDir = -lights[0].direction;
-    float lightIntensity = saturate(dot(input.normal, lightDir));
-    
-    if(lightIntensity > 0.f)
+    float4 ambient = lights[0].color.ambient;
+    float4 diffuse = float4(0.f, 0.f, 0.f, 0.f);
+    float4 spec = float4(0.f, 0.f, 0.f, 0.f);
+
+    float3 lightVec = normalize(-lights[0].direction);
+
+    float diffuseFactor = dot(lightVec, input.normal);
+
+	
+    if (diffuseFactor > 0.f)
     {
-        color += (lights[0].color.diffuse * lightIntensity);
-        color = saturate(color);
-        float3 reflection = normalize(2 * lightIntensity * input.normal - lightDir);
-        specular = pow(saturate(dot(reflection, input.viewDirection)), 4.f);
+        //float3 reflection = normalize(2 * diffuseFactor * input.normal - lightVec);
+        float3 reflection = normalize(reflect(-lightVec, input.normal));
+
+        float specFactor = pow(max(dot(reflection, input.viewDirection), 0.f), 32.f);
+        
+        diffuse = diffuseFactor * lights[0].color.diffuse;
+        spec = specFactor * lights[0].color.specular;
     }
     
-    color = color * albedo;
-    color = saturate(color + specular);
+    float4 retColor = materialColor * (ambient + diffuse) + spec;
     
-    return color;
+    return retColor;
+    
     //float4 albedo;
     //float4 lightColor;
     //float4 ambientColor;
