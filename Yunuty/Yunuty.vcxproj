@@ -317,6 +317,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="SoundSystem.cpp" />
     <ClCompile Include="SoundChannel.cpp" />
     <ClCompile Include="Random.cpp" />
+    <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="StaticMeshRenderer.cpp" />
     <ClCompile Include="TestCase.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -368,6 +369,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="Filelist.h" />
     <ClInclude Include="header\DebugCube.h" />
     <ClInclude Include="header\DirectionalLight.h" />
+    <ClInclude Include="header\PointLight.h" />
+    <ClInclude Include="header\SpotLight.h" />
     <ClInclude Include="header\StaticMeshRenderer.h" />
     <ClInclude Include="header\UIImage.h" />
     <ClInclude Include="header\UIText.h" />
@@ -384,7 +387,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="NavMeshTesterTool.h" />
     <ClInclude Include="OffMeshConnectionTool.h" />
     <ClInclude Include="PerfTimer.h" />
-    <ClInclude Include="PointLight.h" />
     <ClInclude Include="Sample.h" />
     <ClInclude Include="SampleInterfaces.h" />
     <ClInclude Include="Sample_Debug.h" />

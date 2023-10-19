@@ -16,6 +16,8 @@
 #include "YGDirectionalLightAdapter.h"
 #include "IYunuGIPointLight.h"
 #include "YGPointLightAdapter.h"
+#include "IYunuGISpotLight.h"
+#include "YGSpotLightAdapter.h"
 
 namespace yunuGIAdapter
 {
@@ -40,6 +42,10 @@ namespace yunuGIAdapter
 		virtual yunuGI::IPointLight* CreatePointLight(const yunuGI::IPointLightDesc& desc)
 		{
 			return new PointLightAdapter{};
+		}
+		virtual yunuGI::ISpotLight* CreateSpotLight(const yunuGI::ISpotLightDesc& desc)
+		{
+			return new SpotLightAdapter{};
 		}
 		virtual yunuGI::IDebugCube* CreateDebugCube(const yunuGI::IDebugCubeDesc& desc)
 		{

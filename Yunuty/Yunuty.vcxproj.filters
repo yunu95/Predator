@@ -265,6 +265,9 @@
     <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\PointLight">
       <UniqueIdentifier>{e7184d7f-9039-432f-85a3-bf93a71654b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\SpotLight">
+      <UniqueIdentifier>{2a5a9436-8b98-48ca-ae5a-1866a9637b61}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -473,6 +476,9 @@
     </ClCompile>
     <ClCompile Include="PointLight.cpp">
       <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\PointLight</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\SpotLight</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -713,8 +719,11 @@
     <ClInclude Include="header\DirectionalLight.h">
       <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\DirectionalLight</Filter>
     </ClInclude>
-    <ClInclude Include="PointLight.h">
+    <ClInclude Include="header\PointLight.h">
       <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\PointLight</Filter>
+    </ClInclude>
+    <ClInclude Include="header\SpotLight.h">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\SpotLight</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

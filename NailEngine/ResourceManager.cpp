@@ -198,6 +198,8 @@ void ResourceManager::CreateDefaultMaterial()
 void ResourceManager::CreateDefaultTexture()
 {
 	CreateTexture(L"Texture/zoro.jpg");
+	CreateTexture(L"Texture/Brick_Albedo.jpg");
+	CreateTexture(L"Texture/Brick_Normal.jpg");
 }
 
 void ResourceManager::LoadCubeMesh()
@@ -288,6 +290,7 @@ void ResourceManager::LoadSphereMesh()
 	v.uv = DirectX::SimpleMath::Vector2(0.5f, 0.0f);
 	v.normal = v.pos;
 	v.normal.Normalize();
+	v.tangent = DirectX::SimpleMath::Vector3{ 1.f,0.f,1.f };
 	vec.push_back(v);
 
 	float stackAngle = DirectX::XM_PI / stackCount;
@@ -315,6 +318,11 @@ void ResourceManager::LoadSphereMesh()
 			v.normal = v.pos;
 			v.normal.Normalize();
 
+			v.tangent.x = -radius * sinf(phi) * sinf(theta);
+			v.tangent.y = 0.0f;
+			v.tangent.z = radius * sinf(phi) * cosf(theta);
+			v.tangent.Normalize();
+
 			v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
 
 			vec.push_back(v);
@@ -327,6 +335,7 @@ void ResourceManager::LoadSphereMesh()
 	v.uv = DirectX::SimpleMath::Vector2(0.5f, 1.0f);
 	v.normal = v.pos;
 	v.normal.Normalize();
+	v.tangent = DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f);
 	vec.push_back(v);
 
 	std::vector<unsigned int> idx(36);

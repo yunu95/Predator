@@ -17,6 +17,8 @@
 #include <tchar.h>
 #include <map>
 
+#include "TestComponent.h"
+
 // Data
 static ID3D11Device* g_pd3dDevice = NULL;
 static ID3D11DeviceContext* g_pd3dDeviceContext = NULL;
@@ -158,26 +160,38 @@ int main(int, char**)
 		auto renderer = camObj2->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
         //renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1.f,0.f,0.f,1.f });
         renderer->GetGI().LoadMesh("Sphere");
-        //renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, L"Texture/zoro.jpg");
+        renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, L"Texture/Brick_Albedo.jpg");
+        renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::NORMAL, L"Texture/Brick_Normal.jpg");
 	}
- //   // 라이트
-	//{
-	//	auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
- //       camObj2->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{0.f,80.f,0.f} });
-	//	auto renderer = camObj2->AddComponent<yunutyEngine::graphics::DirectionalLight>();
- //       auto color = yunuGI::Color{ 1.0f,1.f,1.f,1.f };
- //       renderer->GetGI().SetLightDiffuseColor(color);
-	//}
+
 	// 라이트
 	{
 		auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		//camObj2->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{0.f,80.f,0.f} });
-        camObj2->GetTransform()->position = Vector3d(0, 1.5f, 5);
-		auto renderer = camObj2->AddComponent<yunutyEngine::graphics::PointLight>();
-		auto color = yunuGI::Color{ 1.f,0.f,0.f,1.f};
+		camObj2->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{50.f,-30.f,0.f} });
+        camObj2->GetTransform()->position = Vector3d(0.f, 0.f, 5);
+		auto renderer = camObj2->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+		auto color = yunuGI::Color{ 0.7f,0.7f,0.7f,1.f};
 		renderer->GetGI().SetLightDiffuseColor(color);
-        renderer->GetGI().SetRange(2.f);
 	}
+	// 라이트
+	{
+		auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        camObj2->AddComponent<TestComponent>();
+		camObj2->GetTransform()->position = Vector3d(2.f, 0.f, 5);
+		auto renderer = camObj2->AddComponent<yunutyEngine::graphics::PointLight>();
+        renderer->GetGI().SetRange(10);
+        auto color = yunuGI::Color{ 0.f,0.f,1.f,1.f };
+        renderer->GetGI().SetLightDiffuseColor(color);
+	}
+	//// 라이트
+	//{
+	//	auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//	//camObj2->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{0.f,80.f,0.f} });
+	//	camObj2->GetTransform()->position = Vector3d(-2.f, 0.f, 5);
+	//	auto renderer = camObj2->AddComponent<yunutyEngine::graphics::SpotLight>();
+	//	auto color = yunuGI::Color{ 0.f,0.f,1.f,1.f };
+	//	renderer->GetGI().SetLightDiffuseColor(color);
+	//}
 
      //auto rtsCam = camObj2->AddComponent<RTSCam>();
 
