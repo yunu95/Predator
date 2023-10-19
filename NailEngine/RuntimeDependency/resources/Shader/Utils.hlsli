@@ -12,24 +12,26 @@ bool UseTexture(uint useTexture)
     return false;
 }
 
-LightColor CalculateLight(int lightIndex, float3 normal, float3 viewDirection, float4 pos)
+void CalculateLight(int lightIndex, float3 normal, float3 viewDirection, float4 pos, out float4 diffuse, out float4 ambient, out float4 specular)
 {
-    LightColor color = (LightColor) 0.f;
-
-    float3 viewLightDir = (float3) 0.f;
-
-    float diffuseFactor = 0.f;
-    float specularFactor = 0.f;
-    float distanceRatio = 1.f;
+    diffuse = float4(0.f, 0.f, 0.f, 0.f);
+    ambient = float4(0.f, 0.f, 0.f, 0.f);
+    specular = float4(0.f, 0.f, 0.f, 0.f);
     
     if(lights[lightIndex].lightType == 0)
     {
-        diffuseFactor = saturate(dot(-lights[lightIndex].direction, float4(normal, 0.f)));
-    
+        float3 lightVec = -lights[lightIndex].direction;
+        ambient = lights[lightIndex].color.ambient;
+        
+        float diffuseFactor = dot(lightVec, normal);
+        
         if (diffuseFactor > 0.f)
         {
-            float3 reflection = normalize(reflect(lights[lightIndex].direction, float4(normal, 0.f)));
-            specularFactor = pow(max(dot(reflection, viewDirection), 0.f), 32.f);
+            float3 v = normalize(reflect(-lightVec, normal));
+            float specFactor = pow(max(dot(v, viewDirection), 0.f), 36.f);
+            
+            diffuse = diffuseFactor * lights[lightIndex].color.diffuse;
+            specular = specFactor * lights[lightIndex].color.specular;
         }
     }
     else if (lights[lightIndex].lightType == 1)
@@ -37,25 +39,68 @@ LightColor CalculateLight(int lightIndex, float3 normal, float3 viewDirection, f
         float3 lightVec = lights[lightIndex].position - pos;
         
         float d = length(lightVec);
-        diffuseFactor = saturate(dot(-lights[lightIndex].direction, float4(normal, 0.f)));
-        float3 reflection = normalize(reflect(lights[lightIndex].direction, float4(normal, 0.f)));
-        specularFactor = pow(max(dot(reflection, viewDirection), 0.f), 32.f);
-        if (d > lights[lightIndex].range)
+        
+        if(d > lights[lightIndex].range)
         {
-            diffuseFactor = 0;
-            specularFactor = 0;
+            return;
         }
+        
         lightVec /= d;
         
-        distanceRatio = 1.f / pow(d, 2);
+        ambient = lights[lightIndex].color.ambient;
+        
+        float diffuseFactor = dot(lightVec, normal);
+        float zero = 0.f;
+        
+        if(diffuseFactor > zero)
+        {
+            float3 v = normalize(reflect(-lightVec, normal));
+            float specFactor = pow(max(dot(v, viewDirection), 0.f), 8.f);
+            
+            diffuse = diffuseFactor * lights[lightIndex].color.diffuse;
+            specular = specFactor * lights[lightIndex].color.specular;
+        }
+        
+        float att = 1.f / pow(d, 2);
+        
+        diffuse *= att;
+        specular *= att;
+        
     }
-   
-
-    color.diffuse = lights[lightIndex].color.diffuse * diffuseFactor * distanceRatio;
-    color.ambient = lights[lightIndex].color.ambient * distanceRatio;
-    color.specular = lights[lightIndex].color.specular * specularFactor * distanceRatio;
-    
-    return color;
+    else if (lights[lightIndex].lightType == 2)
+    {
+        float3 lightVec = lights[lightIndex].position - pos;
+        
+        float d = length(lightVec);
+        
+        if(d > lights[lightIndex].range)
+        {
+            return;
+        }
+        
+        lightVec /= d;
+        
+        ambient = lights[lightIndex].color.ambient;
+        
+        float diffuseFactor = dot(lightVec, normal);
+        
+        if (diffuseFactor > 0.f)
+        {
+            float3 v = normalize(reflect(-lightVec, normal));
+            float specFactor = pow(max(dot(v, viewDirection), 0.f), 36.f); 
+            
+            diffuse = diffuseFactor * lights[lightIndex].color.diffuse;
+            specular = specFactor * lights[lightIndex].color.specular;
+        }
+        
+        float spot = pow(max(dot(-lightVec, lights[lightIndex].direction.xyz), 0.f), 16.f);
+        
+        float att = 1.f / pow(d, 2);
+        
+        ambient *= spot;
+        diffuse *= att;
+        specular *= att;
+    }
 }
 
 #endif

@@ -204,6 +204,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="RTSCam.h" />
     <ClInclude Include="ShakyCam.h" />
     <ClInclude Include="TerrainEditor.h" />
+    <ClInclude Include="TestComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp" />
@@ -225,6 +226,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="RoamingCam.cpp" />
     <ClCompile Include="RTSCam.cpp" />
     <ClCompile Include="ShakyCam.cpp" />
+    <ClCompile Include="TestComponent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

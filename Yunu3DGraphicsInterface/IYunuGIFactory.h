@@ -26,5 +26,6 @@ namespace yunuGI
         virtual yunuGI::IUIText* CreateUIText(const yunuGI::IUITextDesc& desc) = 0;
         virtual yunuGI::IDirectionalLight* CreateDirectionalLight(const yunuGI::IDirectionalLightDesc& desc) = 0;
         virtual yunuGI::IPointLight* CreatePointLight(const yunuGI::IPointLightDesc& desc) = 0;
+        virtual yunuGI::ISpotLight* CreateSpotLight(const yunuGI::ISpotLightDesc& desc) = 0;
     };
 }

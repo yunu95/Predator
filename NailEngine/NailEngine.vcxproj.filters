@@ -70,6 +70,9 @@
     <Filter Include="Light\PointLight">
       <UniqueIdentifier>{bc32e237-2f44-4d6a-88cb-f4420a7aa97e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Light\SpotLight">
+      <UniqueIdentifier>{b31a3bd1-1cea-4875-ac9d-6cf99d284c56}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -201,6 +204,9 @@
     <ClInclude Include="PointLight.h">
       <Filter>Light\PointLight</Filter>
     </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>Light\SpotLight</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -268,6 +274,9 @@
     </ClCompile>
     <ClCompile Include="PointLight.cpp">
       <Filter>Light\PointLight</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>Light\SpotLight</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

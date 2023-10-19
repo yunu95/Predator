@@ -73,6 +73,7 @@
     <ClInclude Include="DebugMeshes.h">
       <Filter>DebugMeshes</Filter>
     </ClInclude>
+    <ClInclude Include="TestComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShakyCam.cpp" />
@@ -115,5 +116,6 @@
     <ClCompile Include="RequestDetourTest.cpp">
       <Filter>RecastDetourTest</Filter>
     </ClCompile>
+    <ClCompile Include="TestComponent.cpp" />
   </ItemGroup>
 </Project>

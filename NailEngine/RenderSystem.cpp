@@ -45,7 +45,9 @@ void RenderSystem::PushLightData()
 		}
 		else if(e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Spot))
 		{
-
+			params.lights[i].range = e->GetLightInfo().range;
+			params.lights[i].angle = e->GetLightInfo().angle;
+			params.lights[i].direction = e->GetLightInfo().direction;
 		}
 		
 		i++;

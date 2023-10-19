@@ -8,5 +8,10 @@ namespace yunuGI
     {
     public:
         virtual void SetLightDiffuseColor(yunuGI::Color& color) override {};
+        virtual void SetRange(float range) = 0;
+        virtual void SetAngle(float angle) = 0;
     };
+	struct ISpotLightDesc
+	{
+	};
 }
