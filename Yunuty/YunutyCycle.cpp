@@ -91,8 +91,8 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 
     for (auto i = GlobalComponent::globalComponents.begin(); i != GlobalComponent::globalComponents.end(); i++)
         (*i)->Update();
-    //i->second->Update();
 
+    // 이 구조로 인해, OnDestroy함수에서 Scene::DestroyGameObject 함수를 호출하면 사이클이 터질수밖에 없다.
     for (auto each : Scene::getCurrentScene()->destroyList)
     {
         for (auto each : each->GetIndexedComponents())
@@ -104,7 +104,6 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 
     for (auto each : GetGameObjects(false))
         each->SetCacheDirty();
-    //ActiveComponentsDo(&Component::Update);
     for (auto each : GetActiveComponents())
         UpdateComponent(each);
 

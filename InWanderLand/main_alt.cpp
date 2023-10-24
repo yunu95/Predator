@@ -13,6 +13,8 @@
 #include "DebugTilePlane.h"
 #include "DebugBeacon.h"
 #include "DebugMeshes.h"
+#include "PathField.h"
+#include "PathEditor.h"
 #include <d3d11.h>
 #include <tchar.h>
 #include <map>
@@ -160,6 +162,14 @@ int main(int, char**)
     tilePlane->width = 10;
     tilePlane->height = 10;
     tilePlane->SetTiles();
+
+    auto pathField = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<PathField>();
+    pathField->Initialize(10, 10, 0.4f);
+
+    auto pathEditor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<PathEditor>();
+    pathEditor->targetPathField = pathField;
+    rtsCam->groundHoveringClickCallback = [=](Vector3d position) {pathEditor->PositionHover(position); };
+    rtsCam->groundLeftClickCallback = [=](Vector3d position) {pathEditor->OnLeftClick(position); };
 
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 
