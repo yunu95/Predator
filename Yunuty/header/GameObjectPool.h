@@ -43,7 +43,7 @@ namespace yunutyEngine
     };
 }
 template<typename ReprenstativeComponent>
-void GameObjectPool<ReprenstativeComponent>::SetObjectInitializer(function<void(GameObject*, ReprenstativeComponent*)> initializer)
+void GameObjectPool<ReprenstativeComponent>::SetObjectInitializer(function<void(yunutyEngine::GameObject*, ReprenstativeComponent*)> initializer)
 {
     this->objectInitializer = initializer;
 }

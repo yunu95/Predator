@@ -152,6 +152,11 @@ int main(int, char**)
 	auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	camObj2->GetTransform()->position = Vector3d(0, 0, -15);
 	auto rtsCam = camObj2->AddComponent<RTSCam>();
+	auto rtsCamRect = camObj2->AddComponent<BoxCollider2D>();
+	//rtsCamRect->SetWidth(yunutyEngine::graphics::Renderer::SingleInstance().GetResolution().x);
+	rtsCamRect->SetWidth(128);
+	//rtsCamRect->SetHeight(yunutyEngine::graphics::Renderer::SingleInstance().GetResolution().y);
+	rtsCamRect->SetHeight(80);
 
 	// Player Character
 	auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();

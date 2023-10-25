@@ -43,6 +43,9 @@
     <Filter Include="MouseDragRect">
       <UniqueIdentifier>{dbe205eb-d26c-41d9-837a-d994cff12ea1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Projectiles">
+      <UniqueIdentifier>{7aca15e3-2aee-4a80-ad16-70f6c3b9e9ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShakyCam.h" />
@@ -103,6 +106,18 @@
     </ClInclude>
     <ClInclude Include="MouseDragRect.h">
       <Filter>MouseDragRect</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileManager.h">
+      <Filter>Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectilePool.h">
+      <Filter>Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Projectiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +182,9 @@
     </ClCompile>
     <ClCompile Include="MouseDragRect.cpp">
       <Filter>MouseDragRect</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Projectiles</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -8,12 +8,7 @@
 #include "Timer.h"
 #include <list>
 
-enum class UnitType
-{
-	PLAYER, // юс╫ц
-	WARRIOR,
-	ARCHER,
-};
+class GameObject;
 
 class CommonUnit : public IUnit
 {
@@ -24,9 +19,12 @@ public:
 	virtual void Attack() override;
 	virtual void AttackMove() override;
 	virtual void Chase() override;
+	virtual void Damaged(float damage) override;
+	virtual void Hit() override;
 	virtual void Die() override;
 
 	void Initialize(UnitType unitType);
+	void DeleteDeadObjectInList(CommonUnit* unit);
 
 	// Setter
 	void SetDestination(Vector3d targetPos) { lastMouseScreenPos = targetPos; }
@@ -49,10 +47,12 @@ private:
 	void moveToDestination(yunutyEngine::Vector3d targetPos);
 
 	UnitType m_unitType;
+	AttackType m_attackType;
 	State m_state;
 	bool m_isDying;
 	bool m_isPlayer;
 	bool m_isAttackReady;
+	float m_maxHp;
 	float m_hp;
 	float m_mp;
 	float m_defense;
@@ -64,6 +64,7 @@ private:
 	float m_detectRange;
 	float m_hitboxWidth;
 	float m_hitboxHeight;
+	float m_projectileSpeed;
 	yunutyEngine::Vector2d lastMouseScreenPos;
 
 	//const yunutyEngine::math::Curve m_moveCurve{ [](double t) {return 1 - (1 - t) * (1 - t); } };
@@ -75,4 +76,5 @@ private:
 	std::list<CommonUnit*> detectedEnemies;
 	std::list<CommonUnit*> attackRangeEnemies;
 	CommonUnit* targetEnemy;
+	yunutyEngine::GameObject* hpBarObject;
 };
