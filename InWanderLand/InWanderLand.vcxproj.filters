@@ -37,6 +37,15 @@
     <Filter Include="GHComponents\IRangeAction">
       <UniqueIdentifier>{c5e170ca-14c5-4a76-99f7-69d515abc7b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DebugMeshes">
+      <UniqueIdentifier>{63795638-a23d-4b7e-a43d-3da8d1088678}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Path">
+      <UniqueIdentifier>{fd700d27-99c8-48fe-a7fa-d50f17beb154}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PathEditor">
+      <UniqueIdentifier>{bdeb32c3-9345-46aa-9876-48fd5865c87c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShakyCam.h" />
@@ -88,9 +97,6 @@
     <ClInclude Include="Player.h">
       <Filter>GHComponents</Filter>
     </ClInclude>
-    <ClInclude Include="IRangeAction.h">
-      <Filter>GHComponents\IRangeAction</Filter>
-    </ClInclude>
     <ClInclude Include="RangeSystem.h">
       <Filter>GHComponents</Filter>
     </ClInclude>
@@ -100,6 +106,19 @@
     <ClInclude Include="Unit.h">
       <Filter>GHComponents</Filter>
     </ClInclude>
+    <ClInclude Include="PathEditor.h">
+      <Filter>PathEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugMeshes.h">
+      <Filter>DebugMeshes</Filter>
+    </ClInclude>
+    <ClInclude Include="PathField.h">
+      <Filter>Path</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileSystem.h">
+      <Filter>GHComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShakyCam.cpp" />
@@ -157,14 +176,15 @@
     <ClCompile Include="Player.cpp">
       <Filter>GHComponents</Filter>
     </ClCompile>
-    <ClCompile Include="IRangeAction.cpp">
-      <Filter>GHComponents\IRangeAction</Filter>
-    </ClCompile>
     <ClCompile Include="RangeSystem.cpp">
       <Filter>GHComponents</Filter>
     </ClCompile>
     <ClCompile Include="Unit.cpp">
       <Filter>GHComponents</Filter>
     </ClCompile>
+    <ClCompile Include="ProjectileSystem.cpp">
+      <Filter>GHComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp" />
   </ItemGroup>
 </Project>

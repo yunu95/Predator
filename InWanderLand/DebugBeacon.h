@@ -20,12 +20,17 @@ public:
         debugBeacon->maxScale = scale;
         debugBeacon->duration = duration;
         staticMesh->GetGI().LoadMesh("Sphere");
-        //staticMesh->GetGI().SetMesh(L"Sphere");
+        staticMesh->GetGI().GetMaterial()->SetColor(color);
+        // 와이어
+        //staticMesh->GetGI().GetMaterial()->SetPixelShader(L"DebugPS.cso");
+        // 솔리드
+        staticMesh->GetGI().GetMaterial()->SetPixelShader(L"DefaultPS.cso");
         //staticMesh->GetGI().SetColor(0, color);
         //staticMesh->GetGI().SetShader(0, L"Forward");
         //staticMesh->GetGI().SetMaterialName(0, L"Forward");
         gameObject->GetTransform()->scale = Vector3d(0, 0, 0);
         gameObject->GetTransform()->position = position;
+        staticMesh->Update();
         return debugBeacon;
     }
     virtual void Update() override

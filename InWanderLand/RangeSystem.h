@@ -3,15 +3,24 @@
 /// <summary>
 /// GetGameObject->GetComponent<IRangeAction>을 통해 함수호출 할 예정. 
 /// </summary>
-class RangeSystem : public Component
+
+class Unit;
+
+class RangeSystem : public CircleCollider2D
 {
 private:
-    GameObject* m_unit;
-    string m_type;
+    Unit* m_unitComponent;
+    float m_tempIDRadius;
+    float m_tempAtkRadius;
+
+public:   
+    void SetUnitComponent(Unit* unitComponent);
+    void SetIdRadius(float radius);
+    void SetAtkRadius(float radius);
+
 public:
-    void SetUnitGameObject(GameObject* obj);
-    void SetRangeType(string p_type);
-public:
+    virtual void Start() override;
     virtual void OnCollisionEnter2D(const Collision2D& collision) override;
+    virtual void OnCollisionExit2D(const Collision2D& collision) override;
 };
 

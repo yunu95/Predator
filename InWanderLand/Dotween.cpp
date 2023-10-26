@@ -39,6 +39,18 @@ void Dotween::Update()
 	}
 }
 
+void Dotween::StopAllDotweenFunction()
+{
+	for (int i = 0; i < TimerIndex::End; i++)
+	{
+		if (dotweenTimerArray[i] != nullptr)
+		{
+			/// isDone을 true로 바꿔주어 강제로 타이머 종료.
+			dotweenTimerArray[i]->isDone = true;
+		}
+	}
+}
+
 Dotween& Dotween::DOMove(Vector3d endPosition, double p_duration)
 {
 	// 	GetGameObject()->GetTransform()는 Component를 갖게 될 GameObject를 리턴한다.
@@ -90,6 +102,7 @@ Dotween& Dotween::DOMove(Vector3d endPosition, double p_duration)
 		GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(m_doMovetweenTimer->finalXvalue, m_doMovetweenTimer->finalYvalue, m_doMovetweenTimer->finalZvalue));
 	};
 
+	currentTimerIndex = TimerIndex::MoveTimer;
 	tempTimer = m_doMovetweenTimer;
 	dotweenTimerArray[TimerIndex::MoveTimer] = tempTimer;
 
@@ -141,6 +154,7 @@ Dotween& Dotween::DOScale(Vector3d endScale, double p_duration)
 		//GetGameObject()->GetTransform()->SetWorldScale(Vector3D(m_doScaletweenTimer->finalXvalue, m_doScaletweenTimer->finalYvalue, m_doScaletweenTimer->finalZvalue));
 	};
 
+	currentTimerIndex = TimerIndex::ScaleTimer;
 	tempTimer = m_doScaletweenTimer;
 	dotweenTimerArray[TimerIndex::ScaleTimer] = tempTimer;
 
@@ -215,6 +229,7 @@ Dotween& Dotween::DORotate(Vector3d endRotation, double p_duration)
 		GetGameObject()->GetTransform()->SetWorldRotation(Vector3d(m_doRotatetweenTimer->finalXvalue, m_doRotatetweenTimer->finalYvalue, m_doRotatetweenTimer->finalZvalue));
 	};
 
+	currentTimerIndex = TimerIndex::RotateTimer;
 	tempTimer = m_doRotatetweenTimer;
 	dotweenTimerArray[TimerIndex::RotateTimer] = tempTimer;
 
@@ -242,6 +257,7 @@ Dotween& Dotween::DOQRotate(Vector3d axis, double angle, double p_duration)
 		//GetGameObject()->GetTransform()->Rotate(axis, DegreeToRadian(m_doQrotatetweenTimer->movingDistanceX - previousAngle));
 	};
 
+	currentTimerIndex = TimerIndex::RotateTimer;
 	tempTimer = m_doQrotatetweenTimer;
 	dotweenTimerArray[TimerIndex::RotateTimer] = tempTimer;
 
@@ -320,6 +336,7 @@ Dotween& Dotween::DOCustom(double p_duration)
 	m_doCustomTweenTimer->Start();
 	m_doCustomTweenTimer->duration = p_duration;
 
+	currentTimerIndex = TimerIndex::CustomTimer;
 	tempTimer = m_doCustomTweenTimer;
 	dotweenTimerArray[TimerIndex::CustomTimer] = tempTimer;
 
@@ -332,6 +349,7 @@ Dotween& Dotween::DONothing(double p_duration)
 	m_doNothingTweenTimer->Start();
 	m_doNothingTweenTimer->duration = p_duration;
 
+	currentTimerIndex = TimerIndex::NothingTimer;
 	tempTimer = m_doNothingTweenTimer;
 	dotweenTimerArray[TimerIndex::NothingTimer] = tempTimer;
 
@@ -378,6 +396,7 @@ Dotween& Dotween::DOShakePosition(double p_duration, double strength /*= 1.5f*/,
 		GetGameObject()->GetTransform()->SetWorldPosition(GetGameObject()->GetTransform()->GetWorldPosition() - randPos);
 	};
 
+	currentTimerIndex = TimerIndex::ShakeTimer;
 	tempTimer = m_doShaketweenTimer;
 	dotweenTimerArray[TimerIndex::ShakeTimer] = tempTimer;
 
@@ -407,42 +426,13 @@ Dotween& Dotween::SetEase(easing_functions p_ease)
 
 Dotween& Dotween::OnComplete(std::function<void()> expirationFunc)
 {
-	tempTimer->onCompleteFunction = expirationFunc;
+	dotweenTimerArray[currentTimerIndex]->onCompleteFunction = expirationFunc;
 	return *this;
 }
 
 Dotween& Dotween::OnUpdate(std::function<void()> updateFunc)
 {
 	tempTimer->onUpdate = updateFunc;
-	return *this;
-}
-
-Dotween& Dotween::InitDotweenTimer()
-{
-	tempTimer->m_xValue = 0;
-	tempTimer->m_yValue = 0;
-	tempTimer->m_zValue = 0;
-	tempTimer->easeTime = 0;
-	tempTimer->elapsed = 0;
-	tempTimer->duration = 0;
-	tempTimer->delay = 0;
-	tempTimer->movingDistanceX = 0;
-	tempTimer->movingDistanceY = 0;
-	tempTimer->movingDistanceZ = 0;
-	tempTimer->speed = 0;
-	tempTimer->normalizedDistanceX = 0;
-	tempTimer->normalizedDistanceY = 0;
-	tempTimer->normalizedDistanceZ = 0;
-	tempTimer->finalXvalue = 0;
-	tempTimer->finalYvalue = 0;
-	tempTimer->finalZvalue = 0;
-	tempTimer->accumulated = 0;
-	tempTimer->isActive = 0;
-	tempTimer->isRepeat = 0;
-	tempTimer->isDone = 0;
-	tempTimer->onCompleteFunction = []() {};
-	tempTimer->onExpiration = []() {};
-	tempTimer->onUpdate = []() {};
 	return *this;
 }
 
@@ -457,7 +447,6 @@ double Dotween::AdjustRotation(double& rot)
 	}
 	return rot;
 }
-
 
 //void Dotween::clearDotweenTimerMap()
 //{

@@ -7,8 +7,9 @@ class RTSCam :public yunutyEngine::graphics::Camera
 {
 public:
     bool roamingMode = false;
-    function<void(Vector3d)> groundLeftClickCallback{[](Vector3d){}};
-    function<void(Vector3d)> groundRightClickCallback{[](Vector3d){}};
+    function<void(Vector3d)> groundLeftClickCallback{[](Vector3d) {}};
+    function<void(Vector3d)> groundRightClickCallback{[](Vector3d) {}};
+    function<void(Vector3d)> groundHoveringClickCallback{[](Vector3d) {}};
     void Update()
     {
         if (Input::isKeyPushed(KeyCode::Tab))
@@ -24,21 +25,18 @@ public:
                 cameraSpeed = 20.0f;
 
             auto lastMousePos = yunutyEngine::Input::getMouseScreenPositionNormalized();
-            if (yunutyEngine::Input::isKeyDown(KeyCode::A)/* || lastMousePos.x < 0*/)
+            if (yunutyEngine::Input::isKeyDown(KeyCode::A) || lastMousePos.x < 0)
                 deltaDirection -= Vector3d::right;
-            if (yunutyEngine::Input::isKeyDown(KeyCode::D)/* || lastMousePos.x > 1*/)
+            if (yunutyEngine::Input::isKeyDown(KeyCode::D) || lastMousePos.x > 1)
                 deltaDirection += Vector3d::right;
-            if (yunutyEngine::Input::isKeyDown(KeyCode::W)/* || lastMousePos.y < 0*/)
-                deltaDirection += Vector3d::up;
-            if (yunutyEngine::Input::isKeyDown(KeyCode::S)/* || lastMousePos.y > 1*/)
-                deltaDirection -= Vector3d::up;
-			if (yunutyEngine::Input::isKeyDown(KeyCode::Q))
-				deltaDirection += Vector3d::forward;
-			if (yunutyEngine::Input::isKeyDown(KeyCode::E))
-				deltaDirection -= Vector3d::forward;
+            if (yunutyEngine::Input::isKeyDown(KeyCode::W) || lastMousePos.y < 0)
+                deltaDirection += Vector3d::forward;
+            if (yunutyEngine::Input::isKeyDown(KeyCode::S) || lastMousePos.y > 1)
+                deltaDirection -= Vector3d::forward;
 
             GetTransform()->position += deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed;
-            GetTransform()->rotation = Quaternion::Identity();
+            Quaternion quat = Quaternion::MakeWithForwardUp(Vector3d::down,Vector3d::forward);
+            GetTransform()->rotation = quat;
         }
         else
         {
@@ -90,8 +88,7 @@ public:
             GetTransform()->position += deltaPosition.Normalized() * Time::GetDeltaTime() * cameraSpeed;
         }
 
-        // 스크린 스페이스 -> 월드 스페이스를 구하는 로직
-        if (!roamingMode && (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick)))
+        if (!roamingMode)
         {
             Vector3d projectedPoint;
             auto resolution = graphics::Renderer::SingleInstance().GetResolution();
@@ -108,15 +105,17 @@ public:
                 right * centeredPosition.x * 0.001 * resolution.x * expectedPlaneDistance() +
                 up * centeredPosition.y * 0.001 * resolution.y * expectedPlaneDistance();
 
-            DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?
-                yunuGI::Color::red() : yunuGI::Color::blue(), { 0.2,0.2,0.2 });
+            if (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick))
+                DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?  yunuGI::Color::red() : yunuGI::Color::blue(), { 0.2,0.2,0.2 });
             if (Input::isKeyPushed(KeyCode::MouseLeftClick))
                 groundLeftClickCallback(projectedPoint);
-            else
+            else if (Input::isKeyPushed(KeyCode::MouseRightClick))
                 groundRightClickCallback(projectedPoint);
+
+            groundHoveringClickCallback(projectedPoint);
         }
     }
 private:
-    float expectedPlaneDistance() { return abs(GetTransform()->GetWorldPosition().z); };
+    float expectedPlaneDistance() { return abs(GetTransform()->GetWorldPosition().y); };
 };
 

@@ -1,32 +1,51 @@
 #include "RangeSystem.h"
-#include "IRangeAction.h"
+#include "Unit.h"
 
-void RangeSystem::SetUnitGameObject(GameObject* obj)
+void RangeSystem::Start()
 {
-	m_unit = obj;
-	//this->GetGameObject()->SetParent(obj);
 }
 
-void RangeSystem::SetRangeType(string p_type)
+void RangeSystem::SetUnitComponent(Unit* unitComponent)
 {
-	m_type = p_type;
+	m_unitComponent = unitComponent;
+}
+
+void RangeSystem::SetIdRadius(float radius)
+{
+	m_tempIDRadius = radius;
+	SetRadius(radius);
+}
+
+void RangeSystem::SetAtkRadius(float radius)
+{
+	m_tempAtkRadius = radius;
 }
 
 void RangeSystem::OnCollisionEnter2D(const Collision2D& collision)
 {
 	/// 설정해준 타입에 따라 Unit에서 호출될 함수를 정해준다.
-	// 임시 조건 - 부모 게임오브젝트가 다를 경우 충돌 이벤트 발생
-	if (GetGameObject()->GetParentGameObject() != collision.m_OtherCollider->GetGameObject()->GetParentGameObject())
-	{
+	// 부모 오브젝트 (유닛) 의 타입이 다르다면 충돌 처리
+	if (collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>() != nullptr && 
+		m_unitComponent->GetType() != collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>()->GetType())
+	{	
+		m_unitComponent->SetIdRadius(m_tempIDRadius);
+		m_unitComponent->SetAtkRadius(m_tempAtkRadius);
 		
-		if (m_type == "Identification")
-			m_unit->GetComponent<IRangeAction>()->IdentifyAction(collision.m_OtherCollider->GetTransform()->GetWorldPosition());
-
-		else if (m_type == "Attack")
-			m_unit->GetComponent<IRangeAction>()->AttackAction(collision.m_OtherCollider->GetTransform()->GetWorldPosition());
-
+		m_unitComponent->SetOpponentGameObject(collision.m_OtherCollider->GetGameObject());
+		m_unitComponent->IdentifyTransition();
 	}
+}
 
-
+/// <summary>
+/// 인식 범위에 있다가 벗어 났을 경우. 즉 
+/// </summary>
+/// <param name="collision"></param>
+void RangeSystem::OnCollisionExit2D(const Collision2D& collision)
+{
+	if (collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>() != nullptr &&
+		m_unitComponent->GetType() != collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>()->GetType())
+	{
+		m_unitComponent->ExitIDRangeTransition();
+	}
 }
 

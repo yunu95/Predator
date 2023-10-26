@@ -14,4 +14,9 @@ cbuffer MaterialBuffer : register(b1)
     float4 materialColor;
 };
 
+Texture2D AlbedoMap : register(t0);
+Texture2D NormalMap : register(t1);
+
+SamplerState sam : register(s0);
+
 #endif

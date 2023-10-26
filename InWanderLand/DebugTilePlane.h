@@ -25,14 +25,11 @@ public:
         {
             for (int j = 0; j < width; j++)
             {
-                Vector3d position = GetTransform()->GetWorldPosition() + Vector3d(i - halveWidth, j - halveHeight, 0.5);
+                Vector3d position = GetTransform()->GetWorldPosition() + Vector3d(i - halveWidth, -0.5,j - halveHeight);
                 auto tile = Scene::getCurrentScene()->AddGameObject();
                 auto staticMesh = tile->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
                 staticMesh->GetGI().LoadMesh("Cube");
-                //staticMesh->GetGI().SetMesh(L"Cube");
-                //staticMesh->GetGI().SetColor(0, ((i + j) % 2 == 0 ? colorA : colorB));
-                //staticMesh->GetGI().SetShader(0, L"Forward");
-                //staticMesh->GetGI().SetMaterialName(0, L"Forward");
+                staticMesh->GetGI().GetMaterial()->SetColor(((i + j) % 2 == 0 ? colorA : colorB));
                 tile->GetTransform()->SetWorldPosition(position);
                 staticMesh->GetTransform()->scale = Vector3d(1, 1, 1);
             }

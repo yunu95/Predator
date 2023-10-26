@@ -9,6 +9,7 @@
 #include "ShakyCam.h"
 #include "Player.h"
 #include "Dotween.h"
+#include "Projectile.h"
 #include "CamSwitcher.h"   
 #include "RoamingCam.h"   
 #include "RTSCam.h"   
@@ -158,7 +159,7 @@ int main(int, char**)
     auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     camObj2->setName("Camera");
 
-    camObj2->GetTransform()->position = Vector3d(0, 0, -30);
+    camObj2->GetTransform()->position = Vector3d(0, 10, 0);
 	//camObj2->GetTransform()->SetWorldRotation(Vector3d(90, 90, 0));
     // 지면의 좌클릭, 우클릭에 대한 콜백은 아래의 RTSCam 인스턴스에 등록할 수 있다.
     auto rtsCam = camObj2->AddComponent<RTSCam>();
@@ -196,7 +197,8 @@ int main(int, char**)
     //auto playerCollider = playerGameObject->AddComponent<Collider>();
 
     playerGameObject->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{1, 0, 0});
-    playerGameObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
+
+    playerGameObject->AddComponent<CircleCollider2D>();
 
     Dotween* dotweenComponent = playerGameObject->AddComponent<Dotween>();
 
@@ -205,9 +207,6 @@ int main(int, char**)
     {
         // Before moving, Make player look at position.
         Vector3d distanceVector = position - playerGameObject->GetTransform()->GetWorldPosition();
-
-        playerGameObject->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(distanceVector.Normalized(), playerGameObject->GetTransform()->rotation.Right()));
-        playerGameObject->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(distanceVector.Normalized(), playerGameObject->GetTransform()->rotation.Right()));
 
         float speed = 3.0f;
         
@@ -245,116 +244,105 @@ int main(int, char**)
 	auto playerIDRangeObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     playerIDRangeObject->setName("Player Identyfication RangeSystem");
 
-	auto playerIDRangeCollider2d = playerIDRangeObject->AddComponent<CircleCollider2D>();
     float playerIDRangeRadius = 3.0f;
-    playerIDRangeCollider2d->SetRadius(playerIDRangeRadius);
+    float playerAtkRangeRadius = 2.0f;
 
     auto playerIDRangeSystem = playerIDRangeObject->AddComponent<RangeSystem>();
-    playerIDRangeSystem->SetUnitGameObject(playerGameObject);
-    playerIDRangeSystem->SetRangeType("Identification");
-
-
+    playerIDRangeSystem->SetUnitComponent(playerComponent);
+    playerIDRangeSystem->SetIdRadius(playerIDRangeRadius);
+    playerIDRangeSystem->SetAtkRadius(playerAtkRangeRadius);
+  
 	auto playerIDRangeMesh = playerIDRangeObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 	playerIDRangeMesh->GetGI().LoadMesh("Sphere");
-	//playerRangeMesh->GetGI().SetMesh(L"Sphere");
-	playerIDRangeMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });
-	//playerRangeMesh->GetGI().SetShader(0, L"Forward");
-	//playerRangeMesh->GetGI().SetMaterialName(0, L"Forward");
+	playerIDRangeMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0.3, 1, 0 });
+	playerIDRangeMesh->GetGI().GetMaterial()->SetPixelShader(L"DebugPS.cso");
 
+    playerIDRangeObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
     playerIDRangeObject->GetTransform()->scale = Vector2d(playerIDRangeRadius * 2, playerIDRangeRadius * 2);
-	playerIDRangeObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
     playerIDRangeObject->SetParent(playerGameObject);
-
 #pragma endregion
-
-#pragma region Player Attack Range
-	auto playerAttackRangeObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    playerAttackRangeObject->setName("playerRange2DCollider");
-
-	auto playerAttackRangeCollider2d = playerAttackRangeObject->AddComponent<CircleCollider2D>();
-	float playerAttackRangeRadius = 1.0f;
-    playerAttackRangeCollider2d->SetRadius(playerIDRangeRadius);
-
-	auto playerAttackRangeSystem = playerAttackRangeObject->AddComponent<RangeSystem>();
-    playerAttackRangeSystem->SetUnitGameObject(playerGameObject);
-    playerAttackRangeSystem->SetRangeType("Identification");
-
-
-	auto playerAttackRangeMesh = playerAttackRangeObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    playerAttackRangeMesh->GetGI().LoadMesh("Sphere");
-	//playerRangeMesh->GetGI().SetMesh(L"Sphere");
-    playerAttackRangeMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 0, 0 });
-	//playerRangeMesh->GetGI().SetShader(0, L"Forward");
-	//playerRangeMesh->GetGI().SetMaterialName(0, L"Forward");
-
-	playerAttackRangeObject->GetTransform()->scale = Vector2d(playerAttackRangeRadius * 2, playerAttackRangeRadius * 2);
-	playerAttackRangeObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
-	playerAttackRangeObject->SetParent(playerGameObject);
-
-#pragma endregion
-
+     
 #pragma region Enemy Unit
-    auto ememyUnitObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    ememyUnitObject->setName("enemyUnit");
-    auto enemyMesh = ememyUnitObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+    auto ememyGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    ememyGameObject->setName("enemyUnit");
+    auto enemyMesh = ememyGameObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
    
-    auto enemytempComponent = ememyUnitObject->AddComponent<Unit>();
+    auto enemytempComponent = ememyGameObject->AddComponent<Unit>();
+
+    ememyGameObject->AddComponent<CircleCollider2D>();
 
     enemyMesh->GetGI().LoadMesh("Capsule");
     enemyMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 1, 0 });
-    ememyUnitObject->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ -10, 0, 0 });
-    ememyUnitObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
+    ememyGameObject->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ -10, 0, 0 });
+
+    Dotween* enemyDotween = ememyGameObject->AddComponent<Dotween>();
+#pragma endregion
+
+#pragma region Enemy Projectiles
+    GameObject* enemyProjectileObjects[10];
+    Projectile* enemyProjectiles[10];
+    yunutyEngine::graphics::StaticMeshRenderer* enemyProjectileMesh[10];
+	enemytempComponent->EquipMissile();
+
+    for (int i = 0; i < 10; i++)
+    {
+        enemyProjectileObjects[i] = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        enemyProjectileObjects[i]->setName("EnemyProjectile");
+        enemyProjectileObjects[i]->AddComponent<Dotween>();
+        enemyProjectileObjects[i]->AddComponent<CircleCollider2D>();
+        enemyProjectiles[i] = enemyProjectileObjects[i]->AddComponent<Projectile>();
+        enemyProjectileMesh[i] = enemyProjectileObjects[i]->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+        enemyProjectileMesh[i]->GetGI().LoadMesh("Capsule");
+        enemyProjectileMesh[i]->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 0 });
+        enemytempComponent->SetProjectile(enemyProjectiles[i]);
+    }
+
 #pragma endregion
 
 #pragma region Enemy Identyfication Range
 	auto enemyIDRangeObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     enemyIDRangeObject->setName("enemyRange2DCollider");
 
-	auto enemyIDRangeCollider2d = enemyIDRangeObject->AddComponent<CircleCollider2D>();
-    float enemyIDRangeRadius = 3.0f;
-	enemyIDRangeCollider2d->SetRadius(enemyIDRangeRadius);
-
-    auto enemyIDRangeSystem = enemyIDRangeObject->AddComponent<RangeSystem>();
-    enemyIDRangeSystem->SetUnitGameObject(ememyUnitObject);
-    enemyIDRangeSystem->SetRangeType("Identification");
+    float enemyIDRangeRadius = 5.0f;
+    float enemyAtkRangeRadius = 3.0f;
+    
+    auto enemyRangeSystem = enemyIDRangeObject->AddComponent<RangeSystem>();
+    enemyRangeSystem->SetUnitComponent(enemytempComponent);
+    enemyRangeSystem->SetIdRadius(enemyIDRangeRadius);
+    enemyRangeSystem->SetAtkRadius(enemyAtkRangeRadius);
 
 	auto enemyIDRangeMesh = enemyIDRangeObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
     enemyIDRangeMesh->GetGI().LoadMesh("Sphere");
-	//playerRangeMesh->GetGI().SetMesh(L"Sphere");
     enemyIDRangeMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });
-    //enemyIDRangeMesh->GetGI().GetMaterial()->SetPixelShader(L"Forward");
-	//playerRangeMesh->GetGI().SetMaterialName(0, L"Forward");
+    enemyIDRangeMesh->GetGI().GetMaterial()->SetPixelShader(L"DebugPS.cso");
 
+    enemyIDRangeObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
     enemyIDRangeObject->GetTransform()->scale = Vector2d(enemyIDRangeRadius * 2, enemyIDRangeRadius * 2);
-	enemyIDRangeObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
-	enemyIDRangeObject->SetParent(ememyUnitObject);
-
+	enemyIDRangeObject->SetParent(ememyGameObject);
 #pragma endregion
 
-#pragma region Enemy Attack Range
-	auto enemyAttackRangeObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    enemyAttackRangeObject->setName("enemyRange2DCollider");
-
-	auto enemyAttackRangeCollider2d = enemyAttackRangeObject->AddComponent<CircleCollider2D>();
-	float enemyAttackRangeRadius = 1.0f;
-    enemyAttackRangeCollider2d->SetRadius(enemyAttackRangeRadius);
-
-	auto enemyAttackRangeSystem = enemyAttackRangeObject->AddComponent<RangeSystem>();
-    enemyAttackRangeSystem->SetUnitGameObject(ememyUnitObject);
-    enemyAttackRangeSystem->SetRangeType("Identification");
-
-	auto enemyAttackRangeMesh = enemyAttackRangeObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    enemyAttackRangeMesh->GetGI().LoadMesh("Sphere");
-	//playerRangeMesh->GetGI().SetMesh(L"Sphere");
-    enemyAttackRangeMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 0, 0 });
-	//playerRangeMesh->GetGI().SetShader(0, L"Forward");
-	//playerRangeMesh->GetGI().SetMaterialName(0, L"Forward");
-
-	enemyAttackRangeObject->GetTransform()->scale = Vector2d(enemyAttackRangeRadius * 2, enemyAttackRangeRadius * 2);
-	enemyAttackRangeObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
-	enemyAttackRangeObject->SetParent(ememyUnitObject);
-
-#pragma endregion
+//#pragma region Enemy Attack Range
+//	auto enemyAttackRangeObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+//    enemyAttackRangeObject->setName("enemyRange2DCollider");
+//
+//	auto enemyAttackRangeCollider2d = enemyAttackRangeObject->AddComponent<CircleCollider2D>();
+//	float enemyAttackRangeRadius = 1.0f;
+//    enemyAttackRangeCollider2d->SetRadius(enemyAttackRangeRadius);
+//
+//	auto enemyAttackRangeSystem = enemyAttackRangeObject->AddComponent<RangeSystem>();
+//
+//	auto enemyAttackRangeMesh = enemyAttackRangeObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+//    enemyAttackRangeMesh->GetGI().LoadMesh("Sphere");
+//	//playerRangeMesh->GetGI().SetMesh(L"Sphere");
+//    enemyAttackRangeMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 0, 0 });
+//	//playerRangeMesh->GetGI().SetShader(0, L"Forward");
+//	//playerRangeMesh->GetGI().SetMaterialName(0, L"Forward");
+//
+//	enemyAttackRangeObject->GetTransform()->scale = Vector2d(enemyAttackRangeRadius * 2, enemyAttackRangeRadius * 2);
+//	enemyAttackRangeObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
+//	enemyAttackRangeObject->SetParent(ememyGameObject);
+//
+//#pragma endregion
 
     yunutyEngine::YunutyCycle::SingleInstance().autoRendering = false;
     yunutyEngine::YunutyCycle::SingleInstance().Play();
