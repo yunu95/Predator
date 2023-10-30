@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "Dotween.h"
 #include "Projectile.h"
+#include "ProjectileSystem.h"
 #include "CamSwitcher.h"   
 #include "RoamingCam.h"   
 #include "RTSCam.h"   
@@ -183,6 +184,12 @@ int main(int, char**)
                 currentSpeed = flapSpeed;
         }
     };*/
+#pragma region 투사체 시스템
+    auto projectileSystemGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    auto projectileSystemComponent = projectileSystemGameObject->AddComponent<ProjectileSystem>();
+#pragma endregion
+
+
 
 #pragma region Player
     auto playerGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();

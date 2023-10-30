@@ -14,7 +14,6 @@ void Projectile::OnCollisionEnter2D(const Collision2D& collision)
 	if (collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>() != nullptr && 
 		collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>()->GetType() != m_projectileSystem->GetUnitType())
 	{
-		isHit = true;
 		m_projectileSystem->ReturnToStack(this);
 		isHit = false;
 	}
