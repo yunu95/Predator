@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="AdaptorInterface">
+      <UniqueIdentifier>{66de5f87-8309-45c3-8f1b-73a9998a3c98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{41f650d4-18ad-402d-bed0-2f227b0355d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsEngine">
+      <UniqueIdentifier>{14c17afd-e44b-498b-828c-409abcb88bdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsEngine\Device">
+      <UniqueIdentifier>{2b1a30f4-8399-4e18-a66c-2706ef221c9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsEngine\ResourceBuilder">
+      <UniqueIdentifier>{84e3d707-2b2d-4458-bed0-68ed4a7e2210}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsEngine\SwapChain">
+      <UniqueIdentifier>{25fca1dc-89dc-4eb9-86fd-458196cc44a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{3b53919c-641f-4a21-803c-823567c46fa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Shader">
+      <UniqueIdentifier>{efdc96de-5efd-4984-a530-4779ec16e520}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{ad823b26-60d2-44c9-8fad-3aad16520606}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResourceManager">
+      <UniqueIdentifier>{ee4a89a3-e52e-43a1-8cb1-8beae72116ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Mesh">
+      <UniqueIdentifier>{451f893b-af2f-4540-b448-b40ab7d456e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Material">
+      <UniqueIdentifier>{7b0fc08a-cd60-4156-abcc-e908bf36c183}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsEngine\ConstantBuffer">
+      <UniqueIdentifier>{d230dab2-65e7-4af6-8dd8-6c3208c526fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenderSystem">
+      <UniqueIdentifier>{4d0b3b22-de09-40b2-b2c0-3640c30f2933}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NailCamera">
+      <UniqueIdentifier>{e8370a40-d710-4a8d-8dcb-430aab3bf802}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsEngine\RenderableManager">
+      <UniqueIdentifier>{80244bcb-1889-44fe-b2b5-fb0f02453bd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsEngine\RenderableManager\IRenderable">
+      <UniqueIdentifier>{d9d9befe-d147-4bd9-9870-9b2ff0998b6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsEngine\RenderableManager\IRenderable\StaticMesh">
+      <UniqueIdentifier>{fb7b53f2-4e24-4663-9aba-e3fbaf21b85b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Texture">
+      <UniqueIdentifier>{db20820c-deef-4b80-b972-92338038b52e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="YGCameraAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="YGDebugCubeAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="YGDebugSphereAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="YGEventHandlerAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="YGFactoryAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="YGRenderableAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="YGRendererAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="YGResourceManagerAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="YGSkinnedMeshAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="YGStaticMeshAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="YGUIImageAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="YGUITextAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="YGAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="NailEngine.h">
+      <Filter>GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Device.h">
+      <Filter>GraphicsEngine\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceBuilder.h">
+      <Filter>GraphicsEngine\ResourceBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="SwapChain.h">
+      <Filter>GraphicsEngine\SwapChain</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Resource\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Resource\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Resource\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleMath.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexShader.h">
+      <Filter>Resource\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="PixelShader.h">
+      <Filter>Resource\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffer.h">
+      <Filter>GraphicsEngine\ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSystem.h">
+      <Filter>RenderSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="NailCamera.h">
+      <Filter>NailCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableManager.h">
+      <Filter>GraphicsEngine\RenderableManager</Filter>
+    </ClInclude>
+    <ClInclude Include="IRenderable.h">
+      <Filter>GraphicsEngine\RenderableManager\IRenderable</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMesh.h">
+      <Filter>GraphicsEngine\RenderableManager\IRenderable\StaticMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="YGMaterialAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialWrapper.h">
+      <Filter>Resource\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Resource\Texture</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="YGExports.cpp">
+      <Filter>AdaptorInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="NailEngine.cpp">
+      <Filter>GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Device.cpp">
+      <Filter>GraphicsEngine\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceBuilder.cpp">
+      <Filter>GraphicsEngine\ResourceBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="SwapChain.cpp">
+      <Filter>GraphicsEngine\SwapChain</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Resource\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Resource\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Resource\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexShader.cpp">
+      <Filter>Resource\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="PixelShader.cpp">
+      <Filter>Resource\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantBuffer.cpp">
+      <Filter>GraphicsEngine\ConstantBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderSystem.cpp">
+      <Filter>RenderSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="NailCamera.cpp">
+      <Filter>NailCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableManager.cpp">
+      <Filter>GraphicsEngine\RenderableManager</Filter>
+    </ClCompile>
+    <ClCompile Include="IRenderable.cpp">
+      <Filter>GraphicsEngine\RenderableManager\IRenderable</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMesh.cpp">
+      <Filter>GraphicsEngine\RenderableManager\IRenderable\StaticMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="YGMaterialAdapter.cpp">
+      <Filter>AdaptorInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Resource\Texture</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="RuntimeDependency\resources\Shader\DefaultVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\DefaultPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\DebugPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SimpleMath.inl">
+      <Filter>Utils</Filter>
+    </None>
+    <None Include="RuntimeDependency\resources\Shader\Buffers.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>

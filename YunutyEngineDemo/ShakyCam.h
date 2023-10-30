@@ -4,6 +4,12 @@ using namespace yunutyEngine;
 
 class ShakyCam : public yunutyEngine::graphics::Camera
 {
+public:
+    void SetObject(yunuGI::IStaticMeshRenderer* renderer)
+    {
+        this->renderer = renderer;
+    };
+
 protected:
     void Update()
     {
@@ -26,6 +32,16 @@ protected:
             deltaPosition -= Vector3d::up;
         if (yunutyEngine::Input::isKeyDown(KeyCode::E))
             deltaPosition += Vector3d::up;
+
+        if (yunutyEngine::Input::isKeyDown(KeyCode::R))
+        {
+            renderer->GetMaterial()->SetColor(yunuGI::Color{0.f,0.f,1.f,1.f});
+        }
+		if (yunutyEngine::Input::isKeyLifted(KeyCode::R))
+		{
+			renderer->GetMaterial()->SetColor(yunuGI::Color{ 1.f,0.f,0.f,1.f });
+		}
+
         static auto lastMousePos = yunutyEngine::Input::getMouseScreenPosition();
 
         auto dMousePos = yunutyEngine::Input::getMouseScreenPosition() - lastMousePos;
@@ -55,4 +71,7 @@ protected:
 
         GetTransform()->position += deltaPosition.Normalized() * Time::GetDeltaTime() * cameraSpeed;
     }
+
+private:
+    yunuGI::IStaticMeshRenderer* renderer;
 };

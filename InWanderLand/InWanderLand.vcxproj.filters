@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="imgui">
-      <UniqueIdentifier>{0587d7a3-f2ce-4d56-b84f-a0005d3bfce6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sources">
       <UniqueIdentifier>{08e36723-ce4f-4cff-9662-c40801cf1acf}</UniqueIdentifier>
     </Filter>
@@ -13,95 +10,159 @@
     <Filter Include="Editor\Panel">
       <UniqueIdentifier>{076edac7-36b3-4f60-9a8d-fe25c71eb05e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents">
+      <UniqueIdentifier>{1c4fad8c-dd4d-4667-b404-8bfe4834498e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\imgui">
+      <UniqueIdentifier>{0587d7a3-f2ce-4d56-b84f-a0005d3bfce6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Events">
+      <UniqueIdentifier>{54eeffd8-024b-4977-9705-73efefd2d99a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Panel\List">
+      <UniqueIdentifier>{8eccc7d3-f91f-4e56-aa6d-13596ef88423}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Commands">
+      <UniqueIdentifier>{d1157612-53f5-422c-904b-39d5c1028d08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Commands\MenubarCommands">
+      <UniqueIdentifier>{59aa71fe-8d68-4297-8598-553d8498282d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataStructure">
+      <UniqueIdentifier>{df3d0462-035e-4bad-98d4-634df95d5b42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ShakyCam.h" />
-    <ClInclude Include="..\Include\ImGui\backends\imgui_impl_dx11.h">
-      <Filter>sources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\ImGui\backends\imgui_impl_win32.h">
-      <Filter>sources</Filter>
-    </ClInclude>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
-      <Filter>imgui</Filter>
+      <Filter>Editor\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\ImGui\imgui.h">
-      <Filter>imgui</Filter>
+      <Filter>Editor\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\ImGui\imgui_internal.h">
-      <Filter>imgui</Filter>
+      <Filter>Editor\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Editor\EditorLayer.h">
+    <ClInclude Include="..\Include\ImGui\backends\imgui_impl_dx11.h">
+      <Filter>Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\ImGui\backends\imgui_impl_win32.h">
+      <Filter>Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Layer.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorEvents.h">
+      <Filter>Editor\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsLayer.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="ShakyCam.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorLayer.h">
       <Filter>Editor</Filter>
     </ClInclude>
-    <ClInclude Include="Editor\Panel\EditorPanel.h">
+    <ClInclude Include="EditorPanel.h">
       <Filter>Editor\Panel</Filter>
     </ClInclude>
-    <ClInclude Include="Editor\Panel\Panel_GameView.h">
-      <Filter>Editor\Panel</Filter>
+    <ClInclude Include="Panel_CameraView.h">
+      <Filter>Editor\Panel\List</Filter>
     </ClInclude>
-    <ClInclude Include="Editor\Panel\Panel_Hierarchy.h">
-      <Filter>Editor\Panel</Filter>
+    <ClInclude Include="Panel_Hierarchy.h">
+      <Filter>Editor\Panel\List</Filter>
     </ClInclude>
-    <ClInclude Include="Editor\Panel\Panel_Inspector.h">
-      <Filter>Editor\Panel</Filter>
+    <ClInclude Include="Panel_Inspector.h">
+      <Filter>Editor\Panel\List</Filter>
     </ClInclude>
-    <ClInclude Include="Editor\Panel\Panel_MiniMap.h">
-      <Filter>Editor\Panel</Filter>
+    <ClInclude Include="Panel_MiniMap.h">
+      <Filter>Editor\Panel\List</Filter>
     </ClInclude>
-    <ClInclude Include="Editor\Panel\Panel_SceneView.h">
-      <Filter>Editor\Panel</Filter>
+    <ClInclude Include="Panel_SceneView.h">
+      <Filter>Editor\Panel\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Editor\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandManager.h">
+      <Filter>Editor\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgramExitCommand.h">
+      <Filter>Editor\Commands\MenubarCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="MenubarCommands.h">
+      <Filter>Editor\Commands\MenubarCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="CircularQueue.h">
+      <Filter>Editor\DataStructure</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ShakyCam.cpp" />
-    <ClCompile Include="main_alt.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Include\ImGui\backends\imgui_impl_win32.cpp">
+    <ClCompile Include="EntryPoint.cpp">
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="..\Include\ImGui\imgui.cpp">
-      <Filter>imgui</Filter>
+      <Filter>Editor\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Include\ImGui\imgui_demo.cpp">
-      <Filter>imgui</Filter>
+      <Filter>Editor\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Include\ImGui\imgui_draw.cpp">
-      <Filter>imgui</Filter>
+      <Filter>Editor\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Include\ImGui\imgui_tables.cpp">
-      <Filter>imgui</Filter>
+      <Filter>Editor\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Include\ImGui\imgui_widgets.cpp">
-      <Filter>imgui</Filter>
+      <Filter>Editor\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Include\ImGui\backends\imgui_impl_win32.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
       <Filter>sources</Filter>
     </ClCompile>
-    <ClCompile Include="Editor\EditorLayer.cpp">
+    <ClCompile Include="EditorEvents.cpp">
+      <Filter>Editor\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsLayer.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="ShakyCam.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorLayer.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
-    <ClCompile Include="Editor\Panel\EditorPanel.cpp">
+    <ClCompile Include="EditorPanel.cpp">
       <Filter>Editor\Panel</Filter>
     </ClCompile>
-    <ClCompile Include="Editor\Panel\Panel_GameView.cpp">
-      <Filter>Editor\Panel</Filter>
+    <ClCompile Include="Panel_CameraView.cpp">
+      <Filter>Editor\Panel\List</Filter>
     </ClCompile>
-    <ClCompile Include="Editor\Panel\Panel_Hierarchy.cpp">
-      <Filter>Editor\Panel</Filter>
+    <ClCompile Include="Panel_Hierarchy.cpp">
+      <Filter>Editor\Panel\List</Filter>
     </ClCompile>
-    <ClCompile Include="Editor\Panel\Panel_Inspector.cpp">
-      <Filter>Editor\Panel</Filter>
+    <ClCompile Include="Panel_Inspector.cpp">
+      <Filter>Editor\Panel\List</Filter>
     </ClCompile>
-    <ClCompile Include="Editor\Panel\Panel_MiniMap.cpp">
-      <Filter>Editor\Panel</Filter>
+    <ClCompile Include="Panel_MiniMap.cpp">
+      <Filter>Editor\Panel\List</Filter>
     </ClCompile>
-    <ClCompile Include="Editor\Panel\Panel_SceneView.cpp">
-      <Filter>Editor\Panel</Filter>
+    <ClCompile Include="Panel_SceneView.cpp">
+      <Filter>Editor\Panel\List</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandManager.cpp">
+      <Filter>Editor\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgramExitCommand.cpp">
+      <Filter>Editor\Commands\MenubarCommands</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
