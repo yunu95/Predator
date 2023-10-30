@@ -175,13 +175,22 @@
     <ClInclude Include="..\Include\ImGui\imconfig.h" />
     <ClInclude Include="..\Include\ImGui\imgui.h" />
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
-    <ClInclude Include="Editor\EditorLayer.h" />
-    <ClInclude Include="Editor\Panel\EditorPanel.h" />
-    <ClInclude Include="Editor\Panel\Panel_GameView.h" />
-    <ClInclude Include="Editor\Panel\Panel_Hierarchy.h" />
-    <ClInclude Include="Editor\Panel\Panel_Inspector.h" />
-    <ClInclude Include="Editor\Panel\Panel_MiniMap.h" />
-    <ClInclude Include="Editor\Panel\Panel_SceneView.h" />
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="CircularQueue.h" />
+    <ClInclude Include="Command.h" />
+    <ClInclude Include="CommandManager.h" />
+    <ClInclude Include="ContentsLayer.h" />
+    <ClInclude Include="EditorEvents.h" />
+    <ClInclude Include="EditorLayer.h" />
+    <ClInclude Include="EditorPanel.h" />
+    <ClInclude Include="Layer.h" />
+    <ClInclude Include="MenubarCommands.h" />
+    <ClInclude Include="Panel_CameraView.h" />
+    <ClInclude Include="Panel_Hierarchy.h" />
+    <ClInclude Include="Panel_Inspector.h" />
+    <ClInclude Include="Panel_MiniMap.h" />
+    <ClInclude Include="Panel_SceneView.h" />
+    <ClInclude Include="ProgramExitCommand.h" />
     <ClInclude Include="ShakyCam.h" />
   </ItemGroup>
   <ItemGroup>
@@ -192,20 +201,19 @@
     <ClCompile Include="..\Include\ImGui\imgui_draw.cpp" />
     <ClCompile Include="..\Include\ImGui\imgui_tables.cpp" />
     <ClCompile Include="..\Include\ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="Editor\EditorLayer.cpp" />
-    <ClCompile Include="Editor\Panel\EditorPanel.cpp" />
-    <ClCompile Include="Editor\Panel\Panel_GameView.cpp" />
-    <ClCompile Include="Editor\Panel\Panel_Hierarchy.cpp" />
-    <ClCompile Include="Editor\Panel\Panel_Inspector.cpp" />
-    <ClCompile Include="Editor\Panel\Panel_MiniMap.cpp" />
-    <ClCompile Include="Editor\Panel\Panel_SceneView.cpp" />
-    <ClCompile Include="main.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="main_alt.cpp" />
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="CommandManager.cpp" />
+    <ClCompile Include="ContentsLayer.cpp" />
+    <ClCompile Include="EditorEvents.cpp" />
+    <ClCompile Include="EditorLayer.cpp" />
+    <ClCompile Include="EditorPanel.cpp" />
+    <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="Panel_CameraView.cpp" />
+    <ClCompile Include="Panel_Hierarchy.cpp" />
+    <ClCompile Include="Panel_Inspector.cpp" />
+    <ClCompile Include="Panel_MiniMap.cpp" />
+    <ClCompile Include="Panel_SceneView.cpp" />
+    <ClCompile Include="ProgramExitCommand.cpp" />
     <ClCompile Include="ShakyCam.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
