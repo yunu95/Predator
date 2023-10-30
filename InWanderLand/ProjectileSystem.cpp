@@ -1,41 +1,49 @@
 #include "ProjectileSystem.h"
 #include "Unit.h"
 #include "Projectile.h"
+#include "Dotween.h"
 
-// 생성자에서 주인 오브젝트 등록.
-ProjectileSystem::ProjectileSystem(Unit* OwnerUnit)
+ProjectileSystem::ProjectileSystem()
 {
-	m_ownerUnit = OwnerUnit;
+	instance = this;
 }
 
-void ProjectileSystem::SetProjectile(Projectile* p_projectile)
+ProjectileSystem* ProjectileSystem::GetInstance()
 {
-	p_projectile->SetSystem(this);
-	p_projectile->GetGameObject()->SetSelfActive(false);
-	projectileStack.push(p_projectile);
+	if (instance == nullptr)
+		instance = new ProjectileSystem;
+	return instance;
 }
 
-void ProjectileSystem::Shoot(Vector3d enemyPosition)
+void ProjectileSystem::SetUp()
 {
-	Projectile* currentProjectile = projectileStack.top();
-	projectileStack.pop();
-	currentProjectile->GetGameObject()->GetTransform()->SetWorldPosition(m_ownerUnit->GetGameObject()->GetTransform()->GetWorldPosition());
-	currentProjectile->GetGameObject()->SetSelfActive(true);
-	currentProjectile->Shoot(enemyPosition);
+	for (int i = 0; i < 100; i++)
+	{
+		m_projectileStack.push(yunutyEngine::Scene::getCurrentScene()->AddGameObject());
+		m_projectileStack.top()->AddComponent<Projectile>();
+		m_projectileStack.top()->AddComponent<Dotween>();
+	}
 }
 
-void ProjectileSystem::ReturnToStack(Projectile* usedProjectile)
+void ProjectileSystem::Shoot(Unit* ownerUnit, Vector3d endPosition, float speed)
 {
-	projectileStack.push(usedProjectile);
-	usedProjectile->GetGameObject()->SetSelfActive(false);
+	if (m_projectileStack.empty())
+	{
+		SetUp();
+	}
+
+	Vector3d startPosition = ownerUnit->GetGameObject()->GetTransform()->GetWorldPosition();
+	float distance = (endPosition - startPosition).Magnitude();
+
+	m_projectileStack.top()->GetComponent<Projectile>()->SetOwnerType(ownerUnit->GetType());
+	m_projectileStack.top()->GetTransform()->SetWorldPosition(startPosition);
+	m_projectileStack.top()->GetComponent<Dotween>()->DOMove(endPosition, distance / speed);
+	m_projectileStack.pop();
 }
 
-string ProjectileSystem::GetUnitType() const
+void ProjectileSystem::ReturnToPool(GameObject* usedObject)
 {
-	return m_ownerUnit->GetType();
-}
+	usedObject->SetSelfActive(false);
 
-bool ProjectileSystem::Empty() const
-{
-	return projectileStack.empty();
+	m_projectileStack.push(usedObject);
 }

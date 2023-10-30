@@ -12,18 +12,19 @@ class Projectile;
 
 class ProjectileSystem
 {
+private:
+	ProjectileSystem();
+	static ProjectileSystem* instance;
+
 public:
-	ProjectileSystem(Unit* OwnerUnit);
+	static ProjectileSystem* GetInstance();
 
 private:
-	Unit* m_ownerUnit;
-	std::stack<Projectile*> projectileStack;
+	std::stack<GameObject*> m_projectileStack;
 
 public:
-	void SetProjectile(Projectile* p_projectile);
-	void Shoot(Vector3d enemyPosition);
-	void ReturnToStack(Projectile* usedProjectile);
-	string GetUnitType() const;
-	bool Empty() const;
+	void Shoot(Unit* ownerUnit, Vector3d endPosition, float speed);
+	void ReturnToPool(GameObject* usedObject);
+	void SetUp();
 };
 

@@ -118,7 +118,9 @@
     <ClInclude Include="ProjectileSystem.h">
       <Filter>GHComponents</Filter>
     </ClInclude>
-    <ClInclude Include="Projectile.h" />
+    <ClInclude Include="Projectile.h">
+      <Filter>GHComponents</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShakyCam.cpp" />
@@ -185,6 +187,8 @@
     <ClCompile Include="ProjectileSystem.cpp">
       <Filter>GHComponents</Filter>
     </ClCompile>
-    <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="Projectile.cpp">
+      <Filter>GHComponents</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

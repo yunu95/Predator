@@ -25,10 +25,10 @@ private:
 	};
 
 	FSM<UnitState>* unitFSM;
-	ProjectileSystem* m_projectileSystem;
 
 protected:
 	float m_speed;
+	float m_bulletSpeed;
 
 	bool isInIDRange;
 	bool isInAtkRange;
@@ -69,8 +69,6 @@ public:
 	void IdentifyTransition();
 	void ExitIDRangeTransition();
 	void SetOpponentGameObject(GameObject* obj);
-	void SetProjectile(Projectile* p_projectile);
-	void EquipMissile();
 
 protected:
 	string unitType;

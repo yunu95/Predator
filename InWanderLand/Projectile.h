@@ -5,20 +5,14 @@
 /// 움직임과 다른 유닛과 충돌 했을 경우의 로직으로 구성된다.
 /// </summary>
 
-class ProjectileSystem;
-
 class Projectile : public Component
 {
 private:
 	float m_speed = 2.0f;
-	bool isHit;
-
-	ProjectileSystem* m_projectileSystem;
+	string ownerType;
 
 public:
-	void Shoot(Vector3d endPosition);
-	
-	void SetSystem(ProjectileSystem* sys);
+	void SetOwnerType(string type);
 
 public:
 	virtual void Start() override;

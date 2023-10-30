@@ -184,10 +184,8 @@ int main(int, char**)
                 currentSpeed = flapSpeed;
         }
     };*/
-#pragma region 투사체 시스템
-    auto projectileSystemGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    auto projectileSystemComponent = projectileSystemGameObject->AddComponent<ProjectileSystem>();
-#pragma endregion
+ /*   auto projectileSystemGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    auto projectileSystemComponent = projectileSystemGameObject->AddComponent<ProjectileSystem>();*/
 
 
 
@@ -286,23 +284,23 @@ int main(int, char**)
 #pragma endregion
 
 #pragma region Enemy Projectiles
-    GameObject* enemyProjectileObjects[10];
-    Projectile* enemyProjectiles[10];
-    yunutyEngine::graphics::StaticMeshRenderer* enemyProjectileMesh[10];
-	enemytempComponent->EquipMissile();
+ //   GameObject* enemyProjectileObjects[10];
+ //   Projectile* enemyProjectiles[10];
+ //   yunutyEngine::graphics::StaticMeshRenderer* enemyProjectileMesh[10];
+	//enemytempComponent->EquipMissile();
 
-    for (int i = 0; i < 10; i++)
-    {
-        enemyProjectileObjects[i] = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        enemyProjectileObjects[i]->setName("EnemyProjectile");
-        enemyProjectileObjects[i]->AddComponent<Dotween>();
-        enemyProjectileObjects[i]->AddComponent<CircleCollider2D>();
-        enemyProjectiles[i] = enemyProjectileObjects[i]->AddComponent<Projectile>();
-        enemyProjectileMesh[i] = enemyProjectileObjects[i]->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-        enemyProjectileMesh[i]->GetGI().LoadMesh("Capsule");
-        enemyProjectileMesh[i]->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 0 });
-        enemytempComponent->SetProjectile(enemyProjectiles[i]);
-    }
+ //   for (int i = 0; i < 10; i++)
+ //   {
+ //       enemyProjectileObjects[i] = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+ //       enemyProjectileObjects[i]->setName("EnemyProjectile");
+ //       enemyProjectileObjects[i]->AddComponent<Dotween>();
+ //       enemyProjectileObjects[i]->AddComponent<CircleCollider2D>();
+ //       enemyProjectiles[i] = enemyProjectileObjects[i]->AddComponent<Projectile>();
+ //       enemyProjectileMesh[i] = enemyProjectileObjects[i]->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+ //       enemyProjectileMesh[i]->GetGI().LoadMesh("Capsule");
+ //       enemyProjectileMesh[i]->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 0 });
+ //       enemytempComponent->SetProjectile(enemyProjectiles[i]);
+ //   }
 
 #pragma endregion
 
