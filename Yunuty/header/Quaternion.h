@@ -32,5 +32,6 @@ namespace yunutyEngine
         static Quaternion MakeWithForwardUp(const Vector3d& foward, const Vector3d& up);
         static Quaternion MakeWithAxes(const Vector3d& right, const Vector3d& up, const Vector3d& forward);
         static Quaternion MakeWithAxes(const Vector3f& right, const Vector3f& up, const Vector3f& forward);
+        static Quaternion Identity();
     };
 }

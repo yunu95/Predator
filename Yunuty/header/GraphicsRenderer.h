@@ -52,6 +52,7 @@ namespace yunutyEngine
             // 파일을 로드합니다. 파일을 그래픽스 파일로 인지할 수 없을 경우, 해당 파일을 무시합니다.
             void LoadFile(const char* fileName);
             // 해상도 조정 함수
+            Vector2i GetResolution();
             void SetResolution(unsigned int width, unsigned int height);
             // 렌더링이 끝난 직후 호출할 콜백함수를 지정합니다.
             void SetAfterRenderAction(const function<void()>& action);
@@ -65,7 +66,7 @@ namespace yunutyEngine
             // 수동으로 그래픽스 엔진의 업데이트 함수를 실행시킵니다.
             void ManualUpdate(float delta) { Update(delta); }
 
-            
+
             // 그래픽스 엔진의 ClickEvent를 발생시킵니다. x,y 좌표는 0에서 1 사이의 값으로 정규화되어야 하며,
             // (0,0)의 좌표는 왼쪽 위 지점에 해당합니다.
             // 이 함수는 그래픽스 객체에 대응되는 EventHandler 객체의 이벤트 함수를 호출합니다.
@@ -88,6 +89,7 @@ namespace yunutyEngine
         private:
             static unique_ptr<Renderer> instance;
             function<void()> afterRenderAction{ []() {} };
+            Vector2i resolution;
             //function<void(yunuGI::IRenderable*)> clickEventCallback{ [](yunuGI::IRenderable*) {} };
             friend yunutyEngine::YunutyCycle;
             friend yunutyEngine::graphics::_YunuGIObjects;
