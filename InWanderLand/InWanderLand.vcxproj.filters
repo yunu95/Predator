@@ -4,6 +4,36 @@
     <Filter Include="sources">
       <UniqueIdentifier>{08e36723-ce4f-4cff-9662-c40801cf1acf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RTSCam">
+      <UniqueIdentifier>{4d58ffff-525b-4e6d-a64c-bf1f311430a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RoamingCam">
+      <UniqueIdentifier>{2d512d5b-fcbf-459a-af2e-e0419a2af7d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CamSwitcher">
+      <UniqueIdentifier>{bf3324c5-849e-4c7f-af17-eeb0a882cc19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RecastDetourTest">
+      <UniqueIdentifier>{56c19951-ac88-4ad2-9b55-db6f941240e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugPlane">
+      <UniqueIdentifier>{028fb8ff-0f7e-465c-894d-222249262cc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugBeacon">
+      <UniqueIdentifier>{12a9b6c6-374f-4024-a2c3-3d67deff9469}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TerrainEditor">
+      <UniqueIdentifier>{bdeb32c3-9345-46aa-9876-48fd5865c87c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugMeshes">
+      <UniqueIdentifier>{63795638-a23d-4b7e-a43d-3da8d1088678}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RTSTerrain">
+      <UniqueIdentifier>{35902296-3a53-47ef-a7ac-de94b5000e79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PeriodicAction">
+      <UniqueIdentifier>{d31814ce-faa7-415f-8b5a-672e90071988}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Editor">
       <UniqueIdentifier>{a8da4320-0b8b-4bf9-8101-466d6da6cfeb}</UniqueIdentifier>
     </Filter>
@@ -59,6 +89,36 @@
     </ClInclude>
     <ClInclude Include="ContentsLayer.h">
       <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="RTSCam.h">
+      <Filter>RTSCam</Filter>
+    </ClInclude>
+    <ClInclude Include="RoamingCam.h">
+      <Filter>RoamingCam</Filter>
+    </ClInclude>
+    <ClInclude Include="CamSwitcher.h">
+      <Filter>CamSwitcher</Filter>
+    </ClInclude>
+    <ClInclude Include="RequestDetourTest.h">
+      <Filter>RecastDetourTest</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugTilePlane.h">
+      <Filter>DebugPlane</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugBeacon.h">
+      <Filter>DebugBeacon</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainEditor.h">
+      <Filter>TerrainEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugMeshes.h">
+      <Filter>DebugMeshes</Filter>
+    </ClInclude>
+    <ClInclude Include="PeriodicAction.h">
+      <Filter>PeriodicAction</Filter>
+    </ClInclude>
+    <ClInclude Include="RTSTerrain.h">
+      <Filter>RTSTerrain</Filter>
     </ClInclude>
     <ClInclude Include="ShakyCam.h">
       <Filter>Contents</Filter>
@@ -128,6 +188,18 @@
     <ClCompile Include="Application.cpp">
       <Filter>sources</Filter>
     </ClCompile>
+    <ClCompile Include="RTSCam.cpp">
+      <Filter>RTSCam</Filter>
+    </ClCompile>
+    <ClCompile Include="RoamingCam.cpp">
+      <Filter>RoamingCam</Filter>
+    </ClCompile>
+    <ClCompile Include="CamSwitcher.cpp">
+      <Filter>CamSwitcher</Filter>
+    </ClCompile>
+    <ClCompile Include="RequestDetourTest.cpp">
+      <Filter>RecastDetourTest</Filter>
+    </ClCompile>
     <ClCompile Include="EditorEvents.cpp">
       <Filter>Editor\Events</Filter>
     </ClCompile>
@@ -164,5 +236,7 @@
     <ClCompile Include="ProgramExitCommand.cpp">
       <Filter>Editor\Commands\MenubarCommands</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\YunutyEngineDemo\main_alt.cpp" />
   </ItemGroup>
 </Project>

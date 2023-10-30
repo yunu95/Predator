@@ -121,18 +121,6 @@
     <Filter Include="yunutyEngine\Interval">
       <UniqueIdentifier>{9bb6c81b-45ad-4086-8af7-90e90ba8470b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="yunutyEngine\NavigationField2D">
-      <UniqueIdentifier>{e4dce237-68af-47ff-94b3-b4e59232a33c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="yunutyEngine\NavigationUnit2D">
-      <UniqueIdentifier>{ef5f6ac6-4762-4e1c-8d95-523f1f7f4bd5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="yunutyEngine\NavigationUnit2DState">
-      <UniqueIdentifier>{b73e7163-071d-4c30-b9ee-709cad9dcc22}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="yunutyEngine\NavigationUnit2DReport">
-      <UniqueIdentifier>{f6fe8166-bf7c-4d7e-a4d3-0684e6b40a49}</UniqueIdentifier>
-    </Filter>
     <Filter Include="yunutyEngine\cache">
       <UniqueIdentifier>{7736d455-84a8-4f78-a489-5035ee785362}</UniqueIdentifier>
     </Filter>
@@ -241,6 +229,36 @@
     <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\SkinnedMesh">
       <UniqueIdentifier>{fc00bea1-cbc2-4fe8-91ff-5823930dfbdc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="pch">
+      <UniqueIdentifier>{b2b675e2-1dab-40be-a750-c0c6f036b20b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\NavigationSystem">
+      <UniqueIdentifier>{c3baa169-680d-464d-80fe-a388d8da09e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\NavigationSystem\NavigationUnit2DState">
+      <UniqueIdentifier>{b73e7163-071d-4c30-b9ee-709cad9dcc22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\NavigationSystem\NavigationField2D">
+      <UniqueIdentifier>{e4dce237-68af-47ff-94b3-b4e59232a33c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\NavigationSystem\NavigationUnit2D">
+      <UniqueIdentifier>{ef5f6ac6-4762-4e1c-8d95-523f1f7f4bd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\NavigationSystem\NavigationUnit2DReport">
+      <UniqueIdentifier>{f6fe8166-bf7c-4d7e-a4d3-0684e6b40a49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\NavigationSystem\RecastDetour">
+      <UniqueIdentifier>{4368c7e2-9a4e-48eb-b561-14c37f7885e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\NavigationSystem\RecastDetour\header">
+      <UniqueIdentifier>{a48032ed-482b-40f6-80ca-5685475df508}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\NavigationSystem\RecastDetour\source">
+      <UniqueIdentifier>{31ca7e3b-bf9e-45c6-85ef-ad47e47ca082}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ClientTemplate">
+      <UniqueIdentifier>{c2f86423-113b-4f7e-bb77-e530e31e8781}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -322,13 +340,13 @@
       <Filter>yunutyEngine\Interval</Filter>
     </ClCompile>
     <ClCompile Include="NavigationField2D.cpp">
-      <Filter>yunutyEngine\NavigationField2D</Filter>
+      <Filter>yunutyEngine\NavigationSystem\NavigationField2D</Filter>
     </ClCompile>
     <ClCompile Include="NavigationUnit2D.cpp">
-      <Filter>yunutyEngine\NavigationUnit2D</Filter>
+      <Filter>yunutyEngine\NavigationSystem\NavigationUnit2D</Filter>
     </ClCompile>
     <ClCompile Include="NavigationUnit2DReport.cpp">
-      <Filter>yunutyEngine\NavigationUnit2DReport</Filter>
+      <Filter>yunutyEngine\NavigationSystem\NavigationUnit2DReport</Filter>
     </ClCompile>
     <ClCompile Include="Random.cpp">
       <Filter>yunutyEngine\math\Random</Filter>
@@ -386,6 +404,63 @@
     </ClCompile>
     <ClCompile Include="YunutySkinnedMesh.cpp">
       <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\SkinnedMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>pch</Filter>
+    </ClCompile>
+    <ClCompile Include="ConvexVolumeTool.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="CrowdTool.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Filelist.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="InputGeom.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshLoaderObj.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="NavMeshPruneTool.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="NavMeshTesterTool.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="OffMeshConnectionTool.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="PerfTimer.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Sample.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Sample_Debug.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Sample_SoloMesh.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Sample_TempObstacles.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="Sample_TileMesh.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="SampleInterfaces.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCase.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="ValueHistory.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="ChunkyTriMesh.cpp">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -474,16 +549,16 @@
       <Filter>yunutyEngine\Interval</Filter>
     </ClInclude>
     <ClInclude Include="header\NavigationField2D.h">
-      <Filter>yunutyEngine\NavigationField2D</Filter>
+      <Filter>yunutyEngine\NavigationSystem\NavigationField2D</Filter>
     </ClInclude>
     <ClInclude Include="header\NavigationUnit2D.h">
-      <Filter>yunutyEngine\NavigationUnit2D</Filter>
+      <Filter>yunutyEngine\NavigationSystem\NavigationUnit2D</Filter>
     </ClInclude>
     <ClInclude Include="header\NavigationUnit2DState.h">
-      <Filter>yunutyEngine\NavigationUnit2DState</Filter>
+      <Filter>yunutyEngine\NavigationSystem\NavigationUnit2DState</Filter>
     </ClInclude>
     <ClInclude Include="header\NavigationUnit2DReport.h">
-      <Filter>yunutyEngine\NavigationUnit2DReport</Filter>
+      <Filter>yunutyEngine\NavigationSystem\NavigationUnit2DReport</Filter>
     </ClInclude>
     <ClInclude Include="header\CanvasRenderSpace.h">
       <Filter>yunutyEngine</Filter>
@@ -568,6 +643,60 @@
     </ClInclude>
     <ClInclude Include="header\YunutyStringConversion.h">
       <Filter>yunutyEngine\yunutyUtility\StringConversion</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkyTriMesh.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="ConvexVolumeTool.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="CrowdTool.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="Filelist.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="InputGeom.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshLoaderObj.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="NavMeshPruneTool.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="NavMeshTesterTool.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="OffMeshConnectionTool.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="PerfTimer.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="Sample.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="Sample_Debug.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="Sample_SoloMesh.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="Sample_TempObstacles.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="Sample_TileMesh.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="SampleInterfaces.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="TestCase.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="ValueHistory.h">
+      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

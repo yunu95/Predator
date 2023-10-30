@@ -5,7 +5,6 @@
 #include <string>
 
 #include <d3d11.h>
-
 #include "Struct.h"
 
 class Mesh
