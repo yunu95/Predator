@@ -110,7 +110,6 @@
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
-
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -127,7 +126,10 @@
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
-
+    <PostBuildEvent>
+      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0
+xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -149,7 +151,6 @@
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
-
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -171,7 +172,6 @@
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
-
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\backends\imgui_impl_dx11.h" />
