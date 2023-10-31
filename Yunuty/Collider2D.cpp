@@ -47,10 +47,12 @@ void Collider2D::InvokeCollisionEvents()
         {
             meanColliderArea += collider->GetArea();
             auto pos = collider->GetTransform()->GetWorldPosition();
+            // x축과 직교하는 다른 축의 성분, 콜라이더들이 XY평면에 있다면 y축 성분, XZ평면 위에 있다면 z축 성분이 된다. 
+            const double xOrth = isOnXYPlane ? pos.y : pos.z;
             if (!rectInitialized)
             {
                 left = right = pos.x;
-                top = bottom = isOnXYPlane ? pos.y : pos.z;
+                top = bottom = xOrth;
                 rectInitialized = true;
                 continue;
             }
@@ -60,9 +62,9 @@ void Collider2D::InvokeCollisionEvents()
             if (pos.x < left)
                 left = pos.x;
             if (pos.y > top)
-                top = pos.y;
+                top = xOrth;
             if (pos.y < bottom)
-                bottom = pos.y;
+                bottom = xOrth;
         }
         meanColliderArea /= activeColliders.size();
 

@@ -30,13 +30,12 @@ public:
             if (yunutyEngine::Input::isKeyDown(KeyCode::D) || lastMousePos.x > 1)
                 deltaDirection += Vector3d::right;
             if (yunutyEngine::Input::isKeyDown(KeyCode::W) || lastMousePos.y < 0)
-                deltaDirection += Vector3d::forward;
+                deltaDirection += Vector3d::up;
             if (yunutyEngine::Input::isKeyDown(KeyCode::S) || lastMousePos.y > 1)
-                deltaDirection -= Vector3d::forward;
+                deltaDirection -= Vector3d::up;
 
             GetTransform()->position += deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed;
-            Quaternion quat = Quaternion::MakeWithForwardUp(Vector3d::down,Vector3d::forward);
-            GetTransform()->rotation = quat;
+            GetTransform()->rotation = Quaternion::Identity();
         }
         else
         {
@@ -94,8 +93,8 @@ public:
             auto resolution = graphics::Renderer::SingleInstance().GetResolution();
             auto centeredPosition = Input::getMouseScreenPositionNormalized();
             centeredPosition.x -= 0.5;
-            centeredPosition.y -= 0.5;
-            centeredPosition.y *= -1;
+			centeredPosition.y -= 0.5;
+			centeredPosition.y *= -1;
             // 카메라 해상도가 1280, 800일때 near plane의 가로가 1.28, 0.8임.
             auto forward = GetTransform()->GetWorldRotation().Forward();
             auto right = GetTransform()->GetWorldRotation().Right();
@@ -106,7 +105,8 @@ public:
                 up * centeredPosition.y * 0.001 * resolution.y * expectedPlaneDistance();
 
             if (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick))
-                DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?  yunuGI::Color::red() : yunuGI::Color::blue(), { 0.2,0.2,0.2 });
+                DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?
+                    yunuGI::Color::red() : yunuGI::Color::blue(), { 0.2,0.2,0.2 });
             if (Input::isKeyPushed(KeyCode::MouseLeftClick))
                 groundLeftClickCallback(projectedPoint);
             else if (Input::isKeyPushed(KeyCode::MouseRightClick))
@@ -116,6 +116,6 @@ public:
         }
     }
 private:
-    float expectedPlaneDistance() { return abs(GetTransform()->GetWorldPosition().y); };
+    float expectedPlaneDistance() { return abs(GetTransform()->GetWorldPosition().z); };
 };
 

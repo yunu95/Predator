@@ -1,14 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="imgui">
-      <UniqueIdentifier>{0587d7a3-f2ce-4d56-b84f-a0005d3bfce6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sources">
       <UniqueIdentifier>{08e36723-ce4f-4cff-9662-c40801cf1acf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scripts">
-      <UniqueIdentifier>{121d28b6-c354-41fd-9b67-492aa15aa2b0}</UniqueIdentifier>
     </Filter>
     <Filter Include="RTSCam">
       <UniqueIdentifier>{4d58ffff-525b-4e6d-a64c-bf1f311430a2}</UniqueIdentifier>
@@ -28,53 +22,73 @@
     <Filter Include="DebugBeacon">
       <UniqueIdentifier>{12a9b6c6-374f-4024-a2c3-3d67deff9469}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GHComponents">
-      <UniqueIdentifier>{68ccfbdd-83a9-4083-b6a0-7794bda5e09e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GHComponents\Dotween">
-      <UniqueIdentifier>{f412aa5f-6d0c-4d12-886c-cc62b5a8eeaf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GHComponents\IRangeAction">
-      <UniqueIdentifier>{c5e170ca-14c5-4a76-99f7-69d515abc7b0}</UniqueIdentifier>
+    <Filter Include="TerrainEditor">
+      <UniqueIdentifier>{bdeb32c3-9345-46aa-9876-48fd5865c87c}</UniqueIdentifier>
     </Filter>
     <Filter Include="DebugMeshes">
       <UniqueIdentifier>{63795638-a23d-4b7e-a43d-3da8d1088678}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Path">
-      <UniqueIdentifier>{fd700d27-99c8-48fe-a7fa-d50f17beb154}</UniqueIdentifier>
+    <Filter Include="RTSTerrain">
+      <UniqueIdentifier>{35902296-3a53-47ef-a7ac-de94b5000e79}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PathEditor">
-      <UniqueIdentifier>{bdeb32c3-9345-46aa-9876-48fd5865c87c}</UniqueIdentifier>
+    <Filter Include="PeriodicAction">
+      <UniqueIdentifier>{d31814ce-faa7-415f-8b5a-672e90071988}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor">
+      <UniqueIdentifier>{a8da4320-0b8b-4bf9-8101-466d6da6cfeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Panel">
+      <UniqueIdentifier>{076edac7-36b3-4f60-9a8d-fe25c71eb05e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents">
+      <UniqueIdentifier>{1c4fad8c-dd4d-4667-b404-8bfe4834498e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\imgui">
+      <UniqueIdentifier>{0587d7a3-f2ce-4d56-b84f-a0005d3bfce6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Events">
+      <UniqueIdentifier>{54eeffd8-024b-4977-9705-73efefd2d99a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Panel\List">
+      <UniqueIdentifier>{8eccc7d3-f91f-4e56-aa6d-13596ef88423}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Commands">
+      <UniqueIdentifier>{d1157612-53f5-422c-904b-39d5c1028d08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Commands\MenubarCommands">
+      <UniqueIdentifier>{59aa71fe-8d68-4297-8598-553d8498282d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataStructure">
+      <UniqueIdentifier>{df3d0462-035e-4bad-98d4-634df95d5b42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ShakyCam.h" />
-    <ClInclude Include="..\Include\ImGui\backends\imgui_impl_dx11.h">
-      <Filter>sources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\ImGui\backends\imgui_impl_win32.h">
-      <Filter>sources</Filter>
-    </ClInclude>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
-      <Filter>imgui</Filter>
+      <Filter>Editor\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\ImGui\imgui.h">
-      <Filter>imgui</Filter>
+      <Filter>Editor\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\ImGui\imgui_internal.h">
-      <Filter>imgui</Filter>
+      <Filter>Editor\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Dotween.h">
-      <Filter>GHComponents\Dotween</Filter>
+    <ClInclude Include="..\Include\ImGui\backends\imgui_impl_dx11.h">
+      <Filter>Editor\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="DotweenTimer.h">
-      <Filter>GHComponents\Dotween</Filter>
+    <ClInclude Include="..\Include\ImGui\backends\imgui_impl_win32.h">
+      <Filter>Editor\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="DotweenTimerPool.h">
-      <Filter>GHComponents\Dotween</Filter>
+    <ClInclude Include="Application.h">
+      <Filter>sources</Filter>
     </ClInclude>
-    <ClInclude Include="Easing.h">
-      <Filter>GHComponents\Dotween</Filter>
+    <ClInclude Include="Layer.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorEvents.h">
+      <Filter>Editor\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsLayer.h">
+      <Filter>Contents</Filter>
     </ClInclude>
     <ClInclude Include="RTSCam.h">
       <Filter>RTSCam</Filter>
@@ -94,74 +108,115 @@
     <ClInclude Include="DebugBeacon.h">
       <Filter>DebugBeacon</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>GHComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="RangeSystem.h">
-      <Filter>GHComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="FSM.h">
-      <Filter>GHComponents\IRangeAction</Filter>
-    </ClInclude>
-    <ClInclude Include="Unit.h">
-      <Filter>GHComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="PathEditor.h">
-      <Filter>PathEditor</Filter>
+    <ClInclude Include="TerrainEditor.h">
+      <Filter>TerrainEditor</Filter>
     </ClInclude>
     <ClInclude Include="DebugMeshes.h">
       <Filter>DebugMeshes</Filter>
     </ClInclude>
-    <ClInclude Include="PathField.h">
-      <Filter>Path</Filter>
+    <ClInclude Include="PeriodicAction.h">
+      <Filter>PeriodicAction</Filter>
     </ClInclude>
-    <ClInclude Include="ProjectileSystem.h">
-      <Filter>GHComponents</Filter>
+    <ClInclude Include="RTSTerrain.h">
+      <Filter>RTSTerrain</Filter>
+    </ClInclude>
+    <ClInclude Include="ShakyCam.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorLayer.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorPanel.h">
+      <Filter>Editor\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel_CameraView.h">
+      <Filter>Editor\Panel\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel_Hierarchy.h">
+      <Filter>Editor\Panel\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel_Inspector.h">
+      <Filter>Editor\Panel\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel_MiniMap.h">
+      <Filter>Editor\Panel\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel_SceneView.h">
+      <Filter>Editor\Panel\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Editor\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandManager.h">
+      <Filter>Editor\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgramExitCommand.h">
+      <Filter>Editor\Commands\MenubarCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="MenubarCommands.h">
+      <Filter>Editor\Commands\MenubarCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="CircularQueue.h">
+      <Filter>Editor\DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="Dotween.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="DotweenTimer.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="DotweenTimerPool.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="Easing.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="FSM.h">
+      <Filter>Contents</Filter>
     </ClInclude>
     <ClInclude Include="Projectile.h">
-      <Filter>GHComponents</Filter>
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileSystem.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="RangeSystem.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>Contents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ShakyCam.cpp" />
-    <ClCompile Include="main_alt.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Include\ImGui\backends\imgui_impl_win32.cpp">
+    <ClCompile Include="EntryPoint.cpp">
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="..\Include\ImGui\imgui.cpp">
-      <Filter>imgui</Filter>
+      <Filter>Editor\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Include\ImGui\imgui_demo.cpp">
-      <Filter>imgui</Filter>
+      <Filter>Editor\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Include\ImGui\imgui_draw.cpp">
-      <Filter>imgui</Filter>
+      <Filter>Editor\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Include\ImGui\imgui_tables.cpp">
-      <Filter>imgui</Filter>
+      <Filter>Editor\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Include\ImGui\imgui_widgets.cpp">
-      <Filter>imgui</Filter>
+      <Filter>Editor\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Include\ImGui\backends\imgui_impl_win32.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
       <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Dotween.cpp">
-      <Filter>GHComponents\Dotween</Filter>
-    </ClCompile>
-    <ClCompile Include="DotweenTimer.cpp">
-      <Filter>GHComponents\Dotween</Filter>
-    </ClCompile>
-    <ClCompile Include="DotweenTimerPool.cpp">
-      <Filter>GHComponents\Dotween</Filter>
-    </ClCompile>
-    <ClCompile Include="Easing.cpp">
-      <Filter>GHComponents\Dotween</Filter>
     </ClCompile>
     <ClCompile Include="RTSCam.cpp">
       <Filter>RTSCam</Filter>
@@ -175,20 +230,70 @@
     <ClCompile Include="RequestDetourTest.cpp">
       <Filter>RecastDetourTest</Filter>
     </ClCompile>
+    <ClCompile Include="EditorEvents.cpp">
+      <Filter>Editor\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsLayer.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="ShakyCam.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorLayer.cpp">
+      <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorPanel.cpp">
+      <Filter>Editor\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel_CameraView.cpp">
+      <Filter>Editor\Panel\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel_Hierarchy.cpp">
+      <Filter>Editor\Panel\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel_Inspector.cpp">
+      <Filter>Editor\Panel\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel_MiniMap.cpp">
+      <Filter>Editor\Panel\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel_SceneView.cpp">
+      <Filter>Editor\Panel\List</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandManager.cpp">
+      <Filter>Editor\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgramExitCommand.cpp">
+      <Filter>Editor\Commands\MenubarCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\YunutyEngineDemo\main_alt.cpp" />
+    <ClCompile Include="Dotween.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>GHComponents</Filter>
+      <Filter>Contents</Filter>
     </ClCompile>
-    <ClCompile Include="RangeSystem.cpp">
-      <Filter>GHComponents</Filter>
+    <ClCompile Include="DotweenTimer.cpp">
+      <Filter>Contents</Filter>
     </ClCompile>
-    <ClCompile Include="Unit.cpp">
-      <Filter>GHComponents</Filter>
+    <ClCompile Include="DotweenTimerPool.cpp">
+      <Filter>Contents</Filter>
     </ClCompile>
-    <ClCompile Include="ProjectileSystem.cpp">
-      <Filter>GHComponents</Filter>
+    <ClCompile Include="Easing.cpp">
+      <Filter>Contents</Filter>
     </ClCompile>
     <ClCompile Include="Projectile.cpp">
-      <Filter>GHComponents</Filter>
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileSystem.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="RangeSystem.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>Contents</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
