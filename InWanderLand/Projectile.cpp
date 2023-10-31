@@ -18,6 +18,6 @@ void Projectile::OnCollisionEnter2D(const Collision2D& collision)
 	if (collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>() != nullptr && 
 		collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>()->GetType() != ownerType)
 	{
-		ProjectileSystem::GetInstance()->ReturnToPool(GetGameObject());
+		ProjectileSystem::GetInstance()->ReturnToPool(collision.m_Collider->GetGameObject());
 	}
 }

@@ -199,7 +199,7 @@ int main(int, char**)
 
     auto playerComponent = playerGameObject->AddComponent<Player>();
 
-    //auto playerCollider = playerGameObject->AddComponent<Collider>();
+    auto playerCollider = playerGameObject->AddComponent<CircleCollider2D>();
 
     playerGameObject->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{1, 0, 0});
 
@@ -274,7 +274,7 @@ int main(int, char**)
    
     auto enemytempComponent = ememyGameObject->AddComponent<Unit>();
 
-    ememyGameObject->AddComponent<CircleCollider2D>();
+    auto enemyCollider = ememyGameObject->AddComponent<CircleCollider2D>();
 
     enemyMesh->GetGI().LoadMesh("Capsule");
     enemyMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 1, 0 });

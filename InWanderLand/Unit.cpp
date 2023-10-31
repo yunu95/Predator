@@ -7,7 +7,7 @@ void Unit::Start()
 {
 	unitType = "Enemy";
 	m_speed = 5.0f;
-	m_bulletSpeed = 2.0f;
+	m_bulletSpeed = 1.0f;
 	isInIDRange = false;
 	isInAtkRange = false;
 	isOutIDRange = false;
