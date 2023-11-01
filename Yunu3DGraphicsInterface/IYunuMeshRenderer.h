@@ -9,8 +9,8 @@ namespace yunuGI
 	class IMeshRenderer : public IRenderable
 	{
 	public:
-		virtual void SetMaterial(IMaterial* material) = 0;
-		virtual IMaterial* GetMaterial() = 0;
+		virtual void SetMaterial(unsigned int index, IMaterial* material) = 0;
+		virtual IMaterial* GetMaterial(unsigned int index = 0) = 0;
 
 	};
 }

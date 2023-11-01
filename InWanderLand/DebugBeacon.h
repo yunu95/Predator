@@ -19,7 +19,7 @@ public:
         debugBeacon->debugSphere = staticMesh;
         debugBeacon->maxScale = scale;
         debugBeacon->duration = duration;
-        staticMesh->GetGI().LoadMesh("Sphere");
+        staticMesh->GetGI().SetMesh(L"Sphere");
         staticMesh->GetGI().GetMaterial()->SetColor(color);
         // ¿ÍÀÌ¾î
         //staticMesh->GetGI().GetMaterial()->SetPixelShader(L"DebugPS.cso");

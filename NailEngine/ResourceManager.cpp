@@ -10,9 +10,15 @@ using namespace DirectX::PackedVector;
 
 #include "VertexShader.h"
 #include "PixelShader.h"
+#include "ResourceBuilder.h"
+#include "Device.h"
 #include "Mesh.h"
-#include "Material.h"
+#include "IMaterial.h"
 #include "Texture.h"
+
+#include "NailEngine.h"
+#include "RenderTargetGroup.h"
+
 
 LazyObjects<ResourceManager> ResourceManager::Instance;
 
@@ -20,8 +26,8 @@ void ResourceManager::CreateDefaultResource()
 {
 	CreateDefaultShader();
 	CreateDefaultMesh();
-	CreateDefaultMaterial();
 	CreateDefaultTexture();
+	CreateDefaultMaterial();
 }
 
 void ResourceManager::CreateShader(const std::wstring& shaderPath)
@@ -119,8 +125,46 @@ void ResourceManager::CreateTexture(const std::wstring& texturePath)
 	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 
 	texture->LoadTexture(texturePath);
+	texture->SetName(texturePath);
 
 	textureMap.insert({ texturePath, texture });
+}
+
+std::shared_ptr<Texture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, unsigned int bindFlag)
+{
+	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+
+	texture->CreateTexture(texturePath, width, height, format, bindFlag);
+	texture->SetName(texturePath);
+
+	textureMap.insert({ texturePath, texture });
+
+
+
+	return texture;
+}
+
+std::shared_ptr<Texture>& ResourceManager::CreateTextureFromResource(const std::wstring& texturePath, Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D)
+{
+	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+
+	texture->CreateFromResource(tex2D);
+	texture->SetName(texturePath);
+
+	textureMap.insert({ texturePath, texture });
+
+	return texture;
+}
+
+void ResourceManager::LoadFBX(const char* filePath)
+{
+	FBXNode node = FBXLoader::Instance.Get().LoadFBXData(filePath);
+
+	std::vector<FBXData> dataVec;
+	std::wstring fbxName = std::filesystem::path(filePath).stem().wstring();
+	this->fbxDataVecMap.insert({ fbxName, dataVec });
+	
+	FillFBXData(fbxName, node, this->fbxDataVecMap.find(fbxName)->second);
 }
 
 std::shared_ptr<yunuGIAdapter::MaterialAdapter>& ResourceManager::GetMaterial(const std::wstring& materialName)
@@ -157,8 +201,45 @@ std::shared_ptr<Mesh>& ResourceManager::GetMesh(const std::wstring& meshName)
 std::shared_ptr<Texture>& ResourceManager::GetTexture(const std::wstring& textureName)
 {
 	auto iter = textureMap.find(textureName);
-	assert(iter != textureMap.end());
+	if (iter != textureMap.end())
+	{
+		return iter->second;
+	}
 
+	auto& renderTargetGroupVec = NailEngine::Instance.Get().GetRenderTargetGroup();
+
+	if (textureName == L"D_Position")
+	{
+		return renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION));
+	}
+	else if (textureName == L"D_Normal")
+	{
+		return renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(NORMAL));
+	}
+	else if (textureName == L"D_Albedo")
+	{
+		return renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ALBEDO));
+	}
+	else if (textureName == L"D_Depth")
+	{
+		return renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(DEPTH));
+	}
+	else if (textureName == L"D_DiffuseLight")
+	{
+		return renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(DIFFUSE));
+	}
+	else if (textureName == L"D_SpecularLight")
+	{
+		return renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR));
+	}
+}
+
+std::vector<FBXData>& ResourceManager::GetFBXData(const std::string fbxName)
+{
+	std::wstring fbxNameW = std::wstring{ fbxName.begin(), fbxName.end() };
+
+	auto iter = this->fbxDataVecMap.find(fbxNameW);
+	assert(iter != this->fbxDataVecMap.end());
 	return iter->second;
 }
 
@@ -166,11 +247,17 @@ void ResourceManager::CreateDefaultShader()
 {
 #pragma region VS
 	CreateShader(L"DefaultVS.cso");
+	CreateShader(L"Deferred_DirectionalLightVS.cso");
+	CreateShader(L"Deferred_FinalVS.cso");
+	CreateShader(L"TextureVS.cso");
 #pragma endregion
 
 #pragma region PS
 	CreateShader(L"DefaultPS.cso");
 	CreateShader(L"DebugPS.cso");
+	CreateShader(L"Deferred_DirectionalLightPS.cso");
+	CreateShader(L"Deferred_FinalPS.cso");
+	CreateShader(L"TexturePS.cso");
 #pragma endregion
 }
 
@@ -193,6 +280,92 @@ void ResourceManager::CreateDefaultMaterial()
 		yunuGI::MaterialDesc desc;
 		CrateMaterial(desc);
 	}
+
+	// DirectionalLight
+	{
+		yunuGI::MaterialDesc desc;
+		desc.materialName = L"Deferred_DirectionalLight";
+		yunuGI::IMaterial* material = CrateMaterial(desc);
+		material->SetVertexShader(L"Deferred_DirectionalLightVS.cso");
+		material->SetPixelShader(L"Deferred_DirectionalLightPS.cso");
+		material->SetTexture(yunuGI::Texture_Type::Temp0, L"D_Position");
+		material->SetTexture(yunuGI::Texture_Type::Temp1, L"D_Normal");
+	}
+
+	// Deferred_Final
+	{
+		yunuGI::MaterialDesc desc;
+		desc.materialName = L"Deferred_Final";
+		yunuGI::IMaterial* material = CrateMaterial(desc);
+		material->SetVertexShader(L"Deferred_FinalVS.cso");
+		material->SetPixelShader(L"Deferred_FinalPS.cso");
+		material->SetTexture(yunuGI::Texture_Type::Temp0, L"D_Albedo");
+		material->SetTexture(yunuGI::Texture_Type::Temp1, L"D_DiffuseLight");
+		material->SetTexture(yunuGI::Texture_Type::Temp2, L"D_SpecularLight");
+	}
+
+	/// Deferred Debug Info
+	{
+		{
+			// Position
+			yunuGI::MaterialDesc desc;
+			desc.materialName = L"DeferredPosition";
+			yunuGI::IMaterial* material = CrateMaterial(desc);
+			material->SetPixelShader(L"TexturePS.cso");
+			material->SetVertexShader(L"TextureVS.cso");
+			material->SetTexture(yunuGI::Texture_Type::Temp0, L"D_Position");
+		}
+
+		{
+			// Normal
+			yunuGI::MaterialDesc desc;
+			desc.materialName = L"DeferredNormal";
+			yunuGI::IMaterial* material = CrateMaterial(desc);
+			material->SetPixelShader(L"TexturePS.cso");
+			material->SetVertexShader(L"TextureVS.cso");
+			material->SetTexture(yunuGI::Texture_Type::Temp0, L"D_Normal");
+		}
+
+		{
+			// Color
+			yunuGI::MaterialDesc desc;
+			desc.materialName = L"DeferredColor";
+			yunuGI::IMaterial* material = CrateMaterial(desc);
+			material->SetPixelShader(L"TexturePS.cso");
+			material->SetVertexShader(L"TextureVS.cso");
+			material->SetTexture(yunuGI::Texture_Type::Temp0, L"D_Albedo");
+		}
+
+		{
+			// Depth
+			yunuGI::MaterialDesc desc;
+			desc.materialName = L"DeferredDepth";
+			yunuGI::IMaterial* material = CrateMaterial(desc);
+			material->SetPixelShader(L"TexturePS.cso");
+			material->SetVertexShader(L"TextureVS.cso");
+			material->SetTexture(yunuGI::Texture_Type::Temp0, L"D_Depth");
+		}
+
+		{
+			// DiffuseLight
+			yunuGI::MaterialDesc desc;
+			desc.materialName = L"DeferredDiffuseLight";
+			yunuGI::IMaterial* material = CrateMaterial(desc);
+			material->SetPixelShader(L"TexturePS.cso");
+			material->SetVertexShader(L"TextureVS.cso");
+			material->SetTexture(yunuGI::Texture_Type::Temp0, L"D_DiffuseLight");
+		}
+
+		{
+			// SpecularLight
+			yunuGI::MaterialDesc desc;
+			desc.materialName = L"DeferredSpecularLight";
+			yunuGI::IMaterial* material = CrateMaterial(desc);
+			material->SetPixelShader(L"TexturePS.cso");
+			material->SetVertexShader(L"TextureVS.cso");
+			material->SetTexture(yunuGI::Texture_Type::Temp0, L"D_SpecularLight");
+		}
+	}
 }
 
 void ResourceManager::CreateDefaultTexture()
@@ -200,6 +373,83 @@ void ResourceManager::CreateDefaultTexture()
 	CreateTexture(L"Texture/zoro.jpg");
 	CreateTexture(L"Texture/Brick_Albedo.jpg");
 	CreateTexture(L"Texture/Brick_Normal.jpg");
+}
+
+void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode& node, std::vector<FBXData>& dataVec)
+{
+	for (int i = 0; i < node.meshVec.size(); ++i)
+	{
+		auto iter = this->meshMap.find(node.meshVec[i].meshName);
+
+		// 이미 메쉬 데이터가 있다면 이 메쉬는 다중 머터리얼임
+		if (iter != this->meshMap.end())
+		{
+			iter->second->SetData(node.meshVec[i].vertex, node.meshVec[i].indices);
+
+			for (auto& e : this->fbxDataVecMap.find(fbxName)->second)
+			{
+				if (e.meshName != node.meshVec[i].meshName) continue;
+
+				CreateResourceFromFBX(node.meshVec[i], this->fbxDataVecMap.find(fbxName)->second, e);
+			}
+		}
+		else
+		{
+			// 메쉬 데이터가 없다면 메쉬를 생성 후 삽입
+			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
+			mesh->SetMeshName(node.meshVec[i].meshName);
+			mesh->SetData(node.meshVec[i].vertex, node.meshVec[i].indices);
+			meshMap.insert({ node.meshVec[i].meshName,mesh });
+
+			FBXData data;
+			CreateResourceFromFBX(node.meshVec[i], dataVec,  data);
+		}
+	}
+
+	for (int i = 0; i < node.child.size(); ++i)
+	{
+		FillFBXData(fbxName, node.child[i], dataVec);
+	}
+}
+
+void ResourceManager::CreateResourceFromFBX(FBXMeshData& meshData, std::vector<FBXData>& dataVec, FBXData& fbxData)
+{
+	// Fill FBXData 
+	FBXData _data;
+	// 1. Mesh Name Set
+	_data.meshName = meshData.meshName;
+	// 2. Material Set
+	MaterialData materialData;
+	materialData.materialName = meshData.material.materialName;
+	materialData.albedoMap = meshData.material.albedoMap;
+	materialData.normalMap = meshData.material.normalMap;
+	materialData.armMap = meshData.material.armMap;
+	materialData.emissionMap = meshData.material.emissionMap;
+	_data.materialVec.emplace_back(materialData);
+	// Data Push
+	if (fbxData.meshName.empty())
+	{
+		dataVec.emplace_back(_data);
+	}
+	else
+	{
+		fbxData.materialVec.emplace_back(materialData);
+	}
+
+	// Create Texture
+	CreateTexture(materialData.albedoMap);
+	CreateTexture(materialData.normalMap);
+	CreateTexture(materialData.armMap);
+	CreateTexture(materialData.emissionMap);
+
+	// Create Material
+	yunuGI::MaterialDesc desc;
+	desc.materialName = materialData.materialName;
+	yunuGI::IMaterial* material = CrateMaterial(desc);
+	material->SetTexture(yunuGI::Texture_Type::ALBEDO, materialData.albedoMap);
+	material->SetTexture(yunuGI::Texture_Type::NORMAL, materialData.normalMap);
+	material->SetTexture(yunuGI::Texture_Type::ARM, materialData.armMap);
+	material->SetTexture(yunuGI::Texture_Type::EMISSION, materialData.emissionMap);
 }
 
 void ResourceManager::LoadCubeMesh()
@@ -266,7 +516,7 @@ void ResourceManager::LoadCubeMesh()
 	idx[30] = 20; idx[31] = 21; idx[32] = 22;
 	idx[33] = 20; idx[34] = 22; idx[35] = 23;
 
-	cubeMesh->Init(vec, idx);
+	cubeMesh->SetData(vec, idx);
 	meshMap.insert({ L"Cube",cubeMesh });
 }
 
@@ -385,13 +635,36 @@ void ResourceManager::LoadSphereMesh()
 		idx.push_back(lastRingStartIndex + i + 1);
 	}
 
-	sphereMesh->Init(vec, idx);
+	sphereMesh->SetData(vec, idx);
 	meshMap.insert({ L"Sphere",sphereMesh });
 }
 
 void ResourceManager::LoadRactangleMesh()
 {
+	std::shared_ptr<Mesh> rectangleMesh = std::make_shared<Mesh>();
 
+	rectangleMesh->SetMeshName(L"Rectangle");
+
+	float w2 = 0.5f;
+	float h2 = 0.5f;
+
+	std::vector<Vertex> vec(4);
+
+
+	// POS COLOR UV TANGENT
+	// 앞면
+	vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+	vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+	vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+	vec[3] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+
+	std::vector<unsigned int> idx(6);
+
+	idx[0] = 0; idx[1] = 1; idx[2] = 2;
+	idx[3] = 0; idx[4] = 2; idx[5] = 3;
+
+	rectangleMesh->SetData(vec, idx);
+	meshMap.insert({ L"Rectangle",rectangleMesh });
 }
 
 void ResourceManager::LoadPointMesh()
@@ -550,7 +823,7 @@ void ResourceManager::LoadCapsuleMesh()
 		indices.push_back(c);
 	}
 
-	capsuleMesh->Init(vertices, indices);
+	capsuleMesh->SetData(vertices, indices);
 	meshMap.insert({ L"Capsule",capsuleMesh });
 }
 
@@ -658,6 +931,6 @@ void ResourceManager::LoadCylinderMesh()
 		indices.push_back(c);
 	}
 
-	cylinderMesh->Init(vertices, indices);
+	cylinderMesh->SetData(vertices, indices);
 	meshMap.insert({ L"Cylinder",cylinderMesh });
 }

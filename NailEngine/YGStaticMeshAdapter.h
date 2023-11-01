@@ -19,8 +19,9 @@ namespace yunuGIAdapter
 			renderable = std::make_shared<StaticMesh>();
 			RenderableManager::Instance.Get().PushRenderableObject(renderable);
 
-			material = std::make_unique<MaterialWrapper>();
+			std::shared_ptr<MaterialWrapper> material = std::make_shared<MaterialWrapper>();
 			material->SetRenderable(this->renderable);
+			this->materialVec.emplace_back(material);
 		}
 
 		~StaticMeshAdapter()
@@ -35,35 +36,54 @@ namespace yunuGIAdapter
 
 		virtual void SetActive(bool isActive) {};
 
-		virtual void LoadMesh(const char* fileName)
+		virtual void SetMesh(const std::wstring& meshName) override
 		{
-			renderable->SetMeshName(std::wstring{fileName, fileName + strlen(fileName)});
+			renderable->SetMeshName(meshName);
 		};
 
 		virtual void SetPickingMode(bool isPickingModeOn) {}
 
-		virtual void SetMaterial(yunuGI::IMaterial* material) override
+		virtual void SetMaterial(unsigned int index, yunuGI::IMaterial* material) override
 		{
-			if (this->material->IsOrigin())
+			// 새로운 Material이라면
+			if (index + 1 > this->materialVec.size())
 			{
-				this->material->original = reinterpret_cast<yunuGIAdapter::MaterialAdapter*>(material);
+				std::shared_ptr<MaterialWrapper> tempMaterial = std::make_shared<MaterialWrapper>();
+				tempMaterial->SetRenderable(this->renderable);
+				this->materialVec.emplace_back(tempMaterial);
+
+				if (this->materialVec.back()->IsOrigin())
+				{
+					this->materialVec.back()->original = reinterpret_cast<yunuGIAdapter::MaterialAdapter*>(material);
+				}
+				else
+				{
+					this->materialVec.back()->variation = reinterpret_cast<yunuGIAdapter::MaterialAdapter*>(material);
+				}
 			}
 			else
 			{
-				this->material->variation = reinterpret_cast<yunuGIAdapter::MaterialAdapter*>(material);
+				if (this->materialVec[index]->IsOrigin())
+				{
+					this->materialVec[index]->original = reinterpret_cast<yunuGIAdapter::MaterialAdapter*>(material);
+				}
+				else
+				{
+					this->materialVec[index]->variation = reinterpret_cast<yunuGIAdapter::MaterialAdapter*>(material);
+				}
 			}
 
-			renderable->SetMaterial(material);
+			renderable->SetMaterial(index, material);
 		};
 
-		virtual yunuGI::IMaterial* GetMaterial()override
+		virtual yunuGI::IMaterial* GetMaterial(unsigned int index = 0)override
 		{
-			return this->material.get();
+			return this->materialVec[index].get();
 		};
 
 	private:
 		std::shared_ptr<StaticMesh> renderable;
-		std::unique_ptr<MaterialWrapper> material;
+		std::vector<std::shared_ptr<MaterialWrapper>> materialVec;
 
 	};
 }

@@ -3,6 +3,8 @@
 DirectionalLight::DirectionalLight()
 {
 	this->lightInfo.lightType = static_cast<unsigned int>(LightType::Directional);
+	this->meshName = L"Rectangle";
+	this->materialName = L"Deferred_DirectionalLight";
 }
 
 void DirectionalLight::SetLightDiffuseColor(DirectX::SimpleMath::Vector4& color)
