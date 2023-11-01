@@ -7,7 +7,7 @@ void Unit::Start()
 {
 	unitType = "Enemy";
 	m_speed = 5.0f;
-	m_bulletSpeed = 1.0f;
+	m_bulletSpeed = 5.1f;
 	isInIDRange = false;
 	isInAtkRange = false;
 	isOutIDRange = false;
@@ -60,6 +60,11 @@ void Unit::SetOpponentGameObject(GameObject* obj)
 	m_opponentGameobject = obj;
 }
 
+void Unit::StopAttack()
+{
+	isOutAtkRange = true;
+}
+
 void Unit::AttackTransition()
 {
 	isInAtkRange = true;
@@ -78,10 +83,10 @@ void Unit::AttackFunction()
 	GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });
 
 	// 투사체가 설정되어 있다면 원거리 공격을 한다.
-	ProjectileSystem::GetInstance()->Shoot(this, m_opponentGameobject->GetTransform()->GetWorldPosition(), m_bulletSpeed);
+	ProjectileSystem::GetInstance()->Shoot(this, m_opponentGameobject->GetComponent<Unit>(), m_bulletSpeed);
 
 	/// 공격 후 m_Delay간격으로 재귀를 할지, 아니면 쫓아갈 지를 정한다.
-	GetGameObject()->GetComponent<Dotween>()->DONothing(1.5f/*딜레이*/).OnComplete([this]()
+	GetGameObject()->GetComponent<Dotween>()->DONothing(0.5f/*딜레이*/).OnComplete([this]()
 		{
 			float distance = (m_opponentGameobject->GetTransform()->GetWorldPosition() - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
 			if (distance > m_AtkDistance)

@@ -70,6 +70,8 @@ public:
 	void ExitIDRangeTransition();
 	void SetOpponentGameObject(GameObject* obj);
 
+	void StopAttack();
+
 protected:
 	string unitType;
 

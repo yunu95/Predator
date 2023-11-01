@@ -23,17 +23,27 @@ void Application::Contents::ContentsLayer::Initialize()
 	auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	camObj2->setName("Camera");
 
-	camObj2->GetTransform()->position = Vector3d(0, 10, -20);
+	camObj2->GetTransform()->position = Vector3d(0, 30, 0);
 	camObj2->GetTransform()->rotation = Vector3d(0, 0, 0);
-	//camObj2->GetTransform()->SetWorldRotation(Vector3d(90, 90, 0));
 	// 지면의 좌클릭, 우클릭에 대한 콜백은 아래의 RTSCam 인스턴스에 등록할 수 있다.
 	auto rtsCam = camObj2->AddComponent<RTSCam>();
 
 	auto camSwitcher = camObj2->AddComponent<CamSwitcher>();
-	//camSwitcher->cams.push_back(roamingCam);
 	camSwitcher->cams.push_back(rtsCam);
 
 	DebugBeacon::PlaceBeacon({ 0,1,-0.5 });
+
+	/// 투사체 objectPool 셋업
+	ProjectileSystem::GetInstance()->SetUp();
+
+#pragma region Check Pattern Tiles
+	//// 체크무늬로 xy 평면을 초기화하는 클래스다.
+	auto tilePlane = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugTilePlane>();
+	tilePlane->GetGameObject()->setName("tilePlane");
+	tilePlane->width = 10;
+	tilePlane->height = 10;
+	tilePlane->SetTiles();
+#pragma endregion
 
 #pragma region Player
 	auto playerGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -60,21 +70,9 @@ void Application::Contents::ContentsLayer::Initialize()
 		Vector3d distanceVector = position - playerGameObject->GetTransform()->GetWorldPosition();
 
 		float speed = 3.0f;
-		//dotweenComponent->DOMove(Vector3d(position.x,
-		//	playerGameObject->GetTransform()->GetWorldPosition().y, position.z), distanceVector.Magnitude() / speed);
 		dotweenComponent->DOMove(Vector3d(position), distanceVector.Magnitude() / speed);
 
 	};
-
-#pragma endregion
-
-#pragma region Check Pattern Tiles
-	//// 체크무늬로 xy 평면을 초기화하는 클래스다.
-	auto tilePlane = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugTilePlane>();
-	tilePlane->GetGameObject()->setName("tilePlane");
-	tilePlane->width = 10;
-	tilePlane->height = 10;
-	tilePlane->SetTiles();
 #pragma endregion
 
 #pragma region Player Identyfication RangeSystem
