@@ -128,8 +128,7 @@
     </Link>
     <PostBuildEvent>
       <Command>if exist "$(projectdir)RuntimeDependency\resources" xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
-if exist "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K
-if exist "$(projectdir)RuntimeDependency\imgui" xcopy "$(projectdir)RuntimeDependency\imgui" "$(targetdir)" /E /C /Q /H /R /Y /K</Command>
+if exist "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -184,6 +183,9 @@ if exist "$(projectdir)RuntimeDependency\imgui" xcopy "$(projectdir)RuntimeDepen
     <ClInclude Include="DebugBeacon.h" />
     <ClInclude Include="DebugMeshes.h" />
     <ClInclude Include="DebugTilePlane.h" />
+    <ClInclude Include="PanelList.h" />
+    <ClInclude Include="Panel_Palette.h" />
+    <ClInclude Include="Panel_Preview.h" />
     <ClInclude Include="PeriodicAction.h" />
     <ClInclude Include="RequestDetourTest.h" />
     <ClInclude Include="RoamingCam.h" />
@@ -232,12 +234,13 @@ if exist "$(projectdir)RuntimeDependency\imgui" xcopy "$(projectdir)RuntimeDepen
     <ClCompile Include="ContentsLayer.cpp" />
     <ClCompile Include="EditorEvents.cpp" />
     <ClCompile Include="EditorLayer.cpp" />
-    <ClCompile Include="EditorPanel.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="Panel_CameraView.cpp" />
     <ClCompile Include="Panel_Hierarchy.cpp" />
     <ClCompile Include="Panel_Inspector.cpp" />
     <ClCompile Include="Panel_MiniMap.cpp" />
+    <ClCompile Include="Panel_Palette.cpp" />
+    <ClCompile Include="Panel_Preview.cpp" />
     <ClCompile Include="Panel_SceneView.cpp" />
     <ClCompile Include="ProgramExitCommand.cpp" />
     <ClCompile Include="RequestDetourTest.cpp" />

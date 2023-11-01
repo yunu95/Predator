@@ -159,6 +159,15 @@
     <ClInclude Include="CircularQueue.h">
       <Filter>Editor\DataStructure</Filter>
     </ClInclude>
+    <ClInclude Include="Panel_Preview.h">
+      <Filter>Editor\Panel\List</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelList.h">
+      <Filter>Editor\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel_Palette.h">
+      <Filter>Editor\Panel\List</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -212,9 +221,6 @@
     <ClCompile Include="EditorLayer.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
-    <ClCompile Include="EditorPanel.cpp">
-      <Filter>Editor\Panel</Filter>
-    </ClCompile>
     <ClCompile Include="Panel_CameraView.cpp">
       <Filter>Editor\Panel\List</Filter>
     </ClCompile>
@@ -238,5 +244,11 @@
     </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="..\YunutyEngineDemo\main_alt.cpp" />
+    <ClCompile Include="Panel_Preview.cpp">
+      <Filter>Editor\Panel\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel_Palette.cpp">
+      <Filter>Editor\Panel\List</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

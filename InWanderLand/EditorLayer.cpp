@@ -1,11 +1,7 @@
 #include "EditorLayer.h"
 
 #include "EditorPanel.h"
-#include "Panel_Hierarchy.h"
-#include "Panel_Inspector.h"
-#include "Panel_Minimap.h"
-#include "Panel_SceneView.h"
-#include "Panel_CameraView.h"
+#include "PanelList.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -23,13 +19,15 @@ namespace Application
 			/// 에디터에서 사용할 에디터 카메라, 게임뷰 카메라 생성
 
 			/// 에디터 패널 생성 및 초기화 진행
-			editorPanelList.resize(5);
+			editorPanelList.resize((int)Panel_List::Size);
 
 			editorPanelList[(int)Panel_List::HIERARCHY] = &HierarchyPanel::GetInstance();
 			editorPanelList[(int)Panel_List::INSPECTOR] = &InspectorPanel::GetInstance();
+			editorPanelList[(int)Panel_List::PREVIEW] = &PreviewPanel::GetInstance();
 			editorPanelList[(int)Panel_List::MINIMAP] = &MiniMapPanel::GetInstance();
 			editorPanelList[(int)Panel_List::SCENEVIEW] = &SceneViewPanel::GetInstance();
 			editorPanelList[(int)Panel_List::CAMERAVIEW] = &CameraViewPanel::GetInstance();
+			editorPanelList[(int)Panel_List::PALETTE] = &PalettePanel::GetInstance();
 
 			for (auto each : editorPanelList)
 			{
