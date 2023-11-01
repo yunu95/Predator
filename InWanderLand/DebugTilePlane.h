@@ -23,16 +23,24 @@ public:
 
         for (int i = 0; i < height; i++)
         {
-            for (int j = 0; j < width; j++)
+            /*for (int j = 0; j < width; j++)
             {
-                Vector3d position = GetTransform()->GetWorldPosition() + Vector3d(i - halveWidth, -0.5,j - halveHeight);
+                Vector3d position = GetTransform()->GetWorldPosition() + Vector3d(j - halveWidth+0.5, -0.5,i - halveHeight+0.5);
                 auto tile = Scene::getCurrentScene()->AddGameObject();
                 auto staticMesh = tile->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
                 staticMesh->GetGI().LoadMesh("Cube");
                 staticMesh->GetGI().GetMaterial()->SetColor(((i + j) % 2 == 0 ? colorA : colorB));
                 tile->GetTransform()->SetWorldPosition(position);
                 staticMesh->GetTransform()->scale = Vector3d(1, 1, 1);
-            }
+            }*/
+            Vector3d position = GetTransform()->GetWorldPosition() + Vector3d(0, -0.5, i - halveHeight + 0.5);
+
+            auto tile = Scene::getCurrentScene()->AddGameObject();
+            auto staticMesh = tile->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+            staticMesh->GetGI().LoadMesh("Cube");
+            staticMesh->GetGI().GetMaterial()->SetColor(((i) % 2 == 0 ? colorA : colorB));
+            tile->GetTransform()->SetWorldPosition(position);
+            staticMesh->GetTransform()->scale = Vector3d(static_cast<double>(width), 1, 1);
         }
     }
 };
