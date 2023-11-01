@@ -25,7 +25,11 @@ namespace yunutyEngine
         Vector3();
         Vector3(real x, real y, real z);
         Vector3(const Vector3& rhs);
+        //template<typename real2>
+        //Vector3(const Vector3<real2>& rhs) {}
         Vector3(const Vector2<real>& rhs);
+        template<typename real2>
+        Vector3(const Vector3<real2>& rhs);
         static const Vector3 zero;
         static const Vector3 one;
         static const Vector3 right;
@@ -74,19 +78,24 @@ namespace yunutyEngine
     }
 };
 template<typename real>
-yunutyEngine::Vector3<real>::Vector3<real>() : Vector3<real>(0, 0, 0) {}
+yunutyEngine::Vector3<real>::Vector3() : Vector3<real>(0, 0, 0) {}
 template<typename real>
-yunutyEngine::Vector3<real>::Vector3<real>(real x, real y, real z)
+yunutyEngine::Vector3<real>::Vector3(real x, real y, real z)
 {
     this->x = x;
     this->y = y;
     this->z = z;
 }
 template<typename real>
-yunutyEngine::Vector3<real>::Vector3<real>(const Vector2<real>& rhs) : Vector3<real>(rhs.x, rhs.y, 0)
+yunutyEngine::Vector3<real>::Vector3(const Vector2<real>& rhs) : Vector3<real>(rhs.x, rhs.y, 0)
 { }
 template<typename real>
-yunutyEngine::Vector3<real>::Vector3<real>(const Vector3<real>& rhs) : Vector3<real>(rhs.x, rhs.y, rhs.z)
+yunutyEngine::Vector3<real>::Vector3(const Vector3<real>& rhs) : Vector3<real>(rhs.x, rhs.y, rhs.z)
+{ }
+template<typename real>
+template<typename real2>
+yunutyEngine::Vector3<real>::Vector3(const Vector3<real2>& rhs) :
+    Vector3<real>(static_cast<real>(rhs.x), static_cast<real>(rhs.y), static_cast<real>(rhs.z))
 { }
 template<typename real>
 real yunutyEngine::Vector3<real>::Dot(const Vector3<real>& lhs, const Vector3<real>& rhs)

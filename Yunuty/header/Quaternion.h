@@ -13,10 +13,10 @@ namespace yunutyEngine
     {
     private:
     public:
-        double w = 1;
         double x = 0;
         double y = 0;
         double z = 0;
+        double w = 1;
         Quaternion();
         Quaternion(double w, double x, double y, double z);
         Quaternion(const Vector3d& euler);

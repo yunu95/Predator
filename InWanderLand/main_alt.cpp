@@ -13,6 +13,8 @@
 #include "DebugTilePlane.h"
 #include "DebugBeacon.h"
 #include "DebugMeshes.h"
+#include "PathField.h"
+#include "PathEditor.h"
 #include <d3d11.h>
 #include <tchar.h>
 #include <map>
@@ -52,6 +54,41 @@ ID3D11ShaderResourceView* GetSRV(void* handle)
         srvs[handle] = srv;
     }
     return srvs[handle];
+}
+void CreateNavPlane(Vector3f botleft, Vector3f topright, std::vector<Vector3f>& worldVertices, std::vector<int>& worldFaces)
+{
+    int startingIdx = worldVertices.size();
+    worldVertices.push_back({ botleft.x,0,topright.z });
+    worldVertices.push_back({ botleft.x,0,botleft.z });
+    worldVertices.push_back({ topright.x,0,botleft.z });
+    worldVertices.push_back({ topright.x,0,topright.z });
+
+    worldFaces.push_back(startingIdx + 2);
+    worldFaces.push_back(startingIdx + 1);
+    worldFaces.push_back(startingIdx + 0);
+    worldFaces.push_back(startingIdx + 3);
+    worldFaces.push_back(startingIdx + 2);
+    worldFaces.push_back(startingIdx + 0);
+
+    auto tilePlane = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugTilePlane>();
+    auto size = topright - botleft;
+    tilePlane->GetTransform()->SetWorldPosition((botleft + topright) / 2.0);
+    tilePlane->width = size.x;
+    tilePlane->height = size.z;
+    tilePlane->SetTiles();
+}
+
+NavigationAgent* CreateAgent(NavigationField* navField)
+{
+    auto agent = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationAgent>();
+    agent->SetSpeed(2);
+    agent->SetRadius(0.5);
+    agent->AssignToNavigationField(navField);
+    auto staticMesh = agent->GetGameObject()->AddGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+    staticMesh->GetGI().LoadMesh("Capsule");
+    staticMesh->GetGI().GetMaterial()->SetColor({ 0.75,0.75,0.75,0 });
+    staticMesh->GetTransform()->position = Vector3d{ 0,0.5,0 };
+    return agent;
 }
 // Main code
 int main(int, char**)
@@ -141,6 +178,7 @@ int main(int, char**)
     ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+    yunutyEngine::Collider2D::SetIsOnXYPlane(false);
 
     //auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     //camObj->GetTransform()->position = Vector3d(0, 0, -5);
@@ -148,34 +186,51 @@ int main(int, char**)
 
     auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
-    camObj2->GetTransform()->position = Vector3d(0, 0, -5);
     auto rtsCam = camObj2->AddComponent<RTSCam>();
+    rtsCam->GetTransform()->position = Vector3d(0, 10, 0);
 
     auto camSwitcher = camObj2->AddComponent<CamSwitcher>();
     //camSwitcher->cams.push_back(roamingCam);
     camSwitcher->cams.push_back(rtsCam);
 
-    DebugBeacon::PlaceBeacon({0,1,-0.5});
-    /*class FlappyBird : public Component
+    // 길찾기 테스트
     {
-    protected:
-        float gravity = -9.81;
-        float currentSpeed{ 0 };
-        float flapSpeed = 25;
-        virtual void Update()override
-        {
-            GetTransform()->position.y += currentSpeed * Time::GetDeltaTime();
-            currentSpeed += gravity * Time::GetDeltaTime();
-            if (Input::isKeyPushed(KeyCode::Space))
-                currentSpeed = flapSpeed;
-        }
-    };*/
-    auto tilePlane = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugTilePlane>();
-    tilePlane->width = 10;
-    tilePlane->height = 10;
-    tilePlane->SetTiles();
+        //auto tilePlane = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugTilePlane>();
+        //tilePlane->width = 10;
+        //tilePlane->height = 10;
+        //tilePlane->SetTiles();
 
-    yunutyEngine::YunutyCycle::SingleInstance().autoRendering = false;
+        const float corridorRadius = 3;
+        std::vector<Vector3f> worldVertices {
+        };
+        std::vector<int> worldFaces { };
+
+        CreateNavPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
+        CreateNavPlane({ -8,0,-2 }, { 8,0,2 }, worldVertices, worldFaces);
+        CreateNavPlane({ -8,0,-8 }, { -6,0,8 }, worldVertices, worldFaces);
+        CreateNavPlane({ 6,0,-8 }, { 8,0,8 }, worldVertices, worldFaces);
+        CreateNavPlane({ -8,0,6 }, { 8,0,8 }, worldVertices, worldFaces);
+        CreateNavPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
+        auto navField = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationField>();
+        navField->BuildField(worldVertices, worldFaces);
+        auto agent = CreateAgent(navField);
+        auto agent2 = CreateAgent(navField);
+        auto agent3 = CreateAgent(navField);
+        rtsCam->groundRightClickCallback = [=](Vector3d position) {
+            agent->MoveTo(position);
+            agent2->MoveTo(position);
+            agent3->MoveTo(position);
+        };
+    }
+
+    //auto pathField = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<PathField>();
+    //pathField->Initialize(10, 10, 0.4f);
+
+    //auto pathEditor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<PathEditor>();
+    //pathEditor->targetPathField = pathField;
+    //rtsCam->groundHoveringClickCallback = [=](Vector3d position) {pathEditor->PositionHover(position); };
+    //rtsCam->groundLeftClickCallback = [=](Vector3d position) {pathEditor->OnLeftClick(position); };
+
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 
     ID3D11Device* otherDevice{ nullptr };
@@ -241,7 +296,6 @@ int main(int, char**)
     bool done = false;
     while (!done)
     {
-        yunutyEngine::graphics::Renderer::SingleInstance().ManualRender();
         MSG msg;
         while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
         {
@@ -253,99 +307,6 @@ int main(int, char**)
         if (done)
             break;
     }
-
-
-    //while (!done)
-    //{
-    //	yunutyEngine::graphics::Renderer::SingleInstance().ManualRender();
-    //	MSG msg;
-    //	while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
-    //	{
-    //		::TranslateMessage(&msg);
-    //		::DispatchMessage(&msg);
-    //		if (msg.message == WM_QUIT)
-    //			done = true;
-    //	}
-    //	if (done)
-    //		break;
-
-    //	//Start the Dear ImGui frame
-    //	ImGui_ImplDX11_NewFrame();
-    //	ImGui_ImplWin32_NewFrame();
-    //	ImGui::NewFrame();
-
-    //	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-    //	if (show_demo_window)
-    //		ImGui::ShowDemoWindow(&show_demo_window);
-
-    //	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-    //	{
-    //		static float f = 0.0f;
-    //		static int counter = 0;
-
-    //		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-    //		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-    //		ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-    //		ImGui::Checkbox("Another Window", &show_another_window);
-
-    //		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-    //		ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-    //		if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-    //		{
-    //			counter++;
-    //			otherDC->ClearRenderTargetView(rtv, (counter % 2 == 0) ? color_red : color_blue);
-    //			otherDC->Flush();
-    //		}
-    //		ImGui::SameLine();
-    //		ImGui::Text("counter = %d", counter);
-
-    //		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    //		ImGui::Text("pointer = %p", (yunutyEngine::graphics::Renderer::SingleInstance().QuerySharedOutputHandle()));
-    //		ImGui::Image(GetSRV(yunutyEngine::graphics::Renderer::SingleInstance().QuerySharedOutputHandle()), { 1280,800 });
-    //		//ImGui::Image(static_cast<void*>(tempSrv), { 1920,1080 });
-    //		//ImGui::Image(static_cast<void*>(yunutyEngine::graphics::Renderer::SingleInstance().QueryD3D11RenderOutputSRV()), { 1920,1080 });
-    //		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    //		ImGui::End();
-    //	}
-
-    //	// 3. Show another simple window.
-    //	if (show_another_window)
-    //	{
-    //		ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-    //		ImGui::Text("Hello from another window!");
-    //		ImGui::Image(GetSRV(yunutyEngine::graphics::Renderer::SingleInstance().QuerySharedOutputHandle()), { 1280,800 });
-    //		if (ImGui::Button("Close Me"))
-    //			show_another_window = false;
-    //		//ImGui::Image(GetSRV(yunutyEngine::graphics::Renderer::SingleInstance().QuerySharedOutputHandle()), { 100,100 });
-    //		ImGui::End();
-    //	}
-
-    //	// Rendering
-    //	ImGui::Render();
-    //	const float clear_color_with_alpha[4] = { clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w };
-    //	g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
-    //	g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color_with_alpha);
-    //	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-    //	// Update and Render additional Platform Windows
-    //	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    //	{
-    //		ImGui::UpdatePlatformWindows();
-    //		ImGui::RenderPlatformWindowsDefault();
-    //	}
-
-    //	if (yunutyEngine::Input::isKeyDown(KeyCode::MouseLeftClick))
-    //	{
-    //		//yunutyEngine::graphics::Renderer::SingleInstance().InvokeClickEvent(x, y);
-    //	}
-
-    //	//g_pSwapChain->Present(1, 0); // Present with vsync
-    //	g_pSwapChain->Present(0, 0); // Present without vsync
-    //}
-
-    // Cleanup
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();

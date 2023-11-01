@@ -259,6 +259,12 @@
     <Filter Include="ClientTemplate">
       <UniqueIdentifier>{c2f86423-113b-4f7e-bb77-e530e31e8781}</UniqueIdentifier>
     </Filter>
+    <Filter Include="yunutyEngine\NavigationSystem\NavigationField">
+      <UniqueIdentifier>{d5d1652a-010a-46be-8232-a1fd4b640a90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\NavigationSystem\NavigationAgent">
+      <UniqueIdentifier>{6c5c0422-b46f-4c14-ba6c-9da973c01bcd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -461,6 +467,12 @@
     </ClCompile>
     <ClCompile Include="ChunkyTriMesh.cpp">
       <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="YunutyNavigationField.cpp">
+      <Filter>yunutyEngine\NavigationSystem\NavigationField</Filter>
+    </ClCompile>
+    <ClCompile Include="YunutyNavigationAgent.cpp">
+      <Filter>yunutyEngine\NavigationSystem\NavigationAgent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -697,6 +709,18 @@
     </ClInclude>
     <ClInclude Include="ValueHistory.h">
       <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="header\YunutyNavigationField.h">
+      <Filter>yunutyEngine\NavigationSystem\NavigationField</Filter>
+    </ClInclude>
+    <ClInclude Include="_YunutyNavigationFieldImpl.h">
+      <Filter>yunutyEngine\NavigationSystem\NavigationField</Filter>
+    </ClInclude>
+    <ClInclude Include="header\YunutyNavigationAgent.h">
+      <Filter>yunutyEngine\NavigationSystem\NavigationAgent</Filter>
+    </ClInclude>
+    <ClInclude Include="_YunutyNavigationAgentImpl.h">
+      <Filter>yunutyEngine\NavigationSystem\NavigationAgent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

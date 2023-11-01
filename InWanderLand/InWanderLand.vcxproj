@@ -187,6 +187,7 @@ if exist "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" xcopy "$(
     <ClInclude Include="Panel_Palette.h" />
     <ClInclude Include="Panel_Preview.h" />
     <ClInclude Include="PeriodicAction.h" />
+    <ClInclude Include="PathField.h" />
     <ClInclude Include="RequestDetourTest.h" />
     <ClInclude Include="RoamingCam.h" />
     <ClInclude Include="RTSCam.h" />
@@ -208,7 +209,7 @@ if exist "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" xcopy "$(
     <ClInclude Include="Panel_SceneView.h" />
     <ClInclude Include="ProgramExitCommand.h" />
     <ClInclude Include="ShakyCam.h" />
-    <ClInclude Include="TerrainEditor.h" />
+    <ClInclude Include="PathEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp" />
