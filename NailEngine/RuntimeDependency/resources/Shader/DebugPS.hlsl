@@ -1,7 +1,5 @@
 #include "Buffers.hlsli"
 
-#define WIRE_FRAME
-
 struct PixelIn
 {
     float4 pos : SV_Position;

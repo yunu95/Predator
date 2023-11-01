@@ -11,6 +11,13 @@ public:
 public:
 	void PushLightData();
 	void PushCameraData();
+	void Render();
 	void RenderObject();
+	void RenderLight();
+	void DrawFinal();
+
+
+
+	void DrawDeferredInfo();
 };
 

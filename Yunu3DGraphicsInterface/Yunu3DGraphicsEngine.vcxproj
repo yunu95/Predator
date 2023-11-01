@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FBXData.h" />
     <ClInclude Include="ILight.h" />
     <ClInclude Include="IMaterial.h" />
     <ClInclude Include="IYunuGIDebugCube.h" />

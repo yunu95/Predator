@@ -138,7 +138,7 @@ int main(int, char**)
     yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
     yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(1280, 800);
     yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(releaseHwnd);
-    //yunutyEngine::graphics::Renderer::SingleInstance().LoadFile("FBX/BossDoor/BossDoor.fbx");
+    yunutyEngine::graphics::Renderer::SingleInstance().LoadFile("FBX/TestBox");
 
     ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 
@@ -153,36 +153,35 @@ int main(int, char**)
         auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
         camObj2->AddComponent<RTSCam>();
     }
-    // 큐브
+
+	// 큐브
 	{
-		auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		camObj2->GetTransform()->position = Vector3d(0, 0, 5);
-		auto renderer = camObj2->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-        //renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1.f,0.f,0.f,1.f });
-        renderer->GetGI().LoadMesh("Sphere");
-        renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, L"Texture/Brick_Albedo.jpg");
-        renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::NORMAL, L"Texture/Brick_Normal.jpg");
+		auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("TestBox");
+		camObj2->GetTransform()->position = Vector3d(0, 0, 10);
+		//renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1.f,0.f,0.f,1.f });
+		//renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, L"Texture/Brick_Albedo.jpg");
+		//renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::NORMAL, L"Texture/Brick_Normal.jpg");
 	}
 
 	// 라이트
 	{
 		auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		camObj2->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{50.f,-30.f,0.f} });
-        camObj2->GetTransform()->position = Vector3d(0.f, 0.f, 5);
+		//camObj2->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{50.f,-30.f,0.f} });
+        //camObj2->GetTransform()->position = Vector3d(0.f, 0.f, 5);
 		auto renderer = camObj2->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 		auto color = yunuGI::Color{ 0.7f,0.7f,0.7f,1.f};
 		renderer->GetGI().SetLightDiffuseColor(color);
 	}
-	// 라이트
-	{
-		auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        camObj2->AddComponent<TestComponent>();
-		camObj2->GetTransform()->position = Vector3d(2.f, 0.f, 5);
-		auto renderer = camObj2->AddComponent<yunutyEngine::graphics::PointLight>();
-        renderer->GetGI().SetRange(10);
-        auto color = yunuGI::Color{ 0.f,0.f,1.f,1.f };
-        renderer->GetGI().SetLightDiffuseColor(color);
-	}
+	//// 라이트
+	//{
+	//	auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+ //       camObj2->AddComponent<TestComponent>();
+	//	camObj2->GetTransform()->position = Vector3d(2.f, 0.f, 5);
+	//	auto renderer = camObj2->AddComponent<yunutyEngine::graphics::PointLight>();
+ //       renderer->GetGI().SetRange(10);
+ //       auto color = yunuGI::Color{ 0.f,0.f,1.f,1.f };
+ //       renderer->GetGI().SetLightDiffuseColor(color);
+	//}
 	//// 라이트
 	//{
 	//	auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -447,6 +446,7 @@ void CreateRenderTarget()
     g_pSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
     g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_mainRenderTargetView);
     pBackBuffer->Release();
+    
 }
 
 void CleanupRenderTarget()

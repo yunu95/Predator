@@ -47,9 +47,6 @@ void ConstantBuffer::PushGraphicsData(void* data, unsigned int size, unsigned in
 	//assert(this->currentIndex < this->count);
 	assert(this->size == ((size + 15) & ~15));
 
-	LightParams* temp = (LightParams*)data;
-	LightParams temp2 = *temp;
-
 	D3D11_MAPPED_SUBRESOURCE _subResource;
 
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->Map(this->buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &_subResource);

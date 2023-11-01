@@ -63,6 +63,11 @@ void yunuGIAdapter::MaterialAdapter::SetColor(const yunuGI::Color& color)
 	this->color = color;
 }
 
+void yunuGIAdapter::MaterialAdapter::SetInt(int index, int val)
+{
+	this->temp_int[index] = val;
+}
+
 const std::wstring& yunuGIAdapter::MaterialAdapter::GetMaterialName() const
 {
 	return this->materialDesc.materialName;
@@ -91,9 +96,23 @@ void yunuGIAdapter::MaterialAdapter::PushGraphicsData()
 	MaterialBuffer materialBuffer;
 	materialBuffer.color = reinterpret_cast<DirectX::SimpleMath::Vector4&>(this->color);
 	materialBuffer.useTexture = this->useTextures;
+	materialBuffer.temp_int = this->temp_int;
 
 	NailEngine::Instance.Get().GetConstantBuffer(1)->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer),1);
 
 	ResourceManager::Instance.Get().GetShader(vs)->Bind();
 	ResourceManager::Instance.Get().GetShader(ps)->Bind();
+}
+
+void yunuGIAdapter::MaterialAdapter::UnBindGraphicsData()
+{
+	for (unsigned int i = 0; i < textures.size(); ++i)
+	{
+		if (this->textures[i].empty())
+		{
+			continue;
+		}
+
+		ResourceManager::Instance.Get().GetTexture(this->textures[i])->UnBind(i);
+	}
 }

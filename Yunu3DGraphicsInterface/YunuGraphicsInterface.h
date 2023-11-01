@@ -18,3 +18,4 @@
 #include "ISpotLight.h"
 #include "YunuVector3.h"
 #include "YunuVector4.h"
+#include "FBXData.h"

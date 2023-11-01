@@ -30,6 +30,11 @@ public:
 		GetVariation()->SetTexture(textureType, texture);
 	};
 
+	virtual void SetInt(int index, int val) override
+	{
+		GetVariation()->SetInt(index, val);
+	}
+
 	virtual void SetColor(const yunuGI::Color& color) override
 	{
 		GetVariation()->SetColor(color);
@@ -69,7 +74,7 @@ private:
 		{
 			variation = ResourceManager::Instance.Get().CreateInstanceMaterial(original);
 			usingOriginal = false;
-			renderable->SetMaterial(variation);
+			renderable->SetMaterial(0, variation);
 		}
 
 		return variation;

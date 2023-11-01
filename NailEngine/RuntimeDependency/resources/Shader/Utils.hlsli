@@ -12,23 +12,25 @@ bool UseTexture(uint useTexture)
     return false;
 }
 
-void CalculateLight(int lightIndex, float3 normal, float3 viewDirection, float4 pos, out float4 diffuse, out float4 ambient, out float4 specular)
+void CalculateLight(int lightIndex, float3 normal, float4 pos, out float4 diffuse, out float4 ambient, out float4 specular)
 {
     diffuse = float4(0.f, 0.f, 0.f, 0.f);
     ambient = float4(0.f, 0.f, 0.f, 0.f);
     specular = float4(0.f, 0.f, 0.f, 0.f);
     
+    float3 viewDirection = normalize(pos);
+    
     if(lights[lightIndex].lightType == 0)
     {
-        float3 lightVec = -lights[lightIndex].direction;
+        float3 lightVec = normalize(mul(float4(lights[lightIndex].direction.xyz, 0.f), VTM).xyz);
         ambient = lights[lightIndex].color.ambient;
         
-        float diffuseFactor = dot(lightVec, normal);
+        float diffuseFactor = dot(-lightVec, normal);
         
         if (diffuseFactor > 0.f)
         {
-            float3 v = normalize(reflect(-lightVec, normal));
-            float specFactor = pow(max(dot(v, viewDirection), 0.f), 36.f);
+            float3 v = normalize(lightVec + 2 * (saturate(dot(-lightVec, normal)) * normal));
+            float specFactor = pow(max(dot(-viewDirection ,v), 0.f), 16.f);
             
             diffuse = diffuseFactor * lights[lightIndex].color.diffuse;
             specular = specFactor * lights[lightIndex].color.specular;

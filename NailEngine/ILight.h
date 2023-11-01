@@ -4,6 +4,8 @@
 #include "SimpleMath.h"
 using namespace DirectX::PackedVector;
 
+#include "ResourceManager.h"
+
 #define MAX_LIGHT 50
 
 enum class LightType
@@ -16,7 +18,7 @@ enum class LightType
 struct LightColor
 {
 	DirectX::SimpleMath::Vector4 diffuse{ 1.f,1.f,1.f,1.f };
-	DirectX::SimpleMath::Vector4 ambient{ 0.2f,0.2f,0.2f,1.f };
+	DirectX::SimpleMath::Vector4 ambient{ 0.1f,0.1f,0.1f,1.f };
 	DirectX::SimpleMath::Vector4 specular{ 1.f,1.f,1.f,1.f };
 };
 
@@ -45,6 +47,20 @@ public:
 	virtual void SetLightDiffuseColor(DirectX::SimpleMath::Vector4& color) = 0;
 	virtual void SetLightPosition(DirectX::SimpleMath::Vector4& position) = 0;
 
+	void SetID(int id)
+	{
+		this->id = id; 
+		ResourceManager::Instance.Get().GetMaterial(this->materialName)->SetInt(0, this->id);
+	}
+	int GetID() { return this->id; }
+
+	std::wstring& GetMeshName() { return this->meshName; }
+	std::wstring& GetMaterialName() { return this->materialName; }
 protected:
+	int id;
+
 	LightInfo lightInfo;
+	std::wstring meshName;
+	std::wstring materialName;
+
 };

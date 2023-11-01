@@ -37,7 +37,7 @@ void SwapChain::Init(HWND hWnd, int width, int height)
 	_sd.SampleDesc.Count = 1;
 	_sd.SampleDesc.Quality = 0;
 	_sd.BufferUsage = DXGI_USAGE_BACK_BUFFER | DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	_sd.BufferCount = 2;
+	_sd.BufferCount = SWAP_CHAIN_BUFFER_COUNT;
 	_sd.Scaling = DXGI_SCALING_STRETCH;
 	_sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 	_sd.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
@@ -108,4 +108,9 @@ void SwapChain::Init(HWND hWnd, int width, int height)
 	_dxgiDevice->Release();
 	_dxgiAdapter->Release();
 	_dxgiFactory->Release();
+}
+
+void SwapChain::SwapBackBufferIndex()
+{
+	this->backBufferIndex = (this->backBufferIndex + 1) % SWAP_CHAIN_BUFFER_COUNT;
 }

@@ -138,7 +138,6 @@ void PixelShader::CreateRasterizerState(const std::string& fileContent)
 	rasterDesc.ScissorEnable = false;
 	rasterDesc.SlopeScaledDepthBias = 0.f;
 
-
 	std::regex commentRegex("// ShaderType : (\\w+)");
 	std::smatch matches;
 	if (std::regex_search(fileContent, matches,commentRegex))
