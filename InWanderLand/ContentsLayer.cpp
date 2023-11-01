@@ -2,26 +2,87 @@
 
 #include "YunutyEngine.h"
 #include "ShakyCam.h"
+#include "RTSCam.h"   
+#include "DebugTilePlane.h"
+#include "DebugBeacon.h"
+#include "DebugMeshes.h"
 
 #include <d3d11.h>
 
+void CreateNavPlane(Vector3f botleft, Vector3f topright, std::vector<Vector3f>& worldVertices, std::vector<int>& worldFaces)
+{
+    int startingIdx = worldVertices.size();
+    worldVertices.push_back({ botleft.x,0,topright.z });
+    worldVertices.push_back({ botleft.x,0,botleft.z });
+    worldVertices.push_back({ topright.x,0,botleft.z });
+    worldVertices.push_back({ topright.x,0,topright.z });
+
+    worldFaces.push_back(startingIdx + 2);
+    worldFaces.push_back(startingIdx + 1);
+    worldFaces.push_back(startingIdx + 0);
+    worldFaces.push_back(startingIdx + 3);
+    worldFaces.push_back(startingIdx + 2);
+    worldFaces.push_back(startingIdx + 0);
+
+    auto tilePlane = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugTilePlane>();
+    auto size = topright - botleft;
+    tilePlane->GetTransform()->SetWorldPosition((botleft + topright) / 2.0);
+    tilePlane->width = size.x;
+    tilePlane->height = size.z;
+    tilePlane->SetTiles();
+}
+
+NavigationAgent* CreateAgent(NavigationField* navField)
+{
+    auto agent = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationAgent>();
+    agent->SetSpeed(2);
+    agent->SetRadius(0.5);
+    agent->AssignToNavigationField(navField);
+    auto staticMesh = agent->GetGameObject()->AddGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+    staticMesh->GetGI().LoadMesh("Capsule");
+    staticMesh->GetGI().GetMaterial()->SetColor({ 0.75,0.75,0.75,0 });
+    staticMesh->GetTransform()->position = Vector3d{ 0,0.5,0 };
+    return agent;
+}
 void Application::Contents::ContentsLayer::Initialize()
 {
-	yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	camObj->AddComponent<ShakyCam>()->SetCameraMain();
+    yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+    yunutyEngine::Collider2D::SetIsOnXYPlane(false);
 
-	auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	staticMesh->GetGI().LoadMesh("Cube");
-	///staticMesh->GetGI().GetMaterial()->SetPixelShader(L"DebugPS.cso");
-	staticMesh->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, L"Texture/zoro.jpg");
-	staticMeshObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ 1,3,10 });
-	//staticMesh->GetGI().LoadDiffuseMap("Textures/000000002405_reverse.dds");
-	//staticMesh->GetGI().LoadNormalMap("Textures/000000002406_b_reverse.dds");
+    //auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    //camObj->GetTransform()->position = Vector3d(0, 0, -5);
+    //auto roamingCam = camObj->AddComponent<RoamingCam>();
 
-	yunutyEngine::YunutyCycle::SingleInstance().autoRendering = false;
-	yunutyEngine::YunutyCycle::SingleInstance().Play();
+    auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+
+    auto rtsCam = camObj->AddComponent<RTSCam>();
+    rtsCam->GetTransform()->position = Vector3d(0, 10, 0);
+
+    // 길찾기 테스트
+    {
+        const float corridorRadius = 3;
+        std::vector<Vector3f> worldVertices { };
+        std::vector<int> worldFaces { };
+
+        CreateNavPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
+        CreateNavPlane({ -8,0,-2 }, { 8,0,2 }, worldVertices, worldFaces);
+        CreateNavPlane({ -8,0,-8 }, { -6,0,8 }, worldVertices, worldFaces);
+        CreateNavPlane({ 6,0,-8 }, { 8,0,8 }, worldVertices, worldFaces);
+        CreateNavPlane({ -8,0,6 }, { 8,0,8 }, worldVertices, worldFaces);
+        CreateNavPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
+        auto navField = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationField>();
+        navField->BuildField(worldVertices, worldFaces);
+        auto agent = CreateAgent(navField);
+        auto agent2 = CreateAgent(navField);
+        auto agent3 = CreateAgent(navField);
+        rtsCam->groundRightClickCallback = [=](Vector3d position) {
+            agent->MoveTo(position);
+            agent2->MoveTo(position);
+            agent3->MoveTo(position);
+        };
+    }
+
+    yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 void Application::Contents::ContentsLayer::Update(float ts)
