@@ -32,7 +32,8 @@ void RangeSystem::OnCollisionEnter2D(const Collision2D& collision)
 		m_unitComponent->SetAtkRadius(m_tempAtkRadius);
 		
 		m_unitComponent->SetOpponentGameObject(collision.m_OtherCollider->GetGameObject());
-		m_unitComponent->IdentifyTransition();
+		m_unitComponent->EnterIDRange();
+		m_unitComponent->IdleTransition();
 	}
 }
 
@@ -45,7 +46,7 @@ void RangeSystem::OnCollisionExit2D(const Collision2D& collision)
 	if (collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>() != nullptr &&
 		m_unitComponent->GetType() != collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>()->GetType())
 	{
-		m_unitComponent->ExitIDRangeTransition();
+		m_unitComponent->ChaseTransition();
 	}
 }
 

@@ -25,13 +25,13 @@ public:
                 cameraSpeed = 20.0f;
 
             auto lastMousePos = yunutyEngine::Input::getMouseScreenPositionNormalized();
-            if (yunutyEngine::Input::isKeyDown(KeyCode::A) || lastMousePos.x < 0)
+            if (yunutyEngine::Input::isKeyDown(KeyCode::A) || lastMousePos.x <= 0)
                 deltaDirection -= Vector3d::right;
-            if (yunutyEngine::Input::isKeyDown(KeyCode::D) || lastMousePos.x > 1)
+            if (yunutyEngine::Input::isKeyDown(KeyCode::D) || lastMousePos.x >= 1)
                 deltaDirection += Vector3d::right;
-            if (yunutyEngine::Input::isKeyDown(KeyCode::W) || lastMousePos.y < 0)
+            if (yunutyEngine::Input::isKeyDown(KeyCode::W) || lastMousePos.y <= 0)
                 deltaDirection += Vector3d::forward;
-            if (yunutyEngine::Input::isKeyDown(KeyCode::S) || lastMousePos.y > 1)
+            if (yunutyEngine::Input::isKeyDown(KeyCode::S) || lastMousePos.y >= 1)
                 deltaDirection -= Vector3d::forward;
 
             GetTransform()->position += deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed;
@@ -106,7 +106,8 @@ public:
                 up * centeredPosition.y * 0.001 * resolution.y * expectedPlaneDistance();
 
             if (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick))
-                DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?  yunuGI::Color::red() : yunuGI::Color::blue(), { 0.2,0.2,0.2 });
+                DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?
+                    yunuGI::Color::red() : yunuGI::Color::blue(), { 0.2,0.2,0.2 });
             if (Input::isKeyPushed(KeyCode::MouseLeftClick))
                 groundLeftClickCallback(projectedPoint);
             else if (Input::isKeyPushed(KeyCode::MouseRightClick))

@@ -12,38 +12,91 @@
 #include "DebugTilePlane.h"
 #include "DebugBeacon.h"
 #include "RangeSystem.h"
+#include "RTSCam.h"   
+#include "DebugTilePlane.h"
+#include "DebugBeacon.h"
+#include "DebugMeshes.h"
+#include "UnitFactory.h"
 
 
 #include <d3d11.h>
 
+void CreateNavPlane(Vector3f botleft, Vector3f topright, std::vector<Vector3f>& worldVertices, std::vector<int>& worldFaces)
+{
+	int startingIdx = worldVertices.size();
+	worldVertices.push_back({ botleft.x,0,topright.z });
+	worldVertices.push_back({ botleft.x,0,botleft.z });
+	worldVertices.push_back({ topright.x,0,botleft.z });
+	worldVertices.push_back({ topright.x,0,topright.z });
+
+	worldFaces.push_back(startingIdx + 2);
+	worldFaces.push_back(startingIdx + 1);
+	worldFaces.push_back(startingIdx + 0);
+	worldFaces.push_back(startingIdx + 3);
+	worldFaces.push_back(startingIdx + 2);
+	worldFaces.push_back(startingIdx + 0);
+
+	auto tilePlane = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugTilePlane>();
+	auto size = topright - botleft;
+	tilePlane->GetTransform()->SetWorldPosition((botleft + topright) / 2.0);
+	tilePlane->width = size.x;
+	tilePlane->height = size.z;
+	tilePlane->SetTiles();
+}
+
+NavigationAgent* CreateAgent(NavigationField* navField)
+{
+	auto agent = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationAgent>();
+	agent->SetSpeed(2);
+	agent->SetRadius(0.5);
+	agent->AssignToNavigationField(navField);
+	auto staticMesh = agent->GetGameObject()->AddGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	staticMesh->GetGI().LoadMesh("Capsule");
+	staticMesh->GetGI().GetMaterial()->SetColor({ 0.75,0.75,0.75,0 });
+	staticMesh->GetTransform()->position = Vector3d{ 0,0.5,0 };
+	return agent;
+}
 void Application::Contents::ContentsLayer::Initialize()
 {
 	yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+	yunutyEngine::Collider2D::SetIsOnXYPlane(false);
 
-	auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	camObj2->setName("Camera");
+	//auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//camObj->GetTransform()->position = Vector3d(0, 0, -5);
+	//auto roamingCam = camObj->AddComponent<RoamingCam>();
 
-	camObj2->GetTransform()->position = Vector3d(0, 30, 0);
-	camObj2->GetTransform()->rotation = Vector3d(0, 0, 0);
-	// 지면의 좌클릭, 우클릭에 대한 콜백은 아래의 RTSCam 인스턴스에 등록할 수 있다.
-	auto rtsCam = camObj2->AddComponent<RTSCam>();
+	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
-	auto camSwitcher = camObj2->AddComponent<CamSwitcher>();
-	camSwitcher->cams.push_back(rtsCam);
+	auto rtsCam = camObj->AddComponent<RTSCam>();
+	rtsCam->GetTransform()->position = Vector3d(0, 10, 0);
 
-	DebugBeacon::PlaceBeacon({ 0,1,-0.5 });
+	const float corridorRadius = 3;
+	std::vector<Vector3f> worldVertices{ };
+	std::vector<int> worldFaces{ };
+
+	// 길찾기 필드 생성
+
+	CreateNavPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
+	CreateNavPlane({ -8,0,-2 }, { 8,0,2 }, worldVertices, worldFaces);
+	CreateNavPlane({ -8,0,-8 }, { -6,0,8 }, worldVertices, worldFaces);
+	CreateNavPlane({ 6,0,-8 }, { 8,0,8 }, worldVertices, worldFaces);
+	CreateNavPlane({ -8,0,6 }, { 8,0,8 }, worldVertices, worldFaces);
+	CreateNavPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
+	auto navField = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationField>();
+	navField->BuildField(worldVertices, worldFaces);
+	auto agent = CreateAgent(navField);
+	auto agent2 = CreateAgent(navField);
+	auto agent3 = CreateAgent(navField);
+	rtsCam->groundRightClickCallback = [=](Vector3d position) 
+	{
+		agent->MoveTo(position);
+		agent2->MoveTo(position);
+		agent3->MoveTo(position);
+	};
+
 
 	/// 투사체 objectPool 셋업
 	ProjectileSystem::GetInstance()->SetUp();
-
-#pragma region Check Pattern Tiles
-	//// 체크무늬로 xy 평면을 초기화하는 클래스다.
-	auto tilePlane = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugTilePlane>();
-	tilePlane->GetGameObject()->setName("tilePlane");
-	tilePlane->width = 10;
-	tilePlane->height = 10;
-	tilePlane->SetTiles();
-#pragma endregion
 
 #pragma region Player
 	auto playerGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -57,11 +110,16 @@ void Application::Contents::ContentsLayer::Initialize()
 
 	auto playerCollider = playerGameObject->AddComponent<CircleCollider2D>();
 
-	playerGameObject->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ 1, 0, 0 });
+	playerGameObject->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ 3, 0, 0 });
 
 	playerGameObject->AddComponent<CircleCollider2D>();
 
-	Dotween* dotweenComponent = playerGameObject->AddComponent<Dotween>();
+	playerGameObject->AddComponent<Dotween>();
+
+	auto playerNavigation = playerGameObject->AddComponent<NavigationAgent>();
+	playerNavigation->SetSpeed(10.0f);
+	playerNavigation->SetRadius(0.5);
+	playerNavigation->AssignToNavigationField(navField);
 
 	// 지면에 대한  좌클릭의 콜백 함수를 정의한다.
 	rtsCam->groundLeftClickCallback = [=](Vector3d position)
@@ -69,8 +127,9 @@ void Application::Contents::ContentsLayer::Initialize()
 		// Before moving, Make player look at position.
 		Vector3d distanceVector = position - playerGameObject->GetTransform()->GetWorldPosition();
 
-		float speed = 3.0f;
-		dotweenComponent->DOMove(Vector3d(position), distanceVector.Magnitude() / speed);
+		float speed = 5.0f;
+		playerNavigation->MoveTo(Vector3d(position));
+		//dotweenComponent->DOMove(Vector3d(position), distanceVector.Magnitude() / speed);
 
 	};
 #pragma endregion
@@ -108,9 +167,15 @@ void Application::Contents::ContentsLayer::Initialize()
 
 	enemyMesh->GetGI().LoadMesh("Capsule");
 	enemyMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 1, 0 });
-	ememyGameObject->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ -10, 0, 0 });
+	ememyGameObject->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ -3, 0, 0 });
 
-	Dotween* enemyDotween = ememyGameObject->AddComponent<Dotween>();
+	auto enemyDotween = ememyGameObject->AddComponent<Dotween>();
+
+	auto enemyNavigation = ememyGameObject->AddComponent<NavigationAgent>();
+	enemyNavigation->SetSpeed(10.0f);
+	enemyNavigation->SetRadius(0.5f);
+	enemyNavigation->AssignToNavigationField(navField);
+
 #pragma endregion
 
 #pragma region Enemy Identyfication Range
@@ -135,8 +200,6 @@ void Application::Contents::ContentsLayer::Initialize()
 	enemyIDRangeObject->SetParent(ememyGameObject);
 #pragma endregion
 
-
-	yunutyEngine::YunutyCycle::SingleInstance().autoRendering = false;
 	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 

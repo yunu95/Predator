@@ -13,7 +13,7 @@ class Projectile;
 
 class Unit : public Component
 {
-private:
+protected:
 	enum UnitState
 	{
 		Idle,
@@ -21,22 +21,31 @@ private:
 		Chase,
 		Detect,
 		Attack,
+		Death,
 		StateEnd
 	};
 
 	FSM<UnitState>* unitFSM;
 
 protected:
+	string unitType;
+
 	float m_speed;
 	float m_bulletSpeed;
 
-	bool isInIDRange;
-	bool isInAtkRange;
-	bool isOutAtkRange;
-	bool isOutIDRange;
+	bool idleToChase;
+	bool idleToAttack;
+	bool attackToIdle;
+	bool chaseToIdle;
+
+	std::vector<bool> transitionTriggerVector;
+
+	bool isJustEntered;			// 밖에 있다가 들어온 경우. 
 
 	float m_IdDistance;
 	float m_AtkDistance;
+
+	float transitionDelay;
 
 	// 처음 인식 범위에 들어왔을 때 저장되는 상대 유닛.
 	GameObject* m_opponentGameobject;
@@ -46,14 +55,15 @@ protected:
 	void ChaseEngage();
 	void AttackEngage();
 
+	void IdleUpdate();
 	void ChaseUpdate();
 	void AttackUpdate();
 
-	void AttackTransition();
+	void IdleEngageFunction();
+	void AttackEngageFunction();
+	void ChaseUpdateFunction();
 
-	void IdleFunction();
-	void AttackFunction();
-	void ChaseFunction();
+	void InitTriggers();
 
 public:
 	// 컴포넌트에서 가져온 함수
@@ -63,17 +73,19 @@ public:
 public:
 	// 자식들에게 물려주되, 외부에서 호출이 가능한 함수
 	string GetType() const;
+	
 	void SetIdRadius(float radius);
 	void SetAtkRadius(float radius);
 
-	void IdentifyTransition();
-	void ExitIDRangeTransition();
+
+	/// 현재 상태에서 다른 상태로 가기 위한 bool값을 판별해주는 함수.
+	void IdleTransition();
+	void ChaseTransition();
+	void AttackTransition();
+
 	void SetOpponentGameObject(GameObject* obj);
 
-	void StopAttack();
-
-protected:
-	string unitType;
-
+	void EnterIDRange();
+	void ExitIDRange();
 };
 

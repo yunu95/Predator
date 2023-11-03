@@ -61,6 +61,30 @@
     <Filter Include="Editor\DataStructure">
       <UniqueIdentifier>{df3d0462-035e-4bad-98d4-634df95d5b42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Path">
+      <UniqueIdentifier>{fd700d27-99c8-48fe-a7fa-d50f17beb154}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PathEditor">
+      <UniqueIdentifier>{bdeb32c3-9345-46aa-9876-48fd5865c87c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Units">
+      <UniqueIdentifier>{405ea7bd-7f87-4f62-bbaa-63df3fb1cb29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Dotween">
+      <UniqueIdentifier>{85ab2a5f-3903-4ced-9819-cd9b6e84dbec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\RangeSystem">
+      <UniqueIdentifier>{8f88b8f0-05a0-458e-8199-c421742d4d60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Projectile">
+      <UniqueIdentifier>{d4aef375-a61c-498a-a67f-f5684011a0e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\FSM">
+      <UniqueIdentifier>{32381cc4-5559-4056-a930-6663da504c19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitFactory">
+      <UniqueIdentifier>{acd2f4f0-ac5f-47d4-9337-b5d6450ce773}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -159,35 +183,50 @@
     <ClInclude Include="CircularQueue.h">
       <Filter>Editor\DataStructure</Filter>
     </ClInclude>
-    <ClInclude Include="Dotween.h">
-      <Filter>Contents</Filter>
+    <ClInclude Include="Panel_Preview.h">
+      <Filter>Editor\Panel\List</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Contents</Filter>
+    <ClInclude Include="PanelList.h">
+      <Filter>Editor\Panel</Filter>
     </ClInclude>
-    <ClInclude Include="DotweenTimer.h">
-      <Filter>Contents</Filter>
+    <ClInclude Include="Panel_Palette.h">
+      <Filter>Editor\Panel\List</Filter>
     </ClInclude>
-    <ClInclude Include="DotweenTimerPool.h">
-      <Filter>Contents</Filter>
-    </ClInclude>
-    <ClInclude Include="Easing.h">
-      <Filter>Contents</Filter>
-    </ClInclude>
-    <ClInclude Include="FSM.h">
-      <Filter>Contents</Filter>
-    </ClInclude>
-    <ClInclude Include="Projectile.h">
-      <Filter>Contents</Filter>
-    </ClInclude>
-    <ClInclude Include="ProjectileSystem.h">
-      <Filter>Contents</Filter>
-    </ClInclude>
-    <ClInclude Include="RangeSystem.h">
-      <Filter>Contents</Filter>
+    <ClInclude Include="PathField.h">
+      <Filter>Path</Filter>
     </ClInclude>
     <ClInclude Include="Unit.h">
-      <Filter>Contents</Filter>
+      <Filter>Contents\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Contents\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="Dotween.h">
+      <Filter>Contents\Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="DotweenTimer.h">
+      <Filter>Contents\Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="DotweenTimerPool.h">
+      <Filter>Contents\Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="Easing.h">
+      <Filter>Contents\Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="RangeSystem.h">
+      <Filter>Contents\RangeSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Contents\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileSystem.h">
+      <Filter>Contents\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="FSM.h">
+      <Filter>Contents\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitFactory.h">
+      <Filter>Contents\UnitFactory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -242,9 +281,6 @@
     <ClCompile Include="EditorLayer.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
-    <ClCompile Include="EditorPanel.cpp">
-      <Filter>Editor\Panel</Filter>
-    </ClCompile>
     <ClCompile Include="Panel_CameraView.cpp">
       <Filter>Editor\Panel\List</Filter>
     </ClCompile>
@@ -268,32 +304,41 @@
     </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="..\YunutyEngineDemo\main_alt.cpp" />
-    <ClCompile Include="Dotween.cpp">
-      <Filter>Contents</Filter>
+    <ClCompile Include="Panel_Preview.cpp">
+      <Filter>Editor\Panel\List</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Contents</Filter>
-    </ClCompile>
-    <ClCompile Include="DotweenTimer.cpp">
-      <Filter>Contents</Filter>
-    </ClCompile>
-    <ClCompile Include="DotweenTimerPool.cpp">
-      <Filter>Contents</Filter>
-    </ClCompile>
-    <ClCompile Include="Easing.cpp">
-      <Filter>Contents</Filter>
-    </ClCompile>
-    <ClCompile Include="Projectile.cpp">
-      <Filter>Contents</Filter>
-    </ClCompile>
-    <ClCompile Include="ProjectileSystem.cpp">
-      <Filter>Contents</Filter>
-    </ClCompile>
-    <ClCompile Include="RangeSystem.cpp">
-      <Filter>Contents</Filter>
+    <ClCompile Include="Panel_Palette.cpp">
+      <Filter>Editor\Panel\List</Filter>
     </ClCompile>
     <ClCompile Include="Unit.cpp">
-      <Filter>Contents</Filter>
+      <Filter>Contents\Units</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Contents\Units</Filter>
+    </ClCompile>
+    <ClCompile Include="Dotween.cpp">
+      <Filter>Contents\Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="DotweenTimer.cpp">
+      <Filter>Contents\Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="DotweenTimerPool.cpp">
+      <Filter>Contents\Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="Easing.cpp">
+      <Filter>Contents\Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="RangeSystem.cpp">
+      <Filter>Contents\RangeSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Contents\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileSystem.cpp">
+      <Filter>Contents\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitFactory.cpp">
+      <Filter>Contents\UnitFactory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

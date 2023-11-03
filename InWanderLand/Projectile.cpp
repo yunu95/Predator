@@ -37,9 +37,6 @@ void Projectile::ShootFunction()
 	GetGameObject()->GetTransform()->SetWorldRotation(directionVector);
 	GetGameObject()->GetTransform()->SetWorldPosition(movedPositionPerFrame);
 
-	/// 투사체가 한번 자리를 옮겼다. 그 후 목표 유닛에 부딫혔는지 판단하고,
-	/// 부딫혔다면 Pool에 리턴해주고, 아니라면 재귀한다.
-	/// 부딫혔는지를 어떻게 판단할 것인가? -> 
 	float dotProducted = Vector3d::Dot(directionVector, afterDirectionVector);
 	float multipledLength = directionVector.Magnitude() * afterDirectionVector.Magnitude();
 
