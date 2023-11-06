@@ -10,10 +10,12 @@
 
 
 LazyObjects<FBXLoader> FBXLoader::Instance;
+unsigned int FBXLoader::currentBoneIndex = 1;
+
 
 FBXNode FBXLoader::LoadFBXData(const char* filePath)
 {
-	this->texturePath = std::filesystem::path(filePath).parent_path().wstring() 
+	this->texturePath = std::filesystem::path(filePath).parent_path().wstring()
 		+ L"/" + std::filesystem::path(filePath).stem().wstring() + L".fbm/";
 
 	// Assimp Importer 객체 생성
@@ -21,16 +23,26 @@ FBXNode FBXLoader::LoadFBXData(const char* filePath)
 
 	// Load Flag
 	unsigned int flag;
+	//flag = aiProcess_Triangulate |
+	//	aiProcess_JoinIdenticalVertices |
+	//	aiProcess_CalcTangentSpace |
+	//	aiProcess_GenSmoothNormals |
+	//	aiProcess_FlipWindingOrder |
+	//	aiProcess_FlipUVs |
+	//	aiProcess_SplitLargeMeshes |
+	//	aiProcess_PreTransformVertices |
+	//	aiProcess_ConvertToLeftHanded |
+	//	aiProcess_PopulateArmatureData |
+	//	aiProcess_LimitBoneWeights |
+	//	aiProcess_SortByPType |
+	//	aiProcess_GenBoundingBoxes |
+	//	aiProcess_EmbedTextures;
+
 	flag = aiProcess_Triangulate |
-		aiProcess_JoinIdenticalVertices |
-		aiProcess_CalcTangentSpace |
-		aiProcess_GenNormals |
-		aiProcess_MakeLeftHanded |
-		aiProcess_FlipWindingOrder |
-		aiProcess_FlipUVs |
-		aiProcess_SplitLargeMeshes |
-		aiProcess_PreTransformVertices |
-		aiProcess_MakeLeftHanded;
+		aiProcess_ConvertToLeftHanded | aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
+		aiProcess_CalcTangentSpace | aiProcess_PopulateArmatureData |
+		aiProcess_FlipWindingOrder | aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
+		aiProcess_SortByPType | aiProcess_EmbedTextures | aiProcess_LimitBoneWeights;
 
 	const aiScene* scene = importer.ReadFile(filePath, flag);
 
@@ -38,18 +50,51 @@ FBXNode FBXLoader::LoadFBXData(const char* filePath)
 		std::cerr << "모델 로딩 실패!" << std::endl;
 	}
 
+	scene->mAnimations;
+	scene->mNumAnimations;
 
 
 	// Mesh Data Load
 	FBXNode rootNode;
 	ParseNode(scene->mRootNode, scene, rootNode);
 
+	// Animation Load
+	//ParseAnimation();
+
+	BoneInfo boneInfo;
+	boneInfo.index = 0;
+	boneInfo.parentIndex = -1;
+	boneInfo.name = L"BoneRoot";
+
+	// Load한 Bone을 계층 구조로 만들기
+	BuildBoneHierarchy(scene->mRootNode, boneInfo.child, 0);
+	rootNode.boneInfo = std::move(boneInfo);
+
+	boneInfoMap.clear();
+	currentBoneIndex = 1;
+	texturePath.clear();
+
 	return rootNode;
 }
 
 void FBXLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode& fbxNode)
 {
-	for (unsigned int i = 0; i < node->mNumMeshes; ++i) 
+	// Mesh Load And Material Load
+	ParseMesh(node, scene, fbxNode);
+
+	// Parse Child
+	fbxNode.child.resize(node->mNumChildren);
+	for (unsigned int i = 0; i < node->mNumChildren; ++i)
+	{
+		ParseNode(node->mChildren[i], scene, fbxNode.child[i]);
+	}
+}
+
+void FBXLoader::ParseMesh(const aiNode* node, const aiScene* scene, FBXNode& fbxNode)
+{
+	std::wstring asd = this->aiStringToWString(node->mName.C_Str());
+
+	for (unsigned int i = 0; i < node->mNumMeshes; ++i)
 	{
 		FBXMeshData data;
 
@@ -59,11 +104,14 @@ void FBXLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode& fbx
 		std::wstring meshName = aiStringToWString(mesh->mName.C_Str());
 
 		data.meshName = meshName;
+		aiMatrix4x4 transform = node->mTransformation;
+
 		for (int j = 0; j < mesh->mNumVertices; ++j)
 		{
 			// 버텍스 위치 (Position)
-			aiVector3D vertex = mesh->mVertices[j];
-			DirectX::SimpleMath::Vector3 dvertex{ vertex.x,vertex.y,vertex.z};
+			aiVector3D vertexPos = mesh->mVertices[j];
+			vertexPos *= transform;
+			DirectX::SimpleMath::Vector3 dvertex{ vertexPos.x,vertexPos.y,vertexPos.z };
 
 			// 버텍스 색상 (Color) - 대개 사용되지 않음
 			///aiColor4D color = mesh->mColors[0][i]; // 첫 번째 색상 채널
@@ -74,12 +122,15 @@ void FBXLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode& fbx
 
 			// 법선 (Normal)
 			aiVector3D normal = mesh->mNormals[j];
+			normal *= transform;
 			DirectX::SimpleMath::Vector3 dnormal{ normal.x, normal.y, normal.z };
 
 			// 탄젠트 (Tangent)
 			///aiVector3D tangent = mesh->mTangents[i];
 
-			data.vertex.emplace_back(Vertex{ dvertex , DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f), duv, dnormal, DirectX::SimpleMath::Vector3(1.f,0.f,0.f) });
+			Vertex vertex = { dvertex , DirectX::SimpleMath::Vector4(1.f,1.f,1.f,1.f), duv, dnormal, DirectX::SimpleMath::Vector3(1.f,0.f,0.f) };
+
+			data.vertex.emplace_back(vertex);
 		}
 
 		/// 인덱스 채우기
@@ -95,14 +146,23 @@ void FBXLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode& fbx
 		// Material Load
 		ParseMaterial(scene, mesh, data);
 
-		fbxNode.meshVec.emplace_back(data);
-	}
+		// Vertex에 Bone 정보 넣기
+		for (int b = 0; b < mesh->mNumBones; ++b)
+		{
+			for (int w = 0; w < mesh->mBones[b]->mNumWeights; ++w)
+			{
+				FBXBoneInfo boneInfo;
+				boneInfo.name = this->aiStringToWString(mesh->mBones[b]->mName.C_Str());
+				boneInfo.offset = this->ConvertToCloumnMajor(mesh->mBones[b]->mOffsetMatrix);
 
-	// Parse Child
-	fbxNode.child.resize(node->mNumChildren);
-	for (unsigned int i = 0; i < node->mNumChildren; ++i) 
-	{
-		ParseNode(node->mChildren[i], scene, fbxNode.child[i]);
+				this->boneInfoMap.insert({ boneInfo.name,boneInfo });
+
+				data.vertex[mesh->mBones[b]->mWeights[w].mVertexId].FillBoneIndexWeight(b, mesh->mBones[b]->mWeights[w].mWeight);
+			}
+		}
+
+
+		fbxNode.meshVec.emplace_back(data);
 	}
 }
 
@@ -143,4 +203,32 @@ DirectX::SimpleMath::Matrix FBXLoader::ConvertToCloumnMajor(aiMatrix4x4 matrix)
 	};
 
 	return colMajor;
+}
+
+void FBXLoader::BuildBoneHierarchy(const aiNode* node, std::vector<BoneInfo>& boneInfoVec, int parentIndex)
+{
+	auto iter = this->boneInfoMap.find(this->aiStringToWString(node->mName.C_Str()));
+	if (iter != this->boneInfoMap.end())
+	{
+		BoneInfo boneInfo;
+
+		boneInfo.name = iter->second.name;
+
+		boneInfo.index = currentBoneIndex++;
+		boneInfo.parentIndex = parentIndex;
+
+		boneInfoVec.emplace_back(boneInfo);
+
+		for (int i = 0; i < node->mNumChildren; ++i)
+		{
+			BuildBoneHierarchy(node->mChildren[i], boneInfoVec.back().child, boneInfo.index);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < node->mNumChildren; ++i)
+		{
+			BuildBoneHierarchy(node->mChildren[i], boneInfoVec, parentIndex);
+		}
+	}
 }

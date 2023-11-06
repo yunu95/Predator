@@ -139,8 +139,6 @@ std::shared_ptr<Texture>& ResourceManager::CreateTexture(const std::wstring& tex
 
 	textureMap.insert({ texturePath, texture });
 
-
-
 	return texture;
 }
 
@@ -164,17 +162,25 @@ void ResourceManager::LoadFBX(const char* filePath)
 	std::wstring fbxName = std::filesystem::path(filePath).stem().wstring();
 	this->fbxDataVecMap.insert({ fbxName, dataVec });
 	
+	fbxBoneInfoMap.insert({ fbxName,node.boneInfo });
+
 	FillFBXData(fbxName, node, this->fbxDataVecMap.find(fbxName)->second);
 }
 
-std::shared_ptr<yunuGIAdapter::MaterialAdapter>& ResourceManager::GetMaterial(const std::wstring& materialName)
+std::shared_ptr<yunuGIAdapter::MaterialAdapter> ResourceManager::GetMaterial(const std::wstring& materialName)
 {
 	auto iter = materialMap.find(materialName);
 	if (iter == materialMap.end())
 	{
 		auto iter2 = instanceMaterialMap.find(materialName);
-		assert(iter2 != instanceMaterialMap.end());
-		return iter2->second;
+		if (iter2 == instanceMaterialMap.end())
+		{
+			return nullptr;
+		}
+		else
+		{
+			return iter2->second;
+		}
 	}
 	else
 	{
@@ -429,10 +435,12 @@ void ResourceManager::CreateResourceFromFBX(FBXMeshData& meshData, std::vector<F
 	// Data Push
 	if (fbxData.meshName.empty())
 	{
+		// 메쉬가 새로 생성 되었을 경우
 		dataVec.emplace_back(_data);
 	}
 	else
 	{
+		// 이미 메쉬가 있는 경우 머터리얼만 추가
 		fbxData.materialVec.emplace_back(materialData);
 	}
 
@@ -443,13 +451,20 @@ void ResourceManager::CreateResourceFromFBX(FBXMeshData& meshData, std::vector<F
 	CreateTexture(materialData.emissionMap);
 
 	// Create Material
-	yunuGI::MaterialDesc desc;
-	desc.materialName = materialData.materialName;
-	yunuGI::IMaterial* material = CrateMaterial(desc);
-	material->SetTexture(yunuGI::Texture_Type::ALBEDO, materialData.albedoMap);
-	material->SetTexture(yunuGI::Texture_Type::NORMAL, materialData.normalMap);
-	material->SetTexture(yunuGI::Texture_Type::ARM, materialData.armMap);
-	material->SetTexture(yunuGI::Texture_Type::EMISSION, materialData.emissionMap);
+	if (this->GetMaterial(materialData.materialName))
+	{
+		return;
+	}
+	else
+	{
+		yunuGI::MaterialDesc desc;
+		desc.materialName = materialData.materialName;
+		yunuGI::IMaterial* material = CrateMaterial(desc);
+		material->SetTexture(yunuGI::Texture_Type::ALBEDO, materialData.albedoMap);
+		material->SetTexture(yunuGI::Texture_Type::NORMAL, materialData.normalMap);
+		material->SetTexture(yunuGI::Texture_Type::ARM, materialData.armMap);
+		material->SetTexture(yunuGI::Texture_Type::EMISSION, materialData.emissionMap);
+	}
 }
 
 void ResourceManager::LoadCubeMesh()

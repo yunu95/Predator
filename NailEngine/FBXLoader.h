@@ -19,6 +19,19 @@ using namespace DirectX::PackedVector;
 
 class Mesh;
 
+struct FBXBoneInfo
+{
+	std::wstring name;
+	DirectX::SimpleMath::Matrix offset;
+};
+
+struct BoneInfo
+{
+	std::wstring name;
+	int index;
+	int parentIndex;
+	std::vector<BoneInfo> child;
+};
 
 
 struct FBXMaterialData
@@ -44,6 +57,7 @@ struct FBXNode
 {
 	std::vector<FBXNode> child;
 	std::vector<FBXMeshData> meshVec;
+	BoneInfo boneInfo;
 };
 
 class FBXLoader
@@ -57,13 +71,17 @@ public:
 
 private:
 	void ParseNode(const aiNode* node, const aiScene* scene, FBXNode& fbxNode);
+	void ParseMesh(const aiNode* node, const aiScene* scene, FBXNode& fbxNode);
 	void ParseMaterial(const aiScene*scene, const aiMesh* mesh, FBXMeshData& meshData);
 
 private:
 	std::wstring aiStringToWString(std::string str);
 	DirectX::SimpleMath::Matrix ConvertToCloumnMajor(aiMatrix4x4 matrix);
+	void BuildBoneHierarchy(const aiNode* node, std::vector<BoneInfo>& boneInfoVec, int parentIndex);
 
 private:
 	std::wstring texturePath;
+	std::unordered_map<std::wstring,FBXBoneInfo> boneInfoMap;
+	static unsigned int currentBoneIndex;
 };
 
