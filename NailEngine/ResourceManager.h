@@ -41,7 +41,7 @@ public:
 #pragma endregion
 
 #pragma region Getter
-	std::shared_ptr<yunuGIAdapter::MaterialAdapter>& GetMaterial(const std::wstring& materialName);
+	std::shared_ptr<yunuGIAdapter::MaterialAdapter> GetMaterial(const std::wstring& materialName);
 	std::shared_ptr<Shader>& GetShader(const std::wstring& shaderPath);
 	std::shared_ptr<Mesh>& GetMesh(const std::wstring& meshName);
 	std::shared_ptr<Texture>& GetTexture(const std::wstring& textureName);
@@ -74,5 +74,6 @@ private:
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGIAdapter::MaterialAdapter>> materialMap;
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGIAdapter::MaterialAdapter>> instanceMaterialMap;
 	std::unordered_map<std::wstring, std::vector<FBXData>> fbxDataVecMap;
+	std::unordered_map<std::wstring, BoneInfo> fbxBoneInfoMap;
 };
 

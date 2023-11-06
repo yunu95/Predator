@@ -138,7 +138,7 @@ int main(int, char**)
     yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
     yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(1280, 800);
     yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(releaseHwnd);
-    yunutyEngine::graphics::Renderer::SingleInstance().LoadFile("FBX/TestBox");
+    yunutyEngine::graphics::Renderer::SingleInstance().LoadFile("FBX/Boss");
 
     ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 
@@ -156,7 +156,7 @@ int main(int, char**)
 
 	// Å¥ºê
 	{
-		auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("TestBox");
+		auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
 		camObj2->GetTransform()->position = Vector3d(0, 0, 10);
 		//renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1.f,0.f,0.f,1.f });
 		//renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, L"Texture/Brick_Albedo.jpg");

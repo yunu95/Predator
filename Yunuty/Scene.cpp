@@ -39,14 +39,16 @@ yunutyEngine::GameObject* Scene::AddGameObjectFromFBX(string fbxName)
 		for (int i = 0; i < data.size(); ++i)
 		{
 			auto gameObjectChild = gameObject->AddGameObject();
-			gameObjectChild->GetTransform()->scale = Vector3d{ 0.01,0.01,0.01 };
+			//gameObjectChild->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{90.f,0.f,0.f} });
+			gameObjectChild->GetTransform()->scale = Vector3d{0.01,0.01f,0.01f} ;
 			auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 			renderer->GetGI().SetMesh(data[i].meshName);
 
 			// Material Data Set
 			for (int j = 0; j < data[i].materialVec.size(); ++j)
 			{
-				renderer->GetGI().SetMaterial(
+				renderer->GetGI().SetMaterial
+				(
 					j, graphics::Renderer::SingleInstance().GetResourceManager()->GetMaterial(data[i].materialVec[j].materialName)
 				);
 			}
