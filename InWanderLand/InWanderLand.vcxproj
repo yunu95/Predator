@@ -188,6 +188,7 @@ if exist "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" xcopy "$(
     <ClInclude Include="DotweenTimerPool.h" />
     <ClInclude Include="Easing.h" />
     <ClInclude Include="FSM.h" />
+    <ClInclude Include="MoveDetector.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ProjectileSystem.h" />
@@ -251,6 +252,7 @@ if exist "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" xcopy "$(
     <ClCompile Include="EditorEvents.cpp" />
     <ClCompile Include="EditorLayer.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="MoveDetector.cpp" />
     <ClCompile Include="Panel_CameraView.cpp" />
     <ClCompile Include="Panel_Hierarchy.cpp" />
     <ClCompile Include="Panel_Inspector.cpp" />

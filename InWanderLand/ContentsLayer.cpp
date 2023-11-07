@@ -8,6 +8,7 @@
 #include "Dotween.h"
 #include "Projectile.h"
 #include "ProjectileSystem.h"
+#include "MoveDetector.h"
 #include "RoamingCam.h"   
 #include "DebugTilePlane.h"
 #include "DebugBeacon.h"
@@ -117,8 +118,8 @@ void Application::Contents::ContentsLayer::Initialize()
 	playerGameObject->AddComponent<Dotween>();
 
 	auto playerNavigation = playerGameObject->AddComponent<NavigationAgent>();
-	playerNavigation->SetSpeed(10.0f);
-	playerNavigation->SetRadius(0.5);
+	//playerNavigation->SetSpeed(10.0f);
+	//playerNavigation->SetRadius(0.5);
 	playerNavigation->AssignToNavigationField(navField);
 
 	// 지면에 대한  좌클릭의 콜백 함수를 정의한다.
@@ -126,7 +127,6 @@ void Application::Contents::ContentsLayer::Initialize()
 	{
 		// Before moving, Make player look at position.
 		Vector3d distanceVector = position - playerGameObject->GetTransform()->GetWorldPosition();
-
 		float speed = 5.0f;
 		playerNavigation->MoveTo(Vector3d(position));
 		//dotweenComponent->DOMove(Vector3d(position), distanceVector.Magnitude() / speed);

@@ -2,21 +2,17 @@
 #include "Dotween.h"
 #include "ProjectileSystem.h"
 #include "Projectile.h"
+#include "MoveDetector.h"
 
 void Unit::Start()
 {
 	unitType = "Enemy";
-	m_speed = 3.0f;
+	m_speed = 5.0f;
 	m_bulletSpeed = 5.1f;
 
-	transitionTriggerVector.push_back(idleToChase);
-	transitionTriggerVector.push_back(idleToAttack);
-	transitionTriggerVector.push_back(chaseToIdle);
-	transitionTriggerVector.push_back(attackToIdle);
-	InitTriggers();
-
 	unitFSM = new FSM<UnitState>(UnitState::Idle);
-	 
+	isRechaseCompleted = true;
+
 	unitFSM->transitions[UnitState::Idle].push_back({ UnitState::Chase,
 		[this]() { return idleToChase == true; } });
 
@@ -26,14 +22,27 @@ void Unit::Start()
 	unitFSM->transitions[UnitState::Chase].push_back({ UnitState::Idle,
 		[this]() { return chaseToIdle == true; } });
 
+	unitFSM->transitions[UnitState::Chase].push_back({ UnitState::ReChase,
+		[this]() { return isChaseRequested == true; } });
+
+	unitFSM->transitions[UnitState::ReChase].push_back({ UnitState::Chase,
+	[this]() { return isRechaseCompleted == true; } });
+
 	unitFSM->transitions[UnitState::Attack].push_back({ UnitState::Idle,
 		[this]() { return attackToIdle == true; } });
+
+	for (int i = 1; i < UnitState::StateEnd - 1; i++)
+	{
+		unitFSM->transitions[UnitState(i)].push_back({ UnitState::Idle,
+			[this]() {return initToIdle == true; } });
+	}
 
 	unitFSM->engageAction[UnitState::Idle] = [this]() { IdleEngage(); };
 	unitFSM->engageAction[UnitState::Chase] = [this]() { ChaseEngage(); };
 	unitFSM->engageAction[UnitState::Attack] = [this]() { AttackEngage(); };
 
 
+	unitFSM->updateAction[UnitState::Idle] = [this]() { IdleUpdate(); };
 	unitFSM->updateAction[UnitState::Chase] = [this]() { ChaseUpdate(); };
 	unitFSM->updateAction[UnitState::Attack] = [this]() { AttackUpdate(); };
 
@@ -54,14 +63,30 @@ void Unit::Update()
 	{
 		// Chase로 갈 것인지, Attack으로 갈 것인지 판별
 		// -> idleToChase냐 idleToAttack 이냐!
-		float distance = (m_opponentPosition - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
+		if (unitFSM->previousState == UnitState::Attack && !isJustEntered)
+		{
+			transitionDelay = 0.7f;
+		}
+		else
+		{
+			transitionDelay = 0.0f;
+			isJustEntered = false;
+		}
 
-		if (distance < m_IdDistance && distance > m_AtkDistance)
-			idleToChase = true;
-		
-		if (distance <= m_AtkDistance)
-			idleToAttack = true;
-		
+		GetGameObject()->GetComponent<Dotween>()->DONothing(transitionDelay).OnComplete([=]()
+			{
+				if (m_opponentGameobject != nullptr)
+				{
+					float distance = (m_opponentGameobject->GetTransform()->GetWorldPosition()
+						- GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
+
+					if (distance < m_IdDistance && distance > m_AtkDistance)
+						idleToChase = true;
+
+					else if (distance < m_AtkDistance)
+						idleToAttack = true;
+				}
+			});
 	}
 
 	void Unit::ChaseTransition()
@@ -73,22 +98,18 @@ void Unit::Update()
 	{
 		attackToIdle = true;
 	}
+
+	/// <summary>
+	/// 상대 유닛이 인식 범위를 완전히 벗어낫을 때 호출되는 함수.
+	/// ex) FSM 초기화, transitionDelay 초기화.
+	/// </summary>
+	void Unit::InitFSM()
+	{
+		transitionDelay = 0.0f;
+		initToIdle = true;
+	}
+
 #pragma endregion
-
-void Unit::SetOpponentGameObject(GameObject* obj)
-{
-	m_opponentGameobject = obj;
-}
-
-void Unit::EnterIDRange()
-{
-	isJustEntered = true;
-}
-
-void Unit::ExitIDRange()
-{
-	isJustEntered = false;
-}
 
 #pragma region State Engage Functions
 	void Unit::IdleEngageFunction()
@@ -96,12 +117,17 @@ void Unit::ExitIDRange()
 		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 0, 0 });
 
 		GetGameObject()->GetComponent<Dotween>()->StopAllDotweenFunction();
-	
+
 		IdleTransition();
+
+		//GetGameObject()->GetComponent<Dotween>()->DONothing(0.5f /*딜레이*/).OnComplete([=]()
+		//	{
+		//	});
 	}
 
 	void Unit::AttackEngageFunction()
 	{
+		GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(GetGameObject()->GetTransform()->GetWorldPosition());
 		// 상대방을 공격하는 로직. 근접 공격 or 원거리 (투사체) 공격
 		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });
 
@@ -113,7 +139,7 @@ void Unit::ExitIDRange()
 			{
 				float distance = (m_opponentGameobject->GetTransform()->GetWorldPosition() - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
 
-				if (distance > m_AtkDistance)
+				if (distance < m_AtkDistance)
 				{
 					AttackEngageFunction();
 				}
@@ -123,27 +149,29 @@ void Unit::ExitIDRange()
 				}
 			});
 	}
-#pragma endregion 
 
-#pragma region State Update Functions
-	void Unit::ChaseUpdateFunction()
+	void Unit::ChaseEngageFunction()
 	{
 		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 1, 0, 0 });
+
+		MoveDetector::GetInstance()->TargetMove(this, m_opponentTargetPosition);
 
 		Vector3d betweenVector = m_opponentGameobject->GetTransform()->GetWorldPosition() - GetGameObject()->GetTransform()->GetWorldPosition();
 		Vector3d directionVector = betweenVector.Normalized();
 
-		Vector3d endPosition = GetGameObject()->GetTransform()->GetWorldPosition() + (directionVector * m_speed * Time::GetDeltaTime());
+		//Vector3d endPosition = GetGameObject()->GetTransform()->GetWorldPosition() + (directionVector * chaseSpeed * Time::GetDeltaTime());
+		Vector3d endPosition = m_opponentGameobject->GetTransform()->GetWorldPosition();
 
+		float distancePerFrame = (endPosition - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
+
+		//GetGameObject()->GetComponent<NavigationAgent>()->SetSpeed(distancePerFrame / Time::GetDeltaTime());
 		GetGameObject()->GetComponent<NavigationAgent>()->SetSpeed(1.0f);
-		GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(m_opponentPosition);
+		//GetGameObject()->GetComponent<NavigationAgent>()->SetAcceleration(1.0f);
+		GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(m_opponentTargetPosition);
+		//GetGameObject()->GetTransform()->SetWorldPosition(endPosition);
 
-		float distance = (m_opponentPosition - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
-
-		if (distance < m_AtkDistance)
-		{
-			ChaseTransition();
-		}
+		float distance = (m_opponentGameobject->GetTransform()->GetWorldPosition()
+			- GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
 		//else if (distance > m_IdDistance)
 		//{
 		//	ExitIDRangeTransition();
@@ -151,27 +179,49 @@ void Unit::ExitIDRange()
 	}
 #pragma endregion 
 
+void Unit::MoveDetect(Vector3d newPosition)
+{
+	m_opponentTargetPosition = newPosition;
+	isChaseRequested = true;
+}
+
 void Unit::IdleEngage()
 {
-	InitTriggers();
+	initToIdle = false;
+	chaseToIdle = false;
+	attackToIdle = false;
 	IdleEngageFunction();
 }
 
 void Unit::ChaseEngage()
 {
-	InitTriggers();
+	idleToChase = false;
+	isChaseRequested = false;
+	chaseSpeed = 10.0f;
+	GetGameObject()->GetComponent<NavigationAgent>()->SetRadius(0.5f);
+	ChaseEngageFunction();
 }
 
 void Unit::AttackEngage()
 {
-	InitTriggers();
-
+	idleToAttack = false;
 	AttackEngageFunction();
+}
+
+void Unit::IdleUpdate()
+{
+
 }
 
 void Unit::ChaseUpdate()
 {
-	ChaseUpdateFunction();
+	float distance = (m_opponentGameobject->GetTransform()->GetWorldPosition()
+		- GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
+
+	if (distance < m_AtkDistance)
+	{
+		ChaseTransition();
+	}
 }
 
 void Unit::AttackUpdate()
@@ -193,10 +243,18 @@ void Unit::SetAtkRadius(float radius)
 	m_AtkDistance = radius;
 }
 
-void Unit::InitTriggers()
+void Unit::SetOpponentGameObject(GameObject* obj)
 {
-	for (auto e : transitionTriggerVector)
-	{
-		e = false;
-	}
+	m_opponentGameobject = obj;
 }
+
+void Unit::SetOpponentTargetPosition(Vector3d pos)
+{
+	m_opponentTargetPosition = pos;
+}
+
+void Unit::EnterIDRange()
+{
+	isJustEntered = true;
+}
+

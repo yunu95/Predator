@@ -4,7 +4,7 @@
 void Player::Start()
 {
 	unitType = "Player";
-	m_speed = 3.0f;
+	m_speed = 5.0f;
 	m_bulletSpeed = 5.1f;
 	idleToChase = false;
 	idleToAttack = false;
