@@ -85,9 +85,6 @@
     <Filter Include="Contents\UnitFactory">
       <UniqueIdentifier>{acd2f4f0-ac5f-47d4-9337-b5d6450ce773}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\MoveDetector">
-      <UniqueIdentifier>{87f73103-4697-4b71-b3ce-ad792d51d91f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -231,9 +228,6 @@
     <ClInclude Include="UnitFactory.h">
       <Filter>Contents\UnitFactory</Filter>
     </ClInclude>
-    <ClInclude Include="MoveDetector.h">
-      <Filter>Contents\MoveDetector</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -345,9 +339,6 @@
     </ClCompile>
     <ClCompile Include="UnitFactory.cpp">
       <Filter>Contents\UnitFactory</Filter>
-    </ClCompile>
-    <ClCompile Include="MoveDetector.cpp">
-      <Filter>Contents\MoveDetector</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

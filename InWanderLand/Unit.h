@@ -1,6 +1,7 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "FSM.h"
+#include <list>
 
 /// <summary>
 /// 일반 적군 유닛 클래스이자 플레이어 및 보스 클래스의 부모 클래스.
@@ -10,7 +11,6 @@
 class Timer;
 class ProjectileSystem;
 class Projectile;
-class MoveDetector;
 
 class Unit : public Component
 {
@@ -20,7 +20,6 @@ protected:
 		Idle,
 		Move,
 		Chase,
-		ReChase,
 		Detect,
 		Attack,
 		Death,
@@ -33,30 +32,30 @@ protected:
 	string unitType;
 
 	float m_speed;
-	float chaseSpeed;
 	float m_bulletSpeed;
 
 	bool idleToChase;
 	bool idleToAttack;
 	bool attackToIdle;
 	bool chaseToIdle;
-	bool isChaseRequested;
-	bool isRechaseCompleted;
 
 	bool initToIdle;
 
 	bool isJustEntered;			// 밖에 있다가 들어온 경우. 
+
+	bool isDistanceComparingStarted;
 
 	float m_IdDistance;
 	float m_AtkDistance;
 
 	float transitionDelay;
 
+	float chaseUpdateDelay;
+
 	// 처음 인식 범위에 들어왔을 때 저장되는 상대 유닛.
-	GameObject* m_opponentGameobject;
-	Vector3d m_opponentPosition;		// 현재 상대의 위치
-	Vector3d m_moveTargetPosition;		// 자신의 이동 예정 위치
-	Vector3d m_opponentTargetPosition;	// 상대의 이동 예정 위치
+	std::list<GameObject*> m_opponentGameObjectList;
+	GameObject* m_currentTargetObject;
+	Vector3d m_currentTargetPosition;		// 현재 상대의 위치
 
 	void IdleEngage();
 	void ChaseEngage();
@@ -90,9 +89,8 @@ public:
 
 	void InitFSM();
 
-	void MoveDetect(Vector3d newPosition);
 	void SetOpponentGameObject(GameObject* obj);
-	void SetOpponentTargetPosition(Vector3d pos);
+	void DeleteOpponentGameObject(GameObject* obj);
 	void EnterIDRange();
 };
 

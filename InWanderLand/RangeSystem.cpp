@@ -1,6 +1,5 @@
 #include "RangeSystem.h"
 #include "Unit.h"
-#include "MoveDetector.h"
 
 void RangeSystem::Start()
 {
@@ -32,10 +31,6 @@ void RangeSystem::OnCollisionEnter2D(const Collision2D& collision)
 	{	
 		float distance = (collision.m_OtherCollider->GetGameObject()->GetTransform()->GetWorldPosition() - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
 		
-		MoveDetector::GetInstance()->SetTargetUnit(collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>());
-		MoveDetector::GetInstance()->SetChaserUnit(collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>(),
-			m_unitComponent);
-
 		m_unitComponent->SetIdRadius(m_tempIDRadius);
 		m_unitComponent->SetAtkRadius(m_tempAtkRadius);
 		
@@ -55,6 +50,7 @@ void RangeSystem::OnCollisionExit2D(const Collision2D& collision)
 		m_unitComponent->GetType() != collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>()->GetType())
 	{
 		m_unitComponent->InitFSM();
+		m_unitComponent->DeleteOpponentGameObject(collision.m_OtherCollider->GetGameObject());
 	}
 }
 

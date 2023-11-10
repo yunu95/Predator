@@ -4,7 +4,7 @@
 void Player::Start()
 {
 	unitType = "Player";
-	m_speed = 5.0f;
+	m_speed = 2.0f;
 	m_bulletSpeed = 5.1f;
 	idleToChase = false;
 	idleToAttack = false;
@@ -43,7 +43,10 @@ void Player::Update()
 
 	// 인식 범위 내에 들어오게 된다면, 목표로 하는(적군) 오브젝트의 위치 정보를 계속 받아와야한다.
 	// 그렇게 되면 이동중에 해당 적군 오브젝트의 위치가 바뀌어도 그에 맞게 자연스럽게 이동할 수 있지 않을까?
-	if (m_opponentGameobject != nullptr)
-		m_opponentPosition = m_opponentGameobject->GetTransform()->GetWorldPosition();
+	if (!(m_opponentGameObjectList.empty()))
+	{
+		m_currentTargetObject = m_opponentGameObjectList.front();
+		m_currentTargetPosition = m_currentTargetObject->GetTransform()->GetWorldPosition();
+	}
 }
 
