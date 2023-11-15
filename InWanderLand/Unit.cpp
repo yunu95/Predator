@@ -11,7 +11,7 @@ void Unit::Start()
 	chaseUpdateDelay = 1;
 
 	isDistanceComparingStarted = false;
-
+	
 	unitFSM = new FSM<UnitState>(UnitState::Idle);
 
 	unitFSM->transitions[UnitState::Idle].push_back({ UnitState::Chase,
@@ -35,7 +35,6 @@ void Unit::Start()
 	unitFSM->engageAction[UnitState::Idle] = [this]() { IdleEngage(); };
 	unitFSM->engageAction[UnitState::Chase] = [this]() { ChaseEngage(); };
 	unitFSM->engageAction[UnitState::Attack] = [this]() { AttackEngage(); };
-
 
 	unitFSM->updateAction[UnitState::Idle] = [this]() { IdleUpdate(); };
 	unitFSM->updateAction[UnitState::Chase] = [this]() { ChaseUpdate(); };
@@ -91,6 +90,11 @@ void Unit::Update()
 		attackToIdle = true;
 	}
 
+	void Unit::ControlTransition()
+	{
+
+	}
+
 	/// <summary>
 	/// 상대 유닛이 인식 범위를 완전히 벗어낫을 때 호출되는 함수.
 	/// ex) FSM 초기화, transitionDelay 초기화.
@@ -108,6 +112,8 @@ void Unit::Update()
 		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 0, 0 });
 
 		GetGameObject()->GetComponent<Dotween>()->StopAllDotweenFunction();
+
+		GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(GetGameObject()->GetTransform()->GetWorldPosition());
 
 		IdleTransition();
 	}
@@ -184,6 +190,11 @@ void Unit::AttackEngage()
 {
 	idleToAttack = false;
 	AttackEngageFunction();
+}
+
+void Unit::MoveEngage()
+{
+
 }
 
 void Unit::IdleUpdate()

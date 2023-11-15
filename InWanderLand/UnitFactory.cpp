@@ -2,83 +2,85 @@
 #include "Unit.h"
 #include "Player.h"
 #include "RangeSystem.h"
+#include "Dotween.h"
 
-void UnitFactory::AddUnitComponent(UnitType enumType)
+UnitFactory::UnitFactory()
 {
-	switch (enumType)
+	playerColor = yunuGI::Color{ 0, 1, 1, 0 };
+	enemyColor = yunuGI::Color{ 1, 0, 1, 0 };
+
+	defaultPlayerAtkRadius = 2.0f;
+	defaultPlayerIDRadius = 3.0f;
+
+	defaultEnemyAtkRadius = 3.0f;
+	defaultEnemyIDRadius = 5.0f;
+}
+
+yunutyEngine::GameObject* UnitFactory::CreateUnit(UnitType unitType, yunutyEngine::NavigationField* navField)
+{
+	/// 1. UnitGameObject 생성
+	auto unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+
+	unitGameObject->AddComponent<Dotween>();
+
+	// 1-1. unitType에 따른 Unit 컴포넌트 추가
+	Unit* unitComponent;
+
+	// 1-2. (임시) StaticMeshRenderer 추가
+	auto unitMesh = unitGameObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	unitMesh->GetGI().LoadMesh("Capsule");
+
+	/// 2. RangeSystem Gameobject 추가
+	auto unitRangeSystemObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	unitRangeSystemObject->SetParent(unitGameObject);
+	unitRangeSystemObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
+
+	// 2-1. RangeSystem Component 추가
+	RangeSystem* rangeSystemComponent = unitRangeSystemObject->AddComponent<RangeSystem>();
+
+	// 2-2. RangeSystem Debug Mesh 추가
+	auto rangeSystemMesh = unitRangeSystemObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	rangeSystemMesh->GetGI().LoadMesh("Sphere");
+	rangeSystemMesh->GetGI().GetMaterial()->SetPixelShader(L"DebugPS.cso");
+
+	/// 3. NavigationAgent Component 추가
+	auto unitNavigationComponent = unitGameObject->AddComponent<NavigationAgent>();
+	unitNavigationComponent->AssignToNavigationField(navField);
+
+	/// 4. Collider Component 추가
+	auto unitColliderComponent = unitGameObject->AddComponent<CircleCollider2D>();
+
+	/// switch-case 문으로 커스터마이징(?)
+	switch (unitType)
 	{
 		case UnitType::PLAYER:
-			m_unit = m_unitGameObject->AddComponent<Player>();
-			m_unitGameObject->setName("Player");
+		{
+			unitGameObject->setName("Player");
+			unitComponent = unitGameObject->AddComponent<Player>();
+			unitMesh->GetGI().GetMaterial()->SetColor(playerColor);
+			rangeSystemComponent->SetAtkRadius(defaultPlayerAtkRadius);
+			rangeSystemComponent->SetIdRadius(defaultPlayerIDRadius);
+			rangeSystemMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });		// 색 다르게 할거면 switch-case안에 넣기.
+
+			unitRangeSystemObject->GetTransform()->scale = Vector2d(defaultPlayerIDRadius * 2, defaultPlayerIDRadius * 2);
 			break;
+		}
 
 		case UnitType::ENEMY:
-			m_unit = m_unitGameObject->AddComponent<Unit>();
-			m_unitGameObject->setName("Unit");
-			break;
+		{
+			unitGameObject->setName("enemyUnit");
+			unitComponent = unitGameObject->AddComponent<Unit>();
+			unitMesh->GetGI().GetMaterial()->SetColor(enemyColor);
+			rangeSystemComponent->SetAtkRadius(defaultEnemyAtkRadius);
+			rangeSystemComponent->SetIdRadius(defaultEnemyIDRadius);
+			rangeSystemMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 0, 0 });		// 색 다르게 할거면 switch-case안에 넣기.
 
-		case UnitType::BOSS:
-			//unitGameObject->AddComponent<Boss>();
+			unitRangeSystemObject->GetTransform()->scale = Vector2d(defaultEnemyIDRadius * 2, defaultEnemyIDRadius * 2);
 			break;
+		}
 	}
-}
+	rangeSystemComponent->SetUnitComponent(unitComponent);
 
-/// 이 함수는 추후 fbx를 로드할 때 교체될 예정.
-void UnitFactory::AddMeshComponent(UnitType enumType)
-{
-	m_staticMeshRenderer = m_unitGameObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	m_staticMeshRenderer->GetGI().LoadMesh("Capsule");
-	m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 1, 1, 0 });
-}
 
-void UnitFactory::AddColliderComponent()
-{
-	m_circleCollider = m_unitGameObject->AddComponent<CircleCollider2D>();
-	m_circleCollider->SetRadius(defaultUnitColliderRadius);
-}
-
-void UnitFactory::AddNavigationComponent()
-{
-	m_navigationAgent = m_unitGameObject->AddComponent<NavigationAgent>();
-	m_navigationAgent->SetSpeed(2);
-	m_navigationAgent->SetRadius(0.5);
-}
-
-void UnitFactory::AddRangeSystemComponent()
-{
-	m_rangeSystem = m_rangeGameObject->AddComponent<RangeSystem>();
-	m_rangeSystem->SetUnitComponent(m_unit);
-	m_rangeSystem->SetIdRadius(defaultIdRadius);
-	m_rangeSystem->SetAtkRadius(defalutAtkRadius);
-}
-
-GameObject* UnitFactory::CreateUnit(UnitType enumType)
-{
-
-	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	m_rangeGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-
-	AddUnitComponent(enumType);
-	AddMeshComponent(enumType);
-	AddColliderComponent();
-	AddNavigationComponent();
-	AddRangeSystemComponent();
-
-	return m_unitGameObject;
-}
-
-void UnitFactory::SetUnitColliderRadius(float rad)
-{
-	m_circleCollider->SetRadius(rad);
-}
-
-void UnitFactory::SetRangeRadius(float idRadius, float atkRadius)
-{
-	m_rangeSystem->SetIdRadius(idRadius);
-	m_rangeSystem->SetAtkRadius(atkRadius);
-}
-
-void UnitFactory::SetNavField(NavigationField* field)
-{
-	m_navigationAgent->AssignToNavigationField(field);
+	return unitGameObject;
 }

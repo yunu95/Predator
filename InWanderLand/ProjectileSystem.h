@@ -21,10 +21,7 @@ public:
 	static ProjectileSystem* GetInstance();
 
 private:
-	std::vector<GameObject*> m_projectileVector;
-
 	std::stack<GameObject*> m_projectileStack;								// 발사 대기 중인 투사체들.
-	std::unordered_map<GameObject*, Unit*> m_chasingProjectileMap;	// 발사 후의 투사체와 해당 투사체가 쫓아갈 대상 유닛.
 
 public:
 	void Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed);

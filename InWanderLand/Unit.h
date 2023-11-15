@@ -53,13 +53,14 @@ protected:
 	float chaseUpdateDelay;
 
 	// 처음 인식 범위에 들어왔을 때 저장되는 상대 유닛.
-	std::list<GameObject*> m_opponentGameObjectList;
-	GameObject* m_currentTargetObject;
+	std::list<yunutyEngine::GameObject*> m_opponentGameObjectList;
+	yunutyEngine::GameObject* m_currentTargetObject;
 	Vector3d m_currentTargetPosition;		// 현재 상대의 위치
 
 	void IdleEngage();
 	void ChaseEngage();
 	void AttackEngage();
+	virtual void MoveEngage();
 
 	void IdleUpdate();
 	void ChaseUpdate();
@@ -81,16 +82,18 @@ public:
 	void SetIdRadius(float radius);
 	void SetAtkRadius(float radius);
 
-
 	/// 현재 상태에서 다른 상태로 가기 위한 bool값을 판별해주는 함수.
 	void IdleTransition();
 	void ChaseTransition();
 	void AttackTransition();
 
+	// 다른 상태전환과는 달리, 직접 조작을 해서 상태를 전환하는 경우...?
+	void ControlTransition();
+
 	void InitFSM();
 
-	void SetOpponentGameObject(GameObject* obj);
-	void DeleteOpponentGameObject(GameObject* obj);
+	void SetOpponentGameObject(yunutyEngine::GameObject* obj);
+	void DeleteOpponentGameObject(yunutyEngine::GameObject* obj);
 	void EnterIDRange();
 };
 
