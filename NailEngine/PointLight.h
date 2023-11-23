@@ -1,6 +1,10 @@
 #pragma once
 #include "ILight.h"
 
+#include <DirectXMath.h>
+#include "SimpleMath.h"
+using namespace DirectX::PackedVector;
+
 class PointLight : public ILight
 {
 public:
@@ -12,5 +16,11 @@ public:
 
 public:
 	void SetRange(float range);
+	void SetWorldTM(const DirectX::SimpleMath::Matrix& wtm);
+	DirectX::SimpleMath::Matrix& GetWorldTM();
+
+private:
+	DirectX::SimpleMath::Matrix wtm;
+
 };
 

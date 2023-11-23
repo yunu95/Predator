@@ -1,13 +1,11 @@
 #include "FBXLoader.h"
 
 #include <iostream>
-
-#include "Mesh.h"
-
 #include <codecvt>
 #include <locale>
 #include <filesystem>
 
+#include "Mesh.h"
 
 LazyObjects<FBXLoader> FBXLoader::Instance;
 unsigned int FBXLoader::currentBoneIndex = 1;
@@ -38,21 +36,25 @@ FBXNode FBXLoader::LoadFBXData(const char* filePath)
 	//	aiProcess_GenBoundingBoxes |
 	//	aiProcess_EmbedTextures;
 
+	
+
 	flag = aiProcess_Triangulate |
 		aiProcess_ConvertToLeftHanded | aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
 		aiProcess_CalcTangentSpace | aiProcess_PopulateArmatureData |
-		aiProcess_FlipWindingOrder | aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
-		aiProcess_SortByPType | aiProcess_EmbedTextures | aiProcess_LimitBoneWeights;
+		aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
+		aiProcess_SortByPType | aiProcess_LimitBoneWeights;
+
+	//flag = aiProcess_Triangulate |
+	//	aiProcess_ConvertToLeftHanded | aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
+	//	aiProcess_CalcTangentSpace | aiProcess_PopulateArmatureData |
+	//	aiProcess_FlipWindingOrder | aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
+	//	aiProcess_SortByPType | aiProcess_LimitBoneWeights;
 
 	const aiScene* scene = importer.ReadFile(filePath, flag);
 
 	if (!scene) {
 		std::cerr << "모델 로딩 실패!" << std::endl;
 	}
-
-	scene->mAnimations;
-	scene->mNumAnimations;
-
 
 	// Mesh Data Load
 	FBXNode rootNode;
@@ -61,7 +63,7 @@ FBXNode FBXLoader::LoadFBXData(const char* filePath)
 	// Animation Load
 	//ParseAnimation();
 
-	BoneInfo boneInfo;
+	yunuGI::BoneInfo boneInfo;
 	boneInfo.index = 0;
 	boneInfo.parentIndex = -1;
 	boneInfo.name = L"BoneRoot";
@@ -69,6 +71,8 @@ FBXNode FBXLoader::LoadFBXData(const char* filePath)
 	// Load한 Bone을 계층 구조로 만들기
 	BuildBoneHierarchy(scene->mRootNode, boneInfo.child, 0);
 	rootNode.boneInfo = std::move(boneInfo);
+
+	LoadAnimation(scene);
 
 	boneInfoMap.clear();
 	currentBoneIndex = 1;
@@ -179,7 +183,59 @@ void FBXLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMeshD
 		aiString path;
 		if (material->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS)
 		{
-			meshData.material.albedoMap = this->texturePath + aiStringToWString(path.C_Str());
+
+			std::wstring _path = aiStringToWString(path.C_Str());
+			std::filesystem::path pathName(_path);
+			pathName.filename().wstring();
+
+			meshData.material.albedoMap = this->texturePath + pathName.filename().wstring();
+		}
+	}
+
+	// Normal Texture
+	if (material->GetTextureCount(aiTextureType_NORMALS) > 0)
+	{
+		aiString path;
+		if (material->GetTexture(aiTextureType_NORMALS, 0, &path) == AI_SUCCESS)
+		{
+
+			std::wstring _path = aiStringToWString(path.C_Str());
+			std::filesystem::path pathName(_path);
+			pathName.filename().wstring();
+
+			meshData.material.normalMap = this->texturePath + pathName.filename().wstring();
+		}
+	}
+}
+
+void FBXLoader::LoadAnimation(const aiScene* scene)
+{
+	AnimationClip animationClip;
+	for (int i = 0; i < scene->mNumAnimations; ++i)
+	{
+		aiAnimation* animation = scene->mAnimations[i];
+		animationClip.name = this->aiStringToWString(animation->mName.C_Str());
+		animationClip.duration = animation->mDuration / animation->mTicksPerSecond;
+		animationClip.totlaFrame = animation->mDuration;
+		int totalFrame = animation->mDuration;
+
+		for (int j = 0; j < animation->mNumChannels; ++j)
+		{
+			aiNodeAnim* nodeAnim = animation->mChannels[j];
+			nodeAnim->mNodeName;
+
+			for (int k = 0; k < nodeAnim->mNumPositionKeys; ++k)
+			{
+
+			}
+			for (int k = 0; k < nodeAnim->mNumRotationKeys; ++k)
+			{
+
+			}
+			for (int k = 0; k < nodeAnim->mNumScalingKeys; ++k)
+			{
+
+			}
 		}
 	}
 }
@@ -205,12 +261,12 @@ DirectX::SimpleMath::Matrix FBXLoader::ConvertToCloumnMajor(aiMatrix4x4 matrix)
 	return colMajor;
 }
 
-void FBXLoader::BuildBoneHierarchy(const aiNode* node, std::vector<BoneInfo>& boneInfoVec, int parentIndex)
+void FBXLoader::BuildBoneHierarchy(const aiNode* node, std::vector<yunuGI::BoneInfo>& boneInfoVec, int parentIndex)
 {
 	auto iter = this->boneInfoMap.find(this->aiStringToWString(node->mName.C_Str()));
 	if (iter != this->boneInfoMap.end())
 	{
-		BoneInfo boneInfo;
+		yunuGI::BoneInfo boneInfo;
 
 		boneInfo.name = iter->second.name;
 

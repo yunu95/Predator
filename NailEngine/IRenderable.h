@@ -7,7 +7,11 @@
 #include "SimpleMath.h"
 using namespace DirectX::PackedVector;
 
-#include "IMaterial.h"
+#include "Material.h"
+
+#include "Mesh.h"
+
+class yunuGI::IMaterial;
 
 class IRenderable
 {
@@ -15,25 +19,31 @@ public:
 	IRenderable();
 #pragma region Setter
 	void SetWorldTM(const DirectX::SimpleMath::Matrix& wtm) { this->wtm = wtm; };
-	void SetMeshName(const std::wstring& meshName) { this->meshName = meshName; }
+	void SetMesh(Mesh* mesh)
+	{
+		this->mesh = mesh;
+	}
 	void SetMaterial(unsigned int index, yunuGI::IMaterial* material)
 	{
 		// 새로운 Material이라면
 		if (index + 1 > this->materialVec.size())
 		{
-			this->materialVec.emplace_back(material);
+			this->materialVec.emplace_back(reinterpret_cast<Material*>(material));
 		}
 		else
 		{
-			this->materialVec[index] = material;
+			this->materialVec[index] = reinterpret_cast<Material*>(material);
 		}
 	}
 #pragma endregion
 
 #pragma region Getter
 	DirectX::SimpleMath::Matrix& GetWorldTM() { return this->wtm; }
-	std::wstring& GetMeshName() { return meshName; }
-	const yunuGI::IMaterial* GetMaterial(unsigned int index) 
+	Mesh* GetMesh() 
+	{ 
+		return this->mesh; 
+	}
+	Material* GetMaterial(unsigned int index) 
 	{
 		return materialVec[index]; 
 	}
@@ -41,7 +51,7 @@ public:
 
 protected:
 	DirectX::SimpleMath::Matrix wtm;
-	std::wstring meshName;
-	std::vector<yunuGI::IMaterial*> materialVec;
+	Mesh* mesh;
+	std::vector<Material*> materialVec;
 };
 

@@ -21,6 +21,7 @@ yunuGIAdapter::MaterialAdapter::MaterialAdapter()
 	, ps{ L"DefaultPS.cso" }
 	, color {1.f,1.f,1.f,1.f} 
 {
+	useTextures = { 0, };
 	id++;
 }
 

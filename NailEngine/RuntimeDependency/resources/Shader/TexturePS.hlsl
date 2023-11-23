@@ -18,4 +18,7 @@ float4 main(PixelIn input) : SV_TARGET
 }
 
 // ShaderInfo
-// ShaderType : Solid
+// ShaderType : Forward
+// RasterType : Solid
+// CullType : CullBack
+// DepthType : Less

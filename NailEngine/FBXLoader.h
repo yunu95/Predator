@@ -1,5 +1,5 @@
 #pragma once
-#include "YunuGraphicsInterface.h"
+#include "FBXData.h"
 
 #include "Utils.h"
 #include "Struct.h"
@@ -22,32 +22,47 @@ class Mesh;
 struct FBXBoneInfo
 {
 	std::wstring name;
+	int parentIndex;
+	int index;
 	DirectX::SimpleMath::Matrix offset;
 };
 
-struct BoneInfo
+struct KeyFrameInfo
+{
+	//std::vector<std::vector<
+};
+
+struct AnimationClip
 {
 	std::wstring name;
-	int index;
-	int parentIndex;
-	std::vector<BoneInfo> child;
+	double duration;
+	int totlaFrame;
+	std::vector<std::vector<DirectX::SimpleMath::Matrix>> keyFrameInfo;
 };
 
+//struct BoneInfo
+//{
+//	std::wstring name;
+//	int index;
+//	int parentIndex;
+//	std::vector<BoneInfo> child;
+//};
 
-struct FBXMaterialData
-{
-	std::wstring materialName;
-	std::wstring albedoMap;
-	std::wstring normalMap;
-	std::wstring armMap;
-	std::wstring emissionMap;
-};
+
+//struct FBXMaterialData
+//{
+//	std::wstring materialName;
+//	std::wstring albedoMap;
+//	std::wstring normalMap;
+//	std::wstring armMap;
+//	std::wstring emissionMap;
+//};
 
 struct FBXMeshData
 {
 	std::wstring meshName;
 
-	FBXMaterialData material;
+	yunuGI::MaterialData material;
 
 	std::vector<Vertex> vertex;
 	std::vector<unsigned int> indices;
@@ -57,7 +72,7 @@ struct FBXNode
 {
 	std::vector<FBXNode> child;
 	std::vector<FBXMeshData> meshVec;
-	BoneInfo boneInfo;
+	yunuGI::BoneInfo boneInfo;
 };
 
 class FBXLoader
@@ -73,11 +88,12 @@ private:
 	void ParseNode(const aiNode* node, const aiScene* scene, FBXNode& fbxNode);
 	void ParseMesh(const aiNode* node, const aiScene* scene, FBXNode& fbxNode);
 	void ParseMaterial(const aiScene*scene, const aiMesh* mesh, FBXMeshData& meshData);
+	void LoadAnimation(const aiScene* scene);
 
 private:
 	std::wstring aiStringToWString(std::string str);
 	DirectX::SimpleMath::Matrix ConvertToCloumnMajor(aiMatrix4x4 matrix);
-	void BuildBoneHierarchy(const aiNode* node, std::vector<BoneInfo>& boneInfoVec, int parentIndex);
+	void BuildBoneHierarchy(const aiNode* node, std::vector<yunuGI::BoneInfo>& boneInfoVec, int parentIndex);
 
 private:
 	std::wstring texturePath;

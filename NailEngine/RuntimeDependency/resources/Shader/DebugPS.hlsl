@@ -2,8 +2,13 @@
 
 struct PixelIn
 {
-    float4 pos : SV_Position;
-    float4 color : Color;
+    float4 posH : SV_Position;
+    float4 posV : POSITION;
+    float4 color : COLOR;
+    float2 uv : TEXCOORD0;
+    float3 normalV : NORMAL;
+    float3 tangentV : TANGENT;
+    float3 biNormalV : BINORMAL;
 };
 
 float4 main(PixelIn input) : SV_TARGET
@@ -12,4 +17,7 @@ float4 main(PixelIn input) : SV_TARGET
 }
 
 // ShaderInfo
-// ShaderType : Wireframe
+// ShaderType : Forward
+// RasterType : Wireframe
+// CullType : CullNone
+// DepthType : Less

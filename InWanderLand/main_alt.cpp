@@ -138,7 +138,7 @@ int main(int, char**)
     yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
     yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(1280, 800);
     yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(releaseHwnd);
-    yunutyEngine::graphics::Renderer::SingleInstance().LoadFile("FBX/Boss");
+    yunutyEngine::graphics::Renderer::SingleInstance().LoadFile("FBX/Zelda");
 
     ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 
@@ -155,22 +155,58 @@ int main(int, char**)
     }
 
 	// 큐브
+	//{
+	//	auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Zelda");
+	//	camObj2->GetTransform()->position = Vector3d(0, 0, 10);
+	//	//renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1.f,0.f,0.f,1.f });
+	//	//renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, L"Texture/Brick_Albedo.jpg");
+	//	//renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::NORMAL, L"Texture/Brick_Normal.jpg");
+	//}
 	{
-		auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
-		camObj2->GetTransform()->position = Vector3d(0, 0, 10);
-		//renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1.f,0.f,0.f,1.f });
-		//renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, L"Texture/Brick_Albedo.jpg");
-		//renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::NORMAL, L"Texture/Brick_Normal.jpg");
+		auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Zelda");
+        camObj2->GetTransform()->scale = Vector3d{ 0.01f,0.01f,0.01f };
+
 	}
 
 	// 라이트
+    {
+        auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        //camObj2->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{50.f,-30.f,0.f} });
+        camObj2->GetTransform()->position = Vector3d(0.f, 0.f, 7);
+        auto renderer = camObj2->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+        yunuGI::Color color = { 1.f,0.f,0.f,1.f };
+        renderer->GetGI().SetLightDiffuseColor(color);
+    }
 	{
 		auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		//camObj2->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{50.f,-30.f,0.f} });
-        //camObj2->GetTransform()->position = Vector3d(0.f, 0.f, 5);
-		auto renderer = camObj2->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-		auto color = yunuGI::Color{ 0.7f,0.7f,0.7f,1.f};
-		renderer->GetGI().SetLightDiffuseColor(color);
+		camObj2->GetTransform()->position = Vector3d(0.f, 0.f, -5);
+        //camObj2->GetTransform()->scale = Vector3d(5, 5, 5);
+		auto renderer = camObj2->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+        auto& meshList = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetMeshList();
+        for (int i = 0; i < meshList.size(); ++i)
+        {
+            if (meshList[i]->GetName() == L"Sphere")
+            {
+                renderer->GetGI().SetMesh(meshList[i]);
+            }
+        }
+        auto& materialList = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetMaterialhList();
+		for (int i = 0; i < materialList.size(); ++i)
+		{
+			if (materialList[i]->GetName() == L"DefaultMaterial")
+			{
+				renderer->GetGI().SetMaterial(0,materialList[i]);
+			}
+		}
+		auto& shaderList = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetShaderList();
+		for (int i = 0; i < shaderList.size(); ++i)
+		{
+			if (shaderList[i]->GetName() == L"DebugPS.cso")
+			{
+				auto material = renderer->GetGI().GetMaterial(0);
+                material->SetPixelShader(shaderList[i]);
+			}
+		}
 	}
 	//// 라이트
 	//{

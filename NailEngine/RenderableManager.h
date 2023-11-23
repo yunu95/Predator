@@ -6,6 +6,7 @@
 
 class IRenderable;
 
+
 class RenderableManager
 {
 public:
@@ -22,6 +23,5 @@ public:
 
 private:
 	std::unordered_set<std::shared_ptr<IRenderable>> renderableSet;
-
 };
 

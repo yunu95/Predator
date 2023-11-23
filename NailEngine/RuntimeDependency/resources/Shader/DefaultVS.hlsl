@@ -23,7 +23,6 @@ struct VertexOut
 VertexOut main(VertexIn input)
 {
     VertexOut output;
-    
     row_major matrix WV = mul(WTM,VTM);
     
     output.posH = mul(float4(input.pos, 1.f), WVP);

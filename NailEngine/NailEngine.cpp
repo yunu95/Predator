@@ -29,9 +29,9 @@ void NailEngine::Init(UINT64 hWnd)
 	this->swapChain->Init(this->hWnd, this->width, this->height);
 	ResourceBuilder::Instance.Get().swapChain = this->swapChain;
 
-	ResourceManager::Instance.Get().CreateDefaultResource();
 	CreateConstantBuffer();
 	CreateRenderTargetGroup();
+	ResourceManager::Instance.Get().CreateDefaultResource();
 }
 
 void NailEngine::Render()
@@ -39,27 +39,7 @@ void NailEngine::Render()
 	// Begin
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetViewports(1, &ResourceBuilder::Instance.Get().swapChain->GetViewPort());
 
-	D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
-
-	depthStencilDesc.DepthEnable = true; // 깊이 버퍼 사용 여부
-	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL; // 깊이 값을 쓰는지 여부
-	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL; // 깊이 값을 비교하는 함수
-
-	depthStencilDesc.StencilEnable = false; // 스텐실 버퍼 사용 여부
-	depthStencilDesc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK; // 스텐실 값을 읽을 때의 마스크
-	depthStencilDesc.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK; // 스텐실 값을 쓸 때의 마스크
-
-	depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP; // 스텐실 테스트에 실패하면 수행할 동작
-	depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP; // 스텐실 테스트는 성공했으나 깊이 테스트는 실패한 경우에 수행할 동작
-	depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP; // 스텐실 테스트와 깊이 테스트 모두 성공한 경우에 수행할 동작
-	depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS; // 스텐실 테스트에 사용할 함수
-
-	depthStencilDesc.BackFace = depthStencilDesc.FrontFace; // 양면 스텐실을 
-
-	ID3D11DepthStencilState* pDepthStencilState;
-	HRESULT hr = ResourceBuilder::Instance.Get().device->GetDevice()->CreateDepthStencilState(&depthStencilDesc, &pDepthStencilState);
-
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->OMSetDepthStencilState(pDepthStencilState, 1);
+	
 
 	const float red[] = { 0.f, 0.5f, 0.f, 1.f };
 

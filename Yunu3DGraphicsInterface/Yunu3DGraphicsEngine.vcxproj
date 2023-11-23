@@ -160,8 +160,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="FBXData.h" />
+    <ClInclude Include="IAnimation.h" />
     <ClInclude Include="ILight.h" />
     <ClInclude Include="IMaterial.h" />
+    <ClInclude Include="IMesh.h" />
+    <ClInclude Include="IResource.h" />
+    <ClInclude Include="IShader.h" />
+    <ClInclude Include="ITexture.h" />
     <ClInclude Include="IYunuGIDebugCube.h" />
     <ClInclude Include="IYunuGIDebugObject.h" />
     <ClInclude Include="IYunuGIDebugSphere.h" />
@@ -216,6 +221,7 @@
     <Image Include="Yunu3DGraphicsEngine.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="IResource.cpp" />
     <ClCompile Include="YGExports.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

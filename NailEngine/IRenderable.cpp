@@ -4,5 +4,5 @@
 
 IRenderable::IRenderable()
 {
-	this->materialVec.emplace_back(ResourceManager::Instance.Get().GetMaterial(L"DefaultMaterial").get());
+	this->materialVec.emplace_back(reinterpret_cast<Material*>(ResourceManager::Instance.Get().GetMaterial(L"DefaultMaterial").get()));
 }
