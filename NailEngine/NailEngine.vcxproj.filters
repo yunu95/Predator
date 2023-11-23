@@ -219,6 +219,9 @@
     <ClInclude Include="FBXLoader.h">
       <Filter>FBXLoader</Filter>
     </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -299,6 +302,9 @@
     <ClCompile Include="FBXLoader.cpp">
       <Filter>FBXLoader</Filter>
     </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="RuntimeDependency\resources\Shader\DefaultVS.hlsl">
@@ -326,6 +332,12 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="RuntimeDependency\resources\Shader\TextureVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\Deferred_PointLightVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\Deferred_PointLightPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

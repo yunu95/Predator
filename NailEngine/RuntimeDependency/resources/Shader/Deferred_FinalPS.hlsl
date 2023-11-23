@@ -23,13 +23,16 @@ float4 main(PixelIn input) : SV_Target
 
     float4 color = Temp0Map.Sample(sam, input.uv);
     float4 specular = Temp2Map.Sample(sam, input.uv);
-    
+    color = pow(color, 1 / 2.2f);
     output = (color * lightPower) + specular;
     //output = (color);
-    output.rgb = pow(output.rgb, 1 / 2.2);
+    //output.rgb = pow(output.rgb, 1 / 2.2);
     
     return output;
 }
 
 // ShaderInfo
-// ShaderType : Solid
+// ShaderType : Forward
+// RasterType : Solid
+// CullType : CullNone
+// DepthType : NoDepthTestNoWrite

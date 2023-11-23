@@ -32,8 +32,8 @@ void CalculateLight(int lightIndex, float3 normal, float4 pos, out float4 diffus
             float3 v = normalize(lightVec + 2 * (saturate(dot(-lightVec, normal)) * normal));
             float specFactor = pow(max(dot(-viewDirection ,v), 0.f), 16.f);
             
-            diffuse = diffuseFactor * lights[lightIndex].color.diffuse;
-            specular = specFactor * lights[lightIndex].color.specular;
+            diffuse += diffuseFactor * lights[lightIndex].color.diffuse;
+            specular += specFactor * lights[lightIndex].color.specular;
         }
     }
     else if (lights[lightIndex].lightType == 1)
@@ -60,7 +60,7 @@ void CalculateLight(int lightIndex, float3 normal, float4 pos, out float4 diffus
             float specFactor = pow(max(dot(v, viewDirection), 0.f), 8.f);
             
             diffuse = diffuseFactor * lights[lightIndex].color.diffuse;
-            specular = specFactor * lights[lightIndex].color.specular;
+            //specular = specFactor * lights[lightIndex].color.specular;
         }
         
         float att = 1.f / pow(d, 2);

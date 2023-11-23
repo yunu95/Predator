@@ -28,7 +28,7 @@ public:
                 Vector3d position = GetTransform()->GetWorldPosition() + Vector3d(i - halveWidth, j - halveHeight, 0.5);
                 auto tile = Scene::getCurrentScene()->AddGameObject();
                 auto staticMesh = tile->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-                staticMesh->GetGI().SetMesh(L"Cube");
+                ///staticMesh->GetGI().SetMesh(L"Cube");
                 //staticMesh->GetGI().SetMesh(L"Cube");
                 staticMesh->GetGI().GetMaterial()->SetColor(((i + j) % 2 == 0 ? colorA : colorB));
                 //staticMesh->GetGI().SetShader(0, L"Forward");

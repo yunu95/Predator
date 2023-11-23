@@ -65,7 +65,7 @@ PS_OUT main(PixelIn input)
     if (UseTexture(useAlbedo) == 1)
     {
         color = AlbedoMap.Sample(sam, input.uv);
-        color.rgb = pow(color.rgb, 2.2);
+        //color.rgb = pow(color.rgb, 2.2f);
     }
     
     float3 viewNormal = input.normalV;
@@ -95,4 +95,7 @@ PS_OUT main(PixelIn input)
 }
 
 // ShaderInfo
-// ShaderType : Solid
+// ShaderType : Deferred
+// RasterType : Solid
+// CullType : CullBack
+// DepthType : Less

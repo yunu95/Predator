@@ -1,9 +1,5 @@
 #include "RenderSystem.h"
 
-#include <DirectXMath.h>
-#include "SimpleMath.h"
-using namespace DirectX::PackedVector;
-
 #include "NailEngine.h"
 #include "Struct.h"
 #include "ConstantBuffer.h"
@@ -18,6 +14,7 @@ using namespace DirectX::PackedVector;
 
 #include "ILight.h"
 #include "LightManager.h"
+#include "PointLight.h"
 
 #include "NailCamera.h"
 #include "RenderTargetGroup.h"
@@ -29,6 +26,39 @@ using namespace DirectX::PackedVector;
 #include "Device.h"
 
 LazyObjects<RenderSystem> RenderSystem::Instance;
+
+void RenderSystem::ClearRenderInfo()
+{
+	deferredVec.clear();
+	forwardVec.clear();
+}
+
+void RenderSystem::SortObject()
+{
+	auto& renderableSet = RenderableManager::Instance.Get().GetRenderableSet();
+
+	for (auto& e : renderableSet)
+	{
+		auto mesh = e->GetMesh();
+		for (int i = 0; i < mesh->GetMaterialCount(); ++i)
+		{
+			RenderInfo renderInfo;
+			renderInfo.mesh = mesh;
+			renderInfo.material = e->GetMaterial(i);
+			renderInfo.materialIndex = i;
+			renderInfo.wtm = e->GetWorldTM();
+
+			if (e->GetMaterial(i)->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+			{
+				this->deferredVec.emplace_back(renderInfo);
+			}
+			else if (e->GetMaterial(i)->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+			{
+				this->forwardVec.emplace_back(renderInfo);
+			}
+		}
+	}
+}
 
 void RenderSystem::PushLightData()
 {
@@ -76,6 +106,9 @@ void RenderSystem::PushCameraData()
 
 void RenderSystem::Render()
 {
+	ClearRenderInfo();
+	SortObject();
+
 	PushCameraData();
 	PushLightData();
 
@@ -88,37 +121,35 @@ void RenderSystem::Render()
 	// Final 출력
 	DrawFinal();
 
+	RenderForward();
+
 	// 디퍼드 정보 출력
 	DrawDeferredInfo();
 
 	// 디퍼드용 SRV UnBind
-	ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight")->UnBindGraphicsData();
-	ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final")->UnBindGraphicsData();
+	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
+	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"))->UnBindGraphicsData();
 }
 
 void RenderSystem::RenderObject()
 {
-	
-	auto& renderableSet = RenderableManager::Instance.Get().GetRenderableSet();
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
 	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->OMSetRenderTarget();
 
-	for (auto& e : renderableSet)
+	for (auto& e : this->deferredVec)
 	{
 		MatrixBuffer matrixBuffer;
-		matrixBuffer.WTM = e->GetWorldTM();
+		matrixBuffer.WTM = e.wtm;
 		matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
 		matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
 		matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-		matrixBuffer.WorldInvTrans = e->GetWorldTM().Invert().Transpose();
+		matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
 		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 
-		auto& mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
-		for (int i = 0; i < mesh->GetMaterialCount(); ++i)
-		{
-			ResourceManager::Instance.Get().GetMaterial(e->GetMaterial(i)->GetMaterialName())->PushGraphicsData();
-			mesh->Render(i);
-		}
+		auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.mesh->GetName()));
+
+		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.material->GetName()))->PushGraphicsData();
+		mesh->Render(e.materialIndex);
 	}
 	
 	//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->UnBind();
@@ -132,13 +163,27 @@ void RenderSystem::RenderLight()
 	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->OMSetRenderTarget();
 	for (auto& e : lightSet)
 	{
-		ResourceManager::Instance.Get().GetMaterial(e->GetMaterialName())->PushGraphicsData();
-		auto& mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
+		// Point Light의 경우 실제 Sphere Mesh를 렌더링 파이프라인에 넘긴다.
+		// 이때 WVP이 필요하기에 상수버퍼에 밀어넣어야 한다.
+		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
+		{
+			MatrixBuffer matrixBuffer;
+			matrixBuffer.WTM = std::static_pointer_cast<PointLight>(e)->GetWorldTM();
+			matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+			matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+			matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+			matrixBuffer.WorldInvTrans = std::static_pointer_cast<PointLight>(e)->GetWorldTM().Invert().Transpose();
+			NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+		}
+
+		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e->GetMaterialName()))->PushGraphicsData();
+		auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
 		for (int i = 0; i < mesh->GetMaterialCount(); ++i)
 		{
 			mesh->Render(i);
 		}
 	}
+
 	//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->UnBind();
 }
 
@@ -149,8 +194,28 @@ void RenderSystem::DrawFinal()
 		ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
 		ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
 
-	ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final")->PushGraphicsData();
+
+	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"))->PushGraphicsData();
 	ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();
+}
+
+void RenderSystem::RenderForward()
+{
+	for (auto& e : this->forwardVec)
+	{
+		MatrixBuffer matrixBuffer;
+		matrixBuffer.WTM = e.wtm;
+		matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+		matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+		matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+		matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+
+		auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.mesh->GetName()));
+
+		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.material->GetName()))->PushGraphicsData();
+		mesh->Render(e.materialIndex);
+	}
 }
 
 void RenderSystem::DrawDeferredInfo()
@@ -165,17 +230,17 @@ void RenderSystem::DrawDeferredInfo()
 		DirectX::SimpleMath::Matrix wtm = matSclae * matRotation * matTranslation;
 
 		if (i == 0)
-			ResourceManager::Instance.Get().GetMaterial(L"DeferredPosition")->PushGraphicsData();
+			std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredPosition"))->PushGraphicsData();
 		else if (i == 1)
-			ResourceManager::Instance.Get().GetMaterial(L"DeferredNormal")->PushGraphicsData();
+			std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredNormal"))->PushGraphicsData();
 		else if (i == 2)
-			ResourceManager::Instance.Get().GetMaterial(L"DeferredColor")->PushGraphicsData();
+			std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredColor"))->PushGraphicsData();
 		else if (i == 3)
-			ResourceManager::Instance.Get().GetMaterial(L"DeferredDepth")->PushGraphicsData();
+			std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredDepth"))->PushGraphicsData();
 		else if (i == 4)
-			ResourceManager::Instance.Get().GetMaterial(L"DeferredDiffuseLight")->PushGraphicsData();
+			std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredDiffuseLight"))->PushGraphicsData();
 		else if (i == 5)
-			ResourceManager::Instance.Get().GetMaterial(L"DeferredSpecularLight")->PushGraphicsData();
+			std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredSpecularLight"))->PushGraphicsData();
 		//else if (i == 6)
 		//{
 		//	matSclae = DirectX::SimpleMath::Matrix::CreateScale(DirectX::SimpleMath::Vector3(1280 / 10.f, 800 / 10.f, 1.f));

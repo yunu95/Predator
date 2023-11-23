@@ -31,13 +31,20 @@ PS_OUT main(PixelIn input)
     float3 viewNormal = Temp1Map.Sample(sam, input.uv).xyz;
     
     LightColor color;
-    CalculateLight(temp_int0, viewNormal, float4(viewPos, 0.f), color.diffuse, color.ambient, color.specular);
+    
+    for (int i = 0; i < lightCount; ++i)
+    {
+        CalculateLight(i, viewNormal, float4(viewPos, 0.f), color.diffuse, color.ambient, color.specular);
+    }
     
     output.diffuse = color.diffuse + color.ambient;
-    output.specular = color.specular;
+    //output.specular = color.specular;
     
     return output;
 }
 
 // ShaderInfo
-// ShaderType : Solid
+// ShaderType : Light
+// RasterType : Solid
+// CullType : CullBack
+// DepthType : Less

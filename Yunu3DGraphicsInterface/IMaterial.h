@@ -1,12 +1,13 @@
 #pragma once
-#include "IUnknown.h"
+#include "IResource.h"
 
 #include "YunuGIColor.h"
 
-#include <string>
-
 namespace yunuGI
 {
+	class IShader;
+	class ITexture;
+
 	enum class Texture_Type
 	{
 		ALBEDO,
@@ -19,22 +20,16 @@ namespace yunuGI
 		Temp2,
 	};
 
-	struct MaterialDesc
-	{
-		std::wstring materialName;
-	};
-
-	class IMaterial : public IUnknown
+	class IMaterial : virtual public IResource
 	{
 	public:
-		virtual void SetMaterialName(const std::wstring& materialName) = 0;
-		virtual void SetVertexShader(const std::wstring& vertexShader) = 0;
-		virtual void SetPixelShader(const std::wstring& pixelShader) = 0;
-		virtual void SetTexture(Texture_Type textureType, const std::wstring& texture) = 0;
+		virtual void SetVertexShader(const yunuGI::IShader* shader) = 0;
+		virtual void SetPixelShader(const yunuGI::IShader* shader) = 0;
+		virtual void SetTexture(Texture_Type textureType, const yunuGI::ITexture* texture) = 0;
 		virtual void SetColor(const yunuGI::Color& color) = 0;
 		virtual void SetInt(int index, int val) = 0;
 
-		virtual const std::wstring& GetMaterialName()const = 0;
+		virtual const yunuGI::IShader* GetPixelShader() const = 0;
 
 	private:
 

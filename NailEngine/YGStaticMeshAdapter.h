@@ -36,15 +36,17 @@ namespace yunuGIAdapter
 
 		virtual void SetActive(bool isActive) {};
 
-		virtual void SetMesh(const std::wstring& meshName) override
+		virtual void SetMesh(yunuGI::IMesh* mesh) override
 		{
-			renderable->SetMeshName(meshName);
+			renderable->SetMesh(reinterpret_cast<Mesh*>(mesh));
 		};
 
 		virtual void SetPickingMode(bool isPickingModeOn) {}
 
 		virtual void SetMaterial(unsigned int index, yunuGI::IMaterial* material) override
 		{
+			std::shared_ptr<Material> materialPtr = std::shared_ptr<Material>(reinterpret_cast<Material*>(material));
+
 			// 새로운 Material이라면
 			if (index + 1 > this->materialVec.size())
 			{
@@ -54,22 +56,22 @@ namespace yunuGIAdapter
 
 				if (this->materialVec.back()->IsOrigin())
 				{
-					this->materialVec.back()->original = reinterpret_cast<yunuGIAdapter::MaterialAdapter*>(material);
+					this->materialVec.back()->original = materialPtr;
 				}
 				else
 				{
-					this->materialVec.back()->variation = reinterpret_cast<yunuGIAdapter::MaterialAdapter*>(material);
+					this->materialVec.back()->variation = materialPtr;
 				}
 			}
 			else
 			{
 				if (this->materialVec[index]->IsOrigin())
 				{
-					this->materialVec[index]->original = reinterpret_cast<yunuGIAdapter::MaterialAdapter*>(material);
+					this->materialVec[index]->original = materialPtr;
 				}
 				else
 				{
-					this->materialVec[index]->variation = reinterpret_cast<yunuGIAdapter::MaterialAdapter*>(material);
+					this->materialVec[index]->variation = materialPtr;
 				}
 			}
 

@@ -3,18 +3,33 @@
 #include <vector>
 #include <string>
 
-struct MaterialData
+namespace yunuGI
 {
-	std::wstring materialName;
-	std::wstring albedoMap;
-	std::wstring normalMap;
-	std::wstring armMap;
-	std::wstring emissionMap;
-};
+	struct BoneInfo
+	{
+		std::wstring name;
+		int index;
+		int parentIndex;
+		std::vector<BoneInfo> child;
+	};
 
-struct FBXData
-{
-	std::wstring meshName;
+	struct MaterialData
+	{
+		std::wstring materialName;
+		std::wstring albedoMap;
+		std::wstring normalMap;
+		std::wstring armMap;
+		std::wstring emissionMap;
+	};
 
-	std::vector<MaterialData> materialVec;
-};
+	struct FBXData
+	{
+		std::wstring meshName;
+
+		std::vector<MaterialData> materialVec;
+
+		BoneInfo boneInfo;
+	};
+
+
+}
