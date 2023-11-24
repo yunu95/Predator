@@ -98,11 +98,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_HAS_STD_BYTE=0;NOMINMAX;WIN32;_DEBUG;_CONSOLE;YUNUTY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_HAS_STD_BYTE=0;_SILENCE_ALL_CXX20_DEPRECATION_WARNINGS;NOMINMAX;WIN32;_DEBUG;_CONSOLE;YUNUTY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>YunutyEngine.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)FMOD\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(SolutionDir)Include\;$(SolutionDir)Include\FMOD\;$(ProjectDir)header\;$(SolutionDir)Include\Detour;$(SolutionDir)Include\DetourCrowd;$(SolutionDir)Include\DetourDebugUtils;$(SolutionDir)Include\DetourTileCache;$(SolutionDir)Include\Recast</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FMOD\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(SolutionDir)Include\;$(SolutionDir)Include\FMOD\;$(ProjectDir)header\;$(SolutionDir)Include\Detour;$(SolutionDir)Include\DetourCrowd;$(SolutionDir)Include\DetourDebugUtils;$(SolutionDir)Include\DetourTileCache;$(SolutionDir)Include\Recast;$(SolutionDir)include\physx\include;$(SolutionDir)include\physx\include\cudamanager;$(SolutionDir)include\physx\source\physxextensions\src;$(SolutionDir)include\physx\source\foundation\include;$(SolutionDir)include\physx\source\geomutils\include;$(SolutionDir)include\physx\snippets\graphics\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <IncludeInUnityFile>true</IncludeInUnityFile>
     </ClCompile>
@@ -110,7 +110,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Bin\$(Platform)\$(Configuration)\;$(SolutionDir)Lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Rpcrt4.lib;Recast.lib;Detour.lib;DetourCrowd.lib;DetourTileCache.lib;DebugUtils.lib;fmod32_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Rpcrt4.lib;Recast.lib;Detour.lib;DetourCrowd.lib;DetourTileCache.lib;DebugUtils.lib;PhysX_64.lib;PhysXExtensions_static_64.lib;PhysXPvdSDK_static_64.lib;PhysXVehicle_static_64.lib;PhysXVehicle2_static_64.lib;PhysXCharacterKinematic_static_64.lib;PhysXCooking_64.lib;PVDRuntime_64.lib;SceneQuery_static_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;fmod32_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
@@ -123,11 +123,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_HAS_STD_BYTE=0;NOMINMAX;WIN32;NDEBUG;_CONSOLE;YUNUTY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_HAS_STD_BYTE=0;_SILENCE_ALL_CXX20_DEPRECATION_WARNINGS;NOMINMAX;WIN32;NDEBUG;_CONSOLE;YUNUTY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>YunutyEngine.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)FMOD\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(SolutionDir)Include\;$(SolutionDir)Include\FMOD\;$(ProjectDir)header\;$(SolutionDir)Include\Detour;$(SolutionDir)Include\DetourCrowd;$(SolutionDir)Include\DetourDebugUtils;$(SolutionDir)Include\DetourTileCache;$(SolutionDir)Include\Recast</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FMOD\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(SolutionDir)Include\;$(SolutionDir)Include\FMOD\;$(ProjectDir)header\;$(SolutionDir)Include\Detour;$(SolutionDir)Include\DetourCrowd;$(SolutionDir)Include\DetourDebugUtils;$(SolutionDir)Include\DetourTileCache;$(SolutionDir)Include\Recast;$(SolutionDir)include\physx\include;$(SolutionDir)include\physx\include\cudamanager;$(SolutionDir)include\physx\source\physxextensions\src;$(SolutionDir)include\physx\source\foundation\include;$(SolutionDir)include\physx\source\geomutils\include;$(SolutionDir)include\physx\snippets\graphics\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <IncludeInUnityFile>true</IncludeInUnityFile>
     </ClCompile>
@@ -137,7 +137,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Bin\$(Platform)\$(Configuration)\;$(SolutionDir)Lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Rpcrt4.lib;Recast.lib;Detour.lib;DetourCrowd.lib;DetourTileCache.lib;DebugUtils.lib;fmod32_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Rpcrt4.lib;Recast.lib;Detour.lib;DetourCrowd.lib;DetourTileCache.lib;DebugUtils.lib;PhysX_64.lib;PhysXExtensions_static_64.lib;PhysXPvdSDK_static_64.lib;PhysXVehicle_static_64.lib;PhysXVehicle2_static_64.lib;PhysXCharacterKinematic_static_64.lib;PhysXCooking_64.lib;PVDRuntime_64.lib;SceneQuery_static_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;PhysX_64.lib;PhysXExtensions_static_64.lib;PhysXPvdSDK_static_64.lib;PhysXVehicle_static_64.lib;PhysXVehicle2_static_64.lib;PhysXCharacterKinematic_static_64.lib;PhysXCooking_64.lib;PVDRuntime_64.lib;SceneQuery_static_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;fmod32_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
@@ -148,9 +148,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_HAS_STD_BYTE=0;NOMINMAX;USE_PLAIN_PTR;_DEBUG;_CONSOLE;YUNUTY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_HAS_STD_BYTE=0;_SILENCE_ALL_CXX20_DEPRECATION_WARNINGS;NOMINMAX;USE_PLAIN_PTR;_DEBUG;_CONSOLE;YUNUTY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)FMOD\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(SolutionDir)Include\;$(SolutionDir)Include\FMOD\;$(ProjectDir)header\;$(SolutionDir)Include\Detour;$(SolutionDir)Include\DetourCrowd;$(SolutionDir)Include\DetourDebugUtils;$(SolutionDir)Include\DetourTileCache;$(SolutionDir)Include\Recast</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FMOD\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(SolutionDir)Include\;$(SolutionDir)Include\FMOD\;$(ProjectDir)header\;$(SolutionDir)Include\Detour;$(SolutionDir)Include\DetourCrowd;$(SolutionDir)Include\DetourDebugUtils;$(SolutionDir)Include\DetourTileCache;$(SolutionDir)Include\Recast;$(SolutionDir)include\physx\include;$(SolutionDir)include\physx\include\cudamanager;$(SolutionDir)include\physx\source\physxextensions\src;$(SolutionDir)include\physx\source\foundation\include;$(SolutionDir)include\physx\source\geomutils\include;$(SolutionDir)include\physx\snippets\graphics\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>YunutyEngine.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -161,7 +161,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Bin\$(Platform)\$(Configuration)\;$(SolutionDir)Lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Rpcrt4.lib;Recast.lib;Detour.lib;DetourCrowd.lib;DetourTileCache.lib;DebugUtils.lib;fmod64_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Rpcrt4.lib;Recast.lib;Detour.lib;DetourCrowd.lib;DetourTileCache.lib;DebugUtils.lib;PhysX_64.lib;PhysXExtensions_static_64.lib;PhysXPvdSDK_static_64.lib;PhysXVehicle_static_64.lib;PhysXVehicle2_static_64.lib;PhysXCharacterKinematic_static_64.lib;PhysXCooking_64.lib;PVDRuntime_64.lib;SceneQuery_static_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;fmod64_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
@@ -174,9 +174,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_HAS_STD_BYTE=0;NOMINMAX;USE_PLAIN_PTR;NDEBUG;_CONSOLE;YUNUTY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_HAS_STD_BYTE=0;_SILENCE_ALL_CXX20_DEPRECATION_WARNINGS;NOMINMAX;USE_PLAIN_PTR;NDEBUG;_CONSOLE;YUNUTY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)FMOD\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(SolutionDir)Include\;$(SolutionDir)Include\FMOD\;$(ProjectDir)header\;$(SolutionDir)Include\Detour;$(SolutionDir)Include\DetourCrowd;$(SolutionDir)Include\DetourDebugUtils;$(SolutionDir)Include\DetourTileCache;$(SolutionDir)Include\Recast</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FMOD\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(SolutionDir)Include\;$(SolutionDir)Include\FMOD\;$(ProjectDir)header\;$(SolutionDir)Include\Detour;$(SolutionDir)Include\DetourCrowd;$(SolutionDir)Include\DetourDebugUtils;$(SolutionDir)Include\DetourTileCache;$(SolutionDir)Include\Recast;$(SolutionDir)include\physx\include;$(SolutionDir)include\physx\include\cudamanager;$(SolutionDir)include\physx\source\physxextensions\src;$(SolutionDir)include\physx\source\foundation\include;$(SolutionDir)include\physx\source\geomutils\include;$(SolutionDir)include\physx\snippets\graphics\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>YunutyEngine.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -188,7 +188,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Bin\$(Platform)\$(Configuration)\;$(SolutionDir)Lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Rpcrt4.lib;Recast.lib;Detour.lib;DetourCrowd.lib;DetourTileCache.lib;DebugUtils.lib;fmod64_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Rpcrt4.lib;Recast.lib;Detour.lib;DetourCrowd.lib;DetourTileCache.lib;DebugUtils.lib;PhysX_64.lib;PhysXExtensions_static_64.lib;PhysXPvdSDK_static_64.lib;PhysXVehicle_static_64.lib;PhysXVehicle2_static_64.lib;PhysXCharacterKinematic_static_64.lib;PhysXCooking_64.lib;PVDRuntime_64.lib;SceneQuery_static_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;PhysX_64.lib;PhysXExtensions_static_64.lib;PhysXPvdSDK_static_64.lib;PhysXVehicle_static_64.lib;PhysXVehicle2_static_64.lib;PhysXCharacterKinematic_static_64.lib;PhysXCooking_64.lib;PVDRuntime_64.lib;SceneQuery_static_64.lib;PhysXCommon_64.lib;PhysXFoundation_64.lib;fmod64_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
@@ -243,6 +243,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     </ClCompile>
     <ClCompile Include="MetaData.cpp" />
     <ClCompile Include="MetafileManager.cpp" />
+    <ClCompile Include="YunutyBoxCollider.cpp" />
+    <ClCompile Include="YunutyCapsuleCollider.cpp" />
+    <ClCompile Include="YunutyCollider.cpp" />
+    <ClCompile Include="YunutyCylinderCollider.cpp" />
     <ClCompile Include="YunutyNavigationAgent.cpp" />
     <ClCompile Include="YunutyNavigationField.cpp" />
     <ClCompile Include="NavigationField2D.cpp" />
@@ -335,7 +339,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="YunutyGraphicsEventHandler.cpp" />
     <ClCompile Include="YunutyMathConstants.cpp" />
     <ClCompile Include="Quaternion.cpp" />
-    <ClCompile Include="RigidBody.cpp" />
+    <ClCompile Include="_YunutyPhysxContactCallback.cpp" />
+    <ClCompile Include="_YunutyPhysxGlobal.cpp" />
+    <ClCompile Include="YunutyRigidBody.cpp" />
     <ClCompile Include="RigidBody2D.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Component.cpp" />
@@ -350,6 +356,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="GraphicsRenderer.cpp" />
     <ClCompile Include="YunutyRenderable.cpp" />
     <ClCompile Include="YunutySkinnedMesh.cpp" />
+    <ClCompile Include="YunutySphereCollider.cpp" />
     <ClCompile Include="YunutyTime.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vector.cpp" />
@@ -362,6 +369,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="_YunuGIObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="header\YunutyBoxCollider.h" />
     <ClInclude Include="ChunkyTriMesh.h" />
     <ClInclude Include="ConvexVolumeTool.h" />
     <ClInclude Include="CrowdTool.h" />
@@ -393,6 +401,14 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="Sample_TileMesh.h" />
     <ClInclude Include="TestCase.h" />
     <ClInclude Include="ValueHistory.h" />
+    <ClInclude Include="header\YunutyCapsuleCollider.h" />
+    <ClInclude Include="header\YunutyCollider.h" />
+    <ClInclude Include="header\YunutyCylinderCollider.h" />
+    <ClInclude Include="header\YunutyForceType.h" />
+    <ClInclude Include="header\YunutySphereCollider.h" />
+    <ClInclude Include="header\YunutyPhysicsMaterialInfo.h" />
+    <ClInclude Include="_YunutyBoxColliderImpl.h" />
+    <ClInclude Include="_YunutyColliderImpl.h" />
     <ClInclude Include="_YunutyNavigationAgentImpl.h" />
     <ClInclude Include="_YunutyNavigationFieldImpl.h" />
     <ClInclude Include="_XMMath.h" />
@@ -419,7 +435,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="header\RectTransform.h" />
     <ClInclude Include="header\YunutyMathConstants.h" />
     <ClInclude Include="header\Quaternion.h" />
-    <ClInclude Include="header\RigidBody.h" />
+    <ClInclude Include="header\YunutyRigidBody.h" />
     <ClInclude Include="header\RigidBody2D.h" />
     <ClInclude Include="header\LineCollider2D.h" />
     <ClInclude Include="header\Random.h" />
@@ -444,6 +460,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="header\MetafileManager.h" />
     <ClInclude Include="header\ResourceType.h" />
     <ClInclude Include="header\SingletonClass.h" />
+    <ClInclude Include="_YunutyPhysxContactCallback.h" />
+    <ClInclude Include="_YunutyPhysxGlobal.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Yunuty.rc" />

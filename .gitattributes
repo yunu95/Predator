@@ -49,3 +49,5 @@
 .lib filter=lfs diff=lfs merge=lfs -text
 Lib/* filter=lfs diff=lfs merge=lfs -text
 *.lib filter=lfs diff=lfs merge=lfs -text
+Yunuty/RuntimeDependency/x64/debug/PhysXGpu_64.dll filter=lfs diff=lfs merge=lfs -text
+*.dll filter=lfs diff=lfs merge=lfs -text

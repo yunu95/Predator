@@ -58,6 +58,35 @@ void Application::Contents::ContentsLayer::Initialize()
     auto rtsCam = camObj->AddComponent<RTSCam>();
     rtsCam->GetTransform()->position = Vector3d(0, 10, 0);
 
+    // phsyx collider 테스트
+    {
+        auto boxCollider = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        auto boxColliderComp = boxCollider->AddComponent<yunutyEngine::physics::BoxCollider>();
+        auto rigidComp = boxCollider->AddComponent<physics::RigidBody>();
+        //rigidComp->SetAsStatic(true);
+        boxCollider->GetTransform()->position = Vector3d(0, 10, 0);
+        boxCollider->GetTransform()->rotation = Vector3d(100, 10, 35);
+        auto boxMesh = boxCollider->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+        boxMesh->GetGI().LoadMesh("Cube");
+        boxMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color::black());
+        //rigidComp->LockTranslation(1,1,1);
+        rigidComp->SetAsKinematic(true);
+        //rigidComp->AddForce({ 0, -10, 0 }, physics::ForceType::VELOCITY_CHANGE);
+
+        auto planeCollider = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        auto planeColliderComp = planeCollider->AddComponent<yunutyEngine::physics::BoxCollider>();
+        planeColliderComp->SetHalfExtent({ 10,1,10 });
+        //auto planeRigidComp = planeCollider->AddComponent<physics::RigidBody>();
+        //planeRigidComp->SetAsStatic(true);
+        planeCollider->GetTransform()->position = Vector3d(0, 0, 0);
+        auto planeMesh = planeCollider->AddGameObject();
+        auto planeMeshComp = planeMesh->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+        planeMeshComp->GetGI().LoadMesh("Cube");
+        planeMeshComp->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
+        planeMesh->GetTransform()->scale = Vector3d(10, 1, 10);
+    }
+
+
     // 길찾기 테스트
     {
         const float corridorRadius = 3;
@@ -75,7 +104,8 @@ void Application::Contents::ContentsLayer::Initialize()
         auto agent = CreateAgent(navField);
         auto agent2 = CreateAgent(navField);
         auto agent3 = CreateAgent(navField);
-        rtsCam->groundRightClickCallback = [=](Vector3d position) {
+        rtsCam->groundRightClickCallback = [=](Vector3d position)
+        {
             agent->MoveTo(position);
             agent2->MoveTo(position);
             agent3->MoveTo(position);

@@ -64,6 +64,9 @@
     <Filter Include="PathEditor">
       <UniqueIdentifier>{bdeb32c3-9345-46aa-9876-48fd5865c87c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestCodes">
+      <UniqueIdentifier>{8339e451-67eb-4692-ba45-88e6ad08ee10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -174,6 +177,12 @@
     <ClInclude Include="PathField.h">
       <Filter>Path</Filter>
     </ClInclude>
+    <ClInclude Include="ColliderEnableDeathTest.h">
+      <Filter>TestCodes</Filter>
+    </ClInclude>
+    <ClInclude Include="NavAgentEnableDeathTest.h">
+      <Filter>TestCodes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -248,8 +257,6 @@
     <ClCompile Include="ProgramExitCommand.cpp">
       <Filter>Editor\Commands\MenubarCommands</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="..\YunutyEngineDemo\main_alt.cpp" />
     <ClCompile Include="Panel_Preview.cpp">
       <Filter>Editor\Panel\List</Filter>
     </ClCompile>
