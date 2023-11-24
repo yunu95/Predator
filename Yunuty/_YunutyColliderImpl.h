@@ -113,8 +113,6 @@ namespace yunutyEngine
                     _PhysxGlobal::SingleInstance().UnRegisterCollider(this);
                     pxActor->release();
                 }
-                if (pxShape)
-                    pxShape->release();
             }
             virtual PxGeometry& GetGeometry() = 0;
             // 게임 컴포넌트에 대응되는 physX 객체들을 초기화하는 구문이다. Start함수에서 호출된다.

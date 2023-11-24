@@ -24,7 +24,8 @@ void yunutyEngine::physics::ContactReportCallback::onTrigger(PxTriggerPair* pair
         const PxTriggerPair& current = *pairs++;
         auto triggerCollider = _PhysxGlobal::SingleInstance().ColliderByPxActor[current.triggerActor];
         auto otherCollider = _PhysxGlobal::SingleInstance().ColliderByPxActor[current.otherActor];
-        void (Component:: * callback)(const Collider*) { nullptr };
+
+        void (Component:: * callback)(Collider*) { nullptr };
         //if (current.status & PxPairFlag::eNOTIFY_TOUCH_PERSISTS)
             //callback = &Component::OnTriggerStay;
         //else
@@ -36,14 +37,21 @@ void yunutyEngine::physics::ContactReportCallback::onTrigger(PxTriggerPair* pair
             continue;
         //if (current.status & PxPairFlag::enotify_touch)
             //printf("Shape is entering trigger volume\n");
-        for (Component* eachComponent : triggerCollider->GetGameObject()->GetComponents<Component>())
+        if (triggerCollider)
         {
-            (eachComponent->*callback)(otherCollider);
-        };
-        for (auto eachComponent : otherCollider->GetGameObject()->GetComponents<Component>())
+            for (Component* eachComponent : triggerCollider->GetGameObject()->GetComponents<Component>())
+            {
+                (eachComponent->*callback)(otherCollider);
+            };
+        }
+        if (otherCollider)
         {
-            (eachComponent->*callback)(triggerCollider);
-        };
+            for (auto eachComponent : otherCollider->GetGameObject()->GetComponents<Component>())
+            {
+                (eachComponent->*callback)(triggerCollider);
+            };
+        }
+
         if (current.status & PxPairFlag::eNOTIFY_TOUCH_FOUND)
             printf("Shape is entering trigger volume\n");
         if (current.status & PxPairFlag::eNOTIFY_TOUCH_PERSISTS)
