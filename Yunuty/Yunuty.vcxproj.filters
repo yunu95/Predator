@@ -265,9 +265,6 @@
     <Filter Include="yunutyEngine\physics\Collider">
       <UniqueIdentifier>{da8516e5-bcff-4b15-832a-7ca0db099727}</UniqueIdentifier>
     </Filter>
-    <Filter Include="yunutyEngine\physics\CylinderCollider">
-      <UniqueIdentifier>{b9f71bc8-9f6c-4f08-9d6a-acfa30642262}</UniqueIdentifier>
-    </Filter>
     <Filter Include="yunutyEngine\physics\SphereCollider">
       <UniqueIdentifier>{823b9e6a-8a96-4396-b560-4c1f1c0c63b9}</UniqueIdentifier>
     </Filter>
@@ -506,9 +503,6 @@
     </ClCompile>
     <ClCompile Include="YunutyCollider.cpp">
       <Filter>yunutyEngine\physics\Collider</Filter>
-    </ClCompile>
-    <ClCompile Include="YunutyCylinderCollider.cpp">
-      <Filter>yunutyEngine\physics\CylinderCollider</Filter>
     </ClCompile>
     <ClCompile Include="YunutyBoxCollider.cpp">
       <Filter>yunutyEngine\physics\BoxCollider</Filter>
@@ -776,9 +770,6 @@
     <ClInclude Include="header\YunutyCollider.h">
       <Filter>yunutyEngine\physics\Collider</Filter>
     </ClInclude>
-    <ClInclude Include="header\YunutyCylinderCollider.h">
-      <Filter>yunutyEngine\physics\CylinderCollider</Filter>
-    </ClInclude>
     <ClInclude Include="header\YunutyBoxCollider.h">
       <Filter>yunutyEngine\physics\BoxCollider</Filter>
     </ClInclude>
@@ -805,6 +796,12 @@
     </ClInclude>
     <ClInclude Include="_YunutyBoxColliderImpl.h">
       <Filter>yunutyEngine\physics\BoxCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="_YunutyCapsuleColliderImpl.h">
+      <Filter>yunutyEngine\physics\CapsuleCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="_YunutySphereColliderImpl.h">
+      <Filter>yunutyEngine\physics\SphereCollider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
