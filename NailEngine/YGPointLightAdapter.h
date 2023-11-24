@@ -34,7 +34,7 @@ namespace yunuGIAdapter
 			DirectX::SimpleMath::Matrix rot = DirectX::XMMatrixRotationQuaternion(quat);
 
 			// 라이트의 위치를 넣어줌
-			DirectX::SimpleMath::Vector4 lightPos = { pos.x,pos.y,pos.z,1.f };
+			DirectX::SimpleMath::Vector4 lightPos = { pos.x,pos.y,pos.z, 1.f };
 			light->SetLightPosition(lightPos);
 
 			light->SetWorldTM(reinterpret_cast<const DirectX::SimpleMath::Matrix&>(tm));

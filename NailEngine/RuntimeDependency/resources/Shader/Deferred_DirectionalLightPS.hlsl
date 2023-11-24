@@ -32,10 +32,12 @@ PS_OUT main(PixelIn input)
     
     LightColor color;
     
-    for (int i = 0; i < lightCount; ++i)
-    {
-        CalculateLight(i, viewNormal, float4(viewPos, 0.f), color.diffuse, color.ambient, color.specular);
-    }
+    //for (int i = 0; i < lightCount; ++i)
+    //{
+    //    CalculateLight(i, viewNormal, float4(viewPos, 0.f), color.diffuse, color.ambient, color.specular);
+    //}
+    
+    CalculateLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);
     
     output.diffuse = color.diffuse + color.ambient;
     //output.specular = color.specular;
@@ -46,5 +48,5 @@ PS_OUT main(PixelIn input)
 // ShaderInfo
 // ShaderType : Light
 // RasterType : Solid
-// CullType : CullBack
-// DepthType : Less
+// CullType : CullNone
+// DepthType : NoDepthTestNoWrite

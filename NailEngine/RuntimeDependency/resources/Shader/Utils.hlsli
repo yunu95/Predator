@@ -12,7 +12,7 @@ bool UseTexture(uint useTexture)
     return false;
 }
 
-void CalculateLight(int lightIndex, float3 normal, float4 pos, out float4 diffuse, out float4 ambient, out float4 specular)
+void CalculateLight(int lightIndex, float3 normal, float3 pos, out float4 diffuse, out float4 ambient, out float4 specular)
 {
     diffuse = float4(0.f, 0.f, 0.f, 0.f);
     ambient = float4(0.f, 0.f, 0.f, 0.f);
@@ -38,35 +38,44 @@ void CalculateLight(int lightIndex, float3 normal, float4 pos, out float4 diffus
     }
     else if (lights[lightIndex].lightType == 1)
     {
-        float3 lightVec = lights[lightIndex].position - pos;
+        float diffuseRatio = 0.f;
+        float distanceRatio = 1.f;
         
-        float d = length(lightVec);
+        float3 lightPos = mul(lights[lightIndex].position, VTM).xyz;
         
-        if(d > lights[lightIndex].range)
+        float3 lightVec = normalize(pos - lightPos);   
+        
+        diffuseRatio = saturate(dot(-lightVec, normal));
+        
+        float d = distance(pos, lightPos);
+        if(lights[lightIndex].range == 0.f)
         {
-            return;
+            distanceRatio = 0.f;
+        }
+        else
+        {
+            distanceRatio = saturate(1.f - pow(d / lights[lightIndex].range, 2));
         }
         
-        lightVec /= d;
+        ambient = lights[lightIndex].color.ambient * distanceRatio;
+        diffuse = lights[lightIndex].color.diffuse * diffuseRatio * distanceRatio;
+       
+        //float zero = 0.f;
         
-        ambient = lights[lightIndex].color.ambient;
-        
-        float diffuseFactor = dot(lightVec, normal);
-        float zero = 0.f;
-        
-        if(diffuseFactor > zero)
-        {
-            float3 v = normalize(reflect(-lightVec, normal));
-            float specFactor = pow(max(dot(v, viewDirection), 0.f), 8.f);
+        //if(diffuseFactor > zero)
+        //{
+        //    //float3 v = normalize(reflect(-lightVec, normal));
+        //    //float specFactor = pow(max(dot(v, viewDirection), 0.f), 8.f);
             
-            diffuse = diffuseFactor * lights[lightIndex].color.diffuse;
-            //specular = specFactor * lights[lightIndex].color.specular;
-        }
+        //    diffuse = diffuseFactor * lights[lightIndex].color.diffuse;
+        //    //specular = specFactor * lights[lightIndex].color.specular;
+        //}
         
-        float att = 1.f / pow(d, 2);
+        //float att = 1.f / pow(d, 2);
         
-        diffuse *= att;
-        specular *= att;
+        //diffuse *= att;
+        
+        // specular *= att;
         
     }
     else if (lights[lightIndex].lightType == 2)

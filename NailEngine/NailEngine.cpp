@@ -39,16 +39,12 @@ void NailEngine::Render()
 	// Begin
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetViewports(1, &ResourceBuilder::Instance.Get().swapChain->GetViewPort());
 
-	
-
-	const float red[] = { 0.f, 0.5f, 0.f, 1.f };
+	const float red[] = { 0.5f, 0.5f, 0.5f, 1.f };
 
 	// 렌더 타겟뷰를 내가 지정한 값으로 픽셀을 다 초기화하여 지운다.
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->ClearRenderTargetView(ResourceBuilder::Instance.Get().swapChain->GetRTV().Get(), red);
 	// 뎁스 스텐실뷰를 초기화한다.
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->ClearDepthStencilView(ResourceBuilder::Instance.Get().swapChain->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
-
-
 
 	///
 	D3D11_BLEND_DESC blendDesc;
