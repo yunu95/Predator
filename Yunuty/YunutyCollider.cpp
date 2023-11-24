@@ -20,14 +20,6 @@ namespace yunutyEngine
         {
             delete impl;
         }
-        /*bool Collider::IsTrigger()
-        {
-            return impl->GetIsTrigger();
-        }
-        void Collider::SetAsTrigger(bool isTrigger)
-        {
-            impl->SetAsTrigger(isTrigger);
-        }*/
         bool Collider::IsUsingCCD()
         {
             return impl->IsUsingCCD();
@@ -74,10 +66,13 @@ namespace yunutyEngine
         }
         void Collider::OnEnable()
         {
+            impl->pxActor->setActorFlag({PxActorFlag::eDISABLE_SIMULATION},false);
+            if (impl->pxRigidDynamic->isSleeping())
+                impl->pxRigidDynamic->wakeUp();
         }
         void Collider::OnDisable()
         {
-
+            impl->pxActor->setActorFlag({PxActorFlag::eDISABLE_SIMULATION},true);
         }
     }
 }

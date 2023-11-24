@@ -2,7 +2,7 @@
 #include "YunutyEngine.h"
 #include <algorithm>
 
-class DelayedTestFunctions : Component
+class DelayedTestFunctions : public yunutyEngine::Component
 {
 public:
     struct Todo
@@ -26,7 +26,7 @@ protected:
             return;
 
         timeElapsed += Time::GetDeltaTime();
-        if (todoList[todoIdx].timeoffset > timeElapsed)
+        if (todoList[todoIdx].timeoffset < timeElapsed)
         {
             todoList[todoIdx].todo();
             todoIdx++;

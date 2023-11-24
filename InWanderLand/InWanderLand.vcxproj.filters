@@ -177,10 +177,13 @@
     <ClInclude Include="PathField.h">
       <Filter>Path</Filter>
     </ClInclude>
-    <ClInclude Include="ColliderEnableDeathTest.h">
+    <ClInclude Include="TestColliderEnableDeath.h">
       <Filter>TestCodes</Filter>
     </ClInclude>
-    <ClInclude Include="NavAgentEnableDeathTest.h">
+    <ClInclude Include="TestNavAgentEnableDeath.h">
+      <Filter>TestCodes</Filter>
+    </ClInclude>
+    <ClInclude Include="DelayedTestFunctions.h">
       <Filter>TestCodes</Filter>
     </ClInclude>
   </ItemGroup>

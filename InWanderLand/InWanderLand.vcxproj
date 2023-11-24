@@ -180,11 +180,12 @@ if exist "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" xcopy "$(
     <ClInclude Include="..\Include\ImGui\imgui.h" />
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
     <ClInclude Include="CamSwitcher.h" />
-    <ClInclude Include="ColliderEnableDeathTest.h" />
+    <ClInclude Include="TestColliderEnableDeath.h" />
     <ClInclude Include="DebugBeacon.h" />
     <ClInclude Include="DebugMeshes.h" />
     <ClInclude Include="DebugTilePlane.h" />
-    <ClInclude Include="NavAgentEnableDeathTest.h" />
+    <ClInclude Include="DelayedTestFunctions.h" />
+    <ClInclude Include="TestNavAgentEnableDeath.h" />
     <ClInclude Include="PanelList.h" />
     <ClInclude Include="Panel_Palette.h" />
     <ClInclude Include="Panel_Preview.h" />

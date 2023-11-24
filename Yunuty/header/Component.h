@@ -119,12 +119,12 @@ namespace yunutyEngine
         virtual void OnCollisionExit2D(const Collision2D& collision) {};
 
         // 콜라이더가 트리거 콜라이더와 충돌을 시작할 때 호출되는 콜백 함수입니다.
-        virtual void OnTriggerEnter(const physics::Collider* collider) {};
+        virtual void OnTriggerEnter(physics::Collider* collider) {};
         // 콜라이더가 트리거 콜라이더와 서로 겹쳐진 상태로 있을때 매 프레임마다 호출되는 콜백 함수입니다.
         //virtual void OnTriggerStay(const physics::Collider* collider) {};
 
         // 콜라이더가 트리거 콜라이더로부터 떨어져 나갈때 호출되는 콜백 함수입니다.
-        virtual void OnTriggerExit(const physics::Collider* collider) {};
+        virtual void OnTriggerExit(physics::Collider* collider) {};
         virtual ~Component();
         Transform* GetTransform();
         GameObject* GetGameObject();
