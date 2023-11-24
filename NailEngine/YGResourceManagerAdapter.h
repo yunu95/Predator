@@ -82,7 +82,7 @@ namespace yunuGIAdapter
 			return ResourceManager::Instance.Get().GetMeshList();
 		}
 
-        virtual std::vector<yunuGI::IMaterial*>& GetMaterialhList()const override
+        virtual std::vector<yunuGI::IMaterial*>& GetMaterialList()const override
 		{
 			return ResourceManager::Instance.Get().GetMaterialList();
 		}

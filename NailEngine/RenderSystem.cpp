@@ -178,10 +178,7 @@ void RenderSystem::RenderLight()
 
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e->GetMaterialName()))->PushGraphicsData();
 		auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
-		for (int i = 0; i < mesh->GetMaterialCount(); ++i)
-		{
-			mesh->Render(i);
-		}
+		mesh->Render();
 	}
 
 	//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->UnBind();

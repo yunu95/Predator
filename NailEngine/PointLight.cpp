@@ -28,9 +28,6 @@ void PointLight::SetRange(float range)
 void PointLight::SetWorldTM(const DirectX::SimpleMath::Matrix& wtm)
 {
 	this->wtm = wtm;
-	this->wtm._11 *= this->lightInfo.range;
-	this->wtm._22 *= this->lightInfo.range;
-	this->wtm._33 *= this->lightInfo.range;
 }
 
 DirectX::SimpleMath::Matrix& PointLight::GetWorldTM()

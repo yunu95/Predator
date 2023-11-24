@@ -27,7 +27,7 @@ namespace yunuGI
 
         virtual std::vector<IShader*>& GetShaderList()const = 0;
         virtual std::vector<IMesh*>& GetMeshList()const = 0;
-        virtual std::vector<IMaterial*>& GetMaterialhList()const = 0;
+        virtual std::vector<IMaterial*>& GetMaterialList()const = 0;
     };
 }
 
