@@ -73,5 +73,4 @@
 #include "YunutyBoxCollider.h"
 #include "YunutyCapsuleCollider.h"
 #include "YunutySphereCollider.h"
-#include "YunutyCylinderCollider.h"
 #include "YunutyRigidBody.h"

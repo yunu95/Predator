@@ -246,7 +246,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="YunutyBoxCollider.cpp" />
     <ClCompile Include="YunutyCapsuleCollider.cpp" />
     <ClCompile Include="YunutyCollider.cpp" />
-    <ClCompile Include="YunutyCylinderCollider.cpp" />
     <ClCompile Include="YunutyNavigationAgent.cpp" />
     <ClCompile Include="YunutyNavigationField.cpp" />
     <ClCompile Include="NavigationField2D.cpp" />
@@ -403,11 +402,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="ValueHistory.h" />
     <ClInclude Include="header\YunutyCapsuleCollider.h" />
     <ClInclude Include="header\YunutyCollider.h" />
-    <ClInclude Include="header\YunutyCylinderCollider.h" />
     <ClInclude Include="header\YunutyForceType.h" />
     <ClInclude Include="header\YunutySphereCollider.h" />
     <ClInclude Include="header\YunutyPhysicsMaterialInfo.h" />
     <ClInclude Include="_YunutyBoxColliderImpl.h" />
+    <ClInclude Include="_YunutyCapsuleColliderImpl.h" />
     <ClInclude Include="_YunutyColliderImpl.h" />
     <ClInclude Include="_YunutyNavigationAgentImpl.h" />
     <ClInclude Include="_YunutyNavigationFieldImpl.h" />
@@ -462,6 +461,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="header\SingletonClass.h" />
     <ClInclude Include="_YunutyPhysxContactCallback.h" />
     <ClInclude Include="_YunutyPhysxGlobal.h" />
+    <ClInclude Include="_YunutySphereColliderImpl.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Yunuty.rc" />

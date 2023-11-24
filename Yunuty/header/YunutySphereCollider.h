@@ -21,7 +21,10 @@ namespace yunutyEngine
         class YUNUTY_API SphereCollider : public Collider
         {
         public:
-            void SetRadius(float radius) {};
+            class Impl;
+            Impl* impl;
+            SphereCollider();
+            void SetRadius(float radius);
         };
     }
 }

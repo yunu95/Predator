@@ -48,10 +48,37 @@ void TestColliderEnableDeath()
         boxMesh->GetGI().LoadMesh("Cube");
         boxMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color::black());
     }
+    {
+        auto sphereCollider = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        auto sphereColliderComp = sphereCollider->AddComponent<yunutyEngine::physics::SphereCollider>();
+        auto rigidComp = sphereCollider->AddComponent<physics::RigidBody>();
+        //rigidComp->SetAsStatic(true);
+        sphereCollider->GetTransform()->position = Vector3d(-1, 13, 2);
+        sphereCollider->GetTransform()->rotation = Vector3d(100, 10, 35);
+        auto sphereMesh = sphereCollider->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+        sphereCollider->AddComponent<TriggerVolumeTest>();
+        sphereMesh->GetGI().LoadMesh("Sphere");
+        sphereMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color::black());
+        sphereColliderComp->SetRadius(0.5);
+    }
+    {
+        auto capsuleCollider = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        auto capsuleColliderComp = capsuleCollider->AddComponent<yunutyEngine::physics::CapsuleCollider>();
+        auto rigidComp = capsuleCollider->AddComponent<physics::RigidBody>();
+        //rigidComp->SetAsStatic(true);
+        capsuleCollider->GetTransform()->position = Vector3d(1, 13, 2);
+        capsuleCollider->GetTransform()->rotation = Vector3d(100, 10, 35);
+        auto capsuleMesh = capsuleCollider->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+        capsuleCollider->AddComponent<TriggerVolumeTest>();
+        capsuleMesh->GetGI().LoadMesh("Capsule");
+        capsuleMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color::black());
+        capsuleColliderComp->SetRadius(0.25);
+        capsuleColliderComp->SetHalfHeight(0.5);
+    }
 
     auto planeCollider = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     auto planeColliderComp = planeCollider->AddComponent<yunutyEngine::physics::BoxCollider>();
-    planeColliderComp->SetHalfExtent({ 10,1,10 });
+    planeColliderComp->SetHalfExtent({ 5,1,5 });
     auto planeRigidComp = planeCollider->AddComponent<physics::RigidBody>();
     planeRigidComp->SetAsStatic(true);
     planeCollider->GetTransform()->position = Vector3d(0, 0, 0);
@@ -59,19 +86,15 @@ void TestColliderEnableDeath()
     auto planeMeshComp = planeMesh->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
     planeMeshComp->GetGI().LoadMesh("Cube");
     planeMeshComp->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
-    planeMesh->GetTransform()->scale = Vector3d(10, 1, 10);
+    planeMesh->GetTransform()->scale = Vector3d(10, 2, 10);
 
     // 트리거 콜라이더 생성
-    {
+    /*{
         auto planeCollider = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
         auto planeColliderComp = planeCollider->AddComponent<yunutyEngine::physics::BoxCollider>();
         planeColliderComp->SetHalfExtent({ 10,1,10 });
         planeCollider->GetTransform()->position = Vector3d(0, 3, 0);
-        auto planeMesh = planeCollider->AddGameObject();
-        auto planeMeshComp = planeMesh->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-        planeMeshComp->GetGI().LoadMesh("Cube");
-        planeMesh->GetTransform()->scale = Vector3d(10, 1, 10);
-    }
+    }*/
 
     auto delayedFunctions = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DelayedTestFunctions>();
 

@@ -21,9 +21,11 @@ namespace yunutyEngine
         class YUNUTY_API CapsuleCollider : public Collider
         {
         public:
-            void SetRadius(float radius) {};
-            void SetHeight(float height) {};
-            virtual void Start()override {};
+            class Impl;
+            Impl* impl;
+            CapsuleCollider();
+            void SetRadius(float radius);
+            void SetHalfHeight(float halfHeight);
         };
     }
 }
