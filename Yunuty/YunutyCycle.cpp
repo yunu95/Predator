@@ -10,6 +10,7 @@
 #include "GlobalComponent.h"
 #include "Scene.h"
 #include "Camera.h"
+#include "_YunutyPhysxGlobal.h"
 #include <thread>
 #include <mutex>
 #include <cassert>
@@ -48,9 +49,10 @@ void yunutyEngine::YunutyCycle::Initialize()
 
 void yunutyEngine::YunutyCycle::Play()
 {
-    updateThread = thread(&YunutyCycle::ThreadFunction, this);
     isGameRunning = true;
     ActiveComponentsDo(StartComponent);
+    yunutyEngine::physics::_PhysxGlobal::SingleInstance();
+    updateThread = thread(&YunutyCycle::ThreadFunction, this);
 }
 
 void yunutyEngine::YunutyCycle::Stop()
@@ -106,6 +108,14 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
         each->SetCacheDirty();
     for (auto each : GetActiveComponents())
         UpdateComponent(each);
+
+    // 물리처리
+    auto pxScene = physics::_PhysxGlobal::SingleInstance().PxSceneByScene[Scene::currentScene];
+    if (Time::GetDeltaTime() > 0)
+    {
+        pxScene->simulate(Time::GetDeltaTime());
+        pxScene->fetchResults(true);
+    }
 
     Collider2D::InvokeCollisionEvents();
     graphics::Renderer::SingleInstance().Update(Time::GetDeltaTime());
