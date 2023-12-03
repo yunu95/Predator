@@ -156,15 +156,15 @@ int main(int, char**)
 
     {
         auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        auto light = camObj2->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+        auto light = camObj2->AddComponent<yunutyEngine::graphics::PointLight>();
         yunuGI::Color color{ 1,0,0,1 };
         light->GetGI().SetLightDiffuseColor(color);
-        //light->GetGI().SetRange(2);
+        light->GetGI().SetRange(2);
     }
 
     {
 		auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        //camObj2->GetTransform()->position = Vector3d{ 0.5,0,0 };
+        camObj2->GetTransform()->position = Vector3d{ 0,0,0.5 };
 		auto renderer = camObj2->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 
 		auto& shaderList = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetShaderList();
@@ -173,7 +173,7 @@ int main(int, char**)
 
 		for (auto& e : meshList)
 		{
-			if (e->GetName() == L"Sphere")
+			if (e->GetName() == L"Rectangle")
 			{
 				renderer->GetGI().SetMesh(e);
 			}
