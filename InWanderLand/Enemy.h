@@ -1,16 +1,22 @@
 #pragma once
-#include "BaseUnitEntity.h"
+#include "YunutyEngine.h"
 #include "FSM.h"
+#include <list>
+#include "BaseUnitEntity.h"
+
 /// <summary>
-/// Player 클래스. 추후 Unit을 상속받는 구조로 수정 예정.
+/// 일반 적군 유닛 클래스이자 플레이어 및 보스 클래스의 부모 클래스.
+/// 기본적으로 모든 유닛의 기능을 갖고 있다.
 /// </summary>
 
-class RTSCam;
+class Timer;
+class ProjectileSystem;
+class Projectile;
 
-class Player : public BaseUnitEntity
+class Enemy : public BaseUnitEntity
 {
 private:
-	enum PlayerState
+	enum UnitState
 	{
 		Idle,
 		Move,
@@ -21,22 +27,7 @@ private:
 		StateEnd
 	};
 
-	FSM<PlayerState>* playerFSM;
-
-	RTSCam* rtsCamComponent;
-
-	bool changeToMove;
-	bool moveToIdle;
-	bool isMoveStarted;
-	//bool moveToChase;		// Move -> Idle -> Chase 순으로 해보자
-
-	Vector3d m_tempPosition;		// MoveTo호출 도중 SetPosition 해주면 어떻게 될까 확인용.
-	bool tempCheck;
-
-	Vector3d m_movePosition;		// 클릭 시 이동해야 할 위치를 담아주는 멤버
-	Vector3d m_previousPosition;	// 이동 중인지를 판단하기 위한 이전 프레임에서의 위치 (현재 위치와 비교)
-	
-	float distanceOffset;
+	FSM<UnitState>* unitFSM;
 
 private:
 	/// 현재 상태에서 다른 상태로 가기 위한 bool값을 판별해주는 함수.
@@ -61,16 +52,5 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual void OnDestroy() override;
-
-	void SetMovingSystemComponent(RTSCam* sys);
-
-private:
-	void MoveEngage();
-	void MoveEngageFunction();
-
-	void MoveUpdate();
-
-
 };
 
- 

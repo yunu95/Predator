@@ -5,58 +5,68 @@
 void Player::Start()
 {
 	unitType = "Player";
-	m_speed = 2.0f;
+	m_speed = 1.5f;
 	m_bulletSpeed = 5.1f;
-
+	distanceOffset = 0.25f;
 
 	idleToChase = false;
 	idleToAttack = false;
 	chaseToIdle = false;
 	attackToIdle = false;
-	changeToMoveState = false;
+	changeToMove = false;
+	moveToIdle = false;
 
-	unitFSM = new FSM<UnitState>(UnitState::Idle);
-	IdleEngage();		// 최초 실행 시 상태함수 호출 안함... 그래서 일단 호출 직접 해줬다.
+	playerFSM = new FSM<PlayerState>(PlayerState::Idle);
+	//IdleEngage();		// 최초 실행 시 상태함수 호출 안함... 그래서 일단 호출 직접 해줬다.
 
-	unitFSM->transitions[UnitState::Idle].push_back({ UnitState::Chase,
+	playerFSM->transitions[PlayerState::Idle].push_back({ PlayerState::Chase,
 		[this]() { return idleToChase == true; } });
 
-	unitFSM->transitions[UnitState::Idle].push_back({ UnitState::Attack,
+	playerFSM->transitions[PlayerState::Idle].push_back({ PlayerState::Attack,
 		[this]() { return idleToChase == true; } });
 
-	unitFSM->transitions[UnitState::Chase].push_back({ UnitState::Idle,
+	playerFSM->transitions[PlayerState::Move].push_back({ PlayerState::Idle,
+		[this]() { return moveToIdle == true; } });
+
+	playerFSM->transitions[PlayerState::Chase].push_back({ PlayerState::Idle,
 		[this]() { return chaseToIdle == true; } });
 
-	unitFSM->transitions[UnitState::Chase].push_back({ UnitState::Attack,
+	playerFSM->transitions[PlayerState::Chase].push_back({ PlayerState::Attack,
 		[this]() { return idleToAttack == true; } });
 
-	unitFSM->transitions[UnitState::Attack].push_back({ UnitState::Idle,
+	playerFSM->transitions[PlayerState::Attack].push_back({ PlayerState::Idle,
 		[this]() { return attackToIdle == true; } });
 
-	for (int i = 1; i < UnitState::StateEnd - 1; i++)
+	for (int i = 0; i < PlayerState::StateEnd; i++)
 	{
-		if (i != UnitState::Death)
+		if (i == PlayerState::Death)
 		{
-			unitFSM->transitions[UnitState(i)].push_back({ UnitState::Move,
-			[this]() {return changeToMoveState == true; } });
+			break;
+		}
+		else
+		{
+			playerFSM->transitions[PlayerState(i)].push_back({ PlayerState::Move,
+			[this]() {return changeToMove == true; } });
 		}
 	}
 
-	unitFSM->engageAction[UnitState::Idle] = [this]() { IdleEngage(); };
-	unitFSM->engageAction[UnitState::Move] = [this]() { MoveEngage(); };
-	unitFSM->engageAction[UnitState::Chase] = [this]() { ChaseEngage(); };
-	unitFSM->engageAction[UnitState::Attack] = [this]() { AttackEngage(); };
+	playerFSM->engageAction[PlayerState::Idle] = [this]() { IdleEngage(); };
+	playerFSM->engageAction[PlayerState::Chase] = [this]() { ChaseEngage(); };
+	playerFSM->engageAction[PlayerState::Move] = [this]() { MoveEngage(); };
+	playerFSM->engageAction[PlayerState::Attack] = [this]() { AttackEngage(); };
 
-	unitFSM->updateAction[UnitState::Chase] = [this]() { ChaseUpdate(); };
-	unitFSM->updateAction[UnitState::Attack] = [this]() { AttackUpdate(); };
+	playerFSM->updateAction[PlayerState::Chase] = [this]() { ChaseUpdate(); };
+	playerFSM->updateAction[PlayerState::Attack] = [this]() { AttackUpdate(); };
+	playerFSM->updateAction[PlayerState::Move] = [this]() { MoveUpdate(); };
+
+
+	GetGameObject()->GetComponent<NavigationAgent>()->SetSpeed(m_speed);
 }
 
 void Player::Update()
 {
-	unitFSM->UpdateState();
+	playerFSM->UpdateState();
 
-	// 인식 범위 내에 들어오게 된다면, 목표로 하는(적군) 오브젝트의 위치 정보를 계속 받아와야한다.
-	// 그렇게 되면 이동중에 해당 적군 오브젝트의 위치가 바뀌어도 그에 맞게 자연스럽게 이동할 수 있지 않을까?
 	if (!(m_opponentGameObjectList.empty()))
 	{
 		m_currentTargetObject = m_opponentGameObjectList.front();
@@ -66,8 +76,86 @@ void Player::Update()
 	rtsCamComponent->groundLeftClickCallback = [=](Vector3d position)
 	{
 		m_movePosition = position;
-		changeToMoveState = true;
+		isMoveStarted = false;
+		changeToMove = true;
 	};
+
+	if (!tempCheck)
+	{
+		rtsCamComponent->groundRightClickCallback = [=](Vector3d tempposition)
+		{
+			m_tempPosition = tempposition;
+			GetGameObject()->GetTransform()->SetWorldPosition(m_tempPosition);
+			tempCheck = true;
+		};
+	}
+
+}
+
+void Player::OnDestroy()
+{
+	delete playerFSM;
+}
+
+void Player::IdleTransition()
+{
+
+}
+
+void Player::ChaseTransition()
+{
+
+}
+
+void Player::AttackTransition()
+{
+
+}
+
+void Player::IdleEngage()
+{
+	moveToIdle = false;
+	GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 0 });
+}
+
+void Player::ChaseEngage()
+{
+
+}
+
+void Player::AttackEngage()
+{
+
+}
+
+void Player::IdleEngageFunction()
+{
+
+}
+
+void Player::AttackEngageFunction()
+{
+
+}
+
+void Player::ChaseEngageFunction()
+{
+
+}
+
+void Player::IdleUpdate()
+{
+
+}
+
+void Player::ChaseUpdate()
+{
+
+}
+
+void Player::AttackUpdate()
+{
+
 }
 
 void Player::SetMovingSystemComponent(RTSCam* sys)
@@ -77,15 +165,38 @@ void Player::SetMovingSystemComponent(RTSCam* sys)
 
 void Player::MoveEngage()
 {
-	changeToMoveState = false;
-	MoveStateFunction();
+	changeToMove = false;
+	m_previousPosition = GetGameObject()->GetTransform()->GetWorldPosition();
+	MoveEngageFunction();
 }
 
-void Player::MoveStateFunction()
+void Player::MoveEngageFunction()
 {
 	GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 1, 1, 0 });
 
 	GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(m_movePosition);
 
+	
+
+}
+
+void Player::MoveUpdate()
+{
+	// 상태 진입 시 GameObject의 위치를 매 프레임 마다 이전 프레임과 비교하기.
+	// 최초 진입 생각하기. MoveTo 호출 전에 비교하면 당연히 같다.
+
+	float distance = (GetGameObject()->GetTransform()->GetWorldPosition() - m_movePosition).Magnitude();
+
+	if (!isMoveStarted && GetGameObject()->GetTransform()->GetWorldPosition() != m_previousPosition)
+	{
+		isMoveStarted = true;
+	}
+	else if (isMoveStarted && distance < distanceOffset)
+	{
+		GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(GetGameObject()->GetTransform()->GetWorldPosition());
+		moveToIdle = true;
+		isMoveStarted = false;
+	}
+	m_previousPosition = GetGameObject()->GetTransform()->GetWorldPosition();
 }
 

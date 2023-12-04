@@ -57,6 +57,8 @@ void Application::Contents::ContentsLayer::Initialize()
 
 	auto rtsCam = camObj->AddComponent<RTSCam>();
 	rtsCam->GetTransform()->position = Vector3d(0, 10, 0);
+	camObj->GetTransform()->SetWorldPosition(Vector3d(-10, 10, 0));
+	camObj->GetTransform()->SetWorldRotation(Vector3d(115, 145, 0));
 
 	const float corridorRadius = 3;
 	std::vector<Vector3f> worldVertices{ };
@@ -77,12 +79,10 @@ void Application::Contents::ContentsLayer::Initialize()
 
 	UnitFactory* factory = new UnitFactory;
 
-	auto playerGameObject = factory->CreateUnit(UnitType::PLAYER, navField);
+	auto playerGameObject = factory->CreateUnit(UnitType::PLAYER, navField, Vector3d(5.0f, 0.0f, 0.0f));
 	playerGameObject->GetComponent<Player>()->SetMovingSystemComponent(rtsCam);
-	playerGameObject->GetTransform()->SetWorldPosition(Vector3d(5, 0, 0));
 
-	auto enemyGameObject = factory->CreateUnit(UnitType::ENEMY, navField);
-	enemyGameObject->GetTransform()->SetWorldPosition(Vector3d(30, 30, 30));
+	auto enemyGameObject = factory->CreateUnit(UnitType::ENEMY, navField, Vector3d(-5.0f, 0.0f, 0.0f));
 
 	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }

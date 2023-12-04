@@ -27,7 +27,7 @@ private:
 	float defaultEnemyIDRadius;
 
 public:
-	yunutyEngine::GameObject* CreateUnit(UnitType unitType, yunutyEngine::NavigationField* navField);
+	yunutyEngine::GameObject* CreateUnit(UnitType unitType, yunutyEngine::NavigationField* navField, Vector3d startPosition);
 
 };
 

@@ -1,5 +1,5 @@
 #include "UnitFactory.h"
-#include "Unit.h"
+#include "Enemy.h"
 #include "Player.h"
 #include "RangeSystem.h"
 #include "Dotween.h"
@@ -16,15 +16,15 @@ UnitFactory::UnitFactory()
 	defaultEnemyIDRadius = 5.0f;
 }
 
-yunutyEngine::GameObject* UnitFactory::CreateUnit(UnitType unitType, yunutyEngine::NavigationField* navField)
+yunutyEngine::GameObject* UnitFactory::CreateUnit(UnitType unitType, yunutyEngine::NavigationField* navField, Vector3d startPosition)
 {
 	/// 1. UnitGameObject 생성
 	auto unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-
+	unitGameObject->GetTransform()->SetWorldPosition(startPosition);
 	unitGameObject->AddComponent<Dotween>();
 
 	// 1-1. unitType에 따른 Unit 컴포넌트 추가
-	Unit* unitComponent;
+	BaseUnitEntity* unitComponent;
 
 	// 1-2. (임시) StaticMeshRenderer 추가
 	auto unitMesh = unitGameObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
@@ -49,6 +49,7 @@ yunutyEngine::GameObject* UnitFactory::CreateUnit(UnitType unitType, yunutyEngin
 
 	/// 4. Collider Component 추가
 	auto unitColliderComponent = unitGameObject->AddComponent<CircleCollider2D>();
+	unitColliderComponent->SetRadius(1.0f);
 
 	/// switch-case 문으로 커스터마이징(?)
 	switch (unitType)
@@ -57,29 +58,33 @@ yunutyEngine::GameObject* UnitFactory::CreateUnit(UnitType unitType, yunutyEngin
 		{
 			unitGameObject->setName("Player");
 			unitComponent = unitGameObject->AddComponent<Player>();
+			unitComponent->SetAtkRadius(defaultPlayerAtkRadius);
+			unitComponent->SetIdRadius(defaultPlayerIDRadius);
 			unitMesh->GetGI().GetMaterial()->SetColor(playerColor);
-			rangeSystemComponent->SetAtkRadius(defaultPlayerAtkRadius);
-			rangeSystemComponent->SetIdRadius(defaultPlayerIDRadius);
 			rangeSystemMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });		// 색 다르게 할거면 switch-case안에 넣기.
 
 			unitRangeSystemObject->GetTransform()->scale = Vector2d(defaultPlayerIDRadius * 2, defaultPlayerIDRadius * 2);
+
+			unitRangeSystemObject->setName("PlayerRangeObject");
 			break;
 		}
 
 		case UnitType::ENEMY:
 		{
 			unitGameObject->setName("enemyUnit");
-			unitComponent = unitGameObject->AddComponent<Unit>();
+			unitComponent = unitGameObject->AddComponent<Enemy>();
 			unitMesh->GetGI().GetMaterial()->SetColor(enemyColor);
-			rangeSystemComponent->SetAtkRadius(defaultEnemyAtkRadius);
-			rangeSystemComponent->SetIdRadius(defaultEnemyIDRadius);
+			unitComponent->SetAtkRadius(defaultEnemyAtkRadius);
+			unitComponent->SetIdRadius(defaultEnemyIDRadius);
 			rangeSystemMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 0, 0 });		// 색 다르게 할거면 switch-case안에 넣기.
 
 			unitRangeSystemObject->GetTransform()->scale = Vector2d(defaultEnemyIDRadius * 2, defaultEnemyIDRadius * 2);
+
+			unitRangeSystemObject->setName("EnemyRangeObject");
 			break;
 		}
 	}
-	rangeSystemComponent->SetUnitComponent(unitComponent);
+	rangeSystemComponent->SetOwnerUnitComponent(unitComponent);
 
 
 	return unitGameObject;

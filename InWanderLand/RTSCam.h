@@ -80,7 +80,7 @@ public:
                 //    rot.Right() +
                 //    dMousePos.x * rotationSpeedFactor * -rot.Forward();
                 Vector3d newUp = rot.Up() + -dMousePos.y * rotationSpeedFactor * -rot.Forward();
-                Vector3d newRight = Vector3d::Cross(Vector3d::up, newForward);
+                Vector3d newRight = Vector3d::Cross(newUp, newForward);
                 //GetTransform()->rotation = Quaternion::MakeWithAxes(euler);
                 GetTransform()->rotation = Quaternion::MakeWithAxes(newRight, newUp, newForward);
             }

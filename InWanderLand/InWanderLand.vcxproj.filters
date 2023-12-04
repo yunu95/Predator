@@ -85,6 +85,9 @@
     <Filter Include="Contents\UnitFactory">
       <UniqueIdentifier>{acd2f4f0-ac5f-47d4-9337-b5d6450ce773}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\InitialFactors">
+      <UniqueIdentifier>{5e4af819-8eb5-4acc-a261-2bee0658b7bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -195,7 +198,7 @@
     <ClInclude Include="PathField.h">
       <Filter>Path</Filter>
     </ClInclude>
-    <ClInclude Include="Unit.h">
+    <ClInclude Include="Enemy.h">
       <Filter>Contents\Units</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
@@ -227,6 +230,18 @@
     </ClInclude>
     <ClInclude Include="UnitFactory.h">
       <Filter>Contents\UnitFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseUnitEntity.h">
+      <Filter>Contents\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyFactor.h">
+      <Filter>Contents\InitialFactors</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerFactor.h">
+      <Filter>Contents\InitialFactors</Filter>
+    </ClInclude>
+    <ClInclude Include="InitialFactorInterface.h">
+      <Filter>Contents\InitialFactors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -310,7 +325,7 @@
     <ClCompile Include="Panel_Palette.cpp">
       <Filter>Editor\Panel\List</Filter>
     </ClCompile>
-    <ClCompile Include="Unit.cpp">
+    <ClCompile Include="Enemy.cpp">
       <Filter>Contents\Units</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
@@ -339,6 +354,18 @@
     </ClCompile>
     <ClCompile Include="UnitFactory.cpp">
       <Filter>Contents\UnitFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseUnitEntity.cpp">
+      <Filter>Contents\Units</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyFactor.cpp">
+      <Filter>Contents\InitialFactors</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerFactor.cpp">
+      <Filter>Contents\InitialFactors</Filter>
+    </ClCompile>
+    <ClCompile Include="InitialFactorInterface.cpp">
+      <Filter>Contents\InitialFactors</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

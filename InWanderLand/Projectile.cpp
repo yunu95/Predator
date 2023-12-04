@@ -1,14 +1,14 @@
 #include "Projectile.h"
 #include "Dotween.h"
 #include "ProjectileSystem.h"
-#include "Unit.h"
+#include "BaseUnitEntity.h"
 
 void Projectile::SetOwnerType(string type)
 {
 	ownerType = type;
 }
 
-void Projectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed)
+void Projectile::Shoot(BaseUnitEntity* ownerUnit, BaseUnitEntity* opponentUnit, float speed)
 {
 	m_speed = speed;
 	m_ownerUnit = ownerUnit;
@@ -67,8 +67,8 @@ void Projectile::Update()
 
 void Projectile::OnCollisionEnter2D(const Collision2D& collision)
 {
-	if (collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>() != nullptr && 
-		collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>()->GetType() != ownerType)
+	if (collision.m_OtherCollider->GetGameObject()->GetComponent<BaseUnitEntity>() != nullptr &&
+		collision.m_OtherCollider->GetGameObject()->GetComponent<BaseUnitEntity>()->GetType() != ownerType)
 	{
 		ProjectileSystem::GetInstance()->ReturnToPool(collision.m_Collider->GetGameObject());
 	}
