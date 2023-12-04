@@ -175,7 +175,6 @@ namespace Application
         isRunning = true;
         while (isRunning)
         {
-            yunutyEngine::graphics::Renderer::SingleInstance().ManualRender();
             MSG msg;
             while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
             {

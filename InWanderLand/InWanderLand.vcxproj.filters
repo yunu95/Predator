@@ -58,8 +58,35 @@
     <Filter Include="Editor\Commands\MenubarCommands">
       <UniqueIdentifier>{59aa71fe-8d68-4297-8598-553d8498282d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\DataStructure">
+    <Filter Include="Editor\DataSystem">
       <UniqueIdentifier>{df3d0462-035e-4bad-98d4-634df95d5b42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataSystem\Iterator">
+      <UniqueIdentifier>{5555cdbb-a236-4aa2-b001-d7e18a3006b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataSystem\DataStructure">
+      <UniqueIdentifier>{dd1ed6d9-7a8f-431e-bc9f-71b76bffdde2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\IO">
+      <UniqueIdentifier>{33d969ad-26c9-4675-b49e-b952ef5f0763}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataSystem\EditableData">
+      <UniqueIdentifier>{47ea8057-a1f7-490c-8be2-48ee0ba2a859}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataSystem\EditableData\InstanceData">
+      <UniqueIdentifier>{eafa4f98-daf4-4d03-adc2-3ee83fbbc9df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataSystem\EditableData\SharedData">
+      <UniqueIdentifier>{11241e27-faa2-4357-a3d8-416d74037a31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataSystem\EditableData\DataType">
+      <UniqueIdentifier>{23af273e-3034-4921-a34c-25496efb6b27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataSystem\EditableData\SharedData\DataType">
+      <UniqueIdentifier>{12c926e0-9622-4f19-940e-0f9fed6da0ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataSystem\EditableData\InstanceData\DataType">
+      <UniqueIdentifier>{18bad386-fd1e-43c8-881e-26fad3f74cad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -156,9 +183,6 @@
     <ClInclude Include="MenubarCommands.h">
       <Filter>Editor\Commands\MenubarCommands</Filter>
     </ClInclude>
-    <ClInclude Include="CircularQueue.h">
-      <Filter>Editor\DataStructure</Filter>
-    </ClInclude>
     <ClInclude Include="Panel_Preview.h">
       <Filter>Editor\Panel\List</Filter>
     </ClInclude>
@@ -167,6 +191,60 @@
     </ClInclude>
     <ClInclude Include="Panel_Palette.h">
       <Filter>Editor\Panel\List</Filter>
+    </ClInclude>
+    <ClInclude Include="CircularQueue.h">
+      <Filter>Editor\DataSystem\DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="UUID.h">
+      <Filter>Editor\DataSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Identifiable.h">
+      <Filter>Editor\DataSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Storable.h">
+      <Filter>Editor\DataSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="MapFileManager.h">
+      <Filter>Editor\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="InstanceManager.h">
+      <Filter>Editor\DataSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="EditableData.h">
+      <Filter>Editor\DataSystem\EditableData</Filter>
+    </ClInclude>
+    <ClInclude Include="InstanceData.h">
+      <Filter>Editor\DataSystem\EditableData\InstanceData</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedData.h">
+      <Filter>Editor\DataSystem\EditableData\SharedData</Filter>
+    </ClInclude>
+    <ClInclude Include="Ornaments.h">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="Units.h">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="Units_SharedData.h">
+      <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="Ornaments_SharedData.h">
+      <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain_SharedData.h">
+      <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="Units_InstanceData.h">
+      <Filter>Editor\DataSystem\EditableData\InstanceData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="Ornaments_InstanceData.h">
+      <Filter>Editor\DataSystem\EditableData\InstanceData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain_InstanceData.h">
+      <Filter>Editor\DataSystem\EditableData\InstanceData\DataType</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -249,6 +327,45 @@
     </ClCompile>
     <ClCompile Include="Panel_Palette.cpp">
       <Filter>Editor\Panel\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Identifiable.cpp">
+      <Filter>Editor\DataSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Storable.cpp">
+      <Filter>Editor\DataSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="MapFileManager.cpp">
+      <Filter>Editor\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="InstanceManager.cpp">
+      <Filter>Editor\DataSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Ornaments.cpp">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="Units.cpp">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="Ornaments_SharedData.cpp">
+      <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain_SharedData.cpp">
+      <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="Units_SharedData.cpp">
+      <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="Ornaments_InstanceData.cpp">
+      <Filter>Editor\DataSystem\EditableData\InstanceData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain_InstanceData.cpp">
+      <Filter>Editor\DataSystem\EditableData\InstanceData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="Units_InstanceData.cpp">
+      <Filter>Editor\DataSystem\EditableData\InstanceData\DataType</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

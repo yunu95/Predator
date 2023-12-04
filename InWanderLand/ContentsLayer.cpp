@@ -20,7 +20,6 @@ void Application::Contents::ContentsLayer::Initialize()
 	//staticMesh->GetGI().LoadDiffuseMap("Textures/000000002405_reverse.dds");
 	//staticMesh->GetGI().LoadNormalMap("Textures/000000002406_b_reverse.dds");
 
-	yunutyEngine::YunutyCycle::SingleInstance().autoRendering = false;
 	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 

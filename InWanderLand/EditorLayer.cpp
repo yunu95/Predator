@@ -1,5 +1,6 @@
 #include "EditorLayer.h"
 
+#include "MapFileManager.h"
 #include "EditorPanel.h"
 #include "PanelList.h"
 
@@ -16,6 +17,9 @@ namespace Application
 	{
 		void EditorLayer::Initialize()
 		{
+			/// 각종 매니저 클래스 메모리 할당
+			MapFileManager::GetInstance();
+
 			/// 에디터에서 사용할 에디터 카메라, 게임뷰 카메라 생성
 
 			/// 에디터 패널 생성 및 초기화 진행
