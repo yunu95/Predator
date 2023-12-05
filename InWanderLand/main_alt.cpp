@@ -138,7 +138,7 @@ int main(int, char**)
 	yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
 	yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(1280, 800);
 	yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(releaseHwnd);
-	yunutyEngine::graphics::Renderer::SingleInstance().LoadFile("FBX/Zelda");
+	yunutyEngine::graphics::Renderer::SingleInstance().LoadFile("FBX/Sponza");
 
 	ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 
@@ -155,11 +155,15 @@ int main(int, char**)
 	}
 
 	{
+		auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sponza");
+	}
+
+	{
 		auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto light = camObj2->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-		yunuGI::Color color{ 0,1,0,1 };
+		yunuGI::Color color{ 1,1,1,1 };
 		light->GetGI().SetLightDiffuseColor(color);
-		//camObj2->GetTransform()->rotation = Quaternion{ Vector3d{180,0,0} };
+		camObj2->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
 	}
 
 	{
@@ -185,38 +189,40 @@ int main(int, char**)
 	{
 		auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto temp = static_cast<float>(- 25 + i);
-		camObj->GetTransform()->position = Vector3d{temp,0, 19};
+		camObj->GetTransform()->position = Vector3d{temp,5, 0};
 		auto light = camObj->AddComponent<yunutyEngine::graphics::PointLight>();
 		yunuGI::Color color{ 1,0,0,1 };
 		light->GetGI().SetLightDiffuseColor(color);
-		light->GetGI().SetRange(2);
+		light->GetGI().SetRange(3);
 
-		{
-			auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-			camObj2->GetTransform()->scale = Vector3d{ 4,4,4 };
-			camObj2->GetTransform()->position = Vector3d{ temp,0, 19 };
-			auto renderer = camObj2->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		//{
+		//	auto camObj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		//	camObj2->GetTransform()->scale = Vector3d{ 6,6,6 };
+		//	camObj2->GetTransform()->position = Vector3d{ temp,5, 0 };
+		//	auto renderer = camObj2->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 
-			auto& shaderList = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetShaderList();
-			auto& meshList = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetMeshList();
-			auto& materialList = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetMaterialList();
+		//	auto& shaderList = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetShaderList();
+		//	auto& meshList = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetMeshList();
+		//	auto& materialList = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetMaterialList();
 
-			for (auto& e : meshList)
-			{
-				if (e->GetName() == L"Sphere")
-				{
-					renderer->GetGI().SetMesh(e);
-				}
-			}
+		//	for (auto& e : meshList)
+		//	{
+		//		if (e->GetName() == L"Sphere")
+		//		{
+		//			renderer->GetGI().SetMesh(e);
+		//		}
+		//	}
 
-			for (auto& e : shaderList)
-			{
-				if (e->GetName() == L"DebugPS.cso")
-				{
-					renderer->GetGI().GetMaterial(0)->SetPixelShader(e);
-				}
-			}
-		}
+		//	for (auto& e : shaderList)
+		//	{
+		//		if (e->GetName() == L"DebugPS.cso")
+		//		{
+		//			renderer->GetGI().GetMaterial(0)->SetPixelShader(e);
+		//		}
+		//	}
+		//	yunuGI::Color debugColor{ 1,0,0,1 };
+		//	renderer->GetGI().GetMaterial(0)->SetColor(debugColor);
+		//}
 	}
 
 	//{
