@@ -99,3 +99,4 @@ PS_OUT main(PixelIn input)
 // RasterType : Solid
 // CullType : CullBack
 // DepthType : Less
+// BlendType : Default

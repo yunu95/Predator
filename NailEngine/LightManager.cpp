@@ -7,6 +7,6 @@ LazyObjects<LightManager> LightManager::Instance;
 void LightManager::PushLightInstance(std::shared_ptr<ILight> light)
 {
 	light->SetID(this->lightCount);
-	this->lightSet.insert(light);
+	this->lightSet.emplace_back(light);
 	this->lightCount++;
 }
