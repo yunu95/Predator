@@ -143,6 +143,20 @@ int main(int, char**)
 	camObj->AddComponent<ShakyCam>()->SetCameraMain();
 
 	{
+	protected:
+		float gravity = -9.81;
+		float currentSpeed{ 0 };
+		float flapSpeed = 25;
+		virtual void Update()override
+		{
+			GetTransform()->position.y += currentSpeed * Time::GetDeltaTime();
+			currentSpeed += gravity * Time::GetDeltaTime();
+			if (Input::isKeyPushed(KeyCode::Space))
+				currentSpeed = flapSpeed;
+		}
+	};*/
+	{
+		auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		staticMesh->GetGI().LoadMesh("Cube");
@@ -168,6 +182,28 @@ int main(int, char**)
 		staticMesh->GetGI().LoadMesh("Cylinder");
 		staticMeshObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ -5,0,0 });
 	}
+		auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		//staticMeshObj->AddComponent<FlappyBird>();
+		staticMesh->GetGI().LoadMesh("Capsule");
+		staticMesh->GetGI().SetMesh(L"Capsule");
+		staticMesh->GetGI().SetColor(0, yunuGI::Color{ 1,0,0,0 });
+		staticMesh->GetGI().SetShader(0, L"Debug");
+		staticMesh->GetGI().SetMaterialName(0, L"Forward");
+		staticMeshObj->GetTransform()->SetWorldPosition(yunutyEngine::Vector3d{ 1,0,0 });
+	}
+	{
+		auto staticMeshObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto staticMesh = staticMeshObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		//staticMeshObj->AddComponent<FlappyBird>();
+		staticMesh->GetGI().LoadMesh("Capsule");
+		staticMesh->GetGI().SetMesh(L"Capsule");
+		staticMesh->GetGI().SetColor(0, yunuGI::Color{ 0,1,0,0 });
+		staticMesh->GetGI().SetShader(0, L"Debug");
+		staticMesh->GetGI().SetMaterialName(0, L"Forward");
+	}
+	
+	//staticMesh->GetGI().LoadDiffuseMap("Textures/000000002405_reverse.dds");
+	//staticMesh->GetGI().LoadNormalMap("Textures/000000002406_b_reverse.dds");
 
 	yunutyEngine::YunutyCycle::SingleInstance().autoRendering = false;
 	yunutyEngine::YunutyCycle::SingleInstance().Play();
