@@ -36,3 +36,4 @@ float4 main(PixelIn input) : SV_Target
 // RasterType : Solid
 // CullType : CullNone
 // DepthType : NoDepthTestNoWrite
+// BlendType : Default

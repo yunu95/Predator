@@ -176,6 +176,7 @@ void RenderSystem::RenderLight()
 			NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 		}
 
+		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e->GetMaterialName()))->SetInt(0, e->GetID());
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e->GetMaterialName()))->PushGraphicsData();
 		auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
 		mesh->Render();

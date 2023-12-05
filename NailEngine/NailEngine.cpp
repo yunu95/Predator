@@ -46,30 +46,6 @@ void NailEngine::Render()
 	// µª½º ½ºÅÙ½Çºä¸¦ ÃÊ±âÈ­ÇÑ´Ù.
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->ClearDepthStencilView(ResourceBuilder::Instance.Get().swapChain->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 
-	///
-	D3D11_BLEND_DESC blendDesc;
-	ID3D11BlendState* state;
-	ZeroMemory(&blendDesc, sizeof(blendDesc));
-
-	blendDesc.AlphaToCoverageEnable = false;
-	blendDesc.IndependentBlendEnable = false;
-
-	for (UINT i = 0; i < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; ++i) {
-		blendDesc.RenderTarget[i].BlendEnable = FALSE;
-		blendDesc.RenderTarget[i].SrcBlend = D3D11_BLEND_ONE;
-		blendDesc.RenderTarget[i].DestBlend = D3D11_BLEND_ZERO;
-		blendDesc.RenderTarget[i].BlendOp = D3D11_BLEND_OP_ADD;
-		blendDesc.RenderTarget[i].SrcBlendAlpha = D3D11_BLEND_ONE;
-		blendDesc.RenderTarget[i].DestBlendAlpha = D3D11_BLEND_ZERO;
-		blendDesc.RenderTarget[i].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-		blendDesc.RenderTarget[i].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-	}
-	ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateBlendState(&blendDesc, &state);
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->OMSetBlendState(state, nullptr, 0xFFFFFFFF);
-	///
-
-
-
 	RenderSystem::Instance.Get().Render();
 
 	// End

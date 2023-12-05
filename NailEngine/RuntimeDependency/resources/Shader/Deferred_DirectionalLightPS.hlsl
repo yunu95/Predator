@@ -50,3 +50,4 @@ PS_OUT main(PixelIn input)
 // RasterType : Solid
 // CullType : CullNone
 // DepthType : NoDepthTestNoWrite
+// BlendType : AlphaBlend

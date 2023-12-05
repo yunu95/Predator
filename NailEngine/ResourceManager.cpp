@@ -127,7 +127,7 @@ std::shared_ptr<Material> ResourceManager::CreateInstanceMaterial(const std::sha
 
 	std::wstring materialName = instanceMaterial->GetName();
 	materialName += L"_instance_";
-	materialName += std::to_wstring(material->GetID());
+	materialName += std::to_wstring(instanceMaterial->GetID());
 	instanceMaterial->SetName(materialName);
 
 

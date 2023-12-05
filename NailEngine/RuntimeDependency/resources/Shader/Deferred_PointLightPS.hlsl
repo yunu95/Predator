@@ -45,7 +45,7 @@ PS_OUT main(PixelIn input)
     
     CalculateLight(lightIndex, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);
     
-    output.diffuse = color.diffuse + color.ambient;
+    output.diffuse = (color.diffuse + color.ambient);
     //output.specular = color.specular;
     
     return output;
@@ -54,5 +54,6 @@ PS_OUT main(PixelIn input)
 // ShaderInfo
 // ShaderType : Light
 // RasterType : Solid
-// CullType : CullNone
+// CullType : CullFront
 // DepthType : NoDepthTestNoWrite
+// BlendType : AlphaBlend

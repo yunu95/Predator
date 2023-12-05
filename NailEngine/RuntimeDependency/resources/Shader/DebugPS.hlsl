@@ -21,3 +21,4 @@ float4 main(PixelIn input) : SV_TARGET
 // RasterType : Wireframe
 // CullType : CullNone
 // DepthType : Less
+// BlendType : Default

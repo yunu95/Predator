@@ -22,6 +22,7 @@ Material::Material(const Material& rhs)
 	this->ps = rhs.ps;
 	this->textures = rhs.textures;
 	this->useTextures = rhs.useTextures;
+	this->name = rhs.name;
 }
 
 void Material::SetVertexShader(const yunuGI::IShader* shader)

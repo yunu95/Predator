@@ -65,6 +65,8 @@ void PixelShader::Bind()
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->OMSetDepthStencilState(this->depthStencilState.Get(), 1);
 
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->PSSetShader(ps.Get(), nullptr, 0);
+
+	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->OMSetBlendState(this->blendState.Get(), nullptr, 0xFFFFFFFF);
 }
 
 void PixelShader::UnBind()
@@ -127,6 +129,7 @@ void PixelShader::CreateShaderState(const std::wstring& shaderPath)
 	CreateShaderType(fileContent);
 	CreateRasterizerState(fileContent);
 	CreateDepthStencilState(fileContent);
+	CreateBlendState(fileContent);
 }
 
 void PixelShader::CreateShaderType(const std::string& fileContent)
@@ -243,7 +246,7 @@ void PixelShader::CreateRasterizerState(const std::string& fileContent)
 void PixelShader::CreateDepthStencilState(const std::string& fileContent)
 {
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
-
+	
 	depthStencilDesc.DepthEnable = true; // 깊이 버퍼 사용 여부
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS; // 깊이 값을 비교하는 함수
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL; // 깊이 값을 쓰는지 여부
@@ -295,6 +298,7 @@ void PixelShader::CreateDepthStencilState(const std::string& fileContent)
 			else if (shaderType == "NoDepthTestNoWrite")
 			{
 				depthStencilDesc.DepthEnable = false;
+				//depthStencilDesc.DepthFunc = D3D11_COMPARISON_ALWAYS;
 				depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 			}
 			else if (shaderType == "LessNoWrite")
@@ -317,4 +321,53 @@ void PixelShader::CreateDepthStencilState(const std::string& fileContent)
 	}
 
 	ResourceBuilder::Instance.Get().device->GetDevice()->CreateDepthStencilState(&depthStencilDesc, this->depthStencilState.GetAddressOf());
+}
+
+void PixelShader::CreateBlendState(const std::string& fileContent)
+{
+	D3D11_BLEND_DESC blendDesc{};
+
+	blendDesc.AlphaToCoverageEnable = false;
+	blendDesc.IndependentBlendEnable = false;
+
+	blendDesc.RenderTarget[0].BlendEnable = false;
+	blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+	blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
+	blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	std::regex commentRegex("// BlendType : (\\w+)");
+	std::smatch matches;
+	if (std::regex_search(fileContent, matches, commentRegex))
+	{
+		if (matches.size() >= 2)
+		{
+			std::string shaderType = matches[1].str();
+			if (shaderType == "Default")
+			{
+
+			}
+			else if (shaderType == "AlphaBlend")
+			{
+				blendDesc.RenderTarget[0].BlendEnable = true;
+				blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+				blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+			}
+			else
+			{
+				// 뒤에 입력이 없으니 assert
+				assert(FALSE);
+			}
+		}
+		else
+		{
+			// BlendType : 이라는 문자열을 hlsl파일 안에 정의하지 않았으니 assert
+			assert(FALSE);
+		}
+	}
+
+	ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateBlendState(&blendDesc, this->blendState.GetAddressOf());
 }

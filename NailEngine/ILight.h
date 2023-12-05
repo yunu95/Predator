@@ -50,7 +50,6 @@ public:
 	void SetID(int id)
 	{
 		this->id = id; 
-		ResourceManager::Instance.Get().GetMaterial(this->materialName)->SetInt(0, this->id);
 	}
 	int GetID() { return this->id; }
 
