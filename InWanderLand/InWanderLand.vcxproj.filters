@@ -187,9 +187,6 @@
     <ClInclude Include="DelayedTestFunctions.h">
       <Filter>TestCodes</Filter>
     </ClInclude>
-    <ClInclude Include="TestUtils.h">
-      <Filter>TestCodes</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">

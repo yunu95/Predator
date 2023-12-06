@@ -220,7 +220,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="ShakyCam.h" />
     <ClInclude Include="PathEditor.h" />
     <ClInclude Include="TestComponent.h" />
-    <ClInclude Include="TestUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp" />

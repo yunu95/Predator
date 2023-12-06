@@ -18,8 +18,8 @@ void Application::Contents::ContentsLayer::Initialize()
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
     yunutyEngine::Collider2D::SetIsOnXYPlane(false);
 
-    //TestColliderEnableDeath();
-    TestNavEnableDeath();
+    TestColliderEnableDeath();
+    //TestNavEnableDeath();
 
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
