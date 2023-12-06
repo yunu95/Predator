@@ -101,6 +101,8 @@ void TestColliderEnableDeath()
         planeColliderComp->SetHalfExtent({ 10,1,10 });
         planeCollider->GetTransform()->position = Vector3d(0, 3, 0);
     }*/
+    auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<graphics::DirectionalLight>();
+    directionalLight->GetTransform()->SetWorldRotation(Quaternion({ 100,10,0 }));
 
     auto delayedFunctions = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DelayedTestFunctions>();
 
