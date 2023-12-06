@@ -10,14 +10,14 @@
 
 class TriggerVolumeTest : public Component
 {
-// PhysX Visual Debugger라는 프로그램을 실행하고 테스트 코드를 실행하면 어떤 현상이 일어나는지 더욱 자세히 관찰할 수 있습니다.
+    // PhysX Visual Debugger라는 프로그램을 실행하고 테스트 코드를 실행하면 어떤 현상이 일어나는지 더욱 자세히 관찰할 수 있습니다.
     virtual void OnTriggerEnter(physics::Collider* other) override
     {
-        DebugBeacon::PlaceBeacon(other->GetTransform()->GetWorldPosition(), yunuGI::Color::blue(), {3,3,3});
+        DebugBeacon::PlaceBeacon(other->GetTransform()->GetWorldPosition(), yunuGI::Color::blue(), { 3,3,3 });
     };
     virtual void OnTriggerExit(physics::Collider* other) override
     {
-        DebugBeacon::PlaceBeacon(other->GetTransform()->GetWorldPosition(), yunuGI::Color::blue(), {3,3,3});
+        DebugBeacon::PlaceBeacon(other->GetTransform()->GetWorldPosition(), yunuGI::Color::blue(), { 3,3,3 });
     };
 };
 // PhysX Visual Debugger라는 프로그램을 실행하고 테스트 코드를 실행하면 어떤 현상이 일어나는지 더욱 자세히 관찰할 수 있습니다.
@@ -34,7 +34,13 @@ void TestColliderEnableDeath()
     boxCollider->GetTransform()->position = Vector3d(0, 10, 0);
     boxCollider->GetTransform()->rotation = Vector3d(100, 10, 35);
     auto boxMesh = boxCollider->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    boxMesh->GetGI().LoadMesh("Cube");
+
+    auto resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+    auto cubeMesh = resourceManager->GetMesh(L"Cube");
+    auto sphereMeshResource = resourceManager->GetMesh(L"Sphere");
+    auto capsuleMeshResource = resourceManager->GetMesh(L"Capsule");
+
+    boxMesh->GetGI().SetMesh(cubeMesh);
     boxMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color::black());
     {
         auto boxCollider = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -45,7 +51,7 @@ void TestColliderEnableDeath()
         boxCollider->GetTransform()->rotation = Vector3d(100, 10, 35);
         auto boxMesh = boxCollider->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
         boxCollider->AddComponent<TriggerVolumeTest>();
-        boxMesh->GetGI().LoadMesh("Cube");
+        boxMesh->GetGI().SetMesh(cubeMesh);
         boxMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color::black());
     }
     {
@@ -57,7 +63,7 @@ void TestColliderEnableDeath()
         sphereCollider->GetTransform()->rotation = Vector3d(100, 10, 35);
         auto sphereMesh = sphereCollider->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
         sphereCollider->AddComponent<TriggerVolumeTest>();
-        sphereMesh->GetGI().LoadMesh("Sphere");
+        sphereMesh->GetGI().SetMesh(sphereMeshResource);
         sphereMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color::black());
         sphereColliderComp->SetRadius(0.5);
     }
@@ -70,7 +76,7 @@ void TestColliderEnableDeath()
         capsuleCollider->GetTransform()->rotation = Vector3d(100, 10, 35);
         auto capsuleMesh = capsuleCollider->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
         capsuleCollider->AddComponent<TriggerVolumeTest>();
-        capsuleMesh->GetGI().LoadMesh("Capsule");
+        capsuleMesh->GetGI().SetMesh(capsuleMeshResource);
         capsuleMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color::black());
         capsuleColliderComp->SetRadius(0.25);
         capsuleColliderComp->SetHalfHeight(0.5);
@@ -84,7 +90,7 @@ void TestColliderEnableDeath()
     planeCollider->GetTransform()->position = Vector3d(0, 0, 0);
     auto planeMesh = planeCollider->AddGameObject();
     auto planeMeshComp = planeMesh->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    planeMeshComp->GetGI().LoadMesh("Cube");
+    planeMeshComp->GetGI().SetMesh(cubeMesh);
     planeMeshComp->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
     planeMesh->GetTransform()->scale = Vector3d(10, 2, 10);
 

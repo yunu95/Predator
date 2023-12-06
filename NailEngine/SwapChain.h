@@ -12,6 +12,7 @@ public:
 	~SwapChain();
 
 	void Init(HWND hWnd, int width, int height);
+	void SwapBackBufferIndex();
 
 #pragma region Getter
 	Microsoft::WRL::ComPtr<IDXGISwapChain1>& GetSwapChain() { return swapChain; }
@@ -28,5 +29,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> DSBuffer;
 
 	D3D11_VIEWPORT vp;
+
+	unsigned int backBufferIndex;
 };
 

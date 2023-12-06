@@ -38,7 +38,7 @@ NavigationAgent* CreateAgent(NavigationField* navField)
     agent->SetRadius(0.5);
     agent->AssignToNavigationField(navField);
     auto staticMesh = agent->GetGameObject()->AddGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    staticMesh->GetGI().LoadMesh("Capsule");
+    staticMesh->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(L"Capsule"));
     staticMesh->GetGI().GetMaterial()->SetColor({ 0.75,0.75,0.75,0 });
     staticMesh->GetTransform()->position = Vector3d{ 0,0.5,0 };
     return agent;
@@ -68,6 +68,9 @@ void TestNavEnableDeath()
     auto delayedTestFunctions = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DelayedTestFunctions>();
     delayedTestFunctions->todoList.push_back({ 3,[=]() {agent3->Relocate(Vector3d{3,0,0}); } });
     delayedTestFunctions->todoList.push_back({ 8,[=]() {agent3->Relocate(Vector3d{3,9,8}); } });
+
+    auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<graphics::DirectionalLight>();
+    directionalLight->GetTransform()->SetWorldRotation(Quaternion({100,10,0}));
 
     agent3->Relocate(Vector3d{ 3,0,0 });
     rtsCam->groundRightClickCallback = [=](Vector3d position)

@@ -10,9 +10,12 @@ public:
 	virtual void UnBind() override;
 
 private:
-	void CreateRasterizerState();
+	//void CreateRasterizerState();
 	void CreateShaderState(const std::wstring& shaderPath);
+	void CreateShaderType(const std::string& fileContent);
 	void CreateRasterizerState(const std::string& fileContent);
+	void CreateDepthStencilState(const std::string& fileContent);
+	void CreateBlendState(const std::string& fileContent);
 	void CreateSamplerState();
 
 private:
@@ -21,5 +24,7 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState;
+	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
 };
 

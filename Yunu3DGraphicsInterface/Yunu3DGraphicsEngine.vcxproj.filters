@@ -51,8 +51,26 @@
     <Filter Include="AdapterTemplate">
       <UniqueIdentifier>{6592b14a-5084-42f0-a3ec-99883003788a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\IMaterial">
+    <Filter Include="Header Files\FBX">
+      <UniqueIdentifier>{ffe1fbb9-e689-457b-bca8-6e18ba5d2fb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IResource">
+      <UniqueIdentifier>{a2b86bb6-1f5d-4648-bc1c-841a687e9539}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IResource\IMaterial">
       <UniqueIdentifier>{cb7f02e4-25af-40b5-a109-d2162b39915e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IResource\IMesh">
+      <UniqueIdentifier>{e7ebd179-4d3e-4447-995f-8e18d7412d7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IResource\ITexture">
+      <UniqueIdentifier>{1aa0c6e8-b420-4974-9a0f-1c60640767a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IResource\IShader">
+      <UniqueIdentifier>{7746b75c-35f0-462e-894d-d0cd751d48d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IResource\IAnimation">
+      <UniqueIdentifier>{9d7b4831-bc43-4344-b576-70bd340cc6fd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -168,10 +186,52 @@
       <Filter>AdapterTemplate</Filter>
     </ClInclude>
     <ClInclude Include="IMaterial.h">
-      <Filter>Header Files\IMaterial</Filter>
+      <Filter>Header Files\IResource\IMaterial</Filter>
     </ClInclude>
     <ClInclude Include="YGMaterialAdapter.h">
       <Filter>AdapterTemplate</Filter>
+    </ClInclude>
+    <ClInclude Include="ILight.h">
+      <Filter>Header Files\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="YunuVector3.h">
+      <Filter>raw</Filter>
+    </ClInclude>
+    <ClInclude Include="YunuVector4.h">
+      <Filter>raw</Filter>
+    </ClInclude>
+    <ClInclude Include="YGDirectionalLightAdapter.h">
+      <Filter>AdapterTemplate</Filter>
+    </ClInclude>
+    <ClInclude Include="YGPointLightAdapter.h">
+      <Filter>AdapterTemplate</Filter>
+    </ClInclude>
+    <ClInclude Include="YGSpotLightAdapter.h">
+      <Filter>AdapterTemplate</Filter>
+    </ClInclude>
+    <ClInclude Include="YGLightAdapter.h">
+      <Filter>AdapterTemplate</Filter>
+    </ClInclude>
+    <ClInclude Include="IYunuMeshRenderer.h">
+      <Filter>Header Files\Renderable</Filter>
+    </ClInclude>
+    <ClInclude Include="FBXData.h">
+      <Filter>Header Files\FBX</Filter>
+    </ClInclude>
+    <ClInclude Include="IResource.h">
+      <Filter>Header Files\IResource</Filter>
+    </ClInclude>
+    <ClInclude Include="IMesh.h">
+      <Filter>Header Files\IResource\IMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="ITexture.h">
+      <Filter>Header Files\IResource\ITexture</Filter>
+    </ClInclude>
+    <ClInclude Include="IShader.h">
+      <Filter>Header Files\IResource\IShader</Filter>
+    </ClInclude>
+    <ClInclude Include="IAnimation.h">
+      <Filter>Header Files\IResource\IAnimation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +250,9 @@
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
       <Filter>AdapterTemplate</Filter>
+    </ClCompile>
+    <ClCompile Include="IResource.cpp">
+      <Filter>Header Files\IResource</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

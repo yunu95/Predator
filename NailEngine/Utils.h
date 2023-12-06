@@ -27,3 +27,29 @@ public:
 private:
 	T* instance = nullptr;
 };
+
+enum 
+{
+	SWAP_CHAIN_BUFFER_COUNT = 2,
+	G_BUFFER_MEMBER_COUNT = 4,
+	LIGHTING_MEMBER_COUNT =2,
+};
+
+enum
+{
+	POSITION,
+	NORMAL,
+	ALBEDO,
+	DEPTH,
+	DIFFUSE = 0,
+	SPECULAR = 1,
+	GBUFFER_COUNT
+};
+
+enum class RENDER_TARGET_TYPE
+{
+	//SWAP_CHAIN,
+	G_BUFFER,
+	LIGHTING,
+	END
+};
