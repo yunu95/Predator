@@ -149,7 +149,6 @@ namespace Application
         yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
         yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(winSizeX, winSizeY);
         yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(hWND);
-        //yunutyEngine::graphics::Renderer::SingleInstance().LoadFile("FBX/BossDoor/BossDoor.fbx");
     }
 
     void Application::Initialize()

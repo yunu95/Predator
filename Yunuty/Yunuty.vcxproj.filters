@@ -91,9 +91,6 @@
     <Filter Include="yunutyEngine\YunutyEngine Header">
       <UniqueIdentifier>{af86806f-f074-4c5b-8b0e-92eaa187b6fc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="yunutyEngine\RigidBody">
-      <UniqueIdentifier>{1ae7a020-d3a9-440b-95f3-7e30103c735a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="yunutyEngine\RigidBody2D">
       <UniqueIdentifier>{6015c4fc-a7de-4730-afc6-f0cdb83a7c5f}</UniqueIdentifier>
     </Filter>
@@ -103,14 +100,8 @@
     <Filter Include="yunutyEngine\Collider2D">
       <UniqueIdentifier>{e1bbed2d-709b-4833-8425-bf869fadf461}</UniqueIdentifier>
     </Filter>
-    <Filter Include="yunutyEngine\BoxCollider2D">
-      <UniqueIdentifier>{5a84d76b-0b86-46a1-96e2-14a2f45d5839}</UniqueIdentifier>
-    </Filter>
     <Filter Include="yunutyEngine\CircleCollider2D">
       <UniqueIdentifier>{d57ed543-df79-4293-8409-22acab2736ad}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="yunutyEngine\Collision">
-      <UniqueIdentifier>{e707c0f1-3d37-437e-b02d-cccaf4a1677c}</UniqueIdentifier>
     </Filter>
     <Filter Include="yunutyEngine\Collision2D">
       <UniqueIdentifier>{17950682-2c73-4882-8bc9-25d5ec6a1500}</UniqueIdentifier>
@@ -274,6 +265,42 @@
     <Filter Include="yunutyEngine\NavigationSystem\NavigationAgent">
       <UniqueIdentifier>{6c5c0422-b46f-4c14-ba6c-9da973c01bcd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="yunutyEngine\physics">
+      <UniqueIdentifier>{8f8e3fe3-9a24-4cf5-87e0-a33d64923605}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\physics\RigidBody">
+      <UniqueIdentifier>{1ae7a020-d3a9-440b-95f3-7e30103c735a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\physics\Collider">
+      <UniqueIdentifier>{da8516e5-bcff-4b15-832a-7ca0db099727}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\physics\SphereCollider">
+      <UniqueIdentifier>{823b9e6a-8a96-4396-b560-4c1f1c0c63b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\physics\BoxCollider">
+      <UniqueIdentifier>{9efd3b73-4416-410a-bbd9-eccf23f4ae27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\physics\CapsuleCollider">
+      <UniqueIdentifier>{bfa827d7-a192-4eb5-adfd-46344ed91c07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\physics\ForceType">
+      <UniqueIdentifier>{2e7115e1-55ab-4720-9971-1a523979f2ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\physics\MaterialInfo">
+      <UniqueIdentifier>{68b7dad7-fea8-45dd-8f9d-8bebf8680e73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\physics\_PhysxGlobal">
+      <UniqueIdentifier>{d85722fb-85c9-4cc5-b50c-564ae0ca2d3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\physics\_PhysxContactCallback">
+      <UniqueIdentifier>{821098fc-ea7f-46b4-b138-df8bf63ae2a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\BoxCollider2D">
+      <UniqueIdentifier>{5a84d76b-0b86-46a1-96e2-14a2f45d5839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\physics\Collision">
+      <UniqueIdentifier>{e707c0f1-3d37-437e-b02d-cccaf4a1677c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -327,8 +354,8 @@
     <ClCompile Include="WinMain.cpp">
       <Filter>yunutyEngine\Main</Filter>
     </ClCompile>
-    <ClCompile Include="RigidBody.cpp">
-      <Filter>yunutyEngine\RigidBody</Filter>
+    <ClCompile Include="YunutyRigidBody.cpp">
+      <Filter>yunutyEngine\physics\RigidBody</Filter>
     </ClCompile>
     <ClCompile Include="RigidBody2D.cpp">
       <Filter>yunutyEngine\RigidBody2D</Filter>
@@ -492,6 +519,24 @@
     <ClCompile Include="YunutyNavigationAgent.cpp">
       <Filter>yunutyEngine\NavigationSystem\NavigationAgent</Filter>
     </ClCompile>
+    <ClCompile Include="YunutyCollider.cpp">
+      <Filter>yunutyEngine\physics\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="YunutyBoxCollider.cpp">
+      <Filter>yunutyEngine\physics\BoxCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="YunutyCapsuleCollider.cpp">
+      <Filter>yunutyEngine\physics\CapsuleCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="YunutySphereCollider.cpp">
+      <Filter>yunutyEngine\physics\SphereCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="_YunutyPhysxGlobal.cpp">
+      <Filter>yunutyEngine\physics\_PhysxGlobal</Filter>
+    </ClCompile>
+    <ClCompile Include="_YunutyPhysxContactCallback.cpp">
+      <Filter>yunutyEngine\physics\_PhysxContactCallback</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\Camera.h">
@@ -545,8 +590,8 @@
     <ClInclude Include="header\YunutyEngine.h">
       <Filter>yunutyEngine</Filter>
     </ClInclude>
-    <ClInclude Include="header\RigidBody.h">
-      <Filter>yunutyEngine\RigidBody</Filter>
+    <ClInclude Include="header\YunutyRigidBody.h">
+      <Filter>yunutyEngine\physics\RigidBody</Filter>
     </ClInclude>
     <ClInclude Include="header\RigidBody2D.h">
       <Filter>yunutyEngine\RigidBody2D</Filter>
@@ -567,7 +612,7 @@
       <Filter>yunutyEngine\Collision2D</Filter>
     </ClInclude>
     <ClInclude Include="header\Collision.h">
-      <Filter>yunutyEngine\Collision</Filter>
+      <Filter>yunutyEngine\physics\Collision</Filter>
     </ClInclude>
     <ClInclude Include="header\LineCollider2D.h">
       <Filter>yunutyEngine\LineCollider2D</Filter>
@@ -748,6 +793,42 @@
     </ClInclude>
     <ClInclude Include="_YunutyNavigationAgentImpl.h">
       <Filter>yunutyEngine\NavigationSystem\NavigationAgent</Filter>
+    </ClInclude>
+    <ClInclude Include="header\YunutyCollider.h">
+      <Filter>yunutyEngine\physics\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="header\YunutyBoxCollider.h">
+      <Filter>yunutyEngine\physics\BoxCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="header\YunutyCapsuleCollider.h">
+      <Filter>yunutyEngine\physics\CapsuleCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="_YunutyPhysxGlobal.h">
+      <Filter>yunutyEngine\physics\_PhysxGlobal</Filter>
+    </ClInclude>
+    <ClInclude Include="header\YunutySphereCollider.h">
+      <Filter>yunutyEngine\physics\SphereCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="_YunutyColliderImpl.h">
+      <Filter>yunutyEngine\physics\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="header\YunutyForceType.h">
+      <Filter>yunutyEngine\physics\ForceType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\YunutyPhysicsMaterialInfo.h">
+      <Filter>yunutyEngine\physics\MaterialInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="_YunutyPhysxContactCallback.h">
+      <Filter>yunutyEngine\physics\_PhysxContactCallback</Filter>
+    </ClInclude>
+    <ClInclude Include="_YunutyBoxColliderImpl.h">
+      <Filter>yunutyEngine\physics\BoxCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="_YunutyCapsuleColliderImpl.h">
+      <Filter>yunutyEngine\physics\CapsuleCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="_YunutySphereColliderImpl.h">
+      <Filter>yunutyEngine\physics\SphereCollider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

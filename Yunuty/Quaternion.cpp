@@ -87,6 +87,10 @@ Vector3d Quaternion::Right()const
 {
     return *this * Vector3d::right;
 }
+double Quaternion::Dot(const Quaternion& first, const Quaternion& second)
+{
+    return first.x * second.x + first.y * second.y + first.z * second.z + first.w * second.w;
+}
 Quaternion Quaternion::MakeWithForwardUp(const Vector3d& forward, const Vector3d& up)
 {
     Vector3d newUp = up - Vector3d::Project(up, forward.Normalized());
