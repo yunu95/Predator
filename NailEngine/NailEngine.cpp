@@ -19,14 +19,14 @@ LazyObjects<NailEngine> NailEngine::Instance;
 
 void NailEngine::Init(UINT64 hWnd)
 {
-	this->hWnd = reinterpret_cast<HWND>(hWnd);
+	this->windowInfo.hWnd = reinterpret_cast<HWND>(hWnd);
 
 	this->device = std::make_shared<Device>();
 	this->device->Init();
 	ResourceBuilder::Instance.Get().device = this->device;
 
 	this->swapChain = std::make_shared<SwapChain>();
-	this->swapChain->Init(this->hWnd, this->width, this->height);
+	this->swapChain->Init(this->windowInfo.hWnd, this->windowInfo.width, this->windowInfo.height);
 	ResourceBuilder::Instance.Get().swapChain = this->swapChain;
 
 	CreateConstantBuffer();
@@ -69,8 +69,8 @@ void NailEngine::Render()
 
 void NailEngine::SetResolution(unsigned int width, unsigned int height)
 {
-	this->width = width;
-	this->height = height;
+	this-> windowInfo.width = width;
+	this->windowInfo.height = height;
 }
 
 std::shared_ptr<ConstantBuffer>& NailEngine::GetConstantBuffer(unsigned int index)
@@ -129,32 +129,32 @@ void NailEngine::CreateRenderTargetGroup()
 
 		rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
 			L"PositionTarget",
-			this->width,
-			this->height,
+			this->windowInfo.width,
+			this->windowInfo.height,
 			DXGI_FORMAT_R32G32B32A32_FLOAT,
 			D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
 			);
 
 		rtVec[1].texture = ResourceManager::Instance.Get().CreateTexture(
 			L"NormalTarget",
-			this->width,
-			this->height,
+			this->windowInfo.width,
+			this->windowInfo.height,
 			DXGI_FORMAT_R32G32B32A32_FLOAT,
 			D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
 		);
 
 		rtVec[2].texture = ResourceManager::Instance.Get().CreateTexture(
 			L"AlbedoTarget",
-			this->width,
-			this->height,
+			this->windowInfo.width,
+			this->windowInfo.height,
 			DXGI_FORMAT_R8G8B8A8_UNORM,
 			D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
 		);
 
 		rtVec[3].texture = ResourceManager::Instance.Get().CreateTexture(
 			L"DepthTarget",
-			this->width,
-			this->height,
+			this->windowInfo.width,
+			this->windowInfo.height,
 			DXGI_FORMAT_R8G8B8A8_UNORM,
 			D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
 		);
@@ -169,16 +169,16 @@ void NailEngine::CreateRenderTargetGroup()
 
 		rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
 			L"DiffuseLightTarget",
-			this->width,
-			this->height,
+			this->windowInfo.width,
+			this->windowInfo.height,
 			DXGI_FORMAT_R8G8B8A8_UNORM,
 			D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
 		);
 
 		rtVec[1].texture = ResourceManager::Instance.Get().CreateTexture(
 			L"SpecularLightTarget",
-			this->width,
-			this->height,
+			this->windowInfo.width,
+			this->windowInfo.height,
 			DXGI_FORMAT_R8G8B8A8_UNORM,
 			D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
 		);
