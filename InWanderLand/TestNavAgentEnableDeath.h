@@ -65,6 +65,11 @@ void TestNavEnableDeath()
     auto agent = CreateAgent(navField);
     auto agent2 = CreateAgent(navField);
     auto agent3 = CreateAgent(navField);
+    auto delayedTestFunctions = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DelayedTestFunctions>();
+    delayedTestFunctions->todoList.push_back({ 3,[=]() {agent3->Relocate(Vector3d{3,0,0}); } });
+    delayedTestFunctions->todoList.push_back({ 8,[=]() {agent3->Relocate(Vector3d{3,9,8}); } });
+
+    agent3->Relocate(Vector3d{ 3,0,0 });
     rtsCam->groundRightClickCallback = [=](Vector3d position)
     {
         agent->MoveTo(position);
