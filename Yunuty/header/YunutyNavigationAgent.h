@@ -26,6 +26,8 @@ namespace yunutyEngine
         float GetSpeed();
         float GetAcceleration();
         float GetRadius();
+        void Relocate(Vector3f destination);
+        void Relocate(Vector3d destination) { Relocate(Vector3f{ destination }); };
         void MoveTo(Vector3f destination);
         void MoveTo(Vector3d destination) { MoveTo(Vector3f{ destination }); }
     private:

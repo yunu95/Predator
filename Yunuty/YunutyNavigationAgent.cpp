@@ -65,6 +65,43 @@ float yunutyEngine::NavigationAgent::GetRadius()
 {
     return impl->agentParams.radius;
 }
+void yunutyEngine::NavigationAgent::Relocate(Vector3f destination)
+{
+    const float* pos = &destination.x;
+    constexpr float agentPlacementHalfExtents[3]{ 1000,1000,1000 };
+    float nearest[3];
+    dtPolyRef ref = 0;
+    dtVcopy(nearest, pos);
+
+    dtStatus status = navField->impl->navQuery->findNearestPoly(pos, agentPlacementHalfExtents, impl->crowd->getFilter(0), &ref, nearest);
+    if (dtStatusFailed(status))
+    {
+        dtVcopy(nearest, pos);
+        ref = 0;
+    }
+    dtCrowdAgent* ag = impl->crowd->getEditableAgent(impl->agentIdx);
+    ag->corridor.reset(ref, nearest);
+    ag->boundary.reset();
+    ag->partial = false;
+
+    ag->topologyOptTime = 0;
+    ag->targetReplanTime = 0;
+    ag->nneis = 0;
+
+    dtVset(ag->dvel, 0, 0, 0);
+    dtVset(ag->nvel, 0, 0, 0);
+    dtVset(ag->vel, 0, 0, 0);
+    dtVcopy(ag->npos, nearest);
+
+    ag->desiredSpeed = 0;
+
+    if (ref)
+        ag->state = DT_CROWDAGENT_STATE_WALKING;
+    else
+        ag->state = DT_CROWDAGENT_STATE_INVALID;
+
+    ag->targetState = DT_CROWDAGENT_TARGET_NONE;
+}
 void yunutyEngine::NavigationAgent::MoveTo(Vector3f destination)
 {
     if (navField == nullptr)

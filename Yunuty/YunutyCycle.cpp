@@ -111,7 +111,7 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 
     // 물리처리
     auto pxScene = physics::_PhysxGlobal::SingleInstance().PxSceneByScene[Scene::currentScene];
-    if (Time::GetDeltaTime() > 0)
+    if (Time::GetDeltaTime() > 0 && pxScene)
     {
         pxScene->simulate(Time::GetDeltaTime());
         pxScene->fetchResults(true);
