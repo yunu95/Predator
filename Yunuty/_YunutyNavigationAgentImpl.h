@@ -1,0 +1,42 @@
+#pragma once
+#include "DetourCrowd.h"
+#include "YunutyNavigationAgent.h"
+
+namespace yunutyEngine
+{
+    class NavigationAgent::Impl
+    {
+    private:
+        Impl(NavigationAgent* navAgentComponent) :navAgentComponent(navAgentComponent)
+        {
+            navAgentComponent = navAgentComponent;
+        }
+        virtual ~Impl()
+        {
+            if (crowd != nullptr && agentIdx != -1)
+                crowd->removeAgent(agentIdx);
+        }
+        friend NavigationAgent;
+    public:
+        int agentIdx{-1};
+        //const dtCrowdAgent* agent{ nullptr };
+        dtCrowd* crowd{ nullptr };
+        dtPolyRef targetRef;
+        float targetPos[3];
+        dtCrowdAgentParams agentParams
+        {
+            .radius = 1,
+            .height = 0.3,
+            .maxAcceleration = std::numeric_limits<float>::max(),
+            .maxSpeed = 5,
+            .collisionQueryRange = 12,
+            .pathOptimizationRange = 30,
+            .separationWeight = 2,
+            .updateFlags = DT_CROWD_ANTICIPATE_TURNS |
+            DT_CROWD_OPTIMIZE_VIS |
+            DT_CROWD_OBSTACLE_AVOIDANCE,
+            .obstacleAvoidanceType = (unsigned char)3,
+        };
+        NavigationAgent* navAgentComponent;
+    };
+}

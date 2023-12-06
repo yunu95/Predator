@@ -122,14 +122,14 @@ void Input::Update()
 }
 bool Input::m_isKeyDown(KeyCode keyCode)
 {
-    //if (mainWnd != 0 && GetForegroundWindow() != mainWnd)
-        //return false;
+    if (mainWnd != 0 && GetForegroundWindow() != mainWnd)
+        return false;
     return keyDownSet.find(keyCode) != keyDownSet.end();
 }
 bool Input::m_isKeyPushed(KeyCode keyCode)
 {
-    //if (mainWnd != 0 && GetForegroundWindow() != mainWnd)
-        //return false;
+    if (mainWnd != 0 && GetForegroundWindow() != mainWnd)
+        return false;
     return keyPushedSet.find(keyCode) != keyPushedSet.end();
 }
 bool Input::m_isKeyLifted(KeyCode keyCode)
