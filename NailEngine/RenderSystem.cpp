@@ -218,13 +218,22 @@ void RenderSystem::RenderForward()
 
 void RenderSystem::DrawDeferredInfo()
 {
+	auto windowInfo = NailEngine::Instance.Get().GetWindowInfo();
+	int width = windowInfo.width;
+	int height = windowInfo.height;
 	for (int i = 0; i < 6; i++)
 	{
-		DirectX::SimpleMath::Matrix matSclae = DirectX::SimpleMath::Matrix::CreateScale(DirectX::SimpleMath::Vector3(1280 / 10.f, 800 / 10.f, 1.f));
+		DirectX::SimpleMath::Matrix matSclae = DirectX::SimpleMath::Matrix::CreateScale(DirectX::SimpleMath::Vector3(width / 10.f, height / 10.f, 1.f));
 		DirectX::SimpleMath::Matrix matRotation = DirectX::SimpleMath::Matrix::CreateRotationX(0.f);
 		matRotation *= DirectX::SimpleMath::Matrix::CreateRotationY(0.f);
 		matRotation *= DirectX::SimpleMath::Matrix::CreateRotationZ(0.f);
-		DirectX::SimpleMath::Matrix matTranslation = DirectX::SimpleMath::Matrix::CreateTranslation(DirectX::SimpleMath::Vector3(-576.f + (i * 128.f), 360.f, 1.f));
+		/// 
+		DirectX::SimpleMath::Matrix matTranslation = DirectX::SimpleMath::Matrix::CreateTranslation(DirectX::SimpleMath::Vector3(
+			((-width/2.f) + ((width/10.f)*(i+2)))
+			,((height/2.f) - ((height/10.f)*2.f) + 22.f)
+			,1.f)
+		);
+		/// 
 		DirectX::SimpleMath::Matrix wtm = matSclae * matRotation * matTranslation;
 
 		if (i == 0)

@@ -9,6 +9,29 @@
 
 #include <d3d11.h>
 
+/// 그래픽스 테스트용
+void GraphicsTest()
+{
+    const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+    _resourceManager->LoadFile("FBX/Sponza");
+
+    {
+        auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sponza");
+    }
+
+     //포인트 라이트
+    {
+        auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        object->GetTransform()->position = Vector3d{ 0,3,0 };
+        auto light = object->AddComponent<yunutyEngine::graphics::PointLight>();
+        light->GetGI().SetRange(4);
+        yunuGI::Color color{1,0,0,1};
+        light->GetGI().SetLightDiffuseColor(color);
+    }
+
+}
+
+
 void CreateNavPlane(Vector3f botleft, Vector3f topright, std::vector<Vector3f>& worldVertices, std::vector<int>& worldFaces)
 {
     int startingIdx = worldVertices.size();
@@ -63,40 +86,42 @@ void Application::Contents::ContentsLayer::Initialize()
     //camObj->GetTransform()->position = Vector3d(0, 0, -5);
     //auto roamingCam = camObj->AddComponent<RoamingCam>();
 
+    GraphicsTest();
+
     {
         auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
         directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-        directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
+        directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{90,0,45} };
     }
 
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
     auto rtsCam = camObj->AddComponent<RTSCam>();
-    rtsCam->GetTransform()->position = Vector3d(0, 10, 0);
+    //rtsCam->GetTransform()->position = Vector3d(0, 10, 0);
 
-    // 길찾기 테스트
-    {
-        const float corridorRadius = 3;
-        std::vector<Vector3f> worldVertices { };
-        std::vector<int> worldFaces { };
+    //// 길찾기 테스트
+    //{
+    //    const float corridorRadius = 3;
+    //    std::vector<Vector3f> worldVertices { };
+    //    std::vector<int> worldFaces { };
 
-        CreateNavPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
-        CreateNavPlane({ -8,0,-2 }, { 8,0,2 }, worldVertices, worldFaces);
-        CreateNavPlane({ -8,0,-8 }, { -6,0,8 }, worldVertices, worldFaces);
-        CreateNavPlane({ 6,0,-8 }, { 8,0,8 }, worldVertices, worldFaces);
-        CreateNavPlane({ -8,0,6 }, { 8,0,8 }, worldVertices, worldFaces);
-        CreateNavPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
-        auto navField = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationField>();
-        navField->BuildField(worldVertices, worldFaces);
-        auto agent = CreateAgent(navField);
-        auto agent2 = CreateAgent(navField);
-        auto agent3 = CreateAgent(navField);
-        rtsCam->groundRightClickCallback = [=](Vector3d position) {
-            agent->MoveTo(position);
-            agent2->MoveTo(position);
-            agent3->MoveTo(position);
-        };
-    }
+    //    CreateNavPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
+    //    CreateNavPlane({ -8,0,-2 }, { 8,0,2 }, worldVertices, worldFaces);
+    //    CreateNavPlane({ -8,0,-8 }, { -6,0,8 }, worldVertices, worldFaces);
+    //    CreateNavPlane({ 6,0,-8 }, { 8,0,8 }, worldVertices, worldFaces);
+    //    CreateNavPlane({ -8,0,6 }, { 8,0,8 }, worldVertices, worldFaces);
+    //    CreateNavPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
+    //    auto navField = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationField>();
+    //    navField->BuildField(worldVertices, worldFaces);
+    //    auto agent = CreateAgent(navField);
+    //    auto agent2 = CreateAgent(navField);
+    //    auto agent3 = CreateAgent(navField);
+    //    rtsCam->groundRightClickCallback = [=](Vector3d position) {
+    //        agent->MoveTo(position);
+    //        agent2->MoveTo(position);
+    //        agent3->MoveTo(position);
+    //    };
+    //}
 
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
