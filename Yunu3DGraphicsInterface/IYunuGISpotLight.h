@@ -4,9 +4,14 @@
 
 namespace yunuGI
 {
-    class ISpotLight: public yunuGI::IUnknown
+    class ISpotLight: public yunuGI::ILight
     {
     public:
-        virtual void SetWorldTM(const Matrix4x4& tm) = 0;
+        virtual void SetLightDiffuseColor(yunuGI::Color& color) override {};
+        virtual void SetRange(float range) = 0;
+        virtual void SetAngle(float angle) = 0;
     };
+	struct ISpotLightDesc
+	{
+	};
 }

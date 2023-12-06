@@ -37,6 +37,9 @@
 #include "GameObjectPool.h"
 #include "SoundSystem.h"
 #include "SoundChannel.h"
+#include "DirectionalLight.h"
+#include "PointLight.h"
+#include "SpotLight.h"
 
 // 수학 라이브러리들
 #include "YunutyMathConstants.h"

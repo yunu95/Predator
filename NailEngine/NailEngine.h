@@ -5,13 +5,12 @@
 #include <memory>
 #include <vector>
 
-
-
 #include "Utils.h"
 
 class Device;
 class SwapChain;
 class ConstantBuffer;
+class RenderTargetGroup;
 
 class NailEngine
 {
@@ -25,10 +24,12 @@ public:
 
 public:
 	void SetResolution(unsigned int width, unsigned int height);
-	std::shared_ptr<ConstantBuffer>& GetConstantBuffer(unsigned int index);
 
+	std::shared_ptr<ConstantBuffer>& GetConstantBuffer(unsigned int index);
+	std::vector<std::shared_ptr<RenderTargetGroup>>& GetRenderTargetGroup() { return this->renderTargetGroup; }
 private:
 	void CreateConstantBuffer();
+	void CreateRenderTargetGroup();
 
 private:
 	HWND hWnd;
@@ -39,6 +40,6 @@ private:
 	std::shared_ptr<SwapChain> swapChain;
 
 	std::vector<std::shared_ptr<ConstantBuffer>> constantBuffers;
-
+	std::vector<std::shared_ptr<RenderTargetGroup>> renderTargetGroup;
 };
 

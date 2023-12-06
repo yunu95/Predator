@@ -120,6 +120,7 @@
     <ClInclude Include="DebugMeshes.h">
       <Filter>DebugMeshes</Filter>
     </ClInclude>
+    <ClInclude Include="TestComponent.h" />
     <ClInclude Include="PeriodicAction.h">
       <Filter>PeriodicAction</Filter>
     </ClInclude>
@@ -186,6 +187,9 @@
     <ClInclude Include="DelayedTestFunctions.h">
       <Filter>TestCodes</Filter>
     </ClInclude>
+    <ClInclude Include="TestUtils.h">
+      <Filter>TestCodes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -227,6 +231,7 @@
     <ClCompile Include="RequestDetourTest.cpp">
       <Filter>RecastDetourTest</Filter>
     </ClCompile>
+    <ClCompile Include="TestComponent.cpp" />
     <ClCompile Include="EditorEvents.cpp">
       <Filter>Editor\Events</Filter>
     </ClCompile>

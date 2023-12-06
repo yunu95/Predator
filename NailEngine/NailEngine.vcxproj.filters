@@ -58,6 +58,27 @@
     <Filter Include="Resource\Texture">
       <UniqueIdentifier>{db20820c-deef-4b80-b972-92338038b52e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Light">
+      <UniqueIdentifier>{00b3b583-dc75-40dc-b537-2acd344dd505}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Light\ILight">
+      <UniqueIdentifier>{623d0d1a-35e3-4b2e-a440-8253d8d26e16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Light\DirectionalLight">
+      <UniqueIdentifier>{3b1aad02-90c8-4d9f-8bea-7acfc5c8335b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Light\PointLight">
+      <UniqueIdentifier>{bc32e237-2f44-4d6a-88cb-f4420a7aa97e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Light\SpotLight">
+      <UniqueIdentifier>{b31a3bd1-1cea-4875-ac9d-6cf99d284c56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsEngine\RenderTargetGroup">
+      <UniqueIdentifier>{d48f5a68-226e-4936-92ce-f94bb02f9848}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FBXLoader">
+      <UniqueIdentifier>{62dbce78-fb04-4e5f-97ff-328a4f8254b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -165,6 +186,42 @@
     <ClInclude Include="Texture.h">
       <Filter>Resource\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="YGDirectionalLightAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="YGPointLightAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="YGSpotLightAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="IYunuMeshRenderer.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="ILight.h">
+      <Filter>Light\ILight</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>Light\DirectionalLight</Filter>
+    </ClInclude>
+    <ClInclude Include="LightManager.h">
+      <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>Light\PointLight</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>Light\SpotLight</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTargetGroup.h">
+      <Filter>GraphicsEngine\RenderTargetGroup</Filter>
+    </ClInclude>
+    <ClInclude Include="FBXLoader.h">
+      <Filter>FBXLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -224,6 +281,30 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Resource\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp">
+      <Filter>Light\DirectionalLight</Filter>
+    </ClCompile>
+    <ClCompile Include="LightManager.cpp">
+      <Filter>Light</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>Light\PointLight</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>Light\SpotLight</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTargetGroup.cpp">
+      <Filter>GraphicsEngine\RenderTargetGroup</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleMath.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="FBXLoader.cpp">
+      <Filter>FBXLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="RuntimeDependency\resources\Shader\DefaultVS.hlsl">
@@ -235,12 +316,39 @@
     <FxCompile Include="RuntimeDependency\resources\Shader\DebugPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\Deferred_DirectionalLightPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\Deferred_DirectionalLightVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\Deferred_FinalVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\Deferred_FinalPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\TexturePS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\TextureVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\Deferred_PointLightVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\Deferred_PointLightPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
       <Filter>Utils</Filter>
     </None>
     <None Include="RuntimeDependency\resources\Shader\Buffers.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="RuntimeDependency\resources\Shader\Utils.hlsli">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

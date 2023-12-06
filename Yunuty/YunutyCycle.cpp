@@ -120,7 +120,9 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
     Collider2D::InvokeCollisionEvents();
     graphics::Renderer::SingleInstance().Update(Time::GetDeltaTime());
     if (autoRendering)
+    {
         graphics::Renderer::SingleInstance().Render();
+    }
 
     {
         std::scoped_lock lock(actionReservationMutex);

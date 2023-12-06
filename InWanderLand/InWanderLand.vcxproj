@@ -110,6 +110,11 @@
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0
+
+xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -127,8 +132,9 @@
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>if exist "$(projectdir)RuntimeDependency\resources" xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
-if exist "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K</Command>
+      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0
+
+xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -213,6 +219,8 @@ if exist "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" xcopy "$(
     <ClInclude Include="ProgramExitCommand.h" />
     <ClInclude Include="ShakyCam.h" />
     <ClInclude Include="PathEditor.h" />
+    <ClInclude Include="TestComponent.h" />
+    <ClInclude Include="TestUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp" />
@@ -241,6 +249,7 @@ if exist "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" xcopy "$(
     <ClCompile Include="RoamingCam.cpp" />
     <ClCompile Include="RTSCam.cpp" />
     <ClCompile Include="ShakyCam.cpp" />
+    <ClCompile Include="TestComponent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

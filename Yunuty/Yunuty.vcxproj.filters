@@ -250,6 +250,15 @@
     <Filter Include="ClientTemplate">
       <UniqueIdentifier>{c2f86423-113b-4f7e-bb77-e530e31e8781}</UniqueIdentifier>
     </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\DirectionalLight">
+      <UniqueIdentifier>{a954b19f-8264-41ea-acbe-f5d770dde448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\PointLight">
+      <UniqueIdentifier>{e7184d7f-9039-432f-85a3-bf93a71654b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\SpotLight">
+      <UniqueIdentifier>{2a5a9436-8b98-48ca-ae5a-1866a9637b61}</UniqueIdentifier>
+    </Filter>
     <Filter Include="yunutyEngine\NavigationSystem\NavigationField">
       <UniqueIdentifier>{d5d1652a-010a-46be-8232-a1fd4b640a90}</UniqueIdentifier>
     </Filter>
@@ -494,6 +503,15 @@
     </ClCompile>
     <ClCompile Include="ChunkyTriMesh.cpp">
       <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\DirectionalLight</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\PointLight</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\SpotLight</Filter>
     </ClCompile>
     <ClCompile Include="YunutyNavigationField.cpp">
       <Filter>yunutyEngine\NavigationSystem\NavigationField</Filter>
@@ -754,6 +772,15 @@
     </ClInclude>
     <ClInclude Include="ValueHistory.h">
       <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
+    </ClInclude>
+    <ClInclude Include="header\DirectionalLight.h">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\DirectionalLight</Filter>
+    </ClInclude>
+    <ClInclude Include="header\PointLight.h">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\PointLight</Filter>
+    </ClInclude>
+    <ClInclude Include="header\SpotLight.h">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\SpotLight</Filter>
     </ClInclude>
     <ClInclude Include="header\YunutyNavigationField.h">
       <Filter>yunutyEngine\NavigationSystem\NavigationField</Filter>

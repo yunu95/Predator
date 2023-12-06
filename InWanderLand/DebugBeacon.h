@@ -19,12 +19,20 @@ public:
         debugBeacon->debugSphere = staticMesh;
         debugBeacon->maxScale = scale;
         debugBeacon->duration = duration;
-        staticMesh->GetGI().LoadMesh("Sphere");
+        staticMesh->GetGI().SetMesh(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(L"Sphere"));
         staticMesh->GetGI().GetMaterial()->SetColor(color);
         // 와이어
         //staticMesh->GetGI().GetMaterial()->SetPixelShader(L"DebugPS.cso");
         // 솔리드
-        staticMesh->GetGI().GetMaterial()->SetPixelShader(L"DefaultPS.cso");
+        auto shaderList = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetShaderList();
+        for (int i = 0; i < shaderList.size(); ++i)
+        {
+            if (shaderList[i]->GetName() == L"DefaultPS.cso")
+            {
+                staticMesh->GetGI().GetMaterial()->SetPixelShader(shaderList[i]);
+            }
+        }
+        
         //staticMesh->GetGI().SetColor(0, color);
         //staticMesh->GetGI().SetShader(0, L"Forward");
         //staticMesh->GetGI().SetMaterialName(0, L"Forward");
@@ -40,7 +48,7 @@ public:
             elapsed = duration;
 
         GetTransform()->scale = maxScale * popCurve.Evaluate(elapsed/duration);
-        if (elapsed > duration)
+        if (elapsed >= duration)
             Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
     }
 private:
