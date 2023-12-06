@@ -70,3 +70,10 @@
 // 네비게이션
 #include "YunutyNavigationField.h"
 #include "YunutyNavigationAgent.h"
+
+// 물리
+#include "YunutyCollider.h"
+#include "YunutyBoxCollider.h"
+#include "YunutyCapsuleCollider.h"
+#include "YunutySphereCollider.h"
+#include "YunutyRigidBody.h"

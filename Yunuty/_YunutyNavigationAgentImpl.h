@@ -1,5 +1,12 @@
 #pragma once
 #include "DetourCrowd.h"
+#include "DetourNavMesh.h"
+#include "DetourNavMeshQuery.h"
+#include "DetourObstacleAvoidance.h"
+#include "DetourCommon.h"
+#include "DetourMath.h"
+#include "DetourAssert.h"
+#include "DetourAlloc.h"
 #include "YunutyNavigationAgent.h"
 
 namespace yunutyEngine
