@@ -1,5 +1,8 @@
 #include "YunutyEngine.h"
 #include "Input.h"
+// GetKeyState는 게임만들라고 있는 기능은 아님. 하드웨어에 최소한의 latency를 가지기 위한 기능(XInput)을 도입하는 것이 좋을 것이다.
+// xinput은 패드나 페달, 휠도 지원함.
+// GPU 가속도 고려할 수 있다. (NVIDIA G SYNC) 
 
 using namespace yunutyEngine;
 
