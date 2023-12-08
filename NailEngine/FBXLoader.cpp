@@ -5,6 +5,7 @@
 #include <locale>
 #include <filesystem>
 
+#include "ResourceManager.h"
 #include "Mesh.h"
 
 LazyObjects<FBXLoader> FBXLoader::Instance;
@@ -35,8 +36,6 @@ FBXNode FBXLoader::LoadFBXData(const char* filePath)
 	//	aiProcess_SortByPType |
 	//	aiProcess_GenBoundingBoxes |
 	//	aiProcess_EmbedTextures;
-
-	
 
 	flag = aiProcess_Triangulate |
 		aiProcess_ConvertToLeftHanded | aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
@@ -72,7 +71,11 @@ FBXNode FBXLoader::LoadFBXData(const char* filePath)
 	BuildBoneHierarchy(scene->mRootNode, boneInfo.child, 0);
 	rootNode.boneInfo = std::move(boneInfo);
 
-	LoadAnimation(scene);
+	if (scene->mNumAnimations > 0)
+	{
+		rootNode.hasAnimation = true;
+		LoadAnimation(scene);
+	}
 
 	boneInfoMap.clear();
 	currentBoneIndex = 1;
@@ -183,12 +186,12 @@ void FBXLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMeshD
 		aiString path;
 		if (material->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS)
 		{
-
 			std::wstring _path = aiStringToWString(path.C_Str());
 			std::filesystem::path pathName(_path);
 			pathName.filename().wstring();
 
 			meshData.material.albedoMap = this->texturePath + pathName.filename().wstring();
+			//meshData.material.albedoMap = this->texturePath + L"T_Spear_D.png";
 		}
 	}
 
@@ -198,45 +201,82 @@ void FBXLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMeshD
 		aiString path;
 		if (material->GetTexture(aiTextureType_NORMALS, 0, &path) == AI_SUCCESS)
 		{
-
 			std::wstring _path = aiStringToWString(path.C_Str());
 			std::filesystem::path pathName(_path);
 			pathName.filename().wstring();
 
 			meshData.material.normalMap = this->texturePath + pathName.filename().wstring();
+			//meshData.material.albedoMap = this->texturePath + L"T_Spear_N.png";
 		}
 	}
 }
 
 void FBXLoader::LoadAnimation(const aiScene* scene)
 {
-	AnimationClip animationClip;
 	for (int i = 0; i < scene->mNumAnimations; ++i)
 	{
 		aiAnimation* animation = scene->mAnimations[i];
+
+		AnimationClip animationClip;
 		animationClip.name = this->aiStringToWString(animation->mName.C_Str());
 		animationClip.duration = animation->mDuration / animation->mTicksPerSecond;
 		animationClip.totlaFrame = animation->mDuration;
 		int totalFrame = animation->mDuration;
+
+		animationClip.keyFrameInfoVec.resize(this->boneInfoMap.size() + 1);
 
 		for (int j = 0; j < animation->mNumChannels; ++j)
 		{
 			aiNodeAnim* nodeAnim = animation->mChannels[j];
 			nodeAnim->mNodeName;
 
-			for (int k = 0; k < nodeAnim->mNumPositionKeys; ++k)
-			{
+			auto iter = this->boneInfoMap.find(this->aiStringToWString(nodeAnim->mNodeName.C_Str()));
 
-			}
-			for (int k = 0; k < nodeAnim->mNumRotationKeys; ++k)
+			if (iter != this->boneInfoMap.end())
 			{
+				KeyFrameInfo keyFrameInfo;
+				keyFrameInfo.srtVec.resize(animationClip.totlaFrame + 1 , DirectX::SimpleMath::Matrix::Identity);
 
-			}
-			for (int k = 0; k < nodeAnim->mNumScalingKeys; ++k)
-			{
+				std::vector<DirectX::SimpleMath::Matrix> keyPosMatrix;
+				keyPosMatrix.resize(animationClip.totlaFrame + 1);
 
+				std::vector<DirectX::SimpleMath::Matrix> keyRotMatrix;
+				keyRotMatrix.resize(animationClip.totlaFrame + 1);
+
+				std::vector<DirectX::SimpleMath::Matrix> keyScaleMatrix;
+				keyScaleMatrix.resize(animationClip.totlaFrame + 1);
+
+				for (int k = 0; k < nodeAnim->mNumPositionKeys; ++k)
+				{
+					aiVectorKey vectorKey = nodeAnim->mPositionKeys[k];
+					keyPosMatrix[static_cast<int>(vectorKey.mTime)] =
+						DirectX::SimpleMath::Matrix::CreateTranslation(DirectX::SimpleMath::Vector3{ vectorKey.mValue.x,vectorKey.mValue.y,vectorKey.mValue.z });
+				}
+				for (int k = 0; k < nodeAnim->mNumRotationKeys; ++k)
+				{
+					aiQuatKey quatKey = nodeAnim->mRotationKeys[k];
+					keyRotMatrix[static_cast<int>(quatKey.mTime)] =
+						DirectX::XMMatrixRotationQuaternion(DirectX::SimpleMath::Vector4{ quatKey.mValue.x,quatKey.mValue.y,quatKey.mValue.z, quatKey.mValue.w });
+				}
+				for (int k = 0; k < nodeAnim->mNumScalingKeys; ++k)
+				{
+					aiVectorKey vectorKey = nodeAnim->mScalingKeys[k];
+					keyScaleMatrix[static_cast<int>(vectorKey.mTime)] =
+						DirectX::SimpleMath::Matrix::CreateScale(DirectX::SimpleMath::Vector3{ vectorKey.mValue.x,vectorKey.mValue.y,vectorKey.mValue.z });
+				}
+
+				for (int k = 0; k < keyPosMatrix.size(); ++k)
+				{
+					DirectX::SimpleMath::Matrix srt = DirectX::SimpleMath::Matrix::Identity;
+					srt = keyScaleMatrix[k] * keyRotMatrix[k] * keyPosMatrix[k];
+					keyFrameInfo.srtVec[k] = (srt);
+				}
+				
+				animationClip.keyFrameInfoVec[iter->second.index] = std::move(keyFrameInfo);
 			}
 		}
+
+		ResourceManager::Instance.Get().CreateAnimation(animationClip);
 	}
 }
 
@@ -271,7 +311,10 @@ void FBXLoader::BuildBoneHierarchy(const aiNode* node, std::vector<yunuGI::BoneI
 		boneInfo.name = iter->second.name;
 
 		boneInfo.index = currentBoneIndex++;
+		iter->second.index = boneInfo.index;
+
 		boneInfo.parentIndex = parentIndex;
+		iter->second.parentIndex = boneInfo.parentIndex;
 
 		boneInfoVec.emplace_back(boneInfo);
 

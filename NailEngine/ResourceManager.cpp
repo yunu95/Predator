@@ -14,6 +14,7 @@ using namespace DirectX::PackedVector;
 #include "IMaterial.h"
 #include "Material.h"
 #include "Texture.h"
+#include "Animation.h"
 
 #include "NailEngine.h"
 #include "RenderTargetGroup.h"
@@ -188,6 +189,16 @@ void ResourceManager::LoadFBX(const char* filePath)
 	this->fbxBoneInfoVecMap.insert({ fbxName, std::move(boneInfoVec) });
 	auto iter = this->fbxBoneInfoVecMap.find(fbxName);
 	FillFBXBoneInfoVec(node.boneInfo, iter->second);
+}
+
+void ResourceManager::CreateAnimation(AnimationClip& animationClip)
+{
+	std::shared_ptr<yunuGI::IAnimation> animation = std::make_shared<Animation>();
+
+	animation->SetName(animationClip.name);
+
+	this->animationVec.emplace_back(animation.get());
+	this->animationMap.insert({ animationClip.name, animation });
 }
 
 std::shared_ptr<yunuGI::IMaterial> ResourceManager::GetMaterial(const std::wstring& materialName)

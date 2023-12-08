@@ -13,20 +13,36 @@
 void GraphicsTest()
 {
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-    _resourceManager->LoadFile("FBX/Sponza");
+    //_resourceManager->LoadFile("FBX/Boss");
+	//_resourceManager->LoadFile("FBX/Monster");
+	_resourceManager->LoadFile("FBX/Building");
+
+    auto& meshList = _resourceManager->GetMeshList();
 
     {
-        auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sponza");
+       auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Building");
+       //object->GetTransform()->scale = Vector3d{ 100,100,100 };
+       //object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
+       /* auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        object->GetTransform()->rotation = Quaternion{ Vector3d{-90,0,0} };
+        auto renderer = object->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+        for (auto& e : meshList)
+        {
+            if (e->GetName() == L"Cube")
+            {
+                renderer->GetGI().SetMesh(e);
+            }
+        }*/
     }
 
      //포인트 라이트
     {
-        auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+       /* auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
         object->GetTransform()->position = Vector3d{ 0,3,0 };
         auto light = object->AddComponent<yunutyEngine::graphics::PointLight>();
         light->GetGI().SetRange(4);
         yunuGI::Color color{1,0,0,1};
-        light->GetGI().SetLightDiffuseColor(color);
+        light->GetGI().SetLightDiffuseColor(color);*/
     }
 
 }
@@ -90,8 +106,10 @@ void Application::Contents::ContentsLayer::Initialize()
 
     {
         auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-        directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{90,0,45} };
+        auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+        directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{0,0,0} };
+        //yunuGI::Color color{ 0.5,0.5,0.5,1 };
+        //light->GetGI().SetLightDiffuseColor(color);
     }
 
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();

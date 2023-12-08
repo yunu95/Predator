@@ -29,7 +29,8 @@ struct FBXBoneInfo
 
 struct KeyFrameInfo
 {
-	//std::vector<std::vector<
+	std::wstring boneName;
+	std::vector<DirectX::SimpleMath::Matrix> srtVec;
 };
 
 struct AnimationClip
@@ -37,7 +38,7 @@ struct AnimationClip
 	std::wstring name;
 	double duration;
 	int totlaFrame;
-	std::vector<std::vector<DirectX::SimpleMath::Matrix>> keyFrameInfo;
+	std::vector<KeyFrameInfo> keyFrameInfoVec;
 };
 
 //struct BoneInfo
@@ -73,6 +74,7 @@ struct FBXNode
 	std::vector<FBXNode> child;
 	std::vector<FBXMeshData> meshVec;
 	yunuGI::BoneInfo boneInfo;
+	bool hasAnimation;
 };
 
 class FBXLoader
@@ -97,7 +99,7 @@ private:
 
 private:
 	std::wstring texturePath;
-	std::unordered_map<std::wstring,FBXBoneInfo> boneInfoMap;
+	std::unordered_map<std::wstring, FBXBoneInfo> boneInfoMap;
 	static unsigned int currentBoneIndex;
 };
 

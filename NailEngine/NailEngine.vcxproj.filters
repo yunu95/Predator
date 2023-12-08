@@ -79,6 +79,9 @@
     <Filter Include="FBXLoader">
       <UniqueIdentifier>{62dbce78-fb04-4e5f-97ff-328a4f8254b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource\Animation">
+      <UniqueIdentifier>{eb8ca908-0835-4787-a5bc-46507564d786}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -222,6 +225,9 @@
     <ClInclude Include="Resource.h">
       <Filter>Resource</Filter>
     </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Resource\Animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -304,6 +310,9 @@
     </ClCompile>
     <ClCompile Include="Resource.cpp">
       <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Resource\Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
