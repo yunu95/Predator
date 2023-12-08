@@ -197,8 +197,10 @@ void ResourceManager::CreateAnimation(AnimationClip& animationClip)
 
 	animation->SetName(animationClip.name);
 
+	std::static_pointer_cast<Animation>(animation)->SetAnimationClip(std::move(animationClip));
+
 	this->animationVec.emplace_back(animation.get());
-	this->animationMap.insert({ animationClip.name, animation });
+	this->animationMap.insert({ animation->GetName(), animation });
 }
 
 std::shared_ptr<yunuGI::IMaterial> ResourceManager::GetMaterial(const std::wstring& materialName)
@@ -367,6 +369,13 @@ void ResourceManager::CreateDefaultMaterial()
 		CrateMaterial(name);
 	}
 
+	// Skinned Default Material
+	{
+		std::wstring name{L"SKinnedDefaultMaterial"};
+		auto material = CrateMaterial(name);
+		material->SetVertexShader(this->GetShader(L"SkinnedVS.cso").get());
+	}
+
 	auto& renderTargetGroupVec = NailEngine::Instance.Get().GetRenderTargetGroup();
 
 	// DirectionalLight
@@ -496,6 +505,7 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode& node, st
 			CreateMesh(mesh);
 
 			yunuGI::FBXData data;
+			data.hasAnimation = node.hasAnimation;
 			CreateResourceFromFBX(node.meshVec[i], dataVec,  data);
 		}
 	}

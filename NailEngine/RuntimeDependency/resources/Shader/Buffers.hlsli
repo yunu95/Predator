@@ -33,6 +33,11 @@ cbuffer MaterialBuffer : register(b1)
     int temp_int7;
 };
 
+cbuffer BoneMatrixBuffer : register(b2)
+{
+    row_major matrix BoneTransform[96];
+}
+
 // 라이트 관련
 struct LightColor
 {

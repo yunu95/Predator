@@ -9,9 +9,16 @@
 class MaterialWrapper : public yunuGI::IMaterial, public Resource
 {
 public:
-	MaterialWrapper()
+	MaterialWrapper(bool isStatic)
 	{
-		this->original = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DefaultMaterial"));
+		if (isStatic)
+		{
+			this->original = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DefaultMaterial"));
+		}
+		else
+		{
+			this->original = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"SkinnedDefaultMaterial"));
+		}
 	}
 
 	virtual void SetName(const std::wstring& materialName) override

@@ -3,6 +3,7 @@
 
 #include "Utils.h"
 #include "Struct.h"
+#include "Animation.h"
 
 #include <memory>
 #include <string>
@@ -27,20 +28,6 @@ struct FBXBoneInfo
 	DirectX::SimpleMath::Matrix offset;
 };
 
-struct KeyFrameInfo
-{
-	std::wstring boneName;
-	std::vector<DirectX::SimpleMath::Matrix> srtVec;
-};
-
-struct AnimationClip
-{
-	std::wstring name;
-	double duration;
-	int totlaFrame;
-	std::vector<KeyFrameInfo> keyFrameInfoVec;
-};
-
 //struct BoneInfo
 //{
 //	std::wstring name;
@@ -48,7 +35,6 @@ struct AnimationClip
 //	int parentIndex;
 //	std::vector<BoneInfo> child;
 //};
-
 
 //struct FBXMaterialData
 //{

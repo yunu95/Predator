@@ -18,6 +18,7 @@
 #include "YGPointLightAdapter.h"
 #include "IYunuGISpotLight.h"
 #include "YGSpotLightAdapter.h"
+#include "YGAnimatorAdapter.h"
 
 namespace yunuGIAdapter
 {
@@ -58,6 +59,10 @@ namespace yunuGIAdapter
 		virtual yunuGI::IUIText* CreateUIText(const yunuGI::IUITextDesc& desc)
 		{
 			return new UITextAdapter{};
+		}
+		virtual yunuGI::IAnimator* CreateAnimator(const yunuGI::IAnimatorDesc& desc)
+		{
+			return new AnimatorAdapter{};
 		}
 	};
 }

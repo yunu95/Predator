@@ -40,17 +40,35 @@ yunutyEngine::GameObject* Scene::AddGameObjectFromFBX(string fbxName)
 		{
 			auto gameObjectChild = gameObject->AddGameObject();
 			//gameObjectChild->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{90.f,0.f,0.f} });
-			gameObjectChild->GetTransform()->scale = Vector3d{0.01,0.01f,0.01f} ;
-			auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-			renderer->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(data[i].meshName));
+			gameObjectChild->GetTransform()->scale = Vector3d{ 0.01,0.01f,0.01f };
 
-			// Material Data Set
-			for (int j = 0; j < data[i].materialVec.size(); ++j)
+			if (!data[i].hasAnimation)
 			{
-				renderer->GetGI().SetMaterial
-				(
-					j, graphics::Renderer::SingleInstance().GetResourceManager()->GetMaterial(data[i].materialVec[j].materialName)
-				);
+				auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+				renderer->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(data[i].meshName));
+
+				// Material Data Set
+				for (int j = 0; j < data[i].materialVec.size(); ++j)
+				{
+					renderer->GetGI().SetMaterial
+					(
+						j, graphics::Renderer::SingleInstance().GetResourceManager()->GetMaterial(data[i].materialVec[j].materialName)
+					);
+				}
+			}
+			else
+			{
+				auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::SkinnedMesh>();
+				renderer->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(data[i].meshName));
+
+				// Material Data Set
+				for (int j = 0; j < data[i].materialVec.size(); ++j)
+				{
+					renderer->GetGI().SetMaterial
+					(
+						j, graphics::Renderer::SingleInstance().GetResourceManager()->GetMaterial(data[i].materialVec[j].materialName)
+					);
+				}
 			}
 		}
 	}

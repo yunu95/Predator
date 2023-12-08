@@ -5,17 +5,12 @@
 
 namespace yunuGI
 {
-    class ISkinnedMesh : virtual public yunuGI::IRenderable
+    class ISkinnedMesh : public yunuGI::IMeshRenderer
     {
     public:
-        virtual void LoadMesh(const char* fileName) abstract;
-        virtual void LoadDiffuseMap(const char* fileName)abstract;
-        virtual void LoadNormalMap(const char* fileName)abstract;
-        virtual void SetPickingMode(bool isPickingModeOn)abstract;
-        // 곧 버려질 애들
-        virtual void SetAnimation(const char* animID) {};
-        virtual void SetAnimationRepeat(bool repeat) {};
-        virtual void PlayAnimation() {};
+		virtual void SetPickingMode(bool isPickingModeOn) = 0;
+		virtual void SetMaterial(unsigned int index, IMaterial* material) {};
+		virtual IMaterial* GetMaterial(unsigned int index = 0) { return nullptr; };
     };
 
     struct ISkinnedMeshDesc

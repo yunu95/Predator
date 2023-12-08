@@ -6,12 +6,22 @@
 
 LazyObjects<RenderableManager> RenderableManager::Instance;
 
-void RenderableManager::PushRenderableObject(std::shared_ptr<IRenderable> renderable)
+void RenderableManager::PushStaticRenderableObject(std::shared_ptr<IRenderable> renderable)
 {
-	this->renderableSet.insert(renderable);
+	this->staticRenderableSet.insert(renderable);
 }
 
-void RenderableManager::PopRenderableObject(std::shared_ptr<IRenderable> renderable)
+void RenderableManager::PopStaticRenderableObject(std::shared_ptr<IRenderable> renderable)
 {
-	this->renderableSet.erase(renderable);
+	this->staticRenderableSet.erase(renderable);
+}
+
+void RenderableManager::PushSKinnedRenderableObject(std::shared_ptr<IRenderable> renderable)
+{
+	this->skinnedRenderableSet.insert(renderable);
+}
+
+void RenderableManager::PopSKinnedRenderableObject(std::shared_ptr<IRenderable> renderable)
+{
+	this->skinnedRenderableSet.erase(renderable);
 }

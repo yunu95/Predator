@@ -82,6 +82,9 @@
     <Filter Include="Resource\Animation">
       <UniqueIdentifier>{eb8ca908-0835-4787-a5bc-46507564d786}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GraphicsEngine\RenderableManager\IRenderable\SkinnedMesh">
+      <UniqueIdentifier>{dd8982f3-ee29-4343-92e6-96f93059c404}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -228,6 +231,12 @@
     <ClInclude Include="Animation.h">
       <Filter>Resource\Animation</Filter>
     </ClInclude>
+    <ClInclude Include="YGAnimatorAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinnedMesh.h">
+      <Filter>GraphicsEngine\RenderableManager\IRenderable\SkinnedMesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -314,6 +323,9 @@
     <ClCompile Include="Animation.cpp">
       <Filter>Resource\Animation</Filter>
     </ClCompile>
+    <ClCompile Include="SkinnedMesh.cpp">
+      <Filter>GraphicsEngine\RenderableManager\IRenderable\SkinnedMesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="RuntimeDependency\resources\Shader\DefaultVS.hlsl">
@@ -347,6 +359,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="RuntimeDependency\resources\Shader\Deferred_PointLightPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\SkinnedVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

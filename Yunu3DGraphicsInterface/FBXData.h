@@ -29,6 +29,8 @@ namespace yunuGI
 		std::vector<MaterialData> materialVec;
 
 		BoneInfo boneInfo;
+
+		bool hasAnimation;
 	};
 
 

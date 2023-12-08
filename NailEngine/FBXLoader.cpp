@@ -220,7 +220,7 @@ void FBXLoader::LoadAnimation(const aiScene* scene)
 		AnimationClip animationClip;
 		animationClip.name = this->aiStringToWString(animation->mName.C_Str());
 		animationClip.duration = animation->mDuration / animation->mTicksPerSecond;
-		animationClip.totlaFrame = animation->mDuration;
+		animationClip.totalFrame = animation->mDuration;
 		int totalFrame = animation->mDuration;
 
 		animationClip.keyFrameInfoVec.resize(this->boneInfoMap.size() + 1);
@@ -235,16 +235,16 @@ void FBXLoader::LoadAnimation(const aiScene* scene)
 			if (iter != this->boneInfoMap.end())
 			{
 				KeyFrameInfo keyFrameInfo;
-				keyFrameInfo.srtVec.resize(animationClip.totlaFrame + 1 , DirectX::SimpleMath::Matrix::Identity);
+				keyFrameInfo.srtVec.resize(animationClip.totalFrame + 1 , DirectX::SimpleMath::Matrix::Identity);
 
 				std::vector<DirectX::SimpleMath::Matrix> keyPosMatrix;
-				keyPosMatrix.resize(animationClip.totlaFrame + 1);
+				keyPosMatrix.resize(animationClip.totalFrame + 1);
 
 				std::vector<DirectX::SimpleMath::Matrix> keyRotMatrix;
-				keyRotMatrix.resize(animationClip.totlaFrame + 1);
+				keyRotMatrix.resize(animationClip.totalFrame + 1);
 
 				std::vector<DirectX::SimpleMath::Matrix> keyScaleMatrix;
-				keyScaleMatrix.resize(animationClip.totlaFrame + 1);
+				keyScaleMatrix.resize(animationClip.totalFrame + 1);
 
 				for (int k = 0; k < nodeAnim->mNumPositionKeys; ++k)
 				{

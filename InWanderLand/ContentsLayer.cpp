@@ -13,14 +13,16 @@
 void GraphicsTest()
 {
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-    //_resourceManager->LoadFile("FBX/Boss");
+    _resourceManager->LoadFile("FBX/Boss");
 	//_resourceManager->LoadFile("FBX/Monster");
-	_resourceManager->LoadFile("FBX/Building");
+	//_resourceManager->LoadFile("FBX/Building");
 
     auto& meshList = _resourceManager->GetMeshList();
 
     {
-       auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Building");
+       auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+       //auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+       //auto animator = object->AddComponent<yunutyEngine::graphics::Animator>();
        //object->GetTransform()->scale = Vector3d{ 100,100,100 };
        //object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
        /* auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
