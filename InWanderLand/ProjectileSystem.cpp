@@ -1,5 +1,5 @@
 #include "ProjectileSystem.h"
-#include "BaseUnitEntity.h"
+#include "Unit.h"
 #include "Projectile.h"
 #include "Dotween.h"
 
@@ -33,7 +33,7 @@ void ProjectileSystem::SetUp()
 	}
 }
 
-void ProjectileSystem::Shoot(BaseUnitEntity* ownerUnit, BaseUnitEntity* opponentUnit, float speed)
+void ProjectileSystem::Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed)
 {
 	if (m_projectileStack.empty())
 	{

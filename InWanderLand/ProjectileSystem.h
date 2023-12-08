@@ -8,7 +8,7 @@
 /// 발사체가 움직이고 충돌하는 로직은 Projectile 클래스에서 관리하자.
 /// </summary>
 
-class BaseUnitEntity;
+class Unit;
 class Projectile;
 
 class ProjectileSystem
@@ -24,7 +24,7 @@ private:
 	std::stack<GameObject*> m_projectileStack;								// 발사 대기 중인 투사체들.
 
 public:
-	void Shoot(BaseUnitEntity* ownerUnit, BaseUnitEntity* opponentUnit, float speed);
+	void Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed);
 	void ReturnToPool(GameObject* usedObject);
 	void SetUp();
 

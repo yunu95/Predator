@@ -55,7 +55,7 @@ void Enemy::OnDestroy()
 }
 
 #pragma region TransitionFuctions
-	void Enemy::IdleTransition()
+	void Enemy::IdleToOtherStatesTransition()
 	{
 		// Chase로 갈 것인지, Attack으로 갈 것인지 판별
 		// -> idleToChase냐 idleToAttack 이냐!
@@ -90,7 +90,7 @@ void Enemy::OnDestroy()
 		chaseToIdle = true;
 	}
 
-	void Enemy::AttackTransition()
+	void Enemy::AttackToIdleTransition()
 	{
 		attackToIdle = true;
 	}
@@ -105,7 +105,7 @@ void Enemy::OnDestroy()
 
 		GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(GetGameObject()->GetTransform()->GetWorldPosition());
 
-		IdleTransition();
+		IdleToOtherStatesTransition();
 	}
 
 	void Enemy::AttackEngageFunction()
@@ -115,7 +115,7 @@ void Enemy::OnDestroy()
 		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });
 
 		// 투사체가 설정되어 있다면 원거리 공격을 한다.
-		ProjectileSystem::GetInstance()->Shoot(this, m_currentTargetObject->GetComponent<BaseUnitEntity>(), m_bulletSpeed);
+		ProjectileSystem::GetInstance()->Shoot(this, m_currentTargetObject->GetComponent<Unit>(), m_bulletSpeed);
 
 		/// 공격 후 m_Delay간격으로 재귀를 할지, 아니면 쫓아갈 지를 정한다.
 		GetGameObject()->GetComponent<Dotween>()->DONothing(0.5f/*딜레이*/).OnComplete([=]()
@@ -128,7 +128,7 @@ void Enemy::OnDestroy()
 				}
 				else
 				{
-					AttackTransition();
+					AttackToIdleTransition();
 				}
 			});
 	}

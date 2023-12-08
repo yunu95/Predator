@@ -97,7 +97,7 @@ void Player::OnDestroy()
 	delete playerFSM;
 }
 
-void Player::IdleTransition()
+void Player::IdleToOtherStatesTransition()
 {
 
 }
@@ -107,7 +107,7 @@ void Player::ChaseTransition()
 
 }
 
-void Player::AttackTransition()
+void Player::AttackToIdleTransition()
 {
 
 }

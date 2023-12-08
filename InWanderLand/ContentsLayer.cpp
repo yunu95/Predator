@@ -4,7 +4,8 @@
 #include "ShakyCam.h"
 #include "RTSCam.h"   
 #include "CamSwitcher.h"   
-#include "Player.h"
+#include "Unit.h"
+#include "PlayerController.h"
 #include "Dotween.h"
 #include "Projectile.h"
 #include "ProjectileSystem.h"
@@ -57,10 +58,9 @@ void Application::Contents::ContentsLayer::Initialize()
 
 	auto rtsCam = camObj->AddComponent<RTSCam>();
 	rtsCam->GetTransform()->position = Vector3d(0, 10, 0);
-	camObj->GetTransform()->SetWorldPosition(Vector3d(-10, 10, 0));
-	camObj->GetTransform()->SetWorldRotation(Vector3d(115, 145, 0));
+	camObj->GetTransform()->SetWorldPosition(Vector3d(0, 30, 0));
+	//camObj->GetTransform()->SetWorldRotation(Vector3d(115, 145, 0));
 
-	const float corridorRadius = 3;
 	std::vector<Vector3f> worldVertices{ };
 	std::vector<int> worldFaces{ };
 
@@ -77,12 +77,15 @@ void Application::Contents::ContentsLayer::Initialize()
 	/// 투사체 objectPool 셋업
 	ProjectileSystem::GetInstance()->SetUp();
 
-	UnitFactory* factory = new UnitFactory;
+	std::unique_ptr<UnitFactory> factory = make_unique<UnitFactory>();
 
-	auto playerGameObject = factory->CreateUnit(UnitType::PLAYER, navField, Vector3d(5.0f, 0.0f, 0.0f));
-	playerGameObject->GetComponent<Player>()->SetMovingSystemComponent(rtsCam);
+	auto playerGameObject = factory->CreateUnit(UnitType::PLAYER, navField, Vector3d(7.0f, 0.0f, 0.0f));
+	//playerGameObject->GetComponent<Unit>()->SetMovingSystemComponent(rtsCam);
+	auto controllerComponent = playerGameObject->AddComponent<PlayerController>();
+	controllerComponent->SetMovingSystemComponent(rtsCam);
 
-	auto enemyGameObject = factory->CreateUnit(UnitType::ENEMY, navField, Vector3d(-5.0f, 0.0f, 0.0f));
+	auto enemyGameObject1 = factory->CreateUnit(UnitType::ENEMY, navField, Vector3d(0.0f, 0.0f, 0.0f));
+	auto enemyGameObject2 = factory->CreateUnit(UnitType::ENEMY, navField, Vector3d(0.0f, 0.0f, 5.0f));
 
 	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
@@ -90,7 +93,7 @@ void Application::Contents::ContentsLayer::Initialize()
 void Application::Contents::ContentsLayer::Update(float ts)
 {
 
-}
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 
 void Application::Contents::ContentsLayer::GUIProgress()
 {

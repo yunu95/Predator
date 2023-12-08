@@ -4,17 +4,17 @@
 /// GetGameObject->GetComponent<IRangeAction>을 통해 함수호출 할 예정. 
 /// </summary>
 
-class BaseUnitEntity;
+class Unit;
 
 class RangeSystem : public CircleCollider2D
 {
 private:
-    BaseUnitEntity* m_unitComponent;
+    Unit* m_unitComponent;
     float m_tempIDRadius;
     float m_tempAtkRadius;
 
 public:   
-    void SetOwnerUnitComponent(BaseUnitEntity* unitComponent);
+    void SetOwnerUnitComponent(Unit* unitComponent);
 
 public:
     virtual void Start() override;

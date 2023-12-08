@@ -198,12 +198,6 @@
     <ClInclude Include="PathField.h">
       <Filter>Path</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Contents\Units</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Contents\Units</Filter>
-    </ClInclude>
     <ClInclude Include="Dotween.h">
       <Filter>Contents\Dotween</Filter>
     </ClInclude>
@@ -231,7 +225,7 @@
     <ClInclude Include="UnitFactory.h">
       <Filter>Contents\UnitFactory</Filter>
     </ClInclude>
-    <ClInclude Include="BaseUnitEntity.h">
+    <ClInclude Include="Unit.h">
       <Filter>Contents\Units</Filter>
     </ClInclude>
     <ClInclude Include="EnemyFactor.h">
@@ -242,6 +236,9 @@
     </ClInclude>
     <ClInclude Include="InitialFactorInterface.h">
       <Filter>Contents\InitialFactors</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerController.h">
+      <Filter>Contents\Units</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -325,12 +322,6 @@
     <ClCompile Include="Panel_Palette.cpp">
       <Filter>Editor\Panel\List</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Contents\Units</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Contents\Units</Filter>
-    </ClCompile>
     <ClCompile Include="Dotween.cpp">
       <Filter>Contents\Dotween</Filter>
     </ClCompile>
@@ -355,7 +346,7 @@
     <ClCompile Include="UnitFactory.cpp">
       <Filter>Contents\UnitFactory</Filter>
     </ClCompile>
-    <ClCompile Include="BaseUnitEntity.cpp">
+    <ClCompile Include="Unit.cpp">
       <Filter>Contents\Units</Filter>
     </ClCompile>
     <ClCompile Include="EnemyFactor.cpp">
@@ -366,6 +357,9 @@
     </ClCompile>
     <ClCompile Include="InitialFactorInterface.cpp">
       <Filter>Contents\InitialFactors</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerController.cpp">
+      <Filter>Contents\Units</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

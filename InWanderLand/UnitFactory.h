@@ -26,6 +26,9 @@ private:
 	float defaultEnemyAtkRadius;
 	float defaultEnemyIDRadius;
 
+	float defaultPlayerSpeed;
+	float defaultEnemySpeed;
+
 public:
 	yunutyEngine::GameObject* CreateUnit(UnitType unitType, yunutyEngine::NavigationField* navField, Vector3d startPosition);
 
