@@ -19,20 +19,26 @@ namespace yunuGIAdapter
 		{
 			
 		}
-		virtual void PushAnimation(yunuGI::IAnimation* animation) 
+		virtual void SetMesh(yunuGI::IMesh* mesh) override
+		{
+
+		}
+
+		virtual void PushAnimation(yunuGI::IAnimation* animation) override
 		{
 
 		};
-		virtual void Play(yunuGI::IAnimation* animation) 
+		virtual void Play(yunuGI::IAnimation* animation) override
 		{
 
 		};
-		virtual void SetPlaySpeed(float playSpeed) 
+		virtual void SetPlaySpeed(float playSpeed) override
 		{
 
 		};
 
-		virtual void SetActive(bool isActive) {};
+		virtual void SetActive(bool isActive)
+		{};
 
 		virtual void SetPickingMode(bool isPickingModeOn) {}
 

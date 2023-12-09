@@ -21,20 +21,25 @@ void GraphicsTest()
 
     {
        auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+       auto childList = object->GetChildren();
+       auto animator = object->AddComponent<yunutyEngine::graphics::Animator>();
+
+	   for (auto& e : meshList)
+	   {
+		   if (e->GetName() == L"bosschar")
+		   {
+               animator->GetGI().SetMesh(e);
+		   }
+	   }
+
        //auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-       //auto animator = object->AddComponent<yunutyEngine::graphics::Animator>();
+
        //object->GetTransform()->scale = Vector3d{ 100,100,100 };
        //object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
        /* auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
         object->GetTransform()->rotation = Quaternion{ Vector3d{-90,0,0} };
         auto renderer = object->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-        for (auto& e : meshList)
-        {
-            if (e->GetName() == L"Cube")
-            {
-                renderer->GetGI().SetMesh(e);
-            }
-        }*/
+       */
     }
 
      //포인트 라이트
