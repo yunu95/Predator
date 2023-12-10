@@ -21,16 +21,6 @@ void GraphicsTest()
 
     {
        auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
-       auto childList = object->GetChildren();
-       auto animator = object->AddComponent<yunutyEngine::graphics::Animator>();
-
-	   for (auto& e : meshList)
-	   {
-		   if (e->GetName() == L"bosschar")
-		   {
-               animator->GetGI().SetMesh(e);
-		   }
-	   }
 
        //auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
@@ -153,7 +143,8 @@ void Application::Contents::ContentsLayer::Initialize()
 
 void Application::Contents::ContentsLayer::Update(float ts)
 {
-
+    auto fps = yunutyEngine::Time::GetFPS();
+    cout << fps << endl;
 }
 
 void Application::Contents::ContentsLayer::GUIProgress()

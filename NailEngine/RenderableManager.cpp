@@ -16,12 +16,12 @@ void RenderableManager::PopStaticRenderableObject(std::shared_ptr<IRenderable> r
 	this->staticRenderableSet.erase(renderable);
 }
 
-void RenderableManager::PushSKinnedRenderableObject(std::shared_ptr<IRenderable> renderable)
+void RenderableManager::PushSkinnedRenderableObject(std::shared_ptr<IRenderable> renderable)
 {
 	this->skinnedRenderableSet.insert(renderable);
 }
 
-void RenderableManager::PopSKinnedRenderableObject(std::shared_ptr<IRenderable> renderable)
+void RenderableManager::PopSkinnedRenderableObject(std::shared_ptr<IRenderable> renderable)
 {
 	this->skinnedRenderableSet.erase(renderable);
 }

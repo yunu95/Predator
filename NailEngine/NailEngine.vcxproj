@@ -328,6 +328,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="RuntimeDependency\resources\Shader\TexturePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
@@ -343,7 +345,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="RuntimeDependency\resources\Shader\Buffers.hlsli" />
+    <None Include="RuntimeDependency\resources\Shader\Buffers.hlsli">
+      <FileType>Document</FileType>
+    </None>
     <None Include="RuntimeDependency\resources\Shader\ForwardPS.hlsli" />
     <None Include="RuntimeDependency\resources\Shader\Utils.hlsli" />
     <None Include="SimpleMath.inl" />

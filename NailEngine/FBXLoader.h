@@ -26,6 +26,7 @@ struct FBXBoneInfo
 	int parentIndex;
 	int index;
 	DirectX::SimpleMath::Matrix offset;
+	DirectX::SimpleMath::Matrix localTM;
 };
 
 //struct BoneInfo
@@ -86,6 +87,9 @@ private:
 private:
 	std::wstring texturePath;
 	std::unordered_map<std::wstring, FBXBoneInfo> boneInfoMap;
+
+	std::vector<FBXBoneInfo> fbxBoneInfoVec;
+
 	static unsigned int currentBoneIndex;
 };
 

@@ -7,10 +7,12 @@
 #include "ResourceManager.h"
 #include "Material.h"
 #include "Mesh.h"
+#include "Animation.h"
 
 #include "NailCamera.h"
 #include "RenderableManager.h"
 #include "IRenderable.h"
+#include "SKinnedMesh.h"
 
 #include "ILight.h"
 #include "LightManager.h"
@@ -31,13 +33,14 @@ void RenderSystem::ClearRenderInfo()
 {
 	deferredVec.clear();
 	forwardVec.clear();
+	skinnedVec.clear();
 }
 
 void RenderSystem::SortObject()
 {
-	auto& renderableSet = RenderableManager::Instance.Get().GetRenderableSet();
+	auto& staticRenderableSet = RenderableManager::Instance.Get().GetStaticRenderableSet();
 
-	for (auto& e : renderableSet)
+	for (auto& e : staticRenderableSet)
 	{
 		auto mesh = e->GetMesh();
 		for (int i = 0; i < mesh->GetMaterialCount(); ++i)
@@ -56,6 +59,30 @@ void RenderSystem::SortObject()
 			{
 				this->forwardVec.emplace_back(renderInfo);
 			}
+		}
+	}
+
+	// skinned
+	auto& skinnedRenderableSet = RenderableManager::Instance.Get().GetSKinnedRenderableSet();
+
+	for (auto& e : skinnedRenderableSet)
+	{
+		auto mesh = e->GetMesh();
+		for (int i = 0; i < mesh->GetMaterialCount(); ++i)
+		{
+			SkinnedRenderInfo skinnedRenderInfo;
+
+			RenderInfo renderInfo;
+			renderInfo.mesh = mesh;
+			renderInfo.material = e->GetMaterial(i);
+			renderInfo.materialIndex = i;
+			renderInfo.wtm = e->GetWorldTM();
+
+			skinnedRenderInfo.renderInfo = std::move(renderInfo);
+
+			skinnedRenderInfo.boneName = std::static_pointer_cast<SkinnedMesh>(e)->GetBone();
+
+			this->skinnedVec.emplace_back(skinnedRenderInfo);
 		}
 	}
 }
@@ -112,8 +139,11 @@ void RenderSystem::Render()
 	PushCameraData();
 	PushLightData();
 
-	// 오브젝트 렌더
+	// 스태틱 오브젝트 렌더
 	RenderObject();
+
+	// 스킨드 오브젝트 렌더
+	RenderSkinned();
 	
 	// 라이트 렌더
 	RenderLight();
@@ -153,6 +183,65 @@ void RenderSystem::RenderObject()
 	}
 	
 	//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->UnBind();
+}
+
+void RenderSystem::RenderSkinned()
+{
+	for (auto& e : this->skinnedVec)
+	{
+		// 본TM 구해서 넘기기
+		auto& boneVec = ResourceManager::Instance.Get().GetFBXBoneData(std::string{ e.boneName.begin(), e.boneName.end()});
+		BoneMatrix boneMatrixBuffer;
+		//for (int i = 0; i < boneVec.size(); ++i)
+		//{
+		//	if (i == 0)
+		//	{
+		//		boneMatrixBuffer.finalTM[i] = boneVec[i].offset * boneVec[i].localTM;
+		//	}
+		//	else
+		//	{
+		//		//boneMatrixBuffer.finalTM[i] = boneVec[i].offset * boneMatrixBuffer.finalTM[boneVec[i].parentIndex-1] * boneVec[i].localTM;
+		//		boneMatrixBuffer.finalTM[i] = boneVec[i].offset * boneVec[i].localTM * boneMatrixBuffer.finalTM[boneVec[i].parentIndex - 1];
+		//	}
+		//}
+		for (int i = 0; i < boneVec.size(); ++i)
+		{
+			if (i == 0)
+			{
+				boneMatrixBuffer.finalTM[i] = boneVec[i].offset * boneVec[i].localTM;
+			}
+			else
+			{
+				int parentIndex = boneVec[i].parentIndex; // 부모 뼈대의 인덱스 가져오기
+				boneMatrixBuffer.finalTM[i] = boneMatrixBuffer.finalTM[parentIndex] * boneVec[i].offset * boneVec[i].localTM;
+			}
+		}
+		NailEngine::Instance.Get().GetConstantBuffer(4)->PushGraphicsData(&boneMatrixBuffer, sizeof(BoneMatrix), 4);
+
+
+		MatrixBuffer matrixBuffer;
+		matrixBuffer.WTM = e.renderInfo.wtm;
+		matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+		matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+		matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+		matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+
+		auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.renderInfo.mesh->GetName()));
+
+		auto shaderList = ResourceManager::Instance.Get().GetShaderList();
+		for (auto& i : shaderList)
+		{
+			if (i->GetName() == L"SkinnedVS.cso")
+			{
+				std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.renderInfo.material->GetName()))->SetVertexShader(i);
+			}
+		}
+
+		
+		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.renderInfo.material->GetName()))->PushGraphicsData();
+		mesh->Render(e.renderInfo.materialIndex);
+	}
 }
 
 void RenderSystem::RenderLight()

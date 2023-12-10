@@ -77,9 +77,12 @@ FBXNode FBXLoader::LoadFBXData(const char* filePath)
 		LoadAnimation(scene);
 	}
 
+	ResourceManager::Instance.Get().PushFBXBoneInfo(std::filesystem::path(filePath).stem().wstring(), this->fbxBoneInfoVec);
+
 	boneInfoMap.clear();
 	currentBoneIndex = 1;
 	texturePath.clear();
+	fbxBoneInfoVec.clear();
 
 	return rootNode;
 }
@@ -167,7 +170,6 @@ void FBXLoader::ParseMesh(const aiNode* node, const aiScene* scene, FBXNode& fbx
 				data.vertex[mesh->mBones[b]->mWeights[w].mVertexId].FillBoneIndexWeight(b, mesh->mBones[b]->mWeights[w].mWeight);
 			}
 		}
-
 
 		fbxNode.meshVec.emplace_back(data);
 	}
@@ -315,8 +317,11 @@ void FBXLoader::BuildBoneHierarchy(const aiNode* node, std::vector<yunuGI::BoneI
 
 		boneInfo.parentIndex = parentIndex;
 		iter->second.parentIndex = boneInfo.parentIndex;
+		iter->second.localTM = this->ConvertToCloumnMajor(node->mTransformation);
 
 		boneInfoVec.emplace_back(boneInfo);
+
+		this->fbxBoneInfoVec.emplace_back(iter->second);
 
 		for (int i = 0; i < node->mNumChildren; ++i)
 		{

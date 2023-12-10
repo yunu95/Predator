@@ -4,7 +4,7 @@
 #include "YGRenderableAdapter.h"
 
 #include "RenderableManager.h"
-#include "StaticMesh.h"
+#include "SKinnedMesh.h"
 #include "MaterialWrapper.h"
 
 #include <memory>
@@ -16,8 +16,8 @@ namespace yunuGIAdapter
 	public:
 		SkinnedMeshAdapter() :RenderableAdapter()
 		{
-			renderable = std::make_shared<StaticMesh>();
-			RenderableManager::Instance.Get().PushStaticRenderableObject(renderable);
+			renderable = std::make_shared<SkinnedMesh>();
+			RenderableManager::Instance.Get().PushSkinnedRenderableObject(renderable);
 
 			std::shared_ptr<MaterialWrapper> material = std::make_shared<MaterialWrapper>(false);
 			material->SetRenderable(this->renderable);
@@ -26,7 +26,12 @@ namespace yunuGIAdapter
 
 		~SkinnedMeshAdapter()
 		{
-			RenderableManager::Instance.Get().PopStaticRenderableObject(renderable);
+			RenderableManager::Instance.Get().PopSkinnedRenderableObject(renderable);
+		}
+
+		virtual void SetBone(std::wstring fbxName) override
+		{
+			renderable->SetBone(fbxName);
 		}
 
 		virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)
@@ -84,7 +89,7 @@ namespace yunuGIAdapter
 		};
 
 	private:
-		std::shared_ptr<StaticMesh> renderable;
+		std::shared_ptr<SkinnedMesh> renderable;
 		std::vector<std::shared_ptr<MaterialWrapper>> materialVec;
 	};
 }

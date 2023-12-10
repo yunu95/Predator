@@ -289,16 +289,20 @@ std::vector<yunuGI::FBXData>& ResourceManager::GetFBXData(const std::string fbxN
 	return iter->second;
 }
 
-yunuGI::BoneInfo& ResourceManager::GetFBXBoneData(const std::string fbxName)
+std::vector<FBXBoneInfo>& ResourceManager::GetFBXBoneData(const std::string fbxName)
 {
-	//std::wstring fbxNameW = std::wstring{ fbxName.begin(), fbxName.end() };
+	std::wstring fbxNameW = std::wstring{ fbxName.begin(), fbxName.end() };
 
-	//auto iter = this->fbxBoneInfoTreeMap.find(fbxNameW);
-	//assert(iter != this->fbxBoneInfoTreeMap.end());
+	auto iter = this->BoneOffsetInfoVecMap.find(fbxNameW);
+	assert(iter != this->BoneOffsetInfoVecMap.end());
 
-	//return iter->second;
-	yunuGI::BoneInfo a{};
-	return a;
+	return iter->second;
+}
+
+yunuGI::BoneInfo& ResourceManager::GetBoneData(const std::string fbxName)
+{
+	yunuGI::BoneInfo boneInfo;
+	return boneInfo;
 }
 
 void ResourceManager::CreateDeferredShader(const std::wstring& shaderPath)
@@ -334,6 +338,7 @@ void ResourceManager::CreateDefaultShader()
 {
 #pragma region VS
 	CreateShader(L"DefaultVS.cso");
+	CreateShader(L"SkinnedVS.cso");
 	CreateDeferredShader(L"Deferred_DirectionalLightVS.cso");
 	CreateDeferredShader(L"Deferred_PointLightVS.cso");
 	CreateDeferredShader(L"Deferred_FinalVS.cso");
@@ -571,6 +576,11 @@ void ResourceManager::CreateResourceFromFBX(FBXMeshData& meshData, std::vector<y
 		material->SetTexture(yunuGI::Texture_Type::ARM, GetTexture(materialData.armMap).get());
 		material->SetTexture(yunuGI::Texture_Type::EMISSION, GetTexture(materialData.emissionMap).get());
 	}
+}
+
+void ResourceManager::PushFBXBoneInfo(const std::wstring fbxName, std::vector<FBXBoneInfo> fbxBoneInfo)
+{
+	this->BoneOffsetInfoVecMap.insert({ fbxName, fbxBoneInfo });
 }
 
 void ResourceManager::LoadCubeMesh()

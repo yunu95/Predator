@@ -10,6 +10,7 @@ using namespace DirectX::PackedVector;
 
 class Mesh;
 class Material;
+class Animation;
 
 struct RenderInfo
 {
@@ -17,6 +18,13 @@ struct RenderInfo
 	Material* material;
 	unsigned int materialIndex;
 	DirectX::SimpleMath::Matrix wtm;
+};
+
+struct SkinnedRenderInfo
+{
+	RenderInfo renderInfo;
+	std::wstring boneName;
+	int animatorIndex;
 };
 
 
@@ -33,6 +41,7 @@ public:
 	void PushCameraData();
 	void Render();
 	void RenderObject();
+	void RenderSkinned();
 	void RenderLight();
 	void DrawFinal();
 
@@ -43,5 +52,6 @@ public:
 private:
 	std::vector<RenderInfo> deferredVec;
 	std::vector<RenderInfo> forwardVec;
+	std::vector<SkinnedRenderInfo> skinnedVec;
 };
 

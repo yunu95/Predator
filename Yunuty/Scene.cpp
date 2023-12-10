@@ -58,8 +58,12 @@ yunutyEngine::GameObject* Scene::AddGameObjectFromFBX(string fbxName)
 			}
 			else
 			{
+				auto animator = gameObject->AddComponent<yunutyEngine::graphics::Animator>();
+				animator->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(data[i].meshName));
+
 				auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::SkinnedMesh>();
 				renderer->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(data[i].meshName));
+				renderer->GetGI().SetBone(std::wstring{ fbxName.begin(),fbxName.end() });
 
 				// Material Data Set
 				for (int j = 0; j < data[i].materialVec.size(); ++j)

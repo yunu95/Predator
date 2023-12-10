@@ -57,7 +57,7 @@ namespace yunuGIAdapter
 
         virtual bool GetFBXBoneData(const std::string& fbxName, yunuGI::BoneInfo& boneInfo)const override
         {
-            auto& fbxBoneData = ResourceManager::Instance.Get().GetFBXBoneData(fbxName);
+            auto& fbxBoneData = ResourceManager::Instance.Get().GetBoneData(fbxName);
             
             boneInfo = std::move(fbxBoneData);
             if (boneInfo.name.empty())

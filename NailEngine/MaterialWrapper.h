@@ -9,6 +9,10 @@
 class MaterialWrapper : public yunuGI::IMaterial, public Resource
 {
 public:
+	MaterialWrapper()
+	{
+		
+	}
 	MaterialWrapper(bool isStatic)
 	{
 		if (isStatic)
@@ -80,7 +84,7 @@ public:
 		return usingOriginal;
 	}
 
-	void SetRenderable(std::shared_ptr<StaticMesh>& renderable)
+	void SetRenderable(std::shared_ptr<IRenderable> renderable)
 	{
 		this->renderable = renderable;
 	}
@@ -105,6 +109,6 @@ public:
 	std::shared_ptr<Material> variation;
 
 private:
-	std::shared_ptr<StaticMesh> renderable;
+	std::shared_ptr<IRenderable> renderable;
 
 };

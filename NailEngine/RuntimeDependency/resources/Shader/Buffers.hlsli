@@ -33,11 +33,6 @@ cbuffer MaterialBuffer : register(b1)
     int temp_int7;
 };
 
-cbuffer BoneMatrixBuffer : register(b2)
-{
-    row_major matrix BoneTransform[96];
-}
-
 // 라이트 관련
 struct LightColor
 {
@@ -71,6 +66,11 @@ cbuffer CameraBuffer : register(b3)
     float3 cameraPos;
     float pad;
 };
+
+cbuffer BoneMatrixBuffer : register(b4)
+{
+    row_major matrix BoneTransform[96];
+}
 
 Texture2D AlbedoMap : register(t0);
 Texture2D NormalMap : register(t1);

@@ -369,13 +369,13 @@
     <None Include="SimpleMath.inl">
       <Filter>Utils</Filter>
     </None>
-    <None Include="RuntimeDependency\resources\Shader\Buffers.hlsli">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="RuntimeDependency\resources\Shader\Utils.hlsli">
       <Filter>Shaders</Filter>
     </None>
     <None Include="RuntimeDependency\resources\Shader\ForwardPS.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="RuntimeDependency\resources\Shader\Buffers.hlsli">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
