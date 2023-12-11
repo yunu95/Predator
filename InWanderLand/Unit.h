@@ -12,6 +12,7 @@
 class Unit : public Component
 {
 private:
+	// 사용 시 주의점 : 마지막에는 Death와 StateEnd가 순서대로 들어가 있을 것!
 	enum class UnitState
 	{
 		Idle,
@@ -22,8 +23,12 @@ private:
 		Death,
 		StateEnd
 	};
+
 	FSM<UnitState> unitFSM{UnitState::Idle};
 	string unitType;
+
+	int m_hp;
+	int m_ap;
 
 	float m_speed;
 	float m_bulletSpeed;
@@ -31,15 +36,13 @@ private:
 	float chaseUpdateDelay;
 
 	// 지금 수행중인 명령
-	UnitState currentOrder=UnitState::Idle;
+	UnitState currentOrder = UnitState::Idle;
 
-	float m_IdDistance;
-	float m_AtkDistance;
+	float m_idDistance;
+	float m_atkDistance;
 
 	float idleToChaseDelay = 1.5f;
 	float idleElapsed;
-
-	float MoveUpdateDelay;
 
 	float moveFunctionElapsed;
 	float moveFunctionCallDelay = 0.1f;
@@ -50,21 +53,29 @@ private:
 	float attackFunctionElapsed;
 	float attackFunctionCallDelay = 0.3f;
 
-	// 처음 인식 범위에 들어왔을 때 저장되는 상대 유닛.
+	float deathFunctionElapsed;
+	float deathAnimationDelay = 1.5f;
+
+
 	std::list<yunutyEngine::GameObject*> m_opponentGameObjectList;
-	yunutyEngine::GameObject* m_currentTargetObject;
-	Vector3d m_currentMovePosition;		// 현재 상대의 위치
+
+	yunutyEngine::GameObject* m_currentTargetObject;		// Attack이나 Chase 때 사용할 적군  오브젝트
+	Vector3d m_currentMovePosition;							// 현재 상대의 위치
 
 private:
-	/// 현재 상태에서 다른 상태로 가기 위한 bool값을 판별해주는 함수.
-	/// 내부에서 fsm의 함수를 호출해야하니 자식들이 재정의 해줄 것!
-
 	void IdleEngage();
 	void MoveEngage();
 	void AttackMoveEngage();
 	void AttackEngage();
 	void ChaseEngage();
 	void DeathEngage();
+
+	void IdleUpdate();
+	void MoveUpdate();
+	void AttackMoveUpdate();
+	void ChaseUpdate();
+	void AttackUpdate();
+	void DeathUpdate();
 
 	void IdleEngageFunction();
 	void MoveEngageFunction();
@@ -73,17 +84,12 @@ private:
 	void AttackEngageFunction();
 	void DeathEngageFunction();
 
-	void IdleUpdate();
-	void MoveUpdate();
-	void AttackMoveUpdate();
-	void ChaseUpdate();
-	void AttackUpdate();
-
 	void IdleUpdateFunction();
 	void MoveUpdateFunction();
 	void AttackMoveUpdateFunction();
 	void ChaseUpdateFunction();
 	void AttackUpdateFunction();
+	void DeathUpdateFunction();
 
 	void StopPosition();
 
@@ -94,9 +100,17 @@ public:
 	string GetType() const;
 	void SetType(string type);
 
+	void SetUnitHp(int p_Hp);
+	void SetUnitAp(int p_Ap);
 	void SetIdRadius(float radius);
 	void SetAtkRadius(float radius);
 	void SetUnitSpeed(float speed);
+
+	UnitState GetUnitCurrentState() const;
+	int GetUnitAp() const;
+	void Damaged(GameObject* opponentObject, int opponentAp);
+	void FindClosestOpponent();
+
 
 	void OrderMove(Vector3d position);
 	void OrderAttackMove(Vector3d position);

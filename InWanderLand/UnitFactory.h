@@ -29,8 +29,18 @@ private:
 	float defaultPlayerSpeed;
 	float defaultEnemySpeed;
 
+	int playerHp;
+	int playerAp;
+	int enemyHp;
+	int enemyAp;
+
 public:
 	yunutyEngine::GameObject* CreateUnit(UnitType unitType, yunutyEngine::NavigationField* navField, Vector3d startPosition);
-
+	void SetIDRadius(float idRadius);
+	void SetAtkRadius(float atkRadius);
+	void SetPlayerHp(int p_hp);
+	void SetPlayerAp(int p_ap);
+	void SetEnemyHp(int p_hp);
+	void SetEnemyAp(int p_ap);
 };
 

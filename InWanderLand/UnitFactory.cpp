@@ -1,7 +1,6 @@
 #include "UnitFactory.h"
 #include "Unit.h"
 #include "RangeSystem.h"
-#include "Dotween.h"
 
 UnitFactory::UnitFactory()
 {
@@ -12,7 +11,7 @@ UnitFactory::UnitFactory()
 	defaultPlayerIDRadius = 3.0f;
 	defaultPlayerSpeed = 2.5f;
 
-	defaultEnemyAtkRadius = 3.0f;
+	defaultEnemyAtkRadius = 1.0f;
 	defaultEnemyIDRadius = 5.0f;
 	defaultEnemySpeed = 1.0f;
 }
@@ -22,7 +21,6 @@ yunutyEngine::GameObject* UnitFactory::CreateUnit(UnitType unitType, yunutyEngin
 	/// 1. UnitGameObject 생성
 	auto unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	unitGameObject->GetTransform()->SetWorldPosition(startPosition);
-	unitGameObject->AddComponent<Dotween>();
 
 	// 1-1. unitType에 따른 Unit 컴포넌트 추가
 	Unit* unitComponent = unitGameObject->AddComponent<Unit>();
@@ -59,6 +57,8 @@ yunutyEngine::GameObject* UnitFactory::CreateUnit(UnitType unitType, yunutyEngin
 		{
 			unitGameObject->setName("Player");
 			unitComponent->SetType("Player");
+			unitComponent->SetUnitHp(playerHp);
+			unitComponent->SetUnitAp(playerAp);
 			unitMesh->GetGI().GetMaterial()->SetColor(playerColor);
 			unitComponent->SetAtkRadius(defaultPlayerAtkRadius);
 			unitComponent->SetIdRadius(defaultPlayerIDRadius);
@@ -78,6 +78,8 @@ yunutyEngine::GameObject* UnitFactory::CreateUnit(UnitType unitType, yunutyEngin
 		{
 			unitGameObject->setName("Enemy");
 			unitComponent->SetType("Enemy");
+			unitComponent->SetUnitHp(enemyHp);
+			unitComponent->SetUnitAp(enemyAp);
 			unitMesh->GetGI().GetMaterial()->SetColor(enemyColor);
 			unitComponent->SetAtkRadius(defaultEnemyAtkRadius);
 			unitComponent->SetIdRadius(defaultEnemyIDRadius);
@@ -97,4 +99,34 @@ yunutyEngine::GameObject* UnitFactory::CreateUnit(UnitType unitType, yunutyEngin
 
 
 	return unitGameObject;
+}
+
+void UnitFactory::SetIDRadius(float idRadius)
+{
+
+}
+
+void UnitFactory::SetAtkRadius(float atkRadius)
+{
+
+}
+
+void UnitFactory::SetPlayerHp(int p_hp)
+{
+	playerHp = p_hp;
+}
+
+void UnitFactory::SetPlayerAp(int p_ap)
+{
+	playerAp = p_ap;
+}
+
+void UnitFactory::SetEnemyHp(int p_hp)
+{
+	enemyHp = p_hp;
+}
+
+void UnitFactory::SetEnemyAp(int p_ap)
+{
+	enemyAp = p_ap;
 }

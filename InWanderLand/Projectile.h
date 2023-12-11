@@ -16,7 +16,6 @@ private:
 	Unit* m_ownerUnit;
 
 	bool isShootStarted = false;
-	bool isPassed;
 
 public:
 	void SetOwnerType(string type);
@@ -27,6 +26,5 @@ public:
 public:
 	virtual void Start() override;
 	virtual void Update() override;
-	virtual void OnCollisionEnter2D(const Collision2D& collision) override;
 };
 

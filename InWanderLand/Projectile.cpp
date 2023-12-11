@@ -48,13 +48,16 @@ void Projectile::ShootFunction()
 	{
 		GetGameObject()->SetSelfActive(false);
 		ProjectileSystem::GetInstance()->ReturnToPool(GetGameObject());
+
+		m_opponentUnit->Damaged(m_ownerUnit->GetGameObject(), m_ownerUnit->GetUnitAp());
+
 		isShootStarted = false;
 	}
 }
 
 void Projectile::Start()
 {
-	isPassed = false;
+
 }
 
 void Projectile::Update()
@@ -65,11 +68,3 @@ void Projectile::Update()
 	}
 }
 
-void Projectile::OnCollisionEnter2D(const Collision2D& collision)
-{
-	if (collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>() != nullptr &&
-		collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>()->GetType() != ownerType)
-	{
-		ProjectileSystem::GetInstance()->ReturnToPool(collision.m_Collider->GetGameObject());
-	}
-}

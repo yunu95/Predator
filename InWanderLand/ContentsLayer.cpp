@@ -77,10 +77,22 @@ void Application::Contents::ContentsLayer::Initialize()
 	/// 투사체 objectPool 셋업
 	ProjectileSystem::GetInstance()->SetUp();
 
+	/// Unit Members
+	int playerHp = 1000;
+	int playerAp = 3;
+	
+	int enemyHp = 20;
+	int enemyAp = 2;
+
 	std::unique_ptr<UnitFactory> factory = make_unique<UnitFactory>();
 
+	factory->SetPlayerHp(playerHp);
+	factory->SetPlayerAp(playerAp);
+	factory->SetEnemyHp(enemyHp);
+	factory->SetEnemyAp(enemyAp);
+
 	auto playerGameObject = factory->CreateUnit(UnitType::PLAYER, navField, Vector3d(7.0f, 0.0f, 0.0f));
-	//playerGameObject->GetComponent<Unit>()->SetMovingSystemComponent(rtsCam);
+
 	auto controllerComponent = playerGameObject->AddComponent<PlayerController>();
 	controllerComponent->SetMovingSystemComponent(rtsCam);
 
