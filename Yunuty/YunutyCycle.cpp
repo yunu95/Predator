@@ -82,9 +82,10 @@ void yunutyEngine::YunutyCycle::ThreadFunction()
         ThreadUpdate();
         auto sleepImplied = 10;
         sleepImplied -= Time::GetDeltaTimeUnscaled() * 1000;
-        if (sleepImplied > 1)
-            std::this_thread::sleep_for(std::chrono::milliseconds(sleepImplied));
-    }
+		/*   if (sleepImplied > 1)
+			   std::this_thread::sleep_for(std::chrono::milliseconds(sleepImplied));
+       */
+	}
 }
 // Update components and render camera
 void yunutyEngine::YunutyCycle::ThreadUpdate()

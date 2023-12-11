@@ -186,7 +186,7 @@ namespace Application
             if (!isRunning)
                 break;
 
-            /// Editor 관련 영역, Release Mode 에서는 구현 안되도록 처리
+			/// Editor 관련 영역, Release Mode 에서는 구현 안되도록 처리
 //#ifdef _DEBUG
 //        //Start the Dear ImGui frame
 //            ImGui_ImplDX11_NewFrame();

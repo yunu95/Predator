@@ -50,8 +50,15 @@ public:
 	void DrawDeferredInfo();
 
 private:
+	void BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo);
+
+private:
 	std::vector<RenderInfo> deferredVec;
 	std::vector<RenderInfo> forwardVec;
 	std::vector<SkinnedRenderInfo> skinnedVec;
+
+	DirectX::SimpleMath::Matrix temp[256];
 };
+
+
 

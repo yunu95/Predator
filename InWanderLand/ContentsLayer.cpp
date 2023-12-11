@@ -21,6 +21,7 @@ void GraphicsTest()
 
     {
        auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+       //object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
 
        //auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 

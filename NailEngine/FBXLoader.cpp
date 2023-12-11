@@ -83,6 +83,7 @@ FBXNode FBXLoader::LoadFBXData(const char* filePath)
 	currentBoneIndex = 1;
 	texturePath.clear();
 	fbxBoneInfoVec.clear();
+	isFirst = true;
 
 	return rootNode;
 }
@@ -293,12 +294,32 @@ std::wstring FBXLoader::aiStringToWString(std::string str)
 
 DirectX::SimpleMath::Matrix FBXLoader::ConvertToCloumnMajor(aiMatrix4x4 matrix)
 {
+	//std::cout << matrix.a1 << ", " << matrix.a2 << ", " << matrix.a3 << ", " << matrix.a4 << std::endl;
+	//std::cout << matrix.b1 << ", " << matrix.b2 << ", " << matrix.b3 << ", " << matrix.b4 << std::endl;
+	//std::cout << matrix.c1 << ", " << matrix.c2 << ", " << matrix.c3 << ", " << matrix.c4 << std::endl;
+	//std::cout << matrix.d1 << ", " << matrix.d2 << ", " << matrix.d3 << ", " << matrix.d4 << std::endl;
+
 	DirectX::SimpleMath::Matrix colMajor{
 		matrix.a1, matrix.b1, matrix.c1,matrix.d1,
 		matrix.a2, matrix.b2, matrix.c2,matrix.d2,
 		matrix.a3, matrix.b3, matrix.c3,matrix.d3,
 		matrix.a4, matrix.b4, matrix.c4,matrix.d4,
 	};
+
+	//std::cout << std::endl;
+	//
+	//std::cout << colMajor._11 << ", " << colMajor._12 << ", " << colMajor._13 << ", " <<colMajor._14 << std::endl;
+	//std::cout << colMajor._21 << ", " << colMajor._22 << ", " << colMajor._23 << ", " <<colMajor._24 << std::endl;
+	//std::cout << colMajor._31 << ", " << colMajor._32 << ", " << colMajor._33 << ", " <<colMajor._34 << std::endl;
+	//std::cout << colMajor._41 << ", " << colMajor._42 << ", " << colMajor._43 << ", " <<colMajor._44 << std::endl;
+	
+
+	//DirectX::SimpleMath::Matrix colMajor{
+	//matrix.a1, matrix.a2, matrix.a3,matrix.a4,
+	//matrix.b1, matrix.b2, matrix.b3,matrix.b4,
+	//matrix.c1, matrix.c2, matrix.c3,matrix.c4,
+	//matrix.d1, matrix.d2, matrix.d3,matrix.d4,
+	//};
 
 	return colMajor;
 }
@@ -335,4 +356,14 @@ void FBXLoader::BuildBoneHierarchy(const aiNode* node, std::vector<yunuGI::BoneI
 			BuildBoneHierarchy(node->mChildren[i], boneInfoVec, parentIndex);
 		}
 	}
+}
+
+void FBXLoader::FindRoot(const aiNode* node)
+{
+	if (!node->mParent)
+	{
+		FindRoot(node->mParent);
+	}
+
+	int a = 1;
 }

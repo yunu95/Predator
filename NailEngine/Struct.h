@@ -77,7 +77,7 @@ struct CameraBuffer
 
 struct BoneMatrix
 {
-	DirectX::SimpleMath::Matrix finalTM[96];
+	DirectX::SimpleMath::Matrix finalTM[256];
 };
 
 // Deferred Only

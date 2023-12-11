@@ -84,6 +84,8 @@ private:
 	DirectX::SimpleMath::Matrix ConvertToCloumnMajor(aiMatrix4x4 matrix);
 	void BuildBoneHierarchy(const aiNode* node, std::vector<yunuGI::BoneInfo>& boneInfoVec, int parentIndex);
 
+	void FindRoot(const aiNode* node);
+
 private:
 	std::wstring texturePath;
 	std::unordered_map<std::wstring, FBXBoneInfo> boneInfoMap;
@@ -91,5 +93,7 @@ private:
 	std::vector<FBXBoneInfo> fbxBoneInfoVec;
 
 	static unsigned int currentBoneIndex;
+
+	bool isFirst = true;
 };
 

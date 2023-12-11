@@ -29,6 +29,7 @@
 
 LazyObjects<RenderSystem> RenderSystem::Instance;
 
+
 void RenderSystem::ClearRenderInfo()
 {
 	deferredVec.clear();
@@ -190,34 +191,7 @@ void RenderSystem::RenderSkinned()
 	for (auto& e : this->skinnedVec)
 	{
 		// 본TM 구해서 넘기기
-		auto& boneVec = ResourceManager::Instance.Get().GetFBXBoneData(std::string{ e.boneName.begin(), e.boneName.end()});
-		BoneMatrix boneMatrixBuffer;
-		//for (int i = 0; i < boneVec.size(); ++i)
-		//{
-		//	if (i == 0)
-		//	{
-		//		boneMatrixBuffer.finalTM[i] = boneVec[i].offset * boneVec[i].localTM;
-		//	}
-		//	else
-		//	{
-		//		//boneMatrixBuffer.finalTM[i] = boneVec[i].offset * boneMatrixBuffer.finalTM[boneVec[i].parentIndex-1] * boneVec[i].localTM;
-		//		boneMatrixBuffer.finalTM[i] = boneVec[i].offset * boneVec[i].localTM * boneMatrixBuffer.finalTM[boneVec[i].parentIndex - 1];
-		//	}
-		//}
-		for (int i = 0; i < boneVec.size(); ++i)
-		{
-			if (i == 0)
-			{
-				boneMatrixBuffer.finalTM[i] = boneVec[i].offset * boneVec[i].localTM;
-			}
-			else
-			{
-				int parentIndex = boneVec[i].parentIndex; // 부모 뼈대의 인덱스 가져오기
-				boneMatrixBuffer.finalTM[i] = boneMatrixBuffer.finalTM[parentIndex] * boneVec[i].offset * boneVec[i].localTM;
-			}
-		}
-		NailEngine::Instance.Get().GetConstantBuffer(4)->PushGraphicsData(&boneMatrixBuffer, sizeof(BoneMatrix), 4);
-
+		BoneUpdate(e);
 
 		MatrixBuffer matrixBuffer;
 		matrixBuffer.WTM = e.renderInfo.wtm;
@@ -351,4 +325,31 @@ void RenderSystem::DrawDeferredInfo()
 		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 		ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();
 	}
+}
+
+void RenderSystem::BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo)
+{
+	auto& boneVec = ResourceManager::Instance.Get().GetFBXBoneData(std::string{ skinnedRenderInfo.boneName.begin(), skinnedRenderInfo.boneName.end() });
+	BoneMatrix* boneMatrixBuffer = new BoneMatrix;
+	for (int i = 0; i < boneVec.size(); ++i)
+	{
+		if (i == 0)
+		{
+			boneMatrixBuffer->finalTM[i] = boneVec[i].offset * boneVec[i].localTM;
+			temp[i] = boneVec[i].localTM;
+		}
+		else
+		{
+			//boneMatrixBuffer.finalTM[i] = boneVec[i].offset * boneMatrixBuffer.finalTM[boneVec[i].parentIndex-1] * boneVec[i].localTM;
+			boneMatrixBuffer->finalTM[i] = boneVec[i].offset * boneVec[i].localTM * temp[boneVec[i].parentIndex - 1];
+			temp[i] = boneVec[i].localTM * temp[boneVec[i].parentIndex - 1];
+
+			assert(boneVec[i].index -1 == i);
+			assert(boneVec[i].parentIndex - 1 < i);
+		}
+	}
+
+	NailEngine::Instance.Get().GetConstantBuffer(4)->PushGraphicsData(boneMatrixBuffer, sizeof(BoneMatrix), 4);
+
+	delete boneMatrixBuffer;
 }
