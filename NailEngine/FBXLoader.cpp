@@ -11,7 +11,6 @@
 LazyObjects<FBXLoader> FBXLoader::Instance;
 unsigned int FBXLoader::currentBoneIndex = 1;
 
-
 FBXNode FBXLoader::LoadFBXData(const char* filePath)
 {
 	this->texturePath = std::filesystem::path(filePath).parent_path().wstring()
@@ -54,7 +53,8 @@ FBXNode FBXLoader::LoadFBXData(const char* filePath)
 	if (!scene) {
 		std::cerr << "모델 로딩 실패!" << std::endl;
 	}
-
+	
+	
 	// Mesh Data Load
 	FBXNode rootNode;
 	ParseNode(scene->mRootNode, scene, rootNode);
