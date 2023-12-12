@@ -11,23 +11,27 @@
 #include "ResourceManager.h"
 
 #include "RenderSystem.h"
+#include "RenderTargetGroup.h"
+
+#include "ILight.h"
 
 LazyObjects<NailEngine> NailEngine::Instance;
 
 void NailEngine::Init(UINT64 hWnd)
 {
-	this->hWnd = reinterpret_cast<HWND>(hWnd);
+	this->windowInfo.hWnd = reinterpret_cast<HWND>(hWnd);
 
 	this->device = std::make_shared<Device>();
 	this->device->Init();
 	ResourceBuilder::Instance.Get().device = this->device;
 
 	this->swapChain = std::make_shared<SwapChain>();
-	this->swapChain->Init(this->hWnd, this->width, this->height);
+	this->swapChain->Init(this->windowInfo.hWnd, this->windowInfo.width, this->windowInfo.height);
 	ResourceBuilder::Instance.Get().swapChain = this->swapChain;
 
-	ResourceManager::Instance.Get().CreateDefaultResource();
 	CreateConstantBuffer();
+	CreateRenderTargetGroup();
+	ResourceManager::Instance.Get().CreateDefaultResource();
 }
 
 void NailEngine::Render()
@@ -35,63 +39,14 @@ void NailEngine::Render()
 	// Begin
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetViewports(1, &ResourceBuilder::Instance.Get().swapChain->GetViewPort());
 
-	D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
-
-	depthStencilDesc.DepthEnable = true; // 깊이 버퍼 사용 여부
-	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL; // 깊이 값을 쓰는지 여부
-	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS; // 깊이 값을 비교하는 함수
-
-	depthStencilDesc.StencilEnable = false; // 스텐실 버퍼 사용 여부
-	depthStencilDesc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK; // 스텐실 값을 읽을 때의 마스크
-	depthStencilDesc.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK; // 스텐실 값을 쓸 때의 마스크
-
-	depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP; // 스텐실 테스트에 실패하면 수행할 동작
-	depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP; // 스텐실 테스트는 성공했으나 깊이 테스트는 실패한 경우에 수행할 동작
-	depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP; // 스텐실 테스트와 깊이 테스트 모두 성공한 경우에 수행할 동작
-	depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS; // 스텐실 테스트에 사용할 함수
-
-	depthStencilDesc.BackFace = depthStencilDesc.FrontFace; // 양면 스텐실을 
-
-	ID3D11DepthStencilState* pDepthStencilState;
-	HRESULT hr = ResourceBuilder::Instance.Get().device->GetDevice()->CreateDepthStencilState(&depthStencilDesc, &pDepthStencilState);
-
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->OMSetDepthStencilState(pDepthStencilState, 1);
-
-	const float red[] = { 0.f, 0.5f, 0.f, 1.f };
+	const float red[] = { 0.5f, 0.5f, 0.5f, 1.f };
 
 	// 렌더 타겟뷰를 내가 지정한 값으로 픽셀을 다 초기화하여 지운다.
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->ClearRenderTargetView(ResourceBuilder::Instance.Get().swapChain->GetRTV().Get(), red);
 	// 뎁스 스텐실뷰를 초기화한다.
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->ClearDepthStencilView(ResourceBuilder::Instance.Get().swapChain->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 
-	//// renderstate 객체를 만들자
-	//D3D11_RASTERIZER_DESC rasterizerDesc = { };
-	//rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-	//rasterizerDesc.CullMode = D3D11_CULL_BACK;
-	//rasterizerDesc.FrontCounterClockwise = false;
-	//rasterizerDesc.DepthBias = 0;
-	//rasterizerDesc.DepthBiasClamp = 0.0f;
-	//rasterizerDesc.SlopeScaledDepthBias = 0.0f;
-	//rasterizerDesc.DepthClipEnable = true;
-	//rasterizerDesc.ScissorEnable = false;
-	//rasterizerDesc.MultisampleEnable = false;
-	//rasterizerDesc.AntialiasedLineEnable = false;
-
-	////Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
-	//ID3D11RasterizerState* rasterizerState;
-	//ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
-
-	////_context->RSSetState(rasterizerState.Get());
-	////ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetState(rasterizerState);
-
-	///ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetState(0);
-
-	// 렌더 타겟 뷰를 바인딩하고, 뎁스 스텐실 버퍼를 출력 병합기 단계에 바인딩한다.
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->OMSetRenderTargets(1,
-		ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
-		ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
-
-	RenderSystem::Instance.Get().RenderObject();
+	RenderSystem::Instance.Get().Render();
 
 	// End
 	ResourceBuilder::Instance.Get().swapChain->GetSwapChain().Get()->Present(1, 0);
@@ -100,12 +55,22 @@ void NailEngine::Render()
 	{
 		iter->Clear();
 	}
+
+	for (auto& iter : this->renderTargetGroup)
+	{
+		iter->Clear();
+	}
+
+	for (auto& iter : this->renderTargetGroup)
+	{
+		iter->UnBind();
+	}
 }
 
 void NailEngine::SetResolution(unsigned int width, unsigned int height)
 {
-	this->width = width;
-	this->height = height;
+	this-> windowInfo.width = width;
+	this->windowInfo.height = height;
 }
 
 std::shared_ptr<ConstantBuffer>& NailEngine::GetConstantBuffer(unsigned int index)
@@ -125,5 +90,100 @@ void NailEngine::CreateConstantBuffer()
 		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
 		_constantBuffer->CraeteConstantBuffer(sizeof(MaterialBuffer), 256);
 		this->constantBuffers.emplace_back(_constantBuffer);
+	}
+
+	{
+		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
+		_constantBuffer->CraeteConstantBuffer(sizeof(LightParams), 1);
+		this->constantBuffers.emplace_back(_constantBuffer);
+	}
+
+	{
+		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
+		_constantBuffer->CraeteConstantBuffer(sizeof(CameraBuffer), 256);
+		this->constantBuffers.emplace_back(_constantBuffer);
+	}
+}
+
+void NailEngine::CreateRenderTargetGroup()
+{
+	this->renderTargetGroup.resize(static_cast<int>(RENDER_TARGET_TYPE::END));
+	//// SwapChain
+	//{
+	//	std::vector<RenderTarget> rtVec(SWAP_CHAIN_BUFFER_COUNT);
+	//	for (int i = 0; i < SWAP_CHAIN_BUFFER_COUNT; i++)
+	//	{
+	//		std::wstring name = L"SwapChainTarget_" + std::to_wstring(i);
+
+	//		Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D;
+	//		this->swapChain->GetSwapChain()->GetBuffer(i, __uuidof(ID3D11Texture2D), &tex2D);
+	//		rtVec[i].texture = ResourceManager::Instance.Get().CreateTextureFromResource(name, tex2D);
+	//	}
+	//	this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SWAP_CHAIN)] = std::make_shared<RenderTargetGroup>();
+	//	this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SWAP_CHAIN)]->SetRenderTargetVec(rtVec);
+	//}
+
+	// G_BUFFER
+	{
+		std::vector<RenderTarget> rtVec(G_BUFFER_MEMBER_COUNT);
+
+		rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
+			L"PositionTarget",
+			this->windowInfo.width,
+			this->windowInfo.height,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
+			);
+
+		rtVec[1].texture = ResourceManager::Instance.Get().CreateTexture(
+			L"NormalTarget",
+			this->windowInfo.width,
+			this->windowInfo.height,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
+		);
+
+		rtVec[2].texture = ResourceManager::Instance.Get().CreateTexture(
+			L"AlbedoTarget",
+			this->windowInfo.width,
+			this->windowInfo.height,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
+		);
+
+		rtVec[3].texture = ResourceManager::Instance.Get().CreateTexture(
+			L"DepthTarget",
+			this->windowInfo.width,
+			this->windowInfo.height,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
+		);
+
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)] = std::make_shared<RenderTargetGroup>();
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->SetRenderTargetVec(rtVec);
+	}
+	
+	// LIGHTING
+	{
+		std::vector<RenderTarget> rtVec(LIGHTING_MEMBER_COUNT);
+
+		rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
+			L"DiffuseLightTarget",
+			this->windowInfo.width,
+			this->windowInfo.height,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
+		);
+
+		rtVec[1].texture = ResourceManager::Instance.Get().CreateTexture(
+			L"SpecularLightTarget",
+			this->windowInfo.width,
+			this->windowInfo.height,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
+		);
+
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)] = std::make_shared<RenderTargetGroup>();
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->SetRenderTargetVec(rtVec);
 	}
 }

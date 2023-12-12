@@ -7,17 +7,31 @@ UnitFactory::UnitFactory()
 	playerColor = yunuGI::Color{ 0, 1, 1, 0 };
 	enemyColor = yunuGI::Color{ 1, 0, 1, 0 };
 
-	defaultPlayerAtkRadius = 2.0f;
-	defaultPlayerIDRadius = 3.0f;
+	defaultPlayerAtkRadius = 1.0f;
+	defaultPlayerIDRadius = 5.0f;
 	defaultPlayerSpeed = 2.5f;
 
-	defaultEnemyAtkRadius = 1.0f;
+	defaultEnemyAtkRadius = 3.0f;
 	defaultEnemyIDRadius = 5.0f;
 	defaultEnemySpeed = 1.0f;
 }
 
 yunutyEngine::GameObject* UnitFactory::CreateUnit(UnitType unitType, yunutyEngine::NavigationField* navField, Vector3d startPosition)
 {
+	// 리소스 매니저 가져오기
+	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	
+	auto capsuleMesh = _resourceManager->GetMesh(L"Capsule");
+	auto sphereMesh = _resourceManager->GetMesh(L"Sphere");
+
+	auto shaderList = _resourceManager->GetShaderList();
+	yunuGI::IShader* debugShader;
+	for (auto e : shaderList)
+	{
+		if (e->GetShaderInfo().rasterizer == yunuGI::Rasterizer::Wire)
+			debugShader = e;
+	}
+
 	/// 1. UnitGameObject 생성
 	auto unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	unitGameObject->GetTransform()->SetWorldPosition(startPosition);
@@ -27,7 +41,7 @@ yunutyEngine::GameObject* UnitFactory::CreateUnit(UnitType unitType, yunutyEngin
 
 	// 1-2. (임시) StaticMeshRenderer 추가
 	auto unitMesh = unitGameObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	unitMesh->GetGI().LoadMesh("Capsule");
+	unitMesh->GetGI().SetMesh(capsuleMesh);
 
 	/// 2. RangeSystem Gameobject 추가
 	auto unitRangeSystemObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -39,12 +53,13 @@ yunutyEngine::GameObject* UnitFactory::CreateUnit(UnitType unitType, yunutyEngin
 
 	// 2-2. RangeSystem Debug Mesh 추가
 	auto rangeSystemMesh = unitRangeSystemObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	rangeSystemMesh->GetGI().LoadMesh("Sphere");
-	rangeSystemMesh->GetGI().GetMaterial()->SetPixelShader(L"DebugPS.cso");
+	rangeSystemMesh->GetGI().SetMesh(sphereMesh);
+	rangeSystemMesh->GetGI().GetMaterial()->SetPixelShader(debugShader);
 
 	/// 3. NavigationAgent Component 추가
 	auto unitNavigationComponent = unitGameObject->AddComponent<NavigationAgent>();
 	unitNavigationComponent->AssignToNavigationField(navField);
+	unitNavigationComponent->SetRadius(0.25f);
 
 	/// 4. Collider Component 추가
 	auto unitColliderComponent = unitGameObject->AddComponent<CircleCollider2D>();

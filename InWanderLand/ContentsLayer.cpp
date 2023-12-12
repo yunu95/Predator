@@ -18,7 +18,7 @@
 #include "DebugBeacon.h"
 #include "DebugMeshes.h"
 #include "UnitFactory.h"
-
+#include "DelayedTestFunctions.h"
 
 #include <d3d11.h>
 
@@ -57,12 +57,10 @@ void Application::Contents::ContentsLayer::Initialize()
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
 	auto rtsCam = camObj->AddComponent<RTSCam>();
-	rtsCam->GetTransform()->position = Vector3d(0, 10, 0);
-	camObj->GetTransform()->SetWorldPosition(Vector3d(0, 30, 0));
-	//camObj->GetTransform()->SetWorldRotation(Vector3d(115, 145, 0));
-
 	std::vector<Vector3f> worldVertices{ };
 	std::vector<int> worldFaces{ };
+
+	camObj->GetTransform()->SetWorldPosition(Vector3d(0, 30, 0));
 
 	// 길찾기 필드 생성
 	CreateNavPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
@@ -78,10 +76,10 @@ void Application::Contents::ContentsLayer::Initialize()
 	ProjectileSystem::GetInstance()->SetUp();
 
 	/// Unit Members
-	int playerHp = 1000;
+	int playerHp = 100;
 	int playerAp = 3;
 	
-	int enemyHp = 20;
+	int enemyHp = 100;
 	int enemyAp = 2;
 
 	std::unique_ptr<UnitFactory> factory = make_unique<UnitFactory>();
@@ -92,12 +90,47 @@ void Application::Contents::ContentsLayer::Initialize()
 	factory->SetEnemyAp(enemyAp);
 
 	auto playerGameObject = factory->CreateUnit(UnitType::PLAYER, navField, Vector3d(7.0f, 0.0f, 0.0f));
+	auto playerGameObject2 = factory->CreateUnit(UnitType::PLAYER, navField, Vector3d(7.0f, 0.0f, 5.0f));
+	auto playerGameObject3 = factory->CreateUnit(UnitType::PLAYER, navField, Vector3d(7.0f, 0.0f, -5.0f));
+	auto playerGameObject4 = factory->CreateUnit(UnitType::PLAYER, navField, Vector3d(0.0f, 0.0f, 5.0f));
 
 	auto controllerComponent = playerGameObject->AddComponent<PlayerController>();
+	auto controllerComponent2 = playerGameObject2->AddComponent<PlayerController>();
+	auto controllerComponent3 = playerGameObject3->AddComponent<PlayerController>();
+	auto controllerComponent4 = playerGameObject4->AddComponent<PlayerController>();
 	controllerComponent->SetMovingSystemComponent(rtsCam);
+	controllerComponent2->SetMovingSystemComponent(rtsCam);
+	controllerComponent3->SetMovingSystemComponent(rtsCam);
+	controllerComponent4->SetMovingSystemComponent(rtsCam);
 
-	auto enemyGameObject1 = factory->CreateUnit(UnitType::ENEMY, navField, Vector3d(0.0f, 0.0f, 0.0f));
-	auto enemyGameObject2 = factory->CreateUnit(UnitType::ENEMY, navField, Vector3d(0.0f, 0.0f, 5.0f));
+
+	auto enemyGameObject1 = factory->CreateUnit(UnitType::ENEMY, navField, Vector3d(-7.0f, 0.0f, 0.0f));
+	auto enemyGameObject2 = factory->CreateUnit(UnitType::ENEMY, navField, Vector3d(-7.0f, 0.0f, 5.0f));
+	auto enemyGameObject3 = factory->CreateUnit(UnitType::ENEMY, navField, Vector3d(-7.0f, 0.0f, -5.0f));
+	auto enemyGameObject4 = factory->CreateUnit(UnitType::ENEMY, navField, Vector3d(0.0f, 0.0f, -5.0f));
+
+	{
+		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+		directionalLight->GetTransform()->SetWorldPosition(Vector3d(0, 50, 0));
+		directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{100,0,0} };
+	}
+
+	auto delayFunctionObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	auto delayFunctionComponent = delayFunctionObject->AddComponent<DelayedTestFunctions>();
+	delayFunctionComponent->todoList.push_back({ 1.0f, [=]()
+		{
+			playerGameObject->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
+			playerGameObject2->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
+			playerGameObject3->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
+			playerGameObject4->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
+
+			enemyGameObject1->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
+			enemyGameObject2->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
+			enemyGameObject3->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
+			enemyGameObject4->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
+		} });
+
 
 	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }

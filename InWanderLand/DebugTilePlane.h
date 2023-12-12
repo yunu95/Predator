@@ -37,7 +37,17 @@ public:
 
             auto tile = Scene::getCurrentScene()->AddGameObject();
             auto staticMesh = tile->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-            staticMesh->GetGI().LoadMesh("Cube");
+
+            const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+            auto& meshList = _resourceManager->GetMeshList();
+            for (auto& e : meshList)
+            {
+                if (e->GetName() == L"Cube")
+                {
+                    staticMesh->GetGI().SetMesh(e);
+                }
+            }
+
             staticMesh->GetGI().GetMaterial()->SetColor(((i) % 2 == 0 ? colorA : colorB));
             tile->GetTransform()->SetWorldPosition(position);
             staticMesh->GetTransform()->scale = Vector3d(static_cast<double>(width), 1, 1);

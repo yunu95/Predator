@@ -15,8 +15,8 @@ namespace yunuGIAdapter
 		virtual void SetShader(int materialIndex, std::wstring shaderKey)  {};
 		virtual void SetMaterialName(int materialIndex, std::wstring materialKey)  {};
 		virtual void SetMesh(std::wstring mesh)  {};
-		virtual void SetMaterial(yunuGI::IMaterial* material) override {};
-		virtual yunuGI::IMaterial* GetMaterial() override { return nullptr; };
+		/*virtual void SetMaterial(yunuGI::IMaterial* material) override {};
+		virtual yunuGI::IMaterial* GetMaterial() override { return nullptr; };*/
 	private:
 	};
 }

@@ -2,6 +2,24 @@
 
 #include "Utils.h"
 
+#include <DirectXMath.h>
+#include "SimpleMath.h"
+using namespace DirectX::PackedVector;
+
+#include <vector>
+
+class Mesh;
+class Material;
+
+struct RenderInfo
+{
+	Mesh* mesh;
+	Material* material;
+	unsigned int materialIndex;
+	DirectX::SimpleMath::Matrix wtm;
+};
+
+
 class RenderSystem
 {
 public:
@@ -9,6 +27,21 @@ public:
 	friend LazyObjects<RenderSystem>;
 
 public:
+	void ClearRenderInfo();
+	void SortObject();
+	void PushLightData();
+	void PushCameraData();
+	void Render();
 	void RenderObject();
+	void RenderLight();
+	void DrawFinal();
+
+	void RenderForward();
+
+	void DrawDeferredInfo();
+
+private:
+	std::vector<RenderInfo> deferredVec;
+	std::vector<RenderInfo> forwardVec;
 };
 

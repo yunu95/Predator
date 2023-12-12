@@ -159,7 +159,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FBXData.h" />
+    <ClInclude Include="IAnimation.h" />
+    <ClInclude Include="ILight.h" />
     <ClInclude Include="IMaterial.h" />
+    <ClInclude Include="IMesh.h" />
+    <ClInclude Include="IResource.h" />
+    <ClInclude Include="IShader.h" />
+    <ClInclude Include="ITexture.h" />
     <ClInclude Include="IYunuGIDebugCube.h" />
     <ClInclude Include="IYunuGIDebugObject.h" />
     <ClInclude Include="IYunuGIDebugSphere.h" />
@@ -171,16 +178,21 @@
     <ClInclude Include="IYunuGIUIImage.h" />
     <ClInclude Include="IYunuGIUIObject.h" />
     <ClInclude Include="IYunuGIUIText.h" />
+    <ClInclude Include="IYunuMeshRenderer.h" />
     <ClInclude Include="YGCameraAdapter.h" />
     <ClInclude Include="YGDebugCubeAdapter.h" />
     <ClInclude Include="YGDebugSphereAdapter.h" />
+    <ClInclude Include="YGDirectionalLightAdapter.h" />
     <ClInclude Include="YGEventHandlerAdapter.h" />
     <ClInclude Include="YGFactoryAdapter.h" />
+    <ClInclude Include="YGLightAdapter.h" />
     <ClInclude Include="YGMaterialAdapter.h" />
+    <ClInclude Include="YGPointLightAdapter.h" />
     <ClInclude Include="YGRenderableAdapter.h" />
     <ClInclude Include="YGRendererAdapter.h" />
     <ClInclude Include="YGResourceManagerAdapter.h" />
     <ClInclude Include="YGSkinnedMeshAdapter.h" />
+    <ClInclude Include="YGSpotLightAdapter.h" />
     <ClInclude Include="YGStaticMeshAdapter.h" />
     <ClInclude Include="YGUIImageAdapter.h" />
     <ClInclude Include="YGUITextAdapter.h" />
@@ -198,6 +210,8 @@
     <ClInclude Include="YunuGIGlobal.h" />
     <ClInclude Include="YunuGIPtr.h" />
     <ClInclude Include="YunuGraphicsInterface.h" />
+    <ClInclude Include="YunuVector3.h" />
+    <ClInclude Include="YunuVector4.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Yunu3DGraphicsEngine.rc" />
@@ -207,6 +221,7 @@
     <Image Include="Yunu3DGraphicsEngine.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="IResource.cpp" />
     <ClCompile Include="YGExports.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

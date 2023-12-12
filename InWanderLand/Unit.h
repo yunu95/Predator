@@ -29,7 +29,7 @@ private:
 
 	int m_hp;
 	int m_ap;
-
+	
 	float m_speed;
 	float m_bulletSpeed;
 
@@ -56,6 +56,7 @@ private:
 	float deathFunctionElapsed;
 	float deathAnimationDelay = 1.5f;
 
+	bool isAttackMoving;
 
 	std::list<yunutyEngine::GameObject*> m_opponentGameObjectList;
 
@@ -116,6 +117,5 @@ public:
 	void OrderAttackMove(Vector3d position);
 	void SetOpponentGameObject(yunutyEngine::GameObject* obj);
 	void DeleteOpponentGameObject(yunutyEngine::GameObject* obj);
-	void EnterIDRange(GameObject* opponentObject);
 };
 

@@ -12,7 +12,7 @@ void Unit::Start()
 		[this]() { return currentOrder == UnitState::Move; } });
 
 	unitFSM.transitions[UnitState::Idle].push_back({ UnitState::AttackMove,
-		[this]() { return currentOrder == UnitState::AttackMove; } });
+		[this]() { return currentOrder == UnitState::AttackMove || (unitFSM.previousState == UnitState::Attack && isAttackMoving); } });
 
 	unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Chase,
 		[this]() { return ((!m_opponentGameObjectList.empty()) && idleElapsed >= idleToChaseDelay); } });
@@ -40,7 +40,7 @@ void Unit::Start()
 
 	unitFSM.transitions[UnitState::Attack].push_back({ UnitState::Idle,
 		[this]() { return (GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetObject->GetTransform()->GetWorldPosition()).Magnitude() >= m_atkDistance + 0.4f ||
-		m_currentTargetObject->GetComponent<Unit>()->GetUnitCurrentState() == UnitState::Death; } });
+		(m_currentTargetObject->GetComponent<Unit>()->GetUnitCurrentState() == UnitState::Death); } });
 
 	unitFSM.transitions[UnitState::Attack].push_back({ UnitState::Move,
 		[this]() { return currentOrder == UnitState::Move; } });
@@ -100,7 +100,6 @@ void Unit::Update()
 
 		AttackMoveEngageFunction();
 	}
-
 
 	void Unit::AttackEngage()
 	{
@@ -163,7 +162,13 @@ void Unit::Update()
 	void Unit::AttackUpdate()
 	{
 		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });
+		if (m_currentTargetObject->GetComponent<Unit>()->GetUnitCurrentState() == UnitState::Death)
+		{
+			m_opponentGameObjectList.remove(m_currentTargetObject);
 
+			if (!m_opponentGameObjectList.empty())
+				m_currentTargetObject = m_opponentGameObjectList.front();
+		}
 		attackFunctionElapsed += Time::GetDeltaTime();
 
 		if (attackFunctionElapsed >= attackFunctionCallDelay)
@@ -195,6 +200,8 @@ void Unit::Update()
 	{
 		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 0, 0 });
 
+		bool isCurrentOpponentDeath = false;
+
 		auto itr = m_opponentGameObjectList.begin();
 
 		while (itr != m_opponentGameObjectList.end())
@@ -202,6 +209,8 @@ void Unit::Update()
 			if ((*itr)->GetComponent<Unit>()->GetUnitCurrentState() == UnitState::Death)
 			{
 				itr = m_opponentGameObjectList.erase(itr);
+				isCurrentOpponentDeath = true;
+				break;
 			}
 			else
 				itr++;
@@ -209,10 +218,13 @@ void Unit::Update()
 
 		FindClosestOpponent();
 
-		if (unitFSM.previousState == UnitState::Attack)
+		idleToChaseDelay = 0.0f;
+
+		if (unitFSM.previousState == UnitState::Attack && !isCurrentOpponentDeath)
 			idleToChaseDelay = 1.0f;
-		else
-			idleToChaseDelay = 0.0f;
+
+		if (unitFSM.previousState == UnitState::AttackMove)
+			isAttackMoving = false;
 
 		StopPosition();
 	}
@@ -243,6 +255,9 @@ void Unit::Update()
 	{
 		StopPosition();
 
+		GetGameObject()->GetComponent<NavigationAgent>()->SetRadius(0.0f);
+		GetGameObject()->GetComponent<NavigationAgent>()->SetActive(false);
+		//GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(7, 0, 0));
 		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 1, 1, 0 });
 	}
 #pragma endregion
@@ -294,7 +309,6 @@ void Unit::Update()
 	}
 
 #pragma endregion
-
 
 void Unit::StopPosition()
 {
@@ -388,10 +402,12 @@ void Unit::OrderMove(Vector3d position)
 	m_currentMovePosition = position;
 	currentOrder = UnitState::Move;
 }
+
 void Unit::OrderAttackMove(Vector3d position)
 {
 	m_currentMovePosition = position;
 	currentOrder = UnitState::AttackMove;
+	isAttackMoving = true;
 }
 
 void Unit::SetOpponentGameObject(yunutyEngine::GameObject* obj)
@@ -408,8 +424,3 @@ void Unit::DeleteOpponentGameObject(yunutyEngine::GameObject* obj)
 		m_currentTargetObject = nullptr;
 }
 
-void Unit::EnterIDRange(GameObject* opponentObject)
-{
-	m_currentMovePosition = opponentObject->GetTransform()->GetWorldPosition();
-	currentOrder = UnitState::Chase;
-}

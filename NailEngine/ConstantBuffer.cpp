@@ -6,6 +6,8 @@
 #include "ResourceBuilder.h"
 #include "Device.h"
 
+#include "ILight.h"
+
 ConstantBuffer::ConstantBuffer()
 	: mappedBuffer{nullptr},
 	currentIndex{0}
@@ -42,7 +44,7 @@ void ConstantBuffer::CraeteConstantBuffer(unsigned int size, unsigned int count)
 
 void ConstantBuffer::PushGraphicsData(void* data, unsigned int size, unsigned int slot)
 {
-	assert(this->currentIndex < this->count);
+	//assert(this->currentIndex < this->count);
 	assert(this->size == ((size + 15) & ~15));
 
 	D3D11_MAPPED_SUBRESOURCE _subResource;
@@ -55,7 +57,7 @@ void ConstantBuffer::PushGraphicsData(void* data, unsigned int size, unsigned in
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->VSSetConstantBuffers(slot, 1, this->buffer.GetAddressOf());
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->PSSetConstantBuffers(slot, 1, this->buffer.GetAddressOf());
 
-	this->currentIndex++;
+	//this->currentIndex++;
 }
 
 void ConstantBuffer::Clear()

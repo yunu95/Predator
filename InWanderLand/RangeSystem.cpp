@@ -22,7 +22,6 @@ void RangeSystem::OnCollisionEnter2D(const Collision2D& collision)
 		float distance = (collision.m_OtherCollider->GetGameObject()->GetTransform()->GetWorldPosition() - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
 		
 		m_unitComponent->SetOpponentGameObject(collision.m_OtherCollider->GetGameObject());
-		m_unitComponent->EnterIDRange(collision.m_OtherCollider->GetGameObject());
 		//m_unitComponent->IdleTransition();
 	}
 }

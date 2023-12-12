@@ -88,6 +88,9 @@
     <Filter Include="Contents\InitialFactors">
       <UniqueIdentifier>{5e4af819-8eb5-4acc-a261-2bee0658b7bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestCodes">
+      <UniqueIdentifier>{8339e451-67eb-4692-ba45-88e6ad08ee10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -141,6 +144,7 @@
     <ClInclude Include="DebugMeshes.h">
       <Filter>DebugMeshes</Filter>
     </ClInclude>
+    <ClInclude Include="TestComponent.h" />
     <ClInclude Include="PeriodicAction.h">
       <Filter>PeriodicAction</Filter>
     </ClInclude>
@@ -240,6 +244,15 @@
     <ClInclude Include="PlayerController.h">
       <Filter>Contents\Units</Filter>
     </ClInclude>
+    <ClInclude Include="TestColliderEnableDeath.h">
+      <Filter>TestCodes</Filter>
+    </ClInclude>
+    <ClInclude Include="TestNavAgentEnableDeath.h">
+      <Filter>TestCodes</Filter>
+    </ClInclude>
+    <ClInclude Include="DelayedTestFunctions.h">
+      <Filter>TestCodes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -281,6 +294,7 @@
     <ClCompile Include="RequestDetourTest.cpp">
       <Filter>RecastDetourTest</Filter>
     </ClCompile>
+    <ClCompile Include="TestComponent.cpp" />
     <ClCompile Include="EditorEvents.cpp">
       <Filter>Editor\Events</Filter>
     </ClCompile>
@@ -314,8 +328,6 @@
     <ClCompile Include="ProgramExitCommand.cpp">
       <Filter>Editor\Commands\MenubarCommands</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="..\YunutyEngineDemo\main_alt.cpp" />
     <ClCompile Include="Panel_Preview.cpp">
       <Filter>Editor\Panel\List</Filter>
     </ClCompile>

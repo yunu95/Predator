@@ -110,6 +110,11 @@
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0
+
+xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -127,8 +132,9 @@
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>if exist "$(projectdir)RuntimeDependency\resources" xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
-if exist "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K</Command>
+      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0
+
+xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -182,6 +188,7 @@ if exist "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" xcopy "$(
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="CamSwitcher.h" />
+    <ClInclude Include="TestColliderEnableDeath.h" />
     <ClInclude Include="DebugBeacon.h" />
     <ClInclude Include="DebugMeshes.h" />
     <ClInclude Include="DebugTilePlane.h" />
@@ -195,6 +202,8 @@ if exist "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" xcopy "$(
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ProjectileSystem.h" />
     <ClInclude Include="RangeSystem.h" />
+    <ClInclude Include="DelayedTestFunctions.h" />
+    <ClInclude Include="TestNavAgentEnableDeath.h" />
     <ClInclude Include="PanelList.h" />
     <ClInclude Include="Panel_Palette.h" />
     <ClInclude Include="Panel_Preview.h" />
@@ -224,6 +233,7 @@ if exist "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" xcopy "$(
     <ClInclude Include="TerrainEditor.h" />
     <ClInclude Include="InitialFactorInterface.h" />
     <ClInclude Include="UnitFactory.h" />
+    <ClInclude Include="TestComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp" />
@@ -233,10 +243,6 @@ if exist "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" xcopy "$(
     <ClCompile Include="..\Include\ImGui\imgui_draw.cpp" />
     <ClCompile Include="..\Include\ImGui\imgui_tables.cpp" />
     <ClCompile Include="..\Include\ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="..\YunutyEngineDemo\main_alt.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="CamSwitcher.cpp" />
@@ -274,6 +280,7 @@ if exist "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" xcopy "$(
     <ClCompile Include="RTSCam.cpp" />
     <ClCompile Include="ShakyCam.cpp" />
     <ClCompile Include="InitialFactorInterface.cpp" />
+    <ClCompile Include="TestComponent.cpp" />
     <ClCompile Include="UnitFactory.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
