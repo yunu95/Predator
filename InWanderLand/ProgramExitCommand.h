@@ -18,7 +18,7 @@ namespace Application
 			: public Command
 		{
 		public:
-			ProgramExitCommand(Application& app);
+			ProgramExitCommand();
 
 			virtual void Execute() override;
 			

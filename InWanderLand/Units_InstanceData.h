@@ -3,7 +3,36 @@
 /// 유닛
 
 #pragma once
-class Units_InstanceData
-{
-};
 
+#include "InstanceData.h"
+
+namespace Application
+{
+	namespace Editor
+	{
+		struct POD_Units_InstanceData
+		{
+			TO_JSON(POD_Units_InstanceData);
+
+			unsigned int currentHP;
+		};
+
+		class Units_InstanceData
+			:public InstanceData
+		{
+			friend class Units;
+
+		public:
+			// 템플릿으로부터 초기화되는 데이터들을 일괄적으로 처리하는 함수
+			virtual bool EnterDataFromTemplate(const std::shared_ptr<TemplateData>& templateData) override;
+
+			POD_Units_InstanceData pod;
+
+		protected:
+			virtual bool PreEncoding(json& data) const override;
+			virtual bool PostEncoding(json& data) const override;
+			virtual bool PreDecoding(const json& data) override;
+			virtual bool PostDecoding(const json& data) override;
+		};
+	}
+}

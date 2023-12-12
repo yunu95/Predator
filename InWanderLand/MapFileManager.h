@@ -10,6 +10,14 @@ namespace Application
 {
 	namespace Editor
 	{
+		class InstanceManager;
+	}
+}
+
+namespace Application
+{
+	namespace Editor
+	{
 		class MapFileManager
 		{
 		public:
@@ -27,6 +35,7 @@ namespace Application
 			MapFileManager(const MapFileManager&) = delete;
 			MapFileManager& operator=(const MapFileManager&) = delete;
 
+			InstanceManager& instanceManager;
 			std::string currentMap;
 		};
 	}

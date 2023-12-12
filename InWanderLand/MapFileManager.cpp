@@ -1,5 +1,10 @@
 #include "MapFileManager.h"
 
+#include "Storable.h"
+#include "InstanceManager.h"
+
+#include <fstream>
+
 namespace Application
 {
     namespace Editor
@@ -23,17 +28,51 @@ namespace Application
 
         bool MapFileManager::LoadMapFile(const std::string& path)
         {
-            return false;
+            std::ifstream loadFile{ path };
+
+            if (loadFile.is_open())
+            {
+                json mapData;
+                loadFile >> mapData;
+
+                if (instanceManager.Decoding(mapData))
+                {
+                    loadFile.close();
+                    return true;
+                }
+                else
+                {
+                    loadFile.close();
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
 
         bool MapFileManager::SaveMapFile(const std::string& path)
         {
-            return false;
+            json mapData = instanceManager.Encoding();
+            
+            std::ofstream saveFile{ path };
+
+            if (saveFile.is_open())
+            {
+                saveFile << mapData.dump(4);
+                saveFile.close();
+                return true;
+            }
+            else
+            { 
+                return false;
+            }
         }
 
         /// private
         MapFileManager::MapFileManager()
-            : currentMap()
+            : instanceManager(InstanceManager::GetInstance()), currentMap()
         {
 
         }

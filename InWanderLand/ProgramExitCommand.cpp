@@ -6,8 +6,8 @@ namespace Application
 {
 	namespace Editor
 	{
-		ProgramExitCommand::ProgramExitCommand(Application& app)
-			: app(app)
+		ProgramExitCommand::ProgramExitCommand()
+			: app(Application::GetInstance())
 		{
 
 		}

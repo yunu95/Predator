@@ -88,6 +88,9 @@
     <Filter Include="Editor\DataSystem\EditableData\InstanceData\DataType">
       <UniqueIdentifier>{18bad386-fd1e-43c8-881e-26fad3f74cad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Commands\MenubarCommands\File">
+      <UniqueIdentifier>{ff20d7ae-412d-42d0-bec7-11abb5773aa1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -177,9 +180,6 @@
     <ClInclude Include="CommandManager.h">
       <Filter>Editor\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="ProgramExitCommand.h">
-      <Filter>Editor\Commands\MenubarCommands</Filter>
-    </ClInclude>
     <ClInclude Include="MenubarCommands.h">
       <Filter>Editor\Commands\MenubarCommands</Filter>
     </ClInclude>
@@ -210,13 +210,13 @@
     <ClInclude Include="InstanceManager.h">
       <Filter>Editor\DataSystem</Filter>
     </ClInclude>
-    <ClInclude Include="EditableData.h">
+    <ClInclude Include="IEditableData.h">
       <Filter>Editor\DataSystem\EditableData</Filter>
     </ClInclude>
     <ClInclude Include="InstanceData.h">
       <Filter>Editor\DataSystem\EditableData\InstanceData</Filter>
     </ClInclude>
-    <ClInclude Include="SharedData.h">
+    <ClInclude Include="TemplateData.h">
       <Filter>Editor\DataSystem\EditableData\SharedData</Filter>
     </ClInclude>
     <ClInclude Include="Ornaments.h">
@@ -228,13 +228,13 @@
     <ClInclude Include="Units.h">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClInclude>
-    <ClInclude Include="Units_SharedData.h">
+    <ClInclude Include="Units_TemplateData.h">
       <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
     </ClInclude>
-    <ClInclude Include="Ornaments_SharedData.h">
+    <ClInclude Include="Ornaments_TemplateData.h">
       <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
     </ClInclude>
-    <ClInclude Include="Terrain_SharedData.h">
+    <ClInclude Include="Terrain_TemplateData.h">
       <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
     </ClInclude>
     <ClInclude Include="Units_InstanceData.h">
@@ -245,6 +245,27 @@
     </ClInclude>
     <ClInclude Include="Terrain_InstanceData.h">
       <Filter>Editor\DataSystem\EditableData\InstanceData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="TemplateDataManager.h">
+      <Filter>Editor\DataSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="TemplateDataList.h">
+      <Filter>Editor\DataSystem\EditableData\SharedData</Filter>
+    </ClInclude>
+    <ClInclude Include="InstanceDataList.h">
+      <Filter>Editor\DataSystem\EditableData\InstanceData</Filter>
+    </ClInclude>
+    <ClInclude Include="EditableDataList.h">
+      <Filter>Editor\DataSystem\EditableData</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgramExitCommand.h">
+      <Filter>Editor\Commands\MenubarCommands\File</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveMapCommand.h">
+      <Filter>Editor\Commands\MenubarCommands\File</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadMapCommand.h">
+      <Filter>Editor\Commands\MenubarCommands\File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -317,9 +338,6 @@
     <ClCompile Include="CommandManager.cpp">
       <Filter>Editor\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="ProgramExitCommand.cpp">
-      <Filter>Editor\Commands\MenubarCommands</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="..\YunutyEngineDemo\main_alt.cpp" />
     <ClCompile Include="Panel_Preview.cpp">
@@ -349,13 +367,13 @@
     <ClCompile Include="Units.cpp">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClCompile>
-    <ClCompile Include="Ornaments_SharedData.cpp">
+    <ClCompile Include="Ornaments_TemplateData.cpp">
       <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
     </ClCompile>
-    <ClCompile Include="Terrain_SharedData.cpp">
+    <ClCompile Include="Terrain_TemplateData.cpp">
       <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
     </ClCompile>
-    <ClCompile Include="Units_SharedData.cpp">
+    <ClCompile Include="Units_TemplateData.cpp">
       <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
     </ClCompile>
     <ClCompile Include="Ornaments_InstanceData.cpp">
@@ -366,6 +384,18 @@
     </ClCompile>
     <ClCompile Include="Units_InstanceData.cpp">
       <Filter>Editor\DataSystem\EditableData\InstanceData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="TemplateDataManager.cpp">
+      <Filter>Editor\DataSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgramExitCommand.cpp">
+      <Filter>Editor\Commands\MenubarCommands\File</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveMapCommand.cpp">
+      <Filter>Editor\Commands\MenubarCommands\File</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadMapCommand.cpp">
+      <Filter>Editor\Commands\MenubarCommands\File</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

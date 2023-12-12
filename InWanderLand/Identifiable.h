@@ -5,10 +5,15 @@
 
 #include "UUID.h"
 
+#include <string>
+
 namespace Application
 {
 	namespace Editor
 	{
+		std::string UUID_To_String(UUID uuid);
+		UUID String_From_UUID(std::string str);
+
 		class Identifiable
 		{
 		public:

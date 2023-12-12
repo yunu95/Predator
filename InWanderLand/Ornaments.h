@@ -4,34 +4,36 @@
 
 #pragma once
 
-#include "EditableData.h"
+#include "IEditableData.h"
 #include "Ornaments_InstanceData.h"
-#include "Ornaments_SharedData.h"
+#include "Ornaments_TemplateData.h"
 
 #include <memory>
+#include <string>
 
 namespace Application
 {
 	namespace Editor
 	{
 		class Ornaments
-			: public EditableData
+			: public IEditableData
 		{
 			friend class InstanceManager;
 
 		public:
+			virtual std::shared_ptr<IEditableData> Clone() const override;
+
+			Ornaments_InstanceData instanceData;
+			std::shared_ptr<Ornaments_TemplateData> templateData;
+
+		protected:
 			virtual bool PreEncoding(json& data) const override;
 			virtual bool PostEncoding(json& data) const override;
 			virtual bool PreDecoding(const json& data) override;
 			virtual bool PostDecoding(const json& data) override;
 
-			virtual std::shared_ptr<EditableData> Clone() override;
-
-			Ornaments_InstanceData instanceData;
-			std::shared_ptr<Ornaments_SharedData>& sharedData;
-
 		private:
-			Ornaments();
+			Ornaments(const std::string& name);
 			Ornaments(const Ornaments& prototype);
 			Ornaments& operator=(const Ornaments& prototype);
 		};

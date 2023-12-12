@@ -4,17 +4,19 @@
 
 #pragma once
 
-#include "EditableData.h"
+#include "Storable.h"
+#include "IEditableData.h"
 
 #include <string>
 #include <memory>
-#include <set>
+#include <unordered_set>
 
 namespace Application
 {
 	namespace Editor
 	{
 		class InstanceManager
+			: public Storable
 		{
 		public:
 			static InstanceManager& GetInstance();
@@ -22,9 +24,13 @@ namespace Application
 			virtual ~InstanceManager();
 
 			bool CreateInstance(const std::string& dataName);
-			bool CloneInstance(const std::shared_ptr<EditableData>& prototype);
-			bool Save(json& jsonData);
-			bool Load(const json& jsonData);
+			bool CloneInstance(const std::shared_ptr<IEditableData>& prototype);
+
+		protected:
+			virtual bool PreEncoding(json& data) const override;
+			virtual bool PostEncoding(json& data) const override;
+			virtual bool PreDecoding(const json& data) override;
+			virtual bool PostDecoding(const json& data) override;
 
 		private:
 			static std::unique_ptr<InstanceManager> instance;
@@ -35,8 +41,8 @@ namespace Application
 
 			void Clear();
 
-			std::set<std::shared_ptr<EditableData>> list;
-			std::shared_ptr<EditableData> mould;
+			std::unordered_set<std::shared_ptr<IEditableData>> list;
+			std::shared_ptr<IEditableData> mould;
 		};
 	}
 }

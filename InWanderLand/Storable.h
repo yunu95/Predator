@@ -4,18 +4,39 @@
 
 #pragma once
 
+#include <unordered_map>
+#include <string>
+#include <vector>
 #include <nlohmann/json.hpp>
+#include <boost/pfr.hpp>
 
 using json = nlohmann::json;
 
 namespace Application
 {
 	namespace Editor
-	{
+	{	
+		template <int N, typename T>
+		json FieldEncoding(T& className, json& data)
+		{
+			if constexpr (N == 0)
+			{
+				return data;
+			}
+			else
+			{
+				data[boost::pfr::get_name<N - 1, T>()] = boost::pfr::get<N - 1>(className);
+				FieldEncoding<N - 1, T>(className, data);
+			}
+			return data;
+		}
+
 		class Storable
 		{
 		public:
+			// json 형태로 Storable 클래스를 저장합니다.
 			json Encoding() const;
+			// json 형태로부터 Storable 클래스를 초기화합니다.
 			bool Decoding(const json& data);
 
 		protected:
@@ -27,3 +48,11 @@ namespace Application
 	}
 }
 
+#define TO_JSON(Class) \
+operator json() \
+{ \
+	json data; \
+	Class classObj = Class(); \
+	Application::Editor::FieldEncoding<boost::pfr::tuple_size_v<Class>>(classObj, data); \
+	return data; \
+}

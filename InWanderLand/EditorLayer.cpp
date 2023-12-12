@@ -71,9 +71,17 @@ namespace Application
 			ImGui::BeginMenuBar();
 			if (ImGui::BeginMenu("File"))
 			{
+				if (ImGui::MenuItem("LoadMap"), "Ctrl + L")
+				{
+					cm.AddQueue(std::make_shared<LoadMapCommand>());
+				}
+				if (ImGui::MenuItem("SaveMap"), "Ctrl + S")
+				{
+					cm.AddQueue(std::make_shared<SaveMapCommand>());
+				}
 				if (ImGui::MenuItem("Exit"))
 				{
-					cm.AddQueue(std::make_shared<ProgramExitCommand>(Application::GetInstance()));
+					cm.AddQueue(std::make_shared<ProgramExitCommand>());
 				}
 				ImGui::EndMenu();
 			}

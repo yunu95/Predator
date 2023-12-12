@@ -4,13 +4,34 @@
 
 #pragma once
 
+#include "Storable.h"
+
+namespace Application
+{
+	namespace Editor
+	{
+		class TemplateData;
+	}
+}
+
 namespace Application
 {
 	namespace Editor
 	{
 		class InstanceData
+			: public Storable
 		{
+		public:
+			// 템플릿으로부터 초기화되는 데이터들을 일괄적으로 처리하는 함수
+			virtual bool EnterDataFromTemplate(const std::shared_ptr<TemplateData>& templateData) = 0;	
 
+			// 기본 공용 데이터
+
+		protected:
+			virtual bool PreEncoding(json& data) const = 0;
+			virtual bool PostEncoding(json& data) const = 0;
+			virtual bool PreDecoding(const json& data) = 0;
+			virtual bool PostDecoding(const json& data) = 0;
 		};
 	}
 }
