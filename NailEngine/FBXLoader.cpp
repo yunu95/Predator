@@ -4,6 +4,8 @@
 #include <codecvt>
 #include <locale>
 #include <filesystem>
+#include <fstream>
+#include <cmath>
 
 #include "ResourceManager.h"
 #include "Mesh.h"
@@ -39,7 +41,7 @@ FBXNode FBXLoader::LoadFBXData(const char* filePath)
 	flag = aiProcess_Triangulate |
 		aiProcess_ConvertToLeftHanded | aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
 		aiProcess_CalcTangentSpace | aiProcess_PopulateArmatureData |
-		aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
+		aiProcess_FlipWindingOrder | aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
 		aiProcess_SortByPType | aiProcess_LimitBoneWeights;
 
 	//flag = aiProcess_Triangulate |
@@ -53,23 +55,14 @@ FBXNode FBXLoader::LoadFBXData(const char* filePath)
 	if (!scene) {
 		std::cerr << "모델 로딩 실패!" << std::endl;
 	}
-	
-	
+
+
 	// Mesh Data Load
 	FBXNode rootNode;
-	ParseNode(scene->mRootNode, scene, rootNode);
+	ParseNode(scene->mRootNode, scene->mRootNode, scene, rootNode, rootNode);
 
 	// Animation Load
 	//ParseAnimation();
-
-	yunuGI::BoneInfo boneInfo;
-	boneInfo.index = 0;
-	boneInfo.parentIndex = -1;
-	boneInfo.name = L"BoneRoot";
-
-	// Load한 Bone을 계층 구조로 만들기
-	BuildBoneHierarchy(scene->mRootNode, boneInfo.child, 0);
-	rootNode.boneInfo = std::move(boneInfo);
 
 	if (scene->mNumAnimations > 0)
 	{
@@ -77,7 +70,7 @@ FBXNode FBXLoader::LoadFBXData(const char* filePath)
 		LoadAnimation(scene);
 	}
 
-	ResourceManager::Instance.Get().PushFBXBoneInfo(std::filesystem::path(filePath).stem().wstring(), this->fbxBoneInfoVec);
+	ResourceManager::Instance.Get().PushFBXBoneInfo(std::filesystem::path(filePath).stem().wstring(), rootNode, boneInfoMap);
 
 	boneInfoMap.clear();
 	currentBoneIndex = 1;
@@ -88,20 +81,23 @@ FBXNode FBXLoader::LoadFBXData(const char* filePath)
 	return rootNode;
 }
 
-void FBXLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode& fbxNode)
+void FBXLoader::ParseNode(const aiNode* rootNode, const aiNode* node, const aiScene* scene, FBXNode& fbxNode, FBXNode& fbxRootNode)
 {
+	fbxNode.nodeName = this->aiStringToWString(node->mName.C_Str());
+	fbxNode.transformMatrix = this->ConvertToCloumnMajor(node->mTransformation);
+
 	// Mesh Load And Material Load
-	ParseMesh(node, scene, fbxNode);
+	ParseMesh(rootNode, node, scene, fbxNode, fbxRootNode);
 
 	// Parse Child
 	fbxNode.child.resize(node->mNumChildren);
 	for (unsigned int i = 0; i < node->mNumChildren; ++i)
 	{
-		ParseNode(node->mChildren[i], scene, fbxNode.child[i]);
+		ParseNode(rootNode, node->mChildren[i], scene, fbxNode.child[i], fbxRootNode);
 	}
 }
 
-void FBXLoader::ParseMesh(const aiNode* node, const aiScene* scene, FBXNode& fbxNode)
+void FBXLoader::ParseMesh(const aiNode* rootNode, const aiNode* node, const aiScene* scene, FBXNode& fbxNode, FBXNode& fbxRootNode)
 {
 	std::wstring asd = this->aiStringToWString(node->mName.C_Str());
 
@@ -121,7 +117,7 @@ void FBXLoader::ParseMesh(const aiNode* node, const aiScene* scene, FBXNode& fbx
 		{
 			// 버텍스 위치 (Position)
 			aiVector3D vertexPos = mesh->mVertices[j];
-			vertexPos *= transform;
+			//vertexPos *= transform;
 			DirectX::SimpleMath::Vector3 dvertex{ vertexPos.x,vertexPos.y,vertexPos.z };
 
 			// 버텍스 색상 (Color) - 대개 사용되지 않음
@@ -133,7 +129,7 @@ void FBXLoader::ParseMesh(const aiNode* node, const aiScene* scene, FBXNode& fbx
 
 			// 법선 (Normal)
 			aiVector3D normal = mesh->mNormals[j];
-			normal *= transform;
+			//normal *= transform;
 			DirectX::SimpleMath::Vector3 dnormal{ normal.x, normal.y, normal.z };
 
 			// 탄젠트 (Tangent)
@@ -157,6 +153,7 @@ void FBXLoader::ParseMesh(const aiNode* node, const aiScene* scene, FBXNode& fbx
 		// Material Load
 		ParseMaterial(scene, mesh, data);
 
+
 		// Vertex에 Bone 정보 넣기
 		for (int b = 0; b < mesh->mNumBones; ++b)
 		{
@@ -168,9 +165,52 @@ void FBXLoader::ParseMesh(const aiNode* node, const aiScene* scene, FBXNode& fbx
 
 				this->boneInfoMap.insert({ boneInfo.name,boneInfo });
 
-				data.vertex[mesh->mBones[b]->mWeights[w].mVertexId].FillBoneIndexWeight(b, mesh->mBones[b]->mWeights[w].mWeight);
+				//data.vertex[mesh->mBones[b]->mWeights[w].mVertexId].FillBoneIndexWeight(b, mesh->mBones[b]->mWeights[w].mWeight);
 			}
 		}
+
+		// Build 계층
+		if (mesh->mNumBones > 0)
+		{
+			yunuGI::BoneInfo boneInfo;
+			boneInfo.index = 0;
+			boneInfo.parentIndex = -1;
+			boneInfo.name = L"BoneRoot";
+
+			// Load한 Bone을 계층 구조로 만들기
+			BuildBoneHierarchy(scene->mRootNode, boneInfo.child, 0);
+			fbxRootNode.boneInfo = std::move(boneInfo);
+		}
+
+		for (int b = 0; b < mesh->mNumBones; ++b)
+		{
+			for (int w = 0; w < mesh->mBones[b]->mNumWeights; ++w)
+			{
+				aiString boneName = mesh->mBones[b]->mName;
+
+				auto iter = this->boneInfoMap.find(this->aiStringToWString(boneName.C_Str()));
+
+				if (iter != this->boneInfoMap.end())
+				{
+					data.vertex[mesh->mBones[b]->mWeights[w].mVertexId].FillBoneIndexWeight(iter->second.index - 1, mesh->mBones[b]->mWeights[w].mWeight);
+				}
+			}
+		}
+		std::ofstream outputfile("output.txt");
+
+		if (outputfile.is_open())
+		{
+			for (int i = 0; i < data.vertex.size(); ++i)
+			{
+				outputfile << data.vertex[i].pos.x << std::endl;
+				outputfile << data.vertex[i].pos.y << std::endl;
+				outputfile << data.vertex[i].pos.z << std::endl;
+				outputfile << std::endl;
+			}
+			
+		}
+
+		
 
 		fbxNode.meshVec.emplace_back(data);
 	}
@@ -238,7 +278,7 @@ void FBXLoader::LoadAnimation(const aiScene* scene)
 			if (iter != this->boneInfoMap.end())
 			{
 				KeyFrameInfo keyFrameInfo;
-				keyFrameInfo.srtVec.resize(animationClip.totalFrame + 1 , DirectX::SimpleMath::Matrix::Identity);
+				keyFrameInfo.srtVec.resize(animationClip.totalFrame + 1, DirectX::SimpleMath::Matrix::Identity);
 
 				std::vector<DirectX::SimpleMath::Matrix> keyPosMatrix;
 				keyPosMatrix.resize(animationClip.totalFrame + 1);
@@ -274,7 +314,7 @@ void FBXLoader::LoadAnimation(const aiScene* scene)
 					srt = keyScaleMatrix[k] * keyRotMatrix[k] * keyPosMatrix[k];
 					keyFrameInfo.srtVec[k] = (srt);
 				}
-				
+
 				animationClip.keyFrameInfoVec[iter->second.index] = std::move(keyFrameInfo);
 			}
 		}
@@ -312,7 +352,7 @@ DirectX::SimpleMath::Matrix FBXLoader::ConvertToCloumnMajor(aiMatrix4x4 matrix)
 	//std::cout << colMajor._21 << ", " << colMajor._22 << ", " << colMajor._23 << ", " <<colMajor._24 << std::endl;
 	//std::cout << colMajor._31 << ", " << colMajor._32 << ", " << colMajor._33 << ", " <<colMajor._34 << std::endl;
 	//std::cout << colMajor._41 << ", " << colMajor._42 << ", " << colMajor._43 << ", " <<colMajor._44 << std::endl;
-	
+
 
 	//DirectX::SimpleMath::Matrix colMajor{
 	//matrix.a1, matrix.a2, matrix.a3,matrix.a4,

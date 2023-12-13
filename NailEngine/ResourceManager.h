@@ -42,7 +42,7 @@ private:
 #pragma endregion
 
 public:
-	void PushFBXBoneInfo(const std::wstring fbxName, std::vector<FBXBoneInfo> fbxBoneInfo);
+	void PushFBXBoneInfo(const std::wstring fbxName, FBXNode fbxNode, std::unordered_map<std::wstring, FBXBoneInfo> fbxBoneInfoMap);
 #pragma region Getter
 	std::shared_ptr<yunuGI::IMaterial> GetMaterial(const std::wstring& materialName);
 	std::shared_ptr<yunuGI::IShader> GetShader(const std::wstring& shaderPath);
@@ -56,12 +56,11 @@ public:
 
 	std::vector<yunuGI::IMesh*>& GetMeshList() { return this->meshVec; };
 	std::vector<yunuGI::ITexture*> GetTextureList() { return this->textureVec; };
-	std::vector<yunuGI::IMaterial*>& GetMaterialList() 
-	{
-		return this->materialVec; 
-	};
+	std::vector<yunuGI::IMaterial*>& GetMaterialList() { return this->materialVec; };
 	std::vector<yunuGI::IShader*>& GetShaderList() { return this->shaderVec; };
 	std::vector<yunuGI::IAnimation*> GetAnimationList() { return this->animationVec; };
+
+	std::unordered_map<std::wstring, std::pair<FBXNode, std::unordered_map<std::wstring, FBXBoneInfo>>>& GetFBXNodeAndBone(const std::wstring& fbxName) { return this->fbxNodeAndBone; }
 #pragma endregion
 
 private:
@@ -119,6 +118,8 @@ private:
 	std::unordered_map<std::wstring, std::vector<yunuGI::BoneInfo>> fbxBoneInfoVecMap;
 	// 그래픽스 엔진 내부에서 스키닝 애니메이션에 쓸 오프셋 행렬을 가지고 있는 본 정보
 	std::unordered_map<std::wstring, std::vector<FBXBoneInfo>> BoneOffsetInfoVecMap;
+	// 그래픽스에서 사용할 데이터 묶음 아래 객체를 사용하면 BoneOffsetInfoVecMap는 사용하지 않도록한다.
+	std::unordered_map<std::wstring, std::pair<FBXNode, std::unordered_map<std::wstring, FBXBoneInfo>>> fbxNodeAndBone;
 
 
 	//std::unordered_map<std::wstring, std::shared_ptr<Shader>> shaderMap;

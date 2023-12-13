@@ -21,6 +21,7 @@ void GraphicsTest()
 
     {
        auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+       //object->GetTransform()->position = Vector3d{ 0,0,5 };
        //object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
 
        //auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -112,8 +113,9 @@ void Application::Contents::ContentsLayer::Initialize()
 
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
-    auto rtsCam = camObj->AddComponent<RTSCam>();
-    //rtsCam->GetTransform()->position = Vector3d(0, 10, 0);
+    //auto rtsCam = camObj->AddComponent<RTSCam>();
+    auto rtsCam = camObj->AddComponent<yunutyEngine::graphics::Camera>();
+    rtsCam->GetTransform()->position = Vector3d(0, 0, -2);
 
     //// 길찾기 테스트
     //{

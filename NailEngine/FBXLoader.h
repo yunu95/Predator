@@ -13,6 +13,7 @@
 #include <assimp/postprocess.h>
 
 #include <vector>
+#include <map>
 
 #include <DirectXMath.h>
 #include "SimpleMath.h"
@@ -61,6 +62,8 @@ struct FBXNode
 	std::vector<FBXNode> child;
 	std::vector<FBXMeshData> meshVec;
 	yunuGI::BoneInfo boneInfo;
+	std::wstring nodeName;
+	DirectX::SimpleMath::Matrix transformMatrix;
 	bool hasAnimation;
 };
 
@@ -74,8 +77,8 @@ public:
 	FBXNode LoadFBXData(const char* filePath);
 
 private:
-	void ParseNode(const aiNode* node, const aiScene* scene, FBXNode& fbxNode);
-	void ParseMesh(const aiNode* node, const aiScene* scene, FBXNode& fbxNode);
+	void ParseNode(const aiNode* rootNode, const aiNode* node, const aiScene* scene, FBXNode& fbxNode, FBXNode& fbxRootNode);
+	void ParseMesh(const aiNode* rootNode, const aiNode* node, const aiScene* scene, FBXNode& fbxNode, FBXNode& fbxRootNode);
 	void ParseMaterial(const aiScene*scene, const aiMesh* mesh, FBXMeshData& meshData);
 	void LoadAnimation(const aiScene* scene);
 

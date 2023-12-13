@@ -17,39 +17,36 @@ struct Vertex
 	DirectX::SimpleMath::Vector2 uv;
 	DirectX::SimpleMath::Vector3 normal;
 	DirectX::SimpleMath::Vector3 tangent;
-	DirectX::SimpleMath::Vector4 index{0.f,0.f,0.f,0.f};
+	unsigned int indices[4]{ 0xffffffffu ,0xffffffffu ,0xffffffffu ,0xffffffffu };
 	DirectX::SimpleMath::Vector4 weights{0.f,0.f,0.f,0.f};
-
-	bool isInit[4]{false,};
 
 public:
 	void FillBoneIndexWeight(unsigned int index, float weight)
 	{
-		if (!isInit[0])
+		if (this->indices[0] == 0xffffffffu)
 		{
-			isInit[0] = true;
-			this->index.x = index;
+			this->indices[0] = index;
 			this->weights.x = weight;
 		}
-		else if (!isInit[1])
+		else if (this->indices[1] == 0xffffffffu)
 		{
-			isInit[1] = true;
-			this->index.y = index;
+			this->indices[1] = index;
 			this->weights.y = weight;
 		}
-		else if (!isInit[2])
+		else if (this->indices[2] == 0xffffffffu)
 		{
-			isInit[2] = true;
-			this->index.z = index;
+			this->indices[2] = index;
 			this->weights.z = weight;
 		}
-		else if (!isInit[3])
+		else if (this->indices[3] == 0xffffffffu)
 		{
-			isInit[3] = true;
-			this->index.w = index;
+			this->indices[3] = index;
 			this->weights.w = weight;
 		}
 	}
+	unsigned int* GetIdx() { return indices; }
+	DirectX::SimpleMath::Vector4 GetWeight() { return weights; }
+
 };
 
 struct MatrixBuffer

@@ -2,6 +2,8 @@
 
 #include "Utils.h"
 
+#include "FBXLoader.h"
+
 #include <DirectXMath.h>
 #include "SimpleMath.h"
 using namespace DirectX::PackedVector;
@@ -51,13 +53,25 @@ public:
 
 private:
 	void BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo);
+	void ReadBone(FBXNode fbxNode, DirectX::SimpleMath::Matrix parentMatrix, std::wstring fbxName,
+		const std::unordered_map<std::wstring, std::pair<FBXNode, std::unordered_map<std::wstring, FBXBoneInfo>>>& fbxNodeAndBoneMap);
 
 private:
 	std::vector<RenderInfo> deferredVec;
 	std::vector<RenderInfo> forwardVec;
 	std::vector<SkinnedRenderInfo> skinnedVec;
 
-	DirectX::SimpleMath::Matrix temp[256];
+	//DirectX::SimpleMath::Matrix temp[256];
+	BoneMatrix finalTM;
+
+	
+
+
+
+
+
+
+	std::map < std::wstring, DirectX::SimpleMath::Matrix> tempMap;
 };
 
 

@@ -578,9 +578,9 @@ void ResourceManager::CreateResourceFromFBX(FBXMeshData& meshData, std::vector<y
 	}
 }
 
-void ResourceManager::PushFBXBoneInfo(const std::wstring fbxName, std::vector<FBXBoneInfo> fbxBoneInfo)
+void ResourceManager::PushFBXBoneInfo(const std::wstring fbxName, FBXNode fbxNode, std::unordered_map<std::wstring,FBXBoneInfo> fbxBoneInfoMap)
 {
-	this->BoneOffsetInfoVecMap.insert({ fbxName, fbxBoneInfo });
+	this->fbxNodeAndBone.insert({ fbxName,{fbxNode,{fbxBoneInfoMap}} });
 }
 
 void ResourceManager::LoadCubeMesh()

@@ -27,6 +27,9 @@
 #include "SwapChain.h"
 #include "Device.h"
 
+#include <iostream>
+#include <fstream>
+
 LazyObjects<RenderSystem> RenderSystem::Instance;
 
 
@@ -108,13 +111,13 @@ void RenderSystem::PushLightData()
 		{
 			params.lights[i].range = e->GetLightInfo().range;
 		}
-		else if(e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Spot))
+		else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Spot))
 		{
 			params.lights[i].range = e->GetLightInfo().range;
 			params.lights[i].angle = e->GetLightInfo().angle;
 			params.lights[i].direction = e->GetLightInfo().direction;
 		}
-		
+
 		i++;
 	}
 
@@ -145,7 +148,7 @@ void RenderSystem::Render()
 
 	// 스킨드 오브젝트 렌더
 	RenderSkinned();
-	
+
 	// 라이트 렌더
 	RenderLight();
 
@@ -182,7 +185,7 @@ void RenderSystem::RenderObject()
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.material->GetName()))->PushGraphicsData();
 		mesh->Render(e.materialIndex);
 	}
-	
+
 	//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->UnBind();
 }
 
@@ -192,6 +195,23 @@ void RenderSystem::RenderSkinned()
 	{
 		// 본TM 구해서 넘기기
 		BoneUpdate(e);
+
+		std::ofstream outputfile("output2.txt");
+
+		if (outputfile.is_open())
+		{
+			for (auto i : tempMap)
+			{
+				outputfile << std::string{ i.first.begin(), i.first.end() } << std::endl;
+				outputfile << i.second._11 << ", " << i.second._12 <<", " <<i.second._13 << ", " << i.second._14 << std::endl;
+				outputfile << i.second._21 << ", " << i.second._22 <<", " <<i.second._23 << ", " << i.second._24 << std::endl;
+				outputfile << i.second._31 << ", " << i.second._32 <<", " <<i.second._33 << ", " << i.second._34 << std::endl;
+				outputfile << i.second._41 << ", " << i.second._42 <<", " <<i.second._43 << ", " << i.second._44 << std::endl;
+				outputfile << std::endl;
+			}
+		}
+		outputfile.close();
+
 
 		MatrixBuffer matrixBuffer;
 		matrixBuffer.WTM = e.renderInfo.wtm;
@@ -212,7 +232,7 @@ void RenderSystem::RenderSkinned()
 			}
 		}
 
-		
+
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.renderInfo.material->GetName()))->PushGraphicsData();
 		mesh->Render(e.renderInfo.materialIndex);
 	}
@@ -292,9 +312,9 @@ void RenderSystem::DrawDeferredInfo()
 		matRotation *= DirectX::SimpleMath::Matrix::CreateRotationZ(0.f);
 		/// 
 		DirectX::SimpleMath::Matrix matTranslation = DirectX::SimpleMath::Matrix::CreateTranslation(DirectX::SimpleMath::Vector3(
-			((-width/2.f) + ((width/10.f)*(i+2)))
-			,((height/2.f) - ((height/10.f)*2.f) + 22.f)
-			,1.f)
+			((-width / 2.f) + ((width / 10.f) * (i + 2)))
+			, ((height / 2.f) - ((height / 10.f) * 2.f) + 22.f)
+			, 1.f)
 		);
 		/// 
 		DirectX::SimpleMath::Matrix wtm = matSclae * matRotation * matTranslation;
@@ -329,27 +349,58 @@ void RenderSystem::DrawDeferredInfo()
 
 void RenderSystem::BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo)
 {
-	auto& boneVec = ResourceManager::Instance.Get().GetFBXBoneData(std::string{ skinnedRenderInfo.boneName.begin(), skinnedRenderInfo.boneName.end() });
-	BoneMatrix* boneMatrixBuffer = new BoneMatrix;
-	for (int i = 0; i < boneVec.size(); ++i)
-	{
-		if (i == 0)
-		{
-			boneMatrixBuffer->finalTM[i] = boneVec[i].offset * boneVec[i].localTM;
-			temp[i] = boneVec[i].localTM;
-		}
-		else
-		{
-			//boneMatrixBuffer.finalTM[i] = boneVec[i].offset * boneMatrixBuffer.finalTM[boneVec[i].parentIndex-1] * boneVec[i].localTM;
-			boneMatrixBuffer->finalTM[i] = boneVec[i].offset * boneVec[i].localTM * temp[boneVec[i].parentIndex - 1];
-			temp[i] = boneVec[i].localTM * temp[boneVec[i].parentIndex - 1];
+	std::unordered_map<std::wstring, std::pair<FBXNode, std::unordered_map<std::wstring, FBXBoneInfo>>>& fbxNodeAndBone =
+		ResourceManager::Instance.Get().GetFBXNodeAndBone(skinnedRenderInfo.boneName);
+	//BoneMatrix* boneMatrixBuffer = new BoneMatrix;
+	//for (int i = 0; i < boneVec.size(); ++i)
+	//{
+	//	if (i == 0)
+	//	{
+	//		boneMatrixBuffer->finalTM[i] = boneVec[i].offset * boneVec[i].localTM;
+	//		temp[i] = boneVec[i].localTM;
+	//	}
+	//	else
+	//	{
+	//		//boneMatrixBuffer.finalTM[i] = boneVec[i].offset * boneMatrixBuffer.finalTM[boneVec[i].parentIndex-1] * boneVec[i].localTM;
+	//		boneMatrixBuffer->finalTM[i] = boneVec[i].offset * boneVec[i].localTM * temp[boneVec[i].parentIndex - 1];
+	//		temp[i] = boneVec[i].localTM * temp[boneVec[i].parentIndex - 1];
 
-			assert(boneVec[i].index -1 == i);
-			assert(boneVec[i].parentIndex - 1 < i);
-		}
+	//		assert(boneVec[i].index -1 == i);
+	//		assert(boneVec[i].parentIndex - 1 < i);
+	//	}
+	//}
+
+	auto iter = fbxNodeAndBone.find(skinnedRenderInfo.boneName);
+
+	ReadBone(iter->second.first, DirectX::SimpleMath::Matrix::Identity, skinnedRenderInfo.boneName, fbxNodeAndBone);
+
+	NailEngine::Instance.Get().GetConstantBuffer(4)->PushGraphicsData(&finalTM, sizeof(BoneMatrix), 4);
+
+	//delete boneMatrixBuffer;
+}
+
+void RenderSystem::ReadBone(FBXNode fbxNode, DirectX::SimpleMath::Matrix parentMatrix, std::wstring fbxName,
+	const std::unordered_map<std::wstring, std::pair<FBXNode, std::unordered_map<std::wstring, FBXBoneInfo>>>& fbxNodeAndBoneMap)
+{
+	for (int i = 0; i < fbxNode.child.size(); ++i)
+	{
+		ReadBone(fbxNode.child[i], fbxNode.transformMatrix * parentMatrix, fbxName, fbxNodeAndBoneMap);
 	}
 
-	NailEngine::Instance.Get().GetConstantBuffer(4)->PushGraphicsData(boneMatrixBuffer, sizeof(BoneMatrix), 4);
+	static int magic = 0;
+	magic++;
+	std::cout << magic << std::endl;
 
-	delete boneMatrixBuffer;
+	// iter->second => pair
+	auto iter = fbxNodeAndBoneMap.find(fbxName);
+	// iter2 => Bone
+	auto iter2 = iter->second.second.find(fbxNode.nodeName);
+
+	if (iter2 != iter->second.second.end())
+	{
+		finalTM.finalTM[iter2->second.index-1] = iter2->second.offset * iter2->second.localTM * parentMatrix;
+
+
+		tempMap.insert({ fbxNode.nodeName ,finalTM.finalTM[iter2->second.index - 1] });
+	}
 }
