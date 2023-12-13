@@ -329,27 +329,27 @@ void RenderSystem::DrawDeferredInfo()
 
 void RenderSystem::BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo)
 {
-	auto& boneVec = ResourceManager::Instance.Get().GetFBXBoneData(std::string{ skinnedRenderInfo.boneName.begin(), skinnedRenderInfo.boneName.end() });
-	BoneMatrix* boneMatrixBuffer = new BoneMatrix;
-	for (int i = 0; i < boneVec.size(); ++i)
-	{
-		if (i == 0)
-		{
-			boneMatrixBuffer->finalTM[i] = boneVec[i].offset * boneVec[i].localTM;
-			temp[i] = boneVec[i].localTM;
-		}
-		else
-		{
-			//boneMatrixBuffer.finalTM[i] = boneVec[i].offset * boneMatrixBuffer.finalTM[boneVec[i].parentIndex-1] * boneVec[i].localTM;
-			boneMatrixBuffer->finalTM[i] = boneVec[i].offset * boneVec[i].localTM * temp[boneVec[i].parentIndex - 1];
-			temp[i] = boneVec[i].localTM * temp[boneVec[i].parentIndex - 1];
+	//auto& boneVec = ResourceManager::Instance.Get().GetFBXBoneData(std::string{ skinnedRenderInfo.boneName.begin(), skinnedRenderInfo.boneName.end() });
+	//BoneMatrix* boneMatrixBuffer = new BoneMatrix;
+	//for (int i = 0; i < boneVec.size(); ++i)
+	//{
+	//	if (i == 0)
+	//	{
+	//		boneMatrixBuffer->finalTM[i] = boneVec[i].offset * boneVec[i].localTM;
+	//		temp[i] = boneVec[i].localTM;
+	//	}
+	//	else
+	//	{
+	//		//boneMatrixBuffer.finalTM[i] = boneVec[i].offset * boneMatrixBuffer.finalTM[boneVec[i].parentIndex-1] * boneVec[i].localTM;
+	//		boneMatrixBuffer->finalTM[i] = boneVec[i].offset * boneVec[i].localTM * temp[boneVec[i].parentIndex - 1];
+	//		temp[i] = boneVec[i].localTM * temp[boneVec[i].parentIndex - 1];
 
-			assert(boneVec[i].index -1 == i);
-			assert(boneVec[i].parentIndex - 1 < i);
-		}
-	}
+	//		assert(boneVec[i].index -1 == i);
+	//		assert(boneVec[i].parentIndex - 1 < i);
+	//	}
+	//}
 
-	NailEngine::Instance.Get().GetConstantBuffer(4)->PushGraphicsData(boneMatrixBuffer, sizeof(BoneMatrix), 4);
+	//NailEngine::Instance.Get().GetConstantBuffer(4)->PushGraphicsData(boneMatrixBuffer, sizeof(BoneMatrix), 4);
 
-	delete boneMatrixBuffer;
+	//delete boneMatrixBuffer;
 }

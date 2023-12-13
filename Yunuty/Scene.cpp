@@ -2,6 +2,53 @@
 #include "Scene.h"
 #include "GameObject.h"
 
+void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode, const std::string& fbxName)
+{
+	auto gameObjectChild = parentObject->AddGameObject();
+	gameObjectChild->setName(std::string{ fbxNode->nodeName.begin(),fbxNode->nodeName.end() });
+
+	//gameObjectChild->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{90.f,0.f,0.f} });
+	gameObjectChild->GetTransform()->scale = Vector3d{ 0.01,0.01f,0.01f };
+
+	if (!fbxNode->hasAnimation)
+	{
+		auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(fbxNode->nodeName));
+
+		// Material Data Set
+		for (int j = 0; j < fbxNode->materialVec.size(); ++j)
+		{
+			renderer->GetGI().SetMaterial
+			(
+				j, graphics::Renderer::SingleInstance().GetResourceManager()->GetMaterial(fbxNode->materialVec[j].materialName)
+			);
+		}
+	}
+	else
+	{
+		if (fbxNode->materialVec.size() != 0)
+		{
+			auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::SkinnedMesh>();
+			renderer->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(fbxNode->nodeName));
+			renderer->GetGI().SetBone(std::wstring{ fbxName.begin(),fbxName.end() });
+
+			// Material Data Set
+			for (int j = 0; j < fbxNode->materialVec.size(); ++j)
+			{
+				renderer->GetGI().SetMaterial
+				(
+					j, graphics::Renderer::SingleInstance().GetResourceManager()->GetMaterial(fbxNode->materialVec[j].materialName)
+				);
+			}
+		}
+	}
+
+	for (int i = 0; i < fbxNode->child.size(); ++i)
+	{
+		AddGameObjectFromFBXNode(gameObjectChild, fbxNode->child[i], fbxName);
+	}
+}
+
 using namespace yunutyEngine;
 yunutyEngine::Scene* yunutyEngine::Scene::currentScene = nullptr;
 yunutyEngine::Scene* yunutyEngine::Scene::getCurrentScene()
@@ -30,51 +77,19 @@ yunutyEngine::GameObject* yunutyEngine::Scene::AddGameObject(IGameObjectParent* 
 	return gameObject;
 }
 
+
+
 yunutyEngine::GameObject* Scene::AddGameObjectFromFBX(string fbxName)
 {
-	auto gameObject = AddGameObject();
-	std::vector<yunuGI::FBXData> data;
+	auto gameObject = AddGameObject(fbxName);
+	yunuGI::FBXData* data = nullptr;
 	if (graphics::Renderer::SingleInstance().GetResourceManager()->GetFBXData(fbxName, data))
 	{
-		for (int i = 0; i < data.size(); ++i)
+		for (int i = 0; i < data->child.size(); ++i)
 		{
-			auto gameObjectChild = gameObject->AddGameObject();
-			//gameObjectChild->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{90.f,0.f,0.f} });
-			gameObjectChild->GetTransform()->scale = Vector3d{ 0.01,0.01f,0.01f };
-
-			if (!data[i].hasAnimation)
-			{
-				auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-				renderer->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(data[i].meshName));
-
-				// Material Data Set
-				for (int j = 0; j < data[i].materialVec.size(); ++j)
-				{
-					renderer->GetGI().SetMaterial
-					(
-						j, graphics::Renderer::SingleInstance().GetResourceManager()->GetMaterial(data[i].materialVec[j].materialName)
-					);
-				}
-			}
-			else
-			{
-				auto animator = gameObject->AddComponent<yunutyEngine::graphics::Animator>();
-				animator->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(data[i].meshName));
-
-				auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::SkinnedMesh>();
-				renderer->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(data[i].meshName));
-				renderer->GetGI().SetBone(std::wstring{ fbxName.begin(),fbxName.end() });
-
-				// Material Data Set
-				for (int j = 0; j < data[i].materialVec.size(); ++j)
-				{
-					renderer->GetGI().SetMaterial
-					(
-						j, graphics::Renderer::SingleInstance().GetResourceManager()->GetMaterial(data[i].materialVec[j].materialName)
-					);
-				}
-			}
+			AddGameObjectFromFBXNode(gameObject, data, fbxName);
 		}
+
 	}
 
 	return gameObject;

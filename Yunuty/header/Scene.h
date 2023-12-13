@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <set>
+#include <string>
 
 #ifdef YUNUTY_EXPORTS
 #define YUNUTY_API __declspec(dllexport)
@@ -14,6 +15,7 @@
 
 
 using namespace std;
+
 namespace yunutyEngine
 {
     class GameObject;
@@ -48,5 +50,8 @@ namespace yunutyEngine
         GameObject* AddGameObject(string name, IGameObjectParent* parent = nullptr);
         GameObject* AddGameObjectFromFBX(string fbxName);
         friend YunutyCycle;
+
+    private:
+        
     };
 }

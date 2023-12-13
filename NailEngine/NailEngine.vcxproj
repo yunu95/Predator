@@ -178,7 +178,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="DirectionalLight.h" />
-    <ClInclude Include="FBXLoader.h" />
+    <ClInclude Include="FBXLoader.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="ILight.h" />
     <ClInclude Include="IRenderable.h" />
     <ClInclude Include="IYunuMeshRenderer.h" />
@@ -186,6 +189,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialWrapper.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="ModelData.h" />
+    <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="NailCamera.h" />
     <ClInclude Include="NailEngine.h" />
     <ClInclude Include="PixelShader.h" />
@@ -233,11 +238,15 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
-    <ClCompile Include="FBXLoader.cpp" />
+    <ClCompile Include="FBXLoader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="IRenderable.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="NailCamera.cpp" />
     <ClCompile Include="NailEngine.cpp" />
     <ClCompile Include="PixelShader.cpp" />

@@ -43,11 +43,11 @@ namespace yunuGIAdapter
         {
             return reinterpret_cast<yunuGI::IMesh*>(ResourceManager::Instance.Get().GetMesh(meshName).get());
         }
-        virtual bool GetFBXData(const std::string& fbxName, std::vector<yunuGI::FBXData>& dataVec)const override
+        virtual bool GetFBXData(const std::string& fbxName, yunuGI::FBXData*& fbxData)const override
         {
-            auto& fbxDataVec = ResourceManager::Instance.Get().GetFBXData(fbxName);
-            dataVec = std::move(fbxDataVec);
-            if (dataVec.size() == 0)
+            auto _fbxData = ResourceManager::Instance.Get().GetFBXData(fbxName);
+            fbxData = _fbxData;
+            if (_fbxData == nullptr)
             {
                 return false;
             }
@@ -59,11 +59,11 @@ namespace yunuGIAdapter
         {
             auto& fbxBoneData = ResourceManager::Instance.Get().GetBoneData(fbxName);
             
-            boneInfo = std::move(fbxBoneData);
-            if (boneInfo.name.empty())
-            {
-                return false;
-            }
+            //boneInfo = std::move(fbxBoneData);
+            //if (boneInfo.name.empty())
+            //{
+            //    return false;
+            //}
 
             return true;
         };

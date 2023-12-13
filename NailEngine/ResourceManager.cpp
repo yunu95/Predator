@@ -20,6 +20,9 @@ using namespace DirectX::PackedVector;
 #include "RenderTargetGroup.h"
 
 
+#include "ModelLoader.h"
+
+
 LazyObjects<ResourceManager> ResourceManager::Instance;
 
 void ResourceManager::CreateDefaultResource()
@@ -105,6 +108,11 @@ void ResourceManager::CreateMesh(const std::shared_ptr<Mesh>& mesh)
 	meshMap.insert({ mesh->GetName(), mesh });
 }
 
+void ResourceManager::PushFBXBoneInfo(const std::wstring fbxName, std::map<std::wstring, BoneInfo>& boneInfoMap)
+{
+	this->fbxBoneInfoMap.insert({ fbxName, (boneInfoMap) });
+}
+
 yunuGI::IMaterial* ResourceManager::CrateMaterial(std::wstring materialName)
 {
 	std::shared_ptr<Material> material = std::make_shared<Material>();
@@ -174,34 +182,35 @@ std::shared_ptr<Texture>& ResourceManager::CreateTextureFromResource(const std::
 
 void ResourceManager::LoadFBX(const char* filePath)
 {
-	FBXNode node = FBXLoader::Instance.Get().LoadFBXData(filePath);
-
-	std::vector<yunuGI::FBXData> dataVec;
+	FBXNode* node = ModelLoader::Instance.Get().LoadModel(filePath);
 	std::wstring fbxName = std::filesystem::path(filePath).stem().wstring();
+	this->fbxNodeMap.insert({ fbxName, node });
 
-	this->fbxDataVecMap.insert({ fbxName, dataVec });
+	yunuGI::FBXData* fbxData = new yunuGI::FBXData;
+	fbxData->hasAnimation = node->hasAnimation;
+	fbxData->nodeName = node->nodeName;
+	fbxData->child.resize(node->child.size());
 
-	//this->fbxBoneInfoTreeMap.insert({ fbxName,node.boneInfo });
+	for (int i = 0; i < node->child.size(); ++i)
+	{
+		fbxData->child[i] = new yunuGI::FBXData;
+		this->FillFBXData(fbxName, node->child[i], fbxData->child[i]);
+	}
 
-	FillFBXData(fbxName, node, this->fbxDataVecMap.find(fbxName)->second);
-
-	std::vector<yunuGI::BoneInfo> boneInfoVec;
-	this->fbxBoneInfoVecMap.insert({ fbxName, std::move(boneInfoVec) });
-	auto iter = this->fbxBoneInfoVecMap.find(fbxName);
-	FillFBXBoneInfoVec(node.boneInfo, iter->second);
+	this->fbxDataMap.insert({ fbxName, fbxData });
 }
 
-void ResourceManager::CreateAnimation(AnimationClip& animationClip)
-{
-	std::shared_ptr<yunuGI::IAnimation> animation = std::make_shared<Animation>();
-
-	animation->SetName(animationClip.name);
-
-	std::static_pointer_cast<Animation>(animation)->SetAnimationClip(std::move(animationClip));
-
-	this->animationVec.emplace_back(animation.get());
-	this->animationMap.insert({ animation->GetName(), animation });
-}
+//void ResourceManager::CreateAnimation(AnimationClip& animationClip)
+//{
+//	std::shared_ptr<yunuGI::IAnimation> animation = std::make_shared<Animation>();
+//
+//	animation->SetName(animationClip.name);
+//
+//	std::static_pointer_cast<Animation>(animation)->SetAnimationClip(std::move(animationClip));
+//
+//	this->animationVec.emplace_back(animation.get());
+//	this->animationMap.insert({ animation->GetName(), animation });
+//}
 
 std::shared_ptr<yunuGI::IMaterial> ResourceManager::GetMaterial(const std::wstring& materialName)
 {
@@ -280,24 +289,24 @@ std::shared_ptr<Texture> ResourceManager::GetTexture(const std::wstring& texture
 	return nullptr;
 }
 
-std::vector<yunuGI::FBXData>& ResourceManager::GetFBXData(const std::string fbxName)
+yunuGI::FBXData* ResourceManager::GetFBXData(const std::string fbxName)
 {
 	std::wstring fbxNameW = std::wstring{ fbxName.begin(), fbxName.end() };
 
-	auto iter = this->fbxDataVecMap.find(fbxNameW);
-	assert(iter != this->fbxDataVecMap.end());
+	auto iter = this->fbxDataMap.find(fbxNameW);
+	assert(iter != this->fbxDataMap.end());
 	return iter->second;
 }
 
-std::vector<FBXBoneInfo>& ResourceManager::GetFBXBoneData(const std::string fbxName)
-{
-	std::wstring fbxNameW = std::wstring{ fbxName.begin(), fbxName.end() };
-
-	auto iter = this->BoneOffsetInfoVecMap.find(fbxNameW);
-	assert(iter != this->BoneOffsetInfoVecMap.end());
-
-	return iter->second;
-}
+//std::vector<FBXBoneInfo>& ResourceManager::GetFBXBoneData(const std::string fbxName)
+//{
+//	std::wstring fbxNameW = std::wstring{ fbxName.begin(), fbxName.end() };
+//
+//	auto iter = this->BoneOffsetInfoVecMap.find(fbxNameW);
+//	assert(iter != this->BoneOffsetInfoVecMap.end());
+//
+//	return iter->second;
+//}
 
 yunuGI::BoneInfo& ResourceManager::GetBoneData(const std::string fbxName)
 {
@@ -483,105 +492,126 @@ void ResourceManager::CreateDefaultTexture()
 	CreateTexture(L"Texture/Brick_Normal.jpg");
 }
 
-void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode& node, std::vector<yunuGI::FBXData>& dataVec)
+void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yunuGI::FBXData* fbxData)
 {
-	for (int i = 0; i < node.meshVec.size(); ++i)
+	fbxData->nodeName = node->nodeName;
+	fbxData->child.resize(node->child.size());
+	fbxData->materialVec.resize(node->meshVec.size());
+	for (int i = 0; i < node->meshVec.size(); ++i)
 	{
-		auto iter = this->meshMap.find(node.meshVec[i].meshName);
-
-		// 이미 메쉬 데이터가 있다면 이 메쉬는 다중 머터리얼임
-		if (iter != this->meshMap.end())
-		{
-			std::static_pointer_cast<Mesh>(iter->second)->SetData(node.meshVec[i].vertex, node.meshVec[i].indices);
-
-			for (auto& e : this->fbxDataVecMap.find(fbxName)->second)
-			{
-				if (e.meshName != node.meshVec[i].meshName) continue;
-
-				CreateResourceFromFBX(node.meshVec[i], this->fbxDataVecMap.find(fbxName)->second, e);
-			}
-		}
-		else
-		{
-			// 메쉬 데이터가 없다면 메쉬를 생성 후 삽입
-			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
-			mesh->SetName(node.meshVec[i].meshName);
-			mesh->SetData(node.meshVec[i].vertex, node.meshVec[i].indices);
-			CreateMesh(mesh);
-
-			yunuGI::FBXData data;
-			data.hasAnimation = node.hasAnimation;
-			CreateResourceFromFBX(node.meshVec[i], dataVec,  data);
-		}
+		fbxData->materialVec[i].materialName = node->meshVec[i].material.materialName;
+		fbxData->materialVec[i].albedoMap = node->meshVec[i].material.albedoMap;
+		fbxData->materialVec[i].armMap = node->meshVec[i].material.armMap;
+		fbxData->materialVec[i].emissionMap = node->meshVec[i].material.emissionMap;
+		fbxData->materialVec[i].normalMap = node->meshVec[i].material.normalMap;
 	}
 
-	for (int i = 0; i < node.child.size(); ++i)
+	for (int i = 0; i < node->child.size(); ++i)
 	{
-		FillFBXData(fbxName, node.child[i], dataVec);
+		fbxData->child[i] = new yunuGI::FBXData;
+		this->FillFBXData(fbxName, node->child[i], fbxData->child[i]);
 	}
 }
+
+//void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode& node, std::vector<yunuGI::FBXData>& dataVec)
+//{
+//	//for (int i = 0; i < node.meshVec.size(); ++i)
+//	//{
+//	//	auto iter = this->meshMap.find(node.meshVec[i].meshName);
+//
+//	//	// 이미 메쉬 데이터가 있다면 이 메쉬는 다중 머터리얼임
+//	//	if (iter != this->meshMap.end())
+//	//	{
+//	//		std::static_pointer_cast<Mesh>(iter->second)->SetData(node.meshVec[i].vertex, node.meshVec[i].indices);
+//
+//	//		for (auto& e : this->fbxDataVecMap.find(fbxName)->second)
+//	//		{
+//	//			if (e.meshName != node.meshVec[i].meshName) continue;
+//
+//	//			CreateResourceFromFBX(node.meshVec[i], this->fbxDataVecMap.find(fbxName)->second, e);
+//	//		}
+//	//	}
+//	//	else
+//	//	{
+//	//		// 메쉬 데이터가 없다면 메쉬를 생성 후 삽입
+//	//		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
+//	//		mesh->SetName(node.meshVec[i].meshName);
+//	//		mesh->SetData(node.meshVec[i].vertex, node.meshVec[i].indices);
+//	//		CreateMesh(mesh);
+//
+//	//		yunuGI::FBXData data;
+//	//		data.hasAnimation = node.hasAnimation;
+//	//		CreateResourceFromFBX(node.meshVec[i], dataVec,  data);
+//	//	}
+//	//}
+//
+//	//for (int i = 0; i < node.child.size(); ++i)
+//	//{
+//	//	FillFBXData(fbxName, node.child[i], dataVec);
+//	//}
+//}
 
 void ResourceManager::FillFBXBoneInfoVec(const yunuGI::BoneInfo& boneInfo, std::vector<yunuGI::BoneInfo>& boneInfoVec)
 {
 	boneInfoVec.emplace_back(boneInfo);
 
-	for (int i = 0; i < boneInfo.child.size(); ++i)
-	{
-		FillFBXBoneInfoVec(boneInfo.child[i], boneInfoVec);
-	}
+	//for (int i = 0; i < boneInfo.child.size(); ++i)
+	//{
+	//	FillFBXBoneInfoVec(boneInfo.child[i], boneInfoVec);
+	//}
 }
 
-void ResourceManager::CreateResourceFromFBX(FBXMeshData& meshData, std::vector<yunuGI::FBXData>& dataVec, yunuGI::FBXData& fbxData)
-{
-	// Fill FBXData 
-	yunuGI::FBXData _data;
-	// 1. Mesh Name Set
-	_data.meshName = meshData.meshName;
-	// 2. Material Set
-	yunuGI::MaterialData materialData;
-	materialData.materialName = meshData.material.materialName;
-	materialData.albedoMap = meshData.material.albedoMap;
-	materialData.normalMap = meshData.material.normalMap;
-	materialData.armMap = meshData.material.armMap;
-	materialData.emissionMap = meshData.material.emissionMap;
-	_data.materialVec.emplace_back(materialData);
-	// Data Push
-	if (fbxData.meshName.empty())
-	{
-		// 메쉬가 새로 생성 되었을 경우
-		dataVec.emplace_back(_data);
-	}
-	else
-	{
-		// 이미 메쉬가 있는 경우 머터리얼만 추가
-		fbxData.materialVec.emplace_back(materialData);
-	}
+//void ResourceManager::CreateResourceFromFBX(FBXMeshData& meshData, std::vector<yunuGI::FBXData>& dataVec, yunuGI::FBXData& fbxData)
+//{
+//	// Fill FBXData 
+//	yunuGI::FBXData _data;
+//	// 1. Mesh Name Set
+//	_data.meshName = meshData.meshName;
+//	// 2. Material Set
+//	yunuGI::MaterialData materialData;
+//	materialData.materialName = meshData.material.materialName;
+//	materialData.albedoMap = meshData.material.albedoMap;
+//	materialData.normalMap = meshData.material.normalMap;
+//	materialData.armMap = meshData.material.armMap;
+//	materialData.emissionMap = meshData.material.emissionMap;
+//	_data.materialVec.emplace_back(materialData);
+//	// Data Push
+//	if (fbxData.meshName.empty())
+//	{
+//		// 메쉬가 새로 생성 되었을 경우
+//		dataVec.emplace_back(_data);
+//	}
+//	else
+//	{
+//		// 이미 메쉬가 있는 경우 머터리얼만 추가
+//		fbxData.materialVec.emplace_back(materialData);
+//	}
+//
+//	// Create Texture
+//	CreateTexture(materialData.albedoMap);
+//	CreateTexture(materialData.normalMap);
+//	CreateTexture(materialData.armMap);
+//	CreateTexture(materialData.emissionMap);
+//
+//	// Create Material
+//	if (this->GetMaterial(materialData.materialName))
+//	{
+//		return;
+//	}
+//	else
+//	{
+//		yunuGI::IMaterial* material = CrateMaterial(materialData.materialName);
+//		material->SetTexture(yunuGI::Texture_Type::ALBEDO, GetTexture(materialData.albedoMap).get());
+//		material->SetTexture(yunuGI::Texture_Type::NORMAL, GetTexture(materialData.normalMap).get());
+//		material->SetTexture(yunuGI::Texture_Type::ARM, GetTexture(materialData.armMap).get());
+//		material->SetTexture(yunuGI::Texture_Type::EMISSION, GetTexture(materialData.emissionMap).get());
+//	}
+//}
 
-	// Create Texture
-	CreateTexture(materialData.albedoMap);
-	CreateTexture(materialData.normalMap);
-	CreateTexture(materialData.armMap);
-	CreateTexture(materialData.emissionMap);
-
-	// Create Material
-	if (this->GetMaterial(materialData.materialName))
-	{
-		return;
-	}
-	else
-	{
-		yunuGI::IMaterial* material = CrateMaterial(materialData.materialName);
-		material->SetTexture(yunuGI::Texture_Type::ALBEDO, GetTexture(materialData.albedoMap).get());
-		material->SetTexture(yunuGI::Texture_Type::NORMAL, GetTexture(materialData.normalMap).get());
-		material->SetTexture(yunuGI::Texture_Type::ARM, GetTexture(materialData.armMap).get());
-		material->SetTexture(yunuGI::Texture_Type::EMISSION, GetTexture(materialData.emissionMap).get());
-	}
-}
-
-void ResourceManager::PushFBXBoneInfo(const std::wstring fbxName, std::vector<FBXBoneInfo> fbxBoneInfo)
-{
-	this->BoneOffsetInfoVecMap.insert({ fbxName, fbxBoneInfo });
-}
+//void ResourceManager::PushFBXBoneInfo(const std::wstring fbxName, std::vector<FBXBoneInfo> fbxBoneInfo)
+//{
+//	this->BoneOffsetInfoVecMap.insert({ fbxName, fbxBoneInfo });
+//}
 
 void ResourceManager::LoadCubeMesh()
 {

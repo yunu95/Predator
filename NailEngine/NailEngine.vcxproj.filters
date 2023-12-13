@@ -85,6 +85,12 @@
     <Filter Include="GraphicsEngine\RenderableManager\IRenderable\SkinnedMesh">
       <UniqueIdentifier>{dd8982f3-ee29-4343-92e6-96f93059c404}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FBXLoader\ModelLoader">
+      <UniqueIdentifier>{fec12d7e-e5d3-4ed1-8b48-3cd6a3945031}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FBXLoader\ModelLoader\Header">
+      <UniqueIdentifier>{b2254a48-8590-4f24-ab9c-56ff15105978}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -237,6 +243,12 @@
     <ClInclude Include="SkinnedMesh.h">
       <Filter>GraphicsEngine\RenderableManager\IRenderable\SkinnedMesh</Filter>
     </ClInclude>
+    <ClInclude Include="ModelLoader.h">
+      <Filter>FBXLoader\ModelLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelData.h">
+      <Filter>FBXLoader\ModelLoader\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -325,6 +337,9 @@
     </ClCompile>
     <ClCompile Include="SkinnedMesh.cpp">
       <Filter>GraphicsEngine\RenderableManager\IRenderable\SkinnedMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelLoader.cpp">
+      <Filter>FBXLoader\ModelLoader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

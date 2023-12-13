@@ -3,10 +3,12 @@
 #include "YunuGraphicsInterface.h"
 
 #include "Utils.h"
+#include "ModelData.h"
 
 #include <wrl.h>
 #include <memory>
 #include <unordered_map>
+#include <map>
 #include <d3d11.h>
 
 
@@ -34,7 +36,7 @@ public:
 	std::shared_ptr<Texture>& CreateTextureFromResource(const std::wstring& texturePath, Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D);
 
 	void LoadFBX(const char* filePath);
-	void CreateAnimation(AnimationClip& animationClip);
+	///void CreateAnimation(AnimationClip& animationClip);
 
 private:
 	void CreateMesh(const std::wstring& mesh);
@@ -42,7 +44,8 @@ private:
 #pragma endregion
 
 public:
-	void PushFBXBoneInfo(const std::wstring fbxName, std::vector<FBXBoneInfo> fbxBoneInfo);
+	void PushFBXBoneInfo(const std::wstring fbxName, std::map<std::wstring, BoneInfo>& boneInfoMap);
+
 #pragma region Getter
 	std::shared_ptr<yunuGI::IMaterial> GetMaterial(const std::wstring& materialName);
 	std::shared_ptr<yunuGI::IShader> GetShader(const std::wstring& shaderPath);
@@ -50,8 +53,8 @@ public:
 	std::shared_ptr<yunuGI::IShader> GetDeferredShader(const std::wstring& shaderPath);
 	std::shared_ptr<Mesh> GetMesh(const std::wstring& meshName);
 	std::shared_ptr<Texture> GetTexture(const std::wstring& textureName);
-	std::vector<yunuGI::FBXData>& GetFBXData(const std::string fbxName);
-	std::vector<FBXBoneInfo>& GetFBXBoneData(const std::string fbxName);
+	yunuGI::FBXData* GetFBXData(const std::string fbxName);
+	///std::vector<FBXBoneInfo>& GetFBXBoneData(const std::string fbxName);
 	yunuGI::BoneInfo& GetBoneData(const std::string fbxName);
 
 	std::vector<yunuGI::IMesh*>& GetMeshList() { return this->meshVec; };
@@ -71,9 +74,9 @@ private:
 	void CreateDefaultMaterial();
 	void CreateDefaultTexture();
 
-	void FillFBXData(const std::wstring& fbxName,FBXNode& node, std::vector<yunuGI::FBXData>& dataVec);
+	void FillFBXData(const std::wstring& fbxName,FBXNode* node, yunuGI::FBXData* fbxData);
 	void FillFBXBoneInfoVec(const yunuGI::BoneInfo& boneInfo, std::vector<yunuGI::BoneInfo>& boneInfoVec);
-	void CreateResourceFromFBX(FBXMeshData& meshData, std::vector<yunuGI::FBXData>& dataVec, yunuGI::FBXData& fbxData);
+	//void CreateResourceFromFBX(FBXMeshData& meshData, std::vector<yunuGI::FBXData>& dataVec, yunuGI::FBXData& fbxData);
 	
 
 #pragma region LoadMesh
@@ -114,11 +117,12 @@ private:
 	std::vector<yunuGI::IAnimation*> animationVec;
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGI::IAnimation>> animationMap;
 
-	std::unordered_map<std::wstring, std::vector<yunuGI::FBXData>> fbxDataVecMap;
+	std::unordered_map<std::wstring, yunuGI::FBXData*> fbxDataMap;
 	//// 게임 엔진에서 본 계층구조로 오브젝트 만들 때 쓰는용
-	std::unordered_map<std::wstring, std::vector<yunuGI::BoneInfo>> fbxBoneInfoVecMap;
+	///std::unordered_map<std::wstring, std::vector<yunuGI::BoneInfo>> fbxBoneInfoVecMap;
 	// 그래픽스 엔진 내부에서 스키닝 애니메이션에 쓸 오프셋 행렬을 가지고 있는 본 정보
-	std::unordered_map<std::wstring, std::vector<FBXBoneInfo>> BoneOffsetInfoVecMap;
+	std::unordered_map<std::wstring, std::map<std::wstring,BoneInfo>> fbxBoneInfoMap;
+	std::unordered_map<std::wstring, FBXNode*> fbxNodeMap;
 
 
 	//std::unordered_map<std::wstring, std::shared_ptr<Shader>> shaderMap;
