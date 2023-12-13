@@ -74,12 +74,23 @@ bool yunutyEngine::YunutyCycle::IsGameRunning()
 {
     return isGameRunning;
 }
+bool yunutyEngine::YunutyCycle::IsUpdating()
+{
+    return isUpdating;
+}
 
 void yunutyEngine::YunutyCycle::ThreadFunction()
 {
     while (isGameRunning)
     {
-        ThreadUpdate();
+        {
+            {std::unique_lock lock{preUpdateMutex}; }
+            isUpdating = true;
+            ThreadUpdate();
+            isUpdating = false;
+        }
+        //updateMutexCV.notify_all();
+
         auto sleepImplied = 10;
         sleepImplied -= Time::GetDeltaTimeUnscaled() * 1000;
         if (sleepImplied > 1)
@@ -89,6 +100,7 @@ void yunutyEngine::YunutyCycle::ThreadFunction()
 // Update components and render camera
 void yunutyEngine::YunutyCycle::ThreadUpdate()
 {
+    std::unique_lock lock{updateMutex};
     Time::Update();
 
     for (auto i = GlobalComponent::globalComponents.begin(); i != GlobalComponent::globalComponents.end(); i++)

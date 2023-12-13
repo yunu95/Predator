@@ -268,5 +268,20 @@
     <ClCompile Include="Panel_Palette.cpp">
       <Filter>Editor\Panel\List</Filter>
     </ClCompile>
+    <ClCompile Include="TestCaseTemplate.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCasePhysics.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCaseNavigation.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCaseD3D11LiveObj.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCaseD3D11LiveObjImgui.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
