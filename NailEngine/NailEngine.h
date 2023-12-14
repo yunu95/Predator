@@ -12,6 +12,13 @@ class SwapChain;
 class ConstantBuffer;
 class RenderTargetGroup;
 
+struct WindowInfo
+{
+	HWND hWnd;
+	unsigned int width;
+	unsigned int height;
+};
+
 class NailEngine
 {
 public:
@@ -27,14 +34,15 @@ public:
 
 	std::shared_ptr<ConstantBuffer>& GetConstantBuffer(unsigned int index);
 	std::vector<std::shared_ptr<RenderTargetGroup>>& GetRenderTargetGroup() { return this->renderTargetGroup; }
+
+	WindowInfo& GetWindowInfo() { return this->windowInfo; }
+
 private:
 	void CreateConstantBuffer();
 	void CreateRenderTargetGroup();
 
 private:
-	HWND hWnd;
-	unsigned int width;
-	unsigned int height;
+	WindowInfo windowInfo;
 
 	std::shared_ptr<Device> device;
 	std::shared_ptr<SwapChain> swapChain;

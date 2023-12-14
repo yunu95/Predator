@@ -17,7 +17,7 @@ public:
 
         if (!roamingMode)
         {
-            float cameraSpeed = 5.0f;
+            float cameraSpeed = 50.f;
             Camera::Update();
             Vector3d deltaDirection = Vector3d::zero;
 

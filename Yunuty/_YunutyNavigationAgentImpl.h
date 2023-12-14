@@ -32,7 +32,7 @@ namespace yunutyEngine
         float targetPos[3];
         dtCrowdAgentParams agentParams
         {
-            .radius = 1,
+            .radius = 0.5,
             .height = 0.3,
             .maxAcceleration = std::numeric_limits<float>::max(),
             .maxSpeed = 5,
