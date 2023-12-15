@@ -11,6 +11,7 @@
 #include "DebugBeacon.h"
 #include "DebugMeshes.h"
 #include "YunutyEngine.h"
+#include <codecvt>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -26,11 +27,21 @@ namespace InWanderLand
     public:
         TEST_METHOD(TestCaseD3D11LiveObjimgui)
         {
-            Application::Application& client = Application::Application::CreateApplication(0, 0);
-            Application::Contents::ContentsLayer::AssignTestInitializer(TestCaseD3D11LiveObjimguiInit);
-            client.Initialize();
-            client.Run();
-            client.Finalize();
+            try
+            {
+                Application::Application& client = Application::Application::CreateApplication(0, 0);
+                Application::Contents::ContentsLayer::AssignTestInitializer(TestCaseD3D11LiveObjimguiInit);
+                client.Initialize();
+                client.Run();
+                client.Finalize();
+            }
+            catch (const std::exception& e)
+            {
+
+                wstring_convert <codecvt_utf8_utf16<wchar_t>> converter;
+                wstring wide = converter.from_bytes(e.what());
+                Assert::Fail(wide.c_str());
+            }
             //Assert::IsTrue();
         }
     };
