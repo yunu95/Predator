@@ -1,5 +1,6 @@
 #include "Unit.h"
 #include "ProjectileSystem.h"
+#include "PlayerController.h"
 
 void Unit::Start()
 {
@@ -15,7 +16,7 @@ void Unit::Start()
 		[this]() { return currentOrder == UnitState::AttackMove || (unitFSM.previousState == UnitState::Attack && isAttackMoving); } });
 
 	unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Chase,
-		[this]() { return ((!m_opponentGameObjectList.empty()) && idleElapsed >= idleToChaseDelay); } });
+		[this]() { return (m_currentTargetObject != nullptr && idleElapsed >= idleToChaseDelay) && m_currentTargetObject->GetComponent<Unit>()->currentOrder != UnitState::Death; } });
 
 	unitFSM.transitions[UnitState::Move].push_back({ UnitState::Idle,
 		[this]() { return (GetGameObject()->GetTransform()->GetWorldPosition() - m_currentMovePosition).Magnitude() < 0.3f; } });
@@ -30,20 +31,28 @@ void Unit::Start()
 		[this]() { return currentOrder == UnitState::Move; } });
 
 	unitFSM.transitions[UnitState::AttackMove].push_back({ UnitState::Chase,
-		[this]() { return !m_opponentGameObjectList.empty(); } });
+		[this]() { return m_currentTargetObject != nullptr; } });
 
 	unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Idle,
-		[this]() { return m_opponentGameObjectList.empty(); } });
+		[this]() { return m_currentTargetObject == nullptr; } });
 
 	unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Attack,
-		[this]() { return (GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetObject->GetTransform()->GetWorldPosition()).Magnitude() <= m_atkDistance + 0.4f; } });
+		[this](){ return (GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetObject->GetTransform()->GetWorldPosition()).Magnitude() <= m_atkDistance + 0.4f; } });
 
 	unitFSM.transitions[UnitState::Attack].push_back({ UnitState::Idle,
-		[this]() { return (GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetObject->GetTransform()->GetWorldPosition()).Magnitude() >= m_atkDistance + 0.4f ||
-		(m_currentTargetObject->GetComponent<Unit>()->GetUnitCurrentState() == UnitState::Death); } });
+		[this]() { return m_currentTargetObject == nullptr; } });
 
 	unitFSM.transitions[UnitState::Attack].push_back({ UnitState::Move,
 		[this]() { return currentOrder == UnitState::Move; } });
+
+	unitFSM.transitions[UnitState::QSkill].push_back({ UnitState::Idle,
+		[this]() { return currentOrder == UnitState::Idle; } });
+
+	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::QSkill); i++)
+	{
+		unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::QSkill,
+		[this]() { return currentOrder == UnitState::QSkill; } });
+	}
 
 	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Death); i++)
 	{
@@ -56,6 +65,7 @@ void Unit::Start()
 	unitFSM.engageAction[UnitState::AttackMove] = [this]() { AttackMoveEngage(); };
 	unitFSM.engageAction[UnitState::Chase] = [this]() { ChaseEngage(); };
 	unitFSM.engageAction[UnitState::Attack] = [this]() { AttackEngage(); };
+	unitFSM.engageAction[UnitState::QSkill] = [this]() { QSkillEngage(); };
 	unitFSM.engageAction[UnitState::Death] = [this]() { DeathEngage(); };
 
 	unitFSM.updateAction[UnitState::Idle] = [this]() { IdleUpdate(); };
@@ -63,6 +73,7 @@ void Unit::Start()
 	unitFSM.updateAction[UnitState::AttackMove] = [this]() { AttackMoveUpdate(); };
 	unitFSM.updateAction[UnitState::Chase] = [this]() { ChaseUpdate(); };
 	unitFSM.updateAction[UnitState::Attack] = [this]() { AttackUpdate(); };
+	unitFSM.updateAction[UnitState::QSkill] = [this]() { QSkillUpdate(); };
 	unitFSM.updateAction[UnitState::Death] = [this]() { DeathUpdate(); };
 }
 
@@ -95,7 +106,7 @@ void Unit::Update()
 		currentOrder = UnitState::AttackMove;
 
 		moveFunctionElapsed = 0.0f;
-	
+
 		GetGameObject()->GetComponent<NavigationAgent>()->SetSpeed(m_speed);
 
 		AttackMoveEngageFunction();
@@ -115,6 +126,15 @@ void Unit::Update()
 		currentOrder = UnitState::Chase;
 
 		ChaseEngageFunction();
+	}
+
+	void Unit::QSkillEngage()
+	{
+		currentOrder = UnitState::QSkill;
+		qSkillFunctionStartElapsed = 0.0f;
+		qSkillFunctionStartedElapsed = 0.0f;
+
+		StopMove();
 	}
 
 	void Unit::DeathEngage()
@@ -162,17 +182,31 @@ void Unit::Update()
 	void Unit::AttackUpdate()
 	{
 		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });
-		if (m_currentTargetObject->GetComponent<Unit>()->GetUnitCurrentState() == UnitState::Death)
-		{
-			m_opponentGameObjectList.remove(m_currentTargetObject);
 
-			if (!m_opponentGameObjectList.empty())
-				m_currentTargetObject = m_opponentGameObjectList.front();
-		}
 		attackFunctionElapsed += Time::GetDeltaTime();
 
 		if (attackFunctionElapsed >= attackFunctionCallDelay)
 			AttackUpdateFunction();
+	}
+
+	void Unit::QSkillUpdate()
+	{
+		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 0 });
+
+		qSkillFunctionStartElapsed += Time::GetDeltaTime();
+
+		if (isSkillStarted)
+		{
+			qSkillFunctionStartedElapsed += Time::GetDeltaTime();
+			if (qSkillFunctionStartedElapsed >= qSkillAnimationDuration)
+			{
+				isSkillStarted = false;
+				currentOrder = UnitState::Idle;
+			}
+		}
+
+		if (qSkillFunctionStartElapsed >= qSkillStartDelay)
+			QSkillUpdateFunction();
 	}
 
 	void Unit::ChaseUpdate()
@@ -196,37 +230,24 @@ void Unit::Update()
 
 
 #pragma region Engage Functions
+	/// <summary>
+	/// 주요 기능 : m_currentTargetObject가 nullptr인 상태로 들어오면 상황에 따라 재정의.
+	/// </summary>
 	void Unit::IdleEngageFunction()
 	{
 		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 0, 0 });
 
-		bool isCurrentOpponentDeath = false;
-
-		auto itr = m_opponentGameObjectList.begin();
-
-		while (itr != m_opponentGameObjectList.end())
-		{
-			if ((*itr)->GetComponent<Unit>()->GetUnitCurrentState() == UnitState::Death)
-			{
-				itr = m_opponentGameObjectList.erase(itr);
-				isCurrentOpponentDeath = true;
-				break;
-			}
-			else
-				itr++;
-		}
-
-		FindClosestOpponent();
+		DetermineCurrentTargetObject();
 
 		idleToChaseDelay = 0.0f;
 
-		if (unitFSM.previousState == UnitState::Attack && !isCurrentOpponentDeath)
+		if (unitFSM.previousState == UnitState::Attack && m_currentTargetObject == nullptr)
 			idleToChaseDelay = 1.0f;
 
 		if (unitFSM.previousState == UnitState::AttackMove)
 			isAttackMoving = false;
 
-		StopPosition();
+		StopMove();
 	}
 
 	void Unit::MoveEngageFunction()
@@ -246,18 +267,22 @@ void Unit::Update()
 
 	void Unit::AttackEngageFunction()
 	{
-		StopPosition();
+		StopMove();
 
 		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });
 	}
 
 	void Unit::DeathEngageFunction()
 	{
-		StopPosition();
+		m_opponentObjectList.clear();
+
+		ReportUnitDeath();
+
+		StopMove();
 
 		GetGameObject()->GetComponent<NavigationAgent>()->SetRadius(0.0f);
 		GetGameObject()->GetComponent<NavigationAgent>()->SetActive(false);
-		//GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(7, 0, 0));
+		GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(99, 990, 990));
 		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 1, 1, 0 });
 	}
 #pragma endregion
@@ -286,7 +311,7 @@ void Unit::Update()
 	{
 		chaseFunctionElapsed = 0.0f;
 
-		FindClosestOpponent();
+		DetermineCurrentTargetObject();
 
 		GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(m_currentTargetObject->GetTransform()->GetWorldPosition());
 	}
@@ -301,16 +326,25 @@ void Unit::Update()
 		ProjectileSystem::GetInstance()->Shoot(this, m_currentTargetObject->GetComponent<Unit>(), m_bulletSpeed);
 	}
 
+	void Unit::QSkillUpdateFunction()
+	{
+		qSkillFunctionStartElapsed = 0.0f;
+		isSkillStarted = true;
+		
+		// 스킬 오브젝트 생성 (실제 스킬 기능)
+
+	}
+
 	void Unit::DeathUpdateFunction()
 	{
 		deathFunctionElapsed = 0.0f;
 
-		GetGameObject()->SetSelfActive(false);
+		//GetGameObject()->SetSelfActive(false);
 	}
 
 #pragma endregion
 
-void Unit::StopPosition()
+void Unit::StopMove()
 {
 	GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(GetGameObject()->GetTransform()->GetWorldPosition());
 }
@@ -350,9 +384,19 @@ void Unit::SetUnitSpeed(float speed)
 	m_speed = speed;
 }
 
-Unit::UnitState Unit::GetUnitCurrentState() const
+int Unit::GetPlayerSerialNumber() const
 {
-	return currentOrder;
+	return playerSerialNumber;
+}
+
+void Unit::SetCurrentOrderMove()
+{
+	currentOrder = UnitState::Move;
+}
+
+void Unit::SetCurrentOrderAttackMove()
+{
+	currentOrder = UnitState::AttackMove;
 }
 
 int Unit::GetUnitAp() const
@@ -362,39 +406,54 @@ int Unit::GetUnitAp() const
 
 void Unit::Damaged(GameObject* opponentObject, int opponentAp)
 {
-	bool isAlreadyExist = false;
-	for (auto itr = m_opponentGameObjectList.begin(); itr != m_opponentGameObjectList.end(); itr++)
-	{
-		if ((*itr) == opponentObject)
-			isAlreadyExist = true;
-	}
+	AddToOpponentObjectList(opponentObject);
 
-	if (!isAlreadyExist)
-		m_opponentGameObjectList.push_back(opponentObject);
-
-	if (m_currentTargetObject == nullptr)
-		m_currentTargetObject = opponentObject;
-	
 	m_hp -= opponentAp;
 }
 
-void Unit::FindClosestOpponent()
+void Unit::DetermineCurrentTargetObject()
 {
 	bool isDistanceComparingStarted = false;
 
 	float tempShortestDistance = 0.0f;
 
-	for (auto e : m_opponentGameObjectList)
+	for (auto e : m_opponentObjectList)
 	{
 		float distance = (GetGameObject()->GetTransform()->GetWorldPosition() - e->GetTransform()->GetWorldPosition()).Magnitude();
 
-		if (!isDistanceComparingStarted || tempShortestDistance > distance)
+		if ((!isDistanceComparingStarted || tempShortestDistance > distance) && e->GetComponent<Unit>()->currentOrder != UnitState::Death)
 		{
 			tempShortestDistance = distance;
 			m_currentTargetObject = e;
 			isDistanceComparingStarted = true;
 		}
 	}
+}
+
+void Unit::ReportUnitDeath()
+{
+	for (auto e : m_recognizedThisList)
+	{
+		// 죽은 유닛이 아닌 죽은 유닛을 list에 갖고 있는 유닛의 함수 호출
+		e->IdentifiedOpponentDeath(this->GetGameObject());
+	}
+}
+
+void Unit::IdentifiedOpponentDeath(yunutyEngine::GameObject* diedOpponent)
+{
+	/// 죽은 유닛이 현재 타겟으로 지정한 유닛이라면
+	if (m_currentTargetObject == diedOpponent)
+		m_currentTargetObject = nullptr;
+
+	/// 적군을 담고 있는 list에서 죽은 오브젝트 유닛을 빼준다.
+	m_opponentObjectList.remove(diedOpponent);
+}
+
+void Unit::SetPlayerSerialNumber()
+{
+	static int localSerialNumber = 1;
+	playerSerialNumber = localSerialNumber;
+	localSerialNumber++;
 }
 
 void Unit::OrderMove(Vector3d position)
@@ -407,20 +466,41 @@ void Unit::OrderAttackMove(Vector3d position)
 {
 	m_currentMovePosition = position;
 	currentOrder = UnitState::AttackMove;
+
+	// 다음 클릭은 Move로 바꿀 수 있도록 function 재정의.
+	PlayerController::GetInstance()->MakeLeftClickMove(this->playerSerialNumber);
+
 	isAttackMoving = true;
 }
 
-void Unit::SetOpponentGameObject(yunutyEngine::GameObject* obj)
+void Unit::OrderQSkill(Vector3d position)
 {
-	m_opponentGameObjectList.push_back(obj);
-	if (m_currentTargetObject == nullptr)
-		m_currentTargetObject = obj;
+	currentOrder = UnitState::QSkill;
+	// 다음 클릭은 Move로 바꿀 수 있도록 function 재정의.
+	PlayerController::GetInstance()->MakeLeftClickMove(this->playerSerialNumber);
+	m_currentSkillPosition = position;
 }
 
-void Unit::DeleteOpponentGameObject(yunutyEngine::GameObject* obj)
+void Unit::AddToOpponentObjectList(yunutyEngine::GameObject* opponent)
 {
-	m_opponentGameObjectList.remove(obj);
+	if (opponent->GetComponent<Unit>()->currentOrder != UnitState::Death && this->currentOrder != UnitState::Death)
+	{
+		m_opponentObjectList.push_back(opponent);
+
+		if (m_currentTargetObject == nullptr)
+			m_currentTargetObject = opponent;
+
+		opponent->GetComponent<Unit>()->m_recognizedThisList.push_back(this);
+	}
+}
+
+void Unit::DeleteFromOpponentObjectList(yunutyEngine::GameObject* obj)
+{
+	m_opponentObjectList.remove(obj);
+
 	if (m_currentTargetObject == obj)
 		m_currentTargetObject = nullptr;
+
+	obj->GetComponent<Unit>()->m_recognizedThisList.remove(this);
 }
 

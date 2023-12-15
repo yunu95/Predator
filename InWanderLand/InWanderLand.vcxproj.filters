@@ -253,6 +253,7 @@
     <ClInclude Include="DelayedTestFunctions.h">
       <Filter>TestCodes</Filter>
     </ClInclude>
+    <ClInclude Include="InputManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -373,5 +374,7 @@
     <ClCompile Include="PlayerController.cpp">
       <Filter>Contents\Units</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="InputManager.cpp" />
   </ItemGroup>
 </Project>

@@ -15,6 +15,7 @@ class ProjectileSystem
 {
 private:
 	ProjectileSystem();
+	~ProjectileSystem();
 	static ProjectileSystem* instance;
 
 public:

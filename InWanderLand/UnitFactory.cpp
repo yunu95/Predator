@@ -1,6 +1,7 @@
 #include "UnitFactory.h"
 #include "Unit.h"
 #include "RangeSystem.h"
+#include "PlayerController.h"
 
 UnitFactory::UnitFactory()
 {
@@ -8,7 +9,7 @@ UnitFactory::UnitFactory()
 	enemyColor = yunuGI::Color{ 1, 0, 1, 0 };
 
 	defaultPlayerAtkRadius = 1.0f;
-	defaultPlayerIDRadius = 5.0f;
+	defaultPlayerIDRadius = 2.0f;
 	defaultPlayerSpeed = 2.5f;
 
 	defaultEnemyAtkRadius = 3.0f;
@@ -79,6 +80,9 @@ yunutyEngine::GameObject* UnitFactory::CreateUnit(UnitType unitType, yunutyEngin
 			unitComponent->SetIdRadius(defaultPlayerIDRadius);
 			unitComponent->SetUnitSpeed(defaultPlayerSpeed);
 			
+			unitComponent->SetPlayerSerialNumber();
+			PlayerController::GetInstance()->AddPlayerUnit(unitComponent);
+
 			rangeSystemComponent->SetRadius(defaultPlayerIDRadius);
 
 			rangeSystemMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });		// 색 다르게 할거면 switch-case안에 넣기.

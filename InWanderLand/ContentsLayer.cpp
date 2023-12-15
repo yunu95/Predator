@@ -6,6 +6,7 @@
 #include "CamSwitcher.h"   
 #include "Unit.h"
 #include "PlayerController.h"
+#include "InputManager.h"
 #include "Dotween.h"
 #include "Projectile.h"
 #include "ProjectileSystem.h"
@@ -53,10 +54,16 @@ void Application::Contents::ContentsLayer::Initialize()
 	//auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	//camObj->GetTransform()->position = Vector3d(0, 0, -5);
 	//auto roamingCam = camObj->AddComponent<RoamingCam>();
+	auto sphereMesh = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(L"Sphere");
+	auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	mouseCursorMesh->GetGI().SetMesh(sphereMesh);
+	mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 0 });
 
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
 	auto rtsCam = camObj->AddComponent<RTSCam>();
+	rtsCam->SetMouseCursorObject(mouseCursorObject);
 	std::vector<Vector3f> worldVertices{ };
 	std::vector<int> worldFaces{ };
 
@@ -72,8 +79,11 @@ void Application::Contents::ContentsLayer::Initialize()
 	auto navField = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationField>();
 	navField->BuildField(worldVertices, worldFaces);
 
-	/// 투사체 objectPool 셋업
+	/// ProjectileSystem SetUp
 	ProjectileSystem::GetInstance()->SetUp();
+
+	/// PlayerController SetUp
+	PlayerController::GetInstance()->SetMovingSystemComponent(rtsCam);
 
 	/// Unit Members
 	int playerHp = 100;
@@ -92,17 +102,6 @@ void Application::Contents::ContentsLayer::Initialize()
 	auto playerGameObject = factory->CreateUnit(UnitType::PLAYER, navField, Vector3d(7.0f, 0.0f, 0.0f));
 	auto playerGameObject2 = factory->CreateUnit(UnitType::PLAYER, navField, Vector3d(7.0f, 0.0f, 5.0f));
 	auto playerGameObject3 = factory->CreateUnit(UnitType::PLAYER, navField, Vector3d(7.0f, 0.0f, -5.0f));
-	auto playerGameObject4 = factory->CreateUnit(UnitType::PLAYER, navField, Vector3d(0.0f, 0.0f, 5.0f));
-
-	auto controllerComponent = playerGameObject->AddComponent<PlayerController>();
-	auto controllerComponent2 = playerGameObject2->AddComponent<PlayerController>();
-	auto controllerComponent3 = playerGameObject3->AddComponent<PlayerController>();
-	auto controllerComponent4 = playerGameObject4->AddComponent<PlayerController>();
-	controllerComponent->SetMovingSystemComponent(rtsCam);
-	controllerComponent2->SetMovingSystemComponent(rtsCam);
-	controllerComponent3->SetMovingSystemComponent(rtsCam);
-	controllerComponent4->SetMovingSystemComponent(rtsCam);
-
 
 	auto enemyGameObject1 = factory->CreateUnit(UnitType::ENEMY, navField, Vector3d(-7.0f, 0.0f, 0.0f));
 	auto enemyGameObject2 = factory->CreateUnit(UnitType::ENEMY, navField, Vector3d(-7.0f, 0.0f, 5.0f));
@@ -116,21 +115,23 @@ void Application::Contents::ContentsLayer::Initialize()
 		directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{100,0,0} };
 	}
 
-	auto delayFunctionObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto delayFunctionComponent = delayFunctionObject->AddComponent<DelayedTestFunctions>();
-	delayFunctionComponent->todoList.push_back({ 1.0f, [=]()
-		{
-			playerGameObject->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
-			playerGameObject2->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
-			playerGameObject3->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
-			playerGameObject4->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
+	//auto delayFunctionObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//auto delayFunctionComponent = delayFunctionObject->AddComponent<DelayedTestFunctions>();
+	//delayFunctionComponent->todoList.push_back({ 1.0f, [=]()
+	//	{
+	//		playerGameObject->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
+	//		playerGameObject2->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
+	//		playerGameObject3->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
+	//		playerGameObject4->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
 
-			enemyGameObject1->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
-			enemyGameObject2->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
-			enemyGameObject3->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
-			enemyGameObject4->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
-		} });
+	//		enemyGameObject1->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
+	//		enemyGameObject2->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
+	//		enemyGameObject3->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
+	//		enemyGameObject4->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
+	//	} });
 
+	auto inputManagerObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	inputManagerObject->AddComponent<InputManager>();
 
 	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }

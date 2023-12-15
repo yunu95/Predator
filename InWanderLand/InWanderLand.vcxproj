@@ -185,6 +185,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="..\Include\ImGui\imconfig.h" />
     <ClInclude Include="..\Include\ImGui\imgui.h" />
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="CamSwitcher.h" />
@@ -243,6 +244,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="..\Include\ImGui\imgui_draw.cpp" />
     <ClCompile Include="..\Include\ImGui\imgui_tables.cpp" />
     <ClCompile Include="..\Include\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="CamSwitcher.cpp" />

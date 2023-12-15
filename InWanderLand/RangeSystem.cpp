@@ -21,7 +21,7 @@ void RangeSystem::OnCollisionEnter2D(const Collision2D& collision)
 	{	
 		float distance = (collision.m_OtherCollider->GetGameObject()->GetTransform()->GetWorldPosition() - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
 		
-		m_unitComponent->SetOpponentGameObject(collision.m_OtherCollider->GetGameObject());
+		m_unitComponent->AddToOpponentObjectList(collision.m_OtherCollider->GetGameObject());
 		//m_unitComponent->IdleTransition();
 	}
 }
@@ -35,7 +35,7 @@ void RangeSystem::OnCollisionExit2D(const Collision2D& collision)
 	if (collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>() != nullptr &&
 		m_unitComponent->GetType() != collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>()->GetType())
 	{
-		m_unitComponent->DeleteOpponentGameObject(collision.m_OtherCollider->GetGameObject());
+		m_unitComponent->DeleteFromOpponentObjectList(collision.m_OtherCollider->GetGameObject());
 	}
 }
 

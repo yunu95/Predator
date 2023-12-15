@@ -20,6 +20,7 @@ private:
 		Chase,
 		Attack,
 		AttackMove,
+		QSkill,
 		Death,
 		StateEnd
 	};
@@ -56,12 +57,23 @@ private:
 	float deathFunctionElapsed;
 	float deathAnimationDelay = 1.5f;
 
+	float qSkillFunctionStartElapsed;
+	float qSkillFunctionStartedElapsed;
+	float qSkillStartDelay = 1.0f;
+	float qSkillAnimationDuration = 1.0f;
+	bool isSkillStarted;
+
 	bool isAttackMoving;
 
-	std::list<yunutyEngine::GameObject*> m_opponentGameObjectList;
+	int playerSerialNumber;
+
+	std::list<yunutyEngine::GameObject*> m_opponentObjectList;		
+	std::list<Unit*> m_recognizedThisList;	// 현재 이 오브젝트를 적군으로 인식한 다른 유닛들의 리스트.
 
 	yunutyEngine::GameObject* m_currentTargetObject;		// Attack이나 Chase 때 사용할 적군  오브젝트
 	Vector3d m_currentMovePosition;							// 현재 상대의 위치
+
+	Vector3d m_currentSkillPosition;
 
 private:
 	void IdleEngage();
@@ -69,6 +81,7 @@ private:
 	void AttackMoveEngage();
 	void AttackEngage();
 	void ChaseEngage();
+	void QSkillEngage();
 	void DeathEngage();
 
 	void IdleUpdate();
@@ -76,6 +89,7 @@ private:
 	void AttackMoveUpdate();
 	void ChaseUpdate();
 	void AttackUpdate();
+	void QSkillUpdate();
 	void DeathUpdate();
 
 	void IdleEngageFunction();
@@ -90,9 +104,13 @@ private:
 	void AttackMoveUpdateFunction();
 	void ChaseUpdateFunction();
 	void AttackUpdateFunction();
+	void QSkillUpdateFunction();
 	void DeathUpdateFunction();
 
-	void StopPosition();
+	void StopMove();
+	void DetermineCurrentTargetObject();
+	void ReportUnitDeath();												// this 유닛이 죽었다는 정보를 전달
+	void IdentifiedOpponentDeath(yunutyEngine::GameObject* obj);		// 상대 유닛이 죽었을 경우 처리할 내용을 담은 함수
 
 public:
 	virtual void Start() override;
@@ -107,15 +125,20 @@ public:
 	void SetAtkRadius(float radius);
 	void SetUnitSpeed(float speed);
 
-	UnitState GetUnitCurrentState() const;
+	void SetPlayerSerialNumber();
+	int GetPlayerSerialNumber() const;
+
+	void SetCurrentOrderMove();
+	void SetCurrentOrderAttackMove();
+
 	int GetUnitAp() const;
 	void Damaged(GameObject* opponentObject, int opponentAp);
-	void FindClosestOpponent();
-
 
 	void OrderMove(Vector3d position);
 	void OrderAttackMove(Vector3d position);
-	void SetOpponentGameObject(yunutyEngine::GameObject* obj);
-	void DeleteOpponentGameObject(yunutyEngine::GameObject* obj);
+	void OrderQSkill(Vector3d position);
+
+	void AddToOpponentObjectList(yunutyEngine::GameObject* obj);
+	void DeleteFromOpponentObjectList(yunutyEngine::GameObject* obj);
 };
 

@@ -1,13 +1,17 @@
 #include "ProjectileSystem.h"
 #include "Unit.h"
 #include "Projectile.h"
-#include "Dotween.h"
 
 ProjectileSystem* ProjectileSystem::instance = nullptr;
 
 ProjectileSystem::ProjectileSystem()
 {
 	instance = this;
+}
+
+ProjectileSystem::~ProjectileSystem()
+{
+	delete instance;
 }
 
 ProjectileSystem* ProjectileSystem::GetInstance()
@@ -31,7 +35,6 @@ void ProjectileSystem::SetUp()
 		m_projectileStack.push(yunutyEngine::Scene::getCurrentScene()->AddGameObject());
 		m_projectileStack.top()->SetSelfActive(false);
 		m_projectileStack.top()->AddComponent<Projectile>();
-		m_projectileStack.top()->AddComponent<Dotween>();
 		m_projectileStack.top()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		m_projectileStack.top()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().SetMesh(capsuleMesh);
 		m_projectileStack.top()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 1, 0 });
