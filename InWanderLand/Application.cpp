@@ -75,8 +75,8 @@ namespace Application
         if (!CreateDeviceD3D(hWND))
         {
             CleanupDeviceD3D();
-            ::UnregisterClass(wc.lpszClassName, wc.hInstance);
             throw std::runtime_error(std::string("failed to create d3d device!"));
+            ::UnregisterClass(wc.lpszClassName, wc.hInstance);
         }
 
         ::ShowWindow(hWND, SW_SHOWDEFAULT);
