@@ -332,7 +332,11 @@ bool CreateDeviceD3D(HWND hWnd)
         res = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_WARP, nullptr, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &featureLevel, &g_pd3dDeviceContext);
 
     if (res != S_OK)
-        throw std::runtime_error(string("D3D11CreateDeviceAndSwapChain 함수에서 런타임 오류가 났습니다. 에러 코드 :") + to_string(res));
+    {
+        std::stringstream ss;
+        ss << std::hex << res;
+        throw std::runtime_error(string("D3D11CreateDeviceAndSwapChain 함수에서 런타임 오류가 났습니다. 에러 코드 : ") + ss.str());
+    }
 
     CreateRenderTarget();
     return true;
@@ -381,7 +385,7 @@ ID3D11ShaderResourceView* GetSRV(void* handle)
         srvs[handle] = srv;
     }
     return srvs[handle];
-}
+    }
 
 #ifndef WM_DPICHANGED
 #define WM_DPICHANGED 0x02E0 // From Windows SDK 8.1+ headers
