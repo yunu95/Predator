@@ -22,6 +22,7 @@ void GraphicsTest()
     {
        auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Test5");
        //object->GetTransform()->scale = Vector3d{ 50,50,50 };
+       //object->GetTransform()->position = Vector3d{ 0,0,5 };
        //object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
 
        //auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
