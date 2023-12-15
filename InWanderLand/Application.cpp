@@ -335,7 +335,7 @@ bool CreateDeviceD3D(HWND hWnd)
     {
         std::stringstream ss;
         ss << std::hex << res;
-        throw std::runtime_error(string("D3D11CreateDeviceAndSwapChain 함수에서 런타임 오류가 났습니다. 에러 코드 : ") + ss.str());
+        throw std::runtime_error(string("D3D11CreateDeviceAndSwapChain caused runtime error, error code : ") + ss.str());
     }
 
     CreateRenderTarget();
