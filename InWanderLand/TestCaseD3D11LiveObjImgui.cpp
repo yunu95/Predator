@@ -26,11 +26,19 @@ namespace InWanderLand
     public:
         TEST_METHOD(TestCaseD3D11LiveObjimgui)
         {
-            Application::Application& client = Application::Application::CreateApplication(0, 0);
-            Application::Contents::ContentsLayer::AssignTestInitializer(TestCaseD3D11LiveObjimguiInit);
-            client.Initialize();
-            client.Run();
-            client.Finalize();
+            try
+            {
+                Application::Application& client = Application::Application::CreateApplication(0, 0);
+                Application::Contents::ContentsLayer::AssignTestInitializer(TestCaseD3D11LiveObjimguiInit);
+                client.Initialize();
+                client.Run();
+                client.Finalize();
+            }
+            catch (const std::exception& e)
+            {
+                std::cout << e.what();
+                Assert::Fail(L"Exception was thrown");
+            }
             //Assert::IsTrue();
         }
     };
