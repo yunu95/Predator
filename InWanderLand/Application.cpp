@@ -330,8 +330,9 @@ bool CreateDeviceD3D(HWND hWnd)
     HRESULT res = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &featureLevel, &g_pd3dDeviceContext);
     if (res == DXGI_ERROR_UNSUPPORTED) // Try high-performance WARP software driver if hardware is not available.
         res = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_WARP, nullptr, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &featureLevel, &g_pd3dDeviceContext);
+
     if (res != S_OK)
-        return false;
+        throw std::runtime_error(string("D3D11CreateDeviceAndSwapChain 함수에서 런타임 오류가 났습니다. 에러 코드 :") + to_string(res));
 
     CreateRenderTarget();
     return true;
