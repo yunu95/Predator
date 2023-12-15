@@ -1,7 +1,7 @@
 #include "RenderSystem.h"
 
 #include "NailEngine.h"
-#include "Struct.h"
+
 #include "ConstantBuffer.h"
 
 #include "ResourceManager.h"
@@ -26,6 +26,9 @@
 #include "ResourceBuilder.h"
 #include "SwapChain.h"
 #include "Device.h"
+
+#include <iostream>
+#include <fstream>
 
 LazyObjects<RenderSystem> RenderSystem::Instance;
 
@@ -154,6 +157,8 @@ void RenderSystem::Render()
 
 	RenderForward();
 
+
+
 	// 디퍼드 정보 출력
 	DrawDeferredInfo();
 
@@ -202,6 +207,38 @@ void RenderSystem::RenderSkinned()
 		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 
 		auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.renderInfo.mesh->GetName()));
+
+		auto& vertex = mesh->GetVertex();
+		auto& idx = mesh->GetIdx();
+		
+		//std::ofstream outputfile("output.txt");
+
+
+		//for (int i = 0; i < idx[0].indexVec.size(); ++i)
+		//{
+		//	float weight[4]{ vertex[0].vertexVec[idx[0].indexVec[i]].weights.x ,vertex[0].vertexVec[idx[0].indexVec[i]].weights.y,
+		//		vertex[0].vertexVec[idx[0].indexVec[i]].weights.z, vertex[0].vertexVec[idx[0].indexVec[i]].weights.w};
+
+		//	DirectX::SimpleMath::Vector3 posL;
+		//	for (int j = 0; j < 4; ++j)
+		//	{
+		//		//vertex[0].vertexVec[idx[0].indexVec[i]].pos += weight[j] * ();
+		//		auto tempPos = DirectX::SimpleMath::Vector4(vertex[0].vertexVec[idx[0].indexVec[i]].pos.x, vertex[0].vertexVec[idx[0].indexVec[i]].pos.y,
+		//			vertex[0].vertexVec[idx[0].indexVec[i]].pos.z, 1.f);
+
+		//		auto tempFinalTM = finalTM.finalTM[vertex[0].vertexVec[idx[0].indexVec[i]].indices[j] == 0xffffffffu ? 0 : vertex[0].vertexVec[idx[0].indexVec[i]].indices[j]];
+
+		//		posL.x += weight[j] * (DirectX::SimpleMath::Vector4::Transform(tempPos, tempFinalTM)).x;
+		//		posL.y += weight[j] * (DirectX::SimpleMath::Vector4::Transform(tempPos, tempFinalTM)).y;
+		//		posL.z += weight[j] * (DirectX::SimpleMath::Vector4::Transform(tempPos, tempFinalTM)).z;
+		//	}
+		//	outputfile << i << " " << idx[0].indexVec[i] << std::endl;
+		//	outputfile << posL.x << " " << posL.y << " " << posL.z << std::endl;
+		//	outputfile << std::endl;
+
+		//}
+		//outputfile.close();
+
 
 		auto shaderList = ResourceManager::Instance.Get().GetShaderList();
 		for (auto& i : shaderList)
@@ -329,8 +366,8 @@ void RenderSystem::DrawDeferredInfo()
 
 void RenderSystem::BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo)
 {
-	//auto& boneVec = ResourceManager::Instance.Get().GetFBXBoneData(std::string{ skinnedRenderInfo.boneName.begin(), skinnedRenderInfo.boneName.end() });
-	//BoneMatrix* boneMatrixBuffer = new BoneMatrix;
+	auto& boneMap = ResourceManager::Instance.Get().GetFBXBoneData(std::string{ skinnedRenderInfo.boneName.begin(), skinnedRenderInfo.boneName.end() });
+
 	//for (int i = 0; i < boneVec.size(); ++i)
 	//{
 	//	if (i == 0)
@@ -349,7 +386,27 @@ void RenderSystem::BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo)
 	//	}
 	//}
 
-	//NailEngine::Instance.Get().GetConstantBuffer(4)->PushGraphicsData(boneMatrixBuffer, sizeof(BoneMatrix), 4);
+	auto fbxNode = ResourceManager::Instance.Get().GetFBXNode(skinnedRenderInfo.boneName);
 
-	//delete boneMatrixBuffer;
+	ReadBone(fbxNode, DirectX::SimpleMath::Matrix::Identity, std::string{ skinnedRenderInfo.boneName.begin(), skinnedRenderInfo.boneName.end() });
+
+	NailEngine::Instance.Get().GetConstantBuffer(4)->PushGraphicsData(&this->finalTM, sizeof(BoneMatrix), 4);
+}
+
+void RenderSystem::ReadBone(FBXNode* fbxNode, DirectX::SimpleMath::Matrix parentMatrix, const std::string& fbxName)
+{
+	auto& boneInfoMap = ResourceManager::Instance.Get().GetFBXBoneData(fbxName);
+
+	for (int i = 0; i < fbxNode->child.size(); ++i)
+	{
+		ReadBone(fbxNode->child[i], fbxNode->transformMatrix * parentMatrix, fbxName);
+	}
+
+	auto iter = boneInfoMap.find(fbxNode->nodeName);
+
+	if (iter != boneInfoMap.end())
+	{
+		this->finalTM.finalTM[iter->second.index] = iter->second.offset * fbxNode->transformMatrix * parentMatrix;
+		//this->finalTM.finalTM[iter->second.index] = this->finalTM.finalTM[iter->second.index].Transpose();
+	}
 }

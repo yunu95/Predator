@@ -56,6 +56,8 @@ public:
 	yunuGI::FBXData* GetFBXData(const std::string fbxName);
 	///std::vector<FBXBoneInfo>& GetFBXBoneData(const std::string fbxName);
 	yunuGI::BoneInfo& GetBoneData(const std::string fbxName);
+	std::map<std::wstring, BoneInfo>& GetFBXBoneData(const std::string fbxName);
+	FBXNode* GetFBXNode(const std::wstring& fbxName);
 
 	std::vector<yunuGI::IMesh*>& GetMeshList() { return this->meshVec; };
 	std::vector<yunuGI::ITexture*> GetTextureList() { return this->textureVec; };

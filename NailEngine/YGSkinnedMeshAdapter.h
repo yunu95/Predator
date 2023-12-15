@@ -21,6 +21,7 @@ namespace yunuGIAdapter
 
 			std::shared_ptr<MaterialWrapper> material = std::make_shared<MaterialWrapper>(false);
 			material->SetRenderable(this->renderable);
+			//renderable->SetMaterial(0, material->GetMaterial());
 			this->materialVec.emplace_back(material);
 		}
 

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Utils.h"
+#include "Struct.h"
+#include "ModelData.h"
 
 #include <DirectXMath.h>
 #include "SimpleMath.h"
@@ -51,13 +53,14 @@ public:
 
 private:
 	void BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo);
+	void ReadBone(FBXNode* fbxNode, DirectX::SimpleMath::Matrix parentMatrix, const std::string& fbxName);
 
 private:
 	std::vector<RenderInfo> deferredVec;
 	std::vector<RenderInfo> forwardVec;
 	std::vector<SkinnedRenderInfo> skinnedVec;
 
-	DirectX::SimpleMath::Matrix temp[256];
+	BoneMatrix finalTM;
 };
 
 

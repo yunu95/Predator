@@ -13,14 +13,15 @@
 void GraphicsTest()
 {
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-    _resourceManager->LoadFile("FBX/Boss");
+    _resourceManager->LoadFile("FBX/Test5");
 	//_resourceManager->LoadFile("FBX/Monster");
 	//_resourceManager->LoadFile("FBX/Building");
 
     auto& meshList = _resourceManager->GetMeshList();
 
     {
-       auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+       auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Test5");
+       //object->GetTransform()->scale = Vector3d{ 50,50,50 };
        //object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
 
        //auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -112,8 +113,9 @@ void Application::Contents::ContentsLayer::Initialize()
 
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
+    //auto rtsCam = camObj->AddComponent<yunutyEngine::graphics::Camera>();
     auto rtsCam = camObj->AddComponent<RTSCam>();
-    //rtsCam->GetTransform()->position = Vector3d(0, 10, 0);
+    //rtsCam->GetTransform()->position = Vector3d(0, 0, -30);
 
     //// 길찾기 테스트
     //{
@@ -144,8 +146,8 @@ void Application::Contents::ContentsLayer::Initialize()
 
 void Application::Contents::ContentsLayer::Update(float ts)
 {
-    auto fps = yunutyEngine::Time::GetFPS();
-    cout << fps << endl;
+    //auto fps = yunutyEngine::Time::GetFPS();
+    //cout << fps << endl;
 }
 
 void Application::Contents::ContentsLayer::GUIProgress()

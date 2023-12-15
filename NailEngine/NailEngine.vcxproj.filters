@@ -379,15 +379,15 @@
     <FxCompile Include="RuntimeDependency\resources\Shader\SkinnedVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\ForwardPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
       <Filter>Utils</Filter>
     </None>
     <None Include="RuntimeDependency\resources\Shader\Utils.hlsli">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="RuntimeDependency\resources\Shader\ForwardPS.hlsli">
       <Filter>Shaders</Filter>
     </None>
     <None Include="RuntimeDependency\resources\Shader\Buffers.hlsli">

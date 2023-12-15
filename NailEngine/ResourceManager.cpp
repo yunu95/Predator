@@ -314,6 +314,20 @@ yunuGI::BoneInfo& ResourceManager::GetBoneData(const std::string fbxName)
 	return boneInfo;
 }
 
+std::map<std::wstring, BoneInfo>& ResourceManager::GetFBXBoneData(const std::string fbxName)
+{
+	auto iter = this->fbxBoneInfoMap.find(std::wstring{ fbxName.begin(), fbxName.end() });
+	if (iter != this->fbxBoneInfoMap.end())
+	{
+		return iter->second;
+	}
+}
+
+FBXNode* ResourceManager::GetFBXNode(const std::wstring& fbxName)
+{
+	return this->fbxNodeMap.find(fbxName)->second;
+}
+
 void ResourceManager::CreateDeferredShader(const std::wstring& shaderPath)
 {
 	size_t dotPos = shaderPath.find_last_of(L".");
@@ -385,7 +399,7 @@ void ResourceManager::CreateDefaultMaterial()
 
 	// Skinned Default Material
 	{
-		std::wstring name{L"SKinnedDefaultMaterial"};
+		std::wstring name{L"SkinnedDefaultMaterial"};
 		auto material = CrateMaterial(name);
 		material->SetVertexShader(this->GetShader(L"SkinnedVS.cso").get());
 	}
@@ -499,11 +513,58 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 	fbxData->materialVec.resize(node->meshVec.size());
 	for (int i = 0; i < node->meshVec.size(); ++i)
 	{
-		fbxData->materialVec[i].materialName = node->meshVec[i].material.materialName;
-		fbxData->materialVec[i].albedoMap = node->meshVec[i].material.albedoMap;
-		fbxData->materialVec[i].armMap = node->meshVec[i].material.armMap;
-		fbxData->materialVec[i].emissionMap = node->meshVec[i].material.emissionMap;
-		fbxData->materialVec[i].normalMap = node->meshVec[i].material.normalMap;
+		// 실제 Mesh와 Material을 만들자
+		if (this->meshMap.find(node->nodeName) == this->meshMap.end())
+		{
+			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
+			mesh->SetName(node->nodeName);
+			mesh->SetData(node->meshVec[i].vertex, node->meshVec[i].indices);
+			this->meshMap.insert({ node->nodeName, mesh });
+		}
+		
+		if (this->materialMap.find(node->meshVec[i].material.materialName) == this->materialMap.end())
+		{
+			std::shared_ptr<Material> material = std::make_shared<Material>();
+			material->SetName(node->meshVec[i].material.materialName);
+
+			if (!node->meshVec[i].material.albedoMap.empty())
+			{
+				this->CreateTexture(node->meshVec[i].material.albedoMap);
+				material->SetTexture(yunuGI::Texture_Type::ALBEDO, GetTexture(node->meshVec[i].material.albedoMap).get());
+			}
+			if (!node->meshVec[i].material.armMap.empty())
+			{
+				this->CreateTexture(node->meshVec[i].material.armMap);
+				material->SetTexture(yunuGI::Texture_Type::ARM, GetTexture(node->meshVec[i].material.armMap).get());
+			}
+			if (!node->meshVec[i].material.emissionMap.empty())
+			{
+				this->CreateTexture(node->meshVec[i].material.emissionMap);
+				material->SetTexture(yunuGI::Texture_Type::EMISSION, GetTexture(node->meshVec[i].material.emissionMap).get());
+			}
+			if (!node->meshVec[i].material.normalMap.empty())
+			{
+				this->CreateTexture(node->meshVec[i].material.normalMap);
+				material->SetTexture(yunuGI::Texture_Type::NORMAL, GetTexture(node->meshVec[i].material.normalMap).get());
+			}
+
+			fbxData->materialVec[i].materialName = node->meshVec[i].material.materialName;
+			fbxData->materialVec[i].albedoMap = node->meshVec[i].material.albedoMap;
+			fbxData->materialVec[i].armMap = node->meshVec[i].material.armMap;
+			fbxData->materialVec[i].emissionMap = node->meshVec[i].material.emissionMap;
+			fbxData->materialVec[i].normalMap = node->meshVec[i].material.normalMap;
+
+			this->materialMap.insert({ node->meshVec[i].material.materialName , material });
+		}
+		else
+		{
+			fbxData->materialVec[i].materialName = node->meshVec[i].material.materialName;
+			fbxData->materialVec[i].albedoMap = node->meshVec[i].material.albedoMap;
+			fbxData->materialVec[i].armMap = node->meshVec[i].material.armMap;
+			fbxData->materialVec[i].emissionMap = node->meshVec[i].material.emissionMap;
+			fbxData->materialVec[i].normalMap = node->meshVec[i].material.normalMap;
+			//auto material = GetMaterial(node->meshVec[i].material.materialName);
+		}
 	}
 
 	for (int i = 0; i < node->child.size(); ++i)
