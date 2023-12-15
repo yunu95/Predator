@@ -37,10 +37,7 @@ namespace InWanderLand
             }
             catch (const std::exception& e)
             {
-
-                wstring_convert <codecvt_utf8_utf16<wchar_t>> converter;
-                wstring wide = converter.from_bytes(e.what());
-                Assert::Fail(wide.c_str());
+                Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
             }
             //Assert::IsTrue();
         }
