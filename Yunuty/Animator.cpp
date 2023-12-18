@@ -11,22 +11,25 @@ yunutyEngine::graphics::Animator::Animator()
 
 void Animator::Update()
 {
-	this->currentTime += Time::GetDeltaTime();
-
 	auto& gi = this->GetGI();
+
+	this->currentTime += Time::GetDeltaTime()*gi.GetPlaySpeed();
+
 
 	auto currentAnimation = gi.GetCurrentAnimation();
 	float duration = currentAnimation->GetDuration();
 	int totalFrame = currentAnimation->GetTotalFrame();
+
+	__int32 ratio = static_cast<__int32>(totalFrame / duration);
 
 	if (currentAnimation->GetLoop() && currentTime >= duration)
 	{
 		currentTime = 0.f;
 	}
 
-	float framePerSecond = totalFrame / duration;
-	int currentFrame = this->currentTime / framePerSecond;
+	currentFrame = static_cast<__int32>(currentTime * ratio);
+	currentFrame = min(currentFrame, totalFrame - 1);
 
 	gi.SetCurrentFrame(currentFrame);
-	gi.SetFrameRatio((this->currentTime - currentFrame) / framePerSecond);
+	gi.SetFrameRatio(static_cast<float>(currentTime - static_cast<float>(currentFrame) / ratio));
 }

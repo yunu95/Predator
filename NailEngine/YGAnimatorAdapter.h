@@ -43,6 +43,11 @@ namespace yunuGIAdapter
 			animator->SetPlaySpeed(playSpeed);
 		};
 
+		virtual float GetPlaySpeed() override
+		{
+			return animator->GetPlaySpeed();
+		};
+
 		virtual void SetModel(const std::wstring& modelName) override
 		{
 			animator->SetModel(modelName);

@@ -15,11 +15,6 @@ namespace yunuGI
 		virtual void SetLoop(bool isLoop) = 0;
 		virtual bool GetLoop() = 0;
 
-	protected:
-		float duration;
-		int totalFrame;
-		bool isLoop;
-
 	private:
 
 	};

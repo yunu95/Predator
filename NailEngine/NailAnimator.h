@@ -20,6 +20,11 @@ public:
 		this->playSpeed = playSpeed;
 	};
 
+	float GetPlaySpeed()
+	{
+		return this->playSpeed;
+	}
+
 	void SetMesh(yunuGI::IMesh* mesh) {};
 
 	void SetModel(const std::wstring& modelName) 

@@ -181,6 +181,8 @@ void ModelLoader::LoadAnimation(const aiScene* scene)
 
 		animationClip.keyFrameInfoVec.resize(this->boneInfoMap.size());
 
+		int maxKeyCount = 0;
+
 		for (int j = 0; j < animation->mNumChannels; ++j)
 		{
 			aiNodeAnim* nodeAnim = animation->mChannels[j];
@@ -192,6 +194,11 @@ void ModelLoader::LoadAnimation(const aiScene* scene)
 				unsigned int boneIndex = iter->second.index;
 
 				animationClip.keyFrameInfoVec[boneIndex].resize(nodeAnim->mNumPositionKeys);
+
+				if (nodeAnim->mNumPositionKeys >= maxKeyCount)
+				{
+					maxKeyCount = nodeAnim->mNumPositionKeys;
+				}
 
 				for (int k = 0; k < nodeAnim->mNumPositionKeys; ++k)
 				{
@@ -214,6 +221,12 @@ void ModelLoader::LoadAnimation(const aiScene* scene)
 					animationClip.keyFrameInfoVec[boneIndex][k].scale = DirectX::SimpleMath::Vector3{ vectorKey.mValue.x,vectorKey.mValue.y, vectorKey.mValue.z };
 				}
 			}
+		}
+
+		for (int r = 0; r < animationClip.keyFrameInfoVec.size(); ++r)
+		{
+			KeyFrameInfo keyFrameInfo = animationClip.keyFrameInfoVec[r].back();
+			animationClip.keyFrameInfoVec[r].resize(maxKeyCount, keyFrameInfo);
 		}
 
 		ResourceManager::Instance.Get().CreateAnimation(animationClip);
