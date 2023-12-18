@@ -2,7 +2,7 @@
 #include "Scene.h"
 #include "GameObject.h"
 
-void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode, const std::string& fbxName)
+void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode, const std::string& fbxName, GameObject* rootObject)
 {
 	auto gameObjectChild = parentObject->AddGameObject();
 	gameObjectChild->setName(std::string{ fbxNode->nodeName.begin(),fbxNode->nodeName.end() });
@@ -32,6 +32,10 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
 			renderer->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(fbxNode->nodeName));
 			renderer->GetGI().SetBone(std::wstring{ fbxName.begin(),fbxName.end() });
 
+			auto animator = rootObject->GetComponent<yunutyEngine::graphics::Animator>();
+			auto animatorIndex = animator->GetGI().GetID();
+			renderer->GetGI().SetAnimatorIndex(animatorIndex);
+
 			// Material Data Set
 			for (int j = 0; j < fbxNode->materialVec.size(); ++j)
 			{
@@ -45,7 +49,7 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
 
 	for (int i = 0; i < fbxNode->child.size(); ++i)
 	{
-		AddGameObjectFromFBXNode(gameObjectChild, fbxNode->child[i], fbxName);
+		AddGameObjectFromFBXNode(gameObjectChild, fbxNode->child[i], fbxName, rootObject);
 	}
 }
 
@@ -85,11 +89,15 @@ yunutyEngine::GameObject* Scene::AddGameObjectFromFBX(string fbxName)
 	yunuGI::FBXData* data = nullptr;
 	if (graphics::Renderer::SingleInstance().GetResourceManager()->GetFBXData(fbxName, data))
 	{
-		for (int i = 0; i < data->child.size(); ++i)
+		if (data->hasAnimation)
 		{
-			AddGameObjectFromFBXNode(gameObject, data->child[i], fbxName);
+			gameObject->AddComponent<yunutyEngine::graphics::Animator>();
 		}
 
+		for (int i = 0; i < data->child.size(); ++i)
+		{
+			AddGameObjectFromFBXNode(gameObject, data->child[i], fbxName, gameObject);
+		}
 	}
 
 	return gameObject;

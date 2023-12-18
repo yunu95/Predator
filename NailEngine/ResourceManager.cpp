@@ -200,17 +200,19 @@ void ResourceManager::LoadFBX(const char* filePath)
 	this->fbxDataMap.insert({ fbxName, fbxData });
 }
 
-//void ResourceManager::CreateAnimation(AnimationClip& animationClip)
-//{
-//	std::shared_ptr<yunuGI::IAnimation> animation = std::make_shared<Animation>();
-//
-//	animation->SetName(animationClip.name);
-//
-//	std::static_pointer_cast<Animation>(animation)->SetAnimationClip(std::move(animationClip));
-//
-//	this->animationVec.emplace_back(animation.get());
-//	this->animationMap.insert({ animation->GetName(), animation });
-//}
+void ResourceManager::CreateAnimation(const AnimationClip& animationClip)
+{
+	std::shared_ptr<yunuGI::IAnimation> animation = std::make_shared<Animation>();
+
+	animation->SetName(animationClip.name);
+	animation->SetDuration(animationClip.duration);
+	animation->SetTotalFrame(animationClip.totalFrame);
+
+	std::static_pointer_cast<Animation>(animation)->SetAnimationClip(std::move(animationClip));
+
+	this->animationVec.emplace_back(animation.get());
+	this->animationMap.insert({ animation->GetName(), animation });
+}
 
 std::shared_ptr<yunuGI::IMaterial> ResourceManager::GetMaterial(const std::wstring& materialName)
 {

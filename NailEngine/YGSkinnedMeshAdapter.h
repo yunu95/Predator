@@ -47,6 +47,11 @@ namespace yunuGIAdapter
 			renderable->SetMesh(reinterpret_cast<Mesh*>(mesh));
 		};
 
+		virtual void SetAnimatorIndex(int animatorIndex) override
+		{
+			renderable->SetAnimatorIndex(animatorIndex);
+		};
+
 		virtual void SetPickingMode(bool isPickingModeOn) {}
 
 		virtual void SetMaterial(unsigned int index, yunuGI::IMaterial* material) override

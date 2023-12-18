@@ -25,7 +25,7 @@ struct RenderInfo
 struct SkinnedRenderInfo
 {
 	RenderInfo renderInfo;
-	std::wstring boneName;
+	std::wstring modelName;
 	int animatorIndex;
 };
 

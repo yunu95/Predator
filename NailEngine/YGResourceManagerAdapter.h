@@ -86,5 +86,10 @@ namespace yunuGIAdapter
 		{
 			return ResourceManager::Instance.Get().GetMaterialList();
 		}
+
+        virtual std::vector<yunuGI::IAnimation*>& GetAnimationList()const override
+        {
+            return ResourceManager::Instance.Get().GetAnimationList();
+        };
     };
 }

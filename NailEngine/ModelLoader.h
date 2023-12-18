@@ -32,6 +32,7 @@ private:
 	void ParseNode(const aiNode* node, const aiScene* scene, FBXNode* fbxNode);
 	void ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMeshData& fbxMeshData);
 	void AddHasAnimation(FBXNode* fbxNode);
+	void LoadAnimation(const aiScene* scene);
 
 	void FillVertexBoneIndexAndWeight(const aiScene* scene, const aiNode* node, FBXNode* fbxNode);
 

@@ -48,6 +48,6 @@ struct FBXNode
 	std::vector<FBXNode*> child;
 	std::vector<FBXMeshData> meshVec;
 	DirectX::SimpleMath::Matrix transformMatrix;
-	//BoneInfo boneInfo;
 	bool hasAnimation;
 };
+

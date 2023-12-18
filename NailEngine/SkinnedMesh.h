@@ -15,7 +15,19 @@ public:
 		return this->fbxName;
 	}
 
+	void SetAnimatorIndex(unsigned int index)
+	{
+		this->animatorIndex = index;
+	}
+
+	unsigned int GetAnimatorIndex()
+	{
+		return this->animatorIndex;
+	}
+
+
 private:
 	std::wstring fbxName;
+	unsigned int animatorIndex;
 };
 

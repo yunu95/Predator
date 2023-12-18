@@ -91,6 +91,12 @@
     <Filter Include="FBXLoader\ModelLoader\Header">
       <UniqueIdentifier>{b2254a48-8590-4f24-ab9c-56ff15105978}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Animator">
+      <UniqueIdentifier>{27ade7b6-08b3-4f7e-a68c-a914c8294a3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animator\AnimatorManager">
+      <UniqueIdentifier>{8bda1498-93ae-46b4-920d-ce2c12fcdcc2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -249,6 +255,12 @@
     <ClInclude Include="ModelData.h">
       <Filter>FBXLoader\ModelLoader\Header</Filter>
     </ClInclude>
+    <ClInclude Include="NailAnimator.h">
+      <Filter>Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="NailAnimatorManager.h">
+      <Filter>Animator\AnimatorManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -340,6 +352,12 @@
     </ClCompile>
     <ClCompile Include="ModelLoader.cpp">
       <Filter>FBXLoader\ModelLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="NailAnimator.cpp">
+      <Filter>Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="NailAnimatorManager.cpp">
+      <Filter>Animator\AnimatorManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

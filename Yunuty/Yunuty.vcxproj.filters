@@ -836,7 +836,7 @@
     <ClInclude Include="_YunutySphereColliderImpl.h">
       <Filter>yunutyEngine\physics\SphereCollider</Filter>
     </ClInclude>
-    <ClInclude Include="Animator.h">
+    <ClInclude Include="header\Animator.h">
       <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\Animator</Filter>
     </ClInclude>
   </ItemGroup>

@@ -36,7 +36,7 @@ public:
 	std::shared_ptr<Texture>& CreateTextureFromResource(const std::wstring& texturePath, Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D);
 
 	void LoadFBX(const char* filePath);
-	///void CreateAnimation(AnimationClip& animationClip);
+	void CreateAnimation(const AnimationClip& animationClip);
 
 private:
 	void CreateMesh(const std::wstring& mesh);
@@ -66,7 +66,7 @@ public:
 		return this->materialVec; 
 	};
 	std::vector<yunuGI::IShader*>& GetShaderList() { return this->shaderVec; };
-	std::vector<yunuGI::IAnimation*> GetAnimationList() { return this->animationVec; };
+	std::vector<yunuGI::IAnimation*>& GetAnimationList() { return this->animationVec; };
 #pragma endregion
 
 private:

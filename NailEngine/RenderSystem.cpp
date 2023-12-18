@@ -27,6 +27,8 @@
 #include "SwapChain.h"
 #include "Device.h"
 
+#include "NailAnimatorManager.h"
+
 #include <iostream>
 #include <fstream>
 
@@ -81,10 +83,11 @@ void RenderSystem::SortObject()
 			renderInfo.material = e->GetMaterial(i);
 			renderInfo.materialIndex = i;
 			renderInfo.wtm = e->GetWorldTM();
+			skinnedRenderInfo.animatorIndex = std::static_pointer_cast<SkinnedMesh>(e)->GetAnimatorIndex();
 
 			skinnedRenderInfo.renderInfo = std::move(renderInfo);
 
-			skinnedRenderInfo.boneName = std::static_pointer_cast<SkinnedMesh>(e)->GetBone();
+			skinnedRenderInfo.modelName = std::static_pointer_cast<SkinnedMesh>(e)->GetBone();
 
 			this->skinnedVec.emplace_back(skinnedRenderInfo);
 		}
@@ -156,8 +159,6 @@ void RenderSystem::Render()
 	DrawFinal();
 
 	RenderForward();
-
-
 
 	// 디퍼드 정보 출력
 	DrawDeferredInfo();
@@ -366,29 +367,13 @@ void RenderSystem::DrawDeferredInfo()
 
 void RenderSystem::BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo)
 {
-	auto& boneMap = ResourceManager::Instance.Get().GetFBXBoneData(std::string{ skinnedRenderInfo.boneName.begin(), skinnedRenderInfo.boneName.end() });
+	auto& boneMap = ResourceManager::Instance.Get().GetFBXBoneData(std::string{ skinnedRenderInfo.modelName.begin(), skinnedRenderInfo.modelName.end() });
 
-	//for (int i = 0; i < boneVec.size(); ++i)
-	//{
-	//	if (i == 0)
-	//	{
-	//		boneMatrixBuffer->finalTM[i] = boneVec[i].offset * boneVec[i].localTM;
-	//		temp[i] = boneVec[i].localTM;
-	//	}
-	//	else
-	//	{
-	//		//boneMatrixBuffer.finalTM[i] = boneVec[i].offset * boneMatrixBuffer.finalTM[boneVec[i].parentIndex-1] * boneVec[i].localTM;
-	//		boneMatrixBuffer->finalTM[i] = boneVec[i].offset * boneVec[i].localTM * temp[boneVec[i].parentIndex - 1];
-	//		temp[i] = boneVec[i].localTM * temp[boneVec[i].parentIndex - 1];
+	auto animator = NailAnimatorManager::Instance.Get().GetAnimator(skinnedRenderInfo.animatorIndex);
 
-	//		assert(boneVec[i].index -1 == i);
-	//		assert(boneVec[i].parentIndex - 1 < i);
-	//	}
-	//}
+	auto fbxNode = ResourceManager::Instance.Get().GetFBXNode(skinnedRenderInfo.modelName);
 
-	auto fbxNode = ResourceManager::Instance.Get().GetFBXNode(skinnedRenderInfo.boneName);
-
-	ReadBone(fbxNode, DirectX::SimpleMath::Matrix::Identity, std::string{ skinnedRenderInfo.boneName.begin(), skinnedRenderInfo.boneName.end() });
+	ReadBone(fbxNode, DirectX::SimpleMath::Matrix::Identity, std::string{ skinnedRenderInfo.modelName.begin(), skinnedRenderInfo.modelName.end() });
 
 	NailEngine::Instance.Get().GetConstantBuffer(4)->PushGraphicsData(&this->finalTM, sizeof(BoneMatrix), 4);
 }
@@ -407,6 +392,5 @@ void RenderSystem::ReadBone(FBXNode* fbxNode, DirectX::SimpleMath::Matrix parent
 	if (iter != boneInfoMap.end())
 	{
 		this->finalTM.finalTM[iter->second.index] = iter->second.offset * fbxNode->transformMatrix * parentMatrix;
-		//this->finalTM.finalTM[iter->second.index] = this->finalTM.finalTM[iter->second.index].Transpose();
 	}
 }

@@ -3,6 +3,8 @@
 #include <filesystem>
 #include <iostream>
 
+#include "Animation.h"
+
 #include "ResourceManager.h"
 
 LazyObjects<ModelLoader> ModelLoader::Instance;
@@ -38,6 +40,8 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 		AddHasAnimation(fbxNode);
 	}
 
+	LoadAnimation(scene);
+
 	ResourceManager::Instance.Get().PushFBXBoneInfo(std::filesystem::path(filePath).stem().wstring(), this->boneInfoMap);
 
 	boneInfoMap.clear();
@@ -56,8 +60,6 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 
 		unsigned int meshIndex = node->mMeshes[i];
 		aiMesh* mesh = scene->mMeshes[meshIndex];
-
-		
 
 		for (int j = 0; j < mesh->mNumVertices; ++j)
 		{
@@ -163,6 +165,58 @@ void ModelLoader::AddHasAnimation(FBXNode* fbxNode)
 	for (int i = 0; i < fbxNode->child.size(); ++i)
 	{
 		AddHasAnimation(fbxNode->child[i]);
+	}
+}
+
+void ModelLoader::LoadAnimation(const aiScene* scene)
+{
+	for (int i = 0; i < scene->mNumAnimations; ++i)
+	{
+		aiAnimation* animation = scene->mAnimations[i];
+
+		AnimationClip animationClip;
+		animationClip.name = this->aiStringToWString(animation->mName);
+		animationClip.duration = animation->mDuration / animation->mTicksPerSecond;
+		animationClip.totalFrame = animation->mDuration;
+
+		animationClip.keyFrameInfoVec.resize(this->boneInfoMap.size());
+
+		for (int j = 0; j < animation->mNumChannels; ++j)
+		{
+			aiNodeAnim* nodeAnim = animation->mChannels[j];
+
+			auto iter = this->boneInfoMap.find(this->aiStringToWString(nodeAnim->mNodeName));
+
+			if (iter != this->boneInfoMap.end())
+			{
+				unsigned int boneIndex = iter->second.index;
+
+				animationClip.keyFrameInfoVec[boneIndex].resize(nodeAnim->mNumPositionKeys);
+
+				for (int k = 0; k < nodeAnim->mNumPositionKeys; ++k)
+				{
+					aiVectorKey vectorKey = nodeAnim->mPositionKeys[k];
+
+					animationClip.keyFrameInfoVec[boneIndex][k].pos = DirectX::SimpleMath::Vector3{ vectorKey.mValue.x, vectorKey.mValue.y, vectorKey.mValue.z};
+				}
+
+				for (int k = 0; k < nodeAnim->mNumRotationKeys; ++k)
+				{
+					aiQuatKey quatKey = nodeAnim->mRotationKeys[k];
+
+					animationClip.keyFrameInfoVec[boneIndex][k].rot = DirectX::SimpleMath::Vector4{ quatKey.mValue.x, quatKey.mValue.y, quatKey.mValue.z, quatKey.mValue.w };
+				}
+
+				for (int k = 0; k < nodeAnim->mNumScalingKeys; ++k)
+				{
+					aiVectorKey vectorKey = nodeAnim->mScalingKeys[k];
+
+					animationClip.keyFrameInfoVec[boneIndex][k].scale = DirectX::SimpleMath::Vector3{ vectorKey.mValue.x,vectorKey.mValue.y, vectorKey.mValue.z };
+				}
+			}
+		}
+
+		ResourceManager::Instance.Get().CreateAnimation(animationClip);
 	}
 }
 

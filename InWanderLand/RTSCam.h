@@ -104,7 +104,11 @@ public:
 				rot = Quaternion{ Vector3d{euler.x += (20.0f * Time::GetDeltaTime()) ,euler.y , euler.z   } };
 			}
 
-			//if (yunutyEngine::Input::isKeyDown(KeyCode::MouseRightClick))
+			//if (yunutyEngine::Input::is
+			// 
+			// 
+			// 
+			// Down(KeyCode::MouseRightClick))
 			//{
 			//    constexpr float rotationSpeedFactor = 0.003f;
 			//    //auto euler = GetTransform()->rotation.Euler();

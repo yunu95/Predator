@@ -10,6 +10,7 @@ namespace yunuGI
     public:
 		virtual void SetPickingMode(bool isPickingModeOn) = 0;
         virtual void SetBone(std::wstring fbxName) = 0;
+        virtual void SetAnimatorIndex(int animatorIndex) = 0;
 		virtual void SetMaterial(unsigned int index, IMaterial* material) {};
 		virtual IMaterial* GetMaterial(unsigned int index = 0) { return nullptr; };
     };

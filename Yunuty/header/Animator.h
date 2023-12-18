@@ -24,6 +24,10 @@ namespace yunutyEngine::graphics
 		// GI는 Graphics Interface라는 뜻임.
 		yunuGI::IAnimator& GetGI() { return Renderable<yunuGI::IAnimator>::GetGI(); }
 		Animator();
+		void Update();
+
+	private:
+		float currentTime = 0.f;
 	};
 }
 
