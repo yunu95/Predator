@@ -109,6 +109,7 @@ namespace InWanderLand
     public:
         TEST_METHOD(TestCaseNavigation)
         {
+            Assert::IsTrue(1 + 1 == 3);
             Application::Application& client = Application::Application::CreateApplication(0, 0);
             Application::Contents::ContentsLayer::AssignTestInitializer(TestCaseNavigationInit);
             client.Initialize();
