@@ -6,6 +6,11 @@
 #include "DebugTilePlane.h"
 #include "DebugBeacon.h"
 #include "DebugMeshes.h"
+#include "Application.h"
+#ifdef GEN_TESTS
+#include "CppUnitTest.h"
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+#endif
 
 #include <d3d11.h>
 
@@ -147,7 +152,14 @@ void Application::Contents::ContentsLayer::Finalize()
 {
 
 }
+#ifdef GEN_TESTS
 void Application::Contents::ContentsLayer::AssignTestInitializer(std::function<void()> testInitializer)
 {
     ContentsLayer::testInitializer = testInitializer;
+    YunutyCycle::SingleInstance().onExceptionThrown = [](const std::exception& e) {
+        Application::Application::GetInstance().AddMainLoopTodo([=]() {
+            Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
+            });
+    };
 }
+#endif

@@ -40,7 +40,6 @@ namespace InWanderLand
             {
                 Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
             }
-            //Assert::IsTrue();
         }
     };
 }
