@@ -90,7 +90,7 @@ void TestCaseNavigationInit()
         Application::Application::GetInstance().AddMainLoopTodo([=]() {
             // Assert 함수군은 테스트 케이스의 실행 성공 여부를 판단하는데에 쓰입니다.
             // Assert의 실행은 메인 스레드에서 실행되어야 합니다.
-            Assert::IsTrue((agent->GetTransform()->GetWorldPosition() - 3*moveDestination).MagnitudeSqr() < 0.3,L"navigation agent couldn't move to a specific location!");
+            Assert::IsTrue((agent->GetTransform()->GetWorldPosition() - moveDestination).MagnitudeSqr() < 0.3,L"navigation agent couldn't move to a specific location!");
             agent->Relocate(Vector3d{ -10,0,0 });
                 });
             } });
