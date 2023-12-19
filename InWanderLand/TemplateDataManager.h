@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Storable.h"
+#include "Identifiable.h"
 #include "IEditableData.h"
 #include "TemplateData.h"
 
@@ -24,11 +25,15 @@ namespace Application
 
 			virtual ~TemplateDataManager();
 
-			bool CreateTemplateData(const std::string& name, IEditableData::DataType type);
-			bool CloneTemplateData(const std::string& name, const std::shared_ptr<TemplateData>& prototype);
+			TemplateData* CreateTemplateData(const std::string& name, const IEditableData::DataType& type);
+			TemplateData* CloneTemplateData(const std::string& name, const TemplateData* prototype);
 			bool DeleteTemplateData(const std::string& name);
-			std::shared_ptr<TemplateData> GetTemplateData(const std::string& name) const;
+			TemplateData* GetTemplateData(const std::string& name) const;
 			IEditableData::DataType GetDataType(const std::string& name) const;
+			IEditableData::DataType GetDataType(const TemplateData* ptr) const;
+			IEditableData::DataType GetDataType(const UUID& uuid) const;
+			std::string GetDataKey(const TemplateData* ptr) const;
+			std::string GetDataKey(const UUID& uuid) const;
 			void Clear();
 
 		protected:
@@ -44,8 +49,10 @@ namespace Application
 			TemplateDataManager(const TemplateDataManager&) = delete;
 			TemplateDataManager& operator=(const TemplateDataManager&) = delete;
 
-			std::map<std::string, std::shared_ptr<TemplateData>> list;
-			std::unordered_map<std::shared_ptr<TemplateData>, IEditableData::DataType> typeMap;
+			std::map<const std::string, std::unique_ptr<TemplateData>> list;
+			std::unordered_map<const TemplateData*, IEditableData::DataType> typeMap;
+			std::unordered_map<const UUID, std::string> uuidKeyMap;
+			std::unordered_map<const TemplateData*, std::string> ptrKeyMap;
 		};
 	}
 }

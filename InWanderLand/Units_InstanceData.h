@@ -13,8 +13,10 @@ namespace Application
 		struct POD_Units_InstanceData
 		{
 			TO_JSON(POD_Units_InstanceData);
+			FROM_JSON(POD_Units_InstanceData);
 
 			unsigned int currentHP;
+			std::string testName = "Kiki";
 		};
 
 		class Units_InstanceData
@@ -24,9 +26,10 @@ namespace Application
 
 		public:
 			// 템플릿으로부터 초기화되는 데이터들을 일괄적으로 처리하는 함수
-			virtual bool EnterDataFromTemplate(const std::shared_ptr<TemplateData>& templateData) override;
+			virtual bool EnterDataFromTemplate(const TemplateData* templateData) override;
 
-			POD_Units_InstanceData pod;
+			POD_Units_InstanceData pod = POD_Units_InstanceData();
+			double testDouble = 10.0;
 
 		protected:
 			virtual bool PreEncoding(json& data) const override;

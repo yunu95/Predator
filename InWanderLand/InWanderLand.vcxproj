@@ -278,6 +278,7 @@ if exist "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" xcopy "$(
     <ClCompile Include="RTSCam.cpp" />
     <ClCompile Include="SaveMapCommand.cpp" />
     <ClCompile Include="ShakyCam.cpp" />
+    <ClCompile Include="TemplateData.cpp" />
     <ClCompile Include="TemplateDataManager.cpp" />
     <ClCompile Include="Storable.cpp" />
     <ClCompile Include="Terrain.cpp" />

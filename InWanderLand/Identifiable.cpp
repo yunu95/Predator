@@ -16,7 +16,7 @@ namespace Application
 			return std::string(id_char);
 		}
 
-		UUID String_From_UUID(std::string str)
+		UUID String_To_UUID(std::string str)
 		{
 			UUID uuid;
 			if (UuidFromStringA((RPC_CSTR)str.c_str(), &uuid) != RPC_S_OK)
@@ -38,7 +38,7 @@ namespace Application
 			this->id = id;
 		}
 
-		UUID Identifiable::GetUUID()
+		UUID Identifiable::GetUUID() const
 		{
 			return id;
 		}

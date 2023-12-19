@@ -6,11 +6,6 @@ namespace Application
 {
 	namespace Editor
 	{
-		std::shared_ptr<TemplateData> Ornaments_TemplateData::Clone() const
-		{
-			return std::shared_ptr<TemplateData>(new Ornaments_TemplateData(*this));
-		}
-
 		bool Ornaments_TemplateData::PreEncoding(json& data) const
 		{
 			return true;

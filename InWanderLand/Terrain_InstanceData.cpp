@@ -6,10 +6,10 @@ namespace Application
 {
 	namespace Editor
 	{
-		bool Terrain_InstanceData::EnterDataFromTemplate(const std::shared_ptr<TemplateData>& templateData)
+		bool Terrain_InstanceData::EnterDataFromTemplate(const TemplateData* templateData)
 		{
 #pragma region Check
-			auto ptr = std::dynamic_pointer_cast<Terrain_TemplateData>(templateData);
+			auto ptr = dynamic_cast<Terrain_TemplateData*>(const_cast<TemplateData*>(templateData));
 			if (ptr == nullptr)
 			{
 				return false;

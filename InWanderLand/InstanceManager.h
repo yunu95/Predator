@@ -6,10 +6,21 @@
 
 #include "Storable.h"
 #include "IEditableData.h"
+#include "Identifiable.h"
 
 #include <string>
 #include <memory>
+#include <unordered_map>
 #include <unordered_set>
+
+
+namespace Application
+{
+	namespace Editor
+	{
+		class TemplateData;
+	}
+}
 
 namespace Application
 {
@@ -23,8 +34,10 @@ namespace Application
 
 			virtual ~InstanceManager();
 
-			bool CreateInstance(const std::string& dataName);
-			bool CloneInstance(const std::shared_ptr<IEditableData>& prototype);
+			// 이미 만들어진 TemplateData 로부터 Instance 를 생성함
+			IEditableData* CreateInstance(const std::string& dataName);
+			IEditableData* GetInstance(const UUID& uuid) const;
+			void Clear();
 
 		protected:
 			virtual bool PreEncoding(json& data) const override;
@@ -39,10 +52,14 @@ namespace Application
 			InstanceManager(const InstanceManager&) = delete;
 			InstanceManager& operator=(const InstanceManager&) = delete;
 
-			void Clear();
+			// TemplateData 가 생성되기 전에 그 틀만 우선 작성함
+			IEditableData* CreateEmptyInstance(const IEditableData::DataType& type);
 
-			std::unordered_set<std::shared_ptr<IEditableData>> list;
-			std::shared_ptr<IEditableData> mould;
+			std::unordered_map<const UUID, std::unique_ptr<IEditableData>> list;
+			std::unordered_map<const UUID, TemplateData*> tdMap;
+			// CreateEmptyInstance Only
+			std::unordered_set<IEditableData*> listBeforeMatching;
+			IEditableData* mould;
 		};
 	}
 }

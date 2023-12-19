@@ -17,7 +17,7 @@ namespace Application
 	namespace Editor
 	{	
 		template <int N, typename T>
-		json FieldEncoding(T& className, json& data)
+		json FieldEncoding(T& classInstance, json& data)
 		{
 			if constexpr (N == 0)
 			{
@@ -25,11 +25,27 @@ namespace Application
 			}
 			else
 			{
-				data[boost::pfr::get_name<N - 1, T>()] = boost::pfr::get<N - 1>(className);
-				FieldEncoding<N - 1, T>(className, data);
+				data[boost::pfr::get_name<N - 1, T>()] = boost::pfr::get<N - 1>(classInstance);
+				FieldEncoding<N - 1, T>(classInstance, data);
 			}
 			return data;
 		}
+
+		template <int N, typename T>
+		const json& FieldDecoding(T& classInstance, const json& data)
+		{
+			if constexpr (N == 0)
+			{
+				return data;
+			}
+			else
+			{
+				boost::pfr::get<N - 1>(classInstance) = data[boost::pfr::get_name<N - 1, T>()];
+				FieldDecoding<N - 1, T>(classInstance, data);
+			}
+			return data;
+		}
+
 
 		class Storable
 		{
@@ -52,7 +68,13 @@ namespace Application
 operator json() \
 { \
 	json data; \
-	Class classObj = Class(); \
-	Application::Editor::FieldEncoding<boost::pfr::tuple_size_v<Class>>(classObj, data); \
+	Application::Editor::FieldEncoding<boost::pfr::tuple_size_v<Class>>(*this, data); \
 	return data; \
+}
+
+#define FROM_JSON(Class) \
+Class& operator=(const json& data) \
+{ \
+	Application::Editor::FieldDecoding<boost::pfr::tuple_size_v<Class>>(*this, data); \
+	return *this; \
 }

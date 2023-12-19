@@ -1,59 +1,97 @@
 #include "Units.h"
 
+#include "InstanceManager.h"
 #include "TemplateDataManager.h"
 
 namespace Application
 {
 	namespace Editor
 	{
-		std::shared_ptr<IEditableData> Units::Clone() const
+		TemplateData* Units::GetTemplateData()
 		{
-			return std::shared_ptr<IEditableData>(new Units(*this));
+			return templateData;
+		}
+
+		bool Units::SetTemplateData(const std::string& dataName)
+		{
+			auto ptr = TemplateDataManager::GetInstance().GetTemplateData(dataName);
+			if (ptr == nullptr)
+			{
+				return false;
+			}
+
+			templateData = static_cast<Units_TemplateData*>(ptr);
+
+			return true;
+		}
+
+		IEditableData* Units::Clone() const
+		{
+			auto& imanager = InstanceManager::GetInstance();
+			auto instance =  imanager.CreateInstance(templateData->GetDataKey());
+
+			if (instance != nullptr)
+			{
+				static_cast<Units*>(instance)->instanceData = instanceData;
+			}
+
+			return instance;
 		}
 
 		bool Units::PreEncoding(json& data) const
 		{
-			instanceData.PreEncoding(data);
-			templateData->PreEncoding(data);
+			if (!instanceData.PreEncoding(data["instance_data"]))
+			{
+				return false;
+			}
 
+			data["template_data"] = UUID_To_String(templateData->GetUUID());
 			return true;
 		}
 
 		bool Units::PostEncoding(json& data) const
 		{
-			instanceData.PostEncoding(data);
-			templateData->PostEncoding(data);
+			if (!instanceData.PostEncoding(data["instance_data"]))
+			{
+				return false;
+			}
 
 			return true;
 		}
 
 		bool Units::PreDecoding(const json& data)
 		{
-			instanceData.PreDecoding(data);
-			templateData->PreDecoding(data);
+			if (!instanceData.PreDecoding(data["instance_data"]))
+			{
+				return false;
+			}
+
+			auto& manager = TemplateDataManager::GetInstance();
+			templateData = std::static_cast<Units_TemplateData*>(manager.GetTemplateData(manager.GetDataKey(String_To_UUID(data["template_data"]))));
 
 			return true;
 		}
 
 		bool Units::PostDecoding(const json& data)
 		{
-			instanceData.PostDecoding(data);
-			templateData->PostDecoding(data);
-
+			if (!instanceData.PostDecoding(data["instance_data"]))
+			{
+				return false;
+			}
 			return true;
+		}
+
+		Units::Units()
+			: instanceData(), templateData(nullptr)
+		{
+
 		}
 
 		Units::Units(const std::string& name)
 			: instanceData(), templateData()
 		{
 			auto& manager = TemplateDataManager::GetInstance();
-			if (!manager.CreateTemplateData(name, IEditableData::DataType::Units))
-			{
-				// 이미 해당하는 이름의 데이터가 있는 경우, templateData 가 nullptr
-				return;
-			}
-
-			templateData = std::static_pointer_cast<Units_TemplateData>(manager.GetTemplateData(name));
+			templateData = static_cast<Units_TemplateData*>(manager.GetTemplateData(name));
 			instanceData.EnterDataFromTemplate(templateData);
 		}
 

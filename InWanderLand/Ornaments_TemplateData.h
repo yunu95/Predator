@@ -17,7 +17,6 @@ namespace Application
 			friend class TemplateDataManager;
 
 		public:
-			virtual std::shared_ptr<TemplateData> Clone() const override;
 
 		protected:
 			virtual bool PreEncoding(json& data) const override;

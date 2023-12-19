@@ -8,6 +8,15 @@
 #include "Storable.h"
 
 #include <memory>
+#include <string>
+
+namespace Application
+{
+	namespace Editor
+	{
+		class TemplateData;
+	}
+}
 
 namespace Application
 {
@@ -28,7 +37,11 @@ namespace Application
 			};
 
 		public:
-			virtual std::shared_ptr<IEditableData> Clone() const = 0;
+			virtual ~IEditableData() = default;
+
+			virtual TemplateData* GetTemplateData() = 0;
+			virtual bool SetTemplateData(const std::string& dataName) = 0;
+			virtual IEditableData* Clone() const = 0;
 
 		protected:
 			virtual bool PreEncoding(json& data) const = 0;

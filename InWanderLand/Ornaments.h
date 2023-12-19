@@ -21,10 +21,12 @@ namespace Application
 			friend class InstanceManager;
 
 		public:
-			virtual std::shared_ptr<IEditableData> Clone() const override;
+			virtual TemplateData* GetTemplateData() override;
+			virtual bool SetTemplateData(const std::string& dataName) override;
+			virtual IEditableData* Clone() const override;
 
 			Ornaments_InstanceData instanceData;
-			std::shared_ptr<Ornaments_TemplateData> templateData;
+			Ornaments_TemplateData* templateData;
 
 		protected:
 			virtual bool PreEncoding(json& data) const override;
@@ -33,6 +35,7 @@ namespace Application
 			virtual bool PostDecoding(const json& data) override;
 
 		private:
+			Ornaments();
 			Ornaments(const std::string& name);
 			Ornaments(const Ornaments& prototype);
 			Ornaments& operator=(const Ornaments& prototype);

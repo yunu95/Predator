@@ -6,10 +6,10 @@ namespace Application
 {
 	namespace Editor
 	{
-		bool Ornaments_InstanceData::EnterDataFromTemplate(const std::shared_ptr<TemplateData>& templateData)
+		bool Ornaments_InstanceData::EnterDataFromTemplate(const TemplateData* templateData)
 		{
 #pragma region Check
-			auto ptr = std::dynamic_pointer_cast<Ornaments_TemplateData>(templateData);
+			auto ptr = dynamic_cast<Ornaments_TemplateData*>(const_cast<TemplateData*>(templateData));
 			if (ptr == nullptr)
 			{
 				return false;

@@ -5,139 +5,221 @@
 
 namespace Application
 {
-    namespace Editor
-    {
-        std::unique_ptr<InstanceManager> InstanceManager::instance = nullptr;
+	namespace Editor
+	{
+		std::unique_ptr<InstanceManager> InstanceManager::instance = nullptr;
 
-        InstanceManager& InstanceManager::GetInstance()
-        {
+		InstanceManager& InstanceManager::GetInstance()
+		{
 			if (instance == nullptr)
 			{
 				instance = std::unique_ptr<InstanceManager>(new InstanceManager());
 			}
 
-            return *instance;
-        }
+			return *instance;
+		}
 
-        InstanceManager::~InstanceManager()
-        {
+		InstanceManager::~InstanceManager()
+		{
 
-        }
+		}
 
-        bool InstanceManager::CreateInstance(const std::string& dataName)
-        {
-            auto& sdmanager = TemplateDataManager::GetInstance();
-            auto sdptr = sdmanager.GetTemplateData(dataName);
-            if (sdptr == nullptr)
-            {
-                return false;
-            }
+		IEditableData* InstanceManager::CreateInstance(const std::string& dataName)
+		{
+			auto& tdmanager = TemplateDataManager::GetInstance();
+			auto tdptr = tdmanager.GetTemplateData(dataName);
+			if (tdptr == nullptr)
+			{
+				return false;
+			}
 
-            std::shared_ptr<IEditableData> instance;
+			IEditableData* instance;
 
-            switch (sdmanager.GetDataType(dataName))
-            {
-                case IEditableData::DataType::Terrain:
-                {
-                    instance = std::shared_ptr<IEditableData>(new Terrain(dataName));
-                    break;
-                }
+			switch (tdmanager.GetDataType(dataName))
+			{
+				case IEditableData::DataType::Terrain:
+				{
+					instance = new Terrain(dataName);
+					break;
+				}
 
-                case IEditableData::DataType::Units:
-                {
-                    instance = std::shared_ptr<IEditableData>(new Units(dataName));
-                    break;
-                }
+				case IEditableData::DataType::Units:
+				{
+					instance = new Units(dataName);
+					break;
+				}
 
-                case IEditableData::DataType::Ornaments:
-                {
-                    instance = std::shared_ptr<IEditableData>(new Ornaments(dataName));
-                    break;
-                }
+				case IEditableData::DataType::Ornaments:
+				{
+					instance = new Ornaments(dataName);
+					break;
+				}
 
-                default:
-                    break;
-            }
+				default:
+					break;
+			}
 
-            list.insert(instance);
-            
-            return true;
-        }
+			list[instance->GetUUID()] = std::make_unique<IEditableData>(instance);
+			tdMap[instance->GetUUID()] = tdptr;
 
-        bool InstanceManager::CloneInstance(const std::shared_ptr<IEditableData>& prototype)
-        {
-            if (list.find(prototype) == list.end())
-            {
-                // 관리되고 있는 EditableData 가 아닐 경우, 생성하지 않음
-                return false;
-            }
+			return instance;
+		}
 
-            list.insert(prototype->Clone());
+		IEditableData* InstanceManager::GetInstance(const UUID& uuid) const
+		{
+			auto itr = list.find(uuid);
+			if (itr == list.end())
+			{
+				return nullptr;
+			}
 
-            return true;
-        }
+			return itr->second.get();
+		}
 
-        bool InstanceManager::PreEncoding(json& data) const
-        {
-            UUID uuid;
-            for (auto& each : list)
-            {
-                uuid = each->GetUUID();
-                json eachData;
-                if (!each->PreEncoding(eachData[UUID_To_String(uuid)]))
-                {
-                    return false;
-                }
-                data["InstanceList"].push_back(eachData);
-            }
+		void InstanceManager::Clear()
+		{
+			tdMap.clear();
+			listBeforeMatching.clear();
+			list.clear();
+			mould = nullptr;
+		}
 
-            return true;
-        }
+		bool InstanceManager::PreEncoding(json& data) const
+		{
+			auto& tdmanager = TemplateDataManager::GetInstance();
 
-        bool InstanceManager::PostEncoding(json& data) const
-        {
-            UUID uuid;
-            for (auto& each : list)
-            {
-                uuid = each->GetUUID();
+			std::string uuidStr;
+			for (auto& [uuid, ptr] : list)
+			{
+				uuidStr = UUID_To_String(uuid);
 
-                for (auto& [key, value] : data["InstanceList"].items())
-                {
-                    if (uuid == String_From_UUID(key))
-                    {
-                        if (!each->PostEncoding(value))
-                        {
-                            return false;
-                        }
-                        break;
-                    }
-                }
-            }
+				data["InstanceList"][uuidStr]["type"] = tdmanager.GetDataType(tdMap.find(uuid)->second);
+				if (!ptr->PreEncoding(data["InstanceList"][uuidStr]["0_Pre"]))
+				{
+					return false;
+				}
+			}
 
-            return true;
-        }
+			return true;
+		}
 
-        bool InstanceManager::PreDecoding(const json& data)
-        {
-            return false;
-        }
+		bool InstanceManager::PostEncoding(json& data) const
+		{
+			std::string uuidStr;
+			for (auto& [uuid, ptr] : list)
+			{
+				uuidStr = UUID_To_String(uuid);
 
-        bool InstanceManager::PostDecoding(const json& data)
-        {
-            return false;
-        }
+				auto itr = data["InstanceList"].find(uuidStr);
+				if (itr == data["InstanceList"].end())
+				{
+					return false;
+				}
 
-        /// private
-        InstanceManager::InstanceManager()
-        {
+				if (!ptr->PostEncoding(itr.value()["1_Post"]))
+				{
+					return false;
+				}
+			}
 
-        }
+			return true;
+		}
 
-        void InstanceManager::Clear()
-        {
-            list.clear();
-            mould = nullptr;
-        }
+		bool InstanceManager::PreDecoding(const json& data)
+		{
+			UUID uuid;
+			for (auto& [uuidStr, instanceData] : data["InstanceList"].items())
+			{
+				uuid = String_To_UUID(uuidStr);
 
-    }
+				auto instance = CreateEmptyInstance(instanceData["type"]);
+
+				if (instance == nullptr)
+				{
+					Clear();
+					return false;
+				}
+
+				instance->SetUUID(uuid);
+
+				if (!instance->PreDecoding(instanceData["0_Pre"]))
+				{
+					Clear();
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		bool InstanceManager::PostDecoding(const json& data)
+		{
+			auto& tdmanager = TemplateDataManager::GetInstance();
+
+			UUID uuid;
+			for (auto& [uuidStr, instanceData] : data["InstanceList"].items())
+			{
+				uuid = String_To_UUID(uuidStr);
+
+				for (auto each : listBeforeMatching)
+				{
+					if (each->GetUUID() == uuid)
+					{
+						if (!each->PostDecoding(instanceData["1_Post"]))
+						{
+							Clear();
+							return false;
+						}
+
+						list[uuid] = std::make_unique<IEditableData>(each);
+						tdMap[uuid] = each->GetTemplateData();
+						listBeforeMatching.erase(each);
+						break;
+					}
+				}
+			}
+
+			return true;
+		}
+
+		/// private
+		InstanceManager::InstanceManager()
+			: list(), tdMap(), listBeforeMatching(), mould()
+		{
+
+		}
+
+		IEditableData* InstanceManager::CreateEmptyInstance(const IEditableData::DataType& type)
+		{
+			IEditableData* instance;
+
+			switch (type)
+			{
+				case IEditableData::DataType::Terrain:
+				{
+					instance = new Terrain();
+					break;
+				}
+
+				case IEditableData::DataType::Units:
+				{
+					instance = new Units();
+					break;
+				}
+
+				case IEditableData::DataType::Ornaments:
+				{
+					instance = new Ornaments();
+					break;
+				}
+
+				default:
+					break;
+			}
+
+			listBeforeMatching.insert(instance);
+
+			return instance;
+		}
+	}
 }

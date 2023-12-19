@@ -2,6 +2,7 @@
 
 #include "Storable.h"
 #include "InstanceManager.h"
+#include "TemplateDataManager.h"
 
 #include <fstream>
 
@@ -35,6 +36,16 @@ namespace Application
                 json mapData;
                 loadFile >> mapData;
 
+                // Manager √ ±‚»≠
+                TemplateDataManager::GetInstance().Clear();
+                instanceManager.Clear();
+
+                if (!TemplateDataManager::GetInstance().Decoding(mapData))
+                {
+                    loadFile.close();
+                    return false;
+                }
+
                 if (instanceManager.Decoding(mapData))
                 {
                     loadFile.close();
@@ -54,8 +65,9 @@ namespace Application
 
         bool MapFileManager::SaveMapFile(const std::string& path)
         {
-            json mapData = instanceManager.Encoding();
-            
+            json mapData = TemplateDataManager::GetInstance().Encoding();
+            mapData.merge_patch(instanceManager.Encoding());
+
             std::ofstream saveFile{ path };
 
             if (saveFile.is_open())

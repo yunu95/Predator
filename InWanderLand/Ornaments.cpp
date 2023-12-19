@@ -1,14 +1,41 @@
 #include "Ornaments.h"
 
+#include "InstanceManager.h"
 #include "TemplateDataManager.h"
 
 namespace Application
 {
 	namespace Editor
 	{
-		std::shared_ptr<IEditableData> Ornaments::Clone() const
+		TemplateData* Ornaments::GetTemplateData()
 		{
-			return std::shared_ptr<IEditableData>(new Ornaments(*this));
+			return templateData;
+		}
+
+		bool Ornaments::SetTemplateData(const std::string& dataName)
+		{
+			auto ptr = TemplateDataManager::GetInstance().GetTemplateData(dataName);
+			if (ptr == nullptr)
+			{
+				return false;
+			}
+
+			templateData = static_cast<Ornaments_TemplateData*>(ptr);
+
+			return true;
+		}
+
+		IEditableData* Ornaments::Clone() const
+		{
+			auto& imanager = InstanceManager::GetInstance();
+			auto instance = imanager.CreateInstance(templateData->GetDataKey());
+
+			if (instance != nullptr)
+			{
+				static_cast<Ornaments*>(instance)->instanceData = instanceData;
+			}
+
+			return instance;
 		}
 
 		bool Ornaments::PreEncoding(json& data) const
@@ -31,17 +58,17 @@ namespace Application
 			return true;
 		}
 
+		Ornaments::Ornaments()
+			: instanceData(), templateData(nullptr)
+		{
+
+		}
+
 		Ornaments::Ornaments(const std::string& name)
 			: instanceData(), templateData()
 		{
 			auto& manager = TemplateDataManager::GetInstance();
-			if (!manager.CreateTemplateData(name, IEditableData::DataType::Ornaments))
-			{
-				// 이미 해당하는 이름의 데이터가 있는 경우, templateData 가 nullptr
-				return;
-			}
-
-			templateData = std::static_pointer_cast<Ornaments_TemplateData>(manager.GetTemplateData(name));
+			templateData = static_cast<Ornaments_TemplateData*>(manager.GetTemplateData(name));
 			instanceData.EnterDataFromTemplate(templateData);
 		}
 

@@ -17,7 +17,7 @@ namespace Application
 
 		public:
 			// 템플릿으로부터 초기화되는 데이터들을 일괄적으로 처리하는 함수
-			virtual bool EnterDataFromTemplate(const std::shared_ptr<TemplateData>& templateData) override;
+			virtual bool EnterDataFromTemplate(const TemplateData* templateData) override;
 
 		protected:
 			virtual bool PreEncoding(json& data) const override;

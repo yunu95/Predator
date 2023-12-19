@@ -12,7 +12,7 @@ namespace Application
 	namespace Editor
 	{
 		std::string UUID_To_String(UUID uuid);
-		UUID String_From_UUID(std::string str);
+		UUID String_To_UUID(std::string str);
 
 		class Identifiable
 		{
@@ -20,7 +20,7 @@ namespace Application
 			Identifiable();
 			Identifiable(const UUID& id);
 
-			UUID GetUUID();
+			UUID GetUUID() const;
 			void SetUUID(const UUID& id);
 
 		protected:

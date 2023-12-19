@@ -76,20 +76,20 @@
     <Filter Include="Editor\DataSystem\EditableData\InstanceData">
       <UniqueIdentifier>{eafa4f98-daf4-4d03-adc2-3ee83fbbc9df}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\DataSystem\EditableData\SharedData">
-      <UniqueIdentifier>{11241e27-faa2-4357-a3d8-416d74037a31}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Editor\DataSystem\EditableData\DataType">
       <UniqueIdentifier>{23af273e-3034-4921-a34c-25496efb6b27}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Editor\DataSystem\EditableData\SharedData\DataType">
-      <UniqueIdentifier>{12c926e0-9622-4f19-940e-0f9fed6da0ec}</UniqueIdentifier>
     </Filter>
     <Filter Include="Editor\DataSystem\EditableData\InstanceData\DataType">
       <UniqueIdentifier>{18bad386-fd1e-43c8-881e-26fad3f74cad}</UniqueIdentifier>
     </Filter>
     <Filter Include="Editor\Commands\MenubarCommands\File">
       <UniqueIdentifier>{ff20d7ae-412d-42d0-bec7-11abb5773aa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataSystem\EditableData\TemplateData">
+      <UniqueIdentifier>{11241e27-faa2-4357-a3d8-416d74037a31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataSystem\EditableData\TemplateData\DataType">
+      <UniqueIdentifier>{12c926e0-9622-4f19-940e-0f9fed6da0ec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -217,7 +217,7 @@
       <Filter>Editor\DataSystem\EditableData\InstanceData</Filter>
     </ClInclude>
     <ClInclude Include="TemplateData.h">
-      <Filter>Editor\DataSystem\EditableData\SharedData</Filter>
+      <Filter>Editor\DataSystem\EditableData\TemplateData</Filter>
     </ClInclude>
     <ClInclude Include="Ornaments.h">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
@@ -229,13 +229,13 @@
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClInclude>
     <ClInclude Include="Units_TemplateData.h">
-      <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClInclude>
     <ClInclude Include="Ornaments_TemplateData.h">
-      <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClInclude>
     <ClInclude Include="Terrain_TemplateData.h">
-      <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClInclude>
     <ClInclude Include="Units_InstanceData.h">
       <Filter>Editor\DataSystem\EditableData\InstanceData\DataType</Filter>
@@ -250,7 +250,7 @@
       <Filter>Editor\DataSystem</Filter>
     </ClInclude>
     <ClInclude Include="TemplateDataList.h">
-      <Filter>Editor\DataSystem\EditableData\SharedData</Filter>
+      <Filter>Editor\DataSystem\EditableData\TemplateData</Filter>
     </ClInclude>
     <ClInclude Include="InstanceDataList.h">
       <Filter>Editor\DataSystem\EditableData\InstanceData</Filter>
@@ -368,13 +368,13 @@
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClCompile>
     <ClCompile Include="Ornaments_TemplateData.cpp">
-      <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClCompile>
     <ClCompile Include="Terrain_TemplateData.cpp">
-      <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClCompile>
     <ClCompile Include="Units_TemplateData.cpp">
-      <Filter>Editor\DataSystem\EditableData\SharedData\DataType</Filter>
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClCompile>
     <ClCompile Include="Ornaments_InstanceData.cpp">
       <Filter>Editor\DataSystem\EditableData\InstanceData\DataType</Filter>
@@ -396,6 +396,9 @@
     </ClCompile>
     <ClCompile Include="LoadMapCommand.cpp">
       <Filter>Editor\Commands\MenubarCommands\File</Filter>
+    </ClCompile>
+    <ClCompile Include="TemplateData.cpp">
+      <Filter>Editor\DataSystem\EditableData\TemplateData</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

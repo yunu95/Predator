@@ -21,10 +21,12 @@ namespace Application
 			friend class InstanceManager;
 
 		public:
-			virtual std::shared_ptr<IEditableData> Clone() const override;
+			virtual TemplateData* GetTemplateData() override;
+			virtual bool SetTemplateData(const std::string& dataName) override;
+			virtual IEditableData* Clone() const override;
 
 			Terrain_InstanceData instanceData;
-			std::shared_ptr<Terrain_TemplateData> templateData;
+			Terrain_TemplateData* templateData;
 
 		protected:
 			virtual bool PreEncoding(json& data) const override;
@@ -33,6 +35,7 @@ namespace Application
 			virtual bool PostDecoding(const json& data) override;
 
 		private:
+			Terrain();
 			Terrain(const std::string& name);
 			Terrain(const Terrain& prototype);
 			Terrain& operator=(const Terrain& prototype);

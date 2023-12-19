@@ -13,6 +13,7 @@ namespace Application
 		struct POD_Units_TemplateData
 		{
 			TO_JSON(POD_Units_TemplateData);
+			FROM_JSON(POD_Units_TemplateData);
 
 			int maxHP = 50;
 		};
@@ -24,9 +25,8 @@ namespace Application
 			friend class TemplateDataManager;
 
 		public:
-			virtual std::shared_ptr<TemplateData> Clone() const override;
-
 			POD_Units_TemplateData pod;
+			int testInt;
 
 		protected:
 			virtual bool PreEncoding(json& data) const override;

@@ -17,18 +17,24 @@ namespace Application
 		struct POD_TemplateData
 		{
 			TO_JSON(POD_TemplateData);
+			FROM_JSON(POD_TemplateData);
 
-			std::string name = "None";
+			std::string test = "test";
 		};
 
 		class TemplateData
 			: public Identifiable, public Storable
 		{
+			friend class TemplateDataManager;
+
 		public:
-			virtual std::shared_ptr<TemplateData> Clone() const = 0;
+			virtual ~TemplateData() = default;
+
+			std::string GetDataKey() const;
 
 			// 기본 공용 데이터
 			POD_TemplateData pod = POD_TemplateData();
+			double testDouble = 10.0;
 
 		protected:
 			virtual bool PreEncoding(json& data) const = 0;

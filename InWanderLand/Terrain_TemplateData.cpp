@@ -6,11 +6,6 @@ namespace Application
 {
 	namespace Editor
 	{
-		std::shared_ptr<TemplateData> Terrain_TemplateData::Clone() const
-		{
-			return std::shared_ptr<TemplateData>(new Terrain_TemplateData(*this));
-		}
-
 		bool Terrain_TemplateData::PreEncoding(json& data) const
 		{
 			return true;

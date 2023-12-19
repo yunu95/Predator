@@ -71,11 +71,11 @@ namespace Application
 			ImGui::BeginMenuBar();
 			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::MenuItem("LoadMap"), "Ctrl + L")
+				if (ImGui::MenuItem("LoadMap"))
 				{
 					cm.AddQueue(std::make_shared<LoadMapCommand>());
 				}
-				if (ImGui::MenuItem("SaveMap"), "Ctrl + S")
+				if (ImGui::MenuItem("SaveMap"))
 				{
 					cm.AddQueue(std::make_shared<SaveMapCommand>());
 				}
