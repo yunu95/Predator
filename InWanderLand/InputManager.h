@@ -6,12 +6,21 @@
 /// </summary>
 class InputManager : public Component
 {
+public:
+	enum SelectedSerialNumber
+	{
+		One = 1,
+		Two,
+		Three,
+		All
+	};
+
 private:
 	int currentSelectedSerialNumber;
 
 public:
-	void Start() override;
-	void Update() override;
+	virtual void Start() override;
+	virtual void Update() override;
 
 };
 

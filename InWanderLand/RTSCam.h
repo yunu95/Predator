@@ -47,10 +47,10 @@ public:
                 cameraSpeed = 20.0f;
 
             auto lastMousePos = yunutyEngine::Input::getMouseScreenPositionNormalized();
-            if (yunutyEngine::Input::isKeyDown(KeyCode::A) || lastMousePos.x <= 0)
+   /*         if (yunutyEngine::Input::isKeyDown(KeyCode::A) || lastMousePos.x <= 0)
                 deltaDirection -= Vector3d::right;
             if (yunutyEngine::Input::isKeyDown(KeyCode::D) || lastMousePos.x >= 1)
-                deltaDirection += Vector3d::right;
+                deltaDirection += Vector3d::right;*/
             if (yunutyEngine::Input::isKeyDown(KeyCode::W) || lastMousePos.y <= 0)
                 deltaDirection += Vector3d::forward;
             if (yunutyEngine::Input::isKeyDown(KeyCode::S) || lastMousePos.y >= 1)

@@ -3,34 +3,40 @@
 
 void InputManager::Start()
 {
-	currentSelectedSerialNumber = 0;
+
 }
 
 void InputManager::Update()
 {
 	if (yunutyEngine::Input::isKeyDown(KeyCode::NUM_1))
 	{
-		currentSelectedSerialNumber = 1;
-		PlayerController::GetInstance()->MakeLeftClickMove(currentSelectedSerialNumber);
+		currentSelectedSerialNumber = SelectedSerialNumber::One;
+		PlayerController::GetInstance()->ApplyCurrentPlayerOrder(currentSelectedSerialNumber, PlayerController::OrderType::Move);
 	}
 	if (yunutyEngine::Input::isKeyDown(KeyCode::NUM_2))
 	{
-		currentSelectedSerialNumber = 2;
-		PlayerController::GetInstance()->MakeLeftClickMove(currentSelectedSerialNumber);
+		currentSelectedSerialNumber = SelectedSerialNumber::Two;
+		PlayerController::GetInstance()->ApplyCurrentPlayerOrder(currentSelectedSerialNumber, PlayerController::OrderType::Move);
 	}
 	if (yunutyEngine::Input::isKeyDown(KeyCode::NUM_3))
 	{
-		currentSelectedSerialNumber = 3;
-		PlayerController::GetInstance()->MakeLeftClickMove(currentSelectedSerialNumber);
+		currentSelectedSerialNumber = SelectedSerialNumber::Three;
+		PlayerController::GetInstance()->ApplyCurrentPlayerOrder(currentSelectedSerialNumber, PlayerController::OrderType::Move);
+	}
+
+	if (yunutyEngine::Input::isKeyDown(KeyCode::NUM_4))
+	{
+		currentSelectedSerialNumber = SelectedSerialNumber::All;
+		PlayerController::GetInstance()->ApplyCurrentPlayerOrder(currentSelectedSerialNumber, PlayerController::OrderType::Move);
 	}
 
 	if (yunutyEngine::Input::isKeyDown(KeyCode::A))
 	{
-		PlayerController::GetInstance()->MakeLeftClickAttackMove(currentSelectedSerialNumber);
+		PlayerController::GetInstance()->ApplyCurrentPlayerOrder(currentSelectedSerialNumber, PlayerController::OrderType::AttackMove);
 	}
 
 	if (yunutyEngine::Input::isKeyDown(KeyCode::Q))
 	{
-		PlayerController::GetInstance()->QSkillKeyPressed(currentSelectedSerialNumber);
+		PlayerController::GetInstance()->ApplyCurrentPlayerOrder(currentSelectedSerialNumber, PlayerController::OrderType::QSkill);
 	}
 }

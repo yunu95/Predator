@@ -11,7 +11,7 @@
 
 class Unit : public Component
 {
-private:
+public:
 	// 사용 시 주의점 : 마지막에는 Death와 StateEnd가 순서대로 들어가 있을 것!
 	enum class UnitState
 	{
@@ -25,6 +25,7 @@ private:
 		StateEnd
 	};
 
+private:
 	FSM<UnitState> unitFSM{UnitState::Idle};
 	string unitType;
 
@@ -135,8 +136,8 @@ public:
 	void Damaged(GameObject* opponentObject, int opponentAp);
 
 	void OrderMove(Vector3d position);
-	void OrderAttackMove(Vector3d position);
-	void OrderQSkill(Vector3d position);
+	void OrderAttackMove(Vector3d position, bool isAllSelected);
+	void OrderQSkill(Vector3d position, bool isAllSelected);
 
 	void AddToOpponentObjectList(yunutyEngine::GameObject* obj);
 	void DeleteFromOpponentObjectList(yunutyEngine::GameObject* obj);

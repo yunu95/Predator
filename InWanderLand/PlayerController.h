@@ -11,6 +11,14 @@ class Unit;
 
 class PlayerController
 {
+public:
+	enum class OrderType
+	{
+		Move,
+		AttackMove,
+		QSkill,
+	};
+
 private:
 	PlayerController();
 	~PlayerController();
@@ -22,14 +30,16 @@ public:
 private:
 	RTSCam* m_movingSystemComponent;
 	std::map<Unit*, int> playerComponentMap;
-	
+	int previousSerialNumber = 0;
+
+	void SelectFunctionByOrderType(int unitSerialNumber, OrderType p_orderType);
+
 public:
-	void MakeLeftClickMove(int unitSerialNumber);
-	void MakeLeftClickAttackMove(int unitSerialNumber);
-
-	void QSkillKeyPressed(int unitSerialNumber);
-
+	void ApplyCurrentPlayerOrder(int unitSerialNumber, OrderType orderType);
 	void SetMovingSystemComponent(RTSCam* sys);
-	void AddPlayerUnit(Unit* p_playerUnit); 
+	void AddPlayerUnit(Unit* p_playerUnit);
+
+	void SetLeftClickEmpty();
+
 };
 

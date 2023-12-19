@@ -91,6 +91,12 @@
     <Filter Include="TestCodes">
       <UniqueIdentifier>{8339e451-67eb-4692-ba45-88e6ad08ee10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\InputManager">
+      <UniqueIdentifier>{f1dccdf0-9ecd-4b27-aefe-392012154399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\SkillSystem">
+      <UniqueIdentifier>{4e094e6e-1794-44d8-b6ae-21411ec09e19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -253,7 +259,9 @@
     <ClInclude Include="DelayedTestFunctions.h">
       <Filter>TestCodes</Filter>
     </ClInclude>
-    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="InputManager.h">
+      <Filter>Contents\InputManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -375,6 +383,8 @@
       <Filter>Contents\Units</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Contents\InputManager</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

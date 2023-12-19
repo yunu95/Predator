@@ -1,6 +1,7 @@
 #include "Unit.h"
 #include "ProjectileSystem.h"
 #include "PlayerController.h"
+#include "InputManager.h"
 
 void Unit::Start()
 {
@@ -202,6 +203,8 @@ void Unit::Update()
 			{
 				isSkillStarted = false;
 				currentOrder = UnitState::Idle;
+				// 여기서 leftClickFunction을 스킬 사용 못하게 해야 한다....
+				PlayerController::GetInstance()->SetLeftClickEmpty();
 			}
 		}
 
@@ -406,7 +409,8 @@ int Unit::GetUnitAp() const
 
 void Unit::Damaged(GameObject* opponentObject, int opponentAp)
 {
-	AddToOpponentObjectList(opponentObject);
+	if (currentOrder == UnitState::Idle)
+		AddToOpponentObjectList(opponentObject);
 
 	m_hp -= opponentAp;
 }
@@ -462,22 +466,36 @@ void Unit::OrderMove(Vector3d position)
 	currentOrder = UnitState::Move;
 }
 
-void Unit::OrderAttackMove(Vector3d position)
+void Unit::OrderAttackMove(Vector3d position, bool isAllSelected)
 {
 	m_currentMovePosition = position;
 	currentOrder = UnitState::AttackMove;
 
+	if (isAllSelected)
+	{
+		PlayerController::GetInstance()->ApplyCurrentPlayerOrder(InputManager::SelectedSerialNumber::All, PlayerController::OrderType::Move);
+	}
+	else
+	{
+		PlayerController::GetInstance()->ApplyCurrentPlayerOrder(this->playerSerialNumber, PlayerController::OrderType::Move);
+	}
 	// 다음 클릭은 Move로 바꿀 수 있도록 function 재정의.
-	PlayerController::GetInstance()->MakeLeftClickMove(this->playerSerialNumber);
-
+		
 	isAttackMoving = true;
 }
 
-void Unit::OrderQSkill(Vector3d position)
+void Unit::OrderQSkill(Vector3d position, bool isAllSelected)
 {
 	currentOrder = UnitState::QSkill;
-	// 다음 클릭은 Move로 바꿀 수 있도록 function 재정의.
-	PlayerController::GetInstance()->MakeLeftClickMove(this->playerSerialNumber);
+
+	if (isAllSelected)
+	{
+		PlayerController::GetInstance()->ApplyCurrentPlayerOrder(InputManager::SelectedSerialNumber::All, PlayerController::OrderType::Move);
+	}
+	else
+	{
+		PlayerController::GetInstance()->ApplyCurrentPlayerOrder(this->playerSerialNumber, PlayerController::OrderType::Move);
+	}
 	m_currentSkillPosition = position;
 }
 
