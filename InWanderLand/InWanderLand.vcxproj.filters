@@ -283,5 +283,8 @@
     <ClCompile Include="TestCaseD3D11LiveObjImgui.cpp">
       <Filter>TestCodes</Filter>
     </ClCompile>
+    <ClCompile Include="TestCaseGroupControl.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

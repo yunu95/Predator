@@ -18,7 +18,7 @@ void TestInitializerTemplate()
         Application::Application::GetInstance().AddMainLoopTodo([]() {
             // Assert 함수군은 테스트 케이스의 실행 성공 여부를 판단하는데에 쓰입니다.
             // Assert의 실행은 메인 스레드에서 실행되어야 합니다.
-            Assert::IsTrue(1 + 1 == 3);
+            Assert::IsTrue(1 + 1 == 2);
 
             // 위 식이 참이라면 프로그램을 종료합니다. 
             Application::Application::GetInstance().TurnOff();
