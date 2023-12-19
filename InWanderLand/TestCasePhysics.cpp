@@ -1,3 +1,4 @@
+#ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
 #include "YunutyEngine.h"
@@ -154,3 +155,4 @@ namespace InWanderLand
         }
     };
 }
+#endif
