@@ -1,54 +1,71 @@
 #pragma once
-#include "YGMaterialAdapter.h"
-#include "ResourceManager.h"
+#include "IMaterial.h"
 
-class MaterialWrapper : public yunuGI::IMaterial
+#include "Resource.h"
+
+#include "ResourceManager.h"
+#include "Material.h"
+
+class MaterialWrapper : public yunuGI::IMaterial, public Resource
 {
 public:
 	MaterialWrapper()
 	{
-		this->original = ResourceManager::Instance.Get().GetMaterial(L"DefaultMaterial").get();
+		this->original = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DefaultMaterial"));
 	}
 
-	virtual void SetMaterialName(const std::wstring& materialName) override
+	virtual void SetName(const std::wstring& materialName) override
 	{
-		GetVariation()->SetMaterialName(materialName);
+		GetVariation()->SetName(materialName);
 	};
 
-	virtual void SetVertexShader(const std::wstring& vertexShader) override
+	virtual void SetVertexShader(const yunuGI::IShader* shader) override
 	{
-		GetVariation()->SetVertexShader(vertexShader);
+		GetVariation()->SetVertexShader(shader);
 	};
 
-	virtual void SetPixelShader(const std::wstring& pixelShader) override
+	virtual void SetPixelShader(const yunuGI::IShader* shader) override
 	{
-		GetVariation()->SetPixelShader(pixelShader);
+		GetVariation()->SetPixelShader(shader);
 	};
 
-	virtual void SetTexture(yunuGI::Texture_Type textureType, const std::wstring& texture) override
+	virtual void SetTexture(yunuGI::Texture_Type textureType, const yunuGI::ITexture* texture) override
 	{
 		GetVariation()->SetTexture(textureType, texture);
 	};
+
+	virtual void SetInt(int index, int val) override
+	{
+		GetVariation()->SetInt(index, val);
+	}
 
 	virtual void SetColor(const yunuGI::Color& color) override
 	{
 		GetVariation()->SetColor(color);
 	}
 
-	virtual const std::wstring& GetMaterialName()const override
+	virtual const std::wstring& GetName()const override
 	{
 		if (usingOriginal)
-			return original->GetMaterialName();
+			return original->GetName();
 		else
-			return variation->GetMaterialName();
+			return variation->GetName();
 	}
 
-	yunuGIAdapter::MaterialAdapter* GetMaterial()
+	virtual const yunuGI::IShader* GetPixelShader() const override
 	{
 		if (usingOriginal)
-			return original;
+			return original->GetPixelShader();
 		else
-			return variation;
+			return variation->GetPixelShader();
+	}
+
+	Material* GetMaterial()
+	{
+		if (usingOriginal)
+			return original.get();
+		else
+			return variation.get();
 	}
 
 	bool IsOrigin()
@@ -63,21 +80,22 @@ public:
 
 private:
 	bool usingOriginal{ true };
-	yunuGIAdapter::MaterialAdapter* GetVariation()
+
+	std::shared_ptr<Material> GetVariation()
 	{
 		if (usingOriginal)
 		{
 			variation = ResourceManager::Instance.Get().CreateInstanceMaterial(original);
 			usingOriginal = false;
-			renderable->SetMaterial(variation);
+			renderable->SetMaterial(0, variation.get());
 		}
 
 		return variation;
 	};
 
 public:
-	yunuGIAdapter::MaterialAdapter* original;
-	yunuGIAdapter::MaterialAdapter* variation;
+	std::shared_ptr<Material> original;
+	std::shared_ptr<Material> variation;
 
 private:
 	std::shared_ptr<StaticMesh> renderable;

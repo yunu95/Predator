@@ -37,6 +37,9 @@
 #include "GameObjectPool.h"
 #include "SoundSystem.h"
 #include "SoundChannel.h"
+#include "DirectionalLight.h"
+#include "PointLight.h"
+#include "SpotLight.h"
 
 // 수학 라이브러리들
 #include "YunutyMathConstants.h"
@@ -63,3 +66,14 @@
 #include "DebugCube.h"
 #include "UIImage.h"
 #include "UIText.h"
+
+// 네비게이션
+#include "YunutyNavigationField.h"
+#include "YunutyNavigationAgent.h"
+
+// 물리
+#include "YunutyCollider.h"
+#include "YunutyBoxCollider.h"
+#include "YunutyCapsuleCollider.h"
+#include "YunutySphereCollider.h"
+#include "YunutyRigidBody.h"

@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <memory>
+#include <functional>
 
 #include "Layer.h"
 #include "CommandManager.h"
@@ -20,6 +21,8 @@ namespace Application
 			: public Layer
 		{
 		public:
+			static void AssignTestInitializer(std::function<void()> testInitializer);
+
 			virtual void Initialize() override;
 			// virtual void EventProgress(Events& e) override;
 			virtual void Update(float ts) override;
@@ -41,6 +44,8 @@ namespace Application
 				/// 첫 패널이 0 이고, 모든 간격이 1일 때에 가능함
 				Size
 			};
+
+			static std::function<void()> testInitializer;
 
 			void UI_DrawMenubar();
 

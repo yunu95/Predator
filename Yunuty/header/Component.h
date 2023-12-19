@@ -21,12 +21,14 @@ namespace yunutyEngine
 {
     class GameObject;
     class YunutyCycle;
-    class Collision;
+    class Transform;
     class Collision2D;
     class Collider2D;
-    class Collider;
-    class Transform;
-
+    namespace physics
+    {
+        class Collision;
+        class Collider;
+    }
     /// <summary>
     /// Component는 게임 오브젝트들에게 배치될 수 있는 객체입니다.
     /// 게임 오브젝트는 해당 게임 오브젝트에 어떤 Component들이 배치되어 있느냐에 따라 그 성질이 정의된다고 볼 수 있습니다.
@@ -51,6 +53,7 @@ namespace yunutyEngine
         GUID guid;
     protected:
         Component();
+        bool wasStartCalled() { return StartCalled; }
     public:
         template<typename ComponentType>
         static ComponentType* LoadReferenceByGUID(const char* guid)
@@ -72,8 +75,8 @@ namespace yunutyEngine
                 wcscpy_s(reinterpret_cast<WCHAR*>(rpcStr), wcslen(guid) + 1, guid);
              */   //wcscpy_s((WCHAR*)rpcStr, wcslen(guid) + 1, guid);
 
-            //UuidFromStringW((RPC_WSTR)(guid), &uuid);
-            //RpcSsFree(rpcStr);
+             //UuidFromStringW((RPC_WSTR)(guid), &uuid);
+             //RpcSsFree(rpcStr);
             return LoadReferenceByGUID<ComponentType>(uuid);
         }
         template<typename ComponentType>
@@ -102,15 +105,26 @@ namespace yunutyEngine
         // 충돌체 간에 이벤트가 일어날 때, 콜라이더가 배치된 게임 오브젝트가 갖고 있는 모든 Component들에게
         // 해당 이벤트에 대응되는 콜백 함수가 호출됩니다.
 
-        // 충돌체들이 서로 충돌을 시작할 때 호출되는 콜백 함수입니다.
-        virtual void OnCollisionEnter(const Collision& collision) {};
+        // 리지드바디들끼리 충돌을 시작할 때 호출되는 콜백 함수입니다.
+        virtual void OnCollisionEnter(const physics::Collision& collision) {};
+        // 2D 콜라이더가 다른 2D 콜라이더와 겹쳐지기 시작할 때 호출되는 콜백 함수입니다.
         virtual void OnCollisionEnter2D(const Collision2D& collision) {};
-        // 충돌체들이 서로 겹쳐진 상태로 있을때 매 프레임마다 호출되는 콜백 함수입니다.
-        virtual void OnCollisionStay(const Collision& collision) {};
+        // 리지드바디들끼리 겹쳐진 상태로 있을때 매 프레임마다 호출되는 콜백 함수입니다.
+        virtual void OnCollisionStay(const physics::Collision& collision) {};
+        // 2D 콜라이더가 다른 2D 콜라이더와 서로 겹쳐진 상태로 있을때 매 프레임마다 호출되는 콜백 함수입니다.
         virtual void OnCollisionStay2D(const Collision2D& collision) {};
-        // 충돌체들이 충돌을 마치고 서로 떨어져 나갈때 호출되는 콜백 함수입니다.
-        virtual void OnCollisionExit(const Collision& collision) {};
+        // 리지드바디들끼리 충돌을 마치고 서로 떨어져 나갈때 호출되는 콜백 함수입니다.
+        virtual void OnCollisionExit(const physics::Collision& collision) {};
+        // 2D 콜라이더가 다른 2D 콜라이더로부터 떨어져 나갈때 호출되는 콜백 함수입니다.
         virtual void OnCollisionExit2D(const Collision2D& collision) {};
+
+        // 콜라이더가 트리거 콜라이더와 충돌을 시작할 때 호출되는 콜백 함수입니다.
+        virtual void OnTriggerEnter(physics::Collider* collider) {};
+        // 콜라이더가 트리거 콜라이더와 서로 겹쳐진 상태로 있을때 매 프레임마다 호출되는 콜백 함수입니다.
+        //virtual void OnTriggerStay(const physics::Collider* collider) {};
+
+        // 콜라이더가 트리거 콜라이더로부터 떨어져 나갈때 호출되는 콜백 함수입니다.
+        virtual void OnTriggerExit(physics::Collider* collider) {};
         virtual ~Component();
         Transform* GetTransform();
         GameObject* GetGameObject();
@@ -124,6 +138,6 @@ namespace yunutyEngine
         friend GameObject;
         friend YunutyCycle;
         friend Collider2D;
-        friend Collider;
+        friend physics::Collider;
     };
 }

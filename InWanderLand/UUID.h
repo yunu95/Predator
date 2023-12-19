@@ -17,6 +17,16 @@ namespace std
     class hash<UUID>
     {
     public:
+        size_t operator()(const UUID& uuid) const
+        {
+            return *reinterpret_cast<size_t*>(const_cast<UUID*>(&uuid)->Data4);
+        }
+    };
+
+    template <>
+    class hash<const UUID>
+    {
+    public:
         size_t operator()(const UUID& uuid) const 
         {
             return *reinterpret_cast<size_t*>(const_cast<UUID*>(&uuid)->Data4);

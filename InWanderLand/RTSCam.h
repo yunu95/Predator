@@ -17,7 +17,7 @@ public:
 
         if (!roamingMode)
         {
-            float cameraSpeed = 5.0f;
+            float cameraSpeed = 50.f;
             Camera::Update();
             Vector3d deltaDirection = Vector3d::zero;
 
@@ -25,17 +25,18 @@ public:
                 cameraSpeed = 20.0f;
 
             auto lastMousePos = yunutyEngine::Input::getMouseScreenPositionNormalized();
-            if (yunutyEngine::Input::isKeyDown(KeyCode::A) || lastMousePos.x < 0)
+            if (yunutyEngine::Input::isKeyDown(KeyCode::A) || lastMousePos.x <= 0)
                 deltaDirection -= Vector3d::right;
-            if (yunutyEngine::Input::isKeyDown(KeyCode::D) || lastMousePos.x > 1)
+            if (yunutyEngine::Input::isKeyDown(KeyCode::D) || lastMousePos.x >= 1)
                 deltaDirection += Vector3d::right;
-            if (yunutyEngine::Input::isKeyDown(KeyCode::W) || lastMousePos.y < 0)
-                deltaDirection += Vector3d::up;
-            if (yunutyEngine::Input::isKeyDown(KeyCode::S) || lastMousePos.y > 1)
-                deltaDirection -= Vector3d::up;
+            if (yunutyEngine::Input::isKeyDown(KeyCode::W) || lastMousePos.y <= 0)
+                deltaDirection += Vector3d::forward;
+            if (yunutyEngine::Input::isKeyDown(KeyCode::S) || lastMousePos.y >= 1)
+                deltaDirection -= Vector3d::forward;
 
             GetTransform()->position += deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed;
-            GetTransform()->rotation = Quaternion::Identity();
+            Quaternion quat = Quaternion::MakeWithForwardUp(Vector3d::down,Vector3d::forward);
+            GetTransform()->rotation = quat;
         }
         else
         {
@@ -116,6 +117,6 @@ public:
         }
     }
 private:
-    float expectedPlaneDistance() { return abs(GetTransform()->GetWorldPosition().z); };
+    float expectedPlaneDistance() { return abs(GetTransform()->GetWorldPosition().y); };
 };
 

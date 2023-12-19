@@ -45,7 +45,6 @@ namespace Application
 				return false;
 			}
 
-			data["template_data"] = UUID_To_String(templateData->GetUUID());
 			return true;
 		}
 
@@ -55,6 +54,8 @@ namespace Application
 			{
 				return false;
 			}
+
+			data["template_data"] = UUID_To_String(templateData->GetUUID());
 
 			return true;
 		}
@@ -66,9 +67,6 @@ namespace Application
 				return false;
 			}
 
-			auto& manager = TemplateDataManager::GetInstance();
-			templateData = std::static_cast<Units_TemplateData*>(manager.GetTemplateData(manager.GetDataKey(String_To_UUID(data["template_data"]))));
-
 			return true;
 		}
 
@@ -78,7 +76,12 @@ namespace Application
 			{
 				return false;
 			}
-			return true;
+
+			auto& tdManager = TemplateDataManager::GetInstance();
+
+			UUID uuid = String_To_UUID(data["template_data"]);
+
+			return SetTemplateData(tdManager.GetDataKey(uuid));
 		}
 
 		Units::Units()

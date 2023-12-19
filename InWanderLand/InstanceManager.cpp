@@ -30,7 +30,7 @@ namespace Application
 			auto tdptr = tdmanager.GetTemplateData(dataName);
 			if (tdptr == nullptr)
 			{
-				return false;
+				return nullptr;
 			}
 
 			IEditableData* instance;
@@ -59,7 +59,7 @@ namespace Application
 					break;
 			}
 
-			list[instance->GetUUID()] = std::make_unique<IEditableData>(instance);
+			list[instance->GetUUID()] = std::unique_ptr<IEditableData>(instance);
 			tdMap[instance->GetUUID()] = tdptr;
 
 			return instance;
@@ -171,7 +171,7 @@ namespace Application
 							return false;
 						}
 
-						list[uuid] = std::make_unique<IEditableData>(each);
+						list[uuid] = std::unique_ptr<IEditableData>(each);
 						tdMap[uuid] = each->GetTemplateData();
 						listBeforeMatching.erase(each);
 						break;
@@ -184,7 +184,7 @@ namespace Application
 
 		/// private
 		InstanceManager::InstanceManager()
-			: list(), tdMap(), listBeforeMatching(), mould()
+			: list(), tdMap(), listBeforeMatching(), mould(nullptr)
 		{
 
 		}

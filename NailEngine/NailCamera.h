@@ -21,11 +21,14 @@ public:
 	void SetAsMain();
 
 	DirectX::SimpleMath::Matrix& GetVTM() { return this->vtm; }
+	DirectX::SimpleMath::Matrix& GetVTMOrtho() { return this->vtmOrtho; }
 	DirectX::SimpleMath::Matrix& GetPTM() { return this->ptm; }
+	DirectX::SimpleMath::Matrix& GetWTM() { return this->wtm; }
 
 private:
 	DirectX::SimpleMath::Matrix wtm;
 	DirectX::SimpleMath::Matrix vtm;
+	DirectX::SimpleMath::Matrix vtmOrtho;
 	DirectX::SimpleMath::Matrix ptm;
 	float fov = DirectX::XM_PI / 4.f;
 	float cameraNear = 1.f;

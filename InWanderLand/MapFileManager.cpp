@@ -33,28 +33,30 @@ namespace Application
 
             if (loadFile.is_open())
             {
+                auto& templateManager = TemplateDataManager::GetInstance();
+
                 json mapData;
                 loadFile >> mapData;
 
                 // Manager √ ±‚»≠
-                TemplateDataManager::GetInstance().Clear();
                 instanceManager.Clear();
+                templateManager.Clear();
 
-                if (!TemplateDataManager::GetInstance().Decoding(mapData))
+                if (!instanceManager.PreDecoding(mapData) || !templateManager.PreDecoding(mapData))
                 {
                     loadFile.close();
                     return false;
                 }
 
-                if (instanceManager.Decoding(mapData))
+                if (!instanceManager.PostDecoding(mapData) || !templateManager.PostDecoding(mapData))
                 {
                     loadFile.close();
-                    return true;
+                    return false;
                 }
                 else
                 {
                     loadFile.close();
-                    return false;
+                    return true;
                 }
             }
             else
@@ -65,8 +67,21 @@ namespace Application
 
         bool MapFileManager::SaveMapFile(const std::string& path)
         {
-            json mapData = TemplateDataManager::GetInstance().Encoding();
-            mapData.merge_patch(instanceManager.Encoding());
+            auto& templateManager = TemplateDataManager::GetInstance();
+
+            json mapData;
+            
+            // Pre
+            if (!instanceManager.PreEncoding(mapData) || !templateManager.PreEncoding(mapData))
+            {
+                return false;
+            }
+
+            // Post
+            if (!instanceManager.PostEncoding(mapData) || !templateManager.PostEncoding(mapData))
+            {
+                return false;
+            }
 
             std::ofstream saveFile{ path };
 

@@ -12,6 +12,12 @@
 #include "YGDebugCubeAdapter.h"
 #include "IYunuGIDebugCube.h"
 #include "IYunuGIUIImage.h"
+#include "IYunuGIDirectionalLight.h"
+#include "YGDirectionalLightAdapter.h"
+#include "IYunuGIPointLight.h"
+#include "YGPointLightAdapter.h"
+#include "IYunuGISpotLight.h"
+#include "YGSpotLightAdapter.h"
 
 namespace yunuGIAdapter
 {
@@ -29,6 +35,18 @@ namespace yunuGIAdapter
 		{
 			return new SkinnedMeshAdapter{};
 		}
+		virtual yunuGI::IDirectionalLight* CreateDirectionalLight(const yunuGI::IDirectionalLightDesc& desc)
+		{
+			return new DirectionalLightAdapter{};
+		}
+		virtual yunuGI::IPointLight* CreatePointLight(const yunuGI::IPointLightDesc& desc)
+		{
+			return new PointLightAdapter{};
+		}
+		virtual yunuGI::ISpotLight* CreateSpotLight(const yunuGI::ISpotLightDesc& desc)
+		{
+			return new SpotLightAdapter{};
+		}
 		virtual yunuGI::IDebugCube* CreateDebugCube(const yunuGI::IDebugCubeDesc& desc)
 		{
 			return new DebugCubeAdapter{};
@@ -41,7 +59,5 @@ namespace yunuGIAdapter
 		{
 			return new UITextAdapter{};
 		}
-		virtual yunuGI::IDirectionalLight* CreateDirectionalLight(const yunuGI::IDirectionalLightDesc& desc) 
-		{ return nullptr; }
 	};
 }

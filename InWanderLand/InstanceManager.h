@@ -30,6 +30,8 @@ namespace Application
 			: public Storable
 		{
 		public:
+			friend class MapFileManager;
+
 			static InstanceManager& GetInstance();
 
 			virtual ~InstanceManager();

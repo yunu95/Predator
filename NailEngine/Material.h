@@ -1,32 +1,47 @@
 #pragma once
+#include "IMaterial.h"
 
-#include "YunuGraphicsInterface.h"
+#include "Resource.h"
 
-#include <string>
 #include <array>
 
 #include "Struct.h"
 
-class Material
+class VertexShader;
+class PixelShader;
+class Texture;
+class yunuGI::IShader;
+class yunuGI::ITexture;
+
+class Material : public yunuGI::IMaterial, public Resource
 {
 public:
 	Material();
 	~Material();
+	Material(const Material& rhs);
 
 public:
-#pragma region Setter
-	void SetMaterialName(const yunuGI::MaterialDesc& materialDesc) { this->materialDesc = materialDesc; }
+	virtual void SetVertexShader(const yunuGI::IShader* shader) override;
+	virtual void SetPixelShader(const yunuGI::IShader* shader) override;
+	virtual void SetTexture(yunuGI::Texture_Type textureType, const yunuGI::ITexture* texture) override;
+	virtual void SetColor(const yunuGI::Color& color) override;
+	virtual void SetInt(int index, int val) override;
+	virtual const yunuGI::IShader* GetPixelShader() const override;
 
-#pragma endregion
-
+public:
 	void PushGraphicsData();
+	void UnBindGraphicsData();
 
 private:
-	yunuGI::MaterialDesc materialDesc;
+	yunuGI::Color color{1.f,1.f,1.f,1.f};
 
-	std::wstring vs;
-	std::wstring ps;
-	std::array<std::wstring, MAX_TEXTURE> textures;
+	std::shared_ptr<VertexShader> vs;
+	std::shared_ptr<PixelShader> ps;
+
+	std::array<std::shared_ptr<Texture>, MAX_TEXTURE> textures;
+	std::array<unsigned int, MAX_TEXTURE> useTextures;
+	std::array<int, MAX_INT> temp_int;
+	int lightIndex;
 
 	MaterialBuffer materialBuffer;
 };

@@ -21,6 +21,8 @@ namespace Application
 			: public Storable
 		{
 		public:
+			friend class MapFileManager;
+
 			static TemplateDataManager& GetInstance();
 
 			virtual ~TemplateDataManager();

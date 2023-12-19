@@ -6,6 +6,7 @@
 
 class IRenderable;
 
+
 class RenderableManager
 {
 public:
@@ -14,6 +15,7 @@ public:
 
 public:
 	void PushRenderableObject(std::shared_ptr<IRenderable> renderable);
+	void PopRenderableObject(std::shared_ptr<IRenderable> renderable);
 
 #pragma region Getter
 	std::unordered_set<std::shared_ptr<IRenderable>>& GetRenderableSet() { return this->renderableSet; }
@@ -21,6 +23,5 @@ public:
 
 private:
 	std::unordered_set<std::shared_ptr<IRenderable>> renderableSet;
-
 };
 

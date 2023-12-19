@@ -15,8 +15,17 @@ namespace Application
 {
 	namespace Editor
 	{
+		std::function<void()> EditorLayer::testInitializer;
+
 		void EditorLayer::Initialize()
 		{
+			/// Test 환경을 위한 Initialize 지원
+			if (EditorLayer::testInitializer)
+			{
+				EditorLayer::testInitializer();
+				return;
+			}
+
 			/// 각종 매니저 클래스 메모리 할당
 			MapFileManager::GetInstance();
 
@@ -63,6 +72,11 @@ namespace Application
 			{
 				each->Finalize();
 			}
+		}
+
+		void EditorLayer::AssignTestInitializer(std::function<void()> testInitializer)
+		{
+			EditorLayer::testInitializer = testInitializer;
 		}
 
 		/// private
