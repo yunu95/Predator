@@ -5,17 +5,17 @@
 
 #include "Command.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class MapFileManager;
 	}
 }
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class SaveMapCommand
 			: public Command

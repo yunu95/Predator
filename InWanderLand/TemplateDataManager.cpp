@@ -4,9 +4,9 @@
 
 #include <assert.h>
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		std::unique_ptr<TemplateDataManager> TemplateDataManager::instance = nullptr;
 

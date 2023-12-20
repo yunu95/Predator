@@ -11,9 +11,9 @@
 #include <memory>
 #include <string>
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class Ornaments
 			: public IEditableData

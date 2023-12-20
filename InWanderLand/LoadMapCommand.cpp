@@ -2,9 +2,9 @@
 
 #include "MapFileManager.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		LoadMapCommand::LoadMapCommand()
 			: mapFileManager(MapFileManager::GetInstance())
@@ -14,7 +14,7 @@ namespace Application
 
 		void LoadMapCommand::Execute()
 		{
-			mapFileManager.LoadMapFile("TestMap");
+			mapFileManager.LoadMapFile("TestMap.pmap");
 		}
 	}
 }

@@ -2,9 +2,9 @@
 
 #include "imgui.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		std::unique_ptr<MiniMapPanel> MiniMapPanel::instance = nullptr;
 

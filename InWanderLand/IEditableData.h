@@ -10,17 +10,17 @@
 #include <memory>
 #include <string>
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class TemplateData;
 	}
 }
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class IEditableData
 			: public Identifiable, public Storable

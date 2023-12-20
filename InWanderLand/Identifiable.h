@@ -7,9 +7,9 @@
 
 #include <string>
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		std::string UUID_To_String(UUID uuid);
 		UUID String_To_UUID(std::string str);

@@ -13,9 +13,9 @@
 #include "CommandManager.h"
 #include "EditorPanel.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class EditorLayer
 			: public Layer

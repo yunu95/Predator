@@ -10,9 +10,9 @@
 #include <memory>
 #include <string>
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		struct POD_TemplateData
 		{

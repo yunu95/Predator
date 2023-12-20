@@ -6,17 +6,18 @@
 #include <string>
 #include <memory>
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class InstanceManager;
+		class TemplateDataManager;
 	}
 }
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class MapFileManager
 		{
@@ -28,6 +29,8 @@ namespace Application
 			bool LoadMapFile(const std::string& path);
 			bool SaveMapFile(const std::string& path);
 
+			void Clear();
+
 		private:
 			static std::unique_ptr<MapFileManager> instance;
 
@@ -36,6 +39,8 @@ namespace Application
 			MapFileManager& operator=(const MapFileManager&) = delete;
 
 			InstanceManager& instanceManager;
+			TemplateDataManager& templateDataManager;
+
 			std::string currentMap;
 		};
 	}

@@ -1,8 +1,8 @@
 #include "Storable.h"
 
-namespace Application
+namespace application
 {
-    namespace Editor
+    namespace editor
     {
         json Storable::Encoding() const
         {

@@ -3,9 +3,9 @@
 #include "EditableDataList.h"
 #include "TemplateDataManager.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		std::unique_ptr<InstanceManager> InstanceManager::instance = nullptr;
 

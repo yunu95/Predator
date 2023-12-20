@@ -2,9 +2,9 @@
 
 #include "imgui.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		std::unique_ptr<InspectorPanel> InspectorPanel::instance = nullptr;
 

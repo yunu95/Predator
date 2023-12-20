@@ -443,7 +443,6 @@
     <ClCompile Include="TestCaseD3D11LiveObjImgui.cpp">
       <Filter>TestCodes</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="UUIDManager.cpp">
       <Filter>Editor\DataSystem</Filter>
     </ClCompile>

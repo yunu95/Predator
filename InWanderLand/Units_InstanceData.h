@@ -6,9 +6,9 @@
 
 #include "InstanceData.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		struct POD_Units_InstanceData
 		{

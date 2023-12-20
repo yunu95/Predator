@@ -2,9 +2,9 @@
 
 #include "TemplateDataManager.h"
 
-namespace Application
+namespace application
 {
-    namespace Editor
+    namespace editor
     {
         std::string TemplateData::GetDataKey() const
         {

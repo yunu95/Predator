@@ -3,9 +3,9 @@
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		TemplateData* Ornaments::GetTemplateData()
 		{
@@ -40,22 +40,48 @@ namespace Application
 
 		bool Ornaments::PreEncoding(json& data) const
 		{
+			if (!instanceData.PreEncoding(data["instance_data"]))
+			{
+				return false;
+			}
+
 			return true;
 		}
 
 		bool Ornaments::PostEncoding(json& data) const
 		{
+			if (!instanceData.PostEncoding(data["instance_data"]))
+			{
+				return false;
+			}
+
+			data["template_data"] = UUID_To_String(templateData->GetUUID());
+
 			return true;
 		}
 
 		bool Ornaments::PreDecoding(const json& data)
 		{
+			if (!instanceData.PreDecoding(data["instance_data"]))
+			{
+				return false;
+			}
+
 			return true;
 		}
 
 		bool Ornaments::PostDecoding(const json& data)
 		{
-			return true;
+			if (!instanceData.PostDecoding(data["instance_data"]))
+			{
+				return false;
+			}
+
+			auto& tdManager = TemplateDataManager::GetInstance();
+
+			UUID uuid = String_To_UUID(data["template_data"]);
+
+			return SetTemplateData(tdManager.GetDataKey(uuid));
 		}
 
 		Ornaments::Ornaments()

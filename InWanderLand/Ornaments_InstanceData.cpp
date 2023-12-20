@@ -2,9 +2,9 @@
 
 #include "Ornaments_TemplateData.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		bool Ornaments_InstanceData::EnterDataFromTemplate(const TemplateData* templateData)
 		{
@@ -24,6 +24,8 @@ namespace Application
 
 		bool Ornaments_InstanceData::PreEncoding(json& data) const
 		{
+			FieldEncoding<boost::pfr::tuple_size_v<POD_InstanceData>>(InstanceData::pod, data["POD_Base"]);
+			FieldEncoding<boost::pfr::tuple_size_v<POD_Ornaments_InstanceData>>(pod, data["POD"]);
 			return true;
 		}
 
@@ -34,6 +36,8 @@ namespace Application
 
 		bool Ornaments_InstanceData::PreDecoding(const json& data)
 		{
+			FieldDecoding<boost::pfr::tuple_size_v<POD_InstanceData>>(InstanceData::pod, data["POD_Base"]);
+			FieldDecoding<boost::pfr::tuple_size_v<POD_Ornaments_InstanceData>>(pod, data["POD"]);
 			return true;
 		}
 

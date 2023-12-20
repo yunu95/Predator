@@ -7,9 +7,9 @@
 
 #include <memory>
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class PreviewPanel
 			: public Panel

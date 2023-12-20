@@ -1,8 +1,8 @@
 #include "CommandManager.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		std::unique_ptr<CommandManager> CommandManager::instance = nullptr;
 

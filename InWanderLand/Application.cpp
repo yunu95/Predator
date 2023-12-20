@@ -32,7 +32,7 @@ HWND hWND = NULL;
 HWND editorHWND = NULL;
 WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("InWanderLand"), NULL };
 
-namespace Application
+namespace application
 {
     std::unique_ptr<Application> Application::instance = nullptr;
 
@@ -159,7 +159,7 @@ namespace Application
         //ImGui::SetCursorPosY(ImGui::GetCurrentWindow()->WindowPadding.y);
 
 #ifdef _DEBUG
-        layers[(int)LayerList::EditorLayer] = new Editor::EditorLayer();
+        layers[(int)LayerList::EditorLayer] = new editor::EditorLayer();
 #endif
 
         layers[(int)LayerList::ContentsLayer] = new Contents::ContentsLayer();

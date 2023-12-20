@@ -2,12 +2,9 @@
 
 #include "MapFileManager.h"
 
-#include "TemplateDataManager.h"
-#include "InstanceManager.h"
-
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		SaveMapCommand::SaveMapCommand()
 			: mapFileManager(MapFileManager::GetInstance())
@@ -17,7 +14,7 @@ namespace Application
 
 		void SaveMapCommand::Execute()
 		{
-			mapFileManager.SaveMapFile("TestMap");
+			mapFileManager.SaveMapFile("TestMap.pmap");
 		}
 	}
 }

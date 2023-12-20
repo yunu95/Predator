@@ -2,9 +2,9 @@
 
 #include "Units_TemplateData.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		bool Units_InstanceData::EnterDataFromTemplate(const TemplateData* templateData)
 		{

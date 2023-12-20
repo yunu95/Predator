@@ -11,9 +11,9 @@
 #include "MenubarCommands.h"
 #include "Application.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		std::function<void()> EditorLayer::testInitializer;
 

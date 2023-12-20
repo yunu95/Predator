@@ -8,9 +8,9 @@
 
 #include <memory>
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class MiniMapPanel
 			: public Panel

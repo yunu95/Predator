@@ -12,9 +12,9 @@
 
 using json = nlohmann::json;
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{	
 		template <int N, typename T>
 		json FieldEncoding(T& classInstance, json& data)
@@ -68,13 +68,13 @@ namespace Application
 operator json() \
 { \
 	json data; \
-	Application::Editor::FieldEncoding<boost::pfr::tuple_size_v<Class>>(*this, data); \
+	application::editor::FieldEncoding<boost::pfr::tuple_size_v<Class>>(*this, data); \
 	return data; \
 }
 
 #define FROM_JSON(Class) \
 Class& operator=(const json& data) \
 { \
-	Application::Editor::FieldDecoding<boost::pfr::tuple_size_v<Class>>(*this, data); \
+	application::editor::FieldDecoding<boost::pfr::tuple_size_v<Class>>(*this, data); \
 	return *this; \
 }

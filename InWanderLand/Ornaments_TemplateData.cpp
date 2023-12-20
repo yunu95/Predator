@@ -2,9 +2,9 @@
 
 #include "TemplateDataManager.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		bool Ornaments_TemplateData::PreEncoding(json& data) const
 		{

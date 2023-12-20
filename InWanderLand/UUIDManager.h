@@ -4,14 +4,18 @@
 #pragma once
 
 #include "UUID.h"
+#include "unordered_map"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class UUIDManager
 		{
-			
+
+
+		private:
+
 		};
 	}
 }

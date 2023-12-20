@@ -6,9 +6,9 @@
 
 #include <memory>
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		template <typename T>
 		class Singleton
@@ -16,6 +16,7 @@ namespace Application
 		public:
 			static T& GetInstance()
 			{
+				static std::unique_ptr<T> instance = nullptr;
 				if (instance == nullptr)
 				{
 					instance = std::make_unique<T>();
@@ -36,12 +37,6 @@ namespace Application
 
 			Singleton(const Singleton&) = delete;
 			Singleton& operator=(const Singleton&) = delete;
-
-		private:
-			static std::unique_ptr<T> instance;
 		};
-
-		template <typename T>
-		std::unique_ptr<T> Singleton<T>::instance = nullptr;
 	}
 }

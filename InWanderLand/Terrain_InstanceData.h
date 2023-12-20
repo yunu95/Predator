@@ -6,10 +6,16 @@
 
 #include "InstanceData.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
+		struct POD_Terrain_InstanceData
+		{
+			TO_JSON(POD_Terrain_InstanceData);
+			FROM_JSON(POD_Terrain_InstanceData);
+		};
+
 		class Terrain_InstanceData
 			:public InstanceData
 		{
@@ -18,6 +24,8 @@ namespace Application
 		public:
 			// 템플릿으로부터 초기화되는 데이터들을 일괄적으로 처리하는 함수
 			virtual bool EnterDataFromTemplate(const TemplateData* templateData) override;
+
+			POD_Terrain_InstanceData pod = POD_Terrain_InstanceData();
 
 		protected:
 			virtual bool PreEncoding(json& data) const override;

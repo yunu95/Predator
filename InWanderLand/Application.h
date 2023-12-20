@@ -12,7 +12,7 @@
 #include <functional>
 #include <mutex>
 
-namespace Application
+namespace application
 {
     class Application
     {
@@ -57,7 +57,7 @@ namespace Application
         std::vector<Layer*> layers;
 
 #ifdef _DEBUG
-        Editor::CommandManager& cm = Editor::CommandManager::GetInstance();
+        editor::CommandManager& cm = editor::CommandManager::GetInstance();
 #endif
     };
 }

@@ -1,8 +1,8 @@
 #include "Identifiable.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		std::string UUID_To_String(UUID uuid)
 		{

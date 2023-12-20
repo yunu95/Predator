@@ -6,9 +6,9 @@
 
 #include "TemplateData.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class Terrain_TemplateData
 			:public TemplateData

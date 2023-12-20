@@ -30,8 +30,8 @@ namespace InWanderLand
         {
             try
             {
-                Application::Application& client = Application::Application::CreateApplication(0, 0);
-                Application::Contents::ContentsLayer::AssignTestInitializer(TestCaseD3D11LiveObjimguiInit);
+                application::Application& client = application::Application::CreateApplication(0, 0);
+                application::Contents::ContentsLayer::AssignTestInitializer(TestCaseD3D11LiveObjimguiInit);
                 client.Initialize();
                 client.Run();
                 client.Finalize();

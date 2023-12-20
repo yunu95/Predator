@@ -5,14 +5,14 @@
 
 #include "Command.h"
 
-namespace Application
+namespace application
 {
 	class Application;
 }
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class ProgramExitCommand
 			: public Command

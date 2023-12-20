@@ -14,17 +14,17 @@
 #include <unordered_set>
 
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class TemplateData;
 	}
 }
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class InstanceManager
 			: public Storable

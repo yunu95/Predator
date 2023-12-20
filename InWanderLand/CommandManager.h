@@ -11,9 +11,9 @@
 #include <stack>
 #include <concepts>
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class CommandManager
 		{

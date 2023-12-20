@@ -6,9 +6,9 @@
 
 #include <fstream>
 
-namespace Application
+namespace application
 {
-    namespace Editor
+    namespace editor
     {
         std::unique_ptr<MapFileManager> MapFileManager::instance = nullptr;
 
@@ -33,22 +33,19 @@ namespace Application
 
             if (loadFile.is_open())
             {
-                auto& templateManager = TemplateDataManager::GetInstance();
-
                 json mapData;
                 loadFile >> mapData;
 
                 // Manager √ ±‚»≠
-                instanceManager.Clear();
-                templateManager.Clear();
+                Clear();
 
-                if (!instanceManager.PreDecoding(mapData) || !templateManager.PreDecoding(mapData))
+                if (!instanceManager.PreDecoding(mapData) || !templateDataManager.PreDecoding(mapData))
                 {
                     loadFile.close();
                     return false;
                 }
 
-                if (!instanceManager.PostDecoding(mapData) || !templateManager.PostDecoding(mapData))
+                if (!instanceManager.PostDecoding(mapData) || !templateDataManager.PostDecoding(mapData))
                 {
                     loadFile.close();
                     return false;
@@ -67,18 +64,16 @@ namespace Application
 
         bool MapFileManager::SaveMapFile(const std::string& path)
         {
-            auto& templateManager = TemplateDataManager::GetInstance();
-
             json mapData;
             
             // Pre
-            if (!instanceManager.PreEncoding(mapData) || !templateManager.PreEncoding(mapData))
+            if (!instanceManager.PreEncoding(mapData) || !templateDataManager.PreEncoding(mapData))
             {
                 return false;
             }
 
             // Post
-            if (!instanceManager.PostEncoding(mapData) || !templateManager.PostEncoding(mapData))
+            if (!instanceManager.PostEncoding(mapData) || !templateDataManager.PostEncoding(mapData))
             {
                 return false;
             }
@@ -97,9 +92,16 @@ namespace Application
             }
         }
 
+        void MapFileManager::Clear()
+        {
+            instanceManager.Clear();
+            templateDataManager.Clear();
+        }
+
         /// private
         MapFileManager::MapFileManager()
-            : instanceManager(InstanceManager::GetInstance()), currentMap()
+            : instanceManager(InstanceManager::GetInstance()), templateDataManager(TemplateDataManager::GetInstance())
+            , currentMap()
         {
 
         }

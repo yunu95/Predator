@@ -3,9 +3,9 @@
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		TemplateData* Units::GetTemplateData()
 		{
