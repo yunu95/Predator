@@ -93,60 +93,66 @@ void yunutyEngine::YunutyCycle::ThreadFunction()
 
         auto sleepImplied = 10;
         sleepImplied -= Time::GetDeltaTimeUnscaled() * 1000;
-        if (sleepImplied > 1)
-            std::this_thread::sleep_for(std::chrono::milliseconds(sleepImplied));
-    }
+		/*   if (sleepImplied > 1)
+			   std::this_thread::sleep_for(std::chrono::milliseconds(sleepImplied));
+       */
+	}
 }
 // Update components and render camera
 void yunutyEngine::YunutyCycle::ThreadUpdate()
 {
     std::unique_lock lock{updateMutex};
-    Time::Update();
-
-    for (auto i = GlobalComponent::globalComponents.begin(); i != GlobalComponent::globalComponents.end(); i++)
-        (*i)->Update();
-
-    // 이 구조로 인해, OnDestroy함수에서 Scene::DestroyGameObject 함수를 호출하면 사이클이 터질수밖에 없다.
-    for (auto each : Scene::getCurrentScene()->destroyList)
+    try
     {
-        for (auto each : each->GetIndexedComponents())
-            each->OnDestroy();
-        each->parent->MoveChild(each);
+        Time::Update();
+
+        for (auto i = GlobalComponent::globalComponents.begin(); i != GlobalComponent::globalComponents.end(); i++)
+            (*i)->Update();
+
+        // 이 구조로 인해, OnDestroy함수에서 Scene::DestroyGameObject 함수를 호출하면 사이클이 터질수밖에 없다.
+        for (auto each : Scene::getCurrentScene()->destroyList)
+        {
+            for (auto each : each->GetIndexedComponents())
+                each->OnDestroy();
+            each->parent->MoveChild(each);
+        }
+
+        Scene::getCurrentScene()->destroyList.clear();
+
+        for (auto each : GetGameObjects(false))
+            each->SetCacheDirty();
+        for (auto each : GetActiveComponents())
+            UpdateComponent(each);
+
+        // 물리처리
+        auto pxScene = physics::_PhysxGlobal::SingleInstance().PxSceneByScene[Scene::currentScene];
+        if (Time::GetDeltaTime() > 0 && pxScene)
+        {
+            pxScene->simulate(Time::GetDeltaTime());
+            pxScene->fetchResults(true);
+        }
+
+        Collider2D::InvokeCollisionEvents();
+        graphics::Renderer::SingleInstance().Update(Time::GetDeltaTime());
+        if (autoRendering)
+        {
+            graphics::Renderer::SingleInstance().Render();
+        }
+
+        {
+            std::scoped_lock lock(actionReservationMutex);
+            for (auto each : afterUpdateActions)
+                each();
+            afterUpdateActions.clear();
+        }
     }
-
-    Scene::getCurrentScene()->destroyList.clear();
-
-    for (auto each : GetGameObjects(false))
-        each->SetCacheDirty();
-    for (auto each : GetActiveComponents())
-        UpdateComponent(each);
-
-    // 물리처리
-    auto pxScene = physics::_PhysxGlobal::SingleInstance().PxSceneByScene[Scene::currentScene];
-    if (Time::GetDeltaTime() > 0 && pxScene)
+    catch (const std::exception& e)
     {
-        pxScene->simulate(Time::GetDeltaTime());
-        pxScene->fetchResults(true);
+        if (onExceptionThrown)
+            onExceptionThrown(e);
+        else
+            throw e;
     }
-
-    Collider2D::InvokeCollisionEvents();
-    graphics::Renderer::SingleInstance().Update(Time::GetDeltaTime());
-    if (autoRendering)
-    {
-        graphics::Renderer::SingleInstance().Render();
-    }
-
-    {
-        std::scoped_lock lock(actionReservationMutex);
-        //actionReservationMutex.lock();
-        for (auto each : afterUpdateActions)
-            each();
-        afterUpdateActions.clear();
-        //actionReservationMutex.unlock();
-    }
-
-    //if (Camera::mainCamera)
-        //Camera::mainCamera->Render();
 }
 
 void yunutyEngine::YunutyCycle::ReserveActionAfterUpdate(std::function<void()> action)

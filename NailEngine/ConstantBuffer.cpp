@@ -9,8 +9,7 @@
 #include "ILight.h"
 
 ConstantBuffer::ConstantBuffer()
-	: mappedBuffer{nullptr},
-	currentIndex{0}
+	: mappedBuffer{nullptr}
 {
 
 }
@@ -20,12 +19,11 @@ ConstantBuffer::~ConstantBuffer()
 	delete[] mappedBuffer;
 }
 
-void ConstantBuffer::CraeteConstantBuffer(unsigned int size, unsigned int count)
+void ConstantBuffer::CraeteConstantBuffer(unsigned int size)
 {
 	this->size = (size + 15) & ~15;
-	this->count = count;
 
-	mappedBuffer = new BYTE[this->size * this->count];
+	mappedBuffer = new BYTE[this->size];
 
 	D3D11_BUFFER_DESC _bufferDesc;
 	_bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -62,5 +60,5 @@ void ConstantBuffer::PushGraphicsData(void* data, unsigned int size, unsigned in
 
 void ConstantBuffer::Clear()
 {
-	this->currentIndex = 0;
+
 }

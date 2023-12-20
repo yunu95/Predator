@@ -32,6 +32,8 @@ public:
 
 #pragma region Getter
 	unsigned int GetMaterialCount() { return this->materialCount; }
+	std::vector<VertexBuffer>& GetVertex() { return  vertexBufferVec; }
+	std::vector<IndexBuffer>& GetIdx() { return indexBufferVec; }
 
 #pragma endregion
 

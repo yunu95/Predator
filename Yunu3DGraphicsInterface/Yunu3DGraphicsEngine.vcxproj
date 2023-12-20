@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="FBXData.h" />
     <ClInclude Include="IAnimation.h" />
+    <ClInclude Include="IAnimator.h" />
     <ClInclude Include="ILight.h" />
     <ClInclude Include="IMaterial.h" />
     <ClInclude Include="IMesh.h" />

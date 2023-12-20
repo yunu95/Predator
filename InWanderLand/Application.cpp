@@ -144,9 +144,6 @@ namespace Application
         //IM_ASSERT(font != nullptr);
 #endif
 
-        /// Contents
-        //yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"YunuDX11Renderer.dll");
-        //yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"MZDX11Renderer.dll");
         yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
         yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(winSizeX, winSizeY);
         yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(hWND);
@@ -154,15 +151,15 @@ namespace Application
 
     void Application::Initialize()
     {
-        layers.resize(1);
+        layers.resize(2);
 
         //ImGui::SetCursorPosY(ImGui::GetCurrentWindow()->WindowPadding.y);
 
 #ifdef _DEBUG
-        //layers[(int)LayerList::EditorLayer] = new Editor::EditorLayer();
+        layers[(int)LayerList::EditorLayer] = new Editor::EditorLayer();
 #endif
 
-        layers[0] = new Contents::ContentsLayer();
+        layers[(int)LayerList::ContentsLayer] = new Contents::ContentsLayer();
 
         for (auto each : layers)
         {
@@ -186,60 +183,60 @@ namespace Application
             if (!isRunning)
                 break;
 
-            /// Editor 관련 영역, Release Mode 에서는 구현 안되도록 처리
-//#ifdef _DEBUG
-//        //Start the Dear ImGui frame
-//            ImGui_ImplDX11_NewFrame();
-//            ImGui_ImplWin32_NewFrame();
-//            ImGui::NewFrame();
-//
-//            ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
-//            //window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-//            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
-//            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-//            window_flags |= ImGuiWindowFlags_MenuBar;
-//
-//            {
-//                ImGui::Begin("DockSpace Demo", nullptr, window_flags);
-//
-//                ImGuiStyle& style = ImGui::GetStyle();
-//
-//                // Dockspace
-//                float minWinSizeX = style.WindowMinSize.x;
-//                style.WindowMinSize.x = 370.0f;
-//                ImGui::DockSpace(ImGui::GetID("MyDockspace"));
-//                style.WindowMinSize.x = minWinSizeX;
-//
-//                layers[(int)LayerList::EditorLayer]->Update(1);
-//                layers[(int)LayerList::EditorLayer]->GUIProgress();
-//
-//                ImGui::End();
-//            }
-//
-//            ImGui::Render();
-//
-//            ImVec4 clear_color = ImVec4(0.8f, 0.2f, 0.2f, 1.00f);
-//            const float clear_color_with_alpha[4] = { clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w };
-//            g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
-//            g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color_with_alpha);
-//            ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-//
-//            // Update and Render additional Platform Windows
-//            if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-//            {
-//                ImGui::UpdatePlatformWindows();
-//                ImGui::RenderPlatformWindowsDefault();
-//            }
-//
-//            //g_pSwapChain->Present(1, 0); // Present with vsync
-//            g_pSwapChain->Present(0, 0); // Present without vsync
-//
-//            // 커맨드들 실행
-//            cm.ExecuteCommands();
-//#endif
+        /// Editor 관련 영역, Release Delivery Mode 에서는 구현 안되도록 해야함 
+#ifdef EDITOR
+        //Start the Dear ImGui frame
+            ImGui_ImplDX11_NewFrame();
+            ImGui_ImplWin32_NewFrame();
+            ImGui::NewFrame();
 
-            layers[0]->Update(1);
-            layers[0]->GUIProgress();
+            ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
+            //window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
+            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+            window_flags |= ImGuiWindowFlags_MenuBar;
+
+            {
+                ImGui::Begin("DockSpace Demo", nullptr, window_flags);
+
+                ImGuiStyle& style = ImGui::GetStyle();
+
+                // Dockspace
+                float minWinSizeX = style.WindowMinSize.x;
+                style.WindowMinSize.x = 370.0f;
+                ImGui::DockSpace(ImGui::GetID("MyDockspace"));
+                style.WindowMinSize.x = minWinSizeX;
+
+                layers[(int)LayerList::EditorLayer]->Update(1);
+                layers[(int)LayerList::EditorLayer]->GUIProgress();
+
+                ImGui::End();
+            }
+
+            ImGui::Render();
+
+            ImVec4 clear_color = ImVec4(0.8f, 0.2f, 0.2f, 1.00f);
+            const float clear_color_with_alpha[4] = { clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w };
+            g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
+            g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color_with_alpha);
+            ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+            // Update and Render additional Platform Windows
+            if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+            {
+                ImGui::UpdatePlatformWindows();
+                ImGui::RenderPlatformWindowsDefault();
+            }
+
+            //g_pSwapChain->Present(1, 0); // Present with vsync
+            g_pSwapChain->Present(0, 0); // Present without vsync
+
+            // 커맨드들 실행
+            cm.ExecuteCommands();
+#endif
+
+            layers[(int)LayerList::ContentsLayer]->Update(1);
+            layers[(int)LayerList::ContentsLayer]->GUIProgress();
 
             // 게임 엔진을 멈추고 동작을 실행하는 부분
             {
@@ -385,7 +382,7 @@ ID3D11ShaderResourceView* GetSRV(void* handle)
         srvs[handle] = srv;
     }
     return srvs[handle];
-    }
+}
 
 #ifndef WM_DPICHANGED
 #define WM_DPICHANGED 0x02E0 // From Windows SDK 8.1+ headers

@@ -17,31 +17,35 @@ struct Vertex
 	DirectX::SimpleMath::Vector2 uv;
 	DirectX::SimpleMath::Vector3 normal;
 	DirectX::SimpleMath::Vector3 tangent;
-	DirectX::SimpleMath::Vector4 index{-1,-1,-1,-1};
-	DirectX::SimpleMath::Vector4 weights{-1.f,-1.f,-1.f,-1.f};
-
+	unsigned int indices[4]{0xffffffffu,0xffffffffu ,0xffffffffu ,0xffffffffu };
+	DirectX::SimpleMath::Vector4 weights{0.f,0.f,0.f,0.f};
+	
 public:
 	void FillBoneIndexWeight(unsigned int index, float weight)
 	{
-		if (this->index.x == -1)
+		if (indices[0] == 0xffffffffu)
 		{
-			this->index.x = index;
+			this->indices[0] = index;
 			this->weights.x = weight;
 		}
-		else if (this->index.y == -1)
+		else if (indices[1] == 0xffffffffu)
 		{
-			this->index.y = index;
+			this->indices[1] = index;
 			this->weights.y = weight;
 		}
-		else if (this->index.z == -1)
+		else if (indices[2] == 0xffffffffu)
 		{
-			this->index.z = index;
+			this->indices[2] = index;
 			this->weights.z = weight;
 		}
-		else if (this->index.w == -1)
+		else if (indices[3] == 0xffffffffu)
 		{
-			this->index.w = index;
+			this->indices[3] = index;
 			this->weights.w = weight;
+		}
+		else
+		{
+			assert(FALSE);
 		}
 	}
 };
@@ -67,6 +71,11 @@ struct CameraBuffer
 {
 	DirectX::SimpleMath::Vector3 position;
 	float padding;
+};
+
+struct BoneMatrix
+{
+	DirectX::SimpleMath::Matrix finalTM[256];
 };
 
 // Deferred Only

@@ -1,6 +1,11 @@
 #include "NailEngine.h"
 
 #include <assert.h>
+#include <shlobj.h>
+#include <filesystem>
+#include <ranges>
+#include <iostream>
+
 
 #include "ResourceBuilder.h"
 #include "Device.h"
@@ -14,6 +19,7 @@
 #include "RenderTargetGroup.h"
 
 #include "ILight.h"
+
 
 LazyObjects<NailEngine> NailEngine::Instance;
 
@@ -69,7 +75,7 @@ void NailEngine::Render()
 
 void NailEngine::SetResolution(unsigned int width, unsigned int height)
 {
-	this-> windowInfo.width = width;
+	this->windowInfo.width = width;
 	this->windowInfo.height = height;
 }
 
@@ -82,25 +88,31 @@ void NailEngine::CreateConstantBuffer()
 {
 	{
 		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
-		_constantBuffer->CraeteConstantBuffer(sizeof(MatrixBuffer), 256);
+		_constantBuffer->CraeteConstantBuffer(sizeof(MatrixBuffer));
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
 
 	{
 		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
-		_constantBuffer->CraeteConstantBuffer(sizeof(MaterialBuffer), 256);
+		_constantBuffer->CraeteConstantBuffer(sizeof(MaterialBuffer));
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
 
 	{
 		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
-		_constantBuffer->CraeteConstantBuffer(sizeof(LightParams), 1);
+		_constantBuffer->CraeteConstantBuffer(sizeof(LightParams));
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
 
 	{
 		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
-		_constantBuffer->CraeteConstantBuffer(sizeof(CameraBuffer), 256);
+		_constantBuffer->CraeteConstantBuffer(sizeof(CameraBuffer));
+		this->constantBuffers.emplace_back(_constantBuffer);
+	}
+
+	{
+		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
+		_constantBuffer->CraeteConstantBuffer(sizeof(BoneMatrix));
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
 }
@@ -133,7 +145,7 @@ void NailEngine::CreateRenderTargetGroup()
 			this->windowInfo.height,
 			DXGI_FORMAT_R32G32B32A32_FLOAT,
 			D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
-			);
+		);
 
 		rtVec[1].texture = ResourceManager::Instance.Get().CreateTexture(
 			L"NormalTarget",
@@ -162,7 +174,7 @@ void NailEngine::CreateRenderTargetGroup()
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)] = std::make_shared<RenderTargetGroup>();
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->SetRenderTargetVec(rtVec);
 	}
-	
+
 	// LIGHTING
 	{
 		std::vector<RenderTarget> rtVec(LIGHTING_MEMBER_COUNT);

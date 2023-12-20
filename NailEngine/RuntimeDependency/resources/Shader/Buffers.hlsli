@@ -67,6 +67,11 @@ cbuffer CameraBuffer : register(b3)
     float pad;
 };
 
+cbuffer BoneMatrixBuffer : register(b4)
+{
+    row_major matrix BoneTransform[256];
+}
+
 Texture2D AlbedoMap : register(t0);
 Texture2D NormalMap : register(t1);
 Texture2D ARMMap : register(t2);

@@ -46,7 +46,7 @@ namespace Application
 		void EditorLayer::GUIProgress()
 		{
 			UI_DrawMenubar();
-
+			
 			for (auto each : editorPanelList)
 			{
 				each->GUIProgress();

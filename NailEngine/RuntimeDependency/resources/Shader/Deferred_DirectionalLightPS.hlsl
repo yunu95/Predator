@@ -29,6 +29,7 @@ PS_OUT main(PixelIn input)
     }
     
     float3 viewNormal = Temp1Map.Sample(sam, input.uv).xyz;
+    //float3 viewNormal = pow(Temp1Map.Sample(sam, input.uv).xyz, 1 / 2.2f);
     
     LightColor color;
     

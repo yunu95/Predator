@@ -17,16 +17,16 @@ namespace yunuGIAdapter
 		StaticMeshAdapter() :RenderableAdapter() 
 		{
 			renderable = std::make_shared<StaticMesh>();
-			RenderableManager::Instance.Get().PushRenderableObject(renderable);
+			RenderableManager::Instance.Get().PushStaticRenderableObject(renderable);
 
-			std::shared_ptr<MaterialWrapper> material = std::make_shared<MaterialWrapper>();
+			std::shared_ptr<MaterialWrapper> material = std::make_shared<MaterialWrapper>(true);
 			material->SetRenderable(this->renderable);
 			this->materialVec.emplace_back(material);
 		}
 
 		~StaticMeshAdapter()
 		{
-			RenderableManager::Instance.Get().PopRenderableObject(renderable);
+			RenderableManager::Instance.Get().PopStaticRenderableObject(renderable);
 		}
 
 		virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)

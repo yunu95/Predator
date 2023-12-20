@@ -100,6 +100,9 @@
     <Filter Include="Contents\UnitFactory\UnitProductionOrder">
       <UniqueIdentifier>{1fe0b80f-260e-4d3d-8eee-ece07c14b020}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestCodes\nonValidationTests">
+      <UniqueIdentifier>{2a6a71a3-8099-4fc4-9690-9765cedeb43f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -433,5 +436,11 @@
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClCompile>
     <ClCompile Include="MagicianProduction.cpp" />
+    <ClCompile Include="SnippetTemplate.cpp">
+      <Filter>TestCodes\nonValidationTests</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetAnimation.cpp">
+      <Filter>TestCodes\nonValidationTests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

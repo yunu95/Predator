@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Utils.h"
+#include "Struct.h"
+#include "ModelData.h"
 
 #include <DirectXMath.h>
 #include "SimpleMath.h"
@@ -10,6 +12,8 @@ using namespace DirectX::PackedVector;
 
 class Mesh;
 class Material;
+class Animation;
+class NailAnimator;
 
 struct RenderInfo
 {
@@ -17,6 +21,13 @@ struct RenderInfo
 	Material* material;
 	unsigned int materialIndex;
 	DirectX::SimpleMath::Matrix wtm;
+};
+
+struct SkinnedRenderInfo
+{
+	RenderInfo renderInfo;
+	std::wstring modelName;
+	int animatorIndex;
 };
 
 
@@ -33,6 +44,7 @@ public:
 	void PushCameraData();
 	void Render();
 	void RenderObject();
+	void RenderSkinned();
 	void RenderLight();
 	void DrawFinal();
 
@@ -41,7 +53,16 @@ public:
 	void DrawDeferredInfo();
 
 private:
+	void BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo);
+	void ReadBone(FBXNode* fbxNode, DirectX::SimpleMath::Matrix parentMatrix, const std::string& fbxName, std::shared_ptr<NailAnimator> animator);
+
+private:
 	std::vector<RenderInfo> deferredVec;
 	std::vector<RenderInfo> forwardVec;
+	std::vector<SkinnedRenderInfo> skinnedVec;
+
+	BoneMatrix finalTM;
 };
+
+
 
