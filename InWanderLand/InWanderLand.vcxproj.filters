@@ -286,7 +286,10 @@
     <ClCompile Include="TestCaseD3D11LiveObjImgui.cpp">
       <Filter>TestCodes</Filter>
     </ClCompile>
-    <ClCompile Include="NVTestTemplate.cpp">
+    <ClCompile Include="SnippetTemplate.cpp">
+      <Filter>TestCodes\nonValidationTests</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetAnimation.cpp">
       <Filter>TestCodes\nonValidationTests</Filter>
     </ClCompile>
   </ItemGroup>
