@@ -83,6 +83,16 @@ void Unit::Update()
 	unitFSM.UpdateState();
 }
 
+Unit::UnitType Unit::GetUnitType() const
+{
+	return m_unitType;
+}
+
+Unit::UnitSide Unit::GetUnitSide() const
+{
+	return m_unitSide;
+}
+
 #pragma region State Engage()
 	void Unit::IdleEngage()
 	{
@@ -204,7 +214,7 @@ void Unit::Update()
 				isSkillStarted = false;
 				currentOrder = UnitState::Idle;
 				// 여기서 leftClickFunction을 스킬 사용 못하게 해야 한다....
-				PlayerController::GetInstance()->SetLeftClickEmpty();
+				PlayerController::GetInstance()->SetLeftClickMove();
 			}
 		}
 
@@ -325,6 +335,7 @@ void Unit::Update()
 
 		//if (m_currentTargetObject->GetComponent<Unit>()->GetUnitCurrentState() == UnitState::Death)
 
+		if(m_attackType == AttackType::Melee)
 
 		ProjectileSystem::GetInstance()->Shoot(this, m_currentTargetObject->GetComponent<Unit>(), m_bulletSpeed);
 	}
@@ -352,14 +363,14 @@ void Unit::StopMove()
 	GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(GetGameObject()->GetTransform()->GetWorldPosition());
 }
 
-std::string Unit::GetType() const
+void Unit::SetUnitType(UnitType type)
 {
-	return unitType;
+	m_unitType = type;
 }
 
-void Unit::SetType(string type)
+void Unit::SetUnitSide(UnitSide side)
 {
-	unitType = type;
+	m_unitSide = side;
 }
 
 void Unit::SetUnitHp(int p_Hp)
@@ -466,36 +477,23 @@ void Unit::OrderMove(Vector3d position)
 	currentOrder = UnitState::Move;
 }
 
-void Unit::OrderAttackMove(Vector3d position, bool isAllSelected)
+void Unit::OrderAttackMove(Vector3d position)
 {
 	m_currentMovePosition = position;
 	currentOrder = UnitState::AttackMove;
 
-	if (isAllSelected)
-	{
-		PlayerController::GetInstance()->ApplyCurrentPlayerOrder(InputManager::SelectedSerialNumber::All, PlayerController::OrderType::Move);
-	}
-	else
-	{
-		PlayerController::GetInstance()->ApplyCurrentPlayerOrder(this->playerSerialNumber, PlayerController::OrderType::Move);
-	}
+	PlayerController::GetInstance()->SetLeftClickMove();
 	// 다음 클릭은 Move로 바꿀 수 있도록 function 재정의.
 		
 	isAttackMoving = true;
 }
 
-void Unit::OrderQSkill(Vector3d position, bool isAllSelected)
+void Unit::OrderQSkill(Vector3d position)
 {
 	currentOrder = UnitState::QSkill;
 
-	if (isAllSelected)
-	{
-		PlayerController::GetInstance()->ApplyCurrentPlayerOrder(InputManager::SelectedSerialNumber::All, PlayerController::OrderType::Move);
-	}
-	else
-	{
-		PlayerController::GetInstance()->ApplyCurrentPlayerOrder(this->playerSerialNumber, PlayerController::OrderType::Move);
-	}
+	PlayerController::GetInstance()->SetLeftClickMove();
+
 	m_currentSkillPosition = position;
 }
 

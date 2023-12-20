@@ -23,7 +23,7 @@ namespace yunutyEngine
             // 길찾기 주체들의 최대 개체수
             int maxCrowdNumber{ 1024 };
             // 길찾기 주체들의 최대 충돌반경
-            float maxAgentRadius{ 0.6 };
+            float maxAgentRadius{ 10.0 };
             // 오를수 있는 경사
             float walkableSlopeAngle{ 30 };
             // 오를 수 있는 단차

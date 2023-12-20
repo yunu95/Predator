@@ -29,7 +29,71 @@ void PlayerController::SetMovingSystemComponent(RTSCam* sys)
 
 void PlayerController::AddPlayerUnit(Unit* p_playerUnit)
 {
-	playerComponentMap.insert({p_playerUnit, p_playerUnit->GetPlayerSerialNumber()});
+	playerComponentMap.insert({ p_playerUnit->GetPlayerSerialNumber(), p_playerUnit });
+}
+
+void PlayerController::SetLeftClickMove()
+{
+	if (currentSelectedSerialNumber == InputManager::SelectedSerialNumber::All)
+	{
+		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
+		{
+			for (auto e : playerComponentMap)
+			{
+				e.second->OrderMove(pos);
+			}
+		};
+	}
+	else
+	{
+		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
+		{
+			playerComponentMap.find(currentSelectedSerialNumber)->second->OrderMove(pos);
+		};
+	}
+
+}
+
+void PlayerController::SetLeftClickAttackMove()
+{
+	if (currentSelectedSerialNumber == InputManager::SelectedSerialNumber::All)
+	{
+		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
+		{
+			for (auto e : playerComponentMap)
+			{
+				e.second->OrderAttackMove(pos);
+			}
+		};
+	}
+	else
+	{
+		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
+		{
+			playerComponentMap.find(currentSelectedSerialNumber)->second->OrderAttackMove(pos);
+		};
+	}
+}
+
+void PlayerController::SetLeftClickSkill(int skillNum)
+{
+	if (currentSelectedSerialNumber == InputManager::SelectedSerialNumber::All)
+	{
+		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
+		{
+			for (auto e : playerComponentMap)
+			{
+				e.second->OrderQSkill(pos);
+			}
+		};
+	}
+	else
+	{
+		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
+		{
+			playerComponentMap.find(currentSelectedSerialNumber)->second->OrderQSkill(pos);
+		};
+	}
 }
 
 void PlayerController::SetLeftClickEmpty()
@@ -37,105 +101,117 @@ void PlayerController::SetLeftClickEmpty()
 	m_movingSystemComponent->groundLeftClickCallback = [](Vector3d pos) {};
 }
 
-void PlayerController::ApplyCurrentPlayerOrder(int unitSerialNumber, OrderType orderType)
+
+void PlayerController::SetRightClickEmpty()
 {
-	m_movingSystemComponent->GetMouseCursorObject()
-		->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 1, 1, 0 });
-
-	// 이전에 선택한 유닛과 같다면 그대로 둔다.
-	SelectFunctionByOrderType(unitSerialNumber, orderType);
-
-	previousSerialNumber = unitSerialNumber;
+	m_movingSystemComponent->groundRightClickCallback = [](Vector3d pos) {};
 }
 
-void PlayerController::SelectFunctionByOrderType(int unitSerialNumber, OrderType p_orderType)
+void PlayerController::SetCurrentPlayerSerialNumber(int p_num)
 {
-	switch (p_orderType)
-	{
-		case PlayerController::OrderType::Move:
-		{
-
-				if (unitSerialNumber == InputManager::SelectedSerialNumber::All)
-				{
-					m_movingSystemComponent->groundRightClickCallback = [=](Vector3d position)
-					{
-						for (auto e : playerComponentMap)
-						{
-							e.first->OrderMove(position);
-						}
-					};
-				}
-				else
-				{
-					for (auto e : playerComponentMap)
-					{
-						if (e.second == unitSerialNumber)
-						{
-							m_movingSystemComponent->groundRightClickCallback = [=](Vector3d position)
-							{
-								e.first->OrderMove(position);
-							};
-						}
-					}
-				}
-			break;
-		}
-
-		case PlayerController::OrderType::AttackMove:
-		{
-			if (unitSerialNumber == InputManager::SelectedSerialNumber::All)
-			{
-				m_movingSystemComponent->groundRightClickCallback = [=](Vector3d position)
-				{
-					for (auto e : playerComponentMap)
-					{
-						e.first->OrderAttackMove(position, true);
-					}
-				};
-			}
-			else
-			{
-				for (auto e : playerComponentMap)
-				{
-					if (e.second == unitSerialNumber)
-					{
-						m_movingSystemComponent->groundRightClickCallback = [=](Vector3d position)
-						{
-							e.first->OrderAttackMove(position, false);
-						};
-					}
-				}
-			}
-			break;
-		}
-		case PlayerController::OrderType::QSkill:
-		{
-			if (unitSerialNumber == InputManager::SelectedSerialNumber::All)
-			{
-				m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d position)
-				{
-					for (auto e : playerComponentMap)
-					{
-						e.first->OrderQSkill(position, true);
-					}
-				};
-			}
-			else
-			{
-				for (auto e : playerComponentMap)
-				{
-					if (e.second == unitSerialNumber)
-					{
-						m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d position)
-						{
-							e.first->OrderQSkill(position, false);
-						};
-					}
-				}
-			}
-			break;
-		}
-	}
+	currentSelectedSerialNumber = p_num;
+	SetLeftClickMove();
 }
+
+//void PlayerController::ApplyCurrentPlayerOrder(int unitSerialNumber, OrderType orderType)
+//{
+//	m_movingSystemComponent->GetMouseCursorObject()
+//		->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 1, 1, 0 });
+//
+//	// 이전에 선택한 유닛과 같다면 그대로 둔다.
+//	SelectFunctionByOrderType(unitSerialNumber, orderType);
+//
+//	previousSerialNumber = unitSerialNumber;
+//}
+//
+//void PlayerController::SelectFunctionByOrderType(int unitSerialNumber, OrderType p_orderType)
+//{
+//	switch (p_orderType)
+//	{
+//		case PlayerController::OrderType::Move:
+//		{
+//
+//				if (unitSerialNumber == InputManager::SelectedSerialNumber::All)
+//				{
+//					m_movingSystemComponent->groundRightClickCallback = [=](Vector3d position)
+//					{
+//						for (auto e : playerComponentMap)
+//						{
+//							e.first->OrderMove(position);
+//						}
+//					};
+//				}
+//				else
+//				{
+//					for (auto e : playerComponentMap)
+//					{
+//						if (e.second == unitSerialNumber)
+//						{
+//							m_movingSystemComponent->groundRightClickCallback = [=](Vector3d position)
+//							{
+//								e.first->OrderMove(position);
+//							};
+//						}
+//					}
+//				}
+//			break;
+//		}
+//
+//		case PlayerController::OrderType::AttackMove:
+//		{
+//			if (unitSerialNumber == InputManager::SelectedSerialNumber::All)
+//			{
+//				m_movingSystemComponent->groundRightClickCallback = [=](Vector3d position)
+//				{
+//					for (auto e : playerComponentMap)
+//					{
+//						e.first->OrderAttackMove(position, true);
+//					}
+//				};
+//			}
+//			else
+//			{
+//				for (auto e : playerComponentMap)
+//				{
+//					if (e.second == unitSerialNumber)
+//					{
+//						m_movingSystemComponent->groundRightClickCallback = [=](Vector3d position)
+//						{
+//							e.first->OrderAttackMove(position, false);
+//						};
+//					}
+//				}
+//			}
+//			break;
+//		}
+//		case PlayerController::OrderType::QSkill:
+//		{
+//			if (unitSerialNumber == InputManager::SelectedSerialNumber::All)
+//			{
+//				m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d position)
+//				{
+//					for (auto e : playerComponentMap)
+//					{
+//						e.first->OrderQSkill(position, true);
+//					}
+//				};
+//			}
+//			else
+//			{
+//				for (auto e : playerComponentMap)
+//				{
+//					if (e.second == unitSerialNumber)
+//					{
+//						m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d position)
+//						{
+//							e.first->OrderQSkill(position, false);
+//						};
+//					}
+//				}
+//			}
+//			break;
+//		}
+//	}
+//}
 
 

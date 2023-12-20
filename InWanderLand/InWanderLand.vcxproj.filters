@@ -97,6 +97,9 @@
     <Filter Include="Contents\SkillSystem">
       <UniqueIdentifier>{4e094e6e-1794-44d8-b6ae-21411ec09e19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\UnitFactory\UnitProductionOrder">
+      <UniqueIdentifier>{1fe0b80f-260e-4d3d-8eee-ece07c14b020}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -262,6 +265,19 @@
     <ClInclude Include="InputManager.h">
       <Filter>Contents\InputManager</Filter>
     </ClInclude>
+    <ClInclude Include="SkillSystem.h">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitProductionOrder.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClInclude>
+    <ClInclude Include="WarriorProduction.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClInclude>
+    <ClInclude Include="HealerProduction.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicianProduction.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -386,5 +402,36 @@
     <ClCompile Include="InputManager.cpp">
       <Filter>Contents\InputManager</Filter>
     </ClCompile>
+    <ClCompile Include="TestCaseTemplate.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCasePhysics.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCaseNavigation.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCaseD3D11LiveObj.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCaseD3D11LiveObjImgui.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCaseGroupControl.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillSystem.cpp">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitProductionOrder.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClCompile>
+    <ClCompile Include="WarriorProduction.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClCompile>
+    <ClCompile Include="HealerProduction.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicianProduction.cpp" />
   </ItemGroup>
 </Project>

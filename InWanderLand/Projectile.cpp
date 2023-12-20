@@ -3,7 +3,7 @@
 #include "ProjectileSystem.h"
 #include "Unit.h"
 
-void Projectile::SetOwnerType(string type)
+void Projectile::SetOwnerType(Unit::UnitType type)
 {
 	ownerType = type;
 }

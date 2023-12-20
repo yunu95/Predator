@@ -29,17 +29,25 @@ public:
 
 private:
 	RTSCam* m_movingSystemComponent;
-	std::map<Unit*, int> playerComponentMap;
+	std::map<int, Unit*> playerComponentMap;
+	int currentSelectedSerialNumber = 0;
 	int previousSerialNumber = 0;
 
-	void SelectFunctionByOrderType(int unitSerialNumber, OrderType p_orderType);
+	//void SelectFunctionByOrderType(int unitSerialNumber, OrderType p_orderType);
 
 public:
-	void ApplyCurrentPlayerOrder(int unitSerialNumber, OrderType orderType);
+	//void ApplyCurrentPlayerOrder(int unitSerialNumber, OrderType orderType);
 	void SetMovingSystemComponent(RTSCam* sys);
 	void AddPlayerUnit(Unit* p_playerUnit);
 
+	void SetLeftClickMove();
+	void SetLeftClickAttackMove();
+	void SetLeftClickSkill(int skillNum);
+
 	void SetLeftClickEmpty();
+	void SetRightClickEmpty();
+
+	void SetCurrentPlayerSerialNumber(int p_num);
 
 };
 

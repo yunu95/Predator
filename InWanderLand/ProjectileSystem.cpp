@@ -49,7 +49,7 @@ void ProjectileSystem::Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed)
 	}
 
 	m_projectileStack.top()->SetSelfActive(true);
-	m_projectileStack.top()->GetComponent<Projectile>()->SetOwnerType(ownerUnit->GetType());
+	m_projectileStack.top()->GetComponent<Projectile>()->SetOwnerType(ownerUnit->GetUnitType());
 	m_projectileStack.top()->GetComponent<Projectile>()->Shoot(ownerUnit, opponentUnit, speed);
 	m_projectileStack.pop();
 }

@@ -27,6 +27,14 @@ public:
 
     void Start()
     {
+		const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+		auto capsuleMesh = _resourceManager->GetMesh(L"Capsule");
+
+        mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+
+        mouseCursorMesh->GetGI().SetMesh(capsuleMesh);
+        mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 1, 0, 0 });
         //Vector3d startPosition = Vector3d(-30, 30, 0);
         //GetTransform()->SetWorldPosition(startPosition);
         //GetTransform()->rotation = lookAt(startPosition, Vector3d::zero, GetTransform()->rotation.Up());

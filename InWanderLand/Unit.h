@@ -25,9 +25,33 @@ public:
 		StateEnd
 	};
 
+	enum class AttackType
+	{
+		Melee,
+		Ranged
+	};
+
+	enum class UnitType
+	{
+		Warrior,
+		Magician,
+		Healer,
+		MeleeEnemy,
+		Boss
+	};
+
+	enum class UnitSide
+	{
+		Player,
+		Enemy
+	};
+
 private:
 	FSM<UnitState> unitFSM{UnitState::Idle};
-	string unitType;
+
+	UnitType m_unitType;
+	UnitSide m_unitSide;
+	AttackType m_attackType;
 
 	int m_hp;
 	int m_ap;
@@ -117,8 +141,10 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 
-	string GetType() const;
-	void SetType(string type);
+	UnitType GetUnitType() const;
+	UnitSide GetUnitSide() const;
+	void SetUnitType(UnitType type);
+	void SetUnitSide(UnitSide side);
 
 	void SetUnitHp(int p_Hp);
 	void SetUnitAp(int p_Ap);
@@ -136,8 +162,8 @@ public:
 	void Damaged(GameObject* opponentObject, int opponentAp);
 
 	void OrderMove(Vector3d position);
-	void OrderAttackMove(Vector3d position, bool isAllSelected);
-	void OrderQSkill(Vector3d position, bool isAllSelected);
+	void OrderAttackMove(Vector3d position);
+	void OrderQSkill(Vector3d position);
 
 	void AddToOpponentObjectList(yunutyEngine::GameObject* obj);
 	void DeleteFromOpponentObjectList(yunutyEngine::GameObject* obj);
