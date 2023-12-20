@@ -67,8 +67,11 @@
     <Filter Include="TestCodes">
       <UniqueIdentifier>{8339e451-67eb-4692-ba45-88e6ad08ee10}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TestCodes\nonValidationTests">
+    <Filter Include="TestCodes\snippets">
       <UniqueIdentifier>{2a6a71a3-8099-4fc4-9690-9765cedeb43f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette">
+      <UniqueIdentifier>{a9b999c8-825f-44cf-a68d-f8b64f9f4397}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -287,10 +290,10 @@
       <Filter>TestCodes</Filter>
     </ClCompile>
     <ClCompile Include="SnippetTemplate.cpp">
-      <Filter>TestCodes\nonValidationTests</Filter>
+      <Filter>TestCodes\snippets</Filter>
     </ClCompile>
     <ClCompile Include="SnippetAnimation.cpp">
-      <Filter>TestCodes\nonValidationTests</Filter>
+      <Filter>TestCodes\snippets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
