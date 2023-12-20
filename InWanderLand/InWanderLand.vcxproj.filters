@@ -67,6 +67,9 @@
     <Filter Include="TestCodes">
       <UniqueIdentifier>{8339e451-67eb-4692-ba45-88e6ad08ee10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestCodes\nonValidationTests">
+      <UniqueIdentifier>{2a6a71a3-8099-4fc4-9690-9765cedeb43f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -282,6 +285,9 @@
     </ClCompile>
     <ClCompile Include="TestCaseD3D11LiveObjImgui.cpp">
       <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="NVTestTemplate.cpp">
+      <Filter>TestCodes\nonValidationTests</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

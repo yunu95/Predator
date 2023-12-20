@@ -330,6 +330,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="EditorEvents.cpp" />
     <ClCompile Include="EditorLayer.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="NVTestTemplate.cpp" />
     <ClCompile Include="Panel_CameraView.cpp" />
     <ClCompile Include="Panel_Hierarchy.cpp" />
     <ClCompile Include="Panel_Inspector.cpp" />
