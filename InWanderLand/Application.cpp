@@ -24,7 +24,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 // Data
 ID3D11Device* g_pd3dDevice = NULL;
 ID3D11DeviceContext* g_pd3dDeviceContext = NULL;
-IDXGISwapChain*  g_pSwapChain = NULL;
+IDXGISwapChain* g_pSwapChain = NULL;
 UINT g_ResizeWidth = NULL;
 UINT g_ResizeHeight = NULL;
 ID3D11RenderTargetView* g_mainRenderTargetView = NULL;
@@ -76,6 +76,7 @@ namespace Application
         {
             CleanupDeviceD3D();
             ::UnregisterClass(wc.lpszClassName, wc.hInstance);
+
             throw std::runtime_error(std::string("failed to create d3d device!"));
         }
 
@@ -174,7 +175,6 @@ namespace Application
         isRunning = true;
         while (isRunning)
         {
-            //yunutyEngine::graphics::Renderer::SingleInstance().ManualRender();
             MSG msg;
             while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
             {
@@ -240,7 +240,28 @@ namespace Application
 
             layers[(int)LayerList::ContentsLayer]->Update(1);
             layers[(int)LayerList::ContentsLayer]->GUIProgress();
+
+            // 게임 엔진을 멈추고 동작을 실행하는 부분
+            {
+                std::scoped_lock lock{loopTodoRegistrationMutex};
+                if (!loopRegistrations.empty())
+                {
+                    std::unique_lock preupdateLock{YunutyCycle::SingleInstance().preUpdateMutex};
+                    std::unique_lock updateLock{YunutyCycle::SingleInstance().updateMutex};
+
+                    for (auto each : loopRegistrations)
+                        each();
+                    loopRegistrations.clear();
+                }
+            }
+            if (!YunutyCycle::SingleInstance().IsGameRunning())
+            {
+                YunutyCycle::SingleInstance().Release();
+                isRunning = false;
+            }
         }
+        if (YunutyCycle::SingleInstance().IsGameRunning())
+            YunutyCycle::SingleInstance().Release();
     }
 
     void Application::Finalize()
@@ -275,6 +296,11 @@ namespace Application
             isRunning = false;
         }
     }
+    void Application::AddMainLoopTodo(std::function<void()> todo)
+    {
+        scoped_lock lock{ loopTodoRegistrationMutex };
+        loopRegistrations.push_back(todo);
+    }
 }
 
 // Helper functions
@@ -304,8 +330,13 @@ bool CreateDeviceD3D(HWND hWnd)
     HRESULT res = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &featureLevel, &g_pd3dDeviceContext);
     if (res == DXGI_ERROR_UNSUPPORTED) // Try high-performance WARP software driver if hardware is not available.
         res = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_WARP, nullptr, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &featureLevel, &g_pd3dDeviceContext);
+
     if (res != S_OK)
-        return false;
+    {
+        std::stringstream ss;
+        ss << std::hex << res;
+        throw std::runtime_error(string("D3D11CreateDeviceAndSwapChain caused runtime error, error code : ") + ss.str());
+    }
 
     CreateRenderTarget();
     return true;
@@ -354,7 +385,7 @@ ID3D11ShaderResourceView* GetSRV(void* handle)
         srvs[handle] = srv;
     }
     return srvs[handle];
-}
+    }
 
 #ifndef WM_DPICHANGED
 #define WM_DPICHANGED 0x02E0 // From Windows SDK 8.1+ headers
@@ -375,28 +406,28 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     switch (msg)
     {
-        case WM_SIZE:
-            if (wParam == SIZE_MINIMIZED)
-                return 0;
-            g_ResizeWidth = (UINT)LOWORD(lParam); // Queue resize
-            g_ResizeHeight = (UINT)HIWORD(lParam);
+    case WM_SIZE:
+        if (wParam == SIZE_MINIMIZED)
             return 0;
-        case WM_SYSCOMMAND:
-            if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
-                return 0;
-            break;
-        case WM_DESTROY:
-            ::PostQuitMessage(0);
+        g_ResizeWidth = (UINT)LOWORD(lParam); // Queue resize
+        g_ResizeHeight = (UINT)HIWORD(lParam);
+        return 0;
+    case WM_SYSCOMMAND:
+        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
             return 0;
-        case WM_DPICHANGED:
-            if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DpiEnableScaleViewports)
-            {
-                //const int dpi = HIWORD(wParam);
-                //printf("WM_DPICHANGED to %d (%.0f%%)\n", dpi, (float)dpi / 96.0f * 100.0f);
-                const RECT* suggested_rect = (RECT*)lParam;
-                ::SetWindowPos(hWnd, nullptr, suggested_rect->left, suggested_rect->top, suggested_rect->right - suggested_rect->left, suggested_rect->bottom - suggested_rect->top, SWP_NOZORDER | SWP_NOACTIVATE);
-            }
-            break;
+        break;
+    case WM_DESTROY:
+        ::PostQuitMessage(0);
+        return 0;
+    case WM_DPICHANGED:
+        if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DpiEnableScaleViewports)
+        {
+            //const int dpi = HIWORD(wParam);
+            //printf("WM_DPICHANGED to %d (%.0f%%)\n", dpi, (float)dpi / 96.0f * 100.0f);
+            const RECT* suggested_rect = (RECT*)lParam;
+            ::SetWindowPos(hWnd, nullptr, suggested_rect->left, suggested_rect->top, suggested_rect->right - suggested_rect->left, suggested_rect->bottom - suggested_rect->top, SWP_NOZORDER | SWP_NOACTIVATE);
+        }
+        break;
     }
     return ::DefWindowProcW(hWnd, msg, wParam, lParam);
 }

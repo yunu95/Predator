@@ -28,6 +28,7 @@ namespace yunutyEngine
     private:
         thread updateThread;
         bool isGameRunning{ false };
+        bool isUpdating{ false };
 
         void ActiveComponentsDo(function<void(Component*)> todo);
         void ActiveComponentsDo(void (Component::* method)());
@@ -47,6 +48,14 @@ namespace yunutyEngine
     public:
         // 수동으로 렌더링을 구동할 것 같으면 false로 두면 된다.
         bool autoRendering = true;
+        // yunuty 라이프사이클을 실행시키는 뮤텍스.
+        // 외부에서 락을 걸면 게임엔진 스레드의 업데이트 사이클이 돌고 있지 않음이 보장된다.
+        std::mutex updateMutex;
+        // yunuty 업데이트 라이프사이클을 실행하기 전 거치는 뮤텍스.
+        // 외부에서 락을 걸면 게임엔진 스레드의 업데이트 사이클이 한번 더 돌지 않을 것임이 보장된다.
+        std::mutex preUpdateMutex;
+        // 예외가 발생했을때 예외를 던지는 대신 이 함수를 호출한다. 함수가 등록되어 있지 않으면 예외를 던진다.
+        std::function<void(const std::exception& e)> onExceptionThrown;
         static YunutyCycle& SingleInstance();
         virtual void Initialize();
         virtual void Release();
@@ -58,5 +67,6 @@ namespace yunutyEngine
         void ReserveActionAfterUpdate(std::function<void()> action);
         void SetMaxFrameRate();
         bool IsGameRunning();
+        bool IsUpdating();
     };
 }
