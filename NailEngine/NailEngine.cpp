@@ -88,31 +88,31 @@ void NailEngine::CreateConstantBuffer()
 {
 	{
 		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
-		_constantBuffer->CraeteConstantBuffer(sizeof(MatrixBuffer), 256);
+		_constantBuffer->CraeteConstantBuffer(sizeof(MatrixBuffer));
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
 
 	{
 		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
-		_constantBuffer->CraeteConstantBuffer(sizeof(MaterialBuffer), 256);
+		_constantBuffer->CraeteConstantBuffer(sizeof(MaterialBuffer));
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
 
 	{
 		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
-		_constantBuffer->CraeteConstantBuffer(sizeof(LightParams), 1);
+		_constantBuffer->CraeteConstantBuffer(sizeof(LightParams));
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
 
 	{
 		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
-		_constantBuffer->CraeteConstantBuffer(sizeof(CameraBuffer), 256);
+		_constantBuffer->CraeteConstantBuffer(sizeof(CameraBuffer));
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
 
 	{
 		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
-		_constantBuffer->CraeteConstantBuffer(sizeof(BoneMatrix), 256);
+		_constantBuffer->CraeteConstantBuffer(sizeof(BoneMatrix));
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
 }

@@ -211,7 +211,7 @@ void ModelLoader::LoadAnimation(const aiScene* scene)
 				{
 					aiQuatKey quatKey = nodeAnim->mRotationKeys[k];
 
-					animationClip.keyFrameInfoVec[boneIndex][k].rot = DirectX::SimpleMath::Vector4{ quatKey.mValue.x, quatKey.mValue.y, quatKey.mValue.z, quatKey.mValue.w };
+					animationClip.keyFrameInfoVec[boneIndex][k].rot = DirectX::SimpleMath::Quaternion{ quatKey.mValue.x, quatKey.mValue.y, quatKey.mValue.z, quatKey.mValue.w };
 				}
 
 				for (int k = 0; k < nodeAnim->mNumScalingKeys; ++k)

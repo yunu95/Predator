@@ -10,7 +10,7 @@ public:
 	ConstantBuffer();
 	~ConstantBuffer();
 
-	void CraeteConstantBuffer(unsigned int size, unsigned int count);
+	void CraeteConstantBuffer(unsigned int size);
 
 	void PushGraphicsData(void* data, unsigned int size, unsigned int slot);
 
@@ -22,8 +22,6 @@ private:
 	GUID myGuid;
 
 	unsigned int size;
-	unsigned int count;
-	unsigned int currentIndex;
 
 	BYTE* mappedBuffer;
 };

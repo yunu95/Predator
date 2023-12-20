@@ -28,6 +28,7 @@
 #include "Device.h"
 
 #include "NailAnimatorManager.h"
+#include "NailAnimator.h"
 
 #include <iostream>
 #include <fstream>
@@ -209,38 +210,6 @@ void RenderSystem::RenderSkinned()
 
 		auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.renderInfo.mesh->GetName()));
 
-		auto& vertex = mesh->GetVertex();
-		auto& idx = mesh->GetIdx();
-		
-		//std::ofstream outputfile("output.txt");
-
-
-		//for (int i = 0; i < idx[0].indexVec.size(); ++i)
-		//{
-		//	float weight[4]{ vertex[0].vertexVec[idx[0].indexVec[i]].weights.x ,vertex[0].vertexVec[idx[0].indexVec[i]].weights.y,
-		//		vertex[0].vertexVec[idx[0].indexVec[i]].weights.z, vertex[0].vertexVec[idx[0].indexVec[i]].weights.w};
-
-		//	DirectX::SimpleMath::Vector3 posL;
-		//	for (int j = 0; j < 4; ++j)
-		//	{
-		//		//vertex[0].vertexVec[idx[0].indexVec[i]].pos += weight[j] * ();
-		//		auto tempPos = DirectX::SimpleMath::Vector4(vertex[0].vertexVec[idx[0].indexVec[i]].pos.x, vertex[0].vertexVec[idx[0].indexVec[i]].pos.y,
-		//			vertex[0].vertexVec[idx[0].indexVec[i]].pos.z, 1.f);
-
-		//		auto tempFinalTM = finalTM.finalTM[vertex[0].vertexVec[idx[0].indexVec[i]].indices[j] == 0xffffffffu ? 0 : vertex[0].vertexVec[idx[0].indexVec[i]].indices[j]];
-
-		//		posL.x += weight[j] * (DirectX::SimpleMath::Vector4::Transform(tempPos, tempFinalTM)).x;
-		//		posL.y += weight[j] * (DirectX::SimpleMath::Vector4::Transform(tempPos, tempFinalTM)).y;
-		//		posL.z += weight[j] * (DirectX::SimpleMath::Vector4::Transform(tempPos, tempFinalTM)).z;
-		//	}
-		//	outputfile << i << " " << idx[0].indexVec[i] << std::endl;
-		//	outputfile << posL.x << " " << posL.y << " " << posL.z << std::endl;
-		//	outputfile << std::endl;
-
-		//}
-		//outputfile.close();
-
-
 		auto shaderList = ResourceManager::Instance.Get().GetShaderList();
 		for (auto& i : shaderList)
 		{
@@ -250,7 +219,6 @@ void RenderSystem::RenderSkinned()
 			}
 		}
 
-		
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.renderInfo.material->GetName()))->PushGraphicsData();
 		mesh->Render(e.renderInfo.materialIndex);
 	}
@@ -373,24 +341,48 @@ void RenderSystem::BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo)
 
 	auto fbxNode = ResourceManager::Instance.Get().GetFBXNode(skinnedRenderInfo.modelName);
 
-	ReadBone(fbxNode, DirectX::SimpleMath::Matrix::Identity, std::string{ skinnedRenderInfo.modelName.begin(), skinnedRenderInfo.modelName.end() });
+	ReadBone(fbxNode, DirectX::SimpleMath::Matrix::Identity, std::string{ skinnedRenderInfo.modelName.begin(), skinnedRenderInfo.modelName.end() }, animator);
 
 	NailEngine::Instance.Get().GetConstantBuffer(4)->PushGraphicsData(&this->finalTM, sizeof(BoneMatrix), 4);
 }
 
-void RenderSystem::ReadBone(FBXNode* fbxNode, DirectX::SimpleMath::Matrix parentMatrix, const std::string& fbxName)
+void RenderSystem::ReadBone(FBXNode* fbxNode, DirectX::SimpleMath::Matrix parentMatrix, const std::string& fbxName, std::shared_ptr<NailAnimator> animator)
 {
 	auto& boneInfoMap = ResourceManager::Instance.Get().GetFBXBoneData(fbxName);
 
-	for (int i = 0; i < fbxNode->child.size(); ++i)
-	{
-		ReadBone(fbxNode->child[i], fbxNode->transformMatrix * parentMatrix, fbxName);
-	}
+	Animation* animation = static_cast<Animation*>(animator->GetCurrentAnimation());
+	int currentFrame = animator->GetCurrentFrame();
+	int nextFrame = currentFrame + 1;
+	float frameRatio = animator->GetFrameRatio();
+	AnimationClip& animationClip = animation->GetAnimationClip();
+
+	DirectX::SimpleMath::Matrix srt = fbxNode->transformMatrix;
 
 	auto iter = boneInfoMap.find(fbxNode->nodeName);
-
 	if (iter != boneInfoMap.end())
 	{
-		this->finalTM.finalTM[iter->second.index] = iter->second.offset * fbxNode->transformMatrix * parentMatrix;
+		auto animationPos = DirectX::SimpleMath::Vector3::Lerp(animationClip.keyFrameInfoVec[iter->second.index][currentFrame].pos,
+			animationClip.keyFrameInfoVec[iter->second.index][nextFrame].pos, frameRatio);
+
+		auto animationScale = DirectX::SimpleMath::Vector3::Lerp(animationClip.keyFrameInfoVec[iter->second.index][currentFrame].scale,
+			animationClip.keyFrameInfoVec[iter->second.index][nextFrame].scale, frameRatio);
+
+		auto animationRot = DirectX::SimpleMath::Quaternion::Slerp(animationClip.keyFrameInfoVec[iter->second.index][currentFrame].rot,
+			animationClip.keyFrameInfoVec[iter->second.index][nextFrame].rot, frameRatio);
+
+		
+
+		auto translateMat = DirectX::SimpleMath::Matrix::CreateTranslation(animationPos);
+		auto rotationMat = DirectX::XMMatrixRotationQuaternion(animationRot);
+		auto scaleMat = DirectX::SimpleMath::Matrix::CreateScale(animationScale);
+
+		srt = scaleMat * rotationMat * translateMat;
+
+		this->finalTM.finalTM[iter->second.index] = iter->second.offset * srt * parentMatrix;
+	}
+
+	for (int i = 0; i < fbxNode->child.size(); ++i)
+	{
+		ReadBone(fbxNode->child[i], srt * parentMatrix, fbxName, animator);
 	}
 }

@@ -12,7 +12,7 @@ using namespace DirectX::PackedVector;
 struct KeyFrameInfo
 {
 	DirectX::SimpleMath::Vector3 pos;
-	DirectX::SimpleMath::Vector4 rot;
+	DirectX::SimpleMath::Quaternion rot;
 	DirectX::SimpleMath::Vector3 scale;
 };
 
@@ -45,6 +45,8 @@ public:
 	{
 		return animationClip.isLoop;
 	};
+
+	AnimationClip& GetAnimationClip() { return animationClip; }
 
 private:
 	AnimationClip animationClip;

@@ -13,6 +13,7 @@ using namespace DirectX::PackedVector;
 class Mesh;
 class Material;
 class Animation;
+class NailAnimator;
 
 struct RenderInfo
 {
@@ -53,7 +54,7 @@ public:
 
 private:
 	void BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo);
-	void ReadBone(FBXNode* fbxNode, DirectX::SimpleMath::Matrix parentMatrix, const std::string& fbxName);
+	void ReadBone(FBXNode* fbxNode, DirectX::SimpleMath::Matrix parentMatrix, const std::string& fbxName, std::shared_ptr<NailAnimator> animator);
 
 private:
 	std::vector<RenderInfo> deferredVec;

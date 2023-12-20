@@ -57,6 +57,16 @@ public:
 		return this->currentAnimation;
 	};
 
+	int GetCurrentFrame()
+	{
+		return currentFrame;
+	}
+
+	float GetFrameRatio()
+	{
+		return frameRatio;
+	}
+
 private:
 	float playSpeed = 1.f;
 	int currentFrame;

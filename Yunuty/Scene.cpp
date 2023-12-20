@@ -8,7 +8,7 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
 	gameObjectChild->setName(std::string{ fbxNode->nodeName.begin(),fbxNode->nodeName.end() });
 
 	//gameObjectChild->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{90.f,0.f,0.f} });
-	gameObjectChild->GetTransform()->scale = Vector3d{ 0.1f,0.1f,0.1f };
+	gameObjectChild->GetTransform()->scale = Vector3d{ 0.01f,0.01f,0.01f };
 
 	if (!fbxNode->hasAnimation)
 	{
