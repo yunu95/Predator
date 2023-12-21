@@ -285,6 +285,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="DebugMeshes.h" />
     <ClInclude Include="DebugTilePlane.h" />
     <ClInclude Include="DelayedTestFunctions.h" />
+    <ClInclude Include="TestComponent2.h" />
     <ClInclude Include="TestNavAgentEnableDeath.h" />
     <ClInclude Include="PanelList.h" />
     <ClInclude Include="Panel_Palette.h" />
@@ -313,7 +314,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="ProgramExitCommand.h" />
     <ClInclude Include="ShakyCam.h" />
     <ClInclude Include="PathEditor.h" />
-    <ClInclude Include="TestComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp" />
@@ -347,7 +347,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="TestCaseNavigation.cpp" />
     <ClCompile Include="TestCasePhysics.cpp" />
     <ClCompile Include="TestCaseTemplate.cpp" />
-    <ClCompile Include="TestComponent.cpp" />
+    <ClCompile Include="TestComponent2.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

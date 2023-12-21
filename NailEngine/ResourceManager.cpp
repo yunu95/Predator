@@ -15,6 +15,7 @@ using namespace DirectX::PackedVector;
 #include "Material.h"
 #include "Texture.h"
 #include "Animation.h"
+#include "AnimationGroup.h"
 
 #include "NailEngine.h"
 #include "RenderTargetGroup.h"
@@ -113,6 +114,11 @@ void ResourceManager::PushFBXBoneInfo(const std::wstring fbxName, std::map<std::
 	this->fbxBoneInfoMap.insert({ fbxName, (boneInfoMap) });
 }
 
+void ResourceManager::PushFBXNode(const std::wstring fbxName, FBXNode* fbxNode)
+{
+	this->fbxNodeMap.insert({fbxName, fbxNode});
+}
+
 yunuGI::IMaterial* ResourceManager::CrateMaterial(std::wstring materialName)
 {
 	std::shared_ptr<Material> material = std::make_shared<Material>();
@@ -184,7 +190,7 @@ void ResourceManager::LoadFBX(const char* filePath)
 {
 	FBXNode* node = ModelLoader::Instance.Get().LoadModel(filePath);
 	std::wstring fbxName = std::filesystem::path(filePath).stem().wstring();
-	this->fbxNodeMap.insert({ fbxName, node });
+	//////////////////////////////////////////////////////////////////////////this->fbxNodeMap.insert({ fbxName, node });
 
 	yunuGI::FBXData* fbxData = new yunuGI::FBXData;
 	fbxData->hasAnimation = node->hasAnimation;
@@ -200,18 +206,39 @@ void ResourceManager::LoadFBX(const char* filePath)
 	this->fbxDataMap.insert({ fbxName, fbxData });
 }
 
-void ResourceManager::CreateAnimation(const AnimationClip& animationClip)
+void ResourceManager::CreateAnimation(const std::vector<AnimationClip>& animationClip, const std::wstring& fbxName)
 {
-	std::shared_ptr<yunuGI::IAnimation> animation = std::make_shared<Animation>();
+	for (int i = 0; i < animationClip.size(); ++i)
+	{
+		std::shared_ptr<yunuGI::IAnimation> animation = std::make_shared<Animation>();
 
-	animation->SetName(animationClip.name);
-	animation->SetDuration(animationClip.duration);
-	animation->SetTotalFrame(animationClip.totalFrame);
+		animation->SetName(animationClip[i].name);
+		animation->SetDuration(animationClip[i].duration);
+		animation->SetTotalFrame(animationClip[i].totalFrame);
 
-	std::static_pointer_cast<Animation>(animation)->SetAnimationClip(std::move(animationClip));
+		std::static_pointer_cast<Animation>(animation)->SetAnimationClip((animationClip[i]));
 
-	this->animationVec.emplace_back(animation.get());
-	this->animationMap.insert({ animation->GetName(), animation });
+		this->animationVec.emplace_back(animation.get());
+		this->animationMap.insert({ animation->GetName(), animation });
+
+		auto iter = this->animationGroupMap.find(fbxName);
+		if (iter != this->animationGroupMap.end())
+		{
+			std::static_pointer_cast<Animation>(animation)->SetAnimationIndex(this->animationGroupMap[fbxName]->GetAnimationVec().size());
+			this->animationGroupMap[fbxName]->GetAnimationVec().emplace_back(std::static_pointer_cast<Animation>(animation));
+		}
+		else
+		{
+			std::shared_ptr<AnimationGroup> animationGroup = std::make_shared<AnimationGroup>();
+			animationGroup->SetFBXName(fbxName);
+
+			std::static_pointer_cast<Animation>(animation)->SetAnimationIndex(animationGroup->GetAnimationVec().size());
+			animationGroup->GetAnimationVec().emplace_back(std::static_pointer_cast<Animation>(animation));
+			this->animationGroupMap.insert({ fbxName, animationGroup });
+		}
+	}
+
+	this->animationGroupMap[fbxName]->CreateTexture();
 }
 
 std::shared_ptr<yunuGI::IMaterial> ResourceManager::GetMaterial(const std::wstring& materialName)
@@ -330,6 +357,11 @@ FBXNode* ResourceManager::GetFBXNode(const std::wstring& fbxName)
 	return this->fbxNodeMap.find(fbxName)->second;
 }
 
+std::shared_ptr<AnimationGroup> ResourceManager::GetAnimationGroup(const std::wstring& modelName)
+{
+	return this->animationGroupMap.find(modelName)->second;
+}
+
 void ResourceManager::CreateDeferredShader(const std::wstring& shaderPath)
 {
 	size_t dotPos = shaderPath.find_last_of(L".");
@@ -401,7 +433,7 @@ void ResourceManager::CreateDefaultMaterial()
 
 	// Skinned Default Material
 	{
-		std::wstring name{L"SkinnedDefaultMaterial"};
+		std::wstring name{ L"SkinnedDefaultMaterial" };
 		auto material = CrateMaterial(name);
 		material->SetVertexShader(this->GetShader(L"SkinnedVS.cso").get());
 	}
@@ -413,7 +445,7 @@ void ResourceManager::CreateDefaultMaterial()
 		yunuGI::IMaterial* material = CrateMaterial(L"Deferred_DirectionalLight");
 		material->SetVertexShader(GetDeferredShader(L"Deferred_DirectionalLightVS.cso").get());
 		material->SetPixelShader(GetDeferredShader(L"Deferred_DirectionalLightPS.cso").get());
-		material->SetTexture(yunuGI::Texture_Type::Temp0, 
+		material->SetTexture(yunuGI::Texture_Type::Temp0,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp1,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(NORMAL)).get());
@@ -435,11 +467,11 @@ void ResourceManager::CreateDefaultMaterial()
 		yunuGI::IMaterial* material = CrateMaterial(L"Deferred_Final");
 		material->SetVertexShader(GetDeferredShader(L"Deferred_FinalVS.cso").get());
 		material->SetPixelShader(GetDeferredShader(L"Deferred_FinalPS.cso").get());
-		material->SetTexture(yunuGI::Texture_Type::Temp0, 
+		material->SetTexture(yunuGI::Texture_Type::Temp0,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ALBEDO)).get());
-		material->SetTexture(yunuGI::Texture_Type::Temp1, 
+		material->SetTexture(yunuGI::Texture_Type::Temp1,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(DIFFUSE)).get());
-		material->SetTexture(yunuGI::Texture_Type::Temp2, 
+		material->SetTexture(yunuGI::Texture_Type::Temp2,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR)).get());
 	}
 
@@ -468,7 +500,7 @@ void ResourceManager::CreateDefaultMaterial()
 			yunuGI::IMaterial* material = CrateMaterial(L"DeferredColor");
 			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
 			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
-			material->SetTexture(yunuGI::Texture_Type::Temp0, 
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
 				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ALBEDO)).get());
 		}
 
@@ -486,7 +518,7 @@ void ResourceManager::CreateDefaultMaterial()
 			yunuGI::IMaterial* material = CrateMaterial(L"DeferredDiffuseLight");
 			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
 			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
-			material->SetTexture(yunuGI::Texture_Type::Temp0, 
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
 				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(DIFFUSE)).get());
 		}
 
@@ -495,7 +527,7 @@ void ResourceManager::CreateDefaultMaterial()
 			yunuGI::IMaterial* material = CrateMaterial(L"DeferredSpecularLight");
 			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
 			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
-			material->SetTexture(yunuGI::Texture_Type::Temp0, 
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
 				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR)).get());
 		}
 	}
@@ -523,7 +555,7 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 			mesh->SetData(node->meshVec[i].vertex, node->meshVec[i].indices);
 			this->meshMap.insert({ node->nodeName, mesh });
 		}
-		
+
 		if (this->materialMap.find(node->meshVec[i].material.materialName) == this->materialMap.end())
 		{
 			std::shared_ptr<Material> material = std::make_shared<Material>();

@@ -1,6 +1,9 @@
 #pragma once
 #include "IAnimation.h"
 
+#include <wrl.h>
+#include <d3d11.h>
+
 #include <DirectXMath.h>
 #include "SimpleMath.h"
 using namespace DirectX::PackedVector;
@@ -25,6 +28,7 @@ struct AnimationClip
 	std::vector<std::vector<KeyFrameInfo>> keyFrameInfoVec;
 };
 
+
 class Animation : public yunuGI::IAnimation, public Resource
 {
 public:
@@ -48,7 +52,13 @@ public:
 
 	AnimationClip& GetAnimationClip() { return animationClip; }
 
+	void SetAnimationIndex(int idx) { this->animationIndex = idx; }
+	int GetAnimationIndex() {return animationIndex;	}
 private:
 	AnimationClip animationClip;
+	int animationIndex = 0;
+
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> SRV;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D;
 };
 
