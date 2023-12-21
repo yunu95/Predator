@@ -69,6 +69,7 @@ Global
 		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.DebugExe|x64.Build.0 = DebugExe|x64
 		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.DebugExe|x86.ActiveCfg = DebugExe|Win32
 		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.DebugGraphics|x64.ActiveCfg = DebugGraphics|x64
+		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.DebugGraphics|x64.Build.0 = DebugGraphics|x64
 		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.DebugGraphics|x86.ActiveCfg = DebugExe|Win32
 		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Release|x64.ActiveCfg = Release|x64
 		{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}.Release|x64.Build.0 = Release|x64
