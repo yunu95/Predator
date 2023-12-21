@@ -5,20 +5,20 @@
 
 #include "Command.h"
 
-namespace Application
+namespace application
 {
 	class Application;
 }
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class ProgramExitCommand
 			: public Command
 		{
 		public:
-			ProgramExitCommand(Application& app);
+			ProgramExitCommand();
 
 			virtual void Execute() override;
 			

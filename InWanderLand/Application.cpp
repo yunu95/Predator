@@ -32,7 +32,7 @@ HWND hWND = NULL;
 HWND editorHWND = NULL;
 WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("InWanderLand"), NULL };
 
-namespace Application
+namespace application
 {
     std::unique_ptr<Application> Application::instance = nullptr;
 
@@ -64,11 +64,11 @@ namespace Application
         //ImGui_ImplWin32_EnableDpiAwareness();
         ::RegisterClassEx(&wc);
 
-        /// °ÔÀÓ À©µµ¿ì »ý¼º
-        int winSizeX = 1920;	// À©µµ¿ì °¡·Î »çÀÌÁî
-        int winSizeY = 1080;	// À©µµ¿ì ¼¼·Î »çÀÌÁî
-        int winPosX = (GetSystemMetrics(SM_CXSCREEN) - winSizeX) / 2;	// À©µµ¿ì X ÁÂÇ¥
-        int winPosY = (GetSystemMetrics(SM_CYSCREEN) - winSizeY) / 2;	// À©µµ¿ì Y ÁÂÇ¥
+        /// ê²Œìž„ ìœˆë„ìš° ìƒì„±
+        int winSizeX = 1920;	// ìœˆë„ìš° ê°€ë¡œ ì‚¬ì´ì¦ˆ
+        int winSizeY = 1080;	// ìœˆë„ìš° ì„¸ë¡œ ì‚¬ì´ì¦ˆ
+        int winPosX = (GetSystemMetrics(SM_CXSCREEN) - winSizeX) / 2;	// ìœˆë„ìš° X ì¢Œí‘œ
+        int winPosY = (GetSystemMetrics(SM_CYSCREEN) - winSizeY) / 2;	// ìœˆë„ìš° Y ì¢Œí‘œ
         hWND = ::CreateWindow(wc.lpszClassName, _T("InWanderLand"), WS_OVERLAPPEDWINDOW, winPosX, winPosY, winSizeX, winSizeY, NULL, NULL, wc.hInstance, NULL);
 
         // Initialize Direct3D
@@ -85,13 +85,13 @@ namespace Application
 
 
 #ifdef EDITOR
-        /// ¿¡µðÅÍ À©µµ¿ì »ý¼º
+        /// ì—ë””í„° ìœˆë„ìš° ìƒì„±
         int editorWinSizeX = 1280;
         int editorWinSizeY = 800;
         int editorWinPosX = (GetSystemMetrics(SM_CXSCREEN) - editorWinSizeX) / 2 + 500;
         int editorWinPosY = (GetSystemMetrics(SM_CYSCREEN) - editorWinSizeY) / 2 - 300;
 
-        // °ÔÀÓ¿£Áø ½º·¹µå¿¡¼­ ¿¡µðÅÍ À©µµ¿ì¸¦ »ý¼ºÇÏµµ·Ï À¯µµ
+        // ê²Œìž„ì—”ì§„ ìŠ¤ë ˆë“œì—ì„œ ì—ë””í„° ìœˆë„ìš°ë¥¼ ìƒì„±í•˜ë„ë¡ ìœ ë„
         yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [=]()
         {
             editorHWND = ::CreateWindow(wc.lpszClassName, _T("Editor Window"), WS_OVERLAPPEDWINDOW, editorWinPosX, editorWinPosY, editorWinSizeX, editorWinSizeY, NULL, NULL, wc.hInstance, NULL);
@@ -170,6 +170,7 @@ namespace Application
         layers.resize(2);
         //ImGui::SetCursorPosY(ImGui::GetCurrentWindow()->WindowPadding.y);
 
+
 #ifdef EDITOR
         layers[(int)LayerList::EditorLayer] = new Editor::EditorLayer();
 #endif
@@ -199,7 +200,7 @@ namespace Application
             if (!isRunning)
                 break;
 
-            // °ÔÀÓ ¿£ÁøÀ» ¸ØÃß°í µ¿ÀÛÀ» ½ÇÇàÇÏ´Â ºÎºÐ
+            // ê²Œìž„ ì—”ì§„ì„ ë©ˆì¶”ê³  ë™ìž‘ì„ ì‹¤í–‰í•˜ëŠ” ë¶€ë¶„
             {
                 std::scoped_lock lock{loopTodoRegistrationMutex};
                 if (!loopRegistrations.empty())
@@ -305,7 +306,7 @@ namespace Application
         //g_pSwapChain->Present(1, 0); // Present with vsync
         g_pSwapChain->Present(0, 0); // Present without vsync
 
-        // Ä¿¸Çµåµé ½ÇÇà
+        // ì»¤ë§¨ë“œë“¤ ì‹¤í–‰
         cm.ExecuteCommands();
 
         layers[(int)LayerList::ContentsLayer]->Update(1);

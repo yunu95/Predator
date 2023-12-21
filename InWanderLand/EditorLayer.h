@@ -7,19 +7,22 @@
 
 #include <vector>
 #include <memory>
+#include <functional>
 
 #include "Layer.h"
 #include "CommandManager.h"
 #include "EditorPanel.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class EditorLayer
 			: public Layer
 		{
 		public:
+			static void AssignTestInitializer(std::function<void()> testInitializer);
+
 			virtual void Initialize() override;
 			// virtual void EventProgress(Events& e) override;
 			virtual void Update(float ts) override;
@@ -42,9 +45,11 @@ namespace Application
 				Size
 			};
 
+			static std::function<void()> testInitializer;
+
 			void UI_DrawMenubar();
 
-			CommandManager& cm = CommandManager::GetInstance();
+			CommandManager& cm = CommandManager::GetSingletonInstance();
 			std::vector<Panel*> editorPanelList;
 		};
 	}

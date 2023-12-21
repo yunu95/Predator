@@ -3,33 +3,26 @@
 
 #pragma once
 
+#include "Singleton.h"
 #include "EditorPanel.h"
 
 #include <memory>
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class PreviewPanel
-			: public Panel
+			: public Panel, public Singleton<PreviewPanel>
 		{
 		public:
-			static PreviewPanel& GetInstance();
-
+			PreviewPanel();
 			virtual ~PreviewPanel();
 
 			virtual void Initialize() override;
 			virtual void Update(float ts) override;
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
-
-		protected:
-			static std::unique_ptr<PreviewPanel> instance;
-
-			PreviewPanel();
-			PreviewPanel(const PreviewPanel& copy) = delete;
-			PreviewPanel& operator=(const PreviewPanel& copy) = delete;
 		};
 	}
 }

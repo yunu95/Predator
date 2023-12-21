@@ -14,14 +14,14 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 #include <d3d11.h>
 
-std::function<void()> Application::Contents::ContentsLayer::testInitializer;
+std::function<void()> application::Contents::ContentsLayer::testInitializer;
 
-/// ±×·¡ÇÈ½º Å×½ºÆ®¿ë
+/// ê·¸ëž˜í”½ìŠ¤ í…ŒìŠ¤íŠ¸ìš©
 void GraphicsTest()
 {
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-    //Æ÷ÀÎÆ® ¶óÀÌÆ®
+    //í¬ì¸íŠ¸ ë¼ì´íŠ¸
     {
         auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
         object->GetTransform()->position = Vector3d{ 0,3,0 };
@@ -79,7 +79,7 @@ void GraphicsTest()
 //    staticMesh->GetTransform()->position = Vector3d{ 0,0.5,0 };
 //    return agent;
 //}
-void Application::Contents::ContentsLayer::Initialize()
+void application::Contents::ContentsLayer::Initialize()
 {
     if (ContentsLayer::testInitializer)
     {
@@ -106,7 +106,7 @@ void Application::Contents::ContentsLayer::Initialize()
     auto rtsCam = camObj->AddComponent<RTSCam>();
     //rtsCam->GetTransform()->position = Vector3d(0, 10, 0);
 
-    //// ±æÃ£±â Å×½ºÆ®
+    //// ê¸¸ì°¾ê¸° í…ŒìŠ¤íŠ¸
     //{
     //    const float corridorRadius = 3;
     //    std::vector<Vector3f> worldVertices { };
@@ -133,20 +133,21 @@ void Application::Contents::ContentsLayer::Initialize()
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
-void Application::Contents::ContentsLayer::Update(float ts)
+void application::Contents::ContentsLayer::Update(float ts)
 {
 
 }
 
-void Application::Contents::ContentsLayer::GUIProgress()
+void application::Contents::ContentsLayer::GUIProgress()
 {
 
 }
 
-void Application::Contents::ContentsLayer::Finalize()
+void application::Contents::ContentsLayer::Finalize()
 {
 
 }
+
 #ifdef GEN_TESTS
 void Application::Contents::ContentsLayer::AssignTestInitializer(std::function<void()> testInitializer)
 {

@@ -7,22 +7,22 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-// ÀÌ ÇÔ¼ö´Â °ÔÀÓÀÇ ±âº» ÃÊ±âÈ­ ÇÔ¼ö¸¦ ¿À¹ö¶óÀÌµåÇÕ´Ï´Ù.
+// ì´ í•¨ìˆ˜ëŠ” ê²Œì„ì˜ ê¸°ë³¸ ì´ˆê¸°í™” í•¨ìˆ˜ë¥¼ ì˜¤ë²„ë¼ì´ë“œí•©ë‹ˆë‹¤.
 void TestInitializerTemplate()
 {
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
     auto delayedTestFunctions = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DelayedTestFunctions>();
 
-    // delayedTestFunctions¿¡ 2ÃÊ ÈÄ ½ÇÇà½ÃÅ³ Äİ¹é ÇÔ¼ö¸¦ µî·ÏÇÕ´Ï´Ù. ÀÌ Äİ¹éÇÔ¼ö´Â °ÔÀÓ ¿£Áø ½º·¹µå¿¡¼­ È£ÃâµË´Ï´Ù.
+    // delayedTestFunctionsì— 2ì´ˆ í›„ ì‹¤í–‰ì‹œí‚¬ ì½œë°± í•¨ìˆ˜ë¥¼ ë“±ë¡í•©ë‹ˆë‹¤. ì´ ì½œë°±í•¨ìˆ˜ëŠ” ê²Œì„ ì—”ì§„ ìŠ¤ë ˆë“œì—ì„œ í˜¸ì¶œë©ë‹ˆë‹¤.
     delayedTestFunctions->todoList.push_back({ 0.3,[]() {
-        // °ÔÀÓ ¿£Áø ½º·¹µå¿¡¼­ ¸ŞÀÎ ½º·¹µå¿¡¼­ Æ¯Á¤ µ¿ÀÛÀ» ±¸µ¿½ÃÅ°°í ½Í´Ù¸é ¾Æ·¡ÀÇ AddMainLoopTodo ÇÔ¼ö¸¦ »ç¿ëÇÕ´Ï´Ù.
-        Application::Application::GetInstance().AddMainLoopTodo([]() {
-            // Assert ÇÔ¼ö±ºÀº Å×½ºÆ® ÄÉÀÌ½ºÀÇ ½ÇÇà ¼º°ø ¿©ºÎ¸¦ ÆÇ´ÜÇÏ´Âµ¥¿¡ ¾²ÀÔ´Ï´Ù.
-            // AssertÀÇ ½ÇÇàÀº ¸ŞÀÎ ½º·¹µå¿¡¼­ ½ÇÇàµÇ¾î¾ß ÇÕ´Ï´Ù.
+        // ê²Œì„ ì—”ì§„ ìŠ¤ë ˆë“œì—ì„œ ë©”ì¸ ìŠ¤ë ˆë“œì—ì„œ íŠ¹ì • ë™ì‘ì„ êµ¬ë™ì‹œí‚¤ê³  ì‹¶ë‹¤ë©´ ì•„ë˜ì˜ AddMainLoopTodo í•¨ìˆ˜ë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.
+        application::Application::GetInstance().AddMainLoopTodo([]() {
+            // Assert í•¨ìˆ˜êµ°ì€ í…ŒìŠ¤íŠ¸ ì¼€ì´ìŠ¤ì˜ ì‹¤í–‰ ì„±ê³µ ì—¬ë¶€ë¥¼ íŒë‹¨í•˜ëŠ”ë°ì— ì“°ì…ë‹ˆë‹¤.
+            // Assertì˜ ì‹¤í–‰ì€ ë©”ì¸ ìŠ¤ë ˆë“œì—ì„œ ì‹¤í–‰ë˜ì–´ì•¼ í•©ë‹ˆë‹¤.
             Assert::IsTrue(1 + 1 == 2);
 
-            // À§ ½ÄÀÌ ÂüÀÌ¶ó¸é ÇÁ·Î±×·¥À» Á¾·áÇÕ´Ï´Ù. 
-            Application::Application::GetInstance().TurnOff();
+            // ìœ„ ì‹ì´ ì°¸ì´ë¼ë©´ í”„ë¡œê·¸ë¨ì„ ì¢…ë£Œí•©ë‹ˆë‹¤. 
+            application::Application::GetInstance().TurnOff();
                 });
             } });
 
@@ -38,7 +38,7 @@ namespace InWanderLand
     public:
         TEST_METHOD(TestCaseTemplate)
         {
-            Application::Application& client = Application::Application::CreateApplication(0, 0);
+            application::Application& client = application::Application::CreateApplication(0, 0);
             Application::Contents::ContentsLayer::AssignTestInitializer(TestInitializerTemplate);
             client.Initialize();
             client.Run();

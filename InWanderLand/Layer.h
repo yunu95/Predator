@@ -4,7 +4,7 @@
 
 #pragma once
 
-namespace Application
+namespace application
 {
 	class Layer
 	{
