@@ -87,6 +87,7 @@ namespace yunutyEngine
             void Render();
             void Update(float delta);
         private:
+            HWND mainWnd = 0;
             static unique_ptr<Renderer> instance;
             function<void()> afterRenderAction{ []() {} };
             Vector2i resolution;

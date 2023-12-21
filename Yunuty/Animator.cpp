@@ -16,24 +16,12 @@ void Animator::Update()
 	
 	// 현재 애니메이션 업데이트
 	{
-		//this->currentTime += Time::GetDeltaTime() * gi.GetPlaySpeed();
 		auto currentAnimation = gi.GetCurrentAnimation();
 		float duration = currentAnimation->GetDuration();
 		int totalFrame = currentAnimation->GetTotalFrame();
-		//if (currentAnimation->GetLoop() && currentTime >= duration)
-		//{
-		//	currentTime = 0.f;
-		//}
+		desc.curr.speed = currentAnimation->GetPlaySpeed();
 		__int32 ratio = static_cast<__int32>(totalFrame / duration);
 
-		//currentFrame = static_cast<__int32>(currentTime * ratio);
-		//currentFrame = min(currentFrame, totalFrame - 1);
-
-		//gi.SetCurrentFrame(currentFrame);
-		//
-		//gi.SetFrameRatio(static_cast<float>(currentTime - static_cast<float>(currentFrame) / ratio));
-
-		
 		desc.curr.sumTime += (desc.curr.speed * Time::GetDeltaTime());
 		if (desc.curr.sumTime >= currentAnimation->GetDuration())
 		{
@@ -68,6 +56,7 @@ void Animator::Update()
 		}
 		else
 		{
+			desc.next.speed = nextAnimation->GetPlaySpeed();
 			desc.next.sumTime += (desc.next.speed * Time::GetDeltaTime());
 			if (desc.next.sumTime >= nextAnimation->GetDuration())
 			{

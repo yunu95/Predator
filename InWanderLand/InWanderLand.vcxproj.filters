@@ -55,8 +55,32 @@
     <Filter Include="Editor\Commands\MenubarCommands">
       <UniqueIdentifier>{59aa71fe-8d68-4297-8598-553d8498282d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\DataStructure">
+    <Filter Include="Editor\DataSystem">
       <UniqueIdentifier>{df3d0462-035e-4bad-98d4-634df95d5b42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataSystem\Iterator">
+      <UniqueIdentifier>{5555cdbb-a236-4aa2-b001-d7e18a3006b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataSystem\DataStructure">
+      <UniqueIdentifier>{dd1ed6d9-7a8f-431e-bc9f-71b76bffdde2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\IO">
+      <UniqueIdentifier>{33d969ad-26c9-4675-b49e-b952ef5f0763}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataSystem\EditableData">
+      <UniqueIdentifier>{47ea8057-a1f7-490c-8be2-48ee0ba2a859}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataSystem\EditableData\DataType">
+      <UniqueIdentifier>{23af273e-3034-4921-a34c-25496efb6b27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Commands\MenubarCommands\File">
+      <UniqueIdentifier>{ff20d7ae-412d-42d0-bec7-11abb5773aa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataSystem\EditableData\TemplateData">
+      <UniqueIdentifier>{11241e27-faa2-4357-a3d8-416d74037a31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\DataSystem\EditableData\TemplateData\DataType">
+      <UniqueIdentifier>{12c926e0-9622-4f19-940e-0f9fed6da0ec}</UniqueIdentifier>
     </Filter>
     <Filter Include="Path">
       <UniqueIdentifier>{fd700d27-99c8-48fe-a7fa-d50f17beb154}</UniqueIdentifier>
@@ -66,6 +90,15 @@
     </Filter>
     <Filter Include="TestCodes">
       <UniqueIdentifier>{8339e451-67eb-4692-ba45-88e6ad08ee10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Etc">
+      <UniqueIdentifier>{7876c722-b05f-470b-afa3-9b71d70e8da4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestCodes\snippets">
+      <UniqueIdentifier>{2a6a71a3-8099-4fc4-9690-9765cedeb43f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette">
+      <UniqueIdentifier>{a9b999c8-825f-44cf-a68d-f8b64f9f4397}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -156,14 +189,8 @@
     <ClInclude Include="CommandManager.h">
       <Filter>Editor\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="ProgramExitCommand.h">
-      <Filter>Editor\Commands\MenubarCommands</Filter>
-    </ClInclude>
     <ClInclude Include="MenubarCommands.h">
       <Filter>Editor\Commands\MenubarCommands</Filter>
-    </ClInclude>
-    <ClInclude Include="CircularQueue.h">
-      <Filter>Editor\DataStructure</Filter>
     </ClInclude>
     <ClInclude Include="Panel_Preview.h">
       <Filter>Editor\Panel\List</Filter>
@@ -173,6 +200,66 @@
     </ClInclude>
     <ClInclude Include="Panel_Palette.h">
       <Filter>Editor\Panel\List</Filter>
+    </ClInclude>
+    <ClInclude Include="CircularQueue.h">
+      <Filter>Editor\DataSystem\DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="UUID.h">
+      <Filter>Editor\DataSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Identifiable.h">
+      <Filter>Editor\DataSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Storable.h">
+      <Filter>Editor\DataSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="MapFileManager.h">
+      <Filter>Editor\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="InstanceManager.h">
+      <Filter>Editor\DataSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="IEditableData.h">
+      <Filter>Editor\DataSystem\EditableData</Filter>
+    </ClInclude>
+    <ClInclude Include="ITemplateData.h">
+      <Filter>Editor\DataSystem\EditableData\TemplateData</Filter>
+    </ClInclude>
+    <ClInclude Include="Ornaments.h">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="Units.h">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="Units_TemplateData.h">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="Ornaments_TemplateData.h">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain_TemplateData.h">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="TemplateDataManager.h">
+      <Filter>Editor\DataSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="TemplateDataList.h">
+      <Filter>Editor\DataSystem\EditableData\TemplateData</Filter>
+    </ClInclude>
+    <ClInclude Include="EditableDataList.h">
+      <Filter>Editor\DataSystem\EditableData</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgramExitCommand.h">
+      <Filter>Editor\Commands\MenubarCommands\File</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveMapCommand.h">
+      <Filter>Editor\Commands\MenubarCommands\File</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadMapCommand.h">
+      <Filter>Editor\Commands\MenubarCommands\File</Filter>
     </ClInclude>
     <ClInclude Include="PathField.h">
       <Filter>Path</Filter>
@@ -188,6 +275,13 @@
     </ClInclude>
     <ClInclude Include="TestComponent2.h">
       <Filter>TestCodes</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainEditor.h" />
+    <ClInclude Include="UUIDManager.h">
+      <Filter>Editor\DataSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>Editor\Etc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -260,14 +354,53 @@
     <ClCompile Include="CommandManager.cpp">
       <Filter>Editor\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="ProgramExitCommand.cpp">
-      <Filter>Editor\Commands\MenubarCommands</Filter>
-    </ClCompile>
     <ClCompile Include="Panel_Preview.cpp">
       <Filter>Editor\Panel\List</Filter>
     </ClCompile>
     <ClCompile Include="Panel_Palette.cpp">
       <Filter>Editor\Panel\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Identifiable.cpp">
+      <Filter>Editor\DataSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Storable.cpp">
+      <Filter>Editor\DataSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="MapFileManager.cpp">
+      <Filter>Editor\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="InstanceManager.cpp">
+      <Filter>Editor\DataSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Ornaments.cpp">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="Units.cpp">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="Ornaments_TemplateData.cpp">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain_TemplateData.cpp">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="Units_TemplateData.cpp">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="TemplateDataManager.cpp">
+      <Filter>Editor\DataSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgramExitCommand.cpp">
+      <Filter>Editor\Commands\MenubarCommands\File</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveMapCommand.cpp">
+      <Filter>Editor\Commands\MenubarCommands\File</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadMapCommand.cpp">
+      <Filter>Editor\Commands\MenubarCommands\File</Filter>
     </ClCompile>
     <ClCompile Include="TestCaseTemplate.cpp">
       <Filter>TestCodes</Filter>
@@ -286,6 +419,21 @@
     </ClCompile>
     <ClCompile Include="TestComponent2.cpp">
       <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="UUIDManager.cpp">
+      <Filter>Editor\DataSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCaseMapFileIO.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetTemplate.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetAnimation.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetAnimationChangeInterpolation.cpp">
+      <Filter>TestCodes\snippets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

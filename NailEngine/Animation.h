@@ -25,6 +25,7 @@ struct AnimationClip
 	double duration;
 	int totalFrame;
 	bool isLoop;
+	float speed=1.f;
 	std::vector<std::vector<KeyFrameInfo>> keyFrameInfoVec;
 };
 
@@ -48,6 +49,16 @@ public:
 	virtual bool GetLoop() override
 	{
 		return animationClip.isLoop;
+	};
+
+	virtual void SetPlaySpeed(float playSpeed) override
+	{
+		this->animationClip.speed = playSpeed;
+	};
+
+	virtual float GetPlaySpeed() override
+	{
+		return this->animationClip.speed;
 	};
 
 	AnimationClip& GetAnimationClip() { return animationClip; }

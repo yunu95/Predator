@@ -396,6 +396,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="MeshLoaderObj.h" />
     <ClInclude Include="header\YunutyNavigationAgent.h" />
     <ClInclude Include="header\YunutyNavigationField.h" />
+    <ClInclude Include="MutexedReference.h" />
+    <ClInclude Include="MutexedSingletonClass.h" />
     <ClInclude Include="NavMeshPruneTool.h" />
     <ClInclude Include="NavMeshTesterTool.h" />
     <ClInclude Include="OffMeshConnectionTool.h" />

@@ -43,6 +43,7 @@ void yunutyEngine::graphics::Renderer::SetOutputWindow(const HWND& hwnd)
     auto renderer = _YunuGIObjects::SingleInstance().renderer.Get();
     assert(renderer != nullptr, L"그래픽스 렌더러가 없는 상태입니다!");
     renderer->SetOutputWindow(reinterpret_cast<unsigned long long>(hwnd));
+    this->mainWnd = hwnd;
     Input::GetInstance()->mainWnd = hwnd;
 }
 void yunutyEngine::graphics::Renderer::LoadFiles(const char* rootPath)

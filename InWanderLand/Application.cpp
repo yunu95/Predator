@@ -32,7 +32,7 @@ HWND hWND = NULL;
 HWND editorHWND = NULL;
 WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("InWanderLand"), NULL };
 
-namespace Application
+namespace application
 {
     std::unique_ptr<Application> Application::instance = nullptr;
 
@@ -64,11 +64,11 @@ namespace Application
         //ImGui_ImplWin32_EnableDpiAwareness();
         ::RegisterClassEx(&wc);
 
-        /// °ÔÀÓ À©µµ¿ì »ý¼º
-        int winSizeX = 1920;	// À©µµ¿ì °¡·Î »çÀÌÁî
-        int winSizeY = 1080;	// À©µµ¿ì ¼¼·Î »çÀÌÁî
-        int winPosX = (GetSystemMetrics(SM_CXSCREEN) - winSizeX) / 2;	// À©µµ¿ì X ÁÂÇ¥
-        int winPosY = (GetSystemMetrics(SM_CYSCREEN) - winSizeY) / 2;	// À©µµ¿ì Y ÁÂÇ¥
+        /// ê²Œìž„ ìœˆë„ìš° ìƒì„±
+        int winSizeX = 1920;	// ìœˆë„ìš° ê°€ë¡œ ì‚¬ì´ì¦ˆ
+        int winSizeY = 1080;	// ìœˆë„ìš° ì„¸ë¡œ ì‚¬ì´ì¦ˆ
+        int winPosX = (GetSystemMetrics(SM_CXSCREEN) - winSizeX) / 2;	// ìœˆë„ìš° X ì¢Œí‘œ
+        int winPosY = (GetSystemMetrics(SM_CYSCREEN) - winSizeY) / 2;	// ìœˆë„ìš° Y ì¢Œí‘œ
         hWND = ::CreateWindow(wc.lpszClassName, _T("InWanderLand"), WS_OVERLAPPEDWINDOW, winPosX, winPosY, winSizeX, winSizeY, NULL, NULL, wc.hInstance, NULL);
 
         // Initialize Direct3D
@@ -84,69 +84,81 @@ namespace Application
         ::UpdateWindow(hWND);
 
 
-#ifdef _DEBUG
-        /// ¿¡µðÅÍ À©µµ¿ì »ý¼º
+#ifdef EDITOR
+        /// ì—ë””í„° ìœˆë„ìš° ìƒì„±
         int editorWinSizeX = 1280;
         int editorWinSizeY = 800;
         int editorWinPosX = (GetSystemMetrics(SM_CXSCREEN) - editorWinSizeX) / 2 + 500;
         int editorWinPosY = (GetSystemMetrics(SM_CYSCREEN) - editorWinSizeY) / 2 - 300;
-        editorHWND = ::CreateWindow(wc.lpszClassName, _T("Editor Window"), WS_OVERLAPPEDWINDOW, editorWinPosX, editorWinPosY, editorWinSizeX, editorWinSizeY, NULL, NULL, wc.hInstance, NULL);
 
-        //::ShowWindow(editorHWND, SW_SHOWDEFAULT);
-        //::UpdateWindow(editorHWND);
-
-        // Setup Dear ImGui context
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO(); (void)io;
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
-        //io.ConfigViewportsNoAutoMerge = true;
-        //io.ConfigViewportsNoTaskBarIcon = true;
-        //io.ConfigViewportsNoDefaultParent = true;
-        //io.ConfigDockingAlwaysTabBar = true;
-        //io.ConfigDockingTransparentPayload = true;
-        //io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: Experimental. THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
-        //io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI: Experimental.
-
-        // Setup Dear ImGui style
-        ImGui::StyleColorsDark();
-        //ImGui::StyleColorsLight();
-
-        // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
-        ImGuiStyle& style = ImGui::GetStyle();
-        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        // ê²Œìž„ì—”ì§„ ìŠ¤ë ˆë“œì—ì„œ ì—ë””í„° ìœˆë„ìš°ë¥¼ ìƒì„±í•˜ë„ë¡ ìœ ë„
+        yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [=]()
         {
-            style.WindowRounding = 0.0f;
-            style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-        }
+            editorHWND = ::CreateWindow(wc.lpszClassName, _T("Editor Window"), WS_OVERLAPPEDWINDOW, editorWinPosX, editorWinPosY, editorWinSizeX, editorWinSizeY, NULL, NULL, wc.hInstance, NULL);
 
-        // Setup Platform/Renderer backends
-        ImGui_ImplWin32_Init(editorHWND);
-        ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
+            //::ShowWindow(editorHWND, SW_SHOWDEFAULT);
+            //::UpdateWindow(editorHWND);
 
-        // Load Fonts
-        // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-        // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-        // - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-        // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-        // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
-        // - Read 'docs/FONTS.md' for more instructions and details.
-        // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-        //io.Fonts->AddFontDefault();
-        //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
-        //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-        //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-        //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-        //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
-        //IM_ASSERT(font != nullptr);
+            // Setup Dear ImGui context
+            IMGUI_CHECKVERSION();
+            ImGui::CreateContext();
+            ImGuiIO& io = ImGui::GetIO(); (void)io;
+            io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+            io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+            io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+            io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+            //io.ConfigViewportsNoAutoMerge = true;
+            //io.ConfigViewportsNoTaskBarIcon = true;
+            //io.ConfigViewportsNoDefaultParent = true;
+            //io.ConfigDockingAlwaysTabBar = true;
+            //io.ConfigDockingTransparentPayload = true;
+            //io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: Experimental. THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
+            //io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI: Experimental.
+
+            // Setup Dear ImGui style
+            ImGui::StyleColorsDark();
+            //ImGui::StyleColorsLight();
+
+            // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+            ImGuiStyle& style = ImGui::GetStyle();
+            if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+            {
+                style.WindowRounding = 0.0f;
+                style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+            }
+
+            // Setup Platform/Renderer backends
+            ImGui_ImplWin32_Init(editorHWND);
+            ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
+
+            // Load Fonts
+            // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+            // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+            // - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+            // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+            // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
+            // - Read 'docs/FONTS.md' for more instructions and details.
+            // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+            //io.Fonts->AddFontDefault();
+            //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
+            //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
+            //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
+            //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
+            //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
+            //IM_ASSERT(font != nullptr);
+        };
+        yunutyEngine::YunutyCycle::SingleInstance().postUpdateAction = []() { Application::instance->ImGuiUpdate(); };
+        yunutyEngine::YunutyCycle::SingleInstance().postThreadAction = []()
+        {
+            // Cleanup
+            ImGui_ImplDX11_Shutdown();
+            ImGui_ImplWin32_Shutdown();
+            ImGui::DestroyContext();
+            CleanupDeviceD3D();
+            ::DestroyWindow(editorHWND);
+        };
 #endif
 
-        /// Contents
-        //yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"YunuDX11Renderer.dll");
-        //yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"MZDX11Renderer.dll");
         yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
         yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(winSizeX, winSizeY);
         yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(hWND);
@@ -154,19 +166,21 @@ namespace Application
 
     void Application::Initialize()
     {
-        layers.resize(2);
 
+        layers.resize(2);
         //ImGui::SetCursorPosY(ImGui::GetCurrentWindow()->WindowPadding.y);
 
-#ifdef _DEBUG
-        layers[(int)LayerList::EditorLayer] = new Editor::EditorLayer();
+
+#ifdef EDITOR
+        layers[(int)LayerList::EditorLayer] = new editor::EditorLayer();
 #endif
 
         layers[(int)LayerList::ContentsLayer] = new Contents::ContentsLayer();
 
         for (auto each : layers)
         {
-            each->Initialize();
+            if (each)
+                each->Initialize();
         }
     }
 
@@ -186,68 +200,13 @@ namespace Application
             if (!isRunning)
                 break;
 
-			/// Editor °ü·Ã ¿µ¿ª, Release Mode ¿¡¼­´Â ±¸Çö ¾ÈµÇµµ·Ï Ã³¸®
-//#ifdef _DEBUG
-//        //Start the Dear ImGui frame
-//            ImGui_ImplDX11_NewFrame();
-//            ImGui_ImplWin32_NewFrame();
-//            ImGui::NewFrame();
-//
-//            ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
-//            //window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-//            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
-//            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-//            window_flags |= ImGuiWindowFlags_MenuBar;
-//
-//            {
-//                ImGui::Begin("DockSpace Demo", nullptr, window_flags);
-//
-//                ImGuiStyle& style = ImGui::GetStyle();
-//
-//                // Dockspace
-//                float minWinSizeX = style.WindowMinSize.x;
-//                style.WindowMinSize.x = 370.0f;
-//                ImGui::DockSpace(ImGui::GetID("MyDockspace"));
-//                style.WindowMinSize.x = minWinSizeX;
-//
-//                layers[(int)LayerList::EditorLayer]->Update(1);
-//                layers[(int)LayerList::EditorLayer]->GUIProgress();
-//
-//                ImGui::End();
-//            }
-//
-//            ImGui::Render();
-//
-//            ImVec4 clear_color = ImVec4(0.8f, 0.2f, 0.2f, 1.00f);
-//            const float clear_color_with_alpha[4] = { clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w };
-//            g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
-//            g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color_with_alpha);
-//            ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-//
-//            // Update and Render additional Platform Windows
-//            if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-//            {
-//                ImGui::UpdatePlatformWindows();
-//                ImGui::RenderPlatformWindowsDefault();
-//            }
-//
-//            //g_pSwapChain->Present(1, 0); // Present with vsync
-//            g_pSwapChain->Present(0, 0); // Present without vsync
-//
-//            // Ä¿¸Çµåµé ½ÇÇà
-//            cm.ExecuteCommands();
-//#endif
-
-            layers[(int)LayerList::ContentsLayer]->Update(1);
-            layers[(int)LayerList::ContentsLayer]->GUIProgress();
-
-            // °ÔÀÓ ¿£ÁøÀ» ¸ØÃß°í µ¿ÀÛÀ» ½ÇÇàÇÏ´Â ºÎºÐ
+            // ê²Œìž„ ì—”ì§„ì„ ë©ˆì¶”ê³  ë™ìž‘ì„ ì‹¤í–‰í•˜ëŠ” ë¶€ë¶„
             {
                 std::scoped_lock lock{loopTodoRegistrationMutex};
                 if (!loopRegistrations.empty())
                 {
-                    std::unique_lock preupdateLock{YunutyCycle::SingleInstance().preUpdateMutex};
-                    std::unique_lock updateLock{YunutyCycle::SingleInstance().updateMutex};
+                    //std::unique_lock preupdateLock{YunutyCycle::SingleInstance().preUpdateMutex};
+                    //std::unique_lock updateLock{YunutyCycle::SingleInstance().updateMutex};
 
                     for (auto each : loopRegistrations)
                         each();
@@ -273,19 +232,8 @@ namespace Application
             delete each;
         }
 
-#ifdef _DEBUG
-        // Cleanup
-        ImGui_ImplDX11_Shutdown();
-        ImGui_ImplWin32_Shutdown();
-        ImGui::DestroyContext();
-#endif
 
-        CleanupDeviceD3D();
         ::DestroyWindow(hWND);
-
-#ifdef _DEBUG
-        ::DestroyWindow(editorHWND);
-#endif
         ::UnregisterClass(wc.lpszClassName, wc.hInstance);
     }
 
@@ -301,6 +249,70 @@ namespace Application
         scoped_lock lock{ loopTodoRegistrationMutex };
         loopRegistrations.push_back(todo);
     }
+#ifdef EDITOR
+    void Application::ImGuiUpdate()
+    {
+        MSG msg;
+        while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
+        {
+            ::TranslateMessage(&msg);
+            ::DispatchMessage(&msg);
+            if (msg.message == WM_QUIT)
+                isRunning = false;
+        }
+        //Start the Dear ImGui frame
+        ImGui_ImplDX11_NewFrame();
+        ImGui_ImplWin32_NewFrame();
+        ImGui::NewFrame();
+
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
+        //window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
+        window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+        window_flags |= ImGuiWindowFlags_MenuBar;
+
+        {
+            ImGui::Begin("DockSpace Demo", nullptr, window_flags);
+
+            ImGuiStyle& style = ImGui::GetStyle();
+
+            // Dockspace
+            float minWinSizeX = style.WindowMinSize.x;
+            style.WindowMinSize.x = 370.0f;
+            ImGui::DockSpace(ImGui::GetID("MyDockspace"));
+            style.WindowMinSize.x = minWinSizeX;
+
+            layers[(int)LayerList::EditorLayer]->Update(1);
+            layers[(int)LayerList::EditorLayer]->GUIProgress();
+
+            ImGui::End();
+        }
+
+        ImGui::Render();
+
+        ImVec4 clear_color = ImVec4(0.8f, 0.2f, 0.2f, 1.00f);
+        const float clear_color_with_alpha[4] = { clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w };
+        g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
+        g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color_with_alpha);
+        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+        // Update and Render additional Platform Windows
+        if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+        }
+
+        //g_pSwapChain->Present(1, 0); // Present with vsync
+        g_pSwapChain->Present(0, 0); // Present without vsync
+
+        // ì»¤ë§¨ë“œë“¤ ì‹¤í–‰
+        cm.ExecuteCommands();
+
+        layers[(int)LayerList::ContentsLayer]->Update(1);
+        layers[(int)LayerList::ContentsLayer]->GUIProgress();
+    }
+#endif
 }
 
 // Helper functions
@@ -385,7 +397,7 @@ ID3D11ShaderResourceView* GetSRV(void* handle)
         srvs[handle] = srv;
     }
     return srvs[handle];
-    }
+}
 
 #ifndef WM_DPICHANGED
 #define WM_DPICHANGED 0x02E0 // From Windows SDK 8.1+ headers
@@ -401,6 +413,7 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    //YunutyCycle::SingleInstance().ReserveActionAfterUpdate([=]() {ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam); });
     if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
         return true;
 
@@ -431,3 +444,5 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
     return ::DefWindowProcW(hWnd, msg, wParam, lParam);
 }
+
+

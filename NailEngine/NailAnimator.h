@@ -84,7 +84,7 @@ public:
 
 		nextAnimation = animation;
 		transitionDesc.next.animIndex = ((Animation*)(animation))->GetAnimationIndex();
-		transitionDesc.next.speed = transitionSpeed;
+		//transitionDesc.next.speed = transitionSpeed;
 		transitionDesc.transitionDuration = transitionDuration;
 		transitionDesc.transitionSpeed = transitionSpeed;
 	};

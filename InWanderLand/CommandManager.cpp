@@ -1,19 +1,12 @@
 #include "CommandManager.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
-		std::unique_ptr<CommandManager> CommandManager::instance = nullptr;
-
-		CommandManager& CommandManager::GetInstance()
+		CommandManager::CommandManager()
 		{
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<CommandManager>(new CommandManager());
-			}
 
-			return *instance;
 		}
 
 		CommandManager::~CommandManager()
@@ -52,11 +45,6 @@ namespace Application
 		}
 
 		/// private
-		CommandManager::CommandManager()
-		{
-
-		}
-
 		void CommandManager::ResizeBuffer()
 		{
 			while (undoQueue.size() + redoStack.size() > bufferSize)
