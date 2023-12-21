@@ -6,16 +6,9 @@ namespace application
 {
 	namespace editor
 	{
-		std::unique_ptr<PalettePanel> PalettePanel::instance = nullptr;
-
-		PalettePanel& PalettePanel::GetInstance()
+		PalettePanel::PalettePanel()
 		{
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<PalettePanel>(new PalettePanel());
-			}
 
-			return *instance;
 		}
 
 		PalettePanel::~PalettePanel()
@@ -48,11 +41,6 @@ namespace application
 		}
 
 		void PalettePanel::Finalize()
-		{
-
-		}
-
-		PalettePanel::PalettePanel()
 		{
 
 		}

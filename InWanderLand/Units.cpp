@@ -7,32 +7,42 @@ namespace application
 {
 	namespace editor
 	{
-		TemplateData* Units::GetTemplateData()
+		TemplateDataManager& Units::templateDataManager = TemplateDataManager::GetSingletonInstance();
+
+		bool Units::EnterDataFromTemplate()
 		{
-			return templateData;
+			// 템플릿으로부터 초기화되는 데이터들 처리 영역	
+			pod.currentHP = pod.templateData->pod.maxHP;
+
+			return true;
+		}
+
+		ITemplateData* Units::GetTemplateData()
+		{
+			return pod.templateData;
 		}
 
 		bool Units::SetTemplateData(const std::string& dataName)
 		{
-			auto ptr = TemplateDataManager::GetInstance().GetTemplateData(dataName);
+			auto ptr = templateDataManager.GetTemplateData(dataName);
 			if (ptr == nullptr)
 			{
 				return false;
 			}
 
-			templateData = static_cast<Units_TemplateData*>(ptr);
+			pod.templateData = static_cast<Units_TemplateData*>(ptr);
 
 			return true;
 		}
 
 		IEditableData* Units::Clone() const
 		{
-			auto& imanager = InstanceManager::GetInstance();
-			auto instance =  imanager.CreateInstance(templateData->GetDataKey());
+			auto& imanager = InstanceManager::GetSingletonInstance();
+			auto instance =  imanager.CreateInstance(pod.templateData->GetDataKey());
 
 			if (instance != nullptr)
 			{
-				static_cast<Units*>(instance)->instanceData = instanceData;
+				static_cast<Units*>(instance)->pod = pod;
 			}
 
 			return instance;
@@ -40,74 +50,57 @@ namespace application
 
 		bool Units::PreEncoding(json& data) const
 		{
-			if (!instanceData.PreEncoding(data["instance_data"]))
-			{
-				return false;
-			}
+			FieldPreEncoding<boost::pfr::tuple_size_v<POD_Units>>(pod, data["POD"]);
 
 			return true;
 		}
 
 		bool Units::PostEncoding(json& data) const
 		{
-			if (!instanceData.PostEncoding(data["instance_data"]))
-			{
-				return false;
-			}
-
-			data["template_data"] = UUID_To_String(templateData->GetUUID());
+			FieldPostEncoding<boost::pfr::tuple_size_v<POD_Units>>(pod, data["POD"]);
 
 			return true;
 		}
 
 		bool Units::PreDecoding(const json& data)
 		{
-			if (!instanceData.PreDecoding(data["instance_data"]))
-			{
-				return false;
-			}
+			FieldPreDecoding<boost::pfr::tuple_size_v<POD_Units>>(pod, data["POD"]);
 
 			return true;
 		}
 
 		bool Units::PostDecoding(const json& data)
 		{
-			if (!instanceData.PostDecoding(data["instance_data"]))
-			{
-				return false;
-			}
+			FieldPostDecoding<boost::pfr::tuple_size_v<POD_Units>>(pod, data["POD"]);
 
-			auto& tdManager = TemplateDataManager::GetInstance();
-
-			UUID uuid = String_To_UUID(data["template_data"]);
-
-			return SetTemplateData(tdManager.GetDataKey(uuid));
+			return true;
 		}
 
 		Units::Units()
-			: instanceData(), templateData(nullptr)
+			: pod()
 		{
-
+			pod.testptr = this;
 		}
 
 		Units::Units(const std::string& name)
-			: instanceData(), templateData()
+			: IEditableData(), pod()
 		{
-			auto& manager = TemplateDataManager::GetInstance();
-			templateData = static_cast<Units_TemplateData*>(manager.GetTemplateData(name));
-			instanceData.EnterDataFromTemplate(templateData);
+			pod.templateData = static_cast<Units_TemplateData*>(templateDataManager.GetTemplateData(name));
+			EnterDataFromTemplate();
+
+			pod.testptr = this;
 		}
 
 		Units::Units(const Units& prototype)
-			: instanceData(prototype.instanceData), templateData(prototype.templateData)
+			: pod(prototype.pod)
 		{
 
 		}
 
 		Units& Units::operator=(const Units& prototype)
 		{
-			instanceData = prototype.instanceData;
-			templateData = prototype.templateData;
+			IEditableData::operator=(prototype);
+			pod = prototype.pod;
 			return *this;
 		}
 	}

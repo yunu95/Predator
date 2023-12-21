@@ -5,17 +5,10 @@
 namespace application
 {
 	namespace editor
-	{
-		std::unique_ptr<HierarchyPanel> HierarchyPanel::instance = nullptr;
-
-		HierarchyPanel& HierarchyPanel::GetInstance()
+	{	
+		HierarchyPanel::HierarchyPanel()
 		{
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<HierarchyPanel>(new HierarchyPanel());
-			}
 
-			return *instance;
 		}
 
 		HierarchyPanel::~HierarchyPanel()
@@ -48,11 +41,6 @@ namespace application
 		}
 
 		void HierarchyPanel::Finalize()
-		{
-
-		}
-
-		HierarchyPanel::HierarchyPanel()
 		{
 
 		}

@@ -1,22 +1,33 @@
 /// 2023. 11. 23 김상준
-/// TemplateData 의 구체화된 클래스
+/// ITemplateData 의 구체화된 클래스
 /// 지형
 
 #pragma once
 
-#include "TemplateData.h"
+#include "ITemplateData.h"
 
 namespace application
 {
 	namespace editor
 	{
+		class Terrain_TemplateData;
+
+		struct POD_Terrain_TemplateData
+		{
+			TO_JSON(POD_Terrain_TemplateData);
+			FROM_JSON(POD_Terrain_TemplateData);
+		};
+
 		class Terrain_TemplateData
-			:public TemplateData
+			:public ITemplateData
 		{
 			friend class Terrain;
 			friend class TemplateDataManager;
 
 		public:
+			virtual std::string GetDataKey() const override;
+
+			POD_Terrain_TemplateData pod;
 
 		protected:
 			virtual bool PreEncoding(json& data) const override;

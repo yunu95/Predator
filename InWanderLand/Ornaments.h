@@ -1,11 +1,10 @@
 /// 2023. 11. 23 김상준
-/// EditableData 의 구체화된 클래스
+/// IEditableData 의 구체화된 클래스
 /// 장식물
 
 #pragma once
 
 #include "IEditableData.h"
-#include "Ornaments_InstanceData.h"
 #include "Ornaments_TemplateData.h"
 
 #include <memory>
@@ -15,18 +14,36 @@ namespace application
 {
 	namespace editor
 	{
+		class TemplateDataManager;
+	}
+}
+
+namespace application
+{
+	namespace editor
+	{
+		class Ornaments;
+
+		struct POD_Ornaments
+		{
+			Ornaments_TemplateData* templateData;
+
+			TO_JSON(POD_Ornaments);
+			FROM_JSON(POD_Ornaments);
+		};
+
 		class Ornaments
 			: public IEditableData
 		{
 			friend class InstanceManager;
 
 		public:
-			virtual TemplateData* GetTemplateData() override;
+			virtual bool EnterDataFromTemplate() override;
+			virtual ITemplateData* GetTemplateData() override;
 			virtual bool SetTemplateData(const std::string& dataName) override;
 			virtual IEditableData* Clone() const override;
 
-			Ornaments_InstanceData instanceData;
-			Ornaments_TemplateData* templateData;
+			POD_Ornaments pod;
 
 		protected:
 			virtual bool PreEncoding(json& data) const override;
@@ -35,6 +52,8 @@ namespace application
 			virtual bool PostDecoding(const json& data) override;
 
 		private:
+			static TemplateDataManager& templateDataManager;
+
 			Ornaments();
 			Ornaments(const std::string& name);
 			Ornaments(const Ornaments& prototype);

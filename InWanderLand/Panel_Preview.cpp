@@ -6,16 +6,9 @@ namespace application
 {
 	namespace editor
 	{
-		std::unique_ptr<PreviewPanel> PreviewPanel::instance = nullptr;
-
-		PreviewPanel& PreviewPanel::GetInstance()
+		PreviewPanel::PreviewPanel()
 		{
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<PreviewPanel>(new PreviewPanel());
-			}
 
-			return *instance;
 		}
 
 		PreviewPanel::~PreviewPanel()
@@ -48,11 +41,6 @@ namespace application
 		}
 
 		void PreviewPanel::Finalize()
-		{
-
-		}
-
-		PreviewPanel::PreviewPanel()
 		{
 
 		}

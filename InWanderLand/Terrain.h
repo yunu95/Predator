@@ -1,11 +1,10 @@
 /// 2023. 11. 23 김상준
-/// EditableData 의 구체화된 클래스
+/// IEditableData 의 구체화된 클래스
 /// 지형
 
 #pragma once
 
 #include "IEditableData.h"
-#include "Terrain_InstanceData.h"
 #include "Terrain_TemplateData.h"
 
 #include <memory>
@@ -15,18 +14,36 @@ namespace application
 {
 	namespace editor
 	{
+		class TemplateDataManager;
+	}
+}
+
+namespace application
+{
+	namespace editor
+	{
+		class Terrain;
+
+		struct POD_Terrain
+		{
+			Terrain_TemplateData* templateData = nullptr;
+
+			TO_JSON(POD_Terrain);
+			FROM_JSON(POD_Terrain);
+		};
+
 		class Terrain
 			: public IEditableData
 		{
 			friend class InstanceManager;
 
 		public:
-			virtual TemplateData* GetTemplateData() override;
+			virtual bool EnterDataFromTemplate() override;
+			virtual ITemplateData* GetTemplateData() override;
 			virtual bool SetTemplateData(const std::string& dataName) override;
 			virtual IEditableData* Clone() const override;
 
-			Terrain_InstanceData instanceData;
-			Terrain_TemplateData* templateData;
+			POD_Terrain pod;
 
 		protected:
 			virtual bool PreEncoding(json& data) const override;
@@ -35,6 +52,8 @@ namespace application
 			virtual bool PostDecoding(const json& data) override;
 
 		private:
+			static TemplateDataManager& templateDataManager;
+
 			Terrain();
 			Terrain(const std::string& name);
 			Terrain(const Terrain& prototype);

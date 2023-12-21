@@ -14,27 +14,15 @@ namespace application
 {
 	namespace editor
 	{
-		struct POD_TemplateData
-		{
-			TO_JSON(POD_TemplateData);
-			FROM_JSON(POD_TemplateData);
-
-			std::string test = "test";
-		};
-
-		class TemplateData
+		class ITemplateData
 			: public Identifiable, public Storable
 		{
 			friend class TemplateDataManager;
 
 		public:
-			virtual ~TemplateData() = default;
+			virtual ~ITemplateData() = default;
 
-			std::string GetDataKey() const;
-
-			// 기본 공용 데이터
-			POD_TemplateData pod = POD_TemplateData();
-			double testDouble = 10.0;
+			virtual std::string GetDataKey() const = 0;
 
 		protected:
 			virtual bool PreEncoding(json& data) const = 0;

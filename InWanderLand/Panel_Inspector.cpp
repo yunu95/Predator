@@ -6,16 +6,9 @@ namespace application
 {
 	namespace editor
 	{
-		std::unique_ptr<InspectorPanel> InspectorPanel::instance = nullptr;
-
-		InspectorPanel& InspectorPanel::GetInstance()
+		InspectorPanel::InspectorPanel()
 		{
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<InspectorPanel>(new InspectorPanel());
-			}
 
-			return *instance;
 		}
 
 		InspectorPanel::~InspectorPanel()
@@ -48,11 +41,6 @@ namespace application
 		}
 
 		void InspectorPanel::Finalize()
-		{
-
-		}
-
-		InspectorPanel::InspectorPanel()
 		{
 
 		}

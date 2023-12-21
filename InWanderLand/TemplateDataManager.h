@@ -1,12 +1,13 @@
 /// 2023. 12. 04 김상준
-/// TemplateData 에 대한 생성 및 관리를 위한 매니저 클래스
+/// ITemplateData 에 대한 생성 및 관리를 위한 매니저 클래스
 
 #pragma once
 
+#include "Singleton.h"
 #include "Storable.h"
 #include "Identifiable.h"
 #include "IEditableData.h"
-#include "TemplateData.h"
+#include "ITemplateData.h"
 
 #include <memory>
 #include <string>
@@ -18,23 +19,21 @@ namespace application
 	namespace editor
 	{
 		class TemplateDataManager
-			: public Storable
+			: public Storable, public Singleton<TemplateDataManager>
 		{
 		public:
 			friend class MapFileManager;
 
-			static TemplateDataManager& GetInstance();
+			TemplateDataManager();
 
-			virtual ~TemplateDataManager();
-
-			TemplateData* CreateTemplateData(const std::string& name, const IEditableData::DataType& type);
-			TemplateData* CloneTemplateData(const std::string& name, const TemplateData* prototype);
+			ITemplateData* CreateTemplateData(const std::string& name, const IEditableData::DataType& type);
+			ITemplateData* CloneTemplateData(const std::string& name, const ITemplateData* prototype);
 			bool DeleteTemplateData(const std::string& name);
-			TemplateData* GetTemplateData(const std::string& name) const;
+			ITemplateData* GetTemplateData(const std::string& name) const;
 			IEditableData::DataType GetDataType(const std::string& name) const;
-			IEditableData::DataType GetDataType(const TemplateData* ptr) const;
+			IEditableData::DataType GetDataType(const ITemplateData* ptr) const;
 			IEditableData::DataType GetDataType(const UUID& uuid) const;
-			std::string GetDataKey(const TemplateData* ptr) const;
+			std::string GetDataKey(const ITemplateData* ptr) const;
 			std::string GetDataKey(const UUID& uuid) const;
 			void Clear();
 
@@ -45,16 +44,10 @@ namespace application
 			virtual bool PostDecoding(const json& data) override;
 
 		private:
-			static std::unique_ptr<TemplateDataManager> instance;
-
-			TemplateDataManager();
-			TemplateDataManager(const TemplateDataManager&) = delete;
-			TemplateDataManager& operator=(const TemplateDataManager&) = delete;
-
-			std::map<const std::string, std::unique_ptr<TemplateData>> list;
-			std::unordered_map<const TemplateData*, IEditableData::DataType> typeMap;
+			std::map<const std::string, std::unique_ptr<ITemplateData>> list;
+			std::unordered_map<const ITemplateData*, IEditableData::DataType> typeMap;
 			std::unordered_map<const UUID, std::string> uuidKeyMap;
-			std::unordered_map<const TemplateData*, std::string> ptrKeyMap;
+			std::unordered_map<const ITemplateData*, std::string> ptrKeyMap;
 		};
 	}
 }

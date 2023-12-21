@@ -70,14 +70,8 @@
     <Filter Include="Editor\DataSystem\EditableData">
       <UniqueIdentifier>{47ea8057-a1f7-490c-8be2-48ee0ba2a859}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\DataSystem\EditableData\InstanceData">
-      <UniqueIdentifier>{eafa4f98-daf4-4d03-adc2-3ee83fbbc9df}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Editor\DataSystem\EditableData\DataType">
       <UniqueIdentifier>{23af273e-3034-4921-a34c-25496efb6b27}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Editor\DataSystem\EditableData\InstanceData\DataType">
-      <UniqueIdentifier>{18bad386-fd1e-43c8-881e-26fad3f74cad}</UniqueIdentifier>
     </Filter>
     <Filter Include="Editor\Commands\MenubarCommands\File">
       <UniqueIdentifier>{ff20d7ae-412d-42d0-bec7-11abb5773aa1}</UniqueIdentifier>
@@ -223,10 +217,7 @@
     <ClInclude Include="IEditableData.h">
       <Filter>Editor\DataSystem\EditableData</Filter>
     </ClInclude>
-    <ClInclude Include="InstanceData.h">
-      <Filter>Editor\DataSystem\EditableData\InstanceData</Filter>
-    </ClInclude>
-    <ClInclude Include="TemplateData.h">
+    <ClInclude Include="ITemplateData.h">
       <Filter>Editor\DataSystem\EditableData\TemplateData</Filter>
     </ClInclude>
     <ClInclude Include="Ornaments.h">
@@ -247,23 +238,11 @@
     <ClInclude Include="Terrain_TemplateData.h">
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClInclude>
-    <ClInclude Include="Units_InstanceData.h">
-      <Filter>Editor\DataSystem\EditableData\InstanceData\DataType</Filter>
-    </ClInclude>
-    <ClInclude Include="Ornaments_InstanceData.h">
-      <Filter>Editor\DataSystem\EditableData\InstanceData\DataType</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain_InstanceData.h">
-      <Filter>Editor\DataSystem\EditableData\InstanceData\DataType</Filter>
-    </ClInclude>
     <ClInclude Include="TemplateDataManager.h">
       <Filter>Editor\DataSystem</Filter>
     </ClInclude>
     <ClInclude Include="TemplateDataList.h">
       <Filter>Editor\DataSystem\EditableData\TemplateData</Filter>
-    </ClInclude>
-    <ClInclude Include="InstanceDataList.h">
-      <Filter>Editor\DataSystem\EditableData\InstanceData</Filter>
     </ClInclude>
     <ClInclude Include="EditableDataList.h">
       <Filter>Editor\DataSystem\EditableData</Filter>
@@ -404,15 +383,6 @@
     <ClCompile Include="Units_TemplateData.cpp">
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClCompile>
-    <ClCompile Include="Ornaments_InstanceData.cpp">
-      <Filter>Editor\DataSystem\EditableData\InstanceData\DataType</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrain_InstanceData.cpp">
-      <Filter>Editor\DataSystem\EditableData\InstanceData\DataType</Filter>
-    </ClCompile>
-    <ClCompile Include="Units_InstanceData.cpp">
-      <Filter>Editor\DataSystem\EditableData\InstanceData\DataType</Filter>
-    </ClCompile>
     <ClCompile Include="TemplateDataManager.cpp">
       <Filter>Editor\DataSystem</Filter>
     </ClCompile>
@@ -424,9 +394,6 @@
     </ClCompile>
     <ClCompile Include="LoadMapCommand.cpp">
       <Filter>Editor\Commands\MenubarCommands\File</Filter>
-    </ClCompile>
-    <ClCompile Include="TemplateData.cpp">
-      <Filter>Editor\DataSystem\EditableData\TemplateData</Filter>
     </ClCompile>
     <ClCompile Include="TestCaseTemplate.cpp">
       <Filter>TestCodes</Filter>

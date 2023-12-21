@@ -6,16 +6,9 @@ namespace application
 {
 	namespace editor
 	{
-		std::unique_ptr<SceneViewPanel> SceneViewPanel::instance = nullptr;
-
-		SceneViewPanel& SceneViewPanel::GetInstance()
+		SceneViewPanel::SceneViewPanel()
 		{
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<SceneViewPanel>(new SceneViewPanel());
-			}
 
-			return *instance;
 		}
 
 		SceneViewPanel::~SceneViewPanel()
@@ -48,11 +41,6 @@ namespace application
 		}
 
 		void SceneViewPanel::Finalize()
-		{
-
-		}
-
-		SceneViewPanel::SceneViewPanel()
 		{
 
 		}

@@ -1,9 +1,10 @@
 /// 2023. 11. 23 김상준
-/// 실제 Instance 가 되어 관리되는 EditableData 에 대한 Manager 클래스
-/// EditableData 는 InstanceMaanger 를 통해서만 생성할 수 있음
+/// 실제 Instance 가 되어 관리되는 IEditableData 에 대한 Manager 클래스
+/// IEditableData 는 InstanceMaanger 를 통해서만 생성할 수 있음
 
 #pragma once
 
+#include "Singleton.h"
 #include "Storable.h"
 #include "IEditableData.h"
 #include "Identifiable.h"
@@ -18,7 +19,8 @@ namespace application
 {
 	namespace editor
 	{
-		class TemplateData;
+		class TemplateDataManager;
+		class ITemplateData;
 	}
 }
 
@@ -27,17 +29,16 @@ namespace application
 	namespace editor
 	{
 		class InstanceManager
-			: public Storable
+			: public Storable, public Singleton<InstanceManager>
 		{
 		public:
 			friend class MapFileManager;
 
-			static InstanceManager& GetInstance();
+			InstanceManager();
 
-			virtual ~InstanceManager();
-
-			// 이미 만들어진 TemplateData 로부터 Instance 를 생성함
+			// 이미 만들어진 ITemplateData 로부터 Instance 를 생성함
 			IEditableData* CreateInstance(const std::string& dataName);
+			bool DeleteInstance(const UUID& uuid);
 			IEditableData* GetInstance(const UUID& uuid) const;
 			void Clear();
 
@@ -48,17 +49,12 @@ namespace application
 			virtual bool PostDecoding(const json& data) override;
 
 		private:
-			static std::unique_ptr<InstanceManager> instance;
-
-			InstanceManager();
-			InstanceManager(const InstanceManager&) = delete;
-			InstanceManager& operator=(const InstanceManager&) = delete;
-
-			// TemplateData 가 생성되기 전에 그 틀만 우선 작성함
+			// ITemplateData 가 생성되기 전에 그 틀만 우선 작성함
 			IEditableData* CreateEmptyInstance(const IEditableData::DataType& type);
 
+			TemplateDataManager& templateDataManager;
 			std::unordered_map<const UUID, std::unique_ptr<IEditableData>> list;
-			std::unordered_map<const UUID, TemplateData*> tdMap;
+			std::unordered_map<const UUID, ITemplateData*> tdMap;
 			// CreateEmptyInstance Only
 			std::unordered_set<IEditableData*> listBeforeMatching;
 			IEditableData* mould;

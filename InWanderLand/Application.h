@@ -57,7 +57,7 @@ namespace application
         std::vector<Layer*> layers;
 
 #ifdef _DEBUG
-        editor::CommandManager& cm = editor::CommandManager::GetInstance();
+        editor::CommandManager& cm = editor::CommandManager::GetSingletonInstance();
 #endif
     };
 }

@@ -6,51 +6,55 @@ namespace application
 {
 	namespace editor
 	{
+		std::string Units_TemplateData::GetDataKey() const
+		{
+			return TemplateDataManager::GetSingletonInstance().GetDataKey(this);
+		}
+
 		bool Units_TemplateData::PreEncoding(json& data) const
 		{
-			FieldEncoding<boost::pfr::tuple_size_v<POD_TemplateData>>(TemplateData::pod, data["POD_Base"]);
-			FieldEncoding<boost::pfr::tuple_size_v<POD_Units_TemplateData>>(pod, data["POD"]);
+			FieldPreEncoding<boost::pfr::tuple_size_v<POD_Units_TemplateData>>(pod, data["POD"]);
+
 			return true;
 		}
 
 		bool Units_TemplateData::PostEncoding(json& data) const
 		{
-			data["testInt"] = testInt;
-			data["testDouble"] = testDouble;
+			FieldPostEncoding<boost::pfr::tuple_size_v<POD_Units_TemplateData>>(pod, data["POD"]);
+
 			return true;
 		}
 
 		bool Units_TemplateData::PreDecoding(const json& data)
 		{
-			FieldDecoding<boost::pfr::tuple_size_v<POD_TemplateData>>(TemplateData::pod, data["POD_Base"]);
-			FieldDecoding<boost::pfr::tuple_size_v<POD_Units_TemplateData>>(pod, data["POD"]);
+			FieldPreDecoding<boost::pfr::tuple_size_v<POD_Units_TemplateData>>(pod, data["POD"]);
+
 			return true;
 		}
 
 		bool Units_TemplateData::PostDecoding(const json& data)
 		{
-			testInt = data["testInt"];
-			testDouble = data["testDouble"];
+			FieldPostDecoding<boost::pfr::tuple_size_v<POD_Units_TemplateData>>(pod, data["POD"]);
+
 			return true;
 		}
 
 		Units_TemplateData::Units_TemplateData()
-			: pod(), testInt(100)
+			: ITemplateData(), pod()
 		{
-			testDouble = 77.7;
+			pod.mypointer = this;
 		}
 
 		Units_TemplateData::Units_TemplateData(const Units_TemplateData& prototype)
-			: TemplateData(prototype), pod(prototype.pod), testInt(prototype.testInt)
+			: ITemplateData(prototype), pod(prototype.pod) 
 		{
 
 		}
 
 		Units_TemplateData& Units_TemplateData::operator=(const Units_TemplateData& prototype)
 		{
-			TemplateData::operator=(prototype);
+			ITemplateData::operator=(prototype);
 			pod = prototype.pod;
-			testInt = prototype.testInt;
 			return *this;
 		}
 	}

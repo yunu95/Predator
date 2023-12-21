@@ -16,7 +16,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 void TestCaseMapFileIOInitializer()
 {
     using namespace application::editor;
-    auto& tdm = TemplateDataManager::GetInstance();
+    auto& tdm = TemplateDataManager::GetSingletonInstance();
     tdm.CreateTemplateData("Terrain1", IEditableData::DataType::Terrain);
     tdm.CreateTemplateData("Terrain2", IEditableData::DataType::Terrain);
     tdm.CreateTemplateData("Terrain3", IEditableData::DataType::Terrain);
@@ -27,7 +27,7 @@ void TestCaseMapFileIOInitializer()
     tdm.CreateTemplateData("Ornament2", IEditableData::DataType::Ornaments);
     tdm.CreateTemplateData("Ornament3", IEditableData::DataType::Ornaments);
 
-    auto& im = InstanceManager::GetInstance();
+    auto& im = InstanceManager::GetSingletonInstance();
     im.CreateInstance("Terrain1");
     im.CreateInstance("Terrain2");
     im.CreateInstance("Terrain2");
@@ -59,9 +59,9 @@ namespace InWanderLand
             application::editor::EditorLayer::AssignTestInitializer(TestCaseMapFileIOInitializer);
             client.Initialize();
 
-            auto& mfm = application::editor::MapFileManager::GetInstance();
-            auto& tdm = application::editor::TemplateDataManager::GetInstance();
-            auto& im = application::editor::InstanceManager::GetInstance();
+            auto& mfm = application::editor::MapFileManager::GetSingletonInstance();
+            auto& tdm = application::editor::TemplateDataManager::GetSingletonInstance();
+            auto& im = application::editor::InstanceManager::GetSingletonInstance();
 
             mfm.SaveMapFile("TestCase1.pmap");
             mfm.Clear();

@@ -288,13 +288,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="IEditableData.h" />
     <ClInclude Include="EditableDataList.h" />
     <ClInclude Include="Identifiable.h" />
-    <ClInclude Include="InstanceData.h" />
-    <ClInclude Include="InstanceDataList.h" />
     <ClInclude Include="InstanceManager.h" />
     <ClInclude Include="LoadMapCommand.h" />
     <ClInclude Include="MapFileManager.h" />
     <ClInclude Include="Ornaments.h" />
-    <ClInclude Include="Ornaments_InstanceData.h" />
     <ClInclude Include="Ornaments_TemplateData.h" />
     <ClInclude Include="DelayedTestFunctions.h" />
     <ClInclude Include="TestNavAgentEnableDeath.h" />
@@ -325,7 +322,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="ProgramExitCommand.h" />
     <ClInclude Include="SaveMapCommand.h" />
     <ClInclude Include="ShakyCam.h" />
-    <ClInclude Include="TemplateData.h" />
+    <ClInclude Include="ITemplateData.h" />
     <ClInclude Include="TemplateDataList.h" />
     <ClInclude Include="TemplateDataManager.h" />
     <ClInclude Include="Storable.h" />
@@ -333,10 +330,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="TerrainEditor.h" />
     <ClInclude Include="PathEditor.h" />
     <ClInclude Include="TestComponent.h" />
-    <ClInclude Include="Terrain_InstanceData.h" />
     <ClInclude Include="Terrain_TemplateData.h" />
     <ClInclude Include="Units.h" />
-    <ClInclude Include="Units_InstanceData.h" />
     <ClInclude Include="Units_TemplateData.h" />
     <ClInclude Include="UUID.h" />
     <ClInclude Include="UUIDManager.h" />
@@ -361,7 +356,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="MapFileManager.cpp" />
     <ClCompile Include="Ornaments.cpp" />
-    <ClCompile Include="Ornaments_InstanceData.cpp" />
     <ClCompile Include="Ornaments_TemplateData.cpp" />
     <ClCompile Include="Panel_CameraView.cpp" />
     <ClCompile Include="Panel_Hierarchy.cpp" />
@@ -376,15 +370,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="RTSCam.cpp" />
     <ClCompile Include="SaveMapCommand.cpp" />
     <ClCompile Include="ShakyCam.cpp" />
-    <ClCompile Include="TemplateData.cpp" />
     <ClCompile Include="TemplateDataManager.cpp" />
     <ClCompile Include="Storable.cpp" />
     <ClCompile Include="Terrain.cpp" />
-    <ClCompile Include="Terrain_InstanceData.cpp" />
     <ClCompile Include="Terrain_TemplateData.cpp" />
     <ClCompile Include="TestCaseMapFileIO.cpp" />
     <ClCompile Include="Units.cpp" />
-    <ClCompile Include="Units_InstanceData.cpp" />
     <ClCompile Include="Units_TemplateData.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObj.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObjImgui.cpp" />

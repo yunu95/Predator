@@ -6,16 +6,9 @@ namespace application
 {
 	namespace editor
 	{
-		std::unique_ptr<MiniMapPanel> MiniMapPanel::instance = nullptr;
-
-		MiniMapPanel& MiniMapPanel::GetInstance()
+		MiniMapPanel::MiniMapPanel()
 		{
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<MiniMapPanel>(new MiniMapPanel());
-			}
 
-			return *instance;
 		}
 
 		MiniMapPanel::~MiniMapPanel()
@@ -48,11 +41,6 @@ namespace application
 		}
 
 		void MiniMapPanel::Finalize()
-		{
-
-		}
-
-		MiniMapPanel::MiniMapPanel()
 		{
 
 		}

@@ -27,7 +27,7 @@ namespace application
 			bool isMouseOver = false;
 			bool isFocused = false;
 
-			CommandManager& commandManager = CommandManager::GetInstance();
+			CommandManager& commandManager = CommandManager::GetSingletonInstance();
 		};
 	}
 }

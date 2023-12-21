@@ -14,7 +14,7 @@ namespace application
 		class Singleton
 		{
 		public:
-			static T& GetInstance()
+			static T& GetSingletonInstance()
 			{
 				static std::unique_ptr<T> instance = nullptr;
 				if (instance == nullptr)

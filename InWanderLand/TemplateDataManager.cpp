@@ -2,38 +2,25 @@
 
 #include "TemplateDataList.h"
 
-#include <assert.h>
-
 namespace application
 {
 	namespace editor
 	{
-		std::unique_ptr<TemplateDataManager> TemplateDataManager::instance = nullptr;
-
-		TemplateDataManager& TemplateDataManager::GetInstance()
-		{
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<TemplateDataManager>(new TemplateDataManager());
-			}
-
-			return *instance;
-		}
-
-		TemplateDataManager::~TemplateDataManager()
+		TemplateDataManager::TemplateDataManager()
+			: Storable(), Singleton<TemplateDataManager>(), list(), typeMap(), uuidKeyMap(), ptrKeyMap()
 		{
 
 		}
 
-		TemplateData* TemplateDataManager::CreateTemplateData(const std::string& name, const IEditableData::DataType& type)
+		ITemplateData* TemplateDataManager::CreateTemplateData(const std::string& name, const IEditableData::DataType& type)
 		{
 			if (list.find(name) != list.end())
 			{
-				// 이미 해당 이름으로 생성된 TemplateData 가 있음
+				// 이미 해당 이름으로 생성된 ITemplateData 가 있음
 				return nullptr;
 			}
 
-			TemplateData* instance;
+			ITemplateData* instance = nullptr;
 
 			switch (type)
 			{
@@ -59,19 +46,22 @@ namespace application
 					break;
 			}
 
-			list[name] = std::unique_ptr<TemplateData>(instance);
-			typeMap[instance] = type;
-			uuidKeyMap[instance->GetUUID()] = name;
-			ptrKeyMap[instance] = name;
+			if (instance != nullptr)
+			{
+				list[name] = std::unique_ptr<ITemplateData>(instance);
+				typeMap[instance] = type;
+				uuidKeyMap[instance->id] = name;
+				ptrKeyMap[instance] = name;
+			}
 
 			return instance;
 		}
 
-		TemplateData* TemplateDataManager::CloneTemplateData(const std::string& name, const TemplateData* prototype)
+		ITemplateData* TemplateDataManager::CloneTemplateData(const std::string& name, const ITemplateData* prototype)
 		{
 			if (list.find(name) != list.end())
 			{
-				// 이미 해당 이름으로 생성된 TemplateData 가 있음
+				// 이미 해당 이름으로 생성된 ITemplateData 가 있음
 				return nullptr;
 			}
 
@@ -85,19 +75,19 @@ namespace application
 				{
 					case IEditableData::DataType::Terrain:
 					{
-						*static_cast<Terrain_TemplateData*>(instance) = *static_cast<Terrain_TemplateData*>(const_cast<TemplateData*>(prototype));
+						*static_cast<Terrain_TemplateData*>(instance) = *static_cast<Terrain_TemplateData*>(const_cast<ITemplateData*>(prototype));
 						break;
 					}
 
 					case IEditableData::DataType::Units:
 					{
-						*static_cast<Units_TemplateData*>(instance) = *static_cast<Units_TemplateData*>(const_cast<TemplateData*>(prototype));
+						*static_cast<Units_TemplateData*>(instance) = *static_cast<Units_TemplateData*>(const_cast<ITemplateData*>(prototype));
 						break;
 					}
 
 					case IEditableData::DataType::Ornaments:
 					{
-						*static_cast<Ornaments_TemplateData*>(instance) = *static_cast<Ornaments_TemplateData*>(const_cast<TemplateData*>(prototype));
+						*static_cast<Ornaments_TemplateData*>(instance) = *static_cast<Ornaments_TemplateData*>(const_cast<ITemplateData*>(prototype));
 						break;
 					}
 
@@ -113,24 +103,24 @@ namespace application
 		{
 			if (list.find(name) == list.end())
 			{
-				// 해당 이름으로 생성된 TemplateData 가 없음
+				// 해당 이름으로 생성된 ITemplateData 가 없음
 				return false;
 			}
 
 			typeMap.erase(list[name].get());
-			uuidKeyMap.erase(list[name].get()->GetUUID());
+			uuidKeyMap.erase(list[name].get()->id);
 			ptrKeyMap.erase(list[name].get());
 			list.erase(name);
 
 			return true;
 		}
 
-		TemplateData* TemplateDataManager::GetTemplateData(const std::string& name) const
+		ITemplateData* TemplateDataManager::GetTemplateData(const std::string& name) const
 		{
 			auto itr = list.find(name);
 			if (itr == list.end())
 			{
-				// 해당 이름으로 생성된 TemplateData 가 없으면 nullptr 반환
+				// 해당 이름으로 생성된 ITemplateData 가 없으면 nullptr 반환
 				return nullptr;
 			}
 
@@ -142,16 +132,16 @@ namespace application
 			auto itr = list.find(name);
 			if (itr == list.end())
 			{
-				// 해당 이름으로 생성된 TemplateData 가 없으면 None 반환
+				// 해당 이름으로 생성된 ITemplateData 가 없으면 None 반환
 				return IEditableData::DataType::None;
 			}
 
 			return typeMap.find(itr->second.get())->second;
 		}
 
-		IEditableData::DataType TemplateDataManager::GetDataType(const TemplateData* ptr) const
+		IEditableData::DataType TemplateDataManager::GetDataType(const ITemplateData* ptr) const
 		{
-			auto itr = typeMap.find(const_cast<TemplateData*>(ptr));
+			auto itr = typeMap.find(const_cast<ITemplateData*>(ptr));
 			if (itr == typeMap.end())
 			{
 				// 해당 데이터가 없으면 None 반환
@@ -173,7 +163,7 @@ namespace application
 			return itr->second;
 		}
 
-		std::string TemplateDataManager::GetDataKey(const TemplateData* ptr) const
+		std::string TemplateDataManager::GetDataKey(const ITemplateData* ptr) const
 		{
 			auto itr = ptrKeyMap.find(ptr);
 			if (itr == ptrKeyMap.end())
@@ -211,7 +201,7 @@ namespace application
 			std::string uuidStr;
 			for (auto& [key, ptr] : list)
 			{
-				uuid = ptr->GetUUID();
+				uuid = ptr->id;
 				uuidStr = UUID_To_String(uuid);
 
 				data["TemplateList"][uuidStr]["key"] = key;
@@ -230,7 +220,7 @@ namespace application
 			std::string uuidStr;
 			for (auto& [key, ptr] : list)
 			{
-				uuid = ptr->GetUUID();
+				uuid = ptr->id;
 				uuidStr = UUID_To_String(uuid);
 
 				auto itr = data["TemplateList"].find(uuidStr);
@@ -262,7 +252,7 @@ namespace application
 
 				// Change UUID
 				uuid = String_To_UUID(uuidStr);
-				uuidKeyMap.erase(instance->GetUUID());
+				uuidKeyMap.erase(instance->id);
 				uuidKeyMap[uuid] = templateData["key"];
 				instance->SetUUID(uuid);
 
@@ -288,13 +278,6 @@ namespace application
 			}
 
 			return true;
-		}
-
-		/// private
-		TemplateDataManager::TemplateDataManager()
-			: list(), typeMap(), uuidKeyMap(), ptrKeyMap()
-		{
-
 		}
 	}
 }

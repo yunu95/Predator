@@ -14,7 +14,7 @@ namespace application
 {
 	namespace editor
 	{
-		class TemplateData;
+		class ITemplateData;
 	}
 }
 
@@ -39,7 +39,8 @@ namespace application
 		public:
 			virtual ~IEditableData() = default;
 
-			virtual TemplateData* GetTemplateData() = 0;
+			virtual bool EnterDataFromTemplate() = 0;
+			virtual ITemplateData* GetTemplateData() = 0;
 			virtual bool SetTemplateData(const std::string& dataName) = 0;
 			virtual IEditableData* Clone() const = 0;
 

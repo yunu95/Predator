@@ -4,9 +4,13 @@
 
 #pragma once
 
+#include "Identifiable.h"
+#include "UUIDManager.h"
+
 #include <unordered_map>
 #include <string>
 #include <vector>
+#include <type_traits>
 #include <nlohmann/json.hpp>
 #include <boost/pfr.hpp>
 
@@ -15,9 +19,9 @@ using json = nlohmann::json;
 namespace application
 {
 	namespace editor
-	{	
+	{
 		template <int N, typename T>
-		json FieldEncoding(T& classInstance, json& data)
+		json FieldPreEncoding(T& classInstance, json& data)
 		{
 			if constexpr (N == 0)
 			{
@@ -25,14 +29,17 @@ namespace application
 			}
 			else
 			{
-				data[boost::pfr::get_name<N - 1, T>()] = boost::pfr::get<N - 1>(classInstance);
-				FieldEncoding<N - 1, T>(classInstance, data);
+				if constexpr (!std::is_pointer_v<std::remove_reference_t<decltype(boost::pfr::get<N - 1>(classInstance))>>)
+				{
+					data[boost::pfr::get_name<N - 1, std::remove_const_t<T>>()] = boost::pfr::get<N - 1>(classInstance);
+				}
+				FieldPreEncoding<N - 1, T>(classInstance, data);
 			}
 			return data;
 		}
 
 		template <int N, typename T>
-		const json& FieldDecoding(T& classInstance, const json& data)
+		json FieldPostEncoding(T& classInstance, json& data)
 		{
 			if constexpr (N == 0)
 			{
@@ -40,12 +47,56 @@ namespace application
 			}
 			else
 			{
-				boost::pfr::get<N - 1>(classInstance) = data[boost::pfr::get_name<N - 1, T>()];
-				FieldDecoding<N - 1, T>(classInstance, data);
+				if constexpr (std::is_pointer_v<std::remove_reference_t<decltype(boost::pfr::get<N - 1>(classInstance))>>)
+				{
+					data[boost::pfr::get_name<N - 1, std::remove_const_t<T>>()] = UUID_To_String(boost::pfr::get<N - 1>(classInstance)->GetUUID());
+				}
+				FieldPostEncoding<N - 1, T>(classInstance, data);
 			}
 			return data;
 		}
 
+		template <int N, typename T>
+		const json& FieldPreDecoding(T& classInstance, const json& data)
+		{
+			if constexpr (N == 0)
+			{
+				return data;
+			}
+			else
+			{
+				if constexpr (std::is_pointer_v<std::remove_reference_t<decltype(boost::pfr::get<N - 1>(classInstance))>>)
+				{
+					boost::pfr::get<N - 1>(classInstance) = nullptr;
+				}
+				else
+				{
+					boost::pfr::get<N - 1>(classInstance) = data[boost::pfr::get_name<N - 1, T>()];
+				}
+				FieldPreDecoding<N - 1, T>(classInstance, data);
+			}
+			return data;
+		}
+
+		template <int N, typename T>
+		const json& FieldPostDecoding(T& classInstance, const json& data)
+		{
+			if constexpr (N == 0)
+			{
+				return data;
+			}
+			else
+			{
+				if constexpr (std::is_pointer_v<std::remove_reference_t<decltype(boost::pfr::get<N - 1>(classInstance))>>)
+				{
+					boost::pfr::get<N - 1>(classInstance) = UUIDManager::GetSingletonInstance()
+						.GetPointerFromUUID<std::remove_reference_t<decltype(boost::pfr::get<N - 1>(classInstance))>>
+						(String_To_UUID(data[boost::pfr::get_name<N - 1, T>()]));
+				}
+				FieldPostDecoding<N - 1, T>(classInstance, data);
+			}
+			return data;
+		}
 
 		class Storable
 		{
@@ -68,13 +119,13 @@ namespace application
 operator json() \
 { \
 	json data; \
-	application::editor::FieldEncoding<boost::pfr::tuple_size_v<Class>>(*this, data); \
+	application::editor::FieldPreEncoding<boost::pfr::tuple_size_v<Class>>(*this, data); \
 	return data; \
 }
 
 #define FROM_JSON(Class) \
 Class& operator=(const json& data) \
 { \
-	application::editor::FieldDecoding<boost::pfr::tuple_size_v<Class>>(*this, data); \
+	application::editor::FieldPreDecoding<boost::pfr::tuple_size_v<Class>>(*this, data); \
 	return *this; \
 }

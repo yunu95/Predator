@@ -3,6 +3,7 @@
 #include "Storable.h"
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
+#include "UUIDManager.h"
 
 #include <fstream>
 
@@ -10,19 +11,9 @@ namespace application
 {
     namespace editor
     {
-        std::unique_ptr<MapFileManager> MapFileManager::instance = nullptr;
-
-        MapFileManager& MapFileManager::GetInstance()
-        {
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<MapFileManager>(new MapFileManager());
-			}
-
-            return *instance;
-        }
-
-        MapFileManager::~MapFileManager()
+        MapFileManager::MapFileManager()
+            : Singleton<MapFileManager>(), instanceManager(InstanceManager::GetSingletonInstance()), templateDataManager(TemplateDataManager::GetSingletonInstance())
+            , currentMapPath()
         {
 
         }
@@ -35,6 +26,13 @@ namespace application
             {
                 json mapData;
                 loadFile >> mapData;
+
+                // 제대로 된 Map 파일이 아닐 경우 취소
+                if (mapData.find("InWanderLand") == mapData.end())
+                {
+                    loadFile.close();
+                    return false;
+                }
 
                 // Manager 초기화
                 Clear();
@@ -65,7 +63,7 @@ namespace application
         bool MapFileManager::SaveMapFile(const std::string& path)
         {
             json mapData;
-            
+
             // Pre
             if (!instanceManager.PreEncoding(mapData) || !templateDataManager.PreEncoding(mapData))
             {
@@ -77,6 +75,14 @@ namespace application
             {
                 return false;
             }
+
+            if (mapData.is_null())
+            {
+                // mapdData 가 만들어진 것이 없다면 취소
+                return false;
+            }
+
+            mapData["InWanderLand"] = "Map";
 
             std::ofstream saveFile{ path };
 
@@ -92,19 +98,21 @@ namespace application
             }
         }
 
+        std::string MapFileManager::GetCurrentMapPath() const
+        {
+            return currentMapPath;
+        }
+
+        void MapFileManager::SetCurrentMapPath(std::string& path)
+        {
+            currentMapPath = path;
+        }
+
         void MapFileManager::Clear()
         {
             instanceManager.Clear();
             templateDataManager.Clear();
+            UUIDManager::GetSingletonInstance().Clear();
         }
-
-        /// private
-        MapFileManager::MapFileManager()
-            : instanceManager(InstanceManager::GetInstance()), templateDataManager(TemplateDataManager::GetInstance())
-            , currentMap()
-        {
-
-        }
-
     }
 }

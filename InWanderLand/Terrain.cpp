@@ -7,32 +7,41 @@ namespace application
 {
 	namespace editor
 	{
-		TemplateData* Terrain::GetTemplateData()
+		TemplateDataManager& Terrain::templateDataManager = TemplateDataManager::GetSingletonInstance();
+
+		bool Terrain::EnterDataFromTemplate()
 		{
-			return templateData;
+			// 템플릿으로부터 초기화되는 데이터들 처리 영역	
+
+			return true;
+		}
+
+		ITemplateData* Terrain::GetTemplateData()
+		{
+			return pod.templateData;
 		}
 
 		bool Terrain::SetTemplateData(const std::string& dataName)
 		{
-			auto ptr = TemplateDataManager::GetInstance().GetTemplateData(dataName);
+			auto ptr = templateDataManager.GetTemplateData(dataName);
 			if (ptr == nullptr)
 			{
 				return false;
 			}
 
-			templateData = static_cast<Terrain_TemplateData*>(ptr);
+			pod.templateData = static_cast<Terrain_TemplateData*>(ptr);
 
 			return true;
 		}
 
 		IEditableData* Terrain::Clone() const
 		{
-			auto& imanager = InstanceManager::GetInstance();
-			auto instance = imanager.CreateInstance(templateData->GetDataKey());
+			auto& imanager = InstanceManager::GetSingletonInstance();
+			auto instance = imanager.CreateInstance(pod.templateData->GetDataKey());
 
 			if (instance != nullptr)
 			{
-				static_cast<Terrain*>(instance)->instanceData = instanceData;
+				static_cast<Terrain*>(instance)->pod = pod;
 			}
 
 			return instance;
@@ -40,74 +49,55 @@ namespace application
 
 		bool Terrain::PreEncoding(json& data) const
 		{
-			if (!instanceData.PreEncoding(data["instance_data"]))
-			{
-				return false;
-			}
+			FieldPreEncoding<boost::pfr::tuple_size_v<POD_Terrain>>(pod, data["POD"]);
 
 			return true;
 		}
 
 		bool Terrain::PostEncoding(json& data) const
 		{
-			if (!instanceData.PostEncoding(data["instance_data"]))
-			{
-				return false;
-			}
-
-			data["template_data"] = UUID_To_String(templateData->GetUUID());
+			FieldPostEncoding<boost::pfr::tuple_size_v<POD_Terrain>>(pod, data["POD"]);
 
 			return true;
 		}
 
 		bool Terrain::PreDecoding(const json& data)
 		{
-			if (!instanceData.PreDecoding(data["instance_data"]))
-			{
-				return false;
-			}
+			FieldPreDecoding<boost::pfr::tuple_size_v<POD_Terrain>>(pod, data["POD"]);
 
 			return true;
 		}
 
 		bool Terrain::PostDecoding(const json& data)
 		{
-			if (!instanceData.PostDecoding(data["instance_data"]))
-			{
-				return false;
-			}
+			FieldPostDecoding<boost::pfr::tuple_size_v<POD_Terrain>>(pod, data["POD"]);
 
-			auto& tdManager = TemplateDataManager::GetInstance();
-
-			UUID uuid = String_To_UUID(data["template_data"]);
-
-			return SetTemplateData(tdManager.GetDataKey(uuid));
+			return true;
 		}
 
 		Terrain::Terrain()
-			: instanceData(), templateData(nullptr)
+			: pod()
 		{
 
 		}
 
 		Terrain::Terrain(const std::string& name)
-			: instanceData(), templateData()
+			: IEditableData(), pod()
 		{
-			auto& manager = TemplateDataManager::GetInstance();
-			templateData = static_cast<Terrain_TemplateData*>(manager.GetTemplateData(name));
-			instanceData.EnterDataFromTemplate(templateData);
+			pod.templateData = static_cast<Terrain_TemplateData*>(templateDataManager.GetTemplateData(name));
+			EnterDataFromTemplate();
 		}
 
 		Terrain::Terrain(const Terrain& prototype)
-			: instanceData(prototype.instanceData), templateData(prototype.templateData)
+			: pod(prototype.pod)
 		{
 
 		}
 
 		Terrain& Terrain::operator=(const Terrain& prototype)
 		{
-			instanceData = prototype.instanceData;
-			templateData = prototype.templateData;
+			IEditableData::operator=(prototype);
+			pod = prototype.pod;
 			return *this;
 		}
 	}

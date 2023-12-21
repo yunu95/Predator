@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Singleton.h"
 #include "EditorPanel.h"
 
 #include <memory>
@@ -12,24 +13,16 @@ namespace application
 	namespace editor
 	{
 		class CameraViewPanel
-			: public Panel
+			: public Panel, public Singleton<CameraViewPanel>
 		{
 		public:
-			static CameraViewPanel& GetInstance();
-
+			CameraViewPanel();
 			virtual ~CameraViewPanel();
 
 			virtual void Initialize() override;
 			virtual void Update(float ts) override;
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
-
-		protected:
-			static std::unique_ptr<CameraViewPanel> instance;
-
-			CameraViewPanel();
-			CameraViewPanel(const CameraViewPanel& copy) = delete;
-			CameraViewPanel& operator=(const CameraViewPanel& copy) = delete;
 		};
 	}
 }

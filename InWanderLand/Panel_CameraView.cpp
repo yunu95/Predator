@@ -6,16 +6,9 @@ namespace application
 {
 	namespace editor
 	{
-		std::unique_ptr<CameraViewPanel> CameraViewPanel::instance = nullptr;
-
-		CameraViewPanel& CameraViewPanel::GetInstance()
+		CameraViewPanel::CameraViewPanel()
 		{
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<CameraViewPanel>(new CameraViewPanel());
-			}
 
-			return *instance;
 		}
 
 		CameraViewPanel::~CameraViewPanel()
@@ -48,11 +41,6 @@ namespace application
 		}
 
 		void CameraViewPanel::Finalize()
-		{
-
-		}
-
-		CameraViewPanel::CameraViewPanel()
 		{
 
 		}

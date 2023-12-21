@@ -1,32 +1,36 @@
 /// 2023. 11. 23 김상준
-/// TemplateData 의 구체화된 클래스
+/// ITemplateData 의 구체화된 클래스
 /// 유닛
 
 #pragma once
 
-#include "TemplateData.h"
+#include "ITemplateData.h"
 
 namespace application
 {
 	namespace editor
 	{
+		class Units_TemplateData;
+
 		struct POD_Units_TemplateData
 		{
 			TO_JSON(POD_Units_TemplateData);
 			FROM_JSON(POD_Units_TemplateData);
 
 			int maxHP = 50;
+			ITemplateData* mypointer = nullptr;
 		};
 
 		class Units_TemplateData
-			:public TemplateData
+			:public ITemplateData
 		{
 			friend class Units;
 			friend class TemplateDataManager;
 
 		public:
+			virtual std::string GetDataKey() const override;
+
 			POD_Units_TemplateData pod;
-			int testInt;
 
 		protected:
 			virtual bool PreEncoding(json& data) const override;

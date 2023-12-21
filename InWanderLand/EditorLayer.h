@@ -49,7 +49,7 @@ namespace application
 
 			void UI_DrawMenubar();
 
-			CommandManager& cm = CommandManager::GetInstance();
+			CommandManager& cm = CommandManager::GetSingletonInstance();
 			std::vector<Panel*> editorPanelList;
 		};
 	}

@@ -27,20 +27,20 @@ namespace application
 			}
 
 			/// 각종 매니저 클래스 메모리 할당
-			MapFileManager::GetInstance();
+			MapFileManager::GetSingletonInstance();
 
 			/// 에디터에서 사용할 에디터 카메라, 게임뷰 카메라 생성
 
 			/// 에디터 패널 생성 및 초기화 진행
 			editorPanelList.resize((int)Panel_List::Size);
 
-			editorPanelList[(int)Panel_List::HIERARCHY] = &HierarchyPanel::GetInstance();
-			editorPanelList[(int)Panel_List::INSPECTOR] = &InspectorPanel::GetInstance();
-			editorPanelList[(int)Panel_List::PREVIEW] = &PreviewPanel::GetInstance();
-			editorPanelList[(int)Panel_List::MINIMAP] = &MiniMapPanel::GetInstance();
-			editorPanelList[(int)Panel_List::SCENEVIEW] = &SceneViewPanel::GetInstance();
-			editorPanelList[(int)Panel_List::CAMERAVIEW] = &CameraViewPanel::GetInstance();
-			editorPanelList[(int)Panel_List::PALETTE] = &PalettePanel::GetInstance();
+			editorPanelList[(int)Panel_List::HIERARCHY] = &HierarchyPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::INSPECTOR] = &InspectorPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::PREVIEW] = &PreviewPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::MINIMAP] = &MiniMapPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::SCENEVIEW] = &SceneViewPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::CAMERAVIEW] = &CameraViewPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::PALETTE] = &PalettePanel::GetSingletonInstance();
 
 			for (auto each : editorPanelList)
 			{

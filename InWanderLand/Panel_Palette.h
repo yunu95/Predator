@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Singleton.h"
 #include "EditorPanel.h"
 
 #include <memory>
@@ -12,24 +13,16 @@ namespace application
 	namespace editor
 	{
 		class PalettePanel
-			: public Panel
+			: public Panel, public Singleton<PalettePanel>
 		{
 		public:
-			static PalettePanel& GetInstance();
-
+			PalettePanel();
 			virtual ~PalettePanel();
 
 			virtual void Initialize() override;
 			virtual void Update(float ts) override;
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
-
-		protected:
-			static std::unique_ptr<PalettePanel> instance;
-
-			PalettePanel();
-			PalettePanel(const PalettePanel& copy) = delete;
-			PalettePanel& operator=(const PalettePanel& copy) = delete;
 		};
 	}
 }

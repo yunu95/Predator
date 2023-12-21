@@ -1,9 +1,13 @@
 #include "Identifiable.h"
 
+#include "UUIDManager.h"
+
 namespace application
 {
 	namespace editor
 	{
+		UUIDManager& Identifiable::uuidManager = UUIDManager::GetSingletonInstance();
+
 		std::string UUID_To_String(UUID uuid)
 		{
 			char* id_char;
@@ -28,14 +32,21 @@ namespace application
 			return uuid;
 		}
 
+		Identifiable::~Identifiable()
+		{
+			uuidManager.EraseUUID(id);
+		}
+
 		Identifiable::Identifiable()
 		{
 			UuidCreate(&id);
+			uuidManager.RegisterUUIDWithPointer(id, this);
 		}
 
 		Identifiable::Identifiable(const UUID& id)
+			: id(id)
 		{
-			this->id = id;
+			uuidManager.RegisterUUIDWithPointer(id, this);
 		}
 
 		UUID Identifiable::GetUUID() const
@@ -45,7 +56,9 @@ namespace application
 
 		void Identifiable::SetUUID(const UUID& id)
 		{
+			uuidManager.EraseUUID(this->id);
 			this->id = id;
+			uuidManager.RegisterUUIDWithPointer(id, this);
 		}
 	}
 }

@@ -7,7 +7,7 @@ namespace application
 	namespace editor
 	{
 		SaveMapCommand::SaveMapCommand()
-			: mapFileManager(MapFileManager::GetInstance())
+			: mapFileManager(MapFileManager::GetSingletonInstance())
 		{
 			
 		}
