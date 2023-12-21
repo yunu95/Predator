@@ -47,8 +47,8 @@ namespace snippets
         // 이 테스트들은 오직 개발자가 직접 엔트리 포인트를 달리하여 테스트를 진행하고 싶을 때의 용도로만 사용됩니다.
         TEST_METHOD(SnippetTemplate)
         {
-            Application::Application& client = Application::Application::CreateApplication(0, 0);
-            Application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializerTemplate);
+            application::Application& client = application::Application::CreateApplication(0, 0);
+            application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializerTemplate);
             client.Initialize();
             client.Run();
             client.Finalize();
