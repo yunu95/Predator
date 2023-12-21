@@ -7,10 +7,7 @@ namespace yunuGI
 {
 	struct BoneInfo
 	{
-		std::wstring name;
-		int index;
-		int parentIndex;
-		std::vector<BoneInfo> child;
+		int index = -1;
 	};
 
 	struct MaterialData
@@ -24,11 +21,15 @@ namespace yunuGI
 
 	struct FBXData
 	{
-		std::wstring meshName;
+		std::vector<FBXData*> child;
+
+		std::wstring nodeName;
 
 		std::vector<MaterialData> materialVec;
 
 		BoneInfo boneInfo;
+
+		bool hasAnimation;
 	};
 
 

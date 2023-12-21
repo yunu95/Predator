@@ -1,13 +1,15 @@
 #pragma once
-// 싱글톤 클래스를 자식 클래스타입을 템플릿 파라미터로 받는 템플릿 클래스로 구현한다.
 
 namespace yunutyEngine
 {
+    // 싱글톤 클래스를 자식 클래스타입을 템플릿 파라미터로 받는 템플릿 클래스로 구현한다.
     template<typename T>
     class SingletonClass
     {
     public:
         static T& SingleInstance();
+    protected:
+        virtual ~SingletonClass() = default;
     private:
         static T* instance;
     };

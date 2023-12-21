@@ -40,6 +40,7 @@
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
+#include "Animator.h"
 
 // 수학 라이브러리들
 #include "YunutyMathConstants.h"

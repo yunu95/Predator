@@ -94,6 +94,12 @@
     <Filter Include="Editor\Etc">
       <UniqueIdentifier>{7876c722-b05f-470b-afa3-9b71d70e8da4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestCodes\snippets">
+      <UniqueIdentifier>{2a6a71a3-8099-4fc4-9690-9765cedeb43f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette">
+      <UniqueIdentifier>{a9b999c8-825f-44cf-a68d-f8b64f9f4397}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -415,6 +421,12 @@
     </ClCompile>
     <ClCompile Include="TestCaseMapFileIO.cpp">
       <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetTemplate.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetAnimation.cpp">
+      <Filter>TestCodes\snippets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

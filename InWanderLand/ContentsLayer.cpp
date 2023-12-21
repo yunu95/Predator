@@ -6,22 +6,22 @@
 #include "DebugTilePlane.h"
 #include "DebugBeacon.h"
 #include "DebugMeshes.h"
+#include "Application.h"
+#ifdef GEN_TESTS
+#include "CppUnitTest.h"
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+#endif
 
 #include <d3d11.h>
 
 std::function<void()> application::Contents::ContentsLayer::testInitializer;
 
-/// ±×·¡ÇÈ½º Å×½ºÆ®¿ë
+/// ê·¸ëž˜í”½ìŠ¤ í…ŒìŠ¤íŠ¸ìš©
 void GraphicsTest()
 {
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-    _resourceManager->LoadFile("FBX/Sponza");
 
-    {
-        auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sponza");
-    }
-
-    //Æ÷ÀÎÆ® ¶óÀÌÆ®
+    //í¬ì¸íŠ¸ ë¼ì´íŠ¸
     {
         auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
         object->GetTransform()->position = Vector3d{ 0,3,0 };
@@ -106,7 +106,7 @@ void application::Contents::ContentsLayer::Initialize()
     auto rtsCam = camObj->AddComponent<RTSCam>();
     //rtsCam->GetTransform()->position = Vector3d(0, 10, 0);
 
-    //// ±æÃ£±â Å×½ºÆ®
+    //// ê¸¸ì°¾ê¸° í…ŒìŠ¤íŠ¸
     //{
     //    const float corridorRadius = 3;
     //    std::vector<Vector3f> worldVertices { };
@@ -147,7 +147,15 @@ void application::Contents::ContentsLayer::Finalize()
 {
 
 }
-void application::Contents::ContentsLayer::AssignTestInitializer(std::function<void()> testInitializer)
+
+#ifdef GEN_TESTS
+void Application::Contents::ContentsLayer::AssignTestInitializer(std::function<void()> testInitializer)
 {
     ContentsLayer::testInitializer = testInitializer;
+    YunutyCycle::SingleInstance().onExceptionThrown = [](const std::exception& e) {
+        Application::Application::GetInstance().AddMainLoopTodo([=]() {
+            Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
+            });
+    };
 }
+#endif

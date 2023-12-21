@@ -196,6 +196,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animator.cpp" />
     <ClCompile Include="BoxCollider2D.cpp" />
     <ClCompile Include="AudioSource.cpp" />
     <ClCompile Include="Cache.cpp" />
@@ -371,6 +372,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="_YunuGIObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="header\Animator.h" />
     <ClInclude Include="header\YunutyBoxCollider.h" />
     <ClInclude Include="ChunkyTriMesh.h" />
     <ClInclude Include="ConvexVolumeTool.h" />
@@ -394,6 +396,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="MeshLoaderObj.h" />
     <ClInclude Include="header\YunutyNavigationAgent.h" />
     <ClInclude Include="header\YunutyNavigationField.h" />
+    <ClInclude Include="MutexedReference.h" />
+    <ClInclude Include="MutexedSingletonClass.h" />
     <ClInclude Include="NavMeshPruneTool.h" />
     <ClInclude Include="NavMeshTesterTool.h" />
     <ClInclude Include="OffMeshConnectionTool.h" />

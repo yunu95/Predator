@@ -79,6 +79,24 @@
     <Filter Include="FBXLoader">
       <UniqueIdentifier>{62dbce78-fb04-4e5f-97ff-328a4f8254b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource\Animation">
+      <UniqueIdentifier>{eb8ca908-0835-4787-a5bc-46507564d786}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsEngine\RenderableManager\IRenderable\SkinnedMesh">
+      <UniqueIdentifier>{dd8982f3-ee29-4343-92e6-96f93059c404}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FBXLoader\ModelLoader">
+      <UniqueIdentifier>{fec12d7e-e5d3-4ed1-8b48-3cd6a3945031}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FBXLoader\ModelLoader\Header">
+      <UniqueIdentifier>{b2254a48-8590-4f24-ab9c-56ff15105978}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animator">
+      <UniqueIdentifier>{27ade7b6-08b3-4f7e-a68c-a914c8294a3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animator\AnimatorManager">
+      <UniqueIdentifier>{8bda1498-93ae-46b4-920d-ce2c12fcdcc2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -222,6 +240,27 @@
     <ClInclude Include="Resource.h">
       <Filter>Resource</Filter>
     </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Resource\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="YGAnimatorAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinnedMesh.h">
+      <Filter>GraphicsEngine\RenderableManager\IRenderable\SkinnedMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelLoader.h">
+      <Filter>FBXLoader\ModelLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelData.h">
+      <Filter>FBXLoader\ModelLoader\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="NailAnimator.h">
+      <Filter>Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="NailAnimatorManager.h">
+      <Filter>Animator\AnimatorManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -305,6 +344,21 @@
     <ClCompile Include="Resource.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Resource\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinnedMesh.cpp">
+      <Filter>GraphicsEngine\RenderableManager\IRenderable\SkinnedMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelLoader.cpp">
+      <Filter>FBXLoader\ModelLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="NailAnimator.cpp">
+      <Filter>Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="NailAnimatorManager.cpp">
+      <Filter>Animator\AnimatorManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="RuntimeDependency\resources\Shader\DefaultVS.hlsl">
@@ -340,18 +394,21 @@
     <FxCompile Include="RuntimeDependency\resources\Shader\Deferred_PointLightPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\SkinnedVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\ForwardPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
       <Filter>Utils</Filter>
     </None>
-    <None Include="RuntimeDependency\resources\Shader\Buffers.hlsli">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="RuntimeDependency\resources\Shader\Utils.hlsli">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="RuntimeDependency\resources\Shader\ForwardPS.hlsli">
+    <None Include="RuntimeDependency\resources\Shader\Buffers.hlsli">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

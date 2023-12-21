@@ -35,6 +35,7 @@ namespace application
         void AddMainLoopTodo(std::function<void()> todo);
 
     private:
+        void ImGuiUpdate();
         std::mutex loopTodoRegistrationMutex;
         // AddMainLoopTodo로 등록된 휘발성 콜백 함수들입니다.
         // 매 루프가 종료될 때 이 컨테이너에 실행 동작들이 담겨있다면 모두 실행하고 내용을 비웁니다.

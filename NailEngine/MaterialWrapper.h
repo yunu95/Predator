@@ -11,7 +11,18 @@ class MaterialWrapper : public yunuGI::IMaterial, public Resource
 public:
 	MaterialWrapper()
 	{
-		this->original = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DefaultMaterial"));
+		
+	}
+	MaterialWrapper(bool isStatic)
+	{
+		if (isStatic)
+		{
+			this->original = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DefaultMaterial"));
+		}
+		else
+		{
+			this->original = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"SkinnedDefaultMaterial"));
+		}
 	}
 
 	virtual void SetName(const std::wstring& materialName) override
@@ -73,7 +84,7 @@ public:
 		return usingOriginal;
 	}
 
-	void SetRenderable(std::shared_ptr<StaticMesh>& renderable)
+	void SetRenderable(std::shared_ptr<IRenderable> renderable)
 	{
 		this->renderable = renderable;
 	}
@@ -98,6 +109,6 @@ public:
 	std::shared_ptr<Material> variation;
 
 private:
-	std::shared_ptr<StaticMesh> renderable;
+	std::shared_ptr<IRenderable> renderable;
 
 };

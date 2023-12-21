@@ -301,6 +301,15 @@
     <Filter Include="yunutyEngine\physics\Collision">
       <UniqueIdentifier>{e707c0f1-3d37-437e-b02d-cccaf4a1677c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\Animator">
+      <UniqueIdentifier>{9e8686ea-8b75-405c-98ca-bba3e81be792}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\MutexedReference">
+      <UniqueIdentifier>{029e5705-14a3-4e0d-b6ba-430b500a1e43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\MutexedSingletonClass">
+      <UniqueIdentifier>{80afa455-377b-4123-aacd-a6aa2c594bde}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -536,6 +545,9 @@
     </ClCompile>
     <ClCompile Include="_YunutyPhysxContactCallback.cpp">
       <Filter>yunutyEngine\physics\_PhysxContactCallback</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\Animator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -829,6 +841,15 @@
     </ClInclude>
     <ClInclude Include="_YunutySphereColliderImpl.h">
       <Filter>yunutyEngine\physics\SphereCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="header\Animator.h">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="MutexedReference.h">
+      <Filter>yunutyEngine\MutexedReference</Filter>
+    </ClInclude>
+    <ClInclude Include="MutexedSingletonClass.h">
+      <Filter>yunutyEngine\MutexedSingletonClass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
