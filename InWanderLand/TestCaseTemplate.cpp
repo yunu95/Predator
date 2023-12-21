@@ -39,7 +39,7 @@ namespace InWanderLand
         TEST_METHOD(TestCaseTemplate)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            Application::Contents::ContentsLayer::AssignTestInitializer(TestInitializerTemplate);
+            application::Contents::ContentsLayer::AssignTestInitializer(TestInitializerTemplate);
             client.Initialize();
             client.Run();
             client.Finalize();

@@ -172,7 +172,7 @@ namespace application
 
 
 #ifdef EDITOR
-        layers[(int)LayerList::EditorLayer] = new Editor::EditorLayer();
+        layers[(int)LayerList::EditorLayer] = new editor::EditorLayer();
 #endif
 
         layers[(int)LayerList::ContentsLayer] = new Contents::ContentsLayer();
