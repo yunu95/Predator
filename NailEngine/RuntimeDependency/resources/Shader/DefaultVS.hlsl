@@ -7,6 +7,9 @@ struct VertexIn
     float2 uv : TEXCOORD0;
     float3 normal : NORMAL;
     float3 tangent : TANGENT;
+    
+    // INSTANCING;
+    row_major matrix world : INST;
 };
 
 struct VertexOut
@@ -23,15 +26,25 @@ struct VertexOut
 VertexOut main(VertexIn input)
 {
     VertexOut output;
-    row_major matrix WV = mul(WTM,VTM);
+    row_major matrix WV = mul(input.world,VTM);
+    row_major matrix VP = mul(VTM,PTM);
     
-    output.posH = mul(float4(input.pos, 1.f), WVP);
+    //output.posH = mul(float4(input.pos, 1.f), WVP);
+    //output.posV = mul(float4(input.pos, 1.f), WV);
+    //output.color = input.color;
+    //output.uv = input.uv;
+    //output.normalV = normalize(mul(float4(input.normal,0.f), WV));
+    //output.tangentV = normalize(mul(float4(input.tangent, 0.f), WV));
+    //output.biNormalV = normalize(cross(output.tangentV,output.normalV));
+    
+    output.posH = mul(float4(input.pos, 1.f), input.world);
+    output.posH = mul(output.posH, VP);
     output.posV = mul(float4(input.pos, 1.f), WV);
     output.color = input.color;
     output.uv = input.uv;
-    output.normalV = normalize(mul(float4(input.normal,0.f), WV));
+    output.normalV = normalize(mul(float4(input.normal, 0.f), WV));
     output.tangentV = normalize(mul(float4(input.tangent, 0.f), WV));
-    output.biNormalV = normalize(cross(output.tangentV,output.normalV));
+    output.biNormalV = normalize(cross(output.tangentV, output.normalV));
     
     return output;
 }

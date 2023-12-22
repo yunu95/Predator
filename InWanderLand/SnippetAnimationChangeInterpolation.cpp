@@ -26,37 +26,23 @@ void SnippetAnimationChangeInterpolationInit()
 
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	_resourceManager->LoadFile("FBX/Boss");
+	_resourceManager->LoadFile("FBX/Test5");
 
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < 30; ++i)
 	{
-		for (int j = 0; j < 1; ++j)
+		for (int j = 0; j < 30; ++j)
 		{
-			float temp = 2 * i;
-			float temp2 = 2 * j;
-			auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
-			auto test = object->AddComponent<TestComponent2>();
-			object->GetTransform()->position = Vector3d{ temp,temp2,0 };
-			auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
-			test->anim = animator;
-			auto& animationList = _resourceManager->GetAnimationList();
-			for (auto& i : animationList)
+			auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			auto tempX = static_cast<float>(rand() % 100);
+			auto tempZ = static_cast<float>(rand() % 100);
+			object->GetTransform()->position = Vector3d{ tempX,0,tempZ };
+			auto renderer = object->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+			auto meshList = _resourceManager->GetMeshList();
+			for (auto& i : meshList)
 			{
-				if (i->GetName() == L"root|000.Idle")
+				if (i->GetName() == L"Sphere")
 				{
-					test->idleAnimation = i;
-					i->SetPlaySpeed(2.f);
-					i->SetLoop(true);
-					animator->GetGI().PushAnimation(i);
-					animator->GetGI().Play(i);
-				}
-
-				if (i->GetName() == L"root|001-2.Walk")
-				{
-					test->walkAnimation = i;
-					i->SetPlaySpeed(0.5f);
-					i->SetLoop(true);
-					animator->GetGI().PushAnimation(i);
+					renderer->GetGI().SetMesh(i);
 				}
 			}
 		}

@@ -7,6 +7,18 @@
 #include "ResourceBuilder.h"
 #include "Device.h"
 
+#include <Windows.h>
+#include <string>
+
+std::wstring ConvertToWideString(const char* str) {
+	int size = MultiByteToWideChar(CP_ACP, 0, str, -1, NULL, 0);
+	wchar_t* buffer = new wchar_t[size];
+	MultiByteToWideChar(CP_ACP, 0, str, -1, buffer, size);
+	std::wstring result(buffer);
+	delete[] buffer;
+	return result;
+}
+
 void VertexShader::CreateShader(const std::wstring& shaderPath)
 {
 	unsigned int _compileFlag = 0;
@@ -58,100 +70,107 @@ void VertexShader::UnBind()
 
 void VertexShader::CreateInputLayout()
 {
-	//ID3D11ShaderReflection* _shaderReflection = nullptr;
-	//::D3DReflect(
-	//	vsBuffer->GetBufferPointer(),
-	//	vsBuffer->GetBufferSize(),
-	//	IID_ID3D11ShaderReflection,
-	//	(void**)&_shaderReflection
-	//);
+	ID3D11ShaderReflection* _shaderReflection = nullptr;
+	::D3DReflect(
+		vsBuffer->GetBufferPointer(),
+		vsBuffer->GetBufferSize(),
+		IID_ID3D11ShaderReflection,
+		(void**)&_shaderReflection
+	);
 
-	//D3D11_SHADER_DESC _shaderDesc;
-	//_shaderReflection->GetDesc(&_shaderDesc);
+	D3D11_SHADER_DESC _shaderDesc;
+	_shaderReflection->GetDesc(&_shaderDesc);
 
-	//std::vector<D3D11_INPUT_ELEMENT_DESC> _inputLayoutDescVec;
+	std::vector<D3D11_INPUT_ELEMENT_DESC> _inputLayoutDescVec;
 
-	//for (int i = 0; i < _shaderDesc.InputParameters; i++)
-	//{
-	//	D3D11_INPUT_ELEMENT_DESC _inputDesc;
-	//	_inputLayoutDescVec.emplace_back(_inputDesc);
+	for (int i = 0; i < _shaderDesc.InputParameters; i++)
+	{
+		D3D11_INPUT_ELEMENT_DESC _inputDesc;
+		_inputLayoutDescVec.emplace_back(_inputDesc);
 
-	//	D3D11_SIGNATURE_PARAMETER_DESC paramDesc;
-	//	_shaderReflection->GetInputParameterDesc(i, &paramDesc);
+		D3D11_SIGNATURE_PARAMETER_DESC paramDesc;
+		_shaderReflection->GetInputParameterDesc(i, &paramDesc);
 
-	//	_inputLayoutDescVec[i].SemanticName = paramDesc.SemanticName;
-	//	_inputLayoutDescVec[i].SemanticIndex = paramDesc.SemanticIndex;
-	//	_inputLayoutDescVec[i].InputSlot = 0;
-	//	_inputLayoutDescVec[i].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	//	_inputLayoutDescVec[i].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	//	_inputLayoutDescVec[i].InstanceDataStepRate = 0;
+		_inputLayoutDescVec[i].SemanticName = paramDesc.SemanticName;
+		_inputLayoutDescVec[i].SemanticIndex = paramDesc.SemanticIndex;
+		_inputLayoutDescVec[i].InputSlot = 0;
+		_inputLayoutDescVec[i].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		_inputLayoutDescVec[i].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		_inputLayoutDescVec[i].InstanceDataStepRate = 0;
 
-	//	if (paramDesc.Mask == 1)
-	//	{
-	//		if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32)
-	//		{
-	//			_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32_UINT;
-	//		}
-	//		else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32)
-	//		{
-	//			_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32_SINT;
-	//		}
-	//		else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32)
-	//		{
-	//			_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32_FLOAT;
-	//		}
-	//	}
-	//	else if (paramDesc.Mask <= 3) 
-	//	{
-	//		if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) 
-	//		{
-	//			_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32_UINT;
-	//		}
-	//		else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) 
-	//		{
-	//			_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32_SINT;
-	//		}
-	//		else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) 
-	//		{
-	//			_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32_FLOAT;
-	//		}
-	//	}
-	//	else if (paramDesc.Mask <= 7) 
-	//	{
-	//		if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32)
-	//		{
-	//			_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32B32_UINT;
-	//		}
-	//		else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) 
-	//		{
-	//			_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32B32_SINT;
-	//		}
-	//		else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) 
-	//		{
-	//			_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	//		}
-	//	}
-	//	else if (paramDesc.Mask <= 15) 
-	//	{
-	//		if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) 
-	//		{
-	//			_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32B32A32_UINT;
-	//		}
-	//		else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32)
-	//		{
-	//			_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32B32A32_SINT;
-	//		}
-	//		else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32)
-	//		{
-	//			_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	//		}
-	//	}
-	//}
+		if (ConvertToWideString(paramDesc.SemanticName) == L"INST")
+		{
+			_inputLayoutDescVec[i].InputSlot = 1;
+			_inputLayoutDescVec[i].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
+			_inputLayoutDescVec[i].InstanceDataStepRate = 1;
+		}
+
+		if (paramDesc.Mask == 1)
+		{
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32)
+			{
+				_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32_UINT;
+			}
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32)
+			{
+				_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32_SINT;
+			}
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32)
+			{
+				_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32_FLOAT;
+			}
+		}
+		else if (paramDesc.Mask <= 3) 
+		{
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) 
+			{
+				_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32_UINT;
+			}
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) 
+			{
+				_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32_SINT;
+			}
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) 
+			{
+				_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32_FLOAT;
+			}
+		}
+		else if (paramDesc.Mask <= 7) 
+		{
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32)
+			{
+				_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32B32_UINT;
+			}
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) 
+			{
+				_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32B32_SINT;
+			}
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) 
+			{
+				_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+			}
+		}
+		else if (paramDesc.Mask <= 15) 
+		{
+			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) 
+			{
+				_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32B32A32_UINT;
+			}
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32)
+			{
+				_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32B32A32_SINT;
+			}
+			else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32)
+			{
+				_inputLayoutDescVec[i].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+			}
+		}
+	}
 
 
 
-	//ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateInputLayout(&_inputLayoutDescVec[0], _inputLayoutDescVec.size(),
-	//	this->vsBuffer->GetBufferPointer(), this->vsBuffer->GetBufferSize(), this->inputLayout.GetAddressOf());
+	ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateInputLayout(&_inputLayoutDescVec[0], _inputLayoutDescVec.size(),
+		this->vsBuffer->GetBufferPointer(), this->vsBuffer->GetBufferSize(), this->inputLayout.GetAddressOf());
 
 
 	//float3 pos : POSITION;
@@ -162,21 +181,21 @@ void VertexShader::CreateInputLayout()
 	//uint4 indices : BLENDINDICES;
 	//float4 weight : BLENDWEIGHT;
 
-	D3D11_INPUT_ELEMENT_DESC _inputLayoutDesc[] =
-	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{"TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{"BLENDINDICES", 0,  DXGI_FORMAT_R32G32B32A32_UINT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{"BLENDWEIGHT", 0,  DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
+	//D3D11_INPUT_ELEMENT_DESC _inputLayoutDesc[] =
+	//{
+	//	{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	//	{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	//	{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	//	{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	//	{"TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	//	{"BLENDINDICES", 0,  DXGI_FORMAT_R32G32B32A32_UINT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	//	{"BLENDWEIGHT", 0,  DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	//};
 
-	unsigned int _numElements = ARRAYSIZE(_inputLayoutDesc);
+	//unsigned int _numElements = ARRAYSIZE(_inputLayoutDesc);
 
-	HRESULT hr = ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateInputLayout(_inputLayoutDesc, _numElements,
-		this->vsBuffer->GetBufferPointer(), this->vsBuffer->GetBufferSize(), this->inputLayout.GetAddressOf());
+	//HRESULT hr = ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateInputLayout(_inputLayoutDesc, _numElements,
+	//	this->vsBuffer->GetBufferPointer(), this->vsBuffer->GetBufferSize(), this->inputLayout.GetAddressOf());
 
-	int a = 1;
+	//int a = 1;
 }

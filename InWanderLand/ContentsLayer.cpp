@@ -24,34 +24,19 @@ void GraphicsTest()
 
 	_resourceManager->LoadFile("FBX/Boss");
 
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < 500; ++i)
 	{
-		for (int j = 0; j < 1; ++j)
+		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto tempX = static_cast<float>(rand() % 100);
+		auto tempZ = static_cast<float>(rand() % 100);
+		object->GetTransform()->position = Vector3d{ tempX,0,tempZ };
+		auto renderer = object->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		auto meshList = _resourceManager->GetMeshList();
+		for (auto& i : meshList)
 		{
-			float temp = 2 * i;
-			float temp2 = 2 * j;
-			auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
-			auto test = object->AddComponent<TestComponent2>();
-			object->GetTransform()->position = Vector3d{ temp,temp2,0 };
-			auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
-			test->anim = animator;
-			auto& animationList = _resourceManager->GetAnimationList();
-			for (auto& i : animationList)
+			if (i->GetName() == L"Sphere")
 			{
-				if (i->GetName() == L"root|000.Idle")
-				{
-					test->idleAnimation = i;
-					i->SetLoop(true);
-					animator->GetGI().PushAnimation(i);
-					animator->GetGI().Play(i);
-				}
-
-				if (i->GetName() == L"root|001-2.Walk")
-				{
-					test->walkAnimation = i;
-					i->SetLoop(true);
-					animator->GetGI().PushAnimation(i);
-				}
+				renderer->GetGI().SetMesh(i);
 			}
 		}
 	}
@@ -175,11 +160,11 @@ void application::Contents::ContentsLayer::Finalize()
 #ifdef GEN_TESTS
 void application::Contents::ContentsLayer::AssignTestInitializer(std::function<void()> testInitializer)
 {
-    ContentsLayer::testInitializer = testInitializer;
-    YunutyCycle::SingleInstance().onExceptionThrown = [](const std::exception& e) {
-        application::Application::GetInstance().AddMainLoopTodo([=]() {
-            Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
-            });
-    };
+	ContentsLayer::testInitializer = testInitializer;
+	YunutyCycle::SingleInstance().onExceptionThrown = [](const std::exception& e) {
+		application::Application::GetInstance().AddMainLoopTodo([=]() {
+			Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
+			});
+	};
 }
 #endif
