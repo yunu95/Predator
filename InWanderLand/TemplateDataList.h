@@ -3,5 +3,5 @@
 
 #pragma once
 #include "Terrain_TemplateData.h"
-#include "Units_TemplateData.h"
-#include "Ornaments_TemplateData.h"
+#include "Unit_TemplateData.h"
+#include "Ornament_TemplateData.h"

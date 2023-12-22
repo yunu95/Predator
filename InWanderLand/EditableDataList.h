@@ -3,5 +3,5 @@
 
 #pragma once
 #include "Terrain.h"
-#include "Units.h"
-#include "Ornaments.h"
+#include "Unit.h"
+#include "Ornament.h"

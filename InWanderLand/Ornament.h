@@ -5,7 +5,7 @@
 #pragma once
 
 #include "IEditableData.h"
-#include "Ornaments_TemplateData.h"
+#include "Ornament_TemplateData.h"
 
 #include <memory>
 #include <string>
@@ -22,17 +22,17 @@ namespace application
 {
 	namespace editor
 	{
-		class Ornaments;
+		class Ornament;
 
-		struct POD_Ornaments
+		struct POD_Ornament
 		{
-			Ornaments_TemplateData* templateData;
+			Ornament_TemplateData* templateData;
 
-			TO_JSON(POD_Ornaments);
-			FROM_JSON(POD_Ornaments);
+			TO_JSON(POD_Ornament);
+			FROM_JSON(POD_Ornament);
 		};
 
-		class Ornaments
+		class Ornament
 			: public IEditableData
 		{
 			friend class InstanceManager;
@@ -43,7 +43,7 @@ namespace application
 			virtual bool SetTemplateData(const std::string& dataName) override;
 			virtual IEditableData* Clone() const override;
 
-			POD_Ornaments pod;
+			POD_Ornament pod;
 
 		protected:
 			virtual bool PreEncoding(json& data) const override;
@@ -54,10 +54,10 @@ namespace application
 		private:
 			static TemplateDataManager& templateDataManager;
 
-			Ornaments();
-			Ornaments(const std::string& name);
-			Ornaments(const Ornaments& prototype);
-			Ornaments& operator=(const Ornaments& prototype);
+			Ornament();
+			Ornament(const std::string& name);
+			Ornament(const Ornament& prototype);
+			Ornament& operator=(const Ornament& prototype);
 		};
 	}
 }
