@@ -1,6 +1,9 @@
 #ifndef _BUFFERS_HLSLI_
 #define _BUFFERS_HLSLI_
 
+#define MAX_BONE_COUNT 250
+#define MAX_FRAME_COUNT 500
+
 cbuffer MatrixBuffer : register(b0)
 {
     row_major matrix WTM;
@@ -69,8 +72,35 @@ cbuffer CameraBuffer : register(b3)
 
 cbuffer BoneMatrixBuffer : register(b4)
 {
-    row_major matrix BoneTransform[256];
+    row_major matrix BoneTransform[MAX_BONE_COUNT];
 }
+
+struct KeyframeDesc
+{
+    int animIndex;
+    uint currFrame;
+    uint nextFrame;
+    float ratio;
+    float sumTime;
+    float speed;
+    float2 padding;
+};
+
+struct TransitionDesc
+{
+    float transitionDuration;
+    float transitionSpeed;
+    float transitionTotalTime;
+    float transitionRatio;
+    KeyframeDesc curr;
+    KeyframeDesc next;
+};
+
+cbuffer TransitionBuffer : register(b5)
+{
+    TransitionDesc transitionDesc;
+}
+
 
 Texture2D AlbedoMap : register(t0);
 Texture2D NormalMap : register(t1);
@@ -81,6 +111,7 @@ Texture2D Temp0Map : register(t5);
 Texture2D Temp1Map : register(t6);
 Texture2D Temp2Map : register(t7);
 
+Texture2DArray TransformMap : register(t8);
 
 
 SamplerState sam : register(s0);

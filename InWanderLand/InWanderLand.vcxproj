@@ -380,6 +380,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="Ornament.h" />
     <ClInclude Include="Ornament_TemplateData.h" />
     <ClInclude Include="DelayedTestFunctions.h" />
+    <ClInclude Include="TestComponent2.h" />
     <ClInclude Include="TestNavAgentEnableDeath.h" />
     <ClInclude Include="PanelList.h" />
     <ClInclude Include="Panel_Palette.h" />
@@ -415,7 +416,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TerrainEditor.h" />
     <ClInclude Include="PathEditor.h" />
-    <ClInclude Include="TestComponent.h" />
     <ClInclude Include="Terrain_TemplateData.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Unit_TemplateData.h" />
@@ -444,6 +444,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="Ornament.cpp" />
     <ClCompile Include="Ornament_TemplateData.cpp" />
     <ClCompile Include="SnippetAnimation.cpp" />
+    <ClCompile Include="SnippetAnimationChangeInterpolation.cpp" />
     <ClCompile Include="SnippetTemplate.cpp" />
     <ClCompile Include="Panel_CameraView.cpp" />
     <ClCompile Include="Panel_Hierarchy.cpp" />
@@ -470,7 +471,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="TestCaseNavigation.cpp" />
     <ClCompile Include="TestCasePhysics.cpp" />
     <ClCompile Include="TestCaseTemplate.cpp" />
-    <ClCompile Include="TestComponent.cpp" />
+    <ClCompile Include="TestComponent2.cpp" />
     <ClCompile Include="UUIDManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

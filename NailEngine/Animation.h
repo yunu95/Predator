@@ -1,6 +1,9 @@
 #pragma once
 #include "IAnimation.h"
 
+#include <wrl.h>
+#include <d3d11.h>
+
 #include <DirectXMath.h>
 #include "SimpleMath.h"
 using namespace DirectX::PackedVector;
@@ -22,8 +25,10 @@ struct AnimationClip
 	double duration;
 	int totalFrame;
 	bool isLoop;
+	float speed=1.f;
 	std::vector<std::vector<KeyFrameInfo>> keyFrameInfoVec;
 };
+
 
 class Animation : public yunuGI::IAnimation, public Resource
 {
@@ -46,9 +51,25 @@ public:
 		return animationClip.isLoop;
 	};
 
+	virtual void SetPlaySpeed(float playSpeed) override
+	{
+		this->animationClip.speed = playSpeed;
+	};
+
+	virtual float GetPlaySpeed() override
+	{
+		return this->animationClip.speed;
+	};
+
 	AnimationClip& GetAnimationClip() { return animationClip; }
 
+	void SetAnimationIndex(int idx) { this->animationIndex = idx; }
+	int GetAnimationIndex() {return animationIndex;	}
 private:
 	AnimationClip animationClip;
+	int animationIndex = 0;
+
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> SRV;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D;
 };
 

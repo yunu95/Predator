@@ -175,6 +175,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationGroup.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="DirectionalLight.h" />
@@ -237,6 +238,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationGroup.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />

@@ -27,8 +27,6 @@ namespace yunutyEngine::graphics
 		void Update();
 
 	private:
-		float currentTime = 0.f;
-		int currentFrame;
 	};
 }
 

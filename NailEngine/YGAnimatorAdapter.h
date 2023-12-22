@@ -53,20 +53,51 @@ namespace yunuGIAdapter
 			animator->SetModel(modelName);
 		};
 
-		virtual void SetCurrentFrame(int frame) override
-		{
-			animator->SetCurrentFrame(frame);
-		};
+		//virtual void SetCurrentFrame(int frame) override
+		//{
+		//	animator->SetCurrentFrame(frame);
+		//};
 
-		virtual void SetFrameRatio(float ratio) override
-		{
-			animator->SetFrameRatio(ratio);
-		};
+		//virtual void SetFrameRatio(float ratio) override
+		//{
+		//	animator->SetFrameRatio(ratio);
+		//};
 
 		virtual yunuGI::IAnimation* GetCurrentAnimation() override
 		{
 			return animator->GetCurrentAnimation();
 		};
+
+		virtual void ChangeAnimation(yunuGI::IAnimation* animation, float transitionDuration, float transitionSpeed)override
+		{
+			animator->ChangeAnimation(animation, transitionDuration, transitionSpeed);
+		};
+
+		virtual yunuGI::TransitionDesc& GetTransitionDesc() override
+		{
+			return reinterpret_cast<yunuGI::TransitionDesc&>(animator->GetTransitionDesc());
+		};
+
+		virtual void SetCurrentAnimation(yunuGI::IAnimation* animation) override
+		{
+			animator->SetCurrentAnimation(animation);
+		};
+
+		virtual void SetNextAnimation(yunuGI::IAnimation* animation) override
+		{
+			animator->SetNextAnimation(animation);
+		};
+
+		virtual yunuGI::IAnimation* GetNextAnimation() override
+		{
+			return animator->GetNextAnimation();
+		};
+
+		virtual void SetTransitionDesc(yunuGI::TransitionDesc& tansitionDesc) override
+		{
+			animator->SetTransitionDesc(reinterpret_cast<TransitionDesc&>(tansitionDesc));
+		};
+
 
 		virtual unsigned int GetID() override
 		{
@@ -80,6 +111,9 @@ namespace yunuGIAdapter
 
 	private:
 		std::shared_ptr<NailAnimator> animator;
+
+
+		
 
 	};
 }

@@ -153,7 +153,6 @@
     <ClInclude Include="DebugMeshes.h">
       <Filter>DebugMeshes</Filter>
     </ClInclude>
-    <ClInclude Include="TestComponent.h" />
     <ClInclude Include="PeriodicAction.h">
       <Filter>PeriodicAction</Filter>
     </ClInclude>
@@ -274,6 +273,9 @@
     <ClInclude Include="DelayedTestFunctions.h">
       <Filter>TestCodes</Filter>
     </ClInclude>
+    <ClInclude Include="TestComponent2.h">
+      <Filter>TestCodes</Filter>
+    </ClInclude>
     <ClInclude Include="TerrainEditor.h" />
     <ClInclude Include="UUIDManager.h">
       <Filter>Editor\DataSystem</Filter>
@@ -322,7 +324,6 @@
     <ClCompile Include="RequestDetourTest.cpp">
       <Filter>RecastDetourTest</Filter>
     </ClCompile>
-    <ClCompile Include="TestComponent.cpp" />
     <ClCompile Include="EditorEvents.cpp">
       <Filter>Editor\Events</Filter>
     </ClCompile>
@@ -416,6 +417,9 @@
     <ClCompile Include="TestCaseD3D11LiveObjImgui.cpp">
       <Filter>TestCodes</Filter>
     </ClCompile>
+    <ClCompile Include="TestComponent2.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
     <ClCompile Include="UUIDManager.cpp">
       <Filter>Editor\DataSystem</Filter>
     </ClCompile>
@@ -426,6 +430,9 @@
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
     <ClCompile Include="SnippetAnimation.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetAnimationChangeInterpolation.cpp">
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
   </ItemGroup>
