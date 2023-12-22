@@ -19,7 +19,7 @@ void InstanceBuffer::Create(const std::vector<InstancingData>& instanceDataVec, 
 {
 	_stride = sizeof(InstancingData);
 	_count = static_cast<int>(instanceDataVec.size());
-
+	_maxCount = _count;
 	_slot = slot;
 
 	D3D11_BUFFER_DESC desc;

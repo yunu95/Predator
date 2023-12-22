@@ -26,11 +26,10 @@ void SnippetAnimationChangeInterpolationInit()
 
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	_resourceManager->LoadFile("FBX/Test5");
+	_resourceManager->LoadFile("FBX/Boss");
 
-	for (int i = 0; i < 30; ++i)
+	for (int i = 0; i < 1000; ++i)
 	{
-		for (int j = 0; j < 30; ++j)
 		{
 			auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 			auto tempX = static_cast<float>(rand() % 100);
