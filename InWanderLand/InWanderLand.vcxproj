@@ -377,8 +377,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="InstanceManager.h" />
     <ClInclude Include="LoadMapCommand.h" />
     <ClInclude Include="MapFileManager.h" />
-    <ClInclude Include="Ornaments.h" />
-    <ClInclude Include="Ornaments_TemplateData.h" />
+    <ClInclude Include="Ornament.h" />
+    <ClInclude Include="Ornament_TemplateData.h" />
     <ClInclude Include="DelayedTestFunctions.h" />
     <ClInclude Include="TestNavAgentEnableDeath.h" />
     <ClInclude Include="PanelList.h" />
@@ -417,8 +417,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="PathEditor.h" />
     <ClInclude Include="TestComponent.h" />
     <ClInclude Include="Terrain_TemplateData.h" />
-    <ClInclude Include="Units.h" />
-    <ClInclude Include="Units_TemplateData.h" />
+    <ClInclude Include="Unit.h" />
+    <ClInclude Include="Unit_TemplateData.h" />
     <ClInclude Include="UUID.h" />
     <ClInclude Include="UUIDManager.h" />
   </ItemGroup>
@@ -441,8 +441,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="EditorLayer.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="MapFileManager.cpp" />
-    <ClCompile Include="Ornaments.cpp" />
-    <ClCompile Include="Ornaments_TemplateData.cpp" />
+    <ClCompile Include="Ornament.cpp" />
+    <ClCompile Include="Ornament_TemplateData.cpp" />
     <ClCompile Include="SnippetAnimation.cpp" />
     <ClCompile Include="SnippetTemplate.cpp" />
     <ClCompile Include="Panel_CameraView.cpp" />
@@ -463,8 +463,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Terrain_TemplateData.cpp" />
     <ClCompile Include="TestCaseMapFileIO.cpp" />
-    <ClCompile Include="Units.cpp" />
-    <ClCompile Include="Units_TemplateData.cpp" />
+    <ClCompile Include="Unit.cpp" />
+    <ClCompile Include="Unit_TemplateData.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObj.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObjImgui.cpp" />
     <ClCompile Include="TestCaseNavigation.cpp" />

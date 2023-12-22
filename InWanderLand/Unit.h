@@ -5,7 +5,7 @@
 #pragma once
 
 #include "IEditableData.h"
-#include "Units_TemplateData.h"
+#include "Unit_TemplateData.h"
 
 #include <memory>
 #include <string>
@@ -22,21 +22,29 @@ namespace application
 {
 	namespace editor
 	{
-		class Units;
-
-		struct POD_Units
+		namespace unit
 		{
-			Units_TemplateData* templateData = nullptr;
+			enum class Affiliation
+			{
+				None,	// ¿¹¿Ü¿ë
+				Player,
+				Enemy
+			};
+		}
 
-			TO_JSON(POD_Units);
-			FROM_JSON(POD_Units);
+		class Unit;
 
-			std::string testName = "T1";
-			int currentHP = 100000;
-			IEditableData* testptr = nullptr;
+		struct POD_Unit
+		{
+			Unit_TemplateData* templateData = nullptr;
+			unit::Affiliation dd = unit::Affiliation::None;
+
+			TO_JSON(POD_Unit);
+			FROM_JSON(POD_Unit);
+
 		};
 
-		class Units
+		class Unit
 			: public IEditableData
 		{
 			friend class InstanceManager;
@@ -47,7 +55,7 @@ namespace application
 			virtual bool SetTemplateData(const std::string& dataName) override;
 			virtual IEditableData* Clone() const override;
 
-			POD_Units pod;
+			POD_Unit pod;
 
 		protected:
 			virtual bool PreEncoding(json& data) const override;
@@ -58,10 +66,10 @@ namespace application
 		private:
 			static TemplateDataManager& templateDataManager;
 
-			Units();
-			Units(const std::string& name);
-			Units(const Units& prototype);
-			Units& operator=(const Units& prototype);
+			Unit();
+			Unit(const std::string& name);
+			Unit(const Unit& prototype);
+			Unit& operator=(const Unit& prototype);
 		};
 	}
 }

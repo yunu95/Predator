@@ -50,7 +50,7 @@ namespace application
 
 		private:
 			// ITemplateData 가 생성되기 전에 그 틀만 우선 작성함
-			IEditableData* CreateEmptyInstance(const IEditableData::DataType& type);
+			IEditableData* CreateEmptyInstance(const DataType& type);
 
 			TemplateDataManager& templateDataManager;
 			std::unordered_map<const UUID, std::unique_ptr<IEditableData>> list;

@@ -12,7 +12,7 @@ namespace application
 
 		}
 
-		ITemplateData* TemplateDataManager::CreateTemplateData(const std::string& name, const IEditableData::DataType& type)
+		ITemplateData* TemplateDataManager::CreateTemplateData(const std::string& name, const DataType& type)
 		{
 			if (list.find(name) != list.end())
 			{
@@ -24,21 +24,21 @@ namespace application
 
 			switch (type)
 			{
-				case IEditableData::DataType::Terrain:
+				case DataType::Terrain:
 				{
 					instance = new Terrain_TemplateData;
 					break;
 				}
 
-				case IEditableData::DataType::Units:
+				case DataType::Unit:
 				{
-					instance = new Units_TemplateData;
+					instance = new Unit_TemplateData;
 					break;
 				}
 
-				case IEditableData::DataType::Ornaments:
+				case DataType::Ornament:
 				{
-					instance = new Ornaments_TemplateData;
+					instance = new Ornament_TemplateData;
 					break;
 				}
 
@@ -65,7 +65,7 @@ namespace application
 				return nullptr;
 			}
 
-			IEditableData::DataType type = typeMap[prototype];
+			DataType type = typeMap[prototype];
 
 			auto instance = CreateTemplateData(name, type);
 
@@ -73,21 +73,21 @@ namespace application
 			{
 				switch (type)
 				{
-					case IEditableData::DataType::Terrain:
+					case DataType::Terrain:
 					{
 						*static_cast<Terrain_TemplateData*>(instance) = *static_cast<Terrain_TemplateData*>(const_cast<ITemplateData*>(prototype));
 						break;
 					}
 
-					case IEditableData::DataType::Units:
+					case DataType::Unit:
 					{
-						*static_cast<Units_TemplateData*>(instance) = *static_cast<Units_TemplateData*>(const_cast<ITemplateData*>(prototype));
+						*static_cast<Unit_TemplateData*>(instance) = *static_cast<Unit_TemplateData*>(const_cast<ITemplateData*>(prototype));
 						break;
 					}
 
-					case IEditableData::DataType::Ornaments:
+					case DataType::Ornament:
 					{
-						*static_cast<Ornaments_TemplateData*>(instance) = *static_cast<Ornaments_TemplateData*>(const_cast<ITemplateData*>(prototype));
+						*static_cast<Ornament_TemplateData*>(instance) = *static_cast<Ornament_TemplateData*>(const_cast<ITemplateData*>(prototype));
 						break;
 					}
 
@@ -127,37 +127,37 @@ namespace application
 			return itr->second.get();
 		}
 
-		IEditableData::DataType TemplateDataManager::GetDataType(const std::string& name) const
+		DataType TemplateDataManager::GetDataType(const std::string& name) const
 		{
 			auto itr = list.find(name);
 			if (itr == list.end())
 			{
 				// 해당 이름으로 생성된 ITemplateData 가 없으면 None 반환
-				return IEditableData::DataType::None;
+				return DataType::None;
 			}
 
 			return typeMap.find(itr->second.get())->second;
 		}
 
-		IEditableData::DataType TemplateDataManager::GetDataType(const ITemplateData* ptr) const
+		DataType TemplateDataManager::GetDataType(const ITemplateData* ptr) const
 		{
 			auto itr = typeMap.find(const_cast<ITemplateData*>(ptr));
 			if (itr == typeMap.end())
 			{
 				// 해당 데이터가 없으면 None 반환
-				return IEditableData::DataType::None;
+				return DataType::None;
 			}
 
 			return itr->second;
 		}
 
-		IEditableData::DataType TemplateDataManager::GetDataType(const UUID& uuid) const
+		DataType TemplateDataManager::GetDataType(const UUID& uuid) const
 		{
 			auto itr = typeMap.find(GetTemplateData(GetDataKey(uuid)));
 			if (itr == typeMap.end())
 			{
 				// 해당 데이터가 없으면 None 반환
-				return IEditableData::DataType::None;
+				return DataType::None;
 			}
 
 			return itr->second;

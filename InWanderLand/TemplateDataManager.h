@@ -26,13 +26,13 @@ namespace application
 
 			TemplateDataManager();
 
-			ITemplateData* CreateTemplateData(const std::string& name, const IEditableData::DataType& type);
+			ITemplateData* CreateTemplateData(const std::string& name, const DataType& type);
 			ITemplateData* CloneTemplateData(const std::string& name, const ITemplateData* prototype);
 			bool DeleteTemplateData(const std::string& name);
 			ITemplateData* GetTemplateData(const std::string& name) const;
-			IEditableData::DataType GetDataType(const std::string& name) const;
-			IEditableData::DataType GetDataType(const ITemplateData* ptr) const;
-			IEditableData::DataType GetDataType(const UUID& uuid) const;
+			DataType GetDataType(const std::string& name) const;
+			DataType GetDataType(const ITemplateData* ptr) const;
+			DataType GetDataType(const UUID& uuid) const;
 			std::string GetDataKey(const ITemplateData* ptr) const;
 			std::string GetDataKey(const UUID& uuid) const;
 			void Clear();
@@ -45,7 +45,7 @@ namespace application
 
 		private:
 			std::map<const std::string, std::unique_ptr<ITemplateData>> list;
-			std::unordered_map<const ITemplateData*, IEditableData::DataType> typeMap;
+			std::unordered_map<const ITemplateData*, DataType> typeMap;
 			std::unordered_map<const UUID, std::string> uuidKeyMap;
 			std::unordered_map<const ITemplateData*, std::string> ptrKeyMap;
 		};
