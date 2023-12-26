@@ -5,7 +5,7 @@ void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject)
 	m_objectName = "MeleeEnemy";
 	m_unitType = Unit::UnitType::MeleeEnemy;
 	m_unitSide = Unit::UnitSide::Enemy;
-	m_hp = 150;
+	m_hp = 100;
 	m_ap = 10;
 	m_idRadius = 10.0f;
 	m_atkRadius = 3.5f;
@@ -41,7 +41,7 @@ void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject)
 			m_attackAnimation->SetLoop(true);
 			animator->GetGI().PushAnimation(m_attackAnimation);
 		}
-		else if (each->GetName() == L"Armature|down")
+		else if (each->GetName() == L"Armature|Phase3_Player")
 		{
 			m_deathAnimation = each;
 			m_deathAnimation->SetLoop(false);
