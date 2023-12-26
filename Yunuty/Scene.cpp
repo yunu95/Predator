@@ -29,7 +29,7 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
 		if (fbxNode->materialVec.size() != 0)
 		{
 			auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::SkinnedMesh>();
-			renderer->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(fbxNode->nodeName));
+			renderer->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(fbxNode->meshName));
 			renderer->GetGI().SetBone(std::wstring{ fbxName.begin(),fbxName.end() });
 
 			auto animator = rootObject->GetComponent<yunutyEngine::graphics::Animator>();

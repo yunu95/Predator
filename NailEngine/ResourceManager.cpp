@@ -555,7 +555,7 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
 			mesh->SetName(node->meshVec[i].meshName);
 			mesh->SetData(node->meshVec[i].vertex, node->meshVec[i].indices);
-			this->meshMap.insert({ node->nodeName, mesh });
+			this->meshMap.insert({ node->meshVec[i].meshName, mesh });
 		}
 
 		if (this->materialMap.find(node->meshVec[i].material.materialName) == this->materialMap.end())

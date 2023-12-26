@@ -22,31 +22,17 @@ void GraphicsTest()
 {
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	//_resourceManager->LoadFile("FBX/BigTree");
-	//_resourceManager->LoadFile("FBX/Bush");
-	_resourceManager->LoadFile("FBX/Test5");
+	_resourceManager->LoadFile("FBX/BigTree");
+	_resourceManager->LoadFile("FBX/Bush");
 
-	//for (int i = 0; i < 250; ++i)
-	//{
-	//	auto tempX = static_cast<float>(rand() % 100);
-	//	auto tempZ = static_cast<float>(rand() % 100);
-	//	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("BigTree");
-	//	object->GetTransform()->position = Vector3d{tempX,0,tempZ};
-	//	auto object1 = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Bush");
-	//	object1->GetTransform()->position = Vector3d{tempZ,0,tempX};
-	//}
+	for (int i = 0; i < 500; ++i)
 	{
-		auto& animationList = _resourceManager->GetAnimationList();
-		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Test5");
-
-		auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
-		for (auto& each : animationList)
-		{
-			if ()
-			{
-			}
-			animator->GetGI().PushAnimation();
-		}
+		auto tempX = static_cast<float>(rand() % 100);
+		auto tempZ = static_cast<float>(rand() % 100);
+		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("BigTree");
+		object->GetTransform()->position = Vector3d{tempX,0,tempZ};
+		auto object1 = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Bush");
+		object1->GetTransform()->position = Vector3d{tempZ,0,tempX};
 	}
 }
 

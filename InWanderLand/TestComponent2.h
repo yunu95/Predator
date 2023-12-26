@@ -12,11 +12,11 @@ public:
 	{
 		if (Input::isKeyDown(KeyCode::H))
 		{
-			anim->GetGI().ChangeAnimation(walkAnimation, 0.5f, 2.f);
+			anim->GetGI().ChangeAnimation(walkAnimation, 1.f, 1.f);
 		}
 		if (Input::isKeyDown(KeyCode::J))
 		{
-			anim->GetGI().ChangeAnimation(idleAnimation, 0.5f, 2.f);
+			anim->GetGI().ChangeAnimation(idleAnimation, 1.f, 1.f);
 		}
 	}
 };
