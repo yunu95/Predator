@@ -21,43 +21,27 @@ void SnippetAnimationChangeInterpolationInit()
 	}
 
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	camObj->AddComponent<yunutyEngine::graphics::Camera>();
-	camObj->GetTransform()->position = Vector3d{ 0,4,-15 };
+
+	auto rtsCam = camObj->AddComponent<RTSCam>();
 
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 	_resourceManager->LoadFile("FBX/Boss");
 
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < 1000; ++i)
 	{
-		for (int j = 0; j < 1; ++j)
 		{
-			float temp = 2 * i;
-			float temp2 = 2 * j;
-			auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
-			
-			auto test = object->AddComponent<TestComponent2>();
-			object->GetTransform()->position = Vector3d{ temp,temp2,0 };
-			auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
-			test->anim = animator;
-			auto& animationList = _resourceManager->GetAnimationList();
-			for (auto& i : animationList)
+			auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			auto tempX = static_cast<float>(rand() % 100);
+			auto tempZ = static_cast<float>(rand() % 100);
+			object->GetTransform()->position = Vector3d{ tempX,0,tempZ };
+			auto renderer = object->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+			auto meshList = _resourceManager->GetMeshList();
+			for (auto& i : meshList)
 			{
-				if (i->GetName() == L"root|000.Idle")
+				if (i->GetName() == L"Sphere")
 				{
-					test->idleAnimation = i;
-					i->SetPlaySpeed(2.f);
-					i->SetLoop(true);
-					animator->GetGI().PushAnimation(i);
-					animator->GetGI().Play(i);
-				}
-
-				if (i->GetName() == L"root|001-2.Walk")
-				{
-					test->walkAnimation = i;
-					i->SetPlaySpeed(0.5f);
-					i->SetLoop(true);
-					animator->GetGI().PushAnimation(i);
+					renderer->GetGI().SetMesh(i);
 				}
 			}
 		}
@@ -68,11 +52,12 @@ void SnippetAnimationChangeInterpolationInit()
 
 namespace snippets
 {
-	
 	TEST_CLASS(InWanderLand)
 	{
 	public:
-		// TestComponent2안에 H키와 J키를 눌렀을 때 애니메이션 전환하게 되어있음.
+		// 테스트 함수의 이름이 Snippet으로 시작하는 테스트들은 빌드의 성공 여부 판단에 쓰이지 않습니다.
+		// RunTests.bat를 실행해도 이 테스트들은 실행되지 않으며, Jenkins에서도 이 테스트들은 실행되지 않습니다.
+		// 이 테스트들은 오직 개발자가 직접 엔트리 포인트를 달리하여 테스트를 진행하고 싶을 때의 용도로만 사용됩니다.
 		TEST_METHOD(SnippetAnimationChangeInterpolation)
 		{
 			application::Application& client = application::Application::CreateApplication(0, 0);

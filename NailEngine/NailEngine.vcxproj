@@ -184,6 +184,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="ILight.h" />
+    <ClInclude Include="InstanceBuffer.h" />
+    <ClInclude Include="InstancingManager.h" />
     <ClInclude Include="IRenderable.h" />
     <ClInclude Include="IYunuMeshRenderer.h" />
     <ClInclude Include="LightManager.h" />
@@ -246,6 +248,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="InstanceBuffer.cpp" />
+    <ClCompile Include="InstancingManager.cpp" />
     <ClCompile Include="IRenderable.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="Material.cpp" />
