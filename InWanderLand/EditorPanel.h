@@ -7,9 +7,9 @@
 
 #include <memory>
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class Panel
 		{
@@ -27,7 +27,7 @@ namespace Application
 			bool isMouseOver = false;
 			bool isFocused = false;
 
-			CommandManager& commandManager = CommandManager::GetInstance();
+			CommandManager& commandManager = CommandManager::GetSingletonInstance();
 		};
 	}
 }

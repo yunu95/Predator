@@ -91,7 +91,8 @@ yunutyEngine::GameObject* Scene::AddGameObjectFromFBX(string fbxName)
 	{
 		if (data->hasAnimation)
 		{
-			gameObject->AddComponent<yunutyEngine::graphics::Animator>();
+			auto animator = gameObject->AddComponent<yunutyEngine::graphics::Animator>();
+			animator->GetGI().SetModel(std::wstring{ fbxName.begin(), fbxName.end() });
 		}
 
 		for (int i = 0; i < data->child.size(); ++i)

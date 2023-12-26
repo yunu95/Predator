@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Singleton.h"
 #include "Command.h"
 
 #include <memory>
@@ -11,15 +12,15 @@
 #include <stack>
 #include <concepts>
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class CommandManager
+			: public Singleton<CommandManager>
 		{
 		public:
-			static CommandManager& GetInstance();
-
+			CommandManager();
 			virtual ~CommandManager();
 			
 			// commandQueue 에 커맨드를 추가
@@ -48,12 +49,6 @@ namespace Application
 			void RedoCommand();												// 실행 취소했던 커맨드를 다시 실행함
 
 		private:
-			static std::unique_ptr<CommandManager> instance;
-
-			CommandManager();
-			CommandManager(const CommandManager& app) = delete;
-			CommandManager& operator=(const CommandManager& app) = delete;
-
 			void ResizeBuffer();											// undoQueue 와 redoStack 사이즈를 합친 bufferSize 가 넘칠 때 동작하는 함수
 
 			int bufferSize = 50;

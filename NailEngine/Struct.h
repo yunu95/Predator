@@ -9,6 +9,8 @@ using namespace DirectX::PackedVector;
 
 #define MAX_TEXTURE 8
 #define MAX_INT 8
+#define MAX_BONE_COUNT 250
+#define MAX_FRAME_COUNT 500
 
 struct Vertex
 {
@@ -75,7 +77,44 @@ struct CameraBuffer
 
 struct BoneMatrix
 {
-	DirectX::SimpleMath::Matrix finalTM[256];
+	DirectX::SimpleMath::Matrix finalTM[MAX_BONE_COUNT];
+};
+
+struct KeyframeDesc
+{
+	int animIndex;
+	unsigned int currFrame;
+	unsigned int nextFrame;
+	float ratio;
+	float sumTime;
+	float speed = 1.f;
+	DirectX::SimpleMath::Vector2 padding;
+};
+
+struct TransitionDesc
+{
+	TransitionDesc()
+	{
+		curr.animIndex = 0;
+		next.animIndex = -1;
+	}
+
+	void ClearNextAnimation()
+	{
+		next.animIndex = -1;
+		next.currFrame = 0;
+		next.nextFrame = 0;
+		next.sumTime = 0;
+		transitionTotalTime = 0;
+		transitionRatio = 0;
+	}
+
+	float transitionDuration;
+	float transitionSpeed;
+	float transitionTotalTime;
+	float transitionRatio;
+	KeyframeDesc curr;
+	KeyframeDesc next;
 };
 
 // Deferred Only

@@ -115,6 +115,12 @@ void NailEngine::CreateConstantBuffer()
 		_constantBuffer->CraeteConstantBuffer(sizeof(BoneMatrix));
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
+
+	{
+		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
+		_constantBuffer->CraeteConstantBuffer(sizeof(TransitionDesc));
+		this->constantBuffers.emplace_back(_constantBuffer);
+	}
 }
 
 void NailEngine::CreateRenderTargetGroup()

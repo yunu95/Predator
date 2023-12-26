@@ -3,20 +3,13 @@
 
 #include "imgui.h"
 
-namespace Application
+namespace application
 {
-    namespace Editor
+    namespace editor
     {
-        std::unique_ptr<PalettePanel> PalettePanel::instance = nullptr;
-
-        PalettePanel& PalettePanel::GetInstance()
+        PalettePanel::PalettePanel()
         {
-            if (instance == nullptr)
-            {
-                instance = std::unique_ptr<PalettePanel>(new PalettePanel());
-            }
 
-            return *instance;
         }
 
         PalettePanel::~PalettePanel()
@@ -38,25 +31,20 @@ namespace Application
         {
             ImGui::Begin("Palette");
 
-            /// ImGui °ü·Ã ³»ºÎ º¯¼ö ¾÷µ¥ÀÌÆ®
+            /// ImGui ê´€ë ¨ ë‚´ë¶€ ë³€ìˆ˜ ì—…ë°ì´íŠ¸
             isMouseOver = ImGui::IsWindowHovered();
             isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
-            /// ½ÇÁ¦ ÆĞ³Î¿¡ ±×¸®´Â ¿µ¿ª
+            /// ì‹¤ì œ íŒ¨ë„ì— ê·¸ë¦¬ëŠ” ì˜ì—­
 
-            /// ¾Æ·¡ ºÎºĞÀº Palette°¡ ¿À·ÎÁö Àå½Ä¹° ¹èÄ¡¿¡¸¸ »ç¿ëµÈ´Ù°í °¡Á¤ÇÏ°í ÀÛ¼ºÇÑ ÄÚµåÀÔ´Ï´Ù.
-            /// ¸Ş½Ã Å¸ÀÔÀ» °áÁ¤ÇÑ ÈÄ 
-            // ¸Ş½Ã Å¸ÀÔÀ» ¼³Á¤ÇÕ´Ï´Ù.
+            /// ì•„ë˜ ë¶€ë¶„ì€ Paletteê°€ ì˜¤ë¡œì§€ ì¥ì‹ë¬¼ ë°°ì¹˜ì—ë§Œ ì‚¬ìš©ëœë‹¤ê³  ê°€ì •í•˜ê³  ì‘ì„±í•œ ì½”ë“œì…ë‹ˆë‹¤.
+            /// ë©”ì‹œ íƒ€ì…ì„ ê²°ì •í•œ í›„ 
+            // ë©”ì‹œ íƒ€ì…ì„ ì„¤ì •í•©ë‹ˆë‹¤.
 
             ImGui::End();
         }
 
         void PalettePanel::Finalize()
-        {
-
-        }
-
-        PalettePanel::PalettePanel()
         {
 
         }

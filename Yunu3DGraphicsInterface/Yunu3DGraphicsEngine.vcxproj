@@ -211,6 +211,7 @@
     <ClInclude Include="YunuGIGlobal.h" />
     <ClInclude Include="YunuGIPtr.h" />
     <ClInclude Include="YunuGraphicsInterface.h" />
+    <ClInclude Include="YunuVector2.h" />
     <ClInclude Include="YunuVector3.h" />
     <ClInclude Include="YunuVector4.h" />
   </ItemGroup>

@@ -97,6 +97,9 @@
     <Filter Include="Animator\AnimatorManager">
       <UniqueIdentifier>{8bda1498-93ae-46b4-920d-ce2c12fcdcc2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource\Animation\AnimationGroup">
+      <UniqueIdentifier>{0844c700-9d5a-4be5-bd83-ad7a40e2b79c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -261,6 +264,9 @@
     <ClInclude Include="NailAnimatorManager.h">
       <Filter>Animator\AnimatorManager</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationGroup.h">
+      <Filter>Resource\Animation\AnimationGroup</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -358,6 +364,9 @@
     </ClCompile>
     <ClCompile Include="NailAnimatorManager.cpp">
       <Filter>Animator\AnimatorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationGroup.cpp">
+      <Filter>Resource\Animation\AnimationGroup</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
