@@ -22,22 +22,30 @@ void GraphicsTest()
 {
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	_resourceManager->LoadFile("FBX/Boss");
+	//_resourceManager->LoadFile("FBX/BigTree");
+	//_resourceManager->LoadFile("FBX/Bush");
+	_resourceManager->LoadFile("FBX/Test5");
 
-	for (int i = 0; i < 500; ++i)
+	//for (int i = 0; i < 250; ++i)
+	//{
+	//	auto tempX = static_cast<float>(rand() % 100);
+	//	auto tempZ = static_cast<float>(rand() % 100);
+	//	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("BigTree");
+	//	object->GetTransform()->position = Vector3d{tempX,0,tempZ};
+	//	auto object1 = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Bush");
+	//	object1->GetTransform()->position = Vector3d{tempZ,0,tempX};
+	//}
 	{
-		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		auto tempX = static_cast<float>(rand() % 100);
-		auto tempZ = static_cast<float>(rand() % 100);
-		object->GetTransform()->position = Vector3d{ tempX,0,tempZ };
-		auto renderer = object->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		auto meshList = _resourceManager->GetMeshList();
-		for (auto& i : meshList)
+		auto& animationList = _resourceManager->GetAnimationList();
+		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Test5");
+
+		auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
+		for (auto& each : animationList)
 		{
-			if (i->GetName() == L"Sphere")
+			if ()
 			{
-				renderer->GetGI().SetMesh(i);
 			}
+			animator->GetGI().PushAnimation();
 		}
 	}
 }

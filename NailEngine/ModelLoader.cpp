@@ -38,13 +38,14 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 	if (scene->HasAnimations())
 	{
 		AddHasAnimation(fbxNode);
+		LoadAnimation(scene, std::filesystem::path(filePath).stem().wstring());
 	}
 
 	ResourceManager::Instance.Get().PushFBXBoneInfo(std::filesystem::path(filePath).stem().wstring(), this->boneInfoMap);
 
 	ResourceManager::Instance.Get().PushFBXNode(std::filesystem::path(filePath).stem().wstring(), fbxNode);
 
-	LoadAnimation(scene, std::filesystem::path(filePath).stem().wstring());
+	///LoadAnimation(scene, std::filesystem::path(filePath).stem().wstring());
 
 	boneInfoMap.clear();
 	animationClipVec.clear();
@@ -63,6 +64,8 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 
 		unsigned int meshIndex = node->mMeshes[i];
 		aiMesh* mesh = scene->mMeshes[meshIndex];
+
+		fbxMeshData.meshName = this->aiStringToWString(mesh->mName);
 
 		for (int j = 0; j < mesh->mNumVertices; ++j)
 		{

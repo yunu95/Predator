@@ -543,15 +543,17 @@ void ResourceManager::CreateDefaultTexture()
 void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yunuGI::FBXData* fbxData)
 {
 	fbxData->nodeName = node->nodeName;
+	fbxData->hasAnimation = node->hasAnimation;
 	fbxData->child.resize(node->child.size());
 	fbxData->materialVec.resize(node->meshVec.size());
 	for (int i = 0; i < node->meshVec.size(); ++i)
 	{
+		fbxData->meshName = node->meshVec[i].meshName;
 		// 실제 Mesh와 Material을 만들자
-		if (this->meshMap.find(node->nodeName) == this->meshMap.end())
+		if (this->meshMap.find(node->meshVec[i].meshName) == this->meshMap.end())
 		{
 			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
-			mesh->SetName(node->nodeName);
+			mesh->SetName(node->meshVec[i].meshName);
 			mesh->SetData(node->meshVec[i].vertex, node->meshVec[i].indices);
 			this->meshMap.insert({ node->nodeName, mesh });
 		}

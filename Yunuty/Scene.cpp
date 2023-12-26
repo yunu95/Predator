@@ -8,12 +8,12 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
 	gameObjectChild->setName(std::string{ fbxNode->nodeName.begin(),fbxNode->nodeName.end() });
 
 	//gameObjectChild->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{90.f,0.f,0.f} });
-	gameObjectChild->GetTransform()->scale = Vector3d{ 0.01f,0.01f,0.01f };
+	gameObjectChild->GetTransform()->scale = Vector3d{ 0.1f,0.1f,0.1f };
 
 	if (!fbxNode->hasAnimation)
 	{
 		auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		renderer->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(fbxNode->nodeName));
+		renderer->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(fbxNode->meshName));
 
 		// Material Data Set
 		for (int j = 0; j < fbxNode->materialVec.size(); ++j)
@@ -87,6 +87,7 @@ yunutyEngine::GameObject* Scene::AddGameObjectFromFBX(string fbxName)
 {
 	auto gameObject = AddGameObject(fbxName);
 	yunuGI::FBXData* data = nullptr;
+
 	if (graphics::Renderer::SingleInstance().GetResourceManager()->GetFBXData(fbxName, data))
 	{
 		if (data->hasAnimation)
