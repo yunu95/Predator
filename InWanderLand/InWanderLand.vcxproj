@@ -366,6 +366,15 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="..\Include\ImGui\imgui.h" />
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
     <ClInclude Include="CamSwitcher.h" />
+    <ClInclude Include="DoodadPaletteManager.h" />
+    <ClInclude Include="PaletteInstance.h" />
+    <ClInclude Include="PaletteManager.h" />
+    <ClInclude Include="SelectionBox.h" />
+    <ClInclude Include="SelectionBoxPerInstance.h" />
+    <ClInclude Include="SelectionBoxPerInstancePool.h" />
+    <ClInclude Include="TerrainBrush.h" />
+    <ClInclude Include="TerrainInstance.h" />
+    <ClInclude Include="TerrainPaletteManager.h" />
     <ClInclude Include="TestColliderEnableDeath.h" />
     <ClInclude Include="DebugBeacon.h" />
     <ClInclude Include="DebugMeshes.h" />
@@ -400,6 +409,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="ShakyCam.h" />
     <ClInclude Include="PathEditor.h" />
     <ClInclude Include="TestComponent.h" />
+    <ClInclude Include="UnitBrush.h" />
+    <ClInclude Include="UnitInstance.h" />
+    <ClInclude Include="UnitPaletteManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp" />

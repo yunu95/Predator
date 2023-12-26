@@ -1,7 +1,6 @@
 #pragma once
 #include "YunutyEngine.h"
 using namespace yunutyEngine;
-
 // RTS 경로를 XZ평면에 생성하기 위한 컴포넌트
 // 이 컴포넌트가 포함된 XZ 평면을 그리드로 나누고, 그리드의 꼭짓점에 경로 노드를 지정할 수 있게 한다.
 // 인접한 경로노드들끼리 이루는 다각형은 RTS 유닛들이 오갈 수 있는 경로가 된다.
