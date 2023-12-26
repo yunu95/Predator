@@ -37,8 +37,11 @@ void Unit::Start()
 	unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Idle,
 		[this]() { return m_currentTargetObject == nullptr; } });
 
+	unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Move,
+		[this]() { return currentOrder == UnitState::Move; } });
+
 	unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Attack,
-		[this](){ return (GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetObject->GetTransform()->GetWorldPosition()).Magnitude() <= m_atkDistance + 0.4f; } });
+		[this]() { return (GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetObject->GetTransform()->GetWorldPosition()).Magnitude() <= m_atkDistance + 0.4f; } });
 
 	unitFSM.transitions[UnitState::Attack].push_back({ UnitState::Idle,
 		[this]() { return m_currentTargetObject == nullptr; } });
@@ -94,267 +97,295 @@ Unit::UnitSide Unit::GetUnitSide() const
 }
 
 #pragma region State Engage()
-	void Unit::IdleEngage()
-	{
-		currentOrder = UnitState::Idle;
-		idleElapsed = 0.0f;
-		IdleEngageFunction();
-	}
+void Unit::IdleEngage()
+{
+	currentOrder = UnitState::Idle;
+	idleElapsed = 0.0f;
+	IdleEngageFunction();
+}
 
-	void Unit::MoveEngage()
-	{
-		currentOrder = UnitState::Move;
+void Unit::MoveEngage()
+{
+	currentOrder = UnitState::Move;
 
-		moveFunctionElapsed = 0.0f;
+	moveFunctionElapsed = 0.0f;
 
-		GetGameObject()->GetComponent<NavigationAgent>()->SetSpeed(m_speed);
+	GetGameObject()->GetComponent<NavigationAgent>()->SetSpeed(m_speed);
 
-		MoveEngageFunction();
-	}
+	MoveEngageFunction();
+}
 
-	void Unit::AttackMoveEngage()
-	{
-		currentOrder = UnitState::AttackMove;
+void Unit::AttackMoveEngage()
+{
+	currentOrder = UnitState::AttackMove;
 
-		moveFunctionElapsed = 0.0f;
+	moveFunctionElapsed = 0.0f;
 
-		GetGameObject()->GetComponent<NavigationAgent>()->SetSpeed(m_speed);
+	GetGameObject()->GetComponent<NavigationAgent>()->SetSpeed(m_speed);
 
-		AttackMoveEngageFunction();
-	}
+	AttackMoveEngageFunction();
+}
 
-	void Unit::AttackEngage()
-	{
-		currentOrder = UnitState::Attack;
+void Unit::AttackEngage()
+{
+	currentOrder = UnitState::Attack;
 
-		attackFunctionElapsed = 0.0f;
+	attackFunctionElapsed = 0.0f;
+	isAttackStarted = false;
 
-		AttackEngageFunction();
-	}
+	AttackEngageFunction();
+}
 
-	void Unit::ChaseEngage()
-	{
-		currentOrder = UnitState::Chase;
+void Unit::ChaseEngage()
+{
+	currentOrder = UnitState::Chase;
 
-		ChaseEngageFunction();
-	}
+	ChaseEngageFunction();
+}
 
-	void Unit::QSkillEngage()
-	{
-		currentOrder = UnitState::QSkill;
-		qSkillFunctionStartElapsed = 0.0f;
-		qSkillFunctionStartedElapsed = 0.0f;
+void Unit::QSkillEngage()
+{
+	currentOrder = UnitState::QSkill;
+	qSkillFunctionStartElapsed = 0.0f;
+	qSkillFunctionStartedElapsed = 0.0f;
 
-		StopMove();
-	}
+	//GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
+	//GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_deathAnimation);
 
-	void Unit::DeathEngage()
-	{
-		currentOrder = UnitState::Death;
+	StopMove();
+}
 
-		deathFunctionElapsed = 0.0f;
+void Unit::DeathEngage()
+{
+	currentOrder = UnitState::Death;
 
-		DeathEngageFunction();
-	}
+	deathFunctionElapsed = 0.0f;
+
+	DeathEngageFunction();
+}
 #pragma endregion
 
 
 #pragma region State Update()
-	void Unit::IdleUpdate()
+void Unit::IdleUpdate()
+{
+	idleElapsed += Time::GetDeltaTime();
+
+	IdleUpdateFunction();
+	// 데미지를 입으면 공격한 상대의 정보를 list에 등록하고 쫓아가기
+}
+
+void Unit::MoveUpdate()
+{
+	moveFunctionElapsed += Time::GetDeltaTime();
+
+	Vector3d mouseXZVector = Vector3d(m_currentMovePosition.x, 0, m_currentMovePosition.z);
+
+	LookAt(mouseXZVector);
+
+	if (moveFunctionElapsed >= moveFunctionCallDelay)
+		MoveUpdateFunction();
+}
+
+void Unit::AttackMoveUpdate()
+{
+	moveFunctionElapsed += Time::GetDeltaTime();
+
+	Vector3d mouseXZVector = Vector3d(m_currentMovePosition.x, 0, m_currentMovePosition.z);
+
+	LookAt(mouseXZVector);
+
+	if (moveFunctionElapsed >= moveFunctionCallDelay)
+		AttackMoveUpdateFunction();
+}
+
+void Unit::AttackUpdate()
+{
+	attackFunctionElapsed += Time::GetDeltaTime();
+
+	LookAt(m_currentTargetObject->GetTransform()->GetWorldPosition());
+
+	if (attackFunctionElapsed >= attackFunctionCallDelay)
 	{
-		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 0, 0 });
-
-		idleElapsed += Time::GetDeltaTime();
-
-		IdleUpdateFunction();
-		// 데미지를 입으면 공격한 상대의 정보를 list에 등록하고 쫓아가기
-	}
-
-	void Unit::MoveUpdate()
-	{
-		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 1, 0, 0 });
-
-		moveFunctionElapsed += Time::GetDeltaTime();
-
-		if (moveFunctionElapsed >= moveFunctionCallDelay)
-			MoveUpdateFunction();
-	}
-
-	void Unit::AttackMoveUpdate()
-	{
-		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.4, 0.3, 0.25, 0 });
-
-		moveFunctionElapsed += Time::GetDeltaTime();
-
-		if (moveFunctionElapsed >= moveFunctionCallDelay)
-			AttackMoveUpdateFunction();
-	}
-
-	void Unit::AttackUpdate()
-	{
-		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });
-
-		attackFunctionElapsed += Time::GetDeltaTime();
-
-		if (attackFunctionElapsed >= attackFunctionCallDelay)
-			AttackUpdateFunction();
-	}
-
-	void Unit::QSkillUpdate()
-	{
-		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 0 });
-
-		qSkillFunctionStartElapsed += Time::GetDeltaTime();
-
-		if (isSkillStarted)
+		if (!isAttackStarted)
 		{
-			qSkillFunctionStartedElapsed += Time::GetDeltaTime();
-			if (qSkillFunctionStartedElapsed >= qSkillAnimationDuration)
-			{
-				isSkillStarted = false;
-				currentOrder = UnitState::Idle;
-				// 여기서 leftClickFunction을 스킬 사용 못하게 해야 한다....
-				PlayerController::GetInstance()->SetLeftClickMove();
-			}
+			GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
+			GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_attackAnimation);
+			isAttackStarted = true;
 		}
-
-		if (qSkillFunctionStartElapsed >= qSkillStartDelay)
-			QSkillUpdateFunction();
+		AttackUpdateFunction();
 	}
+}
 
-	void Unit::ChaseUpdate()
+void Unit::QSkillUpdate()
+{
+	qSkillFunctionStartElapsed += Time::GetDeltaTime();
+
+	if (isSkillStarted)
 	{
-		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.5, 0.2, 0, 0 });
-		chaseFunctionElapsed += Time::GetDeltaTime();
-
-		if (chaseFunctionElapsed >= chaseFunctionCallDelay)
-			ChaseUpdateFunction();
+		qSkillFunctionStartedElapsed += Time::GetDeltaTime();
+		if (qSkillFunctionStartedElapsed >= qSkillAnimationDuration)
+		{
+			isSkillStarted = false;
+			currentOrder = UnitState::Idle;
+			// 여기서 leftClickFunction을 스킬 사용 못하게 해야 한다....
+			PlayerController::GetInstance()->SetLeftClickMove();
+		}
 	}
 
-	void Unit::DeathUpdate()
-	{
-		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 0 });
-		deathFunctionElapsed += Time::GetDeltaTime();
+	if (qSkillFunctionStartElapsed >= qSkillStartDelay)
+		QSkillUpdateFunction();
+}
 
-		if (deathFunctionElapsed >= deathAnimationDelay)
-			DeathUpdateFunction();
-	}
+void Unit::ChaseUpdate()
+{
+	chaseFunctionElapsed += Time::GetDeltaTime();
+
+	LookAt(m_currentTargetObject->GetTransform()->GetWorldPosition());
+
+	if (chaseFunctionElapsed >= chaseFunctionCallDelay)
+		ChaseUpdateFunction();
+}
+
+void Unit::DeathUpdate()
+{
+	deathFunctionElapsed += Time::GetDeltaTime();
+
+	if (deathFunctionElapsed >= deathAnimationDelay)
+		DeathUpdateFunction();
+}
 #pragma endregion
 
 
 #pragma region Engage Functions
-	/// <summary>
-	/// 주요 기능 : m_currentTargetObject가 nullptr인 상태로 들어오면 상황에 따라 재정의.
-	/// </summary>
-	void Unit::IdleEngageFunction()
-	{
-		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 0, 0 });
+/// <summary>
+/// 주요 기능 : m_currentTargetObject가 nullptr인 상태로 들어오면 상황에 따라 재정의.
+/// </summary>
+void Unit::IdleEngageFunction()
+{
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_idleAnimation);
 
-		DetermineCurrentTargetObject();
+	DetermineCurrentTargetObject();
 
-		idleToChaseDelay = 0.0f;
+	idleToChaseDelay = 0.0f;
 
-		if (unitFSM.previousState == UnitState::Attack && m_currentTargetObject == nullptr)
-			idleToChaseDelay = 1.0f;
+	if (unitFSM.previousState == UnitState::Attack && m_currentTargetObject == nullptr)
+		idleToChaseDelay = 1.0f;
 
-		if (unitFSM.previousState == UnitState::AttackMove)
-			isAttackMoving = false;
+	if (unitFSM.previousState == UnitState::AttackMove)
+		isAttackMoving = false;
 
-		StopMove();
-	}
+	StopMove();
+}
 
-	void Unit::MoveEngageFunction()
-	{
-		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 1, 0, 0 });
-	}
+void Unit::MoveEngageFunction()
+{
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
 
-	void Unit::AttackMoveEngageFunction()
-	{
-		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.4, 0.3, 0.25, 0 });
-	}
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_walkAnimation);
+}
 
-	void Unit::ChaseEngageFunction()
-	{
-		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.5, 0.2, 0, 0 });
-	}
+void Unit::AttackMoveEngageFunction()
+{
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
 
-	void Unit::AttackEngageFunction()
-	{
-		StopMove();
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_walkAnimation);
+}
 
-		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });
-	}
+void Unit::ChaseEngageFunction()
+{
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
 
-	void Unit::DeathEngageFunction()
-	{
-		m_opponentObjectList.clear();
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_walkAnimation);
+}
 
-		ReportUnitDeath();
+void Unit::AttackEngageFunction()
+{
+	StopMove();
+	
+	//// Idle Animation 적용 후 Delay주고 쏘기
+	//GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
+	//GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_idleAnimation);
 
-		StopMove();
+	// 바로 쏘기
+	ProjectileSystem::GetInstance()->Shoot(this, m_currentTargetObject->GetComponent<Unit>(), m_bulletSpeed);
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_attackAnimation);
 
-		GetGameObject()->GetComponent<NavigationAgent>()->SetRadius(0.0f);
-		GetGameObject()->GetComponent<NavigationAgent>()->SetActive(false);
-		GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(99, 990, 990));
-		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 1, 1, 0 });
-	}
+}
+
+void Unit::DeathEngageFunction()
+{
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_deathAnimation);
+
+	m_opponentObjectList.clear();
+
+	ReportUnitDeath();
+
+	StopMove();
+}
 #pragma endregion
 
 #pragma region Update Functions
-	void Unit::IdleUpdateFunction()
-	{
-		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 0, 0 });
-	}
+void Unit::IdleUpdateFunction()
+{
 
-	void Unit::MoveUpdateFunction()
-	{
-		moveFunctionElapsed = 0.0f;
+}
 
-		GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(m_currentMovePosition);
-	}
+void Unit::MoveUpdateFunction()
+{
+	moveFunctionElapsed = 0.0f;
 
-	void Unit::AttackMoveUpdateFunction()
-	{
-		moveFunctionElapsed = 0.0f;
+	GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(m_currentMovePosition);
+}
 
-		GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(m_currentMovePosition);
-	}
+void Unit::AttackMoveUpdateFunction()
+{
+	moveFunctionElapsed = 0.0f;
 
-	void Unit::ChaseUpdateFunction()
-	{
-		chaseFunctionElapsed = 0.0f;
+	GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(m_currentMovePosition);
+}
 
-		DetermineCurrentTargetObject();
+void Unit::ChaseUpdateFunction()
+{
+	chaseFunctionElapsed = 0.0f;
 
-		GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(m_currentTargetObject->GetTransform()->GetWorldPosition());
-	}
+	DetermineCurrentTargetObject();
 
-	void Unit::AttackUpdateFunction()
-	{
-		attackFunctionElapsed = 0.0f;
+	GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(m_currentTargetObject->GetTransform()->GetWorldPosition());
+}
 
-		//if (m_currentTargetObject->GetComponent<Unit>()->GetUnitCurrentState() == UnitState::Death)
+void Unit::AttackUpdateFunction()
+{
+	attackFunctionElapsed = 0.0f;
 
-		if(m_attackType == AttackType::Melee)
+	//if (m_currentTargetObject->GetComponent<Unit>()->GetUnitCurrentState() == UnitState::Death)
 
-		ProjectileSystem::GetInstance()->Shoot(this, m_currentTargetObject->GetComponent<Unit>(), m_bulletSpeed);
-	}
+	//if(m_attackType == AttackType::Melee)
 
-	void Unit::QSkillUpdateFunction()
-	{
-		qSkillFunctionStartElapsed = 0.0f;
-		isSkillStarted = true;
-		
-		// 스킬 오브젝트 생성 (실제 스킬 기능)
+	ProjectileSystem::GetInstance()->Shoot(this, m_currentTargetObject->GetComponent<Unit>(), m_bulletSpeed);
+}
 
-	}
+void Unit::QSkillUpdateFunction()
+{
+	qSkillFunctionStartElapsed = 0.0f;
+	isSkillStarted = true;
 
-	void Unit::DeathUpdateFunction()
-	{
-		deathFunctionElapsed = 0.0f;
+	// 스킬 오브젝트 생성 (실제 스킬 기능)
 
-		//GetGameObject()->SetSelfActive(false);
-	}
+}
+
+void Unit::DeathUpdateFunction()
+{
+	deathFunctionElapsed = 0.0f;
+
+	GetGameObject()->GetComponent<NavigationAgent>()->SetRadius(0.0f);
+	GetGameObject()->GetComponent<NavigationAgent>()->SetActive(false);
+	GetGameObject()->SetSelfActive(false);
+	//GetGameObject()->SetSelfActive(false);
+}
 
 #pragma endregion
 
@@ -396,6 +427,70 @@ void Unit::SetAtkRadius(float radius)
 void Unit::SetUnitSpeed(float speed)
 {
 	m_speed = speed;
+}
+
+void Unit::SetIdleAnimation(IAnimation* idleAnim)
+{
+	m_idleAnimation = idleAnim;
+}
+
+void Unit::SetWalkAnimation(IAnimation* walkAnim)
+{
+	m_walkAnimation = walkAnim;
+}
+
+void Unit::SetAttackAnimation(IAnimation* attackAnim)
+{
+	m_attackAnimation = attackAnim;
+}
+
+void Unit::SetDeathAnimation(IAnimation* deathAnim)
+{
+	m_deathAnimation = deathAnim;
+}
+
+void Unit::LookAt(Vector3d destination)
+{
+	// 먼저, 방향 판별.
+	Vector3d tempDistanceVec = destination - GetGameObject()->GetTransform()->GetWorldPosition();
+	Vector3d distanceVec = Vector3d(tempDistanceVec.x, 0, tempDistanceVec.z);
+	bool isUnitFliped = false;
+	Vector3d forwardVector = GetGameObject()->GetTransform()->GetWorldRotation().Forward();
+	forwardVector.y = 0.0f;
+	forwardVector *= -1;
+
+	Vector3d axis = Vector3d::Cross(forwardVector, distanceVec);
+
+	float localRotationSpeed = rotationSpeed;
+
+	if (axis.y < 0)
+	{
+		localRotationSpeed *= -1;
+		//i	sUnitFliped = true;
+	}
+	
+	// 내적으로 반대 방향이 찍혔을 경우 로컬 bool값 조절
+	float dotted = Vector3d::Dot(forwardVector, distanceVec);
+	if (dotted < 0)
+	{
+		isUnitFliped = true;
+	}
+	else
+	{
+		isUnitFliped = false;
+	}
+
+	// 진동 방지 - forward가 distance와 어느정도 일직선 상이 된다면 돌지말것.
+	if (axis.Magnitude() >= 0.5 || isUnitFliped == true)
+	{
+		currentRotation += localRotationSpeed * Time::GetDeltaTime();
+		GetGameObject()->GetTransform()->rotation = Quaternion({ 0, currentRotation, 0 });
+	}
+
+	//Vector3d directionVector = (destination - GetGameObject()->GetTransform()->GetWorldPosition()).Normalized();
+	//Vector3d finalDirectionVector = Vector3d(directionVector.x, GetTransform()->GetWorldPosition().y, directionVector.z);
+
+	//GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(-1 * finalDirectionVector, GetTransform()->GetWorldRotation().Up()));
 }
 
 int Unit::GetPlayerSerialNumber() const
@@ -484,7 +579,7 @@ void Unit::OrderAttackMove(Vector3d position)
 
 	PlayerController::GetInstance()->SetLeftClickMove();
 	// 다음 클릭은 Move로 바꿀 수 있도록 function 재정의.
-		
+
 	isAttackMoving = true;
 }
 

@@ -366,6 +366,20 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="..\Include\ImGui\imgui.h" />
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
     <ClInclude Include="CamSwitcher.h" />
+    <ClInclude Include="Dotween.h" />
+    <ClInclude Include="DotweenTimer.h" />
+    <ClInclude Include="DotweenTimerPool.h" />
+    <ClInclude Include="Easing.h" />
+    <ClInclude Include="FSM.h" />
+    <ClInclude Include="HealerProduction.h" />
+    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="MagicianProduction.h" />
+    <ClInclude Include="MeleeEnemyProduction.h" />
+    <ClInclude Include="PlayerController.h" />
+    <ClInclude Include="Projectile.h" />
+    <ClInclude Include="ProjectileSystem.h" />
+    <ClInclude Include="RangeSystem.h" />
+    <ClInclude Include="SkillSystem.h" />
     <ClInclude Include="TestColliderEnableDeath.h" />
     <ClInclude Include="DebugBeacon.h" />
     <ClInclude Include="DebugMeshes.h" />
@@ -400,6 +414,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="ShakyCam.h" />
     <ClInclude Include="PathEditor.h" />
     <ClInclude Include="TestComponent.h" />
+    <ClInclude Include="Unit.h" />
+    <ClInclude Include="UnitFactory.h" />
+    <ClInclude Include="UnitProductionOrder.h" />
+    <ClInclude Include="WarriorProduction.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp" />
@@ -413,9 +431,22 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="CommandManager.cpp" />
     <ClCompile Include="ContentsLayer.cpp" />
+    <ClCompile Include="Dotween.cpp" />
+    <ClCompile Include="DotweenTimer.cpp" />
+    <ClCompile Include="DotweenTimerPool.cpp" />
+    <ClCompile Include="Easing.cpp" />
     <ClCompile Include="EditorEvents.cpp" />
     <ClCompile Include="EditorLayer.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="HealerProduction.cpp" />
+    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="MagicianProduction.cpp" />
+    <ClCompile Include="MeleeEnemyProduction.cpp" />
+    <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="ProjectileSystem.cpp" />
+    <ClCompile Include="RangeSystem.cpp" />
+    <ClCompile Include="SkillSystem.cpp" />
     <ClCompile Include="SnippetAnimation.cpp" />
     <ClCompile Include="SnippetTemplate.cpp" />
     <ClCompile Include="Panel_CameraView.cpp" />
@@ -432,10 +463,16 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="ShakyCam.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObj.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObjImgui.cpp" />
+    <ClCompile Include="TestCaseGroupControl.cpp" />
     <ClCompile Include="TestCaseNavigation.cpp" />
     <ClCompile Include="TestCasePhysics.cpp" />
     <ClCompile Include="TestCaseTemplate.cpp" />
     <ClCompile Include="TestComponent.cpp" />
+    <ClCompile Include="TestUnitAnimation.cpp" />
+    <ClCompile Include="Unit.cpp" />
+    <ClCompile Include="UnitFactory.cpp" />
+    <ClCompile Include="UnitProductionOrder.cpp" />
+    <ClCompile Include="WarriorProduction.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

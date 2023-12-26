@@ -271,53 +271,53 @@ Dotween& Dotween::DOQRotate(Vector3d axis, double angle, double p_duration)
 /// <returns></returns>
 Dotween& Dotween::DOLookAt(Transform* lookTransform, double p_duration, bool isYaxisInclude)
 {	
-	//DotweenTimer* m_doLookTweenTimer = DotweenTimerPool::GetInstance()->GetDotweenTimer();
+	DotweenTimer* m_doLookTweenTimer = DotweenTimerPool::GetInstance()->GetDotweenTimer();
 
-	//Vector3d objectFront = GetGameObject()->GetTransform()->GetFront();
-	//Vector3d objectUp;
-	//Vector3d objectRight = GetGameObject()->GetTransform()->GetRight();
-	//Vector3d objectLeft = Vector3d(-1 * objectRight.x, objectRight.y, -1 * objectRight.z);
+	Vector3d objectFront = GetGameObject()->GetTransform()->GetWorldRotation().Forward();
+	Vector3d objectUp;
+	Vector3d objectRight = GetGameObject()->GetTransform()->GetWorldRotation().Right();
+	Vector3d objectLeft = Vector3d(-1 * objectRight.x, objectRight.y, -1 * objectRight.z);
 
-	//Vector3d tempLookPos = lookTransform->GetWorldPosition();
-	//Vector3d tempPos = GetGameObject()->GetTransform()->GetWorldPosition();
-	//Vector3d tempUp = GetGameObject()->GetTransform()->GetUp();
+	Vector3d tempLookPos = lookTransform->GetWorldPosition();
+	Vector3d tempPos = GetGameObject()->GetTransform()->GetWorldPosition();
+	Vector3d tempUp = GetGameObject()->GetTransform()->GetWorldRotation().Up();
 
-	//Vector3d distanceVec = Vector3d(tempLookPos.x - tempPos.x, tempLookPos.y - tempPos.y, tempLookPos.z - tempPos.z);
+	Vector3d distanceVec = Vector3d(tempLookPos.x - tempPos.x, tempLookPos.y - tempPos.y, tempLookPos.z - tempPos.z);
 
-	//double angle;
-	//double sq;
-	//double finalAngle;
-	//double finalDegree;
+	double angle;
+	double sq;
+	double finalAngle;
+	double finalDegree;
 
-	//double dot = DotProduct(GetGameObject()->GetTransform()->GetFront(), GetGameObject()->GetTransform()->GetLocalPosition() - tempLookPos);
+	double dot = Vector3d::Dot(GetGameObject()->GetTransform()->GetWorldRotation().Forward(), GetGameObject()->GetTransform()->GetWorldPosition() - tempLookPos);
 
-	//// 회전 방향 판정
-	//Vector3D axis = CrossProduct(objectFront, distanceVec);
+	// 회전 방향 판정
+	Vector3d axis = Vector3d::Cross(objectFront, distanceVec);
 
-	//angle = (objectFront.x * distanceVec.x + objectFront.z * distanceVec.z);
-	//sq = (sqrt(pow(objectFront.x, 2) + pow(objectFront.z, 2)) *
-	//	sqrt(pow(distanceVec.x, 2) + pow(distanceVec.z, 2)));
+	angle = (objectFront.x * distanceVec.x + objectFront.z * distanceVec.z);
+	sq = (sqrt(pow(objectFront.x, 2) + pow(objectFront.z, 2)) *
+		sqrt(pow(distanceVec.x, 2) + pow(distanceVec.z, 2)));
 
-	//// 두 벡터의 각도가 180도 이상이면 180을, -180 이하 이라면 -180을 
-	////finalAngle = acos( max( -1.0f, min(1.0f, angle / sq) ) );
-	//finalAngle = acos(std::clamp(angle / sq, -1.0, 1.0));			// c++17 된다면
-	//finalDegree = RadianToDegree(finalAngle);
+	// 두 벡터의 각도가 180도 이상이면 180을, -180 이하 이라면 -180을 
+	//finalAngle = acos( max( -1.0f, min(1.0f, angle / sq) ) );
+	finalAngle = acos(std::clamp(angle / sq, -1.0, 1.0));			// c++17 된다면
+	finalDegree = 57.2969f * (finalAngle);
 
-	//if (axis.y < 0)
-	//	finalDegree *= -1;
+	if (axis.y < 0)
+		finalDegree *= -1;
 
-	//objectUp = GetGameObject()->GetTransform()->GetUp();
+	objectUp = GetGameObject()->GetTransform()->GetWorldRotation().Up();
 
-	//m_doLookTweenTimer->Start();
-	//m_doLookTweenTimer->duration = p_duration;
-	//m_doLookTweenTimer->onUpdate = [=]()distanceVector.Normalized()
-	//{
-	//	double degreePerFrame = finalDegree / (m_doLookTweenTimer->duration);
-	//	if (tempPos - tempLookPos != Vector3D(0,0,0) && !isnan(degreePerFrame))
-	//		GetGameObject()->GetTransform()->Rotate(objectUp, DegreeToRadian(degreePerFrame * ZeldaEngine::TimeController::GetInstance().GetDeltaTime()));
-	//};
+	m_doLookTweenTimer->Start();
+	m_doLookTweenTimer->duration = p_duration;
+	m_doLookTweenTimer->onUpdate = [=]()
+	{
+		double degreePerFrame = finalDegree / (m_doLookTweenTimer->duration);
+		/*if (tempPos - tempLookPos != Vector3d(0,0,0) && !isnan(degreePerFrame))
+			GetGameObject()->GetTransform()->Rotate(objectUp, (degreePerFrame * Time::GetDeltaTime()) / 57.2969f);*/
+	};
 
-	//tempTimer = m_doLookTweenTimer;
+	tempTimer = m_doLookTweenTimer;
 	//m_dotweenTimerMap.insert({ tempTimer, m_doLookTweenTimer->isDone });
 
 	return *this;

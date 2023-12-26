@@ -5,8 +5,8 @@ class WarriorProduction : public UnitProductionOrder
 {
 
 public:
-	virtual void SetUnitData() override;
-	virtual GameObject* CreateUnitToOrder() override;
+	virtual void SetUnitData(GameObject* fbxObject) override;
+	virtual GameObject* CreateUnitWithOrder() override;
 	
 };
 

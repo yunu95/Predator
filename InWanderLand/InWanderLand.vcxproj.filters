@@ -150,9 +150,6 @@
     <ClInclude Include="DebugBeacon.h">
       <Filter>DebugBeacon</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainEditor.h">
-      <Filter>TerrainEditor</Filter>
-    </ClInclude>
     <ClInclude Include="DebugMeshes.h">
       <Filter>DebugMeshes</Filter>
     </ClInclude>
@@ -214,48 +211,6 @@
     <ClInclude Include="PathField.h">
       <Filter>Path</Filter>
     </ClInclude>
-    <ClInclude Include="Dotween.h">
-      <Filter>Contents\Dotween</Filter>
-    </ClInclude>
-    <ClInclude Include="DotweenTimer.h">
-      <Filter>Contents\Dotween</Filter>
-    </ClInclude>
-    <ClInclude Include="DotweenTimerPool.h">
-      <Filter>Contents\Dotween</Filter>
-    </ClInclude>
-    <ClInclude Include="Easing.h">
-      <Filter>Contents\Dotween</Filter>
-    </ClInclude>
-    <ClInclude Include="RangeSystem.h">
-      <Filter>Contents\RangeSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Projectile.h">
-      <Filter>Contents\Projectile</Filter>
-    </ClInclude>
-    <ClInclude Include="ProjectileSystem.h">
-      <Filter>Contents\Projectile</Filter>
-    </ClInclude>
-    <ClInclude Include="FSM.h">
-      <Filter>Contents\FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="UnitFactory.h">
-      <Filter>Contents\UnitFactory</Filter>
-    </ClInclude>
-    <ClInclude Include="Unit.h">
-      <Filter>Contents\Units</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyFactor.h">
-      <Filter>Contents\InitialFactors</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerFactor.h">
-      <Filter>Contents\InitialFactors</Filter>
-    </ClInclude>
-    <ClInclude Include="InitialFactorInterface.h">
-      <Filter>Contents\InitialFactors</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerController.h">
-      <Filter>Contents\Units</Filter>
-    </ClInclude>
     <ClInclude Include="TestColliderEnableDeath.h">
       <Filter>TestCodes</Filter>
     </ClInclude>
@@ -265,22 +220,61 @@
     <ClInclude Include="DelayedTestFunctions.h">
       <Filter>TestCodes</Filter>
     </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>Contents\InputManager</Filter>
+    <ClInclude Include="PathEditor.h" />
+    <ClInclude Include="Dotween.h">
+      <Filter>Contents\Dotween</Filter>
     </ClInclude>
-    <ClInclude Include="SkillSystem.h">
-      <Filter>Contents\SkillSystem</Filter>
+    <ClInclude Include="DotweenTimer.h">
+      <Filter>Contents\Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="DotweenTimerPool.h">
+      <Filter>Contents\Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>Contents\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="WarriorProduction.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClInclude>
     <ClInclude Include="UnitProductionOrder.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClInclude>
-    <ClInclude Include="WarriorProduction.h">
+    <ClInclude Include="MagicianProduction.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClInclude>
     <ClInclude Include="HealerProduction.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClInclude>
-    <ClInclude Include="MagicianProduction.h" />
+    <ClInclude Include="UnitFactory.h">
+      <Filter>Contents\UnitFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillSystem.h">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="RangeSystem.h">
+      <Filter>Contents\RangeSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileSystem.h">
+      <Filter>Contents\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Contents\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Contents\InputManager</Filter>
+    </ClInclude>
+    <ClInclude Include="FSM.h">
+      <Filter>Contents\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Easing.h">
+      <Filter>Contents\Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="MeleeEnemyProduction.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerController.h">
+      <Filter>Contents\InputManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -362,49 +356,6 @@
     <ClCompile Include="Panel_Palette.cpp">
       <Filter>Editor\Panel\List</Filter>
     </ClCompile>
-    <ClCompile Include="Dotween.cpp">
-      <Filter>Contents\Dotween</Filter>
-    </ClCompile>
-    <ClCompile Include="DotweenTimer.cpp">
-      <Filter>Contents\Dotween</Filter>
-    </ClCompile>
-    <ClCompile Include="DotweenTimerPool.cpp">
-      <Filter>Contents\Dotween</Filter>
-    </ClCompile>
-    <ClCompile Include="Easing.cpp">
-      <Filter>Contents\Dotween</Filter>
-    </ClCompile>
-    <ClCompile Include="RangeSystem.cpp">
-      <Filter>Contents\RangeSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="Projectile.cpp">
-      <Filter>Contents\Projectile</Filter>
-    </ClCompile>
-    <ClCompile Include="ProjectileSystem.cpp">
-      <Filter>Contents\Projectile</Filter>
-    </ClCompile>
-    <ClCompile Include="UnitFactory.cpp">
-      <Filter>Contents\UnitFactory</Filter>
-    </ClCompile>
-    <ClCompile Include="Unit.cpp">
-      <Filter>Contents\Units</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyFactor.cpp">
-      <Filter>Contents\InitialFactors</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerFactor.cpp">
-      <Filter>Contents\InitialFactors</Filter>
-    </ClCompile>
-    <ClCompile Include="InitialFactorInterface.cpp">
-      <Filter>Contents\InitialFactors</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerController.cpp">
-      <Filter>Contents\Units</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="InputManager.cpp">
-      <Filter>Contents\InputManager</Filter>
-    </ClCompile>
     <ClCompile Include="TestCaseTemplate.cpp">
       <Filter>TestCodes</Filter>
     </ClCompile>
@@ -420,11 +371,23 @@
     <ClCompile Include="TestCaseD3D11LiveObjImgui.cpp">
       <Filter>TestCodes</Filter>
     </ClCompile>
-    <ClCompile Include="TestCaseGroupControl.cpp">
-      <Filter>TestCodes</Filter>
+    <ClCompile Include="SnippetTemplate.cpp">
+      <Filter>TestCodes\nonValidationTests</Filter>
     </ClCompile>
-    <ClCompile Include="SkillSystem.cpp">
-      <Filter>Contents\SkillSystem</Filter>
+    <ClCompile Include="SnippetAnimation.cpp">
+      <Filter>TestCodes\nonValidationTests</Filter>
+    </ClCompile>
+    <ClCompile Include="Dotween.cpp">
+      <Filter>Contents\Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="DotweenTimer.cpp">
+      <Filter>Contents\Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="DotweenTimerPool.cpp">
+      <Filter>Contents\Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>Contents\Units</Filter>
     </ClCompile>
     <ClCompile Include="UnitProductionOrder.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
@@ -432,15 +395,44 @@
     <ClCompile Include="WarriorProduction.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClCompile>
+    <ClCompile Include="MagicianProduction.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClCompile>
     <ClCompile Include="HealerProduction.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClCompile>
-    <ClCompile Include="MagicianProduction.cpp" />
-    <ClCompile Include="SnippetTemplate.cpp">
-      <Filter>TestCodes\nonValidationTests</Filter>
+    <ClCompile Include="UnitFactory.cpp">
+      <Filter>Contents\UnitFactory</Filter>
     </ClCompile>
-    <ClCompile Include="SnippetAnimation.cpp">
-      <Filter>TestCodes\nonValidationTests</Filter>
+    <ClCompile Include="SkillSystem.cpp">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="RangeSystem.cpp">
+      <Filter>Contents\RangeSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Contents\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileSystem.cpp">
+      <Filter>Contents\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Contents\InputManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Easing.cpp">
+      <Filter>Contents\Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="TestUnitAnimation.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCaseGroupControl.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="MeleeEnemyProduction.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerController.cpp">
+      <Filter>Contents\InputManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

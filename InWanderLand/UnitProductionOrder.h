@@ -5,6 +5,8 @@
 /// UnitFactory에서의 유닛 생산을 좀 더 효율적으로 하기 위한 클래스.
 /// </summary>
 
+using namespace yunuGI;
+
 class UnitProductionOrder : public Component
 {
 protected:
@@ -18,13 +20,16 @@ protected:
 	float m_unitSpeed;
 
 	// 임시. 모델링 파일로 대체해주기
-	yunuGI::Color m_unitColor;
-
+	GameObject* m_unitGameObject;
+	IAnimation* m_idleAnimation;
+	IAnimation* m_walkAnimation;
+	IAnimation* m_attackAnimation;
+	IAnimation* m_deathAnimation;
 
 public:
-	virtual void SetUnitData() = 0;
-	//virtual void SetUnitGameObject(GameObject* obj) = 0;
-	virtual GameObject* CreateUnitToOrder();
+	virtual GameObject* CreateUnitWithOrder();
+
+	virtual void SetUnitData(GameObject* fbxObject) = 0;
 
 	virtual void SetPlayerRelatedComponents(Unit* playerUnit);
 };

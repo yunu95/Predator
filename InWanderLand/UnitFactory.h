@@ -6,11 +6,9 @@
 /// 는 필요 없지
 /// </summary>
 
-class UnitProductionOrder;
-
-class UnitFactory : public Component
+class UnitFactory
 {
 public:
-	void OrderCreateUnit(GameObject* orderedUnit, yunutyEngine::NavigationField* navField, Vector3d startPosition);
+	void OrderCreateUnit(yunutyEngine::GameObject* orderedUnit, yunutyEngine::NavigationField* navField, Vector3d startPosition);
 };
 

@@ -1,6 +1,6 @@
 #include "HealerProduction.h"
 
-void HealerProduction::SetUnitData()
+void HealerProduction::SetUnitData(GameObject* fbxObject)
 {
 	m_objectName = "Healer";
 	m_unitType = Unit::UnitType::Healer;
@@ -12,8 +12,8 @@ void HealerProduction::SetUnitData()
 	m_unitSpeed = 2.0f;
 }
 
-yunutyEngine::GameObject* HealerProduction::CreateUnitToOrder()
+yunutyEngine::GameObject* HealerProduction::CreateUnitWithOrder()
 {
-	auto unitGameObject = UnitProductionOrder::CreateUnitToOrder();
+	auto unitGameObject = UnitProductionOrder::CreateUnitWithOrder();
 	return unitGameObject;
 }

@@ -1,6 +1,6 @@
 #include "MagicianProduction.h"
 
-void MagicianProduction::SetUnitData()
+void MagicianProduction::SetUnitData(GameObject* fbxObject)
 {
 	m_objectName = "Magician";
 	m_unitType = Unit::UnitType::Magician;
@@ -12,8 +12,8 @@ void MagicianProduction::SetUnitData()
 	m_unitSpeed = 1.0f;
 }
 
-yunutyEngine::GameObject* MagicianProduction::CreateUnitToOrder()
+yunutyEngine::GameObject* MagicianProduction::CreateUnitWithOrder()
 {
-	auto unitGameObject = UnitProductionOrder::CreateUnitToOrder();
+	auto unitGameObject = UnitProductionOrder::CreateUnitWithOrder();
 	return unitGameObject;
 }

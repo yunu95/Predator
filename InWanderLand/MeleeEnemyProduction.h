@@ -1,7 +1,7 @@
 #pragma once
 #include "UnitProductionOrder.h"
 
-class MagicianProduction : public UnitProductionOrder
+class MeleeEnemyProduction : public UnitProductionOrder
 {
 public:
 	virtual void SetUnitData(GameObject* fbxObject) override;

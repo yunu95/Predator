@@ -4,6 +4,8 @@
 //#include <memory>
 #include <list>
 
+using namespace yunuGI;
+
 /// <summary>
 /// 유닛들이 공유하는 멤버.
 /// 기본적으로 모든 유닛은 BaseUnitEntity를 상속한다.
@@ -60,6 +62,12 @@ private:
 	float m_bulletSpeed;
 
 	float chaseUpdateDelay;
+	// 유닛의 현재 회전값을 동경각으로 나타냅니다. 유닛은 currentRotation이 0도일때 동쪽(양의 X 방향), 90도일때 북쪽(양의 z 방향)을 향합니다.
+	float currentRotation{270};
+	// 유닛이 바라봐야 하는 회전값을 동경각으로 나타냅니다. 유닛은 회전속도에 따라 회전값을 desiredRotation과 일치하게 바꿉니다.
+	float desiredRotation{270};
+	float rotationSpeed{ 500 };
+
 
 	// 지금 수행중인 명령
 	UnitState currentOrder = UnitState::Idle;
@@ -76,8 +84,10 @@ private:
 	float chaseFunctionElapsed;
 	float chaseFunctionCallDelay = 0.1f;
 
+	float attackStartDelay = 0.3f;
 	float attackFunctionElapsed;
-	float attackFunctionCallDelay = 0.3f;
+	float attackFunctionCallDelay = 0.5f;
+	bool isAttackStarted = false;
 
 	float deathFunctionElapsed;
 	float deathAnimationDelay = 1.5f;
@@ -86,6 +96,7 @@ private:
 	float qSkillFunctionStartedElapsed;
 	float qSkillStartDelay = 1.0f;
 	float qSkillAnimationDuration = 1.0f;
+
 	bool isSkillStarted;
 
 	bool isAttackMoving;
@@ -99,6 +110,15 @@ private:
 	Vector3d m_currentMovePosition;							// 현재 상대의 위치
 
 	Vector3d m_currentSkillPosition;
+
+private:
+	/// <summary>
+	/// 애니메이션 관련 멤버
+	/// </summary>
+	IAnimation* m_idleAnimation;
+	IAnimation* m_walkAnimation;
+	IAnimation* m_attackAnimation;
+	IAnimation* m_deathAnimation;
 
 private:
 	void IdleEngage();
@@ -133,6 +153,8 @@ private:
 	void DeathUpdateFunction();
 
 	void StopMove();
+	void LookAt(Vector3d destination);
+	
 	void DetermineCurrentTargetObject();
 	void ReportUnitDeath();												// this 유닛이 죽었다는 정보를 전달
 	void IdentifiedOpponentDeath(yunutyEngine::GameObject* obj);		// 상대 유닛이 죽었을 경우 처리할 내용을 담은 함수
@@ -151,6 +173,11 @@ public:
 	void SetIdRadius(float radius);
 	void SetAtkRadius(float radius);
 	void SetUnitSpeed(float speed);
+
+	void SetIdleAnimation(IAnimation* idleAnim);
+	void SetWalkAnimation(IAnimation* walkAnim);
+	void SetAttackAnimation(IAnimation* attackAnim);
+	void SetDeathAnimation(IAnimation* deathAnim);
 
 	void SetPlayerSerialNumber();
 	int GetPlayerSerialNumber() const;
