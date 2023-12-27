@@ -27,6 +27,7 @@ VertexOut main(VertexIn input)
 {
     VertexOut output;
     row_major matrix WV = mul(input.world,VTM);
+    //row_major matrix WV = mul(WTM, VTM);
     row_major matrix VP = mul(VTM,PTM);
     
     //output.posH = mul(float4(input.pos, 1.f), WVP);

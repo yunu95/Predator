@@ -116,7 +116,7 @@ void ResourceManager::PushFBXBoneInfo(const std::wstring fbxName, std::map<std::
 
 void ResourceManager::PushFBXNode(const std::wstring fbxName, FBXNode* fbxNode)
 {
-	this->fbxNodeMap.insert({fbxName, fbxNode});
+	this->fbxNodeMap.insert({ fbxName, fbxNode });
 }
 
 yunuGI::IMaterial* ResourceManager::CrateMaterial(std::wstring materialName)
@@ -555,10 +555,10 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 	DirectX::SimpleMath::Quaternion quat;
 	wtm.Decompose(scale, quat, pos);
 
-	fbxData->pos = yunuGI::Vector3{pos.x, pos.y,pos.z};
-	fbxData->scale = yunuGI::Vector3{ scale.x, scale.y,scale.z};
-	fbxData->quat = yunuGI::Vector4{ quat.x, quat.y, quat.z, quat.w};
-	
+	fbxData->pos = yunuGI::Vector3{ pos.x, pos.y,pos.z };
+	fbxData->scale = yunuGI::Vector3{ scale.x, scale.y,scale.z };
+	fbxData->quat = yunuGI::Vector4{ quat.x, quat.y, quat.z, quat.w };
+
 
 	for (int i = 0; i < node->meshVec.size(); ++i)
 	{
@@ -570,6 +570,14 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 			mesh->SetName(node->meshVec[i].meshName);
 			mesh->SetData(node->meshVec[i].vertex, node->meshVec[i].indices);
 			this->meshMap.insert({ node->meshVec[i].meshName, mesh });
+		}
+		else
+		{
+			if (node->meshVec.size() != 1)
+			{
+				std::static_pointer_cast<Mesh>(this->meshMap.find(node->meshVec[i].meshName)->second)
+					->SetData(node->meshVec[i].vertex, node->meshVec[i].indices);
+			}
 		}
 
 		if (this->materialMap.find(node->meshVec[i].material.materialName) == this->materialMap.end())

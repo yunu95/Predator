@@ -15,6 +15,7 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
 	{
 		auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		renderer->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(fbxNode->meshName));
+		//renderer->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(fbxNode->nodeName));
 
 		// Material Data Set
 		for (int j = 0; j < fbxNode->materialVec.size(); ++j)

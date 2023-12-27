@@ -31,10 +31,10 @@ private:
 	DirectX::SimpleMath::Matrix vtmOrtho;
 	DirectX::SimpleMath::Matrix ptm;
 	float fov = DirectX::XM_PI / 4.f;
-	float cameraNear = 1.f;
+	float cameraNear = 0.1f;
 	float cameraFar = 1000.f;
-	float width = 1280;
-	float height = 800;
+	float width = 1920;
+	float height = 1080;
 
 };
 
