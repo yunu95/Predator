@@ -26,21 +26,21 @@ namespace application
 
 			switch (templateDataManager.GetDataType(dataName))
 			{
-				case DataType::Terrain:
+				case DataType::TerrainData:
 				{
-					instance = new Terrain(dataName);
+					instance = new TerrainData(dataName);
 					break;
 				}
 
-				case DataType::Unit:
+				case DataType::UnitData:
 				{
-					instance = new Unit(dataName);
+					instance = new UnitData(dataName);
 					break;
 				}
 
-				case DataType::Ornament:
+				case DataType::OrnamentData:
 				{
-					instance = new Ornament(dataName);
+					instance = new OrnamentData(dataName);
 					break;
 				}
 
@@ -195,21 +195,21 @@ namespace application
 
 			switch (type)
 			{
-				case DataType::Terrain:
+				case DataType::TerrainData:
 				{
-					instance = new Terrain();
+					instance = new TerrainData();
 					break;
 				}
 
-				case DataType::Unit:
+				case DataType::UnitData:
 				{
-					instance = new Unit();
+					instance = new UnitData();
 					break;
 				}
 
-				case DataType::Ornament:
+				case DataType::OrnamentData:
 				{
-					instance = new Ornament();
+					instance = new OrnamentData();
 					break;
 				}
 

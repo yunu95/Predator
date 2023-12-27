@@ -45,6 +45,15 @@ namespace application
 				Size
 			};
 
+			enum class Module_List
+			{
+				TemplateDataEditor	= 0,
+
+				/// Size를 자동으로 넣기 위해 사용하는 enum
+				/// 첫 패널이 0 이고, 모든 간격이 1일 때에 가능함
+				Size
+			};
+
 			static std::function<void()> testInitializer;
 
 			void UI_DrawMenubar();

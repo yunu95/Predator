@@ -225,13 +225,13 @@
     <ClInclude Include="ITemplateData.h">
       <Filter>Editor\DataSystem\EditableData\TemplateData</Filter>
     </ClInclude>
-    <ClInclude Include="Ornament.h">
+    <ClInclude Include="OrnamentData.h">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClInclude>
-    <ClInclude Include="Terrain.h">
+    <ClInclude Include="TerrainData.h">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClInclude>
-    <ClInclude Include="Unit.h">
+    <ClInclude Include="UnitData.h">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClInclude>
     <ClInclude Include="Unit_TemplateData.h">
@@ -375,10 +375,10 @@
     <ClCompile Include="Ornament.cpp">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClCompile>
-    <ClCompile Include="Terrain.cpp">
+    <ClCompile Include="TerrainData.cpp">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClCompile>
-    <ClCompile Include="Unit.cpp">
+    <ClCompile Include="UnitData.cpp">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClCompile>
     <ClCompile Include="Ornament_TemplateData.cpp">

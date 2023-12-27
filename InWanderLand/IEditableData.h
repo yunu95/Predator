@@ -25,9 +25,9 @@ namespace application
 		enum class DataType
 		{
 			None,			// ¿¹¿Ü¿ë
-			Terrain,
-			Unit,
-			Ornament
+			TerrainData,
+			UnitData,
+			OrnamentData
 		};
 
 		class IEditableData

@@ -1,11 +1,11 @@
 /// 2023. 11. 23 김상준
 /// IEditableData 의 구체화된 클래스
-/// 장식물
+/// 지형
 
 #pragma once
 
 #include "IEditableData.h"
-#include "Ornament_TemplateData.h"
+#include "Terrain_TemplateData.h"
 
 #include <memory>
 #include <string>
@@ -22,17 +22,17 @@ namespace application
 {
 	namespace editor
 	{
-		class Ornament;
+		class TerrainData;
 
-		struct POD_Ornament
+		struct POD_Terrain
 		{
-			Ornament_TemplateData* templateData;
+			Terrain_TemplateData* templateData = nullptr;
 
-			TO_JSON(POD_Ornament);
-			FROM_JSON(POD_Ornament);
+			TO_JSON(POD_Terrain);
+			FROM_JSON(POD_Terrain);
 		};
 
-		class Ornament
+		class TerrainData
 			: public IEditableData
 		{
 			friend class InstanceManager;
@@ -43,7 +43,7 @@ namespace application
 			virtual bool SetTemplateData(const std::string& dataName) override;
 			virtual IEditableData* Clone() const override;
 
-			POD_Ornament pod;
+			POD_Terrain pod;
 
 		protected:
 			virtual bool PreEncoding(json& data) const override;
@@ -54,10 +54,10 @@ namespace application
 		private:
 			static TemplateDataManager& templateDataManager;
 
-			Ornament();
-			Ornament(const std::string& name);
-			Ornament(const Ornament& prototype);
-			Ornament& operator=(const Ornament& prototype);
+			TerrainData();
+			TerrainData(const std::string& name);
+			TerrainData(const TerrainData& prototype);
+			TerrainData& operator=(const TerrainData& prototype);
 		};
 	}
 }

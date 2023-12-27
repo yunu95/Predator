@@ -1,4 +1,4 @@
-#include "Terrain.h"
+#include "TerrainData.h"
 
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
@@ -7,21 +7,21 @@ namespace application
 {
 	namespace editor
 	{
-		TemplateDataManager& Terrain::templateDataManager = TemplateDataManager::GetSingletonInstance();
+		TemplateDataManager& TerrainData::templateDataManager = TemplateDataManager::GetSingletonInstance();
 
-		bool Terrain::EnterDataFromTemplate()
+		bool TerrainData::EnterDataFromTemplate()
 		{
 			// 템플릿으로부터 초기화되는 데이터들 처리 영역	
 
 			return true;
 		}
 
-		ITemplateData* Terrain::GetTemplateData()
+		ITemplateData* TerrainData::GetTemplateData()
 		{
 			return pod.templateData;
 		}
 
-		bool Terrain::SetTemplateData(const std::string& dataName)
+		bool TerrainData::SetTemplateData(const std::string& dataName)
 		{
 			auto ptr = templateDataManager.GetTemplateData(dataName);
 			if (ptr == nullptr)
@@ -34,67 +34,67 @@ namespace application
 			return true;
 		}
 
-		IEditableData* Terrain::Clone() const
+		IEditableData* TerrainData::Clone() const
 		{
 			auto& imanager = InstanceManager::GetSingletonInstance();
 			auto instance = imanager.CreateInstance(pod.templateData->GetDataKey());
 
 			if (instance != nullptr)
 			{
-				static_cast<Terrain*>(instance)->pod = pod;
+				static_cast<TerrainData*>(instance)->pod = pod;
 			}
 
 			return instance;
 		}
 
-		bool Terrain::PreEncoding(json& data) const
+		bool TerrainData::PreEncoding(json& data) const
 		{
 			FieldPreEncoding<boost::pfr::tuple_size_v<POD_Terrain>>(pod, data["POD"]);
 
 			return true;
 		}
 
-		bool Terrain::PostEncoding(json& data) const
+		bool TerrainData::PostEncoding(json& data) const
 		{
 			FieldPostEncoding<boost::pfr::tuple_size_v<POD_Terrain>>(pod, data["POD"]);
 
 			return true;
 		}
 
-		bool Terrain::PreDecoding(const json& data)
+		bool TerrainData::PreDecoding(const json& data)
 		{
 			FieldPreDecoding<boost::pfr::tuple_size_v<POD_Terrain>>(pod, data["POD"]);
 
 			return true;
 		}
 
-		bool Terrain::PostDecoding(const json& data)
+		bool TerrainData::PostDecoding(const json& data)
 		{
 			FieldPostDecoding<boost::pfr::tuple_size_v<POD_Terrain>>(pod, data["POD"]);
 
 			return true;
 		}
 
-		Terrain::Terrain()
+		TerrainData::TerrainData()
 			: pod()
 		{
 
 		}
 
-		Terrain::Terrain(const std::string& name)
+		TerrainData::TerrainData(const std::string& name)
 			: IEditableData(), pod()
 		{
 			pod.templateData = static_cast<Terrain_TemplateData*>(templateDataManager.GetTemplateData(name));
 			EnterDataFromTemplate();
 		}
 
-		Terrain::Terrain(const Terrain& prototype)
+		TerrainData::TerrainData(const TerrainData& prototype)
 			: pod(prototype.pod)
 		{
 
 		}
 
-		Terrain& Terrain::operator=(const Terrain& prototype)
+		TerrainData& TerrainData::operator=(const TerrainData& prototype)
 		{
 			IEditableData::operator=(prototype);
 			pod = prototype.pod;

@@ -21,7 +21,7 @@ namespace application
 		class Unit_TemplateData
 			:public ITemplateData
 		{
-			friend class Unit;
+			friend class UnitData;
 			friend class TemplateDataManager;
 
 		public:

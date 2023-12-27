@@ -21,7 +21,7 @@ namespace application
 		class Terrain_TemplateData
 			:public ITemplateData
 		{
-			friend class Terrain;
+			friend class TerrainData;
 			friend class TemplateDataManager;
 
 		public:

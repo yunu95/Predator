@@ -17,15 +17,15 @@ void TestCaseMapFileIOInitializer()
 {
     using namespace application::editor;
     auto& tdm = TemplateDataManager::GetSingletonInstance();
-    tdm.CreateTemplateData("Terrain1", DataType::Terrain);
-    tdm.CreateTemplateData("Terrain2", DataType::Terrain);
-    tdm.CreateTemplateData("Terrain3", DataType::Terrain);
-    tdm.CreateTemplateData("Unit1", DataType::Unit);
-    tdm.CreateTemplateData("Unit2", DataType::Unit);
-    tdm.CreateTemplateData("Unit3", DataType::Unit);
-    tdm.CreateTemplateData("Ornament1", DataType::Ornament);
-    tdm.CreateTemplateData("Ornament2", DataType::Ornament);
-    tdm.CreateTemplateData("Ornament3", DataType::Ornament);
+    tdm.CreateTemplateData("Terrain1", DataType::TerrainData);
+    tdm.CreateTemplateData("Terrain2", DataType::TerrainData);
+    tdm.CreateTemplateData("Terrain3", DataType::TerrainData);
+    tdm.CreateTemplateData("Unit1", DataType::UnitData);
+    tdm.CreateTemplateData("Unit2", DataType::UnitData);
+    tdm.CreateTemplateData("Unit3", DataType::UnitData);
+    tdm.CreateTemplateData("Ornament1", DataType::OrnamentData);
+    tdm.CreateTemplateData("Ornament2", DataType::OrnamentData);
+    tdm.CreateTemplateData("Ornament3", DataType::OrnamentData);
 
     auto& im = InstanceManager::GetSingletonInstance();
     im.CreateInstance("Terrain1");
