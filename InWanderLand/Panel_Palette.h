@@ -1,5 +1,5 @@
 /// 2023. 11. 01 김상준
-/// Unit, Terrain 등 대단위에 대한 편집 시 옵션을 제공하는 팔레트 패널
+/// UnitData, TerrainData 등 대단위에 대한 편집 시 옵션을 제공하는 팔레트 패널
 
 #pragma once
 

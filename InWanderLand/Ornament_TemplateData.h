@@ -21,7 +21,7 @@ namespace application
 		class Ornament_TemplateData
 			:public ITemplateData
 		{
-			friend class Ornament;
+			friend class OrnamentData;
 			friend class TemplateDataManager;
 
 		public:

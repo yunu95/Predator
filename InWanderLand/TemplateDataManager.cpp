@@ -24,19 +24,19 @@ namespace application
 
 			switch (type)
 			{
-				case DataType::Terrain:
+				case DataType::TerrainData:
 				{
 					instance = new Terrain_TemplateData;
 					break;
 				}
 
-				case DataType::Unit:
+				case DataType::UnitData:
 				{
 					instance = new Unit_TemplateData;
 					break;
 				}
 
-				case DataType::Ornament:
+				case DataType::OrnamentData:
 				{
 					instance = new Ornament_TemplateData;
 					break;
@@ -73,19 +73,19 @@ namespace application
 			{
 				switch (type)
 				{
-					case DataType::Terrain:
+					case DataType::TerrainData:
 					{
 						*static_cast<Terrain_TemplateData*>(instance) = *static_cast<Terrain_TemplateData*>(const_cast<ITemplateData*>(prototype));
 						break;
 					}
 
-					case DataType::Unit:
+					case DataType::UnitData:
 					{
 						*static_cast<Unit_TemplateData*>(instance) = *static_cast<Unit_TemplateData*>(const_cast<ITemplateData*>(prototype));
 						break;
 					}
 
-					case DataType::Ornament:
+					case DataType::OrnamentData:
 					{
 						*static_cast<Ornament_TemplateData*>(instance) = *static_cast<Ornament_TemplateData*>(const_cast<ITemplateData*>(prototype));
 						break;
