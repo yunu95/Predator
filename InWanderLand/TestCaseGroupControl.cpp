@@ -92,12 +92,19 @@ void TestCaseGroupControlInit()
 	rsrcManager->LoadFile("FBX/Boss");
 
 	auto warriorProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<WarriorProduction>();
-	auto warriorFBXObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
-	warriorProductor->SetUnitData(warriorFBXObject);
+	warriorProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"));
 	auto player1GameObject = warriorProductor->CreateUnitWithOrder();
 	unitfactory->OrderCreateUnit(player1GameObject, navField, Vector3d(-7.0f, 0.0f, 0.0f));
 
+	auto magicianProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MagicianProduction>();
+	magicianProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"));
+	auto player2GameObject = magicianProductor->CreateUnitWithOrder();
+	unitfactory->OrderCreateUnit(player2GameObject, navField, Vector3d(-7.0f, 0.0f, 7.0f));
 
+	auto healerProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<HealerProduction>();
+	healerProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"));
+	auto player3GameObject = healerProductor->CreateUnitWithOrder();
+	unitfactory->OrderCreateUnit(player3GameObject, navField, Vector3d(-7.0f, 0.0f, -7.0f));
 
 	auto meleeEnemyProductor1 = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MeleeEnemyProduction>();
 	meleeEnemyProductor1->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Player"));
