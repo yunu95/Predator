@@ -22,18 +22,91 @@ void GraphicsTest()
 {
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	_resourceManager->LoadFile("FBX/BigTree");
-	_resourceManager->LoadFile("FBX/Bush");
-
-	for (int i = 0; i < 500; ++i)
+	_resourceManager->LoadFile("FBX/Sponza");
+	//_resourceManager->LoadFile("FBX/Bush");
+	_resourceManager->LoadFile("FBX/Boss");
+	auto& shaderList = _resourceManager->GetShaderList();
+	auto& meshList = _resourceManager->GetMeshList();
 	{
-		auto tempX = static_cast<float>(rand() % 100);
-		auto tempZ = static_cast<float>(rand() % 100);
-		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("BigTree");
-		object->GetTransform()->position = Vector3d{tempX,0,tempZ};
-		auto object1 = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Bush");
-		object1->GetTransform()->position = Vector3d{tempZ,0,tempX};
+		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		object->GetTransform()->position = Vector3d{0,0,-4};
+		auto light = object->AddComponent<yunutyEngine::graphics::PointLight>();
+		yunuGI::Color color = yunuGI::Color{0,0,1,1};
+		light->GetGI().SetLightDiffuseColor(color);
+		light->GetGI().SetRange(10);
 	}
+	{
+		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		object->GetTransform()->scale = Vector3d{20,20,20 };
+		object->GetTransform()->position = Vector3d{ 0,0,-4 };
+		auto renderer = object->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		yunuGI::Color color = yunuGI::Color{ 0,0,1,1 };
+		renderer->GetGI().GetMaterial()->SetColor(color);
+		for (auto& i : meshList)
+		{
+			if (i->GetName() == L"Sphere")
+			{
+				renderer->GetGI().SetMesh(i);
+			}
+		}
+		for (auto& i : shaderList)
+		{
+			if (i->GetName() == L"DebugPS.cso")
+			{
+				renderer->GetGI().GetMaterial()->SetPixelShader(i);
+			}
+		}
+		for (auto& i : shaderList)
+		{
+			if (i->GetName() == L"DebugVS.cso")
+			{
+				renderer->GetGI().GetMaterial()->SetVertexShader(i);
+			}
+		}
+	}
+
+	//{
+	//	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//	object->GetTransform()->scale = Vector3d{ 20,20,20 };
+	//	object->GetTransform()->position = Vector3d{ 0,0,10 };
+	//	auto renderer = object->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//	for (auto& i : meshList)
+	//	{
+	//		if (i->GetName() == L"Sphere")
+	//		{
+	//			renderer->GetGI().SetMesh(i);
+	//		}
+	//	}
+	//}
+
+	//for (int i = 0; i < 1000; ++i)
+	{
+		//auto tempX = static_cast<float>(rand() % 100);
+		//auto tempZ = static_cast<float>(rand() % 100);
+		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sponza");
+		object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
+		//object->GetTransform()->position = Vector3d{-10,0,4};
+		//object->GetTransform()->position = Vector3d{tempX,0,tempZ};
+		/*auto object1 = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Bush");
+		object1->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
+		object1->GetTransform()->position = Vector3d{ tempX,0,tempZ };*/
+	}
+
+	//{
+	//	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+	//	auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
+	//	auto& animationList = _resourceManager->GetAnimationList();
+
+	//	for (auto& i : animationList)
+	//	{
+	//		if (i->GetName() == L"root|000.Idle")
+	//		{
+	//			i->SetLoop(i);
+	//			animator->GetGI().PushAnimation(i);
+	//			animator->GetGI().Play(i);
+	//		}
+	//	}
+	//}
 }
 
 

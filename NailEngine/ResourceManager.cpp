@@ -395,6 +395,7 @@ void ResourceManager::CreateDefaultShader()
 {
 #pragma region VS
 	CreateShader(L"DefaultVS.cso");
+	CreateShader(L"DebugVS.cso");
 	CreateShader(L"SkinnedVS.cso");
 	CreateDeferredShader(L"Deferred_DirectionalLightVS.cso");
 	CreateDeferredShader(L"Deferred_PointLightVS.cso");
@@ -546,6 +547,19 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 	fbxData->hasAnimation = node->hasAnimation;
 	fbxData->child.resize(node->child.size());
 	fbxData->materialVec.resize(node->meshVec.size());
+
+
+	DirectX::SimpleMath::Matrix wtm = (node->worldMatrix);
+	DirectX::SimpleMath::Vector3 pos;
+	DirectX::SimpleMath::Vector3 scale;
+	DirectX::SimpleMath::Quaternion quat;
+	wtm.Decompose(scale, quat, pos);
+
+	fbxData->pos = yunuGI::Vector3{pos.x, pos.y,pos.z};
+	fbxData->scale = yunuGI::Vector3{ scale.x, scale.y,scale.z};
+	fbxData->quat = yunuGI::Vector4{ quat.x, quat.y, quat.z, quat.w};
+	
+
 	for (int i = 0; i < node->meshVec.size(); ++i)
 	{
 		fbxData->meshName = node->meshVec[i].meshName;
