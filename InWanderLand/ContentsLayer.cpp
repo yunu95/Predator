@@ -149,8 +149,8 @@ void application::Contents::ContentsLayer::Initialize()
 
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
-	auto rtsCam = camObj->AddComponent<graphics::Camera>();
-	rtsCam->GetTransform()->position = Vector3d(0, 0, -10);
+	auto rtsCam = camObj->AddComponent<RTSCam>();
+	//rtsCam->GetTransform()->position = Vector3d(0, 0, -10);
 
 	//// 길찾기 테스트
 	//{
