@@ -4,19 +4,17 @@
 class TestComponent2 : public yunutyEngine::Component
 {
 public:
-	graphics::Animator* anim;
-	yunuGI::IAnimation* walkAnimation;
-	yunuGI::IAnimation* idleAnimation;
+	GameObject* gameObject;
 
 	void Update()
 	{
 		if (Input::isKeyDown(KeyCode::H))
 		{
-			anim->GetGI().ChangeAnimation(walkAnimation, 1.f, 1.f);
+			yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(gameObject);
 		}
 		if (Input::isKeyDown(KeyCode::J))
 		{
-			anim->GetGI().ChangeAnimation(idleAnimation, 1.f, 1.f);
+
 		}
 	}
 };

@@ -24,7 +24,10 @@ public:
 			this->original = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"SkinnedDefaultMaterial"));
 		}
 	}
-
+	~MaterialWrapper()
+	{
+		int a = 1;
+	}
 	virtual void SetName(const std::wstring& materialName) override
 	{
 		GetVariation()->SetName(materialName);

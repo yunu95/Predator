@@ -26,28 +26,17 @@ void SnippetAnimationChangeInterpolationInit()
 
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	_resourceManager->LoadFile("FBX/Boss");
-	auto& animationList = _resourceManager->GetAnimationList();
-	for (int i = 0; i < 100; ++i)
+	_resourceManager->LoadFile("FBX/Bush");
+	
 	{
-		{
-			auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
-			auto tempX = static_cast<float>(rand() % 100);
-			auto tempZ = static_cast<float>(rand() % 100);
-			object->GetTransform()->position = Vector3d{ tempX,0,tempZ };
-			auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
+		auto bush = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Bush");
 
-			for (auto& i : animationList)
-			{
-				if (i->GetName() == L"root|000.Idle")
-				{
-					i->SetLoop(true);
-					animator->GetGI().PushAnimation(i);
-					animator->GetGI().Play(i);
-				}
-			}
-		}
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto test = obj->AddComponent<TestComponent2>();
+		
+		test->gameObject = bush;
 	}
+
 
 	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
