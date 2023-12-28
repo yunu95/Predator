@@ -480,6 +480,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="TerrainData.cpp" />
     <ClCompile Include="Terrain_TemplateData.cpp" />
     <ClCompile Include="TestCaseMapFileIO.cpp" />
+    <ClCompile Include="TestCasePhysxTrigger.cpp" />
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="Unit_TemplateData.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObj.cpp" />

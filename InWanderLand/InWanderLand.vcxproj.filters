@@ -525,5 +525,8 @@
     <ClCompile Include="SnippetPhysxCollider.cpp">
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
+    <ClCompile Include="TestCasePhysxTrigger.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
