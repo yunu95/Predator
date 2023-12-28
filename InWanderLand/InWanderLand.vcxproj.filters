@@ -435,5 +435,8 @@
     <ClCompile Include="SnippetAnimationChangeInterpolation.cpp">
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
+    <ClCompile Include="SnippetAllGraphicsWorked.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

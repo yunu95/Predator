@@ -331,8 +331,8 @@ void RenderSystem::DrawDeferredInfo()
 		matRotation *= DirectX::SimpleMath::Matrix::CreateRotationZ(0.f);
 		/// 
 		DirectX::SimpleMath::Matrix matTranslation = DirectX::SimpleMath::Matrix::CreateTranslation(DirectX::SimpleMath::Vector3(
-			((-width/2.f) + ((width/10.f)*(i+2)))
-			,((height/2.f) - ((height/10.f)*2.f) + 22.f)
+			((-width/2.f) + ((width*0.05) + ((width/10.f) * i)))
+			,((height/2.f) - ((height*0.05)))
 			,1.f)
 		);
 		/// 

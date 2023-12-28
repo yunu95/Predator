@@ -443,6 +443,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="MapFileManager.cpp" />
     <ClCompile Include="Ornament.cpp" />
     <ClCompile Include="Ornament_TemplateData.cpp" />
+    <ClCompile Include="SnippetAllGraphicsWorked.cpp" />
     <ClCompile Include="SnippetAnimation.cpp" />
     <ClCompile Include="SnippetAnimationChangeInterpolation.cpp" />
     <ClCompile Include="SnippetTemplate.cpp" />

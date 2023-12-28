@@ -39,13 +39,13 @@ void SnippetAnimationChangeInterpolationInit()
 			auto test = object->AddComponent<TestComponent2>();
 			object->GetTransform()->position = Vector3d{ temp,temp2,0 };
 			auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
-			test->anim = animator;
+			//test->anim = animator;
 			auto& animationList = _resourceManager->GetAnimationList();
 			for (auto& i : animationList)
 			{
 				if (i->GetName() == L"root|000.Idle")
 				{
-					test->idleAnimation = i;
+					//test->idleAnimation = i;
 					i->SetPlaySpeed(2.f);
 					i->SetLoop(true);
 					animator->GetGI().PushAnimation(i);
@@ -54,7 +54,7 @@ void SnippetAnimationChangeInterpolationInit()
 
 				if (i->GetName() == L"root|001-2.Walk")
 				{
-					test->walkAnimation = i;
+					//test->walkAnimation = i;
 					i->SetPlaySpeed(0.5f);
 					i->SetLoop(true);
 					animator->GetGI().PushAnimation(i);
