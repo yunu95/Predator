@@ -72,8 +72,9 @@ PS_OUT main(PixelIn input)
     if (UseTexture(useNormal) == 1)
     {
         // [0, 255] 범위에서 [0, 1]로 변환
-        float3 tangentSpaceNormal = pow(NormalMap.Sample(sam, input.uv).xyz, 1 / 2.2f);
+        //float3 tangentSpaceNormal = pow(NormalMap.Sample(sam, input.uv).xyz, 1 / 2.2f);
         //float3 tangentSpaceNormal = pow(NormalMap.Sample(sam, input.uv).xyz, 2.2f);
+        float3 tangentSpaceNormal = NormalMap.Sample(sam, input.uv).xyz;
         
         // [0, 1] 범위에서 [-1, 1]로 변환
         tangentSpaceNormal = (tangentSpaceNormal - 0.5f) * 2.f;

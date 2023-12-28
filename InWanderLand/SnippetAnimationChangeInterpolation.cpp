@@ -9,63 +9,85 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-// ÀÌ ÇÔ¼ö´Â °ÔÀÓÀÇ ±âº» ÃÊ±âÈ­ ÇÔ¼ö¸¦ ¿À¹ö¶óÀÌµåÇÕ´Ï´Ù.
+// ì´ í•¨ìˆ˜ëŠ” ê²Œì„ì˜ ê¸°ë³¸ ì´ˆê¸°í™” í•¨ìˆ˜ë¥¼ ì˜¤ë²„ë¼ì´ë“œí•©ë‹ˆë‹¤.
 void SnippetAnimationChangeInterpolationInit()
 {
-	yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+    class TestComponent2 : public yunutyEngine::Component
+    {
+    public:
+        graphics::Animator* anim;
+        yunuGI::IAnimation* idleAnimation;
+        yunuGI::IAnimation* walkAnimation;
+    };
+    yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 
-	{
-		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-		directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{90,0,45} };
-	}
+    {
+        auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+        directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{90,0,45} };
+    }
 
-	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    camObj->AddComponent<yunutyEngine::graphics::Camera>();
+    camObj->GetTransform()->position = Vector3d{ 0,4,-15 };
 
-	auto rtsCam = camObj->AddComponent<RTSCam>();
+    const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+    _resourceManager->LoadFile("FBX/Boss");
 
-	_resourceManager->LoadFile("FBX/Boss");
+    for (int i = 0; i < 1; ++i)
+    {
+        for (int j = 0; j < 1; ++j)
+        {
+            float temp = 2 * i;
+            float temp2 = 2 * j;
+            auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
 
-	for (int i = 0; i < 1000; ++i)
-	{
-		{
-			auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-			auto tempX = static_cast<float>(rand() % 100);
-			auto tempZ = static_cast<float>(rand() % 100);
-			object->GetTransform()->position = Vector3d{ tempX,0,tempZ };
-			auto renderer = object->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-			auto meshList = _resourceManager->GetMeshList();
-			for (auto& i : meshList)
-			{
-				if (i->GetName() == L"Sphere")
-				{
-					renderer->GetGI().SetMesh(i);
-				}
-			}
-		}
-	}
+            auto test = object->AddComponent<TestComponent2>();
+            object->GetTransform()->position = Vector3d{ temp,temp2,0 };
+            auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
+            test->anim = animator;
+            auto& animationList = _resourceManager->GetAnimationList();
+            for (auto& i : animationList)
+            {
+                if (i->GetName() == L"root|000.Idle")
+                {
+                    test->idleAnimation = i;
+                    i->SetPlaySpeed(2.f);
+                    i->SetLoop(true);
+                    animator->GetGI().PushAnimation(i);
+                    animator->GetGI().Play(i);
+                }
 
-	yunutyEngine::YunutyCycle::SingleInstance().Play();
+                if (i->GetName() == L"root|001-2.Walk")
+                {
+                    test->walkAnimation = i;
+                    i->SetPlaySpeed(0.5f);
+                    i->SetLoop(true);
+                    animator->GetGI().PushAnimation(i);
+                }
+            }
+        }
+    }
+
+    yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 namespace snippets
 {
-	TEST_CLASS(InWanderLand)
-	{
-	public:
-		// Å×½ºÆ® ÇÔ¼öÀÇ ÀÌ¸§ÀÌ SnippetÀ¸·Î ½ÃÀÛÇÏ´Â Å×½ºÆ®µéÀº ºôµåÀÇ ¼º°ø ¿©ºÎ ÆÇ´Ü¿¡ ¾²ÀÌÁö ¾Ê½À´Ï´Ù.
-		// RunTests.bat¸¦ ½ÇÇàÇØµµ ÀÌ Å×½ºÆ®µéÀº ½ÇÇàµÇÁö ¾ÊÀ¸¸ç, Jenkins¿¡¼­µµ ÀÌ Å×½ºÆ®µéÀº ½ÇÇàµÇÁö ¾Ê½À´Ï´Ù.
-		// ÀÌ Å×½ºÆ®µéÀº ¿ÀÁ÷ °³¹ßÀÚ°¡ Á÷Á¢ ¿£Æ®¸® Æ÷ÀÎÆ®¸¦ ´Ş¸®ÇÏ¿© Å×½ºÆ®¸¦ ÁøÇàÇÏ°í ½ÍÀ» ¶§ÀÇ ¿ëµµ·Î¸¸ »ç¿ëµË´Ï´Ù.
-		TEST_METHOD(SnippetAnimationChangeInterpolation)
-		{
-			application::Application& client = application::Application::CreateApplication(0, 0);
-			application::Contents::ContentsLayer::AssignTestInitializer(SnippetAnimationChangeInterpolationInit);
-			client.Initialize();
-			client.Run();
-			client.Finalize();
-		}
-	};
+
+    TEST_CLASS(InWanderLand)
+    {
+    public:
+        // TestComponent2ì•ˆì— Hí‚¤ì™€ Jí‚¤ë¥¼ ëˆŒë €ì„ ë•Œ ì• ë‹ˆë©”ì´ì…˜ ì „í™˜í•˜ê²Œ ë˜ì–´ìˆìŒ.
+        TEST_METHOD(SnippetAnimationChangeInterpolation)
+        {
+            application::Application& client = application::Application::CreateApplication(0, 0);
+            application::Contents::ContentsLayer::AssignTestInitializer(SnippetAnimationChangeInterpolationInit);
+            client.Initialize();
+            client.Run();
+            client.Finalize();
+        }
+    };
 }
 #endif

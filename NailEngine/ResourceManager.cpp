@@ -116,7 +116,7 @@ void ResourceManager::PushFBXBoneInfo(const std::wstring fbxName, std::map<std::
 
 void ResourceManager::PushFBXNode(const std::wstring fbxName, FBXNode* fbxNode)
 {
-	this->fbxNodeMap.insert({fbxName, fbxNode});
+	this->fbxNodeMap.insert({ fbxName, fbxNode });
 }
 
 yunuGI::IMaterial* ResourceManager::CrateMaterial(std::wstring materialName)
@@ -135,20 +135,18 @@ yunuGI::IMaterial* ResourceManager::CrateMaterial(std::wstring materialName)
 	return material.get();
 }
 
-std::shared_ptr<Material> ResourceManager::CreateInstanceMaterial(const std::shared_ptr<Material> material)
+Material* ResourceManager::CreateInstanceMaterial(const Material* material)
 {
 	Material* _material = new Material(*material);
-	std::shared_ptr<Material> instanceMaterial(_material);
 
-	std::wstring materialName = instanceMaterial->GetName();
+	std::wstring materialName = _material->GetName();
 	materialName += L"_instance_";
-	materialName += std::to_wstring(instanceMaterial->GetID());
-	instanceMaterial->SetName(materialName);
+	materialName += std::to_wstring(_material->GetID());
+	_material->SetName(materialName);
 
+	instanceMaterialMap.insert({ materialName, std::shared_ptr<Material>(_material)});
 
-	instanceMaterialMap.insert({ materialName, instanceMaterial });
-
-	return instanceMaterial;
+	return _material;
 }
 
 void ResourceManager::CreateTexture(const std::wstring& texturePath)
@@ -395,6 +393,7 @@ void ResourceManager::CreateDefaultShader()
 {
 #pragma region VS
 	CreateShader(L"DefaultVS.cso");
+	CreateShader(L"DebugVS.cso");
 	CreateShader(L"SkinnedVS.cso");
 	CreateDeferredShader(L"Deferred_DirectionalLightVS.cso");
 	CreateDeferredShader(L"Deferred_PointLightVS.cso");
@@ -543,17 +542,40 @@ void ResourceManager::CreateDefaultTexture()
 void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yunuGI::FBXData* fbxData)
 {
 	fbxData->nodeName = node->nodeName;
+	fbxData->hasAnimation = node->hasAnimation;
 	fbxData->child.resize(node->child.size());
 	fbxData->materialVec.resize(node->meshVec.size());
+
+
+	DirectX::SimpleMath::Matrix wtm = (node->worldMatrix);
+	DirectX::SimpleMath::Vector3 pos;
+	DirectX::SimpleMath::Vector3 scale;
+	DirectX::SimpleMath::Quaternion quat;
+	wtm.Decompose(scale, quat, pos);
+
+	fbxData->pos = yunuGI::Vector3{ pos.x, pos.y,pos.z };
+	fbxData->scale = yunuGI::Vector3{ scale.x, scale.y,scale.z };
+	fbxData->quat = yunuGI::Vector4{ quat.x, quat.y, quat.z, quat.w };
+
+
 	for (int i = 0; i < node->meshVec.size(); ++i)
 	{
+		fbxData->meshName = node->meshVec[i].meshName;
 		// 실제 Mesh와 Material을 만들자
-		if (this->meshMap.find(node->nodeName) == this->meshMap.end())
+		if (this->meshMap.find(node->meshVec[i].meshName) == this->meshMap.end())
 		{
 			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
-			mesh->SetName(node->nodeName);
+			mesh->SetName(node->meshVec[i].meshName);
 			mesh->SetData(node->meshVec[i].vertex, node->meshVec[i].indices);
-			this->meshMap.insert({ node->nodeName, mesh });
+			this->meshMap.insert({ node->meshVec[i].meshName, mesh });
+		}
+		else
+		{
+			if (node->meshVec.size() != 1)
+			{
+				std::static_pointer_cast<Mesh>(this->meshMap.find(node->meshVec[i].meshName)->second)
+					->SetData(node->meshVec[i].vertex, node->meshVec[i].indices);
+			}
 		}
 
 		if (this->materialMap.find(node->meshVec[i].material.materialName) == this->materialMap.end())

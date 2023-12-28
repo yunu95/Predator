@@ -83,28 +83,33 @@ public:
 
             if (yunutyEngine::Input::isKeyDown(KeyCode::LeftArrow))
             {
-                Quaternion& rot = GetTransform()->rotation;
-                auto euler = rot.Euler();
-                rot = Quaternion{ Vector3d{euler.x,euler.y -= (20.0f * Time::GetDeltaTime())   , euler.z} };
+                //Quaternion& rot = GetTransform()->rotation;
+                //auto euler = rot.Euler();
+                //rot = Quaternion{ Vector3d{euler.x,euler.y -= (20.0f * Time::GetDeltaTime())   , euler.z} };
+                euler.y -= (20.0f * Time::GetDeltaTime());
             }
             if (yunutyEngine::Input::isKeyDown(KeyCode::RightArrow))
             {
-                Quaternion& rot = GetTransform()->rotation;
-                auto euler = rot.Euler();
-                rot = Quaternion{ Vector3d{euler.x,euler.y += (20.0f * Time::GetDeltaTime())   , euler.z} };
+                //Quaternion& rot = GetTransform()->rotation;
+                //auto euler = rot.Euler();
+                //rot = Quaternion{ Vector3d{euler.x,euler.y += (20.0f * Time::GetDeltaTime())   , euler.z} };
+                euler.y += (20.0f * Time::GetDeltaTime());
             }
             if (yunutyEngine::Input::isKeyDown(KeyCode::UpArrow))
             {
-                Quaternion& rot = GetTransform()->rotation;
-                auto euler = rot.Euler();
-                rot = Quaternion{ Vector3d{euler.x -= (20.0f * Time::GetDeltaTime()) ,euler.y , euler.z   } };
+                //Quaternion& rot = GetTransform()->rotation;
+                //auto euler = rot.Euler();
+                //rot = Quaternion{ Vector3d{euler.x -= (20.0f * Time::GetDeltaTime()) ,euler.y , euler.z   } };
+                euler.x -= (20.0f * Time::GetDeltaTime());
             }
             if (yunutyEngine::Input::isKeyDown(KeyCode::DownArrow))
             {
-                Quaternion& rot = GetTransform()->rotation;
-                auto euler = rot.Euler();
-                rot = Quaternion{ Vector3d{euler.x += (20.0f * Time::GetDeltaTime()) ,euler.y , euler.z   } };
+                //Quaternion& rot = GetTransform()->rotation;
+                //auto euler = rot.Euler();
+                //rot = Quaternion{ Vector3d{euler.x += (20.0f * Time::GetDeltaTime()) ,euler.y , euler.z   } };
+                euler.x += (20.0f * Time::GetDeltaTime());
             }
+            GetTransform()->rotation = Quaternion{ euler };
 
             //if (yunutyEngine::Input::is
             // 
@@ -171,11 +176,11 @@ public:
                 if (groundRightClickReleaseCallback) groundRightClickReleaseCallback(projectedPoint);
             }
 
-
             groundHoveringClickCallback(projectedPoint);
         }
     }
 private:
     float expectedPlaneDistance() { return abs(GetTransform()->GetWorldPosition().y); };
+    Vector3d euler;
 };
 

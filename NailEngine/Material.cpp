@@ -58,7 +58,7 @@ const yunuGI::IShader* Material::GetPixelShader() const
 
 Material::~Material()
 {
-
+	int a = 1;
 }
 
 void Material::PushGraphicsData()

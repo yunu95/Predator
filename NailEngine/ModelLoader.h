@@ -30,7 +30,7 @@ public:
 	FBXNode* LoadModel(const char* filePath);
 
 private:
-	void ParseNode(const aiNode* node, const aiScene* scene, FBXNode* fbxNode);
+	void ParseNode(const aiNode* node, const aiScene* scene, FBXNode* fbxNode, DirectX::SimpleMath::Matrix parentMatrix);
 	void ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMeshData& fbxMeshData);
 	void AddHasAnimation(FBXNode* fbxNode);
 	void LoadAnimation(const aiScene* scene, const std::wstring& fbxName);

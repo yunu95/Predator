@@ -52,6 +52,11 @@ void RenderSystem::SortObject()
 
 	for (auto& e : staticRenderableSet)
 	{
+		if(e->IsActive() == false)
+		{
+			continue;
+		}
+
 		auto mesh = e->GetMesh();
 		for (int i = 0; i < mesh->GetMaterialCount(); ++i)
 		{
@@ -77,6 +82,11 @@ void RenderSystem::SortObject()
 
 	for (auto& e : skinnedRenderableSet)
 	{
+		if (e->IsActive() == false)
+		{
+			continue;
+		}
+
 		auto mesh = e->GetMesh();
 		for (int i = 0; i < mesh->GetMaterialCount(); ++i)
 		{
@@ -243,7 +253,7 @@ void RenderSystem::RenderSkinned()
 		}
 
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.renderInfo.material->GetName()))->PushGraphicsData();
-		mesh->Render(nullptr,e.renderInfo.materialIndex);
+		mesh->Render(e.renderInfo.materialIndex,nullptr);
 	}
 }
 
@@ -304,7 +314,7 @@ void RenderSystem::RenderForward()
 		auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.mesh->GetName()));
 
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.material->GetName()))->PushGraphicsData();
-		mesh->Render(nullptr,e.materialIndex);
+		mesh->Render(e.materialIndex, nullptr);
 	}
 }
 

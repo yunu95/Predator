@@ -31,20 +31,21 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 	}
 
 	FBXNode* fbxNode = new FBXNode;
-	ParseNode(scene->mRootNode, scene, fbxNode);
+	ParseNode(scene->mRootNode, scene, fbxNode, this->ConvertToCloumnMajor(scene->mRootNode->mTransformation));
 
 	FillVertexBoneIndexAndWeight(scene, scene->mRootNode, fbxNode);
-
-	if (scene->HasAnimations())
-	{
-		AddHasAnimation(fbxNode);
-	}
 
 	ResourceManager::Instance.Get().PushFBXBoneInfo(std::filesystem::path(filePath).stem().wstring(), this->boneInfoMap);
 
 	ResourceManager::Instance.Get().PushFBXNode(std::filesystem::path(filePath).stem().wstring(), fbxNode);
 
-	LoadAnimation(scene, std::filesystem::path(filePath).stem().wstring());
+	if (scene->HasAnimations())
+	{
+		AddHasAnimation(fbxNode);
+		LoadAnimation(scene, std::filesystem::path(filePath).stem().wstring());
+	}
+
+	///LoadAnimation(scene, std::filesystem::path(filePath).stem().wstring());
 
 	boneInfoMap.clear();
 	animationClipVec.clear();
@@ -52,17 +53,20 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 	return fbxNode;
 }
 
-void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* fbxNode)
+void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* fbxNode, DirectX::SimpleMath::Matrix parentMatrix)
 {
 	fbxNode->nodeName = this->aiStringToWString(node->mName);
 	fbxNode->transformMatrix = this->ConvertToCloumnMajor(node->mTransformation);
-
+	//fbxNode->worldMatrix = parentMatrix * fbxNode->transformMatrix;
+	fbxNode->worldMatrix = fbxNode->transformMatrix * parentMatrix;
 	for (int i = 0; i < node->mNumMeshes; ++i)
 	{
 		FBXMeshData fbxMeshData;
 
 		unsigned int meshIndex = node->mMeshes[i];
 		aiMesh* mesh = scene->mMeshes[meshIndex];
+
+		fbxMeshData.meshName = this->aiStringToWString(mesh->mName);
 
 		for (int j = 0; j < mesh->mNumVertices; ++j)
 		{
@@ -120,7 +124,7 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 	{
 		FBXNode* fbxChildNode = new FBXNode;
 		fbxNode->child[i] = fbxChildNode;
-		ParseNode(node->mChildren[i], scene, fbxChildNode);
+		ParseNode(node->mChildren[i], scene, fbxChildNode, fbxNode->worldMatrix);
 	}
 }
 

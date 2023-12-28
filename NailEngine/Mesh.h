@@ -29,7 +29,7 @@ class Mesh : public yunuGI::IMesh, public Resource
 public:
 	void SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& indexVec);
 
-	void Render(std::shared_ptr<InstanceBuffer> buffer = nullptr, unsigned int materialIndex = 0);
+	void Render(unsigned int materialIndex = 0, std::shared_ptr<InstanceBuffer> buffer = nullptr);
 
 
 #pragma region Getter
