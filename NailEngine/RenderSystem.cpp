@@ -52,6 +52,11 @@ void RenderSystem::SortObject()
 
 	for (auto& e : staticRenderableSet)
 	{
+		if(e->IsActive() == false)
+		{
+			continue;
+		}
+
 		auto mesh = e->GetMesh();
 		for (int i = 0; i < mesh->GetMaterialCount(); ++i)
 		{
@@ -77,6 +82,11 @@ void RenderSystem::SortObject()
 
 	for (auto& e : skinnedRenderableSet)
 	{
+		if (e->IsActive() == false)
+		{
+			continue;
+		}
+
 		auto mesh = e->GetMesh();
 		for (int i = 0; i < mesh->GetMaterialCount(); ++i)
 		{

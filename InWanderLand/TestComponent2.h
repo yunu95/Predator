@@ -10,11 +10,12 @@ public:
 	{
 		if (Input::isKeyDown(KeyCode::H))
 		{
-			yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(gameObject);
+			//yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(gameObject);
+			gameObject->SetSelfActive(false);
 		}
 		if (Input::isKeyDown(KeyCode::J))
 		{
-
+			gameObject->SetSelfActive(true);
 		}
 	}
 };

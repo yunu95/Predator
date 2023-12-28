@@ -34,7 +34,10 @@ namespace yunuGIAdapter
 			renderable->SetWorldTM(reinterpret_cast<const DirectX::SimpleMath::Matrix&>(worldTM));
 		};
 
-		virtual void SetActive(bool isActive) {};
+		virtual void SetActive(bool isActive)
+		{
+			renderable->SetActive(isActive);
+		};
 
 		virtual void SetMesh(yunuGI::IMesh* mesh) override
 		{

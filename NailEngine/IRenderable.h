@@ -35,6 +35,10 @@ public:
 			this->materialVec[index] = reinterpret_cast<Material*>(material);
 		}
 	}
+	void SetActive(bool isActive)
+	{
+		this->isActive = isActive;
+	}
 #pragma endregion
 
 #pragma region Getter
@@ -47,11 +51,16 @@ public:
 	{
 		return materialVec[index]; 
 	}
+	bool IsActive()
+	{
+		return isActive;
+	}
 #pragma endregion
 
 protected:
 	DirectX::SimpleMath::Matrix wtm;
 	Mesh* mesh;
 	std::vector<Material*> materialVec;
+	bool isActive = true;
 };
 

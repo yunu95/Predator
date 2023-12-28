@@ -26,8 +26,9 @@ public:
 	}
 	~MaterialWrapper()
 	{
-		int a = 1;
+
 	}
+
 	virtual void SetName(const std::wstring& materialName) override
 	{
 		GetVariation()->SetName(materialName);
