@@ -6,7 +6,7 @@
 #include "Layer.h"
 #include <functional>
 
-namespace Application
+namespace application
 {
     namespace Contents
     {

@@ -239,6 +239,9 @@
     <ClInclude Include="IAnimator.h">
       <Filter>Header Files\Animator</Filter>
     </ClInclude>
+    <ClInclude Include="YunuVector2.h">
+      <Filter>raw</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Yunu3DGraphicsEngine.rc">

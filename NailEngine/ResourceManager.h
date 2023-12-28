@@ -3,21 +3,26 @@
 #include "YunuGraphicsInterface.h"
 
 #include "Utils.h"
+#include "Struct.h"
 #include "ModelData.h"
 
 #include <wrl.h>
 #include <memory>
 #include <unordered_map>
 #include <map>
+#include <array>
 #include <d3d11.h>
 
 
-#include "FBXLoader.h"
+#include "ModelLoader.h"
 
 class Shader;
 class Mesh;
 class Texture;
 class Material;
+class Animation;
+class AnimationGroup;
+
 
 class ResourceManager
 {
@@ -36,7 +41,7 @@ public:
 	std::shared_ptr<Texture>& CreateTextureFromResource(const std::wstring& texturePath, Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D);
 
 	void LoadFBX(const char* filePath);
-	void CreateAnimation(const AnimationClip& animationClip);
+	void CreateAnimation(const std::vector<AnimationClip>& animationClip, const std::wstring& fbxName);
 
 private:
 	void CreateMesh(const std::wstring& mesh);
@@ -45,6 +50,7 @@ private:
 
 public:
 	void PushFBXBoneInfo(const std::wstring fbxName, std::map<std::wstring, BoneInfo>& boneInfoMap);
+	void PushFBXNode(const std::wstring fbxName, FBXNode* fbxNode);
 
 #pragma region Getter
 	std::shared_ptr<yunuGI::IMaterial> GetMaterial(const std::wstring& materialName);
@@ -67,6 +73,7 @@ public:
 	};
 	std::vector<yunuGI::IShader*>& GetShaderList() { return this->shaderVec; };
 	std::vector<yunuGI::IAnimation*>& GetAnimationList() { return this->animationVec; };
+	std::shared_ptr<AnimationGroup> GetAnimationGroup(const std::wstring& modelName);
 #pragma endregion
 
 private:
@@ -118,6 +125,8 @@ private:
 	// Animation 관련
 	std::vector<yunuGI::IAnimation*> animationVec;
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGI::IAnimation>> animationMap;
+	// 그래픽스에서 애니메이션을 텍스처로 활용하고 싶어서 만든 컨테이너
+	std::unordered_map<std::wstring, std::shared_ptr<AnimationGroup>> animationGroupMap;
 
 	std::unordered_map<std::wstring, yunuGI::FBXData*> fbxDataMap;
 	//// 게임 엔진에서 본 계층구조로 오브젝트 만들 때 쓰는용

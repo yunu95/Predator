@@ -12,6 +12,7 @@
 #include "PlayerController.h"
 #include "UnitFactory.h"
 #include "InputManager.h"
+#include "StatusTimerPool.h"
 #include "WarriorProduction.h"
 #include "HealerProduction.h"
 #include "MagicianProduction.h"
@@ -86,9 +87,12 @@ void TestCaseGroupControlInit()
 	/// UnitFactory
 	unique_ptr<UnitFactory> unitfactory = make_unique<UnitFactory>();
 
+	/// StatusManager 
+	StatusTimerPool::GetInstance()->SetUp();
+
 	/// FBX File Load
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-	rsrcManager->LoadFile("FBX/Player");
+	//rsrcManager->LoadFile("FBX/Player");
 	rsrcManager->LoadFile("FBX/Boss");
 
 	auto warriorProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<WarriorProduction>();
@@ -106,15 +110,15 @@ void TestCaseGroupControlInit()
 	auto player3GameObject = healerProductor->CreateUnitWithOrder();
 	unitfactory->OrderCreateUnit(player3GameObject, navField, Vector3d(-7.0f, 0.0f, -7.0f));
 
-	auto meleeEnemyProductor1 = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MeleeEnemyProduction>();
-	meleeEnemyProductor1->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Player"));
-	auto enemy1GameObject = meleeEnemyProductor1->CreateUnitWithOrder();
-	unitfactory->OrderCreateUnit(enemy1GameObject, navField, Vector3d(7.0f, 0.0f, 7.0f));
+	//auto meleeEnemyProductor1 = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MeleeEnemyProduction>();
+	//meleeEnemyProductor1->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Player"));
+	//auto enemy1GameObject = meleeEnemyProductor1->CreateUnitWithOrder();
+	//unitfactory->OrderCreateUnit(enemy1GameObject, navField, Vector3d(7.0f, 0.0f, 7.0f));
 
-	auto meleeEnemyProductor2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MeleeEnemyProduction>();
-	meleeEnemyProductor2->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Player"));
-	auto enemy2GameObject = meleeEnemyProductor2->CreateUnitWithOrder();
-	unitfactory->OrderCreateUnit(enemy2GameObject, navField, Vector3d(7.0f, 0.0f, 0.0f));
+	//auto meleeEnemyProductor2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MeleeEnemyProduction>();
+	//meleeEnemyProductor2->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Player"));
+	//auto enemy2GameObject = meleeEnemyProductor2->CreateUnitWithOrder();
+	//unitfactory->OrderCreateUnit(enemy2GameObject, navField, Vector3d(7.0f, 0.0f, 0.0f));
 
 
 	{
@@ -152,8 +156,8 @@ namespace InWanderLand
 	public:
 		TEST_METHOD(TestCaseGroupControl)
 		{
-			Application::Application& client = Application::Application::CreateApplication(0, 0);
-			Application::Contents::ContentsLayer::AssignTestInitializer(TestCaseGroupControlInit);
+			application::Application& client = application::Application::CreateApplication(0, 0);
+			application::Contents::ContentsLayer::AssignTestInitializer(TestCaseGroupControlInit);
 			client.Initialize();
 			client.Run();
 			client.Finalize();

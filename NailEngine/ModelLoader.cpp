@@ -40,11 +40,14 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 		AddHasAnimation(fbxNode);
 	}
 
-	LoadAnimation(scene);
-
 	ResourceManager::Instance.Get().PushFBXBoneInfo(std::filesystem::path(filePath).stem().wstring(), this->boneInfoMap);
 
+	ResourceManager::Instance.Get().PushFBXNode(std::filesystem::path(filePath).stem().wstring(), fbxNode);
+
+	LoadAnimation(scene, std::filesystem::path(filePath).stem().wstring());
+
 	boneInfoMap.clear();
+	animationClipVec.clear();
 
 	return fbxNode;
 }
@@ -168,7 +171,7 @@ void ModelLoader::AddHasAnimation(FBXNode* fbxNode)
 	}
 }
 
-void ModelLoader::LoadAnimation(const aiScene* scene)
+void ModelLoader::LoadAnimation(const aiScene* scene, const std::wstring& fbxName)
 {
 	for (int i = 0; i < scene->mNumAnimations; ++i)
 	{
@@ -229,8 +232,10 @@ void ModelLoader::LoadAnimation(const aiScene* scene)
 			animationClip.keyFrameInfoVec[r].resize(maxKeyCount, keyFrameInfo);
 		}
 
-		ResourceManager::Instance.Get().CreateAnimation(animationClip);
+		this->animationClipVec.emplace_back(animationClip);
 	}
+
+	ResourceManager::Instance.Get().CreateAnimation(this->animationClipVec, fbxName);
 }
 
 void ModelLoader::FillVertexBoneIndexAndWeight(const aiScene* scene, const aiNode* node, FBXNode* fbxNode)

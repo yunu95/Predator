@@ -6,6 +6,7 @@
 #include <memory>
 #include <string>
 #include <map>
+#include <vector>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -32,7 +33,7 @@ private:
 	void ParseNode(const aiNode* node, const aiScene* scene, FBXNode* fbxNode);
 	void ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMeshData& fbxMeshData);
 	void AddHasAnimation(FBXNode* fbxNode);
-	void LoadAnimation(const aiScene* scene);
+	void LoadAnimation(const aiScene* scene, const std::wstring& fbxName);
 
 	void FillVertexBoneIndexAndWeight(const aiScene* scene, const aiNode* node, FBXNode* fbxNode);
 
@@ -43,6 +44,7 @@ private:
 	std::wstring texturePath;
 
 	std::map<std::wstring, BoneInfo> boneInfoMap;
+	std::vector<AnimationClip> animationClipVec;
 
 };
 

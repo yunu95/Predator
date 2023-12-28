@@ -97,6 +97,9 @@ private:
 	float qSkillStartDelay = 1.0f;
 	float qSkillAnimationDuration = 1.0f;
 
+	float animationLerpDuration = 1.0f;
+	float animationTransitionSpeed = 3.0f;
+
 	bool isSkillStarted;
 
 	bool isAttackMoving;
@@ -186,7 +189,8 @@ public:
 	void SetCurrentOrderAttackMove();
 
 	int GetUnitAp() const;
-	void Damaged(GameObject* opponentObject, int opponentAp);
+	void Damaged(GameObject* opponentObject, int opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
+	void Damaged(int dmg);										// 추적받지 않는 데미지
 
 	void OrderMove(Vector3d position);
 	void OrderAttackMove(Vector3d position);

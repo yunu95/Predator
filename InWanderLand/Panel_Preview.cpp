@@ -2,20 +2,13 @@
 
 #include "imgui.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
-		std::unique_ptr<PreviewPanel> PreviewPanel::instance = nullptr;
-
-		PreviewPanel& PreviewPanel::GetInstance()
+		PreviewPanel::PreviewPanel()
 		{
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<PreviewPanel>(new PreviewPanel());
-			}
 
-			return *instance;
 		}
 
 		PreviewPanel::~PreviewPanel()
@@ -48,11 +41,6 @@ namespace Application
 		}
 
 		void PreviewPanel::Finalize()
-		{
-
-		}
-
-		PreviewPanel::PreviewPanel()
 		{
 
 		}

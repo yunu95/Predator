@@ -79,6 +79,8 @@ void Unit::Start()
 	unitFSM.updateAction[UnitState::Attack] = [this]() { AttackUpdate(); };
 	unitFSM.updateAction[UnitState::QSkill] = [this]() { QSkillUpdate(); };
 	unitFSM.updateAction[UnitState::Death] = [this]() { DeathUpdate(); };
+
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_idleAnimation);
 }
 
 void Unit::Update()
@@ -209,8 +211,7 @@ void Unit::AttackUpdate()
 	{
 		if (!isAttackStarted)
 		{
-			GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
-			GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_attackAnimation);
+			GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_attackAnimation, animationLerpDuration, animationTransitionSpeed);
 			isAttackStarted = true;
 		}
 		AttackUpdateFunction();
@@ -263,8 +264,7 @@ void Unit::DeathUpdate()
 /// </summary>
 void Unit::IdleEngageFunction()
 {
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_idleAnimation);
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 
 	DetermineCurrentTargetObject();
 
@@ -281,23 +281,19 @@ void Unit::IdleEngageFunction()
 
 void Unit::MoveEngageFunction()
 {
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
-
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_walkAnimation);
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
 }
 
 void Unit::AttackMoveEngageFunction()
 {
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
 
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_walkAnimation);
 }
 
 void Unit::ChaseEngageFunction()
 {
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
 
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_walkAnimation);
 }
 
 void Unit::AttackEngageFunction()
@@ -310,15 +306,12 @@ void Unit::AttackEngageFunction()
 
 	// ¹Ù·Î ½î±â
 	ProjectileSystem::GetInstance()->Shoot(this, m_currentTargetObject->GetComponent<Unit>(), m_bulletSpeed);
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_attackAnimation);
-
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_attackAnimation, animationLerpDuration, animationTransitionSpeed);
 }
 
 void Unit::DeathEngageFunction()
 {
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_deathAnimation);
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_deathAnimation, animationLerpDuration, animationTransitionSpeed);
 
 	m_opponentObjectList.clear();
 
@@ -519,6 +512,11 @@ void Unit::Damaged(GameObject* opponentObject, int opponentAp)
 		AddToOpponentObjectList(opponentObject);
 
 	m_hp -= opponentAp;
+}
+
+void Unit::Damaged(int dmg)
+{
+	m_hp -= dmg;
 }
 
 void Unit::DetermineCurrentTargetObject()

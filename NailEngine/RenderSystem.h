@@ -53,8 +53,8 @@ public:
 	void DrawDeferredInfo();
 
 private:
-	void BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo);
-	void ReadBone(FBXNode* fbxNode, DirectX::SimpleMath::Matrix parentMatrix, const std::string& fbxName, std::shared_ptr<NailAnimator> animator);
+	//void BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo);
+	//void ReadBone(FBXNode* fbxNode, DirectX::SimpleMath::Matrix parentMatrix, const std::string& fbxName, std::shared_ptr<NailAnimator> animator);
 
 private:
 	std::vector<RenderInfo> deferredVec;

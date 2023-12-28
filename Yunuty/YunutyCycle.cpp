@@ -81,6 +81,8 @@ bool yunutyEngine::YunutyCycle::IsUpdating()
 
 void yunutyEngine::YunutyCycle::ThreadFunction()
 {
+    if (preThreadAction)
+        preThreadAction();
     while (isGameRunning)
     {
         {
@@ -93,10 +95,12 @@ void yunutyEngine::YunutyCycle::ThreadFunction()
 
         auto sleepImplied = 10;
         sleepImplied -= Time::GetDeltaTimeUnscaled() * 1000;
-		/*   if (sleepImplied > 1)
-			   std::this_thread::sleep_for(std::chrono::milliseconds(sleepImplied));
+        /*   if (sleepImplied > 1)
+               std::this_thread::sleep_for(std::chrono::milliseconds(sleepImplied));
        */
-	}
+    }
+    if (postThreadAction)
+        postThreadAction();
 }
 // Update components and render camera
 void yunutyEngine::YunutyCycle::ThreadUpdate()
@@ -134,6 +138,10 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 
         Collider2D::InvokeCollisionEvents();
         graphics::Renderer::SingleInstance().Update(Time::GetDeltaTime());
+
+        if (postUpdateAction)
+            postUpdateAction();
+
         if (autoRendering)
         {
             graphics::Renderer::SingleInstance().Render();

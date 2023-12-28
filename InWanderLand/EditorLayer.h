@@ -7,19 +7,22 @@
 
 #include <vector>
 #include <memory>
+#include <functional>
 
 #include "Layer.h"
 #include "CommandManager.h"
 #include "EditorPanel.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class EditorLayer
 			: public Layer
 		{
 		public:
+			static void AssignTestInitializer(std::function<void()> testInitializer);
+
 			virtual void Initialize() override;
 			// virtual void EventProgress(Events& e) override;
 			virtual void Update(float ts) override;
@@ -42,9 +45,20 @@ namespace Application
 				Size
 			};
 
+			enum class Module_List
+			{
+				TemplateDataEditor	= 0,
+
+				/// Size를 자동으로 넣기 위해 사용하는 enum
+				/// 첫 패널이 0 이고, 모든 간격이 1일 때에 가능함
+				Size
+			};
+
+			static std::function<void()> testInitializer;
+
 			void UI_DrawMenubar();
 
-			CommandManager& cm = CommandManager::GetInstance();
+			CommandManager& cm = CommandManager::GetSingletonInstance();
 			std::vector<Panel*> editorPanelList;
 		};
 	}

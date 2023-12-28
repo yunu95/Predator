@@ -2,20 +2,13 @@
 
 #include "imgui.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
-	{
-		std::unique_ptr<HierarchyPanel> HierarchyPanel::instance = nullptr;
-
-		HierarchyPanel& HierarchyPanel::GetInstance()
+	namespace editor
+	{	
+		HierarchyPanel::HierarchyPanel()
 		{
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<HierarchyPanel>(new HierarchyPanel());
-			}
 
-			return *instance;
 		}
 
 		HierarchyPanel::~HierarchyPanel()
@@ -48,11 +41,6 @@ namespace Application
 		}
 
 		void HierarchyPanel::Finalize()
-		{
-
-		}
-
-		HierarchyPanel::HierarchyPanel()
 		{
 
 		}

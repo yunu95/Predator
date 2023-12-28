@@ -3,7 +3,7 @@
 // Main code
 int main(int argc, char** argv)
 {
-	Application::Application& client = Application::Application::CreateApplication(argc, argv);
+	application::Application& client = application::Application::CreateApplication(argc, argv);
 	client.Initialize();
 	client.Run();
 	client.Finalize();

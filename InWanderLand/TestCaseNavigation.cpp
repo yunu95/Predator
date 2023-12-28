@@ -88,7 +88,7 @@ void TestCaseNavigationInit()
     // delayedTestFunctions에 2초 후 실행시킬 콜백 함수를 등록합니다. 이 콜백함수는 게임 엔진 스레드에서 호출됩니다.
     delayedTestFunctions->todoList.push_back({ 2,[=]() {
         // 게임 엔진 스레드에서 메인 스레드에서 특정 동작을 구동시키고 싶다면 아래의 AddMainLoopTodo 함수를 사용합니다.
-        Application::Application::GetInstance().AddMainLoopTodo([=]() {
+        application::Application::GetInstance().AddMainLoopTodo([=]() {
             // Assert 함수군은 테스트 케이스의 실행 성공 여부를 판단하는데에 쓰입니다.
             // Assert의 실행은 메인 스레드에서 실행되어야 합니다.
             Assert::IsTrue((agent->GetTransform()->GetWorldPosition() - moveDestination).MagnitudeSqr() < 0.3,L"navigation agent couldn't move to a specific location!");
@@ -97,10 +97,10 @@ void TestCaseNavigationInit()
             } });
     delayedTestFunctions->todoList.push_back({ 2.2,[=]() {
         // 게임 엔진 스레드에서 메인 스레드에서 특정 동작을 구동시키고 싶다면 아래의 AddMainLoopTodo 함수를 사용합니다.
-        Application::Application::GetInstance().AddMainLoopTodo([=]() {
+        application::Application::GetInstance().AddMainLoopTodo([=]() {
             Assert::IsTrue((agent->GetTransform()->GetWorldPosition() - Vector3d{-7.5,0,0}).MagnitudeSqr() < 1,L"navigation agent's ""Relocate"" method didn't really relocate the agent!");
             // 위 식이 참이라면 프로그램을 종료합니다. 
-            Application::Application::GetInstance().TurnOff();
+            application::Application::GetInstance().TurnOff();
                 });
             } });
     yunutyEngine::YunutyCycle::SingleInstance().Play();
@@ -113,8 +113,8 @@ namespace InWanderLand
     public:
         TEST_METHOD(TestCaseNavigation)
         {
-            Application::Application& client = Application::Application::CreateApplication(0, 0);
-            Application::Contents::ContentsLayer::AssignTestInitializer(TestCaseNavigationInit);
+            application::Application& client = application::Application::CreateApplication(0, 0);
+            application::Contents::ContentsLayer::AssignTestInitializer(TestCaseNavigationInit);
             client.Initialize();
             client.Run();
             client.Finalize();
