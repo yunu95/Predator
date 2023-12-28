@@ -1,6 +1,6 @@
 /// 2023. 11. 23 김상준
 /// ITemplateData 의 구체화된 클래스
-/// 장식물
+/// 유닛
 
 #pragma once
 
@@ -10,24 +10,24 @@ namespace application
 {
 	namespace editor
 	{
-		class Ornaments_TemplateData;
+		class Unit_TemplateData;
 
-		struct POD_Ornaments_TemplateData
+		struct POD_Unit_TemplateData
 		{
-			TO_JSON(POD_Ornaments_TemplateData);
-			FROM_JSON(POD_Ornaments_TemplateData);
+			TO_JSON(POD_Unit_TemplateData);
+			FROM_JSON(POD_Unit_TemplateData);
 		};
 
-		class Ornaments_TemplateData
+		class Unit_TemplateData
 			:public ITemplateData
 		{
-			friend class Ornaments;
+			friend class UnitData;
 			friend class TemplateDataManager;
 
 		public:
 			virtual std::string GetDataKey() const override;
 
-			POD_Ornaments_TemplateData pod;
+			POD_Unit_TemplateData pod;
 
 		protected:
 			virtual bool PreEncoding(json& data) const override;
@@ -36,10 +36,9 @@ namespace application
 			virtual bool PostDecoding(const json& data) override;
 
 		private:
-			Ornaments_TemplateData();
-			Ornaments_TemplateData(const Ornaments_TemplateData& prototype);
-			Ornaments_TemplateData& operator=(const Ornaments_TemplateData& prototype);
+			Unit_TemplateData();
+			Unit_TemplateData(const Unit_TemplateData& prototype);
+			Unit_TemplateData& operator=(const Unit_TemplateData& prototype);
 		};
 	}
 }
-

@@ -22,19 +22,18 @@ namespace application
 {
 	namespace editor
 	{
+		enum class DataType
+		{
+			None,			// 예외용
+			TerrainData,
+			UnitData,
+			OrnamentData
+		};
+
 		class IEditableData
 			: public Identifiable, public Storable
 		{
 			friend class InstanceManager;
-
-		public:
-			enum class DataType
-			{
-				None,			// 예외용
-				Terrain,
-				Units,
-				Ornaments
-			};
 
 		public:
 			virtual ~IEditableData() = default;

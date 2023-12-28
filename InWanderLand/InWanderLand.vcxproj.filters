@@ -225,19 +225,19 @@
     <ClInclude Include="ITemplateData.h">
       <Filter>Editor\DataSystem\EditableData\TemplateData</Filter>
     </ClInclude>
-    <ClInclude Include="Ornaments.h">
+    <ClInclude Include="OrnamentData.h">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClInclude>
-    <ClInclude Include="Terrain.h">
+    <ClInclude Include="TerrainData.h">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClInclude>
-    <ClInclude Include="Units.h">
+    <ClInclude Include="UnitData.h">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClInclude>
-    <ClInclude Include="Units_TemplateData.h">
+    <ClInclude Include="Unit_TemplateData.h">
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClInclude>
-    <ClInclude Include="Ornaments_TemplateData.h">
+    <ClInclude Include="Ornament_TemplateData.h">
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClInclude>
     <ClInclude Include="Terrain_TemplateData.h">
@@ -372,22 +372,22 @@
     <ClCompile Include="InstanceManager.cpp">
       <Filter>Editor\DataSystem</Filter>
     </ClCompile>
-    <ClCompile Include="Ornaments.cpp">
+    <ClCompile Include="Ornament.cpp">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClCompile>
-    <ClCompile Include="Terrain.cpp">
+    <ClCompile Include="TerrainData.cpp">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClCompile>
-    <ClCompile Include="Units.cpp">
+    <ClCompile Include="UnitData.cpp">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClCompile>
-    <ClCompile Include="Ornaments_TemplateData.cpp">
+    <ClCompile Include="Ornament_TemplateData.cpp">
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClCompile>
     <ClCompile Include="Terrain_TemplateData.cpp">
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClCompile>
-    <ClCompile Include="Units_TemplateData.cpp">
+    <ClCompile Include="Unit_TemplateData.cpp">
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClCompile>
     <ClCompile Include="TemplateDataManager.cpp">

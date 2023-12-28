@@ -26,21 +26,21 @@ namespace application
 
 			switch (templateDataManager.GetDataType(dataName))
 			{
-				case IEditableData::DataType::Terrain:
+				case DataType::TerrainData:
 				{
-					instance = new Terrain(dataName);
+					instance = new TerrainData(dataName);
 					break;
 				}
 
-				case IEditableData::DataType::Units:
+				case DataType::UnitData:
 				{
-					instance = new Units(dataName);
+					instance = new UnitData(dataName);
 					break;
 				}
 
-				case IEditableData::DataType::Ornaments:
+				case DataType::OrnamentData:
 				{
-					instance = new Ornaments(dataName);
+					instance = new OrnamentData(dataName);
 					break;
 				}
 
@@ -189,27 +189,27 @@ namespace application
 		}
 
 		/// private
-		IEditableData* InstanceManager::CreateEmptyInstance(const IEditableData::DataType& type)
+		IEditableData* InstanceManager::CreateEmptyInstance(const DataType& type)
 		{
 			IEditableData* instance = nullptr;
 
 			switch (type)
 			{
-				case IEditableData::DataType::Terrain:
+				case DataType::TerrainData:
 				{
-					instance = new Terrain();
+					instance = new TerrainData();
 					break;
 				}
 
-				case IEditableData::DataType::Units:
+				case DataType::UnitData:
 				{
-					instance = new Units();
+					instance = new UnitData();
 					break;
 				}
 
-				case IEditableData::DataType::Ornaments:
+				case DataType::OrnamentData:
 				{
-					instance = new Ornaments();
+					instance = new OrnamentData();
 					break;
 				}
 

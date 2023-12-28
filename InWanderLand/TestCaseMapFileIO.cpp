@@ -17,15 +17,15 @@ void TestCaseMapFileIOInitializer()
 {
     using namespace application::editor;
     auto& tdm = TemplateDataManager::GetSingletonInstance();
-    tdm.CreateTemplateData("Terrain1", IEditableData::DataType::Terrain);
-    tdm.CreateTemplateData("Terrain2", IEditableData::DataType::Terrain);
-    tdm.CreateTemplateData("Terrain3", IEditableData::DataType::Terrain);
-    tdm.CreateTemplateData("Unit1", IEditableData::DataType::Units);
-    tdm.CreateTemplateData("Unit2", IEditableData::DataType::Units);
-    tdm.CreateTemplateData("Unit3", IEditableData::DataType::Units);
-    tdm.CreateTemplateData("Ornament1", IEditableData::DataType::Ornaments);
-    tdm.CreateTemplateData("Ornament2", IEditableData::DataType::Ornaments);
-    tdm.CreateTemplateData("Ornament3", IEditableData::DataType::Ornaments);
+    tdm.CreateTemplateData("Terrain1", DataType::TerrainData);
+    tdm.CreateTemplateData("Terrain2", DataType::TerrainData);
+    tdm.CreateTemplateData("Terrain3", DataType::TerrainData);
+    tdm.CreateTemplateData("Unit1", DataType::UnitData);
+    tdm.CreateTemplateData("Unit2", DataType::UnitData);
+    tdm.CreateTemplateData("Unit3", DataType::UnitData);
+    tdm.CreateTemplateData("Ornament1", DataType::OrnamentData);
+    tdm.CreateTemplateData("Ornament2", DataType::OrnamentData);
+    tdm.CreateTemplateData("Ornament3", DataType::OrnamentData);
 
     auto& im = InstanceManager::GetSingletonInstance();
     im.CreateInstance("Terrain1");

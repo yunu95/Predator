@@ -1,11 +1,11 @@
 /// 2023. 11. 23 김상준
 /// IEditableData 의 구체화된 클래스
-/// 지형
+/// 유닛
 
 #pragma once
 
 #include "IEditableData.h"
-#include "Terrain_TemplateData.h"
+#include "Unit_TemplateData.h"
 
 #include <memory>
 #include <string>
@@ -22,17 +22,29 @@ namespace application
 {
 	namespace editor
 	{
-		class Terrain;
-
-		struct POD_Terrain
+		namespace unit
 		{
-			Terrain_TemplateData* templateData = nullptr;
+			enum class Affiliation
+			{
+				None,	// 예외용
+				Player,
+				Enemy
+			};
+		}
 
-			TO_JSON(POD_Terrain);
-			FROM_JSON(POD_Terrain);
+		class UnitData;
+
+		struct POD_Unit
+		{
+			Unit_TemplateData* templateData = nullptr;
+			unit::Affiliation dd = unit::Affiliation::None;
+
+			TO_JSON(POD_Unit);
+			FROM_JSON(POD_Unit);
+
 		};
 
-		class Terrain
+		class UnitData
 			: public IEditableData
 		{
 			friend class InstanceManager;
@@ -43,7 +55,7 @@ namespace application
 			virtual bool SetTemplateData(const std::string& dataName) override;
 			virtual IEditableData* Clone() const override;
 
-			POD_Terrain pod;
+			POD_Unit pod;
 
 		protected:
 			virtual bool PreEncoding(json& data) const override;
@@ -54,10 +66,10 @@ namespace application
 		private:
 			static TemplateDataManager& templateDataManager;
 
-			Terrain();
-			Terrain(const std::string& name);
-			Terrain(const Terrain& prototype);
-			Terrain& operator=(const Terrain& prototype);
+			UnitData();
+			UnitData(const std::string& name);
+			UnitData(const UnitData& prototype);
+			UnitData& operator=(const UnitData& prototype);
 		};
 	}
 }
