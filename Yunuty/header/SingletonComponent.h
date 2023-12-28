@@ -4,9 +4,9 @@
 
 namespace yunutyEngine
 {
-    // È£ÃâµÇ¸é ¹Ù·Î ½Ì±ÛÅæ Å¬·¡½º¸¦ ÀÚ½Ä Å¬·¡½ºÅ¸ÀÔÀ» ÅÛÇÃ¸´ ÆÄ¶ó¹ÌÅÍ·Î ¹Ş´Â ÅÛÇÃ¸´ Å¬·¡½º·Î ±¸ÇöÇÑ´Ù.
-    template<typename T> requires std::derived_from<T, yunutyEngine::Component>
-    class SingletonComponent
+    // í˜¸ì¶œë˜ë©´ ë°”ë¡œ ì‹±ê¸€í†¤ í´ë˜ìŠ¤ë¥¼ ìì‹ í´ë˜ìŠ¤íƒ€ì…ì„ í…œí”Œë¦¿ íŒŒë¼ë¯¸í„°ë¡œ ë°›ëŠ” í…œí”Œë¦¿ í´ë˜ìŠ¤ë¡œ êµ¬í˜„í•œë‹¤.
+    template<typename T> 
+    class SingletonComponent : virtual public yunutyEngine::Component
     {
     public:
         static T& Instance();

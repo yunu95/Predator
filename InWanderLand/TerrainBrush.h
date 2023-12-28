@@ -2,11 +2,11 @@
 #include "YunutyEngine.h"
 #include "SingletonComponent.h"
 
-namespace Application
+namespace application
 {
-    namespace Editor
+    namespace editor
     {
-        namespace Palette
+        namespace palette
         {
             class TerrainBrush : public yunutyEngine::SingletonComponent<TerrainBrush>
             {

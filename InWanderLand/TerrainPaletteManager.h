@@ -3,15 +3,17 @@
 #include "YunutyEngine.h"
 #include "SingletonClass.h"
 
-namespace Application
+namespace application
 {
-    namespace Editor
+    namespace editor
     {
-        namespace Palette
+        namespace palette
         {
             class TerrainPaletteManager : public PaletteManager, public  yunutyEngine::SingletonClass<TerrainPaletteManager>
             {
             public:
+                virtual PaletteInstance* PlaceInstance(Vector3d worldPosition) { return nullptr; };
+                virtual bool isSelectMode() { return false; };
             private:
             };
         }

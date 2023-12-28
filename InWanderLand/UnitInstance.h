@@ -1,11 +1,11 @@
 #pragma once
 #include "PaletteInstance.h"
 
-namespace Application
+namespace application
 {
-    namespace Editor
+    namespace editor
     {
-        namespace Palette
+        namespace palette
         {
             class UnitInstance : public PaletteInstance
             {

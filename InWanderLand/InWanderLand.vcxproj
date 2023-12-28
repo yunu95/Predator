@@ -367,6 +367,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
     <ClInclude Include="CamSwitcher.h" />
     <ClInclude Include="DoodadPaletteManager.h" />
+    <ClInclude Include="PaletteSelectCollider.h" />
     <ClInclude Include="PaletteInstance.h" />
     <ClInclude Include="PaletteManager.h" />
     <ClInclude Include="SelectionBox.h" />
@@ -455,8 +456,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="MapFileManager.cpp" />
     <ClCompile Include="Ornament.cpp" />
     <ClCompile Include="Ornament_TemplateData.cpp" />
+    <ClCompile Include="PaletteManager.cpp" />
     <ClCompile Include="SnippetAnimation.cpp" />
     <ClCompile Include="SnippetAnimationChangeInterpolation.cpp" />
+    <ClCompile Include="SnippetEditTerrain.cpp" />
+    <ClCompile Include="SnippetPhysxCollider.cpp" />
     <ClCompile Include="SnippetTemplate.cpp" />
     <ClCompile Include="Panel_CameraView.cpp" />
     <ClCompile Include="Panel_Hierarchy.cpp" />

@@ -3,11 +3,11 @@
 #include "YunutyEngine.h"
 #include "SingletonClass.h"
 
-namespace Application
+namespace application
 {
-    namespace Editor
+    namespace editor
     {
-        namespace Palette
+        namespace palette
         {
             class UnitPaletteManager : public PaletteManager, public yunutyEngine::SingletonClass<UnitPaletteManager>
             {

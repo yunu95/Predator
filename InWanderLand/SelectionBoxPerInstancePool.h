@@ -3,11 +3,11 @@
 #include "SelectionBoxPerInstance.h"
 #include "SingletonComponent.h"
 
-namespace Application
+namespace application
 {
-    namespace Editor
+    namespace editor
     {
-        namespace Palette
+        namespace palette
         {
             class SelectionBoxPerInstancePool :public GameObjectPool<SelectionBoxPerInstance>, public yunutyEngine::SingletonComponent<SelectionBoxPerInstancePool>
             {
