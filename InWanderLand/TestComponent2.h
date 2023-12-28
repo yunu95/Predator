@@ -8,10 +8,10 @@ public:
 
 	void Update()
 	{
-		if (Input::isKeyDown(KeyCode::H))
+		if (Input::isKeyPushed(KeyCode::H))
 		{
-			//yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(gameObject);
-			gameObject->SetSelfActive(false);
+			yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(gameObject);
+			//gameObject->SetSelfActive(false);
 		}
 		if (Input::isKeyDown(KeyCode::J))
 		{

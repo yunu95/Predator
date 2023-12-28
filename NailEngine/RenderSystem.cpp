@@ -175,7 +175,7 @@ void RenderSystem::Render()
 	RenderForward();
 
 	// 디퍼드 정보 출력
-	//DrawDeferredInfo();
+	DrawDeferredInfo();
 
 	// 디퍼드용 SRV UnBind
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
