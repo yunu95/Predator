@@ -24,7 +24,6 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
 			(
 				j, graphics::Renderer::SingleInstance().GetResourceManager()->GetMaterial(fbxNode->materialVec[j].materialName)
 			);
-			graphics::Renderer::SingleInstance().GetResourceManager()->GetMaterial(fbxNode->materialVec[j].materialName)->GetName();
 		}
 	}
 	else

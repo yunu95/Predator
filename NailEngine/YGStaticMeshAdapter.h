@@ -45,8 +45,6 @@ namespace yunuGIAdapter
 
 		virtual void SetMaterial(unsigned int index, yunuGI::IMaterial* material) override
 		{
-			std::shared_ptr<Material> materialPtr = std::shared_ptr<Material>(reinterpret_cast<Material*>(material));
-
 			// 새로운 Material이라면
 			if (index + 1 > this->materialVec.size())
 			{
@@ -56,22 +54,22 @@ namespace yunuGIAdapter
 
 				if (this->materialVec.back()->IsOrigin())
 				{
-					this->materialVec.back()->original = materialPtr;
+					this->materialVec.back()->original = reinterpret_cast<Material*>(material);
 				}
 				else
 				{
-					this->materialVec.back()->variation = materialPtr;
+					this->materialVec.back()->variation = reinterpret_cast<Material*>(material);
 				}
 			}
 			else
 			{
 				if (this->materialVec[index]->IsOrigin())
 				{
-					this->materialVec[index]->original = materialPtr;
+					this->materialVec[index]->original = reinterpret_cast<Material*>(material);
 				}
 				else
 				{
-					this->materialVec[index]->variation = materialPtr;
+					this->materialVec[index]->variation = reinterpret_cast<Material*>(material);
 				}
 			}
 

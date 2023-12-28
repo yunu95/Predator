@@ -135,20 +135,18 @@ yunuGI::IMaterial* ResourceManager::CrateMaterial(std::wstring materialName)
 	return material.get();
 }
 
-std::shared_ptr<Material> ResourceManager::CreateInstanceMaterial(const std::shared_ptr<Material> material)
+Material* ResourceManager::CreateInstanceMaterial(const Material* material)
 {
 	Material* _material = new Material(*material);
-	std::shared_ptr<Material> instanceMaterial(_material);
 
-	std::wstring materialName = instanceMaterial->GetName();
+	std::wstring materialName = _material->GetName();
 	materialName += L"_instance_";
-	materialName += std::to_wstring(instanceMaterial->GetID());
-	instanceMaterial->SetName(materialName);
+	materialName += std::to_wstring(_material->GetID());
+	_material->SetName(materialName);
 
+	instanceMaterialMap.insert({ materialName, std::shared_ptr<Material>(_material)});
 
-	instanceMaterialMap.insert({ materialName, instanceMaterial });
-
-	return instanceMaterial;
+	return _material;
 }
 
 void ResourceManager::CreateTexture(const std::wstring& texturePath)
