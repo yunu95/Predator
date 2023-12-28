@@ -32,7 +32,7 @@ namespace application
 			};
 		}
 
-		class Unit;
+		class UnitData;
 
 		struct POD_Unit
 		{
@@ -44,7 +44,7 @@ namespace application
 
 		};
 
-		class Unit
+		class UnitData
 			: public IEditableData
 		{
 			friend class InstanceManager;
@@ -66,10 +66,10 @@ namespace application
 		private:
 			static TemplateDataManager& templateDataManager;
 
-			Unit();
-			Unit(const std::string& name);
-			Unit(const Unit& prototype);
-			Unit& operator=(const Unit& prototype);
+			UnitData();
+			UnitData(const std::string& name);
+			UnitData(const UnitData& prototype);
+			UnitData& operator=(const UnitData& prototype);
 		};
 	}
 }
