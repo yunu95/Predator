@@ -22,12 +22,14 @@ struct IndexBuffer
 	std::vector<unsigned int> indexVec;
 };
 
+class InstanceBuffer;
+
 class Mesh : public yunuGI::IMesh, public Resource
 {
 public:
 	void SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& indexVec);
 
-	void Render(unsigned int materialIndex = 0);
+	void Render(unsigned int materialIndex = 0, std::shared_ptr<InstanceBuffer> buffer = nullptr);
 
 
 #pragma region Getter

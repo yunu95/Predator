@@ -43,11 +43,12 @@ struct FBXMeshData
 };
 
 struct FBXNode
-{
+{ 
 	std::wstring nodeName;
 	std::vector<FBXNode*> child;
 	std::vector<FBXMeshData> meshVec;
 	DirectX::SimpleMath::Matrix transformMatrix;
-	bool hasAnimation;
+	DirectX::SimpleMath::Matrix worldMatrix;
+	bool hasAnimation = false;
 };
 

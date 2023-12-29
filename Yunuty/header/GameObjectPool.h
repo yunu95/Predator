@@ -16,19 +16,19 @@ using namespace std;
 using namespace yunutyEngine;
 namespace yunutyEngine
 {
-    // ¿ÀºêÁ§Æ®°¡ ÇÊ¿äÇÏ¸é »ý¼ºÇÏ°í, »ý¼ºµÈ ¿ÀºêÁ§Æ®ÀÇ ¿ëµµ°¡ ´Ù ³¡³ª¸é Æó±âÇÏ´Â ´ë½Å ºñÈ°¼ºÈ­¸¸ ½ÃÄÑ³ù´Ù°¡,
-    // ´Ù½Ã ¿ÀºêÁ§Æ®¿¡ ´ëÇÑ ¿äÃ»ÀÌ µé¾î¿À¸é ÀçÈ°¼ºÈ­ ½ÃÅ°´Â ¿ÀºêÁ§Æ® Ç® °´Ã¼ÀÔ´Ï´Ù. 
+    // ì˜¤ë¸Œì íŠ¸ê°€ í•„ìš”í•˜ë©´ ìƒì„±í•˜ê³ , ìƒì„±ëœ ì˜¤ë¸Œì íŠ¸ì˜ ìš©ë„ê°€ ë‹¤ ëë‚˜ë©´ íê¸°í•˜ëŠ” ëŒ€ì‹  ë¹„í™œì„±í™”ë§Œ ì‹œì¼œë†¨ë‹¤ê°€,
+    // ë‹¤ì‹œ ì˜¤ë¸Œì íŠ¸ì— ëŒ€í•œ ìš”ì²­ì´ ë“¤ì–´ì˜¤ë©´ ìž¬í™œì„±í™” ì‹œí‚¤ëŠ” ì˜¤ë¸Œì íŠ¸ í’€ ê°ì²´ìž…ë‹ˆë‹¤. 
     template<typename ReprenstativeComponent>
-    class GameObjectPool : public Component
+    class GameObjectPool : virtual public Component
     {
         static_assert(std::is_base_of<Component, ReprenstativeComponent>::value, "only derived classes from component are allowed");
     public:
-        // ºô·ÁÁÙ ¿ÀºêÁ§Æ®°¡ ´Ü ÇÏ³ªµµ ¾øÀ» °æ¿ì, °ÔÀÓ¿ÀºêÁ§Æ®¿Í ±×¿¡ µþ¸° µÎ¸ñ ÄÄÆ÷³ÍÆ®¸¦ »ý¼ºÇÕ´Ï´Ù.
-        // ±× ÈÄ, »ý¼ºµÈ °ÔÀÓ ¿ÀºêÁ§Æ®¿Í µÎ¸ñ ÄÄÆ÷³ÍÆ®¸¦ ¸Å°³º¯¼ö·Î initializer¸¦ ½ÇÇàÇÕ´Ï´Ù.
+        // ë¹Œë ¤ì¤„ ì˜¤ë¸Œì íŠ¸ê°€ ë‹¨ í•˜ë‚˜ë„ ì—†ì„ ê²½ìš°, ê²Œìž„ì˜¤ë¸Œì íŠ¸ì™€ ê·¸ì— ë”¸ë¦° ë‘ëª© ì»´í¬ë„ŒíŠ¸ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
+        // ê·¸ í›„, ìƒì„±ëœ ê²Œìž„ ì˜¤ë¸Œì íŠ¸ì™€ ë‘ëª© ì»´í¬ë„ŒíŠ¸ë¥¼ ë§¤ê°œë³€ìˆ˜ë¡œ initializerë¥¼ ì‹¤í–‰í•©ë‹ˆë‹¤.
         void SetObjectInitializer(function<void(GameObject*, ReprenstativeComponent*)> initializer);
-        // °ÔÀÓ ¿ÀºêÁ§Æ® Ç®¿¡ ÀúÀåµÈ °ÔÀÓ ¿ÀºêÁ§Æ®¸¦ È°¼ºÈ­ÇÕ´Ï´Ù.
+        // ê²Œìž„ ì˜¤ë¸Œì íŠ¸ í’€ì— ì €ìž¥ëœ ê²Œìž„ ì˜¤ë¸Œì íŠ¸ë¥¼ í™œì„±í™”í•©ë‹ˆë‹¤.
         ReprenstativeComponent* Borrow();
-        // °ÔÀÓ ¿ÀºêÁ§Æ® Ç®¿¡¼­ °ü¸®ÇÏ´Â °ÔÀÓ ¿ÀºêÁ§Æ®¸¦ µÇµ¹·Á ÁÝ´Ï´Ù.
+        // ê²Œìž„ ì˜¤ë¸Œì íŠ¸ í’€ì—ì„œ ê´€ë¦¬í•˜ëŠ” ê²Œìž„ ì˜¤ë¸Œì íŠ¸ë¥¼ ë˜ëŒë ¤ ì¤ë‹ˆë‹¤.
         void Return(ReprenstativeComponent*);
         int poolObjectsSize() { return poolObjects.size(); };
         int expendableObjectsSize() { return expendableObjects.size(); };

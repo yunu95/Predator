@@ -17,7 +17,7 @@
 //#include <concepts>
 //#include <functional>
 //
-//namespace Application
+//namespace application
 //{
 //	namespace Editor
 //	{

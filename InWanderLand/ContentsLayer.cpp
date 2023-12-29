@@ -22,38 +22,60 @@ void GraphicsTest()
 {
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
+	_resourceManager->LoadFile("FBX/Sponza");
+	_resourceManager->LoadFile("FBX/Bush");
 	_resourceManager->LoadFile("FBX/Boss");
+	_resourceManager->LoadFile("FBX/BigTree");
+	//auto& shaderList = _resourceManager->GetShaderList();
+	//auto& meshList = _resourceManager->GetMeshList();
+	//{
+	//	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//	object->GetTransform()->position = Vector3d{0,0.25,0};
+	//	auto light = object->AddComponent<yunutyEngine::graphics::PointLight>();
+	//	yunuGI::Color color = yunuGI::Color{0,0,1,1};
+	//	light->GetGI().SetLightDiffuseColor(color);
+	//	light->GetGI().SetRange(0.3);
+	//}
 
-	for (int i = 0; i < 1; ++i)
+
+	//for (int i = 0; i < 1; ++i)
+	//{
+	//	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sponza");
+	//	object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
+	//	//object->GetTransform()->scale = Vector3d{ 1.01,1.01,1.01 };
+	//}
+
+	//{
+	//	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+	//	auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
+	//	auto& animationList = _resourceManager->GetAnimationList();
+
+	//	for (auto& i : animationList)
+	//	{
+	//		if (i->GetName() == L"root|000.Idle")
+	//		{
+	//			i->SetLoop(i);
+	//			animator->GetGI().PushAnimation(i);
+	//			animator->GetGI().Play(i);
+	//		}
+	//	}
+	//}
+	//for(int i = 0; i <500;++i)
+	//{
+	//	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("BigTree");
+	//	object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
+	//	float tempX = static_cast<float>(rand() % 100);
+	//	float tempZ = static_cast<float>(rand() % 100);
+	//	object->GetTransform()->position = Vector3d{tempX,0,tempZ};
+	//}
+
 	{
-		for (int j = 0; j < 1; ++j)
-		{
-			float temp = 2 * i;
-			float temp2 = 2 * j;
-			auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
-			auto test = object->AddComponent<TestComponent2>();
-			object->GetTransform()->position = Vector3d{ temp,temp2,0 };
-			auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
-			test->anim = animator;
-			auto& animationList = _resourceManager->GetAnimationList();
-			for (auto& i : animationList)
-			{
-				if (i->GetName() == L"root|000.Idle")
-				{
-					test->idleAnimation = i;
-					i->SetLoop(true);
-					animator->GetGI().PushAnimation(i);
-					animator->GetGI().Play(i);
-				}
+		auto bush = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Bush");
 
-				if (i->GetName() == L"root|001-2.Walk")
-				{
-					test->walkAnimation = i;
-					i->SetLoop(true);
-					animator->GetGI().PushAnimation(i);
-				}
-			}
-		}
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto test = obj->AddComponent<TestComponent2>();
+
+		test->gameObject = bush;
 	}
 }
 
@@ -128,7 +150,7 @@ void application::Contents::ContentsLayer::Initialize()
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
 	auto rtsCam = camObj->AddComponent<RTSCam>();
-	//rtsCam->GetTransform()->position = Vector3d(0, 10, 0);
+	//rtsCam->GetTransform()->position = Vector3d(0, 0, -10);
 
 	//// 길찾기 테스트
 	//{
@@ -175,11 +197,11 @@ void application::Contents::ContentsLayer::Finalize()
 #ifdef GEN_TESTS
 void application::Contents::ContentsLayer::AssignTestInitializer(std::function<void()> testInitializer)
 {
-    ContentsLayer::testInitializer = testInitializer;
-    YunutyCycle::SingleInstance().onExceptionThrown = [](const std::exception& e) {
-        application::Application::GetInstance().AddMainLoopTodo([=]() {
-            Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
-            });
-    };
+	ContentsLayer::testInitializer = testInitializer;
+	YunutyCycle::SingleInstance().onExceptionThrown = [](const std::exception& e) {
+		application::Application::GetInstance().AddMainLoopTodo([=]() {
+			Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
+			});
+	};
 }
 #endif

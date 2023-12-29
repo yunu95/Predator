@@ -59,7 +59,7 @@ namespace application
 
     Application& Application::GetInstance()
     {
-        assert(instance && "You must first create an Application.");
+        assert(instance && "You must first create an application.");
 
         return *instance;
     }
