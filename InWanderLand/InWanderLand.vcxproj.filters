@@ -100,6 +100,12 @@
     <Filter Include="Editor\Palette">
       <UniqueIdentifier>{a9b999c8-825f-44cf-a68d-f8b64f9f4397}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Panel\List\Module">
+      <UniqueIdentifier>{114c2856-9f92-45a3-9c0d-b670ed9f40cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Panel\List\Module\List">
+      <UniqueIdentifier>{0dde7a4c-816a-4065-9448-de7114622f91}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Editor\Palette\PaletteManager">
       <UniqueIdentifier>{f532809e-b9e7-4b03-8c8b-1ec33b8dd06c}</UniqueIdentifier>
     </Filter>
@@ -361,6 +367,15 @@
     <ClInclude Include="Singleton.h">
       <Filter>Editor\Etc</Filter>
     </ClInclude>
+    <ClInclude Include="EditorModule.h">
+      <Filter>Editor\Panel\List\Module</Filter>
+    </ClInclude>
+    <ClInclude Include="Module_TemplateDataEditor.h">
+      <Filter>Editor\Panel\List\Module\List</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleList.h">
+      <Filter>Editor\Panel\List\Module\List</Filter>
+    </ClInclude>
     <ClInclude Include="PaletteSelectCollider.h">
       <Filter>Editor\Palette\PaletteBrush</Filter>
     </ClInclude>
@@ -515,6 +530,9 @@
     </ClCompile>
     <ClCompile Include="SnippetAnimationChangeInterpolation.cpp">
       <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="Module_TemplateDataEditor.cpp">
+      <Filter>Editor\Panel\List\Module\List</Filter>
     </ClCompile>
     <ClCompile Include="PaletteManager.cpp">
       <Filter>Editor\Palette\PaletteManager</Filter>

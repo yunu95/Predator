@@ -29,7 +29,7 @@ namespace application
 
         void PalettePanel::GUIProgress()
         {
-            ImGui::Begin("Palette");
+            ImGui::Begin("Palette", 0, ImGuiWindowFlags_NoBringToFrontOnFocus);
 
             /// ImGui 관련 내부 변수 업데이트
             isMouseOver = ImGui::IsWindowHovered();

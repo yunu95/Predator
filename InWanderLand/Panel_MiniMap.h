@@ -7,8 +7,6 @@
 #include "Singleton.h"
 #include "EditorPanel.h"
 
-#include <memory>
-
 namespace application
 {
 	namespace editor

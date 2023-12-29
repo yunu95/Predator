@@ -14,14 +14,16 @@ namespace application
 		class Panel
 		{
 		public:
+			virtual ~Panel() = default;
+
 			virtual void Initialize() = 0;
 			//virtual void EventProgress(Events& e) = 0;
 			virtual void Update(float ts) = 0;
 			virtual void GUIProgress() = 0;
 			virtual void Finalize() = 0;
 
-			bool IsPanelMouseOver() { return isMouseOver; }
-			bool IsPanelFocused() { return isFocused; }
+			inline bool IsPanelMouseOver() { return isMouseOver; }
+			inline bool IsPanelFocused() { return isFocused; }
 
 		protected:
 			bool isMouseOver = false;
