@@ -41,13 +41,13 @@ inline yunutyEngine::graphics::StaticMeshRenderer* AttachDebugMesh(GameObject* t
     staticMesh->GetGI().GetMaterial()->SetColor(color);
     auto& shaderList = rsrcManager->GetShaderList();
     yunuGI::IShader* shader = nullptr;
-    for (auto each : shaderList)
-    {
-        if (each->GetName() == (isWireFrame ? L"DebugPS.cso" : L"DefaultPS.cso"))
-        {
-            shader = each;
-        }
-    }
-    staticMesh->GetGI().GetMaterial()->SetPixelShader(shader);
+    //for (auto each : shaderList)
+    //{
+    //    if (each->GetName() == (isWireFrame ? L"DebugPS.cso" : L"DefaultPS.cso"))
+    //    {
+    //        shader = each;
+    //    }
+    //}
+    //staticMesh->GetGI().GetMaterial()->SetPixelShader(shader);
     return staticMesh;
 }

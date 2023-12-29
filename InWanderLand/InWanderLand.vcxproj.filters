@@ -528,5 +528,8 @@
     <ClCompile Include="TestCasePhysxTrigger.cpp">
       <Filter>TestCodes</Filter>
     </ClCompile>
+    <ClCompile Include="Snippet1milGameObjects.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

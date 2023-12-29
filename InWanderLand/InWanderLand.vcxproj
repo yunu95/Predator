@@ -457,6 +457,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="Ornament.cpp" />
     <ClCompile Include="Ornament_TemplateData.cpp" />
     <ClCompile Include="PaletteManager.cpp" />
+    <ClCompile Include="Snippet1milGameObjects.cpp" />
     <ClCompile Include="SnippetAnimation.cpp" />
     <ClCompile Include="SnippetAnimationChangeInterpolation.cpp" />
     <ClCompile Include="SnippetEditTerrain.cpp" />

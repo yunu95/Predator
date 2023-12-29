@@ -14,6 +14,8 @@ void SnippetInitializerEditTerrain()
 {
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
     auto rtsCam = Scene::getCurrentScene()->AddGameObject()->AddComponent<RTSCam>();
+
+
     rtsCam->GetTransform()->position = Vector3d(3, 10, 3);
     application::editor::palette::PaletteManager::SetCurrentPalette(&application::editor::palette::TerrainPaletteManager::SingleInstance());
     rtsCam->groundHoveringClickCallback = [](const Vector3d& worldPos) {application::editor::palette::TerrainPaletteManager::GetCurrentPalette()->OnMouseMove(worldPos); };
