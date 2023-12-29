@@ -28,7 +28,7 @@ namespace application
 
 		void InspectorPanel::GUIProgress()
 		{
-			ImGui::Begin("Inspector");
+			ImGui::Begin("Inspector", 0, ImGuiWindowFlags_NoBringToFrontOnFocus);
 
 			/// ImGui 관련 내부 변수 업데이트
 			isMouseOver = ImGui::IsWindowHovered();

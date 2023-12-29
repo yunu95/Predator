@@ -28,7 +28,7 @@ namespace application
 
 		void CameraViewPanel::GUIProgress()
 		{
-			ImGui::Begin("CameraView");
+			ImGui::Begin("CameraView", 0, ImGuiWindowFlags_NoBringToFrontOnFocus);
 
 			/// ImGui 관련 내부 변수 업데이트
 			isMouseOver = ImGui::IsWindowHovered();
