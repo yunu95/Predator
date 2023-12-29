@@ -276,9 +276,10 @@ namespace application
             ::TranslateMessage(&msg);
             ::DispatchMessage(&msg);
             if (msg.message == WM_QUIT)
+            {
                 isRunning = false;
+            }
         }
-
 
         //Start the Dear ImGui frame
         ImGui_ImplDX11_NewFrame();
@@ -398,18 +399,11 @@ void CleanupRenderTarget()
     if (g_EditormainRenderTargetView) { g_EditormainRenderTargetView->Release(); g_EditormainRenderTargetView = nullptr; }
 }
 
-/// 뭔가 비율 처리에 문제가 있는 것으로 보임
-/// Graphics 쪽의 도움 필요
 void ResizeBuffers(HWND hWnd)
 {
-    //// Ensure the viewport is set up correctly
-    //RECT rect;
-    //GetClientRect(hWnd, &rect);
-    //D3D11_VIEWPORT vp = { 0, 0, rect.right - rect.left, rect.bottom - rect.top, 0.0f, 1.0f };
-    //g_Editorpd3dDeviceContext->RSSetViewports(1, &vp);
-
-    //// Resize the buffers
-    //g_EditorpSwapChain->ResizeBuffers(1, rect.right - rect.left, rect.bottom - rect.top, DXGI_FORMAT_UNKNOWN, 0);
+    g_EditormainRenderTargetView->Release();
+    g_EditorpSwapChain->ResizeBuffers(0, dockspaceArea.x, dockspaceArea.y, DXGI_FORMAT_UNKNOWN, 0);
+    CreateRenderTarget();
 }
 
 ID3D11ShaderResourceView* GetSRV(void* handle)
