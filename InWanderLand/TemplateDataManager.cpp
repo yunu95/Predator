@@ -7,16 +7,17 @@ namespace application
 	namespace editor
 	{
 		TemplateDataManager::TemplateDataManager()
-			: Storable(), Singleton<TemplateDataManager>(), list(), typeMap(), uuidKeyMap(), ptrKeyMap()
+			: Storable(), Singleton<TemplateDataManager>(), list(), typeMap(), uuidKeyMap(), ptrKeyMap(), dataContainer()
 		{
-
+			// ëŒ€ëµ 100ê°œ ì •ë„ì˜ ë°ì´í„°ë¥¼ ìˆ˜ìš©í•  ìˆ˜ ìˆë„ë¡ ë¯¸ë¦¬ í• ë‹¹í•¨
+			dataContainer.reserve(100);
 		}
 
 		ITemplateData* TemplateDataManager::CreateTemplateData(const std::string& name, const DataType& type)
 		{
 			if (list.find(name) != list.end())
 			{
-				// ÀÌ¹Ì ÇØ´ç ÀÌ¸§À¸·Î »ı¼ºµÈ ITemplateData °¡ ÀÖÀ½
+				// ì´ë¯¸ í•´ë‹¹ ì´ë¦„ìœ¼ë¡œ ìƒì„±ëœ ITemplateData ê°€ ìˆìŒ
 				return nullptr;
 			}
 
@@ -61,7 +62,7 @@ namespace application
 		{
 			if (list.find(name) != list.end())
 			{
-				// ÀÌ¹Ì ÇØ´ç ÀÌ¸§À¸·Î »ı¼ºµÈ ITemplateData °¡ ÀÖÀ½
+				// ì´ë¯¸ í•´ë‹¹ ì´ë¦„ìœ¼ë¡œ ìƒì„±ëœ ITemplateData ê°€ ìˆìŒ
 				return nullptr;
 			}
 
@@ -103,7 +104,7 @@ namespace application
 		{
 			if (list.find(name) == list.end())
 			{
-				// ÇØ´ç ÀÌ¸§À¸·Î »ı¼ºµÈ ITemplateData °¡ ¾øÀ½
+				// í•´ë‹¹ ì´ë¦„ìœ¼ë¡œ ìƒì„±ëœ ITemplateData ê°€ ì—†ìŒ
 				return false;
 			}
 
@@ -120,7 +121,7 @@ namespace application
 			auto itr = list.find(name);
 			if (itr == list.end())
 			{
-				// ÇØ´ç ÀÌ¸§À¸·Î »ı¼ºµÈ ITemplateData °¡ ¾øÀ¸¸é nullptr ¹İÈ¯
+				// í•´ë‹¹ ì´ë¦„ìœ¼ë¡œ ìƒì„±ëœ ITemplateData ê°€ ì—†ìœ¼ë©´ nullptr ë°˜í™˜
 				return nullptr;
 			}
 
@@ -132,7 +133,7 @@ namespace application
 			auto itr = list.find(name);
 			if (itr == list.end())
 			{
-				// ÇØ´ç ÀÌ¸§À¸·Î »ı¼ºµÈ ITemplateData °¡ ¾øÀ¸¸é None ¹İÈ¯
+				// í•´ë‹¹ ì´ë¦„ìœ¼ë¡œ ìƒì„±ëœ ITemplateData ê°€ ì—†ìœ¼ë©´ None ë°˜í™˜
 				return DataType::None;
 			}
 
@@ -144,7 +145,7 @@ namespace application
 			auto itr = typeMap.find(const_cast<ITemplateData*>(ptr));
 			if (itr == typeMap.end())
 			{
-				// ÇØ´ç µ¥ÀÌÅÍ°¡ ¾øÀ¸¸é None ¹İÈ¯
+				// í•´ë‹¹ ë°ì´í„°ê°€ ì—†ìœ¼ë©´ None ë°˜í™˜
 				return DataType::None;
 			}
 
@@ -156,7 +157,7 @@ namespace application
 			auto itr = typeMap.find(GetTemplateData(GetDataKey(uuid)));
 			if (itr == typeMap.end())
 			{
-				// ÇØ´ç µ¥ÀÌÅÍ°¡ ¾øÀ¸¸é None ¹İÈ¯
+				// í•´ë‹¹ ë°ì´í„°ê°€ ì—†ìœ¼ë©´ None ë°˜í™˜
 				return DataType::None;
 			}
 
@@ -168,7 +169,7 @@ namespace application
 			auto itr = ptrKeyMap.find(ptr);
 			if (itr == ptrKeyMap.end())
 			{
-				// ÇØ´ç µ¥ÀÌÅÍ°¡ ¾ø´Ù¸é ºó string Àü´Ş
+				// í•´ë‹¹ ë°ì´í„°ê°€ ì—†ë‹¤ë©´ ë¹ˆ string ì „ë‹¬
 				return std::string();
 			}
 
@@ -180,11 +181,27 @@ namespace application
 			auto itr = uuidKeyMap.find(uuid);
 			if (itr == uuidKeyMap.end())
 			{
-				// ÇØ´ç µ¥ÀÌÅÍ°¡ ¾ø´Ù¸é ºó string Àü´Ş
+				// í•´ë‹¹ ë°ì´í„°ê°€ ì—†ë‹¤ë©´ ë¹ˆ string ì „ë‹¬
 				return std::string();
 			}
 
 			return itr->second;
+		}
+
+		const std::vector<ITemplateData*>& TemplateDataManager::GetDataList(const DataType& type)
+		{
+			dataContainer.clear();
+
+			for (auto& each : list)
+			{
+				auto ptr = each.second.get();
+				if (typeMap[ptr] == type)
+				{
+					dataContainer.push_back(ptr);
+				}
+			}
+
+			return dataContainer;
 		}
 
 		void TemplateDataManager::Clear()
@@ -192,6 +209,7 @@ namespace application
 			typeMap.clear();
 			uuidKeyMap.clear();
 			ptrKeyMap.clear();
+			dataContainer.clear();
 			list.clear();
 		}
 

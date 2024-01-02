@@ -1,6 +1,6 @@
-/// 2023. 11. 23 ±è»óÁØ
-/// ITemplateData ÀÇ ±¸Ã¼È­µÈ Å¬·¡½º
-/// Àå½Ä¹°
+/// 2023. 11. 23 ê¹€ìƒì¤€
+/// ITemplateData ì˜ êµ¬ì²´í™”ëœ í´ëž˜ìŠ¤
+/// ìž¥ì‹ë¬¼
 
 #pragma once
 

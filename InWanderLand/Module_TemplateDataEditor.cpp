@@ -1,12 +1,14 @@
 #include "Module_TemplateDataEditor.h"
 
-#include "imgui.h"
+#include "TemplateDataManager.h"
+
 
 namespace application
 {
 	namespace editor
 	{
 		Module_TemplateDataEditor::Module_TemplateDataEditor()
+			: tdManager(TemplateDataManager::GetSingletonInstance())
 		{
 
 		}
@@ -32,12 +34,12 @@ namespace application
 
 			ImGui::Begin("TemplateData Editor", &activation);
 
-			/// ImGui °ü·Ã ³»ºÎ º¯¼ö ¾÷µ¥ÀÌÆ®
+			/// ImGui ê´€ë ¨ ë‚´ë¶€ ë³€ìˆ˜ ì—…ë°ì´íŠ¸
 			isMouseOver = ImGui::IsWindowHovered();
 			isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
-			/// ½ÇÁ¦ ÆĞ³Î¿¡ ±×¸®´Â ¿µ¿ª
-
+			/// ì‹¤ì œ íŒ¨ë„ì— ê·¸ë¦¬ëŠ” ì˜ì—­
+			DrawLayout();
 
 			ImGui::End();
 		}
@@ -45,6 +47,34 @@ namespace application
 		void Module_TemplateDataEditor::Finalize()
 		{
 
+		}
+
+		void Module_TemplateDataEditor::DrawLayout()
+		{
+			// Spacing, ë°”ê¾¸ì§€ ì•ŠëŠ”ë‹¤ëŠ” ì „ì œë¡œ staticìœ¼ë¡œ êµ¬í˜„
+			static auto spacing = ImGui::GetStyle().ItemSpacing;
+
+			auto region = ImGui::GetContentRegionAvail();
+
+			DrawList(ImVec2(region.x * 0.2 - spacing.x/2, region.y - spacing.y/2));
+			ImGui::SameLine();
+			DrawTemplateDataPanel(ImVec2(region.x * 0.8 - spacing.x/2, region.y - spacing.y/2));
+		}
+
+		void Module_TemplateDataEditor::DrawList(const ImVec2& region)
+		{
+			ImGui::BeginChild("TemplateDataList", region, true);
+			ImGui::CollapsingHeader("Terrain");
+			ImGui::CollapsingHeader("Units");
+			ImGui::CollapsingHeader("Ornaments");
+			ImGui::EndChild();
+		}
+
+		void Module_TemplateDataEditor::DrawTemplateDataPanel(const ImVec2& region)
+		{
+			ImGui::BeginChild("SelectedTemplateDataList", region, true);
+			ImGui::Text("Some test2");
+			ImGui::EndChild();
 		}
 	}
 }
