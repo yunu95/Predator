@@ -1,6 +1,6 @@
-/// 2023. 11. 21 ±è»óÁØ
-/// ÆÄÀÏ ÇüÅÂ·Î ÀúÀåÇÏ±â À§ÇÑ json À» ´Ù·ç´Â Å¬·¡½º
-/// ÇØ´ç Å¬·¡½º¸¦ »ó¼Ó¹Ş¾Æ Pre / Post ÀÔÃâ·ÂÀ» ÀçÁ¤ÀÇÇÏ¿© ±¸Ã¼È­ÇÔ
+/// 2023. 11. 21 ê¹€ìƒì¤€
+/// íŒŒì¼ í˜•íƒœë¡œ ì €ì¥í•˜ê¸° ìœ„í•œ json ì„ ë‹¤ë£¨ëŠ” í´ë˜ìŠ¤
+/// í•´ë‹¹ í´ë˜ìŠ¤ë¥¼ ìƒì†ë°›ì•„ Pre / Post ì…ì¶œë ¥ì„ ì¬ì •ì˜í•˜ì—¬ êµ¬ì²´í™”í•¨
 
 #pragma once
 
@@ -20,6 +20,23 @@ namespace application
 {
 	namespace editor
 	{
+		// STL Container í™•ì¸ìš© í…œí”Œë¦¿ í´ë˜ìŠ¤
+		template <typename T, typename = void>
+		class is_STL_Container
+			: public std::false_type
+		{
+
+		};
+
+		// void íŠ¹ìˆ˜í™”, begin() / end() í•¨ìˆ˜ ìœ ë¬´ë¡œë§Œ íŒë‹¨í•¨
+		// ì˜ˆì™¸ì— ëŒ€í•´ì„œëŠ” ìš°ì„  ìƒê°í•˜ì§€ ì•ŠìŒ
+		template <typename T>
+		struct is_STL_Container<T, std::void_t<decltype(std::declval<T>().begin()), decltype(std::declval<T>().end())>>
+			: std::true_type
+		{
+
+		};
+
 		template <int N, typename T>
 		json FieldPreEncoding(T& classInstance, json& data)
 		{
@@ -29,6 +46,7 @@ namespace application
 			}
 			else
 			{
+				// Not Pointer, nlohmann json ì€ STL Container ë³€í™˜ì„ ì§€ì›í•¨
 				if constexpr (!std::is_pointer_v<std::remove_reference_t<decltype(boost::pfr::get<N - 1>(classInstance))>>)
 				{
 					data[boost::pfr::get_name<N - 1, std::remove_const_t<T>>()] = boost::pfr::get<N - 1>(classInstance);
@@ -47,6 +65,7 @@ namespace application
 			}
 			else
 			{
+				// Pointer
 				if constexpr (std::is_pointer_v<std::remove_reference_t<decltype(boost::pfr::get<N - 1>(classInstance))>>)
 				{
 					data[boost::pfr::get_name<N - 1, std::remove_const_t<T>>()] = UUID_To_String(boost::pfr::get<N - 1>(classInstance)->GetUUID());
@@ -65,9 +84,15 @@ namespace application
 			}
 			else
 			{
+				// pointer
 				if constexpr (std::is_pointer_v<std::remove_reference_t<decltype(boost::pfr::get<N - 1>(classInstance))>>)
 				{
 					boost::pfr::get<N - 1>(classInstance) = nullptr;
+				}
+				// STL Container
+				else if constexpr (is_STL_Container<std::remove_reference_t<decltype(boost::pfr::get<N - 1>(classInstance))>>::value)
+				{
+					boost::pfr::get<N - 1>(classInstance) = data[boost::pfr::get_name<N - 1, T>()].get<std::remove_reference_t<decltype(boost::pfr::get<N - 1>(classInstance))>>();
 				}
 				else
 				{
@@ -87,6 +112,7 @@ namespace application
 			}
 			else
 			{
+				// pointer
 				if constexpr (std::is_pointer_v<std::remove_reference_t<decltype(boost::pfr::get<N - 1>(classInstance))>>)
 				{
 					boost::pfr::get<N - 1>(classInstance) = UUIDManager::GetSingletonInstance()
@@ -101,9 +127,9 @@ namespace application
 		class Storable
 		{
 		public:
-			// json ÇüÅÂ·Î Storable Å¬·¡½º¸¦ ÀúÀåÇÕ´Ï´Ù.
+			// json í˜•íƒœë¡œ Storable í´ë˜ìŠ¤ë¥¼ ì €ì¥í•©ë‹ˆë‹¤.
 			json Encoding() const;
-			// json ÇüÅÂ·ÎºÎÅÍ Storable Å¬·¡½º¸¦ ÃÊ±âÈ­ÇÕ´Ï´Ù.
+			// json í˜•íƒœë¡œë¶€í„° Storable í´ë˜ìŠ¤ë¥¼ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
 			bool Decoding(const json& data);
 
 		protected:
