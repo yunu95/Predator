@@ -11,6 +11,7 @@ cbuffer MatrixBuffer : register(b0)
     row_major matrix PTM;
     row_major matrix WVP;
     row_major matrix WorldInvTrans;
+    //float4 objectID;
 }
 
 cbuffer MaterialBuffer : register(b1)

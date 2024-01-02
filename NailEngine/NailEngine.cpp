@@ -38,6 +38,8 @@ void NailEngine::Init(UINT64 hWnd)
 	CreateConstantBuffer();
 	CreateRenderTargetGroup();
 	ResourceManager::Instance.Get().CreateDefaultResource();
+
+	RenderSystem::Instance.Get().Init();
 }
 
 void NailEngine::Render()

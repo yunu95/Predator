@@ -13,6 +13,8 @@ LazyObjects<InstancingManager> InstancingManager::Instance;
 
 void InstancingManager::RegisterMeshAndMaterial(std::vector<RenderInfo>& renderInfo)
 {
+	if (renderInfo.size() == 0) return;
+
 	ClearData();
 
 	std::map<InstanceID, std::vector<RenderInfo>> cache;

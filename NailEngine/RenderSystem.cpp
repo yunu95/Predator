@@ -33,11 +33,20 @@
 
 #include "InstancingManager.h"
 
+#include "UIImage.h"
+#include "Texture.h"
+
 #include <iostream>
 #include <fstream>
 
 LazyObjects<RenderSystem> RenderSystem::Instance;
 
+
+void RenderSystem::Init()
+{
+	spriteBatch = std::make_unique<DirectX::SpriteBatch>(ResourceBuilder::Instance.Get().device->GetDeviceContext().Get());
+	commonStates = std::make_unique<DirectX::CommonStates>(ResourceBuilder::Instance.Get().device->GetDevice().Get());
+}
 
 void RenderSystem::ClearRenderInfo()
 {
@@ -97,6 +106,7 @@ void RenderSystem::SortObject()
 			renderInfo.material = e->GetMaterial(i);
 			renderInfo.materialIndex = i;
 			renderInfo.wtm = e->GetWorldTM();
+			//renderInfo.objecID = e->GetID();
 			skinnedRenderInfo.animatorIndex = std::static_pointer_cast<SkinnedMesh>(e)->GetAnimatorIndex();
 
 			skinnedRenderInfo.renderInfo = std::move(renderInfo);
@@ -174,6 +184,8 @@ void RenderSystem::Render()
 
 	RenderForward();
 
+	RenderUI();
+
 	// 디퍼드 정보 출력
 	DrawDeferredInfo();
 
@@ -193,20 +205,21 @@ void RenderSystem::RenderObject()
 	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
 	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
 	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 
 	InstancingManager::Instance.Get().RegisterMeshAndMaterial(this->deferredVec);
 
-	for (auto& e : this->deferredVec)
-	{
-		
+	//for (auto& e : this->deferredVec)
+	//{
+	//	
 
-		/*auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.mesh->GetName()));
+	//	/*auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.mesh->GetName()));
 
-		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.material->GetName()))->PushGraphicsData();
-		mesh->Render(e.materialIndex);*/
-		
-	}
+	//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.material->GetName()))->PushGraphicsData();
+	//	mesh->Render(e.materialIndex);*/
+	//	
+	//}
 	
 	//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->UnBind();
 }
@@ -236,6 +249,7 @@ void RenderSystem::RenderSkinned()
 		matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
 		matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 		matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+		//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{e.renderInfo.objecID,0,0,0};
 		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 
 		auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.renderInfo.mesh->GetName()));
@@ -299,23 +313,52 @@ void RenderSystem::DrawFinal()
 	ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();
 }
 
+void RenderSystem::RenderUI()
+{
+	auto& uiSet = RenderableManager::Instance.Get().GetUIImageSet();
+	this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied());
+	for (auto& i : uiSet)
+	{
+		auto uiImage = std::static_pointer_cast<UIImage>(i);
+
+		if (uiImage->IsActive() == false)
+		{
+			continue;
+		}
+
+		auto texture = ((Texture*)(std::static_pointer_cast<UIImage>(i)->GetTexture()));
+		this->spriteBatch->Draw(texture->GetSRV().Get(), uiImage->pos);
+	}
+	this->spriteBatch->End();
+}
+
 void RenderSystem::RenderForward()
 {
-	for (auto& e : this->forwardVec)
-	{
-		MatrixBuffer matrixBuffer;
-		matrixBuffer.WTM = e.wtm;
-		matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-		matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
-		matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-		matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+	//MatrixBuffer matrixBuffer;
+	////matrixBuffer.WTM = e.wtm;
+	//matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+	//matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	//matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	//matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	////matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
+	//NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 
-		auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.mesh->GetName()));
-
-		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.material->GetName()))->PushGraphicsData();
-		mesh->Render(e.materialIndex, nullptr);
-	}
+	//for (auto& e : this->forwardVec)
+	//{
+	//	MatrixBuffer matrixBuffer;
+	//	matrixBuffer.WTM = e.wtm;
+	//	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+	//	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	//	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	//	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	//	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+	//
+	//	auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.mesh->GetName()));
+	//
+	//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.material->GetName()))->PushGraphicsData();
+	//	mesh->Render(e.materialIndex, nullptr);
+	//}
+	InstancingManager::Instance.Get().RegisterMeshAndMaterial(this->forwardVec);
 }
 
 void RenderSystem::DrawDeferredInfo()

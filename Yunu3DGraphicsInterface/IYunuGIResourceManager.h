@@ -26,6 +26,7 @@ namespace yunuGI
         virtual void UnloadResources()const = 0;
 
         virtual std::vector<IShader*>& GetShaderList()const = 0;
+        virtual std::vector<ITexture*>& GetTextureList()const = 0;
         virtual std::vector<IMesh*>& GetMeshList()const = 0;
         virtual std::vector<IMaterial*>& GetMaterialList()const = 0;
         virtual std::vector<IAnimation*>& GetAnimationList()const = 0;

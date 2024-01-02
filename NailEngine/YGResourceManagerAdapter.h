@@ -17,9 +17,17 @@ namespace yunuGIAdapter
             std::string fileName = std::filesystem::path(filePath).filename().string();
             std::string parentFolderName = std::filesystem::path(filePath).parent_path().filename().string();
 
-			int bufferSize = MultiByteToWideChar(CP_UTF8, 0, filePath, -1, nullptr, 0);
-			std::wstring wFilePath(bufferSize, 0);
+            int bufferSize = MultiByteToWideChar(CP_UTF8, 0, filePath, -1, nullptr, 0);
+            bufferSize--;
+			std::wstring wFilePath(bufferSize, L'\0');
 			MultiByteToWideChar(CP_UTF8, 0, filePath, -1, &wFilePath[0], bufferSize);
+
+
+            std::filesystem::path topLevelPath;
+			for (const auto& p : std::filesystem::path(filePath)) {
+				topLevelPath = p;
+				break;  // 첫 번째 경로 세그먼트만 가져오고 반복문 종료
+			}
 
             if (ext == L".hlsl")
             {
@@ -29,6 +37,10 @@ namespace yunuGIAdapter
             {
                 parentFolderName = parentFolderName + "/" + fileName + "/" + fileName + ".fbx";
                 ResourceManager::Instance.Get().LoadFBX(parentFolderName.c_str());
+            }
+            else if (topLevelPath.string() == "Texture")
+            {
+                ResourceManager::Instance.Get().CreateTexture(wFilePath);
             }
         };
         virtual yunuGI::IMaterial* CreateMaterial(std::wstring materialName) const
@@ -90,6 +102,11 @@ namespace yunuGIAdapter
         virtual std::vector<yunuGI::IAnimation*>& GetAnimationList()const override
         {
             return ResourceManager::Instance.Get().GetAnimationList();
+        };
+
+        virtual std::vector<yunuGI::ITexture*>& GetTextureList()const override
+        {
+            return ResourceManager::Instance.Get().GetTextureList();
         };
     };
 }

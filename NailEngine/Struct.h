@@ -59,6 +59,7 @@ struct MatrixBuffer
 	DirectX::SimpleMath::Matrix PTM;
 	DirectX::SimpleMath::Matrix WVP;
 	DirectX::SimpleMath::Matrix WorldInvTrans;
+	//DirectX::SimpleMath::Vector4 objectID;
 };
 
 struct MaterialBuffer

@@ -4,11 +4,15 @@
 #include "Struct.h"
 #include "ModelData.h"
 
+#include "DXTK/SpriteBatch.h"
+#include "DXTK/CommonStates.h"
+
 #include <DirectXMath.h>
 #include "SimpleMath.h"
 using namespace DirectX::PackedVector;
 
 #include <vector>
+#include <memory>
 
 class Mesh;
 class Material;
@@ -21,6 +25,9 @@ struct RenderInfo
 	Material* material;
 	unsigned int materialIndex;
 	DirectX::SimpleMath::Matrix wtm;
+
+
+	//float objecID;
 };
 
 struct SkinnedRenderInfo
@@ -38,6 +45,8 @@ public:
 	friend LazyObjects<RenderSystem>;
 
 public:
+	void Init();
+
 	void ClearRenderInfo();
 	void SortObject();
 	void PushLightData();
@@ -47,6 +56,7 @@ public:
 	void RenderSkinned();
 	void RenderLight();
 	void DrawFinal();
+	void RenderUI();
 
 	void RenderForward();
 
@@ -62,6 +72,9 @@ private:
 	std::vector<SkinnedRenderInfo> skinnedVec;
 
 	BoneMatrix finalTM;
+
+	std::unique_ptr<DirectX::SpriteBatch> spriteBatch;
+	std::unique_ptr<DirectX::CommonStates> commonStates;
 };
 
 

@@ -131,6 +131,7 @@ yunuGI::IMaterial* ResourceManager::CrateMaterial(std::wstring materialName)
 	material->SetName(materialName);
 
 	materialMap.insert({ materialName, material });
+	materialVec.push_back(material.get());
 
 	return material.get();
 }
@@ -157,6 +158,7 @@ void ResourceManager::CreateTexture(const std::wstring& texturePath)
 	texture->SetName(texturePath);
 
 	textureMap.insert({ texturePath, texture });
+	textureVec.push_back(texture.get());
 }
 
 std::shared_ptr<Texture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, unsigned int bindFlag)
@@ -534,9 +536,9 @@ void ResourceManager::CreateDefaultMaterial()
 
 void ResourceManager::CreateDefaultTexture()
 {
-	CreateTexture(L"Texture/zoro.jpg");
+	/*CreateTexture(L"Texture/zoro.jpg");
 	CreateTexture(L"Texture/Brick_Albedo.jpg");
-	CreateTexture(L"Texture/Brick_Normal.jpg");
+	CreateTexture(L"Texture/Brick_Normal.jpg");*/
 }
 
 void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yunuGI::FBXData* fbxData)

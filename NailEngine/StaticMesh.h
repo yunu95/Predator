@@ -6,7 +6,7 @@ class StaticMesh : public IRenderable
 public:
 	~StaticMesh()
 	{
-		int a = 1;
+
 	}
 };
 

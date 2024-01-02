@@ -66,7 +66,7 @@ public:
 	FBXNode* GetFBXNode(const std::wstring& fbxName);
 
 	std::vector<yunuGI::IMesh*>& GetMeshList() { return this->meshVec; };
-	std::vector<yunuGI::ITexture*> GetTextureList() { return this->textureVec; };
+	std::vector<yunuGI::ITexture*>& GetTextureList() { return this->textureVec; };
 	std::vector<yunuGI::IMaterial*>& GetMaterialList() 
 	{
 		return this->materialVec; 
