@@ -3,43 +3,15 @@
 #include "DebugBeacon.h"
 using namespace yunutyEngine;
 
-
-
 class RTSCam :public yunutyEngine::graphics::Camera
 {
 public:
     bool roamingMode = false;
-    function<void(Vector3d)> groundLeftClickCallback{[](Vector3d) {}};
-    function<void(Vector3d)> groundRightClickCallback{[](Vector3d) {}};
-    function<void(Vector3d)> groundHoveringClickCallback{[](Vector3d) {}};
-    
-    GameObject* mouseCursorObject;
-
-    void SetMouseCursorObject(GameObject* mouseObj)
-    {
-        mouseCursorObject = mouseObj;
-    };
-
-    GameObject* GetMouseCursorObject() const
-    {
-        return mouseCursorObject;
-    }
-
-    void Start()
-    {
-		const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-		auto capsuleMesh = _resourceManager->GetMesh(L"Capsule");
-
-        mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-
-        mouseCursorMesh->GetGI().SetMesh(capsuleMesh);
-        mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 1, 0, 0 });
-        //Vector3d startPosition = Vector3d(-30, 30, 0);
-        //GetTransform()->SetWorldPosition(startPosition);
-        //GetTransform()->rotation = lookAt(startPosition, Vector3d::zero, GetTransform()->rotation.Up());
-    }
-
+    function<void(Vector3d)> groundLeftClickCallback{ [](Vector3d) {} };
+    function<void(Vector3d)> groundLeftClickReleaseCallback{ [](Vector3d) {} };
+    function<void(Vector3d)> groundRightClickCallback{ [](Vector3d) {} };
+    function<void(Vector3d)> groundRightClickReleaseCallback{ [](Vector3d) {} };
+    function<void(Vector3d)> groundHoveringClickCallback{ [](Vector3d) {} };
     void Update()
     {
         if (Input::isKeyPushed(KeyCode::Tab))
@@ -55,17 +27,17 @@ public:
                 cameraSpeed = 20.0f;
 
             auto lastMousePos = yunutyEngine::Input::getMouseScreenPositionNormalized();
-   /*         if (yunutyEngine::Input::isKeyDown(KeyCode::A) || lastMousePos.x <= 0)
+            if (yunutyEngine::Input::isKeyDown(KeyCode::A)/* || lastMousePos.x <= 0*/)
                 deltaDirection -= Vector3d::right;
-            if (yunutyEngine::Input::isKeyDown(KeyCode::D) || lastMousePos.x >= 1)
-                deltaDirection += Vector3d::right;*/
-            if (yunutyEngine::Input::isKeyDown(KeyCode::W) || lastMousePos.y <= 0)
+            if (yunutyEngine::Input::isKeyDown(KeyCode::D)/* || lastMousePos.x >= 1*/)
+                deltaDirection += Vector3d::right;
+            if (yunutyEngine::Input::isKeyDown(KeyCode::W)/* || lastMousePos.y <= 0*/)
                 deltaDirection += Vector3d::forward;
-            if (yunutyEngine::Input::isKeyDown(KeyCode::S) || lastMousePos.y >= 1)
+            if (yunutyEngine::Input::isKeyDown(KeyCode::S)/* || lastMousePos.y >= 1*/)
                 deltaDirection -= Vector3d::forward;
 
             GetTransform()->position += deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed;
-            Quaternion quat = Quaternion::MakeWithForwardUp(Vector3d::down,Vector3d::forward);
+            Quaternion quat = Quaternion::MakeWithForwardUp(Vector3d::down, Vector3d::forward);
             GetTransform()->rotation = quat;
         }
         else
@@ -79,41 +51,90 @@ public:
 
             if (yunutyEngine::Input::isKeyDown(KeyCode::A))
                 deltaPosition -= GetTransform()->GetWorldRotation().Right();
+
             if (yunutyEngine::Input::isKeyDown(KeyCode::D))
                 deltaPosition += GetTransform()->GetWorldRotation().Right();
+
             if (yunutyEngine::Input::isKeyDown(KeyCode::W))
                 deltaPosition += GetTransform()->GetWorldRotation().Forward();
+
             if (yunutyEngine::Input::isKeyDown(KeyCode::S))
                 deltaPosition -= GetTransform()->GetWorldRotation().Forward();
+
             if (yunutyEngine::Input::isKeyDown(KeyCode::Q))
                 deltaPosition -= Vector3d::up;
+
             if (yunutyEngine::Input::isKeyDown(KeyCode::E))
                 deltaPosition += Vector3d::up;
-            static auto lastMousePos = yunutyEngine::Input::getMouseScreenPosition();
 
-            auto dMousePos = yunutyEngine::Input::getMouseScreenPosition() - lastMousePos;
-            lastMousePos = yunutyEngine::Input::getMouseScreenPosition();
 
-            if (yunutyEngine::Input::isKeyDown(KeyCode::MouseRightClick))
+            auto lastMousePos = Vector2d::zero;
+            auto dMousePos = Vector3d::zero;
+
+            //if (yunutyEngine::Input::isKeyPushed(KeyCode::MouseRightClick))
+            //{
+            //    lastMousePos = yunutyEngine::Input::getMouseScreenPosition();
+            //}
+
+            //if (yunutyEngine::Input::isKeyDown(KeyCode::MouseRightClick))
+            //{
+            //    dMousePos = yunutyEngine::Input::getMouseScreenPosition();
+            //}
+
+            if (yunutyEngine::Input::isKeyDown(KeyCode::LeftArrow))
             {
-                constexpr float rotationSpeedFactor = 0.0003f;
-                //auto euler = GetTransform()->rotation.Euler();
-                //euler.y += dMousePos.x * rotationSpeedFactor;
-                //euler.x += dMousePos.y * rotationSpeedFactor;
-                Quaternion& rot = GetTransform()->rotation;
-                Vector3d newForward =
-                    rot.Forward() +
-                    dMousePos.x * rotationSpeedFactor * rot.Right() +
-                    -dMousePos.y * rotationSpeedFactor * rot.Up();
-                //Vector3d newRight =
-                //    //Vector3d::right +
-                //    rot.Right() +
-                //    dMousePos.x * rotationSpeedFactor * -rot.Forward();
-                Vector3d newUp = rot.Up() + -dMousePos.y * rotationSpeedFactor * -rot.Forward();
-                Vector3d newRight = Vector3d::Cross(newUp, newForward);
-                //GetTransform()->rotation = Quaternion::MakeWithAxes(euler);
-                GetTransform()->rotation = Quaternion::MakeWithAxes(newRight, newUp, newForward);
+                //Quaternion& rot = GetTransform()->rotation;
+                //auto euler = rot.Euler();
+                //rot = Quaternion{ Vector3d{euler.x,euler.y -= (20.0f * Time::GetDeltaTime())   , euler.z} };
+                euler.y -= (20.0f * Time::GetDeltaTime());
             }
+            if (yunutyEngine::Input::isKeyDown(KeyCode::RightArrow))
+            {
+                //Quaternion& rot = GetTransform()->rotation;
+                //auto euler = rot.Euler();
+                //rot = Quaternion{ Vector3d{euler.x,euler.y += (20.0f * Time::GetDeltaTime())   , euler.z} };
+                euler.y += (20.0f * Time::GetDeltaTime());
+            }
+            if (yunutyEngine::Input::isKeyDown(KeyCode::UpArrow))
+            {
+                //Quaternion& rot = GetTransform()->rotation;
+                //auto euler = rot.Euler();
+                //rot = Quaternion{ Vector3d{euler.x -= (20.0f * Time::GetDeltaTime()) ,euler.y , euler.z   } };
+                euler.x -= (20.0f * Time::GetDeltaTime());
+            }
+            if (yunutyEngine::Input::isKeyDown(KeyCode::DownArrow))
+            {
+                //Quaternion& rot = GetTransform()->rotation;
+                //auto euler = rot.Euler();
+                //rot = Quaternion{ Vector3d{euler.x += (20.0f * Time::GetDeltaTime()) ,euler.y , euler.z   } };
+                euler.x += (20.0f * Time::GetDeltaTime());
+            }
+            GetTransform()->rotation = Quaternion{ euler };
+
+            //if (yunutyEngine::Input::is
+            // 
+            // 
+            // 
+            // Down(KeyCode::MouseRightClick))
+            //{
+            //    constexpr float rotationSpeedFactor = 0.003f;
+            //    //auto euler = GetTransform()->rotation.Euler();
+            //    //euler.y += dMousePos.x * rotationSpeedFactor;
+            //    //euler.x += dMousePos.y * rotationSpeedFactor;
+            //    Quaternion& rot = GetTransform()->rotation;
+            //    Vector3d newForward =
+            //        rot.Forward() +
+            //        dMousePos.x * rotationSpeedFactor * rot.Right() +
+            //        -dMousePos.y * rotationSpeedFactor * rot.Up();
+            //    //Vector3d newRight =
+            //    //    //Vector3d::right +
+            //    //    rot.Right() +
+            //    //    dMousePos.x * rotationSpeedFactor * -rot.Forward();
+            //    Vector3d newUp = rot.Up() + -dMousePos.y * rotationSpeedFactor * -rot.Forward();
+            //    Vector3d newRight = Vector3d::Cross(Vector3d::up, newForward);
+            //    //GetTransform()->rotation = Quaternion::MakeWithAxes(euler);
+            //    GetTransform()->rotation = Quaternion::MakeWithAxes(newRight, newUp, newForward);
+            //}
 
             GetTransform()->position += deltaPosition.Normalized() * Time::GetDeltaTime() * cameraSpeed;
         }
@@ -126,29 +147,40 @@ public:
             centeredPosition.x -= 0.5;
             centeredPosition.y -= 0.5;
             centeredPosition.y *= -1;
-            // Ä«¸Þ¶ó ÇØ»óµµ°¡ 1280, 800ÀÏ¶§ near planeÀÇ °¡·Î°¡ 1.28, 0.8ÀÓ.
+            // ì¹´ë©”ë¼ í•´ìƒë„ê°€ 1280, 800ì¼ë•Œ near planeì˜ ê°€ë¡œê°€ 1.28, 0.8ìž„.
             auto forward = GetTransform()->GetWorldRotation().Forward();
             auto right = GetTransform()->GetWorldRotation().Right();
             auto up = GetTransform()->GetWorldRotation().Up();
             projectedPoint = GetTransform()->GetWorldPosition() +
                 forward * expectedPlaneDistance() +
-                right * centeredPosition.x * 0.7 * 0.001 * resolution.x * expectedPlaneDistance() +
-                up * centeredPosition.y * 0.7 * 0.001 * resolution.y * expectedPlaneDistance();
+                right * centeredPosition.x * 0.001 * resolution.x * expectedPlaneDistance() +
+                up * centeredPosition.y * 0.001 * resolution.y * expectedPlaneDistance();
 
-			if (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick))
-				DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?
-					yunuGI::Color::red() : yunuGI::Color::blue(), { 0.2,0.2,0.2 });
-            mouseCursorObject->GetTransform()->SetWorldPosition(projectedPoint);
-            
+            if (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick))
+                DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?
+                    yunuGI::Color::red() : yunuGI::Color::blue(), { 0.2,0.2,0.2 });
             if (Input::isKeyPushed(KeyCode::MouseLeftClick))
-                groundLeftClickCallback(projectedPoint);
-            else if (Input::isKeyPushed(KeyCode::MouseRightClick))
-                groundRightClickCallback(projectedPoint);
+            {
+                if (groundLeftClickCallback) groundLeftClickCallback(projectedPoint);
+            }
+            else if (Input::isKeyLifted(KeyCode::MouseLeftClick))
+            {
+                if (groundLeftClickReleaseCallback) groundLeftClickReleaseCallback(projectedPoint);
+            }
+            if (Input::isKeyPushed(KeyCode::MouseRightClick))
+            {
+                if (groundRightClickCallback) groundRightClickCallback(projectedPoint);
+            }
+            else if (Input::isKeyLifted(KeyCode::MouseRightClick))
+            {
+                if (groundRightClickReleaseCallback) groundRightClickReleaseCallback(projectedPoint);
+            }
 
             groundHoveringClickCallback(projectedPoint);
         }
     }
 private:
     float expectedPlaneDistance() { return abs(GetTransform()->GetWorldPosition().y); };
+    Vector3d euler;
 };
 

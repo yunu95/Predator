@@ -17,12 +17,16 @@ public:
 	{
 		if (isStatic)
 		{
-			this->original = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DefaultMaterial"));
+			this->original = ((Material*)(ResourceManager::Instance.Get().GetMaterial(L"DefaultMaterial").get()));
 		}
 		else
 		{
-			this->original = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"SkinnedDefaultMaterial"));
+			this->original = ((Material*)(ResourceManager::Instance.Get().GetMaterial(L"SkinnedDefaultMaterial").get()));
 		}
+	}
+	~MaterialWrapper()
+	{
+
 	}
 
 	virtual void SetName(const std::wstring& materialName) override
@@ -74,9 +78,9 @@ public:
 	Material* GetMaterial()
 	{
 		if (usingOriginal)
-			return original.get();
+			return original;
 		else
-			return variation.get();
+			return variation;
 	}
 
 	bool IsOrigin()
@@ -92,21 +96,21 @@ public:
 private:
 	bool usingOriginal{ true };
 
-	std::shared_ptr<Material> GetVariation()
+	Material* GetVariation()
 	{
 		if (usingOriginal)
 		{
 			variation = ResourceManager::Instance.Get().CreateInstanceMaterial(original);
 			usingOriginal = false;
-			renderable->SetMaterial(0, variation.get());
+			renderable->SetMaterial(0, variation);
 		}
 
 		return variation;
 	};
 
 public:
-	std::shared_ptr<Material> original;
-	std::shared_ptr<Material> variation;
+	Material* original;
+	Material* variation;
 
 private:
 	std::shared_ptr<IRenderable> renderable;

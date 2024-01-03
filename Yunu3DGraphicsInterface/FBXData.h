@@ -24,6 +24,11 @@ namespace yunuGI
 		std::vector<FBXData*> child;
 
 		std::wstring nodeName;
+		std::wstring meshName;
+
+		yunuGI::Vector3 pos;
+		yunuGI::Vector3 scale;
+		yunuGI::Vector4 quat;
 
 		std::vector<MaterialData> materialVec;
 

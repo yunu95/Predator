@@ -41,21 +41,22 @@ namespace yunutyEngine
         }
         void Collider::Update()
         {
-            // rigidbody°¡ staticÀÌ¸é Àý´ë Æ®·£½ºÆûÀÌ ¹Ù²î¾î¼± ¾ÈµÈ´Ù.
+            // rigidbodyê°€ staticì´ë©´ ì ˆëŒ€ íŠ¸ëžœìŠ¤í¼ì´ ë°”ë€Œì–´ì„  ì•ˆëœë‹¤.
 #ifdef _DEBUG
             if (impl->isStaticShape())
             {
-                // staticÀ¸·Î ÁöÁ¤µÈ ¸®Áöµå¹Ùµð´Â °áÄÚ ¿òÁ÷ÀÌÁö ¸»¾Æ¾ß ÇÕ´Ï´Ù!
-                // ¹°¸® ½Ã¹Ä·¹ÀÌ¼ÇÀÇ ¿µÇâÀ» ¹ÞÁö ¾ÊÀ¸¸é¼­µµ Æ®·£½ºÆûÀº ¸¶À½´ë·Î ¹Ù²Ù°í ½Í´Ù¸é RigidBody ÄÄÆ÷³ÍÆ®ÀÇ SetAsKinematic ±â´ÉÀ» È°¿ëÇÏ¼¼¿ä. 
+                // staticìœ¼ë¡œ ì§€ì •ëœ ë¦¬ì§€ë“œë°”ë””ëŠ” ê²°ì½” ì›€ì§ì´ì§€ ë§ì•„ì•¼ í•©ë‹ˆë‹¤!
+                // ë¬¼ë¦¬ ì‹œë®¬ë ˆì´ì…˜ì˜ ì˜í–¥ì„ ë°›ì§€ ì•Šìœ¼ë©´ì„œë„ íŠ¸ëžœìŠ¤í¼ì€ ë§ˆìŒëŒ€ë¡œ ë°”ê¾¸ê³  ì‹¶ë‹¤ë©´ RigidBody ì»´í¬ë„ŒíŠ¸ì˜ SetAsKinematic ê¸°ëŠ¥ì„ í™œìš©í•˜ì„¸ìš”. 
                 assert((firstLocation - GetTransform()->GetWorldPosition()).MagnitudeSqr() < 0.01);
                 assert(Quaternion::Dot(firstRotation, GetTransform()->GetWorldRotation()) > 0.99);
                 return;
             }
 #endif
-            // rigidbody°¡ kinematicÀÌ¸é physXActor°¡ ¹«Á¶°Ç °ÔÀÓ ¿ÀºêÁ§Æ®ÀÇ Æ®·£½ºÆûÀ» µû¶ó°¡¾ß ÇÑ´Ù.
-            // rigidbody°¡ dynamicÀÏ¶§´Â °ÔÀÓ ¿ÀºêÁ§Æ®ÀÇ Æ®·£½ºÆûÀÌ physXActor¸¦ µû¶ó°¡¸é µÈ´Ù.
-            if (rigidBody != nullptr && (rigidBody->GetIsKinematic()))
+            // rigidbodyê°€ kinematicì´ë©´ physXActorê°€ ë¬´ì¡°ê±´ ê²Œìž„ ì˜¤ë¸Œì íŠ¸ì˜ íŠ¸ëžœìŠ¤í¼ì„ ë”°ë¼ê°€ì•¼ í•œë‹¤.
+            // rigidbodyê°€ dynamicì¼ë•ŒëŠ” ê²Œìž„ ì˜¤ë¸Œì íŠ¸ì˜ íŠ¸ëžœìŠ¤í¼ì´ physXActorë¥¼ ë”°ë¼ê°€ë©´ ëœë‹¤.
+            if (impl->isKinematic)
             {
+                assert(GetTransform()->GetWorldScale().MagnitudeSqr() > 0.99 &&GetTransform()->GetWorldScale().MagnitudeSqr() < 1.01,"scale must be 1.");
                 impl->SetActorWorldTransform(GetTransform()->GetWorldTM());
             }
             else
@@ -66,13 +67,13 @@ namespace yunutyEngine
         }
         void Collider::OnEnable()
         {
-            impl->pxActor->setActorFlag({PxActorFlag::eDISABLE_SIMULATION},false);
+            impl->pxActor->setActorFlag({ PxActorFlag::eDISABLE_SIMULATION }, false);
             if (impl->pxRigidDynamic->isSleeping())
                 impl->pxRigidDynamic->wakeUp();
         }
         void Collider::OnDisable()
         {
-            impl->pxActor->setActorFlag({PxActorFlag::eDISABLE_SIMULATION},true);
+            impl->pxActor->setActorFlag({ PxActorFlag::eDISABLE_SIMULATION }, true);
         }
     }
 }

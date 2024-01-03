@@ -2,7 +2,7 @@
 #include "YunutyEngine.h"
 #include "Unit.h"
 /// <summary>
-/// UnitFactory¿¡¼­ÀÇ À¯´Ö »ı»êÀ» Á» ´õ È¿À²ÀûÀ¸·Î ÇÏ±â À§ÇÑ Å¬·¡½º.
+/// UnitFactoryì—ì„œì˜ ìœ ë‹› ìƒì‚°ì„ ì¢€ ë” íš¨ìœ¨ì ìœ¼ë¡œ í•˜ê¸° ìœ„í•œ í´ë˜ìŠ¤.
 /// </summary>
 
 using namespace yunuGI;
@@ -19,8 +19,9 @@ protected:
 	float m_atkRadius;
 	float m_unitSpeed;
 
-	// ÀÓ½Ã. ¸ğµ¨¸µ ÆÄÀÏ·Î ´ëÃ¼ÇØÁÖ±â
+	// ì„ì‹œ. ëª¨ë¸ë§ íŒŒì¼ë¡œ ëŒ€ì²´í•´ì£¼ê¸°
 	GameObject* m_unitGameObject;
+	GameObject* m_unitAttackColliderObject;
 	IAnimation* m_idleAnimation;
 	IAnimation* m_walkAnimation;
 	IAnimation* m_attackAnimation;

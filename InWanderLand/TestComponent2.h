@@ -4,19 +4,18 @@
 class TestComponent2 : public yunutyEngine::Component
 {
 public:
-	graphics::Animator* anim;
-	yunuGI::IAnimation* walkAnimation;
-	yunuGI::IAnimation* idleAnimation;
+	GameObject* gameObject;
 
 	void Update()
 	{
-		if (Input::isKeyDown(KeyCode::H))
+		if (Input::isKeyPushed(KeyCode::H))
 		{
-			anim->GetGI().ChangeAnimation(walkAnimation, 0.5f, 2.f);
+			yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(gameObject);
+			//gameObject->SetSelfActive(false);
 		}
 		if (Input::isKeyDown(KeyCode::J))
 		{
-			anim->GetGI().ChangeAnimation(idleAnimation, 0.5f, 2.f);
+			gameObject->SetSelfActive(true);
 		}
 	}
 };

@@ -1,4 +1,7 @@
 #include "WarriorProduction.h"
+#include "BleedingComponent.h"
+#include "MeleeAttackSystem.h"
+#include "DebugMeshes.h"
 
 void WarriorProduction::SetUnitData(GameObject* fbxObject)
 {
@@ -48,6 +51,32 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject)
 			animator->GetGI().PushAnimation(m_deathAnimation);
 		}
 	}
+
+	/// Choose AttackType
+
+
+	/// Unit Attack Collider Setting
+	m_unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	m_unitAttackColliderObject->setName("UnitAttackCollider");
+	//auto rigidBody = m_unitAttackColliderObject->AddComponent<physics::RigidBody>();
+	//rigidBody->SetAsKinematic(true);
+
+	auto m_physicsCollider = m_unitAttackColliderObject->AddComponent<physics::BoxCollider>();
+	m_physicsCollider->SetHalfExtent({ 0.5,0.5,0.5 });
+	//auto m_physicsRigidbody = m_unitAttackColliderObject->AddComponent<physics::RigidBody>();
+	
+	auto warriorBleedingSystem = m_unitAttackColliderObject->AddComponent<BleedingComponent>();
+	auto debugColliderMesh = AttachDebugMesh(m_unitAttackColliderObject, DebugMeshType::Rectangle, yunuGI::Color::red(), true);
+	
+	m_unitAttackColliderObject->SetParent(m_unitGameObject);
+	m_unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, 1.3f });
+
+	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
+	warriorAttackSystem->SetColliderObject(m_unitAttackColliderObject);
+	warriorAttackSystem->SetColliderRemainTime(1.0f);
+
+	//m_unitAttackColliderObject->SetSelfActive(false);
+
 }
 
 GameObject* WarriorProduction::CreateUnitWithOrder()

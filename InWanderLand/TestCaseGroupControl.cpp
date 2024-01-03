@@ -44,7 +44,7 @@ void CreateNavigationPlane2(Vector3f botleft, Vector3f topright, std::vector<Vec
 	tilePlane->SetTiles();
 }
 
-// ÀÌ ÇÔ¼ö´Â °ÔÀÓÀÇ ±âº» ÃÊ±âÈ­ ÇÔ¼ö¸¦ ¿À¹ö¶óÀÌµåÇÕ´Ï´Ù.
+// ì´ í•¨ìˆ˜ëŠ” ê²Œìž„ì˜ ê¸°ë³¸ ì´ˆê¸°í™” í•¨ìˆ˜ë¥¼ ì˜¤ë²„ë¼ì´ë“œí•©ë‹ˆë‹¤.
 void TestCaseGroupControlInit()
 {
 	yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
@@ -62,13 +62,16 @@ void TestCaseGroupControlInit()
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
 	auto rtsCam = camObj->AddComponent<RTSCam>();
-	rtsCam->SetMouseCursorObject(mouseCursorObject);
+	rtsCam->groundHoveringClickCallback = [=](Vector3d pos)
+	{
+		mouseCursorObject->GetTransform()->SetWorldPosition(pos);
+	};
 	std::vector<Vector3f> worldVertices{ };
 	std::vector<int> worldFaces{ };
 
 	camObj->GetTransform()->SetWorldPosition(Vector3d(0, 30, 0));
 
-	// ±æÃ£±â ÇÊµå »ý¼º
+	// ê¸¸ì°¾ê¸° í•„ë“œ ìƒì„±
 	CreateNavigationPlane2({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
 	CreateNavigationPlane2({ -8,0,-2 }, { 8,0,2 }, worldVertices, worldFaces);
 	CreateNavigationPlane2({ -8,0,-8 }, { -6,0,8 }, worldVertices, worldFaces);
@@ -91,24 +94,24 @@ void TestCaseGroupControlInit()
 	StatusTimerPool::GetInstance()->SetUp();
 
 	/// FBX File Load
-	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-	//rsrcManager->LoadFile("FBX/Player");
-	rsrcManager->LoadFile("FBX/Boss");
+	//auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	////rsrcManager->LoadFile("FBX/Player");
+	//rsrcManager->LoadFile("FBX/Boss");
 
-	auto warriorProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<WarriorProduction>();
-	warriorProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"));
-	auto player1GameObject = warriorProductor->CreateUnitWithOrder();
-	unitfactory->OrderCreateUnit(player1GameObject, navField, Vector3d(-7.0f, 0.0f, 0.0f));
+	//auto warriorProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<WarriorProduction>();
+	//warriorProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"));
+	//auto player1GameObject = warriorProductor->CreateUnitWithOrder();
+	//unitfactory->OrderCreateUnit(player1GameObject, navField, Vector3d(-7.0f, 0.0f, 0.0f));
 
-	auto magicianProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MagicianProduction>();
-	magicianProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"));
-	auto player2GameObject = magicianProductor->CreateUnitWithOrder();
-	unitfactory->OrderCreateUnit(player2GameObject, navField, Vector3d(-7.0f, 0.0f, 7.0f));
+	//auto magicianProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MagicianProduction>();
+	//magicianProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"));
+	//auto player2GameObject = magicianProductor->CreateUnitWithOrder();
+	//unitfactory->OrderCreateUnit(player2GameObject, navField, Vector3d(-7.0f, 0.0f, 7.0f));
 
-	auto healerProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<HealerProduction>();
-	healerProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"));
-	auto player3GameObject = healerProductor->CreateUnitWithOrder();
-	unitfactory->OrderCreateUnit(player3GameObject, navField, Vector3d(-7.0f, 0.0f, -7.0f));
+	//auto healerProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<HealerProduction>();
+	//healerProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"));
+	//auto player3GameObject = healerProductor->CreateUnitWithOrder();
+	//unitfactory->OrderCreateUnit(player3GameObject, navField, Vector3d(-7.0f, 0.0f, -7.0f));
 
 	//auto meleeEnemyProductor1 = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MeleeEnemyProduction>();
 	//meleeEnemyProductor1->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Player"));
@@ -120,7 +123,8 @@ void TestCaseGroupControlInit()
 	//auto enemy2GameObject = meleeEnemyProductor2->CreateUnitWithOrder();
 	//unitfactory->OrderCreateUnit(enemy2GameObject, navField, Vector3d(7.0f, 0.0f, 0.0f));
 
-
+	auto boxTemp = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	boxTemp->AddComponent<physics::CapsuleCollider>();
 	{
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();

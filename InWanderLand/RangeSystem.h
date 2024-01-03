@@ -1,12 +1,12 @@
 #pragma once
 #include "YunutyEngine.h"
 /// <summary>
-/// GetGameObject->GetComponent<IRangeAction>À» ÅëÇØ ÇÔ¼öÈ£Ãâ ÇÒ ¿¹Á¤. 
+/// GetGameObject->GetComponent<IRangeAction>ì„ í†µí•´ í•¨ìˆ˜í˜¸ì¶œ í•  ì˜ˆì •. 
 /// </summary>
 
 class Unit;
 
-class RangeSystem : public CircleCollider2D
+class RangeSystem : public Component
 {
 private:
     Unit* m_unitComponent;
@@ -18,7 +18,7 @@ public:
 
 public:
     virtual void Start() override;
-    virtual void OnCollisionEnter2D(const Collision2D& collision) override;
-    virtual void OnCollisionExit2D(const Collision2D& collision) override;
+    virtual void OnTriggerEnter(physics::Collider* collider) override;
+    virtual void OnTriggerExit(physics::Collider* collider) override;
 };
 

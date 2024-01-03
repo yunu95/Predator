@@ -31,6 +31,8 @@
 #include "NailAnimatorManager.h"
 #include "NailAnimator.h"
 
+#include "InstancingManager.h"
+
 #include <iostream>
 #include <fstream>
 
@@ -50,6 +52,11 @@ void RenderSystem::SortObject()
 
 	for (auto& e : staticRenderableSet)
 	{
+		if(e->IsActive() == false)
+		{
+			continue;
+		}
+
 		auto mesh = e->GetMesh();
 		for (int i = 0; i < mesh->GetMaterialCount(); ++i)
 		{
@@ -75,6 +82,11 @@ void RenderSystem::SortObject()
 
 	for (auto& e : skinnedRenderableSet)
 	{
+		if (e->IsActive() == false)
+		{
+			continue;
+		}
+
 		auto mesh = e->GetMesh();
 		for (int i = 0; i < mesh->GetMaterialCount(); ++i)
 		{
@@ -175,20 +187,25 @@ void RenderSystem::RenderObject()
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
 	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->OMSetRenderTarget();
 
+	MatrixBuffer matrixBuffer;
+	//matrixBuffer.WTM = e.wtm;
+	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+
+	InstancingManager::Instance.Get().RegisterMeshAndMaterial(this->deferredVec);
+
 	for (auto& e : this->deferredVec)
 	{
-		MatrixBuffer matrixBuffer;
-		matrixBuffer.WTM = e.wtm;
-		matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-		matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
-		matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-		matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+		
 
-		auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.mesh->GetName()));
+		/*auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.mesh->GetName()));
 
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.material->GetName()))->PushGraphicsData();
-		mesh->Render(e.materialIndex);
+		mesh->Render(e.materialIndex);*/
+		
 	}
 	
 	//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->UnBind();
@@ -236,7 +253,7 @@ void RenderSystem::RenderSkinned()
 		}
 
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.renderInfo.material->GetName()))->PushGraphicsData();
-		mesh->Render(e.renderInfo.materialIndex);
+		mesh->Render(e.renderInfo.materialIndex,nullptr);
 	}
 }
 
@@ -297,7 +314,7 @@ void RenderSystem::RenderForward()
 		auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.mesh->GetName()));
 
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.material->GetName()))->PushGraphicsData();
-		mesh->Render(e.materialIndex);
+		mesh->Render(e.materialIndex, nullptr);
 	}
 }
 

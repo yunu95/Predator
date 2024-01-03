@@ -16,6 +16,7 @@ namespace yunutyEngine
             PxCapsuleGeometry geometry;
             virtual PxGeometry& GetGeometry()override
             {
+                //assert(radius != 0);
                 geometry = PxCapsuleGeometry{ radius,halfHeight };
                 return geometry;
             }

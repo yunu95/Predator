@@ -1,6 +1,7 @@
 #include "Unit.h"
 #include "ProjectileSystem.h"
 #include "PlayerController.h"
+#include "AttackSystem.h"
 #include "InputManager.h"
 
 void Unit::Start()
@@ -86,6 +87,7 @@ void Unit::Start()
 void Unit::Update()
 {
 	unitFSM.UpdateState();
+	GetGameObject()->GetTransform()->scale = Vector3d(0.00005, 0.00005, 0.00005);
 }
 
 Unit::UnitType Unit::GetUnitType() const
@@ -174,7 +176,7 @@ void Unit::IdleUpdate()
 	idleElapsed += Time::GetDeltaTime();
 
 	IdleUpdateFunction();
-	// µ¥¹ÌÁö¸¦ ÀÔÀ¸¸é °ø°İÇÑ »ó´ëÀÇ Á¤º¸¸¦ list¿¡ µî·ÏÇÏ°í ÂÑ¾Æ°¡±â
+	// ë°ë¯¸ì§€ë¥¼ ì…ìœ¼ë©´ ê³µê²©í•œ ìƒëŒ€ì˜ ì •ë³´ë¥¼ listì— ë“±ë¡í•˜ê³  ì«“ì•„ê°€ê¸°
 }
 
 void Unit::MoveUpdate()
@@ -229,7 +231,7 @@ void Unit::QSkillUpdate()
 		{
 			isSkillStarted = false;
 			currentOrder = UnitState::Idle;
-			// ¿©±â¼­ leftClickFunctionÀ» ½ºÅ³ »ç¿ë ¸øÇÏ°Ô ÇØ¾ß ÇÑ´Ù....
+			// ì—¬ê¸°ì„œ leftClickFunctionì„ ìŠ¤í‚¬ ì‚¬ìš© ëª»í•˜ê²Œ í•´ì•¼ í•œë‹¤....
 			PlayerController::GetInstance()->SetLeftClickMove();
 		}
 	}
@@ -260,7 +262,7 @@ void Unit::DeathUpdate()
 
 #pragma region Engage Functions
 /// <summary>
-/// ÁÖ¿ä ±â´É : m_currentTargetObject°¡ nullptrÀÎ »óÅÂ·Î µé¾î¿À¸é »óÈ²¿¡ µû¶ó ÀçÁ¤ÀÇ.
+/// ì£¼ìš” ê¸°ëŠ¥ : m_currentTargetObjectê°€ nullptrì¸ ìƒíƒœë¡œ ë“¤ì–´ì˜¤ë©´ ìƒí™©ì— ë”°ë¼ ì¬ì •ì˜.
 /// </summary>
 void Unit::IdleEngageFunction()
 {
@@ -300,12 +302,16 @@ void Unit::AttackEngageFunction()
 {
 	StopMove();
 	
-	//// Idle Animation Àû¿ë ÈÄ DelayÁÖ°í ½î±â
+	//// Idle Animation ì ìš© í›„ Delayì£¼ê³  ì˜ê¸°
 	//GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
 	//GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_idleAnimation);
 
-	// ¹Ù·Î ½î±â
-	ProjectileSystem::GetInstance()->Shoot(this, m_currentTargetObject->GetComponent<Unit>(), m_bulletSpeed);
+	// ë°”ë¡œ ì˜ê¸°
+	//ProjectileSystem::GetInstance()->Shoot(this, m_currentTargetObject->GetComponent<Unit>(), m_bulletSpeed);
+	//GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_attackAnimation, animationLerpDuration, animationTransitionSpeed);
+
+	/// AttackSystem ì ìš©
+	GetGameObject()->GetComponent<AttackSystem>()->Attack(m_currentTargetObject->GetComponent<Unit>());
 	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_attackAnimation, animationLerpDuration, animationTransitionSpeed);
 }
 
@@ -358,7 +364,7 @@ void Unit::AttackUpdateFunction()
 
 	//if(m_attackType == AttackType::Melee)
 
-	ProjectileSystem::GetInstance()->Shoot(this, m_currentTargetObject->GetComponent<Unit>(), m_bulletSpeed);
+	GetGameObject()->GetComponent<AttackSystem>()->Attack(m_currentTargetObject->GetComponent<Unit>());
 }
 
 void Unit::QSkillUpdateFunction()
@@ -366,7 +372,7 @@ void Unit::QSkillUpdateFunction()
 	qSkillFunctionStartElapsed = 0.0f;
 	isSkillStarted = true;
 
-	// ½ºÅ³ ¿ÀºêÁ§Æ® »ı¼º (½ÇÁ¦ ½ºÅ³ ±â´É)
+	// ìŠ¤í‚¬ ì˜¤ë¸Œì íŠ¸ ìƒì„± (ì‹¤ì œ ìŠ¤í‚¬ ê¸°ëŠ¥)
 
 }
 
@@ -444,7 +450,7 @@ void Unit::SetDeathAnimation(IAnimation* deathAnim)
 
 void Unit::LookAt(Vector3d destination)
 {
-	// ¸ÕÀú, ¹æÇâ ÆÇº°.
+	// ë¨¼ì €, ë°©í–¥ íŒë³„.
 	Vector3d tempDistanceVec = destination - GetGameObject()->GetTransform()->GetWorldPosition();
 	Vector3d distanceVec = Vector3d(tempDistanceVec.x, 0, tempDistanceVec.z);
 	bool isUnitFliped = false;
@@ -462,7 +468,7 @@ void Unit::LookAt(Vector3d destination)
 		//i	sUnitFliped = true;
 	}
 	
-	// ³»ÀûÀ¸·Î ¹İ´ë ¹æÇâÀÌ ÂïÇûÀ» °æ¿ì ·ÎÄÃ bool°ª Á¶Àı
+	// ë‚´ì ìœ¼ë¡œ ë°˜ëŒ€ ë°©í–¥ì´ ì°í˜”ì„ ê²½ìš° ë¡œì»¬ boolê°’ ì¡°ì ˆ
 	float dotted = Vector3d::Dot(forwardVector, distanceVec);
 	if (dotted < 0)
 	{
@@ -473,7 +479,7 @@ void Unit::LookAt(Vector3d destination)
 		isUnitFliped = false;
 	}
 
-	// Áøµ¿ ¹æÁö - forward°¡ distance¿Í ¾î´ÀÁ¤µµ ÀÏÁ÷¼± »óÀÌ µÈ´Ù¸é µ¹Áö¸»°Í.
+	// ì§„ë™ ë°©ì§€ - forwardê°€ distanceì™€ ì–´ëŠì •ë„ ì¼ì§ì„  ìƒì´ ëœë‹¤ë©´ ëŒì§€ë§ê²ƒ.
 	if (axis.Magnitude() >= 0.5 || isUnitFliped == true)
 	{
 		currentRotation += localRotationSpeed * Time::GetDeltaTime();
@@ -542,18 +548,18 @@ void Unit::ReportUnitDeath()
 {
 	for (auto e : m_recognizedThisList)
 	{
-		// Á×Àº À¯´ÖÀÌ ¾Æ´Ñ Á×Àº À¯´ÖÀ» list¿¡ °®°í ÀÖ´Â À¯´ÖÀÇ ÇÔ¼ö È£Ãâ
+		// ì£½ì€ ìœ ë‹›ì´ ì•„ë‹Œ ì£½ì€ ìœ ë‹›ì„ listì— ê°–ê³  ìˆëŠ” ìœ ë‹›ì˜ í•¨ìˆ˜ í˜¸ì¶œ
 		e->IdentifiedOpponentDeath(this->GetGameObject());
 	}
 }
 
 void Unit::IdentifiedOpponentDeath(yunutyEngine::GameObject* diedOpponent)
 {
-	/// Á×Àº À¯´ÖÀÌ ÇöÀç Å¸°ÙÀ¸·Î ÁöÁ¤ÇÑ À¯´ÖÀÌ¶ó¸é
+	/// ì£½ì€ ìœ ë‹›ì´ í˜„ì¬ íƒ€ê²Ÿìœ¼ë¡œ ì§€ì •í•œ ìœ ë‹›ì´ë¼ë©´
 	if (m_currentTargetObject == diedOpponent)
 		m_currentTargetObject = nullptr;
 
-	/// Àû±ºÀ» ´ã°í ÀÖ´Â list¿¡¼­ Á×Àº ¿ÀºêÁ§Æ® À¯´ÖÀ» »©ÁØ´Ù.
+	/// ì êµ°ì„ ë‹´ê³  ìˆëŠ” listì—ì„œ ì£½ì€ ì˜¤ë¸Œì íŠ¸ ìœ ë‹›ì„ ë¹¼ì¤€ë‹¤.
 	m_opponentObjectList.remove(diedOpponent);
 }
 
@@ -576,7 +582,7 @@ void Unit::OrderAttackMove(Vector3d position)
 	currentOrder = UnitState::AttackMove;
 
 	PlayerController::GetInstance()->SetLeftClickMove();
-	// ´ÙÀ½ Å¬¸¯Àº Move·Î ¹Ù²Ü ¼ö ÀÖµµ·Ï function ÀçÁ¤ÀÇ.
+	// ë‹¤ìŒ í´ë¦­ì€ Moveë¡œ ë°”ê¿€ ìˆ˜ ìˆë„ë¡ function ì¬ì •ì˜.
 
 	isAttackMoving = true;
 }

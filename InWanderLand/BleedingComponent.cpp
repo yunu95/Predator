@@ -5,9 +5,9 @@
 
 void BleedingComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 {
-	/// ÃâÇ÷ ½Ã½ºÅÛ	
-	/// damage¸¦ ÁÖ´Â°Ç Unit->Damaged ÇÔ¼ö¸¦ È£Ãâ,
-	/// ÀÌ¿ÜÀÇ ·ÎÁ÷(ÃâÇ÷ ½ºÅÃ, Áö¼Ó ÇÇÇØ, )Àº ³»ºÎ¿¡¼­ ±¸Çö
+	/// ì¶œí˜ˆ ì‹œìŠ¤í…œ	
+	/// damageë¥¼ ì£¼ëŠ”ê±´ Unit->Damaged í•¨ìˆ˜ë¥¼ í˜¸ì¶œ,
+	/// ì´ì™¸ì˜ ë¡œì§(ì¶œí˜ˆ ìŠ¤íƒ, ì§€ì† í”¼í•´, )ì€ ë‚´ë¶€ì—ì„œ êµ¬í˜„
 	
 	StatusTimer* bleedingTimer = StatusTimerPool::GetInstance()->GetStatusTimer();
 	opponentUnitMap.insert({ opponentUnit, bleedingTimer });
@@ -36,4 +36,15 @@ void BleedingComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 void BleedingComponent::Update()
 {
 	
+}
+
+void BleedingComponent::OnTriggerEnter(physics::Collider* collider)
+{
+	// Request StatusTimer To TimerPool here
+	if (collider->GetGameObject()->GetComponent<Unit>() != nullptr &&
+		collider->GetGameObject()->GetComponent<Unit>()->GetUnitSide() == Unit::UnitSide::Enemy)
+	{
+		ApplyStatus(GetGameObject()->GetParentGameObject()->GetComponent<Unit>(),
+			collider->GetGameObject()->GetComponent<Unit>());
+	}
 }

@@ -1,19 +1,14 @@
 #pragma once
 #include "YunutyEngine.h"
 /// <summary>
-/// ÃâÇ÷°ú °°Àº »óÅÂÀÌ»ó°ú ¹öÇÁ »óÅÂ ÄÄÆ÷³ÍÆ®.
+/// ì¶œí˜ˆê³¼ ê°™ì€ ìƒíƒœì´ìƒê³¼ ë²„í”„ ìƒíƒœ ì»´í¬ë„ŒíŠ¸.
 /// </summary>
 
 class Unit;
 
 class UnitStatusComponent : public Component
 {
-private:
-	Unit* m_ownerUnit;
-	Unit* m_currentOpponentUnit;
-
 public:
-	virtual void SetOwnerUnit(Unit* ownerUnit);
 	virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) = 0;
 };
 

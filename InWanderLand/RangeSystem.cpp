@@ -6,36 +6,32 @@ void RangeSystem::Start()
 
 }
 
+void RangeSystem::OnTriggerEnter(physics::Collider* collider)
+{
+	/// ì„¤ì •í•´ì¤€ íƒ€ìž…ì— ë”°ë¼ Unitì—ì„œ í˜¸ì¶œë  í•¨ìˆ˜ë¥¼ ì •í•´ì¤€ë‹¤.
+// ë¶€ëª¨ ì˜¤ë¸Œì íŠ¸ (ìœ ë‹›) ì˜ íƒ€ìž…ì´ ë‹¤ë¥´ë‹¤ë©´ ì¶©ëŒ ì²˜ë¦¬
+	if (collider->GetGameObject()->GetComponent<Unit>() != nullptr &&
+		m_unitComponent->GetUnitSide() != collider->GetGameObject()->GetComponent<Unit>()->GetUnitSide())
+	{
+		float distance = (collider->GetGameObject()->GetTransform()->GetWorldPosition() - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
+
+		m_unitComponent->AddToOpponentObjectList(collider->GetGameObject());
+		//m_unitComponent->IdleTransition();
+	}
+}
+
+void RangeSystem::OnTriggerExit(physics::Collider* collider)
+{
+	if (collider->GetGameObject()->GetComponent<Unit>() != nullptr &&
+		m_unitComponent->GetUnitSide() != collider->GetGameObject()->GetComponent<Unit>()->GetUnitSide())
+	{
+		m_unitComponent->DeleteFromOpponentObjectList(collider->GetGameObject());
+	}
+}
+
 void RangeSystem::SetOwnerUnitComponent(Unit* unitComponent)
 {
 	m_unitComponent = unitComponent;
 }
 
-
-void RangeSystem::OnCollisionEnter2D(const Collision2D& collision)
-{
-	/// ¼³Á¤ÇØÁØ Å¸ÀÔ¿¡ µû¶ó Unit¿¡¼­ È£ÃâµÉ ÇÔ¼ö¸¦ Á¤ÇØÁØ´Ù.
-	// ºÎ¸ð ¿ÀºêÁ§Æ® (À¯´Ö) ÀÇ Å¸ÀÔÀÌ ´Ù¸£´Ù¸é Ãæµ¹ Ã³¸®
-	if (collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>() != nullptr &&
-		m_unitComponent->GetUnitSide() != collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>()->GetUnitSide())
-	{	
-		float distance = (collision.m_OtherCollider->GetGameObject()->GetTransform()->GetWorldPosition() - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
-		
-		m_unitComponent->AddToOpponentObjectList(collision.m_OtherCollider->GetGameObject());
-		//m_unitComponent->IdleTransition();
-	}
-}
-
-/// <summary>
-/// ÀÎ½Ä ¹üÀ§¿¡ ÀÖ´Ù°¡ ¹þ¾î ³µÀ» °æ¿ì. 
-/// </summary>
-/// <param name="collision"></param>
-void RangeSystem::OnCollisionExit2D(const Collision2D& collision)
-{
-	if (collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>() != nullptr &&
-		m_unitComponent->GetUnitSide() != collision.m_OtherCollider->GetGameObject()->GetComponent<Unit>()->GetUnitSide())
-	{
-		m_unitComponent->DeleteFromOpponentObjectList(collision.m_OtherCollider->GetGameObject());
-	}
-}
 

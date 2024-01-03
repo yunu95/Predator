@@ -10,208 +10,211 @@ using namespace std;
 using namespace physx;
 namespace yunutyEngine
 {
-    namespace physics
-    {
-        // ÀÌ Å¬·¡½ºÀÇ ¼³Á¤°ª¸¸ °Çµå¸®¸é ÄÝ¶óÀÌ´õ°¡ ¹°¸® °­Ã¼, Æ®¸®°Å º¼·ýÀÇ ±â´ÉÀ» ¸ðµÎ ¼öÇàÇÒ ¼ö ÀÖÁö¸¸ ÄÜÅÙÃ÷ °³¹ßÀÚ ÀÔÀå¿¡¼­´Â ÀÌ Å¬·¡½ºÀÇ Á¸Àç¸¦ ¾Ë ¼ö ¾ø´Ù.
-        // ÀÌ °´Ã¼´Â Collider ÄÄÆ÷³ÍÆ® ¾È¿¡¼­ Á¤ÀÇµÇÁö¸¸, ÀÌ °´Ã¼ÀÇ °ªµéÀ» °Çµå¸®´Â ÀÎÅÍÆäÀÌ½º´Â Rigidbody Component¿Í Collider Component¿¡ Á¸ÀçÇÕ´Ï´Ù.
-        class Collider::Impl
-        {
-        private:
-            Collider* colliderComponent;
-            physx::PxRigidStatic* pxRigidStatic{ nullptr };
-            physx::PxRigidDynamic* pxRigidDynamic{nullptr};
-            physx::PxShape* pxShape{nullptr};
-            physx::PxMaterial* pxMaterial{nullptr};
-            physx::PxRigidActor* pxActor{nullptr};
-            PxShapeFlags pxShapeFlags{ PxShapeFlag::eVISUALIZATION | physx::PxShapeFlag::eTRIGGER_SHAPE };
-            bool isStatic{ true };
-            bool isKinematic{ false };
-            bool ccdEnabled{ false };
-            friend Collider;
-            friend RigidBody;
-            friend _PhysxGlobal;
+	namespace physics
+	{
+		// ì´ í´ëž˜ìŠ¤ì˜ ì„¤ì •ê°’ë§Œ ê±´ë“œë¦¬ë©´ ì½œë¼ì´ë”ê°€ ë¬¼ë¦¬ ê°•ì²´, íŠ¸ë¦¬ê±° ë³¼ë¥¨ì˜ ê¸°ëŠ¥ì„ ëª¨ë‘ ìˆ˜í–‰í•  ìˆ˜ ìžˆì§€ë§Œ ì½˜í…ì¸  ê°œë°œìž ìž…ìž¥ì—ì„œëŠ” ì´ í´ëž˜ìŠ¤ì˜ ì¡´ìž¬ë¥¼ ì•Œ ìˆ˜ ì—†ë‹¤.
+		// ì´ ê°ì²´ëŠ” Collider ì»´í¬ë„ŒíŠ¸ ì•ˆì—ì„œ ì •ì˜ë˜ì§€ë§Œ, ì´ ê°ì²´ì˜ ê°’ë“¤ì„ ê±´ë“œë¦¬ëŠ” ì¸í„°íŽ˜ì´ìŠ¤ëŠ” Rigidbody Componentì™€ Collider Componentì— ì¡´ìž¬í•©ë‹ˆë‹¤.
+		class Collider::Impl
+		{
+		private:
+			Collider* colliderComponent;
+			physx::PxRigidStatic* pxRigidStatic{ nullptr };
+			physx::PxRigidDynamic* pxRigidDynamic{ nullptr };
+			physx::PxShape* pxShape{ nullptr };
+			physx::PxMaterial* pxMaterial{ nullptr };
+			physx::PxRigidActor* pxActor{ nullptr };
+			PxShapeFlags pxShapeFlags{ PxShapeFlag::eVISUALIZATION | physx::PxShapeFlag::eTRIGGER_SHAPE };
+			bool isStatic{ false };
+			bool isKinematic{ false };
+			bool ccdEnabled{ false };
+			friend Collider;
+			friend RigidBody;
+			friend _PhysxGlobal;
 
-        protected:
-        public:
-            // Rigidbody°¡ Á¸ÀçÇÏÁö ¾ÊÀ¸¸é isTrigger´Â Âü, Rigidbody°¡ Á¸ÀçÇÏ¸é Trigger´Â °ÅÁþÀÔ´Ï´Ù.
-            /*bool GetIsTrigger()
-            {
-                return pxShapeFlags.isSet(physx::PxShapeFlag::eTRIGGER_SHAPE);
-            }
-            void SetAsTrigger(bool isTrigger)
-            {
-                if (isTrigger)
-                    pxShapeFlags.raise(physx::PxShapeFlag::eTRIGGER_SHAPE);
-                else
-                    pxShapeFlags.clear(physx::PxShapeFlag::eTRIGGER_SHAPE);
+		protected:
+		public:
+			// Rigidbodyê°€ ì¡´ìž¬í•˜ì§€ ì•Šìœ¼ë©´ isTriggerëŠ” ì°¸, Rigidbodyê°€ ì¡´ìž¬í•˜ë©´ TriggerëŠ” ê±°ì§“ìž…ë‹ˆë‹¤.
+			/*bool GetIsTrigger()
+			{
+				return pxShapeFlags.isSet(physx::PxShapeFlag::eTRIGGER_SHAPE);
+			}
+			void SetAsTrigger(bool isTrigger)
+			{
+				if (isTrigger)
+					pxShapeFlags.raise(physx::PxShapeFlag::eTRIGGER_SHAPE);
+				else
+					pxShapeFlags.clear(physx::PxShapeFlag::eTRIGGER_SHAPE);
 
-                if (pxShape)
-                    pxShape->setFlags(pxShapeFlags);
-            }*/
+				if (pxShape)
+					pxShape->setFlags(pxShapeFlags);
+			}*/
 
-            Impl(Collider* colliderComponent)
-            {
-                this->colliderComponent = colliderComponent;
-            }
-            bool isRigidBody()
-            {
-                return pxShapeFlags.isSet(physx::PxShapeFlag::eSIMULATION_SHAPE);
-            }
-            void SetAsRigidbody(RigidBody* rigidBody)
-            {
-                isStatic = false;
-                colliderComponent->rigidBody = rigidBody;
-                if (rigidBody != nullptr)
-                {
-                    pxShapeFlags.clear(physx::PxShapeFlag::eTRIGGER_SHAPE);
-                    pxShapeFlags.raise(physx::PxShapeFlag::eSIMULATION_SHAPE);
-                }
-                else
-                {
-                    pxShapeFlags.clear(physx::PxShapeFlag::eSIMULATION_SHAPE);
-                    pxShapeFlags.raise(physx::PxShapeFlag::eTRIGGER_SHAPE);
-                }
+			Impl(Collider* colliderComponent)
+			{
+				this->colliderComponent = colliderComponent;
+			}
+			bool isRigidBody()
+			{
+				return pxShapeFlags.isSet(physx::PxShapeFlag::eSIMULATION_SHAPE);
+			}
+			void SetAsRigidbody(RigidBody* rigidBody)
+			{
+				isStatic = false;
+				colliderComponent->rigidBody = rigidBody;
+				if (rigidBody != nullptr)
+				{
+					pxShapeFlags.clear(physx::PxShapeFlag::eTRIGGER_SHAPE);
+					pxShapeFlags.raise(physx::PxShapeFlag::eSIMULATION_SHAPE);
+				}
+				else
+				{
+					pxShapeFlags.clear(physx::PxShapeFlag::eSIMULATION_SHAPE);
+					pxShapeFlags.raise(physx::PxShapeFlag::eTRIGGER_SHAPE);
+				}
 
-                if (pxShape)
-                    pxShape->setFlags(pxShapeFlags);
-            }
-            bool IsUsingCCD()
-            {
-                return ccdEnabled;
-            }
-            void EnableCCD(bool enable)
-            {
-                ccdEnabled = enable;
-                if (pxRigidDynamic)
-                    pxRigidDynamic->setRigidBodyFlag(PxRigidBodyFlag::eENABLE_CCD, enable);
-            }
-            bool isStaticShape()
-            {
-                return isStatic;
-            }
-            void SetAsStatic(bool isStatic)
-            {
-                // ÇÑ¹ø ½ºÅÂÆ½À¸·Î ÁöÁ¤ÇÑ RigidBody´Â ´Ù½Ã ¹Ù²ÙÁö ¸¶½Ã¿À. ±×·± Çàµ¿À» ½ÃµµÇÏ¸é ¾Æ·¡ assert ¹®¿¡¼­ ·±Å¸ÀÓ ¿À·ù°¡ ÀâÈ÷°Ô µË´Ï´Ù.
-                // Á¤ ±×·± ±¸¼ºÀÌ ÇÊ¿äÇÏ´Ù¸é °ÔÀÓ ¿£Áø °³¹ßÀÚ¿¡°Ô ¹®ÀÇÇÏ½Ã¿À.
-                assert((pxRigidStatic == nullptr && pxRigidDynamic == nullptr) || this->isStatic == isStatic);
-                this->isStatic = isStatic;
-            }
-            void SetAsKinematic(bool isKinematic)
-            {
-                this->isKinematic = isKinematic;
-                if (pxRigidDynamic)
-                    pxRigidDynamic->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, isKinematic);
-            }
-            bool IsKinematic()
-            {
-                return isKinematic;
-            }
-            virtual ~Impl()
-            {
-                if (pxActor)
-                {
-                    _PhysxGlobal::SingleInstance().UnRegisterCollider(this);
-                    pxActor->release();
-                }
-            }
-            virtual PxGeometry& GetGeometry() = 0;
-            // °ÔÀÓ ÄÄÆ÷³ÍÆ®¿¡ ´ëÀÀµÇ´Â physX °´Ã¼µéÀ» ÃÊ±âÈ­ÇÏ´Â ±¸¹®ÀÌ´Ù. StartÇÔ¼ö¿¡¼­ È£ÃâµÈ´Ù.
-            void InitializePhysXActor()
-            {
-                static_assert(sizeof(yunuGI::Matrix4x4) == sizeof(PxMat44));
-                auto worldTM = colliderComponent->GetTransform()->GetWorldTM();
-                pxMaterial = _PhysxGlobal::SingleInstance().pxPhysics->createMaterial(1.0f, 1.0f, 0.0f);
+				if (pxShape)
+					pxShape->setFlags(pxShapeFlags);
+			}
+			bool IsUsingCCD()
+			{
+				return ccdEnabled;
+			}
+			void EnableCCD(bool enable)
+			{
+				ccdEnabled = enable;
+				if (pxRigidDynamic)
+					pxRigidDynamic->setRigidBodyFlag(PxRigidBodyFlag::eENABLE_CCD, enable);
+			}
+			bool isStaticShape()
+			{
+				return isStatic;
+			}
+			void SetAsStatic(bool isStatic)
+			{
+				// í•œë²ˆ ìŠ¤íƒœí‹±ìœ¼ë¡œ ì§€ì •í•œ RigidBodyëŠ” ë‹¤ì‹œ ë°”ê¾¸ì§€ ë§ˆì‹œì˜¤. ê·¸ëŸ° í–‰ë™ì„ ì‹œë„í•˜ë©´ ì•„ëž˜ assert ë¬¸ì—ì„œ ëŸ°íƒ€ìž„ ì˜¤ë¥˜ê°€ ìž¡ížˆê²Œ ë©ë‹ˆë‹¤.
+				// ì • ê·¸ëŸ° êµ¬ì„±ì´ í•„ìš”í•˜ë‹¤ë©´ ê²Œìž„ ì—”ì§„ ê°œë°œìžì—ê²Œ ë¬¸ì˜í•˜ì‹œì˜¤.
+				assert((pxRigidStatic == nullptr && pxRigidDynamic == nullptr) || this->isStatic == isStatic);
+				this->isStatic = isStatic;
+			}
+			void SetAsKinematic(bool isKinematic)
+			{
+				this->isKinematic = isKinematic;
+				if (pxRigidDynamic)
+					pxRigidDynamic->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, isKinematic);
+			}
+			bool IsKinematic()
+			{
+				return isKinematic;
+			}
+			virtual ~Impl()
+			{
+				if (pxActor)
+				{
+					_PhysxGlobal::SingleInstance().UnRegisterCollider(this);
+					pxActor->release();
+				}
+			}
+			virtual PxGeometry& GetGeometry() = 0;
+			// ê²Œìž„ ì»´í¬ë„ŒíŠ¸ì— ëŒ€ì‘ë˜ëŠ” physX ê°ì²´ë“¤ì„ ì´ˆê¸°í™”í•˜ëŠ” êµ¬ë¬¸ì´ë‹¤. Startí•¨ìˆ˜ì—ì„œ í˜¸ì¶œëœë‹¤.
+			void InitializePhysXActor()
+			{
+				static_assert(sizeof(yunuGI::Matrix4x4) == sizeof(PxMat44));
+				auto worldTM = colliderComponent->GetTransform()->GetWorldTM();
+				pxMaterial = _PhysxGlobal::SingleInstance().pxPhysics->createMaterial(1.0f, 1.0f, 0.0f);
 
-                pxShape = _PhysxGlobal::SingleInstance().pxPhysics->createShape(GetGeometry(), *pxMaterial, true, pxShapeFlags);
+				pxShape = _PhysxGlobal::SingleInstance().pxPhysics->createShape(GetGeometry(), *pxMaterial, true, pxShapeFlags);
 
-                if (isStatic)
-                {
-                    pxRigidStatic = _PhysxGlobal::SingleInstance().pxPhysics->createRigidStatic(PxTransform(reinterpret_cast<const PxMat44&>(worldTM)));
-                    _PhysxGlobal::SingleInstance().RequestPxScene(colliderComponent->GetGameObject()->GetScene())->addActor(*pxRigidStatic);
-                    pxRigidStatic->attachShape(*pxShape);
-                    pxActor = pxRigidStatic;
-                }
-                else
-                {
-                    pxRigidDynamic = _PhysxGlobal::SingleInstance().pxPhysics->createRigidDynamic(PxTransform(reinterpret_cast<const PxMat44&>(worldTM)));
-                    _PhysxGlobal::SingleInstance().RequestPxScene(colliderComponent->GetGameObject()->GetScene())->addActor(*pxRigidDynamic);
-                    pxRigidDynamic->attachShape(*pxShape);
-                    if (ccdEnabled)
-                        pxRigidDynamic->setRigidBodyFlag(PxRigidBodyFlag::eENABLE_CCD, true);
-                    if (isKinematic)
-                        pxRigidDynamic->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
-                    pxActor = pxRigidDynamic;
-                }
-                _PhysxGlobal::SingleInstance().RegisterCollider(this);
-                pxShape->release();
-            }
-            void LockTranslation(bool x, bool y, bool z)
-            {
-                if (isStatic)
-                    return;
+				if (isStatic)
+				{
+					pxRigidStatic = _PhysxGlobal::SingleInstance().pxPhysics->createRigidStatic(PxTransform(reinterpret_cast<const PxMat44&>(worldTM)));
+					_PhysxGlobal::SingleInstance().RequestPxScene(colliderComponent->GetGameObject()->GetScene())->addActor(*pxRigidStatic);
+					pxRigidStatic->attachShape(*pxShape);
+					pxActor = pxRigidStatic;
+				}
+				else
+				{
+					//assert(PxTransform{ PxMat44{ reinterpret_cast<const PxMat44&>(worldTM) } }.isValid(), "ì›”ë“œ ìŠ¤ì¼€ì¼ì´ 1ì´ì—¬ì•¼ ë¨ ã…‹");
+					pxRigidDynamic = _PhysxGlobal::SingleInstance().pxPhysics->createRigidDynamic(PxTransform(PxMat44{ reinterpret_cast<const PxMat44&>(worldTM) }));
+					_PhysxGlobal::SingleInstance().RequestPxScene(colliderComponent->GetGameObject()->GetScene())->addActor(*pxRigidDynamic);
+					pxRigidDynamic->attachShape(*pxShape);
+					if (ccdEnabled)
+						pxRigidDynamic->setRigidBodyFlag(PxRigidBodyFlag::eENABLE_CCD, true);
+					if (colliderComponent->rigidBody == nullptr)
+						isKinematic = true;
+					if (isKinematic)
+						pxRigidDynamic->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
+					pxActor = pxRigidDynamic;
+				}
+				_PhysxGlobal::SingleInstance().RegisterCollider(this);
+				pxShape->release();
+			}
+			void LockTranslation(bool x, bool y, bool z)
+			{
+				if (isStatic)
+					return;
 
-                pxRigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_LINEAR_X, x);
-                pxRigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_LINEAR_Y, y);
-                pxRigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_LINEAR_Z, z);
-            }
-            void LockRotation(bool x, bool y, bool z)
-            {
-                if (isStatic)
-                    return;
+				pxRigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_LINEAR_X, x);
+				pxRigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_LINEAR_Y, y);
+				pxRigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_LINEAR_Z, z);
+			}
+			void LockRotation(bool x, bool y, bool z)
+			{
+				if (isStatic)
+					return;
 
-                pxRigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, x);
-                pxRigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, y);
-                pxRigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, z);
-            }
-            void SetMass(float mass)
-            {
-                if (isStatic)
-                    return;
+				pxRigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, x);
+				pxRigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, y);
+				pxRigidDynamic->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, z);
+			}
+			void SetMass(float mass)
+			{
+				if (isStatic)
+					return;
 
-                pxRigidDynamic->setMass(mass);
-            }
-            void AddForce(const Vector3f& forceVector, ForceType forceType)
-            {
-                if (isStatic)
-                    return;
+				pxRigidDynamic->setMass(mass);
+			}
+			void AddForce(const Vector3f& forceVector, ForceType forceType)
+			{
+				if (isStatic)
+					return;
 
-                static_assert((int)ForceType::FORCE == (int)PxForceMode::eFORCE);
-                static_assert((int)ForceType::IMPULSE == (int)PxForceMode::eIMPULSE);
-                static_assert((int)ForceType::VELOCITY_CHANGE == (int)PxForceMode::eVELOCITY_CHANGE);
-                static_assert((int)ForceType::ACCELERATION == (int)PxForceMode::eACCELERATION);
+				static_assert((int)ForceType::FORCE == (int)PxForceMode::eFORCE);
+				static_assert((int)ForceType::IMPULSE == (int)PxForceMode::eIMPULSE);
+				static_assert((int)ForceType::VELOCITY_CHANGE == (int)PxForceMode::eVELOCITY_CHANGE);
+				static_assert((int)ForceType::ACCELERATION == (int)PxForceMode::eACCELERATION);
 
-                pxRigidDynamic->addForce(reinterpret_cast<const PxVec3&>(forceVector), reinterpret_cast<const PxForceMode::Enum&>(forceType));
-            }
-            void AddTorque(const Vector3f& forceVector, ForceType torqueType)
-            {
-                if (isStatic)
-                    return;
+				pxRigidDynamic->addForce(reinterpret_cast<const PxVec3&>(forceVector), reinterpret_cast<const PxForceMode::Enum&>(forceType));
+			}
+			void AddTorque(const Vector3f& forceVector, ForceType torqueType)
+			{
+				if (isStatic)
+					return;
 
-                static_assert((int)ForceType::FORCE == (int)PxForceMode::eFORCE);
-                static_assert((int)ForceType::IMPULSE == (int)PxForceMode::eIMPULSE);
-                static_assert((int)ForceType::VELOCITY_CHANGE == (int)PxForceMode::eVELOCITY_CHANGE);
-                static_assert((int)ForceType::ACCELERATION == (int)PxForceMode::eACCELERATION);
+				static_assert((int)ForceType::FORCE == (int)PxForceMode::eFORCE);
+				static_assert((int)ForceType::IMPULSE == (int)PxForceMode::eIMPULSE);
+				static_assert((int)ForceType::VELOCITY_CHANGE == (int)PxForceMode::eVELOCITY_CHANGE);
+				static_assert((int)ForceType::ACCELERATION == (int)PxForceMode::eACCELERATION);
 
-                pxRigidDynamic->addTorque(reinterpret_cast<const PxVec3&>(forceVector), reinterpret_cast<const PxForceMode::Enum&>(torqueType));
-            }
-            void SetActorWorldTransform(const yunuGI::Matrix4x4& worldTM)
-            {
-                static_assert(sizeof(yunuGI::Matrix4x4) == sizeof(PxMat44));
-                pxActor->setGlobalPose(PxTransform{ reinterpret_cast<const PxMat44&>(worldTM) });
-            }
-            yunutyEngine::Vector3f GetActorPosition()
-            {
-                static_assert(sizeof(Vector3f) == sizeof(PxVec3));
-                return reinterpret_cast<const Vector3f&>(pxActor->getGlobalPose().p);
-            }
-            yunutyEngine::Quaternion GetActorRotation()
-            {
-                static_assert(sizeof(Quaternion) == sizeof(PxQuatd));
+				pxRigidDynamic->addTorque(reinterpret_cast<const PxVec3&>(forceVector), reinterpret_cast<const PxForceMode::Enum&>(torqueType));
+			}
+			void SetActorWorldTransform(const yunuGI::Matrix4x4& worldTM)
+			{
+				static_assert(sizeof(yunuGI::Matrix4x4) == sizeof(PxMat44));
+				pxActor->setGlobalPose(PxTransform{ reinterpret_cast<const PxMat44&>(worldTM) });
+			}
+			yunutyEngine::Vector3f GetActorPosition()
+			{
+				static_assert(sizeof(Vector3f) == sizeof(PxVec3));
+				return reinterpret_cast<const Vector3f&>(pxActor->getGlobalPose().p);
+			}
+			yunutyEngine::Quaternion GetActorRotation()
+			{
+				static_assert(sizeof(Quaternion) == sizeof(PxQuatd));
 
-                auto pxQuat = pxActor->getGlobalPose().q;
-                yunutyEngine::Quaternion quat { pxQuat.w, pxQuat.x, pxQuat.y, pxQuat.z };
-                return quat;
-            }
-        };
-    }
+				auto pxQuat = pxActor->getGlobalPose().q;
+				yunutyEngine::Quaternion quat{ pxQuat.w, pxQuat.x, pxQuat.y, pxQuat.z };
+				return quat;
+			}
+		};
+	}
 }

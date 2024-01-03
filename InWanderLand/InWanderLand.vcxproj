@@ -365,7 +365,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="..\Include\ImGui\imconfig.h" />
     <ClInclude Include="..\Include\ImGui\imgui.h" />
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
+    <ClInclude Include="AttackSystem.h" />
     <ClInclude Include="BleedingComponent.h" />
+    <ClInclude Include="MeleeAttackSystem.h" />
+    <ClInclude Include="RangedAttackSystem.h" />
     <ClInclude Include="StatusTimer.h" />
     <ClInclude Include="StatusTimerPool.h" />
     <ClInclude Include="CamSwitcher.h" />
@@ -383,6 +386,16 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="ProjectileSystem.h" />
     <ClInclude Include="RangeSystem.h" />
     <ClInclude Include="SkillSystem.h" />
+    <ClInclude Include="DoodadPaletteManager.h" />
+    <ClInclude Include="PaletteSelectCollider.h" />
+    <ClInclude Include="PaletteInstance.h" />
+    <ClInclude Include="PaletteManager.h" />
+    <ClInclude Include="SelectionBox.h" />
+    <ClInclude Include="SelectionBoxPerInstance.h" />
+    <ClInclude Include="SelectionBoxPerInstancePool.h" />
+    <ClInclude Include="TerrainBrush.h" />
+    <ClInclude Include="TerrainInstance.h" />
+    <ClInclude Include="TerrainPaletteManager.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="TestColliderEnableDeath.h" />
     <ClInclude Include="DebugBeacon.h" />
@@ -443,6 +456,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="UnitFactory.h" />
     <ClInclude Include="UnitProductionOrder.h" />
     <ClInclude Include="WarriorProduction.h" />
+    <ClInclude Include="UnitBrush.h" />
+    <ClInclude Include="UnitInstance.h" />
+    <ClInclude Include="UnitPaletteManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp" />
@@ -452,7 +468,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="..\Include\ImGui\imgui_draw.cpp" />
     <ClCompile Include="..\Include\ImGui\imgui_tables.cpp" />
     <ClCompile Include="..\Include\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="AttackSystem.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
+    <ClCompile Include="MeleeAttackSystem.cpp" />
+    <ClCompile Include="RangedAttackSystem.cpp" />
+    <ClCompile Include="SnippetSkillSystem.cpp" />
     <ClCompile Include="StatusTimer.cpp" />
     <ClCompile Include="StatusTimerPool.cpp" />
     <ClCompile Include="CamSwitcher.cpp" />
@@ -481,8 +501,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="MapFileManager.cpp" />
     <ClCompile Include="Ornament.cpp" />
     <ClCompile Include="Ornament_TemplateData.cpp" />
+    <ClCompile Include="PaletteManager.cpp" />
     <ClCompile Include="SnippetAnimation.cpp" />
     <ClCompile Include="SnippetAnimationChangeInterpolation.cpp" />
+    <ClCompile Include="SnippetEditTerrain.cpp" />
+    <ClCompile Include="SnippetPhysxCollider.cpp" />
     <ClCompile Include="SnippetTemplate.cpp" />
     <ClCompile Include="Panel_CameraView.cpp" />
     <ClCompile Include="Panel_Hierarchy.cpp" />
@@ -502,6 +525,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="TerrainData.cpp" />
     <ClCompile Include="Terrain_TemplateData.cpp" />
     <ClCompile Include="TestCaseMapFileIO.cpp" />
+    <ClCompile Include="TestCasePhysxTrigger.cpp" />
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="UnitStatusComponent.cpp" />
     <ClCompile Include="Unit_TemplateData.cpp" />

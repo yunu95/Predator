@@ -6,19 +6,20 @@ class StatusTimer;
 class BleedingComponent : public UnitStatusComponent
 {
 private:
-	int m_maxDamagedCount = 3;			// ¸ñÇ¥ ÃâÇ÷ µ¥¹ÌÁö È½¼ö
-	int m_currentDamagedCount = 0;			// ÃâÇ÷·Î µ¥¹ÌÁö¸¦ ÀÔÀº È½¼ö
+	int m_maxDamagedCount = 3;			// ëª©í‘œ ì¶œí˜ˆ ë°ë¯¸ì§€ íšŸìˆ˜
+	int m_currentDamagedCount = 0;			// ì¶œí˜ˆë¡œ ë°ë¯¸ì§€ë¥¼ ì…ì€ íšŸìˆ˜
 	int m_bleedDamage = 1.0f;
-	float m_bleedDuration = 5.0f;			// ÃâÇ÷ Áö¼Ó ½Ã°£
-	float m_bleedInterval = 1.0f;			// ÃâÇ÷ ÇÇÇØ °£°İ
-	float m_bleedElapsed = 0.0f;			// ÃâÇ÷ ÇÇÇØ °æ°ú ½Ã°£
+	float m_bleedDuration = 5.0f;			// ì¶œí˜ˆ ì§€ì† ì‹œê°„
+	float m_bleedInterval = 1.0f;			// ì¶œí˜ˆ í”¼í•´ ê°„ê²©
+	float m_bleedElapsed = 0.0f;			// ì¶œí˜ˆ í”¼í•´ ê²½ê³¼ ì‹œê°„
 
-	std::map<Unit*, StatusTimer*> opponentUnitMap;	// ÇöÀç ÃâÇ÷À» °Ş´Â À¯´Ö, ÇØ´ç À¯´ÖÀÇ ÃâÇ÷ Å¸ÀÌ¸Ó
+	std::map<Unit*, StatusTimer*> opponentUnitMap;	// í˜„ì¬ ì¶œí˜ˆì„ ê²ªëŠ” ìœ ë‹›, í•´ë‹¹ ìœ ë‹›ì˜ ì¶œí˜ˆ íƒ€ì´ë¨¸
 
 public:
 	virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) override;
 	
 public:
 	virtual void Update() override;
+	virtual void OnTriggerEnter(physics::Collider* collider) override;
 };
 
