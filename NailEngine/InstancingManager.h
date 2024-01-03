@@ -22,7 +22,9 @@ public:
 	friend LazyObjects<InstancingManager>;
 
 public:
+	void Init();
 	void RegisterMeshAndMaterial(std::vector<RenderInfo>& renderInfo);
+	void RegisterSkinnedMeshAndMaterial(std::vector<SkinnedRenderInfo>& renderInfo);
 	void ClearData();
 
 private:
@@ -32,4 +34,5 @@ private:
 
 private:
 	std::map<InstanceID/*instanceId*/, std::shared_ptr<InstanceBuffer>> _buffers;
+	std::shared_ptr<InstanceTransitionDesc> instanceTransitionDesc;
 };

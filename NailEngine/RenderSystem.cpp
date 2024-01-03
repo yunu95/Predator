@@ -107,7 +107,8 @@ void RenderSystem::SortObject()
 			renderInfo.materialIndex = i;
 			renderInfo.wtm = e->GetWorldTM();
 			//renderInfo.objecID = e->GetID();
-			skinnedRenderInfo.animatorIndex = std::static_pointer_cast<SkinnedMesh>(e)->GetAnimatorIndex();
+			skinnedRenderInfo.animator = NailAnimatorManager::Instance.Get().GetAnimator(
+				std::static_pointer_cast<SkinnedMesh>(e)->GetAnimatorIndex());
 
 			skinnedRenderInfo.renderInfo = std::move(renderInfo);
 
@@ -226,49 +227,51 @@ void RenderSystem::RenderObject()
 
 void RenderSystem::RenderSkinned()
 {
-	for (auto& e : this->skinnedVec)
-	{
-		// 본TM 구해서 넘기기
-		//BoneUpdate(e);
+	MatrixBuffer matrixBuffer;
+	//matrixBuffer.WTM = e.wtm;
+	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
+	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 
-		auto animator = NailAnimatorManager::Instance.Get().GetAnimator(e.animatorIndex);
-		auto modelName = animator->GetModel();
-		ResourceManager::Instance.Get().GetAnimationGroup(modelName)->Bind();
+	InstancingManager::Instance.Get().RegisterSkinnedMeshAndMaterial(this->skinnedVec);
 
-		//KeyframeDesc keyFrameDesc;
-		//keyFrameDesc.animIndex = animator->GetTransitionDesc().curr.animIndex;
-		//keyFrameDesc.currFrame = animator->GetCurrentFrame();
-		//keyFrameDesc.nextFrame = animator->GetCurrentFrame()+1;
-		//keyFrameDesc.ratio = animator->GetFrameRatio();
-		auto& transitionDesc = animator->GetTransitionDesc();
-		NailEngine::Instance.Get().GetConstantBuffer(5)->PushGraphicsData(&transitionDesc, sizeof(TransitionDesc), 5);
+	//for (auto& e : this->skinnedVec)
+	//{
+	//	// 본TM 구해서 넘기기
+	//	//BoneUpdate(e);
 
-		MatrixBuffer matrixBuffer;
-		matrixBuffer.WTM = e.renderInfo.wtm;
-		matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-		matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
-		matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-		matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-		//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{e.renderInfo.objecID,0,0,0};
-		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+	//	auto animator = NailAnimatorManager::Instance.Get().GetAnimator(e.animatorIndex);
+	//	auto modelName = animator->GetModel();
+	//	ResourceManager::Instance.Get().GetAnimationGroup(modelName)->Bind();
 
-		auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.renderInfo.mesh->GetName()));
+	//	//KeyframeDesc keyFrameDesc;
+	//	//keyFrameDesc.animIndex = animator->GetTransitionDesc().curr.animIndex;
+	//	//keyFrameDesc.currFrame = animator->GetCurrentFrame();
+	//	//keyFrameDesc.nextFrame = animator->GetCurrentFrame()+1;
+	//	//keyFrameDesc.ratio = animator->GetFrameRatio();
+	//	auto& transitionDesc = animator->GetTransitionDesc();
+	//	NailEngine::Instance.Get().GetConstantBuffer(5)->PushGraphicsData(&transitionDesc, sizeof(InstanceTransitionDesc), 5);
 
-		auto animationGroup = ResourceManager::Instance.Get().GetAnimationGroup(e.modelName);
-		animationGroup->Bind();
+	//	MatrixBuffer matrixBuffer;
+	//	matrixBuffer.WTM = e.renderInfo.wtm;
+	//	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+	//	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	//	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	//	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	//	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{e.renderInfo.objecID,0,0,0};
+	//	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 
-		auto shaderList = ResourceManager::Instance.Get().GetShaderList();
-		for (auto& i : shaderList)
-		{
-			if (i->GetName() == L"SkinnedVS.cso")
-			{
-				std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.renderInfo.material->GetName()))->SetVertexShader(i);
-			}
-		}
+	//	auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.renderInfo.mesh->GetName()));
 
-		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.renderInfo.material->GetName()))->PushGraphicsData();
-		mesh->Render(e.renderInfo.materialIndex,nullptr);
-	}
+	//	auto animationGroup = ResourceManager::Instance.Get().GetAnimationGroup(e.modelName);
+	//	animationGroup->Bind();
+
+	//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.renderInfo.material->GetName()))->PushGraphicsData();
+	//	mesh->Render(e.renderInfo.materialIndex,nullptr);
+	//}
 }
 
 void RenderSystem::RenderLight()

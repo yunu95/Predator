@@ -25,63 +25,69 @@ void GraphicsTest()
 {
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	_resourceManager->CreateMaterial(L"Debug");
+	_resourceManager->LoadFile("FBX/Boss");
 	_resourceManager->LoadFile("FBX/Bush");
+	_resourceManager->LoadFile("FBX/BigTree");
+	auto& animationList = _resourceManager->GetAnimationList();
 
-	auto& materialList = _resourceManager->GetMaterialList();
-	auto& shaderList = _resourceManager->GetShaderList();
-	auto& meshList = _resourceManager->GetMeshList();
-	for(int i = 0; i < 500; ++i)
+	for (int j = 0; j < 100; ++j)
 	{
-		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Bush");
-		float tempX = rand() % 100;
-		float tempZ = rand() % 100;
+		float tempX = rand() % 1000;
+		float tempZ = rand() % 1000;
+		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+		object->GetTransform()->position = Vector3d{tempX,0,tempZ};
+		auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
+		for (auto& i : animationList)
+		{
+			if (i->GetName() == L"root|000.Idle")
+			{
+				i->SetLoop(true);
+				animator->GetGI().PushAnimation(i);
+				animator->GetGI().Play(i);
+			}
 
-		object->GetTransform()->position = { tempX, 0, tempZ };
+			if (i->GetName() == L"root|001-2.Walk")
+			{
+				i->SetLoop(true);
+				animator->GetGI().PushAnimation(i);
+			}
+		}
 	}
-	for (int k = 0; k < 500; ++k)
-	{
-		float tempX = rand() % 100;
-		float tempZ = rand() % 100;
 
-		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		object->GetTransform()->position = { tempX, 0, tempZ };
-		auto renderer = object->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		yunuGI::IMesh* sphere = nullptr;
-		yunuGI::IMaterial* material = nullptr;
-		yunuGI::IShader* vs = nullptr;
-		yunuGI::IShader* ps = nullptr;
-		for (auto& i : meshList)
-		{
-			if (i->GetName() == L"Sphere")
-			{
-				sphere = i;
-			}
-		}
-		for (auto& j : shaderList)
-		{
-			if (j->GetName() == L"DebugVS.cso")
-			{
-				vs = j;
-			}
-			if (j->GetName() == L"DebugPS.cso")
-			{
-				ps = j;
-			}
-		}
-		for (auto& i : materialList)
-		{
-			if (i->GetName() == L"Debug")
-			{
-				material = i;
-			}
-		}
+	//for (int j = 0; j < 1; ++j)
+	//{
+	//	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
 
-		material->SetColor(yunuGI::Color{ 0,1,0,1 });
-		renderer->GetGI().SetMesh(sphere);
-		material->SetPixelShader(ps);
-		material->SetVertexShader(vs);
-		renderer->GetGI().SetMaterial(0, material);
-	}
+	//	auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
+	//	for (auto& i : animationList)
+	//	{
+	//		if (i->GetName() == L"root|000.Idle")
+	//		{
+	//			i->SetLoop(true);
+	//			animator->GetGI().PushAnimation(i);
+	//			
+	//		}
+
+	//		if (i->GetName() == L"root|001-2.Walk")
+	//		{
+	//			i->SetLoop(true);
+	//			animator->GetGI().PushAnimation(i);
+	//			animator->GetGI().Play(i);
+	//		}
+	//	}
+	//}
+
+	//for (int i = 0; i < 500; ++i)
+	//{
+	//	float tempX = static_cast<float>(rand() % 100);
+	//	float tempZ = static_cast<float>(rand() % 100);
+	//	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Bush");
+	//	object->GetTransform()->position = Vector3d{ tempX,0,tempZ };
+	//	object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
+	//	auto object1 = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("BigTree");
+	//	object1->GetTransform()->position = Vector3d{ tempZ,0,tempX };
+	//	object1->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
+	//}
 }
 
 
@@ -155,7 +161,8 @@ void application::Contents::ContentsLayer::Initialize()
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
 	auto rtsCam = camObj->AddComponent<RTSCam>();
-	//rtsCam->GetTransform()->position = Vector3d(25, 0, -150);
+	//auto rtsCam = camObj->AddComponent<yunutyEngine::graphics::Camera>();
+	//rtsCam->GetTransform()->position = Vector3d(0, 50, -450);
 
 	//// 길찾기 테스트
 	//{

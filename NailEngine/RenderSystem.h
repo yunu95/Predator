@@ -25,16 +25,14 @@ struct RenderInfo
 	Material* material;
 	unsigned int materialIndex;
 	DirectX::SimpleMath::Matrix wtm;
-
-
-	//float objecID;
 };
 
 struct SkinnedRenderInfo
 {
 	RenderInfo renderInfo;
 	std::wstring modelName;
-	int animatorIndex;
+	std::shared_ptr<NailAnimator> animator;
+	TransitionDesc transitionDesc;
 };
 
 

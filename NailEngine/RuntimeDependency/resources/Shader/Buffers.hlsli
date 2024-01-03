@@ -3,6 +3,7 @@
 
 #define MAX_BONE_COUNT 250
 #define MAX_FRAME_COUNT 500
+#define MAX_INSTANCE_MODEL 500
 
 cbuffer MatrixBuffer : register(b0)
 {
@@ -97,9 +98,9 @@ struct TransitionDesc
     KeyframeDesc next;
 };
 
-cbuffer TransitionBuffer : register(b5)
+cbuffer InstanceTransitionDesc : register(b5)
 {
-    TransitionDesc transitionDesc;
+    TransitionDesc transitionDesc[MAX_INSTANCE_MODEL];
 }
 
 
