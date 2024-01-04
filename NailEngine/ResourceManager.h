@@ -49,6 +49,7 @@ private:
 #pragma endregion
 
 public:
+	void* GetFinalRenderImage();
 	void PushFBXBoneInfo(const std::wstring fbxName, std::map<std::wstring, BoneInfo>& boneInfoMap);
 	void PushFBXNode(const std::wstring fbxName, FBXNode* fbxNode);
 
@@ -66,7 +67,7 @@ public:
 	FBXNode* GetFBXNode(const std::wstring& fbxName);
 
 	std::vector<yunuGI::IMesh*>& GetMeshList() { return this->meshVec; };
-	std::vector<yunuGI::ITexture*> GetTextureList() { return this->textureVec; };
+	std::vector<yunuGI::ITexture*>& GetTextureList() { return this->textureVec; };
 	std::vector<yunuGI::IMaterial*>& GetMaterialList() 
 	{
 		return this->materialVec; 
@@ -101,41 +102,41 @@ private:
 
 
 private:
-	// Mesh °ü·Ã
+	// Mesh ê´€ë ¨
 	std::vector<yunuGI::IMesh*> meshVec;
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGI::IMesh>> meshMap;
 
-	// Texture °ü·Ã
+	// Texture ê´€ë ¨
 	std::vector<yunuGI::ITexture*> textureVec;
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGI::ITexture>> textureMap;
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGI::ITexture>> deferredTextureMap;
 
-	// Material °ü·Ã
+	// Material ê´€ë ¨
 	std::vector<yunuGI::IMaterial*> materialVec;
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGI::IMaterial>> materialMap;
-	// Graphics ³»ºÎ¿¡¼­ »ç¿ë ÇÒ Material
+	// Graphics ë‚´ë¶€ì—ì„œ ì‚¬ìš© í•  Material
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGI::IMaterial>> instanceMaterialMap;
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGI::IMaterial>> deferredMaterialMap;
 
-	// Shader °ü·Ã
+	// Shader ê´€ë ¨
 	std::vector<yunuGI::IShader*> shaderVec;
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGI::IShader>> shaderMap;
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGI::IShader>> deferredShaderMap;
 
-	// Animation °ü·Ã
+	// Animation ê´€ë ¨
 	std::vector<yunuGI::IAnimation*> animationVec;
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGI::IAnimation>> animationMap;
-	// ±×·¡ÇÈ½º¿¡¼­ ¾Ö´Ï¸ŞÀÌ¼ÇÀ» ÅØ½ºÃ³·Î È°¿ëÇÏ°í ½Í¾î¼­ ¸¸µç ÄÁÅ×ÀÌ³Ê
+	// ê·¸ë˜í”½ìŠ¤ì—ì„œ ì• ë‹ˆë©”ì´ì…˜ì„ í…ìŠ¤ì²˜ë¡œ í™œìš©í•˜ê³  ì‹¶ì–´ì„œ ë§Œë“  ì»¨í…Œì´ë„ˆ
 	std::unordered_map<std::wstring, std::shared_ptr<AnimationGroup>> animationGroupMap;
 
 	std::unordered_map<std::wstring, yunuGI::FBXData*> fbxDataMap;
-	//// °ÔÀÓ ¿£Áø¿¡¼­ º» °èÃş±¸Á¶·Î ¿ÀºêÁ§Æ® ¸¸µé ¶§ ¾²´Â¿ë
+	//// ê²Œì„ ì—”ì§„ì—ì„œ ë³¸ ê³„ì¸µêµ¬ì¡°ë¡œ ì˜¤ë¸Œì íŠ¸ ë§Œë“¤ ë•Œ ì“°ëŠ”ìš©
 	///std::unordered_map<std::wstring, std::vector<yunuGI::BoneInfo>> fbxBoneInfoVecMap;
-	// ±×·¡ÇÈ½º ¿£Áø ³»ºÎ¿¡¼­ ½ºÅ°´× ¾Ö´Ï¸ŞÀÌ¼Ç¿¡ ¾µ ¿ÀÇÁ¼Â Çà·ÄÀ» °¡Áö°í ÀÖ´Â º» Á¤º¸
+	// ê·¸ë˜í”½ìŠ¤ ì—”ì§„ ë‚´ë¶€ì—ì„œ ìŠ¤í‚¤ë‹ ì• ë‹ˆë©”ì´ì…˜ì— ì“¸ ì˜¤í”„ì…‹ í–‰ë ¬ì„ ê°€ì§€ê³  ìˆëŠ” ë³¸ ì •ë³´
 	std::unordered_map<std::wstring, std::map<std::wstring,BoneInfo>> fbxBoneInfoMap;
 	std::unordered_map<std::wstring, FBXNode*> fbxNodeMap;
 
-
+	ID3D11ShaderResourceView* finalRenderImagerSRV = nullptr;
 	//std::unordered_map<std::wstring, std::shared_ptr<Shader>> shaderMap;
 	//std::unordered_map<std::wstring, std::shared_ptr<Texture>> textureMap;
 	//std::unordered_map<std::wstring, std::shared_ptr<Mesh>> meshMap;
@@ -144,7 +145,7 @@ private:
 	
 	//std::unordered_map<std::wstring, yunuGI::BoneInfo> fbxBoneInfoTreeMap;
 
-	//// ±×·¡ÇÈ½º¿¡¼­ ½ºÅ°´×ÇÒ ¶§ ¾²´Â offset matrix¸¦ °¡Áö°í ÀÖ´Â º» Á¤º¸
+	//// ê·¸ë˜í”½ìŠ¤ì—ì„œ ìŠ¤í‚¤ë‹í•  ë•Œ ì“°ëŠ” offset matrixë¥¼ ê°€ì§€ê³  ìˆëŠ” ë³¸ ì •ë³´
 	//std::unordered_map<std::wstring, std::vector<FBXBoneInfo>> fbxBonOffsetVecMap;
 };
 

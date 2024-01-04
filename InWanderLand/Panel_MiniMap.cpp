@@ -28,7 +28,7 @@ namespace application
 
 		void MiniMapPanel::GUIProgress()
 		{
-			ImGui::Begin("MiniMap");
+			ImGui::Begin("MiniMap", 0, ImGuiWindowFlags_NoBringToFrontOnFocus);
 
 			/// ImGui 관련 내부 변수 업데이트
 			isMouseOver = ImGui::IsWindowHovered();

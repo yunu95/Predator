@@ -1,5 +1,5 @@
-/// 2023. 12. 04 ±è»óÁØ
-/// ITemplateData ¿¡ ´ëÇÑ »ı¼º ¹× °ü¸®¸¦ À§ÇÑ ¸Å´ÏÀú Å¬·¡½º
+/// 2023. 12. 04 ê¹€ìƒì¤€
+/// ITemplateData ì— ëŒ€í•œ ìƒì„± ë° ê´€ë¦¬ë¥¼ ìœ„í•œ ë§¤ë‹ˆì € í´ë˜ìŠ¤
 
 #pragma once
 
@@ -13,6 +13,7 @@
 #include <string>
 #include <map>
 #include <unordered_map>
+#include <vector>
 
 namespace application
 {
@@ -35,6 +36,7 @@ namespace application
 			DataType GetDataType(const UUID& uuid) const;
 			std::string GetDataKey(const ITemplateData* ptr) const;
 			std::string GetDataKey(const UUID& uuid) const;
+			const std::vector<ITemplateData*>& GetDataList(const DataType& type);
 			void Clear();
 
 		protected:
@@ -48,6 +50,7 @@ namespace application
 			std::unordered_map<const ITemplateData*, DataType> typeMap;
 			std::unordered_map<const UUID, std::string> uuidKeyMap;
 			std::unordered_map<const ITemplateData*, std::string> ptrKeyMap;
+			std::vector<ITemplateData*> dataContainer;
 		};
 	}
 }
