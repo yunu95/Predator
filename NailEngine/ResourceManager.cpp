@@ -141,6 +141,16 @@ void* ResourceManager::GetFinalRenderImage()
 	return static_cast<void*>(finalRenderImagerSRV);
 }
 
+void* ResourceManager::GetDevice()
+{
+	return static_cast<void*>(ResourceBuilder::Instance.Get().device->GetDevice().Get());
+}
+
+void* ResourceManager::GetDeviceContext()
+{
+	return static_cast<void*>(ResourceBuilder::Instance.Get().device->GetDeviceContext().Get());
+}
+
 void ResourceManager::PushFBXBoneInfo(const std::wstring fbxName, std::map<std::wstring, BoneInfo>& boneInfoMap)
 {
 	this->fbxBoneInfoMap.insert({ fbxName, (boneInfoMap) });

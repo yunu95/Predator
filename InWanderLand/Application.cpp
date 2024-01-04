@@ -87,6 +87,10 @@ namespace application
         ::ShowWindow(hWND, SW_SHOWDEFAULT);
         ::UpdateWindow(hWND);
 
+		yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
+		yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(appSpecification.windowWidth, appSpecification.windowHeight);
+		yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(hWND);
+
 #ifdef EDITOR
         /// 에디터 윈도우 생성
         int editorWinSizeX = appSpecification.windowWidth;
@@ -143,7 +147,7 @@ namespace application
 
             // Setup Platform/Renderer backends
             ImGui_ImplWin32_Init(editorHWND);
-            ImGui_ImplDX11_Init(g_Editorpd3dDevice, g_Editorpd3dDeviceContext);
+            ImGui_ImplDX11_Init((ID3D11Device*)yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDevice(), (ID3D11DeviceContext*)yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDeviceContext());
 
             // Load Fonts
             // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
@@ -172,10 +176,6 @@ namespace application
             ::DestroyWindow(editorHWND);
         };
 #endif
-
-        yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
-        yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(appSpecification.windowWidth, appSpecification.windowHeight);
-        yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(hWND);
     }
 
     void Application::Initialize()
