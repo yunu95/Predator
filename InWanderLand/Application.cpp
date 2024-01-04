@@ -75,22 +75,24 @@ namespace application
         //ImGui_ImplWin32_EnableDpiAwareness();
         ::RegisterClassEx(&wc);
 
+        appSpecification.appName = wc.lpszClassName;
+        appSpecification.windowWidth = 1920;
+        appSpecification.windowHeight = 1080;
+
         /// 게임 윈도우 생성
-        int winSizeX = 1920;	// 윈도우 가로 사이즈
-        int winSizeY = 1080;	// 윈도우 세로 사이즈
-        int winPosX = (GetSystemMetrics(SM_CXSCREEN) - winSizeX) / 2;	// 윈도우 X 좌표
-        int winPosY = (GetSystemMetrics(SM_CYSCREEN) - winSizeY) / 2;	// 윈도우 Y 좌표
-        hWND = ::CreateWindow(wc.lpszClassName, wc.lpszClassName, WS_OVERLAPPEDWINDOW, winPosX, winPosY, winSizeX, winSizeY, NULL, NULL, wc.hInstance, NULL);
+        int winPosX = (GetSystemMetrics(SM_CXSCREEN) - appSpecification.windowWidth) / 2;	// 윈도우 X 좌표
+        int winPosY = (GetSystemMetrics(SM_CYSCREEN) - appSpecification.windowHeight) / 2;	// 윈도우 Y 좌표
+        hWND = ::CreateWindow(wc.lpszClassName, wc.lpszClassName, WS_OVERLAPPEDWINDOW, winPosX, winPosY, appSpecification.windowWidth, appSpecification.windowHeight, NULL, NULL, wc.hInstance, NULL);
 
         ::ShowWindow(hWND, SW_SHOWDEFAULT);
         ::UpdateWindow(hWND);
 
 #ifdef EDITOR
         /// 에디터 윈도우 생성
-        int editorWinSizeX = 1280;
-        int editorWinSizeY = 800;
-        int editorWinPosX = (GetSystemMetrics(SM_CXSCREEN) - editorWinSizeX) / 2 + 500;
-        int editorWinPosY = (GetSystemMetrics(SM_CYSCREEN) - editorWinSizeY) / 2 - 300;
+        int editorWinSizeX = appSpecification.windowWidth;
+        int editorWinSizeY = appSpecification.windowHeight;
+        int editorWinPosX = (GetSystemMetrics(SM_CXSCREEN) - editorWinSizeX) / 2 + 300;
+        int editorWinPosY = (GetSystemMetrics(SM_CYSCREEN) - editorWinSizeY) / 2 + 200;
 
         // 게임엔진 스레드에서 에디터 윈도우를 생성하도록 유도
         yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [=]()
@@ -172,7 +174,7 @@ namespace application
 #endif
 
         yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
-        yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(winSizeX, winSizeY);
+        yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(appSpecification.windowWidth, appSpecification.windowHeight);
         yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(hWND);
     }
 
@@ -267,6 +269,11 @@ namespace application
         scoped_lock lock{ loopTodoRegistrationMutex };
         loopRegistrations.push_back(todo);
     }
+    const ApplicationSpecification& Application::GetApplicationSpecification() const
+    {
+        return appSpecification;
+    }
+
 #ifdef EDITOR
     void Application::ImGuiUpdate()
     {

@@ -148,6 +148,9 @@
     <Filter Include="Editor\Palette\PaletteBrush\TerrainBrush">
       <UniqueIdentifier>{14ee86d7-bf36-42e5-9618-562c06f3e4d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Camera">
+      <UniqueIdentifier>{330bd250-ad1e-4870-b137-7b7ca402047c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -379,6 +382,9 @@
     <ClInclude Include="PaletteSelectCollider.h">
       <Filter>Editor\Palette\PaletteBrush</Filter>
     </ClInclude>
+    <ClInclude Include="EditorCamera.h">
+      <Filter>Editor\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -545,6 +551,9 @@
     </ClCompile>
     <ClCompile Include="TestCasePhysxTrigger.cpp">
       <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorCamera.cpp">
+      <Filter>Editor\Camera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

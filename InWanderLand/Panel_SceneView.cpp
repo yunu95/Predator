@@ -2,11 +2,16 @@
 
 #include "imgui.h"
 
+#include "YunutyEngine.h"
+
+#include <d3d11.h>
+
 namespace application
 {
 	namespace editor
 	{
 		SceneViewPanel::SceneViewPanel()
+			: rendererWidth(), rendererHeight()
 		{
 
 		}
@@ -18,7 +23,9 @@ namespace application
 
 		void SceneViewPanel::Initialize()
 		{
-
+			auto rect = yunutyEngine::graphics::Renderer::SingleInstance().GetResolution();
+			rendererWidth = rect.x;
+			rendererHeight = rect.y;
 		}
 
 		void SceneViewPanel::Update(float ts)
@@ -30,12 +37,14 @@ namespace application
 		{
 			ImGui::Begin("SceneView", 0, ImGuiWindowFlags_NoBringToFrontOnFocus);
 
-			/// ImGui °ü·Ã ³»ºÎ º¯¼ö ¾÷µ¥ÀÌÆ®
+			/// ImGui ê´€ë ¨ ë‚´ë¶€ ë³€ìˆ˜ ì—…ë°ì´íŠ¸
 			isMouseOver = ImGui::IsWindowHovered();
 			isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
-			/// ½ÇÁ¦ ÆĞ³Î¿¡ ±×¸®´Â ¿µ¿ª
+			/// ì‹¤ì œ íŒ¨ë„ì— ê·¸ë¦¬ëŠ” ì˜ì—­
+			ID3D11ShaderResourceView* sceneImage;
 
+			ImGui::Image((void*)sceneImage, ImVec2(rendererWidth, rendererHeight));
 
 			ImGui::End();
 		}
