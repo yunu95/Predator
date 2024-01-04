@@ -24,6 +24,7 @@ void SnippetInitializerEditTerrain()
     rtsCam->groundLeftClickCallback = [](const Vector3d& worldPos) {application::editor::palette::TerrainPaletteManager::GetCurrentPalette()->OnLeftClick(); };
     rtsCam->groundLeftClickReleaseCallback = [](const Vector3d& worldPos) {application::editor::palette::TerrainPaletteManager::GetCurrentPalette()->OnLeftClickRelease(); };
 
+    auto directionalLight = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 
     SelectionBox::Instance();
     yunutyEngine::YunutyCycle::SingleInstance().Play();
