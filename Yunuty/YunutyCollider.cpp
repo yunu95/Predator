@@ -31,6 +31,7 @@ namespace yunutyEngine
         void Collider::Start()
         {
             impl->InitializePhysXActor();
+            cachedScale = GetTransform()->GetWorldScale();
 #ifdef _DEBUG
             if (impl->isStaticShape())
             {
@@ -57,6 +58,12 @@ namespace yunutyEngine
             if (impl->isKinematic)
             {
                 impl->SetActorWorldTransform(GetTransform()->GetWorldTM());
+
+                if (auto scl = GetTransform()->GetWorldScale(); cachedScale != scl)
+                {
+                    cachedScale = scl;
+                    ApplyScale(cachedScale);
+                }
             }
             else
             {

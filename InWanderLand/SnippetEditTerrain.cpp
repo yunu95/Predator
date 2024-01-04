@@ -5,9 +5,12 @@
 #include "DelayedTestFunctions.h"
 #include "Application.h"
 #include "RTSCam.h"
+#include "SelectionBox.h"
 #include "TerrainPaletteManager.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+using namespace application::editor::palette;
 
 // 이 함수는 게임의 기본 초기화 함수를 오버라이드합니다.
 void SnippetInitializerEditTerrain()
@@ -15,12 +18,14 @@ void SnippetInitializerEditTerrain()
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
     auto rtsCam = Scene::getCurrentScene()->AddGameObject()->AddComponent<RTSCam>();
 
-
     rtsCam->GetTransform()->position = Vector3d(3, 10, 3);
     application::editor::palette::PaletteManager::SetCurrentPalette(&application::editor::palette::TerrainPaletteManager::SingleInstance());
     rtsCam->groundHoveringClickCallback = [](const Vector3d& worldPos) {application::editor::palette::TerrainPaletteManager::GetCurrentPalette()->OnMouseMove(worldPos); };
     rtsCam->groundLeftClickCallback = [](const Vector3d& worldPos) {application::editor::palette::TerrainPaletteManager::GetCurrentPalette()->OnLeftClick(); };
     rtsCam->groundLeftClickReleaseCallback = [](const Vector3d& worldPos) {application::editor::palette::TerrainPaletteManager::GetCurrentPalette()->OnLeftClickRelease(); };
+
+
+    SelectionBox::Instance();
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 

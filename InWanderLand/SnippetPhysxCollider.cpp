@@ -76,6 +76,7 @@ void SnippetInitializerPhysxCollider()
     cam->GetTransform()->position = { 0,0,-10 };
     auto collider1 = Scene::getCurrentScene()->AddGameObject()->AddComponent<TriggerCollider>();
     auto collider2 = Scene::getCurrentScene()->AddGameObject()->AddComponent<KinematicCollider>();
+    collider1->GetTransform()->scale = { 1.5,1.5,1.5 };
     collider1->y = 0.3;
     collider2->y = -0.3;
     collider2->t = 1;
