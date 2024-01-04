@@ -25,7 +25,7 @@ namespace yunuGI
         virtual bool GetFBXBoneData(const std::string& fbxName, yunuGI::BoneInfo& boneInfo)const = 0;
         virtual void UnloadResources()const = 0;
 
-        virtual void* GetFinalRenderImage() = 0;
+        virtual void* GetFinalRenderImage() const = 0;
 
         virtual std::vector<IShader*>& GetShaderList()const = 0;
         virtual std::vector<ITexture*>& GetTextureList()const = 0;
