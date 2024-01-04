@@ -87,6 +87,7 @@ void Unit::Start()
 void Unit::Update()
 {
 	unitFSM.UpdateState();
+	/// 꼭 고쳐주기 나중에!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	GetGameObject()->GetTransform()->scale = Vector3d(0.00005, 0.00005, 0.00005);
 }
 

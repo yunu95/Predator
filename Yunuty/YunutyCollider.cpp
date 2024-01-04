@@ -56,7 +56,14 @@ namespace yunutyEngine
             // rigidbody가 dynamic일때는 게임 오브젝트의 트랜스폼이 physXActor를 따라가면 된다.
             if (impl->isKinematic)
             {
-                assert(GetTransform()->GetWorldScale().MagnitudeSqr() > 0.99 &&GetTransform()->GetWorldScale().MagnitudeSqr() < 1.01,"scale must be 1.");
+                float tempX = GetTransform()->GetWorldScale().x;
+                float tempY = GetTransform()->GetWorldScale().y;
+                float tempZ = GetTransform()->GetWorldScale().z;
+
+                GameObject* tempGameObj = GetGameObject();
+
+                assert(GetTransform()->GetWorldScale().x == 1.0f && GetTransform()->GetWorldScale().y == 1.0f && GetTransform()->GetWorldScale().z == 1.0f,
+                    "scale must be 1.");
                 impl->SetActorWorldTransform(GetTransform()->GetWorldTM());
             }
             else

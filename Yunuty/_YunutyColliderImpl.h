@@ -133,7 +133,7 @@ namespace yunutyEngine
 				}
 				else
 				{
-					//assert(PxTransform{ PxMat44{ reinterpret_cast<const PxMat44&>(worldTM) } }.isValid(), "월드 스케일이 1이여야 됨 ㅋ");
+					assert(PxTransform{ PxMat44{ reinterpret_cast<const PxMat44&>(worldTM) } }.isValid(), "world scale must be 1.");
 					pxRigidDynamic = _PhysxGlobal::SingleInstance().pxPhysics->createRigidDynamic(PxTransform(PxMat44{ reinterpret_cast<const PxMat44&>(worldTM) }));
 					_PhysxGlobal::SingleInstance().RequestPxScene(colliderComponent->GetGameObject()->GetScene())->addActor(*pxRigidDynamic);
 					pxRigidDynamic->attachShape(*pxShape);

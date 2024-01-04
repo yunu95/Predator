@@ -69,13 +69,34 @@ void SnippetSkillSystemInit()
 	camObj->GetTransform()->SetWorldPosition(Vector3d(0, 30, 0));
 
 	// 길찾기 필드 생성
-	CreateNavigationPlanes({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
+	
+	//int bottomLeftX = 0;
+	//int bottomLeftZ = 0;
+	//int topRightX = 100;
+	//int topRightZ = 100;
+	//for (int i = 0; i < 5; i++)
+	//{
+	//	bottomLeftX += i * 100;
+	//	topRightX += i * 100;
+	//	for (int j = 0; j < 5; j++)
+	//	{
+	//		bottomLeftZ += j * 100;
+	//		topRightZ += j * 100;
+	//		Vector3d bottomLeft = Vector3d(bottomLeftX, 0, bottomLeftZ);
+	//		Vector3d topRight = Vector3d(topRightX, 0, topRightZ);
+	//		CreateNavigationPlanes(bottomLeft, topRight, worldVertices, worldFaces);
+	//	}
+	//}
+	//CreateNavigationPlanes({ -500,0,-500 }, { 500,0,500 }, worldVertices, worldFaces);
 	CreateNavigationPlanes({ -8,0,-2 }, { 8,0,2 }, worldVertices, worldFaces);
 	CreateNavigationPlanes({ -8,0,-8 }, { -6,0,8 }, worldVertices, worldFaces);
 	CreateNavigationPlanes({ 6,0,-8 }, { 8,0,8 }, worldVertices, worldFaces);
 	CreateNavigationPlanes({ -8,0,6 }, { 8,0,8 }, worldVertices, worldFaces);
 	CreateNavigationPlanes({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
-	auto navField = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationField>();
+	//CreateNavigationPlanes({ -1000,0,-1000 }, { 1000,0,1000 }, worldVertices, worldFaces);
+	auto fieldObject = Scene::getCurrentScene()->AddGameObject();
+
+	auto navField = fieldObject->AddComponent<yunutyEngine::NavigationField>();
 	navField->BuildField(worldVertices, worldFaces);
 
 	/// ProjectileSystem SetUp
@@ -98,25 +119,31 @@ void SnippetSkillSystemInit()
 	/// Player1 : Warrior Unit Production
 	//unique_ptr<WarriorProduction> warriorProductor = make_unique<WarriorProduction>();
 	auto warriorProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<WarriorProduction>();
-	warriorProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"));
+	warriorProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(-7.0f, 0.0f, 0.0f));
 	auto player1GameObject = warriorProductor->CreateUnitWithOrder();
-	unitfactory->OrderCreateUnit(player1GameObject, navField, Vector3d(-7.0f, 0.0f, 0.0f));
-
-
-	//auto meleeEnemyProductor1 = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MeleeEnemyProduction>();
-	//meleeEnemyProductor1->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Player"));
-	//auto enemy1GameObject = meleeEnemyProductor1->CreateUnitWithOrder();
-	//unitfactory->OrderCreateUnit(enemy1GameObject, navField, Vector3d(7.0f, 0.0f, 7.0f));
 
 	auto magicianProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MagicianProduction>();
-	magicianProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"));
+	magicianProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(-7.0f, 0.0f, 7.0f));
 	auto player2GameObject = magicianProductor->CreateUnitWithOrder();
-	unitfactory->OrderCreateUnit(player2GameObject, navField, Vector3d(-7.0f, 0.0f, 7.0f));
 
 	auto healerProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<HealerProduction>();
-	healerProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"));
+	healerProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(-7.0f, 0.0f, -7.0f));
 	auto player3GameObject = healerProductor->CreateUnitWithOrder();
-	unitfactory->OrderCreateUnit(player3GameObject, navField, Vector3d(-7.0f, 0.0f, -7.0f));
+
+	auto meleeEnemyProductor1 = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MeleeEnemyProduction>();
+	meleeEnemyProductor1->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(7.0f, 0.0f, 7.0f));
+	auto enemy1GameObject = meleeEnemyProductor1->CreateUnitWithOrder();
+	/// Test - Make Cube which doesn't have Kinematic Collider 
+	//graphics::StaticMeshRenderer* debugMesh;
+	//auto cubeObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//cubeObject->GetTransform()->SetWorldPosition({ 7,3,0 });
+	//debugMesh = AttachDebugMesh(cubeObject, DebugMeshType::Cube, yunuGI::Color::green(), false);
+
+	//auto cubeCollider = cubeObject->AddComponent<physics::BoxCollider>();
+	//cubeCollider->SetHalfExtent({ 1,1,1 });
+	//auto cubeRigidBody = cubeObject->AddComponent<physics::RigidBody>();
+	//cubeRigidBody->SetAsKinematic(false);
+
 
 	{
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();

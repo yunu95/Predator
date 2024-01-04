@@ -1,15 +1,17 @@
 #include "HealerProduction.h"
 
-void HealerProduction::SetUnitData(GameObject* fbxObject)
+void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition)
 {
 	m_objectName = "Healer";
 	m_unitType = Unit::UnitType::Healer;
 	m_unitSide = Unit::UnitSide::Player;
 	m_hp = 100;
 	m_ap = 10;
-	m_idRadius = 15.0f;
-	m_atkRadius = 10.0f;
+	m_idRadius = 3.0f;
+	m_atkRadius = 1.0f;
 	m_unitSpeed = 2.0f;
+	m_navField = navField;
+	m_startPosition = startPosition;
 
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 

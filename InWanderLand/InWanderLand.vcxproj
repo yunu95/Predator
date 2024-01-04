@@ -449,6 +449,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="Terrain_TemplateData.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="UnitStatusComponent.h" />
+    <ClInclude Include="UnitTransformComponent.h" />
     <ClInclude Include="Unit_TemplateData.h" />
     <ClInclude Include="UUID.h" />
     <ClInclude Include="UUIDManager.h" />
@@ -528,6 +529,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="TestCasePhysxTrigger.cpp" />
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="UnitStatusComponent.cpp" />
+    <ClCompile Include="UnitTransformComponent.cpp" />
     <ClCompile Include="Unit_TemplateData.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObj.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObjImgui.cpp" />

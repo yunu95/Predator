@@ -482,6 +482,7 @@
     <ClInclude Include="RangedAttackSystem.h">
       <Filter>Contents\AttackSystem</Filter>
     </ClInclude>
+    <ClInclude Include="UnitTransformComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -715,5 +716,6 @@
     <ClCompile Include="RangedAttackSystem.cpp">
       <Filter>Contents\AttackSystem</Filter>
     </ClCompile>
+    <ClCompile Include="UnitTransformComponent.cpp" />
   </ItemGroup>
 </Project>

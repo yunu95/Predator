@@ -26,11 +26,13 @@ protected:
 	IAnimation* m_walkAnimation;
 	IAnimation* m_attackAnimation;
 	IAnimation* m_deathAnimation;
+	NavigationField* m_navField;
+	Vector3d m_startPosition;
 
 public:
 	virtual GameObject* CreateUnitWithOrder();
 
-	virtual void SetUnitData(GameObject* fbxObject) = 0;
+	virtual void SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition) = 0;
 
 	virtual void SetPlayerRelatedComponents(Unit* playerUnit);
 };

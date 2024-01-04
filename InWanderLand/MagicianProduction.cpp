@@ -1,15 +1,17 @@
 #include "MagicianProduction.h"
 
-void MagicianProduction::SetUnitData(GameObject* fbxObject)
+void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition)
 {
 	m_objectName = "Magician";
 	m_unitType = Unit::UnitType::Magician;
 	m_unitSide = Unit::UnitSide::Player;
 	m_hp = 80;
 	m_ap = 20;
-	m_idRadius = 10.0f;
-	m_atkRadius = 4.5f;
+	m_idRadius = 3.0f;
+	m_atkRadius = 2.5f;
 	m_unitSpeed = 1.0f;
+	m_navField = navField;
+	m_startPosition = startPosition;
 
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 

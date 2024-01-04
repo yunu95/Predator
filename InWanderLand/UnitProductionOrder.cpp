@@ -1,36 +1,47 @@
 #include "UnitProductionOrder.h"
 #include "RangeSystem.h"
 #include "PlayerController.h"
+#include "UnitTransformComponent.h"
 
 GameObject* UnitProductionOrder::CreateUnitWithOrder()
 {
+	m_unitGameObject->GetTransform()->SetWorldPosition(m_startPosition);
+	m_unitGameObject->GetTransform()->scale = { 1.0f, 1.0f, 1.0f };			// 콜라이더가 붙는 오브젝트 Or 그 오브젝트의 부모 오브젝트는 반드시 scale이 1로 통일 되어야 한다.
 
-	/// 1. UnitGameObject 생성
-
-	// 1-1. unitType에 따른 Unit 컴포넌트 추가
+	/// 1. UnitComponent 추가
 	Unit* m_unitComponent = m_unitGameObject->AddComponent<Unit>();
 
-	/// 2. RangeSystem Gameobject 추가
+	///// 2. 유닛을 따라다니는 별개의 오브젝트 생성
+	auto unitTransformObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	unitTransformObject->AddComponent<UnitTransformComponent>()->ownerObject = m_unitGameObject;
+
+	/// 2. RangeSystem Gameobject 및 Component 추가
 	auto unitRangeSystemObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	unitRangeSystemObject->SetParent(m_unitGameObject);
-	unitRangeSystemObject->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
+	//unitRangeSystemObject->GetTransform()->scale = { 1.0f, 1.0f, 1.0f };
 
-	// 2-1. RangeSystem Component 추가
-	auto rangesystemCollider = unitRangeSystemObject->AddComponent<physics::SphereCollider>();
-	rangesystemCollider->SetRadius(m_idRadius);
-
+	// 2-1. RangeSystem Component
 	RangeSystem* rangeSystemComponent = unitRangeSystemObject->AddComponent<RangeSystem>();
 	rangeSystemComponent->SetOwnerUnitComponent(m_unitComponent);
+
+	// 2-2. RangeSystem Collider
+	auto rangesystemCollider = unitRangeSystemObject->AddComponent<physics::SphereCollider>();
+	rangesystemCollider->SetRadius(m_idRadius);
+	unitRangeSystemObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+	
+	// 2-3. m_gameObject를 부모로 설정
+	unitRangeSystemObject->SetParent(unitTransformObject);
+
 	//// 2-2. RangeSystem Debug Mesh 추가
 	//auto rangeSystemMesh = unitRangeSystemObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	/// 3. Collider Component 추가 - object의 scale은 1,1,1로 통일하기
+	//auto unitCollider = m_unitGameObject->AddComponent<physics::BoxCollider>();
+	auto unitCollider = unitTransformObject->AddComponent<physics::BoxCollider>();	// 빈 껍데기에 
+	unitCollider->SetHalfExtent({ 1, 1, 1 });
 
-	/// 3. Collider Component 추가 - 현재 콜라이더의 오브젝트 크기는 1로 고정돼야 하므로 따로 오브젝트를 만들어주기
-	auto unitColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	unitColliderObject->setName("UnitCollider");
-	unitColliderObject->GetTransform()->scale = Vector3d(1.0f, 1.0f, 1.0f);
-	auto unitColliderComponent = unitColliderObject->AddComponent<physics::SphereCollider>();
-	unitColliderComponent->SetRadius(1.0f);
-	unitColliderObject->SetParent(m_unitGameObject);
+	/// 4. NavigationAgent Component 추가
+	auto unitNavigationComponent = m_unitGameObject->AddComponent<NavigationAgent>();
+	unitNavigationComponent->AssignToNavigationField(m_navField);
+	unitNavigationComponent->SetRadius(0.1f);
 
 	/// Unit Member Setting
 	m_unitComponent->GetGameObject()->setName(m_objectName);
@@ -44,13 +55,13 @@ GameObject* UnitProductionOrder::CreateUnitWithOrder()
 	m_unitComponent->SetIdRadius(m_idRadius);
 	m_unitComponent->SetUnitSpeed(m_unitSpeed);
 
-	//unitRangeSystemObject->GetTransform()->scale = Vector2d(m_idRadius * 2, m_idRadius * 2);
-
 	m_unitComponent->SetIdleAnimation(m_idleAnimation);
 	m_unitComponent->SetWalkAnimation(m_walkAnimation);
 	m_unitComponent->SetAttackAnimation(m_attackAnimation);
 	m_unitComponent->SetDeathAnimation(m_deathAnimation);
 
+
+	/// + 플레이어 유닛일 경우 특수 처리
 	if (m_unitSide == Unit::UnitSide::Player)
 		SetPlayerRelatedComponents(m_unitComponent);
 

@@ -78,16 +78,24 @@ void SnippetInitializerPhysxCollider()
 	cam->GetTransform()->position = { 0,0,-10 };
 
 	auto colliderObject = Scene::getCurrentScene()->AddGameObject();
+	//auto collider0 = colliderObject->AddComponent<physics::CapsuleCollider>();
+	//collider0->SetRadius(5.0f);
+	//collider0->SetHalfHeight(1.0f);
 
-	colliderObject->GetTransform()->scale = { 1.35,1.35,1.35 };
-	colliderObject->GetTransform()->rotation = { 45,45,45 };
-	auto collider0 = colliderObject->AddComponent<TriggerCollider>();
 	auto collider1 = Scene::getCurrentScene()->AddGameObject()->AddComponent<TriggerCollider>();
 	auto collider2 = Scene::getCurrentScene()->AddGameObject()->AddComponent<KinematicCollider>();
 	collider1->y = 0.3;
 	collider2->y = -0.3;
 	collider2->t = 1;
 
+	//colliderObject->SetParent(collider1->GetGameObject());
+
+	collider1->GetGameObject()->SetParent(colliderObject);
+
+	colliderObject->GetTransform()->scale = { 1.0f,1.0f,.0f };
+
+	colliderObject->GetTransform()->SetWorldPosition({ 10.0f, 10.0f, 10.0f });
+	//colliderObject->GetTransform()->SetWorldPosition(Vector3d(5.0f, 4.0f, 3.0f));
 	//collider1->GetTransform()->scale = { 1.5,1.5,1.5 };
 	//collider2->GetTransform()->scale = { 1.5,1.5,1.5 };
 
