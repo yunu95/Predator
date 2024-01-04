@@ -123,6 +123,11 @@ void* ResourceManager::GetFinalRenderImage()
 	desc.CPUAccessFlags = 0;
 	desc.Usage = D3D11_USAGE_DEFAULT;
 
+	if (renderImage != nullptr)
+	{
+		renderImage->Release();
+	}
+
 	ResourceBuilder::Instance.Get().device->GetDevice()->CreateTexture2D(&desc, nullptr, &renderImage);
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->CopyResource(renderImage, backBuffer);
 
