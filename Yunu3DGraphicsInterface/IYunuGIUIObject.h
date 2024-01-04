@@ -13,5 +13,6 @@ namespace yunuGI
 		virtual void SetScreenSpace() = 0;
 		virtual void SetWorldSpace() = 0;		
 		virtual void SetPickingMode(bool isPickingModeOn) = 0;
+		virtual void SetLayer(int layer) = 0;
 	};
 }

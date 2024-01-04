@@ -18,6 +18,8 @@
 #include "RenderSystem.h"
 #include "RenderTargetGroup.h"
 
+#include "InstancingManager.h"
+
 #include "ILight.h"
 
 
@@ -38,6 +40,9 @@ void NailEngine::Init(UINT64 hWnd)
 	CreateConstantBuffer();
 	CreateRenderTargetGroup();
 	ResourceManager::Instance.Get().CreateDefaultResource();
+
+	RenderSystem::Instance.Get().Init();
+	InstancingManager::Instance.Get().Init();
 }
 
 void NailEngine::Render()
@@ -118,7 +123,7 @@ void NailEngine::CreateConstantBuffer()
 
 	{
 		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
-		_constantBuffer->CraeteConstantBuffer(sizeof(TransitionDesc));
+		_constantBuffer->CraeteConstantBuffer(sizeof(InstanceTransitionDesc));
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
 }

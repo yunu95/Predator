@@ -4,6 +4,8 @@
 #include "Mesh.h"
 
 #include "NailCamera.h"
+#include "NailAnimator.h"
+#include "AnimationGroup.h"
 #include "NailEngine.h"
 #include "ConstantBuffer.h"
 #include "ResourceManager.h"
@@ -11,8 +13,15 @@
 
 LazyObjects<InstancingManager> InstancingManager::Instance;
 
+void InstancingManager::Init()
+{
+	instanceTransitionDesc = std::make_shared<InstanceTransitionDesc>();
+}
+
 void InstancingManager::RegisterMeshAndMaterial(std::vector<RenderInfo>& renderInfo)
 {
+	if (renderInfo.size() == 0) return;
+
 	ClearData();
 
 	std::map<InstanceID, std::vector<RenderInfo>> cache;
@@ -67,6 +76,51 @@ void InstancingManager::RegisterMeshAndMaterial(std::vector<RenderInfo>& renderI
 	}
 }
 
+void InstancingManager::RegisterSkinnedMeshAndMaterial(std::vector<SkinnedRenderInfo>& renderInfo)
+{
+	if (renderInfo.size() == 0) return;
+
+	ClearData();
+
+	std::map<InstanceID, std::vector<SkinnedRenderInfo>> cache;
+
+	for (auto& each : renderInfo)
+	{
+		InstanceID instanceID = std::make_pair((unsigned __int64)each.renderInfo.mesh, (unsigned __int64)each.renderInfo.material);
+
+		cache[instanceID].push_back(each);
+	}
+
+	for (auto& pair : cache)
+	{
+		const std::vector<SkinnedRenderInfo>& renderInfoVec = pair.second;
+
+		const InstanceID instanceID = pair.first;
+
+		{
+			for (int i = 0; i < renderInfoVec.size(); ++i)
+			{
+				const RenderInfo& renderInfo = renderInfoVec[i].renderInfo;
+				InstancingData data;
+				data.wtm = renderInfo.wtm;
+				AddData(instanceID, data);
+				this->instanceTransitionDesc->transitionDesc[i] = renderInfoVec[i].animator->GetTransitionDesc();
+			}
+
+			NailEngine::Instance.Get().GetConstantBuffer(5)->PushGraphicsData(this->instanceTransitionDesc.get(),
+				sizeof(InstanceTransitionDesc), 5);
+
+			auto animationGroup = ResourceManager::Instance.Get().GetAnimationGroup(renderInfoVec[0].modelName);
+			animationGroup->Bind();
+
+			auto& buffer = _buffers[instanceID];
+			renderInfoVec[0].renderInfo.material->PushGraphicsData();
+			buffer->PushData();
+			renderInfoVec[0].renderInfo.mesh->Render(renderInfoVec[0].renderInfo.materialIndex, buffer);
+		}
+	}
+}
+
 void InstancingManager::ClearData()
 {
 	for (auto& pair : _buffers)
@@ -74,6 +128,7 @@ void InstancingManager::ClearData()
 		pair.second->ClearData();
 	}
 }
+
 
 void InstancingManager::AddData(InstanceID id, InstancingData instancingData)
 {

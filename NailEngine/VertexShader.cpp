@@ -167,35 +167,6 @@ void VertexShader::CreateInputLayout()
 		}
 	}
 
-
-
 	ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateInputLayout(&_inputLayoutDescVec[0], _inputLayoutDescVec.size(),
 		this->vsBuffer->GetBufferPointer(), this->vsBuffer->GetBufferSize(), this->inputLayout.GetAddressOf());
-
-
-	//float3 pos : POSITION;
-	//float4 color : COLOR;
-	//float2 uv : TEXCOORD;
-	//float3 normal : NORMAL;
-	//float3 tangent : TANGENT;
-	//uint4 indices : BLENDINDICES;
-	//float4 weight : BLENDWEIGHT;
-
-	//D3D11_INPUT_ELEMENT_DESC _inputLayoutDesc[] =
-	//{
-	//	{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	//	{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	//	{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	//	{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	//	{"TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	//	{"BLENDINDICES", 0,  DXGI_FORMAT_R32G32B32A32_UINT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	//	{"BLENDWEIGHT", 0,  DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	//};
-
-	//unsigned int _numElements = ARRAYSIZE(_inputLayoutDesc);
-
-	//HRESULT hr = ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateInputLayout(_inputLayoutDesc, _numElements,
-	//	this->vsBuffer->GetBufferPointer(), this->vsBuffer->GetBufferSize(), this->inputLayout.GetAddressOf());
-
-	//int a = 1;
 }

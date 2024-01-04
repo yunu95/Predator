@@ -8,6 +8,9 @@
 #include "DebugMeshes.h"
 #include "Application.h"
 #include "TestComponent2.h"
+
+#include <algorithm>
+#include <string>
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -21,62 +24,70 @@ std::function<void()> application::Contents::ContentsLayer::testInitializer;
 void GraphicsTest()
 {
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-
-	_resourceManager->LoadFile("FBX/Sponza");
-	_resourceManager->LoadFile("FBX/Bush");
+	_resourceManager->CreateMaterial(L"Debug");
 	_resourceManager->LoadFile("FBX/Boss");
+	_resourceManager->LoadFile("FBX/Bush");
 	_resourceManager->LoadFile("FBX/BigTree");
-	//auto& shaderList = _resourceManager->GetShaderList();
-	//auto& meshList = _resourceManager->GetMeshList();
-	//{
-	//	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//	object->GetTransform()->position = Vector3d{0,0.25,0};
-	//	auto light = object->AddComponent<yunutyEngine::graphics::PointLight>();
-	//	yunuGI::Color color = yunuGI::Color{0,0,1,1};
-	//	light->GetGI().SetLightDiffuseColor(color);
-	//	light->GetGI().SetRange(0.3);
-	//}
+	auto& animationList = _resourceManager->GetAnimationList();
 
+	for (int j = 0; j < 100; ++j)
+	{
+		float tempX = rand() % 1000;
+		float tempZ = rand() % 1000;
+		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+		object->GetTransform()->position = Vector3d{tempX,0,tempZ};
+		auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
+		for (auto& i : animationList)
+		{
+			if (i->GetName() == L"root|000.Idle")
+			{
+				i->SetLoop(true);
+				animator->GetGI().PushAnimation(i);
+				animator->GetGI().Play(i);
+			}
 
-	//for (int i = 0; i < 1; ++i)
-	//{
-	//	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sponza");
-	//	object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
-	//	//object->GetTransform()->scale = Vector3d{ 1.01,1.01,1.01 };
-	//}
+			if (i->GetName() == L"root|001-2.Walk")
+			{
+				i->SetLoop(true);
+				animator->GetGI().PushAnimation(i);
+			}
+		}
+	}
 
+	//for (int j = 0; j < 1; ++j)
 	//{
 	//	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
-	//	auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
-	//	auto& animationList = _resourceManager->GetAnimationList();
 
+	//	auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
 	//	for (auto& i : animationList)
 	//	{
 	//		if (i->GetName() == L"root|000.Idle")
 	//		{
-	//			i->SetLoop(i);
+	//			i->SetLoop(true);
+	//			animator->GetGI().PushAnimation(i);
+	//			
+	//		}
+
+	//		if (i->GetName() == L"root|001-2.Walk")
+	//		{
+	//			i->SetLoop(true);
 	//			animator->GetGI().PushAnimation(i);
 	//			animator->GetGI().Play(i);
 	//		}
 	//	}
 	//}
-	//for(int i = 0; i <500;++i)
+
+	//for (int i = 0; i < 500; ++i)
 	//{
-	//	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("BigTree");
-	//	object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
 	//	float tempX = static_cast<float>(rand() % 100);
 	//	float tempZ = static_cast<float>(rand() % 100);
-	//	object->GetTransform()->position = Vector3d{tempX,0,tempZ};
+	//	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Bush");
+	//	object->GetTransform()->position = Vector3d{ tempX,0,tempZ };
+	//	object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
+	//	auto object1 = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("BigTree");
+	//	object1->GetTransform()->position = Vector3d{ tempZ,0,tempX };
+	//	object1->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
 	//}
-
-	{
-		auto bush = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Bush");
-
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		auto test = obj->AddComponent<TestComponent2>();
-
-		test->gameObject = bush;
-	}
 }
 
 
@@ -150,7 +161,8 @@ void application::Contents::ContentsLayer::Initialize()
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
 	auto rtsCam = camObj->AddComponent<RTSCam>();
-	//rtsCam->GetTransform()->position = Vector3d(0, 0, -10);
+	//auto rtsCam = camObj->AddComponent<yunutyEngine::graphics::Camera>();
+	//rtsCam->GetTransform()->position = Vector3d(0, 50, -450);
 
 	//// 길찾기 테스트
 	//{

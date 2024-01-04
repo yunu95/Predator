@@ -93,6 +93,7 @@ PS_OUT main(PixelIn input)
     float depth = projPos.z / projPos.w;
     
     output.depth = float4(depth, depth, depth, depth);
+    //output.depth = float4(objectID.x, 0, 0, 0);
     return output;
 }
 

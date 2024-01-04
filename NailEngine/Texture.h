@@ -21,6 +21,7 @@ public:
 
 #pragma region Getter
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>& GetRTV() { return this->RTV; }
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>& GetSRV() { return this->SRV; }
 #pragma endregion
 
 private:

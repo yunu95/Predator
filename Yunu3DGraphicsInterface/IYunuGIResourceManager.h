@@ -7,7 +7,7 @@
 
 #include "FBXData.h"
 
-// ¸®¼Ò½º ¸Å´ÏÀú´Â ÅØ½ºÃ³, ¸Ş½Ã¿Í °°Àº ±×·¡ÇÈ½º ¸®¼Ò½ºµéÀ» ¸í½ÃÀûÀ¸·Î ºÒ·¯¿À°Å³ª ÇÒ´çÇØÁ¦ÇÏ°í ½ÍÀ» ¶§ »ç¿ëÇÑ´Ù.
+// ë¦¬ì†ŒìŠ¤ ë§¤ë‹ˆì €ëŠ” í…ìŠ¤ì²˜, ë©”ì‹œì™€ ê°™ì€ ê·¸ë˜í”½ìŠ¤ ë¦¬ì†ŒìŠ¤ë“¤ì„ ëª…ì‹œì ìœ¼ë¡œ ë¶ˆëŸ¬ì˜¤ê±°ë‚˜ í• ë‹¹í•´ì œí•˜ê³  ì‹¶ì„ ë•Œ ì‚¬ìš©í•œë‹¤.
 namespace yunuGI
 {
     struct IResourceManagerDesc
@@ -25,7 +25,10 @@ namespace yunuGI
         virtual bool GetFBXBoneData(const std::string& fbxName, yunuGI::BoneInfo& boneInfo)const = 0;
         virtual void UnloadResources()const = 0;
 
+        virtual void* GetFinalRenderImage() = 0;
+
         virtual std::vector<IShader*>& GetShaderList()const = 0;
+        virtual std::vector<ITexture*>& GetTextureList()const = 0;
         virtual std::vector<IMesh*>& GetMeshList()const = 0;
         virtual std::vector<IMaterial*>& GetMaterialList()const = 0;
         virtual std::vector<IAnimation*>& GetAnimationList()const = 0;

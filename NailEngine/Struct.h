@@ -11,6 +11,7 @@ using namespace DirectX::PackedVector;
 #define MAX_INT 8
 #define MAX_BONE_COUNT 250
 #define MAX_FRAME_COUNT 500
+#define MAX_INSTANCE_MODEL 500
 
 struct Vertex
 {
@@ -59,6 +60,7 @@ struct MatrixBuffer
 	DirectX::SimpleMath::Matrix PTM;
 	DirectX::SimpleMath::Matrix WVP;
 	DirectX::SimpleMath::Matrix WorldInvTrans;
+	//DirectX::SimpleMath::Vector4 objectID;
 };
 
 struct MaterialBuffer
@@ -115,6 +117,11 @@ struct TransitionDesc
 	float transitionRatio;
 	KeyframeDesc curr;
 	KeyframeDesc next;
+};
+
+struct InstanceTransitionDesc
+{
+	TransitionDesc transitionDesc[MAX_INSTANCE_MODEL];
 };
 
 // Deferred Only

@@ -101,11 +101,12 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)Include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>D3D11.lib;dxgi.lib;D3DCompiler.lib;dxguid.lib;DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>D3D11.lib;dxgi.lib;D3DCompiler.lib;dxguid.lib;DirectXTex.lib;%(AdditionalDependencies);DirectXTK.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0
@@ -140,11 +141,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)Include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>assimp-vc143-mtd.lib;minizip.lib;pugixml.lib;zlibd.lib;D3D11.lib;dxgi.lib;D3DCompiler.lib;dxguid.lib;DirectXTex.lib;user32.lib</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc143-mtd.lib;minizip.lib;pugixml.lib;zlibd.lib;D3D11.lib;dxgi.lib;D3DCompiler.lib;dxguid.lib;DirectXTex.lib;user32.lib;DirectXTK.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
@@ -214,6 +216,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="Struct.h" />
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="UIImage.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VertexShader.h" />
     <ClInclude Include="YGAdapter.h" />
@@ -274,6 +277,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="UIImage.cpp" />
     <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="YGExports.cpp" />
     <ClCompile Include="YGMaterialAdapter.cpp">

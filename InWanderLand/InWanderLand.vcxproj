@@ -462,6 +462,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="Module_TemplateDataEditor.cpp" />
     <ClCompile Include="Ornament.cpp" />
     <ClCompile Include="Ornament_TemplateData.cpp" />
+    <ClCompile Include="SnippetAllGraphicsWorked.cpp" />
     <ClCompile Include="PaletteManager.cpp" />
     <ClCompile Include="SnippetAnimation.cpp" />
     <ClCompile Include="SnippetAnimationChangeInterpolation.cpp" />

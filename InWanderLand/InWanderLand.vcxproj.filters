@@ -537,6 +537,9 @@
     <ClCompile Include="SnippetAnimationChangeInterpolation.cpp">
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
+    <ClCompile Include="SnippetAllGraphicsWorked.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
     <ClCompile Include="Module_TemplateDataEditor.cpp">
       <Filter>Editor\Panel\List\Module\List</Filter>
     </ClCompile>

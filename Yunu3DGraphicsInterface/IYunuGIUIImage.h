@@ -4,10 +4,11 @@
 
 namespace yunuGI
 {
+	class ITexture;
 	class IUIImage : public yunuGI::IUIObject
 	{
 	public:
-		virtual void SetImage(LPCSTR fileName) = 0;
+		virtual void SetImage(ITexture* texture) = 0;
 	};
 	struct IUIImageDesc
 	{
