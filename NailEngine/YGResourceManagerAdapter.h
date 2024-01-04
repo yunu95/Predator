@@ -26,7 +26,7 @@ namespace yunuGIAdapter
             std::filesystem::path topLevelPath;
 			for (const auto& p : std::filesystem::path(filePath)) {
 				topLevelPath = p;
-				break;  // Ã¹ ¹øÂ° °æ·Î ¼¼±×¸ÕÆ®¸¸ °¡Á®¿À°í ¹Ýº¹¹® Á¾·á
+				break;  // ì²« ë²ˆì§¸ ê²½ë¡œ ì„¸ê·¸ë¨¼íŠ¸ë§Œ ê°€ì ¸ì˜¤ê³  ë°˜ë³µë¬¸ ì¢…ë£Œ
 			}
 
             if (ext == L".hlsl")
@@ -82,6 +82,10 @@ namespace yunuGIAdapter
 
         virtual void UnloadResources()const override
         {
+        };
+        virtual void* GetFinalRenderImage() override
+        {
+            return ResourceManager::Instance.Get().GetFinalRenderImage();
         };
 
         virtual std::vector<yunuGI::IShader*>& GetShaderList() const override

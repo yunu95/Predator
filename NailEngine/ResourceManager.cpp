@@ -10,6 +10,7 @@ using namespace DirectX::PackedVector;
 #include "PixelShader.h"
 #include "ResourceBuilder.h"
 #include "Device.h"
+#include "SwapChain.h"
 #include "Mesh.h"
 #include "IMaterial.h"
 #include "Material.h"
@@ -107,6 +108,37 @@ void ResourceManager::CreateMesh(const std::shared_ptr<Mesh>& mesh)
 {
 	meshVec.emplace_back(mesh.get());
 	meshMap.insert({ mesh->GetName(), mesh });
+}
+
+void* ResourceManager::GetFinalRenderImage()
+{
+	ID3D11Texture2D* renderImage = nullptr;
+	ID3D11Texture2D* backBuffer = nullptr;
+
+	ResourceBuilder::Instance.Get().swapChain->GetSwapChain()->GetBuffer(0, __uuidof(ID3D11Texture2D),
+		reinterpret_cast<void**>(&backBuffer));
+
+	D3D11_TEXTURE2D_DESC desc;
+	backBuffer->GetDesc(&desc);
+	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	desc.CPUAccessFlags = 0;
+	desc.Usage = D3D11_USAGE_DEFAULT;
+
+	ResourceBuilder::Instance.Get().device->GetDevice()->CreateTexture2D(&desc, nullptr, &renderImage);
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->CopyResource(renderImage, backBuffer);
+
+	if (finalRenderImagerSRV != nullptr)
+	{
+		finalRenderImagerSRV->Release();
+		finalRenderImagerSRV = nullptr;
+	}
+
+	ResourceBuilder::Instance.Get().device->GetDevice()->CreateShaderResourceView(renderImage, nullptr, &finalRenderImagerSRV);
+
+	renderImage->Release();
+	backBuffer->Release();
+
+	return static_cast<void*>(finalRenderImagerSRV);
 }
 
 void ResourceManager::PushFBXBoneInfo(const std::wstring fbxName, std::map<std::wstring, BoneInfo>& boneInfoMap)
@@ -563,7 +595,7 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 	for (int i = 0; i < node->meshVec.size(); ++i)
 	{
 		fbxData->meshName = node->meshVec[i].meshName;
-		// ½ÇÁ¦ Mesh¿Í MaterialÀ» ¸¸µéÀÚ
+		// ì‹¤ì œ Meshì™€ Materialì„ ë§Œë“¤ì
 		if (this->meshMap.find(node->meshVec[i].meshName) == this->meshMap.end())
 		{
 			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
@@ -638,7 +670,7 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 //	//{
 //	//	auto iter = this->meshMap.find(node.meshVec[i].meshName);
 //
-//	//	// ÀÌ¹Ì ¸Ş½¬ µ¥ÀÌÅÍ°¡ ÀÖ´Ù¸é ÀÌ ¸Ş½¬´Â ´ÙÁß ¸ÓÅÍ¸®¾óÀÓ
+//	//	// ì´ë¯¸ ë©”ì‰¬ ë°ì´í„°ê°€ ìˆë‹¤ë©´ ì´ ë©”ì‰¬ëŠ” ë‹¤ì¤‘ ë¨¸í„°ë¦¬ì–¼ì„
 //	//	if (iter != this->meshMap.end())
 //	//	{
 //	//		std::static_pointer_cast<Mesh>(iter->second)->SetData(node.meshVec[i].vertex, node.meshVec[i].indices);
@@ -652,7 +684,7 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 //	//	}
 //	//	else
 //	//	{
-//	//		// ¸Ş½¬ µ¥ÀÌÅÍ°¡ ¾ø´Ù¸é ¸Ş½¬¸¦ »ı¼º ÈÄ »ğÀÔ
+//	//		// ë©”ì‰¬ ë°ì´í„°ê°€ ì—†ë‹¤ë©´ ë©”ì‰¬ë¥¼ ìƒì„± í›„ ì‚½ì…
 //	//		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
 //	//		mesh->SetName(node.meshVec[i].meshName);
 //	//		mesh->SetData(node.meshVec[i].vertex, node.meshVec[i].indices);
@@ -697,12 +729,12 @@ void ResourceManager::FillFBXBoneInfoVec(const yunuGI::BoneInfo& boneInfo, std::
 //	// Data Push
 //	if (fbxData.meshName.empty())
 //	{
-//		// ¸Ş½¬°¡ »õ·Î »ı¼º µÇ¾úÀ» °æ¿ì
+//		// ë©”ì‰¬ê°€ ìƒˆë¡œ ìƒì„± ë˜ì—ˆì„ ê²½ìš°
 //		dataVec.emplace_back(_data);
 //	}
 //	else
 //	{
-//		// ÀÌ¹Ì ¸Ş½¬°¡ ÀÖ´Â °æ¿ì ¸ÓÅÍ¸®¾ó¸¸ Ãß°¡
+//		// ì´ë¯¸ ë©”ì‰¬ê°€ ìˆëŠ” ê²½ìš° ë¨¸í„°ë¦¬ì–¼ë§Œ ì¶”ê°€
 //		fbxData.materialVec.emplace_back(materialData);
 //	}
 //
@@ -744,32 +776,32 @@ void ResourceManager::LoadCubeMesh()
 
 	std::vector<Vertex> vec(24);
 
-	// ¾Õ¸é
+	// ì•ë©´
 	vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
 	vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
 	vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
 	vec[3] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
-	// µŞ¸é
+	// ë’·ë©´
 	vec[4] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
 	vec[5] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
 	vec[6] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
 	vec[7] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
-	// À­¸é
+	// ìœ—ë©´
 	vec[8] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
 	vec[9] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
 	vec[10] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.f, 0.f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
 	vec[11] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.f, 1.f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
-	// ¾Æ·§¸é
+	// ì•„ë«ë©´
 	vec[12] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
 	vec[13] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
 	vec[14] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
 	vec[15] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
-	// ¿ŞÂÊ¸é
+	// ì™¼ìª½ë©´
 	vec[16] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
 	vec[17] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
 	vec[18] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
 	vec[19] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
-	// ¿À¸¥ÂÊ¸é
+	// ì˜¤ë¥¸ìª½ë©´
 	vec[20] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
 	vec[21] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
 	vec[22] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
@@ -777,22 +809,22 @@ void ResourceManager::LoadCubeMesh()
 
 	std::vector<unsigned int> idx(36);
 
-	// ¾Õ¸é
+	// ì•ë©´
 	idx[0] = 0; idx[1] = 1; idx[2] = 2;
 	idx[3] = 0; idx[4] = 2; idx[5] = 3;
-	// µŞ¸é
+	// ë’·ë©´
 	idx[6] = 4; idx[7] = 5; idx[8] = 6;
 	idx[9] = 4; idx[10] = 6; idx[11] = 7;
-	// À­¸é
+	// ìœ—ë©´
 	idx[12] = 8; idx[13] = 9; idx[14] = 10;
 	idx[15] = 8; idx[16] = 10; idx[17] = 11;
-	// ¾Æ·§¸é
+	// ì•„ë«ë©´
 	idx[18] = 12; idx[19] = 13; idx[20] = 14;
 	idx[21] = 12; idx[22] = 14; idx[23] = 15;
-	// ¿ŞÂÊ¸é
+	// ì™¼ìª½ë©´
 	idx[24] = 16; idx[25] = 17; idx[26] = 18;
 	idx[27] = 16; idx[28] = 18; idx[29] = 19;
-	// ¿À¸¥ÂÊ¸é
+	// ì˜¤ë¥¸ìª½ë©´
 	idx[30] = 20; idx[31] = 21; idx[32] = 22;
 	idx[33] = 20; idx[34] = 22; idx[35] = 23;
 
@@ -806,15 +838,15 @@ void ResourceManager::LoadSphereMesh()
 
 	sphereMesh->SetName(L"Sphere");
 
-	float radius = 0.5f; // ±¸ÀÇ ¹İÁö¸§
-	unsigned int stackCount = 20; // °¡·Î ºĞÇÒ
-	unsigned int sliceCount = 20; // ¼¼·Î ºĞÇÒ
+	float radius = 0.5f; // êµ¬ì˜ ë°˜ì§€ë¦„
+	unsigned int stackCount = 20; // ê°€ë¡œ ë¶„í• 
+	unsigned int sliceCount = 20; // ì„¸ë¡œ ë¶„í• 
 
 	std::vector<Vertex> vec;
 
 	Vertex v;
 
-	// ºÏ±Ø
+	// ë¶ê·¹
 	v.pos = DirectX::SimpleMath::Vector3{ 0.0f, radius, 0.0f };
 	v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
 	v.uv = DirectX::SimpleMath::Vector2(0.5f, 0.0f);
@@ -829,12 +861,12 @@ void ResourceManager::LoadSphereMesh()
 	float deltaU = 1.f / static_cast<float>(sliceCount);
 	float deltaV = 1.f / static_cast<float>(stackCount);
 
-	// °í¸®¸¶´Ù µ¹¸é¼­ Á¤Á¡À» °è»êÇÑ´Ù (ºÏ±Ø/³²±Ø ´ÜÀÏÁ¡Àº °í¸®°¡ X)
+	// ê³ ë¦¬ë§ˆë‹¤ ëŒë©´ì„œ ì •ì ì„ ê³„ì‚°í•œë‹¤ (ë¶ê·¹/ë‚¨ê·¹ ë‹¨ì¼ì ì€ ê³ ë¦¬ê°€ X)
 	for (unsigned int y = 1; y <= stackCount - 1; ++y)
 	{
 		float phi = y * stackAngle;
 
-		// °í¸®¿¡ À§Ä¡ÇÑ Á¤Á¡
+		// ê³ ë¦¬ì— ìœ„ì¹˜í•œ ì •ì 
 		for (unsigned int x = 0; x <= sliceCount; ++x)
 		{
 			float theta = x * sliceAngle;
@@ -859,7 +891,7 @@ void ResourceManager::LoadSphereMesh()
 		}
 	}
 
-	// ³²±Ø
+	// ë‚¨ê·¹
 	v.pos = DirectX::SimpleMath::Vector3{ 0.0f, -radius, 0.0f };
 	v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
 	v.uv = DirectX::SimpleMath::Vector2(0.5f, 1.0f);
@@ -870,7 +902,7 @@ void ResourceManager::LoadSphereMesh()
 
 	std::vector<unsigned int> idx(36);
 
-	// ºÏ±Ø ÀÎµ¦½º
+	// ë¶ê·¹ ì¸ë±ìŠ¤
 	for (unsigned int i = 0; i <= sliceCount; ++i)
 	{
 		//  [0]
@@ -881,7 +913,7 @@ void ResourceManager::LoadSphereMesh()
 		idx.push_back(i + 1);
 	}
 
-	// ¸öÅë ÀÎµ¦½º
+	// ëª¸í†µ ì¸ë±ìŠ¤
 	unsigned int ringVertexCount = sliceCount + 1;
 	for (unsigned int y = 0; y < stackCount - 2; ++y)
 	{
@@ -902,7 +934,7 @@ void ResourceManager::LoadSphereMesh()
 		}
 	}
 
-	// ³²±Ø ÀÎµ¦½º
+	// ë‚¨ê·¹ ì¸ë±ìŠ¤
 	unsigned int bottomIndex = static_cast<unsigned int>(vec.size()) - 1;
 	unsigned int lastRingStartIndex = bottomIndex - ringVertexCount;
 	for (unsigned int i = 0; i < sliceCount; ++i)
@@ -932,7 +964,7 @@ void ResourceManager::LoadRactangleMesh()
 
 
 	// POS COLOR UV TANGENT
-	// ¾Õ¸é
+	// ì•ë©´
 	vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
 	vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
 	vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
@@ -963,22 +995,22 @@ void ResourceManager::LoadCapsuleMesh()
 
 	capsuleMesh->SetName(L"Capsule");
 
-	float radius = 0.5f; // Ä¸½¶ÀÇ ¹İÁö¸§
-	float height = 1.0f; // Ä¸½¶ÀÇ ³ôÀÌ
-	int stackCount = 5; // ¼öÆò ºĞÇÒ
-	int sliceCount = 20; // ¼öÁ÷ ºĞÇÒ
+	float radius = 0.5f; // ìº¡ìŠì˜ ë°˜ì§€ë¦„
+	float height = 1.0f; // ìº¡ìŠì˜ ë†’ì´
+	int stackCount = 5; // ìˆ˜í‰ ë¶„í• 
+	int sliceCount = 20; // ìˆ˜ì§ ë¶„í• 
 
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 
-	// »ó´Ü ¹İ±¸ Á¤Á¡
+	// ìƒë‹¨ ë°˜êµ¬ ì •ì 
 	vertices.push_back(Vertex{
 		DirectX::SimpleMath::Vector3{0.0f, radius + height * 0.5f, 0.0f},
 		DirectX::SimpleMath::Vector4{1.f, 1.f, 1.f, 1.f} });
 
 	for (int i = 1; i <= stackCount; i++)
 	{
-		// À­¹æÇâ º¤ÅÍ¿ÍÀÇ °¢µµ
+		// ìœ—ë°©í–¥ ë²¡í„°ì™€ì˜ ê°ë„
 		float upTheta = DirectX::XM_PI * 0.5f * (i / static_cast<float>(stackCount));
 
 		float xzsize = radius * sinf(upTheta);
@@ -1001,10 +1033,10 @@ void ResourceManager::LoadCapsuleMesh()
 
 	size_t middleIdx = vertices.size();
 
-	// ÇÏ´Ü ¹İ±¸ Á¤Á¡
+	// í•˜ë‹¨ ë°˜êµ¬ ì •ì 
 	for (int i = stackCount; i >= 1; i--)
 	{
-		// À­¹æÇâ º¤ÅÍ¿ÍÀÇ °¢µµ
+		// ìœ—ë°©í–¥ ë²¡í„°ì™€ì˜ ê°ë„
 		float upTheta = DirectX::XM_PI * 0.5f * (i / static_cast<float>(stackCount));
 
 		float xzsize = radius * sinf(upTheta);
@@ -1030,7 +1062,7 @@ void ResourceManager::LoadCapsuleMesh()
 		DirectX::SimpleMath::Vector4(1.f, 1.f,1.f,1.f) }
 	);
 
-	// »ó´Ü ¹İ±¸ ÀÎµ¦½º
+	// ìƒë‹¨ ë°˜êµ¬ ì¸ë±ìŠ¤
 	for (int i = 0; i < sliceCount; i++) {
 		int a = 0;
 		int b = 1 + i;
@@ -1058,7 +1090,7 @@ void ResourceManager::LoadCapsuleMesh()
 		}
 	}
 
-	// ½Ç¸°´õ ºÎºĞ ÀÎµ¦½º
+	// ì‹¤ë¦°ë” ë¶€ë¶„ ì¸ë±ìŠ¤
 	for (int i = 0; i < sliceCount; i++)
 	{
 		int a = middleIdx - sliceCount + i;
@@ -1075,7 +1107,7 @@ void ResourceManager::LoadCapsuleMesh()
 		indices.push_back(b);
 	}
 
-	// ÇÏ´Ü ¹İ±¸ ÀÎµ¦½º
+	// í•˜ë‹¨ ë°˜êµ¬ ì¸ë±ìŠ¤
 	for (int i = 1; i < stackCount; i++) {
 		for (int j = 0; j < sliceCount; j++) {
 			int a = middleIdx + (i - 1) * sliceCount + j;
@@ -1116,11 +1148,11 @@ void ResourceManager::LoadCylinderMesh()
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 
-	float radius = 0.5f; // ½Ç¸°´õÀÇ ¹İÁö¸§
-	float height = 1.0f; // ½Ç¸°´õÀÇ ³ôÀÌ
-	int sliceCount = 20; // ¼öÁ÷ ºĞÇÒ
+	float radius = 0.5f; // ì‹¤ë¦°ë”ì˜ ë°˜ì§€ë¦„
+	float height = 1.0f; // ì‹¤ë¦°ë”ì˜ ë†’ì´
+	int sliceCount = 20; // ìˆ˜ì§ ë¶„í• 
 
-	// Á¤»ó Á¤Á¡
+	// ì •ìƒ ì •ì 
 	vertices.push_back(Vertex{
 		DirectX::SimpleMath::Vector3{0.0f, height * 0.5f, 0.0f},
 		DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f},
@@ -1128,7 +1160,7 @@ void ResourceManager::LoadCylinderMesh()
 		DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
 	);
 
-	// ¹Ù´Ú Á¤Á¡
+	// ë°”ë‹¥ ì •ì 
 	vertices.push_back(Vertex{
 		DirectX::SimpleMath::Vector3{0.0f, -height * 0.5f, 0.0f},
 		DirectX::SimpleMath::Vector4{1.f, 1.f, 1.f,1.f} ,
@@ -1136,7 +1168,7 @@ void ResourceManager::LoadCylinderMesh()
 		DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
 	);
 
-	// À­¸é
+	// ìœ—ë©´
 	for (int i = 0; i < sliceCount; ++i)
 	{
 		float zTheta = DirectX::XM_PI * 2.0f * (i / static_cast<float>(sliceCount));
@@ -1153,7 +1185,7 @@ void ResourceManager::LoadCylinderMesh()
 		);
 	}
 
-	// ¹Ø¸é
+	// ë°‘ë©´
 	for (int i = 0; i < sliceCount; ++i)
 	{
 		float zTheta = DirectX::XM_PI * 2.0f * (i / static_cast<float>(sliceCount));
@@ -1170,7 +1202,7 @@ void ResourceManager::LoadCylinderMesh()
 		);
 	}
 
-	// À­¸é ÀÎµ¦½º
+	// ìœ—ë©´ ì¸ë±ìŠ¤
 	for (int i = 0; i < sliceCount; ++i)
 	{
 		int a = 0;
@@ -1182,7 +1214,7 @@ void ResourceManager::LoadCylinderMesh()
 		indices.push_back(c);
 	}
 
-	// ¿·¸é ÀÎµ¦½º
+	// ì˜†ë©´ ì¸ë±ìŠ¤
 	for (int i = 0; i < sliceCount; ++i)
 	{
 		int a = 2 + i;
@@ -1199,7 +1231,7 @@ void ResourceManager::LoadCylinderMesh()
 		indices.push_back(b);
 	}
 
-	// ¹Ø¸é ÀÎµ¦½º
+	// ë°‘ë©´ ì¸ë±ìŠ¤
 	for (int i = 0; i < sliceCount; ++i)
 	{
 		int a = 1;
