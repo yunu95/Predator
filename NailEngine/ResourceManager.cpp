@@ -177,7 +177,7 @@ Material* ResourceManager::CreateInstanceMaterial(const Material* material)
 	materialName += std::to_wstring(_material->GetID());
 	_material->SetName(materialName);
 
-	instanceMaterialMap.insert({ materialName, std::shared_ptr<Material>(_material)});
+	instanceMaterialMap.insert({ materialName, std::shared_ptr<Material>(_material) });
 
 	return _material;
 }

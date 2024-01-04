@@ -68,10 +68,7 @@ public:
 
 	std::vector<yunuGI::IMesh*>& GetMeshList() { return this->meshVec; };
 	std::vector<yunuGI::ITexture*>& GetTextureList() { return this->textureVec; };
-	std::vector<yunuGI::IMaterial*>& GetMaterialList() 
-	{
-		return this->materialVec; 
-	};
+	std::vector<yunuGI::IMaterial*>& GetMaterialList() { return this->materialVec; };
 	std::vector<yunuGI::IShader*>& GetShaderList() { return this->shaderVec; };
 	std::vector<yunuGI::IAnimation*>& GetAnimationList() { return this->animationVec; };
 	std::shared_ptr<AnimationGroup> GetAnimationGroup(const std::wstring& modelName);
@@ -84,10 +81,10 @@ private:
 	void CreateDefaultMaterial();
 	void CreateDefaultTexture();
 
-	void FillFBXData(const std::wstring& fbxName,FBXNode* node, yunuGI::FBXData* fbxData);
+	void FillFBXData(const std::wstring& fbxName, FBXNode* node, yunuGI::FBXData* fbxData);
 	void FillFBXBoneInfoVec(const yunuGI::BoneInfo& boneInfo, std::vector<yunuGI::BoneInfo>& boneInfoVec);
 	//void CreateResourceFromFBX(FBXMeshData& meshData, std::vector<yunuGI::FBXData>& dataVec, yunuGI::FBXData& fbxData);
-	
+
 
 #pragma region LoadMesh
 	void LoadCubeMesh();
@@ -133,7 +130,7 @@ private:
 	//// 게임 엔진에서 본 계층구조로 오브젝트 만들 때 쓰는용
 	///std::unordered_map<std::wstring, std::vector<yunuGI::BoneInfo>> fbxBoneInfoVecMap;
 	// 그래픽스 엔진 내부에서 스키닝 애니메이션에 쓸 오프셋 행렬을 가지고 있는 본 정보
-	std::unordered_map<std::wstring, std::map<std::wstring,BoneInfo>> fbxBoneInfoMap;
+	std::unordered_map<std::wstring, std::map<std::wstring, BoneInfo>> fbxBoneInfoMap;
 	std::unordered_map<std::wstring, FBXNode*> fbxNodeMap;
 
 	ID3D11ShaderResourceView* finalRenderImagerSRV = nullptr;
@@ -142,10 +139,9 @@ private:
 	//std::unordered_map<std::wstring, std::shared_ptr<Mesh>> meshMap;
 	//std::unordered_map<std::wstring, std::shared_ptr<yunuGIAdapter::MaterialAdapter>> materialMap;
 	//std::unordered_map<std::wstring, std::shared_ptr<yunuGIAdapter::MaterialAdapter>> instanceMaterialMap;
-	
+
 	//std::unordered_map<std::wstring, yunuGI::BoneInfo> fbxBoneInfoTreeMap;
 
 	//// 그래픽스에서 스키닝할 때 쓰는 offset matrix를 가지고 있는 본 정보
 	//std::unordered_map<std::wstring, std::vector<FBXBoneInfo>> fbxBonOffsetVecMap;
 };
-

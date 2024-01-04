@@ -11,7 +11,7 @@ namespace application
 	namespace editor
 	{
 		SceneViewPanel::SceneViewPanel()
-			: rendererWidth(), rendererHeight()
+			: rendererWidth(), rendererHeight(), resourceManager(nullptr)
 		{
 
 		}
@@ -26,6 +26,7 @@ namespace application
 			auto rect = yunutyEngine::graphics::Renderer::SingleInstance().GetResolution();
 			rendererWidth = rect.x;
 			rendererHeight = rect.y;
+			resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 		}
 
 		void SceneViewPanel::Update(float ts)
@@ -42,7 +43,7 @@ namespace application
 			isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
 			/// 실제 패널에 그리는 영역
-			ID3D11ShaderResourceView* sceneImage;
+			ID3D11ShaderResourceView* sceneImage = static_cast<ID3D11ShaderResourceView*>(resourceManager->GetFinalRenderImage());
 
 			ImGui::Image((void*)sceneImage, ImVec2(rendererWidth, rendererHeight));
 
