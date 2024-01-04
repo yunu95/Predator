@@ -83,7 +83,7 @@ namespace yunuGIAdapter
         virtual void UnloadResources()const override
         {
         };
-        virtual void* GetFinalRenderImage() override
+        virtual void* GetFinalRenderImage() const override
         {
             return ResourceManager::Instance.Get().GetFinalRenderImage();
         };
