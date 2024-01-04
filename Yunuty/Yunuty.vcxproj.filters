@@ -121,14 +121,8 @@
     <Filter Include="yunutyEngine\SoundChannel">
       <UniqueIdentifier>{1f2eff60-0998-46ea-ae60-505effc32a97}</UniqueIdentifier>
     </Filter>
-    <Filter Include="yunutyEngine\GameObjectPool">
-      <UniqueIdentifier>{09ae7e14-a6e9-4647-8db8-031e20608951}</UniqueIdentifier>
-    </Filter>
     <Filter Include="yunutyEngine\AudioSource">
       <UniqueIdentifier>{dfe2793b-226f-40df-8f3f-7decbab071c4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="yunutyEngine\SingletonClass">
-      <UniqueIdentifier>{e1685109-5e05-4a0b-968a-12e9e108a656}</UniqueIdentifier>
     </Filter>
     <Filter Include="yunutyEngine\Graphics">
       <UniqueIdentifier>{faeaa1b4-88b8-4e05-8656-8d6f8267fd12}</UniqueIdentifier>
@@ -247,9 +241,6 @@
     <Filter Include="yunutyEngine\NavigationSystem\RecastDetour\source">
       <UniqueIdentifier>{31ca7e3b-bf9e-45c6-85ef-ad47e47ca082}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ClientTemplate">
-      <UniqueIdentifier>{c2f86423-113b-4f7e-bb77-e530e31e8781}</UniqueIdentifier>
-    </Filter>
     <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\DirectionalLight">
       <UniqueIdentifier>{a954b19f-8264-41ea-acbe-f5d770dde448}</UniqueIdentifier>
     </Filter>
@@ -300,6 +291,27 @@
     </Filter>
     <Filter Include="yunutyEngine\physics\Collision">
       <UniqueIdentifier>{e707c0f1-3d37-437e-b02d-cccaf4a1677c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\Animator">
+      <UniqueIdentifier>{9e8686ea-8b75-405c-98ca-bba3e81be792}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\MutexedReference">
+      <UniqueIdentifier>{029e5705-14a3-4e0d-b6ba-430b500a1e43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\MutexedSingletonClass">
+      <UniqueIdentifier>{80afa455-377b-4123-aacd-a6aa2c594bde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\ClientTemplate">
+      <UniqueIdentifier>{c2f86423-113b-4f7e-bb77-e530e31e8781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\ClientTemplate\SingletonClass">
+      <UniqueIdentifier>{e1685109-5e05-4a0b-968a-12e9e108a656}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\ClientTemplate\SingletonComponent">
+      <UniqueIdentifier>{23d006b1-1e5a-4e83-b10a-2d88d44ec488}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\ClientTemplate\GameObjectPool">
+      <UniqueIdentifier>{09ae7e14-a6e9-4647-8db8-031e20608951}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -406,7 +418,7 @@
       <Filter>yunutyEngine\SoundChannel</Filter>
     </ClCompile>
     <ClCompile Include="GameObjectPool.cpp">
-      <Filter>yunutyEngine\GameObjectPool</Filter>
+      <Filter>yunutyEngine\ClientTemplate\GameObjectPool</Filter>
     </ClCompile>
     <ClCompile Include="GraphicsRenderer.cpp">
       <Filter>yunutyEngine\Graphics\Renderer</Filter>
@@ -495,9 +507,6 @@
     <ClCompile Include="SampleInterfaces.cpp">
       <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
     </ClCompile>
-    <ClCompile Include="TestCase.cpp">
-      <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
-    </ClCompile>
     <ClCompile Include="ValueHistory.cpp">
       <Filter>yunutyEngine\NavigationSystem\RecastDetour\source</Filter>
     </ClCompile>
@@ -536,6 +545,9 @@
     </ClCompile>
     <ClCompile Include="_YunutyPhysxContactCallback.cpp">
       <Filter>yunutyEngine\physics\_PhysxContactCallback</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\Animator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -654,7 +666,7 @@
       <Filter>yunutyEngine\SoundChannel</Filter>
     </ClInclude>
     <ClInclude Include="header\GameObjectPool.h">
-      <Filter>yunutyEngine\GameObjectPool</Filter>
+      <Filter>yunutyEngine\ClientTemplate\GameObjectPool</Filter>
     </ClInclude>
     <ClInclude Include="header\AudioSource.h">
       <Filter>yunutyEngine\AudioSource</Filter>
@@ -672,7 +684,7 @@
       <Filter>yunutyEngine\Resource\MetaData</Filter>
     </ClInclude>
     <ClInclude Include="header\SingletonClass.h">
-      <Filter>yunutyEngine\SingletonClass</Filter>
+      <Filter>yunutyEngine\ClientTemplate\SingletonClass</Filter>
     </ClInclude>
     <ClInclude Include="header\JsonReader.h">
       <Filter>yunutyEngine\json\JsonReader</Filter>
@@ -767,9 +779,6 @@
     <ClInclude Include="SampleInterfaces.h">
       <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
     </ClInclude>
-    <ClInclude Include="TestCase.h">
-      <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
-    </ClInclude>
     <ClInclude Include="ValueHistory.h">
       <Filter>yunutyEngine\NavigationSystem\RecastDetour\header</Filter>
     </ClInclude>
@@ -829,6 +838,18 @@
     </ClInclude>
     <ClInclude Include="_YunutySphereColliderImpl.h">
       <Filter>yunutyEngine\physics\SphereCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="header\Animator.h">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="MutexedReference.h">
+      <Filter>yunutyEngine\MutexedReference</Filter>
+    </ClInclude>
+    <ClInclude Include="MutexedSingletonClass.h">
+      <Filter>yunutyEngine\MutexedSingletonClass</Filter>
+    </ClInclude>
+    <ClInclude Include="header\SingletonComponent.h">
+      <Filter>yunutyEngine\ClientTemplate\SingletonComponent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,20 +2,13 @@
 
 #include "imgui.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
-		std::unique_ptr<InspectorPanel> InspectorPanel::instance = nullptr;
-
-		InspectorPanel& InspectorPanel::GetInstance()
+		InspectorPanel::InspectorPanel()
 		{
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<InspectorPanel>(new InspectorPanel());
-			}
 
-			return *instance;
 		}
 
 		InspectorPanel::~InspectorPanel()
@@ -35,7 +28,7 @@ namespace Application
 
 		void InspectorPanel::GUIProgress()
 		{
-			ImGui::Begin("Inspector");
+			ImGui::Begin("Inspector", 0, ImGuiWindowFlags_NoBringToFrontOnFocus);
 
 			/// ImGui 관련 내부 변수 업데이트
 			isMouseOver = ImGui::IsWindowHovered();
@@ -48,11 +41,6 @@ namespace Application
 		}
 
 		void InspectorPanel::Finalize()
-		{
-
-		}
-
-		InspectorPanel::InspectorPanel()
 		{
 
 		}

@@ -7,6 +7,7 @@
 #include "IYunuGIDebugCube.h"
 #include "IYunuGIUIImage.h"
 #include "IYunuGIUIText.h"
+#include "IAnimator.h"
 #include "IUnknown.h"
 
 // 팩토리 객체는 카메라, 메쉬와 같이 렌더링에 필요한 객체들을 생성한다.
@@ -27,5 +28,6 @@ namespace yunuGI
         virtual yunuGI::IDirectionalLight* CreateDirectionalLight(const yunuGI::IDirectionalLightDesc& desc) = 0;
         virtual yunuGI::IPointLight* CreatePointLight(const yunuGI::IPointLightDesc& desc) = 0;
         virtual yunuGI::ISpotLight* CreateSpotLight(const yunuGI::ISpotLightDesc& desc) = 0;
+        virtual yunuGI::IAnimator* CreateAnimator(const yunuGI::IAnimatorDesc& desc) = 0;
     };
 }

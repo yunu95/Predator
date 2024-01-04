@@ -196,6 +196,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animator.cpp" />
     <ClCompile Include="BoxCollider2D.cpp" />
     <ClCompile Include="AudioSource.cpp" />
     <ClCompile Include="Cache.cpp" />
@@ -324,12 +325,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="StaticMeshRenderer.cpp" />
-    <ClCompile Include="TestCase.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="UIImage.cpp" />
     <ClCompile Include="UIText.cpp" />
     <ClCompile Include="ValueHistory.cpp">
@@ -371,6 +366,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="_YunuGIObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="header\Animator.h" />
     <ClInclude Include="header\YunutyBoxCollider.h" />
     <ClInclude Include="ChunkyTriMesh.h" />
     <ClInclude Include="ConvexVolumeTool.h" />
@@ -394,6 +390,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="MeshLoaderObj.h" />
     <ClInclude Include="header\YunutyNavigationAgent.h" />
     <ClInclude Include="header\YunutyNavigationField.h" />
+    <ClInclude Include="MutexedReference.h" />
+    <ClInclude Include="MutexedSingletonClass.h" />
     <ClInclude Include="NavMeshPruneTool.h" />
     <ClInclude Include="NavMeshTesterTool.h" />
     <ClInclude Include="OffMeshConnectionTool.h" />
@@ -404,7 +402,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="Sample_SoloMesh.h" />
     <ClInclude Include="Sample_TempObstacles.h" />
     <ClInclude Include="Sample_TileMesh.h" />
-    <ClInclude Include="TestCase.h" />
+    <ClInclude Include="header\SingletonComponent.h" />
     <ClInclude Include="ValueHistory.h" />
     <ClInclude Include="header\YunutyCapsuleCollider.h" />
     <ClInclude Include="header\YunutyCollider.h" />

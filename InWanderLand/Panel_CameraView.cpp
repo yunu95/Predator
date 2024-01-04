@@ -2,20 +2,13 @@
 
 #include "imgui.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
-		std::unique_ptr<CameraViewPanel> CameraViewPanel::instance = nullptr;
-
-		CameraViewPanel& CameraViewPanel::GetInstance()
+		CameraViewPanel::CameraViewPanel()
 		{
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<CameraViewPanel>(new CameraViewPanel());
-			}
 
-			return *instance;
 		}
 
 		CameraViewPanel::~CameraViewPanel()
@@ -35,7 +28,7 @@ namespace Application
 
 		void CameraViewPanel::GUIProgress()
 		{
-			ImGui::Begin("CameraView");
+			ImGui::Begin("CameraView", 0, ImGuiWindowFlags_NoBringToFrontOnFocus);
 
 			/// ImGui 관련 내부 변수 업데이트
 			isMouseOver = ImGui::IsWindowHovered();
@@ -48,11 +41,6 @@ namespace Application
 		}
 
 		void CameraViewPanel::Finalize()
-		{
-
-		}
-
-		CameraViewPanel::CameraViewPanel()
 		{
 
 		}

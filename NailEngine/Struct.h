@@ -9,6 +9,9 @@ using namespace DirectX::PackedVector;
 
 #define MAX_TEXTURE 8
 #define MAX_INT 8
+#define MAX_BONE_COUNT 250
+#define MAX_FRAME_COUNT 500
+#define MAX_INSTANCE_MODEL 500
 
 struct Vertex
 {
@@ -17,31 +20,35 @@ struct Vertex
 	DirectX::SimpleMath::Vector2 uv;
 	DirectX::SimpleMath::Vector3 normal;
 	DirectX::SimpleMath::Vector3 tangent;
-	DirectX::SimpleMath::Vector4 index{-1,-1,-1,-1};
-	DirectX::SimpleMath::Vector4 weights{-1.f,-1.f,-1.f,-1.f};
-
+	unsigned int indices[4]{0xffffffffu,0xffffffffu ,0xffffffffu ,0xffffffffu };
+	DirectX::SimpleMath::Vector4 weights{0.f,0.f,0.f,0.f};
+	
 public:
 	void FillBoneIndexWeight(unsigned int index, float weight)
 	{
-		if (this->index.x == -1)
+		if (indices[0] == 0xffffffffu)
 		{
-			this->index.x = index;
+			this->indices[0] = index;
 			this->weights.x = weight;
 		}
-		else if (this->index.y == -1)
+		else if (indices[1] == 0xffffffffu)
 		{
-			this->index.y = index;
+			this->indices[1] = index;
 			this->weights.y = weight;
 		}
-		else if (this->index.z == -1)
+		else if (indices[2] == 0xffffffffu)
 		{
-			this->index.z = index;
+			this->indices[2] = index;
 			this->weights.z = weight;
 		}
-		else if (this->index.w == -1)
+		else if (indices[3] == 0xffffffffu)
 		{
-			this->index.w = index;
+			this->indices[3] = index;
 			this->weights.w = weight;
+		}
+		else
+		{
+			assert(FALSE);
 		}
 	}
 };
@@ -53,6 +60,7 @@ struct MatrixBuffer
 	DirectX::SimpleMath::Matrix PTM;
 	DirectX::SimpleMath::Matrix WVP;
 	DirectX::SimpleMath::Matrix WorldInvTrans;
+	//DirectX::SimpleMath::Vector4 objectID;
 };
 
 struct MaterialBuffer
@@ -67,6 +75,53 @@ struct CameraBuffer
 {
 	DirectX::SimpleMath::Vector3 position;
 	float padding;
+};
+
+struct BoneMatrix
+{
+	DirectX::SimpleMath::Matrix finalTM[MAX_BONE_COUNT];
+};
+
+struct KeyframeDesc
+{
+	int animIndex;
+	unsigned int currFrame;
+	unsigned int nextFrame;
+	float ratio;
+	float sumTime;
+	float speed = 1.f;
+	DirectX::SimpleMath::Vector2 padding;
+};
+
+struct TransitionDesc
+{
+	TransitionDesc()
+	{
+		curr.animIndex = 0;
+		next.animIndex = -1;
+	}
+
+	void ClearNextAnimation()
+	{
+		next.animIndex = -1;
+		next.currFrame = 0;
+		next.nextFrame = 0;
+		next.sumTime = 0;
+		transitionTotalTime = 0;
+		transitionRatio = 0;
+	}
+
+	float transitionDuration;
+	float transitionSpeed;
+	float transitionTotalTime;
+	float transitionRatio;
+	KeyframeDesc curr;
+	KeyframeDesc next;
+};
+
+struct InstanceTransitionDesc
+{
+	TransitionDesc transitionDesc[MAX_INSTANCE_MODEL];
 };
 
 // Deferred Only

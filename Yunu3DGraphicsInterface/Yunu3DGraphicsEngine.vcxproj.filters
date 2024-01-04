@@ -72,6 +72,9 @@
     <Filter Include="Header Files\IResource\IAnimation">
       <UniqueIdentifier>{9d7b4831-bc43-4344-b576-70bd340cc6fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Animator">
+      <UniqueIdentifier>{3532cc9e-1207-485a-8766-aec11fd2a817}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IYunuGI3DRenderer.h">
@@ -232,6 +235,12 @@
     </ClInclude>
     <ClInclude Include="IAnimation.h">
       <Filter>Header Files\IResource\IAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="IAnimator.h">
+      <Filter>Header Files\Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="YunuVector2.h">
+      <Filter>raw</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

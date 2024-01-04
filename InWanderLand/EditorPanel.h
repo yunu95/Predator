@@ -1,5 +1,5 @@
-/// 2023. 10. 04 ±è»óÁØ
-/// ¿¡µğÅÍ¿¡¼­ »ç¿ëÇÒ ÆĞ³ÎµéÀÇ °øÅë ¿ä¼Ò¸¦ ¸ğ¾ÆµĞ Ãß»ó Å¬·¡½º
+/// 2023. 10. 04 ê¹€ìƒì¤€
+/// ì—ë””í„°ì—ì„œ ì‚¬ìš©í•  íŒ¨ë„ë“¤ì˜ ê³µí†µ ìš”ì†Œë¥¼ ëª¨ì•„ë‘” ì¶”ìƒ í´ë˜ìŠ¤
 
 #pragma once
 
@@ -7,27 +7,29 @@
 
 #include <memory>
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class Panel
 		{
 		public:
+			virtual ~Panel() = default;
+
 			virtual void Initialize() = 0;
 			//virtual void EventProgress(Events& e) = 0;
 			virtual void Update(float ts) = 0;
 			virtual void GUIProgress() = 0;
 			virtual void Finalize() = 0;
 
-			bool IsPanelMouseOver() { return isMouseOver; }
-			bool IsPanelFocused() { return isFocused; }
+			inline bool IsPanelMouseOver() { return isMouseOver; }
+			inline bool IsPanelFocused() { return isFocused; }
 
 		protected:
 			bool isMouseOver = false;
 			bool isFocused = false;
 
-			CommandManager& commandManager = CommandManager::GetInstance();
+			CommandManager& commandManager = CommandManager::GetSingletonInstance();
 		};
 	}
 }

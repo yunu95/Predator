@@ -9,8 +9,7 @@
 #include "ILight.h"
 
 ConstantBuffer::ConstantBuffer()
-	: mappedBuffer{nullptr},
-	currentIndex{0}
+	: mappedBuffer{nullptr}
 {
 
 }
@@ -20,12 +19,11 @@ ConstantBuffer::~ConstantBuffer()
 	delete[] mappedBuffer;
 }
 
-void ConstantBuffer::CraeteConstantBuffer(unsigned int size, unsigned int count)
+void ConstantBuffer::CraeteConstantBuffer(unsigned int size)
 {
 	this->size = (size + 15) & ~15;
-	this->count = count;
 
-	mappedBuffer = new BYTE[this->size * this->count];
+	mappedBuffer = new BYTE[this->size];
 
 	D3D11_BUFFER_DESC _bufferDesc;
 	_bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -44,23 +42,19 @@ void ConstantBuffer::CraeteConstantBuffer(unsigned int size, unsigned int count)
 
 void ConstantBuffer::PushGraphicsData(void* data, unsigned int size, unsigned int slot)
 {
-	//assert(this->currentIndex < this->count);
 	assert(this->size == ((size + 15) & ~15));
 
 	D3D11_MAPPED_SUBRESOURCE _subResource;
 
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->Map(this->buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &_subResource);
-	//::memcpy(&this->mappedBuffer[this->currentIndex * this->size], data, size);
 	::memcpy(_subResource.pData, data, size);
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->Unmap(this->buffer.Get(), 0);
 
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->VSSetConstantBuffers(slot, 1, this->buffer.GetAddressOf());
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->PSSetConstantBuffers(slot, 1, this->buffer.GetAddressOf());
-
-	//this->currentIndex++;
 }
 
 void ConstantBuffer::Clear()
 {
-	this->currentIndex = 0;
+
 }

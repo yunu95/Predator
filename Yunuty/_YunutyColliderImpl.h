@@ -12,8 +12,8 @@ namespace yunutyEngine
 {
     namespace physics
     {
-        // ÀÌ Å¬·¡½ºÀÇ ¼³Á¤°ª¸¸ °Çµå¸®¸é ÄÝ¶óÀÌ´õ°¡ ¹°¸® °­Ã¼, Æ®¸®°Å º¼·ýÀÇ ±â´ÉÀ» ¸ðµÎ ¼öÇàÇÒ ¼ö ÀÖÁö¸¸ ÄÜÅÙÃ÷ °³¹ßÀÚ ÀÔÀå¿¡¼­´Â ÀÌ Å¬·¡½ºÀÇ Á¸Àç¸¦ ¾Ë ¼ö ¾ø´Ù.
-        // ÀÌ °´Ã¼´Â Collider ÄÄÆ÷³ÍÆ® ¾È¿¡¼­ Á¤ÀÇµÇÁö¸¸, ÀÌ °´Ã¼ÀÇ °ªµéÀ» °Çµå¸®´Â ÀÎÅÍÆäÀÌ½º´Â Rigidbody Component¿Í Collider Component¿¡ Á¸ÀçÇÕ´Ï´Ù.
+        // ì´ í´ëž˜ìŠ¤ì˜ ì„¤ì •ê°’ë§Œ ê±´ë“œë¦¬ë©´ ì½œë¼ì´ë”ê°€ ë¬¼ë¦¬ ê°•ì²´, íŠ¸ë¦¬ê±° ë³¼ë¥¨ì˜ ê¸°ëŠ¥ì„ ëª¨ë‘ ìˆ˜í–‰í•  ìˆ˜ ìžˆì§€ë§Œ ì½˜í…ì¸  ê°œë°œìž ìž…ìž¥ì—ì„œëŠ” ì´ í´ëž˜ìŠ¤ì˜ ì¡´ìž¬ë¥¼ ì•Œ ìˆ˜ ì—†ë‹¤.
+        // ì´ ê°ì²´ëŠ” Collider ì»´í¬ë„ŒíŠ¸ ì•ˆì—ì„œ ì •ì˜ë˜ì§€ë§Œ, ì´ ê°ì²´ì˜ ê°’ë“¤ì„ ê±´ë“œë¦¬ëŠ” ì¸í„°íŽ˜ì´ìŠ¤ëŠ” Rigidbody Componentì™€ Collider Componentì— ì¡´ìž¬í•©ë‹ˆë‹¤.
         class Collider::Impl
         {
         private:
@@ -24,7 +24,7 @@ namespace yunutyEngine
             physx::PxMaterial* pxMaterial{nullptr};
             physx::PxRigidActor* pxActor{nullptr};
             PxShapeFlags pxShapeFlags{ PxShapeFlag::eVISUALIZATION | physx::PxShapeFlag::eTRIGGER_SHAPE };
-            bool isStatic{ true };
+            bool isStatic{ false };
             bool isKinematic{ false };
             bool ccdEnabled{ false };
             friend Collider;
@@ -33,7 +33,7 @@ namespace yunutyEngine
 
         protected:
         public:
-            // Rigidbody°¡ Á¸ÀçÇÏÁö ¾ÊÀ¸¸é isTrigger´Â Âü, Rigidbody°¡ Á¸ÀçÇÏ¸é Trigger´Â °ÅÁþÀÔ´Ï´Ù.
+            // Rigidbodyê°€ ì¡´ìž¬í•˜ì§€ ì•Šìœ¼ë©´ isTriggerëŠ” ì°¸, Rigidbodyê°€ ì¡´ìž¬í•˜ë©´ TriggerëŠ” ê±°ì§“ìž…ë‹ˆë‹¤.
             /*bool GetIsTrigger()
             {
                 return pxShapeFlags.isSet(physx::PxShapeFlag::eTRIGGER_SHAPE);
@@ -91,8 +91,8 @@ namespace yunutyEngine
             }
             void SetAsStatic(bool isStatic)
             {
-                // ÇÑ¹ø ½ºÅÂÆ½À¸·Î ÁöÁ¤ÇÑ RigidBody´Â ´Ù½Ã ¹Ù²ÙÁö ¸¶½Ã¿À. ±×·± Çàµ¿À» ½ÃµµÇÏ¸é ¾Æ·¡ assert ¹®¿¡¼­ ·±Å¸ÀÓ ¿À·ù°¡ ÀâÈ÷°Ô µË´Ï´Ù.
-                // Á¤ ±×·± ±¸¼ºÀÌ ÇÊ¿äÇÏ´Ù¸é °ÔÀÓ ¿£Áø °³¹ßÀÚ¿¡°Ô ¹®ÀÇÇÏ½Ã¿À.
+                // í•œë²ˆ ìŠ¤íƒœí‹±ìœ¼ë¡œ ì§€ì •í•œ RigidBodyëŠ” ë‹¤ì‹œ ë°”ê¾¸ì§€ ë§ˆì‹œì˜¤. ê·¸ëŸ° í–‰ë™ì„ ì‹œë„í•˜ë©´ ì•„ëž˜ assert ë¬¸ì—ì„œ ëŸ°íƒ€ìž„ ì˜¤ë¥˜ê°€ ìž¡ížˆê²Œ ë©ë‹ˆë‹¤.
+                // ì • ê·¸ëŸ° êµ¬ì„±ì´ í•„ìš”í•˜ë‹¤ë©´ ê²Œìž„ ì—”ì§„ ê°œë°œìžì—ê²Œ ë¬¸ì˜í•˜ì‹œì˜¤.
                 assert((pxRigidStatic == nullptr && pxRigidDynamic == nullptr) || this->isStatic == isStatic);
                 this->isStatic = isStatic;
             }
@@ -115,7 +115,7 @@ namespace yunutyEngine
                 }
             }
             virtual PxGeometry& GetGeometry() = 0;
-            // °ÔÀÓ ÄÄÆ÷³ÍÆ®¿¡ ´ëÀÀµÇ´Â physX °´Ã¼µéÀ» ÃÊ±âÈ­ÇÏ´Â ±¸¹®ÀÌ´Ù. StartÇÔ¼ö¿¡¼­ È£ÃâµÈ´Ù.
+            // ê²Œìž„ ì»´í¬ë„ŒíŠ¸ì— ëŒ€ì‘ë˜ëŠ” physX ê°ì²´ë“¤ì„ ì´ˆê¸°í™”í•˜ëŠ” êµ¬ë¬¸ì´ë‹¤. Startí•¨ìˆ˜ì—ì„œ í˜¸ì¶œëœë‹¤.
             void InitializePhysXActor()
             {
                 static_assert(sizeof(yunuGI::Matrix4x4) == sizeof(PxMat44));
@@ -138,6 +138,8 @@ namespace yunutyEngine
                     pxRigidDynamic->attachShape(*pxShape);
                     if (ccdEnabled)
                         pxRigidDynamic->setRigidBodyFlag(PxRigidBodyFlag::eENABLE_CCD, true);
+                    if (colliderComponent->rigidBody == nullptr)
+                        isKinematic = true;
                     if (isKinematic)
                         pxRigidDynamic->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
                     pxActor = pxRigidDynamic;

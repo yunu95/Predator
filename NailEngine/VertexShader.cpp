@@ -7,6 +7,18 @@
 #include "ResourceBuilder.h"
 #include "Device.h"
 
+#include <Windows.h>
+#include <string>
+
+std::wstring ConvertToWideString(const char* str) {
+	int size = MultiByteToWideChar(CP_ACP, 0, str, -1, NULL, 0);
+	wchar_t* buffer = new wchar_t[size];
+	MultiByteToWideChar(CP_ACP, 0, str, -1, buffer, size);
+	std::wstring result(buffer);
+	delete[] buffer;
+	return result;
+}
+
 void VertexShader::CreateShader(const std::wstring& shaderPath)
 {
 	unsigned int _compileFlag = 0;
@@ -86,6 +98,13 @@ void VertexShader::CreateInputLayout()
 		_inputLayoutDescVec[i].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		_inputLayoutDescVec[i].InstanceDataStepRate = 0;
 
+		if (ConvertToWideString(paramDesc.SemanticName) == L"INST")
+		{
+			_inputLayoutDescVec[i].InputSlot = 1;
+			_inputLayoutDescVec[i].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
+			_inputLayoutDescVec[i].InstanceDataStepRate = 1;
+		}
+
 		if (paramDesc.Mask == 1)
 		{
 			if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32)
@@ -147,14 +166,6 @@ void VertexShader::CreateInputLayout()
 			}
 		}
 	}
-
-	//D3D11_INPUT_ELEMENT_DESC _inputLayoutDesc[] =
-	//{
-	//	{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	//	{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	//};
-	//
-	//unsigned int _numElements = ARRAYSIZE(_inputLayoutDesc);
 
 	ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateInputLayout(&_inputLayoutDescVec[0], _inputLayoutDescVec.size(),
 		this->vsBuffer->GetBufferPointer(), this->vsBuffer->GetBufferSize(), this->inputLayout.GetAddressOf());

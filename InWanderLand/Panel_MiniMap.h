@@ -4,33 +4,24 @@
 
 #pragma once
 
+#include "Singleton.h"
 #include "EditorPanel.h"
 
-#include <memory>
-
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
 		class MiniMapPanel
-			: public Panel
+			: public Panel, public Singleton<MiniMapPanel>
 		{
 		public:
-			static MiniMapPanel& GetInstance();
-
+			MiniMapPanel();
 			virtual ~MiniMapPanel();
 
 			virtual void Initialize() override;
 			virtual void Update(float ts) override;
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
-
-		protected:
-			static std::unique_ptr<MiniMapPanel> instance;
-
-			MiniMapPanel();
-			MiniMapPanel(const MiniMapPanel& copy) = delete;
-			MiniMapPanel& operator=(const MiniMapPanel& copy) = delete;
 		};
 	}
 }

@@ -65,14 +65,16 @@ PS_OUT main(PixelIn input)
     if (UseTexture(useAlbedo) == 1)
     {
         color = AlbedoMap.Sample(sam, input.uv);
-        //color.rgb = pow(color.rgb, 2.2f);
+        color.rgb = pow(color.rgb, 2.2f);
     }
     
     float3 viewNormal = input.normalV;
     if (UseTexture(useNormal) == 1)
     {
         // [0, 255] 범위에서 [0, 1]로 변환
-        float3 tangentSpaceNormal = pow(NormalMap.Sample(sam, input.uv).xyz, 1 / 2.2f);
+        //float3 tangentSpaceNormal = pow(NormalMap.Sample(sam, input.uv).xyz, 1 / 2.2f);
+        //float3 tangentSpaceNormal = pow(NormalMap.Sample(sam, input.uv).xyz, 2.2f);
+        float3 tangentSpaceNormal = NormalMap.Sample(sam, input.uv).xyz;
         
         // [0, 1] 범위에서 [-1, 1]로 변환
         tangentSpaceNormal = (tangentSpaceNormal - 0.5f) * 2.f;
@@ -91,6 +93,7 @@ PS_OUT main(PixelIn input)
     float depth = projPos.z / projPos.w;
     
     output.depth = float4(depth, depth, depth, depth);
+    //output.depth = float4(objectID.x, 0, 0, 0);
     return output;
 }
 

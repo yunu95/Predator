@@ -3,6 +3,10 @@
 
 class StaticMesh : public IRenderable
 {
-	
+public:
+	~StaticMesh()
+	{
+
+	}
 };
 

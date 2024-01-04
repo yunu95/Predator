@@ -1,16 +1,19 @@
 #include "RenderSystem.h"
 
 #include "NailEngine.h"
-#include "Struct.h"
+
 #include "ConstantBuffer.h"
 
 #include "ResourceManager.h"
 #include "Material.h"
 #include "Mesh.h"
+#include "Animation.h"
+#include "AnimationGroup.h"
 
 #include "NailCamera.h"
 #include "RenderableManager.h"
 #include "IRenderable.h"
+#include "SKinnedMesh.h"
 
 #include "ILight.h"
 #include "LightManager.h"
@@ -25,20 +28,44 @@
 #include "SwapChain.h"
 #include "Device.h"
 
+#include "NailAnimatorManager.h"
+#include "NailAnimator.h"
+
+#include "InstancingManager.h"
+
+#include "UIImage.h"
+#include "Texture.h"
+
+#include <iostream>
+#include <fstream>
+
 LazyObjects<RenderSystem> RenderSystem::Instance;
+
+
+void RenderSystem::Init()
+{
+	spriteBatch = std::make_unique<DirectX::SpriteBatch>(ResourceBuilder::Instance.Get().device->GetDeviceContext().Get());
+	commonStates = std::make_unique<DirectX::CommonStates>(ResourceBuilder::Instance.Get().device->GetDevice().Get());
+}
 
 void RenderSystem::ClearRenderInfo()
 {
 	deferredVec.clear();
 	forwardVec.clear();
+	skinnedVec.clear();
 }
 
 void RenderSystem::SortObject()
 {
-	auto& renderableSet = RenderableManager::Instance.Get().GetRenderableSet();
+	auto& staticRenderableSet = RenderableManager::Instance.Get().GetStaticRenderableSet();
 
-	for (auto& e : renderableSet)
+	for (auto& e : staticRenderableSet)
 	{
+		if(e->IsActive() == false)
+		{
+			continue;
+		}
+
 		auto mesh = e->GetMesh();
 		for (int i = 0; i < mesh->GetMaterialCount(); ++i)
 		{
@@ -56,6 +83,38 @@ void RenderSystem::SortObject()
 			{
 				this->forwardVec.emplace_back(renderInfo);
 			}
+		}
+	}
+
+	// skinned
+	auto& skinnedRenderableSet = RenderableManager::Instance.Get().GetSKinnedRenderableSet();
+
+	for (auto& e : skinnedRenderableSet)
+	{
+		if (e->IsActive() == false)
+		{
+			continue;
+		}
+
+		auto mesh = e->GetMesh();
+		for (int i = 0; i < mesh->GetMaterialCount(); ++i)
+		{
+			SkinnedRenderInfo skinnedRenderInfo;
+
+			RenderInfo renderInfo;
+			renderInfo.mesh = mesh;
+			renderInfo.material = e->GetMaterial(i);
+			renderInfo.materialIndex = i;
+			renderInfo.wtm = e->GetWorldTM();
+			//renderInfo.objecID = e->GetID();
+			skinnedRenderInfo.animator = NailAnimatorManager::Instance.Get().GetAnimator(
+				std::static_pointer_cast<SkinnedMesh>(e)->GetAnimatorIndex());
+
+			skinnedRenderInfo.renderInfo = std::move(renderInfo);
+
+			skinnedRenderInfo.modelName = std::static_pointer_cast<SkinnedMesh>(e)->GetBone();
+
+			this->skinnedVec.emplace_back(skinnedRenderInfo);
 		}
 	}
 }
@@ -112,8 +171,11 @@ void RenderSystem::Render()
 	PushCameraData();
 	PushLightData();
 
-	// 오브젝트 렌더
+	// 스태틱 오브젝트 렌더
 	RenderObject();
+
+	// 스킨드 오브젝트 렌더
+	RenderSkinned();
 	
 	// 라이트 렌더
 	RenderLight();
@@ -122,6 +184,8 @@ void RenderSystem::Render()
 	DrawFinal();
 
 	RenderForward();
+
+	RenderUI();
 
 	// 디퍼드 정보 출력
 	DrawDeferredInfo();
@@ -136,23 +200,78 @@ void RenderSystem::RenderObject()
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
 	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->OMSetRenderTarget();
 
-	for (auto& e : this->deferredVec)
-	{
-		MatrixBuffer matrixBuffer;
-		matrixBuffer.WTM = e.wtm;
-		matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-		matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
-		matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-		matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+	MatrixBuffer matrixBuffer;
+	//matrixBuffer.WTM = e.wtm;
+	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
+	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 
-		auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.mesh->GetName()));
+	InstancingManager::Instance.Get().RegisterMeshAndMaterial(this->deferredVec);
 
-		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.material->GetName()))->PushGraphicsData();
-		mesh->Render(e.materialIndex);
-	}
+	//for (auto& e : this->deferredVec)
+	//{
+	//	
+
+	//	/*auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.mesh->GetName()));
+
+	//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.material->GetName()))->PushGraphicsData();
+	//	mesh->Render(e.materialIndex);*/
+	//	
+	//}
 	
 	//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->UnBind();
+}
+
+void RenderSystem::RenderSkinned()
+{
+	MatrixBuffer matrixBuffer;
+	//matrixBuffer.WTM = e.wtm;
+	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
+	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+
+	InstancingManager::Instance.Get().RegisterSkinnedMeshAndMaterial(this->skinnedVec);
+
+	//for (auto& e : this->skinnedVec)
+	//{
+	//	// 본TM 구해서 넘기기
+	//	//BoneUpdate(e);
+
+	//	auto animator = NailAnimatorManager::Instance.Get().GetAnimator(e.animatorIndex);
+	//	auto modelName = animator->GetModel();
+	//	ResourceManager::Instance.Get().GetAnimationGroup(modelName)->Bind();
+
+	//	//KeyframeDesc keyFrameDesc;
+	//	//keyFrameDesc.animIndex = animator->GetTransitionDesc().curr.animIndex;
+	//	//keyFrameDesc.currFrame = animator->GetCurrentFrame();
+	//	//keyFrameDesc.nextFrame = animator->GetCurrentFrame()+1;
+	//	//keyFrameDesc.ratio = animator->GetFrameRatio();
+	//	auto& transitionDesc = animator->GetTransitionDesc();
+	//	NailEngine::Instance.Get().GetConstantBuffer(5)->PushGraphicsData(&transitionDesc, sizeof(InstanceTransitionDesc), 5);
+
+	//	MatrixBuffer matrixBuffer;
+	//	matrixBuffer.WTM = e.renderInfo.wtm;
+	//	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+	//	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	//	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	//	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	//	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{e.renderInfo.objecID,0,0,0};
+	//	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+
+	//	auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.renderInfo.mesh->GetName()));
+
+	//	auto animationGroup = ResourceManager::Instance.Get().GetAnimationGroup(e.modelName);
+	//	animationGroup->Bind();
+
+	//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.renderInfo.material->GetName()))->PushGraphicsData();
+	//	mesh->Render(e.renderInfo.materialIndex,nullptr);
+	//}
 }
 
 void RenderSystem::RenderLight()
@@ -197,23 +316,52 @@ void RenderSystem::DrawFinal()
 	ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();
 }
 
+void RenderSystem::RenderUI()
+{
+	auto& uiSet = RenderableManager::Instance.Get().GetUIImageSet();
+	this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied());
+	for (auto& i : uiSet)
+	{
+		auto uiImage = std::static_pointer_cast<UIImage>(i);
+
+		if (uiImage->IsActive() == false)
+		{
+			continue;
+		}
+
+		auto texture = ((Texture*)(std::static_pointer_cast<UIImage>(i)->GetTexture()));
+		this->spriteBatch->Draw(texture->GetSRV().Get(), uiImage->pos);
+	}
+	this->spriteBatch->End();
+}
+
 void RenderSystem::RenderForward()
 {
-	for (auto& e : this->forwardVec)
-	{
-		MatrixBuffer matrixBuffer;
-		matrixBuffer.WTM = e.wtm;
-		matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-		matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
-		matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-		matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+	//MatrixBuffer matrixBuffer;
+	////matrixBuffer.WTM = e.wtm;
+	//matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+	//matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	//matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	//matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	////matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
+	//NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 
-		auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.mesh->GetName()));
-
-		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.material->GetName()))->PushGraphicsData();
-		mesh->Render(e.materialIndex);
-	}
+	//for (auto& e : this->forwardVec)
+	//{
+	//	MatrixBuffer matrixBuffer;
+	//	matrixBuffer.WTM = e.wtm;
+	//	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+	//	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	//	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	//	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	//	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+	//
+	//	auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.mesh->GetName()));
+	//
+	//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.material->GetName()))->PushGraphicsData();
+	//	mesh->Render(e.materialIndex, nullptr);
+	//}
+	InstancingManager::Instance.Get().RegisterMeshAndMaterial(this->forwardVec);
 }
 
 void RenderSystem::DrawDeferredInfo()
@@ -229,8 +377,8 @@ void RenderSystem::DrawDeferredInfo()
 		matRotation *= DirectX::SimpleMath::Matrix::CreateRotationZ(0.f);
 		/// 
 		DirectX::SimpleMath::Matrix matTranslation = DirectX::SimpleMath::Matrix::CreateTranslation(DirectX::SimpleMath::Vector3(
-			((-width/2.f) + ((width/10.f)*(i+2)))
-			,((height/2.f) - ((height/10.f)*2.f) + 22.f)
+			((-width/2.f) + ((width*0.05) + ((width/10.f) * i)))
+			,((height/2.f) - ((height*0.05)))
 			,1.f)
 		);
 		/// 
@@ -263,3 +411,55 @@ void RenderSystem::DrawDeferredInfo()
 		ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();
 	}
 }
+
+//void RenderSystem::BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo)
+//{
+//	/*auto& boneMap = ResourceManager::Instance.Get().GetFBXBoneData(std::string{ skinnedRenderInfo.modelName.begin(), skinnedRenderInfo.modelName.end() });
+//
+//	
+//
+//	auto fbxNode = ResourceManager::Instance.Get().GetFBXNode(skinnedRenderInfo.modelName);
+//
+//	ReadBone(fbxNode, DirectX::SimpleMath::Matrix::Identity, std::string{ skinnedRenderInfo.modelName.begin(), skinnedRenderInfo.modelName.end() }, animator);
+//
+//	NailEngine::Instance.Get().GetConstantBuffer(4)->PushGraphicsData(&this->finalTM, sizeof(BoneMatrix), 4);*/
+//}
+
+//void RenderSystem::ReadBone(FBXNode* fbxNode, DirectX::SimpleMath::Matrix parentMatrix, const std::string& fbxName, std::shared_ptr<NailAnimator> animator)
+//{
+//	auto& boneInfoMap = ResourceManager::Instance.Get().GetFBXBoneData(fbxName);
+//
+//	Animation* animation = static_cast<Animation*>(animator->GetCurrentAnimation());
+//	int currentFrame = animator->GetCurrentFrame();
+//	int nextFrame = currentFrame + 1;
+//	float frameRatio = animator->GetFrameRatio();
+//	AnimationClip& animationClip = animation->GetAnimationClip();
+//
+//	DirectX::SimpleMath::Matrix srt = fbxNode->transformMatrix;
+//
+//	auto iter = boneInfoMap.find(fbxNode->nodeName);
+//	if (iter != boneInfoMap.end())
+//	{
+//		auto animationPos = DirectX::SimpleMath::Vector3::Lerp(animationClip.keyFrameInfoVec[iter->second.index][currentFrame].pos,
+//			animationClip.keyFrameInfoVec[iter->second.index][nextFrame].pos, frameRatio);
+//
+//		auto animationScale = DirectX::SimpleMath::Vector3::Lerp(animationClip.keyFrameInfoVec[iter->second.index][currentFrame].scale,
+//			animationClip.keyFrameInfoVec[iter->second.index][nextFrame].scale, frameRatio);
+//
+//		auto animationRot = DirectX::SimpleMath::Quaternion::Slerp(animationClip.keyFrameInfoVec[iter->second.index][currentFrame].rot,
+//			animationClip.keyFrameInfoVec[iter->second.index][nextFrame].rot, frameRatio);
+//
+//		auto translateMat = DirectX::SimpleMath::Matrix::CreateTranslation(animationPos);
+//		auto rotationMat = DirectX::XMMatrixRotationQuaternion(animationRot);
+//		auto scaleMat = DirectX::SimpleMath::Matrix::CreateScale(animationScale);
+//
+//		srt = scaleMat * rotationMat * translateMat;
+//
+//		this->finalTM.finalTM[iter->second.index] = iter->second.offset * srt * parentMatrix;
+//	}
+//
+//	for (int i = 0; i < fbxNode->child.size(); ++i)
+//	{
+//		ReadBone(fbxNode->child[i], srt * parentMatrix, fbxName, animator);
+//	}
+//}

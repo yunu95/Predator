@@ -2,12 +2,12 @@
 
 #include "Application.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
-		ProgramExitCommand::ProgramExitCommand(Application& app)
-			: app(app)
+		ProgramExitCommand::ProgramExitCommand()
+			: app(Application::GetInstance())
 		{
 
 		}

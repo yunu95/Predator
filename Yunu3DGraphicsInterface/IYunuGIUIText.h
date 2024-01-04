@@ -10,6 +10,7 @@ namespace yunuGI
 	public:
 		virtual void SetText(TCHAR* text, ...) = 0;
 		virtual const std::string GetText() = 0;
+		virtual void SetLayer(int layer) {};
 	};
 	struct IUITextDesc
 	{

@@ -2,20 +2,13 @@
 
 #include "imgui.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
-		std::unique_ptr<MiniMapPanel> MiniMapPanel::instance = nullptr;
-
-		MiniMapPanel& MiniMapPanel::GetInstance()
+		MiniMapPanel::MiniMapPanel()
 		{
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<MiniMapPanel>(new MiniMapPanel());
-			}
 
-			return *instance;
 		}
 
 		MiniMapPanel::~MiniMapPanel()
@@ -35,7 +28,7 @@ namespace Application
 
 		void MiniMapPanel::GUIProgress()
 		{
-			ImGui::Begin("MiniMap");
+			ImGui::Begin("MiniMap", 0, ImGuiWindowFlags_NoBringToFrontOnFocus);
 
 			/// ImGui 관련 내부 변수 업데이트
 			isMouseOver = ImGui::IsWindowHovered();
@@ -48,11 +41,6 @@ namespace Application
 		}
 
 		void MiniMapPanel::Finalize()
-		{
-
-		}
-
-		MiniMapPanel::MiniMapPanel()
 		{
 
 		}

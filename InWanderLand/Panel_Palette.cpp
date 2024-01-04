@@ -1,60 +1,52 @@
 #include "Panel_Palette.h"
+#include "YunutyEngine.h"
 
 #include "imgui.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
-	{
-		std::unique_ptr<PalettePanel> PalettePanel::instance = nullptr;
+    namespace editor
+    {
+        PalettePanel::PalettePanel()
+        {
 
-		PalettePanel& PalettePanel::GetInstance()
-		{
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<PalettePanel>(new PalettePanel());
-			}
+        }
 
-			return *instance;
-		}
+        PalettePanel::~PalettePanel()
+        {
 
-		PalettePanel::~PalettePanel()
-		{
+        }
 
-		}
+        void PalettePanel::Initialize()
+        {
 
-		void PalettePanel::Initialize()
-		{
+        }
 
-		}
+        void PalettePanel::Update(float ts)
+        {
 
-		void PalettePanel::Update(float ts)
-		{
+        }
 
-		}
+        void PalettePanel::GUIProgress()
+        {
+            ImGui::Begin("Palette");
 
-		void PalettePanel::GUIProgress()
-		{
-			ImGui::Begin("Palette");
+            /// ImGui 관련 내부 변수 업데이트
+            isMouseOver = ImGui::IsWindowHovered();
+            isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
-			/// ImGui ���� ���� ���� ������Ʈ
-			isMouseOver = ImGui::IsWindowHovered();
-			isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
-			
-			/// ���� �гο� �׸��� ����
+            /// 실제 패널에 그리는 영역
 
+            /// 아래 부분은 Palette가 오로지 장식물 배치에만 사용된다고 가정하고 작성한 코드입니다.
+            /// 메시 타입을 결정한 후 
+            // 메시 타입을 설정합니다.
 
-			ImGui::End();
-		}
+            ImGui::End();
+        }
 
-		void PalettePanel::Finalize()
-		{
+        void PalettePanel::Finalize()
+        {
 
-		}
-
-		PalettePanel::PalettePanel()
-		{
-
-		}
-	}
+        }
+    }
 }

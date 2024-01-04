@@ -2,20 +2,13 @@
 
 #include "imgui.h"
 
-namespace Application
+namespace application
 {
-	namespace Editor
+	namespace editor
 	{
-		std::unique_ptr<SceneViewPanel> SceneViewPanel::instance = nullptr;
-
-		SceneViewPanel& SceneViewPanel::GetInstance()
+		SceneViewPanel::SceneViewPanel()
 		{
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<SceneViewPanel>(new SceneViewPanel());
-			}
 
-			return *instance;
 		}
 
 		SceneViewPanel::~SceneViewPanel()
@@ -35,7 +28,7 @@ namespace Application
 
 		void SceneViewPanel::GUIProgress()
 		{
-			ImGui::Begin("SceneView");
+			ImGui::Begin("SceneView", 0, ImGuiWindowFlags_NoBringToFrontOnFocus);
 
 			/// ImGui 관련 내부 변수 업데이트
 			isMouseOver = ImGui::IsWindowHovered();
@@ -48,11 +41,6 @@ namespace Application
 		}
 
 		void SceneViewPanel::Finalize()
-		{
-
-		}
-
-		SceneViewPanel::SceneViewPanel()
 		{
 
 		}

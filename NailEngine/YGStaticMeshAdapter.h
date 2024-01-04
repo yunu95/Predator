@@ -17,16 +17,16 @@ namespace yunuGIAdapter
 		StaticMeshAdapter() :RenderableAdapter() 
 		{
 			renderable = std::make_shared<StaticMesh>();
-			RenderableManager::Instance.Get().PushRenderableObject(renderable);
+			RenderableManager::Instance.Get().PushStaticRenderableObject(renderable);
 
-			std::shared_ptr<MaterialWrapper> material = std::make_shared<MaterialWrapper>();
+			std::shared_ptr<MaterialWrapper> material = std::make_shared<MaterialWrapper>(true);
 			material->SetRenderable(this->renderable);
 			this->materialVec.emplace_back(material);
 		}
 
 		~StaticMeshAdapter()
 		{
-			RenderableManager::Instance.Get().PopRenderableObject(renderable);
+			RenderableManager::Instance.Get().PopStaticRenderableObject(renderable);
 		}
 
 		virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)
@@ -34,7 +34,10 @@ namespace yunuGIAdapter
 			renderable->SetWorldTM(reinterpret_cast<const DirectX::SimpleMath::Matrix&>(worldTM));
 		};
 
-		virtual void SetActive(bool isActive) {};
+		virtual void SetActive(bool isActive)
+		{
+			renderable->SetActive(isActive);
+		};
 
 		virtual void SetMesh(yunuGI::IMesh* mesh) override
 		{
@@ -45,8 +48,6 @@ namespace yunuGIAdapter
 
 		virtual void SetMaterial(unsigned int index, yunuGI::IMaterial* material) override
 		{
-			std::shared_ptr<Material> materialPtr = std::shared_ptr<Material>(reinterpret_cast<Material*>(material));
-
 			// 새로운 Material이라면
 			if (index + 1 > this->materialVec.size())
 			{
@@ -56,22 +57,22 @@ namespace yunuGIAdapter
 
 				if (this->materialVec.back()->IsOrigin())
 				{
-					this->materialVec.back()->original = materialPtr;
+					this->materialVec.back()->original = reinterpret_cast<Material*>(material);
 				}
 				else
 				{
-					this->materialVec.back()->variation = materialPtr;
+					this->materialVec.back()->variation = reinterpret_cast<Material*>(material);
 				}
 			}
 			else
 			{
 				if (this->materialVec[index]->IsOrigin())
 				{
-					this->materialVec[index]->original = materialPtr;
+					this->materialVec[index]->original = reinterpret_cast<Material*>(material);
 				}
 				else
 				{
-					this->materialVec[index]->variation = materialPtr;
+					this->materialVec[index]->variation = reinterpret_cast<Material*>(material);
 				}
 			}
 

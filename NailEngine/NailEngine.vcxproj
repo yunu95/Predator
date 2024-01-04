@@ -101,11 +101,12 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)Include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>D3D11.lib;dxgi.lib;D3DCompiler.lib;dxguid.lib;DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>D3D11.lib;dxgi.lib;D3DCompiler.lib;dxguid.lib;DirectXTex.lib;%(AdditionalDependencies);DirectXTK.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K || exit 0
@@ -140,11 +141,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)Include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>assimp-vc143-mtd.lib;minizip.lib;pugixml.lib;zlibd.lib;D3D11.lib;dxgi.lib;D3DCompiler.lib;dxguid.lib;DirectXTex.lib;user32.lib</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc143-mtd.lib;minizip.lib;pugixml.lib;zlibd.lib;D3D11.lib;dxgi.lib;D3DCompiler.lib;dxguid.lib;DirectXTex.lib;user32.lib;DirectXTK.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K
@@ -174,17 +176,28 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationGroup.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="DirectionalLight.h" />
-    <ClInclude Include="FBXLoader.h" />
+    <ClInclude Include="FBXLoader.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="ILight.h" />
+    <ClInclude Include="InstanceBuffer.h" />
+    <ClInclude Include="InstancingManager.h" />
     <ClInclude Include="IRenderable.h" />
     <ClInclude Include="IYunuMeshRenderer.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialWrapper.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="ModelData.h" />
+    <ClInclude Include="ModelLoader.h" />
+    <ClInclude Include="NailAnimator.h" />
+    <ClInclude Include="NailAnimatorManager.h" />
     <ClInclude Include="NailCamera.h" />
     <ClInclude Include="NailEngine.h" />
     <ClInclude Include="PixelShader.h" />
@@ -197,14 +210,17 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SimpleMath.h" />
+    <ClInclude Include="SkinnedMesh.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="Struct.h" />
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="UIImage.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VertexShader.h" />
     <ClInclude Include="YGAdapter.h" />
+    <ClInclude Include="YGAnimatorAdapter.h" />
     <ClInclude Include="YGCameraAdapter.h" />
     <ClInclude Include="YGDebugCubeAdapter.h" />
     <ClInclude Include="YGDebugSphereAdapter.h" />
@@ -226,14 +242,24 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="YGUITextAdapter.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationGroup.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
-    <ClCompile Include="FBXLoader.cpp" />
+    <ClCompile Include="FBXLoader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="InstanceBuffer.cpp" />
+    <ClCompile Include="InstancingManager.cpp" />
     <ClCompile Include="IRenderable.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="ModelLoader.cpp" />
+    <ClCompile Include="NailAnimator.cpp" />
+    <ClCompile Include="NailAnimatorManager.cpp" />
     <ClCompile Include="NailCamera.cpp" />
     <ClCompile Include="NailEngine.cpp" />
     <ClCompile Include="PixelShader.cpp" />
@@ -246,10 +272,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
+    <ClCompile Include="SkinnedMesh.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="UIImage.cpp" />
     <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="YGExports.cpp" />
     <ClCompile Include="YGMaterialAdapter.cpp">
@@ -263,6 +291,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\DebugVS.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="RuntimeDependency\resources\Shader\DefaultPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -318,6 +352,23 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\ForwardPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\SkinnedVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="RuntimeDependency\resources\Shader\TexturePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
@@ -332,8 +383,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="RuntimeDependency\resources\Shader\Buffers.hlsli" />
-    <None Include="RuntimeDependency\resources\Shader\ForwardPS.hlsli" />
+    <None Include="RuntimeDependency\resources\Shader\Buffers.hlsli">
+      <FileType>Document</FileType>
+    </None>
     <None Include="RuntimeDependency\resources\Shader\Utils.hlsli" />
     <None Include="SimpleMath.inl" />
   </ItemGroup>
