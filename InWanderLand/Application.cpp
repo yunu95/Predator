@@ -274,6 +274,12 @@ namespace application
         return appSpecification;
     }
 
+    void* Application::GetSRV()
+    {
+        static auto resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+        return ::GetSRV(resourceManager->GetFinalRenderImage());
+    }
+
 #ifdef EDITOR
     void Application::ImGuiUpdate()
     {

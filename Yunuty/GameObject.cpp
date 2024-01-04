@@ -23,8 +23,8 @@ void yunutyEngine::GameObject::DoThingsOnParents(function<void(GameObject*)> tod
 }
 void yunutyEngine::GameObject::DeleteComponent(Component* component)
 {
-    // º¤ÅÍ¿¡¼­ ÄÄÆ÷³ÍÆ®¸¦ »èÁ¦ÇÏ´Âµ¥¿¡ ¾²ÀÌ´Â ¸Å¿ì ÃßÇÑ ÄÚµå, ¹°·Ğ ÄÄÆ÷³ÍÆ® °¹¼ö°¡ 
-    // 100°³¸¦ ³Ñ¾î°¡Áöµµ ¾ÊÀ»Å×´Ï ÀÌ·± ÄÚµå´Â Á» ºñÈ¿À²ÀûÀÌ¾îµµ µÈ´Ù.
+    // ë²¡í„°ì—ì„œ ì»´í¬ë„ŒíŠ¸ë¥¼ ì‚­ì œí•˜ëŠ”ë°ì— ì“°ì´ëŠ” ë§¤ìš° ì¶”í•œ ì½”ë“œ, ë¬¼ë¡  ì»´í¬ë„ŒíŠ¸ ê°¯ìˆ˜ê°€ 
+    // 100ê°œë¥¼ ë„˜ì–´ê°€ì§€ë„ ì•Šì„í…Œë‹ˆ ì´ëŸ° ì½”ë“œëŠ” ì¢€ ë¹„íš¨ìœ¨ì ì´ì–´ë„ ëœë‹¤.
     for (auto itr = indexedComponents.begin(); itr != indexedComponents.end(); itr++)
         if (*itr == component)
         {
@@ -68,10 +68,17 @@ void yunutyEngine::GameObject::SetSelfActive(bool selfActive)
                     activeStack.push(each);
 
             for (auto eachComp = child->components.begin(); eachComp != child->components.end(); eachComp++)
+            {
                 if (activeAfter)
+                {
                     eachComp->first->OnEnable();
+                }
                 else
+                {
                     eachComp->first->OnDisable();
+                }
+                YunutyCycle::SingleInstance().HandleComponent(eachComp->first);
+            }
         }
     }
 
@@ -99,7 +106,7 @@ void yunutyEngine::GameObject::SetParent(IGameObjectParent* parent)
     this->parentGameObject = dynamic_cast<GameObject*>(parent);
     DoThingsOnParents([](GameObject* parent) {parent->childrenNum++; });
 }
-// ÀÌ°Å º¹Àâµµ nÀÓ.
+// ì´ê±° ë³µì¡ë„ nì„.
 unique_ptr<yunutyEngine::GameObject> yunutyEngine::GameObject::MoveChild(GameObject* child)
 {
     auto ret = move(children[child]);
@@ -132,7 +139,6 @@ int yunutyEngine::GameObject::GetChildIndex(const GameObject* child)const
 }
 yunutyEngine::GameObject::~GameObject()
 {
-
 }
 Transform* yunutyEngine::GameObject::GetTransform()
 {
@@ -192,6 +198,7 @@ int yunutyEngine::GameObject::GetSceneIndex()const
 }
 int yunutyEngine::GameObject::GetSceneIndex(const GameObject* target)
 {
+    assert(false, "GetSceneIndex is deprecated... call for master yunu's help in case if you need it.");
     if (!target->cachedSceneIndex.IsDirty())
         return target->cachedSceneIndex;
 
@@ -221,7 +228,7 @@ int yunutyEngine::GameObject::GetSceneIndex(const GameObject* target)
                     obj->cachedSceneIndex = 1;
                     continue;
                 }
-                // ¾À¿¡¼­ °¡Àå Ã¹¹øÂ°·Î ¹èÄ¡µÈ °ÔÀÓ¿ÀºêÁ§Æ®
+                // ì”¬ì—ì„œ ê°€ì¥ ì²«ë²ˆì§¸ë¡œ ë°°ì¹˜ëœ ê²Œì„ì˜¤ë¸Œì íŠ¸
                 else
                 {
                     obj->cachedSceneIndex = 0;

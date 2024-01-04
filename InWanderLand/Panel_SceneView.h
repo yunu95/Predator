@@ -6,9 +6,9 @@
 #include "Singleton.h"
 #include "EditorPanel.h"
 
-namespace yunuGI
+namespace application
 {
-	class IResourceManager;
+	class Application;
 }
 
 namespace application
@@ -28,7 +28,7 @@ namespace application
 			virtual void Finalize() override;
 
 		private:
-			const yunuGI::IResourceManager* resourceManager;
+			Application* app;
 			unsigned int rendererWidth;
 			unsigned int rendererHeight;
 		};

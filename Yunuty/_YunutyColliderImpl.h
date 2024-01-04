@@ -20,9 +20,9 @@ namespace yunutyEngine
             Collider* colliderComponent;
             physx::PxRigidStatic* pxRigidStatic{ nullptr };
             physx::PxRigidDynamic* pxRigidDynamic{nullptr};
-            physx::PxShape* pxShape{nullptr};
             physx::PxMaterial* pxMaterial{nullptr};
             physx::PxRigidActor* pxActor{nullptr};
+            physx::PxShape* pxShape{nullptr};
             PxShapeFlags pxShapeFlags{ PxShapeFlag::eVISUALIZATION | physx::PxShapeFlag::eTRIGGER_SHAPE };
             bool isStatic{ false };
             bool isKinematic{ false };
@@ -30,7 +30,6 @@ namespace yunutyEngine
             friend Collider;
             friend RigidBody;
             friend _PhysxGlobal;
-
         protected:
         public:
             // Rigidbody가 존재하지 않으면 isTrigger는 참, Rigidbody가 존재하면 Trigger는 거짓입니다.
@@ -126,14 +125,14 @@ namespace yunutyEngine
 
                 if (isStatic)
                 {
-                    pxRigidStatic = _PhysxGlobal::SingleInstance().pxPhysics->createRigidStatic(PxTransform(reinterpret_cast<const PxMat44&>(worldTM)));
+                    pxRigidStatic = _PhysxGlobal::SingleInstance().pxPhysics->createRigidStatic(PxTransform(reinterpret_cast<const PxMat44&>(worldTM)).getNormalized());
                     _PhysxGlobal::SingleInstance().RequestPxScene(colliderComponent->GetGameObject()->GetScene())->addActor(*pxRigidStatic);
                     pxRigidStatic->attachShape(*pxShape);
                     pxActor = pxRigidStatic;
                 }
                 else
                 {
-                    pxRigidDynamic = _PhysxGlobal::SingleInstance().pxPhysics->createRigidDynamic(PxTransform(reinterpret_cast<const PxMat44&>(worldTM)));
+                    pxRigidDynamic = _PhysxGlobal::SingleInstance().pxPhysics->createRigidDynamic(PxTransform(reinterpret_cast<const PxMat44&>(worldTM)).getNormalized());
                     _PhysxGlobal::SingleInstance().RequestPxScene(colliderComponent->GetGameObject()->GetScene())->addActor(*pxRigidDynamic);
                     pxRigidDynamic->attachShape(*pxShape);
                     if (ccdEnabled)
@@ -199,7 +198,7 @@ namespace yunutyEngine
             void SetActorWorldTransform(const yunuGI::Matrix4x4& worldTM)
             {
                 static_assert(sizeof(yunuGI::Matrix4x4) == sizeof(PxMat44));
-                pxActor->setGlobalPose(PxTransform{ reinterpret_cast<const PxMat44&>(worldTM) });
+                pxActor->setGlobalPose(PxTransform{ reinterpret_cast<const PxMat44&>(worldTM) }.getNormalized());
             }
             yunutyEngine::Vector3f GetActorPosition()
             {
@@ -213,6 +212,11 @@ namespace yunutyEngine
                 auto pxQuat = pxActor->getGlobalPose().q;
                 yunutyEngine::Quaternion quat { pxQuat.w, pxQuat.x, pxQuat.y, pxQuat.z };
                 return quat;
+            }
+            void ResetGeometry()
+            {
+                if (pxShape)
+                    pxShape->setGeometry(GetGeometry());
             }
         };
     }

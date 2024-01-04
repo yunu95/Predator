@@ -30,7 +30,7 @@ namespace yunutyEngine
             PxPvd* pxPvd;
             PxPhysics* pxPhysics;
 
-            // pxSceneÀÌ ¾ø´Â °æ¿ì PxSceneÀ» ¸¸µé¾î¼­ ÁØ´Ù.
+            // pxSceneì´ ì—†ëŠ” ê²½ìš° PxSceneì„ ë§Œë“¤ì–´ì„œ ì¤€ë‹¤.
             PxScene* RequestPxScene(Scene* scene)
             {
                 if (auto itr = PxSceneByScene.find(scene); itr == PxSceneByScene.end())

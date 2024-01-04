@@ -1,7 +1,7 @@
 /*****************************************************************
  * \file   YunutyCycle.h
- * \brief  
- * 
+ * \brief
+ *
  * \author KOCCA23
  * \date   September 2023
  *********************************************************************/
@@ -20,8 +20,9 @@
 namespace yunutyEngine
 {
     class Component;
+    class GameObject;
     /**
-     * \brief »çÀÌÅ¬Àº °ÔÀÓ ¿£ÁøÀÇ ¸ŞÀÎ½º·¹µåÀÇ ±¸µ¿À» Á¦¾îÇÏ´Â ½Ì±ÛÅæ Å¬·¡½ºÀÌ´Ù.
+     * \brief ì‚¬ì´í´ì€ ê²Œì„ ì—”ì§„ì˜ ë©”ì¸ìŠ¤ë ˆë“œì˜ êµ¬ë™ì„ ì œì–´í•˜ëŠ” ì‹±ê¸€í†¤ í´ë˜ìŠ¤ì´ë‹¤.
      */
     class YUNUTY_API YunutyCycle : Object
     {
@@ -34,33 +35,53 @@ namespace yunutyEngine
         void ActiveComponentsDo(void (Component::* method)());
         vector<Component*> GetActiveComponents();
         vector<GameObject*> GetGameObjects(bool onlyActive = true);
+
+        /// <summary>
+        /// í™œì„±í™”ë˜ì–´ ê°ê° Start, Update ê²Œì„ ì—”ì§„ ì‚¬ì´í´ì— ì°¸ì—¬í•˜ëŠ” ì»´í¬ë„ŒíŠ¸ë“¤ì˜ ì§‘í•©.
+        /// </summary>
+        unordered_set<Component*> startTargetComponents;
+        stack<Component*> startTargetComponentsPendingAddition;
+        stack<Component*> startTargetComponentsPendingDeletion;
+        unordered_set<Component*> updateTargetComponents;
+        stack<Component*> updateTargetComponentsPendingAddition;
+        stack<Component*> updateTargetComponentsPendingDeletion;
+        /// <summary>
+        /// updateTargetComponents/activeGameObjectsë“¤ì— ì¶”ê°€ë  ê°ì²´ë“¤.
+        /// </summary>
+        /// <summary>
+        /// updateTargetComponents/activeGameObjectsë“¤ì—ì„œ ì‚­ì œë  ê°ì²´ë“¤.
+        /// </summary>
+
         vector<std::function<void()>> afterUpdateActions;
         std::mutex actionReservationMutex;
-        
+
         static void UpdateComponent(Component* component);
         static void StartComponent(Component* component);
         void ThreadFunction();
+        void ReceivePendingObjectsChange();
+        friend Component;
+        friend GameObject;
     protected:
         static YunutyCycle* _instance;
         YunutyCycle();
         virtual ~YunutyCycle();
         virtual void ThreadUpdate();
     public:
-        // ¼öµ¿À¸·Î ·»´õ¸µÀ» ±¸µ¿ÇÒ °Í °°À¸¸é false·Î µÎ¸é µÈ´Ù.
+        // ìˆ˜ë™ìœ¼ë¡œ ë Œë”ë§ì„ êµ¬ë™í•  ê²ƒ ê°™ìœ¼ë©´ falseë¡œ ë‘ë©´ ëœë‹¤.
         bool autoRendering = true;
-        // yunuty ¶óÀÌÇÁ»çÀÌÅ¬À» ½ÇÇà½ÃÅ°´Â ¹ÂÅØ½º.
-        // ¿ÜºÎ¿¡¼­ ¶ôÀ» °É¸é °ÔÀÓ¿£Áø ½º·¹µåÀÇ ¾÷µ¥ÀÌÆ® »çÀÌÅ¬ÀÌ µ¹°í ÀÖÁö ¾ÊÀ½ÀÌ º¸ÀåµÈ´Ù.
+        // yunuty ë¼ì´í”„ì‚¬ì´í´ì„ ì‹¤í–‰ì‹œí‚¤ëŠ” ë®¤í…ìŠ¤.
+        // ì™¸ë¶€ì—ì„œ ë½ì„ ê±¸ë©´ ê²Œì„ì—”ì§„ ìŠ¤ë ˆë“œì˜ ì—…ë°ì´íŠ¸ ì‚¬ì´í´ì´ ëŒê³  ìˆì§€ ì•ŠìŒì´ ë³´ì¥ëœë‹¤.
         std::mutex updateMutex;
-        // yunuty ¾÷µ¥ÀÌÆ® ¶óÀÌÇÁ»çÀÌÅ¬À» ½ÇÇàÇÏ±â Àü °ÅÄ¡´Â ¹ÂÅØ½º.
-        // ¿ÜºÎ¿¡¼­ ¶ôÀ» °É¸é °ÔÀÓ¿£Áø ½º·¹µåÀÇ ¾÷µ¥ÀÌÆ® »çÀÌÅ¬ÀÌ ÇÑ¹ø ´õ µ¹Áö ¾ÊÀ» °ÍÀÓÀÌ º¸ÀåµÈ´Ù.
+        // yunuty ì—…ë°ì´íŠ¸ ë¼ì´í”„ì‚¬ì´í´ì„ ì‹¤í–‰í•˜ê¸° ì „ ê±°ì¹˜ëŠ” ë®¤í…ìŠ¤.
+        // ì™¸ë¶€ì—ì„œ ë½ì„ ê±¸ë©´ ê²Œì„ì—”ì§„ ìŠ¤ë ˆë“œì˜ ì—…ë°ì´íŠ¸ ì‚¬ì´í´ì´ í•œë²ˆ ë” ëŒì§€ ì•Šì„ ê²ƒì„ì´ ë³´ì¥ëœë‹¤.
         std::mutex preUpdateMutex;
-        // ¿¹¿Ü°¡ ¹ß»ıÇßÀ»¶§ ¿¹¿Ü¸¦ ´øÁö´Â ´ë½Å ÀÌ ÇÔ¼ö¸¦ È£ÃâÇÑ´Ù. ÇÔ¼ö°¡ µî·ÏµÇ¾î ÀÖÁö ¾ÊÀ¸¸é ¿¹¿Ü¸¦ ´øÁø´Ù.
+        // ì˜ˆì™¸ê°€ ë°œìƒí–ˆì„ë•Œ ì˜ˆì™¸ë¥¼ ë˜ì§€ëŠ” ëŒ€ì‹  ì´ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•œë‹¤. í•¨ìˆ˜ê°€ ë“±ë¡ë˜ì–´ ìˆì§€ ì•Šìœ¼ë©´ ì˜ˆì™¸ë¥¼ ë˜ì§„ë‹¤.
         std::function<void(const std::exception& e)> onExceptionThrown;
-        // °ÔÀÓ »çÀÌÅ¬ ½º·¹µå°¡ ½ÃÀÛµÇÀÚ¸¶ÀÚ ½ÇÇàÇÒ ÇÔ¼ö.
+        // ê²Œì„ ì‚¬ì´í´ ìŠ¤ë ˆë“œê°€ ì‹œì‘ë˜ìë§ˆì ì‹¤í–‰í•  í•¨ìˆ˜.
         std::function<void()> preThreadAction;
-        // °ÔÀÓ »çÀÌÅ¬ ½º·¹µå°¡ ³¡³»±â Á÷Àü¿¡ ½ÇÇàÇÒ ÇÔ¼ö.
+        // ê²Œì„ ì‚¬ì´í´ ìŠ¤ë ˆë“œê°€ ëë‚´ê¸° ì§ì „ì— ì‹¤í–‰í•  í•¨ìˆ˜.
         std::function<void()> postThreadAction;
-        // °ÔÀÓ ½º·¹µåÀÇ ¾÷µ¥ÀÌÆ® »çÀÌÅ¬ÀÌ ³¡³­ ÈÄ ½ÇÇàÇÒ ÇÔ¼ö.
+        // ê²Œì„ ìŠ¤ë ˆë“œì˜ ì—…ë°ì´íŠ¸ ì‚¬ì´í´ì´ ëë‚œ í›„ ì‹¤í–‰í•  í•¨ìˆ˜.
         std::function<void()> postUpdateAction;
         static YunutyCycle& SingleInstance();
         virtual void Initialize();
@@ -68,9 +89,13 @@ namespace yunutyEngine
         void Play();
         void Stop();
         void Pause();
-        // ¿£ÁøÀ» È°¿ëÇÏ´Â ½º·¹µå¿Í µ¿½Ã¼º ¹®Á¦°¡ »ı±æ¶§ »ç¿ëÇÏ´Â ÇÔ¼ö
-        // ¾÷µ¥ÀÌÆ®°¡ ³¡³­ÈÄ µ¿ÀÛ½ÃÅ³ ÇÔ¼ö¸¦ µî·ÏÇÑ´Ù. ÇÑ¹ø ½ÇÇàµÈ ÇÔ¼ö´Â ±×´ë·Î »èÁ¦µÈ´Ù.
+        // ì—”ì§„ì„ í™œìš©í•˜ëŠ” ìŠ¤ë ˆë“œì™€ ë™ì‹œì„± ë¬¸ì œê°€ ìƒê¸¸ë•Œ ì‚¬ìš©í•˜ëŠ” í•¨ìˆ˜
+        // ì—…ë°ì´íŠ¸ê°€ ëë‚œí›„ ë™ì‘ì‹œí‚¬ í•¨ìˆ˜ë¥¼ ë“±ë¡í•œë‹¤. í•œë²ˆ ì‹¤í–‰ëœ í•¨ìˆ˜ëŠ” ê·¸ëŒ€ë¡œ ì‚­ì œëœë‹¤.
         void ReserveActionAfterUpdate(std::function<void()> action);
+        // ì»´í¬ë„ŒíŠ¸ë¥¼ ìœ ëˆ„í‹° ì‚¬ì´í´ì—ì„œ í•¸ë“¤ë§í•˜ë„ë¡ í•œë‹¤.
+        // ì»´í¬ë„ŒíŠ¸ì˜ ìƒíƒœì— ë”°ë¼ ìš”ì²­ì´ ì™„ì „íˆ ë¬´ì‹œë˜ê±°ë‚˜, ì‚¬ì´í´ì—ì„œ íŠ¹ì • ë‹¨ê³„ì— ì²˜ë¦¬ë˜ëŠ” ëŒ€ìƒì´ ëœë‹¤.
+        // forceDropì´ ì°¸ì¸ ê²½ìš° ë¬»ì§€ë„ ë”°ì§€ì§€ë„ ì•Šê³  ì»´í¬ë„ŒíŠ¸ë¥¼ ì‚¬ì´í´ì—ì„œ ì œê±°í•œë‹¤.
+        void HandleComponent(Component* component,bool forceDrop=false);
         void SetMaxFrameRate();
         bool IsGameRunning();
         bool IsUpdating();

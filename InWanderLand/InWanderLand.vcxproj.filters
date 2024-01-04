@@ -558,5 +558,8 @@
     <ClCompile Include="EditorCamera.cpp">
       <Filter>Editor\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Snippet1milGameObjects.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
