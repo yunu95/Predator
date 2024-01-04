@@ -112,12 +112,10 @@ void ResourceManager::CreateMesh(const std::shared_ptr<Mesh>& mesh)
 
 void* ResourceManager::GetFinalRenderImage()
 {
-	ID3D11Texture2D* backBuffer = nullptr;
-
 	ResourceBuilder::Instance.Get().swapChain->GetSwapChain()->GetBuffer(0, __uuidof(ID3D11Texture2D),
 		reinterpret_cast<void**>(&backBuffer));
 
-	D3D11_TEXTURE2D_DESC desc;
+	/*D3D11_TEXTURE2D_DESC desc;
 	backBuffer->GetDesc(&desc);
 	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 	desc.CPUAccessFlags = 0;
@@ -134,7 +132,8 @@ void* ResourceManager::GetFinalRenderImage()
 
 	backBuffer->Release();
 
-	return static_cast<void*>(renderImage);
+	return static_cast<void*>(renderImage);*/
+	return static_cast<void*>(backBuffer);
 }
 
 void ResourceManager::PushFBXBoneInfo(const std::wstring fbxName, std::map<std::wstring, BoneInfo>& boneInfoMap)
