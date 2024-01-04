@@ -44,7 +44,6 @@ namespace application
 
 			/// 실제 패널에 그리는 영역
 			ID3D11ShaderResourceView* sceneImage = static_cast<ID3D11ShaderResourceView*>(resourceManager->GetFinalRenderImage());
-
 			ImGui::Image((void*)sceneImage, ImVec2(rendererWidth, rendererHeight));
 
 			ImGui::End();

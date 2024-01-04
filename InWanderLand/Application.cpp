@@ -9,6 +9,7 @@
 #include "ContentsLayer.h"
 
 #include <d3d11.h>
+#include <dxgi1_2.h>
 #include <tchar.h>
 
 #include <cassert>
@@ -32,7 +33,7 @@ WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHand
 #ifdef EDITOR
 ID3D11Device* g_Editorpd3dDevice = NULL;
 ID3D11DeviceContext* g_Editorpd3dDeviceContext = NULL;
-IDXGISwapChain* g_EditorpSwapChain = NULL;
+IDXGISwapChain1* g_EditorpSwapChain = NULL;
 UINT g_EditorResizeWidth = NULL;
 UINT g_EditorResizeHeight = NULL;
 ID3D11RenderTargetView* g_EditormainRenderTargetView = NULL;
@@ -91,6 +92,10 @@ namespace application
 		yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(appSpecification.windowWidth, appSpecification.windowHeight);
 		yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(hWND);
 
+		g_Editorpd3dDevice = (ID3D11Device*)yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDevice();
+		g_Editorpd3dDeviceContext = (ID3D11DeviceContext*)yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDeviceContext();
+		g_EditormainRenderTargetView = (ID3D11RenderTargetView*)yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetMainRenderTargetView();
+        g_EditorpSwapChain = (IDXGISwapChain1*)yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetSwapChain();
 #ifdef EDITOR
         /// 에디터 윈도우 생성
         int editorWinSizeX = appSpecification.windowWidth;
@@ -105,14 +110,14 @@ namespace application
 
             editorHWND = ::CreateWindow(wcEditor.lpszClassName, wcEditor.lpszClassName, WS_OVERLAPPEDWINDOW, editorWinPosX, editorWinPosY, editorWinSizeX, editorWinSizeY, NULL, NULL, wcEditor.hInstance, NULL);
 
-            // Initialize Direct3D
-            if (!CreateDeviceD3D(editorHWND))
-            {
-                CleanupDeviceD3D();
-                ::UnregisterClass(wcEditor.lpszClassName, wcEditor.hInstance);
+            //// Initialize Direct3D
+            //if (!CreateDeviceD3D(editorHWND))
+            //{
+            //    CleanupDeviceD3D();
+            //    ::UnregisterClass(wcEditor.lpszClassName, wcEditor.hInstance);
 
-                throw std::runtime_error(std::string("failed to create d3d device!"));
-            }
+            //    throw std::runtime_error(std::string("failed to create d3d device!"));
+            //}
 
             ::ShowWindow(editorHWND, SW_SHOWDEFAULT);
             ::UpdateWindow(editorHWND);
@@ -147,7 +152,8 @@ namespace application
 
             // Setup Platform/Renderer backends
             ImGui_ImplWin32_Init(editorHWND);
-            ImGui_ImplDX11_Init((ID3D11Device*)yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDevice(), (ID3D11DeviceContext*)yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDeviceContext());
+           
+            ImGui_ImplDX11_Init(g_Editorpd3dDevice, g_Editorpd3dDeviceContext);
 
             // Load Fonts
             // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
@@ -349,39 +355,39 @@ namespace application
 // Helper functions
 bool CreateDeviceD3D(HWND hWnd)
 {
-    // Setup swap chain
-    DXGI_SWAP_CHAIN_DESC sd;
-    ZeroMemory(&sd, sizeof(sd));
-    sd.BufferCount = 2;
-    sd.BufferDesc.Width = 0;
-    sd.BufferDesc.Height = 0;
-    sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    sd.BufferDesc.RefreshRate.Numerator = 60;
-    sd.BufferDesc.RefreshRate.Denominator = 1;
-    sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    sd.OutputWindow = hWnd;
-    sd.SampleDesc.Count = 1;
-    sd.SampleDesc.Quality = 0;
-    sd.Windowed = TRUE;
-    sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+    //// Setup swap chain
+    //DXGI_SWAP_CHAIN_DESC sd;
+    //ZeroMemory(&sd, sizeof(sd));
+    //sd.BufferCount = 2;
+    //sd.BufferDesc.Width = 0;
+    //sd.BufferDesc.Height = 0;
+    //sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    //sd.BufferDesc.RefreshRate.Numerator = 60;
+    //sd.BufferDesc.RefreshRate.Denominator = 1;
+    //sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+    //sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    //sd.OutputWindow = hWnd;
+    //sd.SampleDesc.Count = 1;
+    //sd.SampleDesc.Quality = 0;
+    //sd.Windowed = TRUE;
+    //sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
-    UINT createDeviceFlags = 0;
-    //createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-    D3D_FEATURE_LEVEL featureLevel;
-    const D3D_FEATURE_LEVEL featureLevelArray[2] = { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_0, };
-    HRESULT res = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &g_EditorpSwapChain, &g_Editorpd3dDevice, &featureLevel, &g_Editorpd3dDeviceContext);
-    if (res == DXGI_ERROR_UNSUPPORTED) // Try high-performance WARP software driver if hardware is not available.
-        res = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_WARP, nullptr, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &g_EditorpSwapChain, &g_Editorpd3dDevice, &featureLevel, &g_Editorpd3dDeviceContext);
+    //UINT createDeviceFlags = 0;
+    ////createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+    //D3D_FEATURE_LEVEL featureLevel;
+    //const D3D_FEATURE_LEVEL featureLevelArray[2] = { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_0, };
+    //HRESULT res = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &g_EditorpSwapChain, &g_Editorpd3dDevice, &featureLevel, &g_Editorpd3dDeviceContext);
+    //if (res == DXGI_ERROR_UNSUPPORTED) // Try high-performance WARP software driver if hardware is not available.
+    //    res = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_WARP, nullptr, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &g_EditorpSwapChain, &g_Editorpd3dDevice, &featureLevel, &g_Editorpd3dDeviceContext);
 
-    if (res != S_OK)
-    {
-        std::stringstream ss;
-        ss << std::hex << res;
-        throw std::runtime_error(string("D3D11CreateDeviceAndSwapChain caused runtime error, error code : ") + ss.str());
-    }
+    //if (res != S_OK)
+    //{
+    //    std::stringstream ss;
+    //    ss << std::hex << res;
+    //    throw std::runtime_error(string("D3D11CreateDeviceAndSwapChain caused runtime error, error code : ") + ss.str());
+    //}
 
-    CreateRenderTarget();
+    //CreateRenderTarget();
     return true;
 }
 
@@ -408,9 +414,9 @@ void CleanupRenderTarget()
 
 void ResizeBuffers(HWND hWnd)
 {
-    g_EditormainRenderTargetView->Release();
-    g_EditorpSwapChain->ResizeBuffers(0, dockspaceArea.x, dockspaceArea.y, DXGI_FORMAT_UNKNOWN, 0);
-    CreateRenderTarget();
+    //g_EditormainRenderTargetView->Release();
+    //g_EditorpSwapChain->ResizeBuffers(0, dockspaceArea.x, dockspaceArea.y, DXGI_FORMAT_UNKNOWN, 0);
+    //CreateRenderTarget();
 }
 
 ID3D11ShaderResourceView* GetSRV(void* handle)

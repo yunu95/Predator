@@ -29,6 +29,8 @@ namespace yunuGI
 
         virtual void* GetDevice() const = 0;
         virtual void* GetDeviceContext() const = 0;
+        virtual void* GetMainRenderTargetView() const = 0;
+        virtual void* GetSwapChain() const = 0;
 
         virtual std::vector<IShader*>& GetShaderList()const = 0;
         virtual std::vector<ITexture*>& GetTextureList()const = 0;
@@ -36,5 +38,6 @@ namespace yunuGI
         virtual std::vector<IMaterial*>& GetMaterialList()const = 0;
         virtual std::vector<IAnimation*>& GetAnimationList()const = 0;
     };
+
 }
 

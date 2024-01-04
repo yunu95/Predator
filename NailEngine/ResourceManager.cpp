@@ -151,6 +151,16 @@ void* ResourceManager::GetDeviceContext()
 	return static_cast<void*>(ResourceBuilder::Instance.Get().device->GetDeviceContext().Get());
 }
 
+void* ResourceManager::GetMainRenderTargetView()
+{
+	return static_cast<void*>(ResourceBuilder::Instance.Get().swapChain->GetRTV().Get());
+}
+
+void* ResourceManager::GetSwapChain()
+{
+	return static_cast<void*>(ResourceBuilder::Instance.Get().swapChain->GetSwapChain().Get());
+}
+
 void ResourceManager::PushFBXBoneInfo(const std::wstring fbxName, std::map<std::wstring, BoneInfo>& boneInfoMap)
 {
 	this->fbxBoneInfoMap.insert({ fbxName, (boneInfoMap) });
