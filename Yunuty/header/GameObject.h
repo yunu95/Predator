@@ -22,10 +22,10 @@ namespace yunutyEngine
     class Transform;
     class YunutyCycle;
     /// <summary>
-    /// °ÔÀÓ ¿ÀºêÁ§Æ®´Â °ÔÀÓ ¾À¿¡ ¹èÄ¡µÉ ¼ö ÀÖ´Â °¡Àå ±âº»ÀûÀÎ ´ÜÀ§ÀÇ °´Ã¼ÀÔ´Ï´Ù.
-    /// °ÔÀÓ ¿ÀºêÁ§Æ®´Â ±âº»ÀûÀ¸·Î Transform ÄÄÆ÷³ÍÆ®¸¦ °®°í ÀÖÀ¸¸ç, ´Ù¾çÇÑ ÄÄÆ÷³ÍÆ®¸¦ Ãß°¡·Î °¡ÁüÀ¸·Î¼­ °ÔÀÓ¿ÀºêÁ§Æ®·Î¼­ÀÇ ¼ºÁúÀÌ °áÁ¤µË´Ï´Ù.
-    /// °ÔÀÓ ¿ÀºêÁ§Æ®´Â ÀÚ½Ä °ÔÀÓ ¿ÀºêÁ§Æ®¿Í ºÎ¸ð °ÔÀÓ ¿ÀºêÁ§Æ®¸¦ °¡Áú ¼ö ÀÖ´Â °èÃþ ±¸Á¶¸¦ °®°í ÀÖ½À´Ï´Ù.
-    /// ÀÚ½Ä °ÔÀÓ ¿ÀºêÁ§Æ®ÀÇ À§Ä¡¿Í °¢µµ´Â ºÎ¸ð °ÔÀÓ ¿ÀºêÁ§Æ®ÀÇ À§Ä¡¿Í °¢µµ¿¡ Á¾¼ÓÀûÀÔ´Ï´Ù.
+    /// ê²Œìž„ ì˜¤ë¸Œì íŠ¸ëŠ” ê²Œìž„ ì”¬ì— ë°°ì¹˜ë  ìˆ˜ ìžˆëŠ” ê°€ìž¥ ê¸°ë³¸ì ì¸ ë‹¨ìœ„ì˜ ê°ì²´ìž…ë‹ˆë‹¤.
+    /// ê²Œìž„ ì˜¤ë¸Œì íŠ¸ëŠ” ê¸°ë³¸ì ìœ¼ë¡œ Transform ì»´í¬ë„ŒíŠ¸ë¥¼ ê°–ê³  ìžˆìœ¼ë©°, ë‹¤ì–‘í•œ ì»´í¬ë„ŒíŠ¸ë¥¼ ì¶”ê°€ë¡œ ê°€ì§ìœ¼ë¡œì„œ ê²Œìž„ì˜¤ë¸Œì íŠ¸ë¡œì„œì˜ ì„±ì§ˆì´ ê²°ì •ë©ë‹ˆë‹¤.
+    /// ê²Œìž„ ì˜¤ë¸Œì íŠ¸ëŠ” ìžì‹ ê²Œìž„ ì˜¤ë¸Œì íŠ¸ì™€ ë¶€ëª¨ ê²Œìž„ ì˜¤ë¸Œì íŠ¸ë¥¼ ê°€ì§ˆ ìˆ˜ ìžˆëŠ” ê³„ì¸µ êµ¬ì¡°ë¥¼ ê°–ê³  ìžˆìŠµë‹ˆë‹¤.
+    /// ìžì‹ ê²Œìž„ ì˜¤ë¸Œì íŠ¸ì˜ ìœ„ì¹˜ì™€ ê°ë„ëŠ” ë¶€ëª¨ ê²Œìž„ ì˜¤ë¸Œì íŠ¸ì˜ ìœ„ì¹˜ì™€ ê°ë„ì— ì¢…ì†ì ìž…ë‹ˆë‹¤.
     /// </summary>
     class YUNUTY_API GameObject :
         public Object, public IGameObjectParent
@@ -45,8 +45,8 @@ namespace yunutyEngine
         {
             return AddComponent<ComponentType>(GUID_NULL);
         }
-        // guid¸¦ »ç¿ëÇÏ´Â ÄÚµå´Â »ç½Ç publicÀÌ¸é ¾ÈµÈ´Ù. °ÔÀÓ Å¬¶óÀÌ¾ðÆ®´Â ¾ê¸¦ ¾Ë ÇÊ¿ä°¡ ¾ø°í,
-        // ¾ÀÀÇ ÀúÀå, ºÒ·¯¿À±â ±â´ÉÀ» ±¸ÇöÇÏ´Â °ÔÀÓ ¿¡µðÅÍ¿¡¸¸ ³ëÃâÇØ¾ß ÇÏ±â ¶§¹®.
+        // guidë¥¼ ì‚¬ìš©í•˜ëŠ” ì½”ë“œëŠ” ì‚¬ì‹¤ publicì´ë©´ ì•ˆëœë‹¤. ê²Œìž„ í´ë¼ì´ì–¸íŠ¸ëŠ” ì–˜ë¥¼ ì•Œ í•„ìš”ê°€ ì—†ê³ ,
+        // ì”¬ì˜ ì €ìž¥, ë¶ˆëŸ¬ì˜¤ê¸° ê¸°ëŠ¥ì„ êµ¬í˜„í•˜ëŠ” ê²Œìž„ ì—ë””í„°ì—ë§Œ ë…¸ì¶œí•´ì•¼ í•˜ê¸° ë•Œë¬¸.
         template<typename ComponentType>
         ComponentType* AddComponent(const char* guid)
         {
@@ -62,7 +62,7 @@ namespace yunutyEngine
             CLSIDFromString(guid, &uuid);
             return AddComponent<ComponentType>(uuid);
         }
-        // ÅÛÇÃ¸´ ¸Å°³º¯¼ö·Î ÁÖ¾îÁø Å¸ÀÔÀÇ ÄÄÆ÷³ÍÆ®¸¦ °ÔÀÓ ¿ÀºêÁ§Æ®¿¡ ºÎÂøÇÕ´Ï´Ù.
+        // í…œí”Œë¦¿ ë§¤ê°œë³€ìˆ˜ë¡œ ì£¼ì–´ì§„ íƒ€ìž…ì˜ ì»´í¬ë„ŒíŠ¸ë¥¼ ê²Œìž„ ì˜¤ë¸Œì íŠ¸ì— ë¶€ì°©í•©ë‹ˆë‹¤.
         template<typename ComponentType>
         ComponentType* AddComponent(GUID guid)
         {
@@ -80,12 +80,12 @@ namespace yunutyEngine
         }
         Component* GetComponentByIndex(unsigned int index)
         {
-            // out of index ¿À·ù°¡ ¶ã °æ¿ì, ±×³É ÅÍÁö°Ô ³»¹ö·Á µÎ´Â°Ô ¸Â´Ù.
+            // out of index ì˜¤ë¥˜ê°€ ëœ° ê²½ìš°, ê·¸ëƒ¥ í„°ì§€ê²Œ ë‚´ë²„ë ¤ ë‘ëŠ”ê²Œ ë§žë‹¤.
             assert(index < indexedComponents.size());
-            //assert("out of index ¿À·ù°¡ ¹ß»ýÇß´Ù. ÄÄÆ÷³ÍÆ® °¹¼öµµ ÆÄ¾Ç ¾ÈÇÏ´Ï±î ¿À·ù°¡ ³ª´Â °Í ¾Æ´Ï³Ä?" && index < indexedComponents.size());
+            //assert("out of index ì˜¤ë¥˜ê°€ ë°œìƒí–ˆë‹¤. ì»´í¬ë„ŒíŠ¸ ê°¯ìˆ˜ë„ íŒŒì•… ì•ˆí•˜ë‹ˆê¹Œ ì˜¤ë¥˜ê°€ ë‚˜ëŠ” ê²ƒ ì•„ë‹ˆëƒ?" && index < indexedComponents.size());
             return indexedComponents[index];
         }
-        // ÅÛÇÃ¸´ ¸Å°³º¯¼ö·Î ÁÖ¾îÁø Å¸ÀÔÀÇ ÄÄÆ÷³ÍÆ®°¡ °ÔÀÓ ¿ÀºêÁ§Æ®¿¡ Á¸ÀçÇÏ´ÂÁö È®ÀÎÇÏ°í, ÃÖÃÊ·Î È®ÀÎµÈ ÄÄÆ÷³ÍÆ® °´Ã¼ÀÇ Æ÷ÀÎÅÍ¸¦ ¹ÝÈ¯ÇÕ´Ï´Ù.
+        // í…œí”Œë¦¿ ë§¤ê°œë³€ìˆ˜ë¡œ ì£¼ì–´ì§„ íƒ€ìž…ì˜ ì»´í¬ë„ŒíŠ¸ê°€ ê²Œìž„ ì˜¤ë¸Œì íŠ¸ì— ì¡´ìž¬í•˜ëŠ”ì§€ í™•ì¸í•˜ê³ , ìµœì´ˆë¡œ í™•ì¸ëœ ì»´í¬ë„ŒíŠ¸ ê°ì²´ì˜ í¬ì¸í„°ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
         template<typename ComponentType>
         ComponentType* GetComponent()
         {
@@ -98,7 +98,7 @@ namespace yunutyEngine
             }
             return nullptr;
         }
-        // ÅÛÇÃ¸´ ¸Å°³º¯¼ö·Î ÁÖ¾îÁø Å¸ÀÔÀÇ ÄÄÆ÷³ÍÆ®°¡ °ÔÀÓ ¿ÀºêÁ§Æ®¿¡ Á¸ÀçÇÏ´ÂÁö È®ÀÎÇÏ°í, ÃÖÃÊ·Î È®ÀÎµÈ ÄÄÆ÷³ÍÆ® °´Ã¼ÀÇ Æ÷ÀÎÅÍ¸¦ ¹ÝÈ¯ÇÕ´Ï´Ù.
+        // í…œí”Œë¦¿ ë§¤ê°œë³€ìˆ˜ë¡œ ì£¼ì–´ì§„ íƒ€ìž…ì˜ ì»´í¬ë„ŒíŠ¸ê°€ ê²Œìž„ ì˜¤ë¸Œì íŠ¸ì— ì¡´ìž¬í•˜ëŠ”ì§€ í™•ì¸í•˜ê³ , ìµœì´ˆë¡œ í™•ì¸ëœ ì»´í¬ë„ŒíŠ¸ ê°ì²´ì˜ í¬ì¸í„°ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
         template<typename ComponentType>
         const ComponentType* GetComponent()const
         {
@@ -111,7 +111,7 @@ namespace yunutyEngine
             }
             return nullptr;
         }
-        // ÅÛÇÃ¸´ ¸Å°³º¯¼ö·Î ÁÖ¾îÁø Å¸ÀÔÀÇ ÄÄÆ÷³ÍÆ®µéÀÌ °ÔÀÓ ¿ÀºêÁ§Æ®¿¡ Á¸ÀçÇÏ´ÂÁö È®ÀÎÇÏ°í, È®ÀÎµÈ ÄÄÆ÷³ÍÆ®µéÀÇ Æ÷ÀÎÅÍ¸¦ º¤ÅÍ ÄÁÅ×ÀÌ³Ê¿¡ ´ã¾Æ ¹ÝÈ¯ÇÕ´Ï´Ù.
+        // í…œí”Œë¦¿ ë§¤ê°œë³€ìˆ˜ë¡œ ì£¼ì–´ì§„ íƒ€ìž…ì˜ ì»´í¬ë„ŒíŠ¸ë“¤ì´ ê²Œìž„ ì˜¤ë¸Œì íŠ¸ì— ì¡´ìž¬í•˜ëŠ”ì§€ í™•ì¸í•˜ê³ , í™•ì¸ëœ ì»´í¬ë„ŒíŠ¸ë“¤ì˜ í¬ì¸í„°ë¥¼ ë²¡í„° ì»¨í…Œì´ë„ˆì— ë‹´ì•„ ë°˜í™˜í•©ë‹ˆë‹¤.
         template<typename ComponentType>
         vector<ComponentType*> GetComponents()
         {
@@ -127,14 +127,14 @@ namespace yunutyEngine
         }
         const vector<Component*>& GetIndexedComponents() { return indexedComponents; }
         void DeleteComponent(Component* component);
-        // °ÔÀÓ ¿ÀºêÁ§Æ®°¡ È°¼ºÈ­µÇ¾î ÀÖ´ÂÁöÀÇ ¿©ºÎ¸¦ ¹ÝÈ¯ÇÕ´Ï´Ù.
-        // ºÎ¸ð °´Ã¼°¡ È°¼ºÈ­µÇ¾î ÀÖÁö ¾Ê´Ù¸é ¹«Á¶°Ç ºñÈ°¼ºÈ­µÈ »óÅÂ·Î Ç¥½ÃµË´Ï´Ù.
+        // ê²Œìž„ ì˜¤ë¸Œì íŠ¸ê°€ í™œì„±í™”ë˜ì–´ ìžˆëŠ”ì§€ì˜ ì—¬ë¶€ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
+        // ë¶€ëª¨ ê°ì²´ê°€ í™œì„±í™”ë˜ì–´ ìžˆì§€ ì•Šë‹¤ë©´ ë¬´ì¡°ê±´ ë¹„í™œì„±í™”ëœ ìƒíƒœë¡œ í‘œì‹œë©ë‹ˆë‹¤.
         bool GetActive();
-        // °ÔÀÓ ¿ÀºêÁ§Æ®°¡ ½º½º·Î È°¼ºÈ­µÇ¾î ÀÖ´ÂÁöÀÇ ¿©ºÎ¸¦ ¹ÝÈ¯ÇÕ´Ï´Ù.
-        // ºÎ¸ð °´Ã¼°¡ È°¼ºÈ­µÇ¾î ÀÖÁö ¾Ê´Ù¸é Àü¿ªÀûÀ¸·Î È°¼ºÈ­µÈ »óÅÂ´Â ¾Æ´Ò¼öµµ ÀÖ½À´Ï´Ù.
+        // ê²Œìž„ ì˜¤ë¸Œì íŠ¸ê°€ ìŠ¤ìŠ¤ë¡œ í™œì„±í™”ë˜ì–´ ìžˆëŠ”ì§€ì˜ ì—¬ë¶€ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
+        // ë¶€ëª¨ ê°ì²´ê°€ í™œì„±í™”ë˜ì–´ ìžˆì§€ ì•Šë‹¤ë©´ ì „ì—­ì ìœ¼ë¡œ í™œì„±í™”ëœ ìƒíƒœëŠ” ì•„ë‹ìˆ˜ë„ ìžˆìŠµë‹ˆë‹¤.
         bool GetSelfActive();
         void SetSelfActive(bool selfActive);
-        // °ÔÀÓ ¿ÀºêÁ§Æ®ÀÇ ºÎ¸ð °ÔÀÓ ¿ÀºêÁ§Æ®¸¦ ¹ÝÈ¯ÇÕ´Ï´Ù. ºÎ¸ð°¡ ¾ø´Ù¸é null Æ÷ÀÎÅÍ¸¦ ¹ÝÈ¯ÇÕ´Ï´Ù.
+        // ê²Œìž„ ì˜¤ë¸Œì íŠ¸ì˜ ë¶€ëª¨ ê²Œìž„ ì˜¤ë¸Œì íŠ¸ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤. ë¶€ëª¨ê°€ ì—†ë‹¤ë©´ null í¬ì¸í„°ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
         GameObject* GetParentGameObject();
         const GameObject* GetParentGameObject()const;
         Scene* GetScene();
@@ -157,13 +157,14 @@ namespace yunutyEngine
         unordered_map<const GameObject*, int> childIndexMap;
         // sceneIndex is Updated per every cycle.
         int sceneIndex = 0;
+        // ì”¬ ì¸ë±ìŠ¤ëŠ” ì´ ê²Œìž„ì˜¤ë¸Œì íŠ¸ê°€ ì”¬ì—ì„œ ëª‡ë²ˆì§¸ ì˜¤ë¸Œì íŠ¸ì¸ì§€ë¥¼ ë‚˜íƒ€ëƒ…ë‹ˆë‹¤.
         mutable cache<int> cachedSceneIndex;
         unordered_map<Component*, unique_ptr<Component>> components;
         vector<Component*> indexedComponents;
         GameObject(IGameObjectParent* parent);
         void DoThingsOnParents(function<void(GameObject*)> todo);
         virtual void SetChildIndex(GameObject* child, int index);
-        // ²¿¸®Àç±Í¸¦ À§ÇÑ Àç±ÍÇÔ¼ö
+        // ê¼¬ë¦¬ìž¬ê·€ë¥¼ ìœ„í•œ ìž¬ê·€í•¨ìˆ˜
         static int GetSceneIndex(const GameObject* target);
         void SetCacheDirty();
     protected:

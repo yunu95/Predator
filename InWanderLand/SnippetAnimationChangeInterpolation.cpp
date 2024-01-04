@@ -45,6 +45,8 @@ void SnippetAnimationChangeInterpolationInit()
 
             auto test = object->AddComponent<TestComponent2>();
             object->GetTransform()->position = Vector3d{ temp,temp2,0 };
+            static constexpr double scale = 0.0001;
+            object->GetTransform()->scale = Vector3d{ scale,scale,scale };
             auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
             test->anim = animator;
             auto& animationList = _resourceManager->GetAnimationList();

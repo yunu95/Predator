@@ -8,11 +8,19 @@ namespace yunutyEngine
         CapsuleCollider::CapsuleCollider() :Collider(impl = new CapsuleCollider::Impl{ this }) {}
         void CapsuleCollider::SetRadius(float radius)
         {
-            impl->radius = radius;
+            unscaledRadius = radius;
+            ApplyScale(GetTransform()->GetWorldScale());
         }
         void CapsuleCollider::SetHalfHeight(float halfHeight)
         {
-            impl->halfHeight = halfHeight;
+            unscaledHalfHeight = halfHeight;
+            ApplyScale(GetTransform()->GetWorldScale());
+        }
+        void CapsuleCollider::ApplyScale(const Vector3d& scale)
+        {
+            impl->radius = unscaledRadius * static_cast<float>(scale.x);
+            impl->halfHeight = unscaledHalfHeight * static_cast<float>(scale.y);
+            impl->ResetGeometry();
         }
     }
 }

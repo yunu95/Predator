@@ -24,7 +24,11 @@ namespace yunutyEngine
             BoxCollider();
             class Impl;
             Impl* impl;
+
             void SetHalfExtent(const Vector3f& halfExtent);
+            virtual void ApplyScale(const Vector3d& halfExtent) override;
+        private:
+            Vector3f unscaledHalfExtent;
         };
     }
 }

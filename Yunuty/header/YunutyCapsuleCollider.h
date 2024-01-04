@@ -26,6 +26,11 @@ namespace yunutyEngine
             CapsuleCollider();
             void SetRadius(float radius);
             void SetHalfHeight(float halfHeight);
+            // x,z축 스케일 조정은 안됨.
+            virtual void ApplyScale(const Vector3d& scale)override;
+        private:
+            float unscaledHalfHeight;
+            float unscaledRadius;
         };
     }
 }
