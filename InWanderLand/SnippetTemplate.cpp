@@ -4,16 +4,18 @@
 #include "YunutyEngine.h"
 #include "DelayedTestFunctions.h"
 #include "Application.h"
+#include "DebugMeshes.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-// ÀÌ ÇÔ¼ö´Â °ÔÀÓÀÇ ±âº» ÃÊ±âÈ­ ÇÔ¼ö¸¦ ¿À¹ö¶óÀÌµåÇÕ´Ï´Ù.
+// ì´ í•¨ìˆ˜ëŠ” ê²Œìž„ì˜ ê¸°ë³¸ ì´ˆê¸°í™” í•¨ìˆ˜ë¥¼ ì˜¤ë²„ë¼ì´ë“œí•©ë‹ˆë‹¤.
 void SnippetInitializerTemplate()
 {
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 
     auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
     auto debugStaticMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+    auto debugStaticMesh2 = AttachDebugMesh(yunutyEngine::Scene::getCurrentScene()->AddGameObject(), DebugMeshType::Cube, yunuGI::Color::green());
     debugStaticMesh->GetGI().SetMesh(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(L"Cube"));
     debugStaticMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color::blue());
     auto& shaderList = rsrcManager->GetShaderList();
@@ -42,9 +44,9 @@ namespace snippets
     TEST_CLASS(InWanderLand)
     {
     public:
-        // Å×½ºÆ® ÇÔ¼öÀÇ ÀÌ¸§ÀÌ SnippetÀ¸·Î ½ÃÀÛÇÏ´Â Å×½ºÆ®µéÀº ºôµåÀÇ ¼º°ø ¿©ºÎ ÆÇ´Ü¿¡ ¾²ÀÌÁö ¾Ê½À´Ï´Ù.
-        // RunTests.bat¸¦ ½ÇÇàÇØµµ ÀÌ Å×½ºÆ®µéÀº ½ÇÇàµÇÁö ¾ÊÀ¸¸ç, Jenkins¿¡¼­µµ ÀÌ Å×½ºÆ®µéÀº ½ÇÇàµÇÁö ¾Ê½À´Ï´Ù.
-        // ÀÌ Å×½ºÆ®µéÀº ¿ÀÁ÷ °³¹ßÀÚ°¡ Á÷Á¢ ¿£Æ®¸® Æ÷ÀÎÆ®¸¦ ´Þ¸®ÇÏ¿© Å×½ºÆ®¸¦ ÁøÇàÇÏ°í ½ÍÀ» ¶§ÀÇ ¿ëµµ·Î¸¸ »ç¿ëµË´Ï´Ù.
+        // í…ŒìŠ¤íŠ¸ í•¨ìˆ˜ì˜ ì´ë¦„ì´ Snippetìœ¼ë¡œ ì‹œìž‘í•˜ëŠ” í…ŒìŠ¤íŠ¸ë“¤ì€ ë¹Œë“œì˜ ì„±ê³µ ì—¬ë¶€ íŒë‹¨ì— ì“°ì´ì§€ ì•ŠìŠµë‹ˆë‹¤.
+        // RunTests.batë¥¼ ì‹¤í–‰í•´ë„ ì´ í…ŒìŠ¤íŠ¸ë“¤ì€ ì‹¤í–‰ë˜ì§€ ì•Šìœ¼ë©°, Jenkinsì—ì„œë„ ì´ í…ŒìŠ¤íŠ¸ë“¤ì€ ì‹¤í–‰ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
+        // ì´ í…ŒìŠ¤íŠ¸ë“¤ì€ ì˜¤ì§ ê°œë°œìžê°€ ì§ì ‘ ì—”íŠ¸ë¦¬ í¬ì¸íŠ¸ë¥¼ ë‹¬ë¦¬í•˜ì—¬ í…ŒìŠ¤íŠ¸ë¥¼ ì§„í–‰í•˜ê³  ì‹¶ì„ ë•Œì˜ ìš©ë„ë¡œë§Œ ì‚¬ìš©ë©ë‹ˆë‹¤.
         TEST_METHOD(SnippetTemplate)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);

@@ -113,7 +113,7 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 		for (auto i = GlobalComponent::globalComponents.begin(); i != GlobalComponent::globalComponents.end(); i++)
 			(*i)->Update();
 
-		// ÀÌ ±¸Á¶·Î ÀÎÇØ, OnDestroyÇÔ¼ö¿¡¼­ Scene::DestroyGameObject ÇÔ¼ö¸¦ È£ÃâÇÏ¸é »çÀÌÅ¬ÀÌ ÅÍÁú¼ö¹Û¿¡ ¾ø´Ù.
+		// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, OnDestroyï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ Scene::DestroyGameObject ï¿½Ô¼ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½.
 		for (auto each : Scene::getCurrentScene()->destroyList)
 		{
 			for (auto each : each->GetIndexedComponents())
@@ -128,7 +128,7 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 		for (auto each : GetActiveComponents())
 			UpdateComponent(each);
 
-		// ¹°¸®Ã³¸®
+		// ï¿½ï¿½ï¿½ï¿½Ã³ï¿½ï¿½
 		auto pxScene = physics::_PhysxGlobal::SingleInstance().PxSceneByScene[Scene::currentScene];
 		if (Time::GetDeltaTime() > 0 && pxScene)
 		{

@@ -1,6 +1,6 @@
-/// 2023. 11. 23 ±è»óÁØ
-/// IEditableData ÀÇ ±¸Ã¼È­µÈ Å¬·¡½º
-/// À¯´Ö
+/// 2023. 11. 23 ê¹€ìƒì¤€
+/// IEditableData ì˜ êµ¬ì²´í™”ëœ í´ë˜ìŠ¤
+/// ìœ ë‹›
 
 #pragma once
 
@@ -26,7 +26,7 @@ namespace application
 		{
 			enum class Affiliation
 			{
-				None,	// ¿¹¿Ü¿ë
+				None,	// ì˜ˆì™¸ìš©
 				Player,
 				Enemy
 			};
@@ -37,11 +37,10 @@ namespace application
 		struct POD_Unit
 		{
 			Unit_TemplateData* templateData = nullptr;
-			unit::Affiliation dd = unit::Affiliation::None;
+			unit::Affiliation affiliation = unit::Affiliation::None;
 
 			TO_JSON(POD_Unit);
 			FROM_JSON(POD_Unit);
-
 		};
 
 		class UnitData

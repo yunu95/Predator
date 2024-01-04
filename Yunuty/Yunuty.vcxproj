@@ -325,12 +325,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="StaticMeshRenderer.cpp" />
-    <ClCompile Include="TestCase.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="UIImage.cpp" />
     <ClCompile Include="UIText.cpp" />
     <ClCompile Include="ValueHistory.cpp">
@@ -408,7 +402,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="Sample_SoloMesh.h" />
     <ClInclude Include="Sample_TempObstacles.h" />
     <ClInclude Include="Sample_TileMesh.h" />
-    <ClInclude Include="TestCase.h" />
+    <ClInclude Include="header\SingletonComponent.h" />
     <ClInclude Include="ValueHistory.h" />
     <ClInclude Include="header\YunutyCapsuleCollider.h" />
     <ClInclude Include="header\YunutyCollider.h" />

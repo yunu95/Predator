@@ -100,6 +100,54 @@
     <Filter Include="Editor\Palette">
       <UniqueIdentifier>{a9b999c8-825f-44cf-a68d-f8b64f9f4397}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Panel\List\Module">
+      <UniqueIdentifier>{114c2856-9f92-45a3-9c0d-b670ed9f40cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Panel\List\Module\List">
+      <UniqueIdentifier>{0dde7a4c-816a-4065-9448-de7114622f91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteManager">
+      <UniqueIdentifier>{f532809e-b9e7-4b03-8c8b-1ec33b8dd06c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteInstance">
+      <UniqueIdentifier>{0f6ed044-5c7b-40b1-9879-5656d439c20a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\GraphicsHelper">
+      <UniqueIdentifier>{94dbe3f8-d102-4df7-9951-cbe8c0e75d21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\GraphicsHelper\SelectionBox">
+      <UniqueIdentifier>{21c5dbfe-2183-4d0b-88c3-4548b6a1c80a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\GraphicsHelper\SelectionBoxPerInstancePool">
+      <UniqueIdentifier>{7531a950-aea9-40d4-ac04-154b495a0277}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\GraphicsHelper\SelectionBoxPerInstance">
+      <UniqueIdentifier>{c2b7bff1-f11d-4f5f-8aee-e8790426ea25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteManager\DoodadPaletteManager">
+      <UniqueIdentifier>{40739a4f-3a66-4c5a-91e5-315c832d7449}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteManager\TerrainPaletteManager">
+      <UniqueIdentifier>{39436433-9e3b-4404-8467-5f5fd1c4d386}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteManager\UnitPaletteManager">
+      <UniqueIdentifier>{e8658192-829c-4b4d-b2d3-4da5e28a4f3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteInstance\TerrainInstance">
+      <UniqueIdentifier>{4847a1aa-0029-445d-91f5-8b19c232f9ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteInstance\UnitInstance">
+      <UniqueIdentifier>{28eaf762-a605-4181-8cfa-5fb61e826531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteBrush">
+      <UniqueIdentifier>{5c1206b3-304d-4b4e-877f-17346baa1efd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteBrush\UnitBrush">
+      <UniqueIdentifier>{08dce8d9-bd44-4c7f-9ea3-a2bd9bc81310}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteBrush\TerrainBrush">
+      <UniqueIdentifier>{14ee86d7-bf36-42e5-9618-562c06f3e4d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -273,6 +321,42 @@
     <ClInclude Include="DelayedTestFunctions.h">
       <Filter>TestCodes</Filter>
     </ClInclude>
+    <ClInclude Include="PaletteManager.h">
+      <Filter>Editor\Palette\PaletteManager</Filter>
+    </ClInclude>
+    <ClInclude Include="PaletteInstance.h">
+      <Filter>Editor\Palette\PaletteInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainInstance.h">
+      <Filter>Editor\Palette\PaletteInstance\TerrainInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitInstance.h">
+      <Filter>Editor\Palette\PaletteInstance\UnitInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectionBoxPerInstance.h">
+      <Filter>Editor\Palette\GraphicsHelper\SelectionBoxPerInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectionBoxPerInstancePool.h">
+      <Filter>Editor\Palette\GraphicsHelper\SelectionBoxPerInstancePool</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitBrush.h">
+      <Filter>Editor\Palette\PaletteBrush\UnitBrush</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectionBox.h">
+      <Filter>Editor\Palette\GraphicsHelper\SelectionBox</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainBrush.h">
+      <Filter>Editor\Palette\PaletteBrush\TerrainBrush</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitPaletteManager.h">
+      <Filter>Editor\Palette\PaletteManager\UnitPaletteManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainPaletteManager.h">
+      <Filter>Editor\Palette\PaletteManager\TerrainPaletteManager</Filter>
+    </ClInclude>
+    <ClInclude Include="DoodadPaletteManager.h">
+      <Filter>Editor\Palette\PaletteManager\DoodadPaletteManager</Filter>
+    </ClInclude>
     <ClInclude Include="TestComponent2.h">
       <Filter>TestCodes</Filter>
     </ClInclude>
@@ -282,6 +366,18 @@
     </ClInclude>
     <ClInclude Include="Singleton.h">
       <Filter>Editor\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorModule.h">
+      <Filter>Editor\Panel\List\Module</Filter>
+    </ClInclude>
+    <ClInclude Include="Module_TemplateDataEditor.h">
+      <Filter>Editor\Panel\List\Module\List</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleList.h">
+      <Filter>Editor\Panel\List\Module\List</Filter>
+    </ClInclude>
+    <ClInclude Include="PaletteSelectCollider.h">
+      <Filter>Editor\Palette\PaletteBrush</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -437,6 +533,21 @@
     </ClCompile>
     <ClCompile Include="SnippetAllGraphicsWorked.cpp">
       <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="Module_TemplateDataEditor.cpp">
+      <Filter>Editor\Panel\List\Module\List</Filter>
+    </ClCompile>
+    <ClCompile Include="PaletteManager.cpp">
+      <Filter>Editor\Palette\PaletteManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetEditTerrain.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetPhysxCollider.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCasePhysxTrigger.cpp">
+      <Filter>TestCodes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

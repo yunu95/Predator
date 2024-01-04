@@ -366,6 +366,19 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="..\Include\ImGui\imgui.h" />
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
     <ClInclude Include="CamSwitcher.h" />
+    <ClInclude Include="EditorModule.h" />
+    <ClInclude Include="ModuleList.h" />
+    <ClInclude Include="Module_TemplateDataEditor.h" />
+    <ClInclude Include="DoodadPaletteManager.h" />
+    <ClInclude Include="PaletteSelectCollider.h" />
+    <ClInclude Include="PaletteInstance.h" />
+    <ClInclude Include="PaletteManager.h" />
+    <ClInclude Include="SelectionBox.h" />
+    <ClInclude Include="SelectionBoxPerInstance.h" />
+    <ClInclude Include="SelectionBoxPerInstancePool.h" />
+    <ClInclude Include="TerrainBrush.h" />
+    <ClInclude Include="TerrainInstance.h" />
+    <ClInclude Include="TerrainPaletteManager.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="TestColliderEnableDeath.h" />
     <ClInclude Include="DebugBeacon.h" />
@@ -421,6 +434,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="Unit_TemplateData.h" />
     <ClInclude Include="UUID.h" />
     <ClInclude Include="UUIDManager.h" />
+    <ClInclude Include="UnitBrush.h" />
+    <ClInclude Include="UnitInstance.h" />
+    <ClInclude Include="UnitPaletteManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp" />
@@ -441,11 +457,15 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="EditorLayer.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="MapFileManager.cpp" />
+    <ClCompile Include="Module_TemplateDataEditor.cpp" />
     <ClCompile Include="Ornament.cpp" />
     <ClCompile Include="Ornament_TemplateData.cpp" />
     <ClCompile Include="SnippetAllGraphicsWorked.cpp" />
+    <ClCompile Include="PaletteManager.cpp" />
     <ClCompile Include="SnippetAnimation.cpp" />
     <ClCompile Include="SnippetAnimationChangeInterpolation.cpp" />
+    <ClCompile Include="SnippetEditTerrain.cpp" />
+    <ClCompile Include="SnippetPhysxCollider.cpp" />
     <ClCompile Include="SnippetTemplate.cpp" />
     <ClCompile Include="Panel_CameraView.cpp" />
     <ClCompile Include="Panel_Hierarchy.cpp" />
@@ -465,6 +485,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="TerrainData.cpp" />
     <ClCompile Include="Terrain_TemplateData.cpp" />
     <ClCompile Include="TestCaseMapFileIO.cpp" />
+    <ClCompile Include="TestCasePhysxTrigger.cpp" />
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="Unit_TemplateData.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObj.cpp" />
