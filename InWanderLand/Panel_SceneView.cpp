@@ -1,6 +1,8 @@
 #include "Panel_SceneView.h"
 
 #include "imgui.h"
+#include "imgui_impl_dx11.h"
+#include "imgui_impl_win32.h"
 
 #include "Application.h"
 #include "YunutyEngine.h"
@@ -44,9 +46,10 @@ namespace application
 			isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
 			/// 실제 패널에 그리는 영역
+
 			ID3D11ShaderResourceView* sceneImage = static_cast<ID3D11ShaderResourceView*>(app->GetSRV());
 
-			ImGui::Image((void*)sceneImage, ImVec2(rendererWidth, rendererHeight));
+			ImGui::Image(reinterpret_cast<ImTextureID>(sceneImage), ImVec2(rendererWidth, rendererHeight));
 
 			ImGui::End();
 		}

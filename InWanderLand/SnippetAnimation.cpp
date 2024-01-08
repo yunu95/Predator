@@ -32,6 +32,9 @@ void SnippetInitializerAnimation()
     animator->GetGI().PushAnimation(anim);
     animator->GetGI().Play(anim);
 
+    auto colliderComponent = skinnedMesh->AddComponent<physics::BoxCollider>();
+    colliderComponent->SetHalfExtent({ 0.5f, 0.5f, 0.5f });
+
     auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<graphics::DirectionalLight>();
     directionalLight->GetTransform()->SetWorldRotation(Quaternion({ 100,10,0 }));
 

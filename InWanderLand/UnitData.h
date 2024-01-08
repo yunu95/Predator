@@ -39,10 +39,6 @@ namespace application
 			Unit_TemplateData* templateData = nullptr;
 			unit::Affiliation affiliation = unit::Affiliation::None;
 
-			std::vector<int> stlVec = std::vector<int>(4, 6);
-			std::map<int, int> stlMap = { {1, 1}, {2, 2}, {3, 3} };
-			std::string stlString = "Unit Name";
-
 			TO_JSON(POD_Unit);
 			FROM_JSON(POD_Unit);
 		};

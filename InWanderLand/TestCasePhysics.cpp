@@ -17,7 +17,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 class TriggerVolumeTest : public Component
 {
-    // PhysX Visual Debugger¶ó´Â ÇÁ·Î±×·¥À» ½ÇÇàÇÏ°í Å×½ºÆ® ÄÚµå¸¦ ½ÇÇàÇÏ¸é ¾î¶² Çö»óÀÌ ÀÏ¾î³ª´ÂÁö ´õ¿í ÀÚ¼¼È÷ °üÂûÇÒ ¼ö ÀÖ½À´Ï´Ù.
+    // PhysX Visual Debuggerë¼ëŠ” í”„ë¡œê·¸ëž¨ì„ ì‹¤í–‰í•˜ê³  í…ŒìŠ¤íŠ¸ ì½”ë“œë¥¼ ì‹¤í–‰í•˜ë©´ ì–´ë–¤ í˜„ìƒì´ ì¼ì–´ë‚˜ëŠ”ì§€ ë”ìš± ìžì„¸ížˆ ê´€ì°°í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
     virtual void OnTriggerEnter(physics::Collider* other) override
     {
         DebugBeacon::PlaceBeacon(other->GetTransform()->GetWorldPosition(), yunuGI::Color::blue(), { 3,3,3 });
@@ -28,7 +28,7 @@ class TriggerVolumeTest : public Component
     };
 };
 
-// ÀÌ ÇÔ¼ö´Â °ÔÀÓÀÇ ±âº» ÃÊ±âÈ­ ÇÔ¼ö¸¦ ¿À¹ö¶óÀÌµåÇÕ´Ï´Ù.
+// ì´ í•¨ìˆ˜ëŠ” ê²Œìž„ì˜ ê¸°ë³¸ ì´ˆê¸°í™” í•¨ìˆ˜ë¥¼ ì˜¤ë²„ë¼ì´ë“œí•©ë‹ˆë‹¤.
 void TestCasePhysicsInit()
 {
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
@@ -105,7 +105,7 @@ void TestCasePhysicsInit()
     planeMeshComp->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
     planeMesh->GetTransform()->scale = Vector3d(10, 2, 10);
 
-    // Æ®¸®°Å ÄÝ¶óÀÌ´õ »ý¼º
+    // íŠ¸ë¦¬ê±° ì½œë¼ì´ë” ìƒì„±
     /*{
         auto planeCollider = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
         auto planeColliderComp = planeCollider->AddComponent<yunutyEngine::physics::BoxCollider>();
@@ -117,22 +117,22 @@ void TestCasePhysicsInit()
 
     auto delayedFunctions = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DelayedTestFunctions>();
 
-    // Á¦´ë·Î »èÁ¦µÇ´ÂÁö Å×½ºÆ®
+    // ì œëŒ€ë¡œ ì‚­ì œë˜ëŠ”ì§€ í…ŒìŠ¤íŠ¸
     delayedFunctions->todoList.push_back({ 2,[=]() {Scene::getCurrentScene()->DestroyGameObject(boxCollider); } });
-    // Á¦´ë·Î ºñÈ°¼ºÈ­µÇ´ÂÁö Å×½ºÆ®
+    // ì œëŒ€ë¡œ ë¹„í™œì„±í™”ë˜ëŠ”ì§€ í…ŒìŠ¤íŠ¸
     //delayedFunctions->todoList.push_back({ 1,[=]() {boxColliderComp->SetActive(false); } });
-    // Á¦´ë·Î ÀçÈ°¼ºÈ­µÇ´ÂÁö Å×½ºÆ®
+    // ì œëŒ€ë¡œ ìž¬í™œì„±í™”ë˜ëŠ”ì§€ í…ŒìŠ¤íŠ¸
     //delayedFunctions->todoList.push_back({ 1.3,[=]() {boxColliderComp->SetActive(true); } });
 
-    // delayedTestFunctions¿¡ 2ÃÊ ÈÄ ½ÇÇà½ÃÅ³ ÄÝ¹é ÇÔ¼ö¸¦ µî·ÏÇÕ´Ï´Ù. ÀÌ ÄÝ¹éÇÔ¼ö´Â °ÔÀÓ ¿£Áø ½º·¹µå¿¡¼­ È£ÃâµË´Ï´Ù.
+    // delayedTestFunctionsì— 2ì´ˆ í›„ ì‹¤í–‰ì‹œí‚¬ ì½œë°± í•¨ìˆ˜ë¥¼ ë“±ë¡í•©ë‹ˆë‹¤. ì´ ì½œë°±í•¨ìˆ˜ëŠ” ê²Œìž„ ì—”ì§„ ìŠ¤ë ˆë“œì—ì„œ í˜¸ì¶œë©ë‹ˆë‹¤.
     delayedTestFunctions->todoList.push_back({ 2,[=]() {
-        // °ÔÀÓ ¿£Áø ½º·¹µå¿¡¼­ ¸ÞÀÎ ½º·¹µå¿¡¼­ Æ¯Á¤ µ¿ÀÛÀ» ±¸µ¿½ÃÅ°°í ½Í´Ù¸é ¾Æ·¡ÀÇ AddMainLoopTodo ÇÔ¼ö¸¦ »ç¿ëÇÕ´Ï´Ù.
+        // ê²Œìž„ ì—”ì§„ ìŠ¤ë ˆë“œì—ì„œ ë©”ì¸ ìŠ¤ë ˆë“œì—ì„œ íŠ¹ì • ë™ìž‘ì„ êµ¬ë™ì‹œí‚¤ê³  ì‹¶ë‹¤ë©´ ì•„ëž˜ì˜ AddMainLoopTodo í•¨ìˆ˜ë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.
         application::Application::GetInstance().AddMainLoopTodo([=]() {
-            // Assert ÇÔ¼ö±ºÀº Å×½ºÆ® ÄÉÀÌ½ºÀÇ ½ÇÇà ¼º°ø ¿©ºÎ¸¦ ÆÇ´ÜÇÏ´Âµ¥¿¡ ¾²ÀÔ´Ï´Ù.
-            // AssertÀÇ ½ÇÇàÀº ¸ÞÀÎ ½º·¹µå¿¡¼­ ½ÇÇàµÇ¾î¾ß ÇÕ´Ï´Ù.
+            // Assert í•¨ìˆ˜êµ°ì€ í…ŒìŠ¤íŠ¸ ì¼€ì´ìŠ¤ì˜ ì‹¤í–‰ ì„±ê³µ ì—¬ë¶€ë¥¼ íŒë‹¨í•˜ëŠ”ë°ì— ì“°ìž…ë‹ˆë‹¤.
+            // Assertì˜ ì‹¤í–‰ì€ ë©”ì¸ ìŠ¤ë ˆë“œì—ì„œ ì‹¤í–‰ë˜ì–´ì•¼ í•©ë‹ˆë‹¤.
             Assert::IsTrue(boxCollider->GetTransform()->GetWorldPosition().y < 3);
 
-            // À§ ½ÄÀÌ ÂüÀÌ¶ó¸é ÇÁ·Î±×·¥À» Á¾·áÇÕ´Ï´Ù. 
+            // ìœ„ ì‹ì´ ì°¸ì´ë¼ë©´ í”„ë¡œê·¸ëž¨ì„ ì¢…ë£Œí•©ë‹ˆë‹¤. 
             application::Application::GetInstance().TurnOff();
                 });
             } });
