@@ -50,6 +50,8 @@ private:
 
 public:
 	void* GetFinalRenderImage();
+	void* GetDevice();
+	void* GetDeviceContext();
 	void PushFBXBoneInfo(const std::wstring fbxName, std::map<std::wstring, BoneInfo>& boneInfoMap);
 	void PushFBXNode(const std::wstring fbxName, FBXNode* fbxNode);
 
@@ -68,7 +70,10 @@ public:
 
 	std::vector<yunuGI::IMesh*>& GetMeshList() { return this->meshVec; };
 	std::vector<yunuGI::ITexture*>& GetTextureList() { return this->textureVec; };
-	std::vector<yunuGI::IMaterial*>& GetMaterialList() { return this->materialVec; };
+	std::vector<yunuGI::IMaterial*>& GetMaterialList()
+	{
+		return this->materialVec;
+	};
 	std::vector<yunuGI::IShader*>& GetShaderList() { return this->shaderVec; };
 	std::vector<yunuGI::IAnimation*>& GetAnimationList() { return this->animationVec; };
 	std::shared_ptr<AnimationGroup> GetAnimationGroup(const std::wstring& modelName);
@@ -146,3 +151,4 @@ private:
 	//// 그래픽스에서 스키닝할 때 쓰는 offset matrix를 가지고 있는 본 정보
 	//std::unordered_map<std::wstring, std::vector<FBXBoneInfo>> fbxBonOffsetVecMap;
 };
+

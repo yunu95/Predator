@@ -117,6 +117,6 @@ void AnimationGroup::ReadBone(FBXNode* fbxNode, DirectX::SimpleMath::Matrix pare
 
 	for (int i = 0; i < fbxNode->child.size(); ++i)
 	{
-		ReadBone(fbxNode->child[i], srt * parentMatrix, clip, animIndex,frame);
+		ReadBone(fbxNode->child[i], srt * parentMatrix, clip, animIndex, frame);
 	}
 }

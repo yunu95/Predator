@@ -21,7 +21,6 @@ using namespace DirectX::PackedVector;
 #include "NailEngine.h"
 #include "RenderTargetGroup.h"
 
-
 #include "ModelLoader.h"
 
 
@@ -139,6 +138,16 @@ void* ResourceManager::GetFinalRenderImage()
 	renderImage->Release();
 
 	return static_cast<void*>(renderImageView);
+}
+
+void* ResourceManager::GetDevice()
+{
+	return ResourceBuilder::Instance.Get().device->GetDevice().Get();
+}
+
+void* ResourceManager::GetDeviceContext()
+{
+	return ResourceBuilder::Instance.Get().device->GetDeviceContext().Get();
 }
 
 void ResourceManager::PushFBXBoneInfo(const std::wstring fbxName, std::map<std::wstring, BoneInfo>& boneInfoMap)

@@ -39,7 +39,7 @@ namespace yunutyEngine
                 firstRotation = GetTransform()->GetWorldRotation();
             }
 #endif
-        }
+        } 
         void Collider::Update()
         {
             // rigidbody가 static이면 절대 트랜스폼이 바뀌어선 안된다.
@@ -57,6 +57,14 @@ namespace yunutyEngine
             // rigidbody가 dynamic일때는 게임 오브젝트의 트랜스폼이 physXActor를 따라가면 된다.
             if (impl->isKinematic)
             {
+                float tempX = GetTransform()->GetWorldScale().x;
+                float tempY = GetTransform()->GetWorldScale().y;
+                float tempZ = GetTransform()->GetWorldScale().z;
+
+                GameObject* tempGameObj = GetGameObject();
+
+                assert(GetTransform()->GetWorldScale().x == 1.0f && GetTransform()->GetWorldScale().y == 1.0f && GetTransform()->GetWorldScale().z == 1.0f,
+                    "scale must be 1.");
                 impl->SetActorWorldTransform(GetTransform()->GetWorldTM());
 
                 if (auto scl = GetTransform()->GetWorldScale(); cachedScale != scl)

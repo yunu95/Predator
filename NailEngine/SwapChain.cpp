@@ -61,7 +61,7 @@ void SwapChain::Init(HWND hWnd, int width, int height)
 	assert(_hr == S_OK);
 
 	_hr = _dxgiFactory->CreateSwapChainForHwnd(
-		ResourceBuilder::Instance.Get().device->GetDevice(),
+		ResourceBuilder::Instance.Get().device->GetDevice().Get(),
 		hWnd,
 		&_sd,
 		0,
