@@ -7,16 +7,16 @@ class Device
 {
 public:
 	~Device();
-	void Init();
+	void Init(void* device, void* deviceContext);
 
 #pragma region Getter
-	Microsoft::WRL::ComPtr<ID3D11Device>& GetDevice() { return this->device; }
-	Microsoft::WRL::ComPtr<ID3D11DeviceContext>& GetDeviceContext() { return deviceContext; }
+	ID3D11Device*& GetDevice() { return this->device; }
+	ID3D11DeviceContext*& GetDeviceContext() { return deviceContext; }
 #pragma endregion
 
 private:
-	Microsoft::WRL::ComPtr<ID3D11Device> device;
-	Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext;
+	ID3D11Device* device;
+	ID3D11DeviceContext* deviceContext;
 
 };
 

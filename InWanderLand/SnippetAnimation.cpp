@@ -17,7 +17,8 @@ void SnippetInitializerAnimation()
     rsrcManager->LoadFile("FBX/Boss");
     auto skinnedMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
     auto animator = skinnedMesh->GetComponent<yunutyEngine::graphics::Animator>();
-
+    static constexpr double scale = 0.0001;
+    skinnedMesh->GetTransform()->scale = Vector3d{ scale,scale,scale };
     auto& animList = rsrcManager->GetAnimationList();
     yunuGI::IAnimation* anim = nullptr;
     for (auto each : animList)

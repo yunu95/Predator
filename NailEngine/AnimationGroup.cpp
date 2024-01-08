@@ -22,7 +22,7 @@ void AnimationGroup::CreateTexture()
 		desc.Width = MAX_BONE_COUNT * 4;
 		desc.Height = MAX_FRAME_COUNT;
 		desc.ArraySize = animationCount;
-		desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT; // 16¹ÙÀÌÆ®
+		desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT; // 16ë°”ì´íŠ¸
 		desc.Usage = D3D11_USAGE_IMMUTABLE;
 		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 		desc.MipLevels = 1;
@@ -32,10 +32,10 @@ void AnimationGroup::CreateTexture()
 		const unsigned int dataSize = MAX_BONE_COUNT * sizeof(DirectX::SimpleMath::Matrix);
 		// 8000000
 		const unsigned int pageSize = dataSize * MAX_FRAME_COUNT;
-		// mallocPtrÀÌ °¡¸®Å°´Â °ø°£ÀÌ 8000000
+		// mallocPtrì´ ê°€ë¦¬í‚¤ëŠ” ê³µê°„ì´ 8000000
 		void* mallocPtr = ::malloc(pageSize * animationCount);
 
-		// ÆÄÆíÈ­µÈ µ¥ÀÌÅÍ¸¦ Á¶¸³ÇÑ´Ù.
+		// íŒŒí¸í™”ëœ ë°ì´í„°ë¥¼ ì¡°ë¦½í•œë‹¤.
 		for (int c = 0; c < animationCount; c++)
 		{
 			unsigned int startOffset = c * pageSize;
@@ -49,7 +49,7 @@ void AnimationGroup::CreateTexture()
 			}
 		}
 
-		// ¸®¼Ò½º ¸¸µé±â
+		// ë¦¬ì†ŒìŠ¤ ë§Œë“¤ê¸°
 		std::vector<D3D11_SUBRESOURCE_DATA> subResources(animationCount);
 
 		for (int c = 0; c < animationCount; c++)
@@ -80,7 +80,7 @@ void AnimationGroup::CreateTexture()
 
 void AnimationGroup::Bind()
 {
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->VSSetShaderResources(8, 1, this->srv.GetAddressOf());
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->VSSetShaderResources(8, 1, this->srv.GetAddressOf());
 }
 
 void AnimationGroup::CreateAnimationTransform(unsigned int idx)

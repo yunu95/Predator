@@ -2,36 +2,39 @@
 
 Device::~Device()
 {
-	device->Release();
-	deviceContext->Release();
+	//device->Release();
+	//deviceContext->Release();
 }
 
-void Device::Init()
+void Device::Init(void* device, void* deviceContext)
 {
-	UINT createDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+	this->device = static_cast<ID3D11Device*>(device);
+	this->deviceContext = static_cast<ID3D11DeviceContext*>(deviceContext);
 
-#if defined(_DEBUG) || defined(DEBUG)
-	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-#endif
-
-	HRESULT _hr = S_FALSE;
-
-	D3D_FEATURE_LEVEL featureLevels[] =
-	{
-		D3D_FEATURE_LEVEL_11_0,
-		D3D_FEATURE_LEVEL_11_1,
-	};
-
-	_hr = ::D3D11CreateDevice(
-		nullptr,	// ±âº» ¾î´ğÅÍ
-		D3D_DRIVER_TYPE_HARDWARE,
-		nullptr,	// ¼ÒÇÁÆ®¿ş¾î ÀåÄ¡¸¦ »ç¿ëÇÏÁö ¾ÊÀ½
-		createDeviceFlags,
-		featureLevels,
-		ARRAYSIZE(featureLevels),
-		D3D11_SDK_VERSION,
-		device.GetAddressOf(),
-		nullptr,
-		deviceContext.GetAddressOf()
-	);
+//	UINT createDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+//
+//#if defined(_DEBUG) || defined(DEBUG)
+//	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+//#endif
+//
+//	HRESULT _hr = S_FALSE;
+//
+//	D3D_FEATURE_LEVEL featureLevels[] =
+//	{
+//		D3D_FEATURE_LEVEL_11_0,
+//		D3D_FEATURE_LEVEL_11_1,
+//	};
+//
+//	_hr = ::D3D11CreateDevice(
+//		nullptr,	// ê¸°ë³¸ ì–´ëŒ‘í„°
+//		D3D_DRIVER_TYPE_HARDWARE,
+//		nullptr,	// ì†Œí”„íŠ¸ì›¨ì–´ ì¥ì¹˜ë¥¼ ì‚¬ìš©í•˜ì§€ ì•ŠìŒ
+//		createDeviceFlags,
+//		featureLevels,
+//		ARRAYSIZE(featureLevels),
+//		D3D11_SDK_VERSION,
+//		device.GetAddressOf(),
+//		nullptr,
+//		deviceContext.GetAddressOf()
+//	);
 }

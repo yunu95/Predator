@@ -31,6 +31,7 @@ namespace yunutyEngine
         void Collider::Start()
         {
             impl->InitializePhysXActor();
+            cachedScale = GetTransform()->GetWorldScale();
 #ifdef _DEBUG
             if (impl->isStaticShape())
             {
@@ -65,6 +66,12 @@ namespace yunutyEngine
                 assert(GetTransform()->GetWorldScale().x == 1.0f && GetTransform()->GetWorldScale().y == 1.0f && GetTransform()->GetWorldScale().z == 1.0f,
                     "scale must be 1.");
                 impl->SetActorWorldTransform(GetTransform()->GetWorldTM());
+
+                if (auto scl = GetTransform()->GetWorldScale(); cachedScale != scl)
+                {
+                    cachedScale = scl;
+                    ApplyScale(cachedScale);
+                }
             }
             else
             {

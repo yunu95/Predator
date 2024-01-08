@@ -52,6 +52,11 @@ namespace application
                 /// </summary>
                 virtual bool isSelectMode() = 0;
                 /// <summary>
+                /// shouldSelect는 팔레트 인스턴스가 선택 콜라이더에 들어왔을 때 호출되어 해당 인스턴스를 선택할지 여부를 결정합니다.
+                /// 대부분의 경우 dynamic_cast를 사용하여 해당 인스턴스가 선택 가능한 인스턴스인지 판별하는 것으로 구현될 것입니다.
+                /// </summary>
+                virtual bool shouldSelect(PaletteInstance*) { return false; };
+                /// <summary>
                 /// 브러시 오브젝트는 팔레트 모드가 선택모드가 아닐 때 마우스 커서가 월드 스페이스에 사영된 위치로 이동합니다.
                 /// 팔레트 모드가 선택모드일 때는 게임오브젝트가 비활성화되며 브러시 오브젝트가 표시되지 않습니다.
                 /// </summary>

@@ -136,7 +136,8 @@ private:
 	std::unordered_map<std::wstring, std::map<std::wstring,BoneInfo>> fbxBoneInfoMap;
 	std::unordered_map<std::wstring, FBXNode*> fbxNodeMap;
 
-	ID3D11ShaderResourceView* finalRenderImagerSRV = nullptr;
+	//
+	ID3D11ShaderResourceView* renderImageView = nullptr;
 	//std::unordered_map<std::wstring, std::shared_ptr<Shader>> shaderMap;
 	//std::unordered_map<std::wstring, std::shared_ptr<Texture>> textureMap;
 	//std::unordered_map<std::wstring, std::shared_ptr<Mesh>> meshMap;

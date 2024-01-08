@@ -25,6 +25,7 @@ namespace application::editor::palette
         currentBrushPos = projectedWorldPos;
         if (isDraggingForSelection())
         {
+            SelectionBox::Instance().SetCoverage(dragStartPos, currentBrushPos);
             /// 셀렉션 박스를 활성화시키고 리사이징합니다.
         }
         /// 개별 인스턴스 드래깅 상태라면 드래깅되는 객체의 위치를 옮깁니다.

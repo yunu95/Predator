@@ -751,5 +751,8 @@
     <ClCompile Include="WarriorSkillSystem.cpp">
       <Filter>Contents\SkillSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Snippet1milGameObjects.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

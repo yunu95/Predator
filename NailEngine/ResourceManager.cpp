@@ -112,8 +112,8 @@ void ResourceManager::CreateMesh(const std::shared_ptr<Mesh>& mesh)
 
 void* ResourceManager::GetFinalRenderImage()
 {
-	ID3D11Texture2D* renderImage = nullptr;
 	ID3D11Texture2D* backBuffer = nullptr;
+	ID3D11Texture2D* renderImage = nullptr;
 
 	ResourceBuilder::Instance.Get().swapChain->GetSwapChain()->GetBuffer(0, __uuidof(ID3D11Texture2D),
 		reinterpret_cast<void**>(&backBuffer));
@@ -123,22 +123,22 @@ void* ResourceManager::GetFinalRenderImage()
 	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 	desc.CPUAccessFlags = 0;
 	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.MiscFlags = D3D11_RESOURCE_MISC_SHARED;
 
 	ResourceBuilder::Instance.Get().device->GetDevice()->CreateTexture2D(&desc, nullptr, &renderImage);
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->CopyResource(renderImage, backBuffer);
 
-	if (finalRenderImagerSRV != nullptr)
+	if (renderImageView != nullptr)
 	{
-		finalRenderImagerSRV->Release();
-		finalRenderImagerSRV = nullptr;
+		renderImageView->Release();
+		renderImageView = nullptr;
 	}
+	ResourceBuilder::Instance.Get().device->GetDevice()->CreateShaderResourceView(renderImage, nullptr, &renderImageView);
 
-	ResourceBuilder::Instance.Get().device->GetDevice()->CreateShaderResourceView(renderImage, nullptr, &finalRenderImagerSRV);
-
-	renderImage->Release();
 	backBuffer->Release();
+	renderImage->Release();
 
-	return static_cast<void*>(finalRenderImagerSRV);
+	return static_cast<void*>(renderImageView);
 }
 
 void ResourceManager::PushFBXBoneInfo(const std::wstring fbxName, std::map<std::wstring, BoneInfo>& boneInfoMap)
