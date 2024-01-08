@@ -707,9 +707,6 @@
     <ClCompile Include="PlayerController.cpp">
       <Filter>Contents\InputManager</Filter>
     </ClCompile>
-    <ClCompile Include="SnippetAnimation.cpp" />
-    <ClCompile Include="SnippetAnimationChangeInterpolation.cpp" />
-    <ClCompile Include="SnippetTemplate.cpp" />
     <ClCompile Include="UnitStatusComponent.cpp">
       <Filter>Contents\UnitStatusComponent</Filter>
     </ClCompile>
@@ -731,12 +728,9 @@
     <ClCompile Include="TestCasePhysxTrigger.cpp">
       <Filter>TestCodes</Filter>
     </ClCompile>
-    <ClCompile Include="SnippetEditTerrain.cpp" />
-    <ClCompile Include="SnippetPhysxCollider.cpp" />
     <ClCompile Include="AttackSystem.cpp">
       <Filter>Contents\AttackSystem</Filter>
     </ClCompile>
-    <ClCompile Include="SnippetSkillSystem.cpp" />
     <ClCompile Include="MeleeAttackSystem.cpp">
       <Filter>Contents\AttackSystem</Filter>
     </ClCompile>
@@ -744,7 +738,6 @@
       <Filter>Contents\AttackSystem</Filter>
     </ClCompile>
     <ClCompile Include="UnitTransformComponent.cpp" />
-    <ClCompile Include="SnippetAllGraphicsWorked.cpp" />
     <ClCompile Include="KnockBackComponent.cpp">
       <Filter>Contents\UnitStatusComponent\KnockBack</Filter>
     </ClCompile>
@@ -752,7 +745,28 @@
       <Filter>Contents\SkillSystem</Filter>
     </ClCompile>
     <ClCompile Include="Snippet1milGameObjects.cpp">
-      <Filter>TestCodes\snippets</Filter>
+      <Filter>TestCodes\nonValidationTests</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetAllGraphicsWorked.cpp">
+      <Filter>TestCodes\nonValidationTests</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetAnimation.cpp">
+      <Filter>TestCodes\nonValidationTests</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetAnimationChangeInterpolation.cpp">
+      <Filter>TestCodes\nonValidationTests</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetEditTerrain.cpp">
+      <Filter>TestCodes\nonValidationTests</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetPhysxCollider.cpp">
+      <Filter>TestCodes\nonValidationTests</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetSkillSystem.cpp">
+      <Filter>TestCodes\nonValidationTests</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetTemplate.cpp">
+      <Filter>TestCodes\nonValidationTests</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
