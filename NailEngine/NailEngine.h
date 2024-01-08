@@ -26,7 +26,7 @@ public:
 	friend LazyObjects<NailEngine>;
 
 public:
-	void Init(UINT64 hWnd, void* device, void* deviceContext);
+	void Init(UINT64 hWnd);
 	void Render();
 
 public:

@@ -87,7 +87,14 @@ namespace yunuGIAdapter
         {
             return ResourceManager::Instance.Get().GetFinalRenderImage();
         };
-
+        virtual void* GetDevice() const override
+        {
+            return ResourceManager::Instance.Get().GetFinalRenderImage();
+        };
+        virtual void* GetDeviceContext() const override
+        {
+            return ResourceManager::Instance.Get().GetFinalRenderImage();
+        };
         virtual std::vector<yunuGI::IShader*>& GetShaderList() const override
         {
             return ResourceManager::Instance.Get().GetShaderList();

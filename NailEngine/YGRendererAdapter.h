@@ -14,9 +14,9 @@ namespace yunuGIAdapter
             NailEngine::Instance.Release();
         }
 
-        virtual void SetOutputWindow(UINT64 hWnd, void* device, void* deviceContext)
+        virtual void SetOutputWindow(UINT64 hWnd)
         {
-            NailEngine::Instance.Get().Init(hWnd, device, deviceContext);
+            NailEngine::Instance.Get().Init(hWnd);
         };
 
         virtual void Update(float deltaTime) { };

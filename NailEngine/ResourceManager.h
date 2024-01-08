@@ -50,6 +50,8 @@ private:
 
 public:
 	void* GetFinalRenderImage();
+	void* GetDevice();
+	void* GetDeviceContext();
 	void PushFBXBoneInfo(const std::wstring fbxName, std::map<std::wstring, BoneInfo>& boneInfoMap);
 	void PushFBXNode(const std::wstring fbxName, FBXNode* fbxNode);
 
