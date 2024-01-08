@@ -15,7 +15,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-void CreateNavPlane(Vector3f botleft, Vector3f topright, std::vector<Vector3f>& worldVertices, std::vector<int>& worldFaces)
+void CreateNavigationPlane(Vector3f botleft, Vector3f topright, std::vector<Vector3f>& worldVertices, std::vector<int>& worldFaces)
 {
     int startingIdx = worldVertices.size();
     worldVertices.push_back({ botleft.x,0,topright.z });
@@ -63,12 +63,12 @@ void TestCaseNavigationInit()
     auto rtsCam = camObj->AddComponent<RTSCam>();
     rtsCam->GetTransform()->position = Vector3d(3, 10, 3);
 
-    CreateNavPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
-    CreateNavPlane({ -8,0,-2 }, { 8,0,2 }, worldVertices, worldFaces);
-    CreateNavPlane({ -8,0,-8 }, { -6,0,8 }, worldVertices, worldFaces);
-    CreateNavPlane({ 6,0,-8 }, { 8,0,8 }, worldVertices, worldFaces);
-    CreateNavPlane({ -8,0,6 }, { 8,0,8 }, worldVertices, worldFaces);
-    CreateNavPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
+    CreateNavigationPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
+    CreateNavigationPlane({ -8,0,-2 }, { 8,0,2 }, worldVertices, worldFaces);
+    CreateNavigationPlane({ -8,0,-8 }, { -6,0,8 }, worldVertices, worldFaces);
+    CreateNavigationPlane({ 6,0,-8 }, { 8,0,8 }, worldVertices, worldFaces);
+    CreateNavigationPlane({ -8,0,6 }, { 8,0,8 }, worldVertices, worldFaces);
+    CreateNavigationPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
     auto navField = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationField>();
     navField->BuildField(worldVertices, worldFaces);
     auto agent = CreateAgent(navField);

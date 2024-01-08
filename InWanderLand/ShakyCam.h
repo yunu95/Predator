@@ -4,6 +4,9 @@ using namespace yunutyEngine;
 
 class ShakyCam : public yunutyEngine::graphics::Camera
 {
+private:
+    Quaternion rot;
+
 protected:
     void Update()
     {
@@ -43,9 +46,7 @@ protected:
                 dMousePos.x * rotationSpeedFactor * rot.Right() +
                 -dMousePos.y * rotationSpeedFactor * rot.Up();
             Vector3d newRight =
-                //Vector3d::right +
-                rot.Right() +
-                dMousePos.x * rotationSpeedFactor * -rot.Forward();
+                Vector3d::Cross(Vector3d::up, newForward);
             Vector3d newUp = 
                 rot.Up() +
                 -dMousePos.y * rotationSpeedFactor * -rot.Forward();
