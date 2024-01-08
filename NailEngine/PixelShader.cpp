@@ -36,7 +36,7 @@ void PixelShader::CreateShader(const std::wstring& shaderPath)
 	//	}
 	//}
 
-	if (FAILED(ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreatePixelShader(
+	if (FAILED(ResourceBuilder::Instance.Get().device->GetDevice()->CreatePixelShader(
 		psBuffer->GetBufferPointer(),
 		psBuffer->GetBufferSize(),
 		nullptr,
@@ -60,18 +60,18 @@ void PixelShader::Bind()
 {
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetSamplers(0, 1, this->samplerState.GetAddressOf());
 
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetState(this->rasterizerState.Get());
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetState(this->rasterizerState.Get());
 
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->OMSetDepthStencilState(this->depthStencilState.Get(), 1);
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetDepthStencilState(this->depthStencilState.Get(), 1);
 
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->PSSetShader(ps.Get(), nullptr, 0);
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShader(ps.Get(), nullptr, 0);
 
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->OMSetBlendState(this->blendState.Get(), nullptr, 0xFFFFFFFF);
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetBlendState(this->blendState.Get(), nullptr, 0xFFFFFFFF);
 }
 
 void PixelShader::UnBind()
 {
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->PSSetShader(nullptr, nullptr, 0);
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShader(nullptr, nullptr, 0);
 }
 
 //void PixelShader::CreateRasterizerState()
@@ -122,7 +122,7 @@ void PixelShader::CreateShaderState(const std::wstring& shaderPath)
 	std::regex commentRegex("//.*?ShaderInfo");
 	if (!std::regex_search(fileContent, commentRegex))
 	{
-		// hlsl¾È¿¡ ShaderInfo¶ó´Â ÁÖ¼®ÀÌ ¾ø±â¿¡ assert
+		// hlslì•ˆì— ShaderInfoë¼ëŠ” ì£¼ì„ì´ ì—†ê¸°ì— assert
 		assert(FALSE);
 	}
 
@@ -155,13 +155,13 @@ void PixelShader::CreateShaderType(const std::string& fileContent)
 			}
 			else
 			{
-				// µÚ¿¡ ÀÔ·ÂÀÌ ¾ø¾úÀ¸´Ï assert
+				// ë’¤ì— ìž…ë ¥ì´ ì—†ì—ˆìœ¼ë‹ˆ assert
 				assert(FALSE);
 			}
 		}
 		else
 		{
-			// ShaderType : ÀÌ¶ó´Â ¹®ÀÚ¿­À» hlslÆÄÀÏ ¾È¿¡ Á¤ÀÇÇÏÁö ¾Ê¾ÒÀ¸´Ï assert
+			// ShaderType : ì´ë¼ëŠ” ë¬¸ìžì—´ì„ hlslíŒŒì¼ ì•ˆì— ì •ì˜í•˜ì§€ ì•Šì•˜ìœ¼ë‹ˆ assert
 			assert(FALSE);
 		}
 	}
@@ -198,13 +198,13 @@ void PixelShader::CreateRasterizerState(const std::string& fileContent)
 			}
 			else
 			{
-				// µÚ¿¡ ÀÔ·ÂÀÌ ¾ø¾úÀ¸´Ï assert
+				// ë’¤ì— ìž…ë ¥ì´ ì—†ì—ˆìœ¼ë‹ˆ assert
 				assert(FALSE);
 			}
 		}
 		else
 		{
-			// RasterType : ÀÌ¶ó´Â ¹®ÀÚ¿­À» hlslÆÄÀÏ ¾È¿¡ Á¤ÀÇÇÏÁö ¾Ê¾ÒÀ¸´Ï assert
+			// RasterType : ì´ë¼ëŠ” ë¬¸ìžì—´ì„ hlslíŒŒì¼ ì•ˆì— ì •ì˜í•˜ì§€ ì•Šì•˜ìœ¼ë‹ˆ assert
 			assert(FALSE);
 		}
 	}
@@ -229,13 +229,13 @@ void PixelShader::CreateRasterizerState(const std::string& fileContent)
 			}
 			else
 			{
-				// µÚ¿¡ ÀÔ·ÂÀÌ ¾ø¾úÀ¸´Ï assert
+				// ë’¤ì— ìž…ë ¥ì´ ì—†ì—ˆìœ¼ë‹ˆ assert
 				assert(FALSE);
 			}
 		}
 		else
 		{
-			// CullType : ÀÌ¶ó´Â ¹®ÀÚ¿­À» hlslÆÄÀÏ ¾È¿¡ Á¤ÀÇÇÏÁö ¾Ê¾ÒÀ¸´Ï assert
+			// CullType : ì´ë¼ëŠ” ë¬¸ìžì—´ì„ hlslíŒŒì¼ ì•ˆì— ì •ì˜í•˜ì§€ ì•Šì•˜ìœ¼ë‹ˆ assert
 			assert(FALSE);
 		}
 	}
@@ -247,20 +247,20 @@ void PixelShader::CreateDepthStencilState(const std::string& fileContent)
 {
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
 	
-	depthStencilDesc.DepthEnable = true; // ±íÀÌ ¹öÆÛ »ç¿ë ¿©ºÎ
-	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS; // ±íÀÌ °ªÀ» ºñ±³ÇÏ´Â ÇÔ¼ö
-	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL; // ±íÀÌ °ªÀ» ¾²´ÂÁö ¿©ºÎ
+	depthStencilDesc.DepthEnable = true; // ê¹Šì´ ë²„í¼ ì‚¬ìš© ì—¬ë¶€
+	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS; // ê¹Šì´ ê°’ì„ ë¹„êµí•˜ëŠ” í•¨ìˆ˜
+	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL; // ê¹Šì´ ê°’ì„ ì“°ëŠ”ì§€ ì—¬ë¶€
 
-	depthStencilDesc.StencilEnable = false; // ½ºÅÙ½Ç ¹öÆÛ »ç¿ë ¿©ºÎ
-	depthStencilDesc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK; // ½ºÅÙ½Ç °ªÀ» ÀÐÀ» ¶§ÀÇ ¸¶½ºÅ©
-	depthStencilDesc.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK; // ½ºÅÙ½Ç °ªÀ» ¾µ ¶§ÀÇ ¸¶½ºÅ©
+	depthStencilDesc.StencilEnable = false; // ìŠ¤í…ì‹¤ ë²„í¼ ì‚¬ìš© ì—¬ë¶€
+	depthStencilDesc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK; // ìŠ¤í…ì‹¤ ê°’ì„ ì½ì„ ë•Œì˜ ë§ˆìŠ¤í¬
+	depthStencilDesc.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK; // ìŠ¤í…ì‹¤ ê°’ì„ ì“¸ ë•Œì˜ ë§ˆìŠ¤í¬
 
-	depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP; // ½ºÅÙ½Ç Å×½ºÆ®¿¡ ½ÇÆÐÇÏ¸é ¼öÇàÇÒ µ¿ÀÛ
-	depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP; // ½ºÅÙ½Ç Å×½ºÆ®´Â ¼º°øÇßÀ¸³ª ±íÀÌ Å×½ºÆ®´Â ½ÇÆÐÇÑ °æ¿ì¿¡ ¼öÇàÇÒ µ¿ÀÛ
-	depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP; // ½ºÅÙ½Ç Å×½ºÆ®¿Í ±íÀÌ Å×½ºÆ® ¸ðµÎ ¼º°øÇÑ °æ¿ì¿¡ ¼öÇàÇÒ µ¿ÀÛ
-	depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS; // ½ºÅÙ½Ç Å×½ºÆ®¿¡ »ç¿ëÇÒ ÇÔ¼ö
+	depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP; // ìŠ¤í…ì‹¤ í…ŒìŠ¤íŠ¸ì— ì‹¤íŒ¨í•˜ë©´ ìˆ˜í–‰í•  ë™ìž‘
+	depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP; // ìŠ¤í…ì‹¤ í…ŒìŠ¤íŠ¸ëŠ” ì„±ê³µí–ˆìœ¼ë‚˜ ê¹Šì´ í…ŒìŠ¤íŠ¸ëŠ” ì‹¤íŒ¨í•œ ê²½ìš°ì— ìˆ˜í–‰í•  ë™ìž‘
+	depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP; // ìŠ¤í…ì‹¤ í…ŒìŠ¤íŠ¸ì™€ ê¹Šì´ í…ŒìŠ¤íŠ¸ ëª¨ë‘ ì„±ê³µí•œ ê²½ìš°ì— ìˆ˜í–‰í•  ë™ìž‘
+	depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS; // ìŠ¤í…ì‹¤ í…ŒìŠ¤íŠ¸ì— ì‚¬ìš©í•  í•¨ìˆ˜
 
-	depthStencilDesc.BackFace = depthStencilDesc.FrontFace; // ¾ç¸é ½ºÅÙ½ÇÀ» 
+	depthStencilDesc.BackFace = depthStencilDesc.FrontFace; // ì–‘ë©´ ìŠ¤í…ì‹¤ì„ 
 
 	std::regex commentRegex("// DepthType : (\\w+)");
 	std::smatch matches;
@@ -309,13 +309,13 @@ void PixelShader::CreateDepthStencilState(const std::string& fileContent)
 			}
 			else
 			{
-				// µÚ¿¡ ÀÔ·ÂÀÌ ¾ø¾úÀ¸´Ï assert
+				// ë’¤ì— ìž…ë ¥ì´ ì—†ì—ˆìœ¼ë‹ˆ assert
 				assert(FALSE);
 			}
 		}
 		else
 		{
-			// DepthType : ÀÌ¶ó´Â ¹®ÀÚ¿­À» hlslÆÄÀÏ ¾È¿¡ Á¤ÀÇÇÏÁö ¾Ê¾ÒÀ¸´Ï assert
+			// DepthType : ì´ë¼ëŠ” ë¬¸ìžì—´ì„ hlslíŒŒì¼ ì•ˆì— ì •ì˜í•˜ì§€ ì•Šì•˜ìœ¼ë‹ˆ assert
 			assert(FALSE);
 		}
 	}
@@ -358,16 +358,16 @@ void PixelShader::CreateBlendState(const std::string& fileContent)
 			}
 			else
 			{
-				// µÚ¿¡ ÀÔ·ÂÀÌ ¾øÀ¸´Ï assert
+				// ë’¤ì— ìž…ë ¥ì´ ì—†ìœ¼ë‹ˆ assert
 				assert(FALSE);
 			}
 		}
 		else
 		{
-			// BlendType : ÀÌ¶ó´Â ¹®ÀÚ¿­À» hlslÆÄÀÏ ¾È¿¡ Á¤ÀÇÇÏÁö ¾Ê¾ÒÀ¸´Ï assert
+			// BlendType : ì´ë¼ëŠ” ë¬¸ìžì—´ì„ hlslíŒŒì¼ ì•ˆì— ì •ì˜í•˜ì§€ ì•Šì•˜ìœ¼ë‹ˆ assert
 			assert(FALSE);
 		}
 	}
 
-	ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateBlendState(&blendDesc, this->blendState.GetAddressOf());
+	ResourceBuilder::Instance.Get().device->GetDevice()->CreateBlendState(&blendDesc, this->blendState.GetAddressOf());
 }

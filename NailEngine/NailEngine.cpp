@@ -25,12 +25,12 @@
 
 LazyObjects<NailEngine> NailEngine::Instance;
 
-void NailEngine::Init(UINT64 hWnd)
+void NailEngine::Init(UINT64 hWnd, void* device, void* deviceContext)
 {
 	this->windowInfo.hWnd = reinterpret_cast<HWND>(hWnd);
 
 	this->device = std::make_shared<Device>();
-	this->device->Init();
+	this->device->Init(device, deviceContext);
 	ResourceBuilder::Instance.Get().device = this->device;
 
 	this->swapChain = std::make_shared<SwapChain>();
@@ -48,14 +48,14 @@ void NailEngine::Init(UINT64 hWnd)
 void NailEngine::Render()
 {
 	// Begin
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetViewports(1, &ResourceBuilder::Instance.Get().swapChain->GetViewPort());
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &ResourceBuilder::Instance.Get().swapChain->GetViewPort());
 
 	const float red[] = { 0.5f, 0.5f, 0.5f, 1.f };
 
-	// ·»´õ Å¸°Ùºä¸¦ ³»°¡ ÁöÁ¤ÇÑ °ªÀ¸·Î ÇÈ¼¿À» ´Ù ÃÊ±âÈ­ÇÏ¿© Áö¿î´Ù.
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->ClearRenderTargetView(ResourceBuilder::Instance.Get().swapChain->GetRTV().Get(), red);
-	// µª½º ½ºÅÙ½Çºä¸¦ ÃÊ±âÈ­ÇÑ´Ù.
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->ClearDepthStencilView(ResourceBuilder::Instance.Get().swapChain->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+	// ë Œë” íƒ€ê²Ÿë·°ë¥¼ ë‚´ê°€ ì§€ì •í•œ ê°’ìœ¼ë¡œ í”½ì…€ì„ ë‹¤ ì´ˆê¸°í™”í•˜ì—¬ ì§€ìš´ë‹¤.
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->ClearRenderTargetView(ResourceBuilder::Instance.Get().swapChain->GetRTV().Get(), red);
+	// ëŽìŠ¤ ìŠ¤í…ì‹¤ë·°ë¥¼ ì´ˆê¸°í™”í•œë‹¤.
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->ClearDepthStencilView(ResourceBuilder::Instance.Get().swapChain->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 
 	RenderSystem::Instance.Get().Render();
 

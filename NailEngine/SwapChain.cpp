@@ -28,7 +28,7 @@ void SwapChain::Init(HWND hWnd, int width, int height)
 {
 	HRESULT _hr = S_FALSE;
 
-	// 胶恳眉牢
+	// 鞀れ檻觳挫澑
 	DXGI_SWAP_CHAIN_DESC1 _sd{};
 	_sd.Width = width;
 	_sd.Height = height;
@@ -43,8 +43,10 @@ void SwapChain::Init(HWND hWnd, int width, int height)
 	_sd.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
 	_sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH | DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
 
-	Microsoft::WRL::ComPtr<IDXGIDevice2> _dxgiDevice;
-	_hr = ResourceBuilder::Instance.Get().device->GetDevice().As(&_dxgiDevice);
+	IDXGIDevice2* _dxgiDevice;
+	_hr = ResourceBuilder::Instance.Get().device->GetDevice()->QueryInterface(
+		__uuidof(IDXGIDevice2), reinterpret_cast<void**>(&_dxgiDevice));
+
 	assert(_hr == S_OK);
 
 	Microsoft::WRL::ComPtr<IDXGIAdapter> _dxgiAdapter;
@@ -59,7 +61,7 @@ void SwapChain::Init(HWND hWnd, int width, int height)
 	assert(_hr == S_OK);
 
 	_hr = _dxgiFactory->CreateSwapChainForHwnd(
-		ResourceBuilder::Instance.Get().device->GetDevice().Get(),
+		ResourceBuilder::Instance.Get().device->GetDevice(),
 		hWnd,
 		&_sd,
 		0,
@@ -67,12 +69,12 @@ void SwapChain::Init(HWND hWnd, int width, int height)
 		this->swapChain.GetAddressOf());
 	assert(_hr == S_OK);
 
-	// RTV 积己
+	// RTV 靸濎劚
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> backBuffer;
 	this->swapChain.Get()->GetBuffer(0, __uuidof(ID3D11Texture2D), &backBuffer);
-	ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateRenderTargetView(backBuffer.Get(), nullptr, this->RTV.GetAddressOf());
+	ResourceBuilder::Instance.Get().device->GetDevice()->CreateRenderTargetView(backBuffer.Get(), nullptr, this->RTV.GetAddressOf());
 
-	// DSV 积己
+	// DSV 靸濎劚
 	D3D11_TEXTURE2D_DESC _dsd{};
 	_dsd.Width = width;
 	_dsd.Height = height;
@@ -86,13 +88,13 @@ void SwapChain::Init(HWND hWnd, int width, int height)
 	_dsd.CPUAccessFlags = 0;
 	_dsd.MiscFlags = 0;
 
-	_hr = ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateTexture2D(
+	_hr = ResourceBuilder::Instance.Get().device->GetDevice()->CreateTexture2D(
 		&_dsd,
 		nullptr,
 		this->DSBuffer.GetAddressOf());
 	assert(_hr == S_OK);
 
-	ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateDepthStencilView(
+	ResourceBuilder::Instance.Get().device->GetDevice()->CreateDepthStencilView(
 		this->DSBuffer.Get(),
 		0,
 		this->DSV.GetAddressOf()

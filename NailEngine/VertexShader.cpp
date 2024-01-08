@@ -43,7 +43,7 @@ void VertexShader::CreateShader(const std::wstring& shaderPath)
 	//	}
 	//}
 
-	if (FAILED(ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateVertexShader(
+	if (FAILED(ResourceBuilder::Instance.Get().device->GetDevice()->CreateVertexShader(
 		vsBuffer->GetBufferPointer(),
 		vsBuffer->GetBufferSize(),
 		nullptr,
@@ -58,14 +58,14 @@ void VertexShader::CreateShader(const std::wstring& shaderPath)
 
 void VertexShader::Bind()
 {
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->IASetInputLayout(this->inputLayout.Get());
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->VSSetShader(vs.Get(), nullptr, 0);
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetInputLayout(this->inputLayout.Get());
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->VSSetShader(vs.Get(), nullptr, 0);
 }
 
 void VertexShader::UnBind()
 {
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->IASetInputLayout(nullptr);
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->VSSetShader(nullptr, nullptr, 0);
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetInputLayout(nullptr);
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->VSSetShader(nullptr, nullptr, 0);
 }
 
 void VertexShader::CreateInputLayout()
@@ -167,6 +167,6 @@ void VertexShader::CreateInputLayout()
 		}
 	}
 
-	ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateInputLayout(&_inputLayoutDescVec[0], _inputLayoutDescVec.size(),
+	ResourceBuilder::Instance.Get().device->GetDevice()->CreateInputLayout(&_inputLayoutDescVec[0], _inputLayoutDescVec.size(),
 		this->vsBuffer->GetBufferPointer(), this->vsBuffer->GetBufferSize(), this->inputLayout.GetAddressOf());
 }
