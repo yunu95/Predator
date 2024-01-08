@@ -95,6 +95,7 @@ void SnippetInitializerPhysxCollider()
 	colliderObject->GetTransform()->scale = { 1.0f,1.0f,.0f };
 
 	colliderObject->GetTransform()->SetWorldPosition({ 10.0f, 10.0f, 10.0f });
+	colliderObject->SetSelfActive(false);
 	//colliderObject->GetTransform()->SetWorldPosition(Vector3d(5.0f, 4.0f, 3.0f));
 	//collider1->GetTransform()->scale = { 1.5,1.5,1.5 };
 	//collider2->GetTransform()->scale = { 1.5,1.5,1.5 };

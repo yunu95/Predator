@@ -2,9 +2,11 @@
 #include "YunutyEngine.h"
 #include "Unit.h"
 /// <summary>
-/// ½ÇÁ¦·Î ¹ß»çÃ¼¿¡ ºÙ¿©ÁÙ ÄÄÆ÷³ÍÆ®.
-/// ¿òÁ÷ÀÓ°ú ´Ù¸¥ À¯´Ö°ú Ãæµ¹ ÇßÀ» °æ¿ìÀÇ ·ÎÁ÷À¸·Î ±¸¼ºµÈ´Ù.
+/// ì‹¤ì œë¡œ ë°œì‚¬ì²´ì— ë¶™ì—¬ì¤„ ì»´í¬ë„ŒíŠ¸.
+/// ì›€ì§ìž„ê³¼ ë‹¤ë¥¸ ìœ ë‹›ê³¼ ì¶©ëŒ í–ˆì„ ê²½ìš°ì˜ ë¡œì§ìœ¼ë¡œ êµ¬ì„±ëœë‹¤.
 /// </summary>
+
+class UnitStatusComponent;
 
 class Projectile : public Component
 {

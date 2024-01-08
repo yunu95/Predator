@@ -1,6 +1,8 @@
 #pragma once
 #include "AttackSystem.h"
-
+/// <summary>
+///
+/// </summary>
 class MeleeAttackSystem : public AttackSystem
 {
 private:
@@ -14,6 +16,7 @@ public:
 	void SetColliderObject(GameObject* colliderObj);
 	void SetColliderRemainTime(float time);
 public:
+	virtual void Start() override;
 	virtual void Update() override;
-};
+};  
 

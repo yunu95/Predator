@@ -75,7 +75,7 @@ void PlayerController::SetLeftClickAttackMove()
 	}
 }
 
-void PlayerController::SetLeftClickSkill(int skillNum)
+void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
 {
 	if (currentSelectedSerialNumber == InputManager::SelectedSerialNumber::All)
 	{
@@ -83,7 +83,7 @@ void PlayerController::SetLeftClickSkill(int skillNum)
 		{
 			for (auto e : playerComponentMap)
 			{
-				e.second->OrderQSkill(pos);
+				e.second->OrderSkill(p_skillNum, pos);
 			}
 		};
 	}
@@ -91,7 +91,7 @@ void PlayerController::SetLeftClickSkill(int skillNum)
 	{
 		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
 		{
-			playerComponentMap.find(currentSelectedSerialNumber)->second->OrderQSkill(pos);
+			playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum, pos);
 		};
 	}
 }
@@ -118,7 +118,7 @@ void PlayerController::SetCurrentPlayerSerialNumber(int p_num)
 //	m_movingSystemComponent->GetMouseCursorObject()
 //		->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 1, 1, 0 });
 //
-//	// ÀÌÀü¿¡ ¼±ÅÃÇÑ À¯´Ö°ú °°´Ù¸é ±×´ë·Î µĞ´Ù.
+//	// ì´ì „ì— ì„ íƒí•œ ìœ ë‹›ê³¼ ê°™ë‹¤ë©´ ê·¸ëŒ€ë¡œ ë‘”ë‹¤.
 //	SelectFunctionByOrderType(unitSerialNumber, orderType);
 //
 //	previousSerialNumber = unitSerialNumber;

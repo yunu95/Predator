@@ -3,7 +3,7 @@
 
 void RangedAttackSystem::Attack(Unit* opponentUnit)
 {
-	ProjectileSystem::GetInstance()->Shoot(GetGameObject()->GetComponent<Unit>(),opponentUnit, m_bulletSpeed);
+	ProjectileSystem::GetInstance()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed);
 }
 
 void RangedAttackSystem::SetOwnerUnit(Unit* p_unit)
@@ -14,4 +14,9 @@ void RangedAttackSystem::SetOwnerUnit(Unit* p_unit)
 void RangedAttackSystem::SetBulletSpeed(float speed)
 {
 	m_bulletSpeed = speed;
+}
+
+void RangedAttackSystem::Start()
+{
+	m_ownerUnit = GetGameObject()->GetComponent<Unit>();
 }

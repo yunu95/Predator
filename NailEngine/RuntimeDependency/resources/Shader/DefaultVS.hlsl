@@ -8,7 +8,8 @@ struct VertexIn
     float3 normal : NORMAL;
     float3 tangent : TANGENT;
     
-    // INSTANCING;
+    // INSTANCING
+    uint instanceID : SV_INSTANCEID;
     row_major matrix world : INST;
 };
 
@@ -29,7 +30,7 @@ VertexOut main(VertexIn input)
     row_major matrix WV = mul(input.world,VTM);
     //row_major matrix WV = mul(WTM, VTM);
     row_major matrix VP = mul(VTM,PTM);
-    
+    uint id = input.instanceID;
     //output.posH = mul(float4(input.pos, 1.f), WVP);
     //output.posV = mul(float4(input.pos, 1.f), WV);
     //output.color = input.color;

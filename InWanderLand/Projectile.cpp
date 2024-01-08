@@ -2,6 +2,7 @@
 #include "Dotween.h"
 #include "ProjectileSystem.h"
 #include "Unit.h"
+#include "UnitStatusComponent.h"
 
 void Projectile::SetOwnerType(Unit::UnitType type)
 {
@@ -13,6 +14,7 @@ void Projectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed)
 	m_speed = speed;
 	m_ownerUnit = ownerUnit;
 	m_opponentUnit = opponentUnit;
+	
 	GetGameObject()->GetTransform()->SetWorldPosition(ownerUnit->GetGameObject()->GetTransform()->GetWorldPosition());
 
 	isShootStarted = true;
@@ -20,18 +22,19 @@ void Projectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed)
 
 void Projectile::ShootFunction()
 {
-	//// ¿òÁ÷ÀÌ±â ÀüÀÇ Åõ»çÃ¼ À§Ä¡
+	//// ì›€ì§ì´ê¸° ì „ì˜ íˆ¬ì‚¬ì²´ ìœ„ì¹˜
 	Vector3d startPosition = GetGameObject()->GetTransform()->GetWorldPosition();
+
 	Vector3d endPosition = m_opponentUnit->GetGameObject()->GetTransform()->GetWorldPosition();
 	float distance = (endPosition - startPosition).Magnitude();
 
-	// ¿òÁ÷ÀÌ±â Àü ¹æÇâ º¤ÅÍ
+	// ì›€ì§ì´ê¸° ì „ ë°©í–¥ ë²¡í„°
 	Vector3d directionVector = (endPosition - startPosition).Normalized();
 
-	// ¿òÁ÷ÀÌ°í ³ª¼­ÀÇ Åõ»çÃ¼ À§Ä¡.
+	// ì›€ì§ì´ê³  ë‚˜ì„œì˜ íˆ¬ì‚¬ì²´ ìœ„ì¹˜.
 	Vector3d movedPositionPerFrame = GetGameObject()->GetTransform()->GetWorldPosition() + (directionVector * m_speed * Time::GetDeltaTime());
 	
-	// ¿òÁ÷ÀÌ°í ³ª¼­ÀÇ Åõ»çÃ¼ -> ¸ñÇ¥¹° ¹æÇâ º¤ÅÍ
+	// ì›€ì§ì´ê³  ë‚˜ì„œì˜ íˆ¬ì‚¬ì²´ -> ëª©í‘œë¬¼ ë°©í–¥ ë²¡í„°
 	Vector3d afterDirectionVector = (endPosition - movedPositionPerFrame).Normalized();
 
 	GetGameObject()->GetTransform()->SetWorldRotation(directionVector);
@@ -49,7 +52,10 @@ void Projectile::ShootFunction()
 		GetGameObject()->SetSelfActive(false);
 		ProjectileSystem::GetInstance()->ReturnToPool(GetGameObject());
 
+		/// ì¶©ëŒ (ëª©ì ì§€ ë„ì°© ì‹œ) í˜¸ì¶œí•˜ê³ ìž í•˜ëŠ” ë¡œì§ì€ ì—¬ê¸°ì—
 		m_opponentUnit->Damaged(m_ownerUnit->GetGameObject(), m_ownerUnit->GetUnitAp());
+		//GetGameObject()->GetComponent<UnitStatusComponent>()->ApplyStatus(m_ownerUnit, m_opponentUnit);
+
 
 		isShootStarted = false;
 	}

@@ -28,7 +28,7 @@ namespace application
 
 		void HierarchyPanel::GUIProgress()
 		{
-			ImGui::Begin("Hierarchy");
+			ImGui::Begin("Hierarchy", 0, ImGuiWindowFlags_NoBringToFrontOnFocus);
 
 			/// ImGui 관련 내부 변수 업데이트
 			isMouseOver = ImGui::IsWindowHovered();

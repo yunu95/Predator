@@ -28,7 +28,7 @@ namespace application
 
 		void SceneViewPanel::GUIProgress()
 		{
-			ImGui::Begin("SceneView");
+			ImGui::Begin("SceneView", 0, ImGuiWindowFlags_NoBringToFrontOnFocus);
 
 			/// ImGui 관련 내부 변수 업데이트
 			isMouseOver = ImGui::IsWindowHovered();

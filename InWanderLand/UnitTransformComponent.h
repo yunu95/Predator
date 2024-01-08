@@ -13,6 +13,8 @@ public:
 	virtual void Update() override
 	{
 		GetTransform()->SetWorldPosition(ownerObject->GetTransform()->GetWorldPosition());
+		GetTransform()->rotation = ownerObject->GetTransform()->rotation;
+		//GetTransform()->scale = ownerObject->GetTransform()->scale;
 	}
 };
 

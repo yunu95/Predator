@@ -50,13 +50,13 @@ void Unit::Start()
 	unitFSM.transitions[UnitState::Attack].push_back({ UnitState::Move,
 		[this]() { return currentOrder == UnitState::Move; } });
 
-	unitFSM.transitions[UnitState::QSkill].push_back({ UnitState::Idle,
+	unitFSM.transitions[UnitState::Skill].push_back({ UnitState::Idle,
 		[this]() { return currentOrder == UnitState::Idle; } });
 
-	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::QSkill); i++)
+	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Skill); i++)
 	{
-		unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::QSkill,
-		[this]() { return currentOrder == UnitState::QSkill; } });
+		unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::Skill,
+		[this]() { return currentOrder == UnitState::Skill; } });
 	}
 
 	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Death); i++)
@@ -70,7 +70,7 @@ void Unit::Start()
 	unitFSM.engageAction[UnitState::AttackMove] = [this]() { AttackMoveEngage(); };
 	unitFSM.engageAction[UnitState::Chase] = [this]() { ChaseEngage(); };
 	unitFSM.engageAction[UnitState::Attack] = [this]() { AttackEngage(); };
-	unitFSM.engageAction[UnitState::QSkill] = [this]() { QSkillEngage(); };
+	unitFSM.engageAction[UnitState::Skill] = [this]() { SkillEngage(); };
 	unitFSM.engageAction[UnitState::Death] = [this]() { DeathEngage(); };
 
 	unitFSM.updateAction[UnitState::Idle] = [this]() { IdleUpdate(); };
@@ -78,7 +78,7 @@ void Unit::Start()
 	unitFSM.updateAction[UnitState::AttackMove] = [this]() { AttackMoveUpdate(); };
 	unitFSM.updateAction[UnitState::Chase] = [this]() { ChaseUpdate(); };
 	unitFSM.updateAction[UnitState::Attack] = [this]() { AttackUpdate(); };
-	unitFSM.updateAction[UnitState::QSkill] = [this]() { QSkillUpdate(); };
+	unitFSM.updateAction[UnitState::Skill] = [this]() { SkillUpdate(); };
 	unitFSM.updateAction[UnitState::Death] = [this]() { DeathUpdate(); };
 
 	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_idleAnimation);
@@ -148,9 +148,9 @@ void Unit::ChaseEngage()
 	ChaseEngageFunction();
 }
 
-void Unit::QSkillEngage()
+void Unit::SkillEngage()
 {
-	currentOrder = UnitState::QSkill;
+	currentOrder = UnitState::Skill;
 	qSkillFunctionStartElapsed = 0.0f;
 	qSkillFunctionStartedElapsed = 0.0f;
 
@@ -221,7 +221,7 @@ void Unit::AttackUpdate()
 	}
 }
 
-void Unit::QSkillUpdate()
+void Unit::SkillUpdate()
 {
 	qSkillFunctionStartElapsed += Time::GetDeltaTime();
 
@@ -449,6 +449,11 @@ void Unit::SetDeathAnimation(IAnimation* deathAnim)
 	m_deathAnimation = deathAnim;
 }
 
+void Unit::SetAttackDelay(float p_delay)
+{
+	attackFunctionCallDelay = p_delay;
+}
+
 void Unit::LookAt(Vector3d destination)
 {
 	// 먼저, 방향 판별.
@@ -588,9 +593,9 @@ void Unit::OrderAttackMove(Vector3d position)
 	isAttackMoving = true;
 }
 
-void Unit::OrderQSkill(Vector3d position)
+void Unit::OrderSkill(SkillEnum p_skillNum, Vector3d position)
 {
-	currentOrder = UnitState::QSkill;
+	currentOrder = UnitState::Skill;
 
 	PlayerController::GetInstance()->SetLeftClickMove();
 
@@ -618,5 +623,15 @@ void Unit::DeleteFromOpponentObjectList(yunutyEngine::GameObject* obj)
 		m_currentTargetObject = nullptr;
 
 	obj->GetComponent<Unit>()->m_recognizedThisList.remove(this);
+}
+
+void Unit::SetNavField(NavigationField* p_navField)
+{
+	m_unitNavField = p_navField;
+}
+
+NavigationField*  Unit::GetNavField() const
+{
+	return m_unitNavField;
 }
 

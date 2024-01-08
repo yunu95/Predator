@@ -23,7 +23,7 @@ ProjectileSystem* ProjectileSystem::GetInstance()
 
 void ProjectileSystem::SetUp()
 {
-	// ¸®¼Ò½º ¸Å´ÏÀú °¡Á®¿À±â
+	// ë¦¬ì†ŒìŠ¤ ë§¤ë‹ˆì € ê°€ì ¸ì˜¤ê¸°
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 	auto capsuleMesh = _resourceManager->GetMesh(L"Capsule");

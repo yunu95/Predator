@@ -1,11 +1,13 @@
 #include "MeleeEnemyProduction.h"
+#include "MeleeAttackSystem.h"
+#include "DebugMeshes.h"
 
 void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition)
 {
 	m_objectName = "MeleeEnemy";
 	m_unitType = Unit::UnitType::MeleeEnemy;
 	m_unitSide = Unit::UnitSide::Enemy;
-	m_hp = 100;
+	m_hp = 100000;
 	m_ap = 10;
 	m_idRadius = 2.0f;
 	m_atkRadius = 1.5f;
@@ -50,6 +52,23 @@ void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject, NavigationField* n
 			animator->GetGI().PushAnimation(m_deathAnimation);
 		}
 	}
+
+	m_unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	m_unitAttackColliderObject->setName("UnitAttackCollider");
+
+	auto m_physicsCollider = m_unitAttackColliderObject->AddComponent<physics::BoxCollider>();
+	m_physicsCollider->SetHalfExtent({ 0.5,0.5,0.5 });
+
+	auto debugColliderMesh = AttachDebugMesh(m_unitAttackColliderObject, DebugMeshType::Rectangle, yunuGI::Color::red(), true);
+
+	//m_unitAttackColliderObject->SetParent(m_unitGameObject);
+	//m_unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, 1.3f });
+
+	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
+	warriorAttackSystem->SetColliderObject(m_unitAttackColliderObject);
+	warriorAttackSystem->SetColliderRemainTime(1.0f);
+
+	//m_unitAttackColliderObject->SetSelfActive(false);
 }
 
 yunutyEngine::GameObject* MeleeEnemyProduction::CreateUnitWithOrder()

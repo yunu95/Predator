@@ -9,6 +9,9 @@ struct VertexIn
     float3 tangent : TANGENT;
     uint4 indices : BLENDINDICES;
     float4 weight : BLENDWEIGHT;
+    
+    uint instanceID : SV_INSTANCEID;
+    row_major matrix world : INST;
 };
 
 struct VertexOut
@@ -32,15 +35,15 @@ row_major matrix GetAnimationMatrix(VertexIn input)
     int nextFrame[2];
     float ratio[2];
 
-    animIndex[0] = transitionDesc.curr.animIndex;
-    currFrame[0] = transitionDesc.curr.currFrame;
-    nextFrame[0] = transitionDesc.curr.nextFrame;
-    ratio[0] = transitionDesc.curr.ratio;
+    animIndex[0] = transitionDesc[input.instanceID].curr.animIndex;
+    currFrame[0] = transitionDesc[input.instanceID].curr.currFrame;
+    nextFrame[0] = transitionDesc[input.instanceID].curr.nextFrame;
+    ratio[0] = transitionDesc[input.instanceID].curr.ratio;
 
-    animIndex[1] = transitionDesc.next.animIndex;
-    currFrame[1] = transitionDesc.next.currFrame;
-    nextFrame[1] = transitionDesc.next.nextFrame;
-    ratio[1] = transitionDesc.next.ratio;
+    animIndex[1] = transitionDesc[input.instanceID].next.animIndex;
+    currFrame[1] = transitionDesc[input.instanceID].next.currFrame;
+    nextFrame[1] = transitionDesc[input.instanceID].next.nextFrame;
+    ratio[1] = transitionDesc[input.instanceID].next.ratio;
 
     float4 c0, c1, c2, c3;
     float4 n0, n1, n2, n3;
@@ -80,7 +83,7 @@ row_major matrix GetAnimationMatrix(VertexIn input)
             next = matrix(n0, n1, n2, n3);
 
             matrix nextResult = lerp(curr, next, ratio[1]);
-            result = lerp(result, nextResult, transitionDesc.transitionRatio);
+            result = lerp(result, nextResult, transitionDesc[input.instanceID].transitionRatio);
         }
 
         transform += mul(weights[i], result);
@@ -92,21 +95,25 @@ row_major matrix GetAnimationMatrix(VertexIn input)
 VertexOut main(VertexIn input)
 {
     VertexOut output;
-    row_major matrix WV = mul(WTM, VTM);
-    
+    row_major matrix _WV = mul(input.world, VTM);
+    row_major matrix _WVP = mul(_WV, PTM);
     row_major matrix boneMat = GetAnimationMatrix(input);
     
     output.posH = mul(float4(input.pos, 1.f), boneMat);
-    output.posH = mul(output.posH, WVP);
+    output.posH = mul(output.posH, _WVP);
+    
     output.posV = mul(float4(input.pos, 1.f), boneMat);
-    output.posV = mul(output.posV, WV);
+    output.posV = mul(output.posV, _WV);
+    
     output.color = input.color;
+    
     output.uv = input.uv;
+    
     output.normalV = normalize(mul(float4(input.normal, 0.f), boneMat));
-    output.normalV = normalize(mul(float4(output.normalV, 0.f), WV));
+    output.normalV = normalize(mul(float4(output.normalV, 0.f), _WV));
     
     output.tangentV = normalize(mul(float4(input.tangent, 0.f), boneMat));
-    output.tangentV = normalize(mul(float4(output.tangentV, 0.f), WV));
+    output.tangentV = normalize(mul(float4(output.tangentV, 0.f), _WV));
     
     output.biNormalV = normalize(cross(output.tangentV, output.normalV));
     

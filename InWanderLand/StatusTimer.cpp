@@ -19,7 +19,7 @@ void StatusTimer::Update()
 		{
 			onCompleteFunction();
 
-			if (!m_isRepeated)
+			if (m_isRepeated == false)
 			{
 				onExpiration();
 				m_isActivated = false;
@@ -27,7 +27,7 @@ void StatusTimer::Update()
 			}
 			else
 			{
-				m_elapsed -= m_duration;
+				m_elapsed = 0.0f;
 			}
 		}
 	}

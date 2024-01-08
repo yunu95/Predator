@@ -16,6 +16,11 @@ void MeleeAttackSystem::SetColliderRemainTime(float time)
 	attackColliderRemainTime = time;
 }
 
+void MeleeAttackSystem::Start()
+{
+	//meleeAttackColliderObject->SetSelfActive(false);
+}
+
 void MeleeAttackSystem::Update()
 {
 	if (colliderActivated)

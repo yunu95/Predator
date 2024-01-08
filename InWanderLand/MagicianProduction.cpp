@@ -1,4 +1,5 @@
 #include "MagicianProduction.h"
+#include "RangedAttackSystem.h"
 
 void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition)
 {
@@ -7,11 +8,12 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 	m_unitSide = Unit::UnitSide::Player;
 	m_hp = 80;
 	m_ap = 20;
-	m_idRadius = 3.0f;
-	m_atkRadius = 2.5f;
+	m_idRadius = 10.0f;
+	m_atkRadius = 8.5f;
 	m_unitSpeed = 1.0f;
 	m_navField = navField;
 	m_startPosition = startPosition;
+	m_attackDelay = 4.0f;
 
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
@@ -50,6 +52,10 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 			animator->GetGI().PushAnimation(m_deathAnimation);
 		}
 	}
+
+	/// Unit Attack Collider Setting
+	auto magicianAttackSystem = m_unitGameObject->AddComponent<RangedAttackSystem>();
+	magicianAttackSystem->SetBulletSpeed(10.0f);
 }
 
 yunutyEngine::GameObject* MagicianProduction::CreateUnitWithOrder()

@@ -7,14 +7,14 @@
 using namespace yunuGI;
 
 /// <summary>
-/// À¯´ÖµéÀÌ °øÀ¯ÇÏ´Â ¸â¹ö.
-/// ±âº»ÀûÀ¸·Î ¸ğµç À¯´ÖÀº BaseUnitEntity¸¦ »ó¼ÓÇÑ´Ù.
+/// ìœ ë‹›ë“¤ì´ ê³µìœ í•˜ëŠ” ë©¤ë²„.
+/// ê¸°ë³¸ì ìœ¼ë¡œ ëª¨ë“  ìœ ë‹›ì€ BaseUnitEntityë¥¼ ìƒì†í•œë‹¤.
 /// </summary>
 
 class Unit : public Component
 {
 public:
-	// »ç¿ë ½Ã ÁÖÀÇÁ¡ : ¸¶Áö¸·¿¡´Â Death¿Í StateEnd°¡ ¼ø¼­´ë·Î µé¾î°¡ ÀÖÀ» °Í!
+	// ì‚¬ìš© ì‹œ ì£¼ì˜ì  : ë§ˆì§€ë§‰ì—ëŠ” Deathì™€ StateEndê°€ ìˆœì„œëŒ€ë¡œ ë“¤ì–´ê°€ ìˆì„ ê²ƒ!
 	enum class UnitState
 	{
 		Idle,
@@ -22,7 +22,7 @@ public:
 		Chase,
 		Attack,
 		AttackMove,
-		QSkill,
+		Skill,
 		Death,
 		StateEnd
 	};
@@ -48,7 +48,14 @@ public:
 		Enemy
 	};
 
-private:
+	enum class SkillEnum
+	{
+		Q,
+		W,
+		E
+	};
+
+protected:
 	FSM<UnitState> unitFSM{UnitState::Idle};
 
 	UnitType m_unitType;
@@ -62,14 +69,14 @@ private:
 	float m_bulletSpeed;
 
 	float chaseUpdateDelay;
-	// À¯´ÖÀÇ ÇöÀç È¸Àü°ªÀ» µ¿°æ°¢À¸·Î ³ªÅ¸³À´Ï´Ù. À¯´ÖÀº currentRotationÀÌ 0µµÀÏ¶§ µ¿ÂÊ(¾çÀÇ X ¹æÇâ), 90µµÀÏ¶§ ºÏÂÊ(¾çÀÇ z ¹æÇâ)À» ÇâÇÕ´Ï´Ù.
+	// ìœ ë‹›ì˜ í˜„ì¬ íšŒì „ê°’ì„ ë™ê²½ê°ìœ¼ë¡œ ë‚˜íƒ€ëƒ…ë‹ˆë‹¤. ìœ ë‹›ì€ currentRotationì´ 0ë„ì¼ë•Œ ë™ìª½(ì–‘ì˜ X ë°©í–¥), 90ë„ì¼ë•Œ ë¶ìª½(ì–‘ì˜ z ë°©í–¥)ì„ í–¥í•©ë‹ˆë‹¤.
 	float currentRotation{270};
-	// À¯´ÖÀÌ ¹Ù¶óºÁ¾ß ÇÏ´Â È¸Àü°ªÀ» µ¿°æ°¢À¸·Î ³ªÅ¸³À´Ï´Ù. À¯´ÖÀº È¸Àü¼Óµµ¿¡ µû¶ó È¸Àü°ªÀ» desiredRotation°ú ÀÏÄ¡ÇÏ°Ô ¹Ù²ß´Ï´Ù.
+	// ìœ ë‹›ì´ ë°”ë¼ë´ì•¼ í•˜ëŠ” íšŒì „ê°’ì„ ë™ê²½ê°ìœ¼ë¡œ ë‚˜íƒ€ëƒ…ë‹ˆë‹¤. ìœ ë‹›ì€ íšŒì „ì†ë„ì— ë”°ë¼ íšŒì „ê°’ì„ desiredRotationê³¼ ì¼ì¹˜í•˜ê²Œ ë°”ê¿‰ë‹ˆë‹¤.
 	float desiredRotation{270};
 	float rotationSpeed{ 500 };
 
 
-	// Áö±İ ¼öÇàÁßÀÎ ¸í·É
+	// ì§€ê¸ˆ ìˆ˜í–‰ì¤‘ì¸ ëª…ë ¹
 	UnitState currentOrder = UnitState::Idle;
 
 	float m_idDistance;
@@ -107,29 +114,32 @@ private:
 	int playerSerialNumber;
 
 	std::list<yunutyEngine::GameObject*> m_opponentObjectList;		
-	std::list<Unit*> m_recognizedThisList;	// ÇöÀç ÀÌ ¿ÀºêÁ§Æ®¸¦ Àû±ºÀ¸·Î ÀÎ½ÄÇÑ ´Ù¸¥ À¯´ÖµéÀÇ ¸®½ºÆ®.
+	std::list<Unit*> m_recognizedThisList;	// í˜„ì¬ ì´ ì˜¤ë¸Œì íŠ¸ë¥¼ ì êµ°ìœ¼ë¡œ ì¸ì‹í•œ ë‹¤ë¥¸ ìœ ë‹›ë“¤ì˜ ë¦¬ìŠ¤íŠ¸.
 
-	yunutyEngine::GameObject* m_currentTargetObject;		// AttackÀÌ³ª Chase ¶§ »ç¿ëÇÒ Àû±º  ¿ÀºêÁ§Æ®
-	Vector3d m_currentMovePosition;							// ÇöÀç »ó´ëÀÇ À§Ä¡
+	yunutyEngine::GameObject* m_currentTargetObject;		// Attackì´ë‚˜ Chase ë•Œ ì‚¬ìš©í•  ì êµ°  ì˜¤ë¸Œì íŠ¸
+	Vector3d m_currentMovePosition;							// í˜„ì¬ ìƒëŒ€ì˜ ìœ„ì¹˜
 
 	Vector3d m_currentSkillPosition;
 
-private:
+protected:
 	/// <summary>
-	/// ¾Ö´Ï¸ŞÀÌ¼Ç °ü·Ã ¸â¹ö
+	/// ì• ë‹ˆë©”ì´ì…˜ ê´€ë ¨ ë©¤ë²„
 	/// </summary>
 	IAnimation* m_idleAnimation;
 	IAnimation* m_walkAnimation;
 	IAnimation* m_attackAnimation;
 	IAnimation* m_deathAnimation;
 
-private:
+	/// ìœ ë‹›ì´ ì†í•´ìˆëŠ” field
+	NavigationField* m_unitNavField;
+
+protected:
 	void IdleEngage();
 	void MoveEngage();
 	void AttackMoveEngage();
 	void AttackEngage();
 	void ChaseEngage();
-	void QSkillEngage();
+	void SkillEngage();
 	void DeathEngage();
 
 	void IdleUpdate();
@@ -137,7 +147,7 @@ private:
 	void AttackMoveUpdate();
 	void ChaseUpdate();
 	void AttackUpdate();
-	void QSkillUpdate();
+	void SkillUpdate();
 	void DeathUpdate();
 
 	void IdleEngageFunction();
@@ -159,8 +169,8 @@ private:
 	void LookAt(Vector3d destination);
 	
 	void DetermineCurrentTargetObject();
-	void ReportUnitDeath();												// this À¯´ÖÀÌ Á×¾ú´Ù´Â Á¤º¸¸¦ Àü´Ş
-	void IdentifiedOpponentDeath(yunutyEngine::GameObject* obj);		// »ó´ë À¯´ÖÀÌ Á×¾úÀ» °æ¿ì Ã³¸®ÇÒ ³»¿ëÀ» ´ãÀº ÇÔ¼ö
+	void ReportUnitDeath();												// this ìœ ë‹›ì´ ì£½ì—ˆë‹¤ëŠ” ì •ë³´ë¥¼ ì „ë‹¬
+	void IdentifiedOpponentDeath(yunutyEngine::GameObject* obj);		// ìƒëŒ€ ìœ ë‹›ì´ ì£½ì—ˆì„ ê²½ìš° ì²˜ë¦¬í•  ë‚´ìš©ì„ ë‹´ì€ í•¨ìˆ˜
 
 public:
 	virtual void Start() override;
@@ -182,6 +192,8 @@ public:
 	void SetAttackAnimation(IAnimation* attackAnim);
 	void SetDeathAnimation(IAnimation* deathAnim);
 
+	void SetAttackDelay(float p_delay);
+
 	void SetPlayerSerialNumber();
 	int GetPlayerSerialNumber() const;
 
@@ -189,14 +201,17 @@ public:
 	void SetCurrentOrderAttackMove();
 
 	int GetUnitAp() const;
-	void Damaged(GameObject* opponentObject, int opponentAp);	// µ¥¹ÌÁö ÀÔ¾úÀ» °æ¿ì ÃßÀûÇÏ´Â ·ÎÁ÷ Æ÷ÇÔ
-	void Damaged(int dmg);										// ÃßÀû¹ŞÁö ¾Ê´Â µ¥¹ÌÁö
+	void Damaged(GameObject* opponentObject, int opponentAp);	// ë°ë¯¸ì§€ ì…ì—ˆì„ ê²½ìš° ì¶”ì í•˜ëŠ” ë¡œì§ í¬í•¨
+	void Damaged(int dmg);										// ì¶”ì ë°›ì§€ ì•ŠëŠ” ë°ë¯¸ì§€
 
 	void OrderMove(Vector3d position);
 	void OrderAttackMove(Vector3d position);
-	void OrderQSkill(Vector3d position);
+	void OrderSkill(SkillEnum p_skillNum, Vector3d position);
 
 	void AddToOpponentObjectList(yunutyEngine::GameObject* obj);
 	void DeleteFromOpponentObjectList(yunutyEngine::GameObject* obj);
+
+	void SetNavField(NavigationField* p_navField);
+	NavigationField* GetNavField() const;
 };
 

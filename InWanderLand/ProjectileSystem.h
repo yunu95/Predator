@@ -3,13 +3,14 @@
 #include <stack>
 #include <vector>
 /// <summary>
-/// UnitÀÇ ¸â¹ö°´Ã¼ÀÎ ¹ß»çÃ¼ ½Ã½ºÅÛ Å¬·¡½º.
-/// ½Ã½ºÅÛÀÌ¶ó´Â ÀÌ¸§¿¡ °É¸Â°Ô ¿ªÇÒÀº ¹ß»çÃ¼ µî·Ï ¹× »ç°İ ÇÔ¼ö¸¸ È£Ãâ
-/// ¹ß»çÃ¼°¡ ¿òÁ÷ÀÌ°í Ãæµ¹ÇÏ´Â ·ÎÁ÷Àº Projectile Å¬·¡½º¿¡¼­ °ü¸®ÇÏÀÚ.
+/// Unitì˜ ë©¤ë²„ê°ì²´ì¸ ë°œì‚¬ì²´ ì‹œìŠ¤í…œ í´ë˜ìŠ¤.
+/// ì‹œìŠ¤í…œì´ë¼ëŠ” ì´ë¦„ì— ê±¸ë§ê²Œ ì—­í• ì€ ë°œì‚¬ì²´ ë“±ë¡ ë° ì‚¬ê²© í•¨ìˆ˜ë§Œ í˜¸ì¶œ
+/// ë°œì‚¬ì²´ê°€ ì›€ì§ì´ê³  ì¶©ëŒí•˜ëŠ” ë¡œì§ì€ Projectile í´ë˜ìŠ¤ì—ì„œ ê´€ë¦¬í•˜ì.
 /// </summary>
 
 class Unit;
 class Projectile;
+class UnitStatusComponent;
 
 class ProjectileSystem
 {
@@ -22,7 +23,7 @@ public:
 	static ProjectileSystem* GetInstance();
 
 private:
-	std::stack<GameObject*> m_projectileStack;								// ¹ß»ç ´ë±â ÁßÀÎ Åõ»çÃ¼µé.
+	std::stack<GameObject*> m_projectileStack;								// ë°œì‚¬ ëŒ€ê¸° ì¤‘ì¸ íˆ¬ì‚¬ì²´ë“¤.
 
 public:
 	void Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed);

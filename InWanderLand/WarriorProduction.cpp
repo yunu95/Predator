@@ -1,5 +1,6 @@
 #include "WarriorProduction.h"
 #include "BleedingComponent.h"
+#include "KnockBackComponent.h"
 #include "MeleeAttackSystem.h"
 #include "DebugMeshes.h"
 
@@ -15,6 +16,7 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 	m_unitSpeed = 1.5f;
 	m_navField = navField;
 	m_startPosition = startPosition;
+	m_attackDelay = 1.0f;
 
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
@@ -58,21 +60,21 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 
 
 	/// Unit Attack Collider Setting
-	//m_unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//m_unitAttackColliderObject->setName("UnitAttackCollider");
+	m_unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	m_unitAttackColliderObject->setName("WarriorAutoAttackCollider");
 
-	//auto m_physicsCollider = m_unitAttackColliderObject->AddComponent<physics::BoxCollider>();
-	//m_physicsCollider->SetHalfExtent({ 0.5,0.5,0.5 });
-	//
-	//auto warriorBleedingSystem = m_unitAttackColliderObject->AddComponent<BleedingComponent>();
-	//auto debugColliderMesh = AttachDebugMesh(m_unitAttackColliderObject, DebugMeshType::Rectangle, yunuGI::Color::red(), true);
-	//
-	//m_unitAttackColliderObject->SetParent(m_unitGameObject);
-	//m_unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, 1.3f });
+	auto m_physicsCollider = m_unitAttackColliderObject->AddComponent<physics::BoxCollider>();
+	m_physicsCollider->SetHalfExtent({ 1.0f, 1.0f, 3.0f });
+	
+	auto warriorBleedingSystem = m_unitAttackColliderObject->AddComponent<KnockBackComponent>();
+	auto debugColliderMesh = AttachDebugMesh(m_unitAttackColliderObject, DebugMeshType::Rectangle, yunuGI::Color::red(), true);
+	m_unitAttackColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
-	//auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
-	//warriorAttackSystem->SetColliderObject(m_unitAttackColliderObject);
-	//warriorAttackSystem->SetColliderRemainTime(1.0f);
+	//debugColliderMesh->GetGI().sethalfext
+
+	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
+	warriorAttackSystem->SetColliderObject(m_unitAttackColliderObject);
+	warriorAttackSystem->SetColliderRemainTime(0.5f);
 
 	//m_unitAttackColliderObject->SetSelfActive(false);
 

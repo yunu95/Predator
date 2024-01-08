@@ -88,11 +88,13 @@ void SnippetSkillSystemInit()
 	//	}
 	//}
 	//CreateNavigationPlanes({ -500,0,-500 }, { 500,0,500 }, worldVertices, worldFaces);
-	CreateNavigationPlanes({ -8,0,-2 }, { 8,0,2 }, worldVertices, worldFaces);
-	CreateNavigationPlanes({ -8,0,-8 }, { -6,0,8 }, worldVertices, worldFaces);
-	CreateNavigationPlanes({ 6,0,-8 }, { 8,0,8 }, worldVertices, worldFaces);
-	CreateNavigationPlanes({ -8,0,6 }, { 8,0,8 }, worldVertices, worldFaces);
-	CreateNavigationPlanes({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
+	//CreateNavigationPlanes({ -8,0,-2 }, { 8,0,2 }, worldVertices, worldFaces);
+	//CreateNavigationPlanes({ -8,0,-8 }, { -6,0,8 }, worldVertices, worldFaces);
+	//CreateNavigationPlanes({ 6,0,-8 }, { 8,0,8 }, worldVertices, worldFaces);
+	//CreateNavigationPlanes({ -8,0,6 }, { 8,0,8 }, worldVertices, worldFaces);
+	//CreateNavigationPlanes({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
+	CreateNavigationPlanes({ -30,0,-30 }, { 30,0,30 }, worldVertices, worldFaces);
+
 	//CreateNavigationPlanes({ -1000,0,-1000 }, { 1000,0,1000 }, worldVertices, worldFaces);
 	auto fieldObject = Scene::getCurrentScene()->AddGameObject();
 
@@ -126,24 +128,14 @@ void SnippetSkillSystemInit()
 	magicianProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(-7.0f, 0.0f, 7.0f));
 	auto player2GameObject = magicianProductor->CreateUnitWithOrder();
 
-	auto healerProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<HealerProduction>();
-	healerProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(-7.0f, 0.0f, -7.0f));
-	auto player3GameObject = healerProductor->CreateUnitWithOrder();
+	//auto healerProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<HealerProduction>();
+	//healerProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(-7.0f, 0.0f, -7.0f));
+	//auto player3GameObject = healerProductor->CreateUnitWithOrder();
 
+	//unique_ptr<MeleeEnemyProduction> meleeEnemyProductor1 = make_unique<MeleeEnemyProduction>();
 	auto meleeEnemyProductor1 = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MeleeEnemyProduction>();
 	meleeEnemyProductor1->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(7.0f, 0.0f, 7.0f));
 	auto enemy1GameObject = meleeEnemyProductor1->CreateUnitWithOrder();
-	/// Test - Make Cube which doesn't have Kinematic Collider 
-	//graphics::StaticMeshRenderer* debugMesh;
-	//auto cubeObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//cubeObject->GetTransform()->SetWorldPosition({ 7,3,0 });
-	//debugMesh = AttachDebugMesh(cubeObject, DebugMeshType::Cube, yunuGI::Color::green(), false);
-
-	//auto cubeCollider = cubeObject->AddComponent<physics::BoxCollider>();
-	//cubeCollider->SetHalfExtent({ 1,1,1 });
-	//auto cubeRigidBody = cubeObject->AddComponent<physics::RigidBody>();
-	//cubeRigidBody->SetAsKinematic(false);
-
 
 	{
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();

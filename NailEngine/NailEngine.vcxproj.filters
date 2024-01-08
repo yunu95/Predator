@@ -109,6 +109,9 @@
     <Filter Include="Instancing\InstancingManager">
       <UniqueIdentifier>{ccca542e-b089-49b6-85d8-94ef3ed7a5a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GraphicsEngine\RenderableManager\IRenderable\UI">
+      <UniqueIdentifier>{9116d217-c39f-4b1e-b2be-f38c8d512d7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -282,6 +285,9 @@
     <ClInclude Include="InstancingManager.h">
       <Filter>Instancing\InstancingManager</Filter>
     </ClInclude>
+    <ClInclude Include="UIImage.h">
+      <Filter>GraphicsEngine\RenderableManager\IRenderable\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -388,6 +394,9 @@
     </ClCompile>
     <ClCompile Include="InstancingManager.cpp">
       <Filter>Instancing\InstancingManager</Filter>
+    </ClCompile>
+    <ClCompile Include="UIImage.cpp">
+      <Filter>GraphicsEngine\RenderableManager\IRenderable\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

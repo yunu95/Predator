@@ -1,5 +1,6 @@
 #include "InputManager.h"
 #include "PlayerController.h"
+#include "Unit.h"
 
 void InputManager::Start()
 {
@@ -33,6 +34,6 @@ void InputManager::Update()
 
 	if (yunutyEngine::Input::isKeyDown(KeyCode::Q))
 	{
-		PlayerController::GetInstance()->SetLeftClickSkill(1);
+		PlayerController::GetInstance()->SetLeftClickSkill(Unit::SkillEnum::Q);
 	}
 }

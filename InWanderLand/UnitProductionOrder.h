@@ -19,6 +19,8 @@ protected:
 	float m_atkRadius;
 	float m_unitSpeed;
 
+	float m_attackDelay;
+
 	// 임시. 모델링 파일로 대체해주기
 	GameObject* m_unitGameObject;
 	GameObject* m_unitAttackColliderObject;

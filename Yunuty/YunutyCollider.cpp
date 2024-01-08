@@ -38,7 +38,7 @@ namespace yunutyEngine
                 firstRotation = GetTransform()->GetWorldRotation();
             }
 #endif
-        }
+        } 
         void Collider::Update()
         {
             // rigidbody가 static이면 절대 트랜스폼이 바뀌어선 안된다.

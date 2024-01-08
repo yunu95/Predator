@@ -1,9 +1,13 @@
 #pragma once
+#include "YunutyEngine.h"
+#include "Unit.h"
 /// <summary>
-/// Unit(Player) ÄÄÆ÷³ÍÆ®°¡ ºÙ¾îÀÖ´Â ¿ÀºêÁ§Æ®¿¡ Ãß°¡ÇÒ ½ºÅ³ ½Ã½ºÅÛ ÄÄÆ÷³ÍÆ®.
-/// playerÀÇ serial Number¿¡ µû¶ó 
+/// Unitì´ SkillStateì—ì„œ í˜¸ì¶œí•´ì£¼ëŠ” í•¨ìˆ˜ëŠ” SkillSystemì—ì„œ êµ¬í˜„í•œë‹¤.
+/// í”Œë ˆì´ì–´ ìœ ë‹›ë³„ë¡œ í´ë˜ìŠ¤ë¥¼ ë§Œë“¤ì–´ parameterë¡œ Unit::SkillEnumë¥¼ ë°›ì•„ ë™ì‘í•˜ê²Œ í•œë‹¤.
 /// </summary>
-class SkillSystem
+class SkillSystem : public Component
 {
+public:
+	virtual void SkillActivate(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition) = 0;
 };
 

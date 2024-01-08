@@ -1,9 +1,10 @@
 #pragma once
 #include "YunutyEngine.h"
 #include <map>
+#include "Unit.h"
 /// <summary>
-/// UnitFactory¿¡¼­ Player¸¦ ¸¸µé °æ¿ì, PlayerController¿¡ ÇØ´ç Player¸¦ µî·ÏÇÑ´Ù.
-/// °íÀ¯ ¹øÈ£¸¦ ¹èºĞÇÏ¿© Å°ÀÔ·ÂÀ¸·Î ÁöÁ¤ÇÒ ¼ö ÀÖµµ·Ï ÇØº¸ÀÚ!
+/// UnitFactoryì—ì„œ Playerë¥¼ ë§Œë“¤ ê²½ìš°, PlayerControllerì— í•´ë‹¹ Playerë¥¼ ë“±ë¡í•œë‹¤.
+/// ê³ ìœ  ë²ˆí˜¸ë¥¼ ë°°ë¶„í•˜ì—¬ í‚¤ì…ë ¥ìœ¼ë¡œ ì§€ì •í•  ìˆ˜ ìˆë„ë¡ í•´ë³´ì!
 /// </summary>
 
 class RTSCam;
@@ -42,7 +43,7 @@ public:
 
 	void SetLeftClickMove();
 	void SetLeftClickAttackMove();
-	void SetLeftClickSkill(int skillNum);
+	void SetLeftClickSkill(Unit::SkillEnum p_skillNum);
 
 	void SetLeftClickEmpty();
 	void SetRightClickEmpty();
