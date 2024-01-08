@@ -26,7 +26,7 @@ void Texture::LoadTexture(const std::wstring& texturePath)
 		DirectX::LoadFromWICFile(texturePath.c_str(), DirectX::WIC_FLAGS_NONE, nullptr, image);
 	}
 
-	CreateShaderResourceView(ResourceBuilder::Instance.Get().device->GetDevice().Get(), image.GetImages(),
+	CreateShaderResourceView(ResourceBuilder::Instance.Get().device->GetDevice(), image.GetImages(),
 		image.GetImageCount(), image.GetMetadata(), SRV.GetAddressOf());
 }
 

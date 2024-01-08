@@ -44,8 +44,8 @@ LazyObjects<RenderSystem> RenderSystem::Instance;
 
 void RenderSystem::Init()
 {
-	spriteBatch = std::make_unique<DirectX::SpriteBatch>(ResourceBuilder::Instance.Get().device->GetDeviceContext().Get());
-	commonStates = std::make_unique<DirectX::CommonStates>(ResourceBuilder::Instance.Get().device->GetDevice().Get());
+	spriteBatch = std::make_unique<DirectX::SpriteBatch>(ResourceBuilder::Instance.Get().device->GetDeviceContext());
+	commonStates = std::make_unique<DirectX::CommonStates>(ResourceBuilder::Instance.Get().device->GetDevice());
 }
 
 void RenderSystem::ClearRenderInfo()

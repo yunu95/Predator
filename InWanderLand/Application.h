@@ -1,6 +1,6 @@
-/// 2023.10. 11 ±è»óÁØ
-/// Entry Point °¡ µÇ´Â main ÇÔ¼ö¸¦ °£°áÈ­½ÃÅ°°í, ÀÛ¾÷ ¿µ¿ªÀ» ±¸ºĞÇÏ¿© »ç¿ëÇÏ±â À§ÇÑ
-/// ÇÁ·Î¼¼½ºÀÇ ´ÜÀ§Ã¼ ¿ªÇÒÀ» ÇÏ´Â Å¬·¡½º ÀÛ¼º
+/// 2023.10. 11 ê¹€ìƒì¤€
+/// Entry Point ê°€ ë˜ëŠ” main í•¨ìˆ˜ë¥¼ ê°„ê²°í™”ì‹œí‚¤ê³ , ì‘ì—… ì˜ì—­ì„ êµ¬ë¶„í•˜ì—¬ ì‚¬ìš©í•˜ê¸° ìœ„í•œ
+/// í”„ë¡œì„¸ìŠ¤ì˜ ë‹¨ìœ„ì²´ ì—­í• ì„ í•˜ëŠ” í´ë˜ìŠ¤ ì‘ì„±
 
 #pragma once
 
@@ -14,6 +14,13 @@
 
 namespace application
 {
+    struct ApplicationSpecification
+    {
+        std::wstring appName;
+        unsigned int windowWidth;
+        unsigned int windowHeight;
+    };
+
     class Application
     {
     public:
@@ -22,24 +29,29 @@ namespace application
 
         ~Application();
 
-        /// ÇÊ¼ö ¿ä¼Ò
-        void Initialize();		// ÃÊ±âÈ­
-        void Run();				// ½ÇÇà(·çÇÁ)
-        void Finalize();		// ¸¶¹«¸®
+        /// í•„ìˆ˜ ìš”ì†Œ
+        void Initialize();		// ì´ˆê¸°í™”
+        void Run();				// ì‹¤í–‰(ë£¨í”„)
+        void Finalize();		// ë§ˆë¬´ë¦¬
 
-        /// ±â´É ´ÜÀ§ ¿ä¼Ò
-        void TurnOff();			// Run »óÅÂÀÏ ¶§, ·çÇÁ¸¦ Å»ÃâÇÔ
-        // ¸ŞÀÎ ½º·¹µå ·çÇÁ°¡ ³¡³ª±â Àü¿¡ ½ÇÇàÇÒ ÇÔ¼ö¸¦ µî·ÏÇÕ´Ï´Ù. µî·ÏµÈ µ¿ÀÛÀº ÇÑ¹ø ½ÇÇàÈÄ »ç¶óÁı´Ï´Ù.
-        // AddMainLoopTodo ÇÔ¼ö´Â ¸ŞÀÎ ½º·¹µå ·çÇÁ¿¡ ¹ÂÅØ½º ¶ôÀ» °Ì´Ï´Ù.
-        // AddMainLoopTodo ÇÔ¼öÀÇ ¸Å°³º¯¼ö·Î µî·ÏµÈ µ¿ÀÛ todo´Â ½ÇÇàµÉ ¶§ °ÔÀÓ ¿£Áø ·çÇÁ¿¡ ¹ÂÅØ½º ¶ôÀ» °Ì´Ï´Ù.
+        /// ê¸°ëŠ¥ ë‹¨ìœ„ ìš”ì†Œ
+        void TurnOff();			// Run ìƒíƒœì¼ ë•Œ, ë£¨í”„ë¥¼ íƒˆì¶œí•¨
+        // ë©”ì¸ ìŠ¤ë ˆë“œ ë£¨í”„ê°€ ëë‚˜ê¸° ì „ì— ì‹¤í–‰í•  í•¨ìˆ˜ë¥¼ ë“±ë¡í•©ë‹ˆë‹¤. ë“±ë¡ëœ ë™ì‘ì€ í•œë²ˆ ì‹¤í–‰í›„ ì‚¬ë¼ì§‘ë‹ˆë‹¤.
+        // AddMainLoopTodo í•¨ìˆ˜ëŠ” ë©”ì¸ ìŠ¤ë ˆë“œ ë£¨í”„ì— ë®¤í…ìŠ¤ ë½ì„ ê²ë‹ˆë‹¤.
+        // AddMainLoopTodo í•¨ìˆ˜ì˜ ë§¤ê°œë³€ìˆ˜ë¡œ ë“±ë¡ëœ ë™ì‘ todoëŠ” ì‹¤í–‰ë  ë•Œ ê²Œì„ ì—”ì§„ ë£¨í”„ì— ë®¤í…ìŠ¤ ë½ì„ ê²ë‹ˆë‹¤.
         void AddMainLoopTodo(std::function<void()> todo);
+
+        const ApplicationSpecification& GetApplicationSpecification() const;
+        
+        /// Testìš©
+        void* GetSRV();
 
     private:
         void ImGuiUpdate();
         std::mutex loopTodoRegistrationMutex;
-        // AddMainLoopTodo·Î µî·ÏµÈ ÈÖ¹ß¼º Äİ¹é ÇÔ¼öµéÀÔ´Ï´Ù.
-        // ¸Å ·çÇÁ°¡ Á¾·áµÉ ¶§ ÀÌ ÄÁÅ×ÀÌ³Ê¿¡ ½ÇÇà µ¿ÀÛµéÀÌ ´ã°ÜÀÖ´Ù¸é ¸ğµÎ ½ÇÇàÇÏ°í ³»¿ëÀ» ºñ¿ó´Ï´Ù.
-        // ÀÌ ¸ñ·Ï¿¡ ´ã±ä ÇÔ¼öµéÀÌ ½ÇÇàµÇ´Â µ¿¾È °ÔÀÓ ¿£Áø ½º·¹µå´Â µ¿ÀÛÀ» Á¤ÁöÇÕ´Ï´Ù.
+        // AddMainLoopTodoë¡œ ë“±ë¡ëœ íœ˜ë°œì„± ì½œë°± í•¨ìˆ˜ë“¤ì…ë‹ˆë‹¤.
+        // ë§¤ ë£¨í”„ê°€ ì¢…ë£Œë  ë•Œ ì´ ì»¨í…Œì´ë„ˆì— ì‹¤í–‰ ë™ì‘ë“¤ì´ ë‹´ê²¨ìˆë‹¤ë©´ ëª¨ë‘ ì‹¤í–‰í•˜ê³  ë‚´ìš©ì„ ë¹„ì›ë‹ˆë‹¤.
+        // ì´ ëª©ë¡ì— ë‹´ê¸´ í•¨ìˆ˜ë“¤ì´ ì‹¤í–‰ë˜ëŠ” ë™ì•ˆ ê²Œì„ ì—”ì§„ ìŠ¤ë ˆë“œëŠ” ë™ì‘ì„ ì •ì§€í•©ë‹ˆë‹¤.
         std::vector<std::function<void()>> loopRegistrations;
 
         enum class LayerList
@@ -54,10 +66,11 @@ namespace application
         Application(const Application& app) = delete;
         Application& operator=(const Application& app) = delete;
 
+        ApplicationSpecification appSpecification;
         bool isRunning = false;
         std::vector<Layer*> layers;
 
-#ifdef _DEBUG
+#ifdef EDITOR
         editor::CommandManager& cm = editor::CommandManager::GetSingletonInstance();
 #endif
     };

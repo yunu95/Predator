@@ -141,16 +141,6 @@ void* ResourceManager::GetFinalRenderImage()
 	return static_cast<void*>(renderImageView);
 }
 
-void* ResourceManager::GetDevice()
-{
-	return ResourceBuilder::Instance.Get().device->GetDevice().Get();
-}
-
-void* ResourceManager::GetDeviceContext()
-{
-	return ResourceBuilder::Instance.Get().device->GetDeviceContext().Get();
-}
-
 void ResourceManager::PushFBXBoneInfo(const std::wstring fbxName, std::map<std::wstring, BoneInfo>& boneInfoMap)
 {
 	this->fbxBoneInfoMap.insert({ fbxName, (boneInfoMap) });
@@ -187,7 +177,7 @@ Material* ResourceManager::CreateInstanceMaterial(const Material* material)
 	materialName += std::to_wstring(_material->GetID());
 	_material->SetName(materialName);
 
-	instanceMaterialMap.insert({ materialName, std::shared_ptr<Material>(_material)});
+	instanceMaterialMap.insert({ materialName, std::shared_ptr<Material>(_material) });
 
 	return _material;
 }

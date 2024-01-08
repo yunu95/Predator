@@ -26,8 +26,6 @@ namespace yunuGI
         virtual void UnloadResources()const = 0;
 
         virtual void* GetFinalRenderImage() const = 0;
-        virtual void* GetDevice() const = 0;
-        virtual void* GetDeviceContext() const = 0;
 
         virtual std::vector<IShader*>& GetShaderList()const = 0;
         virtual std::vector<ITexture*>& GetTextureList()const = 0;

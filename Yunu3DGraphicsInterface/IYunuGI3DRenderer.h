@@ -29,7 +29,7 @@ namespace yunuGI
 
         // 그림을 그릴 대상 윈도우를 정함, 이 함수를 사용하면
         // 오직 그래픽스엔진만이 해당 윈도우에 이미지를 그리는 것으로 가정한다.
-        virtual void SetOutputWindow(UINT64 hWnd) = 0;
+        virtual void SetOutputWindow(UINT64 hWnd, void* device, void* deviceContext) = 0;
         // 시간에 따라 상태가 변화되어야 하는 애니메이션, 파티클의 경우에 적용된다.
         virtual void Update(float deltaTime) = 0;
         // 렌더링 시작

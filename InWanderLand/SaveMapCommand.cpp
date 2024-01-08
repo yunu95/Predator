@@ -13,7 +13,7 @@ namespace application
 		}
 
 		void SaveMapCommand::Execute()
-		{
+		{			
 			mapFileManager.SaveMapFile("TestMap.pmap");
 		}
 	}

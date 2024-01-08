@@ -25,12 +25,12 @@
 
 LazyObjects<NailEngine> NailEngine::Instance;
 
-void NailEngine::Init(UINT64 hWnd)
+void NailEngine::Init(UINT64 hWnd, void* device, void* deviceContext)
 {
 	this->windowInfo.hWnd = reinterpret_cast<HWND>(hWnd);
 
 	this->device = std::make_shared<Device>();
-	this->device->Init();
+	this->device->Init(device, deviceContext);
 	ResourceBuilder::Instance.Get().device = this->device;
 
 	this->swapChain = std::make_shared<SwapChain>();

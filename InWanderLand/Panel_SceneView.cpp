@@ -1,12 +1,20 @@
 #include "Panel_SceneView.h"
 
 #include "imgui.h"
+#include "imgui_impl_dx11.h"
+#include "imgui_impl_win32.h"
+
+#include "Application.h"
+#include "YunutyEngine.h"
+
+#include <d3d11.h>
 
 namespace application
 {
 	namespace editor
 	{
 		SceneViewPanel::SceneViewPanel()
+			: app(nullptr), rendererWidth(), rendererHeight()
 		{
 
 		}
@@ -18,7 +26,10 @@ namespace application
 
 		void SceneViewPanel::Initialize()
 		{
-
+			app = &Application::GetInstance();
+			auto rect = yunutyEngine::graphics::Renderer::SingleInstance().GetResolution();
+			rendererWidth = rect.x;
+			rendererHeight = rect.y;
 		}
 
 		void SceneViewPanel::Update(float ts)
@@ -30,12 +41,15 @@ namespace application
 		{
 			ImGui::Begin("SceneView", 0, ImGuiWindowFlags_NoBringToFrontOnFocus);
 
-			/// ImGui °ü·Ã ³»ºÎ º¯¼ö ¾÷µ¥ÀÌÆ®
+			/// ImGui ê´€ë ¨ ë‚´ë¶€ ë³€ìˆ˜ ì—…ë°ì´íŠ¸
 			isMouseOver = ImGui::IsWindowHovered();
 			isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
-			/// ½ÇÁ¦ ÆĞ³Î¿¡ ±×¸®´Â ¿µ¿ª
+			/// ì‹¤ì œ íŒ¨ë„ì— ê·¸ë¦¬ëŠ” ì˜ì—­
 
+			ID3D11ShaderResourceView* sceneImage = static_cast<ID3D11ShaderResourceView*>(app->GetSRV());
+
+			ImGui::Image(reinterpret_cast<ImTextureID>(sceneImage), ImVec2(rendererWidth, rendererHeight));
 
 			ImGui::End();
 		}
