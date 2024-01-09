@@ -43,8 +43,7 @@ namespace application
 
         const ApplicationSpecification& GetApplicationSpecification() const;
         
-        /// Test용
-        void* GetSRV();
+        void* GetSceneSRV();
 
     private:
         void ImGuiUpdate();

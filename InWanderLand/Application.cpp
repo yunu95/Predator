@@ -277,7 +277,7 @@ namespace application
 		return appSpecification;
 	}
 
-	void* Application::GetSRV()
+	void* Application::GetSceneSRV()
 	{
 		static auto resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 		return resourceManager->GetFinalRenderImage();
