@@ -23,9 +23,9 @@ void Device::Init()
 	};
 
 	_hr = ::D3D11CreateDevice(
-		nullptr,	// ±âº» ¾î´ğÅÍ
+		nullptr,	// ê¸°ë³¸ ì–´ëŒ‘í„°
 		D3D_DRIVER_TYPE_HARDWARE,
-		nullptr,	// ¼ÒÇÁÆ®¿ş¾î ÀåÄ¡¸¦ »ç¿ëÇÏÁö ¾ÊÀ½
+		nullptr,	// ì†Œí”„íŠ¸ì›¨ì–´ ì¥ì¹˜ë¥¼ ì‚¬ìš©í•˜ì§€ ì•ŠìŒ
 		createDeviceFlags,
 		featureLevels,
 		ARRAYSIZE(featureLevels),

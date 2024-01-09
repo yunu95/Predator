@@ -52,9 +52,9 @@ void NailEngine::Render()
 
 	const float red[] = { 0.5f, 0.5f, 0.5f, 1.f };
 
-	// ·»´õ Å¸°Ùºä¸¦ ³»°¡ ÁöÁ¤ÇÑ °ªÀ¸·Î ÇÈ¼¿À» ´Ù ÃÊ±âÈ­ÇÏ¿© Áö¿î´Ù.
+	// ë Œë” íƒ€ê²Ÿë·°ë¥¼ ë‚´ê°€ ì§€ì •í•œ ê°’ìœ¼ë¡œ í”½ì…€ì„ ë‹¤ ì´ˆê¸°í™”í•˜ì—¬ ì§€ìš´ë‹¤.
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->ClearRenderTargetView(ResourceBuilder::Instance.Get().swapChain->GetRTV().Get(), red);
-	// µª½º ½ºÅÙ½Çºä¸¦ ÃÊ±âÈ­ÇÑ´Ù.
+	// ëŽìŠ¤ ìŠ¤í…ì‹¤ë·°ë¥¼ ì´ˆê¸°í™”í•œë‹¤.
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->ClearDepthStencilView(ResourceBuilder::Instance.Get().swapChain->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 
 	RenderSystem::Instance.Get().Render();

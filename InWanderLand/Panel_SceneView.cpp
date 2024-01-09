@@ -1,12 +1,20 @@
 #include "Panel_SceneView.h"
 
 #include "imgui.h"
+#include "imgui_impl_dx11.h"
+#include "imgui_impl_win32.h"
+
+#include "Application.h"
+#include "YunutyEngine.h"
+
+#include <d3d11.h>
 
 namespace application
 {
 	namespace editor
 	{
 		SceneViewPanel::SceneViewPanel()
+			: app(nullptr), rendererWidth(), rendererHeight()
 		{
 
 		}
@@ -18,24 +26,42 @@ namespace application
 
 		void SceneViewPanel::Initialize()
 		{
-
+			app = &Application::GetInstance();
+			auto rect = yunutyEngine::graphics::Renderer::SingleInstance().GetResolution();
+			rendererWidth = rect.x;
+			rendererHeight = rect.y;
 		}
 
 		void SceneViewPanel::Update(float ts)
 		{
-
+			// Resize ì´ë²¤íŠ¸ì— ë”°ë¼ì„œ rendererWidth, Height ë°”ê¾¸ê¸°
 		}
 
 		void SceneViewPanel::GUIProgress()
 		{
 			ImGui::Begin("SceneView", 0, ImGuiWindowFlags_NoBringToFrontOnFocus);
 
-			/// ImGui °ü·Ã ³»ºÎ º¯¼ö ¾÷µ¥ÀÌÆ®
+			/// ImGui ê´€ë ¨ ë‚´ë¶€ ë³€ìˆ˜ ì—…ë°ì´íŠ¸
 			isMouseOver = ImGui::IsWindowHovered();
 			isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
-			/// ½ÇÁ¦ ÆÐ³Î¿¡ ±×¸®´Â ¿µ¿ª
+			/// ì‹¤ì œ íŒ¨ë„ì— ê·¸ë¦¬ëŠ” ì˜ì—­
 
+			// ê·¸ë ¤ì§€ëŠ” ì˜ì—­ì— ë§žê²Œ í™”ë©´ ë¹„ ìž¬êµ¬ì„±
+			float ratio = (float)rendererHeight / (float)rendererWidth;
+			ImVec2 newRegion = ImGui::GetContentRegionAvail();
+			float newRegionRatio = newRegion.y / newRegion.x;
+
+			if (newRegionRatio >= ratio)
+			{
+				newRegion.y = newRegion.x * ratio;
+			}
+			else
+			{
+				newRegion.x = newRegion.y / ratio;
+			}
+
+			ImGui::Image(reinterpret_cast<ImTextureID>(app->GetSceneSRV()), newRegion);
 
 			ImGui::End();
 		}
