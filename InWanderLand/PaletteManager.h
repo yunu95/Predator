@@ -7,6 +7,7 @@ namespace application
     {
         namespace palette
         {
+            class SelectionBox;
             class PaletteInstance;
             /// <summary>
             /// PaletteManager는 유닛 팔레트, 지형 팔레트, 장식물 팔레트로 특수화되는 팔레트 관리 클래스의 베이스 클래스입니다.
@@ -16,6 +17,15 @@ namespace application
             class PaletteManager
             {
             public:
+                // 상호 배타적인 팔레트의 현재 상태를 나타냅니다.
+                enum class State
+                {
+                    None,
+                    Select, // 객체를 선택할 수 있는 상태
+                    Place, // 객체를 배치하는 상태
+                    DraggingObjects, // 객체를 움직이는 상태
+                    DraggingSelectBox, // 선택 박스를 조정하고 있는 상태
+                };
                 /// <summary>
                 /// 현재 활성화된 팔레트를 지정하거나 가져올 수 있습니다.
                 /// </summary>
@@ -36,42 +46,69 @@ namespace application
                 /// <param name="projectedWorldPos"> 마우스의 위치가 월드 좌표에 사영된 위치를 전달해 커서의 위치를 업데이트합니다.</param>
                 void OnMouseMove(Vector3d projectedWorldPos);
                 void OnDeletion();
-            protected:
                 /// <summary>
-                /// 하나의 PaletteManager로부터 선택된 인스턴스들입니다. 유닛 팔레트의 경우 유닛, 지형 팔레트의 경우 지형 한 칸에 대응합니다.
+                /// 팔레트를 객체 선택모드로 전환할지, 객체 배치 모드로 전환할지 설정합니다. isSelectMode가 참이면 선택모드로, 거짓이면 배치모드로 전환됩니다.
                 /// </summary>
-                vector<PaletteInstance*> selectedInstances;
+                void SetAsSelectMode(bool isSelectMode);
+                bool IsSelectMode(); 
+            protected:
                 /// <summary>
                 /// 객체 배치를 시도할 때 호출되는 함수입니다. 해당 위치에 유닛, 지형, 장식물 등을 배치하고 배치된 객체를 반환하십시오.
                 /// 부득이한 여건으로 객체를 배치할 수 없다면 Null 포인터를 반환하십시오. 
                 /// </summary>
                 /// <param name="worldPosition"></param>
                 virtual PaletteInstance* PlaceInstance(Vector3d worldPosition) = 0;
+                template<typename T> requires std::derived_from<T, yunutyEngine::Component>
+                T* PlaceSoleComponent(Vector3d worldPosition)
+                {
+                    auto component = Scene::getCurrentScene()->AddGameObject()->AddComponent<T>();
+                    component->GetTransform()->position = worldPosition;
+                    return component;
+                }
                 /// <summary>
-                /// 현재 팔레트 모드가 선택모드인지 아닌지 반환합니다. 선택모드일 때는 브러시가 표시되지 않으며, 마우스 좌클릭이 객체 배치가 아닌 객체 선택에 사용됩니다.
+                /// 마우스가 선택모드이고 선택 박스를 드래깅하지 않을때 차지하게 될 충돌크기의 halfExtents입니다.
                 /// </summary>
-                virtual bool isSelectMode() = 0;
+                Vector3d unDraggingHalfExtent{ 1,1,1 };
+                /// <summary>
+                /// 이 팔레트가 선택 모드에서 인스턴스들을 클릭할 수 있는지를 나타냅니다.
+                /// 예를 들어 지형 팔레트의 경우 지형 노드들을 한칸씩 클릭할 필요가 없기에 false로 초기화합니다.
+                /// </summary>
+                bool canSelectInstance{ true };
                 /// <summary>
                 /// shouldSelect는 팔레트 인스턴스가 선택 콜라이더에 들어왔을 때 호출되어 해당 인스턴스를 선택할지 여부를 결정합니다.
                 /// 대부분의 경우 dynamic_cast를 사용하여 해당 인스턴스가 선택 가능한 인스턴스인지 판별하는 것으로 구현될 것입니다.
                 /// </summary>
-                virtual bool shouldSelect(PaletteInstance*) { return false; };
+                virtual bool ShouldSelect(PaletteInstance*) { return false; };
                 /// <summary>
                 /// 브러시 오브젝트는 팔레트 모드가 선택모드가 아닐 때 마우스 커서가 월드 스페이스에 사영된 위치로 이동합니다.
                 /// 팔레트 모드가 선택모드일 때는 게임오브젝트가 비활성화되며 브러시 오브젝트가 표시되지 않습니다.
                 /// </summary>
                 GameObject* brush;
             private:
-                /// <summary>
-                /// 사용자가 지금 여러 객체들을 선택하기 위해 드래깅 중인가? 를 판별합니다.
-                /// </summary>
-                bool isDraggingForSelection();
+                // 선택 박스에 유효한 인스턴스가 접촉되기 시작했을 때, 혹은 접촉이 끝났을 때 호출됩니다.
+                void OnSelectionContactEnter(PaletteInstance* instance);
+                void OnSelectionContactExit(PaletteInstance* instance);
+                // 선택 목록에 인스턴스를 추가 / 제거
+                void InsertSelection(PaletteInstance* instance);
+                void EraseSelection(PaletteInstance* instance);
+                void ClearSelection();
+                // 선택박스와 접촉중인 객체 중 가장 마우스포인터와 가까운 인스턴스의 OnHover 함수를 호출합니다.
+                // 접촉중인 객체가 없다면 현재 마킹된 인스턴스의 OnHoverLeft 함수를 호출합니다.
+                void HoverClosestInstance();
+                // 현재 호버링중인 객체가 있다면 OnHoverLeft함수를 호출합니다. 
+                void UnHoverCurrentInstance();
+                // 현재 팔레트 기능 조작의 상태
+                State state{ State::Select };
+                PaletteInstance* pendingSelection;
+                unordered_set<PaletteInstance*> selection;
                 static PaletteManager* currentPalette;
                 PaletteInstance* draggingObject = nullptr;
                 Vector3d dragStartPos;
                 Vector3d currentBrushPos;
+                Vector3d lastFrameBrushPos;
                 float draggingTime = 0;
                 static constexpr float dragThreshold = 0.5f;
+                friend SelectionBox;
             };
         }
     }

@@ -12,10 +12,22 @@ public:
     function<void(Vector3d)> groundRightClickCallback{ [](Vector3d) {} };
     function<void(Vector3d)> groundRightClickReleaseCallback{ [](Vector3d) {} };
     function<void(Vector3d)> groundHoveringClickCallback{ [](Vector3d) {} };
+    function<void()> deleteButtonCallback{ []() {} };
+    function<void()> tabButtonCallback{ []() {} };
+    function<void()> cButtonCallback{ []() {} };
     void Update()
     {
         if (Input::isKeyPushed(KeyCode::Tab))
             roamingMode = !roamingMode;
+
+        if (yunutyEngine::Input::isKeyPushed(KeyCode::Delete))
+            deleteButtonCallback();
+
+        if (yunutyEngine::Input::isKeyPushed(KeyCode::Tab))
+            tabButtonCallback();
+
+        if (yunutyEngine::Input::isKeyPushed(KeyCode::C))
+            cButtonCallback();
 
         if (!roamingMode)
         {

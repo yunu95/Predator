@@ -148,6 +148,12 @@
     <Filter Include="Editor\Palette\PaletteBrush\TerrainBrush">
       <UniqueIdentifier>{14ee86d7-bf36-42e5-9618-562c06f3e4d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Palette\PaletteInstance\RegionInstance">
+      <UniqueIdentifier>{f4de70f3-c627-4642-9176-8b680a0b35bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteManager\RegionPaletteManager">
+      <UniqueIdentifier>{26864948-b22d-4e8f-9d2f-46cb7ec49f64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -379,6 +385,12 @@
     <ClInclude Include="PaletteSelectCollider.h">
       <Filter>Editor\Palette\PaletteBrush</Filter>
     </ClInclude>
+    <ClInclude Include="RegionInstance.h">
+      <Filter>Editor\Palette\PaletteInstance\RegionInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="RegionPaletteManager.h">
+      <Filter>Editor\Palette\PaletteManager\RegionPaletteManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -537,10 +549,7 @@
     <ClCompile Include="Module_TemplateDataEditor.cpp">
       <Filter>Editor\Panel\List\Module\List</Filter>
     </ClCompile>
-    <ClCompile Include="PaletteManager.cpp">
-      <Filter>Editor\Palette\PaletteManager</Filter>
-    </ClCompile>
-    <ClCompile Include="SnippetEditTerrain.cpp">
+    <ClCompile Include="SnippetUnitPalette.cpp">
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
     <ClCompile Include="SnippetPhysxCollider.cpp">
@@ -550,6 +559,27 @@
       <Filter>TestCodes</Filter>
     </ClCompile>
     <ClCompile Include="Snippet1milGameObjects.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="PaletteInstance.cpp">
+      <Filter>Editor\Palette\PaletteInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugMeshes.cpp">
+      <Filter>DebugMeshes</Filter>
+    </ClCompile>
+    <ClCompile Include="PaletteManager.cpp">
+      <Filter>Editor\Palette\PaletteManager</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitInstance.cpp">
+      <Filter>Editor\Palette\PaletteInstance\UnitInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="RegionInstance.cpp">
+      <Filter>Editor\Palette\PaletteInstance\RegionInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainInstance.cpp">
+      <Filter>Editor\Palette\PaletteInstance\TerrainInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetRegionPalette.cpp">
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
   </ItemGroup>

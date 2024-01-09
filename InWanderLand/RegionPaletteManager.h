@@ -1,8 +1,8 @@
 #pragma once
 #include "PaletteManager.h"
-#include "UnitInstance.h"
 #include "YunutyEngine.h"
 #include "SingletonClass.h"
+#include "RegionInstance.h"
 
 namespace application
 {
@@ -10,17 +10,17 @@ namespace application
     {
         namespace palette
         {
-            class UnitPaletteManager : public PaletteManager, public yunutyEngine::SingletonClass<UnitPaletteManager>
+            class RegionPaletteManager : public PaletteManager, public  yunutyEngine::SingletonClass<RegionPaletteManager>
             {
             public:
             protected:
                 virtual PaletteInstance* PlaceInstance(Vector3d worldPosition) override
                 {
-                    return PlaceSoleComponent<UnitInstance>(worldPosition);
+                    return PlaceSoleComponent<RegionInstance>(worldPosition);
                 }
                 virtual bool ShouldSelect(PaletteInstance* instance)
                 {
-                    return dynamic_cast<UnitInstance*>(instance);
+                    return dynamic_cast<RegionInstance*>(instance);
                 };
             private:
             };
