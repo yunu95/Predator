@@ -112,6 +112,9 @@
     <Filter Include="GraphicsEngine\RenderableManager\IRenderable\UI">
       <UniqueIdentifier>{9116d217-c39f-4b1e-b2be-f38c8d512d7c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RenderSystem\ShadowPass">
+      <UniqueIdentifier>{4cc813e4-2679-48b4-ab25-3e044b73e417}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -288,6 +291,9 @@
     <ClInclude Include="UIImage.h">
       <Filter>GraphicsEngine\RenderableManager\IRenderable\UI</Filter>
     </ClInclude>
+    <ClInclude Include="ShadowPass.h">
+      <Filter>RenderSystem\ShadowPass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -397,6 +403,9 @@
     </ClCompile>
     <ClCompile Include="UIImage.cpp">
       <Filter>GraphicsEngine\RenderableManager\IRenderable\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowPass.cpp">
+      <Filter>RenderSystem\ShadowPass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -29,7 +29,7 @@ private:
 
 	std::vector<ID3D11RenderTargetView*> RTVVec;
 
-	// UnBind¿ë null Render Target
+	// UnBindìš© null Render Target
 	std::vector<ID3D11RenderTargetView*> nullRTV;
 
 	unsigned int rtCount;

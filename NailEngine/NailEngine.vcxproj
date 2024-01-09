@@ -209,6 +209,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="ResourceBuilder.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShadowPass.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="SkinnedMesh.h" />
     <ClInclude Include="SpotLight.h" />
@@ -271,6 +272,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="ResourceBuilder.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShadowPass.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="SkinnedMesh.cpp" />
     <ClCompile Include="SpotLight.cpp" />

@@ -52,6 +52,7 @@ public:
 	void Render();
 	void RenderObject();
 	void RenderSkinned();
+	void RenderShadow();
 	void RenderLight();
 	void DrawFinal();
 	void RenderUI();

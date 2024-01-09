@@ -19,6 +19,7 @@
 #include "RenderTargetGroup.h"
 
 #include "InstancingManager.h"
+#include "ShadowPass.h"
 
 #include "ILight.h"
 
@@ -43,6 +44,7 @@ void NailEngine::Init(UINT64 hWnd)
 
 	RenderSystem::Instance.Get().Init();
 	InstancingManager::Instance.Get().Init();
+	ShadowPass::Instance.Get().Init();
 }
 
 void NailEngine::Render()

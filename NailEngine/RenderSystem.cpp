@@ -36,6 +36,8 @@
 #include "UIImage.h"
 #include "Texture.h"
 
+#include "ShadowPass.h"
+
 #include <iostream>
 #include <fstream>
 
@@ -176,6 +178,9 @@ void RenderSystem::Render()
 
 	// 스킨드 오브젝트 렌더
 	RenderSkinned();
+
+	// 그림자 맵 생성
+	//RenderShadow();
 	
 	// 라이트 렌더
 	RenderLight();
@@ -272,6 +277,22 @@ void RenderSystem::RenderSkinned()
 	//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.renderInfo.material->GetName()))->PushGraphicsData();
 	//	mesh->Render(e.renderInfo.materialIndex,nullptr);
 	//}
+}
+
+void RenderSystem::RenderShadow()
+{
+	ShadowPass::Instance.Get().Bind();
+
+	//MatrixBuffer matrixBuffer;
+	////matrixBuffer.WTM = e.wtm;
+	//matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+	//matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	//matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	//matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	////matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
+	//NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+
+	//InstancingManager::Instance.Get().RegisterMeshAndMaterial(this->deferredVec);
 }
 
 void RenderSystem::RenderLight()
