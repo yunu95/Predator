@@ -34,7 +34,7 @@ namespace application
 
 		void SceneViewPanel::Update(float ts)
 		{
-
+			// Resize 이벤트에 따라서 rendererWidth, Height 바꾸기
 		}
 
 		void SceneViewPanel::GUIProgress()
@@ -47,9 +47,21 @@ namespace application
 
 			/// 실제 패널에 그리는 영역
 
-			ID3D11ShaderResourceView* sceneImage = static_cast<ID3D11ShaderResourceView*>(app->GetSRV());
+			// 그려지는 영역에 맞게 화면 비 재구성
+			float ratio = (float)rendererHeight / (float)rendererWidth;
+			ImVec2 newRegion = ImGui::GetContentRegionAvail();
+			float newRegionRatio = newRegion.y / newRegion.x;
 
-			ImGui::Image(reinterpret_cast<ImTextureID>(sceneImage), ImVec2(rendererWidth, rendererHeight));
+			if (newRegionRatio >= ratio)
+			{
+				newRegion.y = newRegion.x * ratio;
+			}
+			else
+			{
+				newRegion.x = newRegion.y / ratio;
+			}
+
+			ImGui::Image(reinterpret_cast<ImTextureID>(app->GetSceneSRV()), newRegion);
 
 			ImGui::End();
 		}
