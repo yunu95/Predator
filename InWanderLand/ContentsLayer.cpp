@@ -193,7 +193,7 @@ void application::Contents::ContentsLayer::Initialize()
 
 void application::Contents::ContentsLayer::Update(float ts)
 {
-	std::cout << Time::GetFPS() << std::endl;
+	//std::cout << Time::GetFPS() << std::endl;
 }
 
 void application::Contents::ContentsLayer::GUIProgress()

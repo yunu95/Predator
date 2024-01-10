@@ -1,8 +1,10 @@
-/// 2023. 10. 11 ±è»óÁØ
-/// application ¿¡¼­ »ç¿ëÇÒ ±¸¼ºÀ» ±×·ìÈ­ÇÏ¿© ÅëÇÕ °ü¸®ÇÏ±â À§ÇÑ
-/// Layer °èÃşÀ» ¸¸µå´Â ÀÎÅÍÆäÀÌ½º
+/// 2023. 10. 11 ê¹€ìƒì¤€
+/// application ì—ì„œ ì‚¬ìš©í•  êµ¬ì„±ì„ ê·¸ë£¹í™”í•˜ì—¬ í†µí•© ê´€ë¦¬í•˜ê¸° ìœ„í•œ
+/// Layer ê³„ì¸µì„ ë§Œë“œëŠ” ì¸í„°í˜ì´ìŠ¤
 
 #pragma once
+
+#include "EditorEvents.h"
 
 namespace application
 {
@@ -10,9 +12,11 @@ namespace application
 	{
 	public:
 		virtual void Initialize() = 0;
-		//virtual void EventProgress(Events& e) = 0;
 		virtual void Update(float ts) = 0;
 		virtual void GUIProgress() = 0;
 		virtual void Finalize() = 0;
+#ifdef EDITOR
+		virtual void OnEvent(editor::EditorEvents& event) {};
+#endif
 	};
 }

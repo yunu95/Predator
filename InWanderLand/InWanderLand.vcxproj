@@ -367,10 +367,14 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
     <ClInclude Include="CamSwitcher.h" />
     <ClInclude Include="EditorCamera.h" />
+    <ClInclude Include="EditorCommonEvents.h" />
     <ClInclude Include="EditorModule.h" />
+    <ClInclude Include="EventManager.h" />
+    <ClInclude Include="KeyboardEvents.h" />
     <ClInclude Include="ModuleList.h" />
     <ClInclude Include="Module_TemplateDataEditor.h" />
     <ClInclude Include="DoodadPaletteManager.h" />
+    <ClInclude Include="MouseEvents.h" />
     <ClInclude Include="PaletteSelectCollider.h" />
     <ClInclude Include="PaletteInstance.h" />
     <ClInclude Include="PaletteManager.h" />
@@ -440,6 +444,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="UnitBrush.h" />
     <ClInclude Include="UnitInstance.h" />
     <ClInclude Include="UnitPaletteManager.h" />
+    <ClInclude Include="WindowEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp" />
@@ -453,12 +458,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="EditorCamera.cpp" />
     <ClCompile Include="DebugMeshes.cpp" />
+    <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="Identifiable.cpp" />
     <ClCompile Include="InstanceManager.cpp" />
     <ClCompile Include="LoadMapCommand.cpp" />
     <ClCompile Include="CommandManager.cpp" />
     <ClCompile Include="ContentsLayer.cpp" />
-    <ClCompile Include="EditorEvents.cpp" />
     <ClCompile Include="EditorLayer.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="MapFileManager.cpp" />

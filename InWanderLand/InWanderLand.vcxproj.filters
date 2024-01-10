@@ -157,6 +157,21 @@
     <Filter Include="Editor\Palette\PaletteManager\RegionPaletteManager">
       <UniqueIdentifier>{26864948-b22d-4e8f-9d2f-46cb7ec49f64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Events\Category">
+      <UniqueIdentifier>{8039b949-8b1d-456e-950b-17344a38e1cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Events\Category\3_Mouse">
+      <UniqueIdentifier>{030d7362-27a1-4a26-80c8-864ff663bc15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Events\Category\4_Keyboard">
+      <UniqueIdentifier>{821267f0-92eb-4873-a9c6-60e8bcb5edd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Events\Category\1_Editor">
+      <UniqueIdentifier>{b32e1149-d273-470d-995a-d2a3de904ecf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Events\Category\2_Window">
+      <UniqueIdentifier>{6b007f4f-4168-4380-8d54-6523874c757c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -397,6 +412,21 @@
     <ClInclude Include="RegionPaletteManager.h">
       <Filter>Editor\Palette\PaletteManager\RegionPaletteManager</Filter>
     </ClInclude>
+    <ClInclude Include="EventManager.h">
+      <Filter>Editor\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowEvents.h">
+      <Filter>Editor\Events\Category\2_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorCommonEvents.h">
+      <Filter>Editor\Events\Category\1_Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseEvents.h">
+      <Filter>Editor\Events\Category\3_Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardEvents.h">
+      <Filter>Editor\Events\Category\4_Keyboard</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -437,9 +467,6 @@
     </ClCompile>
     <ClCompile Include="RequestDetourTest.cpp">
       <Filter>RecastDetourTest</Filter>
-    </ClCompile>
-    <ClCompile Include="EditorEvents.cpp">
-      <Filter>Editor\Events</Filter>
     </ClCompile>
     <ClCompile Include="ContentsLayer.cpp">
       <Filter>Contents</Filter>
@@ -593,6 +620,9 @@
     </ClCompile>
     <ClCompile Include="SnippetGIEnableDisable.cpp">
       <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManager.cpp">
+      <Filter>Editor\Events</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

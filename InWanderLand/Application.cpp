@@ -7,6 +7,7 @@
 #include "YunutyEngine.h"
 #include "EditorLayer.h"
 #include "ContentsLayer.h"
+#include "WindowEvents.h"
 
 #include <d3d11.h>
 #include <dxgi1_4.h>
@@ -16,11 +17,11 @@
 
 // Forward declarations of helper functions
 void GetDeviceAndDeviceContext();
-bool CreateSwapChain();
-void CleanupSwapChain();
 void CreateRenderTarget();
+bool CreateSwapChain();
 void CleanupRenderTarget();
-void ResizeBuffers(HWND hWnd);
+void CleanupSwapChain();
+void ResizeBuffers();
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -42,6 +43,7 @@ HWND editorHWND = NULL;
 WNDCLASSEX wcEditor = { sizeof(WNDCLASSEX), CS_CLASSDC, WndEditorProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("InWanderLand_Editor"), NULL };
 ImVec2 dockspaceArea = ImVec2();
 ImVec2 dockspaceStartPoint = ImVec2();
+function<void()> winResizeCallBackFunction = function<void()>();
 #endif
 
 namespace application
@@ -91,17 +93,17 @@ namespace application
 
 #ifdef EDITOR
 		/// 에디터 윈도우 생성
-		int editorWinSizeX = appSpecification.windowWidth;
-		int editorWinSizeY = appSpecification.windowHeight;
-		int editorWinPosX = (GetSystemMetrics(SM_CXSCREEN) - editorWinSizeX) / 2 + 1920;
-		int editorWinPosY = (GetSystemMetrics(SM_CYSCREEN) - editorWinSizeY) / 2 + 200;
+		g_EditorResizeWidth = appSpecification.windowWidth;
+		g_EditorResizeHeight = appSpecification.windowHeight;
+		int editorWinPosX = (GetSystemMetrics(SM_CXSCREEN) - g_EditorResizeWidth) / 2 + 1920;
+		int editorWinPosY = (GetSystemMetrics(SM_CYSCREEN) - g_EditorResizeHeight) / 2 + 200;
 
 		// 게임엔진 스레드에서 에디터 윈도우를 생성하도록 유도
-		yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [=]()
+		yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [&, editorWinPosX, editorWinPosY, this]()
 			{
 				::RegisterClassEx(&wcEditor);
 
-				editorHWND = ::CreateWindow(wcEditor.lpszClassName, wcEditor.lpszClassName, WS_OVERLAPPEDWINDOW, editorWinPosX, editorWinPosY, editorWinSizeX, editorWinSizeY, NULL, NULL, wcEditor.hInstance, NULL);
+				editorHWND = ::CreateWindow(wcEditor.lpszClassName, wcEditor.lpszClassName, WS_OVERLAPPEDWINDOW, editorWinPosX, editorWinPosY, g_EditorResizeWidth, g_EditorResizeHeight, NULL, NULL, wcEditor.hInstance, NULL);
 
 				GetDeviceAndDeviceContext();
 
@@ -113,6 +115,12 @@ namespace application
 
 					throw std::runtime_error(std::string("failed to create d3d device!"));
 				}
+
+				// Resize CallBack 구현
+				SetEditorResizeCallBack
+				(
+					[&]() { Application::DispatchEvent<editor::WindowResizeEvent>(g_EditorResizeWidth, g_EditorResizeHeight); }
+				);
 
 				::ShowWindow(editorHWND, SW_SHOWDEFAULT);
 				::UpdateWindow(editorHWND);
@@ -277,6 +285,11 @@ namespace application
 		return appSpecification;
 	}
 
+	void Application::SetEditorResizeCallBack(std::function<void()> callBack)
+	{
+		winResizeCallBackFunction = callBack;
+	}
+
 	void* Application::GetSceneSRV()
 	{
 		static auto resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
@@ -346,11 +359,34 @@ namespace application
 		//g_EditorpSwapChain->Present(1, 0); // Present with vsync
 		g_EditorpSwapChain->Present(0, 0); // Present without vsync
 
+		// 이벤트들 실행
+		ProcessEvents();
+
 		// 커맨드들 실행
 		cm.ExecuteCommands();
 
 		layers[(int)LayerList::ContentsLayer]->Update(1);
 		layers[(int)LayerList::ContentsLayer]->GUIProgress();
+	}
+
+	void Application::OnEvent(editor::EditorEvents& event)
+	{
+		editor::EventDispatcher dispatcher(event);
+		dispatcher.Dispatch<editor::WindowResizeEvent>([this](editor::WindowResizeEvent& e) { std::cout << e.GetDebugString(); return true; });
+
+		layers[(int)LayerList::EditorLayer]->OnEvent(event);
+	}
+
+	void Application::ProcessEvents()
+	{
+		while (em.Size() != 0)
+		{
+			auto eventFunc = em.PopEventCallable();
+			if (eventFunc)
+			{
+				eventFunc();
+			}
+		}
 	}
 #endif
 }
@@ -361,6 +397,14 @@ void GetDeviceAndDeviceContext()
 {
 	g_pD3dDevice = reinterpret_cast<ID3D11Device*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDevice());
 	g_pD3dDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDeviceContext());
+}
+
+void CreateRenderTarget()
+{
+	ID3D11Texture2D* pBackBuffer;
+	g_EditorpSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
+	g_pD3dDevice->CreateRenderTargetView(pBackBuffer, nullptr, &g_EditormainRenderTargetView);
+	pBackBuffer->Release();
 }
 
 bool CreateSwapChain()
@@ -377,8 +421,7 @@ bool CreateSwapChain()
 	sd.Scaling = DXGI_SCALING_STRETCH;
 	sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 	sd.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
-	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH | DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
-
+	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	IDXGIDevice2* dxgiDevice;
 	auto result1 = g_pD3dDevice->QueryInterface(IID_PPV_ARGS(&dxgiDevice));
@@ -398,26 +441,18 @@ bool CreateSwapChain()
 	return true;
 }
 
+void CleanupRenderTarget()
+{
+	if (g_EditormainRenderTargetView) { g_EditormainRenderTargetView->Release(); g_EditormainRenderTargetView = nullptr; }
+}
+
 void CleanupSwapChain()
 {
 	CleanupRenderTarget();
 	if (g_EditorpSwapChain) { g_EditorpSwapChain->Release(); g_EditorpSwapChain = nullptr; }
 }
 
-void CreateRenderTarget()
-{
-	ID3D11Texture2D* pBackBuffer;
-	g_EditorpSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
-	g_pD3dDevice->CreateRenderTargetView(pBackBuffer, nullptr, &g_EditormainRenderTargetView);
-	pBackBuffer->Release();
-}
-
-void CleanupRenderTarget()
-{
-	if (g_EditormainRenderTargetView) { g_EditormainRenderTargetView->Release(); g_EditormainRenderTargetView = nullptr; }
-}
-
-void ResizeBuffers(HWND hWnd)
+void ResizeBuffers()
 {
 	g_EditormainRenderTargetView->Release();
 	g_EditorpSwapChain->ResizeBuffers(0, dockspaceArea.x, dockspaceArea.y, DXGI_FORMAT_UNKNOWN, 0);
@@ -474,12 +509,19 @@ LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			RECT rect = RECT();
 			GetClientRect(hWnd, &rect);
 			dockspaceArea = ImVec2(rect.right - rect.left, rect.bottom - rect.top);
+			g_EditorResizeWidth = dockspaceArea.x;
+			g_EditorResizeHeight = dockspaceArea.y;
 
 			POINT windowPos = POINT();
 			ClientToScreen(hWnd, &windowPos);
 			dockspaceStartPoint = ImVec2(windowPos.x, windowPos.y);
 
-			ResizeBuffers(hWnd);
+			ResizeBuffers();
+
+			if (winResizeCallBackFunction)
+			{
+				winResizeCallBackFunction();
+			}
 
 			return 0;
 		}
