@@ -11,39 +11,48 @@ namespace application
 {
 	namespace editor
 	{
-		class MouseButtonPressedEvent
+		class MouseButtonEvent
 			: public EditorEvents
 		{
 		public:
-			EVENT_SETTING(Mouse, MouseButtonPressed);
+			CATEGORY_SETTING(EventCategory::Mouse);
+		};
+
+		class MouseButtonPressedEvent
+			: public MouseButtonEvent
+		{
+		public:
+			EVENT_SETTING(EventType::MouseButtonPressed);
 		};
 
 		class MouseButtonReleasedEvent
-			: public EditorEvents
+			: public MouseButtonEvent
 		{
 		public:
-			EVENT_SETTING(Mouse, MouseButtonReleased);
+			EVENT_SETTING(EventType::MouseButtonReleased);
 		};
 
 		class MouseButtonDownEvent
-			: public EditorEvents
+			: public MouseButtonEvent
 		{
 		public:
-			EVENT_SETTING(Mouse, MouseButtonDown);
+			EVENT_SETTING(EventType::MouseButtonDown);
 		};
 
 		class MouseMovedEvent
 			: public EditorEvents
 		{
 		public:
-			EVENT_SETTING(Mouse, MouseMoved);
+			CATEGORY_SETTING(EventCategory::Mouse);
+			EVENT_SETTING(EventType::MouseMoved);
 		};
 
 		class MouseScrolledEvent
 			: public EditorEvents
 		{
 		public:
-			EVENT_SETTING(Mouse, MouseScrolled);
+			CATEGORY_SETTING(EventCategory::Mouse);
+			EVENT_SETTING(EventType::MouseScrolled);
 		};
 	}
 }

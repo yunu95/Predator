@@ -15,7 +15,8 @@ namespace application
 			: public EditorEvents
 		{
 		public:
-			EVENT_SETTING(Editor, SelectionChange);
+			CATEGORY_SETTING(EventCategory::Editor);
+			EVENT_SETTING(EventType::SelectionChange);
 		};
 	}
 }

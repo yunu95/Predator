@@ -15,7 +15,8 @@ namespace application
 			: public EditorEvents
 		{
 		public:
-			EVENT_SETTING(Window, WindowResize);
+			CATEGORY_SETTING(EventCategory::Editor | EventCategory::Window);
+			EVENT_SETTING(EventType::WindowResize);
 
 			WindowResizeEvent(const unsigned int& width, const unsigned int& height)
 				: width(width), height(height)

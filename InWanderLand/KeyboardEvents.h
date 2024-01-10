@@ -15,14 +15,16 @@ namespace application
 			: public EditorEvents
 		{
 		public:
-			EVENT_SETTING(Keyboard, KeyPressed);
+			CATEGORY_SETTING(EventCategory::Keyboard);
+			EVENT_SETTING(EventType::KeyPressed);
 		};
 
 		class KeyReleasedEvent
 			: public EditorEvents
 		{
 		public:
-			EVENT_SETTING(Keyboard, KeyReleased);
+			CATEGORY_SETTING(EventCategory::Keyboard);
+			EVENT_SETTING(EventType::KeyReleased);
 		};
 	}
 }

@@ -15,15 +15,27 @@ namespace application
 {
 	namespace editor
 	{
-		enum class EventCategory
+		// Flag
+		enum class EventCategory : unsigned long long
 		{
 			None = 0,
 			// Common Event
-			Editor,
-			Window,
-			Mouse,
-			Keyboard,
+			Editor = 1,
+			Input = 1 << 1,
+			Window = 1 << 2,
+			InGame = 1 << 3,
+			Mouse = 1 << 4,
+			Keyboard = 1 << 5,
 		};
+
+#pragma region operator overloading
+		unsigned long long operator | (const EventCategory& c1, const EventCategory& c2);
+		unsigned long long operator | (const unsigned long long& c1, const EventCategory& c2);
+		unsigned long long operator | (const EventCategory& c1, const unsigned long long&& c2);
+		unsigned long long operator & (const EventCategory& c1, const EventCategory& c2);
+		unsigned long long operator & (const unsigned long long& c1, const EventCategory& c2);
+		unsigned long long operator & (const EventCategory& c1, const unsigned long long& c2);
+#pragma endregion
 
 		enum class EventType
 		{
@@ -39,18 +51,21 @@ namespace application
 		};
 
 		// 멤버 함수 override 자동화를 위한 매크로 함수
-		#define EVENT_SETTING(category, type) \
-		static EventCategory GetStaticCategory() { return EventCategory::##category; } \
-		static EventType GetStaticType() { return EventType::##type; } \
-		virtual EventCategory GetEventCategory() const override { return GetStaticCategory(); } \
+		#define CATEGORY_SETTING(category) \
+		static unsigned long long GetStaticCategoryFlag() { return static_cast<unsigned long long>(category); } \
+		virtual unsigned long long GetEventCategoryFlag() const override { return GetStaticCategoryFlag(); }
+
+		#define EVENT_SETTING(type) \
+		static EventType GetStaticType() { return type; } \
 		virtual EventType GetEventType() const override { return GetStaticType(); } \
 		virtual std::string GetName() const override { return #type; }
+
 
 		class EditorEvents
 		{
 		public:
 			virtual ~EditorEvents() = default;
-			virtual EventCategory GetEventCategory() const = 0;
+			virtual unsigned long long GetEventCategoryFlag() const = 0;
 			virtual EventType GetEventType() const = 0;
 			// 디버그 용도로 쓰기 위함
 			virtual std::string GetName() const = 0;
@@ -76,7 +91,7 @@ namespace application
 			template<typename T>
 			bool Dispatch(EventFunc<T> func)
 			{
-				if (event.propagation && (event.GetEventCategory() == T::GetStaticCategory()) && (event.GetEventType() == T::GetStaticType()))
+				if (event.propagation && (event.GetEventCategoryFlag() & T::GetStaticCategoryFlag()) && (event.GetEventType() == T::GetStaticType()))
 				{
 					event.propagation = func(*static_cast<T*>(&event));
 					return true;

@@ -591,5 +591,8 @@
     <ClCompile Include="EventManager.cpp">
       <Filter>Editor\Events</Filter>
     </ClCompile>
+    <ClCompile Include="EditorEvents.cpp">
+      <Filter>Editor\Events</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

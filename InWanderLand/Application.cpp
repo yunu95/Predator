@@ -8,6 +8,7 @@
 #include "EditorLayer.h"
 #include "ContentsLayer.h"
 #include "WindowEvents.h"
+#include "MouseEvents.h"
 
 #include <d3d11.h>
 #include <dxgi1_4.h>
@@ -373,6 +374,13 @@ namespace application
 	{
 		editor::EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<editor::WindowResizeEvent>([this](editor::WindowResizeEvent& e) { std::cout << e.GetDebugString(); return true; });
+
+		//ImGuiIO& io = ImGui::GetIO();
+		//if (io.MouseDown[0])
+		//{
+		//	dispatcher.Dispatch<editor::MouseButtonDownEvent>([this](editor::MouseButtonDownEvent))
+		//}
+
 
 		layers[(int)LayerList::EditorLayer]->OnEvent(event);
 	}
