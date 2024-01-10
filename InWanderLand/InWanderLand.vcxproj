@@ -477,6 +477,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="Snippet1milGameObjects.cpp" />
     <ClCompile Include="SnippetAnimation.cpp" />
     <ClCompile Include="SnippetAnimationChangeInterpolation.cpp" />
+    <ClCompile Include="SnippetCamPositionAndNear.cpp" />
     <ClCompile Include="SnippetGIEnableDisable.cpp" />
     <ClCompile Include="SnippetRegionPalette.cpp" />
     <ClCompile Include="SnippetUnitPalette.cpp" />

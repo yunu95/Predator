@@ -19,30 +19,45 @@ namespace yunuGIAdapter
             NailCamera::Instance.Get().SetWorldTM(reinterpret_cast<const DirectX::SimpleMath::Matrix&>(tm));
         };
 
-        virtual void SetFOV(float fov) override 
+        virtual void SetVerticalFOV(float fov) override
         {
-            NailCamera::Instance.Get().SetFOV(fov);
+            NailCamera::Instance.Get().SetVerticalFOV(fov);
         };
-
+        virtual float GetVerticalFOV() override
+        {
+            return NailCamera::Instance.Get().GetVerticalFOV();
+        }
         virtual void SetNear(float cameraNear) override
         {
             NailCamera::Instance.Get().SetNear(cameraNear);
         };
+        virtual float GetNear()
+        {
+            return NailCamera::Instance.Get().GetNear();
+        }
 
-        virtual void SetFar(float cameraFar) override 
+        virtual void SetFar(float cameraFar) override
         {
             NailCamera::Instance.Get().SetFar(cameraFar);
         };
+        virtual float GetFar() override
+        {
+            return NailCamera::Instance.Get().GetFar();
+        }
 
-        virtual void SetResolution(float width, float height) override 
+        virtual void SetResolution(float width, float height) override
         {
             NailCamera::Instance.Get().SetResolution(width, height);
         };
+        virtual void GetResolution(float* width, float* height)
+        {
+            NailCamera::Instance.Get().GetResolution(width, height);
+        }
 
-        virtual void SetAsMain() override 
+        virtual void SetAsMain() override
         {
             NailCamera::Instance.Get().SetAsMain();
         };
-		
+
     };
 }
