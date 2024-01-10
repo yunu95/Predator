@@ -503,7 +503,6 @@
     <ClInclude Include="RangedAttackSystem.h">
       <Filter>Contents\AttackSystem</Filter>
     </ClInclude>
-    <ClInclude Include="UnitTransformComponent.h" />
     <ClInclude Include="KnockBackComponent.h">
       <Filter>Contents\UnitStatusComponent\KnockBack</Filter>
     </ClInclude>
@@ -515,6 +514,9 @@
     </ClInclude>
     <ClInclude Include="OnlyDamageComponent.h">
       <Filter>Contents\UnitStatusComponent\OnlyDamage</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTransformComponent.h">
+      <Filter>Contents\Units</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -752,7 +754,6 @@
     <ClCompile Include="RangedAttackSystem.cpp">
       <Filter>Contents\AttackSystem</Filter>
     </ClCompile>
-    <ClCompile Include="UnitTransformComponent.cpp" />
     <ClCompile Include="SnippetAllGraphicsWorked.cpp" />
     <ClCompile Include="KnockBackComponent.cpp">
       <Filter>Contents\UnitStatusComponent\KnockBack</Filter>
@@ -765,6 +766,9 @@
     </ClCompile>
     <ClCompile Include="OnlyDamageComponent.cpp">
       <Filter>Contents\UnitStatusComponent\OnlyDamage</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTransformComponent.cpp">
+      <Filter>Contents\Units</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
