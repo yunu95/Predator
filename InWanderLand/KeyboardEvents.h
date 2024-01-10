@@ -11,20 +11,32 @@ namespace application
 {
 	namespace editor
 	{
-		class KeyPressedEvent
+		class KeyboardEvent
 			: public EditorEvents
 		{
 		public:
-			CATEGORY_SETTING(EventCategory::Keyboard);
-			EVENT_SETTING(EventType::KeyPressed);
+			CATEGORY_SETTING(EventCategory::Editor | EventCategory::Input | EventCategory::Keyboard)
+		};
+
+		class KeyPressedEvent
+			: public KeyboardEvent
+		{
+		public:
+			EVENT_SETTING(EventType::KeyPressed)
+		};
+
+		class KeyDownEvent
+			: public KeyboardEvent
+		{
+		public:
+			EVENT_SETTING(EventType::KeyDown)
 		};
 
 		class KeyReleasedEvent
-			: public EditorEvents
+			: public KeyboardEvent
 		{
 		public:
-			CATEGORY_SETTING(EventCategory::Keyboard);
-			EVENT_SETTING(EventType::KeyReleased);
+			EVENT_SETTING(EventType::KeyReleased)
 		};
 	}
 }

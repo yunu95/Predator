@@ -151,6 +151,12 @@
     <Filter Include="Editor\Camera">
       <UniqueIdentifier>{330bd250-ad1e-4870-b137-7b7ca402047c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Palette\PaletteInstance\RegionInstance">
+      <UniqueIdentifier>{f4de70f3-c627-4642-9176-8b680a0b35bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteManager\RegionPaletteManager">
+      <UniqueIdentifier>{26864948-b22d-4e8f-9d2f-46cb7ec49f64}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Editor\Events\Category">
       <UniqueIdentifier>{8039b949-8b1d-456e-950b-17344a38e1cc}</UniqueIdentifier>
     </Filter>
@@ -165,6 +171,9 @@
     </Filter>
     <Filter Include="Editor\Events\Category\2_Window">
       <UniqueIdentifier>{6b007f4f-4168-4380-8d54-6523874c757c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\IO\KeyInput">
+      <UniqueIdentifier>{ba70a303-f04f-429e-a442-3276da507949}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -400,6 +409,12 @@
     <ClInclude Include="EditorCamera.h">
       <Filter>Editor\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="RegionInstance.h">
+      <Filter>Editor\Palette\PaletteInstance\RegionInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="RegionPaletteManager.h">
+      <Filter>Editor\Palette\PaletteManager\RegionPaletteManager</Filter>
+    </ClInclude>
     <ClInclude Include="EventManager.h">
       <Filter>Editor\Events</Filter>
     </ClInclude>
@@ -414,6 +429,12 @@
     </ClInclude>
     <ClInclude Include="KeyboardEvents.h">
       <Filter>Editor\Events\Category\4_Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorKeyCodes.h">
+      <Filter>Editor\IO\KeyInput</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorInputManager.h">
+      <Filter>Editor\IO\KeyInput</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -570,10 +591,7 @@
     <ClCompile Include="Module_TemplateDataEditor.cpp">
       <Filter>Editor\Panel\List\Module\List</Filter>
     </ClCompile>
-    <ClCompile Include="PaletteManager.cpp">
-      <Filter>Editor\Palette\PaletteManager</Filter>
-    </ClCompile>
-    <ClCompile Include="SnippetEditTerrain.cpp">
+    <ClCompile Include="SnippetUnitPalette.cpp">
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
     <ClCompile Include="SnippetPhysxCollider.cpp">
@@ -588,11 +606,38 @@
     <ClCompile Include="Snippet1milGameObjects.cpp">
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
+    <ClCompile Include="PaletteInstance.cpp">
+      <Filter>Editor\Palette\PaletteInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugMeshes.cpp">
+      <Filter>DebugMeshes</Filter>
+    </ClCompile>
+    <ClCompile Include="PaletteManager.cpp">
+      <Filter>Editor\Palette\PaletteManager</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitInstance.cpp">
+      <Filter>Editor\Palette\PaletteInstance\UnitInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="RegionInstance.cpp">
+      <Filter>Editor\Palette\PaletteInstance\RegionInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainInstance.cpp">
+      <Filter>Editor\Palette\PaletteInstance\TerrainInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetRegionPalette.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetGIEnableDisable.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
     <ClCompile Include="EventManager.cpp">
       <Filter>Editor\Events</Filter>
     </ClCompile>
     <ClCompile Include="EditorEvents.cpp">
       <Filter>Editor\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorInputManager.cpp">
+      <Filter>Editor\IO\KeyInput</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

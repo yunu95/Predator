@@ -127,7 +127,7 @@ namespace yunutyEngine
         // 콜라이더가 트리거 콜라이더와 서로 겹쳐진 상태로 있을때 매 프레임마다 호출되는 콜백 함수입니다.
         //virtual void OnTriggerStay(const physics::Collider* collider) {};
 
-        // 콜라이더가 트리거 콜라이더로부터 떨어져 나갈때 호출되는 콜백 함수입니다.
+        // 콜라이더가 트리거 콜라이더로부터 떨어져 나갈때 호출되는 콜백 함수입니다. 상대 콜라이더가 삭제되면서 호출될 경우, collider는 nullptr이 됩니다.
         virtual void OnTriggerExit(physics::Collider* collider) {};
         virtual ~Component();
         Transform* GetTransform();

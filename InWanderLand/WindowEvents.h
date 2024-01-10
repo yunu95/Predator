@@ -15,10 +15,10 @@ namespace application
 			: public EditorEvents
 		{
 		public:
-			CATEGORY_SETTING(EventCategory::Editor | EventCategory::Window);
-			EVENT_SETTING(EventType::WindowResize);
+			CATEGORY_SETTING(EventCategory::Editor | EventCategory::Window)
+			EVENT_SETTING(EventType::WindowResize)
 
-			WindowResizeEvent(const unsigned int& width, const unsigned int& height)
+			WindowResizeEvent(unsigned int width, unsigned int height)
 				: width(width), height(height)
 			{
 

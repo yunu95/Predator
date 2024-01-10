@@ -1,6 +1,6 @@
-/// 2023. 11. 23 ±è»óÁØ
-/// ITemplateData ÀÇ ±¸Ã¼È­µÈ Å¬·¡½º
-/// ÁöÇü
+/// 2023. 11. 23 ê¹€ìƒì¤€
+/// ITemplateData ì˜ êµ¬ì²´í™”ëœ í´ë˜ìŠ¤
+/// ì§€í˜•
 
 #pragma once
 
@@ -14,8 +14,8 @@ namespace application
 
 		struct POD_Terrain_TemplateData
 		{
-			TO_JSON(POD_Terrain_TemplateData);
-			FROM_JSON(POD_Terrain_TemplateData);
+			TO_JSON(POD_Terrain_TemplateData)
+			FROM_JSON(POD_Terrain_TemplateData)
 		};
 
 		class Terrain_TemplateData

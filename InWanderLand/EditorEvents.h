@@ -45,9 +45,9 @@ namespace application
 			// Window
 			WindowResize, WindowMove, WindowFocus,
 			// Mouse
-			MouseButtonPressed, MouseButtonReleased, MouseButtonDown, MouseMoved, MouseScrolled,
+			MouseButtonPressed, MouseButtonDown, MouseButtonUp, MouseMove, MouseWheel,
 			// Keyboard
-			KeyPressed, KeyReleased,
+			KeyPressed, KeyDown, KeyReleased,
 		};
 
 		// 멤버 함수 override 자동화를 위한 매크로 함수

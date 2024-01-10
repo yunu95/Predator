@@ -16,6 +16,8 @@
 
 #include <cassert>
 
+#include <windowsx.h>
+
 // Forward declarations of helper functions
 void GetDeviceAndDeviceContext();
 void CreateRenderTarget();
@@ -45,6 +47,12 @@ WNDCLASSEX wcEditor = { sizeof(WNDCLASSEX), CS_CLASSDC, WndEditorProc, 0L, 0L, G
 ImVec2 dockspaceArea = ImVec2();
 ImVec2 dockspaceStartPoint = ImVec2();
 function<void()> winResizeCallBackFunction = function<void()>();
+function<void()> winMouseLeftPressedCallBackFunction = function<void()>();
+function<void()> winMouseLeftUpCallBackFunction = function<void()>();
+function<void()> winMouseRightPressedCallBackFunction = function<void()>();
+function<void()> winMouseRightUpCallBackFunction = function<void()>();
+function<void(int posX, int posY)> winMouseMoveCallBackFunction = function<void(int, int)>();
+function<void(short wheelDelta)> winMouseWheelCallBackFunction = function<void(short)>();
 #endif
 
 namespace application
@@ -117,11 +125,8 @@ namespace application
 					throw std::runtime_error(std::string("failed to create d3d device!"));
 				}
 
-				// Resize CallBack 구현
-				SetEditorResizeCallBack
-				(
-					[&]() { Application::DispatchEvent<editor::WindowResizeEvent>(g_EditorResizeWidth, g_EditorResizeHeight); }
-				);
+				// Window 관련 CallBack 구현
+				SetWindowCallBack();
 
 				::ShowWindow(editorHWND, SW_SHOWDEFAULT);
 				::UpdateWindow(editorHWND);
@@ -286,9 +291,15 @@ namespace application
 		return appSpecification;
 	}
 
-	void Application::SetEditorResizeCallBack(std::function<void()> callBack)
+	void Application::SetWindowCallBack()
 	{
-		winResizeCallBackFunction = callBack;
+		winResizeCallBackFunction = [&]() { Application::DispatchEvent<editor::WindowResizeEvent>(g_EditorResizeWidth, g_EditorResizeHeight); };
+		winMouseLeftPressedCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Left); };
+		winMouseLeftUpCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Left); };
+		winMouseRightPressedCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Right); };
+		winMouseRightUpCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Right); };
+		winMouseMoveCallBackFunction = [&](int posX, int posY) { Application::DispatchEvent<editor::MouseMoveEvent>(posX, posY); };
+		winMouseWheelCallBackFunction = [&](short wheelDelta) {Application::DispatchEvent<editor::MouseWheelEvent>(wheelDelta); };
 	}
 
 	void* Application::GetSceneSRV()
@@ -374,19 +385,29 @@ namespace application
 	{
 		editor::EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<editor::WindowResizeEvent>([this](editor::WindowResizeEvent& e) { std::cout << e.GetDebugString(); return true; });
-
-		//ImGuiIO& io = ImGui::GetIO();
-		//if (io.MouseDown[0])
-		//{
-		//	dispatcher.Dispatch<editor::MouseButtonDownEvent>([this](editor::MouseButtonDownEvent))
-		//}
-
-
+		dispatcher.Dispatch<editor::MouseButtonPressedEvent>([this](editor::MouseButtonPressedEvent& e) { std::cout << e.GetDebugString(); return true; });
+		dispatcher.Dispatch<editor::MouseButtonDownEvent>([this](editor::MouseButtonDownEvent& e) { std::cout << e.GetDebugString(); return true; });
+		dispatcher.Dispatch<editor::MouseButtonUpEvent>([this](editor::MouseButtonUpEvent& e) { std::cout << e.GetDebugString(); return true; });
+		dispatcher.Dispatch<editor::MouseMoveEvent>([this](editor::MouseMoveEvent& e) { std::cout << e.GetDebugString(); return true; });
+		dispatcher.Dispatch<editor::MouseWheelEvent>([this](editor::MouseWheelEvent& e) { std::cout << e.GetDebugString(); return true; });
+		
 		layers[(int)LayerList::EditorLayer]->OnEvent(event);
 	}
 
 	void Application::ProcessEvents()
 	{
+		eim.Update();
+
+		if (eim.IsMouseButtonDown(editor::MouseCode::Left))
+		{
+			Application::DispatchEvent<editor::MouseButtonDownEvent>(editor::MouseCode::Left);
+		}
+
+		if (eim.IsMouseButtonDown(editor::MouseCode::Right))
+		{
+			Application::DispatchEvent<editor::MouseButtonDownEvent>(editor::MouseCode::Right);
+		}
+
 		while (em.Size() != 0)
 		{
 			auto eventFunc = em.PopEventCallable();
@@ -507,6 +528,8 @@ LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
 		return true;
 
+	static auto& eim = application::editor::EditorInputManager::GetSingletonInstance();
+
 	switch (msg)
 	{
 		case WM_SIZE:
@@ -539,6 +562,64 @@ LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			ClientToScreen(hWnd, &windowPos);
 			dockspaceStartPoint = ImVec2(windowPos.x, windowPos.y);
 
+			return 0;
+		}
+		case WM_LBUTTONDOWN:
+		{
+			if (winMouseLeftPressedCallBackFunction)
+			{
+				eim.Update();
+				eim.UpdateMouseButtonState(application::editor::MouseCode::Left, application::editor::KeyState::Pressed);
+				winMouseLeftPressedCallBackFunction();
+			}
+			return 0;
+		}
+		case WM_LBUTTONUP:
+		{
+			if (winMouseLeftUpCallBackFunction)
+			{
+				eim.Update();
+				eim.UpdateMouseButtonState(application::editor::MouseCode::Left, application::editor::KeyState::Up);
+				winMouseLeftUpCallBackFunction();
+			}
+			return 0;
+		}
+		case WM_RBUTTONDOWN:
+		{
+			if (winMouseRightPressedCallBackFunction)
+			{
+				eim.Update();
+				eim.UpdateMouseButtonState(application::editor::MouseCode::Right, application::editor::KeyState::Pressed);
+				winMouseRightPressedCallBackFunction();
+			}
+			return 0;
+		}
+		case WM_RBUTTONUP:
+		{
+			if (winMouseRightUpCallBackFunction)
+			{
+				eim.Update();
+				eim.UpdateMouseButtonState(application::editor::MouseCode::Right, application::editor::KeyState::Up);
+				winMouseRightUpCallBackFunction();
+			}
+			return 0;
+		}
+		case WM_MOUSEMOVE:
+		{
+			if (winMouseMoveCallBackFunction)
+			{
+				eim.Update();
+				winMouseMoveCallBackFunction(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+			}
+			return 0;
+		}
+		case WM_MOUSEWHEEL:
+		{
+			if (winMouseWheelCallBackFunction)
+			{
+				eim.Update();
+				winMouseWheelCallBackFunction(GET_WHEEL_DELTA_WPARAM(wParam));
+			}
 			return 0;
 		}
 		case WM_SYSCOMMAND:
