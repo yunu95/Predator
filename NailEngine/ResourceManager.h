@@ -37,7 +37,7 @@ public:
 	yunuGI::IMaterial* CrateMaterial(std::wstring materialName);
 	Material* CreateInstanceMaterial(const Material* material);
 	void CreateTexture(const std::wstring& texturePath);
-	std::shared_ptr<Texture>& CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, unsigned int bindFlag);
+	std::shared_ptr<Texture>& CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag);
 	std::shared_ptr<Texture>& CreateTextureFromResource(const std::wstring& texturePath, Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D);
 
 	void LoadFBX(const char* filePath);
@@ -70,9 +70,9 @@ public:
 
 	std::vector<yunuGI::IMesh*>& GetMeshList() { return this->meshVec; };
 	std::vector<yunuGI::ITexture*>& GetTextureList() { return this->textureVec; };
-	std::vector<yunuGI::IMaterial*>& GetMaterialList() 
+	std::vector<yunuGI::IMaterial*>& GetMaterialList()
 	{
-		return this->materialVec; 
+		return this->materialVec;
 	};
 	std::vector<yunuGI::IShader*>& GetShaderList() { return this->shaderVec; };
 	std::vector<yunuGI::IAnimation*>& GetAnimationList() { return this->animationVec; };
@@ -86,10 +86,10 @@ private:
 	void CreateDefaultMaterial();
 	void CreateDefaultTexture();
 
-	void FillFBXData(const std::wstring& fbxName,FBXNode* node, yunuGI::FBXData* fbxData);
+	void FillFBXData(const std::wstring& fbxName, FBXNode* node, yunuGI::FBXData* fbxData);
 	void FillFBXBoneInfoVec(const yunuGI::BoneInfo& boneInfo, std::vector<yunuGI::BoneInfo>& boneInfoVec);
 	//void CreateResourceFromFBX(FBXMeshData& meshData, std::vector<yunuGI::FBXData>& dataVec, yunuGI::FBXData& fbxData);
-	
+
 
 #pragma region LoadMesh
 	void LoadCubeMesh();
@@ -118,6 +118,7 @@ private:
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGI::IMaterial>> materialMap;
 	// Graphics 내부에서 사용 할 Material
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGI::IMaterial>> instanceMaterialMap;
+	std::unordered_map<std::wstring, std::shared_ptr<yunuGI::IMaterial>> shadowMaterialMap;
 	std::unordered_map<std::wstring, std::shared_ptr<yunuGI::IMaterial>> deferredMaterialMap;
 
 	// Shader 관련
@@ -135,7 +136,7 @@ private:
 	//// 게임 엔진에서 본 계층구조로 오브젝트 만들 때 쓰는용
 	///std::unordered_map<std::wstring, std::vector<yunuGI::BoneInfo>> fbxBoneInfoVecMap;
 	// 그래픽스 엔진 내부에서 스키닝 애니메이션에 쓸 오프셋 행렬을 가지고 있는 본 정보
-	std::unordered_map<std::wstring, std::map<std::wstring,BoneInfo>> fbxBoneInfoMap;
+	std::unordered_map<std::wstring, std::map<std::wstring, BoneInfo>> fbxBoneInfoMap;
 	std::unordered_map<std::wstring, FBXNode*> fbxNodeMap;
 
 	//
@@ -145,7 +146,7 @@ private:
 	//std::unordered_map<std::wstring, std::shared_ptr<Mesh>> meshMap;
 	//std::unordered_map<std::wstring, std::shared_ptr<yunuGIAdapter::MaterialAdapter>> materialMap;
 	//std::unordered_map<std::wstring, std::shared_ptr<yunuGIAdapter::MaterialAdapter>> instanceMaterialMap;
-	
+
 	//std::unordered_map<std::wstring, yunuGI::BoneInfo> fbxBoneInfoTreeMap;
 
 	//// 그래픽스에서 스키닝할 때 쓰는 offset matrix를 가지고 있는 본 정보

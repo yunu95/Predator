@@ -8,14 +8,21 @@ public:
 
 	void Update()
 	{
-		if (Input::isKeyPushed(KeyCode::H))
+		if (Input::isKeyDown(KeyCode::I))
 		{
-			yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(gameObject);
-			//gameObject->SetSelfActive(false);
+			gameObject->GetTransform()->position.y += gameObject->GetTransform()->position.y * Time::GetDeltaTime() * 10;
+		}
+		if (Input::isKeyDown(KeyCode::K))
+		{
+			gameObject->GetTransform()->position.y -= gameObject->GetTransform()->position.y * Time::GetDeltaTime() * 10;
 		}
 		if (Input::isKeyDown(KeyCode::J))
 		{
-			gameObject->SetSelfActive(true);
+			gameObject->GetTransform()->position.x -= gameObject->GetTransform()->position.x * Time::GetDeltaTime() * 10;
+		}
+		if (Input::isKeyDown(KeyCode::L))
+		{
+			gameObject->GetTransform()->position.x += gameObject->GetTransform()->position.x * Time::GetDeltaTime() * 10;
 		}
 	}
 };

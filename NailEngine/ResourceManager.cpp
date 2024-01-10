@@ -21,7 +21,6 @@ using namespace DirectX::PackedVector;
 #include "NailEngine.h"
 #include "RenderTargetGroup.h"
 
-
 #include "ModelLoader.h"
 
 
@@ -187,7 +186,7 @@ Material* ResourceManager::CreateInstanceMaterial(const Material* material)
 	materialName += std::to_wstring(_material->GetID());
 	_material->SetName(materialName);
 
-	instanceMaterialMap.insert({ materialName, std::shared_ptr<Material>(_material)});
+	instanceMaterialMap.insert({ materialName, std::shared_ptr<Material>(_material) });
 
 	return _material;
 }
@@ -203,7 +202,7 @@ void ResourceManager::CreateTexture(const std::wstring& texturePath)
 	textureVec.push_back(texture.get());
 }
 
-std::shared_ptr<Texture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, unsigned int bindFlag)
+std::shared_ptr<Texture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag)
 {
 	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 
@@ -452,6 +451,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateDeferredShader(L"Deferred_PointLightPS.cso");
 	CreateDeferredShader(L"Deferred_FinalPS.cso");
 	CreateShader(L"TexturePS.cso");
+	CreateShader(L"TestPS.cso");
 #pragma endregion
 }
 
@@ -492,6 +492,8 @@ void ResourceManager::CreateDefaultMaterial()
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp1,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(NORMAL)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp2,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::SHADOW)]->GetRTTexture(static_cast<int>(SHADOW)).get());
 	}
 
 	// PointLight
@@ -572,6 +574,15 @@ void ResourceManager::CreateDefaultMaterial()
 			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
 			material->SetTexture(yunuGI::Texture_Type::Temp0,
 				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR)).get());
+		}
+
+		{
+			// Shadow
+			yunuGI::IMaterial* material = CrateMaterial(L"DeferredShadow");
+			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
+			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::SHADOW)]->GetRTTexture(static_cast<int>(SHADOW)).get());
 		}
 	}
 }
@@ -975,10 +986,10 @@ void ResourceManager::LoadRactangleMesh()
 
 	// POS COLOR UV TANGENT
 	// 앞면
-	vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
-	vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
-	vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
-	vec[3] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+	vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+	vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+	vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+	vec[3] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
 
 	std::vector<unsigned int> idx(6);
 

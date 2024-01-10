@@ -12,6 +12,8 @@ cbuffer MatrixBuffer : register(b0)
     row_major matrix PTM;
     row_major matrix WVP;
     row_major matrix WorldInvTrans;
+    row_major matrix VTMInv;
+    row_major matrix lightVP;
     //float4 objectID;
 }
 
@@ -38,7 +40,7 @@ cbuffer MaterialBuffer : register(b1)
     int temp_int7;
 };
 
-// ∂Û¿Ã∆Æ ∞¸∑√
+// ÎùºÏù¥Ìä∏ Í¥ÄÎ†®
 struct LightColor
 {
     float4 diffuse;

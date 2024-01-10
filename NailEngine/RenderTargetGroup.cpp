@@ -11,7 +11,14 @@ RenderTargetGroup::~RenderTargetGroup()
 
 void RenderTargetGroup::OMSetRenderTarget()
 {
-	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(this->rtCount, RTVVec.data(), ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
+	if (this->dsv == nullptr)
+	{
+		ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(this->rtCount, RTVVec.data(), ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
+	}
+	else
+	{
+		ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(this->rtCount, RTVVec.data(), this->dsv.Get());
+	}
 }
 
 void RenderTargetGroup::UnBind()
@@ -27,7 +34,7 @@ void RenderTargetGroup::Clear()
 	}
 }
 
-void RenderTargetGroup::SetRenderTargetVec(std::vector<RenderTarget>& rtVec)
+void RenderTargetGroup::SetRenderTargetVec(std::vector<RenderTarget>& rtVec, Microsoft::WRL::ComPtr<ID3D11DepthStencilView> dsv)
 {
 	this->rtVec = rtVec;
 	this->rtCount = rtVec.size();
@@ -36,6 +43,11 @@ void RenderTargetGroup::SetRenderTargetVec(std::vector<RenderTarget>& rtVec)
 	{
 		this->RTVVec.emplace_back(rtVec[i].texture->GetRTV().Get());
 		nullRTV.emplace_back(nullptr);
+	}
+
+	if (dsv != nullptr)
+	{
+		this->dsv = dsv;
 	}
 }
 

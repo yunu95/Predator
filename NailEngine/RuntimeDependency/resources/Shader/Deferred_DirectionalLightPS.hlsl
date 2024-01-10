@@ -16,6 +16,7 @@ struct PS_OUT
 // Deferred_DirectionalLight
 // Temp0Map : View Position
 // Temp1Map : View Normal
+// Temp2Map : Shadow Map
 // temp_int0 : light index
 
 PS_OUT main(PixelIn input)

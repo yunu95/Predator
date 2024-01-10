@@ -1,10 +1,15 @@
-/// 2023. 10. 04 ±è»óÁØ
-/// ¿¡µğÅÍ¿¡¼­ ÆíÁıÀ» À§ÇÑ ³»¿ëÀ» È®ÀÎÇÒ ¼ö ÀÖ´Â View ÆĞ³Î
+/// 2023. 10. 04 ê¹€ìƒì¤€
+/// ì—ë””í„°ì—ì„œ í¸ì§‘ì„ ìœ„í•œ ë‚´ìš©ì„ í™•ì¸í•  ìˆ˜ ìˆëŠ” View íŒ¨ë„
 
 #pragma once
 
 #include "Singleton.h"
 #include "EditorPanel.h"
+
+namespace application
+{
+	class Application;
+}
 
 namespace application
 {
@@ -21,6 +26,11 @@ namespace application
 			virtual void Update(float ts) override;
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
+
+		private:
+			Application* app;
+			unsigned int rendererWidth;
+			unsigned int rendererHeight;
 		};
 	}
 }

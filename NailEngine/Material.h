@@ -19,7 +19,7 @@ public:
 	Material();
 	~Material();
 	Material(const Material& rhs);
-
+	void operator=(const Material& rhs);
 public:
 	virtual void SetVertexShader(const yunuGI::IShader* shader) override;
 	virtual void SetPixelShader(const yunuGI::IShader* shader) override;

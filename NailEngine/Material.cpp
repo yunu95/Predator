@@ -25,6 +25,16 @@ Material::Material(const Material& rhs)
 	this->name = rhs.name;
 }
 
+void Material::operator=(const Material& rhs)
+{
+	this->color = rhs.color;
+	this->vs = rhs.vs;
+	this->ps = rhs.ps;
+	this->textures = rhs.textures;
+	this->useTextures = rhs.useTextures;
+	this->name = rhs.name;
+}
+
 void Material::SetVertexShader(const yunuGI::IShader* shader)
 {
 	vs = std::static_pointer_cast<VertexShader>(ResourceManager::Instance.Get().GetShader(shader));
@@ -65,7 +75,7 @@ void Material::PushGraphicsData()
 {
 	for (unsigned int i = 0; i < textures.size(); ++i)
 	{
-		if (this->textures[i] == nullptr ||this->textures[i]->GetName().empty())
+		if (this->textures[i] == nullptr || this->textures[i]->GetName().empty())
 		{
 			this->useTextures[i] = 0;
 			continue;

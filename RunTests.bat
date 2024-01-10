@@ -15,13 +15,6 @@ for /f "tokens=*" %%i in ('vstest.console.exe --listtests %~dp0\Bin\x64\Debug\In
 		)
     	)
 )
-
-if %errorFlag% equ 1 (
-	echo Some test must have failed. >> %~dp0\testResults.log
-) else (
-	echo every test result is successful. >> %~dp0\testResults.log
-)
-
 type %~dp0\testResults.log
 
 if %errorFlag% equ 1 (

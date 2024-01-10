@@ -17,16 +17,18 @@ public:
 	void UnBind(unsigned int slot);
 
 	void CreateFromResource(Microsoft::WRL::ComPtr<ID3D11Texture2D>& tex2D);
-	void CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, unsigned int bindFlag);
+	void CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag);
 
 #pragma region Getter
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>& GetRTV() { return this->RTV; }
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>& GetSRV() { return this->SRV; }
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView>& GetDSV() { return this->DSV; }
 #pragma endregion
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RTV;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> SRV;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> DSV;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D;
 };
 

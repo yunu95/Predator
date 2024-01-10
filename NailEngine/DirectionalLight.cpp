@@ -26,3 +26,13 @@ DirectX::SimpleMath::Vector4& DirectionalLight::GetDirection()
 {
 	return this->lightInfo.direction;
 }
+
+void DirectionalLight::SetWorldTM(const DirectX::SimpleMath::Matrix& wtm)
+{
+	this->wtm = wtm;
+}
+
+DirectX::SimpleMath::Matrix& DirectionalLight::GetWorldTM()
+{
+	return this->wtm;
+}

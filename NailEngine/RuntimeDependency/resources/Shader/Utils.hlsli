@@ -35,6 +35,31 @@ void CalculateLight(int lightIndex, float3 normal, float3 pos, out float4 diffus
             diffuse += diffuseFactor * lights[lightIndex].color.diffuse;
             specular += specFactor * lights[lightIndex].color.specular;
         }
+        
+        // 그림자
+        if (length(diffuse) != 0)
+        {
+            matrix shadowVP = lightVP;
+        
+            float4 worldPos = mul(float4(pos.xyz, 1.f), VTMInv);
+            float4 shadowClipPos = mul(worldPos, shadowVP);
+            float depth = shadowClipPos.z / shadowClipPos.w;
+    
+            float2 uv = shadowClipPos.xy / shadowClipPos.w;
+            uv.y = -uv.y;
+            uv = uv * 0.5 + 0.5;
+ 
+            if (0 < uv.x && uv.x < 1 && 0 < uv.y && uv.y < 1)
+            {
+                float shadowDepth = Temp2Map.Sample(sam, uv).x;
+                if (shadowDepth > 0 && depth > shadowDepth + 0.00001f)
+                {
+                    //diffuse *= 0.5f;
+                    diffuse = float4(1,0,0,1);
+                    specular = (float4) 0.f;
+                }
+            }
+        }
     }
     else if (lights[lightIndex].lightType == 1)
     {

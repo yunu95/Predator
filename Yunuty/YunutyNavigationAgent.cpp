@@ -35,8 +35,6 @@ void yunutyEngine::NavigationAgent::AssignToNavigationField(NavigationField* nav
         //auto agent = impl->crowd->getAgent(impl->agentIdx);
     }
 }
-
-
 void yunutyEngine::NavigationAgent::SetSpeed(float speed)
 {
     impl->agentParams.maxSpeed = speed;

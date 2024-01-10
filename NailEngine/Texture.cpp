@@ -46,7 +46,7 @@ void Texture::CreateFromResource(Microsoft::WRL::ComPtr<ID3D11Texture2D>& tex2D)
 	ResourceBuilder::Instance.Get().device->GetDevice()->CreateRenderTargetView(tex2D.Get(), nullptr, this->RTV.GetAddressOf());
 }
 
-void Texture::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, unsigned int bindFlag)
+void Texture::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag)
 {
 	D3D11_TEXTURE2D_DESC texDesc{};
 	texDesc.Width = width;
@@ -62,15 +62,27 @@ void Texture::CreateTexture(const std::wstring& texturePath, unsigned int width,
 	texDesc.MiscFlags = 0;
 	HRESULT hr = ResourceBuilder::Instance.Get().device->GetDevice()->CreateTexture2D(&texDesc, nullptr, this->tex2D.GetAddressOf());
 
-	D3D11_RENDER_TARGET_VIEW_DESC rtvDesc{};
-	rtvDesc.Format = texDesc.Format;
-	rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-	ResourceBuilder::Instance.Get().device->GetDevice()->CreateRenderTargetView(this->tex2D.Get(), &rtvDesc, this->RTV.GetAddressOf());
+	if (bindFlag & D3D11_BIND_DEPTH_STENCIL)
+	{
+		D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+		dsvDesc.Flags = 0;
+		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		dsvDesc.Texture2D.MipSlice = 0;
+		ResourceBuilder::Instance.Get().device->GetDevice()->CreateDepthStencilView(this->tex2D.Get(), &dsvDesc, this->DSV.GetAddressOf());
+	}
+	else
+	{
+		D3D11_RENDER_TARGET_VIEW_DESC rtvDesc{};
+		rtvDesc.Format = texDesc.Format;
+		rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+		ResourceBuilder::Instance.Get().device->GetDevice()->CreateRenderTargetView(this->tex2D.Get(), &rtvDesc, this->RTV.GetAddressOf());
 
-	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-	srvDesc.Format = texDesc.Format;
-	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MostDetailedMip = 0;
-	srvDesc.Texture2D.MipLevels = 1;
-	ResourceBuilder::Instance.Get().device->GetDevice()->CreateShaderResourceView(this->tex2D.Get(), &srvDesc, this->SRV.GetAddressOf());
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+		srvDesc.Format = texDesc.Format;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		srvDesc.Texture2D.MipLevels = 1;
+		ResourceBuilder::Instance.Get().device->GetDevice()->CreateShaderResourceView(this->tex2D.Get(), &srvDesc, this->SRV.GetAddressOf());
+	}
 }
