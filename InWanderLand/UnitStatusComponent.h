@@ -10,5 +10,7 @@ class UnitStatusComponent : public Component
 {
 public:
 	virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) = 0;
+	virtual void OnTriggerEnter(physics::Collider* collider) override;
+
 };
 

@@ -1,5 +1,6 @@
 #include "MeleeEnemyProduction.h"
 #include "MeleeAttackSystem.h"
+#include "UnitTransformComponent.h"
 #include "DebugMeshes.h"
 
 void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition)
@@ -14,6 +15,7 @@ void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject, NavigationField* n
 	m_unitSpeed = 1.5f;
 	m_navField = navField;
 	m_startPosition = startPosition;
+	m_attackDelay = 2.0f;
 
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
@@ -42,7 +44,7 @@ void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject, NavigationField* n
 		else if (each->GetName() == L"root|003-1.NormalAttack_L")
 		{
 			m_attackAnimation = each;
-			m_attackAnimation->SetLoop(true);
+			m_attackAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_attackAnimation);
 		}
 		else if (each->GetName() == L"root|012.Death")
@@ -53,21 +55,29 @@ void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject, NavigationField* n
 		}
 	}
 
-	m_unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	m_unitAttackColliderObject->setName("UnitAttackCollider");
 
-	auto m_physicsCollider = m_unitAttackColliderObject->AddComponent<physics::BoxCollider>();
+	/// 임시 - UnitTransformComponent 생성
+	m_unitTransformGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	auto unitTransformComponent = m_unitTransformGameObject->AddComponent<UnitTransformComponent>();
+	unitTransformComponent->ownerObject = m_unitGameObject;
+
+	auto unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	unitAttackColliderObject->setName("UnitAttackCollider");
+
+	auto m_physicsCollider = unitAttackColliderObject->AddComponent<physics::BoxCollider>();
 	m_physicsCollider->SetHalfExtent({ 0.5,0.5,0.5 });
 
-	auto debugColliderMesh = AttachDebugMesh(m_unitAttackColliderObject, DebugMeshType::Rectangle, yunuGI::Color::red(), true);
+	auto debugColliderMesh = AttachDebugMesh(unitAttackColliderObject, DebugMeshType::Rectangle, yunuGI::Color::red(), true);
 
 	//m_unitAttackColliderObject->SetParent(m_unitGameObject);
 	//m_unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, 1.3f });
 
 	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
-	warriorAttackSystem->SetColliderObject(m_unitAttackColliderObject);
+	warriorAttackSystem->SetColliderObject(unitAttackColliderObject);
 	warriorAttackSystem->SetColliderRemainTime(1.0f);
 
+	unitAttackColliderObject->SetParent(m_unitTransformGameObject);
+	unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -2.0f });
 	//m_unitAttackColliderObject->SetSelfActive(false);
 }
 

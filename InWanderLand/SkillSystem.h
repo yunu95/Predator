@@ -7,6 +7,8 @@
 /// </summary>
 class SkillSystem : public Component
 {
+protected:
+	float m_totalSkillTime = 0.0f;	// 해당 시간 후에 Unit의 상태를 Idle로 돌이켜줍니다.
 public:
 	virtual void SkillActivate(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition) = 0;
 };
