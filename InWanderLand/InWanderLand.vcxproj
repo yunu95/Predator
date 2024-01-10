@@ -369,6 +369,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="BleedingComponent.h" />
     <ClInclude Include="KnockBackComponent.h" />
     <ClInclude Include="MeleeAttackSystem.h" />
+    <ClInclude Include="OnlyDamageComponent.h" />
     <ClInclude Include="RangedAttackSystem.h" />
     <ClInclude Include="StatusTimer.h" />
     <ClInclude Include="StatusTimerPool.h" />
@@ -464,6 +465,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="UnitBrush.h" />
     <ClInclude Include="UnitInstance.h" />
     <ClInclude Include="UnitPaletteManager.h" />
+    <ClInclude Include="PlayerSkillSystem.h" />
     <ClInclude Include="WarriorSkillSystem.h" />
   </ItemGroup>
   <ItemGroup>
@@ -478,6 +480,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="BleedingComponent.cpp" />
     <ClCompile Include="KnockBackComponent.cpp" />
     <ClCompile Include="MeleeAttackSystem.cpp" />
+    <ClCompile Include="OnlyDamageComponent.cpp" />
     <ClCompile Include="RangedAttackSystem.cpp" />
     <ClCompile Include="SnippetSkillSystem.cpp" />
     <ClCompile Include="StatusTimer.cpp" />
@@ -552,6 +555,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="UnitFactory.cpp" />
     <ClCompile Include="UnitProductionOrder.cpp" />
     <ClCompile Include="WarriorProduction.cpp" />
+    <ClCompile Include="PlayerSkillSystem.cpp" />
     <ClCompile Include="WarriorSkillSystem.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

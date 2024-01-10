@@ -196,6 +196,9 @@
     <Filter Include="Contents\UnitStatusComponent\KnockBack">
       <UniqueIdentifier>{0562aa4c-cdda-4cb7-845e-b4dd252c119b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\UnitStatusComponent\OnlyDamage">
+      <UniqueIdentifier>{a747ad64-1ec4-4e4a-b3dd-6afdf9903359}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -504,8 +507,14 @@
     <ClInclude Include="KnockBackComponent.h">
       <Filter>Contents\UnitStatusComponent\KnockBack</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerSkillSystem.h">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClInclude>
     <ClInclude Include="WarriorSkillSystem.h">
       <Filter>Contents\SkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="OnlyDamageComponent.h">
+      <Filter>Contents\UnitStatusComponent\OnlyDamage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -748,8 +757,14 @@
     <ClCompile Include="KnockBackComponent.cpp">
       <Filter>Contents\UnitStatusComponent\KnockBack</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerSkillSystem.cpp">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClCompile>
     <ClCompile Include="WarriorSkillSystem.cpp">
       <Filter>Contents\SkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="OnlyDamageComponent.cpp">
+      <Filter>Contents\UnitStatusComponent\OnlyDamage</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

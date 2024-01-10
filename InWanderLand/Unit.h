@@ -91,9 +91,11 @@ protected:
 	float chaseFunctionElapsed;
 	float chaseFunctionCallDelay = 0.1f;
 
+	float attackStartElapsed = 0.0f;
+
 	float attackStartDelay = 0.3f;
 	float attackFunctionElapsed;
-	float attackFunctionCallDelay = 0.5f;
+	float attackFunctionCallDelay = 2.0f;
 	bool isAttackStarted = false;
 
 	float deathFunctionElapsed;
@@ -125,6 +127,7 @@ protected:
 	/// <summary>
 	/// 애니메이션 관련 멤버
 	/// </summary>
+	
 	IAnimation* m_idleAnimation;
 	IAnimation* m_walkAnimation;
 	IAnimation* m_attackAnimation;
@@ -132,6 +135,10 @@ protected:
 
 	/// 유닛이 속해있는 field
 	NavigationField* m_unitNavField;
+
+	/// 현재 스킬 활성화 시 적용되는 스킬 적용 위치
+	Vector3d m_skillPosition;
+	SkillEnum m_currentSelectedSkill;
 
 protected:
 	void IdleEngage();
@@ -164,6 +171,8 @@ protected:
 	void AttackUpdateFunction();
 	void QSkillUpdateFunction();
 	void DeathUpdateFunction();
+	
+	void CheckCurrentAnimation(IAnimation* currentStateAnimation);
 
 	void StopMove();
 	void LookAt(Vector3d destination);
@@ -213,5 +222,8 @@ public:
 
 	void SetNavField(NavigationField* p_navField);
 	NavigationField* GetNavField() const;
+
+
+	void EndSkillState();
 };
 

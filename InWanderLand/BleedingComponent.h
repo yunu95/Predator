@@ -19,6 +19,5 @@ public:
 	
 public:
 	virtual void Update() override;
-	virtual void OnTriggerEnter(physics::Collider* collider) override;
 };
 

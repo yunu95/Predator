@@ -36,4 +36,9 @@ void InputManager::Update()
 	{
 		PlayerController::GetInstance()->SetLeftClickSkill(Unit::SkillEnum::Q);
 	}
+
+	if (yunutyEngine::Input::isKeyDown(KeyCode::W))
+	{
+		PlayerController::GetInstance()->SetLeftClickSkill(Unit::SkillEnum::W);
+	}
 }
