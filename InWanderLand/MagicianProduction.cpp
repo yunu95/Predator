@@ -1,5 +1,6 @@
 #include "MagicianProduction.h"
 #include "RangedAttackSystem.h"
+#include "UnitTransformComponent.h"
 
 void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition)
 {
@@ -42,7 +43,7 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 		else if (each->GetName() == L"root|003-1.NormalAttack_L")
 		{
 			m_attackAnimation = each;
-			m_attackAnimation->SetLoop(true);
+			m_attackAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_attackAnimation);
 		}
 		else if (each->GetName() == L"root|012.Death")
@@ -52,6 +53,11 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 			animator->GetGI().PushAnimation(m_deathAnimation);
 		}
 	}
+
+	/// 임시 - UnitTransformComponent 생성
+	m_unitTransformGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	auto unitTransformComponent = m_unitTransformGameObject->AddComponent<UnitTransformComponent>();
+	unitTransformComponent->ownerObject = m_unitGameObject;
 
 	/// Unit Attack Collider Setting
 	auto magicianAttackSystem = m_unitGameObject->AddComponent<RangedAttackSystem>();

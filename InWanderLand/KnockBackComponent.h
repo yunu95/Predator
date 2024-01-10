@@ -10,13 +10,12 @@ class KnockBackComponent : public UnitStatusComponent
 {
 private:
 	float m_power = 3.0f;
-	float m_duration = 1.0f;
+	float m_duration = 0.2f;
 
 public:
 	virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) override;
 
 public:
 	virtual void Update() override;
-	virtual void OnTriggerEnter(physics::Collider* collider) override;
 };
 

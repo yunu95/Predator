@@ -4,6 +4,7 @@
 #pragma once
 
 #include "EditorEvents.h"
+#include "EditorKeyCodes.h"
 
 #include <sstream>
 
@@ -11,39 +12,200 @@ namespace application
 {
 	namespace editor
 	{
-		class MouseButtonPressedEvent
+		class MouseButtonEvent
 			: public EditorEvents
 		{
 		public:
-			EVENT_SETTING(Mouse, MouseButtonPressed);
+			CATEGORY_SETTING(EventCategory::Editor | EventCategory::Input | EventCategory::Mouse)
+
+			MouseCode GetMouseCode() const { return mouseCode; }
+
+		protected:
+			MouseButtonEvent(MouseCode mouseCode)
+				: mouseCode(mouseCode)
+			{
+		
+			}
+
+		protected:
+			MouseCode mouseCode;
 		};
 
-		class MouseButtonReleasedEvent
-			: public EditorEvents
+		class MouseButtonPressedEvent
+			: public MouseButtonEvent
 		{
 		public:
-			EVENT_SETTING(Mouse, MouseButtonReleased);
+			EVENT_SETTING(EventType::MouseButtonPressed)
+
+			MouseButtonPressedEvent(MouseCode mouseCode)
+				: MouseButtonEvent(mouseCode)
+			{
+
+			}
+
+			virtual std::string GetDebugString() const
+			{
+				std::stringstream ss;
+				ss << "[" + GetName() + "] ";
+				auto code = GetMouseCode();
+				switch (code)
+				{
+					case application::editor::MouseCode::Left:
+					{
+						ss << "Left Pressed\n";
+						break;
+					}
+					case application::editor::MouseCode::Middle:
+					{
+						ss << "Wheel Pressed\n";
+						break;
+					}
+					case application::editor::MouseCode::Right:
+					{
+						ss << "Right Pressed\n";
+						break;
+					}
+					default:
+						break;
+				}
+				return ss.str();
+			}
 		};
 
 		class MouseButtonDownEvent
-			: public EditorEvents
+			: public MouseButtonEvent
 		{
 		public:
-			EVENT_SETTING(Mouse, MouseButtonDown);
+			EVENT_SETTING(EventType::MouseButtonDown)
+
+			MouseButtonDownEvent(MouseCode mouseCode)
+				: MouseButtonEvent(mouseCode)
+			{
+
+			}
+
+			virtual std::string GetDebugString() const
+			{
+				std::stringstream ss;
+				ss << "[" + GetName() + "] ";
+				auto code = GetMouseCode();
+				switch (code)
+				{
+					case application::editor::MouseCode::Left:
+					{
+						ss << "Left Down\n";
+						break;
+					}
+					case application::editor::MouseCode::Middle:
+					{
+						ss << "Wheel Down\n";
+						break;
+					}
+					case application::editor::MouseCode::Right:
+					{
+						ss << "Right Down\n";
+						break;
+					}
+					default:
+						break;
+				}
+				return ss.str();
+			}
 		};
 
-		class MouseMovedEvent
-			: public EditorEvents
+		class MouseButtonUpEvent
+			: public MouseButtonEvent
 		{
 		public:
-			EVENT_SETTING(Mouse, MouseMoved);
+			EVENT_SETTING(EventType::MouseButtonUp)
+
+			MouseButtonUpEvent(MouseCode mouseCode)
+				: MouseButtonEvent(mouseCode)
+			{
+
+			}
+
+			virtual std::string GetDebugString() const
+			{
+				std::stringstream ss;
+				ss << "[" + GetName() + "] ";
+				auto code = GetMouseCode();
+				switch (code)
+				{
+					case application::editor::MouseCode::Left:
+					{
+						ss << "Left Up\n";
+						break;
+					}
+					case application::editor::MouseCode::Middle:
+					{
+						ss << "Wheel Up\n";
+						break;
+					}
+					case application::editor::MouseCode::Right:
+					{
+						ss << "Right Up\n";
+						break;
+					}
+					default:
+						break;
+				}
+				return ss.str();
+			}
 		};
 
-		class MouseScrolledEvent
+		class MouseMoveEvent
 			: public EditorEvents
 		{
 		public:
-			EVENT_SETTING(Mouse, MouseScrolled);
+			CATEGORY_SETTING(EventCategory::Editor | EventCategory::Input | EventCategory::Mouse)
+			EVENT_SETTING(EventType::MouseMove)
+
+			MouseMoveEvent(int posX, int posY)
+				: posX(posX), posY(posY)
+			{
+
+			}
+
+			int GetPosX() { return posX; }
+			int GetPosY() { return posY; }
+
+			virtual std::string GetDebugString() const
+			{
+				std::stringstream ss;
+				ss << "[" + GetName() + "] posX : " << posX << " / posY : " << posY << '\n';
+				return ss.str();
+			}
+
+		private:
+			int posX;
+			int posY;
+		};
+
+		class MouseWheelEvent
+			: public EditorEvents
+		{
+		public:
+			CATEGORY_SETTING(EventCategory::Editor | EventCategory::Input | EventCategory::Mouse)
+			EVENT_SETTING(EventType::MouseWheel)
+
+			MouseWheelEvent(short wheelDelta)
+				: wheelDelta(wheelDelta)
+			{
+
+			}
+
+			short GetWheelDelta() { return wheelDelta; }
+
+			virtual std::string GetDebugString() const
+			{
+				std::stringstream ss;
+				ss << "[" + GetName() + "] wheelDelta : " << wheelDelta << '\n';
+				return ss.str();
+			}
+
+		private:
+			short wheelDelta;
 		};
 	}
 }

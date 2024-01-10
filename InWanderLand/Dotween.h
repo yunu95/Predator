@@ -1,14 +1,14 @@
 #pragma once
 /// <summary>
-/// DotweenÀ» ÀÌ¿ëÇÏ¸é ¼öÄ¡ÀÇ º¯°æÀ» ±×·¡ÇÁ´ë·Î Á¶Àı °¡´É.
-/// ¶ÇÇÑ delay¸¦ ÀÌ¿ëÇØ nÃÊ µÚ¿¡ ½ÇÇà½ÃÅ³ ¼öµµ ÀÖµµ·Ï ÇÏ±â (µğÆúÆ® ¸Å°³º¯¼ö)
-/// ÀÌ¸¦ ÀÌ¿ëÇÑ position, scale, rotation ±â´É ±¸Çö.
-/// ¿øÇÏ´Â ÇüÅÂ : (GameObject) dotWeen->AddComponent<Dotween>;
-/// dotWeen->DoMove( ´ë»ó ¿ÀºêÁ§Æ®, endValue, duration, delay, Ease )...
-/// ¸Å°³º¯¼ö°¡ ³Ê¹« ³Ê¹« ¸¹¾Ó
-/// ¸â¹öº¯¼ö·Î Ease°ª °®°í, delay´Â µğÆúÆ®¶ó°í Ä¡¸é...
-/// ÀÏ´Ü delay = 0, Ease : Linear·Î ¸¸µé¾îº¸°í »ı°¢ÇÏÀÚ
-/// ÀÚ±â ÀÚ½ÅÀ» °è¼Ó ¸®ÅÏÇØÁÖ¸é¼­ objectÀÇ °ªÀ» ¹Ù²ãÁØ´Ù...?
+/// Dotweenì„ ì´ìš©í•˜ë©´ ìˆ˜ì¹˜ì˜ ë³€ê²½ì„ ê·¸ë˜í”„ëŒ€ë¡œ ì¡°ì ˆ ê°€ëŠ¥.
+/// ë˜í•œ delayë¥¼ ì´ìš©í•´ nì´ˆ ë’¤ì— ì‹¤í–‰ì‹œí‚¬ ìˆ˜ë„ ìˆë„ë¡ í•˜ê¸° (ë””í´íŠ¸ ë§¤ê°œë³€ìˆ˜)
+/// ì´ë¥¼ ì´ìš©í•œ position, scale, rotation ê¸°ëŠ¥ êµ¬í˜„.
+/// ì›í•˜ëŠ” í˜•íƒœ : (GameObject) dotWeen->AddComponent<Dotween>;
+/// dotWeen->DoMove( ëŒ€ìƒ ì˜¤ë¸Œì íŠ¸, endValue, duration, delay, Ease )...
+/// ë§¤ê°œë³€ìˆ˜ê°€ ë„ˆë¬´ ë„ˆë¬´ ë§ì•™
+/// ë©¤ë²„ë³€ìˆ˜ë¡œ Easeê°’ ê°–ê³ , delayëŠ” ë””í´íŠ¸ë¼ê³  ì¹˜ë©´...
+/// ì¼ë‹¨ delay = 0, Ease : Linearë¡œ ë§Œë“¤ì–´ë³´ê³  ìƒê°í•˜ì
+/// ìê¸° ìì‹ ì„ ê³„ì† ë¦¬í„´í•´ì£¼ë©´ì„œ objectì˜ ê°’ì„ ë°”ê¿”ì¤€ë‹¤...?
 /// </summary>
 #include <iostream>
 #include <map>
@@ -43,20 +43,20 @@ public:
 
 	void StopAllDotweenFunction();
 
-	/// Ã¹ ¸Å°³º¯¼ö´Â GameObject·Î ¹Ù²ãÁÙ ¿¹Á¤...!
+	/// ì²« ë§¤ê°œë³€ìˆ˜ëŠ” GameObjectë¡œ ë°”ê¿”ì¤„ ì˜ˆì •...!
 	Dotween& DOMove(Vector3d endPosition, double p_duration);
 	Dotween& DOScale(Vector3d endScale, double p_duration);
 	Dotween& DORotate(Vector3d endRotation, double p_duration);
 	Dotween& DOQRotate(Vector3d axis, double angle, double p_duration);
 
-	// DOLookAtForBossÀº YÃàÀ» °í·ÁÇÏÁö ¾Ê°í ¸¸µç °Í. (À§¾Æ·¡ °í·Á X), DOLookAtÀº YÃà±îÁö µ¹¸°´Ù.
-	Dotween& DOLookAt(Transform* lookTransform, double duration, bool isYaxisInclude);
+	// DOLookAtForBossì€ Yì¶•ì„ ê³ ë ¤í•˜ì§€ ì•Šê³  ë§Œë“  ê²ƒ. (ìœ„ì•„ë˜ ê³ ë ¤ X), DOLookAtì€ Yì¶•ê¹Œì§€ ëŒë¦°ë‹¤.
+	Dotween& DOLookAt(Vector3d lookTransform, double duration, bool isYaxisInclude);
 	
-	// ¾Æ·¡ÀÇ ÇÔ¼öµéÀº ±âÁ¸ Dotween¿£ ¾ø´Â ÇÔ¼öµé...
+	// ì•„ë˜ì˜ í•¨ìˆ˜ë“¤ì€ ê¸°ì¡´ Dotweenì—” ì—†ëŠ” í•¨ìˆ˜ë“¤...
 	Dotween& DOCustom(double p_duration);
 	Dotween& DONothing(double p_duration);
 
-	// strength : Ãà¸¶´Ù ÀÌµ¿ÇÏ´Â °ª.			vibrato : Èçµé¸²ÀÇ °­µµ
+	// strength : ì¶•ë§ˆë‹¤ ì´ë™í•˜ëŠ” ê°’.			vibrato : í”ë“¤ë¦¼ì˜ ê°•ë„
 	Dotween& DOShakePosition(double p_duration, double strength = 2.0f, int vibrato = 2);
 
 	Dotween& SetDelay(double p_delay);
@@ -66,10 +66,10 @@ public:
 
 	Dotween& OnUpdate(std::function<void()> updateFunc);
 
-	// DO ÇÔ¼ö°¡ È£ÃâµÉ ¶§¸¶´Ù functionÀ» ³Ö¾îÁÖ±â À§ÇÑ ÀÓ½Ã °´Ã¼.
-	// ¾îÂ÷ÇÇ ´ëÀÔµÉ °´Ã¼ delete µÉ °ÍÀÌ±â ¶§¹®¿¡ µû·Î delete ÇÏÁö ¾Ê´Â´Ù.
+	// DO í•¨ìˆ˜ê°€ í˜¸ì¶œë  ë•Œë§ˆë‹¤ functionì„ ë„£ì–´ì£¼ê¸° ìœ„í•œ ì„ì‹œ ê°ì²´.
+	// ì–´ì°¨í”¼ ëŒ€ì…ë  ê°ì²´ delete ë  ê²ƒì´ê¸° ë•Œë¬¸ì— ë”°ë¡œ delete í•˜ì§€ ì•ŠëŠ”ë‹¤.
 
-	// °¢µµ°¡ 0~360µµ°¡ ¾Æ´Ò ¶§ 0~360À¸·Î Á¶Á¤ÇØÁÖ´Â ÇÔ¼ö. 
+	// ê°ë„ê°€ 0~360ë„ê°€ ì•„ë‹ ë•Œ 0~360ìœ¼ë¡œ ì¡°ì •í•´ì£¼ëŠ” í•¨ìˆ˜. 
 	double AdjustRotation(double& rot);
 
 	//void clearDotweenTimerMap();
@@ -86,5 +86,6 @@ private:
 
 	double previousAngle;
 
+	float currentRotation{ 270 };
 };
 

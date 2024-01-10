@@ -3,6 +3,9 @@
 #include "PlayerController.h"
 #include "AttackSystem.h"
 #include "InputManager.h"
+#include "PlayerSkillSystem.h"
+#include "Dotween.h"
+
 
 void Unit::Start()
 {
@@ -157,6 +160,8 @@ void Unit::SkillEngage()
 	//GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
 	//GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_deathAnimation);
 
+	GetGameObject()->GetComponent<PlayerSkillSystem>()->SkillActivate(m_currentSelectedSkill, m_skillPosition);
+
 	StopMove();
 }
 
@@ -174,6 +179,8 @@ void Unit::DeathEngage()
 #pragma region State Update()
 void Unit::IdleUpdate()
 {
+	CheckCurrentAnimation(m_idleAnimation);
+
 	idleElapsed += Time::GetDeltaTime();
 
 	IdleUpdateFunction();
@@ -182,6 +189,8 @@ void Unit::IdleUpdate()
 
 void Unit::MoveUpdate()
 {
+	CheckCurrentAnimation(m_walkAnimation);
+
 	moveFunctionElapsed += Time::GetDeltaTime();
 
 	Vector3d mouseXZVector = Vector3d(m_currentMovePosition.x, 0, m_currentMovePosition.z);
@@ -194,6 +203,8 @@ void Unit::MoveUpdate()
 
 void Unit::AttackMoveUpdate()
 {
+	CheckCurrentAnimation(m_walkAnimation);
+
 	moveFunctionElapsed += Time::GetDeltaTime();
 
 	Vector3d mouseXZVector = Vector3d(m_currentMovePosition.x, 0, m_currentMovePosition.z);
@@ -206,18 +217,24 @@ void Unit::AttackMoveUpdate()
 
 void Unit::AttackUpdate()
 {
+	/// AttackState에서는 공격 후 다음 공격까지 남은 시간 동안 idleAnimation을 적용하므로 다른 방식으로 체크하는게 좋겠다.
+	//CheckCurrentAnimation(m_attackAnimation);
+
 	attackFunctionElapsed += Time::GetDeltaTime();
 
 	LookAt(m_currentTargetObject->GetTransform()->GetWorldPosition());
 
-	if (attackFunctionElapsed >= attackFunctionCallDelay)
+	if (attackFunctionElapsed >= attackFunctionCallDelay || !isAttackStarted)
 	{
-		if (!isAttackStarted)
-		{
-			GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_attackAnimation, animationLerpDuration, animationTransitionSpeed);
-			isAttackStarted = true;
-		}
-		AttackUpdateFunction();
+		isAttackStarted = true;
+		attackFunctionElapsed = 0.0f;
+
+		GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_attackAnimation, animationLerpDuration, animationTransitionSpeed);
+		GetGameObject()->GetComponent<AttackSystem>()->Attack(m_currentTargetObject->GetComponent<Unit>());
+		GetGameObject()->GetComponent<Dotween>()->DONothing(m_attackAnimation->GetTotalFrame() * Time::GetDeltaTime()).OnComplete([=]()
+			{
+				GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
+			});
 	}
 }
 
@@ -243,6 +260,8 @@ void Unit::SkillUpdate()
 
 void Unit::ChaseUpdate()
 {
+	CheckCurrentAnimation(m_walkAnimation);
+
 	chaseFunctionElapsed += Time::GetDeltaTime();
 
 	LookAt(m_currentTargetObject->GetTransform()->GetWorldPosition());
@@ -253,6 +272,8 @@ void Unit::ChaseUpdate()
 
 void Unit::DeathUpdate()
 {
+	CheckCurrentAnimation(m_deathAnimation);
+
 	deathFunctionElapsed += Time::GetDeltaTime();
 
 	if (deathFunctionElapsed >= deathAnimationDelay)
@@ -290,19 +311,17 @@ void Unit::MoveEngageFunction()
 void Unit::AttackMoveEngageFunction()
 {
 	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
-
 }
 
 void Unit::ChaseEngageFunction()
 {
 	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
-
 }
 
 void Unit::AttackEngageFunction()
 {
 	StopMove();
-	
+
 	//// Idle Animation 적용 후 Delay주고 쏘기
 	//GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetCurrentFrame(0);
 	//GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(m_idleAnimation);
@@ -312,14 +331,13 @@ void Unit::AttackEngageFunction()
 	//GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_attackAnimation, animationLerpDuration, animationTransitionSpeed);
 
 	/// AttackSystem 적용
-	GetGameObject()->GetComponent<AttackSystem>()->Attack(m_currentTargetObject->GetComponent<Unit>());
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_attackAnimation, animationLerpDuration, animationTransitionSpeed);
+	//GetGameObject()->GetComponent<AttackSystem>()->Attack(m_currentTargetObject->GetComponent<Unit>());
+	//GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_attackAnimation, animationLerpDuration, animationTransitionSpeed);
 }
 
 void Unit::DeathEngageFunction()
 {
 	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_deathAnimation, animationLerpDuration, animationTransitionSpeed);
-
 	m_opponentObjectList.clear();
 
 	ReportUnitDeath();
@@ -364,8 +382,9 @@ void Unit::AttackUpdateFunction()
 	//if (m_currentTargetObject->GetComponent<Unit>()->GetUnitCurrentState() == UnitState::Death)
 
 	//if(m_attackType == AttackType::Melee)
-
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(m_attackAnimation, animationLerpDuration, animationTransitionSpeed);
 	GetGameObject()->GetComponent<AttackSystem>()->Attack(m_currentTargetObject->GetComponent<Unit>());
+
 }
 
 void Unit::QSkillUpdateFunction()
@@ -385,6 +404,14 @@ void Unit::DeathUpdateFunction()
 	GetGameObject()->GetComponent<NavigationAgent>()->SetActive(false);
 	GetGameObject()->SetSelfActive(false);
 	//GetGameObject()->SetSelfActive(false);
+}
+
+void Unit::CheckCurrentAnimation(IAnimation* currentStateAnimation)
+{
+	if (GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().GetCurrentAnimation() != currentStateAnimation)
+	{
+		GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(currentStateAnimation, animationLerpDuration, animationTransitionSpeed);
+	}
 }
 
 #pragma endregion
@@ -486,7 +513,7 @@ void Unit::LookAt(Vector3d destination)
 	}
 
 	// 진동 방지 - forward가 distance와 어느정도 일직선 상이 된다면 돌지말것.
-	if (axis.Magnitude() >= 0.5 || isUnitFliped == true)
+	if (axis.Magnitude() >= 0.7 || isUnitFliped == true)
 	{
 		currentRotation += localRotationSpeed * Time::GetDeltaTime();
 		GetGameObject()->GetTransform()->rotation = Quaternion({ 0, currentRotation, 0 });
@@ -596,6 +623,8 @@ void Unit::OrderAttackMove(Vector3d position)
 void Unit::OrderSkill(SkillEnum p_skillNum, Vector3d position)
 {
 	currentOrder = UnitState::Skill;
+	m_skillPosition = position;
+	m_currentSelectedSkill = p_skillNum;
 
 	PlayerController::GetInstance()->SetLeftClickMove();
 
@@ -633,5 +662,11 @@ void Unit::SetNavField(NavigationField* p_navField)
 NavigationField*  Unit::GetNavField() const
 {
 	return m_unitNavField;
+}
+
+void Unit::EndSkillState()
+{
+	currentOrder = UnitState::Idle;
+	PlayerController::GetInstance()->SetLeftClickMove();
 }
 

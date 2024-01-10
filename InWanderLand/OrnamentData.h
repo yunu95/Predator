@@ -1,6 +1,6 @@
-/// 2023. 11. 23 ±è»óÁØ
-/// IEditableData ÀÇ ±¸Ã¼È­µÈ Å¬·¡½º
-/// Àå½Ä¹°
+/// 2023. 11. 23 ê¹€ìƒì¤€
+/// IEditableData ì˜ êµ¬ì²´í™”ëœ í´ë˜ìŠ¤
+/// ì¥ì‹ë¬¼
 
 #pragma once
 
@@ -28,8 +28,8 @@ namespace application
 		{
 			Ornament_TemplateData* templateData;
 
-			TO_JSON(POD_Ornament);
-			FROM_JSON(POD_Ornament);
+			TO_JSON(POD_Ornament)
+			FROM_JSON(POD_Ornament)
 		};
 
 		class OrnamentData

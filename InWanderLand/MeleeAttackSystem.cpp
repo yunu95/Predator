@@ -2,7 +2,8 @@
 
 void MeleeAttackSystem::Attack(Unit* opponentUnit)
 {
-	meleeAttackColliderObject->SetSelfActive(true);
+	//meleeAttackColliderObject->SetSelfActive(true);
+	meleeAttackColliderObject->GetComponent<physics::BoxCollider>()->SetActive(true);
 	colliderActivated = true;
 }
 
@@ -28,9 +29,9 @@ void MeleeAttackSystem::Update()
 		colliderRemainElasped += Time::GetDeltaTime();
 		if (colliderRemainElasped >= attackColliderRemainTime)
 		{
-			meleeAttackColliderObject->SetSelfActive(false);
+			//meleeAttackColliderObject->SetSelfActive(false);
+			meleeAttackColliderObject->GetComponent<physics::BoxCollider>()->SetActive(false);
 			colliderActivated = false;
 		}
 	}
-	
 }
