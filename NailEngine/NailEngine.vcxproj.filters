@@ -171,9 +171,6 @@
     <ClInclude Include="Shader.h">
       <Filter>Resource\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>ResourceManager</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Resource\Mesh</Filter>
     </ClInclude>
@@ -288,6 +285,9 @@
     <ClInclude Include="UIImage.h">
       <Filter>GraphicsEngine\RenderableManager\IRenderable\UI</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -295,9 +295,6 @@
     </ClCompile>
     <ClCompile Include="NailEngine.cpp">
       <Filter>GraphicsEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="Device.cpp">
-      <Filter>GraphicsEngine\Device</Filter>
     </ClCompile>
     <ClCompile Include="ResourceBuilder.cpp">
       <Filter>GraphicsEngine\ResourceBuilder</Filter>
@@ -307,9 +304,6 @@
     </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>Resource\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Resource\Mesh</Filter>
@@ -397,6 +391,12 @@
     </ClCompile>
     <ClCompile Include="UIImage.cpp">
       <Filter>GraphicsEngine\RenderableManager\IRenderable\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Device.cpp">
+      <Filter>GraphicsEngine\Device</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

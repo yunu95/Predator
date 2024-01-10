@@ -20,19 +20,19 @@ namespace application
 
 		void EditorLayer::Initialize()
 		{
-			/// Test È¯°æÀ» À§ÇÑ Initialize Áö¿ø
+			/// Test í™˜ê²½ì„ ìœ„í•œ Initialize ì§€ì›
 			if (EditorLayer::testInitializer)
 			{
 				EditorLayer::testInitializer();
 				return;
 			}
 
-			/// °¢Á¾ ¸Å´ÏÀú Å¬·¡½º ¸Ş¸ğ¸® ÇÒ´ç
+			/// ê°ì¢… ë§¤ë‹ˆì € í´ë˜ìŠ¤ ë©”ëª¨ë¦¬ í• ë‹¹
 			MapFileManager::GetSingletonInstance();
 
-			/// ¿¡µğÅÍ¿¡¼­ »ç¿ëÇÒ ¿¡µğÅÍ Ä«¸Ş¶ó, °ÔÀÓºä Ä«¸Ş¶ó »ı¼º
+			/// ì—ë””í„°ì—ì„œ ì‚¬ìš©í•  ì—ë””í„° ì¹´ë©”ë¼, ê²Œì„ë·° ì¹´ë©”ë¼ ìƒì„±
 
-			/// ¿¡µğÅÍ ÆĞ³Î »ı¼º ¹× ÃÊ±âÈ­ ÁøÇà
+			/// ì—ë””í„° íŒ¨ë„ ìƒì„± ë° ì´ˆê¸°í™” ì§„í–‰
 			editorPanelList.resize((int)Panel_List::Size);
 
 			editorPanelList[(int)Panel_List::HIERARCHY] = std::unique_ptr<Panel>(&HierarchyPanel::GetSingletonInstance());
@@ -43,7 +43,7 @@ namespace application
 			editorPanelList[(int)Panel_List::CAMERAVIEW] = std::unique_ptr<Panel>(&CameraViewPanel::GetSingletonInstance());
 			editorPanelList[(int)Panel_List::PALETTE] = std::unique_ptr<Panel>(&PalettePanel::GetSingletonInstance());
 
-			/// ¿¡µğÅÍ ¸ğµâ »ı¼º ¹× ÃÊ±âÈ­ ÁøÇà
+			/// ì—ë””í„° ëª¨ë“ˆ ìƒì„± ë° ì´ˆê¸°í™” ì§„í–‰
 			editorModuleList.resize((int)Module_List::Size);
 
 			editorModuleList[(int)Module_List::TemplateDataEditor] = std::unique_ptr<EditorModule>(&Module_TemplateDataEditor::GetSingletonInstance());
@@ -102,6 +102,21 @@ namespace application
 
 				each->Finalize();
 			}
+		}
+
+		void EditorLayer::OnEvent(EditorEvents& event)
+		{
+			for (auto& each : editorPanelList)
+			{
+				each->OnEvent(event);
+			}
+
+			for (auto& each : editorModuleList)
+			{
+
+				each->OnEvent(event);
+			}
+
 		}
 
 		void EditorLayer::AssignTestInitializer(std::function<void()> testInitializer)

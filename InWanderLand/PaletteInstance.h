@@ -25,6 +25,8 @@ namespace application
             class PaletteInstance : public yunutyEngine::Component
             {
             public:
+#ifdef EDITOR
+                virtual void Start() override;
                 /// <summary>
                 /// OnSelected는 객체가 선택되었을 때 호출됩니다. 객체가 선택되었음을 명확히 알 수 있도록 그래픽스 효과를 구현하십시오. 
                 /// OnHover는 팔레트 선택 모드에서 마우스 커서가 해당 객체에 올라갔을 때 호출됩니다. OnSelected와 유사하지만 구분은 가능한 효과를 구현하십시오.
@@ -32,19 +34,34 @@ namespace application
                 /// 이 세가지 함수들은 중복되어 호출될 수 있습니다. 멱등성을 고려해 구현하십시오. 
                 /// 예를 들어, OnSelected 함수가 두번 연속 호출된 경우와 한번 호출된 경우의 결과는 서로 같아야 합니다.
                 /// </summary>
-                virtual void OnHover() = 0;
-                virtual void OnSelected() = 0;
-                virtual void OnDeselected() = 0;
+                virtual void OnHover();
+                virtual void OnHoverLeft();
+                virtual void OnSelected();
+                virtual void OnDeselected();
+#endif
                 /// <summary>
                 /// 현재 존재하는 모든 PaletteInstance들을 에디터 요소에서 인게임 요소로 활성화시킵니다.
                 /// 지형의 경우 네비게이션 메시를 구워 인게임에서 오갈 수 있는 지형으로 만듭니다.
                 /// 유닛의 경우 인게임 유닛을 생성합니다.
-                /// 이 동작을 한 이후에도 PaletteInstance들의 상태는 변하지 않아야 합니다.
                 /// </summary>
                 static void ApplyInstances();
+                /// <summary>
+                /// 현재 게임 요소로서 활성화된 모든 PaletteInstance들을 에디터에서 조작 가능한 상태로 되돌립니다.
+                /// 기본 동작은 피킹을 위해 쓰이는 충돌체들을 다시 활성화시킵니다.
+                /// </summary>
+                static void ResetInstances();
             protected:
-                virtual void ApplyInstance() =0;
+                virtual void ApplyInstance();
+                virtual void ResetInstance();
+                float selectCircleRadius{ 1.25 };
+                yunutyEngine::physics::BoxCollider* pickingCollider{ nullptr };
             private:
+#ifdef EDITOR
+                yunutyEngine::physics::RigidBody* rigidBody{ nullptr };
+                yunutyEngine::graphics::StaticMeshRenderer* selectCircle{nullptr};
+                bool isSelected{ false };
+                bool isHovering{ false };
+#endif
             };
         }
     }

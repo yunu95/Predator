@@ -12,10 +12,22 @@ public:
     function<void(Vector3d)> groundRightClickCallback{ [](Vector3d) {} };
     function<void(Vector3d)> groundRightClickReleaseCallback{ [](Vector3d) {} };
     function<void(Vector3d)> groundHoveringClickCallback{ [](Vector3d) {} };
+    function<void()> deleteButtonCallback{ []() {} };
+    function<void()> tabButtonCallback{ []() {} };
+    function<void()> cButtonCallback{ []() {} };
     void Update()
     {
         if (Input::isKeyPushed(KeyCode::Tab))
             roamingMode = !roamingMode;
+
+        if (yunutyEngine::Input::isKeyPushed(KeyCode::Delete))
+            deleteButtonCallback();
+
+        if (yunutyEngine::Input::isKeyPushed(KeyCode::Tab))
+            tabButtonCallback();
+
+        if (yunutyEngine::Input::isKeyPushed(KeyCode::C))
+            cButtonCallback();
 
         if (!roamingMode)
         {
@@ -142,19 +154,11 @@ public:
         if (!roamingMode)
         {
             Vector3d projectedPoint;
-            auto resolution = graphics::Renderer::SingleInstance().GetResolution();
             auto centeredPosition = Input::getMouseScreenPositionNormalized();
             centeredPosition.x -= 0.5;
             centeredPosition.y -= 0.5;
             centeredPosition.y *= -1;
-            // 카메라 해상도가 1280, 800일때 near plane의 가로가 1.28, 0.8임.
-            auto forward = GetTransform()->GetWorldRotation().Forward();
-            auto right = GetTransform()->GetWorldRotation().Right();
-            auto up = GetTransform()->GetWorldRotation().Up();
-            projectedPoint = GetTransform()->GetWorldPosition() +
-                forward * expectedPlaneDistance() +
-                right * centeredPosition.x * 0.001 * resolution.x * expectedPlaneDistance() +
-                up * centeredPosition.y * 0.001 * resolution.y * expectedPlaneDistance();
+            projectedPoint = GetProjectedPoint(centeredPosition, expectedPlaneDistance());
 
             if (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick))
                 DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?

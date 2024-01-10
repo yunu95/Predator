@@ -46,6 +46,7 @@ namespace yunutyEngine
         double MagnitudeSqr()const;
         double Magnitude()const;
         Vector3 Normalized() const;
+        Vector3 Abs() const;
 
         Vector3& operator=(const Vector2<real>& rhs);
         Vector3& operator=(const Vector3& rhs);
@@ -143,6 +144,11 @@ template<typename real>
 Vector3<real> yunutyEngine::Vector3<real>::Normalized() const
 {
     return Normalize(*this);
+}
+template<typename real>
+Vector3<real> yunutyEngine::Vector3<real>::Abs() const
+{
+    return Vector3<real>(abs(x), abs(y), abs(z));
 }
 
 template<typename real>

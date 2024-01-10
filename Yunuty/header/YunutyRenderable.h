@@ -8,9 +8,9 @@
 #include "YunuGraphicsInterface.h"
 #include "Transform.h"
 
-// Ä«¸Ş¶ó´Â È­¸é¿¡ °ÔÀÓ»ó¿¡ Á¸ÀçÇÏ´Â ¸ğµç ±×·¡ÇÈ ¿ä¼ÒµéÀ» Ãâ·ÂÇÏ´Â µ¥¿¡ ¾²ÀÌ´Â °´Ã¼ÀÔ´Ï´Ù. 
-// Ä«¸Ş¶óÀÇ ±¸ÇöÀº ¿£ÁøÀÇ µ¿ÀÛÈ¯°æ,È¤Àº Ä«¸Ş¶óÀÇ Æ¯¼º¿¡ µû¶ó ´Ş¶óÁú ¼ö ÀÖ±â ¶§¹®¿¡,
-// È­¸éÀ» ±×·Á³»±â À§ÇØ ¾²ÀÌ´Â ÇÔ¼ö Render´Â Ãß»ó ¸Ş¼Òµå·Î Á¤ÀÇµË´Ï´Ù.
+// ì¹´ë©”ë¼ëŠ” í™”ë©´ì— ê²Œì„ìƒì— ì¡´ì¬í•˜ëŠ” ëª¨ë“  ê·¸ë˜í”½ ìš”ì†Œë“¤ì„ ì¶œë ¥í•˜ëŠ” ë°ì— ì“°ì´ëŠ” ê°ì²´ì…ë‹ˆë‹¤. 
+// ì¹´ë©”ë¼ì˜ êµ¬í˜„ì€ ì—”ì§„ì˜ ë™ì‘í™˜ê²½,í˜¹ì€ ì¹´ë©”ë¼ì˜ íŠ¹ì„±ì— ë”°ë¼ ë‹¬ë¼ì§ˆ ìˆ˜ ìˆê¸° ë•Œë¬¸ì—,
+// í™”ë©´ì„ ê·¸ë ¤ë‚´ê¸° ìœ„í•´ ì“°ì´ëŠ” í•¨ìˆ˜ RenderëŠ” ì¶”ìƒ ë©”ì†Œë“œë¡œ ì •ì˜ë©ë‹ˆë‹¤.
 #ifdef YUNUTY_EXPORTS
 #define YUNUTY_API __declspec(dllexport)
 #else
@@ -19,68 +19,73 @@
 
 namespace yunuGI
 {
-	class IRenderable;
+    class IRenderable;
 }
 namespace yunutyEngine::graphics
 {
-	class YunutyCycle;
-	template <typename YunuGIType >
-	class Renderable;
-	class Renderer;
-	class EventHandler;
-	/// ÇÒ¸Ó´Ï
-	// ¸ğÃ¼°¡ µÇ´Â Renderable
-	// IRenderable °´Ã¼¸¦ °ÔÀÓ ÄÄÆ÷³ÍÆ®¿Í ´ëÀÀ½ÃÅ°´Â ¸ÊÀ» Á¤Àû ¸â¹ö·Î µé°í ÀÖ´Ù.
-	template <>
-	class YUNUTY_API Renderable<yunuGI::IRenderable> : public Component
-	{
-	public:
-		virtual ~Renderable()
-		{
-			yunuGIWrapperMap.erase(yunuGI);
-		};
-		virtual void Update()override
-		{
-			yunuGI->SetWorldTM(GetTransform()->GetWorldTM());
-		}
-	protected:
-		Renderable(yunuGI::IRenderable* yunuGI) : yunuGI(yunuGI)
-		{
-			yunuGIWrapperMap[yunuGI] = this;
-		}
-		virtual void OnEnable()
-		{
-			yunuGI->SetActive(true);
-		}
-		virtual void OnDisable()
-		{
-			yunuGI->SetActive(false);
-		}
-	private:
-		static std::unordered_map<yunuGI::IRenderable*, Renderable<yunuGI::IRenderable>*> yunuGIWrapperMap;
-		yunuGI::IRenderable* yunuGI;
-		friend Renderer;
-		friend EventHandler;
-	};
-	/// ¾Æ¹öÁö
-	// Æ¯¼öÇÑ Å¸ÀÔ¿¡ ´ëÇÑ Renderable
-	// ±×·¡ÇÈ½º °´Ã¼¸¦ yunuGIPtr·Î µé°í ÀÖÀ¸¸é¼­ ·¡ÆÛ ¿ªÇÒÀ» ÇÑ´Ù.
-	template <typename YunuGIType>
-	class YUNUTY_API Renderable : public Renderable<yunuGI::IRenderable>
-	{
-	private:
-		yunuGI::GIPtr<YunuGIType> instancePtr;
-	protected:
-		// ±×·¡ÇÈ½º °´Ã¼¸¦ ¹Ş¾Æ ÀÌº¥Æ® ½Ã½ºÅÛ¿¡ µî·ÏÇØ¾ßµÊ. ±×·¯¸é »ı¼ºÀÚ¸¦ ºÎ¸¦¶§ ·¹ÆÛ·±½º°¡ »ı¼ºµÇ¾î ÀÖ¾î¾ß ÇÏ´Âµ¥?
-		Renderable(YunuGIType* yunuGI) : Renderable<yunuGI::IRenderable>(yunuGI)
-		{
-			auto castedBasePtr = static_cast<yunuGI::IRenderable*>(yunuGI);
-			static_assert(std::is_base_of<yunuGI::IRenderable, YunuGIType>());
-			instancePtr = yunuGI;
-		}
-		YunuGIType& GetGI() { return *instancePtr.Get(); }
-	public:
-		friend Renderer;
-		friend EventHandler;
-	};
+    class YunutyCycle;
+    template <typename YunuGIType >
+    class Renderable;
+    class Renderer;
+    class EventHandler;
+    /// í• ë¨¸ë‹ˆ
+    // ëª¨ì²´ê°€ ë˜ëŠ” Renderable
+    // IRenderable ê°ì²´ë¥¼ ê²Œì„ ì»´í¬ë„ŒíŠ¸ì™€ ëŒ€ì‘ì‹œí‚¤ëŠ” ë§µì„ ì •ì  ë©¤ë²„ë¡œ ë“¤ê³  ìˆë‹¤.
+    template <>
+    class YUNUTY_API Renderable<yunuGI::IRenderable> : public Component
+    {
+    public:
+        virtual ~Renderable()
+        {
+            yunuGIWrapperMap.erase(yunuGI);
+        };
+        virtual void Start()override
+        {
+            yunuGI->SetWorldTM(GetTransform()->GetWorldTM());
+        }
+        virtual void Update()override
+        {
+            yunuGI->SetWorldTM(GetTransform()->GetWorldTM());
+        }
+    protected:
+        Renderable(yunuGI::IRenderable* yunuGI) : yunuGI(yunuGI)
+        {
+            yunuGIWrapperMap[yunuGI] = this;
+        }
+        virtual void OnEnable()
+        {
+            yunuGI->SetWorldTM(GetTransform()->GetWorldTM());
+            yunuGI->SetActive(true);
+        }
+        virtual void OnDisable()
+        {
+            yunuGI->SetActive(false);
+        }
+    private:
+        static std::unordered_map<yunuGI::IRenderable*, Renderable<yunuGI::IRenderable>*> yunuGIWrapperMap;
+        yunuGI::IRenderable* yunuGI;
+        friend Renderer;
+        friend EventHandler;
+    };
+    /// ì•„ë²„ì§€
+    // íŠ¹ìˆ˜í•œ íƒ€ì…ì— ëŒ€í•œ Renderable
+    // ê·¸ë˜í”½ìŠ¤ ê°ì²´ë¥¼ yunuGIPtrë¡œ ë“¤ê³  ìˆìœ¼ë©´ì„œ ë˜í¼ ì—­í• ì„ í•œë‹¤.
+    template <typename YunuGIType>
+    class YUNUTY_API Renderable : public Renderable<yunuGI::IRenderable>
+    {
+    private:
+        yunuGI::GIPtr<YunuGIType> instancePtr;
+    protected:
+        // ê·¸ë˜í”½ìŠ¤ ê°ì²´ë¥¼ ë°›ì•„ ì´ë²¤íŠ¸ ì‹œìŠ¤í…œì— ë“±ë¡í•´ì•¼ë¨. ê·¸ëŸ¬ë©´ ìƒì„±ìë¥¼ ë¶€ë¥¼ë•Œ ë ˆí¼ëŸ°ìŠ¤ê°€ ìƒì„±ë˜ì–´ ìˆì–´ì•¼ í•˜ëŠ”ë°?
+        Renderable(YunuGIType* yunuGI) : Renderable<yunuGI::IRenderable>(yunuGI)
+        {
+            auto castedBasePtr = static_cast<yunuGI::IRenderable*>(yunuGI);
+            static_assert(std::is_base_of<yunuGI::IRenderable, YunuGIType>());
+            instancePtr = yunuGI;
+        }
+        YunuGIType& GetGI() { return *instancePtr.Get(); }
+    public:
+        friend Renderer;
+        friend EventHandler;
+    };
 }

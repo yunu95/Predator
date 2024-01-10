@@ -36,7 +36,7 @@ void ConstantBuffer::CraeteConstantBuffer(unsigned int size)
 	
 	//HRESULT _hr = ::CoCreateGuid(&myGuid);
 
-	ResourceBuilder::Instance.Get().device->GetDevice().Get()->CreateBuffer(&_bufferDesc, nullptr, this->buffer.GetAddressOf());
+	ResourceBuilder::Instance.Get().device->GetDevice()->CreateBuffer(&_bufferDesc, nullptr, this->buffer.GetAddressOf());
 	//buffer.Get()->SetPrivateData(myGuid, this->size * this->count, this->mappedBuffer);
 }
 
@@ -46,12 +46,12 @@ void ConstantBuffer::PushGraphicsData(void* data, unsigned int size, unsigned in
 
 	D3D11_MAPPED_SUBRESOURCE _subResource;
 
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->Map(this->buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &_subResource);
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->Map(this->buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &_subResource);
 	::memcpy(_subResource.pData, data, size);
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->Unmap(this->buffer.Get(), 0);
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->Unmap(this->buffer.Get(), 0);
 
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->VSSetConstantBuffers(slot, 1, this->buffer.GetAddressOf());
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->PSSetConstantBuffers(slot, 1, this->buffer.GetAddressOf());
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->VSSetConstantBuffers(slot, 1, this->buffer.GetAddressOf());
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetConstantBuffers(slot, 1, this->buffer.GetAddressOf());
 }
 
 void ConstantBuffer::Clear()

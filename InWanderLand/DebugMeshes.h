@@ -11,6 +11,7 @@ enum class DebugMeshType
     Rectangle,
 };
 
+yunuGI::IMaterial* GetColoredDebugMaterial(yunuGI::Color color);
 inline void CreateLine(Vector3d start, Vector3d end, yunuGI::Color color = yunuGI::Color::red(), bool isWireFrame = true, float cylinderRadius = 0.1f)
 {
     auto gameObject = Scene::getCurrentScene()->AddGameObject();
@@ -38,7 +39,7 @@ inline yunutyEngine::graphics::StaticMeshRenderer* AttachDebugMesh(GameObject* t
     }
     auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
     staticMesh->GetGI().SetMesh(rsrcManager->GetMesh(meshName));
-    staticMesh->GetGI().GetMaterial()->SetColor(color);
+    staticMesh->GetGI().SetMaterial(0, GetColoredDebugMaterial(color));
     auto& shaderList = rsrcManager->GetShaderList();
     yunuGI::IShader* shader = nullptr;
     for (auto each : shaderList)

@@ -28,6 +28,8 @@ namespace yunutyEngine
         protected:
             virtual void Start() override;
             virtual void Update()override;
+            // í”¼ì§ìŠ¤ ê°ì²´ì˜ ì›”ë“œìŠ¤ì¼€ì¼ì´ ë‹¬ë¼ì¡Œì„ ë•Œ ì´ë¥¼ ì–´ë–»ê²Œ ë°˜ì˜í• ì§€ ê²°ì •í•©ë‹ˆë‹¤.
+            virtual void ApplyScale(const Vector3d& worldScale) = 0;
             virtual void OnEnable()override;
             virtual void OnDisable()override;
             RigidBody* rigidBody;
@@ -37,10 +39,11 @@ namespace yunutyEngine
             //bool IsTrigger();
             //void SetAsTrigger(bool isTrigger);
             bool IsUsingCCD();
-            // Continuous Collision Detection ±â´ÉÀ» È°¼ºÈ­ÇÏ¸é ÇÑ ÇÁ·¹ÀÓ¿¡¼­ ´ÙÀ½ ÇÁ·¹ÀÓ±îÁöÀÇ Ãæµ¹À» ¿¬¼ÓÀûÀ¸·Î Ã¼Å©ÇÕ´Ï´Ù.
-            // CCD ±â´ÉÀÌ È°¼ºÈ­µÇ¸é Bullet through paper Çö»óÀÌ ¹ß»ıÇÏÁö ¾Ê½À´Ï´Ù.
+            // Continuous Collision Detection ê¸°ëŠ¥ì„ í™œì„±í™”í•˜ë©´ í•œ í”„ë ˆì„ì—ì„œ ë‹¤ìŒ í”„ë ˆì„ê¹Œì§€ì˜ ì¶©ëŒì„ ì—°ì†ì ìœ¼ë¡œ ì²´í¬í•©ë‹ˆë‹¤.
+            // CCD ê¸°ëŠ¥ì´ í™œì„±í™”ë˜ë©´ Bullet through paper í˜„ìƒì´ ë°œìƒí•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
             void EnableCCD(bool enable);
         private:
+            Vector3d cachedScale;
             friend RigidBody;
 #ifdef _DEBUG
             Vector3d firstLocation;

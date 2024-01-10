@@ -8,7 +8,13 @@ namespace yunutyEngine
         SphereCollider::SphereCollider() :Collider(impl = new SphereCollider::Impl{ this }) {}
         void SphereCollider::SetRadius(float radius)
         {
-            impl->radius = radius;
+            unscaledRadius = radius;
+            ApplyScale(GetTransform()->GetWorldScale());
+        }
+        void SphereCollider::ApplyScale(const Vector3d& scale)
+        {
+            impl->radius = unscaledRadius * static_cast<float>(scale.x);
+            impl->ResetGeometry();
         }
     }
 }

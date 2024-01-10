@@ -171,26 +171,26 @@ void RenderSystem::Render()
 	PushCameraData();
 	PushLightData();
 
-	// ½ºÅÂÆ½ ¿ÀºêÁ§Æ® ·»´õ
+	// ìŠ¤íƒœí‹± ì˜¤ë¸Œì íŠ¸ ë Œë”
 	RenderObject();
 
-	// ½ºÅ²µå ¿ÀºêÁ§Æ® ·»´õ
+	// ìŠ¤í‚¨ë“œ ì˜¤ë¸Œì íŠ¸ ë Œë”
 	RenderSkinned();
 	
-	// ¶óÀÌÆ® ·»´õ
+	// ë¼ì´íŠ¸ ë Œë”
 	RenderLight();
 
-	// Final Ãâ·Â
+	// Final ì¶œë ¥
 	DrawFinal();
 
 	RenderForward();
 
 	RenderUI();
 
-	// µğÆÛµå Á¤º¸ Ãâ·Â
+	// ë””í¼ë“œ ì •ë³´ ì¶œë ¥
 	DrawDeferredInfo();
 
-	// µğÆÛµå¿ë SRV UnBind
+	// ë””í¼ë“œìš© SRV UnBind
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"))->UnBindGraphicsData();
 }
@@ -240,7 +240,7 @@ void RenderSystem::RenderSkinned()
 
 	//for (auto& e : this->skinnedVec)
 	//{
-	//	// º»TM ±¸ÇØ¼­ ³Ñ±â±â
+	//	// ë³¸TM êµ¬í•´ì„œ ë„˜ê¸°ê¸°
 	//	//BoneUpdate(e);
 
 	//	auto animator = NailAnimatorManager::Instance.Get().GetAnimator(e.animatorIndex);
@@ -278,12 +278,12 @@ void RenderSystem::RenderLight()
 {
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
 	auto& lightSet = LightManager::Instance.Get().GetLightList();
-	// ¶óÀÌÆÃ ·»´õ
+	// ë¼ì´íŒ… ë Œë”
 	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->OMSetRenderTarget();
 	for (auto& e : lightSet)
 	{
-		// Point LightÀÇ °æ¿ì ½ÇÁ¦ Sphere Mesh¸¦ ·»´õ¸µ ÆÄÀÌÇÁ¶óÀÎ¿¡ ³Ñ±ä´Ù.
-		// ÀÌ¶§ WVPÀÌ ÇÊ¿äÇÏ±â¿¡ »ó¼ö¹öÆÛ¿¡ ¹Ğ¾î³Ö¾î¾ß ÇÑ´Ù.
+		// Point Lightì˜ ê²½ìš° ì‹¤ì œ Sphere Meshë¥¼ ë Œë”ë§ íŒŒì´í”„ë¼ì¸ì— ë„˜ê¸´ë‹¤.
+		// ì´ë•Œ WVPì´ í•„ìš”í•˜ê¸°ì— ìƒìˆ˜ë²„í¼ì— ë°€ì–´ë„£ì–´ì•¼ í•œë‹¤.
 		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{
 			MatrixBuffer matrixBuffer;
@@ -306,8 +306,8 @@ void RenderSystem::RenderLight()
 
 void RenderSystem::DrawFinal()
 {
-	// ·»´õ Å¸°Ù ºä¸¦ ¹ÙÀÎµùÇÏ°í, µª½º ½ºÅÙ½Ç ¹öÆÛ¸¦ Ãâ·Â º´ÇÕ±â ´Ü°è¿¡ ¹ÙÀÎµùÇÑ´Ù.
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->OMSetRenderTargets(1,
+	// ë Œë” íƒ€ê²Ÿ ë·°ë¥¼ ë°”ì¸ë”©í•˜ê³ , ëìŠ¤ ìŠ¤í…ì‹¤ ë²„í¼ë¥¼ ì¶œë ¥ ë³‘í•©ê¸° ë‹¨ê³„ì— ë°”ì¸ë”©í•œë‹¤.
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1,
 		ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
 		ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
 

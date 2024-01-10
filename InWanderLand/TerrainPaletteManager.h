@@ -13,7 +13,6 @@ namespace application
             {
             public:
                 virtual PaletteInstance* PlaceInstance(Vector3d worldPosition) { return nullptr; };
-                virtual bool isSelectMode() { return false; };
             private:
             };
         }

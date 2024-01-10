@@ -8,8 +8,8 @@ struct ID3D11DeviceContext;
 struct ID3D11ShaderResourceView;
 struct D3D12_GPU_DESCRIPTOR_HANDLE;
 
-// ·»´õ·¯´Â Ãâ·ÂÈ­¸éÀ» Á¦¾îÇÏ°í, ÀÌ¹ÌÁö¸¦ ·»´õ¸µ ÇØÁÖ´Â ¿ªÇÒÀ» ÇÑ´Ù.
-// ·»´õ·¯´Â ¾Æ¹«·± ·»´õ¸µ °´Ã¼¸¦ »ı¼ºÇÏÁöµµ ¾Ê°í, ÇÇÅ·°ú °°Àº ÀÌº¥Æ® Ã³¸®¸¦ ÇØÁÖÁöµµ ¾Ê´Â´Ù.
+// ë Œë”ëŸ¬ëŠ” ì¶œë ¥í™”ë©´ì„ ì œì–´í•˜ê³ , ì´ë¯¸ì§€ë¥¼ ë Œë”ë§ í•´ì£¼ëŠ” ì—­í• ì„ í•œë‹¤.
+// ë Œë”ëŸ¬ëŠ” ì•„ë¬´ëŸ° ë Œë”ë§ ê°ì²´ë¥¼ ìƒì„±í•˜ì§€ë„ ì•Šê³ , í”¼í‚¹ê³¼ ê°™ì€ ì´ë²¤íŠ¸ ì²˜ë¦¬ë¥¼ í•´ì£¼ì§€ë„ ì•ŠëŠ”ë‹¤.
 namespace yunuGI
 {
     struct I3DRendererDesc
@@ -20,37 +20,37 @@ namespace yunuGI
     class I3DRenderer : public yunuGI::IUnknown
     {
     public:
-        // ·»´õ·¯¸¦ ÃÊ±âÈ­ÇÏ´Â ºÎºĞÀº ¸ğµÎ ¿©±â¼­ Ã³¸®ÇÑ´Ù.
+        // ë Œë”ëŸ¬ë¥¼ ì´ˆê¸°í™”í•˜ëŠ” ë¶€ë¶„ì€ ëª¨ë‘ ì—¬ê¸°ì„œ ì²˜ë¦¬í•œë‹¤.
         I3DRenderer() {};
         virtual ~I3DRenderer() {}
 
-        // DX¸¦ ÃÊ±âÈ­ÇÑ´Ù.
+        // DXë¥¼ ì´ˆê¸°í™”í•œë‹¤.
         //virtual bool Initialize() = 0;
 
-        // ±×¸²À» ±×¸± ´ë»ó À©µµ¿ì¸¦ Á¤ÇÔ, ÀÌ ÇÔ¼ö¸¦ »ç¿ëÇÏ¸é
-        // ¿ÀÁ÷ ±×·¡ÇÈ½º¿£Áø¸¸ÀÌ ÇØ´ç À©µµ¿ì¿¡ ÀÌ¹ÌÁö¸¦ ±×¸®´Â °ÍÀ¸·Î °¡Á¤ÇÑ´Ù.
+        // ê·¸ë¦¼ì„ ê·¸ë¦´ ëŒ€ìƒ ìœˆë„ìš°ë¥¼ ì •í•¨, ì´ í•¨ìˆ˜ë¥¼ ì‚¬ìš©í•˜ë©´
+        // ì˜¤ì§ ê·¸ë˜í”½ìŠ¤ì—”ì§„ë§Œì´ í•´ë‹¹ ìœˆë„ìš°ì— ì´ë¯¸ì§€ë¥¼ ê·¸ë¦¬ëŠ” ê²ƒìœ¼ë¡œ ê°€ì •í•œë‹¤.
         virtual void SetOutputWindow(UINT64 hWnd) = 0;
-        // ½Ã°£¿¡ µû¶ó »óÅÂ°¡ º¯È­µÇ¾î¾ß ÇÏ´Â ¾Ö´Ï¸ŞÀÌ¼Ç, ÆÄÆ¼Å¬ÀÇ °æ¿ì¿¡ Àû¿ëµÈ´Ù.
+        // ì‹œê°„ì— ë”°ë¼ ìƒíƒœê°€ ë³€í™”ë˜ì–´ì•¼ í•˜ëŠ” ì• ë‹ˆë©”ì´ì…˜, íŒŒí‹°í´ì˜ ê²½ìš°ì— ì ìš©ëœë‹¤.
         virtual void Update(float deltaTime) = 0;
-        // ·»´õ¸µ ½ÃÀÛ
+        // ë Œë”ë§ ì‹œì‘
         //virtual void BeginRender() = 0;
         virtual void Render() = 0;
 
-        // ·»´õ¸µ ¸¶¹«¸®. ±×¸± °Í ´Ù ±×¸° »óÅÂ¿¡¼­ Present
+        // ë Œë”ë§ ë§ˆë¬´ë¦¬. ê·¸ë¦´ ê²ƒ ë‹¤ ê·¸ë¦° ìƒíƒœì—ì„œ Present
         //virtual void EndRender() = 0;
 
-        // Ã¢ Å©±â°¡ º¯ÇßÀ» ¶§ Ã³¸®ÇØ¾ß ÇÒ °Íµé
+        // ì°½ í¬ê¸°ê°€ ë³€í–ˆì„ ë•Œ ì²˜ë¦¬í•´ì•¼ í•  ê²ƒë“¤
         //virtual void OnResize() = 0;
-        // ÇØ»óµµ º¯°æÀ» ¿äÃ»ÇÏ´Â ÇÔ¼ö
+        // í•´ìƒë„ ë³€ê²½ì„ ìš”ì²­í•˜ëŠ” í•¨ìˆ˜
         virtual void ResizeResolution(unsigned int width, unsigned int height) = 0;
 
-        // È¤¿©³ª ³»ºÎ ±×·¡ÇÈ½º ±¸Á¶¸¦ ¾Ë¾Æ¾ß ÇÒ ¶§
+        // í˜¹ì—¬ë‚˜ ë‚´ë¶€ ê·¸ë˜í”½ìŠ¤ êµ¬ì¡°ë¥¼ ì•Œì•„ì•¼ í•  ë•Œ
         //virtual ID3D11Device* QueryD3d11Device() { return nullptr; }
         //virtual ID3D11DeviceContext* QueryD3dDeviceContext() { return nullptr; }
-        // void Æ÷ÀÎÅÍ·Î ·»´õ Ãâ·Â¹°À» Àü´ŞÇØÁÖ±â À§ÇÑ Äõ¸®
+        // void í¬ì¸í„°ë¡œ ë Œë” ì¶œë ¥ë¬¼ì„ ì „ë‹¬í•´ì£¼ê¸° ìœ„í•œ ì¿¼ë¦¬
         virtual void* QuerySharedOutputHandle() = 0;
         //virtual ID3D11ShaderResourceView* QueryD3D11RenderOutputSRV(ID3D11Device* requesting) { return nullptr; }
-        // imgui¿¡ ·»´õ Ãâ·Â¹°À» Àü´ŞÇØÁÖ±â À§ÇÑ Äõ¸®
+        // imguiì— ë Œë” ì¶œë ¥ë¬¼ì„ ì „ë‹¬í•´ì£¼ê¸° ìœ„í•œ ì¿¼ë¦¬
         //virtual D3D12_GPU_DESCRIPTOR_HANDLE* QueryD3D12RenderOutputGDH() { return nullptr; }
     };
 }

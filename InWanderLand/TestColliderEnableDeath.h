@@ -107,7 +107,7 @@ void TestColliderEnableDeath()
     auto delayedFunctions = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DelayedTestFunctions>();
 
     // 제대로 삭제되는지 테스트
-    //delayedFunctions->todoList.push_back({ 2,[=]() {Scene::getCurrentScene()->DestroyGameObject(boxCollider); } });
+    //delayedFunctions->todoList.push_back({ 2,[=]() {Scene::getCurrentScene()->DestroyGameObject(pickingCollider); } });
     // 제대로 비활성화되는지 테스트
     delayedFunctions->todoList.push_back({ 1,[=]() {boxCollider->SetSelfActive(false); } });
     // 제대로 재활성화되는지 테스트
