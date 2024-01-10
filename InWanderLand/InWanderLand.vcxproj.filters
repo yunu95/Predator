@@ -591,5 +591,8 @@
     <ClCompile Include="SnippetRegionPalette.cpp">
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
+    <ClCompile Include="SnippetGIEnableDisable.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

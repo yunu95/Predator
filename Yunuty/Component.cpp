@@ -71,18 +71,15 @@ std::wstring yunutyEngine::Component::GetGUIDWStr()
 }
 void yunutyEngine::Component::SetActive(bool active)
 {
-    if (isActive && !active)
+    if (isActive != active)
     {
-        YunutyCycle::SingleInstance().updateTargetComponentsPendingDeletion.push(this);
-        OnDisable();
-    }
-    if (!isActive && active)
-    {
+        isActive = active;
         YunutyCycle::SingleInstance().HandleComponent(this);
-        OnEnable();
+        if (isActive)
+            OnEnable();
+        else
+            OnDisable();
     }
-
-    isActive = active;
 }
 void yunutyEngine::Component::SetIsUpdating(bool isUpdating)
 {

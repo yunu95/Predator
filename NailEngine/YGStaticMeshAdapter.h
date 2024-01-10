@@ -48,7 +48,7 @@ namespace yunuGIAdapter
 
 		virtual void SetMaterial(unsigned int index, yunuGI::IMaterial* material) override
 		{
-			// »õ·Î¿î MaterialÀÌ¶ó¸é
+			// ìƒˆë¡œìš´ Materialì´ë¼ë©´
 			if (index + 1 > this->materialVec.size())
 			{
 				std::shared_ptr<MaterialWrapper> tempMaterial = std::make_shared<MaterialWrapper>();
