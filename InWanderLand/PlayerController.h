@@ -34,6 +34,9 @@ private:
 	int currentSelectedSerialNumber = 0;
 	int previousSerialNumber = 0;
 
+public:
+	float lookRotationDuration = 0.1f;
+
 	//void SelectFunctionByOrderType(int unitSerialNumber, OrderType p_orderType);
 
 public:

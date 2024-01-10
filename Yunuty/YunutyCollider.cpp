@@ -81,6 +81,7 @@ namespace yunutyEngine
         }
         void Collider::OnEnable()
         {
+            impl->SetActorWorldTransform(GetTransform()->GetWorldTM());
             impl->pxActor->setActorFlag({ PxActorFlag::eDISABLE_SIMULATION }, false);
             if (impl->pxRigidDynamic->isSleeping())
                 impl->pxRigidDynamic->wakeUp();
