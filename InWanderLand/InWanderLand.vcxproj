@@ -536,6 +536,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="SnippetCamPositionAndNear.cpp" />
     <ClCompile Include="SnippetGIEnableDisable.cpp" />
     <ClCompile Include="SnippetRegionPalette.cpp" />
+    <ClCompile Include="SnippetTerrainPalette.cpp" />
     <ClCompile Include="SnippetUnitPalette.cpp" />
     <ClCompile Include="SnippetPhysxCollider.cpp" />
     <ClCompile Include="SnippetTemplate.cpp" />
