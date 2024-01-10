@@ -101,7 +101,7 @@ namespace application
 					/// 디버그 용
 					if (!event.propagation)
 					{
-						std::cout << event.GetName() << " 이벤트 전파 종료!" << std::endl;
+						std::cout << event.GetName() << " 전파 종료 이벤트입니다." << std::endl;
 					}
 					///
 

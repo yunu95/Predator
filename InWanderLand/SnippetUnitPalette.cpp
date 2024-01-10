@@ -22,15 +22,15 @@ void SnippetInitializerUnitPalette()
 
     rtsCam->GetTransform()->position = Vector3d(3, 10, 3);
     application::editor::palette::PaletteManager::SetCurrentPalette(&application::editor::palette::UnitPaletteManager::SingleInstance());
-    rtsCam->groundHoveringClickCallback = [](const Vector3d& worldPos) {application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnMouseMove(worldPos); };
-    rtsCam->groundLeftClickCallback = [](const Vector3d& worldPos) {application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnLeftClick(); };
-    rtsCam->groundLeftClickReleaseCallback = [](const Vector3d& worldPos) {application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnLeftClickRelease(); };
-    rtsCam->deleteButtonCallback = []() {application::editor::palette::PaletteManager::GetCurrentPalette()->OnDeletion(); };
-    rtsCam->cButtonCallback = []()
-    {
-        auto palette = application::editor::palette::PaletteManager::GetCurrentPalette();
-        palette->SetAsSelectMode(!palette->IsSelectMode());
-    };
+    //rtsCam->groundHoveringClickCallback = [](const Vector3d& worldPos) {application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnMouseMove(worldPos); };
+    //rtsCam->groundLeftClickCallback = [](const Vector3d& worldPos) {application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnLeftClick(); };
+    //rtsCam->groundLeftClickReleaseCallback = [](const Vector3d& worldPos) {application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnLeftClickRelease(); };
+    //rtsCam->deleteButtonCallback = []() {application::editor::palette::PaletteManager::GetCurrentPalette()->OnDeletion(); };
+    //rtsCam->cButtonCallback = []()
+    //{
+    //    auto palette = application::editor::palette::PaletteManager::GetCurrentPalette();
+    //    palette->SetAsSelectMode(!palette->IsSelectMode());
+    //};
 
     auto directionalLight = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 

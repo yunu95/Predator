@@ -6,6 +6,8 @@
 #include "Singleton.h"
 #include "EditorPanel.h"
 
+#include <utility>
+
 namespace application
 {
 	class Application;
@@ -26,11 +28,26 @@ namespace application
 			virtual void Update(float ts) override;
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
+			virtual void OnEvent(EditorEvents& event) override;
+
+			std::pair<unsigned int, unsigned int> GetRenderImageSize() const;
+			std::pair<double, double> GetCursorPosInScreenSpace() const;
+
+		private:
+			void ImGui_Update();
+			void ImGui_OnResizeRenderImageSize();
+			void ImGui_UpdateCursorPosInScreenSpace();
+			bool ImGui_IsCursorInScreen();
+			std::pair<float, float> ImGui_GetCursorPosOnPanel();
 
 		private:
 			Application* app;
-			unsigned int rendererWidth;
-			unsigned int rendererHeight;
+			std::pair<unsigned int, unsigned int> renderImageSize;
+			std::pair<double, double> cursorPos_InScreenSpace;
+
+			// flag
+			bool resize;
+			bool mouseMove;
 		};
 	}
 }
