@@ -14,8 +14,8 @@ namespace application
 
 		struct POD_Ornament_TemplateData
 		{
-			TO_JSON(POD_Ornament_TemplateData);
-			FROM_JSON(POD_Ornament_TemplateData);
+			TO_JSON(POD_Ornament_TemplateData)
+			FROM_JSON(POD_Ornament_TemplateData)
 		};
 
 		class Ornament_TemplateData

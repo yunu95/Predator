@@ -7,6 +7,7 @@
 #include "Layer.h"
 #include "CommandManager.h"
 #include "EventManager.h"
+#include "EditorInputManager.h"
 
 #include <vector>
 #include <memory>
@@ -84,7 +85,7 @@ namespace application
         // 이 목록에 담긴 함수들이 실행되는 동안 게임 엔진 스레드는 동작을 정지합니다.
         std::vector<std::function<void()>> loopRegistrations;
 
-        void SetEditorResizeCallBack(std::function<void()> callBack);
+        void SetWindowCallBack();
 
         enum class LayerList
         {
@@ -105,6 +106,7 @@ namespace application
 #ifdef EDITOR
         editor::CommandManager& cm = editor::CommandManager::GetSingletonInstance();
         editor::EventManager em = editor::EventManager();
+        editor::EditorInputManager& eim = editor::EditorInputManager::GetSingletonInstance();
 #endif
     };
 }

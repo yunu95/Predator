@@ -223,6 +223,9 @@
     <Filter Include="Editor\Events\Category\2_Window">
       <UniqueIdentifier>{6b007f4f-4168-4380-8d54-6523874c757c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\IO\KeyInput">
+      <UniqueIdentifier>{ba70a303-f04f-429e-a442-3276da507949}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -569,6 +572,12 @@
     <ClInclude Include="KeyboardEvents.h">
       <Filter>Editor\Events\Category\4_Keyboard</Filter>
     </ClInclude>
+    <ClInclude Include="EditorKeyCodes.h">
+      <Filter>Editor\IO\KeyInput</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorInputManager.h">
+      <Filter>Editor\IO\KeyInput</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -864,6 +873,12 @@
     </ClCompile>
     <ClCompile Include="EventManager.cpp">
       <Filter>Editor\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorEvents.cpp">
+      <Filter>Editor\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorInputManager.cpp">
+      <Filter>Editor\IO\KeyInput</Filter>
     </ClCompile>
     <ClCompile Include="SnippetCamPositionAndNear.cpp">
       <Filter>TestCodes\snippets</Filter>
