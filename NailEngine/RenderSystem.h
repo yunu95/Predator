@@ -80,7 +80,8 @@ private:
 	std::unique_ptr<DirectX::SpriteBatch> spriteBatch;
 	std::unique_ptr<DirectX::CommonStates> commonStates;
 
-	yunuGI::IShader* shader = nullptr;
+	yunuGI::IShader* ps = nullptr;
+	yunuGI::IShader* vs = nullptr;
 };
 
 

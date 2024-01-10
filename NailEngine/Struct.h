@@ -7,6 +7,8 @@ using namespace DirectX::PackedVector;
 #include <array>
 #include <memory>
 
+#define SM_SIZE 2048
+
 #define MAX_TEXTURE 8
 #define MAX_INT 8
 #define MAX_BONE_COUNT 250

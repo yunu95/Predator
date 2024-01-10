@@ -1,5 +1,5 @@
 #include "ShadowPass.h"
-
+#include "Struct.h"
 #include "ResourceBuilder.h"
 #include "Device.h"
 

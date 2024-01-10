@@ -442,6 +442,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateDeferredShader(L"Deferred_PointLightVS.cso");
 	CreateDeferredShader(L"Deferred_FinalVS.cso");
 	CreateShader(L"TextureVS.cso");
+	CreateShader(L"TestVS.cso");
 #pragma endregion
 
 #pragma region PS

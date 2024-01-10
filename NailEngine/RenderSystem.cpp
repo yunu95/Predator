@@ -44,9 +44,9 @@
 
 LazyObjects<RenderSystem> RenderSystem::Instance;
 
-
 void RenderSystem::Init()
 {
+
 	spriteBatch = std::make_unique<DirectX::SpriteBatch>(ResourceBuilder::Instance.Get().device->GetDeviceContext().Get());
 	commonStates = std::make_unique<DirectX::CommonStates>(ResourceBuilder::Instance.Get().device->GetDevice().Get());
 
@@ -55,7 +55,11 @@ void RenderSystem::Init()
 	{
 		if (i->GetName() == L"TestPS.cso")
 		{
-			this->shader = i;
+			this->ps = i;
+		}
+		if (i->GetName() == L"TestVS.cso")
+		{
+			this->vs = i;
 		}
 	}
 }
@@ -85,7 +89,8 @@ void RenderSystem::SortObject()
 			renderInfo.mesh = mesh;
 			renderInfo.material = e->GetMaterial(i);
 			renderInfo.shadowMaterial = Material(*e->GetMaterial(i));
-			renderInfo.shadowMaterial.SetPixelShader(this->shader);
+			renderInfo.shadowMaterial.SetPixelShader(this->ps);
+			renderInfo.shadowMaterial.SetVertexShader(this->vs);
 			renderInfo.materialIndex = i;
 			renderInfo.wtm = e->GetWorldTM();
 
@@ -310,7 +315,8 @@ void RenderSystem::RenderShadow()
 		{
 			MatrixBuffer matrixBuffer;
 			matrixBuffer.VTM = std::static_pointer_cast<DirectionalLight>(e)->GetWorldTM().Invert();
-			matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(200 * 1.f, 200 * 1.f, 0.1f, 500.f);
+			matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(100 * 1.f, 100 * 1.f, 0.001f, 500.f);
+			//matrixBuffer.PTM = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PI/4.f, 1920/ 1080, 0.1f, 1000.f);
 			NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 		}
 	}
@@ -337,7 +343,8 @@ void RenderSystem::RenderLight()
 		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Directional))
 		{
 			matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
-			matrixBuffer.lightVP = std::static_pointer_cast<DirectionalLight>(e)->GetWorldTM().Invert() * DirectX::XMMatrixOrthographicLH(200 * 1.f, 200 * 1.f, 0.1f, 500.f);
+			matrixBuffer.lightVP = std::static_pointer_cast<DirectionalLight>(e)->GetWorldTM().Invert() * DirectX::XMMatrixOrthographicLH(100 * 1.f, 100 * 1.f, 0.001f, 500.f);
+			//matrixBuffer.lightVP = std::static_pointer_cast<DirectionalLight>(e)->GetWorldTM().Invert() * DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PI / 4.f, 1920 / 1080, 0.1f, 1000.f);
 		}
 		else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{

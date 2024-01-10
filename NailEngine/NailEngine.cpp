@@ -52,7 +52,7 @@ void NailEngine::Init(UINT64 hWnd)
 void NailEngine::Render()
 {
 	// Begin
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetViewports(1, &ResourceBuilder::Instance.Get().swapChain->GetViewPort());
+	//ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetViewports(1, &ResourceBuilder::Instance.Get().swapChain->GetViewPort());
 
 	const float red[] = { 0.5f, 0.5f, 0.5f, 1.f };
 

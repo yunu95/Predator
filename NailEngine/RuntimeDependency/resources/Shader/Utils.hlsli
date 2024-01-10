@@ -54,8 +54,8 @@ void CalculateLight(int lightIndex, float3 normal, float3 pos, out float4 diffus
                 float shadowDepth = Temp2Map.Sample(sam, uv).x;
                 if (shadowDepth > 0 && depth > shadowDepth + 0.00001f)
                 {
-                    //diffuse *= 0.5f;
-                    diffuse = float4(1,0,0,1);
+                    diffuse *= 0.5f;
+                    //diffuse = float4(1,0,0,1);
                     specular = (float4) 0.f;
                 }
             }

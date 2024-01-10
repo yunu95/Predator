@@ -47,16 +47,18 @@ void GraphicsTest()
 	}
 
 	{
+		// 지면
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->scale = Vector3d{ 100,100,1 };
+		obj->GetTransform()->scale = Vector3d{ 2,2,1 };
 		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		renderer->GetGI().SetMesh(planeMesh);
 	}
 
 	{
+		// 구
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->position = Vector3d{ 0,0,-100 };
-		obj->GetTransform()->scale = Vector3d{ 50,50,50 };
+		obj->GetTransform()->position = Vector3d{ 0,0,-1 };
+		obj->GetTransform()->scale = Vector3d{ 1,1,1 };
 		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		renderer->GetGI().SetMesh(sphereMesh);
 	}
@@ -127,7 +129,7 @@ void application::Contents::ContentsLayer::Initialize()
 	{
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-		directionalLight->GetTransform()->position = Vector3d{0,0,-200} ;
+		directionalLight->GetTransform()->position = Vector3d{0,0,-10} ;
 		//auto test = directionalLight->AddComponent<TestComponent2>();
 		//test->gameObject = directionalLight;
 	}

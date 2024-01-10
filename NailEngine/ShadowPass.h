@@ -6,7 +6,7 @@
 
 #include <wrl.h>
 
-#define SM_SIZE 2048
+
 
 class ShadowPass
 {
