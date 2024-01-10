@@ -429,6 +429,15 @@ void RenderSystem::RenderForward()
 	//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.material->GetName()))->PushGraphicsData();
 	//	mesh->Render(e.materialIndex, nullptr);
 	//}
+
+	MatrixBuffer matrixBuffer;
+	//matrixBuffer.WTM = e.wtm;
+	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
+	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 	InstancingManager::Instance.Get().RegisterMeshAndMaterial(this->forwardVec);
 }
 

@@ -18,7 +18,7 @@ using namespace DirectX::PackedVector;
 struct Vertex
 {
 	DirectX::SimpleMath::Vector3 pos;
-	DirectX::SimpleMath::Vector4 color;
+	DirectX::SimpleMath::Vector4 color{1,1,1,1};
 	DirectX::SimpleMath::Vector2 uv;
 	DirectX::SimpleMath::Vector3 normal;
 	DirectX::SimpleMath::Vector3 tangent;

@@ -26,9 +26,20 @@ void GraphicsTest()
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 	auto& meshList = _resourceManager->GetMeshList();
+	auto& shaderList = _resourceManager->GetShaderList();
+
 	yunuGI::IMesh* planeMesh = nullptr;
 	yunuGI::IMesh* sphereMesh = nullptr;
 	yunuGI::IMesh* cubeMesh = nullptr;
+	yunuGI::IShader* shader = nullptr;
+
+	for (auto& i : shaderList)
+	{
+		if (i->GetName() == L"DebugPS.cso")
+		{
+			shader = i;
+		}
+	}
 
 	for (auto& i : meshList)
 	{
@@ -61,6 +72,7 @@ void GraphicsTest()
 		obj->GetTransform()->scale = Vector3d{ 1,1,1 };
 		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		renderer->GetGI().SetMesh(sphereMesh);
+		//renderer->GetGI().GetMaterial()->SetPixelShader(shader);
 	}
 }
 
