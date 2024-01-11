@@ -119,5 +119,6 @@ Texture2DArray TransformMap : register(t8);
 
 
 SamplerState sam : register(s0);
+SamplerComparisonState shadowSam : register(s1);
 
 #endif

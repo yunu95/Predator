@@ -53,12 +53,11 @@ void PixelShader::CreateShader(const std::wstring& shaderPath)
 
 	//CreateRasterizerState();
 	CreateShaderState(hlslPath);
-	CreateSamplerState();
 }
 
 void PixelShader::Bind()
 {
-	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetSamplers(0, 1, this->samplerState.GetAddressOf());
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetSamplers(samplerSlot, 1, this->samplerState.GetAddressOf());
 
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetState(this->rasterizerState.Get());
 
@@ -93,26 +92,6 @@ void PixelShader::UnBind()
 //	//}
 //}
 
-void PixelShader::CreateSamplerState()
-{
-	D3D11_SAMPLER_DESC samplerDesc;
-	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.MipLODBias = 0.f;
-	samplerDesc.MaxAnisotropy = 1;
-	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-	samplerDesc.BorderColor[0] = 0;
-	samplerDesc.BorderColor[1] = 0;
-	samplerDesc.BorderColor[2] = 0;
-	samplerDesc.BorderColor[3] = 0;
-	samplerDesc.MinLOD = 0;
-	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-	ResourceBuilder::Instance.Get().device->GetDevice()->CreateSamplerState(&samplerDesc, this->samplerState.GetAddressOf());
-}
-
 void PixelShader::CreateShaderState(const std::wstring& shaderPath)
 {
 	std::ifstream file(shaderPath);
@@ -130,6 +109,7 @@ void PixelShader::CreateShaderState(const std::wstring& shaderPath)
 	CreateRasterizerState(fileContent);
 	CreateDepthStencilState(fileContent);
 	CreateBlendState(fileContent);
+	CreateSamplerState(fileContent);
 }
 
 void PixelShader::CreateShaderType(const std::string& fileContent)
@@ -370,4 +350,75 @@ void PixelShader::CreateBlendState(const std::string& fileContent)
 	}
 
 	ResourceBuilder::Instance.Get().device->GetDevice()->CreateBlendState(&blendDesc, this->blendState.GetAddressOf());
+}
+
+void PixelShader::CreateSamplerState(const std::string& fileContent)
+{
+	D3D11_SAMPLER_DESC samplerDesc;
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.MipLODBias = 0.f;
+	samplerDesc.MaxAnisotropy = 1;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	samplerDesc.BorderColor[0] = 0;
+	samplerDesc.BorderColor[1] = 0;
+	samplerDesc.BorderColor[2] = 0;
+	samplerDesc.BorderColor[3] = 0;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+
+	std::regex commentRegex("// Sampler : (\\w+)");
+	std::smatch matches;
+	if (std::regex_search(fileContent, matches, commentRegex))
+	{
+		if (matches.size() >= 2)
+		{
+			std::string shaderType = matches[1].str();
+			if (shaderType == "Default")
+			{
+
+			}
+			else if (shaderType == "Shadow")
+			{
+				samplerDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
+				samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
+				samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
+				samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
+
+				float borderColor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+				samplerDesc.BorderColor[0] = borderColor[0];
+				samplerDesc.BorderColor[1] = borderColor[1];
+				samplerDesc.BorderColor[2] = borderColor[2];
+				samplerDesc.BorderColor[3] = borderColor[3];
+
+				samplerDesc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
+
+				samplerDesc.MipLODBias = 0.0f;
+
+				samplerDesc.MaxAnisotropy = 1;
+
+				// 텍스처 좌표가 0에서 1 범위를 벗어나면 텍스처 주소를 Border로 설정
+				samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
+				samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
+				samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
+
+				this->samplerSlot = 1;
+			}
+			else
+			{
+				// 뒤에 입력이 없으니 assert
+				assert(FALSE);
+			}
+		}
+		else
+		{
+			// BlendType : 이라는 문자열을 hlsl파일 안에 정의하지 않았으니 assert
+			assert(FALSE);
+		}
+	}
+
+	ResourceBuilder::Instance.Get().device->GetDevice()->CreateSamplerState(&samplerDesc, this->samplerState.GetAddressOf());
 }

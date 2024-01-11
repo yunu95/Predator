@@ -315,7 +315,7 @@ void RenderSystem::RenderShadow()
 		{
 			MatrixBuffer matrixBuffer;
 			matrixBuffer.VTM = std::static_pointer_cast<DirectionalLight>(e)->GetWorldTM().Invert();
-			matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(100 * 1.f, 100 * 1.f, 0.001f, 500.f);
+			matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(100 * 1.f, 100 * 1.f, 0.0000001f, 500.f);
 			//matrixBuffer.PTM = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PI/4.f, 1920/ 1080, 0.1f, 1000.f);
 			NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 		}
@@ -343,7 +343,7 @@ void RenderSystem::RenderLight()
 		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Directional))
 		{
 			matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
-			matrixBuffer.lightVP = std::static_pointer_cast<DirectionalLight>(e)->GetWorldTM().Invert() * DirectX::XMMatrixOrthographicLH(100 * 1.f, 100 * 1.f, 0.001f, 500.f);
+			matrixBuffer.lightVP = std::static_pointer_cast<DirectionalLight>(e)->GetWorldTM().Invert() * DirectX::XMMatrixOrthographicLH(100 * 1.f, 100 * 1.f, 0.0000001f, 500.f);
 			//matrixBuffer.lightVP = std::static_pointer_cast<DirectionalLight>(e)->GetWorldTM().Invert() * DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PI / 4.f, 1920 / 1080, 0.1f, 1000.f);
 		}
 		else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))

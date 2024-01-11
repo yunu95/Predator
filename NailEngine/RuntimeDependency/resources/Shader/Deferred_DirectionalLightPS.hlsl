@@ -53,3 +53,4 @@ PS_OUT main(PixelIn input)
 // CullType : CullNone
 // DepthType : NoDepthTestNoWrite
 // BlendType : AlphaBlend
+// Sampler : Default

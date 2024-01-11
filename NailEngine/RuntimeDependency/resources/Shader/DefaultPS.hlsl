@@ -103,3 +103,4 @@ PS_OUT main(PixelIn input)
 // CullType : CullBack
 // DepthType : Less
 // BlendType : Default
+// Sampler : Default

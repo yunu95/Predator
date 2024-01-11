@@ -18,3 +18,4 @@ float4 main(PixelIn input) : SV_Target0
 // CullType : CullBack
 // DepthType : NoDepthTest
 // BlendType : Default
+// Sampler : Shadow
