@@ -55,7 +55,7 @@ void SnippetSkillSystemInit()
 	auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 	mouseCursorMesh->GetGI().SetMesh(sphereMesh);
-	mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 0 });
+	mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
 
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
