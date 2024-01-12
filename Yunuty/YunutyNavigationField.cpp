@@ -201,5 +201,19 @@ bool yunutyEngine::NavigationField::IsInitialized()
 }
 void yunutyEngine::NavigationField::CleanUpField()
 {
-    impl->~Impl();
+    if (impl->polyMesh)
+    {
+        rcFreePolyMesh(impl->polyMesh);
+        impl->polyMesh = nullptr;
+    }
+    if (impl->polyMeshDetail)
+    {
+        rcFreePolyMeshDetail(impl->polyMeshDetail);
+        impl->polyMeshDetail = nullptr;
+    }
+    if (impl->navMesh)
+    {
+        dtFreeNavMesh(impl->navMesh);
+        impl->navMesh = nullptr;
+    }
 }

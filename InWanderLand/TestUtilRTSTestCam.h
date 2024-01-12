@@ -16,37 +16,28 @@ namespace tests
         void Update()
         {
             Camera::Update();
-            GetTransform()->SetWorldRotation(Vector3d{90,0,0});
+            GetTransform()->SetWorldRotation(Vector3d{ 90,0,0 });
 
-            float cameraSpeed = 1.0f;
-            Vector3d deltaPosition = Vector3d::zero;
+            float cameraSpeed = 50.f;
+            Camera::Update();
+            Vector3d deltaDirection = Vector3d::zero;
 
             if (yunutyEngine::Input::isKeyDown(KeyCode::LShift))
                 cameraSpeed = 20.0f;
 
-            if (yunutyEngine::Input::isKeyDown(KeyCode::A))
-                deltaPosition -= GetTransform()->GetWorldRotation().Right();
+            auto lastMousePos = yunutyEngine::Input::getMouseScreenPositionNormalized();
+            if (yunutyEngine::Input::isKeyDown(KeyCode::A)/* || lastMousePos.x <= 0*/)
+                deltaDirection -= Vector3d::right;
+            if (yunutyEngine::Input::isKeyDown(KeyCode::D)/* || lastMousePos.x >= 1*/)
+                deltaDirection += Vector3d::right;
+            if (yunutyEngine::Input::isKeyDown(KeyCode::W)/* || lastMousePos.y <= 0*/)
+                deltaDirection += Vector3d::forward;
+            if (yunutyEngine::Input::isKeyDown(KeyCode::S)/* || lastMousePos.y >= 1*/)
+                deltaDirection -= Vector3d::forward;
 
-            if (yunutyEngine::Input::isKeyDown(KeyCode::D))
-                deltaPosition += GetTransform()->GetWorldRotation().Right();
-
-            if (yunutyEngine::Input::isKeyDown(KeyCode::W))
-                deltaPosition += GetTransform()->GetWorldRotation().Forward();
-
-            if (yunutyEngine::Input::isKeyDown(KeyCode::S))
-                deltaPosition -= GetTransform()->GetWorldRotation().Forward();
-
-            if (yunutyEngine::Input::isKeyDown(KeyCode::Q))
-                deltaPosition -= Vector3d::up;
-
-            if (yunutyEngine::Input::isKeyDown(KeyCode::E))
-                deltaPosition += Vector3d::up;
-
-
-            auto lastMousePos = Vector2d::zero;
-            auto dMousePos = Vector3d::zero;
-
-            GetTransform()->position += deltaPosition.Normalized() * Time::GetDeltaTime() * cameraSpeed;
+            GetTransform()->position += deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed;
+            Quaternion quat = Quaternion::MakeWithForwardUp(Vector3d::down, Vector3d::forward);
+            GetTransform()->rotation = quat;
 
             Vector3d projectedPoint;
             auto centeredPosition = Input::getMouseScreenPositionNormalized();

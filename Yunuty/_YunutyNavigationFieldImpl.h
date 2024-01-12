@@ -24,12 +24,21 @@ namespace yunutyEngine
             crowd = nullptr;
             dtFreeNavMeshQuery(navQuery);
             navQuery = nullptr;
-            /*rcFreePolyMesh(polyMesh);
-            polyMesh = nullptr;
-            rcFreePolyMeshDetail(polyMeshDetail);
-            polyMeshDetail = nullptr;
-            dtFreeNavMesh(navMesh);
-            navMesh = nullptr;*/
+            if (polyMesh)
+            {
+                rcFreePolyMesh(polyMesh);
+                polyMesh = nullptr;
+            }
+            if (polyMeshDetail)
+            {
+                rcFreePolyMeshDetail(polyMeshDetail);
+                polyMeshDetail = nullptr;
+            }
+            if (navMesh)
+            {
+                dtFreeNavMesh(navMesh);
+                navMesh = nullptr;
+            }
         }
         friend NavigationField;
     public:

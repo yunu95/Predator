@@ -50,6 +50,10 @@ namespace tests
         buttonEvent->keyPushEvents[KeyCode::C] = []() {TerrainPaletteManager::SingleInstance().SetIsMarking(!TerrainPaletteManager::SingleInstance().IsMarking()); };
         buttonEvent->keyPushEvents[KeyCode::B] = [=]() {
             PaletteManager::GetCurrentPalette()->ApplyAsPlaytimeObjects();
+            for (auto each : agents)
+            {
+                each->AssignToNavigationField(&SingleNavigationField::Instance());
+            }
         };
         TerrainPaletteManager::SingleInstance().SetBrushSize(2);
         TerrainPaletteManager::GetCurrentPalette()->SetAsSelectMode(false);

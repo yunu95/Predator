@@ -3,13 +3,12 @@
 
 namespace yunuGI
 {
-    union Color
+    struct Color
     {
-        float rgba[4]{ 1 };
-        struct
-        {
-            float r, g, b, a;
-        };
+        float r{ 1 };
+        float g{ 1 };
+        float b{ 1 };
+        float a{ 1 };
         // Overloading '==' operator for comparison
         bool operator==(const Color& other) const {
             return r == other.r && g == other.g && b == other.b && a == other.a;

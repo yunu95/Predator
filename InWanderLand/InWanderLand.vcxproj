@@ -258,7 +258,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;INWANDERLAND;_UNICODE;UNICODE;GEN_TESTS;EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -282,7 +282,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;INWANDERLAND;_UNICODE;UNICODE;EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -306,7 +306,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;INWANDERLAND;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -355,7 +355,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;INWANDERLAND;_UNICODE;UNICODE;GEN_TESTS;EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
