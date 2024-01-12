@@ -327,9 +327,6 @@
     <ClCompile Include="GlobalComponent.cpp">
       <Filter>yunutyEngine\GlobalComponent</Filter>
     </ClCompile>
-    <ClCompile Include="Vector.cpp">
-      <Filter>yunutyEngine\Vector</Filter>
-    </ClCompile>
     <ClCompile Include="Vector2.cpp">
       <Filter>yunutyEngine\Vector2</Filter>
     </ClCompile>

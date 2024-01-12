@@ -14,16 +14,23 @@ yunutyEngine::NavigationField::~NavigationField()
 }
 void yunutyEngine::NavigationField::Update()
 {
-    if (impl->crowd == nullptr)
+    if (!IsInitialized())
         return;
 
     impl->crowd->update(yunutyEngine::Time::GetDeltaTime(), nullptr);
 }
+Vector3d yunutyEngine::NavigationField::GetClosestPointOnField(const Vector3d& worldPosition) const
+{
+    return Vector3d::zero;
+}
 void yunutyEngine::NavigationField::BuildField(const float* worldVertices, size_t verticesNum, const int* faces, size_t facesNum, const BuildSettings& buildSettings)
 {
+    if (IsInitialized())
+        CleanUpField();
+
     float bmin[3]{ std::numeric_limits<float>::max(),std::numeric_limits<float>::max(),std::numeric_limits<float>::max() };
     float bmax[3]{ -std::numeric_limits<float>::max(),-std::numeric_limits<float>::max(),-std::numeric_limits<float>::max() };
-    // πŸøÓ¥ı∏Æ ¡§∫∏∫Œ≈Õ º≥¡§
+    // Î∞îÏö¥ÎçîÎ¶¨ Ï†ïÎ≥¥Î∂ÄÌÑ∞ ÏÑ§Ï†ï
     for (auto i = 0; i < verticesNum; i++)
     {
         if (bmin[0] > worldVertices[i * 3])
@@ -61,10 +68,10 @@ void yunutyEngine::NavigationField::BuildField(const float* worldVertices, size_
     rcVcopy(config.bmax, bmax);
     rcCalcGridSize(config.bmin, config.bmax, config.cs, &config.width, &config.height);
 
-    // ¿€æ˜ ∏∆∂Ù¿ª ¿˙¿Â«“ context ∞¥√º ª˝º∫, ¿€æ˜¿« º∫∆–ø©∫Œ∏¶ ¿˙¿Â«“ processResult º±æ
+    // ÏûëÏóÖ Îß•ÎùΩÏùÑ Ï†ÄÏû•Ìï† context Í∞ùÏ≤¥ ÏÉùÏÑ±, ÏûëÏóÖÏùò ÏÑ±Ìå®Ïó¨Î∂ÄÎ•º Ï†ÄÏû•Ìï† processResult ÏÑ†Ïñ∏
     auto* context = impl->context.get();
     bool processResult{ false };
-    // ∫πºø ≥Ù¿Ã« µÂ ∞¯∞£ «“¥Á
+    // Î≥µÏÖÄ ÎÜíÏù¥ÌïÑÎìú Í≥µÍ∞Ñ Ìï†Îãπ
     rcHeightfield* heightField{ rcAllocHeightfield() };
     assert(heightField != nullptr);
 
@@ -80,12 +87,12 @@ void yunutyEngine::NavigationField::BuildField(const float* worldVertices, size_
     processResult = rcRasterizeTriangles(context, worldVertices, verticesNum, faces, triareas.data(), facesNum, *heightField, config.walkableClimb);
     assert(processResult == true);
 
-    // « ø‰æ¯¥¬ ∫Œ∫– « ≈Õ∏µ
+    // ÌïÑÏöîÏóÜÎäî Î∂ÄÎ∂Ñ ÌïÑÌÑ∞ÎßÅ
     rcFilterLowHangingWalkableObstacles(context, config.walkableClimb, *heightField);
     rcFilterLedgeSpans(context, config.walkableHeight, config.walkableClimb, *heightField);
     rcFilterWalkableLowHeightSpans(context, config.walkableHeight, *heightField);
 
-    // π–¡˝ ≥Ù¿Ã « µÂ ∏∏µÈ±‚
+    // Î∞ÄÏßë ÎÜíÏù¥ ÌïÑÎìú ÎßåÎì§Í∏∞
     rcCompactHeightfield* compactHeightField{ rcAllocCompactHeightfield() };
     assert(compactHeightField != nullptr);
 
@@ -102,21 +109,21 @@ void yunutyEngine::NavigationField::BuildField(const float* worldVertices, size_
     rcBuildRegions(context, *compactHeightField, 0, config.minRegionArea, config.mergeRegionArea);
     assert(processResult == true);
 
-    // ¿±∞˚º± ∏∏µÈ±‚
+    // Ïú§Í≥ΩÏÑ† ÎßåÎì§Í∏∞
     rcContourSet* contourSet{ rcAllocContourSet() };
     assert(contourSet != nullptr);
 
     processResult = rcBuildContours(context, *compactHeightField, config.maxSimplificationError, config.maxEdgeLen, *contourSet);
     assert(processResult == true);
 
-    // ¿±∞˚º±¿∏∑Œ∫Œ≈Õ ∆˙∏Æ∞Ô ª˝º∫
+    // Ïú§Í≥ΩÏÑ†ÏúºÎ°úÎ∂ÄÌÑ∞ Ìè¥Î¶¨Í≥§ ÏÉùÏÑ±
     rcPolyMesh*& polyMesh{ impl->polyMesh = rcAllocPolyMesh() };
     assert(polyMesh != nullptr);
 
     processResult = rcBuildPolyMesh(context, *contourSet, config.maxVertsPerPoly, *polyMesh);
     assert(processResult == true);
 
-    // µ≈◊¿œ ∏ﬁΩ√ ª˝º∫
+    // ÎîîÌÖåÏùº Î©îÏãú ÏÉùÏÑ±
     auto& detailMesh{ impl->polyMeshDetail = rcAllocPolyMeshDetail() };
     assert(detailMesh != nullptr);
 
@@ -126,7 +133,7 @@ void yunutyEngine::NavigationField::BuildField(const float* worldVertices, size_
     //rcFreeCompactHeightfield(compactHeightField);
     //rcFreeContourSet(contourSet);
 
-    // detour µ•¿Ã≈Õ ª˝º∫
+    // detour Îç∞Ïù¥ÌÑ∞ ÏÉùÏÑ±
     unsigned char* navData{ nullptr };
     int navDataSize{ 0 };
 
@@ -188,3 +195,11 @@ void yunutyEngine::NavigationField::BuildField(const float* worldVertices, size_
 
     impl->crowd->init(1024, buildSettings.maxAgentRadius, navMesh);
 };
+bool yunutyEngine::NavigationField::IsInitialized()
+{
+    return impl->navMesh != nullptr;
+}
+void yunutyEngine::NavigationField::CleanUpField()
+{
+    impl->~Impl();
+}

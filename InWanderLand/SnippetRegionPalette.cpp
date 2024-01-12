@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
@@ -46,9 +47,9 @@ void SnippetInitializerRegionPalette()
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
-namespace snippets
+namespace tests
 {
-    TEST_CLASS(InWanderLand)
+    TEST_CLASS(Snippets)
     {
     public:
         // 테스트 함수의 이름이 Snippet으로 시작하는 테스트들은 빌드의 성공 여부 판단에 쓰이지 않습니다.

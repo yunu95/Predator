@@ -41,16 +41,26 @@ namespace application
                 /// - 마우스 커서가 움직일 때 해당 위치로 브러시를 이동합니다. 유닛의 경우 유닛의 실루엣이, 지형의 경우 변경사항이 적용될 지형의 실루엣이 표시됩니다.
                 /// - 브러시가 존재하는 위치에 에디터 인스턴스를 배치합니다.
                 /// </summary>
-                void OnLeftClick();
-                void OnLeftClickRelease();
+                virtual void OnLeftClick();
+                virtual void OnLeftClickRelease();
                 /// <param name="projectedWorldPos"> 마우스의 위치가 월드 좌표에 사영된 위치를 전달해 커서의 위치를 업데이트합니다.</param>
-                void OnMouseMove(Vector3d projectedWorldPos);
-                void OnDeletion();
+                virtual void OnMouseMove(Vector3d projectedWorldPos);
+                virtual void OnDeletion();
                 /// <summary>
                 /// 팔레트를 객체 선택모드로 전환할지, 객체 배치 모드로 전환할지 설정합니다. isSelectMode가 참이면 선택모드로, 거짓이면 배치모드로 전환됩니다.
                 /// </summary>
-                void SetAsSelectMode(bool isSelectMode);
-                bool IsSelectMode(); 
+                virtual void SetAsSelectMode(bool isSelectMode);
+                virtual bool IsSelectMode();
+                /// <summary>
+                /// Apply 함수는 팔레트 매니저가 관리하는 모든 에디터 객체들을 플레이타임 객체로 변환시킬때 사용됩니다.
+                /// 지형은 네비게이션 메시로 구워지고, 유닛은 배치되며, 장식물은 아무것도 하지 않습니다.
+                /// </summary>
+                /// <returns></returns>
+                virtual void ApplyAsPlaytimeObjects() = 0;
+                /// <summary>
+                /// 팔레트 매니저로부터 비롯된 플레이타임 객체들을 싸그리 정리합니다.
+                /// </summary>
+                virtual void CleanUpPlaytimeObjects() = 0;
             protected:
                 /// <summary>
                 /// 객체 배치를 시도할 때 호출되는 함수입니다. 해당 위치에 유닛, 지형, 장식물 등을 배치하고 배치된 객체를 반환하십시오.
@@ -65,6 +75,7 @@ namespace application
                     component->GetTransform()->position = worldPosition;
                     return component;
                 }
+                bool IsClickingLeft();
                 /// <summary>
                 /// 마우스가 선택모드이고 선택 박스를 드래깅하지 않을때 차지하게 될 충돌크기의 halfExtents입니다.
                 /// </summary>
@@ -79,12 +90,8 @@ namespace application
                 /// 대부분의 경우 dynamic_cast를 사용하여 해당 인스턴스가 선택 가능한 인스턴스인지 판별하는 것으로 구현될 것입니다.
                 /// </summary>
                 virtual bool ShouldSelect(PaletteInstance*) { return false; };
-                /// <summary>
-                /// 브러시 오브젝트는 팔레트 모드가 선택모드가 아닐 때 마우스 커서가 월드 스페이스에 사영된 위치로 이동합니다.
-                /// 팔레트 모드가 선택모드일 때는 게임오브젝트가 비활성화되며 브러시 오브젝트가 표시되지 않습니다.
-                /// </summary>
-                GameObject* brush;
             private:
+                bool isClickingLeft{ false };
                 // 선택 박스에 유효한 인스턴스가 접촉되기 시작했을 때, 혹은 접촉이 끝났을 때 호출됩니다.
                 void OnSelectionContactEnter(PaletteInstance* instance);
                 void OnSelectionContactExit(PaletteInstance* instance);

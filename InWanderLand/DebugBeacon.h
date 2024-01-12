@@ -1,9 +1,10 @@
 #pragma once
 
 #include "YunutyEngine.h"
+#include "DebugMeshes.h"
 
 using namespace yunutyEngine;
-// ÀÓ½Ã·Î Æ¯Á¤ ÁöÁ¡¿¡ Ä¿Á³´Ù ÀÛ¾ÆÁö´Â ÀÌÆåÆ®¸¦ »ý¼ºÇÏ´Â ¸ðµâ
+// ìž„ì‹œë¡œ íŠ¹ì • ì§€ì ì— ì»¤ì¡Œë‹¤ ìž‘ì•„ì§€ëŠ” ì´íŽ™íŠ¸ë¥¼ ìƒì„±í•˜ëŠ” ëª¨ë“ˆ
 class DebugBeacon : public yunutyEngine::Component
 {
 public:
@@ -20,10 +21,10 @@ public:
         debugBeacon->maxScale = scale;
         debugBeacon->duration = duration;
         staticMesh->GetGI().SetMesh(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(L"Sphere"));
-        staticMesh->GetGI().GetMaterial()->SetColor(color);
-        // ¿ÍÀÌ¾î
+        staticMesh->GetGI().SetMaterial(0, GetColoredDebugMaterial(color, false));
+        // ì™€ì´ì–´
         //staticMesh->GetGI().GetMaterial()->SetPixelShader(L"DebugPS.cso");
-        // ¼Ö¸®µå
+        // ì†”ë¦¬ë“œ
         auto shaderList = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetShaderList();
         for (int i = 0; i < shaderList.size(); ++i)
         {
@@ -32,7 +33,7 @@ public:
                 staticMesh->GetGI().GetMaterial()->SetPixelShader(shaderList[i]);
             }
         }
-        
+
         //staticMesh->GetGI().SetColor(0, color);
         //staticMesh->GetGI().SetShader(0, L"Forward");
         //staticMesh->GetGI().SetMaterialName(0, L"Forward");
@@ -47,7 +48,7 @@ public:
         if (elapsed > duration)
             elapsed = duration;
 
-        GetTransform()->scale = maxScale * popCurve.Evaluate(elapsed/duration);
+        GetTransform()->scale = maxScale * popCurve.Evaluate(elapsed / duration);
         if (elapsed >= duration)
             Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
     }

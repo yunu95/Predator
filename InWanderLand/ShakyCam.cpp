@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "ShakyCam.h"
 
 //void ShakyCam::Start()

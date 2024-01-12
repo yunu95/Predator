@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "HealerProduction.h"
 
 void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition)

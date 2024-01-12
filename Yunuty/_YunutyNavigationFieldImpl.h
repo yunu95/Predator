@@ -8,7 +8,7 @@
 
 namespace yunutyEngine
 {
-    // ImplÀº ±×Àú µ¥ÀÌÅÍ¸¸ ½×¾ÆµÎ´Â °÷À¸·Î ¾´´Ù.
+    // Implì€ ê·¸ì € ë°ì´í„°ë§Œ ìŒ“ì•„ë‘ëŠ” ê³³ìœ¼ë¡œ ì“´ë‹¤.
     class NavigationField::Impl
     {
     private:
@@ -21,7 +21,15 @@ namespace yunutyEngine
         virtual ~Impl()
         {
             dtFreeCrowd(crowd);
+            crowd = nullptr;
             dtFreeNavMeshQuery(navQuery);
+            navQuery = nullptr;
+            /*rcFreePolyMesh(polyMesh);
+            polyMesh = nullptr;
+            rcFreePolyMeshDetail(polyMeshDetail);
+            polyMeshDetail = nullptr;
+            dtFreeNavMesh(navMesh);
+            navMesh = nullptr;*/
         }
         friend NavigationField;
     public:

@@ -256,8 +256,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <AdditionalIncludeDirectories>$(SolutionDir)Include\;$(SolutionDir)Include\ImGui\;$(SolutionDir)Include\ImGui\backends;$(SolutionDir)Yunuty\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;GEN_TESTS;EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_HAS_STD_BYTE=0;INWANDERLAND;_UNICODE;UNICODE;GEN_TESTS;EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -278,8 +280,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <AdditionalIncludeDirectories>$(SolutionDir)Include\;$(SolutionDir)Include\ImGui\;$(SolutionDir)Include\ImGui\backends;$(SolutionDir)Yunuty\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_HAS_STD_BYTE=0;INWANDERLAND;_UNICODE;UNICODE;EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -300,8 +304,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <AdditionalIncludeDirectories>$(SolutionDir)Include\;$(SolutionDir)Include\ImGui\;$(SolutionDir)Include\ImGui\backends;$(SolutionDir)Yunuty\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_HAS_STD_BYTE=0;INWANDERLAND;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -347,8 +353,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;GEN_TESTS;EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_HAS_STD_BYTE=0;INWANDERLAND;_UNICODE;UNICODE;GEN_TESTS;EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -367,6 +375,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
     <ClInclude Include="AttackSystem.h" />
     <ClInclude Include="BleedingComponent.h" />
+    <ClInclude Include="SingleNavigationField.h" />
+    <ClInclude Include="TestUtilButtonEvent.h" />
+    <ClInclude Include="InWanderLand.h" />
     <ClInclude Include="KnockBackComponent.h" />
     <ClInclude Include="MeleeAttackSystem.h" />
     <ClInclude Include="OnlyDamageComponent.h" />
@@ -461,6 +472,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="TerrainEditor.h" />
     <ClInclude Include="PathEditor.h" />
     <ClInclude Include="Terrain_TemplateData.h" />
+    <ClInclude Include="TestUtilNavAgent.h" />
+    <ClInclude Include="TestUtilRTSTestCam.h" />
+    <ClInclude Include="TestUtils.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="UnitStatusComponent.h" />
     <ClInclude Include="UnitTransformComponent.h" />
@@ -479,15 +493,15 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="WarriorSkillSystem.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp" />
-    <ClCompile Include="..\Include\ImGui\backends\imgui_impl_win32.cpp" />
-    <ClCompile Include="..\Include\ImGui\imgui.cpp" />
-    <ClCompile Include="..\Include\ImGui\imgui_demo.cpp" />
-    <ClCompile Include="..\Include\ImGui\imgui_draw.cpp" />
-    <ClCompile Include="..\Include\ImGui\imgui_tables.cpp" />
-    <ClCompile Include="..\Include\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="AttackSystem.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
+    <ClCompile Include="imgui.cpp" />
+    <ClCompile Include="imgui_demo.cpp" />
+    <ClCompile Include="imgui_draw.cpp" />
+    <ClCompile Include="imgui_impl_dx11.cpp" />
+    <ClCompile Include="imgui_impl_win32.cpp" />
+    <ClCompile Include="imgui_tables.cpp" />
+    <ClCompile Include="imgui_widgets.cpp" />
     <ClCompile Include="KnockBackComponent.cpp" />
     <ClCompile Include="MeleeAttackSystem.cpp" />
     <ClCompile Include="OnlyDamageComponent.cpp" />
@@ -557,6 +571,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="Storable.cpp" />
     <ClCompile Include="TerrainData.cpp" />
     <ClCompile Include="TerrainInstance.cpp" />
+    <ClCompile Include="TerrainPaletteManager.cpp" />
     <ClCompile Include="Terrain_TemplateData.cpp" />
     <ClCompile Include="TestCaseMapFileIO.cpp" />
     <ClCompile Include="TestCasePhysxTrigger.cpp" />

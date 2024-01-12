@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "PaletteManager.h"
 #include "PaletteInstance.h"
 #include "SelectionBox.h"
@@ -8,6 +9,7 @@ namespace application::editor::palette
 
     void PaletteManager::OnLeftClick()
     {
+        isClickingLeft = true;
         /// 호버링 되는 상태의 객체가 있다면 객체를 단 하나만 선택합니다. 선택된 객체가 없다면 눈치를 보다가 드래깅을 시작합니다.
         switch (state)
         {
@@ -53,6 +55,7 @@ namespace application::editor::palette
     }
     void PaletteManager::OnLeftClickRelease()
     {
+        isClickingLeft = false;
         switch (state)
         {
         case application::editor::palette::PaletteManager::State::None:
@@ -84,6 +87,7 @@ namespace application::editor::palette
             SelectionBox::Instance().SetCoverage(currentBrushPos - unDraggingHalfExtent, currentBrushPos + unDraggingHalfExtent);
             break;
         case application::editor::palette::PaletteManager::State::Place:
+
             break;
         case application::editor::palette::PaletteManager::State::DraggingObjects:
             for (auto each : selection)
@@ -124,6 +128,10 @@ namespace application::editor::palette
     bool PaletteManager::IsSelectMode()
     {
         return state != State::Place;
+    }
+    bool PaletteManager::IsClickingLeft()
+    {
+        return isClickingLeft;
     }
 
     void PaletteManager::OnSelectionContactEnter(PaletteInstance* instance)

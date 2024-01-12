@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "WarriorProduction.h"
 #include "BleedingComponent.h"
 #include "KnockBackComponent.h"

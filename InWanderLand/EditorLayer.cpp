@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "EditorLayer.h"
 
 #include "MapFileManager.h"

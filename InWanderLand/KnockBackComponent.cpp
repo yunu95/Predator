@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "KnockBackComponent.h"
 #include "UnitTransformComponent.h"
 #include "Unit.h"

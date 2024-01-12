@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "BleedingComponent.h"
 #include "StatusTimerPool.h"
 #include "StatusTimer.h"

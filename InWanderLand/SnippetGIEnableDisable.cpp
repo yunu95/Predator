@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
@@ -41,9 +42,9 @@ void SnippetInitializerGIEnableDisable()
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
-namespace snippets
+namespace tests
 {
-    TEST_CLASS(InWanderLand)
+    TEST_CLASS(Snippets)
     {
     public:
         /// <summary>

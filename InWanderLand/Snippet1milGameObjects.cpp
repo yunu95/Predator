@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
@@ -42,9 +43,9 @@ void SnippetInitializer1milGameObjects()
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
-namespace snippets
+namespace tests
 {
-    TEST_CLASS(InWanderLand)
+    TEST_CLASS(Snippets)
     {
     public:
         // 게임오브젝트의 갯수가 100만개가 되어도, 1000만개가 되어도 Update함수를 매번 호출하지만 않는다면 게임 실행에 전혀 부담을 주지 않습니다.

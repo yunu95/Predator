@@ -12,7 +12,7 @@ namespace application
 #ifdef EDITOR
         namespace palette
         {
-            class SelectionBox : public yunutyEngine::SingletonComponent<SelectionBox>
+            class SelectionBox : public yunutyEngine::Component,public yunutyEngine::SingletonComponent<SelectionBox>
             {
             public:
                 virtual void Start() override
@@ -31,7 +31,8 @@ namespace application
                 }
                 void ShowSelectionBox(bool box)
                 {
-                    boxMesh->SetActive(box);
+                    if (boxMesh)
+                        boxMesh->SetActive(box);
                 }
                 unordered_set<PaletteInstance*>& GetContactingInstances()
                 {

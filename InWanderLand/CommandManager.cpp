@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "CommandManager.h"
 
 namespace application

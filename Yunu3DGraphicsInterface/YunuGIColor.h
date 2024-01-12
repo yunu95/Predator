@@ -1,10 +1,11 @@
 #pragma once
+#include <type_traits>
 
 namespace yunuGI
 {
     union Color
     {
-        float rgba[4]{ 0 };
+        float rgba[4]{ 1 };
         struct
         {
             float r, g, b, a;
@@ -20,3 +21,21 @@ namespace yunuGI
         static Color black() { return { 0,0,0,1 }; };
     };
 }
+template <>
+struct std::hash<yunuGI::Color>
+{
+    std::size_t operator()(const yunuGI::Color& k) const
+    {
+        using std::size_t;
+        using std::hash;
+
+        // Compute individual hash values for first,
+        // second and third and combine them using XOR
+        // and bit shifting:
+
+        return(hash<float>()(k.r) << 0)
+            ^ (hash<float>()(k.g) << 1)
+            ^ (hash<float>()(k.b) << 2)
+            ^ (hash<float>()(k.a) << 3);
+    }
+};

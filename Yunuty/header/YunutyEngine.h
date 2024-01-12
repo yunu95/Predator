@@ -41,8 +41,9 @@
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "Animator.h"
+#include "SingletonComponent.h"
 
-// ¼öÇĞ ¶óÀÌºê·¯¸®µé
+// ìˆ˜í•™ ë¼ì´ë¸ŒëŸ¬ë¦¬ë“¤
 #include "YunutyMathConstants.h"
 #include "Random.h"
 #include "Interval.h"
@@ -55,7 +56,7 @@
 #include "YunutyPixel.h"
 #include "YunutyPixelInfos.h"
 
-// ±×·¡ÇÈ½º
+// ê·¸ë˜í”½ìŠ¤
 #include "YunuGraphicsInterface.h"
 #include "GraphicsRenderer.h"
 #include "Camera.h"
@@ -68,11 +69,11 @@
 #include "UIImage.h"
 #include "UIText.h"
 
-// ³×ºñ°ÔÀÌ¼Ç
+// ë„¤ë¹„ê²Œì´ì…˜
 #include "YunutyNavigationField.h"
 #include "YunutyNavigationAgent.h"
 
-// ¹°¸®
+// ë¬¼ë¦¬
 #include "YunutyCollider.h"
 #include "YunutyBoxCollider.h"
 #include "YunutyCapsuleCollider.h"

@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "StatusTimer.h"
 
 void StatusTimer::Start()

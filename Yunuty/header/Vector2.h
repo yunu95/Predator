@@ -114,7 +114,7 @@ Vector2<real> yunutyEngine::Vector2<real>::DirectionByAngle(double radian)
     return Vector2<real>(cos(radian), sin(radian));
 }
 
-// º¤ÅÍ¸¦ ¹æÇâº¤ÅÍ·Î °è»êÇÏ°í, ÇØ´ç º¤ÅÍ¿Í xÃàº¤ÅÍ¿ÍÀÇ ¹İ½Ã°è¹æÇâ °¢µµ¸¦ 0~360µµ »çÀÌ·Î ¹İÈ¯ÇÑ´Ù.
+// ë²¡í„°ë¥¼ ë°©í–¥ë²¡í„°ë¡œ ê³„ì‚°í•˜ê³ , í•´ë‹¹ ë²¡í„°ì™€ xì¶•ë²¡í„°ì™€ì˜ ë°˜ì‹œê³„ë°©í–¥ ê°ë„ë¥¼ 0~360ë„ ì‚¬ì´ë¡œ ë°˜í™˜í•œë‹¤.
 template<typename real>
 double yunutyEngine::Vector2<real>::GetAngleDegree()
 {
@@ -282,3 +282,20 @@ template<typename real>
 const Vector2<real> yunutyEngine::Vector2<real>::up = Vector2<real>(0, 1);
 template<typename real>
 const Vector2<real> yunutyEngine::Vector2<real>::down = Vector2<real>(0, -1);
+
+template <typename real>
+struct std::hash<Vector2<real>>
+{
+    std::size_t operator()(const Vector2<real>& k) const
+    {
+        using std::size_t;
+        using std::hash;
+
+        // Compute individual hash values for first,
+        // second and third and combine them using XOR
+        // and bit shifting:
+
+        return(hash<real>()(k.x) << 0)
+            ^ (hash<real>()(k.y) << 1);
+    }
+};

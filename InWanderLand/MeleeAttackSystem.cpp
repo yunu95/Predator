@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "MeleeAttackSystem.h"
 
 void MeleeAttackSystem::Attack(Unit* opponentUnit)

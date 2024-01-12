@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "PaletteInstance.h"
 #include "DebugMeshes.h"
 
@@ -19,7 +20,7 @@ namespace application::editor::palette
     {
         isHovering = true;
         selectCircle->SetActive(true);
-        selectCircle->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 1,1,1 }));
+        selectCircle->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 1,1,1 },true));
     }
     void PaletteInstance::OnHoverLeft()
     {
@@ -35,7 +36,7 @@ namespace application::editor::palette
     {
         isSelected = true;
         selectCircle->SetActive(true);
-        selectCircle->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,1,0 }));
+        selectCircle->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,1,0 },true));
     }
     void PaletteInstance::OnDeselected()
     {
