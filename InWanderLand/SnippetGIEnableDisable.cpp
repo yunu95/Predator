@@ -44,7 +44,7 @@ void SnippetInitializerGIEnableDisable()
 
 namespace tests
 {
-    TEST_CLASS(Snippets)
+    TEST_CLASS(SnippetGIEnableDisableClass)
     {
     public:
         /// <summary>

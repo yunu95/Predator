@@ -24,7 +24,7 @@ void TestCaseD3D11LiveObjimguiInit()
 
 namespace tests
 {
-    TEST_CLASS(BuildTests)
+    TEST_CLASS(TestCaseD3D11LiveObjimguiClass)
     {
     public:
         TEST_METHOD(TestCaseD3D11LiveObjimgui)

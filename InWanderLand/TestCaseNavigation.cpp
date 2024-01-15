@@ -109,7 +109,7 @@ void TestCaseNavigationInit()
 
 namespace tests
 {
-    TEST_CLASS(BuildTests)
+    TEST_CLASS(TestCaseNavigationClass)
     {
     public:
         TEST_METHOD(TestCaseNavigation)

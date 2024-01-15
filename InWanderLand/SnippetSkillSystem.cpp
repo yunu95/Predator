@@ -154,7 +154,7 @@ void SnippetSkillSystemInit()
 
 namespace tests
 {
-	TEST_CLASS(Snippets)
+	TEST_CLASS(SnippetSkillSystemClass)
 	{
 	public:
 		TEST_METHOD(SnippetSkillSystem)

@@ -154,7 +154,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>YunutyEngine.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <DisableSpecificWarnings>4244;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4828;4251;4244;4267;4100;4481;4305</DisableSpecificWarnings>
       <IncludeInUnityFile>true</IncludeInUnityFile>
     </ClCompile>
     <Link>
@@ -181,6 +181,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <PrecompiledHeaderFile>YunutyEngine.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <IncludeInUnityFile>true</IncludeInUnityFile>
+      <DisableSpecificWarnings>4828;4251;4244;4267;4100;4481;4305</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

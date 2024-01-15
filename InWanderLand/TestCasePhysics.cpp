@@ -143,7 +143,7 @@ void TestCasePhysicsInit()
 
 namespace tests
 {
-    TEST_CLASS(BuildTests)
+    TEST_CLASS(TestCasePhysicsClass)
     {
     public:
         TEST_METHOD(TestCasePhysics)

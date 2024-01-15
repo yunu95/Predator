@@ -68,6 +68,7 @@
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
     <CLRSupport>false</CLRSupport>
+    <EnableUnitySupport>true</EnableUnitySupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugExe|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -75,6 +76,7 @@
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
     <CLRSupport>false</CLRSupport>
+    <EnableUnitySupport>true</EnableUnitySupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugGraphics|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -82,6 +84,7 @@
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
     <CLRSupport>false</CLRSupport>
+    <EnableUnitySupport>true</EnableUnitySupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -98,6 +101,7 @@
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
     <CLRSupport>false</CLRSupport>
+    <EnableUnitySupport>true</EnableUnitySupport>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -254,12 +258,13 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(SolutionDir)Include\;$(SolutionDir)Include\ImGui\;$(SolutionDir)Include\ImGui\backends;$(SolutionDir)Yunuty\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /bigobj %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;INWANDERLAND;_UNICODE;UNICODE;GEN_TESTS;EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4828;4251;4244;4267;4100;4481;4305</DisableSpecificWarnings>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
+      <IncludeInUnityFile>true</IncludeInUnityFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -278,12 +283,13 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(SolutionDir)Include\;$(SolutionDir)Include\ImGui\;$(SolutionDir)Include\ImGui\backends;$(SolutionDir)Yunuty\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /bigobj %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;INWANDERLAND;_UNICODE;UNICODE;EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4828;4251;4244;4267;4100;4481;4305</DisableSpecificWarnings>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
+      <IncludeInUnityFile>true</IncludeInUnityFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -302,12 +308,13 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(SolutionDir)Include\;$(SolutionDir)Include\ImGui\;$(SolutionDir)Include\ImGui\backends;$(SolutionDir)Yunuty\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /bigobj %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;INWANDERLAND;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4828;4251;4244;4267;4100;4481;4305</DisableSpecificWarnings>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
+      <IncludeInUnityFile>true</IncludeInUnityFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -351,12 +358,13 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>$(SolutionDir)Include\;$(SolutionDir)Include\ImGui\;$(SolutionDir)Include\ImGui\backends;$(SolutionDir)Yunuty\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /bigobj %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;INWANDERLAND;_UNICODE;UNICODE;GEN_TESTS;EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4828;4251;4244;4267;4100;4481;4305</DisableSpecificWarnings>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
+      <IncludeInUnityFile>true</IncludeInUnityFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -577,6 +585,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="TestCasePhysxTrigger.cpp" />
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="UnitInstance.cpp" />
+    <ClCompile Include="UnitPaletteManager.cpp" />
     <ClCompile Include="UnitStatusComponent.cpp" />
     <ClCompile Include="UnitTransformComponent.cpp" />
     <ClCompile Include="Unit_TemplateData.cpp" />

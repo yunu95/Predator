@@ -13,7 +13,7 @@ yunuGI::IMaterial* GetColoredDebugMaterial(yunuGI::Color color, bool isWireFrame
     }
     else
     {
-        wstringstream ss{isWireFrame? L"wireframed ColorCached DebugMaterial ":L"default ColorCached DebugMaterial " };
+        wstringstream ss{ isWireFrame ? L"wireframed ColorCached DebugMaterial " : L"default ColorCached DebugMaterial " };
         ss << materialMap.size();
         auto ret = materialMap[color] = rsrcManager->CreateMaterial(ss.str());
         ret->SetColor(color);

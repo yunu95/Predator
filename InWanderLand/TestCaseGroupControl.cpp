@@ -170,7 +170,7 @@ void TestCaseGroupControlInit()
 
 namespace tests
 {
-	TEST_CLASS(BuildTests)
+	TEST_CLASS(TestCaseGroupControlClass)
 	{
 	public:
 		TEST_METHOD(TestCaseGroupControl)

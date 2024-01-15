@@ -85,7 +85,7 @@ void SnippetInitializerPhysxTrigger()
 
 namespace tests
 {
-    TEST_CLASS(BuildTests)
+    TEST_CLASS(TestCasePhysxTriggerClass)
     {
     public:
         TEST_METHOD(TestCasePhysxTrigger)

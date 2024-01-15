@@ -34,7 +34,7 @@ void TestInitializerTemplate()
 
 namespace tests
 {
-    TEST_CLASS(BuildTests)
+    TEST_CLASS(TestCaseTemplateClass)
     {
     public:
         TEST_METHOD(TestCaseTemplate)

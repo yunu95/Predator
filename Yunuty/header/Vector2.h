@@ -72,18 +72,18 @@ namespace yunutyEngine
     }
 };
 template<typename real>
-yunutyEngine::Vector2<real>::Vector2<real>() :Vector2<real>(0, 0) {}
+yunutyEngine::Vector2<real>::Vector2() :Vector2<real>(0, 0) {}
 template<typename real>
-yunutyEngine::Vector2<real>::Vector2<real>(real x, real y)
+yunutyEngine::Vector2<real>::Vector2(real x, real y)
 {
     this->x = x;
     this->y = y;
 }
 template<typename real>
-yunutyEngine::Vector2<real>::Vector2<real>(const Vector2<real>& rhs) :Vector2<real>(rhs.x, rhs.y)
+yunutyEngine::Vector2<real>::Vector2(const Vector2<real>& rhs) :Vector2<real>(rhs.x, rhs.y)
 { }
 template<typename real>
-yunutyEngine::Vector2<real>::Vector2<real>(const Vector3<real>& rhs) : Vector2<real>(rhs.x, rhs.y)
+yunutyEngine::Vector2<real>::Vector2(const Vector3<real>& rhs) : Vector2<real>(rhs.x, rhs.y)
 { }
 template<typename real>
 real yunutyEngine::Vector2<real>::Dot(const Vector2<real>& lhs, const Vector2<real>& rhs)

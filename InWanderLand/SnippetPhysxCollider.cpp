@@ -89,7 +89,7 @@ void SnippetInitializerPhysxCollider()
 
 namespace tests
 {
-    TEST_CLASS(Snippets)
+    TEST_CLASS(SnippetPhysxColliderClass)
     {
     public:
         /// <summary>

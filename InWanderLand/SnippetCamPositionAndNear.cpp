@@ -13,7 +13,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace tests
 {
-    TEST_CLASS(Snippets)
+    TEST_CLASS(SnippetCamPosAndNearClass)
     {
         static void SnippetInitializerCamPosAndNear()
         {

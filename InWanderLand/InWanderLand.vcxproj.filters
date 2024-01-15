@@ -917,5 +917,8 @@
     <ClCompile Include="TerrainPaletteManager.cpp">
       <Filter>Editor\Palette\PaletteManager\TerrainPaletteManager</Filter>
     </ClCompile>
+    <ClCompile Include="UnitPaletteManager.cpp">
+      <Filter>Editor\Palette\PaletteManager\UnitPaletteManager</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

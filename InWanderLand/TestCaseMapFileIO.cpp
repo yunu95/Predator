@@ -51,7 +51,7 @@ void TestCaseMapFileIOInitializer()
 
 namespace tests
 {
-    TEST_CLASS(BuildTests)
+    TEST_CLASS(TestCaseMapFileIOClass)
     {
     public:
         TEST_METHOD(TestCaseMapFileIO)
