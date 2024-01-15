@@ -147,6 +147,11 @@ namespace application
 				//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: Experimental. THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
 				//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI: Experimental.
 
+				/// Custom 영역
+				// 타이틀 바를 컨트롤 할 때에만 움직임
+				io.ConfigWindowsMoveFromTitleBarOnly = true;
+				///
+
 				// Setup Dear ImGui style
 				ImGui::StyleColorsDark();
 				//ImGui::StyleColorsLight();
@@ -220,17 +225,6 @@ namespace application
 		isRunning = true;
 		while (isRunning)
 		{
-			MSG msg;
-			while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
-			{
-				::TranslateMessage(&msg);
-				::DispatchMessage(&msg);
-				if (msg.message == WM_QUIT)
-					isRunning = false;
-			}
-			if (!isRunning)
-				break;
-
 			// 게임 엔진을 멈추고 동작을 실행하는 부분
 			{
 				std::scoped_lock lock{ loopTodoRegistrationMutex };
@@ -526,7 +520,9 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+	{
 		return true;
+	}
 
 	static auto& eim = application::editor::EditorInputManager::GetSingletonInstance();
 

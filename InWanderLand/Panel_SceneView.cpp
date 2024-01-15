@@ -1,8 +1,7 @@
 #include "Panel_SceneView.h"
 
 #include "imgui.h"
-#include "imgui_impl_dx11.h"
-#include "imgui_impl_win32.h"
+#include "imgui_internal.h"
 
 #include "Application.h"
 #include "YunutyEngine.h"
@@ -14,12 +13,14 @@
 
 #include <d3d11.h>
 
+#include <iostream>
+
 namespace application
 {
 	namespace editor
 	{
 		SceneViewPanel::SceneViewPanel()
-			: app(nullptr), renderImageSize(), cursorPos_InScreenSpace(), resize(false), mouseMove(false)
+			: app(nullptr), renderImageSize(), cursorPos_InScreenSpace()
 		{
 
 		}
@@ -41,18 +42,18 @@ namespace application
 
 		void SceneViewPanel::GUIProgress()
 		{
+			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1, 0, 1, 1));
+
 			ImGui::Begin("SceneView", 0, ImGuiWindowFlags_NoBringToFrontOnFocus);
 
 			ImGui_Update();
-
-			/// ImGui 관련 내부 변수 업데이트
-			isMouseOver = ImGui::IsWindowHovered();
-			isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
 			/// 실제 패널에 그리는 영역
 			ImGui::Image(reinterpret_cast<ImTextureID>(app->GetSceneSRV()), ImVec2(renderImageSize.first, renderImageSize.second));
 
 			ImGui::End();
+
+			ImGui::PopStyleColor();
 		}
 
 		void SceneViewPanel::Finalize()
@@ -63,20 +64,8 @@ namespace application
 		void SceneViewPanel::OnEvent(EditorEvents& event)
 		{
 			EventDispatcher dispatcher(event);
-			dispatcher.Dispatch<WindowResizeEvent>([&, this](WindowResizeEvent& e) { resize = true; return true; });
 
-			if (isFocused)
-			{
-				if (isMouseOver)
-				{
-					/// Test
-					static auto& upm = palette::UnitPaletteManager::SingleInstance();
 
-					dispatcher.Dispatch<MouseButtonPressedEvent>([&, this](MouseButtonPressedEvent& e) { upm.OnLeftClick(); return true; });
-					dispatcher.Dispatch<MouseMoveEvent>([&, this](MouseMoveEvent& e) { mouseMove = true; return true; });
-					dispatcher.Dispatch<MouseButtonUpEvent>([&, this](MouseButtonUpEvent& e) { upm.OnLeftClickRelease(); return true; });
-				}
-			}
 		}
 
 		std::pair<unsigned int, unsigned int> SceneViewPanel::GetRenderImageSize() const
@@ -91,26 +80,41 @@ namespace application
 
 		void SceneViewPanel::ImGui_Update()
 		{
+			/// ImGui 관련 내부 변수 업데이트
+			isMouseOver = ImGui::IsWindowHovered();
+			isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
+
 			/// 임시
 			static auto& upm = palette::UnitPaletteManager::SingleInstance();
 			///
 
-			if (resize)
+			ImGui_OnResizeRenderImageSize();
+
+			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
 			{
-				ImGui_OnResizeRenderImageSize();
-				resize = false;
+				upm.OnLeftClick();
 			}
 
-			if (mouseMove)
+			// 입력에 대한 처리
+			if (isFocused)
 			{
-				if (ImGui_IsCursorInScreen())
+				if (isMouseOver)
 				{
-					ImGui_UpdateCursorPosInScreenSpace();
-					auto distToXZPlane = abs(yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y);
-					auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint({ cursorPos_InScreenSpace.first, cursorPos_InScreenSpace.second }, distToXZPlane);
-					upm.OnMouseMove(projectedPos);
+					if (ImGui::IsMouseDown(ImGuiMouseButton_Left))
+					{
+						if (ImGui_IsCursorInScreen())
+						{
+							ImGui_UpdateCursorPosInScreenSpace();
+							auto distToXZPlane = abs(yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y);
+							auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint({ cursorPos_InScreenSpace.first, cursorPos_InScreenSpace.second }, distToXZPlane);
+							upm.OnMouseMove(projectedPos);
+						}
+					}
+					else if(ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+					{
+						upm.OnLeftClickRelease();
+					}
 				}
-				mouseMove = false;
 			}
 		}
 
@@ -119,7 +123,9 @@ namespace application
 			// 그려지는 영역에 맞게 화면 비 재구성
 			auto rect = yunutyEngine::graphics::Renderer::SingleInstance().GetResolution();
 			float ratio = (float)rect.y / (float)rect.x;
-			ImVec2 newRegion = ImGui::GetContentRegionAvail();
+			auto winMin = ImGui::GetWindowContentRegionMin();
+			auto winMax = ImGui::GetWindowContentRegionMax();
+			ImVec2 newRegion(winMax.x - winMin.x, winMax.y - winMin.y);
 			float newRegionRatio = newRegion.y / newRegion.x;
 
 			if (newRegionRatio >= ratio)
@@ -143,7 +149,7 @@ namespace application
 			ImVec2 finalPos(curPos.first - startPos.x, curPos.second - startPos.y);
 
 			cursorPos_InScreenSpace.first = (finalPos.x - (renderImageSize.first / 2)) / renderImageSize.first;
-			cursorPos_InScreenSpace.second = (finalPos.y - (renderImageSize.second / 2)) / -renderImageSize.second;
+			cursorPos_InScreenSpace.second = ((renderImageSize.second / 2) - finalPos.y) / renderImageSize.second;
 		}
 
 		bool SceneViewPanel::ImGui_IsCursorInScreen()

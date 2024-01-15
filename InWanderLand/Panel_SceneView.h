@@ -46,8 +46,6 @@ namespace application
 			std::pair<double, double> cursorPos_InScreenSpace;
 
 			// flag
-			bool resize;
-			bool mouseMove;
 		};
 	}
 }
