@@ -3,14 +3,14 @@
 #include "YunutyEngine.h"
 
 using namespace yunutyEngine;
-// ÀÓ½Ã·Î Å¸ÀÏ Æò¸éÀ» »ç¹æÀ¸·Î ¹èÄ¡ÇÒ ¼ö ÀÖ´Â ¸ğµâ
+// ì„ì‹œë¡œ íƒ€ì¼ í‰ë©´ì„ ì‚¬ë°©ìœ¼ë¡œ ë°°ì¹˜í•  ìˆ˜ ìˆëŠ” ëª¨ë“ˆ
 class DebugTilePlane : public yunutyEngine::Component
 {
 public:
     int width{ 5 };
     int height{ 5 };
-    yunuGI::Color colorA{1, 0.5, 0.25, 0};
-    yunuGI::Color colorB{0.5, 0.25, 0.25, 0};
+    yunuGI::Color colorA{1, 0.5, 0.25, 1};
+    yunuGI::Color colorB{0.5, 0.25, 0.25, 1};
     vector<GameObject*> tiles;
     void SetTiles()
     {
