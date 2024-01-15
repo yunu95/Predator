@@ -56,7 +56,6 @@ void InstanceBuffer::PushData()
 	}
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->Unmap(_instanceBuffer.Get(), 0);
 
-
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetVertexBuffers(1, 1, _instanceBuffer.GetAddressOf(), &_stride, &_offset);
 }
 

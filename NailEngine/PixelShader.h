@@ -2,6 +2,8 @@
 
 #include "Shader.h"
 
+#include <vector>
+
 class PixelShader : public Shader
 {
 public:

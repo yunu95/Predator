@@ -49,8 +49,8 @@ PS_OUT main(PixelIn input)
 
 // ShaderInfo
 // ShaderType : Light
-// RasterType : Solid
+// RasterType : Shadow
 // CullType : CullNone
 // DepthType : NoDepthTestNoWrite
 // BlendType : AlphaBlend
-// Sampler : Default
+// Sampler : Shadow

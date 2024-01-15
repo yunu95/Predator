@@ -46,7 +46,7 @@ void NailEngine::Init(UINT64 hWnd)
 
 	RenderSystem::Instance.Get().Init();
 	InstancingManager::Instance.Get().Init();
-	ShadowPass::Instance.Get().Init();
+	ShadowPass::Instance.Get().Init(ResourceManager::Instance.Get().GetTexture(L"ShadowDepth").get());
 }
 
 void NailEngine::Render()
@@ -214,27 +214,27 @@ void NailEngine::CreateRenderTargetGroup()
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->SetRenderTargetVec(rtVec);
 	}
 
-	// SHADOW
-	{
-		std::vector<RenderTarget> rtVec(SHADOW_MEMBER_COUNT);
+	//// SHADOW
+	//{
+	//	std::vector<RenderTarget> rtVec(SHADOW_MEMBER_COUNT);
 
-		rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
-			L"ShadowTarget",
-			SM_SIZE,
-			SM_SIZE,
-			DXGI_FORMAT_R32G32B32A32_FLOAT,
-			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
-		);
+	//	rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
+	//		L"ShadowTarget",
+	//		SM_SIZE,
+	//		SM_SIZE,
+	//		DXGI_FORMAT_R32G32B32A32_FLOAT,
+	//		static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+	//	);
 
-		auto dsTexture = ResourceManager::Instance.Get().CreateTexture(
-			L"ShadowTargetDepth",
-			SM_SIZE,
-			SM_SIZE,
-			DXGI_FORMAT_D24_UNORM_S8_UINT,
-			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL)
-		);
+	//	auto dsTexture = ResourceManager::Instance.Get().CreateTexture(
+	//		L"ShadowTargetDepth",
+	//		SM_SIZE,
+	//		SM_SIZE,
+	//		DXGI_FORMAT_D24_UNORM_S8_UINT,
+	//		static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL)
+	//	);
 
-		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SHADOW)] = std::make_shared<RenderTargetGroup>();
-		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SHADOW)]->SetRenderTargetVec(rtVec, dsTexture->GetDSV());
-	}
+	//	this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SHADOW)] = std::make_shared<RenderTargetGroup>();
+	//	this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SHADOW)]->SetRenderTargetVec(rtVec, dsTexture->GetDSV());
+	//}
 }

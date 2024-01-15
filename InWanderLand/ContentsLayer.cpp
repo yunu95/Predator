@@ -142,6 +142,7 @@ void application::Contents::ContentsLayer::Initialize()
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 		directionalLight->GetTransform()->position = Vector3d{0,0,-10} ;
+		directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{0, 45, 0} };
 		//auto test = directionalLight->AddComponent<TestComponent2>();
 		//test->gameObject = directionalLight;
 	}

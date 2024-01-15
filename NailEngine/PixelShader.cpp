@@ -21,20 +21,6 @@ void PixelShader::CreateShader(const std::wstring& shaderPath)
 
 	::D3DReadFileToBlob(shaderPath.c_str(), psBuffer.GetAddressOf());
 
-	//if (FAILED(::D3DCompileFromFile(shaderPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
-	//	, "main", "ps_5_0", _compileFlag, NULL, psBuffer.GetAddressOf(), errorMSG.GetAddressOf())))
-	//{
-	//	if (errorMSG)
-	//	{
-	//		::MessageBoxA(nullptr, "Failed to compile shader!", nullptr, MB_OK);
-	//		assert(true);
-	//	}
-	//	else
-	//	{
-	//		::MessageBoxA(nullptr, "Shader path not found!", nullptr, MB_OK);
-	//		assert(true);
-	//	}
-	//}
 
 	if (FAILED(ResourceBuilder::Instance.Get().device->GetDevice()->CreatePixelShader(
 		psBuffer->GetBufferPointer(),
@@ -51,13 +37,12 @@ void PixelShader::CreateShader(const std::wstring& shaderPath)
 	std::wstring hlslPath{L"Shader/"};
 	hlslPath = hlslPath + fileName + L".hlsl";
 
-	//CreateRasterizerState();
 	CreateShaderState(hlslPath);
 }
 
 void PixelShader::Bind()
 {
-	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetSamplers(samplerSlot, 1, this->samplerState.GetAddressOf());
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetSamplers(this->samplerSlot, 1, this->samplerState.GetAddressOf());
 
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetState(this->rasterizerState.Get());
 
@@ -72,25 +57,6 @@ void PixelShader::UnBind()
 {
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShader(nullptr, nullptr, 0);
 }
-
-//void PixelShader::CreateRasterizerState()
-//{
-//	//ID3D11ShaderReflection* pShaderReflection = nullptr;
-//
-//	//D3DReflect(
-//	//	psBuffer->GetBufferPointer(),
-//	//	psBuffer->GetBufferSize(),
-//	//	IID_ID3D11ShaderReflection,
-//	//	(void**)&pShaderReflection
-//	//);
-//
-//	//ID3D11ShaderReflectionVariable* pVariable = pShaderReflection->GetVariableByName("A");
-//
-//	//if (pVariable) {
-//	//	D3D11_SHADER_VARIABLE_DESC varDesc;
-//	//	HRESULT hr = pVariable->GetDesc(&varDesc);
-//	//}
-//}
 
 void PixelShader::CreateShaderState(const std::wstring& shaderPath)
 {
@@ -175,6 +141,16 @@ void PixelShader::CreateRasterizerState(const std::string& fileContent)
 			{
 				this->shaderInfo.rasterizer = yunuGI::Rasterizer::Wire;
 				rasterDesc.FillMode = D3D11_FILL_WIREFRAME;
+			}
+			else if (shaderType == "Shadow")
+			{
+				rasterDesc.DepthBias = 100000;
+				rasterDesc.DepthBiasClamp = 0.f;
+				rasterDesc.DepthClipEnable = true;
+				rasterDesc.SlopeScaledDepthBias = 1.f;
+
+				this->shaderInfo.rasterizer = yunuGI::Rasterizer::Solid;
+				rasterDesc.FillMode = D3D11_FILL_SOLID;
 			}
 			else
 			{
@@ -369,7 +345,6 @@ void PixelShader::CreateSamplerState(const std::string& fileContent)
 	samplerDesc.MinLOD = 0;
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-
 	std::regex commentRegex("// Sampler : (\\w+)");
 	std::smatch matches;
 	if (std::regex_search(fileContent, matches, commentRegex))
@@ -400,11 +375,6 @@ void PixelShader::CreateSamplerState(const std::string& fileContent)
 
 				samplerDesc.MaxAnisotropy = 1;
 
-				// 텍스처 좌표가 0에서 1 범위를 벗어나면 텍스처 주소를 Border로 설정
-				samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
-				samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
-				samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
-
 				this->samplerSlot = 1;
 			}
 			else
@@ -415,7 +385,7 @@ void PixelShader::CreateSamplerState(const std::string& fileContent)
 		}
 		else
 		{
-			// BlendType : 이라는 문자열을 hlsl파일 안에 정의하지 않았으니 assert
+			// Sampler : 이라는 문자열을 hlsl파일 안에 정의하지 않았으니 assert
 			assert(FALSE);
 		}
 	}

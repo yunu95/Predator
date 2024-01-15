@@ -299,9 +299,9 @@ void RenderSystem::RenderSkinned()
 void RenderSystem::RenderShadow()
 {
 	auto& lightSet = LightManager::Instance.Get().GetLightList();
-
-	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
-	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SHADOW)]->OMSetRenderTarget();
+	ShadowPass::Instance.Get().Bind();
+	//auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
+	//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SHADOW)]->OMSetRenderTarget();
 
 	//MatrixBuffer matrixBuffer;
 	//matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();

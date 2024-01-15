@@ -493,8 +493,9 @@ void ResourceManager::CreateDefaultMaterial()
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp1,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(NORMAL)).get());
+
 		material->SetTexture(yunuGI::Texture_Type::Temp2,
-			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::SHADOW)]->GetRTTexture(static_cast<int>(SHADOW)).get());
+			GetTexture(L"ShadowDepth").get());
 	}
 
 	// PointLight
@@ -583,7 +584,7 @@ void ResourceManager::CreateDefaultMaterial()
 			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
 			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
 			material->SetTexture(yunuGI::Texture_Type::Temp0,
-				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::SHADOW)]->GetRTTexture(static_cast<int>(SHADOW)).get());
+				GetTexture(L"ShadowDepth").get());
 		}
 	}
 }
@@ -593,6 +594,18 @@ void ResourceManager::CreateDefaultTexture()
 	/*CreateTexture(L"Texture/zoro.jpg");
 	CreateTexture(L"Texture/Brick_Albedo.jpg");
 	CreateTexture(L"Texture/Brick_Normal.jpg");*/
+
+
+
+	//	auto dsTexture = ResourceManager::Instance.Get().CreateTexture(
+//		L"ShadowTargetDepth",
+//		SM_SIZE,
+//		SM_SIZE,
+//		DXGI_FORMAT_D24_UNORM_S8_UINT,
+//		static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL)
+//	);
+
+	CreateTexture(L"ShadowDepth",SM_SIZE, SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE));
 }
 
 void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yunuGI::FBXData* fbxData)
