@@ -20,7 +20,7 @@ namespace application
 	namespace editor
 	{
 		SceneViewPanel::SceneViewPanel()
-			: app(nullptr), renderImageSize(), cursorPos_InScreenSpace()
+			: app(nullptr), prevWindowSize(), renderImageSize(), cursorPos_InScreenSpace()
 		{
 
 		}
@@ -84,6 +84,8 @@ namespace application
 			isMouseOver = ImGui::IsWindowHovered();
 			isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
+			
+
 			/// 임시
 			static auto& upm = palette::UnitPaletteManager::SingleInstance();
 			///
@@ -95,22 +97,26 @@ namespace application
 				upm.OnLeftClick();
 			}
 
+			
+
 			// 입력에 대한 처리
 			if (isFocused)
 			{
 				if (isMouseOver)
 				{
-					if (ImGui::IsMouseDown(ImGuiMouseButton_Left))
+					if (ImGui_IsCursorInScreen())
 					{
-						if (ImGui_IsCursorInScreen())
-						{
-							ImGui_UpdateCursorPosInScreenSpace();
-							auto distToXZPlane = abs(yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y);
-							auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint({ cursorPos_InScreenSpace.first, cursorPos_InScreenSpace.second }, distToXZPlane);
-							upm.OnMouseMove(projectedPos);
-						}
+						ImGui_UpdateCursorPosInScreenSpace();
+						auto distToXZPlane = abs(yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y);
+						auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint({ cursorPos_InScreenSpace.first, cursorPos_InScreenSpace.second }, distToXZPlane);
+						upm.OnMouseMove(projectedPos);
 					}
-					else if(ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+					else
+					{
+						Release();
+					}
+
+					if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
 					{
 						upm.OnLeftClickRelease();
 					}
@@ -152,6 +158,12 @@ namespace application
 			cursorPos_InScreenSpace.second = ((renderImageSize.second / 2) - finalPos.y) / renderImageSize.second;
 		}
 
+		void SceneViewPanel::ImGui_UpdateWindowSize()
+		{
+			auto size = ImGui::GetWindowSize();
+
+		}
+
 		bool SceneViewPanel::ImGui_IsCursorInScreen()
 		{
 			auto curPos = ImGui_GetCursorPosOnPanel();
@@ -165,6 +177,15 @@ namespace application
 			auto curPos = ImGui::GetMousePos();
 
 			return std::pair<float, float>(curPos.x - winPos.x, curPos.y - winPos.y);
+		}
+
+		void SceneViewPanel::Release()
+		{
+			/// 임시
+			static auto& upm = palette::UnitPaletteManager::SingleInstance();
+			///
+
+			upm.OnLeftClickRelease();
 		}
 	}
 }

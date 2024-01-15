@@ -225,6 +225,17 @@ namespace application
 		isRunning = true;
 		while (isRunning)
 		{
+			MSG msg;
+			while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
+			{
+				::TranslateMessage(&msg);
+				::DispatchMessage(&msg);
+				if (msg.message == WM_QUIT)
+				{
+					isRunning = false;
+				}
+			}
+
 			// 게임 엔진을 멈추고 동작을 실행하는 부분
 			{
 				std::scoped_lock lock{ loopTodoRegistrationMutex };

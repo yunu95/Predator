@@ -7,6 +7,7 @@
 #include "EditorEvents.h"
 
 #include <memory>
+#include <utility>
 
 namespace application
 {

@@ -37,11 +37,14 @@ namespace application
 			void ImGui_Update();
 			void ImGui_OnResizeRenderImageSize();
 			void ImGui_UpdateCursorPosInScreenSpace();
+			void ImGui_UpdateWindowSize();
 			bool ImGui_IsCursorInScreen();
 			std::pair<float, float> ImGui_GetCursorPosOnPanel();
+			void Release();
 
 		private:
 			Application* app;
+			std::pair<float, float> prevWindowSize;
 			std::pair<unsigned int, unsigned int> renderImageSize;
 			std::pair<double, double> cursorPos_InScreenSpace;
 
