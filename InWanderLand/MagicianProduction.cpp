@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "MagicianProduction.h"
 #include "RangedAttackSystem.h"
 #include "UnitTransformComponent.h"

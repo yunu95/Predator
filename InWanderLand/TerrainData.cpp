@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "TerrainData.h"
 
 #include "InstanceManager.h"

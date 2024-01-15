@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "MapFileManager.h"
 
 #include "Storable.h"

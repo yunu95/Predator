@@ -20,28 +20,32 @@ namespace yunutyEngine
         class Impl;
         struct BuildSettings
         {
-            // ±æÃ£±â ÁÖÃ¼µéÀÇ ÃÖ´ë °³Ã¼¼ö
+            // ê¸¸ì°¾ê¸° ì£¼ì²´ë“¤ì˜ ìµœëŒ€ ê°œì²´ìˆ˜
             int maxCrowdNumber{ 1024 };
-            // ±æÃ£±â ÁÖÃ¼µéÀÇ ÃÖ´ë Ãæµ¹¹İ°æ
+            // ê¸¸ì°¾ê¸° ì£¼ì²´ë“¤ì˜ ìµœëŒ€ ì¶©ëŒë°˜ê²½
             float maxAgentRadius{ 10.0 };
-            // ¿À¸¦¼ö ÀÖ´Â °æ»ç
+            // ì˜¤ë¥¼ìˆ˜ ìˆëŠ” ê²½ì‚¬
             float walkableSlopeAngle{ 30 };
-            // ¿À¸¦ ¼ö ÀÖ´Â ´ÜÂ÷
+            // ì˜¤ë¥¼ ìˆ˜ ìˆëŠ” ë‹¨ì°¨
             float walkableClimb{ 0.2 };
-            // ÃµÀåÀÇ ÃÖ¼Ò ³ôÀÌ
+            // ì²œì¥ì˜ ìµœì†Œ ë†’ì´
             float walkableHeight{ 0.3 };
-            // xÃà,zÃà °ø°£ ºĞÇÒÀÇ ´ÜÀ§, ´ÜÀ§°¡ ÀÛÀ»¼ö·Ï ÆÇÁ¤ÀÌ ´õ ¼¼¹ĞÇØÁöÁö¸¸, ³×ºñ°ÔÀÌ¼Ç ºôµå¿Í ±æÃ£±â ½Ã½ºÅÛÀÇ ºÎÇÏ°¡ ´Ã°Ô µÈ´Ù.
+            // xì¶•,zì¶• ê³µê°„ ë¶„í• ì˜ ë‹¨ìœ„, ë‹¨ìœ„ê°€ ì‘ì„ìˆ˜ë¡ íŒì •ì´ ë” ì„¸ë°€í•´ì§€ì§€ë§Œ, ë„¤ë¹„ê²Œì´ì…˜ ë¹Œë“œì™€ ê¸¸ì°¾ê¸° ì‹œìŠ¤í…œì˜ ë¶€í•˜ê°€ ëŠ˜ê²Œ ëœë‹¤.
             float divisionSizeXZ{ 0.3 };
-            // yÃà °ø°£ ºĞÇÒÀÇ ´ÜÀ§, ´ÜÀ§°¡ ÀÛÀ»¼ö·Ï ÆÇÁ¤ÀÌ ´õ ¼¼¹ĞÇØÁöÁö¸¸, ³×ºñ°ÔÀÌ¼Ç ºôµå¿Í ±æÃ£±â ½Ã½ºÅÛÀÇ ºÎÇÏ°¡ ´Ã°Ô µÈ´Ù.
+            // yì¶• ê³µê°„ ë¶„í• ì˜ ë‹¨ìœ„, ë‹¨ìœ„ê°€ ì‘ì„ìˆ˜ë¡ íŒì •ì´ ë” ì„¸ë°€í•´ì§€ì§€ë§Œ, ë„¤ë¹„ê²Œì´ì…˜ ë¹Œë“œì™€ ê¸¸ì°¾ê¸° ì‹œìŠ¤í…œì˜ ë¶€í•˜ê°€ ëŠ˜ê²Œ ëœë‹¤.
             float divisionSizeY{ 0.2 };
-            // °ø°£ ºĞÇÒÀº xzÃàÀ¸·Î 250*330, yÃàÀ¸·Î 200°³ Á¤µµ ºĞÇÒµÇ´Â Á¤µµ¸é ¼ø½Ä°£¿¡ ³×ºñ°ÔÀÌ¼Ç ºôµåµµ µÇ¸é¼­ ±æÃ£±âµµ ¹«¸®¾øÀÌ ÇÏ°Ô µÇ´Â Á¤µµ´Ù.
-            // xzÃàÀ¸·Î 743* 989°³ Á¤µµ ºĞÇÒÀÌ µÇµµ Å« ºÎÇÏ´Â ¾ø´Ù.
+            // ê³µê°„ ë¶„í• ì€ xzì¶•ìœ¼ë¡œ 250*330, yì¶•ìœ¼ë¡œ 200ê°œ ì •ë„ ë¶„í• ë˜ëŠ” ì •ë„ë©´ ìˆœì‹ê°„ì— ë„¤ë¹„ê²Œì´ì…˜ ë¹Œë“œë„ ë˜ë©´ì„œ ê¸¸ì°¾ê¸°ë„ ë¬´ë¦¬ì—†ì´ í•˜ê²Œ ë˜ëŠ” ì •ë„ë‹¤.
+            // xzì¶•ìœ¼ë¡œ 743* 989ê°œ ì •ë„ ë¶„í• ì´ ë˜ë„ í° ë¶€í•˜ëŠ” ì—†ë‹¤.
         };
         NavigationField();
         virtual ~NavigationField();
         virtual void Update();
-        void BuildField(const float* worldVertices, size_t verticesNum, const int* faces, size_t facesNum, const BuildSettings& buildSettings = BuildSettings{});
-        void BuildField(std::vector<Vector3f> worldVertices, std::vector<int> faces, const BuildSettings& buildSettings = BuildSettings{})
+        Vector3d GetClosestPointOnField(const Vector3d& worldPosition) const;
+        void BuildField(const float* worldVertices, size_t verticesNum, const int* faces, size_t facesNum, const NavigationField::BuildSettings& buildSettings = BuildSettings{});
+        bool IsInitialized();
+        // facesëŠ” 3ê°œì˜ ì •ìˆ˜ë¡œ ì´ë£¨ì–´ì§„ ì‚¼ê°í˜• ì¸ë±ìŠ¤ ë°°ì—´ì´ë‹¤.
+        // ì‚¼ê°í˜•ì˜ ë…¸ë§ ë°©í–¥ì€ ì™¼ì† ë²•ì¹™ì„ ë”°ë¥´ë¯€ë¡œ, 0-1, 1-2 ë²„í…ìŠ¤ë¥¼ ì‡ëŠ” í™”ì‚´í‘œëŠ” ì‹œê³„ë°©í–¥ìœ¼ë¡œ ê°ê²¨ì•¼ í•œë‹¤.
+        void BuildField(std::vector<Vector3f> worldVertices, std::vector<int> faces, const NavigationField::BuildSettings& buildSettings = BuildSettings{})
         {
             static_assert(sizeof(Vector3f) == sizeof(float) * 3);
             assert(!worldVertices.empty() && !faces.empty());
@@ -49,6 +53,7 @@ namespace yunutyEngine
             BuildField(reinterpret_cast<float*>(&worldVertices[0]), worldVertices.size(), &faces[0], faces.size() / 3, buildSettings);
         }
     private:
+        void CleanUpField();
         Impl* impl{ nullptr };
         friend NavigationAgent;
     };

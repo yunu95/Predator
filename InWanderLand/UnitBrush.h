@@ -8,7 +8,7 @@ namespace application
     {
         namespace palette
         {
-            class UnitBrush : public yunutyEngine::SingletonComponent<UnitBrush>
+            class UnitBrush : public yunutyEngine::Component, public yunutyEngine::SingletonComponent<UnitBrush>
             {
             public:
             private:

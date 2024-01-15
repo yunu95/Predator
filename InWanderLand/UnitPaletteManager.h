@@ -22,6 +22,8 @@ namespace application
                 {
                     return dynamic_cast<UnitInstance*>(instance);
                 };
+                virtual void ApplyAsPlaytimeObjects() override {};
+                virtual void CleanUpPlaytimeObjects() override {};
             private:
             };
         }
