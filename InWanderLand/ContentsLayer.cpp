@@ -24,20 +24,32 @@ std::function<void()> application::Contents::ContentsLayer::testInitializer;
 void GraphicsTest()
 {
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-
+	_resourceManager->LoadFile("FBX/Bush");
+	_resourceManager->LoadFile("Texture/T_LeafBrush.png");
+	_resourceManager->LoadFile("LeavesPS.cso");
+	_resourceManager->LoadFile("LeavesVS.cso");
 	auto& meshList = _resourceManager->GetMeshList();
 	auto& shaderList = _resourceManager->GetShaderList();
-
+	auto& textureList = _resourceManager->GetTextureList();
+	
 	yunuGI::IMesh* planeMesh = nullptr;
 	yunuGI::IMesh* sphereMesh = nullptr;
 	yunuGI::IMesh* cubeMesh = nullptr;
-	yunuGI::IShader* shader = nullptr;
+	yunuGI::IShader* pshader = nullptr;
+	yunuGI::IShader* vshader = nullptr;
+	yunuGI::ITexture* texture = nullptr;
+
+	
 
 	for (auto& i : shaderList)
 	{
-		if (i->GetName() == L"DebugPS.cso")
+		if (i->GetName() == L"LeavesPS.cso")
 		{
-			shader = i;
+			pshader = i;
+		}
+		if (i->GetName() == L"LeavesVS.cso")
+		{
+			vshader = i;
 		}
 	}
 
@@ -57,23 +69,21 @@ void GraphicsTest()
 		}
 	}
 
+	for (auto& i : textureList)
 	{
-		// 지면
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->scale = Vector3d{ 2,2,1 };
-		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		renderer->GetGI().SetMesh(planeMesh);
+		if (i->GetName() == L"Texture/T_LeafBrush.png")
+		{
+			texture = i;
+		}
 	}
 
-	{
-		// 구
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->position = Vector3d{ 0,0,0 };
-		obj->GetTransform()->scale = Vector3d{ 1,1,1 };
-		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		renderer->GetGI().SetMesh(sphereMesh);
-		//renderer->GetGI().GetMaterial()->SetPixelShader(shader);
-	}
+	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Bush");
+	auto& childVec = obj->GetChildren();
+	auto renderer = childVec[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.13,0.33,0.19,1 });
+	renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, texture);
+	renderer->GetGI().GetMaterial()->SetPixelShader(pshader);
+	renderer->GetGI().GetMaterial()->SetVertexShader(vshader);
 }
 
 

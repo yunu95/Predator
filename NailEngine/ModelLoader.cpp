@@ -14,7 +14,7 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 	this->texturePath = std::filesystem::path(filePath).parent_path().wstring()
 		+ L"/" + std::filesystem::path(filePath).stem().wstring() + L".fbm/";
 
-	// Assimp Importer °´Ã¼ »ý¼º
+	// Assimp Importer ê°ì²´ ìƒì„±
 	Assimp::Importer importer;
 
 	// Load Flag
@@ -144,9 +144,9 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 		{
 			std::wstring _path = aiStringToWString(path);
 			std::filesystem::path pathName(_path);
-			pathName.filename().wstring();
+			std::wstring fileName =  pathName.filename().wstring();
 
-			fbxMeshData.material.albedoMap = this->texturePath + pathName.filename().wstring();
+			fbxMeshData.material.albedoMap = this->texturePath + fileName;
 		}
 	}
 
@@ -158,9 +158,9 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 		{
 			std::wstring _path = aiStringToWString(path);
 			std::filesystem::path pathName(_path);
-			pathName.filename().wstring();
+			std::wstring fileName = pathName.filename().wstring();
 
-			fbxMeshData.material.normalMap = this->texturePath + pathName.filename().wstring();
+			fbxMeshData.material.normalMap = this->texturePath + fileName;
 		}
 	}
 }

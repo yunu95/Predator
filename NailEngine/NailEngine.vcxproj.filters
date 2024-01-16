@@ -457,6 +457,12 @@
     <FxCompile Include="RuntimeDependency\resources\Shader\TestVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\LeavesPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\LeavesVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
