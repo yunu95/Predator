@@ -8,6 +8,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Yunu3DGraphicsInterface", "Yunu3DGraphicsInterface\Yunu3DGraphicsEngine.vcxproj", "{9E096B24-E24D-4BFC-9A4D-64C93013BC39}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InWanderLand", "InWanderLand\InWanderLand.vcxproj", "{49F28A62-3499-4DD9-B0D4-A6F8D83EEA4B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2BD97F71-C51D-4422-A416-2B78779E9D80} = {2BD97F71-C51D-4422-A416-2B78779E9D80}
+		{60308F48-95FA-432C-849D-B74BE6CCCE60} = {60308F48-95FA-432C-849D-B74BE6CCCE60}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NailEngine", "NailEngine\NailEngine.vcxproj", "{2BD97F71-C51D-4422-A416-2B78779E9D80}"
 EndProject
