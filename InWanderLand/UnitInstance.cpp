@@ -1,5 +1,6 @@
 #include "InWanderLand.h"
 #include "DebugMeshes.h"
+#include "UnitInstance.h"
 
 namespace application::editor::palette
 {

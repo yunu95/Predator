@@ -398,6 +398,7 @@
     <ClCompile Include="Device.cpp">
       <Filter>GraphicsEngine\Device</Filter>
     </ClCompile>
+    <ClCompile Include="tempMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="RuntimeDependency\resources\Shader\DefaultVS.hlsl">
