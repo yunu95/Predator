@@ -7,14 +7,15 @@ struct PixelIn
     float4 clipPos : POSITION;
 };
 
-float main(PixelIn input) : SV_DEPTH
+void main(PixelIn input) 
 {
-    return input.clipPos.z;
+    //return input.clipPos.z / input.clipPos.w;
+    return;
 }
 
 // ShaderInfo
 // ShaderType : Deferred
-// RasterType : Solid
+// RasterType : Shadow
 // CullType : CullBack
 // DepthType : LessEqual
 // BlendType : Default

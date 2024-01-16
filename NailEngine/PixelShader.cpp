@@ -145,6 +145,7 @@ void PixelShader::CreateRasterizerState(const std::string& fileContent)
 			else if (shaderType == "Shadow")
 			{
 				rasterDesc.DepthBias = 100000;
+				//rasterDesc.DepthBias = 25000;
 				rasterDesc.DepthBiasClamp = 0.f;
 				rasterDesc.DepthClipEnable = true;
 				rasterDesc.SlopeScaledDepthBias = 1.f;

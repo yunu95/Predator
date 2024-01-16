@@ -68,7 +68,7 @@ void GraphicsTest()
 	{
 		// 구
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->position = Vector3d{ 0,0,-1 };
+		obj->GetTransform()->position = Vector3d{ 0,0,0 };
 		obj->GetTransform()->scale = Vector3d{ 1,1,1 };
 		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		renderer->GetGI().SetMesh(sphereMesh);
