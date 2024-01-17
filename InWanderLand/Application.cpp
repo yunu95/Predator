@@ -257,12 +257,14 @@ namespace application
 
     void Application::Finalize()
     {
+#ifdef EDITOR
         for (auto each : layers)
         {
             each->Finalize();
 
             delete each;
         }
+#endif
 
 
         ::DestroyWindow(hWND);
