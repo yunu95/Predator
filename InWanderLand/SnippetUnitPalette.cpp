@@ -17,7 +17,7 @@ using namespace application::editor::palette;
 
 
 
-namespace tests
+namespace snippets
 {
     TEST_CLASS(SnippetUnitPaletteClass)
     {

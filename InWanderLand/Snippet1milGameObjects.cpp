@@ -43,7 +43,7 @@ void SnippetInitializer1milGameObjects()
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
-namespace tests
+namespace snippets
 {
     TEST_CLASS(Snippet1milGameObjectsClass)
     {

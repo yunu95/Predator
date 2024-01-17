@@ -17,14 +17,14 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace application::editor::palette;
 
 
-namespace tests
+namespace snippets
 {
     // 이 함수는 게임의 기본 초기화 함수를 오버라이드합니다.
     void SnippetInitializerTerrainPalette()
     {
         yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-        auto rtsCam = Scene::getCurrentScene()->AddGameObject()->AddComponent<RTSTestCam>();
-        auto buttonEvent = Scene::getCurrentScene()->AddGameObject()->AddComponent<ButtonEvent>();
+        auto rtsCam = Scene::getCurrentScene()->AddGameObject()->AddComponent<tests::RTSTestCam>();
+        auto buttonEvent = Scene::getCurrentScene()->AddGameObject()->AddComponent<tests::ButtonEvent>();
         static vector<NavigationAgent*> agents;
 
         rtsCam->GetTransform()->position = Vector3d(3, 10, 3);
@@ -32,7 +32,7 @@ namespace tests
         rtsCam->groundHoveringClickCallback = [](const Vector3d& worldPos) {PaletteManager::GetCurrentPalette()->OnMouseMove(worldPos); };
         rtsCam->groundLeftClickCallback = [](const Vector3d& worldPos) {
             if (Input::isKeyDown(KeyCode::Control) && SingleNavigationField::Instance().IsInitialized())
-                agents.push_back(CreateNavAgent(worldPos, &SingleNavigationField::Instance()));
+                agents.push_back(tests::CreateNavAgent(worldPos, &SingleNavigationField::Instance()));
             else
                 PaletteManager::GetCurrentPalette()->OnLeftClick();
         };

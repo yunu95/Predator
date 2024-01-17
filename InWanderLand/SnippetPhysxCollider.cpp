@@ -87,7 +87,7 @@ void SnippetInitializerPhysxCollider()
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
-namespace tests
+namespace snippets
 {
     TEST_CLASS(SnippetPhysxColliderClass)
     {

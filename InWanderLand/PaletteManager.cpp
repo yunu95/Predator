@@ -7,6 +7,7 @@ namespace application::editor::palette
 {
     PaletteManager* PaletteManager::currentPalette = nullptr;
 
+#ifdef EDITOR
     void PaletteManager::OnLeftClick()
     {
         isClickingLeft = true;
@@ -239,4 +240,5 @@ namespace application::editor::palette
             pendingSelection->OnHoverLeft();
         pendingSelection = nullptr;
     }
+#endif
 }
