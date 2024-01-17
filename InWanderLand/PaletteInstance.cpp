@@ -4,9 +4,9 @@
 
 namespace application::editor::palette
 {
-#ifdef EDITOR
     void PaletteInstance::Start()
     {
+#ifdef EDITOR
         selectCircle = AttachDebugMesh(GetGameObject()->AddGameObject(), DebugMeshType::Rectangle, yunuGI::Color{1, 1, 1}, true);
         selectCircle->GetTransform()->rotation = Quaternion({ 90,0,0 });
         pickingCollider = GetGameObject()->AddComponent<yunutyEngine::physics::BoxCollider>();
@@ -15,12 +15,14 @@ namespace application::editor::palette
         rigidBody->SetAsKinematic(true);
         selectCircle->GetTransform()->scale = Vector3d::one * selectCircleRadius;
         selectCircle->SetActive(false);
+#endif
     }
+#ifdef EDITOR
     void PaletteInstance::OnHover()
     {
         isHovering = true;
         selectCircle->SetActive(true);
-        selectCircle->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 1,1,1 },true));
+        selectCircle->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 1,1,1 }, true));
     }
     void PaletteInstance::OnHoverLeft()
     {
@@ -36,7 +38,7 @@ namespace application::editor::palette
     {
         isSelected = true;
         selectCircle->SetActive(true);
-        selectCircle->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,1,0 },true));
+        selectCircle->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,1,0 }, true));
     }
     void PaletteInstance::OnDeselected()
     {
@@ -48,6 +50,7 @@ namespace application::editor::palette
             selectCircle->SetActive(false);
         }
     }
+#endif
     void PaletteInstance::ResetInstance()
     {
         pickingCollider->SetActive(true);
@@ -56,7 +59,6 @@ namespace application::editor::palette
     {
         pickingCollider->SetActive(false);
     }
-#endif
     void PaletteInstance::ResetInstances()
     {
     }

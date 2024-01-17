@@ -12,6 +12,7 @@ namespace application
             class TerrainPaletteManager : public PaletteManager, public  yunutyEngine::SingletonClass<TerrainPaletteManager>
             {
             public:
+#ifdef EDITOR
                 virtual PaletteInstance* PlaceInstance(Vector3d worldPosition)override;
                 virtual void OnMouseMove(Vector3d projectedWorldPos)override;
                 virtual void SetAsSelectMode(bool isSelectMode);
@@ -21,6 +22,7 @@ namespace application
                 // 브러시 크기는 0부터 시작합니다.
                 unsigned int GetBrushSize();
                 void SetBrushSize(unsigned int brushSize);
+#endif
                 virtual void ApplyAsPlaytimeObjects() override;
                 virtual void CleanUpPlaytimeObjects() override {};
                 static constexpr double nodeDistance = 0.5;

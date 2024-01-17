@@ -10,7 +10,6 @@ namespace application::editor::palette
         PaletteInstance::Start();
         mesh = AttachDebugMesh(GetGameObject()->AddGameObject(), DebugMeshType::Cube, yunuGI::Color{0.7, 0.7, 0.7}, false);
     }
-    
 #endif
     void UnitInstance::ApplyInstance()
     {

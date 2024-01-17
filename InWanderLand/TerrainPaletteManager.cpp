@@ -9,6 +9,7 @@
 
 namespace application::editor::palette
 {
+#ifdef EDITOR
     PaletteInstance* TerrainPaletteManager::PlaceInstance(Vector3d worldPosition)
     {
         auto centerNodeKey = WorldToNodeSpace(worldPosition);
@@ -65,6 +66,7 @@ namespace application::editor::palette
         this->brushSize = brushSize;
         TerrainBrush::Instance().SetBrushSize(brushSize);
     }
+#endif
     void TerrainPaletteManager::ApplyAsPlaytimeObjects()
     {
         std::vector<Vector3f> vertexList;

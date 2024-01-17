@@ -1,5 +1,5 @@
 #include "InWanderLand.h"
-#ifdef GEN_TESTS
+#if defined(GEN_TESTS) && defined(EDITOR)
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
 #include "YunutyEngine.h"
