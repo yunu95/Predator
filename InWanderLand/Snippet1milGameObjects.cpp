@@ -43,9 +43,9 @@ void SnippetInitializer1milGameObjects()
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
-namespace tests
+namespace snippets
 {
-    TEST_CLASS(Snippets)
+    TEST_CLASS(Snippet1milGameObjectsClass)
     {
     public:
         // 게임오브젝트의 갯수가 100만개가 되어도, 1000만개가 되어도 Update함수를 매번 호출하지만 않는다면 게임 실행에 전혀 부담을 주지 않습니다.
@@ -54,7 +54,7 @@ namespace tests
         TEST_METHOD(Snippet1milGameObjects)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializer1milGameObjects);
+            application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializer1milGameObjects);
             client.Initialize();
             client.Run();
             client.Finalize();

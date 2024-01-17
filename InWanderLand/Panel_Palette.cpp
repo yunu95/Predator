@@ -1,3 +1,4 @@
+#ifdef EDITOR
 #include "InWanderLand.h"
 #include "Panel_Palette.h"
 #include "YunutyEngine.h"
@@ -51,3 +52,4 @@ namespace application
         }
     }
 }
+#endif

@@ -407,7 +407,7 @@ void Unit::DeathUpdateFunction()
 	//GetGameObject()->SetSelfActive(false);
 }
 
-void Unit::CheckCurrentAnimation(IAnimation* currentStateAnimation)
+void Unit::CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation)
 {
 	if (GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().GetCurrentAnimation() != currentStateAnimation)
 	{
@@ -457,22 +457,22 @@ void Unit::SetUnitSpeed(float speed)
 	m_speed = speed;
 }
 
-void Unit::SetIdleAnimation(IAnimation* idleAnim)
+void Unit::SetIdleAnimation(yunuGI::IAnimation* idleAnim)
 {
 	m_idleAnimation = idleAnim;
 }
 
-void Unit::SetWalkAnimation(IAnimation* walkAnim)
+void Unit::SetWalkAnimation(yunuGI::IAnimation* walkAnim)
 {
 	m_walkAnimation = walkAnim;
 }
 
-void Unit::SetAttackAnimation(IAnimation* attackAnim)
+void Unit::SetAttackAnimation(yunuGI::IAnimation* attackAnim)
 {
 	m_attackAnimation = attackAnim;
 }
 
-void Unit::SetDeathAnimation(IAnimation* deathAnim)
+void Unit::SetDeathAnimation(yunuGI::IAnimation* deathAnim)
 {
 	m_deathAnimation = deathAnim;
 }

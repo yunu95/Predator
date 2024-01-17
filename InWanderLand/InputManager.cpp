@@ -35,11 +35,11 @@ void InputManager::Update()
 
 	if (yunutyEngine::Input::isKeyDown(KeyCode::Q))
 	{
-		PlayerController::GetInstance()->SetLeftClickSkill(Unit::SkillEnum::Q);
+		PlayerController::GetInstance()->SetLeftClickSkill(Unit::SkillEnum::QSkill);
 	}
 
 	if (yunutyEngine::Input::isKeyDown(KeyCode::W))
 	{
-		PlayerController::GetInstance()->SetLeftClickSkill(Unit::SkillEnum::W);
+		PlayerController::GetInstance()->SetLeftClickSkill(Unit::SkillEnum::WSkill);
 	}
 }

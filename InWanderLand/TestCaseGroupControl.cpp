@@ -170,13 +170,13 @@ void TestCaseGroupControlInit()
 
 namespace tests
 {
-	TEST_CLASS(BuildTests)
+	TEST_CLASS(TestCaseGroupControlClass)
 	{
 	public:
 		TEST_METHOD(TestCaseGroupControl)
 		{
 			application::Application& client = application::Application::CreateApplication(0, 0);
-			application::Contents::ContentsLayer::AssignTestInitializer(TestCaseGroupControlInit);
+			application::contents::ContentsLayer::AssignTestInitializer(TestCaseGroupControlInit);
 			client.Initialize();
 			client.Run();
 			client.Finalize();

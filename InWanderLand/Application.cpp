@@ -212,7 +212,7 @@ namespace application
 #ifdef EDITOR
 		layers[(int)LayerList::EditorLayer] = new editor::EditorLayer();
 #endif
-		layers[(int)LayerList::ContentsLayer] = new Contents::ContentsLayer();
+		layers[(int)LayerList::ContentsLayer] = new contents::ContentsLayer();
 
 		for (auto each : layers)
 		{
@@ -266,13 +266,14 @@ namespace application
 
 	void Application::Finalize()
 	{
+#ifdef EDITOR
 		for (auto each : layers)
 		{
 			each->Finalize();
 
 			delete each;
 		}
-
+#endif
 
 		::DestroyWindow(hWND);
 		::UnregisterClass(wc.lpszClassName, wc.hInstance);
@@ -296,48 +297,13 @@ namespace application
 		scoped_lock lock{ loopTodoRegistrationMutex };
 		loopRegistrations.push_back(todo);
 	}
+
 	const ApplicationSpecification& Application::GetApplicationSpecification() const
 	{
 		return appSpecification;
 	}
 
-	void Application::SetWindowCallBack()
-	{
-		// mouse device setting
-		inputDevice[0].usUsagePage = 0x01;
-		inputDevice[0].usUsage = 0x02;
-		inputDevice[0].dwFlags = RIDEV_INPUTSINK;
-		inputDevice[0].hwndTarget = editorHWND;
-
-		// keyboard device setting
-		inputDevice[1].usUsagePage = 0x01;
-		inputDevice[1].usUsage = 0x06;
-		inputDevice[1].dwFlags = RIDEV_INPUTSINK;
-		inputDevice[1].hwndTarget = editorHWND;
-
-		RegisterRawInputDevices(inputDevice, 2, sizeof(RAWINPUTDEVICE));
-
-		winResizeCallBackFunction = [&]() { Application::DispatchEvent<editor::WindowResizeEvent>(g_EditorResizeWidth, g_EditorResizeHeight); };
-		winKeyboardPressedCallBackFunction = [&](unsigned char keyCode)
-			{
-				if (eim.IsKeyboardDown(static_cast<editor::KeyCode>(keyCode)))
-				{
-					Application::DispatchEvent<editor::KeyDownEvent>(static_cast<editor::KeyCode>(keyCode));
-				}
-				else
-				{
-					Application::DispatchEvent<editor::KeyPressedEvent>(static_cast<editor::KeyCode>(keyCode));
-				}
-			};
-		winKeyboardUpCallBackFunction = [&](unsigned char keyCode) { Application::DispatchEvent<editor::KeyReleasedEvent>(static_cast<editor::KeyCode>(keyCode)); };
-		winMouseLeftPressedCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Left); };
-		winMouseLeftUpCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Left); };
-		winMouseRightPressedCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Right); };
-		winMouseRightUpCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Right); };
-		winMouseMoveCallBackFunction = [&](long posX, long posY) { Application::DispatchEvent<editor::MouseMoveEvent>(posX, posY); };
-		winMouseWheelCallBackFunction = [&](short wheelDelta) {Application::DispatchEvent<editor::MouseWheelEvent>(wheelDelta); };
-	}
-
+	
 	void* Application::GetSceneSRV()
 	{
 		static auto resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
@@ -345,6 +311,10 @@ namespace application
 	}
 
 #ifdef EDITOR
+	bool Application::IsFocusGameWindow()
+	{
+		return false;
+	}
 	void Application::ImGuiUpdate()
 	{
 		MSG msg;
@@ -451,6 +421,43 @@ namespace application
 				eventFunc();
 			}
 		}
+	}
+
+	void Application::SetWindowCallBack()
+	{
+		// mouse device setting
+		inputDevice[0].usUsagePage = 0x01;
+		inputDevice[0].usUsage = 0x02;
+		inputDevice[0].dwFlags = RIDEV_INPUTSINK;
+		inputDevice[0].hwndTarget = editorHWND;
+
+		// keyboard device setting
+		inputDevice[1].usUsagePage = 0x01;
+		inputDevice[1].usUsage = 0x06;
+		inputDevice[1].dwFlags = RIDEV_INPUTSINK;
+		inputDevice[1].hwndTarget = editorHWND;
+
+		RegisterRawInputDevices(inputDevice, 2, sizeof(RAWINPUTDEVICE));
+
+		winResizeCallBackFunction = [&]() { Application::DispatchEvent<editor::WindowResizeEvent>(g_EditorResizeWidth, g_EditorResizeHeight); };
+		winKeyboardPressedCallBackFunction = [&](unsigned char keyCode)
+			{
+				if (eim.IsKeyboardDown(static_cast<editor::KeyCode>(keyCode)))
+				{
+					Application::DispatchEvent<editor::KeyDownEvent>(static_cast<editor::KeyCode>(keyCode));
+				}
+				else
+				{
+					Application::DispatchEvent<editor::KeyPressedEvent>(static_cast<editor::KeyCode>(keyCode));
+				}
+			};
+		winKeyboardUpCallBackFunction = [&](unsigned char keyCode) { Application::DispatchEvent<editor::KeyReleasedEvent>(static_cast<editor::KeyCode>(keyCode)); };
+		winMouseLeftPressedCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Left); };
+		winMouseLeftUpCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Left); };
+		winMouseRightPressedCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Right); };
+		winMouseRightUpCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Right); };
+		winMouseMoveCallBackFunction = [&](long posX, long posY) { Application::DispatchEvent<editor::MouseMoveEvent>(posX, posY); };
+		winMouseWheelCallBackFunction = [&](short wheelDelta) {Application::DispatchEvent<editor::MouseWheelEvent>(wheelDelta); };
 	}
 #endif
 }

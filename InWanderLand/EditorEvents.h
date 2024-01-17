@@ -6,6 +6,7 @@
 
 #pragma once
 
+#ifdef EDITOR
 #include <string>
 #include <functional>
 
@@ -114,3 +115,4 @@ namespace application
 		};
 	}
 }
+#endif

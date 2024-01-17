@@ -143,13 +143,13 @@ void TestCasePhysicsInit()
 
 namespace tests
 {
-    TEST_CLASS(BuildTests)
+    TEST_CLASS(TestCasePhysicsClass)
     {
     public:
         TEST_METHOD(TestCasePhysics)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(TestCasePhysicsInit);
+            application::contents::ContentsLayer::AssignTestInitializer(TestCasePhysicsInit);
             client.Initialize();
             client.Run();
             client.Finalize();

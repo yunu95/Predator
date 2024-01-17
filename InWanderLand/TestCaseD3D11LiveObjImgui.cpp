@@ -24,7 +24,7 @@ void TestCaseD3D11LiveObjimguiInit()
 
 namespace tests
 {
-    TEST_CLASS(BuildTests)
+    TEST_CLASS(TestCaseD3D11LiveObjimguiClass)
     {
     public:
         TEST_METHOD(TestCaseD3D11LiveObjimgui)
@@ -32,7 +32,7 @@ namespace tests
             try
             {
                 application::Application& client = application::Application::CreateApplication(0, 0);
-                application::Contents::ContentsLayer::AssignTestInitializer(TestCaseD3D11LiveObjimguiInit);
+                application::contents::ContentsLayer::AssignTestInitializer(TestCaseD3D11LiveObjimguiInit);
                 client.Initialize();
                 client.Run();
                 client.Finalize();

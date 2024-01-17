@@ -1,3 +1,4 @@
+#ifdef EDITOR
 #include "InWanderLand.h"
 #include "Panel_SceneView.h"
 
@@ -205,3 +206,4 @@ namespace application
 		}
 	}
 }
+#endif

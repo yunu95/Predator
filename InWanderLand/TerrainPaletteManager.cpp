@@ -1,4 +1,5 @@
 #pragma once
+#ifdef EDITOR
 #include "InWanderLand.h"
 #include "PaletteManager.h"
 #include "TerrainPaletteManager.h"
@@ -136,3 +137,4 @@ namespace application::editor::palette
         return node;
     }
 }
+#endif

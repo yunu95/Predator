@@ -10,7 +10,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-// ÀÌ ÇÔ¼ö´Â °ÔÀÓÀÇ ±âº» ÃÊ±âÈ­ ÇÔ¼ö¸¦ ¿À¹ö¶óÀÌµåÇÕ´Ï´Ù.
+// ì´ í•¨ìˆ˜ëŠ” ê²Œì„ì˜ ê¸°ë³¸ ì´ˆê¸°í™” í•¨ìˆ˜ë¥¼ ì˜¤ë²„ë¼ì´ë“œí•©ë‹ˆë‹¤.
 void SnippetAllGraphicsWorkedInit()
 {
 	yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
@@ -85,17 +85,17 @@ void SnippetAllGraphicsWorkedInit()
 	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
-namespace tests
+namespace snippets
 {
 
-	TEST_CLASS(Snippets)
+	TEST_CLASS(SnippetAllGraphicsWorkedClass)
 	{
 	public:
-		// TestComponent2¾È¿¡ HÅ°¿Í JÅ°¸¦ ´­·¶À» ¶§ ¾Ö´Ï¸ŞÀÌ¼Ç ÀüÈ¯ÇÏ°Ô µÇ¾îÀÖÀ½.
+		// TestComponent2ì•ˆì— Hí‚¤ì™€ Jí‚¤ë¥¼ ëˆŒë €ì„ ë•Œ ì• ë‹ˆë©”ì´ì…˜ ì „í™˜í•˜ê²Œ ë˜ì–´ìˆìŒ.
 		TEST_METHOD(SnippetAllGraphicsWorked)
 		{
 			application::Application& client = application::Application::CreateApplication(0, 0);
-			application::Contents::ContentsLayer::AssignTestInitializer(SnippetAllGraphicsWorkedInit);
+			application::contents::ContentsLayer::AssignTestInitializer(SnippetAllGraphicsWorkedInit);
 			client.Initialize();
 			client.Run();
 			client.Finalize();

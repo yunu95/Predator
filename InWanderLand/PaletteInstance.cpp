@@ -1,10 +1,10 @@
+#ifdef EDITOR
 #include "InWanderLand.h"
 #include "PaletteInstance.h"
 #include "DebugMeshes.h"
 
 namespace application::editor::palette
 {
-#ifdef EDITOR
     void PaletteInstance::Start()
     {
         selectCircle = AttachDebugMesh(GetGameObject()->AddGameObject(), DebugMeshType::Rectangle, yunuGI::Color{1, 1, 1}, true);
@@ -20,7 +20,7 @@ namespace application::editor::palette
     {
         isHovering = true;
         selectCircle->SetActive(true);
-        selectCircle->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 1,1,1 },true));
+        selectCircle->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 1,1,1 }, true));
     }
     void PaletteInstance::OnHoverLeft()
     {
@@ -36,7 +36,7 @@ namespace application::editor::palette
     {
         isSelected = true;
         selectCircle->SetActive(true);
-        selectCircle->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,1,0 },true));
+        selectCircle->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,1,0 }, true));
     }
     void PaletteInstance::OnDeselected()
     {
@@ -56,7 +56,6 @@ namespace application::editor::palette
     {
         pickingCollider->SetActive(false);
     }
-#endif
     void PaletteInstance::ResetInstances()
     {
     }
@@ -64,3 +63,4 @@ namespace application::editor::palette
     {
     }
 }
+#endif

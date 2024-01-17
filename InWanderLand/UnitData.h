@@ -4,6 +4,7 @@
 
 #pragma once
 
+#ifdef EDITOR
 #include "IEditableData.h"
 #include "Unit_TemplateData.h"
 
@@ -72,3 +73,4 @@ namespace application
 		};
 	}
 }
+#endif

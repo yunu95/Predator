@@ -1,4 +1,5 @@
 #pragma once
+#ifdef EDITOR
 #include "PaletteManager.h"
 #include "YunutyEngine.h"
 #include "SingletonClass.h"
@@ -19,3 +20,4 @@ namespace application
         }
     }
 }
+#endif

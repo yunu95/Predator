@@ -1,8 +1,9 @@
-/// 2023. 12. 08 ±è»óÁØ
-/// ¿¡µğÅÍÀÇ ÇöÀç ¸Ê »óÅÂ¸¦ ÀúÀåÇÏ´Â Ä¿¸Çµå
+/// 2023. 12. 08 ê¹€ìƒì¤€
+/// ì—ë””í„°ì˜ í˜„ì¬ ë§µ ìƒíƒœë¥¼ ì €ì¥í•˜ëŠ” ì»¤ë§¨ë“œ
 
 #pragma once
 
+#ifdef EDITOR
 #include "Command.h"
 
 namespace application
@@ -30,4 +31,4 @@ namespace application
 		};
 	}
 }
-
+#endif

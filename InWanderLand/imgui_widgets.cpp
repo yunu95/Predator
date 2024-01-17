@@ -3989,7 +3989,7 @@ static bool InputTextFilterCharacter(ImGuiContext* ctx, unsigned int* p_char, Im
             if (!(c >= '0' && c <= '9') && (c != c_decimal_point) && (c != '-') && (c != '+') && (c != '*') && (c != '/'))
                 return false;
 
-        // Allow 0-9 . - + * / e E
+        // Allow 0-9 . - + * / e Alphabet_E
         if (flags & ImGuiInputTextFlags_CharsScientific)
             if (!(c >= '0' && c <= '9') && (c != c_decimal_point) && (c != '-') && (c != '+') && (c != '*') && (c != '/') && (c != 'e') && (c != 'E'))
                 return false;

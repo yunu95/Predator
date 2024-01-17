@@ -40,9 +40,9 @@ void SnippetInitializerTemplate()
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
-namespace tests
+namespace snippets
 {
-    TEST_CLASS(Snippets)
+    TEST_CLASS(SnippetTemplateClass)
     {
     public:
         // 테스트 함수의 이름이 Snippet으로 시작하는 테스트들은 빌드의 성공 여부 판단에 쓰이지 않습니다.
@@ -51,7 +51,7 @@ namespace tests
         TEST_METHOD(SnippetTemplate)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializerTemplate);
+            application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializerTemplate);
             client.Initialize();
             client.Run();
             client.Finalize();

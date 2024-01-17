@@ -9,6 +9,7 @@
 
 #include "Camera.h"
 
+#ifdef EDITOR
 namespace application
 {
 	namespace editor
@@ -55,4 +56,4 @@ namespace application
 		};
 	}
 }
-
+#endif

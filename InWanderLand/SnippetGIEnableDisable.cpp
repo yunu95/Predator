@@ -42,9 +42,9 @@ void SnippetInitializerGIEnableDisable()
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
-namespace tests
+namespace snippets
 {
-    TEST_CLASS(Snippets)
+    TEST_CLASS(SnippetGIEnableDisableClass)
     {
     public:
         /// <summary>
@@ -53,7 +53,7 @@ namespace tests
         TEST_METHOD(SnippetGIEnableDisable)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializerGIEnableDisable);
+            application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializerGIEnableDisable);
             client.Initialize();
             client.Run();
             client.Finalize();

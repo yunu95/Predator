@@ -1,4 +1,5 @@
 #pragma once
+#ifdef EDITOR
 #include "PaletteInstance.h"
 
 namespace application
@@ -10,10 +11,8 @@ namespace application
             class UnitInstance : public PaletteInstance
             {
             public:
-#ifdef EDITOR
                 virtual void Start()override;
             protected:
-                virtual void ApplyInstance() override;
                 virtual void OnHover()
                 {
                     PaletteInstance::OnHover();
@@ -22,10 +21,11 @@ namespace application
                 {
                     PaletteInstance::OnHoverLeft();
                 }
-#endif
+                virtual void ApplyInstance() override;
             private:
                 yunutyEngine::graphics::StaticMeshRenderer* mesh{ nullptr };
             };
         }
     }
 }
+#endif

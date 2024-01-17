@@ -87,9 +87,9 @@ void SnippetInitializerPhysxCollider()
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
-namespace tests
+namespace snippets
 {
-    TEST_CLASS(Snippets)
+    TEST_CLASS(SnippetPhysxColliderClass)
     {
     public:
         /// <summary>
@@ -99,7 +99,7 @@ namespace tests
         TEST_METHOD(SnippetPhysxCollider)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializerPhysxCollider);
+            application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializerPhysxCollider);
             client.Initialize();
             client.Run();
             client.Finalize();

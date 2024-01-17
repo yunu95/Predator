@@ -1,4 +1,5 @@
 #pragma once
+#ifdef EDITOR
 #include "YunutyEngine.h"
 
 namespace application
@@ -120,3 +121,4 @@ namespace application
         }
     }
 }
+#endif

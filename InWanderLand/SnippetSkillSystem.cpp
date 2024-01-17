@@ -152,15 +152,15 @@ void SnippetSkillSystemInit()
 	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
-namespace tests
+namespace snippets
 {
-	TEST_CLASS(Snippets)
+	TEST_CLASS(SnippetSkillSystemClass)
 	{
 	public:
 		TEST_METHOD(SnippetSkillSystem)
 		{
 			application::Application& client = application::Application::CreateApplication(0, 0);
-			application::Contents::ContentsLayer::AssignTestInitializer(SnippetSkillSystemInit);
+			application::contents::ContentsLayer::AssignTestInitializer(SnippetSkillSystemInit);
 			client.Initialize();
 			client.Run();
 			client.Finalize();

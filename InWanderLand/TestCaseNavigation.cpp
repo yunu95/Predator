@@ -109,13 +109,13 @@ void TestCaseNavigationInit()
 
 namespace tests
 {
-    TEST_CLASS(BuildTests)
+    TEST_CLASS(TestCaseNavigationClass)
     {
     public:
         TEST_METHOD(TestCaseNavigation)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(TestCaseNavigationInit);
+            application::contents::ContentsLayer::AssignTestInitializer(TestCaseNavigationInit);
             client.Initialize();
             client.Run();
             client.Finalize();

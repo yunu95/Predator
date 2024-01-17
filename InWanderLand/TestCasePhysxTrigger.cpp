@@ -85,13 +85,13 @@ void SnippetInitializerPhysxTrigger()
 
 namespace tests
 {
-    TEST_CLASS(BuildTests)
+    TEST_CLASS(TestCasePhysxTriggerClass)
     {
     public:
         TEST_METHOD(TestCasePhysxTrigger)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializerPhysxTrigger);
+            application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializerPhysxTrigger);
             client.Initialize();
             client.Run();
             client.Finalize();

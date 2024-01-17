@@ -44,7 +44,7 @@ Input::Input()
     rawKeyEnumMap.insert(make_pair('B', KeyCode::B));
     rawKeyEnumMap.insert(make_pair('C', KeyCode::C));
     rawKeyEnumMap.insert(make_pair('D', KeyCode::D));
-    rawKeyEnumMap.insert(make_pair('E', KeyCode::E));
+    rawKeyEnumMap.insert(make_pair('E', KeyCode::Alphabet_E));
     rawKeyEnumMap.insert(make_pair('F', KeyCode::F));
     rawKeyEnumMap.insert(make_pair('G', KeyCode::G));
     rawKeyEnumMap.insert(make_pair('H', KeyCode::H));

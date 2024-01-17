@@ -3,6 +3,7 @@
 
 #pragma once
 
+#ifdef EDITOR
 #include "Singleton.h"
 #include "EditorModule.h"
 
@@ -50,3 +51,4 @@ namespace application
 		};
 	}
 }
+#endif

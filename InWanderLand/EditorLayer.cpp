@@ -1,3 +1,4 @@
+#ifdef EDITOR
 #include "InWanderLand.h"
 #include "EditorLayer.h"
 
@@ -122,7 +123,6 @@ namespace application
 
 				each->OnEvent(event);
 			}
-
 		}
 
 		void EditorLayer::LateInitialize()
@@ -176,3 +176,4 @@ namespace application
 		}
 	}
 }
+#endif

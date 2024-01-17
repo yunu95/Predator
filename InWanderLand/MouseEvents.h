@@ -3,6 +3,7 @@
 
 #pragma once
 
+#ifdef EDITOR
 #include "EditorEvents.h"
 #include "EditorKeyCodes.h"
 
@@ -209,4 +210,4 @@ namespace application
 		};
 	}
 }
-
+#endif

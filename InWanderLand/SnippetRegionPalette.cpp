@@ -1,5 +1,5 @@
 #include "InWanderLand.h"
-#ifdef GEN_TESTS
+#if defined(GEN_TESTS) && defined(EDITOR)
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
 #include "YunutyEngine.h"
@@ -47,9 +47,9 @@ void SnippetInitializerRegionPalette()
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
-namespace tests
+namespace snippets
 {
-    TEST_CLASS(Snippets)
+    TEST_CLASS(SnippetRegionPaletteClass)
     {
     public:
         // 테스트 함수의 이름이 Snippet으로 시작하는 테스트들은 빌드의 성공 여부 판단에 쓰이지 않습니다.
@@ -58,7 +58,7 @@ namespace tests
         TEST_METHOD(SnippetRegionPalette)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializerRegionPalette);
+            application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializerRegionPalette);
             client.Initialize();
             client.Run();
             client.Finalize();

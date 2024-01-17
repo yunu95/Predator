@@ -5,6 +5,7 @@
 
 #pragma once
 
+#ifdef EDITOR
 #include <vector>
 #include <memory>
 #include <functional>
@@ -75,3 +76,4 @@ namespace application
 		};
 	}
 }
+#endif

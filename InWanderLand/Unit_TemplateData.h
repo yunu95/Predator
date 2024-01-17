@@ -4,6 +4,7 @@
 
 #pragma once
 
+#ifdef EDITOR
 #include "ITemplateData.h"
 
 namespace application
@@ -42,3 +43,4 @@ namespace application
 		};
 	}
 }
+#endif

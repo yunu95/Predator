@@ -3,6 +3,7 @@
 
 #include "YunutyEngine.h"
 
+#ifdef EDITOR
 // 게임 엔진에서 사용할 Component 용 EditorCamera
 class EditorCameraComponent
 	: public yunutyEngine::graphics::Camera
@@ -99,3 +100,4 @@ namespace application
 		}
 	}
 }
+#endif

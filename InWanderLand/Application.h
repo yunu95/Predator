@@ -68,6 +68,8 @@ namespace application
                 app.em.PushEventCallable([event]() { app.OnEvent(*event); });
             }
         }
+
+        bool IsFocusGameWindow();
 #endif
 
     private:
@@ -78,6 +80,7 @@ namespace application
         void OnEvent(editor::EditorEvents& event);
         // 이벤트들을 일괄적으로 실행
         void ProcessEvents();
+        void SetWindowCallBack();
 #endif
         std::mutex loopTodoRegistrationMutex;
         // AddMainLoopTodo로 등록된 휘발성 콜백 함수들입니다.
@@ -85,7 +88,6 @@ namespace application
         // 이 목록에 담긴 함수들이 실행되는 동안 게임 엔진 스레드는 동작을 정지합니다.
         std::vector<std::function<void()>> loopRegistrations;
 
-        void SetWindowCallBack();
 
         enum class LayerList
         {
@@ -104,6 +106,8 @@ namespace application
         std::vector<Layer*> layers;
 
 #ifdef EDITOR
+        bool isFocusGameWindow = false;
+
         editor::CommandManager& cm = editor::CommandManager::GetSingletonInstance();
         editor::EventManager em = editor::EventManager();
         editor::EditorInputManager& eim = editor::EditorInputManager::GetSingletonInstance();

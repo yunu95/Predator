@@ -1,3 +1,4 @@
+#ifdef EDITOR
 #include "InWanderLand.h"
 #include "EditorInputManager.h"
 #include "Application.h"
@@ -192,3 +193,5 @@ namespace application
 		}
 	}
 }
+#endif
+

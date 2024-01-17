@@ -1,3 +1,4 @@
+#ifdef EDITOR
 #include "InWanderLand.h"
 #include "PaletteManager.h"
 #include "PaletteInstance.h"
@@ -240,3 +241,4 @@ namespace application::editor::palette
         pendingSelection = nullptr;
     }
 }
+#endif
