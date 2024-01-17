@@ -4,11 +4,11 @@
 
 void OnlyDamageComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 {
-	opponentUnit->Damaged(skillDamage);
+	opponentUnit->Damaged(ownerUnit->GetGameObject(), ownerUnit->DetermineAttackDamage(m_skillDamage));
 }
 
-void OnlyDamageComponent::SetSkillDamage(int dmg)
+void OnlyDamageComponent::SetSkillDamage(float dmg)
 {
-	skillDamage = dmg;
+	m_skillDamage = dmg;
 }
 

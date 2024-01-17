@@ -1,24 +1,27 @@
-#include "StatusTimer.h"
+#include "Timer.h"
 
-void StatusTimer::Start()
+void Timer::Start()
 {
+	m_isActivated = false;
+	m_isRepeated = false;
 
+	m_elapsed = 0.0f;
+	m_duration = 0.0f;
 }
 
-void StatusTimer::Update()
+void Timer::Update()
 {
 	if (m_isActivated)
 	{
-		onUpdate();
-
 		m_elapsed += Time::GetDeltaTime();
-
 		if (m_elapsed >= m_duration)
 		{
 			onCompleteFunction();
 
 			if (m_isRepeated == false)
 			{
+				m_elapsed = m_duration;
+				onUpdate(m_elapsed / m_duration);
 				onExpiration();
 				m_isActivated = false;
 				m_elapsed = 0.0f;
@@ -28,16 +31,20 @@ void StatusTimer::Update()
 				m_elapsed = 0.0f;
 			}
 		}
+		else
+		{
+			onUpdate(m_elapsed / m_duration);
+		}
 	}
 }
 
-void StatusTimer::ActivateTimer()
+void Timer::ActivateTimer()
 {
 	m_elapsed = 0.0f;
 	m_isActivated = true;
 }
 
-void StatusTimer::StopTimer()
+void Timer::StopTimer()
 {
 	m_isActivated = false;
 	m_elapsed = 0.0f;

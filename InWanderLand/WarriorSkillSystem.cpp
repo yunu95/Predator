@@ -1,13 +1,20 @@
 #include "WarriorSkillSystem.h"
+#include "KnockBackComponent.h"
 #include "Dotween.h"
 
 void WarriorSkillSystem::QSkillActivate(Vector3d skillPos)
 {
+	QSkillKnockBackCollider->GetGameObject()->GetComponent<KnockBackComponent>()->SkillStarted();
+
 	QSkillKnockBackCollider->SetActive(true);
 
 	GetGameObject()->GetComponent<NavigationAgent>()->SetActive(false);	
 
 	float tempDistance = (skillPos - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
+
+	isQSkillActivating = true;
+	m_QSkillKnockBackDebugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+	m_QSkillKnockBackDebugObject->SetSelfActive(true);
 
 	// 1. 목표 위치로 돌진
 	m_UnitDotween->DOMove(skillPos, tempDistance / m_QskillRushSpeed).OnComplete([=]()
@@ -15,7 +22,10 @@ void WarriorSkillSystem::QSkillActivate(Vector3d skillPos)
 			// 2. remainTime 이후에 collider 비활성화
 			m_UnitDotween->DONothing(m_knockBackObjectRemainTime).OnComplete([=]()
 				{
+					isQSkillActivating = false;
+					m_QSkillKnockBackDebugObject->SetSelfActive(false);
 					QSkillKnockBackCollider->SetActive(false);
+					QSkillKnockBackCollider->GetGameObject()->GetComponent<KnockBackComponent>()->SkillEnded();
 					GetGameObject()->GetComponent<Unit>()->EndSkillState();			/// skill 종료 시 Unit을 idle상태로 전환.
 
 					GetGameObject()->GetComponent<NavigationAgent>()->SetActive(true);
@@ -28,10 +38,13 @@ void WarriorSkillSystem::QSkillActivate(Vector3d skillPos)
 void WarriorSkillSystem::WSkillActivate(Vector3d skillPos)
 {
 	WSkillCollider->SetActive(true);
+	m_WSkillDebugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+	m_WSkillDebugObject->SetSelfActive(true);
 
 	m_UnitDotween->DONothing(m_wSkillColliderRemainTime).OnComplete([=]()
 		{
 			WSkillCollider->SetActive(false);
+			m_WSkillDebugObject->SetSelfActive(false);
 		});
 }
 
@@ -55,11 +68,27 @@ void WarriorSkillSystem::SetUnitTransformObject(GameObject* obj)
 	m_unitTransformObject = obj;
 }
 
+void WarriorSkillSystem::SetKnockBackDebugObject(GameObject* obj, float radius)
+{
+	m_QSkillKnockBackDebugObject = obj;
+	m_QSkillRadius = radius;
+}
+
+void WarriorSkillSystem::SetWSkillDebugObject(GameObject* obj, float radius)
+{
+	m_WSkillDebugObject = obj;
+	m_WSkillRadius = radius;
+}
+
 void WarriorSkillSystem::Start()
 {
 	SetPlayerDotweenComponent(GetGameObject()->GetComponent<Dotween>());
-	m_totalSkillTime = 5.0f;
-	//QSkillKnockBackObject->SetSelfActive(false);
+
+	m_QSkillKnockBackDebugObject->GetTransform()->scale = { pow(m_QSkillRadius, 2), pow(m_QSkillRadius, 2), pow(m_QSkillRadius, 2) };
+	m_QSkillKnockBackDebugObject->SetSelfActive(false);
+
+	m_WSkillDebugObject->GetTransform()->scale = { pow(m_WSkillRadius, 2), pow(m_WSkillRadius, 2), pow(m_WSkillRadius, 2) };
+	m_WSkillDebugObject->SetSelfActive(false);
 }
 
 void WarriorSkillSystem::Update()
@@ -70,5 +99,10 @@ void WarriorSkillSystem::Update()
 		QSkillKnockBackCollider->SetActive(false);
 		WSkillCollider->SetActive(false);
 		isColliderSetActiveFalseSet = true;
+	}
+
+	if (isQSkillActivating)
+	{
+		m_QSkillKnockBackDebugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
 	}
 }

@@ -8,21 +8,23 @@
 
 class UnitStatusComponent;
 
-class Projectile : public Component
+class AutoAttackProjectile : public Component
 {
-private:
+protected:
 	float m_speed;
 	Unit::UnitType ownerType;
 	Unit* m_opponentUnit;
 	Unit* m_ownerUnit;
 
-	bool isShootStarted = false;
+	bool isShootOperating = false;
 
 public:
 	void SetOwnerType(Unit::UnitType type);
 
-	void Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed);
-	void ShootFunction();
+	virtual void Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed);
+
+private:
+	void ShootUpdateFunction();
 
 public:
 	virtual void Start() override;

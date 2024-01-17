@@ -1,15 +1,15 @@
-#include "Projectile.h"
+#include "AutoAttackProjectile.h"
 #include "Dotween.h"
-#include "ProjectileSystem.h"
+#include "AutoAttackProjectilePool.h"
 #include "Unit.h"
 #include "UnitStatusComponent.h"
 
-void Projectile::SetOwnerType(Unit::UnitType type)
+void AutoAttackProjectile::SetOwnerType(Unit::UnitType type)
 {
 	ownerType = type;
 }
 
-void Projectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed)
+void AutoAttackProjectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed)
 {
 	m_speed = speed;
 	m_ownerUnit = ownerUnit;
@@ -17,10 +17,10 @@ void Projectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed)
 	
 	GetGameObject()->GetTransform()->SetWorldPosition(ownerUnit->GetGameObject()->GetTransform()->GetWorldPosition());
 
-	isShootStarted = true;
+	isShootOperating = true;
 }
 
-void Projectile::ShootFunction()
+void AutoAttackProjectile::ShootUpdateFunction()
 {
 	//// 움직이기 전의 투사체 위치
 	Vector3d startPosition = GetGameObject()->GetTransform()->GetWorldPosition();
@@ -50,27 +50,26 @@ void Projectile::ShootFunction()
 	if (angle < 0)
 	{
 		GetGameObject()->SetSelfActive(false);
-		ProjectileSystem::GetInstance()->ReturnToPool(GetGameObject());
+
+		AutoAttackProjectilePool::SingleInstance().Return(this);
 
 		/// 충돌 (목적지 도착 시) 호출하고자 하는 로직은 여기에
-		m_opponentUnit->Damaged(m_ownerUnit->GetGameObject(), m_ownerUnit->GetUnitAp());
-		//GetGameObject()->GetComponent<UnitStatusComponent>()->ApplyStatus(m_ownerUnit, m_opponentUnit);
+		m_opponentUnit->Damaged(m_ownerUnit->GetGameObject(), m_ownerUnit->DetermineAttackDamage(m_ownerUnit->GetUnitDamage()));
 
-
-		isShootStarted = false;
+		isShootOperating = false;
 	}
 }
 
-void Projectile::Start()
+void AutoAttackProjectile::Start()
 {
 
 }
 
-void Projectile::Update()
+void AutoAttackProjectile::Update()
 {
-	if (isShootStarted)
+	if (isShootOperating)
 	{
-		ShootFunction();
+		ShootUpdateFunction();
 	}
 }
 

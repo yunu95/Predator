@@ -8,8 +8,12 @@ private:
 	physics::SphereCollider* WSkillCollider;
 
 	bool isColliderSetActiveFalseSet;
+	bool isQSkillActivating = false;
 
 	GameObject* m_unitTransformObject;
+
+	GameObject* m_QSkillKnockBackDebugObject;	float m_QSkillRadius;
+	GameObject* m_WSkillDebugObject;			float m_WSkillRadius;
 
 	float m_QskillRushSpeed = 10.0f;
 	float m_knockBackObjectRemainTime = 1.0f;
@@ -27,6 +31,11 @@ public:
 
 	void SetUnitTransformObject(GameObject* obj);
 
+	// parameter로 전달받는 radius는 실제 collider에 적용된 radius입니다.
+	void SetKnockBackDebugObject(GameObject* obj, float radius);
+	void SetWSkillDebugObject(GameObject* obj, float radius);
+
+public:
 	virtual void Start() override;
 	virtual void Update() override;
 };

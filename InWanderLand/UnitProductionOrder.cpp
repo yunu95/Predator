@@ -24,7 +24,7 @@ GameObject* UnitProductionOrder::CreateUnitWithOrder()
 	auto rangesystemCollider = unitRangeSystemObject->AddComponent<physics::SphereCollider>();
 	rangesystemCollider->SetRadius(m_idRadius);
 	unitRangeSystemObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-	
+
 	// 2-3. m_gameObject를 부모로 설정
 	unitRangeSystemObject->SetParent(m_unitTransformGameObject);
 
@@ -32,8 +32,8 @@ GameObject* UnitProductionOrder::CreateUnitWithOrder()
 	//auto rangeSystemMesh = unitRangeSystemObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 	/// 3. Collider Component 추가 - object의 scale은 1,1,1로 통일하기
 	//auto unitCollider = m_unitGameObject->AddComponent<physics::BoxCollider>();
-	auto unitCollider = m_unitTransformGameObject->AddComponent<physics::BoxCollider>();	// 빈 껍데기에 
-	unitCollider->SetHalfExtent({ 3, 3, 3 });
+	auto unitCollider = m_unitTransformGameObject->AddComponent<physics::SphereCollider>();	// 빈 껍데기에 
+	unitCollider->SetRadius(1.0f);
 
 
 	/// 4. NavigationAgent Component 추가
@@ -42,24 +42,22 @@ GameObject* UnitProductionOrder::CreateUnitWithOrder()
 	unitNavigationComponent->SetRadius(0.3f);
 
 	/// 6. Dotween 추가
-	m_unitGameObject->AddComponent<Dotween>();
+	m_unitComponent->dotween = m_unitGameObject->AddComponent<Dotween>();
+	m_unitComponent->knockBackTimer = m_unitGameObject->AddComponent<Timer>();
 
 	/// Unit Member Setting
 	m_unitComponent->GetGameObject()->setName(m_objectName);
 	m_unitComponent->SetUnitType(m_unitType);
 	m_unitComponent->SetUnitSide(m_unitSide);
 
-	m_unitComponent->SetUnitHp(m_hp);
-	m_unitComponent->SetUnitAp(m_ap);
+	m_unitComponent->SetUnitHp(m_healthPoint);
+	m_unitComponent->SetUnitAp(m_autoAttackDamage);
 
 	m_unitComponent->SetAtkRadius(m_atkRadius);
 	m_unitComponent->SetIdRadius(m_idRadius);
 	m_unitComponent->SetUnitSpeed(m_unitSpeed);
 
-	m_unitComponent->SetIdleAnimation(m_idleAnimation);
-	m_unitComponent->SetWalkAnimation(m_walkAnimation);
-	m_unitComponent->SetAttackAnimation(m_attackAnimation);
-	m_unitComponent->SetDeathAnimation(m_deathAnimation);
+	m_unitComponent->unitAnimations = m_baseUnitAnimations;
 
 	m_unitComponent->SetAttackDelay(m_attackDelay);
 

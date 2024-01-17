@@ -1,7 +1,7 @@
 #include "Enemy.h"
 #include "Dotween.h"
 #include "ProjectileSystem.h"
-#include "Projectile.h"
+#include "AutoAttackProjectile.h"
 
 void Enemy::Start()
 {
@@ -45,8 +45,8 @@ void Enemy::Update()
 {
 	unitFSM->UpdateState();
 
-	// ÀÎ½Ä ¹üÀ§ ³»¿¡ µé¾î¿À°Ô µÈ´Ù¸é, ¸ñÇ¥·Î ÇÏ´Â(Àû±º) ¿ÀºêÁ§Æ®ÀÇ À§Ä¡ Á¤º¸¸¦ °è¼Ó ¹Þ¾Æ¿Í¾ßÇÑ´Ù.
-	// ±×·¸°Ô µÇ¸é ÀÌµ¿Áß¿¡ ÇØ´ç Àû±º ¿ÀºêÁ§Æ®ÀÇ À§Ä¡°¡ ¹Ù²î¾îµµ ±×¿¡ ¸Â°Ô ÀÚ¿¬½º·´°Ô ÀÌµ¿ÇÒ ¼ö ÀÖÁö ¾ÊÀ»±î?
+	// ì¸ì‹ ë²”ìœ„ ë‚´ì— ë“¤ì–´ì˜¤ê²Œ ëœë‹¤ë©´, ëª©í‘œë¡œ í•˜ëŠ”(ì êµ°) ì˜¤ë¸Œì íŠ¸ì˜ ìœ„ì¹˜ ì •ë³´ë¥¼ ê³„ì† ë°›ì•„ì™€ì•¼í•œë‹¤.
+	// ê·¸ë ‡ê²Œ ë˜ë©´ ì´ë™ì¤‘ì— í•´ë‹¹ ì êµ° ì˜¤ë¸Œì íŠ¸ì˜ ìœ„ì¹˜ê°€ ë°”ë€Œì–´ë„ ê·¸ì— ë§žê²Œ ìžì—°ìŠ¤ëŸ½ê²Œ ì´ë™í•  ìˆ˜ ìžˆì§€ ì•Šì„ê¹Œ?
 }
 
 void Enemy::OnDestroy()
@@ -57,8 +57,8 @@ void Enemy::OnDestroy()
 #pragma region TransitionFuctions
 	void Enemy::IdleToOtherStatesTransition()
 	{
-		// Chase·Î °¥ °ÍÀÎÁö, AttackÀ¸·Î °¥ °ÍÀÎÁö ÆÇº°
-		// -> idleToChase³Ä idleToAttack ÀÌ³Ä!
+		// Chaseë¡œ ê°ˆ ê²ƒì¸ì§€, Attackìœ¼ë¡œ ê°ˆ ê²ƒì¸ì§€ íŒë³„
+		// -> idleToChaseëƒ idleToAttack ì´ëƒ!
 		if (unitFSM->previousState == UnitState::Attack/* && !isJustEntered*/)
 		{
 			transitionDelay = 0.7f;
@@ -111,14 +111,14 @@ void Enemy::OnDestroy()
 	void Enemy::AttackEngageFunction()
 	{
 		GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(GetGameObject()->GetTransform()->GetWorldPosition());
-		// »ó´ë¹æÀ» °ø°ÝÇÏ´Â ·ÎÁ÷. ±ÙÁ¢ °ø°Ý or ¿ø°Å¸® (Åõ»çÃ¼) °ø°Ý
+		// ìƒëŒ€ë°©ì„ ê³µê²©í•˜ëŠ” ë¡œì§. ê·¼ì ‘ ê³µê²© or ì›ê±°ë¦¬ (íˆ¬ì‚¬ì²´) ê³µê²©
 		GetGameObject()->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 1, 0 });
 
-		// Åõ»çÃ¼°¡ ¼³Á¤µÇ¾î ÀÖ´Ù¸é ¿ø°Å¸® °ø°ÝÀ» ÇÑ´Ù.
+		// íˆ¬ì‚¬ì²´ê°€ ì„¤ì •ë˜ì–´ ìžˆë‹¤ë©´ ì›ê±°ë¦¬ ê³µê²©ì„ í•œë‹¤.
 		ProjectileSystem::GetInstance()->Shoot(this, m_currentTargetObject->GetComponent<Unit>(), m_bulletSpeed);
 
-		/// °ø°Ý ÈÄ m_Delay°£°ÝÀ¸·Î Àç±Í¸¦ ÇÒÁö, ¾Æ´Ï¸é ÂÑ¾Æ°¥ Áö¸¦ Á¤ÇÑ´Ù.
-		GetGameObject()->GetComponent<Dotween>()->DONothing(0.5f/*µô·¹ÀÌ*/).OnComplete([=]()
+		/// ê³µê²© í›„ m_Delayê°„ê²©ìœ¼ë¡œ ìž¬ê·€ë¥¼ í• ì§€, ì•„ë‹ˆë©´ ì«“ì•„ê°ˆ ì§€ë¥¼ ì •í•œë‹¤.
+		GetGameObject()->GetComponent<Dotween>()->DONothing(0.5f/*ë”œë ˆì´*/).OnComplete([=]()
 			{
 				float distance = (m_currentTargetObject->GetTransform()->GetWorldPosition() - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
 

@@ -1,9 +1,20 @@
 #include "RangedAttackSystem.h"
-#include "ProjectileSystem.h"
+#include "AutoAttackProjectilePool.h"
+#include "MagicianAutoAttackProjectilePool.h"
 
 void RangedAttackSystem::Attack(Unit* opponentUnit)
 {
-	ProjectileSystem::GetInstance()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed);
+	switch (m_ownerUnit->GetUnitType())
+	{
+		case Unit::UnitType::Magician :
+		{
+			MagicianAutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed);
+		}
+			break;
+		default:
+			AutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed);
+			break;
+	}
 }
 
 void RangedAttackSystem::SetOwnerUnit(Unit* p_unit)

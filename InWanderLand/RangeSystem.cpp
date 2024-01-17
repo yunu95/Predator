@@ -54,8 +54,11 @@ void RangeSystem::OnTriggerExit(physics::Collider* collider)
 {
 	if (collider->GetGameObject()->GetComponent<UnitTransformComponent>() != nullptr && 
 		collider->GetGameObject()->GetComponent<UnitTransformComponent>()->ownerObject->GetComponent<Unit>() != nullptr &&
-		m_unitComponent->GetUnitSide() != collider->GetGameObject()->GetComponent<UnitTransformComponent>()->ownerObject->GetComponent<Unit>()->GetUnitSide())
+		m_unitComponent->GetUnitSide() != collider->GetGameObject()->GetComponent<UnitTransformComponent>()->ownerObject->GetComponent<Unit>()->GetUnitSide() &&
+		!(m_unitComponent->GetJustCrushedState()))
 	{
+		/// 넉백공격 당하면서 Exit불릴 때는 지우면 안되는데...
+		/// unit에 멤버를 추가
 		m_unitComponent->DeleteFromOpponentObjectList(collider->GetGameObject()->GetComponent<UnitTransformComponent>()->ownerObject);
 	}
 }

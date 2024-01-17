@@ -100,9 +100,6 @@
     <Filter Include="Contents\RangeSystem">
       <UniqueIdentifier>{8f88b8f0-05a0-458e-8199-c421742d4d60}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\Projectile">
-      <UniqueIdentifier>{d4aef375-a61c-498a-a67f-f5684011a0e1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents\FSM">
       <UniqueIdentifier>{32381cc4-5559-4056-a930-6663da504c19}</UniqueIdentifier>
     </Filter>
@@ -225,6 +222,48 @@
     </Filter>
     <Filter Include="Editor\IO\KeyInput">
       <UniqueIdentifier>{ba70a303-f04f-429e-a442-3276da507949}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Timer">
+      <UniqueIdentifier>{e6ac6c6a-8749-4b81-8b38-f053b8e345ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitStatusComponent\FieldDamage">
+      <UniqueIdentifier>{ea62f4c6-e57e-4246-87d0-8a35f4c29d5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectilePools">
+      <UniqueIdentifier>{419a8732-9b17-49e5-a85c-d8685acdf480}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectilePools\Warrior">
+      <UniqueIdentifier>{5635f508-2cb3-403a-891f-0c8224a7bee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectilePools\Magician">
+      <UniqueIdentifier>{d3967c4d-cb79-4403-9a0e-8052c3a39a61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectilePools\Supporter">
+      <UniqueIdentifier>{32c8b7b8-5fa6-4e22-8344-b35d0bb87cd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectileComponents">
+      <UniqueIdentifier>{d4aef375-a61c-498a-a67f-f5684011a0e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectileComponents\Warrior">
+      <UniqueIdentifier>{99465ae9-9fed-4e41-a53c-0683a58a3154}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectileComponents\Magician">
+      <UniqueIdentifier>{7b0d58cb-9631-4b39-af19-8ce63ab348da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectileComponents\Magician\Skill2">
+      <UniqueIdentifier>{3d12d20e-0354-4c1c-9f40-b43c7dbf7f4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectileComponents\Magician\Passive">
+      <UniqueIdentifier>{67064df8-d931-4e64-8903-e8e001049ab4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectileComponents\Magician\Skill1">
+      <UniqueIdentifier>{6388c7a7-5003-480a-8fd6-ae9d5043dc78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectileComponents\Supporter">
+      <UniqueIdentifier>{657226b3-978a-4e0a-a348-e66d698ea0b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectileComponents\BaseAutoAttack">
+      <UniqueIdentifier>{8e78929b-3441-46e9-9098-462f0fb30ec5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -433,12 +472,6 @@
     <ClInclude Include="RangeSystem.h">
       <Filter>Contents\RangeSystem</Filter>
     </ClInclude>
-    <ClInclude Include="ProjectileSystem.h">
-      <Filter>Contents\Projectile</Filter>
-    </ClInclude>
-    <ClInclude Include="Projectile.h">
-      <Filter>Contents\Projectile</Filter>
-    </ClInclude>
     <ClInclude Include="InputManager.h">
       <Filter>Contents\InputManager</Filter>
     </ClInclude>
@@ -578,6 +611,28 @@
     <ClInclude Include="EditorInputManager.h">
       <Filter>Editor\IO\KeyInput</Filter>
     </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Contents\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="FieldDamage.h">
+      <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoAttackProjectile.h">
+      <Filter>Contents\ProjectileComponents\BaseAutoAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicianAutoAttackProjectile.h">
+      <Filter>Contents\ProjectileComponents\Magician\Passive</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicianAutoAttackProjectilePool.h">
+      <Filter>Contents\ProjectilePools\Magician</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicianSkillOneProjectilePool.h">
+      <Filter>Contents\ProjectilePools\Magician</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoAttackProjectilePool.h">
+      <Filter>Contents\ProjectilePools</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicianSkillSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -748,12 +803,6 @@
     <ClCompile Include="RangeSystem.cpp">
       <Filter>Contents\RangeSystem</Filter>
     </ClCompile>
-    <ClCompile Include="Projectile.cpp">
-      <Filter>Contents\Projectile</Filter>
-    </ClCompile>
-    <ClCompile Include="ProjectileSystem.cpp">
-      <Filter>Contents\Projectile</Filter>
-    </ClCompile>
     <ClCompile Include="InputManager.cpp">
       <Filter>Contents\InputManager</Filter>
     </ClCompile>
@@ -777,9 +826,6 @@
     </ClCompile>
     <ClCompile Include="BleedingComponent.cpp">
       <Filter>Contents\UnitStatusComponent\Bleeding</Filter>
-    </ClCompile>
-    <ClCompile Include="StatusTimerPool.cpp">
-      <Filter>Contents\UnitStatusComponent\StatusTimer</Filter>
     </ClCompile>
     <ClCompile Include="StatusTimer.cpp">
       <Filter>Contents\UnitStatusComponent\StatusTimer</Filter>
@@ -889,5 +935,24 @@
     <ClCompile Include="SnippetTerrainPalette.cpp">
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
+    <ClCompile Include="SnippetDebugMeshScaleCheck.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Contents\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="FieldDamage.cpp">
+      <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoAttackProjectile.cpp">
+      <Filter>Contents\ProjectileComponents\BaseAutoAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicianAutoAttackProjectile.cpp">
+      <Filter>Contents\ProjectileComponents\Magician\Passive</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoAttackProjectilePool.cpp">
+      <Filter>Contents\ProjectilePools</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicianSkillSystem.cpp" />
   </ItemGroup>
 </Project>
