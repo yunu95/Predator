@@ -5,6 +5,8 @@
 #include "EditorPanel.h"
 #include "PanelList.h"
 #include "ModuleList.h"
+#include "PaletteManagerList.h"
+#include "Camera.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -30,8 +32,10 @@ namespace application
 
 			/// 각종 매니저 클래스 메모리 할당
 			MapFileManager::GetSingletonInstance();
-
-			/// 에디터에서 사용할 에디터 카메라, 게임뷰 카메라 생성
+			palette::TerrainPaletteManager::SingleInstance();
+			palette::UnitPaletteManager::SingleInstance();
+			// palette::DoodadPaletteManager::SingleInstance();
+			palette::RegionPaletteManager::SingleInstance();
 
 			/// 에디터 패널 생성 및 초기화 진행
 			editorPanelList.resize((int)Panel_List::Size);
@@ -63,6 +67,8 @@ namespace application
 
 		void EditorLayer::Update(float ts)
 		{
+			editorCamera.Update(ts);
+
 			for (auto& each : editorPanelList)
 			{
 				each->Update(ts);
@@ -86,7 +92,6 @@ namespace application
 
 			for (auto& each : editorModuleList)
 			{
-
 				each->GUIProgress();
 			}
 		}
@@ -118,6 +123,12 @@ namespace application
 				each->OnEvent(event);
 			}
 
+		}
+
+		void EditorLayer::LateInitialize()
+		{
+			// 카메라 초기화
+			editorCamera.Initialize(yunutyEngine::graphics::Camera::GetMainCamera());
 		}
 
 		void EditorLayer::AssignTestInitializer(std::function<void()> testInitializer)

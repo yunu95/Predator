@@ -21,7 +21,7 @@ namespace application
 	namespace editor
 	{
 		SceneViewPanel::SceneViewPanel()
-			: app(nullptr), prevWindowSize(), renderImageSize(), cursorPos_InScreenSpace()
+			: app(nullptr), prevWindowSize(), currentWindowSize(), renderImageSize(), cursorPos_InScreenSpace()
 		{
 
 		}
@@ -91,7 +91,13 @@ namespace application
 			static auto& upm = palette::UnitPaletteManager::SingleInstance();
 			///
 
-			ImGui_OnResizeRenderImageSize();
+			ImGui_UpdateWindowSize();
+
+			// Resize 에 대한 처리 부분
+			if (ImGui_IsWindowResize())
+			{
+				ImGui_OnResizeRenderImageSize();
+			}
 
 			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
 			{
@@ -161,8 +167,12 @@ namespace application
 
 		void SceneViewPanel::ImGui_UpdateWindowSize()
 		{
-			auto size = ImGui::GetWindowSize();
+			prevWindowSize.first = currentWindowSize.first;
+			prevWindowSize.second = currentWindowSize.second;
 
+			auto size = ImGui::GetContentRegionMax();
+			currentWindowSize.first = size.x;
+			currentWindowSize.second = size.y;
 		}
 
 		bool SceneViewPanel::ImGui_IsCursorInScreen()
@@ -170,6 +180,11 @@ namespace application
 			auto curPos = ImGui_GetCursorPosOnPanel();
 			ImVec2 startPos = ImGui::GetCursorPos();
 			return (curPos.first >= startPos.x && curPos.first <= startPos.x + renderImageSize.first) && (curPos.second >= startPos.y && curPos.second <= startPos.y + renderImageSize.second);
+		}
+
+		bool SceneViewPanel::ImGui_IsWindowResize()
+		{
+			return (prevWindowSize != currentWindowSize);
 		}
 
 		std::pair<float, float> SceneViewPanel::ImGui_GetCursorPosOnPanel()

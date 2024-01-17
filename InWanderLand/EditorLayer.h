@@ -12,6 +12,7 @@
 
 #include "Layer.h"
 #include "CommandManager.h"
+#include "EditorCamera.h"
 #include "EditorPanel.h"
 #include "EditorModule.h"
 #include "EditorEvents.h"
@@ -31,6 +32,10 @@ namespace application
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
 			virtual void OnEvent(EditorEvents& event) override;
+
+			// Content 레이어의 Initialize 이후에 초기화 되어야 하는
+			// GameEngine 과 관련된 내용들을 초기화하는 함수입니다.
+			void LateInitialize();
 
 		private:
 			enum class Panel_List
@@ -63,8 +68,10 @@ namespace application
 			void UI_DrawMenubar();
 
 			CommandManager& cm = CommandManager::GetSingletonInstance();
+			EditorCamera& editorCamera = EditorCamera::GetSingletonInstance();
+
 			std::vector<std::unique_ptr<Panel>> editorPanelList;
-			std::vector<std::unique_ptr<EditorModule>> editorModuleList;
+			std::vector<std::unique_ptr<EditorModule>> editorModuleList;	
 		};
 	}
 }

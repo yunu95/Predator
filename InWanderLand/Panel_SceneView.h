@@ -20,8 +20,9 @@ namespace application
 		class SceneViewPanel
 			: public Panel, public Singleton<SceneViewPanel>
 		{
+			friend class Singleton<SceneViewPanel>;
+
 		public:
-			SceneViewPanel();
 			virtual ~SceneViewPanel();
 
 			virtual void Initialize() override;
@@ -34,17 +35,21 @@ namespace application
 			std::pair<double, double> GetCursorPosInScreenSpace() const;
 
 		private:
+			SceneViewPanel();
+			
 			void ImGui_Update();
 			void ImGui_OnResizeRenderImageSize();
 			void ImGui_UpdateCursorPosInScreenSpace();
 			void ImGui_UpdateWindowSize();
 			bool ImGui_IsCursorInScreen();
+			bool ImGui_IsWindowResize();
 			std::pair<float, float> ImGui_GetCursorPosOnPanel();
 			void Release();
 
 		private:
 			Application* app;
 			std::pair<float, float> prevWindowSize;
+			std::pair<float, float> currentWindowSize;
 			std::pair<unsigned int, unsigned int> renderImageSize;
 			std::pair<double, double> cursorPos_InScreenSpace;
 

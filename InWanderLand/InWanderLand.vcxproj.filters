@@ -603,6 +603,9 @@
     <ClInclude Include="TestUtilRTSTestCam.h">
       <Filter>TestCodes\TestUtils</Filter>
     </ClInclude>
+    <ClInclude Include="PaletteManagerList.h">
+      <Filter>Editor\Palette\PaletteManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">

@@ -10,6 +10,7 @@
 #include "ContentsLayer.h"
 #include "WindowEvents.h"
 #include "MouseEvents.h"
+#include "KeyboardEvents.h"
 
 #include <d3d11.h>
 #include <dxgi1_4.h>
@@ -47,12 +48,15 @@ HWND editorHWND = NULL;
 WNDCLASSEX wcEditor = { sizeof(WNDCLASSEX), CS_CLASSDC, WndEditorProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("InWanderLand_Editor"), NULL };
 ImVec2 dockspaceArea = ImVec2();
 ImVec2 dockspaceStartPoint = ImVec2();
+RAWINPUTDEVICE inputDevice[2] = { RAWINPUTDEVICE(), RAWINPUTDEVICE() };
 function<void()> winResizeCallBackFunction = function<void()>();
+function<void(unsigned char keyCode)> winKeyboardPressedCallBackFunction = function<void(unsigned char)>();
+function<void(unsigned char keyCode)> winKeyboardUpCallBackFunction = function<void(unsigned char)>();
 function<void()> winMouseLeftPressedCallBackFunction = function<void()>();
 function<void()> winMouseLeftUpCallBackFunction = function<void()>();
 function<void()> winMouseRightPressedCallBackFunction = function<void()>();
 function<void()> winMouseRightUpCallBackFunction = function<void()>();
-function<void(int posX, int posY)> winMouseMoveCallBackFunction = function<void(int, int)>();
+function<void(long posX, long posY)> winMouseMoveCallBackFunction = function<void(long, long)>();
 function<void(short wheelDelta)> winMouseWheelCallBackFunction = function<void(short)>();
 #endif
 
@@ -203,15 +207,11 @@ namespace application
 
 	void Application::Initialize()
 	{
-
 		layers.resize(2);
-		//ImGui::SetCursorPosY(ImGui::GetCurrentWindow()->WindowPadding.y);
-
 
 #ifdef EDITOR
 		layers[(int)LayerList::EditorLayer] = new editor::EditorLayer();
 #endif
-
 		layers[(int)LayerList::ContentsLayer] = new Contents::ContentsLayer();
 
 		for (auto each : layers)
@@ -219,6 +219,10 @@ namespace application
 			if (each)
 				each->Initialize();
 		}
+
+#ifdef EDITOR
+		static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer])->LateInitialize();
+#endif
 	}
 
 	void Application::Run()
@@ -299,12 +303,38 @@ namespace application
 
 	void Application::SetWindowCallBack()
 	{
+		// mouse device setting
+		inputDevice[0].usUsagePage = 0x01;
+		inputDevice[0].usUsage = 0x02;
+		inputDevice[0].dwFlags = RIDEV_INPUTSINK;
+		inputDevice[0].hwndTarget = editorHWND;
+
+		// keyboard device setting
+		inputDevice[1].usUsagePage = 0x01;
+		inputDevice[1].usUsage = 0x06;
+		inputDevice[1].dwFlags = RIDEV_INPUTSINK;
+		inputDevice[1].hwndTarget = editorHWND;
+
+		RegisterRawInputDevices(inputDevice, 2, sizeof(RAWINPUTDEVICE));
+
 		winResizeCallBackFunction = [&]() { Application::DispatchEvent<editor::WindowResizeEvent>(g_EditorResizeWidth, g_EditorResizeHeight); };
+		winKeyboardPressedCallBackFunction = [&](unsigned char keyCode)
+			{
+				if (eim.IsKeyboardDown(static_cast<editor::KeyCode>(keyCode)))
+				{
+					Application::DispatchEvent<editor::KeyDownEvent>(static_cast<editor::KeyCode>(keyCode));
+				}
+				else
+				{
+					Application::DispatchEvent<editor::KeyPressedEvent>(static_cast<editor::KeyCode>(keyCode));
+				}
+			};
+		winKeyboardUpCallBackFunction = [&](unsigned char keyCode) { Application::DispatchEvent<editor::KeyReleasedEvent>(static_cast<editor::KeyCode>(keyCode)); };
 		winMouseLeftPressedCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Left); };
 		winMouseLeftUpCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Left); };
 		winMouseRightPressedCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Right); };
 		winMouseRightUpCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Right); };
-		winMouseMoveCallBackFunction = [&](int posX, int posY) { Application::DispatchEvent<editor::MouseMoveEvent>(posX, posY); };
+		winMouseMoveCallBackFunction = [&](long posX, long posY) { Application::DispatchEvent<editor::MouseMoveEvent>(posX, posY); };
 		winMouseWheelCallBackFunction = [&](short wheelDelta) {Application::DispatchEvent<editor::MouseWheelEvent>(wheelDelta); };
 	}
 
@@ -391,28 +421,22 @@ namespace application
 	{
 		editor::EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<editor::WindowResizeEvent>([this](editor::WindowResizeEvent& e) { std::cout << e.GetDebugString(); return true; });
+		dispatcher.Dispatch<editor::KeyPressedEvent>([this](editor::KeyPressedEvent& e) { std::cout << e.GetDebugString(); return true; });
+		dispatcher.Dispatch<editor::KeyDownEvent>([this](editor::KeyDownEvent& e) { std::cout << e.GetDebugString(); return true; });
+		dispatcher.Dispatch<editor::KeyReleasedEvent>([this](editor::KeyReleasedEvent& e) { std::cout << e.GetDebugString(); return true; });
 		dispatcher.Dispatch<editor::MouseButtonPressedEvent>([this](editor::MouseButtonPressedEvent& e) { std::cout << e.GetDebugString(); return true; });
 		dispatcher.Dispatch<editor::MouseButtonDownEvent>([this](editor::MouseButtonDownEvent& e) { std::cout << e.GetDebugString(); return true; });
 		dispatcher.Dispatch<editor::MouseButtonUpEvent>([this](editor::MouseButtonUpEvent& e) { std::cout << e.GetDebugString(); return true; });
 		dispatcher.Dispatch<editor::MouseMoveEvent>([this](editor::MouseMoveEvent& e) { std::cout << e.GetDebugString(); return true; });
 		dispatcher.Dispatch<editor::MouseWheelEvent>([this](editor::MouseWheelEvent& e) { std::cout << e.GetDebugString(); return true; });
-		
+
 		layers[(int)LayerList::EditorLayer]->OnEvent(event);
 	}
 
 	void Application::ProcessEvents()
 	{
+		eim.Clear();
 		eim.Update();
-
-		if (eim.IsMouseButtonDown(editor::MouseCode::Left))
-		{
-			Application::DispatchEvent<editor::MouseButtonDownEvent>(editor::MouseCode::Left);
-		}
-
-		if (eim.IsMouseButtonDown(editor::MouseCode::Right))
-		{
-			Application::DispatchEvent<editor::MouseButtonDownEvent>(editor::MouseCode::Right);
-		}
 
 		while (em.Size() != 0)
 		{
@@ -540,6 +564,115 @@ LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 	switch (msg)
 	{
+		case WM_INPUT:
+		{
+			static RAWINPUT rawInput = RAWINPUT();
+			UINT unSize = sizeof(RAWINPUT);
+			GetRawInputData((HRAWINPUT)lParam, RID_INPUT, &rawInput, &unSize, sizeof(RAWINPUTHEADER));
+
+			if (rawInput.header.dwType == RIM_TYPEKEYBOARD)
+			{
+				switch (rawInput.data.keyboard.Message)
+				{
+					case WM_KEYDOWN:
+					{
+						if (winKeyboardPressedCallBackFunction)
+						{
+							eim.Update();
+							unsigned char keyCode = static_cast<unsigned char>(application::editor::EditorInputManager::GetKeycode(rawInput.data.keyboard.VKey));
+							if (eim.IsKeyboardDown(static_cast<application::editor::KeyCode>(keyCode)))
+							{
+								eim.UpdateKeyboardState(static_cast<application::editor::KeyCode>(keyCode), application::editor::KeyState::Down);
+							}
+							else
+							{
+								eim.UpdateKeyboardState(static_cast<application::editor::KeyCode>(keyCode), application::editor::KeyState::Pressed);
+							}
+							winKeyboardPressedCallBackFunction(keyCode);
+						}
+						return 0;
+					}
+					case WM_KEYUP:
+					{
+						if (winKeyboardUpCallBackFunction)
+						{
+							eim.Update();
+							unsigned char keyCode = static_cast<unsigned char>(application::editor::EditorInputManager::GetKeycode(rawInput.data.keyboard.VKey));
+							eim.UpdateKeyboardState(static_cast<application::editor::KeyCode>(keyCode), application::editor::KeyState::Up);
+							winKeyboardUpCallBackFunction(keyCode);
+						}
+						return 0;
+					}
+				}
+			}
+			else if (rawInput.header.dwType == RIM_TYPEMOUSE)
+			{
+				if (rawInput.data.mouse.usFlags == MOUSE_MOVE_RELATIVE || rawInput.data.mouse.usFlags == MOUSE_MOVE_ABSOLUTE)
+				{
+					if (winMouseMoveCallBackFunction)
+					{
+						eim.Update();
+						static POINT cursorPos;
+						GetCursorPos(&cursorPos);
+						winMouseMoveCallBackFunction(cursorPos.x, cursorPos.y);
+					}
+				}
+
+				switch (rawInput.data.mouse.usButtonFlags)
+				{
+					case RI_MOUSE_BUTTON_1_DOWN:
+					{
+						if (winMouseLeftPressedCallBackFunction)
+						{
+							eim.Update();
+							eim.UpdateMouseButtonState(application::editor::MouseCode::Left, application::editor::KeyState::Pressed);
+							winMouseLeftPressedCallBackFunction();
+						}
+						return 0;
+					}
+					case RI_MOUSE_BUTTON_1_UP:
+					{
+						if (winMouseLeftUpCallBackFunction)
+						{
+							eim.Update();
+							eim.UpdateMouseButtonState(application::editor::MouseCode::Left, application::editor::KeyState::Up);
+							winMouseLeftUpCallBackFunction();
+						}
+						return 0;
+					}
+					case RI_MOUSE_BUTTON_2_DOWN:
+					{
+						if (winMouseRightPressedCallBackFunction)
+						{
+							eim.Update();
+							eim.UpdateMouseButtonState(application::editor::MouseCode::Right, application::editor::KeyState::Pressed);
+							winMouseRightPressedCallBackFunction();
+						}
+						return 0;
+					}
+					case RI_MOUSE_BUTTON_2_UP:
+					{
+						if (winMouseRightUpCallBackFunction)
+						{
+							eim.Update();
+							eim.UpdateMouseButtonState(application::editor::MouseCode::Right, application::editor::KeyState::Up);
+							winMouseRightUpCallBackFunction();
+						}
+						return 0;
+					}
+					case RI_MOUSE_WHEEL:
+					{
+						if (winMouseWheelCallBackFunction)
+						{
+							eim.Update();
+							winMouseWheelCallBackFunction(rawInput.data.mouse.usButtonData);
+						}
+						return 0;
+					}
+				}
+			}
+		break;
+		}
 		case WM_SIZE:
 		{
 			if (wParam == SIZE_MINIMIZED)
@@ -570,64 +703,6 @@ LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			ClientToScreen(hWnd, &windowPos);
 			dockspaceStartPoint = ImVec2(windowPos.x, windowPos.y);
 
-			return 0;
-		}
-		case WM_LBUTTONDOWN:
-		{
-			if (winMouseLeftPressedCallBackFunction)
-			{
-				eim.Update();
-				eim.UpdateMouseButtonState(application::editor::MouseCode::Left, application::editor::KeyState::Pressed);
-				winMouseLeftPressedCallBackFunction();
-			}
-			return 0;
-		}
-		case WM_LBUTTONUP:
-		{
-			if (winMouseLeftUpCallBackFunction)
-			{
-				eim.Update();
-				eim.UpdateMouseButtonState(application::editor::MouseCode::Left, application::editor::KeyState::Up);
-				winMouseLeftUpCallBackFunction();
-			}
-			return 0;
-		}
-		case WM_RBUTTONDOWN:
-		{
-			if (winMouseRightPressedCallBackFunction)
-			{
-				eim.Update();
-				eim.UpdateMouseButtonState(application::editor::MouseCode::Right, application::editor::KeyState::Pressed);
-				winMouseRightPressedCallBackFunction();
-			}
-			return 0;
-		}
-		case WM_RBUTTONUP:
-		{
-			if (winMouseRightUpCallBackFunction)
-			{
-				eim.Update();
-				eim.UpdateMouseButtonState(application::editor::MouseCode::Right, application::editor::KeyState::Up);
-				winMouseRightUpCallBackFunction();
-			}
-			return 0;
-		}
-		case WM_MOUSEMOVE:
-		{
-			if (winMouseMoveCallBackFunction)
-			{
-				eim.Update();
-				winMouseMoveCallBackFunction(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-			}
-			return 0;
-		}
-		case WM_MOUSEWHEEL:
-		{
-			if (winMouseWheelCallBackFunction)
-			{
-				eim.Update();
-				winMouseWheelCallBackFunction(GET_WHEEL_DELTA_WPARAM(wParam));
-			}
 			return 0;
 		}
 		case WM_SYSCOMMAND:

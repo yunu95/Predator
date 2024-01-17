@@ -161,14 +161,14 @@ namespace application
 			CATEGORY_SETTING(EventCategory::Editor | EventCategory::Input | EventCategory::Mouse)
 			EVENT_SETTING(EventType::MouseMove)
 
-			MouseMoveEvent(int posX, int posY)
+			MouseMoveEvent(long posX, long posY)
 				: posX(posX), posY(posY)
 			{
 
 			}
 
-			int GetPosX() { return posX; }
-			int GetPosY() { return posY; }
+			long GetPosX() { return posX; }
+			long GetPosY() { return posY; }
 
 			virtual std::string GetDebugString() const
 			{
@@ -178,8 +178,8 @@ namespace application
 			}
 
 		private:
-			int posX;
-			int posY;
+			long posX;
+			long posY;
 		};
 
 		class MouseWheelEvent
