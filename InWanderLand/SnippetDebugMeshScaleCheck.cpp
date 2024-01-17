@@ -35,7 +35,7 @@ void SnippetDebugMeshScaleCheckInit()
 	auto patrol2 = testObject2->AddComponent<ObjectPatrolMove>();
 	patrol2->a = -3;
 	auto object2DebugObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	11
+	
 	auto obj1Collider = testObject1->AddComponent<physics::SphereCollider>();
 	obj1Collider->SetRadius(2.0f);
 	object1DebugObj->GetTransform()->scale = { 2.0f, 2.0f, 2.0f };
