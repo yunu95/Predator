@@ -117,7 +117,7 @@ namespace application
 			{
 				::RegisterClassEx(&wcEditor);
 
-				editorHWND = ::CreateWindow(wcEditor.lpszClassName, wcEditor.lpszClassName, WS_OVERLAPPEDWINDOW, editorWinPosX, editorWinPosY, g_EditorResizeWidth, g_EditorResizeHeight, NULL, NULL, wcEditor.hInstance, NULL);
+				editorHWND = ::CreateWindow(wcEditor.lpszClassName, wcEditor.lpszClassName, WS_OVERLAPPEDWINDOW, editorWinPosX, editorWinPosY, g_EditorResizeWidth, g_EditorResizeHeight, hWND, NULL, wcEditor.hInstance, NULL);
 
 				GetDeviceAndDeviceContext();
 
@@ -356,6 +356,11 @@ namespace application
 			{
 				isRunning = false;
 			}
+		}
+
+		if (!isRunning)
+		{
+			return;
 		}
 
 		//Start the Dear ImGui frame
