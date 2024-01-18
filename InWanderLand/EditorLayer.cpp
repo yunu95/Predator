@@ -127,6 +127,12 @@ namespace application
 
 		void EditorLayer::LateInitialize()
 		{
+			auto scene = yunutyEngine::Scene::getCurrentScene();
+			if (scene == nullptr)
+			{
+				yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+			}
+
 			// 카메라 초기화
 			editorCamera.Initialize(yunutyEngine::graphics::Camera::GetMainCamera());
 		}
