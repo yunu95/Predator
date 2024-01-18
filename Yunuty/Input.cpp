@@ -121,7 +121,7 @@ void Input::Update()
         }
     }
     if (isActive)
-        cachedMouseScreenPosition = getMouseScreenPosition();
+        CacheMouseScreenPosition();
 }
 bool Input::m_isKeyDown(KeyCode keyCode)
 {
