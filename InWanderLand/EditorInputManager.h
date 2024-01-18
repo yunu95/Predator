@@ -3,10 +3,12 @@
 
 #pragma once
 
+#ifdef EDITOR
 #include "Singleton.h"
 #include "EditorKeyCodes.h"
 
 #include <map>
+#include <unordered_map>
 
 namespace application
 {
@@ -37,7 +39,11 @@ namespace application
 		class EditorInputManager
 			: public Singleton<EditorInputManager>
 		{
+			friend class Singleton<EditorInputManager>;
+
 		public:
+			static KeyCode GetKeycode(const int& key);
+
 			void Update();
 
 			bool IsKeyboardPressed(KeyCode keyCode) const;
@@ -54,10 +60,13 @@ namespace application
 			void Clear();
 
 		private:
+			EditorInputManager();
+
 			std::map<KeyCode, KeyboardData> keyboardMap;
 			std::map<MouseCode, MouseData> mouseMap;
+
+			static std::unordered_map<int, KeyCode> rawKeyEnumMap;
 		};
 	}
 }
-
-
+#endif

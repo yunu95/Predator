@@ -1,8 +1,9 @@
-/// 2023. 10. 19 ±è»óÁØ
-/// Ä¿¸ÇµåµéÀ» ÀÏ°ıÀûÀ¸·Î Ã³¸®ÇÏ±â À§ÇÑ °ü¸®ÀÚ Å¬·¡½º
+/// 2023. 10. 19 ê¹€ìƒì¤€
+/// ì»¤ë§¨ë“œë“¤ì„ ì¼ê´„ì ìœ¼ë¡œ ì²˜ë¦¬í•˜ê¸° ìœ„í•œ ê´€ë¦¬ì í´ë˜ìŠ¤
 
 #pragma once
 
+#ifdef EDITOR
 #include "Singleton.h"
 #include "Command.h"
 
@@ -19,21 +20,22 @@ namespace application
 		class CommandManager
 			: public Singleton<CommandManager>
 		{
-		public:
-			CommandManager();
+			friend class Singleton<CommandManager>;
+
+		public:	
 			virtual ~CommandManager();
 			
-			// commandQueue ¿¡ Ä¿¸Çµå¸¦ Ãß°¡
+			// commandQueue ì— ì»¤ë§¨ë“œë¥¼ ì¶”ê°€
 			template<class T, class... Types> requires (std::is_base_of_v<Command, T> && !std::is_base_of_v<UndoableCommand, T>)
 			void AddQueue(const std::shared_ptr<T>& command)
 			{
 				commandQueue.emplace(command);
 			}
 
-			// Undo / Redo °¡´ÉÇÑ À¯Àú ¸í·ÉÀº µû·Î °ü¸®ÇÏ±â À§ÇÔ ÇÔ¼ö
-			/// AddQueue ÇÔ¼ö ³»ºÎ¿¡¼­ dynamic_cast ¸¦ ÅëÇØ¼­ ±¸ÇöÇÒ ¼öµµ ÀÖÀ¸³ª,
-			/// UndoableCommand ¸¦ À§ÇØ¼­ ¸ğµç Command °¡ dynamic_cast ¸¦ ÇÏ´Â ±¸Á¶°¡ ºñÈ¿À²ÀûÀÌ¶ó ÆÇ´Ü,
-			/// Ã³À½ °³¹ß ½ÃÁ¡¿¡¼­ UndoableCommand ´Â µû·Î °ü¸®ÇÒ ¼ö ÀÖµµ·Ï Ã³¸®ÇÔ
+			// Undo / Redo ê°€ëŠ¥í•œ ìœ ì € ëª…ë ¹ì€ ë”°ë¡œ ê´€ë¦¬í•˜ê¸° ìœ„í•¨ í•¨ìˆ˜
+			/// AddQueue í•¨ìˆ˜ ë‚´ë¶€ì—ì„œ dynamic_cast ë¥¼ í†µí•´ì„œ êµ¬í˜„í•  ìˆ˜ë„ ìˆìœ¼ë‚˜,
+			/// UndoableCommand ë¥¼ ìœ„í•´ì„œ ëª¨ë“  Command ê°€ dynamic_cast ë¥¼ í•˜ëŠ” êµ¬ì¡°ê°€ ë¹„íš¨ìœ¨ì ì´ë¼ íŒë‹¨,
+			/// ì²˜ìŒ ê°œë°œ ì‹œì ì—ì„œ UndoableCommand ëŠ” ë”°ë¡œ ê´€ë¦¬í•  ìˆ˜ ìˆë„ë¡ ì²˜ë¦¬í•¨
 			template<class T> requires std::derived_from<T, UndoableCommand>
 			void AddQueue(const std::shared_ptr<T>& command)
 			{
@@ -43,13 +45,15 @@ namespace application
 				ResizeBuffer();
 			}
 
-			void ExecuteCommands();											// commandQueue ÀÇ ³»¿ëÀ» ¸ğµÎ ½ÇÇàÇÔ
+			void ExecuteCommands();											// commandQueue ì˜ ë‚´ìš©ì„ ëª¨ë‘ ì‹¤í–‰í•¨
 
-			void UndoCommand();												// ¸¶Áö¸·À¸·Î ½ÇÇàÇß´ø Ä¿¸Çµå¸¦ Ãë¼ÒÇÏ°í µÇµ¹¸²
-			void RedoCommand();												// ½ÇÇà Ãë¼ÒÇß´ø Ä¿¸Çµå¸¦ ´Ù½Ã ½ÇÇàÇÔ
+			void UndoCommand();												// ë§ˆì§€ë§‰ìœ¼ë¡œ ì‹¤í–‰í–ˆë˜ ì»¤ë§¨ë“œë¥¼ ì·¨ì†Œí•˜ê³  ë˜ëŒë¦¼
+			void RedoCommand();												// ì‹¤í–‰ ì·¨ì†Œí–ˆë˜ ì»¤ë§¨ë“œë¥¼ ë‹¤ì‹œ ì‹¤í–‰í•¨
 
 		private:
-			void ResizeBuffer();											// undoQueue ¿Í redoStack »çÀÌÁî¸¦ ÇÕÄ£ bufferSize °¡ ³ÑÄ¥ ¶§ µ¿ÀÛÇÏ´Â ÇÔ¼ö
+			CommandManager();
+
+			void ResizeBuffer();											// undoQueue ì™€ redoStack ì‚¬ì´ì¦ˆë¥¼ í•©ì¹œ bufferSize ê°€ ë„˜ì¹  ë•Œ ë™ì‘í•˜ëŠ” í•¨ìˆ˜
 
 			int bufferSize = 50;
 			std::queue<std::shared_ptr<Command>> commandQueue;
@@ -58,3 +62,4 @@ namespace application
 		};
 	}
 }
+#endif

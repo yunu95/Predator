@@ -1,9 +1,10 @@
-/// 2023. 10. 04 ±è»óÁØ
-/// SceneView ÆĞ³ÎÀÌ ÀüÃ¼ °ø°£¿¡¼­ ÇöÀç È®ÀÎÇÏ°í ÀÖ´Â ºÎºĞÀ» ÇÑ ´«¿¡ ÆÄ¾ÇÇÒ ¼ö ÀÖ´Â
-/// MiniMap À» Á¦°øÇØÁÖ´Â ÆĞ³Î
+/// 2023. 10. 04 ê¹€ìƒì¤€
+/// SceneView íŒ¨ë„ì´ ì „ì²´ ê³µê°„ì—ì„œ í˜„ì¬ í™•ì¸í•˜ê³  ìˆëŠ” ë¶€ë¶„ì„ í•œ ëˆˆì— íŒŒì•…í•  ìˆ˜ ìˆëŠ”
+/// MiniMap ì„ ì œê³µí•´ì£¼ëŠ” íŒ¨ë„
 
 #pragma once
 
+#ifdef EDITOR
 #include "Singleton.h"
 #include "EditorPanel.h"
 
@@ -14,14 +15,19 @@ namespace application
 		class MiniMapPanel
 			: public Panel, public Singleton<MiniMapPanel>
 		{
+			friend class Singleton<MiniMapPanel>;
+
 		public:
-			MiniMapPanel();
 			virtual ~MiniMapPanel();
 
 			virtual void Initialize() override;
 			virtual void Update(float ts) override;
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
+
+		private:
+			MiniMapPanel();
 		};
 	}
 }
+#endif

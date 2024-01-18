@@ -95,7 +95,7 @@ namespace snippets
 		TEST_METHOD(SnippetAllGraphicsWorked)
 		{
 			application::Application& client = application::Application::CreateApplication(0, 0);
-			application::Contents::ContentsLayer::AssignTestInitializer(SnippetAllGraphicsWorkedInit);
+			application::contents::ContentsLayer::AssignTestInitializer(SnippetAllGraphicsWorkedInit);
 			client.Initialize();
 			client.Run();
 			client.Finalize();

@@ -3,8 +3,13 @@
 
 #pragma once
 
+#ifdef EDITOR
 #include "Singleton.h"
 #include "EditorPanel.h"
+#include "UnitPaletteManager.h"
+#include "EditorInputManager.h"
+
+#include <utility>
 
 namespace application
 {
@@ -18,19 +23,43 @@ namespace application
 		class SceneViewPanel
 			: public Panel, public Singleton<SceneViewPanel>
 		{
+			friend class Singleton<SceneViewPanel>;
+
 		public:
-			SceneViewPanel();
 			virtual ~SceneViewPanel();
 
 			virtual void Initialize() override;
 			virtual void Update(float ts) override;
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
+			virtual void OnEvent(EditorEvents& event) override;
+
+			std::pair<unsigned int, unsigned int> GetRenderImageSize() const;
+			std::pair<double, double> GetCursorPosInScreenSpace() const;
+
+		private:
+			SceneViewPanel();
+			
+			void ImGui_Update();
+			void ImGui_OnResizeRenderImageSize();
+			void ImGui_UpdateCursorPosInScreenSpace();
+			void ImGui_UpdateWindowSize();
+			bool ImGui_IsCursorInScreen();
+			bool ImGui_IsWindowResize();
+			std::pair<float, float> ImGui_GetCursorPosOnPanel();
+			void Release();
 
 		private:
 			Application* app;
-			unsigned int rendererWidth;
-			unsigned int rendererHeight;
+			palette::UnitPaletteManager& upm = palette::UnitPaletteManager::SingleInstance();
+			EditorInputManager& eim = EditorInputManager::GetSingletonInstance();
+			std::pair<float, float> prevWindowSize;
+			std::pair<float, float> currentWindowSize;
+			std::pair<unsigned int, unsigned int> renderImageSize;
+			std::pair<double, double> cursorPos_InScreenSpace;
+
+			// flag
 		};
 	}
 }
+#endif

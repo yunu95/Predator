@@ -54,7 +54,7 @@ namespace snippets
         TEST_METHOD(Snippet1milGameObjects)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializer1milGameObjects);
+            application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializer1milGameObjects);
             client.Initialize();
             client.Run();
             client.Finalize();

@@ -3,10 +3,12 @@
 
 #pragma once
 
+#ifdef EDITOR
 #include "CommandManager.h"
 #include "EditorEvents.h"
 
 #include <memory>
+#include <utility>
 
 namespace application
 {
@@ -34,3 +36,4 @@ namespace application
 		};
 	}
 }
+#endif

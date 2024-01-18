@@ -1,3 +1,4 @@
+#ifdef EDITOR
 #include "UnitPaletteManager.h"
 #include "UnitInstance.h"
 
@@ -12,3 +13,4 @@ namespace application::editor::palette
         return dynamic_cast<UnitInstance*>(instance);
     };
 }
+#endif

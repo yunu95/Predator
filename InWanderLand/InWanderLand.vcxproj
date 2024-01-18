@@ -986,6 +986,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
     <ClInclude Include="AttackSystem.h" />
     <ClInclude Include="BleedingComponent.h" />
+    <ClInclude Include="PaletteManagerList.h" />
     <ClInclude Include="SingleNavigationField.h" />
     <ClInclude Include="TestUtilButtonEvent.h" />
     <ClInclude Include="InWanderLand.h" />

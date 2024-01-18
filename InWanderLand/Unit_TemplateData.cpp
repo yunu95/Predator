@@ -1,3 +1,4 @@
+#ifdef EDITOR
 #include "InWanderLand.h"
 #include "Unit_TemplateData.h"
 
@@ -60,4 +61,4 @@ namespace application
 		}
 	}
 }
-
+#endif

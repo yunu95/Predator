@@ -3,6 +3,7 @@
 
 #pragma once
 
+#ifdef EDITOR
 #include "Command.h"
 
 namespace application
@@ -27,4 +28,4 @@ namespace application
 		};
 	}
 }
-
+#endif

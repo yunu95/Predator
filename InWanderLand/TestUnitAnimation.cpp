@@ -40,7 +40,7 @@ namespace tests
         TEST_METHOD(TestUnitAnimation)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(TestInitUnitAnimation);
+            application::contents::ContentsLayer::AssignTestInitializer(TestInitUnitAnimation);
             client.Initialize();
             client.Run();
             client.Finalize();

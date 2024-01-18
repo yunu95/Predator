@@ -1,3 +1,4 @@
+#ifdef EDITOR
 #include "InWanderLand.h"
 #include "TerrainData.h"
 
@@ -12,7 +13,7 @@ namespace application
 
 		bool TerrainData::EnterDataFromTemplate()
 		{
-			// ÅÛÇÃ¸´À¸·ÎºÎÅÍ ÃÊ±âÈ­µÇ´Â µ¥ÀÌÅÍµé Ã³¸® ¿µ¿ª	
+			// í…œí”Œë¦¿ìœ¼ë¡œë¶€í„° ì´ˆê¸°í™”ë˜ëŠ” ë°ì´í„°ë“¤ ì²˜ë¦¬ ì˜ì—­	
 
 			return true;
 		}
@@ -103,3 +104,4 @@ namespace application
 		}
 	}
 }
+#endif

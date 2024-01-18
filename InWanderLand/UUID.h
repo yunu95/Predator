@@ -1,9 +1,10 @@
-/// 2023. 11. 20 ±è»óÁØ
-/// ¿¡µðÅÍ¿¡¼­ »ç¿ëÇÒ ÀÎ½ºÅÏ½ºµéÀ» °ü¸®ÇÏ±â À§ÇÏ¿© °íÀ¯ÇÑ ½Äº°ÀÚ¸¦ »ç¿ëÇÏ±â À§ÇÑ ±¸Á¶Ã¼
-/// ÇØ´ç ±¸Á¶Ã¼´Â MS ¿¡¼­ Á¦°øÇØÁÖ´Â ±âº» ±¸Á¶Ã¼¸¦ »ç¿ëÇÔ
+/// 2023. 11. 20 ê¹€ìƒì¤€
+/// ì—ë””í„°ì—ì„œ ì‚¬ìš©í•  ì¸ìŠ¤í„´ìŠ¤ë“¤ì„ ê´€ë¦¬í•˜ê¸° ìœ„í•˜ì—¬ ê³ ìœ í•œ ì‹ë³„ìžë¥¼ ì‚¬ìš©í•˜ê¸° ìœ„í•œ êµ¬ì¡°ì²´
+/// í•´ë‹¹ êµ¬ì¡°ì²´ëŠ” MS ì—ì„œ ì œê³µí•´ì£¼ëŠ” ê¸°ë³¸ êµ¬ì¡°ì²´ë¥¼ ì‚¬ìš©í•¨
 
 #pragma once
 
+#ifdef EDITOR
 #include <rpc.h>
 #pragma comment(lib, "Rpcrt4.lib")
 
@@ -33,3 +34,4 @@ namespace std
         }
     };
 };
+#endif

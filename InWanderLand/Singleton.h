@@ -1,6 +1,6 @@
-/// 2023. 12. 19 ±è»óÁØ
-/// Singleton ÆĞÅÏÀ¸·Î »ç¿ëÇÒ Å¬·¡½ºÀÇ °æ¿ì ÇØ´ç Å¬·¡½º¸¦ ÅëÇØ
-/// ¹İº¹µÇ´Â ºÎºĞÀ» ÁÙÀÏ ¼ö ÀÖµµ·Ï ÇÔ
+/// 2023. 12. 19 ê¹€ìƒì¤€
+/// Singleton íŒ¨í„´ìœ¼ë¡œ ì‚¬ìš©í•  í´ë˜ìŠ¤ì˜ ê²½ìš° í•´ë‹¹ í´ë˜ìŠ¤ë¥¼ í†µí•´
+/// ë°˜ë³µë˜ëŠ” ë¶€ë¶„ì„ ì¤„ì¼ ìˆ˜ ìˆë„ë¡ í•¨
 
 #pragma once
 
@@ -19,7 +19,7 @@ namespace application
 				static std::unique_ptr<T> instance = nullptr;
 				if (instance == nullptr)
 				{
-					instance = std::make_unique<T>();
+					instance = std::unique_ptr<T>(new T);
 				}
 				return *instance;
 			}

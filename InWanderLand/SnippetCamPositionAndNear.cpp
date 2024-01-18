@@ -51,7 +51,7 @@ namespace snippets
         TEST_METHOD(SnippetCamPosAndNear)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializerCamPosAndNear);
+            application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializerCamPosAndNear);
             client.Initialize();
             client.Run();
             client.Finalize();

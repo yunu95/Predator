@@ -19,7 +19,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 #include <d3d11.h>
 
-std::function<void()> application::Contents::ContentsLayer::testInitializer;
+std::function<void()> application::contents::ContentsLayer::testInitializer;
 
 /// 그래픽스 테스트용
 void GraphicsTest()
@@ -137,7 +137,7 @@ void GraphicsTest()
 //    staticMesh->GetTransform()->position = Vector3d{ 0,0.5,0 };
 //    return agent;
 //}
-void application::Contents::ContentsLayer::Initialize()
+void application::contents::ContentsLayer::Initialize()
 {
     if (ContentsLayer::testInitializer)
     {
@@ -167,23 +167,23 @@ void application::Contents::ContentsLayer::Initialize()
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
-void application::Contents::ContentsLayer::Update(float ts)
+void application::contents::ContentsLayer::Update(float ts)
 {
     //std::cout << Time::GetFPS() << std::endl;
 }
 
-void application::Contents::ContentsLayer::GUIProgress()
+void application::contents::ContentsLayer::GUIProgress()
 {
 
 }
 
-void application::Contents::ContentsLayer::Finalize()
+void application::contents::ContentsLayer::Finalize()
 {
 
 }
 
 #ifdef GEN_TESTS
-void application::Contents::ContentsLayer::AssignTestInitializer(std::function<void()> testInitializer)
+void application::contents::ContentsLayer::AssignTestInitializer(std::function<void()> testInitializer)
 {
     ContentsLayer::testInitializer = testInitializer;
     YunutyCycle::SingleInstance().onExceptionThrown = [](const std::exception& e) {
