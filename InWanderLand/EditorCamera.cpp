@@ -22,15 +22,22 @@ namespace application
 		{
 			// Game 카메라 세팅
 			this->gameCam = gameCam;
-			auto gcts = gameCam->GetTransform();
+			yunutyEngine::Transform* gcts = nullptr;
+			if (gameCam != nullptr)
+			{
+				gcts = gameCam->GetTransform();
+			}
 
 			// Editor 카메라를 Scene에 생성하고 해당 카메라를 메인으로 변경
 			auto scene = yunutyEngine::Scene::getCurrentScene();
 			auto ecc = scene->AddGameObject()->AddComponent<EditorCameraComponent>();
-			auto ts = ecc->GetTransform();
-			ts->SetWorldPosition(gcts->GetWorldPosition());
-			ts->SetWorldRotation(gcts->GetWorldRotation());
 			ecc->SetCameraMain();
+			auto ts = ecc->GetTransform();
+			if (gameCam)
+			{
+				ts->SetWorldPosition(gcts->GetWorldPosition());
+				ts->SetWorldRotation(gcts->GetWorldRotation());
+			}
 
 			editorCam = ecc;
 			cameraTState = CameraTypeState::Editor;
@@ -43,8 +50,11 @@ namespace application
 			{
 				case application::editor::EditorCamera::CameraTypeState::Editor:
 				{
-					cameraTState = CameraTypeState::Game;
-					gameCam->SetCameraMain();
+					if (gameCam)
+					{
+						cameraTState = CameraTypeState::Game;
+						gameCam->SetCameraMain();
+					}
 					break;
 				}
 				case application::editor::EditorCamera::CameraTypeState::Game:
@@ -74,14 +84,17 @@ namespace application
 			}
 			else
 			{
-				auto ts = editorCam->GetTransform();
-				auto gcts = gameCam->GetTransform();
-				auto pos = ts->GetWorldPosition();
-				pos.y = gcts->GetWorldPosition().y;
-				ts->SetWorldPosition(pos);
-				ts->SetWorldRotation(gcts->GetWorldRotation());
+				if (gameCam)
+				{
+					auto ts = editorCam->GetTransform();
+					auto gcts = gameCam->GetTransform();
+					auto pos = ts->GetWorldPosition();
+					pos.y = gcts->GetWorldPosition().y;
+					ts->SetWorldPosition(pos);
+					ts->SetWorldRotation(gcts->GetWorldRotation());
 
-				cameraPState = CameraPerspectiveState::Game;
+					cameraPState = CameraPerspectiveState::Game;
+				}
 				return;
 			}
 		}
