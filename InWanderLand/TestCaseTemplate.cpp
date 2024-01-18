@@ -40,7 +40,7 @@ namespace tests
         TEST_METHOD(TestCaseTemplate)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(TestInitializerTemplate);
+            application::contents::ContentsLayer::AssignTestInitializer(TestInitializerTemplate);
             client.Initialize();
             client.Run();
             client.Finalize();

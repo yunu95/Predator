@@ -3,6 +3,7 @@
 
 #pragma once
 
+#ifdef EDITOR
 #include "Singleton.h"
 #include "Storable.h"
 #include "Identifiable.h"
@@ -22,11 +23,10 @@ namespace application
 		class TemplateDataManager
 			: public Storable, public Singleton<TemplateDataManager>
 		{
-		public:
+			friend class Singleton<TemplateDataManager>;
 			friend class MapFileManager;
 
-			TemplateDataManager();
-
+		public:
 			ITemplateData* CreateTemplateData(const std::string& name, const DataType& type);
 			ITemplateData* CloneTemplateData(const std::string& name, const ITemplateData* prototype);
 			bool DeleteTemplateData(const std::string& name);
@@ -46,6 +46,8 @@ namespace application
 			virtual bool PostDecoding(const json& data) override;
 
 		private:
+			TemplateDataManager();
+
 			std::map<const std::string, std::unique_ptr<ITemplateData>> list;
 			std::unordered_map<const ITemplateData*, DataType> typeMap;
 			std::unordered_map<const UUID, std::string> uuidKeyMap;
@@ -54,3 +56,4 @@ namespace application
 		};
 	}
 }
+#endif

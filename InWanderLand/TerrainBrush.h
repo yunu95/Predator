@@ -1,4 +1,5 @@
 #pragma once
+#ifdef EDITOR
 #include "YunutyEngine.h"
 #include "SingletonComponent.h"
 #include "DebugMeshes.h" 
@@ -92,3 +93,4 @@ namespace application
         }
     }
 }
+#endif

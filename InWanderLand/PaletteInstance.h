@@ -1,4 +1,5 @@
 #pragma once
+#ifdef EDITOR
 #include "YunutyEngine.h"
 
 namespace application
@@ -26,7 +27,6 @@ namespace application
             {
             public:
                 virtual void Start() override;
-#ifdef EDITOR
                 /// <summary>
                 /// OnSelected는 객체가 선택되었을 때 호출됩니다. 객체가 선택되었음을 명확히 알 수 있도록 그래픽스 효과를 구현하십시오. 
                 /// OnHover는 팔레트 선택 모드에서 마우스 커서가 해당 객체에 올라갔을 때 호출됩니다. OnSelected와 유사하지만 구분은 가능한 효과를 구현하십시오.
@@ -38,7 +38,6 @@ namespace application
                 virtual void OnHoverLeft();
                 virtual void OnSelected();
                 virtual void OnDeselected();
-#endif
                 /// <summary>
                 /// 현재 존재하는 모든 PaletteInstance들을 에디터 요소에서 인게임 요소로 활성화시킵니다.
                 /// 지형의 경우 네비게이션 메시를 구워 인게임에서 오갈 수 있는 지형으로 만듭니다.
@@ -56,13 +55,12 @@ namespace application
                 float selectCircleRadius{ 1.25 };
                 yunutyEngine::physics::BoxCollider* pickingCollider{ nullptr };
             private:
-#ifdef EDITOR
                 yunutyEngine::physics::RigidBody* rigidBody{ nullptr };
                 yunutyEngine::graphics::StaticMeshRenderer* selectCircle{nullptr};
                 bool isSelected{ false };
                 bool isHovering{ false };
-#endif
             };
         }
     }
 }
+#endif

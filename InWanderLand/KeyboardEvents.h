@@ -3,6 +3,7 @@
 
 #pragma once
 
+#ifdef EDITOR
 #include "EditorEvents.h"
 
 #include <sstream>
@@ -16,6 +17,18 @@ namespace application
 		{
 		public:
 			CATEGORY_SETTING(EventCategory::Editor | EventCategory::Input | EventCategory::Keyboard)
+
+			KeyCode GetKeyCode() const { return keyCode; }
+
+		protected:
+			KeyboardEvent(KeyCode keyCode)
+				: keyCode(keyCode)
+			{
+
+			}
+
+		private:
+			KeyCode keyCode;
 		};
 
 		class KeyPressedEvent
@@ -23,6 +36,21 @@ namespace application
 		{
 		public:
 			EVENT_SETTING(EventType::KeyPressed)
+
+			KeyPressedEvent(KeyCode keyCode)
+				: KeyboardEvent(keyCode)
+			{
+
+			}
+
+			virtual std::string GetDebugString() const
+			{
+				std::stringstream ss;
+				ss << "[" + GetName() + "] ";
+				auto code = GetKeyCode();
+				ss << static_cast<unsigned int>(code) << '\n';
+				return ss.str();
+			}
 		};
 
 		class KeyDownEvent
@@ -30,6 +58,21 @@ namespace application
 		{
 		public:
 			EVENT_SETTING(EventType::KeyDown)
+
+			KeyDownEvent(KeyCode keyCode)
+				: KeyboardEvent(keyCode)
+			{
+
+			}
+
+			virtual std::string GetDebugString() const
+			{
+				std::stringstream ss;
+				ss << "[" + GetName() + "] ";
+				auto code = GetKeyCode();
+				ss << static_cast<unsigned int>(code) << '\n';
+				return ss.str();
+			}
 		};
 
 		class KeyReleasedEvent
@@ -37,7 +80,22 @@ namespace application
 		{
 		public:
 			EVENT_SETTING(EventType::KeyReleased)
+
+			KeyReleasedEvent(KeyCode keyCode)
+				: KeyboardEvent(keyCode)
+			{
+
+			}
+
+			virtual std::string GetDebugString() const
+			{
+				std::stringstream ss;
+				ss << "[" + GetName() + "] ";
+				auto code = GetKeyCode();
+				ss << static_cast<unsigned int>(code) << '\n';
+				return ss.str();
+			}
 		};
 	}
 }
-
+#endif

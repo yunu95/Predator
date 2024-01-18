@@ -1,3 +1,4 @@
+#ifdef EDITOR
 #include "InWanderLand.h"
 #include "EventManager.h"
 
@@ -32,3 +33,4 @@ namespace application
         }
     }
 }
+#endif

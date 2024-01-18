@@ -14,7 +14,7 @@ public:
     function<void(Vector3d)> groundHoveringClickCallback{ [](Vector3d) {} };
     function<void()> deleteButtonCallback{ []() {} };
     function<void()> tabButtonCallback{ []() {} };
-    function<void()> cButtonCallback{ []() {} };
+    function<void()> xButtonCallback{ []() {} };
     void Update()
     {
         if (Input::isKeyPushed(KeyCode::Tab))
@@ -26,8 +26,8 @@ public:
         if (yunutyEngine::Input::isKeyPushed(KeyCode::Tab))
             tabButtonCallback();
 
-        if (yunutyEngine::Input::isKeyPushed(KeyCode::C))
-            cButtonCallback();
+        if (yunutyEngine::Input::isKeyPushed(KeyCode::X))
+            xButtonCallback();
 
         if (!roamingMode)
         {

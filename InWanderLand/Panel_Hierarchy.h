@@ -1,8 +1,9 @@
-/// 2023. 10. 04 ±è»óÁØ
-/// ÆíÁı °¡´ÉÇÑ °èÃş ±¸Á¶¸¦ È®ÀÎÇÏ´Â ÆĞ³Î
+/// 2023. 10. 04 ê¹€ìƒì¤€
+/// í¸ì§‘ ê°€ëŠ¥í•œ ê³„ì¸µ êµ¬ì¡°ë¥¼ í™•ì¸í•˜ëŠ” íŒ¨ë„
 
 #pragma once
 
+#ifdef EDITOR
 #include "Singleton.h"
 #include "EditorPanel.h"
 
@@ -13,14 +14,19 @@ namespace application
 		class HierarchyPanel
 			: public Panel, public Singleton<HierarchyPanel>
 		{
+			friend class Singleton<HierarchyPanel>;
+
 		public:
-			HierarchyPanel();
 			virtual ~HierarchyPanel();
 
 			virtual void Initialize() override;
 			virtual void Update(float ts) override;
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
+
+		private:
+			HierarchyPanel();
 		};
 	}
 }
+#endif

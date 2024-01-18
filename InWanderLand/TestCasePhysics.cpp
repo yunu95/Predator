@@ -149,7 +149,7 @@ namespace tests
         TEST_METHOD(TestCasePhysics)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(TestCasePhysicsInit);
+            application::contents::ContentsLayer::AssignTestInitializer(TestCasePhysicsInit);
             client.Initialize();
             client.Run();
             client.Finalize();

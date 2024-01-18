@@ -86,7 +86,7 @@ namespace snippets
         TEST_METHOD(SnippetAnimationChangeInterpolation)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(SnippetAnimationChangeInterpolationInit);
+            application::contents::ContentsLayer::AssignTestInitializer(SnippetAnimationChangeInterpolationInit);
             client.Initialize();
             client.Run();
             client.Finalize();

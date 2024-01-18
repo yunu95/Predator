@@ -5,6 +5,7 @@
 
 #pragma once
 
+#ifdef EDITOR
 #include <vector>
 #include <memory>
 #include <functional>
@@ -12,61 +13,67 @@
 
 #include "Layer.h"
 #include "CommandManager.h"
+#include "EditorCamera.h"
 #include "EditorPanel.h"
 #include "EditorModule.h"
 #include "EditorEvents.h"
 
 namespace application
 {
-    namespace editor
-    {
-        class EditorLayer
-            : public Layer
-        {
-        public:
-            static void AssignTestInitializer(std::function<void()> testInitializer);
+	namespace editor
+	{
+		class EditorLayer
+			: public Layer
+		{
+		public:
+			static void AssignTestInitializer(std::function<void()> testInitializer);
 
-            virtual void Initialize() override;
-            virtual void Update(float ts) override;
-            virtual void GUIProgress() override;
-            virtual void Finalize() override;
-#ifdef EDITOR
-            virtual void OnEvent(EditorEvents& event) override;
-#endif
+			virtual void Initialize() override;
+			virtual void Update(float ts) override;
+			virtual void GUIProgress() override;
+			virtual void Finalize() override;
+			virtual void OnEvent(EditorEvents& event) override;
 
-        private:
-            enum class Panel_List
-            {
-                HIERARCHY = 0,
-                INSPECTOR,
-                PREVIEW,
-                MINIMAP,
-                SCENEVIEW,
-                CAMERAVIEW,
-                PALETTE,
+			// Content 레이어의 Initialize 이후에 초기화 되어야 하는
+			// GameEngine 과 관련된 내용들을 초기화하는 함수입니다.
+			void LateInitialize();
 
-                /// Size를 자동으로 넣기 위해 사용하는 enum
-                /// 첫 enum 값이 0 이고, 모든 간격이 1일 때에 가능함
-                Size
-            };
+		private:
+			enum class Panel_List
+			{
+				HIERARCHY	= 0,
+				INSPECTOR,
+				PREVIEW,
+				MINIMAP,
+				SCENEVIEW,
+				CAMERAVIEW,
+				PALETTE,
 
-            enum class Module_List
-            {
-                TemplateDataEditor = 0,
+				/// Size를 자동으로 넣기 위해 사용하는 enum
+				/// 첫 enum 값이 0 이고, 모든 간격이 1일 때에 가능함
+				Size
+			};
 
-                /// Size를 자동으로 넣기 위해 사용하는 enum
-                /// 첫 enum 값이 0 이고, 모든 간격이 1일 때에 가능함
-                Size
-            };
+			enum class Module_List
+			{
+				TemplateDataEditor	= 0,
+
+				/// Size를 자동으로 넣기 위해 사용하는 enum
+				/// 첫 enum 값이 0 이고, 모든 간격이 1일 때에 가능함
+				Size
+			};
 
 
-            static std::function<void()> testInitializer;
+			static std::function<void()> testInitializer;
 
-            void UI_DrawMenubar();
+			void UI_DrawMenubar();
 
-            CommandManager& cm = CommandManager::GetSingletonInstance();
-            std::vector<std::unique_ptr<Panel>> editorPanelList;
-            std::vector<std::unique_ptr<EditorModule>> editorModuleList;
-        };
-    }
+			CommandManager& cm = CommandManager::GetSingletonInstance();
+			EditorCamera& editorCamera = EditorCamera::GetSingletonInstance();
+
+			std::vector<std::unique_ptr<Panel>> editorPanelList;
+			std::vector<std::unique_ptr<EditorModule>> editorModuleList;	
+		};
+	}
 }
+#endif

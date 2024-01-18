@@ -1,9 +1,10 @@
-/// 2023. 11. 23 ±è»óÁØ
-/// ½ÇÁ¦ Instance °¡ µÇ¾î °ü¸®µÇ´Â IEditableData ¿¡ ´ëÇÑ Manager Å¬·¡½º
-/// IEditableData ´Â InstanceMaanger ¸¦ ÅëÇØ¼­¸¸ »ı¼ºÇÒ ¼ö ÀÖÀ½
+/// 2023. 11. 23 ê¹€ìƒì¤€
+/// ì‹¤ì œ Instance ê°€ ë˜ì–´ ê´€ë¦¬ë˜ëŠ” IEditableData ì— ëŒ€í•œ Manager í´ë˜ìŠ¤
+/// IEditableData ëŠ” InstanceMaanger ë¥¼ í†µí•´ì„œë§Œ ìƒì„±í•  ìˆ˜ ìˆìŒ
 
 #pragma once
 
+#ifdef EDITOR
 #include "Singleton.h"
 #include "Storable.h"
 #include "IEditableData.h"
@@ -31,12 +32,11 @@ namespace application
 		class InstanceManager
 			: public Storable, public Singleton<InstanceManager>
 		{
-		public:
+			friend class Singleton<InstanceManager>;
 			friend class MapFileManager;
 
-			InstanceManager();
-
-			// ÀÌ¹Ì ¸¸µé¾îÁø ITemplateData ·ÎºÎÅÍ Instance ¸¦ »ı¼ºÇÔ
+		public:
+			// ì´ë¯¸ ë§Œë“¤ì–´ì§„ ITemplateData ë¡œë¶€í„° Instance ë¥¼ ìƒì„±í•¨
 			IEditableData* CreateInstance(const std::string& dataName);
 			bool DeleteInstance(const UUID& uuid);
 			IEditableData* GetInstance(const UUID& uuid) const;
@@ -49,7 +49,9 @@ namespace application
 			virtual bool PostDecoding(const json& data) override;
 
 		private:
-			// ITemplateData °¡ »ı¼ºµÇ±â Àü¿¡ ±× Æ²¸¸ ¿ì¼± ÀÛ¼ºÇÔ
+			InstanceManager();
+
+			// ITemplateData ê°€ ìƒì„±ë˜ê¸° ì „ì— ê·¸ í‹€ë§Œ ìš°ì„  ì‘ì„±í•¨
 			IEditableData* CreateEmptyInstance(const DataType& type);
 
 			TemplateDataManager& templateDataManager;
@@ -61,5 +63,4 @@ namespace application
 		};
 	}
 }
-
-
+#endif

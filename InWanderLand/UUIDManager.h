@@ -1,9 +1,10 @@
-/// 2023. 12. 19 ±è»óÁØ
-/// UUID ¸¦ ÅëÇØ Æ÷ÀÎÅÍ¸¦ ÀúÀåÇÏ°í È¹µæÇÒ ¼ö ÀÖ´Â Manager Å¬·¡½º
-/// µû·Î °ËÁõ ÀıÂ÷¸¦ °ÅÄ¡Áö ¾Ê°í void* ÇüÅÂ·Î Ä³½ºÆÃÇÏ¿© »ç¿ëÇÔ
+/// 2023. 12. 19 ê¹€ìƒì¤€
+/// UUID ë¥¼ í†µí•´ í¬ì¸í„°ë¥¼ ì €ì¥í•˜ê³  íšë“í•  ìˆ˜ ìˆëŠ” Manager í´ë˜ìŠ¤
+/// ë”°ë¡œ ê²€ì¦ ì ˆì°¨ë¥¼ ê±°ì¹˜ì§€ ì•Šê³  void* í˜•íƒœë¡œ ìºìŠ¤íŒ…í•˜ì—¬ ì‚¬ìš©í•¨
 
 #pragma once
 
+#ifdef EDITOR
 #include "Singleton.h"
 #include "Identifiable.h"
 
@@ -17,6 +18,8 @@ namespace application
 		class UUIDManager
 			: public Singleton<UUIDManager>
 		{
+			friend class Singleton<UUIDManager>;
+
 		public:
 			bool RegisterUUIDWithPointer(const UUID& uuid, Identifiable* pointer);
 
@@ -30,7 +33,10 @@ namespace application
 			void Clear();
 
 		private:
+			UUIDManager() = default;
+
 			std::unordered_map<const UUID, Identifiable*> uuidMap;
 		};
 	}
 }
+#endif

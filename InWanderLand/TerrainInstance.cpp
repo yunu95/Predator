@@ -1,2 +1,3 @@
-#include "InWanderLand.h"
-
+#ifdef EDITOR
+#include "TerrainInstance.h"
+#endif

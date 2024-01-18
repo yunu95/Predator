@@ -1,3 +1,4 @@
+#ifdef EDITOR
 #include "InWanderLand.h"
 #include "MapFileManager.h"
 
@@ -28,14 +29,14 @@ namespace application
                 json mapData;
                 loadFile >> mapData;
 
-                // Á¦´ë·Î µÈ Map ÆÄÀÏÀÌ ¾Æ´Ò °æ¿ì Ãë¼Ò
+                // ì œëŒ€ë¡œ ëœ Map íŒŒì¼ì´ ì•„ë‹ ê²½ìš° ì·¨ì†Œ
                 if (mapData.find("InWanderLand") == mapData.end())
                 {
                     loadFile.close();
                     return false;
                 }
 
-                // Manager ÃÊ±âÈ­
+                // Manager ì´ˆê¸°í™”
                 Clear();
 
                 if (!instanceManager.PreDecoding(mapData) || !templateDataManager.PreDecoding(mapData))
@@ -79,7 +80,7 @@ namespace application
 
             if (mapData.is_null())
             {
-                // mapdData °¡ ¸¸µé¾îÁø °ÍÀÌ ¾ø´Ù¸é Ãë¼Ò
+                // mapdData ê°€ ë§Œë“¤ì–´ì§„ ê²ƒì´ ì—†ë‹¤ë©´ ì·¨ì†Œ
                 return false;
             }
 
@@ -117,3 +118,4 @@ namespace application
         }
     }
 }
+#endif

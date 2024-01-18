@@ -1,5 +1,7 @@
+#ifdef EDITOR
 #include "InWanderLand.h"
 #include "Panel_Inspector.h"
+#include "Application.h"
 
 #include "imgui.h"
 
@@ -31,11 +33,11 @@ namespace application
 		{
 			ImGui::Begin("Inspector", 0, ImGuiWindowFlags_NoBringToFrontOnFocus);
 
-			/// ImGui °ü·Ã ³»ºÎ º¯¼ö ¾÷µ¥ÀÌÆ®
+			/// ImGui ê´€ë ¨ ë‚´ë¶€ ë³€ìˆ˜ ì—…ë°ì´íŠ¸
 			isMouseOver = ImGui::IsWindowHovered();
 			isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
-			/// ½ÇÁ¦ ÆĞ³Î¿¡ ±×¸®´Â ¿µ¿ª
+			/// ì‹¤ì œ íŒ¨ë„ì— ê·¸ë¦¬ëŠ” ì˜ì—­
 
 
 			ImGui::End();
@@ -47,3 +49,4 @@ namespace application
 		}
 	}
 }
+#endif

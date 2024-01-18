@@ -1,8 +1,9 @@
-/// 2023. 11. 21 ±è»óÁØ
-/// UUID ¸¦ »ç¿ëÇÏ¿© °ü¸®°¡ µÉ ´ë»óÀÌ »ó¼Ó¹ŞÀ» Å¬·¡½º
+/// 2023. 11. 21 ê¹€ìƒì¤€
+/// UUID ë¥¼ ì‚¬ìš©í•˜ì—¬ ê´€ë¦¬ê°€ ë  ëŒ€ìƒì´ ìƒì†ë°›ì„ í´ë˜ìŠ¤
 
 #pragma once
 
+#ifdef EDITOR
 #include "UUID.h"
 
 #include <string>
@@ -32,7 +33,7 @@ namespace application
 
 			UUID GetUUID() const;
 
-			// SetUUID ¸¦ ÅëÇØ UUID ¸¦ ¹Ù²Ù¾î¾ß¸¸ UUIDManager ¿¡¼­ º¯°æ»çÇ×ÀÌ Àû¿ëµÇ¹Ç·Î ÁÖÀÇ
+			// SetUUID ë¥¼ í†µí•´ UUID ë¥¼ ë°”ê¾¸ì–´ì•¼ë§Œ UUIDManager ì—ì„œ ë³€ê²½ì‚¬í•­ì´ ì ìš©ë˜ë¯€ë¡œ ì£¼ì˜
 			void SetUUID(const UUID& id);
 
 		protected:
@@ -43,3 +44,4 @@ namespace application
 		};
 	}
 }
+#endif

@@ -1,3 +1,4 @@
+#ifdef EDITOR
 #include "InWanderLand.h"
 #include "PaletteManager.h"
 #include "PaletteInstance.h"
@@ -7,7 +8,6 @@ namespace application::editor::palette
 {
     PaletteManager* PaletteManager::currentPalette = nullptr;
 
-#ifdef EDITOR
     void PaletteManager::OnLeftClick()
     {
         isClickingLeft = true;
@@ -130,6 +130,7 @@ namespace application::editor::palette
     {
         return state != State::Place;
     }
+
     bool PaletteManager::IsClickingLeft()
     {
         return isClickingLeft;
@@ -240,5 +241,5 @@ namespace application::editor::palette
             pendingSelection->OnHoverLeft();
         pendingSelection = nullptr;
     }
-#endif
 }
+#endif

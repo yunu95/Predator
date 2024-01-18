@@ -3,6 +3,7 @@
 
 #pragma once
 
+#ifdef EDITOR
 #include "EditorEvents.h"
 
 #include <sstream>
@@ -35,5 +36,25 @@ namespace application
 			unsigned int width;
 			unsigned int height;
 		};
+
+		class WindowFocusEvent
+			: public EditorEvents
+		{
+			CATEGORY_SETTING(EventCategory::Editor | EventCategory::Window)
+			EVENT_SETTING(EventType::WindowFocus)
+
+			WindowFocusEvent()
+			{
+
+			}
+
+			virtual std::string GetDebugString() const
+			{
+				std::stringstream ss;
+				ss << "[" + GetName() + "]\n";
+				return ss.str();
+			}
+		};
 	}
 }
+#endif

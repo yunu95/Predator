@@ -1,4 +1,5 @@
 #pragma once
+#ifdef EDITOR
 #include "PaletteManager.h"
 #include "SelectionBox.h"
 #include "YunutyEngine.h"
@@ -9,7 +10,6 @@ namespace application
 {
     namespace editor
     {
-#ifdef EDITOR
         namespace palette
         {
             class SelectionBox : public yunutyEngine::Component,public yunutyEngine::SingletonComponent<SelectionBox>
@@ -64,6 +64,6 @@ namespace application
                 graphics::StaticMeshRenderer* boxMesh;
             };
         }
-#endif
     }
 }
+#endif
