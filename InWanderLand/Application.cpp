@@ -335,11 +335,6 @@ namespace application
 			return;
 		}
 
-		if (hWND != GetForegroundWindow())
-		{
-			gameFocus = false;
-		}
-
 		//Start the Dear ImGui frame
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
@@ -554,6 +549,11 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+		case WM_KILLFOCUS:
+		{
+			gameFocus = false;
+			break;
+		}
 		case WM_SETFOCUS:
 		{
 			gameFocus = true;
