@@ -1,6 +1,8 @@
 #ifdef EDITOR
 #include "InWanderLand.h"
 #include "Panel_Palette.h"
+#include "Application.h"
+
 #include "YunutyEngine.h"
 
 #include "imgui.h"
@@ -35,7 +37,7 @@ namespace application
 
             /// ImGui 관련 내부 변수 업데이트
             isMouseOver = ImGui::IsWindowHovered();
-            isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
+			isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
             /// 실제 패널에 그리는 영역
 

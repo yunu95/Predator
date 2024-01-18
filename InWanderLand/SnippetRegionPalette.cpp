@@ -27,7 +27,7 @@ void SnippetInitializerRegionPalette()
     rtsCam->groundLeftClickCallback = [](const Vector3d& worldPos) {application::editor::palette::PaletteManager::GetCurrentPalette()->OnLeftClick(); };
     rtsCam->groundLeftClickReleaseCallback = [](const Vector3d& worldPos) {application::editor::palette::PaletteManager::GetCurrentPalette()->OnLeftClickRelease(); };
     rtsCam->deleteButtonCallback = []() {application::editor::palette::PaletteManager::GetCurrentPalette()->OnDeletion(); };
-    rtsCam->cButtonCallback = []()
+    rtsCam->xButtonCallback = []()
     {
         auto palette = application::editor::palette::PaletteManager::GetCurrentPalette();
         palette->SetAsSelectMode(!palette->IsSelectMode());

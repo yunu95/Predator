@@ -130,6 +130,7 @@ namespace application::editor::palette
     {
         return state != State::Place;
     }
+
     bool PaletteManager::IsClickingLeft()
     {
         return isClickingLeft;

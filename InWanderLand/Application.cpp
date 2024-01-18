@@ -49,15 +49,16 @@ WNDCLASSEX wcEditor = { sizeof(WNDCLASSEX), CS_CLASSDC, WndEditorProc, 0L, 0L, G
 ImVec2 dockspaceArea = ImVec2();
 ImVec2 dockspaceStartPoint = ImVec2();
 RAWINPUTDEVICE inputDevice[2] = { RAWINPUTDEVICE(), RAWINPUTDEVICE() };
-function<void()> winResizeCallBackFunction = function<void()>();
-function<void(unsigned char keyCode)> winKeyboardPressedCallBackFunction = function<void(unsigned char)>();
-function<void(unsigned char keyCode)> winKeyboardUpCallBackFunction = function<void(unsigned char)>();
-function<void()> winMouseLeftPressedCallBackFunction = function<void()>();
-function<void()> winMouseLeftUpCallBackFunction = function<void()>();
-function<void()> winMouseRightPressedCallBackFunction = function<void()>();
-function<void()> winMouseRightUpCallBackFunction = function<void()>();
-function<void(long posX, long posY)> winMouseMoveCallBackFunction = function<void(long, long)>();
-function<void(short wheelDelta)> winMouseWheelCallBackFunction = function<void(short)>();
+std::function<void()> winResizeCallBackFunction = std::function<void()>();
+std::function<void(unsigned char keyCode)> winKeyboardPressedCallBackFunction = std::function<void(unsigned char)>();
+std::function<void(unsigned char keyCode)> winKeyboardUpCallBackFunction = std::function<void(unsigned char)>();
+std::function<void()> winMouseLeftPressedCallBackFunction = std::function<void()>();
+std::function<void()> winMouseLeftUpCallBackFunction = std::function<void()>();
+std::function<void()> winMouseRightPressedCallBackFunction = std::function<void()>();
+std::function<void()> winMouseRightUpCallBackFunction = std::function<void()>();
+std::function<void(long posX, long posY)> winMouseMoveCallBackFunction = std::function<void(long, long)>();
+std::function<void(short wheelDelta)> winMouseWheelCallBackFunction = std::function<void(short)>();
+bool gameFocus = false;
 #endif
 
 namespace application
@@ -313,8 +314,9 @@ namespace application
 #ifdef EDITOR
 	bool Application::IsFocusGameWindow()
 	{
-		return false;
+		return gameFocus;
 	}
+
 	void Application::ImGuiUpdate()
 	{
 		MSG msg;
@@ -331,6 +333,11 @@ namespace application
 		if (!isRunning)
 		{
 			return;
+		}
+
+		if (hWND != GetForegroundWindow())
+		{
+			gameFocus = false;
 		}
 
 		//Start the Dear ImGui frame
@@ -547,6 +554,11 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+		case WM_SETFOCUS:
+		{
+			gameFocus = true;
+			break;
+		}
 		case WM_SIZE:
 			if (wParam == SIZE_MINIMIZED)
 				return 0;

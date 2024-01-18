@@ -62,6 +62,7 @@ namespace application
                 /// 팔레트 매니저로부터 비롯된 플레이타임 객체들을 싸그리 정리합니다.
                 /// </summary>
                 virtual void CleanUpPlaytimeObjects() = 0;
+
             protected:
                 /// <summary>
                 /// 객체 배치를 시도할 때 호출되는 함수입니다. 해당 위치에 유닛, 지형, 장식물 등을 배치하고 배치된 객체를 반환하십시오.

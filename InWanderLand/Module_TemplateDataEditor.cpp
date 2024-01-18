@@ -1,16 +1,16 @@
 #ifdef EDITOR
 #include "InWanderLand.h"
 #include "Module_TemplateDataEditor.h"
+#include "Application.h"
 
 #include "TemplateDataManager.h"
-
 
 namespace application
 {
 	namespace editor
 	{
 		Module_TemplateDataEditor::Module_TemplateDataEditor()
-			: tdManager(TemplateDataManager::GetSingletonInstance())
+			: tdManager(TemplateDataManager::GetSingletonInstance()), selectedData(nullptr)
 		{
 
 		}

@@ -6,6 +6,8 @@
 #ifdef EDITOR
 #include "Singleton.h"
 #include "EditorPanel.h"
+#include "UnitPaletteManager.h"
+#include "EditorInputManager.h"
 
 #include <utility>
 
@@ -49,6 +51,8 @@ namespace application
 
 		private:
 			Application* app;
+			palette::UnitPaletteManager& upm = palette::UnitPaletteManager::SingleInstance();
+			EditorInputManager& eim = EditorInputManager::GetSingletonInstance();
 			std::pair<float, float> prevWindowSize;
 			std::pair<float, float> currentWindowSize;
 			std::pair<unsigned int, unsigned int> renderImageSize;

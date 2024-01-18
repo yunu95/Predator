@@ -86,12 +86,6 @@ namespace application
 			isMouseOver = ImGui::IsWindowHovered();
 			isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
-			
-
-			/// 임시
-			static auto& upm = palette::UnitPaletteManager::SingleInstance();
-			///
-
 			ImGui_UpdateWindowSize();
 
 			// Resize 에 대한 처리 부분
@@ -105,11 +99,9 @@ namespace application
 				upm.OnLeftClick();
 			}
 
-			
-
-			// 입력에 대한 처리
-			if (isFocused)
+			if (isFocused && !Application::IsFocusGameWindow())
 			{
+				// 마우스 입력에 대한 처리
 				if (isMouseOver)
 				{
 					if (ImGui_IsCursorInScreen())
@@ -128,6 +120,13 @@ namespace application
 					{
 						upm.OnLeftClickRelease();
 					}
+				}
+
+				// 키 입력에 대한 처리
+				if (eim.IsKeyboardUp(KeyCode::X))
+				{
+					auto palette = upm.GetCurrentPalette();
+					palette->SetAsSelectMode(!palette->IsSelectMode());
 				}
 			}
 		}
@@ -197,11 +196,7 @@ namespace application
 		}
 
 		void SceneViewPanel::Release()
-		{
-			/// 임시
-			static auto& upm = palette::UnitPaletteManager::SingleInstance();
-			///
-
+		{	
 			upm.OnLeftClickRelease();
 		}
 	}

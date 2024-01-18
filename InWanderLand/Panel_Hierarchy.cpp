@@ -1,6 +1,7 @@
 #ifdef EDITOR
 #include "InWanderLand.h"
 #include "Panel_Hierarchy.h"
+#include "Application.h"
 
 #include "imgui.h"
 

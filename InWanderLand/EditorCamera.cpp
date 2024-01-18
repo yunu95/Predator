@@ -60,7 +60,7 @@ namespace application
 
 		void EditorCamera::Update(float ts)
 		{
-			if (eim.IsKeyboardUp(KeyCode::S))
+			if (eim.IsKeyboardUp(KeyCode::C))
 			{
 				SwitchCam();
 			}
