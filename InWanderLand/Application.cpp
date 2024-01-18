@@ -37,6 +37,7 @@ HWND hWND = NULL;
 WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("InWanderLand"), NULL };
 ID3D11Device* g_pD3dDevice = NULL;
 ID3D11DeviceContext* g_pD3dDeviceContext = NULL;
+bool gameFocus = false;
 
 #ifdef EDITOR
 IDXGISwapChain1* g_EditorpSwapChain = NULL;
@@ -58,7 +59,6 @@ std::function<void()> winMouseRightPressedCallBackFunction = std::function<void(
 std::function<void()> winMouseRightUpCallBackFunction = std::function<void()>();
 std::function<void(long posX, long posY)> winMouseMoveCallBackFunction = std::function<void(long, long)>();
 std::function<void(short wheelDelta)> winMouseWheelCallBackFunction = std::function<void(short)>();
-bool gameFocus = false;
 #endif
 
 namespace application
@@ -85,6 +85,11 @@ namespace application
 	Application::~Application()
 	{
 
+	}
+
+	bool Application::IsFocusGameWindow()
+	{
+		return gameFocus;
 	}
 
 	Application::Application(int argc, char** argv)
@@ -312,10 +317,6 @@ namespace application
 	}
 
 #ifdef EDITOR
-	bool Application::IsFocusGameWindow()
-	{
-		return gameFocus;
-	}
 
 	void Application::ImGuiUpdate()
 	{
@@ -333,11 +334,6 @@ namespace application
 		if (!isRunning)
 		{
 			return;
-		}
-
-		if (hWND != GetForegroundWindow())
-		{
-			gameFocus = false;
 		}
 
 		//Start the Dear ImGui frame
@@ -554,6 +550,11 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+		case WM_KILLFOCUS:
+		{
+			gameFocus = false;
+			break;
+		}
 		case WM_SETFOCUS:
 		{
 			gameFocus = true;

@@ -32,6 +32,8 @@ namespace application
 
         ~Application();
 
+        static bool IsFocusGameWindow();
+
         /// 필수 요소
         void Initialize();		// 초기화
         void Run();				// 실행(루프)
@@ -50,8 +52,6 @@ namespace application
         void* GetSceneSRV();
 
 #ifdef EDITOR
-        static bool IsFocusGameWindow();
-
         // 이벤트를 생성하여 처리하는 함수
         template<typename Event, bool dispatchImmediately = false, typename... EventArgs>
         static void DispatchEvent(EventArgs&&... args)
