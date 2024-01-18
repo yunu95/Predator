@@ -75,7 +75,10 @@ namespace yunutyEngine
             auto newComponent = new ComponentType();
             newComponent->gameObject = this;
             components.insert(make_pair(newComponent, unique_ptr<Component>(newComponent)));
+            updatingComponents.insert(newComponent);
             indexedComponents.push_back(newComponent);
+            HandleComponentUpdateState(newComponent);
+            parent->HandleChildUpdateState(this);
             return newComponent;
         }
         Component* GetComponentByIndex(unsigned int index)
@@ -145,6 +148,7 @@ namespace yunutyEngine
         string getName()const;
         void setName(const string& name);
     private:
+        void HandleComponentUpdateState(Component* component);
         Scene* scene = nullptr;
         string name = "";
         bool selfActive = true;
@@ -159,11 +163,14 @@ namespace yunutyEngine
         int sceneIndex = 0;
         // 씬 인덱스는 이 게임오브젝트가 씬에서 몇번째 오브젝트인지를 나타냅니다.
         mutable cache<int> cachedSceneIndex;
+        // 업데이트의 대상이 되는 컴포넌트들의 목록입니다.
+        unordered_set<Component*> updatingComponents;
         unordered_map<Component*, unique_ptr<Component>> components;
         vector<Component*> indexedComponents;
         GameObject(IGameObjectParent* parent);
         void DoThingsOnParents(function<void(GameObject*)> todo);
         virtual void SetChildIndex(GameObject* child, int index);
+        bool DeservesUpdate();
         // 꼬리재귀를 위한 재귀함수
         static int GetSceneIndex(const GameObject* target);
         void SetCacheDirty();
@@ -173,6 +180,8 @@ namespace yunutyEngine
         int GetChildIndex(const GameObject* child)const override;
 
         friend Scene;
+        friend IGameObjectParent;
+        friend Component;
         friend YunutyCycle;
 #if _DEBUG
         friend Component::Component();

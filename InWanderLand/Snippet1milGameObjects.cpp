@@ -26,7 +26,7 @@ void SnippetInitializer1milGameObjects()
         for (auto each : gameObj->GetComponents<Component>())
             each->SetIsUpdating(false);
     }
-    for (auto i = 0; i < 100000; i++)
+    for (auto i = 0; i < 10000; i++)
         Scene::getCurrentScene()->AddGameObject()->AddComponent<UpdatingComponent>();
 
     auto delayedTestFunctions = Scene::getCurrentScene()->AddGameObject()->AddComponent<DelayedTestFunctions>();

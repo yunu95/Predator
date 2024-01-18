@@ -9,8 +9,9 @@ using namespace std;
 
 yunutyEngine::GameObject::GameObject(IGameObjectParent* parent)
 {
-    transform = AddComponent<Transform>();
     SetParent(parent);
+    transform = AddComponent<Transform>();
+    parent->HandleChildUpdateState(this);
 }
 void yunutyEngine::GameObject::DoThingsOnParents(function<void(GameObject*)> todo)
 {
@@ -77,9 +78,9 @@ void yunutyEngine::GameObject::SetSelfActive(bool selfActive)
                 {
                     eachComp->first->OnDisable();
                 }
-                YunutyCycle::SingleInstance().HandleComponent(eachComp->first);
             }
         }
+        parent->HandleChildUpdateState(this);
     }
 
 }
@@ -117,6 +118,9 @@ unique_ptr<yunutyEngine::GameObject> yunutyEngine::GameObject::MoveChild(GameObj
     for (int i = index; i < childrenIndexed.size(); i++)
         childIndexMap[childrenIndexed[i]] = i;
 
+    child->parent = nullptr;
+    HandleChildUpdateState(child);
+
     return ret;
 }
 
@@ -139,6 +143,8 @@ int yunutyEngine::GameObject::GetChildIndex(const GameObject* child)const
 }
 yunutyEngine::GameObject::~GameObject()
 {
+    if (parent)
+        parent->HandleChildUpdateState(this);
 }
 Transform* yunutyEngine::GameObject::GetTransform()
 {
@@ -192,6 +198,11 @@ void yunutyEngine::GameObject::SetChildIndex(GameObject* child, int index)
             childIndexMap[childrenIndexed[i]] = i;
     }
 }
+
+bool yunutyEngine::GameObject::DeservesUpdate()
+{
+    return (!updatingChildren.empty() || !updatingComponents.empty()) && GetActive();
+}
 int yunutyEngine::GameObject::GetSceneIndex()const
 {
     return GetSceneIndex(this);
@@ -244,21 +255,6 @@ int yunutyEngine::GameObject::GetSceneIndex(const GameObject* target)
         }
     }
     return target->cachedSceneIndex;
-    //int childIndex = target->parent->GetChildIndex(target);
-    //if (childIndex == 0)
-    //{
-    //    if (target->parentGameObject)
-    //        return GetSceneIndexRecursive(target->parentGameObject, deltaIndex + 1);
-    //    else
-    //        return deltaIndex;
-    //}
-    //else
-    //{
-    //    auto brother = target->parent->GetChildren()[childIndex - 1];
-    //    ret += brother->GetSceneIndex() + brother->childrenNum;
-    //}
-
-    //return target->cachedSceneIndex = ret;
 }
 string yunutyEngine::GameObject::getName()const
 {
@@ -267,6 +263,19 @@ string yunutyEngine::GameObject::getName()const
 void yunutyEngine::GameObject::setName(const string& name)
 {
     this->name = name;
+}
+void yunutyEngine::GameObject::HandleComponentUpdateState(Component* component)
+{
+    bool deservesUpdateBefore = DeservesUpdate();
+    //assert(components.find(component) != components.end());
+
+    if (component->isActive && component->isUpdating)
+        updatingComponents.insert(component);
+    else
+        updatingComponents.erase(component);
+
+    if (deservesUpdateBefore != DeservesUpdate())
+        parent->HandleChildUpdateState(this);
 }
 void yunutyEngine::GameObject::SetCacheDirty()
 {

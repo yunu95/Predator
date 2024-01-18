@@ -24,14 +24,21 @@ namespace yunutyEngine
         {
             return impl->IsUsingCCD();
         }
+        bool Collider::WasPxActorInitialized()
+        {
+            return impl->pxActor != nullptr;
+        }
         void Collider::EnableCCD(bool enable)
         {
             impl->EnableCCD(enable);
         }
         void Collider::Start()
         {
-            impl->InitializePhysXActor();
-            cachedScale = GetTransform()->GetWorldScale();
+            if (!WasPxActorInitialized())
+            {
+                impl->InitializePhysXActor();
+                cachedScale = GetTransform()->GetWorldScale();
+            }
 #ifdef _DEBUG
             if (impl->isStaticShape())
             {
@@ -39,7 +46,7 @@ namespace yunutyEngine
                 firstRotation = GetTransform()->GetWorldRotation();
             }
 #endif
-        } 
+        }
         void Collider::Update()
         {
             // rigidbody가 static이면 절대 트랜스폼이 바뀌어선 안된다.
@@ -81,6 +88,11 @@ namespace yunutyEngine
         }
         void Collider::OnEnable()
         {
+            if (!WasPxActorInitialized())
+            {
+                impl->InitializePhysXActor();
+                cachedScale = GetTransform()->GetWorldScale();
+            }
             impl->SetActorWorldTransform(GetTransform()->GetWorldTM());
             impl->pxActor->setActorFlag({ PxActorFlag::eDISABLE_SIMULATION }, false);
             if (impl->pxRigidDynamic->isSleeping())
@@ -88,6 +100,11 @@ namespace yunutyEngine
         }
         void Collider::OnDisable()
         {
+            if (!WasPxActorInitialized())
+            {
+                impl->InitializePhysXActor();
+                cachedScale = GetTransform()->GetWorldScale();
+            }
             impl->pxActor->setActorFlag({ PxActorFlag::eDISABLE_SIMULATION }, true);
         }
     }
