@@ -1,5 +1,5 @@
+#include "InWanderLand.h"
 #include "HealerProduction.h"
-#include "UnitTransformComponent.h"
 #include "RangedAttackSystem.h"
 
 void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition)
@@ -72,11 +72,6 @@ void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navFi
 #pragma endregion
 
 #pragma region Auto Attack Setting (Including Passive Logic)
-	/// 임시 - UnitTransformComponent 생성
-	m_unitTransformGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto unitTransformComponent = m_unitTransformGameObject->AddComponent<UnitTransformComponent>();
-	unitTransformComponent->ownerObject = m_unitGameObject;
-
 	auto magicianAttackSystem = m_unitGameObject->AddComponent<RangedAttackSystem>();
 	magicianAttackSystem->SetBulletSpeed(10.0f);
 #pragma endregion

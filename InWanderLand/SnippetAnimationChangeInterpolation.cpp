@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
@@ -78,7 +79,7 @@ void SnippetAnimationChangeInterpolationInit()
 namespace snippets
 {
 
-    TEST_CLASS(InWanderLand)
+    TEST_CLASS(SnippetAnimationChangeInterpolationClass)
     {
     public:
         // TestComponent2안에 H키와 J키를 눌렀을 때 애니메이션 전환하게 되어있음.

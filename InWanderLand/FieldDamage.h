@@ -9,25 +9,27 @@ class StatusTimer;
 
 class FieldDamage : public UnitStatusComponent
 {
-private:
+protected:
 	struct UnitSensor
 	{
 		Unit* opponentUnit;
 		bool isInField;
 	};
 
+	StatusTimer* m_timer;
 	std::map<UnitSensor*, StatusTimer*> opponentUnitMap;
 
-	Unit* unitOnField;
-
-	float m_fieldDamage = 7.0f;
-	float m_fieldDamageDelay = 0.2f;
+	float m_fieldDamage;
+	float m_fieldDamageDelay;
 
 public:
 	virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) override;
 	virtual void Start() override;
-
+	virtual void OnDestroy() override;
 public:
 	virtual void OnTriggerExit(physics::Collider* collider) override;
+
+public:
+	virtual void ActivateFieldTimer();
 };
 

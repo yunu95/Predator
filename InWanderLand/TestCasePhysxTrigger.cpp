@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
@@ -82,9 +83,9 @@ void SnippetInitializerPhysxTrigger()
     } });
 }
 
-namespace InWanderLand
+namespace tests
 {
-    TEST_CLASS(InWanderLand)
+    TEST_CLASS(TestCasePhysxTriggerClass)
     {
     public:
         TEST_METHOD(TestCasePhysxTrigger)

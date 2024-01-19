@@ -1,4 +1,6 @@
+#include "InWanderLand.h"
 #include "PlayerSkillSystem.h"
+#include "Unit.h"
 
 void PlayerSkillSystem::SkillActivate(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition)
 {
@@ -9,9 +11,6 @@ void PlayerSkillSystem::SkillActivate(Unit::SkillEnum p_currentSkill, Vector3d p
 			break;
 		case Unit::SkillEnum::W:
 			WSkillActivate(p_skillPosition);
-			break;
-		case Unit::SkillEnum::E:
-			ESkillActivate(p_skillPosition);
 			break;
 		default:
 			break;

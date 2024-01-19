@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "Unit.h"
 #include "PlayerController.h"
 #include "AttackSystem.h"
@@ -104,7 +105,7 @@ void Unit::Update()
 {
 	unitFSM.UpdateState();
 	/// 꼭 고쳐주기 나중에!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	GetGameObject()->GetTransform()->scale = Vector3d(0.00005, 0.00005, 0.00005);
+	//GetGameObject()->GetTransform()->scale = Vector3d(0.00005, 0.00005, 0.00005);
 }
 
 Unit::UnitType Unit::GetUnitType() const
@@ -356,7 +357,7 @@ void Unit::DeathUpdate()
 }
 #pragma endregion
 
-void Unit::CheckCurrentAnimation(IAnimation* currentStateAnimation)
+void Unit::CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation)
 {
 	if (GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().GetCurrentAnimation() != currentStateAnimation)
 	{

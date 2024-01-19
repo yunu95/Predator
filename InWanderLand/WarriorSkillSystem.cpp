@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "WarriorSkillSystem.h"
 #include "KnockBackComponent.h"
 #include "Dotween.h"
@@ -61,11 +62,6 @@ void WarriorSkillSystem::SetQSkillKnockBackCollider(physics::SphereCollider* p_c
 void WarriorSkillSystem::SetWSkillCollider(physics::SphereCollider* p_collider)
 {
 	WSkillCollider = p_collider;
-}
-
-void WarriorSkillSystem::SetUnitTransformObject(GameObject* obj)
-{
-	m_unitTransformObject = obj;
 }
 
 void WarriorSkillSystem::SetKnockBackDebugObject(GameObject* obj, float radius)

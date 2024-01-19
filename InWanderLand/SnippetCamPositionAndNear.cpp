@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
@@ -12,7 +13,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace snippets
 {
-    TEST_CLASS(InWanderLand)
+    TEST_CLASS(SnippetCamPosAndNearClass)
     {
         static void SnippetInitializerCamPosAndNear()
         {

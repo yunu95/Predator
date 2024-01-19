@@ -1,7 +1,7 @@
+#include "InWanderLand.h"
 #include "BleedingComponent.h"
 #include "StatusTimerPool.h"
 #include "StatusTimer.h"
-#include "UnitTransformComponent.h"
 #include "Unit.h"
 
 void BleedingComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)

@@ -1,9 +1,9 @@
+#include "InWanderLand.h"
 #include "WarriorProduction.h"
 #include "BleedingComponent.h"
 #include "KnockBackComponent.h"
 #include "MeleeAttackSystem.h"
 #include "WarriorSkillSystem.h"
-#include "UnitTransformComponent.h"
 #include "OnlyDamageComponent.h"
 #include "DebugMeshes.h"
 
@@ -76,11 +76,10 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 	}
 #pragma endregion
 
+	/// UnitComponent 추가
+	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+
 #pragma region Auto Attack Setting (Including Passive Logic)
-	/// 임시 - UnitTransformComponent 생성
-	m_unitTransformGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto unitTransformComponent = m_unitTransformGameObject->AddComponent<UnitTransformComponent>();
-	unitTransformComponent->ownerObject = m_unitGameObject;
 
 	auto unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	unitAttackColliderObject->setName("WarriorAutoAttackCollider");
@@ -90,6 +89,7 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 	
 	// warrior Passive Bleeding System
 	auto warriorBleedingSystem = unitAttackColliderObject->AddComponent<BleedingComponent>();
+	warriorBleedingSystem->SetSkillOwnerUnit(m_unitComponent);
 	auto debugColliderMesh = AttachDebugMesh(unitAttackColliderObject, DebugMeshType::Rectangle, yunuGI::Color::red(), true);
 	unitAttackColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
@@ -98,7 +98,7 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 	warriorAttackSystem->SetColliderRemainTime(0.05f);
 	//m_unitAttackColliderObject->SetSelfActive(false);
 
-	unitAttackColliderObject->SetParent(m_unitTransformGameObject);
+	unitAttackColliderObject->SetParent(m_unitGameObject);
 	unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -2.0f });
 #pragma endregion
 
@@ -108,11 +108,11 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 	auto qSkillKnockBackObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	qSkillKnockBackObject->AddComponent<physics::SphereCollider>()->SetRadius(m_QSkillRadius);
 	qSkillKnockBackObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-	qSkillKnockBackObject->SetParent(m_unitTransformGameObject);
 
 	auto knockBackComponent = qSkillKnockBackObject->AddComponent<KnockBackComponent>();
-	qSkillKnockBackObject->SetParent(m_unitTransformGameObject);
+	knockBackComponent->SetSkillOwnerUnit(m_unitComponent);
 	qSkillKnockBackObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, 0.0f });
+	qSkillKnockBackObject->SetParent(m_unitGameObject);
 
 	auto qSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto qSkillDebugMesh = AttachDebugMesh(qSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), true);
@@ -125,7 +125,7 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 	auto wSkillColliderComponent = wSkillColliderObject->AddComponent<physics::SphereCollider>();
 	wSkillColliderComponent->SetRadius(m_WSkillRadius);
 	wSkillColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-	wSkillColliderObject->SetParent(m_unitTransformGameObject);
+	wSkillColliderObject->SetParent(m_unitGameObject);
 	auto wSkillDamageComponent = wSkillColliderObject->AddComponent<OnlyDamageComponent>();
 	wSkillDamageComponent->SetSkillDamage(1000.0f);
 
@@ -136,7 +136,6 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 	auto warriorSkillSystem = m_unitGameObject->AddComponent<WarriorSkillSystem>();
 	warriorSkillSystem->SetQSkillKnockBackCollider(qSkillKnockBackObject->GetComponent<physics::SphereCollider>());
 	warriorSkillSystem->SetWSkillCollider(wSkillColliderComponent);
-	warriorSkillSystem->SetUnitTransformObject(m_unitTransformGameObject);
 	warriorSkillSystem->SetKnockBackDebugObject(qSkillColliderDebugObject, m_QSkillRadius);
 	warriorSkillSystem->SetWSkillDebugObject(wSkillColliderDebugObject, m_WSkillRadius);
 #pragma endregion

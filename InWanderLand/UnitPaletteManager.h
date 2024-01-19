@@ -1,6 +1,5 @@
 #pragma once
 #include "PaletteManager.h"
-#include "UnitInstance.h"
 #include "YunutyEngine.h"
 #include "SingletonClass.h"
 
@@ -14,14 +13,10 @@ namespace application
             {
             public:
             protected:
-                virtual PaletteInstance* PlaceInstance(Vector3d worldPosition) override
-                {
-                    return PlaceSoleComponent<UnitInstance>(worldPosition);
-                }
-                virtual bool ShouldSelect(PaletteInstance* instance)
-                {
-                    return dynamic_cast<UnitInstance*>(instance);
-                };
+                virtual PaletteInstance* PlaceInstance(Vector3d worldPosition) override;
+                virtual bool ShouldSelect(PaletteInstance* instance) override;
+                virtual void ApplyAsPlaytimeObjects() override {};
+                virtual void CleanUpPlaytimeObjects() override {};
             private:
             };
         }

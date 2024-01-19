@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
@@ -89,7 +90,7 @@ void SnippetInitializerPhysxCollider()
 
 namespace snippets
 {
-    TEST_CLASS(InWanderLand)
+    TEST_CLASS(SnippetPhysxColliderClass)
     {
     public:
         /// <summary>

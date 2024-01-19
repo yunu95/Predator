@@ -1,8 +1,9 @@
+#include "InWanderLand.h"
 #include "MagicianProduction.h"
 #include "RangedAttackSystem.h"
-#include "UnitTransformComponent.h"
 #include "MagicianSkillSystem.h"
-#include "FieldDamage.h"
+#include "ParalysisFieldComponent.h"
+#include "BlindFieldComponent.h"
 #include "DebugMeshes.h"
 
 void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition)
@@ -74,12 +75,10 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 	}
 #pragma endregion
 
-#pragma region Auto Attack Setting (Including Passive Logic)
-	/// 임시 - UnitTransformComponent 생성
-	m_unitTransformGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto unitTransformComponent = m_unitTransformGameObject->AddComponent<UnitTransformComponent>();
-	unitTransformComponent->ownerObject = m_unitGameObject;
+	/// UnitComponent 추가
+	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
 
+#pragma region Auto Attack Setting (Including Passive Logic)
 	auto magicianAttackSystem = m_unitGameObject->AddComponent<RangedAttackSystem>();
 	magicianAttackSystem->SetBulletSpeed(10.0f);
 #pragma endregion
@@ -98,7 +97,8 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 
 	auto QSkillFieldObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	QSkillFieldObject->AddComponent<Dotween>();
-	QSkillFieldObject->AddComponent<FieldDamage>();
+	auto fieldDamageComponent = QSkillFieldObject->AddComponent<BlindFieldComponent>();
+	fieldDamageComponent->SetSkillOwnerUnit(m_unitComponent);
 	auto QSkillFieldCollider = QSkillFieldObject->AddComponent<physics::SphereCollider>();
 	m_QSkillFieldRadius = 2.0f;
 	QSkillFieldCollider->SetRadius(m_QSkillFieldRadius);
@@ -107,11 +107,17 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 	AttachDebugMesh(QSkillFieldDebugObject, DebugMeshType::Sphere, yunuGI::Color::white(), false);
 #pragma endregion
 
+#pragma region W Skill Setting
+	auto WSkillFieldObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	WSkillFieldObject->AddComponent<Dotween>();
+	//auto WSkillFieldComponent = 
+
+#pragma endregion
+
 	auto magicianSkillSystem = m_unitGameObject->AddComponent<MagicianSkillSystem>();
 	magicianSkillSystem->SetQSkillCollider(QSkillProjectileCollider, QSkillFieldCollider);
 	magicianSkillSystem->SetQSkillDebugPair({QSkillProjectileDebugObject, m_QSkillProjectileRadius}, {QSkillFieldDebugObject, m_QSkillFieldRadius});
 	magicianSkillSystem->SetQSkillObject(QSkillProjectileObject, QSkillFieldObject);
-	magicianSkillSystem->SetUnitTransformObject(m_unitTransformGameObject);
 
 }
 

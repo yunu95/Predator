@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
@@ -43,7 +44,7 @@ void SnippetInitializerGIEnableDisable()
 
 namespace snippets
 {
-    TEST_CLASS(InWanderLand)
+    TEST_CLASS(SnippetGIEnableDisableClass)
     {
     public:
         /// <summary>

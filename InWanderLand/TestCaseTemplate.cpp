@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
@@ -31,9 +32,9 @@ void TestInitializerTemplate()
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
-namespace InWanderLand
+namespace tests
 {
-    TEST_CLASS(InWanderLand)
+    TEST_CLASS(TestCaseTemplateClass)
     {
     public:
         TEST_METHOD(TestCaseTemplate)

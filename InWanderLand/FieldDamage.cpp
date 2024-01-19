@@ -2,7 +2,6 @@
 #include "StatusTimer.h"
 #include "StatusTimerPool.h"
 #include "Unit.h"
-#include "UnitTransformComponent.h"
 
 void FieldDamage::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 {
@@ -10,33 +9,41 @@ void FieldDamage::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 	tempStruct->opponentUnit = opponentUnit;
 	tempStruct->isInField = true;
 
-	StatusTimer* inFieldTimer = StatusTimerPool::SingleInstance().Borrow();
-	opponentUnitMap.insert({ tempStruct, inFieldTimer });
+	m_timer = StatusTimerPool::SingleInstance().Borrow();
+	opponentUnitMap.insert({ tempStruct, m_timer });
 	
-	inFieldTimer->m_isRepeated = true;
-	inFieldTimer->m_duration = m_fieldDamageDelay;
-	inFieldTimer->onCompleteFunction = [=]()
-	{
-		opponentUnit->Damaged(m_fieldDamage);
-	};
-	inFieldTimer->ActivateTimer();
+	m_timer->m_isRepeated = true;
+	m_timer->m_duration = m_fieldDamageDelay;
+	//inFieldTimer->onCompleteFunction = [=]()
+	//{
+	//	opponentUnit->Damaged(m_fieldDamage);
+	//};
+	//inFieldTimer->ActivateTimer();
 }
 
 void FieldDamage::Start()
 {
+	m_timer = StatusTimerPool::SingleInstance().Borrow();
+}
+
+void FieldDamage::OnDestroy()
+{
+	for (auto e : opponentUnitMap)
+	{
+		if (e.first->opponentUnit != nullptr)
+			delete e.first;
+	}
 }
 
 void FieldDamage::OnTriggerExit(physics::Collider* collider)
 {
-	if (collider->GetGameObject()->GetComponent<UnitTransformComponent>() != nullptr &&
-		collider->GetGameObject()->GetComponent<UnitTransformComponent>()->ownerObject->GetComponent<Unit>() != nullptr &&
-		collider->GetGameObject()->GetComponent<UnitTransformComponent>()->ownerObject->GetComponent<Unit>()->GetUnitSide() == Unit::UnitSide::Enemy)
+	if (Unit * colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+		colliderUnitComponent != nullptr &&
+		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Enemy)
 	{
-		unitOnField = collider->GetGameObject()->GetComponent<UnitTransformComponent>()->ownerObject->GetComponent<Unit>();
-
 		for (auto e : opponentUnitMap)
 		{
-			if (e.first->opponentUnit == unitOnField)
+			if (e.first->opponentUnit == colliderUnitComponent)
 			{
 				e.second->StopTimer();
 				opponentUnitMap.erase(e.first);
@@ -44,5 +51,10 @@ void FieldDamage::OnTriggerExit(physics::Collider* collider)
 			}
 		}
 	}
+}
+
+void FieldDamage::ActivateFieldTimer()
+{
+	m_timer->ActivateTimer();
 }
 

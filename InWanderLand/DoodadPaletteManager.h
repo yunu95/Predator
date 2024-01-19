@@ -12,6 +12,8 @@ namespace application
             class DoodadPaletteManager : public PaletteManager, public yunutyEngine::SingletonClass<DoodadPaletteManager>
             {
             public:
+                virtual void ApplyAsPlaytimeObjects() override {};
+                virtual void CleanUpPlaytimeObjects() override {};
             private:
             };
         }

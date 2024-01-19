@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
@@ -148,7 +149,7 @@ void SnippetSkillSystemInit()
 
 namespace snippets
 {
-	TEST_CLASS(InWanderLand)
+	TEST_CLASS(SnippetSkillSystemClass)
 	{
 	public:
 		TEST_METHOD(SnippetSkillSystem)

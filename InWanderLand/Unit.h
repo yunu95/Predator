@@ -5,8 +5,6 @@
 #include "Dotween.h"
 #include <list>
 
-using namespace yunuGI;
-
 /// <summary>
 /// 유닛들이 공유하는 멤버.
 /// </summary>
@@ -57,11 +55,11 @@ public:
 
 	struct BaseUnitAnimationStruct
 	{
-		IAnimation* m_idleAnimation;
-		IAnimation* m_walkAnimation;
-		IAnimation* m_attackAnimation;
-		IAnimation* m_paralysisAnimation;
-		IAnimation* m_deathAnimation;
+		yunuGI::IAnimation* m_idleAnimation;
+		yunuGI::IAnimation* m_walkAnimation;
+		yunuGI::IAnimation* m_attackAnimation;
+		yunuGI::IAnimation* m_paralysisAnimation;
+		yunuGI::IAnimation* m_deathAnimation;
 	};
 
 	Timer* knockBackTimer;
@@ -183,7 +181,7 @@ protected:
 	void ParalysisUpdate();
 	void DeathUpdate();
 	
-	void CheckCurrentAnimation(IAnimation* currentStateAnimation);
+	void CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation);
 
 	void StopMove();
 	void LookAt(Vector3d destination);

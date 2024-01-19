@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "YunutyEngine.h"
-// Ä«¸Ş¶óµéÀ» ¹ŞÀº ÈÄ ½ºÀ§Äª ½ÃÄÑÁÖ´Â Å¬·¡½º 
+// ì¹´ë©”ë¼ë“¤ì„ ë°›ì€ í›„ ìŠ¤ìœ„ì¹­ ì‹œì¼œì£¼ëŠ” í´ë˜ìŠ¤ 
 
 using namespace yunutyEngine;
 class CamSwitcher : public Component

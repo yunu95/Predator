@@ -10,8 +10,6 @@ private:
 	bool isColliderSetActiveFalseSet;
 	bool isQSkillActivating = false;
 
-	GameObject* m_unitTransformObject;
-
 	GameObject* m_QSkillKnockBackDebugObject;	float m_QSkillRadius;
 	GameObject* m_WSkillDebugObject;			float m_WSkillRadius;
 
@@ -28,8 +26,6 @@ public:
 public:
 	void SetQSkillKnockBackCollider(physics::SphereCollider* p_collider);
 	void SetWSkillCollider(physics::SphereCollider* p_collider);
-
-	void SetUnitTransformObject(GameObject* obj);
 
 	// parameter로 전달받는 radius는 실제 collider에 적용된 radius입니다.
 	void SetKnockBackDebugObject(GameObject* obj, float radius);

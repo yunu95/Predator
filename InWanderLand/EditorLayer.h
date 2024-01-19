@@ -18,53 +18,55 @@
 
 namespace application
 {
-	namespace editor
-	{
-		class EditorLayer
-			: public Layer
-		{
-		public:
-			static void AssignTestInitializer(std::function<void()> testInitializer);
+    namespace editor
+    {
+        class EditorLayer
+            : public Layer
+        {
+        public:
+            static void AssignTestInitializer(std::function<void()> testInitializer);
 
-			virtual void Initialize() override;
-			virtual void Update(float ts) override;
-			virtual void GUIProgress() override;
-			virtual void Finalize() override;
-			virtual void OnEvent(EditorEvents& event) override;
+            virtual void Initialize() override;
+            virtual void Update(float ts) override;
+            virtual void GUIProgress() override;
+            virtual void Finalize() override;
+#ifdef EDITOR
+            virtual void OnEvent(EditorEvents& event) override;
+#endif
 
-		private:
-			enum class Panel_List
-			{
-				HIERARCHY	= 0,
-				INSPECTOR,
-				PREVIEW,
-				MINIMAP,
-				SCENEVIEW,
-				CAMERAVIEW,
-				PALETTE,
+        private:
+            enum class Panel_List
+            {
+                HIERARCHY = 0,
+                INSPECTOR,
+                PREVIEW,
+                MINIMAP,
+                SCENEVIEW,
+                CAMERAVIEW,
+                PALETTE,
 
-				/// Size를 자동으로 넣기 위해 사용하는 enum
-				/// 첫 enum 값이 0 이고, 모든 간격이 1일 때에 가능함
-				Size
-			};
+                /// Size를 자동으로 넣기 위해 사용하는 enum
+                /// 첫 enum 값이 0 이고, 모든 간격이 1일 때에 가능함
+                Size
+            };
 
-			enum class Module_List
-			{
-				TemplateDataEditor	= 0,
+            enum class Module_List
+            {
+                TemplateDataEditor = 0,
 
-				/// Size를 자동으로 넣기 위해 사용하는 enum
-				/// 첫 enum 값이 0 이고, 모든 간격이 1일 때에 가능함
-				Size
-			};
+                /// Size를 자동으로 넣기 위해 사용하는 enum
+                /// 첫 enum 값이 0 이고, 모든 간격이 1일 때에 가능함
+                Size
+            };
 
 
-			static std::function<void()> testInitializer;
+            static std::function<void()> testInitializer;
 
-			void UI_DrawMenubar();
+            void UI_DrawMenubar();
 
-			CommandManager& cm = CommandManager::GetSingletonInstance();
-			std::vector<std::unique_ptr<Panel>> editorPanelList;
-			std::vector<std::unique_ptr<EditorModule>> editorModuleList;
-		};
-	}
+            CommandManager& cm = CommandManager::GetSingletonInstance();
+            std::vector<std::unique_ptr<Panel>> editorPanelList;
+            std::vector<std::unique_ptr<EditorModule>> editorModuleList;
+        };
+    }
 }

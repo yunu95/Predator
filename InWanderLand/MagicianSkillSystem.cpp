@@ -10,6 +10,9 @@ void MagicianSkillSystem::SetSkillRequirmentsActive(SkillRequirements p_requirme
 
 void MagicianSkillSystem::QSkillActivate(Vector3d skillPos)
 {
+	/// 장판의 타이머를 Activate하는 함수가 필요...
+	//m_QSkillComponent->ActivateFieldTimer();
+
 	isQSkillActivating = true;
 
 	QSkillProjectile.colliderObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());	
@@ -41,6 +44,12 @@ void MagicianSkillSystem::ESkillActivate(Vector3d skillPos)
 
 }
 
+void MagicianSkillSystem::SetInterActionComponent(BlindFieldComponent* p_QSkillComponent, ParalysisFieldComponent* p_WSkillComponent)
+{
+	m_QSkillComponent = p_QSkillComponent;
+	m_WSkillComponent = p_WSkillComponent;
+}
+
 void MagicianSkillSystem::SetQSkillCollider(physics::SphereCollider* p_projectileCollider, physics::SphereCollider* p_fieldDamageCollider)
 {
 	QSkillProjectile.skillCollider = p_projectileCollider;
@@ -63,11 +72,6 @@ void MagicianSkillSystem::SetQSkillDebugPair(std::pair<GameObject*, float> p_pro
 
 	m_QSkillProjectileRadius = p_projectileObjectPair.second;
 	m_QSkillFieldRadius = p_fieldObjectPair.second;
-}
-
-void MagicianSkillSystem::SetUnitTransformObject(GameObject* obj)
-{
-	m_unitTransformObject = obj;
 }
 
 void MagicianSkillSystem::Start()

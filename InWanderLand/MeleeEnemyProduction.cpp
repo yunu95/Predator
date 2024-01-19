@@ -1,6 +1,6 @@
+#include "InWanderLand.h"
 #include "MeleeEnemyProduction.h"
 #include "MeleeAttackSystem.h"
-#include "UnitTransformComponent.h"
 #include "DebugMeshes.h"
 
 void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition)
@@ -72,12 +72,10 @@ void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject, NavigationField* n
 	}
 #pragma endregion
 
-#pragma region Auto Attack Setting
-	/// 임시 - UnitTransformComponent 생성
-	m_unitTransformGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto unitTransformComponent = m_unitTransformGameObject->AddComponent<UnitTransformComponent>();
-	unitTransformComponent->ownerObject = m_unitGameObject;
+	/// UnitComponent 추가
+	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
 
+#pragma region Auto Attack Setting
 	auto unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	unitAttackColliderObject->setName("UnitAttackCollider");
 
@@ -86,16 +84,12 @@ void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject, NavigationField* n
 
 	auto debugColliderMesh = AttachDebugMesh(unitAttackColliderObject, DebugMeshType::Rectangle, yunuGI::Color::red(), true);
 
-	//m_unitAttackColliderObject->SetParent(m_unitGameObject);
-	//m_unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, 1.3f });
-
 	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
 	warriorAttackSystem->SetColliderObject(unitAttackColliderObject);
 	warriorAttackSystem->SetColliderRemainTime(1.0f);
 
-	unitAttackColliderObject->SetParent(m_unitTransformGameObject);
+	unitAttackColliderObject->SetParent(m_unitGameObject);
 	unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -2.0f });
-	//m_unitAttackColliderObject->SetSelfActive(false);
 #pragma endregion
 
 }

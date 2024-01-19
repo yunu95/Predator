@@ -154,7 +154,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>YunutyEngine.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <DisableSpecificWarnings>4244;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4828;4251;4244;4267;4100;4481;4305</DisableSpecificWarnings>
       <IncludeInUnityFile>true</IncludeInUnityFile>
     </ClCompile>
     <Link>
@@ -181,6 +181,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <PrecompiledHeaderFile>YunutyEngine.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <IncludeInUnityFile>true</IncludeInUnityFile>
+      <DisableSpecificWarnings>4828;4251;4244;4267;4100;4481;4305</DisableSpecificWarnings>
+      <UndefinePreprocessorDefinitions>
+      </UndefinePreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -356,7 +359,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="YunutySphereCollider.cpp" />
     <ClCompile Include="YunutyTime.cpp" />
     <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="Vector.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Vector3.cpp" />

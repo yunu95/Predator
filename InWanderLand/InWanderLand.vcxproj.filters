@@ -265,6 +265,15 @@
     <Filter Include="Contents\ProjectileComponents\BaseAutoAttack">
       <UniqueIdentifier>{8e78929b-3441-46e9-9098-462f0fb30ec5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="utility">
+      <UniqueIdentifier>{393727af-ff83-46e3-a6f1-11555d1693a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestCodes\TestUtils">
+      <UniqueIdentifier>{79e1c81f-2b86-45d4-8d80-6134d13375c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\SingleNavigationField">
+      <UniqueIdentifier>{955952c8-9aa3-451c-9298-ee3adedb93d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -593,9 +602,6 @@
     <ClInclude Include="OnlyDamageComponent.h">
       <Filter>Contents\UnitStatusComponent\OnlyDamage</Filter>
     </ClInclude>
-    <ClInclude Include="UnitTransformComponent.h">
-      <Filter>Contents\Units</Filter>
-    </ClInclude>
     <ClInclude Include="EditorCommonEvents.h">
       <Filter>Editor\Events\Category\1_Editor</Filter>
     </ClInclude>
@@ -632,32 +638,35 @@
     <ClInclude Include="AutoAttackProjectilePool.h">
       <Filter>Contents\ProjectilePools</Filter>
     </ClInclude>
-    <ClInclude Include="MagicianSkillSystem.h" />
+    <ClInclude Include="InWanderLand.h" />
+    <ClInclude Include="TestUtilButtonEvent.h">
+      <Filter>TestCodes\TestUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="TestUtils.h">
+      <Filter>TestCodes\TestUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="SingleNavigationField.h">
+      <Filter>Contents\SingleNavigationField</Filter>
+    </ClInclude>
+    <ClInclude Include="TestUtilNavAgent.h">
+      <Filter>TestCodes\TestUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="TestUtilRTSTestCam.h">
+      <Filter>TestCodes\TestUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="ParalysisFieldComponent.h">
+      <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicianSkillSystem.h">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="BlindFieldComponent.h">
+      <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
       <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Include\ImGui\imgui.cpp">
-      <Filter>Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Include\ImGui\imgui_demo.cpp">
-      <Filter>Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Include\ImGui\imgui_draw.cpp">
-      <Filter>Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Include\ImGui\imgui_tables.cpp">
-      <Filter>Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Include\ImGui\imgui_widgets.cpp">
-      <Filter>Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp">
-      <Filter>Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Include\ImGui\backends\imgui_impl_win32.cpp">
-      <Filter>Editor\imgui</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>sources</Filter>
@@ -857,9 +866,6 @@
     <ClCompile Include="OnlyDamageComponent.cpp">
       <Filter>Contents\UnitStatusComponent\OnlyDamage</Filter>
     </ClCompile>
-    <ClCompile Include="UnitTransformComponent.cpp">
-      <Filter>Contents\Units</Filter>
-    </ClCompile>
     <ClCompile Include="SnippetTemplate.cpp">
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
@@ -953,6 +959,41 @@
     <ClCompile Include="AutoAttackProjectilePool.cpp">
       <Filter>Contents\ProjectilePools</Filter>
     </ClCompile>
-    <ClCompile Include="MagicianSkillSystem.cpp" />
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_tables.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_win32.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_dx11.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_demo.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainPaletteManager.cpp">
+      <Filter>Editor\Palette\PaletteManager\TerrainPaletteManager</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitPaletteManager.cpp">
+      <Filter>Editor\Palette\PaletteManager\UnitPaletteManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ParalysisFieldComponent.cpp">
+      <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicianSkillSystem.cpp">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="BlindFieldComponent.cpp">
+      <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

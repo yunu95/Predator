@@ -10,8 +10,12 @@ class Unit;
 
 class UnitStatusComponent : public Component
 {
+private:
+	Unit* m_ownerUnit;
+
 public:
 	virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) = 0;
 	virtual void OnTriggerEnter(physics::Collider* collider) override;
+	virtual void SetSkillOwnerUnit(Unit* p_unit);
 };
 

@@ -25,8 +25,8 @@ namespace application
             class PaletteInstance : public yunutyEngine::Component
             {
             public:
-#ifdef EDITOR
                 virtual void Start() override;
+#ifdef EDITOR
                 /// <summary>
                 /// OnSelected는 객체가 선택되었을 때 호출됩니다. 객체가 선택되었음을 명확히 알 수 있도록 그래픽스 효과를 구현하십시오. 
                 /// OnHover는 팔레트 선택 모드에서 마우스 커서가 해당 객체에 올라갔을 때 호출됩니다. OnSelected와 유사하지만 구분은 가능한 효과를 구현하십시오.

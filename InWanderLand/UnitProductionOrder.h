@@ -5,8 +5,6 @@
 /// UnitFactory에서의 유닛 생산을 좀 더 효율적으로 하기 위한 클래스.
 /// </summary>
 
-using namespace yunuGI;
-
 class UnitProductionOrder : public Component
 {
 protected:
@@ -34,8 +32,8 @@ protected:
 
 	// 임시. 모델링 파일로 대체해주기
 	GameObject* m_unitGameObject;
-	GameObject* m_unitTransformGameObject;
-	
+	Unit* m_unitComponent;
+
 	Unit::BaseUnitAnimationStruct m_baseUnitAnimations;
 
 	NavigationField* m_navField;

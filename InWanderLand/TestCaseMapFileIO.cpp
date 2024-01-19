@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "EditorLayer.h"
@@ -48,9 +49,9 @@ void TestCaseMapFileIOInitializer()
     im.CreateInstance("Ornament3");
 }
 
-namespace InWanderLand
+namespace tests
 {
-    TEST_CLASS(InWanderLand)
+    TEST_CLASS(TestCaseMapFileIOClass)
     {
     public:
         TEST_METHOD(TestCaseMapFileIO)

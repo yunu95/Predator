@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "RegionInstance.h"
 #include "DebugMeshes.h"
 
@@ -14,7 +15,7 @@ namespace application::editor::palette
     void RegionInstance::OnHover()
     {
         isHovering = true;
-        mesh->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 1,1,1 }));
+        mesh->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 1,1,1 }, true));
     }
     void RegionInstance::OnHoverLeft()
     {
@@ -23,13 +24,13 @@ namespace application::editor::palette
             OnSelected();
         else
         {
-            mesh->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,0,1 }));
+            mesh->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,0,1 }, true));
         }
     }
     void RegionInstance::OnSelected()
     {
         isSelected = true;
-        mesh->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,1,0 }));
+        mesh->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,1,0 }, true));
     }
     void RegionInstance::OnDeselected()
     {
@@ -38,7 +39,7 @@ namespace application::editor::palette
             OnHover();
         else
         {
-            mesh->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,0,1 }));
+            mesh->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,0,1 }, true));
         }
     }
     void RegionInstance::SetHalfExtent(const Vector2f& halfExtent)

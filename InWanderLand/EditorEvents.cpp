@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "EditorEvents.h"
 
 namespace application

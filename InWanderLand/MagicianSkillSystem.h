@@ -1,6 +1,9 @@
 #pragma once
 #include "PlayerSkillSystem.h"
 
+class BlindFieldComponent;
+class ParalysisFieldComponent;
+
 class MagicianSkillSystem : public PlayerSkillSystem
 {
 private:
@@ -11,10 +14,12 @@ private:
 		GameObject* debugObject;
 		Dotween* dotweenComponent;
 	};
-	GameObject* m_unitTransformObject;
 
 	SkillRequirements QSkillProjectile;
 	SkillRequirements QSkillFieldDamage;
+
+	BlindFieldComponent* m_QSkillComponent;
+	ParalysisFieldComponent* m_WSkillComponent;
 
 	float m_QSkillProjectileSpeed = 10.0f;
 	float m_QSkillFieldRemainTime = 4.0f;
@@ -32,10 +37,10 @@ public:
 	virtual void WSkillActivate(Vector3d skillPos) override;
 	virtual void ESkillActivate(Vector3d skillPos) override;
 public:
+	void SetInterActionComponent(BlindFieldComponent* p_QSkillComponent, ParalysisFieldComponent* p_WSkillComponent);
 	void SetQSkillCollider(physics::SphereCollider* p_projectileCollider, physics::SphereCollider* p_fieldDamageColliderp);
 	void SetQSkillObject(GameObject* p_projectileTransformObj, GameObject* p_fieldDamageTransformObj);
 	void SetQSkillDebugPair(std::pair<GameObject*, float> p_projectileObjectPair, std::pair<GameObject*, float> p_fieldObjectPair);
-	void SetUnitTransformObject(GameObject* obj);
 
 public:
 	virtual void Start() override;
