@@ -3,7 +3,6 @@
 
 #pragma once
 
-#ifdef EDITOR
 #include "Singleton.h"
 #include "Command.h"
 
@@ -62,4 +61,3 @@ namespace application
 		};
 	}
 }
-#endif

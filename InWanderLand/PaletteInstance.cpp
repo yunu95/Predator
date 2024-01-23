@@ -1,4 +1,3 @@
-#ifdef EDITOR
 #include "InWanderLand.h"
 #include "PaletteInstance.h"
 #include "DebugMeshes.h"
@@ -63,4 +62,3 @@ namespace application::editor::palette
     {
     }
 }
-#endif

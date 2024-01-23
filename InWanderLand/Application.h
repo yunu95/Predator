@@ -51,7 +51,6 @@ namespace application
         // 게임 엔진의 그래픽스 엔진으로부터 최종 렌더 결과를 받아내는 함수
         void* GetSceneSRV();
 
-#ifdef EDITOR
         // 이벤트를 생성하여 처리하는 함수
         template<typename Event, bool dispatchImmediately = false, typename... EventArgs>
         static void DispatchEvent(EventArgs&&... args)
@@ -70,10 +69,8 @@ namespace application
                 app.em.PushEventCallable([event]() { app.OnEvent(*event); });
             }
         }
-#endif
 
     private:
-#ifdef EDITOR
         // ImGui 단계 처리
         void ImGuiUpdate();
         // 전달 받은 이벤트에 대한 처리
@@ -81,7 +78,10 @@ namespace application
         // 이벤트들을 일괄적으로 실행
         void ProcessEvents();
         void SetWindowCallBack();
-#endif
+        // 콘텐츠 레이어에서 Scene / DirectionalLight 등 필요한 내용을 적용하지 않을 경우
+        // 이를 처리하기 위한 단계입니다.
+        void CheckContentsLayerInit();
+
         std::mutex loopTodoRegistrationMutex;
         // AddMainLoopTodo로 등록된 휘발성 콜백 함수들입니다.
         // 매 루프가 종료될 때 이 컨테이너에 실행 동작들이 담겨있다면 모두 실행하고 내용을 비웁니다.
@@ -105,10 +105,8 @@ namespace application
         bool isRunning = false;
         std::vector<Layer*> layers;
 
-#ifdef EDITOR
         editor::CommandManager& cm = editor::CommandManager::GetSingletonInstance();
         editor::EventManager em = editor::EventManager();
         editor::EditorInputManager& eim = editor::EditorInputManager::GetSingletonInstance();
-#endif
     };
 }

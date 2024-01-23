@@ -1,4 +1,3 @@
-#ifdef EDITOR
 #include "InWanderLand.h"
 #include "TemplateDataManager.h"
 
@@ -301,4 +300,3 @@ namespace application
 		}
 	}
 }
-#endif

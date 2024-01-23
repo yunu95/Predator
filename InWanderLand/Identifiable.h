@@ -3,7 +3,6 @@
 
 #pragma once
 
-#ifdef EDITOR
 #include "UUID.h"
 
 #include <string>
@@ -44,4 +43,3 @@ namespace application
 		};
 	}
 }
-#endif

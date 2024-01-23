@@ -242,6 +242,9 @@
     <ClInclude Include="YunuVector2.h">
       <Filter>raw</Filter>
     </ClInclude>
+    <ClInclude Include="YunuGIQuaternion.h">
+      <Filter>raw</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Yunu3DGraphicsEngine.rc">

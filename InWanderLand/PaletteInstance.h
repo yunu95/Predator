@@ -1,5 +1,4 @@
 #pragma once
-#ifdef EDITOR
 #include "YunutyEngine.h"
 
 namespace application
@@ -20,7 +19,6 @@ namespace application
             /// - PaletteInstance는 에디터가 활성화된 상태와 에디터가 비활성화된 상태에 따라 최적화된 동작을 수행해야 합니다.
             /// 예를 들어, 에디터가 활성화된 상태에서는 오브젝트 선택을 위해 PhysX Kinematic Rigidody를 사용해야 하고, 디버그 메시도 표시해야 하지만
             /// 에디터가 비활성화된 상태에서는 RigidBody나 디버그 메시에 들어가는 자원을 사용하지 않아야 합니다.
-            /// #ifdef EDITOR, #endif와 같은 전처리기 지시문을 활용해 이러한 최적화를 수행하십시오. 
             /// </attention>
             /// </summary>
             class PaletteInstance : public yunutyEngine::Component
@@ -63,4 +61,3 @@ namespace application
         }
     }
 }
-#endif
