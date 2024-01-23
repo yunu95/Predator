@@ -4,35 +4,8 @@
     <Filter Include="sources">
       <UniqueIdentifier>{08e36723-ce4f-4cff-9662-c40801cf1acf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="RTSCam">
-      <UniqueIdentifier>{4d58ffff-525b-4e6d-a64c-bf1f311430a2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="RoamingCam">
       <UniqueIdentifier>{2d512d5b-fcbf-459a-af2e-e0419a2af7d6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="CamSwitcher">
-      <UniqueIdentifier>{bf3324c5-849e-4c7f-af17-eeb0a882cc19}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="RecastDetourTest">
-      <UniqueIdentifier>{56c19951-ac88-4ad2-9b55-db6f941240e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DebugPlane">
-      <UniqueIdentifier>{028fb8ff-0f7e-465c-894d-222249262cc3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DebugBeacon">
-      <UniqueIdentifier>{12a9b6c6-374f-4024-a2c3-3d67deff9469}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="TerrainEditor">
-      <UniqueIdentifier>{bdeb32c3-9345-46aa-9876-48fd5865c87c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DebugMeshes">
-      <UniqueIdentifier>{63795638-a23d-4b7e-a43d-3da8d1088678}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="RTSTerrain">
-      <UniqueIdentifier>{35902296-3a53-47ef-a7ac-de94b5000e79}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PeriodicAction">
-      <UniqueIdentifier>{d31814ce-faa7-415f-8b5a-672e90071988}</UniqueIdentifier>
     </Filter>
     <Filter Include="Editor">
       <UniqueIdentifier>{a8da4320-0b8b-4bf9-8101-466d6da6cfeb}</UniqueIdentifier>
@@ -87,9 +60,6 @@
     </Filter>
     <Filter Include="Path">
       <UniqueIdentifier>{fd700d27-99c8-48fe-a7fa-d50f17beb154}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PathEditor">
-      <UniqueIdentifier>{bdeb32c3-9345-46aa-9876-48fd5865c87c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contents\Units">
       <UniqueIdentifier>{405ea7bd-7f87-4f62-bbaa-63df3fb1cb29}</UniqueIdentifier>
@@ -235,6 +205,36 @@
     <Filter Include="Contents\SingleNavigationField">
       <UniqueIdentifier>{955952c8-9aa3-451c-9298-ee3adedb93d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DebugGraphics">
+      <UniqueIdentifier>{b5515b9d-1970-46e2-ae29-ab814e1b2787}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugGraphics\DebugBeacon">
+      <UniqueIdentifier>{12a9b6c6-374f-4024-a2c3-3d67deff9469}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugGraphics\DebugMeshes">
+      <UniqueIdentifier>{63795638-a23d-4b7e-a43d-3da8d1088678}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\DebugPlane">
+      <UniqueIdentifier>{028fb8ff-0f7e-465c-894d-222249262cc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestCodes\TestUtils\PeriodicAction">
+      <UniqueIdentifier>{d31814ce-faa7-415f-8b5a-672e90071988}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapData">
+      <UniqueIdentifier>{1e14d82d-3b46-4868-be82-790e5993af3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\RTSCam">
+      <UniqueIdentifier>{4d58ffff-525b-4e6d-a64c-bf1f311430a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="InGame">
+      <UniqueIdentifier>{307110bf-f12d-41ce-a751-777f138d1143}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugGraphics\DebugGraphic">
+      <UniqueIdentifier>{d4e2e990-93e1-4272-890f-49d928dba311}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugGraphics\DebugStaticMesh">
+      <UniqueIdentifier>{ae990035-017a-49f5-aea7-7ea2bd3026ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -265,34 +265,22 @@
       <Filter>Contents</Filter>
     </ClInclude>
     <ClInclude Include="RTSCam.h">
-      <Filter>RTSCam</Filter>
+      <Filter>Contents\RTSCam</Filter>
     </ClInclude>
     <ClInclude Include="RoamingCam.h">
       <Filter>RoamingCam</Filter>
     </ClInclude>
-    <ClInclude Include="CamSwitcher.h">
-      <Filter>CamSwitcher</Filter>
-    </ClInclude>
-    <ClInclude Include="RequestDetourTest.h">
-      <Filter>RecastDetourTest</Filter>
-    </ClInclude>
     <ClInclude Include="DebugTilePlane.h">
-      <Filter>DebugPlane</Filter>
+      <Filter>sources\DebugPlane</Filter>
     </ClInclude>
     <ClInclude Include="DebugBeacon.h">
-      <Filter>DebugBeacon</Filter>
-    </ClInclude>
-    <ClInclude Include="PathEditor.h">
-      <Filter>PathEditor</Filter>
+      <Filter>DebugGraphics\DebugBeacon</Filter>
     </ClInclude>
     <ClInclude Include="DebugMeshes.h">
-      <Filter>DebugMeshes</Filter>
+      <Filter>DebugGraphics\DebugMeshes</Filter>
     </ClInclude>
     <ClInclude Include="PeriodicAction.h">
-      <Filter>PeriodicAction</Filter>
-    </ClInclude>
-    <ClInclude Include="RTSTerrain.h">
-      <Filter>RTSTerrain</Filter>
+      <Filter>TestCodes\TestUtils\PeriodicAction</Filter>
     </ClInclude>
     <ClInclude Include="ShakyCam.h">
       <Filter>Contents</Filter>
@@ -408,7 +396,6 @@
     <ClInclude Include="DelayedTestFunctions.h">
       <Filter>TestCodes</Filter>
     </ClInclude>
-    <ClInclude Include="PathEditor.h" />
     <ClInclude Include="Dotween.h">
       <Filter>Contents\Dotween</Filter>
     </ClInclude>
@@ -502,7 +489,6 @@
     <ClInclude Include="TestComponent2.h">
       <Filter>TestCodes</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainEditor.h" />
     <ClInclude Include="UUIDManager.h">
       <Filter>Editor\DataSystem</Filter>
     </ClInclude>
@@ -606,6 +592,18 @@
     <ClInclude Include="PaletteManagerList.h">
       <Filter>Editor\Palette\PaletteManager</Filter>
     </ClInclude>
+    <ClInclude Include="MapData.h">
+      <Filter>MapData</Filter>
+    </ClInclude>
+    <ClInclude Include="InGame.h">
+      <Filter>InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugGraphic.h">
+      <Filter>DebugGraphics\DebugGraphic</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugStaticMesh.h">
+      <Filter>DebugGraphics\DebugStaticMesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -615,16 +613,10 @@
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="RTSCam.cpp">
-      <Filter>RTSCam</Filter>
+      <Filter>Contents\RTSCam</Filter>
     </ClCompile>
     <ClCompile Include="RoamingCam.cpp">
       <Filter>RoamingCam</Filter>
-    </ClCompile>
-    <ClCompile Include="CamSwitcher.cpp">
-      <Filter>CamSwitcher</Filter>
-    </ClCompile>
-    <ClCompile Include="RequestDetourTest.cpp">
-      <Filter>RecastDetourTest</Filter>
     </ClCompile>
     <ClCompile Include="ContentsLayer.cpp">
       <Filter>Contents</Filter>
@@ -858,7 +850,7 @@
       <Filter>Contents\UnitStatusComponent</Filter>
     </ClCompile>
     <ClCompile Include="DebugMeshes.cpp">
-      <Filter>DebugMeshes</Filter>
+      <Filter>DebugGraphics\DebugMeshes</Filter>
     </ClCompile>
     <ClCompile Include="PaletteManager.cpp">
       <Filter>Editor\Palette\PaletteManager</Filter>
@@ -922,6 +914,27 @@
     </ClCompile>
     <ClCompile Include="UnitPaletteManager.cpp">
       <Filter>Editor\Palette\PaletteManager\UnitPaletteManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCaseUpdateComponents.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="MapData.cpp">
+      <Filter>MapData</Filter>
+    </ClCompile>
+    <ClCompile Include="InGame.cpp">
+      <Filter>InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugGraphic.cpp">
+      <Filter>DebugGraphics\DebugGraphic</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugStaticMesh.cpp">
+      <Filter>DebugGraphics\DebugStaticMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetMapListIO.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="IEditableData.cpp">
+      <Filter>Editor\DataSystem\EditableData</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

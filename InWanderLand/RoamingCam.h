@@ -8,5 +8,3 @@ protected:
     void Update();
     
 };
-
-

@@ -67,7 +67,7 @@ namespace tests
             mfm.Clear();
             mfm.LoadMapFile("TestCase1.pmap");
             mfm.SaveMapFile("TestCase2.pmap");
-            
+
             json mapData1;
             json mapData2;
 

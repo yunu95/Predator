@@ -986,6 +986,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
     <ClInclude Include="AttackSystem.h" />
     <ClInclude Include="BleedingComponent.h" />
+    <ClInclude Include="DebugGraphic.h" />
+    <ClInclude Include="DebugStaticMesh.h" />
+    <ClInclude Include="InGame.h" />
+    <ClInclude Include="MapData.h" />
     <ClInclude Include="PaletteManagerList.h" />
     <ClInclude Include="SingleNavigationField.h" />
     <ClInclude Include="TestUtilButtonEvent.h" />
@@ -996,7 +1000,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="RangedAttackSystem.h" />
     <ClInclude Include="StatusTimer.h" />
     <ClInclude Include="StatusTimerPool.h" />
-    <ClInclude Include="CamSwitcher.h" />
     <ClInclude Include="EditorCamera.h" />
     <ClInclude Include="EditorCommonEvents.h" />
     <ClInclude Include="EditorInputManager.h" />
@@ -1054,10 +1057,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Panel_Preview.h" />
     <ClInclude Include="PeriodicAction.h" />
     <ClInclude Include="PathField.h" />
-    <ClInclude Include="RequestDetourTest.h" />
     <ClInclude Include="RoamingCam.h" />
     <ClInclude Include="RTSCam.h" />
-    <ClInclude Include="RTSTerrain.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="CircularQueue.h" />
     <ClInclude Include="Command.h" />
@@ -1081,8 +1082,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="TemplateDataManager.h" />
     <ClInclude Include="Storable.h" />
     <ClInclude Include="TerrainData.h" />
-    <ClInclude Include="TerrainEditor.h" />
-    <ClInclude Include="PathEditor.h" />
     <ClInclude Include="Terrain_TemplateData.h" />
     <ClInclude Include="TestUtilNavAgent.h" />
     <ClInclude Include="TestUtilRTSTestCam.h" />
@@ -1107,6 +1106,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
   <ItemGroup>
     <ClCompile Include="AttackSystem.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
+    <ClCompile Include="DebugGraphic.cpp" />
+    <ClCompile Include="DebugStaticMesh.cpp" />
+    <ClCompile Include="IEditableData.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="imgui_demo.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
@@ -1114,14 +1116,15 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="imgui_impl_win32.cpp" />
     <ClCompile Include="imgui_tables.cpp" />
     <ClCompile Include="imgui_widgets.cpp" />
+    <ClCompile Include="InGame.cpp" />
     <ClCompile Include="KnockBackComponent.cpp" />
+    <ClCompile Include="MapData.cpp" />
     <ClCompile Include="MeleeAttackSystem.cpp" />
     <ClCompile Include="OnlyDamageComponent.cpp" />
     <ClCompile Include="RangedAttackSystem.cpp" />
     <ClCompile Include="SnippetSkillSystem.cpp" />
     <ClCompile Include="StatusTimer.cpp" />
     <ClCompile Include="StatusTimerPool.cpp" />
-    <ClCompile Include="CamSwitcher.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="EditorCamera.cpp" />
     <ClCompile Include="EditorEvents.cpp" />
@@ -1174,7 +1177,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Panel_Preview.cpp" />
     <ClCompile Include="Panel_SceneView.cpp" />
     <ClCompile Include="ProgramExitCommand.cpp" />
-    <ClCompile Include="RequestDetourTest.cpp" />
     <ClCompile Include="RoamingCam.cpp" />
     <ClCompile Include="RTSCam.cpp" />
     <ClCompile Include="SaveMapCommand.cpp" />
@@ -1186,7 +1188,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="TerrainPaletteManager.cpp" />
     <ClCompile Include="Terrain_TemplateData.cpp" />
     <ClCompile Include="TestCaseMapFileIO.cpp" />
+    <ClCompile Include="SnippetMapListIO.cpp" />
     <ClCompile Include="TestCasePhysxTrigger.cpp" />
+    <ClCompile Include="TestCaseUpdateComponents.cpp" />
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="UnitInstance.cpp" />
     <ClCompile Include="UnitPaletteManager.cpp" />

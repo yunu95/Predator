@@ -13,43 +13,45 @@
 
 namespace application
 {
-	namespace editor
-	{
-		class ITemplateData;
-	}
+    namespace editor
+    {
+        class ITemplateData;
+    }
 }
 
 namespace application
 {
-	namespace editor
-	{
-		enum class DataType
-		{
-			None,			// 예외용
-			TerrainData,
-			UnitData,
-			OrnamentData
-		};
+    namespace editor
+    {
+        enum class DataType
+        {
+            None,			// 예외용
+            TerrainData,
+            UnitData,
+            OrnamentData
+        };
+        template<typename T>
+        DataType GetDataTypeEnum() { return DataType::None; }
 
-		class IEditableData
-			: public Identifiable, public Storable
-		{
-			friend class InstanceManager;
+        class IEditableData
+            : public Identifiable, public Storable
+        {
+            friend class InstanceManager;
 
-		public:
-			virtual ~IEditableData() = default;
+        public:
+            virtual ~IEditableData() = default;
 
-			virtual bool EnterDataFromTemplate() = 0;
-			virtual ITemplateData* GetTemplateData() = 0;
-			virtual bool SetTemplateData(const std::string& dataName) = 0;
-			virtual IEditableData* Clone() const = 0;
+            virtual bool EnterDataFromTemplate() = 0;
+            virtual ITemplateData* GetTemplateData() = 0;
+            virtual bool SetTemplateData(const std::string& dataName) = 0;
+            virtual IEditableData* Clone() const = 0;
 
-		protected:
-			virtual bool PreEncoding(json& data) const = 0;
-			virtual bool PostEncoding(json& data) const = 0;
-			virtual bool PreDecoding(const json& data) = 0;
-			virtual bool PostDecoding(const json& data) = 0;
-		};
-	}
+        protected:
+            virtual bool PreEncoding(json& data) const = 0;
+            virtual bool PostEncoding(json& data) const = 0;
+            virtual bool PreDecoding(const json& data) = 0;
+            virtual bool PostDecoding(const json& data) = 0;
+        };
+    }
 }
 #endif
