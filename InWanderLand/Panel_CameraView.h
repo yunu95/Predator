@@ -1,5 +1,5 @@
-/// 2023. 10. 04 ±è»óÁØ
-/// ¿¡µğÅÍ¿¡¼­ ¼±ÅÃµÈ Ä«¸Ş¶ó ½ÃÁ¡ÀÇ View ¸¦ È®ÀÎÇÒ ¼ö ÀÖ´Â View ÆĞ³Î
+/// 2023. 10. 04 ê¹€ìƒì¤€
+/// ì—ë””í„°ì—ì„œ ì„ íƒëœ ì¹´ë©”ë¼ ì‹œì ì˜ View ë¥¼ í™•ì¸í•  ìˆ˜ ìˆëŠ” View íŒ¨ë„
 
 #pragma once
 
@@ -13,14 +13,18 @@ namespace application
 		class CameraViewPanel
 			: public Panel, public Singleton<CameraViewPanel>
 		{
+			friend class Singleton<CameraViewPanel>;
+
 		public:
-			CameraViewPanel();
 			virtual ~CameraViewPanel();
 
 			virtual void Initialize() override;
 			virtual void Update(float ts) override;
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
+
+		private:
+			CameraViewPanel();
 		};
 	}
 }

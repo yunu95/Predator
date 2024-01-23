@@ -2,7 +2,6 @@
 /// Editor 의 일반적인 이벤트들을 위한 클래스
 
 #pragma once
-
 #include "EditorEvents.h"
 
 #include <sstream>

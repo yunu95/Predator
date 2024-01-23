@@ -171,7 +171,7 @@ namespace tests
 		TEST_METHOD(TestCaseGroupControl)
 		{
 			application::Application& client = application::Application::CreateApplication(0, 0);
-			application::Contents::ContentsLayer::AssignTestInitializer(TestCaseGroupControlInit);
+			application::contents::ContentsLayer::AssignTestInitializer(TestCaseGroupControlInit);
 			client.Initialize();
 			client.Run();
 			client.Finalize();

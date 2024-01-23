@@ -1,5 +1,5 @@
-/// 2023. 10. 11 ±è»óÁØ
-/// Contents Á¦ÀÛÀ» À§ÇÑ ·¹ÀÌ¾î
+/// 2023. 10. 11 ê¹€ìƒì¤€
+/// Contents ì œì‘ì„ ìœ„í•œ ë ˆì´ì–´
 
 #pragma once
 
@@ -8,7 +8,7 @@
 
 namespace application
 {
-    namespace Contents
+    namespace contents
     {
         class ContentsLayer
             : public Layer
@@ -21,8 +21,8 @@ namespace application
             virtual void Update(float ts) override;
             virtual void GUIProgress() override;
             virtual void Finalize() override;
-            // Å×½ºÆ® ÄÚµå¿¡¼­ ÀÓÀÇ·Î ContentsLayerÀÇ Initialize ÄÚµå¸¦ ¿À¹ö¶óÀÌµå ÇÏ°í ½ÍÀ»¶§ ¾²ÀÌ´Â ÇÔ¼ö
-            // ÀÌ ÇÔ¼ö¸¦ È£ÃâÇÏ¸é YunutyCycle¿¡¼­ ¹ß»ıÇÑ ¿¹¿Ü¸¦ Àâ¾Æ¼­ Å×½ºÆ® ½º·¹µå¿¡¼­ ¿¹¿Ü¸¦ ´øÁı´Ï´Ù.
+            // í…ŒìŠ¤íŠ¸ ì½”ë“œì—ì„œ ì„ì˜ë¡œ ContentsLayerì˜ Initialize ì½”ë“œë¥¼ ì˜¤ë²„ë¼ì´ë“œ í•˜ê³  ì‹¶ì„ë•Œ ì“°ì´ëŠ” í•¨ìˆ˜
+            // ì´ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•˜ë©´ YunutyCycleì—ì„œ ë°œìƒí•œ ì˜ˆì™¸ë¥¼ ì¡ì•„ì„œ í…ŒìŠ¤íŠ¸ ìŠ¤ë ˆë“œì—ì„œ ì˜ˆì™¸ë¥¼ ë˜ì§‘ë‹ˆë‹¤.
 #ifdef GEN_TESTS
             static void AssignTestInitializer(std::function<void()> testInitializer);
 #endif

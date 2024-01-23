@@ -77,7 +77,7 @@ namespace snippets
 		TEST_METHOD(SnippetDebugMeshScaleCheck)
 		{
 			application::Application& client = application::Application::CreateApplication(0, 0);
-			application::Contents::ContentsLayer::AssignTestInitializer(SnippetDebugMeshScaleCheckInit);
+			application::contents::ContentsLayer::AssignTestInitializer(SnippetDebugMeshScaleCheckInit);
 			client.Initialize();
 			client.Run();
 			client.Finalize();

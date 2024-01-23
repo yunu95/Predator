@@ -51,7 +51,7 @@ namespace snippets
         TEST_METHOD(SnippetTemplate)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializerTemplate);
+            application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializerTemplate);
             client.Initialize();
             client.Run();
             client.Finalize();

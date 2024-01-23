@@ -51,7 +51,7 @@ namespace snippets
 		TEST_METHOD(SnippetFloatingDebug)
 		{
 			application::Application& client = application::Application::CreateApplication(0, 0);
-			application::Contents::ContentsLayer::AssignTestInitializer(SnippetFloatingDebugSphere);
+			application::contents::ContentsLayer::AssignTestInitializer(SnippetFloatingDebugSphere);
 			client.Initialize();
 			client.Run();
 			client.Finalize();

@@ -9,7 +9,7 @@ namespace application
 		{
 			if (uuidMap.find(uuid) != uuidMap.end())
 			{
-				// ÀÌ¹Ì µî·ÏµÈ uuid °¡ ÀÖÀ» °æ¿ì
+				// ì´ë¯¸ ë“±ë¡ëœ uuid ê°€ ìˆì„ ê²½ìš°
 				return false;
 			}
 

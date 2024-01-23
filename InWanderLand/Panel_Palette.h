@@ -1,10 +1,13 @@
-/// 2023. 11. 01 ±è»óÁØ
-/// UnitData, TerrainData µî ´ë´ÜÀ§¿¡ ´ëÇÑ ÆíÁı ½Ã ¿É¼ÇÀ» Á¦°øÇÏ´Â ÆÈ·¹Æ® ÆĞ³Î
+/// 2023. 11. 01 ê¹€ìƒì¤€
+/// UnitData, TerrainData ë“± ëŒ€ë‹¨ìœ„ì— ëŒ€í•œ í¸ì§‘ ì‹œ ì˜µì…˜ì„ ì œê³µí•˜ëŠ” íŒ”ë ˆíŠ¸ íŒ¨ë„
 
 #pragma once
 
 #include "Singleton.h"
 #include "EditorPanel.h"
+#include "EditorInputManager.h"
+#include "PaletteManager.h"
+#include "PaletteList.h"
 
 namespace application
 {
@@ -13,14 +16,36 @@ namespace application
 		class PalettePanel
 			: public Panel, public Singleton<PalettePanel>
 		{
+			friend class Singleton<PalettePanel>;
+
 		public:
-			PalettePanel();
 			virtual ~PalettePanel();
 
 			virtual void Initialize() override;
 			virtual void Update(float ts) override;
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
+
+		private:
+			PalettePanel();
+
+			void ChangePalette(palette::Palette* palette);
+
+			void ImGui_Update();
+
+			void ImGui_BeginTerrainPalette();
+			void ImGui_BeginUnitPalette();
+			void ImGui_BeginDoodadPalette();
+			void ImGui_BeginRegionPalette();
+
+			palette::Palette* currentPalette = nullptr;
+
+			EditorInputManager& eim = EditorInputManager::GetSingletonInstance();
+			palette::PaletteManager& pm = palette::PaletteManager::GetSingletonInstance();
+			palette::TerrainPalette& tp = palette::TerrainPalette::SingleInstance();
+			palette::UnitPalette& up = palette::UnitPalette::SingleInstance();
+			palette::DoodadPalette& dp = palette::DoodadPalette::SingleInstance();
+			palette::RegionPalette& rp = palette::RegionPalette::SingleInstance();
 		};
 	}
 }

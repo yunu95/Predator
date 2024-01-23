@@ -14,7 +14,7 @@ namespace application
 			char* id_char;
 			if (UuidToStringA(&uuid, (RPC_CSTR*)&id_char) != RPC_S_OK)
 			{
-				// ¿À·ù ½Ã ºó string ¹ÝÈ¯
+				// ì˜¤ë¥˜ ì‹œ ë¹ˆ string ë°˜í™˜
 				return std::string();
 			}
 
@@ -26,7 +26,7 @@ namespace application
 			UUID uuid;
 			if (UuidFromStringA((RPC_CSTR)str.c_str(), &uuid) != RPC_S_OK)
 			{
-				// ¿À·ù ½Ã ºó UUID ¹ÝÈ¯
+				// ì˜¤ë¥˜ ì‹œ ë¹ˆ UUID ë°˜í™˜
 				return UUID();
 			}
 

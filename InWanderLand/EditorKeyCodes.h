@@ -9,9 +9,9 @@ namespace application
 	{
 		/// Yunuty 와 동일한 KeyCode 를 사용하도록 함
         /// 단, Mouse 관련 부분을 따로 빼내어 분리함
-		enum class KeyCode
+		enum class KeyCode : unsigned char
 		{
-            NoKey,
+            NoKey = 0,
             ESC,
             LeftArrow,
             RightArrow,
@@ -20,8 +20,8 @@ namespace application
             Space,
             Return,
             Control,
-            LShift,
-            RShift,
+            //LShift,
+            Shift,
             Alt,
             Tab,
             Backspace,

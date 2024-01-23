@@ -1,10 +1,10 @@
-/// 2023. 10. 18 ±è»óÁØ
-/// ¿¡µðÅÍ¿¡¼­ Æ¯Á¤ÇÑ ¸í·É¿¡ ´ëÇØ ÀÏ°ý Ã³¸®ÇÒ ¼ö ÀÖ´Â ±¸Á¶¸¦ Å½»öÇÏ´ø Áß
-/// ¸í·ÉÀ» È£ÃâÇÏ´Â È£ÃâÀÚ¿Í ÀÌ¸¦ ¼öÇàÇÏ´Â °´Ã¼¸¦ ºÐ¸®ÇÏ¿© »ç¿ëÇÏ´Â ±¸Á¶ÀÎ
-/// ¸í·É ÆÐÅÏ(Command Pattern)À» ¹ß°ßÇÏ¿© ÀÌ¸¦ »ç¿ëÇÏ±â·ÎÇÏ¿© ¸¸µé¾î³½ Å¬·¡½º
+/// 2023. 10. 18 ê¹€ìƒì¤€
+/// ì—ë””í„°ì—ì„œ íŠ¹ì •í•œ ëª…ë ¹ì— ëŒ€í•´ ì¼ê´„ ì²˜ë¦¬í•  ìˆ˜ ìžˆëŠ” êµ¬ì¡°ë¥¼ íƒìƒ‰í•˜ë˜ ì¤‘
+/// ëª…ë ¹ì„ í˜¸ì¶œí•˜ëŠ” í˜¸ì¶œìžì™€ ì´ë¥¼ ìˆ˜í–‰í•˜ëŠ” ê°ì²´ë¥¼ ë¶„ë¦¬í•˜ì—¬ ì‚¬ìš©í•˜ëŠ” êµ¬ì¡°ì¸
+/// ëª…ë ¹ íŒ¨í„´(Command Pattern)ì„ ë°œê²¬í•˜ì—¬ ì´ë¥¼ ì‚¬ìš©í•˜ê¸°ë¡œí•˜ì—¬ ë§Œë“¤ì–´ë‚¸ í´ëž˜ìŠ¤
 /// 
-/// Command Å¬·¡½º´Â 'ÀÎÅÍÆäÀÌ½º'·Î, ÇØ´ç Å¬·¡½º¸¦ »ó¼Ó¹Þ¾Æ ±¸Ã¼È­ÇÑ
-/// ÇÏÀ§ Command Å¬·¡½º¿¡¼­ ¸í·ÉÀ» Ã³¸®ÇÏµµ·Ï ÇÔ
+/// Command í´ëž˜ìŠ¤ëŠ” 'ì¸í„°íŽ˜ì´ìŠ¤'ë¡œ, í•´ë‹¹ í´ëž˜ìŠ¤ë¥¼ ìƒì†ë°›ì•„ êµ¬ì²´í™”í•œ
+/// í•˜ìœ„ Command í´ëž˜ìŠ¤ì—ì„œ ëª…ë ¹ì„ ì²˜ë¦¬í•˜ë„ë¡ í•¨
 
 #pragma once
 
@@ -17,21 +17,21 @@ namespace application
 		class Command
 		{
 		public:
-			virtual void Execute() = 0;	// ÇØ´ç Ä¿¸Çµå¸¦ ½ÇÇàÇÔ
+			virtual void Execute() = 0;	// í•´ë‹¹ ì»¤ë§¨ë“œë¥¼ ì‹¤í–‰í•¨
 		};
 		
-		/// Undo / Redo °¡´ÉÇÑ Command ´Â ¼±º°ÇÏ¿© Ã³¸®ÇÒ ¼ö ÀÖµµ·Ï Áö¿øÇÏ±â À§ÇØ
-		/// µû·Î ÇÑ ´Ü°è Ãß»óÈ­¸¦ ´õÇÔ
+		/// Undo / Redo ê°€ëŠ¥í•œ Command ëŠ” ì„ ë³„í•˜ì—¬ ì²˜ë¦¬í•  ìˆ˜ ìžˆë„ë¡ ì§€ì›í•˜ê¸° ìœ„í•´
+		/// ë”°ë¡œ í•œ ë‹¨ê³„ ì¶”ìƒí™”ë¥¼ ë”í•¨
 		class UndoableCommand 
 			: public Command
 		{
 		public:
 			virtual void Execute() = 0;
-			virtual void Undo() = 0;	// ÇØ´ç Ä¿¸Çµå ½ÇÇàÀÇ ÀÌÀü »óÅÂ·Î µÇµ¹¸²
+			virtual void Undo() = 0;	// í•´ë‹¹ ì»¤ë§¨ë“œ ì‹¤í–‰ì˜ ì´ì „ ìƒíƒœë¡œ ë˜ëŒë¦¼
 		};
 
-		/// Æ¯º°ÇÑ ÀÎÀÚ ¿äÃ» ¾øÀÌ ´Ü¼øÈ÷ Ã³¸®ÇÒ ¼ö ÀÖ´Â ¸í·É¿¡ ´ëÇØ¼­ Ã³¸®ÇÏ±â À§ÇÑ
-		/// ´Ü¼øÇÑ À¯ÇüÀÇ Ä¿¸Çµå ÅÛÇÃ¸´ ÀÛ¼º
+		/// íŠ¹ë³„í•œ ì¸ìž ìš”ì²­ ì—†ì´ ë‹¨ìˆœížˆ ì²˜ë¦¬í•  ìˆ˜ ìžˆëŠ” ëª…ë ¹ì— ëŒ€í•´ì„œ ì²˜ë¦¬í•˜ê¸° ìœ„í•œ
+		/// ë‹¨ìˆœí•œ ìœ í˜•ì˜ ì»¤ë§¨ë“œ í…œí”Œë¦¿ ìž‘ì„±
 		template <typename Receiver>
 		class SimpleCommands
 			: public Command
@@ -51,10 +51,8 @@ namespace application
 			}
 
 		private:
-			Action action;		// Execute ½Ã¿¡ ½ÇÇàµÉ ´Ü¼øÇÑ ÇÔ¼ö
-			Receiver* receiver;	// Ä¿¸ÇµåÀÇ ´ë»óÀÌ µÉ ¼ö½ÅÀÚ
+			Action action;		// Execute ì‹œì— ì‹¤í–‰ë  ë‹¨ìˆœí•œ í•¨ìˆ˜
+			Receiver* receiver;	// ì»¤ë§¨ë“œì˜ ëŒ€ìƒì´ ë  ìˆ˜ì‹ ìž
 		};
 	}
 }
-
-

@@ -1,5 +1,5 @@
-/// 2023. 11. 01 ±è»óÁØ
-/// Hierarchy ¿¡¼­ ¼±ÅÃÇÑ ´ë»ó¿¡ ´ëÇÑ ³»¿ëÀ» °£·«È÷ ÇÑ ´«¿¡ º¸¿©ÁÖ´Â ÆÐ³Î
+/// 2023. 11. 01 ê¹€ìƒì¤€
+/// Hierarchy ì—ì„œ ì„ íƒí•œ ëŒ€ìƒì— ëŒ€í•œ ë‚´ìš©ì„ ê°„ëžµížˆ í•œ ëˆˆì— ë³´ì—¬ì£¼ëŠ” íŒ¨ë„
 
 #pragma once
 
@@ -24,4 +24,3 @@ namespace application
 		};
 	}
 }
-

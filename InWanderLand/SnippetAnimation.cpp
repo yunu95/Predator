@@ -57,7 +57,7 @@ namespace snippets
         TEST_METHOD(SnippetAnimation)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializerAnimation);
+            application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializerAnimation);
             client.Initialize();
             client.Run();
             client.Finalize();

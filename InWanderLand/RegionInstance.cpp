@@ -4,7 +4,6 @@
 
 namespace application::editor::palette
 {
-#ifdef EDITOR
     void RegionInstance::Start()
     {
         PaletteInstance::Start();
@@ -57,5 +56,4 @@ namespace application::editor::palette
             mesh->GetTransform()->scale = Vector3d{ halfExtent.x * 2,halfExtent.y * 2,1 };
         }
     }
-#endif
 }

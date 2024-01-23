@@ -3,7 +3,6 @@
 /// 장식물
 
 #pragma once
-
 #include "IEditableData.h"
 #include "Ornament_TemplateData.h"
 

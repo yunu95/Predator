@@ -1,6 +1,6 @@
-/// 2023. 11. 23 ±è»óÁØ
-/// Template Data ¿Í Instance Data ·Î ±¸¼ºµÇ´Â ½ÇÁ¦ Instance ÀÇ ÀÎÅÍÆäÀÌ½º
-/// InstanceManager ¸¦ ÅëÇØ¼­ °ü¸®µÊ
+/// 2023. 11. 23 ê¹€ìƒì¤€
+/// Template Data ì™€ Instance Data ë¡œ êµ¬ì„±ë˜ëŠ” ì‹¤ì œ Instance ì˜ ì¸í„°í˜ì´ìŠ¤
+/// InstanceManager ë¥¼ í†µí•´ì„œ ê´€ë¦¬ë¨
 
 #pragma once
 
@@ -24,7 +24,7 @@ namespace application
 	{
 		enum class DataType
 		{
-			None,			// ¿¹¿Ü¿ë
+			None,			// ì˜ˆì™¸ìš©
 			TerrainData,
 			UnitData,
 			OrnamentData
@@ -51,4 +51,3 @@ namespace application
 		};
 	}
 }
-

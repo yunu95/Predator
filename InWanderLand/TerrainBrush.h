@@ -2,7 +2,7 @@
 #include "YunutyEngine.h"
 #include "SingletonComponent.h"
 #include "DebugMeshes.h" 
-#include "TerrainPaletteManager.h"
+#include "TerrainPalette.h"
 
 namespace application
 {
@@ -20,7 +20,7 @@ namespace application
                     for (int i = planeMeshes.size(); i < expectedNum; i++)
                     {
                         auto planeMesh = AttachDebugMesh(GetGameObject()->AddGameObject(), DebugMeshType::Rectangle, yunuGI::Color::green(), true);
-                        planeMesh->GetTransform()->scale = Vector3d::one * TerrainPaletteManager::nodeDistance;
+                        planeMesh->GetTransform()->scale = Vector3d::one * TerrainPalette::nodeDistance;
                         planeMeshes.push_back(planeMesh);
                         /*
                         25 26 27 28 29 30 31
@@ -40,26 +40,26 @@ namespace application
                         // 좌방 기수번호 = (레이어 *2+1)^2 + 레이어 * 2 * 2
                         // 상방 기수번호 = (레이어 *2+1)^2 + 레이어 * 2 * 3
 
-                        // 우방 기수좌표 = -레이어 * TerrainPaletteManager::nodeDistance, 0, +레이어 * TerrainPaletteManager::nodeDistance
-                        // 하방 기수번호 = +레이어 * TerrainPaletteManager::nodeDistance, 0, +레이어 * TerrainPaletteManager::nodeDistance
-                        // 좌방 기수번호 = +레이어 * TerrainPaletteManager::nodeDistance, 0, -레이어 * TerrainPaletteManager::nodeDistance
-                        // 상방 기수번호 = -레이어 * TerrainPaletteManager::nodeDistance, 0, -레이어 * TerrainPaletteManager::nodeDistance
+                        // 우방 기수좌표 = -레이어 * TerrainPalette::nodeDistance, 0, +레이어 * TerrainPalette::nodeDistance
+                        // 하방 기수번호 = +레이어 * TerrainPalette::nodeDistance, 0, +레이어 * TerrainPalette::nodeDistance
+                        // 좌방 기수번호 = +레이어 * TerrainPalette::nodeDistance, 0, -레이어 * TerrainPalette::nodeDistance
+                        // 상방 기수번호 = -레이어 * TerrainPalette::nodeDistance, 0, -레이어 * TerrainPalette::nodeDistance
 
                         // 우방~상방 = 0~3
                         double sx[4] = {
-                            -layerIdx * TerrainPaletteManager::nodeDistance,
-                            +layerIdx * TerrainPaletteManager::nodeDistance,
-                            +layerIdx * TerrainPaletteManager::nodeDistance,
-                            -layerIdx * TerrainPaletteManager::nodeDistance,
+                            -layerIdx * TerrainPalette::nodeDistance,
+                            +layerIdx * TerrainPalette::nodeDistance,
+                            +layerIdx * TerrainPalette::nodeDistance,
+                            -layerIdx * TerrainPalette::nodeDistance,
                         };
                         double sy[4] = {
-                            +layerIdx * TerrainPaletteManager::nodeDistance,
-                            +layerIdx * TerrainPaletteManager::nodeDistance,
-                            -layerIdx * TerrainPaletteManager::nodeDistance,
-                            -layerIdx * TerrainPaletteManager::nodeDistance,
+                            +layerIdx * TerrainPalette::nodeDistance,
+                            +layerIdx * TerrainPalette::nodeDistance,
+                            -layerIdx * TerrainPalette::nodeDistance,
+                            -layerIdx * TerrainPalette::nodeDistance,
                         };
-                        constexpr double dx[4] = { TerrainPaletteManager::nodeDistance, 0, -TerrainPaletteManager::nodeDistance, 0 };
-                        constexpr double dy[4] = { 0, -TerrainPaletteManager::nodeDistance, 0, TerrainPaletteManager::nodeDistance };
+                        constexpr double dx[4] = { TerrainPalette::nodeDistance, 0, -TerrainPalette::nodeDistance, 0 };
+                        constexpr double dy[4] = { 0, -TerrainPalette::nodeDistance, 0, TerrainPalette::nodeDistance };
                         unsigned int lineType = layerIdx == 0 ? 0 : (i - (layerIdx * 2 - 1) * (layerIdx * 2 - 1)) / (layerIdx * 2);
                         double deltaIdx = layerIdx == 0 ? 0 : i - ((layerIdx * 2 - 1) * (layerIdx * 2 - 1) + layerIdx * 2 * lineType);
 

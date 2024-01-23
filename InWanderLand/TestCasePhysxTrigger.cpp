@@ -92,7 +92,7 @@ namespace tests
         TEST_METHOD(TestCasePhysxTrigger)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializerPhysxTrigger);
+            application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializerPhysxTrigger);
             client.Initialize();
             client.Run();
             client.Finalize();

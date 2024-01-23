@@ -100,7 +100,7 @@ namespace snippets
         TEST_METHOD(SnippetPhysxCollider)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializerPhysxCollider);
+            application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializerPhysxCollider);
             client.Initialize();
             client.Run();
             client.Finalize();

@@ -1,5 +1,5 @@
-/// 2023. 11. 21 ±è»óÁØ
-/// Map File ÀÔÃâ·ÂÀ» À§ÇÑ Å¬·¡½º
+/// 2023. 11. 21 ê¹€ìƒì¤€
+/// Map File ì…ì¶œë ¥ì„ ìœ„í•œ í´ë˜ìŠ¤
 
 #pragma once
 
@@ -24,9 +24,9 @@ namespace application
 		class MapFileManager
 			: public Singleton<MapFileManager>
 		{
-		public:
-			MapFileManager();
+			friend class Singleton<MapFileManager>;
 
+		public:
 			bool LoadMapFile(const std::string& path);
 			bool SaveMapFile(const std::string& path);
 			std::string GetCurrentMapPath() const;
@@ -34,6 +34,8 @@ namespace application
 			void Clear();
 
 		private:
+			MapFileManager();
+
 			InstanceManager& instanceManager;
 			TemplateDataManager& templateDataManager;
 

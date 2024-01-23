@@ -28,16 +28,21 @@ namespace snippets
             yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
             auto rtsCam = Scene::getCurrentScene()->AddGameObject()->AddComponent<RTSCam>();
 
+            auto& app = application::Application::GetInstance();
+
             rtsCam->GetTransform()->position = Vector3d(3, 10, 3);
-            application::editor::palette::PaletteManager::SetCurrentPalette(&application::editor::palette::UnitPaletteManager::SingleInstance());
-            rtsCam->groundHoveringClickCallback = [](const Vector3d& worldPos) {application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnMouseMove(worldPos); };
-            rtsCam->groundLeftClickCallback = [](const Vector3d& worldPos) {application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnLeftClick(); };
-            rtsCam->groundLeftClickReleaseCallback = [](const Vector3d& worldPos) {application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnLeftClickRelease(); };
-            rtsCam->deleteButtonCallback = []() {application::editor::palette::PaletteManager::GetCurrentPalette()->OnDeletion(); };
-            rtsCam->cButtonCallback = []()
+            application::editor::palette::Palette::SetCurrentPalette(&application::editor::palette::UnitPaletteManager::SingleInstance());
+            rtsCam->groundHoveringClickCallback = [&](const Vector3d& worldPos) { if (application::Application::IsFocusGameWindow()){ application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnMouseMove(worldPos); } };
+            rtsCam->groundLeftClickCallback = [&](const Vector3d& worldPos) { application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnLeftClick(); };
+            rtsCam->groundLeftClickReleaseCallback = [&](const Vector3d& worldPos) { if (application::Application::IsFocusGameWindow()) { application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnLeftClickRelease(); } };
+            rtsCam->deleteButtonCallback = [&]() { if (application::Application::IsFocusGameWindow()) { application::editor::palette::Palette::GetCurrentPalette()->OnDeletion(); } };
+            rtsCam->xButtonCallback = [&]()
             {
-                auto palette = application::editor::palette::PaletteManager::GetCurrentPalette();
-                palette->SetAsSelectMode(!palette->IsSelectMode());
+                if (application::Application::IsFocusGameWindow())
+                {
+                    auto palette = application::editor::palette::Palette::GetCurrentPalette();
+                    palette->SetAsSelectMode(!palette->IsSelectMode());
+                }
             };
 
             auto directionalLight = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::DirectionalLight>();
@@ -58,7 +63,7 @@ namespace snippets
         TEST_METHOD(SnippetUnitPalette)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializerUnitPalette);
+            application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializerUnitPalette);
             client.Initialize();
             client.Run();
             client.Finalize();
