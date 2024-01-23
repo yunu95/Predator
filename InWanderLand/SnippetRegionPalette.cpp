@@ -22,14 +22,14 @@ void SnippetInitializerRegionPalette()
     auto rtsCam = Scene::getCurrentScene()->AddGameObject()->AddComponent<RTSCam>();
 
     rtsCam->GetTransform()->position = Vector3d(3, 10, 3);
-    application::editor::palette::PaletteManager::SetCurrentPalette(&application::editor::palette::RegionPaletteManager::SingleInstance());
-    rtsCam->groundHoveringClickCallback = [](const Vector3d& worldPos) {application::editor::palette::PaletteManager::GetCurrentPalette()->OnMouseMove(worldPos); };
-    rtsCam->groundLeftClickCallback = [](const Vector3d& worldPos) {application::editor::palette::PaletteManager::GetCurrentPalette()->OnLeftClick(); };
-    rtsCam->groundLeftClickReleaseCallback = [](const Vector3d& worldPos) {application::editor::palette::PaletteManager::GetCurrentPalette()->OnLeftClickRelease(); };
-    rtsCam->deleteButtonCallback = []() {application::editor::palette::PaletteManager::GetCurrentPalette()->OnDeletion(); };
+    application::editor::palette::Palette::SetCurrentPalette(&application::editor::palette::RegionPalette::SingleInstance());
+    rtsCam->groundHoveringClickCallback = [](const Vector3d& worldPos) {application::editor::palette::Palette::GetCurrentPalette()->OnMouseMove(worldPos); };
+    rtsCam->groundLeftClickCallback = [](const Vector3d& worldPos) {application::editor::palette::Palette::GetCurrentPalette()->OnLeftClick(); };
+    rtsCam->groundLeftClickReleaseCallback = [](const Vector3d& worldPos) {application::editor::palette::Palette::GetCurrentPalette()->OnLeftClickRelease(); };
+    rtsCam->deleteButtonCallback = []() {application::editor::palette::Palette::GetCurrentPalette()->OnDeletion(); };
     rtsCam->xButtonCallback = []()
     {
-        auto palette = application::editor::palette::PaletteManager::GetCurrentPalette();
+        auto palette = application::editor::palette::Palette::GetCurrentPalette();
         palette->SetAsSelectMode(!palette->IsSelectMode());
     };
 

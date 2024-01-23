@@ -4,7 +4,6 @@
 
 #pragma once
 
-#ifdef EDITOR
 #include "EditorPanel.h"
 
 #pragma region Macro Function
@@ -34,4 +33,3 @@ namespace application
 		};
 	}
 }
-#endif

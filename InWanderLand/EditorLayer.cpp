@@ -1,4 +1,3 @@
-#ifdef EDITOR
 #include "InWanderLand.h"
 #include "EditorLayer.h"
 
@@ -6,7 +5,7 @@
 #include "EditorPanel.h"
 #include "PanelList.h"
 #include "ModuleList.h"
-#include "PaletteManagerList.h"
+#include "PaletteManager.h"
 #include "Camera.h"
 
 #include "imgui.h"
@@ -33,26 +32,23 @@ namespace application
 
 			/// 각종 매니저 클래스 메모리 할당
 			MapFileManager::GetSingletonInstance();
-			palette::TerrainPaletteManager::SingleInstance();
-			palette::UnitPaletteManager::SingleInstance();
-			// palette::DoodadPaletteManager::SingleInstance();
-			palette::RegionPaletteManager::SingleInstance();
+			palette::PaletteManager::GetSingletonInstance();
 
 			/// 에디터 패널 생성 및 초기화 진행
 			editorPanelList.resize((int)Panel_List::Size);
 
-			editorPanelList[(int)Panel_List::HIERARCHY] = std::unique_ptr<Panel>(&HierarchyPanel::GetSingletonInstance());
-			editorPanelList[(int)Panel_List::INSPECTOR] = std::unique_ptr<Panel>(&InspectorPanel::GetSingletonInstance());
-			editorPanelList[(int)Panel_List::PREVIEW] = std::unique_ptr<Panel>(&PreviewPanel::GetSingletonInstance());
-			editorPanelList[(int)Panel_List::MINIMAP] = std::unique_ptr<Panel>(&MiniMapPanel::GetSingletonInstance());
-			editorPanelList[(int)Panel_List::SCENEVIEW] = std::unique_ptr<Panel>(&SceneViewPanel::GetSingletonInstance());
-			editorPanelList[(int)Panel_List::CAMERAVIEW] = std::unique_ptr<Panel>(&CameraViewPanel::GetSingletonInstance());
-			editorPanelList[(int)Panel_List::PALETTE] = std::unique_ptr<Panel>(&PalettePanel::GetSingletonInstance());
+			editorPanelList[(int)Panel_List::HIERARCHY] = &HierarchyPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::INSPECTOR] = &InspectorPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::PREVIEW] = &PreviewPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::MINIMAP] = &MiniMapPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::SCENEVIEW] = &SceneViewPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::CAMERAVIEW] = &CameraViewPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::PALETTE] = &PalettePanel::GetSingletonInstance();
 
 			/// 에디터 모듈 생성 및 초기화 진행
 			editorModuleList.resize((int)Module_List::Size);
 
-			editorModuleList[(int)Module_List::TemplateDataEditor] = std::unique_ptr<EditorModule>(&Module_TemplateDataEditor::GetSingletonInstance());
+			editorModuleList[(int)Module_List::TemplateDataEditor] = &Module_TemplateDataEditor::GetSingletonInstance();
 
 			for (auto& each : editorPanelList)
 			{
@@ -113,6 +109,8 @@ namespace application
 
 		void EditorLayer::OnEvent(EditorEvents& event)
 		{
+			editorCamera.OnEvent(event);
+
 			for (auto& each : editorPanelList)
 			{
 				each->OnEvent(event);
@@ -127,11 +125,7 @@ namespace application
 
 		void EditorLayer::LateInitialize()
 		{
-			auto scene = yunutyEngine::Scene::getCurrentScene();
-			if (scene == nullptr)
-			{
-				yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-			}
+			palette::PaletteManager::GetSingletonInstance().Initialize();
 
 			// 카메라 초기화
 			editorCamera.Initialize(yunutyEngine::graphics::Camera::GetMainCamera());
@@ -182,4 +176,3 @@ namespace application
 		}
 	}
 }
-#endif

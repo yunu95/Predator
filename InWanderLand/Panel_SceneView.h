@@ -3,10 +3,9 @@
 
 #pragma once
 
-#ifdef EDITOR
 #include "Singleton.h"
 #include "EditorPanel.h"
-#include "UnitPaletteManager.h"
+#include "PaletteManager.h"
 #include "EditorInputManager.h"
 
 #include <utility>
@@ -51,7 +50,7 @@ namespace application
 
 		private:
 			Application* app;
-			palette::UnitPaletteManager& upm = palette::UnitPaletteManager::SingleInstance();
+			palette::PaletteManager* pm;
 			EditorInputManager& eim = EditorInputManager::GetSingletonInstance();
 			std::pair<float, float> prevWindowSize;
 			std::pair<float, float> currentWindowSize;
@@ -62,4 +61,3 @@ namespace application
 		};
 	}
 }
-#endif

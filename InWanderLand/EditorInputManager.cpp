@@ -1,4 +1,3 @@
-#ifdef EDITOR
 #include "InWanderLand.h"
 #include "EditorInputManager.h"
 #include "Application.h"
@@ -23,8 +22,7 @@ namespace application
 			rawKeyEnumMap.insert(std::make_pair(VK_RETURN, KeyCode::Return));
 
 			rawKeyEnumMap.insert(std::make_pair(VK_CONTROL, KeyCode::Control));
-			rawKeyEnumMap.insert(std::make_pair(VK_LSHIFT, KeyCode::LShift));
-			rawKeyEnumMap.insert(std::make_pair(VK_RSHIFT, KeyCode::RShift));
+			rawKeyEnumMap.insert(std::make_pair(VK_SHIFT, KeyCode::Shift));
 			rawKeyEnumMap.insert(std::make_pair(VK_MENU, KeyCode::Alt));
 			rawKeyEnumMap.insert(std::make_pair(VK_TAB, KeyCode::Tab));
 			rawKeyEnumMap.insert(std::make_pair(VK_BACK, KeyCode::Backspace));
@@ -193,5 +191,4 @@ namespace application
 		}
 	}
 }
-#endif
 

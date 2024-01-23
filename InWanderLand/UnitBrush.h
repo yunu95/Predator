@@ -1,5 +1,4 @@
 #pragma once
-#ifdef EDITOR
 #include "YunutyEngine.h"
 #include "SingletonComponent.h"
 
@@ -17,4 +16,3 @@ namespace application
         }
     }
 }
-#endif

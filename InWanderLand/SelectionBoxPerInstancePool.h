@@ -1,5 +1,4 @@
 #pragma once
-#ifdef EDITOR
 #include "YunutyEngine.h"
 #include "SelectionBoxPerInstance.h"
 #include "SingletonComponent.h"
@@ -18,4 +17,3 @@ namespace application
         }
     }
 }
-#endif

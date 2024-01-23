@@ -4,7 +4,6 @@
 
 #pragma once
 
-#ifdef EDITOR
 #include "Identifiable.h"
 #include "Storable.h"
 
@@ -54,4 +53,3 @@ namespace application
         };
     }
 }
-#endif

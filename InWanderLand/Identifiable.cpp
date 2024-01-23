@@ -1,4 +1,3 @@
-#ifdef EDITOR
 #include "InWanderLand.h"
 #include "Identifiable.h"
 
@@ -64,4 +63,3 @@ namespace application
 		}
 	}
 }
-#endif

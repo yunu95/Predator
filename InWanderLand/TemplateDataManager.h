@@ -3,7 +3,6 @@
 
 #pragma once
 
-#ifdef EDITOR
 #include "Singleton.h"
 #include "Storable.h"
 #include "Identifiable.h"
@@ -101,4 +100,3 @@ namespace application
         };
     }
 }
-#endif

@@ -1,4 +1,3 @@
-#ifdef EDITOR
 #include "InWanderLand.h"
 #include "UUIDManager.h"
 
@@ -34,4 +33,3 @@ namespace application
 		}
 	}
 }
-#endif

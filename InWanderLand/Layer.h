@@ -15,8 +15,6 @@ namespace application
 		virtual void Update(float ts) = 0;
 		virtual void GUIProgress() = 0;
 		virtual void Finalize() = 0;
-#ifdef EDITOR
 		virtual void OnEvent(editor::EditorEvents& event) {};
-#endif
 	};
 }

@@ -1,5 +1,4 @@
 #pragma once
-#ifdef EDITOR
 #include "PaletteInstance.h"
 #include "YunutyEngine.h"
 
@@ -31,4 +30,3 @@ namespace application
         }
     }
 }
-#endif

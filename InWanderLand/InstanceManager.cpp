@@ -1,4 +1,3 @@
-#ifdef EDITOR
 #include "InWanderLand.h"
 #include "InstanceManager.h"
 
@@ -232,4 +231,3 @@ namespace application
         }
     }
 }
-#endif

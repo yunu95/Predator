@@ -4,7 +4,6 @@
 
 #pragma once
 
-#ifdef EDITOR
 #include "Singleton.h"
 #include "Identifiable.h"
 
@@ -39,4 +38,3 @@ namespace application
 		};
 	}
 }
-#endif

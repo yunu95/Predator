@@ -1,4 +1,3 @@
-#ifdef EDITOR
 #include "InWanderLand.h"
 #include "MapFileManager.h"
 
@@ -118,4 +117,3 @@ namespace application
         }
     }
 }
-#endif

@@ -1,4 +1,3 @@
-#ifdef EDITOR
 #include "InWanderLand.h"
 #include "Panel_SceneView.h"
 
@@ -11,7 +10,7 @@
 #include "WindowEvents.h"
 #include "MouseEvents.h"
 
-#include "UnitPaletteManager.h"
+#include "PaletteList.h"
 
 #include <d3d11.h>
 
@@ -22,7 +21,7 @@ namespace application
 	namespace editor
 	{
 		SceneViewPanel::SceneViewPanel()
-			: app(nullptr), prevWindowSize(), currentWindowSize(), renderImageSize(), cursorPos_InScreenSpace()
+			: app(nullptr), pm(nullptr), prevWindowSize(), currentWindowSize(), renderImageSize(), cursorPos_InScreenSpace()
 		{
 
 		}
@@ -35,6 +34,7 @@ namespace application
 		void SceneViewPanel::Initialize()
 		{
 			app = &Application::GetInstance();
+			pm = &palette::PaletteManager::GetSingletonInstance();
 		}
 
 		void SceneViewPanel::Update(float ts)
@@ -94,11 +94,6 @@ namespace application
 				ImGui_OnResizeRenderImageSize();
 			}
 
-			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-			{
-				upm.OnLeftClick();
-			}
-
 			if (isFocused && !Application::IsFocusGameWindow())
 			{
 				// 마우스 입력에 대한 처리
@@ -106,28 +101,29 @@ namespace application
 				{
 					if (ImGui_IsCursorInScreen())
 					{
+						if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+						{
+							pm->GetCurrentPalette()->OnLeftClick();
+						}
+
+						if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+						{
+							pm->GetCurrentPalette()->OnLeftClickRelease();
+						}
+
 						ImGui_UpdateCursorPosInScreenSpace();
 						auto distToXZPlane = abs(yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y);
 						auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint({ cursorPos_InScreenSpace.first, cursorPos_InScreenSpace.second }, distToXZPlane);
-						upm.OnMouseMove(projectedPos);
+						pm->GetCurrentPalette()->OnMouseMove(projectedPos);
 					}
 					else
 					{
 						Release();
 					}
-
-					if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
-					{
-						upm.OnLeftClickRelease();
-					}
 				}
 
 				// 키 입력에 대한 처리
-				if (eim.IsKeyboardUp(KeyCode::X))
-				{
-					auto palette = upm.GetCurrentPalette();
-					palette->SetAsSelectMode(!palette->IsSelectMode());
-				}
+
 			}
 		}
 
@@ -197,8 +193,7 @@ namespace application
 
 		void SceneViewPanel::Release()
 		{	
-			upm.OnLeftClickRelease();
+			pm->GetCurrentPalette()->OnLeftClickRelease();
 		}
 	}
 }
-#endif

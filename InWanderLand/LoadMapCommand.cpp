@@ -1,4 +1,3 @@
-#ifdef EDITOR
 #include "InWanderLand.h"
 #include "LoadMapCommand.h"
 
@@ -20,4 +19,3 @@ namespace application
 		}
 	}
 }
-#endif
