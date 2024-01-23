@@ -8,7 +8,6 @@
 
 #pragma once
 
-#ifdef EDITOR
 #include <memory>
 
 namespace application
@@ -57,4 +56,3 @@ namespace application
 		};
 	}
 }
-#endif

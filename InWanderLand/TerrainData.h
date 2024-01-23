@@ -4,7 +4,6 @@
 
 #pragma once
 
-#ifdef EDITOR
 #include "IEditableData.h"
 #include "Terrain_TemplateData.h"
 
@@ -62,4 +61,3 @@ namespace application
 		};
 	}
 }
-#endif

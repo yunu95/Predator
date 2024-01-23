@@ -1,6 +1,6 @@
 #pragma once
-#ifdef EDITOR
 #include "PaletteManager.h"
+#include "Palette.h"
 #include "SelectionBox.h"
 #include "YunutyEngine.h"
 #include "SingletonComponent.h"
@@ -44,8 +44,8 @@ namespace application
                     if (auto instance = other->GetGameObject()->GetComponent<PaletteInstance>())
                     {
                         contactingInstances.insert(instance);
-                        if (PaletteManager::GetCurrentPalette()->ShouldSelect(instance))
-                            PaletteManager::GetCurrentPalette()->OnSelectionContactEnter(instance);
+                        if (pm.GetCurrentPalette()->ShouldSelect(instance))
+                            pm.GetCurrentPalette()->OnSelectionContactEnter(instance);
                     }
                 }
                 virtual void OnTriggerExit(physics::Collider* other) override
@@ -55,15 +55,15 @@ namespace application
                     if (auto instance = other->GetGameObject()->GetComponent<PaletteInstance>(); instance != nullptr)
                     {
                         contactingInstances.erase(instance);
-                        if (PaletteManager::GetCurrentPalette()->ShouldSelect(instance))
-                            PaletteManager::GetCurrentPalette()->OnSelectionContactExit(instance);
+                        if (pm.GetCurrentPalette()->ShouldSelect(instance))
+                            pm.GetCurrentPalette()->OnSelectionContactExit(instance);
                     }
                 }
             private:
+                PaletteManager& pm = PaletteManager::GetSingletonInstance();
                 unordered_set<PaletteInstance*> contactingInstances;
                 graphics::StaticMeshRenderer* boxMesh;
             };
         }
     }
 }
-#endif

@@ -31,16 +31,16 @@ namespace snippets
             auto& app = application::Application::GetInstance();
 
             rtsCam->GetTransform()->position = Vector3d(3, 10, 3);
-            application::editor::palette::PaletteManager::SetCurrentPalette(&application::editor::palette::UnitPaletteManager::SingleInstance());
+            application::editor::palette::Palette::SetCurrentPalette(&application::editor::palette::UnitPaletteManager::SingleInstance());
             rtsCam->groundHoveringClickCallback = [&](const Vector3d& worldPos) { if (application::Application::IsFocusGameWindow()){ application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnMouseMove(worldPos); } };
             rtsCam->groundLeftClickCallback = [&](const Vector3d& worldPos) { application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnLeftClick(); };
             rtsCam->groundLeftClickReleaseCallback = [&](const Vector3d& worldPos) { if (application::Application::IsFocusGameWindow()) { application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnLeftClickRelease(); } };
-            rtsCam->deleteButtonCallback = [&]() { if (application::Application::IsFocusGameWindow()) { application::editor::palette::PaletteManager::GetCurrentPalette()->OnDeletion(); } };
+            rtsCam->deleteButtonCallback = [&]() { if (application::Application::IsFocusGameWindow()) { application::editor::palette::Palette::GetCurrentPalette()->OnDeletion(); } };
             rtsCam->xButtonCallback = [&]()
             {
                 if (application::Application::IsFocusGameWindow())
                 {
-                    auto palette = application::editor::palette::PaletteManager::GetCurrentPalette();
+                    auto palette = application::editor::palette::Palette::GetCurrentPalette();
                     palette->SetAsSelectMode(!palette->IsSelectMode());
                 }
             };

@@ -3,9 +3,11 @@
 
 #pragma once
 
-#ifdef EDITOR
 #include "Singleton.h"
 #include "EditorPanel.h"
+#include "EditorInputManager.h"
+#include "PaletteManager.h"
+#include "PaletteList.h"
 
 namespace application
 {
@@ -26,7 +28,24 @@ namespace application
 
 		private:
 			PalettePanel();
+
+			void ChangePalette(palette::Palette* palette);
+
+			void ImGui_Update();
+
+			void ImGui_BeginTerrainPalette();
+			void ImGui_BeginUnitPalette();
+			void ImGui_BeginDoodadPalette();
+			void ImGui_BeginRegionPalette();
+
+			palette::Palette* currentPalette = nullptr;
+
+			EditorInputManager& eim = EditorInputManager::GetSingletonInstance();
+			palette::PaletteManager& pm = palette::PaletteManager::GetSingletonInstance();
+			palette::TerrainPalette& tp = palette::TerrainPalette::SingleInstance();
+			palette::UnitPalette& up = palette::UnitPalette::SingleInstance();
+			palette::DoodadPalette& dp = palette::DoodadPalette::SingleInstance();
+			palette::RegionPalette& rp = palette::RegionPalette::SingleInstance();
 		};
 	}
 }
-#endif

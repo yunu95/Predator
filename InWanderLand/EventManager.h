@@ -3,7 +3,6 @@
 
 #pragma once
 
-#ifdef EDITOR
 #include "EditorEvents.h"
 
 #include <queue>
@@ -26,4 +25,3 @@ namespace application
 		};
 	}
 }
-#endif

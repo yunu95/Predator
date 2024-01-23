@@ -3,7 +3,6 @@
 
 #pragma once
 
-#ifdef EDITOR
 #include "Singleton.h"
 #include "EditorKeyCodes.h"
 
@@ -56,6 +55,7 @@ namespace application
 
 			void UpdateKeyboardState(KeyCode keyCode, KeyState newState);
 			void UpdateMouseButtonState(MouseCode mouseCode, KeyState newState);
+
 			// Up 상태를 모두 None 으로 처리
 			void Clear();
 
@@ -69,4 +69,3 @@ namespace application
 		};
 	}
 }
-#endif

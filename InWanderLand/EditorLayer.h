@@ -5,7 +5,6 @@
 
 #pragma once
 
-#ifdef EDITOR
 #include <vector>
 #include <memory>
 #include <functional>
@@ -71,9 +70,8 @@ namespace application
 			CommandManager& cm = CommandManager::GetSingletonInstance();
 			EditorCamera& editorCamera = EditorCamera::GetSingletonInstance();
 
-			std::vector<std::unique_ptr<Panel>> editorPanelList;
-			std::vector<std::unique_ptr<EditorModule>> editorModuleList;	
+			std::vector<Panel*> editorPanelList;
+			std::vector<EditorModule*> editorModuleList;	
 		};
 	}
 }
-#endif

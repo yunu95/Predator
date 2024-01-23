@@ -3,7 +3,6 @@
 
 #pragma once
 
-#ifdef EDITOR
 #include "EditorEvents.h"
 
 #include <sstream>
@@ -98,4 +97,3 @@ namespace application
 		};
 	}
 }
-#endif

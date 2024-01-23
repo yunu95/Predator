@@ -215,10 +215,12 @@ namespace application
 	{
 		layers.resize(2);
 
+		layers[(int)LayerList::ContentsLayer] = new contents::ContentsLayer();
+
 #ifdef EDITOR
+		CheckContentsLayerInit();
 		layers[(int)LayerList::EditorLayer] = new editor::EditorLayer();
 #endif
-		layers[(int)LayerList::ContentsLayer] = new contents::ContentsLayer();
 
 		for (auto each : layers)
 		{
@@ -316,10 +318,9 @@ namespace application
 		return resourceManager->GetFinalRenderImage();
 	}
 
-#ifdef EDITOR
-
 	void Application::ImGuiUpdate()
 	{
+#ifdef EDITOR
 		MSG msg;
 		while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
 		{
@@ -393,10 +394,12 @@ namespace application
 
 		layers[(int)LayerList::ContentsLayer]->Update(1);
 		layers[(int)LayerList::ContentsLayer]->GUIProgress();
+#endif
 	}
 
 	void Application::OnEvent(editor::EditorEvents& event)
 	{
+#ifdef EDITOR
 		editor::EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<editor::WindowResizeEvent>([this](editor::WindowResizeEvent& e) { std::cout << e.GetDebugString(); return true; });
 		dispatcher.Dispatch<editor::KeyPressedEvent>([this](editor::KeyPressedEvent& e) { std::cout << e.GetDebugString(); return true; });
@@ -409,10 +412,12 @@ namespace application
 		dispatcher.Dispatch<editor::MouseWheelEvent>([this](editor::MouseWheelEvent& e) { std::cout << e.GetDebugString(); return true; });
 
 		layers[(int)LayerList::EditorLayer]->OnEvent(event);
+#endif
 	}
 
 	void Application::ProcessEvents()
 	{
+#ifdef EDITOR
 		eim.Clear();
 		eim.Update();
 
@@ -424,10 +429,12 @@ namespace application
 				eventFunc();
 			}
 		}
+#endif
 	}
 
 	void Application::SetWindowCallBack()
 	{
+#ifdef EDITOR
 		// mouse device setting
 		inputDevice[0].usUsagePage = 0x01;
 		inputDevice[0].usUsage = 0x02;
@@ -461,8 +468,37 @@ namespace application
 		winMouseRightUpCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Right); };
 		winMouseMoveCallBackFunction = [&](long posX, long posY) { Application::DispatchEvent<editor::MouseMoveEvent>(posX, posY); };
 		winMouseWheelCallBackFunction = [&](short wheelDelta) {Application::DispatchEvent<editor::MouseWheelEvent>(wheelDelta); };
-	}
 #endif
+	}
+
+	void Application::CheckContentsLayerInit()
+	{
+#ifdef EDITOR
+		auto scene = yunutyEngine::Scene::getCurrentScene();
+		if (scene == nullptr)
+		{
+			yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+			auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+			directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{90,0,30} };
+		}
+		else
+		{
+			for (auto each : scene->GetChildren())
+			{
+				auto ptr = each->GetComponent<yunutyEngine::graphics::DirectionalLight>();
+				if (ptr)
+				{
+					return;
+				}
+			}
+
+			auto directionalLight = scene->AddGameObject();
+			directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+			directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{90,0,30} };
+		}
+#endif
+	}
 }
 
 #ifdef EDITOR

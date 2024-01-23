@@ -1,4 +1,3 @@
-#ifdef EDITOR
 #include "InWanderLand.h"
 #include "UnitData.h"
 
@@ -104,4 +103,3 @@ namespace application
 		}
 	}
 }
-#endif

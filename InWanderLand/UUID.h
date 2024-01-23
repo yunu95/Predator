@@ -4,7 +4,6 @@
 
 #pragma once
 
-#ifdef EDITOR
 #include <rpc.h>
 #pragma comment(lib, "Rpcrt4.lib")
 
@@ -34,4 +33,3 @@ namespace std
         }
     };
 };
-#endif

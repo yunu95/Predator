@@ -1,5 +1,4 @@
 #pragma once
-#ifdef EDITOR
 #include "PaletteInstance.h"
 
 namespace application
@@ -28,4 +27,3 @@ namespace application
         }
     }
 }
-#endif

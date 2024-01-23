@@ -4,7 +4,6 @@
 
 #pragma once
 
-#ifdef EDITOR
 #include "Identifiable.h"
 #include "UUIDManager.h"
 
@@ -158,4 +157,3 @@ Class& operator=(const json& data) \
 	application::editor::FieldPreDecoding<boost::pfr::tuple_size_v<Class>>(*this, data); \
 	return *this; \
 }
-#endif
