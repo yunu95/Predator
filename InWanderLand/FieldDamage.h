@@ -1,8 +1,9 @@
 #pragma once
 #include "UnitStatusComponent.h"
 /// <summary>
-/// Collider가 존재하는 시간동안 주기적으로 tick 데미지를 주는 컴포넌트 
-/// Bleeding과의 차이점은 단 하나 -> 장판을 밟고 있는가에 대한 판단
+/// 장판 스킬의 부모 클래스.
+/// 기본적인 틱 데미지를 주는 기능을 제공하며, 추가적인 요소 (ex.실명 및 끌어당김)은
+/// 자식 클래스에서 따로 멤버 선언을 해준다.
 /// </summary>
 
 class StatusTimer;
@@ -10,22 +11,22 @@ class StatusTimer;
 class FieldDamage : public UnitStatusComponent
 {
 protected:
-	struct UnitSensor
-	{
-		Unit* opponentUnit;
-		bool isInField;
-	};
+	StatusTimer* m_damageTimer;			// 기본적인 장판 틱 데미지 타이머, 추가로 사용하고자 할 땐 자식 클래스에서 다른 타이머를 새로 만들어주기.
+	
+	std::set<Unit*> m_currentOnFieldUnits;
 
-	StatusTimer* m_timer;
-	std::map<UnitSensor*, StatusTimer*> opponentUnitMap;
+	float m_fieldDamageElapsed = 0.0f;
 
 	float m_fieldDamage;
 	float m_fieldDamageDelay;
 
+	virtual void SetFieldSkillMembers() = 0;
+
 public:
 	virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) override;
 	virtual void Start() override;
-	virtual void OnDestroy() override;
+	virtual void Update() override;
+
 public:
 	virtual void OnTriggerExit(physics::Collider* collider) override;
 

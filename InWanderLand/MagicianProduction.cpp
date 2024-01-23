@@ -25,7 +25,7 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 	m_criticalDamageDecreaseMultiplier = 0.05f;
 
 	m_idRadius = 10.0f;
-	m_atkRadius = 8.5f;
+	m_atkRadius = 3.5f;
 	m_unitSpeed = 1.5f;
 
 	m_attackDelay = 5.0f;
@@ -108,16 +108,40 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 #pragma endregion
 
 #pragma region W Skill Setting
+	auto WSkillProjectileObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	WSkillProjectileObject->AddComponent<Dotween>();
+
+	auto WSkillProjectileCollider = WSkillProjectileObject->AddComponent<physics::SphereCollider>();
+	m_WSkillProjectileRadius = 1.0f;
+	WSkillProjectileCollider->SetRadius(m_WSkillProjectileRadius);
+	WSkillProjectileObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+
+	auto WSkillProjectileDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	AttachDebugMesh(WSkillProjectileDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
+
 	auto WSkillFieldObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	WSkillFieldObject->AddComponent<Dotween>();
-	//auto WSkillFieldComponent = 
+	auto WfieldDamageComponent = WSkillFieldObject->AddComponent<ParalysisFieldComponent>();
+	WfieldDamageComponent->SetSkillOwnerUnit(m_unitComponent);
+	auto WSkillFieldCollider = WSkillFieldObject->AddComponent<physics::SphereCollider>();
+	m_WSkillFieldRadius = 2.0f;
+	WSkillFieldCollider->SetRadius(m_WSkillFieldRadius);
+	WSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+	auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	AttachDebugMesh(WSkillFieldDebugObject, DebugMeshType::Sphere, yunuGI::Color::blue(), true);
+#pragma endregion
 
 #pragma endregion
 
 	auto magicianSkillSystem = m_unitGameObject->AddComponent<MagicianSkillSystem>();
+
 	magicianSkillSystem->SetQSkillCollider(QSkillProjectileCollider, QSkillFieldCollider);
 	magicianSkillSystem->SetQSkillDebugPair({QSkillProjectileDebugObject, m_QSkillProjectileRadius}, {QSkillFieldDebugObject, m_QSkillFieldRadius});
 	magicianSkillSystem->SetQSkillObject(QSkillProjectileObject, QSkillFieldObject);
+
+	magicianSkillSystem->SetWSkillCollider(WSkillProjectileCollider, WSkillFieldCollider);
+	magicianSkillSystem->SetWSkillDebugPair({ WSkillProjectileDebugObject, m_WSkillProjectileRadius }, { WSkillFieldDebugObject, m_WSkillFieldRadius });
+	magicianSkillSystem->SetWSkillObject(WSkillProjectileObject, WSkillFieldObject);
 
 }
 

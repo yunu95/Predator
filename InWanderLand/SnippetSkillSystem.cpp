@@ -10,6 +10,7 @@
 #include "DebugTilePlane.h"
 #include "DebugBeacon.h"
 #include "DebugMeshes.h"
+#include "DebuggingMeshPool.h"
 #include "PlayerController.h"
 #include "UnitFactory.h"
 #include "InputManager.h"

@@ -74,6 +74,7 @@ protected:
 
 	float m_healthPoint;
 	float m_autoAttackDamage;
+	float m_beforeBlindDamage;
 	float m_initialAutoAttackDamage;
 	float m_maxAutoAttackDamage = 10.0f;
 	float m_minAttackDelay = 0.3f;
@@ -134,9 +135,6 @@ protected:
 	float qSkillAnimationDuration = 1.0f;
 	bool isJustHitByQSkill = false;
 
-	float paralysisElapsed = 0.0f;
-	float paralysisTotalTime = 1.0f;
-
 	float animationLerpDuration = 1.0f;
 	float animationTransitionSpeed = 3.0f;
 
@@ -178,7 +176,6 @@ protected:
 	void ChaseUpdate();
 	void AttackUpdate();
 	void SkillUpdate();
-	void ParalysisUpdate();
 	void DeathUpdate();
 	
 	void CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation);
@@ -234,6 +231,7 @@ public:
 
 	void MakeUnitPushedState(bool p_isCrushed);
 	void MakeUnitParalysisState();
+	void MakeUnitParalysisEnd();
 	bool GetJustCrushedState() const;
 
 	float DetermineAttackDamage(float p_damage);			// 공격유닛이 피격유닛에게 전달하는 데미지 계산.
@@ -249,5 +247,8 @@ public:
 	
 	void IncreaseAttackPower(float p_attackPowerIncrease);
 	void IncreaseAttackSpeed(float p_attackSpeedIncrease);
+
+	void SetUnitDamageToZero(bool p_bool);
+	void MultipleUnitSpeed(float p_mul);
 };
 

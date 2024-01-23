@@ -127,7 +127,8 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 	wSkillColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	wSkillColliderObject->SetParent(m_unitGameObject);
 	auto wSkillDamageComponent = wSkillColliderObject->AddComponent<OnlyDamageComponent>();
-	wSkillDamageComponent->SetSkillDamage(1000.0f);
+	wSkillDamageComponent->SetSkillOwnerUnit(m_unitComponent);
+	wSkillDamageComponent->SetSkillDamage(10.0f);
 
 	auto wSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto wSkillDebugMesh = AttachDebugMesh(wSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), true);

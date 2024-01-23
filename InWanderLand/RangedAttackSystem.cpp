@@ -12,6 +12,10 @@ void RangedAttackSystem::Attack(Unit* opponentUnit)
 			MagicianAutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed);
 		}
 			break;
+		case Unit::UnitType::Healer:
+		{
+
+		}
 		default:
 			AutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed);
 			break;

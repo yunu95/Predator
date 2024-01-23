@@ -95,7 +95,6 @@ void Unit::Start()
 	unitFSM.updateAction[UnitState::Chase] = [this]() { ChaseUpdate(); };
 	unitFSM.updateAction[UnitState::Attack] = [this]() { AttackUpdate(); };
 	unitFSM.updateAction[UnitState::Skill] = [this]() { SkillUpdate(); };
-	unitFSM.updateAction[UnitState::Paralysis] = [this]() { ParalysisUpdate(); };
 	unitFSM.updateAction[UnitState::Death] = [this]() { DeathUpdate(); };
 
 	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(unitAnimations.m_idleAnimation);
@@ -192,7 +191,6 @@ void Unit::SkillEngage()
 
 void Unit::ParalysisEngage()
 {
-	paralysisElapsed = 0.0f;
 	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_paralysisAnimation, animationLerpDuration, animationTransitionSpeed);
 }
 
@@ -310,15 +308,6 @@ void Unit::SkillUpdate()
 	{
 		qSkillFunctionStartElapsed = 0.0f;
 		isSkillStarted = true;
-	}
-}
-
-void Unit::ParalysisUpdate()
-{
-	paralysisElapsed += Time::GetDeltaTime();
-	if (paralysisElapsed >= paralysisTotalTime)
-	{
-		currentOrder = UnitState::Idle;
 	}
 }
 
@@ -513,6 +502,25 @@ void Unit::IncreaseAttackSpeed(float p_attackSpeedIncrease)
 	}
 }
 
+void Unit::SetUnitDamageToZero(bool p_bool)
+{
+	if (p_bool == true)
+	{
+		m_beforeBlindDamage = m_autoAttackDamage;
+		m_autoAttackDamage = 0;
+	}
+
+	else
+	{
+		m_autoAttackDamage = m_beforeBlindDamage;
+	}
+}
+
+void Unit::MultipleUnitSpeed(float p_mul)
+{
+	m_speed *= p_mul;
+}
+
 float Unit::DetermineAttackDamage(float p_damage)
 {
 	m_finalAttackDamage = p_damage;
@@ -663,6 +671,11 @@ void Unit::MakeUnitPushedState(bool p_isCrushed)
 void Unit::MakeUnitParalysisState()
 {
 	currentOrder = UnitState::Paralysis;
+}
+
+void Unit::MakeUnitParalysisEnd()
+{
+	currentOrder = UnitState::Idle;
 }
 
 bool Unit::GetJustCrushedState() const

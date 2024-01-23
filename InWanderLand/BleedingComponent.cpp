@@ -3,6 +3,7 @@
 #include "StatusTimerPool.h"
 #include "StatusTimer.h"
 #include "Unit.h"
+#include "DebuggingMeshPool.h"
 
 void BleedingComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 {
@@ -13,6 +14,9 @@ void BleedingComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 	StatusTimer* bleedingTimer = StatusTimerPool::SingleInstance().Borrow();
 	opponentUnitMap.insert({ opponentUnit, bleedingTimer });
 
+	auto debuggingMesh = DebuggingMeshPool::SingleInstance().Borrow();
+	debuggingMesh->SetUnitObject(opponentUnit);
+
 	bleedingTimer->m_isRepeated = true;
 	bleedingTimer->m_duration = m_bleedDuration;
 	bleedingTimer->onCompleteFunction = [=]()
@@ -22,12 +26,12 @@ void BleedingComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 			m_currentDamagedCount = 0;
 			bleedingTimer->StopTimer();
 			opponentUnitMap.erase(opponentUnit);
-			StatusTimerPool::SingleInstance().Return(bleedingTimer);
 		}
 
 		else
 		{
 			opponentUnit->Damaged(m_bleedDamage);
+			debuggingMesh->PopMeshUP(yunuGI::Color::red(), MaterialNum::Red);
 			m_currentDamagedCount++;
 		}
 	};

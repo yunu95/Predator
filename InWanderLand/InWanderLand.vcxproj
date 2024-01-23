@@ -787,7 +787,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="AutoAttackProjectilePool.h" />
     <ClInclude Include="BleedingComponent.h" />
     <ClInclude Include="BlindFieldComponent.h" />
+    <ClInclude Include="DebuggingMesh.h" />
     <ClInclude Include="FieldDamage.h" />
+    <ClInclude Include="HealerAutoAttackProjectile.h" />
+    <ClInclude Include="HealerAutoAttackProjectilePool.h" />
     <ClInclude Include="ParalysisFieldComponent.h" />
     <ClInclude Include="SingleNavigationField.h" />
     <ClInclude Include="TestUtilButtonEvent.h" />
@@ -894,6 +897,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="TestUtilRTSTestCam.h" />
     <ClInclude Include="TestUtils.h" />
     <ClInclude Include="UnitData.h" />
+    <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="UnitStatusComponent.h" />
     <ClInclude Include="Unit_TemplateData.h" />
     <ClInclude Include="UUID.h" />
@@ -914,7 +918,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="AutoAttackProjectilePool.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
     <ClCompile Include="BlindFieldComponent.cpp" />
+    <ClCompile Include="DebuggingMesh.cpp" />
     <ClCompile Include="FieldDamage.cpp" />
+    <ClCompile Include="HealerAutoAttackProjectile.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="imgui_demo.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
@@ -930,6 +936,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="ParalysisFieldComponent.cpp" />
     <ClCompile Include="RangedAttackSystem.cpp" />
     <ClCompile Include="SnippetDebugMeshScaleCheck.cpp" />
+    <ClCompile Include="SnippetFloatingDebugSphere.cpp" />
     <ClCompile Include="SnippetSkillSystem.cpp" />
     <ClCompile Include="StatusTimer.cpp" />
     <ClCompile Include="CamSwitcher.cpp" />

@@ -274,6 +274,9 @@
     <Filter Include="Contents\SingleNavigationField">
       <UniqueIdentifier>{955952c8-9aa3-451c-9298-ee3adedb93d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\DebuggingSystem">
+      <UniqueIdentifier>{e8d5df45-576d-4ade-b26c-fbdf57f67781}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -663,6 +666,18 @@
     <ClInclude Include="BlindFieldComponent.h">
       <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
     </ClInclude>
+    <ClInclude Include="HealerAutoAttackProjectile.h">
+      <Filter>Contents\ProjectileComponents\Magician\Passive</Filter>
+    </ClInclude>
+    <ClInclude Include="HealerAutoAttackProjectilePool.h">
+      <Filter>Contents\ProjectilePools\Supporter</Filter>
+    </ClInclude>
+    <ClInclude Include="DebuggingMeshPool.h">
+      <Filter>Contents\DebuggingSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="DebuggingMesh.h">
+      <Filter>Contents\DebuggingSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -994,6 +1009,15 @@
     </ClCompile>
     <ClCompile Include="BlindFieldComponent.cpp">
       <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
+    </ClCompile>
+    <ClCompile Include="HealerAutoAttackProjectile.cpp">
+      <Filter>Contents\ProjectileComponents\Magician\Passive</Filter>
+    </ClCompile>
+    <ClCompile Include="DebuggingMesh.cpp">
+      <Filter>Contents\DebuggingSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetFloatingDebugSphere.cpp">
+      <Filter>TestCodes\snippets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
