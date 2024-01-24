@@ -89,13 +89,12 @@ PS_OUT main(PixelIn input)
     if (UseTexture(useTemp0) == 1)
     {
         color = Temp0Map.Sample(sam, input.uv);
-        //clip(color.w - 1);
+        clip(color.w - 1);
     }
     
     output.position = float4(input.posV.xyz, 1.f);
     output.normal = float4(viewNormal.xyz, 1.f);
-    //output.color = color * materialColor;
-    output.color = color;
+    output.color = color * materialColor;
     
     float4 projPos = { 0, 0, 0, 0 };
     
@@ -110,8 +109,8 @@ PS_OUT main(PixelIn input)
 
 // ShaderInfo
 // ShaderType : Deferred
-// RasterType : Wireframe
-// CullType : CullBack
+// RasterType : Solid
+// CullType : CullFront
 // DepthType : Less
 // BlendType : Default
 // Sampler : Default

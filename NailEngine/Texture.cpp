@@ -21,6 +21,10 @@ void Texture::LoadTexture(const std::wstring& texturePath)
 	{
 		DirectX::LoadFromTGAFile(texturePath.c_str(), nullptr, image);
 	}
+	else if (ext == L".hdr" || ext == L".HDR")
+	{
+		DirectX::LoadFromHDRFile(texturePath.c_str(), nullptr, image);
+	}
 	else // png, jpg, jpeg, bmp
 	{
 		DirectX::LoadFromWICFile(texturePath.c_str(), DirectX::WIC_FLAGS_NONE, nullptr, image);
@@ -28,6 +32,10 @@ void Texture::LoadTexture(const std::wstring& texturePath)
 
 	CreateShaderResourceView(ResourceBuilder::Instance.Get().device->GetDevice().Get(), image.GetImages(),
 		image.GetImageCount(), image.GetMetadata(), SRV.GetAddressOf());
+
+
+	width = static_cast<float>(image.GetMetadata().width);
+	height = static_cast<float>(image.GetMetadata().height);
 }
 
 void Texture::Bind(unsigned int slot)

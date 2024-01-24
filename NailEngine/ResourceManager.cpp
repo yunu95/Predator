@@ -443,6 +443,10 @@ void ResourceManager::CreateDefaultShader()
 	CreateDeferredShader(L"Deferred_FinalVS.cso");
 	CreateShader(L"TextureVS.cso");
 	CreateShader(L"TestVS.cso");
+	CreateShader(L"SkyBoxVS.cso");
+	CreateShader(L"IrradianceVS.cso");
+	CreateShader(L"PreFilteredVS.cso");
+	CreateShader(L"SpecLUTVS.cso");
 #pragma endregion
 
 #pragma region PS
@@ -453,6 +457,10 @@ void ResourceManager::CreateDefaultShader()
 	CreateDeferredShader(L"Deferred_FinalPS.cso");
 	CreateShader(L"TexturePS.cso");
 	CreateShader(L"TestPS.cso");
+	CreateShader(L"SkyBoxPS.cso");
+	CreateShader(L"IrradiancePS.cso");
+	CreateShader(L"PreFilteredPS.cso");
+	CreateShader(L"SpecLUTPS.cso");
 #pragma endregion
 }
 
@@ -489,8 +497,25 @@ void ResourceManager::CreateDefaultMaterial()
 		yunuGI::IMaterial* material = CrateMaterial(L"Deferred_DirectionalLight");
 		material->SetVertexShader(GetDeferredShader(L"Deferred_DirectionalLightVS.cso").get());
 		material->SetPixelShader(GetDeferredShader(L"Deferred_DirectionalLightPS.cso").get());
+
+		material->SetTexture(yunuGI::Texture_Type::ALBEDO,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ALBEDO)).get());
+
+		material->SetTexture(yunuGI::Texture_Type::NORMAL,
+			GetTexture(L"Texture/asdDiffuseHDR.dds").get());
+
+		material->SetTexture(yunuGI::Texture_Type::HEIGHT,
+			GetTexture(L"Texture/asdSpecularHDR.dds").get());
+
+		material->SetTexture(yunuGI::Texture_Type::EMISSION,
+			GetTexture(L"Texture/asdBrdf.dds").get());
+
+		material->SetTexture(yunuGI::Texture_Type::ARM,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ARM)).get());
+
 		material->SetTexture(yunuGI::Texture_Type::Temp0,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
+
 		material->SetTexture(yunuGI::Texture_Type::Temp1,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(NORMAL)).get());
 
@@ -561,6 +586,15 @@ void ResourceManager::CreateDefaultMaterial()
 		}
 
 		{
+			// ARM
+			yunuGI::IMaterial* material = CrateMaterial(L"DeferredARM");
+			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
+			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ARM)).get());
+		}
+
+		{
 			// DiffuseLight
 			yunuGI::IMaterial* material = CrateMaterial(L"DeferredDiffuseLight");
 			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
@@ -586,11 +620,28 @@ void ResourceManager::CreateDefaultMaterial()
 			material->SetTexture(yunuGI::Texture_Type::Temp0,
 				GetTexture(L"ShadowDepth").get());
 		}
+
+
+
+		/// PBR
+		{
+			// SpecularLight
+			yunuGI::IMaterial* material = CrateMaterial(L"PBRIrradiance");
+			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
+			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::IRRADIANCE)]->GetRTTexture(static_cast<int>(IRRADIANCE)).get());
+		}
 	}
 }
 
 void ResourceManager::CreateDefaultTexture()
 {
+	CreateTexture(L"Texture/room.dds");
+	CreateTexture(L"Texture/asdEnvHDR.dds");
+	CreateTexture(L"Texture/asdBrdf.dds");
+	CreateTexture(L"Texture/asdDiffuseHDR.dds");
+	CreateTexture(L"Texture/asdSpecularHDR.dds");
 	/*CreateTexture(L"Texture/zoro.jpg");
 	CreateTexture(L"Texture/Brick_Albedo.jpg");
 	CreateTexture(L"Texture/Brick_Normal.jpg");*/

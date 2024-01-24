@@ -116,9 +116,14 @@ Texture2D Temp1Map : register(t6);
 Texture2D Temp2Map : register(t7);
 
 Texture2DArray TransformMap : register(t8);
+TextureCube CubeMap: register(t9);
+TextureCube IrradianceMap : register(t10);
+TextureCube PrefilteredMap : register(t11);
+Texture2D BrdfMap : register(t12);
 
 
 SamplerState sam : register(s0);
 SamplerComparisonState shadowSam : register(s1);
+SamplerState spBRDF_Sampler : register(s2);
 
 #endif

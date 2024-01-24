@@ -24,14 +24,15 @@ std::function<void()> application::Contents::ContentsLayer::testInitializer;
 void GraphicsTest()
 {
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-	_resourceManager->LoadFile("FBX/Bush");
+	//_resourceManager->LoadFile("FBX/Bush");
+	_resourceManager->LoadFile("FBX/Stone");
 	_resourceManager->LoadFile("Texture/T_LeafBrush.png");
 	_resourceManager->LoadFile("LeavesPS.cso");
 	_resourceManager->LoadFile("LeavesVS.cso");
 	auto& meshList = _resourceManager->GetMeshList();
 	auto& shaderList = _resourceManager->GetShaderList();
 	auto& textureList = _resourceManager->GetTextureList();
-	
+
 	yunuGI::IMesh* planeMesh = nullptr;
 	yunuGI::IMesh* sphereMesh = nullptr;
 	yunuGI::IMesh* cubeMesh = nullptr;
@@ -39,7 +40,7 @@ void GraphicsTest()
 	yunuGI::IShader* vshader = nullptr;
 	yunuGI::ITexture* texture = nullptr;
 
-	
+	auto material = _resourceManager->CreateMaterial(L"Leaves");
 
 	for (auto& i : shaderList)
 	{
@@ -77,13 +78,10 @@ void GraphicsTest()
 		}
 	}
 
-	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Bush");
-	auto& childVec = obj->GetChildren();
-	auto renderer = childVec[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.13,0.33,0.19,1 });
-	renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, texture);
-	renderer->GetGI().GetMaterial()->SetPixelShader(pshader);
-	renderer->GetGI().GetMaterial()->SetVertexShader(vshader);
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Stone");
+		obj->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
+	}
 }
 
 
@@ -150,9 +148,11 @@ void application::Contents::ContentsLayer::Initialize()
 
 	{
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-		directionalLight->GetTransform()->position = Vector3d{0,0,-10} ;
-		directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{0, 45, 0} };
+		auto light =directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+		auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
+		light->GetGI().SetLightDiffuseColor(color);
+		directionalLight->GetTransform()->position = Vector3d{ 0,0,-10 };
+		//directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{0, 45, 0} };
 		//auto test = directionalLight->AddComponent<TestComponent2>();
 		//test->gameObject = directionalLight;
 	}

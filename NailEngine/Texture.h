@@ -19,6 +19,9 @@ public:
 	void CreateFromResource(Microsoft::WRL::ComPtr<ID3D11Texture2D>& tex2D);
 	void CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag);
 
+	float GetWidth() { return width; }
+	float GetHeight() { return height; }
+
 #pragma region Getter
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>& GetRTV() { return this->RTV; }
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>& GetSRV() { return this->SRV; }
@@ -30,5 +33,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> SRV;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> DSV;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D;
+
+	float width;
+	float height;
 };
 

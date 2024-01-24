@@ -27,34 +27,34 @@ struct VertexOut
 VertexOut main(VertexIn input)
 {
     VertexOut output;
-
-    // Calculate the direction from the vertex to the camera
-    float3 toCamera = normalize(cameraPos - input.pos);
-
-    // Calculate the dot product between the face normal and the direction to the camera
-    float dotProduct = dot(input.normal, toCamera);
-
-    // Move the vertex along the normal direction to make the face face the camera
-    float3 temp = input.normal * dotProduct;
-    input.pos += temp;
-
     
-    // Calculate the transformation matrices
     row_major matrix WV = mul(input.world, VTM);
     row_major matrix VP = mul(VTM, PTM);
+    
+    ///
+    float2 tempUV = input.uv;
+    tempUV.y = 1 - tempUV.y;
+    tempUV *= 2;
+    tempUV -= 1;
+    tempUV.y *= -1;
+    tempUV.x *= 1;
+    float4 tempVec = float4(tempUV, 0,0);
+    tempVec = mul(tempVec, VTMInv);
+    tempVec = normalize(tempVec);
+    
+    float3 tempNormal = mul(float4(input.normal,0), input.world);
+    tempNormal *= 0.1f;
+    
+    float3 tempPos = (tempVec.xyz + tempNormal) * 2;
+    
+    input.pos += tempPos;
+    ///
    
-    // Transform the vertex position to homogeneous clip space
     output.posH = mul(float4(input.pos, 1.f), input.world);
     output.posH = mul(output.posH, VP);
-
-    // Transform the vertex position to view space
     output.posV = mul(float4(input.pos, 1.f), WV);
-
-    // Copy other attributes
     output.color = input.color;
     output.uv = input.uv;
-
-    // Transform normals and tangents to view space
     output.normalV = normalize(mul(float4(input.normal, 0.f), WV));
     output.tangentV = normalize(mul(float4(input.tangent, 0.f), WV));
     output.biNormalV = normalize(cross(output.tangentV, output.normalV));

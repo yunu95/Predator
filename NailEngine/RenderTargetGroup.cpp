@@ -9,10 +9,19 @@ RenderTargetGroup::~RenderTargetGroup()
 {
 }
 
-void RenderTargetGroup::OMSetRenderTarget()
+void RenderTargetGroup::OMSetRenderTarget(bool isPBR)
 {
-	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetViewports(1, &ResourceBuilder::Instance.Get().swapChain->GetViewPort());
-	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(this->rtCount, RTVVec.data(), ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
+	if (!isPBR)
+	{
+		ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetViewports(1, &ResourceBuilder::Instance.Get().swapChain->GetViewPort());
+		ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(this->rtCount, RTVVec.data(), ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
+	}
+	else
+	{
+		ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetViewports(1, &ResourceBuilder::Instance.Get().swapChain->GetViewPort());
+		ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(this->rtCount, RTVVec.data(), nullptr);
+	}
+
 
 	//if (this->dsv == nullptr)
 	//{

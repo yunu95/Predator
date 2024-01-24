@@ -18,46 +18,12 @@ struct PS_OUT
     float4 normal : SV_Target1;
     float4 color : SV_Target2;
     float4 depth : SV_Target3;
+    float4 arm : SV_Target4;
 };
 
 PS_OUT main(PixelIn input)
 {
-    //input.normalV = normalize(input.normalV);
-    
-    //float3 viewDirection = normalize(cameraPos.xyz - input.posW.xyz);
-    
-    //LightColor totalColor = (LightColor) 0.f;
-
-    //float3 normal = input.normalV;
-    
-    //if(UseTexture(useNormal))
-    //{
-    //    float3 tNormal = NormalMap.Sample(sam, input.uv).xyz;
-    //    tNormal = (tNormal - 0.5f) * 2.f;
-    //    float3x3 matTBN = { input.tangentV, input.biNormalV, input.normalV };
-    //    normal = normalize(mul(tNormal, matTBN));
-    //}
-    
-    //for (int i = 0; i < lightCount; ++i)
-    //{
-    //    LightColor color;
-    //    CalculateLight(i, normal, viewDirection, input.posW, color.diffuse, color.ambient, color.specular);
-    //    totalColor.diffuse += color.diffuse;
-    //    totalColor.ambient += color.ambient;
-    //    totalColor.specular += color.specular;
-    //}
-    
-    //if(UseTexture(useAlbedo))
-    //{
-    //    return AlbedoMap.Sample(sam,input.uv) * (totalColor.ambient + totalColor.diffuse) + totalColor.specular;
-    //}
-    //else
-    //{
-    //    return materialColor * (totalColor.ambient + totalColor.diffuse) + totalColor.specular;
-    //}
-    
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     PS_OUT output = (PS_OUT) 0;
     
     float4 color = float4(0.5f, 0.5f, 0.5f, 1.f);
@@ -80,6 +46,13 @@ PS_OUT main(PixelIn input)
         tangentSpaceNormal = (tangentSpaceNormal - 0.5f) * 2.f;
         float3x3 matTBN = { input.tangentV, input.biNormalV, input.normalV };
         viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
+    }
+    
+    if(UseTexture(useARM) == 1)
+    {
+        output.arm.x = ARMMap.Sample(sam,input.uv).x;
+        output.arm.y = ARMMap.Sample(sam,input.uv).y;
+        output.arm.z = ARMMap.Sample(sam,input.uv).z;
     }
     
     output.position = float4(input.posV.xyz, 1.f);

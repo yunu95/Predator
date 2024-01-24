@@ -115,6 +115,9 @@
     <Filter Include="RenderSystem\ShadowPass">
       <UniqueIdentifier>{4cc813e4-2679-48b4-ab25-3e044b73e417}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RenderSystem\SkyBoxPass">
+      <UniqueIdentifier>{41f90503-d69b-42db-aa72-3f618262db33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -294,6 +297,9 @@
     <ClInclude Include="ShadowPass.h">
       <Filter>RenderSystem\ShadowPass</Filter>
     </ClInclude>
+    <ClInclude Include="SkyBoxPass.h">
+      <Filter>RenderSystem\SkyBoxPass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -407,6 +413,9 @@
     <ClCompile Include="ShadowPass.cpp">
       <Filter>RenderSystem\ShadowPass</Filter>
     </ClCompile>
+    <ClCompile Include="SkyBoxPass.cpp">
+      <Filter>RenderSystem\SkyBoxPass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="RuntimeDependency\resources\Shader\DefaultVS.hlsl">
@@ -461,6 +470,30 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="RuntimeDependency\resources\Shader\LeavesVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\SkyBoxVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\SkyBoxPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\IrradianceVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\IrradiancePS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\PreFilteredVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\PreFilteredPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\SpecLUTPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\SpecLUTVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

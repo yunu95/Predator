@@ -20,6 +20,7 @@
 
 #include "InstancingManager.h"
 #include "ShadowPass.h"
+#include "SkyBoxPass.h"
 
 #include "ILight.h"
 
@@ -45,8 +46,16 @@ void NailEngine::Init(UINT64 hWnd)
 	ResourceManager::Instance.Get().CreateDefaultResource();
 
 	RenderSystem::Instance.Get().Init();
+
 	InstancingManager::Instance.Get().Init();
+
 	ShadowPass::Instance.Get().Init(ResourceManager::Instance.Get().GetTexture(L"ShadowDepth").get());
+
+	SkyBoxPass::Instance.Get().Init(
+		ResourceManager::Instance.Get().GetTexture(L"Texture/asdEnvHDR.dds").get(),
+		ResourceManager::Instance.Get().GetMesh(L"Sphere").get(),
+		ResourceManager::Instance.Get().GetShader(L"SkyBoxVS.cso").get(),
+		ResourceManager::Instance.Get().GetShader(L"SkyBoxPS.cso").get());
 }
 
 void NailEngine::Render()
@@ -71,14 +80,13 @@ void NailEngine::Render()
 		iter->Clear();
 	}
 
-	for (auto& iter : this->renderTargetGroup)
+	for (int i = 0 ; i < this->renderTargetGroup.size(); ++i)
 	{
-		iter->Clear();
-	}
+		this->renderTargetGroup[i]->UnBind();
 
-	for (auto& iter : this->renderTargetGroup)
-	{
-		iter->UnBind();
+		//if (i == static_cast<int>(RENDER_TARGET_TYPE::IRRADIANCE)) continue;
+
+		this->renderTargetGroup[i]->Clear();
 	}
 }
 
@@ -186,6 +194,14 @@ void NailEngine::CreateRenderTargetGroup()
 			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 		);
 
+		rtVec[4].texture = ResourceManager::Instance.Get().CreateTexture(
+			L"ARMTarget",
+			this->windowInfo.width,
+			this->windowInfo.height,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+		);
+
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)] = std::make_shared<RenderTargetGroup>();
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->SetRenderTargetVec(rtVec);
 	}
@@ -212,6 +228,35 @@ void NailEngine::CreateRenderTargetGroup()
 
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)] = std::make_shared<RenderTargetGroup>();
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->SetRenderTargetVec(rtVec);
+	}
+
+	/// PBR
+	{
+		// Irradiance Map
+		std::vector<RenderTarget> rtVec(IRRADIANCE_MEMBER_COUNT);
+		rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
+			L"IrradianceTarget",
+			32,
+			32,
+			DXGI_FORMAT_R16G16B16A16_FLOAT,
+			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+		);
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::IRRADIANCE)] = std::make_shared<RenderTargetGroup>();
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::IRRADIANCE)]->SetRenderTargetVec(rtVec);
+	}
+
+	{
+		// Specular IBL Map
+		std::vector<RenderTarget> rtVec(SPECIBL_MEMBER_COUNT);
+		rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
+			L"SpecularIBLTarget",
+			512,
+			512,
+			DXGI_FORMAT_R16G16B16A16_FLOAT,
+			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+		);
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SPECLIBL)] = std::make_shared<RenderTargetGroup>();
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SPECLIBL)]->SetRenderTargetVec(rtVec);
 	}
 
 	//// SHADOW

@@ -163,6 +163,20 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 			fbxMeshData.material.normalMap = this->texturePath + fileName;
 		}
 	}
+
+	// ARM Texture
+	if (material->GetTextureCount(aiTextureType_METALNESS) > 0)
+	{
+		aiString path;
+		if (material->GetTexture(aiTextureType_METALNESS, 0, &path) == AI_SUCCESS)
+		{
+			std::wstring _path = aiStringToWString(path);
+			std::filesystem::path pathName(_path);
+			std::wstring fileName = pathName.filename().wstring();
+
+			fbxMeshData.material.armMap = this->texturePath + fileName;
+		}
+	}
 }
 
 void ModelLoader::AddHasAnimation(FBXNode* fbxNode)

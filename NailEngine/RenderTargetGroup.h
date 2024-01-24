@@ -11,7 +11,7 @@ class RenderTargetGroup
 {
 public:
 	~RenderTargetGroup();
-	void OMSetRenderTarget();
+	void OMSetRenderTarget(bool isPBR = false);
 	void UnBind();
 	void Clear();
 
