@@ -79,10 +79,6 @@ namespace yunutyEngine
             indexedComponents.push_back(newComponent);
             HandleComponentUpdateState(newComponent);
             parent->HandleChildUpdateState(this);
-			if (GetActive())
-				static_cast<Component*>(newComponent)->OnEnable();
-			else
-				static_cast<Component*>(newComponent)->OnDisable();
             return newComponent;
         }
         Component* GetComponentByIndex(unsigned int index)
