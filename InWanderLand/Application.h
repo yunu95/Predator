@@ -81,6 +81,8 @@ namespace application
         // 콘텐츠 레이어에서 Scene / DirectionalLight 등 필요한 내용을 적용하지 않을 경우
         // 이를 처리하기 위한 단계입니다.
         void CheckContentsLayerInit();
+        // 게임 윈도우 상에 마우스 커서가 있는지 확인하는 함수입니다.
+        bool IsCursorInGameWindow();
 
         std::mutex loopTodoRegistrationMutex;
         // AddMainLoopTodo로 등록된 휘발성 콜백 함수들입니다.

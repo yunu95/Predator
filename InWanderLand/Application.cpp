@@ -11,6 +11,9 @@
 #include "WindowEvents.h"
 #include "MouseEvents.h"
 #include "KeyboardEvents.h"
+#include "PaletteManager.h"
+#include "Palette.h"
+#include "EditorCamera.h"
 
 #include <d3d11.h>
 #include <dxgi1_4.h>
@@ -50,6 +53,8 @@ WNDCLASSEX wcEditor = { sizeof(WNDCLASSEX), CS_CLASSDC, WndEditorProc, 0L, 0L, G
 ImVec2 dockspaceArea = ImVec2();
 ImVec2 dockspaceStartPoint = ImVec2();
 RAWINPUTDEVICE inputDevice[2] = { RAWINPUTDEVICE(), RAWINPUTDEVICE() };
+std::function<void()> gameWindowFocusCallBackFunction = std::function<void()>();
+std::function<void()> gameWindowKillFocusCallBackFunction = std::function<void()>();
 std::function<void()> winResizeCallBackFunction = std::function<void()>();
 std::function<void(unsigned char keyCode)> winKeyboardPressedCallBackFunction = std::function<void(unsigned char)>();
 std::function<void(unsigned char keyCode)> winKeyboardUpCallBackFunction = std::function<void(unsigned char)>();
@@ -448,7 +453,8 @@ namespace application
 		inputDevice[1].hwndTarget = editorHWND;
 
 		RegisterRawInputDevices(inputDevice, 2, sizeof(RAWINPUTDEVICE));
-
+		gameWindowFocusCallBackFunction = [&]() { editor::EditorCamera::GetSingletonInstance().SetInputUpdate(true); };
+		gameWindowKillFocusCallBackFunction = [&]() { editor::EditorCamera::GetSingletonInstance().SetInputUpdate(false); };
 		winResizeCallBackFunction = [&]() { Application::DispatchEvent<editor::WindowResizeEvent>(g_EditorResizeWidth, g_EditorResizeHeight); };
 		winKeyboardPressedCallBackFunction = [&](unsigned char keyCode)
 			{
@@ -462,11 +468,61 @@ namespace application
 				}
 			};
 		winKeyboardUpCallBackFunction = [&](unsigned char keyCode) { Application::DispatchEvent<editor::KeyReleasedEvent>(static_cast<editor::KeyCode>(keyCode)); };
-		winMouseLeftPressedCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Left); };
-		winMouseLeftUpCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Left); };
+		winMouseLeftPressedCallBackFunction = [&]() 
+			{ 
+				Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Left); 
+				if (gameFocus)
+				{
+					if (IsCursorInGameWindow() == true)
+					{
+						auto front = yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation().Forward();
+						auto distToXZPlane = abs(yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y);
+						auto centeredPosition = Input::getMouseScreenPositionNormalized();
+						centeredPosition.x -= 0.5;
+						centeredPosition.y -= 0.5;
+						centeredPosition.y *= -1;
+						auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
+						if (Vector3d::Dot(projectedPos - yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition(), front) > 0)
+						{
+							editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnLeftClick();
+						}
+					}
+				}
+			};
+		winMouseLeftUpCallBackFunction = [&]() 
+			{ 
+				Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Left); 
+				if (gameFocus)
+				{
+					if (IsCursorInGameWindow() == true)
+					{
+						editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnLeftClickRelease();
+					}
+				}
+			};
 		winMouseRightPressedCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Right); };
 		winMouseRightUpCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Right); };
-		winMouseMoveCallBackFunction = [&](long posX, long posY) { Application::DispatchEvent<editor::MouseMoveEvent>(posX, posY); };
+		winMouseMoveCallBackFunction = [&](long posX, long posY) 
+			{ 
+				Application::DispatchEvent<editor::MouseMoveEvent>(posX, posY); 
+				if (gameFocus)
+				{
+					if (IsCursorInGameWindow() == false)
+					{
+						editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnLeftClickRelease();
+						return;
+					}
+
+					auto front = yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation().Forward();
+					auto distToXZPlane = abs(yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y);
+					auto centeredPosition = Input::getMouseScreenPositionNormalized();
+					centeredPosition.x -= 0.5;
+					centeredPosition.y -= 0.5;
+					centeredPosition.y *= -1;
+					auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
+					editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnMouseMove(projectedPos);
+				}
+			};
 		winMouseWheelCallBackFunction = [&](short wheelDelta) {Application::DispatchEvent<editor::MouseWheelEvent>(wheelDelta); };
 #endif
 	}
@@ -498,6 +554,15 @@ namespace application
 			directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{90,0,30} };
 		}
 #endif
+	}
+
+	bool Application::IsCursorInGameWindow()
+	{
+		POINT cursorPos;
+		RECT winRect;
+		GetCursorPos(&cursorPos);
+		GetWindowRect(hWND, &winRect);
+		return (cursorPos.x >= winRect.left && cursorPos.x <= winRect.right) && (cursorPos.y >= winRect.top && cursorPos.y <= winRect.bottom);
 	}
 }
 
@@ -589,11 +654,23 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		case WM_KILLFOCUS:
 		{
 			gameFocus = false;
+#ifdef EDITOR
+			if (gameWindowKillFocusCallBackFunction)
+			{
+				gameWindowKillFocusCallBackFunction();
+			}
+#endif
 			break;
 		}
 		case WM_SETFOCUS:
 		{
 			gameFocus = true;
+#ifdef EDITOR
+			if (gameWindowFocusCallBackFunction)
+			{
+				gameWindowFocusCallBackFunction();
+			}
+#endif
 			break;
 		}
 		case WM_SIZE:
@@ -676,11 +753,6 @@ LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 						static POINT cursorPos;
 						GetCursorPos(&cursorPos);
 						winMouseMoveCallBackFunction(cursorPos.x, cursorPos.y);
-
-						if (gameFocus)
-						{
-
-						}
 					}
 				}
 
