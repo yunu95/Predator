@@ -25,7 +25,7 @@ void SnippetMapListIOInitializer()
     // 공백 파일을 생성하기 위한 세이브
     application::editor::Terrain_TemplateData* terrainTemplateData;
     terrainTemplateData = tdm.CreateTemplateData<Terrain_TemplateData>("TerrainData");
-    terrainTemplateData->pod.coordinatesSet = { {1,4},{2,3},{6,2},{4,3} };
+    terrainTemplateData->pod.coordinates = { {1,4},{2,3},{6,2},{4,3} };
     mfm.SaveMapFile("SnippetMapListIO.pmap");
     mfm.Clear();
     mfm.LoadMapFile("SnippetMapListIO.pmap");

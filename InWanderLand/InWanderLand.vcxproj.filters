@@ -694,6 +694,7 @@
     <ClInclude Include="EditorMath.h">
       <Filter>Editor\Math</Filter>
     </ClInclude>
+    <ClInclude Include="PaletteManagerList.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
