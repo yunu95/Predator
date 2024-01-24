@@ -24,6 +24,9 @@ public:
 public:
 	void Init();
 	void RegisterMeshAndMaterial(std::vector<RenderInfo>& renderInfo);
+	void RegisterMeshAndShadowMaterial(std::vector<RenderInfo>& renderInfo);
+
+
 	void RegisterSkinnedMeshAndMaterial(std::vector<SkinnedRenderInfo>& renderInfo);
 	void ClearData();
 

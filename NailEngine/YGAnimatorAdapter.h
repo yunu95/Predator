@@ -5,7 +5,6 @@
 
 #include "NailAnimator.h"
 #include "NailAnimatorManager.h"
-
 #include <memory>
 
 namespace yunuGIAdapter

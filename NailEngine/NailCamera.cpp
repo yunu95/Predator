@@ -52,3 +52,8 @@ void NailCamera::SetAsMain()
 {
 
 }
+
+DirectX::SimpleMath::Matrix NailCamera::GetPTM90()
+{
+	return DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PI / 2.f, this->width / this->height, this->cameraNear, this->cameraFar);
+}

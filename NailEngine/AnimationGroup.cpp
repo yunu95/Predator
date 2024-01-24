@@ -15,7 +15,7 @@ void AnimationGroup::CreateTexture()
 	{
 		CreateAnimationTransform(i);
 	}
-
+	
 	{
 		D3D11_TEXTURE2D_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_TEXTURE2D_DESC));

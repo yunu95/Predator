@@ -7,6 +7,8 @@ using namespace DirectX::PackedVector;
 #include <array>
 #include <memory>
 
+#define SM_SIZE 2048
+
 #define MAX_TEXTURE 8
 #define MAX_INT 8
 #define MAX_BONE_COUNT 250
@@ -16,7 +18,7 @@ using namespace DirectX::PackedVector;
 struct Vertex
 {
 	DirectX::SimpleMath::Vector3 pos;
-	DirectX::SimpleMath::Vector4 color;
+	DirectX::SimpleMath::Vector4 color{1,1,1,1};
 	DirectX::SimpleMath::Vector2 uv;
 	DirectX::SimpleMath::Vector3 normal;
 	DirectX::SimpleMath::Vector3 tangent;
@@ -60,6 +62,8 @@ struct MatrixBuffer
 	DirectX::SimpleMath::Matrix PTM;
 	DirectX::SimpleMath::Matrix WVP;
 	DirectX::SimpleMath::Matrix WorldInvTrans;
+	DirectX::SimpleMath::Matrix VTMInv;
+	DirectX::SimpleMath::Matrix lightVP;
 	//DirectX::SimpleMath::Vector4 objectID;
 };
 
@@ -129,6 +133,6 @@ class Texture;
 struct RenderTarget
 {
 	std::shared_ptr<Texture> texture;
-	float clearColor[4] = { 0.f,0.f,0.f,0.f };
+	float clearColor[4] = { 0.f,0.f,0.f,1.f };
 };
 
