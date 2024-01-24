@@ -1,9 +1,11 @@
 #pragma once
 #include "MapData.h"
+#include "TerrainPalette.h"
 
 wstring MapData::currentFileName;
 void MapData::ApplyMapData()
 {
+    using namespace application::editor::palette;
 }
 void MapData::CleanUpAppliedObjects()
 {

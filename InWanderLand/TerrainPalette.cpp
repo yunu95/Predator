@@ -122,14 +122,14 @@ namespace application::editor::palette
     {
         switch (beforeState)
         {
-            case application::editor::palette::Palette::State::Place:
-            {
-                SetAsSelectMode(false);
-                break;
-            }
-            default:
-                SetAsSelectMode(true);
-                break;
+        case application::editor::palette::Palette::State::Place:
+        {
+            SetAsSelectMode(false);
+            break;
+        }
+        default:
+            SetAsSelectMode(true);
+            break;
         }
         SetBrushSize(2);
     }
