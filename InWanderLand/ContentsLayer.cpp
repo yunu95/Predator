@@ -145,9 +145,11 @@ void application::contents::ContentsLayer::Initialize()
 		return;
 	}
 
+	//yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 	//auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//camObj->GetTransform()->position = Vector3d(0, 0, -5);
-	//auto roamingCam = camObj->AddComponent<RoamingCam>();
+	//camObj->GetTransform()->position = Vector3d(0, 20, 0);
+	//auto roamingCam = camObj->AddComponent<RTSCam>();
+	//roamingCam->SetCameraMain();
 #ifdef GRAPHICS_TEST
 	{
 		yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());

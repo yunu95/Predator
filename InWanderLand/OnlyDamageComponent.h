@@ -8,12 +8,12 @@
 class OnlyDamageComponent : public UnitStatusComponent
 {
 private:
-	int skillDamage;
+	float m_skillDamage;
 
 public:
 	virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) override;
 
 public:
-	void SetSkillDamage(int dmg);
+	void SetSkillDamage(float dmg);
 };
 

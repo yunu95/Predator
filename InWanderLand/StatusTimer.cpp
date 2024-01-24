@@ -3,17 +3,15 @@
 
 void StatusTimer::Start()
 {
-	m_isActivated = false;
-	m_isRepeated = false;
 
-	m_elapsed = 0.0f;
-	m_duration = 0.0f;
 }
 
 void StatusTimer::Update()
 {
 	if (m_isActivated)
 	{
+		onUpdate();
+
 		m_elapsed += Time::GetDeltaTime();
 
 		if (m_elapsed >= m_duration)

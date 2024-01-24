@@ -37,16 +37,17 @@ namespace application
 				auto gcts = gameCam->GetTransform();
 				ts->SetWorldPosition(gcts->GetWorldPosition());
 				ts->SetWorldRotation(gcts->GetWorldRotation());
+				cameraPState = CameraPerspectiveState::Game;
 			}
 			else
 			{
 				ts->SetWorldPosition(Vector3d{ 0, 10, 0 });
-				ts->SetWorldRotation(Vector3d{ 90, 0, 0 });
+				ts->SetWorldRotation(Vector3d{ 60, 0, 0 });
+				cameraPState = CameraPerspectiveState::Free;
 			}
 
 			editorCam = ecc;
 			cameraTState = CameraTypeState::Editor;
-			cameraPState = CameraPerspectiveState::Game;
 
 			auto ecPos = ts->GetWorldPosition();
 			position.x = ecPos.x;
@@ -79,7 +80,7 @@ namespace application
 		{
 			switch (cameraTState)
 			{
-				case application::editor::EditorCamera::CameraTypeState::Editor:
+				case application::editor::CameraTypeState::Editor:
 				{
 					if (gameCam)
 					{
@@ -88,7 +89,7 @@ namespace application
 					}
 					break;
 				}
-				case application::editor::EditorCamera::CameraTypeState::Game:
+				case application::editor::CameraTypeState::Game:
 				{
 					cameraTState = CameraTypeState::Editor;
 					editorCam->SetCameraMain();
@@ -112,51 +113,106 @@ namespace application
 
 			if (eim.IsMouseButtonDown(MouseCode::Right))
 			{
-				const float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
-				const float speed = GetCameraSpeed();
+				switch (cameraTState)
+				{
+					case application::editor::CameraTypeState::Editor:
+					{
+						const float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
+						const float speed = GetCameraSpeed();
 
-				if (eim.IsKeyboardDown(KeyCode::Q))
-				{
-					positionDelta.y -= speed * yunuGI::Vector3( 0.f, yawSign, 0.f ).y;
-				}
-				if (eim.IsKeyboardDown(KeyCode::E))
-				{
-					positionDelta.y += speed * yunuGI::Vector3( 0.f, yawSign, 0.f ).y;
-				}
-				if (eim.IsKeyboardDown(KeyCode::S))
-				{
-					positionDelta.x -= speed * forwardDirection.x;
-					positionDelta.y -= speed * forwardDirection.y;
-					positionDelta.z -= speed * forwardDirection.z;
-				}
-				if (eim.IsKeyboardDown(KeyCode::W))
-				{
-					positionDelta.x += speed * forwardDirection.x;
-					positionDelta.y += speed * forwardDirection.y;
-					positionDelta.z += speed * forwardDirection.z;
-				}
-				if (eim.IsKeyboardDown(KeyCode::A))
-				{
-					positionDelta.x -= speed * rightDirection.x;
-					positionDelta.y -= speed * rightDirection.y;
-					positionDelta.z -= speed * rightDirection.z;
-				}
-				if (eim.IsKeyboardDown(KeyCode::D))
-				{
-					positionDelta.x += speed * rightDirection.x;
-					positionDelta.y += speed * rightDirection.y;
-					positionDelta.z += speed * rightDirection.z;
-				}
+						switch (cameraPState)
+						{
+							case application::editor::CameraPerspectiveState::Free:
+							{
+								if (eim.IsKeyboardDown(KeyCode::Q))
+								{
+									positionDelta.y -= speed * yunuGI::Vector3(0.f, yawSign, 0.f).y;
+								}
+								if (eim.IsKeyboardDown(KeyCode::E))
+								{
+									positionDelta.y += speed * yunuGI::Vector3(0.f, yawSign, 0.f).y;
+								}
+								if (eim.IsKeyboardDown(KeyCode::S))
+								{
+									positionDelta.x -= speed * forwardDirection.x;
+									positionDelta.y -= speed * forwardDirection.y;
+									positionDelta.z -= speed * forwardDirection.z;
+								}
+								if (eim.IsKeyboardDown(KeyCode::W))
+								{
+									positionDelta.x += speed * forwardDirection.x;
+									positionDelta.y += speed * forwardDirection.y;
+									positionDelta.z += speed * forwardDirection.z;
+								}
+								if (eim.IsKeyboardDown(KeyCode::A))
+								{
+									positionDelta.x -= speed * rightDirection.x;
+									positionDelta.y -= speed * rightDirection.y;
+									positionDelta.z -= speed * rightDirection.z;
+								}
+								if (eim.IsKeyboardDown(KeyCode::D))
+								{
+									positionDelta.x += speed * rightDirection.x;
+									positionDelta.y += speed * rightDirection.y;
+									positionDelta.z += speed * rightDirection.z;
+								}
 
-				float maxRate = 0.12f;
-				yawDelta += glm::clamp(yawSign * deltaPos.x * rotationSpeed, -maxRate, maxRate);
-				pitchDelta += glm::clamp(deltaPos.y * rotationSpeed, -maxRate, maxRate);
+								float maxRate = 0.12f;
+								yawDelta += glm::clamp(yawSign * deltaPos.x * rotationSpeed, -maxRate, maxRate);
+								pitchDelta += glm::clamp(deltaPos.y * rotationSpeed, -maxRate, maxRate);
+								break;
+							}
+							case application::editor::CameraPerspectiveState::Game:
+							{
+								if (eim.IsKeyboardDown(KeyCode::Q))
+								{
+									positionDelta.y -= speed * yunuGI::Vector3(0.f, yawSign, 0.f).y;
+								}
+								if (eim.IsKeyboardDown(KeyCode::E))
+								{
+									positionDelta.y += speed * yunuGI::Vector3(0.f, yawSign, 0.f).y;
+								}
+								if (eim.IsKeyboardDown(KeyCode::S))
+								{
+									positionDelta.x -= speed * forwardDirection.x;
+									positionDelta.z -= speed * forwardDirection.z;
+								}
+								if (eim.IsKeyboardDown(KeyCode::W))
+								{
+									positionDelta.x += speed * forwardDirection.x;
+									positionDelta.z += speed * forwardDirection.z;
+								}
+								if (eim.IsKeyboardDown(KeyCode::A))
+								{
+									positionDelta.x -= speed * rightDirection.x;
+									positionDelta.z -= speed * rightDirection.z;
+								}
+								if (eim.IsKeyboardDown(KeyCode::D))
+								{
+									positionDelta.x += speed * rightDirection.x;
+									positionDelta.z += speed * rightDirection.z;
+								}
+								break;
+							}
+							default:
+								break;
+						}
 
-				const float distance = glm::distance(glm::vec3{ focalPos.x, focalPos.y, -focalPos.z }, glm::vec3{ position.x, position.y, -position.z });
-				focalPos.x = position.x + GetForwardDirection().x * distance;
-				focalPos.y = position.y + GetForwardDirection().y * distance;
-				focalPos.z = position.z + GetForwardDirection().z * distance;
-				focalDistance = distance;
+						const float distance = glm::distance(glm::vec3{ focalPos.x, focalPos.y, -focalPos.z }, glm::vec3{ position.x, position.y, -position.z });
+						focalPos.x = position.x + GetForwardDirection().x * distance;
+						focalPos.y = position.y + GetForwardDirection().y * distance;
+						focalPos.z = position.z + GetForwardDirection().z * distance;
+						focalDistance = distance;
+						break;
+					}
+					case application::editor::CameraTypeState::Game:
+					{
+						// 동작하지 않음
+						break;
+					}
+					default:
+						break;
+				}
 			}
 
 			beforeMousePos = mousePos;
@@ -184,8 +240,25 @@ namespace application
 					auto pos = ts->GetWorldPosition();
 					pos.y = gcts->GetWorldPosition().y;
 					ts->SetWorldPosition(pos);
-					ts->SetWorldRotation(gcts->GetWorldRotation());
+					position.y = pos.y;
+					positionDelta = yunuGI::Vector3();
 
+					auto rot = gcts->GetWorldRotation();
+					ts->SetWorldRotation(rot);
+					glm::quat glmRot = glm::quat(rot.w, rot.x, rot.y, -rot.z);
+
+					pitch = glm::pitch(glmRot);
+					yaw = glm::yaw(glmRot);
+
+					pitchDelta = 0.0f;
+					yawDelta = 0.0f;
+					
+					const auto orientation = GetOrientation();
+					const glm::quat glmOrientation = glm::quat{ (float)orientation.w, (float)orientation.x, (float)orientation.y, -(float)orientation.z };
+					Vector3f fd = ts->GetWorldRotation().Forward();
+					forwardDirection = *reinterpret_cast<yunuGI::Vector3*>(&fd);
+					viewMatrix = math::ConvertMatrix4x4(glm::inverse(glm::translate(glm::mat4(1.0f), glm::vec3{ position.x, position.y, -position.z }) * glm::toMat4(glmOrientation)));
+					
 					cameraPState = CameraPerspectiveState::Game;
 				}
 				return;

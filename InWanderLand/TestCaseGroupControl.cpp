@@ -10,7 +10,6 @@
 #include "DebugTilePlane.h"
 #include "DebugBeacon.h"
 #include "DebugMeshes.h"
-#include "ProjectileSystem.h"
 #include "PlayerController.h"
 #include "UnitFactory.h"
 #include "InputManager.h"
@@ -83,9 +82,6 @@ void TestCaseGroupControlInit()
 	auto navField = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationField>();
 	navField->BuildField(worldVertices, worldFaces);
 
-	/// ProjectileSystem SetUp
-	ProjectileSystem::GetInstance()->SetUp();
-
 	/// PlayerController SetUp
 	PlayerController::GetInstance()->SetMovingSystemComponent(rtsCam);
 
@@ -93,7 +89,6 @@ void TestCaseGroupControlInit()
 	unique_ptr<UnitFactory> unitfactory = make_unique<UnitFactory>();
 
 	/// StatusManager 
-	StatusTimerPool::GetInstance()->SetUp();
 
 	/// FBX File Load
 	//auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();

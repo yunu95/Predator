@@ -13,6 +13,11 @@
 namespace application
 {
 	class Application;
+
+	namespace editor
+	{
+		class EditorCamera;
+	}
 }
 
 namespace application
@@ -49,7 +54,10 @@ namespace application
 			void Release();
 
 		private:
+			void ImGui_SceneViewSettings();
+
 			Application* app;
+			EditorCamera* ec;
 			palette::PaletteManager* pm;
 			EditorInputManager& eim = EditorInputManager::GetSingletonInstance();
 			std::pair<float, float> prevWindowSize;

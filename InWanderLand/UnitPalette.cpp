@@ -1,5 +1,6 @@
 #include "UnitPalette.h"
 #include "UnitInstance.h"
+#include "SelectionBox.h"
 
 namespace application::editor::palette
 {

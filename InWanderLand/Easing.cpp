@@ -238,3 +238,16 @@ easingFunction getEasingFunction(easing_functions function)
 	auto it = easingFunctions.find(function);
 	return it == easingFunctions.end() ? nullptr : it->second;
 }
+
+// 0~1까지 norm 값을 넣었을 때 0~0.5는 firstHalf 값이, 0.5~ 1은 1-lastHalf값이 나오는 함수
+double EasingBackFunction(easing_functions firstHalf, easing_functions lastHalf, double t)
+{
+	if (t < 0.5)
+	{
+		return getEasingFunction(firstHalf)(t * 2);
+	}
+	else
+	{
+		return 1- getEasingFunction(lastHalf)(t * 2 - 1);
+	}
+}
