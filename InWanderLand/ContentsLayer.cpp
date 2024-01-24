@@ -24,70 +24,70 @@ std::function<void()> application::contents::ContentsLayer::testInitializer;
 /// 그래픽스 테스트용
 void GraphicsTest()
 {
-	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-	//_resourceManager->LoadFile("FBX/Bush");
-	_resourceManager->LoadFile("FBX/Stone");
-	_resourceManager->LoadFile("Texture/T_LeafBrush.png");
-	_resourceManager->LoadFile("LeavesPS.cso");
-	_resourceManager->LoadFile("LeavesVS.cso");
-	auto& meshList = _resourceManager->GetMeshList();
-	auto& shaderList = _resourceManager->GetShaderList();
-	auto& textureList = _resourceManager->GetTextureList();
+	//const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	////_resourceManager->LoadFile("FBX/Bush");
+	//_resourceManager->LoadFile("FBX/Stone");
+	//_resourceManager->LoadFile("Texture/T_LeafBrush.png");
+	//_resourceManager->LoadFile("LeavesPS.cso");
+	//_resourceManager->LoadFile("LeavesVS.cso");
+	//auto& meshList = _resourceManager->GetMeshList();
+	//auto& shaderList = _resourceManager->GetShaderList();
+	//auto& textureList = _resourceManager->GetTextureList();
 
-	yunuGI::IMesh* planeMesh = nullptr;
-	yunuGI::IMesh* sphereMesh = nullptr;
-	yunuGI::IMesh* cubeMesh = nullptr;
-	yunuGI::IShader* pshader = nullptr;
-	yunuGI::IShader* vshader = nullptr;
-	yunuGI::ITexture* texture = nullptr;
+	//yunuGI::IMesh* planeMesh = nullptr;
+	//yunuGI::IMesh* sphereMesh = nullptr;
+	//yunuGI::IMesh* cubeMesh = nullptr;
+	//yunuGI::IShader* pshader = nullptr;
+	//yunuGI::IShader* vshader = nullptr;
+	//yunuGI::ITexture* texture = nullptr;
 
-	auto material = _resourceManager->CreateMaterial(L"Leaves");
+	//auto material = _resourceManager->CreateMaterial(L"Leaves");
 
-	for (auto& i : shaderList)
-	{
-		float tempX = rand() % 1000;
-		float tempZ = rand() % 1000;
-		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
-		object->GetTransform()->position = Vector3d{ tempX,0,tempZ };
-		auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
-		for (auto& i : animationList)
-		{
-			pshader = i;
-		}
-		if (i->GetName() == L"LeavesVS.cso")
-		{
-			vshader = i;
-		}
-	}
+	//for (auto& i : shaderList)
+	//{
+	//	float tempX = rand() % 1000;
+	//	float tempZ = rand() % 1000;
+	//	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+	//	object->GetTransform()->position = Vector3d{ tempX,0,tempZ };
+	//	auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
+	//	for (auto& i : animationList)
+	//	{
+	//		pshader = i;
+	//	}
+	//	if (i->GetName() == L"LeavesVS.cso")
+	//	{
+	//		vshader = i;
+	//	}
+	//}
 
-	for (auto& i : meshList)
-	{
-		if (i->GetName() == L"Rectangle")
-		{
-			planeMesh = i;
-		}
-		if (i->GetName() == L"Sphere")
-		{
-			sphereMesh = i;
-		}
-		if (i->GetName() == L"Cube")
-		{
-			cubeMesh = i;
-		}
-	}
+	//for (auto& i : meshList)
+	//{
+	//	if (i->GetName() == L"Rectangle")
+	//	{
+	//		planeMesh = i;
+	//	}
+	//	if (i->GetName() == L"Sphere")
+	//	{
+	//		sphereMesh = i;
+	//	}
+	//	if (i->GetName() == L"Cube")
+	//	{
+	//		cubeMesh = i;
+	//	}
+	//}
 
-	for (auto& i : textureList)
-	{
-		if (i->GetName() == L"Texture/T_LeafBrush.png")
-		{
-			texture = i;
-		}
-	}
+	//for (auto& i : textureList)
+	//{
+	//	if (i->GetName() == L"Texture/T_LeafBrush.png")
+	//	{
+	//		texture = i;
+	//	}
+	//}
 
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Stone");
-		obj->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
-	}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Stone");
+	//	obj->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
+	//}
 }
 
 
