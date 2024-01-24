@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "UnitFactory.h"
 #include "Unit.h"
 #include "RangeSystem.h"

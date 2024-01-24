@@ -1,9 +1,12 @@
+#include "InWanderLand.h"
 #include "EditorLayer.h"
 
 #include "MapFileManager.h"
 #include "EditorPanel.h"
 #include "PanelList.h"
 #include "ModuleList.h"
+#include "PaletteManager.h"
+#include "Camera.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -20,33 +23,32 @@ namespace application
 
 		void EditorLayer::Initialize()
 		{
-			/// Test È¯°æÀ» À§ÇÑ Initialize Áö¿ø
+			/// Test í™˜ê²½ì„ ìœ„í•œ Initialize ì§€ì›
 			if (EditorLayer::testInitializer)
 			{
 				EditorLayer::testInitializer();
 				return;
 			}
 
-			/// °¢Á¾ ¸Å´ÏÀú Å¬·¡½º ¸Ş¸ğ¸® ÇÒ´ç
+			/// ê°ì¢… ë§¤ë‹ˆì € í´ë˜ìŠ¤ ë©”ëª¨ë¦¬ í• ë‹¹
 			MapFileManager::GetSingletonInstance();
+			palette::PaletteManager::GetSingletonInstance();
 
-			/// ¿¡µğÅÍ¿¡¼­ »ç¿ëÇÒ ¿¡µğÅÍ Ä«¸Ş¶ó, °ÔÀÓºä Ä«¸Ş¶ó »ı¼º
-
-			/// ¿¡µğÅÍ ÆĞ³Î »ı¼º ¹× ÃÊ±âÈ­ ÁøÇà
+			/// ì—ë””í„° íŒ¨ë„ ìƒì„± ë° ì´ˆê¸°í™” ì§„í–‰
 			editorPanelList.resize((int)Panel_List::Size);
 
-			editorPanelList[(int)Panel_List::HIERARCHY] = std::unique_ptr<Panel>(&HierarchyPanel::GetSingletonInstance());
-			editorPanelList[(int)Panel_List::INSPECTOR] = std::unique_ptr<Panel>(&InspectorPanel::GetSingletonInstance());
-			editorPanelList[(int)Panel_List::PREVIEW] = std::unique_ptr<Panel>(&PreviewPanel::GetSingletonInstance());
-			editorPanelList[(int)Panel_List::MINIMAP] = std::unique_ptr<Panel>(&MiniMapPanel::GetSingletonInstance());
-			editorPanelList[(int)Panel_List::SCENEVIEW] = std::unique_ptr<Panel>(&SceneViewPanel::GetSingletonInstance());
-			editorPanelList[(int)Panel_List::CAMERAVIEW] = std::unique_ptr<Panel>(&CameraViewPanel::GetSingletonInstance());
-			editorPanelList[(int)Panel_List::PALETTE] = std::unique_ptr<Panel>(&PalettePanel::GetSingletonInstance());
+			editorPanelList[(int)Panel_List::HIERARCHY] = &HierarchyPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::INSPECTOR] = &InspectorPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::PREVIEW] = &PreviewPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::MINIMAP] = &MiniMapPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::SCENEVIEW] = &SceneViewPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::CAMERAVIEW] = &CameraViewPanel::GetSingletonInstance();
+			editorPanelList[(int)Panel_List::PALETTE] = &PalettePanel::GetSingletonInstance();
 
-			/// ¿¡µğÅÍ ¸ğµâ »ı¼º ¹× ÃÊ±âÈ­ ÁøÇà
+			/// ì—ë””í„° ëª¨ë“ˆ ìƒì„± ë° ì´ˆê¸°í™” ì§„í–‰
 			editorModuleList.resize((int)Module_List::Size);
 
-			editorModuleList[(int)Module_List::TemplateDataEditor] = std::unique_ptr<EditorModule>(&Module_TemplateDataEditor::GetSingletonInstance());
+			editorModuleList[(int)Module_List::TemplateDataEditor] = &Module_TemplateDataEditor::GetSingletonInstance();
 
 			for (auto& each : editorPanelList)
 			{
@@ -62,6 +64,8 @@ namespace application
 
 		void EditorLayer::Update(float ts)
 		{
+			editorCamera.Update(ts);
+
 			for (auto& each : editorPanelList)
 			{
 				each->Update(ts);
@@ -85,7 +89,6 @@ namespace application
 
 			for (auto& each : editorModuleList)
 			{
-
 				each->GUIProgress();
 			}
 		}
@@ -102,6 +105,30 @@ namespace application
 
 				each->Finalize();
 			}
+		}
+
+		void EditorLayer::OnEvent(EditorEvents& event)
+		{
+			editorCamera.OnEvent(event);
+
+			for (auto& each : editorPanelList)
+			{
+				each->OnEvent(event);
+			}
+
+			for (auto& each : editorModuleList)
+			{
+
+				each->OnEvent(event);
+			}
+		}
+
+		void EditorLayer::LateInitialize()
+		{
+			palette::PaletteManager::GetSingletonInstance().Initialize();
+
+			// ì¹´ë©”ë¼ ì´ˆê¸°í™”
+			editorCamera.Initialize(yunutyEngine::graphics::Camera::GetMainCamera());
 		}
 
 		void EditorLayer::AssignTestInitializer(std::function<void()> testInitializer)

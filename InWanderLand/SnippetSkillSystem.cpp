@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
@@ -9,7 +10,7 @@
 #include "DebugTilePlane.h"
 #include "DebugBeacon.h"
 #include "DebugMeshes.h"
-#include "ProjectileSystem.h"
+#include "DebuggingMeshPool.h"
 #include "PlayerController.h"
 #include "UnitFactory.h"
 #include "InputManager.h"
@@ -55,7 +56,7 @@ void SnippetSkillSystemInit()
 	auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 	mouseCursorMesh->GetGI().SetMesh(sphereMesh);
-	mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 0 });
+	mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
 
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
@@ -102,9 +103,6 @@ void SnippetSkillSystemInit()
 	auto navField = fieldObject->AddComponent<yunutyEngine::NavigationField>();
 	navField->BuildField(worldVertices, worldFaces);
 
-	/// ProjectileSystem SetUp
-	ProjectileSystem::GetInstance()->SetUp();
-
 	/// PlayerController SetUp
 	PlayerController::GetInstance()->SetMovingSystemComponent(rtsCam);
 
@@ -112,7 +110,6 @@ void SnippetSkillSystemInit()
 	unique_ptr<UnitFactory> unitfactory = make_unique<UnitFactory>();
 
 	/// StatusManager 
-	StatusTimerPool::GetInstance()->SetUp();
 
 	/// FBX File Load
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
@@ -153,13 +150,13 @@ void SnippetSkillSystemInit()
 
 namespace snippets
 {
-	TEST_CLASS(InWanderLand)
+	TEST_CLASS(SnippetSkillSystemClass)
 	{
 	public:
 		TEST_METHOD(SnippetSkillSystem)
 		{
 			application::Application& client = application::Application::CreateApplication(0, 0);
-			application::Contents::ContentsLayer::AssignTestInitializer(SnippetSkillSystemInit);
+			application::contents::ContentsLayer::AssignTestInitializer(SnippetSkillSystemInit);
 			client.Initialize();
 			client.Run();
 			client.Finalize();

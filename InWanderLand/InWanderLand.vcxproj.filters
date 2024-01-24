@@ -1,35 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="sources">
       <UniqueIdentifier>{08e36723-ce4f-4cff-9662-c40801cf1acf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="RTSCam">
-      <UniqueIdentifier>{4d58ffff-525b-4e6d-a64c-bf1f311430a2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="RoamingCam">
       <UniqueIdentifier>{2d512d5b-fcbf-459a-af2e-e0419a2af7d6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="CamSwitcher">
-      <UniqueIdentifier>{bf3324c5-849e-4c7f-af17-eeb0a882cc19}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="RecastDetourTest">
-      <UniqueIdentifier>{56c19951-ac88-4ad2-9b55-db6f941240e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DebugPlane">
-      <UniqueIdentifier>{028fb8ff-0f7e-465c-894d-222249262cc3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DebugBeacon">
-      <UniqueIdentifier>{12a9b6c6-374f-4024-a2c3-3d67deff9469}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DebugMeshes">
-      <UniqueIdentifier>{63795638-a23d-4b7e-a43d-3da8d1088678}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="RTSTerrain">
-      <UniqueIdentifier>{35902296-3a53-47ef-a7ac-de94b5000e79}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PeriodicAction">
-      <UniqueIdentifier>{d31814ce-faa7-415f-8b5a-672e90071988}</UniqueIdentifier>
     </Filter>
     <Filter Include="Editor">
       <UniqueIdentifier>{a8da4320-0b8b-4bf9-8101-466d6da6cfeb}</UniqueIdentifier>
@@ -85,11 +61,35 @@
     <Filter Include="Path">
       <UniqueIdentifier>{fd700d27-99c8-48fe-a7fa-d50f17beb154}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PathEditor">
-      <UniqueIdentifier>{bdeb32c3-9345-46aa-9876-48fd5865c87c}</UniqueIdentifier>
+    <Filter Include="Contents\Units">
+      <UniqueIdentifier>{405ea7bd-7f87-4f62-bbaa-63df3fb1cb29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Dotween">
+      <UniqueIdentifier>{85ab2a5f-3903-4ced-9819-cd9b6e84dbec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\RangeSystem">
+      <UniqueIdentifier>{8f88b8f0-05a0-458e-8199-c421742d4d60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\FSM">
+      <UniqueIdentifier>{32381cc4-5559-4056-a930-6663da504c19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitFactory">
+      <UniqueIdentifier>{acd2f4f0-ac5f-47d4-9337-b5d6450ce773}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\InitialFactors">
+      <UniqueIdentifier>{5e4af819-8eb5-4acc-a261-2bee0658b7bf}</UniqueIdentifier>
     </Filter>
     <Filter Include="TestCodes">
       <UniqueIdentifier>{8339e451-67eb-4692-ba45-88e6ad08ee10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\InputManager">
+      <UniqueIdentifier>{f1dccdf0-9ecd-4b27-aefe-392012154399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\SkillSystem">
+      <UniqueIdentifier>{4e094e6e-1794-44d8-b6ae-21411ec09e19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitFactory\UnitProductionOrder">
+      <UniqueIdentifier>{1fe0b80f-260e-4d3d-8eee-ece07c14b020}</UniqueIdentifier>
     </Filter>
     <Filter Include="Editor\Etc">
       <UniqueIdentifier>{7876c722-b05f-470b-afa3-9b71d70e8da4}</UniqueIdentifier>
@@ -100,17 +100,20 @@
     <Filter Include="Editor\Palette">
       <UniqueIdentifier>{a9b999c8-825f-44cf-a68d-f8b64f9f4397}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\UnitStatusComponent">
+      <UniqueIdentifier>{ef349162-0995-425e-adcb-c51e02b1de52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitStatusComponent\Bleeding">
+      <UniqueIdentifier>{7e6e1e1f-4f97-47cb-80e4-44bb1e31f4af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitStatusComponent\StatusTimer">
+      <UniqueIdentifier>{70ed445c-61e5-45a6-97e7-862d894974ec}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Editor\Panel\List\Module">
       <UniqueIdentifier>{114c2856-9f92-45a3-9c0d-b670ed9f40cf}</UniqueIdentifier>
     </Filter>
     <Filter Include="Editor\Panel\List\Module\List">
       <UniqueIdentifier>{0dde7a4c-816a-4065-9448-de7114622f91}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Editor\Palette\PaletteManager">
-      <UniqueIdentifier>{f532809e-b9e7-4b03-8c8b-1ec33b8dd06c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Editor\Palette\PaletteInstance">
-      <UniqueIdentifier>{0f6ed044-5c7b-40b1-9879-5656d439c20a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Editor\Palette\GraphicsHelper">
       <UniqueIdentifier>{94dbe3f8-d102-4df7-9951-cbe8c0e75d21}</UniqueIdentifier>
@@ -124,20 +127,119 @@
     <Filter Include="Editor\Palette\GraphicsHelper\SelectionBoxPerInstance">
       <UniqueIdentifier>{c2b7bff1-f11d-4f5f-8aee-e8790426ea25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\Palette\PaletteManager\DoodadPaletteManager">
-      <UniqueIdentifier>{40739a4f-3a66-4c5a-91e5-315c832d7449}</UniqueIdentifier>
+    <Filter Include="Contents\AttackSystem">
+      <UniqueIdentifier>{ea748de1-2efa-4856-ae13-e8adad2ec02f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\Palette\PaletteManager\TerrainPaletteManager">
-      <UniqueIdentifier>{39436433-9e3b-4404-8467-5f5fd1c4d386}</UniqueIdentifier>
+    <Filter Include="Editor\Camera">
+      <UniqueIdentifier>{330bd250-ad1e-4870-b137-7b7ca402047c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\Palette\PaletteManager\UnitPaletteManager">
-      <UniqueIdentifier>{e8658192-829c-4b4d-b2d3-4da5e28a4f3d}</UniqueIdentifier>
+    <Filter Include="Contents\UnitStatusComponent\KnockBack">
+      <UniqueIdentifier>{0562aa4c-cdda-4cb7-845e-b4dd252c119b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\Palette\PaletteInstance\TerrainInstance">
-      <UniqueIdentifier>{4847a1aa-0029-445d-91f5-8b19c232f9ac}</UniqueIdentifier>
+    <Filter Include="Contents\UnitStatusComponent\OnlyDamage">
+      <UniqueIdentifier>{a747ad64-1ec4-4e4a-b3dd-6afdf9903359}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\Palette\PaletteInstance\UnitInstance">
-      <UniqueIdentifier>{28eaf762-a605-4181-8cfa-5fb61e826531}</UniqueIdentifier>
+    <Filter Include="Editor\Events\Category">
+      <UniqueIdentifier>{8039b949-8b1d-456e-950b-17344a38e1cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Events\Category\3_Mouse">
+      <UniqueIdentifier>{030d7362-27a1-4a26-80c8-864ff663bc15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Events\Category\4_Keyboard">
+      <UniqueIdentifier>{821267f0-92eb-4873-a9c6-60e8bcb5edd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Events\Category\1_Editor">
+      <UniqueIdentifier>{b32e1149-d273-470d-995a-d2a3de904ecf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Events\Category\2_Window">
+      <UniqueIdentifier>{6b007f4f-4168-4380-8d54-6523874c757c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\IO\KeyInput">
+      <UniqueIdentifier>{ba70a303-f04f-429e-a442-3276da507949}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Timer">
+      <UniqueIdentifier>{e6ac6c6a-8749-4b81-8b38-f053b8e345ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitStatusComponent\FieldDamage">
+      <UniqueIdentifier>{ea62f4c6-e57e-4246-87d0-8a35f4c29d5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectilePools">
+      <UniqueIdentifier>{419a8732-9b17-49e5-a85c-d8685acdf480}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectilePools\Warrior">
+      <UniqueIdentifier>{5635f508-2cb3-403a-891f-0c8224a7bee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectilePools\Magician">
+      <UniqueIdentifier>{d3967c4d-cb79-4403-9a0e-8052c3a39a61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectilePools\Supporter">
+      <UniqueIdentifier>{32c8b7b8-5fa6-4e22-8344-b35d0bb87cd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectileComponents">
+      <UniqueIdentifier>{d4aef375-a61c-498a-a67f-f5684011a0e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectileComponents\Warrior">
+      <UniqueIdentifier>{99465ae9-9fed-4e41-a53c-0683a58a3154}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectileComponents\Magician">
+      <UniqueIdentifier>{7b0d58cb-9631-4b39-af19-8ce63ab348da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectileComponents\Magician\Skill2">
+      <UniqueIdentifier>{3d12d20e-0354-4c1c-9f40-b43c7dbf7f4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectileComponents\Magician\Passive">
+      <UniqueIdentifier>{67064df8-d931-4e64-8903-e8e001049ab4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectileComponents\Magician\Skill1">
+      <UniqueIdentifier>{6388c7a7-5003-480a-8fd6-ae9d5043dc78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectileComponents\Supporter">
+      <UniqueIdentifier>{657226b3-978a-4e0a-a348-e66d698ea0b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ProjectileComponents\BaseAutoAttack">
+      <UniqueIdentifier>{8e78929b-3441-46e9-9098-462f0fb30ec5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility">
+      <UniqueIdentifier>{393727af-ff83-46e3-a6f1-11555d1693a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestCodes\TestUtils">
+      <UniqueIdentifier>{79e1c81f-2b86-45d4-8d80-6134d13375c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\SingleNavigationField">
+      <UniqueIdentifier>{955952c8-9aa3-451c-9298-ee3adedb93d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\DebuggingSystem">
+      <UniqueIdentifier>{e8d5df45-576d-4ade-b26c-fbdf57f67781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugGraphics">
+      <UniqueIdentifier>{b5515b9d-1970-46e2-ae29-ab814e1b2787}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugGraphics\DebugBeacon">
+      <UniqueIdentifier>{12a9b6c6-374f-4024-a2c3-3d67deff9469}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugGraphics\DebugMeshes">
+      <UniqueIdentifier>{63795638-a23d-4b7e-a43d-3da8d1088678}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\DebugPlane">
+      <UniqueIdentifier>{028fb8ff-0f7e-465c-894d-222249262cc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestCodes\TestUtils\PeriodicAction">
+      <UniqueIdentifier>{d31814ce-faa7-415f-8b5a-672e90071988}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapData">
+      <UniqueIdentifier>{1e14d82d-3b46-4868-be82-790e5993af3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\RTSCam">
+      <UniqueIdentifier>{4d58ffff-525b-4e6d-a64c-bf1f311430a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="InGame">
+      <UniqueIdentifier>{307110bf-f12d-41ce-a751-777f138d1143}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugGraphics\DebugGraphic">
+      <UniqueIdentifier>{d4e2e990-93e1-4272-890f-49d928dba311}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugGraphics\DebugStaticMesh">
+      <UniqueIdentifier>{ae990035-017a-49f5-aea7-7ea2bd3026ec}</UniqueIdentifier>
     </Filter>
     <Filter Include="Editor\Palette\PaletteBrush">
       <UniqueIdentifier>{5c1206b3-304d-4b4e-877f-17346baa1efd}</UniqueIdentifier>
@@ -148,8 +250,38 @@
     <Filter Include="Editor\Palette\PaletteBrush\TerrainBrush">
       <UniqueIdentifier>{14ee86d7-bf36-42e5-9618-562c06f3e4d8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\Camera">
-      <UniqueIdentifier>{330bd250-ad1e-4870-b137-7b7ca402047c}</UniqueIdentifier>
+    <Filter Include="Editor\Palette\PaletteInstance">
+      <UniqueIdentifier>{0f6ed044-5c7b-40b1-9879-5656d439c20a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteInstance\TerrainInstance">
+      <UniqueIdentifier>{4847a1aa-0029-445d-91f5-8b19c232f9ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteInstance\UnitInstance">
+      <UniqueIdentifier>{28eaf762-a605-4181-8cfa-5fb61e826531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteInstance\RegionInstance">
+      <UniqueIdentifier>{f4de70f3-c627-4642-9176-8b680a0b35bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\List">
+      <UniqueIdentifier>{ca9f8542-f8f4-4207-827e-2d1f72a27cf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\List\DoodadPalette">
+      <UniqueIdentifier>{40739a4f-3a66-4c5a-91e5-315c832d7449}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\List\RegionPalette">
+      <UniqueIdentifier>{26864948-b22d-4e8f-9d2f-46cb7ec49f64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\List\TerrainPalette">
+      <UniqueIdentifier>{39436433-9e3b-4404-8467-5f5fd1c4d386}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\List\UnitPalette">
+      <UniqueIdentifier>{e8658192-829c-4b4d-b2d3-4da5e28a4f3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\imgui\Utility">
+      <UniqueIdentifier>{e37288c2-a10e-4e49-b631-b2d6dd3c5a60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Math">
+      <UniqueIdentifier>{afafc9b7-f571-47a2-adf6-47a7b60fe72b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -181,34 +313,22 @@
       <Filter>Contents</Filter>
     </ClInclude>
     <ClInclude Include="RTSCam.h">
-      <Filter>RTSCam</Filter>
+      <Filter>Contents\RTSCam</Filter>
     </ClInclude>
     <ClInclude Include="RoamingCam.h">
       <Filter>RoamingCam</Filter>
     </ClInclude>
-    <ClInclude Include="CamSwitcher.h">
-      <Filter>CamSwitcher</Filter>
-    </ClInclude>
-    <ClInclude Include="RequestDetourTest.h">
-      <Filter>RecastDetourTest</Filter>
-    </ClInclude>
     <ClInclude Include="DebugTilePlane.h">
-      <Filter>DebugPlane</Filter>
+      <Filter>sources\DebugPlane</Filter>
     </ClInclude>
     <ClInclude Include="DebugBeacon.h">
-      <Filter>DebugBeacon</Filter>
-    </ClInclude>
-    <ClInclude Include="PathEditor.h">
-      <Filter>PathEditor</Filter>
+      <Filter>DebugGraphics\DebugBeacon</Filter>
     </ClInclude>
     <ClInclude Include="DebugMeshes.h">
-      <Filter>DebugMeshes</Filter>
+      <Filter>DebugGraphics\DebugMeshes</Filter>
     </ClInclude>
     <ClInclude Include="PeriodicAction.h">
-      <Filter>PeriodicAction</Filter>
-    </ClInclude>
-    <ClInclude Include="RTSTerrain.h">
-      <Filter>RTSTerrain</Filter>
+      <Filter>TestCodes\TestUtils\PeriodicAction</Filter>
     </ClInclude>
     <ClInclude Include="ShakyCam.h">
       <Filter>Contents</Filter>
@@ -324,8 +444,53 @@
     <ClInclude Include="DelayedTestFunctions.h">
       <Filter>TestCodes</Filter>
     </ClInclude>
-    <ClInclude Include="PaletteManager.h">
-      <Filter>Editor\Palette\PaletteManager</Filter>
+    <ClInclude Include="Dotween.h">
+      <Filter>Contents\Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="DotweenTimer.h">
+      <Filter>Contents\Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="DotweenTimerPool.h">
+      <Filter>Contents\Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>Contents\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="WarriorProduction.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitProductionOrder.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicianProduction.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClInclude>
+    <ClInclude Include="HealerProduction.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitFactory.h">
+      <Filter>Contents\UnitFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillSystem.h">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="RangeSystem.h">
+      <Filter>Contents\RangeSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Contents\InputManager</Filter>
+    </ClInclude>
+    <ClInclude Include="FSM.h">
+      <Filter>Contents\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Easing.h">
+      <Filter>Contents\Dotween</Filter>
+    </ClInclude>
+    <ClInclude Include="MeleeEnemyProduction.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerController.h">
+      <Filter>Contents\InputManager</Filter>
     </ClInclude>
     <ClInclude Include="PaletteInstance.h">
       <Filter>Editor\Palette\PaletteInstance</Filter>
@@ -351,24 +516,35 @@
     <ClInclude Include="TerrainBrush.h">
       <Filter>Editor\Palette\PaletteBrush\TerrainBrush</Filter>
     </ClInclude>
-    <ClInclude Include="UnitPaletteManager.h">
-      <Filter>Editor\Palette\PaletteManager\UnitPaletteManager</Filter>
+    <ClInclude Include="UnitPalette.h">
+      <Filter>Editor\Palette\List\UnitPalette</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainPaletteManager.h">
-      <Filter>Editor\Palette\PaletteManager\TerrainPaletteManager</Filter>
+    <ClInclude Include="TerrainPalette.h">
+      <Filter>Editor\Palette\List\TerrainPalette</Filter>
     </ClInclude>
-    <ClInclude Include="DoodadPaletteManager.h">
-      <Filter>Editor\Palette\PaletteManager\DoodadPaletteManager</Filter>
+    <ClInclude Include="DoodadPalette.h">
+      <Filter>Editor\Palette\List\DoodadPalette</Filter>
     </ClInclude>
     <ClInclude Include="TestComponent2.h">
       <Filter>TestCodes</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainEditor.h" />
     <ClInclude Include="UUIDManager.h">
       <Filter>Editor\DataSystem</Filter>
     </ClInclude>
     <ClInclude Include="Singleton.h">
       <Filter>Editor\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitStatusComponent.h">
+      <Filter>Contents\UnitStatusComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="BleedingComponent.h">
+      <Filter>Contents\UnitStatusComponent\Bleeding</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusTimerPool.h">
+      <Filter>Contents\UnitStatusComponent\StatusTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusTimer.h">
+      <Filter>Contents\UnitStatusComponent\StatusTimer</Filter>
     </ClInclude>
     <ClInclude Include="EditorModule.h">
       <Filter>Editor\Panel\List\Module</Filter>
@@ -382,52 +558,155 @@
     <ClInclude Include="PaletteSelectCollider.h">
       <Filter>Editor\Palette\PaletteBrush</Filter>
     </ClInclude>
+    <ClInclude Include="AttackSystem.h">
+      <Filter>Contents\AttackSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="MeleeAttackSystem.h">
+      <Filter>Contents\AttackSystem</Filter>
+    </ClInclude>
     <ClInclude Include="EditorCamera.h">
       <Filter>Editor\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="RangedAttackSystem.h">
+      <Filter>Contents\AttackSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="KnockBackComponent.h">
+      <Filter>Contents\UnitStatusComponent\KnockBack</Filter>
+    </ClInclude>
+    <ClInclude Include="RegionInstance.h">
+      <Filter>Editor\Palette\PaletteInstance\RegionInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="RegionPalette.h">
+      <Filter>Editor\Palette\List\RegionPalette</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerSkillSystem.h">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager.h">
+      <Filter>Editor\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="WarriorSkillSystem.h">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowEvents.h">
+      <Filter>Editor\Events\Category\2_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="OnlyDamageComponent.h">
+      <Filter>Contents\UnitStatusComponent\OnlyDamage</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorCommonEvents.h">
+      <Filter>Editor\Events\Category\1_Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseEvents.h">
+      <Filter>Editor\Events\Category\3_Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardEvents.h">
+      <Filter>Editor\Events\Category\4_Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorKeyCodes.h">
+      <Filter>Editor\IO\KeyInput</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorInputManager.h">
+      <Filter>Editor\IO\KeyInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Contents\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="FieldDamage.h">
+      <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoAttackProjectile.h">
+      <Filter>Contents\ProjectileComponents\BaseAutoAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicianAutoAttackProjectile.h">
+      <Filter>Contents\ProjectileComponents\Magician\Passive</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicianAutoAttackProjectilePool.h">
+      <Filter>Contents\ProjectilePools\Magician</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicianSkillOneProjectilePool.h">
+      <Filter>Contents\ProjectilePools\Magician</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoAttackProjectilePool.h">
+      <Filter>Contents\ProjectilePools</Filter>
+    </ClInclude>
+    <ClInclude Include="InWanderLand.h" />
+    <ClInclude Include="TestUtilButtonEvent.h">
+      <Filter>TestCodes\TestUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="TestUtils.h">
+      <Filter>TestCodes\TestUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="SingleNavigationField.h">
+      <Filter>Contents\SingleNavigationField</Filter>
+    </ClInclude>
+    <ClInclude Include="TestUtilNavAgent.h">
+      <Filter>TestCodes\TestUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="TestUtilRTSTestCam.h">
+      <Filter>TestCodes\TestUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="ParalysisFieldComponent.h">
+      <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicianSkillSystem.h">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="BlindFieldComponent.h">
+      <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
+    </ClInclude>
+    <ClInclude Include="HealerAutoAttackProjectile.h">
+      <Filter>Contents\ProjectileComponents\Magician\Passive</Filter>
+    </ClInclude>
+    <ClInclude Include="HealerAutoAttackProjectilePool.h">
+      <Filter>Contents\ProjectilePools\Supporter</Filter>
+    </ClInclude>
+    <ClInclude Include="DebuggingMeshPool.h">
+      <Filter>Contents\DebuggingSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="DebuggingMesh.h">
+      <Filter>Contents\DebuggingSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="PaletteManager.h">
+      <Filter>Editor\Palette</Filter>
+    </ClInclude>
+    <ClInclude Include="MapData.h">
+      <Filter>MapData</Filter>
+    </ClInclude>
+    <ClInclude Include="InGame.h">
+      <Filter>InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugGraphic.h">
+      <Filter>DebugGraphics\DebugGraphic</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugStaticMesh.h">
+      <Filter>DebugGraphics\DebugStaticMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Palette.h">
+      <Filter>Editor\Palette</Filter>
+    </ClInclude>
+    <ClInclude Include="PaletteList.h">
+      <Filter>Editor\Palette\List</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_Utility.h">
+      <Filter>Editor\imgui\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorMath.h">
+      <Filter>Editor\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
       <Filter>sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\Include\ImGui\imgui.cpp">
-      <Filter>Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Include\ImGui\imgui_demo.cpp">
-      <Filter>Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Include\ImGui\imgui_draw.cpp">
-      <Filter>Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Include\ImGui\imgui_tables.cpp">
-      <Filter>Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Include\ImGui\imgui_widgets.cpp">
-      <Filter>Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Include\ImGui\backends\imgui_impl_dx11.cpp">
-      <Filter>Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Include\ImGui\backends\imgui_impl_win32.cpp">
-      <Filter>Editor\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="RTSCam.cpp">
-      <Filter>RTSCam</Filter>
+      <Filter>Contents\RTSCam</Filter>
     </ClCompile>
     <ClCompile Include="RoamingCam.cpp">
       <Filter>RoamingCam</Filter>
-    </ClCompile>
-    <ClCompile Include="CamSwitcher.cpp">
-      <Filter>CamSwitcher</Filter>
-    </ClCompile>
-    <ClCompile Include="RequestDetourTest.cpp">
-      <Filter>RecastDetourTest</Filter>
-    </ClCompile>
-    <ClCompile Include="EditorEvents.cpp">
-      <Filter>Editor\Events</Filter>
     </ClCompile>
     <ClCompile Include="ContentsLayer.cpp">
       <Filter>Contents</Filter>
@@ -528,6 +807,90 @@
     <ClCompile Include="TestCaseMapFileIO.cpp">
       <Filter>TestCodes</Filter>
     </ClCompile>
+    <ClCompile Include="Dotween.cpp">
+      <Filter>Contents\Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="DotweenTimer.cpp">
+      <Filter>Contents\Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>Contents\Units</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitProductionOrder.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClCompile>
+    <ClCompile Include="WarriorProduction.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicianProduction.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClCompile>
+    <ClCompile Include="HealerProduction.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitFactory.cpp">
+      <Filter>Contents\UnitFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillSystem.cpp">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="RangeSystem.cpp">
+      <Filter>Contents\RangeSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Contents\InputManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Easing.cpp">
+      <Filter>Contents\Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="TestUnitAnimation.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCaseGroupControl.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="MeleeEnemyProduction.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerController.cpp">
+      <Filter>Contents\InputManager</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitStatusComponent.cpp">
+      <Filter>Contents\UnitStatusComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="BleedingComponent.cpp">
+      <Filter>Contents\UnitStatusComponent\Bleeding</Filter>
+    </ClCompile>
+    <ClCompile Include="StatusTimer.cpp">
+      <Filter>Contents\UnitStatusComponent\StatusTimer</Filter>
+    </ClCompile>
+    <ClCompile Include="Module_TemplateDataEditor.cpp">
+      <Filter>Editor\Panel\List\Module\List</Filter>
+    </ClCompile>
+    <ClCompile Include="DotweenTimerPool.cpp">
+      <Filter>Contents\Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackSystem.cpp">
+      <Filter>Contents\AttackSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="MeleeAttackSystem.cpp">
+      <Filter>Contents\AttackSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="RangedAttackSystem.cpp">
+      <Filter>Contents\AttackSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="KnockBackComponent.cpp">
+      <Filter>Contents\UnitStatusComponent\KnockBack</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerSkillSystem.cpp">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="WarriorSkillSystem.cpp">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="OnlyDamageComponent.cpp">
+      <Filter>Contents\UnitStatusComponent\OnlyDamage</Filter>
+    </ClCompile>
     <ClCompile Include="SnippetTemplate.cpp">
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
@@ -543,10 +906,7 @@
     <ClCompile Include="Module_TemplateDataEditor.cpp">
       <Filter>Editor\Panel\List\Module\List</Filter>
     </ClCompile>
-    <ClCompile Include="PaletteManager.cpp">
-      <Filter>Editor\Palette\PaletteManager</Filter>
-    </ClCompile>
-    <ClCompile Include="SnippetEditTerrain.cpp">
+    <ClCompile Include="SnippetUnitPalette.cpp">
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
     <ClCompile Include="SnippetPhysxCollider.cpp">
@@ -560,6 +920,150 @@
     </ClCompile>
     <ClCompile Include="Snippet1milGameObjects.cpp">
       <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="PaletteInstance.cpp">
+      <Filter>Editor\Palette\PaletteInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitStatusComponent.cpp">
+      <Filter>Contents\UnitStatusComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugMeshes.cpp">
+      <Filter>DebugGraphics\DebugMeshes</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitInstance.cpp">
+      <Filter>Editor\Palette\PaletteInstance\UnitInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="RegionInstance.cpp">
+      <Filter>Editor\Palette\PaletteInstance\RegionInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainInstance.cpp">
+      <Filter>Editor\Palette\PaletteInstance\TerrainInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetRegionPalette.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetGIEnableDisable.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManager.cpp">
+      <Filter>Editor\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorEvents.cpp">
+      <Filter>Editor\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorInputManager.cpp">
+      <Filter>Editor\IO\KeyInput</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetCamPositionAndNear.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetSkillSystem.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetTerrainPalette.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetDebugMeshScaleCheck.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Contents\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="FieldDamage.cpp">
+      <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoAttackProjectile.cpp">
+      <Filter>Contents\ProjectileComponents\BaseAutoAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicianAutoAttackProjectile.cpp">
+      <Filter>Contents\ProjectileComponents\Magician\Passive</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoAttackProjectilePool.cpp">
+      <Filter>Contents\ProjectilePools</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_tables.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_win32.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_dx11.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_demo.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainPalette.cpp">
+      <Filter>Editor\Palette\List\TerrainPalette</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitPalette.cpp">
+      <Filter>Editor\Palette\List\UnitPalette</Filter>
+    </ClCompile>
+    <ClCompile Include="ParalysisFieldComponent.cpp">
+      <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicianSkillSystem.cpp">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="BlindFieldComponent.cpp">
+      <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
+    </ClCompile>
+    <ClCompile Include="HealerAutoAttackProjectile.cpp">
+      <Filter>Contents\ProjectileComponents\Magician\Passive</Filter>
+    </ClCompile>
+    <ClCompile Include="DebuggingMesh.cpp">
+      <Filter>Contents\DebuggingSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetFloatingDebugSphere.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCaseUpdateComponents.cpp">
+      <Filter>TestCodes</Filter>
+    </ClCompile>
+    <ClCompile Include="MapData.cpp">
+      <Filter>MapData</Filter>
+    </ClCompile>
+    <ClCompile Include="InGame.cpp">
+      <Filter>InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugGraphic.cpp">
+      <Filter>DebugGraphics\DebugGraphic</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugStaticMesh.cpp">
+      <Filter>DebugGraphics\DebugStaticMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetMapListIO.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="IEditableData.cpp">
+      <Filter>Editor\DataSystem\EditableData</Filter>
+    </ClCompile>
+    <ClCompile Include="Palette.cpp">
+      <Filter>Editor\Palette</Filter>
+    </ClCompile>
+    <ClCompile Include="PaletteManager.cpp">
+      <Filter>Editor\Palette</Filter>
+    </ClCompile>
+    <ClCompile Include="DoodadPalette.cpp">
+      <Filter>Editor\Palette\List\DoodadPalette</Filter>
+    </ClCompile>
+    <ClCompile Include="RegionPalette.cpp">
+      <Filter>Editor\Palette\List\RegionPalette</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_Utility.cpp">
+      <Filter>Editor\imgui\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorMath.cpp">
+      <Filter>Editor\Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

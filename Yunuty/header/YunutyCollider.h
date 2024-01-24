@@ -43,6 +43,7 @@ namespace yunutyEngine
             // CCD 기능이 활성화되면 Bullet through paper 현상이 발생하지 않습니다.
             void EnableCCD(bool enable);
         private:
+            bool WasPxActorInitialized();
             Vector3d cachedScale;
             friend RigidBody;
 #ifdef _DEBUG

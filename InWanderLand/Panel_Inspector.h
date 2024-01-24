@@ -1,5 +1,5 @@
-/// 2023. 10. 04 ±è»óÁØ
-/// ¼±ÅÃÇÑ Æ¯Á¤ °´Ã¼¿¡ ´ëÇÏ¿© »ó¼¼ÇÑ ÆíÁı ³»¿ëÀ» È®ÀÎÇÒ ¼ö ÀÖ´Â ÆĞ³Î
+/// 2023. 10. 04 ê¹€ìƒì¤€
+/// ì„ íƒí•œ íŠ¹ì • ê°ì²´ì— ëŒ€í•˜ì—¬ ìƒì„¸í•œ í¸ì§‘ ë‚´ìš©ì„ í™•ì¸í•  ìˆ˜ ìˆëŠ” íŒ¨ë„
 
 #pragma once
 
@@ -13,14 +13,18 @@ namespace application
 		class InspectorPanel
 			: public Panel, public Singleton<InspectorPanel>
 		{
+			friend class Singleton<InspectorPanel>;
+
 		public:
-			InspectorPanel();
 			virtual ~InspectorPanel();
 
 			virtual void Initialize() override;
 			virtual void Update(float ts) override;
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
+
+		private:
+			InspectorPanel();
 		};
 	}
 }

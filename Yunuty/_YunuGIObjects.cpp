@@ -1,41 +1,44 @@
 #include <assert.h>
 #include "GraphicsRenderer.h"
 #include "_YunuGIObjects.h"
+#include <iostream>
 
 namespace yunutyEngine::graphics
 {
     void _YunuGIObjects::LoadDll(const std::wstring& dllFileName)
     {
-        // CreateResourceManager ÄÚµå Â¥°í ¿¬°áÇÏ¸é µÊ
+        // CreateResourceManager ì½”ë“œ ì§œê³  ì—°ê²°í•˜ë©´ ë¨
         HINSTANCE hDLL{ LoadLibraryW(dllFileName.c_str()) };
-        assert(hDLL != nullptr, L"±×·¡ÇÈ½º ¿£Áø¿¡ ÇØ´çÇÏ´Â DLL ÆÄÀÏÀÌ ¾ø½À´Ï´Ù!");
+        DWORD err = GetLastError();
+        std::cout << err << std::endl;
+        assert(hDLL != nullptr, L"ê·¸ë˜í”½ìŠ¤ ì—”ì§„ì— í•´ë‹¹í•˜ëŠ” DLL íŒŒì¼ì´ ì—†ìŠµë‹ˆë‹¤!");
 
         yunuGI::Global::CreateRenderer = reinterpret_cast<decltype(yunuGI::Global::CreateRenderer)>(GetProcAddress(hDLL, "CreateRenderer"));
-        assert(yunuGI::Global::CreateRenderer != nullptr, L"±×·¡ÇÈ½º ·»´õ·¯ »ı¼º ÇÔ¼ö°¡ ¾ø½À´Ï´Ù!");
+        assert(yunuGI::Global::CreateRenderer != nullptr, L"ê·¸ë˜í”½ìŠ¤ ë Œë”ëŸ¬ ìƒì„± í•¨ìˆ˜ê°€ ì—†ìŠµë‹ˆë‹¤!");
 
         yunuGI::Global::CreateFactory = reinterpret_cast<decltype(yunuGI::Global::CreateFactory)>(GetProcAddress(hDLL, "CreateFactory"));
-        assert(yunuGI::Global::CreateFactory != nullptr, L"±×·¡ÇÈ½º ÆÑÅä¸® »ı¼º ÇÔ¼ö°¡ ¾ø½À´Ï´Ù!");
+        assert(yunuGI::Global::CreateFactory != nullptr, L"ê·¸ë˜í”½ìŠ¤ íŒ©í† ë¦¬ ìƒì„± í•¨ìˆ˜ê°€ ì—†ìŠµë‹ˆë‹¤!");
 
         yunuGI::Global::CreateEventHandler = reinterpret_cast<decltype(yunuGI::Global::CreateEventHandler)>(GetProcAddress(hDLL, "CreateEventHandler"));
-        assert(yunuGI::Global::CreateEventHandler != nullptr, L"±×·¡ÇÈ½º ÀÌº¥Æ® ½Ã½ºÅÛ ÇÚµé·¯ »ı¼º ÇÔ¼ö°¡ ¾ø½À´Ï´Ù!");
+        assert(yunuGI::Global::CreateEventHandler != nullptr, L"ê·¸ë˜í”½ìŠ¤ ì´ë²¤íŠ¸ ì‹œìŠ¤í…œ í•¸ë“¤ëŸ¬ ìƒì„± í•¨ìˆ˜ê°€ ì—†ìŠµë‹ˆë‹¤!");
 
         yunuGI::Global::CreateResourceManager = reinterpret_cast<decltype(yunuGI::Global::CreateResourceManager)>(GetProcAddress(hDLL, "CreateResourceManager"));
-        assert(yunuGI::Global::CreateResourceManager != nullptr, L"±×·¡ÇÈ½º ¸®¼Ò½º ¸Å´ÏÀú »ı¼º ÇÔ¼ö°¡ ¾ø½À´Ï´Ù!");
+        assert(yunuGI::Global::CreateResourceManager != nullptr, L"ê·¸ë˜í”½ìŠ¤ ë¦¬ì†ŒìŠ¤ ë§¤ë‹ˆì € ìƒì„± í•¨ìˆ˜ê°€ ì—†ìŠµë‹ˆë‹¤!");
 
         yunuGI::Global::ReleaseYunuGI = reinterpret_cast<decltype(yunuGI::Global::ReleaseYunuGI)>(GetProcAddress(hDLL, "ReleaseYunuGI"));
-        assert(yunuGI::Global::ReleaseYunuGI != nullptr, L"±×·¡ÇÈ½º ÀÎÅÍÆäÀÌ½º ¸±¸®Áî ÇÔ¼ö°¡ ¾ø½À´Ï´Ù!");
+        assert(yunuGI::Global::ReleaseYunuGI != nullptr, L"ê·¸ë˜í”½ìŠ¤ ì¸í„°í˜ì´ìŠ¤ ë¦´ë¦¬ì¦ˆ í•¨ìˆ˜ê°€ ì—†ìŠµë‹ˆë‹¤!");
 
         renderer = yunuGI::Global::CreateRenderer({});
-        assert(renderer.Get() != nullptr, L"±×·¡ÇÈ½º ·»´õ·¯°¡ »ı¼ºµÇÁö ¾Ê¾Ò½À´Ï´Ù!");
+        assert(renderer.Get() != nullptr, L"ê·¸ë˜í”½ìŠ¤ ë Œë”ëŸ¬ê°€ ìƒì„±ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤!");
         //renderer->Initialize();
 
         eventHandler = yunuGI::Global::CreateEventHandler({});
-        assert(eventHandler.Get() != nullptr, L"±×·¡ÇÈ½º ÀÌº¥Æ® ½Ã½ºÅÛ ÇÚµé·¯°¡ »ı¼ºµÇÁö ¾Ê¾Ò½À´Ï´Ù!");
+        assert(eventHandler.Get() != nullptr, L"ê·¸ë˜í”½ìŠ¤ ì´ë²¤íŠ¸ ì‹œìŠ¤í…œ í•¸ë“¤ëŸ¬ê°€ ìƒì„±ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤!");
 
         resourceManager = yunuGI::Global::CreateResourceManager({});
-        assert(resourceManager.Get() != nullptr, L"±×·¡ÇÈ½º ¸®¼Ò½º ¸Å´ÏÀú°¡ »ı¼ºµÇÁö ¾Ê¾Ò½À´Ï´Ù!");
+        assert(resourceManager.Get() != nullptr, L"ê·¸ë˜í”½ìŠ¤ ë¦¬ì†ŒìŠ¤ ë§¤ë‹ˆì €ê°€ ìƒì„±ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤!");
 
         factory = yunuGI::Global::CreateFactory(yunuGI::IFactoryDesc());
-        assert(factory.Get() != nullptr, L"±×·¡ÇÈ½º ·»´õ·¯°¡ »ı¼ºµÇÁö ¾Ê¾Ò½À´Ï´Ù!");
+        assert(factory.Get() != nullptr, L"ê·¸ë˜í”½ìŠ¤ ë Œë”ëŸ¬ê°€ ìƒì„±ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤!");
     }
 }

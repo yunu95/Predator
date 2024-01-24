@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "ContentsLayer.h"
 
 #include "YunutyEngine.h"
@@ -18,7 +19,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 #include <d3d11.h>
 
-std::function<void()> application::Contents::ContentsLayer::testInitializer;
+std::function<void()> application::contents::ContentsLayer::testInitializer;
 
 /// 그래픽스 테스트용
 void GraphicsTest()
@@ -44,7 +45,12 @@ void GraphicsTest()
 
 	for (auto& i : shaderList)
 	{
-		if (i->GetName() == L"LeavesPS.cso")
+		float tempX = rand() % 1000;
+		float tempZ = rand() % 1000;
+		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+		object->GetTransform()->position = Vector3d{ tempX,0,tempZ };
+		auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
+		for (auto& i : animationList)
 		{
 			pshader = i;
 		}
@@ -130,23 +136,23 @@ void GraphicsTest()
 //    staticMesh->GetTransform()->position = Vector3d{ 0,0.5,0 };
 //    return agent;
 //}
-void application::Contents::ContentsLayer::Initialize()
+void application::contents::ContentsLayer::Initialize()
 {
 	if (ContentsLayer::testInitializer)
 	{
 		ContentsLayer::testInitializer();
 		return;
 	}
-	yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-	yunutyEngine::Collider2D::SetIsOnXYPlane(false);
 
+	//yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 	//auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//camObj->GetTransform()->position = Vector3d(0, 0, -5);
-	//auto roamingCam = camObj->AddComponent<RoamingCam>();
-
-	GraphicsTest();
-
+	//camObj->GetTransform()->position = Vector3d(0, 20, 0);
+	//auto roamingCam = camObj->AddComponent<RTSCam>();
+	//roamingCam->SetCameraMain();
+#ifdef GRAPHICS_TEST
 	{
+		yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+		yunutyEngine::Collider2D::SetIsOnXYPlane(false);
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto light =directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 		auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
@@ -156,63 +162,37 @@ void application::Contents::ContentsLayer::Initialize()
 		//auto test = directionalLight->AddComponent<TestComponent2>();
 		//test->gameObject = directionalLight;
 	}
+	GraphicsTest();
+#else
 
-	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-
-	auto rtsCam = camObj->AddComponent<RTSCam>();
-	//auto rtsCam = camObj->AddComponent<yunutyEngine::graphics::Camera>();
-	//rtsCam->GetTransform()->position = Vector3d(0, 50, -450);
-
-	//// 길찾기 테스트
-	//{
-	//    const float corridorRadius = 3;
-	//    std::vector<Vector3f> worldVertices { };
-	//    std::vector<int> worldFaces { };
-
-	//    CreateNavPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
-	//    CreateNavPlane({ -8,0,-2 }, { 8,0,2 }, worldVertices, worldFaces);
-	//    CreateNavPlane({ -8,0,-8 }, { -6,0,8 }, worldVertices, worldFaces);
-	//    CreateNavPlane({ 6,0,-8 }, { 8,0,8 }, worldVertices, worldFaces);
-	//    CreateNavPlane({ -8,0,6 }, { 8,0,8 }, worldVertices, worldFaces);
-	//    CreateNavPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
-	//    auto navField = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationField>();
-	//    navField->BuildField(worldVertices, worldFaces);
-	//    auto agent = CreateAgent(navField);
-	//    auto agent2 = CreateAgent(navField);
-	//    auto agent3 = CreateAgent(navField);
-	//    rtsCam->groundRightClickCallback = [=](Vector3d position) {
-	//        agent->MoveTo(position);
-	//        agent2->MoveTo(position);
-	//        agent3->MoveTo(position);
-	//    };
-	//}
+#endif
 
 	yunutyEngine::YunutyCycle::SingleInstance().Play();
-}
+	}
 
-void application::Contents::ContentsLayer::Update(float ts)
+void application::contents::ContentsLayer::Update(float ts)
 {
-	std::cout << Time::GetFPS() << std::endl;
+	//std::cout << Time::GetFPS() << std::endl;
 }
 
-void application::Contents::ContentsLayer::GUIProgress()
+void application::contents::ContentsLayer::GUIProgress()
 {
 
 }
 
-void application::Contents::ContentsLayer::Finalize()
+void application::contents::ContentsLayer::Finalize()
 {
 
 }
 
 #ifdef GEN_TESTS
-void application::Contents::ContentsLayer::AssignTestInitializer(std::function<void()> testInitializer)
+void application::contents::ContentsLayer::AssignTestInitializer(std::function<void()> testInitializer)
 {
 	ContentsLayer::testInitializer = testInitializer;
 	YunutyCycle::SingleInstance().onExceptionThrown = [](const std::exception& e) {
 		application::Application::GetInstance().AddMainLoopTodo([=]() {
 			Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
 			});
-	};
+		};
 }
 #endif

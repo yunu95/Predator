@@ -1,3 +1,5 @@
+#ifdef EDITOR
+#include "InWanderLand.h"
 #include "Storable.h"
 
 namespace application
@@ -30,3 +32,4 @@ namespace application
         }
     }
 }
+#endif

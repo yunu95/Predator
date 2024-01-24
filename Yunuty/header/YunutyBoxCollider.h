@@ -28,7 +28,7 @@ namespace yunutyEngine
             void SetHalfExtent(const Vector3f& halfExtent);
             virtual void ApplyScale(const Vector3d& halfExtent) override;
         private:
-            Vector3f unscaledHalfExtent;
+            Vector3f unscaledHalfExtent{ 0.5f,0.5f,0.5f };
         };
     }
 }

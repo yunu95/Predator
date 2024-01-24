@@ -1,6 +1,6 @@
-/// 2023. 11. 23 ±è»óÁØ
-/// IEditableData ÀÇ ±¸Ã¼È­µÈ Å¬·¡½º
-/// ÁöÇü
+/// 2023. 11. 23 ê¹€ìƒì¤€
+/// IEditableData ì˜ êµ¬ì²´í™”ëœ í´ë˜ìŠ¤
+/// ì§€í˜•
 
 #pragma once
 
@@ -28,8 +28,8 @@ namespace application
 		{
 			Terrain_TemplateData* templateData = nullptr;
 
-			TO_JSON(POD_Terrain);
-			FROM_JSON(POD_Terrain);
+			TO_JSON(POD_Terrain)
+			FROM_JSON(POD_Terrain)
 		};
 
 		class TerrainData

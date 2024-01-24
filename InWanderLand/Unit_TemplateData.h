@@ -14,8 +14,8 @@ namespace application
 
 		struct POD_Unit_TemplateData
 		{
-			TO_JSON(POD_Unit_TemplateData);
-			FROM_JSON(POD_Unit_TemplateData);
+			TO_JSON(POD_Unit_TemplateData)
+			FROM_JSON(POD_Unit_TemplateData)
 		};
 
 		class Unit_TemplateData

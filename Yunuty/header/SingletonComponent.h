@@ -1,12 +1,12 @@
 #pragma once
 #include <concepts>
-#include "YunutyEngine.h"
+#include "Component.h"
 
 namespace yunutyEngine
 {
     // 호출되면 바로 싱글톤 클래스를 자식 클래스타입을 템플릿 파라미터로 받는 템플릿 클래스로 구현한다.
     template<typename T> 
-    class SingletonComponent : virtual public yunutyEngine::Component
+    class SingletonComponent
     {
     public:
         static T& Instance();

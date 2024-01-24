@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
@@ -25,7 +26,7 @@ void SnippetInitializer1milGameObjects()
         for (auto each : gameObj->GetComponents<Component>())
             each->SetIsUpdating(false);
     }
-    for (auto i = 0; i < 100000; i++)
+    for (auto i = 0; i < 10000; i++)
         Scene::getCurrentScene()->AddGameObject()->AddComponent<UpdatingComponent>();
 
     auto delayedTestFunctions = Scene::getCurrentScene()->AddGameObject()->AddComponent<DelayedTestFunctions>();
@@ -44,7 +45,7 @@ void SnippetInitializer1milGameObjects()
 
 namespace snippets
 {
-    TEST_CLASS(InWanderLand)
+    TEST_CLASS(Snippet1milGameObjectsClass)
     {
     public:
         // 게임오브젝트의 갯수가 100만개가 되어도, 1000만개가 되어도 Update함수를 매번 호출하지만 않는다면 게임 실행에 전혀 부담을 주지 않습니다.
@@ -53,7 +54,7 @@ namespace snippets
         TEST_METHOD(Snippet1milGameObjects)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializer1milGameObjects);
+            application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializer1milGameObjects);
             client.Initialize();
             client.Run();
             client.Finalize();

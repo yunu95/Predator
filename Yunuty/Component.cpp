@@ -31,13 +31,12 @@ Component::Component()
     guid = addComponentDesc.guid;
     guidPtrMap[guid] = this;
 
-    YunutyCycle::SingleInstance().HandleComponent(this);
 }
 Component::~Component()
 {
     guidPtrMap.erase(guid);
 
-    YunutyCycle::SingleInstance().HandleComponent(this, true);
+    gameObject->HandleComponentUpdateState(this);
 }
 yunutyEngine::GameObject* yunutyEngine::Component::GetGameObject()
 {
@@ -71,24 +70,21 @@ std::wstring yunutyEngine::Component::GetGUIDWStr()
 }
 void yunutyEngine::Component::SetActive(bool active)
 {
-    if (isActive && !active)
+    if (isActive != active)
     {
-        YunutyCycle::SingleInstance().updateTargetComponentsPendingDeletion.push(this);
-        OnDisable();
+        isActive = active;
+        gameObject->HandleComponentUpdateState(this);
+        if (isActive)
+            OnEnable();
+        else
+            OnDisable();
     }
-    if (!isActive && active)
-    {
-        YunutyCycle::SingleInstance().HandleComponent(this);
-        OnEnable();
-    }
-
-    isActive = active;
 }
 void yunutyEngine::Component::SetIsUpdating(bool isUpdating)
 {
     if ((this->isUpdating != isUpdating) && GetGameObject()->GetActive())
     {
         this->isUpdating = isUpdating;
-        YunutyCycle::SingleInstance().HandleComponent(this);
+        gameObject->HandleComponentUpdateState(this);
     }
 };

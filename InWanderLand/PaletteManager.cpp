@@ -1,41 +1,43 @@
 #include "PaletteManager.h"
-#include "SelectionBox.h"
 
-namespace application::editor::palette
+#include "PaletteList.h"
+
+namespace application
 {
-    PaletteManager* PaletteManager::currentPalette = nullptr;
+	namespace editor
+	{
+		namespace palette
+		{
+			void PaletteManager::Initialize()
+			{
+				paletteList[(int)Palette_List::Terrain] = &TerrainPalette::SingleInstance();
+				paletteList[(int)Palette_List::Unit] = &UnitPalette::SingleInstance();
+				paletteList[(int)Palette_List::Doodad] = &DoodadPalette::SingleInstance();
+				paletteList[(int)Palette_List::Region] = &RegionPalette::SingleInstance();
 
-    void PaletteManager::OnLeftClick()
-    {
-        dragStartPos = currentBrushPos;
-        /// 호버링 되는 상태의 객체가 있다면 객체를 단 하나만 선택합니다. 선택된 객체가 없다면 눈치를 보다가 드래깅을 시작합니다.
-    }
-    void PaletteManager::OnLeftClickRelease()
-    {
-        /// 드래깅 선택을 진행중인 상태라면 드래깅 박스를 비활성화합니다.
-        if ((dragStartPos - currentBrushPos).MagnitudeSqr() < dragThreshold * dragThreshold)
-        {
-        }
-        else
-        {
-        }
-    }
-    void PaletteManager::OnMouseMove(Vector3d projectedWorldPos)
-    {
-        currentBrushPos = projectedWorldPos;
-        if (isDraggingForSelection())
-        {
-            SelectionBox::Instance().SetCoverage(dragStartPos, currentBrushPos);
-            /// 셀렉션 박스를 활성화시키고 리사이징합니다.
-        }
-        /// 개별 인스턴스 드래깅 상태라면 드래깅되는 객체의 위치를 옮깁니다.
-    }
-    void PaletteManager::OnDeletion()
-    {
+				SetCurrentPalette(paletteList[(int)Palette_List::Terrain]);
+			}
 
-    }
-    bool PaletteManager::isDraggingForSelection()
-    {
-        return Input::isKeyDown(KeyCode::MouseLeftClick) && (dragStartPos - currentBrushPos).MagnitudeSqr() > dragThreshold * dragThreshold;
-    }
+			void PaletteManager::SetCurrentPalette(Palette* palette)
+			{
+				if (currentPalette)
+				{
+					currentPalette->OnStandbyPalette();
+				}
+
+				currentPalette = palette;
+
+				if (currentPalette)
+				{
+					currentPalette->OnStartPalette();
+				}
+			}
+
+			PaletteManager::PaletteManager()
+				: paletteList(), currentPalette(nullptr)
+			{
+				paletteList.resize((int)Palette_List::Size);
+			}
+		}
+	}
 }

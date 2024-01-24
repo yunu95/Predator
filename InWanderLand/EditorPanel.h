@@ -4,8 +4,10 @@
 #pragma once
 
 #include "CommandManager.h"
+#include "EditorEvents.h"
 
 #include <memory>
+#include <utility>
 
 namespace application
 {
@@ -17,10 +19,10 @@ namespace application
 			virtual ~Panel() = default;
 
 			virtual void Initialize() = 0;
-			//virtual void EventProgress(Events& e) = 0;
 			virtual void Update(float ts) = 0;
 			virtual void GUIProgress() = 0;
 			virtual void Finalize() = 0;
+			virtual void OnEvent(EditorEvents& event) {};
 
 			inline bool IsPanelMouseOver() { return isMouseOver; }
 			inline bool IsPanelFocused() { return isFocused; }

@@ -27,7 +27,7 @@ protected:
             deltaPosition -= GetTransform()->GetWorldRotation().Forward();
         if (yunutyEngine::Input::isKeyDown(KeyCode::Q))
             deltaPosition -= Vector3d::up;
-        if (yunutyEngine::Input::isKeyDown(KeyCode::E))
+        if (yunutyEngine::Input::isKeyDown(KeyCode::Alphabet_E))
             deltaPosition += Vector3d::up;
         static auto lastMousePos = yunutyEngine::Input::getMouseScreenPosition();
 

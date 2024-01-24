@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
@@ -46,11 +47,11 @@ NavigationAgent* CreateAgent(NavigationField* navField)
     agent->AssignToNavigationField(navField);
     auto staticMesh = agent->GetGameObject()->AddGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
     staticMesh->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(L"Capsule"));
-    staticMesh->GetGI().GetMaterial()->SetColor({ 0.75,0.75,0.75,0 });
+    staticMesh->GetGI().GetMaterial()->SetColor({ 0.75,0.75,0.75,1 });
     staticMesh->GetTransform()->position = Vector3d{ 0,0.5,0 };
     return agent;
 }
-// ÀÌ ÇÔ¼ö´Â °ÔÀÓÀÇ ±âº» ÃÊ±âÈ­ ÇÔ¼ö¸¦ ¿À¹ö¶óÀÌµåÇÕ´Ï´Ù.
+// ì´ í•¨ìˆ˜ëŠ” ê²Œìž„ì˜ ê¸°ë³¸ ì´ˆê¸°í™” í•¨ìˆ˜ë¥¼ ì˜¤ë²„ë¼ì´ë“œí•©ë‹ˆë‹¤.
 void TestCaseNavigationInit()
 {
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
@@ -85,36 +86,36 @@ void TestCaseNavigationInit()
     agent->MoveTo(moveDestination);
     agent->SetSpeed(10);
     agent->SetAcceleration(10000000);
-    // delayedTestFunctions¿¡ 2ÃÊ ÈÄ ½ÇÇà½ÃÅ³ ÄÝ¹é ÇÔ¼ö¸¦ µî·ÏÇÕ´Ï´Ù. ÀÌ ÄÝ¹éÇÔ¼ö´Â °ÔÀÓ ¿£Áø ½º·¹µå¿¡¼­ È£ÃâµË´Ï´Ù.
+    // delayedTestFunctionsì— 2ì´ˆ í›„ ì‹¤í–‰ì‹œí‚¬ ì½œë°± í•¨ìˆ˜ë¥¼ ë“±ë¡í•©ë‹ˆë‹¤. ì´ ì½œë°±í•¨ìˆ˜ëŠ” ê²Œìž„ ì—”ì§„ ìŠ¤ë ˆë“œì—ì„œ í˜¸ì¶œë©ë‹ˆë‹¤.
     delayedTestFunctions->todoList.push_back({ 2,[=]() {
-        // °ÔÀÓ ¿£Áø ½º·¹µå¿¡¼­ ¸ÞÀÎ ½º·¹µå¿¡¼­ Æ¯Á¤ µ¿ÀÛÀ» ±¸µ¿½ÃÅ°°í ½Í´Ù¸é ¾Æ·¡ÀÇ AddMainLoopTodo ÇÔ¼ö¸¦ »ç¿ëÇÕ´Ï´Ù.
+        // ê²Œìž„ ì—”ì§„ ìŠ¤ë ˆë“œì—ì„œ ë©”ì¸ ìŠ¤ë ˆë“œì—ì„œ íŠ¹ì • ë™ìž‘ì„ êµ¬ë™ì‹œí‚¤ê³  ì‹¶ë‹¤ë©´ ì•„ëž˜ì˜ AddMainLoopTodo í•¨ìˆ˜ë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.
         application::Application::GetInstance().AddMainLoopTodo([=]() {
-            // Assert ÇÔ¼ö±ºÀº Å×½ºÆ® ÄÉÀÌ½ºÀÇ ½ÇÇà ¼º°ø ¿©ºÎ¸¦ ÆÇ´ÜÇÏ´Âµ¥¿¡ ¾²ÀÔ´Ï´Ù.
-            // AssertÀÇ ½ÇÇàÀº ¸ÞÀÎ ½º·¹µå¿¡¼­ ½ÇÇàµÇ¾î¾ß ÇÕ´Ï´Ù.
+            // Assert í•¨ìˆ˜êµ°ì€ í…ŒìŠ¤íŠ¸ ì¼€ì´ìŠ¤ì˜ ì‹¤í–‰ ì„±ê³µ ì—¬ë¶€ë¥¼ íŒë‹¨í•˜ëŠ”ë°ì— ì“°ìž…ë‹ˆë‹¤.
+            // Assertì˜ ì‹¤í–‰ì€ ë©”ì¸ ìŠ¤ë ˆë“œì—ì„œ ì‹¤í–‰ë˜ì–´ì•¼ í•©ë‹ˆë‹¤.
             Assert::IsTrue((agent->GetTransform()->GetWorldPosition() - moveDestination).MagnitudeSqr() < 0.3,L"navigation agent couldn't move to a specific location!");
             agent->Relocate(Vector3d{ -10,0,0 });
                 });
             } });
     delayedTestFunctions->todoList.push_back({ 2.2,[=]() {
-        // °ÔÀÓ ¿£Áø ½º·¹µå¿¡¼­ ¸ÞÀÎ ½º·¹µå¿¡¼­ Æ¯Á¤ µ¿ÀÛÀ» ±¸µ¿½ÃÅ°°í ½Í´Ù¸é ¾Æ·¡ÀÇ AddMainLoopTodo ÇÔ¼ö¸¦ »ç¿ëÇÕ´Ï´Ù.
+        // ê²Œìž„ ì—”ì§„ ìŠ¤ë ˆë“œì—ì„œ ë©”ì¸ ìŠ¤ë ˆë“œì—ì„œ íŠ¹ì • ë™ìž‘ì„ êµ¬ë™ì‹œí‚¤ê³  ì‹¶ë‹¤ë©´ ì•„ëž˜ì˜ AddMainLoopTodo í•¨ìˆ˜ë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.
         application::Application::GetInstance().AddMainLoopTodo([=]() {
             Assert::IsTrue((agent->GetTransform()->GetWorldPosition() - Vector3d{-7.5,0,0}).MagnitudeSqr() < 1,L"navigation agent's ""Relocate"" method didn't really relocate the agent!");
-            // À§ ½ÄÀÌ ÂüÀÌ¶ó¸é ÇÁ·Î±×·¥À» Á¾·áÇÕ´Ï´Ù. 
+            // ìœ„ ì‹ì´ ì°¸ì´ë¼ë©´ í”„ë¡œê·¸ëž¨ì„ ì¢…ë£Œí•©ë‹ˆë‹¤. 
             application::Application::GetInstance().TurnOff();
                 });
             } });
     yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
-namespace InWanderLand
+namespace tests
 {
-    TEST_CLASS(InWanderLand)
+    TEST_CLASS(TestCaseNavigationClass)
     {
     public:
         TEST_METHOD(TestCaseNavigation)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(TestCaseNavigationInit);
+            application::contents::ContentsLayer::AssignTestInitializer(TestCaseNavigationInit);
             client.Initialize();
             client.Run();
             client.Finalize();

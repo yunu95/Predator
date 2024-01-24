@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "InputManager.h"
 #include "PlayerController.h"
 #include "Unit.h"
@@ -35,5 +36,10 @@ void InputManager::Update()
 	if (yunutyEngine::Input::isKeyDown(KeyCode::Q))
 	{
 		PlayerController::GetInstance()->SetLeftClickSkill(Unit::SkillEnum::Q);
+	}
+
+	if (yunutyEngine::Input::isKeyDown(KeyCode::W))
+	{
+		PlayerController::GetInstance()->SetLeftClickSkill(Unit::SkillEnum::W);
 	}
 }

@@ -1,7 +1,7 @@
-/// 2023. 10. 05 ±è»óÁØ
-/// ¿¡µğÅÍ¿¡¼­ »ç¿ëÇÒ ¸ğµç ³»¿ëÀ» ¸ğ¾ÆµĞ Å¬·¡½º
-/// ÇØ´ç ·¹ÀÌ¾î¸¦ Release ¸ğµå¿¡¼­ »ç¿ëÇÏÁö ¾Ê´Â °ÍÀ¸·Î
-/// Release ¸ğµå¿¡¼­´Â ¿¡µğÅÍ¿¡ ´ëÇÑ ÁøÀÔÀÌ ºÒ°¡´É ÇÏµµ·Ï ÇÔ
+/// 2023. 10. 05 ê¹€ìƒì¤€
+/// ì—ë””í„°ì—ì„œ ì‚¬ìš©í•  ëª¨ë“  ë‚´ìš©ì„ ëª¨ì•„ë‘” í´ë˜ìŠ¤
+/// í•´ë‹¹ ë ˆì´ì–´ë¥¼ Release ëª¨ë“œì—ì„œ ì‚¬ìš©í•˜ì§€ ì•ŠëŠ” ê²ƒìœ¼ë¡œ
+/// Release ëª¨ë“œì—ì„œëŠ” ì—ë””í„°ì— ëŒ€í•œ ì§„ì…ì´ ë¶ˆê°€ëŠ¥ í•˜ë„ë¡ í•¨
 
 #pragma once
 
@@ -12,8 +12,10 @@
 
 #include "Layer.h"
 #include "CommandManager.h"
+#include "EditorCamera.h"
 #include "EditorPanel.h"
 #include "EditorModule.h"
+#include "EditorEvents.h"
 
 namespace application
 {
@@ -26,10 +28,14 @@ namespace application
 			static void AssignTestInitializer(std::function<void()> testInitializer);
 
 			virtual void Initialize() override;
-			// virtual void EventProgress(Events& e) override;
 			virtual void Update(float ts) override;
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
+			virtual void OnEvent(EditorEvents& event) override;
+
+			// Content ë ˆì´ì–´ì˜ Initialize ì´í›„ì— ì´ˆê¸°í™” ë˜ì–´ì•¼ í•˜ëŠ”
+			// GameEngine ê³¼ ê´€ë ¨ëœ ë‚´ìš©ë“¤ì„ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜ì…ë‹ˆë‹¤.
+			void LateInitialize();
 
 		private:
 			enum class Panel_List
@@ -42,8 +48,8 @@ namespace application
 				CAMERAVIEW,
 				PALETTE,
 
-				/// Size¸¦ ÀÚµ¿À¸·Î ³Ö±â À§ÇØ »ç¿ëÇÏ´Â enum
-				/// Ã¹ enum °ªÀÌ 0 ÀÌ°í, ¸ğµç °£°İÀÌ 1ÀÏ ¶§¿¡ °¡´ÉÇÔ
+				/// Sizeë¥¼ ìë™ìœ¼ë¡œ ë„£ê¸° ìœ„í•´ ì‚¬ìš©í•˜ëŠ” enum
+				/// ì²« enum ê°’ì´ 0 ì´ê³ , ëª¨ë“  ê°„ê²©ì´ 1ì¼ ë•Œì— ê°€ëŠ¥í•¨
 				Size
 			};
 
@@ -51,8 +57,8 @@ namespace application
 			{
 				TemplateDataEditor	= 0,
 
-				/// Size¸¦ ÀÚµ¿À¸·Î ³Ö±â À§ÇØ »ç¿ëÇÏ´Â enum
-				/// Ã¹ enum °ªÀÌ 0 ÀÌ°í, ¸ğµç °£°İÀÌ 1ÀÏ ¶§¿¡ °¡´ÉÇÔ
+				/// Sizeë¥¼ ìë™ìœ¼ë¡œ ë„£ê¸° ìœ„í•´ ì‚¬ìš©í•˜ëŠ” enum
+				/// ì²« enum ê°’ì´ 0 ì´ê³ , ëª¨ë“  ê°„ê²©ì´ 1ì¼ ë•Œì— ê°€ëŠ¥í•¨
 				Size
 			};
 
@@ -62,8 +68,10 @@ namespace application
 			void UI_DrawMenubar();
 
 			CommandManager& cm = CommandManager::GetSingletonInstance();
-			std::vector<std::unique_ptr<Panel>> editorPanelList;
-			std::vector<std::unique_ptr<EditorModule>> editorModuleList;
+			EditorCamera& editorCamera = EditorCamera::GetSingletonInstance();
+
+			std::vector<Panel*> editorPanelList;
+			std::vector<EditorModule*> editorModuleList;	
 		};
 	}
 }

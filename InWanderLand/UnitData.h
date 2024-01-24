@@ -39,8 +39,8 @@ namespace application
 			Unit_TemplateData* templateData = nullptr;
 			unit::Affiliation affiliation = unit::Affiliation::None;
 
-			TO_JSON(POD_Unit);
-			FROM_JSON(POD_Unit);
+			TO_JSON(POD_Unit)
+			FROM_JSON(POD_Unit)
 		};
 
 		class UnitData

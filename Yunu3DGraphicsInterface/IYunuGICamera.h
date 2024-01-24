@@ -7,18 +7,22 @@ namespace yunuGI
     class ICamera : public IUnknown
     {
     public:
-        // Ä«¸Ş¶óÀÇ ¿ùµå À§Ä¡¸¦ Àü¼ÛÇØ view matrix¸¦ °»½ÅÇÑ´Ù.
+        // ì¹´ë©”ë¼ì˜ ì›”ë“œ ìœ„ì¹˜ë¥¼ ì „ì†¡í•´ view matrixë¥¼ ê°±ì‹ í•œë‹¤.
         virtual void SetWorldTM(const Matrix4x4& tm) = 0;
-        // Ä«¸Ş¶óÀÇ ½Ã¾ß°¢À» °»½ÅÇÑ´Ù.
-        virtual void SetFOV(float fov) = 0;
-        // Ä«¸Ş¶ó ÀıµÎÃ¼ÀÇ near ÇÃ·¹ÀÎ±îÁöÀÇ °Å¸®¸¦ Á¤ÀÇÇÑ´Ù.
+        // ì¹´ë©”ë¼ì˜ ì‹œì•¼ê°ì„ ê°±ì‹ í•œë‹¤.
+        virtual void SetVerticalFOV(float fov) = 0;
+        virtual float GetVerticalFOV() = 0;
+        // ì¹´ë©”ë¼ ì ˆë‘ì²´ì˜ near í”Œë ˆì¸ê¹Œì§€ì˜ ê±°ë¦¬ë¥¼ ì •ì˜í•œë‹¤.
         virtual void SetNear(float near) = 0;
-        // Ä«¸Ş¶ó ÀıµÎÃ¼ÀÇ far ÇÃ·¹ÀÎ±îÁöÀÇ °Å¸®¸¦ Á¤ÀÇÇÑ´Ù.
+        virtual float GetNear() = 0;
+        // ì¹´ë©”ë¼ ì ˆë‘ì²´ì˜ far í”Œë ˆì¸ê¹Œì§€ì˜ ê±°ë¦¬ë¥¼ ì •ì˜í•œë‹¤.
         virtual void SetFar(float far) = 0;
-        // Ä«¸Ş¶óÀÇ ÇØ»óµµ¸¦ Á¶ÀıÇÑ´Ù.
-        virtual void SetResolution(float width,float height) = 0;
-        // Ä«¸Ş¶ó¸¦ ¸ŞÀÎ Ä«¸Ş¶ó·Î ¸¸µç´Ù.
-        virtual void SetAsMain() =0;
+        virtual float GetFar() = 0;
+        // ì¹´ë©”ë¼ì˜ í•´ìƒë„ë¥¼ ì¡°ì ˆí•œë‹¤.
+        virtual void SetResolution(float width, float height) = 0;
+        virtual void GetResolution(float* width, float* height) = 0;
+        // ì¹´ë©”ë¼ë¥¼ ë©”ì¸ ì¹´ë©”ë¼ë¡œ ë§Œë“ ë‹¤.
+        virtual void SetAsMain() = 0;
     };
     struct ICameraDesc
     {

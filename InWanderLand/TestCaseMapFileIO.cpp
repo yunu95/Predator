@@ -1,4 +1,5 @@
-#ifdef GEN_TESTS
+#if defined(GEN_TESTS) && defined(EDITOR)
+#include "InWanderLand.h"
 #include "CppUnitTest.h"
 #include "EditorLayer.h"
 #include "YunutyEngine.h"
@@ -15,19 +16,18 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 void TestCaseMapFileIOInitializer()
 {
-    using namespace application::editor;
-    auto& tdm = TemplateDataManager::GetSingletonInstance();
-    tdm.CreateTemplateData("Terrain1", DataType::TerrainData);
-    tdm.CreateTemplateData("Terrain2", DataType::TerrainData);
-    tdm.CreateTemplateData("Terrain3", DataType::TerrainData);
-    tdm.CreateTemplateData("Unit1", DataType::UnitData);
-    tdm.CreateTemplateData("Unit2", DataType::UnitData);
-    tdm.CreateTemplateData("Unit3", DataType::UnitData);
-    tdm.CreateTemplateData("Ornament1", DataType::OrnamentData);
-    tdm.CreateTemplateData("Ornament2", DataType::OrnamentData);
-    tdm.CreateTemplateData("Ornament3", DataType::OrnamentData);
+    auto& tdm = application::editor::TemplateDataManager::GetSingletonInstance();
+    tdm.CreateTemplateData("Terrain1", application::editor::DataType::TerrainData);
+    tdm.CreateTemplateData("Terrain2", application::editor::DataType::TerrainData);
+    tdm.CreateTemplateData("Terrain3", application::editor::DataType::TerrainData);
+    tdm.CreateTemplateData("Unit1", application::editor::DataType::UnitData);
+    tdm.CreateTemplateData("Unit2", application::editor::DataType::UnitData);
+    tdm.CreateTemplateData("Unit3", application::editor::DataType::UnitData);
+    tdm.CreateTemplateData("Ornament1", application::editor::DataType::OrnamentData);
+    tdm.CreateTemplateData("Ornament2", application::editor::DataType::OrnamentData);
+    tdm.CreateTemplateData("Ornament3", application::editor::DataType::OrnamentData);
 
-    auto& im = InstanceManager::GetSingletonInstance();
+    auto& im = application::editor::InstanceManager::GetSingletonInstance();
     im.CreateInstance("Terrain1");
     im.CreateInstance("Terrain2");
     im.CreateInstance("Terrain2");
@@ -48,9 +48,9 @@ void TestCaseMapFileIOInitializer()
     im.CreateInstance("Ornament3");
 }
 
-namespace InWanderLand
+namespace tests
 {
-    TEST_CLASS(InWanderLand)
+    TEST_CLASS(TestCaseMapFileIOClass)
     {
     public:
         TEST_METHOD(TestCaseMapFileIO)
@@ -67,7 +67,7 @@ namespace InWanderLand
             mfm.Clear();
             mfm.LoadMapFile("TestCase1.pmap");
             mfm.SaveMapFile("TestCase2.pmap");
-            
+
             json mapData1;
             json mapData2;
 

@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
@@ -16,14 +17,14 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-// ÀÌ ÇÔ¼ö´Â °ÔÀÓÀÇ ±âº» ÃÊ±âÈ­ ÇÔ¼ö¸¦ ¿À¹ö¶óÀÌµåÇÕ´Ï´Ù.
+// ì´ í•¨ìˆ˜ëŠ” ê²Œì„ì˜ ê¸°ë³¸ ì´ˆê¸°í™” í•¨ìˆ˜ë¥¼ ì˜¤ë²„ë¼ì´ë“œí•©ë‹ˆë‹¤.
 void TestCaseD3D11LiveObjimguiInit()
 {
 }
 
-namespace InWanderLand
+namespace tests
 {
-    TEST_CLASS(InWanderLand)
+    TEST_CLASS(TestCaseD3D11LiveObjimguiClass)
     {
     public:
         TEST_METHOD(TestCaseD3D11LiveObjimgui)
@@ -31,7 +32,7 @@ namespace InWanderLand
             try
             {
                 application::Application& client = application::Application::CreateApplication(0, 0);
-                application::Contents::ContentsLayer::AssignTestInitializer(TestCaseD3D11LiveObjimguiInit);
+                application::contents::ContentsLayer::AssignTestInitializer(TestCaseD3D11LiveObjimguiInit);
                 client.Initialize();
                 client.Run();
                 client.Finalize();

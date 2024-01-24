@@ -5,16 +5,25 @@
 /// UnitFactory에서의 유닛 생산을 좀 더 효율적으로 하기 위한 클래스.
 /// </summary>
 
-using namespace yunuGI;
-
 class UnitProductionOrder : public Component
 {
 protected:
 	string m_objectName;
 	Unit::UnitType m_unitType;
 	Unit::UnitSide m_unitSide;
-	int m_hp;
-	int m_ap;
+	
+	float m_healthPoint;
+	int m_manaPoint;
+
+	float m_autoAttackDamage;
+	int m_criticalHitProbability;				// 치명타 확률
+	float m_criticalHitMultiplier;				// 공격 시 치명타 피해량
+
+	/// Decreasing Damage Elements
+	int m_defensePoint;
+	int m_dodgeProbability;					// 회피율
+	float m_criticalDamageDecreaseMultiplier;	// 피격 시 치명타 피해 감소 배율
+
 	float m_idRadius;
 	float m_atkRadius;
 	float m_unitSpeed;
@@ -23,11 +32,10 @@ protected:
 
 	// 임시. 모델링 파일로 대체해주기
 	GameObject* m_unitGameObject;
-	GameObject* m_unitAttackColliderObject;
-	IAnimation* m_idleAnimation;
-	IAnimation* m_walkAnimation;
-	IAnimation* m_attackAnimation;
-	IAnimation* m_deathAnimation;
+	Unit* m_unitComponent;
+
+	Unit::BaseUnitAnimationStruct m_baseUnitAnimations;
+
 	NavigationField* m_navField;
 	Vector3d m_startPosition;
 

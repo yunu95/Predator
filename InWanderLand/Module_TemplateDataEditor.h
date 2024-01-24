@@ -24,8 +24,9 @@ namespace application
 		class Module_TemplateDataEditor
 			: public EditorModule, public Singleton<Module_TemplateDataEditor>
 		{
+			friend class Singleton<Module_TemplateDataEditor>;
+
 		public:
-			Module_TemplateDataEditor();
 			virtual ~Module_TemplateDataEditor();
 
 			virtual void Initialize() override;
@@ -34,6 +35,8 @@ namespace application
 			virtual void Finalize() override;
 
 		private:
+			Module_TemplateDataEditor();
+
 			// TemplateData 리스트와 선택한 리스트에 대한 내용을 출력하는 두 패널을 그려주는 함수
 			void DrawLayout();
 			// TemplateData 리스트를 그리는 함수

@@ -308,9 +308,6 @@
     <ClCompile Include="NailEngine.cpp">
       <Filter>GraphicsEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Device.cpp">
-      <Filter>GraphicsEngine\Device</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceBuilder.cpp">
       <Filter>GraphicsEngine\ResourceBuilder</Filter>
     </ClCompile>
@@ -416,6 +413,10 @@
     <ClCompile Include="SkyBoxPass.cpp">
       <Filter>RenderSystem\SkyBoxPass</Filter>
     </ClCompile>
+    <ClCompile Include="Device.cpp">
+      <Filter>GraphicsEngine\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="tempMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="RuntimeDependency\resources\Shader\DefaultVS.hlsl">

@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "Application.h"
 
 #include "imgui.h"
@@ -7,6 +8,12 @@
 #include "YunutyEngine.h"
 #include "EditorLayer.h"
 #include "ContentsLayer.h"
+#include "WindowEvents.h"
+#include "MouseEvents.h"
+#include "KeyboardEvents.h"
+#include "PaletteManager.h"
+#include "Palette.h"
+#include "EditorCamera.h"
 
 #include <d3d11.h>
 #include <dxgi1_4.h>
@@ -14,13 +21,15 @@
 
 #include <cassert>
 
+#include <windowsx.h>
+
 // Forward declarations of helper functions
 void GetDeviceAndDeviceContext();
-bool CreateSwapChain();
-void CleanupSwapChain();
 void CreateRenderTarget();
+bool CreateSwapChain();
 void CleanupRenderTarget();
-void ResizeBuffers(HWND hWnd);
+void CleanupSwapChain();
+void ResizeBuffers();
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -31,6 +40,7 @@ HWND hWND = NULL;
 WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("InWanderLand"), NULL };
 ID3D11Device* g_pD3dDevice = NULL;
 ID3D11DeviceContext* g_pD3dDeviceContext = NULL;
+bool gameFocus = false;
 
 #ifdef EDITOR
 IDXGISwapChain1* g_EditorpSwapChain = NULL;
@@ -42,6 +52,18 @@ HWND editorHWND = NULL;
 WNDCLASSEX wcEditor = { sizeof(WNDCLASSEX), CS_CLASSDC, WndEditorProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("InWanderLand_Editor"), NULL };
 ImVec2 dockspaceArea = ImVec2();
 ImVec2 dockspaceStartPoint = ImVec2();
+RAWINPUTDEVICE inputDevice[2] = { RAWINPUTDEVICE(), RAWINPUTDEVICE() };
+std::function<void()> gameWindowFocusCallBackFunction = std::function<void()>();
+std::function<void()> gameWindowKillFocusCallBackFunction = std::function<void()>();
+std::function<void()> winResizeCallBackFunction = std::function<void()>();
+std::function<void(unsigned char keyCode)> winKeyboardPressedCallBackFunction = std::function<void(unsigned char)>();
+std::function<void(unsigned char keyCode)> winKeyboardUpCallBackFunction = std::function<void(unsigned char)>();
+std::function<void()> winMouseLeftPressedCallBackFunction = std::function<void()>();
+std::function<void()> winMouseLeftUpCallBackFunction = std::function<void()>();
+std::function<void()> winMouseRightPressedCallBackFunction = std::function<void()>();
+std::function<void()> winMouseRightUpCallBackFunction = std::function<void()>();
+std::function<void(long posX, long posY)> winMouseMoveCallBackFunction = std::function<void(long, long)>();
+std::function<void(short wheelDelta)> winMouseWheelCallBackFunction = std::function<void(short)>();
 #endif
 
 namespace application
@@ -70,6 +92,11 @@ namespace application
 
 	}
 
+	bool Application::IsFocusGameWindow()
+	{
+		return gameFocus;
+	}
+
 	Application::Application(int argc, char** argv)
 	{
 		// Create application window
@@ -91,17 +118,17 @@ namespace application
 
 #ifdef EDITOR
 		/// 에디터 윈도우 생성
-		int editorWinSizeX = appSpecification.windowWidth;
-		int editorWinSizeY = appSpecification.windowHeight;
-		int editorWinPosX = (GetSystemMetrics(SM_CXSCREEN) - editorWinSizeX) / 2 + 1920;
-		int editorWinPosY = (GetSystemMetrics(SM_CYSCREEN) - editorWinSizeY) / 2 + 200;
+		g_EditorResizeWidth = appSpecification.windowWidth;
+		g_EditorResizeHeight = appSpecification.windowHeight;
+		int editorWinPosX = (GetSystemMetrics(SM_CXSCREEN) - g_EditorResizeWidth) / 2 + 1920;
+		int editorWinPosY = (GetSystemMetrics(SM_CYSCREEN) - g_EditorResizeHeight) / 2 + 200;
 
 		// 게임엔진 스레드에서 에디터 윈도우를 생성하도록 유도
-		yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [=]()
+		yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [&, editorWinPosX, editorWinPosY, this]()
 			{
 				::RegisterClassEx(&wcEditor);
 
-				editorHWND = ::CreateWindow(wcEditor.lpszClassName, wcEditor.lpszClassName, WS_OVERLAPPEDWINDOW, editorWinPosX, editorWinPosY, editorWinSizeX, editorWinSizeY, NULL, NULL, wcEditor.hInstance, NULL);
+				editorHWND = ::CreateWindow(wcEditor.lpszClassName, wcEditor.lpszClassName, WS_OVERLAPPEDWINDOW, editorWinPosX, editorWinPosY, g_EditorResizeWidth, g_EditorResizeHeight, hWND, NULL, wcEditor.hInstance, NULL);
 
 				GetDeviceAndDeviceContext();
 
@@ -113,6 +140,9 @@ namespace application
 
 					throw std::runtime_error(std::string("failed to create d3d device!"));
 				}
+
+				// Window 관련 CallBack 구현
+				SetWindowCallBack();
 
 				::ShowWindow(editorHWND, SW_SHOWDEFAULT);
 				::UpdateWindow(editorHWND);
@@ -132,6 +162,11 @@ namespace application
 				//io.ConfigDockingTransparentPayload = true;
 				//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: Experimental. THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
 				//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI: Experimental.
+
+				/// Custom 영역
+				// 타이틀 바를 컨트롤 할 때에만 움직임
+				io.ConfigWindowsMoveFromTitleBarOnly = true;
+				///
 
 				// Setup Dear ImGui style
 				ImGui::StyleColorsDark();
@@ -183,22 +218,24 @@ namespace application
 
 	void Application::Initialize()
 	{
-
 		layers.resize(2);
-		//ImGui::SetCursorPosY(ImGui::GetCurrentWindow()->WindowPadding.y);
 
+		layers[(int)LayerList::ContentsLayer] = new contents::ContentsLayer();
 
 #ifdef EDITOR
+		CheckContentsLayerInit();
 		layers[(int)LayerList::EditorLayer] = new editor::EditorLayer();
 #endif
-
-		layers[(int)LayerList::ContentsLayer] = new Contents::ContentsLayer();
 
 		for (auto each : layers)
 		{
 			if (each)
 				each->Initialize();
 		}
+
+#ifdef EDITOR
+		static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer])->LateInitialize();
+#endif
 	}
 
 	void Application::Run()
@@ -212,10 +249,10 @@ namespace application
 				::TranslateMessage(&msg);
 				::DispatchMessage(&msg);
 				if (msg.message == WM_QUIT)
+				{
 					isRunning = false;
+				}
 			}
-			if (!isRunning)
-				break;
 
 			// 게임 엔진을 멈추고 동작을 실행하는 부분
 			{
@@ -242,13 +279,14 @@ namespace application
 
 	void Application::Finalize()
 	{
+#ifdef EDITOR
 		for (auto each : layers)
 		{
 			each->Finalize();
 
 			delete each;
 		}
-
+#endif
 
 		::DestroyWindow(hWND);
 		::UnregisterClass(wc.lpszClassName, wc.hInstance);
@@ -272,20 +310,22 @@ namespace application
 		scoped_lock lock{ loopTodoRegistrationMutex };
 		loopRegistrations.push_back(todo);
 	}
+
 	const ApplicationSpecification& Application::GetApplicationSpecification() const
 	{
 		return appSpecification;
 	}
 
+	
 	void* Application::GetSceneSRV()
 	{
 		static auto resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 		return resourceManager->GetFinalRenderImage();
 	}
 
-#ifdef EDITOR
 	void Application::ImGuiUpdate()
 	{
+#ifdef EDITOR
 		MSG msg;
 		while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
 		{
@@ -295,6 +335,11 @@ namespace application
 			{
 				isRunning = false;
 			}
+		}
+
+		if (!isRunning)
+		{
+			return;
 		}
 
 		//Start the Dear ImGui frame
@@ -346,13 +391,179 @@ namespace application
 		//g_EditorpSwapChain->Present(1, 0); // Present with vsync
 		g_EditorpSwapChain->Present(0, 0); // Present without vsync
 
+		// 이벤트들 실행
+		ProcessEvents();
+
 		// 커맨드들 실행
 		cm.ExecuteCommands();
 
 		layers[(int)LayerList::ContentsLayer]->Update(1);
 		layers[(int)LayerList::ContentsLayer]->GUIProgress();
-	}
 #endif
+	}
+
+	void Application::OnEvent(editor::EditorEvents& event)
+	{
+#ifdef EDITOR
+		editor::EventDispatcher dispatcher(event);
+		dispatcher.Dispatch<editor::WindowResizeEvent>([this](editor::WindowResizeEvent& e) { std::cout << e.GetDebugString(); return true; });
+		dispatcher.Dispatch<editor::KeyPressedEvent>([this](editor::KeyPressedEvent& e) { std::cout << e.GetDebugString(); return true; });
+		dispatcher.Dispatch<editor::KeyDownEvent>([this](editor::KeyDownEvent& e) { std::cout << e.GetDebugString(); return true; });
+		dispatcher.Dispatch<editor::KeyReleasedEvent>([this](editor::KeyReleasedEvent& e) { std::cout << e.GetDebugString(); return true; });
+		dispatcher.Dispatch<editor::MouseButtonPressedEvent>([this](editor::MouseButtonPressedEvent& e) { std::cout << e.GetDebugString(); return true; });
+		dispatcher.Dispatch<editor::MouseButtonDownEvent>([this](editor::MouseButtonDownEvent& e) { std::cout << e.GetDebugString(); return true; });
+		dispatcher.Dispatch<editor::MouseButtonUpEvent>([this](editor::MouseButtonUpEvent& e) { std::cout << e.GetDebugString(); return true; });
+		dispatcher.Dispatch<editor::MouseMoveEvent>([this](editor::MouseMoveEvent& e) { std::cout << e.GetDebugString(); return true; });
+		dispatcher.Dispatch<editor::MouseWheelEvent>([this](editor::MouseWheelEvent& e) { std::cout << e.GetDebugString(); return true; });
+
+		layers[(int)LayerList::EditorLayer]->OnEvent(event);
+#endif
+	}
+
+	void Application::ProcessEvents()
+	{
+#ifdef EDITOR
+		eim.Clear();
+		eim.Update();
+
+		while (em.Size() != 0)
+		{
+			auto eventFunc = em.PopEventCallable();
+			if (eventFunc)
+			{
+				eventFunc();
+			}
+		}
+#endif
+	}
+
+	void Application::SetWindowCallBack()
+	{
+#ifdef EDITOR
+		// mouse device setting
+		inputDevice[0].usUsagePage = 0x01;
+		inputDevice[0].usUsage = 0x02;
+		inputDevice[0].dwFlags = RIDEV_INPUTSINK;
+		inputDevice[0].hwndTarget = editorHWND;
+
+		// keyboard device setting
+		inputDevice[1].usUsagePage = 0x01;
+		inputDevice[1].usUsage = 0x06;
+		inputDevice[1].dwFlags = RIDEV_INPUTSINK;
+		inputDevice[1].hwndTarget = editorHWND;
+
+		RegisterRawInputDevices(inputDevice, 2, sizeof(RAWINPUTDEVICE));
+		gameWindowFocusCallBackFunction = [&]() { editor::EditorCamera::GetSingletonInstance().SetInputUpdate(true); };
+		gameWindowKillFocusCallBackFunction = [&]() { editor::EditorCamera::GetSingletonInstance().SetInputUpdate(false); };
+		winResizeCallBackFunction = [&]() { Application::DispatchEvent<editor::WindowResizeEvent>(g_EditorResizeWidth, g_EditorResizeHeight); };
+		winKeyboardPressedCallBackFunction = [&](unsigned char keyCode)
+			{
+				if (eim.IsKeyboardDown(static_cast<editor::KeyCode>(keyCode)))
+				{
+					Application::DispatchEvent<editor::KeyDownEvent>(static_cast<editor::KeyCode>(keyCode));
+				}
+				else
+				{
+					Application::DispatchEvent<editor::KeyPressedEvent>(static_cast<editor::KeyCode>(keyCode));
+				}
+			};
+		winKeyboardUpCallBackFunction = [&](unsigned char keyCode) { Application::DispatchEvent<editor::KeyReleasedEvent>(static_cast<editor::KeyCode>(keyCode)); };
+		winMouseLeftPressedCallBackFunction = [&]() 
+			{ 
+				Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Left); 
+				if (gameFocus)
+				{
+					if (IsCursorInGameWindow() == true)
+					{
+						auto front = yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation().Forward();
+						auto distToXZPlane = abs(yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y);
+						auto centeredPosition = Input::getMouseScreenPositionNormalized();
+						centeredPosition.x -= 0.5;
+						centeredPosition.y -= 0.5;
+						centeredPosition.y *= -1;
+						auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
+						if (Vector3d::Dot(projectedPos - yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition(), front) > 0)
+						{
+							editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnLeftClick();
+						}
+					}
+				}
+			};
+		winMouseLeftUpCallBackFunction = [&]() 
+			{ 
+				Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Left); 
+				if (gameFocus)
+				{
+					if (IsCursorInGameWindow() == true)
+					{
+						editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnLeftClickRelease();
+					}
+				}
+			};
+		winMouseRightPressedCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Right); };
+		winMouseRightUpCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Right); };
+		winMouseMoveCallBackFunction = [&](long posX, long posY) 
+			{ 
+				Application::DispatchEvent<editor::MouseMoveEvent>(posX, posY); 
+				if (gameFocus)
+				{
+					if (IsCursorInGameWindow() == false)
+					{
+						editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnLeftClickRelease();
+						return;
+					}
+
+					auto front = yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation().Forward();
+					auto distToXZPlane = abs(yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y);
+					auto centeredPosition = Input::getMouseScreenPositionNormalized();
+					centeredPosition.x -= 0.5;
+					centeredPosition.y -= 0.5;
+					centeredPosition.y *= -1;
+					auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
+					editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnMouseMove(projectedPos);
+				}
+			};
+		winMouseWheelCallBackFunction = [&](short wheelDelta) {Application::DispatchEvent<editor::MouseWheelEvent>(wheelDelta); };
+#endif
+	}
+
+	void Application::CheckContentsLayerInit()
+	{
+#ifdef EDITOR
+		auto scene = yunutyEngine::Scene::getCurrentScene();
+		if (scene == nullptr)
+		{
+			yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+			auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+			directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{90,0,30} };
+		}
+		else
+		{
+			for (auto each : scene->GetChildren())
+			{
+				auto ptr = each->GetComponent<yunutyEngine::graphics::DirectionalLight>();
+				if (ptr)
+				{
+					return;
+				}
+			}
+
+			auto directionalLight = scene->AddGameObject();
+			directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+			directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{90,0,30} };
+		}
+#endif
+	}
+
+	bool Application::IsCursorInGameWindow()
+	{
+		POINT cursorPos;
+		RECT winRect;
+		GetCursorPos(&cursorPos);
+		GetWindowRect(hWND, &winRect);
+		return (cursorPos.x >= winRect.left && cursorPos.x <= winRect.right) && (cursorPos.y >= winRect.top && cursorPos.y <= winRect.bottom);
+	}
 }
 
 #ifdef EDITOR
@@ -361,6 +572,14 @@ void GetDeviceAndDeviceContext()
 {
 	g_pD3dDevice = reinterpret_cast<ID3D11Device*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDevice());
 	g_pD3dDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDeviceContext());
+}
+
+void CreateRenderTarget()
+{
+	ID3D11Texture2D* pBackBuffer;
+	g_EditorpSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
+	g_pD3dDevice->CreateRenderTargetView(pBackBuffer, nullptr, &g_EditormainRenderTargetView);
+	pBackBuffer->Release();
 }
 
 bool CreateSwapChain()
@@ -377,8 +596,7 @@ bool CreateSwapChain()
 	sd.Scaling = DXGI_SCALING_STRETCH;
 	sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 	sd.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
-	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH | DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
-
+	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	IDXGIDevice2* dxgiDevice;
 	auto result1 = g_pD3dDevice->QueryInterface(IID_PPV_ARGS(&dxgiDevice));
@@ -398,26 +616,18 @@ bool CreateSwapChain()
 	return true;
 }
 
+void CleanupRenderTarget()
+{
+	if (g_EditormainRenderTargetView) { g_EditormainRenderTargetView->Release(); g_EditormainRenderTargetView = nullptr; }
+}
+
 void CleanupSwapChain()
 {
 	CleanupRenderTarget();
 	if (g_EditorpSwapChain) { g_EditorpSwapChain->Release(); g_EditorpSwapChain = nullptr; }
 }
 
-void CreateRenderTarget()
-{
-	ID3D11Texture2D* pBackBuffer;
-	g_EditorpSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
-	g_pD3dDevice->CreateRenderTargetView(pBackBuffer, nullptr, &g_EditormainRenderTargetView);
-	pBackBuffer->Release();
-}
-
-void CleanupRenderTarget()
-{
-	if (g_EditormainRenderTargetView) { g_EditormainRenderTargetView->Release(); g_EditormainRenderTargetView = nullptr; }
-}
-
-void ResizeBuffers(HWND hWnd)
+void ResizeBuffers()
 {
 	g_EditormainRenderTargetView->Release();
 	g_EditorpSwapChain->ResizeBuffers(0, dockspaceArea.x, dockspaceArea.y, DXGI_FORMAT_UNKNOWN, 0);
@@ -441,6 +651,28 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+		case WM_KILLFOCUS:
+		{
+			gameFocus = false;
+#ifdef EDITOR
+			if (gameWindowKillFocusCallBackFunction)
+			{
+				gameWindowKillFocusCallBackFunction();
+			}
+#endif
+			break;
+		}
+		case WM_SETFOCUS:
+		{
+			gameFocus = true;
+#ifdef EDITOR
+			if (gameWindowFocusCallBackFunction)
+			{
+				gameWindowFocusCallBackFunction();
+			}
+#endif
+			break;
+		}
 		case WM_SIZE:
 			if (wParam == SIZE_MINIMIZED)
 				return 0;
@@ -462,10 +694,123 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+	{
 		return true;
+	}
+
+	static auto& eim = application::editor::EditorInputManager::GetSingletonInstance();
 
 	switch (msg)
 	{
+		case WM_INPUT:
+		{
+			static RAWINPUT rawInput = RAWINPUT();
+			UINT unSize = sizeof(RAWINPUT);
+			GetRawInputData((HRAWINPUT)lParam, RID_INPUT, &rawInput, &unSize, sizeof(RAWINPUTHEADER));
+
+			if (rawInput.header.dwType == RIM_TYPEKEYBOARD)
+			{
+				switch (rawInput.data.keyboard.Message)
+				{
+					case WM_KEYDOWN:
+					{
+						if (winKeyboardPressedCallBackFunction)
+						{
+							eim.Update();
+							unsigned char keyCode = static_cast<unsigned char>(application::editor::EditorInputManager::GetKeycode(rawInput.data.keyboard.VKey));
+							if (eim.IsKeyboardDown(static_cast<application::editor::KeyCode>(keyCode)))
+							{
+								eim.UpdateKeyboardState(static_cast<application::editor::KeyCode>(keyCode), application::editor::KeyState::Down);
+							}
+							else
+							{
+								eim.UpdateKeyboardState(static_cast<application::editor::KeyCode>(keyCode), application::editor::KeyState::Pressed);
+							}
+							winKeyboardPressedCallBackFunction(keyCode);
+						}
+						return 0;
+					}
+					case WM_KEYUP:
+					{
+						if (winKeyboardUpCallBackFunction)
+						{
+							eim.Update();
+							unsigned char keyCode = static_cast<unsigned char>(application::editor::EditorInputManager::GetKeycode(rawInput.data.keyboard.VKey));
+							eim.UpdateKeyboardState(static_cast<application::editor::KeyCode>(keyCode), application::editor::KeyState::Up);
+							winKeyboardUpCallBackFunction(keyCode);
+						}
+						return 0;
+					}
+				}
+			}
+			else if (rawInput.header.dwType == RIM_TYPEMOUSE)
+			{
+				if (rawInput.data.mouse.usFlags == MOUSE_MOVE_RELATIVE || rawInput.data.mouse.usFlags == MOUSE_MOVE_ABSOLUTE)
+				{
+					if (winMouseMoveCallBackFunction)
+					{
+						eim.Update();
+						static POINT cursorPos;
+						GetCursorPos(&cursorPos);
+						winMouseMoveCallBackFunction(cursorPos.x, cursorPos.y);
+					}
+				}
+
+				switch (rawInput.data.mouse.usButtonFlags)
+				{
+					case RI_MOUSE_BUTTON_1_DOWN:
+					{
+						if (winMouseLeftPressedCallBackFunction)
+						{
+							eim.Update();
+							eim.UpdateMouseButtonState(application::editor::MouseCode::Left, application::editor::KeyState::Pressed);
+							winMouseLeftPressedCallBackFunction();
+						}
+						return 0;
+					}
+					case RI_MOUSE_BUTTON_1_UP:
+					{
+						if (winMouseLeftUpCallBackFunction)
+						{
+							eim.Update();
+							eim.UpdateMouseButtonState(application::editor::MouseCode::Left, application::editor::KeyState::Up);
+							winMouseLeftUpCallBackFunction();
+						}
+						return 0;
+					}
+					case RI_MOUSE_BUTTON_2_DOWN:
+					{
+						if (winMouseRightPressedCallBackFunction)
+						{
+							eim.Update();
+							eim.UpdateMouseButtonState(application::editor::MouseCode::Right, application::editor::KeyState::Pressed);
+							winMouseRightPressedCallBackFunction();
+						}
+						return 0;
+					}
+					case RI_MOUSE_BUTTON_2_UP:
+					{
+						if (winMouseRightUpCallBackFunction)
+						{
+							eim.Update();
+							eim.UpdateMouseButtonState(application::editor::MouseCode::Right, application::editor::KeyState::Up);
+							winMouseRightUpCallBackFunction();
+						}
+						return 0;
+					}
+					case RI_MOUSE_WHEEL:
+					{
+						if (winMouseWheelCallBackFunction)
+						{
+							eim.Update();
+							winMouseWheelCallBackFunction(rawInput.data.mouse.usButtonData);
+						}
+						return 0;
+					}
+				}
+			}
+		break;
+		}
 		case WM_SIZE:
 		{
 			if (wParam == SIZE_MINIMIZED)
@@ -474,12 +819,19 @@ LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			RECT rect = RECT();
 			GetClientRect(hWnd, &rect);
 			dockspaceArea = ImVec2(rect.right - rect.left, rect.bottom - rect.top);
+			g_EditorResizeWidth = dockspaceArea.x;
+			g_EditorResizeHeight = dockspaceArea.y;
 
 			POINT windowPos = POINT();
 			ClientToScreen(hWnd, &windowPos);
 			dockspaceStartPoint = ImVec2(windowPos.x, windowPos.y);
 
-			ResizeBuffers(hWnd);
+			ResizeBuffers();
+
+			if (winResizeCallBackFunction)
+			{
+				winResizeCallBackFunction();
+			}
 
 			return 0;
 		}

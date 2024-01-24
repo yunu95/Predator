@@ -1,55 +1,81 @@
+#include "InWanderLand.h"
 #include "HealerProduction.h"
+#include "RangedAttackSystem.h"
 
 void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition)
 {
+#pragma region Unit Status Member Setting
 	m_objectName = "Healer";
 	m_unitType = Unit::UnitType::Healer;
 	m_unitSide = Unit::UnitSide::Player;
-	m_hp = 100;
-	m_ap = 10;
-	m_idRadius = 3.0f;
-	m_atkRadius = 1.0f;
-	m_unitSpeed = 2.0f;
+
+	m_healthPoint = 120;
+	m_manaPoint = 100;
+
+	m_autoAttackDamage = 8;
+	m_criticalHitProbability = 0.1f;
+	m_criticalHitMultiplier = 1.5f;
+
+	m_defensePoint = 5;
+	m_dodgeProbability = 0.05f;
+	m_criticalDamageDecreaseMultiplier = 0.05f;
+
+	m_idRadius = 10.0f;
+	m_atkRadius = 8.5f;
+	m_unitSpeed = 1.5f;
+
+	m_attackDelay = 1.0f;
+
 	m_navField = navField;
 	m_startPosition = startPosition;
+#pragma endregion
 
-	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-
-	/// Setting Animation Related Members
+#pragma region Animation Related Member Setting
 	m_unitGameObject = fbxObject;
-
+	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
-
 	auto& animList = rsrcManager->GetAnimationList();
-
 	for (auto each : animList)
 	{
 		if (each->GetName() == L"root|000.Idle")
 		{
-			m_idleAnimation = each;
-			m_idleAnimation->SetLoop(true);
-			animator->GetGI().PushAnimation(m_idleAnimation);
-			animator->GetGI().Play(m_idleAnimation);
+			m_baseUnitAnimations.m_idleAnimation = each;
+			m_baseUnitAnimations.m_idleAnimation->SetLoop(true);
+			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_idleAnimation);
+			animator->GetGI().Play(m_baseUnitAnimations.m_idleAnimation);
 		}
 		else if (each->GetName() == L"root|001-2.Walk")
 		{
-			m_walkAnimation = each;
-			m_walkAnimation->SetLoop(true);
-			animator->GetGI().PushAnimation(m_walkAnimation);
+			m_baseUnitAnimations.m_walkAnimation = each;
+			m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
+			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_walkAnimation);
 		}
 		else if (each->GetName() == L"root|003-1.NormalAttack_L")
 		{
-			m_attackAnimation = each;
-			m_attackAnimation->SetLoop(true);
-			animator->GetGI().PushAnimation(m_attackAnimation);
+			m_baseUnitAnimations.m_attackAnimation = each;
+			m_baseUnitAnimations.m_attackAnimation->SetLoop(true);
+			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_attackAnimation);
+		}
+		else if (each->GetName() == L"root|011-1.Groggy")
+		{
+			m_baseUnitAnimations.m_paralysisAnimation = each;
+			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
+			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
 		}
 		else if (each->GetName() == L"root|012.Death")
 		{
-			m_deathAnimation = each;
-			m_deathAnimation->SetLoop(false);
-			animator->GetGI().PushAnimation(m_deathAnimation);
+			m_baseUnitAnimations.m_deathAnimation = each;
+			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
+			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_deathAnimation);
 		}
 	}
+#pragma endregion
+
+#pragma region Auto Attack Setting (Including Passive Logic)
+	auto magicianAttackSystem = m_unitGameObject->AddComponent<RangedAttackSystem>();
+	magicianAttackSystem->SetBulletSpeed(10.0f);
+#pragma endregion
+
 }
 
 yunutyEngine::GameObject* HealerProduction::CreateUnitWithOrder()

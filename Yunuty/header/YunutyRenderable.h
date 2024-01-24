@@ -24,7 +24,7 @@ namespace yunuGI
 namespace yunutyEngine::graphics
 {
     class YunutyCycle;
-    template <typename YunuGIType >
+    template <typename YunuGIType>
     class Renderable;
     class Renderer;
     class EventHandler;
@@ -39,10 +39,6 @@ namespace yunutyEngine::graphics
         {
             yunuGIWrapperMap.erase(yunuGI);
         };
-        virtual void Start()override
-        {
-            yunuGI->SetWorldTM(GetTransform()->GetWorldTM());
-        }
         virtual void Update()override
         {
             yunuGI->SetWorldTM(GetTransform()->GetWorldTM());
@@ -51,9 +47,12 @@ namespace yunutyEngine::graphics
         Renderable(yunuGI::IRenderable* yunuGI) : yunuGI(yunuGI)
         {
             yunuGIWrapperMap[yunuGI] = this;
+            yunuGI->SetWorldTM(GetTransform()->GetWorldTM());
+            yunuGI->SetActive(GetGameObject()->GetActive());
         }
         virtual void OnEnable()
         {
+            yunuGI->SetWorldTM(GetTransform()->GetWorldTM());
             yunuGI->SetActive(true);
         }
         virtual void OnDisable()

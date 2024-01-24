@@ -327,9 +327,6 @@
     <ClCompile Include="GlobalComponent.cpp">
       <Filter>yunutyEngine\GlobalComponent</Filter>
     </ClCompile>
-    <ClCompile Include="Vector.cpp">
-      <Filter>yunutyEngine\Vector</Filter>
-    </ClCompile>
     <ClCompile Include="Vector2.cpp">
       <Filter>yunutyEngine\Vector2</Filter>
     </ClCompile>
@@ -548,6 +545,9 @@
     </ClCompile>
     <ClCompile Include="Animator.cpp">
       <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="IGameObjectParent.cpp">
+      <Filter>yunutyEngine\IGameObjectParent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

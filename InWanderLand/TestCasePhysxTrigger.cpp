@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
@@ -68,6 +69,7 @@ void SnippetInitializerPhysxTrigger()
     cam->GetTransform()->position = { 0,0,-10 };
     auto collider1 = Scene::getCurrentScene()->AddGameObject()->AddComponent<TriggerCollider>();
     auto collider2 = Scene::getCurrentScene()->AddGameObject()->AddComponent<KinematicCollider>();
+    collider1->GetTransform()->scale = { 1.5,1.5,1.5 };
     collider1->y = 0.3;
     collider2->y = -0.3;
     collider2->t = 1;
@@ -82,15 +84,15 @@ void SnippetInitializerPhysxTrigger()
     } });
 }
 
-namespace InWanderLand
+namespace tests
 {
-    TEST_CLASS(InWanderLand)
+    TEST_CLASS(TestCasePhysxTriggerClass)
     {
     public:
         TEST_METHOD(TestCasePhysxTrigger)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializerPhysxTrigger);
+            application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializerPhysxTrigger);
             client.Initialize();
             client.Run();
             client.Finalize();

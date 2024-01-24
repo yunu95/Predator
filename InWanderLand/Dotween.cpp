@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "Dotween.h"
 #include "Transform.h"
 #include "DotweenTimer.h"
@@ -11,7 +12,7 @@ Dotween::Dotween()
 
 Dotween::~Dotween()
 {
-	// vector ³»ÀÇ µ¿ÀûÇÒ´çÇÑ ¸Ş¸ğ¸® ÇØÁ¦.
+	// vector ë‚´ì˜ ë™ì í• ë‹¹í•œ ë©”ëª¨ë¦¬ í•´ì œ.
 
 
 	//delete tempTimer;
@@ -28,12 +29,14 @@ void Dotween::Update()
 	{
 		if (dotweenTimerArray[i] != nullptr)
 		{
-			dotweenTimerArray[i]->Update();
-
 			if (dotweenTimerArray[i]->isDone == true)
 			{
 				DotweenTimerPool::GetInstance()->ReturnDotweenTimer(dotweenTimerArray[i]);
 				dotweenTimerArray[i] = nullptr;
+			}
+			else
+			{
+				dotweenTimerArray[i]->Update();
 			}
 		}
 	}
@@ -45,7 +48,7 @@ void Dotween::StopAllDotweenFunction()
 	{
 		if (dotweenTimerArray[i] != nullptr)
 		{
-			/// isDoneÀ» true·Î ¹Ù²ãÁÖ¾î °­Á¦·Î Å¸ÀÌ¸Ó Á¾·á.
+			/// isDoneì„ trueë¡œ ë°”ê¿”ì£¼ì–´ ê°•ì œë¡œ íƒ€ì´ë¨¸ ì¢…ë£Œ.
 			dotweenTimerArray[i]->isDone = true;
 		}
 	}
@@ -53,16 +56,16 @@ void Dotween::StopAllDotweenFunction()
 
 Dotween& Dotween::DOMove(Vector3d endPosition, double p_duration)
 {
-	// 	GetGameObject()->GetTransform()´Â Component¸¦ °®°Ô µÉ GameObject¸¦ ¸®ÅÏÇÑ´Ù.
+	// 	GetGameObject()->GetTransform()ëŠ” Componentë¥¼ ê°–ê²Œ ë  GameObjectë¥¼ ë¦¬í„´í•œë‹¤.
 	DotweenTimer* m_doMovetweenTimer = DotweenTimerPool::GetInstance()->GetDotweenTimer();
 
 
-	// ½ÃÀÛ °ª ÀúÀå
+	// ì‹œì‘ ê°’ ì €ì¥
 	m_doMovetweenTimer->m_xValue = GetGameObject()->GetTransform()->GetWorldPosition().x;
 	m_doMovetweenTimer->m_yValue = GetGameObject()->GetTransform()->GetWorldPosition().y;
 	m_doMovetweenTimer->m_zValue = GetGameObject()->GetTransform()->GetWorldPosition().z;
 
-	// °¡¾ß ÇÏ´Â °Å¸®
+	// ê°€ì•¼ í•˜ëŠ” ê±°ë¦¬
 	double distanceX = endPosition.x - GetGameObject()->GetTransform()->GetWorldPosition().x;
 	double distanceY = endPosition.y - GetGameObject()->GetTransform()->GetWorldPosition().y;
 	double distanceZ = endPosition.z - GetGameObject()->GetTransform()->GetWorldPosition().z;
@@ -71,16 +74,15 @@ Dotween& Dotween::DOMove(Vector3d endPosition, double p_duration)
 	m_doMovetweenTimer->duration = p_duration;
 	m_doMovetweenTimer->onUpdate = [=]()
 	{
-		// ½Ã°£ Á¤±ÔÈ­ : ÁøÇà ½Ã°£ / ÀüÃ¼ ±â°£
+		// ì‹œê°„ ì •ê·œí™” : ì§„í–‰ ì‹œê°„ / ì „ì²´ ê¸°ê°„
 		m_doMovetweenTimer->easeTime = (m_doMovetweenTimer->elapsed - m_doMovetweenTimer->delay) / (m_doMovetweenTimer->duration - m_doMovetweenTimer->delay);
 
-		// °¡¾ßÇÏ´Â °Å¸®ÀÇ Á¤±ÔÈ­...
-		// ÁøÇà °Å¸® / ÀüÃ¼ °¡¾ßÇÏ´Â °Å¸®
-		// ÁøÇà °Å¸® = ½Ã°£ * ¼Ó·Â
+		// ê°€ì•¼í•˜ëŠ” ê±°ë¦¬ì˜ ì •ê·œí™”...
+		// ì§„í–‰ ê±°ë¦¬ / ì „ì²´ ê°€ì•¼í•˜ëŠ” ê±°ë¦¬
+		// ì§„í–‰ ê±°ë¦¬ = ì‹œê°„ * ì†ë ¥
 
 		double easeWeight = getEasingFunction(m_doMovetweenTimer->m_ease)(m_doMovetweenTimer->easeTime);
 
-		// ¾Æ·¡ ¼¼ÁÙ ¾È¿¡ ¹®Á¦°¡ ¾ø´Ù¸é ³» ¼Õ¿¡ ÀåÀ» ÁöÁü - ÀÌÀ±¿ì
 		m_doMovetweenTimer->movingDistanceX = easeWeight * (distanceX);
 		m_doMovetweenTimer->movingDistanceY = easeWeight * (distanceY);
 		m_doMovetweenTimer->movingDistanceZ = easeWeight * (distanceZ);
@@ -88,8 +90,6 @@ Dotween& Dotween::DOMove(Vector3d endPosition, double p_duration)
 		m_doMovetweenTimer->finalXvalue = m_doMovetweenTimer->m_xValue + m_doMovetweenTimer->movingDistanceX;
 		m_doMovetweenTimer->finalYvalue = m_doMovetweenTimer->m_yValue + m_doMovetweenTimer->movingDistanceY;
 		m_doMovetweenTimer->finalZvalue = m_doMovetweenTimer->m_zValue + m_doMovetweenTimer->movingDistanceZ;
-
-		/// ºÎµ¿ ¼Ò¼öÁ¡ ³ª´°¼À ¿¬»êÀÌ ¹®Á¦ÀÎµí... °ªÀÌ Ä¿Áú¼ö·Ï ¹ö¸®´Â ¼ö°¡ ¸¹¾Æ Áø´Ù....
 
 		if (m_doMovetweenTimer->easeTime >= 1)
 		{
@@ -106,12 +106,12 @@ Dotween& Dotween::DOMove(Vector3d endPosition, double p_duration)
 	tempTimer = m_doMovetweenTimer;
 	dotweenTimerArray[TimerIndex::MoveTimer] = tempTimer;
 
-	/// ÀÚ±â ÀÚ½ÅÀ» ¹İÈ¯ÇØÁØ´Ù...µÚ¿¡ SetDelay, SetEase µîÀ» À§ÇØ
+	/// ìê¸° ìì‹ ì„ ë°˜í™˜í•´ì¤€ë‹¤...ë’¤ì— SetDelay, SetEase ë“±ì„ ìœ„í•´
 	return *this;
 }
 
-// DOScale, DoRotate µîÀÇ ÇÔ¼öµµ Á¦ÀÛ ¿¹Á¤...
-// °á±¹ Vector3ÀÇ °ªÀ» º¯°æÇØÁÖ´Â °Å¶ó ±İ¹æ ¸¸µé ¼ö ÀÖ´Ù
+// DOScale, DoRotate ë“±ì˜ í•¨ìˆ˜ë„ ì œì‘ ì˜ˆì •...
+// ê²°êµ­ Vector3ì˜ ê°’ì„ ë³€ê²½í•´ì£¼ëŠ” ê±°ë¼ ê¸ˆë°© ë§Œë“¤ ìˆ˜ ìˆë‹¤
 Dotween& Dotween::DOScale(Vector3d endScale, double p_duration)
 {
 	DotweenTimer* m_doScaletweenTimer = DotweenTimerPool::GetInstance()->GetDotweenTimer();
@@ -128,12 +128,12 @@ Dotween& Dotween::DOScale(Vector3d endScale, double p_duration)
 	m_doScaletweenTimer->duration = p_duration;
 	m_doScaletweenTimer->onUpdate = [=]()
 	{
-		// ¼Ò¼ö³¢¸®ÀÇ ³ª´°¼À ¿¬»êÀº Á¤È®ÇÑ °ªÀ» ¸¸µé¾î Áà¾ß ÇÑ´Ù...
+		// ì†Œìˆ˜ë¼ë¦¬ì˜ ë‚˜ëˆ—ì…ˆ ì—°ì‚°ì€ ì •í™•í•œ ê°’ì„ ë§Œë“¤ì–´ ì¤˜ì•¼ í•œë‹¤...
 		m_doScaletweenTimer->easeTime = (m_doScaletweenTimer->elapsed - m_doScaletweenTimer->delay) / (m_doScaletweenTimer->duration - m_doScaletweenTimer->delay);
 
 		double easeWeight = getEasingFunction(m_doScaletweenTimer->m_ease)(m_doScaletweenTimer->easeTime);
 
-		// ¾Æ·¡ ¼¼ÁÙ ¾È¿¡ ¹®Á¦°¡ ¾ø´Ù¸é ³» ¼Õ¿¡ ÀåÀ» ÁöÁü - ÀÌÀ±¿ì
+		// ì•„ë˜ ì„¸ì¤„ ì•ˆì— ë¬¸ì œê°€ ì—†ë‹¤ë©´ ë‚´ ì†ì— ì¥ì„ ì§€ì§ - ì´ìœ¤ìš°
 		m_doScaletweenTimer->movingDistanceX = easeWeight * (distanceX);
 		m_doScaletweenTimer->movingDistanceY = easeWeight * (distanceY);
 		m_doScaletweenTimer->movingDistanceZ = easeWeight * (distanceZ);
@@ -142,7 +142,7 @@ Dotween& Dotween::DOScale(Vector3d endScale, double p_duration)
 		m_doScaletweenTimer->finalYvalue = m_doScaletweenTimer->m_yValue + m_doScaletweenTimer->movingDistanceY;
 		m_doScaletweenTimer->finalZvalue = m_doScaletweenTimer->m_zValue + m_doScaletweenTimer->movingDistanceZ;
 
-		/// ºÎµ¿ ¼Ò¼öÁ¡ ³ª´°¼À ¿¬»êÀÌ ¹®Á¦ÀÎµí... °ªÀÌ Ä¿Áú¼ö·Ï ¹ö¸®´Â ¼ö°¡ ¸¹¾Æ Áø´Ù....
+		/// ë¶€ë™ ì†Œìˆ˜ì  ë‚˜ëˆ—ì…ˆ ì—°ì‚°ì´ ë¬¸ì œì¸ë“¯... ê°’ì´ ì»¤ì§ˆìˆ˜ë¡ ë²„ë¦¬ëŠ” ìˆ˜ê°€ ë§ì•„ ì§„ë‹¤....
 
 		if (m_doScaletweenTimer->easeTime >= 1)
 		{
@@ -164,9 +164,9 @@ Dotween& Dotween::DOScale(Vector3d endScale, double p_duration)
 
 Dotween& Dotween::DORotate(Vector3d endRotation, double p_duration)
 {
-	/// DORotate ¸¸µé ¶§ ÁÖÀÇÇÒ Á¡.
-	/// 1. °¢ÀÌ 360À» ³Ñ¾î°¡¸é 0À¸·Î ÃÊ±âÈ­ ÇØÁØ´Ù. 
-	/// ÀÏ´Ü ¿©±â±îÁö?
+	/// DORotate ë§Œë“¤ ë•Œ ì£¼ì˜í•  ì .
+	/// 1. ê°ì´ 360ì„ ë„˜ì–´ê°€ë©´ 0ìœ¼ë¡œ ì´ˆê¸°í™” í•´ì¤€ë‹¤. 
+	/// ì¼ë‹¨ ì—¬ê¸°ê¹Œì§€?
 	DotweenTimer* m_doRotatetweenTimer = DotweenTimerPool::GetInstance()->GetDotweenTimer();
 
 	m_doRotatetweenTimer->m_xValue = GetGameObject()->GetTransform()->GetWorldRotation().x;
@@ -205,8 +205,8 @@ Dotween& Dotween::DORotate(Vector3d endRotation, double p_duration)
 			AdjustRotation(m_doRotatetweenTimer->finalZvalue);
 		}
 
-		// °¢ÀÌ 360À» ³Ñ¾î°¡¸é 0À¸·Î ÃÊ±âÈ­ ÇØÁØ´Ù.
-		// SetRotation Á÷Àü¿¡ ¹Ù²ãÁÖ±â
+		// ê°ì´ 360ì„ ë„˜ì–´ê°€ë©´ 0ìœ¼ë¡œ ì´ˆê¸°í™” í•´ì¤€ë‹¤.
+		// SetRotation ì§ì „ì— ë°”ê¿”ì£¼ê¸°
 		if (m_doRotatetweenTimer->finalXvalue >= 360)
 			AdjustRotation(m_doRotatetweenTimer->finalXvalue);
 
@@ -216,7 +216,7 @@ Dotween& Dotween::DORotate(Vector3d endRotation, double p_duration)
 		if (m_doRotatetweenTimer->finalZvalue >= 360)
 			AdjustRotation(m_doRotatetweenTimer->finalZvalue);
 
-		/// ¹İ´ë·Î °¢µµ°¡ -360 ¹Ì¸¸ÀÌ¶ó¸é -360 ~ 0À¸·Î ¹Ù²ãÁØ´Ù.
+		/// ë°˜ëŒ€ë¡œ ê°ë„ê°€ -360 ë¯¸ë§Œì´ë¼ë©´ -360 ~ 0ìœ¼ë¡œ ë°”ê¿”ì¤€ë‹¤.
 		if (m_doRotatetweenTimer->finalXvalue < 0)
 			AdjustRotation(m_doRotatetweenTimer->finalXvalue);
 
@@ -244,7 +244,7 @@ Dotween& Dotween::DOQRotate(Vector3d axis, double angle, double p_duration)
 	m_doQrotatetweenTimer->duration = p_duration;
 	m_doQrotatetweenTimer->onUpdate = [=]() 
 	{
-		// °á±¹ µ¹·Á¾ß ÇÏ´Â°Ç angle, ±×·±µ¥ ease¸¦ Àû¿ëÇÑ...
+		// ê²°êµ­ ëŒë ¤ì•¼ í•˜ëŠ”ê±´ angle, ê·¸ëŸ°ë° easeë¥¼ ì ìš©í•œ...
 		m_doQrotatetweenTimer->easeTime = (m_doQrotatetweenTimer->elapsed - m_doQrotatetweenTimer->delay) / (m_doQrotatetweenTimer->duration - m_doQrotatetweenTimer->delay);
 		double easeWeight = getEasingFunction(m_doQrotatetweenTimer->m_ease)(m_doQrotatetweenTimer->easeTime);
 
@@ -265,20 +265,21 @@ Dotween& Dotween::DOQRotate(Vector3d axis, double angle, double p_duration)
 }
 
 /// <summary>
-/// DOLookAt ÇÔ¼ö´Â yÃàÀ» °í·ÁÇÏÁö ¾Ê¾Ò´Ù. (À§ ¾Æ·¡·Î È¸ÀüÇÏÁö ¾Ê´Â´Ù.)
+/// DOLookAt í•¨ìˆ˜ëŠ” yì¶•ì„ ê³ ë ¤í•˜ì§€ ì•Šì•˜ë‹¤. (ìœ„ ì•„ë˜ë¡œ íšŒì „í•˜ì§€ ì•ŠëŠ”ë‹¤.)
 /// </summary>
 /// <param name="lookPosition"></param>
 /// <returns></returns>
-Dotween& Dotween::DOLookAt(Transform* lookTransform, double p_duration, bool isYaxisInclude)
+Dotween& Dotween::DOLookAt(Vector3d lookTransform, double p_duration, bool isYaxisInclude)
 {	
+	StopAllDotweenFunction();
 	DotweenTimer* m_doLookTweenTimer = DotweenTimerPool::GetInstance()->GetDotweenTimer();
 
-	Vector3d objectFront = GetGameObject()->GetTransform()->GetWorldRotation().Forward();
+	Vector3d objectFront = GetGameObject()->GetTransform()->GetWorldRotation().Forward() * -1;
 	Vector3d objectUp;
 	Vector3d objectRight = GetGameObject()->GetTransform()->GetWorldRotation().Right();
 	Vector3d objectLeft = Vector3d(-1 * objectRight.x, objectRight.y, -1 * objectRight.z);
 
-	Vector3d tempLookPos = lookTransform->GetWorldPosition();
+	Vector3d tempLookPos = lookTransform;
 	Vector3d tempPos = GetGameObject()->GetTransform()->GetWorldPosition();
 	Vector3d tempUp = GetGameObject()->GetTransform()->GetWorldRotation().Up();
 
@@ -291,42 +292,41 @@ Dotween& Dotween::DOLookAt(Transform* lookTransform, double p_duration, bool isY
 
 	double dot = Vector3d::Dot(GetGameObject()->GetTransform()->GetWorldRotation().Forward(), GetGameObject()->GetTransform()->GetWorldPosition() - tempLookPos);
 
-	// È¸Àü ¹æÇâ ÆÇÁ¤
+	// íšŒì „ ë°©í–¥ íŒì •
 	Vector3d axis = Vector3d::Cross(objectFront, distanceVec);
 
 	angle = (objectFront.x * distanceVec.x + objectFront.z * distanceVec.z);
 	sq = (sqrt(pow(objectFront.x, 2) + pow(objectFront.z, 2)) *
 		sqrt(pow(distanceVec.x, 2) + pow(distanceVec.z, 2)));
 
-	// µÎ º¤ÅÍÀÇ °¢µµ°¡ 180µµ ÀÌ»óÀÌ¸é 180À», -180 ÀÌÇÏ ÀÌ¶ó¸é -180À» 
+	// ë‘ ë²¡í„°ì˜ ê°ë„ê°€ 180ë„ ì´ìƒì´ë©´ 180ì„, -180 ì´í•˜ ì´ë¼ë©´ -180ì„ 
 	//finalAngle = acos( max( -1.0f, min(1.0f, angle / sq) ) );
-	finalAngle = acos(std::clamp(angle / sq, -1.0, 1.0));			// c++17 µÈ´Ù¸é
+	finalAngle = acos(std::clamp(angle / sq, -1.0, 1.0));			// c++17 ëœë‹¤ë©´
 	finalDegree = 57.2969f * (finalAngle);
 
 	if (axis.y < 0)
 		finalDegree *= -1;
-
-	objectUp = GetGameObject()->GetTransform()->GetWorldRotation().Up();
 
 	m_doLookTweenTimer->Start();
 	m_doLookTweenTimer->duration = p_duration;
 	m_doLookTweenTimer->onUpdate = [=]()
 	{
 		double degreePerFrame = finalDegree / (m_doLookTweenTimer->duration);
-		/*if (tempPos - tempLookPos != Vector3d(0,0,0) && !isnan(degreePerFrame))
-			GetGameObject()->GetTransform()->Rotate(objectUp, (degreePerFrame * Time::GetDeltaTime()) / 57.2969f);*/
+		currentRotation += degreePerFrame * Time::GetDeltaTime();
+		GetGameObject()->GetTransform()->rotation = Quaternion({ 0.0f, currentRotation, 0.0f });
 	};
 
+	currentTimerIndex = TimerIndex::RotateTimer;
 	tempTimer = m_doLookTweenTimer;
-	//m_dotweenTimerMap.insert({ tempTimer, m_doLookTweenTimer->isDone });
+	dotweenTimerArray[TimerIndex::RotateTimer] = tempTimer;
 
 	return *this;
 }
 
 
 /// <summary>
-/// dotweenTimerÀÇ OnUpdate¸¦ Á÷Á¢ ¼³Á¤ÇØÁÖ°í ½ÇÇà°¡´ÉÇÑ ÇÔ¼ö.
-/// ±×·²·Á¸é ²À! OnUpdate¸¦ ³Ö¾îÁà¾ßÇÑ´Ù!
+/// dotweenTimerì˜ OnUpdateë¥¼ ì§ì ‘ ì„¤ì •í•´ì£¼ê³  ì‹¤í–‰ê°€ëŠ¥í•œ í•¨ìˆ˜.
+/// ê·¸ëŸ´ë ¤ë©´ ê¼­! OnUpdateë¥¼ ë„£ì–´ì¤˜ì•¼í•œë‹¤!
 /// </summary>
 /// <param name="p_duration"></param>
 /// <returns></returns>

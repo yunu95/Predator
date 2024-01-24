@@ -1,16 +1,13 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "FSM.h"
-//#include <memory>
+#include "Timer.h"
+#include "Dotween.h"
 #include <list>
-
-using namespace yunuGI;
 
 /// <summary>
 /// 유닛들이 공유하는 멤버.
-/// 기본적으로 모든 유닛은 BaseUnitEntity를 상속한다.
 /// </summary>
-
 class Unit : public Component
 {
 public:
@@ -23,6 +20,7 @@ public:
 		Attack,
 		AttackMove,
 		Skill,
+		Paralysis,
 		Death,
 		StateEnd
 	};
@@ -55,6 +53,18 @@ public:
 		E
 	};
 
+	struct BaseUnitAnimationStruct
+	{
+		yunuGI::IAnimation* m_idleAnimation;
+		yunuGI::IAnimation* m_walkAnimation;
+		yunuGI::IAnimation* m_attackAnimation;
+		yunuGI::IAnimation* m_paralysisAnimation;
+		yunuGI::IAnimation* m_deathAnimation;
+	};
+
+	Timer* knockBackTimer;
+	Dotween* dotween;
+
 protected:
 	FSM<UnitState> unitFSM{UnitState::Idle};
 
@@ -62,9 +72,25 @@ protected:
 	UnitSide m_unitSide;
 	AttackType m_attackType;
 
-	int m_hp;
-	int m_ap;
+	float m_healthPoint;
+	float m_autoAttackDamage;
+	float m_beforeBlindDamage;
+	float m_initialAutoAttackDamage;
+	float m_maxAutoAttackDamage = 10.0f;
+	float m_minAttackDelay = 0.3f;
 	
+	float m_finalAttackDamage;
+	float m_finalHitDamage;
+
+	float m_defensePoint;
+	float m_dodgeProbability;
+	float m_criticalDamageDecreaseMultiplier;
+
+	int m_criticalHitProbability;
+	int m_randcriticalHitNumber;
+
+	float m_criticalHitMultiplier;
+
 	float m_speed;
 	float m_bulletSpeed;
 
@@ -91,9 +117,13 @@ protected:
 	float chaseFunctionElapsed;
 	float chaseFunctionCallDelay = 0.1f;
 
+	float attackStartElapsed = 0.0f;
+
 	float attackStartDelay = 0.3f;
 	float attackFunctionElapsed;
-	float attackFunctionCallDelay = 0.5f;
+	float attackFunctionCallDelay;
+	int attackAnimationFrameCheckNumber = 0;
+	bool isAttackAnimationOperating = false;
 	bool isAttackStarted = false;
 
 	float deathFunctionElapsed;
@@ -103,6 +133,7 @@ protected:
 	float qSkillFunctionStartedElapsed;
 	float qSkillStartDelay = 1.0f;
 	float qSkillAnimationDuration = 1.0f;
+	bool isJustHitByQSkill = false;
 
 	float animationLerpDuration = 1.0f;
 	float animationTransitionSpeed = 3.0f;
@@ -122,16 +153,12 @@ protected:
 	Vector3d m_currentSkillPosition;
 
 protected:
-	/// <summary>
-	/// 애니메이션 관련 멤버
-	/// </summary>
-	IAnimation* m_idleAnimation;
-	IAnimation* m_walkAnimation;
-	IAnimation* m_attackAnimation;
-	IAnimation* m_deathAnimation;
-
 	/// 유닛이 속해있는 field
 	NavigationField* m_unitNavField;
+
+	/// 현재 스킬 활성화 시 적용되는 스킬 적용 위치
+	Vector3d m_skillPosition;
+	SkillEnum m_currentSelectedSkill;
 
 protected:
 	void IdleEngage();
@@ -140,6 +167,7 @@ protected:
 	void AttackEngage();
 	void ChaseEngage();
 	void SkillEngage();
+	void ParalysisEngage();
 	void DeathEngage();
 
 	void IdleUpdate();
@@ -149,30 +177,20 @@ protected:
 	void AttackUpdate();
 	void SkillUpdate();
 	void DeathUpdate();
-
-	void IdleEngageFunction();
-	void MoveEngageFunction();
-	void AttackMoveEngageFunction();
-	void ChaseEngageFunction();
-	void AttackEngageFunction();
-	void DeathEngageFunction();
-
-	void IdleUpdateFunction();
-	void MoveUpdateFunction();
-	void AttackMoveUpdateFunction();
-	void ChaseUpdateFunction();
-	void AttackUpdateFunction();
-	void QSkillUpdateFunction();
-	void DeathUpdateFunction();
+	
+	void CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation);
 
 	void StopMove();
 	void LookAt(Vector3d destination);
 	
-	void DetermineCurrentTargetObject();
 	void ReportUnitDeath();												// this 유닛이 죽었다는 정보를 전달
 	void IdentifiedOpponentDeath(yunutyEngine::GameObject* obj);		// 상대 유닛이 죽었을 경우 처리할 내용을 담은 함수
 
+	void DetermineHitDamage(float p_onceCalculatedDmg);					// 피격유닛이 받는 최종 데미지 계산
+
 public:
+	BaseUnitAnimationStruct unitAnimations;
+
 	virtual void Start() override;
 	virtual void Update() override;
 
@@ -187,11 +205,6 @@ public:
 	void SetAtkRadius(float radius);
 	void SetUnitSpeed(float speed);
 
-	void SetIdleAnimation(IAnimation* idleAnim);
-	void SetWalkAnimation(IAnimation* walkAnim);
-	void SetAttackAnimation(IAnimation* attackAnim);
-	void SetDeathAnimation(IAnimation* deathAnim);
-
 	void SetAttackDelay(float p_delay);
 
 	void SetPlayerSerialNumber();
@@ -200,18 +213,42 @@ public:
 	void SetCurrentOrderMove();
 	void SetCurrentOrderAttackMove();
 
-	int GetUnitAp() const;
-	void Damaged(GameObject* opponentObject, int opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
-	void Damaged(int dmg);										// 추적받지 않는 데미지
-
 	void OrderMove(Vector3d position);
 	void OrderAttackMove(Vector3d position);
 	void OrderSkill(SkillEnum p_skillNum, Vector3d position);
 
+	void DetermineCurrentTargetObject();
 	void AddToOpponentObjectList(yunutyEngine::GameObject* obj);
 	void DeleteFromOpponentObjectList(yunutyEngine::GameObject* obj);
 
+	void AddToRecognizeList(Unit* p_unit);
+	void DeleteFromRecognizeList(Unit* p_unit);
+
 	void SetNavField(NavigationField* p_navField);
 	NavigationField* GetNavField() const;
+
+	void EndSkillState();
+
+	void MakeUnitPushedState(bool p_isCrushed);
+	void MakeUnitParalysisState();
+	void MakeUnitParalysisEnd();
+	bool GetJustCrushedState() const;
+
+	float DetermineAttackDamage(float p_damage);			// 공격유닛이 피격유닛에게 전달하는 데미지 계산.
+
+public:
+	/// <summary>
+	/// 유닛의 스탯을 조작하는 함수.
+	/// </summary>
+	/// <returns></returns>
+	int GetUnitDamage() const;
+	void Damaged(GameObject* opponentObject, float opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
+	void Damaged(float dmg);										// 추적받지 않는 데미지
+	
+	void IncreaseAttackPower(float p_attackPowerIncrease);
+	void IncreaseAttackSpeed(float p_attackSpeedIncrease);
+
+	void SetUnitDamageToZero(bool p_bool);
+	void MultipleUnitSpeed(float p_mul);
 };
 

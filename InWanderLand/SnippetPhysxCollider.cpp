@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
@@ -51,6 +52,7 @@ public:
         TestDebugCollider::Start();
         collider = GetGameObject()->AddComponent<physics::BoxCollider>();
         collider->SetHalfExtent({ 0.5,0.5,0.5 });
+		GetGameObject()->AddComponent<physics::RigidBody>();
     }
 };
 class KinematicCollider : public TestDebugCollider
@@ -88,7 +90,7 @@ void SnippetInitializerPhysxCollider()
 
 namespace snippets
 {
-    TEST_CLASS(InWanderLand)
+    TEST_CLASS(SnippetPhysxColliderClass)
     {
     public:
         /// <summary>
@@ -98,7 +100,7 @@ namespace snippets
         TEST_METHOD(SnippetPhysxCollider)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::Contents::ContentsLayer::AssignTestInitializer(SnippetInitializerPhysxCollider);
+            application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializerPhysxCollider);
             client.Initialize();
             client.Run();
             client.Finalize();

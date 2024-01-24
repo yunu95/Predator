@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 #include "ContentsLayer.h"
@@ -9,7 +10,6 @@
 #include "DebugTilePlane.h"
 #include "DebugBeacon.h"
 #include "DebugMeshes.h"
-#include "ProjectileSystem.h"
 #include "PlayerController.h"
 #include "UnitFactory.h"
 #include "InputManager.h"
@@ -82,9 +82,6 @@ void TestCaseGroupControlInit()
 	auto navField = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationField>();
 	navField->BuildField(worldVertices, worldFaces);
 
-	/// ProjectileSystem SetUp
-	ProjectileSystem::GetInstance()->SetUp();
-
 	/// PlayerController SetUp
 	PlayerController::GetInstance()->SetMovingSystemComponent(rtsCam);
 
@@ -92,7 +89,6 @@ void TestCaseGroupControlInit()
 	unique_ptr<UnitFactory> unitfactory = make_unique<UnitFactory>();
 
 	/// StatusManager 
-	StatusTimerPool::GetInstance()->SetUp();
 
 	/// FBX File Load
 	//auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
@@ -167,15 +163,15 @@ void TestCaseGroupControlInit()
 	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
-namespace InWanderLand
+namespace tests
 {
-	TEST_CLASS(InWanderLand)
+	TEST_CLASS(TestCaseGroupControlClass)
 	{
 	public:
 		TEST_METHOD(TestCaseGroupControl)
 		{
 			application::Application& client = application::Application::CreateApplication(0, 0);
-			application::Contents::ContentsLayer::AssignTestInitializer(TestCaseGroupControlInit);
+			application::contents::ContentsLayer::AssignTestInitializer(TestCaseGroupControlInit);
 			client.Initialize();
 			client.Run();
 			client.Finalize();
