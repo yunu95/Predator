@@ -1,5 +1,6 @@
 #pragma once
 #include "YunutyEngine.h"
+#include "DebugStaticMesh.h"
 
 using namespace yunutyEngine;
 
@@ -22,7 +23,7 @@ inline void CreateLine(Vector3d start, Vector3d end, yunuGI::Color color = yunuG
 }
 inline yunutyEngine::graphics::StaticMeshRenderer* AttachDebugMesh(GameObject* target, DebugMeshType meshType = DebugMeshType::Cube, yunuGI::Color color = yunuGI::Color::red(), bool isWireFrame = true)
 {
-    auto staticMesh = target->AddComponent<graphics::StaticMeshRenderer>();
+    auto staticMesh = target->AddComponent<DebugStaticMesh>();
     wstring meshName;
     switch (meshType)
     {

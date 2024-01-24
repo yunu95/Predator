@@ -546,6 +546,9 @@
     <ClCompile Include="Animator.cpp">
       <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\Animator</Filter>
     </ClCompile>
+    <ClCompile Include="IGameObjectParent.cpp">
+      <Filter>yunutyEngine\IGameObjectParent</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\Camera.h">

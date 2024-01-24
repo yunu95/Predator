@@ -66,31 +66,6 @@ void yunutyEngine::YunutyCycle::Pause()
 {
 }
 
-void yunutyEngine::YunutyCycle::HandleComponent(Component* component, bool forceDrop)
-{
-	if (forceDrop)
-	{
-		startTargetComponentsPendingDeletion.push(component);
-		updateTargetComponentsPendingDeletion.push(component);
-		return;
-	}
-	if (component->GetGameObject()->GetActive() && component->GetActive())
-	{
-		if (!component->wasStartCalled())
-			startTargetComponentsPendingAddition.push(component);
-
-		if (component->isUpdating)
-			updateTargetComponentsPendingAddition.push(component);
-		else
-			updateTargetComponentsPendingDeletion.push(component);
-	}
-	else
-	{
-		startTargetComponentsPendingDeletion.push(component);
-		updateTargetComponentsPendingDeletion.push(component);
-	}
-
-}
 void yunutyEngine::YunutyCycle::SetMaxFrameRate()
 {
 }
@@ -127,28 +102,24 @@ void yunutyEngine::YunutyCycle::ThreadFunction()
 	if (postThreadAction)
 		postThreadAction();
 }
-void yunutyEngine::YunutyCycle::ReceivePendingObjectsChange()
+void yunutyEngine::YunutyCycle::ResetUpdateTargetComponents()
 {
-	while (!updateTargetComponentsPendingAddition.empty())
-	{
-		updateTargetComponents.insert(updateTargetComponentsPendingAddition.top());
-		updateTargetComponentsPendingAddition.pop();
-	}
-	while (!updateTargetComponentsPendingDeletion.empty())
-	{
-		updateTargetComponents.erase(updateTargetComponentsPendingDeletion.top());
-		updateTargetComponentsPendingDeletion.pop();
-	}
-	while (!startTargetComponentsPendingAddition.empty())
-	{
-		startTargetComponents.insert(startTargetComponentsPendingAddition.top());
-		startTargetComponentsPendingAddition.pop();
-	}
-	while (!startTargetComponentsPendingDeletion.empty())
-	{
-		startTargetComponents.erase(startTargetComponentsPendingDeletion.top());
-		startTargetComponentsPendingDeletion.pop();
-	}
+    if (updateTargetComponents.size() < Component::guidPtrMap.size())
+        updateTargetComponents.resize(Component::guidPtrMap.size() * 2);
+    updateTargetComponentsSize = 0;
+
+    static std::stack<GameObject*> gameObjectStack;
+    for (auto eachGameObject : Scene::getCurrentScene()->GetUpdatingChildren())
+        gameObjectStack.push(eachGameObject);
+    while (!gameObjectStack.empty())
+    {
+        GameObject* gameObject = gameObjectStack.top();
+        gameObjectStack.pop();
+        for (auto each : gameObject->GetUpdatingChildren())
+            gameObjectStack.push(each);
+        for (auto eachComp : gameObject->updatingComponents)
+            updateTargetComponents[updateTargetComponentsSize++] = eachComp;
+    }
 }
 
 // Update components and render camera
@@ -172,22 +143,11 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 		}
 		Scene::getCurrentScene()->destroyList.clear();
 
-		ReceivePendingObjectsChange();
-
-		//// SetCacheDirty는 GetSceneIndex, 즉 게임오브젝트가 현재 씬에서 몇번째 객체인지 알아야 했을때 쓰였습니다.
-		//for (auto each : gameObjects)
-		//    each->SetCacheDirty();
-		//for (auto each : GetGameObjects(false))
-		//    each->SetCacheDirty();
-		//for (auto each : GetActiveComponents())
-		//    UpdateComponent(each);
-		for (auto each : startTargetComponents)
-			if (each->wasStartCalled() == false)
-				StartComponent(each);
-		startTargetComponents.clear();
-		for (auto each : updateTargetComponents)
-			UpdateComponent(each);
-
+        ResetUpdateTargetComponents();
+        for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
+            StartComponent(updateTargetComponents[i]);
+        for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
+            UpdateComponent(updateTargetComponents[i]);
 
 		auto pxScene = physics::_PhysxGlobal::SingleInstance().RequestPxScene(Scene::currentScene);
 		if (Time::GetDeltaTime() > 0 && pxScene)

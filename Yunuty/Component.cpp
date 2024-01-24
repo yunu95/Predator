@@ -31,13 +31,12 @@ Component::Component()
     guid = addComponentDesc.guid;
     guidPtrMap[guid] = this;
 
-    YunutyCycle::SingleInstance().HandleComponent(this);
 }
 Component::~Component()
 {
     guidPtrMap.erase(guid);
 
-    YunutyCycle::SingleInstance().HandleComponent(this, true);
+    gameObject->HandleComponentUpdateState(this);
 }
 yunutyEngine::GameObject* yunutyEngine::Component::GetGameObject()
 {
@@ -74,7 +73,7 @@ void yunutyEngine::Component::SetActive(bool active)
     if (isActive != active)
     {
         isActive = active;
-        YunutyCycle::SingleInstance().HandleComponent(this);
+        gameObject->HandleComponentUpdateState(this);
         if (isActive)
             OnEnable();
         else
@@ -86,6 +85,6 @@ void yunutyEngine::Component::SetIsUpdating(bool isUpdating)
     if ((this->isUpdating != isUpdating) && GetGameObject()->GetActive())
     {
         this->isUpdating = isUpdating;
-        YunutyCycle::SingleInstance().HandleComponent(this);
+        gameObject->HandleComponentUpdateState(this);
     }
 };

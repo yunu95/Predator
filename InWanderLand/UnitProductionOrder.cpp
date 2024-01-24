@@ -12,7 +12,6 @@ GameObject* UnitProductionOrder::CreateUnitWithOrder()
 
 	/// 2. RangeSystem Gameobject 및 Component 추가
 	auto unitRangeSystemObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//unitRangeSystemObject->GetTransform()->scale = { 1.0f, 1.0f, 1.0f };
 
 	// 2-1. RangeSystem Component
 	RangeSystem* rangeSystemComponent = unitRangeSystemObject->AddComponent<RangeSystem>();
@@ -29,9 +28,9 @@ GameObject* UnitProductionOrder::CreateUnitWithOrder()
 	auto unitCollider = m_unitGameObject->AddComponent<physics::SphereCollider>();	// 빈 껍데기에 
 	unitCollider->SetRadius(1.0f);
 
-	auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	AttachDebugMesh(unitColliderDebugObject, DebugMeshType::Cube, yunuGI::Color::red(), false);
-	unitColliderDebugObject->SetParent(m_unitGameObject);
+	//auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	AttachDebugMesh(m_unitGameObject, DebugMeshType::Cube, yunuGI::Color::green(), false);
+	//unitColliderDebugObject->SetParent(m_unitGameObject);
 
 
 	/// 4. NavigationAgent Component 추가

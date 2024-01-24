@@ -6,224 +6,228 @@
 
 namespace application
 {
-	namespace editor
-	{
-		InstanceManager::InstanceManager()
-			: Storable(), Singleton<InstanceManager>(), templateDataManager(TemplateDataManager::GetSingletonInstance())
-			, list(), tdMap(), listBeforeMatching(), mould(nullptr)
-		{
+    namespace editor
+    {
+        InstanceManager::InstanceManager()
+            : Storable(), Singleton<InstanceManager>(), templateDataManager(TemplateDataManager::GetSingletonInstance())
+            , list(), tdMap(), listBeforeMatching(), mould(nullptr)
+        {
 
-		}
+        }
 
-		IEditableData* InstanceManager::CreateInstance(const std::string& dataName)
-		{
-			auto tdptr = templateDataManager.GetTemplateData(dataName);
-			if (tdptr == nullptr)
-			{
-				return nullptr;
-			}
+        IEditableData* InstanceManager::CreateInstance(const std::string& dataName)
+        {
+            auto tdptr = templateDataManager.GetTemplateData(dataName);
+            if (tdptr == nullptr)
+            {
+                return nullptr;
+            }
 
-			IEditableData* instance = nullptr;
+            IEditableData* instance = nullptr;
 
-			switch (templateDataManager.GetDataType(dataName))
-			{
-				case DataType::TerrainData:
-				{
-					instance = new TerrainData(dataName);
-					break;
-				}
+            switch (templateDataManager.GetDataType(dataName))
+            {
+            case DataType::TerrainData:
+            {
+                instance = new TerrainData(dataName);
+                break;
+            }
 
-				case DataType::UnitData:
-				{
-					instance = new UnitData(dataName);
-					break;
-				}
+            case DataType::UnitData:
+            {
+                instance = new UnitData(dataName);
+                break;
+            }
 
-				case DataType::OrnamentData:
-				{
-					instance = new OrnamentData(dataName);
-					break;
-				}
+            case DataType::OrnamentData:
+            {
+                instance = new OrnamentData(dataName);
+                break;
+            }
 
-				default:
-					break;
-			}
-			
-			if (instance != nullptr)
-			{
-				list[instance->id] = std::unique_ptr<IEditableData>(instance);
-				tdMap[instance->id] = tdptr;
-			}
+            default:
+                break;
+            }
 
-			return instance;
-		}
+            if (instance != nullptr)
+            {
+                list[instance->id] = std::unique_ptr<IEditableData>(instance);
+                tdMap[instance->id] = tdptr;
+            }
 
-		bool InstanceManager::DeleteInstance(const UUID& uuid)
-		{
-			if (list[uuid].get() == mould)
-			{
-				mould = nullptr;
-			}
+            return instance;
+        }
 
-			if (list.erase(uuid) == 0)
-			{
-				return false;
-			}
-			
-			tdMap.erase(uuid);
+        bool InstanceManager::DeleteInstance(const UUID& uuid)
+        {
+            if (list[uuid].get() == mould)
+            {
+                mould = nullptr;
+            }
 
-			return true;
-		}
+            if (list.erase(uuid) == 0)
+            {
+                return false;
+            }
 
-		IEditableData* InstanceManager::GetInstance(const UUID& uuid) const
-		{
-			auto itr = list.find(uuid);
-			if (itr == list.end())
-			{
-				return nullptr;
-			}
+            tdMap.erase(uuid);
 
-			return itr->second.get();
-		}
+            return true;
+        }
 
-		void InstanceManager::Clear()
-		{
-			tdMap.clear();
-			listBeforeMatching.clear();
-			list.clear();
-			mould = nullptr;
-		}
+        IEditableData* InstanceManager::GetInstance(const UUID& uuid) const
+        {
+            auto itr = list.find(uuid);
+            if (itr == list.end())
+            {
+                return nullptr;
+            }
 
-		bool InstanceManager::PreEncoding(json& data) const
-		{
-			std::string uuidStr;
-			for (auto& [uuid, ptr] : list)
-			{
-				uuidStr = UUID_To_String(uuid);
+            return itr->second.get();
+        }
 
-				data["InstanceList"][uuidStr]["type"] = templateDataManager.GetDataType(tdMap.find(uuid)->second);
-				if (!ptr->PreEncoding(data["InstanceList"][uuidStr]["0_Pre"]))
-				{
-					return false;
-				}
-			}
+        void InstanceManager::Clear()
+        {
+            tdMap.clear();
+            listBeforeMatching.clear();
+            list.clear();
+            mould = nullptr;
+        }
 
-			return true;
-		}
+        bool InstanceManager::PreEncoding(json& data) const
+        {
+            std::string uuidStr;
+            for (auto& [uuid, ptr] : list)
+            {
+                uuidStr = UUID_To_String(uuid);
 
-		bool InstanceManager::PostEncoding(json& data) const
-		{
-			std::string uuidStr;
-			for (auto& [uuid, ptr] : list)
-			{
-				uuidStr = UUID_To_String(uuid);
+                data["InstanceList"][uuidStr]["type"] = templateDataManager.GetDataType(tdMap.find(uuid)->second);
+                if (!ptr->PreEncoding(data["InstanceList"][uuidStr]["0_Pre"]))
+                {
+                    return false;
+                }
+            }
 
-				auto itr = data["InstanceList"].find(uuidStr);
-				if (itr == data["InstanceList"].end())
-				{
-					return false;
-				}
+            return true;
+        }
 
-				if (!ptr->PostEncoding(itr.value()["1_Post"]))
-				{
-					return false;
-				}
-			}
+        bool InstanceManager::PostEncoding(json& data) const
+        {
+            std::string uuidStr;
+            for (auto& [uuid, ptr] : list)
+            {
+                uuidStr = UUID_To_String(uuid);
 
-			return true;
-		}
+                auto itr = data["InstanceList"].find(uuidStr);
+                if (itr == data["InstanceList"].end())
+                {
+                    return false;
+                }
 
-		bool InstanceManager::PreDecoding(const json& data)
-		{
-			UUID uuid;
-			for (auto& [uuidStr, instanceData] : data["InstanceList"].items())
-			{
-				uuid = String_To_UUID(uuidStr);
+                if (!ptr->PostEncoding(itr.value()["1_Post"]))
+                {
+                    return false;
+                }
+            }
 
-				auto instance = CreateEmptyInstance(instanceData["type"]);
+            return true;
+        }
 
-				if (instance == nullptr)
-				{
-					Clear();
-					return false;
-				}
+        bool InstanceManager::PreDecoding(const json& data)
+        {
+            UUID uuid;
+            if (!data.contains("InstanceList"))
+                return true;
+            for (auto& [uuidStr, instanceData] : data["InstanceList"].items())
+            {
+                uuid = String_To_UUID(uuidStr);
 
-				// UUID
-				instance->SetUUID(uuid);
+                auto instance = CreateEmptyInstance(instanceData["type"]);
 
-				if (!instance->PreDecoding(instanceData["0_Pre"]))
-				{
-					Clear();
-					return false;
-				}
-			}
+                if (instance == nullptr)
+                {
+                    Clear();
+                    return false;
+                }
 
-			return true;
-		}
+                // UUID
+                instance->SetUUID(uuid);
 
-		bool InstanceManager::PostDecoding(const json& data)
-		{	
-			UUID uuid;
-			for (auto& [uuidStr, instanceData] : data["InstanceList"].items())
-			{
-				uuid = String_To_UUID(uuidStr);
+                if (!instance->PreDecoding(instanceData["0_Pre"]))
+                {
+                    Clear();
+                    return false;
+                }
+            }
 
-				for (auto each : listBeforeMatching)
-				{
-					if (each->id == uuid)
-					{
-						if (!each->PostDecoding(instanceData["1_Post"]))
-						{
-							Clear();
-							return false;
-						}
+            return true;
+        }
 
-						list[uuid] = std::unique_ptr<IEditableData>(each);
-						tdMap[uuid] = each->GetTemplateData();
-						listBeforeMatching.erase(each);
-						break;
-					}
-				}
-			}
+        bool InstanceManager::PostDecoding(const json& data)
+        {
+            UUID uuid;
+            if (!data.contains("InstanceList"))
+                return true;
+            for (auto& [uuidStr, instanceData] : data["InstanceList"].items())
+            {
+                uuid = String_To_UUID(uuidStr);
 
-			return true;
-		}
+                for (auto each : listBeforeMatching)
+                {
+                    if (each->id == uuid)
+                    {
+                        if (!each->PostDecoding(instanceData["1_Post"]))
+                        {
+                            Clear();
+                            return false;
+                        }
 
-		/// private
-		IEditableData* InstanceManager::CreateEmptyInstance(const DataType& type)
-		{
-			IEditableData* instance = nullptr;
+                        list[uuid] = std::unique_ptr<IEditableData>(each);
+                        tdMap[uuid] = each->GetTemplateData();
+                        listBeforeMatching.erase(each);
+                        break;
+                    }
+                }
+            }
 
-			switch (type)
-			{
-				case DataType::TerrainData:
-				{
-					instance = new TerrainData();
-					break;
-				}
+            return true;
+        }
 
-				case DataType::UnitData:
-				{
-					instance = new UnitData();
-					break;
-				}
+        /// private
+        IEditableData* InstanceManager::CreateEmptyInstance(const DataType& type)
+        {
+            IEditableData* instance = nullptr;
 
-				case DataType::OrnamentData:
-				{
-					instance = new OrnamentData();
-					break;
-				}
+            switch (type)
+            {
+            case DataType::TerrainData:
+            {
+                instance = new TerrainData();
+                break;
+            }
 
-				default:
-					break;
-			}
+            case DataType::UnitData:
+            {
+                instance = new UnitData();
+                break;
+            }
 
-			if (instance != nullptr)
-			{
-				listBeforeMatching.insert(instance);
-			}
+            case DataType::OrnamentData:
+            {
+                instance = new OrnamentData();
+                break;
+            }
 
-			return instance;
-		}
-	}
+            default:
+                break;
+            }
+
+            if (instance != nullptr)
+            {
+                listBeforeMatching.insert(instance);
+            }
+
+            return instance;
+        }
+    }
 }

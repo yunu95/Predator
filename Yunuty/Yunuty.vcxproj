@@ -233,6 +233,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     </ClCompile>
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="GameObjectPool.cpp" />
+    <ClCompile Include="IGameObjectParent.cpp" />
     <ClCompile Include="InputGeom.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
