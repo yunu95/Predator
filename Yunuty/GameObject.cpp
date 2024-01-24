@@ -82,7 +82,6 @@ void yunutyEngine::GameObject::SetSelfActive(bool selfActive)
 		}
 		parent->HandleChildUpdateState(this);
 	}
-
 }
 GameObject* yunutyEngine::GameObject::GetParentGameObject()
 {
@@ -202,7 +201,7 @@ void yunutyEngine::GameObject::SetChildIndex(GameObject* child, int index)
 
 bool yunutyEngine::GameObject::DeservesUpdate()
 {
-	return (!updatingChildren.empty() || !updatingComponents.empty()) && GetActive();
+	return (!updatingChildren.empty() || !updatingComponents.empty()) && GetSelfActive();
 }
 int yunutyEngine::GameObject::GetSceneIndex()const
 {
