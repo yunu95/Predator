@@ -7,8 +7,9 @@
 #include "Application.h"
 #include "RTSCam.h"
 #include "SelectionBox.h"
-#include "TerrainPaletteManager.h"
-#include "UnitPaletteManager.h"
+#include "PaletteManager.h"
+#include "TerrainPalette.h"
+#include "UnitPalette.h"
 #include "UnitInstance.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -26,24 +27,24 @@ namespace snippets
         static void SnippetInitializerUnitPalette()
         {
             yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-            auto rtsCam = Scene::getCurrentScene()->AddGameObject()->AddComponent<RTSCam>();
 
             auto& app = application::Application::GetInstance();
 
-            rtsCam->GetTransform()->position = Vector3d(3, 10, 3);
-            application::editor::palette::Palette::SetCurrentPalette(&application::editor::palette::UnitPaletteManager::SingleInstance());
-            rtsCam->groundHoveringClickCallback = [&](const Vector3d& worldPos) { if (application::Application::IsFocusGameWindow()){ application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnMouseMove(worldPos); } };
-            rtsCam->groundLeftClickCallback = [&](const Vector3d& worldPos) { application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnLeftClick(); };
-            rtsCam->groundLeftClickReleaseCallback = [&](const Vector3d& worldPos) { if (application::Application::IsFocusGameWindow()) { application::editor::palette::UnitPaletteManager::GetCurrentPalette()->OnLeftClickRelease(); } };
-            rtsCam->deleteButtonCallback = [&]() { if (application::Application::IsFocusGameWindow()) { application::editor::palette::Palette::GetCurrentPalette()->OnDeletion(); } };
-            rtsCam->xButtonCallback = [&]()
-            {
-                if (application::Application::IsFocusGameWindow())
-                {
-                    auto palette = application::editor::palette::Palette::GetCurrentPalette();
-                    palette->SetAsSelectMode(!palette->IsSelectMode());
-                }
-            };
+            //auto rtsCam = Scene::getCurrentScene()->AddGameObject()->AddComponent<RTSCam>();
+            //rtsCam->GetTransform()->position = Vector3d(3, 10, 3);
+            //application::editor::palette::PaletteManager::GetSingletonInstance().SetCurrentPalette(&application::editor::palette::UnitPalette::SingleInstance());
+            //rtsCam->groundHoveringClickCallback = [&](const Vector3d& worldPos) { if (application::Application::IsFocusGameWindow()){ application::editor::palette::UnitPalette::GetCurrentPalette()->OnMouseMove(worldPos); } };
+            //rtsCam->groundLeftClickCallback = [&](const Vector3d& worldPos) { application::editor::palette::UnitPalette::GetCurrentPalette()->OnLeftClick(); };
+            //rtsCam->groundLeftClickReleaseCallback = [&](const Vector3d& worldPos) { if (application::Application::IsFocusGameWindow()) { application::editor::palette::UnitPalette::GetCurrentPalette()->OnLeftClickRelease(); } };
+            //rtsCam->deleteButtonCallback = [&]() { if (application::Application::IsFocusGameWindow()) { application::editor::palette::Palette::GetCurrentPalette()->OnDeletion(); } };
+            //rtsCam->xButtonCallback = [&]()
+            //{
+            //    if (application::Application::IsFocusGameWindow())
+            //    {
+            //        auto palette = application::editor::palette::Palette::GetCurrentPalette();
+            //        palette->SetAsSelectMode(!palette->IsSelectMode());
+            //    }
+            //};
 
             auto directionalLight = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 

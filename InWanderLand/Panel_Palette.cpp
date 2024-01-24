@@ -112,13 +112,21 @@ namespace application
                         currentPalette->SetAsSelectMode(true);
                     }
                 }
+
+                if (eim.IsKeyboardUp(KeyCode::Delete))
+                {
+                    if (currentPalette && currentPalette->IsSelectMode())
+                    {
+                        currentPalette->OnDeletion();
+                    }
+                }
             }
         }
 
         void PalettePanel::ImGui_BeginTerrainPalette()
         {
-            SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
-            SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+            imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
+            imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 
             if (ImGui::BeginTable("TerrainPaletteTable", 2, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_NoClip))
             {
@@ -155,8 +163,8 @@ namespace application
 
         void PalettePanel::ImGui_BeginUnitPalette()
         {
-            SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
-            SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+            imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
+            imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 
             if (ImGui::BeginTable("UnitPaletteTable", 2, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_NoClip))
             {
@@ -176,8 +184,8 @@ namespace application
 
         void PalettePanel::ImGui_BeginDoodadPalette()
         {
-            SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
-            SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+            imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
+            imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 
             if (ImGui::BeginTable("DoodadPaletteTable", 2, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_NoClip))
             {
@@ -197,8 +205,8 @@ namespace application
 
         void PalettePanel::ImGui_BeginRegionPalette()
         {
-            SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
-            SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+            imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
+            imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 
             if (ImGui::BeginTable("DoodadPaletteTable", 2, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_NoClip))
             {

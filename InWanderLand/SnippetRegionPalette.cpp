@@ -7,8 +7,9 @@
 #include "Application.h"
 #include "RTSCam.h"
 #include "SelectionBox.h"
-#include "TerrainPaletteManager.h"
-#include "RegionPaletteManager.h"
+#include "PaletteManager.h"
+#include "TerrainPalette.h"
+#include "RegionPalette.h"
 #include "RegionInstance.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -19,19 +20,19 @@ using namespace application::editor::palette;
 void SnippetInitializerRegionPalette()
 {
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-    auto rtsCam = Scene::getCurrentScene()->AddGameObject()->AddComponent<RTSCam>();
 
-    rtsCam->GetTransform()->position = Vector3d(3, 10, 3);
-    application::editor::palette::Palette::SetCurrentPalette(&application::editor::palette::RegionPalette::SingleInstance());
-    rtsCam->groundHoveringClickCallback = [](const Vector3d& worldPos) {application::editor::palette::Palette::GetCurrentPalette()->OnMouseMove(worldPos); };
-    rtsCam->groundLeftClickCallback = [](const Vector3d& worldPos) {application::editor::palette::Palette::GetCurrentPalette()->OnLeftClick(); };
-    rtsCam->groundLeftClickReleaseCallback = [](const Vector3d& worldPos) {application::editor::palette::Palette::GetCurrentPalette()->OnLeftClickRelease(); };
-    rtsCam->deleteButtonCallback = []() {application::editor::palette::Palette::GetCurrentPalette()->OnDeletion(); };
-    rtsCam->xButtonCallback = []()
-    {
-        auto palette = application::editor::palette::Palette::GetCurrentPalette();
-        palette->SetAsSelectMode(!palette->IsSelectMode());
-    };
+    //auto rtsCam = Scene::getCurrentScene()->AddGameObject()->AddComponent<RTSCam>();
+    //rtsCam->GetTransform()->position = Vector3d(3, 10, 3);
+    //application::editor::palette::Palette::SetCurrentPalette(&application::editor::palette::RegionPalette::SingleInstance());
+    //rtsCam->groundHoveringClickCallback = [](const Vector3d& worldPos) {application::editor::palette::Palette::GetCurrentPalette()->OnMouseMove(worldPos); };
+    //rtsCam->groundLeftClickCallback = [](const Vector3d& worldPos) {application::editor::palette::Palette::GetCurrentPalette()->OnLeftClick(); };
+    //rtsCam->groundLeftClickReleaseCallback = [](const Vector3d& worldPos) {application::editor::palette::Palette::GetCurrentPalette()->OnLeftClickRelease(); };
+    //rtsCam->deleteButtonCallback = []() {application::editor::palette::Palette::GetCurrentPalette()->OnDeletion(); };
+    //rtsCam->xButtonCallback = []()
+    //{
+    //    auto palette = application::editor::palette::Palette::GetCurrentPalette();
+    //    palette->SetAsSelectMode(!palette->IsSelectMode());
+    //};
 
     auto directionalLight = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 

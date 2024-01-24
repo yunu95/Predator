@@ -14,6 +14,20 @@ namespace application
 {
 	namespace editor
 	{
+		enum class CameraTypeState
+		{
+			None = 0,
+			Editor,
+			Game
+		};
+
+		enum class CameraPerspectiveState
+		{
+			None = 0,
+			Free,
+			Game
+		};
+
 		class EditorCamera
 			: public Singleton<EditorCamera>
 		{
@@ -33,6 +47,8 @@ namespace application
 			// 카메라 움직임 속도 획득
 			float GetCameraSpeed() const;
 
+			CameraPerspectiveState GetGamePerspective() { return cameraPState; }
+
 			yunuGI::Vector3 GetUpDirection() const;
 			yunuGI::Vector3 GetRightDirection() const;
 			yunuGI::Vector3 GetForwardDirection() const;
@@ -44,19 +60,6 @@ namespace application
 		private:
 			EditorCamera() = default;
 
-			enum class CameraTypeState
-			{
-				None = 0,
-				Editor,
-				Game
-			};
-
-			enum class CameraPerspectiveState
-			{
-				None = 0,
-				Free,
-				Game
-			};
 
 			void UpdateCameraView();
 

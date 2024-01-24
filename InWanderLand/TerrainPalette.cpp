@@ -131,7 +131,7 @@ namespace application::editor::palette
                 SetAsSelectMode(true);
                 break;
         }
-        SetBrushSize(2);
+        SetBrushSize(-1);
     }
     void TerrainPalette::OnStandbyPalette()
     {
@@ -144,6 +144,7 @@ namespace application::editor::palette
             beforeState = State::Place;
         }
         state = State::None;
+        TerrainBrush::Instance().SetActive(false);
         CleanUpData();
     }
     Vector3d TerrainPalette::GetNodePosition(const Vector2i& nodeKey)
