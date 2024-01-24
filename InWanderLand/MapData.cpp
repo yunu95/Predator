@@ -28,6 +28,7 @@ void MapData::SaveMapData(const string& fileName)
 {
     currentFileName = fileName;
     SaveTerrainData();
+    mfm.SaveMapFile(fileName);
 }
 void MapData::GetCurrentFileName()
 {
