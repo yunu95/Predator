@@ -676,6 +676,11 @@ LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 						static POINT cursorPos;
 						GetCursorPos(&cursorPos);
 						winMouseMoveCallBackFunction(cursorPos.x, cursorPos.y);
+
+						if (gameFocus)
+						{
+
+						}
 					}
 				}
 

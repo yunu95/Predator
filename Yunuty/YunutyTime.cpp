@@ -14,7 +14,7 @@ void yunutyEngine::Time::Update()
     {
         deltaTimeUnscaled = chrono::duration<double>(now - lastFrameTime).count();
 #if _DEBUG
-        // µð¹ö±× Áß Áß´ÜÁ¡À» Âï¾úÀ» ¶§, deltaTimeUnscaledÀÌ 10ÃÊ ÀÌ»óÀÌ µÉ ¶§µµ ÀÖ´Ù. ±× ¶§¸¦ ´ëºñÇÑ ÄÚµå
+        // ë””ë²„ê·¸ ì¤‘ ì¤‘ë‹¨ì ì„ ì°ì—ˆì„ ë•Œ, deltaTimeUnscaledì´ 10ì´ˆ ì´ìƒì´ ë  ë•Œë„ ìžˆë‹¤. ê·¸ ë•Œë¥¼ ëŒ€ë¹„í•œ ì½”ë“œ
         if (deltaTimeUnscaled > 1)
             deltaTimeUnscaled = 0.000001;
 #endif

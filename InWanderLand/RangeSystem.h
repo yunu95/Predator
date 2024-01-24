@@ -10,8 +10,6 @@ class RangeSystem : public Component
 {
 private:
     Unit* m_unitComponent;
-    float m_tempIDRadius;
-    float m_tempAtkRadius;
 
 public:   
     void SetOwnerUnitComponent(Unit* unitComponent);

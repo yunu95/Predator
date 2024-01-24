@@ -36,21 +36,9 @@ namespace yunutyEngine
         vector<Component*> GetActiveComponents();
         vector<GameObject*> GetGameObjects(bool onlyActive = true);
 
-        /// <summary>
-        /// 활성화되어 각각 Start, Update 게임 엔진 사이클에 참여하는 컴포넌트들의 집합.
-        /// </summary>
-        unordered_set<Component*> startTargetComponents;
-        stack<Component*> startTargetComponentsPendingAddition;
-        stack<Component*> startTargetComponentsPendingDeletion;
-        unordered_set<Component*> updateTargetComponents;
-        stack<Component*> updateTargetComponentsPendingAddition;
-        stack<Component*> updateTargetComponentsPendingDeletion;
-        /// <summary>
-        /// updateTargetComponents/activeGameObjects들에 추가될 객체들.
-        /// </summary>
-        /// <summary>
-        /// updateTargetComponents/activeGameObjects들에서 삭제될 객체들.
-        /// </summary>
+        /// 활성화되어 각각 Start, Update 게임 엔진 사이클에 참여하는 컴포넌트들.
+        std::vector<Component*> updateTargetComponents;
+        unsigned int updateTargetComponentsSize{ 0 };
 
         vector<std::function<void()>> afterUpdateActions;
         std::mutex actionReservationMutex;
@@ -58,7 +46,8 @@ namespace yunutyEngine
         static void UpdateComponent(Component* component);
         static void StartComponent(Component* component);
         void ThreadFunction();
-        void ReceivePendingObjectsChange();
+        // update의 대상이 되는 컴포넌트들을 정리합니다.
+        void ResetUpdateTargetComponents();
         friend Component;
         friend GameObject;
     protected:
@@ -95,7 +84,6 @@ namespace yunutyEngine
         // 컴포넌트를 유누티 사이클에서 핸들링하도록 한다.
         // 컴포넌트의 상태에 따라 요청이 완전히 무시되거나, 사이클에서 특정 단계에 처리되는 대상이 된다.
         // forceDrop이 참인 경우 묻지도 따지지도 않고 컴포넌트를 사이클에서 제거한다.
-        void HandleComponent(Component* component,bool forceDrop=false);
         void SetMaxFrameRate();
         bool IsGameRunning();
         bool IsUpdating();

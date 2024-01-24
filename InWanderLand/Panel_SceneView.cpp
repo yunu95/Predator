@@ -96,7 +96,7 @@ namespace application
 				ImGui_OnResizeRenderImageSize();
 			}
 
-			if (isFocused && !Application::IsFocusGameWindow())
+			if (!Application::IsFocusGameWindow())
 			{
 				// 마우스 입력에 대한 처리
 				if (isMouseOver)

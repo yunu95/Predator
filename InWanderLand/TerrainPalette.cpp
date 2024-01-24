@@ -131,7 +131,7 @@ namespace application::editor::palette
                 SetAsSelectMode(true);
                 break;
         }
-        SetBrushSize(-1);
+        SetBrushSize(2);
     }
     void TerrainPalette::OnStandbyPalette()
     {
@@ -158,10 +158,10 @@ namespace application::editor::palette
     GameObject* TerrainPalette::CreateNodeDebuggingMesh(const Vector2i& nodeKey)
     {
         auto node = Scene::getCurrentScene()->AddGameObject();
+        node->GetTransform()->SetWorldPosition(GetNodePosition(nodeKey) - nodeHeight * Vector3d::up * 0.5);
+        node->GetTransform()->scale = { nodeDistance, nodeHeight, nodeDistance };
         auto mesh = AttachDebugMesh(node, DebugMeshType::Cube, yunuGI::Color{0.788, 0.647, 0.215}, false);
         mesh->SetIsUpdating(false);
-        node->GetTransform()->scale = { nodeDistance, nodeHeight, nodeDistance };
-        node->GetTransform()->SetWorldPosition(GetNodePosition(nodeKey) - nodeHeight * Vector3d::up * 0.5);
         return node;
     }
 }

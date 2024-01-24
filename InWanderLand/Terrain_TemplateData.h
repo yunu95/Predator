@@ -8,37 +8,38 @@
 
 namespace application
 {
-	namespace editor
-	{
-		class Terrain_TemplateData;
+    namespace editor
+    {
+        class Terrain_TemplateData;
 
-		struct POD_Terrain_TemplateData
-		{
-			TO_JSON(POD_Terrain_TemplateData)
-			FROM_JSON(POD_Terrain_TemplateData)
-		};
+        struct POD_Terrain_TemplateData
+        {
+            std::vector<std::pair<int, int>> coordinatesSet;
+            TO_JSON(POD_Terrain_TemplateData)
+                FROM_JSON(POD_Terrain_TemplateData)
+        };
 
-		class Terrain_TemplateData
-			:public ITemplateData
-		{
-			friend class TerrainData;
-			friend class TemplateDataManager;
+        class Terrain_TemplateData
+            :public ITemplateData
+        {
+            friend class TerrainData;
+            friend class TemplateDataManager;
 
-		public:
-			virtual std::string GetDataKey() const override;
+        public:
+            virtual std::string GetDataKey() const override;
 
-			POD_Terrain_TemplateData pod;
+            POD_Terrain_TemplateData pod;
 
-		protected:
-			virtual bool PreEncoding(json& data) const override;
-			virtual bool PostEncoding(json& data) const override;
-			virtual bool PreDecoding(const json& data) override;
-			virtual bool PostDecoding(const json& data) override;
+        protected:
+            virtual bool PreEncoding(json& data) const override;
+            virtual bool PostEncoding(json& data) const override;
+            virtual bool PreDecoding(const json& data) override;
+            virtual bool PostDecoding(const json& data) override;
 
-		private:
-			Terrain_TemplateData();
-			Terrain_TemplateData(const Terrain_TemplateData& prototype);
-			Terrain_TemplateData& operator=(const Terrain_TemplateData& prototype);
-		};
-	}
+        private:
+            Terrain_TemplateData();
+            Terrain_TemplateData(const Terrain_TemplateData& prototype);
+            Terrain_TemplateData& operator=(const Terrain_TemplateData& prototype);
+        };
+    }
 }

@@ -1,26 +1,17 @@
 #pragma once
 #include <stack>
+#include "GameObjectPool.h"
+#include "StatusTimer.h"
 
 class Unit;
 class StatusTimer;
 
-class StatusTimerPool 
+class StatusTimerPool : public GameObjectPool<StatusTimer>, public SingletonClass<StatusTimerPool>
 {
-private:
-	StatusTimerPool();
-	~StatusTimerPool();
-	static StatusTimerPool* instance;
-
 public:
-	static StatusTimerPool* GetInstance();
+	virtual void ObjectInitializer(StatusTimer* projectile) override
+	{
 
-private:
-	std::stack<StatusTimer*> m_statusTimerStack;
-
-public:
-	void SetUp();
-
-	StatusTimer* GetStatusTimer();
-	void ReturnToPool(StatusTimer* usedTimer);
+	}
 };
 

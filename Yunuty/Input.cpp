@@ -1,8 +1,8 @@
 #include "YunutyEngine.h"
 #include "Input.h"
-// GetKeyState´Â °ÔÀÓ¸¸µé¶ó°í ÀÖ´Â ±â´ÉÀº ¾Æ´Ô. ÇÏµå¿þ¾î¿¡ ÃÖ¼ÒÇÑÀÇ latency¸¦ °¡Áö±â À§ÇÑ ±â´É(XInput)À» µµÀÔÇÏ´Â °ÍÀÌ ÁÁÀ» °ÍÀÌ´Ù.
-// xinputÀº ÆÐµå³ª Æä´Þ, ÈÙµµ Áö¿øÇÔ.
-// GPU °¡¼Óµµ °í·ÁÇÒ ¼ö ÀÖ´Ù. (NVIDIA G SYNC) 
+// GetKeyStateëŠ” ê²Œìž„ë§Œë“¤ë¼ê³  ìžˆëŠ” ê¸°ëŠ¥ì€ ì•„ë‹˜. í•˜ë“œì›¨ì–´ì— ìµœì†Œí•œì˜ latencyë¥¼ ê°€ì§€ê¸° ìœ„í•œ ê¸°ëŠ¥(XInput)ì„ ë„ìž…í•˜ëŠ” ê²ƒì´ ì¢‹ì„ ê²ƒì´ë‹¤.
+// xinputì€ íŒ¨ë“œë‚˜ íŽ˜ë‹¬, íœ ë„ ì§€ì›í•¨.
+// GPU ê°€ì†ë„ ê³ ë ¤í•  ìˆ˜ ìžˆë‹¤. (NVIDIA G SYNC) 
 
 using namespace yunutyEngine;
 
@@ -107,10 +107,8 @@ void Input::Update()
     keyLiftedSet.clear();
     for (auto each : rawKeyEnumMap)
     {
-        if (GetKeyState(each.first) & 0x8000)
+        if (isActive && (GetKeyState(each.first) & 0x8000))
         {
-            //if (isWindowFocused())
-                //continue;
             if (keyDownSet.find(each.second) == keyDownSet.end())
                 keyPushedSet.insert(each.second);
             keyDownSet.insert(each.second);
@@ -122,6 +120,8 @@ void Input::Update()
             keyDownSet.erase(each.second);
         }
     }
+    if (isActive)
+        CacheMouseScreenPosition();
 }
 bool Input::m_isKeyDown(KeyCode keyCode)
 {
@@ -141,12 +141,24 @@ bool Input::m_isKeyLifted(KeyCode keyCode)
         //return false;
     return keyLiftedSet.find(keyCode) != keyLiftedSet.end();
 }
+void Input::SetActive(bool active)
+{
+    GetInstance()->isActive = active;
+}
+bool Input::IsActive()
+{
+    return GetInstance()->isActive;
+}
 Vector2d yunutyEngine::Input::getMouseScreenPosition()
+{
+    return GetInstance()->cachedMouseScreenPosition;
+}
+void yunutyEngine::Input::CacheMouseScreenPosition()
 {
     POINT point;
     GetCursorPos(&point);
     ScreenToClient(GetInstance()->mainWnd, &point);
-    return Vector2d(point.x, point.y);
+    cachedMouseScreenPosition = Vector2d(point.x, point.y);
 }
 Vector2d yunutyEngine::Input::getMouseScreenPositionNormalized()
 {
@@ -158,20 +170,20 @@ Vector2d yunutyEngine::Input::getMouseScreenPositionNormalized()
     return ret;
 }
 
-// ÇØ´ç Å°ÄÚµå¿Í ÀÏÄ¡ÇÏ´Â Å°°¡ ´­·¯Á® ÀÖ´Ù¸é ÂüÀ», ´­·¯Á® ÀÖÁö ¾Ê´Ù¸é °ÅÁþÀ» ¹ÝÈ¯ÇÕ´Ï´Ù.
-// Å°°¡ °è¼Ó ´­·ÁÁ® ÀÖ´Â »óÅÂ¶ó¸é ¸Å ÇÁ·¹ÀÓ¸¶´Ù ÂüÀ» ¹ÝÈ¯ÇÕ´Ï´Ù.
+// í•´ë‹¹ í‚¤ì½”ë“œì™€ ì¼ì¹˜í•˜ëŠ” í‚¤ê°€ ëˆŒëŸ¬ì ¸ ìžˆë‹¤ë©´ ì°¸ì„, ëˆŒëŸ¬ì ¸ ìžˆì§€ ì•Šë‹¤ë©´ ê±°ì§“ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
+// í‚¤ê°€ ê³„ì† ëˆŒë ¤ì ¸ ìžˆëŠ” ìƒíƒœë¼ë©´ ë§¤ í”„ë ˆìž„ë§ˆë‹¤ ì°¸ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
 bool yunutyEngine::Input::isKeyDown(KeyCode keyCode)
 {
     return GetInstance()->m_isKeyDown(keyCode);
 }
-// ÇØ´ç Å°ÄÚµå¿Í ÀÏÄ¡ÇÏ´Â Å°°¡ »õ·ÎÀÌ °« ´­·¯Á³´Ù¸é ÂüÀ», ±×·¸Áö ¾Ê´Ù¸é °ÅÁþÀ» ¹ÝÈ¯ÇÕ´Ï´Ù.
-// Å°°¡ °è¼Ó ´­·ÁÁ® ÀÖ´Â »óÅÂÀÏÁö¶óµµ Å°°¡ Ã³À½ ´­·¯Áø ¼ø°£ÀÇ ÇÁ·¹ÀÓ¿¡¼­¸¸ ÂüÀ» ¹ÝÈ¯ÇÕ´Ï´Ù.
+// í•´ë‹¹ í‚¤ì½”ë“œì™€ ì¼ì¹˜í•˜ëŠ” í‚¤ê°€ ìƒˆë¡œì´ ê°“ ëˆŒëŸ¬ì¡Œë‹¤ë©´ ì°¸ì„, ê·¸ë ‡ì§€ ì•Šë‹¤ë©´ ê±°ì§“ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
+// í‚¤ê°€ ê³„ì† ëˆŒë ¤ì ¸ ìžˆëŠ” ìƒíƒœì¼ì§€ë¼ë„ í‚¤ê°€ ì²˜ìŒ ëˆŒëŸ¬ì§„ ìˆœê°„ì˜ í”„ë ˆìž„ì—ì„œë§Œ ì°¸ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
 bool yunutyEngine::Input::isKeyPushed(KeyCode keyCode)
 {
     return GetInstance()->m_isKeyPushed(keyCode);
 }
-// ÇØ´ç Å°ÄÚµå¿Í ÀÏÄ¡ÇÏ´Â Å°°¡ °« ¶¼¾îÁ³´Ù¸é ÂüÀ», ±×·¸Áö ¾Ê´Ù¸é °ÅÁþÀ» ¹ÝÈ¯ÇÕ´Ï´Ù.
-// Å°°¡ °è¼Ó ¶¼¾îÁ® ÀÖ´Â »óÅÂÀÏÁö¶óµµ Å°°¡ Ã³À½ ¶¼¾îÁø ¼ø°£ÀÇ ÇÁ·¹ÀÓ¿¡¼­¸¸ ÂüÀ» ¹ÝÈ¯ÇÕ´Ï´Ù.
+// í•´ë‹¹ í‚¤ì½”ë“œì™€ ì¼ì¹˜í•˜ëŠ” í‚¤ê°€ ê°“ ë–¼ì–´ì¡Œë‹¤ë©´ ì°¸ì„, ê·¸ë ‡ì§€ ì•Šë‹¤ë©´ ê±°ì§“ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
+// í‚¤ê°€ ê³„ì† ë–¼ì–´ì ¸ ìžˆëŠ” ìƒíƒœì¼ì§€ë¼ë„ í‚¤ê°€ ì²˜ìŒ ë–¼ì–´ì§„ ìˆœê°„ì˜ í”„ë ˆìž„ì—ì„œë§Œ ì°¸ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
 bool yunutyEngine::Input::isKeyLifted(KeyCode keyCode)
 {
     return GetInstance()->m_isKeyLifted(keyCode);

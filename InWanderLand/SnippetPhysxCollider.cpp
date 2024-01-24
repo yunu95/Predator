@@ -52,6 +52,7 @@ public:
         TestDebugCollider::Start();
         collider = GetGameObject()->AddComponent<physics::BoxCollider>();
         collider->SetHalfExtent({ 0.5,0.5,0.5 });
+		GetGameObject()->AddComponent<physics::RigidBody>();
     }
 };
 class KinematicCollider : public TestDebugCollider
