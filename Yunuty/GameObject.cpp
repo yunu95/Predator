@@ -106,6 +106,7 @@ void yunutyEngine::GameObject::SetParent(IGameObjectParent* parent)
 	this->parent = parent;
 	this->parentGameObject = dynamic_cast<GameObject*>(parent);
 	DoThingsOnParents([](GameObject* parent) {parent->childrenNum++; });
+	parent->HandleChildUpdateState(this);
 }
 // 이거 복잡도 n임.
 unique_ptr<yunutyEngine::GameObject> yunutyEngine::GameObject::MoveChild(GameObject* child)
