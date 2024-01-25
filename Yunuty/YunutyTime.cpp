@@ -27,6 +27,8 @@ void yunutyEngine::Time::Update()
     {
         fpsQueue.pop();
     }
+
+    int a = 1;
 }
 void yunutyEngine::Time::SetTimeScale(const float& timeScale)
 {
