@@ -5,6 +5,7 @@
 #include "YunutyEngine.h"
 #include "DelayedTestFunctions.h"
 #include "Application.h"
+#include "TestUtilGraphicsTestCam.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -39,7 +40,7 @@ void SnippetInitializerAnimation()
     auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<graphics::DirectionalLight>();
     directionalLight->GetTransform()->SetWorldRotation(Quaternion({ 100,10,0 }));
 
-    auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::Camera>();
+    auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<tests::GraphicsTestCam>();
 
     camObj->GetTransform()->SetWorldPosition({ 0,5,-15 });
 

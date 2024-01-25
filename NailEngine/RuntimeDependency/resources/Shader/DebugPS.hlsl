@@ -22,4 +22,3 @@ float4 main(PixelIn input) : SV_TARGET
 // CullType : CullNone
 // DepthType : Less
 // BlendType : Default
-// Sampler : Default
