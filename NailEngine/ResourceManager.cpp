@@ -477,8 +477,8 @@ void ResourceManager::CreateDefaultMesh()
     CreateMesh(L"Cube");
     CreateMesh(L"Sphere");
     CreateMesh(L"Rectangle");
-    /*CreateMesh(L"Point");
-    CreateMesh(L"Line");*/
+    //CreateMesh(L"Point");
+    CreateMesh(L"Line");
     CreateMesh(L"Capsule");
     CreateMesh(L"Cylinder");
 }
@@ -1080,7 +1080,32 @@ void ResourceManager::LoadPointMesh()
 
 void ResourceManager::LoadLineMesh()
 {
+	std::shared_ptr<Mesh> lineMesh = std::make_shared<Mesh>();
 
+    lineMesh->SetName(L"Line");
+
+	std::vector<Vertex> vertices(2);
+
+    vertices[0] = Vertex{ DirectX::SimpleMath::Vector3{0.0f, 0, 0 },
+                          DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+                          DirectX::SimpleMath::Vector2{0.5f,0.5f},
+                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
+                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
+
+	vertices[1] = Vertex{ DirectX::SimpleMath::Vector3{1.0f, 0, 0 },
+						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
+
+	std::vector<unsigned int> indices(2);
+
+    indices[0] = 0;
+    indices[1] = 1;
+
+
+    lineMesh->SetData(vertices, indices);
+	CreateMesh(lineMesh);
 }
 
 void ResourceManager::LoadCapsuleMesh()
