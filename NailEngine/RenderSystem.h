@@ -17,6 +17,12 @@ using namespace DirectX::PackedVector;
 #include "IShader.h"
 #include "Material.h"
 
+#include "UIImage.h"
+
+#include <memory>
+#include <unordered_set>
+#include <set>
+
 class Mesh;
 class Material;
 class yunuGI::IShader;
@@ -66,6 +72,19 @@ public:
 
 	void DrawDeferredInfo();
 
+public:
+	void PushStaticRenderableObject(std::shared_ptr<IRenderable> renderable);
+	void PopStaticRenderableObject(std::shared_ptr<IRenderable> renderable);
+
+	void PushSkinnedRenderableObject(std::shared_ptr<IRenderable> renderable);
+	void PopSkinnedRenderableObject(std::shared_ptr<IRenderable> renderable);
+
+	void PushUIObject(std::shared_ptr<IRenderable> renderable);
+	void PopUIObject(std::shared_ptr<IRenderable> renderable);
+
+	void ReSortUIObject(int layer, std::shared_ptr<UIImage> ui);
+
+
 private:
 	//void BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo);
 	//void ReadBone(FBXNode* fbxNode, DirectX::SimpleMath::Matrix parentMatrix, const std::string& fbxName, std::shared_ptr<NailAnimator> animator);
@@ -82,6 +101,11 @@ private:
 
 	yunuGI::IShader* ps = nullptr;
 	yunuGI::IShader* vs = nullptr;
+
+private:
+	std::unordered_set<std::shared_ptr<IRenderable>> staticRenderableSet;
+	std::unordered_set<std::shared_ptr<IRenderable>> skinnedRenderableSet;
+	std::set<std::shared_ptr<IRenderable>, CompareSmartPtr> UIImageSet;
 };
 
 

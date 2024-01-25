@@ -207,7 +207,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="NailEngine.h" />
     <ClInclude Include="PixelShader.h" />
     <ClInclude Include="PointLight.h" />
-    <ClInclude Include="RenderableManager.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="RenderTargetGroup.h" />
     <ClInclude Include="Resource.h" />
@@ -272,7 +271,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="NailEngine.cpp" />
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PointLight.cpp" />
-    <ClCompile Include="RenderableManager.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="RenderTargetGroup.cpp" />
     <ClCompile Include="Resource.cpp" />

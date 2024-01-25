@@ -1109,7 +1109,7 @@ void ResourceManager::LoadLineMesh()
 
     lineMesh->SetName(L"Line");
 
-	std::vector<Vertex> vertices(2);
+	std::vector<Vertex> vertices(3);
 
     vertices[0] = Vertex{ DirectX::SimpleMath::Vector3{0.0f, 0, 0 },
                           DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
@@ -1123,10 +1123,17 @@ void ResourceManager::LoadLineMesh()
 						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
 						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
 
-	std::vector<unsigned int> indices(2);
+	vertices[2] = Vertex{ DirectX::SimpleMath::Vector3{1.0f, 0, 0 },
+						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
+
+	std::vector<unsigned int> indices(3);
 
     indices[0] = 0;
     indices[1] = 1;
+    indices[1] = 2;
 
 
     lineMesh->SetData(vertices, indices);

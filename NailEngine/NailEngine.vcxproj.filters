@@ -207,9 +207,6 @@
     <ClInclude Include="NailCamera.h">
       <Filter>NailCamera</Filter>
     </ClInclude>
-    <ClInclude Include="RenderableManager.h">
-      <Filter>GraphicsEngine\RenderableManager</Filter>
-    </ClInclude>
     <ClInclude Include="IRenderable.h">
       <Filter>GraphicsEngine\RenderableManager\IRenderable</Filter>
     </ClInclude>
@@ -343,9 +340,6 @@
     </ClCompile>
     <ClCompile Include="NailCamera.cpp">
       <Filter>NailCamera</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderableManager.cpp">
-      <Filter>GraphicsEngine\RenderableManager</Filter>
     </ClCompile>
     <ClCompile Include="IRenderable.cpp">
       <Filter>GraphicsEngine\RenderableManager\IRenderable</Filter>
