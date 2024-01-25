@@ -9,6 +9,7 @@
 #include "Animation.h"
 #include "AnimationGroup.h"
 
+#include "CameraManager.h"
 #include "NailCamera.h"
 #include "RenderableManager.h"
 #include "IRenderable.h"
@@ -178,7 +179,7 @@ void RenderSystem::PushCameraData()
 	DirectX::SimpleMath::Vector3 pos;
 	DirectX::SimpleMath::Vector3 scale;
 	DirectX::SimpleMath::Quaternion quat;
-	NailCamera::Instance.Get().GetWTM().Decompose(scale, quat, pos);
+	CameraManager::Instance.Get().GetMainCamera()->GetWTM().Decompose(scale, quat, pos);
 	buffer.position = pos;
 	NailEngine::Instance.Get().GetConstantBuffer(3)->PushGraphicsData(&buffer, sizeof(CameraBuffer), 3);
 }
@@ -230,8 +231,8 @@ void RenderSystem::RenderObject()
 
 	MatrixBuffer matrixBuffer;
 	//matrixBuffer.WTM = e.wtm;
-	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
 	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
 	matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
@@ -258,8 +259,8 @@ void RenderSystem::RenderSkinned()
 {
 	MatrixBuffer matrixBuffer;
 	//matrixBuffer.WTM = e.wtm;
-	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
 	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
 	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
@@ -338,8 +339,8 @@ void RenderSystem::RenderLight()
 	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->OMSetRenderTarget();
 
 	MatrixBuffer matrixBuffer;
-	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
 	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 	
 
@@ -439,8 +440,8 @@ void RenderSystem::RenderForward()
 
 	MatrixBuffer matrixBuffer;
 	//matrixBuffer.WTM = e.wtm;
-	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
 	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
 	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
@@ -499,7 +500,7 @@ void RenderSystem::DrawDeferredInfo()
 
 		DirectX::SimpleMath::Matrix wtm = matSclae * matRotation * matTranslation;
 		MatrixBuffer matrixBuffer;
-		matrixBuffer.WVP = wtm * DirectX::SimpleMath::Matrix::Identity * NailCamera::Instance.Get().GetVTMOrtho();
+		matrixBuffer.WVP = wtm * DirectX::SimpleMath::Matrix::Identity * CameraManager::Instance.Get().GetMainCamera()->GetVTMOrtho();
 
 		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 		ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();

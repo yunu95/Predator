@@ -19,6 +19,7 @@ namespace yunuGI
     public:
         virtual void LoadFile(const char* filePath)const = 0;
         virtual yunuGI::IMaterial* CreateMaterial(std::wstring materialName)const = 0;
+        virtual yunuGI::IMesh* CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec)const = 0;
         virtual yunuGI::IMaterial* GetMaterial(const std::wstring& materialName)const = 0;
         virtual yunuGI::IMesh* GetMesh(const std::wstring& meshName)const = 0;
         virtual bool GetFBXData(const std::string& fbxName, yunuGI::FBXData*& fbxData)const = 0;

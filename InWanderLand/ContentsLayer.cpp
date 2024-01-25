@@ -144,11 +144,12 @@ void application::contents::ContentsLayer::Initialize()
 		return;
 	}
 
-	//yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-	//auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//camObj->GetTransform()->position = Vector3d(0, 20, 0);
-	//auto roamingCam = camObj->AddComponent<RTSCam>();
-	//roamingCam->SetCameraMain();
+	yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	camObj->GetTransform()->position = Vector3d(0, 20, 0);
+	camObj->GetTransform()->rotation = Quaternion(Vector3d(60, 0, 0));
+	auto roamingCam = camObj->AddComponent<RTSCam>();
+	roamingCam->SetCameraMain();
 #ifdef GRAPHICS_TEST
 	{
 		yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
@@ -172,7 +173,7 @@ void application::contents::ContentsLayer::Initialize()
 
 void application::contents::ContentsLayer::Update(float ts)
 {
-	//std::cout << Time::GetFPS() << std::endl;
+	std::cout << Time::GetFPS() << std::endl;
 }
 
 void application::contents::ContentsLayer::GUIProgress()

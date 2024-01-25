@@ -4,6 +4,7 @@
 #include "mesh.h"
 #include "VertexShader.h"
 #include "PixelShader.h"
+#include "CameraManager.h"
 #include "NailCamera.h"
 #include "NailEngine.h"
 #include "ConstantBuffer.h"
@@ -21,9 +22,9 @@ void SkyBoxPass::Init(Texture* texture, Mesh* mesh, yunuGI::IShader* vs, yunuGI:
 	this->vs = reinterpret_cast<VertexShader*>(vs);
 	this->ps = reinterpret_cast<PixelShader*>(ps);
 
-	BuildIrradianceMap();
-	BuildSpecularMap();
-	BuildLUT();
+	//BuildIrradianceMap();
+	//BuildSpecularMap();
+	//BuildLUT();
 
 
 	D3D11_SAMPLER_DESC desc = {};
@@ -45,13 +46,13 @@ void SkyBoxPass::Render()
 	DirectX::SimpleMath::Vector3 pos;
 	DirectX::SimpleMath::Vector3 scale;
 	DirectX::SimpleMath::Quaternion quat;
-	NailCamera::Instance.Get().GetWTM().Decompose(scale, quat, pos);
+	CameraManager::Instance.Get().GetMainCamera()->GetWTM().Decompose(scale, quat, pos);
 
 	// CB Set
 	MatrixBuffer matrixBuffer;
 	matrixBuffer.WTM = DirectX::SimpleMath::Matrix::CreateTranslation(pos);
-	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
 	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
 	matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
@@ -116,7 +117,7 @@ void SkyBoxPass::BuildIrradianceMap()
 	DirectX::SimpleMath::Vector3 pos;
 	DirectX::SimpleMath::Vector3 scale;
 	DirectX::SimpleMath::Quaternion quat;
-	NailCamera::Instance.Get().GetWTM().Decompose(scale, quat, pos);
+	CameraManager::Instance.Get().GetMainCamera()->GetWTM().Decompose(scale, quat, pos);
 
 	D3D11_VIEWPORT viewport;
 	viewport.TopLeftX = 0.0f;
@@ -165,7 +166,7 @@ void SkyBoxPass::BuildIrradianceMap()
 		MatrixBuffer matrixBuffer;
 		matrixBuffer.WTM = DirectX::SimpleMath::Matrix::CreateTranslation(pos);
 		matrixBuffer.VTM = viewMatrix;
-		matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM90();
+		matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM90();
 		matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 
@@ -235,7 +236,7 @@ void SkyBoxPass::BuildSpecularMap()
 	DirectX::SimpleMath::Vector3 pos;
 	DirectX::SimpleMath::Vector3 scale;
 	DirectX::SimpleMath::Quaternion quat;
-	NailCamera::Instance.Get().GetWTM().Decompose(scale, quat, pos);
+	CameraManager::Instance.Get().GetMainCamera()->GetWTM().Decompose(scale, quat, pos);
 
 	// CB Set
 
@@ -287,7 +288,7 @@ void SkyBoxPass::BuildSpecularMap()
 		MatrixBuffer matrixBuffer;
 		matrixBuffer.WTM = DirectX::SimpleMath::Matrix::CreateTranslation(pos);
 		matrixBuffer.VTM = viewMatrix;
-		matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM90();
+		matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM90();
 		matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 		matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
 		matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
@@ -355,7 +356,7 @@ void SkyBoxPass::BuildLUT()
 	DirectX::SimpleMath::Vector3 pos;
 	DirectX::SimpleMath::Vector3 scale;
 	DirectX::SimpleMath::Quaternion quat;
-	NailCamera::Instance.Get().GetWTM().Decompose(scale, quat, pos);
+	CameraManager::Instance.Get().GetMainCamera()->GetWTM().Decompose(scale, quat, pos);
 
 	// CB Set
 
@@ -372,8 +373,8 @@ void SkyBoxPass::BuildLUT()
 
 	MatrixBuffer matrixBuffer;
 	matrixBuffer.WTM = DirectX::SimpleMath::Matrix::CreateTranslation(pos);
-	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
 	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
 	matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();

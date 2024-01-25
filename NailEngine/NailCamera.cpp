@@ -1,7 +1,5 @@
 #include "NailCamera.h"
 
-LazyObjects<NailCamera> NailCamera::Instance;
-
 void NailCamera::SetWorldTM(const DirectX::SimpleMath::Matrix wtm)
 {
     this->wtm = wtm;

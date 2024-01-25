@@ -300,6 +300,9 @@
     <ClInclude Include="SkyBoxPass.h">
       <Filter>RenderSystem\SkyBoxPass</Filter>
     </ClInclude>
+    <ClInclude Include="CameraManager.h">
+      <Filter>NailCamera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -417,6 +420,9 @@
       <Filter>GraphicsEngine\Device</Filter>
     </ClCompile>
     <ClCompile Include="tempMain.cpp" />
+    <ClCompile Include="CameraManager.cpp">
+      <Filter>NailCamera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="RuntimeDependency\resources\Shader\DefaultVS.hlsl">
