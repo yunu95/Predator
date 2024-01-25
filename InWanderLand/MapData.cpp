@@ -57,6 +57,14 @@ void MapData::SaveTerrainData()
         terrainTemplateData->pod.coordinates.push_back({ eachCoord.x, eachCoord.y });
     }
 }
+void MapData::LoadUnitInstancesData()
+{
+
+}
+void MapData::SaveUnitInstancesData()
+{
+
+}
 void MapData::CleanMapData()
 {
     using namespace application::editor::palette;

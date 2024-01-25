@@ -28,344 +28,344 @@ LazyObjects<ResourceManager> ResourceManager::Instance;
 
 void ResourceManager::CreateDefaultResource()
 {
-    CreateDefaultShader();
-    CreateDefaultMesh();
-    CreateDefaultTexture();
-    CreateDefaultMaterial();
+	CreateDefaultShader();
+	CreateDefaultMesh();
+	CreateDefaultTexture();
+	CreateDefaultMaterial();
 }
 
 void ResourceManager::CreateShader(const std::wstring& shaderPath)
 {
-    size_t dotPos = shaderPath.find_last_of(L".");
+	size_t dotPos = shaderPath.find_last_of(L".");
 
-    std::wstring shaderType = shaderPath.substr(dotPos - 2, 2);
-    std::shared_ptr<yunuGI::IShader> shader = nullptr;
+	std::wstring shaderType = shaderPath.substr(dotPos - 2, 2);
+	std::shared_ptr<yunuGI::IShader> shader = nullptr;
 
-    if (shaderType == L"VS")
-    {
-        shader = std::make_shared<VertexShader>();
-    }
-    else if (shaderType == L"PS")
-    {
-        shader = std::make_shared<PixelShader>();
-    }
+	if (shaderType == L"VS")
+	{
+		shader = std::make_shared<VertexShader>();
+	}
+	else if (shaderType == L"PS")
+	{
+		shader = std::make_shared<PixelShader>();
+	}
 
-    if (shader != nullptr)
-    {
-        std::static_pointer_cast<Shader>(shader)->CreateShader(shaderPath);
-    }
+	if (shader != nullptr)
+	{
+		std::static_pointer_cast<Shader>(shader)->CreateShader(shaderPath);
+	}
 
-    std::filesystem::path _shaderName(shaderPath);
-    std::wstring shaderName = _shaderName.filename().wstring();
+	std::filesystem::path _shaderName(shaderPath);
+	std::wstring shaderName = _shaderName.filename().wstring();
 
-    shader->SetName(shaderName);
+	shader->SetName(shaderName);
 
-    shaderVec.emplace_back(shader.get());
-    shaderMap.insert({ shaderName , std::move(shader) });
+	shaderVec.emplace_back(shader.get());
+	shaderMap.insert({ shaderName , std::move(shader) });
 }
 
 void ResourceManager::CreateMesh(const std::wstring& mesh)
 {
-    if (mesh == L"Cube")
-    {
-        LoadCubeMesh();
-        return;
-    }
-    else if (mesh == L"Sphere")
-    {
-        LoadSphereMesh();
-        return;
-    }
-    else if (mesh == L"Rectangle")
-    {
-        LoadRactangleMesh();
-        return;
-    }
-    else if (mesh == L"Point")
-    {
-        LoadPointMesh();
-        return;
-    }
-    else if (mesh == L"Line")
-    {
-        LoadLineMesh();
-        return;
-    }
-    else if (mesh == L"Capsule")
-    {
-        LoadCapsuleMesh();
-        return;
-    }
-    else if (mesh == L"Cylinder")
-    {
-        LoadCylinderMesh();
-        return;
-    }
+	if (mesh == L"Cube")
+	{
+		LoadCubeMesh();
+		return;
+	}
+	else if (mesh == L"Sphere")
+	{
+		LoadSphereMesh();
+		return;
+	}
+	else if (mesh == L"Rectangle")
+	{
+		LoadRactangleMesh();
+		return;
+	}
+	else if (mesh == L"Point")
+	{
+		LoadPointMesh();
+		return;
+	}
+	else if (mesh == L"Line")
+	{
+		LoadLineMesh();
+		return;
+	}
+	else if (mesh == L"Capsule")
+	{
+		LoadCapsuleMesh();
+		return;
+	}
+	else if (mesh == L"Cylinder")
+	{
+		LoadCylinderMesh();
+		return;
+	}
 }
 
 void ResourceManager::CreateMesh(const std::shared_ptr<Mesh>& mesh)
 {
-    meshVec.emplace_back(mesh.get());
-    meshMap.insert({ mesh->GetName(), mesh });
+	meshVec.emplace_back(mesh.get());
+	meshMap.insert({ mesh->GetName(), mesh });
 }
 
 void* ResourceManager::GetFinalRenderImage()
 {
-    ID3D11Texture2D* backBuffer = nullptr;
-    ID3D11Texture2D* renderImage = nullptr;
+	ID3D11Texture2D* backBuffer = nullptr;
+	ID3D11Texture2D* renderImage = nullptr;
 
-    ResourceBuilder::Instance.Get().swapChain->GetSwapChain()->GetBuffer(0, __uuidof(ID3D11Texture2D),
-        reinterpret_cast<void**>(&backBuffer));
+	ResourceBuilder::Instance.Get().swapChain->GetSwapChain()->GetBuffer(0, __uuidof(ID3D11Texture2D),
+		reinterpret_cast<void**>(&backBuffer));
 
-    D3D11_TEXTURE2D_DESC desc;
-    backBuffer->GetDesc(&desc);
-    desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-    desc.CPUAccessFlags = 0;
-    desc.Usage = D3D11_USAGE_DEFAULT;
-    desc.MiscFlags = D3D11_RESOURCE_MISC_SHARED;
+	D3D11_TEXTURE2D_DESC desc;
+	backBuffer->GetDesc(&desc);
+	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	desc.CPUAccessFlags = 0;
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.MiscFlags = D3D11_RESOURCE_MISC_SHARED;
 
-    ResourceBuilder::Instance.Get().device->GetDevice()->CreateTexture2D(&desc, nullptr, &renderImage);
-    ResourceBuilder::Instance.Get().device->GetDeviceContext()->CopyResource(renderImage, backBuffer);
+	ResourceBuilder::Instance.Get().device->GetDevice()->CreateTexture2D(&desc, nullptr, &renderImage);
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->CopyResource(renderImage, backBuffer);
 
-    if (renderImageView != nullptr)
-    {
-        renderImageView->Release();
-        renderImageView = nullptr;
-    }
-    ResourceBuilder::Instance.Get().device->GetDevice()->CreateShaderResourceView(renderImage, nullptr, &renderImageView);
+	if (renderImageView != nullptr)
+	{
+		renderImageView->Release();
+		renderImageView = nullptr;
+	}
+	ResourceBuilder::Instance.Get().device->GetDevice()->CreateShaderResourceView(renderImage, nullptr, &renderImageView);
 
-    backBuffer->Release();
-    renderImage->Release();
+	backBuffer->Release();
+	renderImage->Release();
 
-    return static_cast<void*>(renderImageView);
+	return static_cast<void*>(renderImageView);
 }
 
 void* ResourceManager::GetDevice()
 {
-    return ResourceBuilder::Instance.Get().device->GetDevice().Get();
+	return ResourceBuilder::Instance.Get().device->GetDevice().Get();
 }
 
 void* ResourceManager::GetDeviceContext()
 {
-    return ResourceBuilder::Instance.Get().device->GetDeviceContext().Get();
+	return ResourceBuilder::Instance.Get().device->GetDeviceContext().Get();
 }
 
 void ResourceManager::PushFBXBoneInfo(const std::wstring fbxName, std::map<std::wstring, BoneInfo>& boneInfoMap)
 {
-    this->fbxBoneInfoMap.insert({ fbxName, (boneInfoMap) });
+	this->fbxBoneInfoMap.insert({ fbxName, (boneInfoMap) });
 }
 
 void ResourceManager::PushFBXNode(const std::wstring fbxName, FBXNode* fbxNode)
 {
-    this->fbxNodeMap.insert({ fbxName, fbxNode });
+	this->fbxNodeMap.insert({ fbxName, fbxNode });
 }
 
 yunuGI::IMaterial* ResourceManager::CrateMaterial(std::wstring materialName)
 {
-    std::shared_ptr<Material> material = std::make_shared<Material>();
+	std::shared_ptr<Material> material = std::make_shared<Material>();
 
-    if (materialName.empty())
-    {
-        materialName = L"DefaultMaterial";
-    }
+	if (materialName.empty())
+	{
+		materialName = L"DefaultMaterial";
+	}
 
-    material->SetName(materialName);
+	material->SetName(materialName);
 
-    materialMap.insert({ materialName, material });
-    materialVec.push_back(material.get());
+	materialMap.insert({ materialName, material });
+	materialVec.push_back(material.get());
 
-    return material.get();
+	return material.get();
 }
 
 Material* ResourceManager::CreateInstanceMaterial(const Material* material)
 {
-    Material* _material = new Material(*material);
+	Material* _material = new Material(*material);
 
-    std::wstring materialName = _material->GetName();
-    materialName += L"_instance_";
-    materialName += std::to_wstring(_material->GetID());
-    _material->SetName(materialName);
+	std::wstring materialName = _material->GetName();
+	materialName += L"_instance_";
+	materialName += std::to_wstring(_material->GetID());
+	_material->SetName(materialName);
 
-    instanceMaterialMap.insert({ materialName, std::shared_ptr<Material>(_material) });
+	instanceMaterialMap.insert({ materialName, std::shared_ptr<Material>(_material) });
 
-    return _material;
+	return _material;
 }
 
 void ResourceManager::CreateTexture(const std::wstring& texturePath)
 {
-    std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 
-    texture->LoadTexture(texturePath);
-    texture->SetName(texturePath);
+	texture->LoadTexture(texturePath);
+	texture->SetName(texturePath);
 
-    textureMap.insert({ texturePath, texture });
-    textureVec.push_back(texture.get());
+	textureMap.insert({ texturePath, texture });
+	textureVec.push_back(texture.get());
 }
 
 std::shared_ptr<Texture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag)
 {
-    std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 
-    texture->CreateTexture(texturePath, width, height, format, bindFlag);
-    texture->SetName(texturePath);
+	texture->CreateTexture(texturePath, width, height, format, bindFlag);
+	texture->SetName(texturePath);
 
-    this->deferredTextureMap.insert({ texturePath, texture });
-    //this->textureMap.insert({ texturePath, texture });
+	this->deferredTextureMap.insert({ texturePath, texture });
+	//this->textureMap.insert({ texturePath, texture });
 
-    return texture;
+	return texture;
 }
 
 std::shared_ptr<Texture>& ResourceManager::CreateTextureFromResource(const std::wstring& texturePath, Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D)
 {
-    std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 
-    texture->CreateFromResource(tex2D);
-    texture->SetName(texturePath);
+	texture->CreateFromResource(tex2D);
+	texture->SetName(texturePath);
 
-    textureMap.insert({ texturePath, texture });
+	textureMap.insert({ texturePath, texture });
 
-    return texture;
+	return texture;
 }
 
 void ResourceManager::LoadFBX(const char* filePath)
 {
-    FBXNode* node = ModelLoader::Instance.Get().LoadModel(filePath);
-    std::wstring fbxName = std::filesystem::path(filePath).stem().wstring();
-    //////////////////////////////////////////////////////////////////////////this->fbxNodeMap.insert({ fbxName, node });
+	FBXNode* node = ModelLoader::Instance.Get().LoadModel(filePath);
+	std::wstring fbxName = std::filesystem::path(filePath).stem().wstring();
+	//////////////////////////////////////////////////////////////////////////this->fbxNodeMap.insert({ fbxName, node });
 
-    yunuGI::FBXData* fbxData = new yunuGI::FBXData;
-    fbxData->hasAnimation = node->hasAnimation;
-    fbxData->nodeName = node->nodeName;
-    fbxData->child.resize(node->child.size());
+	yunuGI::FBXData* fbxData = new yunuGI::FBXData;
+	fbxData->hasAnimation = node->hasAnimation;
+	fbxData->nodeName = node->nodeName;
+	fbxData->child.resize(node->child.size());
 
-    for (int i = 0; i < node->child.size(); ++i)
-    {
-        fbxData->child[i] = new yunuGI::FBXData;
-        this->FillFBXData(fbxName, node->child[i], fbxData->child[i]);
-    }
+	for (int i = 0; i < node->child.size(); ++i)
+	{
+		fbxData->child[i] = new yunuGI::FBXData;
+		this->FillFBXData(fbxName, node->child[i], fbxData->child[i]);
+	}
 
-    this->fbxDataMap.insert({ fbxName, fbxData });
+	this->fbxDataMap.insert({ fbxName, fbxData });
 }
 
 void ResourceManager::CreateAnimation(const std::vector<AnimationClip>& animationClip, const std::wstring& fbxName)
 {
-    for (int i = 0; i < animationClip.size(); ++i)
-    {
-        std::shared_ptr<yunuGI::IAnimation> animation = std::make_shared<Animation>();
+	for (int i = 0; i < animationClip.size(); ++i)
+	{
+		std::shared_ptr<yunuGI::IAnimation> animation = std::make_shared<Animation>();
 
-        animation->SetName(animationClip[i].name);
-        animation->SetDuration(animationClip[i].duration);
-        animation->SetTotalFrame(animationClip[i].totalFrame);
+		animation->SetName(animationClip[i].name);
+		animation->SetDuration(animationClip[i].duration);
+		animation->SetTotalFrame(animationClip[i].totalFrame);
 
-        std::static_pointer_cast<Animation>(animation)->SetAnimationClip((animationClip[i]));
+		std::static_pointer_cast<Animation>(animation)->SetAnimationClip((animationClip[i]));
 
-        this->animationVec.emplace_back(animation.get());
-        this->animationMap.insert({ animation->GetName(), animation });
+		this->animationVec.emplace_back(animation.get());
+		this->animationMap.insert({ animation->GetName(), animation });
 
-        auto iter = this->animationGroupMap.find(fbxName);
-        if (iter != this->animationGroupMap.end())
-        {
-            std::static_pointer_cast<Animation>(animation)->SetAnimationIndex(this->animationGroupMap[fbxName]->GetAnimationVec().size());
-            this->animationGroupMap[fbxName]->GetAnimationVec().emplace_back(std::static_pointer_cast<Animation>(animation));
-        }
-        else
-        {
-            std::shared_ptr<AnimationGroup> animationGroup = std::make_shared<AnimationGroup>();
-            animationGroup->SetFBXName(fbxName);
+		auto iter = this->animationGroupMap.find(fbxName);
+		if (iter != this->animationGroupMap.end())
+		{
+			std::static_pointer_cast<Animation>(animation)->SetAnimationIndex(this->animationGroupMap[fbxName]->GetAnimationVec().size());
+			this->animationGroupMap[fbxName]->GetAnimationVec().emplace_back(std::static_pointer_cast<Animation>(animation));
+		}
+		else
+		{
+			std::shared_ptr<AnimationGroup> animationGroup = std::make_shared<AnimationGroup>();
+			animationGroup->SetFBXName(fbxName);
 
-            std::static_pointer_cast<Animation>(animation)->SetAnimationIndex(animationGroup->GetAnimationVec().size());
-            animationGroup->GetAnimationVec().emplace_back(std::static_pointer_cast<Animation>(animation));
-            this->animationGroupMap.insert({ fbxName, animationGroup });
-        }
-    }
+			std::static_pointer_cast<Animation>(animation)->SetAnimationIndex(animationGroup->GetAnimationVec().size());
+			animationGroup->GetAnimationVec().emplace_back(std::static_pointer_cast<Animation>(animation));
+			this->animationGroupMap.insert({ fbxName, animationGroup });
+		}
+	}
 
-    this->animationGroupMap[fbxName]->CreateTexture();
+	this->animationGroupMap[fbxName]->CreateTexture();
 }
 
 std::shared_ptr<yunuGI::IMaterial> ResourceManager::GetMaterial(const std::wstring& materialName)
 {
-    auto iter = materialMap.find(materialName);
-    if (iter == materialMap.end())
-    {
-        auto iter2 = instanceMaterialMap.find(materialName);
-        if (iter2 == instanceMaterialMap.end())
-        {
-            return nullptr;
-        }
-        else
-        {
-            return iter2->second;
-        }
-    }
-    else
-    {
-        return iter->second;
-    }
+	auto iter = materialMap.find(materialName);
+	if (iter == materialMap.end())
+	{
+		auto iter2 = instanceMaterialMap.find(materialName);
+		if (iter2 == instanceMaterialMap.end())
+		{
+			return nullptr;
+		}
+		else
+		{
+			return iter2->second;
+		}
+	}
+	else
+	{
+		return iter->second;
+	}
 }
 
 std::shared_ptr<yunuGI::IShader> ResourceManager::GetShader(const std::wstring& shaderPath)
 {
-    auto iter = shaderMap.find(shaderPath);
-    assert(iter != shaderMap.end());
+	auto iter = shaderMap.find(shaderPath);
+	assert(iter != shaderMap.end());
 
-    return std::static_pointer_cast<Shader>(iter->second);
+	return std::static_pointer_cast<Shader>(iter->second);
 }
 
 std::shared_ptr<yunuGI::IShader> ResourceManager::GetShader(const yunuGI::IShader* shader)
 {
-    auto iter = this->shaderMap.find(shader->GetName());
-    if (iter != this->shaderMap.end())
-    {
-        return iter->second;
-    }
+	auto iter = this->shaderMap.find(shader->GetName());
+	if (iter != this->shaderMap.end())
+	{
+		return iter->second;
+	}
 
-    iter = this->deferredShaderMap.find(shader->GetName());
-    if (iter != this->deferredShaderMap.end())
-    {
-        return iter->second;
-    }
+	iter = this->deferredShaderMap.find(shader->GetName());
+	if (iter != this->deferredShaderMap.end())
+	{
+		return iter->second;
+	}
 
-    return nullptr;
+	return nullptr;
 }
 
 std::shared_ptr<yunuGI::IShader> ResourceManager::GetDeferredShader(const std::wstring& shaderPath)
 {
-    auto iter = deferredShaderMap.find(shaderPath);
-    assert(iter != deferredShaderMap.end());
+	auto iter = deferredShaderMap.find(shaderPath);
+	assert(iter != deferredShaderMap.end());
 
-    return std::static_pointer_cast<Shader>(iter->second);
+	return std::static_pointer_cast<Shader>(iter->second);
 }
 
 std::shared_ptr<Mesh> ResourceManager::GetMesh(const std::wstring& meshName)
 {
-    auto iter = meshMap.find(meshName);
-    assert(iter != meshMap.end());
+	auto iter = meshMap.find(meshName);
+	assert(iter != meshMap.end());
 
-    return std::static_pointer_cast<Mesh>(iter->second);
+	return std::static_pointer_cast<Mesh>(iter->second);
 }
 
 std::shared_ptr<Texture> ResourceManager::GetTexture(const std::wstring& textureName)
 {
-    auto iter = textureMap.find(textureName);
-    if (iter != textureMap.end())
-    {
-        return std::static_pointer_cast<Texture>(iter->second);
-    }
-    iter = deferredTextureMap.find(textureName);
-    if (iter != deferredTextureMap.end())
-    {
-        return std::static_pointer_cast<Texture>(iter->second);
-    }
-    return nullptr;
+	auto iter = textureMap.find(textureName);
+	if (iter != textureMap.end())
+	{
+		return std::static_pointer_cast<Texture>(iter->second);
+	}
+	iter = deferredTextureMap.find(textureName);
+	if (iter != deferredTextureMap.end())
+	{
+		return std::static_pointer_cast<Texture>(iter->second);
+	}
+	return nullptr;
 }
 
 yunuGI::FBXData* ResourceManager::GetFBXData(const std::string fbxName)
 {
-    std::wstring fbxNameW = std::wstring{ fbxName.begin(), fbxName.end() };
+	std::wstring fbxNameW = std::wstring{ fbxName.begin(), fbxName.end() };
 
-    auto iter = this->fbxDataMap.find(fbxNameW);
-    assert(iter != this->fbxDataMap.end());
-    return iter->second;
+	auto iter = this->fbxDataMap.find(fbxNameW);
+	assert(iter != this->fbxDataMap.end());
+	return iter->second;
 }
 
 //std::vector<FBXBoneInfo>& ResourceManager::GetFBXBoneData(const std::string fbxName)
@@ -380,76 +380,76 @@ yunuGI::FBXData* ResourceManager::GetFBXData(const std::string fbxName)
 
 yunuGI::BoneInfo& ResourceManager::GetBoneData(const std::string fbxName)
 {
-    yunuGI::BoneInfo boneInfo;
-    return boneInfo;
+	yunuGI::BoneInfo boneInfo;
+	return boneInfo;
 }
 
 std::map<std::wstring, BoneInfo>& ResourceManager::GetFBXBoneData(const std::string fbxName)
 {
-    auto iter = this->fbxBoneInfoMap.find(std::wstring{ fbxName.begin(), fbxName.end() });
-    if (iter != this->fbxBoneInfoMap.end())
-    {
-        return iter->second;
-    }
+	auto iter = this->fbxBoneInfoMap.find(std::wstring{ fbxName.begin(), fbxName.end() });
+	if (iter != this->fbxBoneInfoMap.end())
+	{
+		return iter->second;
+	}
 }
 
 FBXNode* ResourceManager::GetFBXNode(const std::wstring& fbxName)
 {
-    return this->fbxNodeMap.find(fbxName)->second;
+	return this->fbxNodeMap.find(fbxName)->second;
 }
 std::vector<yunuGI::IMesh*>& ResourceManager::GetMeshList() { return this->meshVec; };
 std::vector<yunuGI::ITexture*>& ResourceManager::GetTextureList() { return this->textureVec; };
 std::vector<yunuGI::IMaterial*>& ResourceManager::GetMaterialList()
 {
-    return this->materialVec;
+	return this->materialVec;
 };
 std::vector<yunuGI::IShader*>& ResourceManager::GetShaderList() { return this->shaderVec; };
 std::vector<yunuGI::IAnimation*>& ResourceManager::GetAnimationList() { return this->animationVec; };
 
 std::shared_ptr<AnimationGroup> ResourceManager::GetAnimationGroup(const std::wstring& modelName)
 {
-    return this->animationGroupMap.find(modelName)->second;
+	return this->animationGroupMap.find(modelName)->second;
 }
 
 void ResourceManager::CreateDeferredShader(const std::wstring& shaderPath)
 {
-    size_t dotPos = shaderPath.find_last_of(L".");
+	size_t dotPos = shaderPath.find_last_of(L".");
 
-    std::wstring shaderType = shaderPath.substr(dotPos - 2, 2);
-    std::shared_ptr<yunuGI::IShader> shader = nullptr;
+	std::wstring shaderType = shaderPath.substr(dotPos - 2, 2);
+	std::shared_ptr<yunuGI::IShader> shader = nullptr;
 
-    if (shaderType == L"VS")
-    {
-        shader = std::make_shared<VertexShader>();
-    }
-    else if (shaderType == L"PS")
-    {
-        shader = std::make_shared<PixelShader>();
-    }
+	if (shaderType == L"VS")
+	{
+		shader = std::make_shared<VertexShader>();
+	}
+	else if (shaderType == L"PS")
+	{
+		shader = std::make_shared<PixelShader>();
+	}
 
-    if (shader != nullptr)
-    {
-        std::static_pointer_cast<Shader>(shader)->CreateShader(shaderPath);
-    }
+	if (shader != nullptr)
+	{
+		std::static_pointer_cast<Shader>(shader)->CreateShader(shaderPath);
+	}
 
-    std::filesystem::path _shaderName(shaderPath);
-    std::wstring shaderName = _shaderName.filename().wstring();
+	std::filesystem::path _shaderName(shaderPath);
+	std::wstring shaderName = _shaderName.filename().wstring();
 
-    shader->SetName(shaderName);
+	shader->SetName(shaderName);
 
-    deferredShaderMap.insert({ shaderName , std::move(shader) });
+	deferredShaderMap.insert({ shaderName , std::move(shader) });
 }
 
 void ResourceManager::CreateDefaultShader()
 {
 #pragma region VS
-    CreateShader(L"DefaultVS.cso");
-    CreateShader(L"DebugVS.cso");
-    CreateShader(L"SkinnedVS.cso");
-    CreateDeferredShader(L"Deferred_DirectionalLightVS.cso");
-    CreateDeferredShader(L"Deferred_PointLightVS.cso");
-    CreateDeferredShader(L"Deferred_FinalVS.cso");
-    CreateShader(L"TextureVS.cso");
+	CreateShader(L"DefaultVS.cso");
+	CreateShader(L"DebugVS.cso");
+	CreateShader(L"SkinnedVS.cso");
+	CreateDeferredShader(L"Deferred_DirectionalLightVS.cso");
+	CreateDeferredShader(L"Deferred_PointLightVS.cso");
+	CreateDeferredShader(L"Deferred_FinalVS.cso");
+	CreateShader(L"TextureVS.cso");
 	CreateShader(L"TestVS.cso");
 	CreateShader(L"SkyBoxVS.cso");
 	CreateShader(L"IrradianceVS.cso");
@@ -458,12 +458,12 @@ void ResourceManager::CreateDefaultShader()
 #pragma endregion
 
 #pragma region PS
-    CreateShader(L"DefaultPS.cso");
-    CreateShader(L"DebugPS.cso");
-    CreateDeferredShader(L"Deferred_DirectionalLightPS.cso");
-    CreateDeferredShader(L"Deferred_PointLightPS.cso");
-    CreateDeferredShader(L"Deferred_FinalPS.cso");
-    CreateShader(L"TexturePS.cso");
+	CreateShader(L"DefaultPS.cso");
+	CreateShader(L"DebugPS.cso");
+	CreateDeferredShader(L"Deferred_DirectionalLightPS.cso");
+	CreateDeferredShader(L"Deferred_PointLightPS.cso");
+	CreateDeferredShader(L"Deferred_FinalPS.cso");
+	CreateShader(L"TexturePS.cso");
 	CreateShader(L"TestPS.cso");
 	CreateShader(L"SkyBoxPS.cso");
 	CreateShader(L"IrradiancePS.cso");
@@ -474,31 +474,31 @@ void ResourceManager::CreateDefaultShader()
 
 void ResourceManager::CreateDefaultMesh()
 {
-    CreateMesh(L"Cube");
-    CreateMesh(L"Sphere");
-    CreateMesh(L"Rectangle");
-    /*CreateMesh(L"Point");
-    CreateMesh(L"Line");*/
-    CreateMesh(L"Capsule");
-    CreateMesh(L"Cylinder");
+	CreateMesh(L"Cube");
+	CreateMesh(L"Sphere");
+	CreateMesh(L"Rectangle");
+	/*CreateMesh(L"Point");
+	CreateMesh(L"Line");*/
+	CreateMesh(L"Capsule");
+	CreateMesh(L"Cylinder");
 }
 
 void ResourceManager::CreateDefaultMaterial()
 {
-    // DefaultMaterial
-    {
-        std::wstring name{};
-        CrateMaterial(name);
-    }
+	// DefaultMaterial
+	{
+		std::wstring name{};
+		CrateMaterial(name);
+	}
 
-    // Skinned Default Material
-    {
-        std::wstring name{ L"SkinnedDefaultMaterial" };
-        auto material = CrateMaterial(name);
-        material->SetVertexShader(this->GetShader(L"SkinnedVS.cso").get());
-    }
+	// Skinned Default Material
+	{
+		std::wstring name{ L"SkinnedDefaultMaterial" };
+		auto material = CrateMaterial(name);
+		material->SetVertexShader(this->GetShader(L"SkinnedVS.cso").get());
+	}
 
-    auto& renderTargetGroupVec = NailEngine::Instance.Get().GetRenderTargetGroup();
+	auto& renderTargetGroupVec = NailEngine::Instance.Get().GetRenderTargetGroup();
 
 	// DirectionalLight
 	{
@@ -531,67 +531,67 @@ void ResourceManager::CreateDefaultMaterial()
 			GetTexture(L"ShadowDepth").get());
 	}
 
-    // PointLight
-    {
-        yunuGI::IMaterial* material = CrateMaterial(L"Deferred_PointLight");
-        material->SetVertexShader(GetDeferredShader(L"Deferred_PointLightVS.cso").get());
-        material->SetPixelShader(GetDeferredShader(L"Deferred_PointLightPS.cso").get());
-        material->SetTexture(yunuGI::Texture_Type::Temp0,
-            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
-        material->SetTexture(yunuGI::Texture_Type::Temp1,
-            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(NORMAL)).get());
-    }
+	// PointLight
+	{
+		yunuGI::IMaterial* material = CrateMaterial(L"Deferred_PointLight");
+		material->SetVertexShader(GetDeferredShader(L"Deferred_PointLightVS.cso").get());
+		material->SetPixelShader(GetDeferredShader(L"Deferred_PointLightPS.cso").get());
+		material->SetTexture(yunuGI::Texture_Type::Temp0,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp1,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(NORMAL)).get());
+	}
 
-    // Deferred_Final
-    {
-        yunuGI::IMaterial* material = CrateMaterial(L"Deferred_Final");
-        material->SetVertexShader(GetDeferredShader(L"Deferred_FinalVS.cso").get());
-        material->SetPixelShader(GetDeferredShader(L"Deferred_FinalPS.cso").get());
-        material->SetTexture(yunuGI::Texture_Type::Temp0,
-            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ALBEDO)).get());
-        material->SetTexture(yunuGI::Texture_Type::Temp1,
-            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(DIFFUSE)).get());
-        material->SetTexture(yunuGI::Texture_Type::Temp2,
-            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR)).get());
-    }
+	// Deferred_Final
+	{
+		yunuGI::IMaterial* material = CrateMaterial(L"Deferred_Final");
+		material->SetVertexShader(GetDeferredShader(L"Deferred_FinalVS.cso").get());
+		material->SetPixelShader(GetDeferredShader(L"Deferred_FinalPS.cso").get());
+		material->SetTexture(yunuGI::Texture_Type::Temp0,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ALBEDO)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp1,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(DIFFUSE)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp2,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR)).get());
+	}
 
-    /// Deferred Debug Info
-    {
-        {
-            // Position
-            yunuGI::IMaterial* material = CrateMaterial(L"DeferredPosition");
-            material->SetPixelShader(GetShader(L"TexturePS.cso").get());
-            material->SetVertexShader(GetShader(L"TextureVS.cso").get());
-            material->SetTexture(yunuGI::Texture_Type::Temp0,
-                renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
-        }
+	/// Deferred Debug Info
+	{
+		{
+			// Position
+			yunuGI::IMaterial* material = CrateMaterial(L"DeferredPosition");
+			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
+			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
+		}
 
-        {
-            // Normal
-            yunuGI::IMaterial* material = CrateMaterial(L"DeferredNormal");
-            material->SetPixelShader(GetShader(L"TexturePS.cso").get());
-            material->SetVertexShader(GetShader(L"TextureVS.cso").get());
-            material->SetTexture(yunuGI::Texture_Type::Temp0,
-                renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(NORMAL)).get());
-        }
+		{
+			// Normal
+			yunuGI::IMaterial* material = CrateMaterial(L"DeferredNormal");
+			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
+			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(NORMAL)).get());
+		}
 
-        {
-            // Color
-            yunuGI::IMaterial* material = CrateMaterial(L"DeferredColor");
-            material->SetPixelShader(GetShader(L"TexturePS.cso").get());
-            material->SetVertexShader(GetShader(L"TextureVS.cso").get());
-            material->SetTexture(yunuGI::Texture_Type::Temp0,
-                renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ALBEDO)).get());
-        }
+		{
+			// Color
+			yunuGI::IMaterial* material = CrateMaterial(L"DeferredColor");
+			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
+			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ALBEDO)).get());
+		}
 
-        {
-            // Depth
-            yunuGI::IMaterial* material = CrateMaterial(L"DeferredDepth");
-            material->SetPixelShader(GetShader(L"TexturePS.cso").get());
-            material->SetVertexShader(GetShader(L"TextureVS.cso").get());
-            material->SetTexture(yunuGI::Texture_Type::Temp0,
-                renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(DEPTH)).get());
-        }
+		{
+			// Depth
+			yunuGI::IMaterial* material = CrateMaterial(L"DeferredDepth");
+			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
+			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(DEPTH)).get());
+		}
 
 		{
 			// ARM
@@ -669,93 +669,93 @@ void ResourceManager::CreateDefaultTexture()
 
 void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yunuGI::FBXData* fbxData)
 {
-    fbxData->nodeName = node->nodeName;
-    fbxData->hasAnimation = node->hasAnimation;
-    fbxData->child.resize(node->child.size());
-    fbxData->materialVec.resize(node->meshVec.size());
+	fbxData->nodeName = node->nodeName;
+	fbxData->hasAnimation = node->hasAnimation;
+	fbxData->child.resize(node->child.size());
+	fbxData->materialVec.resize(node->meshVec.size());
 
 
-    DirectX::SimpleMath::Matrix wtm = (node->worldMatrix);
-    DirectX::SimpleMath::Vector3 pos;
-    DirectX::SimpleMath::Vector3 scale;
-    DirectX::SimpleMath::Quaternion quat;
-    wtm.Decompose(scale, quat, pos);
+	DirectX::SimpleMath::Matrix wtm = (node->worldMatrix);
+	DirectX::SimpleMath::Vector3 pos;
+	DirectX::SimpleMath::Vector3 scale;
+	DirectX::SimpleMath::Quaternion quat;
+	wtm.Decompose(scale, quat, pos);
 
-    fbxData->pos = yunuGI::Vector3{ pos.x, pos.y,pos.z };
-    fbxData->scale = yunuGI::Vector3{ scale.x, scale.y,scale.z };
-    fbxData->quat = yunuGI::Vector4{ quat.x, quat.y, quat.z, quat.w };
+	fbxData->pos = yunuGI::Vector3{ pos.x, pos.y,pos.z };
+	fbxData->scale = yunuGI::Vector3{ scale.x, scale.y,scale.z };
+	fbxData->quat = yunuGI::Vector4{ quat.x, quat.y, quat.z, quat.w };
 
 
-    for (int i = 0; i < node->meshVec.size(); ++i)
-    {
-        fbxData->meshName = node->meshVec[i].meshName;
-        // 실제 Mesh와 Material을 만들자
-        if (this->meshMap.find(node->meshVec[i].meshName) == this->meshMap.end())
-        {
-            std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
-            mesh->SetName(node->meshVec[i].meshName);
-            mesh->SetData(node->meshVec[i].vertex, node->meshVec[i].indices);
-            this->meshMap.insert({ node->meshVec[i].meshName, mesh });
-        }
-        else
-        {
-            if (node->meshVec.size() != 1)
-            {
-                std::static_pointer_cast<Mesh>(this->meshMap.find(node->meshVec[i].meshName)->second)
-                    ->SetData(node->meshVec[i].vertex, node->meshVec[i].indices);
-            }
-        }
+	for (int i = 0; i < node->meshVec.size(); ++i)
+	{
+		fbxData->meshName = node->meshVec[i].meshName;
+		// 실제 Mesh와 Material을 만들자
+		if (this->meshMap.find(node->meshVec[i].meshName) == this->meshMap.end())
+		{
+			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
+			mesh->SetName(node->meshVec[i].meshName);
+			mesh->SetData(node->meshVec[i].vertex, node->meshVec[i].indices);
+			this->meshMap.insert({ node->meshVec[i].meshName, mesh });
+		}
+		else
+		{
+			if (node->meshVec.size() != 1)
+			{
+				std::static_pointer_cast<Mesh>(this->meshMap.find(node->meshVec[i].meshName)->second)
+					->SetData(node->meshVec[i].vertex, node->meshVec[i].indices);
+			}
+		}
 
-        if (this->materialMap.find(node->meshVec[i].material.materialName) == this->materialMap.end())
-        {
-            std::shared_ptr<Material> material = std::make_shared<Material>();
-            material->SetName(node->meshVec[i].material.materialName);
+		if (this->materialMap.find(node->meshVec[i].material.materialName) == this->materialMap.end())
+		{
+			std::shared_ptr<Material> material = std::make_shared<Material>();
+			material->SetName(node->meshVec[i].material.materialName);
 
-            if (!node->meshVec[i].material.albedoMap.empty())
-            {
-                this->CreateTexture(node->meshVec[i].material.albedoMap);
-                material->SetTexture(yunuGI::Texture_Type::ALBEDO, GetTexture(node->meshVec[i].material.albedoMap).get());
-            }
-            if (!node->meshVec[i].material.armMap.empty())
-            {
-                this->CreateTexture(node->meshVec[i].material.armMap);
-                material->SetTexture(yunuGI::Texture_Type::ARM, GetTexture(node->meshVec[i].material.armMap).get());
-            }
-            if (!node->meshVec[i].material.emissionMap.empty())
-            {
-                this->CreateTexture(node->meshVec[i].material.emissionMap);
-                material->SetTexture(yunuGI::Texture_Type::EMISSION, GetTexture(node->meshVec[i].material.emissionMap).get());
-            }
-            if (!node->meshVec[i].material.normalMap.empty())
-            {
-                this->CreateTexture(node->meshVec[i].material.normalMap);
-                material->SetTexture(yunuGI::Texture_Type::NORMAL, GetTexture(node->meshVec[i].material.normalMap).get());
-            }
+			if (!node->meshVec[i].material.albedoMap.empty())
+			{
+				this->CreateTexture(node->meshVec[i].material.albedoMap);
+				material->SetTexture(yunuGI::Texture_Type::ALBEDO, GetTexture(node->meshVec[i].material.albedoMap).get());
+			}
+			if (!node->meshVec[i].material.armMap.empty())
+			{
+				this->CreateTexture(node->meshVec[i].material.armMap);
+				material->SetTexture(yunuGI::Texture_Type::ARM, GetTexture(node->meshVec[i].material.armMap).get());
+			}
+			if (!node->meshVec[i].material.emissionMap.empty())
+			{
+				this->CreateTexture(node->meshVec[i].material.emissionMap);
+				material->SetTexture(yunuGI::Texture_Type::EMISSION, GetTexture(node->meshVec[i].material.emissionMap).get());
+			}
+			if (!node->meshVec[i].material.normalMap.empty())
+			{
+				this->CreateTexture(node->meshVec[i].material.normalMap);
+				material->SetTexture(yunuGI::Texture_Type::NORMAL, GetTexture(node->meshVec[i].material.normalMap).get());
+			}
 
-            fbxData->materialVec[i].materialName = node->meshVec[i].material.materialName;
-            fbxData->materialVec[i].albedoMap = node->meshVec[i].material.albedoMap;
-            fbxData->materialVec[i].armMap = node->meshVec[i].material.armMap;
-            fbxData->materialVec[i].emissionMap = node->meshVec[i].material.emissionMap;
-            fbxData->materialVec[i].normalMap = node->meshVec[i].material.normalMap;
+			fbxData->materialVec[i].materialName = node->meshVec[i].material.materialName;
+			fbxData->materialVec[i].albedoMap = node->meshVec[i].material.albedoMap;
+			fbxData->materialVec[i].armMap = node->meshVec[i].material.armMap;
+			fbxData->materialVec[i].emissionMap = node->meshVec[i].material.emissionMap;
+			fbxData->materialVec[i].normalMap = node->meshVec[i].material.normalMap;
 
-            this->materialMap.insert({ node->meshVec[i].material.materialName , material });
-        }
-        else
-        {
-            fbxData->materialVec[i].materialName = node->meshVec[i].material.materialName;
-            fbxData->materialVec[i].albedoMap = node->meshVec[i].material.albedoMap;
-            fbxData->materialVec[i].armMap = node->meshVec[i].material.armMap;
-            fbxData->materialVec[i].emissionMap = node->meshVec[i].material.emissionMap;
-            fbxData->materialVec[i].normalMap = node->meshVec[i].material.normalMap;
-            //auto material = GetMaterial(node->meshVec[i].material.materialName);
-        }
-    }
+			this->materialMap.insert({ node->meshVec[i].material.materialName , material });
+		}
+		else
+		{
+			fbxData->materialVec[i].materialName = node->meshVec[i].material.materialName;
+			fbxData->materialVec[i].albedoMap = node->meshVec[i].material.albedoMap;
+			fbxData->materialVec[i].armMap = node->meshVec[i].material.armMap;
+			fbxData->materialVec[i].emissionMap = node->meshVec[i].material.emissionMap;
+			fbxData->materialVec[i].normalMap = node->meshVec[i].material.normalMap;
+			//auto material = GetMaterial(node->meshVec[i].material.materialName);
+		}
+	}
 
-    for (int i = 0; i < node->child.size(); ++i)
-    {
-        fbxData->child[i] = new yunuGI::FBXData;
-        this->FillFBXData(fbxName, node->child[i], fbxData->child[i]);
-    }
+	for (int i = 0; i < node->child.size(); ++i)
+	{
+		fbxData->child[i] = new yunuGI::FBXData;
+		this->FillFBXData(fbxName, node->child[i], fbxData->child[i]);
+	}
 }
 
 //void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode& node, std::vector<yunuGI::FBXData>& dataVec)
@@ -798,12 +798,12 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 
 void ResourceManager::FillFBXBoneInfoVec(const yunuGI::BoneInfo& boneInfo, std::vector<yunuGI::BoneInfo>& boneInfoVec)
 {
-    boneInfoVec.emplace_back(boneInfo);
+	boneInfoVec.emplace_back(boneInfo);
 
-    //for (int i = 0; i < boneInfo.child.size(); ++i)
-    //{
-    //	FillFBXBoneInfoVec(boneInfo.child[i], boneInfoVec);
-    //}
+	//for (int i = 0; i < boneInfo.child.size(); ++i)
+	//{
+	//	FillFBXBoneInfoVec(boneInfo.child[i], boneInfoVec);
+	//}
 }
 
 //void ResourceManager::CreateResourceFromFBX(FBXMeshData& meshData, std::vector<yunuGI::FBXData>& dataVec, yunuGI::FBXData& fbxData)
@@ -860,201 +860,201 @@ void ResourceManager::FillFBXBoneInfoVec(const yunuGI::BoneInfo& boneInfo, std::
 
 void ResourceManager::LoadCubeMesh()
 {
-    std::shared_ptr<Mesh> cubeMesh = std::make_shared<Mesh>();
+	std::shared_ptr<Mesh> cubeMesh = std::make_shared<Mesh>();
 
-    cubeMesh->SetName(L"Cube");
+	cubeMesh->SetName(L"Cube");
 
-    float w2 = 0.5f;
-    float h2 = 0.5f;
-    float d2 = 0.5f;
+	float w2 = 0.5f;
+	float h2 = 0.5f;
+	float d2 = 0.5f;
 
-    std::vector<Vertex> vec(24);
+	std::vector<Vertex> vec(24);
 
-    // 앞면
-    vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
-    vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
-    vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
-    vec[3] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
-    // 뒷면
-    vec[4] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
-    vec[5] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
-    vec[6] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
-    vec[7] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
-    // 윗면
-    vec[8] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
-    vec[9] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
-    vec[10] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.f, 0.f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
-    vec[11] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.f, 1.f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
-    // 아랫면
-    vec[12] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
-    vec[13] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
-    vec[14] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
-    vec[15] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
-    // 왼쪽면
-    vec[16] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
-    vec[17] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
-    vec[18] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
-    vec[19] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
-    // 오른쪽면
-    vec[20] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
-    vec[21] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
-    vec[22] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
-    vec[23] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+	// 앞면
+	vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+	vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+	vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+	vec[3] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+	// 뒷면
+	vec[4] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+	vec[5] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+	vec[6] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+	vec[7] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+	// 윗면
+	vec[8] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
+	vec[9] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
+	vec[10] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.f, 0.f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
+	vec[11] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.f, 1.f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
+	// 아랫면
+	vec[12] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
+	vec[13] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
+	vec[14] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
+	vec[15] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
+	// 왼쪽면
+	vec[16] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
+	vec[17] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
+	vec[18] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
+	vec[19] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
+	// 오른쪽면
+	vec[20] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+	vec[21] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+	vec[22] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+	vec[23] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
 
-    std::vector<unsigned int> idx(36);
+	std::vector<unsigned int> idx(36);
 
-    // 앞면
-    idx[0] = 0; idx[1] = 1; idx[2] = 2;
-    idx[3] = 0; idx[4] = 2; idx[5] = 3;
-    // 뒷면
-    idx[6] = 4; idx[7] = 5; idx[8] = 6;
-    idx[9] = 4; idx[10] = 6; idx[11] = 7;
-    // 윗면
-    idx[12] = 8; idx[13] = 9; idx[14] = 10;
-    idx[15] = 8; idx[16] = 10; idx[17] = 11;
-    // 아랫면
-    idx[18] = 12; idx[19] = 13; idx[20] = 14;
-    idx[21] = 12; idx[22] = 14; idx[23] = 15;
-    // 왼쪽면
-    idx[24] = 16; idx[25] = 17; idx[26] = 18;
-    idx[27] = 16; idx[28] = 18; idx[29] = 19;
-    // 오른쪽면
-    idx[30] = 20; idx[31] = 21; idx[32] = 22;
-    idx[33] = 20; idx[34] = 22; idx[35] = 23;
+	// 앞면
+	idx[0] = 0; idx[1] = 1; idx[2] = 2;
+	idx[3] = 0; idx[4] = 2; idx[5] = 3;
+	// 뒷면
+	idx[6] = 4; idx[7] = 5; idx[8] = 6;
+	idx[9] = 4; idx[10] = 6; idx[11] = 7;
+	// 윗면
+	idx[12] = 8; idx[13] = 9; idx[14] = 10;
+	idx[15] = 8; idx[16] = 10; idx[17] = 11;
+	// 아랫면
+	idx[18] = 12; idx[19] = 13; idx[20] = 14;
+	idx[21] = 12; idx[22] = 14; idx[23] = 15;
+	// 왼쪽면
+	idx[24] = 16; idx[25] = 17; idx[26] = 18;
+	idx[27] = 16; idx[28] = 18; idx[29] = 19;
+	// 오른쪽면
+	idx[30] = 20; idx[31] = 21; idx[32] = 22;
+	idx[33] = 20; idx[34] = 22; idx[35] = 23;
 
-    cubeMesh->SetData(vec, idx);
-    CreateMesh(cubeMesh);
+	cubeMesh->SetData(vec, idx);
+	CreateMesh(cubeMesh);
 }
 
 void ResourceManager::LoadSphereMesh()
 {
-    std::shared_ptr<Mesh> sphereMesh = std::make_shared<Mesh>();
+	std::shared_ptr<Mesh> sphereMesh = std::make_shared<Mesh>();
 
-    sphereMesh->SetName(L"Sphere");
+	sphereMesh->SetName(L"Sphere");
 
-    float radius = 0.5f; // 구의 반지름
-    unsigned int stackCount = 20; // 가로 분할
-    unsigned int sliceCount = 20; // 세로 분할
+	float radius = 0.5f; // 구의 반지름
+	unsigned int stackCount = 20; // 가로 분할
+	unsigned int sliceCount = 20; // 세로 분할
 
-    std::vector<Vertex> vec;
+	std::vector<Vertex> vec;
 
-    Vertex v;
+	Vertex v;
 
-    // 북극
-    v.pos = DirectX::SimpleMath::Vector3{ 0.0f, radius, 0.0f };
-    v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
-    v.uv = DirectX::SimpleMath::Vector2(0.5f, 0.0f);
-    v.normal = v.pos;
-    v.normal.Normalize();
-    v.tangent = DirectX::SimpleMath::Vector3{ 1.f,0.f,1.f };
-    vec.push_back(v);
+	// 북극
+	v.pos = DirectX::SimpleMath::Vector3{ 0.0f, radius, 0.0f };
+	v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
+	v.uv = DirectX::SimpleMath::Vector2(0.5f, 0.0f);
+	v.normal = v.pos;
+	v.normal.Normalize();
+	v.tangent = DirectX::SimpleMath::Vector3{ 1.f,0.f,1.f };
+	vec.push_back(v);
 
-    float stackAngle = DirectX::XM_PI / stackCount;
-    float sliceAngle = DirectX::XM_2PI / sliceCount;
+	float stackAngle = DirectX::XM_PI / stackCount;
+	float sliceAngle = DirectX::XM_2PI / sliceCount;
 
-    float deltaU = 1.f / static_cast<float>(sliceCount);
-    float deltaV = 1.f / static_cast<float>(stackCount);
+	float deltaU = 1.f / static_cast<float>(sliceCount);
+	float deltaV = 1.f / static_cast<float>(stackCount);
 
-    // 고리마다 돌면서 정점을 계산한다 (북극/남극 단일점은 고리가 X)
-    for (unsigned int y = 1; y <= stackCount - 1; ++y)
-    {
-        float phi = y * stackAngle;
+	// 고리마다 돌면서 정점을 계산한다 (북극/남극 단일점은 고리가 X)
+	for (unsigned int y = 1; y <= stackCount - 1; ++y)
+	{
+		float phi = y * stackAngle;
 
-        // 고리에 위치한 정점
-        for (unsigned int x = 0; x <= sliceCount; ++x)
-        {
-            float theta = x * sliceAngle;
+		// 고리에 위치한 정점
+		for (unsigned int x = 0; x <= sliceCount; ++x)
+		{
+			float theta = x * sliceAngle;
 
-            v.pos.x = radius * sinf(phi) * cosf(theta);
-            v.pos.y = radius * cosf(phi);
-            v.pos.z = radius * sinf(phi) * sinf(theta);
+			v.pos.x = radius * sinf(phi) * cosf(theta);
+			v.pos.y = radius * cosf(phi);
+			v.pos.z = radius * sinf(phi) * sinf(theta);
 
-            v.uv = DirectX::SimpleMath::Vector2(deltaU * x, deltaV * y);
+			v.uv = DirectX::SimpleMath::Vector2(deltaU * x, deltaV * y);
 
-            v.normal = v.pos;
-            v.normal.Normalize();
+			v.normal = v.pos;
+			v.normal.Normalize();
 
-            v.tangent.x = -radius * sinf(phi) * sinf(theta);
-            v.tangent.y = 0.0f;
-            v.tangent.z = radius * sinf(phi) * cosf(theta);
-            v.tangent.Normalize();
+			v.tangent.x = -radius * sinf(phi) * sinf(theta);
+			v.tangent.y = 0.0f;
+			v.tangent.z = radius * sinf(phi) * cosf(theta);
+			v.tangent.Normalize();
 
-            v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
+			v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
 
-            vec.push_back(v);
-        }
-    }
+			vec.push_back(v);
+		}
+	}
 
-    // 남극
-    v.pos = DirectX::SimpleMath::Vector3{ 0.0f, -radius, 0.0f };
-    v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
-    v.uv = DirectX::SimpleMath::Vector2(0.5f, 1.0f);
-    v.normal = v.pos;
-    v.normal.Normalize();
-    v.tangent = DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f);
-    vec.push_back(v);
+	// 남극
+	v.pos = DirectX::SimpleMath::Vector3{ 0.0f, -radius, 0.0f };
+	v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
+	v.uv = DirectX::SimpleMath::Vector2(0.5f, 1.0f);
+	v.normal = v.pos;
+	v.normal.Normalize();
+	v.tangent = DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f);
+	vec.push_back(v);
 
-    std::vector<unsigned int> idx(36);
+	std::vector<unsigned int> idx(36);
 
-    // 북극 인덱스
-    for (unsigned int i = 0; i <= sliceCount; ++i)
-    {
-        //  [0]
-        //   |  \
+	// 북극 인덱스
+	for (unsigned int i = 0; i <= sliceCount; ++i)
+	{
+		//  [0]
+		//   |  \
 		//  [i+1]-[i+2]
-        idx.push_back(0);
-        idx.push_back(i + 2);
-        idx.push_back(i + 1);
-    }
+		idx.push_back(0);
+		idx.push_back(i + 2);
+		idx.push_back(i + 1);
+	}
 
-    // 몸통 인덱스
-    unsigned int ringVertexCount = sliceCount + 1;
-    for (unsigned int y = 0; y < stackCount - 2; ++y)
-    {
-        for (unsigned int x = 0; x < sliceCount; ++x)
-        {
-            //  [y, x]-[y, x+1]
-            //  |		/
-            //  [y+1, x]
-            idx.push_back(1 + (y)*ringVertexCount + (x));
-            idx.push_back(1 + (y)*ringVertexCount + (x + 1));
-            idx.push_back(1 + (y + 1) * ringVertexCount + (x));
-            //		 [y, x+1]
-            //		 /	  |
-            //  [y+1, x]-[y+1, x+1]
-            idx.push_back(1 + (y + 1) * ringVertexCount + (x));
-            idx.push_back(1 + (y)*ringVertexCount + (x + 1));
-            idx.push_back(1 + (y + 1) * ringVertexCount + (x + 1));
-        }
-    }
+	// 몸통 인덱스
+	unsigned int ringVertexCount = sliceCount + 1;
+	for (unsigned int y = 0; y < stackCount - 2; ++y)
+	{
+		for (unsigned int x = 0; x < sliceCount; ++x)
+		{
+			//  [y, x]-[y, x+1]
+			//  |		/
+			//  [y+1, x]
+			idx.push_back(1 + (y)*ringVertexCount + (x));
+			idx.push_back(1 + (y)*ringVertexCount + (x + 1));
+			idx.push_back(1 + (y + 1) * ringVertexCount + (x));
+			//		 [y, x+1]
+			//		 /	  |
+			//  [y+1, x]-[y+1, x+1]
+			idx.push_back(1 + (y + 1) * ringVertexCount + (x));
+			idx.push_back(1 + (y)*ringVertexCount + (x + 1));
+			idx.push_back(1 + (y + 1) * ringVertexCount + (x + 1));
+		}
+	}
 
-    // 남극 인덱스
-    unsigned int bottomIndex = static_cast<unsigned int>(vec.size()) - 1;
-    unsigned int lastRingStartIndex = bottomIndex - ringVertexCount;
-    for (unsigned int i = 0; i < sliceCount; ++i)
-    {
-        //  [last+i]-[last+i+1]
-        //  |      /
-        //  [bottom]
-        idx.push_back(bottomIndex);
-        idx.push_back(lastRingStartIndex + i);
-        idx.push_back(lastRingStartIndex + i + 1);
-    }
+	// 남극 인덱스
+	unsigned int bottomIndex = static_cast<unsigned int>(vec.size()) - 1;
+	unsigned int lastRingStartIndex = bottomIndex - ringVertexCount;
+	for (unsigned int i = 0; i < sliceCount; ++i)
+	{
+		//  [last+i]-[last+i+1]
+		//  |      /
+		//  [bottom]
+		idx.push_back(bottomIndex);
+		idx.push_back(lastRingStartIndex + i);
+		idx.push_back(lastRingStartIndex + i + 1);
+	}
 
-    sphereMesh->SetData(vec, idx);
-    CreateMesh(sphereMesh);
+	sphereMesh->SetData(vec, idx);
+	CreateMesh(sphereMesh);
 }
 
 void ResourceManager::LoadRactangleMesh()
 {
-    std::shared_ptr<Mesh> rectangleMesh = std::make_shared<Mesh>();
+	std::shared_ptr<Mesh> rectangleMesh = std::make_shared<Mesh>();
 
-    rectangleMesh->SetName(L"Rectangle");
+	rectangleMesh->SetName(L"Rectangle");
 
-    float w2 = 0.5f;
-    float h2 = 0.5f;
+	float w2 = 0.5f;
+	float h2 = 0.5f;
 
-    std::vector<Vertex> vec(4);
+	std::vector<Vertex> vec(4);
 
 
 	// POS COLOR UV TANGENT
@@ -1064,13 +1064,13 @@ void ResourceManager::LoadRactangleMesh()
 	vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
 	vec[3] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
 
-    std::vector<unsigned int> idx(6);
+	std::vector<unsigned int> idx(6);
 
-    idx[0] = 0; idx[1] = 1; idx[2] = 2;
-    idx[3] = 0; idx[4] = 2; idx[5] = 3;
+	idx[0] = 0; idx[1] = 1; idx[2] = 2;
+	idx[3] = 0; idx[4] = 2; idx[5] = 3;
 
-    rectangleMesh->SetData(vec, idx);
-    CreateMesh(rectangleMesh);
+	rectangleMesh->SetData(vec, idx);
+	CreateMesh(rectangleMesh);
 }
 
 void ResourceManager::LoadPointMesh()
@@ -1085,258 +1085,258 @@ void ResourceManager::LoadLineMesh()
 
 void ResourceManager::LoadCapsuleMesh()
 {
-    std::shared_ptr<Mesh> capsuleMesh = std::make_shared<Mesh>();
+	std::shared_ptr<Mesh> capsuleMesh = std::make_shared<Mesh>();
 
-    capsuleMesh->SetName(L"Capsule");
+	capsuleMesh->SetName(L"Capsule");
 
-    float radius = 0.5f; // 캡슐의 반지름
-    float height = 1.0f; // 캡슐의 높이
-    int stackCount = 5; // 수평 분할
-    int sliceCount = 20; // 수직 분할
+	float radius = 0.5f; // 캡슐의 반지름
+	float height = 1.0f; // 캡슐의 높이
+	int stackCount = 5; // 수평 분할
+	int sliceCount = 20; // 수직 분할
 
-    std::vector<Vertex> vertices;
-    std::vector<unsigned int> indices;
+	std::vector<Vertex> vertices;
+	std::vector<unsigned int> indices;
 
-    // 상단 반구 정점
-    vertices.push_back(Vertex{
-        DirectX::SimpleMath::Vector3{0.0f, radius + height * 0.5f, 0.0f},
-        DirectX::SimpleMath::Vector4{1.f, 1.f, 1.f, 1.f} });
+	// 상단 반구 정점
+	vertices.push_back(Vertex{
+		DirectX::SimpleMath::Vector3{0.0f, radius + height * 0.5f, 0.0f},
+		DirectX::SimpleMath::Vector4{1.f, 1.f, 1.f, 1.f} });
 
-    for (int i = 1; i <= stackCount; i++)
-    {
-        // 윗방향 벡터와의 각도
-        float upTheta = DirectX::XM_PI * 0.5f * (i / static_cast<float>(stackCount));
+	for (int i = 1; i <= stackCount; i++)
+	{
+		// 윗방향 벡터와의 각도
+		float upTheta = DirectX::XM_PI * 0.5f * (i / static_cast<float>(stackCount));
 
-        float xzsize = radius * sinf(upTheta);
-        float ysize = radius * cosf(upTheta);
+		float xzsize = radius * sinf(upTheta);
+		float ysize = radius * cosf(upTheta);
 
-        for (int j = 0; j < sliceCount; j++)
-        {
-            float zTheta = DirectX::XM_PI * 2.0f * (j / static_cast<float>(sliceCount));
+		for (int j = 0; j < sliceCount; j++)
+		{
+			float zTheta = DirectX::XM_PI * 2.0f * (j / static_cast<float>(sliceCount));
 
-            float x = xzsize * sinf(zTheta);
-            float y = ysize + height * 0.5f;
-            float z = xzsize * cosf(zTheta);
+			float x = xzsize * sinf(zTheta);
+			float y = ysize + height * 0.5f;
+			float z = xzsize * cosf(zTheta);
 
-            vertices.push_back(Vertex{
-                DirectX::SimpleMath::Vector3{x, y, z},
-                DirectX::SimpleMath::Vector4(1.f, 1.f,1.f,1.f) }
-            );
-        }
-    }
+			vertices.push_back(Vertex{
+				DirectX::SimpleMath::Vector3{x, y, z},
+				DirectX::SimpleMath::Vector4(1.f, 1.f,1.f,1.f) }
+			);
+		}
+	}
 
-    size_t middleIdx = vertices.size();
+	size_t middleIdx = vertices.size();
 
-    // 하단 반구 정점
-    for (int i = stackCount; i >= 1; i--)
-    {
-        // 윗방향 벡터와의 각도
-        float upTheta = DirectX::XM_PI * 0.5f * (i / static_cast<float>(stackCount));
+	// 하단 반구 정점
+	for (int i = stackCount; i >= 1; i--)
+	{
+		// 윗방향 벡터와의 각도
+		float upTheta = DirectX::XM_PI * 0.5f * (i / static_cast<float>(stackCount));
 
-        float xzsize = radius * sinf(upTheta);
-        float ysize = radius * cosf(upTheta);
+		float xzsize = radius * sinf(upTheta);
+		float ysize = radius * cosf(upTheta);
 
-        for (int j = 0; j < sliceCount; j++)
-        {
-            float zTheta = DirectX::XM_PI * 2.0f * (j / static_cast<float>(sliceCount));
+		for (int j = 0; j < sliceCount; j++)
+		{
+			float zTheta = DirectX::XM_PI * 2.0f * (j / static_cast<float>(sliceCount));
 
-            float x = xzsize * sinf(zTheta);
-            float y = ysize + height * 0.5f;
-            float z = xzsize * cosf(zTheta);
+			float x = xzsize * sinf(zTheta);
+			float y = ysize + height * 0.5f;
+			float z = xzsize * cosf(zTheta);
 
-            vertices.push_back(Vertex{
-                DirectX::SimpleMath::Vector3(x, -y, z),
-                DirectX::SimpleMath::Vector4(1.f, 1.f,1.f,1.f) }
-            );
-        }
-    }
+			vertices.push_back(Vertex{
+				DirectX::SimpleMath::Vector3(x, -y, z),
+				DirectX::SimpleMath::Vector4(1.f, 1.f,1.f,1.f) }
+			);
+		}
+	}
 
-    vertices.push_back(Vertex{
-        DirectX::SimpleMath::Vector3{0.0f, -(radius + height * 0.5f), 0.0f},
-        DirectX::SimpleMath::Vector4(1.f, 1.f,1.f,1.f) }
-    );
+	vertices.push_back(Vertex{
+		DirectX::SimpleMath::Vector3{0.0f, -(radius + height * 0.5f), 0.0f},
+		DirectX::SimpleMath::Vector4(1.f, 1.f,1.f,1.f) }
+	);
 
-    // 상단 반구 인덱스
-    for (int i = 0; i < sliceCount; i++) {
-        int a = 0;
-        int b = 1 + i;
-        int c = 1 + ((i + 1) % sliceCount);
+	// 상단 반구 인덱스
+	for (int i = 0; i < sliceCount; i++) {
+		int a = 0;
+		int b = 1 + i;
+		int c = 1 + ((i + 1) % sliceCount);
 
-        indices.push_back(a);
-        indices.push_back(b);
-        indices.push_back(c);
-    }
+		indices.push_back(a);
+		indices.push_back(b);
+		indices.push_back(c);
+	}
 
-    for (int i = 1; i < stackCount; i++) {
-        for (int j = 0; j < sliceCount; j++) {
-            int a = 1 + (i - 1) * sliceCount + j;
-            int b = 1 + (i - 1) * sliceCount + ((j + 1) % sliceCount);
-            int c = 1 + i * sliceCount + j;
-            int d = 1 + i * sliceCount + ((j + 1) % sliceCount);
+	for (int i = 1; i < stackCount; i++) {
+		for (int j = 0; j < sliceCount; j++) {
+			int a = 1 + (i - 1) * sliceCount + j;
+			int b = 1 + (i - 1) * sliceCount + ((j + 1) % sliceCount);
+			int c = 1 + i * sliceCount + j;
+			int d = 1 + i * sliceCount + ((j + 1) % sliceCount);
 
-            indices.push_back(a);
-            indices.push_back(c);
-            indices.push_back(d);
+			indices.push_back(a);
+			indices.push_back(c);
+			indices.push_back(d);
 
-            indices.push_back(a);
-            indices.push_back(d);
-            indices.push_back(b);
-        }
-    }
+			indices.push_back(a);
+			indices.push_back(d);
+			indices.push_back(b);
+		}
+	}
 
-    // 실린더 부분 인덱스
-    for (int i = 0; i < sliceCount; i++)
-    {
-        int a = middleIdx - sliceCount + i;
-        int b = middleIdx - sliceCount + ((i + 1) % sliceCount);
-        int c = middleIdx + i;
-        int d = middleIdx + ((i + 1) % sliceCount);
+	// 실린더 부분 인덱스
+	for (int i = 0; i < sliceCount; i++)
+	{
+		int a = middleIdx - sliceCount + i;
+		int b = middleIdx - sliceCount + ((i + 1) % sliceCount);
+		int c = middleIdx + i;
+		int d = middleIdx + ((i + 1) % sliceCount);
 
-        indices.push_back(a);
-        indices.push_back(c);
-        indices.push_back(d);
+		indices.push_back(a);
+		indices.push_back(c);
+		indices.push_back(d);
 
-        indices.push_back(a);
-        indices.push_back(d);
-        indices.push_back(b);
-    }
+		indices.push_back(a);
+		indices.push_back(d);
+		indices.push_back(b);
+	}
 
-    // 하단 반구 인덱스
-    for (int i = 1; i < stackCount; i++) {
-        for (int j = 0; j < sliceCount; j++) {
-            int a = middleIdx + (i - 1) * sliceCount + j;
-            int b = middleIdx + (i - 1) * sliceCount + ((j + 1) % sliceCount);
-            int c = middleIdx + i * sliceCount + j;
-            int d = middleIdx + i * sliceCount + ((j + 1) % sliceCount);
+	// 하단 반구 인덱스
+	for (int i = 1; i < stackCount; i++) {
+		for (int j = 0; j < sliceCount; j++) {
+			int a = middleIdx + (i - 1) * sliceCount + j;
+			int b = middleIdx + (i - 1) * sliceCount + ((j + 1) % sliceCount);
+			int c = middleIdx + i * sliceCount + j;
+			int d = middleIdx + i * sliceCount + ((j + 1) % sliceCount);
 
-            indices.push_back(a);
-            indices.push_back(c);
-            indices.push_back(d);
+			indices.push_back(a);
+			indices.push_back(c);
+			indices.push_back(d);
 
-            indices.push_back(a);
-            indices.push_back(d);
-            indices.push_back(b);
-        }
-    }
+			indices.push_back(a);
+			indices.push_back(d);
+			indices.push_back(b);
+		}
+	}
 
-    for (int i = 0; i < sliceCount; i++) {
-        int a = vertices.size() - 1;
-        int b = vertices.size() - 1 - sliceCount + i;
-        int c = vertices.size() - 1 - sliceCount + ((i + 1) % sliceCount);
+	for (int i = 0; i < sliceCount; i++) {
+		int a = vertices.size() - 1;
+		int b = vertices.size() - 1 - sliceCount + i;
+		int c = vertices.size() - 1 - sliceCount + ((i + 1) % sliceCount);
 
-        indices.push_back(b);
-        indices.push_back(a);
-        indices.push_back(c);
-    }
+		indices.push_back(b);
+		indices.push_back(a);
+		indices.push_back(c);
+	}
 
-    capsuleMesh->SetData(vertices, indices);
-    CreateMesh(capsuleMesh);
+	capsuleMesh->SetData(vertices, indices);
+	CreateMesh(capsuleMesh);
 }
 
 void ResourceManager::LoadCylinderMesh()
 {
-    std::shared_ptr<Mesh> cylinderMesh = std::make_shared<Mesh>();
+	std::shared_ptr<Mesh> cylinderMesh = std::make_shared<Mesh>();
 
-    cylinderMesh->SetName(L"Cylinder");
+	cylinderMesh->SetName(L"Cylinder");
 
-    std::vector<Vertex> vertices;
-    std::vector<unsigned int> indices;
+	std::vector<Vertex> vertices;
+	std::vector<unsigned int> indices;
 
-    float radius = 0.5f; // 실린더의 반지름
-    float height = 1.0f; // 실린더의 높이
-    int sliceCount = 20; // 수직 분할
+	float radius = 0.5f; // 실린더의 반지름
+	float height = 1.0f; // 실린더의 높이
+	int sliceCount = 20; // 수직 분할
 
-    // 정상 정점
-    vertices.push_back(Vertex{
-        DirectX::SimpleMath::Vector3{0.0f, height * 0.5f, 0.0f},
-        DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f},
-        DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
-        DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
-    );
+	// 정상 정점
+	vertices.push_back(Vertex{
+		DirectX::SimpleMath::Vector3{0.0f, height * 0.5f, 0.0f},
+		DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f},
+		DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
+		DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
+	);
 
-    // 바닥 정점
-    vertices.push_back(Vertex{
-        DirectX::SimpleMath::Vector3{0.0f, -height * 0.5f, 0.0f},
-        DirectX::SimpleMath::Vector4{1.f, 1.f, 1.f,1.f} ,
-        DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
-        DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
-    );
+	// 바닥 정점
+	vertices.push_back(Vertex{
+		DirectX::SimpleMath::Vector3{0.0f, -height * 0.5f, 0.0f},
+		DirectX::SimpleMath::Vector4{1.f, 1.f, 1.f,1.f} ,
+		DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
+		DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
+	);
 
-    // 윗면
-    for (int i = 0; i < sliceCount; ++i)
-    {
-        float zTheta = DirectX::XM_PI * 2.0f * (i / static_cast<float>(sliceCount));
+	// 윗면
+	for (int i = 0; i < sliceCount; ++i)
+	{
+		float zTheta = DirectX::XM_PI * 2.0f * (i / static_cast<float>(sliceCount));
 
-        float x = radius * sinf(zTheta);
-        float y = height * 0.5f;
-        float z = radius * cosf(zTheta);
+		float x = radius * sinf(zTheta);
+		float y = height * 0.5f;
+		float z = radius * cosf(zTheta);
 
-        vertices.push_back(Vertex{
-            DirectX::SimpleMath::Vector3{x, y, z},
-            DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f},
-            DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
-            DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
-        );
-    }
+		vertices.push_back(Vertex{
+			DirectX::SimpleMath::Vector3{x, y, z},
+			DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f},
+			DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
+			DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
+		);
+	}
 
-    // 밑면
-    for (int i = 0; i < sliceCount; ++i)
-    {
-        float zTheta = DirectX::XM_PI * 2.0f * (i / static_cast<float>(sliceCount));
+	// 밑면
+	for (int i = 0; i < sliceCount; ++i)
+	{
+		float zTheta = DirectX::XM_PI * 2.0f * (i / static_cast<float>(sliceCount));
 
-        float x = radius * sinf(zTheta);
-        float y = height * 0.5f;
-        float z = radius * cosf(zTheta);
+		float x = radius * sinf(zTheta);
+		float y = height * 0.5f;
+		float z = radius * cosf(zTheta);
 
-        vertices.push_back(Vertex{
-            DirectX::SimpleMath::Vector3{x, -y, z},
-            DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f },
-            DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
-            DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
-        );
-    }
+		vertices.push_back(Vertex{
+			DirectX::SimpleMath::Vector3{x, -y, z},
+			DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f },
+			DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
+			DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
+		);
+	}
 
-    // 윗면 인덱스
-    for (int i = 0; i < sliceCount; ++i)
-    {
-        int a = 0;
-        int b = 2 + i;
-        int c = 2 + ((i + 1) % sliceCount);
+	// 윗면 인덱스
+	for (int i = 0; i < sliceCount; ++i)
+	{
+		int a = 0;
+		int b = 2 + i;
+		int c = 2 + ((i + 1) % sliceCount);
 
-        indices.push_back(a);
-        indices.push_back(b);
-        indices.push_back(c);
-    }
+		indices.push_back(a);
+		indices.push_back(b);
+		indices.push_back(c);
+	}
 
-    // 옆면 인덱스
-    for (int i = 0; i < sliceCount; ++i)
-    {
-        int a = 2 + i;
-        int b = 2 + ((i + 1) % sliceCount);
-        int c = 2 + sliceCount + i;
-        int d = 2 + sliceCount + ((i + 1) % sliceCount);
+	// 옆면 인덱스
+	for (int i = 0; i < sliceCount; ++i)
+	{
+		int a = 2 + i;
+		int b = 2 + ((i + 1) % sliceCount);
+		int c = 2 + sliceCount + i;
+		int d = 2 + sliceCount + ((i + 1) % sliceCount);
 
-        indices.push_back(a);
-        indices.push_back(c);
-        indices.push_back(d);
+		indices.push_back(a);
+		indices.push_back(c);
+		indices.push_back(d);
 
-        indices.push_back(a);
-        indices.push_back(d);
-        indices.push_back(b);
-    }
+		indices.push_back(a);
+		indices.push_back(d);
+		indices.push_back(b);
+	}
 
-    // 밑면 인덱스
-    for (int i = 0; i < sliceCount; ++i)
-    {
-        int a = 1;
-        int b = 2 + sliceCount + i;
-        int c = 2 + sliceCount + ((i + 1) % sliceCount);
+	// 밑면 인덱스
+	for (int i = 0; i < sliceCount; ++i)
+	{
+		int a = 1;
+		int b = 2 + sliceCount + i;
+		int c = 2 + sliceCount + ((i + 1) % sliceCount);
 
-        indices.push_back(b);
-        indices.push_back(a);
-        indices.push_back(c);
-    }
+		indices.push_back(b);
+		indices.push_back(a);
+		indices.push_back(c);
+	}
 
-    cylinderMesh->SetData(vertices, indices);
-    CreateMesh(cylinderMesh);
+	cylinderMesh->SetData(vertices, indices);
+	CreateMesh(cylinderMesh);
 }
