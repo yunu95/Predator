@@ -49,7 +49,7 @@ public:
                 deltaDirection -= Vector3d::forward;
 
             GetTransform()->position += deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed;
-            Quaternion quat = Quaternion::MakeWithForwardUp(Vector3d::down, Vector3d::forward);
+            Quaternion quat = Quaternion(Vector3d(60, 0, 0));
             GetTransform()->rotation = quat;
         }
         else
@@ -153,12 +153,13 @@ public:
 
         if (!roamingMode)
         {
-            Vector3d projectedPoint;
+            auto front = yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation().Forward();
+            auto distToXZPlane = abs(yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y);
             auto centeredPosition = Input::getMouseScreenPositionNormalized();
             centeredPosition.x -= 0.5;
             centeredPosition.y -= 0.5;
             centeredPosition.y *= -1;
-            projectedPoint = GetProjectedPoint(centeredPosition, expectedPlaneDistance());
+            auto projectedPoint = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
 
             if (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick))
                 DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?
