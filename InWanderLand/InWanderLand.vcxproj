@@ -651,6 +651,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
 
 
+
 xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /C /Q /H /R /Y /K  /I /S || exit 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

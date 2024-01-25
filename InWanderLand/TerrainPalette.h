@@ -26,6 +26,7 @@ namespace application
                 unsigned int GetBrushSize();
                 void SetBrushSize(unsigned int brushSize);
                 void AddNode(const Vector2i& nodeKey);
+                void EraseNode(const Vector2i& nodeKey);
                 void ClearNodes();
                 vector<Vector2i> GetNodePositionList();
                 static constexpr double nodeDistance = 0.5;

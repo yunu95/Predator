@@ -19,16 +19,11 @@ namespace application::editor::palette
                 auto nodeKey = Vector2i{ x, y };
                 if (isMarking)
                 {
-                    if (nodes.find(nodeKey) != nodes.end())
-                        continue;
-                    nodes[nodeKey] = CreateNodeDebuggingMesh(nodeKey);
+                    AddNode(nodeKey);
                 }
                 else
                 {
-                    if (nodes.find(nodeKey) == nodes.end())
-                        continue;
-                    Scene::getCurrentScene()->DestroyGameObject(nodes[nodeKey]);
-                    nodes.erase(nodeKey);
+                    EraseNode(nodeKey);
                 }
             }
         }
@@ -64,6 +59,45 @@ namespace application::editor::palette
     {
         this->brushSize = brushSize;
         TerrainBrush::Instance().SetBrushSize(brushSize);
+    }
+    void TerrainPalette::AddNode(const Vector2i& nodeKey)
+    {
+        if (nodes.find(nodeKey) != nodes.end())
+            return;
+#ifdef _DEBUG
+        nodes[nodeKey] = CreateNodeDebuggingMesh(nodeKey);
+#else
+        nodes[nodeKey] = nullptr;
+#endif
+    }
+    void TerrainPalette::EraseNode(const Vector2i& nodeKey)
+    {
+        if (nodes.find(nodeKey) == nodes.end())
+            return;
+#ifdef _DEBUG
+        Scene::getCurrentScene()->DestroyGameObject(nodes[nodeKey]);
+#endif
+        nodes.erase(nodeKey);
+    }
+    void TerrainPalette::ClearNodes()
+    {
+        for (auto& node : nodes)
+        {
+#ifdef _DEBUG
+            Scene::getCurrentScene()->DestroyGameObject(node.second);
+#endif
+        }
+        nodes.clear();
+    }
+    vector<Vector2i> TerrainPalette::GetNodePositionList()
+    {
+        vector<Vector2i> ret;
+        ret.reserve(nodes.size());
+        for (auto& node : nodes)
+        {
+            ret.push_back(node.first);
+        }
+        return ret;
     }
     void TerrainPalette::ApplyAsPlaytimeObjects()
     {
