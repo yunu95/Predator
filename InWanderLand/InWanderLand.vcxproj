@@ -1097,6 +1097,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Storable.h" />
     <ClInclude Include="TerrainData.h" />
     <ClInclude Include="Terrain_TemplateData.h" />
+    <ClInclude Include="TestUtilGraphicsTestCam.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TestUtilNavAgent.h" />
     <ClInclude Include="TestUtilRTSTestCam.h" />
