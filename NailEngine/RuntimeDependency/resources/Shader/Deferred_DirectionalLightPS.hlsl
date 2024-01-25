@@ -39,8 +39,8 @@ PS_OUT main(PixelIn input)
     float3 arm = ARMMap.Sample(sam, input.uv).xyz;
     float3 albedo = AlbedoMap.Sample(sam, input.uv).xyz;
     
-    //CalculateLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);
-    CalculatePBRLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo, arm.b, arm.g);
+    CalculateLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);
+    //CalculatePBRLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo, arm.b, arm.g);
     
     output.diffuse = color.diffuse + color.ambient;
     //output.specular = color.specular;

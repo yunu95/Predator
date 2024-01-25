@@ -199,7 +199,7 @@ void RenderSystem::Render()
 	RenderSkinned();
 
 	// 그림자 맵 생성
-	RenderShadow();
+	//RenderShadow();
 
 	//SkyBoxPass::Instance.Get().BuildIrradianceMap();
 	SkyBoxPass::Instance.Get().BindIBLTexture();
