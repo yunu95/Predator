@@ -12,8 +12,6 @@ cbuffer MatrixBuffer : register(b0)
     row_major matrix PTM;
     row_major matrix WVP;
     row_major matrix WorldInvTrans;
-    row_major matrix VTMInv;
-    row_major matrix lightVP;
     //float4 objectID;
 }
 
@@ -40,7 +38,7 @@ cbuffer MaterialBuffer : register(b1)
     int temp_int7;
 };
 
-// ÎùºÏù¥Ìä∏ Í¥ÄÎ†®
+// ∂Û¿Ã∆Æ ∞¸∑√
 struct LightColor
 {
     float4 diffuse;
@@ -116,14 +114,8 @@ Texture2D Temp1Map : register(t6);
 Texture2D Temp2Map : register(t7);
 
 Texture2DArray TransformMap : register(t8);
-TextureCube CubeMap: register(t9);
-TextureCube IrradianceMap : register(t10);
-TextureCube PrefilteredMap : register(t11);
-Texture2D BrdfMap : register(t12);
 
 
 SamplerState sam : register(s0);
-SamplerComparisonState shadowSam : register(s1);
-SamplerState spBRDF_Sampler : register(s2);
 
 #endif

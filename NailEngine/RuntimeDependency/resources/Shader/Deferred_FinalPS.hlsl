@@ -21,13 +21,13 @@ float4 main(PixelIn input) : SV_Target
         clip(-1);
     }
 
-    //float4 color = Temp0Map.Sample(sam, input.uv);
+    float4 color = Temp0Map.Sample(sam, input.uv);
     float4 specular = Temp2Map.Sample(sam, input.uv);
-    //color = pow(color, 1 / 2.2f);
-    //output = (color * lightPower) + specular;
+    color = pow(color, 1 / 2.2f);
+    output = (color * lightPower) + specular;
     //output = (color);
     //output.rgb = pow(output.rgb, 1 / 2.2);
-    output = lightPower + specular;
+    
     return output;
 }
 
@@ -37,4 +37,3 @@ float4 main(PixelIn input) : SV_Target
 // CullType : CullNone
 // DepthType : NoDepthTestNoWrite
 // BlendType : Default
-// Sampler : Default

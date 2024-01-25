@@ -6,7 +6,7 @@
 #include "DelayedTestFunctions.h"
 #include "Application.h"
 #include "TestComponent2.h"
-#include "RTSCam.h"
+#include "TestUtilGraphicsTestCam.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -22,7 +22,7 @@ void SnippetAllGraphicsWorkedInit()
 	}
 
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	camObj->AddComponent<RTSCam>();
+	camObj->AddComponent<tests::GraphicsTestCam>();
 
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 

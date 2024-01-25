@@ -62,7 +62,6 @@ namespace application
 		private:
 			EditorCamera() = default;
 
-
 			void UpdateCameraView();
 
 			CameraTypeState cameraTState = CameraTypeState::None;
