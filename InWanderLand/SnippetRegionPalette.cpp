@@ -50,20 +50,23 @@ void SnippetInitializerRegionPalette()
 
 namespace snippets
 {
-    TEST_CLASS(SnippetRegionPaletteClass)
+    namespace editor_palette
     {
-    public:
-        // 테스트 함수의 이름이 Snippet으로 시작하는 테스트들은 빌드의 성공 여부 판단에 쓰이지 않습니다.
-        // RunTests.bat를 실행해도 이 테스트들은 실행되지 않으며, Jenkins에서도 이 테스트들은 실행되지 않습니다.
-        // 이 테스트들은 오직 개발자가 직접 엔트리 포인트를 달리하여 테스트를 진행하고 싶을 때의 용도로만 사용됩니다.
-        TEST_METHOD(SnippetRegionPalette)
+        TEST_CLASS(SnippetRegionPaletteClass)
         {
-            application::Application& client = application::Application::CreateApplication(0, 0);
-            application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializerRegionPalette);
-            client.Initialize();
-            client.Run();
-            client.Finalize();
-        }
-    };
+        public:
+            // 테스트 함수의 이름이 Snippet으로 시작하는 테스트들은 빌드의 성공 여부 판단에 쓰이지 않습니다.
+            // RunTests.bat를 실행해도 이 테스트들은 실행되지 않으며, Jenkins에서도 이 테스트들은 실행되지 않습니다.
+            // 이 테스트들은 오직 개발자가 직접 엔트리 포인트를 달리하여 테스트를 진행하고 싶을 때의 용도로만 사용됩니다.
+            TEST_METHOD(SnippetRegionPalette)
+            {
+                application::Application& client = application::Application::CreateApplication(0, 0);
+                application::contents::ContentsLayer::AssignTestInitializer(SnippetInitializerRegionPalette);
+                client.Initialize();
+                client.Run();
+                client.Finalize();
+            }
+        };
+    }
 }
 #endif

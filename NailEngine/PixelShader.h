@@ -2,6 +2,8 @@
 
 #include "Shader.h"
 
+#include <vector>
+
 class PixelShader : public Shader
 {
 public:
@@ -16,7 +18,7 @@ private:
 	void CreateRasterizerState(const std::string& fileContent);
 	void CreateDepthStencilState(const std::string& fileContent);
 	void CreateBlendState(const std::string& fileContent);
-	void CreateSamplerState();
+	void CreateSamplerState(const std::string& fileContent);
 
 private:
 	Microsoft::WRL::ComPtr<ID3DBlob> psBuffer;
@@ -26,5 +28,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState;
 	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
+
+	unsigned int samplerSlot = 0;
 };
 

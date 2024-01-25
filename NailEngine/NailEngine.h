@@ -49,5 +49,6 @@ private:
 
 	std::vector<std::shared_ptr<ConstantBuffer>> constantBuffers;
 	std::vector<std::shared_ptr<RenderTargetGroup>> renderTargetGroup;
+	
 };
 

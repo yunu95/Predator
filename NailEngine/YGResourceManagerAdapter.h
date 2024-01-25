@@ -29,7 +29,7 @@ namespace yunuGIAdapter
 				break;  // 첫 번째 경로 세그먼트만 가져오고 반복문 종료
 			}
 
-            if (ext == L".hlsl")
+            if (ext == L".cso")
             {
                 ResourceManager::Instance.Get().CreateShader(wFilePath);
             }

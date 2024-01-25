@@ -11,12 +11,12 @@ class RenderTargetGroup
 {
 public:
 	~RenderTargetGroup();
-	void OMSetRenderTarget();
+	void OMSetRenderTarget(bool isPBR = false);
 	void UnBind();
 	void Clear();
 
 #pragma region Setter
-	void SetRenderTargetVec(std::vector<RenderTarget>& rtVec);
+	void SetRenderTargetVec(std::vector<RenderTarget>& rtVec, Microsoft::WRL::ComPtr<ID3D11DepthStencilView> dsv = nullptr);
 #pragma endregion
 
 #pragma region Getter
@@ -29,9 +29,11 @@ private:
 
 	std::vector<ID3D11RenderTargetView*> RTVVec;
 
-	// UnBind¿ë null Render Target
+	// UnBindìš© null Render Target
 	std::vector<ID3D11RenderTargetView*> nullRTV;
 
 	unsigned int rtCount;
+
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> dsv;
 };
 

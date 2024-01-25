@@ -112,6 +112,12 @@
     <Filter Include="GraphicsEngine\RenderableManager\IRenderable\UI">
       <UniqueIdentifier>{9116d217-c39f-4b1e-b2be-f38c8d512d7c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RenderSystem\ShadowPass">
+      <UniqueIdentifier>{4cc813e4-2679-48b4-ab25-3e044b73e417}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenderSystem\SkyBoxPass">
+      <UniqueIdentifier>{41f90503-d69b-42db-aa72-3f618262db33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -170,6 +176,9 @@
     </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>Resource\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Resource\Mesh</Filter>
@@ -285,8 +294,14 @@
     <ClInclude Include="UIImage.h">
       <Filter>GraphicsEngine\RenderableManager\IRenderable\UI</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>ResourceManager</Filter>
+    <ClInclude Include="ShadowPass.h">
+      <Filter>RenderSystem\ShadowPass</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBoxPass.h">
+      <Filter>RenderSystem\SkyBoxPass</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraManager.h">
+      <Filter>NailCamera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -304,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>Resource\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Resource\Mesh</Filter>
@@ -392,13 +410,19 @@
     <ClCompile Include="UIImage.cpp">
       <Filter>GraphicsEngine\RenderableManager\IRenderable\UI</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>ResourceManager</Filter>
+    <ClCompile Include="ShadowPass.cpp">
+      <Filter>RenderSystem\ShadowPass</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBoxPass.cpp">
+      <Filter>RenderSystem\SkyBoxPass</Filter>
     </ClCompile>
     <ClCompile Include="Device.cpp">
       <Filter>GraphicsEngine\Device</Filter>
     </ClCompile>
     <ClCompile Include="tempMain.cpp" />
+    <ClCompile Include="CameraManager.cpp">
+      <Filter>NailCamera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="RuntimeDependency\resources\Shader\DefaultVS.hlsl">
@@ -441,6 +465,42 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="RuntimeDependency\resources\Shader\DebugVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\TestPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\TestVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\LeavesPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\LeavesVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\SkyBoxVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\SkyBoxPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\IrradianceVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\IrradiancePS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\PreFilteredVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\PreFilteredPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\SpecLUTPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\SpecLUTVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

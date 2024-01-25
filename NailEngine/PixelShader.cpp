@@ -21,20 +21,6 @@ void PixelShader::CreateShader(const std::wstring& shaderPath)
 
 	::D3DReadFileToBlob(shaderPath.c_str(), psBuffer.GetAddressOf());
 
-	//if (FAILED(::D3DCompileFromFile(shaderPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
-	//	, "main", "ps_5_0", _compileFlag, NULL, psBuffer.GetAddressOf(), errorMSG.GetAddressOf())))
-	//{
-	//	if (errorMSG)
-	//	{
-	//		::MessageBoxA(nullptr, "Failed to compile shader!", nullptr, MB_OK);
-	//		assert(true);
-	//	}
-	//	else
-	//	{
-	//		::MessageBoxA(nullptr, "Shader path not found!", nullptr, MB_OK);
-	//		assert(true);
-	//	}
-	//}
 
 	if (FAILED(ResourceBuilder::Instance.Get().device->GetDevice()->CreatePixelShader(
 		psBuffer->GetBufferPointer(),
@@ -51,14 +37,12 @@ void PixelShader::CreateShader(const std::wstring& shaderPath)
 	std::wstring hlslPath{L"Shader/"};
 	hlslPath = hlslPath + fileName + L".hlsl";
 
-	//CreateRasterizerState();
 	CreateShaderState(hlslPath);
-	CreateSamplerState();
 }
 
 void PixelShader::Bind()
 {
-	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetSamplers(0, 1, this->samplerState.GetAddressOf());
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetSamplers(this->samplerSlot, 1, this->samplerState.GetAddressOf());
 
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetState(this->rasterizerState.Get());
 
@@ -72,45 +56,6 @@ void PixelShader::Bind()
 void PixelShader::UnBind()
 {
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShader(nullptr, nullptr, 0);
-}
-
-//void PixelShader::CreateRasterizerState()
-//{
-//	//ID3D11ShaderReflection* pShaderReflection = nullptr;
-//
-//	//D3DReflect(
-//	//	psBuffer->GetBufferPointer(),
-//	//	psBuffer->GetBufferSize(),
-//	//	IID_ID3D11ShaderReflection,
-//	//	(void**)&pShaderReflection
-//	//);
-//
-//	//ID3D11ShaderReflectionVariable* pVariable = pShaderReflection->GetVariableByName("A");
-//
-//	//if (pVariable) {
-//	//	D3D11_SHADER_VARIABLE_DESC varDesc;
-//	//	HRESULT hr = pVariable->GetDesc(&varDesc);
-//	//}
-//}
-
-void PixelShader::CreateSamplerState()
-{
-	D3D11_SAMPLER_DESC samplerDesc;
-	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.MipLODBias = 0.f;
-	samplerDesc.MaxAnisotropy = 1;
-	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-	samplerDesc.BorderColor[0] = 0;
-	samplerDesc.BorderColor[1] = 0;
-	samplerDesc.BorderColor[2] = 0;
-	samplerDesc.BorderColor[3] = 0;
-	samplerDesc.MinLOD = 0;
-	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-	ResourceBuilder::Instance.Get().device->GetDevice()->CreateSamplerState(&samplerDesc, this->samplerState.GetAddressOf());
 }
 
 void PixelShader::CreateShaderState(const std::wstring& shaderPath)
@@ -130,6 +75,7 @@ void PixelShader::CreateShaderState(const std::wstring& shaderPath)
 	CreateRasterizerState(fileContent);
 	CreateDepthStencilState(fileContent);
 	CreateBlendState(fileContent);
+	CreateSamplerState(fileContent);
 }
 
 void PixelShader::CreateShaderType(const std::string& fileContent)
@@ -195,6 +141,17 @@ void PixelShader::CreateRasterizerState(const std::string& fileContent)
 			{
 				this->shaderInfo.rasterizer = yunuGI::Rasterizer::Wire;
 				rasterDesc.FillMode = D3D11_FILL_WIREFRAME;
+			}
+			else if (shaderType == "Shadow")
+			{
+				rasterDesc.DepthBias = 100000;
+				//rasterDesc.DepthBias = 25000;
+				rasterDesc.DepthBiasClamp = 0.f;
+				rasterDesc.DepthClipEnable = true;
+				rasterDesc.SlopeScaledDepthBias = 1.f;
+
+				this->shaderInfo.rasterizer = yunuGI::Rasterizer::Solid;
+				rasterDesc.FillMode = D3D11_FILL_SOLID;
 			}
 			else
 			{
@@ -370,4 +327,69 @@ void PixelShader::CreateBlendState(const std::string& fileContent)
 	}
 
 	ResourceBuilder::Instance.Get().device->GetDevice()->CreateBlendState(&blendDesc, this->blendState.GetAddressOf());
+}
+
+void PixelShader::CreateSamplerState(const std::string& fileContent)
+{
+	D3D11_SAMPLER_DESC samplerDesc;
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.MipLODBias = 0.f;
+	samplerDesc.MaxAnisotropy = 1;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	samplerDesc.BorderColor[0] = 0;
+	samplerDesc.BorderColor[1] = 0;
+	samplerDesc.BorderColor[2] = 0;
+	samplerDesc.BorderColor[3] = 0;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	std::regex commentRegex("// Sampler : (\\w+)");
+	std::smatch matches;
+	if (std::regex_search(fileContent, matches, commentRegex))
+	{
+		if (matches.size() >= 2)
+		{
+			std::string shaderType = matches[1].str();
+			if (shaderType == "Default")
+			{
+
+			}
+			else if (shaderType == "Shadow")
+			{
+				samplerDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
+				samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
+				samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
+				samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
+
+				float borderColor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+				samplerDesc.BorderColor[0] = borderColor[0];
+				samplerDesc.BorderColor[1] = borderColor[1];
+				samplerDesc.BorderColor[2] = borderColor[2];
+				samplerDesc.BorderColor[3] = borderColor[3];
+
+				samplerDesc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
+
+				samplerDesc.MipLODBias = 0.0f;
+
+				samplerDesc.MaxAnisotropy = 1;
+
+				this->samplerSlot = 1;
+			}
+			else
+			{
+				// 뒤에 입력이 없으니 assert
+				assert(FALSE);
+			}
+		}
+		else
+		{
+			// Sampler : 이라는 문자열을 hlsl파일 안에 정의하지 않았으니 assert
+			assert(FALSE);
+		}
+	}
+
+	ResourceBuilder::Instance.Get().device->GetDevice()->CreateSamplerState(&samplerDesc, this->samplerState.GetAddressOf());
 }
