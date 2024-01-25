@@ -109,6 +109,31 @@ void ResourceManager::CreateMesh(const std::shared_ptr<Mesh>& mesh)
     meshMap.insert({ mesh->GetName(), mesh });
 }
 
+yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec)
+{
+	std::shared_ptr<Mesh> tempMesh = std::make_shared<Mesh>();
+
+    tempMesh->SetName(meshName);
+
+	std::vector<Vertex> vertices;
+
+    for (int i = 0; i < posVec.size(); ++i)
+    {
+        DirectX::SimpleMath::Vector3 tempNormal = normalVec.size() == 0 ? DirectX::SimpleMath::Vector3{ 0.f,0.f,0.f } : DirectX::SimpleMath::Vector3{normalVec[i].x,normalVec[i].y ,normalVec[i].z };
+		vertices.emplace_back(Vertex{ DirectX::SimpleMath::Vector3{posVec[i].x, posVec[i].y, posVec[i].z},
+						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
+						  tempNormal,
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } });
+    }
+
+
+    tempMesh->SetData(vertices, idxVec);
+	CreateMesh(tempMesh);
+
+    return tempMesh.get();
+}
+
 void* ResourceManager::GetFinalRenderImage()
 {
     ID3D11Texture2D* backBuffer = nullptr;

@@ -42,6 +42,8 @@ public:
 	void LoadFBX(const char* filePath);
 	void CreateAnimation(const std::vector<AnimationClip>& animationClip, const std::wstring& fbxName);
 
+	yunuGI::IMesh* CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec);
+
 private:
 	void CreateMesh(const std::wstring& mesh);
 	void CreateMesh(const std::shared_ptr<Mesh>& mesh);
