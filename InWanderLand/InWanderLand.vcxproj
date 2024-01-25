@@ -992,6 +992,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="FieldDamage.h" />
     <ClInclude Include="HealerAutoAttackProjectile.h" />
     <ClInclude Include="HealerAutoAttackProjectilePool.h" />
+    <ClInclude Include="HealerSkillSystem.h" />
     <ClInclude Include="ParalysisFieldComponent.h" />
     <ClInclude Include="DebugGraphic.h" />
     <ClInclude Include="DebugStaticMesh.h" />
@@ -1002,6 +1003,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="imgui_Utility.h" />
     <ClInclude Include="PaletteList.h" />
     <ClInclude Include="PaletteManager.h" />
+    <ClInclude Include="PassiveCake.h" />
+    <ClInclude Include="PassiveCakePool.h" />
     <ClInclude Include="SingleNavigationField.h" />
     <ClInclude Include="TestUtilButtonEvent.h" />
     <ClInclude Include="InWanderLand.h" />
@@ -1128,6 +1131,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="HealerAutoAttackProjectile.cpp" />
     <ClCompile Include="DebugGraphic.cpp" />
     <ClCompile Include="DebugStaticMesh.cpp" />
+    <ClCompile Include="HealerSkillSystem.cpp" />
     <ClCompile Include="IEditableData.cpp" />
     <ClCompile Include="DoodadPalette.cpp" />
     <ClCompile Include="EditorMath.cpp" />
@@ -1148,6 +1152,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="OnlyDamageComponent.cpp" />
     <ClCompile Include="ParalysisFieldComponent.cpp" />
     <ClCompile Include="PaletteManager.cpp" />
+    <ClCompile Include="PassiveCake.cpp" />
     <ClCompile Include="RangedAttackSystem.cpp" />
     <ClCompile Include="SnippetDebugMeshScaleCheck.cpp" />
     <ClCompile Include="SnippetFloatingDebugSphere.cpp" />

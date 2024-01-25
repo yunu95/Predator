@@ -15,7 +15,6 @@ public:
 public:
 	virtual void QSkillActivate(Vector3d skillPos) = 0;
 	virtual void WSkillActivate(Vector3d skillPos) = 0;
-	virtual void ESkillActivate(Vector3d skillPos) = 0;
 
 protected:
 	Dotween* m_UnitDotween;

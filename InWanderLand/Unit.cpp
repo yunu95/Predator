@@ -478,6 +478,12 @@ void Unit::Damaged(float dmg)
 	m_healthPoint -= dmg;
 }
 
+void Unit::Heal(float healingPoint)
+{
+	// 최대 체력이면 x
+	m_healthPoint += healingPoint;
+}
+
 void Unit::IncreaseAttackPower(float p_attackPowerIncrease)
 {
 	/// 우선은 기본 공격력만 증가하는 로직입니다.

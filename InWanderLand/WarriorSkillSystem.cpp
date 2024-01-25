@@ -49,11 +49,6 @@ void WarriorSkillSystem::WSkillActivate(Vector3d skillPos)
 		});
 }
 
-void WarriorSkillSystem::ESkillActivate(Vector3d skillPos)
-{
-
-}
-
 void WarriorSkillSystem::SetQSkillKnockBackCollider(physics::SphereCollider* p_collider)
 {
 	QSkillKnockBackCollider = p_collider;

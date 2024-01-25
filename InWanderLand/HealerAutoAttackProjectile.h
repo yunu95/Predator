@@ -4,8 +4,7 @@
 class HealerAutoAttackProjectile : public AutoAttackProjectile
 {
 private:
-	float currentPassiveCount = 0;
-	float maxPassiveCount = 3;
+	int maxPassiveCount = 5;
 
 public:
 	virtual void Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed) override;

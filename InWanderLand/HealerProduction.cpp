@@ -1,6 +1,9 @@
 #include "InWanderLand.h"
 #include "HealerProduction.h"
 #include "RangedAttackSystem.h"
+#include "OnlyDamageComponent.h"
+#include "DebugMeshes.h"
+#include "HealerSkillSystem.h"
 
 void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition)
 {
@@ -71,11 +74,37 @@ void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navFi
 	}
 #pragma endregion
 
+	/// UnitComponent 추가
+	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+
 #pragma region Auto Attack Setting (Including Passive Logic)
 	auto magicianAttackSystem = m_unitGameObject->AddComponent<RangedAttackSystem>();
 	magicianAttackSystem->SetBulletSpeed(10.0f);
 #pragma endregion
 
+#pragma region Q Skill Setting
+	auto QSkillFieldObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	auto fieldDamageComponent = QSkillFieldObject->AddComponent<OnlyDamageComponent>();
+	fieldDamageComponent->SetSkillOwnerUnit(m_unitComponent);
+
+	auto QSkillFieldCollider = QSkillFieldObject->AddComponent<physics::SphereCollider>();
+	m_QSkillFieldRadius = 2.0f;
+	QSkillFieldCollider->SetRadius(m_QSkillFieldRadius);
+	QSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+	QSkillFieldObject->SetParent(m_unitGameObject);
+
+	auto QSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	AttachDebugMesh(QSkillFieldDebugObject, DebugMeshType::Sphere, yunuGI::Color::white(), false);
+#pragma endregion
+
+#pragma region SkillSystem Setting
+	auto healerSkillSystem = m_unitGameObject->AddComponent<HealerSkillSystem>();
+	healerSkillSystem->SetQSkillCollider(QSkillFieldCollider);
+	healerSkillSystem->SetQSkillObject(QSkillFieldObject);
+	healerSkillSystem->SetQSkillDebugInfo(QSkillFieldDebugObject, m_QSkillFieldRadius);
+
+
+#pragma endregion
 }
 
 yunutyEngine::GameObject* HealerProduction::CreateUnitWithOrder()

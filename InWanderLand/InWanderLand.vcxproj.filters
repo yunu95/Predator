@@ -283,6 +283,9 @@
     <Filter Include="Editor\Math">
       <UniqueIdentifier>{afafc9b7-f571-47a2-adf6-47a7b60fe72b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\ProjectileComponents\Supporter\Passive">
+      <UniqueIdentifier>{69264256-6569-4d0d-a697-201685411b08}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -694,6 +697,14 @@
     <ClInclude Include="EditorMath.h">
       <Filter>Editor\Math</Filter>
     </ClInclude>
+    <ClInclude Include="PaletteManagerList.h" />
+    <ClInclude Include="PassiveCake.h">
+      <Filter>Contents\ProjectileComponents\Supporter\Passive</Filter>
+    </ClInclude>
+    <ClInclude Include="PassiveCakePool.h">
+      <Filter>Contents\ProjectileComponents\Supporter\Passive</Filter>
+    </ClInclude>
+    <ClInclude Include="HealerSkillSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1065,5 +1076,9 @@
     <ClCompile Include="EditorMath.cpp">
       <Filter>Editor\Math</Filter>
     </ClCompile>
+    <ClCompile Include="PassiveCake.cpp">
+      <Filter>Contents\ProjectileComponents\Supporter\Passive</Filter>
+    </ClCompile>
+    <ClCompile Include="HealerSkillSystem.cpp" />
   </ItemGroup>
 </Project>

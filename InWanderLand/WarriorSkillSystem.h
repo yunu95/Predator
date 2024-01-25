@@ -21,7 +21,6 @@ private:
 public:
 	virtual void QSkillActivate(Vector3d skillPos) override;
 	virtual void WSkillActivate(Vector3d skillPos) override;
-	virtual void ESkillActivate(Vector3d skillPos) override;
 
 public:
 	void SetQSkillKnockBackCollider(physics::SphereCollider* p_collider);

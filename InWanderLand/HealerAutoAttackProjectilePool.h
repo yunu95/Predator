@@ -1,6 +1,7 @@
 #pragma once
 #include "HealerAutoAttackProjectile.h"
 #include "GameObjectPool.h"
+#include "PassiveCakePool.h"
 #include "DebugMeshes.h"
 #include "StaticMeshRenderer.h"
 

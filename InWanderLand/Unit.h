@@ -244,6 +244,7 @@ public:
 	int GetUnitDamage() const;
 	void Damaged(GameObject* opponentObject, float opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
 	void Damaged(float dmg);										// 추적받지 않는 데미지
+	void Heal(float healingPoint);										
 	
 	void IncreaseAttackPower(float p_attackPowerIncrease);
 	void IncreaseAttackSpeed(float p_attackSpeedIncrease);

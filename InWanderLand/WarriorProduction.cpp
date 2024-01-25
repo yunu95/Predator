@@ -80,7 +80,6 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
 
 #pragma region Auto Attack Setting (Including Passive Logic)
-
 	auto unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	unitAttackColliderObject->setName("WarriorAutoAttackCollider");
 
@@ -96,10 +95,10 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
 	warriorAttackSystem->SetColliderObject(unitAttackColliderObject);
 	warriorAttackSystem->SetColliderRemainTime(0.05f);
-	//m_unitAttackColliderObject->SetSelfActive(false);
 
 	unitAttackColliderObject->SetParent(m_unitGameObject);
 	unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -2.0f });
+	unitAttackColliderObject->SetSelfActive(false);
 #pragma endregion
 
 #pragma region Q Skill Setting

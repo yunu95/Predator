@@ -16,6 +16,7 @@ void MagicianSkillSystem::QSkillActivate(Vector3d skillPos)
 	isQSkillActivating = true;
 
 	QSkillProjectile.colliderObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());	
+	QSkillProjectile.debugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());	
 
 	SetSkillRequirmentsActive(QSkillProjectile, true);
 
@@ -30,6 +31,7 @@ void MagicianSkillSystem::QSkillActivate(Vector3d skillPos)
 			QSkillFieldDamage.dotweenComponent->DONothing(m_QSkillFieldRemainTime).OnComplete([=]()
 				{
 					SetSkillRequirmentsActive(QSkillFieldDamage, false);
+					isQSkillActivating = false;
 				});
 		});
 }
@@ -39,6 +41,7 @@ void MagicianSkillSystem::WSkillActivate(Vector3d skillPos)
 	isWSkillActivating = true;
 
 	WSkillProjectile.colliderObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+	WSkillProjectile.debugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
 
 	SetSkillRequirmentsActive(WSkillProjectile, true);
 
@@ -53,13 +56,9 @@ void MagicianSkillSystem::WSkillActivate(Vector3d skillPos)
 			WSkillFieldDamage.dotweenComponent->DONothing(m_WSkillFieldRemainTime).OnComplete([=]()
 				{
 					SetSkillRequirmentsActive(WSkillFieldDamage, false);
+					isWSkillActivating = false;
 				});
 		});
-}
-
-void MagicianSkillSystem::ESkillActivate(Vector3d skillPos)
-{
-
 }
 
 void MagicianSkillSystem::SetInterActionComponent(BlindFieldComponent* p_QSkillComponent, ParalysisFieldComponent* p_WSkillComponent)
