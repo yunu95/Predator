@@ -6,39 +6,53 @@ using namespace yunutyEngine;
 
 enum class DebugMeshType
 {
-    None,
-    Cube,
-    Sphere,
-    Rectangle,
+	None,
+	Line,
+	Cube,
+	Sphere,
+	Rectangle,
 };
 
 yunuGI::IMaterial* GetColoredDebugMaterial(yunuGI::Color color, bool isWireFrame);
-inline void CreateLine(Vector3d start, Vector3d end, yunuGI::Color color = yunuGI::Color::red(), bool isWireFrame = true, float cylinderRadius = 0.1f)
-{
-    auto gameObject = Scene::getCurrentScene()->AddGameObject();
-    auto staticMesh = gameObject->AddComponent<graphics::StaticMeshRenderer>();
-    staticMesh->GetGI().GetMaterial()->SetColor(color);
-    ///staticMesh->GetGI().GetMaterial()->SetPixelShader(isWireFrame ? L"DebugPS.cso" : L"DefaultPS.cso");
-    ///staticMesh->GetGI().SetMesh(L"Cylinder");
-}
+
 inline yunutyEngine::graphics::StaticMeshRenderer* AttachDebugMesh(GameObject* target, DebugMeshType meshType = DebugMeshType::Cube, yunuGI::Color color = yunuGI::Color::red(), bool isWireFrame = true)
 {
-    auto staticMesh = target->AddComponent<DebugStaticMesh>();
-    wstring meshName;
-    switch (meshType)
-    {
-    case DebugMeshType::Cube:
-        meshName = L"Cube";
-        break;
-    case DebugMeshType::Sphere:
-        meshName = L"Sphere";
-        break;
-    case DebugMeshType::Rectangle:
-        meshName = L"Rectangle";
-        break;
-    }
-    auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-    staticMesh->GetGI().SetMesh(rsrcManager->GetMesh(meshName));
-    staticMesh->GetGI().SetMaterial(0, GetColoredDebugMaterial(color, isWireFrame));
-    return staticMesh;
+	auto staticMesh = target->AddComponent<DebugStaticMesh>();
+	wstring meshName;
+	switch (meshType)
+	{
+		case DebugMeshType::Line:
+			// Line은 기본 트랜스폼으로 배치되었을 시 0,0,0을 시점으로, 1,0,0을 종점으로 한다.
+			meshName = L"Line";
+			break;
+		case DebugMeshType::Cube:
+			meshName = L"Cube";
+			break;
+		case DebugMeshType::Sphere:
+			meshName = L"Sphere";
+			break;
+		case DebugMeshType::Rectangle:
+			meshName = L"Rectangle";
+			break;
+	}
+	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	staticMesh->GetGI().SetMesh(rsrcManager->GetMesh(meshName));
+	staticMesh->GetGI().SetMaterial(0, GetColoredDebugMaterial(color, isWireFrame));
+	return staticMesh;
 }
+
+inline yunutyEngine::graphics::StaticMeshRenderer* CreateLine(Vector3d start, Vector3d end, yunuGI::Color color = yunuGI::Color::red())
+{
+	if (start == end)
+	{
+		return nullptr;
+	}
+
+	auto gameObject = Scene::getCurrentScene()->AddGameObject();
+	auto delta = (end - start);
+	gameObject->GetTransform()->scale.x = delta.Magnitude();
+	gameObject->GetTransform()->SetWorldRotation(Quaternion::MakeAxisAngleQuaternion(Vector3d::Cross(Vector3d(1, 0, 0), delta).Normalized(), acos(Vector3d::Dot(Vector3d(1, 0, 0), delta.Normalized()))));
+	//gameObject->GetTransform()->SetWorldPosition(Vector3d(start.x, start.y, start.z));
+	return AttachDebugMesh(gameObject, DebugMeshType::Cube, color, true);
+}
+

@@ -26,7 +26,6 @@ namespace application
 			// Game 카메라 세팅
 			this->gameCam = gameCam;
 
-
 			// Editor 카메라를 Scene에 생성하고 해당 카메라를 메인으로 변경
 			auto scene = yunutyEngine::Scene::getCurrentScene();
 			auto ecc = scene->AddGameObject()->AddComponent<EditorCameraComponent>();
