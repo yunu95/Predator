@@ -20,6 +20,7 @@ namespace application
                     auto rsrcManager = graphics::Renderer::SingleInstance().GetResourceManager();
                     boxMesh = AttachDebugMesh(GetGameObject(), DebugMeshType::Rectangle, yunuGI::Color::green(), true);
                     yunutyEngine::physics::BoxCollider* boxCollider = GetGameObject()->AddComponent<yunutyEngine::physics::BoxCollider>();
+                    ShowSelectionBox(false);
                 }
                 void SetCoverage(Vector3d pointA, Vector3d pointB)
                 {

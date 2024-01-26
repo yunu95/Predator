@@ -14,6 +14,20 @@ namespace application
 {
 	namespace editor
 	{
+		enum class CameraTypeState
+		{
+			None = 0,
+			Editor,
+			Game
+		};
+
+		enum class CameraPerspectiveState
+		{
+			None = 0,
+			Free,
+			Game
+		};
+
 		class EditorCamera
 			: public Singleton<EditorCamera>
 		{
@@ -24,6 +38,8 @@ namespace application
 			void OnEvent(EditorEvents& event);
 			void Update(float ts);
 
+			// Input에 대한 처리용 플래그를 설정합니다.
+			void SetInputUpdate(bool inputUpdate) { this->inputUpdate = inputUpdate; }
 			// MainCamera 를 EditorCamera / GameCamera 로 각각 전환합니다.
 			void SwitchCam();
 			// GameCamera 시점에서 움직이도록 변경
@@ -32,6 +48,8 @@ namespace application
 			void SetFreePerspective();
 			// 카메라 움직임 속도 획득
 			float GetCameraSpeed() const;
+
+			CameraPerspectiveState GetGamePerspective() { return cameraPState; }
 
 			yunuGI::Vector3 GetUpDirection() const;
 			yunuGI::Vector3 GetRightDirection() const;
@@ -43,20 +61,6 @@ namespace application
 
 		private:
 			EditorCamera() = default;
-
-			enum class CameraTypeState
-			{
-				None = 0,
-				Editor,
-				Game
-			};
-
-			enum class CameraPerspectiveState
-			{
-				None = 0,
-				Free,
-				Game
-			};
 
 			void UpdateCameraView();
 
@@ -79,6 +83,8 @@ namespace application
 
 			yunuGI::Vector2 mousePos = yunuGI::Vector2();
 			yunuGI::Vector2 beforeMousePos = yunuGI::Vector2();
+
+			bool inputUpdate = false;
 
 			float pitch = 0.0f;
 			float pitchDelta = 0.0f;

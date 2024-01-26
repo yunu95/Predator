@@ -14,8 +14,12 @@ using namespace DirectX::PackedVector;
 #include <vector>
 #include <memory>
 
+#include "IShader.h"
+#include "Material.h"
+
 class Mesh;
 class Material;
+class yunuGI::IShader;
 class Animation;
 class NailAnimator;
 
@@ -23,6 +27,7 @@ struct RenderInfo
 {
 	Mesh* mesh;
 	Material* material;
+	Material shadowMaterial;
 	unsigned int materialIndex;
 	DirectX::SimpleMath::Matrix wtm;
 };
@@ -52,6 +57,7 @@ public:
 	void Render();
 	void RenderObject();
 	void RenderSkinned();
+	void RenderShadow();
 	void RenderLight();
 	void DrawFinal();
 	void RenderUI();
@@ -73,6 +79,9 @@ private:
 
 	std::unique_ptr<DirectX::SpriteBatch> spriteBatch;
 	std::unique_ptr<DirectX::CommonStates> commonStates;
+
+	yunuGI::IShader* ps = nullptr;
+	yunuGI::IShader* vs = nullptr;
 };
 
 

@@ -651,6 +651,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
 
 
+
 xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /C /Q /H /R /Y /K  /I /S || exit 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -989,6 +990,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="BleedingComponent.h" />
     <ClInclude Include="BlindFieldComponent.h" />
     <ClInclude Include="DebuggingMesh.h" />
+    <ClInclude Include="DualCastComponent.h" />
     <ClInclude Include="FieldDamage.h" />
     <ClInclude Include="HealerAutoAttackProjectile.h" />
     <ClInclude Include="HealerAutoAttackProjectilePool.h" />
@@ -1100,6 +1102,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Storable.h" />
     <ClInclude Include="TerrainData.h" />
     <ClInclude Include="Terrain_TemplateData.h" />
+    <ClInclude Include="TestUtilGraphicsTestCam.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TestUtilNavAgent.h" />
     <ClInclude Include="TestUtilRTSTestCam.h" />
@@ -1127,6 +1130,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="BleedingComponent.cpp" />
     <ClCompile Include="BlindFieldComponent.cpp" />
     <ClCompile Include="DebuggingMesh.cpp" />
+    <ClCompile Include="DualCastComponent.cpp" />
     <ClCompile Include="FieldDamage.cpp" />
     <ClCompile Include="HealerAutoAttackProjectile.cpp" />
     <ClCompile Include="DebugGraphic.cpp" />

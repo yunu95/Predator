@@ -48,6 +48,7 @@ namespace yunutyEngine::graphics
         {
             yunuGIWrapperMap[yunuGI] = this;
             yunuGI->SetWorldTM(GetTransform()->GetWorldTM());
+            yunuGI->SetActive(GetGameObject()->GetActive());
         }
         virtual void OnEnable()
         {

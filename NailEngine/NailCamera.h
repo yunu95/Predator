@@ -1,17 +1,11 @@
 #pragma once
 
-#include "Utils.h"
-
 #include <DirectXMath.h>
 #include "SimpleMath.h"
 using namespace DirectX::PackedVector;
 
 class NailCamera
 {
-public:
-    static LazyObjects<NailCamera> Instance;
-    friend LazyObjects<NailCamera>;
-
 public:
     void SetWorldTM(const DirectX::SimpleMath::Matrix wtm);
     void SetVerticalFOV(float fov);
@@ -28,6 +22,9 @@ public:
     DirectX::SimpleMath::Matrix& GetVTMOrtho() { return this->vtmOrtho; }
     DirectX::SimpleMath::Matrix& GetPTM() { return this->ptm; }
     DirectX::SimpleMath::Matrix& GetWTM() { return this->wtm; }
+
+
+	DirectX::SimpleMath::Matrix GetPTM90();
 
 private:
     DirectX::SimpleMath::Matrix wtm;

@@ -11,7 +11,7 @@ void HealerSkillSystem::CrushDown(int p_times)
 {
 	static int crushedCount = 0;
 	float yDistance = GetTransform()->GetWorldPosition().y;
-	unitDotween->DOMove(GetTransform()->GetWorldPosition() - Vector3d(0, yDistance, 0), 0.3f).OnComplete([=]()
+	m_unitDotween->DOMove(GetTransform()->GetWorldPosition() - Vector3d(0, yDistance, 0), 0.3f).OnComplete([=]()
 		{
 			crushedCount++;
 
@@ -22,13 +22,14 @@ void HealerSkillSystem::CrushDown(int p_times)
 			{
 				crushedCount = 0;
 				//GetTransform()->SetWorldPosition(startPosition);
-				unitNavComponent->SetActive(true);
-				unitNavComponent->Relocate(GetTransform()->GetWorldPosition());
+				m_unitNavComponent->SetActive(true);
+				//m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
+				m_unitNavComponent->Relocate(GetTransform()->GetWorldPosition());
 			}
 
 			else
 			{
-				unitDotween->DOMove(GetTransform()->GetWorldPosition() + Vector3d(0, yDistance, 0), 0.3f).OnComplete([=]()
+				m_unitDotween->DOMove(GetTransform()->GetWorldPosition() + Vector3d(0, yDistance, 0), 0.3f).OnComplete([=]()
 					{
 						CrushDown(p_times);
 					});
@@ -46,21 +47,37 @@ void HealerSkillSystem::SetQSkillObject(GameObject* p_fieldDamageObj)
 	QSkillFieldDamage.colliderObject = p_fieldDamageObj;
 }
 
-void HealerSkillSystem::SetQSkillDebugInfo(GameObject* p_fieldDebugObject, float p_fieldDamageRadius)
+void HealerSkillSystem::SetQSkillDebugInfo(GameObject* p_fieldDebugObject)
 {
 	QSkillFieldDamage.debugObject = p_fieldDebugObject;
-	QSkillFieldRadius = p_fieldDamageRadius;
+}
+
+void HealerSkillSystem::SetWSkillCollider(physics::BoxCollider* p_fieldDamageCollider)
+{
+	WSkillFieldDamage.skillCollider = p_fieldDamageCollider;
+}
+
+void HealerSkillSystem::SetWSkillObject(GameObject* p_fieldDamageObj)
+{
+	WSkillFieldDamage.colliderObject = p_fieldDamageObj;
+}
+
+void HealerSkillSystem::SetWSkillDebugInfo(GameObject* p_fieldDebugObject)
+{
+	WSkillFieldDamage.debugObject = p_fieldDebugObject;
 }
 
 void HealerSkillSystem::QSkillActivate(Vector3d skillPos)
 {
 	startPosition = GetTransform()->GetWorldPosition();
 
+	m_unitComponent->SetSkillDuration(4.0f);
+
 	isQSkillActivating = true;
 
-	unitNavComponent->SetActive(false);
+	m_unitNavComponent->SetActive(false);
 
-	unitDotween->DOMove(skillPos + Vector3d(0, QSkillJumpYdistance, 0), reachTopTime).OnComplete([=]()
+	m_unitDotween->DOMove(skillPos + Vector3d({ 0, QSkillJumpYdistance , 0 }), reachTopTime).OnComplete([=]()
 		{
 			CrushDown(3);
 		});
@@ -68,13 +85,19 @@ void HealerSkillSystem::QSkillActivate(Vector3d skillPos)
 
 void HealerSkillSystem::WSkillActivate(Vector3d skillPos)
 {
+	m_unitComponent->SetSkillDuration(2.0f);
+
+	isWSkillActivating = true;
+	isWSkillColliderActivated = true;
+
+	SetSkillRequirmentsActive(WSkillFieldDamage, true);
+
 
 }
 
 void HealerSkillSystem::Start()
 {
-	unitDotween = GetGameObject()->GetComponent<Dotween>();
-	unitNavComponent = GetGameObject()->GetComponent<NavigationAgent>();
+	SetOtherComponentsAsMember();
 	QSkillFieldDamage.skillCollider->SetActive(false);
 }
 
@@ -85,9 +108,15 @@ void HealerSkillSystem::Update()
 		QSkillFieldDamage.debugObject->GetTransform()->SetWorldPosition(QSkillFieldDamage.colliderObject->GetTransform()->GetWorldPosition());
 	}
 
+	if (isWSkillActivating)
+	{
+		WSkillFieldDamage.debugObject->GetTransform()->SetWorldPosition(WSkillFieldDamage.colliderObject->GetTransform()->GetWorldPosition());
+	}
+
 	if (!isColliderSetActiveFalse)
 	{
 		SetSkillRequirmentsActive(QSkillFieldDamage, false);
+		SetSkillRequirmentsActive(WSkillFieldDamage, false);
 		isColliderSetActiveFalse = true;
 	}
 
@@ -96,8 +125,20 @@ void HealerSkillSystem::Update()
 		QSkillColliderElapsed += Time::GetDeltaTime();
 		if (QSkillColliderElapsed >= QSkillColliderRemainTime)
 		{
+			QSkillColliderElapsed = 0.0f;
 			SetSkillRequirmentsActive(QSkillFieldDamage, false);
 			isQSkillColliderActivated = false;
+		}
+	}
+
+	if (isWSkillColliderActivated)
+	{
+		WSkillColliderElapsed += Time::GetDeltaTime();
+		if (WSkillColliderElapsed >= WSkillColliderRemainTime)
+		{
+			WSkillColliderElapsed = 0.0f;
+			SetSkillRequirmentsActive(WSkillFieldDamage, false);
+			isWSkillColliderActivated = false;
 		}
 	}
 

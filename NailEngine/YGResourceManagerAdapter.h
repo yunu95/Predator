@@ -29,7 +29,7 @@ namespace yunuGIAdapter
 				break;  // 첫 번째 경로 세그먼트만 가져오고 반복문 종료
 			}
 
-            if (ext == L".hlsl")
+            if (ext == L".cso")
             {
                 ResourceManager::Instance.Get().CreateShader(wFilePath);
             }
@@ -46,6 +46,10 @@ namespace yunuGIAdapter
         virtual yunuGI::IMaterial* CreateMaterial(std::wstring materialName) const
         {
             return ResourceManager::Instance.Get().CrateMaterial(materialName);
+        };
+        virtual yunuGI::IMesh* CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec)const override
+        {
+            return ResourceManager::Instance.Get().CreateMesh(meshName, posVec,idxVec,normalVec);
         };
         virtual yunuGI::IMaterial* GetMaterial(const std::wstring& materialName)const
         {

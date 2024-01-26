@@ -6,7 +6,7 @@
 #include "DelayedTestFunctions.h"
 #include "Application.h"
 #include "TestComponent2.h"
-#include "RTSCam.h"
+#include "TestUtilGraphicsTestCam.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -29,7 +29,7 @@ void SnippetAnimationChangeInterpolationInit()
     }
 
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    camObj->AddComponent<yunutyEngine::graphics::Camera>();
+    camObj->AddComponent<tests::GraphicsTestCam>();
     camObj->GetTransform()->position = Vector3d{ 0,4,-15 };
 
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();

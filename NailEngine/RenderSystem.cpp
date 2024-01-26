@@ -5,11 +5,11 @@
 #include "ConstantBuffer.h"
 
 #include "ResourceManager.h"
-#include "Material.h"
 #include "Mesh.h"
 #include "Animation.h"
 #include "AnimationGroup.h"
 
+#include "CameraManager.h"
 #include "NailCamera.h"
 #include "RenderableManager.h"
 #include "IRenderable.h"
@@ -18,6 +18,7 @@
 #include "ILight.h"
 #include "LightManager.h"
 #include "PointLight.h"
+#include "DirectionalLight.h"
 
 #include "NailCamera.h"
 #include "RenderTargetGroup.h"
@@ -36,16 +37,33 @@
 #include "UIImage.h"
 #include "Texture.h"
 
+
+#include "ShadowPass.h"
+#include "SkyBoxPass.h"
+
 #include <iostream>
 #include <fstream>
 
 LazyObjects<RenderSystem> RenderSystem::Instance;
 
-
 void RenderSystem::Init()
 {
+
 	spriteBatch = std::make_unique<DirectX::SpriteBatch>(ResourceBuilder::Instance.Get().device->GetDeviceContext().Get());
 	commonStates = std::make_unique<DirectX::CommonStates>(ResourceBuilder::Instance.Get().device->GetDevice().Get());
+
+	auto& shaderList = ResourceManager::Instance.Get().GetShaderList();
+	for (auto& i : shaderList)
+	{
+		if (i->GetName() == L"TestPS.cso")
+		{
+			this->ps = i;
+		}
+		if (i->GetName() == L"TestVS.cso")
+		{
+			this->vs = i;
+		}
+	}
 }
 
 void RenderSystem::ClearRenderInfo()
@@ -61,7 +79,7 @@ void RenderSystem::SortObject()
 
 	for (auto& e : staticRenderableSet)
 	{
-		if(e->IsActive() == false)
+		if (e->IsActive() == false)
 		{
 			continue;
 		}
@@ -72,6 +90,9 @@ void RenderSystem::SortObject()
 			RenderInfo renderInfo;
 			renderInfo.mesh = mesh;
 			renderInfo.material = e->GetMaterial(i);
+			renderInfo.shadowMaterial = Material(*e->GetMaterial(i));
+			renderInfo.shadowMaterial.SetPixelShader(this->ps);
+			renderInfo.shadowMaterial.SetVertexShader(this->vs);
 			renderInfo.materialIndex = i;
 			renderInfo.wtm = e->GetWorldTM();
 
@@ -139,13 +160,13 @@ void RenderSystem::PushLightData()
 		{
 			params.lights[i].range = e->GetLightInfo().range;
 		}
-		else if(e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Spot))
+		else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Spot))
 		{
 			params.lights[i].range = e->GetLightInfo().range;
 			params.lights[i].angle = e->GetLightInfo().angle;
 			params.lights[i].direction = e->GetLightInfo().direction;
 		}
-		
+
 		i++;
 	}
 
@@ -158,7 +179,7 @@ void RenderSystem::PushCameraData()
 	DirectX::SimpleMath::Vector3 pos;
 	DirectX::SimpleMath::Vector3 scale;
 	DirectX::SimpleMath::Quaternion quat;
-	NailCamera::Instance.Get().GetWTM().Decompose(scale, quat, pos);
+	CameraManager::Instance.Get().GetMainCamera()->GetWTM().Decompose(scale, quat, pos);
 	buffer.position = pos;
 	NailEngine::Instance.Get().GetConstantBuffer(3)->PushGraphicsData(&buffer, sizeof(CameraBuffer), 3);
 }
@@ -176,7 +197,13 @@ void RenderSystem::Render()
 
 	// 스킨드 오브젝트 렌더
 	RenderSkinned();
-	
+
+	// 그림자 맵 생성
+	//RenderShadow();
+
+	//SkyBoxPass::Instance.Get().BuildIrradianceMap();
+	SkyBoxPass::Instance.Get().BindIBLTexture();
+
 	// 라이트 렌더
 	RenderLight();
 
@@ -184,6 +211,8 @@ void RenderSystem::Render()
 	DrawFinal();
 
 	RenderForward();
+
+	SkyBoxPass::Instance.Get().Render();
 
 	RenderUI();
 
@@ -202,10 +231,11 @@ void RenderSystem::RenderObject()
 
 	MatrixBuffer matrixBuffer;
 	//matrixBuffer.WTM = e.wtm;
-	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
 	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
 	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
 	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 
@@ -221,7 +251,7 @@ void RenderSystem::RenderObject()
 	//	mesh->Render(e.materialIndex);*/
 	//	
 	//}
-	
+
 	//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->UnBind();
 }
 
@@ -229,8 +259,8 @@ void RenderSystem::RenderSkinned()
 {
 	MatrixBuffer matrixBuffer;
 	//matrixBuffer.WTM = e.wtm;
-	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
 	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
 	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
@@ -274,34 +304,69 @@ void RenderSystem::RenderSkinned()
 	//}
 }
 
+void RenderSystem::RenderShadow()
+{
+	auto& lightSet = LightManager::Instance.Get().GetLightList();
+	ShadowPass::Instance.Get().Bind();
+	//auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
+	//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SHADOW)]->OMSetRenderTarget();
+
+	//MatrixBuffer matrixBuffer;
+	//matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+	//matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+	//matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	//matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	//NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+	for (auto& e : lightSet)
+	{
+		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Directional))
+		{
+			MatrixBuffer matrixBuffer;
+			matrixBuffer.VTM = std::static_pointer_cast<DirectionalLight>(e)->GetWorldTM().Invert();
+			matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(100 * 1.f, 100 * 1.f, 0.0000001f, 500.f);
+			//matrixBuffer.PTM = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PI/4.f, 1920/ 1080, 0.1f, 1000.f);
+			NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+		}
+	}
+	InstancingManager::Instance.Get().RegisterMeshAndShadowMaterial(this->deferredVec);
+}
+
 void RenderSystem::RenderLight()
 {
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
 	auto& lightSet = LightManager::Instance.Get().GetLightList();
 	// 라이팅 렌더
 	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->OMSetRenderTarget();
+
+	MatrixBuffer matrixBuffer;
+	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
+	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	
+
 	for (auto& e : lightSet)
 	{
 		// Point Light의 경우 실제 Sphere Mesh를 렌더링 파이프라인에 넘긴다.
 		// 이때 WVP이 필요하기에 상수버퍼에 밀어넣어야 한다.
-		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
+		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Directional))
 		{
-			MatrixBuffer matrixBuffer;
-			matrixBuffer.WTM = std::static_pointer_cast<PointLight>(e)->GetWorldTM();
-			matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-			matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
-			matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-			matrixBuffer.WorldInvTrans = std::static_pointer_cast<PointLight>(e)->GetWorldTM().Invert().Transpose();
-			NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+			matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
+			matrixBuffer.lightVP = std::static_pointer_cast<DirectionalLight>(e)->GetWorldTM().Invert() * DirectX::XMMatrixOrthographicLH(100 * 1.f, 100 * 1.f, 0.0000001f, 500.f);
+			//matrixBuffer.lightVP = std::static_pointer_cast<DirectionalLight>(e)->GetWorldTM().Invert() * DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PI / 4.f, 1920 / 1080, 0.1f, 1000.f);
 		}
-
+		else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
+		{
+			matrixBuffer.WTM = std::static_pointer_cast<PointLight>(e)->GetWorldTM();
+			matrixBuffer.WorldInvTrans = std::static_pointer_cast<PointLight>(e)->GetWorldTM().Invert().Transpose();
+		}
+		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e->GetMaterialName()))->SetInt(0, e->GetID());
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e->GetMaterialName()))->PushGraphicsData();
 		auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
 		mesh->Render();
-	}
 
-	//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->UnBind();
+		//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->UnBind();
+	}
 }
 
 void RenderSystem::DrawFinal()
@@ -311,6 +376,17 @@ void RenderSystem::DrawFinal()
 		ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
 		ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
 
+	auto& lightSet = LightManager::Instance.Get().GetLightList();
+	for (auto& e : lightSet)
+	{
+		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Directional))
+		{
+			MatrixBuffer matrixBuffer;
+			matrixBuffer.VTM = std::static_pointer_cast<DirectionalLight>(e)->GetWorldTM().Invert();
+			matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(500 * 1.f, 500 * 1.f, 0.1f, 150.f);
+			NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+		}
+	}
 
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"))->PushGraphicsData();
 	ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();
@@ -361,6 +437,15 @@ void RenderSystem::RenderForward()
 	//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.material->GetName()))->PushGraphicsData();
 	//	mesh->Render(e.materialIndex, nullptr);
 	//}
+
+	MatrixBuffer matrixBuffer;
+	//matrixBuffer.WTM = e.wtm;
+	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
+	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
+	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 	InstancingManager::Instance.Get().RegisterMeshAndMaterial(this->forwardVec);
 }
 
@@ -369,7 +454,7 @@ void RenderSystem::DrawDeferredInfo()
 	auto windowInfo = NailEngine::Instance.Get().GetWindowInfo();
 	int width = windowInfo.width;
 	int height = windowInfo.height;
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 9; i++)
 	{
 		DirectX::SimpleMath::Matrix matSclae = DirectX::SimpleMath::Matrix::CreateScale(DirectX::SimpleMath::Vector3(width / 10.f, height / 10.f, 1.f));
 		DirectX::SimpleMath::Matrix matRotation = DirectX::SimpleMath::Matrix::CreateRotationX(0.f);
@@ -377,12 +462,11 @@ void RenderSystem::DrawDeferredInfo()
 		matRotation *= DirectX::SimpleMath::Matrix::CreateRotationZ(0.f);
 		/// 
 		DirectX::SimpleMath::Matrix matTranslation = DirectX::SimpleMath::Matrix::CreateTranslation(DirectX::SimpleMath::Vector3(
-			((-width/2.f) + ((width*0.05) + ((width/10.f) * i)))
-			,((height/2.f) - ((height*0.05)))
-			,1.f)
-		);
+			((-width / 2.f) + ((width * 0.05) + ((width / 10.f) * i)))
+			, ((height / 2.f) - ((height * 0.05)))
+			, 1.f));
 		/// 
-		DirectX::SimpleMath::Matrix wtm = matSclae * matRotation * matTranslation;
+
 
 		if (i == 0)
 			std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredPosition"))->PushGraphicsData();
@@ -393,19 +477,30 @@ void RenderSystem::DrawDeferredInfo()
 		else if (i == 3)
 			std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredDepth"))->PushGraphicsData();
 		else if (i == 4)
-			std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredDiffuseLight"))->PushGraphicsData();
+			std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredARM"))->PushGraphicsData();
 		else if (i == 5)
+			std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredDiffuseLight"))->PushGraphicsData();
+		else if (i == 6)
 			std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredSpecularLight"))->PushGraphicsData();
-		//else if (i == 6)
-		//{
-		//	matSclae = DirectX::SimpleMath::Matrix::CreateScale(DirectX::SimpleMath::Vector3(1280 / 10.f, 800 / 10.f, 1.f));
-		//	matTranslation = DirectX::SimpleMath::Matrix::CreateTranslation(DirectX::SimpleMath::Vector3(-865.f + (i * 200), 424.f, 500.f));
-		//	wtm = matSclae * matRotation * matTranslation;
-		//	ResourceManager::Instance.Get().GetMaterial(L"ShadowTarget")->PushGraphicsData();
-		//}
+		else if (i == 7)
+		{
+			DirectX::SimpleMath::Matrix matTranslation = DirectX::SimpleMath::Matrix::CreateTranslation(DirectX::SimpleMath::Vector3(
+				((-SM_SIZE / 2.f) + ((SM_SIZE * 0.05) + ((SM_SIZE / 10.f) * i)))
+				, ((SM_SIZE / 2.f) - ((SM_SIZE * 0.05)))
+				, 1.f)
+			);
+			matSclae = DirectX::SimpleMath::Matrix::CreateScale(DirectX::SimpleMath::Vector3(SM_SIZE / 10.f, SM_SIZE / 10.f, 1.f));
+			std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredShadow"))->PushGraphicsData();
+		}
+		else if (i == 8)
+		{
+			//matSclae = DirectX::SimpleMath::Matrix::CreateScale(DirectX::SimpleMath::Vector3(128 / 10.f, 128 / 10.f, 1.f));
+			std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"PBRIrradiance"))->PushGraphicsData();
+		}
 
+		DirectX::SimpleMath::Matrix wtm = matSclae * matRotation * matTranslation;
 		MatrixBuffer matrixBuffer;
-		matrixBuffer.WVP = wtm * DirectX::SimpleMath::Matrix::Identity * NailCamera::Instance.Get().GetVTMOrtho();
+		matrixBuffer.WVP = wtm * DirectX::SimpleMath::Matrix::Identity * CameraManager::Instance.Get().GetMainCamera()->GetVTMOrtho();
 
 		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 		ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();

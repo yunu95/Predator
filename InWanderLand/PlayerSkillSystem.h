@@ -17,7 +17,18 @@ public:
 	virtual void WSkillActivate(Vector3d skillPos) = 0;
 
 protected:
-	Dotween* m_UnitDotween;
-	virtual void SetPlayerDotweenComponent(Dotween* p_dotween);
+	struct SkillRequirements
+	{
+		physics::Collider* skillCollider;
+		GameObject* colliderObject;
+		GameObject* debugObject;
+		Dotween* dotweenComponent;
+	};
+
+	Unit* m_unitComponent;
+	Dotween* m_unitDotween;
+	NavigationAgent* m_unitNavComponent;
+
+	virtual void SetOtherComponentsAsMember();
 };
 

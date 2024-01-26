@@ -620,6 +620,11 @@ void Unit::OrderSkill(SkillEnum p_skillNum, Vector3d position)
 	m_currentSkillPosition = position;
 }
 
+void Unit::SetSkillDuration(float p_duration)
+{
+	qSkillAnimationDuration = p_duration;
+}
+
 void Unit::AddToOpponentObjectList(yunutyEngine::GameObject* opponent)
 {
 	if (opponent->GetComponent<Unit>()->currentOrder != UnitState::Death && this->currentOrder != UnitState::Death)

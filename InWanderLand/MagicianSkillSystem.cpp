@@ -117,6 +117,8 @@ void MagicianSkillSystem::SetWSkillDebugPair(std::pair<GameObject*, float> p_pro
 
 void MagicianSkillSystem::Start()
 {
+	SetOtherComponentsAsMember();
+
 	QSkillProjectile.debugObject->GetTransform()->scale = { pow(m_QSkillProjectileRadius, 2), pow(m_QSkillProjectileRadius, 2), pow(m_QSkillProjectileRadius, 2) };
 	QSkillProjectile.debugObject->SetSelfActive(false);
 

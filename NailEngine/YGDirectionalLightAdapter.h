@@ -21,6 +21,8 @@ namespace yunuGIAdapter
 
 		virtual void SetWorldTM(const yunuGI::Matrix4x4& tm) override
 		{
+			light->SetWorldTM(reinterpret_cast<const DirectX::SimpleMath::Matrix&>(tm));
+
 			DirectX::SimpleMath::Matrix wtm = reinterpret_cast<const DirectX::SimpleMath::Matrix&>(tm);
 			DirectX::SimpleMath::Vector3 pos;
 			DirectX::SimpleMath::Vector3 scale;
@@ -29,7 +31,7 @@ namespace yunuGIAdapter
 
 			DirectX::SimpleMath::Matrix rot = DirectX::XMMatrixRotationQuaternion(quat);
 
-			// ¶óÀÌÆ®ÀÇ À§Ä¡¸¦ ³Ö¾îÁÜ
+			// ë¼ì´íŠ¸ì˜ ìœ„ì¹˜ë¥¼ ë„£ì–´ì¤Œ
 			DirectX::SimpleMath::Vector4 lightPos = {pos.x,pos.y,pos.z,1.f};
 			light->SetLightPosition(lightPos);
 			DirectX::SimpleMath::Vector4 front{0.f,0.f,1.f,0.f};

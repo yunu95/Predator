@@ -14,8 +14,11 @@ struct PS_OUT
 };
 
 // Deferred_DirectionalLight
+// Albedo : Deferred Albedo
+// ARMMap : Deferred ARM
 // Temp0Map : View Position
 // Temp1Map : View Normal
+// Temp2Map : Shadow Map
 // temp_int0 : light index
 
 PS_OUT main(PixelIn input)
@@ -33,12 +36,11 @@ PS_OUT main(PixelIn input)
     
     LightColor color;
     
-    //for (int i = 0; i < lightCount; ++i)
-    //{
-    //    CalculateLight(i, viewNormal, float4(viewPos, 0.f), color.diffuse, color.ambient, color.specular);
-    //}
+    float3 arm = ARMMap.Sample(sam, input.uv).xyz;
+    float3 albedo = AlbedoMap.Sample(sam, input.uv).xyz;
     
     CalculateLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);
+    //CalculatePBRLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo, arm.b, arm.g);
     
     output.diffuse = color.diffuse + color.ambient;
     //output.specular = color.specular;
@@ -52,3 +54,4 @@ PS_OUT main(PixelIn input)
 // CullType : CullNone
 // DepthType : NoDepthTestNoWrite
 // BlendType : AlphaBlend
+// Sampler : Shadow

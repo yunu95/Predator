@@ -6,14 +6,18 @@ void HealerAutoAttackProjectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, floa
 	AutoAttackProjectile::Shoot(ownerUnit, opponentUnit, speed);
 
 	/// 버프 중첩 마다 과자 생성
-	static int currentPassiveCount = 0;
 	
-	currentPassiveCount++;
+	HealerAutoAttackCount::currentPassiveCount++;
 
-	if (currentPassiveCount == maxPassiveCount)
+	if (HealerAutoAttackCount::currentPassiveCount >= maxPassiveCount)
 	{
-		currentPassiveCount = 0;
+		HealerAutoAttackCount::currentPassiveCount = 0;
 		PassiveCakePool::SingleInstance().Borrow()->PopCake(ownerUnit->GetTransform()->GetWorldPosition());
 	}
 
+}
+
+void HealerAutoAttackProjectile::PlusHealerPassiveStack()
+{
+	HealerAutoAttackCount::currentPassiveCount++;
 }

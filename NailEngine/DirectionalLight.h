@@ -13,5 +13,11 @@ public:
 public:
 	void SetLightDirection(DirectX::SimpleMath::Vector4& direction);
 	DirectX::SimpleMath::Vector4& GetDirection();
+
+	void SetWorldTM(const DirectX::SimpleMath::Matrix& wtm);
+	DirectX::SimpleMath::Matrix& GetWorldTM();
+
+private:
+	DirectX::SimpleMath::Matrix wtm;
 };
 

@@ -216,6 +216,7 @@ public:
 	void OrderMove(Vector3d position);
 	void OrderAttackMove(Vector3d position);
 	void OrderSkill(SkillEnum p_skillNum, Vector3d position);
+	void SetSkillDuration(float p_duration);
 
 	void DetermineCurrentTargetObject();
 	void AddToOpponentObjectList(yunutyEngine::GameObject* obj);

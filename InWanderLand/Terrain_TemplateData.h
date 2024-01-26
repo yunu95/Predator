@@ -14,7 +14,7 @@ namespace application
 
         struct POD_Terrain_TemplateData
         {
-            std::vector<std::pair<int, int>> coordinatesSet;
+            std::vector<std::pair<int, int>> coordinates;
             TO_JSON(POD_Terrain_TemplateData)
                 FROM_JSON(POD_Terrain_TemplateData)
         };

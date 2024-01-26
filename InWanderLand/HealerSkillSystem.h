@@ -6,17 +6,8 @@ class Dotween;
 class HealerSkillSystem : public PlayerSkillSystem
 {
 private:
-	struct SkillRequirements
-	{
-		physics::SphereCollider* skillCollider;
-		GameObject* colliderObject;
-		GameObject* debugObject;
-		Dotween* dotweenComponent;
-	};
-
 	SkillRequirements QSkillFieldDamage;
-	
-	float QSkillFieldRadius;
+	SkillRequirements WSkillFieldDamage;
 
 	bool isQSkillActivating;
 	bool isColliderSetActiveFalse;
@@ -29,10 +20,13 @@ private:
 	float QSkillColliderRemainTime = 1.0f;
 	float QSkillColliderElapsed = 0.0f;
 
-	Vector3d startPosition;
+	bool isWSkillActivating;
+	bool isWSkillColliderActivated;
 
-	Dotween* unitDotween;
-	NavigationAgent* unitNavComponent;
+	float WSkillColliderRemainTime = 1.0f;
+	float WSkillColliderElapsed = 0.0f;
+
+	Vector3d startPosition;
 
 	void SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen);
 
@@ -43,7 +37,11 @@ private:
 public:
 	void SetQSkillCollider(physics::SphereCollider* p_fieldDamageCollider);
 	void SetQSkillObject(GameObject* p_fieldDamageObj);
-	void SetQSkillDebugInfo(GameObject* p_fieldDebugObject, float p_fieldDamageRadius);
+	void SetQSkillDebugInfo(GameObject* p_fieldDebugObject);
+
+	void SetWSkillCollider(physics::BoxCollider* p_fieldDamageCollider);
+	void SetWSkillObject(GameObject* p_fieldDamageObj);
+	void SetWSkillDebugInfo(GameObject* p_fieldDebugObject);
 
 public:
 	virtual void QSkillActivate(Vector3d skillPos) override;

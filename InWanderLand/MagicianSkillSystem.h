@@ -7,14 +7,6 @@ class ParalysisFieldComponent;
 class MagicianSkillSystem : public PlayerSkillSystem
 {
 private:
-	struct SkillRequirements
-	{
-		physics::SphereCollider* skillCollider;
-		GameObject* colliderObject;
-		GameObject* debugObject;
-		Dotween* dotweenComponent;
-	};
-
 	SkillRequirements QSkillProjectile;
 	SkillRequirements QSkillFieldDamage;
 
