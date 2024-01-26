@@ -3,7 +3,7 @@
 #include "IYunuGIRenderable.h"
 #include "YGRenderableAdapter.h"
 
-#include "RenderableManager.h"
+#include "RenderSystem.h"
 #include "StaticMesh.h"
 #include "MaterialWrapper.h"
 
@@ -17,7 +17,7 @@ namespace yunuGIAdapter
 		StaticMeshAdapter() :RenderableAdapter() 
 		{
 			renderable = std::make_shared<StaticMesh>();
-			RenderableManager::Instance.Get().PushStaticRenderableObject(renderable);
+			RenderSystem::Instance.Get().PushStaticRenderableObject(renderable);
 
 			std::shared_ptr<MaterialWrapper> material = std::make_shared<MaterialWrapper>(true);
 			material->SetRenderable(this->renderable);
@@ -26,7 +26,7 @@ namespace yunuGIAdapter
 
 		~StaticMeshAdapter()
 		{
-			RenderableManager::Instance.Get().PopStaticRenderableObject(renderable);
+			RenderSystem::Instance.Get().PopStaticRenderableObject(renderable);
 		}
 
 		virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)

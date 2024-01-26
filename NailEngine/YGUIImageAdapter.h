@@ -4,7 +4,7 @@
 #include "YunuGraphicsInterface.h"
 #include "YGRenderableAdapter.h"
 
-#include "RenderableManager.h"
+#include "RenderSystem.h"
 #include "UIImage.h"
 
 namespace yunuGIAdapter
@@ -15,13 +15,13 @@ namespace yunuGIAdapter
         UIImageAdapter() :RenderableAdapter() 
         {
 			renderable = std::make_shared<UIImage>();
-			RenderableManager::Instance.Get().PushUIObject(renderable);
-            RenderableManager::Instance.Get().ReSortUIObject(renderable->layer, renderable);
+            RenderSystem::Instance.Get().PushUIObject(renderable);
+            RenderSystem::Instance.Get().ReSortUIObject(renderable->layer, renderable);
         }
 
 		~UIImageAdapter()
 		{
-			RenderableManager::Instance.Get().PopUIObject(renderable);
+            RenderSystem::Instance.Get().PopUIObject(renderable);
 		}
 
         virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)
@@ -47,7 +47,7 @@ namespace yunuGIAdapter
 		virtual void SetLayer(int layer)
 		{
             renderable->layer = layer;
-            RenderableManager::Instance.Get().ReSortUIObject(layer, renderable);
+            RenderSystem::Instance.Get().ReSortUIObject(layer, renderable);
 		};
 
     private:
