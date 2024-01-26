@@ -9,6 +9,7 @@ private:
 
 	bool isColliderSetActiveFalseSet;
 	bool isQSkillActivating = false;
+	bool isWSkillActivating = false;
 
 	GameObject* m_QSkillKnockBackDebugObject;	float m_QSkillRadius;
 	GameObject* m_WSkillDebugObject;			float m_WSkillRadius;

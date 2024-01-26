@@ -29,6 +29,8 @@ protected:
 	Dotween* m_unitDotween;
 	NavigationAgent* m_unitNavComponent;
 
+	Vector3d m_currentSelectedSkillPosition;
+
 	virtual void SetOtherComponentsAsMember();
 };
 

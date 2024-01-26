@@ -71,6 +71,8 @@ void HealerSkillSystem::QSkillActivate(Vector3d skillPos)
 {
 	startPosition = GetTransform()->GetWorldPosition();
 
+	m_currentSelectedSkillPosition = skillPos;
+
 	m_unitComponent->SetSkillDuration(4.0f);
 
 	isQSkillActivating = true;
@@ -106,11 +108,13 @@ void HealerSkillSystem::Update()
 	if (isQSkillActivating)
 	{
 		QSkillFieldDamage.debugObject->GetTransform()->SetWorldPosition(QSkillFieldDamage.colliderObject->GetTransform()->GetWorldPosition());
+		//m_unitComponent->LookAt(m_currentSelectedSkillPosition);
 	}
 
 	if (isWSkillActivating)
 	{
 		WSkillFieldDamage.debugObject->GetTransform()->SetWorldPosition(WSkillFieldDamage.colliderObject->GetTransform()->GetWorldPosition());
+		//m_unitComponent->LookAt(m_currentSelectedSkillPosition);
 	}
 
 	if (!isColliderSetActiveFalse)

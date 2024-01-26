@@ -32,6 +32,12 @@ GameObject* UnitProductionOrder::CreateUnitWithOrder()
 	AttachDebugMesh(m_unitGameObject, DebugMeshType::Cube, yunuGI::Color::green(), false);
 	//unitColliderDebugObject->SetParent(m_unitGameObject);
 
+	auto frontDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	AttachDebugMesh(frontDebugObject, DebugMeshType::Cube, yunuGI::Color::black(), true);
+	frontDebugObject->GetTransform()->scale = { 0.5, 0.5, 0.5 };
+	frontDebugObject->GetTransform()->SetWorldPosition(m_unitGameObject->GetTransform()->rotation.Forward());
+	frontDebugObject->SetParent(m_unitGameObject);
+
 
 	/// 4. NavigationAgent Component 추가
 	auto unitNavigationComponent = m_unitGameObject->AddComponent<NavigationAgent>();

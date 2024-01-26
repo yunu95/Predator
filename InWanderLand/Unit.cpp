@@ -13,6 +13,8 @@ void Unit::Start()
 	m_bulletSpeed = 5.1f;
 	chaseUpdateDelay = 0.1f;
 
+	dotween = GetGameObject()->GetComponent<Dotween>();
+
 	unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Move,
 		[this]() { return currentOrder == UnitState::Move; } });
 
@@ -144,6 +146,10 @@ void Unit::MoveEngage()
 
 	moveFunctionElapsed = 0.0f;
 
+	Vector3d mouseXZVector = Vector3d(m_currentMovePosition.x, 0, m_currentMovePosition.z);
+
+	//dotween->DOLookAt(mouseXZVector, 1, f);
+
 	GetGameObject()->GetComponent<NavigationAgent>()->SetSpeed(m_speed);
 
 	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
@@ -167,6 +173,7 @@ void Unit::AttackEngage()
 	attackFunctionElapsed = 0.0f;
 	attackAnimationFrameCheckNumber = 0;
 	isAttackStarted = false;
+	dotween->DOLookAt(m_currentTargetObject->GetTransform()->GetWorldPosition(), rotationTime, false);
 
 	StopMove();
 }
@@ -174,6 +181,8 @@ void Unit::AttackEngage()
 void Unit::ChaseEngage()
 {
 	currentOrder = UnitState::Chase;
+
+	dotween->DOLookAt(m_currentTargetObject->GetTransform()->GetWorldPosition(), rotationTime, false);
 
 	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
 }
@@ -226,9 +235,9 @@ void Unit::MoveUpdate()
 
 	moveFunctionElapsed += Time::GetDeltaTime();
 
-	Vector3d mouseXZVector = Vector3d(m_currentMovePosition.x, 0, m_currentMovePosition.z);
+	//Vector3d mouseXZVector = Vector3d(m_currentMovePosition.x, 0, m_currentMovePosition.z);
 
-	LookAt(mouseXZVector);
+	//LookAt(mouseXZVector);
 
 	if (moveFunctionElapsed >= moveFunctionCallDelay)
 	{
@@ -246,7 +255,7 @@ void Unit::AttackMoveUpdate()
 
 	Vector3d mouseXZVector = Vector3d(m_currentMovePosition.x, 0, m_currentMovePosition.z);
 
-	LookAt(mouseXZVector);
+	//LookAt(mouseXZVector);
 
 	if (moveFunctionElapsed >= moveFunctionCallDelay)
 	{
@@ -263,7 +272,7 @@ void Unit::AttackUpdate()
 
 	attackFunctionElapsed += Time::GetDeltaTime();
 
-	LookAt(m_currentTargetObject->GetTransform()->GetWorldPosition());
+	//LookAt(m_currentTargetObject->GetTransform()->GetWorldPosition());
 
 	if (isAttackAnimationOperating)
 	{
@@ -274,6 +283,7 @@ void Unit::AttackUpdate()
 			GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 			attackAnimationFrameCheckNumber = 0;
 			isAttackAnimationOperating = false;
+			dotween->DOLookAt(m_currentTargetObject->GetTransform()->GetWorldPosition(), rotationTime, false);
 		}
 	}
 
@@ -317,7 +327,7 @@ void Unit::ChaseUpdate()
 
 	chaseFunctionElapsed += Time::GetDeltaTime();
 
-	LookAt(m_currentTargetObject->GetTransform()->GetWorldPosition());
+	//LookAt(m_currentTargetObject->GetTransform()->GetWorldPosition());
 
 	if (chaseFunctionElapsed >= chaseFunctionCallDelay)
 	{
@@ -397,50 +407,6 @@ void Unit::SetUnitSpeed(float speed)
 void Unit::SetAttackDelay(float p_delay)
 {
 	attackFunctionCallDelay = p_delay;
-}
-
-void Unit::LookAt(Vector3d destination)
-{
-	// 먼저, 방향 판별.
-	Vector3d tempDistanceVec = destination - GetGameObject()->GetTransform()->GetWorldPosition();
-	Vector3d distanceVec = Vector3d(tempDistanceVec.x, 0, tempDistanceVec.z);
-	bool isUnitFliped = false;
-	Vector3d forwardVector = GetGameObject()->GetTransform()->GetWorldRotation().Forward();
-	forwardVector.y = 0.0f;
-	forwardVector *= -1;
-
-	Vector3d axis = Vector3d::Cross(forwardVector, distanceVec);
-
-	float localRotationSpeed = rotationSpeed;
-
-	if (axis.y < 0)
-	{
-		localRotationSpeed *= -1;
-		//i	sUnitFliped = true;
-	}
-	
-	// 내적으로 반대 방향이 찍혔을 경우 로컬 bool값 조절
-	float dotted = Vector3d::Dot(forwardVector, distanceVec);
-	if (dotted < 0)
-	{
-		isUnitFliped = true;
-	}
-	else
-	{
-		isUnitFliped = false;
-	}
-
-	// 진동 방지 - forward가 distance와 어느정도 일직선 상이 된다면 돌지말것.
-	if (axis.Magnitude() >= 0.7 || isUnitFliped == true)
-	{
-		currentRotation += localRotationSpeed * Time::GetDeltaTime();
-		GetGameObject()->GetTransform()->rotation = Quaternion({ 0, currentRotation, 0 });
-	}
-
-	//Vector3d directionVector = (destination - GetGameObject()->GetTransform()->GetWorldPosition()).Normalized();
-	//Vector3d finalDirectionVector = Vector3d(directionVector.x, GetTransform()->GetWorldPosition().y, directionVector.z);
-
-	//GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(-1 * finalDirectionVector, GetTransform()->GetWorldRotation().Up()));
 }
 
 int Unit::GetPlayerSerialNumber() const
@@ -596,12 +562,14 @@ void Unit::OrderMove(Vector3d position)
 {
 	m_currentMovePosition = position;
 	currentOrder = UnitState::Move;
+	dotween->DOLookAt(position, rotationTime, false);
 }
 
 void Unit::OrderAttackMove(Vector3d position)
 {
 	m_currentMovePosition = position;
 	currentOrder = UnitState::AttackMove;
+	dotween->DOLookAt(position, rotationTime, false);
 
 	PlayerController::GetInstance()->SetLeftClickMove();
 	// 다음 클릭은 Move로 바꿀 수 있도록 function 재정의.
@@ -614,6 +582,7 @@ void Unit::OrderSkill(SkillEnum p_skillNum, Vector3d position)
 	currentOrder = UnitState::Skill;
 	m_skillPosition = position;
 	m_currentSelectedSkill = p_skillNum;
+	dotween->DOLookAt(position, rotationTime, false);
 
 	PlayerController::GetInstance()->SetLeftClickMove();
 
