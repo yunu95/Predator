@@ -1,28 +1,29 @@
 #pragma once
 #include "YunutyEngine.h"
+#include "YunuGraphicsInterface.h"
 
 class TestComponent2 : public yunutyEngine::Component
 {
 public:
-	GameObject* gameObject;
+	graphics::StaticMeshRenderer* renderer;
+	yunuGI::IShader* shader;
+	yunuGI::IMaterial* material;
 
 	void Update()
 	{
-		if (Input::isKeyDown(KeyCode::I))
+		if (Input::isKeyPushed(KeyCode::I))
 		{
-			gameObject->GetTransform()->position.y += gameObject->GetTransform()->position.y * Time::GetDeltaTime() * 10;
 		}
 		if (Input::isKeyDown(KeyCode::K))
 		{
-			gameObject->GetTransform()->position.y -= gameObject->GetTransform()->position.y * Time::GetDeltaTime() * 10;
 		}
 		if (Input::isKeyDown(KeyCode::J))
 		{
-			gameObject->GetTransform()->position.x -= gameObject->GetTransform()->position.x * Time::GetDeltaTime() * 10;
+			renderer->GetGI().GetMaterial()->SetPixelShader(shader);
 		}
 		if (Input::isKeyDown(KeyCode::L))
 		{
-			gameObject->GetTransform()->position.x += gameObject->GetTransform()->position.x * Time::GetDeltaTime() * 10;
+			renderer->GetGI().SetMaterial(0, material);
 		}
 	}
 };

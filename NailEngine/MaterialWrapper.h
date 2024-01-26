@@ -13,7 +13,11 @@ public:
 	{
 		
 	}
-	MaterialWrapper(bool isStatic)
+	MaterialWrapper(int index)
+	{
+		this->index = index;
+	}
+	MaterialWrapper(bool isStatic, int index)
 	{
 		if (isStatic)
 		{
@@ -23,6 +27,7 @@ public:
 		{
 			this->original = ((Material*)(ResourceManager::Instance.Get().GetMaterial(L"SkinnedDefaultMaterial").get()));
 		}
+		this->index = index;
 	}
 	~MaterialWrapper()
 	{
@@ -42,6 +47,8 @@ public:
 	virtual void SetPixelShader(const yunuGI::IShader* shader) override
 	{
 		GetVariation()->SetPixelShader(shader);
+
+		RenderSystem::Instance.Get().ReSortRenderInfo(this->renderable.get(), this->index);
 	};
 
 	virtual void SetTexture(yunuGI::Texture_Type textureType, const yunuGI::ITexture* texture) override
@@ -111,6 +118,7 @@ private:
 public:
 	Material* original;
 	Material* variation;
+	int index = 0;
 
 private:
 	std::shared_ptr<IRenderable> renderable;

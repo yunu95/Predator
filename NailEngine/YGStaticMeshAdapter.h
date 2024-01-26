@@ -17,16 +17,18 @@ namespace yunuGIAdapter
 		StaticMeshAdapter() :RenderableAdapter() 
 		{
 			renderable = std::make_shared<StaticMesh>();
-			RenderSystem::Instance.Get().PushStaticRenderableObject(renderable);
+			RenderSystem::Instance.Get().PushStaticRenderableObject(renderable.get());
 
-			std::shared_ptr<MaterialWrapper> material = std::make_shared<MaterialWrapper>(true);
+			std::shared_ptr<MaterialWrapper> material = std::make_shared<MaterialWrapper>(true,0);
 			material->SetRenderable(this->renderable);
 			this->materialVec.emplace_back(material);
+			
 		}
 
 		~StaticMeshAdapter()
 		{
-			RenderSystem::Instance.Get().PopStaticRenderableObject(renderable);
+			int a = 1;
+			RenderSystem::Instance.Get().PopStaticRenderableObject(renderable.get());
 		}
 
 		virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)
@@ -51,7 +53,7 @@ namespace yunuGIAdapter
 			// 새로운 Material이라면
 			if (index + 1 > this->materialVec.size())
 			{
-				std::shared_ptr<MaterialWrapper> tempMaterial = std::make_shared<MaterialWrapper>();
+				std::shared_ptr<MaterialWrapper> tempMaterial = std::make_shared<MaterialWrapper>(index);
 				tempMaterial->SetRenderable(this->renderable);
 				this->materialVec.emplace_back(tempMaterial);
 

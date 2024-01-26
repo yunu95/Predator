@@ -11,8 +11,7 @@
 #include "SimpleMath.h"
 using namespace DirectX::PackedVector;
 
-#include <vector>
-#include <memory>
+
 
 #include "IShader.h"
 #include "Material.h"
@@ -20,32 +19,16 @@ using namespace DirectX::PackedVector;
 #include "UIImage.h"
 
 #include <memory>
+#include <vector>
 #include <unordered_set>
 #include <set>
+#include <map>
 
 class Mesh;
 class Material;
 class yunuGI::IShader;
 class Animation;
 class NailAnimator;
-
-struct RenderInfo
-{
-	Mesh* mesh;
-	Material* material;
-	Material shadowMaterial;
-	unsigned int materialIndex;
-	DirectX::SimpleMath::Matrix wtm;
-};
-
-struct SkinnedRenderInfo
-{
-	RenderInfo renderInfo;
-	std::wstring modelName;
-	std::shared_ptr<NailAnimator> animator;
-	TransitionDesc transitionDesc;
-};
-
 
 class RenderSystem
 {
@@ -73,8 +56,8 @@ public:
 	void DrawDeferredInfo();
 
 public:
-	void PushStaticRenderableObject(std::shared_ptr<IRenderable> renderable);
-	void PopStaticRenderableObject(std::shared_ptr<IRenderable> renderable);
+	void PushStaticRenderableObject(IRenderable* renderable);
+	void PopStaticRenderableObject(IRenderable* renderable);
 
 	void PushSkinnedRenderableObject(std::shared_ptr<IRenderable> renderable);
 	void PopSkinnedRenderableObject(std::shared_ptr<IRenderable> renderable);
@@ -84,16 +67,15 @@ public:
 
 	void ReSortUIObject(int layer, std::shared_ptr<UIImage> ui);
 
+	void ReSortRenderInfo(IRenderable* renderable, int index);
+
+	void RegisterRenderInfo(IRenderable* renderable, std::shared_ptr<RenderInfo> renderInfo);
 
 private:
-	//void BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo);
-	//void ReadBone(FBXNode* fbxNode, DirectX::SimpleMath::Matrix parentMatrix, const std::string& fbxName, std::shared_ptr<NailAnimator> animator);
-
-private:
-	std::vector<RenderInfo> deferredVec;
-	std::vector<RenderInfo> forwardVec;
-	std::vector<SkinnedRenderInfo> skinnedVec;
-
+	std::set<std::shared_ptr<RenderInfo>> deferredSet;
+	std::set<std::shared_ptr<RenderInfo>> forwardSet;
+	std::set<std::shared_ptr<SkinnedRenderInfo>> skinnedSet;
+	
 	BoneMatrix finalTM;
 
 	std::unique_ptr<DirectX::SpriteBatch> spriteBatch;
@@ -103,9 +85,14 @@ private:
 	yunuGI::IShader* vs = nullptr;
 
 private:
-	std::unordered_set<std::shared_ptr<IRenderable>> staticRenderableSet;
+	//std::unordered_set<std::shared_ptr<IRenderable>> staticRenderableSet;
+
+	std::map<IRenderable*, std::vector<std::shared_ptr<RenderInfo>>> staticMeshRenderInfoMap;
+
+
 	std::unordered_set<std::shared_ptr<IRenderable>> skinnedRenderableSet;
 	std::set<std::shared_ptr<IRenderable>, CompareSmartPtr> UIImageSet;
+
 };
 
 

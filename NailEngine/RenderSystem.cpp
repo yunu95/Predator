@@ -40,6 +40,8 @@
 #include "ShadowPass.h"
 #include "SkyBoxPass.h"
 
+#include "StaticMesh.h"
+
 #include <iostream>
 #include <fstream>
 
@@ -67,72 +69,72 @@ void RenderSystem::Init()
 
 void RenderSystem::ClearRenderInfo()
 {
-	deferredVec.clear();
-	forwardVec.clear();
-	skinnedVec.clear();
+	//deferredVec.clear();
+	//forwardVec.clear();
+	//skinnedVec.clear();
 }
 
 void RenderSystem::SortObject()
 {
-	for (auto& e : staticRenderableSet)
-	{
-		if (e->IsActive() == false)
-		{
-			continue;
-		}
+	//for (auto& e : staticRenderableSet)
+	//{
+	//	if (e->IsActive() == false)
+	//	{
+	//		continue;
+	//	}
 
-		auto mesh = e->GetMesh();
-		for (int i = 0; i < mesh->GetMaterialCount(); ++i)
-		{
-			RenderInfo renderInfo;
-			renderInfo.mesh = mesh;
-			renderInfo.material = e->GetMaterial(i);
-			renderInfo.shadowMaterial = Material(*e->GetMaterial(i));
-			renderInfo.shadowMaterial.SetPixelShader(this->ps);
-			renderInfo.shadowMaterial.SetVertexShader(this->vs);
-			renderInfo.materialIndex = i;
-			renderInfo.wtm = e->GetWorldTM();
+	//	auto mesh = e->GetMesh();
+	//	for (int i = 0; i < mesh->GetMaterialCount(); ++i)
+	//	{
+	//		RenderInfo renderInfo;
+	//		renderInfo.mesh = mesh;
+	//		renderInfo.material = e->GetMaterial(i);
+	//		renderInfo.shadowMaterial = Material(*e->GetMaterial(i));
+	//		renderInfo.shadowMaterial.SetPixelShader(this->ps);
+	//		renderInfo.shadowMaterial.SetVertexShader(this->vs);
+	//		renderInfo.materialIndex = i;
+	//		renderInfo.wtm = e->GetWorldTM();
 
-			if (e->GetMaterial(i)->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
-			{
-				this->deferredVec.emplace_back(renderInfo);
-			}
-			else if (e->GetMaterial(i)->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
-			{
-				this->forwardVec.emplace_back(renderInfo);
-			}
-		}
-	}
+	//		if (e->GetMaterial(i)->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+	//		{
+	//			this->deferredVec.emplace_back(renderInfo);
+	//		}
+	//		else if (e->GetMaterial(i)->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+	//		{
+	//			this->forwardVec.emplace_back(renderInfo);
+	//		}
+	//	}
+	//}
 
-	// skinned
-	for (auto& e : skinnedRenderableSet)
-	{
-		if (e->IsActive() == false)
-		{
-			continue;
-		}
+	//// skinned
+	//for (auto& e : skinnedRenderableSet)
+	//{
+	//	if (e->IsActive() == false)
+	//	{
+	//		continue;
+	//	}
 
-		auto mesh = e->GetMesh();
-		for (int i = 0; i < mesh->GetMaterialCount(); ++i)
-		{
-			SkinnedRenderInfo skinnedRenderInfo;
+	//	auto mesh = e->GetMesh();
+	//	for (int i = 0; i < mesh->GetMaterialCount(); ++i)
+	//	{
+	//		SkinnedRenderInfo skinnedRenderInfo;
 
-			RenderInfo renderInfo;
-			renderInfo.mesh = mesh;
-			renderInfo.material = e->GetMaterial(i);
-			renderInfo.materialIndex = i;
-			renderInfo.wtm = e->GetWorldTM();
-			//renderInfo.objecID = e->GetID();
-			skinnedRenderInfo.animator = NailAnimatorManager::Instance.Get().GetAnimator(
-				std::static_pointer_cast<SkinnedMesh>(e)->GetAnimatorIndex());
+	//		RenderInfo renderInfo;
+	//		renderInfo.mesh = mesh;
+	//		renderInfo.material = e->GetMaterial(i);
+	//		renderInfo.materialIndex = i;
+	//		renderInfo.wtm = e->GetWorldTM();
+	//		//renderInfo.objecID = e->GetID();
+	//		skinnedRenderInfo.animator = NailAnimatorManager::Instance.Get().GetAnimator(
+	//			std::static_pointer_cast<SkinnedMesh>(e)->GetAnimatorIndex());
 
-			skinnedRenderInfo.renderInfo = std::move(renderInfo);
+	//		skinnedRenderInfo.renderInfo = std::move(renderInfo);
 
-			skinnedRenderInfo.modelName = std::static_pointer_cast<SkinnedMesh>(e)->GetBone();
+	//		skinnedRenderInfo.modelName = std::static_pointer_cast<SkinnedMesh>(e)->GetBone();
 
-			this->skinnedVec.emplace_back(skinnedRenderInfo);
-		}
-	}
+	//		this->skinnedVec.emplace_back(skinnedRenderInfo);
+	//	}
+	//}
 }
 
 void RenderSystem::PushLightData()
@@ -234,7 +236,7 @@ void RenderSystem::RenderObject()
 	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
 	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 
-	InstancingManager::Instance.Get().RegisterMeshAndMaterial(this->deferredVec);
+	InstancingManager::Instance.Get().RegisterStaticMeshAndMaterialInDeferred();
 
 	//for (auto& e : this->deferredVec)
 	//{
@@ -261,7 +263,7 @@ void RenderSystem::RenderSkinned()
 	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
 	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 
-	InstancingManager::Instance.Get().RegisterSkinnedMeshAndMaterial(this->skinnedVec);
+	InstancingManager::Instance.Get().RegisterSkinnedMeshAndMaterial(this->skinnedSet);
 
 	//for (auto& e : this->skinnedVec)
 	//{
@@ -323,7 +325,7 @@ void RenderSystem::RenderShadow()
 			NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 		}
 	}
-	InstancingManager::Instance.Get().RegisterMeshAndShadowMaterial(this->deferredVec);
+	//InstancingManager::Instance.Get().RegisterMeshAndShadowMaterial(this->deferredVec);
 }
 
 void RenderSystem::RenderLight()
@@ -337,7 +339,7 @@ void RenderSystem::RenderLight()
 	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
 	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
 	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-	
+
 
 	for (auto& e : lightSet)
 	{
@@ -440,7 +442,7 @@ void RenderSystem::RenderForward()
 	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
 	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
 	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
-	InstancingManager::Instance.Get().RegisterMeshAndMaterial(this->forwardVec);
+	InstancingManager::Instance.Get().RegisterStaticMeshAndMaterialInForward();
 }
 
 void RenderSystem::DrawDeferredInfo()
@@ -501,14 +503,29 @@ void RenderSystem::DrawDeferredInfo()
 	}
 }
 
-void RenderSystem::PushStaticRenderableObject(std::shared_ptr<IRenderable> renderable)
+void RenderSystem::PushStaticRenderableObject(IRenderable* renderable)
 {
-	this->staticRenderableSet.insert(renderable);
+	staticMeshRenderInfoMap.insert({ renderable, {} });
+	staticMeshRenderInfoMap[renderable].emplace_back(static_cast<StaticMesh*>(renderable)->renderInfoVec[0]);
+
+	deferredSet.insert(static_cast<StaticMesh*>(renderable)->renderInfoVec[0]);
 }
 
-void RenderSystem::PopStaticRenderableObject(std::shared_ptr<IRenderable> renderable)
+void RenderSystem::PopStaticRenderableObject(IRenderable* renderable)
 {
-	this->staticRenderableSet.erase(renderable);
+	for (int i = 0; i < static_cast<StaticMesh*>(renderable)->renderInfoVec.size(); ++i)
+	{
+		if (static_cast<StaticMesh*>(renderable)->renderInfoVec[i]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+		{
+			InstancingManager::Instance.Get().PopStaticDeferredData(static_cast<StaticMesh*>(renderable)->renderInfoVec[i]);
+		}
+		else
+		{
+			InstancingManager::Instance.Get().PopStaticForwardData(static_cast<StaticMesh*>(renderable)->renderInfoVec[i]);
+		}
+	}
+
+	this->staticMeshRenderInfoMap.erase(renderable);
 }
 
 void RenderSystem::PushSkinnedRenderableObject(std::shared_ptr<IRenderable> renderable)
@@ -541,54 +558,52 @@ void RenderSystem::ReSortUIObject(int layer, std::shared_ptr<UIImage> ui)
 	this->UIImageSet.insert(newUI);
 }
 
-//void RenderSystem::BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo)
-//{
-//	/*auto& boneMap = ResourceManager::Instance.Get().GetFBXBoneData(std::string{ skinnedRenderInfo.modelName.begin(), skinnedRenderInfo.modelName.end() });
-//
-//	
-//
-//	auto fbxNode = ResourceManager::Instance.Get().GetFBXNode(skinnedRenderInfo.modelName);
-//
-//	ReadBone(fbxNode, DirectX::SimpleMath::Matrix::Identity, std::string{ skinnedRenderInfo.modelName.begin(), skinnedRenderInfo.modelName.end() }, animator);
-//
-//	NailEngine::Instance.Get().GetConstantBuffer(4)->PushGraphicsData(&this->finalTM, sizeof(BoneMatrix), 4);*/
-//}
+void RenderSystem::ReSortRenderInfo(IRenderable* renderable, int index)
+{
+	if (staticMeshRenderInfoMap[renderable][index]->material->GetPixelShader()->GetShaderInfo().shaderType ==
+		yunuGI::ShaderType::Deferred)
+	{
+		auto iter = forwardSet.find(staticMeshRenderInfoMap[renderable][index]);
+		if (iter == forwardSet.end())
+		{
+			return;
+		}
+		else
+		{
+			// 포워드에서 디퍼드로
+			InstancingManager::Instance.Get().PopStaticForwardData(staticMeshRenderInfoMap[renderable][index]);
+			forwardSet.erase(iter);
+			deferredSet.insert(staticMeshRenderInfoMap[renderable][index]);
+			InstancingManager::Instance.Get().RegisterStaticDeferredData(staticMeshRenderInfoMap[renderable][index]);
+		}
+	}
+	else
+	{
+		auto iter = deferredSet.find(staticMeshRenderInfoMap[renderable][index]);
+		if (iter == deferredSet.end())
+		{
+			return;
+		}  
+		else
+		{
+			// 디퍼드에서 포워드로
+			InstancingManager::Instance.Get().PopStaticDeferredData(staticMeshRenderInfoMap[renderable][index]);
+			deferredSet.erase(iter);
+			forwardSet.insert(staticMeshRenderInfoMap[renderable][index]);
+			InstancingManager::Instance.Get().RegisterStaticForwardData(staticMeshRenderInfoMap[renderable][index]);
+		}
+	}
+}
 
-//void RenderSystem::ReadBone(FBXNode* fbxNode, DirectX::SimpleMath::Matrix parentMatrix, const std::string& fbxName, std::shared_ptr<NailAnimator> animator)
-//{
-//	auto& boneInfoMap = ResourceManager::Instance.Get().GetFBXBoneData(fbxName);
-//
-//	Animation* animation = static_cast<Animation*>(animator->GetCurrentAnimation());
-//	int currentFrame = animator->GetCurrentFrame();
-//	int nextFrame = currentFrame + 1;
-//	float frameRatio = animator->GetFrameRatio();
-//	AnimationClip& animationClip = animation->GetAnimationClip();
-//
-//	DirectX::SimpleMath::Matrix srt = fbxNode->transformMatrix;
-//
-//	auto iter = boneInfoMap.find(fbxNode->nodeName);
-//	if (iter != boneInfoMap.end())
-//	{
-//		auto animationPos = DirectX::SimpleMath::Vector3::Lerp(animationClip.keyFrameInfoVec[iter->second.index][currentFrame].pos,
-//			animationClip.keyFrameInfoVec[iter->second.index][nextFrame].pos, frameRatio);
-//
-//		auto animationScale = DirectX::SimpleMath::Vector3::Lerp(animationClip.keyFrameInfoVec[iter->second.index][currentFrame].scale,
-//			animationClip.keyFrameInfoVec[iter->second.index][nextFrame].scale, frameRatio);
-//
-//		auto animationRot = DirectX::SimpleMath::Quaternion::Slerp(animationClip.keyFrameInfoVec[iter->second.index][currentFrame].rot,
-//			animationClip.keyFrameInfoVec[iter->second.index][nextFrame].rot, frameRatio);
-//
-//		auto translateMat = DirectX::SimpleMath::Matrix::CreateTranslation(animationPos);
-//		auto rotationMat = DirectX::XMMatrixRotationQuaternion(animationRot);
-//		auto scaleMat = DirectX::SimpleMath::Matrix::CreateScale(animationScale);
-//
-//		srt = scaleMat * rotationMat * translateMat;
-//
-//		this->finalTM.finalTM[iter->second.index] = iter->second.offset * srt * parentMatrix;
-//	}
-//
-//	for (int i = 0; i < fbxNode->child.size(); ++i)
-//	{
-//		ReadBone(fbxNode->child[i], srt * parentMatrix, fbxName, animator);
-//	}
-//}
+void RenderSystem::RegisterRenderInfo(IRenderable* renderable, std::shared_ptr<RenderInfo> renderInfo)
+{
+	auto iter = staticMeshRenderInfoMap.find(renderable);
+	if (iter != staticMeshRenderInfoMap.end())
+	{
+		staticMeshRenderInfoMap[renderable].emplace_back(renderInfo);
+		deferredSet.insert(renderInfo);
+
+		InstancingManager::Instance.Get().RegisterStaticDeferredData(renderInfo);
+	}
+}
+
