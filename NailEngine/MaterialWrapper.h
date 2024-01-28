@@ -47,8 +47,29 @@ public:
 	virtual void SetPixelShader(const yunuGI::IShader* shader) override
 	{
 		GetVariation()->SetPixelShader(shader);
+		RenderSystem::Instance.Get().ReSortRenderInfo(renderable.get(), this->index);
+		/*if (GetVariation()->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+		{
+			if (renderable->IsStatic())
+			{
+				InstancingManager::Instance.Get().RegisterStaticDeferredData(std::static_pointer_cast<StaticMesh>(renderable)->renderInfoVec[index]);
+			}
+			else
+			{
 
-		RenderSystem::Instance.Get().ReSortRenderInfo(this->renderable.get(), this->index);
+			}
+		}
+		else
+		{
+			if (renderable->IsStatic())
+			{
+				InstancingManager::Instance.Get().RegisterStaticForwardData(std::static_pointer_cast<StaticMesh>(renderable)->renderInfoVec[index]);
+			}
+			else
+			{
+
+			}
+		}*/
 	};
 
 	virtual void SetTexture(yunuGI::Texture_Type textureType, const yunuGI::ITexture* texture) override
@@ -109,7 +130,7 @@ private:
 		{
 			if (original->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
 			{
-				if (renderable->IsStatic())
+				if (renderable->IsStatic()) 
 				{
 					InstancingManager::Instance.Get().PopStaticDeferredData(std::static_pointer_cast<StaticMesh>(renderable)->renderInfoVec[this->index]);
 				}
@@ -123,8 +144,9 @@ private:
 			}
 
 			variation = ResourceManager::Instance.Get().CreateInstanceMaterial(original);
-			usingOriginal = false;
 			renderable->SetMaterial(this->index, variation);
+
+			usingOriginal = false;
 		}
 
 		return variation;
