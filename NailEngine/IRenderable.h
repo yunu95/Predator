@@ -58,6 +58,7 @@ public:
 	{
 		return isActive;
 	}
+	bool IsStatic() { return isStatic; }
 
 	float GetID() { return this->objectID; }
 #pragma endregion
@@ -67,6 +68,7 @@ protected:
 	Mesh* mesh;
 	std::vector<Material*> materialVec;
 	bool isActive = true;
+	bool isStatic;
 
 	static float objectID;
 };

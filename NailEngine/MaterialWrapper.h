@@ -107,9 +107,24 @@ private:
 	{
 		if (usingOriginal)
 		{
+			if (original->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+			{
+				if (renderable->IsStatic())
+				{
+					InstancingManager::Instance.Get().PopStaticDeferredData(std::static_pointer_cast<StaticMesh>(renderable)->renderInfoVec[this->index]);
+				}
+			}
+			else
+			{
+				if (renderable->IsStatic())
+				{
+					InstancingManager::Instance.Get().PopStaticForwardData(std::static_pointer_cast<StaticMesh>(renderable)->renderInfoVec[this->index]);
+				}
+			}
+
 			variation = ResourceManager::Instance.Get().CreateInstanceMaterial(original);
 			usingOriginal = false;
-			renderable->SetMaterial(0, variation);
+			renderable->SetMaterial(this->index, variation);
 		}
 
 		return variation;

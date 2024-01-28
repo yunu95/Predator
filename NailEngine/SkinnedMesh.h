@@ -5,6 +5,10 @@
 class SkinnedMesh : public IRenderable
 {
 public:
+	SkinnedMesh()
+	{
+		this->isStatic = false;
+	}
 	void SetBone(std::wstring fbxName)
 	{
 		this->fbxName = fbxName;

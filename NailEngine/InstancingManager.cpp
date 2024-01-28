@@ -239,14 +239,22 @@ void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& rende
 {
 	InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
 
-	this->staticMeshDeferredCache[instanceID].erase(renderInfo);
+	auto iter = this->staticMeshDeferredCache.find(instanceID);
+	if (iter != this->staticMeshDeferredCache.end())
+	{
+		this->staticMeshDeferredCache[instanceID].erase(renderInfo);
+	}
 }
 
 void InstancingManager::PopStaticForwardData(std::shared_ptr<RenderInfo>& renderInfo)
 {
 	InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
 
-	this->staticMeshForwardCache[instanceID].erase(renderInfo);
+	auto iter = this->staticMeshForwardCache.find(instanceID);
+	if (iter != this->staticMeshForwardCache.end())
+	{
+		this->staticMeshForwardCache[instanceID].erase(renderInfo);
+	}
 }
 
 void InstancingManager::RegisterSkinnedMeshAndMaterial(std::set<std::shared_ptr<SkinnedRenderInfo>>& renderInfo)

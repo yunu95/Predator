@@ -13,13 +13,15 @@ class StaticMesh : public IRenderable
 public:
 	StaticMesh()
 	{
+		this->isStatic = true;
+
 		this->renderInfoVec.emplace_back(std::make_shared<RenderInfo>());
 		
 		this->renderInfoVec.back()->mesh = this->mesh;
 		this->renderInfoVec.back()->materialIndex = 0;
 		this->renderInfoVec.back()->material = reinterpret_cast<Material*>(ResourceManager::Instance.Get().GetMaterial(L"DefaultMaterial").get());
 
-		InstancingManager::Instance.Get().RegisterStaticDeferredData(renderInfoVec[0]);
+		
 	}
 
 	~StaticMesh()
@@ -40,6 +42,7 @@ public:
 		for (auto& i : renderInfoVec)
 		{
 			i->mesh = mesh;
+			InstancingManager::Instance.Get().RegisterStaticDeferredData(i);
 		}
 	}
 	virtual void SetMaterial(unsigned int index, yunuGI::IMaterial* material) override
@@ -60,16 +63,12 @@ public:
 		}
 		else
 		{
-			if (renderInfoVec[index]->material->GetPixelShader()->GetShaderInfo().shaderType !=
-				reinterpret_cast<Material*>(material)->GetPixelShader()->GetShaderInfo().shaderType)
-			{
-				RenderSystem::Instance.Get().ReSortRenderInfo(this, index);
-			}
-
 			renderInfoVec[index]->mesh = this->mesh;
 			renderInfoVec[index]->material = reinterpret_cast<Material*>(material);
 
 			this->materialVec[index] = reinterpret_cast<Material*>(material);
+
+			RenderSystem::Instance.Get().ReSortRenderInfo(this, index);
 		}
 	}
 

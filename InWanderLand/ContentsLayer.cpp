@@ -72,7 +72,7 @@ void GraphicsTest()
 	}
 	for (auto& i : meshList)
 	{
-		if (i->GetName() == L"Capsule")
+		if (i->GetName() == L"Cube")
 		{
 			mesh = i;
 		}
