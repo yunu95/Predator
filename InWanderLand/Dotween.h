@@ -86,6 +86,8 @@ private:
 
 	double previousAngle;
 
-	float currentRotation{ 270 };
+	float currentRotation{ 0 };
+
+
 };
 

@@ -100,7 +100,7 @@ protected:
 	// 유닛이 바라봐야 하는 회전값을 동경각으로 나타냅니다. 유닛은 회전속도에 따라 회전값을 desiredRotation과 일치하게 바꿉니다.
 	float desiredRotation{270};
 	float rotationSpeed{ 500 };
-
+	float rotationTime = 0.2f;
 
 	// 지금 수행중인 명령
 	UnitState currentOrder = UnitState::Idle;
@@ -130,8 +130,8 @@ protected:
 	float deathAnimationDelay = 1.5f;
 
 	float qSkillFunctionStartElapsed;
-	float qSkillFunctionStartedElapsed;
-	float qSkillStartDelay = 1.0f;
+	//float qSkillFunctionStartedElapsed;
+	//float qSkillStartDelay = 1.0f;
 	float qSkillAnimationDuration = 1.0f;
 	bool isJustHitByQSkill = false;
 
@@ -181,7 +181,6 @@ protected:
 	void CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation);
 
 	void StopMove();
-	void LookAt(Vector3d destination);
 	
 	void ReportUnitDeath();												// this 유닛이 죽었다는 정보를 전달
 	void IdentifiedOpponentDeath(yunutyEngine::GameObject* obj);		// 상대 유닛이 죽었을 경우 처리할 내용을 담은 함수
@@ -198,17 +197,14 @@ public:
 	UnitSide GetUnitSide() const;
 	void SetUnitType(UnitType type);
 	void SetUnitSide(UnitSide side);
-
 	void SetUnitHp(int p_Hp);
 	void SetUnitAp(int p_Ap);
 	void SetIdRadius(float radius);
 	void SetAtkRadius(float radius);
 	void SetUnitSpeed(float speed);
-
 	void SetAttackDelay(float p_delay);
-
 	void SetPlayerSerialNumber();
-	int GetPlayerSerialNumber() const;
+	void SetSkillDuration(float p_duration);
 
 	void SetCurrentOrderMove();
 	void SetCurrentOrderAttackMove();
@@ -227,12 +223,13 @@ public:
 	void SetNavField(NavigationField* p_navField);
 	NavigationField* GetNavField() const;
 
-	void EndSkillState();
-
 	void MakeUnitPushedState(bool p_isCrushed);
 	void MakeUnitParalysisState();
 	void MakeUnitParalysisEnd();
+
 	bool GetJustCrushedState() const;
+	int GetPlayerSerialNumber() const;
+
 
 	float DetermineAttackDamage(float p_damage);			// 공격유닛이 피격유닛에게 전달하는 데미지 계산.
 
@@ -244,6 +241,7 @@ public:
 	int GetUnitDamage() const;
 	void Damaged(GameObject* opponentObject, float opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
 	void Damaged(float dmg);										// 추적받지 않는 데미지
+	void Heal(float healingPoint);										
 	
 	void IncreaseAttackPower(float p_attackPowerIncrease);
 	void IncreaseAttackSpeed(float p_attackSpeedIncrease);

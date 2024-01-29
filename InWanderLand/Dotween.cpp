@@ -274,7 +274,7 @@ Dotween& Dotween::DOLookAt(Vector3d lookTransform, double p_duration, bool isYax
 	StopAllDotweenFunction();
 	DotweenTimer* m_doLookTweenTimer = DotweenTimerPool::GetInstance()->GetDotweenTimer();
 
-	Vector3d objectFront = GetGameObject()->GetTransform()->GetWorldRotation().Forward() * -1;
+	Vector3d objectFront = GetGameObject()->GetTransform()->GetWorldRotation().Forward();
 	Vector3d objectUp;
 	Vector3d objectRight = GetGameObject()->GetTransform()->GetWorldRotation().Right();
 	Vector3d objectLeft = Vector3d(-1 * objectRight.x, objectRight.y, -1 * objectRight.z);
@@ -313,7 +313,8 @@ Dotween& Dotween::DOLookAt(Vector3d lookTransform, double p_duration, bool isYax
 	{
 		double degreePerFrame = finalDegree / (m_doLookTweenTimer->duration);
 		currentRotation += degreePerFrame * Time::GetDeltaTime();
-		GetGameObject()->GetTransform()->rotation = Quaternion({ 0.0f, currentRotation, 0.0f });
+		if(!isnan(currentRotation))
+			GetGameObject()->GetTransform()->rotation = Quaternion({ 0.0f, currentRotation, 0.0f });
 	};
 
 	currentTimerIndex = TimerIndex::RotateTimer;

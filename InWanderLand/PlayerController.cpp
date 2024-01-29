@@ -91,10 +91,20 @@ void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
 	}
 	else
 	{
-		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
+		if (currentSelectedSerialNumber == InputManager::SelectedSerialNumber::One && p_skillNum == Unit::SkillEnum::W)
 		{
-			playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum, pos);
-		};
+			/// Warrior의 W 스킬은 마우스로 클릭하지 않아도 바로 실행되는 스킬이다.
+			playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum,
+				playerComponentMap.find(currentSelectedSerialNumber)->second->GetTransform()->GetWorldPosition());
+		}
+
+		else
+		{
+			m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
+			{
+				playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum, pos);
+			};
+		}
 	}
 }
 

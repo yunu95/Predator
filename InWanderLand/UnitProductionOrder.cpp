@@ -8,7 +8,6 @@
 GameObject* UnitProductionOrder::CreateUnitWithOrder()
 {
 	m_unitGameObject->GetTransform()->SetWorldPosition(m_startPosition);
-	m_unitGameObject->GetTransform()->scale = { 1.0f, 1.0f, 1.0f };			// 콜라이더가 붙는 오브젝트 Or 그 오브젝트의 부모 오브젝트는 반드시 scale이 1로 통일 되어야 한다.
 
 	/// 2. RangeSystem Gameobject 및 Component 추가
 	auto unitRangeSystemObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -23,7 +22,7 @@ GameObject* UnitProductionOrder::CreateUnitWithOrder()
 	unitRangeSystemObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	unitRangeSystemObject->SetParent(m_unitGameObject);
 
-	/// 3. Collider Component 추가 - object의 scale은 1,1,1로 통일하기
+	/// 3. Collider Component 추가
 	//auto unitCollider = m_unitGameObject->AddComponent<physics::BoxCollider>();
 	auto unitCollider = m_unitGameObject->AddComponent<physics::SphereCollider>();	// 빈 껍데기에 
 	unitCollider->SetRadius(1.0f);
@@ -31,6 +30,12 @@ GameObject* UnitProductionOrder::CreateUnitWithOrder()
 	//auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(m_unitGameObject, DebugMeshType::Cube, yunuGI::Color::green(), false);
 	//unitColliderDebugObject->SetParent(m_unitGameObject);
+
+	auto frontDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	AttachDebugMesh(frontDebugObject, DebugMeshType::Cube, yunuGI::Color::black(), true);
+	frontDebugObject->GetTransform()->scale = { 0.5, 0.5, 0.5 };
+	frontDebugObject->GetTransform()->SetWorldPosition(m_unitGameObject->GetTransform()->rotation.Forward());
+	frontDebugObject->SetParent(m_unitGameObject);
 
 
 	/// 4. NavigationAgent Component 추가

@@ -34,7 +34,7 @@ void DotweenTimer::Init()
 	finalYvalue = 0;
 	finalZvalue = 0;
 
-	accumulated = 0;		// ´©Àû È¸Àü·®
+	accumulated = 0;		// ëˆ„ì  íšŒì „ëŸ‰
 
 	isActive = false;
 	isRepeat = false;
@@ -46,8 +46,7 @@ void DotweenTimer::Init()
 	onExpiration = []() {};
 }
 
-
-// Start¸¦ ºÎ¸£¸é Å¸ÀÌ¸Ó on
+// Startë¥¼ ë¶€ë¥´ë©´ íƒ€ì´ë¨¸ on
 void DotweenTimer::Start()
 {
 	elapsed = 0;

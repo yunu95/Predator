@@ -13,7 +13,11 @@ public:
 	{
 		
 	}
-	MaterialWrapper(bool isStatic)
+	MaterialWrapper(int index)
+	{
+		this->index = index;
+	}
+	MaterialWrapper(bool isStatic, int index)
 	{
 		if (isStatic)
 		{
@@ -23,6 +27,7 @@ public:
 		{
 			this->original = ((Material*)(ResourceManager::Instance.Get().GetMaterial(L"SkinnedDefaultMaterial").get()));
 		}
+		this->index = index;
 	}
 	~MaterialWrapper()
 	{
@@ -42,6 +47,11 @@ public:
 	virtual void SetPixelShader(const yunuGI::IShader* shader) override
 	{
 		GetVariation()->SetPixelShader(shader);
+
+		if (renderable->IsStatic())
+		{
+			RenderSystem::Instance.Get().ReSortRenderInfo(renderable.get(), this->index);
+		}
 	};
 
 	virtual void SetTexture(yunuGI::Texture_Type textureType, const yunuGI::ITexture* texture) override
@@ -93,24 +103,47 @@ public:
 		this->renderable = renderable;
 	}
 
-private:
-	bool usingOriginal{ true };
-
 	Material* GetVariation()
 	{
 		if (usingOriginal)
 		{
+			if (original->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+			{
+				if (renderable->IsStatic())
+				{
+					InstancingManager::Instance.Get().PopStaticDeferredData(std::static_pointer_cast<StaticMesh>(renderable)->renderInfoVec[this->index]);
+				}
+			}
+			else
+			{
+				if (renderable->IsStatic())
+				{
+					InstancingManager::Instance.Get().PopStaticForwardData(std::static_pointer_cast<StaticMesh>(renderable)->renderInfoVec[this->index]);
+				}
+			}
+
+			if (renderable->IsStatic() == false)
+			{
+				InstancingManager::Instance.Get().PopSkinnedData(std::static_pointer_cast<SkinnedMesh>(renderable)->renderInfoVec[this->index]);
+			}
+
 			variation = ResourceManager::Instance.Get().CreateInstanceMaterial(original);
+			renderable->SetMaterial(this->index, variation);
+
 			usingOriginal = false;
-			renderable->SetMaterial(0, variation);
 		}
 
 		return variation;
 	};
+private:
+	bool usingOriginal{ true };
+
+	
 
 public:
 	Material* original;
 	Material* variation;
+	int index = 0;
 
 private:
 	std::shared_ptr<IRenderable> renderable;
