@@ -980,6 +980,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Include\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="..\Include\ImGui\backends\imgui_impl_dx11.h" />
     <ClInclude Include="..\Include\ImGui\backends\imgui_impl_win32.h" />
     <ClInclude Include="..\Include\ImGui\imconfig.h" />
@@ -1125,6 +1126,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="WarriorSkillSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Include\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="AttackSystem.cpp" />
     <ClCompile Include="AutoAttackProjectilePool.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />

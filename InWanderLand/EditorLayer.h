@@ -65,6 +65,7 @@ namespace application
 
 			static std::function<void()> testInitializer;
 
+			void InitSceneGizmo();
 			void UI_DrawMenubar();
 
 			CommandManager& cm = CommandManager::GetSingletonInstance();
