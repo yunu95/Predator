@@ -11,7 +11,6 @@ namespace application::editor::palette
     }
     void UnitInstance::Init(const application::editor::UnitData* unitData)
     {
-        GetTransform()->SetWorldPosition({ unitData->pod.x,unitData->pod.y,unitData->pod.z });
         Init(unitData->pod.templateData);
     }
     void UnitInstance::Init(const application::editor::Unit_TemplateData* unitTemplateData)

@@ -49,12 +49,24 @@ namespace application
 
             return instance;
         }
+        void UnitData::OnRelocate(const Vector3d& newLoc)
+        {
+            pod.x = newLoc.x;
+            pod.y = newLoc.y;
+            pod.z = newLoc.z;
+        };
 
         palette::PaletteInstance* UnitData::ApplyAsPaletteInstance()
         {
-            auto instance{ Scene::getCurrentScene()->AddGameObject()->AddComponent<palette::UnitInstance>() };
-            instance->Init(this);
-            return instance;
+            if (GetPaletteInstance() == nullptr)
+            {
+                unitInstance = Scene::getCurrentScene()->AddGameObject()->AddComponent<palette::UnitInstance>();
+                SetPaletteInstance(unitInstance);
+                unitInstance->SetEditableData(this);
+                unitInstance->Init(this);
+            }
+            unitInstance->GetTransform()->SetWorldPosition({ pod.x,pod.y,pod.z });
+            return unitInstance;
         };
 
         bool UnitData::PreEncoding(json& data) const
@@ -81,7 +93,9 @@ namespace application
         bool UnitData::PostDecoding(const json& data)
         {
             FieldPostDecoding<boost::pfr::tuple_size_v<POD_Unit>>(pod, data["POD"]);
-
+#ifdef EDITOR
+            ApplyAsPaletteInstance();
+#endif
             return true;
         }
 

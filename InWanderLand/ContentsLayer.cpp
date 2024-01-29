@@ -9,6 +9,7 @@
 #include "DebugMeshes.h"
 #include "Application.h"
 #include "TestComponent2.h"
+#include "TestUtilGraphicsTestCam.h"
 
 #include <algorithm>
 #include <string>
@@ -24,70 +25,72 @@ std::function<void()> application::contents::ContentsLayer::testInitializer;
 /// 그래픽스 테스트용
 void GraphicsTest()
 {
-	//const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-	////_resourceManager->LoadFile("FBX/Bush");
-	//_resourceManager->LoadFile("FBX/Stone");
-	//_resourceManager->LoadFile("Texture/T_LeafBrush.png");
-	//_resourceManager->LoadFile("LeavesPS.cso");
-	//_resourceManager->LoadFile("LeavesVS.cso");
-	//auto& meshList = _resourceManager->GetMeshList();
-	//auto& shaderList = _resourceManager->GetShaderList();
-	//auto& textureList = _resourceManager->GetTextureList();
+	{
+		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+		directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{90,0,45} };
+	}
 
-	//yunuGI::IMesh* planeMesh = nullptr;
-	//yunuGI::IMesh* sphereMesh = nullptr;
-	//yunuGI::IMesh* cubeMesh = nullptr;
-	//yunuGI::IShader* pshader = nullptr;
-	//yunuGI::IShader* vshader = nullptr;
-	//yunuGI::ITexture* texture = nullptr;
+	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	camObj->AddComponent<tests::GraphicsTestCam>();
 
-	//auto material = _resourceManager->CreateMaterial(L"Leaves");
+	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	//for (auto& i : shaderList)
-	//{
-	//	float tempX = rand() % 1000;
-	//	float tempZ = rand() % 1000;
-	//	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
-	//	object->GetTransform()->position = Vector3d{ tempX,0,tempZ };
-	//	auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
-	//	for (auto& i : animationList)
-	//	{
-	//		pshader = i;
-	//	}
-	//	if (i->GetName() == L"LeavesVS.cso")
-	//	{
-	//		vshader = i;
-	//	}
-	//}
+	_resourceManager->LoadFile("FBX/Sponza");
+	_resourceManager->LoadFile("FBX/Bush");
+	_resourceManager->LoadFile("FBX/Boss");
+	_resourceManager->LoadFile("FBX/BigTree");
 
-	//for (auto& i : meshList)
-	//{
-	//	if (i->GetName() == L"Rectangle")
-	//	{
-	//		planeMesh = i;
-	//	}
-	//	if (i->GetName() == L"Sphere")
-	//	{
-	//		sphereMesh = i;
-	//	}
-	//	if (i->GetName() == L"Cube")
-	//	{
-	//		cubeMesh = i;
-	//	}
-	//}
+	for (int j = 0; j < 1; ++j)
+	{
+		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
 
-	//for (auto& i : textureList)
-	//{
-	//	if (i->GetName() == L"Texture/T_LeafBrush.png")
-	//	{
-	//		texture = i;
-	//	}
-	//}
+		auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
+		auto& animationList = _resourceManager->GetAnimationList();
+		for (auto& i : animationList)
+		{
+			if (i->GetName() == L"root|000.Idle")
+			{
+				i->SetPlaySpeed(2.f);
+				i->SetLoop(true);
+				animator->GetGI().PushAnimation(i);
+				animator->GetGI().Play(i);
+			}
 
-	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Stone");
-	//	obj->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
-	//}
+			if (i->GetName() == L"root|001-2.Walk")
+			{
+				i->SetPlaySpeed(0.5f);
+				i->SetLoop(true);
+				animator->GetGI().PushAnimation(i);
+			}
+		}
+	}
+
+	for (int i = 0; i < 500; ++i)
+	{
+		float tempX = static_cast<float>(rand() % 100);
+		float tempZ = static_cast<float>(rand() % 100);
+		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Bush");
+		object->GetTransform()->position = Vector3d{ tempX,0,tempZ };
+		object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
+		auto object1 = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("BigTree");
+		object1->GetTransform()->position = Vector3d{ tempZ,0,tempX };
+		object1->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
+	}
+
+	{
+		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sponza");
+		object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
+	}
+
+	{
+		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		object->GetTransform()->position = Vector3d{ 0,0.25,0 };
+		auto light = object->AddComponent<yunutyEngine::graphics::PointLight>();
+		yunuGI::Color color = yunuGI::Color{ 0,0,1,1 };
+		light->GetGI().SetLightDiffuseColor(color);
+		light->GetGI().SetRange(0.3);
+	}
 }
 
 
@@ -152,7 +155,7 @@ void application::contents::ContentsLayer::Initialize()
 	roamingCam->SetCameraMain();
 #ifdef GRAPHICS_TEST
 	{
-		yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+		//yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 		yunutyEngine::Collider2D::SetIsOnXYPlane(false);
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto light =directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();

@@ -4,21 +4,11 @@
 #include "InstanceManager.h"
 #include "Unit_TemplateData.h"
 #include "UnitData.h"
+#include "TemplateDataManager.h"
 
 
 namespace application::editor::palette
 {
-    unordered_set<UnitInstance*>& UnitPalette::GetAllInstances()
-    {
-        return unitInstances;
-    }
-    void UnitPalette::ClearAllInstances()
-    {
-    }
-    void UnitPalette::AddUnitInstance(const UnitData& unitData)
-    {
-
-    }
     void UnitPalette::SelectUnitTemplateData(Unit_TemplateData* templateData)
     {
         selectedUnitTemplateData = templateData;
@@ -26,6 +16,10 @@ namespace application::editor::palette
     void UnitPalette::UnselectUnitTemplateData()
     {
         SelectUnitTemplateData(nullptr);
+    }
+    void UnitPalette::Reset()
+    {
+        UnselectUnitTemplateData();
     }
     UnitData* UnitPalette::PlaceInstance(Vector3d worldPosition)
     {
@@ -40,7 +34,7 @@ namespace application::editor::palette
 
     bool UnitPalette::ShouldSelect(IEditableData* instance)
     {
-        return dynamic_cast<UnitInstance*>(instance);
+        return dynamic_cast<UnitData*>(instance);
     }
 
     void UnitPalette::OnStartPalette()

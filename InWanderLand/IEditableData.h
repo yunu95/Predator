@@ -50,6 +50,7 @@ namespace application
             virtual bool SetTemplateData(const std::string& dataName) = 0;
             virtual IEditableData* Clone() const = 0;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance() = 0;
+            virtual void OnRelocate(const Vector3d& newLoc) {};
             palette::PaletteInstance* GetPaletteInstance();
 
         protected:
@@ -59,7 +60,7 @@ namespace application
             virtual bool PostDecoding(const json& data) = 0;
             void SetPaletteInstance(palette::PaletteInstance* paletteInstance);
         private:
-            palette::PaletteInstance* paletteInstance;
+            palette::PaletteInstance* paletteInstance{ nullptr };
         };
     }
 }

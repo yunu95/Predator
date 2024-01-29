@@ -4,9 +4,18 @@
 #include "InstanceManager.h"
 #include "SelectionBox.h"
 #include "PaletteInstance.h"
+#include "RegionPalette.h"
+#include "UnitPalette.h"
+#include "TerrainPalette.h"
 
 namespace application::editor::palette
 {
+    void Palette::ResetPalettes()
+    {
+        static_cast<Palette&>(RegionPalette::SingleInstance()).Reset();
+        static_cast<Palette&>(UnitPalette::SingleInstance()).Reset();
+        static_cast<Palette&>(TerrainPalette::SingleInstance()).Reset();
+    }
     void Palette::OnLeftClick()
     {
         isClickingLeft = true;
@@ -91,7 +100,10 @@ namespace application::editor::palette
             break;
         case application::editor::palette::Palette::State::DraggingObjects:
             for (auto each : selection)
-                each->GetPaletteInstance()->GetTransform()->SetWorldPosition(each->GetPaletteInstance()->GetTransform()->GetWorldPosition() + currentBrushPos - lastFrameBrushPos);
+            {
+                each->OnRelocate(each->GetPaletteInstance()->GetTransform()->GetWorldPosition() + currentBrushPos - lastFrameBrushPos);
+                each->ApplyAsPaletteInstance();
+            }
             break;
         case application::editor::palette::Palette::State::DraggingSelectBox:
             SelectionBox::Instance().SetCoverage(dragStartPos, currentBrushPos);
@@ -130,7 +142,6 @@ namespace application::editor::palette
     {
         return state != State::Place;
     }
-
     bool Palette::IsClickingLeft()
     {
         return isClickingLeft;

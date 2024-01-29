@@ -17,7 +17,9 @@ void PlayerSkillSystem::SkillActivate(Unit::SkillEnum p_currentSkill, Vector3d p
 	}
 }
 
-void PlayerSkillSystem::SetPlayerDotweenComponent(Dotween* p_dotween)
+void PlayerSkillSystem::SetOtherComponentsAsMember()
 {
-	m_UnitDotween = p_dotween;
+	m_unitComponent = GetGameObject()->GetComponent<Unit>();
+	m_unitDotween = GetGameObject()->GetComponent<Dotween>();
+	m_unitNavComponent = GetGameObject()->GetComponent<NavigationAgent>();
 }

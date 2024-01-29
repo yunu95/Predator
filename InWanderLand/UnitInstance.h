@@ -27,7 +27,6 @@ namespace application
                 {
                     PaletteInstance::OnHoverLeft();
                 }
-                //virtual void ApplyInstance() override;
             private:
                 yunutyEngine::graphics::StaticMeshRenderer* mesh{ nullptr };
                 const application::editor::Unit_TemplateData* unitTemplateData;

@@ -2,6 +2,7 @@
 #include "Palette.h"
 #include "YunutyEngine.h"
 #include "SingletonClass.h"
+#include "TerrainData.h"
 
 namespace application
 {
@@ -32,6 +33,7 @@ namespace application
                 static constexpr double nodeDistance = 0.5;
                 static constexpr double nodeHeight = 6;
             private:
+                //TerrainInstanceData는 사실상 단 하나만 존재함.
                 int brushSize = 0;
                 bool isMarking{ true };
                 unordered_map<Vector2i, GameObject*> nodes;

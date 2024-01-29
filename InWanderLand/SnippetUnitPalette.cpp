@@ -46,8 +46,9 @@ namespace snippets
                 rtsCam->groundHoveringClickCallback = [&](const Vector3d& worldPos) { if (application::Application::IsFocusGameWindow()) { application::editor::palette::UnitPalette::SingleInstance().OnMouseMove(worldPos); } };
                 rtsCam->groundLeftClickCallback = [&](const Vector3d& worldPos) { application::editor::palette::UnitPalette::SingleInstance().OnLeftClick(); };
                 rtsCam->groundLeftClickReleaseCallback = [&](const Vector3d& worldPos) { if (application::Application::IsFocusGameWindow()) { application::editor::palette::UnitPalette::SingleInstance().OnLeftClickRelease(); } };
-                rtsCam->deleteButtonCallback = [&]() { if (application::Application::IsFocusGameWindow()) { application::editor::palette::UnitPalette::SingleInstance().OnDeletion(); } };
-                rtsCam->xButtonCallback = [&]()
+                rtsCam->buttonCallbackDelete = [&]() { if (application::Application::IsFocusGameWindow()) { application::editor::palette::UnitPalette::SingleInstance().OnDeletion(); } };
+                rtsCam->buttonCallback_X = [&]() { UnitPalette::SingleInstance().SelectUnitTemplateData(TemplateDataManager::GetSingletonInstance().GetTemplateData<Unit_TemplateData>("DefaultUnit")); };
+                rtsCam->buttonCallbackSpace = [&]()
                 {
                     if (application::Application::IsFocusGameWindow())
                     {
@@ -55,14 +56,16 @@ namespace snippets
                     }
                 };
 
+
+
                 auto directionalLight = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 
-                auto tempUnit1 = Scene::getCurrentScene()->AddGameObject()->AddComponent<UnitInstance>();
-                tempUnit1->GetTransform()->position = Vector3d(0, 0, 0);
-                auto tempUnit2 = Scene::getCurrentScene()->AddGameObject()->AddComponent<UnitInstance>();
-                tempUnit2->GetTransform()->position = Vector3d(3, 0, 0);
-                auto tempUnit3 = Scene::getCurrentScene()->AddGameObject()->AddComponent<UnitInstance>();
-                tempUnit3->GetTransform()->position = Vector3d(0, 0, 3);
+                //auto tempUnit1 = Scene::getCurrentScene()->AddGameObject()->AddComponent<UnitInstance>();
+                //tempUnit1->GetTransform()->position = Vector3d(0, 0, 0);
+                //auto tempUnit2 = Scene::getCurrentScene()->AddGameObject()->AddComponent<UnitInstance>();
+                //tempUnit2->GetTransform()->position = Vector3d(3, 0, 0);
+                //auto tempUnit3 = Scene::getCurrentScene()->AddGameObject()->AddComponent<UnitInstance>();
+                //tempUnit3->GetTransform()->position = Vector3d(0, 0, 3);
 
                 SelectionBox::Instance();
                 yunutyEngine::YunutyCycle::SingleInstance().Play();

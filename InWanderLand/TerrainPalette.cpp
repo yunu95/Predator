@@ -6,6 +6,8 @@
 #include "DebugMeshes.h"
 #include "TerrainBrush.h"
 #include "SingleNavigationField.h"
+#include "TerrainData.h"
+#include "InstanceManager.h"
 
 namespace application::editor::palette
 {

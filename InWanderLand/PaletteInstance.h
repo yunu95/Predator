@@ -49,6 +49,7 @@ namespace application
                 /// </summary>
                 static void ResetInstances();
                 IEditableData* GetEditableData();
+                void SetEditableData(IEditableData* data);
             protected:
                 //virtual void ApplyInstance();
                 virtual void EnablePickingCollider();

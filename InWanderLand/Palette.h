@@ -27,6 +27,9 @@ namespace application
                     DraggingObjects, // 객체를 움직이는 상태
                     DraggingSelectBox, // 선택 박스를 조정하고 있는 상태
                 };
+                // 팔레트와 맵 데이터는 서로 밀접한 관계를 가지고 있으므로, 맵 데이터를 로드할때마다 팔레트를 초기화할 필요가 있습니다.
+                // ResetPalettes 함수는 모든 팔레트들의 상태를 초기화합니다.
+                static void ResetPalettes();
                 /// <summary>
                 /// LeftClick, LeftClickRelease, OnMouseMove, OnDeletion은 적절히 호출되었을 때 다음과 같은 기능을 수행합니다.
                 /// - 클릭 이벤트가 일어났을 때 가까운 인스턴스 하나를 선택합니다.
@@ -69,6 +72,8 @@ namespace application
                 State GetCurrentState() { return state; }
 
             protected:
+                // Reset 함수는 맵 데이터를 로드할때마다 기존에 로드되어 있던 맵 데이터들간의 관계를 초기화하는데에 사용됩니다.
+                virtual void Reset() {};
                 /// <summary>
                 /// 객체 배치를 시도할 때 호출되는 함수입니다. 해당 위치에 유닛, 지형, 장식물 등을 배치하고 배치된 객체를 반환하십시오.
                 /// 부득이한 여건으로 객체를 배치할 수 없다면 Null 포인터를 반환하십시오. 

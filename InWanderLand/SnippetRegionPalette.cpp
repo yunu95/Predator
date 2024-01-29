@@ -27,8 +27,8 @@ void SnippetInitializerRegionPalette()
     //rtsCam->groundHoveringClickCallback = [](const Vector3d& worldPos) {application::editor::palette::Palette::GetCurrentPalette()->OnMouseMove(worldPos); };
     //rtsCam->groundLeftClickCallback = [](const Vector3d& worldPos) {application::editor::palette::Palette::GetCurrentPalette()->OnLeftClick(); };
     //rtsCam->groundLeftClickReleaseCallback = [](const Vector3d& worldPos) {application::editor::palette::Palette::GetCurrentPalette()->OnLeftClickRelease(); };
-    //rtsCam->deleteButtonCallback = []() {application::editor::palette::Palette::GetCurrentPalette()->OnDeletion(); };
-    //rtsCam->xButtonCallback = []()
+    //rtsCam->buttonCallbackDelete = []() {application::editor::palette::Palette::GetCurrentPalette()->OnDeletion(); };
+    //rtsCam->buttonCallback_X = []()
     //{
     //    auto palette = application::editor::palette::Palette::GetCurrentPalette();
     //    palette->SetAsSelectMode(!palette->IsSelectMode());

@@ -11,7 +11,6 @@
 
 #include "CameraManager.h"
 #include "NailCamera.h"
-#include "RenderableManager.h"
 #include "IRenderable.h"
 #include "SKinnedMesh.h"
 
@@ -75,8 +74,6 @@ void RenderSystem::ClearRenderInfo()
 
 void RenderSystem::SortObject()
 {
-	auto& staticRenderableSet = RenderableManager::Instance.Get().GetStaticRenderableSet();
-
 	for (auto& e : staticRenderableSet)
 	{
 		if (e->IsActive() == false)
@@ -108,8 +105,6 @@ void RenderSystem::SortObject()
 	}
 
 	// skinned
-	auto& skinnedRenderableSet = RenderableManager::Instance.Get().GetSKinnedRenderableSet();
-
 	for (auto& e : skinnedRenderableSet)
 	{
 		if (e->IsActive() == false)
@@ -199,7 +194,7 @@ void RenderSystem::Render()
 	RenderSkinned();
 
 	// 그림자 맵 생성
-	RenderShadow();
+	//RenderShadow();
 
 	//SkyBoxPass::Instance.Get().BuildIrradianceMap();
 	SkyBoxPass::Instance.Get().BindIBLTexture();
@@ -394,9 +389,8 @@ void RenderSystem::DrawFinal()
 
 void RenderSystem::RenderUI()
 {
-	auto& uiSet = RenderableManager::Instance.Get().GetUIImageSet();
 	this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied());
-	for (auto& i : uiSet)
+	for (auto& i : UIImageSet)
 	{
 		auto uiImage = std::static_pointer_cast<UIImage>(i);
 
@@ -505,6 +499,46 @@ void RenderSystem::DrawDeferredInfo()
 		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 		ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();
 	}
+}
+
+void RenderSystem::PushStaticRenderableObject(std::shared_ptr<IRenderable> renderable)
+{
+	this->staticRenderableSet.insert(renderable);
+}
+
+void RenderSystem::PopStaticRenderableObject(std::shared_ptr<IRenderable> renderable)
+{
+	this->staticRenderableSet.erase(renderable);
+}
+
+void RenderSystem::PushSkinnedRenderableObject(std::shared_ptr<IRenderable> renderable)
+{
+	this->skinnedRenderableSet.insert(renderable);
+}
+
+void RenderSystem::PopSkinnedRenderableObject(std::shared_ptr<IRenderable> renderable)
+{
+	this->skinnedRenderableSet.erase(renderable);
+}
+
+void RenderSystem::PushUIObject(std::shared_ptr<IRenderable> renderable)
+{
+	this->UIImageSet.insert(renderable);
+}
+
+void RenderSystem::PopUIObject(std::shared_ptr<IRenderable> renderable)
+{
+	this->UIImageSet.erase(renderable);
+}
+
+void RenderSystem::ReSortUIObject(int layer, std::shared_ptr<UIImage> ui)
+{
+	auto iter = this->UIImageSet.find(ui);
+
+	std::static_pointer_cast<UIImage>(*iter)->layer = layer;
+	auto newUI = *iter;
+	this->UIImageSet.erase(iter);
+	this->UIImageSet.insert(newUI);
 }
 
 //void RenderSystem::BoneUpdate(const SkinnedRenderInfo& skinnedRenderInfo)

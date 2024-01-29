@@ -63,6 +63,10 @@ namespace application::editor::palette
     {
         return editableData;
     }
+    void PaletteInstance::SetEditableData(IEditableData* data)
+    {
+        editableData = data;
+    }
     void PaletteInstance::ApplyInstances()
     {
     }

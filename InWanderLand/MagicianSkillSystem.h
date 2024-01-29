@@ -7,14 +7,6 @@ class ParalysisFieldComponent;
 class MagicianSkillSystem : public PlayerSkillSystem
 {
 private:
-	struct SkillRequirements
-	{
-		physics::SphereCollider* skillCollider;
-		GameObject* colliderObject;
-		GameObject* debugObject;
-		Dotween* dotweenComponent;
-	};
-
 	SkillRequirements QSkillProjectile;
 	SkillRequirements QSkillFieldDamage;
 
@@ -45,7 +37,6 @@ private:
 public:
 	virtual void QSkillActivate(Vector3d skillPos) override;
 	virtual void WSkillActivate(Vector3d skillPos) override;
-	virtual void ESkillActivate(Vector3d skillPos) override;
 public:
 	void SetInterActionComponent(BlindFieldComponent* p_QSkillComponent, ParalysisFieldComponent* p_WSkillComponent);
 	

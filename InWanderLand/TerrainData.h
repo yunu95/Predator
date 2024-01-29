@@ -27,6 +27,7 @@ namespace application
         struct POD_Terrain
         {
             Terrain_TemplateData* templateData = nullptr;
+            std::vector<std::pair<int, int>> coordinates;
 
             TO_JSON(POD_Terrain)
                 FROM_JSON(POD_Terrain)
@@ -38,11 +39,20 @@ namespace application
             friend class InstanceManager;
 
         public:
+            ~TerrainData();
+            // 지형 인스턴스 정보는 맵에 단 하나만 존재합니다.
+            static TerrainData& GetSoleTerrainData();
             virtual bool EnterDataFromTemplate() override;
             virtual ITemplateData* GetTemplateData() override;
             virtual bool SetTemplateData(const std::string& dataName) override;
             virtual IEditableData* Clone() const override;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance()override { return nullptr; };
+
+            // 팔레트에서 이전된 기능들
+            void ApplyAsPlaytimeObjects();
+            void AddNode(const Vector2i& nodeKey);
+            void EraseNode(const Vector2i& nodeKey);
+            void ClearNodes();
 
             POD_Terrain pod;
 
@@ -53,6 +63,7 @@ namespace application
             virtual bool PostDecoding(const json& data) override;
 
         private:
+            static TerrainData* soleTerrainData;
             static TemplateDataManager& templateDataManager;
 
             TerrainData();

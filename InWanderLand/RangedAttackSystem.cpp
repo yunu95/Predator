@@ -2,6 +2,7 @@
 #include "RangedAttackSystem.h"
 #include "AutoAttackProjectilePool.h"
 #include "MagicianAutoAttackProjectilePool.h"
+#include "HealerAutoAttackProjectilePool.h"
 
 void RangedAttackSystem::Attack(Unit* opponentUnit)
 {
@@ -14,7 +15,7 @@ void RangedAttackSystem::Attack(Unit* opponentUnit)
 			break;
 		case Unit::UnitType::Healer:
 		{
-
+			HealerAutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed);
 		}
 		default:
 			AutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed);

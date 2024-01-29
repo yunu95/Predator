@@ -9,6 +9,7 @@ private:
 
 	bool isColliderSetActiveFalseSet;
 	bool isQSkillActivating = false;
+	bool isWSkillActivating = false;
 
 	GameObject* m_QSkillKnockBackDebugObject;	float m_QSkillRadius;
 	GameObject* m_WSkillDebugObject;			float m_WSkillRadius;
@@ -21,7 +22,6 @@ private:
 public:
 	virtual void QSkillActivate(Vector3d skillPos) override;
 	virtual void WSkillActivate(Vector3d skillPos) override;
-	virtual void ESkillActivate(Vector3d skillPos) override;
 
 public:
 	void SetQSkillKnockBackCollider(physics::SphereCollider* p_collider);
