@@ -1183,7 +1183,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="SkillSystem.cpp" />
     <ClCompile Include="MapFileManager.cpp" />
     <ClCompile Include="Module_TemplateDataEditor.cpp" />
-    <ClCompile Include="Ornament.cpp" />
+    <ClCompile Include="OrnamentData.cpp" />
     <ClCompile Include="Ornament_TemplateData.cpp" />
     <ClCompile Include="PaletteInstance.cpp" />
     <ClCompile Include="Palette.cpp" />

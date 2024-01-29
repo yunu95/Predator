@@ -12,52 +12,53 @@
 
 namespace application
 {
-	namespace editor
-	{
-		class TemplateDataManager;
-	}
+    namespace editor
+    {
+        class TemplateDataManager;
+    }
 }
 
 namespace application
 {
-	namespace editor
-	{
-		class TerrainData;
+    namespace editor
+    {
+        class TerrainData;
 
-		struct POD_Terrain
-		{
-			Terrain_TemplateData* templateData = nullptr;
+        struct POD_Terrain
+        {
+            Terrain_TemplateData* templateData = nullptr;
 
-			TO_JSON(POD_Terrain)
-			FROM_JSON(POD_Terrain)
-		};
+            TO_JSON(POD_Terrain)
+                FROM_JSON(POD_Terrain)
+        };
 
-		class TerrainData
-			: public IEditableData
-		{
-			friend class InstanceManager;
+        class TerrainData
+            : public IEditableData
+        {
+            friend class InstanceManager;
 
-		public:
-			virtual bool EnterDataFromTemplate() override;
-			virtual ITemplateData* GetTemplateData() override;
-			virtual bool SetTemplateData(const std::string& dataName) override;
-			virtual IEditableData* Clone() const override;
+        public:
+            virtual bool EnterDataFromTemplate() override;
+            virtual ITemplateData* GetTemplateData() override;
+            virtual bool SetTemplateData(const std::string& dataName) override;
+            virtual IEditableData* Clone() const override;
+            virtual palette::PaletteInstance* ApplyAsPaletteInstance()override { return nullptr; };
 
-			POD_Terrain pod;
+            POD_Terrain pod;
 
-		protected:
-			virtual bool PreEncoding(json& data) const override;
-			virtual bool PostEncoding(json& data) const override;
-			virtual bool PreDecoding(const json& data) override;
-			virtual bool PostDecoding(const json& data) override;
+        protected:
+            virtual bool PreEncoding(json& data) const override;
+            virtual bool PostEncoding(json& data) const override;
+            virtual bool PreDecoding(const json& data) override;
+            virtual bool PostDecoding(const json& data) override;
 
-		private:
-			static TemplateDataManager& templateDataManager;
+        private:
+            static TemplateDataManager& templateDataManager;
 
-			TerrainData();
-			TerrainData(const std::string& name);
-			TerrainData(const TerrainData& prototype);
-			TerrainData& operator=(const TerrainData& prototype);
-		};
-	}
+            TerrainData();
+            TerrainData(const std::string& name);
+            TerrainData(const TerrainData& prototype);
+            TerrainData& operator=(const TerrainData& prototype);
+        };
+    }
 }

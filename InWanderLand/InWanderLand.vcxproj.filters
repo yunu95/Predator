@@ -757,7 +757,7 @@
     <ClCompile Include="InstanceManager.cpp">
       <Filter>Editor\DataSystem</Filter>
     </ClCompile>
-    <ClCompile Include="Ornament.cpp">
+    <ClCompile Include="OrnamentData.cpp">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClCompile>
     <ClCompile Include="TerrainData.cpp">

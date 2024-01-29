@@ -5,6 +5,7 @@ namespace application
 {
     namespace editor
     {
+        class IEditableData;
         namespace palette
         {
             /// <summary>
@@ -47,16 +48,20 @@ namespace application
                 /// 기본 동작은 피킹을 위해 쓰이는 충돌체들을 다시 활성화시킵니다.
                 /// </summary>
                 static void ResetInstances();
+                IEditableData* GetEditableData();
             protected:
-                virtual void ApplyInstance();
-                virtual void ResetInstance();
+                //virtual void ApplyInstance();
+                virtual void EnablePickingCollider();
+                virtual void DisablePickingCollider();
                 float selectCircleRadius{ 1.25 };
                 yunutyEngine::physics::BoxCollider* pickingCollider{ nullptr };
             private:
+                IEditableData* editableData{ nullptr };
                 yunutyEngine::physics::RigidBody* rigidBody{ nullptr };
                 yunutyEngine::graphics::StaticMeshRenderer* selectCircle{nullptr};
                 bool isSelected{ false };
                 bool isHovering{ false };
+                friend IEditableData;
             };
         }
     }

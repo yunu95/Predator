@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <string>
+#include "UnitPalette.h"
 
 namespace application
 {
@@ -38,6 +39,7 @@ namespace application
 		{
 			Unit_TemplateData* templateData = nullptr;
 			unit::Affiliation affiliation = unit::Affiliation::None;
+			float x, y, z;
 
 			TO_JSON(POD_Unit)
 			FROM_JSON(POD_Unit)
@@ -53,6 +55,7 @@ namespace application
 			virtual ITemplateData* GetTemplateData() override;
 			virtual bool SetTemplateData(const std::string& dataName) override;
 			virtual IEditableData* Clone() const override;
+			virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
 
 			POD_Unit pod;
 

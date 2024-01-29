@@ -6,12 +6,12 @@ namespace application
     {
         namespace palette
         {
-            PaletteInstance* DoodadPalette::PlaceInstance(Vector3d worldPosition)
+            IEditableData* DoodadPalette::PlaceInstance(Vector3d worldPosition)
             {
                 return nullptr;
             }
 
-            bool DoodadPalette::ShouldSelect(PaletteInstance* instance)
+            bool DoodadPalette::ShouldSelect(IEditableData* instance)
             {
                 return false;
             }

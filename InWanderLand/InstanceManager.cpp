@@ -15,7 +15,8 @@ namespace application
 
         }
 
-        IEditableData* InstanceManager::CreateInstance(const std::string& dataName)
+        template<>
+        IEditableData* InstanceManager::CreateInstance<IEditableData>(const std::string& dataName)
         {
             auto tdptr = templateDataManager.GetTemplateData(dataName);
             if (tdptr == nullptr)
@@ -73,17 +74,6 @@ namespace application
             tdMap.erase(uuid);
 
             return true;
-        }
-
-        IEditableData* InstanceManager::GetInstance(const UUID& uuid) const
-        {
-            auto itr = list.find(uuid);
-            if (itr == list.end())
-            {
-                return nullptr;
-            }
-
-            return itr->second.get();
         }
 
         void InstanceManager::Clear()

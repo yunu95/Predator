@@ -1,7 +1,7 @@
 #include "InWanderLand.h"
 #include "DebugMeshes.h"
 #include "UnitInstance.h"
-
+#include "UnitData.h"
 namespace application::editor::palette
 {
     void UnitInstance::Start()
@@ -9,9 +9,13 @@ namespace application::editor::palette
         PaletteInstance::Start();
         mesh = AttachDebugMesh(GetGameObject()->AddGameObject(), DebugMeshType::Cube, yunuGI::Color{1, 1, 1}, false);
     }
-
-    void UnitInstance::ApplyInstance()
+    void UnitInstance::Init(const application::editor::UnitData* unitData)
     {
-        // 유닛 생성과 관련된 코드를 여기 넣으면 됨.
+        GetTransform()->SetWorldPosition({ unitData->pod.x,unitData->pod.y,unitData->pod.z });
+        Init(unitData->pod.templateData);
+    }
+    void UnitInstance::Init(const application::editor::Unit_TemplateData* unitTemplateData)
+    {
+        this->unitTemplateData = unitTemplateData;
     }
 }

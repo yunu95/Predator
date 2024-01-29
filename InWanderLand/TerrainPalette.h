@@ -12,12 +12,12 @@ namespace application
             class TerrainPalette : public Palette, public  yunutyEngine::SingletonClass<TerrainPalette>
             {
             public:
-                virtual PaletteInstance* PlaceInstance(Vector3d worldPosition)override;
+                virtual IEditableData* PlaceInstance(Vector3d worldPosition)override;
                 virtual void OnMouseMove(Vector3d projectedWorldPos)override;
                 virtual void SetAsSelectMode(bool isSelectMode) override;
                 // isMarking은 지형을 추가하고 있는지 없애고 있는지 나타냅니다. 
-                virtual void ApplyAsPlaytimeObjects() override;
-                virtual void CleanUpPlaytimeObjects() override {};
+                void ApplyAsPlaytimeObjects();
+                //virtual void CleanUpPlaytimeObjects() override {};
                 virtual void OnStartPalette() override;
                 virtual void OnStandbyPalette() override;
                 bool IsMarking();

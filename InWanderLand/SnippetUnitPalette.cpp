@@ -6,11 +6,14 @@
 #include "DelayedTestFunctions.h"
 #include "Application.h"
 #include "RTSCam.h"
+#include "TestUtilRTSTestCam.h"
 #include "SelectionBox.h"
 #include "PaletteManager.h"
 #include "TerrainPalette.h"
 #include "UnitPalette.h"
 #include "UnitInstance.h"
+#include "Unit_TemplateData.h"
+#include "TemplateDataManager.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -28,25 +31,29 @@ namespace snippets
             // 이 함수는 게임의 기본 초기화 함수를 오버라이드합니다.
             static void SnippetInitializerUnitPalette()
             {
+                using namespace application::editor::palette;
+                using namespace application::editor;
                 yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 
                 auto& app = application::Application::GetInstance();
 
-                //auto rtsCam = Scene::getCurrentScene()->AddGameObject()->AddComponent<RTSCam>();
-                //rtsCam->GetTransform()->position = Vector3d(3, 10, 3);
-                //application::editor::palette::PaletteManager::GetSingletonInstance().SetCurrentPalette(&application::editor::palette::UnitPalette::SingleInstance());
-                //rtsCam->groundHoveringClickCallback = [&](const Vector3d& worldPos) { if (application::Application::IsFocusGameWindow()){ application::editor::palette::UnitPalette::GetCurrentPalette()->OnMouseMove(worldPos); } };
-                //rtsCam->groundLeftClickCallback = [&](const Vector3d& worldPos) { application::editor::palette::UnitPalette::GetCurrentPalette()->OnLeftClick(); };
-                //rtsCam->groundLeftClickReleaseCallback = [&](const Vector3d& worldPos) { if (application::Application::IsFocusGameWindow()) { application::editor::palette::UnitPalette::GetCurrentPalette()->OnLeftClickRelease(); } };
-                //rtsCam->deleteButtonCallback = [&]() { if (application::Application::IsFocusGameWindow()) { application::editor::palette::Palette::GetCurrentPalette()->OnDeletion(); } };
-                //rtsCam->xButtonCallback = [&]()
-                //{
-                //    if (application::Application::IsFocusGameWindow())
-                //    {
-                //        auto palette = application::editor::palette::Palette::GetCurrentPalette();
-                //        palette->SetAsSelectMode(!palette->IsSelectMode());
-                //    }
-                //};
+                auto defaultUnitTemplate = TemplateDataManager::GetSingletonInstance().CreateTemplateData<Unit_TemplateData>("DefaultUnit");
+                UnitPalette::SingleInstance().SelectUnitTemplateData(defaultUnitTemplate);
+
+                auto rtsCam = Scene::getCurrentScene()->AddGameObject()->AddComponent<tests::RTSTestCam>();
+                rtsCam->GetTransform()->position = Vector3d(3, 10, 3);
+                application::editor::palette::PaletteManager::GetSingletonInstance().SetCurrentPalette(&application::editor::palette::UnitPalette::SingleInstance());
+                rtsCam->groundHoveringClickCallback = [&](const Vector3d& worldPos) { if (application::Application::IsFocusGameWindow()) { application::editor::palette::UnitPalette::SingleInstance().OnMouseMove(worldPos); } };
+                rtsCam->groundLeftClickCallback = [&](const Vector3d& worldPos) { application::editor::palette::UnitPalette::SingleInstance().OnLeftClick(); };
+                rtsCam->groundLeftClickReleaseCallback = [&](const Vector3d& worldPos) { if (application::Application::IsFocusGameWindow()) { application::editor::palette::UnitPalette::SingleInstance().OnLeftClickRelease(); } };
+                rtsCam->deleteButtonCallback = [&]() { if (application::Application::IsFocusGameWindow()) { application::editor::palette::UnitPalette::SingleInstance().OnDeletion(); } };
+                rtsCam->xButtonCallback = [&]()
+                {
+                    if (application::Application::IsFocusGameWindow())
+                    {
+                        UnitPalette::SingleInstance().SetAsSelectMode(!UnitPalette::SingleInstance().IsSelectMode());
+                    }
+                };
 
                 auto directionalLight = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 

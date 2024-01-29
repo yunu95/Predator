@@ -1,7 +1,9 @@
 #include "InWanderLand.h"
 #include "Palette.h"
-#include "PaletteInstance.h"
+#include "IEditableData.h"
+#include "InstanceManager.h"
 #include "SelectionBox.h"
+#include "PaletteInstance.h"
 
 namespace application::editor::palette
 {
@@ -89,7 +91,7 @@ namespace application::editor::palette
             break;
         case application::editor::palette::Palette::State::DraggingObjects:
             for (auto each : selection)
-                each->GetTransform()->SetWorldPosition(each->GetTransform()->GetWorldPosition() + currentBrushPos - lastFrameBrushPos);
+                each->GetPaletteInstance()->GetTransform()->SetWorldPosition(each->GetPaletteInstance()->GetTransform()->GetWorldPosition() + currentBrushPos - lastFrameBrushPos);
             break;
         case application::editor::palette::Palette::State::DraggingSelectBox:
             SelectionBox::Instance().SetCoverage(dragStartPos, currentBrushPos);
@@ -104,9 +106,10 @@ namespace application::editor::palette
     {
         for (auto each : selection)
         {
-            each->GetGameObject()->GetScene()->DestroyGameObject(each->GetGameObject());
             auto& contactingInstances = SelectionBox::Instance().GetContactingInstances();
-            contactingInstances.erase(each);
+            contactingInstances.erase(each->GetPaletteInstance());
+
+            InstanceManager::GetSingletonInstance().DeleteInstance(each->GetUUID());
         }
         selection.clear();
     }
@@ -141,7 +144,7 @@ namespace application::editor::palette
         isClickingLeft = false;
     }
 
-    void Palette::OnSelectionContactEnter(PaletteInstance* instance)
+    void Palette::OnSelectionContactEnter(IEditableData* instance)
     {
         switch (state)
         {
@@ -161,7 +164,7 @@ namespace application::editor::palette
             break;
         }
     }
-    void Palette::OnSelectionContactExit(PaletteInstance* instance)
+    void Palette::OnSelectionContactExit(IEditableData* instance)
     {
         switch (state)
         {
@@ -182,32 +185,32 @@ namespace application::editor::palette
         }
     }
 
-    void Palette::InsertSelection(PaletteInstance* instance)
+    void Palette::InsertSelection(IEditableData* instance)
     {
         if (selection.find(instance) == selection.end())
         {
             selection.insert(instance);
-            instance->OnSelected();
+            instance->GetPaletteInstance()->OnSelected();
         }
 
     }
-    void Palette::EraseSelection(PaletteInstance* instance)
+    void Palette::EraseSelection(IEditableData* instance)
     {
         if (selection.find(instance) != selection.end())
         {
             selection.erase(instance);
-            instance->OnDeselected();
+            instance->GetPaletteInstance()->OnDeselected();
         }
     }
     void Palette::ClearSelection()
     {
         for (auto each : selection)
-            each->OnDeselected();
+            each->GetPaletteInstance()->OnDeselected();
         selection.clear();
     }
     void Palette::HoverClosestInstance()
     {
-        PaletteInstance* newPendingSelection{ nullptr };
+        IEditableData* newPendingSelection{ nullptr };
         auto& contactingInstances = SelectionBox::Instance().GetContactingInstances();
         if (contactingInstances.empty())
         {
@@ -217,9 +220,9 @@ namespace application::editor::palette
         {
             for (auto each : contactingInstances)
             {
-                if (ShouldSelect(each))
+                if (ShouldSelect(each->GetEditableData()))
                 {
-                    newPendingSelection = each;
+                    newPendingSelection = each->GetEditableData();
                     break;
                 }
             }
@@ -227,23 +230,24 @@ namespace application::editor::palette
             {
                 if (newPendingSelection == nullptr)
                     break;
-                if (ShouldSelect(each) && (each->GetTransform()->GetWorldPosition() - currentBrushPos).MagnitudeSqr() < (newPendingSelection->GetTransform()->GetWorldPosition() - currentBrushPos).MagnitudeSqr())
-                    newPendingSelection = each;
+                if (ShouldSelect(each->GetEditableData()) &&
+                    (each->GetTransform()->GetWorldPosition() - currentBrushPos).MagnitudeSqr() < (newPendingSelection->GetPaletteInstance()->GetTransform()->GetWorldPosition() - currentBrushPos).MagnitudeSqr())
+                    newPendingSelection = each->GetEditableData();
             }
         }
         if (newPendingSelection == pendingSelection)
             return;
         if (pendingSelection)
-            pendingSelection->OnHoverLeft();
+            pendingSelection->GetPaletteInstance()->OnHoverLeft();
         if (newPendingSelection)
-            newPendingSelection->OnHover();
+            newPendingSelection->GetPaletteInstance()->OnHover();
 
         pendingSelection = newPendingSelection;
     }
     void Palette::UnHoverCurrentInstance()
     {
         if (pendingSelection)
-            pendingSelection->OnHoverLeft();
+            pendingSelection->GetPaletteInstance()->OnHoverLeft();
         pendingSelection = nullptr;
     }
 }

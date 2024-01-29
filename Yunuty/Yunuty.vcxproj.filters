@@ -313,9 +313,6 @@
     <Filter Include="yunutyEngine\ClientTemplate\GameObjectPool">
       <UniqueIdentifier>{09ae7e14-a6e9-4647-8db8-031e20608951}</UniqueIdentifier>
     </Filter>
-    <Filter Include="yunutyEngine\ClientTemplate\RegistryClass">
-      <UniqueIdentifier>{bb8f68b8-6f34-438e-8922-c03748dbe713}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
