@@ -63,14 +63,14 @@ public:
 		{
 			if (this->materialVec[index] != reinterpret_cast<Material*>(material))
 			{
-				//if (this->materialVec[index]->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
-				//{
-				//	InstancingManager::Instance.Get().PopStaticDeferredData(renderInfoVec[index]);
-				//}
-				//else
-				//{
-				//	InstancingManager::Instance.Get().PopStaticForwardData(renderInfoVec[index]);
-				//}
+				if (this->materialVec[index]->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+				{
+					InstancingManager::Instance.Get().PopStaticDeferredData(renderInfoVec[index]);
+				}
+				else
+				{
+					InstancingManager::Instance.Get().PopStaticForwardData(renderInfoVec[index]);
+				}
 
 				renderInfoVec[index]->mesh = this->mesh;
 				renderInfoVec[index]->material = reinterpret_cast<Material*>(material);

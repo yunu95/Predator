@@ -105,8 +105,6 @@ void Unit::Start()
 void Unit::Update()
 {
 	unitFSM.UpdateState();
-	/// 꼭 고쳐주기 나중에!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//GetGameObject()->GetTransform()->scale = Vector3d(0.00005, 0.00005, 0.00005);
 }
 
 Unit::UnitType Unit::GetUnitType() const
@@ -148,7 +146,7 @@ void Unit::MoveEngage()
 
 	Vector3d mouseXZVector = Vector3d(m_currentMovePosition.x, 0, m_currentMovePosition.z);
 
-	//dotween->DOLookAt(mouseXZVector, 1, f);
+	dotween->DOLookAt(mouseXZVector, 1, false);
 
 	GetGameObject()->GetComponent<NavigationAgent>()->SetSpeed(m_speed);
 
