@@ -27,7 +27,10 @@ public:
 
 	void PushData();
 	void ClearData();
-	unsigned int GetCount() { return static_cast<unsigned int>(_data.size()); }
+	unsigned int GetCount() 
+	{
+		return static_cast<unsigned int>(_data.size()); 
+	}
 
 private:
 	

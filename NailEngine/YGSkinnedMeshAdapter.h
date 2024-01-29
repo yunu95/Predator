@@ -17,9 +17,9 @@ namespace yunuGIAdapter
 		SkinnedMeshAdapter() :RenderableAdapter()
 		{
 			renderable = std::make_shared<SkinnedMesh>();
-			RenderSystem::Instance.Get().PushSkinnedRenderableObject(renderable);
+			RenderSystem::Instance.Get().PushSkinnedRenderableObject(renderable.get());
 
-			std::shared_ptr<MaterialWrapper> material = std::make_shared<MaterialWrapper>(false);
+			std::shared_ptr<MaterialWrapper> material = std::make_shared<MaterialWrapper>(false,0);
 			material->SetRenderable(this->renderable);
 			//renderable->SetMaterial(0, material->GetMaterial());
 			this->materialVec.emplace_back(material);
@@ -27,7 +27,7 @@ namespace yunuGIAdapter
 
 		~SkinnedMeshAdapter()
 		{
-			RenderSystem::Instance.Get().PopSkinnedRenderableObject(renderable);
+			RenderSystem::Instance.Get().PopSkinnedRenderableObject(renderable.get());
 		}
 
 		virtual void SetBone(std::wstring fbxName) override
@@ -62,7 +62,7 @@ namespace yunuGIAdapter
 			// 새로운 Material이라면
 			if (index + 1 > this->materialVec.size())
 			{
-				std::shared_ptr<MaterialWrapper> tempMaterial = std::make_shared<MaterialWrapper>();
+				std::shared_ptr<MaterialWrapper> tempMaterial = std::make_shared<MaterialWrapper>(index);
 				tempMaterial->SetRenderable(this->renderable);
 				this->materialVec.emplace_back(tempMaterial);
 
@@ -92,7 +92,7 @@ namespace yunuGIAdapter
 
 		virtual yunuGI::IMaterial* GetMaterial(unsigned int index = 0)override
 		{
-			return this->materialVec[index].get();
+			return this->materialVec[index]->GetVariation();
 		};
 
 	private:

@@ -18,14 +18,17 @@ class IRenderable
 public:
 	IRenderable();
 #pragma region Setter
-	void SetWorldTM(const DirectX::SimpleMath::Matrix& wtm) { this->wtm = wtm; };
-	void SetMesh(Mesh* mesh)
+	virtual void SetWorldTM(const DirectX::SimpleMath::Matrix& wtm)
+	{ 
+		this->wtm = wtm; 
+	};
+	virtual void SetMesh(Mesh* mesh)
 	{
 		this->mesh = mesh;
 	}
-	void SetMaterial(unsigned int index, yunuGI::IMaterial* material)
+	virtual void SetMaterial(unsigned int index, yunuGI::IMaterial* material)
 	{
-		// »õ·Î¿î MaterialÀÌ¶ó¸é
+		// ìƒˆë¡œìš´ Materialì´ë¼ë©´
 		if (index + 1 > this->materialVec.size())
 		{
 			this->materialVec.emplace_back(reinterpret_cast<Material*>(material));
@@ -35,7 +38,7 @@ public:
 			this->materialVec[index] = reinterpret_cast<Material*>(material);
 		}
 	}
-	void SetActive(bool isActive)
+	virtual void SetActive(bool isActive)
 	{
 		this->isActive = isActive;
 	}
@@ -55,6 +58,7 @@ public:
 	{
 		return isActive;
 	}
+	bool IsStatic() { return isStatic; }
 
 	float GetID() { return this->objectID; }
 #pragma endregion
@@ -64,6 +68,7 @@ protected:
 	Mesh* mesh;
 	std::vector<Material*> materialVec;
 	bool isActive = true;
+	bool isStatic;
 
 	static float objectID;
 };
