@@ -191,7 +191,7 @@ void Unit::SkillEngage()
 {
 	currentOrder = UnitState::Skill;
 	qSkillFunctionStartElapsed = 0.0f;
-	qSkillFunctionStartedElapsed = 0.0f;
+	//qSkillFunctionStartedElapsed = 0.0f;
 
 	GetGameObject()->GetComponent<PlayerSkillSystem>()->SkillActivate(m_currentSelectedSkill, m_skillPosition);
 
@@ -301,24 +301,31 @@ void Unit::AttackUpdate()
 void Unit::SkillUpdate()
 {
 	qSkillFunctionStartElapsed += Time::GetDeltaTime();
-
-	if (isSkillStarted)
+	if (qSkillFunctionStartElapsed >= qSkillAnimationDuration)
 	{
-		qSkillFunctionStartedElapsed += Time::GetDeltaTime();
-		if (qSkillFunctionStartedElapsed >= qSkillAnimationDuration)
-		{
-			isSkillStarted = false;
-			currentOrder = UnitState::Idle;
-			// 여기서 leftClickFunction을 스킬 사용 못하게 해야 한다....
-			PlayerController::GetInstance()->SetLeftClickMove();
-		}
+		isSkillStarted = false;
+		currentOrder = UnitState::Idle;
+		// 여기서 leftClickFunction을 스킬 사용 못하게 해야 한다....
+		PlayerController::GetInstance()->SetLeftClickMove();
 	}
 
-	if (qSkillFunctionStartElapsed >= qSkillStartDelay)
-	{
-		qSkillFunctionStartElapsed = 0.0f;
-		isSkillStarted = true;
-	}
+	//if (isSkillStarted)
+	//{
+	//	qSkillFunctionStartedElapsed += Time::GetDeltaTime();
+	//	if (qSkillFunctionStartedElapsed >= qSkillAnimationDuration)
+	//	{
+	//		isSkillStarted = false;
+	//		currentOrder = UnitState::Idle;
+	//		// 여기서 leftClickFunction을 스킬 사용 못하게 해야 한다....
+	//		PlayerController::GetInstance()->SetLeftClickMove();
+	//	}
+	//}
+
+	//if (qSkillFunctionStartElapsed >= qSkillStartDelay)
+	//{
+	//	qSkillFunctionStartElapsed = 0.0f;
+	//	isSkillStarted = true;
+	//}
 }
 
 void Unit::ChaseUpdate()
@@ -584,7 +591,7 @@ void Unit::OrderSkill(SkillEnum p_skillNum, Vector3d position)
 	m_currentSelectedSkill = p_skillNum;
 	dotween->DOLookAt(position, rotationTime, false);
 
-	PlayerController::GetInstance()->SetLeftClickMove();
+	PlayerController::GetInstance()->SetLeftClickEmpty();
 
 	m_currentSkillPosition = position;
 }
@@ -635,12 +642,6 @@ void Unit::SetNavField(NavigationField* p_navField)
 NavigationField*  Unit::GetNavField() const
 {
 	return m_unitNavField;
-}
-
-void Unit::EndSkillState()
-{
-	currentOrder = UnitState::Idle;
-	PlayerController::GetInstance()->SetLeftClickMove();
 }
 
 void Unit::MakeUnitPushedState(bool p_isCrushed)

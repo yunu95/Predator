@@ -9,7 +9,7 @@ private:
 	// 피해를 받는 유닛이 갖고 있어야하는 정보
 	struct bleededUnitInfo
 	{
-		int currentBleedingStack;					// 현재 출혈 스택
+		int currentBleedingStack = 1;					// 현재 출혈 스택
 		Unit* bleedingUnit;
 		int currentDamagedCount = 0;
 	};
