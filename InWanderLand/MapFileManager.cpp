@@ -1,5 +1,6 @@
 #include "InWanderLand.h"
 #include "MapFileManager.h"
+#include "Palette.h"
 
 #include "Storable.h"
 #include "InstanceManager.h"
@@ -37,6 +38,10 @@ namespace application
 
                 // Manager 초기화
                 Clear();
+#ifdef EDITOR
+                // Palette 초기화
+                palette::Palette::ResetPalettes();
+#endif
 
                 if (!instanceManager.PreDecoding(mapData) || !templateDataManager.PreDecoding(mapData))
                 {
@@ -94,7 +99,7 @@ namespace application
                 return true;
             }
             else
-            { 
+            {
                 return false;
             }
         }

@@ -20,7 +20,7 @@ namespace application
                 // 지역의 가로세로 절반 길이를 반환합니다.
                 void SetHalfExtent(const Vector2f& halfExtent);
             protected:
-                virtual void ApplyInstance() {};
+                //virtual void ApplyInstance() {};
             private:
                 Vector2f halfExtent{ 1,1 };
                 yunutyEngine::graphics::StaticMeshRenderer* mesh{ nullptr };

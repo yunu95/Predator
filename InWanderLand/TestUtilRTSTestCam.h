@@ -13,6 +13,9 @@ namespace tests
         function<void(Vector3d)> groundRightClickCallback{ [](Vector3d) {} };
         function<void(Vector3d)> groundRightClickReleaseCallback{ [](Vector3d) {} };
         function<void(Vector3d)> groundHoveringClickCallback{ [](Vector3d) {} };
+        function<void()> buttonCallbackDelete{ []() {} };
+        function<void()> buttonCallback_X{ []() {} };
+        function<void()> buttonCallbackSpace{ []() {} };
         void Update()
         {
             float cameraSpeed = 50.f;
@@ -65,6 +68,12 @@ namespace tests
             }
 
             groundHoveringClickCallback(projectedPoint);
+            if (yunutyEngine::Input::isKeyPushed(KeyCode::X))
+                buttonCallback_X();
+            if (yunutyEngine::Input::isKeyPushed(KeyCode::Space))
+                buttonCallbackSpace();
+            if (yunutyEngine::Input::isKeyPushed(KeyCode::Delete))
+                buttonCallbackDelete();
         }
         float expectedPlaneDistance() { return abs(GetTransform()->GetWorldPosition().y); };
     private:

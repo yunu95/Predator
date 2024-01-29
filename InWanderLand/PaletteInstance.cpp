@@ -1,6 +1,7 @@
 #include "InWanderLand.h"
 #include "PaletteInstance.h"
 #include "DebugMeshes.h"
+#include "Palette.h"
 
 namespace application::editor::palette
 {
@@ -47,16 +48,24 @@ namespace application::editor::palette
             selectCircle->SetActive(false);
         }
     }
-    void PaletteInstance::ResetInstance()
+    void PaletteInstance::EnablePickingCollider()
     {
         pickingCollider->SetActive(true);
     }
-    void PaletteInstance::ApplyInstance()
+    void PaletteInstance::DisablePickingCollider()
     {
         pickingCollider->SetActive(false);
     }
     void PaletteInstance::ResetInstances()
     {
+    }
+    IEditableData* PaletteInstance::GetEditableData()
+    {
+        return editableData;
+    }
+    void PaletteInstance::SetEditableData(IEditableData* data)
+    {
+        editableData = data;
     }
     void PaletteInstance::ApplyInstances()
     {

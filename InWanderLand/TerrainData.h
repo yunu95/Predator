@@ -12,52 +12,64 @@
 
 namespace application
 {
-	namespace editor
-	{
-		class TemplateDataManager;
-	}
+    namespace editor
+    {
+        class TemplateDataManager;
+    }
 }
 
 namespace application
 {
-	namespace editor
-	{
-		class TerrainData;
+    namespace editor
+    {
+        class TerrainData;
 
-		struct POD_Terrain
-		{
-			Terrain_TemplateData* templateData = nullptr;
+        struct POD_Terrain
+        {
+            Terrain_TemplateData* templateData = nullptr;
+            std::vector<std::pair<int, int>> coordinates;
 
-			TO_JSON(POD_Terrain)
-			FROM_JSON(POD_Terrain)
-		};
+            TO_JSON(POD_Terrain)
+                FROM_JSON(POD_Terrain)
+        };
 
-		class TerrainData
-			: public IEditableData
-		{
-			friend class InstanceManager;
+        class TerrainData
+            : public IEditableData
+        {
+            friend class InstanceManager;
 
-		public:
-			virtual bool EnterDataFromTemplate() override;
-			virtual ITemplateData* GetTemplateData() override;
-			virtual bool SetTemplateData(const std::string& dataName) override;
-			virtual IEditableData* Clone() const override;
+        public:
+            ~TerrainData();
+            // 지형 인스턴스 정보는 맵에 단 하나만 존재합니다.
+            static TerrainData& GetSoleTerrainData();
+            virtual bool EnterDataFromTemplate() override;
+            virtual ITemplateData* GetTemplateData() override;
+            virtual bool SetTemplateData(const std::string& dataName) override;
+            virtual IEditableData* Clone() const override;
+            virtual palette::PaletteInstance* ApplyAsPaletteInstance()override { return nullptr; };
 
-			POD_Terrain pod;
+            // 팔레트에서 이전된 기능들
+            void ApplyAsPlaytimeObjects();
+            void AddNode(const Vector2i& nodeKey);
+            void EraseNode(const Vector2i& nodeKey);
+            void ClearNodes();
 
-		protected:
-			virtual bool PreEncoding(json& data) const override;
-			virtual bool PostEncoding(json& data) const override;
-			virtual bool PreDecoding(const json& data) override;
-			virtual bool PostDecoding(const json& data) override;
+            POD_Terrain pod;
 
-		private:
-			static TemplateDataManager& templateDataManager;
+        protected:
+            virtual bool PreEncoding(json& data) const override;
+            virtual bool PostEncoding(json& data) const override;
+            virtual bool PreDecoding(const json& data) override;
+            virtual bool PostDecoding(const json& data) override;
 
-			TerrainData();
-			TerrainData(const std::string& name);
-			TerrainData(const TerrainData& prototype);
-			TerrainData& operator=(const TerrainData& prototype);
-		};
-	}
+        private:
+            static TerrainData* soleTerrainData;
+            static TemplateDataManager& templateDataManager;
+
+            TerrainData();
+            TerrainData(const std::string& name);
+            TerrainData(const TerrainData& prototype);
+            TerrainData& operator=(const TerrainData& prototype);
+        };
+    }
 }

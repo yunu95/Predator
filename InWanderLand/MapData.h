@@ -19,8 +19,11 @@ public:
     // 현재 로드된 맵 파일의 이름을 반환합니다.
     static void GetCurrentFileName();
 private:
+    // 지형, 유닛, 장식물, 지역 등의 객체들을 데이터 형태로 저장하거나 데이터 형태에서 불러옵니다.
     static void LoadTerrainData();
     static void SaveTerrainData();
+    static void LoadUnitInstancesData();
+    static void SaveUnitInstancesData();
     // 현재 로드된 맵 데이터들을 모두 삭제합니다.
     static void CleanMapData();
     static string currentFileName;

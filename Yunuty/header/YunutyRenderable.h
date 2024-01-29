@@ -24,7 +24,7 @@ namespace yunuGI
 namespace yunutyEngine::graphics
 {
     class YunutyCycle;
-    template <typename YunuGIType>
+    template <typename YunuGIType = yunuGI::IRenderable>
     class Renderable;
     class Renderer;
     class EventHandler;
