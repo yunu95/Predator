@@ -183,8 +183,8 @@ void RenderSystem::PushCameraData()
 
 void RenderSystem::Render()
 {
-	ClearRenderInfo();
-	SortObject();
+	//ClearRenderInfo();
+	//SortObject();
 
 	PushCameraData();
 	PushLightData();
@@ -263,7 +263,7 @@ void RenderSystem::RenderSkinned()
 	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
 	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 
-	InstancingManager::Instance.Get().RegisterSkinnedMeshAndMaterial(this->skinnedSet);
+	InstancingManager::Instance.Get().RegisterSkinnedMeshAndMaterial();
 
 	//for (auto& e : this->skinnedVec)
 	//{
@@ -528,14 +528,23 @@ void RenderSystem::PopStaticRenderableObject(IRenderable* renderable)
 	this->staticMeshRenderInfoMap.erase(renderable);
 }
 
-void RenderSystem::PushSkinnedRenderableObject(std::shared_ptr<IRenderable> renderable)
+void RenderSystem::PushSkinnedRenderableObject(IRenderable* renderable)
 {
-	this->skinnedRenderableSet.insert(renderable);
+	skinnedMeshRenderInfoMap.insert({ renderable, {} });
+	skinnedMeshRenderInfoMap[renderable].emplace_back(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[0]);
+
+	skinnedSet.insert(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[0]);
 }
 
-void RenderSystem::PopSkinnedRenderableObject(std::shared_ptr<IRenderable> renderable)
+void RenderSystem::PopSkinnedRenderableObject(IRenderable* renderable)
 {
-	this->skinnedRenderableSet.erase(renderable);
+	for (int i = 0; i < static_cast<SkinnedMesh*>(renderable)->renderInfoVec.size(); ++i)
+	{
+		InstancingManager::Instance.Get().PopSkinnedData(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[i]);
+		this->skinnedSet.erase(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[i]);
+	}
+
+	this->skinnedMeshRenderInfoMap.erase(renderable);
 }
 
 void RenderSystem::PushUIObject(std::shared_ptr<IRenderable> renderable)
@@ -604,6 +613,18 @@ void RenderSystem::RegisterRenderInfo(IRenderable* renderable, std::shared_ptr<R
 		deferredSet.insert(renderInfo);
 
 		InstancingManager::Instance.Get().RegisterStaticDeferredData(renderInfo);
+	}
+}
+
+void RenderSystem::RegisterSkinnedRenderInfo(IRenderable* renderable, std::shared_ptr<SkinnedRenderInfo> renderInfo)
+{
+	auto iter = skinnedMeshRenderInfoMap.find(renderable);
+	if (iter != skinnedMeshRenderInfoMap.end())
+	{
+		skinnedMeshRenderInfoMap[renderable].emplace_back(renderInfo);
+		skinnedSet.insert(renderInfo);
+
+		InstancingManager::Instance.Get().RegisterSkinnedData(renderInfo);
 	}
 }
 

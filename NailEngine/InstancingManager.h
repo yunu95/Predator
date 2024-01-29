@@ -31,11 +31,13 @@ public:
 
 	void RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& renderInfo);
 	void RegisterStaticForwardData(std::shared_ptr<RenderInfo>& renderInfo);
+	void RegisterSkinnedData(std::shared_ptr<SkinnedRenderInfo>& renderInfo);
 
 	void PopStaticDeferredData(std::shared_ptr<RenderInfo>& renderInfo);
 	void PopStaticForwardData(std::shared_ptr<RenderInfo>& renderInfo);
+	void PopSkinnedData(std::shared_ptr<SkinnedRenderInfo>& renderInfo);
 
-	void RegisterSkinnedMeshAndMaterial(std::set<std::shared_ptr<SkinnedRenderInfo>>& renderInfo);
+	void RegisterSkinnedMeshAndMaterial();
 	void ClearData();
 
 private:
@@ -44,6 +46,8 @@ private:
 private:
 	std::map<InstanceID, std::set<std::shared_ptr<RenderInfo>>> staticMeshDeferredCache;
 	std::map<InstanceID, std::set<std::shared_ptr<RenderInfo>>> staticMeshForwardCache;
+
+	std::map<InstanceID, std::set<std::shared_ptr<SkinnedRenderInfo>>> skinnedMeshCache;
 
 
 private:

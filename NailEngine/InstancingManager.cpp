@@ -77,7 +77,6 @@ void InstancingManager::RegisterStaticMeshAndMaterialInDeferred()
 			{
 				auto& buffer = _buffers[instanceID];
 				(*renderInfoVec.begin())->material->PushGraphicsData();
-				auto test = (*renderInfoVec.begin())->mesh->GetMaterialCount();
 				buffer->PushData();
 				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, buffer);
 			}
@@ -235,6 +234,18 @@ void InstancingManager::RegisterStaticForwardData(std::shared_ptr<RenderInfo>& r
 	}
 }
 
+void InstancingManager::RegisterSkinnedData(std::shared_ptr<SkinnedRenderInfo>& renderInfo)
+{
+	InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->renderInfo.mesh, (unsigned __int64)renderInfo->renderInfo.material);
+
+	this->skinnedMeshCache[instanceID].insert(renderInfo);
+
+	if (_buffers.find(instanceID) == _buffers.end())
+	{
+		_buffers[instanceID] = std::make_shared<InstanceBuffer>();
+	}
+}
+
 void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& renderInfo)
 {
 	InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
@@ -243,6 +254,10 @@ void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& rende
 	if (iter != this->staticMeshDeferredCache.end())
 	{
 		this->staticMeshDeferredCache[instanceID].erase(renderInfo);
+		if (this->staticMeshDeferredCache[instanceID].empty())
+		{
+			this->staticMeshDeferredCache.erase(instanceID);
+		}
 	}
 }
 
@@ -254,52 +269,66 @@ void InstancingManager::PopStaticForwardData(std::shared_ptr<RenderInfo>& render
 	if (iter != this->staticMeshForwardCache.end())
 	{
 		this->staticMeshForwardCache[instanceID].erase(renderInfo);
+		if (this->staticMeshForwardCache[instanceID].empty())
+		{
+			this->staticMeshForwardCache.erase(instanceID);
+		}
 	}
 }
 
-void InstancingManager::RegisterSkinnedMeshAndMaterial(std::set<std::shared_ptr<SkinnedRenderInfo>>& renderInfo)
+void InstancingManager::PopSkinnedData(std::shared_ptr<SkinnedRenderInfo>& renderInfo)
 {
-	/*if (renderInfo.size() == 0) return;
+	InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->renderInfo.mesh, (unsigned __int64)renderInfo->renderInfo.material);
 
+	auto iter = this->skinnedMeshCache.find(instanceID);
+	if (iter != this->skinnedMeshCache.end())
+	{
+		this->skinnedMeshCache[instanceID].erase(renderInfo);
+		if (this->skinnedMeshCache[instanceID].empty())
+		{
+			this->skinnedMeshCache.erase(instanceID);
+		}
+	}
+}
+
+void InstancingManager::RegisterSkinnedMeshAndMaterial()
+{
 	ClearData();
 
-	std::map<InstanceID, std::vector<SkinnedRenderInfo>> cache;
-
-	for (auto& each : renderInfo)
+	for (auto& pair : this->skinnedMeshCache)
 	{
-		InstanceID instanceID = std::make_pair((unsigned __int64)each.renderInfo.mesh, (unsigned __int64)each.renderInfo.material);
-
-		cache[instanceID].push_back(each);
-	}
-
-	for (auto& pair : cache)
-	{
-		const std::vector<SkinnedRenderInfo>& renderInfoVec = pair.second;
+		const std::set<std::shared_ptr<SkinnedRenderInfo>>& renderInfoVec = pair.second;
 
 		const InstanceID instanceID = pair.first;
 
 		{
-			for (int i = 0; i < renderInfoVec.size(); ++i)
+			int descIndex = 0;
+			for (auto& i : renderInfoVec)
 			{
-				const RenderInfo& renderInfo = renderInfoVec[i].renderInfo;
+				if (i->renderInfo.isActive == false) continue;
+
+				const RenderInfo& renderInfo = i->renderInfo;
 				InstancingData data;
 				data.wtm = renderInfo.wtm;
 				AddData(instanceID, data);
-				this->instanceTransitionDesc->transitionDesc[i] = renderInfoVec[i].animator->GetTransitionDesc();
+				this->instanceTransitionDesc->transitionDesc[descIndex++] = i->animator->GetTransitionDesc();
 			}
 
 			NailEngine::Instance.Get().GetConstantBuffer(5)->PushGraphicsData(this->instanceTransitionDesc.get(),
 				sizeof(InstanceTransitionDesc), 5);
 
-			auto animationGroup = ResourceManager::Instance.Get().GetAnimationGroup(renderInfoVec[0].modelName);
+			auto animationGroup = ResourceManager::Instance.Get().GetAnimationGroup((*renderInfoVec.begin())->modelName);
 			animationGroup->Bind();
 
-			auto& buffer = _buffers[instanceID];
-			renderInfoVec[0].renderInfo.material->PushGraphicsData();
-			buffer->PushData();
-			renderInfoVec[0].renderInfo.mesh->Render(renderInfoVec[0].renderInfo.materialIndex, buffer);
+			if (renderInfoVec.size() != 0)
+			{
+				auto& buffer = _buffers[instanceID];
+				(*renderInfoVec.begin())->renderInfo.material->PushGraphicsData();
+				buffer->PushData();
+				(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, buffer);
+			}
 		}
-	}*/
+	}
 }
 
 void InstancingManager::ClearData()
@@ -309,7 +338,6 @@ void InstancingManager::ClearData()
 		pair.second->ClearData();
 	}
 }
-
 
 void InstancingManager::AddData(const InstanceID& id, InstancingData& instancingData)
 {

@@ -47,29 +47,11 @@ public:
 	virtual void SetPixelShader(const yunuGI::IShader* shader) override
 	{
 		GetVariation()->SetPixelShader(shader);
-		RenderSystem::Instance.Get().ReSortRenderInfo(renderable.get(), this->index);
-		/*if (GetVariation()->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
-		{
-			if (renderable->IsStatic())
-			{
-				InstancingManager::Instance.Get().RegisterStaticDeferredData(std::static_pointer_cast<StaticMesh>(renderable)->renderInfoVec[index]);
-			}
-			else
-			{
 
-			}
+		if (renderable->IsStatic())
+		{
+			RenderSystem::Instance.Get().ReSortRenderInfo(renderable.get(), this->index);
 		}
-		else
-		{
-			if (renderable->IsStatic())
-			{
-				InstancingManager::Instance.Get().RegisterStaticForwardData(std::static_pointer_cast<StaticMesh>(renderable)->renderInfoVec[index]);
-			}
-			else
-			{
-
-			}
-		}*/
 	};
 
 	virtual void SetTexture(yunuGI::Texture_Type textureType, const yunuGI::ITexture* texture) override
@@ -121,16 +103,13 @@ public:
 		this->renderable = renderable;
 	}
 
-private:
-	bool usingOriginal{ true };
-
 	Material* GetVariation()
 	{
 		if (usingOriginal)
 		{
 			if (original->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
 			{
-				if (renderable->IsStatic()) 
+				if (renderable->IsStatic())
 				{
 					InstancingManager::Instance.Get().PopStaticDeferredData(std::static_pointer_cast<StaticMesh>(renderable)->renderInfoVec[this->index]);
 				}
@@ -143,6 +122,11 @@ private:
 				}
 			}
 
+			if (renderable->IsStatic() == false)
+			{
+				InstancingManager::Instance.Get().PopSkinnedData(std::static_pointer_cast<SkinnedMesh>(renderable)->renderInfoVec[this->index]);
+			}
+
 			variation = ResourceManager::Instance.Get().CreateInstanceMaterial(original);
 			renderable->SetMaterial(this->index, variation);
 
@@ -151,6 +135,10 @@ private:
 
 		return variation;
 	};
+private:
+	bool usingOriginal{ true };
+
+	
 
 public:
 	Material* original;

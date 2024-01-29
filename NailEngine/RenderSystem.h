@@ -59,8 +59,8 @@ public:
 	void PushStaticRenderableObject(IRenderable* renderable);
 	void PopStaticRenderableObject(IRenderable* renderable);
 
-	void PushSkinnedRenderableObject(std::shared_ptr<IRenderable> renderable);
-	void PopSkinnedRenderableObject(std::shared_ptr<IRenderable> renderable);
+	void PushSkinnedRenderableObject(IRenderable* renderable);
+	void PopSkinnedRenderableObject(IRenderable* renderable);
 
 	void PushUIObject(std::shared_ptr<IRenderable> renderable);
 	void PopUIObject(std::shared_ptr<IRenderable> renderable);
@@ -70,6 +70,7 @@ public:
 	void ReSortRenderInfo(IRenderable* renderable, int index);
 
 	void RegisterRenderInfo(IRenderable* renderable, std::shared_ptr<RenderInfo> renderInfo);
+	void RegisterSkinnedRenderInfo(IRenderable* renderable, std::shared_ptr<SkinnedRenderInfo> renderInfo);
 
 private:
 	std::set<std::shared_ptr<RenderInfo>> deferredSet;
@@ -88,11 +89,9 @@ private:
 	//std::unordered_set<std::shared_ptr<IRenderable>> staticRenderableSet;
 
 	std::map<IRenderable*, std::vector<std::shared_ptr<RenderInfo>>> staticMeshRenderInfoMap;
+	std::map<IRenderable*, std::vector<std::shared_ptr<SkinnedRenderInfo>>> skinnedMeshRenderInfoMap;
 
-
-	std::unordered_set<std::shared_ptr<IRenderable>> skinnedRenderableSet;
 	std::set<std::shared_ptr<IRenderable>, CompareSmartPtr> UIImageSet;
-
 };
 
 

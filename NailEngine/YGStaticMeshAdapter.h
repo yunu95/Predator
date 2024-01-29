@@ -27,7 +27,6 @@ namespace yunuGIAdapter
 
 		~StaticMeshAdapter()
 		{
-			int a = 1;
 			RenderSystem::Instance.Get().PopStaticRenderableObject(renderable.get());
 		}
 
