@@ -10,6 +10,11 @@
 
 #include "Camera.h"
 
+namespace yunutyEngine
+{
+	class GameObject;
+}
+
 namespace application
 {
 	namespace editor
@@ -54,23 +59,30 @@ namespace application
 			yunuGI::Vector3 GetUpDirection() const;
 			yunuGI::Vector3 GetRightDirection() const;
 			yunuGI::Vector3 GetForwardDirection() const;
-
 			const yunuGI::Vector3& GetPosition() const { return position; }
-
 			yunuGI::Quaternion GetOrientation() const;
+
+			yunuGI::Matrix4x4 GetWTM() const;
+			yunuGI::Matrix4x4 GetVTM() const;
+			yunuGI::Matrix4x4 GetPTM() const;
+
+			yunuGI::ICamera& GetGI();
+
+			void ChangeVTM(const yunuGI::Matrix4x4& vtm);
 
 		private:
 			EditorCamera() = default;
 
 			void UpdateCameraView();
+			void UpdateGizmo();
+
+			GameObject* axisGizmo = nullptr;
 
 			CameraTypeState cameraTState = CameraTypeState::None;
 			CameraPerspectiveState cameraPState = CameraPerspectiveState::None;
 			yunutyEngine::graphics::Camera* editorCam = nullptr;
 			yunutyEngine::graphics::Camera* gameCam = nullptr;
 			EditorInputManager& eim = EditorInputManager::GetSingletonInstance();
-
-			yunuGI::Matrix4x4 viewMatrix = yunuGI::Matrix4x4();
 
 			yunuGI::Vector3 position = yunuGI::Vector3();
 			yunuGI::Vector3 positionDelta = yunuGI::Vector3();

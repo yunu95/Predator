@@ -283,6 +283,9 @@
     <Filter Include="Editor\Math">
       <UniqueIdentifier>{afafc9b7-f571-47a2-adf6-47a7b60fe72b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\imgui\ImGuizmo">
+      <UniqueIdentifier>{97f4f00f-b2c1-431b-bb84-448b19bf413f}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Contents\ProjectileComponents\Supporter\Passive">
       <UniqueIdentifier>{69264256-6569-4d0d-a697-201685411b08}</UniqueIdentifier>
     </Filter>
@@ -710,6 +713,9 @@
     <ClInclude Include="TestUtilGraphicsTestCam.h">
       <Filter>TestCodes\TestUtils</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\ImGuizmo\ImGuizmo.h">
+      <Filter>Editor\imgui\ImGuizmo</Filter>
+    </ClInclude>
     <ClInclude Include="HealerSkillSystem.h">
       <Filter>Contents\SkillSystem</Filter>
     </ClInclude>
@@ -1086,6 +1092,9 @@
     </ClCompile>
     <ClCompile Include="EditorMath.cpp">
       <Filter>Editor\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Include\ImGuizmo\ImGuizmo.cpp">
+      <Filter>Editor\imgui\ImGuizmo</Filter>
     </ClCompile>
     <ClCompile Include="PassiveCake.cpp">
       <Filter>Contents\ProjectileComponents\Supporter\Passive</Filter>

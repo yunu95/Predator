@@ -18,9 +18,6 @@ namespace tests
         function<void()> buttonCallbackSpace{ []() {} };
         void Update()
         {
-            Camera::Update();
-            GetTransform()->SetWorldRotation(Vector3d{ 90,0,0 });
-
             float cameraSpeed = 50.f;
             Camera::Update();
             Vector3d deltaDirection = Vector3d::zero;
@@ -39,15 +36,16 @@ namespace tests
                 deltaDirection -= Vector3d::forward;
 
             GetTransform()->position += deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed;
-            Quaternion quat = Quaternion::MakeWithForwardUp(Vector3d::down, Vector3d::forward);
+            Quaternion quat = Quaternion(Vector3d(60, 0, 0));
             GetTransform()->rotation = quat;
 
-            Vector3d projectedPoint;
+            Vector3d front = GetTransform()->GetWorldRotation().Forward();
+            auto distToXZPlane = abs(GetTransform()->GetWorldPosition().y);
             auto centeredPosition = Input::getMouseScreenPositionNormalized();
             centeredPosition.x -= 0.5;
             centeredPosition.y -= 0.5;
             centeredPosition.y *= -1;
-            projectedPoint = GetProjectedPoint(centeredPosition, expectedPlaneDistance());
+            Vector3d projectedPoint = GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
 
             if (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick))
                 DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?
