@@ -216,6 +216,17 @@ Material* ResourceManager::CreateInstanceMaterial(const Material* material)
 	return _material;
 }
 
+yunuGI::IMaterial* ResourceManager::CloneMaterial(std::wstring materialName, yunuGI::IMaterial* material)
+{
+	Material* _material = new Material(*(static_cast<Material*>(material)));
+
+	_material->SetName(materialName);
+
+	this->materialMap.insert({ materialName, std::shared_ptr<Material>(_material) });
+    this->materialVec.emplace_back(_material);
+	return _material;
+}
+
 void ResourceManager::CreateTexture(const std::wstring& texturePath)
 {
 	std::shared_ptr<Texture> texture = std::make_shared<Texture>();

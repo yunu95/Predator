@@ -35,6 +35,7 @@ public:
 	void CreateShader(const std::wstring& shaderPath);
 	yunuGI::IMaterial* CrateMaterial(std::wstring materialName);
 	Material* CreateInstanceMaterial(const Material* material);
+	yunuGI::IMaterial* CloneMaterial(std::wstring materialName, yunuGI::IMaterial* material);
 	void CreateTexture(const std::wstring& texturePath);
 	std::shared_ptr<Texture>& CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag);
 	std::shared_ptr<Texture>& CreateTextureFromResource(const std::wstring& texturePath, Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D);

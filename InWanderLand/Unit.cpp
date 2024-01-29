@@ -105,8 +105,6 @@ void Unit::Start()
 void Unit::Update()
 {
 	unitFSM.UpdateState();
-	/// 꼭 고쳐주기 나중에!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//GetGameObject()->GetTransform()->scale = Vector3d(0.00005, 0.00005, 0.00005);
 }
 
 Unit::UnitType Unit::GetUnitType() const
@@ -148,7 +146,7 @@ void Unit::MoveEngage()
 
 	Vector3d mouseXZVector = Vector3d(m_currentMovePosition.x, 0, m_currentMovePosition.z);
 
-	//dotween->DOLookAt(mouseXZVector, 1, f);
+	dotween->DOLookAt(mouseXZVector, 1, false);
 
 	GetGameObject()->GetComponent<NavigationAgent>()->SetSpeed(m_speed);
 
@@ -191,7 +189,7 @@ void Unit::SkillEngage()
 {
 	currentOrder = UnitState::Skill;
 	qSkillFunctionStartElapsed = 0.0f;
-	qSkillFunctionStartedElapsed = 0.0f;
+	//qSkillFunctionStartedElapsed = 0.0f;
 
 	GetGameObject()->GetComponent<PlayerSkillSystem>()->SkillActivate(m_currentSelectedSkill, m_skillPosition);
 
@@ -301,24 +299,31 @@ void Unit::AttackUpdate()
 void Unit::SkillUpdate()
 {
 	qSkillFunctionStartElapsed += Time::GetDeltaTime();
-
-	if (isSkillStarted)
+	if (qSkillFunctionStartElapsed >= qSkillAnimationDuration)
 	{
-		qSkillFunctionStartedElapsed += Time::GetDeltaTime();
-		if (qSkillFunctionStartedElapsed >= qSkillAnimationDuration)
-		{
-			isSkillStarted = false;
-			currentOrder = UnitState::Idle;
-			// 여기서 leftClickFunction을 스킬 사용 못하게 해야 한다....
-			PlayerController::GetInstance()->SetLeftClickMove();
-		}
+		isSkillStarted = false;
+		currentOrder = UnitState::Idle;
+		// 여기서 leftClickFunction을 스킬 사용 못하게 해야 한다....
+		PlayerController::GetInstance()->SetLeftClickMove();
 	}
 
-	if (qSkillFunctionStartElapsed >= qSkillStartDelay)
-	{
-		qSkillFunctionStartElapsed = 0.0f;
-		isSkillStarted = true;
-	}
+	//if (isSkillStarted)
+	//{
+	//	qSkillFunctionStartedElapsed += Time::GetDeltaTime();
+	//	if (qSkillFunctionStartedElapsed >= qSkillAnimationDuration)
+	//	{
+	//		isSkillStarted = false;
+	//		currentOrder = UnitState::Idle;
+	//		// 여기서 leftClickFunction을 스킬 사용 못하게 해야 한다....
+	//		PlayerController::GetInstance()->SetLeftClickMove();
+	//	}
+	//}
+
+	//if (qSkillFunctionStartElapsed >= qSkillStartDelay)
+	//{
+	//	qSkillFunctionStartElapsed = 0.0f;
+	//	isSkillStarted = true;
+	//}
 }
 
 void Unit::ChaseUpdate()
@@ -584,7 +589,7 @@ void Unit::OrderSkill(SkillEnum p_skillNum, Vector3d position)
 	m_currentSelectedSkill = p_skillNum;
 	dotween->DOLookAt(position, rotationTime, false);
 
-	PlayerController::GetInstance()->SetLeftClickMove();
+	PlayerController::GetInstance()->SetLeftClickEmpty();
 
 	m_currentSkillPosition = position;
 }
@@ -635,12 +640,6 @@ void Unit::SetNavField(NavigationField* p_navField)
 NavigationField*  Unit::GetNavField() const
 {
 	return m_unitNavField;
-}
-
-void Unit::EndSkillState()
-{
-	currentOrder = UnitState::Idle;
-	PlayerController::GetInstance()->SetLeftClickMove();
 }
 
 void Unit::MakeUnitPushedState(bool p_isCrushed)

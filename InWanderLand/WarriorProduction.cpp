@@ -89,16 +89,23 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 	// warrior Passive Bleeding System
 	auto warriorBleedingSystem = unitAttackColliderObject->AddComponent<BleedingComponent>();
 	warriorBleedingSystem->SetSkillOwnerUnit(m_unitComponent);
-	auto debugColliderMesh = AttachDebugMesh(unitAttackColliderObject, DebugMeshType::Rectangle, yunuGI::Color::red(), true);
+
 	unitAttackColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+
+	auto autoAttackDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	AttachDebugMesh(autoAttackDebugMesh, DebugMeshType::Cube, yunuGI::Color::red(), true);
+	autoAttackDebugMesh->GetTransform()->scale = { 1.0f, 1.0f, 3.0f };
 
 	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
 	warriorAttackSystem->SetColliderObject(unitAttackColliderObject);
-	warriorAttackSystem->SetColliderRemainTime(0.05f);
+	warriorAttackSystem->SetColliderDebugObject(autoAttackDebugMesh);
+	warriorAttackSystem->SetColliderRemainTime(0.3f);
 
 	unitAttackColliderObject->SetParent(m_unitGameObject);
-	unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -2.0f });
-	unitAttackColliderObject->SetSelfActive(false);
+	unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, 2.0f });
+
+	autoAttackDebugMesh->SetParent(m_unitGameObject);
+	autoAttackDebugMesh->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, 2.0f });
 #pragma endregion
 
 #pragma region Q Skill Setting

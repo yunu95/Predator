@@ -128,6 +128,27 @@ struct InstanceTransitionDesc
 	TransitionDesc transitionDesc[MAX_INSTANCE_MODEL];
 };
 
+class Mesh;
+class Material;
+struct RenderInfo
+{
+	Mesh* mesh;
+	Material* material;
+	//Material shadowMaterial;
+	unsigned int materialIndex;
+	DirectX::SimpleMath::Matrix wtm;
+	bool isActive = true;
+};
+
+class NailAnimator;
+struct SkinnedRenderInfo
+{
+	RenderInfo renderInfo;
+	std::wstring modelName;
+	std::shared_ptr<NailAnimator> animator;
+	TransitionDesc transitionDesc;
+};
+
 // Deferred Only
 class Texture;
 struct RenderTarget

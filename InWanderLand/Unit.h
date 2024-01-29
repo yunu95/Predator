@@ -130,8 +130,8 @@ protected:
 	float deathAnimationDelay = 1.5f;
 
 	float qSkillFunctionStartElapsed;
-	float qSkillFunctionStartedElapsed;
-	float qSkillStartDelay = 1.0f;
+	//float qSkillFunctionStartedElapsed;
+	//float qSkillStartDelay = 1.0f;
 	float qSkillAnimationDuration = 1.0f;
 	bool isJustHitByQSkill = false;
 
@@ -197,17 +197,14 @@ public:
 	UnitSide GetUnitSide() const;
 	void SetUnitType(UnitType type);
 	void SetUnitSide(UnitSide side);
-
 	void SetUnitHp(int p_Hp);
 	void SetUnitAp(int p_Ap);
 	void SetIdRadius(float radius);
 	void SetAtkRadius(float radius);
 	void SetUnitSpeed(float speed);
-
 	void SetAttackDelay(float p_delay);
-
 	void SetPlayerSerialNumber();
-	int GetPlayerSerialNumber() const;
+	void SetSkillDuration(float p_duration);
 
 	void SetCurrentOrderMove();
 	void SetCurrentOrderAttackMove();
@@ -215,7 +212,6 @@ public:
 	void OrderMove(Vector3d position);
 	void OrderAttackMove(Vector3d position);
 	void OrderSkill(SkillEnum p_skillNum, Vector3d position);
-	void SetSkillDuration(float p_duration);
 
 	void DetermineCurrentTargetObject();
 	void AddToOpponentObjectList(yunutyEngine::GameObject* obj);
@@ -227,12 +223,13 @@ public:
 	void SetNavField(NavigationField* p_navField);
 	NavigationField* GetNavField() const;
 
-	void EndSkillState();
-
 	void MakeUnitPushedState(bool p_isCrushed);
 	void MakeUnitParalysisState();
 	void MakeUnitParalysisEnd();
+
 	bool GetJustCrushedState() const;
+	int GetPlayerSerialNumber() const;
+
 
 	float DetermineAttackDamage(float p_damage);			// 공격유닛이 피격유닛에게 전달하는 데미지 계산.
 

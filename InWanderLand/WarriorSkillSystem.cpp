@@ -17,7 +17,7 @@ void WarriorSkillSystem::QSkillActivate(Vector3d skillPos)
 	m_QSkillKnockBackDebugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
 	m_QSkillKnockBackDebugObject->SetSelfActive(true);
 
-	m_unitComponent->SetSkillDuration(tempDistance / m_QskillRushSpeed);
+	m_unitComponent->SetSkillDuration(tempDistance / m_QskillRushSpeed + m_knockBackObjectRemainTime);
 
 	// 1. 목표 위치로 돌진
 	m_unitDotween->DOMove(skillPos, tempDistance / m_QskillRushSpeed).OnComplete([=]()
@@ -29,7 +29,6 @@ void WarriorSkillSystem::QSkillActivate(Vector3d skillPos)
 					m_QSkillKnockBackDebugObject->SetSelfActive(false);
 					QSkillKnockBackCollider->SetActive(false);
 					QSkillKnockBackCollider->GetGameObject()->GetComponent<KnockBackComponent>()->SkillEnded();
-					m_unitComponent->EndSkillState();			/// skill 종료 시 Unit을 idle상태로 전환.
 
 					m_unitNavComponent->SetActive(true);
 					m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
@@ -43,6 +42,12 @@ void WarriorSkillSystem::WSkillActivate(Vector3d skillPos)
 	WSkillCollider->SetActive(true);
 	m_WSkillDebugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
 	m_WSkillDebugObject->SetSelfActive(true);
+
+	float tempDistance = (skillPos - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
+
+
+	m_unitComponent->SetSkillDuration(tempDistance / m_QskillRushSpeed + m_knockBackObjectRemainTime);
+
 
 	m_unitDotween->DONothing(m_wSkillColliderRemainTime).OnComplete([=]()
 		{

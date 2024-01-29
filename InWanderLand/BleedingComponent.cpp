@@ -24,10 +24,12 @@ void BleedingComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 		if (e.first->bleedingUnit == opponentUnit)
 		{
 			isAlreadyBleeding = true;
+
+			e.first->currentDamagedCount = 0;			// 상태 초기화
+			
 			if (e.first->currentBleedingStack < maxBleedingStack)
 			{
 				e.first->currentBleedingStack++;			// 스택 증가 (중첩 증가)
-				e.first->currentDamagedCount = 0;			// 상태 초기화
 			}
 		}
 	}
@@ -38,23 +40,29 @@ void BleedingComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 		bleedingUnitInfo = new bleededUnitInfo;
 		bleedingUnitInfo->bleedingUnit = opponentUnit;
 		bleedingUnitInfo->currentBleedingStack = 1;
-
+		
 		bleedingTimer->m_isRepeated = true;
 		bleedingTimer->m_duration = m_bleedDuration;
 		bleedingTimer->onCompleteFunction = [=]()
 		{
-			if (bleedingUnitInfo->currentDamagedCount == m_maxDamageCount)
+			if (bleedingUnitInfo != nullptr)
 			{
-				bleedingTimer->StopTimer();
-				opponentUnitMap.erase(bleedingUnitInfo);
-				delete bleedingUnitInfo;
-			}
+				if (bleedingUnitInfo->currentDamagedCount == m_maxDamageCount)
+				{
+					bleedingTimer->StopTimer();
+					opponentUnitMap.erase(bleedingUnitInfo);
+					delete bleedingUnitInfo;
+					bleedingUnitInfo = nullptr;
+				}
 
-			else
-			{
-				bleedingUnitInfo->bleedingUnit->Damaged(m_bleedDamage);
-				debuggingMesh->PopMeshUP(yunuGI::Color::red(), MaterialNum::Red);
-				bleedingUnitInfo->currentDamagedCount++;
+				else
+				{
+					/// 데미지 주기 전에 유닛이 죽었는지 판단
+					bleedingUnitInfo->bleedingUnit->Damaged(m_bleedDamage * bleedingUnitInfo->currentBleedingStack);
+					debuggingMesh->PopMeshUP(yunuGI::Color::red(), MaterialNum::Red);
+					bleedingUnitInfo->currentDamagedCount++;
+
+				}
 			}
 		};
 
@@ -65,6 +73,6 @@ void BleedingComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 
 void BleedingComponent::Update()
 {
-	
+
 }
 

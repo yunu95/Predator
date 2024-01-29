@@ -47,6 +47,10 @@ namespace yunuGIAdapter
         {
             return ResourceManager::Instance.Get().CrateMaterial(materialName);
         };
+        virtual yunuGI::IMaterial* CloneMaterial(std::wstring materialName, yunuGI::IMaterial* material)const override
+        {
+            return ResourceManager::Instance.Get().CloneMaterial(materialName, material);
+        };
         virtual yunuGI::IMesh* CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec)const override
         {
             return ResourceManager::Instance.Get().CreateMesh(meshName, posVec,idxVec,normalVec);
