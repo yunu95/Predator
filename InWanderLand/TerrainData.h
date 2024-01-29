@@ -23,7 +23,6 @@ namespace application
     namespace editor
     {
         class TerrainData;
-
         struct POD_Terrain
         {
             Terrain_TemplateData* templateData = nullptr;
@@ -39,6 +38,11 @@ namespace application
             friend class InstanceManager;
 
         public:
+            struct Node
+            {
+                float height;
+                GameObject* debugObject;
+            };
             ~TerrainData();
             // 지형 인스턴스 정보는 맵에 단 하나만 존재합니다.
             static TerrainData& GetSoleTerrainData();
@@ -49,13 +53,16 @@ namespace application
             virtual palette::PaletteInstance* ApplyAsPaletteInstance()override { return nullptr; };
 
             // 팔레트에서 이전된 기능들
-            void ApplyAsPlaytimeObjects();
+            void ApplyAsPlaytimeObject();
             void AddNode(const Vector2i& nodeKey);
             void EraseNode(const Vector2i& nodeKey);
             void ClearNodes();
 
             POD_Terrain pod;
+            unordered_map<Vector2i, Node> nodes;
 
+            static constexpr double nodeDistance = 0.5;
+            //static constexpr double nodeHeight = 6;
         protected:
             virtual bool PreEncoding(json& data) const override;
             virtual bool PostEncoding(json& data) const override;
