@@ -283,6 +283,12 @@
     <Filter Include="Editor\Math">
       <UniqueIdentifier>{afafc9b7-f571-47a2-adf6-47a7b60fe72b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\ProjectileComponents\Supporter\Passive">
+      <UniqueIdentifier>{69264256-6569-4d0d-a697-201685411b08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitStatusComponent\DualCast">
+      <UniqueIdentifier>{983c5f85-0366-4065-a61e-f1f569df5f68}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -695,8 +701,20 @@
       <Filter>Editor\Math</Filter>
     </ClInclude>
     <ClInclude Include="PaletteManagerList.h" />
+    <ClInclude Include="PassiveCake.h">
+      <Filter>Contents\ProjectileComponents\Supporter\Passive</Filter>
+    </ClInclude>
+    <ClInclude Include="PassiveCakePool.h">
+      <Filter>Contents\ProjectileComponents\Supporter\Passive</Filter>
+    </ClInclude>
     <ClInclude Include="TestUtilGraphicsTestCam.h">
       <Filter>TestCodes\TestUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="HealerSkillSystem.h">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="DualCastComponent.h">
+      <Filter>Contents\UnitStatusComponent\DualCast</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1068,6 +1086,15 @@
     </ClCompile>
     <ClCompile Include="EditorMath.cpp">
       <Filter>Editor\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="PassiveCake.cpp">
+      <Filter>Contents\ProjectileComponents\Supporter\Passive</Filter>
+    </ClCompile>
+    <ClCompile Include="HealerSkillSystem.cpp">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="DualCastComponent.cpp">
+      <Filter>Contents\UnitStatusComponent\DualCast</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

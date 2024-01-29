@@ -13,6 +13,8 @@ class UnitStatusComponent : public Component
 private:
 	Unit* m_ownerUnit;
 
+	friend class DualCastComponent;
+
 public:
 	virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) = 0;
 	virtual void OnTriggerEnter(physics::Collider* collider) override;

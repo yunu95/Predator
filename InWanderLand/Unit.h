@@ -100,7 +100,7 @@ protected:
 	// 유닛이 바라봐야 하는 회전값을 동경각으로 나타냅니다. 유닛은 회전속도에 따라 회전값을 desiredRotation과 일치하게 바꿉니다.
 	float desiredRotation{270};
 	float rotationSpeed{ 500 };
-
+	float rotationTime = 0.2f;
 
 	// 지금 수행중인 명령
 	UnitState currentOrder = UnitState::Idle;
@@ -181,7 +181,6 @@ protected:
 	void CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation);
 
 	void StopMove();
-	void LookAt(Vector3d destination);
 	
 	void ReportUnitDeath();												// this 유닛이 죽었다는 정보를 전달
 	void IdentifiedOpponentDeath(yunutyEngine::GameObject* obj);		// 상대 유닛이 죽었을 경우 처리할 내용을 담은 함수
@@ -216,6 +215,7 @@ public:
 	void OrderMove(Vector3d position);
 	void OrderAttackMove(Vector3d position);
 	void OrderSkill(SkillEnum p_skillNum, Vector3d position);
+	void SetSkillDuration(float p_duration);
 
 	void DetermineCurrentTargetObject();
 	void AddToOpponentObjectList(yunutyEngine::GameObject* obj);
@@ -244,6 +244,7 @@ public:
 	int GetUnitDamage() const;
 	void Damaged(GameObject* opponentObject, float opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
 	void Damaged(float dmg);										// 추적받지 않는 데미지
+	void Heal(float healingPoint);										
 	
 	void IncreaseAttackPower(float p_attackPowerIncrease);
 	void IncreaseAttackSpeed(float p_attackSpeedIncrease);

@@ -4,9 +4,9 @@
 #include "Easing.h"
 
 /// <summary>
-/// DotweenÀÇ ¹İº¹È£ÃâÀ» ¸·±âÀ§ÇÑ Å¬·¡½º.
+/// Dotweenì˜ ë°˜ë³µí˜¸ì¶œì„ ë§‰ê¸°ìœ„í•œ í´ë˜ìŠ¤.
 /// elasped? OnExpiriation?
-/// Dotween °´Ã¼°¡ °¡Áö°í ÀÖÀ¸¸é µüÀÎ °Í °°´Ù...
+/// Dotween ê°ì²´ê°€ ê°€ì§€ê³  ìˆìœ¼ë©´ ë”±ì¸ ê²ƒ ê°™ë‹¤...
 /// </summary>
 
 class DotweenTimer
@@ -22,16 +22,16 @@ public:
 
 	double easeTime;
 	double elapsed;
-	// Å¸ÀÌ¸Ó°¡ ½ÃÀÛµÈ ÈÄ °æ°úµÈ ½Ã°£
+	// íƒ€ì´ë¨¸ê°€ ì‹œì‘ëœ í›„ ê²½ê³¼ëœ ì‹œê°„
 	double duration;
 	double delay;
 
-	// ÇöÀç ÁøÇà °Å¸®
+	// í˜„ì¬ ì§„í–‰ ê±°ë¦¬
 	double movingDistanceX;
 	double movingDistanceY;
 	double movingDistanceZ;
 	double movingDistanceW;
-	// ¼Óµµ
+	// ì†ë„
 	double speed;
 
 	double normalizedDistanceX;
@@ -44,24 +44,22 @@ public:
 	double finalZvalue;
 	double finalWvalue;
 
-	double accumulated;		// ´©Àû È¸Àü·®
+	double accumulated;		// ëˆ„ì  íšŒì „ëŸ‰
 
 	bool isActive;
 	bool isRepeat;
-	bool isDone;			// Å¸ÀÌ¸Ó Vector¿¡¼­ »©µµ µÇ´ÂÁö¿¡ ´ëÇÑ ¸Ş½ÃÁö Àü´Ş¿ë
+	bool isDone;			// íƒ€ì´ë¨¸ Vectorì—ì„œ ë¹¼ë„ ë˜ëŠ”ì§€ì— ëŒ€í•œ ë©”ì‹œì§€ ì „ë‹¬ìš©
 
 	easing_functions m_ease;
 
 	std::function<void()> onUpdate = []() {};			
-	std::function<void()> onCompleteFunction = []() {};		// duration µµ´ŞÇßÀ» ¶§ ½ÇÇà½ÃÅ³ ÇÔ¼ö.
-	std::function<void()> onExpiration = []() {};			// dotween ³»ºÎ¿¡¼­ ¼³Á¤ÇØÁÙ ¼ö ÀÖ´Â ½ÇÇà ¿Ï·á ½Ã È£Ãâ ÇÔ¼ö
+	std::function<void()> onCompleteFunction = []() {};		// duration ë„ë‹¬í–ˆì„ ë•Œ ì‹¤í–‰ì‹œí‚¬ í•¨ìˆ˜.
+	std::function<void()> onExpiration = []() {};			// dotween ë‚´ë¶€ì—ì„œ ì„¤ì •í•´ì¤„ ìˆ˜ ìˆëŠ” ì‹¤í–‰ ì™„ë£Œ ì‹œ í˜¸ì¶œ í•¨ìˆ˜
 
 	DotweenTimer();
 	void Start();
 	void Update();
 
 	void Init();
-
-
 };
 
