@@ -89,7 +89,7 @@ void TestCaseNavigationInit()
 	agent->SetSpeed(10);
 	agent->SetAcceleration(10000000);
 	// delayedTestFunctions에 2초 후 실행시킬 콜백 함수를 등록합니다. 이 콜백함수는 게임 엔진 스레드에서 호출됩니다.
-	delayedTestFunctions->todoList.push_back({ 202,[=]() {
+	delayedTestFunctions->todoList.push_back({ 2,[=]() {
 		// 게임 엔진 스레드에서 메인 스레드에서 특정 동작을 구동시키고 싶다면 아래의 AddMainLoopTodo 함수를 사용합니다.
 		application::Application::GetInstance().AddMainLoopTodo([=]() {
 			// Assert 함수군은 테스트 케이스의 실행 성공 여부를 판단하는데에 쓰입니다.
@@ -98,7 +98,7 @@ void TestCaseNavigationInit()
 			agent->Relocate(Vector3d{ -10,0,0 });
 				});
 			} });
-	delayedTestFunctions->todoList.push_back({ 202.2,[=]() {
+	delayedTestFunctions->todoList.push_back({ 2.2,[=]() {
 		// 게임 엔진 스레드에서 메인 스레드에서 특정 동작을 구동시키고 싶다면 아래의 AddMainLoopTodo 함수를 사용합니다.
 		application::Application::GetInstance().AddMainLoopTodo([=]() {
 			Assert::IsTrue((agent->GetTransform()->GetWorldPosition() - Vector3d{-7.5,0,0}).MagnitudeSqr() < 1,L"navigation agent's ""Relocate"" method didn't really relocate the agent!");
