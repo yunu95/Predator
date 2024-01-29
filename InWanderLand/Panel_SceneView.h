@@ -51,9 +51,9 @@ namespace application
 			bool ImGui_IsCursorInScreen();
 			bool ImGui_IsWindowResize();
 			std::pair<float, float> ImGui_GetCursorPosOnPanel();
+			void ImGui_DrawGizmo();
 			void Release();
 
-		private:
 			void ImGui_SceneViewSettings();
 
 			Application* app;
@@ -62,6 +62,7 @@ namespace application
 			EditorInputManager& eim = EditorInputManager::GetSingletonInstance();
 			std::pair<float, float> prevWindowSize;
 			std::pair<float, float> currentWindowSize;
+			std::pair<float, float> imageStartPos;
 			std::pair<unsigned int, unsigned int> renderImageSize;
 			std::pair<double, double> cursorPos_InScreenSpace;
 

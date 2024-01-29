@@ -51,8 +51,15 @@ inline yunutyEngine::graphics::StaticMeshRenderer* CreateLine(Vector3d start, Ve
 	auto gameObject = Scene::getCurrentScene()->AddGameObject();
 	auto delta = (end - start);
 	gameObject->GetTransform()->scale.x = delta.Magnitude();
-	gameObject->GetTransform()->SetWorldRotation(Quaternion::MakeAxisAngleQuaternion(Vector3d::Cross(Vector3d(1, 0, 0), delta).Normalized(), acos(Vector3d::Dot(Vector3d(1, 0, 0), delta.Normalized()))));
-	//gameObject->GetTransform()->SetWorldPosition(Vector3d(start.x, start.y, start.z));
-	return AttachDebugMesh(gameObject, DebugMeshType::Cube, color, true);
+
+	Vector3d axis = Vector3d::Cross(Vector3d(1, 0, 0), delta).Normalized();
+	if (axis == Vector3d(0, 0, 0))
+	{
+		axis = Vector3d(0, 0, 1);
+	}
+
+	gameObject->GetTransform()->SetWorldRotation(Quaternion::MakeAxisAngleQuaternion(axis, acos(Vector3d::Dot(Vector3d(1, 0, 0), delta.Normalized()))));
+	gameObject->GetTransform()->SetWorldPosition(start);
+	return AttachDebugMesh(gameObject, DebugMeshType::Line, color, true);
 }
 

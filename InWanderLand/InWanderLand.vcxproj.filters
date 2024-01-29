@@ -283,6 +283,9 @@
     <Filter Include="Editor\Math">
       <UniqueIdentifier>{afafc9b7-f571-47a2-adf6-47a7b60fe72b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\imgui\ImGuizmo">
+      <UniqueIdentifier>{97f4f00f-b2c1-431b-bb84-448b19bf413f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -698,6 +701,9 @@
     <ClInclude Include="TestUtilGraphicsTestCam.h">
       <Filter>TestCodes\TestUtils</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\ImGuizmo\ImGuizmo.h">
+      <Filter>Editor\imgui\ImGuizmo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1068,6 +1074,9 @@
     </ClCompile>
     <ClCompile Include="EditorMath.cpp">
       <Filter>Editor\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Include\ImGuizmo\ImGuizmo.cpp">
+      <Filter>Editor\imgui\ImGuizmo</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

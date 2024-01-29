@@ -146,18 +146,28 @@ namespace application
 			if (scene)
 			{
 				// x축, z축 각각 그려질 grid 수(즉, 전체 그리드는 gridCount * 2)
-				const unsigned int gridCount = 31;
+				const int gridCount = 61;
 				// 강조 될 단위
-				const unsigned int accentUnit = 10;
+				const int accentUnit = 10;
 				// 간격
-				const unsigned int interval = 1;
+				const int interval = 1;
 				// 길이
-				const unsigned int length = 60;
+				const int length = 60;
 
 				for (unsigned int i = 0; i < gridCount; i++)
 				{
 					int intervalPos = interval * i - ((gridCount - 1) / 2) * interval;
-					if (intervalPos % accentUnit == 0)
+					if (intervalPos == 0)
+					{
+						// x축
+						auto lineX = CreateLine(Vector3d(-length / 2, 0, 0), Vector3d(length / 2, 0, 0), yunuGI::Color::red());
+						lineX->SetIsUpdating(false);
+
+						// z축
+						auto lineZ = CreateLine(Vector3d(0, 0, -length / 2), Vector3d(0, 0, length / 2), yunuGI::Color::blue());
+						lineZ->SetIsUpdating(false);
+					}
+					else if (intervalPos % accentUnit == 0)
 					{
 						// x축 평행
 						auto lineX = CreateLine(Vector3d(-length/2, 0, intervalPos), Vector3d(length/2, 0, intervalPos), yunuGI::Color::white());
