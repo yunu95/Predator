@@ -8,9 +8,11 @@
 #include "SingleNavigationField.h"
 #include "TerrainData.h"
 #include "InstanceManager.h"
+#include "TerrainData.h"
 
 namespace application::editor::palette
 {
+    using namespace application::editor;
     IEditableData* TerrainPalette::PlaceInstance(Vector3d worldPosition)
     {
         auto centerNodeKey = WorldToNodeSpace(worldPosition);
@@ -21,11 +23,11 @@ namespace application::editor::palette
                 auto nodeKey = Vector2i{ x, y };
                 if (isMarking)
                 {
-                    AddNode(nodeKey);
+                    TerrainData::Instance().AddNode(nodeKey, TerrainData::Node{ 0, nullptr });
                 }
                 else
                 {
-                    EraseNode(nodeKey);
+                    TerrainData::Instance().EraseNode(nodeKey);
                 }
             }
         }

@@ -1000,7 +1000,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="DebugGraphic.h" />
     <ClInclude Include="DebugStaticMesh.h" />
     <ClInclude Include="InGame.h" />
-    <ClInclude Include="MapData.h" />
     <ClInclude Include="PaletteManagerList.h" />
     <ClInclude Include="EditorMath.h" />
     <ClInclude Include="imgui_Utility.h" />
@@ -1153,7 +1152,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="KnockBackComponent.cpp" />
     <ClCompile Include="MagicianAutoAttackProjectile.cpp" />
     <ClCompile Include="MagicianSkillSystem.cpp" />
-    <ClCompile Include="MapData.cpp" />
     <ClCompile Include="MeleeAttackSystem.cpp" />
     <ClCompile Include="OnlyDamageComponent.cpp" />
     <ClCompile Include="ParalysisFieldComponent.cpp" />

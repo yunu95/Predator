@@ -69,7 +69,11 @@ namespace application
         bool MapFileManager::SaveMapFile(const std::string& path)
         {
             json mapData;
-
+            // 저장을 더 진행하기 전에 각 데이터들의 내부 데이터를 pod 데이터로 이전하기 위해 실행하는 부분
+            if (!instanceManager.PreSave() || !templateDataManager.PreSave())
+            {
+                return false;
+            }
             // Pre
             if (!instanceManager.PreEncoding(mapData) || !templateDataManager.PreEncoding(mapData))
             {

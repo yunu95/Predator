@@ -83,7 +83,14 @@ namespace application
             list.clear();
             mould = nullptr;
         }
-
+        bool InstanceManager::PreSave()
+        {
+            for (auto& [key, ptr] : list)
+            {
+                ptr->PreSaveCallback();
+            }
+            return true;
+        }
         bool InstanceManager::PreEncoding(json& data) const
         {
             std::string uuidStr;

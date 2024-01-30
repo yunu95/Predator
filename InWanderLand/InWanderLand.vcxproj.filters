@@ -226,9 +226,6 @@
     <Filter Include="TestCodes\TestUtils\PeriodicAction">
       <UniqueIdentifier>{d31814ce-faa7-415f-8b5a-672e90071988}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MapData">
-      <UniqueIdentifier>{1e14d82d-3b46-4868-be82-790e5993af3c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents\RTSCam">
       <UniqueIdentifier>{4d58ffff-525b-4e6d-a64c-bf1f311430a2}</UniqueIdentifier>
     </Filter>
@@ -679,9 +676,6 @@
     <ClInclude Include="PaletteManager.h">
       <Filter>Editor\Palette</Filter>
     </ClInclude>
-    <ClInclude Include="MapData.h">
-      <Filter>MapData</Filter>
-    </ClInclude>
     <ClInclude Include="InGame.h">
       <Filter>InGame</Filter>
     </ClInclude>
@@ -1056,9 +1050,6 @@
     </ClCompile>
     <ClCompile Include="TestCaseUpdateComponents.cpp">
       <Filter>TestCodes</Filter>
-    </ClCompile>
-    <ClCompile Include="MapData.cpp">
-      <Filter>MapData</Filter>
     </ClCompile>
     <ClCompile Include="InGame.cpp">
       <Filter>InGame</Filter>
