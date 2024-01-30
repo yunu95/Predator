@@ -184,6 +184,24 @@ namespace application
 
 				return finalVec;
 			}
+
+			void DecomposeWTM(const yunuGI::Matrix4x4& mat, yunuGI::Vector3& scale, yunuGI::Quaternion& rotation, yunuGI::Vector3& translation)
+			{
+				auto ftm = *reinterpret_cast<DirectX::XMMATRIX*>(const_cast<yunuGI::Matrix4x4*>(&mat));
+				DirectX::XMVECTOR dxscale;
+				DirectX::XMVECTOR dxrotation;
+				DirectX::XMVECTOR dxposition;
+
+				DirectX::XMMatrixDecompose(&dxscale, &dxrotation, &dxposition, ftm);
+
+				scale = *reinterpret_cast<yunuGI::Vector3*>(&dxscale);
+				yunuGI::Vector4 rot = *reinterpret_cast<yunuGI::Vector4*>(&dxrotation);
+				rotation.x = rot.x;
+				rotation.y = rot.y;
+				rotation.z = rot.z;
+				rotation.w = rot.w;
+				translation = *reinterpret_cast<yunuGI::Vector3*>(&dxposition);
+			}
 		}
 	}
 }

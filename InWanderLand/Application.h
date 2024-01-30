@@ -93,8 +93,8 @@ namespace application
 
         enum class LayerList
         {
-            EditorLayer = 0,
-            ContentsLayer,
+            ContentsLayer = 0,
+            EditorLayer,
         };
 
         static std::unique_ptr<Application> instance;

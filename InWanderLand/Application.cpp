@@ -224,7 +224,6 @@ namespace application
 		layers[(int)LayerList::ContentsLayer] = new contents::ContentsLayer();
 
 #ifdef EDITOR
-		CheckContentsLayerInit();
 		layers[(int)LayerList::EditorLayer] = new editor::EditorLayer();
 #endif
 
@@ -235,6 +234,7 @@ namespace application
 		}
 
 #ifdef EDITOR
+		CheckContentsLayerInit();
 		static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer])->LateInitialize();
 #endif
 	}
