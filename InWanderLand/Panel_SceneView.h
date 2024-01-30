@@ -7,8 +7,14 @@
 #include "EditorPanel.h"
 #include "PaletteManager.h"
 #include "EditorInputManager.h"
+#include "YunuGraphicsInterface.h"
 
 #include <utility>
+
+namespace yunutyEngine
+{
+	class GameObject;
+}
 
 namespace application
 {
@@ -55,6 +61,7 @@ namespace application
 			void Release();
 
 			void ImGui_SceneViewSettings();
+			void ImGui_UpdateObjectWTM(GameObject* target, const yunuGI::Matrix4x4& wtm) const;
 
 			Application* app;
 			EditorCamera* ec;
