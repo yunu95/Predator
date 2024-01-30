@@ -101,6 +101,8 @@ namespace application
         TerrainData::TerrainData(const std::string& name)
             : IEditableData(), pod()
         {
+            assert(soleTerrainData == nullptr && "지형 정보는 단 하나만 존재해야 합니다!");
+            soleTerrainData = this;
             pod.templateData = static_cast<Terrain_TemplateData*>(templateDataManager.GetTemplateData(name));
             EnterDataFromTemplate();
         }
@@ -108,7 +110,8 @@ namespace application
         TerrainData::TerrainData(const TerrainData& prototype)
             : pod(prototype.pod)
         {
-
+            assert(soleTerrainData == nullptr && "지형 정보는 단 하나만 존재해야 합니다!");
+            soleTerrainData = this;
         }
 
         TerrainData& TerrainData::operator=(const TerrainData& prototype)

@@ -29,11 +29,6 @@ void TestCaseMapFileIOInitializer()
 
     auto& im = application::editor::InstanceManager::GetSingletonInstance();
     im.CreateInstance("Terrain1");
-    im.CreateInstance("Terrain2");
-    im.CreateInstance("Terrain2");
-    im.CreateInstance("Terrain3");
-    im.CreateInstance("Terrain3");
-    im.CreateInstance("Terrain3");
     im.CreateInstance("Unit1");
     im.CreateInstance("Unit2");
     im.CreateInstance("Unit2");
