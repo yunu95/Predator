@@ -39,7 +39,7 @@ namespace yunutyEngine
     public:
         Scene(const Scene&) = delete;
         Scene& operator=(const Scene&) = delete;
-        Scene() = default;
+        Scene() {};
         virtual const vector<GameObject*>& GetChildren()const override;
         static Scene* getCurrentScene();
         static void LoadScene(Scene* scene);

@@ -34,6 +34,8 @@ namespace application
 			yunuGI::Matrix4x4 GetInverseMatrix(const yunuGI::Matrix4x4& mat);
 
 			yunuGI::Vector3 RotateVector3(const yunuGI::Vector3& vec, const yunuGI::Matrix4x4& roMat);
+
+			void DecomposeWTM(const yunuGI::Matrix4x4& mat, yunuGI::Vector3& scale, yunuGI::Quaternion& rotation, yunuGI::Vector3& translation);
 		}
 	}
 }

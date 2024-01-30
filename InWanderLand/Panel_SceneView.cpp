@@ -19,6 +19,8 @@
 
 #include <iostream>
 
+GameObject* obj = nullptr;
+
 namespace application
 {
 	namespace editor
@@ -238,10 +240,9 @@ namespace application
 
 			ImGuizmo::OPERATION operation = ImGuizmo::ROTATE;
 			ImGuizmo::MODE mode = ImGuizmo::WORLD;
-			static yunuGI::Matrix4x4 mat = yunuGI::Matrix4x4();
-			auto gmat = math::ConvertWTM(mat);
-			ImGuizmo::Manipulate(reinterpret_cast<float*>(&beforeVTM), reinterpret_cast<float*>(&gptm), operation, mode, reinterpret_cast<float*>(&gmat), NULL, NULL, NULL, NULL);
-			mat = math::ConvertWTM(gmat);
+
+			//ImGuizmo::Manipulate(reinterpret_cast<float*>(&beforeVTM), reinterpret_cast<float*>(&gptm), operation, mode, reinterpret_cast<float*>(&objgwtm), NULL, NULL, NULL, NULL);
+			//ImGui_UpdateObjectWTM(obj, math::ConvertWTM(objgwtm));
 
 			if (ec->GetGamePerspective() == CameraPerspectiveState::Free)
 			{
@@ -430,6 +431,17 @@ namespace application
 			}
 
 			ImGui::End();
+		}
+
+		void SceneViewPanel::ImGui_UpdateObjectWTM(GameObject* target, const yunuGI::Matrix4x4& wtm) const
+		{
+			auto ttf = target->GetTransform();
+			yunuGI::Vector3 scale;
+			yunuGI::Quaternion rotation;
+			yunuGI::Vector3 translation;
+			math::DecomposeWTM(wtm, scale, rotation, translation);
+			ttf->SetWorldPosition(*reinterpret_cast<Vector3f*>(&translation));
+			ttf->SetWorldRotation(*reinterpret_cast<Quaternion*>(&rotation));
 		}
 	}
 }
