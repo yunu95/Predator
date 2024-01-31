@@ -115,12 +115,12 @@ void HealerSkillSystem::Update()
 	if (isWSkillActivating)
 	{
 		WSkillFieldDamage.colliderObject->GetTransform()
-			->SetWorldPosition({GetGameObject()->GetTransform()->GetWorldPosition() + GetGameObject()->GetTransform()->rotation.Forward() * -3});
-		WSkillFieldDamage.colliderObject->GetTransform()->rotation = GetGameObject()->GetTransform()->rotation;
+			->SetWorldPosition({GetGameObject()->GetTransform()->GetWorldPosition() + GetGameObject()->GetTransform()->GetWorldRotation().Forward() * -3});
+		WSkillFieldDamage.colliderObject->GetTransform()->GetWorldRotation() = GetGameObject()->GetTransform()->GetWorldRotation();
 
 		WSkillFieldDamage.debugObject->GetTransform()
 			->SetWorldPosition(WSkillFieldDamage.colliderObject->GetTransform()->GetWorldPosition());
-		WSkillFieldDamage.debugObject->GetTransform()->rotation = WSkillFieldDamage.colliderObject->GetTransform()->rotation;
+		WSkillFieldDamage.debugObject->GetTransform()->GetWorldRotation() = WSkillFieldDamage.colliderObject->GetTransform()->GetWorldRotation();
 
 		//m_unitComponent->LookAt(m_currentSelectedSkillPosition);
 	}

@@ -94,7 +94,7 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 
 	auto autoAttackDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(autoAttackDebugMesh, DebugMeshType::Cube, yunuGI::Color::red(), true);
-	autoAttackDebugMesh->GetTransform()->scale = { 1.0f * LENGTH_UNIT, 1.0f * LENGTH_UNIT, 3.0f * LENGTH_UNIT };
+	autoAttackDebugMesh->GetTransform()->SetLocalScale({ 1.0f * LENGTH_UNIT, 1.0f * LENGTH_UNIT, 3.0f * LENGTH_UNIT });
 
 	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
 	warriorAttackSystem->SetColliderObject(unitAttackColliderObject);
@@ -114,7 +114,7 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 
 	auto qSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(qSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), true);
-	qSkillColliderDebugObject->GetTransform()->scale = { m_QSkillRadius, m_QSkillRadius, m_QSkillRadius };
+	qSkillColliderDebugObject->GetTransform()->SetLocalScale({ m_QSkillRadius, m_QSkillRadius, m_QSkillRadius });
 
 	auto knockBackComponent = qSkillKnockBackObject->AddComponent<KnockBackComponent>();
 	knockBackComponent->SetSkillOwnerUnit(m_unitComponent);
@@ -135,7 +135,7 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 
 	auto wSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(wSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), true);
-	wSkillColliderDebugObject->GetTransform()->scale = { m_WSkillRadius, m_WSkillRadius, m_WSkillRadius };
+	wSkillColliderDebugObject->GetTransform()->SetLocalScale({ m_WSkillRadius, m_WSkillRadius, m_WSkillRadius });
 
 	// warrior SkillSystem
 	auto warriorSkillSystem = m_unitGameObject->AddComponent<WarriorSkillSystem>();

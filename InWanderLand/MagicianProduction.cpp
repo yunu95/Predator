@@ -95,7 +95,7 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 
 	auto QSkillProjectileDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(QSkillProjectileDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), false);
-	QSkillProjectileDebugObject->GetTransform()->scale = { m_QSkillProjectileRadius , m_QSkillProjectileRadius , m_QSkillProjectileRadius };
+	QSkillProjectileDebugObject->GetTransform()->SetLocalScale({ m_QSkillProjectileRadius , m_QSkillProjectileRadius , m_QSkillProjectileRadius });
 
 	auto QSkillFieldObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	QSkillFieldObject->AddComponent<Dotween>();
@@ -107,7 +107,7 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 	QSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	auto QSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(QSkillFieldDebugObject, DebugMeshType::Sphere, yunuGI::Color::white(), false);
-	QSkillFieldDebugObject->GetTransform()->scale = { m_QSkillFieldRadius , m_QSkillFieldRadius , m_QSkillFieldRadius };
+	QSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_QSkillFieldRadius , m_QSkillFieldRadius , m_QSkillFieldRadius });
 #pragma endregion
 
 #pragma region W Skill Setting
@@ -121,7 +121,7 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 
 	auto WSkillProjectileDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(WSkillProjectileDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
-	WSkillProjectileDebugObject->GetTransform()->scale = { m_WSkillProjectileRadius , m_WSkillProjectileRadius , m_WSkillProjectileRadius };
+	WSkillProjectileDebugObject->GetTransform()->SetLocalScale({ m_WSkillProjectileRadius , m_WSkillProjectileRadius , m_WSkillProjectileRadius });
 
 	auto WSkillFieldObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	WSkillFieldObject->AddComponent<Dotween>();
@@ -133,7 +133,7 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 	WSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(WSkillFieldDebugObject, DebugMeshType::Sphere, yunuGI::Color::blue(), true);
-	WSkillFieldDebugObject->GetTransform()->scale = { m_WSkillFieldRadius , m_WSkillFieldRadius , m_WSkillFieldRadius };
+	WSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_WSkillFieldRadius , m_WSkillFieldRadius , m_WSkillFieldRadius });
 #pragma endregion
 
 #pragma endregion
