@@ -247,18 +247,6 @@
     <Filter Include="Editor\Palette\PaletteBrush\TerrainBrush">
       <UniqueIdentifier>{14ee86d7-bf36-42e5-9618-562c06f3e4d8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\Palette\PaletteInstance">
-      <UniqueIdentifier>{0f6ed044-5c7b-40b1-9879-5656d439c20a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Editor\Palette\PaletteInstance\TerrainInstance">
-      <UniqueIdentifier>{4847a1aa-0029-445d-91f5-8b19c232f9ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Editor\Palette\PaletteInstance\UnitInstance">
-      <UniqueIdentifier>{28eaf762-a605-4181-8cfa-5fb61e826531}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Editor\Palette\PaletteInstance\RegionInstance">
-      <UniqueIdentifier>{f4de70f3-c627-4642-9176-8b680a0b35bc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Editor\Palette\List">
       <UniqueIdentifier>{ca9f8542-f8f4-4207-827e-2d1f72a27cf0}</UniqueIdentifier>
     </Filter>
@@ -288,6 +276,15 @@
     </Filter>
     <Filter Include="Contents\UnitStatusComponent\DualCast">
       <UniqueIdentifier>{983c5f85-0366-4065-a61e-f1f569df5f68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\EditorInstance">
+      <UniqueIdentifier>{0f6ed044-5c7b-40b1-9879-5656d439c20a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\EditorInstance\UnitInstance">
+      <UniqueIdentifier>{28eaf762-a605-4181-8cfa-5fb61e826531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\EditorInstance\RegionInstance">
+      <UniqueIdentifier>{f4de70f3-c627-4642-9176-8b680a0b35bc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -499,13 +496,10 @@
       <Filter>Contents\InputManager</Filter>
     </ClInclude>
     <ClInclude Include="PaletteInstance.h">
-      <Filter>Editor\Palette\PaletteInstance</Filter>
+      <Filter>Editor\Palette\EditorInstance</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainInstance.h">
-      <Filter>Editor\Palette\PaletteInstance\TerrainInstance</Filter>
-    </ClInclude>
-    <ClInclude Include="UnitInstance.h">
-      <Filter>Editor\Palette\PaletteInstance\UnitInstance</Filter>
+    <ClInclude Include="UnitEditorInstance.h">
+      <Filter>Editor\Palette\EditorInstance\UnitInstance</Filter>
     </ClInclude>
     <ClInclude Include="SelectionBoxPerInstance.h">
       <Filter>Editor\Palette\GraphicsHelper\SelectionBoxPerInstance</Filter>
@@ -579,8 +573,8 @@
     <ClInclude Include="KnockBackComponent.h">
       <Filter>Contents\UnitStatusComponent\KnockBack</Filter>
     </ClInclude>
-    <ClInclude Include="RegionInstance.h">
-      <Filter>Editor\Palette\PaletteInstance\RegionInstance</Filter>
+    <ClInclude Include="RegionEditorInstance.h">
+      <Filter>Editor\Palette\EditorInstance\RegionInstance</Filter>
     </ClInclude>
     <ClInclude Include="RegionPalette.h">
       <Filter>Editor\Palette\List\RegionPalette</Filter>
@@ -715,6 +709,12 @@
     </ClInclude>
     <ClInclude Include="DualCastComponent.h">
       <Filter>Contents\UnitStatusComponent\DualCast</Filter>
+    </ClInclude>
+    <ClInclude Include="RegionData.h">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="Region_TemplateData.h">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -944,7 +944,7 @@
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
     <ClCompile Include="PaletteInstance.cpp">
-      <Filter>Editor\Palette\PaletteInstance</Filter>
+      <Filter>Editor\Palette\EditorInstance</Filter>
     </ClCompile>
     <ClCompile Include="UnitStatusComponent.cpp">
       <Filter>Contents\UnitStatusComponent</Filter>
@@ -952,14 +952,11 @@
     <ClCompile Include="DebugMeshes.cpp">
       <Filter>DebugGraphics\DebugMeshes</Filter>
     </ClCompile>
-    <ClCompile Include="UnitInstance.cpp">
-      <Filter>Editor\Palette\PaletteInstance\UnitInstance</Filter>
+    <ClCompile Include="UnitEditorInstance.cpp">
+      <Filter>Editor\Palette\EditorInstance\UnitInstance</Filter>
     </ClCompile>
-    <ClCompile Include="RegionInstance.cpp">
-      <Filter>Editor\Palette\PaletteInstance\RegionInstance</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainInstance.cpp">
-      <Filter>Editor\Palette\PaletteInstance\TerrainInstance</Filter>
+    <ClCompile Include="RegionEditorInstance.cpp">
+      <Filter>Editor\Palette\EditorInstance\RegionInstance</Filter>
     </ClCompile>
     <ClCompile Include="SnippetRegionPalette.cpp">
       <Filter>TestCodes\snippets</Filter>
@@ -1095,6 +1092,12 @@
     </ClCompile>
     <ClCompile Include="DualCastComponent.cpp">
       <Filter>Contents\UnitStatusComponent\DualCast</Filter>
+    </ClCompile>
+    <ClCompile Include="RegionData.cpp">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="Region_TemplateData.cpp">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,19 +1,19 @@
 #include "InWanderLand.h"
 #include "DebugMeshes.h"
-#include "UnitInstance.h"
+#include "UnitEditorInstance.h"
 #include "UnitData.h"
 namespace application::editor::palette
 {
-    void UnitInstance::Start()
+    void UnitEditorInstance::Start()
     {
         PaletteInstance::Start();
         mesh = AttachDebugMesh(GetGameObject()->AddGameObject(), DebugMeshType::Cube, yunuGI::Color{1, 1, 1}, false);
     }
-    void UnitInstance::Init(const application::editor::UnitData* unitData)
+    void UnitEditorInstance::Init(const application::editor::UnitData* unitData)
     {
         Init(unitData->pod.templateData);
     }
-    void UnitInstance::Init(const application::editor::Unit_TemplateData* unitTemplateData)
+    void UnitEditorInstance::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     {
         this->unitTemplateData = unitTemplateData;
     }

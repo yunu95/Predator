@@ -31,7 +31,8 @@ namespace application
             None,			// 예외용
             TerrainData,
             UnitData,
-            OrnamentData
+            OrnamentData,
+            RegionData,
         };
         template<typename T>
         DataType GetDataTypeEnum() { return DataType::None; }

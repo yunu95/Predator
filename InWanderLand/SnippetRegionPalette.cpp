@@ -10,7 +10,6 @@
 #include "PaletteManager.h"
 #include "TerrainPalette.h"
 #include "RegionPalette.h"
-#include "RegionInstance.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -36,11 +35,11 @@ void SnippetInitializerRegionPalette()
 
     auto directionalLight = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 
-    auto tempRegion1 = Scene::getCurrentScene()->AddGameObject()->AddComponent<RegionInstance>();
+    auto tempRegion1 = Scene::getCurrentScene()->AddGameObject()->AddComponent<RegionEditorInstance>();
     tempRegion1->GetTransform()->position = Vector3d(0, 0, 0);
-    auto tempRegion2 = Scene::getCurrentScene()->AddGameObject()->AddComponent<RegionInstance>();
+    auto tempRegion2 = Scene::getCurrentScene()->AddGameObject()->AddComponent<RegionEditorInstance>();
     tempRegion2->GetTransform()->position = Vector3d(3, 0, 0);
-    auto tempRegion3 = Scene::getCurrentScene()->AddGameObject()->AddComponent<RegionInstance>();
+    auto tempRegion3 = Scene::getCurrentScene()->AddGameObject()->AddComponent<RegionEditorInstance>();
     tempRegion3->GetTransform()->position = Vector3d(0, 0, 3);
     tempRegion3->SetHalfExtent({ 1.5,2 });
 

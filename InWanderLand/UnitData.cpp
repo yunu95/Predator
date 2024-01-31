@@ -1,7 +1,7 @@
 #include "InWanderLand.h"
 #include "UnitData.h"
 #include "UnitPalette.h"
-#include "UnitInstance.h"
+#include "UnitEditorInstance.h"
 
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
@@ -60,7 +60,7 @@ namespace application
         {
             if (GetPaletteInstance() == nullptr)
             {
-                unitInstance = Scene::getCurrentScene()->AddGameObject()->AddComponent<palette::UnitInstance>();
+                unitInstance = Scene::getCurrentScene()->AddGameObject()->AddComponent<palette::UnitEditorInstance>();
                 SetPaletteInstance(unitInstance);
                 unitInstance->SetEditableData(this);
                 unitInstance->Init(this);

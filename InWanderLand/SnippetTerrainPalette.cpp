@@ -10,7 +10,6 @@
 #include "PaletteManager.h"
 #include "TerrainPalette.h"
 #include "SingleNavigationField.h"
-#include "TerrainInstance.h"
 #include "TestUtils.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;

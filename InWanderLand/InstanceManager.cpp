@@ -214,7 +214,11 @@ namespace application
                 instance = new OrnamentData();
                 break;
             }
-
+            case DataType::RegionData:
+            {
+                instance = new RegionData();
+                break;
+            }
             default:
                 break;
             }
