@@ -5,70 +5,70 @@
 
 void PassiveCake::PopCake(Vector3d initialPos)
 {
-	/// 떨어질 위치 선정 (랜덤)
-	std::srand(std::time(0));
-	int dropDistance = std::rand() % (maxDropDistance - minDropDistance) + minDropDistance;
+    /// 떨어질 위치 선정 (랜덤)
+    std::srand(std::time(0));
+    int dropDistance = std::rand() % (maxDropDistance - minDropDistance) + minDropDistance;
 
-	int dropAngle = std::rand() % maxDegree;
-	
-	GetTransform()->SetWorldPosition(initialPos);
-	
-	GetGameObject()->GetTransform()->rotation = Quaternion({ 0, static_cast<float>(dropAngle), 0 });
+    int dropAngle = std::rand() % maxDegree;
 
-	Vector3d endPos = GetTransform()->GetWorldPosition() + GetTransform()->rotation.Forward() * dropDistance;
+    GetTransform()->SetWorldPosition(initialPos);
 
-	m_collider->SetActive(false);
+    GetGameObject()->GetTransform()->SetLocalRotation(Quaternion({ 0, static_cast<float>(dropAngle), 0 }));
 
-	m_mesh->SetActive(true);
+    Vector3d endPos = GetTransform()->GetWorldPosition() + GetTransform()->GetLocalRotation().Forward() * dropDistance;
 
-	GetGameObject()->GetComponent<Dotween>()->DOMove(endPos, 2.0f).OnComplete([this]()
-		{
-			isDropped = true;
-			m_collider->SetActive(true);
-		});
+    m_collider->SetActive(false);
+
+    m_mesh->SetActive(true);
+
+    GetGameObject()->GetComponent<Dotween>()->DOMove(endPos, 2.0f).OnComplete([this]()
+        {
+            isDropped = true;
+            m_collider->SetActive(true);
+        });
 }
 
 void PassiveCake::SetMesh(yunutyEngine::graphics::StaticMeshRenderer* p_mesh)
 {
-	m_mesh = p_mesh;
-	m_mesh->SetActive(false);
+    m_mesh = p_mesh;
+    m_mesh->SetActive(false);
 }
 
 void PassiveCake::SetCollider(physics::BoxCollider* p_collider)
 {
-	m_collider = p_collider;
-	m_collider->SetActive(false);
+    m_collider = p_collider;
+    m_collider->SetActive(false);
 }
 
 void PassiveCake::Start()
 {
-	//GetGameObject()->SetSelfActive(false);
+    //GetGameObject()->SetSelfActive(false);
 
 }
 
 void PassiveCake::Update()
 {
-	if (isDropped)
-	{
-		cakeElapsed += Time::GetDeltaTime();
+    if (isDropped)
+    {
+        cakeElapsed += Time::GetDeltaTime();
 
-		if (cakeElapsed >= cakePersistTime)
-		{
-			PassiveCakePool::SingleInstance().Return(this);
-			cakeElapsed = 0.0f;
-			isDropped = false;
-		}
-	}
+        if (cakeElapsed >= cakePersistTime)
+        {
+            PassiveCakePool::SingleInstance().Return(this);
+            cakeElapsed = 0.0f;
+            isDropped = false;
+        }
+    }
 }
 
 void PassiveCake::OnTriggerEnter(physics::Collider* collider)
 {
-	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
-		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
-	{
-		m_mesh->SetActive(false);
-		PassiveCakePool::SingleInstance().Return(this);
-		colliderUnitComponent->Heal(cakeHealingPoint);
-	}
+    if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+        colliderUnitComponent != nullptr &&
+        colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+    {
+        m_mesh->SetActive(false);
+        PassiveCakePool::SingleInstance().Return(this);
+        colliderUnitComponent->Heal(cakeHealingPoint);
+    }
 }

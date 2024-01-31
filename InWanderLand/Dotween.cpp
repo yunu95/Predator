@@ -314,7 +314,7 @@ Dotween& Dotween::DOLookAt(Vector3d lookTransform, double p_duration, bool isYax
 		double degreePerFrame = finalDegree / (m_doLookTweenTimer->duration);
 		currentRotation += degreePerFrame * Time::GetDeltaTime();
 		if(!isnan(currentRotation))
-			GetGameObject()->GetTransform()->rotation = Quaternion({ 0.0f, currentRotation, 0.0f });
+			GetGameObject()->GetTransform()->SetLocalRotation( Quaternion({ 0.0f, currentRotation, 0.0f }));
 	};
 
 	currentTimerIndex = TimerIndex::RotateTimer;

@@ -163,7 +163,7 @@ namespace application
             constexpr double nodeHeight = 6;
             auto node = Scene::getCurrentScene()->AddGameObject();
             node->GetTransform()->SetWorldPosition(GetNodePosition(nodeKey) - nodeHeight * Vector3d::up * 0.5);
-            node->GetTransform()->scale = { nodeDistance, nodeHeight, nodeDistance };
+            node->GetTransform()->SetLocalScale( { nodeDistance, nodeHeight, nodeDistance });
             auto mesh = AttachDebugMesh(node, DebugMeshType::Cube, yunuGI::Color{0.788, 0.647, 0.215}, false);
             mesh->SetIsUpdating(false);
             return node;

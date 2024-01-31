@@ -540,7 +540,7 @@ namespace application
 			yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 			auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 			directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-			directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{90,0,30} };
+			directionalLight->GetTransform()->SetLocalRotation( Quaternion{ Vector3d{90,0,30} });
 		}
 		else
 		{
@@ -555,7 +555,7 @@ namespace application
 
 			auto directionalLight = scene->AddGameObject();
 			directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-			directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{90,0,30} };
+			directionalLight->GetTransform()->SetLocalRotation( Quaternion{ Vector3d{90,0,30} });
 		}
 #endif
 	}

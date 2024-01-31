@@ -115,7 +115,7 @@ void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navFi
 
 	auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(WSkillFieldDebugObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::blue(), true));
-	WSkillFieldDebugObject->GetTransform()->scale = { 10, 1, 5 };
+	WSkillFieldDebugObject->GetTransform()->SetLocalScale( { 10, 1, 5 });
 
 #pragma endregion
 

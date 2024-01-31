@@ -82,10 +82,10 @@ void WarriorSkillSystem::Start()
 {
 	SetOtherComponentsAsMember();
 
-	m_QSkillKnockBackDebugObject->GetTransform()->scale = { pow(m_QSkillRadius, 2), pow(m_QSkillRadius, 2), pow(m_QSkillRadius, 2) };
+	m_QSkillKnockBackDebugObject->GetTransform()->SetLocalScale( { pow(m_QSkillRadius, 2), pow(m_QSkillRadius, 2), pow(m_QSkillRadius, 2) });
 	m_QSkillKnockBackDebugObject->SetSelfActive(false);
 
-	m_WSkillDebugObject->GetTransform()->scale = { pow(m_WSkillRadius, 2), pow(m_WSkillRadius, 2), pow(m_WSkillRadius, 2) };
+	m_WSkillDebugObject->GetTransform()->SetLocalScale( { pow(m_WSkillRadius, 2), pow(m_WSkillRadius, 2), pow(m_WSkillRadius, 2) });
 	m_WSkillDebugObject->SetSelfActive(false);
 }
 

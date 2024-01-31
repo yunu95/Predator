@@ -8,12 +8,12 @@ namespace application::editor::palette
     void PaletteInstance::Start()
     {
         selectCircle = AttachDebugMesh(GetGameObject()->AddGameObject(), DebugMeshType::Rectangle, yunuGI::Color{1, 1, 1}, true);
-        selectCircle->GetTransform()->rotation = Quaternion({ 90,0,0 });
+        selectCircle->GetTransform()->SetLocalRotation( Quaternion({ 90,0,0 }));
         pickingCollider = GetGameObject()->AddComponent<yunutyEngine::physics::BoxCollider>();
         rigidBody = GetGameObject()->AddComponent<yunutyEngine::physics::RigidBody>();
         pickingCollider->SetHalfExtent({ 0.01,100,0.01 });
         rigidBody->SetAsKinematic(true);
-        selectCircle->GetTransform()->scale = Vector3d::one * selectCircleRadius;
+        selectCircle->GetTransform()->SetLocalScale( Vector3d::one * selectCircleRadius);
         selectCircle->SetActive(false);
     }
     void PaletteInstance::OnHover()

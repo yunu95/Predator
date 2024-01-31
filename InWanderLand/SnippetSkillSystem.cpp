@@ -143,7 +143,7 @@ void SnippetSkillSystemInit()
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 		directionalLight->GetTransform()->SetWorldPosition(Vector3d(0, 100, 0));
-		directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{120,0,0} };
+		directionalLight->GetTransform()->SetLocalRotation( Quaternion{ Vector3d{120,0,0} });
 	}
 
 	auto inputManagerObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();

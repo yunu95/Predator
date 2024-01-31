@@ -12,7 +12,7 @@ yunutyEngine::graphics::Camera::Camera()
 }
 void yunutyEngine::graphics::Camera::Update()
 {
-    GetTransform()->scale = Vector3d::one;
+    GetTransform()->SetLocalScale( Vector3d::one);
     yunuGICamera->SetWorldTM(GetTransform()->GetWorldTM());
 }
 void yunutyEngine::graphics::Camera::SetCameraMain()

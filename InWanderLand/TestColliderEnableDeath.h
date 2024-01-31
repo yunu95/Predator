@@ -10,7 +10,7 @@
 
 class TriggerVolumeTest : public Component
 {
-    // PhysX Visual Debugger¶ó´Â ÇÁ·Î±×·¥À» ½ÇÇàÇÏ°í Å×½ºÆ® ÄÚµå¸¦ ½ÇÇàÇÏ¸é ¾î¶² Çö»óÀÌ ÀÏ¾î³ª´ÂÁö ´õ¿í ÀÚ¼¼È÷ °üÂûÇÒ ¼ö ÀÖ½À´Ï´Ù.
+    // PhysX Visual Debuggerë¼ëŠ” í”„ë¡œê·¸ëž¨ì„ ì‹¤í–‰í•˜ê³  í…ŒìŠ¤íŠ¸ ì½”ë“œë¥¼ ì‹¤í–‰í•˜ë©´ ì–´ë–¤ í˜„ìƒì´ ì¼ì–´ë‚˜ëŠ”ì§€ ë”ìš± ìžì„¸ížˆ ê´€ì°°í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
     virtual void OnTriggerEnter(physics::Collider* other) override
     {
         DebugBeacon::PlaceBeacon(other->GetTransform()->GetWorldPosition(), yunuGI::Color::blue(), { 3,3,3 });
@@ -20,19 +20,19 @@ class TriggerVolumeTest : public Component
         DebugBeacon::PlaceBeacon(other->GetTransform()->GetWorldPosition(), yunuGI::Color::blue(), { 3,3,3 });
     };
 };
-// PhysX Visual Debugger¶ó´Â ÇÁ·Î±×·¥À» ½ÇÇàÇÏ°í Å×½ºÆ® ÄÚµå¸¦ ½ÇÇàÇÏ¸é ¾î¶² Çö»óÀÌ ÀÏ¾î³ª´ÂÁö ´õ¿í ÀÚ¼¼È÷ °üÂûÇÒ ¼ö ÀÖ½À´Ï´Ù.
+// PhysX Visual Debuggerë¼ëŠ” í”„ë¡œê·¸ëž¨ì„ ì‹¤í–‰í•˜ê³  í…ŒìŠ¤íŠ¸ ì½”ë“œë¥¼ ì‹¤í–‰í•˜ë©´ ì–´ë–¤ í˜„ìƒì´ ì¼ì–´ë‚˜ëŠ”ì§€ ë”ìš± ìžì„¸ížˆ ê´€ì°°í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
 void TestColliderEnableDeath()
 {
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     auto rtsCam = camObj->AddComponent<RTSCam>();
-    rtsCam->GetTransform()->position = Vector3d(0, 10, 0);
+    rtsCam->GetTransform()->SetLocalPosition( Vector3d(0, 10, 0));
 
     auto boxCollider = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     auto boxColliderComp = boxCollider->AddComponent<yunutyEngine::physics::BoxCollider>();
     auto rigidComp = boxCollider->AddComponent<physics::RigidBody>();
     //rigidComp->SetAsStatic(true);
-    boxCollider->GetTransform()->position = Vector3d(0, 10, 0);
-    boxCollider->GetTransform()->rotation = Vector3d(100, 10, 35);
+    boxCollider->GetTransform()->SetLocalPosition( Vector3d(0, 10, 0));
+    boxCollider->GetTransform()->SetLocalRotation( Vector3d(100, 10, 35));
     auto boxMesh = boxCollider->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 
     auto resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
@@ -47,8 +47,8 @@ void TestColliderEnableDeath()
         auto boxColliderComp = boxCollider->AddComponent<yunutyEngine::physics::BoxCollider>();
         auto rigidComp = boxCollider->AddComponent<physics::RigidBody>();
         //rigidComp->SetAsStatic(true);
-        boxCollider->GetTransform()->position = Vector3d(0, 13, 0);
-        boxCollider->GetTransform()->rotation = Vector3d(100, 10, 35);
+        boxCollider->GetTransform()->SetLocalPosition( Vector3d(0, 13, 0));
+        boxCollider->GetTransform()->SetLocalRotation( Vector3d(100, 10, 35));
         auto boxMesh = boxCollider->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
         boxCollider->AddComponent<TriggerVolumeTest>();
         boxMesh->GetGI().SetMesh(cubeMesh);
@@ -59,8 +59,8 @@ void TestColliderEnableDeath()
         auto sphereColliderComp = sphereCollider->AddComponent<yunutyEngine::physics::SphereCollider>();
         auto rigidComp = sphereCollider->AddComponent<physics::RigidBody>();
         //rigidComp->SetAsStatic(true);
-        sphereCollider->GetTransform()->position = Vector3d(-1, 13, 2);
-        sphereCollider->GetTransform()->rotation = Vector3d(100, 10, 35);
+        sphereCollider->GetTransform()->SetLocalPosition( Vector3d(-1, 13, 2));
+        sphereCollider->GetTransform()->SetLocalRotation( Vector3d(100, 10, 35));
         auto sphereMesh = sphereCollider->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
         sphereCollider->AddComponent<TriggerVolumeTest>();
         sphereMesh->GetGI().SetMesh(sphereMeshResource);
@@ -72,8 +72,8 @@ void TestColliderEnableDeath()
         auto capsuleColliderComp = capsuleCollider->AddComponent<yunutyEngine::physics::CapsuleCollider>();
         auto rigidComp = capsuleCollider->AddComponent<physics::RigidBody>();
         //rigidComp->SetAsStatic(true);
-        capsuleCollider->GetTransform()->position = Vector3d(1, 13, 2);
-        capsuleCollider->GetTransform()->rotation = Vector3d(100, 10, 35);
+        capsuleCollider->GetTransform()->SetLocalPosition( Vector3d(1, 13, 2));
+        capsuleCollider->GetTransform()->SetLocalRotation( Vector3d(100, 10, 35));
         auto capsuleMesh = capsuleCollider->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
         capsuleCollider->AddComponent<TriggerVolumeTest>();
         capsuleMesh->GetGI().SetMesh(capsuleMeshResource);
@@ -87,14 +87,14 @@ void TestColliderEnableDeath()
     planeColliderComp->SetHalfExtent({ 5,1,5 });
     auto planeRigidComp = planeCollider->AddComponent<physics::RigidBody>();
     planeRigidComp->SetAsStatic(true);
-    planeCollider->GetTransform()->position = Vector3d(0, 0, 0);
+    planeCollider->GetTransform()->SetLocalPosition( Vector3d(0, 0, 0));
     auto planeMesh = planeCollider->AddGameObject();
     auto planeMeshComp = planeMesh->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
     planeMeshComp->GetGI().SetMesh(cubeMesh);
     planeMeshComp->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
-    planeMesh->GetTransform()->scale = Vector3d(10, 2, 10);
+    planeMesh->GetTransform()->SetLocalScale( Vector3d(10, 2, 10));
 
-    // Æ®¸®°Å ÄÝ¶óÀÌ´õ »ý¼º
+    // íŠ¸ë¦¬ê±° ì½œë¼ì´ë” ìƒì„±
     /*{
         auto planeCollider = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
         auto planeColliderComp = planeCollider->AddComponent<yunutyEngine::physics::BoxCollider>();
@@ -106,10 +106,10 @@ void TestColliderEnableDeath()
 
     auto delayedFunctions = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DelayedTestFunctions>();
 
-    // Á¦´ë·Î »èÁ¦µÇ´ÂÁö Å×½ºÆ®
+    // ì œëŒ€ë¡œ ì‚­ì œë˜ëŠ”ì§€ í…ŒìŠ¤íŠ¸
     //delayedFunctions->todoList.push_back({ 2,[=]() {Scene::getCurrentScene()->DestroyGameObject(pickingCollider); } });
-    // Á¦´ë·Î ºñÈ°¼ºÈ­µÇ´ÂÁö Å×½ºÆ®
+    // ì œëŒ€ë¡œ ë¹„í™œì„±í™”ë˜ëŠ”ì§€ í…ŒìŠ¤íŠ¸
     delayedFunctions->todoList.push_back({ 1,[=]() {boxCollider->SetSelfActive(false); } });
-    // Á¦´ë·Î ÀçÈ°¼ºÈ­µÇ´ÂÁö Å×½ºÆ®
+    // ì œëŒ€ë¡œ ìž¬í™œì„±í™”ë˜ëŠ”ì§€ í…ŒìŠ¤íŠ¸
     delayedFunctions->todoList.push_back({ 3,[=]() {boxCollider->SetSelfActive(true); } });
 }

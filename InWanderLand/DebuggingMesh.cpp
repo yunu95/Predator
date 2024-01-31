@@ -29,7 +29,7 @@ void DebuggingMesh::PopMeshUP(yunuGI::Color p_color, MaterialNum p_matNum)
 
 void DebuggingMesh::Start()
 {
-	y = GetGameObject()->GetTransform()->position.y;
+	y = GetGameObject()->GetTransform()->GetLocalPosition().y;
 }
 
 void DebuggingMesh::Update()
@@ -43,7 +43,7 @@ void DebuggingMesh::Update()
 		GetGameObject()->GetTransform()->SetWorldPosition(m_ownerObject->GetTransform()->GetWorldPosition()
 			+ Vector3d(0, m_Yincreasement, 0));
 
-		y = GetGameObject()->GetTransform()->position.y;
+		y = GetGameObject()->GetTransform()->GetLocalPosition().y;
 
 		if (m_floatingTime <= m_floatingElapsed)
 		{

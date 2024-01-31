@@ -8,7 +8,7 @@ namespace application::editor::palette
     {
         PaletteInstance::Start();
         mesh = AttachDebugMesh(GetGameObject()->AddGameObject(), DebugMeshType::Rectangle, yunuGI::Color{0, 0, 1}, true);
-        mesh->GetTransform()->rotation = Quaternion({ 90,0,0 });
+        mesh->GetTransform()->SetLocalRotation( Quaternion({ 90,0,0 }));
         SetHalfExtent(halfExtent);
     }
     void RegionEditorInstance::OnHover()
@@ -59,7 +59,7 @@ namespace application::editor::palette
         if (wasStartCalled())
         {
             pickingCollider->SetHalfExtent({ halfExtent.x,100,halfExtent.y });
-            mesh->GetTransform()->scale = Vector3d{ halfExtent.x * 2,halfExtent.y * 2,1 };
+            mesh->GetTransform()->SetLocalScale( Vector3d{ halfExtent.x * 2,halfExtent.y * 2,1 });
         }
     }
 }

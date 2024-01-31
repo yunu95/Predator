@@ -94,7 +94,7 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 
 	auto autoAttackDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(autoAttackDebugMesh, DebugMeshType::Cube, yunuGI::Color::red(), true);
-	autoAttackDebugMesh->GetTransform()->scale = { 1.0f, 1.0f, 3.0f };
+	autoAttackDebugMesh->GetTransform()->SetLocalScale( { 1.0f, 1.0f, 3.0f });
 
 	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
 	warriorAttackSystem->SetColliderObject(unitAttackColliderObject);

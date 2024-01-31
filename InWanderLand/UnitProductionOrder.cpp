@@ -33,8 +33,8 @@ GameObject* UnitProductionOrder::CreateUnitWithOrder()
 
 	auto frontDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(frontDebugObject, DebugMeshType::Cube, yunuGI::Color::black(), true);
-	frontDebugObject->GetTransform()->scale = { 0.5, 0.5, 0.5 };
-	frontDebugObject->GetTransform()->SetWorldPosition(m_unitGameObject->GetTransform()->rotation.Forward());
+	frontDebugObject->GetTransform()->SetLocalScale( { 0.5, 0.5, 0.5 });
+	frontDebugObject->GetTransform()->SetWorldPosition(m_unitGameObject->GetTransform()->GetLocalRotation().Forward());
 	frontDebugObject->SetParent(m_unitGameObject);
 
 

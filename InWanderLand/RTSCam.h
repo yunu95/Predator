@@ -48,9 +48,9 @@ public:
             if (yunutyEngine::Input::isKeyDown(KeyCode::S)/* || lastMousePos.y >= 1*/)
                 deltaDirection -= Vector3d::forward;
 
-            GetTransform()->position += deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed;
+            GetTransform()->SetLocalPosition(GetTransform()->GetLocalPosition()+ deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed);
             Quaternion quat = Quaternion(Vector3d(60, 0, 0));
-            GetTransform()->rotation = quat;
+            GetTransform()->SetLocalRotation( quat);
         }
         else
         {
@@ -121,7 +121,7 @@ public:
                 //rot = Quaternion{ Vector3d{euler.x += (20.0f * Time::GetDeltaTime()) ,euler.y , euler.z   } };
                 euler.x += (20.0f * Time::GetDeltaTime());
             }
-            GetTransform()->rotation = Quaternion{ euler };
+            GetTransform()->SetLocalRotation( Quaternion{ euler });
 
             //if (yunutyEngine::Input::is
             // 
@@ -148,7 +148,7 @@ public:
             //    GetTransform()->rotation = Quaternion::MakeWithAxes(newRight, newUp, newForward);
             //}
 
-            GetTransform()->position += deltaPosition.Normalized() * Time::GetDeltaTime() * cameraSpeed;
+            GetTransform()->SetLocalPosition(GetTransform()->GetLocalPosition()+ deltaPosition.Normalized() * Time::GetDeltaTime() * cameraSpeed);
         }
 
         if (!roamingMode)

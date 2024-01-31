@@ -35,9 +35,9 @@ namespace tests
             if (yunutyEngine::Input::isKeyDown(KeyCode::S)/* || lastMousePos.y >= 1*/)
                 deltaDirection -= Vector3d::forward;
 
-            GetTransform()->position += deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed;
+            GetTransform()->SetLocalPosition(GetTransform()->GetLocalPosition()+ deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed);
             Quaternion quat = Quaternion(Vector3d(60, 0, 0));
-            GetTransform()->rotation = quat;
+            GetTransform()->SetLocalRotation( quat);
 
             Vector3d front = GetTransform()->GetWorldRotation().Forward();
             auto distToXZPlane = abs(GetTransform()->GetWorldPosition().y);

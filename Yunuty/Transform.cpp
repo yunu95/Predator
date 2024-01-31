@@ -8,7 +8,7 @@
 using namespace yunutyEngine;
 using namespace DirectX;
 
-// ¹®Á¦°¡ ¸¹´Ù. Ä³½Ì¿¡ ½Å°æÀ» ¾²Áö ¾Ê¾Æ °èÃþ ±¸Á¶°¡ Á¶±Ý¸¸ º¹ÀâÇØÁö¸é ºÎÇÏ°¡ ¸Å¿ì Ä¿Áø´Ù.
+// ë¬¸ì œê°€ ë§Žë‹¤. ìºì‹±ì— ì‹ ê²½ì„ ì“°ì§€ ì•Šì•„ ê³„ì¸µ êµ¬ì¡°ê°€ ì¡°ê¸ˆë§Œ ë³µìž¡í•´ì§€ë©´ ë¶€í•˜ê°€ ë§¤ìš° ì»¤ì§„ë‹¤.
 Vector3d yunutyEngine::Transform::GetWorldPosition()const
 {
     if (GetGameObject()->GetParentGameObject() == nullptr)
@@ -23,7 +23,7 @@ Vector3d yunutyEngine::Transform::GetWorldPosition()const
         GetGameObject()->GetParentGameObject()->GetTransform()->GetWorldPosition();
 }
 //XMMATRIX
-// ¹®Á¦°¡ ¸¹´Ù2
+// ë¬¸ì œê°€ ë§Žë‹¤2
 Quaternion yunutyEngine::Transform::GetWorldRotation()const
 {
     if (GetGameObject()->GetParentGameObject() == nullptr)
@@ -40,6 +40,30 @@ Vector3d yunutyEngine::Transform::GetWorldScale()const
     ret.y = scale.y * parentScale.y;
     ret.z = scale.z * parentScale.z;
     return ret;
+}
+Vector3d yunutyEngine::Transform::GetLocalPosition()const
+{
+    return position;
+}
+Quaternion yunutyEngine::Transform::GetLocalRotation()const
+{
+    return rotation;
+}
+Vector3d yunutyEngine::Transform::GetLocalScale()const
+{
+    return scale;
+}
+void yunutyEngine::Transform::SetLocalPosition(const Vector3d& position)
+{
+    this->position = position;
+}
+void yunutyEngine::Transform::SetLocalRotation(const Quaternion& rotation)
+{
+    this->rotation = rotation;
+}
+void yunutyEngine::Transform::SetLocalScale(const Vector3d& scale)
+{
+    this->scale = scale;
 }
 yunuGI::Matrix4x4 yunutyEngine::Transform::GetLocalTM()const
 {
@@ -72,7 +96,7 @@ void yunutyEngine::Transform::SetWorldPosition(const Vector3d& position)
     else
         this->position = parent->GetTransform()->GetWorldRotation() * (position - parent->GetTransform()->GetWorldPosition());
 }
-// ¹®Á¦°¡ ¸¹´Ù4
+// ë¬¸ì œê°€ ë§Žë‹¤4
 void yunutyEngine::Transform::SetWorldRotation(const Quaternion& rotation)
 {
     this->rotation = rotation;

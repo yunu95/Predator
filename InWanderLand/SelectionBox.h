@@ -12,7 +12,7 @@ namespace application
     {
         namespace palette
         {
-            class SelectionBox : public yunutyEngine::Component,public yunutyEngine::SingletonComponent<SelectionBox>
+            class SelectionBox : public yunutyEngine::Component, public yunutyEngine::SingletonComponent<SelectionBox>
             {
             public:
                 virtual void Start() override
@@ -25,10 +25,12 @@ namespace application
                 void SetCoverage(Vector3d pointA, Vector3d pointB)
                 {
                     auto transform = GetTransform();
-                    transform->rotation = Quaternion({ 90,0,0 });
+                    transform->SetLocalRotation(Quaternion({ 90,0,0 }));
                     transform->SetWorldPosition(((pointA + pointB) / 2));
-                    transform->scale = { (pointA - pointB).Abs() };
-                    transform->scale.y = transform->scale.z;
+                    transform->SetLocalScale({ (pointA - pointB).Abs() });
+                    auto newScale = transform->GetLocalScale();
+                    newScale.y = newScale.z;
+                    transform->SetLocalScale(newScale);
                 }
                 void ShowSelectionBox(bool box)
                 {
