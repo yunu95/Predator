@@ -594,7 +594,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
+      <Command>xcopy "$(projectdir)RuntimeDependency\Editor\Imgui" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
+
 
 
 xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /C /Q /H /R /Y /K  /I /S || exit 0</Command>
@@ -648,11 +649,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
+      <Command>xcopy "$(projectdir)RuntimeDependency\Editor\Imgui" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
 
 
 
-xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /C /Q /H /R /Y /K  /I /S || exit 0</Command>
+
+xcopy "$(projectdir)RuntimeDependency\Editor\Resources" "$(targetdir)Editor\Resources" /D /E /C /Q /H /R /Y /K /I /S || exit 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugExe|x64'">
@@ -845,10 +847,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
+      <Command>xcopy "$(projectdir)RuntimeDependency\Editor\Imgui" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
 
 
-xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E /C /Q /H /R /Y /K  /I /S || exit 0</Command>
+
+xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /C /Q /H /R /Y /K  /I /S || exit 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseEditorExe|x64'">
@@ -877,10 +880,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
+      <Command>xcopy "$(projectdir)RuntimeDependency\Editor\Imgui" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
 
 
-xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E /C /Q /H /R /Y /K  /I /S || exit 0</Command>
+
+xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /C /Q /H /R /Y /K  /I /S || exit 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseExe|x64'">
@@ -992,6 +996,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="BlindFieldComponent.h" />
     <ClInclude Include="DebuggingMesh.h" />
     <ClInclude Include="DualCastComponent.h" />
+    <ClInclude Include="EditorResourceManager.h" />
     <ClInclude Include="FieldDamage.h" />
     <ClInclude Include="HealerAutoAttackProjectile.h" />
     <ClInclude Include="HealerAutoAttackProjectilePool.h" />
@@ -1133,6 +1138,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="BlindFieldComponent.cpp" />
     <ClCompile Include="DebuggingMesh.cpp" />
     <ClCompile Include="DualCastComponent.cpp" />
+    <ClCompile Include="EditorResourceManager.cpp" />
     <ClCompile Include="FieldDamage.cpp" />
     <ClCompile Include="HealerAutoAttackProjectile.cpp" />
     <ClCompile Include="DebugGraphic.cpp" />

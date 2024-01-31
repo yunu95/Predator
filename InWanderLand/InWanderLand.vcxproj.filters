@@ -292,6 +292,9 @@
     <Filter Include="Contents\UnitStatusComponent\DualCast">
       <UniqueIdentifier>{983c5f85-0366-4065-a61e-f1f569df5f68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\ResourceManager">
+      <UniqueIdentifier>{3f98245c-d86e-4f70-ba51-32e2366b142c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -722,6 +725,9 @@
     <ClInclude Include="DualCastComponent.h">
       <Filter>Contents\UnitStatusComponent\DualCast</Filter>
     </ClInclude>
+    <ClInclude Include="EditorResourceManager.h">
+      <Filter>Editor\ResourceManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1104,6 +1110,9 @@
     </ClCompile>
     <ClCompile Include="DualCastComponent.cpp">
       <Filter>Contents\UnitStatusComponent\DualCast</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorResourceManager.cpp">
+      <Filter>Editor\ResourceManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
