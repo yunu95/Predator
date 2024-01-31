@@ -4,6 +4,7 @@
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
+#include "ImGuizmo/ImGuizmo.h"
 
 #include "YunutyEngine.h"
 #include "EditorLayer.h"
@@ -223,7 +224,6 @@ namespace application
 		layers[(int)LayerList::ContentsLayer] = new contents::ContentsLayer();
 
 #ifdef EDITOR
-		CheckContentsLayerInit();
 		layers[(int)LayerList::EditorLayer] = new editor::EditorLayer();
 #endif
 
@@ -234,6 +234,7 @@ namespace application
 		}
 
 #ifdef EDITOR
+		CheckContentsLayerInit();
 		static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer])->LateInitialize();
 #endif
 	}
@@ -346,6 +347,9 @@ namespace application
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
+
+		ImGuizmo::SetOrthographic(false);
+		ImGuizmo::BeginFrame();
 
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
 		window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;

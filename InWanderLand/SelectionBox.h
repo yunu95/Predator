@@ -45,8 +45,8 @@ namespace application
                     if (auto instance = other->GetGameObject()->GetComponent<PaletteInstance>())
                     {
                         contactingInstances.insert(instance);
-                        if (pm.GetCurrentPalette()->ShouldSelect(instance))
-                            pm.GetCurrentPalette()->OnSelectionContactEnter(instance);
+                        if (pm.GetCurrentPalette()->ShouldSelect(instance->GetEditableData()))
+                            pm.GetCurrentPalette()->OnSelectionContactEnter(instance->GetEditableData());
                     }
                 }
                 virtual void OnTriggerExit(physics::Collider* other) override
@@ -56,8 +56,8 @@ namespace application
                     if (auto instance = other->GetGameObject()->GetComponent<PaletteInstance>(); instance != nullptr)
                     {
                         contactingInstances.erase(instance);
-                        if (pm.GetCurrentPalette()->ShouldSelect(instance))
-                            pm.GetCurrentPalette()->OnSelectionContactExit(instance);
+                        if (pm.GetCurrentPalette()->ShouldSelect(instance->GetEditableData()))
+                            pm.GetCurrentPalette()->OnSelectionContactExit(instance->GetEditableData());
                     }
                 }
             private:

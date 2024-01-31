@@ -6,6 +6,8 @@
 #include "PaletteList.h"
 #include "imgui_Utility.h"
 #include "EditorCamera.h"
+#include "ImGuizmo/ImGuizmo.h"
+#include "EditorMath.h"
 
 #include "imgui.h"
 #include "imgui_internal.h"
@@ -17,12 +19,14 @@
 
 #include <iostream>
 
+GameObject* obj = nullptr;
+
 namespace application
 {
 	namespace editor
 	{
 		SceneViewPanel::SceneViewPanel()
-			: app(nullptr), ec(nullptr), pm(nullptr), prevWindowSize(), currentWindowSize(), renderImageSize(), cursorPos_InScreenSpace()
+			: app(nullptr), ec(nullptr), pm(nullptr), prevWindowSize(), currentWindowSize(), imageStartPos(), renderImageSize(), cursorPos_InScreenSpace()
 		{
 
 		}
@@ -56,6 +60,8 @@ namespace application
 			ImGui_SceneViewSettings();
 
 			ImGui::Image(reinterpret_cast<ImTextureID>(app->GetSceneSRV()), ImVec2(renderImageSize.first, renderImageSize.second));
+
+			ImGui_DrawGizmo();
 
 			ImGui::End();
 		}
@@ -176,7 +182,7 @@ namespace application
 		void SceneViewPanel::ImGui_UpdateCursorPosInScreenSpace()
 		{
 			auto curPos = ImGui_GetCursorPosOnPanel();
-			ImVec2 startPos = ImGui::GetCursorPos();
+			ImVec2 startPos = ImVec2(imageStartPos.first, imageStartPos.second);
 
 			ImVec2 finalPos(curPos.first - startPos.x, curPos.second - startPos.y);
 
@@ -192,12 +198,16 @@ namespace application
 			auto size = ImGui::GetContentRegionMax();
 			currentWindowSize.first = size.x;
 			currentWindowSize.second = size.y;
+
+			auto pos = ImGui::GetCursorPos();
+			imageStartPos.first = pos.x;
+			imageStartPos.second = pos.y;
 		}
 
 		bool SceneViewPanel::ImGui_IsCursorInScreen()
 		{
 			auto curPos = ImGui_GetCursorPosOnPanel();
-			ImVec2 startPos = ImGui::GetCursorPos();
+			ImVec2 startPos = ImVec2(imageStartPos.first, imageStartPos.second);
 			return (curPos.first >= startPos.x && curPos.first <= startPos.x + renderImageSize.first) && (curPos.second >= startPos.y && curPos.second <= startPos.y + renderImageSize.second);
 		}
 
@@ -212,6 +222,38 @@ namespace application
 			auto curPos = ImGui::GetMousePos();
 
 			return std::pair<float, float>(curPos.x - winPos.x, curPos.y - winPos.y);
+		}
+
+		void SceneViewPanel::ImGui_DrawGizmo()
+		{
+			ImGuizmo::SetDrawlist();
+			ImGuizmo::SetRect(ImGui::GetWindowPos().x + imageStartPos.first, ImGui::GetWindowPos().y + imageStartPos.second, renderImageSize.first, renderImageSize.second);
+			auto vtm = ec->GetVTM();
+			auto ptm = ec->GetPTM();
+			yunuGI::Matrix4x4 im = yunuGI::Matrix4x4();
+			
+			auto gvtm = math::ConvertVTM(vtm);
+			auto gptm = math::ConvertPTM(ptm);
+
+			auto beforeVTM = gvtm;
+			ImGuizmo::ViewManipulate(reinterpret_cast<float*>(&gvtm), 10 * sqrt(3), ImVec2(ImGui::GetWindowPos().x + renderImageSize.first - 128, ImGui::GetWindowPos().y + imageStartPos.second), ImVec2(128, 128), 0x10101010);
+
+			ImGuizmo::OPERATION operation = ImGuizmo::ROTATE;
+			ImGuizmo::MODE mode = ImGuizmo::WORLD;
+
+			//ImGuizmo::Manipulate(reinterpret_cast<float*>(&beforeVTM), reinterpret_cast<float*>(&gptm), operation, mode, reinterpret_cast<float*>(&objgwtm), NULL, NULL, NULL, NULL);
+			//ImGui_UpdateObjectWTM(obj, math::ConvertWTM(objgwtm));
+
+			if (ec->GetGamePerspective() == CameraPerspectiveState::Free)
+			{
+				if (beforeVTM[0][0] != gvtm[0][0] || beforeVTM[0][1] != gvtm[0][1] || beforeVTM[0][2] != gvtm[0][2] || beforeVTM[0][3] != gvtm[0][3] ||
+					beforeVTM[1][0] != gvtm[1][0] || beforeVTM[1][1] != gvtm[1][1] || beforeVTM[1][2] != gvtm[1][2] || beforeVTM[1][3] != gvtm[1][3] ||
+					beforeVTM[2][0] != gvtm[2][0] || beforeVTM[2][1] != gvtm[2][1] || beforeVTM[2][2] != gvtm[2][2] || beforeVTM[2][3] != gvtm[2][3] ||
+					beforeVTM[3][0] != gvtm[3][0] || beforeVTM[3][1] != gvtm[3][1] || beforeVTM[3][2] != gvtm[3][2] || beforeVTM[3][3] != gvtm[3][3])
+				{
+					ec->ChangeVTM(math::ConvertVTM(gvtm));
+				}
+			}
 		}
 
 		void SceneViewPanel::Release()
@@ -389,6 +431,17 @@ namespace application
 			}
 
 			ImGui::End();
+		}
+
+		void SceneViewPanel::ImGui_UpdateObjectWTM(GameObject* target, const yunuGI::Matrix4x4& wtm) const
+		{
+			auto ttf = target->GetTransform();
+			yunuGI::Vector3 scale;
+			yunuGI::Quaternion rotation;
+			yunuGI::Vector3 translation;
+			math::DecomposeWTM(wtm, scale, rotation, translation);
+			ttf->SetWorldPosition(*reinterpret_cast<Vector3f*>(&translation));
+			ttf->SetWorldRotation(*reinterpret_cast<Quaternion*>(&rotation));
 		}
 	}
 }

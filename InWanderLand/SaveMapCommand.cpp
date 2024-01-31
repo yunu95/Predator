@@ -1,5 +1,4 @@
 #include "InWanderLand.h"
-#include "MapData.h"
 #include "SaveMapCommand.h"
 
 #include "MapFileManager.h"
@@ -16,7 +15,8 @@ namespace application
 
         void SaveMapCommand::Execute()
         {
-            MapData::SaveMapData("TestMap.pmap");
+			MapFileManager::GetSingletonInstance().SaveMapFile("TestMap.pmap");
+            //MapData::SaveMapData("TestMap.pmap");
         }
     }
 }

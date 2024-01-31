@@ -980,6 +980,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Include\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="..\Include\ImGui\backends\imgui_impl_dx11.h" />
     <ClInclude Include="..\Include\ImGui\backends\imgui_impl_win32.h" />
     <ClInclude Include="..\Include\ImGui\imconfig.h" />
@@ -999,7 +1000,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="DebugGraphic.h" />
     <ClInclude Include="DebugStaticMesh.h" />
     <ClInclude Include="InGame.h" />
-    <ClInclude Include="MapData.h" />
     <ClInclude Include="PaletteManagerList.h" />
     <ClInclude Include="EditorMath.h" />
     <ClInclude Include="imgui_Utility.h" />
@@ -1007,6 +1007,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="PaletteManager.h" />
     <ClInclude Include="PassiveCake.h" />
     <ClInclude Include="PassiveCakePool.h" />
+    <ClInclude Include="RegionData.h" />
+    <ClInclude Include="Region_TemplateData.h" />
     <ClInclude Include="SingleNavigationField.h" />
     <ClInclude Include="TestUtilButtonEvent.h" />
     <ClInclude Include="InWanderLand.h" />
@@ -1047,13 +1049,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="PaletteSelectCollider.h" />
     <ClInclude Include="PaletteInstance.h" />
     <ClInclude Include="Palette.h" />
-    <ClInclude Include="RegionInstance.h" />
+    <ClInclude Include="RegionEditorInstance.h" />
     <ClInclude Include="RegionPalette.h" />
     <ClInclude Include="SelectionBox.h" />
     <ClInclude Include="SelectionBoxPerInstance.h" />
     <ClInclude Include="SelectionBoxPerInstancePool.h" />
     <ClInclude Include="TerrainBrush.h" />
-    <ClInclude Include="TerrainInstance.h" />
     <ClInclude Include="TerrainPalette.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="TestColliderEnableDeath.h" />
@@ -1118,13 +1119,14 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UnitProductionOrder.h" />
     <ClInclude Include="WarriorProduction.h" />
     <ClInclude Include="UnitBrush.h" />
-    <ClInclude Include="UnitInstance.h" />
+    <ClInclude Include="UnitEditorInstance.h" />
     <ClInclude Include="UnitPalette.h" />
     <ClInclude Include="PlayerSkillSystem.h" />
     <ClInclude Include="WindowEvents.h" />
     <ClInclude Include="WarriorSkillSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Include\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="AttackSystem.cpp" />
     <ClCompile Include="AutoAttackProjectilePool.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
@@ -1151,13 +1153,14 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="KnockBackComponent.cpp" />
     <ClCompile Include="MagicianAutoAttackProjectile.cpp" />
     <ClCompile Include="MagicianSkillSystem.cpp" />
-    <ClCompile Include="MapData.cpp" />
     <ClCompile Include="MeleeAttackSystem.cpp" />
     <ClCompile Include="OnlyDamageComponent.cpp" />
     <ClCompile Include="ParalysisFieldComponent.cpp" />
     <ClCompile Include="PaletteManager.cpp" />
     <ClCompile Include="PassiveCake.cpp" />
     <ClCompile Include="RangedAttackSystem.cpp" />
+    <ClCompile Include="RegionData.cpp" />
+    <ClCompile Include="Region_TemplateData.cpp" />
     <ClCompile Include="SnippetDebugMeshScaleCheck.cpp" />
     <ClCompile Include="SnippetFloatingDebugSphere.cpp" />
     <ClCompile Include="RegionPalette.cpp" />
@@ -1190,11 +1193,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="SkillSystem.cpp" />
     <ClCompile Include="MapFileManager.cpp" />
     <ClCompile Include="Module_TemplateDataEditor.cpp" />
-    <ClCompile Include="Ornament.cpp" />
+    <ClCompile Include="OrnamentData.cpp" />
     <ClCompile Include="Ornament_TemplateData.cpp" />
     <ClCompile Include="PaletteInstance.cpp" />
     <ClCompile Include="Palette.cpp" />
-    <ClCompile Include="RegionInstance.cpp" />
+    <ClCompile Include="RegionEditorInstance.cpp" />
     <ClCompile Include="SnippetAllGraphicsWorked.cpp" />
     <ClCompile Include="Snippet1milGameObjects.cpp" />
     <ClCompile Include="SnippetAnimation.cpp" />
@@ -1221,7 +1224,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="TemplateDataManager.cpp" />
     <ClCompile Include="Storable.cpp" />
     <ClCompile Include="TerrainData.cpp" />
-    <ClCompile Include="TerrainInstance.cpp" />
     <ClCompile Include="TerrainPalette.cpp" />
     <ClCompile Include="Terrain_TemplateData.cpp" />
     <ClCompile Include="TestCaseMapFileIO.cpp" />
@@ -1230,7 +1232,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TestCaseUpdateComponents.cpp" />
     <ClCompile Include="UnitData.cpp" />
-    <ClCompile Include="UnitInstance.cpp" />
+    <ClCompile Include="UnitEditorInstance.cpp" />
     <ClCompile Include="UnitPalette.cpp" />
     <ClCompile Include="UnitStatusComponent.cpp" />
     <ClCompile Include="Unit_TemplateData.cpp" />

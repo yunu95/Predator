@@ -7,8 +7,14 @@
 #include "EditorPanel.h"
 #include "PaletteManager.h"
 #include "EditorInputManager.h"
+#include "YunuGraphicsInterface.h"
 
 #include <utility>
+
+namespace yunutyEngine
+{
+	class GameObject;
+}
 
 namespace application
 {
@@ -51,10 +57,11 @@ namespace application
 			bool ImGui_IsCursorInScreen();
 			bool ImGui_IsWindowResize();
 			std::pair<float, float> ImGui_GetCursorPosOnPanel();
+			void ImGui_DrawGizmo();
 			void Release();
 
-		private:
 			void ImGui_SceneViewSettings();
+			void ImGui_UpdateObjectWTM(GameObject* target, const yunuGI::Matrix4x4& wtm) const;
 
 			Application* app;
 			EditorCamera* ec;
@@ -62,6 +69,7 @@ namespace application
 			EditorInputManager& eim = EditorInputManager::GetSingletonInstance();
 			std::pair<float, float> prevWindowSize;
 			std::pair<float, float> currentWindowSize;
+			std::pair<float, float> imageStartPos;
 			std::pair<unsigned int, unsigned int> renderImageSize;
 			std::pair<double, double> cursorPos_InScreenSpace;
 

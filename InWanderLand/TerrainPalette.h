@@ -2,6 +2,7 @@
 #include "Palette.h"
 #include "YunutyEngine.h"
 #include "SingletonClass.h"
+#include "TerrainData.h"
 
 namespace application
 {
@@ -12,12 +13,12 @@ namespace application
             class TerrainPalette : public Palette, public  yunutyEngine::SingletonClass<TerrainPalette>
             {
             public:
-                virtual PaletteInstance* PlaceInstance(Vector3d worldPosition)override;
+                virtual IEditableData* PlaceInstance(Vector3d worldPosition)override;
                 virtual void OnMouseMove(Vector3d projectedWorldPos)override;
                 virtual void SetAsSelectMode(bool isSelectMode) override;
                 // isMarking은 지형을 추가하고 있는지 없애고 있는지 나타냅니다. 
-                virtual void ApplyAsPlaytimeObjects() override;
-                virtual void CleanUpPlaytimeObjects() override {};
+                void ApplyAsPlaytimeObjects();
+                //virtual void CleanUpPlaytimeObjects() override {};
                 virtual void OnStartPalette() override;
                 virtual void OnStandbyPalette() override;
                 bool IsMarking();
@@ -32,6 +33,7 @@ namespace application
                 static constexpr double nodeDistance = 0.5;
                 static constexpr double nodeHeight = 6;
             private:
+                //TerrainInstanceData는 사실상 단 하나만 존재함.
                 int brushSize = 0;
                 bool isMarking{ true };
                 unordered_map<Vector2i, GameObject*> nodes;

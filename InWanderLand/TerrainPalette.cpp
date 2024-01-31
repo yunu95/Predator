@@ -6,10 +6,14 @@
 #include "DebugMeshes.h"
 #include "TerrainBrush.h"
 #include "SingleNavigationField.h"
+#include "TerrainData.h"
+#include "InstanceManager.h"
+#include "TerrainData.h"
 
 namespace application::editor::palette
 {
-    PaletteInstance* TerrainPalette::PlaceInstance(Vector3d worldPosition)
+    using namespace application::editor;
+    IEditableData* TerrainPalette::PlaceInstance(Vector3d worldPosition)
     {
         auto centerNodeKey = WorldToNodeSpace(worldPosition);
         for (int x = centerNodeKey.x - brushSize; x <= centerNodeKey.x + brushSize; x++)
@@ -19,11 +23,11 @@ namespace application::editor::palette
                 auto nodeKey = Vector2i{ x, y };
                 if (isMarking)
                 {
-                    AddNode(nodeKey);
+                    TerrainData::Instance().AddNode(nodeKey, TerrainData::Node{ 0, nullptr });
                 }
                 else
                 {
-                    EraseNode(nodeKey);
+                    TerrainData::Instance().EraseNode(nodeKey);
                 }
             }
         }
