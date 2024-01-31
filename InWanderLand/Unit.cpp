@@ -168,7 +168,7 @@ void Unit::AttackMoveEngage()
 void Unit::AttackEngage()
 {
 	currentOrder = UnitState::Attack;
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetNextAnimation(unitAnimations.m_idleAnimation);
+	//GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetNextAnimation(unitAnimations.m_idleAnimation);
 	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 
 	attackFunctionElapsed = 0.0f;
@@ -676,4 +676,12 @@ bool Unit::GetJustCrushedState() const
 	return isJustHitByQSkill;
 }
 
+bool Unit::IsUnitDead() const
+{
+	if (m_healthPoint <= 0)
+		return true;
+
+	else
+		return false;
+}
 

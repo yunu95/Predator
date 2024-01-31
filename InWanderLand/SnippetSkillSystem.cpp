@@ -107,7 +107,6 @@ void SnippetSkillSystemInit()
 	PlayerController::GetInstance()->SetMovingSystemComponent(rtsCam);
 
 	/// UnitFactory
-	unique_ptr<UnitFactory> unitfactory = make_unique<UnitFactory>();
 
 	/// StatusManager 
 
@@ -150,9 +149,9 @@ void SnippetSkillSystemInit()
 	meleeEnemyProductor1->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(7.0f, 0.0f, 7.0f));
 	auto enemy1GameObject = meleeEnemyProductor1->CreateUnitWithOrder();
 
-	//auto meleeEnemyProductor2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MeleeEnemyProduction>();
-	//meleeEnemyProductor2->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(7.0f, 0.0f, -7.0f));
-	//auto enemy2GameObject = meleeEnemyProductor2->CreateUnitWithOrder();
+	auto meleeEnemyProductor2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MeleeEnemyProduction>();
+	meleeEnemyProductor2->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(7.0f, 0.0f, -7.0f));
+	auto enemy2GameObject = meleeEnemyProductor2->CreateUnitWithOrder();
 
 	{
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();

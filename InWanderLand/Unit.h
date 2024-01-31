@@ -229,6 +229,8 @@ public:
 	void MakeUnitParalysisEnd();
 
 	bool GetJustCrushedState() const;
+	bool IsUnitDead() const;
+
 	int GetPlayerSerialNumber() const;
 
 
