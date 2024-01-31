@@ -17,18 +17,25 @@ namespace yunutyEngine
         public Component
     {
     public:
-        // ÀÌ ¾Æ·¡·Î position, rotation, scale ÀÌ ¼ÂÀº °èÃş±¸Á¶ Ä³½ÌÀ» À§ÇØ Setter¿¡ ÀÇÇØ °¨½ÎÁ®¾ß ÇÕ´Ï´Ù.
-        Vector3d position = Vector3d();
-        Quaternion rotation;
-        Vector3d scale = Vector3d::one;
+        // ì´ ì•„ë˜ë¡œ position, rotation, scale ì´ ì…‹ì€ ê³„ì¸µêµ¬ì¡° ìºì‹±ì„ ìœ„í•´ Setterì— ì˜í•´ ê°ì‹¸ì ¸ì•¼ í•©ë‹ˆë‹¤.
         Vector3d GetWorldPosition()const;
         Quaternion GetWorldRotation()const;
         Vector3d GetWorldScale()const;
+        Vector3d GetLocalPosition()const;
+        Quaternion GetLocalRotation()const;
+        Vector3d GetLocalScale()const;
         yunuGI::Matrix4x4 GetLocalTM()const;
         yunuGI::Matrix4x4 GetWorldTM()const;
+        void SetLocalPosition(const Vector3d& position);
+        void SetLocalRotation(const Quaternion& rotation);
+        void SetLocalScale(const Vector3d& scale);
         void SetWorldPosition(const Vector3d& position);
         void SetWorldRotation(const Quaternion& rotation);
     private:
+        void InvokeTransformUpdateEvent(GameObject* obj);
+        Vector3d position = Vector3d();
+        Quaternion rotation;
+        Vector3d scale = Vector3d::one;
         void SetCacheDirty();
     };
 }

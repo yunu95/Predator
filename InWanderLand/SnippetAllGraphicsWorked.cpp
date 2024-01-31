@@ -18,7 +18,7 @@ void SnippetAllGraphicsWorkedInit()
 	{
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-		directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{90,0,45} };
+		directionalLight->GetTransform()->SetLocalRotation( Quaternion{ Vector3d{90,0,45} });
 	}
 
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -61,21 +61,21 @@ void SnippetAllGraphicsWorkedInit()
 		float tempX = static_cast<float>(rand() % 100);
 		float tempZ = static_cast<float>(rand() % 100);
 		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Bush");
-		object->GetTransform()->position = Vector3d{ tempX,0,tempZ };
-		object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
+		object->GetTransform()->SetLocalPosition( Vector3d{ tempX,0,tempZ });
+		object->GetTransform()->SetLocalRotation( Quaternion{ Vector3d{90,0,0} });
 		auto object1 = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("BigTree");
-		object1->GetTransform()->position = Vector3d{ tempZ,0,tempX };
-		object1->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
+		object1->GetTransform()->SetLocalPosition( Vector3d{ tempZ,0,tempX });
+		object1->GetTransform()->SetLocalRotation( Quaternion{ Vector3d{90,0,0} });
 	}
 
 	{
 		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sponza");
-		object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
+		object->GetTransform()->SetLocalRotation( Quaternion{ Vector3d{90,0,0} });
 	}
 
 	{
 		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		object->GetTransform()->position = Vector3d{ 0,0.25,0 };
+		object->GetTransform()->SetLocalPosition( Vector3d{ 0,0.25,0 });
 		auto light = object->AddComponent<yunutyEngine::graphics::PointLight>();
 		yunuGI::Color color = yunuGI::Color{ 0,0,1,1 };
 		light->GetGI().SetLightDiffuseColor(color);

@@ -37,14 +37,14 @@ void TestCasePhysicsInit()
 
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     auto rtsCam = camObj->AddComponent<RTSCam>();
-    rtsCam->GetTransform()->position = Vector3d(0, 10, 0);
+    rtsCam->GetTransform()->SetLocalPosition( Vector3d(0, 10, 0));
 
     auto boxCollider = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     auto boxColliderComp = boxCollider->AddComponent<yunutyEngine::physics::BoxCollider>();
     auto rigidComp = boxCollider->AddComponent<physics::RigidBody>();
     //rigidComp->SetAsStatic(true);
-    boxCollider->GetTransform()->position = Vector3d(0, 10, 0);
-    boxCollider->GetTransform()->rotation = Vector3d(100, 10, 35);
+    boxCollider->GetTransform()->SetLocalPosition( Vector3d(0, 10, 0));
+    boxCollider->GetTransform()->SetLocalRotation( Vector3d(100, 10, 35));
     auto boxMesh = boxCollider->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 
     auto resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
@@ -59,8 +59,8 @@ void TestCasePhysicsInit()
         auto boxColliderComp = boxCollider->AddComponent<yunutyEngine::physics::BoxCollider>();
         auto rigidComp = boxCollider->AddComponent<physics::RigidBody>();
         //rigidComp->SetAsStatic(true);
-        boxCollider->GetTransform()->position = Vector3d(0, 13, 0);
-        boxCollider->GetTransform()->rotation = Vector3d(100, 10, 35);
+        boxCollider->GetTransform()->SetLocalPosition( Vector3d(0, 13, 0));
+        boxCollider->GetTransform()->SetLocalRotation( Vector3d(100, 10, 35));
         auto boxMesh = boxCollider->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
         boxCollider->AddComponent<TriggerVolumeTest>();
         boxMesh->GetGI().SetMesh(cubeMesh);
@@ -71,8 +71,8 @@ void TestCasePhysicsInit()
         auto sphereColliderComp = sphereCollider->AddComponent<yunutyEngine::physics::SphereCollider>();
         auto rigidComp = sphereCollider->AddComponent<physics::RigidBody>();
         //rigidComp->SetAsStatic(true);
-        sphereCollider->GetTransform()->position = Vector3d(-1, 13, 2);
-        sphereCollider->GetTransform()->rotation = Vector3d(100, 10, 35);
+        sphereCollider->GetTransform()->SetLocalPosition( Vector3d(-1, 13, 2));
+        sphereCollider->GetTransform()->SetLocalRotation( Vector3d(100, 10, 35));
         auto sphereMesh = sphereCollider->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
         sphereCollider->AddComponent<TriggerVolumeTest>();
         sphereMesh->GetGI().SetMesh(sphereMeshResource);
@@ -84,8 +84,8 @@ void TestCasePhysicsInit()
         auto capsuleColliderComp = capsuleCollider->AddComponent<yunutyEngine::physics::CapsuleCollider>();
         auto rigidComp = capsuleCollider->AddComponent<physics::RigidBody>();
         //rigidComp->SetAsStatic(true);
-        capsuleCollider->GetTransform()->position = Vector3d(1, 13, 2);
-        capsuleCollider->GetTransform()->rotation = Vector3d(100, 10, 35);
+        capsuleCollider->GetTransform()->SetLocalPosition( Vector3d(1, 13, 2));
+        capsuleCollider->GetTransform()->SetLocalRotation( Vector3d(100, 10, 35));
         auto capsuleMesh = capsuleCollider->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
         capsuleCollider->AddComponent<TriggerVolumeTest>();
         capsuleMesh->GetGI().SetMesh(capsuleMeshResource);
@@ -99,12 +99,12 @@ void TestCasePhysicsInit()
     planeColliderComp->SetHalfExtent({ 5,1,5 });
     auto planeRigidComp = planeCollider->AddComponent<physics::RigidBody>();
     planeRigidComp->SetAsStatic(true);
-    planeCollider->GetTransform()->position = Vector3d(0, 0, 0);
+    planeCollider->GetTransform()->SetLocalPosition( Vector3d(0, 0, 0));
     auto planeMesh = planeCollider->AddGameObject();
     auto planeMeshComp = planeMesh->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
     planeMeshComp->GetGI().SetMesh(cubeMesh);
     planeMeshComp->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
-    planeMesh->GetTransform()->scale = Vector3d(10, 2, 10);
+    planeMesh->GetTransform()->SetLocalScale( Vector3d(10, 2, 10));
 
     // 트리거 콜라이더 생성
     /*{

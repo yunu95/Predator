@@ -27,14 +27,14 @@ void SnippetInitializerGIEnableDisable()
         virtual void Update() override
         {
             t += Time::GetDeltaTime();
-            GetGameObject()->GetTransform()->position = { 3 * sin(t * 2), 0, 0 };
+            GetGameObject()->GetTransform()->SetLocalPosition( { 3 * sin(t * 2), 0, 0 });
             debugMesh->SetActive(static_cast<int>(t) % 2 == 0);
         }
 
     };
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
     auto cam = Scene::getCurrentScene()->AddGameObject()->AddComponent<graphics::Camera>();
-    cam->GetTransform()->position = { 0,0,-10 };
+    cam->GetTransform()->SetLocalPosition( { 0,0,-10 });
     auto debugMesh = Scene::getCurrentScene()->AddGameObject()->AddComponent<DebuggingMesh>();
 
     auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<graphics::DirectionalLight>();

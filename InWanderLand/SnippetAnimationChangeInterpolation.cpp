@@ -25,12 +25,12 @@ void SnippetAnimationChangeInterpolationInit()
     {
         auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
         directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-        directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{90,0,45} };
+        directionalLight->GetTransform()->SetLocalRotation( Quaternion{ Vector3d{90,0,45} });
     }
 
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     camObj->AddComponent<tests::GraphicsTestCam>();
-    camObj->GetTransform()->position = Vector3d{ 0,4,-15 };
+    camObj->GetTransform()->SetLocalPosition( Vector3d{ 0,4,-15 });
 
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
@@ -45,9 +45,9 @@ void SnippetAnimationChangeInterpolationInit()
             auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
 
             auto test = object->AddComponent<TestComponent2>();
-            object->GetTransform()->position = Vector3d{ temp,temp2,0 };
+            object->GetTransform()->SetLocalPosition( Vector3d{ temp,temp2,0 });
             static constexpr double scale = 0.0001;
-            object->GetTransform()->scale = Vector3d{ scale,scale,scale };
+            object->GetTransform()->SetLocalScale( Vector3d{ scale,scale,scale });
             auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
             test->anim = animator;
             auto& animationList = _resourceManager->GetAnimationList();
