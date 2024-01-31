@@ -5,6 +5,7 @@
 
 #include "Singleton.h"
 #include "EditorPanel.h"
+#include "EditorResourceManager.h"
 #include "PaletteManager.h"
 #include "EditorInputManager.h"
 #include "YunuGraphicsInterface.h"
@@ -65,6 +66,7 @@ namespace application
 
 			Application* app;
 			EditorCamera* ec;
+			ResourceManager& erm = ResourceManager::GetSingletonInstance();
 			palette::PaletteManager* pm;
 			EditorInputManager& eim = EditorInputManager::GetSingletonInstance();
 			std::pair<float, float> prevWindowSize;

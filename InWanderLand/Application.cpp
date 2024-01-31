@@ -132,6 +132,7 @@ namespace application
 				editorHWND = ::CreateWindow(wcEditor.lpszClassName, wcEditor.lpszClassName, WS_OVERLAPPEDWINDOW, editorWinPosX, editorWinPosY, g_EditorResizeWidth, g_EditorResizeHeight, hWND, NULL, wcEditor.hInstance, NULL);
 
 				GetDeviceAndDeviceContext();
+				erm.Initialize(g_pD3dDevice);
 
 				// Initialize Direct3D
 				if (!CreateSwapChain())
@@ -363,11 +364,7 @@ namespace application
 
 			ImGui::Begin("DockSpace", nullptr, window_flags);
 
-			ImGuiStyle& style = ImGui::GetStyle();
-
 			// Dockspace
-			style.WindowMinSize.x = 100.0f;
-			style.WindowMinSize.y = 50.0f;
 			ImGui::DockSpace(ImGui::GetID("MyDockspace"));
 
 			layers[(int)LayerList::EditorLayer]->Update(1);
