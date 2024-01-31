@@ -99,7 +99,7 @@ void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navFi
 	auto QSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(QSkillFieldDebugObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::white(), true));
 	//QSkillFieldDebugObject->GetTransform()->scale = { pow(m_QSkillFieldRadius, 2), pow(m_QSkillFieldRadius, 2) , pow(m_QSkillFieldRadius, 2) };
-	QSkillFieldDebugObject->GetTransform()->scale = { m_QSkillFieldRadius, m_QSkillFieldRadius, m_QSkillFieldRadius };
+	QSkillFieldDebugObject->GetTransform()->SetLocalScale({m_QSkillFieldRadius, m_QSkillFieldRadius, m_QSkillFieldRadius});
 #pragma endregion
 
 #pragma region W Skill Setting
@@ -117,7 +117,7 @@ void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navFi
 
 	auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(WSkillFieldDebugObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::blue(), true));
-	WSkillFieldDebugObject->GetTransform()->scale = { m_WSkillFieldWidth, 1, m_WSkillFieldHeight };
+	WSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_WSkillFieldWidth, 1, m_WSkillFieldHeight });
 
 #pragma endregion
 

@@ -17,9 +17,9 @@ void PassiveCake::PopCake(Vector3d initialPos)
 
 	int dropAngle = std::rand() % maxDegree;
 
-	GetGameObject()->GetTransform()->rotation = Quaternion({ 0, static_cast<float>(dropAngle), 0 });
+	GetGameObject()->GetTransform()->GetWorldRotation() = Quaternion({ 0, static_cast<float>(dropAngle), 0 });
 
-	Vector3d endPos = GetTransform()->GetWorldPosition() + GetTransform()->rotation.Forward() * dropDistance;
+	Vector3d endPos = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * dropDistance;
 
 	//GetGameObject()->SetSelfActive(true);
 
