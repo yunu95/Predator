@@ -146,7 +146,7 @@ void Unit::MoveEngage()
 
 	Vector3d mouseXZVector = Vector3d(m_currentMovePosition.x, 0, m_currentMovePosition.z);
 
-	dotween->DOLookAt(mouseXZVector, 1, false);
+	//dotween->DOLookAt(mouseXZVector, rotationTime, false);
 
 	GetGameObject()->GetComponent<NavigationAgent>()->SetSpeed(m_speed);
 
@@ -592,6 +592,15 @@ void Unit::OrderSkill(SkillEnum p_skillNum, Vector3d position)
 	PlayerController::GetInstance()->SetLeftClickEmpty();
 
 	m_currentSkillPosition = position;
+}
+
+void Unit::OrderSkill(SkillEnum p_skillNum)
+{
+	/// warrior 2nd active skill 처럼 캐릭터의 회전이 필요 없는 스킬
+	currentOrder = UnitState::Skill;
+	m_currentSelectedSkill = p_skillNum;
+
+	PlayerController::GetInstance()->SetLeftClickEmpty();
 }
 
 void Unit::SetSkillDuration(float p_duration)

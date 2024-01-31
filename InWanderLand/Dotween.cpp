@@ -275,6 +275,7 @@ Dotween& Dotween::DOLookAt(Vector3d lookTransform, double p_duration, bool isYax
 	DotweenTimer* m_doLookTweenTimer = DotweenTimerPool::GetInstance()->GetDotweenTimer();
 
 	Vector3d objectFront = GetGameObject()->GetTransform()->GetWorldRotation().Forward();
+	objectFront *= -1;		// 모델링 뒤집힌 걸 감안
 	Vector3d objectUp;
 	Vector3d objectRight = GetGameObject()->GetTransform()->GetWorldRotation().Right();
 	Vector3d objectLeft = Vector3d(-1 * objectRight.x, objectRight.y, -1 * objectRight.z);

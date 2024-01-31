@@ -25,7 +25,7 @@ GameObject* UnitProductionOrder::CreateUnitWithOrder()
 	/// 3. Collider Component 추가
 	//auto unitCollider = m_unitGameObject->AddComponent<physics::BoxCollider>();
 	auto unitCollider = m_unitGameObject->AddComponent<physics::SphereCollider>();	// 빈 껍데기에 
-	unitCollider->SetRadius(1.0f);
+	unitCollider->SetRadius(1.0f * LENGTH_UNIT);
 
 	//auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(m_unitGameObject, DebugMeshType::Cube, yunuGI::Color::green(), false);

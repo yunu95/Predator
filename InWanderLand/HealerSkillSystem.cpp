@@ -31,6 +31,7 @@ void HealerSkillSystem::CrushDown(int p_times)
 			{
 				m_unitDotween->DOMove(GetTransform()->GetWorldPosition() + Vector3d(0, yDistance, 0), 0.3f).OnComplete([=]()
 					{
+						SetSkillRequirmentsActive(QSkillFieldDamage, false);
 						CrushDown(p_times);
 					});
 			}
