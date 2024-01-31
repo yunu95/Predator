@@ -121,7 +121,6 @@ void SnippetSkillSystemInit()
 	auto warriorProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<WarriorProduction>();
 	warriorProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(-7.0f, 0.0f, 0.0f));
 	auto player1GameObject = warriorProductor->CreateUnitWithOrder();
-
 	auto player1SkinnedMeshRenderer = player1GameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
 	auto player1Material = player1SkinnedMeshRenderer->GetGI().GetMaterial();
 	auto clonedMaterial1 = rsrcManager->CloneMaterial(L"Red", player1Material);
@@ -131,7 +130,6 @@ void SnippetSkillSystemInit()
 	auto magicianProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MagicianProduction>();
 	magicianProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(-7.0f, 0.0f, 7.0f));
 	auto player2GameObject = magicianProductor->CreateUnitWithOrder();
-
 	auto player2SkinnedMeshRenderer = player2GameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
 	auto player2Material = player2SkinnedMeshRenderer->GetGI().GetMaterial();
 	auto clonedMaterial2 = rsrcManager->CloneMaterial(L"Blue", player2Material);
@@ -143,7 +141,7 @@ void SnippetSkillSystemInit()
 	auto player3GameObject = healerProductor->CreateUnitWithOrder();
 	auto player3SkinnedMeshRenderer = player3GameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
 	auto player3Material = player3SkinnedMeshRenderer->GetGI().GetMaterial();
-	auto clonedMaterial3 = rsrcManager->CloneMaterial(L"Green", player2Material);
+	auto clonedMaterial3 = rsrcManager->CloneMaterial(L"Green", player3Material);
 	clonedMaterial3->SetColor(yunuGI::Color::green());
 	player3SkinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial3);
 
@@ -152,9 +150,9 @@ void SnippetSkillSystemInit()
 	meleeEnemyProductor1->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(7.0f, 0.0f, 7.0f));
 	auto enemy1GameObject = meleeEnemyProductor1->CreateUnitWithOrder();
 
-	auto meleeEnemyProductor2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MeleeEnemyProduction>();
-	meleeEnemyProductor2->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(7.0f, 0.0f, -7.0f));
-	auto enemy2GameObject = meleeEnemyProductor2->CreateUnitWithOrder();
+	//auto meleeEnemyProductor2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MeleeEnemyProduction>();
+	//meleeEnemyProductor2->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(7.0f, 0.0f, -7.0f));
+	//auto enemy2GameObject = meleeEnemyProductor2->CreateUnitWithOrder();
 
 	{
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();

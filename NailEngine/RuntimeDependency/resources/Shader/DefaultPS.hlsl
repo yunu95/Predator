@@ -54,6 +54,12 @@ PS_OUT main(PixelIn input)
         output.arm.y = ARMMap.Sample(sam,input.uv).y;
         output.arm.z = ARMMap.Sample(sam,input.uv).z;
     }
+    else
+    {
+        output.arm.x = 1.f;
+        output.arm.y = 1.f;
+        output.arm.z = 1.f;
+    }
     
     output.position = float4(input.posV.xyz, 1.f);
     output.normal = float4(viewNormal.xyz, 1.f);

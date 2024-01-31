@@ -46,7 +46,8 @@ void Unit::Start()
 		[this]() { return currentOrder == UnitState::Move; } });
 
 	unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Attack,
-		[this]() { return (GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetObject->GetTransform()->GetWorldPosition()).Magnitude() <= m_atkDistance + 0.4f; } });
+		[this]() { return (GetGameObject()->GetTransform()->GetWorldPosition()
+			- m_currentTargetObject->GetTransform()->GetWorldPosition()).Magnitude() <= m_atkDistance + 0.4f; } });
 
 	unitFSM.transitions[UnitState::Attack].push_back({ UnitState::Idle,
 		[this]()
@@ -167,11 +168,15 @@ void Unit::AttackMoveEngage()
 void Unit::AttackEngage()
 {
 	currentOrder = UnitState::Attack;
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetNextAnimation(unitAnimations.m_idleAnimation);
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 
 	attackFunctionElapsed = 0.0f;
 	attackAnimationFrameCheckNumber = 0;
 	isAttackStarted = false;
 	dotween->DOLookAt(m_currentTargetObject->GetTransform()->GetWorldPosition(), rotationTime, false);
+	CheckCurrentAnimation(unitAnimations.m_idleAnimation);
+
 
 	StopMove();
 }
@@ -285,7 +290,7 @@ void Unit::AttackUpdate()
 		}
 	}
 
-	if (attackFunctionElapsed >= attackFunctionCallDelay || !isAttackStarted)
+	if (attackFunctionElapsed >= attackFunctionCallDelay /*|| !isAttackStarted*/)
 	{
 		isAttackStarted = true;
 		isAttackAnimationOperating = true;

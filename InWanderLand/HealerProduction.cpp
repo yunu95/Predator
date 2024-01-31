@@ -108,16 +108,16 @@ void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navFi
 	dualCastComponent->SetSkillOwnerUnit(m_unitComponent);
 
 	auto WSkillFieldCollider = WSkillFieldObject->AddComponent<physics::BoxCollider>();
-	m_WSkillFieldWidth = 4.0f * LENGTH_UNIT;
-	m_WSkillFieldHeight = 2.0f * LENGTH_UNIT;
+	m_WSkillFieldWidth = 2.0f * LENGTH_UNIT / 2;
+	m_WSkillFieldHeight = 4.0f * LENGTH_UNIT / 2;
 
 	WSkillFieldCollider->SetHalfExtent({ m_WSkillFieldWidth, 0.1, m_WSkillFieldHeight });
 	WSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-	WSkillFieldObject->SetParent(m_unitGameObject);
+	//WSkillFieldObject->SetParent(m_unitGameObject);
 
 	auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(WSkillFieldDebugObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::blue(), true));
-	WSkillFieldDebugObject->GetTransform()->scale = { m_WSkillFieldWidth, 1 * LENGTH_UNIT, m_WSkillFieldHeight };
+	WSkillFieldDebugObject->GetTransform()->scale = { m_WSkillFieldWidth, 1, m_WSkillFieldHeight };
 
 #pragma endregion
 
