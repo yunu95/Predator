@@ -8,9 +8,11 @@
 #include "SingleNavigationField.h"
 #include "TerrainData.h"
 #include "InstanceManager.h"
+#include "TerrainData.h"
 
 namespace application::editor::palette
 {
+    using namespace application::editor;
     IEditableData* TerrainPalette::PlaceInstance(Vector3d worldPosition)
     {
         auto centerNodeKey = WorldToNodeSpace(worldPosition);
@@ -21,11 +23,11 @@ namespace application::editor::palette
                 auto nodeKey = Vector2i{ x, y };
                 if (isMarking)
                 {
-                    AddNode(nodeKey);
+                    TerrainData::Instance().AddNode(nodeKey, TerrainData::Node{ 0, nullptr });
                 }
                 else
                 {
-                    EraseNode(nodeKey);
+                    TerrainData::Instance().EraseNode(nodeKey);
                 }
             }
         }
@@ -195,7 +197,7 @@ namespace application::editor::palette
     {
         auto node = Scene::getCurrentScene()->AddGameObject();
         node->GetTransform()->SetWorldPosition(GetNodePosition(nodeKey) - nodeHeight * Vector3d::up * 0.5);
-        node->GetTransform()->scale = { nodeDistance, nodeHeight, nodeDistance };
+        node->GetTransform()->SetLocalScale( { nodeDistance, nodeHeight, nodeDistance });
         auto mesh = AttachDebugMesh(node, DebugMeshType::Cube, yunuGI::Color{0.788, 0.647, 0.215}, false);
         mesh->SetIsUpdating(false);
         return node;

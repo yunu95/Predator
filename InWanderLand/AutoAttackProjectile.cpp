@@ -15,8 +15,10 @@ void AutoAttackProjectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, float spee
 	m_speed = speed;
 	m_ownerUnit = ownerUnit;
 	m_opponentUnit = opponentUnit;
-	
+	auto temp = GetGameObject();
+	//GetGameObject()->SetSelfActive(false);
 	GetGameObject()->GetTransform()->SetWorldPosition(ownerUnit->GetGameObject()->GetTransform()->GetWorldPosition());
+	GetGameObject()->SetSelfActive(true);
 
 	isShootOperating = true;
 }
@@ -63,7 +65,6 @@ void AutoAttackProjectile::ShootUpdateFunction()
 
 void AutoAttackProjectile::Start()
 {
-
 }
 
 void AutoAttackProjectile::Update()

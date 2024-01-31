@@ -46,7 +46,8 @@ void Unit::Start()
 		[this]() { return currentOrder == UnitState::Move; } });
 
 	unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Attack,
-		[this]() { return (GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetObject->GetTransform()->GetWorldPosition()).Magnitude() <= m_atkDistance + 0.4f; } });
+		[this]() { return (GetGameObject()->GetTransform()->GetWorldPosition()
+			- m_currentTargetObject->GetTransform()->GetWorldPosition()).Magnitude() <= m_atkDistance + 0.4f; } });
 
 	unitFSM.transitions[UnitState::Attack].push_back({ UnitState::Idle,
 		[this]()
@@ -146,7 +147,7 @@ void Unit::MoveEngage()
 
 	Vector3d mouseXZVector = Vector3d(m_currentMovePosition.x, 0, m_currentMovePosition.z);
 
-	dotween->DOLookAt(mouseXZVector, 1, false);
+	//dotween->DOLookAt(mouseXZVector, rotationTime, false);
 
 	GetGameObject()->GetComponent<NavigationAgent>()->SetSpeed(m_speed);
 
@@ -167,11 +168,15 @@ void Unit::AttackMoveEngage()
 void Unit::AttackEngage()
 {
 	currentOrder = UnitState::Attack;
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetNextAnimation(unitAnimations.m_idleAnimation);
+	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 
 	attackFunctionElapsed = 0.0f;
 	attackAnimationFrameCheckNumber = 0;
 	isAttackStarted = false;
 	dotween->DOLookAt(m_currentTargetObject->GetTransform()->GetWorldPosition(), rotationTime, false);
+	CheckCurrentAnimation(unitAnimations.m_idleAnimation);
+
 
 	StopMove();
 }
@@ -285,7 +290,7 @@ void Unit::AttackUpdate()
 		}
 	}
 
-	if (attackFunctionElapsed >= attackFunctionCallDelay || !isAttackStarted)
+	if (attackFunctionElapsed >= attackFunctionCallDelay /*|| !isAttackStarted*/)
 	{
 		isAttackStarted = true;
 		isAttackAnimationOperating = true;
@@ -592,6 +597,15 @@ void Unit::OrderSkill(SkillEnum p_skillNum, Vector3d position)
 	PlayerController::GetInstance()->SetLeftClickEmpty();
 
 	m_currentSkillPosition = position;
+}
+
+void Unit::OrderSkill(SkillEnum p_skillNum)
+{
+	/// warrior 2nd active skill 처럼 캐릭터의 회전이 필요 없는 스킬
+	currentOrder = UnitState::Skill;
+	m_currentSelectedSkill = p_skillNum;
+
+	PlayerController::GetInstance()->SetLeftClickEmpty();
 }
 
 void Unit::SetSkillDuration(float p_duration)

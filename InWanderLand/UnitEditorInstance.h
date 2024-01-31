@@ -12,7 +12,7 @@ namespace application
     {
         namespace palette
         {
-            class UnitInstance : public PaletteInstance
+            class UnitEditorInstance : public PaletteInstance
             {
             public:
                 virtual void Start() override;

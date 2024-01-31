@@ -22,10 +22,10 @@ namespace snippets
             protected:
                 double epsilon = 0.001;
                 virtual void Start() {
-                    GetTransform()->position.z -= epsilon * 0.5;
+                    GetTransform()->SetLocalPosition(GetTransform()->GetLocalPosition() - Vector3d::forward * epsilon * 0.5);
                 }
                 virtual void Update() {
-                    GetTransform()->position.z += epsilon;
+                    GetTransform()->SetLocalPosition(GetTransform()->GetLocalPosition() + Vector3d::forward * epsilon);
                     epsilon *= -1;
                 }
             };

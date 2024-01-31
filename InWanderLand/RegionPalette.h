@@ -2,7 +2,7 @@
 #include "Palette.h"
 #include "YunutyEngine.h"
 #include "SingletonClass.h"
-#include "RegionInstance.h"
+#include "RegionEditorInstance.h"
 #include "InstanceManager.h"
 
 namespace application
@@ -18,10 +18,8 @@ namespace application
                 virtual IEditableData* PlaceInstance(Vector3d worldPosition) override;
                 virtual bool ShouldSelect(IEditableData* instance)
                 {
-                    return dynamic_cast<RegionInstance*>(instance);
+                    return dynamic_cast<RegionEditorInstance*>(instance);
                 };
-                //virtual void ApplyAsPlaytimeObjects() override {};
-                //virtual void CleanUpPlaytimeObjects() override {};
                 virtual void OnStartPalette() override;
                 virtual void OnStandbyPalette() override;
             private:

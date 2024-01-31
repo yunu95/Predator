@@ -1,7 +1,8 @@
-/// 2023. 12. 04 ±è»óÁØ
-/// IEditableData ÀÇ Type ¿¡ µû¸¥ ±¸Ã¼È­µÈ Å¬·¡½º ¸ñ·ÏÀ» ÇÑ ¹ø¿¡ °ü¸®ÇÒ ¼ö ÀÖµµ·Ï ¸ğÀº Çì´õÆÄÀÏ
+/// 2023. 12. 04 ê¹€ìƒì¤€
+/// IEditableData ì˜ Type ì— ë”°ë¥¸ êµ¬ì²´í™”ëœ í´ë˜ìŠ¤ ëª©ë¡ì„ í•œ ë²ˆì— ê´€ë¦¬í•  ìˆ˜ ìˆë„ë¡ ëª¨ì€ í—¤ë”íŒŒì¼
 
 #pragma once
 #include "TerrainData.h"
 #include "UnitData.h"
 #include "OrnamentData.h"
+#include "RegionData.h"

@@ -9,7 +9,7 @@
 
 #include <memory>
 #include <string>
-#include "UnitInstance.h"
+#include "UnitEditorInstance.h"
 #include "UnitPalette.h"
 
 namespace application
@@ -69,7 +69,7 @@ namespace application
 
         private:
             static TemplateDataManager& templateDataManager;
-            palette::UnitInstance* unitInstance{ nullptr };
+            palette::UnitEditorInstance* unitInstance{ nullptr };
 
             UnitData();
             UnitData(const std::string& name);

@@ -226,9 +226,6 @@
     <Filter Include="TestCodes\TestUtils\PeriodicAction">
       <UniqueIdentifier>{d31814ce-faa7-415f-8b5a-672e90071988}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MapData">
-      <UniqueIdentifier>{1e14d82d-3b46-4868-be82-790e5993af3c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents\RTSCam">
       <UniqueIdentifier>{4d58ffff-525b-4e6d-a64c-bf1f311430a2}</UniqueIdentifier>
     </Filter>
@@ -249,18 +246,6 @@
     </Filter>
     <Filter Include="Editor\Palette\PaletteBrush\TerrainBrush">
       <UniqueIdentifier>{14ee86d7-bf36-42e5-9618-562c06f3e4d8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Editor\Palette\PaletteInstance">
-      <UniqueIdentifier>{0f6ed044-5c7b-40b1-9879-5656d439c20a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Editor\Palette\PaletteInstance\TerrainInstance">
-      <UniqueIdentifier>{4847a1aa-0029-445d-91f5-8b19c232f9ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Editor\Palette\PaletteInstance\UnitInstance">
-      <UniqueIdentifier>{28eaf762-a605-4181-8cfa-5fb61e826531}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Editor\Palette\PaletteInstance\RegionInstance">
-      <UniqueIdentifier>{f4de70f3-c627-4642-9176-8b680a0b35bc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Editor\Palette\List">
       <UniqueIdentifier>{ca9f8542-f8f4-4207-827e-2d1f72a27cf0}</UniqueIdentifier>
@@ -294,6 +279,15 @@
     </Filter>
     <Filter Include="Editor\ResourceManager">
       <UniqueIdentifier>{3f98245c-d86e-4f70-ba51-32e2366b142c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\EditorInstance">
+      <UniqueIdentifier>{0f6ed044-5c7b-40b1-9879-5656d439c20a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\EditorInstance\UnitInstance">
+      <UniqueIdentifier>{28eaf762-a605-4181-8cfa-5fb61e826531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\EditorInstance\RegionInstance">
+      <UniqueIdentifier>{f4de70f3-c627-4642-9176-8b680a0b35bc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -505,13 +499,10 @@
       <Filter>Contents\InputManager</Filter>
     </ClInclude>
     <ClInclude Include="PaletteInstance.h">
-      <Filter>Editor\Palette\PaletteInstance</Filter>
+      <Filter>Editor\Palette\EditorInstance</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainInstance.h">
-      <Filter>Editor\Palette\PaletteInstance\TerrainInstance</Filter>
-    </ClInclude>
-    <ClInclude Include="UnitInstance.h">
-      <Filter>Editor\Palette\PaletteInstance\UnitInstance</Filter>
+    <ClInclude Include="UnitEditorInstance.h">
+      <Filter>Editor\Palette\EditorInstance\UnitInstance</Filter>
     </ClInclude>
     <ClInclude Include="SelectionBoxPerInstance.h">
       <Filter>Editor\Palette\GraphicsHelper\SelectionBoxPerInstance</Filter>
@@ -585,8 +576,8 @@
     <ClInclude Include="KnockBackComponent.h">
       <Filter>Contents\UnitStatusComponent\KnockBack</Filter>
     </ClInclude>
-    <ClInclude Include="RegionInstance.h">
-      <Filter>Editor\Palette\PaletteInstance\RegionInstance</Filter>
+    <ClInclude Include="RegionEditorInstance.h">
+      <Filter>Editor\Palette\EditorInstance\RegionInstance</Filter>
     </ClInclude>
     <ClInclude Include="RegionPalette.h">
       <Filter>Editor\Palette\List\RegionPalette</Filter>
@@ -682,9 +673,6 @@
     <ClInclude Include="PaletteManager.h">
       <Filter>Editor\Palette</Filter>
     </ClInclude>
-    <ClInclude Include="MapData.h">
-      <Filter>MapData</Filter>
-    </ClInclude>
     <ClInclude Include="InGame.h">
       <Filter>InGame</Filter>
     </ClInclude>
@@ -727,6 +715,12 @@
     </ClInclude>
     <ClInclude Include="EditorResourceManager.h">
       <Filter>Editor\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="RegionData.h">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="Region_TemplateData.h">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -956,7 +950,7 @@
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
     <ClCompile Include="PaletteInstance.cpp">
-      <Filter>Editor\Palette\PaletteInstance</Filter>
+      <Filter>Editor\Palette\EditorInstance</Filter>
     </ClCompile>
     <ClCompile Include="UnitStatusComponent.cpp">
       <Filter>Contents\UnitStatusComponent</Filter>
@@ -964,14 +958,11 @@
     <ClCompile Include="DebugMeshes.cpp">
       <Filter>DebugGraphics\DebugMeshes</Filter>
     </ClCompile>
-    <ClCompile Include="UnitInstance.cpp">
-      <Filter>Editor\Palette\PaletteInstance\UnitInstance</Filter>
+    <ClCompile Include="UnitEditorInstance.cpp">
+      <Filter>Editor\Palette\EditorInstance\UnitInstance</Filter>
     </ClCompile>
-    <ClCompile Include="RegionInstance.cpp">
-      <Filter>Editor\Palette\PaletteInstance\RegionInstance</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainInstance.cpp">
-      <Filter>Editor\Palette\PaletteInstance\TerrainInstance</Filter>
+    <ClCompile Include="RegionEditorInstance.cpp">
+      <Filter>Editor\Palette\EditorInstance\RegionInstance</Filter>
     </ClCompile>
     <ClCompile Include="SnippetRegionPalette.cpp">
       <Filter>TestCodes\snippets</Filter>
@@ -1063,9 +1054,6 @@
     <ClCompile Include="TestCaseUpdateComponents.cpp">
       <Filter>TestCodes</Filter>
     </ClCompile>
-    <ClCompile Include="MapData.cpp">
-      <Filter>MapData</Filter>
-    </ClCompile>
     <ClCompile Include="InGame.cpp">
       <Filter>InGame</Filter>
     </ClCompile>
@@ -1113,6 +1101,12 @@
     </ClCompile>
     <ClCompile Include="EditorResourceManager.cpp">
       <Filter>Editor\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RegionData.cpp">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="Region_TemplateData.cpp">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

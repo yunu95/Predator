@@ -1,8 +1,13 @@
 #include "InWanderLand.h"
 #include "MeleeAttackSystem.h"
+#include "UnitProductionOrder.h"
 
 void MeleeAttackSystem::Attack(Unit* opponentUnit)
 {
+	meleeAttackColliderObject->GetTransform()->
+		SetWorldPosition(ownerUnitObject->GetTransform()->GetWorldPosition() + ownerUnitObject->GetTransform()->rotation.Forward() * -3);
+	meleeAttackColliderObject->GetTransform()->rotation = ownerUnitObject->GetTransform()->rotation;
+
 	meleeAttackColliderObject->SetSelfActive(true);
 	meleeAttackColliderDebugObject->SetSelfActive(true);
 	//meleeAttackColliderObject->GetComponent<physics::BoxCollider>()->SetActive(true);
@@ -19,6 +24,11 @@ void MeleeAttackSystem::SetColliderDebugObject(GameObject* debugobj)
 	meleeAttackColliderDebugObject = debugobj;
 }
 
+void MeleeAttackSystem::SetOwnerUnitObject(GameObject* unitobj)
+{
+	ownerUnitObject = unitobj;
+}
+
 void MeleeAttackSystem::SetColliderRemainTime(float time)
 {
 	attackColliderRemainTime = time;
@@ -32,6 +42,11 @@ void MeleeAttackSystem::Start()
 
 void MeleeAttackSystem::Update()
 {
+	meleeAttackColliderDebugObject->GetTransform()->
+		SetWorldPosition(meleeAttackColliderObject->GetTransform()->GetWorldPosition());
+
+	meleeAttackColliderDebugObject->GetTransform()->rotation = meleeAttackColliderObject->GetTransform()->rotation;
+
 	if (colliderActivated)
 	{
 		colliderRemainElasped += Time::GetDeltaTime();

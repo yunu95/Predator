@@ -50,7 +50,7 @@ public:
 
             staticMesh->GetGI().GetMaterial()->SetColor(((i) % 2 == 0 ? colorA : colorB));
             tile->GetTransform()->SetWorldPosition(position);
-            staticMesh->GetTransform()->scale = Vector3d(static_cast<double>(width), 1, 1);
+            staticMesh->GetTransform()->SetLocalScale(Vector3d(static_cast<double>(width), 1, 1));
         }
     }
 };

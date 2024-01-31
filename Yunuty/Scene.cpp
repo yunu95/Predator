@@ -7,8 +7,8 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
     auto gameObjectChild = parentObject->AddGameObject();
     gameObjectChild->setName(std::string{ fbxNode->nodeName.begin(), fbxNode->nodeName.end() });
 
-    gameObjectChild->GetTransform()->position = Vector3d{ fbxNode->pos.x,fbxNode->pos.y ,fbxNode->pos.z };
-    gameObjectChild->GetTransform()->scale = Vector3d{ fbxNode->scale.x,fbxNode->scale.y ,fbxNode->scale.z };
+    gameObjectChild->GetTransform()->SetLocalPosition( Vector3d{ fbxNode->pos.x,fbxNode->pos.y ,fbxNode->pos.z });
+    gameObjectChild->GetTransform()->SetLocalScale( Vector3d{ fbxNode->scale.x,fbxNode->scale.y ,fbxNode->scale.z });
     //gameObjectChild->GetTransform()->rotation = Quaternion{ fbxNode->quat.x,fbxNode->quat.y,fbxNode->quat.z,fbxNode->quat.w };
 
     if (!fbxNode->hasAnimation)
@@ -97,7 +97,7 @@ yunutyEngine::GameObject* yunutyEngine::Scene::AddGameObject(IGameObjectParent* 
 yunutyEngine::GameObject* Scene::AddGameObjectFromFBX(string fbxName)
 {
     auto gameObject = AddGameObject(fbxName);
-    gameObject->GetTransform()->scale = Vector3d{ 0.0001f,0.0001f,0.0001f };
+    gameObject->GetTransform()->SetLocalScale( Vector3d{ 0.0001f,0.0001f,0.0001f });
     //gameObject->GetTransform()->rotation = Quaternion{ Vector3d{ 90,0,0} };
     yunuGI::FBXData* data = nullptr;
 

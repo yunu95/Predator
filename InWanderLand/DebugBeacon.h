@@ -37,8 +37,8 @@ public:
         //staticMesh->GetGI().SetColor(0, color);
         //staticMesh->GetGI().SetShader(0, L"Forward");
         //staticMesh->GetGI().SetMaterialName(0, L"Forward");
-        gameObject->GetTransform()->scale = Vector3d(0, 0, 0);
-        gameObject->GetTransform()->position = position;
+        gameObject->GetTransform()->SetLocalScale( Vector3d(0, 0, 0));
+        gameObject->GetTransform()->SetLocalPosition( position);
         staticMesh->Update();
         return debugBeacon;
     }
@@ -48,7 +48,7 @@ public:
         if (elapsed > duration)
             elapsed = duration;
 
-        GetTransform()->scale = maxScale * popCurve.Evaluate(elapsed / duration);
+        GetTransform()->SetLocalScale( maxScale * popCurve.Evaluate(elapsed / duration));
         if (elapsed >= duration)
             Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
     }

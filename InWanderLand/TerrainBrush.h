@@ -20,7 +20,7 @@ namespace application
 					for (int i = planeMeshes.size(); i < expectedNum; i++)
 					{
 						auto planeMesh = AttachDebugMesh(GetGameObject()->AddGameObject(), DebugMeshType::Rectangle, yunuGI::Color::green(), true);
-						planeMesh->GetTransform()->scale = Vector3d::one * TerrainPalette::nodeDistance;
+						planeMesh->GetTransform()->SetLocalScale( Vector3d::one * TerrainPalette::nodeDistance);
 						planeMeshes.push_back(planeMesh);
 						/*
 						25 26 27 28 29 30 31
@@ -63,9 +63,9 @@ namespace application
 						unsigned int lineType = layerIdx == 0 ? 0 : (i - (layerIdx * 2 - 1) * (layerIdx * 2 - 1)) / (layerIdx * 2);
 						double deltaIdx = layerIdx == 0 ? 0 : i - ((layerIdx * 2 - 1) * (layerIdx * 2 - 1) + layerIdx * 2 * lineType);
 
-						planeMesh->GetTransform()->position = { sx[lineType] + deltaIdx * dx[lineType], 0, sy[lineType] + deltaIdx * dy[lineType] };
-						planeMesh->GetTransform()->rotation = { 90,0,0 };
-						planeMeshesPos.push_back(planeMesh->GetTransform()->position);
+						planeMesh->GetTransform()->SetLocalPosition( { sx[lineType] + deltaIdx * dx[lineType], 0, sy[lineType] + deltaIdx * dy[lineType] });
+						planeMesh->GetTransform()->SetLocalRotation( Vector3d{ 90,0,0 });
+						planeMeshesPos.push_back(planeMesh->GetTransform()->GetLocalPosition());
 					}
 					for (auto i = 0; i < planeMeshes.size(); i++)
 					{

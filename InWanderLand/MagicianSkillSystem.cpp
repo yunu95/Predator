@@ -119,18 +119,11 @@ void MagicianSkillSystem::Start()
 {
 	SetOtherComponentsAsMember();
 
-	QSkillProjectile.debugObject->GetTransform()->scale = { pow(m_QSkillProjectileRadius, 2), pow(m_QSkillProjectileRadius, 2), pow(m_QSkillProjectileRadius, 2) };
 	QSkillProjectile.debugObject->SetSelfActive(false);
-
-	QSkillFieldDamage.debugObject->GetTransform()->scale = { pow(m_QSkillFieldRadius, 2), pow(m_QSkillFieldRadius, 2), pow(m_QSkillFieldRadius, 2) };
 	QSkillFieldDamage.debugObject->SetSelfActive(false);
 	
-	WSkillProjectile.debugObject->GetTransform()->scale = { pow(m_WSkillProjectileRadius, 2), pow(m_WSkillProjectileRadius, 2), pow(m_WSkillProjectileRadius, 2) };
 	WSkillProjectile.debugObject->SetSelfActive(false);
-
-	WSkillFieldDamage.debugObject->GetTransform()->scale = { pow(m_WSkillFieldRadius, 2), pow(m_WSkillFieldRadius, 2), pow(m_WSkillFieldRadius, 2) };
 	WSkillFieldDamage.debugObject->SetSelfActive(false);
-
 }
 
 void MagicianSkillSystem::Update()

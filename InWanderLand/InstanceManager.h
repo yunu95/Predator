@@ -6,6 +6,7 @@
 
 #include "Singleton.h"
 #include "Storable.h"
+#include "TemplateDataManager.h"
 #include "IEditableData.h"
 #include "Identifiable.h"
 
@@ -70,6 +71,7 @@ namespace application
             void Clear();
 
         protected:
+            bool PreSave();
             virtual bool PreEncoding(json& data) const override;
             virtual bool PostEncoding(json& data) const override;
             virtual bool PreDecoding(const json& data) override;

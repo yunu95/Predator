@@ -1,5 +1,5 @@
 #include "UnitPalette.h"
-#include "UnitInstance.h"
+#include "UnitEditorInstance.h"
 #include "SelectionBox.h"
 #include "InstanceManager.h"
 #include "Unit_TemplateData.h"

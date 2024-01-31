@@ -29,6 +29,6 @@ public:
 public:
 	void SetAP(float p_ap);
 	void SkillStarted();
-	void SkillEnded();
+	void ClearCrushedUnitList();
 };
 

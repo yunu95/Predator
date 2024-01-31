@@ -25,6 +25,7 @@ namespace application
 			virtual std::string GetDataKey() const = 0;
 
 		protected:
+            virtual bool PreSaveCallback() { return true; }
 			virtual bool PreEncoding(json& data) const = 0;
 			virtual bool PostEncoding(json& data) const = 0;
 			virtual bool PreDecoding(const json& data) = 0;

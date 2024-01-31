@@ -1,6 +1,9 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "Unit.h"
+
+#define LENGTH_UNIT 3
+
 /// <summary>
 /// UnitFactory에서의 유닛 생산을 좀 더 효율적으로 하기 위한 클래스.
 /// </summary>

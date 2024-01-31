@@ -10,7 +10,6 @@
 #include "PaletteManager.h"
 #include "TerrainPalette.h"
 #include "SingleNavigationField.h"
-#include "TerrainInstance.h"
 #include "TestUtils.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -27,7 +26,7 @@ namespace snippets
 		{
 			yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 			auto rtsCam = Scene::getCurrentScene()->AddGameObject()->AddComponent<tests::RTSTestCam>();
-			rtsCam->GetTransform()->position = Vector3d(3, 10, 3);
+			rtsCam->GetTransform()->SetLocalPosition( Vector3d(3, 10, 3));
 			rtsCam->GetTransform()->SetWorldRotation(Vector3d(60, 0, 0));
 			static vector<NavigationAgent*> agents;
 
@@ -72,7 +71,7 @@ namespace snippets
 			TerrainPaletteManager::GetCurrentPalette()->SetAsSelectMode(false);*/
 
 			auto directionalLight = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-			directionalLight->GetTransform()->rotation = Vector3d(45, 45, 0);
+			directionalLight->GetTransform()->SetLocalRotation( Vector3d(45, 45, 0));
 
 			SelectionBox::Instance();
 			yunutyEngine::YunutyCycle::SingleInstance().Play();

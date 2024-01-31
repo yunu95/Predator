@@ -1,4 +1,5 @@
 #include "RegionPalette.h"
+#include "RegionData.h"
 
 namespace application
 {
@@ -8,6 +9,7 @@ namespace application
         {
             IEditableData* RegionPalette::PlaceInstance(Vector3d worldPosition)
             {
+                //InstanceManager::GetSingletonInstance().CreateInstance<RegionData>();
                 return nullptr;
             };
             void RegionPalette::OnStartPalette()

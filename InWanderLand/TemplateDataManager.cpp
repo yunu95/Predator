@@ -120,6 +120,14 @@ namespace application
             list.clear();
         }
 
+        bool TemplateDataManager::PreSave()
+        {
+            for (auto& [key, ptr] : list)
+            {
+                ptr->PreSaveCallback();
+            }
+            return true;
+        }
         bool TemplateDataManager::PreEncoding(json& data) const
         {
             UUID uuid;

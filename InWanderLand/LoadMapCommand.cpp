@@ -1,6 +1,5 @@
 #include "InWanderLand.h"
 #include "LoadMapCommand.h"
-#include "MapData.h"
 #include "MapFileManager.h"
 
 namespace application
@@ -15,7 +14,8 @@ namespace application
 
 		void LoadMapCommand::Execute()
 		{
-            MapData::LoadMapData("TestMap.pmap");
+			MapFileManager::GetSingletonInstance().LoadMapFile("TestMap.pmap");
+            //MapData::LoadMapData("TestMap.pmap");
 		}
 	}
 }

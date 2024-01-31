@@ -12,7 +12,7 @@ namespace application
         class Unit_TemplateData;
         namespace palette
         {
-            class UnitInstance;
+            class UnitEditorInstance;
             class UnitPalette : public Palette, public yunutyEngine::SingletonClass<UnitPalette>
             {
             public:
@@ -25,7 +25,7 @@ namespace application
                 virtual void OnStartPalette() override;
                 virtual void OnStandbyPalette() override;
             private:
-                unordered_set<UnitInstance*> unitInstances;
+                unordered_set<UnitEditorInstance*> unitInstances;
                 Unit_TemplateData* selectedUnitTemplateData{ nullptr };
             };
         }

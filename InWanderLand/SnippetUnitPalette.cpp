@@ -11,7 +11,7 @@
 #include "PaletteManager.h"
 #include "TerrainPalette.h"
 #include "UnitPalette.h"
-#include "UnitInstance.h"
+#include "UnitEditorInstance.h"
 #include "Unit_TemplateData.h"
 #include "TemplateDataManager.h"
 
@@ -41,7 +41,7 @@ namespace snippets
                 UnitPalette::SingleInstance().SelectUnitTemplateData(defaultUnitTemplate);
 
                 auto rtsCam = Scene::getCurrentScene()->AddGameObject()->AddComponent<tests::RTSTestCam>();
-                rtsCam->GetTransform()->position = Vector3d(3, 10, 3);
+                rtsCam->GetTransform()->SetLocalPosition( Vector3d(3, 10, 3));
                 application::editor::palette::PaletteManager::GetSingletonInstance().SetCurrentPalette(&application::editor::palette::UnitPalette::SingleInstance());
                 rtsCam->groundHoveringClickCallback = [&](const Vector3d& worldPos) { if (application::Application::IsFocusGameWindow()) { application::editor::palette::UnitPalette::SingleInstance().OnMouseMove(worldPos); } };
                 rtsCam->groundLeftClickCallback = [&](const Vector3d& worldPos) { application::editor::palette::UnitPalette::SingleInstance().OnLeftClick(); };
@@ -60,11 +60,11 @@ namespace snippets
 
                 auto directionalLight = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 
-                //auto tempUnit1 = Scene::getCurrentScene()->AddGameObject()->AddComponent<UnitInstance>();
+                //auto tempUnit1 = Scene::getCurrentScene()->AddGameObject()->AddComponent<UnitEditorInstance>();
                 //tempUnit1->GetTransform()->position = Vector3d(0, 0, 0);
-                //auto tempUnit2 = Scene::getCurrentScene()->AddGameObject()->AddComponent<UnitInstance>();
+                //auto tempUnit2 = Scene::getCurrentScene()->AddGameObject()->AddComponent<UnitEditorInstance>();
                 //tempUnit2->GetTransform()->position = Vector3d(3, 0, 0);
-                //auto tempUnit3 = Scene::getCurrentScene()->AddGameObject()->AddComponent<UnitInstance>();
+                //auto tempUnit3 = Scene::getCurrentScene()->AddGameObject()->AddComponent<UnitEditorInstance>();
                 //tempUnit3->GetTransform()->position = Vector3d(0, 0, 3);
 
                 SelectionBox::Instance();
