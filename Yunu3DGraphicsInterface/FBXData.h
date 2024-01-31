@@ -17,6 +17,7 @@ namespace yunuGI
 		std::wstring normalMap;
 		std::wstring armMap;
 		std::wstring emissionMap;
+		std::wstring opacityMap;
 	};
 
 	struct FBXData

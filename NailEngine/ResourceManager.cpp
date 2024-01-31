@@ -218,13 +218,20 @@ Material* ResourceManager::CreateInstanceMaterial(const Material* material)
 
 yunuGI::IMaterial* ResourceManager::CloneMaterial(std::wstring materialName, yunuGI::IMaterial* material)
 {
-	Material* _material = new Material(*(static_cast<Material*>(material)));
+    if (this->materialMap.find(materialName) != this->materialMap.end())
+    {
+        return this->materialMap[materialName].get();
+    }
+    else
+    {
+		Material* _material = new Material(*(static_cast<Material*>(material)));
 
-	_material->SetName(materialName);
+		_material->SetName(materialName);
 
-	this->materialMap.insert({ materialName, std::shared_ptr<Material>(_material) });
-    this->materialVec.emplace_back(_material);
-	return _material;
+		this->materialMap.insert({ materialName, std::shared_ptr<Material>(_material) });
+		this->materialVec.emplace_back(_material);
+		return _material;
+    }
 }
 
 void ResourceManager::CreateTexture(const std::wstring& texturePath)
@@ -767,12 +774,18 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
                 this->CreateTexture(node->meshVec[i].material.normalMap);
                 material->SetTexture(yunuGI::Texture_Type::NORMAL, GetTexture(node->meshVec[i].material.normalMap).get());
             }
+			if (!node->meshVec[i].material.opacityMap.empty())
+			{
+				this->CreateTexture(node->meshVec[i].material.opacityMap);
+				material->SetTexture(yunuGI::Texture_Type::OPACITY, GetTexture(node->meshVec[i].material.opacityMap).get());
+			}
 
             fbxData->materialVec[i].materialName = node->meshVec[i].material.materialName;
             fbxData->materialVec[i].albedoMap = node->meshVec[i].material.albedoMap;
             fbxData->materialVec[i].armMap = node->meshVec[i].material.armMap;
             fbxData->materialVec[i].emissionMap = node->meshVec[i].material.emissionMap;
             fbxData->materialVec[i].normalMap = node->meshVec[i].material.normalMap;
+            fbxData->materialVec[i].opacityMap = node->meshVec[i].material.opacityMap;
 
             this->materialMap.insert({ node->meshVec[i].material.materialName , material });
         }
@@ -783,6 +796,7 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
             fbxData->materialVec[i].armMap = node->meshVec[i].material.armMap;
             fbxData->materialVec[i].emissionMap = node->meshVec[i].material.emissionMap;
             fbxData->materialVec[i].normalMap = node->meshVec[i].material.normalMap;
+            fbxData->materialVec[i].opacityMap = node->meshVec[i].material.opacityMap;
             //auto material = GetMaterial(node->meshVec[i].material.materialName);
         }
     }

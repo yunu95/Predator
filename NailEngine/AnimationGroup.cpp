@@ -80,7 +80,7 @@ void AnimationGroup::CreateTexture()
 
 void AnimationGroup::Bind()
 {
-	ResourceBuilder::Instance.Get().device->GetDeviceContext()->VSSetShaderResources(8, 1, this->srv.GetAddressOf());
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->VSSetShaderResources(10, 1, this->srv.GetAddressOf());
 }
 
 void AnimationGroup::CreateAnimationTransform(unsigned int idx)

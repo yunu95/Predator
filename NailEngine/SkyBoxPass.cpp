@@ -412,11 +412,11 @@ void SkyBoxPass::BindIBLTexture()
 {
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetSamplers(2,1, samplerState.GetAddressOf());
 
-	this->texture->Bind(9);
-	ResourceManager::Instance.Get().GetTexture(L"Texture/asdDiffuseHDR.dds")->Bind(10);
+	this->texture->Bind(11);
+	ResourceManager::Instance.Get().GetTexture(L"Texture/asdDiffuseHDR.dds")->Bind(12);
 	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShaderResources(10, 1, this->irradianceSRV.GetAddressOf());
-	ResourceManager::Instance.Get().GetTexture(L"Texture/asdSpecularHDR.dds")->Bind(11);
+	ResourceManager::Instance.Get().GetTexture(L"Texture/asdSpecularHDR.dds")->Bind(13);
 	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShaderResources(11, 1, this->prefilteredSRV.GetAddressOf());
-	ResourceManager::Instance.Get().GetTexture(L"Texture/asdBrdf.dds")->Bind(12);
+	ResourceManager::Instance.Get().GetTexture(L"Texture/asdBrdf.dds")->Bind(14);
 	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShaderResources(12, 1, this->lutSRV.GetAddressOf());
 }

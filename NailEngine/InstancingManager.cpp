@@ -18,7 +18,7 @@ void InstancingManager::Init()
 	instanceTransitionDesc = std::make_shared<InstanceTransitionDesc>();
 }
 
-void InstancingManager::RegisterStaticMeshAndMaterialInDeferred()
+void InstancingManager::RenderStaticDeferred()
 {
 	// 비활성화인 얘들 거르고
 	// 프러스텀 밖에 있는 얘들 거르고
@@ -84,7 +84,7 @@ void InstancingManager::RegisterStaticMeshAndMaterialInDeferred()
 	}
 }
 
-void InstancingManager::RegisterStaticMeshAndMaterialInForward()
+void InstancingManager::RenderStaticForward()
 {
 
 	// 비활성화인 얘들 거르고
@@ -152,62 +152,56 @@ void InstancingManager::RegisterStaticMeshAndMaterialInForward()
 	}
 }
 
-void InstancingManager::RegisterMeshAndShadowMaterial(std::vector<RenderInfo>& renderInfo)
+void InstancingManager::RenderStaticShadow()
 {
-	//if (renderInfo.size() == 0) return;
+	ClearData();
 
-	//ClearData();
+	for (auto& pair : this->staticMeshDeferredCache)
+	{
+		std::set<std::shared_ptr<RenderInfo>>& renderInfoVec = pair.second;
 
-	//std::map<InstanceID, std::vector<RenderInfo>> cache;
+		const InstanceID& instanceID = pair.first;
 
-	//for (auto& each : renderInfo)
-	//{
-	//	InstanceID instanceID = std::make_pair((unsigned __int64)each.mesh, (unsigned __int64)each.material);
+		//if (renderInfoVec.size() == 1)
+		//{
+		//	MatrixBuffer matrixBuffer;
+		//	matrixBuffer.WTM = renderInfoVec[0].wtm;
+		//	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+		//	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+		//	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+		//	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+		//	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+		//
+		//	auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(renderInfoVec[0].mesh->GetName()));
+		//
+		//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(renderInfoVec[0].material->GetName()))->PushGraphicsData();
+		//	for (int i = 0; i < mesh->GetMaterialCount(); ++i)
+		//	{
+		//		renderInfoVec[0].mesh->Render(i);
+		//	}
+		//}
+		//else
+		{
+			//for (int i = 0; i < renderInfoVec.size(); ++i)
+			for (auto& i : renderInfoVec)
+			{
+				if (i->isActive == false) continue;
 
-	//	cache[instanceID].push_back(each);
-	//}
+				const std::shared_ptr<RenderInfo>& renderInfo = i;
+				InstancingData data;
+				data.wtm = renderInfo->wtm;
+				AddData(instanceID, data);
+			}
 
-	//for (auto& pair : cache)
-	//{
-	//	std::vector<RenderInfo>& renderInfoVec = pair.second;
-
-	//	const InstanceID instanceID = pair.first;
-
-	//	//if (renderInfoVec.size() == 1)
-	//	//{
-	//	//	MatrixBuffer matrixBuffer;
-	//	//	matrixBuffer.WTM = renderInfoVec[0].wtm;
-	//	//	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-	//	//	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
-	//	//	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-	//	//	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-	//	//	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
-	//	//
-	//	//	auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(renderInfoVec[0].mesh->GetName()));
-	//	//
-	//	//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(renderInfoVec[0].material->GetName()))->PushGraphicsData();
-	//	//	for (int i = 0; i < mesh->GetMaterialCount(); ++i)
-	//	//	{
-	//	//		renderInfoVec[0].mesh->Render(i);
-	//	//	}
-	//	//}
-	//	//else
-	//	{
-	//		for (int i = 0; i < renderInfoVec.size(); ++i)
-	//		{
-	//			RenderInfo& renderInfo = renderInfoVec[i];
-	//			InstancingData data;
-	//			data.wtm = renderInfo.wtm;
-	//			AddData(instanceID, data);
-	//		}
-
-	//		auto& buffer = _buffers[instanceID];
-	//		renderInfoVec[0].shadowMaterial.PushGraphicsData();
-	//		auto test = renderInfoVec[0].mesh->GetMaterialCount();
-	//		buffer->PushData();
-	//		renderInfoVec[0].mesh->Render(renderInfoVec[0].materialIndex, buffer);
-	//	}
-	//}
+			if (renderInfoVec.size() != 0)
+			{
+				auto& buffer = _buffers[instanceID];
+				(*renderInfoVec.begin())->shadowMaterial->PushGraphicsData();
+				buffer->PushData();
+				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, buffer);
+			}
+		}
+	}
 }
 
 void InstancingManager::RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& renderInfo)
@@ -291,7 +285,7 @@ void InstancingManager::PopSkinnedData(std::shared_ptr<SkinnedRenderInfo>& rende
 	}
 }
 
-void InstancingManager::RegisterSkinnedMeshAndMaterial()
+void InstancingManager::RenderSkinned()
 {
 	ClearData();
 

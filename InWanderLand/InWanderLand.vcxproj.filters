@@ -1096,5 +1096,14 @@
     <ClCompile Include="DualCastComponent.cpp">
       <Filter>Contents\UnitStatusComponent\DualCast</Filter>
     </ClCompile>
+    <ClCompile Include="SnippetLeaves.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetPCFShadow.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetArtResource.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -26,9 +26,11 @@ cbuffer MaterialBuffer : register(b1)
     uint useARM;
     uint useHeight;
     uint useEmission;
+    uint useOpacity;
     uint useTemp0;
     uint useTemp1;
     uint useTemp2;
+    uint useTemp3;
     
     int temp_int0;
     int temp_int1;
@@ -38,6 +40,8 @@ cbuffer MaterialBuffer : register(b1)
     int temp_int5;
     int temp_int6;
     int temp_int7;
+    int temp_int8;
+    int temp_int9;
 };
 
 // 라이트 관련
@@ -105,21 +109,22 @@ cbuffer InstanceTransitionDesc : register(b5)
     TransitionDesc transitionDesc[MAX_INSTANCE_MODEL];
 }
 
-
 Texture2D AlbedoMap : register(t0);
 Texture2D NormalMap : register(t1);
 Texture2D ARMMap : register(t2);
 Texture2D HeightMap : register(t3);
 Texture2D EmissionMap : register(t4);
-Texture2D Temp0Map : register(t5);
-Texture2D Temp1Map : register(t6);
-Texture2D Temp2Map : register(t7);
+Texture2D OpacityMap : register(t5);
+Texture2D Temp0Map : register(t6);
+Texture2D Temp1Map : register(t7);
+Texture2D Temp2Map : register(t8);
+Texture2D Temp3Map : register(t9);
 
-Texture2DArray TransformMap : register(t8);
-TextureCube CubeMap: register(t9);
-TextureCube IrradianceMap : register(t10);
-TextureCube PrefilteredMap : register(t11);
-Texture2D BrdfMap : register(t12);
+Texture2DArray TransformMap : register(t10);
+TextureCube CubeMap: register(t11);
+TextureCube IrradianceMap : register(t12);
+TextureCube PrefilteredMap : register(t13);
+Texture2D BrdfMap : register(t14);
 
 
 SamplerState sam : register(s0);

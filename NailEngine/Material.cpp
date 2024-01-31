@@ -80,6 +80,7 @@ void Material::PushGraphicsData()
 			continue;
 		}
 
+
 		this->useTextures[i] = 1;
 		this->textures[i]->Bind(i);
 	}

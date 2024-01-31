@@ -177,6 +177,34 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 			fbxMeshData.material.armMap = this->texturePath + fileName;
 		}
 	}
+
+	// Emissive
+	if (material->GetTextureCount(aiTextureType_EMISSIVE) > 0)
+	{
+		aiString path;
+		if (material->GetTexture(aiTextureType_EMISSIVE, 0, &path) == AI_SUCCESS)
+		{
+			std::wstring _path = aiStringToWString(path);
+			std::filesystem::path pathName(_path);
+			std::wstring fileName = pathName.filename().wstring();
+
+			fbxMeshData.material.emissionMap = this->texturePath + fileName;
+		}
+	}
+
+	// OP
+	if (material->GetTextureCount(aiTextureType_OPACITY) > 0)
+	{
+		aiString path;
+		if (material->GetTexture(aiTextureType_OPACITY, 0, &path) == AI_SUCCESS)
+		{
+			std::wstring _path = aiStringToWString(path);
+			std::filesystem::path pathName(_path);
+			std::wstring fileName = pathName.filename().wstring();
+
+			fbxMeshData.material.opacityMap = this->texturePath + fileName;
+		}
+	}
 }
 
 void ModelLoader::AddHasAnimation(FBXNode* fbxNode)

@@ -1158,9 +1158,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="PaletteManager.cpp" />
     <ClCompile Include="PassiveCake.cpp" />
     <ClCompile Include="RangedAttackSystem.cpp" />
+    <ClCompile Include="SnippetArtResource.cpp" />
     <ClCompile Include="SnippetDebugMeshScaleCheck.cpp" />
     <ClCompile Include="SnippetFloatingDebugSphere.cpp" />
     <ClCompile Include="RegionPalette.cpp" />
+    <ClCompile Include="SnippetLeaves.cpp" />
+    <ClCompile Include="SnippetPCFShadow.cpp" />
     <ClCompile Include="SnippetSkillSystem.cpp" />
     <ClCompile Include="StatusTimer.cpp" />
     <ClCompile Include="Application.cpp" />
