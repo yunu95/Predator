@@ -100,6 +100,8 @@ namespace yunutyEngine
         virtual void OnDisable() {};
         // 게임 실행 중 매 프레임마다 호출되는 콜백 함수입니다. Update 함수를 오버라이드 하고 싶으면 base::Update 함수는 부르지 마십시오.
         virtual void Update() { SetIsUpdating(false); };
+        // 게임 실행 중 트랜스폼 값이 업데이트될때마다 호출되는 콜백 함수입니다. 부모의 트랜스폼이 바뀌어도 호출됩니다.
+        virtual void OnTransformUpdate() {};
         // 컴포넌트로부터 최초로 Update가 호출될 때, 호출되는 콜백 함수입니다.
         virtual void Start() {};
         // 게임 오브젝트가 삭제될 때 호출되는 콜백 함수입니다.

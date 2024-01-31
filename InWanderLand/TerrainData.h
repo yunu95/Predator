@@ -75,6 +75,7 @@ namespace application
         private:
             unordered_map<Vector2i, Node> nodes;
             static TerrainData* soleTerrainData;
+            static Terrain_TemplateData* soleTerrainTemplateData;
             static TemplateDataManager& templateDataManager;
 
             TerrainData();

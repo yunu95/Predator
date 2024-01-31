@@ -12,9 +12,9 @@ using namespace DirectX;
 Vector3d yunutyEngine::Transform::GetWorldPosition()const
 {
     if (GetGameObject()->GetParentGameObject() == nullptr)
-        return position;
+        return GetLocalPosition();
 
-    auto deltaPosition = (GetGameObject()->GetParentGameObject()->GetTransform()->GetWorldRotation() * position);
+    auto deltaPosition = (GetGameObject()->GetParentGameObject()->GetTransform()->GetWorldRotation() * GetLocalPosition());
     auto parentScale = GetGameObject()->GetParentGameObject()->GetTransform()->GetWorldScale();
     deltaPosition.x *= parentScale.x;
     deltaPosition.y *= parentScale.y;
@@ -27,13 +27,13 @@ Vector3d yunutyEngine::Transform::GetWorldPosition()const
 Quaternion yunutyEngine::Transform::GetWorldRotation()const
 {
     if (GetGameObject()->GetParentGameObject() == nullptr)
-        return rotation;
-    return  GetGameObject()->GetParentGameObject()->GetTransform()->GetWorldRotation() * rotation;
+        return GetLocalRotation();
+    return GetGameObject()->GetParentGameObject()->GetTransform()->GetWorldRotation() * GetLocalRotation();
 }
 Vector3d yunutyEngine::Transform::GetWorldScale()const
 {
     if (GetGameObject()->GetParentGameObject() == nullptr)
-        return scale;
+        return GetLocalScale();
     Vector3d ret;
     auto parentScale = GetGameObject()->GetParentGameObject()->GetTransform()->GetWorldScale();
     ret.x = scale.x * parentScale.x;
@@ -56,18 +56,28 @@ Vector3d yunutyEngine::Transform::GetLocalScale()const
 void yunutyEngine::Transform::SetLocalPosition(const Vector3d& position)
 {
     this->position = position;
+    InvokeTransformUpdateEvent(GetGameObject());
 }
 void yunutyEngine::Transform::SetLocalRotation(const Quaternion& rotation)
 {
     this->rotation = rotation;
+    InvokeTransformUpdateEvent(GetGameObject());
 }
 void yunutyEngine::Transform::SetLocalScale(const Vector3d& scale)
 {
     this->scale = scale;
+    InvokeTransformUpdateEvent(GetGameObject());
+}
+void yunutyEngine::Transform::InvokeTransformUpdateEvent(GameObject* obj)
+{
+    for (auto eachComp : obj->GetIndexedComponents())
+        eachComp->OnTransformUpdate();
+    for (auto eachChild : obj->GetChildren())
+        InvokeTransformUpdateEvent(eachChild);
 }
 yunuGI::Matrix4x4 yunutyEngine::Transform::GetLocalTM()const
 {
-    DirectX::XMMATRIX ret = math::GetTransformMatrix(position, scale, rotation);
+    DirectX::XMMATRIX ret = math::GetTransformMatrix(GetLocalPosition(), GetLocalScale(), GetLocalRotation());
     return reinterpret_cast<yunuGI::Matrix4x4&>(ret);
 }
 yunuGI::Matrix4x4 yunutyEngine::Transform::GetWorldTM()const
@@ -92,14 +102,19 @@ void yunutyEngine::Transform::SetWorldPosition(const Vector3d& position)
     auto parent = GetGameObject()->GetParentGameObject();
 
     if (!parent)
-        this->position = position;
+        SetLocalPosition(position);
     else
-        this->position = parent->GetTransform()->GetWorldRotation() * (position - parent->GetTransform()->GetWorldPosition());
+        SetLocalPosition(parent->GetTransform()->GetWorldRotation() * (position - parent->GetTransform()->GetWorldPosition()));
 }
 // 문제가 많다4
 void yunutyEngine::Transform::SetWorldRotation(const Quaternion& rotation)
 {
-    this->rotation = rotation;
+    auto parent = GetGameObject()->GetParentGameObject();
+
+    if (!parent)
+        SetLocalRotation(rotation);
+    else
+        SetLocalRotation(parent->GetTransform()->GetWorldRotation().inverse() * rotation);
 }
 void yunutyEngine::Transform::SetCacheDirty()
 {

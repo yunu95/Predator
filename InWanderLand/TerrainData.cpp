@@ -11,6 +11,7 @@ namespace application
     namespace editor
     {
         TerrainData* TerrainData::soleTerrainData{ nullptr };
+        Terrain_TemplateData* TerrainData::soleTerrainTemplateData{nullptr};
         TerrainData::~TerrainData()
         {
             assert(soleTerrainData == this && "지형 정보는 단 하나만 존재해야 합니다!");
@@ -19,8 +20,14 @@ namespace application
         }
         TerrainData& TerrainData::Instance()
         {
+            if (soleTerrainTemplateData == nullptr)
+            {
+                soleTerrainTemplateData = TemplateDataManager::GetSingletonInstance().GetTemplateData<Terrain_TemplateData>("DefaultTerrainTemplate");
+                if (soleTerrainTemplateData == nullptr)
+                    soleTerrainTemplateData = TemplateDataManager::GetSingletonInstance().CreateTemplateData<Terrain_TemplateData>("DefaultTerrainTemplate");
+            }
             if (soleTerrainData == nullptr)
-                soleTerrainData = InstanceManager::GetSingletonInstance().CreateInstance<TerrainData>("TerrainData");
+                soleTerrainData = InstanceManager::GetSingletonInstance().CreateInstance<TerrainData>("DefaultTerrainTemplate");
             return *soleTerrainData;
         }
         TemplateDataManager& TerrainData::templateDataManager = TemplateDataManager::GetSingletonInstance();
@@ -124,7 +131,7 @@ namespace application
         {
             if (nodes.find(nodeKey) != nodes.end())
                 return;
-            nodes[nodeKey] = nodeInfo;
+            nodes[nodeKey] = std::move(nodeInfo);
 #ifdef _DEBUG
             nodes[nodeKey].debugObject = CreateNodeDebuggingMesh(nodeKey);
 #else
@@ -163,7 +170,7 @@ namespace application
             constexpr double nodeHeight = 6;
             auto node = Scene::getCurrentScene()->AddGameObject();
             node->GetTransform()->SetWorldPosition(GetNodePosition(nodeKey) - nodeHeight * Vector3d::up * 0.5);
-            node->GetTransform()->SetLocalScale( { nodeDistance, nodeHeight, nodeDistance });
+            node->GetTransform()->SetLocalScale({ nodeDistance, nodeHeight, nodeDistance });
             auto mesh = AttachDebugMesh(node, DebugMeshType::Cube, yunuGI::Color{0.788, 0.647, 0.215}, false);
             mesh->SetIsUpdating(false);
             return node;

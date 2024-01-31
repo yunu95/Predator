@@ -32,6 +32,7 @@ namespace yunutyEngine
         void SetWorldPosition(const Vector3d& position);
         void SetWorldRotation(const Quaternion& rotation);
     private:
+        void InvokeTransformUpdateEvent(GameObject* obj);
         Vector3d position = Vector3d();
         Quaternion rotation;
         Vector3d scale = Vector3d::one;
