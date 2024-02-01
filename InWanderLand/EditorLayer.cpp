@@ -7,6 +7,7 @@
 #include "ModuleList.h"
 #include "PaletteManager.h"
 #include "Camera.h"
+#include "DebugMeshes.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -57,7 +58,7 @@ namespace application
 
 			for (auto& each : editorModuleList)
 			{
-				
+
 				each->Initialize();
 			}
 		}
@@ -81,7 +82,7 @@ namespace application
 		void EditorLayer::GUIProgress()
 		{
 			UI_DrawMenubar();
-			
+
 			for (auto& each : editorPanelList)
 			{
 				each->GUIProgress();
@@ -129,11 +130,65 @@ namespace application
 
 			// 카메라 초기화
 			editorCamera.Initialize(yunutyEngine::graphics::Camera::GetMainCamera());
+
+			// SceneGizmo
+			InitSceneGizmo();
 		}
 
 		void EditorLayer::AssignTestInitializer(std::function<void()> testInitializer)
 		{
 			EditorLayer::testInitializer = testInitializer;
+		}
+
+		void EditorLayer::InitSceneGizmo()
+		{
+			auto scene = yunutyEngine::Scene::getCurrentScene();
+			if (scene)
+			{
+				// x축, z축 각각 그려질 grid 수(즉, 전체 그리드는 gridCount * 2)
+				const int gridCount = 61;
+				// 강조 될 단위
+				const int accentUnit = 10;
+				// 간격
+				const int interval = 1;
+				// 길이
+				const int length = 60;
+
+				for (unsigned int i = 0; i < gridCount; i++)
+				{
+					int intervalPos = interval * i - ((gridCount - 1) / 2) * interval;
+					if (intervalPos == 0)
+					{
+						// x축
+						auto lineX = CreateLine(Vector3d(-length / 2, 0, 0), Vector3d(length / 2, 0, 0), yunuGI::Color::red());
+						lineX->SetIsUpdating(false);
+
+						// z축
+						auto lineZ = CreateLine(Vector3d(0, 0, -length / 2), Vector3d(0, 0, length / 2), yunuGI::Color::blue());
+						lineZ->SetIsUpdating(false);
+					}
+					else if (intervalPos % accentUnit == 0)
+					{
+						// x축 평행
+						auto lineX = CreateLine(Vector3d(-length/2, 0, intervalPos), Vector3d(length/2, 0, intervalPos), yunuGI::Color::white());
+						lineX->SetIsUpdating(false);
+
+						// z축 평행
+						auto lineZ = CreateLine(Vector3d(intervalPos, 0, -length/2), Vector3d(intervalPos, 0, length/2), yunuGI::Color::white());
+						lineZ->SetIsUpdating(false);
+					}
+					else
+					{
+						// x축 평행
+						auto lineX = CreateLine(Vector3d(-length/2, 0, intervalPos), Vector3d(length/2, 0, intervalPos), yunuGI::Color::gray());
+						lineX->SetIsUpdating(false);
+
+						// z축 평행
+						auto lineZ = CreateLine(Vector3d(intervalPos, 0, -length/2), Vector3d(intervalPos, 0, length/2), yunuGI::Color::gray());
+						lineZ->SetIsUpdating(false);
+					}
+				}
+			}
 		}
 
 		/// private

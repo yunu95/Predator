@@ -31,6 +31,7 @@ void HealerSkillSystem::CrushDown(int p_times)
 			{
 				m_unitDotween->DOMove(GetTransform()->GetWorldPosition() + Vector3d(0, yDistance, 0), 0.3f).OnComplete([=]()
 					{
+						SetSkillRequirmentsActive(QSkillFieldDamage, false);
 						CrushDown(p_times);
 					});
 			}
@@ -113,7 +114,14 @@ void HealerSkillSystem::Update()
 
 	if (isWSkillActivating)
 	{
-		WSkillFieldDamage.debugObject->GetTransform()->SetWorldPosition(WSkillFieldDamage.colliderObject->GetTransform()->GetWorldPosition());
+		WSkillFieldDamage.colliderObject->GetTransform()
+			->SetWorldPosition({GetGameObject()->GetTransform()->GetWorldPosition() + GetGameObject()->GetTransform()->GetWorldRotation().Forward() * -3});
+		WSkillFieldDamage.colliderObject->GetTransform()->GetWorldRotation() = GetGameObject()->GetTransform()->GetWorldRotation();
+
+		WSkillFieldDamage.debugObject->GetTransform()
+			->SetWorldPosition(WSkillFieldDamage.colliderObject->GetTransform()->GetWorldPosition());
+		WSkillFieldDamage.debugObject->GetTransform()->GetWorldRotation() = WSkillFieldDamage.colliderObject->GetTransform()->GetWorldRotation();
+
 		//m_unitComponent->LookAt(m_currentSelectedSkillPosition);
 	}
 

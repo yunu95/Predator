@@ -7,7 +7,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtc/constants.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
-#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "YunuGraphicsInterface.h"
@@ -20,13 +20,22 @@ namespace application
 		{
 			yunuGI::Vector3 ConvertVector3(const glm::vec3& vec);
 			yunuGI::Vector4 ConvertVector4(const glm::vec4& vec);
-			yunuGI::Matrix4x4 ConvertMatrix4x4(const glm::mat4& mat);
+			yunuGI::Matrix4x4 ConvertWTM(const glm::mat4& mat);
+			glm::mat4 ConvertWTM(const yunuGI::Matrix4x4& mat);
+			yunuGI::Matrix4x4 ConvertVTM(const glm::mat4& mat);
+			glm::mat4 ConvertVTM(const yunuGI::Matrix4x4& mat);
+			yunuGI::Matrix4x4 ConvertPTM(const glm::mat4& mat);
+			glm::mat4 ConvertPTM(const yunuGI::Matrix4x4& mat);
 			yunuGI::Quaternion ConvertQuaternion(const glm::quat& quat);
 
 			yunuGI::Matrix4x4 GetRotationMatrix(const yunuGI::Quaternion& quat);
 			yunuGI::Matrix4x4 GetRotationMatrix(const glm::quat& quat);
 
+			yunuGI::Matrix4x4 GetInverseMatrix(const yunuGI::Matrix4x4& mat);
+
 			yunuGI::Vector3 RotateVector3(const yunuGI::Vector3& vec, const yunuGI::Matrix4x4& roMat);
+
+			void DecomposeWTM(const yunuGI::Matrix4x4& mat, yunuGI::Vector3& scale, yunuGI::Quaternion& rotation, yunuGI::Vector3& translation);
 		}
 	}
 }

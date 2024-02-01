@@ -33,21 +33,21 @@ void SnippetInitializerPCFShadow()
 
 	{
 		auto obj = Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->scale = Vector3d{ 3,3,1 };
+		obj->GetTransform()->SetLocalScale(Vector3d{ 3,3,1 });
 		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		renderer->GetGI().SetMesh(quadMesh);
 	}
 
 	{
 		auto obj = Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->position = Vector3d{ 0,0,-2 };
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-2 });
 		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		renderer->GetGI().SetMesh(sphereMesh);
 	}
 
 	auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<graphics::DirectionalLight>();
 	//directionalLight->GetTransform()->SetWorldRotation(Quaternion({ 90,0,0 }));
-	directionalLight->GetTransform()->position = Vector3d{ 0,0,-10 };
+	directionalLight->GetTransform()->SetLocalPosition(Vector3d{0,0,-10});
 
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<tests::GraphicsTestCam>();
 

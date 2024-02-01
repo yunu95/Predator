@@ -72,7 +72,7 @@ void KnockBackComponent::SkillStarted()
 	isSkillStarted = true;
 }
 
-void KnockBackComponent::SkillEnded()
+void KnockBackComponent::ClearCrushedUnitList()
 {
 	isSkillStarted = false;
 	crushedUnitList.clear();

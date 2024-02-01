@@ -10,7 +10,6 @@
 #include "PaletteManager.h"
 #include "TerrainPalette.h"
 #include "RegionPalette.h"
-#include "RegionInstance.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -27,8 +26,8 @@ void SnippetInitializerRegionPalette()
     //rtsCam->groundHoveringClickCallback = [](const Vector3d& worldPos) {application::editor::palette::Palette::GetCurrentPalette()->OnMouseMove(worldPos); };
     //rtsCam->groundLeftClickCallback = [](const Vector3d& worldPos) {application::editor::palette::Palette::GetCurrentPalette()->OnLeftClick(); };
     //rtsCam->groundLeftClickReleaseCallback = [](const Vector3d& worldPos) {application::editor::palette::Palette::GetCurrentPalette()->OnLeftClickRelease(); };
-    //rtsCam->deleteButtonCallback = []() {application::editor::palette::Palette::GetCurrentPalette()->OnDeletion(); };
-    //rtsCam->xButtonCallback = []()
+    //rtsCam->buttonCallbackDelete = []() {application::editor::palette::Palette::GetCurrentPalette()->OnDeletion(); };
+    //rtsCam->buttonCallback_X = []()
     //{
     //    auto palette = application::editor::palette::Palette::GetCurrentPalette();
     //    palette->SetAsSelectMode(!palette->IsSelectMode());
@@ -36,12 +35,12 @@ void SnippetInitializerRegionPalette()
 
     auto directionalLight = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 
-    auto tempRegion1 = Scene::getCurrentScene()->AddGameObject()->AddComponent<RegionInstance>();
-    tempRegion1->GetTransform()->position = Vector3d(0, 0, 0);
-    auto tempRegion2 = Scene::getCurrentScene()->AddGameObject()->AddComponent<RegionInstance>();
-    tempRegion2->GetTransform()->position = Vector3d(3, 0, 0);
-    auto tempRegion3 = Scene::getCurrentScene()->AddGameObject()->AddComponent<RegionInstance>();
-    tempRegion3->GetTransform()->position = Vector3d(0, 0, 3);
+    auto tempRegion1 = Scene::getCurrentScene()->AddGameObject()->AddComponent<RegionEditorInstance>();
+    tempRegion1->GetTransform()->SetLocalPosition( Vector3d(0, 0, 0));
+    auto tempRegion2 = Scene::getCurrentScene()->AddGameObject()->AddComponent<RegionEditorInstance>();
+    tempRegion2->GetTransform()->SetLocalPosition( Vector3d(3, 0, 0));
+    auto tempRegion3 = Scene::getCurrentScene()->AddGameObject()->AddComponent<RegionEditorInstance>();
+    tempRegion3->GetTransform()->SetLocalPosition( Vector3d(0, 0, 3));
     tempRegion3->SetHalfExtent({ 1.5,2 });
 
     SelectionBox::Instance();

@@ -40,7 +40,7 @@ protected:
             //auto euler = GetTransform()->rotation.Euler();
             //euler.y += dMousePos.x * rotationSpeedFactor;
             //euler.x += dMousePos.y * rotationSpeedFactor;
-            Quaternion& rot = GetTransform()->rotation;
+            Quaternion rot = GetTransform()->GetLocalRotation();
             Vector3d newForward = 
                 rot.Forward() +
                 dMousePos.x * rotationSpeedFactor * rot.Right() +
@@ -51,9 +51,9 @@ protected:
                 rot.Up() +
                 -dMousePos.y * rotationSpeedFactor * -rot.Forward();
             //GetTransform()->rotation = Quaternion::MakeWithAxes(euler);
-            GetTransform()->rotation = Quaternion::MakeWithAxes(newRight, newUp, newForward);
+            GetTransform()->SetLocalRotation( Quaternion::MakeWithAxes(newRight, newUp, newForward));
         }
 
-        GetTransform()->position += deltaPosition.Normalized() * Time::GetDeltaTime() * cameraSpeed;
+        GetTransform()->SetLocalPosition(GetTransform()->GetLocalPosition()+ deltaPosition.Normalized() * Time::GetDeltaTime() * cameraSpeed);
     }
 };

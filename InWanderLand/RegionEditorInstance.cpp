@@ -1,22 +1,22 @@
 #include "InWanderLand.h"
-#include "RegionInstance.h"
+#include "RegionEditorInstance.h"
 #include "DebugMeshes.h"
 
 namespace application::editor::palette
 {
-    void RegionInstance::Start()
+    void RegionEditorInstance::Start()
     {
         PaletteInstance::Start();
         mesh = AttachDebugMesh(GetGameObject()->AddGameObject(), DebugMeshType::Rectangle, yunuGI::Color{0, 0, 1}, true);
-        mesh->GetTransform()->rotation = Quaternion({ 90,0,0 });
+        mesh->GetTransform()->SetLocalRotation( Quaternion({ 90,0,0 }));
         SetHalfExtent(halfExtent);
     }
-    void RegionInstance::OnHover()
+    void RegionEditorInstance::OnHover()
     {
         isHovering = true;
         mesh->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 1,1,1 }, true));
     }
-    void RegionInstance::OnHoverLeft()
+    void RegionEditorInstance::OnHoverLeft()
     {
         isHovering = false;
         if (isSelected)
@@ -26,12 +26,12 @@ namespace application::editor::palette
             mesh->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,0,1 }, true));
         }
     }
-    void RegionInstance::OnSelected()
+    void RegionEditorInstance::OnSelected()
     {
         isSelected = true;
         mesh->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,1,0 }, true));
     }
-    void RegionInstance::OnDeselected()
+    void RegionEditorInstance::OnDeselected()
     {
         isSelected = false;
         if (isHovering)
@@ -41,7 +41,13 @@ namespace application::editor::palette
             mesh->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,0,1 }, true));
         }
     }
-    void RegionInstance::SetHalfExtent(const Vector2f& halfExtent)
+    void RegionEditorInstance::Apply(const application::editor::RegionData* regionData)
+    {
+        SetHalfExtent({ regionData->pod.width, regionData->pod.height });
+        GetTransform()->SetWorldPosition({ regionData->pod.x, 0, regionData->pod.z });
+        GetTransform()->SetWorldRotation(Vector3d{ 0,regionData->pod.angle ,0 });
+    }
+    void RegionEditorInstance::SetHalfExtent(const Vector2f& halfExtent)
     {
         this->halfExtent = halfExtent;
 
@@ -53,7 +59,7 @@ namespace application::editor::palette
         if (wasStartCalled())
         {
             pickingCollider->SetHalfExtent({ halfExtent.x,100,halfExtent.y });
-            mesh->GetTransform()->scale = Vector3d{ halfExtent.x * 2,halfExtent.y * 2,1 };
+            mesh->GetTransform()->SetLocalScale( Vector3d{ halfExtent.x * 2,halfExtent.y * 2,1 });
         }
     }
 }

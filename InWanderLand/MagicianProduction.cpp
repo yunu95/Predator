@@ -24,9 +24,9 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 	m_dodgeProbability = 0.05f;
 	m_criticalDamageDecreaseMultiplier = 0.05f;
 
-	m_idRadius = 10.0f;
-	m_atkRadius = 3.5f;
-	m_unitSpeed = 1.5f;
+	m_idRadius = 10.0f * LENGTH_UNIT;
+	m_atkRadius = 3.5f * LENGTH_UNIT;
+	m_unitSpeed = 4.5f;
 
 	m_attackDelay = 5.0f;
 
@@ -85,26 +85,29 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 
 #pragma region Q Skill Setting
 	auto QSkillProjectileObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	
 	QSkillProjectileObject->AddComponent<Dotween>();
 
 	auto QSkillProjectileCollider = QSkillProjectileObject->AddComponent<physics::SphereCollider>();
-	m_QSkillProjectileRadius = 1.0f;
+	m_QSkillProjectileRadius = 1.0f * LENGTH_UNIT;
 	QSkillProjectileCollider->SetRadius(m_QSkillProjectileRadius);
 	QSkillProjectileObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
 	auto QSkillProjectileDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(QSkillProjectileDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), false);
+	QSkillProjectileDebugObject->GetTransform()->SetLocalScale({ m_QSkillProjectileRadius , m_QSkillProjectileRadius , m_QSkillProjectileRadius });
 
 	auto QSkillFieldObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	QSkillFieldObject->AddComponent<Dotween>();
 	auto fieldDamageComponent = QSkillFieldObject->AddComponent<BlindFieldComponent>();
 	fieldDamageComponent->SetSkillOwnerUnit(m_unitComponent);
 	auto QSkillFieldCollider = QSkillFieldObject->AddComponent<physics::SphereCollider>();
-	m_QSkillFieldRadius = 2.0f;
+	m_QSkillFieldRadius = 2.0f * LENGTH_UNIT;
 	QSkillFieldCollider->SetRadius(m_QSkillFieldRadius);
 	QSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	auto QSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(QSkillFieldDebugObject, DebugMeshType::Sphere, yunuGI::Color::white(), false);
+	QSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_QSkillFieldRadius , m_QSkillFieldRadius , m_QSkillFieldRadius });
 #pragma endregion
 
 #pragma region W Skill Setting
@@ -112,23 +115,25 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 	WSkillProjectileObject->AddComponent<Dotween>();
 
 	auto WSkillProjectileCollider = WSkillProjectileObject->AddComponent<physics::SphereCollider>();
-	m_WSkillProjectileRadius = 1.0f;
+	m_WSkillProjectileRadius = 1.0f * LENGTH_UNIT;
 	WSkillProjectileCollider->SetRadius(m_WSkillProjectileRadius);
 	WSkillProjectileObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
 	auto WSkillProjectileDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(WSkillProjectileDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
+	WSkillProjectileDebugObject->GetTransform()->SetLocalScale({ m_WSkillProjectileRadius , m_WSkillProjectileRadius , m_WSkillProjectileRadius });
 
 	auto WSkillFieldObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	WSkillFieldObject->AddComponent<Dotween>();
 	auto WfieldDamageComponent = WSkillFieldObject->AddComponent<ParalysisFieldComponent>();
 	WfieldDamageComponent->SetSkillOwnerUnit(m_unitComponent);
 	auto WSkillFieldCollider = WSkillFieldObject->AddComponent<physics::SphereCollider>();
-	m_WSkillFieldRadius = 2.0f;
+	m_WSkillFieldRadius = 2.0f * LENGTH_UNIT;
 	WSkillFieldCollider->SetRadius(m_WSkillFieldRadius);
 	WSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(WSkillFieldDebugObject, DebugMeshType::Sphere, yunuGI::Color::blue(), true);
+	WSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_WSkillFieldRadius , m_WSkillFieldRadius , m_WSkillFieldRadius });
 #pragma endregion
 
 #pragma endregion

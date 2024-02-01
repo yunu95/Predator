@@ -17,65 +17,65 @@ void SnippetInitializerArtResource()
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	
 #pragma region Cup Tower
-	//rsrcManager->LoadFile("FBX/CupTower");
-	//{
-	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("CupTower");
-	//}
+	rsrcManager->LoadFile("FBX/CupTower");
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("CupTower");
+	}
 #pragma endregion
 
 #pragma region Hat01
-	//rsrcManager->LoadFile("FBX/Hat01");
-	//{
-	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Hat01");
-	//	obj->GetTransform()->position = Vector3d{ 7,0,0 };
-	//}
+	rsrcManager->LoadFile("FBX/Hat01");
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Hat01");
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 7,0,0 });
+	}
 #pragma endregion
 
 #pragma region Hat02
-	//rsrcManager->LoadFile("FBX/Hat02");
-	//{
-	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Hat02");
-	//	obj->GetTransform()->position = Vector3d{ 14,0,0 };
-	//}
+	rsrcManager->LoadFile("FBX/Hat02");
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Hat02");
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 14,0,0 });
+	}
 #pragma endregion
 
 #pragma region Stump
-	//rsrcManager->LoadFile("FBX/Stump");
-	//{
-	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Stump");
-	//	obj->GetTransform()->position = Vector3d{ 30,0,0 };
-	//}
+	rsrcManager->LoadFile("FBX/Stump");
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Stump");
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 30,0,0 });
+	}
 #pragma endregion
 
 #pragma region CastleWall_Door
 	rsrcManager->LoadFile("FBX/CastleWall_Door");
 	{
 		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("CastleWall_Door");
-		obj->GetTransform()->position = Vector3d{ 50,0,0 };
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 50,0,0 });
 	}
 #pragma endregion
 
 #pragma region Monster1
-	/*rsrcManager->LoadFile("FBX/Monster1");
-	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster1");
-		obj->GetTransform()->position = Vector3d{ 60,0,0 };
-	}*/
+	//rsrcManager->LoadFile("FBX/Monster1");
+	//{
+	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster1");
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 60,0,0 });
+	//}
 #pragma endregion
 
 
 #pragma region Monster2
-	/*rsrcManager->LoadFile("FBX/Monster2");
-	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
-		obj->GetTransform()->position = Vector3d{ 70,0,0 };
-	}*/
+	//rsrcManager->LoadFile("FBX/Monster2");
+	//{
+	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 70,0,0 });
+	//}
 #pragma endregion
 
 
 	auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<graphics::DirectionalLight>();
 	//directionalLight->GetTransform()->SetWorldRotation(Quaternion({ 90,0,0 }));
-	directionalLight->GetTransform()->position = Vector3d{ 0,0,-10 };
+	directionalLight->GetTransform()->SetLocalPosition(Vector3d{0,0,-10});
 
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<tests::GraphicsTestCam>();
 

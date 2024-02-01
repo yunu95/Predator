@@ -124,6 +124,19 @@ Quaternion Quaternion::MakeWithAxes(const Vector3f& right, const Vector3f& up, c
         static_cast<double>(quat.m128_f32[2])
     );
 }
+Quaternion yunutyEngine::Quaternion::MakeAxisAngleQuaternion(const Vector3d& axis, double angle)
+{
+    auto nAxis = axis.Normalized();
+    double halfAngle = angle * 0.5;
+
+    double sinHalfAngle = sin(halfAngle);
+    double w = cos(halfAngle);
+    double x = nAxis.x * sinHalfAngle;
+    double y = nAxis.y * sinHalfAngle;
+    double z = nAxis.z * sinHalfAngle;
+
+    return Quaternion(w, x, y, z);
+}
 Quaternion Quaternion::Identity()
 {
     return Quaternion(1, 0, 0, 0);

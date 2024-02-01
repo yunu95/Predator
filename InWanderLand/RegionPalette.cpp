@@ -1,4 +1,5 @@
 #include "RegionPalette.h"
+#include "RegionData.h"
 
 namespace application
 {
@@ -6,18 +7,23 @@ namespace application
     {
         namespace palette
         {
+            IEditableData* RegionPalette::PlaceInstance(Vector3d worldPosition)
+            {
+                //InstanceManager::GetSingletonInstance().CreateInstance<RegionData>();
+                return nullptr;
+            };
             void RegionPalette::OnStartPalette()
             {
                 switch (beforeState)
                 {
-                    case application::editor::palette::Palette::State::Place:
-                    {
-                        SetAsSelectMode(false);
-                        break;
-                    }
-                    default:
-                        SetAsSelectMode(true);
-                        break;
+                case application::editor::palette::Palette::State::Place:
+                {
+                    SetAsSelectMode(false);
+                    break;
+                }
+                default:
+                    SetAsSelectMode(true);
+                    break;
                 }
             }
 

@@ -10,7 +10,7 @@ void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject, NavigationField* n
 	m_unitType = Unit::UnitType::MeleeEnemy;
 	m_unitSide = Unit::UnitSide::Enemy;
 
-	m_healthPoint = 50;
+	m_healthPoint = 500;
 	m_manaPoint = 100;
 
 	m_autoAttackDamage = 10;
@@ -21,9 +21,9 @@ void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject, NavigationField* n
 	m_dodgeProbability = 0.2f;
 	m_criticalDamageDecreaseMultiplier = 0.2f;
 
-	m_idRadius = 2.0f;
-	m_atkRadius = 1.5f;
-	m_unitSpeed = 1.5f;
+	m_idRadius = 1.0f * LENGTH_UNIT;
+	m_atkRadius = 0.2f * LENGTH_UNIT;
+	m_unitSpeed = 4.5f;
 
 	m_attackDelay = 1.0f;
 
@@ -80,19 +80,22 @@ void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject, NavigationField* n
 	unitAttackColliderObject->setName("UnitAttackCollider");
 
 	auto m_physicsCollider = unitAttackColliderObject->AddComponent<physics::BoxCollider>();
-	m_physicsCollider->SetHalfExtent({ 0.5,0.5,0.5 });
+	m_physicsCollider->SetHalfExtent({ 0.5 * LENGTH_UNIT,0.5 * LENGTH_UNIT,0.5 * LENGTH_UNIT });
 
 	auto autoAttackDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(autoAttackDebugMesh, DebugMeshType::Cube, yunuGI::Color::red(), true);
-	autoAttackDebugMesh->GetTransform()->scale = { 1.0f, 1.0f, 3.0f };
+	autoAttackDebugMesh->GetTransform()->SetLocalScale({ 1.0f * LENGTH_UNIT, 1.0f * LENGTH_UNIT, 3.0f * LENGTH_UNIT });
 
 	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
 	warriorAttackSystem->SetColliderObject(unitAttackColliderObject);
 	warriorAttackSystem->SetColliderDebugObject(autoAttackDebugMesh);
+	warriorAttackSystem->SetOwnerUnitObject(m_unitGameObject);
 	warriorAttackSystem->SetColliderRemainTime(0.3f);
 
 	unitAttackColliderObject->SetParent(m_unitGameObject);
 	unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -2.0f });
+	autoAttackDebugMesh->SetParent(m_unitGameObject);
+	autoAttackDebugMesh->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -2.0f });
 #pragma endregion
 
 }

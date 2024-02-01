@@ -25,9 +25,9 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 	m_dodgeProbability = 0.2f;
 	m_criticalDamageDecreaseMultiplier = 0.2f;
 
-	m_idRadius = 2.0f;
-	m_atkRadius = 1.5f;
-	m_unitSpeed = 1.5f;
+	m_idRadius = 4.0f * LENGTH_UNIT;
+	m_atkRadius = 1.7f * LENGTH_UNIT;
+	m_unitSpeed = 4.5f;
 
 	m_attackDelay = 1.0f;
 
@@ -82,50 +82,47 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 #pragma region Auto Attack Setting (Including Passive Logic)
 	auto unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	unitAttackColliderObject->setName("WarriorAutoAttackCollider");
-
 	auto m_physicsCollider = unitAttackColliderObject->AddComponent<physics::BoxCollider>();
-	m_physicsCollider->SetHalfExtent({ 1.0f, 1.0f, 3.0f });
-	
+	m_physicsCollider->SetHalfExtent({ 1.0f * LENGTH_UNIT, 1.0f * LENGTH_UNIT, 3.0f * LENGTH_UNIT });
+	unitAttackColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+	//unitAttackColliderObject->SetParent(m_unitGameObject);
+	unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, 3.0f * LENGTH_UNIT });
+
 	// warrior Passive Bleeding System
 	auto warriorBleedingSystem = unitAttackColliderObject->AddComponent<BleedingComponent>();
 	warriorBleedingSystem->SetSkillOwnerUnit(m_unitComponent);
 
-	unitAttackColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-
 	auto autoAttackDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(autoAttackDebugMesh, DebugMeshType::Cube, yunuGI::Color::red(), true);
-	autoAttackDebugMesh->GetTransform()->scale = { 1.0f, 1.0f, 3.0f };
+	autoAttackDebugMesh->GetTransform()->SetLocalScale({ 1.0f * LENGTH_UNIT, 1.0f * LENGTH_UNIT, 3.0f * LENGTH_UNIT });
 
 	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
 	warriorAttackSystem->SetColliderObject(unitAttackColliderObject);
 	warriorAttackSystem->SetColliderDebugObject(autoAttackDebugMesh);
-	warriorAttackSystem->SetColliderRemainTime(0.3f);
-
-	unitAttackColliderObject->SetParent(m_unitGameObject);
-	unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, 2.0f });
-
-	autoAttackDebugMesh->SetParent(m_unitGameObject);
-	autoAttackDebugMesh->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, 2.0f });
+	warriorAttackSystem->SetOwnerUnitObject(m_unitGameObject);
+	warriorAttackSystem->SetColliderRemainTime(0.8f);
 #pragma endregion
 
 #pragma region Q Skill Setting
-	m_QSkillRadius = 3.0f;
+	m_QSkillRadius = 3.0f * LENGTH_UNIT;
 
 	auto qSkillKnockBackObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	qSkillKnockBackObject->AddComponent<physics::SphereCollider>()->SetRadius(m_QSkillRadius);
+
+	auto qSkillColliderComponent = qSkillKnockBackObject->AddComponent<physics::SphereCollider>();
+	qSkillColliderComponent->SetRadius(m_QSkillRadius);
 	qSkillKnockBackObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+
+	auto qSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	AttachDebugMesh(qSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), true);
+	qSkillColliderDebugObject->GetTransform()->SetLocalScale({ m_QSkillRadius, m_QSkillRadius, m_QSkillRadius });
 
 	auto knockBackComponent = qSkillKnockBackObject->AddComponent<KnockBackComponent>();
 	knockBackComponent->SetSkillOwnerUnit(m_unitComponent);
-	qSkillKnockBackObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, 0.0f });
 	qSkillKnockBackObject->SetParent(m_unitGameObject);
-
-	auto qSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto qSkillDebugMesh = AttachDebugMesh(qSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), true);
 #pragma endregion
 
 #pragma region W Skill Setting
-	m_WSkillRadius = 8.0f;
+	m_WSkillRadius = 3.0f * LENGTH_UNIT;
 
 	auto wSkillColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto wSkillColliderComponent = wSkillColliderObject->AddComponent<physics::SphereCollider>();
@@ -137,12 +134,13 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 	wSkillDamageComponent->SetSkillDamage(10.0f);
 
 	auto wSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto wSkillDebugMesh = AttachDebugMesh(wSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), true);
+	AttachDebugMesh(wSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), true);
+	wSkillColliderDebugObject->GetTransform()->SetLocalScale({ m_WSkillRadius, m_WSkillRadius, m_WSkillRadius });
 
 	// warrior SkillSystem
 	auto warriorSkillSystem = m_unitGameObject->AddComponent<WarriorSkillSystem>();
-	warriorSkillSystem->SetQSkillKnockBackCollider(qSkillKnockBackObject->GetComponent<physics::SphereCollider>());
-	warriorSkillSystem->SetWSkillCollider(wSkillColliderComponent);
+	warriorSkillSystem->SetQSkillKnockBackObject(qSkillKnockBackObject);
+	warriorSkillSystem->SetWSkillObject(wSkillColliderObject);
 	warriorSkillSystem->SetKnockBackDebugObject(qSkillColliderDebugObject, m_QSkillRadius);
 	warriorSkillSystem->SetWSkillDebugObject(wSkillColliderDebugObject, m_WSkillRadius);
 #pragma endregion

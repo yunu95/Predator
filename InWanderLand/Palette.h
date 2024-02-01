@@ -5,14 +5,15 @@ namespace application
 {
     namespace editor
     {
+        class IEditableData;
         namespace palette
         {
-            class SelectionBox;
             class PaletteInstance;
+            class SelectionBox;
             /// <summary>
             /// Palette는 유닛 팔레트, 지형 팔레트, 장식물 팔레트로 특수화되는 팔레트 클래스의 베이스 클래스입니다.
             /// 이 클래스는 직접 사용자 입력을 받지 않습니다. 사용자 입력을 받는 Controller 역할은 외부에 존재하는 클래스가 수행한다고 가정합니다.
-            /// \see PaletteInstance
+            /// \see IEditableData
             /// </summary>
             class Palette
             {
@@ -26,6 +27,9 @@ namespace application
                     DraggingObjects, // 객체를 움직이는 상태
                     DraggingSelectBox, // 선택 박스를 조정하고 있는 상태
                 };
+                // 팔레트와 맵 데이터는 서로 밀접한 관계를 가지고 있으므로, 맵 데이터를 로드할때마다 팔레트를 초기화할 필요가 있습니다.
+                // ResetPalettes 함수는 모든 팔레트들의 상태를 초기화합니다.
+                static void ResetPalettes();
                 /// <summary>
                 /// LeftClick, LeftClickRelease, OnMouseMove, OnDeletion은 적절히 호출되었을 때 다음과 같은 기능을 수행합니다.
                 /// - 클릭 이벤트가 일어났을 때 가까운 인스턴스 하나를 선택합니다.
@@ -50,11 +54,11 @@ namespace application
                 /// 지형은 네비게이션 메시로 구워지고, 유닛은 배치되며, 장식물은 아무것도 하지 않습니다.
                 /// </summary>
                 /// <returns></returns>
-                virtual void ApplyAsPlaytimeObjects() = 0;
+                //virtual void ApplyAsPlaytimeObjects() = 0;
                 /// <summary>
                 /// 팔레트로부터 비롯된 플레이타임 객체들을 싸그리 정리합니다.
                 /// </summary>
-                virtual void CleanUpPlaytimeObjects() = 0;
+                //virtual void CleanUpPlaytimeObjects() = 0;
                 /// <summary>
                 /// 팔레트가 선택되었을 때, 초기화 관련한 내용을 처리하는 함수입니다.
                 /// </summary>
@@ -68,19 +72,21 @@ namespace application
                 State GetCurrentState() { return state; }
 
             protected:
+                // Reset 함수는 맵 데이터를 로드할때마다 기존에 로드되어 있던 맵 데이터들간의 관계를 초기화하는데에 사용됩니다.
+                virtual void Reset() {};
                 /// <summary>
                 /// 객체 배치를 시도할 때 호출되는 함수입니다. 해당 위치에 유닛, 지형, 장식물 등을 배치하고 배치된 객체를 반환하십시오.
                 /// 부득이한 여건으로 객체를 배치할 수 없다면 Null 포인터를 반환하십시오. 
                 /// </summary>
                 /// <param name="worldPosition"></param>
-                virtual PaletteInstance* PlaceInstance(Vector3d worldPosition) = 0;
-                template<typename T> requires std::derived_from<T, yunutyEngine::Component>
-                T* PlaceSoleComponent(Vector3d worldPosition)
-                {
-                    auto component = Scene::getCurrentScene()->AddGameObject()->AddComponent<T>();
-                    component->GetTransform()->position = worldPosition;
-                    return component;
-                }
+                virtual IEditableData* PlaceInstance(Vector3d worldPosition) = 0;
+                //template<typename T> requires std::derived_from<T, yunutyEngine::Component>
+                //T* PlaceSoleComponent(Vector3d worldPosition)
+                //{
+                //    auto component = Scene::getCurrentScene()->AddGameObject()->AddComponent<T>();
+                //    component->GetTransform()->position = worldPosition;
+                //    return component;
+                //}
                 bool IsClickingLeft();
                 /// <summary>
                 /// 마우스가 선택모드이고 선택 박스를 드래깅하지 않을때 차지하게 될 충돌크기의 halfExtents입니다.
@@ -90,7 +96,7 @@ namespace application
                 /// shouldSelect는 팔레트 인스턴스가 선택 콜라이더에 들어왔을 때 호출되어 해당 인스턴스를 선택할지 여부를 결정합니다.
                 /// 대부분의 경우 dynamic_cast를 사용하여 해당 인스턴스가 선택 가능한 인스턴스인지 판별하는 것으로 구현될 것입니다.
                 /// </summary>
-                virtual bool ShouldSelect(PaletteInstance*) { return false; };
+                virtual bool ShouldSelect(IEditableData*) { return false; };
                 /// <summary>
                 /// OnStandbyPalette 에서 사용하기 위한, 포인터 등 데이터 정리 함수입니다.
                 /// </summary>
@@ -99,24 +105,25 @@ namespace application
                 // 현재 팔레트 기능 조작의 상태
                 State state{ State::Select };
                 State beforeState{ State::None };
-                PaletteInstance* pendingSelection;
-                unordered_set<PaletteInstance*> selection;
-                PaletteInstance* draggingObject = nullptr;
+                IEditableData* pendingSelection;
+                unordered_set<IEditableData*> selection;
+                IEditableData* draggingObject = nullptr;
 
+            protected:
             private:
                 // 선택 박스에 유효한 인스턴스가 접촉되기 시작했을 때, 혹은 접촉이 끝났을 때 호출됩니다.
-                void OnSelectionContactEnter(PaletteInstance* instance);
-                void OnSelectionContactExit(PaletteInstance* instance);
+                void OnSelectionContactEnter(IEditableData* instance);
+                void OnSelectionContactExit(IEditableData* instance);
                 // 선택 목록에 인스턴스를 추가 / 제거
-                void InsertSelection(PaletteInstance* instance);
-                void EraseSelection(PaletteInstance* instance);
+                void InsertSelection(IEditableData* instance);
+                void EraseSelection(IEditableData* instance);
                 void ClearSelection();
                 // 선택박스와 접촉중인 객체 중 가장 마우스포인터와 가까운 인스턴스의 OnHover 함수를 호출합니다.
                 // 접촉중인 객체가 없다면 현재 마킹된 인스턴스의 OnHoverLeft 함수를 호출합니다.
                 void HoverClosestInstance();
                 // 현재 호버링중인 객체가 있다면 OnHoverLeft함수를 호출합니다. 
                 void UnHoverCurrentInstance();
-                
+
                 bool isClickingLeft{ false };
                 Vector3d dragStartPos;
                 Vector3d currentBrushPos;

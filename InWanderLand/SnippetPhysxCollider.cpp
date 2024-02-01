@@ -25,7 +25,7 @@ protected:
     virtual void Update() override
     {
         t += Time::GetDeltaTime();
-        GetGameObject()->GetTransform()->position = { 3 * sin(t * 2), y, 0 };
+        GetGameObject()->GetTransform()->SetLocalPosition( { 3 * sin(t * 2), y, 0 });
     }
     /// <summary>
     /// OnTriggerEnter, OnTriggerExit 함수는 트리거 콜라이더와 다른 리지드바디 콜라이더가 서로 겹치거나, 충돌상태에서 벗어나는 시점에 호출됩니다.
@@ -75,10 +75,10 @@ void SnippetInitializerPhysxCollider()
 {
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
     auto cam = Scene::getCurrentScene()->AddGameObject()->AddComponent<graphics::Camera>();
-    cam->GetTransform()->position = { 0,0,-10 };
+    cam->GetTransform()->SetLocalPosition( { 0,0,-10 });
     auto collider1 = Scene::getCurrentScene()->AddGameObject()->AddComponent<TriggerCollider>();
     auto collider2 = Scene::getCurrentScene()->AddGameObject()->AddComponent<KinematicCollider>();
-    collider1->GetTransform()->scale = { 1.5,1.5,1.5 };
+    collider1->GetTransform()->SetLocalScale( { 1.5,1.5,1.5 });
     collider1->y = 0.3;
     collider2->y = -0.3;
     collider2->t = 1;

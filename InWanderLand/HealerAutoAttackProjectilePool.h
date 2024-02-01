@@ -11,6 +11,7 @@ class HealerAutoAttackProjectilePool :
 public:
 	virtual void ObjectInitializer(HealerAutoAttackProjectile* projectile) override
 	{
+		projectile->GetGameObject()->SetSelfActive(false);
 		const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 		auto capsuleMesh = _resourceManager->GetMesh(L"Capsule");
 

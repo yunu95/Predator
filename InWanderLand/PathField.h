@@ -1,9 +1,9 @@
 #pragma once
 #include "YunutyEngine.h"
 using namespace yunutyEngine;
-// RTS °æ·Î¸¦ XZÆò¸é¿¡ »ı¼ºÇÏ±â À§ÇÑ ÄÄÆ÷³ÍÆ®
-// ÀÌ ÄÄÆ÷³ÍÆ®°¡ Æ÷ÇÔµÈ XZ Æò¸éÀ» ±×¸®µå·Î ³ª´©°í, ±×¸®µåÀÇ ²ÀÁşÁ¡¿¡ °æ·Î ³ëµå¸¦ ÁöÁ¤ÇÒ ¼ö ÀÖ°Ô ÇÑ´Ù.
-// ÀÎÁ¢ÇÑ °æ·Î³ëµåµé³¢¸® ÀÌ·ç´Â ´Ù°¢ÇüÀº RTS À¯´ÖµéÀÌ ¿À°¥ ¼ö ÀÖ´Â °æ·Î°¡ µÈ´Ù.
+// RTS ê²½ë¡œë¥¼ XZí‰ë©´ì— ìƒì„±í•˜ê¸° ìœ„í•œ ì»´í¬ë„ŒíŠ¸
+// ì´ ì»´í¬ë„ŒíŠ¸ê°€ í¬í•¨ëœ XZ í‰ë©´ì„ ê·¸ë¦¬ë“œë¡œ ë‚˜ëˆ„ê³ , ê·¸ë¦¬ë“œì˜ ê¼­ì§“ì ì— ê²½ë¡œ ë…¸ë“œë¥¼ ì§€ì •í•  ìˆ˜ ìˆê²Œ í•œë‹¤.
+// ì¸ì ‘í•œ ê²½ë¡œë…¸ë“œë“¤ë¼ë¦¬ ì´ë£¨ëŠ” ë‹¤ê°í˜•ì€ RTS ìœ ë‹›ë“¤ì´ ì˜¤ê°ˆ ìˆ˜ ìˆëŠ” ê²½ë¡œê°€ ëœë‹¤.
 class PathField : public Component
 {
 public:
@@ -12,7 +12,7 @@ public:
         bool passable{ false };
         graphics::StaticMeshRenderer* debugMesh{nullptr};
     };
-    // °¡·Î,¼¼·Î·Î ³ëµå Å×ÀÌºíÀ» ¸¸µç´Ù.
+    // ê°€ë¡œ,ì„¸ë¡œë¡œ ë…¸ë“œ í…Œì´ë¸”ì„ ë§Œë“ ë‹¤.
     void Initialize(int xSize, int ySize, float nodeWidth)
     {
         this->NodesXSize = xSize;
@@ -33,11 +33,11 @@ public:
         auto nodeIndex = NodePositionToIndex(position);
         return NodePosition(nodeIndex.x, nodeIndex.y);
     }
-    // ³ëµå¸¦ Ç¥½ÃÇÒ ¶§¿¡ ¾²ÀÌ´Â µğ¹ö±× ¸Ş½Ã
+    // ë…¸ë“œë¥¼ í‘œì‹œí•  ë•Œì— ì“°ì´ëŠ” ë””ë²„ê·¸ ë©”ì‹œ
     static graphics::StaticMeshRenderer* CreateNodeDebugMesh()
     {
         auto nodeHoverDebugMesh = Scene::getCurrentScene()->AddGameObject()->AddComponent<graphics::StaticMeshRenderer>();
-        nodeHoverDebugMesh->GetTransform()->scale = Vector3d{ 0.2,1,0.2 };
+        nodeHoverDebugMesh->GetTransform()->SetLocalScale( Vector3d{ 0.2,1,0.2 });
         nodeHoverDebugMesh->GetGI().LoadMesh("Cylinder");
         nodeHoverDebugMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
         nodeHoverDebugMesh->GetGI().GetMaterial()->SetPixelShader(L"DefaultPS.cso");
@@ -47,7 +47,7 @@ public:
 private:
     std::vector<std::vector<Node>> nodeTable;
     float nodeWidth;
-    // °æ·Î ÇÊµå°¡ ÃÊ±âÈ­µÇ¾úÀ» ¶§ ÇÊµåÀÇ ¿ùµå À§Ä¡
+    // ê²½ë¡œ í•„ë“œê°€ ì´ˆê¸°í™”ë˜ì—ˆì„ ë•Œ í•„ë“œì˜ ì›”ë“œ ìœ„ì¹˜
     Vector3d initializedWorldPos;
     int NodesXSize{ 0 };
     int NodesYSize{ 0 };

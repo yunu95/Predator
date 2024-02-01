@@ -1,18 +1,19 @@
 #include "InWanderLand.h"
 #include "PaletteInstance.h"
 #include "DebugMeshes.h"
+#include "Palette.h"
 
 namespace application::editor::palette
 {
     void PaletteInstance::Start()
     {
         selectCircle = AttachDebugMesh(GetGameObject()->AddGameObject(), DebugMeshType::Rectangle, yunuGI::Color{1, 1, 1}, true);
-        selectCircle->GetTransform()->rotation = Quaternion({ 90,0,0 });
+        selectCircle->GetTransform()->SetLocalRotation( Quaternion({ 90,0,0 }));
         pickingCollider = GetGameObject()->AddComponent<yunutyEngine::physics::BoxCollider>();
         rigidBody = GetGameObject()->AddComponent<yunutyEngine::physics::RigidBody>();
         pickingCollider->SetHalfExtent({ 0.01,100,0.01 });
         rigidBody->SetAsKinematic(true);
-        selectCircle->GetTransform()->scale = Vector3d::one * selectCircleRadius;
+        selectCircle->GetTransform()->SetLocalScale( Vector3d::one * selectCircleRadius);
         selectCircle->SetActive(false);
     }
     void PaletteInstance::OnHover()
@@ -47,16 +48,24 @@ namespace application::editor::palette
             selectCircle->SetActive(false);
         }
     }
-    void PaletteInstance::ResetInstance()
+    void PaletteInstance::EnablePickingCollider()
     {
         pickingCollider->SetActive(true);
     }
-    void PaletteInstance::ApplyInstance()
+    void PaletteInstance::DisablePickingCollider()
     {
         pickingCollider->SetActive(false);
     }
     void PaletteInstance::ResetInstances()
     {
+    }
+    IEditableData* PaletteInstance::GetEditableData()
+    {
+        return editableData;
+    }
+    void PaletteInstance::SetEditableData(IEditableData* data)
+    {
+        editableData = data;
     }
     void PaletteInstance::ApplyInstances()
     {

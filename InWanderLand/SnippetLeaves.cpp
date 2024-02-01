@@ -56,8 +56,7 @@ void SnippetInitializerLeaves()
 		float tempX = rand() % 100;
 		float tempZ = rand() % 100;
 		auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Bush");
-		Vector3d scale = object->GetTransform()->scale;
-		object->GetTransform()->position = Vector3d{ tempX,0,tempZ };
+		object->GetTransform()->SetLocalPosition(Vector3d{ tempX,0,tempZ });
 		//object->GetTransform()->scale = Vector3d{scale.x*10,scale.y*10,scale.z*10};
 		//object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
 		auto& childVec = object->GetChildren();

@@ -4,6 +4,7 @@
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
+#include "ImGuizmo/ImGuizmo.h"
 
 #include "YunutyEngine.h"
 #include "EditorLayer.h"
@@ -131,6 +132,7 @@ namespace application
 				editorHWND = ::CreateWindow(wcEditor.lpszClassName, wcEditor.lpszClassName, WS_OVERLAPPEDWINDOW, editorWinPosX, editorWinPosY, g_EditorResizeWidth, g_EditorResizeHeight, hWND, NULL, wcEditor.hInstance, NULL);
 
 				GetDeviceAndDeviceContext();
+				erm.Initialize(g_pD3dDevice);
 
 				// Initialize Direct3D
 				if (!CreateSwapChain())
@@ -223,7 +225,6 @@ namespace application
 		layers[(int)LayerList::ContentsLayer] = new contents::ContentsLayer();
 
 #ifdef EDITOR
-		CheckContentsLayerInit();
 		layers[(int)LayerList::EditorLayer] = new editor::EditorLayer();
 #endif
 
@@ -234,6 +235,7 @@ namespace application
 		}
 
 #ifdef EDITOR
+		CheckContentsLayerInit();
 		static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer])->LateInitialize();
 #endif
 	}
@@ -347,6 +349,9 @@ namespace application
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
+		ImGuizmo::SetOrthographic(false);
+		ImGuizmo::BeginFrame();
+
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
 		window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
 		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
@@ -359,11 +364,7 @@ namespace application
 
 			ImGui::Begin("DockSpace", nullptr, window_flags);
 
-			ImGuiStyle& style = ImGui::GetStyle();
-
 			// Dockspace
-			style.WindowMinSize.x = 100.0f;
-			style.WindowMinSize.y = 50.0f;
 			ImGui::DockSpace(ImGui::GetID("MyDockspace"));
 
 			layers[(int)LayerList::EditorLayer]->Update(1);
@@ -536,7 +537,7 @@ namespace application
 			yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 			auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 			directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-			directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{90,0,30} };
+			directionalLight->GetTransform()->SetLocalRotation( Quaternion{ Vector3d{90,0,30} });
 		}
 		else
 		{
@@ -551,7 +552,7 @@ namespace application
 
 			auto directionalLight = scene->AddGameObject();
 			directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-			directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{90,0,30} };
+			directionalLight->GetTransform()->SetLocalRotation( Quaternion{ Vector3d{90,0,30} });
 		}
 #endif
 	}

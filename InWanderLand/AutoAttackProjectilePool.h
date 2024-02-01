@@ -9,6 +9,7 @@ class AutoAttackProjectilePool : public GameObjectPool<AutoAttackProjectile>, pu
 public:
 	virtual void ObjectInitializer(AutoAttackProjectile* projectile) override 
 	{
+		projectile->GetGameObject()->SetSelfActive(false);
 		const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 		auto capsuleMesh = _resourceManager->GetMesh(L"Capsule");
 

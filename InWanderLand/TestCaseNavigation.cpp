@@ -48,7 +48,7 @@ NavigationAgent* CreateAgent(NavigationField* navField)
     auto staticMesh = agent->GetGameObject()->AddGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
     staticMesh->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(L"Capsule"));
     staticMesh->GetGI().GetMaterial()->SetColor({ 0.75,0.75,0.75,1 });
-    staticMesh->GetTransform()->position = Vector3d{ 0,0.5,0 };
+    staticMesh->GetTransform()->SetLocalPosition(Vector3d{ 0,0.5,0 });
     return agent;
 }
 // 이 함수는 게임의 기본 초기화 함수를 오버라이드합니다.
@@ -57,12 +57,14 @@ void TestCaseNavigationInit()
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 
     const float corridorRadius = 3;
-    std::vector<Vector3f> worldVertices { };
-    std::vector<int> worldFaces { };
+    std::vector<Vector3f> worldVertices{ };
+    std::vector<int> worldFaces{ };
 
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    auto rtsCam = camObj->AddComponent<RTSCam>();
-    rtsCam->GetTransform()->position = Vector3d(3, 10, 3);
+    auto rtsCam = camObj->AddComponent<graphics::Camera>();
+    rtsCam->SetCameraMain();
+    rtsCam->GetTransform()->SetLocalPosition( Vector3d(3, 10, 3));
+    rtsCam->GetTransform()->SetWorldRotation({ Vector3d{90,0,0} });
 
     CreateNavigationPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
     CreateNavigationPlane({ -8,0,-2 }, { 8,0,2 }, worldVertices, worldFaces);
@@ -78,10 +80,10 @@ void TestCaseNavigationInit()
     auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<graphics::DirectionalLight>();
     directionalLight->GetTransform()->SetWorldRotation(Quaternion({ 100,10,0 }));
 
-    rtsCam->groundRightClickCallback = [=](Vector3d position)
-    {
-        agent->MoveTo(position);
-    };
+    //rtsCam->groundRightClickCallback = [=](Vector3d position)
+    //{
+    //    agent->MoveTo(position);
+    //};
     const Vector3d moveDestination{ 6.5,0,6.5 };
     agent->MoveTo(moveDestination);
     agent->SetSpeed(10);

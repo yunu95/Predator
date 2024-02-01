@@ -7,6 +7,7 @@
 #include "imgui_internal.h"
 
 #include <string>
+#include <functional>
 
 namespace application
 {
@@ -49,6 +50,23 @@ namespace application
 				SmartStyleColor(ImGuiCol colourId, T colour) { ImGui::PushStyleColor(colourId, ImColor(colour).Value); }
 				~SmartStyleColor() { ImGui::PopStyleColor(); }
 			};
+
+			bool SelectableImageButton(std::string imageKey, std::string filename, bool selected, const ImVec2& size, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), const ImVec4& defaultColor = ImVec4(0.26f, 0.59f, 0.98f, 0.31f), const ImVec4& selectedColor = ImVec4(0.26f, 0.59f, 0.98f, 1.00f));
+
+#pragma region 1Column
+			bool BeginSection_1Col(int& countIdx, std::string sectionName, float width, ImColor underlineColor = IM_COL32(90, 90, 90, 200));
+#pragma endregion
+
+#pragma region 2Column
+			bool BeginSection_2Col(int& countIdx, std::string sectionName, float width, float firstColRatio = 0.5f, ImColor underlineColor = IM_COL32(90, 90, 90, 200));
+			bool SliderFloat_2Col(std::string valName, float& value, float min = 0.0f, float max = 0.0f);
+			bool SliderInt_2Col(std::string valName, int& value, int min = 0, int max = 0);
+			bool DragFloat_2Col(std::string valName, float& value, float speed = 1.0f, float min = 0.0f, float max = 0.0f);
+			bool DragInt_2Col(std::string valName, int& value, float speed = 1.0f, int min = 0, int max = 0);
+			bool Checkbox_2Col(std::string valName, bool& value);
+			bool Dropdown_2Col(std::string valName, const char** options, int optionCount, int* selected);
+#pragma endregion
+			void EndSection();
 
 			namespace draw
 			{

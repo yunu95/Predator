@@ -15,7 +15,8 @@ namespace application
 
         }
 
-        IEditableData* InstanceManager::CreateInstance(const std::string& dataName)
+        template<>
+        IEditableData* InstanceManager::CreateInstance<IEditableData>(const std::string& dataName)
         {
             auto tdptr = templateDataManager.GetTemplateData(dataName);
             if (tdptr == nullptr)
@@ -75,17 +76,6 @@ namespace application
             return true;
         }
 
-        IEditableData* InstanceManager::GetInstance(const UUID& uuid) const
-        {
-            auto itr = list.find(uuid);
-            if (itr == list.end())
-            {
-                return nullptr;
-            }
-
-            return itr->second.get();
-        }
-
         void InstanceManager::Clear()
         {
             tdMap.clear();
@@ -93,7 +83,14 @@ namespace application
             list.clear();
             mould = nullptr;
         }
-
+        bool InstanceManager::PreSave()
+        {
+            for (auto& [key, ptr] : list)
+            {
+                ptr->PreSaveCallback();
+            }
+            return true;
+        }
         bool InstanceManager::PreEncoding(json& data) const
         {
             std::string uuidStr;
@@ -217,7 +214,11 @@ namespace application
                 instance = new OrnamentData();
                 break;
             }
-
+            case DataType::RegionData:
+            {
+                instance = new RegionData();
+                break;
+            }
             default:
                 break;
             }

@@ -124,7 +124,7 @@ void TestCaseGroupControlInit()
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 		directionalLight->GetTransform()->SetWorldPosition(Vector3d(0, 50, 0));
-		directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{100,0,0} };
+		directionalLight->GetTransform()->SetLocalRotation( Quaternion{ Vector3d{100,0,0} });
 	}
 
 	//auto delayFunctionObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();

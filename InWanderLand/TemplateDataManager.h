@@ -84,6 +84,7 @@ namespace application
             void Clear();
 
         protected:
+            bool PreSave();
             virtual bool PreEncoding(json& data) const override;
             virtual bool PostEncoding(json& data) const override;
             virtual bool PreDecoding(const json& data) override;

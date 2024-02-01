@@ -2,48 +2,56 @@
 #include "PassiveCakePool.h"
 #include "Dotween.h"
 #include "Unit.h"
+#include "DebuggingMeshPool.h"
 
 void PassiveCake::PopCake(Vector3d initialPos)
 {
+	GetTransform()->SetWorldPosition(initialPos);
+	m_mesh->GetTransform()->SetWorldPosition(initialPos);
+
+	isFunctionCalled = true;
+
 	/// 떨어질 위치 선정 (랜덤)
 	std::srand(std::time(0));
 	int dropDistance = std::rand() % (maxDropDistance - minDropDistance) + minDropDistance;
 
 	int dropAngle = std::rand() % maxDegree;
-	
-	GetTransform()->SetWorldPosition(initialPos);
-	
-	GetGameObject()->GetTransform()->rotation = Quaternion({ 0, static_cast<float>(dropAngle), 0 });
 
-	Vector3d endPos = GetTransform()->GetWorldPosition() + GetTransform()->rotation.Forward() * dropDistance;
+	GetGameObject()->GetTransform()->GetWorldRotation() = Quaternion({ 0, static_cast<float>(dropAngle), 0 });
 
-	m_collider->SetActive(false);
+	Vector3d endPos = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * dropDistance;
 
+	//GetGameObject()->SetSelfActive(true);
+
+	//m_collider->SetActive(false);
 	m_mesh->SetActive(true);
 
-	GetGameObject()->GetComponent<Dotween>()->DOMove(endPos, 2.0f).OnComplete([this]()
+	m_dotween->DOMove(endPos, 2.0f).OnComplete([=]()
 		{
 			isDropped = true;
 			m_collider->SetActive(true);
 		});
+
 }
 
 void PassiveCake::SetMesh(yunutyEngine::graphics::StaticMeshRenderer* p_mesh)
 {
 	m_mesh = p_mesh;
-	m_mesh->SetActive(false);
 }
 
 void PassiveCake::SetCollider(physics::BoxCollider* p_collider)
 {
 	m_collider = p_collider;
-	m_collider->SetActive(false);
+	//m_collider->SetActive(false);
+}
+
+void PassiveCake::SetDotweenComponent(Dotween* p_dotween)
+{
+	m_dotween = p_dotween;
 }
 
 void PassiveCake::Start()
 {
-	//GetGameObject()->SetSelfActive(false);
-
 }
 
 void PassiveCake::Update()
@@ -54,10 +62,17 @@ void PassiveCake::Update()
 
 		if (cakeElapsed >= cakePersistTime)
 		{
+			m_mesh->SetActive(false);
 			PassiveCakePool::SingleInstance().Return(this);
 			cakeElapsed = 0.0f;
 			isDropped = false;
+			isFunctionCalled = false;
 		}
+	}
+
+	if (isFunctionCalled)
+	{
+		m_mesh->GetTransform()->SetWorldPosition(GetGameObject()->GetTransform()->GetWorldPosition());
 	}
 }
 
@@ -68,7 +83,11 @@ void PassiveCake::OnTriggerEnter(physics::Collider* collider)
 		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
 	{
 		m_mesh->SetActive(false);
+		m_collider->SetActive(false);
 		PassiveCakePool::SingleInstance().Return(this);
+		auto debuggingMeshComponent = DebuggingMeshPool::SingleInstance().Borrow();
+		debuggingMeshComponent->SetUnitObject(colliderUnitComponent);
+		debuggingMeshComponent->PopMeshUP(yunuGI::Color::blue(), MaterialNum::Red);
 		colliderUnitComponent->Heal(cakeHealingPoint);
 	}
 }

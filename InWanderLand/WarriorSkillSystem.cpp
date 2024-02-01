@@ -3,78 +3,80 @@
 #include "KnockBackComponent.h"
 #include "Dotween.h"
 
+void WarriorSkillSystem::SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen)
+{
+	p_requirments.skillCollider->SetActive(p_boolen);
+	p_requirments.colliderObject->SetSelfActive(p_boolen);
+	p_requirments.debugObject->SetSelfActive(p_boolen);
+}
+
 void WarriorSkillSystem::QSkillActivate(Vector3d skillPos)
 {
-	QSkillKnockBackCollider->GetGameObject()->GetComponent<KnockBackComponent>()->SkillStarted();
+	isQSkillStarted = true;
 
-	QSkillKnockBackCollider->SetActive(true);
+	QknockBackSkill.colliderObject->GetComponent<KnockBackComponent>()->SkillStarted();
 
-	m_unitNavComponent->SetActive(false);	
+	SetSkillRequirmentsActive(QknockBackSkill, true);
+
+	m_unitNavComponent->SetActive(false);
 
 	float tempDistance = (skillPos - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
-
-	isQSkillActivating = true;
-	m_QSkillKnockBackDebugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
-	m_QSkillKnockBackDebugObject->SetSelfActive(true);
-
 	m_unitComponent->SetSkillDuration(tempDistance / m_QskillRushSpeed + m_knockBackObjectRemainTime);
-
 	// 1. 목표 위치로 돌진
 	m_unitDotween->DOMove(skillPos, tempDistance / m_QskillRushSpeed).OnComplete([=]()
 		{
 			// 2. remainTime 이후에 collider 비활성화
 			m_unitDotween->DONothing(m_knockBackObjectRemainTime).OnComplete([=]()
 				{
-					isQSkillActivating = false;
-					m_QSkillKnockBackDebugObject->SetSelfActive(false);
-					QSkillKnockBackCollider->SetActive(false);
-					QSkillKnockBackCollider->GetGameObject()->GetComponent<KnockBackComponent>()->SkillEnded();
+					SetSkillRequirmentsActive(QknockBackSkill, false);
+
+					QknockBackSkill.colliderObject->GetComponent<KnockBackComponent>()->ClearCrushedUnitList();
 
 					m_unitNavComponent->SetActive(true);
 					m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
 					m_unitNavComponent->Relocate(skillPos);
+
+					isQSkillStarted = false;
 				});
 		});
 }
 
 void WarriorSkillSystem::WSkillActivate(Vector3d skillPos)
 {
-	WSkillCollider->SetActive(true);
-	m_WSkillDebugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
-	m_WSkillDebugObject->SetSelfActive(true);
+	isWSkillStarted = true;
 
-	float tempDistance = (skillPos - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
+	SetSkillRequirmentsActive(WTauntSkill, true);
 
-
-	m_unitComponent->SetSkillDuration(tempDistance / m_QskillRushSpeed + m_knockBackObjectRemainTime);
-
+	m_unitComponent->SetSkillDuration(m_wSkillColliderRemainTime);
 
 	m_unitDotween->DONothing(m_wSkillColliderRemainTime).OnComplete([=]()
 		{
-			WSkillCollider->SetActive(false);
-			m_WSkillDebugObject->SetSelfActive(false);
+			SetSkillRequirmentsActive(WTauntSkill, false);
+			isWSkillStarted = false;
 		});
 }
 
-void WarriorSkillSystem::SetQSkillKnockBackCollider(physics::SphereCollider* p_collider)
+void WarriorSkillSystem::SetQSkillKnockBackObject(GameObject* obj)
 {
-	QSkillKnockBackCollider = p_collider;
+	QknockBackSkill.colliderObject = obj;
+	QknockBackSkill.skillCollider = obj->GetComponent<physics::Collider>();
 }
 
-void WarriorSkillSystem::SetWSkillCollider(physics::SphereCollider* p_collider)
+void WarriorSkillSystem::SetWSkillObject(GameObject* obj)
 {
-	WSkillCollider = p_collider;
+	WTauntSkill.colliderObject = obj;
+	WTauntSkill.skillCollider = obj->GetComponent<physics::Collider>();
 }
 
 void WarriorSkillSystem::SetKnockBackDebugObject(GameObject* obj, float radius)
 {
-	m_QSkillKnockBackDebugObject = obj;
+	QknockBackSkill.debugObject = obj;
 	m_QSkillRadius = radius;
 }
 
 void WarriorSkillSystem::SetWSkillDebugObject(GameObject* obj, float radius)
 {
-	m_WSkillDebugObject = obj;
+	WTauntSkill.debugObject = obj;
 	m_WSkillRadius = radius;
 }
 
@@ -82,29 +84,20 @@ void WarriorSkillSystem::Start()
 {
 	SetOtherComponentsAsMember();
 
-	m_QSkillKnockBackDebugObject->GetTransform()->scale = { pow(m_QSkillRadius, 2), pow(m_QSkillRadius, 2), pow(m_QSkillRadius, 2) };
-	m_QSkillKnockBackDebugObject->SetSelfActive(false);
+	SetSkillRequirmentsActive(QknockBackSkill, false);
+	SetSkillRequirmentsActive(WTauntSkill, false);
 
-	m_WSkillDebugObject->GetTransform()->scale = { pow(m_WSkillRadius, 2), pow(m_WSkillRadius, 2), pow(m_WSkillRadius, 2) };
-	m_WSkillDebugObject->SetSelfActive(false);
 }
 
 void WarriorSkillSystem::Update()
 {
-	/// Update 들어가기 전에는 Collider->SetActive(false) 불가하므로 첫 Update문에서 false 처리. (임시)
-	if (!isColliderSetActiveFalseSet)
+	if (isQSkillStarted)
 	{
-		QSkillKnockBackCollider->SetActive(false);
-		WSkillCollider->SetActive(false);
-		isColliderSetActiveFalseSet = true;
+		QknockBackSkill.debugObject->GetTransform()->SetWorldPosition(QknockBackSkill.colliderObject->GetTransform()->GetWorldPosition());
 	}
 
-	if (isQSkillActivating)
+	if (isWSkillStarted)
 	{
-		m_QSkillKnockBackDebugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
-	}
-	if (isWSkillActivating)
-	{
-		m_WSkillDebugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+		WTauntSkill.debugObject->GetTransform()->SetWorldPosition(WTauntSkill.colliderObject->GetTransform()->GetWorldPosition());
 	}
 }

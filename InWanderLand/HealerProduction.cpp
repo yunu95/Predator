@@ -24,9 +24,9 @@ void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navFi
 	m_dodgeProbability = 0.05f;
 	m_criticalDamageDecreaseMultiplier = 0.05f;
 
-	m_idRadius = 10.0f;
-	m_atkRadius = 8.5f;
-	m_unitSpeed = 1.5f;
+	m_idRadius = 4.0f * LENGTH_UNIT;
+	m_atkRadius = 2.5f * LENGTH_UNIT;
+	m_unitSpeed = 4.5f;
 
 	m_attackDelay = 1.0f;
 
@@ -91,13 +91,15 @@ void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navFi
 	fieldDamageComponent->SetSkillOwnerUnit(m_unitComponent);
 
 	auto QSkillFieldCollider = QSkillFieldObject->AddComponent<physics::SphereCollider>();
-	m_QSkillFieldRadius = 2.0f;
-	QSkillFieldCollider->SetRadius(m_QSkillFieldRadius);
+	m_QSkillFieldRadius = 2.0f * LENGTH_UNIT;
+	QSkillFieldCollider->SetRadius(1 * LENGTH_UNIT);
 	QSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	QSkillFieldObject->SetParent(m_unitGameObject);
 
 	auto QSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(QSkillFieldDebugObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::white(), true));
+	//QSkillFieldDebugObject->GetTransform()->scale = { pow(m_QSkillFieldRadius, 2), pow(m_QSkillFieldRadius, 2) , pow(m_QSkillFieldRadius, 2) };
+	QSkillFieldDebugObject->GetTransform()->SetLocalScale({m_QSkillFieldRadius, m_QSkillFieldRadius, m_QSkillFieldRadius});
 #pragma endregion
 
 #pragma region W Skill Setting
@@ -106,16 +108,16 @@ void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navFi
 	dualCastComponent->SetSkillOwnerUnit(m_unitComponent);
 
 	auto WSkillFieldCollider = WSkillFieldObject->AddComponent<physics::BoxCollider>();
-	m_WSkillFieldWidth = 5.0f;
-	m_WSkillFieldHeight = 2.0f;
+	m_WSkillFieldWidth = 2.0f * LENGTH_UNIT / 2;
+	m_WSkillFieldHeight = 4.0f * LENGTH_UNIT / 2;
 
 	WSkillFieldCollider->SetHalfExtent({ m_WSkillFieldWidth, 0.1, m_WSkillFieldHeight });
 	WSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-	WSkillFieldObject->SetParent(m_unitGameObject);
+	//WSkillFieldObject->SetParent(m_unitGameObject);
 
 	auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(WSkillFieldDebugObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::blue(), true));
-	WSkillFieldDebugObject->GetTransform()->scale = { 10, 1, 5 };
+	WSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_WSkillFieldWidth, 1, m_WSkillFieldHeight });
 
 #pragma endregion
 

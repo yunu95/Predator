@@ -8,6 +8,7 @@
 #include "CommandManager.h"
 #include "EventManager.h"
 #include "EditorInputManager.h"
+#include "EditorResourceManager.h"
 
 #include <vector>
 #include <memory>
@@ -93,8 +94,8 @@ namespace application
 
         enum class LayerList
         {
-            EditorLayer = 0,
-            ContentsLayer,
+            ContentsLayer = 0,
+            EditorLayer,
         };
 
         static std::unique_ptr<Application> instance;
@@ -107,6 +108,7 @@ namespace application
         bool isRunning = false;
         std::vector<Layer*> layers;
 
+        editor::ResourceManager& erm = editor::ResourceManager::GetSingletonInstance();
         editor::CommandManager& cm = editor::CommandManager::GetSingletonInstance();
         editor::EventManager em = editor::EventManager();
         editor::EditorInputManager& eim = editor::EditorInputManager::GetSingletonInstance();

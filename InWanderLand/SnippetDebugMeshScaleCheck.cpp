@@ -17,7 +17,7 @@ public:
 	virtual void Update() override
 	{
 		t += Time::GetDeltaTime();
-		GetGameObject()->GetTransform()->position = { a * sin(t * 10), y, 0 };
+		GetGameObject()->GetTransform()->SetLocalPosition( { a * sin(t * 10), y, 0 });
 	}
 };
 
@@ -38,7 +38,7 @@ void SnippetDebugMeshScaleCheckInit()
 	
 	auto obj1Collider = testObject1->AddComponent<physics::SphereCollider>();
 	obj1Collider->SetRadius(2.0f);
-	object1DebugObj->GetTransform()->scale = { 2.0f, 2.0f, 2.0f };
+	object1DebugObj->GetTransform()->SetLocalScale( { 2.0f, 2.0f, 2.0f });
 	testObject1->AddComponent<physics::RigidBody>();
 	auto obj1DebugMesh = AttachDebugMesh(object1DebugObj, DebugMeshType::Sphere, yunuGI::Color::red(), false);
 	object1DebugObj->SetParent(testObject1);
@@ -46,7 +46,7 @@ void SnippetDebugMeshScaleCheckInit()
 
 	auto obj2Collider = testObject2->AddComponent<physics::SphereCollider>();
 	obj2Collider->SetRadius(3.0f);
-	object2DebugObj->GetTransform()->scale = { 5.0f, 5.0f, 5.0f };
+	object2DebugObj->GetTransform()->SetLocalScale( { 5.0f, 5.0f, 5.0f });
 	testObject2->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	auto obj2DebugMesh = AttachDebugMesh(object2DebugObj, DebugMeshType::Sphere, yunuGI::Color::green(), false);
 	object2DebugObj->SetParent(testObject2);
