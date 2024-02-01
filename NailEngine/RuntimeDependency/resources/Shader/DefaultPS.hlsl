@@ -68,7 +68,7 @@ PS_OUT main(PixelIn input)
     {
         output.arm.x = 1.f;
         output.arm.y = 1.f;
-        output.arm.z = 1.f;
+        output.arm.z = 1.f; 
     }
     
     output.position = float4(input.posV.xyz, 1.f);

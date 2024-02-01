@@ -32,6 +32,27 @@ void GraphicsTest()
 	_resourceManager->LoadFile("FBX/Monster2");
 	{
 		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
+
+		auto animator = obj->GetComponent<yunutyEngine::graphics::Animator>();
+		auto& animList = _resourceManager->GetAnimationList();
+		yunuGI::IAnimation* anim = nullptr;
+		for (auto each : animList)
+		{
+			if (each->GetName() == L"Ani_Monster2_Walk")
+			{
+				anim = each;
+			}
+		}
+		anim->SetLoop(true);
+		anim->SetPlaySpeed(0.5f);
+		animator->GetGI().PushAnimation(anim);
+		animator->GetGI().Play(anim);
+	}
+
+	_resourceManager->LoadFile("FBX/CastleWall_Door");
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("CastleWall_Door");
+		//obj->GetTransform()->position = Vector3d{ 50,0,0 };
 	}
 }
 

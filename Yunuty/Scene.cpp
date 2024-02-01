@@ -105,6 +105,7 @@ yunutyEngine::GameObject* Scene::AddGameObjectFromFBX(string fbxName)
     {
         if (data->hasAnimation)
         {
+            //gameObject->GetTransform()->scale = Vector3d{ 0.001f,0.001f,0.001f };
             auto animator = gameObject->AddComponent<yunutyEngine::graphics::Animator>();
             animator->GetGI().SetModel(std::wstring{ fbxName.begin(), fbxName.end() });
         }
