@@ -202,6 +202,14 @@ void NailEngine::CreateRenderTargetGroup()
 			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 		);
 
+		rtVec[5].texture = ResourceManager::Instance.Get().CreateTexture(
+			L"EmissiveTarget",
+			this->windowInfo.width,
+			this->windowInfo.height,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+		);
+
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)] = std::make_shared<RenderTargetGroup>();
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->SetRenderTargetVec(rtVec);
 	}
@@ -258,7 +266,19 @@ void NailEngine::CreateRenderTargetGroup()
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SPECLIBL)] = std::make_shared<RenderTargetGroup>();
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SPECLIBL)]->SetRenderTargetVec(rtVec);
 	}
-
+	// Back Buffer
+	{
+		std::vector<RenderTarget> rtVec(FINAL_COUNT);
+		rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
+			L"BackBufferTarget",
+			this->windowInfo.width,
+			this->windowInfo.height,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+		);
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)] = std::make_shared<RenderTargetGroup>();
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->SetRenderTargetVec(rtVec);
+	}
 	//// SHADOW
 	//{
 	//	std::vector<RenderTarget> rtVec(SHADOW_MEMBER_COUNT);

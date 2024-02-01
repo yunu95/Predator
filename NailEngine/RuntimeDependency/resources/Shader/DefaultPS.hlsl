@@ -19,6 +19,7 @@ struct PS_OUT
     float4 color : SV_Target2;
     float4 depth : SV_Target3;
     float4 arm : SV_Target4;
+    float4 emissive : SV_Target5;
 };
 
 PS_OUT main(PixelIn input)
@@ -75,11 +76,10 @@ PS_OUT main(PixelIn input)
     output.normal = float4(viewNormal.xyz, 1.f);
     output.color = color * materialColor;
     
-    //if (UseTexture(useEmission))
-    //{
-    //    output.color *= EmissionMap.Sample(sam, input.uv);
-    //    //clip(-1);
-    //}
+    if (UseTexture(useEmission))
+    {
+        output.emissive = EmissionMap.Sample(sam, input.uv);
+    }
     
     float4 projPos = { 0, 0, 0, 0 };
     
