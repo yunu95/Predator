@@ -589,6 +589,8 @@ void ResourceManager::CreateDefaultMaterial()
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(DIFFUSE)).get());
         material->SetTexture(yunuGI::Texture_Type::Temp2,
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp3,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(EMISSIVE)).get());
     }
 
     /// Deferred Debug Info
