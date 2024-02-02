@@ -21,7 +21,7 @@ namespace application
                     for (int i = planeMeshes.size(); i < expectedNum; i++)
                     {
                         auto planeMesh = AttachDebugMesh(GetGameObject()->AddGameObject(), DebugMeshType::Rectangle, yunuGI::Color::green(), true);
-                        planeMesh->GetTransform()->SetLocalScale(Vector3d::one * TerrainPalette::nodeDistance);
+                        planeMesh->GetTransform()->SetLocalScale(Vector3d::one * TerrainData::nodeDistance);
                         planeMeshes.push_back(planeMesh);
                         /*
                         25 26 27 28 29 30 31
@@ -41,26 +41,26 @@ namespace application
                         // 좌방 기수번호 = (레이어 *2+1)^2 + 레이어 * 2 * 2
                         // 상방 기수번호 = (레이어 *2+1)^2 + 레이어 * 2 * 3
 
-                        // 우방 기수좌표 = -레이어 * TerrainPalette::nodeDistance, 0, +레이어 * TerrainPalette::nodeDistance
-                        // 하방 기수번호 = +레이어 * TerrainPalette::nodeDistance, 0, +레이어 * TerrainPalette::nodeDistance
-                        // 좌방 기수번호 = +레이어 * TerrainPalette::nodeDistance, 0, -레이어 * TerrainPalette::nodeDistance
-                        // 상방 기수번호 = -레이어 * TerrainPalette::nodeDistance, 0, -레이어 * TerrainPalette::nodeDistance
+                        // 우방 기수좌표 = -레이어 * TerrainData::nodeDistance, 0, +레이어 * TerrainData::nodeDistance
+                        // 하방 기수번호 = +레이어 * TerrainData::nodeDistance, 0, +레이어 * TerrainData::nodeDistance
+                        // 좌방 기수번호 = +레이어 * TerrainData::nodeDistance, 0, -레이어 * TerrainData::nodeDistance
+                        // 상방 기수번호 = -레이어 * TerrainData::nodeDistance, 0, -레이어 * TerrainData::nodeDistance
 
                         // 우방~상방 = 0~3
                         double sx[4] = {
-                            -layerIdx * TerrainPalette::nodeDistance,
-                            +layerIdx * TerrainPalette::nodeDistance,
-                            +layerIdx * TerrainPalette::nodeDistance,
-                            -layerIdx * TerrainPalette::nodeDistance,
+                            -layerIdx * TerrainData::nodeDistance,
+                            +layerIdx * TerrainData::nodeDistance,
+                            +layerIdx * TerrainData::nodeDistance,
+                            -layerIdx * TerrainData::nodeDistance,
                         };
                         double sy[4] = {
-                            +layerIdx * TerrainPalette::nodeDistance,
-                            +layerIdx * TerrainPalette::nodeDistance,
-                            -layerIdx * TerrainPalette::nodeDistance,
-                            -layerIdx * TerrainPalette::nodeDistance,
+                            +layerIdx * TerrainData::nodeDistance,
+                            +layerIdx * TerrainData::nodeDistance,
+                            -layerIdx * TerrainData::nodeDistance,
+                            -layerIdx * TerrainData::nodeDistance,
                         };
-                        constexpr double dx[4] = { TerrainPalette::nodeDistance, 0, -TerrainPalette::nodeDistance, 0 };
-                        constexpr double dy[4] = { 0, -TerrainPalette::nodeDistance, 0, TerrainPalette::nodeDistance };
+                        constexpr double dx[4] = { TerrainData::nodeDistance, 0, -TerrainData::nodeDistance, 0 };
+                        constexpr double dy[4] = { 0, -TerrainData::nodeDistance, 0, TerrainData::nodeDistance };
                         unsigned int lineType = layerIdx == 0 ? 0 : (i - (layerIdx * 2 - 1) * (layerIdx * 2 - 1)) / (layerIdx * 2);
                         double deltaIdx = layerIdx == 0 ? 0 : i - ((layerIdx * 2 - 1) * (layerIdx * 2 - 1) + layerIdx * 2 * lineType);
 

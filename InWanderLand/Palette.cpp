@@ -118,6 +118,8 @@ namespace application::editor::palette
     {
         for (auto each : selection)
         {
+            if (each == pendingSelection)
+                pendingSelection = nullptr;
             auto& contactingInstances = SelectionBox::Instance().GetContactingInstances();
             contactingInstances.erase(each->GetPaletteInstance());
 
