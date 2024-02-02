@@ -43,7 +43,7 @@ namespace application
 
 			}
 
-			virtual std::string GetDebugString() const
+			virtual std::string GetDebugString() const override
 			{
 				std::stringstream ss;
 				ss << "[" + GetName() + "] ";
@@ -84,7 +84,7 @@ namespace application
 
 			}
 
-			virtual std::string GetDebugString() const
+			virtual std::string GetDebugString() const override
 			{
 				std::stringstream ss;
 				ss << "[" + GetName() + "] ";
@@ -125,7 +125,7 @@ namespace application
 
 			}
 
-			virtual std::string GetDebugString() const
+			virtual std::string GetDebugString() const override
 			{
 				std::stringstream ss;
 				ss << "[" + GetName() + "] ";
@@ -170,7 +170,7 @@ namespace application
 			long GetPosX() { return posX; }
 			long GetPosY() { return posY; }
 
-			virtual std::string GetDebugString() const
+			virtual std::string GetDebugString() const override
 			{
 				std::stringstream ss;
 				ss << "[" + GetName() + "] posX : " << posX << " / posY : " << posY << '\n';
@@ -197,7 +197,7 @@ namespace application
 
 			short GetWheelDelta() { return wheelDelta; }
 
-			virtual std::string GetDebugString() const
+			virtual std::string GetDebugString() const override
 			{
 				std::stringstream ss;
 				ss << "[" + GetName() + "] wheelDelta : " << wheelDelta << '\n';

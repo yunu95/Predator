@@ -2,6 +2,7 @@
 #include "Panel_Palette.h"
 #include "Application.h"
 #include "imgui_Utility.h"
+#include "EditorCommonEvents.h"
 
 #include "YunutyEngine.h"
 
@@ -81,6 +82,16 @@ namespace application
 		void PalettePanel::Finalize()
 		{
 
+		}
+
+		void PalettePanel::OnEvent(EditorEvents& event)
+		{
+			EventDispatcher dispatcher(event);
+			dispatcher.Dispatch<LoadEvent>([this](LoadEvent& e) 
+				{  
+					LoadCallback();
+					return true; 
+				});
 		}
 
 		PalettePanel::PalettePanel()
@@ -163,6 +174,7 @@ namespace application
 
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
+
 				bool pFlag = imgui::SelectableImageButton("Terrain_PlaceButton", "ImageButtons/Terrain_PlaceButton.png", pButton, ImVec2(50, 50));
 				ImGui::SameLine();
 				bool eFlag = imgui::SelectableImageButton("Terrain_EraseButton", "ImageButtons/Terrain_EraseButton.png", eButton, ImVec2(50, 50));
@@ -323,6 +335,19 @@ namespace application
 			imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 
 			int countIdx = 0;
+		}
+
+		void PalettePanel::LoadCallback()
+		{
+			unitCurrentButton = -1;
+			unitButton.clear();
+
+			auto uSize = tdm.GetDataList(DataType::UnitData).size();
+			unitButton.reserve(30);
+			for (int i = 0; i < uSize; i++)
+			{
+				unitButton.push_back(false);
+			}
 		}
 	}
 }
