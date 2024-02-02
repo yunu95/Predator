@@ -41,7 +41,7 @@ namespace application
 		{
 			None = 0,
 			// Editor
-			SelectionChange,
+			SelectionChange, Save, Load,
 			// Window
 			WindowResize, WindowMove, WindowFocus,
 			// Mouse

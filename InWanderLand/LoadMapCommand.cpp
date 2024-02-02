@@ -15,7 +15,6 @@ namespace application
 		void LoadMapCommand::Execute()
 		{
 			MapFileManager::GetSingletonInstance().LoadMapFile("TestMap.pmap");
-            //MapData::LoadMapData("TestMap.pmap");
 		}
 	}
 }
