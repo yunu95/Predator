@@ -28,6 +28,15 @@ PS_OUT main(PixelIn input)
     
     float4 color = float4(0.5f, 0.5f, 0.5f, 1.f);
     
+    if (UseTexture(useOpacity) == 1)
+    {
+        if (OpacityMap.Sample(sam, input.uv).w == 0.f)
+        {
+            clip(-1);
+        }
+       //clip(test - 1);
+    }
+    
     if (UseTexture(useAlbedo) == 1)
     {
         color = AlbedoMap.Sample(sam, input.uv);
@@ -48,22 +57,29 @@ PS_OUT main(PixelIn input)
         viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
     }
     
-    if(UseTexture(useARM) == 1)
+    if (UseTexture(useARM) == 1)
     {
-        output.arm.x = ARMMap.Sample(sam,input.uv).x;
-        output.arm.y = ARMMap.Sample(sam,input.uv).y;
-        output.arm.z = ARMMap.Sample(sam,input.uv).z;
+        float3 arm = ARMMap.Sample(sam, input.uv);
+        output.arm.x = arm.x;
+        output.arm.y = arm.y;
+        output.arm.z = arm.z;
     }
     else
     {
         output.arm.x = 1.f;
         output.arm.y = 1.f;
-        output.arm.z = 1.f;
+        output.arm.z = 1.f; 
     }
     
     output.position = float4(input.posV.xyz, 1.f);
     output.normal = float4(viewNormal.xyz, 1.f);
     output.color = color * materialColor;
+    
+    //if (UseTexture(useEmission))
+    //{
+    //    output.color *= EmissionMap.Sample(sam, input.uv);
+    //    //clip(-1);
+    //}
     
     float4 projPos = { 0, 0, 0, 0 };
     
@@ -73,6 +89,8 @@ PS_OUT main(PixelIn input)
     
     output.depth = float4(depth, depth, depth, depth);
     //output.depth = float4(objectID.x, 0, 0, 0);
+    
+
     return output;
 }
 

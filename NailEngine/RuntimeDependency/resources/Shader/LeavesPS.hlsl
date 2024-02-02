@@ -18,6 +18,7 @@ struct PS_OUT
     float4 normal : SV_Target1;
     float4 color : SV_Target2;
     float4 depth : SV_Target3;
+    float4 arm : SV_Target4;
 };
 
 
@@ -91,6 +92,10 @@ PS_OUT main(PixelIn input)
         color = Temp0Map.Sample(sam, input.uv);
         clip(color.w - 1);
     }
+    
+    output.arm.x = 1.f;
+    output.arm.y = 0.5f;
+    output.arm.z = 1.f;
     
     output.position = float4(input.posV.xyz, 1.f);
     output.normal = float4(viewNormal.xyz, 1.f);
