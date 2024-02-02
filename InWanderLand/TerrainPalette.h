@@ -26,20 +26,12 @@ namespace application
                 // 브러시 크기는 0부터 시작합니다.
                 unsigned int GetBrushSize();
                 void SetBrushSize(unsigned int brushSize);
-                void AddNode(const Vector2i& nodeKey);
-                void EraseNode(const Vector2i& nodeKey);
-                void ClearNodes();
-                vector<Vector2i> GetNodePositionList();
-                static constexpr double nodeDistance = 0.5;
+                //static constexpr double nodeDistance = 0.25;
                 static constexpr double nodeHeight = 6;
             private:
                 //TerrainInstanceData는 사실상 단 하나만 존재함.
                 int brushSize = 0;
                 bool isMarking{ true };
-                unordered_map<Vector2i, GameObject*> nodes;
-                Vector3d GetNodePosition(const Vector2i& nodeKey);
-                Vector2i WorldToNodeSpace(const Vector3d& worldPos);
-                GameObject* CreateNodeDebuggingMesh(const Vector2i& nodeKey);
             };
         }
     }

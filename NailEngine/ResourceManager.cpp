@@ -111,25 +111,25 @@ void ResourceManager::CreateMesh(const std::shared_ptr<Mesh>& mesh)
 
 yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec)
 {
-    std::shared_ptr<Mesh> tempMesh = std::make_shared<Mesh>();
+	std::shared_ptr<Mesh> tempMesh = std::make_shared<Mesh>();
 
     tempMesh->SetName(meshName);
 
-    std::vector<Vertex> vertices;
+	std::vector<Vertex> vertices;
 
     for (int i = 0; i < posVec.size(); ++i)
     {
         DirectX::SimpleMath::Vector3 tempNormal = normalVec.size() == 0 ? DirectX::SimpleMath::Vector3{ 0.f,0.f,0.f } : DirectX::SimpleMath::Vector3{normalVec[i].x,normalVec[i].y ,normalVec[i].z };
-        vertices.emplace_back(Vertex{ DirectX::SimpleMath::Vector3{posVec[i].x, posVec[i].y, posVec[i].z},
-                          DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
-                          DirectX::SimpleMath::Vector2{0.5f,0.5f},
-                          tempNormal,
-                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } });
+		vertices.emplace_back(Vertex{ DirectX::SimpleMath::Vector3{posVec[i].x, posVec[i].y, posVec[i].z},
+						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
+						  tempNormal,
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } });
     }
 
 
     tempMesh->SetData(vertices, idxVec);
-    CreateMesh(tempMesh);
+	CreateMesh(tempMesh);
 
     return tempMesh.get();
 }
@@ -218,13 +218,20 @@ Material* ResourceManager::CreateInstanceMaterial(const Material* material)
 
 yunuGI::IMaterial* ResourceManager::CloneMaterial(std::wstring materialName, yunuGI::IMaterial* material)
 {
-    Material* _material = new Material(*(static_cast<Material*>(material)));
+    if (this->materialMap.find(materialName) != this->materialMap.end())
+    {
+        return this->materialMap[materialName].get();
+    }
+    else
+    {
+		Material* _material = new Material(*(static_cast<Material*>(material)));
 
-    _material->SetName(materialName);
+		_material->SetName(materialName);
 
-    this->materialMap.insert({ materialName, std::shared_ptr<Material>(_material) });
-    this->materialVec.emplace_back(_material);
-    return _material;
+		this->materialMap.insert({ materialName, std::shared_ptr<Material>(_material) });
+		this->materialVec.emplace_back(_material);
+		return _material;
+    }
 }
 
 void ResourceManager::CreateTexture(const std::wstring& texturePath)
@@ -486,11 +493,11 @@ void ResourceManager::CreateDefaultShader()
     CreateDeferredShader(L"Deferred_PointLightVS.cso");
     CreateDeferredShader(L"Deferred_FinalVS.cso");
     CreateShader(L"TextureVS.cso");
-    CreateShader(L"TestVS.cso");
-    CreateShader(L"SkyBoxVS.cso");
-    CreateShader(L"IrradianceVS.cso");
-    CreateShader(L"PreFilteredVS.cso");
-    CreateShader(L"SpecLUTVS.cso");
+	CreateShader(L"TestVS.cso");
+	CreateShader(L"SkyBoxVS.cso");
+	CreateShader(L"IrradianceVS.cso");
+	CreateShader(L"PreFilteredVS.cso");
+	CreateShader(L"SpecLUTVS.cso");
 #pragma endregion
 
 #pragma region PS
@@ -500,11 +507,11 @@ void ResourceManager::CreateDefaultShader()
     CreateDeferredShader(L"Deferred_PointLightPS.cso");
     CreateDeferredShader(L"Deferred_FinalPS.cso");
     CreateShader(L"TexturePS.cso");
-    CreateShader(L"TestPS.cso");
-    CreateShader(L"SkyBoxPS.cso");
-    CreateShader(L"IrradiancePS.cso");
-    CreateShader(L"PreFilteredPS.cso");
-    CreateShader(L"SpecLUTPS.cso");
+	CreateShader(L"TestPS.cso");
+	CreateShader(L"SkyBoxPS.cso");
+	CreateShader(L"IrradiancePS.cso");
+	CreateShader(L"PreFilteredPS.cso");
+	CreateShader(L"SpecLUTPS.cso");
 #pragma endregion
 }
 
@@ -536,36 +543,36 @@ void ResourceManager::CreateDefaultMaterial()
 
     auto& renderTargetGroupVec = NailEngine::Instance.Get().GetRenderTargetGroup();
 
-    // DirectionalLight
-    {
-        yunuGI::IMaterial* material = CrateMaterial(L"Deferred_DirectionalLight");
-        material->SetVertexShader(GetDeferredShader(L"Deferred_DirectionalLightVS.cso").get());
-        material->SetPixelShader(GetDeferredShader(L"Deferred_DirectionalLightPS.cso").get());
+	// DirectionalLight
+	{
+		yunuGI::IMaterial* material = CrateMaterial(L"Deferred_DirectionalLight");
+		material->SetVertexShader(GetDeferredShader(L"Deferred_DirectionalLightVS.cso").get());
+		material->SetPixelShader(GetDeferredShader(L"Deferred_DirectionalLightPS.cso").get());
 
-        material->SetTexture(yunuGI::Texture_Type::ALBEDO,
-            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ALBEDO)).get());
+		material->SetTexture(yunuGI::Texture_Type::ALBEDO,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ALBEDO)).get());
 
-        material->SetTexture(yunuGI::Texture_Type::NORMAL,
-            GetTexture(L"Texture/asdDiffuseHDR.dds").get());
+		material->SetTexture(yunuGI::Texture_Type::NORMAL,
+			GetTexture(L"Texture/asdDiffuseHDR.dds").get());
 
-        material->SetTexture(yunuGI::Texture_Type::HEIGHT,
-            GetTexture(L"Texture/asdSpecularHDR.dds").get());
+		material->SetTexture(yunuGI::Texture_Type::HEIGHT,
+			GetTexture(L"Texture/asdSpecularHDR.dds").get());
 
-        material->SetTexture(yunuGI::Texture_Type::EMISSION,
-            GetTexture(L"Texture/asdBrdf.dds").get());
+		material->SetTexture(yunuGI::Texture_Type::EMISSION,
+			GetTexture(L"Texture/asdBrdf.dds").get());
 
-        material->SetTexture(yunuGI::Texture_Type::ARM,
-            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ARM)).get());
+		material->SetTexture(yunuGI::Texture_Type::ARM,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ARM)).get());
 
-        material->SetTexture(yunuGI::Texture_Type::Temp0,
-            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp0,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
 
-        material->SetTexture(yunuGI::Texture_Type::Temp1,
-            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(NORMAL)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp1,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(NORMAL)).get());
 
-        material->SetTexture(yunuGI::Texture_Type::Temp2,
-            GetTexture(L"ShadowDepth").get());
-    }
+		material->SetTexture(yunuGI::Texture_Type::Temp2,
+			GetTexture(L"ShadowDepth").get());
+	}
 
     // PointLight
     {
@@ -629,70 +636,70 @@ void ResourceManager::CreateDefaultMaterial()
                 renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(DEPTH)).get());
         }
 
-        {
-            // ARM
-            yunuGI::IMaterial* material = CrateMaterial(L"DeferredARM");
-            material->SetPixelShader(GetShader(L"TexturePS.cso").get());
-            material->SetVertexShader(GetShader(L"TextureVS.cso").get());
-            material->SetTexture(yunuGI::Texture_Type::Temp0,
-                renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ARM)).get());
-        }
+		{
+			// ARM
+			yunuGI::IMaterial* material = CrateMaterial(L"DeferredARM");
+			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
+			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ARM)).get());
+		}
 
-        {
-            // DiffuseLight
-            yunuGI::IMaterial* material = CrateMaterial(L"DeferredDiffuseLight");
-            material->SetPixelShader(GetShader(L"TexturePS.cso").get());
-            material->SetVertexShader(GetShader(L"TextureVS.cso").get());
-            material->SetTexture(yunuGI::Texture_Type::Temp0,
-                renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(DIFFUSE)).get());
-        }
+		{
+			// DiffuseLight
+			yunuGI::IMaterial* material = CrateMaterial(L"DeferredDiffuseLight");
+			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
+			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(DIFFUSE)).get());
+		}
 
-        {
-            // SpecularLight
-            yunuGI::IMaterial* material = CrateMaterial(L"DeferredSpecularLight");
-            material->SetPixelShader(GetShader(L"TexturePS.cso").get());
-            material->SetVertexShader(GetShader(L"TextureVS.cso").get());
-            material->SetTexture(yunuGI::Texture_Type::Temp0,
-                renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR)).get());
-        }
+		{
+			// SpecularLight
+			yunuGI::IMaterial* material = CrateMaterial(L"DeferredSpecularLight");
+			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
+			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR)).get());
+		}
 
-        {
-            // Shadow
-            yunuGI::IMaterial* material = CrateMaterial(L"DeferredShadow");
-            material->SetPixelShader(GetShader(L"TexturePS.cso").get());
-            material->SetVertexShader(GetShader(L"TextureVS.cso").get());
-            material->SetTexture(yunuGI::Texture_Type::Temp0,
-                GetTexture(L"ShadowDepth").get());
-        }
+		{
+			// Shadow
+			yunuGI::IMaterial* material = CrateMaterial(L"DeferredShadow");
+			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
+			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
+				GetTexture(L"ShadowDepth").get());
+		}
 
 
 
-        /// PBR
-        {
-            // SpecularLight
-            yunuGI::IMaterial* material = CrateMaterial(L"PBRIrradiance");
-            material->SetPixelShader(GetShader(L"TexturePS.cso").get());
-            material->SetVertexShader(GetShader(L"TextureVS.cso").get());
-            material->SetTexture(yunuGI::Texture_Type::Temp0,
-                renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::IRRADIANCE)]->GetRTTexture(static_cast<int>(IRRADIANCE)).get());
-        }
-    }
+		/// PBR
+		{
+			// SpecularLight
+			yunuGI::IMaterial* material = CrateMaterial(L"PBRIrradiance");
+			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
+			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::IRRADIANCE)]->GetRTTexture(static_cast<int>(IRRADIANCE)).get());
+		}
+	}
 }
 
 void ResourceManager::CreateDefaultTexture()
 {
-    CreateTexture(L"Texture/room.dds");
-    CreateTexture(L"Texture/asdEnvHDR.dds");
-    CreateTexture(L"Texture/asdBrdf.dds");
-    CreateTexture(L"Texture/asdDiffuseHDR.dds");
-    CreateTexture(L"Texture/asdSpecularHDR.dds");
-    /*CreateTexture(L"Texture/zoro.jpg");
-    CreateTexture(L"Texture/Brick_Albedo.jpg");
-    CreateTexture(L"Texture/Brick_Normal.jpg");*/
+	CreateTexture(L"Texture/room.dds");
+	CreateTexture(L"Texture/asdEnvHDR.dds");
+	CreateTexture(L"Texture/asdBrdf.dds");
+	CreateTexture(L"Texture/asdDiffuseHDR.dds");
+	CreateTexture(L"Texture/asdSpecularHDR.dds");
+	/*CreateTexture(L"Texture/zoro.jpg");
+	CreateTexture(L"Texture/Brick_Albedo.jpg");
+	CreateTexture(L"Texture/Brick_Normal.jpg");*/
 
 
 
-    //	auto dsTexture = ResourceManager::Instance.Get().CreateTexture(
+	//	auto dsTexture = ResourceManager::Instance.Get().CreateTexture(
 //		L"ShadowTargetDepth",
 //		SM_SIZE,
 //		SM_SIZE,
@@ -700,7 +707,7 @@ void ResourceManager::CreateDefaultTexture()
 //		static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL)
 //	);
 
-    CreateTexture(L"ShadowDepth",SM_SIZE, SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE));
+	CreateTexture(L"ShadowDepth",SM_SIZE, SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE));
 }
 
 void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yunuGI::FBXData* fbxData)
@@ -767,12 +774,18 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
                 this->CreateTexture(node->meshVec[i].material.normalMap);
                 material->SetTexture(yunuGI::Texture_Type::NORMAL, GetTexture(node->meshVec[i].material.normalMap).get());
             }
+			if (!node->meshVec[i].material.opacityMap.empty())
+			{
+				this->CreateTexture(node->meshVec[i].material.opacityMap);
+				material->SetTexture(yunuGI::Texture_Type::OPACITY, GetTexture(node->meshVec[i].material.opacityMap).get());
+			}
 
             fbxData->materialVec[i].materialName = node->meshVec[i].material.materialName;
             fbxData->materialVec[i].albedoMap = node->meshVec[i].material.albedoMap;
             fbxData->materialVec[i].armMap = node->meshVec[i].material.armMap;
             fbxData->materialVec[i].emissionMap = node->meshVec[i].material.emissionMap;
             fbxData->materialVec[i].normalMap = node->meshVec[i].material.normalMap;
+            fbxData->materialVec[i].opacityMap = node->meshVec[i].material.opacityMap;
 
             this->materialMap.insert({ node->meshVec[i].material.materialName , material });
         }
@@ -783,6 +796,7 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
             fbxData->materialVec[i].armMap = node->meshVec[i].material.armMap;
             fbxData->materialVec[i].emissionMap = node->meshVec[i].material.emissionMap;
             fbxData->materialVec[i].normalMap = node->meshVec[i].material.normalMap;
+            fbxData->materialVec[i].opacityMap = node->meshVec[i].material.opacityMap;
             //auto material = GetMaterial(node->meshVec[i].material.materialName);
         }
     }
@@ -1037,7 +1051,7 @@ void ResourceManager::LoadSphereMesh()
     {
         //  [0]
         //   |  \
-        //  [i+1]-[i+2]
+		//  [i+1]-[i+2]
         idx.push_back(0);
         idx.push_back(i + 2);
         idx.push_back(i + 1);
@@ -1093,12 +1107,12 @@ void ResourceManager::LoadRactangleMesh()
     std::vector<Vertex> vec(4);
 
 
-    // POS COLOR UV TANGENT
-    // 앞면
-    vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
-    vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
-    vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
-    vec[3] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+	// POS COLOR UV TANGENT
+	// 앞면
+	vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+	vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+	vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+	vec[3] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
 
     std::vector<unsigned int> idx(6);
 
@@ -1116,11 +1130,11 @@ void ResourceManager::LoadPointMesh()
 
 void ResourceManager::LoadLineMesh()
 {
-    std::shared_ptr<Mesh> lineMesh = std::make_shared<Mesh>();
+	std::shared_ptr<Mesh> lineMesh = std::make_shared<Mesh>();
 
     lineMesh->SetName(L"Line");
 
-    std::vector<Vertex> vertices(3);
+	std::vector<Vertex> vertices(3);
 
     vertices[0] = Vertex{ DirectX::SimpleMath::Vector3{0.0f, 0, 0 },
                           DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
@@ -1128,19 +1142,19 @@ void ResourceManager::LoadLineMesh()
                           DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
                           DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
 
-    vertices[1] = Vertex{ DirectX::SimpleMath::Vector3{1.0f, 0, 0 },
-                          DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
-                          DirectX::SimpleMath::Vector2{0.5f,0.5f},
-                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
-                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
+	vertices[1] = Vertex{ DirectX::SimpleMath::Vector3{1.0f, 0, 0 },
+						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
 
-    vertices[2] = Vertex{ DirectX::SimpleMath::Vector3{1.0f, 0, 0 },
-                          DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
-                          DirectX::SimpleMath::Vector2{0.5f,0.5f},
-                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
-                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
+	vertices[2] = Vertex{ DirectX::SimpleMath::Vector3{1.0f, 0, 0 },
+						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
 
-    std::vector<unsigned int> indices(3);
+	std::vector<unsigned int> indices(3);
 
     indices[0] = 0;
     indices[1] = 1;
@@ -1148,7 +1162,7 @@ void ResourceManager::LoadLineMesh()
 
 
     lineMesh->SetData(vertices, indices);
-    CreateMesh(lineMesh);
+	CreateMesh(lineMesh);
 }
 
 void ResourceManager::LoadCapsuleMesh()

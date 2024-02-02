@@ -30,6 +30,7 @@ struct MaterialData
 	std::wstring normalMap;
 	std::wstring armMap;
 	std::wstring emissionMap;
+	std::wstring opacityMap;
 };
 
 struct FBXMeshData

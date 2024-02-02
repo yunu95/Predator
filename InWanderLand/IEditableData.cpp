@@ -10,6 +10,7 @@ namespace application::editor
     {
         if (paletteInstance)
         {
+            paletteInstance->editableData = nullptr;
             Scene::getCurrentScene()->DestroyGameObject(paletteInstance->GetGameObject());
         }
     }

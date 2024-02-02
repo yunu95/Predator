@@ -236,7 +236,7 @@ void RenderSystem::RenderObject()
 	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
 	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 
-	InstancingManager::Instance.Get().RegisterStaticMeshAndMaterialInDeferred();
+	InstancingManager::Instance.Get().RenderStaticDeferred();
 
 	//for (auto& e : this->deferredVec)
 	//{
@@ -263,7 +263,7 @@ void RenderSystem::RenderSkinned()
 	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
 	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 
-	InstancingManager::Instance.Get().RegisterSkinnedMeshAndMaterial();
+	InstancingManager::Instance.Get().RenderSkinned();
 
 	//for (auto& e : this->skinnedVec)
 	//{
@@ -325,7 +325,7 @@ void RenderSystem::RenderShadow()
 			NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 		}
 	}
-	//InstancingManager::Instance.Get().RegisterMeshAndShadowMaterial(this->deferredVec);
+	InstancingManager::Instance.Get().RenderStaticShadow();
 }
 
 void RenderSystem::RenderLight()
@@ -442,7 +442,7 @@ void RenderSystem::RenderForward()
 	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
 	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
 	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
-	InstancingManager::Instance.Get().RegisterStaticMeshAndMaterialInForward();
+	InstancingManager::Instance.Get().RenderStaticForward();
 }
 
 void RenderSystem::DrawDeferredInfo()

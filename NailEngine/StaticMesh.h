@@ -20,6 +20,11 @@ public:
 		this->renderInfoVec.back()->mesh = this->mesh;
 		this->renderInfoVec.back()->materialIndex = 0;
 		this->renderInfoVec.back()->material = reinterpret_cast<Material*>(ResourceManager::Instance.Get().GetMaterial(L"DefaultMaterial").get());
+		this->renderInfoVec.back()->shadowMaterial = static_cast<Material*>(ResourceManager::Instance.Get().CloneMaterial(L"ShadowDefault",
+			reinterpret_cast<Material*>(ResourceManager::Instance.Get().GetMaterial(L"DefaultMaterial").get())));
+
+		this->renderInfoVec.back()->shadowMaterial->SetPixelShader(ResourceManager::Instance.Get().GetShader(L"TestPS.cso").get());
+		this->renderInfoVec.back()->shadowMaterial->SetVertexShader(ResourceManager::Instance.Get().GetShader(L"TestVS.cso").get());
 	}
 
 	~StaticMesh()
@@ -53,6 +58,12 @@ public:
 
 			this->renderInfoVec.back()->materialIndex = index;
 			this->renderInfoVec.back()->material = reinterpret_cast<Material*>(material);
+			this->renderInfoVec.back()->shadowMaterial = static_cast<Material*>(ResourceManager::Instance.Get().CloneMaterial(material->GetName() + L"_Shadow",
+				reinterpret_cast<Material*>(material)));
+
+			this->renderInfoVec.back()->shadowMaterial->SetPixelShader(ResourceManager::Instance.Get().GetShader(L"TestPS.cso").get());
+			this->renderInfoVec.back()->shadowMaterial->SetVertexShader(ResourceManager::Instance.Get().GetShader(L"TestVS.cso").get());
+
 			this->materialVec.emplace_back(reinterpret_cast<Material*>(material));
 
 
@@ -74,6 +85,8 @@ public:
 
 				renderInfoVec[index]->mesh = this->mesh;
 				renderInfoVec[index]->material = reinterpret_cast<Material*>(material);
+				renderInfoVec[index]->shadowMaterial = static_cast<Material*>(ResourceManager::Instance.Get().CloneMaterial(material->GetName() + L"_Shadow",
+					reinterpret_cast<Material*>(material)));
 
 				this->materialVec[index] = reinterpret_cast<Material*>(material);
 
