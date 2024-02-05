@@ -9,6 +9,7 @@
 #include "YunutyEngine.h"
 #include "EditorLayer.h"
 #include "ContentsLayer.h"
+#include "EditorCommonEvents.h"
 #include "WindowEvents.h"
 #include "MouseEvents.h"
 #include "KeyboardEvents.h"
@@ -228,14 +229,12 @@ namespace application
 		layers[(int)LayerList::EditorLayer] = new editor::EditorLayer();
 #endif
 
-		for (auto each : layers)
-		{
-			if (each)
-				each->Initialize();
-		}
+		layers[(int)LayerList::ContentsLayer]->Initialize();
 
 #ifdef EDITOR
 		CheckContentsLayerInit();
+		layers[(int)LayerList::EditorLayer]->Initialize();
+
 		static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer])->LateInitialize();
 #endif
 	}
@@ -392,11 +391,11 @@ namespace application
 		//g_EditorpSwapChain->Present(1, 0); // Present with vsync
 		g_EditorpSwapChain->Present(0, 0); // Present without vsync
 
-		// 이벤트들 실행
-		ProcessEvents();
-
 		// 커맨드들 실행
 		cm.ExecuteCommands();
+
+		// 이벤트들 실행
+		ProcessEvents();
 
 		layers[(int)LayerList::ContentsLayer]->Update(1);
 		layers[(int)LayerList::ContentsLayer]->GUIProgress();
@@ -408,6 +407,8 @@ namespace application
 #ifdef EDITOR
 		editor::EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<editor::WindowResizeEvent>([this](editor::WindowResizeEvent& e) { std::cout << e.GetDebugString(); return true; });
+		dispatcher.Dispatch<editor::SaveEvent>([this](editor::SaveEvent& e) { std::cout << e.GetDebugString(); return true; });
+		dispatcher.Dispatch<editor::LoadEvent>([this](editor::LoadEvent& e) { std::cout << e.GetDebugString(); return true; });
 		dispatcher.Dispatch<editor::KeyPressedEvent>([this](editor::KeyPressedEvent& e) { std::cout << e.GetDebugString(); return true; });
 		dispatcher.Dispatch<editor::KeyDownEvent>([this](editor::KeyDownEvent& e) { std::cout << e.GetDebugString(); return true; });
 		dispatcher.Dispatch<editor::KeyReleasedEvent>([this](editor::KeyReleasedEvent& e) { std::cout << e.GetDebugString(); return true; });

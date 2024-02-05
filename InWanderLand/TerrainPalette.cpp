@@ -15,7 +15,7 @@ namespace application::editor::palette
     using namespace application::editor;
     IEditableData* TerrainPalette::PlaceInstance(Vector3d worldPosition)
     {
-        auto centerNodeKey = WorldToNodeSpace(worldPosition);
+        auto centerNodeKey = TerrainData::Instance().WorldToNodeSpace(worldPosition);
         for (int x = centerNodeKey.x - brushSize; x <= centerNodeKey.x + brushSize; x++)
         {
             for (int y = centerNodeKey.y - brushSize; y <= centerNodeKey.y + brushSize; y++)
@@ -37,7 +37,7 @@ namespace application::editor::palette
     {
         Palette::OnMouseMove(projectedWorldPos);
         // 브러시 움직이기
-        TerrainBrush::Instance().GetTransform()->SetWorldPosition(GetNodePosition(WorldToNodeSpace(projectedWorldPos)));
+        TerrainBrush::Instance().GetTransform()->SetWorldPosition(TerrainData::Instance().GetNodePosition(TerrainData::Instance().WorldToNodeSpace(projectedWorldPos)));
         if (IsClickingLeft() && !IsSelectMode())
             PlaceInstance(projectedWorldPos);
     }
@@ -96,22 +96,5 @@ namespace application::editor::palette
         state = State::None;
         TerrainBrush::Instance().GetGameObject()->SetSelfActive(false);
         CleanUpData();
-    }
-    Vector3d TerrainPalette::GetNodePosition(const Vector2i& nodeKey)
-    {
-        return { nodeKey.x * nodeDistance , 0 ,nodeKey.y * nodeDistance };
-    }
-    Vector2i TerrainPalette::WorldToNodeSpace(const Vector3d& worldPos)
-    {
-        return { (int)(0.5 + worldPos.x / nodeDistance) , (int)(0.5 + worldPos.z / nodeDistance) };
-    }
-    GameObject* TerrainPalette::CreateNodeDebuggingMesh(const Vector2i& nodeKey)
-    {
-        auto node = Scene::getCurrentScene()->AddGameObject();
-        node->GetTransform()->SetWorldPosition(GetNodePosition(nodeKey) - nodeHeight * Vector3d::up * 0.5);
-        node->GetTransform()->SetLocalScale({ nodeDistance, nodeHeight, nodeDistance });
-        auto mesh = AttachDebugMesh(node, DebugMeshType::Cube, yunuGI::Color{0.788, 0.647, 0.215}, false);
-        mesh->SetIsUpdating(false);
-        return node;
     }
 }

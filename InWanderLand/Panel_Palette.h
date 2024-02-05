@@ -29,6 +29,7 @@ namespace application
 			virtual void Update(float ts) override;
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
+			virtual void OnEvent(EditorEvents& event) override;
 
 		private:
 			PalettePanel();
@@ -41,6 +42,8 @@ namespace application
 			void ImGui_BeginUnitPalette();
 			void ImGui_BeginDoodadPalette();
 			void ImGui_BeginRegionPalette();
+
+			void LoadCallback();
 
 			palette::Palette* currentPalette = nullptr;
 

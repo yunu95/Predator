@@ -16,7 +16,6 @@ namespace application
         void SaveMapCommand::Execute()
         {
 			MapFileManager::GetSingletonInstance().SaveMapFile("TestMap.pmap");
-            //MapData::SaveMapData("TestMap.pmap");
         }
     }
 }

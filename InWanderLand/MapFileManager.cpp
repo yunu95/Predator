@@ -1,6 +1,9 @@
 #include "InWanderLand.h"
 #include "MapFileManager.h"
 #include "Palette.h"
+#include "Application.h"
+#include "EditorEvents.h"
+#include "EditorCommonEvents.h"
 
 #include "Storable.h"
 #include "InstanceManager.h"
@@ -57,6 +60,11 @@ namespace application
                 else
                 {
                     loadFile.close();
+
+#ifdef EDITOR
+                    Application::DispatchEvent<LoadEvent>();
+#endif
+
                     return true;
                 }
             }
@@ -100,6 +108,11 @@ namespace application
             {
                 saveFile << mapData.dump(4);
                 saveFile.close();
+
+#ifdef EDITOR
+                Application::DispatchEvent<SaveEvent>();
+#endif
+
                 return true;
             }
             else
