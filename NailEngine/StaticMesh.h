@@ -58,6 +58,7 @@ public:
 
 			this->renderInfoVec.back()->materialIndex = index;
 			this->renderInfoVec.back()->material = reinterpret_cast<Material*>(material);
+			this->renderInfoVec.back()->wtm = this->renderInfoVec[0]->wtm;
 			this->renderInfoVec.back()->shadowMaterial = static_cast<Material*>(ResourceManager::Instance.Get().CloneMaterial(material->GetName() + L"_Shadow",
 				reinterpret_cast<Material*>(material)));
 
@@ -85,6 +86,7 @@ public:
 
 				renderInfoVec[index]->mesh = this->mesh;
 				renderInfoVec[index]->material = reinterpret_cast<Material*>(material);
+				renderInfoVec[index]->wtm = renderInfoVec[index]->wtm;
 				renderInfoVec[index]->shadowMaterial = static_cast<Material*>(ResourceManager::Instance.Get().CloneMaterial(material->GetName() + L"_Shadow",
 					reinterpret_cast<Material*>(material)));
 

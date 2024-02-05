@@ -35,7 +35,9 @@ void GraphicsTest()
 	{
 		yunuGI::IAnimation* walkAnim = nullptr;
 		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
-		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+        obj->GetTransform()->SetLocalScale(Vector3d{ obj->GetTransform()->GetLocalScale().x * 100.f,obj->GetTransform()->GetLocalScale().y * 100.f,obj->GetTransform()->GetLocalScale().z * 100.f });
+        auto& childVec = obj->GetChildren();
+
 		auto animator = obj->GetComponent<graphics::Animator>();
 		for (auto& i : animationList)
 		{
@@ -44,10 +46,15 @@ void GraphicsTest()
 				walkAnim = i;
 			}
 		}
-        walkAnim->SetPlaySpeed(0.001f);
 		walkAnim->SetLoop(true);
 		animator->GetGI().PushAnimation(walkAnim);
 		animator->GetGI().Play(walkAnim);
+	}
+
+    _resourceManager->LoadFile("FBX/CastleWall_Door");
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("CastleWall_Door");
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
 	}
 }
 
