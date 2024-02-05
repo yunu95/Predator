@@ -72,8 +72,12 @@ PS_OUT main(PixelIn input)
         output.arm.z = 1.f; 
     }
     
-    output.position = float4(input.posV.xyz, 1.f);
+    output.position = input.posV;
     output.normal = float4(viewNormal.xyz, 1.f);
+    
+    //float3 fogFactor = saturate(abs(fogEnd - input.posV.z) / abs(fogEnd - fogStart));
+    //float3 fogColor = fogFactor * color.xyz + (1 - fogFactor) * float3(0.7686, 0.8784, 0.9451);
+    
     output.color = color * materialColor;
     
     if (UseTexture(useEmission))

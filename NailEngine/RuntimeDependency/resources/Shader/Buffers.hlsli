@@ -109,6 +109,13 @@ cbuffer InstanceTransitionDesc : register(b5)
     TransitionDesc transitionDesc[MAX_INSTANCE_MODEL];
 }
 
+cbuffer FogBuffer : register(b6)
+{
+    float fogStart;
+    float fogEnd;
+    float2 padding2;
+}
+
 Texture2D AlbedoMap : register(t0);
 Texture2D NormalMap : register(t1);
 Texture2D ARMMap : register(t2);

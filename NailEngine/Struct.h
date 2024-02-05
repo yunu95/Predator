@@ -63,6 +63,7 @@ enum class CB_TYPE
 	CAMERA,
 	BONE,
 	INST_TRANSITION,
+	FOG,
 };
 
 struct MatrixBuffer
@@ -136,6 +137,13 @@ struct TransitionDesc
 struct InstanceTransitionDesc
 {
 	TransitionDesc transitionDesc[MAX_INSTANCE_MODEL];
+};
+
+struct FogBuffer
+{
+	float start;
+	float end;
+	DirectX::SimpleMath::Vector2 padding;
 };
 
 class Mesh;

@@ -158,6 +158,11 @@ void RenderSystem::RenderObject()
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
 	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->OMSetRenderTarget();
 
+	FogBuffer fogBuffer;
+	fogBuffer.start = 15.f;
+	fogBuffer.end = 45.f;
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::FOG))->PushGraphicsData(&fogBuffer, sizeof(FogBuffer), static_cast<int>(CB_TYPE::FOG));
+
 	MatrixBuffer matrixBuffer;
 	//matrixBuffer.WTM = e.wtm;
 	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
@@ -313,6 +318,16 @@ void RenderSystem::RenderBackBuffer()
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1,
 		ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
 		ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
+
+	MatrixBuffer matrixBuffer;
+	//matrixBuffer.WTM = e.wtm;
+	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
+	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
+	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"BackBufferMaterial"))->PushGraphicsData();
 	ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();

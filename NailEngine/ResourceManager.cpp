@@ -608,6 +608,8 @@ void ResourceManager::CreateDefaultMaterial()
 		material->SetPixelShader(GetDeferredShader(L"BackBufferPS.cso").get());
 		material->SetTexture(yunuGI::Texture_Type::Temp0,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->GetRTTexture(static_cast<int>(FINAL)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp1,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
     }
 
     /// Deferred Debug Info
