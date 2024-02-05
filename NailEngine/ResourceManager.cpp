@@ -382,15 +382,6 @@ std::shared_ptr<yunuGI::IShader> ResourceManager::GetDeferredShader(const std::w
 std::shared_ptr<Mesh> ResourceManager::GetMesh(const std::wstring& meshName)
 {
     auto iter = meshMap.find(meshName);
-
-    if (iter == meshMap.end())
-    {
-        return nullptr;
-    }
-
-
-
-
     assert(iter != meshMap.end());
 
     return std::static_pointer_cast<Mesh>(iter->second);
@@ -515,6 +506,7 @@ void ResourceManager::CreateDefaultShader()
     CreateDeferredShader(L"Deferred_DirectionalLightPS.cso");
     CreateDeferredShader(L"Deferred_PointLightPS.cso");
     CreateDeferredShader(L"Deferred_FinalPS.cso");
+    CreateDeferredShader(L"BackBufferPS.cso");
     CreateShader(L"TexturePS.cso");
 	CreateShader(L"TestPS.cso");
 	CreateShader(L"SkyBoxPS.cso");
@@ -605,6 +597,19 @@ void ResourceManager::CreateDefaultMaterial()
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(DIFFUSE)).get());
         material->SetTexture(yunuGI::Texture_Type::Temp2,
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp3,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(EMISSIVE)).get());
+    }
+
+    // BackBuffer
+    {
+		yunuGI::IMaterial* material = CrateMaterial(L"BackBufferMaterial");
+		material->SetVertexShader(GetDeferredShader(L"Deferred_FinalVS.cso").get());
+		material->SetPixelShader(GetDeferredShader(L"BackBufferPS.cso").get());
+		material->SetTexture(yunuGI::Texture_Type::Temp0,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->GetRTTexture(static_cast<int>(FINAL)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp1,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
     }
 
     /// Deferred Debug Info

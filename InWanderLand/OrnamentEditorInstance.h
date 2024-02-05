@@ -26,14 +26,12 @@ namespace application
                 virtual void Start() override;
                 void Init(const application::editor::OrnamentData* ornamentData);
                 void Init(const application::editor::Ornament_TemplateData* ornamentTemplateData);
-                void ResizeMesh(yunuGI::Vector3 scale);
 
             protected:
                 virtual void OnHover() { PaletteInstance::OnHover(); }
                 virtual void OnHoverLeft() { PaletteInstance::OnHoverLeft(); }
 
             private:
-                yunutyEngine::graphics::StaticMeshRenderer* mesh{ nullptr };
                 const application::editor::Ornament_TemplateData* ornamentTemplateData;
             };
         }

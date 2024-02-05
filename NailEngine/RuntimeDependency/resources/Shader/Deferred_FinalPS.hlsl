@@ -10,6 +10,7 @@ struct PixelIn
 // Temp0Map : Albedo
 // Temp1Map : Diffuse Light
 // Temp2Map : Specular Light
+// Temp2Map : Emissive Map
 
 float4 main(PixelIn input) : SV_Target
 {
@@ -23,7 +24,9 @@ float4 main(PixelIn input) : SV_Target
 
     float4 color = Temp0Map.Sample(sam, input.uv);
     float4 specular = Temp2Map.Sample(sam, input.uv);
-    output = lightPower + specular;
+    float4 emissive = Temp3Map.Sample(sam, input.uv);
+    output = lightPower + emissive +specular;
+    //output = (lightPower) + specular;
     
     
     //float4 albedo = Temp1Map.Sample(sam, input.uv);

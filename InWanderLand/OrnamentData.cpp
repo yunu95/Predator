@@ -82,7 +82,6 @@ namespace application
 			ornamentInstance->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
 			ornamentInstance->GetTransform()->SetWorldRotation({ pod.rotation.x,pod.rotation.y,pod.rotation.z,pod.rotation.w });
 			ornamentInstance->GetTransform()->SetLocalScale({ pod.scale.x,pod.scale.y,pod.scale.z });
-			ornamentInstance->ResizeMesh({ pod.scale.x,pod.scale.y,pod.scale.z });
 			return ornamentInstance;
 		}
 

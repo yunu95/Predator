@@ -30,168 +30,33 @@ void GraphicsTest()
 
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-    _resourceManager->LoadFile("FBX/Sponza");
-    _resourceManager->LoadFile("FBX/Bush");
-    _resourceManager->LoadFile("FBX/Boss");
-    _resourceManager->LoadFile("FBX/BigTree");
-    _resourceManager->LoadFile("Texture/zoro.jpg");
+    _resourceManager->LoadFile("FBX/Monster2");
+	auto& animationList = _resourceManager->GetAnimationList();
+	{
+		yunuGI::IAnimation* walkAnim = nullptr;
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
+        //obj->GetTransform()->SetLocalScale(Vector3d{ obj->GetTransform()->GetLocalScale().x / 1000.f,obj->GetTransform()->GetLocalScale().y / 1000.f,obj->GetTransform()->GetLocalScale().z / 1000.f });
+        auto& childVec = obj->GetChildren();
 
-    auto object3 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    auto test = object3->AddComponent<TestComponent2>();
-    yunuGI::IAnimation* anim1 = nullptr;
-    yunuGI::IAnimation* anim2 = nullptr;
-    yunuGI::IAnimation* anim3 = nullptr;
-    yunuGI::IMaterial* tempMaterial = nullptr;
-    yunuGI::ITexture* tempTexture = nullptr;
+		auto animator = obj->GetComponent<graphics::Animator>();
+		for (auto& i : animationList)
+		{
+			if (i->GetName() == L"Ani_Monster2_Walk")
+			{
+				walkAnim = i;
+			}
+		}
+        walkAnim->SetPlaySpeed(0.00000000001f);
+		walkAnim->SetLoop(true);
+		animator->GetGI().PushAnimation(walkAnim);
+		animator->GetGI().Play(walkAnim);
+	}
 
-    auto& texVec = _resourceManager->GetTextureList();
-
-    for (auto& i : texVec)
-    {
-        if (i->GetName() == L"Texture/zoro.jpg")
-        {
-            tempTexture = i;
-        }
-    }
-
-    for (int j = 0; j < 1; ++j)
-    {
-        auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
-        auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
-        auto& animationList = _resourceManager->GetAnimationList();
-        auto& childVec = object->GetChildren();
-        auto renderer = childVec[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
-        test->renderer = renderer;
-        tempMaterial = _resourceManager->CloneMaterial(L"TempMaterial", renderer->GetGI().GetMaterial(0));
-        tempMaterial->SetTexture(yunuGI::Texture_Type::ALBEDO, tempTexture);
-        for (auto& i : animationList)
-        {
-            if (i->GetName() == L"root|000.Idle")
-            {
-                i->SetLoop(true);
-                animator->GetGI().PushAnimation(i);
-                anim1 = i;
-            }
-
-            if (i->GetName() == L"root|001-2.Walk")
-            {
-                i->SetLoop(true);
-                animator->GetGI().PushAnimation(i);
-                anim2 = i;
-            }
-
-            if (i->GetName() == L"root|002-1.NormalAttack_R")
-            {
-                i->SetLoop(true);
-                animator->GetGI().PushAnimation(i);
-                anim3 = i;
-                animator->GetGI().Play(i);
-            }
-        }
-    }
-    for (int j = 0; j < 1; ++j)
-    {
-        auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
-        object->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
-        auto animator = object->GetComponent<yunutyEngine::graphics::Animator>();
-        auto& animationList = _resourceManager->GetAnimationList();
-        for (auto& i : animationList)
-        {
-            if (i->GetName() == L"root|000.Idle")
-            {
-                i->SetLoop(true);
-                animator->GetGI().PushAnimation(i);
-                anim1 = i;
-            }
-
-            if (i->GetName() == L"root|001-2.Walk")
-            {
-                i->SetLoop(true);
-                animator->GetGI().PushAnimation(i);
-                anim2 = i;
-            }
-
-            if (i->GetName() == L"root|002-1.NormalAttack_R")
-            {
-                i->SetLoop(true);
-                animator->GetGI().PushAnimation(i);
-                anim3 = i;
-                animator->GetGI().Play(i);
-            }
-        }
-    }
-    test->material = tempMaterial;
-
-
-    //auto& shaderList = _resourceManager->GetShaderList();
-    //auto& meshList = _resourceManager->GetMeshList();
-    //yunuGI::IShader* shader;
-    //yunuGI::IMesh* mesh;
-    //for (auto& i : shaderList)
-    //{
-    //	if (i->GetName() == L"DebugPS.cso")
-    //	{
-    //		shader = i;
-    //	}
-    //}
-    //for (auto& i : meshList)
-    //{
-    //	if (i->GetName() == L"Cube")
-    //	{
-    //		mesh = i;
-    //	}
-    //}
-    ////for (int i = 0; i < 1500; ++i)
-    ////{
-    ////	float tempX = static_cast<float>(rand() % 100);
-    ////	float tempZ = static_cast<float>(rand() % 100);
-    ////	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Bush");
-    ////	object->GetTransform()->position = Vector3d{ tempX,0,tempZ };
-    ////	object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
-    ////	auto object1 = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("BigTree");
-    ////	object1->GetTransform()->position = Vector3d{ tempZ,0,tempX };
-    ////	object1->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
-    ////}
-
-    ////{
-    ////	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sponza");
-    ////	object->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
-    ////}
-
-    //auto material = _resourceManager->CreateMaterial(L"TEMP");
-    //material->SetPixelShader(shader);
-
-    //auto object1 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //object1->GetTransform()->position = Vector3d{ -5,0,0};
-    //object1->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
-    //auto renderer = object1->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    ////renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,1 });
-    ////renderer->GetGI().SetMaterial(0, material);
-    //renderer->GetGI().SetMesh(mesh);
-
-    //auto object2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //object2->GetTransform()->position = Vector3d{ 5,0,0};
-    //object2->GetTransform()->rotation = Quaternion{ Vector3d{90,0,0} };
-    //auto renderer2 = object2->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    ////renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,1 });
-    ////renderer->GetGI().SetMaterial(0, material);
-    //renderer2->GetGI().SetMesh(mesh);
-
-    //auto object3 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //auto test = object3->AddComponent<TestComponent2>();
-    //test->renderer = renderer2;
-    //test->material = material;
-    //test->shader = shader;
-
-
-    //{
-    //	auto object = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //	object->GetTransform()->position = Vector3d{ 0,0.25,0 };
-    //	auto light = object->AddComponent<yunutyEngine::graphics::PointLight>();
-    //	yunuGI::Color color = yunuGI::Color{ 0,0,1,1 };
-    //	light->GetGI().SetLightDiffuseColor(color);
-    //	light->GetGI().SetRange(0.3);
-    //}
+ //   _resourceManager->LoadFile("FBX/CastleWall_Door");
+	//{
+	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("CastleWall_Door");
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+	//}
 }
 
 
@@ -249,15 +114,41 @@ void application::contents::ContentsLayer::Initialize()
     }
 
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-    auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    camObj->GetTransform()->SetLocalPosition(Vector3d(0, 20, -10));
-    camObj->GetTransform()->SetLocalRotation( Quaternion(Vector3d(60, 0, 0)));
-    auto roamingCam = camObj->AddComponent<RTSCam>();
-    roamingCam->SetCameraMain();
+    //auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    //camObj->GetTransform()->SetLocalPosition(Vector3d(0, 20, -10));
+    //camObj->GetTransform()->SetLocalRotation( Quaternion(Vector3d(60, 0, 0)));
+    //auto roamingCam = camObj->AddComponent<RTSCam>();
+    //roamingCam->SetCameraMain();
 
     const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-    resourceManager->LoadFile("FBX/Bush");
-    resourceManager->LoadFile("FBX/BigTree");
+    //resourceManager->LoadFile("FBX/Monster1");
+    //resourceManager->LoadFile("FBX/SM_Bush_001");
+    //resourceManager->LoadFile("FBX/SM_Bush_002");
+    //resourceManager->LoadFile("FBX/SM_CastleWall");
+    //resourceManager->LoadFile("FBX/SM_CastleWall_Door");
+    //resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
+    //resourceManager->LoadFile("FBX/SM_Chair");
+    //resourceManager->LoadFile("FBX/SM_Cuptower");
+    //resourceManager->LoadFile("FBX/SM_Fork");
+    //resourceManager->LoadFile("FBX/SM_GuideBook");
+    //resourceManager->LoadFile("FBX/SM_Hat01");
+    //resourceManager->LoadFile("FBX/SM_Hat02");
+    //resourceManager->LoadFile("FBX/SM_SmallBush_001");
+    //resourceManager->LoadFile("FBX/SM_Stone_001");
+    //resourceManager->LoadFile("FBX/SM_Stone_002");
+    //resourceManager->LoadFile("FBX/SM_Stump");
+    //resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
+    resourceManager->LoadFile("FBX/SM_Temple_Books");
+    //resourceManager->LoadFile("FBX/SM_Temple_Floor");
+    //resourceManager->LoadFile("FBX/SM_Temple_Pillar");
+    //resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
+    //resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
+    //resourceManager->LoadFile("FBX/SM_Temple_Stairs");
+    //resourceManager->LoadFile("FBX/SM_Temple_Welcome");
+    //resourceManager->LoadFile("FBX/SM_Trunk_001");
+    //resourceManager->LoadFile("FBX/Spear");
+
+    yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Temple_Books");
 
 #ifdef GRAPHICS_TEST
     {
@@ -267,7 +158,7 @@ void application::contents::ContentsLayer::Initialize()
         auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
         auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
         light->GetGI().SetLightDiffuseColor(color);
-        directionalLight->GetTransform()->position = Vector3d{ 0,0,-10 };
+        directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
         //directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{0, 45, 0} };
         //auto test = directionalLight->AddComponent<TestComponent2>();
         //test->gameObject = directionalLight;

@@ -18,8 +18,7 @@ namespace application
 		struct POD_Ornament_TemplateData
 		{
 			std::string thumbnailPath = "ImageButtons/Ornament_Default.png";
-			std::string meshKey = std::string();
-			std::vector<std::string> materialKey = std::vector<std::string>();
+			std::string fbxName = std::string();
 
 			TO_JSON(POD_Ornament_TemplateData)
 			FROM_JSON(POD_Ornament_TemplateData)

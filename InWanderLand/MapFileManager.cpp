@@ -39,19 +39,14 @@ namespace application
 
                 auto objSize = mapData.size();
 
-                std::string objName;
-                std::string meshName;
-                std::vector<std::string> materials;
-                materials.reserve(4);
+                std::string fbxName;
                 std::vector<float> scale(3);
                 std::vector<float> rotation(3);
                 std::vector<float> location(3);
 
                 for (int i = 0; i < objSize; i++)
                 {
-                    objName = mapData[i]["ObjectName"];
-                    meshName = mapData[i]["MeshName"];
-                    materials = mapData[i]["Material"];
+                    fbxName = mapData[i]["ResourceName"];
                     scale[0] = mapData[i]["Scale"][0];
                     scale[1] = mapData[i]["Scale"][1];
                     scale[2] = mapData[i]["Scale"][2];
@@ -62,14 +57,13 @@ namespace application
                     location[1] = mapData[i]["Location"][1] / 100;
                     location[2] = mapData[i]["Location"][2] / 100;
 
-                    auto td = templateDataManager.CreateTemplateData<Ornament_TemplateData>(meshName);
+                    auto td = templateDataManager.CreateTemplateData<Ornament_TemplateData>(fbxName);
                     if (td)
                     {
-                        td->pod.meshKey = meshName;
-                        td->pod.materialKey = materials;
+                        td->pod.fbxName = fbxName;
                     }
 
-                    auto odt = instanceManager.CreateInstance<OrnamentData>(meshName);
+                    auto odt = instanceManager.CreateInstance<OrnamentData>(fbxName);
 
                     /// 좌표계 고려 변환
                     odt->pod.scale.x = scale[1];

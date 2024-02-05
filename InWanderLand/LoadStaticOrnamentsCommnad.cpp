@@ -15,7 +15,7 @@ namespace application
 
 		void LoadStaticOrnamentsCommand::Execute()
 		{
-			MapFileManager::GetSingletonInstance().LoadStaticOrnaments("TestOrnaments.punreal");
+			MapFileManager::GetSingletonInstance().LoadStaticOrnaments("ForDebug.json");
 		}
 	}
 }
