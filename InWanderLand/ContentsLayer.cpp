@@ -25,39 +25,51 @@ std::function<void()> application::contents::ContentsLayer::testInitializer;
 /// 그래픽스 테스트용
 void GraphicsTest()
 {
-    auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    camObj->AddComponent<tests::GraphicsTestCam>();
-    camObj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-50});
+	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	camObj->AddComponent<tests::GraphicsTestCam>();
 
-    const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-    _resourceManager->LoadFile("FBX/Dying6");
+	_resourceManager->LoadFile("FBX/Boss");
 	auto& animationList = _resourceManager->GetAnimationList();
-	{
-		yunuGI::IAnimation* walkAnim = nullptr;
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Dying6");
-        obj->GetTransform()->SetLocalScale(Vector3d{ obj->GetTransform()->GetLocalScale().x / 10.f,obj->GetTransform()->GetLocalScale().y / 10.f,obj->GetTransform()->GetLocalScale().z / 10.f });
-        auto& childVec = obj->GetChildren();
+	yunuGI::IAnimation* idleAnim = nullptr;
+	yunuGI::IAnimation* deadAnim = nullptr;
 
-		auto animator = obj->GetComponent<graphics::Animator>();
+	auto obj = Scene::getCurrentScene()->AddGameObject();
+	auto test = obj->AddComponent<TestComponent2>();
+	
+
+	{
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+		obj2->GetTransform()->SetLocalScale(Vector3d{ obj2->GetTransform()->GetLocalScale().x * 0.01f, obj2->GetTransform()->GetLocalScale().y * 0.01f, obj2->GetTransform()->GetLocalScale().z * 0.01f });
+		auto animator = obj2->GetComponent<graphics::Animator>();
 		for (auto& i : animationList)
 		{
-			if (i->GetName() == L"Armature|Armature.001|mixamo.com|Layer0")
+			if (i->GetName() == L"root|012.Death")
 			{
-				walkAnim = i;
+				animator->GetGI().PushAnimation(i);
+				animator->GetGI().Play(i);
+				deadAnim = i;
+			}
+
+			if (i->GetName() == L"root|000.Idle")
+			{
+				animator->GetGI().PushAnimation(i);
+				idleAnim = i;
 			}
 		}
-        //walkAnim->SetPlaySpeed(0.0000000000001f);
-		walkAnim->SetLoop(true);
-		animator->GetGI().PushAnimation(walkAnim);
-		animator->GetGI().Play(walkAnim);
+		idleAnim->SetLoop(true);
+		test->anim = animator;
+		test->dead = deadAnim;
+		test->idle = idleAnim;
 	}
 
- //   _resourceManager->LoadFile("FBX/SM_Temple_Books");
-	//{
-	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Temple_Books");
-	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
-	//}
+
+	//   _resourceManager->LoadFile("FBX/SM_Temple_Books");
+	   //{
+	   //	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Temple_Books");
+	   //	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+	   //}
 }
 
 
@@ -108,42 +120,42 @@ void GraphicsTest()
 //}
 void application::contents::ContentsLayer::Initialize()
 {
-    if (ContentsLayer::testInitializer)
-    {
-        ContentsLayer::testInitializer();
-        return;
-    }
+	if (ContentsLayer::testInitializer)
+	{
+		ContentsLayer::testInitializer();
+		return;
+	}
 
-    yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-    //auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //camObj->GetTransform()->SetLocalPosition(Vector3d(0, 20, -10));
-    //camObj->GetTransform()->SetLocalRotation( Quaternion(Vector3d(60, 0, 0)));
-    //auto roamingCam = camObj->AddComponent<RTSCam>();
-    //roamingCam->SetCameraMain();
+	yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+	//auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//camObj->GetTransform()->SetLocalPosition(Vector3d(0, 20, -10));
+	//camObj->GetTransform()->SetLocalRotation( Quaternion(Vector3d(60, 0, 0)));
+	//auto roamingCam = camObj->AddComponent<RTSCam>();
+	//roamingCam->SetCameraMain();
 #ifdef GRAPHICS_TEST
-    {
-        //yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-        yunutyEngine::Collider2D::SetIsOnXYPlane(false);
-        auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-        auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
-        light->GetGI().SetLightDiffuseColor(color);
-        directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
-        //directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{0, 45, 0} };
-        //auto test = directionalLight->AddComponent<TestComponent2>();
-        //test->gameObject = directionalLight;
-    }
-    GraphicsTest();
+	{
+		//yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+		yunutyEngine::Collider2D::SetIsOnXYPlane(false);
+		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+		auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
+		light->GetGI().SetLightDiffuseColor(color);
+		directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
+		//directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{0, 45, 0} };
+		//auto test = directionalLight->AddComponent<TestComponent2>();
+		//test->gameObject = directionalLight;
+	}
+	GraphicsTest();
 #else
 
 #endif
 
-    yunutyEngine::YunutyCycle::SingleInstance().Play();
+	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 void application::contents::ContentsLayer::Update(float ts)
 {
-    //std::cout << Time::GetFPS() << std::endl;
+	//std::cout << Time::GetFPS() << std::endl;
 }
 
 void application::contents::ContentsLayer::GUIProgress()
@@ -159,11 +171,11 @@ void application::contents::ContentsLayer::Finalize()
 #ifdef GEN_TESTS
 void application::contents::ContentsLayer::AssignTestInitializer(std::function<void()> testInitializer)
 {
-    ContentsLayer::testInitializer = testInitializer;
-    YunutyCycle::SingleInstance().onExceptionThrown = [](const std::exception& e) {
-        application::Application::GetInstance().AddMainLoopTodo([=]() {
-            Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
-            });
-    };
+	ContentsLayer::testInitializer = testInitializer;
+	YunutyCycle::SingleInstance().onExceptionThrown = [](const std::exception& e) {
+		application::Application::GetInstance().AddMainLoopTodo([=]() {
+			Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
+			});
+	};
 }
 #endif
