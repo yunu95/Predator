@@ -39,16 +39,15 @@ public:
 public:
 	void Init();
 
-	void ClearRenderInfo();
-	void SortObject();
+	void Render();
 	void PushLightData();
 	void PushCameraData();
-	void Render();
 	void RenderObject();
 	void RenderSkinned();
 	void RenderShadow();
 	void RenderLight();
-	void DrawFinal();
+	void RenderFinal();
+	void RenderBackBuffer();
 	void RenderUI();
 
 	void RenderForward();

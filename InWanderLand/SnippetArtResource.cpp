@@ -65,11 +65,24 @@ void SnippetInitializerArtResource()
 
 
 #pragma region Monster2
-	//rsrcManager->LoadFile("FBX/Monster2");
-	//{
-	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
-	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 70,0,0 });
-	//}
+	rsrcManager->LoadFile("FBX/Monster2");
+	auto& animationList = rsrcManager->GetAnimationList();
+	{
+		yunuGI::IAnimation* walkAnim = nullptr;
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 70,0,0 });
+		auto animator = obj->GetComponent<graphics::Animator>();
+		for (auto& i : animationList)
+		{
+			if (i->GetName() == L"Ani_Monster2_Walk")
+			{
+				walkAnim = i;
+			}
+		}
+		walkAnim->SetLoop(true);
+		animator->GetGI().PushAnimation(walkAnim);
+		animator->GetGI().Play(walkAnim);
+	}
 #pragma endregion
 
 

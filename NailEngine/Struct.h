@@ -55,6 +55,16 @@ public:
 	}
 };
 
+enum class CB_TYPE
+{
+	MATRIX,
+	MATERIAL,
+	LIGHT,
+	CAMERA,
+	BONE,
+	INST_TRANSITION,
+};
+
 struct MatrixBuffer
 {
 	DirectX::SimpleMath::Matrix WTM;
