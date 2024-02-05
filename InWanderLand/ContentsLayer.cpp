@@ -27,36 +27,37 @@ void GraphicsTest()
 {
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     camObj->AddComponent<tests::GraphicsTestCam>();
+    camObj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-50});
 
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
- //   _resourceManager->LoadFile("FBX/Monster2");
-	//auto& animationList = _resourceManager->GetAnimationList();
-	//{
-	//	yunuGI::IAnimation* walkAnim = nullptr;
-	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
- //       //obj->GetTransform()->SetLocalScale(Vector3d{ obj->GetTransform()->GetLocalScale().x / 1000.f,obj->GetTransform()->GetLocalScale().y / 1000.f,obj->GetTransform()->GetLocalScale().z / 1000.f });
- //       auto& childVec = obj->GetChildren();
-
-	//	auto animator = obj->GetComponent<graphics::Animator>();
-	//	for (auto& i : animationList)
-	//	{
-	//		if (i->GetName() == L"Ani_Monster2_Walk")
-	//		{
-	//			walkAnim = i;
-	//		}
-	//	}
- //       walkAnim->SetPlaySpeed(0.00000000001f);
-	//	walkAnim->SetLoop(true);
-	//	animator->GetGI().PushAnimation(walkAnim);
-	//	animator->GetGI().Play(walkAnim);
-	//}
-
-    _resourceManager->LoadFile("FBX/SM_Temple_Books");
+    _resourceManager->LoadFile("FBX/Dying6");
+	auto& animationList = _resourceManager->GetAnimationList();
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Temple_Books");
-		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+		yunuGI::IAnimation* walkAnim = nullptr;
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Dying6");
+        obj->GetTransform()->SetLocalScale(Vector3d{ obj->GetTransform()->GetLocalScale().x / 10.f,obj->GetTransform()->GetLocalScale().y / 10.f,obj->GetTransform()->GetLocalScale().z / 10.f });
+        auto& childVec = obj->GetChildren();
+
+		auto animator = obj->GetComponent<graphics::Animator>();
+		for (auto& i : animationList)
+		{
+			if (i->GetName() == L"Armature|Armature.001|mixamo.com|Layer0")
+			{
+				walkAnim = i;
+			}
+		}
+        //walkAnim->SetPlaySpeed(0.0000000000001f);
+		walkAnim->SetLoop(true);
+		animator->GetGI().PushAnimation(walkAnim);
+		animator->GetGI().Play(walkAnim);
 	}
+
+ //   _resourceManager->LoadFile("FBX/SM_Temple_Books");
+	//{
+	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Temple_Books");
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+	//}
 }
 
 

@@ -3,6 +3,30 @@
 
 #include "Buffers.hlsli"
 
+#include "Matrix.hlsli"
+#include "Quaternion.hlsli"
+
+float4x4 LerpTransformMatrix(float4x4 matrix1, float4x4 matrix2, float ratio)
+{
+    float3 pos1;
+    float4 rotation1;
+    float3 scale1;
+    
+    float3 pos2;
+    float4 rotation2;
+    float3 scale2;
+    
+    decompose(matrix1, pos1, rotation1, scale1);
+    decompose(matrix2, pos2, rotation2, scale2);
+    
+    float3 finalPos = lerp(pos1, pos2, ratio);
+    float4 finalRotation = q_slerp(rotation1, rotation2, ratio);
+    float3 finalScale = lerp(scale1, scale2, ratio);
+
+    return (compose(finalPos, finalRotation, finalScale));
+}
+
+
 bool UseTexture(uint useTexture)
 {
     if (useTexture == 1)
@@ -14,7 +38,7 @@ bool UseTexture(uint useTexture)
 static const float SMAP_SIZE = 2048.0f;
 static const float SMAP_DX = 1.0f / SMAP_SIZE;
 
-static const float PI = 3.141592;
+//static const float PI = 3.141592;
 static const float Epsilon = 0.00001;
 static const float3 Fdielectric = 0.04;
 

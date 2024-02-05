@@ -59,6 +59,7 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 	fbxNode->transformMatrix = this->ConvertToCloumnMajor(node->mTransformation);
 	//fbxNode->worldMatrix = parentMatrix * fbxNode->transformMatrix;
 	fbxNode->worldMatrix = fbxNode->transformMatrix * parentMatrix;
+
 	for (int i = 0; i < node->mNumMeshes; ++i)
 	{
 		FBXMeshData fbxMeshData;
