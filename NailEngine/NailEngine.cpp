@@ -138,6 +138,8 @@ void NailEngine::CreateConstantBuffer()
 		_constantBuffer->CraeteConstantBuffer(sizeof(InstanceTransitionDesc));
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
+
+
 }
 
 void NailEngine::CreateRenderTargetGroup()
