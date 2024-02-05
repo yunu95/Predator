@@ -382,6 +382,15 @@ std::shared_ptr<yunuGI::IShader> ResourceManager::GetDeferredShader(const std::w
 std::shared_ptr<Mesh> ResourceManager::GetMesh(const std::wstring& meshName)
 {
     auto iter = meshMap.find(meshName);
+
+    if (iter == meshMap.end())
+    {
+        return nullptr;
+    }
+
+
+
+
     assert(iter != meshMap.end());
 
     return std::static_pointer_cast<Mesh>(iter->second);

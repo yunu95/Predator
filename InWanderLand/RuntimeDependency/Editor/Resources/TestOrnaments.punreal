@@ -1,0 +1,9727 @@
+[
+  {
+    "ObjectName": "SM_BigTree_29",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1194.14118,
+      -319.95536100000004,
+      270.0
+    ],
+    "Rotation": [
+      169.31391567548695,
+      -1.364262187469649,
+      140.56350774181655
+    ],
+    "Scale": [
+      1.75,
+      1.75,
+      1.375
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_002",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      2500.0,
+      380.0,
+      40.0
+    ],
+    "Rotation": [
+      0.0,
+      -24.999999806341354,
+      0.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Welcome",
+    "MeshName": "SM_Welcome",
+    "Material": [
+      "MI_Marble"
+    ],
+    "Location": [
+      10.0,
+      -520.0,
+      510.0001779296799
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Human2",
+    "MeshName": "SM_Human",
+    "Material": [
+      "M_Gray2"
+    ],
+    "Location": [
+      -4130.0,
+      28480.0,
+      0.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_86",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1180.0,
+      3370.0,
+      -40.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      89.999999
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      0.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_12",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1480.0,
+      6860.0,
+      0.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      44.999999651414065
+    ],
+    "Scale": [
+      7.0,
+      6.3125,
+      8.0625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_13",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -80.0,
+      6610.0,
+      40.0
+    ],
+    "Rotation": [
+      0.0,
+      -9.999999922536345,
+      0.0
+    ],
+    "Scale": [
+      -2.875,
+      3.1875,
+      4.9375
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_14",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1770.0,
+      6010.0,
+      820.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -89.999999
+    ],
+    "Scale": [
+      5.0,
+      5.0,
+      -10.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_15",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1930.0,
+      2140.0,
+      -40.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -89.999999
+    ],
+    "Scale": [
+      1.8125,
+      1.8125,
+      3.25
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_21",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      2495.003744,
+      -4308.60988,
+      360.0
+    ],
+    "Rotation": [
+      -148.3349256826406,
+      28.584325402535445,
+      154.65692545824606
+    ],
+    "Scale": [
+      1.0625,
+      1.375,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_Tree_V57",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -577.0577111165564,
+      5183.467875798266,
+      20.0
+    ],
+    "Rotation": [
+      5.433928475979098e-07,
+      4.999999961268507,
+      -60.00000220528411
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush4",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      1760.0,
+      1040.0,
+      -80.0
+    ],
+    "Rotation": [
+      2.504769,
+      4.328750000000002,
+      120.09467800000002
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_22",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      2185.003744,
+      -3468.60988,
+      360.0
+    ],
+    "Rotation": [
+      -148.33492600000034,
+      28.58432500000089,
+      -0.343073799312662
+    ],
+    "Scale": [
+      1.0625,
+      1.375,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush5",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      1680.0,
+      1610.0,
+      20.0
+    ],
+    "Rotation": [
+      -21.728473531388214,
+      20.209850965095992,
+      86.64421406743371
+    ],
+    "Scale": [
+      1.0625,
+      1.3125,
+      1.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_66",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1790.0,
+      2380.0,
+      -160.0
+    ],
+    "Rotation": [
+      3.230188054236559,
+      -6.15603831654022,
+      129.5457180388942
+    ],
+    "Scale": [
+      1.8125,
+      1.5,
+      3.25
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush6",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      2260.0,
+      1290.0,
+      600.0
+    ],
+    "Rotation": [
+      3.662010397142979e-07,
+      -1.907426394609503e-08,
+      109.99999917564931
+    ],
+    "Scale": [
+      1.375,
+      1.375,
+      2.375
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush7",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      2120.0,
+      1630.0,
+      460.0
+    ],
+    "Rotation": [
+      0.3759556540283898,
+      8.859792853926859,
+      154.8499904113108
+    ],
+    "Scale": [
+      1.125,
+      1.0625,
+      1.75
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_67",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1600.0,
+      2220.0,
+      0.0
+    ],
+    "Rotation": [
+      -9.999999922536345,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.6875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_68",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1430.0,
+      2490.0,
+      30.0
+    ],
+    "Rotation": [
+      -7.746342589598498e-08,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      0.9375,
+      0.9375,
+      0.25
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_87",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      390.0,
+      4820.0,
+      -40.0
+    ],
+    "Rotation": [
+      10.345270219934838,
+      -14.76688931828556,
+      87.33601140800815
+    ],
+    "Scale": [
+      1.3125,
+      1.0,
+      1.375
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_49",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -4090.0,
+      -180.0,
+      -610.0
+    ],
+    "Rotation": [
+      9.328532355633596,
+      -6.169372191478486,
+      169.93389638321776
+    ],
+    "Scale": [
+      8.5625,
+      -8.25,
+      20.875
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_24",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      3140.0,
+      -1560.0,
+      420.0
+    ],
+    "Rotation": [
+      -1.816933000000006,
+      -19.920663999999995,
+      10.319103000000002
+    ],
+    "Scale": [
+      1.0,
+      1.3125,
+      0.875
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc15",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_Marble",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      -1257.1836680000001,
+      -4014.43998,
+      730.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -9.999999535217965
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc16",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_Marble",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      -1257.183668,
+      -4014.43998,
+      880.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      14.999999806340846
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc17",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_Marble",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      -1257.183668,
+      -4014.43998,
+      1000.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -4.99999984507258
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_29",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -96.25164881412199,
+      7578.543315288643,
+      -40.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -179.99999860565342
+    ],
+    "Scale": [
+      6.8125,
+      6.8125,
+      5.25
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush17",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      1930.0,
+      -300.0,
+      520.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -140.00000177463693
+    ],
+    "Scale": [
+      1.6875,
+      1.6875,
+      1.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_44",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      3140.0,
+      -460.0,
+      -500.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -59.999999999999986
+    ],
+    "Scale": [
+      6.625,
+      -6.3125,
+      6.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush42",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1861.284605,
+      6071.284655,
+      0.0
+    ],
+    "Rotation": [
+      14.999999999999996,
+      0.0,
+      -90.00000199999997
+    ],
+    "Scale": [
+      2.125,
+      2.125,
+      2.875
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_4",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      3640.0,
+      -4530.0,
+      330.0
+    ],
+    "Rotation": [
+      9.962710739893353,
+      -0.8671720564155975,
+      -175.07558681768484
+    ],
+    "Scale": [
+      1.1875,
+      1.5625,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_69",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1230.0,
+      2990.0,
+      -20.0
+    ],
+    "Rotation": [
+      -11.791976847739184,
+      16.27014210337346,
+      13.308535999513046
+    ],
+    "Scale": [
+      0.5625,
+      0.5625,
+      -0.125
+    ]
+  },
+  {
+    "ObjectName": "SM_StartRabbit",
+    "MeshName": "SM_StartRabbit",
+    "Material": [
+      "MI_Marble"
+    ],
+    "Location": [
+      2710.0,
+      -2649.9999978097653,
+      520.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      90.00000000000001
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_76",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -1793.733306,
+      4663.504833,
+      -138.28624000000002
+    ],
+    "Rotation": [
+      -57.05418700000051,
+      72.03614000000044,
+      179.2656323098545
+    ],
+    "Scale": [
+      0.75,
+      -0.9375,
+      0.5625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush51",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -3171.284605,
+      13291.284655,
+      -30.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.5,
+      1.3125,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush21",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      1803.584706,
+      2983.086351,
+      19.791648000000002
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -20.0
+    ],
+    "Scale": [
+      1.0,
+      1.125,
+      1.125
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush43",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -3806.783867,
+      1728.919376,
+      -50.0
+    ],
+    "Rotation": [
+      177.61805110121796,
+      2.31730399125618,
+      145.3972610109725
+    ],
+    "Scale": [
+      1.5,
+      1.5,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush21",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      2154.99318,
+      3342.823123,
+      223.749978
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      60.00000199999999
+    ],
+    "Scale": [
+      1.375,
+      1.5,
+      1.8125
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc18",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_Marble",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      -864.8704612979009,
+      -4695.216165366672,
+      1320.2005434661737
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      99.99999945775488
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc19",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_BookCover",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      -873.3228250750368,
+      -4677.090009051697,
+      1434.5515453403632
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      55.00000015492761
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush52",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -3441.284605,
+      13691.284655,
+      -70.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.5,
+      1.3125,
+      1.125
+    ]
+  },
+  {
+    "ObjectName": "SM_StartRabbit2",
+    "MeshName": "SM_StartRabbit",
+    "Material": [
+      "MI_Marble"
+    ],
+    "Location": [
+      -2660.0,
+      -2649.9999990265624,
+      520.0001389648387
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -90.00000000000001
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_48",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -1910.0,
+      -340.0,
+      520.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_50",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -1800.0,
+      -530.0,
+      520.0
+    ],
+    "Rotation": [
+      5.3815202703827865,
+      -19.290996997879862,
+      -35.915265571898885
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Tree_V43",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      2690.0,
+      4300.0,
+      -130.0
+    ],
+    "Rotation": [
+      177.49523206541187,
+      -4.32874881157625,
+      120.0946779729975
+    ],
+    "Scale": [
+      2.0625,
+      2.625,
+      1.375
+    ]
+  },
+  {
+    "ObjectName": "mushroom_mini_easy01",
+    "MeshName": "mushroom_mini_easy01",
+    "Material": [
+      "MI_White1"
+    ],
+    "Location": [
+      -3240.0,
+      15440.0,
+      0.0
+    ],
+    "Rotation": [
+      47.09596951440997,
+      18.747237039584135,
+      -68.82716726558944
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush21",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      2200.680775,
+      3341.901948,
+      -28.888908
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      135.000001
+    ],
+    "Scale": [
+      0.875,
+      1.125,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush53",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -3671.284605,
+      13451.284655,
+      -100.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      49.99999961268186
+    ],
+    "Scale": [
+      1.25,
+      1.0625,
+      0.875
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush21",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      1282.197461,
+      4868.874806,
+      -211.527795
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -114.99999899999999
+    ],
+    "Scale": [
+      1.5625,
+      1.875,
+      0.875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_70",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -1543.733306,
+      4893.504833,
+      -68.28624
+    ],
+    "Rotation": [
+      -61.32025649360348,
+      67.25822155610233,
+      -164.7378012190742
+    ],
+    "Scale": [
+      0.75,
+      -0.9375,
+      0.5625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush11",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      2720.0,
+      2160.0,
+      1300.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -179.99999860565413
+    ],
+    "Scale": [
+      1.6875,
+      1.625,
+      2.5625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_71",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1626.425644170651,
+      3449.2773014638124,
+      -190.0
+    ],
+    "Rotation": [
+      19.999999845072715,
+      2.782985346280577e-15,
+      14.999999883804572
+    ],
+    "Scale": [
+      1.3125,
+      1.1875,
+      1.25
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_72",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1487.7228865022835,
+      3596.0075252460642,
+      -80.62444296560352
+    ],
+    "Rotation": [
+      -4.999999845072577,
+      9.93923337957349e-17,
+      14.999999883804595
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush12",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      2930.0,
+      3750.0,
+      920.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      134.99999888380455
+    ],
+    "Scale": [
+      1.875,
+      1.875,
+      3.1875
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush13",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      1540.0,
+      3170.0,
+      -20.0
+    ],
+    "Rotation": [
+      -168.53826099872535,
+      -10.786099634820625,
+      50.84533027505217
+    ],
+    "Scale": [
+      1.125,
+      1.125,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush14",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      1710.0,
+      3700.0,
+      -140.0
+    ],
+    "Rotation": [
+      -7.630739999999996,
+      -12.95253999999999,
+      120.86747699999994
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      0.6875
+    ]
+  },
+  {
+    "ObjectName": "SM_Lamppost",
+    "MeshName": "SM_Lamppost",
+    "Material": [
+      "WorldGridMaterial"
+    ],
+    "Location": [
+      -6790.0,
+      29560.0,
+      0.00011525878653628752
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -89.99999930282748
+    ],
+    "Scale": [
+      1.5,
+      1.5,
+      1.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Tree_V64",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      728.600809,
+      3828.861487,
+      -190.045403
+    ],
+    "Rotation": [
+      179.515825,
+      -5.5429649999999855,
+      -0.8324586126798299
+    ],
+    "Scale": [
+      1.875,
+      2.0,
+      1.4375
+    ]
+  },
+  {
+    "ObjectName": "SM_BigTree_24",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1624.14118,
+      40.04463900000019,
+      340.0
+    ],
+    "Rotation": [
+      -8.218881672774561,
+      5.716165900187913,
+      39.58897145108358
+    ],
+    "Scale": [
+      2.0625,
+      2.0625,
+      1.75
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush15",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      2190.0,
+      2080.0,
+      -140.0
+    ],
+    "Rotation": [
+      -7.630739999999937,
+      -12.952539999999988,
+      55.867477503513506
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      0.6875
+    ]
+  },
+  {
+    "ObjectName": "Cube",
+    "MeshName": "SM_Plane",
+    "Material": [
+      "M_VCBlendMarble"
+    ],
+    "Location": [
+      20.0,
+      -4510.0,
+      520.0001038146947
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_BigTree_25",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1429.4364229390158,
+      871.5260967015777,
+      520.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -35.000001781664714
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_BigTree_26",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      -2729.436422939016,
+      1861.5260967015774,
+      280.0
+    ],
+    "Rotation": [
+      -14.945479085015684,
+      -1.2925627593887723,
+      -4.830448644274157
+    ],
+    "Scale": [
+      1.3125,
+      1.0,
+      1.4375
+    ]
+  },
+  {
+    "ObjectName": "SM_Tree_V8",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      1440.0,
+      3200.0,
+      -370.0
+    ],
+    "Rotation": [
+      -160.000002,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      2.3125,
+      1.875,
+      1.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_16",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -1545.2952429390166,
+      1611.4814577015777,
+      -50.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -114.99999910916831
+    ],
+    "Scale": [
+      1.8125,
+      1.8125,
+      0.6875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_17",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -1485.2952429390166,
+      1991.4814577015777,
+      -10.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -104.99999900000002
+    ],
+    "Scale": [
+      0.375,
+      0.5,
+      -0.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Tree_V65",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      408.600809,
+      4098.861487,
+      -210.045403
+    ],
+    "Rotation": [
+      -177.39243710549258,
+      5.045999664260489,
+      -98.83874720254386
+    ],
+    "Scale": [
+      2.0,
+      1.875,
+      1.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Tree_V66",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      928.600809,
+      3738.861487,
+      -160.045403
+    ],
+    "Rotation": [
+      179.515825,
+      -5.542964999999982,
+      9.16754100000003
+    ],
+    "Scale": [
+      1.875,
+      2.0,
+      1.4375
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_18",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -2235.295242939016,
+      1281.4814577015775,
+      -210.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -150.00000162673638
+    ],
+    "Scale": [
+      4.6875,
+      4.25,
+      9.0625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_73",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      249.09183472807695,
+      4679.709013834073,
+      -55.2221136923323
+    ],
+    "Rotation": [
+      -4.999999961268148,
+      -6.751406757400142e-09,
+      -34.9999998060463
+    ],
+    "Scale": [
+      0.8125,
+      0.625,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_BigTree_33",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      -3474.14118,
+      -2289.9553610000003,
+      1850.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -145.000001
+    ],
+    "Scale": [
+      1.75,
+      1.75,
+      1.75
+    ]
+  },
+  {
+    "ObjectName": "Cube2",
+    "MeshName": "Cube",
+    "Material": [
+      "MI_Marble"
+    ],
+    "Location": [
+      50.0,
+      -110.0,
+      -850.0
+    ],
+    "Rotation": [
+      24.999999806341034,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      15.875,
+      16.75,
+      22.25
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_19",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -2235.295242939016,
+      951.4814577015783,
+      -30.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -10.000003084491537
+    ],
+    "Scale": [
+      4.6875,
+      4.25,
+      10.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_74",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -6.089714596491177,
+      4409.609798762446,
+      -30.0
+    ],
+    "Rotation": [
+      1.7537834442368212,
+      -9.84655186358299,
+      24.848918020198692
+    ],
+    "Scale": [
+      0.6875,
+      0.6875,
+      0.6875
+    ]
+  },
+  {
+    "ObjectName": "SM_Lamppost2",
+    "MeshName": "SM_Lamppost",
+    "Material": [
+      "WorldGridMaterial"
+    ],
+    "Location": [
+      -3640.0,
+      29560.0,
+      0.00013051757559878752
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -89.999999
+    ],
+    "Scale": [
+      1.5,
+      1.5,
+      1.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush22",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -5518.774587841407,
+      2216.4392997259592,
+      0.0
+    ],
+    "Rotation": [
+      -14.999999999999952,
+      1.033680271475643e-14,
+      5.000000355614233
+    ],
+    "Scale": [
+      1.125,
+      1.25,
+      1.25
+    ]
+  },
+  {
+    "ObjectName": "SM_BigTree_34",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      -3364.14118,
+      -3609.955361,
+      1500.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -30.00000189083228
+    ],
+    "Scale": [
+      2.25,
+      2.25,
+      2.375
+    ]
+  },
+  {
+    "ObjectName": "Plane",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1700.0,
+      4070.0,
+      2900.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      9.6875,
+      9.6875,
+      9.6875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_20",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -2223.0398662186317,
+      2323.508948093373,
+      -50.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      135.00000192956404
+    ],
+    "Scale": [
+      1.8125,
+      1.8125,
+      0.6875
+    ]
+  },
+  {
+    "ObjectName": "SM_BigTree_35",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      -2514.14118,
+      -5839.955361,
+      1940.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -20.000002077463535
+    ],
+    "Scale": [
+      2.0625,
+      2.0625,
+      2.0625
+    ]
+  },
+  {
+    "ObjectName": "Pillar3",
+    "MeshName": "SM_CastleWall_Pillar",
+    "Material": [
+      "MI_CastleWall_Pillar"
+    ],
+    "Location": [
+      -3170.0,
+      29150.0,
+      0.00016103515372378752
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -179.999999
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_BigTree_36",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      -1704.14118,
+      -6189.955361,
+      2090.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      19.999998000000005
+    ],
+    "Scale": [
+      2.0625,
+      2.0625,
+      2.0625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush16",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      1000.0,
+      5380.0,
+      480.0
+    ],
+    "Rotation": [
+      5.038368582143826,
+      8.649165126284567,
+      55.38125184373858
+    ],
+    "Scale": [
+      1.5,
+      1.5,
+      2.8125
+    ]
+  },
+  {
+    "ObjectName": "SM_Tree_V58",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -560.0,
+      4630.0,
+      -20.0
+    ],
+    "Rotation": [
+      -177.0077469682569,
+      2.042881350770554,
+      -5.632583505154803
+    ],
+    "Scale": [
+      1.6875,
+      1.4375,
+      1.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_75",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      140.0,
+      4770.0,
+      -200.0
+    ],
+    "Rotation": [
+      -2.506510031529841,
+      -14.739512666258237,
+      -24.027735538005125
+    ],
+    "Scale": [
+      0.5,
+      0.5,
+      0.875
+    ]
+  },
+  {
+    "ObjectName": "SM_BigTree_27",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      -3543.375736087872,
+      867.7013683849855,
+      890.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      95.00000000000001
+    ],
+    "Scale": [
+      2.0625,
+      2.0625,
+      2.0625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_88",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -3196.1959907026367,
+      13578.73694175989,
+      36.69574096691804
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -14.99999988380375
+    ],
+    "Scale": [
+      1.4375,
+      1.375,
+      1.875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_45",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -4960.015790706736,
+      2433.172124868874,
+      -28.286240000000006
+    ],
+    "Rotation": [
+      2.872775000000098,
+      -4.094046999999992,
+      -140.10270064438706
+    ],
+    "Scale": [
+      2.125,
+      -1.8125,
+      1.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush40",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      1293.584706,
+      2853.086351,
+      -60.20835199999999
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -20.0
+    ],
+    "Scale": [
+      0.8125,
+      0.75,
+      0.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_22",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1586.8177089410096,
+      4859.472187106462,
+      -204.93962745899177
+    ],
+    "Rotation": [
+      30.07558457854862,
+      -0.8671721901917524,
+      -19.962707550237166
+    ],
+    "Scale": [
+      2.5,
+      2.5,
+      2.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_25",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      990.1719475166709,
+      4922.00004714596,
+      37.42541155971863
+    ],
+    "Rotation": [
+      -4.924415000000011,
+      -0.8671719999999823,
+      40.037291535218074
+    ],
+    "Scale": [
+      2.1875,
+      2.1875,
+      2.125
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_5",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      2490.0,
+      -4840.0,
+      470.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -150.0000015105407
+    ],
+    "Scale": [
+      1.3125,
+      1.1875,
+      0.9375
+    ]
+  },
+  {
+    "ObjectName": "SM_Tree_V62",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      708.6008089424205,
+      4708.861486795008,
+      -40.04540329565276
+    ],
+    "Rotation": [
+      179.51582455907817,
+      -5.542965087172773,
+      49.16754068789941
+    ],
+    "Scale": [
+      1.6875,
+      2.0,
+      1.4375
+    ]
+  },
+  {
+    "ObjectName": "Stump02_low",
+    "MeshName": "Stump02_low",
+    "Material": [
+      "M_Stump02"
+    ],
+    "Location": [
+      -2550.0,
+      15720.0,
+      0.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      29.99999976760919
+    ],
+    "Scale": [
+      0.5,
+      0.5,
+      0.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_46",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -4844.932081408161,
+      2118.7694259692257,
+      -81.845491
+    ],
+    "Rotation": [
+      2.8727750000000962,
+      -4.094046999999992,
+      -120.1027006443875
+    ],
+    "Scale": [
+      1.8125,
+      -1.5,
+      -1.875
+    ]
+  },
+  {
+    "ObjectName": "SM_Trunk_2",
+    "MeshName": "SM_Trunk_001",
+    "Material": [
+      "MI_Trunk"
+    ],
+    "Location": [
+      -1840.0,
+      5630.0,
+      0.0
+    ],
+    "Rotation": [
+      79.99999938029113,
+      3.1805546814635168e-15,
+      34.99999972887756
+    ],
+    "Scale": [
+      1.375,
+      1.375,
+      1.375
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_26",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      1660.0,
+      -4560.0,
+      280.0
+    ],
+    "Rotation": [
+      -23.858654217399252,
+      -18.747237612903866,
+      143.99478392718305
+    ],
+    "Scale": [
+      0.875,
+      1.125,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "Floor01",
+    "MeshName": "SM_Temple_Floor",
+    "Material": [
+      "MI_Temple_Floor"
+    ],
+    "Location": [
+      -19.99987090951997,
+      -3380.0,
+      519.9220108981082
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.375,
+      1.375,
+      1.375
+    ]
+  },
+  {
+    "ObjectName": "SM_BigTree_37",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      -3044.14118,
+      -5169.955361,
+      1410.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -65.00000165141374
+    ],
+    "Scale": [
+      2.0625,
+      2.0625,
+      2.0625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush27",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -4756.783866700945,
+      1738.9193764714641,
+      -110.0
+    ],
+    "Rotation": [
+      9.386082730086667e-15,
+      -9.999999999999886,
+      175.00000143307807
+    ],
+    "Scale": [
+      1.5,
+      1.5,
+      0.9375
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_77",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      2274.339978728017,
+      523.2044189405508,
+      20.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      9.999999999999975
+    ],
+    "Scale": [
+      1.8125,
+      -1.5,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_23",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -930.0,
+      6500.0,
+      -70.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      3.5,
+      3.5,
+      4.8125
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_81",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -6018.490459441775,
+      2736.3113764242376,
+      -78.28624
+    ],
+    "Rotation": [
+      -69.57518700000011,
+      63.19404300000078,
+      92.6471275492746
+    ],
+    "Scale": [
+      1.8125,
+      -2.0,
+      1.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_78",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      2270.0,
+      650.0,
+      -30.0
+    ],
+    "Rotation": [
+      -5.000000000000002,
+      3.975693351829396e-16,
+      29.999999883804566
+    ],
+    "Scale": [
+      0.75,
+      1.3125,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush18",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -280.0,
+      5390.0,
+      100.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      134.999999
+    ],
+    "Scale": [
+      1.5,
+      1.5,
+      2.4375
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_79",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1880.0,
+      800.0,
+      -50.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      0.6875,
+      0.6875,
+      0.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_26",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      120.0,
+      4510.0,
+      -50.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -9.999999999999998
+    ],
+    "Scale": [
+      0.625,
+      0.625,
+      0.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_3",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      4000.0,
+      940.0,
+      -150.0
+    ],
+    "Rotation": [
+      0.0,
+      9.999999728877157,
+      0.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Tree_V63",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -847.057711,
+      5573.467876,
+      -140.0
+    ],
+    "Rotation": [
+      1.0000000027867055e-06,
+      5.000000000000041,
+      69.99999699297268
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.0625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_89",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -3120.0,
+      13550.0,
+      -80.0
+    ],
+    "Rotation": [
+      10.72858303659912,
+      -10.545290508773114,
+      44.00702721119426
+    ],
+    "Scale": [
+      1.3125,
+      1.5625,
+      1.5625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_82",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -4356.450941291381,
+      1664.4111005780278,
+      -108.28624
+    ],
+    "Rotation": [
+      -57.054187000000304,
+      72.03614000000005,
+      79.26563335561545
+    ],
+    "Scale": [
+      0.75,
+      -0.9375,
+      0.5625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_83",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -6234.264444418552,
+      3254.707427339415,
+      -108.28624
+    ],
+    "Rotation": [
+      -57.05418700000068,
+      72.03613999999995,
+      44.26563335561452
+    ],
+    "Scale": [
+      0.75,
+      -0.9375,
+      0.5625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_84",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -5903.733306,
+      3083.504833,
+      -108.28624
+    ],
+    "Rotation": [
+      -57.05418700000106,
+      72.03614000000053,
+      109.26563351054301
+    ],
+    "Scale": [
+      0.9375,
+      -1.125,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush28",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -6398.774588,
+      2876.4393,
+      -180.0
+    ],
+    "Rotation": [
+      -14.999999999999938,
+      3.1805546814635168e-15,
+      -49.999999573949566
+    ],
+    "Scale": [
+      1.125,
+      1.25,
+      1.25
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush38",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -5788.774588,
+      2836.4393,
+      -240.0
+    ],
+    "Rotation": [
+      -14.999999999999945,
+      1.1131941385122309e-14,
+      -79.99999976760894
+    ],
+    "Scale": [
+      1.125,
+      1.25,
+      1.125
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_10",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      3340.0,
+      -2740.0,
+      420.0
+    ],
+    "Rotation": [
+      -1.8169325554645193,
+      -19.920664236516824,
+      160.31910176652062
+    ],
+    "Scale": [
+      1.0,
+      1.3125,
+      0.875
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush54",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -2941.284605,
+      14041.284655,
+      -110.0
+    ],
+    "Rotation": [
+      -140.00000170420046,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.5,
+      1.3125,
+      1.125
+    ]
+  },
+  {
+    "ObjectName": "SM_BigTree_41",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      1175.85882,
+      -189.955361,
+      270.0
+    ],
+    "Rotation": [
+      169.313916,
+      -1.364261999999996,
+      -69.43649308449163
+    ],
+    "Scale": [
+      1.75,
+      1.75,
+      1.375
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_90",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -1982.7397827987834,
+      14055.060812141432,
+      56.145031166666655
+    ],
+    "Rotation": [
+      -1.2971686135353484,
+      4.829217305137554,
+      -0.05470124417905713
+    ],
+    "Scale": [
+      1.75,
+      1.6875,
+      2.1875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_31",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      3500.0,
+      -1640.0,
+      380.0
+    ],
+    "Rotation": [
+      7.472277005553562e-07,
+      -14.99999988380454,
+      -2.887066273160597e-06
+    ],
+    "Scale": [
+      2.375,
+      2.375,
+      4.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_91",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -1750.0,
+      13800.0,
+      -80.0
+    ],
+    "Rotation": [
+      10.728582999999997,
+      -10.545291000000018,
+      44.00702699999998
+    ],
+    "Scale": [
+      1.625,
+      1.875,
+      1.875
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush79",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      1183.584706,
+      1593.086351,
+      -50.208352000000005
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -64.99999965141414
+    ],
+    "Scale": [
+      0.9375,
+      0.6875,
+      0.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_32",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      930.0,
+      -6560.0,
+      -500.0
+    ],
+    "Rotation": [
+      9.962710734224022,
+      0.8671721222085198,
+      175.07558644308628
+    ],
+    "Scale": [
+      8.5625,
+      -8.25,
+      20.875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_33",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -1020.0,
+      -6530.0,
+      -500.0
+    ],
+    "Rotation": [
+      4.332874013877414,
+      2.497618859876512,
+      150.09450078172256
+    ],
+    "Scale": [
+      8.5625,
+      -8.25,
+      20.875
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush55",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "M_WPOLeaves"
+    ],
+    "Location": [
+      268.71539499999994,
+      14581.284655,
+      1740.0
+    ],
+    "Rotation": [
+      -0.7262102941139122,
+      6.883214155900877,
+      -147.3031736366868
+    ],
+    "Scale": [
+      3.4375,
+      3.5,
+      4.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_34",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      140.0,
+      -6060.0,
+      910.0
+    ],
+    "Rotation": [
+      -8.780296633644753,
+      -11.873849777488093,
+      3.51319127146764
+    ],
+    "Scale": [
+      3.0625,
+      3.0625,
+      4.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_92",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -566.195991,
+      14178.736942,
+      -393.304259
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -14.999999999999996
+    ],
+    "Scale": [
+      4.125,
+      4.0625,
+      4.0625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush56",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -448.50312953814785,
+      13112.393818919496,
+      -40.0
+    ],
+    "Rotation": [
+      0.8238450000000164,
+      11.643576000000158,
+      117.94657492253633
+    ],
+    "Scale": [
+      1.9375,
+      2.125,
+      2.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush57",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -841.284605,
+      12921.284655,
+      -40.0
+    ],
+    "Rotation": [
+      -22.553936000000128,
+      39.90052800000093,
+      57.347502922536606
+    ],
+    "Scale": [
+      1.125,
+      1.3125,
+      1.4375
+    ]
+  },
+  {
+    "ObjectName": "SM_Wall",
+    "MeshName": "SM_CastleWall",
+    "Material": [
+      "M_Brick",
+      "MI_CastleWall_Arch",
+      "MI_CastleWall_Moulding"
+    ],
+    "Location": [
+      -5210.0,
+      31460.0,
+      0.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      179.99999860565413
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_12",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      140.0,
+      -5490.0,
+      640.0
+    ],
+    "Rotation": [
+      -175.00000143307778,
+      -8.04041635297605e-08,
+      90.00000091902486
+    ],
+    "Scale": [
+      1.0625,
+      1.9375,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush58",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      1268.715395,
+      14481.284655,
+      -560.0
+    ],
+    "Rotation": [
+      0.8238450000000029,
+      11.643575999999998,
+      107.946575
+    ],
+    "Scale": [
+      2.5625,
+      2.75,
+      3.125
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_93",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -2748.4532965024428,
+      17812.79924103712,
+      6.903085369799356
+    ],
+    "Rotation": [
+      -20.439026472457904,
+      1.122993691559046,
+      80.7364395539757
+    ],
+    "Scale": [
+      2.25,
+      2.1875,
+      3.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_35",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      3420.0,
+      -5790.0,
+      -500.0
+    ],
+    "Rotation": [
+      9.962711000000002,
+      0.8671719999999998,
+      175.07558600000002
+    ],
+    "Scale": [
+      8.5625,
+      -8.25,
+      20.875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_36",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      2330.0,
+      -5730.0,
+      910.0
+    ],
+    "Rotation": [
+      0.9750212280950586,
+      -19.57385354138313,
+      -14.98797208803518
+    ],
+    "Scale": [
+      5.8125,
+      3.8125,
+      5.0625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_14",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      -920.0,
+      -6200.0,
+      2370.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      69.99999911619568
+    ],
+    "Scale": [
+      1.0625,
+      1.9375,
+      1.25
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_15",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      1330.0,
+      -5150.0,
+      470.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      109.99999880634108
+    ],
+    "Scale": [
+      0.875,
+      2.75,
+      1.8125
+    ]
+  },
+  {
+    "ObjectName": "Chair_easy01",
+    "MeshName": "Chair_easy01",
+    "Material": [
+      "MI_Trunk"
+    ],
+    "Location": [
+      -2580.0,
+      14830.0,
+      -10.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -64.99999949648735
+    ],
+    "Scale": [
+      0.8,
+      0.8000000556310027,
+      0.8000000556310027
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_16",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      2250.0,
+      -5050.0,
+      580.0
+    ],
+    "Rotation": [
+      2.6129816854547734,
+      9.655935783117675,
+      105.22073956064561
+    ],
+    "Scale": [
+      1.3125,
+      1.9375,
+      2.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_94",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -2420.0,
+      18000.0,
+      -80.0
+    ],
+    "Rotation": [
+      1.2639266350565617,
+      7.625920829993395,
+      140.19064432672357
+    ],
+    "Scale": [
+      2.3125,
+      2.5625,
+      2.875
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush59",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -3301.284605,
+      18031.284655,
+      -70.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -44.99999965141371
+    ],
+    "Scale": [
+      1.5,
+      1.3125,
+      1.125
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush60",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "M_WPOLeaves"
+    ],
+    "Location": [
+      -2721.284605,
+      18421.284655,
+      190.0
+    ],
+    "Rotation": [
+      -4.533592010547751,
+      2.11088774785037,
+      24.916433254782458
+    ],
+    "Scale": [
+      1.5,
+      1.3125,
+      2.125
+    ]
+  },
+  {
+    "ObjectName": "SM_BigTree_38",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -2424.14118,
+      -279.95536100000004,
+      560.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -100.00000134858689
+    ],
+    "Scale": [
+      1.875,
+      1.75,
+      1.5
+    ]
+  },
+  {
+    "ObjectName": "SM_BigTree_39",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      -3754.1411800000005,
+      -2799.955361,
+      1380.0
+    ],
+    "Rotation": [
+      3.9671301638096486,
+      14.47751223644767,
+      15.504087405835714
+    ],
+    "Scale": [
+      2.25,
+      2.6875,
+      2.375
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_6",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      1530.0,
+      -580.0,
+      520.0
+    ],
+    "Rotation": [
+      -9.772425756684123,
+      -11.43563000197019,
+      -139.01915984294013
+    ],
+    "Scale": [
+      1.25,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush61",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -2911.284605,
+      18021.284655,
+      -70.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      145.00000131688245
+    ],
+    "Scale": [
+      1.0,
+      0.8125,
+      0.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_37",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -1425.6567206972877,
+      -4895.103917846888,
+      677.7272727272725
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -39.9999996901455
+    ],
+    "Scale": [
+      1.25,
+      1.125,
+      0.6875
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush19",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -3281.2846053788635,
+      5391.284654991058,
+      0.0
+    ],
+    "Rotation": [
+      -14.999999883804486,
+      -3.490393964966642e-07,
+      179.99999869736718
+    ],
+    "Scale": [
+      1.125,
+      1.25,
+      1.25
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc5",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_Marble",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      1029.019046732246,
+      -4205.018097584855,
+      728.962388
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -40.00000254927341
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_38",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -1666.9070912676982,
+      -4808.272841985128,
+      642.7272727272726
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      4.999999961268629
+    ],
+    "Scale": [
+      0.9375,
+      0.9375,
+      0.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_39",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -2724.284700050331,
+      -4176.829999102703,
+      620.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -84.99999965141399
+    ],
+    "Scale": [
+      1.25,
+      1.125,
+      1.125
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_19",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      -2681.9108293612976,
+      -4089.662963551219,
+      420.0
+    ],
+    "Rotation": [
+      -175.49016511039477,
+      8.113913116836327,
+      24.464506379230702
+    ],
+    "Scale": [
+      1.0625,
+      1.375,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_40",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -2776.907091,
+      -3888.2728420000003,
+      562.727273
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -19.999999651413763
+    ],
+    "Scale": [
+      0.9375,
+      0.9375,
+      0.9375
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_41",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      3386.6795481801873,
+      -4208.421943333276,
+      590.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      34.999999419022494
+    ],
+    "Scale": [
+      1.25,
+      1.125,
+      1.125
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_20",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      3315.00374404701,
+      -4258.60988049913,
+      430.0
+    ],
+    "Rotation": [
+      179.887146,
+      10.156472000000052,
+      143.73008141902244
+    ],
+    "Scale": [
+      1.0625,
+      1.375,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_42",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      3163.092909,
+      -4398.272842,
+      532.727273
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      99.99999941902239
+    ],
+    "Scale": [
+      0.9375,
+      0.9375,
+      0.9375
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush62",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -3571.284605,
+      17671.284655,
+      -70.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      145.000001
+    ],
+    "Scale": [
+      1.0,
+      0.8125,
+      0.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_95",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -3128.453297,
+      17352.799241,
+      -33.096914999999996
+    ],
+    "Rotation": [
+      -175.68965898310532,
+      -4.920927334524441,
+      97.93746269316826
+    ],
+    "Scale": [
+      0.875,
+      1.0625,
+      0.6875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_96",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -3378.453297,
+      17112.799241,
+      -63.096914999999996
+    ],
+    "Rotation": [
+      -175.689659,
+      -4.920927000000007,
+      -162.06253777463635
+    ],
+    "Scale": [
+      0.875,
+      1.0625,
+      0.6875
+    ]
+  },
+  {
+    "ObjectName": "SM_BigTree_32",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      3605.8588199999995,
+      -659.955361,
+      810.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -145.000001
+    ],
+    "Scale": [
+      2.0625,
+      1.875,
+      3.4375
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_30",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -3843.7333059817074,
+      5373.504832708829,
+      -28.28624047861888
+    ],
+    "Rotation": [
+      2.8727747245761233,
+      -4.0940466278922285,
+      34.89729807285353
+    ],
+    "Scale": [
+      2.125,
+      -1.8125,
+      1.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_43",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -3930.977070793657,
+      5696.741344635492,
+      -81.84549139868045
+    ],
+    "Rotation": [
+      2.872774724576115,
+      -4.094046627892226,
+      54.897297917926096
+    ],
+    "Scale": [
+      1.8125,
+      -1.5,
+      -1.875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_47",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -3062.783307259464,
+      5249.4874111747185,
+      -88.99284296123392
+    ],
+    "Rotation": [
+      2.872774724576115,
+      -4.094046627892226,
+      54.897297917926096
+    ],
+    "Scale": [
+      0.5625,
+      0.5625,
+      0.375
+    ]
+  },
+  {
+    "ObjectName": "Plane3",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1540.0,
+      4600.0,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      5.625,
+      5.625,
+      5.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush80",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      1093.584706,
+      1713.086351,
+      -50.208352
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -99.99999972887748
+    ],
+    "Scale": [
+      0.625,
+      0.75,
+      0.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush63",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -2401.284605,
+      17311.284655,
+      -70.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      100.00000134858676
+    ],
+    "Scale": [
+      1.0,
+      0.8125,
+      0.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush64",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -2161.284605,
+      17821.284655,
+      -90.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -45.0
+    ],
+    "Scale": [
+      1.5,
+      1.3125,
+      1.4375
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush23",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -3891.284605,
+      5811.284655,
+      -50.0
+    ],
+    "Rotation": [
+      169.9999986831182,
+      4.3473089711936447e-07,
+      -119.99999730212886
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush65",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "M_WPOLeaves"
+    ],
+    "Location": [
+      358.71539499999994,
+      17431.284655,
+      30.0
+    ],
+    "Rotation": [
+      0.8238450000000029,
+      11.643575999999998,
+      107.946575
+    ],
+    "Scale": [
+      3.125,
+      3.3125,
+      4.8125
+    ]
+  },
+  {
+    "ObjectName": "Pillar4",
+    "MeshName": "SM_CastleWall_Pillar",
+    "Material": [
+      "MI_CastleWall_Pillar"
+    ],
+    "Location": [
+      -7250.0,
+      29150.0,
+      0.00013051757559878752
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -89.9999996971734
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "Plane5",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      2190.0,
+      4800.0,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      5.625,
+      5.625,
+      5.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush66",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "M_WPOLeaves"
+    ],
+    "Location": [
+      1338.715395,
+      15661.284655,
+      680.0
+    ],
+    "Rotation": [
+      0.8238450000000029,
+      11.643575999999998,
+      107.946575
+    ],
+    "Scale": [
+      3.125,
+      3.3125,
+      4.8125
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_51",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -1676.251649,
+      7498.543314999999,
+      -110.0
+    ],
+    "Rotation": [
+      4.830449377948904,
+      1.2925628649711332,
+      165.0545219277295
+    ],
+    "Scale": [
+      6.8125,
+      6.8125,
+      1.9375
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush67",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1041.2846049999998,
+      17251.284655,
+      -70.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      145.000001
+    ],
+    "Scale": [
+      1.0,
+      0.8125,
+      0.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush20",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1888.7883770024005,
+      5739.1412461252,
+      -140.00003217435938
+    ],
+    "Rotation": [
+      -1.000000054318662e-06,
+      -6.97173334174295e-07,
+      -150.00000023239141
+    ],
+    "Scale": [
+      0.9375,
+      1.125,
+      0.8125
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush25",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1461.2846049999998,
+      5481.284655,
+      -130.0
+    ],
+    "Rotation": [
+      14.999999961268168,
+      1.7431148248394953e-07,
+      -90.00000199238937
+    ],
+    "Scale": [
+      1.6875,
+      1.6875,
+      1.75
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_97",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -3187.577628527715,
+      14204.66795073245,
+      -33.096915
+    ],
+    "Rotation": [
+      -175.689659,
+      -4.92092700000001,
+      12.937463658441539
+    ],
+    "Scale": [
+      0.875,
+      1.0625,
+      0.6875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_98",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -3448.453297,
+      14432.799241,
+      -63.096915
+    ],
+    "Rotation": [
+      -175.689659,
+      -4.920927000000007,
+      112.93746265844139
+    ],
+    "Scale": [
+      0.875,
+      1.0625,
+      0.6875
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush68",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -3211.284605,
+      18521.284655,
+      -70.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      44.999999302827035
+    ],
+    "Scale": [
+      1.5,
+      1.3125,
+      1.375
+    ]
+  },
+  {
+    "ObjectName": "SM_StartColumn3",
+    "MeshName": "SM_Temple_Pillar_",
+    "Material": [
+      "MI_Temple_Pillar"
+    ],
+    "Location": [
+      -2130.0,
+      -1179.9999982964846,
+      520.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      89.99999930282692
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush69",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -3801.284605,
+      18501.284655,
+      -70.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      145.000001
+    ],
+    "Scale": [
+      1.0,
+      0.8125,
+      0.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_53",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -1613.733306,
+      5133.504833,
+      -28.286239999999992
+    ],
+    "Rotation": [
+      157.37431879675898,
+      63.27827729303992,
+      160.4614822558944
+    ],
+    "Scale": [
+      2.75,
+      -1.4375,
+      1.0625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush26",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1491.284605,
+      6881.284655,
+      -310.0
+    ],
+    "Rotation": [
+      14.999999999999996,
+      0.0,
+      -90.00000199999997
+    ],
+    "Scale": [
+      1.6875,
+      1.6875,
+      1.75
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_99",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -3230.0,
+      18640.0,
+      -200.0
+    ],
+    "Rotation": [
+      5.172245628901121,
+      10.80730074113971,
+      140.8171071155419
+    ],
+    "Scale": [
+      2.3125,
+      2.5625,
+      2.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush70",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1661.2846049999998,
+      16721.284655,
+      -270.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -15.000000232391132
+    ],
+    "Scale": [
+      1.5,
+      1.3125,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush29",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -2001.2846049999998,
+      6571.284655,
+      -120.0
+    ],
+    "Rotation": [
+      9.999999647346039,
+      9.999999922536345,
+      -90.00000203085327
+    ],
+    "Scale": [
+      1.6875,
+      1.6875,
+      1.75
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush71",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "M_WPOLeaves"
+    ],
+    "Location": [
+      -961.284605,
+      18031.284655,
+      -70.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -14.999999999999996
+    ],
+    "Scale": [
+      1.8125,
+      1.625,
+      2.5625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush72",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -4031.284605,
+      13361.284655,
+      -100.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      50.0
+    ],
+    "Scale": [
+      0.625,
+      0.875,
+      0.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush73",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -2221.284605,
+      14231.284655,
+      -100.0
+    ],
+    "Rotation": [
+      -140.00000199999997,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.5,
+      1.3125,
+      1.125
+    ]
+  },
+  {
+    "ObjectName": "SM_StartColumn4",
+    "MeshName": "SM_Temple_Pillar_",
+    "Material": [
+      "MI_Temple_Pillar"
+    ],
+    "Location": [
+      2160.0,
+      -1180.0000224360529,
+      520.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      179.999998302827
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "Plane7",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      2160.0,
+      4210.0,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      9.0625,
+      9.0625,
+      9.0625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush74",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1601.284605,
+      17281.284655,
+      -70.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -14.999999999999996
+    ],
+    "Scale": [
+      1.5,
+      1.3125,
+      2.0
+    ]
+  },
+  {
+    "ObjectName": "Plane8",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      2330.0,
+      4470.0,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      5.625,
+      5.625,
+      5.625
+    ]
+  },
+  {
+    "ObjectName": "mushroom_mini_easy02",
+    "MeshName": "mushroom_mini_easy02",
+    "Material": [
+      "MI_White1",
+      "MI_White1"
+    ],
+    "Location": [
+      -2830.0,
+      16420.0,
+      0.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      0.25,
+      0.25,
+      0.25
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush24",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -3891.284605,
+      5211.284655,
+      -190.0
+    ],
+    "Rotation": [
+      0.0,
+      -9.999999922536404,
+      0.0
+    ],
+    "Scale": [
+      1.5,
+      1.5,
+      0.9375
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush30",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -2581.284605,
+      5641.284655,
+      -130.0
+    ],
+    "Rotation": [
+      0.0,
+      -4.999999961268202,
+      0.0
+    ],
+    "Scale": [
+      1.8125,
+      2.0,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "Plane9",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1900.0,
+      4640.0,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      5.625,
+      5.625,
+      5.625
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook",
+    "MeshName": "SM_StartBook",
+    "Material": [
+      "MI_BookCover",
+      "MI_BookCover",
+      "MI_White"
+    ],
+    "Location": [
+      -10.000041850623866,
+      -4520.0,
+      735.0521687330898
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      179.99999860565399
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Tree_V44",
+    "MeshName": "SM_Trunk_001",
+    "Material": [
+      "MI_Trunk"
+    ],
+    "Location": [
+      2420.0,
+      -450.0,
+      260.0
+    ],
+    "Rotation": [
+      -10.957636724444006,
+      2.175674532320603,
+      74.35357616836414
+    ],
+    "Scale": [
+      1.25,
+      1.5,
+      1.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush31",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -2901.284605,
+      6321.284655,
+      20.0
+    ],
+    "Rotation": [
+      10.000000000000007,
+      2.3854160110976376e-15,
+      -100.0000019225363
+    ],
+    "Scale": [
+      1.6875,
+      1.6875,
+      1.75
+    ]
+  },
+  {
+    "ObjectName": "Plane2",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      2100.0,
+      4320.0,
+      2900.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      7.25,
+      7.25,
+      7.25
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_55",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -2743.733306,
+      5113.504833,
+      -78.28623999999999
+    ],
+    "Rotation": [
+      -69.57518657897853,
+      63.194043087213295,
+      -67.35287376743209
+    ],
+    "Scale": [
+      1.8125,
+      -2.0,
+      1.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_56",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -4333.733306,
+      5813.504833,
+      -108.28623999999999
+    ],
+    "Rotation": [
+      -57.05418707208848,
+      72.03613996619804,
+      -105.73436790044119
+    ],
+    "Scale": [
+      0.75,
+      -0.9375,
+      0.5625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush32",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -3711.284605,
+      6111.284655,
+      -460.0
+    ],
+    "Rotation": [
+      0.8238449675316811,
+      11.64357637447566,
+      -162.05342572637363
+    ],
+    "Scale": [
+      1.375,
+      1.4375,
+      2.625
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc11",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_Marble",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      1064.7251404923404,
+      -4235.9789759538935,
+      847.924814
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      164.99999845072682
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_52",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -7188.377021,
+      6214.245312,
+      -523.001005
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -104.99999934858671
+    ],
+    "Scale": [
+      3.3125,
+      3.0,
+      5.5625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush33",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -6891.284605,
+      6101.284655,
+      -90.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -39.9999996901455
+    ],
+    "Scale": [
+      1.5,
+      1.5,
+      0.6875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_54",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -7048.377021,
+      6214.245312,
+      -523.001005
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      130.00000196829623
+    ],
+    "Scale": [
+      3.3125,
+      3.0,
+      5.5625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_57",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -6503.733306,
+      5923.504833,
+      -108.28624
+    ],
+    "Rotation": [
+      -57.054187000001306,
+      72.0361400000007,
+      34.26563382039567
+    ],
+    "Scale": [
+      0.75,
+      -0.9375,
+      0.5625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush34",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -6671.284605,
+      5881.284655,
+      -200.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -40.00000000000001
+    ],
+    "Scale": [
+      1.5,
+      1.5,
+      0.6875
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush35",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -3011.284605,
+      8171.284655,
+      -30.0
+    ],
+    "Rotation": [
+      0.8238450000000069,
+      11.643576000000017,
+      107.94657469717298
+    ],
+    "Scale": [
+      1.9375,
+      2.125,
+      3.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush36",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -3391.284605,
+      7431.284655,
+      -110.0
+    ],
+    "Rotation": [
+      3.381846461551387,
+      30.622400016822542,
+      -124.4758303672962
+    ],
+    "Scale": [
+      1.5,
+      1.5,
+      2.4375
+    ]
+  },
+  {
+    "ObjectName": "SM_Stairs",
+    "MeshName": "SM_Stairs",
+    "Material": [
+      "MI_Marble"
+    ],
+    "Location": [
+      10.0,
+      330.0,
+      130.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      0.625,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush37",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      -2271.284605,
+      7751.284655,
+      1110.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.875,
+      1.875,
+      3.3125
+    ]
+  },
+  {
+    "ObjectName": "Plane4",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1809.0751719011866,
+      4255.741073618607,
+      2900.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      49.99999961268184
+    ],
+    "Scale": [
+      7.25,
+      7.25,
+      7.25
+    ]
+  },
+  {
+    "ObjectName": "Plane10",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1315.5464911356962,
+      4460.995650332191,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      49.99999961268184
+    ],
+    "Scale": [
+      10.0,
+      10.0,
+      10.0
+    ]
+  },
+  {
+    "ObjectName": "Plane11",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1580.1495572782221,
+      5087.482056719411,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      49.99999961268184
+    ],
+    "Scale": [
+      5.625,
+      5.625,
+      5.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush81",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      1453.584706,
+      2253.086351,
+      -60.208352000000005
+    ],
+    "Rotation": [
+      -165.8672786810522,
+      -5.078545314970937,
+      -30.62994427749818
+    ],
+    "Scale": [
+      0.9375,
+      0.8125,
+      0.625
+    ]
+  },
+  {
+    "ObjectName": "Plane13",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      2012.8321449897423,
+      4685.2560278609335,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      49.99999961268184
+    ],
+    "Scale": [
+      5.625,
+      5.625,
+      5.625
+    ]
+  },
+  {
+    "ObjectName": "Plane14",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1922.9344874457117,
+      4982.6083629250725,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      49.99999961268184
+    ],
+    "Scale": [
+      5.625,
+      5.625,
+      5.625
+    ]
+  },
+  {
+    "ObjectName": "Plane16",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1890.0,
+      4710.0,
+      2900.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      49.99999961268184
+    ],
+    "Scale": [
+      7.25,
+      7.25,
+      7.25
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_105",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1826.817709,
+      4389.472187,
+      -204.939627
+    ],
+    "Rotation": [
+      28.78307139432175,
+      3.9631093960064665,
+      -104.99765565138998
+    ],
+    "Scale": [
+      2.5,
+      2.5,
+      2.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stairs2",
+    "MeshName": "SM_Stairs",
+    "Material": [
+      "MI_Marble"
+    ],
+    "Location": [
+      10.0,
+      80.0,
+      250.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      0.625,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "Plane18",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1370.0,
+      4640.0,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      5.625,
+      5.625,
+      5.625
+    ]
+  },
+  {
+    "ObjectName": "Plane19",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1050.149557,
+      5087.482057,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      50.0
+    ],
+    "Scale": [
+      5.625,
+      5.625,
+      5.625
+    ]
+  },
+  {
+    "ObjectName": "Plane20",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1173.523327,
+      5137.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      99.99999961268179
+    ],
+    "Scale": [
+      8.9375,
+      8.9375,
+      8.9375
+    ]
+  },
+  {
+    "ObjectName": "SM_SmallBush_10",
+    "MeshName": "SM_SmallBush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      179.49243916378373,
+      3472.4163258344965,
+      4.109264543929839
+    ],
+    "Rotation": [
+      20.09156313464641,
+      5.5810372422892325,
+      2.6095243799460746
+    ],
+    "Scale": [
+      1.3125,
+      1.3125,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush44",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -871.2846049999998,
+      15831.284655,
+      -40.0
+    ],
+    "Rotation": [
+      0.8238450000000029,
+      11.643575999999998,
+      107.946575
+    ],
+    "Scale": [
+      1.9375,
+      2.125,
+      2.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush45",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "M_WPOLeaves"
+    ],
+    "Location": [
+      -621.284605,
+      16671.284655,
+      150.0
+    ],
+    "Rotation": [
+      0.8238450000000029,
+      11.643575999999998,
+      107.946575
+    ],
+    "Scale": [
+      1.9375,
+      2.125,
+      3.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush46",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "M_WPOLeaves"
+    ],
+    "Location": [
+      1118.715395,
+      16151.284655,
+      680.0
+    ],
+    "Rotation": [
+      0.8238450000000029,
+      11.643575999999998,
+      107.946575
+    ],
+    "Scale": [
+      3.125,
+      3.3125,
+      4.8125
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush47",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1401.284605,
+      16151.284655,
+      -40.0
+    ],
+    "Rotation": [
+      0.8238450000000064,
+      11.643576000000081,
+      37.946575542245725
+    ],
+    "Scale": [
+      1.0,
+      1.1875,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_SmallBush_001",
+    "MeshName": "SM_SmallBush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      -1240.0,
+      -660.0,
+      2040.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_SmallBush_2",
+    "MeshName": "SM_SmallBush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1100.0,
+      -670.0,
+      2020.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Stairs3",
+    "MeshName": "SM_Stairs",
+    "Material": [
+      "MI_Marble"
+    ],
+    "Location": [
+      10.0,
+      -170.0,
+      370.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      0.625,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_SmallBush_3",
+    "MeshName": "SM_SmallBush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      930.0,
+      -650.0,
+      2020.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_SmallBush_4",
+    "MeshName": "SM_SmallBush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      1100.0,
+      -690.0,
+      2020.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush48",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1521.284605,
+      15801.284655,
+      -40.0
+    ],
+    "Rotation": [
+      -22.55393596807249,
+      39.90052755623071,
+      47.347502617747665
+    ],
+    "Scale": [
+      1.0625,
+      1.25,
+      1.375
+    ]
+  },
+  {
+    "ObjectName": "SM_SmallBush_5",
+    "MeshName": "SM_SmallBush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -2320.0,
+      -2960.0,
+      730.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_SmallBush_6",
+    "MeshName": "SM_SmallBush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -2490.0,
+      -3010.0,
+      710.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush49",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1441.284605,
+      14881.284655,
+      -180.0
+    ],
+    "Rotation": [
+      -3.8772669073760544,
+      9.72990457380886,
+      157.07421055524068
+    ],
+    "Scale": [
+      1.5,
+      1.4375,
+      1.75
+    ]
+  },
+  {
+    "ObjectName": "SM_SmallBush_11",
+    "MeshName": "SM_SmallBush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      299.492439,
+      3752.416326,
+      4.109265
+    ],
+    "Rotation": [
+      20.09156300000017,
+      5.581037000000032,
+      112.60952314789978
+    ],
+    "Scale": [
+      1.3125,
+      1.3125,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_106",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      269.091835,
+      4759.709014,
+      14.777886000000002
+    ],
+    "Rotation": [
+      21.366931873208177,
+      5.491470807628185,
+      10.839352423412588
+    ],
+    "Scale": [
+      0.6875,
+      0.5,
+      0.875
+    ]
+  },
+  {
+    "ObjectName": "SM_BigTree_40",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      2615.85882,
+      -659.955361,
+      1550.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -145.000001
+    ],
+    "Scale": [
+      2.1875,
+      2.1875,
+      2.1875
+    ]
+  },
+  {
+    "ObjectName": "Plane24",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1683.5233269999999,
+      5667.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      100.00000000000001
+    ],
+    "Scale": [
+      10.5625,
+      10.5625,
+      10.5625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stairs4",
+    "MeshName": "SM_Stairs",
+    "Material": [
+      "MI_Marble"
+    ],
+    "Location": [
+      10.0,
+      580.0000199027395,
+      10.003137513604429
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      0.625,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "Plane25",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      2283.523327,
+      5207.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      100.00000000000001
+    ],
+    "Scale": [
+      10.5625,
+      10.5625,
+      10.5625
+    ]
+  },
+  {
+    "ObjectName": "SM_Tree_V67",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -820.0,
+      4430.0,
+      -90.0
+    ],
+    "Rotation": [
+      2.992254316278323,
+      -2.042880537600583,
+      -109.36741655043494
+    ],
+    "Scale": [
+      1.1875,
+      0.9375,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "SM_Tree_V69",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -760.0,
+      4120.0,
+      -110.0
+    ],
+    "Rotation": [
+      2.9922540000000692,
+      -2.0428810000000244,
+      -24.36741765844224
+    ],
+    "Scale": [
+      1.1875,
+      0.9375,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "Plane28",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      623.523327,
+      4717.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      12.6875,
+      12.6875,
+      12.6875
+    ]
+  },
+  {
+    "ObjectName": "Plane29",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      413.523327,
+      5027.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      8.875,
+      8.875,
+      8.875
+    ]
+  },
+  {
+    "ObjectName": "Plane30",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      2100.0,
+      2880.0,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      9.0625,
+      9.0625,
+      9.0625
+    ]
+  },
+  {
+    "ObjectName": "Plane31",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1749.0751719999998,
+      2925.7410739999996,
+      2900.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      50.0
+    ],
+    "Scale": [
+      7.25,
+      7.25,
+      7.25
+    ]
+  },
+  {
+    "ObjectName": "Plane32",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      2095.546491,
+      3470.99565,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      50.0
+    ],
+    "Scale": [
+      10.0,
+      10.0,
+      10.0
+    ]
+  },
+  {
+    "ObjectName": "Plane33",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1363.5233269999999,
+      3547.3568450000002,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      8.875,
+      8.875,
+      8.875
+    ]
+  },
+  {
+    "ObjectName": "Plane34",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1193.5233269999999,
+      4187.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      8.875,
+      8.875,
+      8.875
+    ]
+  },
+  {
+    "ObjectName": "Plane35",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1350.0,
+      3100.0,
+      2900.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      9.6875,
+      9.6875,
+      9.6875
+    ]
+  },
+  {
+    "ObjectName": "Plane36",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1750.0,
+      1910.0,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      9.0625,
+      9.0625,
+      9.0625
+    ]
+  },
+  {
+    "ObjectName": "Plane37",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1399.075172,
+      1955.741074,
+      2900.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      50.0
+    ],
+    "Scale": [
+      7.25,
+      7.25,
+      7.25
+    ]
+  },
+  {
+    "ObjectName": "Plane38",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1745.546491,
+      2500.99565,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      50.0
+    ],
+    "Scale": [
+      10.0,
+      10.0,
+      10.0
+    ]
+  },
+  {
+    "ObjectName": "Plane39",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1013.5233270000001,
+      2577.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      8.875,
+      8.875,
+      8.875
+    ]
+  },
+  {
+    "ObjectName": "Plane40",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      843.5233270000001,
+      3067.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      8.875,
+      8.875,
+      8.875
+    ]
+  },
+  {
+    "ObjectName": "SM_Tree_V70",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1050.0,
+      5010.0,
+      -70.0
+    ],
+    "Rotation": [
+      2.992254000000003,
+      -2.042881000000024,
+      -109.36741700000006
+    ],
+    "Scale": [
+      1.1875,
+      0.9375,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "Plane42",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      273.523327,
+      6507.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      100.00000000000001
+    ],
+    "Scale": [
+      8.9375,
+      8.9375,
+      8.9375
+    ]
+  },
+  {
+    "ObjectName": "Plane43",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      715.5464910000001,
+      6330.99565,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      50.0
+    ],
+    "Scale": [
+      10.0,
+      10.0,
+      10.0
+    ]
+  },
+  {
+    "ObjectName": "Plane44",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      203.523327,
+      6917.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      100.00000000000001
+    ],
+    "Scale": [
+      10.5625,
+      10.5625,
+      10.5625
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc12",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_Marble",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      1044.7392009999999,
+      -4218.208876,
+      962.27566
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      149.99999845072676
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "Plane45",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -346.4766730000001,
+      6457.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      100.00000000000001
+    ],
+    "Scale": [
+      8.875,
+      8.875,
+      8.875
+    ]
+  },
+  {
+    "ObjectName": "Plane46",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -786.4766730000001,
+      6947.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      8.875,
+      8.875,
+      8.875
+    ]
+  },
+  {
+    "ObjectName": "Plane47",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -856.4766730000001,
+      5787.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      8.875,
+      8.875,
+      8.875
+    ]
+  },
+  {
+    "ObjectName": "Plane48",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1260.0,
+      5660.0,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      5.625,
+      5.625,
+      5.625
+    ]
+  },
+  {
+    "ObjectName": "Plane49",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -146.476673,
+      6047.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      100.00000000000001
+    ],
+    "Scale": [
+      8.9375,
+      8.9375,
+      8.9375
+    ]
+  },
+  {
+    "ObjectName": "Plane50",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -4.453509000000054,
+      6470.99565,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      50.0
+    ],
+    "Scale": [
+      10.0,
+      10.0,
+      10.0
+    ]
+  },
+  {
+    "ObjectName": "Plane51",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -516.476673,
+      7057.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      100.00000000000001
+    ],
+    "Scale": [
+      10.5625,
+      10.5625,
+      10.5625
+    ]
+  },
+  {
+    "ObjectName": "Plane52",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -1066.4766730000001,
+      6597.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      174.9999994190227
+    ],
+    "Scale": [
+      8.875,
+      8.875,
+      8.875
+    ]
+  },
+  {
+    "ObjectName": "Plane53",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -1506.4766730000001,
+      7087.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      8.875,
+      8.875,
+      8.875
+    ]
+  },
+  {
+    "ObjectName": "Plane54",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      703.523327,
+      5707.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      8.875,
+      8.875,
+      8.875
+    ]
+  },
+  {
+    "ObjectName": "SM_BigTree_001",
+    "MeshName": "SM_BigTree_001",
+    "Material": [
+      "MI_Trunk",
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      2680.0,
+      -3820.0,
+      510.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      64.99999949648658
+    ],
+    "Scale": [
+      2.0,
+      2.0,
+      2.0
+    ]
+  },
+  {
+    "ObjectName": "Plane55",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -1736.4766730000001,
+      6687.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      174.999999
+    ],
+    "Scale": [
+      11.5,
+      11.5,
+      11.5
+    ]
+  },
+  {
+    "ObjectName": "Plane57",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -3446.476673,
+      7587.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      8.875,
+      8.875,
+      8.875
+    ]
+  },
+  {
+    "ObjectName": "Plane58",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -2776.476673,
+      6517.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      174.999999
+    ],
+    "Scale": [
+      11.5,
+      11.5,
+      11.5
+    ]
+  },
+  {
+    "ObjectName": "Plane59",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -3286.476673,
+      7237.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      14.5625,
+      14.5625,
+      14.5625
+    ]
+  },
+  {
+    "ObjectName": "Plane60",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -2356.476673,
+      6597.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      10.0625,
+      10.0625,
+      10.0625
+    ]
+  },
+  {
+    "ObjectName": "Plane21",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      2183.523327,
+      -682.6431549999998,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      100.00000000000001
+    ],
+    "Scale": [
+      8.9375,
+      8.9375,
+      8.9375
+    ]
+  },
+  {
+    "ObjectName": "Plane22",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      2493.523327,
+      -62.64315499999998,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      149.99999961268193
+    ],
+    "Scale": [
+      8.9375,
+      8.9375,
+      8.9375
+    ]
+  },
+  {
+    "ObjectName": "Plane23",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      2453.523327,
+      547.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      150.0
+    ],
+    "Scale": [
+      8.9375,
+      8.9375,
+      8.9375
+    ]
+  },
+  {
+    "ObjectName": "Plane26",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      2453.523327,
+      -1552.643155,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      150.0
+    ],
+    "Scale": [
+      8.9375,
+      8.9375,
+      8.9375
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush39",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1861.2846049999998,
+      5101.284655,
+      -280.0
+    ],
+    "Rotation": [
+      9.977199636388876e-17,
+      -4.999999999999997,
+      -14.99999988380455
+    ],
+    "Scale": [
+      1.8125,
+      2.0,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "Plane27",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1933.5233269999999,
+      -2732.6431549999998,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      179.99999976760907
+    ],
+    "Scale": [
+      10.9375,
+      10.9375,
+      8.9375
+    ]
+  },
+  {
+    "ObjectName": "Plane41",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1933.523327,
+      -2042.6431550000002,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      180.0
+    ],
+    "Scale": [
+      10.9375,
+      10.9375,
+      8.9375
+    ]
+  },
+  {
+    "ObjectName": "Plane56",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      2763.523327,
+      -1322.643155,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      180.0
+    ],
+    "Scale": [
+      10.9375,
+      10.9375,
+      8.9375
+    ]
+  },
+  {
+    "ObjectName": "Plane61",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -1336.4766730000001,
+      6267.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      174.999999
+    ],
+    "Scale": [
+      11.5,
+      11.5,
+      11.5
+    ]
+  },
+  {
+    "ObjectName": "Plane62",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      3633.523327,
+      -142.64315499999998,
+      2890.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      180.0
+    ],
+    "Scale": [
+      10.9375,
+      10.9375,
+      8.9375
+    ]
+  },
+  {
+    "ObjectName": "Plane63",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      1893.5233269999999,
+      -3222.6431549999998,
+      2890.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      180.0
+    ],
+    "Scale": [
+      10.9375,
+      10.9375,
+      8.9375
+    ]
+  },
+  {
+    "ObjectName": "Plane64",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      2303.523327,
+      927.3568449999998,
+      2890.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      180.0
+    ],
+    "Scale": [
+      10.9375,
+      10.9375,
+      8.9375
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_100",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -103.73330600000008,
+      4823.504833,
+      -28.28624
+    ],
+    "Rotation": [
+      117.02395339183322,
+      79.82426636030723,
+      146.65508335915783
+    ],
+    "Scale": [
+      3.0,
+      -1.4375,
+      1.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_101",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -1487.6794909999999,
+      4454.544827,
+      -40.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      119.99999900000002
+    ],
+    "Scale": [
+      1.5625,
+      1.5625,
+      0.125
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_102",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -1587.679491,
+      4324.544827,
+      -40.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      119.99999900000002
+    ],
+    "Scale": [
+      0.875,
+      0.875,
+      0.125
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_21",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -1275.295243,
+      1811.481458,
+      -30.0
+    ],
+    "Rotation": [
+      2.1175070441833315,
+      -4.530509158307269,
+      -135.08377009053797
+    ],
+    "Scale": [
+      1.3125,
+      1.3125,
+      0.1875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_80",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      912.3205094915922,
+      3304.544827349177,
+      -10.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      119.99999907043663
+    ],
+    "Scale": [
+      1.0,
+      0.8125,
+      0.375
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_107",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -566.195991,
+      13788.736942,
+      -393.304259
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -14.999999999999996
+    ],
+    "Scale": [
+      4.125,
+      4.0625,
+      1.875
+    ]
+  },
+  {
+    "ObjectName": "SM_SmallBush_8",
+    "MeshName": "SM_SmallBush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -2780.0,
+      15390.0,
+      0.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_SmallBush_9",
+    "MeshName": "SM_SmallBush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -2300.0,
+      15100.0,
+      0.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush75",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1771.2846049999998,
+      14741.284655,
+      -210.0
+    ],
+    "Rotation": [
+      30.33420030138575,
+      -2.5759380932821085,
+      115.21783548163198
+    ],
+    "Scale": [
+      1.5,
+      1.3125,
+      1.125
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush76",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1541.284605,
+      14211.284655,
+      -30.0
+    ],
+    "Rotation": [
+      -0.9653881474132504,
+      0.8200107240977845,
+      113.02411532438747
+    ],
+    "Scale": [
+      0.875,
+      1.0625,
+      1.6875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_103",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -1982.739783,
+      14335.060812,
+      -63.854969
+    ],
+    "Rotation": [
+      -1.2971689999999971,
+      4.829217000000002,
+      -0.05470100000002279
+    ],
+    "Scale": [
+      1.3125,
+      1.3125,
+      1.25
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush77",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -2691.284605,
+      17011.284655,
+      -120.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      145.000001
+    ],
+    "Scale": [
+      1.0,
+      0.8125,
+      0.6875
+    ]
+  },
+  {
+    "ObjectName": "Plane65",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      863.5233270000001,
+      17937.356845000002,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      174.999999
+    ],
+    "Scale": [
+      11.5,
+      11.5,
+      11.5
+    ]
+  },
+  {
+    "ObjectName": "Plane66",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -246.47667300000012,
+      17137.356845000002,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      15.375,
+      15.375,
+      15.375
+    ]
+  },
+  {
+    "ObjectName": "Plane67",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -176.47667300000012,
+      17687.356845000002,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      174.999999
+    ],
+    "Scale": [
+      11.5,
+      11.5,
+      11.5
+    ]
+  },
+  {
+    "ObjectName": "Plane68",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      803.523327,
+      17377.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      174.999999
+    ],
+    "Scale": [
+      11.5,
+      11.5,
+      11.5
+    ]
+  },
+  {
+    "ObjectName": "Plane69",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -946.4766730000001,
+      17077.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      174.999999
+    ],
+    "Scale": [
+      11.5,
+      11.5,
+      11.5
+    ]
+  },
+  {
+    "ObjectName": "Plane70",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -1566.4766730000001,
+      19567.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      174.999999
+    ],
+    "Scale": [
+      11.5,
+      11.5,
+      11.5
+    ]
+  },
+  {
+    "ObjectName": "Plane71",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -216.4766729999999,
+      19137.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      174.999999
+    ],
+    "Scale": [
+      11.5,
+      11.5,
+      11.5
+    ]
+  },
+  {
+    "ObjectName": "Plane72",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -216.476673,
+      18807.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      174.999999
+    ],
+    "Scale": [
+      11.5,
+      11.5,
+      11.5
+    ]
+  },
+  {
+    "ObjectName": "Plane73",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -1006.4766730000001,
+      18627.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      174.999999
+    ],
+    "Scale": [
+      11.5,
+      11.5,
+      11.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush82",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1441.284605,
+      14601.284655,
+      -180.0
+    ],
+    "Rotation": [
+      0.823845,
+      11.643576000000003,
+      157.946575
+    ],
+    "Scale": [
+      1.0,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_104",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -46.19599100000005,
+      14938.736942,
+      -393.304259
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -14.999999999999996
+    ],
+    "Scale": [
+      4.125,
+      4.0625,
+      5.75
+    ]
+  },
+  {
+    "ObjectName": "SM_Human",
+    "MeshName": "SM_Human",
+    "Material": [
+      "M_Gray2"
+    ],
+    "Location": [
+      720.0,
+      -1190.0,
+      520.0003136230443
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "Plane74",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      3623.523327,
+      4717.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      23.0625,
+      23.0625,
+      23.0625
+    ]
+  },
+  {
+    "ObjectName": "Plane75",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      3623.523327,
+      6137.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      23.0625,
+      23.0625,
+      23.0625
+    ]
+  },
+  {
+    "ObjectName": "Plane76",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      3413.523327,
+      3947.3568450000002,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      23.0625,
+      23.0625,
+      23.0625
+    ]
+  },
+  {
+    "ObjectName": "Plane77",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      2843.523327,
+      4377.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      23.0625,
+      23.0625,
+      23.0625
+    ]
+  },
+  {
+    "ObjectName": "Plane78",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      2723.523327,
+      3077.3568450000002,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      40.00000000000001
+    ],
+    "Scale": [
+      23.0625,
+      23.0625,
+      23.0625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush78",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      3180.0,
+      4920.0,
+      550.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      134.999999
+    ],
+    "Scale": [
+      1.875,
+      1.875,
+      3.1875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_108",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1380.0,
+      13910.0,
+      -270.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      4.875,
+      1.875,
+      4.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush83",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "M_WPOLeaves"
+    ],
+    "Location": [
+      438.715395,
+      19201.284655,
+      760.0
+    ],
+    "Rotation": [
+      13.270455806205229,
+      9.554129571662816,
+      -144.4148829257134
+    ],
+    "Scale": [
+      3.3125,
+      3.5625,
+      4.8125
+    ]
+  },
+  {
+    "ObjectName": "mushroom_mini_easy2",
+    "MeshName": "mushroom_mini_easy01",
+    "Material": [
+      "MI_White1"
+    ],
+    "Location": [
+      -2310.0,
+      15070.0,
+      40.0
+    ],
+    "Rotation": [
+      20.176983901568796,
+      18.781046835820046,
+      -58.740936111456875
+    ],
+    "Scale": [
+      0.875,
+      0.875,
+      0.875
+    ]
+  },
+  {
+    "ObjectName": "Plane79",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -2076.476673,
+      19427.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      174.999999
+    ],
+    "Scale": [
+      11.5,
+      11.5,
+      11.5
+    ]
+  },
+  {
+    "ObjectName": "Plane80",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      -1136.4766730000001,
+      17407.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -145.00000130985478
+    ],
+    "Scale": [
+      12.625,
+      12.625,
+      12.625
+    ]
+  },
+  {
+    "ObjectName": "Plane81",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      213.52332699999988,
+      17317.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      174.999999
+    ],
+    "Scale": [
+      11.5,
+      11.5,
+      11.5
+    ]
+  },
+  {
+    "ObjectName": "Plane82",
+    "MeshName": "Plane",
+    "Material": [
+      "\uc81c\ubaa9_\uc5c6\uc74c-1_Mat"
+    ],
+    "Location": [
+      613.5233269999999,
+      16977.356845,
+      2910.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      174.999999
+    ],
+    "Scale": [
+      11.5,
+      11.5,
+      11.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush21",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -1657.036627,
+      1563.100196,
+      -142.84723799999995
+    ],
+    "Rotation": [
+      -166.350267347515,
+      -6.27967070165681,
+      39.24768737645887
+    ],
+    "Scale": [
+      1.125,
+      1.4375,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush41",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      1353.584706,
+      1773.086351,
+      -20.208352000000005
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -20.0
+    ],
+    "Scale": [
+      0.9375,
+      0.875,
+      0.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush21",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      2439.932391,
+      1091.242013,
+      79.027751
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      95.000002
+    ],
+    "Scale": [
+      1.0,
+      1.25,
+      1.375
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_85",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      690.0,
+      3020.0,
+      -40.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      129.9999986901457
+    ],
+    "Scale": [
+      0.3125,
+      0.3125,
+      0.125
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_13",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      -640.0,
+      -5370.0,
+      480.0
+    ],
+    "Rotation": [
+      -175.000001,
+      3.1805546814635168e-15,
+      90.00000107746386
+    ],
+    "Scale": [
+      1.0625,
+      1.9375,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_StartColumn_Broken",
+    "MeshName": "SM_Temple_Pillar_",
+    "Material": [
+      "MI_Temple_Pillar"
+    ],
+    "Location": [
+      2140.0000025372065,
+      -4550.0,
+      510.00026216508786
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc2",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_Marble",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      584.9998029354925,
+      -4835.980761780753,
+      728.9623877254196
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      119.99999896126867
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc3",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_Marble",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      562.036291863131,
+      -4794.6748505610285,
+      847.9248140544628
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -34.99999956692216
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc4",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_Marble",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      574.7392009827773,
+      -4818.208876006621,
+      962.2756604439262
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -49.99999976058069
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_11",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      3380.0,
+      -3240.0,
+      420.0
+    ],
+    "Rotation": [
+      -1.816933000000006,
+      -19.920663999999995,
+      10.319102658441427
+    ],
+    "Scale": [
+      1.0,
+      1.3125,
+      0.875
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc6",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_Marble",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      -848.7952847403171,
+      -4696.65213539679,
+      730.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      44.999999542246215
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc7",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_Marble",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      -843.4455753251091,
+      -4665.3905994129245,
+      848.9623879999999
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      59.99999954224617
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc8",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_Marble",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      -884.3769864688228,
+      -4626.4142867248775,
+      967.924814
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -94.99999945775522
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc9",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_Marble",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      -833.1849721687882,
+      -4647.6187143408515,
+      1082.27566
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -109.99999945775477
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc10",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_Marble",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      -864.8704619563546,
+      -4695.216165234491,
+      1201.238108
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      54.999999426050785
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc13",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_Marble",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      1024.739201,
+      -4258.208876,
+      1081.4012635400366
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      129.9999981549274
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush8",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      2520.0,
+      70.0,
+      220.0
+    ],
+    "Rotation": [
+      2.5047690000000014,
+      4.328750000000005,
+      115.0946780387319
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      1.0625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_18",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      -1190.0,
+      -5140.0,
+      480.0
+    ],
+    "Rotation": [
+      -175.000001,
+      -3.975693351829396e-16,
+      45.00000134858675
+    ],
+    "Scale": [
+      1.0625,
+      1.9375,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_24",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      4730.0,
+      -5550.0,
+      -610.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -104.99999918663188
+    ],
+    "Scale": [
+      8.5625,
+      -8.25,
+      20.875
+    ]
+  },
+  {
+    "ObjectName": "SM_StartBook_etc14",
+    "MeshName": "SM_StartBook_etc",
+    "Material": [
+      "MI_Marble",
+      "MI_BookCover",
+      "MI_Marble"
+    ],
+    "Location": [
+      1024.739201,
+      -4258.208876,
+      1200.5272642685522
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      139.99999792253638
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_23",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      -1690.0,
+      -4440.0,
+      400.0
+    ],
+    "Rotation": [
+      -165.92053368122484,
+      -4.208542669054453,
+      24.66569549889537
+    ],
+    "Scale": [
+      1.0625,
+      1.9375,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_GuideBook",
+    "MeshName": "SM_GuideBook",
+    "Material": [
+      "M_Gray",
+      "MI_Green",
+      "MI_BookCover",
+      "MI_White"
+    ],
+    "Location": [
+      616.3025692024285,
+      3893.043343192937,
+      0.0001045669549739614
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -49.99999961268202
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_SmallBush_7",
+    "MeshName": "SM_SmallBush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      -1870.0,
+      -3780.0,
+      490.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_58",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -2683.733306,
+      4563.504833,
+      -108.28624
+    ],
+    "Rotation": [
+      -57.05418700000035,
+      72.03614,
+      -140.73436772887754
+    ],
+    "Scale": [
+      0.75,
+      -0.9375,
+      0.5625
+    ]
+  },
+  {
+    "ObjectName": "SM_Tree_V6",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      1560.0,
+      2930.0,
+      -420.0
+    ],
+    "Rotation": [
+      -160.0000015492732,
+      -1.0597653954391713e-07,
+      2.911683971660647e-07
+    ],
+    "Scale": [
+      2.3125,
+      1.875,
+      1.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_2",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1539.0466217991486,
+      810.8736101672545,
+      0.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      14.999999883804524
+    ],
+    "Scale": [
+      1.8125,
+      -1.5,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "SM_StartColumn",
+    "MeshName": "SM_Temple_Pillar_Broken",
+    "Material": [
+      "MI_Temple_Pillar_Broken"
+    ],
+    "Location": [
+      -2169.9999974627935,
+      -4570.0,
+      510.0002011299317
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_3",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1526.3480760170346,
+      1070.7557891157533,
+      -40.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -9.999999922536404
+    ],
+    "Scale": [
+      1.625,
+      -1.3125,
+      -1.875
+    ]
+  },
+  {
+    "ObjectName": "Fork01_easy",
+    "MeshName": "Fork01_easy",
+    "Material": [
+      "WorldGridMaterial"
+    ],
+    "Location": [
+      -2610.0,
+      15990.0,
+      240.0
+    ],
+    "Rotation": [
+      -29.06133637812336,
+      12.240294198672514,
+      -136.2626158990395
+    ],
+    "Scale": [
+      0.5,
+      0.5,
+      0.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_5",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1199.9197884576988,
+      979.9124644621215,
+      -80.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      4.999999961268175
+    ],
+    "Scale": [
+      0.5625,
+      0.5625,
+      0.375
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_59",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -2843.733306,
+      4713.504833,
+      -108.28624
+    ],
+    "Rotation": [
+      -57.054187000000645,
+      72.03614000000061,
+      -55.73436838731909
+    ],
+    "Scale": [
+      0.9375,
+      -1.125,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_60",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -2344.2847,
+      -3826.8299989999996,
+      540.0
+    ],
+    "Rotation": [
+      -5.857048418294258,
+      -9.526669293467881,
+      -84.94924074364064
+    ],
+    "Scale": [
+      0.75,
+      0.625,
+      -0.0625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_61",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -2154.2847,
+      -3996.829999,
+      540.0
+    ],
+    "Rotation": [
+      -5.857048000000017,
+      -9.526669000000027,
+      -64.94924115492738
+    ],
+    "Scale": [
+      0.5625,
+      0.4375,
+      0.0625
+    ]
+  },
+  {
+    "ObjectName": "SM_Tree_V12",
+    "MeshName": "SM_Trunk_001",
+    "Material": [
+      "MI_Trunk"
+    ],
+    "Location": [
+      1620.0,
+      631.2202336169803,
+      10.0
+    ],
+    "Rotation": [
+      83.51930791751752,
+      -3.186828268605104,
+      -140.0838911937339
+    ],
+    "Scale": [
+      1.0,
+      1.25,
+      1.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Tree_V68",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      428.600809,
+      3888.861487,
+      -200.04540300000002
+    ],
+    "Rotation": [
+      -10.385958000000127,
+      7.331340999999973,
+      74.71946500000023
+    ],
+    "Scale": [
+      1.875,
+      2.0,
+      1.4375
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush9",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      1990.0,
+      4870.0,
+      490.0
+    ],
+    "Rotation": [
+      24.24768761772072,
+      -6.279671831021402,
+      13.649731742535996
+    ],
+    "Scale": [
+      1.0625,
+      1.0,
+      0.9375
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_62",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      2780.0,
+      -1880.0,
+      430.0
+    ],
+    "Rotation": [
+      2.2354288628412173e-07,
+      -1.1619550832619998e-07,
+      14.999996986026977
+    ],
+    "Scale": [
+      1.625,
+      1.625,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_27",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      4940.0,
+      -3560.0,
+      -610.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -84.999999
+    ],
+    "Scale": [
+      8.5625,
+      -8.25,
+      20.875
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_25",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      2650.0,
+      -1560.0,
+      310.0
+    ],
+    "Rotation": [
+      -1.816933000000006,
+      -19.920663999999995,
+      10.319103000000002
+    ],
+    "Scale": [
+      1.0,
+      1.3125,
+      0.875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_6",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      4530.0,
+      -360.0,
+      -610.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      6.625,
+      -6.3125,
+      6.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_7",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      6100.0,
+      670.0,
+      -610.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -59.9999995352183
+    ],
+    "Scale": [
+      6.625,
+      -6.3125,
+      6.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_8",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      4390.0,
+      2260.0,
+      -1070.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      125.0000013556134
+    ],
+    "Scale": [
+      12.8125,
+      -12.5,
+      -14.0
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_9",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1700.0,
+      3850.0,
+      -40.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -89.99999930282748
+    ],
+    "Scale": [
+      1.8125,
+      1.8125,
+      3.5625
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush10",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      2840.0,
+      2610.0,
+      1470.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -165.00000158097774
+    ],
+    "Scale": [
+      1.8125,
+      1.8125,
+      2.8125
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_10",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1300.0,
+      4010.0,
+      -160.0
+    ],
+    "Rotation": [
+      0.8703845153378071,
+      -4.923849743629377,
+      169.96257873567515
+    ],
+    "Scale": [
+      1.5,
+      1.5,
+      1.5
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush50",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -2991.284605,
+      15981.284655,
+      -130.0
+    ],
+    "Rotation": [
+      0.04343665156143414,
+      75.2103978859524,
+      -8.706573731089232
+    ],
+    "Scale": [
+      0.5625,
+      1.1875,
+      0.9375
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_11",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      1650.0,
+      3500.0,
+      -30.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Scale": [
+      0.4375,
+      0.4375,
+      0.375
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_64",
+    "MeshName": "SM_Stone_002",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -2482.1764466307086,
+      -1748.8104123640157,
+      510.0
+    ],
+    "Rotation": [
+      -0.13213510673779172,
+      -1.3062737079874864,
+      -55.49148207595926
+    ],
+    "Scale": [
+      0.8125,
+      0.5625,
+      -0.0625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_63",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -2747.8917466307075,
+      -1951.980413364015,
+      460.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      54.999996690146524
+    ],
+    "Scale": [
+      1.625,
+      1.625,
+      1.3125
+    ]
+  },
+  {
+    "ObjectName": "SM_BigTree_30",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -2982.65495111535,
+      -2099.255281314212,
+      380.0
+    ],
+    "Rotation": [
+      -175.68181643587272,
+      -1.4636135847518974,
+      70.19114356421477
+    ],
+    "Scale": [
+      1.75,
+      1.75,
+      1.375
+    ]
+  },
+  {
+    "ObjectName": "SM_BigTree_31",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOBushes"
+    ],
+    "Location": [
+      -2972.654951,
+      -1159.255281,
+      380.0
+    ],
+    "Rotation": [
+      176.66638313610488,
+      4.983647700188773,
+      129.955409201293
+    ],
+    "Scale": [
+      1.75,
+      1.75,
+      1.625
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_65",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      -2252.176447,
+      -1828.810412,
+      490.0
+    ],
+    "Rotation": [
+      -2.9750715967685437,
+      -5.423197616339621,
+      -55.32448256285854
+    ],
+    "Scale": [
+      0.8125,
+      0.75,
+      0.1875
+    ]
+  },
+  {
+    "ObjectName": "SM_Bush_17",
+    "MeshName": "SM_Bush_001",
+    "Material": [
+      "MI_WPOLeaves"
+    ],
+    "Location": [
+      3320.0,
+      -1930.0,
+      420.0
+    ],
+    "Rotation": [
+      -1.816933000000006,
+      -19.920663999999995,
+      10.319103000000002
+    ],
+    "Scale": [
+      1.0,
+      1.3125,
+      0.875
+    ]
+  },
+  {
+    "ObjectName": "SM_Stone_28",
+    "MeshName": "SM_Stone_001",
+    "Material": [
+      "MI_Stone"
+    ],
+    "Location": [
+      4720.0,
+      -1970.0,
+      -1580.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      -84.999999
+    ],
+    "Scale": [
+      8.5625,
+      -8.25,
+      20.875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup06_low",
+    "MeshName": "TeaTower01_low_Cup06_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup02_low",
+    "MeshName": "TeaTower01_low_Cup02_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf04_low",
+    "MeshName": "TeaTower01_low_Leaf04_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Ivy02_low",
+    "MeshName": "TeaTower01_low_Ivy02_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Dish02_low",
+    "MeshName": "TeaTower01_low_Dish02_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup03_low",
+    "MeshName": "TeaTower01_low_Cup03_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf08_low",
+    "MeshName": "TeaTower01_low_Leaf08_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf02_low",
+    "MeshName": "TeaTower01_low_Leaf02_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup08_low",
+    "MeshName": "TeaTower01_low_Cup08_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Dish01_low",
+    "MeshName": "TeaTower01_low_Dish01_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf09_low",
+    "MeshName": "TeaTower01_low_Leaf09_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup11_low",
+    "MeshName": "TeaTower01_low_Cup11_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Teapot01_low",
+    "MeshName": "TeaTower01_low_Teapot01_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf03_low",
+    "MeshName": "TeaTower01_low_Leaf03_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup03_low",
+    "MeshName": "TeaTower01_low_Cup03_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Dish02_low",
+    "MeshName": "TeaTower01_low_Dish02_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Ivy02_low",
+    "MeshName": "TeaTower01_low_Ivy02_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf04_low",
+    "MeshName": "TeaTower01_low_Leaf04_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup02_low",
+    "MeshName": "TeaTower01_low_Cup02_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup06_low",
+    "MeshName": "TeaTower01_low_Cup06_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup04_low",
+    "MeshName": "TeaTower01_low_Cup04_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf07_low",
+    "MeshName": "TeaTower01_low_Leaf07_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup09_low",
+    "MeshName": "TeaTower01_low_Cup09_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf01_low",
+    "MeshName": "TeaTower01_low_Leaf01_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf06_low",
+    "MeshName": "TeaTower01_low_Leaf06_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup01_low",
+    "MeshName": "TeaTower01_low_Cup01_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Ivy_low",
+    "MeshName": "TeaTower01_low_Ivy_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf05_low",
+    "MeshName": "TeaTower01_low_Leaf05_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Ivy03_low",
+    "MeshName": "TeaTower01_low_Ivy03_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup13_low",
+    "MeshName": "TeaTower01_low_Cup13_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup05_low",
+    "MeshName": "TeaTower01_low_Cup05_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup10_low",
+    "MeshName": "TeaTower01_low_Cup10_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup12_low",
+    "MeshName": "TeaTower01_low_Cup12_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup07_low",
+    "MeshName": "TeaTower01_low_Cup07_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -1917.1598702552326,
+      15375.934455716486,
+      -0.5711358189582825
+    ],
+    "Rotation": [
+      -0.0,
+      0.0,
+      114.9999988838047
+    ],
+    "Scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf03_low",
+    "MeshName": "TeaTower01_low_Leaf03_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Teapot01_low",
+    "MeshName": "TeaTower01_low_Teapot01_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup11_low",
+    "MeshName": "TeaTower01_low_Cup11_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf09_low",
+    "MeshName": "TeaTower01_low_Leaf09_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Dish01_low",
+    "MeshName": "TeaTower01_low_Dish01_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup08_low",
+    "MeshName": "TeaTower01_low_Cup08_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf02_low",
+    "MeshName": "TeaTower01_low_Leaf02_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf08_low",
+    "MeshName": "TeaTower01_low_Leaf08_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup07_low",
+    "MeshName": "TeaTower01_low_Cup07_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup12_low",
+    "MeshName": "TeaTower01_low_Cup12_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup10_low",
+    "MeshName": "TeaTower01_low_Cup10_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup05_low",
+    "MeshName": "TeaTower01_low_Cup05_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup13_low",
+    "MeshName": "TeaTower01_low_Cup13_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Ivy03_low",
+    "MeshName": "TeaTower01_low_Ivy03_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf05_low",
+    "MeshName": "TeaTower01_low_Leaf05_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Ivy_low",
+    "MeshName": "TeaTower01_low_Ivy_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup01_low",
+    "MeshName": "TeaTower01_low_Cup01_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf06_low",
+    "MeshName": "TeaTower01_low_Leaf06_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf01_low",
+    "MeshName": "TeaTower01_low_Leaf01_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup09_low",
+    "MeshName": "TeaTower01_low_Cup09_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Leaf07_low",
+    "MeshName": "TeaTower01_low_Leaf07_low",
+    "Material": [
+      "Ivy_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  },
+  {
+    "ObjectName": "TeaTower01_low_Cup04_low",
+    "MeshName": "TeaTower01_low_Cup04_low",
+    "Material": [
+      "Cup_BaseColor_Mat"
+    ],
+    "Location": [
+      -2156.483302438896,
+      16610.728581615545,
+      0.4283521400518415
+    ],
+    "Rotation": [
+      0.0,
+      -0.0,
+      -135.0000015352176
+    ],
+    "Scale": [
+      1.1875,
+      1.1875,
+      1.1875
+    ]
+  }
+]

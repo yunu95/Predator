@@ -1,7 +1,8 @@
-/// 2023. 10. 20 ±è»óÁØ
-/// ¸Ş´º¹Ù¿¡¼­ »ç¿ëÇÒ ¸í·ÉµéÀ» ¸ğ¾ÆµĞ Çì´õ ÆÄÀÏ
+/// 2023. 10. 20 ê¹€ìƒì¤€
+/// ë©”ë‰´ë°”ì—ì„œ ì‚¬ìš©í•  ëª…ë ¹ë“¤ì„ ëª¨ì•„ë‘” í—¤ë” íŒŒì¼
 
 #pragma once
+#include "LoadStaticOrnamentsCommand.h"
 #include "LoadMapCommand.h"
 #include "SaveMapCommand.h"
 #include "ProgramExitCommand.h"

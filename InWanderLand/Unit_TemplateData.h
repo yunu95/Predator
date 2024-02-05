@@ -6,6 +6,8 @@
 
 #include "ITemplateData.h"
 
+#include <string>
+
 namespace application
 {
 	namespace editor
@@ -14,6 +16,8 @@ namespace application
 
 		struct POD_Unit_TemplateData
 		{
+			std::string thumbnailPath = "ImageButtons/Unit_Default.png";
+
 			TO_JSON(POD_Unit_TemplateData)
 			FROM_JSON(POD_Unit_TemplateData)
 		};

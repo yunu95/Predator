@@ -7,6 +7,7 @@
 #include "RegionPalette.h"
 #include "UnitPalette.h"
 #include "TerrainPalette.h"
+#include "OrnamentPalette.h"
 
 namespace application::editor::palette
 {
@@ -15,6 +16,7 @@ namespace application::editor::palette
         static_cast<Palette&>(RegionPalette::SingleInstance()).Reset();
         static_cast<Palette&>(UnitPalette::SingleInstance()).Reset();
         static_cast<Palette&>(TerrainPalette::SingleInstance()).Reset();
+        static_cast<Palette&>(OrnamentPalette::SingleInstance()).Reset();
     }
     void Palette::OnLeftClick()
     {

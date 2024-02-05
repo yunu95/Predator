@@ -100,7 +100,7 @@ namespace application
                 /// <summary>
                 /// OnStandbyPalette 에서 사용하기 위한, 포인터 등 데이터 정리 함수입니다.
                 /// </summary>
-                void CleanUpData();
+                virtual void CleanUpData();
 
                 // 현재 팔레트 기능 조작의 상태
                 State state{ State::Select };

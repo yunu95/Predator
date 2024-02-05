@@ -11,6 +11,7 @@
 #include <string>
 #include "UnitEditorInstance.h"
 #include "UnitPalette.h"
+#include "PodStructs.h"
 
 namespace application
 {
@@ -40,7 +41,7 @@ namespace application
         {
             Unit_TemplateData* templateData = nullptr;
             unit::Affiliation affiliation = unit::Affiliation::None;
-            float x, y, z;
+            POD_Vector3<float> position;
 
             TO_JSON(POD_Unit)
                 FROM_JSON(POD_Unit)

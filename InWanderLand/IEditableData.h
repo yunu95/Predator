@@ -52,6 +52,8 @@ namespace application
             virtual IEditableData* Clone() const = 0;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance() = 0;
             virtual void OnRelocate(const Vector3d& newLoc) {};
+            virtual void OnRerotate(const Quaternion& newRot) {};
+            virtual void OnRescale(const Vector3d& newScale) {};
             palette::PaletteInstance* GetPaletteInstance();
 
         protected:

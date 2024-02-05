@@ -250,9 +250,6 @@
     <Filter Include="Editor\Palette\List">
       <UniqueIdentifier>{ca9f8542-f8f4-4207-827e-2d1f72a27cf0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\Palette\List\DoodadPalette">
-      <UniqueIdentifier>{40739a4f-3a66-4c5a-91e5-315c832d7449}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Editor\Palette\List\RegionPalette">
       <UniqueIdentifier>{26864948-b22d-4e8f-9d2f-46cb7ec49f64}</UniqueIdentifier>
     </Filter>
@@ -288,6 +285,12 @@
     </Filter>
     <Filter Include="Editor\Palette\EditorInstance\RegionInstance">
       <UniqueIdentifier>{f4de70f3-c627-4642-9176-8b680a0b35bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\EditorInstance\OrnamentInstance">
+      <UniqueIdentifier>{592ea322-871f-457f-acee-10ca160a004a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\List\OrnamentPalette">
+      <UniqueIdentifier>{40739a4f-3a66-4c5a-91e5-315c832d7449}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -525,8 +528,8 @@
     <ClInclude Include="TerrainPalette.h">
       <Filter>Editor\Palette\List\TerrainPalette</Filter>
     </ClInclude>
-    <ClInclude Include="DoodadPalette.h">
-      <Filter>Editor\Palette\List\DoodadPalette</Filter>
+    <ClInclude Include="OrnamentPalette.h">
+      <Filter>Editor\Palette\List\OrnamentPalette</Filter>
     </ClInclude>
     <ClInclude Include="TestComponent2.h">
       <Filter>TestCodes</Filter>
@@ -721,6 +724,15 @@
     </ClInclude>
     <ClInclude Include="Region_TemplateData.h">
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="OrnamentEditorInstance.h">
+      <Filter>Editor\Palette\EditorInstance\OrnamentInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="PodStructs.h">
+      <Filter>Editor\DataSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadStaticOrnamentsCommand.h">
+      <Filter>Editor\Commands\MenubarCommands\File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1075,8 +1087,8 @@
     <ClCompile Include="PaletteManager.cpp">
       <Filter>Editor\Palette</Filter>
     </ClCompile>
-    <ClCompile Include="DoodadPalette.cpp">
-      <Filter>Editor\Palette\List\DoodadPalette</Filter>
+    <ClCompile Include="OrnamentPalette.cpp">
+      <Filter>Editor\Palette\List\OrnamentPalette</Filter>
     </ClCompile>
     <ClCompile Include="RegionPalette.cpp">
       <Filter>Editor\Palette\List\RegionPalette</Filter>
@@ -1116,6 +1128,12 @@
     </ClCompile>
     <ClCompile Include="Region_TemplateData.cpp">
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="OrnamentEditorInstance.cpp">
+      <Filter>Editor\Palette\EditorInstance\OrnamentInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadStaticOrnamentsCommnad.cpp">
+      <Filter>Editor\Commands\MenubarCommands\File</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

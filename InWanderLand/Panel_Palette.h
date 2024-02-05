@@ -40,7 +40,7 @@ namespace application
 
 			void ImGui_BeginTerrainPalette();
 			void ImGui_BeginUnitPalette();
-			void ImGui_BeginDoodadPalette();
+			void ImGui_BeginOrnamentPalette();
 			void ImGui_BeginRegionPalette();
 
 			void LoadCallback();
@@ -53,11 +53,14 @@ namespace application
 			palette::PaletteManager& pm = palette::PaletteManager::GetSingletonInstance();
 			palette::TerrainPalette& tp = palette::TerrainPalette::SingleInstance();
 			palette::UnitPalette& up = palette::UnitPalette::SingleInstance();
-			palette::DoodadPalette& dp = palette::DoodadPalette::SingleInstance();
+			palette::OrnamentPalette& op = palette::OrnamentPalette::SingleInstance();
 			palette::RegionPalette& rp = palette::RegionPalette::SingleInstance();
 
 			int unitCurrentButton = -1;
 			std::vector<bool> unitButton = std::vector<bool>();
+
+			int ornamentCurrentButton = -1;
+			std::vector<bool> ornamentButton = std::vector<bool>();
 		};
 	}
 }

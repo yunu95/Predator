@@ -254,6 +254,11 @@ void application::contents::ContentsLayer::Initialize()
     camObj->GetTransform()->SetLocalRotation( Quaternion(Vector3d(60, 0, 0)));
     auto roamingCam = camObj->AddComponent<RTSCam>();
     roamingCam->SetCameraMain();
+
+    const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+    resourceManager->LoadFile("FBX/Bush");
+    resourceManager->LoadFile("FBX/BigTree");
+
 #ifdef GRAPHICS_TEST
     {
         //yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());

@@ -47,8 +47,12 @@ namespace application
             LoadTextureFromFile("ImageButtons/Terrain_EraseButton.png");
 
             // Unit
-            LoadTextureFromFile("ImageButtons/TestCube.png"); /// Test
+            LoadTextureFromFile("ImageButtons/Unit_Default.png");
             LoadTextureFromFile("ImageButtons/Unit_AddButton.png");
+
+            // Ornament
+            LoadTextureFromFile("ImageButtons/Ornament_Default.png");
+            LoadTextureFromFile("ImageButtons/Ornament_AddButton.png");
         }
 
         Texture2D* ResourceManager::GetTexture2D(std::string filename)

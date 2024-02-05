@@ -197,6 +197,10 @@ namespace application
 			ImGui::BeginMenuBar();
 			if (ImGui::BeginMenu("File"))
 			{
+				if (ImGui::MenuItem("LoadUnrealData"))
+				{
+					cm.AddQueue(std::make_shared<LoadStaticOrnamentsCommand>());
+				}
 				if (ImGui::MenuItem("LoadMap"))
 				{
 					cm.AddQueue(std::make_shared<LoadMapCommand>());

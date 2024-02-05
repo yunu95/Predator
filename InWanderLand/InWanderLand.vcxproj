@@ -1001,6 +1001,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="HealerAutoAttackProjectile.h" />
     <ClInclude Include="HealerAutoAttackProjectilePool.h" />
     <ClInclude Include="HealerSkillSystem.h" />
+    <ClInclude Include="LoadStaticOrnamentsCommand.h" />
+    <ClInclude Include="OrnamentEditorInstance.h" />
     <ClInclude Include="ParalysisFieldComponent.h" />
     <ClInclude Include="DebugGraphic.h" />
     <ClInclude Include="DebugStaticMesh.h" />
@@ -1012,6 +1014,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="PaletteManager.h" />
     <ClInclude Include="PassiveCake.h" />
     <ClInclude Include="PassiveCakePool.h" />
+    <ClInclude Include="PodStructs.h" />
     <ClInclude Include="RegionData.h" />
     <ClInclude Include="Region_TemplateData.h" />
     <ClInclude Include="SingleNavigationField.h" />
@@ -1049,7 +1052,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="KeyboardEvents.h" />
     <ClInclude Include="ModuleList.h" />
     <ClInclude Include="Module_TemplateDataEditor.h" />
-    <ClInclude Include="DoodadPalette.h" />
+    <ClInclude Include="OrnamentPalette.h" />
     <ClInclude Include="MouseEvents.h" />
     <ClInclude Include="PaletteSelectCollider.h" />
     <ClInclude Include="PaletteInstance.h" />
@@ -1145,7 +1148,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="DebugStaticMesh.cpp" />
     <ClCompile Include="HealerSkillSystem.cpp" />
     <ClCompile Include="IEditableData.cpp" />
-    <ClCompile Include="DoodadPalette.cpp" />
+    <ClCompile Include="LoadStaticOrnamentsCommnad.cpp" />
+    <ClCompile Include="OrnamentPalette.cpp" />
     <ClCompile Include="EditorMath.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="imgui_demo.cpp" />
@@ -1161,6 +1165,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="MagicianSkillSystem.cpp" />
     <ClCompile Include="MeleeAttackSystem.cpp" />
     <ClCompile Include="OnlyDamageComponent.cpp" />
+    <ClCompile Include="OrnamentEditorInstance.cpp" />
     <ClCompile Include="ParalysisFieldComponent.cpp" />
     <ClCompile Include="PaletteManager.cpp" />
     <ClCompile Include="PassiveCake.cpp" />

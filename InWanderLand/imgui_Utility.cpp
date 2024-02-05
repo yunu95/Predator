@@ -54,6 +54,9 @@ namespace application
 				static auto& erm = application::editor::ResourceManager::GetSingletonInstance();
 				auto button = erm.GetTexture2D(filename);
 
+				if (button == nullptr)
+					return false;
+
 				if (useTint)
 				{
 					if (selected)

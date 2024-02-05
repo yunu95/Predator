@@ -12,7 +12,7 @@ namespace application
 			{
 				paletteList[(int)Palette_List::Terrain] = &TerrainPalette::SingleInstance();
 				paletteList[(int)Palette_List::Unit] = &UnitPalette::SingleInstance();
-				paletteList[(int)Palette_List::Doodad] = &DoodadPalette::SingleInstance();
+				paletteList[(int)Palette_List::Ornament] = &OrnamentPalette::SingleInstance();
 				paletteList[(int)Palette_List::Region] = &RegionPalette::SingleInstance();
 
 				SetCurrentPalette(paletteList[(int)Palette_List::Terrain]);

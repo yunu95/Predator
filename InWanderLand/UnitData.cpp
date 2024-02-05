@@ -51,9 +51,9 @@ namespace application
         }
         void UnitData::OnRelocate(const Vector3d& newLoc)
         {
-            pod.x = newLoc.x;
-            pod.y = newLoc.y;
-            pod.z = newLoc.z;
+            pod.position.x = newLoc.x;
+            pod.position.y = newLoc.y;
+            pod.position.z = newLoc.z;
         };
 
         palette::PaletteInstance* UnitData::ApplyAsPaletteInstance()
@@ -65,7 +65,7 @@ namespace application
                 unitInstance->SetEditableData(this);
                 unitInstance->Init(this);
             }
-            unitInstance->GetTransform()->SetWorldPosition({ pod.x,pod.y,pod.z });
+            unitInstance->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
             return unitInstance;
         };
 
