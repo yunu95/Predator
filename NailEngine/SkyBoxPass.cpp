@@ -43,33 +43,33 @@ void SkyBoxPass::Init(Texture* texture, Mesh* mesh, yunuGI::IShader* vs, yunuGI:
 void SkyBoxPass::Render()
 {
 	/// Render SkyBox
-	//DirectX::SimpleMath::Vector3 pos;
-	//DirectX::SimpleMath::Vector3 scale;
-	//DirectX::SimpleMath::Quaternion quat;
-	//CameraManager::Instance.Get().GetMainCamera()->GetWTM().Decompose(scale, quat, pos);
+	DirectX::SimpleMath::Vector3 pos;
+	DirectX::SimpleMath::Vector3 scale;
+	DirectX::SimpleMath::Quaternion quat;
+	CameraManager::Instance.Get().GetMainCamera()->GetWTM().Decompose(scale, quat, pos);
 
-	//// CB Set
-	//MatrixBuffer matrixBuffer;
-	//matrixBuffer.WTM = DirectX::SimpleMath::Matrix::CreateTranslation(pos);
-	//matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
-	//matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
-	//matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-	//matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-	//matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
-	//NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
+	// CB Set
+	MatrixBuffer matrixBuffer;
+	matrixBuffer.WTM = DirectX::SimpleMath::Matrix::CreateTranslation(pos);
+	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
+	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
-	//// Bind Texture
-	//this->texture->Bind(9);
-	////ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShaderResources(9, 1, this->irradianceSRV.GetAddressOf());
-	////ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShaderResources(9, 1, this->prefilteredSRV.GetAddressOf());
+	// Bind Texture
+	this->texture->Bind(9);
+	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShaderResources(9, 1, this->irradianceSRV.GetAddressOf());
+	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShaderResources(9, 1, this->prefilteredSRV.GetAddressOf());
 
 
-	//// Bind Shader
-	//this->vs->Bind();
-	//this->ps->Bind();
+	// Bind Shader
+	this->vs->Bind();
+	this->ps->Bind();
 
-	//// Mesh Render
-	//this->mesh->Render();
+	// Mesh Render
+	this->mesh->Render();
 	///
 }
 

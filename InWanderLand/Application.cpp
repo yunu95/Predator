@@ -288,7 +288,7 @@ namespace application
 			delete each;
 		}
 #endif
-
+		yunutyEngine::graphics::Renderer::SingleInstance().Finalize();
 		::DestroyWindow(hWND);
 		::UnregisterClass(wc.lpszClassName, wc.hInstance);
 

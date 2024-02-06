@@ -223,6 +223,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="UIImage.h" />
+    <ClInclude Include="UIText.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VertexShader.h" />
     <ClInclude Include="YGAdapter.h" />
@@ -287,6 +288,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="tempMain.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="UIImage.cpp" />
+    <ClCompile Include="UIText.cpp" />
     <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="YGExports.cpp" />
     <ClCompile Include="YGMaterialAdapter.cpp">

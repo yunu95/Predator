@@ -34,6 +34,7 @@
 #include "InstancingManager.h"
 
 #include "UIImage.h"
+#include "UIText.h"
 #include "Texture.h"
 
 
@@ -46,6 +47,22 @@
 #include <fstream>
 
 LazyObjects<RenderSystem> RenderSystem::Instance;
+
+void RenderSystem::Finalize()
+{
+	for (auto& i : this->brushMap)
+	{
+		i.second->Release();
+	}
+	for (auto& i : this->wFormatMap)
+	{
+		i.second->Release();
+	}
+	wFactory->Release();
+	d2dRT->Release();
+	surface->Release();
+	d2dFactory->Release();
+}
 
 void RenderSystem::Init()
 {
@@ -64,6 +81,30 @@ void RenderSystem::Init()
 			this->vs = i;
 		}
 	}
+
+	CreateD2D();
+}
+
+void RenderSystem::CreateD2D()
+{
+	auto options = D2D1_FACTORY_OPTIONS();
+	options.debugLevel = D2D1_DEBUG_LEVEL_INFORMATION;
+	HRESULT result = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, options, d2dFactory.GetAddressOf());
+
+	if (SUCCEEDED(result)) {
+		result = DWriteCreateFactory(
+			DWRITE_FACTORY_TYPE_SHARED,
+			__uuidof(IDWriteFactory),
+			reinterpret_cast<IUnknown**>(this->wFactory.GetAddressOf()));
+
+		if (FAILED(result)) PostQuitMessage(0);
+	}
+
+	ResourceBuilder::Instance.Get().swapChain->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(surface.GetAddressOf()));
+	auto d2dRTProps = D2D1::RenderTargetProperties(D2D1_RENDER_TARGET_TYPE_DEFAULT, D2D1::PixelFormat(DXGI_FORMAT_R8G8B8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED), 0, 0);
+	d2dFactory->CreateDxgiSurfaceRenderTarget(surface.Get(), &d2dRTProps, d2dRT.GetAddressOf());
+
+	if (FAILED(result)) PostQuitMessage(0);
 }
 
 void RenderSystem::PushLightData()
@@ -115,6 +156,8 @@ void RenderSystem::Render()
 	//ClearRenderInfo();
 	//SortObject();
 
+	
+
 	PushCameraData();
 	PushLightData();
 
@@ -145,12 +188,14 @@ void RenderSystem::Render()
 	RenderUI();
 
 	// 디퍼드 정보 출력
-	DrawDeferredInfo();
+	//DrawDeferredInfo();
 
 	// 디퍼드용 SRV UnBind
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"))->UnBindGraphicsData();
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"BackBufferMaterial"))->UnBindGraphicsData();
+
+	
 }
 
 void RenderSystem::RenderObject()
@@ -349,6 +394,33 @@ void RenderSystem::RenderUI()
 		this->spriteBatch->Draw(texture->GetSRV().Get(), uiImage->pos);
 	}
 	this->spriteBatch->End();
+
+
+	d2dRT->BeginDraw();
+	for (auto& i : this->UITextSet)
+	{
+		auto uiText = std::static_pointer_cast<UIText>(i);
+
+		if (uiText->IsActive() == false)
+		{
+			continue;
+		}
+		
+		D2D1_RECT_F layoutRect = D2D1::RectF(
+			uiText->pos.x,
+			uiText->pos.y,
+			uiText->pos.x + uiText->scale.x, 
+			uiText->pos.y + uiText->scale.y 
+		);
+
+		auto brush = QueryBrush(uiText);
+		auto textFormat = QueryTextFormat(uiText);
+
+		d2dRT->DrawTextW(
+			uiText->text.c_str(), uiText->text.length() , textFormat.Get(), layoutRect, brush.Get()
+		);
+	}
+	d2dRT->EndDraw();
 }
 
 void RenderSystem::RenderForward()
@@ -501,6 +573,16 @@ void RenderSystem::PopUIObject(std::shared_ptr<IRenderable> renderable)
 	this->UIImageSet.erase(renderable);
 }
 
+void RenderSystem::PushTextObject(std::shared_ptr<IRenderable> renderable)
+{
+	this->UITextSet.insert(renderable);
+}
+
+void RenderSystem::PopTextObject(std::shared_ptr<IRenderable> renderable)
+{
+	this->UITextSet.erase(renderable);
+}
+
 void RenderSystem::ReSortUIObject(int layer, std::shared_ptr<UIImage> ui)
 {
 	auto iter = this->UIImageSet.find(ui);
@@ -536,7 +618,7 @@ void RenderSystem::ReSortRenderInfo(IRenderable* renderable, int index)
 		if (iter == deferredSet.end())
 		{
 			return;
-		}  
+		}
 		else
 		{
 			// 디퍼드에서 포워드로
@@ -570,5 +652,55 @@ void RenderSystem::RegisterSkinnedRenderInfo(IRenderable* renderable, std::share
 
 		InstancingManager::Instance.Get().RegisterSkinnedData(renderInfo);
 	}
+}
+
+Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> RenderSystem::QueryBrush(std::shared_ptr<UIText> uiText)
+{
+	auto iter = this->brushMap.find(uiText->color);
+	if (iter != this->brushMap.end())
+	{
+		return iter->second;
+	}
+
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> tempBrush;
+	D2D1::ColorF colorf = D2D1::ColorF(uiText->color.r, uiText->color.g, uiText->color.b, uiText->color.a);
+
+	this->d2dRT->CreateSolidColorBrush(
+		colorf
+		, tempBrush.GetAddressOf());
+
+	this->brushMap.insert({ uiText->color, tempBrush });
+
+	return this->brushMap[uiText->color];
+}
+
+Microsoft::WRL::ComPtr<IDWriteTextFormat> RenderSystem::QueryTextFormat(std::shared_ptr<UIText> uiText)
+{
+	auto iter = this->wFormatMap.find(uiText->key);
+	if (iter != this->wFormatMap.end())
+	{
+		return iter->second;
+	}
+
+	Microsoft::WRL::ComPtr<IDWriteTextFormat> tempFormat;
+
+	wFactory->CreateTextFormat(
+		uiText->key.c_str(),
+		nullptr,
+		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		uiText->size,
+		uiText->font.c_str(),
+		tempFormat.GetAddressOf()
+	);
+
+	tempFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+
+	tempFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+
+	this->wFormatMap.insert({ uiText->key, tempFormat });
+
+	return this->wFormatMap[uiText->key];
 }
 

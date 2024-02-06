@@ -30,6 +30,14 @@ void GraphicsTest()
 
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 700,500 ,1});
+		obj->GetTransform()->SetLocalScale(Vector3d{ 700,500 ,1});
+		auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
+		text->GetGI().SetText(L"Test");
+		//text->GetGI().SetColor(yunuGI::Color{ 1,0,0,1 });
+	}
 
 	_resourceManager->LoadFile("FBX/SM_Trunk_001");
 	{
