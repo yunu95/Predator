@@ -30,46 +30,12 @@ void GraphicsTest()
 
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	_resourceManager->LoadFile("FBX/Boss");
-	auto& animationList = _resourceManager->GetAnimationList();
-	yunuGI::IAnimation* idleAnim = nullptr;
-	yunuGI::IAnimation* deadAnim = nullptr;
 
-	auto obj = Scene::getCurrentScene()->AddGameObject();
-	auto test = obj->AddComponent<TestComponent2>();
-	
-
+	_resourceManager->LoadFile("FBX/SM_Trunk_001");
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
-		obj2->GetTransform()->SetLocalScale(Vector3d{ obj2->GetTransform()->GetLocalScale().x * 0.01f, obj2->GetTransform()->GetLocalScale().y * 0.01f, obj2->GetTransform()->GetLocalScale().z * 0.01f });
-		auto animator = obj2->GetComponent<graphics::Animator>();
-		for (auto& i : animationList)
-		{
-			if (i->GetName() == L"root|012.Death")
-			{
-				animator->GetGI().PushAnimation(i);
-				animator->GetGI().Play(i);
-				deadAnim = i;
-			}
-
-			if (i->GetName() == L"root|000.Idle")
-			{
-				animator->GetGI().PushAnimation(i);
-				idleAnim = i;
-			}
-		}
-		idleAnim->SetLoop(true);
-		test->anim = animator;
-		test->dead = deadAnim;
-		test->idle = idleAnim;
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Trunk_001");
+		//obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
 	}
-
-
-	//   _resourceManager->LoadFile("FBX/SM_Temple_Books");
-	   //{
-	   //	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Temple_Books");
-	   //	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
-	   //}
 }
 
 
