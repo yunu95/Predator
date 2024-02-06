@@ -99,7 +99,7 @@ struct SampleToolState {
 class Sample
 {
 protected:
-	class InputGeom* m_geom;
+	//class InputGeom* m_geom;
 	class dtNavMesh* m_navMesh;
 	class dtNavMeshQuery* m_navQuery;
 	class dtCrowd* m_crowd;
@@ -160,7 +160,6 @@ public:
 	virtual void handleUpdate(const float dt);
 	virtual void collectSettings(struct BuildSettings& settings);
 
-	virtual class InputGeom* getInputGeom() { return m_geom; }
 	virtual class dtNavMesh* getNavMesh() { return m_navMesh; }
 	virtual class dtNavMeshQuery* getNavMeshQuery() { return m_navQuery; }
 	virtual class dtCrowd* getCrowd() { return m_crowd; }
