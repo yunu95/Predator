@@ -29,6 +29,8 @@ void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject, NavigationField* n
 
 	m_navField = navField;
 	m_startPosition = startPosition;
+
+
 #pragma endregion
 
 #pragma region Animation Related Member Setting

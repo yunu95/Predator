@@ -20,6 +20,7 @@
 #include "MagicianProduction.h"
 #include "MeleeEnemyProduction.h"
 #include "UnitProductionOrder.h"
+#include "TacticModeSystem.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -105,6 +106,7 @@ void SnippetSkillSystemInit()
 
 	/// PlayerController SetUp
 	PlayerController::GetInstance()->SetMovingSystemComponent(rtsCam);
+	TacticModeSystem::SingleInstance().SetMovingSystemComponent(rtsCam);
 
 	/// UnitFactory
 

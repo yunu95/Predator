@@ -33,9 +33,10 @@ public:
 
 	enum class UnitType
 	{
-		Warrior,
+		Warrior = 1,
 		Magician,
 		Healer,
+		AllPlayers,
 		MeleeEnemy,
 		Boss
 	};
@@ -142,7 +143,7 @@ protected:
 
 	bool isAttackMoving;
 
-	int playerSerialNumber;
+	UnitType playerSerialNumber;
 
 	std::list<yunutyEngine::GameObject*> m_opponentObjectList;		
 	std::list<Unit*> m_recognizedThisList;	// 현재 이 오브젝트를 적군으로 인식한 다른 유닛들의 리스트.
@@ -203,7 +204,7 @@ public:
 	void SetAtkRadius(float radius);
 	void SetUnitSpeed(float speed);
 	void SetAttackDelay(float p_delay);
-	void SetPlayerSerialNumber();
+	void SetPlayerSerialNumber(UnitType serialNum);
 	void SetSkillDuration(float p_duration);
 
 	void SetCurrentOrderMove();
@@ -231,8 +232,8 @@ public:
 	bool GetJustCrushedState() const;
 	bool IsUnitDead() const;
 
-	int GetPlayerSerialNumber() const;
-
+	UnitType GetPlayerSerialNumber() const;
+	UnitState GetCurrentUnitState() const;
 
 	float DetermineAttackDamage(float p_damage);			// 공격유닛이 피격유닛에게 전달하는 데미지 계산.
 

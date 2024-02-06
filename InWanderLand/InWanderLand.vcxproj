@@ -1010,6 +1010,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="RegionData.h" />
     <ClInclude Include="Region_TemplateData.h" />
     <ClInclude Include="SingleNavigationField.h" />
+    <ClInclude Include="TacticModeSystem.h" />
     <ClInclude Include="TestUtilButtonEvent.h" />
     <ClInclude Include="InWanderLand.h" />
     <ClInclude Include="KnockBackComponent.h" />
@@ -1221,6 +1222,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="RTSCam.cpp" />
     <ClCompile Include="SaveMapCommand.cpp" />
     <ClCompile Include="ShakyCam.cpp" />
+    <ClCompile Include="TacticModeSystem.cpp" />
     <ClCompile Include="TemplateDataManager.cpp" />
     <ClCompile Include="Storable.cpp" />
     <ClCompile Include="TerrainData.cpp" />

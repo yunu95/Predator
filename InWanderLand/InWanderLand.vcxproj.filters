@@ -286,6 +286,9 @@
     <Filter Include="Editor\Palette\EditorInstance\RegionInstance">
       <UniqueIdentifier>{f4de70f3-c627-4642-9176-8b680a0b35bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\TacticModeSystem">
+      <UniqueIdentifier>{d64fe41f-9533-4db4-992e-9a18dfae43dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -716,6 +719,9 @@
     <ClInclude Include="Region_TemplateData.h">
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClInclude>
+    <ClInclude Include="TacticModeSystem.h">
+      <Filter>Contents\TacticModeSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1098,6 +1104,9 @@
     </ClCompile>
     <ClCompile Include="Region_TemplateData.cpp">
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="TacticModeSystem.cpp">
+      <Filter>Contents\TacticModeSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
