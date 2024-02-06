@@ -223,6 +223,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="UIImage.h" />
+    <ClInclude Include="UIText.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VertexShader.h" />
     <ClInclude Include="YGAdapter.h" />
@@ -287,6 +288,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="tempMain.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="UIImage.cpp" />
+    <ClCompile Include="UIText.cpp" />
     <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="YGExports.cpp" />
     <ClCompile Include="YGMaterialAdapter.cpp">
@@ -295,6 +297,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="RuntimeDependency\resources\Shader\BackBufferPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
     <FxCompile Include="RuntimeDependency\resources\Shader\DebugPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
@@ -557,6 +565,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <None Include="RuntimeDependency\resources\Shader\Buffers.hlsli">
       <FileType>Document</FileType>
     </None>
+    <None Include="RuntimeDependency\resources\Shader\Matrix.hlsli" />
+    <None Include="RuntimeDependency\resources\Shader\Quaternion.hlsli" />
     <None Include="RuntimeDependency\resources\Shader\Utils.hlsli" />
     <None Include="SimpleMath.inl" />
   </ItemGroup>

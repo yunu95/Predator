@@ -5,9 +5,12 @@
 
 #include "Singleton.h"
 #include "EditorPanel.h"
+#include "EditorResourceManager.h"
 #include "PaletteManager.h"
 #include "EditorInputManager.h"
 #include "YunuGraphicsInterface.h"
+
+#include "ImGuizmo/ImGuizmo.h"
 
 #include <utility>
 
@@ -55,16 +58,19 @@ namespace application
 			void ImGui_UpdateCursorPosInScreenSpace();
 			void ImGui_UpdateWindowSize();
 			bool ImGui_IsCursorInScreen();
+			bool ImGui_IsCursorInGizmoButtonRect();
 			bool ImGui_IsWindowResize();
 			std::pair<float, float> ImGui_GetCursorPosOnPanel();
 			void ImGui_DrawGizmo();
 			void Release();
 
 			void ImGui_SceneViewSettings();
+			void ImGui_DrawMenuBar();
 			void ImGui_UpdateObjectWTM(GameObject* target, const yunuGI::Matrix4x4& wtm) const;
 
 			Application* app;
 			EditorCamera* ec;
+			ResourceManager& erm = ResourceManager::GetSingletonInstance();
 			palette::PaletteManager* pm;
 			EditorInputManager& eim = EditorInputManager::GetSingletonInstance();
 			std::pair<float, float> prevWindowSize;
@@ -72,8 +78,14 @@ namespace application
 			std::pair<float, float> imageStartPos;
 			std::pair<unsigned int, unsigned int> renderImageSize;
 			std::pair<double, double> cursorPos_InScreenSpace;
+			
 
-			// flag
+			// Gizmo
+			ImGuizmo::OPERATION operation = (ImGuizmo::OPERATION)0;
+			ImGuizmo::MODE mode = ImGuizmo::WORLD;
+
+			std::pair<float, float> gizmoButtonSize = std::pair<float, float>(40, 40);
+			std::pair<float, float> gizmoButtonStartPos = std::pair<float, float>(10, 10);
 		};
 	}
 }

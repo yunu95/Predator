@@ -109,6 +109,7 @@ namespace application
                 unordered_set<IEditableData*> selection;
                 IEditableData* draggingObject = nullptr;
 
+            protected:
             private:
                 // 선택 박스에 유효한 인스턴스가 접촉되기 시작했을 때, 혹은 접촉이 끝났을 때 호출됩니다.
                 void OnSelectionContactEnter(IEditableData* instance);

@@ -62,8 +62,8 @@ void NailEngine::Render()
 {
 	// Begin
 	//ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetViewports(1, &ResourceBuilder::Instance.Get().swapChain->GetViewPort());
-
-	const float red[] = { 0.5f, 0.5f, 0.5f, 1.f };
+	//float4(0.7686, 0.8784, 0.9451, 1.f)
+	const float red[] = { 0.7686, 0.8784, 0.9451, 1.f };
 
 	// 렌더 타겟뷰를 내가 지정한 값으로 픽셀을 다 초기화하여 지운다.
 	ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->ClearRenderTargetView(ResourceBuilder::Instance.Get().swapChain->GetRTV().Get(), red);
@@ -88,6 +88,11 @@ void NailEngine::Render()
 
 		this->renderTargetGroup[i]->Clear();
 	}
+}
+
+void NailEngine::Finalize()
+{
+	RenderSystem::Instance.Get().Finalize();
 }
 
 void NailEngine::SetResolution(unsigned int width, unsigned int height)
@@ -136,6 +141,12 @@ void NailEngine::CreateConstantBuffer()
 	{
 		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
 		_constantBuffer->CraeteConstantBuffer(sizeof(InstanceTransitionDesc));
+		this->constantBuffers.emplace_back(_constantBuffer);
+	}
+
+	{
+		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
+		_constantBuffer->CraeteConstantBuffer(sizeof(FogBuffer));
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
 }
@@ -202,6 +213,14 @@ void NailEngine::CreateRenderTargetGroup()
 			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 		);
 
+		rtVec[5].texture = ResourceManager::Instance.Get().CreateTexture(
+			L"EmissiveTarget",
+			this->windowInfo.width,
+			this->windowInfo.height,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+		);
+
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)] = std::make_shared<RenderTargetGroup>();
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->SetRenderTargetVec(rtVec);
 	}
@@ -258,7 +277,24 @@ void NailEngine::CreateRenderTargetGroup()
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SPECLIBL)] = std::make_shared<RenderTargetGroup>();
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SPECLIBL)]->SetRenderTargetVec(rtVec);
 	}
+	// Back Buffer
+	{
+		std::vector<RenderTarget> rtVec(FINAL_COUNT);
+		rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
+			L"BackBufferTarget",
+			this->windowInfo.width,
+			this->windowInfo.height,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+		);
 
+		rtVec[0].clearColor[0] = 0.7686;
+		rtVec[0].clearColor[1] = 0.8784;
+		rtVec[0].clearColor[2] = 0.9451;
+		rtVec[0].clearColor[3] = 1.f;
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)] = std::make_shared<RenderTargetGroup>();
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->SetRenderTargetVec(rtVec);
+	}
 	//// SHADOW
 	//{
 	//	std::vector<RenderTarget> rtVec(SHADOW_MEMBER_COUNT);

@@ -42,7 +42,7 @@ namespace application
 
 			}
 
-			virtual std::string GetDebugString() const
+			virtual std::string GetDebugString() const override
 			{
 				std::stringstream ss;
 				ss << "[" + GetName() + "] ";
@@ -64,7 +64,7 @@ namespace application
 
 			}
 
-			virtual std::string GetDebugString() const
+			virtual std::string GetDebugString() const override
 			{
 				std::stringstream ss;
 				ss << "[" + GetName() + "] ";
@@ -86,7 +86,7 @@ namespace application
 
 			}
 
-			virtual std::string GetDebugString() const
+			virtual std::string GetDebugString() const override
 			{
 				std::stringstream ss;
 				ss << "[" + GetName() + "] ";

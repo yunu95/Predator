@@ -79,6 +79,7 @@ public:
 
 			this->renderInfoVec.back()->renderInfo.materialIndex = index;
 			this->renderInfoVec.back()->renderInfo.material = reinterpret_cast<Material*>(material);
+			this->renderInfoVec.back()->renderInfo.wtm = renderInfoVec[0]->renderInfo.wtm;
 			this->renderInfoVec.back()->animator = NailAnimatorManager::Instance.Get().GetAnimator(this->animatorIndex);
 			this->renderInfoVec.back()->modelName = this->fbxName;
 
@@ -95,6 +96,7 @@ public:
 
 				renderInfoVec[index]->renderInfo.mesh = this->mesh;
 				renderInfoVec[index]->renderInfo.material = reinterpret_cast<Material*>(material);
+				renderInfoVec[index]->renderInfo.wtm = renderInfoVec[index]->renderInfo.wtm;
 
 				this->materialVec[index] = reinterpret_cast<Material*>(material);
 

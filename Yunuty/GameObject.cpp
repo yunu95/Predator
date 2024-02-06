@@ -72,11 +72,13 @@ void yunutyEngine::GameObject::SetSelfActive(bool selfActive)
             {
                 if (activeAfter)
                 {
-                    eachComp->first->OnEnable();
+                    if (eachComp->first->GetActive())
+                        eachComp->first->OnEnable();
                 }
                 else
                 {
-                    eachComp->first->OnDisable();
+                    if (eachComp->first->GetActive())
+                        eachComp->first->OnDisable();
                 }
             }
         }

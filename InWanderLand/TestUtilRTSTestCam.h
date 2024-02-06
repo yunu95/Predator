@@ -1,6 +1,7 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "DebugBeacon.h"
+#include "EditorCamera.h"
 
 using namespace yunutyEngine;
 namespace tests
@@ -35,9 +36,9 @@ namespace tests
             if (yunutyEngine::Input::isKeyDown(KeyCode::S)/* || lastMousePos.y >= 1*/)
                 deltaDirection -= Vector3d::forward;
 
-            GetTransform()->SetLocalPosition(GetTransform()->GetLocalPosition()+ deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed);
+            GetTransform()->SetLocalPosition(GetTransform()->GetLocalPosition() + deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed);
             Quaternion quat = Quaternion(Vector3d(60, 0, 0));
-            GetTransform()->SetLocalRotation( quat);
+            GetTransform()->SetLocalRotation(quat);
 
             Vector3d front = GetTransform()->GetWorldRotation().Forward();
             auto distToXZPlane = abs(GetTransform()->GetWorldPosition().y);
@@ -45,7 +46,7 @@ namespace tests
             centeredPosition.x -= 0.5;
             centeredPosition.y -= 0.5;
             centeredPosition.y *= -1;
-            Vector3d projectedPoint = GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
+            Vector3d projectedPoint = GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d::up);
 
             if (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick))
                 DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?

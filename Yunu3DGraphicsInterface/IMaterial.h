@@ -15,9 +15,11 @@ namespace yunuGI
 		ARM,
 		HEIGHT,
 		EMISSION,
+		OPACITY,
 		Temp0,
 		Temp1,
 		Temp2,
+		Temp3,
 	};
 
 	class IMaterial : virtual public IResource

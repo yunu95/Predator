@@ -56,7 +56,7 @@ void SkyBoxPass::Render()
 	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
 	matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
-	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
 	// Bind Texture
 	this->texture->Bind(9);
@@ -168,7 +168,7 @@ void SkyBoxPass::BuildIrradianceMap()
 		matrixBuffer.VTM = viewMatrix;
 		matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM90();
 		matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+		NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
 
@@ -292,7 +292,7 @@ void SkyBoxPass::BuildSpecularMap()
 		matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 		matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
 		matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
-		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+		NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
 
@@ -378,7 +378,7 @@ void SkyBoxPass::BuildLUT()
 	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
 	matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
-	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
 
@@ -412,11 +412,11 @@ void SkyBoxPass::BindIBLTexture()
 {
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetSamplers(2,1, samplerState.GetAddressOf());
 
-	this->texture->Bind(9);
-	ResourceManager::Instance.Get().GetTexture(L"Texture/asdDiffuseHDR.dds")->Bind(10);
+	this->texture->Bind(11);
+	ResourceManager::Instance.Get().GetTexture(L"Texture/asdDiffuseHDR.dds")->Bind(12);
 	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShaderResources(10, 1, this->irradianceSRV.GetAddressOf());
-	ResourceManager::Instance.Get().GetTexture(L"Texture/asdSpecularHDR.dds")->Bind(11);
+	ResourceManager::Instance.Get().GetTexture(L"Texture/asdSpecularHDR.dds")->Bind(13);
 	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShaderResources(11, 1, this->prefilteredSRV.GetAddressOf());
-	ResourceManager::Instance.Get().GetTexture(L"Texture/asdBrdf.dds")->Bind(12);
+	ResourceManager::Instance.Get().GetTexture(L"Texture/asdBrdf.dds")->Bind(14);
 	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShaderResources(12, 1, this->lutSRV.GetAddressOf());
 }

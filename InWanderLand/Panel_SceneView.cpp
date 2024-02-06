@@ -14,6 +14,8 @@
 
 #include "YunutyEngine.h"
 
+#include "DebugMeshes.h"
+
 #include <string>
 #include <d3d11.h>
 
@@ -41,23 +43,28 @@ namespace application
 			app = &Application::GetInstance();
 			ec = &EditorCamera::GetSingletonInstance();
 			pm = &palette::PaletteManager::GetSingletonInstance();
+
+			obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			AttachDebugMesh(obj);
 		}
 
 		void SceneViewPanel::Update(float ts)
 		{
-			
+
 		}
 
 		void SceneViewPanel::GUIProgress()
 		{
 			imgui::SmartStyleColor sceneViewColor(ImGuiCol_WindowBg, ImVec4(1, 0, 1, 1));
 
-			ImGui::Begin("SceneView", 0, ImGuiWindowFlags_NoBringToFrontOnFocus);
+			ImGui::Begin("SceneView", 0, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_MenuBar);
 
 			ImGui_Update();
 
 			/// 실제 패널에 그리는 영역
 			ImGui_SceneViewSettings();
+
+			ImGui_DrawMenuBar();
 
 			ImGui::Image(reinterpret_cast<ImTextureID>(app->GetSceneSRV()), ImVec2(renderImageSize.first, renderImageSize.second));
 
@@ -128,7 +135,7 @@ namespace application
 						auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint({ cursorPos_InScreenSpace.first, cursorPos_InScreenSpace.second }, distToXZPlane, Vector3d(0, 1, 0));
 						pm->GetCurrentPalette()->OnMouseMove(projectedPos);
 
-						if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+						if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui_IsCursorInGizmoButtonRect())
 						{
 							if (Vector3d::Dot(projectedPos - yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition(), front) > 0)
 							{
@@ -211,6 +218,13 @@ namespace application
 			return (curPos.first >= startPos.x && curPos.first <= startPos.x + renderImageSize.first) && (curPos.second >= startPos.y && curPos.second <= startPos.y + renderImageSize.second);
 		}
 
+		bool SceneViewPanel::ImGui_IsCursorInGizmoButtonRect()
+		{
+			auto curPos = ImGui_GetCursorPosOnPanel();
+			ImVec2 startPos = ImVec2(imageStartPos.first + gizmoButtonStartPos.first, imageStartPos.second + gizmoButtonStartPos.second);
+			return (curPos.first >= startPos.x - 5 && curPos.first <= startPos.x + gizmoButtonSize.first + 5) && (curPos.second >= startPos.y - 5 && curPos.second <= startPos.y + (gizmoButtonSize.second + 5) * 4 + 5);
+		}
+
 		bool SceneViewPanel::ImGui_IsWindowResize()
 		{
 			return (prevWindowSize != currentWindowSize);
@@ -226,23 +240,91 @@ namespace application
 
 		void SceneViewPanel::ImGui_DrawGizmo()
 		{
+			// Gizmo Option Button
+
+			{
+				imgui::SmartStyleVar framePadding(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+				imgui::SmartStyleVar itemSpacing(ImGuiStyleVar_ItemSpacing, ImVec2(5, 5));
+				imgui::SmartStyleColor settingButtonBGColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+
+				auto selectedColor = ImVec4(1.0f, 0.3f, 0.1f, 1.0f);
+
+				bool button[4] = {};
+
+				switch (operation)
+				{
+					case ImGuizmo::TRANSLATE:
+						button[1] = true;
+						break;
+					case ImGuizmo::ROTATE:
+						button[2] = true;
+						break;
+					case ImGuizmo::SCALE:
+						button[3] = true;
+						break;
+					default:
+						button[0] = true;
+						break;
+				}
+
+				auto palette = pm->GetCurrentPalette();
+				auto buttonStartPos = ImVec2(imageStartPos.first + gizmoButtonStartPos.first, imageStartPos.second + gizmoButtonStartPos.second);
+
+				ImGui::SetCursorPos(buttonStartPos);
+
+				if (imgui::SelectableImageButton("Gizmo Select", "ImageButtons/Scene_Select.png", button[0], ImVec2(gizmoButtonSize.first, gizmoButtonSize.second), ImVec2(0, 0), ImVec2(1, 1), true, ImVec4(0.0f, 0.0f, 0.0f, 0.0f), selectedColor))
+				{
+					operation = (ImGuizmo::OPERATION)0;
+					palette->SetAsSelectMode(true);
+				}
+
+				ImGui::SetCursorPosX(buttonStartPos.x);
+
+				if (imgui::SelectableImageButton("Gizmo Move", "ImageButtons/Scene_Move.png", button[1], ImVec2(gizmoButtonSize.first, gizmoButtonSize.second), ImVec2(0, 0), ImVec2(1, 1), true, ImVec4(0.0f, 0.0f, 0.0f, 0.0f), selectedColor))
+				{
+					operation = ImGuizmo::TRANSLATE;
+					palette->SetAsSelectMode(true);
+				}
+
+				ImGui::SetCursorPosX(buttonStartPos.x);
+
+				if (imgui::SelectableImageButton("Gizmo Rotate", "ImageButtons/Scene_Rotate.png", button[2], ImVec2(gizmoButtonSize.first, gizmoButtonSize.second), ImVec2(0, 0), ImVec2(1, 1), true, ImVec4(0.0f, 0.0f, 0.0f, 0.0f), selectedColor))
+				{
+					operation = ImGuizmo::ROTATE;
+					palette->SetAsSelectMode(true);
+				}
+
+				ImGui::SetCursorPosX(buttonStartPos.x);
+
+				if (imgui::SelectableImageButton("Gizmo Scale", "ImageButtons/Scene_Scale.png", button[3], ImVec2(gizmoButtonSize.first, gizmoButtonSize.second), ImVec2(0, 0), ImVec2(1, 1), true, ImVec4(0.0f, 0.0f, 0.0f, 0.0f), selectedColor))
+				{
+					operation = ImGuizmo::SCALE;
+					palette->SetAsSelectMode(true);
+				}
+			}
+
 			ImGuizmo::SetDrawlist();
-			ImGuizmo::SetRect(ImGui::GetWindowPos().x + imageStartPos.first, ImGui::GetWindowPos().y + imageStartPos.second, renderImageSize.first, renderImageSize.second);
+			float left = ImGui::GetWindowPos().x + imageStartPos.first;
+			float top = ImGui::GetWindowPos().y + imageStartPos.second;
+			float right = left + renderImageSize.first;
+			float bottom = top + renderImageSize.second;
+			ImGuizmo::SetRect(left, top, renderImageSize.first, renderImageSize.second);
+			ImGui::PushClipRect(ImVec2(left,top),ImVec2(right, bottom), true);
+			
 			auto vtm = ec->GetVTM();
 			auto ptm = ec->GetPTM();
 			yunuGI::Matrix4x4 im = yunuGI::Matrix4x4();
-			
+
 			auto gvtm = math::ConvertVTM(vtm);
 			auto gptm = math::ConvertPTM(ptm);
 
 			auto beforeVTM = gvtm;
+
 			ImGuizmo::ViewManipulate(reinterpret_cast<float*>(&gvtm), 10 * sqrt(3), ImVec2(ImGui::GetWindowPos().x + renderImageSize.first - 128, ImGui::GetWindowPos().y + imageStartPos.second), ImVec2(128, 128), 0x10101010);
 
-			ImGuizmo::OPERATION operation = ImGuizmo::ROTATE;
-			ImGuizmo::MODE mode = ImGuizmo::WORLD;
-
-			//ImGuizmo::Manipulate(reinterpret_cast<float*>(&beforeVTM), reinterpret_cast<float*>(&gptm), operation, mode, reinterpret_cast<float*>(&objgwtm), NULL, NULL, NULL, NULL);
-			//ImGui_UpdateObjectWTM(obj, math::ConvertWTM(objgwtm));
+			auto objgwtm = math::ConvertWTM(obj->GetTransform()->GetWorldTM());
+			ImGuizmo::Manipulate(reinterpret_cast<float*>(&beforeVTM), reinterpret_cast<float*>(&gptm), operation, mode, reinterpret_cast<float*>(&objgwtm), NULL, NULL, NULL, NULL);
+			ImGui_UpdateObjectWTM(obj, math::ConvertWTM(objgwtm));
 
 			if (ec->GetGamePerspective() == CameraPerspectiveState::Free)
 			{
@@ -254,10 +336,12 @@ namespace application
 					ec->ChangeVTM(math::ConvertVTM(gvtm));
 				}
 			}
+
+			ImGui::PopClipRect();
 		}
 
 		void SceneViewPanel::Release()
-		{	
+		{
 			pm->GetCurrentPalette()->OnLeftClickRelease();
 		}
 
@@ -268,126 +352,32 @@ namespace application
 			imgui::SmartStyleVar windowRounding(ImGuiStyleVar_WindowRounding, 4.0f);
 			imgui::SmartStyleVar disablePadding(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 
-			imgui::SmartStyleColor settingBGColor(ImGuiCol_WindowBg, ImVec4(0.06f, 0.06f, 0.06f, 0.94f));
+			ImVec2 buttonSize = ImVec2(20, 20);
 
-			const ImVec2 buttonSize = ImVec2(ImGui::CalcTextSize("SceneView Settings").x + 10, ImGui::CalcTextSize("SceneView Settings").y + 10);
-
-			ImVec2 pos = ImVec2(ImGui::GetWindowPos().x + currentWindowSize.first - buttonSize.x, ImGui::GetWindowPos().y - buttonSize.y);
+			ImVec2 pos = ImVec2(ImGui::GetWindowPos().x + currentWindowSize.first - buttonSize.x, ImGui::GetWindowPos().y - 5);
 
 			ImGui::SetNextWindowPos(pos);
 			ImGui::SetNextWindowSize(buttonSize);
 			ImGui::SetNextWindowBgAlpha(0.0f);
+
 			ImGui::Begin("##SceneView_Settings", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking);
 
 			bool openSettingsPopup = false;
 
 			{
-				if (ImGui::Button("SceneView Settings"))
 				{
-					openSettingsPopup = true;
+					imgui::SmartStyleVar framePadding(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+					imgui::SmartStyleColor settingButtonBGColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+
+					if (ImGui::ImageButton("SceneView Settings", (ImTextureID)erm.GetTexture2D("ImageButtons/Setting.png")->GetID(), buttonSize, ImVec2(0, 0), ImVec2(1, 1), ImVec4(0.0f, 0.0f, 0.0f, 0.0f)))
+					{
+						openSettingsPopup = true;
+					}
 				}
 
-				int32_t sectionIdx = 0;
+				int sectionIdx = 0;
 
 				static float popupWidth = 300.0f;
-
-				auto beginSection = [&sectionIdx](const char* name)
-					{
-						if (sectionIdx > 0)
-							imgui::ShiftCursorY(5.5f);
-
-						imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32_WHITE);
-						ImGui::Text(name);
-						imgui::draw::Underline(IM_COL32(90, 90, 90, 200));
-						imgui::ShiftCursorY(3.5f);
-
-						bool result = ImGui::BeginTable("##section_table", 2, ImGuiTableFlags_SizingStretchSame);
-						if (result)
-						{
-							ImGui::TableSetupColumn("Labels", ImGuiTableColumnFlags_WidthFixed, popupWidth * 0.5f);
-							ImGui::TableSetupColumn("Widgets", ImGuiTableColumnFlags_WidthFixed, popupWidth * 0.5f);
-						}
-
-						sectionIdx++;
-						return result;
-					};
-
-				auto endSection = []()
-					{
-						ImGui::EndTable();
-					};
-
-				auto slider = [](const char* label, float& value, float min = 0.0f, float max = 0.0f)
-					{
-						ImGui::TableNextRow();
-						ImGui::TableSetColumnIndex(0);
-						imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
-						ImGui::Text(label);
-						ImGui::TableSetColumnIndex(1);
-						ImGui::SetNextItemWidth(-1);
-						return ImGui::SliderFloat((std::string("##") + std::string(label)).c_str(), &value, min, max);
-					};
-
-				auto drag = [](const char* label, float& value, float delta = 1.0f, float min = 0.0f, float max = 0.0f)
-					{
-						ImGui::TableNextRow();
-						ImGui::TableSetColumnIndex(0);
-						imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
-						ImGui::Text(label);
-						ImGui::TableSetColumnIndex(1);
-						ImGui::SetNextItemWidth(-1);
-						return ImGui::DragFloat((std::string("##") + std::string(label)).c_str(), &value, delta, min, max);
-					};
-
-				auto checkbox = [](const char* label, bool& value)
-					{
-						ImGui::TableNextRow();
-						ImGui::TableSetColumnIndex(0);
-						imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
-						ImGui::Text(label);
-						ImGui::TableSetColumnIndex(1);
-						auto table = ImGui::GetCurrentTable();
-						float columnWidth = ImGui::TableGetMaxColumnWidth(table, 1);
-						imgui::ShiftCursorX(columnWidth - ImGui::GetFrameHeight() - ImGui::GetStyle().ItemInnerSpacing.x);
-						return ImGui::Checkbox((std::string("##") + std::string(label)).c_str(), &value);
-					};
-
-				auto dropdown = [](const char* label, const char** options, int32_t optionCount, int32_t* selected)
-					{
-						// 첫 번째가 None 으로 설정되어 있다고 가정함
-						const char* current = options[*selected - 1];
-						ImGui::TableNextRow();
-						ImGui::TableSetColumnIndex(0);
-						imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
-						ImGui::Text(label);
-						ImGui::TableSetColumnIndex(1);
-						ImGui::PushItemWidth(-1);
-
-						imgui::SmartStyleColor textColor2(ImGuiCol_Text, IM_COL32_WHITE);
-						bool result = false;
-						if (ImGui::BeginCombo("##Combo", current))
-						{
-							for (int i = 0; i < optionCount; i++)
-							{
-								const bool is_selected = (current == options[i]);
-								if (ImGui::Selectable(options[i], is_selected))
-								{
-									current = options[i];
-									// 첫 번째가 None 으로 설정되어 있다고 가정함
-									*selected = i + 1;
-									result = true;
-								}
-
-								if (is_selected)
-									ImGui::SetItemDefaultFocus();
-							}
-							ImGui::EndCombo();
-						}
-
-						ImGui::PopItemWidth();
-
-						return result;
-					};
 
 				imgui::SmartStyleVar itemSpacing(ImGuiStyleVar_ItemSpacing, ImVec2(0, 5.5f));
 				imgui::SmartStyleVar windowPadding(ImGuiStyleVar_WindowPadding, ImVec2(10, 10));
@@ -398,17 +388,18 @@ namespace application
 					ImGui::OpenPopup("SceneView Settings");
 				}
 
-				ImGui::SetNextWindowPos(ImVec2{ ImGui::GetWindowPos().x - popupWidth, ImGui::GetWindowPos().y + buttonSize.y});
+				ImGui::SetNextWindowPos(ImVec2{ ImGui::GetWindowPos().x - popupWidth, ImGui::GetWindowPos().y + buttonSize.y });
 				if (ImGui::BeginPopup("SceneView Settings", ImGuiWindowFlags_NoMove))
 				{
-					if (beginSection("EditorCamera"))
+					if (imgui::BeginSection_2Col(sectionIdx, "EditorCamera", 300.0f))
 					{
 						CameraPerspectiveState state = ec->GetGamePerspective();
+						int selected = (int)state - 1;
 
 						static const char* selectionModes[] = { "Free", "Game" };
-						dropdown("Selection Mode", selectionModes, 2, (int32_t*)&state);
+						imgui::Dropdown_2Col("Selection Mode", selectionModes, 2, (int32_t*)&selected);
 
-						switch (state)
+						switch ((CameraPerspectiveState)(selected + 1))
 						{
 							case application::editor::CameraPerspectiveState::Free:
 							{
@@ -423,14 +414,52 @@ namespace application
 							default:
 								break;
 						}
-
-						endSection();
+						imgui::EndSection();
 					}
 					ImGui::EndPopup();
 				}
 			}
 
 			ImGui::End();
+
+		}
+
+		void SceneViewPanel::ImGui_DrawMenuBar()
+		{
+			ImGui::BeginMenuBar();
+
+			// View Mode
+			if (ImGui::BeginMenu("View Mode"))
+			{
+				bool worldSelected = (mode == ImGuizmo::WORLD);
+
+				if (ImGui::MenuItem("WORLD", 0, worldSelected))
+				{
+					mode = ImGuizmo::WORLD;
+				}
+				if (ImGui::MenuItem("LOCAL", 0, !worldSelected))
+				{
+					mode = ImGuizmo::LOCAL;
+				}
+
+				ImGui::EndMenu();
+			}
+
+
+
+			// Palette Mode
+			imgui::ShiftCursorX(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Select Mode").x - 10);
+
+			if (pm->GetCurrentPalette()->IsSelectMode())
+			{
+				ImGui::BeginMenu("Select Mode", false);
+			}
+			else
+			{
+				ImGui::BeginMenu("Place Mode", false);
+			}
+
+			ImGui::EndMenuBar();
 		}
 
 		void SceneViewPanel::ImGui_UpdateObjectWTM(GameObject* target, const yunuGI::Matrix4x4& wtm) const
@@ -440,6 +469,7 @@ namespace application
 			yunuGI::Quaternion rotation;
 			yunuGI::Vector3 translation;
 			math::DecomposeWTM(wtm, scale, rotation, translation);
+			ttf->SetLocalScale(*reinterpret_cast<Vector3f*>(&scale));
 			ttf->SetWorldPosition(*reinterpret_cast<Vector3f*>(&translation));
 			ttf->SetWorldRotation(*reinterpret_cast<Quaternion*>(&rotation));
 		}

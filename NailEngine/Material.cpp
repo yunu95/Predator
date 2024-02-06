@@ -80,6 +80,7 @@ void Material::PushGraphicsData()
 			continue;
 		}
 
+
 		this->useTextures[i] = 1;
 		this->textures[i]->Bind(i);
 	}
@@ -89,7 +90,7 @@ void Material::PushGraphicsData()
 	materialBuffer.useTexture = this->useTextures;
 	materialBuffer.temp_int = this->temp_int;
 
-	NailEngine::Instance.Get().GetConstantBuffer(1)->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer), 1);
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATERIAL))->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer), static_cast<int>(CB_TYPE::MATERIAL));
 
 	assert(vs);
 	assert(ps);

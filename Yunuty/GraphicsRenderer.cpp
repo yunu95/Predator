@@ -23,7 +23,7 @@ Renderer& yunutyEngine::graphics::Renderer::SingleInstance()
 void yunutyEngine::graphics::Renderer::Render()
 {
     auto renderer = _YunuGIObjects::SingleInstance().renderer.Get();
-    assert(renderer != nullptr, L"±×·¡ÇÈ½º ·»´õ·¯°¡ ¾ø´Â »óÅÂÀÔ´Ï´Ù!");
+    assert(renderer != nullptr, L"ê·¸ëž˜í”½ìŠ¤ ë Œë”ëŸ¬ê°€ ì—†ëŠ” ìƒíƒœìž…ë‹ˆë‹¤!");
     //renderer->BeginRender();
     renderer->Render();
     afterRenderAction();
@@ -41,11 +41,17 @@ void yunutyEngine::graphics::Renderer::LoadGraphicsDll(const wstring& dllFileNam
 void yunutyEngine::graphics::Renderer::SetOutputWindow(const HWND& hwnd)
 {
     auto renderer = _YunuGIObjects::SingleInstance().renderer.Get();
-    assert(renderer != nullptr, L"±×·¡ÇÈ½º ·»´õ·¯°¡ ¾ø´Â »óÅÂÀÔ´Ï´Ù!");
+    assert(renderer != nullptr, L"ê·¸ëž˜í”½ìŠ¤ ë Œë”ëŸ¬ê°€ ì—†ëŠ” ìƒíƒœìž…ë‹ˆë‹¤!");
     renderer->SetOutputWindow(reinterpret_cast<unsigned long long>(hwnd));
     this->mainWnd = hwnd;
     Input::GetInstance()->mainWnd = hwnd;
 }
+
+void Renderer::Finalize()
+{
+    _YunuGIObjects::SingleInstance().renderer->Finalize();
+}
+
 void yunutyEngine::graphics::Renderer::LoadFiles(const char* rootPath)
 {
     std::stack<std::filesystem::path> folders_stack;

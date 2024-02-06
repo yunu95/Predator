@@ -2,6 +2,7 @@
 #include "Panel_Palette.h"
 #include "Application.h"
 #include "imgui_Utility.h"
+#include "EditorCommonEvents.h"
 
 #include "YunutyEngine.h"
 
@@ -9,219 +10,344 @@
 
 namespace application
 {
-    namespace editor
-    {
-        PalettePanel::~PalettePanel()
-        {
+	namespace editor
+	{
+		PalettePanel::~PalettePanel()
+		{
 
-        }
+		}
 
-        void PalettePanel::Initialize()
-        {
-            currentPalette = pm.GetCurrentPalette();
-        }
+		void PalettePanel::Initialize()
+		{
+			currentPalette = pm.GetCurrentPalette();
 
-        void PalettePanel::Update(float ts)
-        {
+			auto uSize = tdm.GetDataList(DataType::UnitData).size();
+			unitButton.reserve(30);
+			for (int i = 0; i < uSize; i++)
+			{
+				unitButton.push_back(false);
+			}
+		}
 
-        }
+		void PalettePanel::Update(float ts)
+		{
 
-        void PalettePanel::GUIProgress()
-        {
-            ImGui::Begin("Palette");
+		}
 
-            ImGui_Update();
+		void PalettePanel::GUIProgress()
+		{
+			ImGui::Begin("Palette");
 
-            /// 실제 패널에 그리는 영역
-            if (ImGui::BeginTabBar("PaletteTabBar", ImGuiTabBarFlags_None))
-            {
-                /// 플래그를 사용하여 정렬 상태를 조정해야 하지만,
-                /// 그냥 간편하게 기본적으로 Terrain 으로 시작된다고 가정함
-                if (ImGui::BeginTabItem("Terrain"))
-                {
-                    ChangePalette(&tp);
-                    ImGui_BeginTerrainPalette();
-                    ImGui::EndTabItem();
-                }
+			ImGui_Update();
 
-                if (ImGui::BeginTabItem("Unit"))
-                {
-                    ChangePalette(&up);
-                    ImGui_BeginUnitPalette();
-                    ImGui::EndTabItem();
-                }
+			/// 실제 패널에 그리는 영역
+			if (ImGui::BeginTabBar("PaletteTabBar", ImGuiTabBarFlags_None))
+			{
+				/// 플래그를 사용하여 정렬 상태를 조정해야 하지만,
+				/// 그냥 간편하게 기본적으로 Terrain 으로 시작된다고 가정함
+				if (ImGui::BeginTabItem("Terrain"))
+				{
+					ChangePalette(&tp);
+					ImGui_BeginTerrainPalette();
+					ImGui::EndTabItem();
+				}
 
-                if (ImGui::BeginTabItem("Doodad"))
-                {
-                    ChangePalette(&dp);
-                    ImGui_BeginDoodadPalette();
-                    ImGui::EndTabItem();
-                }
+				if (ImGui::BeginTabItem("Unit"))
+				{
+					ChangePalette(&up);
+					ImGui_BeginUnitPalette();
+					ImGui::EndTabItem();
+				}
 
-                if (ImGui::BeginTabItem("Region"))
-                {
-                    ChangePalette(&rp);
-                    ImGui_BeginRegionPalette();
-                    ImGui::EndTabItem();
-                }
+				if (ImGui::BeginTabItem("Doodad"))
+				{
+					ChangePalette(&dp);
+					ImGui_BeginDoodadPalette();
+					ImGui::EndTabItem();
+				}
 
-                ImGui::EndTabBar();
-            }
+				if (ImGui::BeginTabItem("Region"))
+				{
+					ChangePalette(&rp);
+					ImGui_BeginRegionPalette();
+					ImGui::EndTabItem();
+				}
 
-            ImGui::End();
-        }
+				ImGui::EndTabBar();
+			}
 
-        void PalettePanel::Finalize()
-        {
+			ImGui::End();
+		}
 
-        }
+		void PalettePanel::Finalize()
+		{
 
-        PalettePanel::PalettePanel()
-        {
+		}
 
-        }
+		void PalettePanel::OnEvent(EditorEvents& event)
+		{
+			EventDispatcher dispatcher(event);
+			dispatcher.Dispatch<LoadEvent>([this](LoadEvent& e) 
+				{  
+					LoadCallback();
+					return true; 
+				});
+		}
 
-        void PalettePanel::ChangePalette(palette::Palette* palette)
-        {
-            if (currentPalette != palette)
-            {
-                pm.SetCurrentPalette(palette);
-                currentPalette = palette;
-            }
-        }
+		PalettePanel::PalettePanel()
+		{
+			unitButton.reserve(20);
+		}
 
-        void PalettePanel::ImGui_Update()
-        {
-            /// ImGui 관련 내부 변수 업데이트
-            isMouseOver = ImGui::IsWindowHovered();
-            isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
+		void PalettePanel::ChangePalette(palette::Palette* palette)
+		{
+			if (currentPalette != palette)
+			{
+				pm.SetCurrentPalette(palette);
+				currentPalette = palette;
+			}
+		}
 
-            if (!Application::IsFocusGameWindow())
-            {
-                // 마우스 입력에 대한 처리
-                if (isMouseOver)
-                {
+		void PalettePanel::ImGui_Update()
+		{
+			/// ImGui 관련 내부 변수 업데이트
+			isMouseOver = ImGui::IsWindowHovered();
+			isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
-                }
+			if (!Application::IsFocusGameWindow())
+			{
+				// 마우스 입력에 대한 처리
+				if (isMouseOver)
+				{
 
-                // 키 입력에 대한 처리
-                if (eim.IsKeyboardUp(KeyCode::ESC))
-                {
-                    if (currentPalette && !currentPalette->IsSelectMode())
-                    {
-                        currentPalette->SetAsSelectMode(true);
-                    }
-                }
+				}
 
-                if (eim.IsKeyboardUp(KeyCode::Delete))
-                {
-                    if (currentPalette && currentPalette->IsSelectMode())
-                    {
-                        currentPalette->OnDeletion();
-                    }
-                }
-            }
-        }
+				// 키 입력에 대한 처리
+				if (eim.IsKeyboardUp(KeyCode::ESC))
+				{
+					if (currentPalette && !currentPalette->IsSelectMode())
+					{
+						currentPalette->SetAsSelectMode(true);
 
-        void PalettePanel::ImGui_BeginTerrainPalette()
-        {
-            imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
-            imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+						if (currentPalette == &up)
+						{
+							if (unitCurrentButton != -1)
+							{
+								unitButton[unitCurrentButton] = false;
+								unitCurrentButton = -1;
+							}
 
-            if (ImGui::BeginTable("TerrainPaletteTable", 2, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_NoClip))
-            {
-                auto modeButtonSize = ImGui::CalcTextSize("Mode");
-                modeButtonSize.x += ImGui::GetStyle().WindowPadding.x + 4.0f;
-                ImGui::TableSetupColumn("label_column", 0, modeButtonSize.x);
-                ImGui::TableSetupColumn("value_column", ImGuiTableColumnFlags_IndentEnable | ImGuiTableColumnFlags_NoClip, ImGui::GetContentRegionAvail().x - modeButtonSize.x);
+							up.SelectUnitTemplateData(nullptr);
+						}
+					}
+				}
 
-                ImGui::TableNextRow();
-                {
-                    ImGui::TableSetColumnIndex(0);
-                    if (ImGui::Button("Mode"))
-                    {
-                        if (currentPalette)
-                        {
-                            currentPalette->SetAsSelectMode(!currentPalette->IsSelectMode());
-                        }
-                    }
+				if (eim.IsKeyboardUp(KeyCode::Delete))
+				{
+					if (currentPalette && currentPalette->IsSelectMode())
+					{
+						currentPalette->OnDeletion();
+					}
+				}
 
-                    ImGui::TableSetColumnIndex(1);
-                    if (currentPalette->IsSelectMode())
-                    {
-                        ImGui::Text("Select");
-                    }
-                    else
-                    {
-                        ImGui::Text("Place");
-                    }
-                }
+				if (eim.IsKeyboardUp(KeyCode::B))
+				{
+					if (currentPalette == &tp)
+					{
+						tp.ApplyAsPlaytimeObjects();
+					}
+				}
+			}
+		}
 
-                ImGui::EndTable();
-            }
-        }
+		void PalettePanel::ImGui_BeginTerrainPalette()
+		{
+			imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
+			imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 
-        void PalettePanel::ImGui_BeginUnitPalette()
-        {
-            imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
-            imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+			int countIdx = 0;
 
-            if (ImGui::BeginTable("UnitPaletteTable", 2, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_NoClip))
-            {
-                ImGui::TableSetupColumn("label_column", 0, 100);
-                ImGui::TableSetupColumn("value_column", ImGuiTableColumnFlags_IndentEnable | ImGuiTableColumnFlags_NoClip, ImGui::GetContentRegionAvail().x);
+			if (imgui::BeginSection_1Col(countIdx, "Place Mode", ImGui::GetContentRegionAvail().x))
+			{
+				bool pButton = !tp.IsSelectMode() && tp.IsMarking();
+				bool eButton = !tp.IsSelectMode() && !tp.IsMarking();
 
-                ImGui::TableNextRow();
-                {
-                    ImGui::TableSetColumnIndex(0);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
 
-                    ImGui::TableSetColumnIndex(1);
-                }
+				bool pFlag = imgui::SelectableImageButton("Terrain_PlaceButton", "ImageButtons/Terrain_PlaceButton.png", pButton, ImVec2(50, 50));
+				ImGui::SameLine();
+				bool eFlag = imgui::SelectableImageButton("Terrain_EraseButton", "ImageButtons/Terrain_EraseButton.png", eButton, ImVec2(50, 50));
 
-                ImGui::EndTable();
-            }
-        }
+				if (pFlag)
+				{
+					if (pButton)
+					{
+						tp.SetAsSelectMode(true);
+					}
+					else
+					{
+						tp.SetAsSelectMode(false);
+						tp.SetIsMarking(true);
+					}
+				}
 
-        void PalettePanel::ImGui_BeginDoodadPalette()
-        {
-            imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
-            imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+				if (eFlag)
+				{
+					if (eButton)
+					{
+						tp.SetAsSelectMode(true);
+					}
+					else
+					{
+						tp.SetAsSelectMode(false);
+						tp.SetIsMarking(false);
+					}
+				}
 
-            if (ImGui::BeginTable("DoodadPaletteTable", 2, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_NoClip))
-            {
-                ImGui::TableSetupColumn("label_column", 0, 100);
-                ImGui::TableSetupColumn("value_column", ImGuiTableColumnFlags_IndentEnable | ImGuiTableColumnFlags_NoClip, ImGui::GetContentRegionAvail().x);
+				imgui::EndSection();
+			}
 
-                ImGui::TableNextRow();
-                {
-                    ImGui::TableSetColumnIndex(0);
+			if (imgui::BeginSection_2Col(countIdx, "Brush Options", ImGui::GetContentRegionAvail().x, 0.3f))
+			{
+				int bSize = tp.GetBrushSize();
 
-                    ImGui::TableSetColumnIndex(1);
-                }
+				if (imgui::SliderInt_2Col("Size", bSize, 0, 15))
+				{
+					tp.SetBrushSize(bSize);
+				}
 
-                ImGui::EndTable();
-            }
-        }
+				imgui::EndSection();
+			}
 
-        void PalettePanel::ImGui_BeginRegionPalette()
-        {
-            imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
-            imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+			if (imgui::BeginSection_1Col(countIdx, "Navigation Build", ImGui::GetContentRegionAvail().x))
+			{
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				if (ImGui::Button("Build", ImVec2(ImGui::GetContentRegionAvail().x, 50)))
+				{
+					tp.ApplyAsPlaytimeObjects();
+				}
 
-            if (ImGui::BeginTable("DoodadPaletteTable", 2, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_NoClip))
-            {
-                ImGui::TableSetupColumn("label_column", 0, 100);
-                ImGui::TableSetupColumn("value_column", ImGuiTableColumnFlags_IndentEnable | ImGuiTableColumnFlags_NoClip, ImGui::GetContentRegionAvail().x);
+				imgui::EndSection();
+			}
+		}
 
-                ImGui::TableNextRow();
-                {
-                    ImGui::TableSetColumnIndex(0);
+		void PalettePanel::ImGui_BeginUnitPalette()
+		{
+			imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
+			imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 
-                    ImGui::TableSetColumnIndex(1);
-                }
+			int countIdx = 0;
 
-                ImGui::EndTable();
-            }
-        }
-    }
+			if (imgui::BeginSection_1Col(countIdx, "Unit List", ImGui::GetContentRegionAvail().x))
+			{
+				auto uSize = tdm.GetDataList(DataType::UnitData).size();
+
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+
+				int colCount = 6;
+				int rowCount = 1;
+
+				auto style = ImGui::GetStyle();
+				auto imageSize = ImGui::GetContentRegionAvail().x / colCount - style.ItemSpacing.x - style.FramePadding.x * 2;
+
+				for (int i = 0; i < uSize + 1; i++)
+				{
+					if (i != 0 && i % colCount == 0)
+					{
+						ImGui::TableNextRow();
+						ImGui::TableSetColumnIndex(0);
+					}
+
+					if (i == uSize)
+					{
+						bool buttonFlag = imgui::SelectableImageButton("Unit Add Button", "ImageButtons/Unit_AddButton.png", false, ImVec2(imageSize, imageSize));
+						if (buttonFlag)
+						{
+							if (unitCurrentButton != -1)
+							{
+								unitButton[unitCurrentButton] = false;
+								unitCurrentButton = -1;
+								up.SelectUnitTemplateData(nullptr);
+								up.SetAsSelectMode(true);
+							}
+
+							// Unit Template 추가 로직과 연결해야 함
+							// 이때, unitButton 에도 pushback 해주어 Size를 추가해야 함
+							/// 임시로 Unit Template Data 하나를 추가하는 로직을 구현함
+							tdm.CreateTemplateData<Unit_TemplateData>("UnitButton" + std::to_string(i));
+							unitButton.push_back(false);
+						}
+					}
+					else
+					{
+						bool ref = unitButton[i];
+						bool buttonFlag = imgui::SelectableImageButton("UnitButton" + std::to_string(i), "ImageButtons/TestCube.png", ref, ImVec2(imageSize, imageSize));
+						if (buttonFlag)
+						{
+							if (unitCurrentButton != -1)
+							{
+								unitButton[unitCurrentButton] = false;
+
+								if (unitCurrentButton == i)
+								{
+									unitCurrentButton = -1;
+									up.SelectUnitTemplateData(nullptr);
+									up.SetAsSelectMode(true);
+								}
+								else
+								{
+									unitButton[i] = true;
+									unitCurrentButton = i;
+									up.SelectUnitTemplateData(static_cast<Unit_TemplateData*>(tdm.GetDataList(DataType::UnitData)[i]));
+									up.SetAsSelectMode(false);
+								}
+							}
+							else
+							{
+								unitButton[i] = true;
+								unitCurrentButton = i;
+								up.SelectUnitTemplateData(static_cast<Unit_TemplateData*>(tdm.GetDataList(DataType::UnitData)[i]));
+								up.SetAsSelectMode(false);
+							}
+						}
+
+						ImGui::SameLine();
+					}
+				}
+				imgui::EndSection();
+			}
+		}
+
+		void PalettePanel::ImGui_BeginDoodadPalette()
+		{
+			imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
+			imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+
+			int countIdx = 0;
+		}
+
+		void PalettePanel::ImGui_BeginRegionPalette()
+		{
+			imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
+			imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+
+			int countIdx = 0;
+		}
+
+		void PalettePanel::LoadCallback()
+		{
+			unitCurrentButton = -1;
+			unitButton.clear();
+
+			auto uSize = tdm.GetDataList(DataType::UnitData).size();
+			unitButton.reserve(30);
+			for (int i = 0; i < uSize; i++)
+			{
+				unitButton.push_back(false);
+			}
+		}
+	}
 }

@@ -9,8 +9,8 @@ using namespace DirectX::PackedVector;
 
 #define SM_SIZE 2048
 
-#define MAX_TEXTURE 8
-#define MAX_INT 8
+#define MAX_TEXTURE 10
+#define MAX_INT 10
 #define MAX_BONE_COUNT 250
 #define MAX_FRAME_COUNT 500
 #define MAX_INSTANCE_MODEL 500
@@ -53,6 +53,17 @@ public:
 			assert(FALSE);
 		}
 	}
+};
+
+enum class CB_TYPE
+{
+	MATRIX,
+	MATERIAL,
+	LIGHT,
+	CAMERA,
+	BONE,
+	INST_TRANSITION,
+	FOG,
 };
 
 struct MatrixBuffer
@@ -128,12 +139,20 @@ struct InstanceTransitionDesc
 	TransitionDesc transitionDesc[MAX_INSTANCE_MODEL];
 };
 
+struct FogBuffer
+{
+	float start;
+	float end;
+	DirectX::SimpleMath::Vector2 padding;
+};
+
 class Mesh;
 class Material;
 struct RenderInfo
 {
 	Mesh* mesh;
 	Material* material;
+	Material* shadowMaterial;
 	//Material shadowMaterial;
 	unsigned int materialIndex;
 	DirectX::SimpleMath::Matrix wtm;

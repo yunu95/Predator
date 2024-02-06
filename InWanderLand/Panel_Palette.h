@@ -5,9 +5,13 @@
 
 #include "Singleton.h"
 #include "EditorPanel.h"
+#include "EditorResourceManager.h"
 #include "EditorInputManager.h"
+#include "TemplateDataManager.h"
 #include "PaletteManager.h"
 #include "PaletteList.h"
+
+#include <vector>
 
 namespace application
 {
@@ -25,6 +29,7 @@ namespace application
 			virtual void Update(float ts) override;
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
+			virtual void OnEvent(EditorEvents& event) override;
 
 		private:
 			PalettePanel();
@@ -38,14 +43,21 @@ namespace application
 			void ImGui_BeginDoodadPalette();
 			void ImGui_BeginRegionPalette();
 
+			void LoadCallback();
+
 			palette::Palette* currentPalette = nullptr;
 
+			ResourceManager& erm = ResourceManager::GetSingletonInstance();
 			EditorInputManager& eim = EditorInputManager::GetSingletonInstance();
+			TemplateDataManager& tdm = TemplateDataManager::GetSingletonInstance();
 			palette::PaletteManager& pm = palette::PaletteManager::GetSingletonInstance();
 			palette::TerrainPalette& tp = palette::TerrainPalette::SingleInstance();
 			palette::UnitPalette& up = palette::UnitPalette::SingleInstance();
 			palette::DoodadPalette& dp = palette::DoodadPalette::SingleInstance();
 			palette::RegionPalette& rp = palette::RegionPalette::SingleInstance();
+
+			int unitCurrentButton = -1;
+			std::vector<bool> unitButton = std::vector<bool>();
 		};
 	}
 }

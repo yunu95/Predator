@@ -70,7 +70,7 @@ std::wstring yunutyEngine::Component::GetGUIDWStr()
 }
 void yunutyEngine::Component::SetActive(bool active)
 {
-    if (isActive != active)
+    if (isActive != active && GetGameObject()->GetActive())
     {
         isActive = active;
         gameObject->HandleComponentUpdateState(this);
@@ -79,6 +79,8 @@ void yunutyEngine::Component::SetActive(bool active)
         else
             OnDisable();
     }
+    else
+        isActive = active;
 }
 void yunutyEngine::Component::SetIsUpdating(bool isUpdating)
 {

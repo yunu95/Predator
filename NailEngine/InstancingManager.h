@@ -24,10 +24,10 @@ public:
 
 public:
 	void Init();
-	void RegisterStaticMeshAndMaterialInDeferred();
-	void RegisterStaticMeshAndMaterialInForward();
+	void RenderStaticDeferred();
+	void RenderStaticForward();
 
-	void RegisterMeshAndShadowMaterial(std::vector<RenderInfo>& renderInfo);
+	void RenderStaticShadow();
 
 	void RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& renderInfo);
 	void RegisterStaticForwardData(std::shared_ptr<RenderInfo>& renderInfo);
@@ -37,7 +37,7 @@ public:
 	void PopStaticForwardData(std::shared_ptr<RenderInfo>& renderInfo);
 	void PopSkinnedData(std::shared_ptr<SkinnedRenderInfo>& renderInfo);
 
-	void RegisterSkinnedMeshAndMaterial();
+	void RenderSkinned();
 	void ClearData();
 
 private:

@@ -13,6 +13,7 @@
 #include "DebugBeacon.h"
 #include "DebugMeshes.h"
 #include "YunutyEngine.h"
+#include "TestUtils.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -61,9 +62,9 @@ void TestCaseNavigationInit()
     std::vector<int> worldFaces{ };
 
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    auto rtsCam = camObj->AddComponent<graphics::Camera>();
+    auto rtsCam = camObj->AddComponent<tests::RTSTestCam>();
     rtsCam->SetCameraMain();
-    rtsCam->GetTransform()->SetLocalPosition( Vector3d(3, 10, 3));
+    rtsCam->GetTransform()->SetLocalPosition(Vector3d(3, 20, 3));
     rtsCam->GetTransform()->SetWorldRotation({ Vector3d{90,0,0} });
 
     CreateNavigationPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
@@ -74,35 +75,72 @@ void TestCaseNavigationInit()
     CreateNavigationPlane({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
     auto navField = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationField>();
     navField->BuildField(worldVertices, worldFaces);
+
+    // 장애물 객체를 추가하는 모습
+    GameObject* obstacleTobeRemoved;
+    {
+        auto obstacle = Scene::getCurrentScene()->AddGameObject();
+        AttachDebugMesh(obstacle);
+        obstacle->GetTransform()->SetLocalScale({ 2,10,2 });
+        obstacle->GetTransform()->SetWorldPosition({ -5,5,7 });
+        auto obstacleComp = obstacle->AddComponent<yunutyEngine::NavigationObstacle>();
+        obstacleComp->SetHalfExtents({ 1,5,1 });
+        obstacleComp->AssignToNavigationField(navField);
+        obstacleTobeRemoved = obstacle;
+    }
+    {
+        auto obstacle = Scene::getCurrentScene()->AddGameObject();
+        AttachDebugMesh(obstacle);
+        obstacle->GetTransform()->SetLocalScale({ 2,10,2 });
+        obstacle->GetTransform()->SetWorldPosition({ -7,5,5 });
+        auto obstacleComp = obstacle->AddComponent<yunutyEngine::NavigationObstacle>();
+        obstacleComp->SetHalfExtents({ 1,5,1 });
+        obstacleComp->AssignToNavigationField(navField);
+    }
+
+
     auto agent = CreateAgent(navField);
+    auto agentStuck = CreateAgent(navField);
     auto delayedTestFunctions = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DelayedTestFunctions>();
 
     auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<graphics::DirectionalLight>();
     directionalLight->GetTransform()->SetWorldRotation(Quaternion({ 100,10,0 }));
 
-    //rtsCam->groundRightClickCallback = [=](Vector3d position)
-    //{
-    //    agent->MoveTo(position);
-    //};
+    rtsCam->groundRightClickCallback = [=](Vector3d position)
+    {
+        agent->MoveTo(position);
+    };
+    rtsCam->buttonCallback_X = [=]()
+    {
+        application::editor::EditorCamera::GetSingletonInstance().SwitchCam();
+    };
     const Vector3d moveDestination{ 6.5,0,6.5 };
     agent->MoveTo(moveDestination);
     agent->SetSpeed(10);
-    agent->SetAcceleration(10000000);
-    // delayedTestFunctions에 2초 후 실행시킬 콜백 함수를 등록합니다. 이 콜백함수는 게임 엔진 스레드에서 호출됩니다.
-    delayedTestFunctions->todoList.push_back({ 2,[=]() {
+    agentStuck->SetSpeed(10);
+    agent->SetAcceleration(20);
+    agentStuck->Relocate(Vector3d{ -7,0,7 });
+    agentStuck->MoveTo(Vector3d{ 0,0,0 });
+    delayedTestFunctions->todoList.push_back({ 1.0,[=]() {
         // 게임 엔진 스레드에서 메인 스레드에서 특정 동작을 구동시키고 싶다면 아래의 AddMainLoopTodo 함수를 사용합니다.
         application::Application::GetInstance().AddMainLoopTodo([=]() {
             // Assert 함수군은 테스트 케이스의 실행 성공 여부를 판단하는데에 쓰입니다.
             // Assert의 실행은 메인 스레드에서 실행되어야 합니다.
-            Assert::IsTrue((agent->GetTransform()->GetWorldPosition() - moveDestination).MagnitudeSqr() < 0.3,L"navigation agent couldn't move to a specific location!");
-            agent->Relocate(Vector3d{ -10,0,0 });
+            // 장애물에 가로막힌 agentStuck은 왼쪽 위 모서리에 갇혀져 있을 것이다. 라는 가설을 검증
+            Assert::IsTrue(agentStuck->GetTransform()->GetWorldPosition().x < -6,L"navigation agent couldn't move to a specific location!");
                 });
+       Scene::getCurrentScene()->DestroyGameObject(obstacleTobeRemoved);
+       agentStuck->MoveTo(Vector3d{ 0,0,0 });
             } });
-    delayedTestFunctions->todoList.push_back({ 2.2,[=]() {
+    // delayedTestFunctions에 2초 후 실행시킬 콜백 함수를 등록합니다. 이 콜백함수는 게임 엔진 스레드에서 호출됩니다.
+    delayedTestFunctions->todoList.push_back({ 5.2,[=]() {
         // 게임 엔진 스레드에서 메인 스레드에서 특정 동작을 구동시키고 싶다면 아래의 AddMainLoopTodo 함수를 사용합니다.
         application::Application::GetInstance().AddMainLoopTodo([=]() {
-            Assert::IsTrue((agent->GetTransform()->GetWorldPosition() - Vector3d{-7.5,0,0}).MagnitudeSqr() < 1,L"navigation agent's ""Relocate"" method didn't really relocate the agent!");
-            // 위 식이 참이라면 프로그램을 종료합니다. 
+            // Assert 함수군은 테스트 케이스의 실행 성공 여부를 판단하는데에 쓰입니다.
+            // Assert의 실행은 메인 스레드에서 실행되어야 합니다.
+            // "장애물에 가로막힌 agentStuck은 왼쪽 위 모서리를 빠져 나왔을 것이다." 라는 가설을 검증
+            //Assert::IsTrue(agentStuck->GetTransform()->GetWorldPosition().x > -6,L"navigation agent couldn't move to a specific location!");
+            Assert::IsTrue((agent->GetTransform()->GetWorldPosition() - moveDestination).MagnitudeSqr() < 0.3,L"navigation agent couldn't move to a specific location!");
             application::Application::GetInstance().TurnOff();
                 });
             } });

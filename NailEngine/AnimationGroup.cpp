@@ -35,7 +35,6 @@ void AnimationGroup::CreateTexture()
 		// mallocPtr이 가리키는 공간이 8000000
 		void* mallocPtr = ::malloc(pageSize * animationCount);
 
-		// 파편화된 데이터를 조립한다.
 		for (int c = 0; c < animationCount; c++)
 		{
 			unsigned int startOffset = c * pageSize;
@@ -80,7 +79,7 @@ void AnimationGroup::CreateTexture()
 
 void AnimationGroup::Bind()
 {
-	ResourceBuilder::Instance.Get().device->GetDeviceContext()->VSSetShaderResources(8, 1, this->srv.GetAddressOf());
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->VSSetShaderResources(10, 1, this->srv.GetAddressOf());
 }
 
 void AnimationGroup::CreateAnimationTransform(unsigned int idx)
