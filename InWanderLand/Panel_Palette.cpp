@@ -271,6 +271,7 @@ namespace application
 					if (i == uSize)
 					{
 						bool buttonFlag = imgui::SelectableImageButton("Unit Add Button", "ImageButtons/Unit_AddButton.png", false, ImVec2(imageSize, imageSize));
+						imgui::SetTooltip("Add");
 						if (buttonFlag)
 						{
 							if (unitCurrentButton != -1)
@@ -292,6 +293,7 @@ namespace application
 					{
 						bool ref = unitButton[i];
 						bool buttonFlag = imgui::SelectableImageButton("UnitButton" + std::to_string(i), static_cast<Unit_TemplateData*>(tdm.GetDataList(DataType::UnitData)[i])->pod.thumbnailPath, ref, ImVec2(imageSize, imageSize));
+						imgui::SetTooltip(tdm.GetDataList(DataType::UnitData)[i]->GetDataKey());
 						if (buttonFlag)
 						{
 							if (unitCurrentButton != -1)
@@ -359,6 +361,7 @@ namespace application
 					if (i == oSize)
 					{
 						bool buttonFlag = imgui::SelectableImageButton("Ornament Add Button", "ImageButtons/Ornament_AddButton.png", false, ImVec2(imageSize, imageSize));
+						imgui::SetTooltip("Add");
 						if (buttonFlag)
 						{
 							if (ornamentCurrentButton != -1)
@@ -373,6 +376,7 @@ namespace application
 							// 이때, ornamentButton 에도 pushback 해주어 Size를 추가해야 함
 							/// 임시로 Ornament Template Data 하나를 추가하는 로직을 구현함
 							auto td = tdm.CreateTemplateData<Ornament_TemplateData>("OrnamentButton" + std::to_string(i));
+							td->pod.fbxName = "SM_Temple_Books";
 							ornamentButton.push_back(false);
 						}
 					}
@@ -380,6 +384,7 @@ namespace application
 					{
 						bool ref = ornamentButton[i];
 						bool buttonFlag = imgui::SelectableImageButton("OrnamentButton" + std::to_string(i), static_cast<Ornament_TemplateData*>(tdm.GetDataList(DataType::OrnamentData)[i])->pod.thumbnailPath, ref, ImVec2(imageSize, imageSize));
+						imgui::SetTooltip(tdm.GetDataList(DataType::OrnamentData)[i]->GetDataKey());
 						if (buttonFlag)
 						{
 							if (ornamentCurrentButton != -1)

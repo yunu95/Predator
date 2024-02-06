@@ -30,33 +30,33 @@ void GraphicsTest()
 
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-    _resourceManager->LoadFile("FBX/Monster2");
-	auto& animationList = _resourceManager->GetAnimationList();
-	{
-		yunuGI::IAnimation* walkAnim = nullptr;
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
-        //obj->GetTransform()->SetLocalScale(Vector3d{ obj->GetTransform()->GetLocalScale().x / 1000.f,obj->GetTransform()->GetLocalScale().y / 1000.f,obj->GetTransform()->GetLocalScale().z / 1000.f });
-        auto& childVec = obj->GetChildren();
-
-		auto animator = obj->GetComponent<graphics::Animator>();
-		for (auto& i : animationList)
-		{
-			if (i->GetName() == L"Ani_Monster2_Walk")
-			{
-				walkAnim = i;
-			}
-		}
-        walkAnim->SetPlaySpeed(0.00000000001f);
-		walkAnim->SetLoop(true);
-		animator->GetGI().PushAnimation(walkAnim);
-		animator->GetGI().Play(walkAnim);
-	}
-
- //   _resourceManager->LoadFile("FBX/CastleWall_Door");
+ //   _resourceManager->LoadFile("FBX/Monster2");
+	//auto& animationList = _resourceManager->GetAnimationList();
 	//{
-	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("CastleWall_Door");
-	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+	//	yunuGI::IAnimation* walkAnim = nullptr;
+	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
+ //       //obj->GetTransform()->SetLocalScale(Vector3d{ obj->GetTransform()->GetLocalScale().x / 1000.f,obj->GetTransform()->GetLocalScale().y / 1000.f,obj->GetTransform()->GetLocalScale().z / 1000.f });
+ //       auto& childVec = obj->GetChildren();
+
+	//	auto animator = obj->GetComponent<graphics::Animator>();
+	//	for (auto& i : animationList)
+	//	{
+	//		if (i->GetName() == L"Ani_Monster2_Walk")
+	//		{
+	//			walkAnim = i;
+	//		}
+	//	}
+ //       walkAnim->SetPlaySpeed(0.00000000001f);
+	//	walkAnim->SetLoop(true);
+	//	animator->GetGI().PushAnimation(walkAnim);
+	//	animator->GetGI().Play(walkAnim);
 	//}
+
+    _resourceManager->LoadFile("FBX/SM_Temple_Books");
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Temple_Books");
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+	}
 }
 
 
@@ -147,8 +147,6 @@ void application::contents::ContentsLayer::Initialize()
     //resourceManager->LoadFile("FBX/SM_Temple_Welcome");
     //resourceManager->LoadFile("FBX/SM_Trunk_001");
     //resourceManager->LoadFile("FBX/Spear");
-
-    yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Temple_Books");
 
 #ifdef GRAPHICS_TEST
     {

@@ -18,21 +18,6 @@ namespace application
 				return result;
 			}
 
-			bool IsItemHovered(float delayInSeconds, ImGuiHoveredFlags flags)
-			{
-				return ImGui::IsItemHovered() && GImGui->HoveredIdTimer > delayInSeconds; /*HoveredIdNotActiveTimer*/
-			}
-
-			void SetTooltip(std::string text, float delayInSeconds, bool allowWhenDisabled, ImVec2 padding)
-			{
-				if (IsItemHovered(delayInSeconds, allowWhenDisabled ? ImGuiHoveredFlags_AllowWhenDisabled : 0))
-				{
-					imgui::SmartStyleVar tooltipPadding(ImGuiStyleVar_WindowPadding, padding);
-					imgui::SmartStyleColor textCol(ImGuiCol_Text, IM_COL32(210, 210, 210, 255));
-					ImGui::SetTooltip(text.data());
-				}
-			}
-
 			void ShiftCursorX(float distance)
 			{
 				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + distance);
@@ -224,6 +209,21 @@ namespace application
 			void EndSection()
 			{
 				ImGui::EndTable();
+			}
+
+			bool IsItemHovered(float delayInSeconds, ImGuiHoveredFlags flags)
+			{
+				return ImGui::IsItemHovered() && GImGui->HoveredIdTimer > delayInSeconds; /*HoveredIdNotActiveTimer*/
+			}
+
+			void SetTooltip(std::string tooltip, float delayInSeconds, bool allowWhenDisabled, ImVec2 padding)
+			{
+				if (IsItemHovered(delayInSeconds, allowWhenDisabled ? ImGuiHoveredFlags_AllowWhenDisabled : 0))
+				{
+					imgui::SmartStyleVar tooltipPadding(ImGuiStyleVar_WindowPadding, padding);
+					imgui::SmartStyleColor textCol(ImGuiCol_Text, IM_COL32(210, 210, 210, 255));
+					ImGui::SetTooltip(tooltip.c_str());
+				}
 			}
 			
 			namespace draw

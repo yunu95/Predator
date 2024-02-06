@@ -18,10 +18,6 @@ namespace application
 			// x, y 크기만큼 확장한 ImRect 획득
 			ImRect RectExpanded(const ImRect& rect, float x, float y);
 
-			bool IsItemHovered(float delayInSeconds = 0.1f, ImGuiHoveredFlags flags = 0);
-
-			void SetTooltip(std::string text, float delayInSeconds = 0.1f, bool allowWhenDisabled = true, ImVec2 padding = ImVec2(5, 5));
-
 			void ShiftCursorX(float distance);
 
 			void ShiftCursorY(float distance);
@@ -67,6 +63,9 @@ namespace application
 			bool Dropdown_2Col(std::string valName, const char** options, int optionCount, int* selected);
 #pragma endregion
 			void EndSection();
+
+			bool IsItemHovered(float delayInSeconds = 0.3f, ImGuiHoveredFlags flags = 0);
+			void SetTooltip(std::string tooltip, float delayInSeconds = 0.3f, bool allowWhenDisabled = true, ImVec2 padding = ImVec2(5, 5));
 
 			namespace draw
 			{

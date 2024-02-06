@@ -16,6 +16,8 @@
 #include "PaletteManager.h"
 #include "Palette.h"
 #include "EditorCamera.h"
+#include "InstanceManager.h"
+#include "TemplateDataManager.h"
 
 #include <d3d11.h>
 #include <dxgi1_4.h>
@@ -296,6 +298,9 @@ namespace application
 		::DestroyWindow(editorHWND);
 		::UnregisterClass(wcEditor.lpszClassName, wcEditor.hInstance);
 #endif
+
+		editor::InstanceManager::GetSingletonInstance().Clear();
+		editor::TemplateDataManager::GetSingletonInstance().Clear();
 	}
 
 	void Application::TurnOff()

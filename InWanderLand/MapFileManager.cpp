@@ -66,17 +66,17 @@ namespace application
                     auto odt = instanceManager.CreateInstance<OrnamentData>(fbxName);
 
                     /// 좌표계 고려 변환
-                    odt->pod.scale.x = scale[1];
+                    odt->pod.scale.x = scale[0];
                     odt->pod.scale.y = scale[2];
-                    odt->pod.scale.z = scale[0];
-                    auto quat = Quaternion(Vector3d(-rotation[1], -rotation[2], -rotation[0]));
+                    odt->pod.scale.z = scale[1];
+                    auto quat = Quaternion(Vector3d(-rotation[0], rotation[2], rotation[1]));
                     odt->pod.rotation.x = quat.x;
                     odt->pod.rotation.y = quat.y;
                     odt->pod.rotation.z = quat.z;
                     odt->pod.rotation.w = quat.w;
-                    odt->pod.position.x = location[1];
+                    odt->pod.position.x = location[0];
                     odt->pod.position.y = location[2];
-                    odt->pod.position.z = location[0];
+                    odt->pod.position.z = -location[1];
                     auto pi = odt->ApplyAsPaletteInstance();
                 }
 

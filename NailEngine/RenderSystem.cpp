@@ -160,7 +160,7 @@ void RenderSystem::RenderObject()
 
 	FogBuffer fogBuffer;
 	fogBuffer.start = 15.f;
-	fogBuffer.end = 45.f;
+	fogBuffer.end = 1000.f;
 	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::FOG))->PushGraphicsData(&fogBuffer, sizeof(FogBuffer), static_cast<int>(CB_TYPE::FOG));
 
 	MatrixBuffer matrixBuffer;
