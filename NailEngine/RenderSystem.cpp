@@ -49,7 +49,6 @@ LazyObjects<RenderSystem> RenderSystem::Instance;
 
 void RenderSystem::Init()
 {
-
 	spriteBatch = std::make_unique<DirectX::SpriteBatch>(ResourceBuilder::Instance.Get().device->GetDeviceContext().Get());
 	commonStates = std::make_unique<DirectX::CommonStates>(ResourceBuilder::Instance.Get().device->GetDevice().Get());
 
@@ -65,76 +64,6 @@ void RenderSystem::Init()
 			this->vs = i;
 		}
 	}
-}
-
-void RenderSystem::ClearRenderInfo()
-{
-	//deferredVec.clear();
-	//forwardVec.clear();
-	//skinnedVec.clear();
-}
-
-void RenderSystem::SortObject()
-{
-	//for (auto& e : staticRenderableSet)
-	//{
-	//	if (e->IsActive() == false)
-	//	{
-	//		continue;
-	//	}
-
-	//	auto mesh = e->GetMesh();
-	//	for (int i = 0; i < mesh->GetMaterialCount(); ++i)
-	//	{
-	//		RenderInfo renderInfo;
-	//		renderInfo.mesh = mesh;
-	//		renderInfo.material = e->GetMaterial(i);
-	//		renderInfo.shadowMaterial = Material(*e->GetMaterial(i));
-	//		renderInfo.shadowMaterial.SetPixelShader(this->ps);
-	//		renderInfo.shadowMaterial.SetVertexShader(this->vs);
-	//		renderInfo.materialIndex = i;
-	//		renderInfo.wtm = e->GetWorldTM();
-
-	//		if (e->GetMaterial(i)->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
-	//		{
-	//			this->deferredVec.emplace_back(renderInfo);
-	//		}
-	//		else if (e->GetMaterial(i)->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
-	//		{
-	//			this->forwardVec.emplace_back(renderInfo);
-	//		}
-	//	}
-	//}
-
-	//// skinned
-	//for (auto& e : skinnedRenderableSet)
-	//{
-	//	if (e->IsActive() == false)
-	//	{
-	//		continue;
-	//	}
-
-	//	auto mesh = e->GetMesh();
-	//	for (int i = 0; i < mesh->GetMaterialCount(); ++i)
-	//	{
-	//		SkinnedRenderInfo skinnedRenderInfo;
-
-	//		RenderInfo renderInfo;
-	//		renderInfo.mesh = mesh;
-	//		renderInfo.material = e->GetMaterial(i);
-	//		renderInfo.materialIndex = i;
-	//		renderInfo.wtm = e->GetWorldTM();
-	//		//renderInfo.objecID = e->GetID();
-	//		skinnedRenderInfo.animator = NailAnimatorManager::Instance.Get().GetAnimator(
-	//			std::static_pointer_cast<SkinnedMesh>(e)->GetAnimatorIndex());
-
-	//		skinnedRenderInfo.renderInfo = std::move(renderInfo);
-
-	//		skinnedRenderInfo.modelName = std::static_pointer_cast<SkinnedMesh>(e)->GetBone();
-
-	//		this->skinnedVec.emplace_back(skinnedRenderInfo);
-	//	}
-	//}
 }
 
 void RenderSystem::PushLightData()
@@ -167,7 +96,7 @@ void RenderSystem::PushLightData()
 		i++;
 	}
 
-	NailEngine::Instance.Get().GetConstantBuffer(2)->PushGraphicsData(&params, sizeof(LightParams), 2);
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHT))->PushGraphicsData(&params, sizeof(LightParams), static_cast<int>(CB_TYPE::LIGHT));
 }
 
 void RenderSystem::PushCameraData()
@@ -178,7 +107,7 @@ void RenderSystem::PushCameraData()
 	DirectX::SimpleMath::Quaternion quat;
 	CameraManager::Instance.Get().GetMainCamera()->GetWTM().Decompose(scale, quat, pos);
 	buffer.position = pos;
-	NailEngine::Instance.Get().GetConstantBuffer(3)->PushGraphicsData(&buffer, sizeof(CameraBuffer), 3);
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::CAMERA))->PushGraphicsData(&buffer, sizeof(CameraBuffer), static_cast<int>(CB_TYPE::CAMERA));
 }
 
 void RenderSystem::Render()
@@ -205,7 +134,9 @@ void RenderSystem::Render()
 	RenderLight();
 
 	// Final 출력
-	DrawFinal();
+	RenderFinal();
+
+	RenderBackBuffer();
 
 	RenderForward();
 
@@ -219,12 +150,18 @@ void RenderSystem::Render()
 	// 디퍼드용 SRV UnBind
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"))->UnBindGraphicsData();
+	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"BackBufferMaterial"))->UnBindGraphicsData();
 }
 
 void RenderSystem::RenderObject()
 {
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
 	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->OMSetRenderTarget();
+
+	FogBuffer fogBuffer;
+	fogBuffer.start = 15.f;
+	fogBuffer.end = 1000.f;
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::FOG))->PushGraphicsData(&fogBuffer, sizeof(FogBuffer), static_cast<int>(CB_TYPE::FOG));
 
 	MatrixBuffer matrixBuffer;
 	//matrixBuffer.WTM = e.wtm;
@@ -234,7 +171,7 @@ void RenderSystem::RenderObject()
 	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
 	matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
 	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
-	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
 	InstancingManager::Instance.Get().RenderStaticDeferred();
 
@@ -261,7 +198,7 @@ void RenderSystem::RenderSkinned()
 	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
 	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
-	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
 	InstancingManager::Instance.Get().RenderSkinned();
 
@@ -322,7 +259,7 @@ void RenderSystem::RenderShadow()
 			matrixBuffer.VTM = std::static_pointer_cast<DirectionalLight>(e)->GetWorldTM().Invert();
 			matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(100 * 1.f, 100 * 1.f, 0.0000001f, 500.f);
 			//matrixBuffer.PTM = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PI/4.f, 1920/ 1080, 0.1f, 1000.f);
-			NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 		}
 	}
 	InstancingManager::Instance.Get().RenderStaticShadow();
@@ -356,7 +293,7 @@ void RenderSystem::RenderLight()
 			matrixBuffer.WTM = std::static_pointer_cast<PointLight>(e)->GetWorldTM();
 			matrixBuffer.WorldInvTrans = std::static_pointer_cast<PointLight>(e)->GetWorldTM().Invert().Transpose();
 		}
-		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+		NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e->GetMaterialName()))->SetInt(0, e->GetID());
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e->GetMaterialName()))->PushGraphicsData();
 		auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
@@ -366,26 +303,33 @@ void RenderSystem::RenderLight()
 	}
 }
 
-void RenderSystem::DrawFinal()
+void RenderSystem::RenderFinal()
 {
-	// 렌더 타겟 뷰를 바인딩하고, 뎁스 스텐실 버퍼를 출력 병합기 단계에 바인딩한다.
+	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->OMSetRenderTarget();
+
+
+	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"))->PushGraphicsData();
+	ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();
+}
+
+void RenderSystem::RenderBackBuffer()
+{
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1,
 		ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
 		ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
 
-	auto& lightSet = LightManager::Instance.Get().GetLightList();
-	for (auto& e : lightSet)
-	{
-		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Directional))
-		{
-			MatrixBuffer matrixBuffer;
-			matrixBuffer.VTM = std::static_pointer_cast<DirectionalLight>(e)->GetWorldTM().Invert();
-			matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(500 * 1.f, 500 * 1.f, 0.1f, 150.f);
-			NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
-		}
-	}
+	MatrixBuffer matrixBuffer;
+	//matrixBuffer.WTM = e.wtm;
+	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
+	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
+	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
-	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"))->PushGraphicsData();
+	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"BackBufferMaterial"))->PushGraphicsData();
 	ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();
 }
 
@@ -441,7 +385,7 @@ void RenderSystem::RenderForward()
 	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
 	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
-	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 	InstancingManager::Instance.Get().RenderStaticForward();
 }
 
@@ -498,7 +442,7 @@ void RenderSystem::DrawDeferredInfo()
 		MatrixBuffer matrixBuffer;
 		matrixBuffer.WVP = wtm * DirectX::SimpleMath::Matrix::Identity * CameraManager::Instance.Get().GetMainCamera()->GetVTMOrtho();
 
-		NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+		NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 		ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();
 	}
 }

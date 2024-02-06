@@ -59,6 +59,7 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 	fbxNode->transformMatrix = this->ConvertToCloumnMajor(node->mTransformation);
 	//fbxNode->worldMatrix = parentMatrix * fbxNode->transformMatrix;
 	fbxNode->worldMatrix = fbxNode->transformMatrix * parentMatrix;
+
 	for (int i = 0; i < node->mNumMeshes; ++i)
 	{
 		FBXMeshData fbxMeshData;
@@ -73,7 +74,16 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 			aiVector3D vertexPos = mesh->mVertices[j];
 			DirectX::SimpleMath::Vector3 dvertex{ vertexPos.x,vertexPos.y,vertexPos.z };
 
-			aiVector3D uv = mesh->mTextureCoords[0][j];
+			aiVector3D uv;
+			if (mesh->mTextureCoords[0] == nullptr)
+			{
+				uv.x = 0.5f;
+				uv.y = 0.5f;
+			}
+			else
+			{
+				uv = mesh->mTextureCoords[0][j];
+			}
 			DirectX::SimpleMath::Vector2 duv{ uv.x, uv.y };
 
 			aiVector3D normal = mesh->mNormals[j];

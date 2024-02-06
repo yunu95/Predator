@@ -497,6 +497,9 @@
     <FxCompile Include="RuntimeDependency\resources\Shader\SpecLUTVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\BackBufferPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -506,6 +509,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="RuntimeDependency\resources\Shader\Buffers.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="RuntimeDependency\resources\Shader\Matrix.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="RuntimeDependency\resources\Shader\Quaternion.hlsli">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

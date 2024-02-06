@@ -24,7 +24,7 @@ struct AnimationClip
 	std::wstring name;
 	double duration;
 	int totalFrame;
-	bool isLoop;
+	bool isLoop = false;
 	float speed=1.f;
 	std::vector<std::vector<KeyFrameInfo>> keyFrameInfoVec;
 };

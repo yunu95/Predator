@@ -308,8 +308,8 @@ void InstancingManager::RenderSkinned()
 				this->instanceTransitionDesc->transitionDesc[descIndex++] = i->animator->GetTransitionDesc();
 			}
 
-			NailEngine::Instance.Get().GetConstantBuffer(5)->PushGraphicsData(this->instanceTransitionDesc.get(),
-				sizeof(InstanceTransitionDesc), 5);
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::INST_TRANSITION))->PushGraphicsData(this->instanceTransitionDesc.get(),
+				sizeof(InstanceTransitionDesc), static_cast<int>(CB_TYPE::INST_TRANSITION));
 
 			auto animationGroup = ResourceManager::Instance.Get().GetAnimationGroup((*renderInfoVec.begin())->modelName);
 			animationGroup->Bind();

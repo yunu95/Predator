@@ -7,8 +7,8 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
     auto gameObjectChild = parentObject->AddGameObject();
     gameObjectChild->setName(std::string{ fbxNode->nodeName.begin(), fbxNode->nodeName.end() });
 
-    gameObjectChild->GetTransform()->SetLocalPosition( Vector3d{ fbxNode->pos.x,fbxNode->pos.y ,fbxNode->pos.z });
-    gameObjectChild->GetTransform()->SetLocalScale( Vector3d{ fbxNode->scale.x,fbxNode->scale.y ,fbxNode->scale.z });
+   
+	//gameObjectChild->GetTransform()->SetLocalScale(Vector3d{ fbxNode->scale.x,fbxNode->scale.y ,fbxNode->scale.z });
     //gameObjectChild->GetTransform()->rotation = Quaternion{ fbxNode->quat.x,fbxNode->quat.y,fbxNode->quat.z,fbxNode->quat.w };
 
     if (!fbxNode->hasAnimation)
@@ -60,6 +60,10 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
         }
     }
 
+	//gameObjectChild->GetTransform()->SetLocalPosition(Vector3d{ fbxNode->pos.x,fbxNode->pos.y ,fbxNode->pos.z });
+	//gameObjectChild->GetTransform()->SetLocalScale(Vector3d{ fbxNode->scale.x,fbxNode->scale.y ,fbxNode->scale.z });
+	//gameObjectChild->GetTransform()->SetLocalRotation(Quaternion{ fbxNode->quat.w, fbxNode->quat.x,fbxNode->quat.y ,fbxNode->quat.z });
+
     for (int i = 0; i < fbxNode->child.size(); ++i)
     {
         AddGameObjectFromFBXNode(gameObjectChild, fbxNode->child[i], fbxName, rootObject);
@@ -105,7 +109,7 @@ yunutyEngine::GameObject* Scene::AddGameObjectFromFBX(string fbxName)
     {
         if (data->hasAnimation)
         {
-            //gameObject->GetTransform()->scale = Vector3d{ 0.001f,0.001f,0.001f };
+            //gameObject->GetTransform()->SetLocalScale(Vector3d{ 0.01f,0.01f,0.01f });
             auto animator = gameObject->AddComponent<yunutyEngine::graphics::Animator>();
             animator->GetGI().SetModel(std::wstring{ fbxName.begin(), fbxName.end() });
         }

@@ -5,7 +5,7 @@
 class TestComponent2 : public yunutyEngine::Component
 {
 public:
-	graphics::SkinnedMesh* renderer;
+	/*graphics::SkinnedMesh* renderer;
 	yunuGI::IShader* shader;
 	yunuGI::IMaterial* material;
 	GameObject* obj;
@@ -26,6 +26,28 @@ public:
 		if (Input::isKeyDown(KeyCode::L))
 		{
 			renderer->GetGI().SetMaterial(0, material);
+		}
+	}*/
+
+	yunutyEngine::graphics::Animator* anim;
+	yunuGI::IAnimation* dead;
+	yunuGI::IAnimation* idle;
+
+	void Update()
+	{
+		if (Input::isKeyPushed(KeyCode::I))
+		{
+			anim->GetGI().ChangeAnimation(idle, 2, 1);
+		}
+		if (Input::isKeyPushed(KeyCode::K))
+		{
+			anim->GetGI().ChangeAnimation(dead, 2, 1);
+		}
+		if (Input::isKeyPushed(KeyCode::J))
+		{
+		}
+		if (Input::isKeyDown(KeyCode::L))
+		{
 		}
 	}
 };

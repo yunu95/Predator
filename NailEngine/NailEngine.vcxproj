@@ -295,6 +295,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="RuntimeDependency\resources\Shader\BackBufferPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
     <FxCompile Include="RuntimeDependency\resources\Shader\DebugPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
@@ -557,6 +563,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <None Include="RuntimeDependency\resources\Shader\Buffers.hlsli">
       <FileType>Document</FileType>
     </None>
+    <None Include="RuntimeDependency\resources\Shader\Matrix.hlsli" />
+    <None Include="RuntimeDependency\resources\Shader\Quaternion.hlsli" />
     <None Include="RuntimeDependency\resources\Shader\Utils.hlsli" />
     <None Include="SimpleMath.inl" />
   </ItemGroup>

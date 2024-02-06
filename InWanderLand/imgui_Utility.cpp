@@ -49,19 +49,33 @@ namespace application
 				ImGui::SetCursorPos(ImVec2(cursor.x + x, cursor.y + y));
 			}
 
-			bool SelectableImageButton(std::string imageKey, std::string filename, bool selected, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, const ImVec4& defaultColor, const ImVec4& selectedColor)
+			bool SelectableImageButton(std::string imageKey, std::string filename, bool selected, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, bool useTint, const ImVec4& bgColor, const ImVec4& selectedColor)
 			{
 				static auto& erm = application::editor::ResourceManager::GetSingletonInstance();
 				auto button = erm.GetTexture2D(filename);
-				if (selected)
+
+				if (useTint)
 				{
-					SmartStyleColor bcolor(ImGuiCol_Button, selectedColor);
-					return ImGui::ImageButton(imageKey.c_str(), (ImTextureID)button->GetID(), size, uv0, uv1);
+					if (selected)
+					{
+						return ImGui::ImageButton(imageKey.c_str(), (ImTextureID)button->GetID(), size, uv0, uv1, bgColor, selectedColor);
+					}
+					else
+					{
+						return ImGui::ImageButton(imageKey.c_str(), (ImTextureID)button->GetID(), size, uv0, uv1, bgColor);
+					}
 				}
 				else
 				{
-					SmartStyleColor bcolor(ImGuiCol_Button, defaultColor);
-					return ImGui::ImageButton(imageKey.c_str(), (ImTextureID)button->GetID(), size, uv0, uv1);
+					if (selected)
+					{
+						imgui::SmartStyleColor buttonCol(ImGuiCol_Button, selectedColor);
+						return ImGui::ImageButton(imageKey.c_str(), (ImTextureID)button->GetID(), size, uv0, uv1, bgColor);
+					}
+					else
+					{
+						return ImGui::ImageButton(imageKey.c_str(), (ImTextureID)button->GetID(), size, uv0, uv1, bgColor);
+					}
 				}
 			}
 
