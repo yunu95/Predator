@@ -72,6 +72,7 @@
 // 네비게이션
 #include "YunutyNavigationField.h"
 #include "YunutyNavigationAgent.h"
+#include "YunutyNavigationObstacle.h"
 
 // 물리
 #include "YunutyCollider.h"
