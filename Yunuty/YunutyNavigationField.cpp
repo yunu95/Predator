@@ -12,6 +12,10 @@ yunutyEngine::NavigationField::NavigationField()
 }
 yunutyEngine::NavigationField::~NavigationField()
 {
+    for (auto each : agents)
+        each->AssignToNavigationField(nullptr);
+    for (auto each : obstacles)
+        each->AssignToNavigationField(nullptr);
     delete impl;
 }
 void yunutyEngine::NavigationField::Update()
@@ -31,6 +35,16 @@ void yunutyEngine::NavigationField::BuildField(const float* worldVertices, size_
         CleanUpField();
 
     auto success = impl->handleBuild(worldVertices, verticesNum, faces, facesNum, buildSettings);
+    if (success)
+    {
+        auto tempAgents = agents;
+        auto tempObstacles = obstacles;
+        for (auto each : tempAgents)
+            each->AssignToNavigationField(this);
+        for (auto each : tempObstacles)
+            each->AssignToNavigationField(this);
+    }
+
     assert(success);
 };
 

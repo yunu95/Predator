@@ -154,8 +154,7 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 void MagicianProduction::SingletonInitializer()
 {
 	graphics::Renderer::SingleInstance().GetResourceManager()->LoadFile("FBX/Boss");
-	auto magicianProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MagicianProduction>();
-	magicianProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), &SingleNavigationField::Instance(), Vector3d(-7.0f, 0.0f, 7.0f));
+	SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), &SingleNavigationField::Instance(), Vector3d(-7.0f, 0.0f, 7.0f));
 }
 yunutyEngine::GameObject* MagicianProduction::CreateUnitWithOrder()
 {

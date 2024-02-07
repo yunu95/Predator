@@ -22,18 +22,21 @@ void yunutyEngine::NavigationAgent::Update()
 }
 void yunutyEngine::NavigationAgent::AssignToNavigationField(NavigationField* navField)
 {
-    this->navField = navField;
-
     if (impl->crowd != nullptr)
         impl->crowd->removeAgent(impl->agentIdx);
 
+    if (this->navField != nullptr)
+        navField->agents.erase(this);
+
     if (navField != nullptr)
     {
+        navField->agents.insert(this);
         Vector3f pos = GetTransform()->GetWorldPosition();
         impl->crowd = navField->impl->m_crowd;
         impl->agentIdx = impl->crowd->addAgent(reinterpret_cast<float*>(&pos), &impl->agentParams);
         //auto agent = impl->crowd->getAgent(impl->agentIdx);
     }
+    this->navField = navField;
 }
 void yunutyEngine::NavigationAgent::SetSpeed(float speed)
 {
