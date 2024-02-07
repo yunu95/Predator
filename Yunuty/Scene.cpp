@@ -60,6 +60,7 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
         }
     }
 
+    gameObjectChild->GetTransform()->SetLocalScale(Vector3d{ fbxNode->scale.x*0.0001f,fbxNode->scale.y*0.0001f ,fbxNode->scale.z*0.0001f });
 	//gameObjectChild->GetTransform()->SetLocalPosition(Vector3d{ fbxNode->pos.x,fbxNode->pos.y ,fbxNode->pos.z });
 	//gameObjectChild->GetTransform()->SetLocalScale(Vector3d{ fbxNode->scale.x,fbxNode->scale.y ,fbxNode->scale.z });
 	//gameObjectChild->GetTransform()->SetLocalRotation(Quaternion{ fbxNode->quat.w, fbxNode->quat.x,fbxNode->quat.y ,fbxNode->quat.z });

@@ -20,6 +20,7 @@
 #include "MagicianProduction.h"
 #include "MeleeEnemyProduction.h"
 #include "UnitProductionOrder.h"
+#include "TacticModeSystem.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -105,9 +106,9 @@ void SnippetSkillSystemInit()
 
 	/// PlayerController SetUp
 	PlayerController::GetInstance()->SetMovingSystemComponent(rtsCam);
+	TacticModeSystem::SingleInstance().SetMovingSystemComponent(rtsCam);
 
 	/// UnitFactory
-	unique_ptr<UnitFactory> unitfactory = make_unique<UnitFactory>();
 
 	/// StatusManager 
 
@@ -150,9 +151,19 @@ void SnippetSkillSystemInit()
 	meleeEnemyProductor1->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(7.0f, 0.0f, 7.0f));
 	auto enemy1GameObject = meleeEnemyProductor1->CreateUnitWithOrder();
 
-	//auto meleeEnemyProductor2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MeleeEnemyProduction>();
-	//meleeEnemyProductor2->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(7.0f, 0.0f, -7.0f));
-	//auto enemy2GameObject = meleeEnemyProductor2->CreateUnitWithOrder();
+	/// UItext Test
+	//auto enemy1TextObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//auto enemy1UITextCom = enemy1TextObj->AddComponent<graphics::UIText>();
+	//enemy1TextObj->SetParent(player1GameObject);
+	//enemy1TextObj->GetTransform()->SetLocalScale(Vector3d(1000, 1000, 0));
+	//enemy1UITextCom->GetGI().SetFontSize(76);
+	//enemy1UITextCom->GetGI().SetText(L"Test");
+
+
+
+	auto meleeEnemyProductor2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MeleeEnemyProduction>();
+	meleeEnemyProductor2->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(7.0f, 0.0f, -7.0f));
+	auto enemy2GameObject = meleeEnemyProductor2->CreateUnitWithOrder();
 
 	{
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();

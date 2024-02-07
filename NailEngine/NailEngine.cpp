@@ -90,6 +90,11 @@ void NailEngine::Render()
 	}
 }
 
+void NailEngine::Finalize()
+{
+	RenderSystem::Instance.Get().Finalize();
+}
+
 void NailEngine::SetResolution(unsigned int width, unsigned int height)
 {
 	this->windowInfo.width = width;

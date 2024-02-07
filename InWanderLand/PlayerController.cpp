@@ -36,7 +36,7 @@ void PlayerController::AddPlayerUnit(Unit* p_playerUnit)
 
 void PlayerController::SetLeftClickMove()
 {
-	if (currentSelectedSerialNumber == InputManager::SelectedSerialNumber::All)
+	if (static_cast<int>(currentSelectedSerialNumber) == InputManager::SelectedSerialNumber::All)
 	{
 		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
 		{
@@ -58,7 +58,7 @@ void PlayerController::SetLeftClickMove()
 
 void PlayerController::SetLeftClickAttackMove()
 {
-	if (currentSelectedSerialNumber == InputManager::SelectedSerialNumber::All)
+	if (static_cast<int>(currentSelectedSerialNumber) == InputManager::SelectedSerialNumber::All)
 	{
 		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
 		{
@@ -79,7 +79,9 @@ void PlayerController::SetLeftClickAttackMove()
 
 void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
 {
-	if (currentSelectedSerialNumber == InputManager::SelectedSerialNumber::All)
+	Unit* currentUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
+
+	if (static_cast<int>(currentSelectedSerialNumber) == InputManager::SelectedSerialNumber::All)
 	{
 		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
 		{
@@ -89,13 +91,13 @@ void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
 			}
 		};
 	}
-	else
+	else if (currentUnit->GetCurrentUnitState() != Unit::UnitState::Skill)
 	{
-		if (currentSelectedSerialNumber == InputManager::SelectedSerialNumber::One && p_skillNum == Unit::SkillEnum::W)
+		if (static_cast<int>(currentSelectedSerialNumber) == InputManager::SelectedSerialNumber::One && p_skillNum == Unit::SkillEnum::W)
 		{
 			/// Warrior의 W 스킬은 마우스로 클릭하지 않아도 바로 실행되는 스킬이다. 다른 스킬 나온다면 구조적 개선 필요
 			playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum);
-		}
+		}	
 
 		else
 		{
@@ -118,10 +120,20 @@ void PlayerController::SetRightClickEmpty()
 	m_movingSystemComponent->groundRightClickCallback = [](Vector3d pos) {};
 }
 
-void PlayerController::SetCurrentPlayerSerialNumber(int p_num)
+void PlayerController::SetCurrentPlayerSerialNumber(Unit::UnitType p_num)
 {
 	currentSelectedSerialNumber = p_num;
 	SetLeftClickMove();
+}
+
+std::map<Unit::UnitType, Unit*> PlayerController::GetPlayerMap() const
+{
+	return playerComponentMap;
+}
+
+Unit* PlayerController::FindSelectedUnitByUnitType(Unit::UnitType p_type)
+{
+	return playerComponentMap.find(p_type)->second;
 }
 
 //void PlayerController::ApplyCurrentPlayerOrder(int unitSerialNumber, OrderType orderType)

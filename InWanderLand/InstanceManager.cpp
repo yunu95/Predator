@@ -83,6 +83,13 @@ namespace application
             list.clear();
             mould = nullptr;
         }
+		void InstanceManager::ApplyInstancesAsPlaytimeObjects()
+		{
+			for (auto& each : list)
+			{
+				each.second->ApplyAsPlaytimeObject();
+			}
+		}
         bool InstanceManager::PreSave()
         {
             for (auto& [key, ptr] : list)

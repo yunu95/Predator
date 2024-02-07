@@ -6,7 +6,7 @@ void MeleeAttackSystem::Attack(Unit* opponentUnit)
 {
 	meleeAttackColliderObject->GetTransform()->
 		SetWorldPosition(ownerUnitObject->GetTransform()->GetWorldPosition() + ownerUnitObject->GetTransform()->GetWorldRotation().Forward() * -3);
-	meleeAttackColliderObject->GetTransform()->GetWorldRotation() = ownerUnitObject->GetTransform()->GetWorldRotation();
+	meleeAttackColliderObject->GetTransform()->SetWorldRotation(ownerUnitObject->GetTransform()->GetWorldRotation());
 
 	meleeAttackColliderObject->SetSelfActive(true);
 	meleeAttackColliderDebugObject->SetSelfActive(true);
@@ -45,7 +45,7 @@ void MeleeAttackSystem::Update()
 	meleeAttackColliderDebugObject->GetTransform()->
 		SetWorldPosition(meleeAttackColliderObject->GetTransform()->GetWorldPosition());
 
-	meleeAttackColliderDebugObject->GetTransform()->GetWorldRotation() = meleeAttackColliderObject->GetTransform()->GetWorldRotation();
+	meleeAttackColliderDebugObject->GetTransform()->SetWorldRotation(meleeAttackColliderObject->GetTransform()->GetWorldRotation());
 
 	if (colliderActivated)
 	{

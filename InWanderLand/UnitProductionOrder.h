@@ -40,9 +40,9 @@ protected:
 	Unit::BaseUnitAnimationStruct m_baseUnitAnimations;
 
 	NavigationField* m_navField;
-	Vector3d m_startPosition;
 
 public:
+	Vector3d m_startPosition;
 	virtual GameObject* CreateUnitWithOrder();
 
 	virtual void SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition) = 0;

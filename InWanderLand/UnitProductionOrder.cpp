@@ -74,7 +74,7 @@ GameObject* UnitProductionOrder::CreateUnitWithOrder()
 
 void UnitProductionOrder::SetPlayerRelatedComponents(Unit* playerUnit)
 {
-	playerUnit->SetPlayerSerialNumber();
+	playerUnit->SetPlayerSerialNumber(m_unitType);
 	PlayerController::GetInstance()->AddPlayerUnit(playerUnit);
 }
 

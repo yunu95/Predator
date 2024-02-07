@@ -20,7 +20,7 @@ private:
 	int maxDegree = 359;
 	float cakeHealingPoint = 1.0f;
 
-	float cakePersistTime = 2.0f;
+	float cakePersistTime = 3.5f;
 	float cakeElapsed = 0.0f;
 
 	bool isFunctionCalled = false;

@@ -39,47 +39,49 @@ namespace yunutyEngine
         {
         public:
             static Renderer& SingleInstance();
-            // ±×·¡ÇÈ½º ¿£Áø ¶óÀÌºê·¯¸®ÀÇ ÄÚµå¸¦ °¡Á®¿É´Ï´Ù. 
-            // ´ë»óÀÌ µÇ´Â ±×·¡ÇÈ ¿£ÁøÀº YunuGraphicsInterface ÀÎÅÍÆäÀÌ½º¸¦ ±¸ÇöÇØ¾ß ÇÕ´Ï´Ù.
+            // ê·¸ëž˜í”½ìŠ¤ ì—”ì§„ ë¼ì´ë¸ŒëŸ¬ë¦¬ì˜ ì½”ë“œë¥¼ ê°€ì ¸ì˜µë‹ˆë‹¤. 
+            // ëŒ€ìƒì´ ë˜ëŠ” ê·¸ëž˜í”½ ì—”ì§„ì€ YunuGraphicsInterface ì¸í„°íŽ˜ì´ìŠ¤ë¥¼ êµ¬í˜„í•´ì•¼ í•©ë‹ˆë‹¤.
             void LoadGraphicsDll(const wstring& dllFileName);
 
-            // ±×·¡ÇÈ °á°ú¸¦ Ãâ·ÂÇÒ Ã¢À» ÁöÁ¤ÇÕ´Ï´Ù. ÀÌ Ã¢¿¡´Â °ÔÀÓ¿£Áø°ú ¿¬°èµÈ ±×·¡ÇÈ½º ¿£Áø¸¸ÀÌ ¿µÇâÀ» ÁÖ¾î¾ß ÇÕ´Ï´Ù. 
-            // °°Àº Ã¢¿¡ ¿©·¯ ±×·¡ÇÈ½º ¿£ÁøÀÌ ·»´õ¸µÀ» ½ÃµµÇÒ °æ¿ì, °®Àº ¾Ö·Î»çÇ×ÀÌ ¹ß»ýÇÏ°Ô µÉ °ÍÀÔ´Ï´Ù.
+            // ê·¸ëž˜í”½ ê²°ê³¼ë¥¼ ì¶œë ¥í•  ì°½ì„ ì§€ì •í•©ë‹ˆë‹¤. ì´ ì°½ì—ëŠ” ê²Œìž„ì—”ì§„ê³¼ ì—°ê³„ëœ ê·¸ëž˜í”½ìŠ¤ ì—”ì§„ë§Œì´ ì˜í–¥ì„ ì£¼ì–´ì•¼ í•©ë‹ˆë‹¤. 
+            // ê°™ì€ ì°½ì— ì—¬ëŸ¬ ê·¸ëž˜í”½ìŠ¤ ì—”ì§„ì´ ë Œë”ë§ì„ ì‹œë„í•  ê²½ìš°, ê°–ì€ ì• ë¡œì‚¬í•­ì´ ë°œìƒí•˜ê²Œ ë  ê²ƒìž…ë‹ˆë‹¤.
             void SetOutputWindow(const HWND& hwnd);
 
-            // ÇØ´ç Æú´õ¿Í ÇÏÀ§ Æú´õ ³»ºÎ¿¡ ÀÖ´Â ¸ðµç ±×·¡ÇÈ½º ÆÄÀÏµéÀ» ·ÎµåÇÕ´Ï´Ù.
+            void Finalize();
+
+            // í•´ë‹¹ í´ë”ì™€ í•˜ìœ„ í´ë” ë‚´ë¶€ì— ìžˆëŠ” ëª¨ë“  ê·¸ëž˜í”½ìŠ¤ íŒŒì¼ë“¤ì„ ë¡œë“œí•©ë‹ˆë‹¤.
             void LoadFiles(const char* rootPath);
-            // ÆÄÀÏÀ» ·ÎµåÇÕ´Ï´Ù. ÆÄÀÏÀ» ±×·¡ÇÈ½º ÆÄÀÏ·Î ÀÎÁöÇÒ ¼ö ¾øÀ» °æ¿ì, ÇØ´ç ÆÄÀÏÀ» ¹«½ÃÇÕ´Ï´Ù.
+            // íŒŒì¼ì„ ë¡œë“œí•©ë‹ˆë‹¤. íŒŒì¼ì„ ê·¸ëž˜í”½ìŠ¤ íŒŒì¼ë¡œ ì¸ì§€í•  ìˆ˜ ì—†ì„ ê²½ìš°, í•´ë‹¹ íŒŒì¼ì„ ë¬´ì‹œí•©ë‹ˆë‹¤.
             void LoadFile(const char* fileName);
-            // ÇØ»óµµ Á¶Á¤ ÇÔ¼ö
+            // í•´ìƒë„ ì¡°ì • í•¨ìˆ˜
             Vector2i GetResolution();
             void SetResolution(unsigned int width, unsigned int height);
-            // ·»´õ¸µÀÌ ³¡³­ Á÷ÈÄ È£ÃâÇÒ ÄÝ¹éÇÔ¼ö¸¦ ÁöÁ¤ÇÕ´Ï´Ù.
+            // ë Œë”ë§ì´ ëë‚œ ì§í›„ í˜¸ì¶œí•  ì½œë°±í•¨ìˆ˜ë¥¼ ì§€ì •í•©ë‹ˆë‹¤.
             void SetAfterRenderAction(const function<void()>& action);
 
-            // ±×·¡ÇÈ °á°ú¸¦ ÀúÀåÇÑ ÅØ½ºÃ³ °´Ã¼ÀÇ ÇÚµéÀ» ¿äÃ»ÇÕ´Ï´Ù. NullÀÌ ¹ÝÈ¯µÉ °æ¿ì, SetOutputWindow ÇÔ¼ö¿¡¸¸ ÀÇÁ¸ÇØ¾ß ÇÕ´Ï´Ù.
+            // ê·¸ëž˜í”½ ê²°ê³¼ë¥¼ ì €ìž¥í•œ í…ìŠ¤ì²˜ ê°ì²´ì˜ í•¸ë“¤ì„ ìš”ì²­í•©ë‹ˆë‹¤. Nullì´ ë°˜í™˜ë  ê²½ìš°, SetOutputWindow í•¨ìˆ˜ì—ë§Œ ì˜ì¡´í•´ì•¼ í•©ë‹ˆë‹¤.
             void* QuerySharedOutputHandle();
 
-            // ¼öµ¿À¸·Î ±×·¡ÇÈ½º ¿£ÁøÀÇ ·»´õ¸µ µ¿ÀÛÀ» ½ÇÇà½ÃÅµ´Ï´Ù.
+            // ìˆ˜ë™ìœ¼ë¡œ ê·¸ëž˜í”½ìŠ¤ ì—”ì§„ì˜ ë Œë”ë§ ë™ìž‘ì„ ì‹¤í–‰ì‹œí‚µë‹ˆë‹¤.
             void ManualRender() { Render(); }
 
-            // ¼öµ¿À¸·Î ±×·¡ÇÈ½º ¿£ÁøÀÇ ¾÷µ¥ÀÌÆ® ÇÔ¼ö¸¦ ½ÇÇà½ÃÅµ´Ï´Ù.
+            // ìˆ˜ë™ìœ¼ë¡œ ê·¸ëž˜í”½ìŠ¤ ì—”ì§„ì˜ ì—…ë°ì´íŠ¸ í•¨ìˆ˜ë¥¼ ì‹¤í–‰ì‹œí‚µë‹ˆë‹¤.
             void ManualUpdate(float delta) { Update(delta); }
 
 
-            // ±×·¡ÇÈ½º ¿£ÁøÀÇ ClickEvent¸¦ ¹ß»ý½ÃÅµ´Ï´Ù. x,y ÁÂÇ¥´Â 0¿¡¼­ 1 »çÀÌÀÇ °ªÀ¸·Î Á¤±ÔÈ­µÇ¾î¾ß ÇÏ¸ç,
-            // (0,0)ÀÇ ÁÂÇ¥´Â ¿ÞÂÊ À§ ÁöÁ¡¿¡ ÇØ´çÇÕ´Ï´Ù.
-            // ÀÌ ÇÔ¼ö´Â ±×·¡ÇÈ½º °´Ã¼¿¡ ´ëÀÀµÇ´Â EventHandler °´Ã¼ÀÇ ÀÌº¥Æ® ÇÔ¼ö¸¦ È£ÃâÇÕ´Ï´Ù.
+            // ê·¸ëž˜í”½ìŠ¤ ì—”ì§„ì˜ ClickEventë¥¼ ë°œìƒì‹œí‚µë‹ˆë‹¤. x,y ì¢Œí‘œëŠ” 0ì—ì„œ 1 ì‚¬ì´ì˜ ê°’ìœ¼ë¡œ ì •ê·œí™”ë˜ì–´ì•¼ í•˜ë©°,
+            // (0,0)ì˜ ì¢Œí‘œëŠ” ì™¼ìª½ ìœ„ ì§€ì ì— í•´ë‹¹í•©ë‹ˆë‹¤.
+            // ì´ í•¨ìˆ˜ëŠ” ê·¸ëž˜í”½ìŠ¤ ê°ì²´ì— ëŒ€ì‘ë˜ëŠ” EventHandler ê°ì²´ì˜ ì´ë²¤íŠ¸ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•©ë‹ˆë‹¤.
             void InvokeClickEvent(float x, float y);
             void InvokeHoverEvent(float x, float y);
 
-            // ±×·¡ÇÈ½º ¿£ÁøÀÇ ClickEvent¸¦ ¹ß»ý½ÃÅµ´Ï´Ù. x,y ÁÂÇ¥´Â 0¿¡¼­ 1 »çÀÌÀÇ °ªÀ¸·Î Á¤±ÔÈ­µÇ¾î¾ß ÇÏ¸ç,
-            // (0,0)ÀÇ ÁÂÇ¥´Â ¿ÞÂÊ À§ ÁöÁ¡¿¡ ÇØ´çÇÕ´Ï´Ù.
-            // ÀÌ ÇÔ¼ö´Â ±×·¡ÇÈ½º °´Ã¼¿¡ ´ëÀÀµÇ´Â Yunuty Renderable Component¸¦ ¹ÝÈ¯ÇÏ¸ç, ÀÎ°ÔÀÓ ÀÌº¥Æ®¸¦ À¯¹ßÇÏÁø ¾Ê½À´Ï´Ù.
+            // ê·¸ëž˜í”½ìŠ¤ ì—”ì§„ì˜ ClickEventë¥¼ ë°œìƒì‹œí‚µë‹ˆë‹¤. x,y ì¢Œí‘œëŠ” 0ì—ì„œ 1 ì‚¬ì´ì˜ ê°’ìœ¼ë¡œ ì •ê·œí™”ë˜ì–´ì•¼ í•˜ë©°,
+            // (0,0)ì˜ ì¢Œí‘œëŠ” ì™¼ìª½ ìœ„ ì§€ì ì— í•´ë‹¹í•©ë‹ˆë‹¤.
+            // ì´ í•¨ìˆ˜ëŠ” ê·¸ëž˜í”½ìŠ¤ ê°ì²´ì— ëŒ€ì‘ë˜ëŠ” Yunuty Renderable Componentë¥¼ ë°˜í™˜í•˜ë©°, ì¸ê²Œìž„ ì´ë²¤íŠ¸ë¥¼ ìœ ë°œí•˜ì§„ ì•ŠìŠµë‹ˆë‹¤.
             Renderable<yunuGI::IRenderable>* ClickRenderable(float x, float y);
             const yunuGI::IResourceManager* GetResourceManager();
 
-            // ±×·¡ÇÈ½º ¿£Áø¿¡¼­ Å¬¸¯ÀÌº¥Æ®°¡ ¹ß»ýÇßÀ» ¶§, ÀÌ¸¦ Ã³¸®ÇØÁÙ ÄÝ¹é ÇÔ¼ö¸¦ µî·ÏÇÕ´Ï´Ù.
+            // ê·¸ëž˜í”½ìŠ¤ ì—”ì§„ì—ì„œ í´ë¦­ì´ë²¤íŠ¸ê°€ ë°œìƒí–ˆì„ ë•Œ, ì´ë¥¼ ì²˜ë¦¬í•´ì¤„ ì½œë°± í•¨ìˆ˜ë¥¼ ë“±ë¡í•©ë‹ˆë‹¤.
             //void RegisterClickEventHandler(function<void(yunuGI::IRenderable*)> callback) 
             //{ clickEventCallback = callback; };
         private:

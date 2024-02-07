@@ -5,6 +5,7 @@
 
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
+#include "MagicianProduction.h"
 
 namespace application
 {
@@ -67,7 +68,12 @@ namespace application
             }
             unitInstance->GetTransform()->SetWorldPosition({ pod.x,pod.y,pod.z });
             return unitInstance;
-        };
+		};
+        void UnitData::ApplyAsPlaytimeObject()
+        {
+            MagicianProduction::Instance().m_startPosition = Vector3d{ pod.x ,pod.y,pod.z };
+			auto player1GameObject = MagicianProduction::Instance().CreateUnitWithOrder();
+        }
 
         bool UnitData::PreEncoding(json& data) const
         {

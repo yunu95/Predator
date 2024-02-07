@@ -21,14 +21,16 @@ void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject, NavigationField* n
 	m_dodgeProbability = 0.2f;
 	m_criticalDamageDecreaseMultiplier = 0.2f;
 
-	m_idRadius = 1.0f * LENGTH_UNIT;
-	m_atkRadius = 0.2f * LENGTH_UNIT;
+	m_idRadius = 4.0f * LENGTH_UNIT;
+	m_atkRadius = 1.7f * LENGTH_UNIT;
 	m_unitSpeed = 4.5f;
 
 	m_attackDelay = 1.0f;
 
 	m_navField = navField;
 	m_startPosition = startPosition;
+
+
 #pragma endregion
 
 #pragma region Animation Related Member Setting

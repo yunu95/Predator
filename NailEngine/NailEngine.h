@@ -28,7 +28,7 @@ public:
 public:
 	void Init(UINT64 hWnd);
 	void Render();
-
+	void Finalize();
 public:
 	void SetResolution(unsigned int width, unsigned int height);
 

@@ -10,7 +10,8 @@ namespace yunutyEngine
     {
     public:
         static T& Instance();
-        static bool isAvailable() { return yunutyEngine::Scene::getCurrentScene(); }
+		static bool isAvailable() { return yunutyEngine::Scene::getCurrentScene(); }
+		virtual void SingletonInitializer() {};
     protected:
         virtual ~SingletonComponent() = default;
     private:
@@ -23,6 +24,7 @@ T& yunutyEngine::SingletonComponent<T>::Instance()
     if (instance == nullptr)
     {
         instance = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<T>();
+        instance ->SingletonInitializer();
     }
     return *instance;
 }

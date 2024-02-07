@@ -41,7 +41,8 @@ namespace application
             virtual ITemplateData* GetTemplateData() override;
             virtual bool SetTemplateData(const std::string& dataName) override;
             virtual IEditableData* Clone() const override;
-            virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
+			virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
+			virtual void ApplyAsPlaytimeObject() override {};
 
             POD_Ornament pod;
 

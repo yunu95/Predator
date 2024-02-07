@@ -52,6 +52,8 @@ namespace yunuGI
         //virtual ID3D11ShaderResourceView* QueryD3D11RenderOutputSRV(ID3D11Device* requesting) { return nullptr; }
         // imgui에 렌더 출력물을 전달해주기 위한 쿼리
         //virtual D3D12_GPU_DESCRIPTOR_HANDLE* QueryD3D12RenderOutputGDH() { return nullptr; }
+
+        virtual void Finalize() = 0;
     };
 }
 

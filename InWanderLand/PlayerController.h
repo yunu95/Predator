@@ -30,8 +30,8 @@ public:
 
 private:
 	RTSCam* m_movingSystemComponent;
-	std::map<int, Unit*> playerComponentMap;
-	int currentSelectedSerialNumber = 0;
+	std::map<Unit::UnitType, Unit*> playerComponentMap;
+	Unit::UnitType currentSelectedSerialNumber;
 	int previousSerialNumber = 0;
 
 public:
@@ -51,7 +51,10 @@ public:
 	void SetLeftClickEmpty();
 	void SetRightClickEmpty();
 
-	void SetCurrentPlayerSerialNumber(int p_num);
+	void SetCurrentPlayerSerialNumber(Unit::UnitType p_num);
+
+	std::map<Unit::UnitType, Unit*> GetPlayerMap() const;
+	Unit* FindSelectedUnitByUnitType(Unit::UnitType p_type);
 
 };
 
