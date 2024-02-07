@@ -3,12 +3,14 @@
 #include "Material.h"
 #include "Mesh.h"
 
+#include "CameraManager.h"
 #include "NailCamera.h"
 #include "NailAnimator.h"
 #include "AnimationGroup.h"
 #include "NailEngine.h"
 #include "ConstantBuffer.h"
 #include "ResourceManager.h"
+#include "PixelShader.h"
 
 
 LazyObjects<InstancingManager> InstancingManager::Instance;
@@ -66,6 +68,14 @@ void InstancingManager::RenderStaticDeferred()
 			for (auto& i : renderInfoVec)
 			{
 				if (i->isActive == false) continue;
+
+				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+				auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
+
+				if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
+				{
+					continue;
+				}
 
 				const std::shared_ptr<RenderInfo>& renderInfo = i;
 				InstancingData data;
@@ -134,6 +144,14 @@ void InstancingManager::RenderStaticForward()
 			{
 				if (i->isActive == false) continue;
 
+				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+				auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
+
+				if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
+				{
+					continue;
+				}
+
 				const std::shared_ptr<RenderInfo>& renderInfo = i;
 				InstancingData data;
 				data.wtm = renderInfo->wtm;
@@ -186,6 +204,14 @@ void InstancingManager::RenderStaticShadow()
 			for (auto& i : renderInfoVec)
 			{
 				if (i->isActive == false) continue;
+
+				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+				//auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
+
+				//if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
+				//{
+				//	continue;
+				//}
 
 				const std::shared_ptr<RenderInfo>& renderInfo = i;
 				InstancingData data;
@@ -300,6 +326,14 @@ void InstancingManager::RenderSkinned()
 			for (auto& i : renderInfoVec)
 			{
 				if (i->renderInfo.isActive == false) continue;
+
+				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+				auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->renderInfo.materialIndex);
+
+				if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
+				{
+					continue;
+				}
 
 				const RenderInfo& renderInfo = i->renderInfo;
 				InstancingData data;

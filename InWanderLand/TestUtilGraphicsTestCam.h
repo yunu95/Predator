@@ -78,9 +78,9 @@ namespace tests
 				centeredPosition.y *= -1;
 				Vector3d projectedPoint = GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
 
-				if (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick))
-					DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?
-						yunuGI::Color::red() : yunuGI::Color::blue(), { 0.2,0.2,0.2 });
+				//if (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick))
+				//	DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?
+				//		yunuGI::Color::red() : yunuGI::Color::blue(), { 0.2,0.2,0.2 });
 				if (Input::isKeyPushed(KeyCode::MouseLeftClick))
 				{
 					if (groundLeftClickCallback) groundLeftClickCallback(projectedPoint);
@@ -91,7 +91,10 @@ namespace tests
 				}
 				if (Input::isKeyPushed(KeyCode::MouseRightClick))
 				{
-					if (groundRightClickCallback) groundRightClickCallback(projectedPoint);
+					if (groundRightClickCallback)
+					{
+						groundRightClickCallback(projectedPoint);
+					}
 				}
 				else if (Input::isKeyLifted(KeyCode::MouseRightClick))
 				{

@@ -39,6 +39,22 @@ void GraphicsTest()
 		//text->GetGI().SetColor(yunuGI::Color{ 1,0,0,1 });
 	}
 
+	{
+		auto& list = _resourceManager->GetShaderList();
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		obj->GetTransform()->SetLocalScale(Vector3d{ 3.44390607,6.29091072,1.59031582 });
+		auto text = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		text->GetGI().SetMesh(_resourceManager->GetMesh(L"Cube"));
+		for (auto& i : list)
+		{
+			if (i->GetName() == L"DebugPS.cso")
+			{
+				text->GetGI().GetMaterial()->SetPixelShader(i);
+			}
+		}
+		//text->GetGI().SetColor(yunuGI::Color{ 1,0,0,1 });
+	}
+
 	_resourceManager->LoadFile("FBX/SM_Trunk_001");
 	{
 		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Trunk_001");

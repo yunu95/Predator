@@ -75,6 +75,7 @@ public:
 	std::vector<yunuGI::IMaterial*>& GetMaterialList();
 	std::vector<yunuGI::IShader*>& GetShaderList();
 	std::vector<yunuGI::IAnimation*>& GetAnimationList();
+	std::vector<std::wstring>& GetFBXList();
 	std::shared_ptr<AnimationGroup> GetAnimationGroup(const std::wstring& modelName);
 #pragma endregion
 
@@ -132,6 +133,7 @@ private:
 	std::unordered_map<std::wstring, std::shared_ptr<AnimationGroup>> animationGroupMap;
 
 	std::unordered_map<std::wstring, yunuGI::FBXData*> fbxDataMap;
+	std::vector<std::wstring> fbxMap;
 	//// 게임 엔진에서 본 계층구조로 오브젝트 만들 때 쓰는용
 	///std::unordered_map<std::wstring, std::vector<yunuGI::BoneInfo>> fbxBoneInfoVecMap;
 	// 그래픽스 엔진 내부에서 스키닝 애니메이션에 쓸 오프셋 행렬을 가지고 있는 본 정보
