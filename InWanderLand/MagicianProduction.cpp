@@ -5,6 +5,7 @@
 #include "ParalysisFieldComponent.h"
 #include "BlindFieldComponent.h"
 #include "DebugMeshes.h"
+#include "SingleNavigationField.h"
 
 void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition)
 {
@@ -85,7 +86,7 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 
 #pragma region Q Skill Setting
 	auto QSkillProjectileObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	
+
 	QSkillProjectileObject->AddComponent<Dotween>();
 
 	auto QSkillProjectileCollider = QSkillProjectileObject->AddComponent<physics::SphereCollider>();
@@ -141,7 +142,7 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 	auto magicianSkillSystem = m_unitGameObject->AddComponent<MagicianSkillSystem>();
 
 	magicianSkillSystem->SetQSkillCollider(QSkillProjectileCollider, QSkillFieldCollider);
-	magicianSkillSystem->SetQSkillDebugPair({QSkillProjectileDebugObject, m_QSkillProjectileRadius}, {QSkillFieldDebugObject, m_QSkillFieldRadius});
+	magicianSkillSystem->SetQSkillDebugPair({ QSkillProjectileDebugObject, m_QSkillProjectileRadius }, { QSkillFieldDebugObject, m_QSkillFieldRadius });
 	magicianSkillSystem->SetQSkillObject(QSkillProjectileObject, QSkillFieldObject);
 
 	magicianSkillSystem->SetWSkillCollider(WSkillProjectileCollider, WSkillFieldCollider);
@@ -150,8 +151,18 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 
 }
 
+void MagicianProduction::SingletonInitializer()
+{
+	graphics::Renderer::SingleInstance().GetResourceManager()->LoadFile("FBX/Boss");
+	SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), &SingleNavigationField::Instance(), Vector3d(-7.0f, 0.0f, 7.0f));
+}
 yunutyEngine::GameObject* MagicianProduction::CreateUnitWithOrder()
 {
 	auto unitGameObject = UnitProductionOrder::CreateUnitWithOrder();
+	auto skinnedMeshRenderer = unitGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
+	auto material = skinnedMeshRenderer->GetGI().GetMaterial();
+	auto clonedMaterial = graphics::Renderer::SingleInstance().GetResourceManager()->CloneMaterial(L"Red", material);
+	clonedMaterial->SetColor(yunuGI::Color::red());
+	skinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial);
 	return unitGameObject;
 }

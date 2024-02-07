@@ -42,7 +42,7 @@ namespace application
                 virtual void OnLeftClick();
                 virtual void OnLeftClickRelease();
                 /// <param name="projectedWorldPos"> 마우스의 위치가 월드 좌표에 사영된 위치를 전달해 커서의 위치를 업데이트합니다.</param>
-                virtual void OnMouseMove(Vector3d projectedWorldPos);
+                virtual void OnMouseMove(Vector3d projectedWorldPos, Vector2d normalizedScreenPos);
                 virtual void OnDeletion();
                 /// <summary>
                 /// 팔레트를 객체 선택모드로 전환할지, 객체 배치 모드로 전환할지 설정합니다. isSelectMode가 참이면 선택모드로, 거짓이면 배치모드로 전환됩니다.

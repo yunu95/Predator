@@ -17,6 +17,11 @@ void PlayerSkillSystem::SkillActivate(Unit::SkillEnum p_currentSkill, Vector3d p
 	}
 }
 
+bool PlayerSkillSystem::IsSkillEnd() const
+{
+	return isSkillEnd;
+}
+
 void PlayerSkillSystem::SetOtherComponentsAsMember()
 {
 	m_unitComponent = GetGameObject()->GetComponent<Unit>();

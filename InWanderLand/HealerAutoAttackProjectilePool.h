@@ -17,7 +17,7 @@ public:
 
 		auto projectileComponent = projectile->GetGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		projectileComponent->GetGI().SetMesh(capsuleMesh);
-		projectileComponent->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 1, 0, 0 });
+		projectileComponent->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::blue(), false));
 	}
 };
 

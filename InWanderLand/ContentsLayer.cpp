@@ -10,6 +10,8 @@
 #include "Application.h"
 #include "TestComponent2.h"
 #include "TestUtilGraphicsTestCam.h"
+#include "MapFileManager.h"
+#include "InstanceManager.h"
 
 #include <algorithm>
 #include <string>
@@ -32,8 +34,8 @@ void GraphicsTest()
 
 	{
 		auto obj = Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->SetLocalPosition(Vector3d{ 700,500 ,1});
-		obj->GetTransform()->SetLocalScale(Vector3d{ 700,500 ,1});
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 700,500 ,1 });
+		obj->GetTransform()->SetLocalScale(Vector3d{ 700,500 ,1 });
 		auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
 		text->GetGI().SetText(L"Test");
 		//text->GetGI().SetColor(yunuGI::Color{ 1,0,0,1 });
@@ -116,14 +118,16 @@ void application::contents::ContentsLayer::Initialize()
 		return;
 	}
 
-	yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+
 	//auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	//camObj->GetTransform()->SetLocalPosition(Vector3d(0, 20, -10));
 	//camObj->GetTransform()->SetLocalRotation( Quaternion(Vector3d(60, 0, 0)));
 	//auto roamingCam = camObj->AddComponent<RTSCam>();
 	//roamingCam->SetCameraMain();
+#ifndef  EDITOR
 #ifdef GRAPHICS_TEST
 	{
+		yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 		//yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 		yunutyEngine::Collider2D::SetIsOnXYPlane(false);
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -137,8 +141,21 @@ void application::contents::ContentsLayer::Initialize()
 	}
 	GraphicsTest();
 #else
-
+	{
+		yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+		auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		camObj->AddComponent<tests::GraphicsTestCam>();
+		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+		auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
+		light->GetGI().SetLightDiffuseColor(color);
+		directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
+		editor::MapFileManager::GetSingletonInstance().LoadMapFile("TestMap.pmap");
+		editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
+	}
 #endif
+
+#endif // ! EDITOR
 
 	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }

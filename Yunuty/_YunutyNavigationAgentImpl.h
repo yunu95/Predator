@@ -39,7 +39,7 @@ namespace yunutyEngine
             .collisionQueryRange = 12,
             .pathOptimizationRange = 30,
             .separationWeight = 2,
-            .updateFlags = DT_CROWD_ANTICIPATE_TURNS |
+            .updateFlags = DT_CROWD_OPTIMIZE_TOPO |
             DT_CROWD_OPTIMIZE_VIS |
             DT_CROWD_OBSTACLE_AVOIDANCE,
             .obstacleAvoidanceType = (unsigned char)3,

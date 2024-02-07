@@ -15,6 +15,8 @@ public:
 public:
 	virtual void QSkillActivate(Vector3d skillPos) = 0;
 	virtual void WSkillActivate(Vector3d skillPos) = 0;
+	
+	virtual bool IsSkillEnd() const;
 
 protected:
 	struct SkillRequirements
@@ -24,12 +26,14 @@ protected:
 		GameObject* debugObject;
 		Dotween* dotweenComponent;
 	};
-
+	
 	Unit* m_unitComponent;
 	Dotween* m_unitDotween;
 	NavigationAgent* m_unitNavComponent;
 
 	Vector3d m_currentSelectedSkillPosition;
+
+	bool isSkillEnd = false;
 
 	virtual void SetOtherComponentsAsMember();
 };

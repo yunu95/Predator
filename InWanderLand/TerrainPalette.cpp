@@ -33,9 +33,9 @@ namespace application::editor::palette
         }
         return nullptr;
     }
-    void TerrainPalette::OnMouseMove(Vector3d projectedWorldPos)
+    void TerrainPalette::OnMouseMove(Vector3d projectedWorldPos, Vector2d normalizedScreenPos)
     {
-        Palette::OnMouseMove(projectedWorldPos);
+        Palette::OnMouseMove(projectedWorldPos, normalizedScreenPos);
         // 브러시 움직이기
         TerrainBrush::Instance().GetTransform()->SetWorldPosition(TerrainData::Instance().GetNodePosition(TerrainData::Instance().WorldToNodeSpace(projectedWorldPos)));
         if (IsClickingLeft() && !IsSelectMode())

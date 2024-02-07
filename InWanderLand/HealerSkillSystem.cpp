@@ -25,6 +25,7 @@ void HealerSkillSystem::CrushDown(int p_times)
 				m_unitNavComponent->SetActive(true);
 				//m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
 				m_unitNavComponent->Relocate(GetTransform()->GetWorldPosition());
+				isSkillEnd = true;
 			}
 
 			else
@@ -116,11 +117,11 @@ void HealerSkillSystem::Update()
 	{
 		WSkillFieldDamage.colliderObject->GetTransform()
 			->SetWorldPosition({GetGameObject()->GetTransform()->GetWorldPosition() + GetGameObject()->GetTransform()->GetWorldRotation().Forward() * -3});
-		WSkillFieldDamage.colliderObject->GetTransform()->GetWorldRotation() = GetGameObject()->GetTransform()->GetWorldRotation();
+		WSkillFieldDamage.colliderObject->GetTransform()->SetWorldRotation(GetGameObject()->GetTransform()->GetWorldRotation());
 
 		WSkillFieldDamage.debugObject->GetTransform()
 			->SetWorldPosition(WSkillFieldDamage.colliderObject->GetTransform()->GetWorldPosition());
-		WSkillFieldDamage.debugObject->GetTransform()->GetWorldRotation() = WSkillFieldDamage.colliderObject->GetTransform()->GetWorldRotation();
+		WSkillFieldDamage.debugObject->GetTransform()->SetWorldRotation(WSkillFieldDamage.colliderObject->GetTransform()->GetWorldRotation());
 
 		//m_unitComponent->LookAt(m_currentSelectedSkillPosition);
 	}

@@ -68,7 +68,8 @@ namespace application
                 return dynamic_cast<T*>(itr->second.get());
             }
             bool DeleteInstance(const UUID& uuid);
-            void Clear();
+			void Clear();
+			void ApplyInstancesAsPlaytimeObjects();
 
         protected:
             bool PreSave();

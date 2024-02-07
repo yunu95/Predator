@@ -7,4 +7,3 @@ public:
 	virtual void SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition) override;
 	virtual GameObject* CreateUnitWithOrder() override;
 };
-
