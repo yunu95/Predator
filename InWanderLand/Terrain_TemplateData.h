@@ -15,8 +15,9 @@ namespace application
         struct POD_Terrain_TemplateData
         {
             std::vector<std::pair<int, int>> coordinates;
+            
             TO_JSON(POD_Terrain_TemplateData)
-                FROM_JSON(POD_Terrain_TemplateData)
+            FROM_JSON(POD_Terrain_TemplateData)
         };
 
         class Terrain_TemplateData
@@ -27,6 +28,7 @@ namespace application
 
         public:
             virtual std::string GetDataKey() const override;
+            virtual std::string GetDataResourceName() const override { return std::string(); };
 
             POD_Terrain_TemplateData pod;
 

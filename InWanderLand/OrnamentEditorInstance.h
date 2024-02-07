@@ -26,6 +26,8 @@ namespace application
                 virtual void Start() override;
                 void Init(const application::editor::OrnamentData* ornamentData);
                 void Init(const application::editor::Ornament_TemplateData* ornamentTemplateData);
+                void ChangeTemplateData(const application::editor::OrnamentData* ornamentData);
+                void ChangeTemplateData(const application::editor::Ornament_TemplateData* ornamentTemplateData);
 
             protected:
                 virtual void OnHover() { PaletteInstance::OnHover(); }

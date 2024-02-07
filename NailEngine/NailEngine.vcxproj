@@ -563,6 +563,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <None Include="RuntimeDependency\resources\Shader\Buffers.hlsli">
       <FileType>Document</FileType>
     </None>
+    <None Include="RuntimeDependency\resources\Shader\Matrix.hlsli" />
+    <None Include="RuntimeDependency\resources\Shader\Quaternion.hlsli" />
     <None Include="RuntimeDependency\resources\Shader\Utils.hlsli" />
     <None Include="SimpleMath.inl" />
   </ItemGroup>

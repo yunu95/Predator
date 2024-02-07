@@ -10,6 +10,7 @@
 #include "Application.h"
 #include "TestComponent2.h"
 #include "TestUtilGraphicsTestCam.h"
+#include "MapFileManager.h"
 
 #include <algorithm>
 #include <string>
@@ -25,37 +26,16 @@ std::function<void()> application::contents::ContentsLayer::testInitializer;
 /// 그래픽스 테스트용
 void GraphicsTest()
 {
-    auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    camObj->AddComponent<tests::GraphicsTestCam>();
+	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	camObj->AddComponent<tests::GraphicsTestCam>();
 
-    const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
- //   _resourceManager->LoadFile("FBX/Monster2");
-	//auto& animationList = _resourceManager->GetAnimationList();
-	//{
-	//	yunuGI::IAnimation* walkAnim = nullptr;
-	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
- //       //obj->GetTransform()->SetLocalScale(Vector3d{ obj->GetTransform()->GetLocalScale().x / 1000.f,obj->GetTransform()->GetLocalScale().y / 1000.f,obj->GetTransform()->GetLocalScale().z / 1000.f });
- //       auto& childVec = obj->GetChildren();
 
-	//	auto animator = obj->GetComponent<graphics::Animator>();
-	//	for (auto& i : animationList)
-	//	{
-	//		if (i->GetName() == L"Ani_Monster2_Walk")
-	//		{
-	//			walkAnim = i;
-	//		}
-	//	}
- //       walkAnim->SetPlaySpeed(0.00000000001f);
-	//	walkAnim->SetLoop(true);
-	//	animator->GetGI().PushAnimation(walkAnim);
-	//	animator->GetGI().Play(walkAnim);
-	//}
-
-    _resourceManager->LoadFile("FBX/SM_Temple_Books");
+	_resourceManager->LoadFile("FBX/SM_Trunk_001");
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Temple_Books");
-		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Trunk_001");
+		//obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
 	}
 }
 
@@ -107,71 +87,73 @@ void GraphicsTest()
 //}
 void application::contents::ContentsLayer::Initialize()
 {
-    if (ContentsLayer::testInitializer)
-    {
-        ContentsLayer::testInitializer();
-        return;
-    }
+	if (ContentsLayer::testInitializer)
+	{
+		ContentsLayer::testInitializer();
+		return;
+	}
 
-    yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-    //auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //camObj->GetTransform()->SetLocalPosition(Vector3d(0, 20, -10));
-    //camObj->GetTransform()->SetLocalRotation( Quaternion(Vector3d(60, 0, 0)));
-    //auto roamingCam = camObj->AddComponent<RTSCam>();
-    //roamingCam->SetCameraMain();
+	yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+	//auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//camObj->GetTransform()->SetLocalPosition(Vector3d(0, 20, -10));
+	//camObj->GetTransform()->SetLocalRotation( Quaternion(Vector3d(60, 0, 0)));
+	//auto roamingCam = camObj->AddComponent<RTSCam>();
+	//roamingCam->SetCameraMain();
 
     const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
     //resourceManager->LoadFile("FBX/Monster1");
-    //resourceManager->LoadFile("FBX/SM_Bush_001");
-    //resourceManager->LoadFile("FBX/SM_Bush_002");
-    //resourceManager->LoadFile("FBX/SM_CastleWall");
-    //resourceManager->LoadFile("FBX/SM_CastleWall_Door");
-    //resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
-    //resourceManager->LoadFile("FBX/SM_Chair");
-    //resourceManager->LoadFile("FBX/SM_Cuptower");
-    //resourceManager->LoadFile("FBX/SM_Fork");
-    //resourceManager->LoadFile("FBX/SM_GuideBook");
-    //resourceManager->LoadFile("FBX/SM_Hat01");
-    //resourceManager->LoadFile("FBX/SM_Hat02");
-    //resourceManager->LoadFile("FBX/SM_SmallBush_001");
-    //resourceManager->LoadFile("FBX/SM_Stone_001");
-    //resourceManager->LoadFile("FBX/SM_Stone_002");
-    //resourceManager->LoadFile("FBX/SM_Stump");
-    //resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
+    resourceManager->LoadFile("FBX/SM_Bush_001");
+    resourceManager->LoadFile("FBX/SM_Bush_002");
+    resourceManager->LoadFile("FBX/SM_CastleWall");
+    resourceManager->LoadFile("FBX/SM_CastleWall_Door");
+    resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
+    resourceManager->LoadFile("FBX/SM_Chair");
+    resourceManager->LoadFile("FBX/SM_Cuptower");
+    resourceManager->LoadFile("FBX/SM_Fork");
+    resourceManager->LoadFile("FBX/SM_GuideBook");
+    resourceManager->LoadFile("FBX/SM_Hat01");
+    resourceManager->LoadFile("FBX/SM_Hat02");
+    resourceManager->LoadFile("FBX/SM_SmallBush_001");
+    resourceManager->LoadFile("FBX/SM_Stone_001");
+    resourceManager->LoadFile("FBX/SM_Stone_002");
+    resourceManager->LoadFile("FBX/SM_Stump");
+    resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
     resourceManager->LoadFile("FBX/SM_Temple_Books");
-    //resourceManager->LoadFile("FBX/SM_Temple_Floor");
-    //resourceManager->LoadFile("FBX/SM_Temple_Pillar");
-    //resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
-    //resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
-    //resourceManager->LoadFile("FBX/SM_Temple_Stairs");
-    //resourceManager->LoadFile("FBX/SM_Temple_Welcome");
-    //resourceManager->LoadFile("FBX/SM_Trunk_001");
+    resourceManager->LoadFile("FBX/SM_Temple_Floor");
+    resourceManager->LoadFile("FBX/SM_Temple_Pillar");
+    resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
+    resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
+    resourceManager->LoadFile("FBX/SM_Temple_Stairs");
+    resourceManager->LoadFile("FBX/SM_Temple_Welcome");
+    resourceManager->LoadFile("FBX/SM_Trunk_001");
     //resourceManager->LoadFile("FBX/Spear");
 
 #ifdef GRAPHICS_TEST
-    {
-        //yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-        yunutyEngine::Collider2D::SetIsOnXYPlane(false);
-        auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-        auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
-        light->GetGI().SetLightDiffuseColor(color);
-        directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
-        //directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{0, 45, 0} };
-        //auto test = directionalLight->AddComponent<TestComponent2>();
-        //test->gameObject = directionalLight;
-    }
-    GraphicsTest();
+	{
+		//yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+		yunutyEngine::Collider2D::SetIsOnXYPlane(false);
+		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+		auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
+		light->GetGI().SetLightDiffuseColor(color);
+		directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
+		//directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{0, 45, 0} };
+		//auto test = directionalLight->AddComponent<TestComponent2>();
+		//test->gameObject = directionalLight;
+
+		editor::MapFileManager::GetSingletonInstance().LoadStaticOrnaments("TestOrnaments.punreal");
+	}
+	GraphicsTest();
 #else
 
 #endif
 
-    yunutyEngine::YunutyCycle::SingleInstance().Play();
+	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 void application::contents::ContentsLayer::Update(float ts)
 {
-    //std::cout << Time::GetFPS() << std::endl;
+	//std::cout << Time::GetFPS() << std::endl;
 }
 
 void application::contents::ContentsLayer::GUIProgress()
@@ -187,11 +169,11 @@ void application::contents::ContentsLayer::Finalize()
 #ifdef GEN_TESTS
 void application::contents::ContentsLayer::AssignTestInitializer(std::function<void()> testInitializer)
 {
-    ContentsLayer::testInitializer = testInitializer;
-    YunutyCycle::SingleInstance().onExceptionThrown = [](const std::exception& e) {
-        application::Application::GetInstance().AddMainLoopTodo([=]() {
-            Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
-            });
-    };
+	ContentsLayer::testInitializer = testInitializer;
+	YunutyCycle::SingleInstance().onExceptionThrown = [](const std::exception& e) {
+		application::Application::GetInstance().AddMainLoopTodo([=]() {
+			Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
+			});
+	};
 }
 #endif

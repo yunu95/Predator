@@ -50,6 +50,7 @@ namespace application
             virtual void OnRelocate(const Vector3d& newLoc) override;
             virtual void OnRerotate(const Quaternion& newRot) override;
             virtual void OnRescale(const Vector3d& newScale) override;
+            virtual void OnDataResourceChange(std::string newName) override;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance() override;
 
             POD_Ornament pod;

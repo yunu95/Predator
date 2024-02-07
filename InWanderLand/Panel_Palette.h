@@ -60,7 +60,6 @@ namespace application
 			std::vector<bool> unitButton = std::vector<bool>();
 
 			int ornamentCurrentButton = -1;
-			std::vector<bool> ornamentButton = std::vector<bool>();
 		};
 	}
 }

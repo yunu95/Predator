@@ -52,6 +52,7 @@ namespace application
                 /// <returns></returns>
                 void SetCurrentPalette(Palette* palette);
                 Palette* GetCurrentPalette() { return currentPalette; }
+                Palette_List GetCurrentPaletteType();
 
             private:
                 PaletteManager();

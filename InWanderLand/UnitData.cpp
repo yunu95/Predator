@@ -56,6 +56,21 @@ namespace application
             pod.position.z = newLoc.z;
         };
 
+        void UnitData::OnRerotate(const Quaternion& newRot)
+        {
+            pod.rotation.x = newRot.x;
+            pod.rotation.y = newRot.y;
+            pod.rotation.z = newRot.z;
+            pod.rotation.w = newRot.w;
+        }
+
+        void UnitData::OnRescale(const Vector3d& newScale)
+        {
+            pod.scale.x = newScale.x;
+            pod.scale.y = newScale.y;
+            pod.scale.z = newScale.z;
+        }
+
         palette::PaletteInstance* UnitData::ApplyAsPaletteInstance()
         {
             if (GetPaletteInstance() == nullptr)
@@ -66,6 +81,8 @@ namespace application
                 unitInstance->Init(this);
             }
             unitInstance->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
+            unitInstance->GetTransform()->SetWorldRotation({ pod.rotation.w, pod.rotation.x,pod.rotation.y,pod.rotation.z });
+            unitInstance->GetTransform()->SetLocalScale({ pod.scale.x,pod.scale.y,pod.scale.z });
             return unitInstance;
         };
 

@@ -54,6 +54,7 @@ namespace application
             virtual void OnRelocate(const Vector3d& newLoc) {};
             virtual void OnRerotate(const Quaternion& newRot) {};
             virtual void OnRescale(const Vector3d& newScale) {};
+            virtual void OnDataResourceChange(std::string newName) {};
             palette::PaletteInstance* GetPaletteInstance();
 
         protected:

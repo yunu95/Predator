@@ -33,6 +33,28 @@ namespace application
 				}
 			}
 
+			Palette_List PaletteManager::GetCurrentPaletteType()
+			{
+				if (currentPalette == paletteList[(int)Palette_List::Terrain])
+				{
+					return Palette_List::Terrain;
+				}
+				else if (currentPalette == paletteList[(int)Palette_List::Unit])
+				{
+					return Palette_List::Unit;
+				}
+				else if (currentPalette == paletteList[(int)Palette_List::Ornament])
+				{
+					return Palette_List::Ornament;
+				}
+				else if (currentPalette == paletteList[(int)Palette_List::Region])
+				{
+					return Palette_List::Region;
+				}
+
+				return Palette_List::None;
+			}
+
 			PaletteManager::PaletteManager()
 				: paletteList(), currentPalette(nullptr)
 			{

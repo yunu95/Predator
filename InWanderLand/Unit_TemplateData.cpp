@@ -12,6 +12,11 @@ namespace application
 			return TemplateDataManager::GetSingletonInstance().GetDataKey(this);
 		}
 
+		std::string Unit_TemplateData::GetDataResourceName() const
+		{
+			return pod.fbxName;
+		}
+
 		bool Unit_TemplateData::PreEncoding(json& data) const
 		{
 			FieldPreEncoding<boost::pfr::tuple_size_v<POD_Unit_TemplateData>>(pod, data["POD"]);

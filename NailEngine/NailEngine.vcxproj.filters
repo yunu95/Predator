@@ -511,5 +511,11 @@
     <None Include="RuntimeDependency\resources\Shader\Buffers.hlsli">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="RuntimeDependency\resources\Shader\Matrix.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="RuntimeDependency\resources\Shader\Quaternion.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

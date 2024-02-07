@@ -57,12 +57,6 @@ namespace application
                     location[1] = mapData[i]["Location"][1] / 100;
                     location[2] = mapData[i]["Location"][2] / 100;
 
-                    auto td = templateDataManager.CreateTemplateData<Ornament_TemplateData>(fbxName);
-                    if (td)
-                    {
-                        td->pod.fbxName = fbxName;
-                    }
-
                     auto odt = instanceManager.CreateInstance<OrnamentData>(fbxName);
 
                     /// 좌표계 고려 변환

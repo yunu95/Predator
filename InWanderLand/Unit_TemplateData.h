@@ -17,6 +17,7 @@ namespace application
 		struct POD_Unit_TemplateData
 		{
 			std::string thumbnailPath = "ImageButtons/Unit_Default.png";
+			std::string fbxName = std::string();
 
 			TO_JSON(POD_Unit_TemplateData)
 			FROM_JSON(POD_Unit_TemplateData)
@@ -30,6 +31,7 @@ namespace application
 
 		public:
 			virtual std::string GetDataKey() const override;
+			virtual std::string GetDataResourceName() const override;
 
 			POD_Unit_TemplateData pod;
 

@@ -103,8 +103,8 @@ namespace application::editor::palette
         case application::editor::palette::Palette::State::DraggingObjects:
             for (auto each : selection)
             {
-                each->OnRelocate(each->GetPaletteInstance()->GetTransform()->GetWorldPosition() + currentBrushPos - lastFrameBrushPos);
-                each->ApplyAsPaletteInstance();
+                //each->OnRelocate(each->GetPaletteInstance()->GetTransform()->GetWorldPosition() + currentBrushPos - lastFrameBrushPos);
+                //each->ApplyAsPaletteInstance();
             }
             break;
         case application::editor::palette::Palette::State::DraggingSelectBox:

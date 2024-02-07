@@ -8,6 +8,7 @@
 #include "PaletteManager.h"
 #include "Camera.h"
 #include "DebugMeshes.h"
+#include "EditorResourceManager.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -127,6 +128,7 @@ namespace application
 		void EditorLayer::LateInitialize()
 		{
 			palette::PaletteManager::GetSingletonInstance().Initialize();
+			ResourceManager::GetSingletonInstance().LoadFbxList();
 
 			// 카메라 초기화
 			editorCamera.Initialize(yunutyEngine::graphics::Camera::GetMainCamera());

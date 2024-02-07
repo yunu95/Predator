@@ -70,6 +70,8 @@ namespace application
                 virtual void OnStandbyPalette() = 0;
 
                 State GetCurrentState() { return state; }
+                bool AreThereAnyObjectSelected() { return selection.size() != 0; }
+                const std::unordered_set<IEditableData*>& GetSelections() { return selection; }
 
             protected:
                 // Reset 함수는 맵 데이터를 로드할때마다 기존에 로드되어 있던 맵 데이터들간의 관계를 초기화하는데에 사용됩니다.

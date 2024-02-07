@@ -23,6 +23,7 @@ namespace application
 			virtual ~ITemplateData() = default;
 
 			virtual std::string GetDataKey() const = 0;
+			virtual std::string GetDataResourceName() const = 0;
 
 		protected:
             virtual bool PreSaveCallback() { return true; }

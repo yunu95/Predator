@@ -8,6 +8,7 @@
 #include "imgui.h"
 
 #include <unordered_map>
+#include <unordered_set>
 #include <string>
 
 namespace application
@@ -51,6 +52,8 @@ namespace application
 			void Initialize(void* device);
 			Texture2D* GetTexture2D(std::string filename);
 			bool LoadTextureFromFile(std::string filename);
+			void LoadFbxList();
+			const std::unordered_set<std::string>& GetFbxList() const { return fbxSet; }
 
 		private:
 			ResourceManager() = default;
@@ -60,6 +63,9 @@ namespace application
 			// Editor\Resources 폴더로부터 상대적 경로를 Key 값으로 합니다.
 			// 해당 Key 값을 통해 LoadTextureFromFile 함수를 호출합니다.
 			std::unordered_map<std::string, std::unique_ptr<Texture2D>> textureMap = std::unordered_map<std::string, std::unique_ptr<Texture2D>>();
+			// LoadFbxList 함수를 통해 Engine 의 ResourceManager 로부터 FBXList 를 획득합니다.
+			// 이때, Ornament_TemplateData 를 Fbx 이름에 맞춰 생성합니다.
+			std::unordered_set<std::string> fbxSet = std::unordered_set<std::string>();
 		};
 	}
 }

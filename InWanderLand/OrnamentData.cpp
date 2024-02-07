@@ -70,6 +70,15 @@ namespace application
 			pod.scale.z = newScale.z;
 		}
 
+		void OrnamentData::OnDataResourceChange(std::string newName)
+		{
+			SetTemplateData(newName);
+			if (ornamentInstance)
+			{
+				ornamentInstance->ChangeTemplateData(this);
+			}
+		}
+
 		palette::PaletteInstance* OrnamentData::ApplyAsPaletteInstance()
 		{
 			if (GetPaletteInstance() == nullptr)

@@ -27,13 +27,6 @@ namespace application
 			{
 				unitButton.push_back(false);
 			}
-
-			auto oSize = tdm.GetDataList(DataType::OrnamentData).size();
-			ornamentButton.reserve(30);
-			for (int i = 0; i < oSize; i++)
-			{
-				ornamentButton.push_back(false);
-			}
 		}
 
 		void PalettePanel::Update(float ts)
@@ -145,6 +138,11 @@ namespace application
 							}
 
 							up.SelectUnitTemplateData(nullptr);
+						}
+						else if (currentPalette == &op)
+						{
+							ornamentCurrentButton = -1;
+							op.SelectOrnamentTemplateData(nullptr);
 						}
 					}
 				}
@@ -286,6 +284,7 @@ namespace application
 							// 이때, unitButton 에도 pushback 해주어 Size를 추가해야 함
 							/// 임시로 Unit Template Data 하나를 추가하는 로직을 구현함
 							auto td = tdm.CreateTemplateData<Unit_TemplateData>("UnitButton" + std::to_string(i));
+							td->pod.fbxName = "SM_Stone_001";
 							unitButton.push_back(false);
 						}
 					}
@@ -350,23 +349,19 @@ namespace application
 				auto style = ImGui::GetStyle();
 				auto imageSize = ImGui::GetContentRegionAvail().x / colCount - style.ItemSpacing.x - style.FramePadding.x * 2;
 
-				for (int i = 0; i < oSize + 1; i++)
+				// 반복 영역을 oSize + 1 로 설정하면 + 버튼 구현됨
+				for (int i = 0; i < oSize; i++)
 				{
-					if (i != 0 && i % colCount == 0)
-					{
-						ImGui::TableNextRow();
-						ImGui::TableSetColumnIndex(0);
-					}
-
+					// oSize 는 + 버튼으로 구현 도중 중단함
 					if (i == oSize)
 					{
-						bool buttonFlag = imgui::SelectableImageButton("Ornament Add Button", "ImageButtons/Ornament_AddButton.png", false, ImVec2(imageSize, imageSize));
-						imgui::SetTooltip("Add");
-						if (buttonFlag)
+						imgui::SmartStyleVar textAlign(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f, 0.5f));
+						imgui::SmartStyleVar border(ImGuiStyleVar_FrameBorderSize, 2);
+						imgui::SmartStyleColor borderCol(ImGuiCol_Border, ImVec4(0.26f, 0.59f, 0.98f, 1.00f));
+						if (ImGui::Selectable("+", false))
 						{
 							if (ornamentCurrentButton != -1)
 							{
-								ornamentButton[ornamentCurrentButton] = false;
 								ornamentCurrentButton = -1;
 								op.SelectOrnamentTemplateData(nullptr);
 								op.SetAsSelectMode(true);
@@ -377,20 +372,16 @@ namespace application
 							/// 임시로 Ornament Template Data 하나를 추가하는 로직을 구현함
 							auto td = tdm.CreateTemplateData<Ornament_TemplateData>("OrnamentButton" + std::to_string(i));
 							td->pod.fbxName = "SM_Temple_Books";
-							ornamentButton.push_back(false);
 						}
+						ImGui::RenderFrameBorder(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
 					}
 					else
 					{
-						bool ref = ornamentButton[i];
-						bool buttonFlag = imgui::SelectableImageButton("OrnamentButton" + std::to_string(i), static_cast<Ornament_TemplateData*>(tdm.GetDataList(DataType::OrnamentData)[i])->pod.thumbnailPath, ref, ImVec2(imageSize, imageSize));
-						imgui::SetTooltip(tdm.GetDataList(DataType::OrnamentData)[i]->GetDataKey());
-						if (buttonFlag)
+						imgui::SmartStyleVar textAlign(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f, 0.5f));
+						if(ImGui::Selectable(static_cast<Ornament_TemplateData*>(tdm.GetDataList(DataType::OrnamentData)[i])->GetDataKey().c_str(), ornamentCurrentButton == i))
 						{
 							if (ornamentCurrentButton != -1)
 							{
-								ornamentButton[ornamentCurrentButton] = false;
-
 								if (ornamentCurrentButton == i)
 								{
 									ornamentCurrentButton = -1;
@@ -399,7 +390,6 @@ namespace application
 								}
 								else
 								{
-									ornamentButton[i] = true;
 									ornamentCurrentButton = i;
 									op.SelectOrnamentTemplateData(static_cast<Ornament_TemplateData*>(tdm.GetDataList(DataType::OrnamentData)[i]));
 									op.SetAsSelectMode(false);
@@ -407,14 +397,11 @@ namespace application
 							}
 							else
 							{
-								ornamentButton[i] = true;
 								ornamentCurrentButton = i;
 								op.SelectOrnamentTemplateData(static_cast<Ornament_TemplateData*>(tdm.GetDataList(DataType::OrnamentData)[i]));
 								op.SetAsSelectMode(false);
 							}
 						}
-
-						ImGui::SameLine();
 					}
 				}
 				imgui::EndSection();
@@ -435,20 +422,12 @@ namespace application
 			unitButton.clear();
 
 			ornamentCurrentButton = -1;
-			ornamentButton.clear();
 
 			auto uSize = tdm.GetDataList(DataType::UnitData).size();
 			unitButton.reserve(30);
 			for (int i = 0; i < uSize; i++)
 			{
 				unitButton.push_back(false);
-			}
-
-			auto oSize = tdm.GetDataList(DataType::OrnamentData).size();
-			ornamentButton.reserve(30);
-			for (int i = 0; i < oSize; i++)
-			{
-				ornamentButton.push_back(false);
 			}
 		}
 	}
