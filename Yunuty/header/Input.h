@@ -41,6 +41,10 @@ namespace yunutyEngine
         static bool IsActive();
         static Vector2d getMouseScreenPosition();
         static Vector2d getMouseScreenPositionNormalized();
+        // 마우스의 스크린 좌표를 -0.5~0.5 사이의 값으로 정규화하여 반환합니다.
+        // x축의 경우 왼쪽이 -0.5, 오른쪽이 0.5입니다.
+        // y축의 경우 아래쪽이 -0.5, 위쪽이 0.5입니다.
+        static Vector2d getMouseScreenPositionNormalizedZeroCenter();
         static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     protected:
         virtual void Update()override;

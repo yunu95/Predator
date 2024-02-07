@@ -118,7 +118,7 @@ void TestCaseNavigationInit()
     agent->MoveTo(moveDestination);
     agent->SetSpeed(10);
     agentStuck->SetSpeed(10);
-    agent->SetAcceleration(20);
+    agent->SetAcceleration(30);
     agentStuck->Relocate(Vector3d{ -7,0,7 });
     agentStuck->MoveTo(Vector3d{ 0,0,0 });
     delayedTestFunctions->todoList.push_back({ 1.0,[=]() {
