@@ -58,6 +58,7 @@ namespace application
             virtual IEditableData* Clone() const override;
             virtual void OnRelocate(const Vector3d& newLoc) override;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
+            virtual void ApplyAsPlaytimeObject() override;
 
             POD_Unit pod;
 

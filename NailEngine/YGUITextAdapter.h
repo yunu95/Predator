@@ -24,7 +24,7 @@ namespace yunuGIAdapter
         }
 
         virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)
-        { 
+		{
 			renderable->pos.x = worldTM.m41;
 			renderable->pos.y = worldTM.m42;
 

@@ -107,6 +107,12 @@ void Unit::Start()
 void Unit::Update()
 {
 	unitFSM.UpdateState();
+
+	/// 전술모드 동작 여부를 확인한다
+	if (TacticModeSystem::SingleInstance().IsTacticModeActivated())
+	{
+		TacticModeSystem::SingleInstance().CallQueueFunction(this);
+	}
 }
 
 Unit::UnitType Unit::GetUnitType() const
@@ -196,13 +202,7 @@ void Unit::SkillEngage()
 	currentOrder = UnitState::Skill;
 	qSkillFunctionStartElapsed = 0.0f;
 
-	if (TacticModeSystem::SingleInstance().IsTacticModeActivated())
-	{ 
-		TacticModeSystem::SingleInstance().CallQueueFunction(this);
-		GetGameObject()->GetComponent<PlayerSkillSystem>()->SkillActivate(m_currentSelectedSkill, m_skillPosition);
-	}
-	else
-		GetGameObject()->GetComponent<PlayerSkillSystem>()->SkillActivate(m_currentSelectedSkill, m_skillPosition);
+	GetGameObject()->GetComponent<PlayerSkillSystem>()->SkillActivate(m_currentSelectedSkill, m_skillPosition);
 
 	StopMove();
 }

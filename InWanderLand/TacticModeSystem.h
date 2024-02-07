@@ -29,7 +29,6 @@ public:
 	void SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum);
 	void SetLeftClickAddQueueForSkill(InputManager::SelectedSerialNumber currentSelectedNum, Unit::SkillEnum currentSelectedSkill);
 
-
 	void EngageTacticMode();
 	void ExitTacticMode();
 	void SetMovingSystemComponent(RTSCam* sys);
