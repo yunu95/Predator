@@ -5,13 +5,14 @@
 #include "Unit_TemplateData.h"
 #include "UnitData.h"
 #include "TemplateDataManager.h"
-
+#include "UnitBrush.h"
 
 namespace application::editor::palette
 {
     void UnitPalette::SelectUnitTemplateData(Unit_TemplateData* templateData)
     {
         selectedUnitTemplateData = templateData;
+        UnitBrush::Instance().ReadyBrush(selectedUnitTemplateData);
     }
     void UnitPalette::UnselectUnitTemplateData()
     {
@@ -24,12 +25,35 @@ namespace application::editor::palette
     UnitData* UnitPalette::PlaceInstance(Vector3d worldPosition)
     {
         auto instance = InstanceManager::GetSingletonInstance().CreateInstance<UnitData>(selectedUnitTemplateData->GetDataKey());
-        instance->pod.x = worldPosition.x;
-        instance->pod.y = worldPosition.y;
-        instance->pod.z = worldPosition.z;
+        instance->pod.position.x = worldPosition.x;
+        instance->pod.position.y = worldPosition.y;
+        instance->pod.position.z = worldPosition.z;
 
         instance->ApplyAsPaletteInstance();
         return instance;
+    }
+
+    void UnitPalette::OnMouseMove(Vector3d projectedWorldPos, Vector2d normalizedScreenPos)
+    {
+        Palette::OnMouseMove(projectedWorldPos, normalizedScreenPos);
+        // 브러시 움직이기
+        UnitBrush::Instance().GetTransform()->SetWorldPosition(projectedWorldPos);
+        if (IsClickingLeft() && !IsSelectMode())
+            PlaceInstance(projectedWorldPos);
+    }
+
+    void UnitPalette::SetAsSelectMode(bool isSelectMode)
+    {
+        Palette::SetAsSelectMode(isSelectMode);
+
+        if (isSelectMode)
+        {
+            UnitBrush::Instance().ReadyBrush(nullptr);
+        }
+        else
+        {
+            UnitBrush::Instance().ReadyBrush(selectedUnitTemplateData);
+        }
     }
 
     bool UnitPalette::ShouldSelect(IEditableData* instance)
@@ -64,5 +88,11 @@ namespace application::editor::palette
         }
         state = State::None;
         CleanUpData();
+    }
+
+    void UnitPalette::CleanUpData()
+    {
+        Palette::CleanUpData();
+        Reset();
     }
 }

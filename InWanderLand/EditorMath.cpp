@@ -115,9 +115,37 @@ namespace application
 				return finalQuat;
 			}
 
+			yunuGI::Matrix4x4 GetTranslateMatrix(const yunuGI::Vector3& trans)
+			{
+				yunuGI::Matrix4x4 finalMat;
+
+				finalMat.m11 = 1.0f;
+				finalMat.m12 = 0.0f;
+				finalMat.m13 = 0.0f;
+				finalMat.m14 = 0.0f;
+
+				finalMat.m21 = 0.0f;
+				finalMat.m22 = 1.0f;
+				finalMat.m23 = 0.0f;
+				finalMat.m24 = 0.0f;
+
+				finalMat.m31 = 0.0f;
+				finalMat.m32 = 0.0f;
+				finalMat.m33 = 1.0f;
+				finalMat.m34 = 0.0f;
+
+				finalMat.m41 = trans.x;
+				finalMat.m42 = trans.y;
+				finalMat.m43 = trans.z;
+				finalMat.m44 = 1.0f;
+
+				return finalMat;
+			}
+
 			yunuGI::Matrix4x4 GetRotationMatrix(const yunuGI::Quaternion& quat)
 			{
 				yunuGI::Matrix4x4 finalMat;
+
 				finalMat.m11 = 1.0f - 2.0f * quat.y * quat.y - 2.0f * quat.z * quat.z;
 				finalMat.m12 = 2.0f * quat.x * quat.y + 2.0f * quat.z * quat.w;
 				finalMat.m13 = 2.0f * quat.x * quat.z - 2.0f * quat.y * quat.w;
@@ -141,28 +169,30 @@ namespace application
 				return finalMat;
 			}
 
-			yunuGI::Matrix4x4 GetRotationMatrix(const glm::quat& quat)
+			yunuGI::Matrix4x4 GetScaleMatrix(const yunuGI::Vector3& scale)
 			{
 				yunuGI::Matrix4x4 finalMat;
-				finalMat.m11 = 1.0f - 2.0f * quat.y * quat.y - 2.0f * quat.z * quat.z;
-				finalMat.m12 = 2.0f * quat.x * quat.y + 2.0f * + quat.z * quat.w;
-				finalMat.m13 = 2.0f * -quat.x * quat.z + 2.0f * quat.y * quat.w;
+
+				finalMat.m11 = scale.x;
+				finalMat.m12 = 0.0f;
+				finalMat.m13 = 0.0f;
 				finalMat.m14 = 0.0f;
 
-				finalMat.m21 = 2.0f * quat.x * quat.y - 2.0f * quat.z * quat.w;
-				finalMat.m22 = 1.0f - 2.0f * quat.x * quat.x - 2.0f * quat.z * quat.z;
-				finalMat.m23 = 2.0f * -quat.y * quat.z - 2.0f * quat.x * quat.w;
+				finalMat.m21 = 0.0f;
+				finalMat.m22 = scale.y;
+				finalMat.m23 = 0.0f;
 				finalMat.m24 = 0.0f;
 
-				finalMat.m31 = 2.0f * -quat.x * quat.z - 2.0f * quat.y * quat.w;
-				finalMat.m32 = 2.0f * -quat.y * quat.z + 2.0f * quat.x * quat.w;
-				finalMat.m33 = 1.0f - 2.0f * quat.x * quat.x - 2.0f * quat.y * quat.y;;
+				finalMat.m31 = 0.0f;
+				finalMat.m32 = 0.0f;
+				finalMat.m33 = scale.z;
 				finalMat.m34 = 0.0f;
 
 				finalMat.m41 = 0.0f;
 				finalMat.m42 = 0.0f;
 				finalMat.m43 = 0.0f;
 				finalMat.m44 = 1.0f;
+
 				return finalMat;
 			}
 

@@ -124,7 +124,36 @@ void application::contents::ContentsLayer::Initialize()
 	//camObj->GetTransform()->SetLocalRotation( Quaternion(Vector3d(60, 0, 0)));
 	//auto roamingCam = camObj->AddComponent<RTSCam>();
 	//roamingCam->SetCameraMain();
-#ifndef  EDITOR
+
+    const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+    //resourceManager->LoadFile("FBX/Monster1");
+    resourceManager->LoadFile("FBX/SM_Bush_001");
+    resourceManager->LoadFile("FBX/SM_Bush_002");
+    resourceManager->LoadFile("FBX/SM_CastleWall");
+    resourceManager->LoadFile("FBX/SM_CastleWall_Door");
+    resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
+    resourceManager->LoadFile("FBX/SM_Chair");
+    resourceManager->LoadFile("FBX/SM_Cuptower");
+    resourceManager->LoadFile("FBX/SM_Fork");
+    resourceManager->LoadFile("FBX/SM_GuideBook");
+    resourceManager->LoadFile("FBX/SM_Hat01");
+    resourceManager->LoadFile("FBX/SM_Hat02");
+    resourceManager->LoadFile("FBX/SM_SmallBush_001");
+    resourceManager->LoadFile("FBX/SM_Stone_001");
+    resourceManager->LoadFile("FBX/SM_Stone_002");
+    resourceManager->LoadFile("FBX/SM_Stump");
+    resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
+    resourceManager->LoadFile("FBX/SM_Temple_Books");
+    resourceManager->LoadFile("FBX/SM_Temple_Floor");
+    resourceManager->LoadFile("FBX/SM_Temple_Pillar");
+    resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
+    resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
+    resourceManager->LoadFile("FBX/SM_Temple_Stairs");
+    resourceManager->LoadFile("FBX/SM_Temple_Welcome");
+    resourceManager->LoadFile("FBX/SM_Trunk_001");
+    //resourceManager->LoadFile("FBX/Spear");
+
+#ifndef EDITOR
 #ifdef GRAPHICS_TEST
 	{
 		yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
@@ -138,6 +167,8 @@ void application::contents::ContentsLayer::Initialize()
 		//directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{0, 45, 0} };
 		//auto test = directionalLight->AddComponent<TestComponent2>();
 		//test->gameObject = directionalLight;
+
+		editor::MapFileManager::GetSingletonInstance().LoadStaticOrnaments("TestOrnaments.punreal");
 	}
 	GraphicsTest();
 #else
@@ -156,7 +187,6 @@ void application::contents::ContentsLayer::Initialize()
 #endif
 
 #endif // ! EDITOR
-
 	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 

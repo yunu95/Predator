@@ -85,6 +85,11 @@ namespace yunuGIAdapter
 			return this->materialVec[index].get();
 		};
 
+		virtual int GetMaterialCount() override
+		{
+			return this->materialVec.size();
+		};
+
 	private:
 		std::shared_ptr<StaticMesh> renderable;
 		std::vector<std::shared_ptr<MaterialWrapper>> materialVec;

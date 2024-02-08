@@ -8,6 +8,7 @@
 #include "PaletteManager.h"
 #include "Camera.h"
 #include "DebugMeshes.h"
+#include "EditorResourceManager.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -127,6 +128,7 @@ namespace application
 		void EditorLayer::LateInitialize()
 		{
 			palette::PaletteManager::GetSingletonInstance().Initialize();
+			ResourceManager::GetSingletonInstance().LateInitialize();
 
 			// 카메라 초기화
 			editorCamera.Initialize(yunutyEngine::graphics::Camera::GetMainCamera());
@@ -197,6 +199,10 @@ namespace application
 			ImGui::BeginMenuBar();
 			if (ImGui::BeginMenu("File"))
 			{
+				if (ImGui::MenuItem("LoadUnrealData"))
+				{
+					cm.AddQueue(std::make_shared<LoadStaticOrnamentsCommand>());
+				}
 				if (ImGui::MenuItem("LoadMap"))
 				{
 					cm.AddQueue(std::make_shared<LoadMapCommand>());
