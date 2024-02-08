@@ -547,15 +547,6 @@ namespace application
 				ImGui::BeginMenu(" | Place Mode", false);
 			}
 
-			if (pm->GetCurrentPalette()->IsSelectMode())
-			{
-				ImGui::BeginMenu("Select Mode", false);
-			}
-			else
-			{
-				ImGui::BeginMenu("Place Mode", false);
-			}
-
 			ImGui::EndMenuBar();
 		}
 
