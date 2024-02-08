@@ -95,6 +95,11 @@ namespace yunuGIAdapter
 			return this->materialVec[index]->GetVariation();
 		};
 
+		virtual int GetMaterialCount() override
+		{
+			return this->materialVec.size();
+		};
+
 	private:
 		std::shared_ptr<SkinnedMesh> renderable;
 		std::vector<std::shared_ptr<MaterialWrapper>> materialVec;

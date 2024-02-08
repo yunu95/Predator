@@ -19,7 +19,6 @@ namespace application
                 void SelectUnitTemplateData(Unit_TemplateData*);
                 void UnselectUnitTemplateData();
 
-            protected:
                 virtual void Reset() override;
                 virtual UnitData* PlaceInstance(Vector3d worldPosition) override;
                 virtual void OnMouseMove(Vector3d projectedWorldPos, Vector2d normalizedScreenPos) override;

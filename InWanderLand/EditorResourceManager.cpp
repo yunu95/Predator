@@ -59,6 +59,12 @@ namespace application
             LoadTextureFromFile("ImageButtons/Ornament_AddButton.png");
         }
 
+        void ResourceManager::LateInitialize()
+        {
+            LoadFbxList();
+            LoadShaderList();
+        }
+
         Texture2D* ResourceManager::GetTexture2D(std::string filename)
         {
             if (textureMap.find(filename) != textureMap.end())
@@ -120,6 +126,16 @@ namespace application
             return true;
         }
 
+        yunuGI::IShader* ResourceManager::GetShader(std::string shaderName)
+        {
+            if (shaderMap.find(shaderName) == shaderMap.end())
+            {
+                return nullptr;
+            }
+
+            return shaderMap[shaderName];
+        }
+
         void ResourceManager::LoadFbxList()
         {
             auto fbxList = graphics::Renderer::SingleInstance().GetResourceManager()->GetFBXList();
@@ -130,8 +146,18 @@ namespace application
             {
                 fbxSname = std::string(each.begin(), each.end());
                 auto td = tdm.CreateTemplateData<Ornament_TemplateData>(fbxSname);
-                td->pod.fbxName = fbxSname;
+                td->SetDataResourceName(fbxSname);
                 fbxSet.insert(fbxSname);
+            }
+        }
+
+        void ResourceManager::LoadShaderList()
+        {
+            auto& shaderList = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetShaderList();
+
+            for (auto each : shaderList)
+            {
+                shaderMap[std::string(each->GetName().begin(), each->GetName().end())] = each;
             }
         }
     }

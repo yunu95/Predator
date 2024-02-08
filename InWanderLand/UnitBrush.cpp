@@ -30,8 +30,23 @@ namespace application
                 }
 
                 auto brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(data->pod.fbxName);
+                brushObj->SetParent(GetGameObject());
 
-                brushList[data] = 
+                for (auto each : brushObj->GetChildren())
+                {
+                    auto comp = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+
+                    if (comp)
+                    {
+                        for (int i = 0; i < comp->GetGI().GetMaterialCount(); ++i)
+                        {
+                            comp->GetGI().GetMaterial(i)->SetPixelShader(erm.GetShader("Debug_AlphaPS.cso"));
+                            comp->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{1,1,1,0.2});
+                        }
+                    }
+                }
+
+                brushList[data] = brushObj;
 
                 return true;
             }

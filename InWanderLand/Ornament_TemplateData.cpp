@@ -12,6 +12,12 @@ namespace application
 			return TemplateDataManager::GetSingletonInstance().GetDataKey(this);
 		}
 
+		void Ornament_TemplateData::SetDataResourceName(std::string fbxName)
+		{
+			pod.fbxName = fbxName;
+			//palette::UnitBrush::Instance().CreateBrushFBX(this);
+		}
+
 		std::string Ornament_TemplateData::GetDataResourceName() const
 		{
 			return pod.fbxName;

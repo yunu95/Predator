@@ -16,7 +16,7 @@ namespace application
 		void Unit_TemplateData::SetDataResourceName(std::string fbxName)
 		{
 			pod.fbxName = fbxName;
-			//palette::UnitBrush::Instance().CreateBrushFBX();
+			palette::UnitBrush::Instance().CreateBrushFBX(this);
 		}
 
 		std::string Unit_TemplateData::GetDataResourceName() const

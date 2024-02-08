@@ -128,7 +128,7 @@ namespace application
 		void EditorLayer::LateInitialize()
 		{
 			palette::PaletteManager::GetSingletonInstance().Initialize();
-			ResourceManager::GetSingletonInstance().LoadFbxList();
+			ResourceManager::GetSingletonInstance().LateInitialize();
 
 			// 카메라 초기화
 			editorCamera.Initialize(yunutyEngine::graphics::Camera::GetMainCamera());

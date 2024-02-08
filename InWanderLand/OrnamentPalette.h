@@ -18,7 +18,6 @@ namespace application
                 void SelectOrnamentTemplateData(Ornament_TemplateData*);
                 void UnselectOrnamentTemplateData();
 
-            protected:
                 virtual void Reset() override;
                 virtual IEditableData* PlaceInstance(Vector3d worldPosition) override;
                 virtual bool ShouldSelect(IEditableData* instance) override;

@@ -29,6 +29,7 @@ namespace application
 
         public:
             virtual std::string GetDataKey() const override;
+            virtual void SetDataResourceName(std::string fbxName) {};
             virtual std::string GetDataResourceName() const override { return std::string(); };
 
             POD_Region_TemplateData pod;

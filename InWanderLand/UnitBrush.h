@@ -7,6 +7,7 @@
 
 #include "Unit_TemplateData.h"
 #include "PaletteManager.h"
+#include "EditorResourceManager.h"
 
 namespace application
 {
@@ -25,6 +26,7 @@ namespace application
 
             private:
                 PaletteManager& pm = PaletteManager::GetSingletonInstance();
+                ResourceManager& erm = ResourceManager::GetSingletonInstance();
 
                 // Save / Load 혹은 Create / Delete 시에 리스트를 변경하는 것이 맞으나,
                 // 진행 과정에서 삭제되는 경우에는 어차피 접근하지 못할 것으로 보고
