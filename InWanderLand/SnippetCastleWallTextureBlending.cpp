@@ -27,9 +27,30 @@ void SnippetCastleWallTextureBlendingInit()
 
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
+	auto& shaderList = _resourceManager->GetShaderList();
+
+	yunuGI::IShader* shader;
+
+	for (auto& i : shaderList)
+	{
+		if (i->GetName() == L"Debug_AlphaPS.cso")
+		{
+			shader = i;
+		}
+	}
+
 	_resourceManager->LoadFile("FBX/SM_CastleWall");
 	{
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CastleWall");
+		auto& childVec = obj->GetChildren();
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(0)->SetPixelShader(shader);
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(0)->SetColor(yunuGI::Color{ 1,0,0,0.2 });
+
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(1)->SetPixelShader(shader);
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(1)->SetColor(yunuGI::Color{ 1,0,0,0.2 });
+
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(2)->SetPixelShader(shader);
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(2)->SetColor(yunuGI::Color{ 1,0,0,0.2 });
 	}
 
 

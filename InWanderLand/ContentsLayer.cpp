@@ -32,35 +32,32 @@ void GraphicsTest()
 
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
+	yunuGI::IShader* shader;
+	auto& shaderList = _resourceManager->GetShaderList();
+	for (auto& i : shaderList)
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->SetLocalPosition(Vector3d{ 700,500 ,1 });
-		obj->GetTransform()->SetLocalScale(Vector3d{ 700,500 ,1 });
-		auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
-		text->GetGI().SetText(L"Test");
-		//text->GetGI().SetColor(yunuGI::Color{ 1,0,0,1 });
-	}
-
-	{
-		auto& list = _resourceManager->GetShaderList();
-		auto obj = Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->SetLocalScale(Vector3d{ 3.44390607,6.29091072,1.59031582 });
-		auto text = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		text->GetGI().SetMesh(_resourceManager->GetMesh(L"Cube"));
-		for (auto& i : list)
+		if (i->GetName() == L"Debug_AlphaPS.cso")
 		{
-			if (i->GetName() == L"DebugPS.cso")
-			{
-				text->GetGI().GetMaterial()->SetPixelShader(i);
-			}
+			shader = i;
 		}
-		//text->GetGI().SetColor(yunuGI::Color{ 1,0,0,1 });
 	}
 
-	_resourceManager->LoadFile("FBX/SM_Trunk_001");
+	_resourceManager->LoadFile("FBX/SM_CastleWall");
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Trunk_001");
-		//obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CastleWall");
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,10 });
+	}
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CastleWall");
+		auto& childVec = obj->GetChildren();
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(0)->SetPixelShader(shader);
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(0)->SetColor(yunuGI::Color{ 0,1,1,0.2 });
+	
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(1)->SetPixelShader(shader);
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(1)->SetColor(yunuGI::Color{ 0,1,1,0.2 });
+	
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(2)->SetPixelShader(shader);
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(2)->SetColor(yunuGI::Color{ 0,1,1,0.2 });
 	}
 }
 
@@ -131,10 +128,12 @@ void application::contents::ContentsLayer::Initialize()
 		//yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 		yunutyEngine::Collider2D::SetIsOnXYPlane(false);
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{0,180,0} });
 		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-		auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
-		light->GetGI().SetLightDiffuseColor(color);
-		directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
+		//auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
+		//auto color = yunuGI::Color{ 1,0,0,1.f };
+		//light->GetGI().SetLightDiffuseColor(color);
+		//directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
 		//directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{0, 45, 0} };
 		//auto test = directionalLight->AddComponent<TestComponent2>();
 		//test->gameObject = directionalLight;

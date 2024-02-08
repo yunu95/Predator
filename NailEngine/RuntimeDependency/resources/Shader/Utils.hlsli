@@ -120,11 +120,11 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
     ambient = float4(0.f, 0.f, 0.f, 0.f);
     specular = float4(0.f, 0.f, 0.f, 0.f);
     
-    // 빛이 표면에서 나가는 방향
+    // 뷰 디렉션
     float3 Lo = normalize(pos);
-    Lo = -Lo;
+    //Lo = -Lo;
     
-    // 빛과 노말의 각
+    // 뷰와 노말의 각
     float cosLo = max(0.0, dot(normal, Lo));
     
     // 반사 벡터
@@ -156,11 +156,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         
         float3 directionalLighting = 0;
         
-        ///
-        
-        ///
-        
-        directionalLighting += (diffuseBRDF + specularBRDF) * Lradiance * cosLi;
+        directionalLighting += (diffuseBRDF  + specularBRDF) * (Lradiance * cosLi);
         
         float3 ambientLighting = float3(0, 0, 0);
         {
