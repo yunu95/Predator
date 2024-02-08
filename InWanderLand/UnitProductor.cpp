@@ -1,13 +1,13 @@
 #include "InWanderLand.h"
-#include "UnitProductionOrder.h"
+#include "UnitProductor.h"
 #include "RangeSystem.h"
 #include "PlayerController.h"
 #include "Dotween.h"
 #include "DebugMeshes.h"
 
-GameObject* UnitProductionOrder::CreateUnitWithOrder()
+void UnitProductor::SetCommonComponents()
 {
-	m_unitGameObject->GetTransform()->SetWorldPosition(m_startPosition);
+	//m_unitGameObject->GetTransform()->SetWorldPosition(m_startPosition);
 
 	/// 2. RangeSystem Gameobject 및 Component 추가
 	auto unitRangeSystemObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -68,11 +68,9 @@ GameObject* UnitProductionOrder::CreateUnitWithOrder()
 	/// + 플레이어 유닛일 경우 특수 처리
 	if (m_unitSide == Unit::UnitSide::Player)
 		SetPlayerRelatedComponents(m_unitComponent);
-
-	return m_unitGameObject;
 }
 
-void UnitProductionOrder::SetPlayerRelatedComponents(Unit* playerUnit)
+void UnitProductor::SetPlayerRelatedComponents(Unit* playerUnit)
 {
 	playerUnit->SetPlayerSerialNumber(m_unitType);
 	PlayerController::GetInstance()->AddPlayerUnit(playerUnit);

@@ -1037,10 +1037,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="DotweenTimerPool.h" />
     <ClInclude Include="Easing.h" />
     <ClInclude Include="FSM.h" />
-    <ClInclude Include="HealerProduction.h" />
+    <ClInclude Include="HealerProductor.h" />
     <ClInclude Include="InputManager.h" />
-    <ClInclude Include="MagicianProduction.h" />
-    <ClInclude Include="MeleeEnemyProduction.h" />
+    <ClInclude Include="MagicianProductor.h" />
+    <ClInclude Include="MeleeEnemyProductor.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="AutoAttackProjectile.h" />
     <ClInclude Include="RangeSystem.h" />
@@ -1122,8 +1122,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UUIDManager.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="UnitFactory.h" />
-    <ClInclude Include="UnitProductionOrder.h" />
-    <ClInclude Include="WarriorProduction.h" />
+    <ClInclude Include="UnitProductor.h" />
+    <ClInclude Include="WarriorProductor.h" />
     <ClInclude Include="UnitBrush.h" />
     <ClInclude Include="UnitEditorInstance.h" />
     <ClInclude Include="UnitPalette.h" />
@@ -1193,10 +1193,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Easing.cpp" />
     <ClCompile Include="EditorLayer.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
-    <ClCompile Include="HealerProduction.cpp" />
+    <ClCompile Include="HealerProductor.cpp" />
     <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="MagicianProduction.cpp" />
-    <ClCompile Include="MeleeEnemyProduction.cpp" />
+    <ClCompile Include="MagicianProductor.cpp" />
+    <ClCompile Include="MeleeEnemyProductor.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="AutoAttackProjectile.cpp" />
     <ClCompile Include="RangeSystem.cpp" />
@@ -1258,8 +1258,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="TestUnitAnimation.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="UnitFactory.cpp" />
-    <ClCompile Include="UnitProductionOrder.cpp" />
-    <ClCompile Include="WarriorProduction.cpp" />
+    <ClCompile Include="UnitProductor.cpp" />
+    <ClCompile Include="WarriorProductor.cpp" />
     <ClCompile Include="PlayerSkillSystem.cpp" />
     <ClCompile Include="WarriorSkillSystem.cpp" />
   </ItemGroup>

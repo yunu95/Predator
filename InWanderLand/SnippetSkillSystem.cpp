@@ -15,12 +15,13 @@
 #include "UnitFactory.h"
 #include "InputManager.h"
 #include "StatusTimerPool.h"
-#include "WarriorProduction.h"
-#include "HealerProduction.h"
-#include "MagicianProduction.h"
-#include "MeleeEnemyProduction.h"
-#include "UnitProductionOrder.h"
+#include "WarriorProductor.h"
+#include "HealerProductor.h"
+#include "MagicianProductor.h"
+#include "MeleeEnemyProductor.h"
+#include "UnitProductor.h"
 #include "TacticModeSystem.h"
+#include "SingleNavigationField.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -101,55 +102,17 @@ void SnippetSkillSystemInit()
 	//CreateNavigationPlanes({ -1000,0,-1000 }, { 1000,0,1000 }, worldVertices, worldFaces);
 	auto fieldObject = Scene::getCurrentScene()->AddGameObject();
 
-	auto navField = fieldObject->AddComponent<yunutyEngine::NavigationField>();
-	navField->BuildField(worldVertices, worldFaces);
+	SingleNavigationField::Instance().BuildField(worldVertices, worldFaces);
 
 	/// PlayerController SetUp
 	PlayerController::GetInstance()->SetMovingSystemComponent(rtsCam);
 	TacticModeSystem::SingleInstance().SetMovingSystemComponent(rtsCam);
 
-	/// UnitFactory
-
-	/// StatusManager 
-
-	/// FBX File Load
-	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-	//rsrcManager->LoadFile("FBX/Player");
-	rsrcManager->LoadFile("FBX/Boss");
-
-	/// Player1 : Warrior Unit Production
-	//unique_ptr<WarriorProduction> warriorProductor = make_unique<WarriorProduction>();
-	auto warriorProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<WarriorProduction>();
-	warriorProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(-7.0f, 0.0f, 0.0f));
-	auto player1GameObject = warriorProductor->CreateUnitWithOrder();
-	auto player1SkinnedMeshRenderer = player1GameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
-	auto player1Material = player1SkinnedMeshRenderer->GetGI().GetMaterial();
-	auto clonedMaterial1 = rsrcManager->CloneMaterial(L"Red", player1Material);
-	clonedMaterial1->SetColor(yunuGI::Color::red());
-	player1SkinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial1);
-
-	auto magicianProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MagicianProduction>();
-	magicianProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(-7.0f, 0.0f, 7.0f));
-	auto player2GameObject = magicianProductor->CreateUnitWithOrder();
-	auto player2SkinnedMeshRenderer = player2GameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
-	auto player2Material = player2SkinnedMeshRenderer->GetGI().GetMaterial();
-	auto clonedMaterial2 = rsrcManager->CloneMaterial(L"Blue", player2Material);
-	clonedMaterial2->SetColor(yunuGI::Color::blue());
-	player2SkinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial2);
-
-	auto healerProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<HealerProduction>();
-	healerProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(-7.0f, 0.0f, -7.0f));
-	auto player3GameObject = healerProductor->CreateUnitWithOrder();
-	auto player3SkinnedMeshRenderer = player3GameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
-	auto player3Material = player3SkinnedMeshRenderer->GetGI().GetMaterial();
-	auto clonedMaterial3 = rsrcManager->CloneMaterial(L"Green", player3Material);
-	clonedMaterial3->SetColor(yunuGI::Color::green());
-	player3SkinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial3);
-
-	////unique_ptr<MeleeEnemyProduction> meleeEnemyProductor1 = make_unique<MeleeEnemyProduction>();
-	auto meleeEnemyProductor1 = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MeleeEnemyProduction>();
-	meleeEnemyProductor1->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(7.0f, 0.0f, 7.0f));
-	auto enemy1GameObject = meleeEnemyProductor1->CreateUnitWithOrder();
+	WarriorProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 0.0f));;
+	MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f));;
+	HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f));
+	MeleeEnemyProductor::Instance().CreateUnit(Vector3d(7.0f, 0.0f, 7.0f));
+	MeleeEnemyProductor::Instance().CreateUnit(Vector3d(7.0f, 0.0f, -7.0f));
 
 	/// UItext Test
 	//auto enemy1TextObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -158,13 +121,6 @@ void SnippetSkillSystemInit()
 	//enemy1TextObj->GetTransform()->SetLocalScale(Vector3d(1000, 1000, 0));
 	//enemy1UITextCom->GetGI().SetFontSize(76);
 	//enemy1UITextCom->GetGI().SetText(L"Test");
-
-
-
-	auto meleeEnemyProductor2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MeleeEnemyProduction>();
-	meleeEnemyProductor2->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), navField, Vector3d(7.0f, 0.0f, -7.0f));
-	auto enemy2GameObject = meleeEnemyProductor2->CreateUnitWithOrder();
-
 	{
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();

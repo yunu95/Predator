@@ -465,16 +465,16 @@
     <ClInclude Include="Unit.h">
       <Filter>Contents\Units</Filter>
     </ClInclude>
-    <ClInclude Include="WarriorProduction.h">
+    <ClInclude Include="WarriorProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClInclude>
-    <ClInclude Include="UnitProductionOrder.h">
+    <ClInclude Include="UnitProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClInclude>
-    <ClInclude Include="MagicianProduction.h">
+    <ClInclude Include="MagicianProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClInclude>
-    <ClInclude Include="HealerProduction.h">
+    <ClInclude Include="HealerProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClInclude>
     <ClInclude Include="UnitFactory.h">
@@ -495,7 +495,7 @@
     <ClInclude Include="Easing.h">
       <Filter>Contents\Dotween</Filter>
     </ClInclude>
-    <ClInclude Include="MeleeEnemyProduction.h">
+    <ClInclude Include="MeleeEnemyProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClInclude>
     <ClInclude Include="PlayerController.h">
@@ -850,16 +850,16 @@
     <ClCompile Include="Unit.cpp">
       <Filter>Contents\Units</Filter>
     </ClCompile>
-    <ClCompile Include="UnitProductionOrder.cpp">
+    <ClCompile Include="UnitProductor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClCompile>
-    <ClCompile Include="WarriorProduction.cpp">
+    <ClCompile Include="WarriorProductor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClCompile>
-    <ClCompile Include="MagicianProduction.cpp">
+    <ClCompile Include="MagicianProductor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClCompile>
-    <ClCompile Include="HealerProduction.cpp">
+    <ClCompile Include="HealerProductor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClCompile>
     <ClCompile Include="UnitFactory.cpp">
@@ -883,7 +883,7 @@
     <ClCompile Include="TestCaseGroupControl.cpp">
       <Filter>TestCodes</Filter>
     </ClCompile>
-    <ClCompile Include="MeleeEnemyProduction.cpp">
+    <ClCompile Include="MeleeEnemyProductor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClCompile>
     <ClCompile Include="PlayerController.cpp">

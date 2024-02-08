@@ -1,5 +1,5 @@
 #include "InWanderLand.h"
-#include "MagicianProduction.h"
+#include "MagicianProductor.h"
 #include "RangedAttackSystem.h"
 #include "MagicianSkillSystem.h"
 #include "ParalysisFieldComponent.h"
@@ -7,9 +7,8 @@
 #include "DebugMeshes.h"
 #include "SingleNavigationField.h"
 
-void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition)
+void MagicianProductor::SetUnitData()
 {
-#pragma region Unit Status Member Setting
 	m_objectName = "Magician";
 	m_unitType = Unit::UnitType::Magician;
 	m_unitSide = Unit::UnitSide::Player;
@@ -31,12 +30,20 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 
 	m_attackDelay = 5.0f;
 
-	m_navField = navField;
-	m_startPosition = startPosition;
-#pragma endregion
+	m_navField = &SingleNavigationField::Instance();
+}
 
+void MagicianProductor::SingletonInitializer()
+{
+	graphics::Renderer::SingleInstance().GetResourceManager()->LoadFile("FBX/Boss");
+	SetUnitData();
+}
+yunutyEngine::GameObject* MagicianProductor::CreateUnit(Vector3d startPos)
+{
 #pragma region Animation Related Member Setting
-	m_unitGameObject = fbxObject;
+	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
+
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
 	auto& animList = rsrcManager->GetAnimationList();
@@ -137,8 +144,7 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 	WSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_WSkillFieldRadius , m_WSkillFieldRadius , m_WSkillFieldRadius });
 #pragma endregion
 
-#pragma endregion
-
+#pragma region SkillSystem Setting
 	auto magicianSkillSystem = m_unitGameObject->AddComponent<MagicianSkillSystem>();
 
 	magicianSkillSystem->SetQSkillCollider(QSkillProjectileCollider, QSkillFieldCollider);
@@ -148,22 +154,15 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 	magicianSkillSystem->SetWSkillCollider(WSkillProjectileCollider, WSkillFieldCollider);
 	magicianSkillSystem->SetWSkillDebugPair({ WSkillProjectileDebugObject, m_WSkillProjectileRadius }, { WSkillFieldDebugObject, m_WSkillFieldRadius });
 	magicianSkillSystem->SetWSkillObject(WSkillProjectileObject, WSkillFieldObject);
+#pragma endregion
 
-}
+	UnitProductor::SetCommonComponents();
 
-void MagicianProduction::SingletonInitializer()
-{
-	graphics::Renderer::SingleInstance().GetResourceManager()->LoadFile("FBX/Boss");
-	auto magicianProductor = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<MagicianProduction>();
-	magicianProductor->SetUnitData(yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss"), &SingleNavigationField::Instance(), Vector3d(-7.0f, 0.0f, 7.0f));
-}
-yunutyEngine::GameObject* MagicianProduction::CreateUnitWithOrder()
-{
-	auto unitGameObject = UnitProductionOrder::CreateUnitWithOrder();
-	auto skinnedMeshRenderer = unitGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
+	auto skinnedMeshRenderer = m_unitGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
 	auto material = skinnedMeshRenderer->GetGI().GetMaterial();
 	auto clonedMaterial = graphics::Renderer::SingleInstance().GetResourceManager()->CloneMaterial(L"Red", material);
 	clonedMaterial->SetColor(yunuGI::Color::red());
 	skinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial);
-	return unitGameObject;
+
+	return m_unitGameObject;
 }
