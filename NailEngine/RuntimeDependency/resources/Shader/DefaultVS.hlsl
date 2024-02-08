@@ -22,6 +22,7 @@ struct VertexOut
     float3 normalV : NORMAL;
     float3 tangentV : TANGENT;
     float3 biNormalV : BINORMAL;
+    uint instanceID : INSTID;
 };
 
 VertexOut main(VertexIn input)
@@ -39,6 +40,6 @@ VertexOut main(VertexIn input)
     output.normalV = normalize(mul(float4(input.normal, 0.f), WV));
     output.tangentV = normalize(mul(float4(input.tangent, 0.f), WV));
     output.biNormalV = normalize(cross(output.tangentV, output.normalV));
-    
+    output.instanceID = input.instanceID;
     return output;
 }

@@ -53,6 +53,7 @@ private:
 private:
 	std::map<InstanceID/*instanceId*/, std::shared_ptr<InstanceBuffer>> _buffers;
 	std::shared_ptr<InstanceTransitionDesc> instanceTransitionDesc;
+	std::shared_ptr<StaticObjIDBuffer> instanceStaticObjDesc;
 
 
 };

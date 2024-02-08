@@ -24,6 +24,7 @@ struct VertexOut
     float3 normalV : NORMAL;
     float3 tangentV : TANGENT;
     float3 biNormalV : BINORMAL;
+    uint instanceID : INSTID;
 };
 
 row_major matrix GetAnimationMatrix(VertexIn input)
@@ -117,6 +118,6 @@ VertexOut main(VertexIn input)
     output.tangentV = normalize(mul(float4(output.tangentV, 0.f), _WV));
     
     output.biNormalV = normalize(cross(output.tangentV, output.normalV));
-    
+    output.instanceID = input.instanceID;
     return output;
 }

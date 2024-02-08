@@ -18,6 +18,7 @@ LazyObjects<InstancingManager> InstancingManager::Instance;
 void InstancingManager::Init()
 {
 	instanceTransitionDesc = std::make_shared<InstanceTransitionDesc>();
+	instanceStaticObjDesc = std::make_shared<StaticObjIDBuffer>();
 }
 
 void InstancingManager::RenderStaticDeferred()
@@ -65,9 +66,13 @@ void InstancingManager::RenderStaticDeferred()
 		//else
 		{
 			//for (int i = 0; i < renderInfoVec.size(); ++i)
+			unsigned int index = 0;
 			for (auto& i : renderInfoVec)
 			{
-				if (i->isActive == false) continue;
+				if (i->isActive == false)
+				{
+					continue;
+				}
 
 				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
 				auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
@@ -81,14 +86,21 @@ void InstancingManager::RenderStaticDeferred()
 				InstancingData data;
 				data.wtm = renderInfo->wtm;
 				AddData(instanceID, data);
+				//this->instanceStaticObjDesc->idColor[index++] = ;
 			}
+
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::INST_COLOR_ID))->PushGraphicsData(this->instanceStaticObjDesc.get(),
+				sizeof(StaticObjIDBuffer), static_cast<int>(CB_TYPE::INST_COLOR_ID));
 
 			if (renderInfoVec.size() != 0)
 			{
 				auto& buffer = _buffers[instanceID];
-				(*renderInfoVec.begin())->material->PushGraphicsData();
-				buffer->PushData();
-				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, buffer);
+				if (buffer->GetCount() > 0)
+				{
+					(*renderInfoVec.begin())->material->PushGraphicsData();
+					buffer->PushData();
+					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, buffer);
+				}
 			}
 		}
 	}
@@ -140,9 +152,13 @@ void InstancingManager::RenderStaticForward()
 		//else
 		{
 			//for (int i = 0; i < renderInfoVec.size(); ++i)
+			unsigned int index = 0;
 			for (auto& i : renderInfoVec)
 			{
-				if (i->isActive == false) continue;
+				if (i->isActive == false)
+				{
+					continue;
+				}
 
 				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
 				auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
@@ -156,15 +172,22 @@ void InstancingManager::RenderStaticForward()
 				InstancingData data;
 				data.wtm = renderInfo->wtm;
 				AddData(instanceID, data);
+				//this->instanceStaticObjDesc->idColor[index++] = ;
 			}
+
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::INST_COLOR_ID))->PushGraphicsData(this->instanceStaticObjDesc.get(),
+				sizeof(StaticObjIDBuffer), static_cast<int>(CB_TYPE::INST_COLOR_ID));
 
 			if (renderInfoVec.size() != 0)
 			{
 				auto& buffer = _buffers[instanceID];
-				(*renderInfoVec.begin())->material->PushGraphicsData();
-				auto test = (*renderInfoVec.begin())->mesh->GetMaterialCount();
-				buffer->PushData();
-				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, buffer);
+				if (buffer->GetCount() > 0)
+				{
+					(*renderInfoVec.begin())->material->PushGraphicsData();
+					auto test = (*renderInfoVec.begin())->mesh->GetMaterialCount();
+					buffer->PushData();
+					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, buffer);
+				}
 			}
 		}
 	}
@@ -325,7 +348,10 @@ void InstancingManager::RenderSkinned()
 			int descIndex = 0;
 			for (auto& i : renderInfoVec)
 			{
-				if (i->renderInfo.isActive == false) continue;
+				if (i->renderInfo.isActive == false)
+				{
+					continue;
+				}
 
 				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
 				auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->renderInfo.materialIndex);
@@ -351,9 +377,12 @@ void InstancingManager::RenderSkinned()
 			if (renderInfoVec.size() != 0)
 			{
 				auto& buffer = _buffers[instanceID];
-				(*renderInfoVec.begin())->renderInfo.material->PushGraphicsData();
-				buffer->PushData();
-				(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, buffer);
+				if (buffer->GetCount() > 0)
+				{
+					(*renderInfoVec.begin())->renderInfo.material->PushGraphicsData();
+					buffer->PushData();
+					(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, buffer);
+				}
 			}
 		}
 	}

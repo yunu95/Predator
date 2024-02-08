@@ -10,6 +10,7 @@ struct PixelIn
     float3 normalV : NORMAL;
     float3 tangentV : TANGENT;
     float3 biNormalV : BINORMAL;
+    uint instanceID : INSTID;
 };
 
 struct PS_OUT

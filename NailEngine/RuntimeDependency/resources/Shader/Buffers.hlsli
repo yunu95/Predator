@@ -4,6 +4,7 @@
 #define MAX_BONE_COUNT 250
 #define MAX_FRAME_COUNT 500
 #define MAX_INSTANCE_MODEL 500
+#define MAX_STATIC_INSTANCE_MODEL 1024
 
 cbuffer MatrixBuffer : register(b0)
 {
@@ -114,6 +115,11 @@ cbuffer FogBuffer : register(b6)
     float fogStart;
     float fogEnd;
     float2 padding2;
+}
+
+cbuffer StaticObjID : register(b7)
+{
+    float4 idColor[MAX_STATIC_INSTANCE_MODEL];
 }
 
 Texture2D AlbedoMap : register(t0);

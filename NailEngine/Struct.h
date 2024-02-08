@@ -14,6 +14,7 @@ using namespace DirectX::PackedVector;
 #define MAX_BONE_COUNT 250
 #define MAX_FRAME_COUNT 500
 #define MAX_INSTANCE_MODEL 500
+#define MAX_STATIC_INSTANCE_MODEL 1024
 
 struct Vertex
 {
@@ -64,6 +65,7 @@ enum class CB_TYPE
 	BONE,
 	INST_TRANSITION,
 	FOG,
+	INST_COLOR_ID
 };
 
 struct MatrixBuffer
@@ -137,6 +139,11 @@ struct TransitionDesc
 struct InstanceTransitionDesc
 {
 	TransitionDesc transitionDesc[MAX_INSTANCE_MODEL];
+};
+
+struct StaticObjIDBuffer
+{
+	DirectX::SimpleMath::Vector4 idColor[MAX_STATIC_INSTANCE_MODEL];
 };
 
 struct FogBuffer
