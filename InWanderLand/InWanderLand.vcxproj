@@ -1008,7 +1008,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="DebugGraphic.h" />
     <ClInclude Include="DebugStaticMesh.h" />
     <ClInclude Include="InGame.h" />
-    <ClInclude Include="PaletteManagerList.h" />
     <ClInclude Include="EditorMath.h" />
     <ClInclude Include="imgui_Utility.h" />
     <ClInclude Include="PaletteList.h" />
@@ -1151,6 +1150,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="HealerSkillSystem.cpp" />
     <ClCompile Include="IEditableData.cpp" />
     <ClCompile Include="LoadStaticOrnamentsCommnad.cpp" />
+    <ClCompile Include="OrnamentBrush.cpp" />
     <ClCompile Include="OrnamentPalette.cpp" />
     <ClCompile Include="EditorMath.cpp" />
     <ClCompile Include="imgui.cpp" />
@@ -1175,6 +1175,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="SnippetArtResource.cpp" />
     <ClCompile Include="RegionData.cpp" />
     <ClCompile Include="Region_TemplateData.cpp" />
+    <ClCompile Include="SnippetCastleWallTextureBlending.cpp" />
     <ClCompile Include="SnippetDebugMeshScaleCheck.cpp" />
     <ClCompile Include="SnippetFloatingDebugSphere.cpp" />
     <ClCompile Include="RegionPalette.cpp" />

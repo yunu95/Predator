@@ -2,6 +2,7 @@
 #include "Ornament_TemplateData.h"
 
 #include "TemplateDataManager.h"
+#include "OrnamentBrush.h"
 
 namespace application
 {
@@ -15,7 +16,7 @@ namespace application
 		void Ornament_TemplateData::SetDataResourceName(std::string fbxName)
 		{
 			pod.fbxName = fbxName;
-			//palette::UnitBrush::Instance().CreateBrushFBX(this);
+			palette::OrnamentBrush::Instance().CreateBrushFBX(this);
 		}
 
 		std::string Ornament_TemplateData::GetDataResourceName() const

@@ -5,6 +5,7 @@
 #include "Ornament_TemplateData.h"
 #include "OrnamentData.h"
 #include "TemplateDataManager.h"
+#include "OrnamentBrush.h"
 
 namespace application
 {
@@ -15,6 +16,7 @@ namespace application
             void OrnamentPalette::SelectOrnamentTemplateData(Ornament_TemplateData* templateData)
             {
                 selectedOrnamentTemplateData = templateData;
+                OrnamentBrush::Instance().ReadyBrush(selectedOrnamentTemplateData);
             }
 
             void OrnamentPalette::UnselectOrnamentTemplateData()
@@ -36,6 +38,29 @@ namespace application
 
                 instance->ApplyAsPaletteInstance();
                 return instance;
+            }
+
+            void OrnamentPalette::OnMouseMove(Vector3d projectedWorldPos, Vector2d normalizedScreenPos)
+            {
+                Palette::OnMouseMove(projectedWorldPos, normalizedScreenPos);
+                // 브러시 움직이기
+                OrnamentBrush::Instance().GetTransform()->SetWorldPosition(projectedWorldPos);
+                if (IsClickingLeft() && !IsSelectMode())
+                    PlaceInstance(projectedWorldPos);
+            }
+
+            void OrnamentPalette::SetAsSelectMode(bool isSelectMode)
+            {
+                Palette::SetAsSelectMode(isSelectMode);
+
+                if (isSelectMode)
+                {
+                    OrnamentBrush::Instance().ReadyBrush(nullptr);
+                }
+                else
+                {
+                    OrnamentBrush::Instance().ReadyBrush(selectedOrnamentTemplateData);
+                }
             }
 
             bool OrnamentPalette::ShouldSelect(IEditableData* instance)

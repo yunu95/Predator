@@ -18,6 +18,10 @@ namespace application
                     return;
                 }
 
+                if (currentBrush != nullptr)
+                {
+                    brushList[currentBrush]->SetSelfActive(false);
+                }
                 brushList[data]->SetSelfActive(true);
                 currentBrush = data;
             }
@@ -41,10 +45,12 @@ namespace application
                         for (int i = 0; i < comp->GetGI().GetMaterialCount(); ++i)
                         {
                             comp->GetGI().GetMaterial(i)->SetPixelShader(erm.GetShader("Debug_AlphaPS.cso"));
-                            comp->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{1,1,1,0.2});
+                            comp->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{1,1,1,0});
                         }
                     }
                 }
+
+                brushObj->SetSelfActive(false);
 
                 brushList[data] = brushObj;
 

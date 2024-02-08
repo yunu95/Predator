@@ -703,7 +703,6 @@
     <ClInclude Include="EditorMath.h">
       <Filter>Editor\Math</Filter>
     </ClInclude>
-    <ClInclude Include="PaletteManagerList.h" />
     <ClInclude Include="PassiveCake.h">
       <Filter>Contents\ProjectileComponents\Supporter\Passive</Filter>
     </ClInclude>
@@ -1152,6 +1151,12 @@
     </ClCompile>
     <ClCompile Include="UnitBrush.cpp">
       <Filter>Editor\Palette\PaletteBrush\UnitBrush</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetCastleWallTextureBlending.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="OrnamentBrush.cpp">
+      <Filter>Editor\Palette\PaletteBrush\OrnamentBrush</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -61,8 +61,9 @@ namespace application
 
         void ResourceManager::LateInitialize()
         {
-            LoadFbxList();
+            // Shader 를 먼저 Load 해야 합니다.
             LoadShaderList();
+            LoadFbxList();
         }
 
         Texture2D* ResourceManager::GetTexture2D(std::string filename)

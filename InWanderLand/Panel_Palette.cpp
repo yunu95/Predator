@@ -371,7 +371,7 @@ namespace application
 							// 이때, ornamentButton 에도 pushback 해주어 Size를 추가해야 함
 							/// 임시로 Ornament Template Data 하나를 추가하는 로직을 구현함
 							auto td = tdm.CreateTemplateData<Ornament_TemplateData>("OrnamentButton" + std::to_string(i));
-							td->pod.fbxName = "SM_Temple_Books";
+							td->SetDataResourceName("SM_Temple_Books");
 						}
 						ImGui::RenderFrameBorder(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
 					}
