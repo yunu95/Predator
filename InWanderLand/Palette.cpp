@@ -86,7 +86,7 @@ namespace application::editor::palette
             break;
         }
     }
-    void Palette::OnMouseMove(Vector3d projectedWorldPos)
+    void Palette::OnMouseMove(Vector3d projectedWorldPos, Vector2d normalizedScreenPos)
     {
         currentBrushPos = projectedWorldPos;
         switch (state)
@@ -95,6 +95,7 @@ namespace application::editor::palette
             break;
         case application::editor::palette::Palette::State::Select:
             HoverClosestInstance();
+            //SelectionBox::Instance().SetAsPickingCollider(graphics::Camera::GetMainCamera(), normalizedScreenPos);
             SelectionBox::Instance().SetCoverage(currentBrushPos - unDraggingHalfExtent, currentBrushPos + unDraggingHalfExtent);
             break;
         case application::editor::palette::Palette::State::Place:

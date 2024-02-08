@@ -1,8 +1,8 @@
 #pragma once
 #include "YunutyEngine.h"
 /// <summary>
-/// Å°¿Í ¸¶¿ì½ºÀÇ ÀÔ·ÂÀ» ¹ŞÀ¸¸é ÇØ´ç ÀÔ·Â¿¡ µû¶ó ´Ù¸¥ Å¬·¡½ºÀÇ ÇÔ¼ö¸¦ È£ÃâÇØÁÖ´Â ÇÔ¼ö.
-///	ÀÔ·Â°ú Àü´ŞÀÇ ¿ªÇÒ¸¸ °®´Â´Ù.
+/// í‚¤ì™€ ë§ˆìš°ìŠ¤ì˜ ì…ë ¥ì„ ë°›ìœ¼ë©´ í•´ë‹¹ ì…ë ¥ì— ë”°ë¼ ë‹¤ë¥¸ í´ë˜ìŠ¤ì˜ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•´ì£¼ëŠ” í•¨ìˆ˜.
+///	ì…ë ¥ê³¼ ì „ë‹¬ì˜ ì—­í• ë§Œ ê°–ëŠ”ë‹¤.
 /// </summary>
 class InputManager : public Component
 {
@@ -16,8 +16,8 @@ public:
 	};
 
 private:
-	int currentSelectedSerialNumber;
-
+	SelectedSerialNumber currentSelectedSerialNumber;
+	bool tacticMode = false;
 public:
 	virtual void Start() override;
 	virtual void Update() override;

@@ -21,7 +21,7 @@ namespace application
             {
                 SelectOrnamentTemplateData(nullptr);
             }
-
+ 
             void OrnamentPalette::Reset()
             {
                 UnselectOrnamentTemplateData();

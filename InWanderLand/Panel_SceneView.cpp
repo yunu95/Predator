@@ -128,7 +128,7 @@ namespace application
 						auto front = yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation().Forward();
 						auto distToXZPlane = abs(yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y);
 						auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint({ cursorPos_InScreenSpace.first, cursorPos_InScreenSpace.second }, distToXZPlane, Vector3d(0, 1, 0));
-						pm->GetCurrentPalette()->OnMouseMove(projectedPos);
+						pm->GetCurrentPalette()->OnMouseMove(projectedPos, { cursorPos_InScreenSpace.first, cursorPos_InScreenSpace.second });
 
 						if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui_IsCursorInGizmoButtonRect())
 						{
@@ -329,8 +329,6 @@ namespace application
 			auto gptm = math::ConvertPTM(ptm);
 
 			auto beforeVTM = gvtm;
-
-			ImGuizmo::ViewManipulate(reinterpret_cast<float*>(&gvtm), 10 * sqrt(3), ImVec2(ImGui::GetWindowPos().x + renderImageSize.first - 128, ImGui::GetWindowPos().y + imageStartPos.second), ImVec2(128, 128), 0x10101010);
 
 			if (pm->GetCurrentPalette()->AreThereAnyObjectSelected())
 			{
@@ -547,6 +545,15 @@ namespace application
 			else
 			{
 				ImGui::BeginMenu(" | Place Mode", false);
+			}
+
+			if (pm->GetCurrentPalette()->IsSelectMode())
+			{
+				ImGui::BeginMenu("Select Mode", false);
+			}
+			else
+			{
+				ImGui::BeginMenu("Place Mode", false);
 			}
 
 			ImGui::EndMenuBar();

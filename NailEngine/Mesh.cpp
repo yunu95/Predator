@@ -4,11 +4,15 @@
 #include "Device.h"
 
 #include "NailEngine.h"
+#include "NailCamera.h"
 #include "RenderTargetGroup.h"
+#include "ConstantBuffer.h"
+#include "CameraManager.h"
+#include "ResourceManager.h"
 
 #include "InstanceBuffer.h"
 
-void Mesh::SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& indexVec)
+void Mesh::SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& indexVec, DirectX::SimpleMath::Vector3& maxPoint, DirectX::SimpleMath::Vector3& minPoint )
 {
 	VertexBuffer vertexBuffer;
 	vertexBuffer.vertexCount = vertexVec.size();
@@ -21,6 +25,11 @@ void Mesh::SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& in
 	indexBuffer.indexVec = std::move(indexVec);
 	CreateIndexBuffer(indexBuffer.indexCount, indexBuffer);
 	this->indexBufferVec.emplace_back(indexBuffer);
+
+	DirectX::BoundingBox aabb;
+	aabb.Center = DirectX::SimpleMath::Vector3((maxPoint.x + minPoint.x) * 0.5f, (maxPoint.y + minPoint.y) * 0.5f, (maxPoint.z + minPoint.z) * 0.5f);
+	aabb.Extents = DirectX::SimpleMath::Vector3((maxPoint.x - minPoint.x) * 0.5f, (maxPoint.y - minPoint.y) * 0.5f, (maxPoint.z - minPoint.z) * 0.5f);
+	this->aabbVec.emplace_back(aabb);
 
 	this->materialCount = this->indexBufferVec.size();
 }
@@ -49,6 +58,18 @@ void Mesh::Render(unsigned int materialIndex /*= 0*/, std::shared_ptr<InstanceBu
 
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->DrawIndexed(this->indexBufferVec[materialIndex].indexCount, 0, 0);
 	}
+}
+
+DirectX::BoundingBox Mesh::GetBoundingBox(DirectX::SimpleMath::Matrix wtm, unsigned int materialIndex /*= 0*/)
+{
+	DirectX::BoundingBox transformedAABB;
+
+	XMStoreFloat3(&transformedAABB.Center, DirectX::XMLoadFloat3(&this->aabbVec[materialIndex].Center));
+	XMStoreFloat3(&transformedAABB.Extents, DirectX::XMLoadFloat3(&this->aabbVec[materialIndex].Extents));
+
+	transformedAABB.Transform(transformedAABB,wtm);
+
+	return transformedAABB;
 }
 
 void Mesh::CreateVertexBuffer(unsigned int vertexCount, VertexBuffer& vertexBuffer)

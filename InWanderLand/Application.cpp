@@ -290,7 +290,7 @@ namespace application
 			delete each;
 		}
 #endif
-
+		yunutyEngine::graphics::Renderer::SingleInstance().Finalize();
 		::DestroyWindow(hWND);
 		::UnregisterClass(wc.lpszClassName, wc.hInstance);
 
@@ -527,7 +527,7 @@ namespace application
 					centeredPosition.y -= 0.5;
 					centeredPosition.y *= -1;
 					auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
-					editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnMouseMove(projectedPos);
+					editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnMouseMove(projectedPos,centeredPosition);
 				}
 			};
 		winMouseWheelCallBackFunction = [&](short wheelDelta) {Application::DispatchEvent<editor::MouseWheelEvent>(wheelDelta); };

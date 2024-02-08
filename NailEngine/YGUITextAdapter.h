@@ -4,19 +4,68 @@
 #include "YunuGraphicsInterface.h"
 #include "YGRenderableAdapter.h"
 
+#include "RenderSystem.h"
+#include "UIText.h"
+
 namespace yunuGIAdapter
 {
     class UITextAdapter : public yunuGIAdapter::RenderableAdapter, public yunuGI::IUIText
     {
     public:
-        UITextAdapter() :RenderableAdapter() { }
-        virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM) { };
-        virtual void SetActive(bool isActive) { };
-        virtual void SetText(TCHAR* text, ...) override {};
-        virtual const std::string GetText() override { return std::string{}; };
-        virtual void SetScreenSpace() {}
-        virtual void SetWorldSpace() {}
-        virtual void SetPickingMode(bool isPickingModeOn) {}
+        UITextAdapter() :RenderableAdapter()
+        { 
+            renderable = std::make_shared<UIText>();
+            RenderSystem::Instance.Get().PushTextObject(renderable);
+        }
+
+        ~UITextAdapter()
+        {
+            RenderSystem::Instance.Get().PopUIObject(renderable);
+        }
+
+        virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)
+		{
+			renderable->pos.x = worldTM.m41;
+			renderable->pos.y = worldTM.m42;
+
+			renderable->scale.x = worldTM.m11;
+			renderable->scale.y = worldTM.m22;
+        };
+
+        virtual void SetActive(bool isActive) 
+        { 
+            renderable->SetActive(isActive);
+        };
+
+        virtual void SetText(std::wstring str) override 
+        {
+            renderable->text = str;
+        };
+
+        virtual const std::wstring& GetText() override 
+        {
+            return  renderable->text;
+        };
+
+        virtual void SetPickingMode(bool isPickingModeOn) 
+        {}
+
+        virtual void SetFontSize(int size)
+        {
+            renderable->SetFontSize(size);
+        };
+
+        virtual void SetFont(std::wstring font)
+        {
+            renderable->SetFont(font);
+        };
+
+        virtual void SetColor(yunuGI::Color color)
+        {
+            renderable->SetColor(color);
+        };
+
     private:
+        std::shared_ptr<UIText> renderable;
     };
 }

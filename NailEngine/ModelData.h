@@ -39,6 +39,7 @@ struct FBXMeshData
 
 	MaterialData material;
 
+	DirectX::SimpleMath::Vector3 aabb[2];
 	std::vector<Vertex> vertex;
 	std::vector<unsigned int> indices;
 };

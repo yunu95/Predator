@@ -22,18 +22,21 @@ void yunutyEngine::NavigationAgent::Update()
 }
 void yunutyEngine::NavigationAgent::AssignToNavigationField(NavigationField* navField)
 {
-    this->navField = navField;
-
     if (impl->crowd != nullptr)
         impl->crowd->removeAgent(impl->agentIdx);
 
+    if (this->navField != nullptr)
+        navField->agents.erase(this);
+
     if (navField != nullptr)
     {
+        navField->agents.insert(this);
         Vector3f pos = GetTransform()->GetWorldPosition();
-        impl->crowd = navField->impl->crowd;
+        impl->crowd = navField->impl->m_crowd;
         impl->agentIdx = impl->crowd->addAgent(reinterpret_cast<float*>(&pos), &impl->agentParams);
         //auto agent = impl->crowd->getAgent(impl->agentIdx);
     }
+    this->navField = navField;
 }
 void yunutyEngine::NavigationAgent::SetSpeed(float speed)
 {
@@ -73,7 +76,7 @@ void yunutyEngine::NavigationAgent::Relocate(Vector3f destination)
     dtPolyRef ref = 0;
     dtVcopy(nearest, pos);
 
-    dtStatus status = navField->impl->navQuery->findNearestPoly(pos, agentPlacementHalfExtents, impl->crowd->getFilter(0), &ref, nearest);
+    dtStatus status = navField->impl->m_navQuery->findNearestPoly(pos, agentPlacementHalfExtents, impl->crowd->getFilter(0), &ref, nearest);
     if (dtStatusFailed(status))
     {
         dtVcopy(nearest, pos);
@@ -108,9 +111,10 @@ void yunutyEngine::NavigationAgent::MoveTo(Vector3f destination)
         return;
     const dtQueryFilter* filter{ impl->crowd->getFilter(0) };
     const dtCrowdAgent* agent = impl->crowd->getAgent(impl->agentIdx);
-    const float* halfExtents = impl->crowd->getQueryExtents();
+    static constexpr float halfExtents[]{ 1,100,1 };
+    //const float* halfExtents = impl->crowd->getQueryExtents();
 
-    navField->impl->navQuery->findNearestPoly(reinterpret_cast<float*>(&destination), halfExtents, filter, &impl->targetRef, impl->targetPos);
+    navField->impl->m_navQuery->findNearestPoly(reinterpret_cast<float*>(&destination), halfExtents, filter, &impl->targetRef, impl->targetPos);
     impl->crowd->requestMoveTarget(impl->agentIdx, impl->targetRef, impl->targetPos);
 }
 const Vector3f& yunutyEngine::NavigationAgent::GetTargetPosition()

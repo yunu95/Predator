@@ -23,6 +23,7 @@ namespace application
 			virtual ~ITemplateData() = default;
 
 			virtual std::string GetDataKey() const = 0;
+			virtual void SetDataResourceName(std::string fbxName) = 0;
 			virtual std::string GetDataResourceName() const = 0;
 
 		protected:

@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <filesystem>
+#include <algorithm>
 
 #include "SimpleMath.h"
 using namespace DirectX::PackedVector;
@@ -127,8 +128,8 @@ yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yu
 						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } });
     }
 
-
-    tempMesh->SetData(vertices, idxVec);
+    auto temp = DirectX::SimpleMath::Vector3{ 1,1,1 };
+    tempMesh->SetData(vertices, idxVec,temp, temp);
 	CreateMesh(tempMesh);
 
     return tempMesh.get();
@@ -288,6 +289,7 @@ void ResourceManager::LoadFBX(const char* filePath)
     }
 
     this->fbxDataMap.insert({ fbxName, fbxData });
+    this->fbxMap.emplace_back(fbxName);
 }
 
 void ResourceManager::CreateAnimation(const std::vector<AnimationClip>& animationClip, const std::wstring& fbxName)
@@ -448,6 +450,11 @@ std::vector<yunuGI::IMaterial*>& ResourceManager::GetMaterialList()
 };
 std::vector<yunuGI::IShader*>& ResourceManager::GetShaderList() { return this->shaderVec; };
 std::vector<yunuGI::IAnimation*>& ResourceManager::GetAnimationList() { return this->animationVec; };
+
+std::vector<std::wstring>& ResourceManager::GetFBXList()
+{
+    return this->fbxMap;
+}
 
 std::shared_ptr<AnimationGroup> ResourceManager::GetAnimationGroup(const std::wstring& modelName)
 {
@@ -731,7 +738,6 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
     fbxData->child.resize(node->child.size());
     fbxData->materialVec.resize(node->meshVec.size());
 
-
     DirectX::SimpleMath::Matrix wtm = (node->worldMatrix);
     DirectX::SimpleMath::Vector3 pos;
     DirectX::SimpleMath::Vector3 scale;
@@ -742,16 +748,18 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
     fbxData->scale = yunuGI::Vector3{ scale.x, scale.y,scale.z };
     fbxData->quat = yunuGI::Vector4{ quat.x, quat.y, quat.z, quat.w };
 
-
     for (int i = 0; i < node->meshVec.size(); ++i)
     {
         fbxData->meshName = node->meshVec[i].meshName;
+        fbxData->aabb.maxPoint = yunuGI::Vector3{ node->meshVec[i].aabb[0].x, node->meshVec[i].aabb[0].y,node->meshVec[i].aabb[0].z };
+        fbxData->aabb.minPoint = yunuGI::Vector3{ node->meshVec[i].aabb[1].x, node->meshVec[i].aabb[1].y,node->meshVec[i].aabb[1].z };
+
         // 실제 Mesh와 Material을 만들자
         if (this->meshMap.find(node->meshVec[i].meshName) == this->meshMap.end())
         {
             std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
             mesh->SetName(node->meshVec[i].meshName);
-            mesh->SetData(node->meshVec[i].vertex, node->meshVec[i].indices);
+            mesh->SetData(node->meshVec[i].vertex, node->meshVec[i].indices, node->meshVec[i].aabb[0], node->meshVec[i].aabb[1]);
             this->meshMap.insert({ node->meshVec[i].meshName, mesh });
         }
         else
@@ -759,7 +767,7 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
             if (node->meshVec.size() != 1)
             {
                 std::static_pointer_cast<Mesh>(this->meshMap.find(node->meshVec[i].meshName)->second)
-                    ->SetData(node->meshVec[i].vertex, node->meshVec[i].indices);
+                    ->SetData(node->meshVec[i].vertex, node->meshVec[i].indices, node->meshVec[i].aabb[0], node->meshVec[i].aabb[1]);
             }
         }
 
@@ -986,7 +994,27 @@ void ResourceManager::LoadCubeMesh()
     idx[30] = 20; idx[31] = 21; idx[32] = 22;
     idx[33] = 20; idx[34] = 22; idx[35] = 23;
 
-    cubeMesh->SetData(vec, idx);
+
+
+	DirectX::SimpleMath::Vector3 minPoint = vec[0].pos;
+	DirectX::SimpleMath::Vector3 maxPoint = vec[0].pos;
+
+	for (const auto& vertex : vec) {
+		// minPoint 업데이트
+		minPoint.x = std::min(minPoint.x, vertex.pos.x);
+		minPoint.y = std::min(minPoint.y, vertex.pos.y);
+		minPoint.z = std::min(minPoint.z, vertex.pos.z);
+
+		// maxPoint 업데이트
+		maxPoint.x = max(maxPoint.x, vertex.pos.x);
+		maxPoint.y = max(maxPoint.y, vertex.pos.y);
+		maxPoint.z = max(maxPoint.z, vertex.pos.z);
+	}
+
+
+
+
+    cubeMesh->SetData(vec, idx, maxPoint,minPoint);
     CreateMesh(cubeMesh);
 }
 
@@ -1105,7 +1133,29 @@ void ResourceManager::LoadSphereMesh()
         idx.push_back(lastRingStartIndex + i + 1);
     }
 
-    sphereMesh->SetData(vec, idx);
+
+
+
+	DirectX::SimpleMath::Vector3 minPoint = vec[0].pos;
+	DirectX::SimpleMath::Vector3 maxPoint = vec[0].pos;
+
+	for (const auto& vertex : vec) {
+		// minPoint 업데이트
+		minPoint.x = std::min(minPoint.x, vertex.pos.x);
+		minPoint.y = std::min(minPoint.y, vertex.pos.y);
+		minPoint.z = std::min(minPoint.z, vertex.pos.z);
+
+		// maxPoint 업데이트
+		maxPoint.x = max(maxPoint.x, vertex.pos.x);
+		maxPoint.y = max(maxPoint.y, vertex.pos.y);
+		maxPoint.z = max(maxPoint.z, vertex.pos.z);
+	}
+
+
+
+
+
+    sphereMesh->SetData(vec, idx, maxPoint, minPoint);
     CreateMesh(sphereMesh);
 }
 
@@ -1133,7 +1183,24 @@ void ResourceManager::LoadRactangleMesh()
     idx[0] = 0; idx[1] = 1; idx[2] = 2;
     idx[3] = 0; idx[4] = 2; idx[5] = 3;
 
-    rectangleMesh->SetData(vec, idx);
+
+	DirectX::SimpleMath::Vector3 minPoint = vec[0].pos;
+	DirectX::SimpleMath::Vector3 maxPoint = vec[0].pos;
+
+	for (const auto& vertex : vec) {
+		// minPoint 업데이트
+		minPoint.x = std::min(minPoint.x, vertex.pos.x);
+		minPoint.y = std::min(minPoint.y, vertex.pos.y);
+		minPoint.z = std::min(minPoint.z, vertex.pos.z);
+
+		// maxPoint 업데이트
+		maxPoint.x = max(maxPoint.x, vertex.pos.x);
+		maxPoint.y = max(maxPoint.y, vertex.pos.y);
+		maxPoint.z = max(maxPoint.z, vertex.pos.z);
+	}
+
+
+    rectangleMesh->SetData(vec, idx, maxPoint, minPoint);
     CreateMesh(rectangleMesh);
 }
 
@@ -1175,7 +1242,23 @@ void ResourceManager::LoadLineMesh()
     indices[1] = 2;
 
 
-    lineMesh->SetData(vertices, indices);
+	DirectX::SimpleMath::Vector3 minPoint = vertices[0].pos;
+	DirectX::SimpleMath::Vector3 maxPoint = vertices[0].pos;
+
+	for (const auto& vertex : vertices) {
+		// minPoint 업데이트
+		minPoint.x = std::min(minPoint.x, vertex.pos.x);
+		minPoint.y = std::min(minPoint.y, vertex.pos.y);
+		minPoint.z = std::min(minPoint.z, vertex.pos.z);
+
+		// maxPoint 업데이트
+		maxPoint.x = max(maxPoint.x, vertex.pos.x);
+		maxPoint.y = max(maxPoint.y, vertex.pos.y);
+		maxPoint.z = max(maxPoint.z, vertex.pos.z);
+	}
+
+
+    lineMesh->SetData(vertices, indices, maxPoint , minPoint);
 	CreateMesh(lineMesh);
 }
 
@@ -1325,7 +1408,25 @@ void ResourceManager::LoadCapsuleMesh()
         indices.push_back(c);
     }
 
-    capsuleMesh->SetData(vertices, indices);
+
+
+	DirectX::SimpleMath::Vector3 minPoint = vertices[0].pos;
+	DirectX::SimpleMath::Vector3 maxPoint = vertices[0].pos;
+
+	for (const auto& vertex : vertices) {
+		// minPoint 업데이트
+		minPoint.x = std::min(minPoint.x, vertex.pos.x);
+		minPoint.y = std::min(minPoint.y, vertex.pos.y);
+		minPoint.z = std::min(minPoint.z, vertex.pos.z);
+
+		// maxPoint 업데이트
+		maxPoint.x = max(maxPoint.x, vertex.pos.x);
+		maxPoint.y = max(maxPoint.y, vertex.pos.y);
+		maxPoint.z = max(maxPoint.z, vertex.pos.z);
+	}
+
+
+    capsuleMesh->SetData(vertices, indices, maxPoint,minPoint);
     CreateMesh(capsuleMesh);
 }
 
@@ -1433,6 +1534,26 @@ void ResourceManager::LoadCylinderMesh()
         indices.push_back(c);
     }
 
-    cylinderMesh->SetData(vertices, indices);
+
+
+
+	DirectX::SimpleMath::Vector3 minPoint = vertices[0].pos;
+	DirectX::SimpleMath::Vector3 maxPoint = vertices[0].pos;
+
+	for (const auto& vertex : vertices) {
+		// minPoint 업데이트
+		minPoint.x = std::min(minPoint.x, vertex.pos.x);
+		minPoint.y = std::min(minPoint.y, vertex.pos.y);
+		minPoint.z = std::min(minPoint.z, vertex.pos.z);
+
+		// maxPoint 업데이트
+		maxPoint.x = max(maxPoint.x, vertex.pos.x);
+		maxPoint.y = max(maxPoint.y, vertex.pos.y);
+		maxPoint.z = max(maxPoint.z, vertex.pos.z);
+	}
+
+
+
+    cylinderMesh->SetData(vertices, indices, maxPoint, minPoint);
     CreateMesh(cylinderMesh);
 }

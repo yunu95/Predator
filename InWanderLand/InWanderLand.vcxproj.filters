@@ -292,6 +292,12 @@
     <Filter Include="Editor\Palette\List\OrnamentPalette">
       <UniqueIdentifier>{40739a4f-3a66-4c5a-91e5-315c832d7449}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\TacticModeSystem">
+      <UniqueIdentifier>{d64fe41f-9533-4db4-992e-9a18dfae43dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteBrush\OrnamentBrush">
+      <UniqueIdentifier>{8045da07-686d-4fea-a63c-27e4e233378c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -734,6 +740,12 @@
     <ClInclude Include="LoadStaticOrnamentsCommand.h">
       <Filter>Editor\Commands\MenubarCommands\File</Filter>
     </ClInclude>
+    <ClInclude Include="TacticModeSystem.h">
+      <Filter>Contents\TacticModeSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="OrnamentBrush.h">
+      <Filter>Editor\Palette\PaletteBrush\OrnamentBrush</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1134,6 +1146,12 @@
     </ClCompile>
     <ClCompile Include="LoadStaticOrnamentsCommnad.cpp">
       <Filter>Editor\Commands\MenubarCommands\File</Filter>
+    </ClCompile>
+    <ClCompile Include="TacticModeSystem.cpp">
+      <Filter>Contents\TacticModeSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitBrush.cpp">
+      <Filter>Editor\Palette\PaletteBrush\UnitBrush</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

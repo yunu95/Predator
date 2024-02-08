@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include "PlayerSkillSystem.h"
 #include "Dotween.h"
+#include "TacticModeSystem.h"
 
 
 void Unit::Start()
@@ -65,7 +66,7 @@ void Unit::Start()
 	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Skill); i++)
 	{
 		unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::Skill,
-		[this]() { return currentOrder == UnitState::Skill; } });
+		[this]() { return currentOrder == UnitState::Skill || (TacticModeSystem::SingleInstance().IsTacticModeActivated() && GetUnitSide() == UnitSide::Player); } });
 	}
 
 	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Paralysis); i++)
@@ -106,6 +107,12 @@ void Unit::Start()
 void Unit::Update()
 {
 	unitFSM.UpdateState();
+
+	/// 전술모드 동작 여부를 확인한다
+	if (TacticModeSystem::SingleInstance().IsTacticModeActivated())
+	{
+		TacticModeSystem::SingleInstance().CallQueueFunction(this);
+	}
 }
 
 Unit::UnitType Unit::GetUnitType() const
@@ -168,7 +175,7 @@ void Unit::AttackMoveEngage()
 void Unit::AttackEngage()
 {
 	currentOrder = UnitState::Attack;
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetNextAnimation(unitAnimations.m_idleAnimation);
+	//GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetNextAnimation(unitAnimations.m_idleAnimation);
 	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 
 	attackFunctionElapsed = 0.0f;
@@ -194,7 +201,6 @@ void Unit::SkillEngage()
 {
 	currentOrder = UnitState::Skill;
 	qSkillFunctionStartElapsed = 0.0f;
-	//qSkillFunctionStartedElapsed = 0.0f;
 
 	GetGameObject()->GetComponent<PlayerSkillSystem>()->SkillActivate(m_currentSelectedSkill, m_skillPosition);
 
@@ -290,7 +296,7 @@ void Unit::AttackUpdate()
 		}
 	}
 
-	if (attackFunctionElapsed >= attackFunctionCallDelay /*|| !isAttackStarted*/)
+	if (attackFunctionElapsed >= attackFunctionCallDelay || !isAttackStarted)
 	{
 		isAttackStarted = true;
 		isAttackAnimationOperating = true;
@@ -309,26 +315,9 @@ void Unit::SkillUpdate()
 		isSkillStarted = false;
 		currentOrder = UnitState::Idle;
 		// 여기서 leftClickFunction을 스킬 사용 못하게 해야 한다....
+		/// 전술모드 추가에 따른 조건식 추가.
 		PlayerController::GetInstance()->SetLeftClickMove();
 	}
-
-	//if (isSkillStarted)
-	//{
-	//	qSkillFunctionStartedElapsed += Time::GetDeltaTime();
-	//	if (qSkillFunctionStartedElapsed >= qSkillAnimationDuration)
-	//	{
-	//		isSkillStarted = false;
-	//		currentOrder = UnitState::Idle;
-	//		// 여기서 leftClickFunction을 스킬 사용 못하게 해야 한다....
-	//		PlayerController::GetInstance()->SetLeftClickMove();
-	//	}
-	//}
-
-	//if (qSkillFunctionStartElapsed >= qSkillStartDelay)
-	//{
-	//	qSkillFunctionStartElapsed = 0.0f;
-	//	isSkillStarted = true;
-	//}
 }
 
 void Unit::ChaseUpdate()
@@ -419,9 +408,14 @@ void Unit::SetAttackDelay(float p_delay)
 	attackFunctionCallDelay = p_delay;
 }
 
-int Unit::GetPlayerSerialNumber() const
+Unit::UnitType Unit::GetPlayerSerialNumber() const
 {
 	return playerSerialNumber;
+}
+
+Unit::UnitState Unit::GetCurrentUnitState() const
+{
+	return currentOrder;
 }
 
 void Unit::SetCurrentOrderMove()
@@ -561,11 +555,9 @@ void Unit::IdentifiedOpponentDeath(yunutyEngine::GameObject* diedOpponent)
 	m_opponentObjectList.remove(diedOpponent);
 }
 
-void Unit::SetPlayerSerialNumber()
+void Unit::SetPlayerSerialNumber(UnitType serialNum)
 {
-	static int localSerialNumber = 1;
-	playerSerialNumber = localSerialNumber;
-	localSerialNumber++;
+	playerSerialNumber = serialNum;
 }
 
 void Unit::OrderMove(Vector3d position)
@@ -676,4 +668,12 @@ bool Unit::GetJustCrushedState() const
 	return isJustHitByQSkill;
 }
 
+bool Unit::IsUnitDead() const
+{
+	if (m_healthPoint <= 0)
+		return true;
+
+	else
+		return false;
+}
 

@@ -18,13 +18,17 @@ namespace application
             public:
                 void SelectUnitTemplateData(Unit_TemplateData*);
                 void UnselectUnitTemplateData();
+
             protected:
                 virtual void Reset() override;
                 virtual UnitData* PlaceInstance(Vector3d worldPosition) override;
+                virtual void OnMouseMove(Vector3d projectedWorldPos, Vector2d normalizedScreenPos) override;
+                virtual void SetAsSelectMode(bool isSelectMode) override;
                 virtual bool ShouldSelect(IEditableData* instance) override;
                 virtual void OnStartPalette() override;
                 virtual void OnStandbyPalette() override;
                 virtual void CleanUpData() override;
+
             private:
                 unordered_set<UnitEditorInstance*> unitInstances;
                 Unit_TemplateData* selectedUnitTemplateData{ nullptr };

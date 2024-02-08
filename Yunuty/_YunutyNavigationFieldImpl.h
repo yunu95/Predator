@@ -4,52 +4,86 @@
 #include "DetourNavMesh.h"
 #include "DetourNavMeshBuilder.h"
 #include "DetourNavMeshQuery.h"
+#include "DetourTileCache.h"
+#include "DetourTileCacheBuilder.h"
+#include "DetourCommon.h"
+#include "DetourMath.h"
+#include "DetourAlloc.h"
+#include "DetourAssert.h"
 #include "DetourCrowd.h"
+#include "_YunutyCustomDtClasses.h"
+#include "ChunkyTriMesh.h"
 
 namespace yunutyEngine
 {
-    // Impl은 그저 데이터만 쌓아두는 곳으로 쓴다.
     class NavigationField::Impl
     {
     private:
         Impl(NavigationField* navFieldComponent) :navFieldComponent(navFieldComponent)
         {
-            navQuery = dtAllocNavMeshQuery();
-            crowd = dtAllocCrowd();
-            context = std::make_unique<rcContext>(rcContext());
+            m_navQuery = dtAllocNavMeshQuery();
+            m_crowd = dtAllocCrowd();
+            m_ctx = new rcContext;
+            m_talloc = new LinearAllocator(32000);
+            m_tcomp = new FastLZCompressor;
+            m_tmproc = new MeshProcess;
         }
         virtual ~Impl()
         {
-            dtFreeCrowd(crowd);
-            crowd = nullptr;
-            dtFreeNavMeshQuery(navQuery);
-            navQuery = nullptr;
-            if (polyMesh)
+            dtFreeCrowd(m_crowd);
+            m_crowd = nullptr;
+            dtFreeNavMeshQuery(m_navQuery);
+            m_navQuery = nullptr;
+            delete m_ctx;
+            if (m_navMesh)
             {
-                rcFreePolyMesh(polyMesh);
-                polyMesh = nullptr;
+                dtFreeNavMesh(m_navMesh);
+                m_navMesh = nullptr;
             }
-            if (polyMeshDetail)
+            if (m_tileCache)
             {
-                rcFreePolyMeshDetail(polyMeshDetail);
-                polyMeshDetail = nullptr;
+                dtFreeTileCache(m_tileCache);
+                m_tileCache = nullptr;
             }
-            if (navMesh)
-            {
-                dtFreeNavMesh(navMesh);
-                navMesh = nullptr;
-            }
+            delete m_talloc;
+            delete m_tcomp;
+            delete m_tmproc;
         }
         friend NavigationField;
     public:
+        bool handleBuild(const float* worldVertices, size_t verticesNum, const int* faces, size_t facesNum, const BuildSettings& buildSettings);
+        int rasterizeTileLayers(const float* worldVertices, size_t verticesNum, const int* faces, size_t facesNum, const int tx, const int ty, const rcConfig& cfg, struct TileCacheData* tiles, const int maxTiles);
+        int calcLayerBufferSize(const int gridWidth, const int gridHeight);
+        dtObstacleRef AddBoxObstacle(Vector3f center, Vector3f halfExtents, const float yRadians);
+        void DeleteObstacle(dtObstacleRef obstacleRef);
+
         NavigationField* navFieldComponent;
 
-        std::unique_ptr<rcContext> context;
-        rcPolyMesh* polyMesh;
-        rcConfig config;
-        rcPolyMeshDetail* polyMeshDetail;
-        class dtNavMesh* navMesh;
-        class dtNavMeshQuery* navQuery;
-        class dtCrowd* crowd;
+        //class InputGeom* m_geom;
+        class dtNavMesh* m_navMesh;
+        class dtNavMeshQuery* m_navQuery;
+        class dtCrowd* m_crowd;
+
+        unsigned char m_navMeshDrawFlags;
+
+        bool m_filterLowHangingObstacles;
+        bool m_filterLedgeSpans;
+        bool m_filterWalkableLowHeightSpans;
+        rcContext* m_ctx;
+
+        struct LinearAllocator* m_talloc;
+        struct FastLZCompressor* m_tcomp;
+        struct MeshProcess* m_tmproc;
+
+        class dtTileCache* m_tileCache;
+
+        float m_cacheBuildTimeMs;
+        int m_cacheCompressedSize;
+        int m_cacheRawSize;
+        int m_cacheLayerCount;
+        unsigned int m_cacheBuildMemUsage;
+        int m_maxTiles;
+        int m_maxPolysPerTile;
+        float m_tileSize;
     };
 }

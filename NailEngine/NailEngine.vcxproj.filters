@@ -300,6 +300,9 @@
     <ClInclude Include="CameraManager.h">
       <Filter>NailCamera</Filter>
     </ClInclude>
+    <ClInclude Include="UIText.h">
+      <Filter>GraphicsEngine\RenderableManager\IRenderable\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -416,6 +419,9 @@
     <ClCompile Include="tempMain.cpp" />
     <ClCompile Include="CameraManager.cpp">
       <Filter>NailCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="UIText.cpp">
+      <Filter>GraphicsEngine\RenderableManager\IRenderable\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

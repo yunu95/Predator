@@ -122,41 +122,16 @@ namespace application
 
         void ResourceManager::LoadFbxList()
         {
-            //auto fbxList = graphics::Renderer::SingleInstance().GetResourceManager()->GetFbxList();
-
-            /// 획득 이전에 임시 테스트용
-            static std::vector<std::string> fbxList;
-            fbxList.push_back("SM_Bush_001");
-            fbxList.push_back("SM_Bush_002");
-            fbxList.push_back("SM_CastleWall");
-            fbxList.push_back("SM_CastleWall_Door");
-            fbxList.push_back("SM_CastleWall_Pillar");
-            fbxList.push_back("SM_Chair");
-            fbxList.push_back("SM_Cuptower");
-            fbxList.push_back("SM_Fork");
-            fbxList.push_back("SM_GuideBook");
-            fbxList.push_back("SM_Hat01");
-            fbxList.push_back("SM_Hat02");
-            fbxList.push_back("SM_SmallBush_001");
-            fbxList.push_back("SM_Stone_001");
-            fbxList.push_back("SM_Stone_002");
-            fbxList.push_back("SM_Stump");
-            fbxList.push_back("SM_Temple_Book_etc");
-            fbxList.push_back("SM_Temple_Books");
-            fbxList.push_back("SM_Temple_Floor");
-            fbxList.push_back("SM_Temple_Pillar");
-            fbxList.push_back("SM_Temple_Pillar_Broken");
-            fbxList.push_back("SM_Temple_Rabbit");
-            fbxList.push_back("SM_Temple_Stairs");
-            fbxList.push_back("SM_Temple_Welcome");
-            fbxList.push_back("SM_Trunk_001");
+            auto fbxList = graphics::Renderer::SingleInstance().GetResourceManager()->GetFBXList();
 
             auto& tdm = TemplateDataManager::GetSingletonInstance();
+            std::string fbxSname = std::string();
             for (auto each : fbxList)
             {
-                auto td = tdm.CreateTemplateData<Ornament_TemplateData>(each);
-                td->pod.fbxName = each;
-                fbxSet.insert(each);
+                fbxSname = std::string(each.begin(), each.end());
+                auto td = tdm.CreateTemplateData<Ornament_TemplateData>(fbxSname);
+                td->pod.fbxName = fbxSname;
+                fbxSet.insert(fbxSname);
             }
         }
     }

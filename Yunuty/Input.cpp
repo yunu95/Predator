@@ -169,6 +169,14 @@ Vector2d yunutyEngine::Input::getMouseScreenPositionNormalized()
     ret.y /= wndRect.bottom - wndRect.top;
     return ret;
 }
+Vector2d yunutyEngine::Input::getMouseScreenPositionNormalizedZeroCenter()
+{
+    Vector2d ret = getMouseScreenPositionNormalized();
+    ret.x -= 0.5;
+    ret.y *= -1;
+    ret.y += 0.5;
+    return ret;
+}
 
 // 해당 키코드와 일치하는 키가 눌러져 있다면 참을, 눌러져 있지 않다면 거짓을 반환합니다.
 // 키가 계속 눌려져 있는 상태라면 매 프레임마다 참을 반환합니다.

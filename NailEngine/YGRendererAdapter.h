@@ -32,5 +32,10 @@ namespace yunuGIAdapter
         };
 
         virtual void* QuerySharedOutputHandle() { return nullptr; }
+
+        virtual void Finalize()
+        {
+            NailEngine::Instance.Get().Finalize();
+        };
     };
 }
