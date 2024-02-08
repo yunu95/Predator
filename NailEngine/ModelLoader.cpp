@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <iostream>
+#include <cfloat>
 
 #include "Animation.h"
 
@@ -67,6 +68,17 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 		unsigned int meshIndex = node->mMeshes[i];
 		aiMesh* mesh = scene->mMeshes[meshIndex];
 
+		aiVector3D maxPoint = mesh->mAABB.mMax;
+		aiVector3D minPoint = mesh->mAABB.mMin;
+
+
+		float maxX = FLT_MIN;
+		float maxY = FLT_MIN;
+		float maxZ = FLT_MIN;
+		float minX = FLT_MAX;
+		float minY = FLT_MAX;
+		float minZ = FLT_MAX;
+
 		fbxMeshData.meshName = this->aiStringToWString(mesh->mName);
 
 		for (int j = 0; j < mesh->mNumVertices; ++j)
@@ -90,6 +102,22 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 			DirectX::SimpleMath::Vector3 dnormal{ normal.x, normal.y, normal.z };
 
 			Vertex vertex = { dvertex, DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f}, duv, dnormal, DirectX::SimpleMath::Vector3{1.f,0.f,0.f} };
+
+			maxX = max(dvertex.x, maxX);
+			maxY = max(dvertex.y, maxY);
+			maxZ = max(dvertex.z, maxZ);
+
+			minX = std::min(dvertex.x, minX);
+			minY = std::min(dvertex.y, minY);
+			minZ = std::min(dvertex.z, minZ);
+
+			//auto tempMax = DirectX::SimpleMath::Vector4::Transform(DirectX::SimpleMath::Vector4{ maxX,maxY,maxZ,1.f }, ConvertToCloumnMajor(node->mTransformation));
+			//auto tempMin = DirectX::SimpleMath::Vector4::Transform(DirectX::SimpleMath::Vector4{ minX,minY,minZ,1.f }, ConvertToCloumnMajor(node->mTransformation));
+
+			//fbxMeshData.aabb[0] = DirectX::SimpleMath::Vector3{ tempMax.x,tempMax.y,tempMax.z };
+			//fbxMeshData.aabb[1] = DirectX::SimpleMath::Vector3{ tempMin.x,tempMin.y,tempMin.z };
+			fbxMeshData.aabb[0] = DirectX::SimpleMath::Vector3{ maxX,maxY,maxZ };
+			fbxMeshData.aabb[1] = DirectX::SimpleMath::Vector3{ minX,minY,minZ };
 
 			fbxMeshData.vertex.emplace_back(vertex);
 		}
@@ -154,7 +182,7 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 		{
 			std::wstring _path = aiStringToWString(path);
 			std::filesystem::path pathName(_path);
-			std::wstring fileName =  pathName.filename().wstring();
+			std::wstring fileName = pathName.filename().wstring();
 
 			fbxMeshData.material.albedoMap = this->texturePath + fileName;
 		}
@@ -263,7 +291,7 @@ void ModelLoader::LoadAnimation(const aiScene* scene, const std::wstring& fbxNam
 				{
 					aiVectorKey vectorKey = nodeAnim->mPositionKeys[k];
 
-					animationClip.keyFrameInfoVec[boneIndex][k].pos = DirectX::SimpleMath::Vector3{ vectorKey.mValue.x, vectorKey.mValue.y, vectorKey.mValue.z};
+					animationClip.keyFrameInfoVec[boneIndex][k].pos = DirectX::SimpleMath::Vector3{ vectorKey.mValue.x, vectorKey.mValue.y, vectorKey.mValue.z };
 				}
 
 				for (int k = 0; k < nodeAnim->mNumRotationKeys; ++k)

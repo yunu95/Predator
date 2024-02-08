@@ -25,6 +25,12 @@ namespace yunutyEngine
             class Impl;
             Collider(Impl* impl);
             virtual ~Collider();
+            //bool IsTrigger();
+            //void SetAsTrigger(bool isTrigger);
+            bool IsUsingCCD();
+            // Continuous Collision Detection 기능을 활성화하면 한 프레임에서 다음 프레임까지의 충돌을 연속적으로 체크합니다.
+            // CCD 기능이 활성화되면 Bullet through paper 현상이 발생하지 않습니다.
+            void EnableCCD(bool enable);
         protected:
             virtual void Start() override;
             virtual void Update()override;
@@ -35,13 +41,6 @@ namespace yunutyEngine
             RigidBody* rigidBody;
 
             Impl* impl;
-        public:
-            //bool IsTrigger();
-            //void SetAsTrigger(bool isTrigger);
-            bool IsUsingCCD();
-            // Continuous Collision Detection 기능을 활성화하면 한 프레임에서 다음 프레임까지의 충돌을 연속적으로 체크합니다.
-            // CCD 기능이 활성화되면 Bullet through paper 현상이 발생하지 않습니다.
-            void EnableCCD(bool enable);
         private:
             bool WasPxActorInitialized();
             Vector3d cachedScale;

@@ -15,12 +15,19 @@ namespace application
 	{
 		namespace imgui
 		{
+			enum class Vector3Flags
+			{
+				None,
+				ResetX,
+				ResetY,
+				ResetZ,
+				TypeX,
+				TypeY,
+				TypeZ
+			};
+
 			// x, y 크기만큼 확장한 ImRect 획득
 			ImRect RectExpanded(const ImRect& rect, float x, float y);
-
-			bool IsItemHovered(float delayInSeconds = 0.1f, ImGuiHoveredFlags flags = 0);
-
-			void SetTooltip(std::string text, float delayInSeconds = 0.1f, bool allowWhenDisabled = true, ImVec2 padding = ImVec2(5, 5));
 
 			void ShiftCursorX(float distance);
 
@@ -66,7 +73,17 @@ namespace application
 			bool Checkbox_2Col(std::string valName, bool& value);
 			bool Dropdown_2Col(std::string valName, const char** options, int optionCount, int* selected);
 #pragma endregion
+
+			// 여기서 bool은 직접 값을 넣어서 변경했는지에 대한 여부를 반환함
+			bool DragFloatLabel(std::string dragKey, std::string label, float& value, float speed = 1.0f, float min = 0.0f, float max = 0.0f);
+			// 여기서 bool은 직접 값을 넣어서 변경했는지에 대한 여부를 반환함
+			bool DragIntLabel(std::string dragKey, std::string label, int& value, float speed = 1.0f, int min = 0, int max = 0);
+			Vector3Flags Vector3Control(std::string valName, float& x, float& y, float& z, bool x_multiSelect = false, bool y_multiSelect = false, bool z_multiSelect = false);
+
 			void EndSection();
+
+			bool IsItemHovered(float delayInSeconds = 0.3f, ImGuiHoveredFlags flags = 0);
+			void SetTooltip(std::string tooltip, float delayInSeconds = 0.3f, bool allowWhenDisabled = true, ImVec2 padding = ImVec2(5, 5));
 
 			namespace draw
 			{

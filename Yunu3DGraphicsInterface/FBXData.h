@@ -20,6 +20,12 @@ namespace yunuGI
 		std::wstring opacityMap;
 	};
 
+	struct BoundingBox
+	{
+		yunuGI::Vector3 maxPoint;
+		yunuGI::Vector3 minPoint;
+	};
+
 	struct FBXData
 	{
 		std::vector<FBXData*> child;
@@ -36,6 +42,8 @@ namespace yunuGI
 		BoneInfo boneInfo;
 
 		bool hasAnimation;
+
+		BoundingBox aabb;
 	};
 
 

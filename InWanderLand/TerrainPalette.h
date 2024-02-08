@@ -14,7 +14,7 @@ namespace application
             {
             public:
                 virtual IEditableData* PlaceInstance(Vector3d worldPosition)override;
-                virtual void OnMouseMove(Vector3d projectedWorldPos)override;
+                virtual void OnMouseMove(Vector3d projectedWorldPos,Vector2d normalizedScreenPos)override;
                 virtual void SetAsSelectMode(bool isSelectMode) override;
                 // isMarking은 지형을 추가하고 있는지 없애고 있는지 나타냅니다. 
                 void ApplyAsPlaytimeObjects();

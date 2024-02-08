@@ -36,7 +36,18 @@ namespace yunutyEngine
     }
     void NavigationObstacle::AssignToNavigationField(NavigationField* navField)
     {
+        if (this->navField != nullptr)
+        {
+            if (impl->obstacleRef != 0)
+                this->navField->impl->DeleteObstacle(impl->obstacleRef);
+            this->navField->obstacles.erase(this);
+        }
+        if (navField != nullptr)
+        {
+            navField->obstacles.insert(this);
+        }
         this->navField = navField;
+
         ApplyObstacleState();
     }
 }

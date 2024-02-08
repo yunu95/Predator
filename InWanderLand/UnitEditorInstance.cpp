@@ -7,7 +7,6 @@ namespace application::editor::palette
     void UnitEditorInstance::Start()
     {
         PaletteInstance::Start();
-        mesh = AttachDebugMesh(GetGameObject()->AddGameObject(), DebugMeshType::Cube, yunuGI::Color{1, 1, 1}, false);
     }
     void UnitEditorInstance::Init(const application::editor::UnitData* unitData)
     {
@@ -16,5 +15,32 @@ namespace application::editor::palette
     void UnitEditorInstance::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     {
         this->unitTemplateData = unitTemplateData;
+        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(unitTemplateData->pod.fbxName);
+        obj->setName("FBX");
+        obj->SetParent(GetGameObject());
+    }
+
+    void UnitEditorInstance::ChangeTemplateData(const application::editor::UnitData* unitData)
+    {
+        ChangeTemplateData(unitData->pod.templateData);
+    }
+
+    void UnitEditorInstance::ChangeTemplateData(const application::editor::Unit_TemplateData* unitTemplateData)
+    {
+        if (this->unitTemplateData == unitTemplateData)
+            return;
+
+        this->unitTemplateData = unitTemplateData;
+        for (auto& each : GetGameObject()->GetChildren())
+        {
+            if (each->getName() == "FBX")
+            {
+                yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(each);
+                break;
+            }
+        }
+        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(unitTemplateData->pod.fbxName);
+        obj->setName("FBX");
+        obj->SetParent(GetGameObject());
     }
 }

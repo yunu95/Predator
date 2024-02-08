@@ -4,5 +4,5 @@
 #pragma once
 #include "TerrainPalette.h"
 #include "UnitPalette.h"
-#include "DoodadPalette.h"
+#include "OrnamentPalette.h"
 #include "RegionPalette.h"

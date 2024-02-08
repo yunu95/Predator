@@ -21,8 +21,6 @@
 
 #include <iostream>
 
-GameObject* obj = nullptr;
-
 namespace application
 {
 	namespace editor
@@ -43,9 +41,6 @@ namespace application
 			app = &Application::GetInstance();
 			ec = &EditorCamera::GetSingletonInstance();
 			pm = &palette::PaletteManager::GetSingletonInstance();
-
-			obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-			AttachDebugMesh(obj);
 		}
 
 		void SceneViewPanel::Update(float ts)
@@ -133,7 +128,7 @@ namespace application
 						auto front = yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation().Forward();
 						auto distToXZPlane = abs(yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y);
 						auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint({ cursorPos_InScreenSpace.first, cursorPos_InScreenSpace.second }, distToXZPlane, Vector3d(0, 1, 0));
-						pm->GetCurrentPalette()->OnMouseMove(projectedPos);
+						pm->GetCurrentPalette()->OnMouseMove(projectedPos, { cursorPos_InScreenSpace.first, cursorPos_InScreenSpace.second });
 
 						if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui_IsCursorInGizmoButtonRect())
 						{
@@ -146,6 +141,7 @@ namespace application
 						if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
 						{
 							pm->GetCurrentPalette()->OnLeftClickRelease();
+							isGuizmoControl = false;
 						}
 					}
 					else
@@ -159,7 +155,25 @@ namespace application
 				}
 
 				// 키 입력에 대한 처리
-
+				if (!eim.IsMouseButtonDown(MouseCode::Right))
+				{
+					if (eim.IsKeyboardPressed(KeyCode::Q))
+					{
+						operation = (ImGuizmo::OPERATION)0;
+					}
+					else if (eim.IsKeyboardPressed(KeyCode::W))
+					{
+						operation = ImGuizmo::OPERATION::TRANSLATE;
+					}
+					else if (eim.IsKeyboardPressed(eim.GetKeyCode('E')))
+					{
+						operation = ImGuizmo::OPERATION::ROTATE;
+					}
+					else if (eim.IsKeyboardPressed(KeyCode::R))
+					{
+						operation = ImGuizmo::OPERATION::SCALE;
+					}
+				}
 			}
 		}
 
@@ -275,7 +289,6 @@ namespace application
 				if (imgui::SelectableImageButton("Gizmo Select", "ImageButtons/Scene_Select.png", button[0], ImVec2(gizmoButtonSize.first, gizmoButtonSize.second), ImVec2(0, 0), ImVec2(1, 1), true, ImVec4(0.0f, 0.0f, 0.0f, 0.0f), selectedColor))
 				{
 					operation = (ImGuizmo::OPERATION)0;
-					palette->SetAsSelectMode(true);
 				}
 
 				ImGui::SetCursorPosX(buttonStartPos.x);
@@ -283,7 +296,6 @@ namespace application
 				if (imgui::SelectableImageButton("Gizmo Move", "ImageButtons/Scene_Move.png", button[1], ImVec2(gizmoButtonSize.first, gizmoButtonSize.second), ImVec2(0, 0), ImVec2(1, 1), true, ImVec4(0.0f, 0.0f, 0.0f, 0.0f), selectedColor))
 				{
 					operation = ImGuizmo::TRANSLATE;
-					palette->SetAsSelectMode(true);
 				}
 
 				ImGui::SetCursorPosX(buttonStartPos.x);
@@ -291,7 +303,6 @@ namespace application
 				if (imgui::SelectableImageButton("Gizmo Rotate", "ImageButtons/Scene_Rotate.png", button[2], ImVec2(gizmoButtonSize.first, gizmoButtonSize.second), ImVec2(0, 0), ImVec2(1, 1), true, ImVec4(0.0f, 0.0f, 0.0f, 0.0f), selectedColor))
 				{
 					operation = ImGuizmo::ROTATE;
-					palette->SetAsSelectMode(true);
 				}
 
 				ImGui::SetCursorPosX(buttonStartPos.x);
@@ -299,7 +310,6 @@ namespace application
 				if (imgui::SelectableImageButton("Gizmo Scale", "ImageButtons/Scene_Scale.png", button[3], ImVec2(gizmoButtonSize.first, gizmoButtonSize.second), ImVec2(0, 0), ImVec2(1, 1), true, ImVec4(0.0f, 0.0f, 0.0f, 0.0f), selectedColor))
 				{
 					operation = ImGuizmo::SCALE;
-					palette->SetAsSelectMode(true);
 				}
 			}
 
@@ -309,8 +319,8 @@ namespace application
 			float right = left + renderImageSize.first;
 			float bottom = top + renderImageSize.second;
 			ImGuizmo::SetRect(left, top, renderImageSize.first, renderImageSize.second);
-			ImGui::PushClipRect(ImVec2(left,top),ImVec2(right, bottom), true);
-			
+			ImGui::PushClipRect(ImVec2(left, top), ImVec2(right, bottom), true);
+
 			auto vtm = ec->GetVTM();
 			auto ptm = ec->GetPTM();
 			yunuGI::Matrix4x4 im = yunuGI::Matrix4x4();
@@ -320,11 +330,70 @@ namespace application
 
 			auto beforeVTM = gvtm;
 
-			ImGuizmo::ViewManipulate(reinterpret_cast<float*>(&gvtm), 10 * sqrt(3), ImVec2(ImGui::GetWindowPos().x + renderImageSize.first - 128, ImGui::GetWindowPos().y + imageStartPos.second), ImVec2(128, 128), 0x10101010);
+			if (pm->GetCurrentPalette()->AreThereAnyObjectSelected())
+			{
+				auto& selections = pm->GetCurrentPalette()->GetSelections();
+				yunuGI::Matrix4x4 tm = yunuGI::Matrix4x4();
+				Vector3d startPosition = Vector3d();
+				if (selections.size() == 1)
+				{
+					tm = (*selections.begin())->GetPaletteInstance()->GetTransform()->GetWorldTM();
+				}
+				else
+				{
+					for (auto each : selections)
+					{
+						startPosition += each->GetPaletteInstance()->GetTransform()->GetWorldPosition();
+					}
+					startPosition /= selections.size();
+					tm = math::GetTranslateMatrix(yunuGI::Vector3(startPosition.x, startPosition.y, startPosition.z));
+				}
 
-			auto objgwtm = math::ConvertWTM(obj->GetTransform()->GetWorldTM());
-			ImGuizmo::Manipulate(reinterpret_cast<float*>(&beforeVTM), reinterpret_cast<float*>(&gptm), operation, mode, reinterpret_cast<float*>(&objgwtm), NULL, NULL, NULL, NULL);
-			ImGui_UpdateObjectWTM(obj, math::ConvertWTM(objgwtm));
+				auto objgwtm = math::ConvertWTM(tm);
+				if (ImGuizmo::Manipulate(reinterpret_cast<float*>(&beforeVTM), reinterpret_cast<float*>(&gptm), operation, mode, reinterpret_cast<float*>(&objgwtm), NULL, NULL, NULL, NULL))
+				{
+					if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+					{
+						OnStartControlGizmo();
+					}
+				}
+
+				if (selections.size() == 1)
+				{
+					ImGui_UpdateEditableDataWTM(*selections.begin(), math::ConvertWTM(objgwtm));
+				}
+				else
+				{
+					yunuGI::Vector3 scale = yunuGI::Vector3();
+					yunuGI::Quaternion rotate = yunuGI::Quaternion();
+					yunuGI::Vector3 trans = yunuGI::Vector3();
+
+					int idx = 0;
+
+					for (auto each : selections)
+					{
+						math::DecomposeWTM(math::ConvertWTM(objgwtm), scale, rotate, trans);
+						auto beforeScale = each->GetPaletteInstance()->GetTransform()->GetLocalScale();
+						auto beforeRotate = each->GetPaletteInstance()->GetTransform()->GetWorldRotation();
+						auto beforePos = each->GetPaletteInstance()->GetTransform()->GetWorldPosition();
+						if (isGuizmoControl)
+						{
+							beforeScale.x = initScale[idx].x * scale.x;
+							beforeScale.y = initScale[idx].y * scale.y;
+							beforeScale.z = initScale[idx].z * scale.z;
+						}
+						beforeRotate = beforeRotate * *reinterpret_cast<yunutyEngine::Quaternion*>(&rotate);
+						beforePos.x += (trans.x - startPosition.x);
+						beforePos.y += (trans.y - startPosition.y);
+						beforePos.z += (trans.z - startPosition.z);
+						each->OnRelocate(beforePos);
+						each->OnRerotate(beforeRotate);
+						each->OnRescale(beforeScale);
+						each->ApplyAsPaletteInstance();
+						idx++;
+					}
+				}
+			}
 
 			if (ec->GetGamePerspective() == CameraPerspectiveState::Free)
 			{
@@ -445,33 +514,68 @@ namespace application
 				ImGui::EndMenu();
 			}
 
+			// Palette Type
+			imgui::ShiftCursorX(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Ornament").x - ImGui::CalcTextSize(" | Select Mode").x - 10);
 
+			switch (pm->GetCurrentPaletteType())
+			{
+				case palette::Palette_List::Terrain:
+					ImGui::BeginMenu(" Terrain", false);
+					break;
+				case palette::Palette_List::Unit:
+					ImGui::BeginMenu("    Unit", false);
+					break;
+				case palette::Palette_List::Ornament:
+					ImGui::BeginMenu("Ornament", false);
+					break;
+				case palette::Palette_List::Region:
+					ImGui::BeginMenu("  Region", false);
+					break;
+				default:
+					break;
+			}
 
 			// Palette Mode
-			imgui::ShiftCursorX(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Select Mode").x - 10);
+			imgui::ShiftCursorX(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(" | Select Mode").x - 10);
 
 			if (pm->GetCurrentPalette()->IsSelectMode())
 			{
-				ImGui::BeginMenu("Select Mode", false);
+				ImGui::BeginMenu(" | Select Mode", false);
 			}
 			else
 			{
-				ImGui::BeginMenu("Place Mode", false);
+				ImGui::BeginMenu(" | Place Mode", false);
 			}
 
 			ImGui::EndMenuBar();
 		}
 
-		void SceneViewPanel::ImGui_UpdateObjectWTM(GameObject* target, const yunuGI::Matrix4x4& wtm) const
+		void SceneViewPanel::ImGui_UpdateEditableDataWTM(IEditableData* target, const yunuGI::Matrix4x4& wtm) const
 		{
-			auto ttf = target->GetTransform();
 			yunuGI::Vector3 scale;
 			yunuGI::Quaternion rotation;
 			yunuGI::Vector3 translation;
 			math::DecomposeWTM(wtm, scale, rotation, translation);
-			ttf->SetLocalScale(*reinterpret_cast<Vector3f*>(&scale));
-			ttf->SetWorldPosition(*reinterpret_cast<Vector3f*>(&translation));
-			ttf->SetWorldRotation(*reinterpret_cast<Quaternion*>(&rotation));
+			target->OnRescale(*reinterpret_cast<Vector3f*>(&scale));
+			target->OnRerotate(*reinterpret_cast<Quaternion*>(&rotation));
+			target->OnRelocate(*reinterpret_cast<Vector3f*>(&translation));
+			target->ApplyAsPaletteInstance();
+		}
+
+		void SceneViewPanel::OnStartControlGizmo()
+		{
+			isGuizmoControl = true;
+			initScale.resize(pm->GetCurrentPalette()->GetSelections().size());
+			int idx = 0;
+			Vector3d tempScale = Vector3d();
+			for (auto each : pm->GetCurrentPalette()->GetSelections())
+			{
+				tempScale = each->GetPaletteInstance()->GetTransform()->GetLocalScale();
+				initScale[idx].x = tempScale.x;
+				initScale[idx].y = tempScale.y;
+				initScale[idx].z = tempScale.z;
+				idx++;
+			}
 		}
 	}
 }

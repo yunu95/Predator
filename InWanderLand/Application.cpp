@@ -16,6 +16,8 @@
 #include "PaletteManager.h"
 #include "Palette.h"
 #include "EditorCamera.h"
+#include "InstanceManager.h"
+#include "TemplateDataManager.h"
 
 #include <d3d11.h>
 #include <dxgi1_4.h>
@@ -296,6 +298,9 @@ namespace application
 		::DestroyWindow(editorHWND);
 		::UnregisterClass(wcEditor.lpszClassName, wcEditor.hInstance);
 #endif
+
+		editor::InstanceManager::GetSingletonInstance().Clear();
+		editor::TemplateDataManager::GetSingletonInstance().Clear();
 	}
 
 	void Application::TurnOff()
@@ -406,17 +411,17 @@ namespace application
 	{
 #ifdef EDITOR
 		editor::EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<editor::WindowResizeEvent>([this](editor::WindowResizeEvent& e) { std::cout << e.GetDebugString(); return true; });
-		dispatcher.Dispatch<editor::SaveEvent>([this](editor::SaveEvent& e) { std::cout << e.GetDebugString(); return true; });
-		dispatcher.Dispatch<editor::LoadEvent>([this](editor::LoadEvent& e) { std::cout << e.GetDebugString(); return true; });
-		dispatcher.Dispatch<editor::KeyPressedEvent>([this](editor::KeyPressedEvent& e) { std::cout << e.GetDebugString(); return true; });
-		dispatcher.Dispatch<editor::KeyDownEvent>([this](editor::KeyDownEvent& e) { std::cout << e.GetDebugString(); return true; });
-		dispatcher.Dispatch<editor::KeyReleasedEvent>([this](editor::KeyReleasedEvent& e) { std::cout << e.GetDebugString(); return true; });
-		dispatcher.Dispatch<editor::MouseButtonPressedEvent>([this](editor::MouseButtonPressedEvent& e) { std::cout << e.GetDebugString(); return true; });
-		dispatcher.Dispatch<editor::MouseButtonDownEvent>([this](editor::MouseButtonDownEvent& e) { std::cout << e.GetDebugString(); return true; });
-		dispatcher.Dispatch<editor::MouseButtonUpEvent>([this](editor::MouseButtonUpEvent& e) { std::cout << e.GetDebugString(); return true; });
-		dispatcher.Dispatch<editor::MouseMoveEvent>([this](editor::MouseMoveEvent& e) { std::cout << e.GetDebugString(); return true; });
-		dispatcher.Dispatch<editor::MouseWheelEvent>([this](editor::MouseWheelEvent& e) { std::cout << e.GetDebugString(); return true; });
+		//dispatcher.Dispatch<editor::WindowResizeEvent>([this](editor::WindowResizeEvent& e) { std::cout << e.GetDebugString(); return true; });
+		//dispatcher.Dispatch<editor::SaveEvent>([this](editor::SaveEvent& e) { std::cout << e.GetDebugString(); return true; });
+		//dispatcher.Dispatch<editor::LoadEvent>([this](editor::LoadEvent& e) { std::cout << e.GetDebugString(); return true; });
+		//dispatcher.Dispatch<editor::KeyPressedEvent>([this](editor::KeyPressedEvent& e) { std::cout << e.GetDebugString(); return true; });
+		//dispatcher.Dispatch<editor::KeyDownEvent>([this](editor::KeyDownEvent& e) { std::cout << e.GetDebugString(); return true; });
+		//dispatcher.Dispatch<editor::KeyReleasedEvent>([this](editor::KeyReleasedEvent& e) { std::cout << e.GetDebugString(); return true; });
+		//dispatcher.Dispatch<editor::MouseButtonPressedEvent>([this](editor::MouseButtonPressedEvent& e) { std::cout << e.GetDebugString(); return true; });
+		//dispatcher.Dispatch<editor::MouseButtonDownEvent>([this](editor::MouseButtonDownEvent& e) { std::cout << e.GetDebugString(); return true; });
+		//dispatcher.Dispatch<editor::MouseButtonUpEvent>([this](editor::MouseButtonUpEvent& e) { std::cout << e.GetDebugString(); return true; });
+		//dispatcher.Dispatch<editor::MouseMoveEvent>([this](editor::MouseMoveEvent& e) { std::cout << e.GetDebugString(); return true; });
+		//dispatcher.Dispatch<editor::MouseWheelEvent>([this](editor::MouseWheelEvent& e) { std::cout << e.GetDebugString(); return true; });
 
 		layers[(int)LayerList::EditorLayer]->OnEvent(event);
 #endif
@@ -522,7 +527,7 @@ namespace application
 					centeredPosition.y -= 0.5;
 					centeredPosition.y *= -1;
 					auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
-					editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnMouseMove(projectedPos);
+					editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnMouseMove(projectedPos,centeredPosition);
 				}
 			};
 		winMouseWheelCallBackFunction = [&](short wheelDelta) {Application::DispatchEvent<editor::MouseWheelEvent>(wheelDelta); };
@@ -719,7 +724,7 @@ LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 						if (winKeyboardPressedCallBackFunction)
 						{
 							eim.Update();
-							unsigned char keyCode = static_cast<unsigned char>(application::editor::EditorInputManager::GetKeycode(rawInput.data.keyboard.VKey));
+							unsigned char keyCode = static_cast<unsigned char>(application::editor::EditorInputManager::GetKeyCode(rawInput.data.keyboard.VKey));
 							if (eim.IsKeyboardDown(static_cast<application::editor::KeyCode>(keyCode)))
 							{
 								eim.UpdateKeyboardState(static_cast<application::editor::KeyCode>(keyCode), application::editor::KeyState::Down);
@@ -737,7 +742,7 @@ LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 						if (winKeyboardUpCallBackFunction)
 						{
 							eim.Update();
-							unsigned char keyCode = static_cast<unsigned char>(application::editor::EditorInputManager::GetKeycode(rawInput.data.keyboard.VKey));
+							unsigned char keyCode = static_cast<unsigned char>(application::editor::EditorInputManager::GetKeyCode(rawInput.data.keyboard.VKey));
 							eim.UpdateKeyboardState(static_cast<application::editor::KeyCode>(keyCode), application::editor::KeyState::Up);
 							winKeyboardUpCallBackFunction(keyCode);
 						}

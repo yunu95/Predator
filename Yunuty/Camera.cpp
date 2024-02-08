@@ -12,7 +12,7 @@ yunutyEngine::graphics::Camera::Camera()
 }
 void yunutyEngine::graphics::Camera::Update()
 {
-    GetTransform()->SetLocalScale( Vector3d::one);
+    GetTransform()->SetLocalScale(Vector3d::one);
     yunuGICamera->SetWorldTM(GetTransform()->GetWorldTM());
 }
 void yunutyEngine::graphics::Camera::SetCameraMain()
@@ -38,8 +38,8 @@ Vector3d yunutyEngine::graphics::Camera::GetProjectedPoint(const Vector2d& norma
     double tanFOV = tan(yunuGICamera.Get()->GetVerticalFOV() * 0.5);
     return GetTransform()->GetWorldPosition() +
         forward * distance +
-        right * 2 * normalizedScreenPosition.x * tanFOV * distance * resolution.x / resolution.y +
-        up * 2 * normalizedScreenPosition.y * tanFOV * distance;
+        right * 2 * normalizedScreenPosition.x * tanFOV * (distance + GetGI().GetNear()) * resolution.x / resolution.y +
+        up * 2 * normalizedScreenPosition.y * tanFOV * (distance + GetGI().GetNear());
 }
 Vector3d yunutyEngine::graphics::Camera::GetProjectedPoint(const Vector2d& normalizedScreenPosition, double distance, const Vector3d& norm)
 {
@@ -57,7 +57,7 @@ Vector3d yunutyEngine::graphics::Camera::GetProjectedPoint(const Vector2d& norma
     }
 
     // 스크린 좌표계 위치의 방향 벡터
-    auto lineDirection = forward + 
+    auto lineDirection = forward +
         right * 2 * normalizedScreenPosition.x * tanFOV * resolution.x / resolution.y +
         up * 2 * normalizedScreenPosition.y * tanFOV;
     lineDirection = lineDirection.Normalized();

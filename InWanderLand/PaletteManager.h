@@ -28,7 +28,7 @@ namespace application
             {
                 Terrain = 0,
                 Unit,
-                Doodad,
+                Ornament,
                 Region,
 
                 /// Size를 자동으로 넣기 위해 사용하는 enum
@@ -52,6 +52,7 @@ namespace application
                 /// <returns></returns>
                 void SetCurrentPalette(Palette* palette);
                 Palette* GetCurrentPalette() { return currentPalette; }
+                Palette_List GetCurrentPaletteType();
 
             private:
                 PaletteManager();

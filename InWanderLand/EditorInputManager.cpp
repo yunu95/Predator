@@ -90,7 +90,7 @@ namespace application
 			rawKeyEnumMap.insert(std::make_pair(VK_OEM_5, KeyCode::BackSlash));
 		}
 
-		KeyCode EditorInputManager::GetKeycode(const int& key)
+		KeyCode EditorInputManager::GetKeyCode(const int& key)
 		{
 			if (rawKeyEnumMap.find(key) == rawKeyEnumMap.end())
 			{

@@ -6,6 +6,9 @@
 
 #include "ITemplateData.h"
 
+#include <string>
+#include <vector>
+
 namespace application
 {
 	namespace editor
@@ -14,6 +17,9 @@ namespace application
 
 		struct POD_Ornament_TemplateData
 		{
+			std::string thumbnailPath = "ImageButtons/Ornament_Default.png";
+			std::string fbxName = std::string();
+
 			TO_JSON(POD_Ornament_TemplateData)
 			FROM_JSON(POD_Ornament_TemplateData)
 		};
@@ -26,6 +32,8 @@ namespace application
 
 		public:
 			virtual std::string GetDataKey() const override;
+			virtual void SetDataResourceName(std::string fbxName) override;
+			virtual std::string GetDataResourceName() const override;
 
 			POD_Ornament_TemplateData pod;
 
