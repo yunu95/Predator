@@ -1126,5 +1126,8 @@
     <ClCompile Include="TacticModeSystem.cpp">
       <Filter>Contents\TacticModeSystem</Filter>
     </ClCompile>
+    <ClCompile Include="SnippetCastleWallTextureBlending.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
