@@ -811,6 +811,7 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
             fbxData->materialVec[i].opacityMap = node->meshVec[i].material.opacityMap;
 
             this->materialMap.insert({ node->meshVec[i].material.materialName , material });
+            this->materialVec.emplace_back(material.get());
         }
         else
         {

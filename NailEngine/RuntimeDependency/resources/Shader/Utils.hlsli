@@ -122,7 +122,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
     
     // 뷰 디렉션
     float3 Lo = normalize(pos);
-    //Lo = -Lo;
+    Lo = -Lo;
     
     // 뷰와 노말의 각
     float cosLo = max(0.0, dot(normal, Lo));
@@ -192,10 +192,11 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         ///
         
         diffuse.xyz += directionalLighting.xyz * lights[lightIndex].color.diffuse.xyz;
+        //diffuse.w = 1.f;
         ambient.xyz = ambientLighting + lights[lightIndex].color.ambient.xyz;
         diffuse = float4(pow(float3(diffuse.xyz), 1.0 / 2.2), 1.0);
         
-        diffuse *= shadow;
+        //diffuse *= shadow;
     }
 }
 
