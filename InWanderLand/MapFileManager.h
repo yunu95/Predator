@@ -27,6 +27,7 @@ namespace application
 			friend class Singleton<MapFileManager>;
 
 		public:
+			bool LoadStaticOrnaments(const std::string& path);
 			bool LoadMapFile(const std::string& path);
 			bool SaveMapFile(const std::string& path);
 			std::string GetCurrentMapPath() const;

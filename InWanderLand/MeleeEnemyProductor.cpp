@@ -1,11 +1,11 @@
 #include "InWanderLand.h"
-#include "MeleeEnemyProduction.h"
+#include "MeleeEnemyProductor.h"
 #include "MeleeAttackSystem.h"
 #include "DebugMeshes.h"
+#include "SingleNavigationField.h"
 
-void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition)
+void MeleeEnemyProductor::SetUnitData()
 {
-#pragma region Unit Status Member Setting
 	m_objectName = "MeleeEnenmy";
 	m_unitType = Unit::UnitType::MeleeEnemy;
 	m_unitSide = Unit::UnitSide::Enemy;
@@ -27,14 +27,21 @@ void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject, NavigationField* n
 
 	m_attackDelay = 1.0f;
 
-	m_navField = navField;
-	m_startPosition = startPosition;
+	m_navField = &SingleNavigationField::Instance();
+}
 
+void MeleeEnemyProductor::SingletonInitializer()
+{
+	graphics::Renderer::SingleInstance().GetResourceManager()->LoadFile("FBX/Boss");
+	SetUnitData();
+}
 
-#pragma endregion
-
+yunutyEngine::GameObject* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
+{
 #pragma region Animation Related Member Setting
-	m_unitGameObject = fbxObject;
+	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
+
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
 	auto& animList = rsrcManager->GetAnimationList();
@@ -100,10 +107,6 @@ void MeleeEnemyProduction::SetUnitData(GameObject* fbxObject, NavigationField* n
 	autoAttackDebugMesh->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -2.0f });
 #pragma endregion
 
-}
-
-yunutyEngine::GameObject* MeleeEnemyProduction::CreateUnitWithOrder()
-{
-	auto unitGameObject = UnitProductionOrder::CreateUnitWithOrder();
-	return unitGameObject;
+	UnitProductor::SetCommonComponents();
+	return m_unitGameObject;
 }

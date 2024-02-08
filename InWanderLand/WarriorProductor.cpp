@@ -1,17 +1,17 @@
 #include "InWanderLand.h"
-#include "WarriorProduction.h"
+#include "WarriorProductor.h"
 #include "BleedingComponent.h"
 #include "KnockBackComponent.h"
 #include "MeleeAttackSystem.h"
 #include "WarriorSkillSystem.h"
 #include "OnlyDamageComponent.h"
 #include "DebugMeshes.h"
-#include "HealerProduction.h"
-#include "MagicianProduction.h"
+#include "HealerProductor.h"
+#include "MagicianProductor.h"
+#include "SingleNavigationField.h"
 
-void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition)
+void WarriorProductor::SetUnitData()
 {
-#pragma region Unit Status Member Setting
 	m_objectName = "Warrior";
 	m_unitType = Unit::UnitType::Warrior;
 	m_unitSide = Unit::UnitSide::Player;
@@ -33,12 +33,21 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 
 	m_attackDelay = 1.0f;
 
-	m_navField = navField;
-	m_startPosition = startPosition;
-#pragma endregion
+	m_navField = &SingleNavigationField::Instance();
+}
 
+void WarriorProductor::SingletonInitializer()
+{
+	graphics::Renderer::SingleInstance().GetResourceManager()->LoadFile("FBX/Boss");
+	SetUnitData();
+}
+
+GameObject* WarriorProductor::CreateUnit(Vector3d startPos)
+{
 #pragma region Animation Related Member Setting
-	m_unitGameObject = fbxObject;
+	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
+
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
 	auto& animList = rsrcManager->GetAnimationList();
@@ -147,37 +156,34 @@ void WarriorProduction::SetUnitData(GameObject* fbxObject, NavigationField* navF
 	warriorSkillSystem->SetWSkillDebugObject(wSkillColliderDebugObject, m_WSkillRadius);
 #pragma endregion
 
-}
+	UnitProductor::SetCommonComponents();
 
-GameObject* WarriorProduction::CreateUnitWithOrder()
-{
-	auto unitGameObject = UnitProductionOrder::CreateUnitWithOrder();
-	return unitGameObject;
+	return m_unitGameObject;
 }
 
 // 전략 패턴을 설명하기 위한 예시 코드
 // 전략 패턴의 핵심은 객체의 동작을 전략 객체를 통해 바꿀 수 있다는 것.
 // 아래의 경우 UnitProductionOrder가 전략에 해당되며, 이 전략 객체가 바뀜에 따라 MakeSome 동작이 바뀐다.
-class Someone
-{
-	// 아래가 전략!
-	UnitProductionOrder* currentStrategy;
-	void MakeSome()
-	{
-		currentStrategy->CreateUnitWithOrder();
-	}
-	void ChangeStrategy(UnitProductionOrder* newStrategy)
-	{
-		currentStrategy = newStrategy;
-	}
-	static void SampleCode()
-	{
-		Someone someDude;
-		someDude.ChangeStrategy(new WarriorProduction);
-		someDude.MakeSome();
-		someDude.ChangeStrategy(new MagicianProduction);
-		someDude.MakeSome();
-		someDude.ChangeStrategy(new HealerProduction);
-		someDude.MakeSome();
-	}
-};
+//class Someone
+//{
+//	// 아래가 전략!
+//	UnitProductionOrder* currentStrategy;
+//	void MakeSome()
+//	{
+//		currentStrategy->CreateUnitWithOrder();
+//	}
+//	void ChangeStrategy(UnitProductionOrder* newStrategy)
+//	{
+//		currentStrategy = newStrategy;
+//	}
+//	static void SampleCode()
+//	{
+//		Someone someDude;
+//		someDude.ChangeStrategy(new WarriorProduction);
+//		someDude.MakeSome();
+//		someDude.ChangeStrategy(new MagicianProduction);
+//		someDude.MakeSome();
+//		someDude.ChangeStrategy(new HealerProduction);
+//		someDude.MakeSome();
+//	}
+//};

@@ -59,10 +59,10 @@ namespace application
 					ImGui::EndTabItem();
 				}
 
-				if (ImGui::BeginTabItem("Doodad"))
+				if (ImGui::BeginTabItem("Ornament"))
 				{
-					ChangePalette(&dp);
-					ImGui_BeginDoodadPalette();
+					ChangePalette(&op);
+					ImGui_BeginOrnamentPalette();
 					ImGui::EndTabItem();
 				}
 
@@ -138,6 +138,11 @@ namespace application
 							}
 
 							up.SelectUnitTemplateData(nullptr);
+						}
+						else if (currentPalette == &op)
+						{
+							ornamentCurrentButton = -1;
+							op.SelectOrnamentTemplateData(nullptr);
 						}
 					}
 				}
@@ -264,6 +269,7 @@ namespace application
 					if (i == uSize)
 					{
 						bool buttonFlag = imgui::SelectableImageButton("Unit Add Button", "ImageButtons/Unit_AddButton.png", false, ImVec2(imageSize, imageSize));
+						imgui::SetTooltip("Add");
 						if (buttonFlag)
 						{
 							if (unitCurrentButton != -1)
@@ -277,14 +283,16 @@ namespace application
 							// Unit Template 추가 로직과 연결해야 함
 							// 이때, unitButton 에도 pushback 해주어 Size를 추가해야 함
 							/// 임시로 Unit Template Data 하나를 추가하는 로직을 구현함
-							tdm.CreateTemplateData<Unit_TemplateData>("UnitButton" + std::to_string(i));
+							auto td = tdm.CreateTemplateData<Unit_TemplateData>("UnitButton" + std::to_string(i));
+							td->SetDataResourceName("SM_Stone_001");
 							unitButton.push_back(false);
 						}
 					}
 					else
 					{
 						bool ref = unitButton[i];
-						bool buttonFlag = imgui::SelectableImageButton("UnitButton" + std::to_string(i), "ImageButtons/TestCube.png", ref, ImVec2(imageSize, imageSize));
+						bool buttonFlag = imgui::SelectableImageButton("UnitButton" + std::to_string(i), static_cast<Unit_TemplateData*>(tdm.GetDataList(DataType::UnitData)[i])->pod.thumbnailPath, ref, ImVec2(imageSize, imageSize));
+						imgui::SetTooltip(tdm.GetDataList(DataType::UnitData)[i]->GetDataKey());
 						if (buttonFlag)
 						{
 							if (unitCurrentButton != -1)
@@ -321,12 +329,83 @@ namespace application
 			}
 		}
 
-		void PalettePanel::ImGui_BeginDoodadPalette()
+		void PalettePanel::ImGui_BeginOrnamentPalette()
 		{
 			imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
 			imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 
 			int countIdx = 0;
+
+			if (imgui::BeginSection_1Col(countIdx, "Ornament List", ImGui::GetContentRegionAvail().x))
+			{
+				auto oSize = tdm.GetDataList(DataType::OrnamentData).size();
+
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+
+				int colCount = 6;
+				int rowCount = 1;
+
+				auto style = ImGui::GetStyle();
+				auto imageSize = ImGui::GetContentRegionAvail().x / colCount - style.ItemSpacing.x - style.FramePadding.x * 2;
+
+				// 반복 영역을 oSize + 1 로 설정하면 + 버튼 구현됨
+				for (int i = 0; i < oSize; i++)
+				{
+					// oSize 는 + 버튼으로 구현 도중 중단함
+					if (i == oSize)
+					{
+						imgui::SmartStyleVar textAlign(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f, 0.5f));
+						imgui::SmartStyleVar border(ImGuiStyleVar_FrameBorderSize, 2);
+						imgui::SmartStyleColor borderCol(ImGuiCol_Border, ImVec4(0.26f, 0.59f, 0.98f, 1.00f));
+						if (ImGui::Selectable("+", false))
+						{
+							if (ornamentCurrentButton != -1)
+							{
+								ornamentCurrentButton = -1;
+								op.SelectOrnamentTemplateData(nullptr);
+								op.SetAsSelectMode(true);
+							}
+
+							// Ornament Template 추가 로직과 연결해야 함
+							// 이때, ornamentButton 에도 pushback 해주어 Size를 추가해야 함
+							/// 임시로 Ornament Template Data 하나를 추가하는 로직을 구현함
+							auto td = tdm.CreateTemplateData<Ornament_TemplateData>("OrnamentButton" + std::to_string(i));
+							td->SetDataResourceName("SM_Temple_Books");
+						}
+						ImGui::RenderFrameBorder(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
+					}
+					else
+					{
+						imgui::SmartStyleVar textAlign(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f, 0.5f));
+						if(ImGui::Selectable(static_cast<Ornament_TemplateData*>(tdm.GetDataList(DataType::OrnamentData)[i])->GetDataKey().c_str(), ornamentCurrentButton == i))
+						{
+							if (ornamentCurrentButton != -1)
+							{
+								if (ornamentCurrentButton == i)
+								{
+									ornamentCurrentButton = -1;
+									op.SelectOrnamentTemplateData(nullptr);
+									op.SetAsSelectMode(true);
+								}
+								else
+								{
+									ornamentCurrentButton = i;
+									op.SelectOrnamentTemplateData(static_cast<Ornament_TemplateData*>(tdm.GetDataList(DataType::OrnamentData)[i]));
+									op.SetAsSelectMode(false);
+								}
+							}
+							else
+							{
+								ornamentCurrentButton = i;
+								op.SelectOrnamentTemplateData(static_cast<Ornament_TemplateData*>(tdm.GetDataList(DataType::OrnamentData)[i]));
+								op.SetAsSelectMode(false);
+							}
+						}
+					}
+				}
+				imgui::EndSection();
+			}
 		}
 
 		void PalettePanel::ImGui_BeginRegionPalette()
@@ -341,6 +420,8 @@ namespace application
 		{
 			unitCurrentButton = -1;
 			unitButton.clear();
+
+			ornamentCurrentButton = -1;
 
 			auto uSize = tdm.GetDataList(DataType::UnitData).size();
 			unitButton.reserve(30);

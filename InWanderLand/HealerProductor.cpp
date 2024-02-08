@@ -1,14 +1,14 @@
 #include "InWanderLand.h"
-#include "HealerProduction.h"
+#include "HealerProductor.h"
 #include "RangedAttackSystem.h"
 #include "OnlyDamageComponent.h"
 #include "DebugMeshes.h"
 #include "HealerSkillSystem.h"
 #include "DualCastComponent.h"
+#include "SingleNavigationField.h"
 
-void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition)
+void HealerProductor::SetUnitData()
 {
-#pragma region Unit Status Member Setting
 	m_objectName = "Healer";
 	m_unitType = Unit::UnitType::Healer;
 	m_unitSide = Unit::UnitSide::Player;
@@ -30,14 +30,21 @@ void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navFi
 
 	m_attackDelay = 1.0f;
 
-	m_navField = navField;
-	m_startPosition = startPosition;
+	m_navField = &SingleNavigationField::Instance();
+}
 
+void HealerProductor::SingletonInitializer()
+{
+	graphics::Renderer::SingleInstance().GetResourceManager()->LoadFile("FBX/Boss");
+	SetUnitData();
+}
 
-#pragma endregion
-
+yunutyEngine::GameObject* HealerProductor::CreateUnit(Vector3d startPos)
+{
 #pragma region Animation Related Member Setting
-	m_unitGameObject = fbxObject;
+	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
+
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
 	auto& animList = rsrcManager->GetAnimationList();
@@ -99,7 +106,7 @@ void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navFi
 	auto QSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(QSkillFieldDebugObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::white(), true));
 	//QSkillFieldDebugObject->GetTransform()->scale = { pow(m_QSkillFieldRadius, 2), pow(m_QSkillFieldRadius, 2) , pow(m_QSkillFieldRadius, 2) };
-	QSkillFieldDebugObject->GetTransform()->SetLocalScale({m_QSkillFieldRadius, m_QSkillFieldRadius, m_QSkillFieldRadius});
+	QSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_QSkillFieldRadius, m_QSkillFieldRadius, m_QSkillFieldRadius });
 #pragma endregion
 
 #pragma region W Skill Setting
@@ -123,7 +130,7 @@ void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navFi
 
 #pragma region SkillSystem Setting
 	auto healerSkillSystem = m_unitGameObject->AddComponent<HealerSkillSystem>();
-	
+
 	healerSkillSystem->SetQSkillCollider(QSkillFieldCollider);
 	healerSkillSystem->SetQSkillObject(QSkillFieldObject);
 	healerSkillSystem->SetQSkillDebugInfo(QSkillFieldDebugObject);
@@ -132,10 +139,8 @@ void HealerProduction::SetUnitData(GameObject* fbxObject, NavigationField* navFi
 	healerSkillSystem->SetWSkillObject(WSkillFieldObject);
 	healerSkillSystem->SetWSkillDebugInfo(WSkillFieldDebugObject);
 #pragma endregion
-}
 
-yunutyEngine::GameObject* HealerProduction::CreateUnitWithOrder()
-{
-	auto unitGameObject = UnitProductionOrder::CreateUnitWithOrder();
-	return unitGameObject;
+	UnitProductor::SetCommonComponents();
+	
+	return m_unitGameObject;
 }

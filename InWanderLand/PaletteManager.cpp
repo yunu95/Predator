@@ -12,7 +12,7 @@ namespace application
 			{
 				paletteList[(int)Palette_List::Terrain] = &TerrainPalette::SingleInstance();
 				paletteList[(int)Palette_List::Unit] = &UnitPalette::SingleInstance();
-				paletteList[(int)Palette_List::Doodad] = &DoodadPalette::SingleInstance();
+				paletteList[(int)Palette_List::Ornament] = &OrnamentPalette::SingleInstance();
 				paletteList[(int)Palette_List::Region] = &RegionPalette::SingleInstance();
 
 				SetCurrentPalette(paletteList[(int)Palette_List::Terrain]);
@@ -31,6 +31,28 @@ namespace application
 				{
 					currentPalette->OnStartPalette();
 				}
+			}
+
+			Palette_List PaletteManager::GetCurrentPaletteType()
+			{
+				if (currentPalette == paletteList[(int)Palette_List::Terrain])
+				{
+					return Palette_List::Terrain;
+				}
+				else if (currentPalette == paletteList[(int)Palette_List::Unit])
+				{
+					return Palette_List::Unit;
+				}
+				else if (currentPalette == paletteList[(int)Palette_List::Ornament])
+				{
+					return Palette_List::Ornament;
+				}
+				else if (currentPalette == paletteList[(int)Palette_List::Region])
+				{
+					return Palette_List::Region;
+				}
+
+				return Palette_List::None;
 			}
 
 			PaletteManager::PaletteManager()

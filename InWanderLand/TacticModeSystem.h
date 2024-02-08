@@ -32,17 +32,14 @@ public:
 	void EngageTacticMode();
 	void ExitTacticMode();
 	void SetMovingSystemComponent(RTSCam* sys);
-	bool IsTacticModeActivated() const;
-	bool IsAllSkillActivated() const;
+	bool IsTacticModeActivated(Unit* p_unit);
 
 	void CallQueueFunction(Unit* p_unit);
 
+	bool isTacticModeStarted;
+
 private:
 	RTSCam* m_rtsCam;
-
-	bool istacticModeOn;
-	bool isReadyToActivateQueue;
-	bool isAllFunctionActivated;
 
 	Unit::UnitType m_currentSelectedPlayerNumber;
 	Unit* currentSelectedUnit;
@@ -55,6 +52,8 @@ private:
 	std::queue<std::function<void()>> warriorQueue;
 	std::queue<std::function<void()>> magicianQueue;
 	std::queue<std::function<void()>> healerQueue;
+
+	std::vector<Unit*> testVector;
 
 	void SetCurrentSelectedQueue(Unit* p_currentUnit);
 };

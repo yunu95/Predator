@@ -26,6 +26,7 @@ namespace application
 	namespace editor
 	{
 		class EditorCamera;
+		class IEditableData;
 	}
 }
 
@@ -66,8 +67,9 @@ namespace application
 
 			void ImGui_SceneViewSettings();
 			void ImGui_DrawMenuBar();
-			void ImGui_UpdateObjectWTM(GameObject* target, const yunuGI::Matrix4x4& wtm) const;
+			void ImGui_UpdateEditableDataWTM(IEditableData* target, const yunuGI::Matrix4x4& wtm) const;
 
+			void OnStartControlGizmo();
 			Application* app;
 			EditorCamera* ec;
 			ResourceManager& erm = ResourceManager::GetSingletonInstance();
@@ -86,6 +88,9 @@ namespace application
 
 			std::pair<float, float> gizmoButtonSize = std::pair<float, float>(40, 40);
 			std::pair<float, float> gizmoButtonStartPos = std::pair<float, float>(10, 10);
+
+			bool isGuizmoControl = false;
+			std::vector<yunuGI::Vector3> initScale = std::vector<yunuGI::Vector3>(64, yunuGI::Vector3{1, 1, 1});
 		};
 	}
 }

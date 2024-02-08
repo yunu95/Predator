@@ -5,9 +5,12 @@
 
 #include "Singleton.h"
 
+#include "YunuGraphicsInterface.h"
+
 #include "imgui.h"
 
 #include <unordered_map>
+#include <unordered_set>
 #include <string>
 
 namespace application
@@ -49,17 +52,28 @@ namespace application
 
 		public:
 			void Initialize(void* device);
+			void LateInitialize();
 			Texture2D* GetTexture2D(std::string filename);
 			bool LoadTextureFromFile(std::string filename);
+			const std::unordered_set<std::string>& GetFbxList() const { return fbxSet; }
+			yunuGI::IShader* GetShader(std::string shaderName);
 
 		private:
 			ResourceManager() = default;
+			void LoadFbxList();
+			void LoadShaderList();
 
 			void* d3dDevice = nullptr;
 
 			// Editor\Resources 폴더로부터 상대적 경로를 Key 값으로 합니다.
 			// 해당 Key 값을 통해 LoadTextureFromFile 함수를 호출합니다.
 			std::unordered_map<std::string, std::unique_ptr<Texture2D>> textureMap = std::unordered_map<std::string, std::unique_ptr<Texture2D>>();
+			// LoadFbxList 함수를 통해 Engine 의 ResourceManager 로부터 FBXList 를 획득합니다.
+			// 이때, Ornament_TemplateData 를 Fbx 이름에 맞춰 생성합니다.
+			std::unordered_set<std::string> fbxSet = std::unordered_set<std::string>();
+			// LoadShaderList 함수를 통해 Engine 의 ResourceManager 로부터 ShaderMap 을 작성합니다.
+			// Shader Name 으로부터 IShader 를 획득합니다.
+			std::unordered_map<std::string, yunuGI::IShader*> shaderMap = std::unordered_map<std::string, yunuGI::IShader*>();
 		};
 	}
 }

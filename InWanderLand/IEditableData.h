@@ -34,6 +34,7 @@ namespace application
 			OrnamentData,
 			RegionData,
 		};
+
 		template<typename T>
 		DataType GetDataTypeEnum() { return DataType::None; }
 
@@ -46,14 +47,17 @@ namespace application
 		public:
 			virtual ~IEditableData();
 
-			virtual bool EnterDataFromTemplate() = 0;
-			virtual ITemplateData* GetTemplateData() = 0;
-			virtual bool SetTemplateData(const std::string& dataName) = 0;
-			virtual IEditableData* Clone() const = 0;
-			virtual palette::PaletteInstance* ApplyAsPaletteInstance() = 0;
-			virtual void ApplyAsPlaytimeObject() = 0;
-			virtual void OnRelocate(const Vector3d& newLoc) {};
-			palette::PaletteInstance* GetPaletteInstance();
+            virtual bool EnterDataFromTemplate() = 0;
+            virtual ITemplateData* GetTemplateData() = 0;
+            virtual bool SetTemplateData(const std::string& dataName) = 0;
+            virtual IEditableData* Clone() const = 0;
+            virtual palette::PaletteInstance* ApplyAsPaletteInstance() = 0;
+            virtual void OnRelocate(const Vector3d& newLoc) {};
+            virtual void OnRerotate(const Quaternion& newRot) {};
+            virtual void OnRescale(const Vector3d& newScale) {};
+            virtual void OnDataResourceChange(std::string newName) {};
+            palette::PaletteInstance* GetPaletteInstance();
+			virtual void ApplyAsPlaytimeObject() {};
 
 		protected:
 			virtual bool PreSaveCallback() { return true; }

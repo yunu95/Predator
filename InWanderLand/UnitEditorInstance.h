@@ -18,6 +18,8 @@ namespace application
                 virtual void Start() override;
                 void Init(const application::editor::UnitData* unitData);
                 void Init(const application::editor::Unit_TemplateData* unitTemplateData);
+                void ChangeTemplateData(const application::editor::UnitData* unitData);
+                void ChangeTemplateData(const application::editor::Unit_TemplateData* unitTemplateData);
             protected:
                 virtual void OnHover()
                 {
@@ -28,7 +30,6 @@ namespace application
                     PaletteInstance::OnHoverLeft();
                 }
             private:
-                yunutyEngine::graphics::StaticMeshRenderer* mesh{ nullptr };
                 const application::editor::Unit_TemplateData* unitTemplateData;
             };
         }

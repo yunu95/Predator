@@ -8,13 +8,24 @@
 /// UnitFactory에서의 유닛 생산을 좀 더 효율적으로 하기 위한 클래스.
 /// </summary>
 
-class UnitProductionOrder : public Component
+class UnitProductor : public Component
 {
 protected:
+
+
+	// 임시. 모델링 파일로 대체해주기
+	GameObject* m_unitGameObject;
+	Unit* m_unitComponent;
+
+	Unit::BaseUnitAnimationStruct m_baseUnitAnimations;
+
+	NavigationField* m_navField;
+
+public:
 	string m_objectName;
 	Unit::UnitType m_unitType;
 	Unit::UnitSide m_unitSide;
-	
+
 	float m_healthPoint;
 	int m_manaPoint;
 
@@ -33,19 +44,11 @@ protected:
 
 	float m_attackDelay;
 
-	// 임시. 모델링 파일로 대체해주기
-	GameObject* m_unitGameObject;
-	Unit* m_unitComponent;
+	virtual GameObject* CreateUnit(Vector3d startPos) = 0;
 
-	Unit::BaseUnitAnimationStruct m_baseUnitAnimations;
+	void SetCommonComponents();
 
-	NavigationField* m_navField;
-
-public:
-	Vector3d m_startPosition;
-	virtual GameObject* CreateUnitWithOrder();
-
-	virtual void SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition) = 0;
+	virtual void SetUnitData() = 0;
 
 	virtual void SetPlayerRelatedComponents(Unit* playerUnit);
 };

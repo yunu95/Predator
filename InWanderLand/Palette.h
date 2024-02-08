@@ -70,6 +70,8 @@ namespace application
                 virtual void OnStandbyPalette() = 0;
 
                 State GetCurrentState() { return state; }
+                bool AreThereAnyObjectSelected() { return selection.size() != 0; }
+                const std::unordered_set<IEditableData*>& GetSelections() { return selection; }
 
             protected:
                 // Reset 함수는 맵 데이터를 로드할때마다 기존에 로드되어 있던 맵 데이터들간의 관계를 초기화하는데에 사용됩니다.
@@ -100,7 +102,7 @@ namespace application
                 /// <summary>
                 /// OnStandbyPalette 에서 사용하기 위한, 포인터 등 데이터 정리 함수입니다.
                 /// </summary>
-                void CleanUpData();
+                virtual void CleanUpData();
 
                 // 현재 팔레트 기능 조작의 상태
                 State state{ State::Select };
@@ -110,7 +112,6 @@ namespace application
                 IEditableData* draggingObject = nullptr;
 
             protected:
-            private:
                 // 선택 박스에 유효한 인스턴스가 접촉되기 시작했을 때, 혹은 접촉이 끝났을 때 호출됩니다.
                 void OnSelectionContactEnter(IEditableData* instance);
                 void OnSelectionContactExit(IEditableData* instance);

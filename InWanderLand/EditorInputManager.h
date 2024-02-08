@@ -41,7 +41,7 @@ namespace application
 			friend class Singleton<EditorInputManager>;
 
 		public:
-			static KeyCode GetKeycode(const int& key);
+			static KeyCode GetKeyCode(const int& key);
 
 			void Update();
 
