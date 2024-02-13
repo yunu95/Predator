@@ -66,7 +66,7 @@ public:
 	Timer* knockBackTimer;
 	Dotween* dotween;
 
-protected:
+private:
 	FSM<UnitState> unitFSM{UnitState::Idle};
 
 	UnitType m_unitType;
@@ -153,7 +153,7 @@ protected:
 
 	Vector3d m_currentSkillPosition;
 
-protected:
+private:
 	/// 유닛이 속해있는 field
 	NavigationField* m_unitNavField;
 
@@ -161,7 +161,7 @@ protected:
 	Vector3d m_skillPosition;
 	SkillEnum m_currentSelectedSkill;
 
-protected:
+private:
 	void IdleEngage();
 	void MoveEngage();
 	void AttackMoveEngage();

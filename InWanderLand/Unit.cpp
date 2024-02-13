@@ -203,10 +203,10 @@ void Unit::SkillEngage()
 		TacticModeSystem::SingleInstance().CallQueueFunction(this);
 	}
 
-	GetGameObject()->GetComponent<PlayerSkillSystem>()->SkillActivate(m_currentSelectedSkill, m_skillPosition);
+	GetGameObject()->GetComponent<PlayerSkillSystem>()->SkillActivate(m_currentSelectedSkill, m_currentSkillPosition);
 
 
-	//StopMove();
+	StopMove();
 }
 
 void Unit::ParalysisEngage()

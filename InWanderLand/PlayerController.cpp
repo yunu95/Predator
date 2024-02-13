@@ -126,7 +126,7 @@ void PlayerController::SetCurrentPlayerSerialNumber(Unit::UnitType p_num)
 	SetLeftClickMove();
 }
 
-std::map<Unit::UnitType, Unit*> PlayerController::GetPlayerMap() const
+std::unordered_map<Unit::UnitType, Unit*> PlayerController::GetPlayerMap() const
 {
 	return playerComponentMap;
 }

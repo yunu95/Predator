@@ -26,13 +26,26 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
 {
 	/// 이렇게 하지말고 동작할 유닛과 같이 지정해줘서 원하는 유닛이 정확히 동작하도록 해야한다...멍청이
 	currentSelectedUnit = playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second;
-	testVector.push_back(playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second);
+	processingUnitMap.insert({ queueOrderIndex, currentSelectedUnit });
+
 	m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
 	{
+		processingSkillPosMap.insert({ currentSelectedUnit, pos });
+		queueOrderIndex++;
+
 		SetCurrentSelectedQueue(currentSelectedUnit);
+		
 		currentSelectedQueue->push([=]()
 			{
-				currentSelectedUnit->OrderSkill(currentSelectedSkill, pos);
+				if (auto itr = processingSkillPosMap.find(currentActivatedUnit);
+					itr != processingSkillPosMap.end())
+				{
+					/*Unit* currentActivatedUnit = processingUnitMap.find(executingOrderIndex)->second;*/
+					Vector3d currentSkillPos = processingSkillPosMap.find(currentActivatedUnit)->second;
+					currentActivatedUnit->OrderSkill(currentSelectedSkill, currentSkillPos);
+					processingSkillPosMap.erase(itr);
+					executingOrderIndex++;
+				}
 			});
 	};
 }
@@ -44,6 +57,10 @@ void TacticModeSystem::EngageTacticMode()
 	/// 2. PlayerController에서 현재 전술모드 적용 가능한 Player Unit의 정보를 가져온다.
 	Time::SetTimeScale(0.0f);
 	playerComponentMap = PlayerController::GetInstance()->GetPlayerMap();
+	queueOrderIndex = 0;
+	executingOrderIndex = 0;
+	processingUnitMap.clear();
+	processingSkillPosMap.clear();
 }
 
 void TacticModeSystem::ExitTacticMode()
@@ -52,7 +69,10 @@ void TacticModeSystem::ExitTacticMode()
 
 	// 하나라도 Queue에 등록되어 있다면 전술모드를 실행한다.
 	if (!(warriorQueue.empty() && magicianQueue.empty() && healerQueue.empty()))
+	{
+
 		isTacticModeStarted = true;
+	}
 }
 
 void TacticModeSystem::SetMovingSystemComponent(RTSCam* sys)
@@ -66,7 +86,8 @@ bool TacticModeSystem::IsTacticModeActivated(Unit* p_unit)
 		return false;
 
 	SetCurrentSelectedQueue(p_unit);
-	if (currentSelectedQueue->empty() || p_unit->GetUnitSide() != Unit::UnitSide::Player)
+
+	if (currentSelectedQueue->empty())
 		return false;
 	else
 		return true;
@@ -86,6 +107,7 @@ void TacticModeSystem::SetCurrentSelectedQueue(Unit* p_currentUnit)
 			currentSelectedQueue = &healerQueue;
 			break;
 	}
+	currentActivatedUnit = p_currentUnit;
 }
 
 void TacticModeSystem::CallQueueFunction(Unit* p_unit)
