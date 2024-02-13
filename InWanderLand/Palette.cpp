@@ -93,8 +93,8 @@ namespace application::editor::palette
             break;
         case application::editor::palette::Palette::State::Select:
             HoverClosestInstance();
-            //SelectionBox::Instance().SetAsPickingCollider(graphics::Camera::GetMainCamera(), normalizedScreenPos);
-            SelectionBox::Instance().SetCoverage(currentBrushPos - unDraggingHalfExtent, currentBrushPos + unDraggingHalfExtent);
+            SelectionBox::Instance().SetAsPickingCollider(graphics::Camera::GetMainCamera(), normalizedScreenPos);
+            //SelectionBox::Instance().SetCoverage(currentBrushPos - unDraggingHalfExtent, currentBrushPos + unDraggingHalfExtent);
             break;
         case application::editor::palette::Palette::State::Place:
 

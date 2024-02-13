@@ -31,6 +31,7 @@ namespace application::editor::palette
                 }
             }
         }
+        TerrainData::Instance().ApplyDebugMesh();
         return nullptr;
     }
     void TerrainPalette::OnMouseMove(Vector3d projectedWorldPos, Vector2d normalizedScreenPos)

@@ -148,7 +148,6 @@ void MagicianProduction::SetUnitData(GameObject* fbxObject, NavigationField* nav
 	magicianSkillSystem->SetWSkillCollider(WSkillProjectileCollider, WSkillFieldCollider);
 	magicianSkillSystem->SetWSkillDebugPair({ WSkillProjectileDebugObject, m_WSkillProjectileRadius }, { WSkillFieldDebugObject, m_WSkillFieldRadius });
 	magicianSkillSystem->SetWSkillObject(WSkillProjectileObject, WSkillFieldObject);
-
 }
 
 void MagicianProduction::SingletonInitializer()

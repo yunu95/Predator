@@ -78,6 +78,15 @@ namespace application
         {
             std::vector<Vector3f> vertexList;
             std::vector<int> indexList;
+            MakeUpVerticesList(vertexList, indexList);
+
+#ifdef _DEBUG
+            //ApplyDebugMesh();
+#endif
+            SingleNavigationField::Instance().BuildField(vertexList, indexList);
+        }
+        void TerrainData::MakeUpVerticesList(std::vector<Vector3f>& vertexList, std::vector<int>& indexList)
+        {
             for (auto& node : nodes)
             {
                 auto nodeKey = node.first;
@@ -125,7 +134,6 @@ namespace application
                     indexList.push_back(vertexList.size() - 1);
                 }
             }
-            SingleNavigationField::Instance().BuildField(vertexList, indexList);
         }
         void TerrainData::AddNode(const Vector2i& nodeKey, Node&& nodeInfo)
         {
@@ -133,7 +141,7 @@ namespace application
                 return;
             nodes[nodeKey] = std::move(nodeInfo);
 #ifdef _DEBUG
-            nodes[nodeKey].debugObject = CreateNodeDebuggingMesh(nodeKey);
+            //nodes[nodeKey].debugObject = CreateNodeDebuggingMesh(nodeKey);
 #else
             nodes[nodeKey].debugObject = nullptr;
 #endif
@@ -143,7 +151,7 @@ namespace application
             if (nodes.find(nodeKey) == nodes.end())
                 return;
 #ifdef _DEBUG
-            Scene::getCurrentScene()->DestroyGameObject(nodes[nodeKey].debugObject);
+            //Scene::getCurrentScene()->DestroyGameObject(nodes[nodeKey].debugObject);
 #endif
             nodes.erase(nodeKey);
         }
@@ -152,10 +160,37 @@ namespace application
             for (auto& node : nodes)
             {
 #ifdef _DEBUG
-                Scene::getCurrentScene()->DestroyGameObject(node.second.debugObject);
+                //Scene::getCurrentScene()->DestroyGameObject(node.second.debugObject);
 #endif
             }
             nodes.clear();
+        }
+        void TerrainData::ApplyDebugMesh()
+        {
+            PreSaveCallback();
+            std::vector<Vector3f> posVecBefore;
+            std::vector<int> idxVecBefore;
+
+            std::vector<yunuGI::Vector3> posVec;
+            std::vector<unsigned int> idxVec;
+            std::vector<yunuGI::Vector3> normalVec;
+
+            MakeUpVerticesList(posVecBefore, idxVecBefore);
+            posVec.resize(posVecBefore.size());
+            idxVec.resize(idxVecBefore.size());
+            normalVec.resize(posVecBefore.size());
+            for (auto i = 0; i < posVecBefore.size(); ++i)
+            {
+                posVec[i] = { posVecBefore[i].x,posVecBefore[i].y,posVecBefore[i].z };
+                normalVec[i] = { 0, 1, 0 };
+            };
+            for (auto i = 0; i < idxVecBefore.size(); ++i)
+                idxVec[i] = idxVecBefore[i];
+
+            auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+            rsrcManager->DeleteMesh(GetDebugMesh()->GetGI().GetMesh());
+            auto mesh = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->CreateMesh(L"terrainMesh", posVec, idxVec, normalVec);
+            GetDebugMesh()->GetGI().SetMesh(mesh);
         }
         Vector3d TerrainData::GetNodePosition(const Vector2i& nodeKey)
         {
@@ -214,6 +249,7 @@ namespace application
             {
                 AddNode({ pod.coordinates[i].first,pod.coordinates[i].second }, { pod.heights[i], nullptr });
             }
+            ApplyDebugMesh();
             return true;
         }
 
@@ -245,6 +281,15 @@ namespace application
             IEditableData::operator=(prototype);
             pod = prototype.pod;
             return *this;
+        }
+        DebugStaticMesh* TerrainData::GetDebugMesh()
+        {
+            if (debugMesh)
+                return debugMesh;
+
+            debugMesh = Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugStaticMesh>();
+            debugMesh->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::brown(), true));
+            return debugMesh;
         }
     }
 }

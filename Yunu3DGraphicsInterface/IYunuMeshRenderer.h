@@ -13,5 +13,6 @@ namespace yunuGI
 		virtual void SetMaterial(unsigned int index, IMaterial* material) = 0;
 		virtual IMaterial* GetMaterial(unsigned int index = 0) = 0;
 		virtual void SetMesh(IMesh* mesh) = 0;
+		virtual IMesh* GetMesh() const= 0;
 	};
 }
