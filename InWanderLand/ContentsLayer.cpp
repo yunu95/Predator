@@ -32,35 +32,63 @@ void GraphicsTest()
 
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	{
-		auto obj = Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->SetLocalPosition(Vector3d{ 700,500 ,1 });
-		obj->GetTransform()->SetLocalScale(Vector3d{ 700,500 ,1 });
-		auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
-		text->GetGI().SetText(L"Test");
-		//text->GetGI().SetColor(yunuGI::Color{ 1,0,0,1 });
-	}
+	_resourceManager->LoadFile("CastleWallPS.cso");
 
+	yunuGI::IShader* shader;
+	yunuGI::IShader* shader2;
+	auto& shaderList = _resourceManager->GetShaderList();
+	for (auto& i : shaderList)
 	{
-		auto& list = _resourceManager->GetShaderList();
-		auto obj = Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->SetLocalScale(Vector3d{ 3.44390607,6.29091072,1.59031582 });
-		auto text = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		text->GetGI().SetMesh(_resourceManager->GetMesh(L"Cube"));
-		for (auto& i : list)
+		if (i->GetName() == L"CastleWallPS.cso")
 		{
-			if (i->GetName() == L"DebugPS.cso")
-			{
-				text->GetGI().GetMaterial()->SetPixelShader(i);
-			}
+			shader = i;
 		}
-		//text->GetGI().SetColor(yunuGI::Color{ 1,0,0,1 });
+
+		if (i->GetName() == L"Debug_AlphaPS.cso")
+		{
+			shader2 = i;
+		}
 	}
 
-	_resourceManager->LoadFile("FBX/SM_Trunk_001");
+	_resourceManager->LoadFile("FBX/SM_CastleWall");
+	_resourceManager->LoadFile("Texture/T_Brick_Dirt_BaseColor.png");
+	_resourceManager->LoadFile("Texture/T_Brick_Dirt_Normal.png");
+	yunuGI::ITexture* texture;
+	yunuGI::ITexture* texture2;
+	auto& textureList = _resourceManager->GetTextureList();
+	for (auto& i : textureList)
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Trunk_001");
-		//obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+		if (i->GetName() == L"Texture/T_Brick_Dirt_BaseColor.png")
+		{
+			texture = i;
+		}
+
+		if (i->GetName() == L"Texture/T_Brick_Dirt_Normal.png")
+		{
+			texture2 = i;
+		}
+	}
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CastleWall");
+		auto& childVec = obj->GetChildren();
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(1)->SetPixelShader(shader);
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(1)->SetTexture(yunuGI::Texture_Type::Temp0, texture);
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(1)->SetTexture(yunuGI::Texture_Type::Temp1, texture2);
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,10 });
+	}
+
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CastleWall");
+		auto& childVec = obj->GetChildren();
+	
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(0)->SetPixelShader(shader2);
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(0)->SetColor(yunuGI::Color{ 0,1,1,0.2 });
+	
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(1)->SetPixelShader(shader2);
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(1)->SetColor(yunuGI::Color{ 0,1,1,0.2 });
+	
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(2)->SetPixelShader(shader2);
+		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(2)->SetColor(yunuGI::Color{ 0,1,1,0.2 });
 	}
 }
 
@@ -127,30 +155,30 @@ void application::contents::ContentsLayer::Initialize()
 
     const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
     //resourceManager->LoadFile("FBX/Monster1");
-    resourceManager->LoadFile("FBX/SM_Bush_001");
-    resourceManager->LoadFile("FBX/SM_Bush_002");
-    resourceManager->LoadFile("FBX/SM_CastleWall");
-    resourceManager->LoadFile("FBX/SM_CastleWall_Door");
-    resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
-    resourceManager->LoadFile("FBX/SM_Chair");
-    resourceManager->LoadFile("FBX/SM_Cuptower");
-    resourceManager->LoadFile("FBX/SM_Fork");
-    resourceManager->LoadFile("FBX/SM_GuideBook");
-    resourceManager->LoadFile("FBX/SM_Hat01");
-    resourceManager->LoadFile("FBX/SM_Hat02");
-    resourceManager->LoadFile("FBX/SM_SmallBush_001");
-    resourceManager->LoadFile("FBX/SM_Stone_001");
-    resourceManager->LoadFile("FBX/SM_Stone_002");
-    resourceManager->LoadFile("FBX/SM_Stump");
-    resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
-    resourceManager->LoadFile("FBX/SM_Temple_Books");
-    resourceManager->LoadFile("FBX/SM_Temple_Floor");
-    resourceManager->LoadFile("FBX/SM_Temple_Pillar");
-    resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
-    resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
-    resourceManager->LoadFile("FBX/SM_Temple_Stairs");
-    resourceManager->LoadFile("FBX/SM_Temple_Welcome");
-    resourceManager->LoadFile("FBX/SM_Trunk_001");
+	///resourceManager->LoadFile("FBX/SM_Bush_001");
+	///resourceManager->LoadFile("FBX/SM_Bush_002");
+	///resourceManager->LoadFile("FBX/SM_CastleWall");
+	///resourceManager->LoadFile("FBX/SM_CastleWall_Door");
+	///resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
+	///resourceManager->LoadFile("FBX/SM_Chair");
+	///resourceManager->LoadFile("FBX/SM_Cuptower");
+	///resourceManager->LoadFile("FBX/SM_Fork");
+	///resourceManager->LoadFile("FBX/SM_GuideBook");
+	///resourceManager->LoadFile("FBX/SM_Hat01");
+	///resourceManager->LoadFile("FBX/SM_Hat02");
+	///resourceManager->LoadFile("FBX/SM_SmallBush_001");
+	///resourceManager->LoadFile("FBX/SM_Stone_001");
+	///resourceManager->LoadFile("FBX/SM_Stone_002");
+	///resourceManager->LoadFile("FBX/SM_Stump");
+	///resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
+	///resourceManager->LoadFile("FBX/SM_Temple_Books");
+	///resourceManager->LoadFile("FBX/SM_Temple_Floor");
+	///resourceManager->LoadFile("FBX/SM_Temple_Pillar");
+	///resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
+	///resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
+	///resourceManager->LoadFile("FBX/SM_Temple_Stairs");
+	///resourceManager->LoadFile("FBX/SM_Temple_Welcome");
+	///resourceManager->LoadFile("FBX/SM_Trunk_001");
     //resourceManager->LoadFile("FBX/Spear");
 
 #ifndef EDITOR
@@ -160,10 +188,12 @@ void application::contents::ContentsLayer::Initialize()
 		//yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 		yunutyEngine::Collider2D::SetIsOnXYPlane(false);
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		//directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{0,180,0} });
 		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-		auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
+		//auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
+		auto color = yunuGI::Color{ 1,1,1,1.f };
 		light->GetGI().SetLightDiffuseColor(color);
-		directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
+		//directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
 		//directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{0, 45, 0} };
 		//auto test = directionalLight->AddComponent<TestComponent2>();
 		//test->gameObject = directionalLight;

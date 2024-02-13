@@ -101,8 +101,17 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 			aiVector3D normal = mesh->mNormals[j];
 			DirectX::SimpleMath::Vector3 dnormal{ normal.x, normal.y, normal.z };
 
-			Vertex vertex = { dvertex, DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f}, duv, dnormal, DirectX::SimpleMath::Vector3{1.f,0.f,0.f} };
-
+			Vertex vertex;
+			
+			if (mesh->HasVertexColors(0))
+			{
+				aiColor4D color = mesh->mColors[0][j];
+				vertex = { dvertex, DirectX::SimpleMath::Vector4{color.r,color.g,color.b,color.a}, duv, dnormal, DirectX::SimpleMath::Vector3{1.f,0.f,0.f} };
+			}
+			else
+			{
+				vertex = { dvertex, DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f}, duv, dnormal, DirectX::SimpleMath::Vector3{1.f,0.f,0.f} };
+			}
 			maxX = max(dvertex.x, maxX);
 			maxY = max(dvertex.y, maxY);
 			maxZ = max(dvertex.z, maxZ);

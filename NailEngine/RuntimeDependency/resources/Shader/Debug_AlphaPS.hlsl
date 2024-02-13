@@ -13,13 +13,16 @@ struct PixelIn
 
 float4 main(PixelIn input) : SV_TARGET
 {
-    return input.color * materialColor;
+    //float4 albedo = AlbedoMap.Sample(sam, input.uv);
+    //return input.color * materialColor;
+    return materialColor;
+    //return input.color * albedo;
 }
 
 // ShaderInfo
 // ShaderType : Forward
 // RasterType : Solid
 // CullType : CullNone
-// DepthType : Less
+// DepthType : LessNoWrite
 // BlendType : AlphaBlend
 // Sampler : Default

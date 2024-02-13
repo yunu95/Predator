@@ -66,8 +66,5 @@ DirectX::SimpleMath::Matrix NailCamera::GetPTM90()
 
 void NailCamera::CreateFrustum()
 {
-	//this->frustum.Transform(this->frustum, wtm*ptm);
 	this->frustum.CreateFromMatrix(this->frustum, ptm);
-	//frustum.Near = this->cameraNear;
-	//frustum.Far = this->cameraFar;
 }
