@@ -26,8 +26,7 @@ void VertexShader::CreateShader(const std::wstring& shaderPath)
 	_compileFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
 
-	::D3DReadFileToBlob(shaderPath.c_str(), vsBuffer.GetAddressOf());
-
+	HRESULT hr = ::D3DReadFileToBlob(shaderPath.c_str(), vsBuffer.GetAddressOf());
 	//if (FAILED(::D3DCompileFromFile(shaderPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
 	//	, "main", "vs_5_0", _compileFlag, NULL, vsBuffer.GetAddressOf(), errorMSG.GetAddressOf())))
 	//{
