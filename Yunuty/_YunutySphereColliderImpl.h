@@ -15,6 +15,7 @@ namespace yunutyEngine
             PxSphereGeometry geometry;
             virtual PxGeometry& GetGeometry()override
             {
+                radius = abs(radius);
                 geometry = PxSphereGeometry{ radius };
                 return geometry;
             }

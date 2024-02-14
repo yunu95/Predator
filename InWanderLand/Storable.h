@@ -144,7 +144,7 @@ namespace application
 }
 
 #define TO_JSON(Class) \
-operator json() \
+operator json() const \
 { \
 	json data; \
 	application::editor::FieldPreEncoding<boost::pfr::tuple_size_v<Class>>(*this, data); \

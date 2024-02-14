@@ -131,5 +131,10 @@ namespace yunuGIAdapter
         {
             return ResourceManager::Instance.Get().GetTextureList();
         };
+
+        virtual std::vector<std::wstring>& GetFBXList()const override
+        {
+            return ResourceManager::Instance.Get().GetFBXList();
+        };
     };
 }

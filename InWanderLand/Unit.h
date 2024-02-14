@@ -133,7 +133,7 @@ protected:
 	float qSkillFunctionStartElapsed;
 	//float qSkillFunctionStartedElapsed;
 	//float qSkillStartDelay = 1.0f;
-	float qSkillAnimationDuration = 1.0f;
+	float qSkillAnimationDuration = 5.0f;
 	bool isJustHitByQSkill = false;
 
 	float animationLerpDuration = 1.0f;

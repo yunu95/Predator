@@ -2,6 +2,7 @@
 #include "Ornament_TemplateData.h"
 
 #include "TemplateDataManager.h"
+#include "OrnamentBrush.h"
 
 namespace application
 {
@@ -10,6 +11,17 @@ namespace application
 		std::string Ornament_TemplateData::GetDataKey() const
 		{
 			return TemplateDataManager::GetSingletonInstance().GetDataKey(this);
+		}
+
+		void Ornament_TemplateData::SetDataResourceName(std::string fbxName)
+		{
+			pod.fbxName = fbxName;
+			palette::OrnamentBrush::Instance().CreateBrushFBX(this);
+		}
+
+		std::string Ornament_TemplateData::GetDataResourceName() const
+		{
+			return pod.fbxName;
 		}
 
 		bool Ornament_TemplateData::PreEncoding(json& data) const

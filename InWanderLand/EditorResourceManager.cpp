@@ -1,5 +1,9 @@
 #include "EditorResourceManager.h"
 
+#include "YunutyEngine.h"
+#include "TemplateDataManager.h"
+#include "Ornament_TemplateData.h"
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
@@ -47,8 +51,19 @@ namespace application
             LoadTextureFromFile("ImageButtons/Terrain_EraseButton.png");
 
             // Unit
-            LoadTextureFromFile("ImageButtons/TestCube.png"); /// Test
+            LoadTextureFromFile("ImageButtons/Unit_Default.png");
             LoadTextureFromFile("ImageButtons/Unit_AddButton.png");
+
+            // Ornament
+            LoadTextureFromFile("ImageButtons/Ornament_Default.png");
+            LoadTextureFromFile("ImageButtons/Ornament_AddButton.png");
+        }
+
+        void ResourceManager::LateInitialize()
+        {
+            // Shader 를 먼저 Load 해야 합니다.
+            LoadShaderList();
+            LoadFbxList();
         }
 
         Texture2D* ResourceManager::GetTexture2D(std::string filename)
@@ -110,6 +125,41 @@ namespace application
             stbi_image_free(image_data);
 
             return true;
+        }
+
+        yunuGI::IShader* ResourceManager::GetShader(std::string shaderName)
+        {
+            if (shaderMap.find(shaderName) == shaderMap.end())
+            {
+                return nullptr;
+            }
+
+            return shaderMap[shaderName];
+        }
+
+        void ResourceManager::LoadFbxList()
+        {
+            auto fbxList = graphics::Renderer::SingleInstance().GetResourceManager()->GetFBXList();
+
+            auto& tdm = TemplateDataManager::GetSingletonInstance();
+            std::string fbxSname = std::string();
+            for (auto each : fbxList)
+            {
+                fbxSname = std::string(each.begin(), each.end());
+                auto td = tdm.CreateTemplateData<Ornament_TemplateData>(fbxSname);
+                td->SetDataResourceName(fbxSname);
+                fbxSet.insert(fbxSname);
+            }
+        }
+
+        void ResourceManager::LoadShaderList()
+        {
+            auto& shaderList = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetShaderList();
+
+            for (auto each : shaderList)
+            {
+                shaderMap[std::string(each->GetName().begin(), each->GetName().end())] = each;
+            }
         }
     }
 }

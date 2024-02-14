@@ -28,9 +28,9 @@ namespace application
 			glm::mat4 ConvertPTM(const yunuGI::Matrix4x4& mat);
 			yunuGI::Quaternion ConvertQuaternion(const glm::quat& quat);
 
+			yunuGI::Matrix4x4 GetTranslateMatrix(const yunuGI::Vector3& trans);
 			yunuGI::Matrix4x4 GetRotationMatrix(const yunuGI::Quaternion& quat);
-			yunuGI::Matrix4x4 GetRotationMatrix(const glm::quat& quat);
-
+			yunuGI::Matrix4x4 GetScaleMatrix(const yunuGI::Vector3& scale);
 			yunuGI::Matrix4x4 GetInverseMatrix(const yunuGI::Matrix4x4& mat);
 
 			yunuGI::Vector3 RotateVector3(const yunuGI::Vector3& vec, const yunuGI::Matrix4x4& roMat);

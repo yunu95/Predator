@@ -14,11 +14,11 @@
 #include "UnitFactory.h"
 #include "InputManager.h"
 #include "StatusTimerPool.h"
-#include "WarriorProduction.h"
-#include "HealerProduction.h"
-#include "MagicianProduction.h"
-#include "MeleeEnemyProduction.h"
-#include "UnitProductionOrder.h"
+#include "WarriorProductor.h"
+#include "HealerProductor.h"
+#include "MagicianProductor.h"
+#include "MeleeEnemyProductor.h"
+#include "UnitProductor.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

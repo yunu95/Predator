@@ -2,6 +2,7 @@
 #include "Unit_TemplateData.h"
 
 #include "TemplateDataManager.h"
+#include "UnitBrush.h"
 
 namespace application
 {
@@ -10,6 +11,17 @@ namespace application
 		std::string Unit_TemplateData::GetDataKey() const
 		{
 			return TemplateDataManager::GetSingletonInstance().GetDataKey(this);
+		}
+
+		void Unit_TemplateData::SetDataResourceName(std::string fbxName)
+		{
+			pod.fbxName = fbxName;
+			palette::UnitBrush::Instance().CreateBrushFBX(this);
+		}
+
+		std::string Unit_TemplateData::GetDataResourceName() const
+		{
+			return pod.fbxName;
 		}
 
 		bool Unit_TemplateData::PreEncoding(json& data) const

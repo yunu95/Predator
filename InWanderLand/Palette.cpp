@@ -7,6 +7,7 @@
 #include "RegionPalette.h"
 #include "UnitPalette.h"
 #include "TerrainPalette.h"
+#include "OrnamentPalette.h"
 
 namespace application::editor::palette
 {
@@ -15,6 +16,7 @@ namespace application::editor::palette
         static_cast<Palette&>(RegionPalette::SingleInstance()).Reset();
         static_cast<Palette&>(UnitPalette::SingleInstance()).Reset();
         static_cast<Palette&>(TerrainPalette::SingleInstance()).Reset();
+        static_cast<Palette&>(OrnamentPalette::SingleInstance()).Reset();
     }
     void Palette::OnLeftClick()
     {
@@ -102,8 +104,8 @@ namespace application::editor::palette
         case application::editor::palette::Palette::State::DraggingObjects:
             for (auto each : selection)
             {
-                each->OnRelocate(each->GetPaletteInstance()->GetTransform()->GetWorldPosition() + currentBrushPos - lastFrameBrushPos);
-                each->ApplyAsPaletteInstance();
+                //each->OnRelocate(each->GetPaletteInstance()->GetTransform()->GetWorldPosition() + currentBrushPos - lastFrameBrushPos);
+                //each->ApplyAsPaletteInstance();
             }
             break;
         case application::editor::palette::Palette::State::DraggingSelectBox:

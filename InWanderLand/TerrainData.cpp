@@ -69,6 +69,7 @@ namespace application
 
             return instance;
         }
+
         palette::PaletteInstance* TerrainData::ApplyAsPaletteInstance()
         {
             return nullptr;
@@ -81,7 +82,7 @@ namespace application
             MakeUpVerticesList(vertexList, indexList);
 
 #ifdef _DEBUG
-            //ApplyDebugMesh();
+            ApplyDebugMesh();
 #endif
             SingleNavigationField::Instance().BuildField(vertexList, indexList);
         }

@@ -6,6 +6,9 @@
 #include "Singleton.h"
 #include "EditorPanel.h"
 
+#include "PaletteManager.h"
+#include "EditorResourceManager.h"
+
 namespace application
 {
 	namespace editor
@@ -25,6 +28,12 @@ namespace application
 
 		private:
 			InspectorPanel();
+
+			void ImGui_DrawTransform();
+			void ImGui_DrawFBXData();
+
+			palette::PaletteManager& pm = palette::PaletteManager::GetSingletonInstance();
+			ResourceManager& erm = ResourceManager::GetSingletonInstance();
 		};
 	}
 }

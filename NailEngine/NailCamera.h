@@ -1,5 +1,6 @@
 #pragma once
 
+#include <DirectXCollision.h>
 #include <DirectXMath.h>
 #include "SimpleMath.h"
 using namespace DirectX::PackedVector;
@@ -23,8 +24,12 @@ public:
     DirectX::SimpleMath::Matrix& GetPTM() { return this->ptm; }
     DirectX::SimpleMath::Matrix& GetWTM() { return this->wtm; }
 
-
 	DirectX::SimpleMath::Matrix GetPTM90();
+    
+    DirectX::BoundingFrustum& GetFrustum() { return this->frustum; };
+
+private:
+    void CreateFrustum();
 
 private:
     DirectX::SimpleMath::Matrix wtm;
@@ -37,5 +42,6 @@ private:
     float width = 1920;
     float height = 1080;
 
+    DirectX::BoundingFrustum frustum;
 };
 

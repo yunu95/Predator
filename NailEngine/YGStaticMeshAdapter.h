@@ -81,18 +81,20 @@ namespace yunuGIAdapter
                     this->materialVec[index]->variation = reinterpret_cast<Material*>(material);
                 }
             }
+        }
 
-            renderable->SetMaterial(index, material);
-        };
-
-        virtual yunuGI::IMaterial* GetMaterial(unsigned int index = 0)override
+        virtual int GetMaterialCount() override
         {
-            return this->materialVec[index].get();
+            return this->materialVec.size();
         };
 
     private:
         std::shared_ptr<StaticMesh> renderable;
         std::vector<std::shared_ptr<MaterialWrapper>> materialVec;
 
+        virtual yunuGI::IMaterial* GetMaterial(unsigned int index = 0)override
+        {
+            return this->materialVec[index].get();
+        };
     };
 }
