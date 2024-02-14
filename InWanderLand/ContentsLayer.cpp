@@ -231,27 +231,6 @@ void application::contents::ContentsLayer::Initialize()
         editor::MapFileManager::GetSingletonInstance().LoadMapFile("TestMap.pmap");
         editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
-        {
-            MagicianProductor::Instance().m_startPosition = Vector3d{ 4,0,4 };
-            auto player1GameObject = MagicianProductor::Instance().CreateUnitWithOrder();
-        }
-
-        {
-            MagicianProductor::Instance().m_startPosition = Vector3d{ 2,0,4 };
-            auto player1GameObject = MagicianProductor::Instance().CreateUnitWithOrder();
-        }
-        {
-            MagicianProductor::Instance().m_startPosition = Vector3d{ 4,0,6 };
-            auto player1GameObject = MagicianProductor::Instance().CreateUnitWithOrder();
-        }
-        {
-            MagicianProductor::Instance().m_startPosition = Vector3d{ 1,0,4 };
-            auto player1GameObject = MagicianProductor::Instance().CreateUnitWithOrder();
-        }
-        camComp->groundRightClickCallback = [=](Vector3d pos)
-        {
-            agent->MoveTo(pos);
-        };
     }
 #endif
 

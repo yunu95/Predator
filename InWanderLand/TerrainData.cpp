@@ -289,7 +289,7 @@ namespace application
                 return debugMesh;
 
             debugMesh = Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugStaticMesh>();
-            debugMesh->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::brown(), true));
+            debugMesh->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::brown(), false));
             return debugMesh;
         }
     }
