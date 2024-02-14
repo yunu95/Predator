@@ -10,10 +10,13 @@
 #include <windowsx.h>
 #include <tchar.h>
 #include <dxgi1_4.h>
+#include <unordered_map>
+#include <locale>
+#include <codecvt>
 
 bool g_preLoad = false;
-std::vector<yunutyEngine::GameObject*> g_gameObjVec;
-
+std::unordered_map<std::wstring, yunuGI::FBXData*> g_fbxMap;
+yunuGI::FBXData* g_selectFBX = nullptr;
 // Data
 static ID3D11Device* g_pd3dDevice = nullptr;
 static ID3D11DeviceContext* g_pd3dDeviceContext = nullptr;
@@ -35,10 +38,19 @@ LRESULT CALLBACK WndProcTool(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_p
 void CreateMyWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show);
 void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show);
 
+std::string ConvertWideStringToUTF8(const std::wstring& wideString) {
+	int size_needed = WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), -1, nullptr, 0, nullptr, nullptr);
+	std::string utf8String(size_needed, 0);
+	WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), -1, &utf8String[0], size_needed, nullptr, nullptr);
+	return utf8String;
+}
+
 void PreLoadResource();
-void CreateObject(std::string fbxName);
-void ShowGameObject(yunutyEngine::GameObject* obj);
+void ShowFBXData(yunuGI::FBXData* data);
 void ShowFBXList();
+void ShowSeleteFBXInfo();
+void CreateComboByTexture(std::string comboName, std::wstring& textureName, std::vector<yunuGI::ITexture*>& textureList);
+void CreateComboByShader(std::string comboName, std::wstring& shaderName, std::vector<yunuGI::IShader*>& shaderList);
 
 
 int WINAPI main(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show)
@@ -154,12 +166,13 @@ int WINAPI main(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_li
 			ShowFBXList();
 
 			ImGui::End();
-			
+
 
 
 
 			ImGui::Begin("Info");
 
+			ShowSeleteFBXInfo();
 
 			ImGui::End();
 		}
@@ -312,80 +325,171 @@ void PreLoadResource()
 
 	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	resourceManager->LoadFile("FBX/SM_Bush_001");
-	CreateObject("SM_Bush_001");
 	resourceManager->LoadFile("FBX/SM_Bush_002");
-	CreateObject("SM_Bush_002");
 	resourceManager->LoadFile("FBX/SM_CastleWall");
-	CreateObject("SM_CastleWall");
 	resourceManager->LoadFile("FBX/SM_CastleWall_Door");
-	CreateObject("SM_CastleWall_Door");
 	resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
-	CreateObject("SM_CastleWall_Pillar");
 	resourceManager->LoadFile("FBX/SM_Chair");
-	CreateObject("SM_Chair");
 	resourceManager->LoadFile("FBX/SM_Cuptower");
-	CreateObject("SM_Cuptower");
 	resourceManager->LoadFile("FBX/SM_Fork");
-	CreateObject("SM_Fork");
 	resourceManager->LoadFile("FBX/SM_GuideBook");
-	CreateObject("SM_GuideBook");
 	resourceManager->LoadFile("FBX/SM_Hat01");
-	CreateObject("SM_Hat01");
 	resourceManager->LoadFile("FBX/SM_Hat02");
-	CreateObject("SM_Hat02");
 	resourceManager->LoadFile("FBX/SM_SmallBush_001");
-	CreateObject("SM_SmallBush_001");
 	resourceManager->LoadFile("FBX/SM_Stone_001");
-	CreateObject("SM_Stone_001");
 	resourceManager->LoadFile("FBX/SM_Stone_002");
-	CreateObject("SM_Stone_002");
 	resourceManager->LoadFile("FBX/SM_Stump");
-	CreateObject("SM_Stump");
 	resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
-	CreateObject("SM_Temple_Book_etc");
 	resourceManager->LoadFile("FBX/SM_Temple_Books");
-	CreateObject("SM_Temple_Books");
 	resourceManager->LoadFile("FBX/SM_Temple_Floor");
-	CreateObject("SM_Temple_Floor");
 	resourceManager->LoadFile("FBX/SM_Temple_Pillar");
-	CreateObject("SM_Temple_Pillar");
 	resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
-	CreateObject("SM_Temple_Pillar_Broken");
 	resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
-	CreateObject("SM_Temple_Rabbit");
 	resourceManager->LoadFile("FBX/SM_Temple_Stairs");
-	CreateObject("SM_Temple_Stairs");
 	resourceManager->LoadFile("FBX/SM_Temple_Welcome");
-	CreateObject("SM_Temple_Welcome");
 	resourceManager->LoadFile("FBX/SM_Trunk_001");
-	CreateObject("SM_Trunk_001");
 
+	g_fbxMap = resourceManager->GetFBXDataMap();
 
 	g_preLoad = false;
 }
 
-void CreateObject(std::string fbxName)
+void ShowFBXData(yunuGI::FBXData* data)
 {
-	g_gameObjVec.emplace_back(Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName));
-}
-
-void ShowGameObject(yunutyEngine::GameObject* obj)
-{
-	if (ImGui::TreeNode(obj->getName().c_str()))
+	if (data->nodeName != L"RootNode")
 	{
-		for (auto& child : obj->GetChildren())
+		// nodeName이 "RootNode"가 아닌 경우에만 트리 노드를 생성
+		if (ImGui::TreeNode(std::string{ data->nodeName.begin(), data->nodeName.end() }.c_str()))
 		{
-			ShowGameObject(child);
-		}
+			if (ImGui::IsItemClicked(0))
+			{
+				// 클릭된 노드의 정보를 변수에 저장
+				g_selectFBX = data;
+			}
 
-		ImGui::TreePop();
+			for (auto& child : data->child)
+			{
+				// 자식이 있을 때만 자식 노드를 보여줌
+				ShowFBXData(child);
+			}
+
+			ImGui::TreePop();
+		}
+	}
+	else
+	{
+		// "RootNode"인 경우에 대한 처리를 원하면 이 부분에 추가
+		for (auto& child : data->child)
+		{
+			// "RootNode"이 아닌 경우에만 자식 노드를 보여줌
+			ShowFBXData(child);
+		}
 	}
 }
 
 void ShowFBXList()
 {
-	for (auto& each : g_gameObjVec)
+	for (auto& each : g_fbxMap)
 	{
-		ShowGameObject(each);
+		ShowFBXData(each.second);
+	}
+}
+
+void ShowSeleteFBXInfo()
+{
+	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	std::vector<yunuGI::ITexture*>& textureList = resourceManager->GetTextureList();
+
+	if (g_selectFBX)
+	{
+		for (auto& each : g_selectFBX->materialVec)
+		{
+			ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "MaterialName : %ls", each.materialName.c_str());
+
+			/// Texture
+			ImGui::Text("AlbedoMap : %ls", each.albedoMap.c_str());
+			CreateComboByTexture(std::string{ "##" } + std::string{ each.materialName.begin(),each.materialName.end() } + std::string{ "AlbedoMap" },
+				each.albedoMap, textureList);
+
+			ImGui::Text("NormalMap : %ls", each.normalMap.c_str());
+			CreateComboByTexture(std::string{ "##" } + std::string{ each.materialName.begin(),each.materialName.end() } + std::string{ "NormalMap" },
+				each.normalMap, textureList);
+
+			ImGui::Text("ARMMap : %ls", each.armMap.c_str());
+			CreateComboByTexture(std::string{ "##" } + std::string{ each.materialName.begin(),each.materialName.end() } + std::string{ "ARMMap" },
+				each.armMap, textureList);
+
+			ImGui::Text("EmissionMap : %ls", each.emissionMap.c_str());
+			CreateComboByTexture(std::string{ "##" } + std::string{ each.materialName.begin(),each.materialName.end() } + std::string{ "EmissionMap" },
+				each.emissionMap, textureList);
+
+			ImGui::Text("OpacityMap : %ls", each.opacityMap.c_str());
+			CreateComboByTexture(std::string{ "##" } + std::string{ each.materialName.begin(),each.materialName.end() } + std::string{ "OpacityMap" },
+				each.opacityMap, textureList);
+
+			ImGui::Text("HeightMap : %ls", each.heightMap.c_str());
+			CreateComboByTexture(std::string{ "##" } + std::string{ each.materialName.begin(),each.materialName.end() } + std::string{ "HeightMap" },
+				each.heightMap, textureList);
+
+			ImGui::Text("Temp0Map : %ls", each.temp0Map.c_str());
+			CreateComboByTexture(std::string{ "##" } + std::string{ each.materialName.begin(),each.materialName.end() } + std::string{ "Temp0Map" },
+				each.temp0Map, textureList);
+
+			ImGui::Text("Temp1Map : %ls", each.temp1Map.c_str());
+			CreateComboByTexture(std::string{ "##" } + std::string{ each.materialName.begin(),each.materialName.end() } + std::string{ "Temp1Map" },
+				each.temp1Map, textureList);
+
+			ImGui::Text("Temp2Map : %ls", each.temp2Map.c_str());
+			CreateComboByTexture(std::string{ "##" } + std::string{ each.materialName.begin(),each.materialName.end() } + std::string{ "Temp2Map" },
+				each.temp2Map, textureList);
+
+			ImGui::Text("Temp3Map : %ls", each.temp0Map.c_str());
+			CreateComboByTexture(std::string{ "##" } + std::string{ each.materialName.begin(),each.materialName.end() } + std::string{ "Temp3Map" },
+				each.temp3Map, textureList);
+
+
+			/// Shader
+			std::vector<yunuGI::IShader*>& shaderList = resourceManager->GetShaderList();
+
+			ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "VertexShader : %ls", each.vs.c_str());
+			CreateComboByShader(std::string{ "##" } + std::string{ each.materialName.begin(),each.materialName.end() } + std::string{ "VertexShader" },
+				each.vs, shaderList);
+
+			ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "PixelShader : %ls", each.ps.c_str());
+			CreateComboByShader(std::string{ "##" } + std::string{ each.materialName.begin(),each.materialName.end() } + std::string{ "PixelShader" },
+				each.ps, shaderList);
+		}
+	}
+}
+
+void CreateComboByTexture(std::string comboName, std::wstring& textureName, std::vector<yunuGI::ITexture*>& textureList)
+{
+	if (ImGui::BeginCombo(comboName.c_str(), std::string{ textureName.begin(),textureName.end() }.c_str()))
+	{
+		for (auto& texture : textureList)
+		{
+			if (ImGui::Selectable(std::string{ texture->GetName().begin(),texture->GetName().end() }.c_str()))
+			{
+				textureName = texture->GetName();
+			}
+		}
+
+		ImGui::EndCombo();
+	}
+}
+
+void CreateComboByShader(std::string comboName, std::wstring& shaderName, std::vector<yunuGI::IShader*>& shaderList)
+{
+	if (ImGui::BeginCombo(comboName.c_str(), std::string{ shaderName.begin(),shaderName.end() }.c_str()))
+	{
+		for (auto& shader : shaderList)
+		{
+			if (ImGui::Selectable(std::string{ shader->GetName().begin(),shader->GetName().end() }.c_str()))
+			{
+				shaderName = shader->GetName();
+			}
+		}
+
+		ImGui::EndCombo();
 	}
 }

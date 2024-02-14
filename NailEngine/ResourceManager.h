@@ -77,6 +77,7 @@ public:
 	std::vector<yunuGI::IAnimation*>& GetAnimationList();
 	std::vector<std::wstring>& GetFBXList();
 	std::shared_ptr<AnimationGroup> GetAnimationGroup(const std::wstring& modelName);
+	std::unordered_map<std::wstring, yunuGI::FBXData*>& GetFBXDataMap() { return fbxDataMap; }
 #pragma endregion
 
 private:

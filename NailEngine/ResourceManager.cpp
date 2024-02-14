@@ -443,7 +443,10 @@ FBXNode* ResourceManager::GetFBXNode(const std::wstring& fbxName)
     return this->fbxNodeMap.find(fbxName)->second;
 }
 std::vector<yunuGI::IMesh*>& ResourceManager::GetMeshList() { return this->meshVec; };
-std::vector<yunuGI::ITexture*>& ResourceManager::GetTextureList() { return this->textureVec; };
+std::vector<yunuGI::ITexture*>& ResourceManager::GetTextureList() 
+{
+    return this->textureVec; 
+};
 std::vector<yunuGI::IMaterial*>& ResourceManager::GetMaterialList()
 {
     return this->materialVec;
@@ -820,7 +823,6 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
             fbxData->materialVec[i].emissionMap = node->meshVec[i].material.emissionMap;
             fbxData->materialVec[i].normalMap = node->meshVec[i].material.normalMap;
             fbxData->materialVec[i].opacityMap = node->meshVec[i].material.opacityMap;
-            //auto material = GetMaterial(node->meshVec[i].material.materialName);
         }
     }
 

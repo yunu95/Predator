@@ -132,5 +132,10 @@ namespace yunuGIAdapter
         {
             return ResourceManager::Instance.Get().GetFBXList();
         };
+
+        virtual std::unordered_map<std::wstring, yunuGI::FBXData*>& GetFBXDataMap()const override
+        {
+            return ResourceManager::Instance.Get().GetFBXDataMap();
+        };
     };
 }
