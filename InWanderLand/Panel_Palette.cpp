@@ -458,8 +458,7 @@ namespace application
                     ImGui::TableNextRow();
                     ImGui::TableSetColumnIndex(0);
                     ImGui::Text("Region name");
-                    ImGui::TableNextRow();
-                    ImGui::TableSetColumnIndex(0);
+                    ImGui::TableNextColumn();
                     string charBuffer = yutility::GetString(selectedRegion->pod.name);
                     charBuffer.reserve(64);
                     ImGui::InputText("##RegionNameInputText", &charBuffer[0], 64);
@@ -468,15 +467,14 @@ namespace application
                     ImGui::TableSetColumnIndex(0);
                     ImGui::Text("width");
                     ImGui::TableNextColumn();
-                    ImGui::InputFloat("##RegionWidthInputText", &selectedRegion->pod.width);
+                    ImGui::DragFloat("##RegionWidthInputText", &selectedRegion->pod.width, 0.005f, 0.0f, FLT_MAX, "%.2f", 0);
                     ImGui::TableNextRow();
                     ImGui::TableSetColumnIndex(0);
                     ImGui::Text("height");
                     ImGui::TableNextColumn();
-                    ImGui::InputFloat("##RegionHeightInputText", &selectedRegion->pod.height);
-
+                    ImGui::DragFloat("##RegionHeightInputText", &selectedRegion->pod.height, 0.005f, 0.0f, FLT_MAX, "%.2f", 0);
+                    imgui::EndSection();
                 }
-                imgui::EndSection();
             }
         }
         void PalettePanel::ImGui_BeginWavePalette()
