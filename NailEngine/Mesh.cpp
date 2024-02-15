@@ -31,6 +31,8 @@ void Mesh::SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& in
 	aabb.Extents = DirectX::SimpleMath::Vector3((maxPoint.x - minPoint.x) * 0.5f, (maxPoint.y - minPoint.y) * 0.5f, (maxPoint.z - minPoint.z) * 0.5f);
 	this->aabbVec.emplace_back(aabb);
 
+	CheckBigBoundingBox(aabb);
+
 	this->materialCount = this->indexBufferVec.size();
 }
 
@@ -67,7 +69,7 @@ DirectX::BoundingBox Mesh::GetBoundingBox(DirectX::SimpleMath::Matrix wtm, unsig
 	XMStoreFloat3(&transformedAABB.Center, DirectX::XMLoadFloat3(&this->aabbVec[materialIndex].Center));
 	XMStoreFloat3(&transformedAABB.Extents, DirectX::XMLoadFloat3(&this->aabbVec[materialIndex].Extents));
 
-	transformedAABB.Transform(transformedAABB,wtm);
+	transformedAABB.Transform(transformedAABB, wtm);
 
 	return transformedAABB;
 }
@@ -106,4 +108,15 @@ void Mesh::CreateIndexBuffer(unsigned int indexCount, IndexBuffer& indexBuffer)
 	_indexData.SysMemSlicePitch = 0;
 
 	ResourceBuilder::Instance.Get().device->GetDevice()->CreateBuffer(&_indexBufferDesc, &_indexData, indexBuffer.indexBuffer.GetAddressOf());
+}
+
+void Mesh::CheckBigBoundingBox(DirectX::BoundingBox& aabb)
+{
+	float v1 = this->aabb.Extents.x * this->aabb.Extents.y * this->aabb.Extents.z;
+	float v2 = aabb.Extents.x * aabb.Extents.y * aabb.Extents.z;
+
+	if (v1 < v2)
+	{
+		this->aabb = aabb;
+	}
 }

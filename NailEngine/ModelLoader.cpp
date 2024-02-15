@@ -128,6 +128,9 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 			fbxMeshData.aabb[0] = DirectX::SimpleMath::Vector3{ maxX,maxY,maxZ };
 			fbxMeshData.aabb[1] = DirectX::SimpleMath::Vector3{ minX,minY,minZ };
 
+			//fbxMeshData.aabb[0] = DirectX::SimpleMath::Vector3{ maxPoint.x,maxPoint.y,maxPoint.z};
+			//fbxMeshData.aabb[1] = DirectX::SimpleMath::Vector3{ minPoint.x,minPoint.y,minPoint.z};
+
 			fbxMeshData.vertex.emplace_back(vertex);
 		}
 

@@ -36,7 +36,10 @@ void GraphicsTest()
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
     {
-        auto abj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
+        obj->GetTransform()->SetLocalScale(Vector3d{ 0.01f,0.01f,0.01f });
+        obj->GetTransform()->SetLocalRotation(Vector3d{ 90,0,0});
+        auto& childVec = obj->GetChildren();
     }
 }
 
@@ -108,9 +111,10 @@ void application::contents::ContentsLayer::Initialize()
 	resourceManager->LoadFile("LeavesVS.cso");
 	resourceManager->LoadFile("LeavesPS.cso");
 
-    //resourceManager->LoadFile("FBX/Monster1");
-	resourceManager->LoadFile("FBX/SM_Bush_001");
-	resourceManager->LoadFile("FBX/SM_Bush_002");
+    resourceManager->LoadFile("FBX/Monster2");
+	//resourceManager->LoadFile("FBX/SM_Bush_001");
+	//resourceManager->LoadFile("FBX/SM_Bush_002");
+	resourceManager->LoadFile("FBX/SM_Trunk_001");
 	///resourceManager->LoadFile("FBX/SM_CastleWall");
 	///resourceManager->LoadFile("FBX/SM_CastleWall_Door");
 	///resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");

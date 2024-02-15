@@ -86,9 +86,12 @@ void InstancingManager::RenderStaticDeferred()
 			if (renderInfoVec.size() != 0)
 			{
 				auto& buffer = _buffers[instanceID];
-				(*renderInfoVec.begin())->material->PushGraphicsData();
-				buffer->PushData();
-				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, buffer);
+				if (buffer->GetCount() > 0)
+				{
+					(*renderInfoVec.begin())->material->PushGraphicsData();
+					buffer->PushData();
+					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, buffer);
+				}
 			}
 		}
 	}
@@ -161,10 +164,13 @@ void InstancingManager::RenderStaticForward()
 			if (renderInfoVec.size() != 0)
 			{
 				auto& buffer = _buffers[instanceID];
-				(*renderInfoVec.begin())->material->PushGraphicsData();
-				auto test = (*renderInfoVec.begin())->mesh->GetMaterialCount();
-				buffer->PushData();
-				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, buffer);
+				if (buffer->GetCount() > 0)
+				{
+					(*renderInfoVec.begin())->material->PushGraphicsData();
+					auto test = (*renderInfoVec.begin())->mesh->GetMaterialCount();
+					buffer->PushData();
+					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, buffer);
+				}
 			}
 		}
 	}
@@ -351,9 +357,12 @@ void InstancingManager::RenderSkinned()
 			if (renderInfoVec.size() != 0)
 			{
 				auto& buffer = _buffers[instanceID];
-				(*renderInfoVec.begin())->renderInfo.material->PushGraphicsData();
-				buffer->PushData();
-				(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, buffer);
+				if (buffer->GetCount() > 0)
+				{
+					(*renderInfoVec.begin())->renderInfo.material->PushGraphicsData();
+					buffer->PushData();
+					(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, buffer);
+				}
 			}
 		}
 	}
