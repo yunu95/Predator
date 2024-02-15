@@ -298,6 +298,12 @@
     <Filter Include="Editor\Palette\PaletteBrush\OrnamentBrush">
       <UniqueIdentifier>{8045da07-686d-4fea-a63c-27e4e233378c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Palette\List\WavePalette">
+      <UniqueIdentifier>{376cdf4e-06ac-4e10-8c0f-0734bc537788}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="InstanceStaticRegistry">
+      <UniqueIdentifier>{661e11c8-f855-4df1-8f51-ecf2f7d59b3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -745,6 +751,19 @@
     <ClInclude Include="OrnamentBrush.h">
       <Filter>Editor\Palette\PaletteBrush\OrnamentBrush</Filter>
     </ClInclude>
+    <ClInclude Include="Wave.h" />
+    <ClInclude Include="WaveData.h">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="WavePalette.h">
+      <Filter>Editor\Palette\List\WavePalette</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticInstanceRegistry.h">
+      <Filter>InstanceStaticRegistry</Filter>
+    </ClInclude>
+    <ClInclude Include="Wave_TemplateData.h">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1157,6 +1176,17 @@
     </ClCompile>
     <ClCompile Include="OrnamentBrush.cpp">
       <Filter>Editor\Palette\PaletteBrush\OrnamentBrush</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCaseQuaternionWithAxes.cpp" />
+    <ClCompile Include="Wave.cpp" />
+    <ClCompile Include="WaveData.cpp">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="WavePalette.cpp">
+      <Filter>Editor\Palette\List\WavePalette</Filter>
+    </ClCompile>
+    <ClCompile Include="Wave_TemplateData.cpp">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

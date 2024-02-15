@@ -1001,6 +1001,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="HealerAutoAttackProjectile.h" />
     <ClInclude Include="HealerAutoAttackProjectilePool.h" />
     <ClInclude Include="HealerSkillSystem.h" />
+    <ClInclude Include="StaticInstanceRegistry.h" />
     <ClInclude Include="LoadStaticOrnamentsCommand.h" />
     <ClInclude Include="OrnamentBrush.h" />
     <ClInclude Include="OrnamentEditorInstance.h" />
@@ -1132,6 +1133,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UnitPalette.h" />
     <ClInclude Include="PlayerSkillSystem.h" />
     <ClInclude Include="Wave.h" />
+    <ClInclude Include="WaveData.h" />
+    <ClInclude Include="WavePalette.h" />
+    <ClInclude Include="Wave_TemplateData.h" />
     <ClInclude Include="WindowEvents.h" />
     <ClInclude Include="WarriorSkillSystem.h" />
   </ItemGroup>
@@ -1273,6 +1277,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="PlayerSkillSystem.cpp" />
     <ClCompile Include="WarriorSkillSystem.cpp" />
     <ClCompile Include="Wave.cpp" />
+    <ClCompile Include="WaveData.cpp" />
+    <ClCompile Include="WavePalette.cpp" />
+    <ClCompile Include="Wave_TemplateData.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
