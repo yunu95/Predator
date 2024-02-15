@@ -35,64 +35,9 @@ void GraphicsTest()
 
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	_resourceManager->LoadFile("CastleWallPS.cso");
-
-	yunuGI::IShader* shader;
-	yunuGI::IShader* shader2;
-	auto& shaderList = _resourceManager->GetShaderList();
-	for (auto& i : shaderList)
-	{
-		if (i->GetName() == L"CastleWallPS.cso")
-		{
-			shader = i;
-		}
-
-		if (i->GetName() == L"Debug_AlphaPS.cso")
-		{
-			shader2 = i;
-		}
-	}
-
-	_resourceManager->LoadFile("FBX/SM_CastleWall");
-	_resourceManager->LoadFile("Texture/T_Brick_Dirt_BaseColor.png");
-	_resourceManager->LoadFile("Texture/T_Brick_Dirt_Normal.png");
-	yunuGI::ITexture* texture;
-	yunuGI::ITexture* texture2;
-	auto& textureList = _resourceManager->GetTextureList();
-	for (auto& i : textureList)
-	{
-		if (i->GetName() == L"Texture/T_Brick_Dirt_BaseColor.png")
-		{
-			texture = i;
-		}
-
-		if (i->GetName() == L"Texture/T_Brick_Dirt_Normal.png")
-		{
-			texture2 = i;
-		}
-	}
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CastleWall");
-		auto& childVec = obj->GetChildren();
-		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(1)->SetPixelShader(shader);
-		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(1)->SetTexture(yunuGI::Texture_Type::Temp0, texture);
-		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(1)->SetTexture(yunuGI::Texture_Type::Temp1, texture2);
-		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,10 });
-	}
-
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CastleWall");
-		auto& childVec = obj->GetChildren();
-	
-		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(0)->SetPixelShader(shader2);
-		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(0)->SetColor(yunuGI::Color{ 0,1,1,0.2 });
-	
-		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(1)->SetPixelShader(shader2);
-		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(1)->SetColor(yunuGI::Color{ 0,1,1,0.2 });
-	
-		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(2)->SetPixelShader(shader2);
-		childVec[0]->GetComponent<graphics::StaticMeshRenderer>()->GetGI().GetMaterial(2)->SetColor(yunuGI::Color{ 0,1,1,0.2 });
-	}
+    {
+        auto abj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+    }
 }
 
 
@@ -157,9 +102,15 @@ void application::contents::ContentsLayer::Initialize()
     //roamingCam->SetCameraMain();
 
     const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+	resourceManager->LoadFile("FBXMaterial.scres");
+
+	resourceManager->LoadFile("LeavesVS.cso");
+	resourceManager->LoadFile("LeavesPS.cso");
+
     //resourceManager->LoadFile("FBX/Monster1");
-	///resourceManager->LoadFile("FBX/SM_Bush_001");
-	///resourceManager->LoadFile("FBX/SM_Bush_002");
+	resourceManager->LoadFile("FBX/SM_Bush_001");
+	resourceManager->LoadFile("FBX/SM_Bush_002");
 	///resourceManager->LoadFile("FBX/SM_CastleWall");
 	///resourceManager->LoadFile("FBX/SM_CastleWall_Door");
 	///resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");

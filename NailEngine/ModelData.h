@@ -31,6 +31,15 @@ struct MaterialData
 	std::wstring armMap;
 	std::wstring emissionMap;
 	std::wstring opacityMap;
+	std::wstring heightMap;
+
+	std::wstring temp0Map;
+	std::wstring temp1Map;
+	std::wstring temp2Map;
+	std::wstring temp3Map;
+
+	std::wstring vs{L"DefaultVS.cso"};
+	std::wstring ps{ L"DefaultPS.cso" };
 };
 
 struct FBXMeshData

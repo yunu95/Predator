@@ -76,7 +76,6 @@ namespace snippets
 	TEST_CLASS(SnippetCastleWallTextureBlendingClass)
 	{
 	public:
-		// TestComponent2안에 H키와 J키를 눌렀을 때 애니메이션 전환하게 되어있음.
 		TEST_METHOD(SnippetCastleWallTextureBlending)
 		{
 			application::Application& client = application::Application::CreateApplication(0, 0);

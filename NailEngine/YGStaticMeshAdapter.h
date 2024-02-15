@@ -81,6 +81,8 @@ namespace yunuGIAdapter
                     this->materialVec[index]->variation = reinterpret_cast<Material*>(material);
                 }
             }
+
+            renderable->SetMaterial(index, material);
         }
 
         virtual int GetMaterialCount() override
