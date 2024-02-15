@@ -38,6 +38,9 @@ namespace yunuGI
         virtual std::vector<IAnimation*>& GetAnimationList()const = 0;
         virtual std::vector<std::wstring>& GetFBXList()const = 0;
         virtual std::unordered_map<std::wstring, yunuGI::FBXData*>& GetFBXDataMap()const = 0;
+
+        virtual void SaveFBXData()const =0;
+        virtual void LoadFBXData()const =0;
     };
 }
 

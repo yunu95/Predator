@@ -14,7 +14,7 @@
 #include <locale>
 #include <codecvt>
 
-bool g_preLoad = false;
+bool g_fbxLoad = false;
 std::unordered_map<std::wstring, yunuGI::FBXData*> g_fbxMap;
 yunuGI::FBXData* g_selectFBX = nullptr;
 // Data
@@ -45,12 +45,15 @@ std::string ConvertWideStringToUTF8(const std::wstring& wideString) {
 	return utf8String;
 }
 
-void PreLoadResource();
+void FBXLoad();
 void ShowFBXData(yunuGI::FBXData* data);
 void ShowFBXList();
 void ShowSeleteFBXInfo();
 void CreateComboByTexture(std::string comboName, std::wstring& textureName, std::vector<yunuGI::ITexture*>& textureList);
 void CreateComboByShader(std::string comboName, std::wstring& shaderName, std::vector<yunuGI::IShader*>& shaderList);
+
+void SaveFBXMaterial();
+void LoadFBXMaterial();
 
 
 int WINAPI main(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show)
@@ -123,7 +126,7 @@ int WINAPI main(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_li
 			ImGui_ImplWin32_WndProcHandler(msg.hwnd, msg.message, msg.wParam, msg.lParam);
 		}
 
-		if (g_preLoad)
+		if (g_fbxLoad)
 		{
 			continue;
 		}
@@ -138,23 +141,24 @@ int WINAPI main(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_li
 		ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 		{
-			static float f = 0.0f;
-			static int counter = 0;
 			ImGui::Begin("Buttons");                          // Create a window called "Hello, world!" and append into it.
 
+			// 바꾼 머터리얼을 저장하는 버튼
 			if (ImGui::Button("SaveButton"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
 			{
-				counter++;
+				SaveFBXMaterial();
 			}
 
+			// 바뀐 머터리얼을 로드하는 버튼
 			if (ImGui::Button("LoadButton"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
 			{
-				counter++;
+				LoadFBXMaterial();
 			}
 
-			if (ImGui::Button("PreLoadButton"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+			// FBX를 로드하는 버튼
+			if (ImGui::Button("FBXLoadButton"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
 			{
-				PreLoadResource();
+				FBXLoad();
 			}
 
 			ImGui::End();
@@ -319,39 +323,44 @@ void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_
 
 }
 
-void PreLoadResource()
+void FBXLoad()
 {
-	g_preLoad = true;
+	g_fbxLoad = true;
 
 	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	// Shader
+	resourceManager->LoadFile("LeavesVS.cso");
+	resourceManager->LoadFile("LeavesPS.cso");
+
+	// Model
 	resourceManager->LoadFile("FBX/SM_Bush_001");
 	resourceManager->LoadFile("FBX/SM_Bush_002");
-	resourceManager->LoadFile("FBX/SM_CastleWall");
-	resourceManager->LoadFile("FBX/SM_CastleWall_Door");
-	resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
-	resourceManager->LoadFile("FBX/SM_Chair");
-	resourceManager->LoadFile("FBX/SM_Cuptower");
-	resourceManager->LoadFile("FBX/SM_Fork");
-	resourceManager->LoadFile("FBX/SM_GuideBook");
-	resourceManager->LoadFile("FBX/SM_Hat01");
-	resourceManager->LoadFile("FBX/SM_Hat02");
-	resourceManager->LoadFile("FBX/SM_SmallBush_001");
-	resourceManager->LoadFile("FBX/SM_Stone_001");
-	resourceManager->LoadFile("FBX/SM_Stone_002");
-	resourceManager->LoadFile("FBX/SM_Stump");
-	resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
-	resourceManager->LoadFile("FBX/SM_Temple_Books");
-	resourceManager->LoadFile("FBX/SM_Temple_Floor");
-	resourceManager->LoadFile("FBX/SM_Temple_Pillar");
-	resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
-	resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
-	resourceManager->LoadFile("FBX/SM_Temple_Stairs");
-	resourceManager->LoadFile("FBX/SM_Temple_Welcome");
-	resourceManager->LoadFile("FBX/SM_Trunk_001");
+	//resourceManager->LoadFile("FBX/SM_CastleWall");
+	//resourceManager->LoadFile("FBX/SM_CastleWall_Door");
+	//resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
+	//resourceManager->LoadFile("FBX/SM_Chair");
+	//resourceManager->LoadFile("FBX/SM_Cuptower");
+	//resourceManager->LoadFile("FBX/SM_Fork");
+	//resourceManager->LoadFile("FBX/SM_GuideBook");
+	//resourceManager->LoadFile("FBX/SM_Hat01");
+	//resourceManager->LoadFile("FBX/SM_Hat02");
+	//resourceManager->LoadFile("FBX/SM_SmallBush_001");
+	//resourceManager->LoadFile("FBX/SM_Stone_001");
+	//resourceManager->LoadFile("FBX/SM_Stone_002");
+	//resourceManager->LoadFile("FBX/SM_Stump");
+	//resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
+	//resourceManager->LoadFile("FBX/SM_Temple_Books");
+	//resourceManager->LoadFile("FBX/SM_Temple_Floor");
+	//resourceManager->LoadFile("FBX/SM_Temple_Pillar");
+	//resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
+	//resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
+	//resourceManager->LoadFile("FBX/SM_Temple_Stairs");
+	//resourceManager->LoadFile("FBX/SM_Temple_Welcome");
+	//resourceManager->LoadFile("FBX/SM_Trunk_001");
 
 	g_fbxMap = resourceManager->GetFBXDataMap();
 
-	g_preLoad = false;
+	g_fbxLoad = false;
 }
 
 void ShowFBXData(yunuGI::FBXData* data)
@@ -492,4 +501,16 @@ void CreateComboByShader(std::string comboName, std::wstring& shaderName, std::v
 
 		ImGui::EndCombo();
 	}
+}
+
+void SaveFBXMaterial()
+{
+	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	resourceManager->SaveFBXData();
+}
+
+void LoadFBXMaterial()
+{
+	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	resourceManager->LoadFBXData();
 }

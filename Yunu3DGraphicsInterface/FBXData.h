@@ -37,8 +37,6 @@ namespace yunuGI
 
 	struct FBXData
 	{
-		std::vector<FBXData*> child;
-
 		std::wstring nodeName;
 		std::wstring meshName;
 
@@ -46,13 +44,14 @@ namespace yunuGI
 		yunuGI::Vector3 scale;
 		yunuGI::Vector4 quat;
 
-		std::vector<MaterialData> materialVec;
-
 		BoneInfo boneInfo;
 
 		bool hasAnimation;
 
 		BoundingBox aabb;
+
+		std::vector<FBXData*> child;
+		std::vector<MaterialData> materialVec;
 	};
 
 

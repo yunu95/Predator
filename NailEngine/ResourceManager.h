@@ -12,6 +12,8 @@
 #include <map>
 #include <array>
 #include <d3d11.h>
+#include <nlohmann/json.hpp>
+#include <iomanip>
 
 
 #include "ModelLoader.h"
@@ -78,6 +80,12 @@ public:
 	std::vector<std::wstring>& GetFBXList();
 	std::shared_ptr<AnimationGroup> GetAnimationGroup(const std::wstring& modelName);
 	std::unordered_map<std::wstring, yunuGI::FBXData*>& GetFBXDataMap() { return fbxDataMap; }
+
+	void SaveFBXData();
+	void SaveFBXChildData(const yunuGI::FBXData* data, nlohmann::json& jsonData);
+
+	void LoadFBXData();
+	void LoadFBXData(const nlohmann::json& jsonData, yunuGI::FBXData* data);
 #pragma endregion
 
 private:
@@ -87,7 +95,7 @@ private:
 	void CreateDefaultMaterial();
 	void CreateDefaultTexture();
 
-	void FillFBXData(const std::wstring& fbxName, FBXNode* node, yunuGI::FBXData* fbxData);
+	void FillFBXData(const std::wstring& fbxName, FBXNode* node, yunuGI::FBXData* fbxData, bool isPreLoad);
 	void FillFBXBoneInfoVec(const yunuGI::BoneInfo& boneInfo, std::vector<yunuGI::BoneInfo>& boneInfoVec);
 	//void CreateResourceFromFBX(FBXMeshData& meshData, std::vector<yunuGI::FBXData>& dataVec, yunuGI::FBXData& fbxData);
 
@@ -102,7 +110,7 @@ private:
 	void LoadCylinderMesh();
 #pragma endregion
 
-
+	std::wstring String_To_Wstring(const std::string& str);
 
 private:
 	// Mesh 관련
@@ -134,7 +142,7 @@ private:
 	std::unordered_map<std::wstring, std::shared_ptr<AnimationGroup>> animationGroupMap;
 
 	std::unordered_map<std::wstring, yunuGI::FBXData*> fbxDataMap;
-	std::vector<std::wstring> fbxMap;
+	std::vector<std::wstring> fbxVec;
 	//// 게임 엔진에서 본 계층구조로 오브젝트 만들 때 쓰는용
 	///std::unordered_map<std::wstring, std::vector<yunuGI::BoneInfo>> fbxBoneInfoVecMap;
 	// 그래픽스 엔진 내부에서 스키닝 애니메이션에 쓸 오프셋 행렬을 가지고 있는 본 정보
