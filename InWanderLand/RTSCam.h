@@ -1,6 +1,7 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "DebugBeacon.h"
+#include "RegionData.h"
 using namespace yunutyEngine;
 
 class RTSCam :public yunutyEngine::graphics::Camera
@@ -48,9 +49,9 @@ public:
             if (yunutyEngine::Input::isKeyDown(KeyCode::S)/* || lastMousePos.y >= 1*/)
                 deltaDirection -= Vector3d::forward;
 
-            GetTransform()->SetLocalPosition(GetTransform()->GetLocalPosition()+ deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed);
+            GetTransform()->SetLocalPosition(GetTransform()->GetLocalPosition() + deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed);
             Quaternion quat = Quaternion(Vector3d(60, 0, 0));
-            GetTransform()->SetLocalRotation( quat);
+            GetTransform()->SetLocalRotation(quat);
         }
         else
         {
@@ -121,7 +122,7 @@ public:
                 //rot = Quaternion{ Vector3d{euler.x += (20.0f * Time::GetDeltaTime()) ,euler.y , euler.z   } };
                 euler.x += (20.0f * Time::GetDeltaTime());
             }
-            GetTransform()->SetLocalRotation( Quaternion{ euler });
+            GetTransform()->SetLocalRotation(Quaternion{ euler });
 
             //if (yunutyEngine::Input::is
             // 
@@ -148,7 +149,7 @@ public:
             //    GetTransform()->rotation = Quaternion::MakeWithAxes(newRight, newUp, newForward);
             //}
 
-            GetTransform()->SetLocalPosition(GetTransform()->GetLocalPosition()+ deltaPosition.Normalized() * Time::GetDeltaTime() * cameraSpeed);
+            GetTransform()->SetLocalPosition(GetTransform()->GetLocalPosition() + deltaPosition.Normalized() * Time::GetDeltaTime() * cameraSpeed);
         }
 
         if (!roamingMode)
@@ -184,7 +185,11 @@ public:
             groundHoveringClickCallback(projectedPoint);
         }
     }
+    void ConstrainByRegion(const application::editor::RegionData* region)
+    {
+    };
 private:
+    const application::editor::RegionData* contrainingRegion;
     float expectedPlaneDistance() { return abs(GetTransform()->GetWorldPosition().y); };
     Vector3d euler;
 };

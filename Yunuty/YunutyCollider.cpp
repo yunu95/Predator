@@ -72,7 +72,7 @@ namespace yunutyEngine
 
                 //assert(GetTransform()->GetWorldScale().x == 1.0f && GetTransform()->GetWorldScale().y == 1.0f && GetTransform()->GetWorldScale().z == 1.0f,
                 //    "scale must be 1.");
-                impl->SetActorWorldTransform(GetTransform()->GetWorldTM());
+                impl->SetActorWorldTransform(GetTransform());
 
                 if (auto scl = GetTransform()->GetWorldScale(); cachedScale != scl)
                 {
@@ -93,7 +93,7 @@ namespace yunutyEngine
                 impl->InitializePhysXActor();
                 cachedScale = GetTransform()->GetWorldScale();
             }
-            impl->SetActorWorldTransform(GetTransform()->GetWorldTM());
+            impl->SetActorWorldTransform(GetTransform());
             impl->pxActor->setActorFlag({ PxActorFlag::eDISABLE_SIMULATION }, false);
             if (impl->pxRigidDynamic->isSleeping())
                 impl->pxRigidDynamic->wakeUp();

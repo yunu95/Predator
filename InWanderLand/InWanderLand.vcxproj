@@ -1131,6 +1131,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UnitEditorInstance.h" />
     <ClInclude Include="UnitPalette.h" />
     <ClInclude Include="PlayerSkillSystem.h" />
+    <ClInclude Include="Wave.h" />
     <ClInclude Include="WindowEvents.h" />
     <ClInclude Include="WarriorSkillSystem.h" />
   </ItemGroup>
@@ -1244,6 +1245,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="TerrainData.cpp" />
     <ClCompile Include="TerrainPalette.cpp" />
     <ClCompile Include="Terrain_TemplateData.cpp" />
+    <ClCompile Include="TestCaseQuaternionWithAxes.cpp" />
     <ClCompile Include="TestCaseMapFileIO.cpp" />
     <ClCompile Include="SnippetMapListIO.cpp" />
     <ClCompile Include="TestCasePhysxTrigger.cpp" />
@@ -1270,6 +1272,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="WarriorProductor.cpp" />
     <ClCompile Include="PlayerSkillSystem.cpp" />
     <ClCompile Include="WarriorSkillSystem.cpp" />
+    <ClCompile Include="Wave.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
