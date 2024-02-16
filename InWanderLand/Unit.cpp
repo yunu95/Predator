@@ -125,7 +125,7 @@ void Unit::IdleEngage()
 {
 	currentOrder = UnitState::Idle;
 	idleElapsed = 0.0f;
-
+	m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
 	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 
 	DetermineCurrentTargetObject();
@@ -151,6 +151,8 @@ void Unit::MoveEngage()
 
 	//dotween->DOLookAt(mouseXZVector, rotationTime, false);
 
+	m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::blue());
+
 	GetGameObject()->GetComponent<NavigationAgent>()->SetSpeed(m_speed);
 
 	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
@@ -162,6 +164,8 @@ void Unit::AttackMoveEngage()
 
 	moveFunctionElapsed = 0.0f;
 
+	m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::gray());
+
 	GetGameObject()->GetComponent<NavigationAgent>()->SetSpeed(m_speed);
 
 	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
@@ -170,7 +174,9 @@ void Unit::AttackMoveEngage()
 void Unit::AttackEngage()
 {
 	currentOrder = UnitState::Attack;
-	//GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().SetNextAnimation(unitAnimations.m_idleAnimation);
+
+	m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::red());
+
 	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 
 	attackFunctionElapsed = 0.0f;
@@ -186,6 +192,8 @@ void Unit::AttackEngage()
 void Unit::ChaseEngage()
 {
 	currentOrder = UnitState::Chase;
+
+	m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::green());
 
 	dotween->DOLookAt(m_currentTargetObject->GetTransform()->GetWorldPosition(), rotationTime, false);
 
@@ -298,7 +306,7 @@ void Unit::AttackUpdate()
 		}
 	}
 
-	if (attackFunctionElapsed >= attackFunctionCallDelay || !isAttackStarted)
+	if (attackFunctionElapsed >= attackFunctionCallDelay/* || !isAttackStarted*/)
 	{
 		isAttackStarted = true;
 		isAttackAnimationOperating = true;
@@ -420,6 +428,21 @@ Unit::UnitState Unit::GetCurrentUnitState() const
 	return currentOrder;
 }
 
+SkillPreviewSystem::SkillPreviewMesh Unit::GetSkillPreviewType(SkillEnum p_currentSkillType) const
+{
+	switch (p_currentSkillType)
+	{
+		case Unit::SkillEnum::Q:
+			return m_qSkillPreviewType;
+			break;
+		case Unit::SkillEnum::W:
+			return m_wSkillPreviewType;
+			break;
+		default:
+			break;
+	}
+}
+
 void Unit::SetCurrentOrderMove()
 {
 	currentOrder = UnitState::Move;
@@ -514,6 +537,11 @@ float Unit::DetermineAttackDamage(float p_damage)
 	return m_finalAttackDamage;
 }
 
+void Unit::SetStaticMeshComponent(yunutyEngine::graphics::StaticMeshRenderer* p_stcMesh)
+{
+	m_staticMeshRenderer = p_stcMesh;
+}
+
 void Unit::DetermineHitDamage(float p_onceCalculatedDmg)
 {
 	m_finalHitDamage = (m_defensePoint / 10.0f) / (1 - m_criticalDamageDecreaseMultiplier) / (1 - m_dodgeProbability);
@@ -605,6 +633,12 @@ void Unit::OrderSkill(SkillEnum p_skillNum)
 void Unit::SetSkillDuration(float p_duration)
 {
 	qSkillAnimationDuration = p_duration;
+}
+
+void Unit::SetSkillPreviewType(SkillPreviewSystem::SkillPreviewMesh p_qskill, SkillPreviewSystem::SkillPreviewMesh p_wskill)
+{
+	m_qSkillPreviewType = p_qskill;
+	m_wSkillPreviewType = p_wskill;
 }
 
 void Unit::AddToOpponentObjectList(yunutyEngine::GameObject* opponent)

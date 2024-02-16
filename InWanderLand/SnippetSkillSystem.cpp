@@ -22,6 +22,7 @@
 #include "UnitProductor.h"
 #include "TacticModeSystem.h"
 #include "SingleNavigationField.h"
+#include "SkillPreviewSystem.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -60,12 +61,22 @@ void SnippetSkillSystemInit()
 	mouseCursorMesh->GetGI().SetMesh(sphereMesh);
 	mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
 
+	auto skillPreviewCubeMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	AttachDebugMesh(skillPreviewCubeMeshObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
+	SkillPreviewSystem::SingleInstance().SetPathPreviewObject(skillPreviewCubeMeshObject);
+
+	auto skillPreviewSphereMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	AttachDebugMesh(skillPreviewSphereMeshObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
+	SkillPreviewSystem::SingleInstance().SetRangePreviewObject(skillPreviewSphereMeshObject);
+
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
 	auto rtsCam = camObj->AddComponent<RTSCam>();
 	rtsCam->groundHoveringClickCallback = [=](Vector3d pos)
 	{
 		mouseCursorObject->GetTransform()->SetWorldPosition(pos);
+		SkillPreviewSystem::SingleInstance().SetCurrentMousPosition(pos);
+		SkillPreviewSystem::SingleInstance().Update();
 	};
 	std::vector<Vector3f> worldVertices{ };
 	std::vector<int> worldFaces{ };

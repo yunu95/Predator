@@ -17,6 +17,7 @@ public:
 
 private:
 	SelectedSerialNumber currentSelectedSerialNumber;
+	bool isPlayerSelected = false;
 	bool tacticMode = false;
 public:
 	virtual void Start() override;

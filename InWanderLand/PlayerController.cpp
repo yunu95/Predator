@@ -4,6 +4,7 @@
 #include "RTSCam.h"
 #include "Unit.h"
 #include "Dotween.h"
+#include "SkillPreviewSystem.h"
 
 PlayerController* PlayerController::instance = nullptr;
 
@@ -48,9 +49,10 @@ void PlayerController::SetLeftClickMove()
 	}
 	else
 	{
+		Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
 		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
 		{
-			playerComponentMap.find(currentSelectedSerialNumber)->second->OrderMove(pos);
+			currentSelectedUnit->OrderMove(pos);
 		};
 	}
 
@@ -101,8 +103,13 @@ void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
 
 		else
 		{
+			Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
+			SkillPreviewSystem::SingleInstance().SetCurrentSelectedPlayerGameObject(currentSelectedUnit->GetGameObject());
+			SkillPreviewSystem::SingleInstance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(p_skillNum));
+			SkillPreviewSystem::SingleInstance().ActivateSkillPreview(true);
 			m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
 			{
+				SkillPreviewSystem::SingleInstance().ActivateSkillPreview(false);
 				playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum, pos);
 			};
 		}

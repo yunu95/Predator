@@ -1018,6 +1018,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="RegionData.h" />
     <ClInclude Include="Region_TemplateData.h" />
     <ClInclude Include="SingleNavigationField.h" />
+    <ClInclude Include="SkillPreviewSystem.h" />
     <ClInclude Include="TacticModeSystem.h" />
     <ClInclude Include="TestUtilButtonEvent.h" />
     <ClInclude Include="InWanderLand.h" />
@@ -1172,10 +1173,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="PaletteManager.cpp" />
     <ClCompile Include="PassiveCake.cpp" />
     <ClCompile Include="RangedAttackSystem.cpp" />
+    <ClCompile Include="SkillPreviewSystem.cpp" />
     <ClCompile Include="SnippetArtResource.cpp" />
     <ClCompile Include="RegionData.cpp" />
     <ClCompile Include="Region_TemplateData.cpp" />
     <ClCompile Include="SnippetCastleWallTextureBlending.cpp" />
+    <ClCompile Include="SnippetUISystem.cpp" />
     <ClCompile Include="SnippetDebugMeshScaleCheck.cpp" />
     <ClCompile Include="SnippetFloatingDebugSphere.cpp" />
     <ClCompile Include="RegionPalette.cpp" />

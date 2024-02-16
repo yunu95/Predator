@@ -24,8 +24,8 @@ void MagicianProductor::SetUnitData()
 	m_dodgeProbability = 0.05f;
 	m_criticalDamageDecreaseMultiplier = 0.05f;
 
-	m_idRadius = 10.0f * LENGTH_UNIT;
-	m_atkRadius = 3.5f * LENGTH_UNIT;
+	m_idRadius = 10.0f * lengthUnit;
+	m_atkRadius = 3.5f * lengthUnit;
 	m_unitSpeed = 4.5f;
 
 	m_attackDelay = 5.0f;
@@ -97,7 +97,7 @@ yunutyEngine::GameObject* MagicianProductor::CreateUnit(Vector3d startPos)
 	QSkillProjectileObject->AddComponent<Dotween>();
 
 	auto QSkillProjectileCollider = QSkillProjectileObject->AddComponent<physics::SphereCollider>();
-	m_QSkillProjectileRadius = 1.0f * LENGTH_UNIT;
+	m_QSkillProjectileRadius = 1.0f * lengthUnit;
 	QSkillProjectileCollider->SetRadius(m_QSkillProjectileRadius);
 	QSkillProjectileObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
@@ -110,7 +110,7 @@ yunutyEngine::GameObject* MagicianProductor::CreateUnit(Vector3d startPos)
 	auto fieldDamageComponent = QSkillFieldObject->AddComponent<BlindFieldComponent>();
 	fieldDamageComponent->SetSkillOwnerUnit(m_unitComponent);
 	auto QSkillFieldCollider = QSkillFieldObject->AddComponent<physics::SphereCollider>();
-	m_QSkillFieldRadius = 2.0f * LENGTH_UNIT;
+	m_QSkillFieldRadius = 2.0f * lengthUnit;
 	QSkillFieldCollider->SetRadius(m_QSkillFieldRadius);
 	QSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	auto QSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -123,7 +123,7 @@ yunutyEngine::GameObject* MagicianProductor::CreateUnit(Vector3d startPos)
 	WSkillProjectileObject->AddComponent<Dotween>();
 
 	auto WSkillProjectileCollider = WSkillProjectileObject->AddComponent<physics::SphereCollider>();
-	m_WSkillProjectileRadius = 1.0f * LENGTH_UNIT;
+	m_WSkillProjectileRadius = 1.0f * lengthUnit;
 	WSkillProjectileCollider->SetRadius(m_WSkillProjectileRadius);
 	WSkillProjectileObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
@@ -136,7 +136,7 @@ yunutyEngine::GameObject* MagicianProductor::CreateUnit(Vector3d startPos)
 	auto WfieldDamageComponent = WSkillFieldObject->AddComponent<ParalysisFieldComponent>();
 	WfieldDamageComponent->SetSkillOwnerUnit(m_unitComponent);
 	auto WSkillFieldCollider = WSkillFieldObject->AddComponent<physics::SphereCollider>();
-	m_WSkillFieldRadius = 2.0f * LENGTH_UNIT;
+	m_WSkillFieldRadius = 2.0f * lengthUnit;
 	WSkillFieldCollider->SetRadius(m_WSkillFieldRadius);
 	WSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();

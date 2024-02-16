@@ -298,6 +298,9 @@
     <Filter Include="Editor\Palette\PaletteBrush\OrnamentBrush">
       <UniqueIdentifier>{8045da07-686d-4fea-a63c-27e4e233378c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\SkillSystem\SkillPreviewSystem">
+      <UniqueIdentifier>{c466da0b-6643-46f9-a7e8-e26c17fcc883}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -745,6 +748,9 @@
     <ClInclude Include="OrnamentBrush.h">
       <Filter>Editor\Palette\PaletteBrush\OrnamentBrush</Filter>
     </ClInclude>
+    <ClInclude Include="SkillPreviewSystem.h">
+      <Filter>Contents\SkillSystem\SkillPreviewSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1157,6 +1163,12 @@
     </ClCompile>
     <ClCompile Include="OrnamentBrush.cpp">
       <Filter>Editor\Palette\PaletteBrush\OrnamentBrush</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetUISystem.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillPreviewSystem.cpp">
+      <Filter>Contents\SkillSystem\SkillPreviewSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

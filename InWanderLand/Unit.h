@@ -4,6 +4,7 @@
 #include "Timer.h"
 #include "Dotween.h"
 #include <list>
+#include "SkillPreviewSystem.h"
 
 /// <summary>
 /// 유닛들이 공유하는 멤버.
@@ -50,8 +51,7 @@ public:
 	enum class SkillEnum
 	{
 		Q,
-		W,
-		E
+		W
 	};
 
 	struct BaseUnitAnimationStruct
@@ -153,6 +153,11 @@ private:
 
 	Vector3d m_currentSkillPosition;
 
+	yunutyEngine::graphics::StaticMeshRenderer* m_staticMeshRenderer;
+
+	SkillPreviewSystem::SkillPreviewMesh m_qSkillPreviewType;
+	SkillPreviewSystem::SkillPreviewMesh m_wSkillPreviewType;
+
 private:
 	/// 유닛이 속해있는 field
 	NavigationField* m_unitNavField;
@@ -206,6 +211,7 @@ public:
 	void SetAttackDelay(float p_delay);
 	void SetPlayerSerialNumber(UnitType serialNum);
 	void SetSkillDuration(float p_duration);
+	void SetSkillPreviewType(SkillPreviewSystem::SkillPreviewMesh p_qskill, SkillPreviewSystem::SkillPreviewMesh p_wskill);
 
 	void SetCurrentOrderMove();
 	void SetCurrentOrderAttackMove();
@@ -234,8 +240,11 @@ public:
 
 	UnitType GetPlayerSerialNumber() const;
 	UnitState GetCurrentUnitState() const;
+	SkillPreviewSystem::SkillPreviewMesh GetSkillPreviewType(Unit::SkillEnum p_currentSkillType) const;
 
 	float DetermineAttackDamage(float p_damage);			// 공격유닛이 피격유닛에게 전달하는 데미지 계산.
+
+	void SetStaticMeshComponent(yunutyEngine::graphics::StaticMeshRenderer* p_stcMesh);
 
 public:
 	/// <summary>
