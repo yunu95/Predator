@@ -17,10 +17,10 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 
 	// Assimp Importer 객체 생성
 	Assimp::Importer importer;
-
+	
 	// Load Flag
 	unsigned int flag = aiProcess_Triangulate |
-		aiProcess_ConvertToLeftHanded | aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
+		aiProcess_ConvertToLeftHanded | aiProcess_MakeLeftHanded  |aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
 		aiProcess_CalcTangentSpace | aiProcess_PopulateArmatureData |
 		aiProcess_FlipWindingOrder | aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
 		aiProcess_SortByPType | aiProcess_LimitBoneWeights;

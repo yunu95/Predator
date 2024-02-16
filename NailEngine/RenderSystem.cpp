@@ -40,6 +40,7 @@
 
 #include "ShadowPass.h"
 #include "SkyBoxPass.h"
+#include "BloomPass.h"
 
 #include "StaticMesh.h"
 
@@ -176,6 +177,8 @@ void RenderSystem::Render()
 	// 라이트 렌더
 	RenderLight();
 
+	BloomPass::Instance.Get().Bloom();
+
 	// Final 출력
 	RenderFinal();
 
@@ -184,6 +187,8 @@ void RenderSystem::Render()
 	RenderForward();
 
 	SkyBoxPass::Instance.Get().Render();
+
+	
 
 	RenderUI();
 
@@ -364,15 +369,15 @@ void RenderSystem::RenderBackBuffer()
 		ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
 		ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
 
-	MatrixBuffer matrixBuffer;
-	//matrixBuffer.WTM = e.wtm;
-	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
-	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
-	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-	matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
-	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
-	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
+	///MatrixBuffer matrixBuffer;
+	/////matrixBuffer.WTM = e.wtm;
+	///matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	///matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
+	///matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	///matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	///matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
+	/////matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
+	///NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"BackBufferMaterial"))->PushGraphicsData();
 	ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();

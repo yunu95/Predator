@@ -812,6 +812,9 @@ void ResourceManager::CreateDefaultShader()
     CreateShader(L"IrradiancePS.cso");
     CreateShader(L"PreFilteredPS.cso");
     CreateShader(L"SpecLUTPS.cso");
+	CreateDeferredShader(L"CopyPS.cso");
+	CreateDeferredShader(L"BlurPS.cso");
+
 #pragma endregion
 }
 
@@ -897,7 +900,7 @@ void ResourceManager::CreateDefaultMaterial()
 		material->SetTexture(yunuGI::Texture_Type::Temp2,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR)).get());
         material->SetTexture(yunuGI::Texture_Type::Temp3,
-            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(EMISSIVE)).get());
+            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)]->GetRTTexture(static_cast<int>(UP4x4_0)).get());
 	}
 
 	// BackBuffer

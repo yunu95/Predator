@@ -37,7 +37,7 @@ void GraphicsTest()
 
     {
         auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
-        obj->GetTransform()->SetLocalScale(Vector3d{ 0.01f,0.01f,0.01f });
+        //obj->GetTransform()->SetLocalScale(Vector3d{ 0.01f,0.01f,0.01f });
         obj->GetTransform()->SetLocalRotation(Vector3d{ 90,0,0});
         auto& childVec = obj->GetChildren();
     }
@@ -106,7 +106,7 @@ void application::contents::ContentsLayer::Initialize()
 
     const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	resourceManager->LoadFile("FBXMaterial.scres");
+	//resourceManager->LoadFile("FBXMaterial.scres");
 
 	resourceManager->LoadFile("LeavesVS.cso");
 	resourceManager->LoadFile("LeavesPS.cso");
@@ -119,7 +119,7 @@ void application::contents::ContentsLayer::Initialize()
 	///resourceManager->LoadFile("FBX/SM_CastleWall_Door");
 	///resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
 	///resourceManager->LoadFile("FBX/SM_Chair");
-	///resourceManager->LoadFile("FBX/SM_Cuptower");
+	resourceManager->LoadFile("FBX/SM_Cuptower");
 	///resourceManager->LoadFile("FBX/SM_Fork");
 	///resourceManager->LoadFile("FBX/SM_GuideBook");
 	///resourceManager->LoadFile("FBX/SM_Hat01");
