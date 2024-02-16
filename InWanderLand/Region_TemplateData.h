@@ -52,6 +52,7 @@ namespace application
             static Region_TemplateData* soleRegionTemplateData;
             Region_TemplateData();
             Region_TemplateData(const Region_TemplateData& prototype);
+            virtual ~Region_TemplateData() { if (this == soleRegionTemplateData) soleRegionTemplateData = nullptr; }
             Region_TemplateData& operator=(const Region_TemplateData& prototype);
         };
     }

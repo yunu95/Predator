@@ -179,6 +179,10 @@ namespace application
                 return CreateTemplateData<Unit_TemplateData>(name);
             case DataType::OrnamentData:
                 return CreateTemplateData<Ornament_TemplateData>(name);
+            case DataType::RegionData:
+                return CreateTemplateData<Region_TemplateData>(name);
+            case DataType::WaveData:
+                return CreateTemplateData<Wave_TemplateData>(name);
             default:
                 return nullptr;
                 break;

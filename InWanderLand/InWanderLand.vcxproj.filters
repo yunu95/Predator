@@ -304,6 +304,9 @@
     <Filter Include="InstanceStaticRegistry">
       <UniqueIdentifier>{661e11c8-f855-4df1-8f51-ecf2f7d59b3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\SpecialEvent">
+      <UniqueIdentifier>{38f84781-e01b-4784-b9e1-01f98814ffd8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -763,6 +766,9 @@
     </ClInclude>
     <ClInclude Include="Wave_TemplateData.h">
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecialEvent.h">
+      <Filter>Contents\SpecialEvent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

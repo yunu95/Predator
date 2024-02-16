@@ -2,6 +2,8 @@
 #include "Terrain_TemplateData.h"
 #include "Unit_TemplateData.h"
 #include "Ornament_TemplateData.h"
+#include "Region_TemplateData.h"
+#include "Wave_TemplateData.h"
 #include "PaletteInstance.h"
 
 namespace application::editor
@@ -28,4 +30,8 @@ namespace application::editor
     DataType GetDataTypeEnum<Unit_TemplateData>() { return DataType::UnitData; }
     template<>
     DataType GetDataTypeEnum<Ornament_TemplateData>() { return DataType::OrnamentData; }
+    template<>
+    DataType GetDataTypeEnum<Region_TemplateData>() { return DataType::RegionData; }
+    template<>
+    DataType GetDataTypeEnum<Wave_TemplateData>() { return DataType::WaveData; }
 }
