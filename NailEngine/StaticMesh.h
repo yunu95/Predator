@@ -45,7 +45,33 @@ public:
         for (auto& i : renderInfoVec)
         {
             i->mesh = mesh;
-            InstancingManager::Instance.Get().RegisterStaticDeferredData(i);
+            if (this->materialVec.size() == 0)
+            {
+                InstancingManager::Instance.Get().RegisterStaticDeferredData(i);
+            }
+            else
+            {
+                for (auto& each : this->materialVec)
+                {
+					if (each->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+					{
+						InstancingManager::Instance.Get().PopStaticDeferredData(i);
+					}
+					else
+					{
+						InstancingManager::Instance.Get().PopStaticForwardData(i);
+					}
+
+					if (each->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+					{
+						InstancingManager::Instance.Get().RegisterStaticDeferredData(i);
+					}
+					else
+					{
+						InstancingManager::Instance.Get().RegisterStaticForwardData(i);
+					}
+                }
+            }
         }
     }
     yunuGI::IMesh* GetMesh()
