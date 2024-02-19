@@ -50,6 +50,15 @@ namespace yunuGIAdapter
             RenderSystem::Instance.Get().ReSortUIObject(layer, renderable);
 		};
 
+        virtual float GetWidth() override
+		{
+            return renderable->GetWidth();
+        };
+        virtual float GetHeight() override
+        {
+            return renderable->GetHeight();
+        };
+
     private:
         std::shared_ptr<UIImage> renderable;
     };

@@ -1,6 +1,8 @@
 #pragma once
 #include "IRenderable.h"
 
+#include "Texture.h"
+
 class UIImage : public IRenderable
 {
 public:
@@ -13,6 +15,16 @@ public:
 	{
 		return this->texture;
 	}
+
+	float GetWidth() 
+	{
+		return (texture)->GetWidth();
+	};
+
+	float GetHeight() 
+	{
+		return (texture)->GetHeight();
+	};
 
 	bool operator<(const UIImage& other) const
 	{
@@ -33,10 +45,10 @@ struct CompareSmartPtr {
 		const auto& rightImage = std::static_pointer_cast<UIImage>(rhs);
 
 		if (leftImage->layer != rightImage->layer) {
-			return leftImage->layer < rightImage->layer; // �ٸ� layer�� ��쿡�� ��
+			return leftImage->layer < rightImage->layer; // 다른 layer인 경우에만 비교
 		}
 
-		// ���߿� �̹����� layer�� �̻��ϴٸ� �� �ڵ带 �� �� �ּҷ� ���ϱ⿡ � ������ �Ͼ �� Ȯ���� �� ����
+		// 나중에 이미지의 layer가 이상하다면 이 코드를 볼 것 주소로 비교하기에 어떤 동작이 일어날 지 확신할 수 없음
 
 		return leftImage.get() < rightImage.get();
 	}

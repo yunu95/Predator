@@ -35,12 +35,24 @@ void GraphicsTest()
 
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
+    _resourceManager->LoadFile("Texture/zoro.jpg");
+    yunuGI::ITexture* texture = nullptr;
+    auto& textureList = _resourceManager->GetTextureList();
+    for (auto& i : textureList)
     {
-        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
-        obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,15.f });
-        //obj->GetTransform()->SetLocalScale(Vector3d{ 0.01f,0.01f,0.01f });
-        obj->GetTransform()->SetLocalRotation(Vector3d{ 90,0,0});
-        auto& childVec = obj->GetChildren();
+        if (i->GetName() == L"Texture/zoro.jpg")
+        {
+            texture = i;
+        }
+    }
+
+    {
+        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        auto ui = obj->AddComponent<yunutyEngine::graphics::UIImage>();
+        ui->GetGI().SetImage(texture);
+
+        auto w = ui->GetGI().GetWidth();
+        auto h = ui->GetGI().GetHeight();
     }
 
 	//{
