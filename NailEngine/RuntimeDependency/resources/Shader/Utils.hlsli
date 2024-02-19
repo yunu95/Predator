@@ -194,6 +194,19 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         diffuse.xyz += directionalLighting.xyz * lights[lightIndex].color.diffuse.xyz;
         //diffuse.w = 1.f;
         ambient.xyz = ambientLighting + lights[lightIndex].color.ambient.xyz;
+        
+        
+        
+        float a = 2.51f;
+        float b = 0.03f;
+        float c = 2.43f;
+        float d = 0.59f;
+        float e = 0.14f;
+        diffuse.xyz = saturate((diffuse.xyz * (a * diffuse.xyz + b)) / (diffuse.xyz * (c * diffuse.xyz + d) + e));
+        
+        //diffuse.xyz = diffuse.xyz / (diffuse.xyz + 1.f);
+        
+        
         diffuse = float4(pow(float3(diffuse.xyz), 1.0 / 2.2), 1.0);
         
         //diffuse *= shadow;

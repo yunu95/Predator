@@ -37,10 +37,18 @@ void GraphicsTest()
 
     {
         auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
+        obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,15.f });
         //obj->GetTransform()->SetLocalScale(Vector3d{ 0.01f,0.01f,0.01f });
         obj->GetTransform()->SetLocalRotation(Vector3d{ 90,0,0});
         auto& childVec = obj->GetChildren();
     }
+
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Cuptower");
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,20.f });
+	//	//obj->GetTransform()->SetLocalRotation(Vector3d{ 90,0,0 });
+	//	auto& childVec = obj->GetChildren();
+	//}
 }
 
 
@@ -116,7 +124,7 @@ void application::contents::ContentsLayer::Initialize()
 	//resourceManager->LoadFile("FBX/SM_Bush_002");
 	resourceManager->LoadFile("FBX/SM_Trunk_001");
 	///resourceManager->LoadFile("FBX/SM_CastleWall");
-	///resourceManager->LoadFile("FBX/SM_CastleWall_Door");
+	resourceManager->LoadFile("FBX/SM_CastleWall_Door");
 	///resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
 	///resourceManager->LoadFile("FBX/SM_Chair");
 	resourceManager->LoadFile("FBX/SM_Cuptower");
