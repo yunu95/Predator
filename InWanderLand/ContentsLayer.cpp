@@ -36,24 +36,37 @@ void GraphicsTest()
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
     _resourceManager->LoadFile("Texture/zoro.jpg");
+    _resourceManager->LoadFile("Texture/Brick_Albedo.jpg");
     yunuGI::ITexture* texture = nullptr;
+    yunuGI::ITexture* texture2 = nullptr;
     auto& textureList = _resourceManager->GetTextureList();
+
     for (auto& i : textureList)
     {
         if (i->GetName() == L"Texture/zoro.jpg")
         {
             texture = i;
         }
+
+		if (i->GetName() == L"Texture/Brick_Albedo.jpg")
+		{
+            texture2 = i;
+		}
     }
 
-    {
-        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        auto ui = obj->AddComponent<yunutyEngine::graphics::UIImage>();
-        ui->GetGI().SetImage(texture);
 
-        auto w = ui->GetGI().GetWidth();
-        auto h = ui->GetGI().GetHeight();
-    }
+
+	{
+		auto obj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto ui2 = obj2->AddComponent<yunutyEngine::graphics::UIImage>();
+		ui2->GetGI().SetImage(texture);
+		ui2->GetGI().SetLayer(2);
+
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto ui = obj->AddComponent<yunutyEngine::graphics::UIImage>();
+		ui->GetGI().SetImage(texture2);
+		ui->GetGI().SetLayer(3);
+	}
 
 	//{
 	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Cuptower");

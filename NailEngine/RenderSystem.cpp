@@ -157,7 +157,7 @@ void RenderSystem::Render()
 	//ClearRenderInfo();
 	//SortObject();
 
-	
+
 
 	PushCameraData();
 	PushLightData();
@@ -188,19 +188,19 @@ void RenderSystem::Render()
 
 	SkyBoxPass::Instance.Get().Render();
 
-	
+
 
 	RenderUI();
 
 	// 디퍼드 정보 출력
-	DrawDeferredInfo();
+	///DrawDeferredInfo();
 
 	// 디퍼드용 SRV UnBind
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"))->UnBindGraphicsData();
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"BackBufferMaterial"))->UnBindGraphicsData();
 
-	
+
 }
 
 void RenderSystem::RenderObject()
@@ -410,19 +410,19 @@ void RenderSystem::RenderUI()
 		{
 			continue;
 		}
-		
+
 		D2D1_RECT_F layoutRect = D2D1::RectF(
 			uiText->pos.x,
 			uiText->pos.y,
-			uiText->pos.x + uiText->scale.x, 
-			uiText->pos.y + uiText->scale.y 
+			uiText->pos.x + uiText->scale.x,
+			uiText->pos.y + uiText->scale.y
 		);
 
 		auto brush = QueryBrush(uiText);
 		auto textFormat = QueryTextFormat(uiText);
 
 		d2dRT->DrawTextW(
-			uiText->text.c_str(), uiText->text.length() , textFormat.Get(), layoutRect, brush.Get()
+			uiText->text.c_str(), uiText->text.length(), textFormat.Get(), layoutRect, brush.Get()
 		);
 	}
 	d2dRT->EndDraw();
@@ -588,14 +588,17 @@ void RenderSystem::PopTextObject(std::shared_ptr<IRenderable> renderable)
 	this->UITextSet.erase(renderable);
 }
 
-void RenderSystem::ReSortUIObject(int layer, std::shared_ptr<UIImage> ui)
+void RenderSystem::ReSortUIObject(int layer, std::shared_ptr<IRenderable> ui)
 {
 	auto iter = this->UIImageSet.find(ui);
 
-	std::static_pointer_cast<UIImage>(*iter)->layer = layer;
-	auto newUI = *iter;
-	this->UIImageSet.erase(iter);
-	this->UIImageSet.insert(newUI);
+	if (iter != this->UIImageSet.end())
+	{
+		std::static_pointer_cast<UIImage>(*iter)->layer = layer;
+		//auto newUI = *iter;
+		//this->UIImageSet.erase(iter);
+		//this->UIImageSet.insert(newUI);
+	}
 }
 
 void RenderSystem::ReSortRenderInfo(IRenderable* renderable, int index)

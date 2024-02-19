@@ -16,12 +16,12 @@ public:
 		return this->texture;
 	}
 
-	float GetWidth() 
+	float GetWidth()
 	{
 		return (texture)->GetWidth();
 	};
 
-	float GetHeight() 
+	float GetHeight()
 	{
 		return (texture)->GetHeight();
 	};
@@ -39,17 +39,20 @@ private:
 	yunuGI::ITexture* texture;
 };
 
-struct CompareSmartPtr {
-	bool operator()(const std::shared_ptr<IRenderable>& lhs, const std::shared_ptr<IRenderable>& rhs) const {
+struct CompareSmartPtr
+{
+	bool operator()(const std::shared_ptr<IRenderable>& lhs, const std::shared_ptr<IRenderable>& rhs) const
+	{
 		const auto& leftImage = std::static_pointer_cast<UIImage>(lhs);
 		const auto& rightImage = std::static_pointer_cast<UIImage>(rhs);
 
-		if (leftImage->layer != rightImage->layer) {
+		if (leftImage->layer != rightImage->layer)
+		{
 			return leftImage->layer < rightImage->layer; // 다른 layer인 경우에만 비교
 		}
-
-		// 나중에 이미지의 layer가 이상하다면 이 코드를 볼 것 주소로 비교하기에 어떤 동작이 일어날 지 확신할 수 없음
-
-		return leftImage.get() < rightImage.get();
+		else
+		{
+			return *leftImage < *rightImage;
+		}
 	}
 };

@@ -78,7 +78,7 @@ public:
 	void PushTextObject(std::shared_ptr<IRenderable> renderable);
 	void PopTextObject(std::shared_ptr<IRenderable> renderable);
 
-	void ReSortUIObject(int layer, std::shared_ptr<UIImage> ui);
+	void ReSortUIObject(int layer, std::shared_ptr<IRenderable> ui);
 
 	void ReSortRenderInfo(IRenderable* renderable, int index);
 
