@@ -7,6 +7,7 @@
 #include "WaveData.h"
 #include "Region_TemplateData.h"
 #include "RegionData.h"
+#include "SpecialEvent.h"
 
 #include "YunutyEngine.h"
 
@@ -49,6 +50,7 @@ namespace application
             {
                 /// 플래그를 사용하여 정렬 상태를 조정해야 하지만,
                 /// 그냥 간편하게 기본적으로 Terrain 으로 시작된다고 가정함
+                bool tabJustOpened = false;
                 if (ImGui::BeginTabItem("Terrain"))
                 {
                     ChangePalette(&tp);
@@ -423,7 +425,8 @@ namespace application
             imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
             imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 
-            static RegionData* selectedRegion = nullptr;
+            static int selectedRegionIdx = 0;
+            RegionData* selectedRegion = nullptr;
             if (ImGui::Button("Make new region"))
                 InstanceManager::GetSingletonInstance().CreateInstance<RegionData>(Region_TemplateData::GetInstance().GetDataKey());
 
@@ -437,15 +440,18 @@ namespace application
                     int countIdx = 0;
                     for (auto each : RegionData::GetInstances())
                     {
-                        countIdx++;
                         stringstream ss;
                         ss << yutility::GetString(each->pod.name).c_str() << " ##RegionSelectable" << countIdx;
-                        if (ImGui::Selectable(ss.str().c_str(), selectedRegion == each))
+                        if (ImGui::Selectable(ss.str().c_str(), selectedRegionIdx == countIdx))
+                        {
+                            selectedRegionIdx = countIdx;
+                        }
+                        if (selectedRegionIdx == countIdx)
                         {
                             selectedRegion = each;
-                        }
-                        if (selectedRegion == each)
                             ImGui::SetItemDefaultFocus();
+                        }
+                        countIdx++;
                     }
                     ImGui::EndListBox();
                 }
@@ -473,6 +479,34 @@ namespace application
                     ImGui::Text("height");
                     ImGui::TableNextColumn();
                     ImGui::DragFloat("##RegionHeightInputText", &selectedRegion->pod.height, 0.005f, 0.0f, FLT_MAX, "%.2f", 0);
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
+                    ImGui::Text("angle");
+                    ImGui::TableNextColumn();
+                    ImGui::DragFloat("##RegionAngleInputText", &selectedRegion->pod.angle, 0.05f, 0.0f, 360, "%.2f", 0);
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
+                    ImGui::Text("special event");
+                    ImGui::TableNextColumn();
+                    if (ImGui::BeginCombo("##RegionSpecialEvent", SpecialEventTypeToString(static_cast<SpecialEventType>(selectedRegion->pod.specialEvent)).c_str()))
+                    {
+                        for (int n = 0; n < SpecialEventTypes().size(); n++)
+                        {
+                            const bool is_selected = (selectedRegion->pod.specialEvent == n);
+                            if (ImGui::Selectable((SpecialEventTypeStrings()[n] + "##SpecialEventSelectable").c_str(), is_selected))
+                                selectedRegion->pod.specialEvent = n;
+
+                            // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+                            if (is_selected)
+                                ImGui::SetItemDefaultFocus();
+                        }
+                        ImGui::EndCombo();
+                    }
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
+                    ImGui::Text("is obstacle?");
+                    ImGui::TableNextColumn();
+                    ImGui::Checkbox("##RegionIsObstacle", &selectedRegion->pod.isObstacle);
                     imgui::EndSection();
                 }
             }

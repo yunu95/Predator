@@ -33,6 +33,7 @@ namespace application
 			UnitData,
 			OrnamentData,
 			RegionData,
+			WaveData,
 		};
 
 		template<typename T>

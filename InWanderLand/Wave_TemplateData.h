@@ -52,6 +52,7 @@ namespace application
             static Wave_TemplateData* soleWaveTemplateData;
             Wave_TemplateData();
             Wave_TemplateData(const Wave_TemplateData& prototype);
+            virtual ~Wave_TemplateData() { if (this == soleWaveTemplateData) soleWaveTemplateData = nullptr; }
             Wave_TemplateData& operator=(const Wave_TemplateData& prototype);
         };
     }

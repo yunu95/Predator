@@ -6,3 +6,4 @@
 #include "UnitData.h"
 #include "OrnamentData.h"
 #include "RegionData.h"
+#include "WaveData.h"
