@@ -57,15 +57,7 @@ void GraphicsTest()
 
 
 	{
-		auto obj2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		auto ui2 = obj2->AddComponent<yunutyEngine::graphics::UIImage>();
-		ui2->GetGI().SetImage(texture);
-		ui2->GetGI().SetLayer(2);
 
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		auto ui = obj->AddComponent<yunutyEngine::graphics::UIImage>();
-		ui->GetGI().SetImage(texture2);
-		ui->GetGI().SetLayer(3);
 	}
 
 	//{

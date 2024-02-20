@@ -3,7 +3,7 @@
 
 #include "Texture.h"
 
-class UIImage : public IRenderable
+class UIImage : public nail::IRenderable
 {
 public:
 	void SetTexture(yunuGI::ITexture* texture)
@@ -41,7 +41,7 @@ private:
 
 struct CompareSmartPtr
 {
-	bool operator()(const std::shared_ptr<IRenderable>& lhs, const std::shared_ptr<IRenderable>& rhs) const
+	bool operator()(const std::shared_ptr<nail::IRenderable>& lhs, const std::shared_ptr<nail::IRenderable>& rhs) const
 	{
 		const auto& leftImage = std::static_pointer_cast<UIImage>(lhs);
 		const auto& rightImage = std::static_pointer_cast<UIImage>(rhs);

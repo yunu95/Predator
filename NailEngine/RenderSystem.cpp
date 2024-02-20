@@ -524,7 +524,7 @@ void RenderSystem::DrawDeferredInfo()
 	}
 }
 
-void RenderSystem::PushStaticRenderableObject(IRenderable* renderable)
+void RenderSystem::PushStaticRenderableObject(nail::IRenderable* renderable)
 {
 	staticMeshRenderInfoMap.insert({ renderable, {} });
 	staticMeshRenderInfoMap[renderable].emplace_back(static_cast<StaticMesh*>(renderable)->renderInfoVec[0]);
@@ -532,7 +532,7 @@ void RenderSystem::PushStaticRenderableObject(IRenderable* renderable)
 	deferredSet.insert(static_cast<StaticMesh*>(renderable)->renderInfoVec[0]);
 }
 
-void RenderSystem::PopStaticRenderableObject(IRenderable* renderable)
+void RenderSystem::PopStaticRenderableObject(nail::IRenderable* renderable)
 {
 	for (int i = 0; i < static_cast<StaticMesh*>(renderable)->renderInfoVec.size(); ++i)
 	{
@@ -549,7 +549,7 @@ void RenderSystem::PopStaticRenderableObject(IRenderable* renderable)
 	this->staticMeshRenderInfoMap.erase(renderable);
 }
 
-void RenderSystem::PushSkinnedRenderableObject(IRenderable* renderable)
+void RenderSystem::PushSkinnedRenderableObject(nail::IRenderable* renderable)
 {
 	skinnedMeshRenderInfoMap.insert({ renderable, {} });
 	skinnedMeshRenderInfoMap[renderable].emplace_back(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[0]);
@@ -557,7 +557,7 @@ void RenderSystem::PushSkinnedRenderableObject(IRenderable* renderable)
 	skinnedSet.insert(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[0]);
 }
 
-void RenderSystem::PopSkinnedRenderableObject(IRenderable* renderable)
+void RenderSystem::PopSkinnedRenderableObject(nail::IRenderable* renderable)
 {
 	for (int i = 0; i < static_cast<SkinnedMesh*>(renderable)->renderInfoVec.size(); ++i)
 	{
@@ -568,40 +568,42 @@ void RenderSystem::PopSkinnedRenderableObject(IRenderable* renderable)
 	this->skinnedMeshRenderInfoMap.erase(renderable);
 }
 
-void RenderSystem::PushUIObject(std::shared_ptr<IRenderable> renderable)
+void RenderSystem::PushUIObject(std::shared_ptr<nail::IRenderable> renderable)
 {
 	this->UIImageSet.insert(renderable);
 }
 
-void RenderSystem::PopUIObject(std::shared_ptr<IRenderable> renderable)
+void RenderSystem::PopUIObject(std::shared_ptr<nail::IRenderable> renderable)
 {
 	this->UIImageSet.erase(renderable);
 }
 
-void RenderSystem::PushTextObject(std::shared_ptr<IRenderable> renderable)
+void RenderSystem::PushTextObject(std::shared_ptr<nail::IRenderable> renderable)
 {
 	this->UITextSet.insert(renderable);
 }
 
-void RenderSystem::PopTextObject(std::shared_ptr<IRenderable> renderable)
+void RenderSystem::PopTextObject(std::shared_ptr<nail::IRenderable> renderable)
 {
 	this->UITextSet.erase(renderable);
 }
 
-void RenderSystem::ReSortUIObject(int layer, std::shared_ptr<IRenderable> ui)
+void RenderSystem::ReSortUIObject(int layer, std::shared_ptr<nail::IRenderable> ui)
 {
 	auto iter = this->UIImageSet.find(ui);
+
+	assert(iter != this->UIImageSet.end());
 
 	if (iter != this->UIImageSet.end())
 	{
 		std::static_pointer_cast<UIImage>(*iter)->layer = layer;
-		//auto newUI = *iter;
-		//this->UIImageSet.erase(iter);
-		//this->UIImageSet.insert(newUI);
+		auto newUI = *iter;
+		this->UIImageSet.erase(iter);
+		this->UIImageSet.insert(newUI);
 	}
 }
 
-void RenderSystem::ReSortRenderInfo(IRenderable* renderable, int index)
+void RenderSystem::ReSortRenderInfo(nail::IRenderable* renderable, int index)
 {
 	if (staticMeshRenderInfoMap[renderable][index]->material->GetPixelShader()->GetShaderInfo().shaderType ==
 		yunuGI::ShaderType::Deferred)
@@ -638,7 +640,7 @@ void RenderSystem::ReSortRenderInfo(IRenderable* renderable, int index)
 	}
 }
 
-void RenderSystem::RegisterRenderInfo(IRenderable* renderable, std::shared_ptr<RenderInfo> renderInfo)
+void RenderSystem::RegisterRenderInfo(nail::IRenderable* renderable, std::shared_ptr<RenderInfo> renderInfo)
 {
 	auto iter = staticMeshRenderInfoMap.find(renderable);
 	if (iter != staticMeshRenderInfoMap.end())
@@ -650,7 +652,7 @@ void RenderSystem::RegisterRenderInfo(IRenderable* renderable, std::shared_ptr<R
 	}
 }
 
-void RenderSystem::RegisterSkinnedRenderInfo(IRenderable* renderable, std::shared_ptr<SkinnedRenderInfo> renderInfo)
+void RenderSystem::RegisterSkinnedRenderInfo(nail::IRenderable* renderable, std::shared_ptr<SkinnedRenderInfo> renderInfo)
 {
 	auto iter = skinnedMeshRenderInfoMap.find(renderable);
 	if (iter != skinnedMeshRenderInfoMap.end())

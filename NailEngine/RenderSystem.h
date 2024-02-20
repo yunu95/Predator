@@ -66,24 +66,24 @@ public:
 	void DrawDeferredInfo();
 
 public:
-	void PushStaticRenderableObject(IRenderable* renderable);
-	void PopStaticRenderableObject(IRenderable* renderable);
+	void PushStaticRenderableObject(nail::IRenderable* renderable);
+	void PopStaticRenderableObject(nail::IRenderable* renderable);
 
-	void PushSkinnedRenderableObject(IRenderable* renderable);
-	void PopSkinnedRenderableObject(IRenderable* renderable);
+	void PushSkinnedRenderableObject(nail::IRenderable* renderable);
+	void PopSkinnedRenderableObject(nail::IRenderable* renderable);
 
-	void PushUIObject(std::shared_ptr<IRenderable> renderable);
-	void PopUIObject(std::shared_ptr<IRenderable> renderable);
+	void PushUIObject(std::shared_ptr<nail::IRenderable> renderable);
+	void PopUIObject(std::shared_ptr<nail::IRenderable> renderable);
 
-	void PushTextObject(std::shared_ptr<IRenderable> renderable);
-	void PopTextObject(std::shared_ptr<IRenderable> renderable);
+	void PushTextObject(std::shared_ptr<nail::IRenderable> renderable);
+	void PopTextObject(std::shared_ptr<nail::IRenderable> renderable);
 
-	void ReSortUIObject(int layer, std::shared_ptr<IRenderable> ui);
+	void ReSortUIObject(int layer, std::shared_ptr<nail::IRenderable> ui);
 
-	void ReSortRenderInfo(IRenderable* renderable, int index);
+	void ReSortRenderInfo(nail::IRenderable* renderable, int index);
 
-	void RegisterRenderInfo(IRenderable* renderable, std::shared_ptr<RenderInfo> renderInfo);
-	void RegisterSkinnedRenderInfo(IRenderable* renderable, std::shared_ptr<SkinnedRenderInfo> renderInfo);
+	void RegisterRenderInfo(nail::IRenderable* renderable, std::shared_ptr<RenderInfo> renderInfo);
+	void RegisterSkinnedRenderInfo(nail::IRenderable* renderable, std::shared_ptr<SkinnedRenderInfo> renderInfo);
 
 private:
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> QueryBrush(std::shared_ptr<UIText> uiText);
@@ -105,11 +105,11 @@ private:
 private:
 	//std::unordered_set<std::shared_ptr<IRenderable>> staticRenderableSet;
 
-	std::map<IRenderable*, std::vector<std::shared_ptr<RenderInfo>>> staticMeshRenderInfoMap;
-	std::map<IRenderable*, std::vector<std::shared_ptr<SkinnedRenderInfo>>> skinnedMeshRenderInfoMap;
+	std::map<nail::IRenderable*, std::vector<std::shared_ptr<RenderInfo>>> staticMeshRenderInfoMap;
+	std::map<nail::IRenderable*, std::vector<std::shared_ptr<SkinnedRenderInfo>>> skinnedMeshRenderInfoMap;
 
-	std::set<std::shared_ptr<IRenderable>, CompareSmartPtr> UIImageSet;
-	std::set<std::shared_ptr<IRenderable>> UITextSet;
+	std::set<std::shared_ptr<nail::IRenderable>, CompareSmartPtr> UIImageSet;
+	std::set<std::shared_ptr<nail::IRenderable>> UITextSet;
 
 	/// D2D 관련 멤버 변수
 	Microsoft::WRL::ComPtr<ID2D1Factory> d2dFactory;

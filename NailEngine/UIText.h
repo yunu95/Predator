@@ -1,7 +1,7 @@
 #pragma once
 #include "IRenderable.h"
 
-class UIText : public IRenderable
+class UIText : public nail::IRenderable
 {
 public:
 	UIText()
