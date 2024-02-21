@@ -34,6 +34,8 @@ namespace application
             // 지역이 배치된 위치, 각도, 크기를 저장합니다.
             wstring name;
             float x, z, angle, width, height;
+            bool isObstacle{ false };
+            int specialEvent{0};
             TO_JSON(POD_Region)
                 FROM_JSON(POD_Region)
         };

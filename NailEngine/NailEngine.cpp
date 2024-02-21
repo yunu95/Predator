@@ -21,6 +21,7 @@
 #include "InstancingManager.h"
 #include "ShadowPass.h"
 #include "SkyBoxPass.h"
+#include "BloomPass.h"
 
 #include "ILight.h"
 
@@ -56,6 +57,8 @@ void NailEngine::Init(UINT64 hWnd)
 		ResourceManager::Instance.Get().GetMesh(L"Sphere").get(),
 		ResourceManager::Instance.Get().GetShader(L"SkyBoxVS.cso").get(),
 		ResourceManager::Instance.Get().GetShader(L"SkyBoxPS.cso").get());
+
+	BloomPass::Instance.Get().Init();
 }
 
 void NailEngine::Render()
@@ -194,7 +197,7 @@ void NailEngine::CreateRenderTargetGroup()
 			L"AlbedoTarget",
 			this->windowInfo.width,
 			this->windowInfo.height,
-			DXGI_FORMAT_R8G8B8A8_UNORM,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
 			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 		);
 
@@ -234,7 +237,7 @@ void NailEngine::CreateRenderTargetGroup()
 			L"DiffuseLightTarget",
 			this->windowInfo.width,
 			this->windowInfo.height,
-			DXGI_FORMAT_R8G8B8A8_UNORM,
+			DXGI_FORMAT_R16G16B16A16_FLOAT,
 			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 		);
 
@@ -285,7 +288,7 @@ void NailEngine::CreateRenderTargetGroup()
 			L"BackBufferTarget",
 			this->windowInfo.width,
 			this->windowInfo.height,
-			DXGI_FORMAT_R8G8B8A8_UNORM,
+			DXGI_FORMAT_R16G16B16A16_FLOAT,
 			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 		);
 
@@ -296,6 +299,100 @@ void NailEngine::CreateRenderTargetGroup()
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)] = std::make_shared<RenderTargetGroup>();
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->SetRenderTargetVec(rtVec);
 	}
+
+	// Bloom 전용 렌더타겟
+	{
+		{
+			std::vector<RenderTarget> rtVec(DOWN4X4_0_COUNT);
+			rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
+				L"DownSample4x4_0_Target",
+				this->windowInfo.width / 4,
+				this->windowInfo.height / 4,
+				//this->windowInfo.width,
+				//this->windowInfo.height,
+				DXGI_FORMAT_R8G8B8A8_UNORM,
+				static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+			);
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN4X4_0)] = std::make_shared<RenderTargetGroup>();
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN4X4_0)]->SetRenderTargetVec(rtVec);
+		}
+
+		{
+			std::vector<RenderTarget> rtVec(DOWN6X6_0_COUNT);
+			rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
+				L"DownSample6x6_0_Target",
+				(this->windowInfo.width / 4) / 6,
+				(this->windowInfo.height / 4) / 6,
+				//this->windowInfo.width,
+				//this->windowInfo.height,
+				DXGI_FORMAT_R8G8B8A8_UNORM,
+				static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+			);
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN6X6_0)] = std::make_shared<RenderTargetGroup>();
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN6X6_0)]->SetRenderTargetVec(rtVec);
+		}
+
+		{
+			std::vector<RenderTarget> rtVec(DOWN6X6_1_COUNT);
+			rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
+				L"DownSample6x6_1_Target",
+				((this->windowInfo.width / 4) / 6)/6,
+				((this->windowInfo.height / 4) / 6)/6,
+				//this->windowInfo.width,
+				//this->windowInfo.height,
+				DXGI_FORMAT_R8G8B8A8_UNORM,
+				static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+			);
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN6X6_1)] = std::make_shared<RenderTargetGroup>();
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN6X6_1)]->SetRenderTargetVec(rtVec);
+		}
+
+		{
+			std::vector<RenderTarget> rtVec(BLUR_COUNT);
+			rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
+				L"Blur_Target",
+				((this->windowInfo.width / 4) / 6),
+				((this->windowInfo.height / 4) / 6),
+				//this->windowInfo.width,
+				//this->windowInfo.height,
+				DXGI_FORMAT_R8G8B8A8_UNORM,
+				static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+			);
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::BLUR)] = std::make_shared<RenderTargetGroup>();
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::BLUR)]->SetRenderTargetVec(rtVec);
+		}
+
+		{
+			std::vector<RenderTarget> rtVec(UP6x6_0_COUNT);
+			rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
+				L"Up6x6_0_Target",
+				((this->windowInfo.width / 4)),
+				((this->windowInfo.height / 4)),
+				//this->windowInfo.width,
+				//this->windowInfo.height,
+				DXGI_FORMAT_R8G8B8A8_UNORM,
+				static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+			);
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP6x6_0)] = std::make_shared<RenderTargetGroup>();
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP6x6_0)]->SetRenderTargetVec(rtVec);
+		}
+
+		{
+			std::vector<RenderTarget> rtVec(UP4x4_0_COUNT);
+			rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
+				L"Up4x4_0_Target",
+				((this->windowInfo.width)),
+				((this->windowInfo.height)),
+				//this->windowInfo.width,
+				//this->windowInfo.height,
+				DXGI_FORMAT_R8G8B8A8_UNORM,
+				static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+			);
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)] = std::make_shared<RenderTargetGroup>();
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)]->SetRenderTargetVec(rtVec);
+		}
+	}
+
 	//// SHADOW
 	//{
 	//	std::vector<RenderTarget> rtVec(SHADOW_MEMBER_COUNT);

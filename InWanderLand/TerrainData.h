@@ -76,17 +76,17 @@ namespace application
             virtual bool PostDecoding(const json& data) override;
 
         private:
-            DebugStaticMesh* debugMesh{ nullptr };
+            static DebugStaticMesh* debugMesh;
             unordered_map<Vector2i, Node> nodes;
             static TerrainData* soleTerrainData;
             static Terrain_TemplateData* soleTerrainTemplateData;
             static TemplateDataManager& templateDataManager;
 
+            static DebugStaticMesh* GetDebugMesh();
             TerrainData();
             TerrainData(const std::string& name);
             TerrainData(const TerrainData& prototype);
             TerrainData& operator=(const TerrainData& prototype);
-            DebugStaticMesh* GetDebugMesh();
         };
     }
 }

@@ -20,7 +20,7 @@ namespace yunuGIAdapter
 
         ~UITextAdapter()
         {
-            RenderSystem::Instance.Get().PopUIObject(renderable);
+            RenderSystem::Instance.Get().PopTextObject(renderable);
         }
 
         virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)

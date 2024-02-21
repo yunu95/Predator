@@ -98,7 +98,7 @@ public:
 		return usingOriginal;
 	}
 
-	void SetRenderable(std::shared_ptr<IRenderable> renderable)
+	void SetRenderable(std::shared_ptr<nail::IRenderable> renderable)
 	{
 		this->renderable = renderable;
 	}
@@ -146,6 +146,6 @@ public:
 	int index = 0;
 
 private:
-	std::shared_ptr<IRenderable> renderable;
+	std::shared_ptr<nail::IRenderable> renderable;
 
 };

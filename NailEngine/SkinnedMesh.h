@@ -9,7 +9,7 @@
 #include <vector>
 #include <memory>
 
-class SkinnedMesh : public IRenderable
+class SkinnedMesh : public nail::IRenderable
 {
 public:
 	SkinnedMesh()

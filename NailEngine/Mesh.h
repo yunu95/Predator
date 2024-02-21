@@ -45,11 +45,14 @@ private:
 	void CreateVertexBuffer(unsigned int vertexCount, VertexBuffer& vertexBuffer);
 	void CreateIndexBuffer(unsigned int indexCount,IndexBuffer& indexBuffer);
 
+	void CheckBigBoundingBox(DirectX::BoundingBox& aabb);
+
 private:
 	std::vector<VertexBuffer> vertexBufferVec;
 	std::vector<IndexBuffer> indexBufferVec;
 
 	std::vector<DirectX::BoundingBox> aabbVec;
+	DirectX::BoundingBox aabb;
 
 	unsigned int materialCount;
 	

@@ -40,6 +40,7 @@
 
 #include "ShadowPass.h"
 #include "SkyBoxPass.h"
+#include "BloomPass.h"
 
 #include "StaticMesh.h"
 
@@ -156,7 +157,7 @@ void RenderSystem::Render()
 	//ClearRenderInfo();
 	//SortObject();
 
-	
+
 
 	PushCameraData();
 	PushLightData();
@@ -176,6 +177,8 @@ void RenderSystem::Render()
 	// 라이트 렌더
 	RenderLight();
 
+	BloomPass::Instance.Get().Bloom();
+
 	// Final 출력
 	RenderFinal();
 
@@ -185,17 +188,19 @@ void RenderSystem::Render()
 
 	SkyBoxPass::Instance.Get().Render();
 
+
+
 	RenderUI();
 
 	// 디퍼드 정보 출력
-	DrawDeferredInfo();
+	///DrawDeferredInfo();
 
 	// 디퍼드용 SRV UnBind
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"))->UnBindGraphicsData();
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"BackBufferMaterial"))->UnBindGraphicsData();
 
-	
+
 }
 
 void RenderSystem::RenderObject()
@@ -364,15 +369,15 @@ void RenderSystem::RenderBackBuffer()
 		ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
 		ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
 
-	MatrixBuffer matrixBuffer;
-	//matrixBuffer.WTM = e.wtm;
-	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
-	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
-	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-	matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
-	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
-	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
+	///MatrixBuffer matrixBuffer;
+	/////matrixBuffer.WTM = e.wtm;
+	///matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	///matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
+	///matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	///matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	///matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
+	/////matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
+	///NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"BackBufferMaterial"))->PushGraphicsData();
 	ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();
@@ -405,19 +410,19 @@ void RenderSystem::RenderUI()
 		{
 			continue;
 		}
-		
+
 		D2D1_RECT_F layoutRect = D2D1::RectF(
 			uiText->pos.x,
 			uiText->pos.y,
-			uiText->pos.x + uiText->scale.x, 
-			uiText->pos.y + uiText->scale.y 
+			uiText->pos.x + uiText->scale.x,
+			uiText->pos.y + uiText->scale.y
 		);
 
 		auto brush = QueryBrush(uiText);
 		auto textFormat = QueryTextFormat(uiText);
 
 		d2dRT->DrawTextW(
-			uiText->text.c_str(), uiText->text.length() , textFormat.Get(), layoutRect, brush.Get()
+			uiText->text.c_str(), uiText->text.length(), textFormat.Get(), layoutRect, brush.Get()
 		);
 	}
 	d2dRT->EndDraw();
@@ -519,7 +524,7 @@ void RenderSystem::DrawDeferredInfo()
 	}
 }
 
-void RenderSystem::PushStaticRenderableObject(IRenderable* renderable)
+void RenderSystem::PushStaticRenderableObject(nail::IRenderable* renderable)
 {
 	staticMeshRenderInfoMap.insert({ renderable, {} });
 	staticMeshRenderInfoMap[renderable].emplace_back(static_cast<StaticMesh*>(renderable)->renderInfoVec[0]);
@@ -527,7 +532,7 @@ void RenderSystem::PushStaticRenderableObject(IRenderable* renderable)
 	deferredSet.insert(static_cast<StaticMesh*>(renderable)->renderInfoVec[0]);
 }
 
-void RenderSystem::PopStaticRenderableObject(IRenderable* renderable)
+void RenderSystem::PopStaticRenderableObject(nail::IRenderable* renderable)
 {
 	for (int i = 0; i < static_cast<StaticMesh*>(renderable)->renderInfoVec.size(); ++i)
 	{
@@ -544,7 +549,7 @@ void RenderSystem::PopStaticRenderableObject(IRenderable* renderable)
 	this->staticMeshRenderInfoMap.erase(renderable);
 }
 
-void RenderSystem::PushSkinnedRenderableObject(IRenderable* renderable)
+void RenderSystem::PushSkinnedRenderableObject(nail::IRenderable* renderable)
 {
 	skinnedMeshRenderInfoMap.insert({ renderable, {} });
 	skinnedMeshRenderInfoMap[renderable].emplace_back(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[0]);
@@ -552,7 +557,7 @@ void RenderSystem::PushSkinnedRenderableObject(IRenderable* renderable)
 	skinnedSet.insert(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[0]);
 }
 
-void RenderSystem::PopSkinnedRenderableObject(IRenderable* renderable)
+void RenderSystem::PopSkinnedRenderableObject(nail::IRenderable* renderable)
 {
 	for (int i = 0; i < static_cast<SkinnedMesh*>(renderable)->renderInfoVec.size(); ++i)
 	{
@@ -563,37 +568,42 @@ void RenderSystem::PopSkinnedRenderableObject(IRenderable* renderable)
 	this->skinnedMeshRenderInfoMap.erase(renderable);
 }
 
-void RenderSystem::PushUIObject(std::shared_ptr<IRenderable> renderable)
+void RenderSystem::PushUIObject(std::shared_ptr<nail::IRenderable> renderable)
 {
 	this->UIImageSet.insert(renderable);
 }
 
-void RenderSystem::PopUIObject(std::shared_ptr<IRenderable> renderable)
+void RenderSystem::PopUIObject(std::shared_ptr<nail::IRenderable> renderable)
 {
 	this->UIImageSet.erase(renderable);
 }
 
-void RenderSystem::PushTextObject(std::shared_ptr<IRenderable> renderable)
+void RenderSystem::PushTextObject(std::shared_ptr<nail::IRenderable> renderable)
 {
 	this->UITextSet.insert(renderable);
 }
 
-void RenderSystem::PopTextObject(std::shared_ptr<IRenderable> renderable)
+void RenderSystem::PopTextObject(std::shared_ptr<nail::IRenderable> renderable)
 {
 	this->UITextSet.erase(renderable);
 }
 
-void RenderSystem::ReSortUIObject(int layer, std::shared_ptr<UIImage> ui)
+void RenderSystem::ReSortUIObject(int layer, std::shared_ptr<nail::IRenderable> ui)
 {
 	auto iter = this->UIImageSet.find(ui);
 
-	std::static_pointer_cast<UIImage>(*iter)->layer = layer;
-	auto newUI = *iter;
-	this->UIImageSet.erase(iter);
-	this->UIImageSet.insert(newUI);
+	assert(iter != this->UIImageSet.end());
+
+	if (iter != this->UIImageSet.end())
+	{
+		std::static_pointer_cast<UIImage>(*iter)->layer = layer;
+		auto newUI = *iter;
+		this->UIImageSet.erase(iter);
+		this->UIImageSet.insert(newUI);
+	}
 }
 
-void RenderSystem::ReSortRenderInfo(IRenderable* renderable, int index)
+void RenderSystem::ReSortRenderInfo(nail::IRenderable* renderable, int index)
 {
 	if (staticMeshRenderInfoMap[renderable][index]->material->GetPixelShader()->GetShaderInfo().shaderType ==
 		yunuGI::ShaderType::Deferred)
@@ -630,7 +640,7 @@ void RenderSystem::ReSortRenderInfo(IRenderable* renderable, int index)
 	}
 }
 
-void RenderSystem::RegisterRenderInfo(IRenderable* renderable, std::shared_ptr<RenderInfo> renderInfo)
+void RenderSystem::RegisterRenderInfo(nail::IRenderable* renderable, std::shared_ptr<RenderInfo> renderInfo)
 {
 	auto iter = staticMeshRenderInfoMap.find(renderable);
 	if (iter != staticMeshRenderInfoMap.end())
@@ -642,7 +652,7 @@ void RenderSystem::RegisterRenderInfo(IRenderable* renderable, std::shared_ptr<R
 	}
 }
 
-void RenderSystem::RegisterSkinnedRenderInfo(IRenderable* renderable, std::shared_ptr<SkinnedRenderInfo> renderInfo)
+void RenderSystem::RegisterSkinnedRenderInfo(nail::IRenderable* renderable, std::shared_ptr<SkinnedRenderInfo> renderInfo)
 {
 	auto iter = skinnedMeshRenderInfoMap.find(renderable);
 	if (iter != skinnedMeshRenderInfoMap.end())

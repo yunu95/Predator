@@ -313,6 +313,9 @@
     <Filter Include="Contents\SingletonClasses">
       <UniqueIdentifier>{81870322-b82c-41fd-af33-5af3b432941d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\SpecialEvent">
+      <UniqueIdentifier>{38f84781-e01b-4784-b9e1-01f98814ffd8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -784,6 +787,9 @@
     </ClInclude>
     <ClInclude Include="SingletonUpdate.h">
       <Filter>Contents\SingletonClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecialEvent.h">
+      <Filter>Contents\SpecialEvent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

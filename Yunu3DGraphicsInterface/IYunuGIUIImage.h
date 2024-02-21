@@ -9,6 +9,8 @@ namespace yunuGI
 	{
 	public:
 		virtual void SetImage(ITexture* texture) = 0;
+		virtual float GetWidth() = 0;
+		virtual float GetHeight() = 0;
 	};
 	struct IUIImageDesc
 	{

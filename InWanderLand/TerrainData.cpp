@@ -12,6 +12,7 @@ namespace application
     {
         TerrainData* TerrainData::soleTerrainData{ nullptr };
         Terrain_TemplateData* TerrainData::soleTerrainTemplateData{nullptr};
+        DebugStaticMesh* TerrainData::debugMesh{nullptr};
         TerrainData::~TerrainData()
         {
             assert(soleTerrainData == this && "지형 정보는 단 하나만 존재해야 합니다!");
@@ -188,10 +189,13 @@ namespace application
             for (auto i = 0; i < idxVecBefore.size(); ++i)
                 idxVec[i] = idxVecBefore[i];
 
-            auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-            rsrcManager->DeleteMesh(GetDebugMesh()->GetGI().GetMesh());
-            auto mesh = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->CreateMesh(L"terrainMesh", posVec, idxVec, normalVec);
-            GetDebugMesh()->GetGI().SetMesh(mesh);
+            if (!posVec.empty() && !idxVec.empty() && !normalVec.empty())
+            {
+                auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+                rsrcManager->DeleteMesh(GetDebugMesh()->GetGI().GetMesh());
+                auto mesh = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->CreateMesh(L"terrainMesh", posVec, idxVec, normalVec);
+                GetDebugMesh()->GetGI().SetMesh(mesh);
+            }
         }
         Vector3d TerrainData::GetNodePosition(const Vector2i& nodeKey)
         {

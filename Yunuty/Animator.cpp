@@ -14,7 +14,12 @@ void Animator::Update()
 	auto& gi = this->GetGI();
 	auto& desc = gi.GetTransitionDesc();
 	
-	// ÇöÀç ¾Ö´Ï¸ÞÀÌ¼Ç ¾÷µ¥ÀÌÆ®
+	if (gi.GetCurrentAnimation() == nullptr)
+	{
+		return;
+	}
+
+	// í˜„ìž¬ ì• ë‹ˆë©”ì´ì…˜ ì—…ë°ì´íŠ¸
 	{
 		auto currentAnimation = gi.GetCurrentAnimation();
 		float duration = currentAnimation->GetDuration();
@@ -37,7 +42,7 @@ void Animator::Update()
 	}
 
 	auto nextAnimation = gi.GetNextAnimation();
-	// ´ÙÀ½ ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ÀÖ´Ù¸é
+	// ë‹¤ìŒ ì• ë‹ˆë©”ì´ì…˜ì´ ìžˆë‹¤ë©´
 	if (nextAnimation)
 	{
 		float duration = nextAnimation->GetDuration();
@@ -46,7 +51,7 @@ void Animator::Update()
 
 		desc.transitionTotalTime += (Time::GetDeltaTime() * desc.transitionSpeed);
 		desc.transitionRatio = desc.transitionTotalTime / desc.transitionDuration;
-		// ¾Ö´Ï¸ÞÀÌ¼Ç ±³Ã¼°¡ ¿Ï·áµÈ´Ù¸é
+		// ì• ë‹ˆë©”ì´ì…˜ êµì²´ê°€ ì™„ë£Œëœë‹¤ë©´
 		if (desc.transitionRatio >= 1.f)
 		{
 			desc.curr = desc.next;

@@ -8,7 +8,7 @@
 #include <vector>
 #include <memory>
 
-class StaticMesh : public IRenderable
+class StaticMesh : public nail::IRenderable
 {
 public:
     StaticMesh()

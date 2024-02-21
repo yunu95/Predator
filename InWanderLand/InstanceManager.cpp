@@ -45,6 +45,16 @@ namespace application
                 instance = new OrnamentData(dataName);
                 break;
             }
+            case DataType::RegionData:
+            {
+                instance = new RegionData(dataName);
+                break;
+            }
+            case DataType::WaveData:
+            {
+                instance = new WaveData(dataName);
+                break;
+            }
 
             default:
                 break;
@@ -153,6 +163,7 @@ namespace application
 
                 auto instance = CreateEmptyInstance(instanceData["type"]);
 
+                assert(instance != nullptr && "incorrect type detected, make sure that datas are stored with proper type value");
                 if (instance == nullptr)
                 {
                     Clear();
@@ -229,6 +240,11 @@ namespace application
             case DataType::RegionData:
             {
                 instance = new RegionData();
+                break;
+            }
+            case DataType::WaveData:
+            {
+                instance = new WaveData();
                 break;
             }
             default:

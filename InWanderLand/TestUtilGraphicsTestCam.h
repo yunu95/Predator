@@ -159,9 +159,9 @@ namespace tests
 		double yawDelta = 0.0;
 
 		double min_Speed = 0.002;
-		double max_Speed = 50.0;
+		double max_Speed = 10.0;
 		double defaultMoveSpeed = 0.008;
-		double rotationSpeed = 20.0;
+		double rotationSpeed = 10.0;
 	};
 }
 

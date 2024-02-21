@@ -7,9 +7,11 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
     auto gameObjectChild = parentObject->AddGameObject();
     gameObjectChild->setName(std::string{ fbxNode->nodeName.begin(), fbxNode->nodeName.end() });
 
+
     gameObjectChild->GetTransform()->SetLocalPosition( Vector3d{ fbxNode->pos.x,fbxNode->pos.y ,fbxNode->pos.z });
     gameObjectChild->GetTransform()->SetLocalScale( Vector3d{ fbxNode->scale.x,fbxNode->scale.y ,fbxNode->scale.z });
-    //gameObjectChild->GetTransform()->rotation = Quaternion{ fbxNode->quat.x,fbxNode->quat.y,fbxNode->quat.z,fbxNode->quat.w };
+    //gameObjectChild->GetTransform()->SetLocalRotation(Quaternion{ fbxNode->quat.w,fbxNode->quat.x,fbxNode->quat.y,fbxNode->quat.z });
+    //gameObjectChild->GetTransform()->SetLocalRotation(Quaternion{ fbxNode->quat.x,fbxNode->quat.y,fbxNode->quat.z,fbxNode->quat.w });
 
     if (!fbxNode->hasAnimation)
     {
@@ -29,15 +31,6 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
     }
     else
     {
-        auto& shaderList = graphics::Renderer::SingleInstance().GetResourceManager()->GetShaderList();
-        yunuGI::IShader* shader = nullptr;
-        for (auto& i : shaderList)
-        {
-            if (i->GetName() == L"SkinnedVS.cso")
-            {
-                shader = i;
-            }
-        }
         if (fbxNode->materialVec.size() != 0)
         {
             auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::SkinnedMesh>();
@@ -52,7 +45,6 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
             for (int j = 0; j < fbxNode->materialVec.size(); ++j)
             {
                 auto material = graphics::Renderer::SingleInstance().GetResourceManager()->GetMaterial(fbxNode->materialVec[j].materialName);
-                material->SetVertexShader(shader);
                 renderer->GetGI().SetMaterial
                 (
                     j, material
