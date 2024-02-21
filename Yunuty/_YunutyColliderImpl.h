@@ -195,10 +195,15 @@ namespace yunutyEngine
 
                 pxRigidDynamic->addTorque(reinterpret_cast<const PxVec3&>(forceVector), reinterpret_cast<const PxForceMode::Enum&>(torqueType));
             }
-            void SetActorWorldTransform(const yunuGI::Matrix4x4& worldTM)
+            void SetActorWorldTransform(const yunutyEngine::Transform* transform)
             {
                 static_assert(sizeof(yunuGI::Matrix4x4) == sizeof(PxMat44));
-                pxActor->setGlobalPose(PxTransform{ reinterpret_cast<const PxMat44&>(worldTM) }.getNormalized());
+                PxTransform pxTransform;
+                auto pos = Vector3f{ transform->GetWorldPosition() };
+                auto rot = transform->GetWorldRotation();
+                pxTransform.p = { pos.x,pos.y,pos.z };
+                pxTransform.q = { static_cast<float>(rot.x),static_cast<float>(rot.y),static_cast<float>(rot.z),static_cast<float>(rot.w) };
+                pxActor->setGlobalPose(pxTransform);
             }
             yunutyEngine::Vector3f GetActorPosition()
             {

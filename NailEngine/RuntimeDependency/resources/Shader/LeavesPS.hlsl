@@ -22,8 +22,6 @@ struct PS_OUT
 };
 
 
-// Temp0Map : MaskMap
-
 PS_OUT main(PixelIn input)
 {
     //input.normalV = normalize(input.normalV);
@@ -87,9 +85,9 @@ PS_OUT main(PixelIn input)
         viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
     }
     
-    if (UseTexture(useTemp0) == 1)
+    if (UseTexture(useOpacity) == 1)
     {
-        color = Temp0Map.Sample(sam, input.uv);
+        color = OpacityMap.Sample(sam, input.uv);
         clip(color.w - 1);
     }
     

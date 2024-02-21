@@ -15,10 +15,8 @@ namespace application
 
         struct POD_Region_TemplateData
         {
-            std::vector<std::pair<int, int>> coordinates;
-
             TO_JSON(POD_Region_TemplateData)
-            FROM_JSON(POD_Region_TemplateData)
+                FROM_JSON(POD_Region_TemplateData)
         };
 
         class Region_TemplateData
@@ -31,7 +29,17 @@ namespace application
             virtual std::string GetDataKey() const override;
             virtual void SetDataResourceName(std::string fbxName) {};
             virtual std::string GetDataResourceName() const override { return std::string(); };
-
+            static Region_TemplateData& GetInstance()
+            {
+                if (soleRegionTemplateData == nullptr)
+                {
+                    soleRegionTemplateData = TemplateDataManager::GetSingletonInstance().GetTemplateData<Region_TemplateData>("DefaultRegionTemplate");
+                    if (soleRegionTemplateData == nullptr)
+                        soleRegionTemplateData = TemplateDataManager::GetSingletonInstance().CreateTemplateData<Region_TemplateData>("DefaultRegionTemplate");
+                }
+                POD_Region_TemplateData pod;
+                return *soleRegionTemplateData;
+            }
             POD_Region_TemplateData pod;
 
         protected:
@@ -41,6 +49,7 @@ namespace application
             virtual bool PostDecoding(const json& data) override;
 
         private:
+            static Region_TemplateData* soleRegionTemplateData;
             Region_TemplateData();
             Region_TemplateData(const Region_TemplateData& prototype);
             Region_TemplateData& operator=(const Region_TemplateData& prototype);

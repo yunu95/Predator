@@ -18,6 +18,15 @@ namespace yunuGI
 		std::wstring armMap;
 		std::wstring emissionMap;
 		std::wstring opacityMap;
+		std::wstring heightMap;
+
+		std::wstring temp0Map;
+		std::wstring temp1Map;
+		std::wstring temp2Map;
+		std::wstring temp3Map;
+
+		std::wstring vs{ L"DefaultVS.cso" };
+		std::wstring ps{ L"DefaultPS.cso" };
 	};
 
 	struct BoundingBox
@@ -28,8 +37,6 @@ namespace yunuGI
 
 	struct FBXData
 	{
-		std::vector<FBXData*> child;
-
 		std::wstring nodeName;
 		std::wstring meshName;
 
@@ -37,13 +44,14 @@ namespace yunuGI
 		yunuGI::Vector3 scale;
 		yunuGI::Vector4 quat;
 
-		std::vector<MaterialData> materialVec;
-
 		BoneInfo boneInfo;
 
 		bool hasAnimation;
 
 		BoundingBox aabb;
+
+		std::vector<FBXData*> child;
+		std::vector<MaterialData> materialVec;
 	};
 
 

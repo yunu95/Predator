@@ -1001,6 +1001,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="HealerAutoAttackProjectile.h" />
     <ClInclude Include="HealerAutoAttackProjectilePool.h" />
     <ClInclude Include="HealerSkillSystem.h" />
+    <ClInclude Include="SingletonUpdate.h" />
+    <ClInclude Include="StaticInstanceRegistry.h" />
     <ClInclude Include="LoadStaticOrnamentsCommand.h" />
     <ClInclude Include="OrnamentBrush.h" />
     <ClInclude Include="OrnamentEditorInstance.h" />
@@ -1118,6 +1120,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="TestUtilNavAgent.h" />
     <ClInclude Include="TestUtilRTSTestCam.h" />
     <ClInclude Include="TestUtils.h" />
+    <ClInclude Include="UIButton.h" />
+    <ClInclude Include="UIManager.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="UnitStatusComponent.h" />
@@ -1132,6 +1136,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UnitEditorInstance.h" />
     <ClInclude Include="UnitPalette.h" />
     <ClInclude Include="PlayerSkillSystem.h" />
+    <ClInclude Include="Wave.h" />
+    <ClInclude Include="WaveData.h" />
+    <ClInclude Include="WavePalette.h" />
+    <ClInclude Include="Wave_TemplateData.h" />
     <ClInclude Include="WindowEvents.h" />
     <ClInclude Include="WarriorSkillSystem.h" />
   </ItemGroup>
@@ -1247,11 +1255,14 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="TerrainData.cpp" />
     <ClCompile Include="TerrainPalette.cpp" />
     <ClCompile Include="Terrain_TemplateData.cpp" />
+    <ClCompile Include="TestCaseQuaternionWithAxes.cpp" />
     <ClCompile Include="TestCaseMapFileIO.cpp" />
     <ClCompile Include="SnippetMapListIO.cpp" />
     <ClCompile Include="TestCasePhysxTrigger.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TestCaseUpdateComponents.cpp" />
+    <ClCompile Include="UIButton.cpp" />
+    <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UnitBrush.cpp" />
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="UnitEditorInstance.cpp" />
@@ -1273,6 +1284,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="WarriorProductor.cpp" />
     <ClCompile Include="PlayerSkillSystem.cpp" />
     <ClCompile Include="WarriorSkillSystem.cpp" />
+    <ClCompile Include="Wave.cpp" />
+    <ClCompile Include="WaveData.cpp" />
+    <ClCompile Include="WavePalette.cpp" />
+    <ClCompile Include="Wave_TemplateData.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

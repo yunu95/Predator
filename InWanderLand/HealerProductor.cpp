@@ -31,6 +31,9 @@ void HealerProductor::SetUnitData()
 	m_attackDelay = 1.0f;
 
 	m_navField = &SingleNavigationField::Instance();
+
+	qSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::OnlyPath;
+	wSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::OnlyPath;
 }
 
 void HealerProductor::SingletonInitializer()

@@ -23,6 +23,9 @@
 #include "TacticModeSystem.h"
 #include "SingleNavigationField.h"
 #include "SkillPreviewSystem.h"
+#include "UIButton.h"
+#include "UIManager.h"
+#include "SingletonUpdate.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -55,7 +58,9 @@ void SnippetSkillSystemInit()
 	yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 	yunutyEngine::Collider2D::SetIsOnXYPlane(false);
 
-	auto sphereMesh = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(L"Sphere");
+	auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+	auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
 	auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 	mouseCursorMesh->GetGI().SetMesh(sphereMesh);
@@ -76,38 +81,12 @@ void SnippetSkillSystemInit()
 	{
 		mouseCursorObject->GetTransform()->SetWorldPosition(pos);
 		SkillPreviewSystem::SingleInstance().SetCurrentMousPosition(pos);
-		SkillPreviewSystem::SingleInstance().Update();
 	};
 	std::vector<Vector3f> worldVertices{ };
 	std::vector<int> worldFaces{ };
 
 	camObj->GetTransform()->SetWorldPosition(Vector3d(0, 30, 0));
 
-	// 길찾기 필드 생성
-	
-	//int bottomLeftX = 0;
-	//int bottomLeftZ = 0;
-	//int topRightX = 100;
-	//int topRightZ = 100;
-	//for (int i = 0; i < 5; i++)
-	//{
-	//	bottomLeftX += i * 100;
-	//	topRightX += i * 100;
-	//	for (int j = 0; j < 5; j++)
-	//	{
-	//		bottomLeftZ += j * 100;
-	//		topRightZ += j * 100;
-	//		Vector3d bottomLeft = Vector3d(bottomLeftX, 0, bottomLeftZ);
-	//		Vector3d topRight = Vector3d(topRightX, 0, topRightZ);
-	//		CreateNavigationPlanes(bottomLeft, topRight, worldVertices, worldFaces);
-	//	}
-	//}
-	//CreateNavigationPlanes({ -500,0,-500 }, { 500,0,500 }, worldVertices, worldFaces);
-	//CreateNavigationPlanes({ -8,0,-2 }, { 8,0,2 }, worldVertices, worldFaces);
-	//CreateNavigationPlanes({ -8,0,-8 }, { -6,0,8 }, worldVertices, worldFaces);
-	//CreateNavigationPlanes({ 6,0,-8 }, { 8,0,8 }, worldVertices, worldFaces);
-	//CreateNavigationPlanes({ -8,0,6 }, { 8,0,8 }, worldVertices, worldFaces);
-	//CreateNavigationPlanes({ -2,0,-8 }, { 2,0,8 }, worldVertices, worldFaces);
 	CreateNavigationPlanes({ -30,0,-30 }, { 30,0,30 }, worldVertices, worldFaces);
 
 	//CreateNavigationPlanes({ -1000,0,-1000 }, { 1000,0,1000 }, worldVertices, worldFaces);
@@ -125,6 +104,45 @@ void SnippetSkillSystemInit()
 	MeleeEnemyProductor::Instance().CreateUnit(Vector3d(7.0f, 0.0f, 7.0f));
 	MeleeEnemyProductor::Instance().CreateUnit(Vector3d(7.0f, 0.0f, -7.0f));
 
+	/// UIButton Test
+	rsrcMgr->LoadFile("Texture/zoro.jpg");
+	rsrcMgr->LoadFile("Texture/zoro_highLighted.jpg");
+	rsrcMgr->LoadFile("Texture/zoro_Clicked.jpg");
+
+	{
+		auto uiImageObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto uiImageComponent = uiImageObject->AddComponent<yunutyEngine::graphics::UIImage>();
+		//uiImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+		auto uiButtonComponent = uiImageObject->AddComponent<UIButton>();
+		uiButtonComponent->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+		uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro_highLighted.jpg"));
+		uiButtonComponent->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro_Clicked.jpg"));
+		uiButtonComponent->SetWidth(255.0f);
+		uiButtonComponent->SetHeight(255.0f);
+		uiButtonComponent->SetImageComponent(uiImageComponent);
+		uiButtonComponent->SetLayer(100);
+		uiImageObject->GetTransform()->SetLocalPosition({ 255, 255, 0 });
+	}
+
+	{
+		auto uiImageObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto uiImageComponent = uiImageObject->AddComponent<yunutyEngine::graphics::UIImage>();
+		//uiImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+		auto uiButtonComponent = uiImageObject->AddComponent<UIButton>();
+		uiButtonComponent->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+		uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro_highLighted.jpg"));
+		uiButtonComponent->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro_Clicked.jpg"));
+		uiButtonComponent->SetWidth(255.0f);
+		uiButtonComponent->SetHeight(255.0f);
+		uiButtonComponent->SetImageComponent(uiImageComponent);
+		uiButtonComponent->SetLayer(90);
+		uiImageObject->GetTransform()->SetLocalPosition({ 125.5f, 255, 0 });
+	}
+
+	UIManager::SingleInstance().SetRTSCam(rtsCam);
+
+	auto singletonUpdateComponent = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<SingletonUpdate>();
+
 	/// UItext Test
 	//auto enemy1TextObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	//auto enemy1UITextCom = enemy1TextObj->AddComponent<graphics::UIText>();
@@ -138,10 +156,6 @@ void SnippetSkillSystemInit()
 		directionalLight->GetTransform()->SetWorldPosition(Vector3d(0, 100, 0));
 		directionalLight->GetTransform()->SetLocalRotation( Quaternion{ Vector3d{120,0,0} });
 	}
-
-	auto inputManagerObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	inputManagerObject->AddComponent<InputManager>();
-
 	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 

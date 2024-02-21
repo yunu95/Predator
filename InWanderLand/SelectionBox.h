@@ -19,8 +19,11 @@ namespace application
                 virtual void Start() override
                 {
                     auto rsrcManager = graphics::Renderer::SingleInstance().GetResourceManager();
-                    boxMesh = AttachDebugMesh(GetGameObject(), DebugMeshType::Cube, yunuGI::Color::green(), false);
-                    yunutyEngine::physics::BoxCollider* boxCollider = GetGameObject()->AddComponent<yunutyEngine::physics::BoxCollider>();
+                    boxMesh = AttachDebugMesh(GetGameObject(), DebugMeshType::Cube, yunuGI::Color::green(), true);
+                    boxCollider = GetGameObject()->AddComponent<yunutyEngine::physics::BoxCollider>();
+                    //debugBoxColliderNear = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::physics::BoxCollider>();
+                    //debugBoxColliderMiddle = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::physics::BoxCollider>();
+                    //debugBoxColliderFar = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::physics::BoxCollider>();
                     ShowSelectionBox(false);
                 }
                 void SetCoverage(Vector3d pointA, Vector3d pointB)
@@ -43,6 +46,11 @@ namespace application
                     auto nearPoint = cam->GetTransform()->GetWorldPosition() - cam->GetTransform()->GetWorldRotation().Forward() * cam->GetGI().GetNear();
                     auto farPoint = cam->GetProjectedPoint(screenSpacePos, 100);
                     //auto farPoint = cam->GetProjectedPoint(screenSpacePos, cam->GetGI().GetFar());
+
+                    //debugBoxColliderNear->GetTransform()->SetLocalPosition(nearPoint);
+                    //debugBoxColliderMiddle->GetTransform()->SetLocalPosition((nearPoint + farPoint) / 2.0);
+                    //debugBoxColliderFar->GetTransform()->SetLocalPosition(farPoint);
+
                     GetTransform()->SetLocalScale({ 0.1,0.1, (nearPoint - farPoint).Magnitude() });
                     GetTransform()->SetWorldPosition((nearPoint + farPoint) / 2.0);
                     GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(farPoint - nearPoint, cam->GetTransform()->GetWorldRotation().Up()));
@@ -79,9 +87,9 @@ namespace application
                 }
             private:
                 yunutyEngine::physics::BoxCollider* boxCollider;
-                yunutyEngine::physics::BoxCollider* debugBoxColliderNear;
-                yunutyEngine::physics::BoxCollider* debugBoxColliderMiddle;
-                yunutyEngine::physics::BoxCollider* debugBoxColliderFar;
+                //yunutyEngine::physics::BoxCollider* debugBoxColliderNear;
+                //yunutyEngine::physics::BoxCollider* debugBoxColliderMiddle;
+                //yunutyEngine::physics::BoxCollider* debugBoxColliderFar;
                 PaletteManager& pm = PaletteManager::GetSingletonInstance();
                 unordered_set<PaletteInstance*> contactingInstances;
                 graphics::StaticMeshRenderer* boxMesh;

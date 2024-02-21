@@ -19,6 +19,12 @@ namespace yunuGI
         static Color white() { return { 1,1,1,1 }; };
         static Color black() { return { 0,0,0,1 }; };
         static Color gray() { return { 0.4,0.4,0.4,1 }; };
+        static Color brown() { return { 0.4,0.1,0.0,1 }; };
+        static Color purple() { return { 0.4,0.1,1.0,1 }; };
+        static Color orange() { return { 0.9,0.3,0.1,1 }; };
+        static Color pink() { return { 1.0,0.5,0.9,1 }; };
+        static Color yellow() { return { 1.0,0.9,0.5,1 }; };
+        static Color cyan() { return { 0.0,1.0,1.0,1 }; };
     };
 }
 template <>

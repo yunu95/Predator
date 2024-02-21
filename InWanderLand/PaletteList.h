@@ -6,3 +6,4 @@
 #include "UnitPalette.h"
 #include "OrnamentPalette.h"
 #include "RegionPalette.h"
+#include "WavePalette.h"

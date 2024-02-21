@@ -21,9 +21,11 @@ namespace yunuGI
         virtual yunuGI::IMaterial* CreateMaterial(std::wstring materialName)const = 0;
         virtual yunuGI::IMaterial* CloneMaterial(std::wstring materialName, yunuGI::IMaterial* material)const = 0;
         virtual yunuGI::IMesh* CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec)const = 0;
+        virtual void DeleteMesh(yunuGI::IMesh* mesh)const = 0;
         virtual yunuGI::IMaterial* GetMaterial(const std::wstring& materialName)const = 0;
         virtual yunuGI::IMesh* GetMesh(const std::wstring& meshName)const = 0;
-        virtual bool GetFBXData(const std::string& fbxName, yunuGI::FBXData*& fbxData)const = 0;
+		virtual yunuGI::ITexture* GetTexture(const std::wstring& textureName)const = 0;
+		virtual bool GetFBXData(const std::string& fbxName, yunuGI::FBXData*& fbxData)const = 0;
         virtual bool GetFBXBoneData(const std::string& fbxName, yunuGI::BoneInfo& boneInfo)const = 0;
         virtual void UnloadResources()const = 0;
 
@@ -37,6 +39,10 @@ namespace yunuGI
         virtual std::vector<IMaterial*>& GetMaterialList()const = 0;
         virtual std::vector<IAnimation*>& GetAnimationList()const = 0;
         virtual std::vector<std::wstring>& GetFBXList()const = 0;
+        virtual std::unordered_map<std::wstring, yunuGI::FBXData*>& GetFBXDataMap()const = 0;
+
+        virtual void SaveFBXData()const =0;
+        virtual void LoadFBXData()const =0;
     };
 }
 

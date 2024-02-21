@@ -31,6 +31,9 @@ void MagicianProductor::SetUnitData()
 	m_attackDelay = 5.0f;
 
 	m_navField = &SingleNavigationField::Instance();
+
+	qSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::Both;
+	wSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::Both;
 }
 
 void MagicianProductor::SingletonInitializer()

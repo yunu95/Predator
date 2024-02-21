@@ -81,23 +81,29 @@ namespace application
 #endif
             return true;
         }
-
+        std::wstring RegionData::MakeUpName()
+        {
+            wstringstream wss;
+            wss << L"Region" << GetInstances().size();
+            return wss.str();
+        }
         RegionData::RegionData()
             : pod()
         {
-
+            pod.name = MakeUpName();
         }
 
         RegionData::RegionData(const std::string& name)
             : IEditableData(), pod()
         {
+            pod.name = MakeUpName();
             EnterDataFromTemplate();
         }
 
         RegionData::RegionData(const RegionData& prototype)
             : pod(prototype.pod)
         {
-
+            pod.name = MakeUpName();
         }
 
         RegionData& RegionData::operator=(const RegionData& prototype)
