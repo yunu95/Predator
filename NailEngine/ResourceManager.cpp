@@ -562,10 +562,12 @@ void ResourceManager::SaveFBXChildData(const yunuGI::FBXData* data, nlohmann::js
 	jsonData["scale"]["y"] = data->scale.y;
 	jsonData["scale"]["z"] = data->scale.z;
 
-	jsonData["quat"]["x"] = data->quat.x;
-	jsonData["quat"]["y"] = data->quat.y;
-	jsonData["quat"]["z"] = data->quat.z;
-	jsonData["quat"]["w"] = data->quat.w;
+	DirectX::SimpleMath::Vector4 tempQuat = DirectX::XMQuaternionNormalize(DirectX::SimpleMath::Vector4{ data->quat.x, data->quat.y,data->quat.z,data->quat.w });
+
+	jsonData["quat"]["x"] = tempQuat.x;
+	jsonData["quat"]["y"] = tempQuat.y;
+	jsonData["quat"]["z"] = tempQuat.z;
+	jsonData["quat"]["w"] = tempQuat.w;
 
 	jsonData["boneInfo"]["index"] = data->boneInfo.index;
 
@@ -1040,6 +1042,7 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 		DirectX::SimpleMath::Vector3 scale;
 		DirectX::SimpleMath::Quaternion quat;
 		wtm.Decompose(scale, quat, pos);
+		quat = DirectX::XMQuaternionNormalize(quat);
 
 		fbxData->pos = yunuGI::Vector3{ pos.x, pos.y,pos.z };
 		fbxData->scale = yunuGI::Vector3{ scale.x, scale.y,scale.z };
@@ -1127,6 +1130,23 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 	}
 	else
 	{
+		//fbxData->nodeName = node->nodeName;
+		//fbxData->hasAnimation = node->hasAnimation;
+		//fbxData->child.resize(node->child.size());
+		//fbxData->materialVec.resize(node->meshVec.size());
+
+		//DirectX::SimpleMath::Matrix wtm = (node->worldMatrix);
+		//DirectX::SimpleMath::Vector3 pos;
+		//DirectX::SimpleMath::Vector3 scale;
+		//DirectX::SimpleMath::Quaternion quat;
+		//wtm.Decompose(scale, quat, pos);
+		//quat = DirectX::XMQuaternionNormalize(quat);
+
+		//fbxData->pos = yunuGI::Vector3{ pos.x, pos.y,pos.z };
+		//fbxData->scale = yunuGI::Vector3{ scale.x, scale.y,scale.z };
+		//fbxData->quat = yunuGI::Vector4{ quat.x, quat.y, quat.z, quat.w };
+		//fbxData->quat = yunuGI::Vector4{ quat.w, quat.x, quat.y, quat.z };
+
 		for (int i = 0; i < node->meshVec.size(); ++i)
 		{
 			// 실제 Mesh와 Material을 만들자

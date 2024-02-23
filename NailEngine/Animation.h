@@ -67,7 +67,7 @@ public:
 	int GetAnimationIndex() {return animationIndex;	}
 private:
 	AnimationClip animationClip;
-	int animationIndex = 0;
+	int animationIndex = -1;
 
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> SRV;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D;

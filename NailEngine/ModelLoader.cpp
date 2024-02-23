@@ -19,8 +19,13 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 	Assimp::Importer importer;
 	
 	// Load Flag
-	unsigned int flag = aiProcess_Triangulate |
+	/*unsigned int flag = aiProcess_Triangulate |
 		aiProcess_ConvertToLeftHanded | aiProcess_MakeLeftHanded  |aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
+		aiProcess_CalcTangentSpace | aiProcess_PopulateArmatureData |
+		aiProcess_FlipWindingOrder | aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
+		aiProcess_SortByPType | aiProcess_LimitBoneWeights;*/
+	unsigned int flag = aiProcess_Triangulate |
+		aiProcess_ConvertToLeftHanded  | aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
 		aiProcess_CalcTangentSpace | aiProcess_PopulateArmatureData |
 		aiProcess_FlipWindingOrder | aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
 		aiProcess_SortByPType | aiProcess_LimitBoneWeights;
@@ -60,6 +65,7 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 	fbxNode->transformMatrix = this->ConvertToCloumnMajor(node->mTransformation);
 	//fbxNode->worldMatrix = parentMatrix * fbxNode->transformMatrix;
 	fbxNode->worldMatrix = fbxNode->transformMatrix * parentMatrix;
+	//fbxNode->worldMatrix = fbxNode->transformMatrix;
 
 	for (int i = 0; i < node->mNumMeshes; ++i)
 	{
