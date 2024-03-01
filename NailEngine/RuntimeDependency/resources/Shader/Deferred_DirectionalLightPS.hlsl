@@ -55,9 +55,11 @@ PS_OUT main(PixelIn input)
     //CalculateLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);
     
     
-    
+    //color.diffuse = float4(pow(float3(color.diffuse.xyz), 1.0 / 2.2), 1.0);
     output.diffuse = color.diffuse + color.ambient;
     //output.specular = color.specular;
+    
+
     
     return output;
 }

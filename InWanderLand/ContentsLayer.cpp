@@ -34,7 +34,7 @@ void GraphicsTest()
     camObj->AddComponent<tests::GraphicsTestCam>();
 
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-
+	_resourceManager->LoadFile("Texture/environment.hdr");
 	{
 		//auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
 		//obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{ -90,0,0 } });
@@ -55,6 +55,16 @@ void GraphicsTest()
 	{
 		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
 		//obj->GetTransform()->SetLocalScale({ Vector3d{ 0.01f,0.01f,0.01f } });
+	}
+
+	yunuGI::ITexture* tex = _resourceManager->GetTexture(L"Texture/environment.hdr");
+	yunuGI::IMesh* mesh = _resourceManager->GetMesh(L"Cube");
+	
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(mesh);
+		renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, tex);
 	}
 
 	//{
