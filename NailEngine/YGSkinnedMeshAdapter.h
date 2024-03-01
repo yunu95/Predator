@@ -97,7 +97,7 @@ namespace yunuGIAdapter
 
 		virtual yunuGI::IMaterial* GetMaterial(unsigned int index = 0)override
 		{
-			return this->materialVec[index].get();
+			return this->materialVec[index]->GetVariation();
 		};
 
 		virtual int GetMaterialCount() override

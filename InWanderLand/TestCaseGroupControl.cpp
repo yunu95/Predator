@@ -142,9 +142,6 @@ void TestCaseGroupControlInit()
 	//		enemyGameObject4->GetComponent<Unit>()->OrderAttackMove(Vector3d::zero);
 	//	} });
 
-	auto inputManagerObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	inputManagerObject->AddComponent<InputManager>();
-
 	auto delayFunctionObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto delayFunctionComponent = delayFunctionObject->AddComponent<DelayedTestFunctions>();
 	// delayedTestFunctions에 2초 후 실행시킬 콜백 함수를 등록합니다. 이 콜백함수는 게임 엔진 스레드에서 호출됩니다.

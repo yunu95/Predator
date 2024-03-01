@@ -23,13 +23,14 @@ void UnitProductor::SetCommonComponents()
 	unitRangeSystemObject->SetParent(m_unitGameObject);
 
 	/// 3. Collider Component 추가
-	//auto unitCollider = m_unitGameObject->AddComponent<physics::BoxCollider>();
 	auto unitCollider = m_unitGameObject->AddComponent<physics::SphereCollider>();	// 빈 껍데기에 
-	unitCollider->SetRadius(1.0f * LENGTH_UNIT);
+	unitCollider->SetRadius(lengthUnit);
 
-	//auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	AttachDebugMesh(m_unitGameObject, DebugMeshType::Cube, yunuGI::Color::green(), false);
-	//unitColliderDebugObject->SetParent(m_unitGameObject);
+	auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	AttachDebugMesh(unitColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
+	unitColliderDebugObject->SetParent(m_unitGameObject);
+	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(lengthUnit, lengthUnit, lengthUnit));
+	m_unitComponent->SetStaticMeshComponent(unitColliderDebugObject->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>());
 
 	auto frontDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(frontDebugObject, DebugMeshType::Cube, yunuGI::Color::black(), true);
@@ -73,6 +74,7 @@ void UnitProductor::SetCommonComponents()
 void UnitProductor::SetPlayerRelatedComponents(Unit* playerUnit)
 {
 	playerUnit->SetPlayerSerialNumber(m_unitType);
+	playerUnit->SetSkillPreviewType(qSkillPreviewType, wSkillPreviewType);
 	PlayerController::GetInstance()->AddPlayerUnit(playerUnit);
 }
 

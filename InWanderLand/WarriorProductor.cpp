@@ -27,13 +27,16 @@ void WarriorProductor::SetUnitData()
 	m_dodgeProbability = 0.2f;
 	m_criticalDamageDecreaseMultiplier = 0.2f;
 
-	m_idRadius = 4.0f * LENGTH_UNIT;
-	m_atkRadius = 1.7f * LENGTH_UNIT;
+	m_idRadius = 4.0f * lengthUnit;
+	m_atkRadius = 1.7f * lengthUnit;
 	m_unitSpeed = 4.5f;
 
 	m_attackDelay = 1.0f;
 
 	m_navField = &SingleNavigationField::Instance();
+
+	qSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::OnlyPath;
+	wSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::None;
 }
 
 void WarriorProductor::SingletonInitializer()
@@ -94,10 +97,10 @@ GameObject* WarriorProductor::CreateUnit(Vector3d startPos)
 	auto unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	unitAttackColliderObject->setName("WarriorAutoAttackCollider");
 	auto m_physicsCollider = unitAttackColliderObject->AddComponent<physics::BoxCollider>();
-	m_physicsCollider->SetHalfExtent({ 1.0f * LENGTH_UNIT, 1.0f * LENGTH_UNIT, 3.0f * LENGTH_UNIT });
+	m_physicsCollider->SetHalfExtent({ 1.0f * lengthUnit, 1.0f * lengthUnit, 3.0f * lengthUnit });
 	unitAttackColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	//unitAttackColliderObject->SetParent(m_unitGameObject);
-	unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, 3.0f * LENGTH_UNIT });
+	unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, 3.0f * lengthUnit });
 
 	// warrior Passive Bleeding System
 	auto warriorBleedingSystem = unitAttackColliderObject->AddComponent<BleedingComponent>();
@@ -105,7 +108,7 @@ GameObject* WarriorProductor::CreateUnit(Vector3d startPos)
 
 	auto autoAttackDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(autoAttackDebugMesh, DebugMeshType::Cube, yunuGI::Color::red(), true);
-	autoAttackDebugMesh->GetTransform()->SetLocalScale({ 1.0f * LENGTH_UNIT, 1.0f * LENGTH_UNIT, 3.0f * LENGTH_UNIT });
+	autoAttackDebugMesh->GetTransform()->SetLocalScale({ 1.0f * lengthUnit, 1.0f * lengthUnit, 3.0f * lengthUnit });
 
 	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
 	warriorAttackSystem->SetColliderObject(unitAttackColliderObject);
@@ -115,7 +118,7 @@ GameObject* WarriorProductor::CreateUnit(Vector3d startPos)
 #pragma endregion
 
 #pragma region Q Skill Setting
-	m_QSkillRadius = 3.0f * LENGTH_UNIT;
+	m_QSkillRadius = 3.0f * lengthUnit;
 
 	auto qSkillKnockBackObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
@@ -133,7 +136,7 @@ GameObject* WarriorProductor::CreateUnit(Vector3d startPos)
 #pragma endregion
 
 #pragma region W Skill Setting
-	m_WSkillRadius = 3.0f * LENGTH_UNIT;
+	m_WSkillRadius = 3.0f * lengthUnit;
 
 	auto wSkillColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto wSkillColliderComponent = wSkillColliderObject->AddComponent<physics::SphereCollider>();
@@ -147,6 +150,15 @@ GameObject* WarriorProductor::CreateUnit(Vector3d startPos)
 	auto wSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(wSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), true);
 	wSkillColliderDebugObject->GetTransform()->SetLocalScale({ m_WSkillRadius, m_WSkillRadius, m_WSkillRadius });
+#pragma endregion
+
+//#pragma region Skill Area Preview System
+//	auto qSkillPreviewObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+//	AttachDebugMesh(qSkillPreviewObject, DebugMeshType::Cube)
+//		->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::blue(), true));
+//
+//
+//#pragma endregion
 
 	// warrior SkillSystem
 	auto warriorSkillSystem = m_unitGameObject->AddComponent<WarriorSkillSystem>();
@@ -154,7 +166,6 @@ GameObject* WarriorProductor::CreateUnit(Vector3d startPos)
 	warriorSkillSystem->SetWSkillObject(wSkillColliderObject);
 	warriorSkillSystem->SetKnockBackDebugObject(qSkillColliderDebugObject, m_QSkillRadius);
 	warriorSkillSystem->SetWSkillDebugObject(wSkillColliderDebugObject, m_WSkillRadius);
-#pragma endregion
 
 	UnitProductor::SetCommonComponents();
 

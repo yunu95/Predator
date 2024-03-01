@@ -6,7 +6,7 @@
 void WarriorSkillSystem::SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen)
 {
 	p_requirments.skillCollider->SetActive(p_boolen);
-	p_requirments.colliderObject->SetSelfActive(p_boolen);
+	//p_requirments.colliderObject->SetSelfActive(p_boolen);
 	p_requirments.debugObject->SetSelfActive(p_boolen);
 }
 
@@ -86,11 +86,12 @@ void WarriorSkillSystem::Start()
 
 	SetSkillRequirmentsActive(QknockBackSkill, false);
 	SetSkillRequirmentsActive(WTauntSkill, false);
-
 }
 
 void WarriorSkillSystem::Update()
 {
+
+	//QknockBackSkill.colliderObject->GetTransform()->SetLocalPosition(Vector3d::zero);
 	if (isQSkillStarted)
 	{
 		QknockBackSkill.debugObject->GetTransform()->SetWorldPosition(QknockBackSkill.colliderObject->GetTransform()->GetWorldPosition());
