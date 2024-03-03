@@ -29,9 +29,9 @@ namespace application
         struct POD_Ornament
         {
             Ornament_TemplateData* templateData = nullptr;
+            POD_Vector3<float> position = POD_Vector3<float>();
+            POD_Quaternion<float> rotation = POD_Quaternion<float>();
             POD_Vector3<float> scale = { 1,1,1 };
-            POD_Quaternion<float> rotation;
-            POD_Vector3<float> position;
 
             TO_JSON(POD_Ornament)
             FROM_JSON(POD_Ornament)

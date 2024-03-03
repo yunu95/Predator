@@ -208,6 +208,234 @@ namespace application
 				return result;
 			}
 
+			bool Vector2_2Col(std::string valName, float& x, float& y, float reset_x, float reset_y)
+			{
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
+				ImGui::AlignTextToFramePadding();
+				ImGui::Text(valName.c_str());
+				ImGui::TableSetColumnIndex(1);
+
+				imgui::SmartStyleVar itemPadding = imgui::SmartStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(1, 2));
+
+				bool returnVal = false;
+
+				const float rowWidth = ImGui::GetFontSize() + 4;
+				const float boxWidth = ImGui::GetColumnWidth() / 2 - rowWidth - 2;
+				const ImVec2 buttonSize = ImVec2(rowWidth, rowWidth + ImGui::GetStyle().FramePadding.y);
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.9f, 0.2f, 0.2f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
+				ImGui::PushID(("##" + valName + "ButtonX").c_str());
+				if (ImGui::Button("X", buttonSize))
+				{
+					x = reset_x;
+					returnVal != true;
+				}
+				ImGui::PopID();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+
+				ImGui::SetNextItemWidth(boxWidth);
+				ImGui::SameLine();
+				returnVal |= ImGui::DragFloat(("##" + valName + "X").c_str(), &x, 0.1f);
+
+				ImGui::SameLine();
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
+				ImGui::PushID(("##" + valName + "ButtonY").c_str());
+				if (ImGui::Button("Y", buttonSize))
+				{
+					y = reset_y;
+					returnVal != true;
+				}
+				ImGui::PopID();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+
+				ImGui::SetNextItemWidth(boxWidth);
+				ImGui::SameLine();
+				returnVal |= ImGui::DragFloat(("##" + valName + "Y").c_str(), &y, 0.1f);
+
+				return returnVal;
+			}
+
+			bool Vector3_2Col(std::string valName, float& x, float& y, float& z, float reset_x, float reset_y, float reset_z)
+			{
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
+				ImGui::AlignTextToFramePadding();
+				ImGui::Text(valName.c_str());
+				ImGui::TableSetColumnIndex(1);
+				
+				imgui::SmartStyleVar itemPadding = imgui::SmartStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(1, 2));
+
+				bool returnVal = false;
+
+				const float rowWidth = ImGui::GetFontSize() + 4;
+				const float boxWidth = ImGui::GetColumnWidth() / 3 - rowWidth - 2;
+				const ImVec2 buttonSize = ImVec2(rowWidth, rowWidth + ImGui::GetStyle().FramePadding.y);
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.9f, 0.2f, 0.2f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
+				ImGui::PushID(("##" + valName + "ButtonX").c_str());
+				if (ImGui::Button("X", buttonSize))
+				{
+					x = reset_x;
+					returnVal != true;
+				}
+				ImGui::PopID();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+
+				ImGui::SetNextItemWidth(boxWidth);
+				ImGui::SameLine();
+				returnVal |= ImGui::DragFloat(("##" + valName + "X").c_str(), &x, 0.1f);
+
+				ImGui::SameLine();
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
+				ImGui::PushID(("##" + valName + "ButtonY").c_str());
+				if (ImGui::Button("Y", buttonSize))
+				{
+					y = reset_y;
+					returnVal != true;
+				}
+				ImGui::PopID();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+
+				ImGui::SetNextItemWidth(boxWidth);
+				ImGui::SameLine();
+				returnVal |= ImGui::DragFloat(("##" + valName + "Y").c_str(), &y, 0.1f);
+
+				ImGui::SameLine();
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.25f, 0.8f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2f, 0.35f, 0.9f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.25f, 0.8f, 1.0f));
+				ImGui::PushID(("##" + valName + "ButtonZ").c_str());
+				if (ImGui::Button("Z", buttonSize))
+				{
+					z = reset_z;
+					returnVal != true;
+				}
+				ImGui::PopID();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+
+				ImGui::SetNextItemWidth(boxWidth);
+				ImGui::SameLine();
+				returnVal |= ImGui::DragFloat(("##" + valName + "Z").c_str(), &z, 0.1f);
+
+				return returnVal;
+			}
+
+			bool Vector4_2Col(std::string valName, float& x, float& y, float& z, float& w, float reset_x, float reset_y, float reset_z, float reset_w)
+			{
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
+				ImGui::AlignTextToFramePadding();
+				ImGui::Text(valName.c_str());
+				ImGui::TableSetColumnIndex(1);
+
+				imgui::SmartStyleVar itemPadding = imgui::SmartStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(1, 2));
+
+				bool returnVal = false;
+
+				const float rowWidth = ImGui::GetFontSize() + 4;
+				const float boxWidth = ImGui::GetColumnWidth() / 4 - rowWidth - 2;
+				const ImVec2 buttonSize = ImVec2(rowWidth, rowWidth + ImGui::GetStyle().FramePadding.y);
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.9f, 0.2f, 0.2f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
+				ImGui::PushID(("##" + valName + "ButtonX").c_str());
+				if (ImGui::Button("X", buttonSize))
+				{
+					x = reset_x;
+					returnVal != true;
+				}
+				ImGui::PopID();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+
+				ImGui::SetNextItemWidth(boxWidth);
+				ImGui::SameLine();
+				returnVal |= ImGui::DragFloat(("##" + valName + "X").c_str(), &x, 0.1f);
+
+				ImGui::SameLine();
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
+				ImGui::PushID(("##" + valName + "ButtonY").c_str());
+				if (ImGui::Button("Y", buttonSize))
+				{
+					y = reset_y;
+					returnVal != true;
+				}
+				ImGui::PopID();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+
+				ImGui::SetNextItemWidth(boxWidth);
+				ImGui::SameLine();
+				returnVal |= ImGui::DragFloat(("##" + valName + "Y").c_str(), &y, 0.1f);
+
+				ImGui::SameLine();
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.25f, 0.8f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2f, 0.35f, 0.9f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.25f, 0.8f, 1.0f));
+				ImGui::PushID(("##" + valName + "ButtonZ").c_str());
+				if (ImGui::Button("Z", buttonSize))
+				{
+					z = reset_z;
+					returnVal != true;
+				}
+				ImGui::PopID();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+
+				ImGui::SetNextItemWidth(boxWidth);
+				ImGui::SameLine();
+				returnVal |= ImGui::DragFloat(("##" + valName + "Z").c_str(), &z, 0.1f);
+
+				ImGui::SameLine();
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.3f, 0.3f, 0.3f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.3f, 0.3f, 0.3f, 1.0f));
+				ImGui::PushID(("##" + valName + "ButtonW").c_str());
+				if (ImGui::Button("W", buttonSize))
+				{
+					w = reset_w;
+					returnVal != true;
+				}
+				ImGui::PopID();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+
+				ImGui::SetNextItemWidth(boxWidth);
+				ImGui::SameLine();
+				returnVal |= ImGui::DragFloat(("##" + valName + "W").c_str(), &w, 0.1f);
+
+				return returnVal;
+			}
+
 			bool DragFloatLabel(std::string dragKey, std::string label, float& value, float speed, float min, float max)
 			{
 				using namespace ImGui;

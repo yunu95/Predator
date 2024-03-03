@@ -4,55 +4,134 @@
 #pragma once
 
 #include "Storable.h"
+#include "imgui_Utility.h"
+#include "EditorMath.h"
 #include <type_traits>
 
 namespace application
 {
-    namespace editor
-    {
-        template <typename T> requires std::is_floating_point_v<T>
-        struct POD_Vector2
-        {
-            T x = 0;
-            T y = 0;
+	namespace editor
+	{
+		template <typename T> requires std::is_floating_point_v<T>
+		struct POD_Vector2
+		{
+			T x = 0;
+			T y = 0;
 
-            TO_JSON(POD_Vector2)
-            FROM_JSON(POD_Vector2)
-        };
+			operator yunuGI::Vector2() const
+			{
+				yunuGI::Vector2 finalVal;
+				finalVal.x = x;
+				finalVal.y = y;
+				return finalVal;
+			}
 
-        template <typename T> requires std::is_floating_point_v<T>
-        struct POD_Vector3
-        {
-            T x = 0;
-            T y = 0;
-            T z = 0;
+			TO_JSON(POD_Vector2)
+			FROM_JSON(POD_Vector2)
+		};
 
-            TO_JSON(POD_Vector3)
-            FROM_JSON(POD_Vector3)
-        };
+		template <typename T> requires std::is_floating_point_v<T>
+		struct POD_Vector3
+		{
+			T x = 0;
+			T y = 0;
+			T z = 0;
 
-        template <typename T> requires std::is_floating_point_v<T>
-        struct POD_Vector4
-        {
-            T x = 0;
-            T y = 0;
-            T z = 0;
-            T w = 1;
+			operator yunuGI::Vector3() const
+			{
+				yunuGI::Vector3 finalVal;
+				finalVal.x = x;
+				finalVal.y = y;
+				finalVal.z = z;
+				return finalVal;
+			}
 
-            TO_JSON(POD_Vector4)
-            FROM_JSON(POD_Vector4)
-        };
+			TO_JSON(POD_Vector3)
+				FROM_JSON(POD_Vector3)
+		};
 
-        template <typename T> requires std::is_floating_point_v<T>
-        struct POD_Quaternion
-        {
-            T x = 0;
-            T y = 0;
-            T z = 0;
-            T w = 1;
+		template <typename T> requires std::is_floating_point_v<T>
+		struct POD_Vector4
+		{
+			T x = 0;
+			T y = 0;
+			T z = 0;
+			T w = 1;
 
-            TO_JSON(POD_Quaternion)
-            FROM_JSON(POD_Quaternion)
-        };
-    }
+			operator yunuGI::Vector4() const
+			{
+				yunuGI::Vector4 finalVal;
+				finalVal.x = x;
+				finalVal.y = y;
+				finalVal.z = z;
+				finalVal.w = w;
+				return finalVal;
+			}
+
+			TO_JSON(POD_Vector4)
+				FROM_JSON(POD_Vector4)
+		};
+
+		template <typename T> requires std::is_floating_point_v<T>
+		struct POD_Quaternion
+		{
+			T x = 0;
+			T y = 0;
+			T z = 0;
+			T w = 1;
+
+			operator yunuGI::Quaternion() const
+			{
+				yunuGI::Quaternion finalVal;
+				finalVal.x = x;
+				finalVal.y = y;
+				finalVal.z = z;
+				finalVal.w = w;
+				return finalVal;
+			}
+
+			TO_JSON(POD_Quaternion)
+			FROM_JSON(POD_Quaternion)
+		};
+
+		namespace imgui
+		{
+			namespace data
+			{
+				template <typename T>
+				bool DrawData(std::string label, const POD_Vector2<T>& data)
+				{
+					return Vector2_2Col(label, const_cast<T&>(data.x), const_cast<T&>(data.y));
+				}
+
+				template <typename T>
+				bool DrawData(std::string label, const POD_Vector3<T>& data)
+				{
+					return Vector3_2Col(label, const_cast<T&>(data.x), const_cast<T&>(data.y), const_cast<T&>(data.z));
+				}
+
+				template <typename T>
+				bool DrawData(std::string label, const POD_Vector4<T>& data)
+				{
+					return Vector4_2Col(label, const_cast<T&>(data.x), const_cast<T&>(data.y), const_cast<T&>(data.z), const_cast<T&>(data.w));
+				}
+
+				template <typename T>
+				bool DrawData(std::string label, const POD_Quaternion<T>& data)
+				{
+					bool returnVal = false;
+					auto angle = math::GetEulerAngle(data);
+
+					returnVal = Vector3_2Col(label, angle.x, angle.y, angle.z);
+					auto finalQuat = math::GetQuaternion(angle);
+					const_cast<T&>(data.x) = finalQuat.x;
+					const_cast<T&>(data.y) = finalQuat.y;
+					const_cast<T&>(data.z) = finalQuat.z;
+					const_cast<T&>(data.w) = finalQuat.w;
+
+					return returnVal;
+				}
+			}
+		}
+	}
 }
