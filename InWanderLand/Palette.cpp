@@ -8,15 +8,18 @@
 #include "UnitPalette.h"
 #include "TerrainPalette.h"
 #include "OrnamentPalette.h"
+#include "RegionPalette.h"
+#include "WavePalette.h"
 
 namespace application::editor::palette
 {
     void Palette::ResetPalettes()
     {
-        static_cast<Palette&>(RegionPalette::SingleInstance()).Reset();
         static_cast<Palette&>(UnitPalette::SingleInstance()).Reset();
         static_cast<Palette&>(TerrainPalette::SingleInstance()).Reset();
         static_cast<Palette&>(OrnamentPalette::SingleInstance()).Reset();
+        static_cast<Palette&>(RegionPalette::SingleInstance()).Reset();
+        static_cast<Palette&>(WavePalette::SingleInstance()).Reset();
     }
     void Palette::OnLeftClick()
     {
@@ -34,12 +37,7 @@ namespace application::editor::palette
         case application::editor::palette::Palette::State::Select:
             if (pendingSelection)
             {
-                if (selection.find(pendingSelection) == selection.end())
-                {
-                    ClearSelection();
-                    InsertSelection(pendingSelection);
-                }
-                state = State::DraggingObjects;
+                OnSelectSingleInstance(pendingSelection);
                 lastFrameBrushPos = currentBrushPos;
                 UnHoverCurrentInstance();
             }
@@ -120,14 +118,16 @@ namespace application::editor::palette
     void Palette::OnDeletion()
     {
         for (auto each : selection)
-        {
-            if (each == pendingSelection)
-                pendingSelection = nullptr;
-            auto& contactingInstances = SelectionBox::Instance().GetContactingInstances();
-            contactingInstances.erase(each->GetPaletteInstance());
+            Delete(each);
+    }
+    void Palette::Delete(IEditableData* data)
+    {
+        if (data == pendingSelection)
+            pendingSelection = nullptr;
+        auto& contactingInstances = SelectionBox::Instance().GetContactingInstances();
+        contactingInstances.erase(data->GetPaletteInstance());
 
-            InstanceManager::GetSingletonInstance().DeleteInstance(each->GetUUID());
-        }
+        InstanceManager::GetSingletonInstance().DeleteInstance(data->GetUUID());
         selection.clear();
     }
     void Palette::SetAsSelectMode(bool isSelectMode)
@@ -146,6 +146,15 @@ namespace application::editor::palette
     bool Palette::IsSelectMode()
     {
         return state != State::Place;
+    }
+    void Palette::OnSelectSingleInstance(IEditableData* data)
+    {
+        if (selection.find(data) == selection.end())
+        {
+            ClearSelection();
+            InsertSelection(data);
+        }
+        state = State::DraggingObjects;
     }
     bool Palette::IsClickingLeft()
     {

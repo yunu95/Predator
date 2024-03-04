@@ -19,7 +19,8 @@ namespace application
                 virtual void Start() override
                 {
                     auto rsrcManager = graphics::Renderer::SingleInstance().GetResourceManager();
-                    boxMesh = AttachDebugMesh(GetGameObject(), DebugMeshType::Cube, yunuGI::Color::green(), true);
+                    boxMesh = AttachDebugMesh(GetGameObject(), DebugMeshType::Rectangle, yunuGI::Color::green(), true);
+                    boxMesh->GetGI().SetMaterial(0, GetColoredDebugMaterialTransparent({ 0,1,0,0.2 }));
                     boxCollider = GetGameObject()->AddComponent<yunutyEngine::physics::BoxCollider>();
                     //debugBoxColliderNear = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::physics::BoxCollider>();
                     //debugBoxColliderMiddle = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::physics::BoxCollider>();
@@ -28,6 +29,7 @@ namespace application
                 }
                 void SetCoverage(Vector3d pointA, Vector3d pointB)
                 {
+                    ShowSelectionBox(true);
                     auto transform = GetTransform();
                     transform->SetLocalRotation(Quaternion({ 90,0,0 }));
                     transform->SetWorldPosition(((pointA + pointB) / 2));
@@ -42,6 +44,7 @@ namespace application
                 // 화면의 중심이 {0,0} 상단이 0.5, 하단이 -0.5인 좌단이 -0.5, 우단이 0.5입니다.
                 void SetAsPickingCollider(graphics::Camera* cam, Vector2d screenSpacePos)
                 {
+                    ShowSelectionBox(false);
                     //auto nearPoint = cam->GetProjectedPoint(screenSpacePos, 0);
                     auto nearPoint = cam->GetTransform()->GetWorldPosition() - cam->GetTransform()->GetWorldRotation().Forward() * cam->GetGI().GetNear();
                     auto farPoint = cam->GetProjectedPoint(screenSpacePos, 100);

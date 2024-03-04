@@ -28,6 +28,7 @@ namespace application
     namespace editor
     {
         class RegionData;
+        class Region_TemplateData;
 
         struct POD_Region
         {
@@ -35,7 +36,8 @@ namespace application
             wstring name;
             float x, z, angle, width, height;
             bool isObstacle{ false };
-            int specialEvent{0};
+            int specialEvent{ 0 };
+            Region_TemplateData* templateData;
             TO_JSON(POD_Region)
                 FROM_JSON(POD_Region)
         };

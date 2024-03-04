@@ -29,6 +29,7 @@ namespace application
     {
         class WaveData;
         class RegionData;
+        class Wave_TemplateData;
 
         struct POD_Wave
         {
@@ -44,6 +45,7 @@ namespace application
             RegionData* triggerRegion{ nullptr };
             // 웨이브가 발동되었을 때 카메라의 이동을 제한하는 지역
             RegionData* contraintRegion{ nullptr };
+            Wave_TemplateData* templateData{ nullptr };
             
             TO_JSON(POD_Wave)
                 FROM_JSON(POD_Wave)

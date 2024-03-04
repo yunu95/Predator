@@ -1,6 +1,7 @@
 #include "WaveData.h"
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
+#include "Wave_TemplateData.h"
 
 namespace application
 {
@@ -20,7 +21,7 @@ namespace application
 
         ITemplateData* WaveData::GetTemplateData()
         {
-            return nullptr;
+            return pod.templateData;
         }
 
         bool WaveData::SetTemplateData(const std::string& dataName)
@@ -86,6 +87,7 @@ namespace application
             : IEditableData(), pod()
         {
             pod.name = MakeUpName();
+            pod.templateData = static_cast<Wave_TemplateData*>(templateDataManager.GetTemplateData(name));
             EnterDataFromTemplate();
         }
 

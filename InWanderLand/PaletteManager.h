@@ -30,6 +30,7 @@ namespace application
                 Unit,
                 Ornament,
                 Region,
+                Wave,
 
                 /// Size를 자동으로 넣기 위해 사용하는 enum
                 /// 첫 enum 값이 0 이고, 모든 간격이 1일 때에 가능함
@@ -53,7 +54,6 @@ namespace application
                 void SetCurrentPalette(Palette* palette);
                 Palette* GetCurrentPalette() { return currentPalette; }
                 Palette_List GetCurrentPaletteType();
-
             private:
                 PaletteManager();
 
