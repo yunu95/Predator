@@ -166,9 +166,6 @@ namespace application
 				ImGui::AlignTextToFramePadding();
 				ImGui::Text(valName.c_str());
 				ImGui::TableSetColumnIndex(1);
-				auto table = ImGui::GetCurrentTable();
-				float columnWidth = ImGui::TableGetMaxColumnWidth(table, 1);
-				imgui::ShiftCursorX(columnWidth - ImGui::GetFrameHeight() - ImGui::GetStyle().ItemInnerSpacing.x);
 				return ImGui::Checkbox(("##" + valName).c_str(), &value);
 			}
 

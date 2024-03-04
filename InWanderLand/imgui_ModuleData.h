@@ -46,6 +46,12 @@ namespace application
 				}
 
 				template <>
+				bool DrawData(std::string label, const bool& data)
+				{
+					return Checkbox_2Col(label, const_cast<bool&>(data));
+				}
+
+				template <>
 				bool DrawData(std::string label, const std::string& data)
 				{
 					ImGui::TableNextRow();
