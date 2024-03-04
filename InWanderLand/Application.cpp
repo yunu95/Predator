@@ -244,6 +244,7 @@ namespace application
 	void Application::Run()
 	{
 		isRunning = true;
+		yunutyEngine::YunutyCycle::SingleInstance().Play();
 		while (isRunning)
 		{
 			MSG msg;

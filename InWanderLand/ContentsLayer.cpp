@@ -233,9 +233,7 @@ void application::contents::ContentsLayer::Initialize()
 
     }
 #endif
-
 #endif // ! EDITOR
-    yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 void application::contents::ContentsLayer::Update(float ts)

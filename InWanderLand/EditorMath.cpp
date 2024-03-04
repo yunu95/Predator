@@ -8,6 +8,10 @@ namespace application
 	{
 		namespace math
 		{
+			const double PI = 3.1415926535897931;
+			const double DEGTORAD = PI / 180;
+			const double RADTODEG = 180 / PI;
+
 			yunuGI::Vector3 ConvertVector3(const glm::vec3& vec)
 			{
 				yunuGI::Vector3 finalVec;
@@ -202,6 +206,50 @@ namespace application
 				DirectX::XMVECTOR d;
 				auto im = DirectX::XMMatrixInverse(&d, wtm);
 				return *reinterpret_cast<yunuGI::Matrix4x4*>(&im);
+			}
+
+			yunuGI::Vector3 GetEulerAngle(const yunuGI::Quaternion& quat)
+			{
+				yunuGI::Vector3 angles;
+
+				// x (x-axis rotation)
+				double sinr_cosp = 2 * (quat.w * quat.x + quat.y * quat.z);
+				double cosr_cosp = 1 - 2 * (quat.x * quat.x + quat.y * quat.y);
+				angles.x = std::atan2(sinr_cosp, cosr_cosp);
+
+				// y (y-axis rotation)
+				double sinp = 2 * (quat.w * quat.y - quat.z * quat.x);
+				if (std::abs(sinp) >= 1)
+					angles.y = std::copysign(PI / 2, sinp); // use 90 degrees if out of range
+				else
+					angles.y = std::asin(sinp);
+
+				// z (z-axis rotation)
+				double siny_cosp = 2 * (quat.w * quat.z + quat.x * quat.y);
+				double cosy_cosp = 1 - 2 * (quat.y * quat.y + quat.z * quat.z);
+				angles.z = std::atan2(siny_cosp, cosy_cosp);
+
+				angles.x *= RADTODEG;
+				angles.y *= RADTODEG;
+				angles.z *= RADTODEG;
+
+				return angles;
+			}
+
+			yunuGI::Quaternion GetQuaternion(const yunuGI::Vector3& euler)
+			{
+				yunuGI::Quaternion finalQuat;
+				double cr = cos(euler.x * DEGTORAD * 0.5);
+				double sr = sin(euler.x * DEGTORAD * 0.5);
+				double cp = cos(euler.y * DEGTORAD * 0.5);
+				double sp = sin(euler.y * DEGTORAD * 0.5);
+				double cy = cos(euler.z * DEGTORAD * 0.5);
+				double sy = sin(euler.z * DEGTORAD * 0.5);
+				finalQuat.w = cr * cp * cy + sr * sp * sy;
+				finalQuat.x = sr * cp * cy - cr * sp * sy;
+				finalQuat.y = cr * sp * cy + sr * cp * sy;
+				finalQuat.z = cr * cp * sy - sr * sp * cy;
+				return finalQuat;
 			}
 
 			yunuGI::Vector3 RotateVector3(const yunuGI::Vector3& vec, const yunuGI::Matrix4x4& roMat)

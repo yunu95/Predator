@@ -1001,6 +1001,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="HealerAutoAttackProjectile.h" />
     <ClInclude Include="HealerAutoAttackProjectilePool.h" />
     <ClInclude Include="HealerSkillSystem.h" />
+    <ClInclude Include="imgui_ModuleData.h" />
     <ClInclude Include="SingletonUpdate.h" />
     <ClInclude Include="SpecialEvent.h" />
     <ClInclude Include="StaticInstanceRegistry.h" />
