@@ -35,7 +35,6 @@ PS_OUT main(PixelIn input)
         {
             clip(-1);
         }
-       //clip(test - 1);
     }
     
     if (UseTexture(useAlbedo) == 1)

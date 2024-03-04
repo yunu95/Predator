@@ -180,10 +180,10 @@ void RenderSystem::Render()
 
 	// Final 출력
 	RenderFinal();
-
+	RenderForward();
 	RenderBackBuffer();
 
-	RenderForward();
+
 
 	SkyBoxPass::Instance.Get().Render();
 
@@ -192,7 +192,7 @@ void RenderSystem::Render()
 	RenderUI();
 
 	// 디퍼드 정보 출력
-	DrawDeferredInfo();
+	///DrawDeferredInfo();
 
 	// 디퍼드용 SRV UnBind
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
@@ -363,6 +363,8 @@ void RenderSystem::RenderFinal()
 
 void RenderSystem::RenderBackBuffer()
 {
+	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
+
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1,
 		ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
 		ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());

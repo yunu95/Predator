@@ -165,6 +165,8 @@ void* ResourceManager::GetFinalRenderImage()
 	ResourceBuilder::Instance.Get().swapChain->GetSwapChain()->GetBuffer(0, __uuidof(ID3D11Texture2D),
 		reinterpret_cast<void**>(&backBuffer));
 
+	//backBuffer = NailEngine::Instance.Get().GetRenderTargetGroup()[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->GetRTTexture(static_cast<int>(FINAL))->GetTex2D().Get();
+
 	D3D11_TEXTURE2D_DESC desc;
 	backBuffer->GetDesc(&desc);
 	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
