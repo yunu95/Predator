@@ -791,6 +791,12 @@
     <ClInclude Include="SpecialEvent.h">
       <Filter>Contents\SpecialEvent</Filter>
     </ClInclude>
+    <ClInclude Include="ButtonFactory.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIPanel.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1225,6 +1231,12 @@
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="UIManager.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonFactory.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIPanel.cpp">
       <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>

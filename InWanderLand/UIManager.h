@@ -23,6 +23,8 @@ private:
 	int m_currentHighestLayer = 0;
 	UIButton* m_highestPriorityButton;
 
+	bool isButtonActiviated = false;
+
 public:
 	void ReportButtonOnMouse(UIButton* p_btn);
 	void ReportMouseExitButton(UIButton* p_btn);

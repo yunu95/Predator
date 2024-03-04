@@ -111,8 +111,6 @@ void SnippetInitializerUISystem()
 	uiButtonComponent->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
 	uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro_highLighted.jpg"));
 	uiButtonComponent->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro_Clicked.jpg"));
-	uiButtonComponent->SetWidth(255.0f);
-	uiButtonComponent->SetHeight(255.0f);
 	uiButtonComponent->SetImageComponent(uiImageComponent);
 	uiImageObject->GetTransform()->SetLocalPosition({ 0, 255, 0 });
 

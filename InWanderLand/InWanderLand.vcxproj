@@ -994,6 +994,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="AutoAttackProjectilePool.h" />
     <ClInclude Include="BleedingComponent.h" />
     <ClInclude Include="BlindFieldComponent.h" />
+    <ClInclude Include="ButtonFactory.h" />
     <ClInclude Include="DebuggingMesh.h" />
     <ClInclude Include="DualCastComponent.h" />
     <ClInclude Include="EditorResourceManager.h" />
@@ -1123,6 +1124,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="TestUtils.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIManager.h" />
+    <ClInclude Include="UIPanel.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="UnitStatusComponent.h" />
@@ -1150,6 +1152,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="AutoAttackProjectilePool.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
     <ClCompile Include="BlindFieldComponent.cpp" />
+    <ClCompile Include="ButtonFactory.cpp" />
     <ClCompile Include="DebuggingMesh.cpp" />
     <ClCompile Include="DualCastComponent.cpp" />
     <ClCompile Include="EditorResourceManager.cpp" />
@@ -1264,6 +1267,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="TestCaseUpdateComponents.cpp" />
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIManager.cpp" />
+    <ClCompile Include="UIPanel.cpp" />
     <ClCompile Include="UnitBrush.cpp" />
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="UnitEditorInstance.cpp" />
