@@ -202,11 +202,11 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         //float3 toneMappedColor = diffuse.xyz / (1.0 + diffuse.xyz / exposure);
         //diffuse.xyz = toneMappedColor;
         
-        float3 x = max(0, diffuse.xyz - 0.004);
-        diffuse.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
-        diffuse.w = 1;
+        //float3 x = max(0, diffuse.xyz - 0.004);
+        //diffuse.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
+        //diffuse.w = 1;
         
-        //diffuse = float4(pow(float3(diffuse.xyz), 1.0 / 2.2), 1.0);
+        diffuse = float4(pow(float3(diffuse.xyz), 1.0 / 2.2), 1.0);
         
         //diffuse *= shadow;
     }
