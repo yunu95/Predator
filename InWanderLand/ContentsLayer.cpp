@@ -35,29 +35,26 @@ void GraphicsTest()
 
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-    _resourceManager->LoadFile("Texture/zoro.jpg");
-    _resourceManager->LoadFile("Texture/Brick_Albedo.jpg");
-    yunuGI::ITexture* texture = nullptr;
-    yunuGI::ITexture* texture2 = nullptr;
-    auto& textureList = _resourceManager->GetTextureList();
+	{
+		//auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
+		//obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{ -90,0,0 } });
+		//obj->GetTransform()->SetLocalScale({ Vector3d{ 0.01f,0.01f,0.01f } });
 
-    for (auto& i : textureList)
-    {
-        if (i->GetName() == L"Texture/zoro.jpg")
-        {
-            texture = i;
-        }
-
-		if (i->GetName() == L"Texture/Brick_Albedo.jpg")
-		{
-            texture2 = i;
-		}
-    }
-
-
+		//for (auto each : animList)
+		//{
+		//	if (each->GetName() == L"Ani_Monster2_Walk")
+		//	{
+		//		anim = each;
+		//	}
+		//}
+		//anim->SetLoop(true);
+		//animator->GetGI().PushAnimation(anim);
+		//animator->GetGI().Play(anim);
+	}
 
 	{
-
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
+		//obj->GetTransform()->SetLocalScale({ Vector3d{ 0.01f,0.01f,0.01f } });
 	}
 
 	//{
@@ -131,20 +128,20 @@ void application::contents::ContentsLayer::Initialize()
 
     const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	//resourceManager->LoadFile("FBXMaterial.scres");
-
+	resourceManager->LoadFile("FBXMaterial.scres");
+	
 	resourceManager->LoadFile("LeavesVS.cso");
 	resourceManager->LoadFile("LeavesPS.cso");
 
     resourceManager->LoadFile("FBX/Monster2");
-	//resourceManager->LoadFile("FBX/SM_Bush_001");
-	//resourceManager->LoadFile("FBX/SM_Bush_002");
-	resourceManager->LoadFile("FBX/SM_Trunk_001");
+	resourceManager->LoadFile("FBX/SM_Bush_001");
+	resourceManager->LoadFile("FBX/SM_Bush_002");
+	//resourceManager->LoadFile("FBX/SM_Trunk_001");
 	///resourceManager->LoadFile("FBX/SM_CastleWall");
-	resourceManager->LoadFile("FBX/SM_CastleWall_Door");
+	//resourceManager->LoadFile("FBX/SM_CastleWall_Door");
 	///resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
 	///resourceManager->LoadFile("FBX/SM_Chair");
-	resourceManager->LoadFile("FBX/SM_Cuptower");
+	//resourceManager->LoadFile("FBX/SM_Cuptower");
 	///resourceManager->LoadFile("FBX/SM_Fork");
 	///resourceManager->LoadFile("FBX/SM_GuideBook");
 	///resourceManager->LoadFile("FBX/SM_Hat01");
@@ -213,9 +210,7 @@ void application::contents::ContentsLayer::Initialize()
 
     }
 #endif
-
 #endif // ! EDITOR
-    yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 void application::contents::ContentsLayer::Update(float ts)

@@ -30,7 +30,7 @@ void KnockBackComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 
 		Vector3d directionVector = (startPosition - GetGameObject()->GetTransform()->GetWorldPosition()).Normalized();
 		Vector3d endPosition = startPosition + (directionVector * m_pushPower);
-
+		Vector3d maxHeightPosition = startPosition + (directionVector * m_pushPower / 2) + Vector3d(0, maxKnockHeight, 0);
 
 		opponentUnit->knockBackTimer->m_duration = m_duration;
 		Vector3d unitCurrentPos = opponentUnit->GetTransform()->GetWorldPosition();
@@ -54,6 +54,19 @@ void KnockBackComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 		//	{
 
 		//	});
+
+		//opponentUnit->GetGameObject()->GetComponent<Dotween>()->DOMove(maxHeightPosition, m_duration / 2).SetEase(EaseOutCubic).OnComplete([=]()
+		//	{
+		//		opponentUnit->GetGameObject()->GetComponent<Dotween>()->DOMove(endPosition, m_duration / 2).SetEase(EaseOutBounce).OnComplete([=]()
+		//			{
+		//				opponentUnit->MakeUnitPushedState(false);
+		//				opponentUnit->DetermineCurrentTargetObject();
+		//				opponentUnit->GetGameObject()->GetComponent<NavigationAgent>()->SetActive(true);
+		//				opponentUnit->GetGameObject()->GetComponent<NavigationAgent>()->AssignToNavigationField(opponentUnit->GetNavField());
+		//				opponentUnit->GetGameObject()->GetComponent<NavigationAgent>()->Relocate(endPosition);
+		//			});
+		//	});
+
 	}
 }
 

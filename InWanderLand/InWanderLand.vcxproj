@@ -1002,6 +1002,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="HealerAutoAttackProjectilePool.h" />
     <ClInclude Include="HealerSkillSystem.h" />
     <ClInclude Include="imgui_ModuleData.h" />
+    <ClInclude Include="SingletonUpdate.h" />
     <ClInclude Include="SpecialEvent.h" />
     <ClInclude Include="StaticInstanceRegistry.h" />
     <ClInclude Include="LoadStaticOrnamentsCommand.h" />
@@ -1021,6 +1022,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="RegionData.h" />
     <ClInclude Include="Region_TemplateData.h" />
     <ClInclude Include="SingleNavigationField.h" />
+    <ClInclude Include="SkillPreviewSystem.h" />
     <ClInclude Include="TacticModeSystem.h" />
     <ClInclude Include="TestUtilButtonEvent.h" />
     <ClInclude Include="InWanderLand.h" />
@@ -1120,6 +1122,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="TestUtilNavAgent.h" />
     <ClInclude Include="TestUtilRTSTestCam.h" />
     <ClInclude Include="TestUtils.h" />
+    <ClInclude Include="UIButton.h" />
+    <ClInclude Include="UIManager.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="UnitStatusComponent.h" />
@@ -1179,10 +1183,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="PaletteManager.cpp" />
     <ClCompile Include="PassiveCake.cpp" />
     <ClCompile Include="RangedAttackSystem.cpp" />
+    <ClCompile Include="SkillPreviewSystem.cpp" />
     <ClCompile Include="SnippetArtResource.cpp" />
     <ClCompile Include="RegionData.cpp" />
     <ClCompile Include="Region_TemplateData.cpp" />
     <ClCompile Include="SnippetCastleWallTextureBlending.cpp" />
+    <ClCompile Include="SnippetUISystem.cpp" />
     <ClCompile Include="SnippetDebugMeshScaleCheck.cpp" />
     <ClCompile Include="SnippetFloatingDebugSphere.cpp" />
     <ClCompile Include="RegionPalette.cpp" />
@@ -1257,6 +1263,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="TestCasePhysxTrigger.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TestCaseUpdateComponents.cpp" />
+    <ClCompile Include="UIButton.cpp" />
+    <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UnitBrush.cpp" />
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="UnitEditorInstance.cpp" />

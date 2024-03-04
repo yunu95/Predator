@@ -24,7 +24,8 @@ namespace yunuGI
         virtual void DeleteMesh(yunuGI::IMesh* mesh)const = 0;
         virtual yunuGI::IMaterial* GetMaterial(const std::wstring& materialName)const = 0;
         virtual yunuGI::IMesh* GetMesh(const std::wstring& meshName)const = 0;
-        virtual bool GetFBXData(const std::string& fbxName, yunuGI::FBXData*& fbxData)const = 0;
+		virtual yunuGI::ITexture* GetTexture(const std::wstring& textureName)const = 0;
+		virtual bool GetFBXData(const std::string& fbxName, yunuGI::FBXData*& fbxData)const = 0;
         virtual bool GetFBXBoneData(const std::string& fbxName, yunuGI::BoneInfo& boneInfo)const = 0;
         virtual void UnloadResources()const = 0;
 

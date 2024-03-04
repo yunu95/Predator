@@ -203,11 +203,17 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         float d = 0.59f;
         float e = 0.14f;
         diffuse.xyz = saturate((diffuse.xyz * (a * diffuse.xyz + b)) / (diffuse.xyz * (c * diffuse.xyz + d) + e));
+        diffuse.a = 1;
+        
+        //diffuse.rgb *= 20.f;
+        //float3 x = max(0, diffuse.rgb - 0.004);
+        //diffuse.rgb = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
+        //diffuse.a = 1;
         
         //diffuse.xyz = diffuse.xyz / (diffuse.xyz + 1.f);
         
         
-        diffuse = float4(pow(float3(diffuse.xyz), 1.0 / 2.2), 1.0);
+        //diffuse = float4(pow(float3(diffuse.xyz), 1.0 / 2.2), 1.0);
         
         //diffuse *= shadow;
     }

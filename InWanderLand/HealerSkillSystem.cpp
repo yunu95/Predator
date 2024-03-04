@@ -23,7 +23,7 @@ void HealerSkillSystem::CrushDown(int p_times)
 				crushedCount = 0;
 				//GetTransform()->SetWorldPosition(startPosition);
 				m_unitNavComponent->SetActive(true);
-				//m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
+				m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
 				m_unitNavComponent->Relocate(GetTransform()->GetWorldPosition());
 				isSkillEnd = true;
 			}
