@@ -5,6 +5,7 @@
 void UIButton::SetIdleImage(yunuGI::ITexture* p_IdleImage)
 {
 	m_IdleImage = p_IdleImage;
+	m_ImageComponent->GetGI().SetImage(m_IdleImage);
 }
 
 void UIButton::SetOnMouseImage(yunuGI::ITexture* p_OnMouseImage)
@@ -19,16 +20,7 @@ void UIButton::SetClickedImage(yunuGI::ITexture* p_ClickedImage)
 
 void UIButton::SetButtonClickFunction(std::function<void()> p_func)
 {
-	m_ClickedEventFunction = p_func;
-}
-
-void UIButton::SetCloseButton()
-{
-	m_closeImageObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	m_closeImageComponent = m_closeImageObject->AddComponent<yunutyEngine::graphics::UIImage>();
-	m_closeImageComponent->GetGI().SetLayer(m_layer + 1);
-	m_closeButtonImage = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetTexture(L"Texture/UI/InGameUITemp/CloseButton.jpg");
-	m_closeImageComponent->GetGI().SetImage(m_closeButtonImage);
+	m_mouseLiftedEventFunction = p_func;
 }
 
 void UIButton::SetLayer(int p_layerNum)
@@ -52,7 +44,7 @@ void UIButton::Start()
 	assert(m_IdleImage != nullptr);
 
 	m_ImageComponent->GetGI().SetImage(m_IdleImage);
-	m_CurrentImage = m_IdleImage;
+	//m_CurrentImage = m_IdleImage;
 
 	/// Width와 Height은 변경되지 않는다는 것을 전제로...
 	m_Width = m_IdleImage->GetWidth();
@@ -61,21 +53,36 @@ void UIButton::Start()
 	Vector2d leftTopPos = GetTransform()->GetWorldPosition();
 	m_ImageCenterPostion = Vector2d(leftTopPos.x + m_Width / 2, leftTopPos.y + m_Height / 2);
 
-	if (m_closeImageObject != nullptr)
+	m_onMouseFunction = [=]()
 	{
-		m_closeImageObject->GetTransform()->SetWorldPosition({ GetTransform()->GetWorldPosition().x + m_Width - m_closeButtonImage->GetWidth(), GetTransform()->GetWorldPosition().y, 0 });
-		m_closeButtonCenterPosition = Vector2d(GetTransform()->GetWorldPosition().x + m_Width - (m_closeButtonImage->GetWidth() / 2), GetTransform()->GetWorldPosition().y + (m_closeButtonImage->GetHeight() / 2));
-	}
-
-	m_ClickedEventFunction = [=]()
-	{
-		//m_ImageComponent->GetGI().SetImage(m_ClickedImage);
-		auto sound = yunutyEngine::SoundSystem::PlayMusic("..\Bin\x64\Debug\Texture\BGM.mp3");
+		if (m_MouseOnImage != nullptr)
+		{
+			m_ImageComponent->GetGI().SetImage(m_MouseOnImage);
+		}
+		if (m_OnMouseEventFunction != nullptr)
+		{
+			m_OnMouseEventFunction();
+		}
 	};
 
-	m_OnMouseEventFunction = [=]()
+	m_mousePushedFunction = [=]()
 	{
-		//m_ImageComponent->GetGI().SetImage(m_MouseOnImage);
+		if (m_ClickedImage != nullptr)
+		{
+			m_ImageComponent->GetGI().SetImage(m_ClickedImage);
+		}
+	};
+
+	m_mouseLiftedFunction = [=]()
+	{
+		if (m_MouseOnImage != nullptr)
+		{
+			m_ImageComponent->GetGI().SetImage(m_MouseOnImage);
+		}
+		if (m_mouseLiftedEventFunction != nullptr)
+		{
+			m_mouseLiftedEventFunction();
+		}
 	};
 
 
@@ -85,50 +92,27 @@ void UIButton::Start()
 void UIButton::Update()
 {
 	auto mousePos = Input::getMouseScreenPosition();
-	bool isMouseOnThisButton = false;
-	bool isMouseOnCloseButton = false;
-	static bool isMouseUIMode = false;
+	bool isMouseJustEntered = false;
 
-	if (m_closeImageObject != nullptr &&
-		mousePos.x <= m_closeButtonCenterPosition.x + m_Width / 2 && mousePos.x >= m_closeButtonCenterPosition.x - m_Width / 2 &&
-		mousePos.y <= m_closeButtonCenterPosition.y + m_Height / 2 && mousePos.y >= m_closeButtonCenterPosition.y - m_Height / 2)
+	if (mousePos.x <= m_ImageCenterPostion.x + m_Width / 2 && mousePos.x >= m_ImageCenterPostion.x - m_Width / 2 &&
+		mousePos.y <= m_ImageCenterPostion.y + m_Height / 2 && mousePos.y >= m_ImageCenterPostion.y - m_Height / 2)
 	{
-		isMouseOnCloseButton = true;
-		if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::MouseLeftClick))
-		{
-			m_closeImageObject->SetSelfActive(false);
-			GetGameObject()->SetSelfActive(false);
-		}
+		isMouseJustEntered = true;
 	}
 
-
-	if (!isMouseOnCloseButton)
+	if (isMouseJustEntered && !isMouseNowOnButton)
 	{
-		if (mousePos.x <= m_ImageCenterPostion.x + m_Width / 2 && mousePos.x >= m_ImageCenterPostion.x - m_Width / 2 &&
-			mousePos.y <= m_ImageCenterPostion.y + m_Height / 2 && mousePos.y >= m_ImageCenterPostion.y - m_Height / 2)
-		{
-			isMouseOnThisButton = true;
-			isMouseUIMode = true;
-			isMouseWasOnButton = true;
-		}
+		isMouseNowOnButton = true;
+		isMouseJustEntered = false;
 
-		if (isMouseOnThisButton && m_CurrentImage != m_MouseOnImage)
-		{
-			UIManager::SingleInstance().ReportButtonOnMouse(this);
-
-			m_CurrentImage = m_MouseOnImage;
-		}
-		else if (!isMouseOnThisButton && m_CurrentImage != m_IdleImage)
-		{
-			if (isMouseWasOnButton)
-			{
-				UIManager::SingleInstance().ReportMouseExitButton(this);
-				isMouseWasOnButton = false;
-			}
-
-			m_ImageComponent->GetGI().SetImage(m_IdleImage);
-			m_CurrentImage = m_IdleImage;
-		}
+		UIManager::SingleInstance().ReportButtonOnMouse(this);
+		//isButtonOnMouseState = false;
+	}
+	else if (!isMouseJustEntered && isMouseNowOnButton)
+	{
+		isMouseNowOnButton = false;
+		UIManager::SingleInstance().ReportMouseExitButton(this);
+		m_ImageComponent->GetGI().SetImage(m_IdleImage);
 	}
 
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "InputManager.h"
+#include "UIPanel.h"
 
 /// <summary>
 /// UI Button 클래스.
@@ -16,22 +17,21 @@ private:
 
 	yunuGI::ITexture* m_CurrentImage;
 
-	std::function<void()> m_ClickedEventFunction;
+	std::function<void()> m_onMouseFunction;
+	std::function<void()> m_mousePushedFunction;
+	std::function<void()> m_mouseLiftedFunction;
+
 	std::function<void()> m_OnMouseEventFunction;
+	std::function<void()> m_mouseLiftedEventFunction;
 
 	yunutyEngine::graphics::UIImage* m_ImageComponent;
-
-	GameObject* m_closeImageObject;
-	yunutyEngine::graphics::UIImage* m_closeImageComponent;
-	yunuGI::ITexture* m_closeButtonImage;
 
 	double m_Width;
 	double m_Height;
 
 	Vector2d m_ImageCenterPostion;
-	Vector2d m_closeButtonCenterPosition;
 
-	bool isMouseWasOnButton;
+	bool isMouseNowOnButton;
 	int m_layer;
 
 public:
@@ -40,8 +40,6 @@ public:
 	void SetClickedImage(yunuGI::ITexture* p_ClickedImage);
 
 	void SetButtonClickFunction(std::function<void()> p_func);
-
-	void SetCloseButton();
 
 	void SetLayer(int p_layerNum);
 	int GetLayer() const;
@@ -52,5 +50,6 @@ public:
 	virtual void Update() override;
 
 	friend class UIManager;
+	friend class UIPanel;
 };
 

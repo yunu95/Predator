@@ -9,14 +9,10 @@
 /// 3. 최소 하나의 button에 마우스가 올라가 있는가? 를 항상 판별.
 /// </summary>
 
-class RTSCam;
-
 class UIManager : public SingletonClass<UIManager>
 {
 private:
 	std::list<UIButton*> m_currentSelectedButtonList;
-
-	RTSCam* m_rtsCamComponent;
 
 	std::function<void(Vector3d pos)> m_beforeUIEnterFunction;
 
@@ -29,8 +25,6 @@ public:
 	void ReportButtonOnMouse(UIButton* p_btn);
 	void ReportMouseExitButton(UIButton* p_btn);
 
-	void SetRTSCam(RTSCam* p_RTSCamComponent);
-	//friend class UIButton;
 	void Update();
 };
 

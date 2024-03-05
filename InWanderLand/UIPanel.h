@@ -15,10 +15,20 @@ private:
 	std::vector<GameObject*> m_panelObjects;
 	yunutyEngine::graphics::UIImage* m_windowImage;
 
+	GameObject* m_closeImageObject;
+	yunuGI::ITexture* m_closeButtonImage;
+	yunutyEngine::graphics::UIImage* closeImageComponent;
+	UIButton* closeButtonComponent;
+
+
+	Vector2d m_closeButtonCenterPosition;
+
 public:
 	void SetWindowImage(yunutyEngine::graphics::UIImage* img);
 	void SetUIButtonComponent(UIButton* btn);
 	void SetPanelActive(bool p_boolen);
 	void SetCloseButtonActive(bool p_boolen);
+
+	virtual void Start() override;
 };
 

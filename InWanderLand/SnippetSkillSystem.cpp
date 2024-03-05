@@ -130,41 +130,81 @@ void SnippetSkillSystemInit()
 	rsrcMgr->LoadFile("Texture/UI/InGameUITemp/CloseButton.jpg");
 
 	rsrcMgr->LoadFile("Texture/UI/InGameUITemp/menu_window.jpg");
+	rsrcMgr->LoadFile("Texture/UI/InGameUITemp/GameManual_Button.jpg");
+	rsrcMgr->LoadFile("Texture/UI/InGameUITemp/GameManual.jpg");
+	rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Sound_Button.jpg");
+	rsrcMgr->LoadFile("Texture/UI/InGameUITemp/NewGame_Button.jpg");
 
 
 #pragma region Menu UI
 	auto menuPanel = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<UIPanel>();
 
-	auto menuWindowUIObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto menuWindowImageComponent = menuWindowUIObject->AddComponent<yunutyEngine::graphics::UIImage>();
-	menuWindowImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/menu_window.jpg"));
-	menuWindowImageComponent->GetGI().SetLayer(1);
-
+#pragma region MenuButton
 	auto menuUIObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto menuUIImageComponent = menuUIObject->AddComponent<yunutyEngine::graphics::UIImage>();
 	auto menuUIButtonComponent = menuUIObject->AddComponent<UIButton>();
-	menuUIButtonComponent->SetIdleImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Menu.jpg"));
-	//menuUIButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro_highLighted.jpg"));
-	//menuUIButtonComponent->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro_Clicked.jpg"));
 	menuUIButtonComponent->SetImageComponent(menuUIImageComponent);
+	menuUIButtonComponent->SetIdleImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Menu.jpg"));
 	menuUIButtonComponent->SetLayer(100);
-	menuUIObject->GetTransform()->SetLocalPosition({ 30, 1000, 0 });
 	menuUIButtonComponent->SetButtonClickFunction([=]()
 		{
-
+			menuPanel->SetPanelActive(true);
 		});
+	menuUIObject->GetTransform()->SetLocalPosition({ 30, 1000, 0 });
 #pragma endregion
 
-	auto uiImageObject2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto uiImageComponent2 = uiImageObject2->AddComponent<yunutyEngine::graphics::UIImage>();
-	auto uiButtonComponent2 = uiImageObject2->AddComponent<UIButton>();
-	uiButtonComponent2->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-	uiButtonComponent2->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro_highLighted.jpg"));
-	uiButtonComponent2->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro_Clicked.jpg"));
-	uiButtonComponent2->SetImageComponent(uiImageComponent2);
-	uiButtonComponent2->SetLayer(90);
-	uiButtonComponent2->SetCloseButton();
-	uiImageObject2->GetTransform()->SetLocalPosition({ 125.5f, 255, 0 });
+	const int menuWindowLayer = 10;
+#pragma region Menu Window
+	auto menuWindowUIObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	auto menuWindowImageComponent = menuWindowUIObject->AddComponent<yunutyEngine::graphics::UIImage>();
+	menuWindowImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/menu_window.jpg"));
+	menuWindowImageComponent->GetGI().SetLayer(menuWindowLayer);
+	menuWindowUIObject->SetSelfActive(false);
+	menuWindowUIObject->GetTransform()->SetWorldPosition({ 900, 540, 0 });
+	menuPanel->SetWindowImage(menuWindowImageComponent);
+#pragma endregion
+
+#pragma region Game Manual Panel
+	auto gameManualPanel = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<UIPanel>();
+	auto gameManualWindowObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	auto gameManualWindowImageComponent = gameManualWindowObject->AddComponent<yunutyEngine::graphics::UIImage>();
+	gameManualWindowImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/GameManual.jpg"));
+	gameManualWindowImageComponent->GetGI().SetLayer(menuWindowLayer + 2);
+	gameManualWindowObject->SetSelfActive(false);
+	gameManualWindowObject->GetTransform()->SetWorldPosition({ 900, 540, 0 });
+	gameManualPanel->SetWindowImage(gameManualWindowImageComponent);
+#pragma endregion
+
+#pragma region Game Manual Button
+	auto gameManualButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	auto gameManualImageComponent = gameManualButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+	auto gameManualButtonComponent = gameManualButtonObject->AddComponent<UIButton>();
+	gameManualButtonComponent->SetImageComponent(gameManualImageComponent);
+	gameManualButtonComponent->SetIdleImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/GameManual_Button.jpg"));
+	gameManualButtonComponent->SetLayer(menuWindowLayer + 1);
+	gameManualButtonComponent->SetButtonClickFunction([=]()
+		{
+			gameManualPanel->SetPanelActive(true);
+		});
+	gameManualButtonObject->GetTransform()->SetLocalPosition({ 1160, 623, 0 });
+	gameManualButtonObject->SetSelfActive(false);
+	menuPanel->SetUIButtonComponent(gameManualButtonComponent);
+#pragma endregion
+
+
+	menuPanel->SetCloseButtonActive(true);
+	gameManualPanel->SetCloseButtonActive(true);
+#pragma endregion
+
+	//auto uiImageObject2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//auto uiImageComponent2 = uiImageObject2->AddComponent<yunutyEngine::graphics::UIImage>();
+	//auto uiButtonComponent2 = uiImageObject2->AddComponent<UIButton>();
+	//uiButtonComponent2->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+	//uiButtonComponent2->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro_highLighted.jpg"));
+	//uiButtonComponent2->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro_Clicked.jpg"));
+	//uiButtonComponent2->SetImageComponent(uiImageComponent2);
+	//uiButtonComponent2->SetLayer(90);
+	//uiImageObject2->GetTransform()->SetLocalPosition({ 125.5f, 255, 0 });
 
 
 
@@ -196,8 +236,6 @@ void SnippetSkillSystemInit()
 	//	uiButtonComponent2->SetLayer(80);
 	//	uiImageObject2->GetTransform()->SetLocalPosition({ 10, 255, 0 });
 	//}
-
-	UIManager::SingleInstance().SetRTSCam(rtsCam);
 
 	auto singletonUpdateComponent = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<SingletonUpdate>();
 
