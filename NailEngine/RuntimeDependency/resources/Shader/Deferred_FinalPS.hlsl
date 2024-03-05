@@ -29,7 +29,7 @@ float4 main(PixelIn input) : SV_Target
     //color = saturate((color * (a * color + b)) / (color * (c * color + d) + e));
     //color = pow(color, 1 / 2.2f);
     //output = pow(output, 2.2f);
-    //lightPower = pow(lightPower, 1 / 2.2f);
+    //lightPower = pow(float4(lightPower.xyz, 1.f), 1 / 2.2f);
     //lightPower = pow(lightPower, 2.2f);
     
     float4 specular = Temp2Map.Sample(sam, input.uv);

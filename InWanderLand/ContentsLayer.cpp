@@ -34,7 +34,9 @@ void GraphicsTest()
     camObj->AddComponent<tests::GraphicsTestCam>();
 
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-
+	_resourceManager->LoadFile("Texture/RustedIron_ARM.png");
+	_resourceManager->LoadFile("Texture/RustedIron_Normal.png");
+	_resourceManager->LoadFile("Texture/RustedIron_BaseColor.png");
 	{
 		//auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
 		//obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{ -90,0,0 } });
@@ -55,6 +57,26 @@ void GraphicsTest()
 	{
 		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
 		//obj->GetTransform()->SetLocalScale({ Vector3d{ 0.01f,0.01f,0.01f } });
+	}
+
+	//{
+	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Stone");
+	//	obj->GetTransform()->SetLocalScale({ Vector3d{ 0.01f,0.01f,0.01f } });
+	//}
+
+	yunuGI::ITexture* tex = _resourceManager->GetTexture(L"Texture/RustedIron_ARM.png");
+	yunuGI::ITexture* tex2 = _resourceManager->GetTexture(L"Texture/RustedIron_Normal.png");
+	yunuGI::ITexture* tex3 = _resourceManager->GetTexture(L"Texture/RustedIron_BaseColor.png");
+	yunuGI::IMesh* mesh = _resourceManager->GetMesh(L"Sphere");
+	
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		//obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(mesh);
+		renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, tex3);
+		renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ARM, tex);
+		renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::NORMAL, tex2);
 	}
 
 	//{
@@ -134,8 +156,9 @@ void application::contents::ContentsLayer::Initialize()
 	resourceManager->LoadFile("LeavesPS.cso");
 
     resourceManager->LoadFile("FBX/Monster2");
-	resourceManager->LoadFile("FBX/SM_Bush_001");
-	resourceManager->LoadFile("FBX/SM_Bush_002");
+    resourceManager->LoadFile("FBX/Stone");
+	//resourceManager->LoadFile("FBX/SM_Bush_001");
+	//resourceManager->LoadFile("FBX/SM_Bush_002");
 	resourceManager->LoadFile("FBX/SM_Trunk_001");
 	resourceManager->LoadFile("FBX/SM_CastleWall");
 	resourceManager->LoadFile("FBX/SM_CastleWall_Door");

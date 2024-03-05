@@ -281,11 +281,11 @@ void NailEngine::CreateRenderTargetGroup()
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SPECLIBL)] = std::make_shared<RenderTargetGroup>();
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SPECLIBL)]->SetRenderTargetVec(rtVec);
 	}
-	// Back Buffer
+	// Final
 	{
 		std::vector<RenderTarget> rtVec(FINAL_COUNT);
 		rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
-			L"BackBufferTarget",
+			L"FinalTarget",
 			this->windowInfo.width,
 			this->windowInfo.height,
 			DXGI_FORMAT_R16G16B16A16_FLOAT,

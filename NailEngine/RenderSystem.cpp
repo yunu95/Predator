@@ -171,7 +171,6 @@ void RenderSystem::Render()
 	// 그림자 맵 생성
 	//RenderShadow();
 
-	//SkyBoxPass::Instance.Get().BuildIrradianceMap();
 	SkyBoxPass::Instance.Get().BindIBLTexture();
 
 	// 라이트 렌더
@@ -193,7 +192,7 @@ void RenderSystem::Render()
 	RenderUI();
 
 	// 디퍼드 정보 출력
-	///DrawDeferredInfo();
+	DrawDeferredInfo();
 
 	// 디퍼드용 SRV UnBind
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
@@ -357,7 +356,6 @@ void RenderSystem::RenderFinal()
 {
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
 	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->OMSetRenderTarget();
-
 
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"))->PushGraphicsData();
 	ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();
