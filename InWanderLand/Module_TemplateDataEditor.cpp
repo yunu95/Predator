@@ -1,7 +1,6 @@
 #include "InWanderLand.h"
 #include "Module_TemplateDataEditor.h"
 #include "Application.h"
-
 #include "TemplateDataManager.h"
 
 namespace application
@@ -65,16 +64,85 @@ namespace application
 		void Module_TemplateDataEditor::DrawList(const ImVec2& region)
 		{
 			ImGui::BeginChild("TemplateDataList", region, true);
-			ImGui::CollapsingHeader("Terrain");
-			ImGui::CollapsingHeader("Units");
-			ImGui::CollapsingHeader("Ornaments");
+			//if (ImGui::CollapsingHeader("Terrain"))
+			//{
+
+			//}
+
+			if (ImGui::CollapsingHeader("Units"))
+			{
+				for (auto each : tdManager.GetDataList(DataType::UnitData))
+				{
+					if (ImGui::Selectable(static_cast<Unit_TemplateData*>(each)->GetDataKey().c_str(), selectedData == each))
+					{
+						if (selectedData == each)
+						{
+							selectedData = nullptr;
+						}
+						else
+						{
+							selectedData = each;
+						}
+					}
+				}
+			}
+			else
+			{
+				if (selectedData != nullptr && tdManager.GetDataType(selectedData) == DataType::UnitData)
+				{
+					selectedData = nullptr;
+				}
+			}
+
+			if (ImGui::CollapsingHeader("Ornaments"))
+			{
+				for (auto each : tdManager.GetDataList(DataType::OrnamentData))
+				{
+					if (ImGui::Selectable(static_cast<Ornament_TemplateData*>(each)->GetDataKey().c_str(), selectedData == each))
+					{
+						if (selectedData == each)
+						{
+							selectedData = nullptr;
+						}
+						else
+						{
+							selectedData = each;
+						}
+					}
+				}
+			}
+			else
+			{
+				if (selectedData != nullptr && tdManager.GetDataType(selectedData) == DataType::OrnamentData)
+				{
+					selectedData = nullptr;
+				}
+			}
+
 			ImGui::EndChild();
 		}
 
 		void Module_TemplateDataEditor::DrawTemplateDataPanel(const ImVec2& region)
 		{
-			ImGui::BeginChild("SelectedTemplateDataList", region, true);
-			ImGui::Text("Some test2");
+			ImGui::BeginChild("SelectedTemplateData", region, true);
+			if (selectedData != nullptr)
+			{
+				switch (tdManager.GetDataType(selectedData->GetDataKey()))
+				{
+					case DataType::UnitData:
+					{
+						DrawTemplateDataPOD<Unit_TemplateData>(selectedData);
+						break;
+					}
+					case DataType::OrnamentData:
+					{
+						DrawTemplateDataPOD<Ornament_TemplateData>(selectedData);
+						break;
+					}
+					default:
+						break;
+				}
+			}
 			ImGui::EndChild();
 		}
 	}

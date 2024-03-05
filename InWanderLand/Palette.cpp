@@ -8,6 +8,7 @@
 #include "UnitPalette.h"
 #include "TerrainPalette.h"
 #include "OrnamentPalette.h"
+#include "Panel_SceneView.h"
 
 namespace application::editor::palette
 {
@@ -18,6 +19,7 @@ namespace application::editor::palette
         static_cast<Palette&>(TerrainPalette::SingleInstance()).Reset();
         static_cast<Palette&>(OrnamentPalette::SingleInstance()).Reset();
     }
+
     void Palette::OnLeftClick()
     {
         isClickingLeft = true;
@@ -45,11 +47,14 @@ namespace application::editor::palette
             }
             else
             {
-                state = State::DraggingSelectBox;
-                dragStartPos = currentBrushPos;
-                ClearSelection();
-                SelectionBox::Instance().ShowSelectionBox(true);
-                SelectionBox::Instance().SetCoverage(dragStartPos, currentBrushPos);
+                if (!SceneViewPanel::GetSingletonInstance().IsMouseOverGizmo())
+                {
+                    state = State::DraggingSelectBox;
+                    dragStartPos = currentBrushPos;
+                    ClearSelection();
+                    SelectionBox::Instance().ShowSelectionBox(true);
+                    SelectionBox::Instance().SetCoverage(dragStartPos, currentBrushPos);
+                }
             }
             break;
         case application::editor::palette::Palette::State::Place:

@@ -165,6 +165,8 @@ void* ResourceManager::GetFinalRenderImage()
 	ResourceBuilder::Instance.Get().swapChain->GetSwapChain()->GetBuffer(0, __uuidof(ID3D11Texture2D),
 		reinterpret_cast<void**>(&backBuffer));
 
+	//backBuffer = NailEngine::Instance.Get().GetRenderTargetGroup()[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->GetRTTexture(static_cast<int>(FINAL))->GetTex2D().Get();
+
 	D3D11_TEXTURE2D_DESC desc;
 	backBuffer->GetDesc(&desc);
 	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
@@ -562,10 +564,12 @@ void ResourceManager::SaveFBXChildData(const yunuGI::FBXData* data, nlohmann::js
 	jsonData["scale"]["y"] = data->scale.y;
 	jsonData["scale"]["z"] = data->scale.z;
 
-	jsonData["quat"]["x"] = data->quat.x;
-	jsonData["quat"]["y"] = data->quat.y;
-	jsonData["quat"]["z"] = data->quat.z;
-	jsonData["quat"]["w"] = data->quat.w;
+	DirectX::SimpleMath::Vector4 tempQuat = DirectX::XMQuaternionNormalize(DirectX::SimpleMath::Vector4{ data->quat.x, data->quat.y,data->quat.z,data->quat.w });
+
+	jsonData["quat"]["x"] = tempQuat.x;
+	jsonData["quat"]["y"] = tempQuat.y;
+	jsonData["quat"]["z"] = tempQuat.z;
+	jsonData["quat"]["w"] = tempQuat.w;
 
 	jsonData["boneInfo"]["index"] = data->boneInfo.index;
 
@@ -820,10 +824,15 @@ void ResourceManager::CreateDefaultShader()
 
 void ResourceManager::CreateDefaultMesh()
 {
+	//LoadFBX("FBX/Cube/Cube.fbx");
+	//LoadFBX("FBX/Sphere/Sphere.fbx");
+	//LoadFBX("FBX/Rectangle/Rectangle.fbx");
+	//LoadFBX("FBX/Capsule/Capsule.fbx");
+	//LoadFBX("FBX/Cylinder/Cylinder.fbx");
 	CreateMesh(L"Cube");
 	CreateMesh(L"Sphere");
 	CreateMesh(L"Rectangle");
-	//CreateMesh(L"Point");
+	CreateMesh(L"Point");
 	CreateMesh(L"Line");
 	CreateMesh(L"Capsule");
 	CreateMesh(L"Cylinder");
@@ -1040,6 +1049,7 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 		DirectX::SimpleMath::Vector3 scale;
 		DirectX::SimpleMath::Quaternion quat;
 		wtm.Decompose(scale, quat, pos);
+		quat = DirectX::XMQuaternionNormalize(quat);
 
 		fbxData->pos = yunuGI::Vector3{ pos.x, pos.y,pos.z };
 		fbxData->scale = yunuGI::Vector3{ scale.x, scale.y,scale.z };
@@ -1127,6 +1137,23 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 	}
 	else
 	{
+		//fbxData->nodeName = node->nodeName;
+		//fbxData->hasAnimation = node->hasAnimation;
+		//fbxData->child.resize(node->child.size());
+		//fbxData->materialVec.resize(node->meshVec.size());
+
+		//DirectX::SimpleMath::Matrix wtm = (node->worldMatrix);
+		//DirectX::SimpleMath::Vector3 pos;
+		//DirectX::SimpleMath::Vector3 scale;
+		//DirectX::SimpleMath::Quaternion quat;
+		//wtm.Decompose(scale, quat, pos);
+		//quat = DirectX::XMQuaternionNormalize(quat);
+
+		//fbxData->pos = yunuGI::Vector3{ pos.x, pos.y,pos.z };
+		//fbxData->scale = yunuGI::Vector3{ scale.x, scale.y,scale.z };
+		//fbxData->quat = yunuGI::Vector4{ quat.x, quat.y, quat.z, quat.w };
+		//fbxData->quat = yunuGI::Vector4{ quat.w, quat.x, quat.y, quat.z };
+
 		for (int i = 0; i < node->meshVec.size(); ++i)
 		{
 			// 실제 Mesh와 Material을 만들자
@@ -1567,10 +1594,10 @@ void ResourceManager::LoadRactangleMesh()
 
     // POS COLOR UV TANGENT
     // 앞면
-    vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
-    vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
-    vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
-    vec[3] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+	vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+	vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+	vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+	vec[3] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
 
 	std::vector<unsigned int> idx(6);
 

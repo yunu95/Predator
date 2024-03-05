@@ -116,7 +116,6 @@ void SnippetInitializerUISystem()
 
 	auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<graphics::DirectionalLight>();
 	directionalLight->GetTransform()->SetWorldRotation(Quaternion({ 10,10,0 }));
-	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 namespace snippets

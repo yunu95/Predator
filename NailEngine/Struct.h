@@ -112,7 +112,7 @@ struct TransitionDesc
 {
 	TransitionDesc()
 	{
-		curr.animIndex = 0;
+		curr.animIndex = -1;
 		next.animIndex = -1;
 	}
 

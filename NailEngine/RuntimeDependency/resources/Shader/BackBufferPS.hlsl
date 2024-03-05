@@ -13,8 +13,10 @@ struct PixelIn
 float4 main(PixelIn input) : SV_Target
 {
     float4 color = Temp0Map.Sample(sam, input.uv);
-
+    color.w = 1.f;
+    //color = float4(pow(float3(color.xyz), 1.0 / 2.2), 1.0);
     
+   
     
     float4 viewPos = Temp1Map.Sample(sam, input.uv);
     

@@ -75,7 +75,10 @@ public:
 		return this->transitionDesc.curr.ratio;
 	}
 
-	TransitionDesc& GetTransitionDesc() { return this->transitionDesc; }
+	TransitionDesc& GetTransitionDesc()
+	{
+		return this->transitionDesc; 
+	}
 	void SetTransitionDesc(TransitionDesc& transitionDesc) { this->transitionDesc = transitionDesc;	}
 
 	void ChangeAnimation(yunuGI::IAnimation* animation, float transitionDuration, float transitionSpeed)

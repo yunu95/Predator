@@ -49,6 +49,7 @@ namespace yunuGIAdapter
         {
             renderable->SetMesh(reinterpret_cast<Mesh*>(mesh));
         };
+
         virtual yunuGI::IMesh* GetMesh() const override
         {
             return renderable->GetMesh();
@@ -103,7 +104,6 @@ namespace yunuGIAdapter
 		{
 			return this->materialVec.size();
 		};
-
 	private:
 		std::shared_ptr<SkinnedMesh> renderable;
 		std::vector<std::shared_ptr<MaterialWrapper>> materialVec;

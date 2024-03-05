@@ -132,8 +132,9 @@ void SnippetSkillSystemInit()
 	rsrcMgr->LoadFile("Texture/UI/InGameUITemp/menu_window.jpg");
 	rsrcMgr->LoadFile("Texture/UI/InGameUITemp/GameManual_Button.jpg");
 	rsrcMgr->LoadFile("Texture/UI/InGameUITemp/GameManual.jpg");
+	rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Sound_Window.jpg");
 	rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Sound_Button.jpg");
-	rsrcMgr->LoadFile("Texture/UI/InGameUITemp/NewGame_Button.jpg");
+	rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Restart_Button.jpg");
 
 
 #pragma region Menu UI
@@ -176,66 +177,75 @@ void SnippetSkillSystemInit()
 #pragma endregion
 
 #pragma region Game Manual Button
-	auto gameManualButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto gameManualImageComponent = gameManualButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
-	auto gameManualButtonComponent = gameManualButtonObject->AddComponent<UIButton>();
-	gameManualButtonComponent->SetImageComponent(gameManualImageComponent);
-	gameManualButtonComponent->SetIdleImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/GameManual_Button.jpg"));
-	gameManualButtonComponent->SetLayer(menuWindowLayer + 1);
-	gameManualButtonComponent->SetButtonClickFunction([=]()
-		{
-			gameManualPanel->SetPanelActive(true);
-		});
-	gameManualButtonObject->GetTransform()->SetLocalPosition({ 1160, 623, 0 });
-	gameManualButtonObject->SetSelfActive(false);
-	menuPanel->SetUIButtonComponent(gameManualButtonComponent);
+	{
+		auto gameManualButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto gameManualImageComponent = gameManualButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+		auto gameManualButtonComponent = gameManualButtonObject->AddComponent<UIButton>();
+		gameManualButtonComponent->SetImageComponent(gameManualImageComponent);
+		gameManualButtonComponent->SetIdleImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/GameManual_Button.jpg"));
+		gameManualButtonComponent->SetLayer(menuWindowLayer + 1);
+		gameManualButtonComponent->SetButtonClickFunction([=]()
+			{
+				gameManualPanel->SetPanelActive(true);
+			});
+		gameManualButtonObject->GetTransform()->SetLocalPosition({ 1060, 623, 0 });
+		gameManualButtonObject->SetSelfActive(false);
+		menuPanel->SetUIButtonComponent(gameManualButtonComponent);
+	}
+#pragma endregion
+
+#pragma region Sound Panel
+	auto soundPanel = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<UIPanel>();
+	auto soundWindowObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	auto soundWindowImageComponent = soundWindowObject->AddComponent<yunutyEngine::graphics::UIImage>();
+	soundWindowImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Sound_Window.jpg"));
+	soundWindowImageComponent->GetGI().SetLayer(menuWindowLayer + 2);
+	soundWindowObject->SetSelfActive(false);
+	soundWindowObject->GetTransform()->SetWorldPosition({ 900, 540, 0 });
+	soundPanel->SetWindowImage(soundWindowImageComponent);
+#pragma endregion
+
+#pragma region Sound Button
+	{
+		auto soundButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto soundButtonImageComponent = soundButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+		auto soundButtonComponent = soundButtonObject->AddComponent<UIButton>();
+		soundButtonComponent->SetImageComponent(soundButtonImageComponent);
+		soundButtonComponent->SetIdleImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Sound_Button.jpg"));
+		soundButtonComponent->SetLayer(menuWindowLayer + 4);
+		soundButtonComponent->SetButtonClickFunction([=]()
+			{
+				soundPanel->SetPanelActive(true);
+			});
+		soundButtonObject->GetTransform()->SetLocalPosition({ 1060, 693, 0 });
+		soundButtonObject->SetSelfActive(false);
+		menuPanel->SetUIButtonComponent(soundButtonComponent);
+	}
+#pragma endregion
+
+#pragma region Restart Button
+	{
+		auto restartButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto restartButtonImageComponent = restartButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+		auto restartButtonComponent = restartButtonObject->AddComponent<UIButton>();
+		restartButtonComponent->SetImageComponent(restartButtonImageComponent);
+		restartButtonComponent->SetIdleImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Restart_Button.jpg"));
+		restartButtonComponent->SetLayer(menuWindowLayer + 3);
+		restartButtonComponent->SetButtonClickFunction([=]()
+			{
+				/// 게임을 재시작하는 로직
+			});
+		restartButtonObject->GetTransform()->SetLocalPosition({ 1060, 763, 0 });
+		restartButtonObject->SetSelfActive(false);
+		menuPanel->SetUIButtonComponent(restartButtonComponent);
+	}
 #pragma endregion
 
 
 	menuPanel->SetCloseButtonActive(true);
 	gameManualPanel->SetCloseButtonActive(true);
+	soundPanel->SetCloseButtonActive(true);
 #pragma endregion
-
-	//auto uiImageObject2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//auto uiImageComponent2 = uiImageObject2->AddComponent<yunutyEngine::graphics::UIImage>();
-	//auto uiButtonComponent2 = uiImageObject2->AddComponent<UIButton>();
-	//uiButtonComponent2->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-	//uiButtonComponent2->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro_highLighted.jpg"));
-	//uiButtonComponent2->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro_Clicked.jpg"));
-	//uiButtonComponent2->SetImageComponent(uiImageComponent2);
-	//uiButtonComponent2->SetLayer(90);
-	//uiImageObject2->GetTransform()->SetLocalPosition({ 125.5f, 255, 0 });
-
-
-
-
-	//auto closeButtonObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//auto closeButtonUiImageComponent = closeButtonObj->AddComponent<yunutyEngine::graphics::UIImage>();
-	//auto closeButtonComponent = closeButtonObj->AddComponent<UIButton>();
-	//closeButtonComponent->SetIdleImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/CloseButton.jpg"));
-	//closeButtonComponent->SetImageComponent(closeButtonUiImageComponent);
-	//closeButtonComponent->SetLayer(91);
-	//closeButtonObj->SetParent(uiImageObject2);
-	//closeButtonComponent->SetButtonClickFunction([=]()
-	//	{
-	//		closeButtonObj->GetParentGameObject()->SetSelfActive(false);
-	//	});
-	//closeButtonObj->GetTransform()->SetLocalPosition({ 112.5f, 112.5f, 0.0f });
-
-
-
-
-	//{
-	//	auto uiImageObject2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//	auto uiImageComponent2 = uiImageObject2->AddComponent<yunutyEngine::graphics::UIImage>();
-	//	auto uiButtonComponent2 = uiImageObject2->AddComponent<UIButton>();
-	//	uiButtonComponent2->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-	//	uiButtonComponent2->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro_highLighted.jpg"));
-	//	uiButtonComponent2->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro_Clicked.jpg"));
-	//	uiButtonComponent2->SetImageComponent(uiImageComponent2);
-	//	uiButtonComponent2->SetLayer(80);
-	//	uiImageObject2->GetTransform()->SetLocalPosition({ 10, 255, 0 });
-	//}
 
 	auto singletonUpdateComponent = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<SingletonUpdate>();
 
@@ -252,7 +262,6 @@ void SnippetSkillSystemInit()
 		directionalLight->GetTransform()->SetWorldPosition(Vector3d(0, 100, 0));
 		directionalLight->GetTransform()->SetLocalRotation( Quaternion{ Vector3d{120,0,0} });
 	}
-	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 namespace snippets

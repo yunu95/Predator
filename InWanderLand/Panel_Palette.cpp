@@ -78,6 +78,7 @@ namespace application
                     ImGui_BeginRegionPalette();
                     ImGui::EndTabItem();
                 }
+
                 if (ImGui::BeginTabItem("Wave"))
                 {
                     ChangePalette(&wp);
@@ -296,7 +297,7 @@ namespace application
                             // 이때, unitButton 에도 pushback 해주어 Size를 추가해야 함
                             /// 임시로 Unit Template Data 하나를 추가하는 로직을 구현함
                             auto td = tdm.CreateTemplateData<Unit_TemplateData>("UnitButton" + std::to_string(i));
-                            td->SetDataResourceName("SM_Stone_001");
+                            td->SetDataResourceName("SM_Bush_001");
                             unitButton.push_back(false);
                         }
                     }

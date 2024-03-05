@@ -316,6 +316,9 @@
     <Filter Include="Contents\SpecialEvent">
       <UniqueIdentifier>{38f84781-e01b-4784-b9e1-01f98814ffd8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\IO\FileSystem">
+      <UniqueIdentifier>{018fec7d-1ab2-4937-a43f-4face4d7b708}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -794,6 +797,12 @@
     <ClInclude Include="UIPanel.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="imgui_ModuleData.h">
+      <Filter>Editor\imgui\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem.h">
+      <Filter>Editor\IO\FileSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1232,6 +1241,9 @@
     </ClCompile>
     <ClCompile Include="UIPanel.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem.cpp">
+      <Filter>Editor\IO\FileSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

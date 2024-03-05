@@ -25,9 +25,9 @@ namespace application::editor::palette
     UnitData* UnitPalette::PlaceInstance(Vector3d worldPosition)
     {
         auto instance = InstanceManager::GetSingletonInstance().CreateInstance<UnitData>(selectedUnitTemplateData->GetDataKey());
-        instance->pod.x = worldPosition.x;
-        instance->pod.y = worldPosition.y;
-        instance->pod.z = worldPosition.z;
+        instance->pod.position.x = worldPosition.x;
+        instance->pod.position.y = worldPosition.y;
+        instance->pod.position.z = worldPosition.z;
 
         instance->ApplyAsPaletteInstance();
         return instance;

@@ -244,6 +244,7 @@ namespace application
 	void Application::Run()
 	{
 		isRunning = true;
+		yunutyEngine::YunutyCycle::SingleInstance().Play();
 		while (isRunning)
 		{
 			MSG msg;
@@ -327,6 +328,11 @@ namespace application
 	{
 		static auto resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 		return resourceManager->GetFinalRenderImage();
+	}
+
+	void* Application::GetWindowHandle()
+	{
+		return hWND;
 	}
 
 	void Application::ImGuiUpdate()

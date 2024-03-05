@@ -29,7 +29,6 @@ void TestInitializerTemplate()
 
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::Camera>();
 
-    yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 namespace tests

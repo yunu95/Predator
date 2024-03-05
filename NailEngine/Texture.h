@@ -26,6 +26,7 @@ public:
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>& GetRTV() { return this->RTV; }
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>& GetSRV() { return this->SRV; }
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView>& GetDSV() { return this->DSV; }
+	Microsoft::WRL::ComPtr<ID3D11Texture2D>& GetTex2D() { return this->tex2D; }
 #pragma endregion
 
 private:

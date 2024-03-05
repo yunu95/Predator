@@ -48,7 +48,7 @@ struct CompareSmartPtr
 
 		if (leftImage->layer != rightImage->layer)
 		{
-			return leftImage->layer < rightImage->layer; // 다른 layer인 경우에만 비교
+			return leftImage->layer < rightImage->layer; 
 		}
 		else
 		{

@@ -52,12 +52,37 @@ namespace application
 
 			return instance;
 		}
+
 		void UnitData::OnRelocate(const Vector3d& newLoc)
 		{
-			pod.x = newLoc.x;
-			pod.y = newLoc.y;
-			pod.z = newLoc.z;
-		};
+			pod.position.x = newLoc.x;
+			pod.position.y = newLoc.y;
+			pod.position.z = newLoc.z;
+		}
+
+		void UnitData::OnRerotate(const Quaternion& newRot)
+		{
+			pod.rotation.x = newRot.x;
+			pod.rotation.y = newRot.y;
+			pod.rotation.z = newRot.z;
+			pod.rotation.w = newRot.w;
+		}
+
+		void UnitData::OnRescale(const Vector3d& newScale)
+		{
+			pod.scale.x = newScale.x;
+			pod.scale.y = newScale.y;
+			pod.scale.z = newScale.z;
+		}
+
+		void UnitData::OnDataResourceChange(std::string newName)
+		{
+			SetTemplateData(newName);
+			if (unitInstance)
+			{
+				unitInstance->ChangeTemplateData(this);
+			}
+		}
 
 		palette::PaletteInstance* UnitData::ApplyAsPaletteInstance()
 		{
@@ -68,7 +93,9 @@ namespace application
 				unitInstance->SetEditableData(this);
 				unitInstance->Init(this);
 			}
-			unitInstance->GetTransform()->SetWorldPosition({ pod.x,pod.y,pod.z });
+			unitInstance->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
+			unitInstance->GetTransform()->SetWorldRotation({ pod.rotation.w, pod.rotation.x,pod.rotation.y,pod.rotation.z });
+			unitInstance->GetTransform()->SetLocalScale({ pod.scale.x,pod.scale.y,pod.scale.z });
 			return unitInstance;
 		};
 		void UnitData::ApplyAsPlaytimeObject()
@@ -77,7 +104,7 @@ namespace application
 			// 타입을 확장하여 유닛 생성 로직에서 같이 처리할 수 있게 만들 수 있다.
 			pod.templateData->pod.m_atkRadius;
 			UnitProductor* productionFactory{ nullptr };
-			Vector3d position{ pod.x, pod.y, pod.z };
+			Vector3d position{ pod.position.x, pod.position.y, pod.position.z };
 			// 유닛을 생성할 때 쓰일 팩토리를 먼저 지정
 			switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
 			{

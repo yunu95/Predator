@@ -73,7 +73,6 @@ void SnippetAnimationChangeInterpolationInit()
         }
     }
 
-    yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 namespace snippets

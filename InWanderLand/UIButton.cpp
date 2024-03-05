@@ -94,8 +94,8 @@ void UIButton::Update()
 	auto mousePos = Input::getMouseScreenPosition();
 	bool isMouseJustEntered = false;
 
-	if (mousePos.x <= m_ImageCenterPostion.x + m_Width / 2 && mousePos.x >= m_ImageCenterPostion.x - m_Width / 2 &&
-		mousePos.y <= m_ImageCenterPostion.y + m_Height / 2 && mousePos.y >= m_ImageCenterPostion.y - m_Height / 2)
+	if (mousePos.x <= m_ImageCenterPostion.x + (m_Width / 2) && mousePos.x >= m_ImageCenterPostion.x - (m_Width / 2) &&
+		mousePos.y <= m_ImageCenterPostion.y + (m_Height / 2) && mousePos.y >= m_ImageCenterPostion.y - (m_Height / 2))
 	{
 		isMouseJustEntered = true;
 	}

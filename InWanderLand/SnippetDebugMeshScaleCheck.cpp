@@ -63,7 +63,6 @@ void SnippetDebugMeshScaleCheckInit()
 
 	camObj->GetTransform()->SetWorldPosition({ 0,0,-25 });
 
-	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 namespace snippets
