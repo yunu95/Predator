@@ -270,11 +270,11 @@ void ResourceManager::CreateTexture(const std::wstring& texturePath)
 	textureVec.push_back(texture.get());
 }
 
-std::shared_ptr<Texture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag)
+std::shared_ptr<Texture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag, int arraySize)
 {
 	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 
-	texture->CreateTexture(texturePath, width, height, format, bindFlag);
+	texture->CreateTexture(texturePath, width, height, format, bindFlag, arraySize);
 	texture->SetName(texturePath);
 
 	this->deferredTextureMap.insert({ texturePath, texture });
@@ -1033,6 +1033,7 @@ void ResourceManager::CreateDefaultTexture()
 //	);
 
     CreateTexture(L"ShadowDepth", SM_SIZE, SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE));
+    CreateTexture(L"PointLightShadowDepth", SM_SIZE, SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE),6);
 }
 
 void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yunuGI::FBXData* fbxData, bool isPreLoad)
