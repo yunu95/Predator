@@ -8,6 +8,8 @@
 #include "Region_TemplateData.h"
 #include "RegionData.h"
 #include "SpecialEvent.h"
+#include "WavePalette.h"
+#include "RegionPalette.h"
 
 #include "YunutyEngine.h"
 
@@ -257,7 +259,18 @@ namespace application
             imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 
             int countIdx = 0;
-
+            bool isPlacingWaveUnit = palette::WavePalette::SingleInstance().currentWaveData && palette::WavePalette::SingleInstance().currentSelectedWaveIndex >= 0;
+            if (isPlacingWaveUnit)
+            {
+                //stringstream ss;
+                //ss << "Wave is selected. Please select time offset and unit type to place.";
+                //ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 0.04f, 0.0f, 0.96f, 1.0f });
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1.0f, 0.0f, 0.0f, 1.0f });
+                //ImGui::TextColored({ 1,0,0,1 }, "Wave is selected. Please select time offset and unit type to place.");
+                ImGui::TextWrapped("Wave is selected. Please select time offset and unit type to place.");
+                ImGui::PopStyleColor();
+                ImGui::DragFloat("time offset", &palette::WavePalette::SingleInstance().currentSelectedWaveTimeOffset, 0.005, 0, 10000);
+            }
             if (imgui::BeginSection_1Col(countIdx, "Unit List", ImGui::GetContentRegionAvail().x))
             {
                 auto uSize = tdm.GetDataList(DataType::UnitData).size();
@@ -426,10 +439,19 @@ namespace application
             imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
             imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 
-            static int selectedRegionIdx = 0;
-            RegionData* selectedRegion = nullptr;
+            //static int selectedRegionIdx = 0;
+            //RegionData* selectedRegion = nullptr;
             if (ImGui::Button("Make new region"))
-                InstanceManager::GetSingletonInstance().CreateInstance<RegionData>(Region_TemplateData::GetInstance().GetDataKey());
+            {
+                auto newInstance = InstanceManager::GetSingletonInstance().CreateInstance<RegionData>(Region_TemplateData::GetInstance().GetDataKey());
+                auto createPoint = graphics::Camera::GetMainCamera()->GetProjectedPoint({ 0.0,0.0 }, graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().Magnitude(), { 0,1,0 });
+                newInstance->pod.angle = 0;
+                newInstance->pod.width = 5;
+                newInstance->pod.height = 5;
+                newInstance->pod.x = createPoint.x;
+                newInstance->pod.z = createPoint.z;
+                newInstance->ApplyAsPaletteInstance();
+            }
 
             int countIdx{ 0 };
             if (imgui::BeginSection_1Col(countIdx, "Region List", ImGui::GetContentRegionAvail().x))
@@ -443,13 +465,12 @@ namespace application
                     {
                         stringstream ss;
                         ss << yutility::GetString(each->pod.name).c_str() << " ##RegionSelectable" << countIdx;
-                        if (ImGui::Selectable(ss.str().c_str(), selectedRegionIdx == countIdx))
+                        if (ImGui::Selectable(ss.str().c_str(), palette::RegionPalette::SingleInstance().GetSingleSelectedRegion() == each))
                         {
-                            selectedRegionIdx = countIdx;
+                            palette::RegionPalette::SingleInstance().SelectRegion(each);
                         }
-                        if (selectedRegionIdx == countIdx)
+                        if (palette::RegionPalette::SingleInstance().GetSingleSelectedRegion() == each)
                         {
-                            selectedRegion = each;
                             ImGui::SetItemDefaultFocus();
                         }
                         countIdx++;
@@ -458,7 +479,7 @@ namespace application
                 }
                 imgui::EndSection();
             }
-            if (selectedRegion)
+            if (palette::RegionPalette::SingleInstance().GetSingleSelectedRegion())
             {
                 if (imgui::BeginSection_2Col(countIdx, "Region info", ImGui::GetContentRegionAvail().x))
                 {
@@ -466,36 +487,39 @@ namespace application
                     ImGui::TableSetColumnIndex(0);
                     ImGui::Text("Region name");
                     ImGui::TableNextColumn();
-                    string charBuffer = yutility::GetString(selectedRegion->pod.name);
+                    string charBuffer = yutility::GetString(palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.name);
                     charBuffer.reserve(64);
                     ImGui::InputText("##RegionNameInputText", &charBuffer[0], 64);
-                    selectedRegion->pod.name = yutility::GetWString(charBuffer);
+                    palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.name = yutility::GetWString(charBuffer);
                     ImGui::TableNextRow();
                     ImGui::TableSetColumnIndex(0);
                     ImGui::Text("width");
                     ImGui::TableNextColumn();
-                    ImGui::DragFloat("##RegionWidthInputText", &selectedRegion->pod.width, 0.005f, 0.0f, FLT_MAX, "%.2f", 0);
+                    if (ImGui::DragFloat("##RegionWidthInputText", &palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.width, 0.005f, 0.0f, FLT_MAX, "%.2f", 0))
+                        palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->ApplyAsPaletteInstance();
                     ImGui::TableNextRow();
                     ImGui::TableSetColumnIndex(0);
                     ImGui::Text("height");
                     ImGui::TableNextColumn();
-                    ImGui::DragFloat("##RegionHeightInputText", &selectedRegion->pod.height, 0.005f, 0.0f, FLT_MAX, "%.2f", 0);
+                    if (ImGui::DragFloat("##RegionHeightInputText", &palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.height, 0.005f, 0.0f, FLT_MAX, "%.2f", 0))
+                        palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->ApplyAsPaletteInstance();
                     ImGui::TableNextRow();
                     ImGui::TableSetColumnIndex(0);
                     ImGui::Text("angle");
                     ImGui::TableNextColumn();
-                    ImGui::DragFloat("##RegionAngleInputText", &selectedRegion->pod.angle, 0.05f, 0.0f, 360, "%.2f", 0);
+                    if (ImGui::DragFloat("##RegionAngleInputText", &palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.angle, 0.05f, 0.0f, 360, "%.2f", 0))
+                        palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->ApplyAsPaletteInstance();
                     ImGui::TableNextRow();
                     ImGui::TableSetColumnIndex(0);
                     ImGui::Text("special event");
                     ImGui::TableNextColumn();
-                    if (ImGui::BeginCombo("##RegionSpecialEvent", SpecialEventTypeToString(static_cast<SpecialEventType>(selectedRegion->pod.specialEvent)).c_str()))
+                    if (ImGui::BeginCombo("##RegionSpecialEvent", SpecialEventTypeToString(static_cast<SpecialEventType>(palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.specialEvent)).c_str()))
                     {
                         for (int n = 0; n < SpecialEventTypes().size(); n++)
                         {
-                            const bool is_selected = (selectedRegion->pod.specialEvent == n);
+                            const bool is_selected = (palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.specialEvent == n);
                             if (ImGui::Selectable((SpecialEventTypeStrings()[n] + "##SpecialEventSelectable").c_str(), is_selected))
-                                selectedRegion->pod.specialEvent = n;
+                                palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.specialEvent = n;
 
                             // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
                             if (is_selected)
@@ -507,7 +531,14 @@ namespace application
                     ImGui::TableSetColumnIndex(0);
                     ImGui::Text("is obstacle?");
                     ImGui::TableNextColumn();
-                    ImGui::Checkbox("##RegionIsObstacle", &selectedRegion->pod.isObstacle);
+                    ImGui::Checkbox("##RegionIsObstacle", &palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.isObstacle);
+
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
+                    if (ImGui::Button("Delete Region"))
+                    {
+                        palette::RegionPalette::SingleInstance().Delete(palette::RegionPalette::SingleInstance().GetSingleSelectedRegion());
+                    }
                     imgui::EndSection();
                 }
             }
@@ -516,7 +547,7 @@ namespace application
         {
             imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
             imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
-            static WaveData* selectedWave = nullptr;
+            WaveData*& selectedWave = palette::WavePalette::SingleInstance().currentWaveData;
             if (ImGui::Button("Make new wave"))
                 InstanceManager::GetSingletonInstance().CreateInstance<WaveData>(Wave_TemplateData::GetInstance().GetDataKey());
 
@@ -580,7 +611,14 @@ namespace application
                         ImGui::EndDisabled();
                     ImGui::TableNextRow();
                     ImGui::TableSetColumnIndex(0);
-                    ImGui::Button("Select region");
+
+                    auto currentPaletteState = palette::WavePalette::SingleInstance().GetWavePaletteState();
+                    if (currentPaletteState == palette::WavePalette::WavePaletteState::SelectingTriggerRegion)
+                        ImGui::BeginDisabled();
+                    if (ImGui::Button("Select region##Trigger"))
+                        palette::WavePalette::SingleInstance().SetWavePaletteState(palette::WavePalette::WavePaletteState::SelectingTriggerRegion);
+                    if (currentPaletteState == palette::WavePalette::WavePaletteState::SelectingTriggerRegion)
+                        ImGui::EndDisabled();
 
                     /// 웨이브 진행 중 카메라의 이동을 제한하는 지역을 지정하는 부분
                     ImGui::TableNextRow();
@@ -588,15 +626,22 @@ namespace application
                     ImGui::Text("Constraint region");
                     ImGui::TableNextRow();
                     ImGui::TableSetColumnIndex(0);
-                    if (!triggerRegion)
+                    if (!constraintRegion)
                         ImGui::BeginDisabled();
                     // 지역 이름을 클릭하면 카메라가 지역의 위치로 이동
-                    if (ImGui::Button(triggerRegion ? yutility::GetString(triggerRegion->pod.name.c_str()).c_str() : "Region not selected"));
-                    if (!triggerRegion)
+                    if (ImGui::Button(constraintRegion ? yutility::GetString(constraintRegion->pod.name.c_str()).c_str() : "Region not selected"));
+                    if (!constraintRegion)
                         ImGui::EndDisabled();
+
                     ImGui::TableNextRow();
                     ImGui::TableSetColumnIndex(0);
-                    ImGui::Button("Select region");
+
+                    if (currentPaletteState == palette::WavePalette::WavePaletteState::SelectingConstraintRegion)
+                        ImGui::BeginDisabled();
+                    if (ImGui::Button("Select region##Constraint"))
+                        palette::WavePalette::SingleInstance().SetWavePaletteState(palette::WavePalette::WavePaletteState::SelectingConstraintRegion);
+                    if (currentPaletteState == palette::WavePalette::WavePaletteState::SelectingConstraintRegion)
+                        ImGui::EndDisabled();
 
                     imgui::EndSection();
                 }
@@ -609,7 +654,17 @@ namespace application
                         ImGui::TableNextRow();
                         ImGui::TableSetColumnIndex(0);
                         // n차 웨이브를 수정하는 부분
-                        if (ImGui::Button(ss.str().c_str()));
+                        if (i - 1 == palette::WavePalette::SingleInstance().currentSelectedWaveIndex)
+                            ImGui::BeginDisabled();
+                        if (ImGui::Button(ss.str().c_str()))
+                        {
+                            palette::WavePalette::SingleInstance().currentSelectedWaveIndex = i - 1;
+                        }
+                        else
+                        {
+                            if (i - 1 == palette::WavePalette::SingleInstance().currentSelectedWaveIndex)
+                                ImGui::EndDisabled();
+                        }
                         ImGui::TableNextColumn();
                         // n차 웨이브를 삭제하는 부분
                         if (ImGui::Button("X"));

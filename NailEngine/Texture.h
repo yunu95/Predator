@@ -17,7 +17,7 @@ public:
 	void UnBind(unsigned int slot);
 
 	void CreateFromResource(Microsoft::WRL::ComPtr<ID3D11Texture2D>& tex2D);
-	void CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag);
+	void CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag, int arraySize = 1);
 
 	virtual float GetWidth() override { return width; }
 	virtual float GetHeight() override { return height; }

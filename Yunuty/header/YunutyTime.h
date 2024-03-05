@@ -20,6 +20,8 @@ namespace yunutyEngine
         static chrono::system_clock::time_point lastFrameTime;
         static double timeScale;
         static double deltaTimeUnscaled;
+        static double timeElapsed;
+        static double timeElapsedUnscaled;
         static void Update();
         static queue<double> fpsQueue;
     public:
@@ -27,6 +29,8 @@ namespace yunutyEngine
         static double GetTimeScale();
         static double GetDeltaTime();
         static double GetDeltaTimeUnscaled();
+        static double GetTimeElapsed();
+        static double GetTimeElapsedUnscaled();
         static int GetFPS();
     };
 }

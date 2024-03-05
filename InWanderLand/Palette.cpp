@@ -8,16 +8,19 @@
 #include "UnitPalette.h"
 #include "TerrainPalette.h"
 #include "OrnamentPalette.h"
+#include "RegionPalette.h"
+#include "WavePalette.h"
 #include "Panel_SceneView.h"
 
 namespace application::editor::palette
 {
     void Palette::ResetPalettes()
     {
-        static_cast<Palette&>(RegionPalette::SingleInstance()).Reset();
         static_cast<Palette&>(UnitPalette::SingleInstance()).Reset();
         static_cast<Palette&>(TerrainPalette::SingleInstance()).Reset();
         static_cast<Palette&>(OrnamentPalette::SingleInstance()).Reset();
+        static_cast<Palette&>(RegionPalette::SingleInstance()).Reset();
+        static_cast<Palette&>(WavePalette::SingleInstance()).Reset();
     }
 
     void Palette::OnLeftClick()
@@ -36,12 +39,7 @@ namespace application::editor::palette
         case application::editor::palette::Palette::State::Select:
             if (pendingSelection)
             {
-                if (selection.find(pendingSelection) == selection.end())
-                {
-                    ClearSelection();
-                    InsertSelection(pendingSelection);
-                }
-                state = State::DraggingObjects;
+                OnSelectSingleInstance(pendingSelection);
                 lastFrameBrushPos = currentBrushPos;
                 UnHoverCurrentInstance();
             }
@@ -58,6 +56,7 @@ namespace application::editor::palette
             }
             break;
         case application::editor::palette::Palette::State::Place:
+            lastInstantiationTime = Time::GetTimeElapsedUnscaled();
             PlaceInstance(currentBrushPos);
             break;
             /// DraggingObjects,DraggingSelect 상태는 이미 좌클릭을 하고 있는 상태이기 때문에 아무것도 할 수 없음.
@@ -125,15 +124,17 @@ namespace application::editor::palette
     void Palette::OnDeletion()
     {
         for (auto each : selection)
-        {
-            if (each == pendingSelection)
-                pendingSelection = nullptr;
-            auto& contactingInstances = SelectionBox::Instance().GetContactingInstances();
-            contactingInstances.erase(each->GetPaletteInstance());
-
-            InstanceManager::GetSingletonInstance().DeleteInstance(each->GetUUID());
-        }
+            Delete(each);
         selection.clear();
+    }
+    void Palette::Delete(IEditableData* data)
+    {
+        if (data == pendingSelection)
+            pendingSelection = nullptr;
+        auto& contactingInstances = SelectionBox::Instance().GetContactingInstances();
+        contactingInstances.erase(data->GetPaletteInstance());
+
+        InstanceManager::GetSingletonInstance().DeleteInstance(data->GetUUID());
     }
     void Palette::SetAsSelectMode(bool isSelectMode)
     {
@@ -151,6 +152,15 @@ namespace application::editor::palette
     bool Palette::IsSelectMode()
     {
         return state != State::Place;
+    }
+    void Palette::OnSelectSingleInstance(IEditableData* data)
+    {
+        if (selection.find(data) == selection.end())
+        {
+            ClearSelection();
+            InsertSelection(data);
+        }
+        state = State::DraggingObjects;
     }
     bool Palette::IsClickingLeft()
     {
@@ -270,5 +280,14 @@ namespace application::editor::palette
         if (pendingSelection)
             pendingSelection->GetPaletteInstance()->OnHoverLeft();
         pendingSelection = nullptr;
+    }
+    bool Palette::CheckInstantiationCooltime()
+    {
+        if (auto currentTime = Time::GetTimeElapsedUnscaled(); currentTime - lastInstantiationTime > instantiationCooltime)
+        {
+            lastInstantiationTime = currentTime;
+            return true;
+        }
+        return false;
     }
 }

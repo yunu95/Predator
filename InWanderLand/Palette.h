@@ -44,6 +44,7 @@ namespace application
                 /// <param name="projectedWorldPos"> 마우스의 위치가 월드 좌표에 사영된 위치를 전달해 커서의 위치를 업데이트합니다.</param>
                 virtual void OnMouseMove(Vector3d projectedWorldPos, Vector2d normalizedScreenPos);
                 virtual void OnDeletion();
+                virtual void Delete(IEditableData* data);
                 /// <summary>
                 /// 팔레트를 객체 선택모드로 전환할지, 객체 배치 모드로 전환할지 설정합니다. isSelectMode가 참이면 선택모드로, 거짓이면 배치모드로 전환됩니다.
                 /// </summary>
@@ -72,10 +73,20 @@ namespace application
                 State GetCurrentState() { return state; }
                 bool AreThereAnyObjectSelected() { return selection.size() != 0; }
                 const std::unordered_set<IEditableData*>& GetSelections() { return selection; }
+                // Reset 함수는 맵 데이터를 로드할때마다 기존에 로드되어 있던 맵 데이터들간의 관계를 초기화하는데에 사용됩니다.
+                virtual void Reset()
+                {
+                    pendingSelection = nullptr;
+                    draggingObject = nullptr;
+                    selection.clear();
+                    state = State::Select;
+                    beforeState = State::None;
+                }
+
 
             protected:
-                // Reset 함수는 맵 데이터를 로드할때마다 기존에 로드되어 있던 맵 데이터들간의 관계를 초기화하는데에 사용됩니다.
-                virtual void Reset() {};
+                // 단일 객체에 대한 선택이 일어났을때 호출되는 콜백 함수, 기본 동작은 해당 객체를 선택 리스트에 추가한다.
+                virtual void OnSelectSingleInstance(IEditableData* data);
                 /// <summary>
                 /// 객체 배치를 시도할 때 호출되는 함수입니다. 해당 위치에 유닛, 지형, 장식물 등을 배치하고 배치된 객체를 반환하십시오.
                 /// 부득이한 여건으로 객체를 배치할 수 없다면 Null 포인터를 반환하십시오. 
@@ -104,6 +115,8 @@ namespace application
                 /// </summary>
                 virtual void CleanUpData();
 
+                // 마우스로 연이어 객체를 배치할 때의 시간 간격입니다.
+                float instantiationCooltime = 0.4f;
                 // 현재 팔레트 기능 조작의 상태
                 State state{ State::Select };
                 State beforeState{ State::None };
@@ -124,11 +137,15 @@ namespace application
                 void HoverClosestInstance();
                 // 현재 호버링중인 객체가 있다면 OnHoverLeft함수를 호출합니다. 
                 void UnHoverCurrentInstance();
+                // 객체를 배치할 수 있는지 여부를 쿨타임에 따라 판단하고, 쿨타임이 지났다면 쿨타임 시간을 갱신하고 true를 반환합니다.
+                bool CheckInstantiationCooltime();
 
                 bool isClickingLeft{ false };
                 Vector3d dragStartPos;
                 Vector3d currentBrushPos;
                 Vector3d lastFrameBrushPos;
+            private:
+                double lastInstantiationTime{0};
                 friend SelectionBox;
             };
         }

@@ -1143,6 +1143,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="PlayerSkillSystem.h" />
     <ClInclude Include="Wave.h" />
     <ClInclude Include="WaveData.h" />
+    <ClInclude Include="WaveInstance.h" />
     <ClInclude Include="WavePalette.h" />
     <ClInclude Include="Wave_TemplateData.h" />
     <ClInclude Include="WindowEvents.h" />

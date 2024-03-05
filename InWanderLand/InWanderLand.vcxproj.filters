@@ -316,6 +316,9 @@
     <Filter Include="Contents\SpecialEvent">
       <UniqueIdentifier>{38f84781-e01b-4784-b9e1-01f98814ffd8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Palette\EditorInstance\WaveInstance">
+      <UniqueIdentifier>{15318b50-b316-4e59-b5e8-fc3e0f36c3e8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Editor\IO\FileSystem">
       <UniqueIdentifier>{018fec7d-1ab2-4937-a43f-4face4d7b708}</UniqueIdentifier>
     </Filter>
@@ -796,6 +799,9 @@
     </ClInclude>
     <ClInclude Include="UIPanel.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveInstance.h">
+      <Filter>Editor\Palette\EditorInstance\WaveInstance</Filter>
     </ClInclude>
     <ClInclude Include="imgui_ModuleData.h">
       <Filter>Editor\imgui\Utility</Filter>

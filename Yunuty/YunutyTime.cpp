@@ -5,6 +5,8 @@
 double yunutyEngine::Time::timeScale = 1;
 chrono::system_clock::time_point yunutyEngine::Time::lastFrameTime = (chrono::system_clock::time_point::min)();
 double yunutyEngine::Time::deltaTimeUnscaled = 0;
+double yunutyEngine::Time::timeElapsed = 0;
+double yunutyEngine::Time::timeElapsedUnscaled = 0;
 queue<double> yunutyEngine::Time::fpsQueue;
 void yunutyEngine::Time::Update()
 {
@@ -27,6 +29,8 @@ void yunutyEngine::Time::Update()
     {
         fpsQueue.pop();
     }
+    timeElapsed += deltaTimeUnscaled * timeScale;
+    timeElapsedUnscaled += deltaTimeUnscaled;
 }
 void yunutyEngine::Time::SetTimeScale(const float& timeScale)
 {
@@ -43,6 +47,14 @@ double yunutyEngine::Time::GetDeltaTime()
 double yunutyEngine::Time::GetDeltaTimeUnscaled()
 {
     return deltaTimeUnscaled;
+}
+double yunutyEngine::Time::GetTimeElapsed()
+{
+    return timeElapsed;
+}
+double yunutyEngine::Time::GetTimeElapsedUnscaled()
+{
+    return timeElapsedUnscaled;
 }
 int yunutyEngine::Time::GetFPS()
 {
