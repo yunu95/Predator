@@ -8,13 +8,14 @@ namespace application::editor::palette
     {
         PaletteInstance::Start();
         mesh = AttachDebugMesh(GetGameObject()->AddGameObject(), DebugMeshType::Rectangle, yunuGI::Color{0, 0, 1}, true);
-        mesh->GetTransform()->SetLocalRotation( Quaternion({ 90,0,0 }));
+        mesh->GetGI().SetMaterial(0, GetColoredDebugMaterialTransparent({ 0,0,1 ,regionTransparency }));
+        mesh->GetTransform()->SetLocalRotation(Quaternion({ 90,0,0 }));
         SetHalfExtent(halfExtent);
     }
     void RegionEditorInstance::OnHover()
     {
         isHovering = true;
-        mesh->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 1,1,1 }, true));
+        mesh->GetGI().SetMaterial(0, GetColoredDebugMaterialTransparent({ 1,1,1 ,regionTransparency }));
     }
     void RegionEditorInstance::OnHoverLeft()
     {
@@ -23,13 +24,13 @@ namespace application::editor::palette
             OnSelected();
         else
         {
-            mesh->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,0,1 }, true));
+            mesh->GetGI().SetMaterial(0, GetColoredDebugMaterialTransparent({ 0,0,1 ,regionTransparency }));
         }
     }
     void RegionEditorInstance::OnSelected()
     {
         isSelected = true;
-        mesh->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,1,0 }, true));
+        mesh->GetGI().SetMaterial(0, GetColoredDebugMaterialTransparent({ 0,1,0 ,regionTransparency }));
     }
     void RegionEditorInstance::OnDeselected()
     {
@@ -38,7 +39,7 @@ namespace application::editor::palette
             OnHover();
         else
         {
-            mesh->GetGI().SetMaterial(0, GetColoredDebugMaterial({ 0,0,1 }, true));
+            mesh->GetGI().SetMaterial(0, GetColoredDebugMaterialTransparent({ 0,0,1 ,regionTransparency }));
         }
     }
     void RegionEditorInstance::Apply(const application::editor::RegionData* regionData)
@@ -58,8 +59,25 @@ namespace application::editor::palette
 
         if (wasStartCalled())
         {
-            pickingCollider->SetHalfExtent({ halfExtent.x,100,halfExtent.y });
-            mesh->GetTransform()->SetLocalScale( Vector3d{ halfExtent.x * 2,halfExtent.y * 2,1 });
+            pickingCollider->SetHalfExtent({ this->halfExtent.x,0.01,this->halfExtent.y });
+            mesh->GetTransform()->SetLocalScale(Vector3d{ halfExtent.x * 2,halfExtent.y * 2,1 });
         }
     }
+    /*void RegionEditorInstance::SetHalfExtent(const Vector3f& halfExtent)
+    {
+        this->halfExtent = halfExtent;
+
+        if (this->halfExtent.x < 0.01)
+            this->halfExtent.x = 0.01;
+        if (this->halfExtent.y < 0.01)
+            this->halfExtent.y = 0.01;
+        if (this->halfExtent.z < 0.01)
+            this->halfExtent.z = 0.01;
+
+        if (wasStartCalled())
+        {
+            pickingCollider->SetHalfExtent(this->halfExtent);
+            mesh->GetTransform()->SetLocalScale(Vector3d{ halfExtent.x * 2,halfExtent.y * 2,1 });
+        }
+    }*/
 }

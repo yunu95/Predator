@@ -23,6 +23,7 @@ namespace application
                 void SetHalfExtent(const Vector2f& halfExtent);
             protected:
             private:
+                static constexpr float regionTransparency{ 0.3f };
                 Vector2f halfExtent{ 1,1 };
                 yunutyEngine::graphics::StaticMeshRenderer* mesh{ nullptr };
                 bool isSelected{ false };

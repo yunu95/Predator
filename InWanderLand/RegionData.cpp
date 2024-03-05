@@ -3,6 +3,7 @@
 #include "RegionPalette.h"
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
+#include "Region_TemplateData.h"
 
 namespace application
 {
@@ -22,7 +23,7 @@ namespace application
 
         ITemplateData* RegionData::GetTemplateData()
         {
-            return nullptr;
+            return pod.templateData;
         }
 
         bool RegionData::SetTemplateData(const std::string& dataName)
@@ -38,6 +39,7 @@ namespace application
         {
             pod.x = newLoc.x;
             pod.z = newLoc.z;
+            ApplyAsPaletteInstance();
         };
 
         palette::PaletteInstance* RegionData::ApplyAsPaletteInstance()
@@ -97,6 +99,7 @@ namespace application
             : IEditableData(), pod()
         {
             pod.name = MakeUpName();
+            pod.templateData = static_cast<Region_TemplateData*>(templateDataManager.GetTemplateData(name));
             EnterDataFromTemplate();
         }
 

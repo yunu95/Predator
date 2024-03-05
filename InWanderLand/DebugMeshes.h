@@ -14,6 +14,7 @@ enum class DebugMeshType
 };
 
 yunuGI::IMaterial* GetColoredDebugMaterial(yunuGI::Color color, bool isWireFrame);
+yunuGI::IMaterial* GetColoredDebugMaterialTransparent(yunuGI::Color color);
 
 inline yunutyEngine::graphics::StaticMeshRenderer* AttachDebugMesh(GameObject* target, DebugMeshType meshType = DebugMeshType::Cube, yunuGI::Color color = yunuGI::Color::red(), bool isWireFrame = true)
 {

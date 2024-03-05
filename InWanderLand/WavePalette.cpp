@@ -35,6 +35,22 @@ namespace application
                 state = State::None;
                 CleanUpData();
             }
+            void WavePalette::OnSelectSingleInstance(IEditableData* data)
+            {
+                switch (wavePaletteState)
+                {
+                case WavePaletteState::None:
+                    break;
+                case WavePaletteState::SelectingConstraintRegion:
+                    currentWaveData->pod.contraintRegion = dynamic_cast<RegionData*>(data);
+                    wavePaletteState = WavePaletteState::None;
+                    break;
+                case WavePaletteState::SelectingTriggerRegion:
+                    currentWaveData->pod.triggerRegion = dynamic_cast<RegionData*>(data);
+                    wavePaletteState = WavePaletteState::None;
+                    break;
+                }
+            }
         }
     }
 }

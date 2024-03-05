@@ -1,4 +1,5 @@
 #include "UnitPalette.h"
+#include "WavePalette.h"
 #include "UnitEditorInstance.h"
 #include "SelectionBox.h"
 #include "InstanceManager.h"
@@ -29,6 +30,14 @@ namespace application::editor::palette
         instance->pod.position.y = worldPosition.y;
         instance->pod.position.z = worldPosition.z;
 
+        auto wave = WavePalette::SingleInstance().currentWaveData;
+        auto waveIdx = WavePalette::SingleInstance().currentSelectedWaveIndex;
+        bool isWaveUnit = wave && waveIdx >= 0;
+        if (isWaveUnit)
+        {
+            instance->pod.waveData = wave;
+            wave->InsertUnitData({ .unitData = instance,.waveIdx = waveIdx,.delay = WavePalette::SingleInstance().currentSelectedWaveTimeOffset });
+        }
         instance->ApplyAsPaletteInstance();
         return instance;
     }
@@ -38,7 +47,7 @@ namespace application::editor::palette
         Palette::OnMouseMove(projectedWorldPos, normalizedScreenPos);
         // 브러시 움직이기
         UnitBrush::Instance().GetTransform()->SetWorldPosition(projectedWorldPos);
-        if (IsClickingLeft() && !IsSelectMode())
+        if (IsClickingLeft() && !IsSelectMode() && CheckInstantiationCooltime())
             PlaceInstance(projectedWorldPos);
     }
 
@@ -88,11 +97,25 @@ namespace application::editor::palette
         }
         state = State::None;
         CleanUpData();
+        WavePalette::SingleInstance().currentSelectedWaveIndex = -1;
     }
 
     void UnitPalette::CleanUpData()
     {
         Palette::CleanUpData();
         Reset();
+    }
+    void UnitPalette::Delete(IEditableData* data)
+    {
+        auto unitData = dynamic_cast<UnitData*>(data);
+        if (unitData)
+        {
+            auto wave = unitData->pod.waveData;
+            if (wave)
+            {
+                wave->DeleteUnitData(unitData);
+            }
+        }
+        Palette::Delete(data);
     }
 }
