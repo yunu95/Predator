@@ -31,7 +31,7 @@ namespace application
 			bool LoadMapFile(const std::string& path);
 			bool SaveMapFile(const std::string& path);
 			std::string GetCurrentMapPath() const;
-			void SetCurrentMapPath(std::string& path);
+			void SetCurrentMapPath(const std::string& path);
 			void Clear();
 
 		private:

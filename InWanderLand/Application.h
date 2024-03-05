@@ -71,6 +71,8 @@ namespace application
             }
         }
 
+        void* GetWindowHandle();
+
     private:
         // ImGui 단계 처리
         void ImGuiUpdate();

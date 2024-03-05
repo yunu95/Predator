@@ -46,6 +46,15 @@ namespace application
 				}
 
 				template <>
+				bool DrawData(std::string label, const double& data)
+				{
+					float val = data;
+					bool returnVal = DragFloat_2Col(label, val);
+					const_cast<double&>(data) = val;
+					return returnVal;
+				}
+
+				template <>
 				bool DrawData(std::string label, const bool& data)
 				{
 					return Checkbox_2Col(label, const_cast<bool&>(data));

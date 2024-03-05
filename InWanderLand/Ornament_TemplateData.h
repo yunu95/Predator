@@ -20,7 +20,6 @@ namespace application
 		{
 			std::string thumbnailPath = "ImageButtons/Ornament_Default.png";
 			std::string fbxName = std::string();
-			bool check;
 
 			TO_JSON(POD_Ornament_TemplateData)
 			FROM_JSON(POD_Ornament_TemplateData)

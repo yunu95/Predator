@@ -998,6 +998,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="DualCastComponent.h" />
     <ClInclude Include="EditorResourceManager.h" />
     <ClInclude Include="FieldDamage.h" />
+    <ClInclude Include="FileSystem.h" />
     <ClInclude Include="HealerAutoAttackProjectile.h" />
     <ClInclude Include="HealerAutoAttackProjectilePool.h" />
     <ClInclude Include="HealerSkillSystem.h" />
@@ -1155,6 +1156,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="DualCastComponent.cpp" />
     <ClCompile Include="EditorResourceManager.cpp" />
     <ClCompile Include="FieldDamage.cpp" />
+    <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="HealerAutoAttackProjectile.cpp" />
     <ClCompile Include="DebugGraphic.cpp" />
     <ClCompile Include="DebugStaticMesh.cpp" />

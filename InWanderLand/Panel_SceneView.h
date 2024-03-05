@@ -51,6 +51,8 @@ namespace application
 			std::pair<unsigned int, unsigned int> GetRenderImageSize() const;
 			std::pair<double, double> GetCursorPosInScreenSpace() const;
 
+			bool IsMouseOverGizmo();
+
 		private:
 			SceneViewPanel();
 			
