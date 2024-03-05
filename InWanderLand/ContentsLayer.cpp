@@ -55,7 +55,7 @@ void GraphicsTest()
 	}
 
 	{
-		//auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stage1_Floor");
 		//obj->GetTransform()->SetLocalScale({ Vector3d{ 0.01f,0.01f,0.01f } });
 	}
 
@@ -65,23 +65,23 @@ void GraphicsTest()
 	//yunuGI::ITexture* tex2 = _resourceManager->GetTexture(L"Texture/RustedIron_Normal.png");
 	//yunuGI::ITexture* tex3 = _resourceManager->GetTexture(L"Texture/RustedIron_BaseColor.png");
 	//yunuGI::IMesh* mesh = _resourceManager->GetMesh(L"Sphere");
-	auto& shaderList = _resourceManager->GetShaderList();
-	yunuGI::IShader* shader;
-	for (auto& i : shaderList)
-	{
-		if (i->GetName() == L"Debug_AlphaPS.cso")
-		{
-			shader = i;
-		}
-	}
+	//auto& shaderList = _resourceManager->GetShaderList();
+	//yunuGI::IShader* shader;
+	//for (auto& i : shaderList)
+	//{
+	//	if (i->GetName() == L"Debug_AlphaPS.cso")
+	//	{
+	//		shader = i;
+	//	}
+	//}
 
-	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
-		//obj->GetTransform()->SetLocalScale({ Vector3d{ 0.01f,0.01f,0.01f } });
-		auto renderer = obj->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		renderer->GetGI().GetMaterial()->SetPixelShader(shader);
-		renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{0,0,1,0.3});
-	}
+	//{
+	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+	//	//obj->GetTransform()->SetLocalScale({ Vector3d{ 0.01f,0.01f,0.01f } });
+	//	auto renderer = obj->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//	renderer->GetGI().GetMaterial()->SetPixelShader(shader);
+	//	renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{0,0,1,0.3});
+	//}
 
 	//{
 	//	auto obj = Scene::getCurrentScene()->AddGameObject();
