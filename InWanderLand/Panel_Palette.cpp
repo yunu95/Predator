@@ -80,6 +80,7 @@ namespace application
                     ImGui_BeginRegionPalette();
                     ImGui::EndTabItem();
                 }
+
                 if (ImGui::BeginTabItem("Wave"))
                 {
                     ChangePalette(&wp);
@@ -268,7 +269,7 @@ namespace application
                 //ImGui::TextColored({ 1,0,0,1 }, "Wave is selected. Please select time offset and unit type to place.");
                 ImGui::TextWrapped("Wave is selected. Please select time offset and unit type to place.");
                 ImGui::PopStyleColor();
-                ImGui::DragFloat("time offset", &palette::WavePalette::SingleInstance().currentSelectedWaveTimeOffset, 0.05, 0, 10000);
+                ImGui::DragFloat("time offset", &palette::WavePalette::SingleInstance().currentSelectedWaveTimeOffset, 0.005, 0, 10000);
             }
             if (imgui::BeginSection_1Col(countIdx, "Unit List", ImGui::GetContentRegionAvail().x))
             {

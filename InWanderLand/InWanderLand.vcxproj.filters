@@ -319,6 +319,9 @@
     <Filter Include="Editor\Palette\EditorInstance\WaveInstance">
       <UniqueIdentifier>{15318b50-b316-4e59-b5e8-fc3e0f36c3e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\IO\FileSystem">
+      <UniqueIdentifier>{018fec7d-1ab2-4937-a43f-4face4d7b708}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -800,6 +803,9 @@
     <ClInclude Include="imgui_ModuleData.h">
       <Filter>Editor\imgui\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="FileSystem.h">
+      <Filter>Editor\IO\FileSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1235,6 +1241,9 @@
     </ClCompile>
     <ClCompile Include="UIManager.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem.cpp">
+      <Filter>Editor\IO\FileSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

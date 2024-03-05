@@ -49,6 +49,14 @@ namespace application
             //waveInstance->Apply(this);
             //return waveInstance;
         };
+        void WaveData::InsertUnitData(WaveUnitData waveUnitData)
+        {
+            waveUnitDataMap[waveUnitData.unitData] = waveUnitData;
+        }
+        void WaveData::DeleteUnitData(UnitData* unitData)
+        {
+            waveUnitDataMap.erase(unitData);
+        }
 
         bool WaveData::PreEncoding(json& data) const
         {

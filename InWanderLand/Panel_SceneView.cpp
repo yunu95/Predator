@@ -90,6 +90,11 @@ namespace application
             return cursorPos_InScreenSpace;
         }
 
+        bool SceneViewPanel::IsMouseOverGizmo()
+        {
+            return ImGuizmo::IsOver();
+        }
+
         void SceneViewPanel::ImGui_Update()
         {
             /// ImGui 관련 내부 변수 업데이트
@@ -330,6 +335,8 @@ namespace application
 
             auto beforeVTM = gvtm;
 
+            ImGuizmo::ViewManipulate(reinterpret_cast<float*>(&gvtm), 10 * sqrt(3), ImVec2(ImGui::GetWindowPos().x + renderImageSize.first - 128, ImGui::GetWindowPos().y + imageStartPos.second), ImVec2(128, 128), 0x10101010);
+
             if (pm->GetCurrentPalette()->AreThereAnyObjectSelected())
             {
                 auto& selections = pm->GetCurrentPalette()->GetSelections();
@@ -352,7 +359,7 @@ namespace application
                 auto objgwtm = math::ConvertWTM(tm);
                 if (ImGuizmo::Manipulate(reinterpret_cast<float*>(&beforeVTM), reinterpret_cast<float*>(&gptm), operation, mode, reinterpret_cast<float*>(&objgwtm), NULL, NULL, NULL, NULL))
                 {
-                    if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+                    if (!isGuizmoControl && ImGui::IsMouseDown(ImGuiMouseButton_Left))
                     {
                         OnStartControlGizmo();
                     }
@@ -531,6 +538,9 @@ namespace application
                 break;
             case palette::Palette_List::Region:
                 ImGui::BeginMenu("  Region", false);
+                break;
+            case palette::Palette_List::Wave:
+                ImGui::BeginMenu("    Wave", false);
                 break;
             default:
                 break;

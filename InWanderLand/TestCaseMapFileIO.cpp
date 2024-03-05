@@ -17,15 +17,15 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 void TestCaseMapFileIOInitializer()
 {
     auto& tdm = application::editor::TemplateDataManager::GetSingletonInstance();
-    tdm.CreateTemplateData("Terrain1", application::editor::DataType::TerrainData);
-    tdm.CreateTemplateData("Terrain2", application::editor::DataType::TerrainData);
-    tdm.CreateTemplateData("Terrain3", application::editor::DataType::TerrainData);
-    tdm.CreateTemplateData("Unit1", application::editor::DataType::UnitData);
-    tdm.CreateTemplateData("Unit2", application::editor::DataType::UnitData);
-    tdm.CreateTemplateData("Unit3", application::editor::DataType::UnitData);
-    tdm.CreateTemplateData("Ornament1", application::editor::DataType::OrnamentData);
-    tdm.CreateTemplateData("Ornament2", application::editor::DataType::OrnamentData);
-    tdm.CreateTemplateData("Ornament3", application::editor::DataType::OrnamentData);
+    tdm.CreateTemplateData("Terrain1", application::editor::DataType::TerrainData)->SetDataResourceName("Monster2");
+    tdm.CreateTemplateData("Terrain2", application::editor::DataType::TerrainData)->SetDataResourceName("Monster2");
+    tdm.CreateTemplateData("Terrain3", application::editor::DataType::TerrainData)->SetDataResourceName("Monster2");
+    tdm.CreateTemplateData("Unit1", application::editor::DataType::UnitData)->SetDataResourceName("Monster2");
+    tdm.CreateTemplateData("Unit2", application::editor::DataType::UnitData)->SetDataResourceName("Monster2");
+    tdm.CreateTemplateData("Unit3", application::editor::DataType::UnitData)->SetDataResourceName("Monster2");
+    tdm.CreateTemplateData("Ornament1", application::editor::DataType::OrnamentData)->SetDataResourceName("Monster2");
+    tdm.CreateTemplateData("Ornament2", application::editor::DataType::OrnamentData)->SetDataResourceName("Monster2");
+    tdm.CreateTemplateData("Ornament3", application::editor::DataType::OrnamentData)->SetDataResourceName("Monster2");
 
     auto& im = application::editor::InstanceManager::GetSingletonInstance();
     im.CreateInstance("Terrain1");
@@ -51,8 +51,9 @@ namespace tests
         TEST_METHOD(TestCaseMapFileIO)
         {
             application::Application& client = application::Application::CreateApplication(0, 0);
-            application::editor::EditorLayer::AssignTestInitializer(TestCaseMapFileIOInitializer);
             client.Initialize();
+
+            TestCaseMapFileIOInitializer();
 
             auto& mfm = application::editor::MapFileManager::GetSingletonInstance();
             auto& tdm = application::editor::TemplateDataManager::GetSingletonInstance();

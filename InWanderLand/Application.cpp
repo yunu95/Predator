@@ -330,6 +330,11 @@ namespace application
 		return resourceManager->GetFinalRenderImage();
 	}
 
+	void* Application::GetWindowHandle()
+	{
+		return hWND;
+	}
+
 	void Application::ImGuiUpdate()
 	{
 #ifdef EDITOR

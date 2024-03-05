@@ -27,6 +27,7 @@ namespace application
 {
     namespace editor
     {
+        class UnitData;
         class WaveData;
         class RegionData;
         class Wave_TemplateData;
@@ -46,7 +47,7 @@ namespace application
             // 웨이브가 발동되었을 때 카메라의 이동을 제한하는 지역
             RegionData* contraintRegion{ nullptr };
             Wave_TemplateData* templateData{ nullptr };
-            
+
             TO_JSON(POD_Wave)
                 FROM_JSON(POD_Wave)
         };
@@ -55,6 +56,12 @@ namespace application
         {
             friend class InstanceManager;
         public:
+            struct WaveUnitData
+            {
+                UnitData* unitData;
+                int waveIdx;
+                float delay;
+            };
             // 에디터에서 특정 웨이브에 종속적인 액션을 취하고 싶을 때 부르는 함수입니다.
             // 웨이브에서 소환되는 유닛들을 배치하고 싶을 때 사용됩니다.
             // 웨이브에 종속적이지 않은 동작을 하고 싶다면 이 함수의 매개변수로 nullptr을 넘겨주십시오.
@@ -66,6 +73,8 @@ namespace application
             virtual void OnRelocate(const Vector3d& newLoc) override;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
             virtual void ApplyAsPlaytimeObject() override {};
+            void InsertUnitData(WaveUnitData waveUnitData);
+            void DeleteUnitData(UnitData* unitData);
 
             POD_Wave pod;
 
@@ -79,6 +88,7 @@ namespace application
             static TemplateDataManager& templateDataManager;
             static WaveData* selectedEditorWave;
             palette::WaveEditorInstance* waveInstance{ nullptr };
+            unordered_map<UnitData*, WaveUnitData> waveUnitDataMap;
 
             WaveData();
             WaveData(const std::string& name);

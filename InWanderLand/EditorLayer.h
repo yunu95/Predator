@@ -16,6 +16,7 @@
 #include "EditorPanel.h"
 #include "EditorModule.h"
 #include "EditorEvents.h"
+#include "MapFileManager.h"
 
 namespace application
 {
@@ -70,6 +71,7 @@ namespace application
 
 			CommandManager& cm = CommandManager::GetSingletonInstance();
 			EditorCamera& editorCamera = EditorCamera::GetSingletonInstance();
+			MapFileManager& mfm = MapFileManager::GetSingletonInstance();
 
 			std::vector<Panel*> editorPanelList;
 			std::vector<EditorModule*> editorModuleList;	

@@ -10,6 +10,7 @@
 #include "OrnamentPalette.h"
 #include "RegionPalette.h"
 #include "WavePalette.h"
+#include "Panel_SceneView.h"
 
 namespace application::editor::palette
 {
@@ -21,6 +22,7 @@ namespace application::editor::palette
         static_cast<Palette&>(RegionPalette::SingleInstance()).Reset();
         static_cast<Palette&>(WavePalette::SingleInstance()).Reset();
     }
+
     void Palette::OnLeftClick()
     {
         isClickingLeft = true;
@@ -43,14 +45,18 @@ namespace application::editor::palette
             }
             else
             {
-                state = State::DraggingSelectBox;
-                dragStartPos = currentBrushPos;
-                ClearSelection();
-                SelectionBox::Instance().ShowSelectionBox(true);
-                SelectionBox::Instance().SetCoverage(dragStartPos, currentBrushPos);
+                if (!SceneViewPanel::GetSingletonInstance().IsMouseOverGizmo())
+                {
+                    state = State::DraggingSelectBox;
+                    dragStartPos = currentBrushPos;
+                    ClearSelection();
+                    SelectionBox::Instance().ShowSelectionBox(true);
+                    SelectionBox::Instance().SetCoverage(dragStartPos, currentBrushPos);
+                }
             }
             break;
         case application::editor::palette::Palette::State::Place:
+            lastInstantiationTime = Time::GetTimeElapsedUnscaled();
             PlaceInstance(currentBrushPos);
             break;
             /// DraggingObjects,DraggingSelect 상태는 이미 좌클릭을 하고 있는 상태이기 때문에 아무것도 할 수 없음.
@@ -274,5 +280,14 @@ namespace application::editor::palette
         if (pendingSelection)
             pendingSelection->GetPaletteInstance()->OnHoverLeft();
         pendingSelection = nullptr;
+    }
+    bool Palette::CheckInstantiationCooltime()
+    {
+        if (auto currentTime = Time::GetTimeElapsedUnscaled(); currentTime - lastInstantiationTime > instantiationCooltime)
+        {
+            lastInstantiationTime = currentTime;
+            return true;
+        }
+        return false;
     }
 }
