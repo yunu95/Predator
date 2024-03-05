@@ -35,9 +35,34 @@ void GraphicsTest()
 
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-    {
-        auto abj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
-    }
+	{
+		//auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
+		//obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{ -90,0,0 } });
+		//obj->GetTransform()->SetLocalScale({ Vector3d{ 0.01f,0.01f,0.01f } });
+
+		//for (auto each : animList)
+		//{
+		//	if (each->GetName() == L"Ani_Monster2_Walk")
+		//	{
+		//		anim = each;
+		//	}
+		//}
+		//anim->SetLoop(true);
+		//animator->GetGI().PushAnimation(anim);
+		//animator->GetGI().Play(anim);
+	}
+
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
+		//obj->GetTransform()->SetLocalScale({ Vector3d{ 0.01f,0.01f,0.01f } });
+	}
+
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Cuptower");
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,20.f });
+	//	//obj->GetTransform()->SetLocalRotation(Vector3d{ 90,0,0 });
+	//	auto& childVec = obj->GetChildren();
+	//}
 }
 
 
@@ -104,18 +129,19 @@ void application::contents::ContentsLayer::Initialize()
     const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 	resourceManager->LoadFile("FBXMaterial.scres");
-
+	
 	resourceManager->LoadFile("LeavesVS.cso");
 	resourceManager->LoadFile("LeavesPS.cso");
 
-    //resourceManager->LoadFile("FBX/Monster1");
-	resourceManager->LoadFile("FBX/SM_Bush_001");
-	resourceManager->LoadFile("FBX/SM_Bush_002");
+    resourceManager->LoadFile("FBX/Monster2");
+	//resourceManager->LoadFile("FBX/SM_Bush_001");
+	//resourceManager->LoadFile("FBX/SM_Bush_002");
+	//resourceManager->LoadFile("FBX/SM_Trunk_001");
 	///resourceManager->LoadFile("FBX/SM_CastleWall");
-	///resourceManager->LoadFile("FBX/SM_CastleWall_Door");
+	//resourceManager->LoadFile("FBX/SM_CastleWall_Door");
 	///resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
 	///resourceManager->LoadFile("FBX/SM_Chair");
-	///resourceManager->LoadFile("FBX/SM_Cuptower");
+	//resourceManager->LoadFile("FBX/SM_Cuptower");
 	///resourceManager->LoadFile("FBX/SM_Fork");
 	///resourceManager->LoadFile("FBX/SM_GuideBook");
 	///resourceManager->LoadFile("FBX/SM_Hat01");

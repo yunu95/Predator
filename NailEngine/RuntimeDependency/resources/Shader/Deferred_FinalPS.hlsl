@@ -22,15 +22,22 @@ float4 main(PixelIn input) : SV_Target
         clip(-1);
     }
 
-    float4 color = Temp0Map.Sample(sam, input.uv);
+    
+
+    
+    //float4 color = Temp0Map.Sample(sam, input.uv);
+    //color = saturate((color * (a * color + b)) / (color * (c * color + d) + e));
+    //color = pow(color, 1 / 2.2f);
+    //output = pow(output, 2.2f);
+    //lightPower = pow(lightPower, 1 / 2.2f);
+    //lightPower = pow(lightPower, 2.2f);
+    
     float4 specular = Temp2Map.Sample(sam, input.uv);
     float4 emissive = Temp3Map.Sample(sam, input.uv);
-    output = lightPower + emissive +specular;
-    //output = (lightPower) + specular;
+    output = lightPower + emissive + specular;
     
+   
     
-    //float4 albedo = Temp1Map.Sample(sam, input.uv);
-    //output = (albedo * color) + specular;
     
     return output;
 }

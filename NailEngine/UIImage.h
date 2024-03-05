@@ -1,7 +1,9 @@
 #pragma once
 #include "IRenderable.h"
 
-class UIImage : public IRenderable
+#include "Texture.h"
+
+class UIImage : public nail::IRenderable
 {
 public:
 	void SetTexture(yunuGI::ITexture* texture)
@@ -13,6 +15,16 @@ public:
 	{
 		return this->texture;
 	}
+
+	float GetWidth()
+	{
+		return (texture)->GetWidth();
+	};
+
+	float GetHeight()
+	{
+		return (texture)->GetHeight();
+	};
 
 	bool operator<(const UIImage& other) const
 	{
@@ -27,17 +39,20 @@ private:
 	yunuGI::ITexture* texture;
 };
 
-struct CompareSmartPtr {
-	bool operator()(const std::shared_ptr<IRenderable>& lhs, const std::shared_ptr<IRenderable>& rhs) const {
+struct CompareSmartPtr
+{
+	bool operator()(const std::shared_ptr<nail::IRenderable>& lhs, const std::shared_ptr<nail::IRenderable>& rhs) const
+	{
 		const auto& leftImage = std::static_pointer_cast<UIImage>(lhs);
 		const auto& rightImage = std::static_pointer_cast<UIImage>(rhs);
 
-		if (leftImage->layer != rightImage->layer) {
-			return leftImage->layer < rightImage->layer; // ´Ù¸¥ layerÀÎ °æ¿ì¿¡¸¸ ºñ±³
+		if (leftImage->layer != rightImage->layer)
+		{
+			return leftImage->layer < rightImage->layer; // ë‹¤ë¥¸ layerì¸ ê²½ìš°ì—ë§Œ ë¹„êµ
 		}
-
-		// ³ªÁß¿¡ ÀÌ¹ÌÁöÀÇ layer°¡ ÀÌ»óÇÏ´Ù¸é ÀÌ ÄÚµå¸¦ º¼ °Í ÁÖ¼Ò·Î ºñ±³ÇÏ±â¿¡ ¾î¶² µ¿ÀÛÀÌ ÀÏ¾î³¯ Áö È®½ÅÇÒ ¼ö ¾øÀ½
-
-		return leftImage.get() < rightImage.get();
+		else
+		{
+			return *leftImage < *rightImage;
+		}
 	}
 };

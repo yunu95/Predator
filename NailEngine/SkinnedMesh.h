@@ -9,7 +9,7 @@
 #include <vector>
 #include <memory>
 
-class SkinnedMesh : public IRenderable
+class SkinnedMesh : public nail::IRenderable
 {
 public:
 	SkinnedMesh()
@@ -22,6 +22,7 @@ public:
 		this->renderInfoVec.back()->renderInfo.materialIndex = 0;
 		this->renderInfoVec.back()->renderInfo.material = reinterpret_cast<Material*>(ResourceManager::Instance.Get().GetMaterial(L"SkinnedDefaultMaterial").get());
 	}
+
 	void SetBone(std::wstring fbxName)
 	{
 		this->fbxName = fbxName;
@@ -59,6 +60,7 @@ public:
 			i->renderInfo.wtm = wtm;
 		}
 	};
+
 	virtual void SetMesh(Mesh* mesh) override
 	{
 		this->mesh = mesh;
@@ -114,6 +116,7 @@ public:
 			i->renderInfo.isActive = isActive;
 		}
 	}
+
 public:
 	std::vector<std::shared_ptr<SkinnedRenderInfo>> renderInfoVec;
 

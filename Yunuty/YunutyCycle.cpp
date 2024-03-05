@@ -145,7 +145,7 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 
         ResetUpdateTargetComponents();
         for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
-            StartComponent(updateTargetComponents[i]);
+             StartComponent(updateTargetComponents[i]);
         for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
             UpdateComponent(updateTargetComponents[i]);
 

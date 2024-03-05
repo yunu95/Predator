@@ -9,19 +9,20 @@ private:
 
 	bool isQSkillStarted;
 	bool isWSkillStarted;
-
+	bool isQSkillPreviewOn;
 	bool isColliderSetActiveFalseSet;
+
+
 
 	float m_QSkillRadius;
 	float m_WSkillRadius;
 
 	float m_QskillRushSpeed = 10.0f;
-	float m_knockBackObjectRemainTime = 1.0f;
+	float m_knockBackObjectRemainTime = 3.0f;
 
 	float m_wSkillColliderRemainTime = 1.0f;
 
 	void SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen);
-
 
 public:
 	virtual void QSkillActivate(Vector3d skillPos) override;

@@ -13,6 +13,7 @@
 #include "IYunuGIDebugCube.h"
 #include "IYunuGIUIImage.h"
 
+가오리
 namespace yunuGIAdapter
 {
 	class FactoryAdapter : public yunuGI::IFactory

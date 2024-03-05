@@ -333,6 +333,7 @@ void FBXLoad()
 	resourceManager->LoadFile("LeavesPS.cso");
 
 	// Model
+	resourceManager->LoadFile("FBX/Monster2");
 	resourceManager->LoadFile("FBX/SM_Bush_001");
 	resourceManager->LoadFile("FBX/SM_Bush_002");
 	//resourceManager->LoadFile("FBX/SM_CastleWall");

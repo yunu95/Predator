@@ -16,7 +16,7 @@ namespace yunuGIAdapter
         {
 			renderable = std::make_shared<UIImage>();
             RenderSystem::Instance.Get().PushUIObject(renderable);
-            RenderSystem::Instance.Get().ReSortUIObject(renderable->layer, renderable);
+            RenderSystem::Instance.Get().ReSortUIObject(std::static_pointer_cast<UIImage>(renderable)->layer, renderable);
         }
 
 		~UIImageAdapter()
@@ -46,9 +46,18 @@ namespace yunuGIAdapter
 
 		virtual void SetLayer(int layer)
 		{
-            renderable->layer = layer;
+            //renderable->layer = layer;
             RenderSystem::Instance.Get().ReSortUIObject(layer, renderable);
 		};
+
+        virtual float GetWidth() override
+		{
+            return renderable->GetWidth();
+        };
+        virtual float GetHeight() override
+        {
+            return renderable->GetHeight();
+        };
 
     private:
         std::shared_ptr<UIImage> renderable;

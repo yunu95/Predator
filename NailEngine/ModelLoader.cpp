@@ -17,10 +17,15 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 
 	// Assimp Importer 객체 생성
 	Assimp::Importer importer;
-
+	
 	// Load Flag
+	/*unsigned int flag = aiProcess_Triangulate |
+		aiProcess_ConvertToLeftHanded | aiProcess_MakeLeftHanded  |aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
+		aiProcess_CalcTangentSpace | aiProcess_PopulateArmatureData |
+		aiProcess_FlipWindingOrder | aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
+		aiProcess_SortByPType | aiProcess_LimitBoneWeights;*/
 	unsigned int flag = aiProcess_Triangulate |
-		aiProcess_ConvertToLeftHanded | aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
+		aiProcess_ConvertToLeftHanded  | aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
 		aiProcess_CalcTangentSpace | aiProcess_PopulateArmatureData |
 		aiProcess_FlipWindingOrder | aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
 		aiProcess_SortByPType | aiProcess_LimitBoneWeights;
@@ -60,6 +65,7 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 	fbxNode->transformMatrix = this->ConvertToCloumnMajor(node->mTransformation);
 	//fbxNode->worldMatrix = parentMatrix * fbxNode->transformMatrix;
 	fbxNode->worldMatrix = fbxNode->transformMatrix * parentMatrix;
+	//fbxNode->worldMatrix = fbxNode->transformMatrix;
 
 	for (int i = 0; i < node->mNumMeshes; ++i)
 	{
@@ -127,6 +133,9 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 			//fbxMeshData.aabb[1] = DirectX::SimpleMath::Vector3{ tempMin.x,tempMin.y,tempMin.z };
 			fbxMeshData.aabb[0] = DirectX::SimpleMath::Vector3{ maxX,maxY,maxZ };
 			fbxMeshData.aabb[1] = DirectX::SimpleMath::Vector3{ minX,minY,minZ };
+
+			//fbxMeshData.aabb[0] = DirectX::SimpleMath::Vector3{ maxPoint.x,maxPoint.y,maxPoint.z};
+			//fbxMeshData.aabb[1] = DirectX::SimpleMath::Vector3{ minPoint.x,minPoint.y,minPoint.z};
 
 			fbxMeshData.vertex.emplace_back(vertex);
 		}

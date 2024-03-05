@@ -298,11 +298,20 @@
     <Filter Include="Editor\Palette\PaletteBrush\OrnamentBrush">
       <UniqueIdentifier>{8045da07-686d-4fea-a63c-27e4e233378c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\SkillSystem\SkillPreviewSystem">
+      <UniqueIdentifier>{c466da0b-6643-46f9-a7e8-e26c17fcc883}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Editor\Palette\List\WavePalette">
       <UniqueIdentifier>{376cdf4e-06ac-4e10-8c0f-0734bc537788}</UniqueIdentifier>
     </Filter>
     <Filter Include="InstanceStaticRegistry">
       <UniqueIdentifier>{661e11c8-f855-4df1-8f51-ecf2f7d59b3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{e3d49ab0-3158-48b4-8541-e69475369d59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\SingletonClasses">
+      <UniqueIdentifier>{81870322-b82c-41fd-af33-5af3b432941d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contents\SpecialEvent">
       <UniqueIdentifier>{38f84781-e01b-4784-b9e1-01f98814ffd8}</UniqueIdentifier>
@@ -770,6 +779,18 @@
     <ClInclude Include="Wave_TemplateData.h">
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClInclude>
+    <ClInclude Include="SkillPreviewSystem.h">
+      <Filter>Contents\SkillSystem\SkillPreviewSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="UIButton.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SingletonUpdate.h">
+      <Filter>Contents\SingletonClasses</Filter>
+    </ClInclude>
     <ClInclude Include="SpecialEvent.h">
       <Filter>Contents\SpecialEvent</Filter>
     </ClInclude>
@@ -1199,6 +1220,18 @@
     </ClCompile>
     <ClCompile Include="Wave_TemplateData.cpp">
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetUISystem.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillPreviewSystem.cpp">
+      <Filter>Contents\SkillSystem\SkillPreviewSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="UIButton.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

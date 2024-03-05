@@ -19,8 +19,8 @@ public:
 	void CreateFromResource(Microsoft::WRL::ComPtr<ID3D11Texture2D>& tex2D);
 	void CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag);
 
-	float GetWidth() { return width; }
-	float GetHeight() { return height; }
+	virtual float GetWidth() override { return width; }
+	virtual float GetHeight() override { return height; }
 
 #pragma region Getter
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>& GetRTV() { return this->RTV; }

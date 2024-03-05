@@ -28,6 +28,11 @@ struct VertexOut
 
 row_major matrix GetAnimationMatrix(VertexIn input)
 {
+    if (transitionDesc[input.instanceID].curr.animIndex == -1)
+    {
+        return input.world;
+    }
+    
     float indices[4] = { input.indices.x, input.indices.y, input.indices.z, input.indices.w };
     float weights[4] = { input.weight.x, input.weight.y, input.weight.z, input.weight.w };
 
