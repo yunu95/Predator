@@ -5,6 +5,7 @@
 #pragma once
 
 #include "ITemplateData.h"
+#include "PodStructs.h"
 
 #include <string>
 #include <vector>
@@ -14,11 +15,12 @@ namespace application
 	namespace editor
 	{
 		class Ornament_TemplateData;
-
+		
 		struct POD_Ornament_TemplateData
 		{
 			std::string thumbnailPath = "ImageButtons/Ornament_Default.png";
 			std::string fbxName = std::string();
+			bool check;
 
 			TO_JSON(POD_Ornament_TemplateData)
 			FROM_JSON(POD_Ornament_TemplateData)

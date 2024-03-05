@@ -119,6 +119,7 @@ namespace application::editor::palette
     {
         for (auto each : selection)
             Delete(each);
+        selection.clear();
     }
     void Palette::Delete(IEditableData* data)
     {
@@ -128,7 +129,6 @@ namespace application::editor::palette
         contactingInstances.erase(data->GetPaletteInstance());
 
         InstanceManager::GetSingletonInstance().DeleteInstance(data->GetUUID());
-        selection.clear();
     }
     void Palette::SetAsSelectMode(bool isSelectMode)
     {

@@ -797,6 +797,9 @@
     <ClInclude Include="WaveInstance.h">
       <Filter>Editor\Palette\EditorInstance\WaveInstance</Filter>
     </ClInclude>
+    <ClInclude Include="imgui_ModuleData.h">
+      <Filter>Editor\imgui\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">

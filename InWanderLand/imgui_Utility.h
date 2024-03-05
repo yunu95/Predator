@@ -3,6 +3,10 @@
 
 #pragma once
 
+#include "Storable.h"
+#include "ITemplateData.h"
+#include "TemplateDataList.h"
+
 #include "imgui.h"
 #include "imgui_internal.h"
 
@@ -72,6 +76,9 @@ namespace application
 			bool DragInt_2Col(std::string valName, int& value, float speed = 1.0f, int min = 0, int max = 0);
 			bool Checkbox_2Col(std::string valName, bool& value);
 			bool Dropdown_2Col(std::string valName, const char** options, int optionCount, int* selected);
+			bool Vector2_2Col(std::string valName, float& x, float& y, float reset_x = 0.0f, float reset_y = 0.0f);
+			bool Vector3_2Col(std::string valName, float& x, float& y, float& z, float reset_x = 0.0f, float reset_y = 0.0f, float reset_z = 0.0f);
+			bool Vector4_2Col(std::string valName, float& x, float& y, float& z, float& w, float reset_x = 0.0f, float reset_y = 0.0f, float reset_z = 0.0f, float reset_w = 1.0f);
 #pragma endregion
 
 			// 여기서 bool은 직접 값을 넣어서 변경했는지에 대한 여부를 반환함

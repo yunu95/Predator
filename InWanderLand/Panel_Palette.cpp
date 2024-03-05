@@ -5,10 +5,11 @@
 #include "EditorCommonEvents.h"
 #include "Wave_TemplateData.h"
 #include "WaveData.h"
-#include "WavePalette.h"
 #include "Region_TemplateData.h"
 #include "RegionData.h"
 #include "SpecialEvent.h"
+#include "WavePalette.h"
+#include "RegionPalette.h"
 
 #include "YunutyEngine.h"
 
@@ -257,7 +258,18 @@ namespace application
             imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 
             int countIdx = 0;
-
+            bool isPlacingWaveUnit = palette::WavePalette::SingleInstance().currentWaveData && palette::WavePalette::SingleInstance().currentSelectedWaveIndex >= 0;
+            if (isPlacingWaveUnit)
+            {
+                //stringstream ss;
+                //ss << "Wave is selected. Please select time offset and unit type to place.";
+                //ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 0.04f, 0.0f, 0.96f, 1.0f });
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1.0f, 0.0f, 0.0f, 1.0f });
+                //ImGui::TextColored({ 1,0,0,1 }, "Wave is selected. Please select time offset and unit type to place.");
+                ImGui::TextWrapped("Wave is selected. Please select time offset and unit type to place.");
+                ImGui::PopStyleColor();
+                ImGui::DragFloat("time offset", &palette::WavePalette::SingleInstance().currentSelectedWaveTimeOffset, 0.05, 0, 10000);
+            }
             if (imgui::BeginSection_1Col(countIdx, "Unit List", ImGui::GetContentRegionAvail().x))
             {
                 auto uSize = tdm.GetDataList(DataType::UnitData).size();
@@ -297,7 +309,7 @@ namespace application
                             // 이때, unitButton 에도 pushback 해주어 Size를 추가해야 함
                             /// 임시로 Unit Template Data 하나를 추가하는 로직을 구현함
                             auto td = tdm.CreateTemplateData<Unit_TemplateData>("UnitButton" + std::to_string(i));
-                            td->SetDataResourceName("Monster2");
+                            td->SetDataResourceName("SM_Bush_001");
                             unitButton.push_back(false);
                         }
                     }
@@ -535,7 +547,6 @@ namespace application
             imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
             imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
             WaveData*& selectedWave = palette::WavePalette::SingleInstance().currentWaveData;
-
             if (ImGui::Button("Make new wave"))
                 InstanceManager::GetSingletonInstance().CreateInstance<WaveData>(Wave_TemplateData::GetInstance().GetDataKey());
 
@@ -642,7 +653,17 @@ namespace application
                         ImGui::TableNextRow();
                         ImGui::TableSetColumnIndex(0);
                         // n차 웨이브를 수정하는 부분
-                        if (ImGui::Button(ss.str().c_str()));
+                        if (i - 1 == palette::WavePalette::SingleInstance().currentSelectedWaveIndex)
+                            ImGui::BeginDisabled();
+                        if (ImGui::Button(ss.str().c_str()))
+                        {
+                            palette::WavePalette::SingleInstance().currentSelectedWaveIndex = i - 1;
+                        }
+                        else
+                        {
+                            if (i - 1 == palette::WavePalette::SingleInstance().currentSelectedWaveIndex)
+                                ImGui::EndDisabled();
+                        }
                         ImGui::TableNextColumn();
                         // n차 웨이브를 삭제하는 부분
                         if (ImGui::Button("X"));

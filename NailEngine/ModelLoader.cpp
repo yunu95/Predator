@@ -28,9 +28,10 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 		aiProcess_ConvertToLeftHanded  | aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
 		aiProcess_CalcTangentSpace | aiProcess_PopulateArmatureData |
 		aiProcess_FlipWindingOrder | aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
-		aiProcess_SortByPType | aiProcess_LimitBoneWeights;
+		aiProcess_SortByPType | aiProcess_LimitBoneWeights | aiProcess_FixInfacingNormals;
 
 	const aiScene* scene = importer.ReadFile(filePath, flag);
+	auto temp = importer.GetErrorString();
 
 	if (!scene) {
 		assert(FALSE);
