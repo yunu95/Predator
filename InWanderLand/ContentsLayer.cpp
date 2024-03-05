@@ -34,7 +34,20 @@ void GraphicsTest()
 	camObj->AddComponent<tests::GraphicsTestCam>();
 
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		obj->GetTransform()->SetLocalPosition(Vector3d{0,0,-1});
+		auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
+		yunuGI::Color color{ 1,0,0,1 };
+		light->GetGI().SetLightDiffuseColor(color);
+		light->GetGI().SetRange(1);
+	}
+	yunuGI::IMesh* mesh = _resourceManager->GetMesh(L"Cube");
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(mesh);
+	}
 }
 
 
