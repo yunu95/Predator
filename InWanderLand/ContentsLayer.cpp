@@ -30,10 +30,10 @@ std::function<void()> application::contents::ContentsLayer::testInitializer;
 /// 그래픽스 테스트용
 void GraphicsTest()
 {
-    auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    camObj->AddComponent<tests::GraphicsTestCam>();
+	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	camObj->AddComponent<tests::GraphicsTestCam>();
 
-    const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	_resourceManager->LoadFile("Texture/RustedIron_ARM.png");
 	_resourceManager->LoadFile("Texture/RustedIron_Normal.png");
 	_resourceManager->LoadFile("Texture/RustedIron_BaseColor.png");
@@ -55,29 +55,43 @@ void GraphicsTest()
 	}
 
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
+		//auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
 		//obj->GetTransform()->SetLocalScale({ Vector3d{ 0.01f,0.01f,0.01f } });
 	}
 
-	//{
-	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Stone");
-	//	obj->GetTransform()->SetLocalScale({ Vector3d{ 0.01f,0.01f,0.01f } });
-	//}
 
-	yunuGI::ITexture* tex = _resourceManager->GetTexture(L"Texture/RustedIron_ARM.png");
-	yunuGI::ITexture* tex2 = _resourceManager->GetTexture(L"Texture/RustedIron_Normal.png");
-	yunuGI::ITexture* tex3 = _resourceManager->GetTexture(L"Texture/RustedIron_BaseColor.png");
-	yunuGI::IMesh* mesh = _resourceManager->GetMesh(L"Sphere");
-	
+
+	//yunuGI::ITexture* tex = _resourceManager->GetTexture(L"Texture/RustedIron_ARM.png");
+	//yunuGI::ITexture* tex2 = _resourceManager->GetTexture(L"Texture/RustedIron_Normal.png");
+	//yunuGI::ITexture* tex3 = _resourceManager->GetTexture(L"Texture/RustedIron_BaseColor.png");
+	//yunuGI::IMesh* mesh = _resourceManager->GetMesh(L"Sphere");
+	auto& shaderList = _resourceManager->GetShaderList();
+	yunuGI::IShader* shader;
+	for (auto& i : shaderList)
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObject();
-		//obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
-		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		renderer->GetGI().SetMesh(mesh);
-		renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, tex3);
-		renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ARM, tex);
-		renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::NORMAL, tex2);
+		if (i->GetName() == L"Debug_AlphaPS.cso")
+		{
+			shader = i;
+		}
 	}
+
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+		//obj->GetTransform()->SetLocalScale({ Vector3d{ 0.01f,0.01f,0.01f } });
+		auto renderer = obj->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().GetMaterial()->SetPixelShader(shader);
+		renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{0,0,1,0.3});
+	}
+
+	//{
+	//	auto obj = Scene::getCurrentScene()->AddGameObject();
+	//	//obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
+	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//	renderer->GetGI().SetMesh(mesh);
+	//	renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, tex3);
+	//	renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ARM, tex);
+	//	renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::NORMAL, tex2);
+	//}
 
 	//{
 	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Cuptower");
@@ -135,30 +149,30 @@ void GraphicsTest()
 //}
 void application::contents::ContentsLayer::Initialize()
 {
-    if (ContentsLayer::testInitializer)
-    {
-        ContentsLayer::testInitializer();
-        return;
-    }
+	if (ContentsLayer::testInitializer)
+	{
+		ContentsLayer::testInitializer();
+		return;
+	}
 
 
-    //auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //camObj->GetTransform()->SetLocalPosition(Vector3d(0, 20, -10));
-    //camObj->GetTransform()->SetLocalRotation( Quaternion(Vector3d(60, 0, 0)));
-    //auto roamingCam = camObj->AddComponent<RTSCam>();
-    //roamingCam->SetCameraMain();
+	//auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//camObj->GetTransform()->SetLocalPosition(Vector3d(0, 20, -10));
+	//camObj->GetTransform()->SetLocalRotation( Quaternion(Vector3d(60, 0, 0)));
+	//auto roamingCam = camObj->AddComponent<RTSCam>();
+	//roamingCam->SetCameraMain();
 
-    const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	//resourceManager->LoadFile("FBXMaterial.scres");
-	
+	resourceManager->LoadFile("FBXMaterial.scres");
+
 	resourceManager->LoadFile("LeavesVS.cso");
 	resourceManager->LoadFile("LeavesPS.cso");
 
-    resourceManager->LoadFile("FBX/Monster2");
-    resourceManager->LoadFile("FBX/Stone");
-	//resourceManager->LoadFile("FBX/SM_Bush_001");
-	//resourceManager->LoadFile("FBX/SM_Bush_002");
+	resourceManager->LoadFile("FBX/Monster2");
+	resourceManager->LoadFile("FBX/Stone");
+	resourceManager->LoadFile("FBX/SM_Bush_001");
+	resourceManager->LoadFile("FBX/SM_Bush_002");
 	resourceManager->LoadFile("FBX/SM_Trunk_001");
 	resourceManager->LoadFile("FBX/SM_CastleWall");
 	resourceManager->LoadFile("FBX/SM_CastleWall_Door");
@@ -182,7 +196,7 @@ void application::contents::ContentsLayer::Initialize()
 	resourceManager->LoadFile("FBX/SM_Temple_Stairs");
 	resourceManager->LoadFile("FBX/SM_Temple_Welcome");
 	resourceManager->LoadFile("FBX/SM_Trunk_001");
-    resourceManager->LoadFile("FBX/Spear");
+	resourceManager->LoadFile("FBX/Spear");
 
 #ifndef EDITOR
 #ifdef GRAPHICS_TEST
@@ -205,40 +219,40 @@ void application::contents::ContentsLayer::Initialize()
 	}
 	GraphicsTest();
 #else
-    {
-        yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-        auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        auto camComp = camObj->AddComponent<RTSCam>();
-        camObj->GetTransform()->SetLocalPosition({ 0,10,0 });
-        auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-        auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
-        light->GetGI().SetLightDiffuseColor(color);
-        directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
-        yunutyEngine::NavigationAgent* agent = nullptr;
-        {
-            agent = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationAgent>();
-            agent->GetTransform()->SetLocalPosition(Vector3d{ 0,0,20 });
-            agent->SetSpeed(5);
-            agent->SetRadius(0.5);
-            agent->AssignToNavigationField(&SingleNavigationField::Instance());
-            auto staticMesh = agent->GetGameObject()->AddGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-            staticMesh->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(L"Capsule"));
-            staticMesh->GetGI().GetMaterial()->SetColor({ 0.75,0.75,0.75,1 });
-            staticMesh->GetTransform()->SetLocalPosition(Vector3d{ 0,0.5,0 });
-        }
+	{
+		yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+		auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto camComp = camObj->AddComponent<RTSCam>();
+		camObj->GetTransform()->SetLocalPosition({ 0,10,0 });
+		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+		auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
+		light->GetGI().SetLightDiffuseColor(color);
+		directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
+		yunutyEngine::NavigationAgent* agent = nullptr;
+		{
+			agent = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationAgent>();
+			agent->GetTransform()->SetLocalPosition(Vector3d{ 0,0,20 });
+			agent->SetSpeed(5);
+			agent->SetRadius(0.5);
+			agent->AssignToNavigationField(&SingleNavigationField::Instance());
+			auto staticMesh = agent->GetGameObject()->AddGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+			staticMesh->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(L"Capsule"));
+			staticMesh->GetGI().GetMaterial()->SetColor({ 0.75,0.75,0.75,1 });
+			staticMesh->GetTransform()->SetLocalPosition(Vector3d{ 0,0.5,0 });
+		}
 
-        editor::MapFileManager::GetSingletonInstance().LoadMapFile("TestMap.pmap");
-        editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
+		editor::MapFileManager::GetSingletonInstance().LoadMapFile("TestMap.pmap");
+		editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
-    }
+	}
 #endif
 #endif // ! EDITOR
 }
 
 void application::contents::ContentsLayer::Update(float ts)
 {
-    //std::cout << Time::GetFPS() << std::endl;
+	//std::cout << Time::GetFPS() << std::endl;
 }
 
 void application::contents::ContentsLayer::GUIProgress()
@@ -254,11 +268,11 @@ void application::contents::ContentsLayer::Finalize()
 #ifdef GEN_TESTS
 void application::contents::ContentsLayer::AssignTestInitializer(std::function<void()> testInitializer)
 {
-    ContentsLayer::testInitializer = testInitializer;
-    YunutyCycle::SingleInstance().onExceptionThrown = [](const std::exception& e) {
-        application::Application::GetInstance().AddMainLoopTodo([=]() {
-            Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
-            });
-    };
+	ContentsLayer::testInitializer = testInitializer;
+	YunutyCycle::SingleInstance().onExceptionThrown = [](const std::exception& e) {
+		application::Application::GetInstance().AddMainLoopTodo([=]() {
+			Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
+});
+	};
 }
 #endif
