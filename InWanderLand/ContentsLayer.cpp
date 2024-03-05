@@ -196,6 +196,7 @@ void application::contents::ContentsLayer::Initialize()
 	resourceManager->LoadFile("FBX/SM_Temple_Stairs");
 	resourceManager->LoadFile("FBX/SM_Temple_Welcome");
 	resourceManager->LoadFile("FBX/SM_Trunk_001");
+	resourceManager->LoadFile("FBX/SM_Stage1_Floor");
 	resourceManager->LoadFile("FBX/Spear");
 
 #ifndef EDITOR

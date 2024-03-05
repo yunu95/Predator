@@ -85,6 +85,11 @@ namespace application
             }
         }
 
+        bool MapFileManager::SaveStaticOrnaments(const std::string& path)
+        {
+            return false;
+        }
+
         bool MapFileManager::LoadMapFile(const std::string& path)
         {
             std::ifstream loadFile{ path };
