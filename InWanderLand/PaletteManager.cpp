@@ -14,6 +14,7 @@ namespace application
 				paletteList[(int)Palette_List::Unit] = &UnitPalette::SingleInstance();
 				paletteList[(int)Palette_List::Ornament] = &OrnamentPalette::SingleInstance();
 				paletteList[(int)Palette_List::Region] = &RegionPalette::SingleInstance();
+				paletteList[(int)Palette_List::Wave] = &WavePalette::SingleInstance();
 
 				SetCurrentPalette(paletteList[(int)Palette_List::Terrain]);
 			}
@@ -50,6 +51,10 @@ namespace application
 				else if (currentPalette == paletteList[(int)Palette_List::Region])
 				{
 					return Palette_List::Region;
+				}
+				else if (currentPalette == paletteList[(int)Palette_List::Wave])
+				{
+					return Palette_List::Wave;
 				}
 
 				return Palette_List::None;

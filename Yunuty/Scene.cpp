@@ -11,8 +11,7 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
 
 	gameObjectChild->GetTransform()->SetLocalPosition(Vector3d{ fbxNode->pos.x,fbxNode->pos.y ,fbxNode->pos.z });
 	gameObjectChild->GetTransform()->SetLocalScale(Vector3d{ fbxNode->scale.x,fbxNode->scale.y ,fbxNode->scale.z });
-	gameObjectChild->GetTransform()->SetLocalRotation(Quaternion{ fbxNode->quat.w, fbxNode->quat.x,fbxNode->quat.y,fbxNode->quat.z });
-	//gameObjectChild->GetTransform()->SetLocalRotation(Quaternion{ fbxNode->quat.x,fbxNode->quat.y,fbxNode->quat.z,fbxNode->quat.w });
+	//gameObjectChild->GetTransform()->SetLocalRotation(Quaternion{ fbxNode->quat.w, fbxNode->quat.x,fbxNode->quat.y,fbxNode->quat.z });
 
 	if (!fbxNode->hasAnimation)
 	{

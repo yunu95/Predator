@@ -41,7 +41,7 @@ namespace application
 
                 std::string fbxName;
                 std::vector<float> scale(3);
-                std::vector<float> rotation(3);
+                std::vector<double> rotation(3);
                 std::vector<float> location(3);
 
                 for (int i = 0; i < objSize; i++)
@@ -126,7 +126,7 @@ namespace application
 #ifdef EDITOR
                     Application::DispatchEvent<LoadEvent>();
 #endif
-
+                    currentMapPath = path;
                     return true;
                 }
             }
@@ -188,7 +188,7 @@ namespace application
             return currentMapPath;
         }
 
-        void MapFileManager::SetCurrentMapPath(std::string& path)
+        void MapFileManager::SetCurrentMapPath(const std::string& path)
         {
             currentMapPath = path;
         }

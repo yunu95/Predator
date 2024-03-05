@@ -30,7 +30,7 @@ namespace application
         {
             Ornament_TemplateData* templateData = nullptr;
             POD_Vector3<float> position = POD_Vector3<float>();
-            POD_Quaternion<float> rotation = POD_Quaternion<float>();
+            POD_Quaternion<double> rotation = POD_Quaternion<double>();
             POD_Vector3<float> scale = { 1,1,1 };
 
             TO_JSON(POD_Ornament)

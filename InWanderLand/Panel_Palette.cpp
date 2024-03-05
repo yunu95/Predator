@@ -78,6 +78,7 @@ namespace application
                     ImGui_BeginRegionPalette();
                     ImGui::EndTabItem();
                 }
+
                 if (ImGui::BeginTabItem("Wave"))
                 {
                     ChangePalette(&wp);

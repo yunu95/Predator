@@ -1,7 +1,7 @@
 #include "InWanderLand.h"
+
 #include "EditorLayer.h"
 
-#include "MapFileManager.h"
 #include "EditorPanel.h"
 #include "PanelList.h"
 #include "ModuleList.h"
@@ -13,6 +13,7 @@
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
+#include "imgui_Utility.h"
 
 #include "MenubarCommands.h"
 #include "Application.h"
@@ -207,9 +208,13 @@ namespace application
 				{
 					cm.AddQueue(std::make_shared<LoadMapCommand>());
 				}
-				if (ImGui::MenuItem("SaveMap", "Ctrl + S"))
+				if (ImGui::MenuItem("SaveMap", "Ctrl + S", false, !mfm.GetCurrentMapPath().empty()))
 				{
 					cm.AddQueue(std::make_shared<SaveMapCommand>());
+				}
+				if (ImGui::MenuItem("SaveMapAs"))
+				{
+					cm.AddQueue(std::make_shared<SaveMapCommand>(true));
 				}
 				if (ImGui::MenuItem("Exit"))
 				{
@@ -233,6 +238,8 @@ namespace application
 				}
 				ImGui::EndMenu();
 			}
+			imgui::ShiftCursorX(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(mfm.GetCurrentMapPath().c_str()).x - 10);
+			ImGui::Text(mfm.GetCurrentMapPath().c_str());
 			ImGui::EndMenuBar();
 		}
 	}

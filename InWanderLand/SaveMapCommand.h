@@ -21,11 +21,12 @@ namespace application
 			: public Command
 		{
 		public:
-			SaveMapCommand();
+			SaveMapCommand(bool saveAs = false);
 
 			virtual void Execute() override;
 
-		private:
+		private:			
+			bool saveAs = false;
 			MapFileManager& mapFileManager;
 		};
 	}
