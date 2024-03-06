@@ -74,7 +74,6 @@ namespace snippets
 			directionalLight->GetTransform()->SetLocalRotation( Vector3d(45, 45, 0));
 
 			SelectionBox::Instance();
-			yunutyEngine::YunutyCycle::SingleInstance().Play();
 		}
 		TEST_CLASS(SnippetTerrainPaletteClass)
 		{

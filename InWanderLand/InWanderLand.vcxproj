@@ -1127,6 +1127,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="TestUtils.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIManager.h" />
+    <ClInclude Include="UIPanel.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="UnitStatusComponent.h" />
@@ -1143,6 +1144,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="PlayerSkillSystem.h" />
     <ClInclude Include="Wave.h" />
     <ClInclude Include="WaveData.h" />
+    <ClInclude Include="WaveInstance.h" />
     <ClInclude Include="WavePalette.h" />
     <ClInclude Include="Wave_TemplateData.h" />
     <ClInclude Include="WindowEvents.h" />
@@ -1270,6 +1272,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="TestCaseUpdateComponents.cpp" />
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIManager.cpp" />
+    <ClCompile Include="UIPanel.cpp" />
     <ClCompile Include="UnitBrush.cpp" />
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="UnitEditorInstance.cpp" />

@@ -23,7 +23,7 @@ namespace application
             {
                 SelectOrnamentTemplateData(nullptr);
             }
- 
+
             void OrnamentPalette::Reset()
             {
                 UnselectOrnamentTemplateData();
@@ -46,7 +46,10 @@ namespace application
                 // 브러시 움직이기
                 OrnamentBrush::Instance().GetTransform()->SetWorldPosition(projectedWorldPos);
                 if (IsClickingLeft() && !IsSelectMode())
-                    PlaceInstance(projectedWorldPos);
+                {
+                    if (CheckInstantiationCooltime())
+                        PlaceInstance(projectedWorldPos);
+                }
             }
 
             void OrnamentPalette::SetAsSelectMode(bool isSelectMode)
@@ -72,14 +75,14 @@ namespace application
             {
                 switch (beforeState)
                 {
-                    case application::editor::palette::Palette::State::Place:
-                    {
-                        SetAsSelectMode(false);
-                        break;
-                    }
-                    default:
-                        SetAsSelectMode(true);
-                        break;
+                case application::editor::palette::Palette::State::Place:
+                {
+                    SetAsSelectMode(false);
+                    break;
+                }
+                default:
+                    SetAsSelectMode(true);
+                    break;
                 }
             }
 

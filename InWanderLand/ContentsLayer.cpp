@@ -34,71 +34,7 @@ void GraphicsTest()
 	camObj->AddComponent<tests::GraphicsTestCam>();
 
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-	_resourceManager->LoadFile("Texture/RustedIron_ARM.png");
-	_resourceManager->LoadFile("Texture/RustedIron_Normal.png");
-	_resourceManager->LoadFile("Texture/RustedIron_BaseColor.png");
-	{
-		//auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
-		//obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{ -90,0,0 } });
-		//obj->GetTransform()->SetLocalScale({ Vector3d{ 0.01f,0.01f,0.01f } });
 
-		//for (auto each : animList)
-		//{
-		//	if (each->GetName() == L"Ani_Monster2_Walk")
-		//	{
-		//		anim = each;
-		//	}
-		//}
-		//anim->SetLoop(true);
-		//animator->GetGI().PushAnimation(anim);
-		//animator->GetGI().Play(anim);
-	}
-
-	{
-		//auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
-		//obj->GetTransform()->SetLocalScale({ Vector3d{ 0.01f,0.01f,0.01f } });
-	}
-
-
-
-	//yunuGI::ITexture* tex = _resourceManager->GetTexture(L"Texture/RustedIron_ARM.png");
-	//yunuGI::ITexture* tex2 = _resourceManager->GetTexture(L"Texture/RustedIron_Normal.png");
-	//yunuGI::ITexture* tex3 = _resourceManager->GetTexture(L"Texture/RustedIron_BaseColor.png");
-	//yunuGI::IMesh* mesh = _resourceManager->GetMesh(L"Sphere");
-	auto& shaderList = _resourceManager->GetShaderList();
-	yunuGI::IShader* shader;
-	for (auto& i : shaderList)
-	{
-		if (i->GetName() == L"Debug_AlphaPS.cso")
-		{
-			shader = i;
-		}
-	}
-
-	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
-		//obj->GetTransform()->SetLocalScale({ Vector3d{ 0.01f,0.01f,0.01f } });
-		auto renderer = obj->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		renderer->GetGI().GetMaterial()->SetPixelShader(shader);
-		renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{0,0,1,0.3});
-	}
-
-	//{
-	//	auto obj = Scene::getCurrentScene()->AddGameObject();
-	//	//obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
-	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	//	renderer->GetGI().SetMesh(mesh);
-	//	renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, tex3);
-	//	renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ARM, tex);
-	//	renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::NORMAL, tex2);
-	//}
-
-	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Cuptower");
-	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,20.f });
-	//	//obj->GetTransform()->SetLocalRotation(Vector3d{ 90,0,0 });
-	//	auto& childVec = obj->GetChildren();
-	//}
 }
 
 

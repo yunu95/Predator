@@ -1,5 +1,6 @@
 #include "InWanderLand.h"
 #include "DebugMeshes.h"
+#include "EditorResourceManager.h"
 
 yunuGI::IMaterial* GetColoredDebugMaterial(yunuGI::Color color, bool isWireFrame)
 {
@@ -27,6 +28,26 @@ yunuGI::IMaterial* GetColoredDebugMaterial(yunuGI::Color color, bool isWireFrame
                 shader = each;
         }
         ret->SetPixelShader(shader);
+        return ret;
+    }
+}
+yunuGI::IMaterial* GetColoredDebugMaterialTransparent(yunuGI::Color color)
+{
+    static std::unordered_map<yunuGI::Color, yunuGI::IMaterial*> materialMap;
+    auto& editorRsrcManager = application::editor::ResourceManager::GetSingletonInstance();
+    auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+    if (materialMap.find(color) != materialMap.end())
+    {
+        return materialMap[color];
+    }
+    else
+    {
+        wstringstream ss{ L"transparent ColorCached DebugMaterial " };
+        ss << materialMap.size();
+        auto ret = materialMap[color] = rsrcManager->CreateMaterial(ss.str());
+        ret->SetColor(color);
+        ret->SetPixelShader(editorRsrcManager.GetShader("Debug_AlphaPS.cso"));
         return ret;
     }
 }

@@ -40,6 +40,7 @@ namespace application
         struct POD_Unit
         {
             Unit_TemplateData* templateData = nullptr;
+            WaveData* waveData = nullptr;
             unit::Affiliation affiliation = unit::Affiliation::None;
             POD_Vector3<float> position = POD_Vector3<float>();
             POD_Quaternion<float> rotation = POD_Quaternion<float>();
