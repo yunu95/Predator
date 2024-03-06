@@ -124,16 +124,19 @@ namespace application
                     loadFile.close();
                     return false;
                 }
-                else
+
+                if (!instanceManager.PostLoad())
                 {
-                    loadFile.close();
+                    return false;
+                }
+
+                loadFile.close();
 
 #ifdef EDITOR
-                    Application::DispatchEvent<LoadEvent>();
+                Application::DispatchEvent<LoadEvent>();
 #endif
-                    currentMapPath = path;
-                    return true;
-                }
+                currentMapPath = path;
+                return true;
             }
             else
             {

@@ -66,6 +66,7 @@ namespace application
 			virtual bool PostEncoding(json& data) const = 0;
 			virtual bool PreDecoding(const json& data) = 0;
 			virtual bool PostDecoding(const json& data) = 0;
+			virtual bool PostLoadCallback() { return true; }
 			void SetPaletteInstance(palette::PaletteInstance* paletteInstance);
 		private:
 			palette::PaletteInstance* paletteInstance{ nullptr };

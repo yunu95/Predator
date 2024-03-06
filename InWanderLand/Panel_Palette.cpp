@@ -269,7 +269,9 @@ namespace application
                 //ImGui::TextColored({ 1,0,0,1 }, "Wave is selected. Please select time offset and unit type to place.");
                 ImGui::TextWrapped("Wave is selected. Please select time offset and unit type to place.");
                 ImGui::PopStyleColor();
-                ImGui::DragFloat("time offset", &palette::WavePalette::SingleInstance().currentSelectedWaveTimeOffset, 0.005, 0, 10000);
+                float timeOffset = palette::WavePalette::SingleInstance().GetCurrentSelectedWaveTimeOffset();
+                ImGui::DragFloat("time offset", &timeOffset, 0.005, 0, 10000);
+                palette::WavePalette::SingleInstance().SetCurrentSelectedWaveTimeOffset(timeOffset);
             }
             if (imgui::BeginSection_1Col(countIdx, "Unit List", ImGui::GetContentRegionAvail().x))
             {
@@ -651,6 +653,10 @@ namespace application
                     {
                         stringstream ss;
                         ss << "Edit wave " << i;
+                        stringstream ssDelete;
+                        ssDelete << "X##" << i;
+                        stringstream ssUnitNum;
+                        ssUnitNum << "Units count : " << selectedWave->pod.waveSizes[i - 1];
                         ImGui::TableNextRow();
                         ImGui::TableSetColumnIndex(0);
                         // n차 웨이브를 수정하는 부분
@@ -658,6 +664,7 @@ namespace application
                             ImGui::BeginDisabled();
                         if (ImGui::Button(ss.str().c_str()))
                         {
+                            palette::WavePalette::SingleInstance().UpdateWaveUnitsVisibility();
                             palette::WavePalette::SingleInstance().currentSelectedWaveIndex = i - 1;
                         }
                         else
@@ -665,9 +672,22 @@ namespace application
                             if (i - 1 == palette::WavePalette::SingleInstance().currentSelectedWaveIndex)
                                 ImGui::EndDisabled();
                         }
+                        ImGui::Text(ssUnitNum.str().c_str());
                         ImGui::TableNextColumn();
                         // n차 웨이브를 삭제하는 부분
-                        if (ImGui::Button("X"));
+                        if (ImGui::Button(ssDelete.str().c_str()))
+                        {
+                            for (auto& each : selectedWave->GetWaveUnitDataMap())
+                                if (each.second.waveIdx == i - 1)
+                                    editor::InstanceManager::GetSingletonInstance().DeleteInstance(each.first->GetUUID());
+                            std::erase_if(selectedWave->GetWaveUnitDataMap(), [i](std::pair<UnitData*, WaveData::WaveUnitData> each) {return each.second.waveIdx == i - 1; });
+                            for (auto& each : selectedWave->GetWaveUnitDataMap())
+                                if (each.second.waveIdx > i - 1)
+                                    each.second.waveIdx--;
+                            selectedWave->pod.waveSizes.resize(selectedWave->pod.waveSizes.size() - 1);
+                            selectedWave->ApplyMapAsPod();
+                            palette::WavePalette::SingleInstance().currentSelectedWaveIndex = -1;
+                        }
                     }
                     ImGui::TableNextRow();
                     ImGui::TableSetColumnIndex(0);

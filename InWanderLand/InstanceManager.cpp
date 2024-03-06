@@ -212,6 +212,14 @@ namespace application
 
             return true;
         }
+        bool InstanceManager::PostLoad()
+        {
+            for (auto& [key, ptr] : list)
+            {
+                ptr->PostLoadCallback();
+            }
+            return true;
+        }
 
         /// private
         IEditableData* InstanceManager::CreateEmptyInstance(const DataType& type)
