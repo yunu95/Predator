@@ -67,7 +67,7 @@ namespace application
 
             POD_Terrain pod;
 
-            static constexpr double nodeDistance = 0.25;
+            static constexpr double nodeDistance = 1;
         protected:
             virtual bool PreSaveCallback()  override;
             virtual bool PreEncoding(json& data) const override;

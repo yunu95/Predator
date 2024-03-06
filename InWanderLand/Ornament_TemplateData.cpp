@@ -2,7 +2,9 @@
 #include "Ornament_TemplateData.h"
 
 #include "TemplateDataManager.h"
+#include "InstanceManager.h"
 #include "OrnamentBrush.h"
+#include "OrnamentData.h"
 
 namespace application
 {
@@ -16,6 +18,13 @@ namespace application
 		void Ornament_TemplateData::SetDataResourceName(std::string fbxName)
 		{
 			pod.fbxName = fbxName;
+			for (auto each : InstanceManager::GetSingletonInstance().GetOrnamentsList())
+			{
+				if (TemplateDataManager::GetSingletonInstance().GetDataKey(static_cast<OrnamentData*>(each)->pod.templateData) == fbxName)
+				{
+					
+				}
+			}
 			palette::OrnamentBrush::Instance().CreateBrushFBX(this);
 		}
 

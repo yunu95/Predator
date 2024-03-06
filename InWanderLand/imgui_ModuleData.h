@@ -7,8 +7,8 @@
 #include "imgui_Utility.h"
 
 #include "PodStructs.h"
-
 #include "EditorResourceManager.h"
+#include "TemplateDataManager.h"
 
 namespace application
 {
@@ -97,6 +97,7 @@ namespace application
 								{
 									current = selections[i];
 									const_cast<std::string&>(data) = current;
+									TemplateDataManager::GetSingletonInstance().GetTemplateData(current)->SetDataResourceName(current);
 									returnVal = true;
 								}
 

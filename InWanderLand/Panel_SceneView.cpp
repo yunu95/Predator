@@ -135,7 +135,7 @@ namespace application
                         auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint({ cursorPos_InScreenSpace.first, cursorPos_InScreenSpace.second }, distToXZPlane, Vector3d(0, 1, 0));
                         pm->GetCurrentPalette()->OnMouseMove(projectedPos, { cursorPos_InScreenSpace.first, cursorPos_InScreenSpace.second });
 
-                        if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui_IsCursorInGizmoButtonRect())
+                        if (eim.IsMouseButtonPressed(MouseCode::Left) && !ImGui_IsCursorInGizmoButtonRect())
                         {
                             if (Vector3d::Dot(projectedPos - yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition(), front) > 0)
                             {
@@ -143,7 +143,7 @@ namespace application
                             }
                         }
 
-                        if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+                        if (eim.IsMouseButtonUp(MouseCode::Left))
                         {
                             pm->GetCurrentPalette()->OnLeftClickRelease();
                             isGuizmoControl = false;

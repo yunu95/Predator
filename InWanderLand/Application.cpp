@@ -323,7 +323,7 @@ namespace application
 		return appSpecification;
 	}
 
-	
+
 	void* Application::GetSceneSRV()
 	{
 		static auto resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
@@ -481,9 +481,9 @@ namespace application
 				}
 			};
 		winKeyboardUpCallBackFunction = [&](unsigned char keyCode) { Application::DispatchEvent<editor::KeyReleasedEvent>(static_cast<editor::KeyCode>(keyCode)); };
-		winMouseLeftPressedCallBackFunction = [&]() 
-			{ 
-				Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Left); 
+		winMouseLeftPressedCallBackFunction = [&]()
+			{
+				Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Left);
 				if (gameFocus)
 				{
 					if (IsCursorInGameWindow() == true)
@@ -502,9 +502,9 @@ namespace application
 					}
 				}
 			};
-		winMouseLeftUpCallBackFunction = [&]() 
-			{ 
-				Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Left); 
+		winMouseLeftUpCallBackFunction = [&]()
+			{
+				Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Left);
 				if (gameFocus)
 				{
 					if (IsCursorInGameWindow() == true)
@@ -515,11 +515,18 @@ namespace application
 			};
 		winMouseRightPressedCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Right); };
 		winMouseRightUpCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Right); };
-		winMouseMoveCallBackFunction = [&](long posX, long posY) 
-			{ 
-				Application::DispatchEvent<editor::MouseMoveEvent>(posX, posY); 
+		winMouseMoveCallBackFunction = [&](long posX, long posY)
+			{
+				Application::DispatchEvent<editor::MouseMoveEvent>(posX, posY);
 				if (gameFocus)
 				{
+					// Time::GetDeltaTimeUnscaled() 를 누적 시간 획득으로 수정 필요
+
+					static float accumTime = Time::GetDeltaTimeUnscaled();
+					if (Time::GetDeltaTimeUnscaled() - accumTime < 0.000001)
+						return;
+					accumTime = Time::GetDeltaTimeUnscaled();
+
 					if (IsCursorInGameWindow() == false)
 					{
 						editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnLeftClickRelease();
@@ -533,7 +540,7 @@ namespace application
 					centeredPosition.y -= 0.5;
 					centeredPosition.y *= -1;
 					auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
-					editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnMouseMove(projectedPos,centeredPosition);
+					editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnMouseMove(projectedPos, centeredPosition);
 				}
 			};
 		winMouseWheelCallBackFunction = [&](short wheelDelta) {Application::DispatchEvent<editor::MouseWheelEvent>(wheelDelta); };
@@ -549,7 +556,7 @@ namespace application
 			yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 			auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 			directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-			directionalLight->GetTransform()->SetLocalRotation( Quaternion{ Vector3d{90,0,30} });
+			directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,30} });
 		}
 		else
 		{
@@ -564,7 +571,7 @@ namespace application
 
 			auto directionalLight = scene->AddGameObject();
 			directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-			directionalLight->GetTransform()->SetLocalRotation( Quaternion{ Vector3d{90,0,30} });
+			directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,30} });
 		}
 #endif
 	}
@@ -822,7 +829,7 @@ LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					}
 				}
 			}
-		break;
+			break;
 		}
 		case WM_SIZE:
 		{

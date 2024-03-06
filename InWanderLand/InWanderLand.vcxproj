@@ -1004,6 +1004,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="HealerAutoAttackProjectilePool.h" />
     <ClInclude Include="HealerSkillSystem.h" />
     <ClInclude Include="imgui_ModuleData.h" />
+    <ClInclude Include="SaveStaticOrnamentsCommnad.h" />
     <ClInclude Include="SingletonUpdate.h" />
     <ClInclude Include="SpecialEvent.h" />
     <ClInclude Include="StaticInstanceRegistry.h" />
@@ -1186,6 +1187,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="PaletteManager.cpp" />
     <ClCompile Include="PassiveCake.cpp" />
     <ClCompile Include="RangedAttackSystem.cpp" />
+    <ClCompile Include="SaveStaticOrnamentsCommnad.cpp" />
     <ClCompile Include="SkillPreviewSystem.cpp" />
     <ClCompile Include="SnippetArtResource.cpp" />
     <ClCompile Include="RegionData.cpp" />

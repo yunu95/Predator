@@ -87,7 +87,53 @@ namespace application
 
         bool MapFileManager::SaveStaticOrnaments(const std::string& path)
         {
-            return false;
+            json punrealData;
+            json ornamentData;
+
+            for (auto& each : instanceManager.list)
+            {
+                auto ptr = dynamic_cast<OrnamentData*>(each.second.get());
+                if (ptr)
+                {
+                    ornamentData["ResourceName"] = ptr->pod.templateData->pod.fbxName;
+                    ornamentData["Location"].push_back(ptr->pod.position.x * 100);
+                    ornamentData["Location"].push_back(-ptr->pod.position.z * 100);
+                    ornamentData["Location"].push_back(ptr->pod.position.y * 100);
+                    Quaternion quat;
+                    quat.w = ptr->pod.rotation.w;
+                    quat.x = ptr->pod.rotation.x;
+                    quat.y = ptr->pod.rotation.y;
+                    quat.z = ptr->pod.rotation.z;
+                    ornamentData["Rotation"].push_back(-quat.Euler().x);
+                    ornamentData["Rotation"].push_back(quat.Euler().z);
+                    ornamentData["Rotation"].push_back(quat.Euler().y);
+                    ornamentData["Scale"].push_back(ptr->pod.scale.x);
+                    ornamentData["Scale"].push_back(ptr->pod.scale.z);
+                    ornamentData["Scale"].push_back(ptr->pod.scale.y);
+
+                    punrealData.push_back(ornamentData);
+                    ornamentData.clear();
+                }
+            }
+
+            if (punrealData.is_null())
+            {
+                return false;
+            }
+
+            std::ofstream saveFile{ path };
+
+            if (saveFile.is_open())
+            {
+                saveFile << punrealData.dump(4);
+                saveFile.close();
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         bool MapFileManager::LoadMapFile(const std::string& path)

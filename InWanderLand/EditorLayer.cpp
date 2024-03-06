@@ -204,6 +204,10 @@ namespace application
 				{
 					cm.AddQueue(std::make_shared<LoadStaticOrnamentsCommand>());
 				}
+				if (ImGui::MenuItem("SaveUnrealData"))
+				{
+					cm.AddQueue(std::make_shared<SaveStaticOrnamentsCommand>());
+				}
 				if (ImGui::MenuItem("LoadMap"))
 				{
 					cm.AddQueue(std::make_shared<LoadMapCommand>());

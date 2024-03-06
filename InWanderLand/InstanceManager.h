@@ -71,6 +71,8 @@ namespace application
 			void Clear();
 			void ApplyInstancesAsPlaytimeObjects();
 
+            std::vector<IEditableData*> GetOrnamentsList();
+
         protected:
             bool PreSave();
             virtual bool PreEncoding(json& data) const override;

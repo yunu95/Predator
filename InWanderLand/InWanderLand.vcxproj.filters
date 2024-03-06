@@ -800,6 +800,9 @@
     <ClInclude Include="FileSystem.h">
       <Filter>Editor\IO\FileSystem</Filter>
     </ClInclude>
+    <ClInclude Include="SaveStaticOrnamentsCommnad.h">
+      <Filter>Editor\Commands\MenubarCommands\File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1238,6 +1241,9 @@
     </ClCompile>
     <ClCompile Include="FileSystem.cpp">
       <Filter>Editor\IO\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveStaticOrnamentsCommnad.cpp">
+      <Filter>Editor\Commands\MenubarCommands\File</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
