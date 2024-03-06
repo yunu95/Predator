@@ -81,6 +81,13 @@ namespace application
                     break;
                 }
             }
+            void WavePalette::Reset() 
+            {
+                Palette::Reset();
+                currentSelectedWaveIndex = -1;
+                currentSelectedWaveTimeOffset = 0;
+                currentWaveData = nullptr;
+            }
         }
     }
 }

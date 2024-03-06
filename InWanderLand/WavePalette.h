@@ -42,6 +42,7 @@ namespace application
                 virtual void OnStandbyPalette() override;
                 virtual void OnSelectSingleInstance(IEditableData* data) override;
             private:
+                virtual void Reset() override;
                 WavePaletteState wavePaletteState{ WavePaletteState::None };
                 float currentSelectedWaveTimeOffset{ 0 };
                 // 웨이브 유닛 배치정보를 수정할 때 생성시점이 오래된 유닛들은 숨김처리한다.

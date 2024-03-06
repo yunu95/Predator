@@ -108,11 +108,13 @@ namespace application
                 UnitData* unit = dynamic_cast<UnitData*>(InstanceManager::GetSingletonInstance().GetInstance(String_To_UUID(pod.waveUnitUUIDS[i])));
                 assert(unit && "wave has uuids but there is no corresponding unitdata!");
                 int waveIdx = 0;
+                int waveCount = 0;
                 for (int j = 0; j < pod.waveSizes.size(); j++)
                 {
-                    if (i < pod.waveSizes[j])
+                    waveCount += pod.waveSizes[j];
+                    waveIdx = j;
+                    if (i < waveCount)
                     {
-                        waveIdx = j;
                         break;
                     }
                 }

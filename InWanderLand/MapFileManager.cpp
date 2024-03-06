@@ -4,6 +4,7 @@
 #include "Application.h"
 #include "EditorEvents.h"
 #include "EditorCommonEvents.h"
+#include "WavePalette.h"
 
 #include "Storable.h"
 #include "InstanceManager.h"
