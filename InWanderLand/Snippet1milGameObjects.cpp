@@ -40,7 +40,6 @@ void SnippetInitializer1milGameObjects()
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::Camera>();
     camObj->GetTransform()->SetWorldPosition({ 0,0,-5 });
 
-    yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 namespace snippets

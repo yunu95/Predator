@@ -157,7 +157,6 @@ void TestCaseGroupControlInit()
 				});
 			} });
 
-	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 namespace tests

@@ -797,6 +797,9 @@
     <ClInclude Include="SpecialEvent.h">
       <Filter>Contents\SpecialEvent</Filter>
     </ClInclude>
+    <ClInclude Include="UIPanel.h">
+      <Filter>UI</Filter>
+    </ClInclude>
     <ClInclude Include="WaveInstance.h">
       <Filter>Editor\Palette\EditorInstance\WaveInstance</Filter>
     </ClInclude>
@@ -1240,6 +1243,9 @@
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="UIManager.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIPanel.cpp">
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="FileSystem.cpp">

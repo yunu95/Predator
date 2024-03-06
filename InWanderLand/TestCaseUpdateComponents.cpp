@@ -65,7 +65,6 @@ namespace tests
                     } });
 
 
-            yunutyEngine::YunutyCycle::SingleInstance().Play();
         }
     public:
         // 부모 게임오브젝트에 달린 컴포넌트의 Update가 먼저 호출되며,

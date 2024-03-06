@@ -67,7 +67,6 @@ void SnippetCastleWallTextureBlendingInit()
 		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,10 });
 	}
 
-	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 namespace snippets

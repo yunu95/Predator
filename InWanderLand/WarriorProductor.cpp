@@ -9,6 +9,7 @@
 #include "HealerProductor.h"
 #include "MagicianProductor.h"
 #include "SingleNavigationField.h"
+#include "UnitData.h"
 
 void WarriorProductor::SetUnitData()
 {

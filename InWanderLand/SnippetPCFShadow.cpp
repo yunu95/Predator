@@ -53,7 +53,6 @@ void SnippetInitializerPCFShadow()
 
 	camObj->GetTransform()->SetWorldPosition({ 0,5,-15 });
 
-	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 namespace snippets
