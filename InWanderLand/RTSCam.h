@@ -30,6 +30,12 @@ public:
         if (yunutyEngine::Input::isKeyPushed(KeyCode::X))
             xButtonCallback();
 
+        // 디버그 그래픽스 키고 끄기용
+        if (Input::isKeyPushed(yunutyEngine::KeyCode::BackSlash))
+        {
+            DebugGraphic::SetEnabled(!DebugGraphic::IsEnabled());
+        }
+
         if (!roamingMode)
         {
             float cameraSpeed = 50.f;
