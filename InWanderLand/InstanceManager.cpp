@@ -104,6 +104,10 @@ namespace application
             {
                 each.second->ApplyAsPlaytimeObject();
             }
+            for (auto& each : list)
+            {
+                each.second->PostApplyAsPlaytimeObject();
+            }
         }
         bool InstanceManager::PreSave()
         {
