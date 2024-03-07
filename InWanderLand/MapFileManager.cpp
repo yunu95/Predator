@@ -4,6 +4,7 @@
 #include "Application.h"
 #include "EditorEvents.h"
 #include "EditorCommonEvents.h"
+#include "WavePalette.h"
 
 #include "Storable.h"
 #include "InstanceManager.h"
@@ -124,16 +125,19 @@ namespace application
                     loadFile.close();
                     return false;
                 }
-                else
+
+                if (!instanceManager.PostLoad())
                 {
-                    loadFile.close();
+                    return false;
+                }
+
+                loadFile.close();
 
 #ifdef EDITOR
-                    Application::DispatchEvent<LoadEvent>();
+                Application::DispatchEvent<LoadEvent>();
 #endif
-                    currentMapPath = path;
-                    return true;
-                }
+                currentMapPath = path;
+                return true;
             }
             else
             {
