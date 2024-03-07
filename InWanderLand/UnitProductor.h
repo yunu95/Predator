@@ -35,6 +35,8 @@ public:
 	int m_criticalHitProbability;				// 치명타 확률
 	float m_criticalHitMultiplier;				// 공격 시 치명타 피해량
 
+	int m_maxAggroNumber;
+
 	/// Decreasing Damage Elements
 	int m_defensePoint;
 	int m_dodgeProbability;					// 회피율

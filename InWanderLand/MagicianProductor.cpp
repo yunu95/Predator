@@ -24,6 +24,8 @@ void MagicianProductor::SetUnitData()
 	m_dodgeProbability = 0.05f;
 	m_criticalDamageDecreaseMultiplier = 0.05f;
 
+	m_maxAggroNumber = 1;
+
 	m_idRadius = 10.0f * lengthUnit;
 	m_atkRadius = 3.5f * lengthUnit;
 	m_unitSpeed = 4.5f;

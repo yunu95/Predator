@@ -66,6 +66,8 @@ void UnitProductor::SetCommonComponents()
 
 	m_unitComponent->SetNavField(m_navField);
 
+	m_unitComponent->SetMaxAggroNumber(m_maxAggroNumber);
+
 	/// + 플레이어 유닛일 경우 특수 처리
 	if (m_unitSide == Unit::UnitSide::Player)
 		SetPlayerRelatedComponents(m_unitComponent);

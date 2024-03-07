@@ -34,8 +34,12 @@ private:
 
 	bool isOnceRotated = false;
 	double previousDegree = 0.0f;
+
 public:
 	void Update();
+
+	void SetPathPreviewObjectRotation();
+	void SetRangePreviewObjectPosition();
 
 	void SetPathPreviewObject(GameObject* p_obj);
 	void SetRangePreviewObject(GameObject* p_obj);

@@ -116,6 +116,16 @@ namespace application
 		int winPosY = (GetSystemMetrics(SM_CYSCREEN) - appSpecification.windowHeight) / 2;	// 윈도우 Y 좌표
 		hWND = ::CreateWindow(wc.lpszClassName, wc.lpszClassName, WS_OVERLAPPEDWINDOW, winPosX, winPosY, appSpecification.windowWidth, appSpecification.windowHeight, NULL, NULL, wc.hInstance, NULL);
 
+		RECT wndRect;
+		GetClientRect(hWND, &wndRect);
+
+		int newWidth = 1920 + (1920 - wndRect.right);
+		int newHeight = 1080 + (1080 - wndRect.bottom);
+
+		//float desiredRatio = 1920.0f / 1080.0f;
+
+		SetWindowPos(hWND, NULL, 0, 0, newWidth, newHeight, SWP_NOMOVE | SWP_NOZORDER);
+
 		::ShowWindow(hWND, SW_SHOWDEFAULT);
 		::UpdateWindow(hWND);
 

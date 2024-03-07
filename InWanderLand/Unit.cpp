@@ -15,6 +15,8 @@ void Unit::Start()
 	chaseUpdateDelay = 0.1f;
 
 	dotween = GetGameObject()->GetComponent<Dotween>();
+	m_navAgentComponent = GetGameObject()->GetComponent<NavigationAgent>();
+	m_animatorComponent = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
 
 	unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Move,
 		[this]() { return currentOrder == UnitState::Move; } });
@@ -23,7 +25,7 @@ void Unit::Start()
 		[this]() { return currentOrder == UnitState::AttackMove || (unitFSM.previousState == UnitState::Attack && isAttackMoving); } });
 
 	unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Chase,
-		[this]() { return (m_currentTargetObject != nullptr && idleElapsed >= idleToChaseDelay) && m_currentTargetObject->GetComponent<Unit>()->currentOrder != UnitState::Death; } });
+		[this]() { return (m_currentTargetUnit != nullptr && idleElapsed >= idleToChaseDelay) && m_currentTargetUnit->currentOrder != UnitState::Death; } });
 
 	unitFSM.transitions[UnitState::Move].push_back({ UnitState::Idle,
 		[this]() { return (GetGameObject()->GetTransform()->GetWorldPosition() - m_currentMovePosition).Magnitude() < 0.3f; } });
@@ -38,23 +40,23 @@ void Unit::Start()
 		[this]() { return currentOrder == UnitState::Move; } });
 
 	unitFSM.transitions[UnitState::AttackMove].push_back({ UnitState::Chase,
-		[this]() { return m_currentTargetObject != nullptr; } });
+		[this]() { return m_currentTargetUnit != nullptr; } });
 
 	unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Idle,
-		[this]() { return m_currentTargetObject == nullptr; } });
+		[this]() { return m_currentTargetUnit == nullptr; } });
 
 	unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Move,
 		[this]() { return currentOrder == UnitState::Move; } });
 
 	unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Attack,
 		[this]() { return (GetGameObject()->GetTransform()->GetWorldPosition()
-			- m_currentTargetObject->GetTransform()->GetWorldPosition()).Magnitude() <= m_atkDistance + 0.4f; } });
+			- m_currentTargetUnit->GetTransform()->GetWorldPosition()).Magnitude() <= m_atkDistance + 0.4f; } });
 
 	unitFSM.transitions[UnitState::Attack].push_back({ UnitState::Idle,
 		[this]()
 		{
-			return m_currentTargetObject == nullptr || 
-				(GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetObject->GetTransform()->GetWorldPosition()).Magnitude() > m_atkDistance + 0.4f;
+			return m_currentTargetUnit == nullptr || 
+				(GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetUnit->GetTransform()->GetWorldPosition()).Magnitude() > m_atkDistance + 0.4f;
 		} });
 
 	unitFSM.transitions[UnitState::Attack].push_back({ UnitState::Move,
@@ -102,7 +104,7 @@ void Unit::Start()
 	unitFSM.updateAction[UnitState::Skill] = [this]() { SkillUpdate(); };
 	unitFSM.updateAction[UnitState::Death] = [this]() { DeathUpdate(); };
 
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().Play(unitAnimations.m_idleAnimation);
+	m_animatorComponent->GetGI().Play(unitAnimations.m_idleAnimation);
 }
 
 void Unit::Update()
@@ -126,13 +128,13 @@ void Unit::IdleEngage()
 	currentOrder = UnitState::Idle;
 	idleElapsed = 0.0f;
 	m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
+	m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 
 	DetermineCurrentTargetObject();
 
 	idleToChaseDelay = 0.0f;
 
-	if (unitFSM.previousState == UnitState::Attack && m_currentTargetObject != nullptr && !isJustHitByQSkill)
+	if (unitFSM.previousState == UnitState::Attack && m_currentTargetUnit != nullptr && !isJustHitByQSkill)
 		idleToChaseDelay = 1.0f;
 
 	if (unitFSM.previousState == UnitState::AttackMove)
@@ -153,9 +155,9 @@ void Unit::MoveEngage()
 
 	m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::blue());
 
-	GetGameObject()->GetComponent<NavigationAgent>()->SetSpeed(m_speed);
+	m_navAgentComponent->SetSpeed(m_speed);
 
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
+	m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
 }
 
 void Unit::AttackMoveEngage()
@@ -166,9 +168,9 @@ void Unit::AttackMoveEngage()
 
 	m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::gray());
 
-	GetGameObject()->GetComponent<NavigationAgent>()->SetSpeed(m_speed);
+	m_navAgentComponent->SetSpeed(m_speed);
 
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
+	m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
 }
 
 void Unit::AttackEngage()
@@ -177,12 +179,12 @@ void Unit::AttackEngage()
 
 	m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::red());
 
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
+	m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 
 	attackFunctionElapsed = 0.0f;
 	attackAnimationFrameCheckNumber = 0;
 	isAttackStarted = false;
-	dotween->DOLookAt(m_currentTargetObject->GetTransform()->GetWorldPosition(), rotationTime, false);
+	dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotationTime, false);
 	CheckCurrentAnimation(unitAnimations.m_idleAnimation);
 
 
@@ -195,9 +197,9 @@ void Unit::ChaseEngage()
 
 	m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::green());
 
-	dotween->DOLookAt(m_currentTargetObject->GetTransform()->GetWorldPosition(), rotationTime, false);
+	dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotationTime, false);
 
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
+	m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
 }
 
 void Unit::SkillEngage()
@@ -219,7 +221,7 @@ void Unit::SkillEngage()
 
 void Unit::ParalysisEngage()
 {
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_paralysisAnimation, animationLerpDuration, animationTransitionSpeed);
+	m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_paralysisAnimation, animationLerpDuration, animationTransitionSpeed);
 }
 
 void Unit::DeathEngage()
@@ -228,7 +230,7 @@ void Unit::DeathEngage()
 
 	deathFunctionElapsed = 0.0f;
 
-	GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_deathAnimation, animationLerpDuration, animationTransitionSpeed);
+	m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_deathAnimation, animationLerpDuration, animationTransitionSpeed);
 	m_opponentObjectList.clear();
 
 	ReportUnitDeath();
@@ -262,7 +264,7 @@ void Unit::MoveUpdate()
 	{
 		moveFunctionElapsed = 0.0f;
 
-		GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(m_currentMovePosition);
+		m_navAgentComponent->MoveTo(m_currentMovePosition);
 	}
 }
 
@@ -280,7 +282,7 @@ void Unit::AttackMoveUpdate()
 	{
 		moveFunctionElapsed = 0.0f;
 
-		GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(m_currentMovePosition);
+		m_navAgentComponent->MoveTo(m_currentMovePosition);
 	}
 }
 
@@ -291,7 +293,7 @@ void Unit::AttackUpdate()
 
 	attackFunctionElapsed += Time::GetDeltaTime();
 
-	//LookAt(m_currentTargetObject->GetTransform()->GetWorldPosition());
+	//LookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition());
 
 	if (isAttackAnimationOperating)
 	{
@@ -299,10 +301,10 @@ void Unit::AttackUpdate()
 
 		if (attackAnimationFrameCheckNumber >= unitAnimations.m_attackAnimation->GetTotalFrame())
 		{
-			GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
+			m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 			attackAnimationFrameCheckNumber = 0;
 			isAttackAnimationOperating = false;
-			dotween->DOLookAt(m_currentTargetObject->GetTransform()->GetWorldPosition(), rotationTime, false);
+			dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotationTime, false);
 		}
 	}
 
@@ -311,8 +313,8 @@ void Unit::AttackUpdate()
 		isAttackStarted = true;
 		isAttackAnimationOperating = true;
 		attackFunctionElapsed = 0.0f;
-		GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(unitAnimations.m_attackAnimation, animationLerpDuration, animationTransitionSpeed);
-		GetGameObject()->GetComponent<AttackSystem>()->Attack(m_currentTargetObject->GetComponent<Unit>());
+		m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_attackAnimation, animationLerpDuration, animationTransitionSpeed);
+		GetGameObject()->GetComponent<AttackSystem>()->Attack(m_currentTargetUnit);
 		CheckCurrentAnimation(unitAnimations.m_attackAnimation);
 	}
 }
@@ -336,7 +338,7 @@ void Unit::ChaseUpdate()
 
 	chaseFunctionElapsed += Time::GetDeltaTime();
 
-	//LookAt(m_currentTargetObject->GetTransform()->GetWorldPosition());
+	//LookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition());
 
 	if (chaseFunctionElapsed >= chaseFunctionCallDelay)
 	{
@@ -344,7 +346,7 @@ void Unit::ChaseUpdate()
 
 		DetermineCurrentTargetObject();
 
-		GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(m_currentTargetObject->GetTransform()->GetWorldPosition());
+		m_navAgentComponent->MoveTo(m_currentTargetUnit->GetTransform()->GetWorldPosition());
 	}
 }
 
@@ -358,8 +360,8 @@ void Unit::DeathUpdate()
 	{
 		deathFunctionElapsed = 0.0f;
 
-		GetGameObject()->GetComponent<NavigationAgent>()->SetRadius(0.0f);
-		GetGameObject()->GetComponent<NavigationAgent>()->SetActive(false);
+		m_navAgentComponent->SetRadius(0.0f);
+		m_navAgentComponent->SetActive(false);
 		GetGameObject()->SetSelfActive(false);
 	}
 }
@@ -367,15 +369,15 @@ void Unit::DeathUpdate()
 
 void Unit::CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation)
 {
-	if (GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().GetCurrentAnimation() != currentStateAnimation)
+	if (m_animatorComponent->GetGI().GetCurrentAnimation() != currentStateAnimation)
 	{
-		GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->GetGI().ChangeAnimation(currentStateAnimation, animationLerpDuration, animationTransitionSpeed);
+		m_animatorComponent->GetGI().ChangeAnimation(currentStateAnimation, animationLerpDuration, animationTransitionSpeed);
 	}
 }
 
 void Unit::StopMove()
 {
-	GetGameObject()->GetComponent<NavigationAgent>()->MoveTo(GetGameObject()->GetTransform()->GetWorldPosition());
+	m_navAgentComponent->MoveTo(GetGameObject()->GetTransform()->GetWorldPosition());
 }
 
 void Unit::SetUnitType(UnitType type)
@@ -458,9 +460,9 @@ int Unit::GetUnitDamage() const
 	return m_autoAttackDamage;
 }
 
-void Unit::Damaged(GameObject* opponentObject, float opponentDmg)
+void Unit::Damaged(Unit* opponentUnit, float opponentDmg)
 {
-	AddToOpponentObjectList(opponentObject);
+	AddToOpponentObjectList(opponentUnit);
 	DetermineHitDamage(opponentDmg);
 	m_healthPoint -= m_finalHitDamage;
 	// ui로 표시되는, 혹은 최종 남은 체력은 반올림할 것인가 혹은 내림할 것인가는 아래에 구현.
@@ -542,6 +544,11 @@ void Unit::SetStaticMeshComponent(yunutyEngine::graphics::StaticMeshRenderer* p_
 	m_staticMeshRenderer = p_stcMesh;
 }
 
+void Unit::ChangeCurrentOpponentUnitForced(Unit* p_unit)
+{
+	m_currentTargetUnit = p_unit;
+}
+
 void Unit::DetermineHitDamage(float p_onceCalculatedDmg)
 {
 	m_finalHitDamage = (m_defensePoint / 10.0f) / (1 - m_criticalDamageDecreaseMultiplier) / (1 - m_dodgeProbability);
@@ -557,10 +564,10 @@ void Unit::DetermineCurrentTargetObject()
 	{
 		float distance = (GetGameObject()->GetTransform()->GetWorldPosition() - e->GetTransform()->GetWorldPosition()).Magnitude();
 
-		if ((!isDistanceComparingStarted || tempShortestDistance > distance) && e->GetComponent<Unit>()->currentOrder != UnitState::Death)
+		if ((!isDistanceComparingStarted || tempShortestDistance > distance) && e->currentOrder != UnitState::Death)
 		{
 			tempShortestDistance = distance;
-			m_currentTargetObject = e;
+			m_currentTargetUnit = e;
 			isDistanceComparingStarted = true;
 		}
 	}
@@ -571,18 +578,18 @@ void Unit::ReportUnitDeath()
 	for (auto e : m_recognizedThisList)
 	{
 		// 죽은 유닛이 아닌 죽은 유닛을 list에 갖고 있는 유닛의 함수 호출
-		e->IdentifiedOpponentDeath(this->GetGameObject());
+		e->IdentifiedOpponentDeath(this);
 	}
 }
 
-void Unit::IdentifiedOpponentDeath(yunutyEngine::GameObject* diedOpponent)
+void Unit::IdentifiedOpponentDeath(Unit* p_unit)
 {
 	/// 죽은 유닛이 현재 타겟으로 지정한 유닛이라면
-	if (m_currentTargetObject == diedOpponent)
-		m_currentTargetObject = nullptr;
+	if (m_currentTargetUnit == p_unit)
+		m_currentTargetUnit = nullptr;
 
 	/// 적군을 담고 있는 list에서 죽은 오브젝트 유닛을 빼준다.
-	m_opponentObjectList.remove(diedOpponent);
+	m_opponentObjectList.remove(p_unit);
 }
 
 void Unit::SetPlayerSerialNumber(UnitType serialNum)
@@ -641,27 +648,35 @@ void Unit::SetSkillPreviewType(SkillPreviewSystem::SkillPreviewMesh p_qskill, Sk
 	m_wSkillPreviewType = p_wskill;
 }
 
-void Unit::AddToOpponentObjectList(yunutyEngine::GameObject* opponent)
+void Unit::SetMaxAggroNumber(int p_num)
 {
-	if (opponent->GetComponent<Unit>()->currentOrder != UnitState::Death && this->currentOrder != UnitState::Death)
+	m_maxAggroNumber = p_num;
+}
+
+void Unit::AddToOpponentObjectList(Unit* p_unit)
+{
+	if (p_unit->currentOrder != UnitState::Death && this->currentOrder != UnitState::Death && p_unit->m_currentAggroNumber < p_unit->m_maxAggroNumber)
 	{
-		m_opponentObjectList.push_back(opponent);
+		m_opponentObjectList.push_back(p_unit);
+		p_unit->m_currentAggroNumber++;
 
-		if (m_currentTargetObject == nullptr)
-			m_currentTargetObject = opponent;
+		if (m_currentTargetUnit == nullptr)
+			m_currentTargetUnit = p_unit;
 
-		opponent->GetComponent<Unit>()->AddToRecognizeList(this);
+		p_unit->AddToRecognizeList(this);
 	}
 }
 
-void Unit::DeleteFromOpponentObjectList(yunutyEngine::GameObject* obj)
+void Unit::DeleteFromOpponentObjectList(Unit* p_unit)
 {
-	m_opponentObjectList.remove(obj);
+	m_opponentObjectList.remove(p_unit);
+	p_unit->m_currentAggroNumber--;
+	assert(p_unit->m_currentAggroNumber >= 0);
 
-	if (m_currentTargetObject == obj)
-		m_currentTargetObject = nullptr;
+	if (m_currentTargetUnit == p_unit)
+		m_currentTargetUnit = nullptr;
 
-	obj->GetComponent<Unit>()->DeleteFromRecognizeList(this);
+	p_unit->DeleteFromRecognizeList(this);
 }
 
 void Unit::AddToRecognizeList(Unit* p_unit)

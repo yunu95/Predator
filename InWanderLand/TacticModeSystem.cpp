@@ -28,19 +28,24 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
 	currentSelectedUnit = playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second;
 	processingUnitMap.insert({ queueOrderIndex, currentSelectedUnit });
 
+	SkillPreviewSystem::SingleInstance().SetCurrentSelectedPlayerGameObject(currentSelectedUnit->GetGameObject());
+	SkillPreviewSystem::SingleInstance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(currentSelectedSkill));
+	SkillPreviewSystem::SingleInstance().ActivateSkillPreview(true);
+
 	m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
 	{
 		processingSkillPosMap.insert({ currentSelectedUnit, pos });
 		queueOrderIndex++;
 
 		SetCurrentSelectedQueue(currentSelectedUnit);
-		
+
+		SkillPreviewSystem::SingleInstance().ActivateSkillPreview(false);
+
 		currentSelectedQueue->push([=]()
 			{
 				if (auto itr = processingSkillPosMap.find(currentActivatedUnit);
 					itr != processingSkillPosMap.end())
 				{
-					/*Unit* currentActivatedUnit = processingUnitMap.find(executingOrderIndex)->second;*/
 					Vector3d currentSkillPos = processingSkillPosMap.find(currentActivatedUnit)->second;
 					currentActivatedUnit->OrderSkill(currentSelectedSkill, currentSkillPos);
 					processingSkillPosMap.erase(itr);
@@ -70,7 +75,6 @@ void TacticModeSystem::ExitTacticMode()
 	// 하나라도 Queue에 등록되어 있다면 전술모드를 실행한다.
 	if (!(warriorQueue.empty() && magicianQueue.empty() && healerQueue.empty()))
 	{
-
 		isTacticModeStarted = true;
 	}
 }

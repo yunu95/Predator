@@ -28,6 +28,8 @@ void WarriorProductor::SetUnitData()
 	m_dodgeProbability = 0.2f;
 	m_criticalDamageDecreaseMultiplier = 0.2f;
 
+	m_maxAggroNumber = 2;
+
 	m_idRadius = 4.0f * lengthUnit;
 	m_atkRadius = 1.7f * lengthUnit;
 	m_unitSpeed = 4.5f;
