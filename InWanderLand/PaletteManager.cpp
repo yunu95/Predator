@@ -19,6 +19,17 @@ namespace application
 				SetCurrentPalette(paletteList[(int)Palette_List::Terrain]);
 			}
 
+			void PaletteManager::Clear()
+			{
+				for (auto& each : paletteList)
+				{
+					if (each)
+					{
+						each->Reset();
+					}
+				}
+			}
+
 			void PaletteManager::SetCurrentPalette(Palette* palette)
 			{
 				if (currentPalette)

@@ -812,6 +812,15 @@
     <ClInclude Include="SaveStaticOrnamentsCommnad.h">
       <Filter>Editor\Commands\MenubarCommands\File</Filter>
     </ClInclude>
+    <ClInclude Include="PaletteBrushManager.h">
+      <Filter>Editor\Palette\PaletteBrush</Filter>
+    </ClInclude>
+    <ClInclude Include="PaletteBrush.h">
+      <Filter>Editor\Palette\PaletteBrush</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushList.h">
+      <Filter>Editor\Palette\PaletteBrush</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1256,6 +1265,9 @@
     </ClCompile>
     <ClCompile Include="SaveStaticOrnamentsCommnad.cpp">
       <Filter>Editor\Commands\MenubarCommands\File</Filter>
+    </ClCompile>
+    <ClCompile Include="PaletteBrushManager.cpp">
+      <Filter>Editor\Palette\PaletteBrush</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

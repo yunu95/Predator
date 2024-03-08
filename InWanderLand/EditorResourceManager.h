@@ -53,6 +53,7 @@ namespace application
 		public:
 			void Initialize(void* device);
 			void LateInitialize();
+			void RematchTemplateData();
 			Texture2D* GetTexture2D(std::string filename);
 			bool LoadTextureFromFile(std::string filename);
 			const std::unordered_set<std::string>& GetFbxList() const { return fbxSet; }

@@ -9,6 +9,7 @@
 #include "PodStructs.h"
 #include "EditorResourceManager.h"
 #include "TemplateDataManager.h"
+#include "PaletteBrushManager.h"
 
 namespace application
 {
@@ -96,8 +97,8 @@ namespace application
 								if (ImGui::Selectable(selections[i].c_str(), is_selected))
 								{
 									current = selections[i];
+									TemplateDataManager::GetSingletonInstance().GetSelectedTemplateData()->SetDataResourceName(current);
 									const_cast<std::string&>(data) = current;
-									TemplateDataManager::GetSingletonInstance().GetTemplateData(current)->SetDataResourceName(current);
 									returnVal = true;
 								}
 

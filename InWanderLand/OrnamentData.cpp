@@ -31,6 +31,7 @@ namespace application
 			}
 
 			pod.templateData = static_cast<Ornament_TemplateData*>(ptr);
+			OnDataResourceChange(pod.templateData->pod.fbxName);
 
 			return true;
 		}
@@ -72,10 +73,11 @@ namespace application
 
 		void OrnamentData::OnDataResourceChange(std::string newName)
 		{
-			SetTemplateData(newName);
+			// TemplateData 를 유지하고 Resource 만 갱신함
 			if (ornamentInstance)
 			{
-				ornamentInstance->ChangeTemplateData(this);
+				ornamentInstance->ChangeResource(newName);
+				ApplyAsPaletteInstance();
 			}
 		}
 

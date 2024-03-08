@@ -5,12 +5,14 @@
 #include "EditorEvents.h"
 #include "EditorCommonEvents.h"
 
-#include "Storable.h"
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
 #include "Ornament_TemplateData.h"
 #include "OrnamentData.h"
 #include "UUIDManager.h"
+#include "PaletteManager.h"
+#include "PaletteBrushManager.h"
+#include "EditorResourceManager.h"
 
 #include <fstream>
 
@@ -154,10 +156,6 @@ namespace application
 
                 // Manager 초기화
                 Clear();
-#ifdef EDITOR
-                // Palette 초기화
-                palette::Palette::ResetPalettes();
-#endif
 
                 if (!instanceManager.PreDecoding(mapData) || !templateDataManager.PreDecoding(mapData))
                 {
@@ -176,6 +174,7 @@ namespace application
 
 #ifdef EDITOR
                     Application::DispatchEvent<LoadEvent>();
+                    palette::PaletteBrushManager::GetSingletonInstance().MakeBrush();
 #endif
                     currentMapPath = path;
                     return true;
@@ -244,8 +243,31 @@ namespace application
             currentMapPath = path;
         }
 
+        bool MapFileManager::LoadDefaultMap()
+        {
+            bool returnVal = LoadMapFile("Default.pmap");
+
+            if (returnVal == false)
+            {
+                for (auto& each : ResourceManager::GetSingletonInstance().GetFbxList())
+                {
+                    auto td = templateDataManager.CreateTemplateData<Ornament_TemplateData>(each);
+                    td->SetDataResourceName(each);
+                }
+                palette::PaletteBrushManager::GetSingletonInstance().MakeBrush();
+            }
+
+            currentMapPath.clear();
+            
+            return returnVal;
+        }
+
         void MapFileManager::Clear()
         {
+#ifdef EDITOR
+            palette::PaletteBrushManager::GetSingletonInstance().Clear();
+            palette::PaletteManager::GetSingletonInstance().Clear();
+#endif
             instanceManager.Clear();
             templateDataManager.Clear();
             UUIDManager::GetSingletonInstance().Clear();

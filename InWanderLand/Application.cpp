@@ -520,12 +520,10 @@ namespace application
 				Application::DispatchEvent<editor::MouseMoveEvent>(posX, posY);
 				if (gameFocus)
 				{
-					// Time::GetDeltaTimeUnscaled() 를 누적 시간 획득으로 수정 필요
-
-					static float accumTime = Time::GetDeltaTimeUnscaled();
-					if (Time::GetDeltaTimeUnscaled() - accumTime < 0.000001)
+					static float accumTime = Time::GetTimeElapsedUnscaled();
+					if (Time::GetTimeElapsedUnscaled() - accumTime < 0.000001)
 						return;
-					accumTime = Time::GetDeltaTimeUnscaled();
+					accumTime = Time::GetTimeElapsedUnscaled();
 
 					if (IsCursorInGameWindow() == false)
 					{

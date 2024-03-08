@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Singleton.h"
+#include "Storable.h"
 
 #include <string>
 #include <memory>
@@ -33,6 +34,7 @@ namespace application
 			bool SaveMapFile(const std::string& path);
 			std::string GetCurrentMapPath() const;
 			void SetCurrentMapPath(const std::string& path);
+			bool LoadDefaultMap();
 			void Clear();
 
 		private:

@@ -48,6 +48,8 @@ namespace application
 			friend class TemplateDataManager;
 
 		public:
+			virtual ~Unit_TemplateData();
+
 			virtual std::string GetDataKey() const override;
 			virtual void SetDataResourceName(std::string fbxName) override;
 			virtual std::string GetDataResourceName() const override;

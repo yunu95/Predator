@@ -105,23 +105,7 @@ namespace application
                 each.second->ApplyAsPlaytimeObject();
             }
         }
-
-        std::vector<IEditableData*> InstanceManager::GetOrnamentsList()
-        {
-            std::vector<IEditableData*> ornamentsList;
-
-            for (auto& each : list)
-            {
-                auto ptr = dynamic_cast<OrnamentData*>(each.second.get());
-                if (ptr)
-                {
-                    ornamentsList.push_back(ptr);
-                }
-            }
-
-            return ornamentsList;
-        }
-
+ 
         bool InstanceManager::PreSave()
         {
             for (auto& [key, ptr] : list)

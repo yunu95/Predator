@@ -19,8 +19,8 @@ namespace application::editor::palette
 	{
 		this->ornamentTemplateData = ornamentTemplateData;
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(ornamentTemplateData->pod.fbxName);
-		obj->setName("FBX");
 		obj->SetParent(GetGameObject());
+		currentFBX = ornamentTemplateData->pod.fbxName;
 	}
 
 	void OrnamentEditorInstance::ChangeTemplateData(const application::editor::OrnamentData* ornamentData)
@@ -30,21 +30,32 @@ namespace application::editor::palette
 
 	void OrnamentEditorInstance::ChangeTemplateData(const application::editor::Ornament_TemplateData* ornamentTemplateData)
 	{
-		if (this->ornamentTemplateData == ornamentTemplateData)
+		if (ornamentTemplateData == nullptr)
+			return;
+		this->ornamentTemplateData = ornamentTemplateData;
+		ChangeResource(ornamentTemplateData->pod.fbxName);
+	}
+
+	void OrnamentEditorInstance::ChangeResource(const std::string& fbxName)
+	{
+		// TemplateData 를 유지하고 Resource 만 갱신함
+		if (currentFBX == fbxName)
 			return;
 
-		this->ornamentTemplateData = ornamentTemplateData;
 		for (auto& each : GetGameObject()->GetChildren())
 		{
-			if (each->getName() == "FBX")
+			if (each->getName() == currentFBX)
 			{
 				yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(each);
 				break;
 			}
 		}
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(ornamentTemplateData->pod.fbxName);
-		obj->setName("FBX");
+
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName);
 		obj->SetParent(GetGameObject());
+		currentFBX = fbxName;
+
+		return;
 	}
 }
 

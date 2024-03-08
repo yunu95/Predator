@@ -2,12 +2,19 @@
 #include "Unit_TemplateData.h"
 
 #include "TemplateDataManager.h"
+#include "InstanceManager.h"
 #include "UnitBrush.h"
+#include "UnitData.h"
 
 namespace application
 {
 	namespace editor
 	{
+		Unit_TemplateData::~Unit_TemplateData()
+		{
+
+		}
+
 		std::string Unit_TemplateData::GetDataKey() const
 		{
 			return TemplateDataManager::GetSingletonInstance().GetDataKey(this);
@@ -15,8 +22,21 @@ namespace application
 
 		void Unit_TemplateData::SetDataResourceName(std::string fbxName)
 		{
+			if (pod.fbxName == fbxName)
+				return;
+
 			pod.fbxName = fbxName;
-			palette::UnitBrush::Instance().CreateBrushFBX(this);
+
+			palette::UnitBrush::Instance().ChangeBrushResource(this->GetDataKey(), fbxName);
+
+			for (auto each : InstanceManager::GetSingletonInstance().GetList<UnitData>())
+			{
+				if (each->pod.templateData->GetDataKey() == this->GetDataKey())
+				{
+					each->OnDataResourceChange(fbxName);
+				}
+			}
+
 		}
 
 		std::string Unit_TemplateData::GetDataResourceName() const

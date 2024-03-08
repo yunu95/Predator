@@ -121,7 +121,6 @@ namespace application
 
 			for (auto& each : editorModuleList)
 			{
-
 				each->OnEvent(event);
 			}
 		}
@@ -129,7 +128,9 @@ namespace application
 		void EditorLayer::LateInitialize()
 		{
 			palette::PaletteManager::GetSingletonInstance().Initialize();
+			palette::PaletteBrushManager::GetSingletonInstance().Initialize();
 			ResourceManager::GetSingletonInstance().LateInitialize();
+			mfm.LoadDefaultMap();
 
 			// 카메라 초기화
 			editorCamera.Initialize(yunutyEngine::graphics::Camera::GetMainCamera());

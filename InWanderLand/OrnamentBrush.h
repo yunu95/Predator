@@ -2,9 +2,11 @@
 #include "YunutyEngine.h"
 #include "SingletonComponent.h"
 
+#include "PaletteBrush.h"
 #include "Ornament_TemplateData.h"
-#include "PaletteManager.h"
-#include "EditorResourceManager.h"
+
+#include <string>
+#include <unordered_map>
 
 namespace application
 {
@@ -12,24 +14,22 @@ namespace application
     {
         namespace palette
         {
-            class OrnamentBrush : public yunutyEngine::Component, public yunutyEngine::SingletonComponent<OrnamentBrush>
+            class OrnamentBrush : public PaletteBrush, public yunutyEngine::Component, public yunutyEngine::SingletonComponent<OrnamentBrush>
             {
             public:
-                // pod 의 fbxName 을 설정할 때 호출해주도록 구성합니다.
-                bool CreateBrushFBX(Ornament_TemplateData* data);
-                // Brush 를 사용하기 전에 호출하는 함수입니다.
-                // nullptr 의 경우 비활성화됩니다.
-                void ReadyBrush(Ornament_TemplateData* data);
+                virtual void CreateBrush() override;
+                virtual bool CreateBrush(const std::string& dataKey) override;
+                virtual bool ChangeBrushResource(const std::string& dataKey, const std::string& fbxName) override;
+                virtual void ReadyBrush(const std::string& dataKey) override;
+                virtual void Clear() override;
+                virtual void Update() override;
 
             private:
-                PaletteManager& pm = PaletteManager::GetSingletonInstance();
-                ResourceManager& erm = ResourceManager::GetSingletonInstance();
+                virtual bool DestroyBrush(const std::string& dataKey) override;
 
-                // Save / Load 혹은 Create / Delete 시에 리스트를 변경하는 것이 맞으나,
-                // 진행 과정에서 삭제되는 경우에는 어차피 접근하지 못할 것으로 보고
-                // 추가되는 경우에만 응대하도록 구성합니다.
-                // 추가는 TemplateData 의 생성자에서 추가하도록 합니다.
-                std::unordered_map<Ornament_TemplateData*, GameObject*> brushList = std::unordered_map<Ornament_TemplateData*, GameObject*>();
+                void ReadyBrush(Ornament_TemplateData* data);
+
+                std::unordered_map<std::string, GameObject*> brushList = std::unordered_map<std::string, GameObject*>();
                 Ornament_TemplateData* currentBrush = nullptr;
             };
         }

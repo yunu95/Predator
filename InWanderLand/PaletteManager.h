@@ -46,6 +46,7 @@ namespace application
 
             public:
                 void Initialize();
+                void Clear();
 
                 /// <summary>
                 /// 현재 활성화된 팔레트를 지정하거나 가져올 수 있습니다.

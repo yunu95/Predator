@@ -3,6 +3,7 @@
 #include "SingletonComponent.h"
 #include "DebugMeshes.h" 
 #include "TerrainPalette.h"
+#include "PaletteBrush.h"
 
 namespace application
 {
@@ -10,9 +11,15 @@ namespace application
     {
         namespace palette
         {
-            class TerrainBrush : public yunutyEngine::Component, public yunutyEngine::SingletonComponent<TerrainBrush>
+            class TerrainBrush : public PaletteBrush, public yunutyEngine::Component, public yunutyEngine::SingletonComponent<TerrainBrush>
             {
             public:
+                virtual void CreateBrush() override {};
+                virtual bool CreateBrush(const std::string& dataKey) override { return false; };
+                virtual bool ChangeBrushResource(const std::string& dataKey, const std::string& fbxName) override { return false; };
+                virtual void ReadyBrush(const std::string& dataKey) override {};
+                virtual void Clear() override {};
+
                 void SetBrushSize(unsigned int size)
                 {
                     brushSize = size;
@@ -85,6 +92,8 @@ namespace application
                 {
                 }
             private:
+                virtual bool DestroyBrush(const std::string& dataKey) override { return false; };
+
                 int brushSize{1};
                 vector<graphics::StaticMeshRenderer*> planeMeshes;
                 vector<Vector3d> planeMeshesPos;

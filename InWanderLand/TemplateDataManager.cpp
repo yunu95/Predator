@@ -9,7 +9,8 @@ namespace application
     namespace editor
     {
         TemplateDataManager::TemplateDataManager()
-            : Storable(), Singleton<TemplateDataManager>(), list(), typeMap(), uuidKeyMap(), ptrKeyMap(), dataContainer()
+            : Storable(), Singleton<TemplateDataManager>(), list(), typeMap(), 
+            uuidKeyMap(), ptrKeyMap(), dataContainer(), selectedData(nullptr)
         {
             // 대략 100개 정도의 데이터를 수용할 수 있도록 미리 할당함
             dataContainer.reserve(100);
@@ -118,6 +119,17 @@ namespace application
             ptrKeyMap.clear();
             dataContainer.clear();
             list.clear();
+            selectedData = nullptr;
+        }
+
+        ITemplateData* TemplateDataManager::GetSelectedTemplateData() const
+        {
+            return selectedData;
+        }
+
+        void TemplateDataManager::SetSelectedTemplateData(const ITemplateData* ptr)
+        {
+            selectedData = const_cast<ITemplateData*>(ptr);
         }
 
         bool TemplateDataManager::PreSave()

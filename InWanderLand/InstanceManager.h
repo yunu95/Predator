@@ -71,7 +71,20 @@ namespace application
 			void Clear();
 			void ApplyInstancesAsPlaytimeObjects();
 
-            std::vector<IEditableData*> GetOrnamentsList();
+            template <typename T>
+            std::vector<T*> GetList()
+            {
+                std::vector<T*> returnList;
+                for (auto& each : list)
+                {
+                    auto ptr = dynamic_cast<T*>(each.second.get());
+                    if (ptr)
+                    {
+                        returnList.push_back(ptr);
+                    }
+                }
+                return returnList;
+            }
 
         protected:
             bool PreSave();

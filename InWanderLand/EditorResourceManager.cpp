@@ -66,6 +66,11 @@ namespace application
             LoadFbxList();
         }
 
+        void ResourceManager::RematchTemplateData()
+        {
+            
+        }
+
         Texture2D* ResourceManager::GetTexture2D(std::string filename)
         {
             if (textureMap.find(filename) != textureMap.end())
@@ -146,14 +151,15 @@ namespace application
             for (auto each : fbxList)
             {
                 fbxSname = std::string(each.begin(), each.end());
-                auto td = tdm.CreateTemplateData<Ornament_TemplateData>(fbxSname);
-                td->SetDataResourceName(fbxSname);
                 fbxSet.insert(fbxSname);
             }
         }
 
         void ResourceManager::LoadShaderList()
         {
+            if (!shaderMap.empty())
+                return;
+
             auto& shaderList = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetShaderList();
 
             for (auto each : shaderList)

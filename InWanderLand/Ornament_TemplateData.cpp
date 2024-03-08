@@ -10,6 +10,11 @@ namespace application
 {
 	namespace editor
 	{
+		Ornament_TemplateData::~Ornament_TemplateData()
+		{
+
+		}
+
 		std::string Ornament_TemplateData::GetDataKey() const
 		{
 			return TemplateDataManager::GetSingletonInstance().GetDataKey(this);
@@ -17,15 +22,20 @@ namespace application
 
 		void Ornament_TemplateData::SetDataResourceName(std::string fbxName)
 		{
+			if (pod.fbxName == fbxName)
+				return;
+
 			pod.fbxName = fbxName;
-			for (auto each : InstanceManager::GetSingletonInstance().GetOrnamentsList())
+
+			palette::OrnamentBrush::Instance().ChangeBrushResource(this->GetDataKey(), fbxName);
+
+			for (auto each : InstanceManager::GetSingletonInstance().GetList<OrnamentData>())
 			{
-				if (TemplateDataManager::GetSingletonInstance().GetDataKey(static_cast<OrnamentData*>(each)->pod.templateData) == fbxName)
+				if (each->pod.templateData->GetDataKey() == this->GetDataKey())
 				{
-					
+					each->OnDataResourceChange(fbxName);
 				}
 			}
-			palette::OrnamentBrush::Instance().CreateBrushFBX(this);
 		}
 
 		std::string Ornament_TemplateData::GetDataResourceName() const

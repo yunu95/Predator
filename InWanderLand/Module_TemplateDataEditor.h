@@ -36,6 +36,8 @@ namespace application
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
 
+			ITemplateData* GetSelectedTemplateData();
+
 		private:
 			Module_TemplateDataEditor();
 
@@ -47,7 +49,7 @@ namespace application
 			void DrawTemplateDataPanel(const ImVec2& region);
 			// ITemplateData 를 해당 TemplateData 로 환원하여 해당 데이터의 pod 내용을 그려내는 함수
 			template <typename T> requires std::is_base_of_v<ITemplateData, T>
-			void DrawTemplateDataPOD(const ITemplateData* data) 
+			void DrawTemplateDataPOD(const ITemplateData* data)
 			{
 				static int idx = 0;
 				imgui::BeginSection_2Col(idx, "Field List", ImGui::GetContentRegionAvail().x, 0.2f);
@@ -56,9 +58,9 @@ namespace application
 				imgui::data::DrawDataField(td->pod);
 				imgui::EndSection();
 			}
+
 		private:
 			TemplateDataManager& tdManager;
-			ITemplateData* selectedData;
 		};
 	}
 }

@@ -8,7 +8,7 @@ namespace application
 	namespace editor
 	{
 		Module_TemplateDataEditor::Module_TemplateDataEditor()
-			: tdManager(TemplateDataManager::GetSingletonInstance()), selectedData(nullptr)
+			: tdManager(TemplateDataManager::GetSingletonInstance())
 		{
 
 		}
@@ -49,6 +49,11 @@ namespace application
 
 		}
 
+		ITemplateData* Module_TemplateDataEditor::GetSelectedTemplateData()
+		{
+			return tdManager.GetSelectedTemplateData();
+		}
+
 		void Module_TemplateDataEditor::DrawLayout()
 		{
 			// Spacing, 바꾸지 않는다는 전제로 static으로 구현
@@ -69,6 +74,8 @@ namespace application
 
 			//}
 
+			auto selectedData = GetSelectedTemplateData();
+
 			if (ImGui::CollapsingHeader("Units"))
 			{
 				for (auto each : tdManager.GetDataList(DataType::UnitData))
@@ -77,11 +84,11 @@ namespace application
 					{
 						if (selectedData == each)
 						{
-							selectedData = nullptr;
+							tdManager.SetSelectedTemplateData(nullptr);
 						}
 						else
 						{
-							selectedData = each;
+							tdManager.SetSelectedTemplateData(each);
 						}
 					}
 				}
@@ -90,7 +97,7 @@ namespace application
 			{
 				if (selectedData != nullptr && tdManager.GetDataType(selectedData) == DataType::UnitData)
 				{
-					selectedData = nullptr;
+					tdManager.SetSelectedTemplateData(nullptr);
 				}
 			}
 
@@ -102,11 +109,11 @@ namespace application
 					{
 						if (selectedData == each)
 						{
-							selectedData = nullptr;
+							tdManager.SetSelectedTemplateData(nullptr);
 						}
 						else
 						{
-							selectedData = each;
+							tdManager.SetSelectedTemplateData(each);
 						}
 					}
 				}
@@ -115,7 +122,7 @@ namespace application
 			{
 				if (selectedData != nullptr && tdManager.GetDataType(selectedData) == DataType::OrnamentData)
 				{
-					selectedData = nullptr;
+					tdManager.SetSelectedTemplateData(nullptr);
 				}
 			}
 
@@ -125,6 +132,7 @@ namespace application
 		void Module_TemplateDataEditor::DrawTemplateDataPanel(const ImVec2& region)
 		{
 			ImGui::BeginChild("SelectedTemplateData", region, true);
+			auto selectedData = GetSelectedTemplateData();
 			if (selectedData != nullptr)
 			{
 				switch (tdManager.GetDataType(selectedData->GetDataKey()))

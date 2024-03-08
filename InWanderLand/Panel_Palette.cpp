@@ -686,8 +686,10 @@ namespace application
         {
             unitCurrentButton = -1;
             unitButton.clear();
+            up.SetAsSelectMode(true);
 
             ornamentCurrentButton = -1;
+            op.SetAsSelectMode(true);
 
             auto uSize = tdm.GetDataList(DataType::UnitData).size();
             unitButton.reserve(30);
