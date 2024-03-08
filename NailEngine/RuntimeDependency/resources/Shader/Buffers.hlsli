@@ -116,6 +116,11 @@ cbuffer FogBuffer : register(b6)
     float2 padding2;
 }
 
+cbuffer PointLightVPMatrix : register(b7)
+{
+    row_major matrix viewProj[6];
+}
+
 Texture2D AlbedoMap : register(t0);
 Texture2D NormalMap : register(t1);
 Texture2D ARMMap : register(t2);

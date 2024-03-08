@@ -236,6 +236,65 @@ void InstancingManager::RenderStaticShadow()
 	}
 }
 
+void InstancingManager::RenderStaticPointLightShadow()
+{
+	ClearData();
+
+	for (auto& pair : this->staticMeshDeferredCache)
+	{
+		std::set<std::shared_ptr<RenderInfo>>& renderInfoVec = pair.second;
+
+		const InstanceID& instanceID = pair.first;
+
+		//if (renderInfoVec.size() == 1)
+		//{
+		//	MatrixBuffer matrixBuffer;
+		//	matrixBuffer.WTM = renderInfoVec[0].wtm;
+		//	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+		//	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+		//	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+		//	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+		//	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+		//
+		//	auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(renderInfoVec[0].mesh->GetName()));
+		//
+		//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(renderInfoVec[0].material->GetName()))->PushGraphicsData();
+		//	for (int i = 0; i < mesh->GetMaterialCount(); ++i)
+		//	{
+		//		renderInfoVec[0].mesh->Render(i);
+		//	}
+		//}
+		//else
+		{
+			//for (int i = 0; i < renderInfoVec.size(); ++i)
+			for (auto& i : renderInfoVec)
+			{
+				if (i->isActive == false) continue;
+
+				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+				//auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
+
+				//if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
+				//{
+				//	continue;
+				//}
+
+				const std::shared_ptr<RenderInfo>& renderInfo = i;
+				InstancingData data;
+				data.wtm = renderInfo->wtm;
+				AddData(instanceID, data);
+			}
+
+			if (renderInfoVec.size() != 0)
+			{
+				auto& buffer = _buffers[instanceID];
+				buffer->PushData();
+				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, buffer);
+			}
+		}
+	}
+}
+
 void InstancingManager::RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& renderInfo)
 {
 	InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);

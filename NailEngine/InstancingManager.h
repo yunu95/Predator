@@ -28,6 +28,7 @@ public:
 	void RenderStaticForward();
 
 	void RenderStaticShadow();
+	void RenderStaticPointLightShadow();
 
 	void RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& renderInfo);
 	void RegisterStaticForwardData(std::shared_ptr<RenderInfo>& renderInfo);

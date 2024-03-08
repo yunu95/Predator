@@ -64,6 +64,7 @@ enum class CB_TYPE
 	BONE,
 	INST_TRANSITION,
 	FOG,
+	POINTLIGHT_VPMATRIX,
 };
 
 struct MatrixBuffer
@@ -145,6 +146,12 @@ struct FogBuffer
 	float end;
 	DirectX::SimpleMath::Vector2 padding;
 };
+
+struct PointLightVPMatrix
+{
+	DirectX::SimpleMath::Matrix viewProj[6];
+};
+
 
 class Mesh;
 class Material;

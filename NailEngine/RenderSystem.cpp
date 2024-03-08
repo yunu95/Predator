@@ -39,6 +39,7 @@
 
 
 #include "ShadowPass.h"
+#include "PointLightShadowPass.h"
 #include "SkyBoxPass.h"
 #include "BloomPass.h"
 
@@ -170,6 +171,8 @@ void RenderSystem::Render()
 
 	// 그림자 맵 생성
 	//RenderShadow();
+	RenderPointLightShadow();
+
 
 	SkyBoxPass::Instance.Get().BindIBLTexture();
 
@@ -183,11 +186,7 @@ void RenderSystem::Render()
 	RenderForward();
 	RenderBackBuffer();
 
-
-
 	SkyBoxPass::Instance.Get().Render();
-
-
 
 	RenderUI();
 
@@ -314,6 +313,72 @@ void RenderSystem::RenderShadow()
 	InstancingManager::Instance.Get().RenderStaticShadow();
 }
 
+void RenderSystem::RenderPointLightShadow()
+{
+	auto& lightSet = LightManager::Instance.Get().GetLightList();
+
+	PointLightShadowPass::Instance.Get().Render();
+
+	for (auto& e : lightSet)
+	{
+		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
+		{
+			// Matrix Buffer Set
+			DirectX::SimpleMath::Vector3 pos;
+			DirectX::SimpleMath::Vector3 scale;
+			DirectX::SimpleMath::Quaternion quat;
+			std::static_pointer_cast<PointLight>(e)->GetWorldTM().Decompose(scale, quat, pos);
+
+			PointLightVPMatrix pointLightVP;
+
+			for (int i = 0; i < 6; ++i)
+			{
+				// 각 렌더 타겟에 대한 시야 및 방향 설정
+				DirectX::SimpleMath::Vector3 targetPos;
+				DirectX::SimpleMath::Vector3 upVec;
+				switch (i)
+				{
+					case 0: // +X
+						targetPos = pos + DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f);
+						upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
+						break;
+					case 1: // -X
+						targetPos = pos + DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f);
+						upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
+						break;
+					case 2: // +Y
+						targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
+						upVec = DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f);
+						break;
+					case 3: // -Y
+						targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f);
+						upVec = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f);
+						break;
+					case 4: // +Z
+						targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f);
+						upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
+						break;
+					case 5: // -Z
+						targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f);
+						upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
+						break;
+				}
+
+				// 뷰 행렬 계산
+				DirectX::SimpleMath::Matrix viewMatrix = DirectX::SimpleMath::Matrix::CreateLookAt(pos, targetPos, upVec);
+				DirectX::SimpleMath::Matrix projMat = CameraManager::Instance.Get().GetPTM90ByResolution(1024, 1024);
+
+				pointLightVP.viewProj[i] = viewMatrix * projMat;
+			}
+
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX))->PushGraphicsData(&pointLightVP, sizeof(PointLightVPMatrix), static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX), true);
+
+			InstancingManager::Instance.Get().RenderStaticPointLightShadow();
+		}
+	}
+	PointLightShadowPass::Instance.Get().EndRender();
+}
+
 void RenderSystem::RenderLight()
 {
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
@@ -340,9 +405,11 @@ void RenderSystem::RenderLight()
 		else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{
 			matrixBuffer.WTM = std::static_pointer_cast<PointLight>(e)->GetWorldTM();
+			matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 			matrixBuffer.WorldInvTrans = std::static_pointer_cast<PointLight>(e)->GetWorldTM().Invert().Transpose();
 		}
 		NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
+
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e->GetMaterialName()))->SetInt(0, e->GetID());
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e->GetMaterialName()))->PushGraphicsData();
 		auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());

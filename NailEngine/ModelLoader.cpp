@@ -24,11 +24,13 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 		aiProcess_CalcTangentSpace | aiProcess_PopulateArmatureData |
 		aiProcess_FlipWindingOrder | aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
 		aiProcess_SortByPType | aiProcess_LimitBoneWeights;*/
+
 	unsigned int flag = aiProcess_Triangulate |
 		aiProcess_ConvertToLeftHanded  | aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
 		aiProcess_CalcTangentSpace | aiProcess_PopulateArmatureData |
 		aiProcess_FlipWindingOrder | aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
-		aiProcess_SortByPType | aiProcess_LimitBoneWeights | aiProcess_FixInfacingNormals;
+		aiProcess_SortByPType | aiProcess_LimitBoneWeights;
+
 
 	const aiScene* scene = importer.ReadFile(filePath, flag);
 	auto temp = importer.GetErrorString();
@@ -109,16 +111,19 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 			DirectX::SimpleMath::Vector3 dnormal{ normal.x, normal.y, normal.z };
 
 			Vertex vertex;
-			
+			aiVector3D tangent = mesh->mTangents[j];
+
 			if (mesh->HasVertexColors(0))
 			{
 				aiColor4D color = mesh->mColors[0][j];
-				vertex = { dvertex, DirectX::SimpleMath::Vector4{color.r,color.g,color.b,color.a}, duv, dnormal, DirectX::SimpleMath::Vector3{1.f,0.f,0.f} };
+				
+				vertex = { dvertex, DirectX::SimpleMath::Vector4{color.r,color.g,color.b,color.a}, duv, dnormal, DirectX::SimpleMath::Vector3{tangent.x,tangent.y,tangent.z} };
 			}
 			else
 			{
-				vertex = { dvertex, DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f}, duv, dnormal, DirectX::SimpleMath::Vector3{1.f,0.f,0.f} };
+				vertex = { dvertex, DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f}, duv, dnormal, DirectX::SimpleMath::Vector3{tangent.x,tangent.y,tangent.z} };
 			}
+
 			maxX = max(dvertex.x, maxX);
 			maxY = max(dvertex.y, maxY);
 			maxZ = max(dvertex.z, maxZ);

@@ -103,13 +103,14 @@ private:
 
 
 #pragma region LoadMesh
-	void LoadCubeMesh();
-	void LoadSphereMesh();
+	//void LoadCubeMesh();
+	//void LoadSphereMesh();
 	void LoadRactangleMesh();
-	void LoadPointMesh();
-	void LoadLineMesh();
-	void LoadCapsuleMesh();
-	void LoadCylinderMesh();
+	//void LoadPointMesh();
+	//void LoadLineMesh();
+	//void LoadCapsuleMesh();
+	//void LoadCylinderMesh();
+	//void LoadTriangleMesh();
 #pragma endregion
 
 	std::wstring String_To_Wstring(const std::string& str);
