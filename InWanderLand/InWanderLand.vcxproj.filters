@@ -136,9 +136,6 @@
     <Filter Include="Contents\UnitStatusComponent\KnockBack">
       <UniqueIdentifier>{0562aa4c-cdda-4cb7-845e-b4dd252c119b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\UnitStatusComponent\OnlyDamage">
-      <UniqueIdentifier>{a747ad64-1ec4-4e4a-b3dd-6afdf9903359}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Editor\Events\Category">
       <UniqueIdentifier>{8039b949-8b1d-456e-950b-17344a38e1cc}</UniqueIdentifier>
     </Filter>
@@ -321,6 +318,9 @@
     </Filter>
     <Filter Include="Editor\IO\FileSystem">
       <UniqueIdentifier>{018fec7d-1ab2-4937-a43f-4face4d7b708}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitStatusComponent\Taunting">
+      <UniqueIdentifier>{a747ad64-1ec4-4e4a-b3dd-6afdf9903359}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -627,8 +627,8 @@
     <ClInclude Include="WindowEvents.h">
       <Filter>Editor\Events\Category\2_Window</Filter>
     </ClInclude>
-    <ClInclude Include="OnlyDamageComponent.h">
-      <Filter>Contents\UnitStatusComponent\OnlyDamage</Filter>
+    <ClInclude Include="TauntingComponent.h">
+      <Filter>Contents\UnitStatusComponent\Taunting</Filter>
     </ClInclude>
     <ClInclude Include="EditorCommonEvents.h">
       <Filter>Editor\Events\Category\1_Editor</Filter>
@@ -809,6 +809,7 @@
     <ClInclude Include="FileSystem.h">
       <Filter>Editor\IO\FileSystem</Filter>
     </ClInclude>
+    <ClInclude Include="DamageOnlyComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1003,8 +1004,8 @@
     <ClCompile Include="WarriorSkillSystem.cpp">
       <Filter>Contents\SkillSystem</Filter>
     </ClCompile>
-    <ClCompile Include="OnlyDamageComponent.cpp">
-      <Filter>Contents\UnitStatusComponent\OnlyDamage</Filter>
+    <ClCompile Include="TauntingComponent.cpp">
+      <Filter>Contents\UnitStatusComponent\Taunting</Filter>
     </ClCompile>
     <ClCompile Include="SnippetTemplate.cpp">
       <Filter>TestCodes\snippets</Filter>
@@ -1251,5 +1252,6 @@
     <ClCompile Include="FileSystem.cpp">
       <Filter>Editor\IO\FileSystem</Filter>
     </ClCompile>
+    <ClCompile Include="DamageOnlyComponent.cpp" />
   </ItemGroup>
 </Project>

@@ -150,10 +150,11 @@ private:
 
 	UnitType playerSerialNumber;
 
-	std::list<Unit*> m_opponentObjectList;		
+	std::set<Unit*> m_opponentObjectSet;		
 	std::list<Unit*> m_recognizedThisList;	// 현재 이 오브젝트를 적군으로 인식한 다른 유닛들의 리스트.
 
 	Unit* m_currentTargetUnit;		// Attack이나 Chase 때 사용할 적군  오브젝트
+	Unit* tauntedUnit;				// 현재 this 유닛이 도발당한 주체.
 	Vector3d m_currentMovePosition;							// 현재 상대의 위치
 
 	Vector3d m_currentSkillPosition;
@@ -253,6 +254,7 @@ public:
 	void SetStaticMeshComponent(yunutyEngine::graphics::StaticMeshRenderer* p_stcMesh);
 
 	void ChangeCurrentOpponentUnitForced(Unit* p_unit);
+	void DeleteTauntingUnit();
 public:
 	/// <summary>
 	/// 유닛의 스탯을 조작하는 함수.

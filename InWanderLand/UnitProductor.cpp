@@ -29,7 +29,7 @@ void UnitProductor::SetCommonComponents()
 	auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(unitColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
 	unitColliderDebugObject->SetParent(m_unitGameObject);
-	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(lengthUnit, lengthUnit, lengthUnit));
+	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(lengthUnit * 2, lengthUnit * 2, lengthUnit * 2));
 	m_unitComponent->SetStaticMeshComponent(unitColliderDebugObject->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>());
 
 	auto frontDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -78,5 +78,41 @@ void UnitProductor::SetPlayerRelatedComponents(Unit* playerUnit)
 	playerUnit->SetPlayerSerialNumber(m_unitType);
 	playerUnit->SetSkillPreviewType(qSkillPreviewType, wSkillPreviewType);
 	PlayerController::GetInstance()->AddPlayerUnit(playerUnit);
+}
+
+void UnitProductor::PushWaveData(Vector3d startPos, float delay)
+{
+	m_waveDelayQueue.push({ startPos, delay });
+	if (!isWaveUnitCreated)
+	{
+		m_duration = delay;
+		isWaveUnitCreated = true;
+	}
+}
+
+void UnitProductor::Update()
+{
+	if (isWaveTimerStarted && !(m_waveDelayQueue.empty()))
+	{
+		m_elapsed += Time::GetDeltaTime();
+
+		if (m_elapsed >= m_duration)
+		{
+			CreateUnit(m_waveDelayQueue.front().first);
+			m_waveDelayQueue.pop();
+			m_elapsed = 0.0f;
+
+			if (m_waveDelayQueue.empty())
+				isWaveTimerStarted = false;
+			else
+				m_duration = m_waveDelayQueue.front().second;
+		}
+	}
+}
+
+void UnitProductor::Start()
+{
+	/// 원래는 플레이어 유닛이 들어오면 ok지만 우선은 실행 시 wave Trigger On
+	isWaveTimerStarted = true;
 }
 

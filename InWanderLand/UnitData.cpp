@@ -8,6 +8,7 @@
 #include "MagicianProductor.h"
 #include "WarriorProductor.h"
 #include "HealerProductor.h"
+#include "MeleeEnemyProductor.h"
 
 namespace application
 {
@@ -106,26 +107,67 @@ namespace application
 			UnitProductor* productionFactory{ nullptr };
 			Vector3d position{ pod.position.x, pod.position.y, pod.position.z };
 			// 유닛을 생성할 때 쓰일 팩토리를 먼저 지정
-			switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
+			if (pod.waveData == nullptr)
 			{
-				case Unit::UnitType::Healer:
-					productionFactory = &HealerProductor::Instance();
-					break;
-				case Unit::UnitType::Warrior:
-					productionFactory = &WarriorProductor::Instance();
-					break;
-				case Unit::UnitType::Magician:
-					productionFactory = &MagicianProductor::Instance();
-					break;
-				default:
-					break;
+				switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
+				{
+					case Unit::UnitType::Healer:
+						productionFactory = &HealerProductor::Instance();
+						break;
+					case Unit::UnitType::Warrior:
+						productionFactory = &WarriorProductor::Instance();
+						break;
+					case Unit::UnitType::Magician:
+						productionFactory = &MagicianProductor::Instance();
+						break;
+					default:
+						productionFactory = &MeleeEnemyProductor::Instance();
+						break;
+				}
+				// 팩토리의 유닛 스펙을 에디터에서 저장한 데이터로 바꿈(유닛 체력, 공격속도 등등...)
+				productionFactory->m_unitSpeed = pod.templateData->pod.m_unitSpeed;
+				// 팩토리로 유닛을 에디터에서 저장된 위치에 생성
+				productionFactory->CreateUnit(position);
 			}
-			// 팩토리의 유닛 스펙을 에디터에서 저장한 데이터로 바꿈(유닛 체력, 공격속도 등등...)
-			productionFactory->m_unitSpeed = pod.templateData->pod.m_unitSpeed;
-			// 팩토리로 유닛을 에디터에서 저장된 위치에 생성
-			productionFactory->CreateUnit(position);
-			// 하지만 이 코드도 수정되어야 함. 유닛 데이터가 바로 유닛 생성으로 이어지는게 아니라,
-			// 웨이브에 속하지 않은 유닛은 UnitSpawnPoint로, 웨이브에 속한 유닛은 따로 처리되어야 하기 때문.
+			else
+			{
+				// 웨이브 데이터가 존재하는 경우
+				UnitProductor* productionFactory{ nullptr };
+				Vector3d position{ pod.position.x, pod.position.y, pod.position.z };
+				switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
+				{
+					case Unit::UnitType::Healer:
+						productionFactory = &HealerProductor::Instance();
+						break;
+					case Unit::UnitType::Warrior:
+						productionFactory = &WarriorProductor::Instance();
+						break;
+					case Unit::UnitType::Magician:
+						productionFactory = &MagicianProductor::Instance();
+						break;
+					default:
+						productionFactory = &MeleeEnemyProductor::Instance();
+						break;
+				}
+
+				static int unitCountPerWave = 0;
+				static int delayIndex = 0;
+				static int waveSizeIndex = 0;
+
+				productionFactory->PushWaveData(position, pod.waveData->pod.waveDelays[delayIndex]);
+				unitCountPerWave++;
+
+				if (pod.waveData->pod.waveSizes[waveSizeIndex] < unitCountPerWave)
+				{
+					unitCountPerWave = 0;
+					waveSizeIndex++;
+				}
+				else
+				{
+					delayIndex++;
+				}
+				//float waveDelay = pod.waveData->GetWaveUnitDataMap().find()
+			}
 		}
 
 		bool UnitData::PreEncoding(json& data) const

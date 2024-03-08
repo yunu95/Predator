@@ -995,6 +995,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="AutoAttackProjectilePool.h" />
     <ClInclude Include="BleedingComponent.h" />
     <ClInclude Include="BlindFieldComponent.h" />
+    <ClInclude Include="DamageOnlyComponent.h" />
     <ClInclude Include="DebuggingMesh.h" />
     <ClInclude Include="DualCastComponent.h" />
     <ClInclude Include="EditorResourceManager.h" />
@@ -1034,7 +1035,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="MagicianSkillOneProjectilePool.h" />
     <ClInclude Include="MagicianSkillSystem.h" />
     <ClInclude Include="MeleeAttackSystem.h" />
-    <ClInclude Include="OnlyDamageComponent.h" />
+    <ClInclude Include="TauntingComponent.h" />
     <ClInclude Include="RangedAttackSystem.h" />
     <ClInclude Include="StatusTimer.h" />
     <ClInclude Include="StatusTimerPool.h" />
@@ -1155,6 +1156,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="AutoAttackProjectilePool.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
     <ClCompile Include="BlindFieldComponent.cpp" />
+    <ClCompile Include="DamageOnlyComponent.cpp" />
     <ClCompile Include="DebuggingMesh.cpp" />
     <ClCompile Include="DualCastComponent.cpp" />
     <ClCompile Include="EditorResourceManager.cpp" />
@@ -1182,7 +1184,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="MagicianAutoAttackProjectile.cpp" />
     <ClCompile Include="MagicianSkillSystem.cpp" />
     <ClCompile Include="MeleeAttackSystem.cpp" />
-    <ClCompile Include="OnlyDamageComponent.cpp" />
+    <ClCompile Include="TauntingComponent.cpp" />
     <ClCompile Include="OrnamentEditorInstance.cpp" />
     <ClCompile Include="ParalysisFieldComponent.cpp" />
     <ClCompile Include="PaletteManager.cpp" />

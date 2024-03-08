@@ -1,7 +1,7 @@
 #include "InWanderLand.h"
 #include "HealerProductor.h"
 #include "RangedAttackSystem.h"
-#include "OnlyDamageComponent.h"
+#include "TauntingComponent.h"
 #include "DebugMeshes.h"
 #include "HealerSkillSystem.h"
 #include "DualCastComponent.h"
@@ -99,7 +99,7 @@ yunutyEngine::GameObject* HealerProductor::CreateUnit(Vector3d startPos)
 
 #pragma region Q Skill Setting
 	auto QSkillFieldObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto fieldDamageComponent = QSkillFieldObject->AddComponent<OnlyDamageComponent>();
+	auto fieldDamageComponent = QSkillFieldObject->AddComponent<DamageOnlyComponent>();
 	fieldDamageComponent->SetSkillOwnerUnit(m_unitComponent);
 
 	auto QSkillFieldCollider = QSkillFieldObject->AddComponent<physics::SphereCollider>();
@@ -111,7 +111,7 @@ yunutyEngine::GameObject* HealerProductor::CreateUnit(Vector3d startPos)
 	auto QSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(QSkillFieldDebugObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::white(), true));
 	//QSkillFieldDebugObject->GetTransform()->scale = { pow(m_QSkillFieldRadius, 2), pow(m_QSkillFieldRadius, 2) , pow(m_QSkillFieldRadius, 2) };
-	QSkillFieldDebugObject->GetTransform()->SetWorldScale({ m_QSkillFieldRadius, m_QSkillFieldRadius, m_QSkillFieldRadius });
+	QSkillFieldDebugObject->GetTransform()->SetWorldScale({ m_QSkillFieldRadius * 2, m_QSkillFieldRadius * 2, m_QSkillFieldRadius * 2 });
 #pragma endregion
 
 #pragma region W Skill Setting

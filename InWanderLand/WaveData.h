@@ -90,11 +90,13 @@ namespace application
             virtual bool PostLoadCallback() override;
             virtual bool PreSaveCallback() override;
 
-        private:
+		private:
+			void ApplyPodAsVector();
             static TemplateDataManager& templateDataManager;
             static WaveData* selectedEditorWave;
             palette::WaveEditorInstance* waveInstance{ nullptr };
             unordered_map<UnitData*, WaveUnitData> waveUnitDataMap;
+			vector<UnitData*> waveUnitDatasVector;
 
             WaveData();
             WaveData(const std::string& name);

@@ -56,7 +56,8 @@ void Unit::Start()
 		[this]()
 		{
 			return m_currentTargetUnit == nullptr || 
-				(GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetUnit->GetTransform()->GetWorldPosition()).Magnitude() > m_atkDistance + 0.4f;
+				(((GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetUnit->GetTransform()->GetWorldPosition()).Magnitude() > m_atkDistance + 0.4f) && m_currentTargetUnit != tauntedUnit
+					|| currentOrder == UnitState::Idle);
 		} });
 
 	unitFSM.transitions[UnitState::Attack].push_back({ UnitState::Move,
@@ -231,7 +232,7 @@ void Unit::DeathEngage()
 	deathFunctionElapsed = 0.0f;
 
 	m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_deathAnimation, animationLerpDuration, animationTransitionSpeed);
-	m_opponentObjectList.clear();
+	m_opponentObjectSet.clear();
 
 	ReportUnitDeath();
 
@@ -345,6 +346,8 @@ void Unit::ChaseUpdate()
 		chaseFunctionElapsed = 0.0f;
 
 		DetermineCurrentTargetObject();
+
+		dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotationTime, false);
 
 		m_navAgentComponent->MoveTo(m_currentTargetUnit->GetTransform()->GetWorldPosition());
 	}
@@ -546,7 +549,18 @@ void Unit::SetStaticMeshComponent(yunutyEngine::graphics::StaticMeshRenderer* p_
 
 void Unit::ChangeCurrentOpponentUnitForced(Unit* p_unit)
 {
-	m_currentTargetUnit = p_unit;
+	if (tauntedUnit == nullptr)
+	{
+		m_currentTargetUnit = nullptr;
+		tauntedUnit = p_unit;
+	}
+
+	currentOrder = UnitState::Idle;
+}
+
+void Unit::DeleteTauntingUnit()
+{
+	tauntedUnit = nullptr;
 }
 
 void Unit::DetermineHitDamage(float p_onceCalculatedDmg)
@@ -556,19 +570,27 @@ void Unit::DetermineHitDamage(float p_onceCalculatedDmg)
 
 void Unit::DetermineCurrentTargetObject()
 {
-	bool isDistanceComparingStarted = false;
-
-	float tempShortestDistance = 0.0f;
-
-	for (auto e : m_opponentObjectList)
+	if (tauntedUnit != nullptr)
 	{
-		float distance = (GetGameObject()->GetTransform()->GetWorldPosition() - e->GetTransform()->GetWorldPosition()).Magnitude();
+		m_currentTargetUnit = tauntedUnit;
+	}
+	
+	else
+	{
+		bool isDistanceComparingStarted = false;
 
-		if ((!isDistanceComparingStarted || tempShortestDistance > distance) && e->currentOrder != UnitState::Death)
+		float tempShortestDistance = 0.0f;
+
+		for (auto e : m_opponentObjectSet)
 		{
-			tempShortestDistance = distance;
-			m_currentTargetUnit = e;
-			isDistanceComparingStarted = true;
+			float distance = (GetGameObject()->GetTransform()->GetWorldPosition() - e->GetTransform()->GetWorldPosition()).Magnitude();
+
+			if ((!isDistanceComparingStarted || tempShortestDistance > distance) && e->currentOrder != UnitState::Death)
+			{
+				tempShortestDistance = distance;
+				m_currentTargetUnit = e;
+				isDistanceComparingStarted = true;
+			}
 		}
 	}
 }
@@ -589,7 +611,7 @@ void Unit::IdentifiedOpponentDeath(Unit* p_unit)
 		m_currentTargetUnit = nullptr;
 
 	/// 적군을 담고 있는 list에서 죽은 오브젝트 유닛을 빼준다.
-	m_opponentObjectList.remove(p_unit);
+	m_opponentObjectSet.erase(p_unit);
 }
 
 void Unit::SetPlayerSerialNumber(UnitType serialNum)
@@ -655,10 +677,10 @@ void Unit::SetMaxAggroNumber(int p_num)
 
 void Unit::AddToOpponentObjectList(Unit* p_unit)
 {
-	if (p_unit->currentOrder != UnitState::Death && this->currentOrder != UnitState::Death && p_unit->m_currentAggroNumber < p_unit->m_maxAggroNumber)
+	if (p_unit->currentOrder != UnitState::Death && this->currentOrder != UnitState::Death 
+		&& p_unit->m_currentAggroNumber < p_unit->m_maxAggroNumber && m_opponentObjectSet.find(p_unit) == m_opponentObjectSet.end())
 	{
-		m_opponentObjectList.push_back(p_unit);
-		p_unit->m_currentAggroNumber++;
+		m_opponentObjectSet.insert(p_unit);
 
 		if (m_currentTargetUnit == nullptr)
 			m_currentTargetUnit = p_unit;
@@ -669,9 +691,7 @@ void Unit::AddToOpponentObjectList(Unit* p_unit)
 
 void Unit::DeleteFromOpponentObjectList(Unit* p_unit)
 {
-	m_opponentObjectList.remove(p_unit);
-	p_unit->m_currentAggroNumber--;
-	assert(p_unit->m_currentAggroNumber >= 0);
+	m_opponentObjectSet.erase(p_unit);
 
 	if (m_currentTargetUnit == p_unit)
 		m_currentTargetUnit = nullptr;
@@ -681,11 +701,13 @@ void Unit::DeleteFromOpponentObjectList(Unit* p_unit)
 
 void Unit::AddToRecognizeList(Unit* p_unit)
 {
+	m_currentAggroNumber++;
 	m_recognizedThisList.push_back(p_unit);
 }
 
 void Unit::DeleteFromRecognizeList(Unit* p_unit)
 {
+	m_currentAggroNumber--;
 	m_recognizedThisList.remove(p_unit);
 }
 

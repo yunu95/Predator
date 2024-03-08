@@ -20,6 +20,18 @@ protected:
 
 	NavigationField* m_navField;
 
+	bool isWaveTimerStarted;
+	bool isWaveUnitCreated;
+
+	float m_elapsed;
+	float m_duration;
+
+	int m_currentIndex = 0;
+	float m_previousDelay;
+
+
+	std::queue<std::pair<Vector3d, float>> m_waveDelayQueue;
+
 public:
 	string m_objectName;
 	Unit::UnitType m_unitType;
@@ -49,11 +61,15 @@ public:
 	float m_attackDelay;
 
 	virtual GameObject* CreateUnit(Vector3d startPos) = 0;
+	virtual void PushWaveData(Vector3d startPos, float delay);
 
 	void SetCommonComponents();
 
 	virtual void SetUnitData() = 0;
 
 	virtual void SetPlayerRelatedComponents(Unit* playerUnit);
+
+	virtual void Update() override;
+	virtual void Start() override;
 };
 

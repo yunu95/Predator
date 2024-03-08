@@ -161,7 +161,7 @@ void SnippetSkillSystemInit()
 	const int inGameLayer = 1;
 
 	auto menuPanel = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<UIPanel>();
-	SoundSystem::PlayMusic("Texture/UI/InGameUITemp/Game_BGM.mp3");
+	//SoundSystem::PlayMusic("Texture/UI/InGameUITemp/Game_BGM.mp3");
 
 #pragma region MenuButton
 	auto menuUIObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
