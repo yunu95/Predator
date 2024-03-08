@@ -52,6 +52,7 @@ namespace application
             virtual void OnRescale(const Vector3d& newScale) override;
             virtual void OnDataResourceChange(std::string newName) override;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance() override;
+            virtual void ApplyAsPlaytimeObject() override;
 
             POD_Ornament pod;
 
