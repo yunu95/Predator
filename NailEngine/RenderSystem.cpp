@@ -330,6 +330,7 @@ void RenderSystem::RenderPointLightShadow()
 			std::static_pointer_cast<PointLight>(e)->GetWorldTM().Decompose(scale, quat, pos);
 
 			PointLightVPMatrix pointLightVP;
+			//DirectX::SimpleMath::Matrix viewMatrix;
 
 			for (int i = 0; i < 6; ++i)
 			{
@@ -362,12 +363,61 @@ void RenderSystem::RenderPointLightShadow()
 						targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f);
 						upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
 						break;
+						//case 0:
+						//{
+						//	viewMatrix._11 = 0; viewMatrix._12 = 0; viewMatrix._13 = -1; viewMatrix._14 = 0;
+						//	viewMatrix._21 = 0; viewMatrix._22 = 1; viewMatrix._23 = 0; viewMatrix._24 = 0;
+						//	viewMatrix._31 = 1; viewMatrix._32 = 0; viewMatrix._33 = -1; viewMatrix._34 = 0;
+						//	viewMatrix._41 = 0; viewMatrix._42 = 0; viewMatrix._43 = 0; viewMatrix._44 = 1;
+						//}
+						//break;
+						//case 1:
+						//{
+						//	viewMatrix._11 = 0; viewMatrix._12 = 0; viewMatrix._13 = 1; viewMatrix._14 = 0;
+						//	viewMatrix._21 = 0; viewMatrix._22 = 1; viewMatrix._23 = 0; viewMatrix._24 = 0;
+						//	viewMatrix._31 = -1; viewMatrix._32 = 0; viewMatrix._33 = -1; viewMatrix._34 = 0;
+						//	viewMatrix._41 = 0; viewMatrix._42 = 0; viewMatrix._43 = 0; viewMatrix._44 = 1;
+						//}
+						//break;
+						//case 2:
+						//{
+						//	viewMatrix._11 = 1; viewMatrix._12 = 0; viewMatrix._13 = 0; viewMatrix._14 = 0;
+						//	viewMatrix._21 = 0; viewMatrix._22 = 0; viewMatrix._23 = 1; viewMatrix._24 = 0;
+						//	viewMatrix._31 = 0; viewMatrix._32 = -1; viewMatrix._33 = 0; viewMatrix._34 = 0;
+						//	viewMatrix._41 = 0; viewMatrix._42 = 0; viewMatrix._43 = 0; viewMatrix._44 = 1;
+						//}
+						//break;
+						//case 3:
+						//{
+						//	viewMatrix._11 = 1; viewMatrix._12 = 0; viewMatrix._13 = 0; viewMatrix._14 = 0;
+						//	viewMatrix._21 = 0; viewMatrix._22 = 0; viewMatrix._23 = -1; viewMatrix._24 = 0;
+						//	viewMatrix._31 = 0; viewMatrix._32 = 1; viewMatrix._33 = 0; viewMatrix._34 = 0;
+						//	viewMatrix._41 = 0; viewMatrix._42 = 0; viewMatrix._43 = 0; viewMatrix._44 = 1;
+						//}
+						//break;
+						//case 4:
+						//{
+						//	viewMatrix._11 = 1; viewMatrix._12 = 0; viewMatrix._13 = 0; viewMatrix._14 = 0;
+						//	viewMatrix._21 = 0; viewMatrix._22 = 1; viewMatrix._23 = 0; viewMatrix._24 = 0;
+						//	viewMatrix._31 = 0; viewMatrix._32 = 0; viewMatrix._33 = 1; viewMatrix._34 = 0;
+						//	viewMatrix._41 = 0; viewMatrix._42 = 0; viewMatrix._43 = 0; viewMatrix._44 = 1;
+						//}
+						//break;
+						//case 5:
+						//{
+						//	viewMatrix._11 = -1; viewMatrix._12 = 0; viewMatrix._13 = 0; viewMatrix._14 = 0;
+						//	viewMatrix._21 = 0; viewMatrix._22 = 1; viewMatrix._23 = 0; viewMatrix._24 = 0;
+						//	viewMatrix._31 = 0; viewMatrix._32 = 0; viewMatrix._33 = -1; viewMatrix._34 = 0;
+						//	viewMatrix._41 = 0; viewMatrix._42 = 0; viewMatrix._43 = 0; viewMatrix._44 = 1;
+						//}
+						//break;
 				}
 
 				// 뷰 행렬 계산
-				DirectX::SimpleMath::Matrix viewMatrix = DirectX::SimpleMath::Matrix::CreateLookAt(pos, targetPos, upVec);
+				//DirectX::SimpleMath::Matrix viewMatrix = DirectX::SimpleMath::Matrix::CreateLookAt(pos, targetPos, upVec);
+				DirectX::SimpleMath::Matrix viewMatrix = XMMatrixLookAtLH(pos, targetPos, upVec);
 				DirectX::SimpleMath::Matrix projMat = CameraManager::Instance.Get().GetPTM90ByResolution(1024, 1024);
-
+				//DirectX::SimpleMath::Matrix projMat = DirectX::XMMatrixOrthographicLH(100 * 1.f, 100 * 1.f, 0.0000001f, 500.f);
 				pointLightVP.viewProj[i] = viewMatrix * projMat;
 			}
 
@@ -381,6 +431,8 @@ void RenderSystem::RenderPointLightShadow()
 
 void RenderSystem::RenderLight()
 {
+
+
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
 	auto& lightSet = LightManager::Instance.Get().GetLightList();
 	// 라이팅 렌더
@@ -404,6 +456,9 @@ void RenderSystem::RenderLight()
 		}
 		else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{
+			// 만들어진 Shadow Map Binb
+			ResourceManager::Instance.Get().GetTexture(L"PointLightShadowDepth")->Bind(15);
+
 			matrixBuffer.WTM = std::static_pointer_cast<PointLight>(e)->GetWorldTM();
 			matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 			matrixBuffer.WorldInvTrans = std::static_pointer_cast<PointLight>(e)->GetWorldTM().Invert().Transpose();
@@ -415,8 +470,13 @@ void RenderSystem::RenderLight()
 		auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
 		mesh->Render();
 
+		// 만들어진 Shadow Map Binb
+		ResourceManager::Instance.Get().GetTexture(L"PointLightShadowDepth")->UnBind(15);
+
 		//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->UnBind();
 	}
+
+
 }
 
 void RenderSystem::RenderFinal()

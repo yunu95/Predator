@@ -7,7 +7,7 @@ struct GS_OUTPUT
 };
 
 [maxvertexcount(18)]
- void main(triangle float4 InPos[3] : SV_Position, inout TriangleStream<GS_OUTPUT> OutStream)
+ void main(triangle float4 InPos[3] : POSITION, inout TriangleStream<GS_OUTPUT> OutStream)
 {
     for (int iFace = 0; iFace < 6; iFace++)
     {
@@ -21,3 +21,16 @@ struct GS_OUTPUT
         OutStream.RestartStrip();
     }
 }
+
+//[maxvertexcount(3)]
+// void main(triangle float4 InPos[3] : POSITION, inout TriangleStream<GS_OUTPUT> OutStream)
+//{
+//    GS_OUTPUT output;
+//    output.RTIndex = 0;
+//    for (int v = 0; v < 3; v++)
+//    {
+//        output.Pos = mul(InPos[v], viewProj[0]);
+//        OutStream.Append(output);
+//    }
+//    OutStream.RestartStrip();
+//}

@@ -6,6 +6,20 @@
 #include "Matrix.hlsli"
 #include "Quaternion.hlsli"
 
+float CalCulateDepth(float3 pos)
+{
+    float near = 0.1f;
+    float far = 10.f;
+    
+    float c1 = far / (far - near);
+    float c0 = -near * far / (far - near);
+    float3 m = abs(pos).xyz;
+    float major = max(m.x, max(m.y, m.z));
+    float depth = (c1 * major + c0) / major;
+    //return PointLightShadowMap.SampleCmpLevelZero(shadowSam, pos, depth);
+    return depth;
+}
+
 float4x4 LerpTransformMatrix(float4x4 matrix1, float4x4 matrix2, float ratio)
 {
     float3 pos1;
@@ -310,6 +324,23 @@ void CalculateLight(int lightIndex, float3 normal, float3 pos, out float4 diffus
         
         ambient = lights[lightIndex].color.ambient * distanceRatio;
         diffuse = lights[lightIndex].color.diffuse * diffuseRatio * distanceRatio;
+        
+
+        // Shadow 연산하는 코드 넣기
+        float4 worldPos = mul(float4(pos.xyz, 1.f), VTMInv);
+        //float curDepth = CalCulateDepth((lights[lightIndex].position.xyz - worldPos.xyz));
+        float curDepth = CalCulateDepth((worldPos.xyz - lights[lightIndex].position.xyz));
+        
+        //float shadow = PointLightShadowMap.Sample(sam, normalize(lights[lightIndex].position.xyz - worldPos.xyz)).r;
+        float shadow = PointLightShadowMap.Sample(sam, normalize(worldPos.xyz - lights[lightIndex].position.xyz)).r;
+        //float shadow = PointLightShadowMap.SampleCmpLevelZero(shadowSam, normalize(worldPos.xyz - lights[lightIndex].position.xyz), curDepth);
+        if (shadow < curDepth - 0.000001)
+            shadow = 0.0f;
+        else
+            shadow = 1.0f;
+        
+        diffuse *= shadow;
+        
         
         //float zero = 0.f;
         

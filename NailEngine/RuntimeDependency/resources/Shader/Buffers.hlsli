@@ -137,7 +137,7 @@ TextureCube CubeMap: register(t11);
 TextureCube IrradianceMap : register(t12);
 TextureCube PrefilteredMap : register(t13);
 Texture2D BrdfMap : register(t14);
-
+TextureCube PointLightShadowMap : register(t15);
 
 SamplerState sam : register(s0);
 SamplerComparisonState shadowSam : register(s1);

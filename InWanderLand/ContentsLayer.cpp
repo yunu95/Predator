@@ -38,8 +38,8 @@ void GraphicsTest()
 	_resourceManager->LoadFile("Texture/Brick_Normal.jpg");
 	{
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		//obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,44.81 });
-		obj->GetTransform()->SetLocalPosition(Vector3d{ -5,0,0});
+		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,44.81 });
+		//obj->GetTransform()->SetLocalPosition(Vector3d{ -5,0,0});
 		auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
 		yunuGI::Color color{ 0,0,1,1 };
 		light->GetGI().SetLightDiffuseColor(color);
@@ -51,82 +51,84 @@ void GraphicsTest()
 	yunuGI::ITexture* tex = _resourceManager->GetTexture(L"Texture/Brick_Albedo.jpg");
 	yunuGI::ITexture* tex2 = _resourceManager->GetTexture(L"Texture/Brick_Normal.jpg");
 
-	//auto& shaderList = _resourceManager->GetShaderList();
-	//yunuGI::IShader* shader;
-	//for (auto& i : shaderList)
-	//{
-	//	if (i->GetName() == L"DebugPS.cso")
-	//	{
-	//		shader = i;
-	//	}
-	//}
-	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//	obj->GetTransform()->SetLocalScale(Vector3d{100,1,100});
-	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	//	renderer->GetGI().SetMesh(mesh);
-	//}
-	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//	obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,1});
-	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,50,50});
-	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	//	renderer->GetGI().SetMesh(mesh);
-	//}
-	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//	obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
-	//	obj->GetTransform()->SetLocalPosition(Vector3d{ -50,50,0 });
-	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	//	renderer->GetGI().SetMesh(mesh);
-	//}
-
-	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//	//obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
-	//	obj->GetTransform()->SetLocalPosition(Vector3d{ -48.67,3.67,44.81 });
-	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	//	renderer->GetGI().SetMesh(mesh);
-	//}
-	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//	//obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
-	//	obj->GetTransform()->SetLocalPosition(Vector3d{ -48.67,3.67,44.81 });
-	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	//	renderer->GetGI().SetMesh(mesh);
-	//}
-	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//	//obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
-	//	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.26,3.67,47.83});
-	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	//	renderer->GetGI().SetMesh(mesh);
-	//}
-	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//	//obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
-	//	obj->GetTransform()->SetLocalPosition(Vector3d{ -48.08,5.32,46.24});
-	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	//	renderer->GetGI().SetMesh(mesh);
-	//}
-
-	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//	obj->GetTransform()->SetLocalScale(Vector3d{ 0.3,0.3,0.3 });
-	//	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,44.81 });
-	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	//	renderer->GetGI().SetMesh(mesh2);
-	//	renderer->GetGI().GetMaterial()->SetPixelShader(shader);
-	//	renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{0,0,1,1});
-	//}
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	auto& shaderList = _resourceManager->GetShaderList();
+	yunuGI::IShader* shader;
+	for (auto& i : shaderList)
+	{
+		if (i->GetName() == L"DebugPS.cso")
+		{
+			shader = i;
+		}
+	}
 
 	{
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		obj->GetTransform()->SetLocalScale(Vector3d{100,1,100});
 		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		renderer->GetGI().SetMesh(mesh);
 	}
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,1});
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,50,50});
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(mesh);
+	}
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
+		obj->GetTransform()->SetLocalPosition(Vector3d{ -50,50,0 });
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(mesh);
+	}
+
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		//obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
+		obj->GetTransform()->SetLocalPosition(Vector3d{ -48.67,3.67,44.81 });
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(mesh);
+	}
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		//obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
+		obj->GetTransform()->SetLocalPosition(Vector3d{ -48.67,3.67,44.81 });
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(mesh);
+	}
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		//obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
+		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.26,3.67,47.83});
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(mesh);
+	}
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		//obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
+		obj->GetTransform()->SetLocalPosition(Vector3d{ -48.08,5.32,46.24});
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(mesh);
+	}
+
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		obj->GetTransform()->SetLocalScale(Vector3d{ 0.3,0.3,0.3 });
+		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,44.81 });
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(mesh2);
+		renderer->GetGI().GetMaterial()->SetPixelShader(shader);
+		renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{0,0,1,1});
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
+	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//	renderer->GetGI().SetMesh(mesh);
+	//}
 }
 
 
@@ -235,9 +237,10 @@ void application::contents::ContentsLayer::Initialize()
 		yunutyEngine::Collider2D::SetIsOnXYPlane(false);
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
+		directionalLight->GetTransform()->SetLocalPosition(Vector3d{0,0,-20});
 		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 		//auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
-		auto color = yunuGI::Color{ 1,1,1,1.f };
+		auto color = yunuGI::Color{ 1,0,0,1.f };
 		light->GetGI().SetLightDiffuseColor(color);
 		//directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
 		//directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{0, 45, 0} };

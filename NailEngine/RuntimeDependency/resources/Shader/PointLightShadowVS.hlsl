@@ -11,7 +11,7 @@ struct VS_IN
 
 struct VS_OUT
 {
-    float4 pos : SV_Position;
+    float4 pos : POSITION;
 };
 
 VS_OUT main(VS_IN input)

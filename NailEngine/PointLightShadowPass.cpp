@@ -28,8 +28,7 @@ void PointLightShadowPass::Render()
 	// Null RenderTarget / TextureArray DSV Set
 	float clearDepth = 1.0f;
 
-	ResourceBuilder::Instance.Get().device->GetDeviceContext()->ClearDepthStencilView(
-		this->dsTexture->GetDSV().Get(), D3D11_CLEAR_DEPTH, clearDepth, 0);
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->ClearDepthStencilView(this->dsTexture->GetDSV().Get(), D3D11_CLEAR_DEPTH| D3D11_CLEAR_STENCIL, clearDepth, 0);
 
 	D3D11_VIEWPORT viewport = { 0.0f, 0.0f, static_cast<float>(1024), static_cast<float>(1024), 0.0f, 1.0f };
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
