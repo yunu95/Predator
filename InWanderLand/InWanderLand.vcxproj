@@ -1193,7 +1193,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="RegionData.cpp" />
     <ClCompile Include="Region_TemplateData.cpp" />
     <ClCompile Include="SnippetCastleWallTextureBlending.cpp" />
-    <ClCompile Include="SnippetCustomMeshOnOff.cpp" />
     <ClCompile Include="SnippetUISystem.cpp" />
     <ClCompile Include="SnippetDebugMeshScaleCheck.cpp" />
     <ClCompile Include="SnippetFloatingDebugSphere.cpp" />
