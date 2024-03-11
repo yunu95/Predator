@@ -1,3 +1,4 @@
+#include <type_traits>
 #include "InWanderLand.h"
 #include "TerrainData.h"
 
@@ -5,6 +6,7 @@
 #include "TemplateDataManager.h"
 #include "SingleNavigationField.h"
 #include "DebugMeshes.h"
+#include "HasVariable.h"
 
 namespace application
 {
@@ -78,20 +80,212 @@ namespace application
 
         void TerrainData::ApplyAsPlaytimeObject()
         {
-            std::vector<Vector3f> vertexList;
-            std::vector<int> indexList;
-            MakeUpVerticesList(vertexList, indexList);
+            if (!nodes.empty())
+                PreSaveCallback();
+            std::vector<yunuGI::Vector3> vertexList;
+            std::vector<unsigned int> indexList;
+            MakeUpVerticesList(vertexList, indexList, nodes);
 
+            std::vector<Vector3f> vertexList2;
+            std::vector<int> indexList2;
+            vertexList2.resize(vertexList.size());
+            indexList2.resize(indexList.size());
+            for (auto i : vertexList)
+            {
+                vertexList2.push_back({ i.x, i.y, i.z });
+            }
+            for (auto i : indexList)
+            {
+                indexList2.push_back(i);
+            }
+            std::vector<Vector2i> affectedCoords;
+            for (auto each : nodes)
+            {
+                affectedCoords.push_back(each.first);
+            }
 #ifdef _DEBUG
             ApplyDebugMesh();
 #endif
-            SingleNavigationField::Instance().BuildField(vertexList, indexList);
+            SingleNavigationField::Instance().BuildField(vertexList2, indexList2);
         }
-        void TerrainData::MakeUpVerticesList(std::vector<Vector3f>& vertexList, std::vector<int>& indexList)
+
+        void TerrainData::AddNode(const Vector2i& nodeKey)
         {
+            if (nodes.find(nodeKey) != nodes.end())
+                return;
+            auto debugMeshIdx = GetOrCreateDebugMeshIndex();
+            nodes[nodeKey] = { .debugMeshIndex = debugMeshIdx };
+            affectedMeshIndices.insert(debugMeshIdx);
+            debugMeshes[debugMeshIdx].nodes.insert(nodeKey);
+        }
+        void TerrainData::EraseNode(const Vector2i& nodeKey)
+        {
+            if (nodes.find(nodeKey) == nodes.end())
+                return;
+
+            auto debugMeshIdx = nodes[nodeKey].debugMeshIndex;
+            affectedMeshIndices.insert(debugMeshIdx);
+            debugMeshes[debugMeshIdx].nodes.erase(nodeKey);
+            nodes.erase(nodeKey);
+        }
+        void TerrainData::ClearNodes()
+        {
+            auto tempNodes = nodes;
+            for (auto each : tempNodes)
+                EraseNode(each.first);
+            for (auto each : debugMeshes)
+            {
+                auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+                rsrcManager->DeleteMesh(each.debugMesh->GetGI().GetMesh());
+                each.debugMesh->GetGI().SetMesh(nullptr);
+                Scene::getCurrentScene()->DestroyGameObject(each.debugMesh->GetGameObject());
+            }
+            debugMeshes.clear();
+            affectedMeshIndices.clear();
+        }
+        void TerrainData::ApplyDebugMesh()
+        {
+            //for (auto i = 0; i < debugMeshes.size(); i++)
+            //    affectedMeshIndices.insert(i);
+            for (auto each : affectedMeshIndices)
+            {
+                std::vector<unsigned int > indices;
+                MakeUpVerticesList(debugMeshes[each].vertices, indices, debugMeshes[each].nodes);
+                debugMeshes[each].normals = std::vector<yunuGI::Vector3>(debugMeshes[each].vertices.size(), { 0,1,0 });
+                bool isDrawable = !debugMeshes[each].vertices.empty() && !indices.empty() && !debugMeshes[each].normals.empty();
+                if (isDrawable)
+                {
+                    auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+                    rsrcManager->DeleteMesh(debugMeshes[each].debugMesh->GetGI().GetMesh());
+                    wstringstream ss;
+                    ss << L"TerrainMesh : " << each;
+                    auto mesh = rsrcManager->CreateMesh(ss.str().c_str(), debugMeshes[each].vertices, indices, debugMeshes[each].normals);
+                    assert(mesh != nullptr);
+                    debugMeshes[each].debugMesh->GetGI().SetMesh(mesh);
+                }
+                //if (isDrawable)
+                    //debugMeshes[each].debugMesh->SetDebugGraphicsEnabled(true);
+                //else
+                //    debugMeshes[each].debugMesh->SetDebugGraphicsEnabled(false);
+                debugMeshes[each].debugMesh->SetActive(isDrawable);
+            }
+            affectedMeshIndices.clear();
+        }
+        Vector3d TerrainData::GetNodePosition(const Vector2i& nodeKey)
+        {
+            return { nodeKey.x * nodeDistance , 0 ,nodeKey.y * nodeDistance };
+        }
+        Vector2i TerrainData::WorldToNodeSpace(const Vector3d& worldPos)
+        {
+            return { (int)(0.5 + worldPos.x / nodeDistance) , (int)(0.5 + worldPos.z / nodeDistance) };
+        }
+        GameObject* TerrainData::CreateNodeDebuggingMesh(const Vector2i& nodeKey)
+        {
+            constexpr double nodeHeight = 6;
+            auto node = Scene::getCurrentScene()->AddGameObject();
+            node->GetTransform()->SetWorldPosition(GetNodePosition(nodeKey) - nodeHeight * Vector3d::up * 0.5);
+            node->GetTransform()->SetLocalScale({ nodeDistance, nodeHeight, nodeDistance });
+            auto mesh = AttachDebugMesh(node, DebugMeshType::Cube, yunuGI::Color{0.788, 0.647, 0.215}, false);
+            mesh->SetIsUpdating(false);
+            return node;
+        }
+
+        bool TerrainData::PreSaveCallback()
+        {
+            pod.coordinates.clear();
+            pod.heights.clear();
+            for (auto each : nodes)
+            {
+                pod.coordinates.push_back({ each.first.x, each.first.y });
+                //pod.heights.push_back(each.second.height);
+            }
+            sort(pod.coordinates.begin(), pod.coordinates.end(),
+                [](const auto& a, const auto& b) {return a.first + a.second < b.first + b.second;  });
+            return true;
+        }
+        bool TerrainData::PreEncoding(json& data) const
+        {
+            FieldPreEncoding<boost::pfr::tuple_size_v<POD_Terrain>>(pod, data["POD"]);
+            return true;
+        }
+
+        bool TerrainData::PostEncoding(json& data) const
+        {
+            FieldPostEncoding<boost::pfr::tuple_size_v<POD_Terrain>>(pod, data["POD"]);
+            return true;
+        }
+
+        bool TerrainData::PreDecoding(const json& data)
+        {
+            pod.coordinates.clear();
+
+            FieldPreDecoding<boost::pfr::tuple_size_v<POD_Terrain>>(pod, data["POD"]);
+            return true;
+        }
+
+        bool TerrainData::PostDecoding(const json& data)
+        {
+            FieldPostDecoding<boost::pfr::tuple_size_v<POD_Terrain>>(pod, data["POD"]);
+            for (auto i = 0; i < pod.coordinates.size(); ++i)
+            {
+                AddNode({ pod.coordinates[i].first,pod.coordinates[i].second });
+            }
+            std::vector<Vector2i> affectedCoords;
+            for (auto each : nodes)
+            {
+                affectedCoords.push_back(each.first);
+            }
+            ApplyDebugMesh();
+
+            return true;
+        }
+
+        TerrainData::TerrainData()
+            : pod()
+        {
+            assert(soleTerrainData == nullptr && "지형 정보는 단 하나만 존재해야 합니다!");
+            soleTerrainData = this;
+        }
+
+        TerrainData::TerrainData(const std::string& name)
+            : IEditableData(), pod()
+        {
+            assert(soleTerrainData == nullptr && "지형 정보는 단 하나만 존재해야 합니다!");
+            soleTerrainData = this;
+            pod.templateData = static_cast<Terrain_TemplateData*>(templateDataManager.GetTemplateData(name));
+            EnterDataFromTemplate();
+        }
+
+        TerrainData::TerrainData(const TerrainData& prototype)
+            : pod(prototype.pod)
+        {
+            assert(soleTerrainData == nullptr && "지형 정보는 단 하나만 존재해야 합니다!");
+            soleTerrainData = this;
+        }
+
+        TerrainData& TerrainData::operator=(const TerrainData& prototype)
+        {
+            IEditableData::operator=(prototype);
+            pod = prototype.pod;
+            return *this;
+        }
+        template<typename T>
+        void TerrainData::MakeUpVerticesList(std::vector<yunuGI::Vector3>& vertexList, std::vector<unsigned int>& indexList, const T& nodes)
+        {
+            vertexList.clear();
+            indexList.clear();
             for (auto& node : nodes)
             {
-                auto nodeKey = node.first;
+                Vector2i nodeKey;
+
+                if constexpr (Has_first<std::remove_reference_t<decltype(node)>>::value)
+                {
+                    nodeKey = node.first;
+                }
+                else
+                {
+                    nodeKey = node;
+                }
                 bool toprightExists{ nodes.find(nodeKey + Vector2i{1, 1}) != nodes.end() };
                 bool topExists{ nodes.find(nodeKey + Vector2i{0, 1}) != nodes.end() };
                 bool rightExists{ nodes.find(nodeKey + Vector2i{1, 0}) != nodes.end() };
@@ -137,164 +331,23 @@ namespace application
                 }
             }
         }
-        void TerrainData::AddNode(const Vector2i& nodeKey, Node&& nodeInfo)
+        DebugStaticMesh* TerrainData::MakeDebugMesh()
         {
-            if (nodes.find(nodeKey) != nodes.end())
-                return;
-            nodes[nodeKey] = std::move(nodeInfo);
-#ifdef _DEBUG
-            //nodes[nodeKey].debugObject = CreateNodeDebuggingMesh(nodeKey);
-#else
-            nodes[nodeKey].debugObject = nullptr;
-#endif
-        }
-        void TerrainData::EraseNode(const Vector2i& nodeKey)
-        {
-            if (nodes.find(nodeKey) == nodes.end())
-                return;
-#ifdef _DEBUG
-            //Scene::getCurrentScene()->DestroyGameObject(nodes[nodeKey].debugObject);
-#endif
-            nodes.erase(nodeKey);
-        }
-        void TerrainData::ClearNodes()
-        {
-            for (auto& node : nodes)
-            {
-#ifdef _DEBUG
-                //Scene::getCurrentScene()->DestroyGameObject(node.second.debugObject);
-#endif
-            }
-            nodes.clear();
-        }
-        void TerrainData::ApplyDebugMesh()
-        {
-            PreSaveCallback();
-            std::vector<Vector3f> posVecBefore;
-            std::vector<int> idxVecBefore;
-
-            std::vector<yunuGI::Vector3> posVec;
-            std::vector<unsigned int> idxVec;
-            std::vector<yunuGI::Vector3> normalVec;
-
-            MakeUpVerticesList(posVecBefore, idxVecBefore);
-            posVec.resize(posVecBefore.size());
-            idxVec.resize(idxVecBefore.size());
-            normalVec.resize(posVecBefore.size());
-            for (auto i = 0; i < posVecBefore.size(); ++i)
-            {
-                posVec[i] = { posVecBefore[i].x,posVecBefore[i].y,posVecBefore[i].z };
-                normalVec[i] = { 0, 1, 0 };
-            };
-            for (auto i = 0; i < idxVecBefore.size(); ++i)
-                idxVec[i] = idxVecBefore[i];
-
-            if (!posVec.empty() && !idxVec.empty() && !normalVec.empty())
-            {
-                auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-                rsrcManager->DeleteMesh(GetDebugMesh()->GetGI().GetMesh());
-                auto mesh = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->CreateMesh(L"terrainMesh", posVec, idxVec, normalVec);
-                GetDebugMesh()->GetGI().SetMesh(mesh);
-            }
-        }
-        Vector3d TerrainData::GetNodePosition(const Vector2i& nodeKey)
-        {
-            return { nodeKey.x * nodeDistance , 0 ,nodeKey.y * nodeDistance };
-        }
-        Vector2i TerrainData::WorldToNodeSpace(const Vector3d& worldPos)
-        {
-            return { (int)(0.5 + worldPos.x / nodeDistance) , (int)(0.5 + worldPos.z / nodeDistance) };
-        }
-        GameObject* TerrainData::CreateNodeDebuggingMesh(const Vector2i& nodeKey)
-        {
-            constexpr double nodeHeight = 6;
-            auto node = Scene::getCurrentScene()->AddGameObject();
-            node->GetTransform()->SetWorldPosition(GetNodePosition(nodeKey) - nodeHeight * Vector3d::up * 0.5);
-            node->GetTransform()->SetLocalScale({ nodeDistance, nodeHeight, nodeDistance });
-            auto mesh = AttachDebugMesh(node, DebugMeshType::Cube, yunuGI::Color{0.788, 0.647, 0.215}, false);
-            mesh->SetIsUpdating(false);
-            return node;
-        }
-
-        bool TerrainData::PreSaveCallback()
-        {
-            pod.coordinates.clear();
-            pod.heights.clear();
-            for (auto each : nodes)
-            {
-                pod.coordinates.push_back({ each.first.x, each.first.y });
-                pod.heights.push_back(each.second.height);
-            }
-            return true;
-        }
-        bool TerrainData::PreEncoding(json& data) const
-        {
-            FieldPreEncoding<boost::pfr::tuple_size_v<POD_Terrain>>(pod, data["POD"]);
-            return true;
-        }
-
-        bool TerrainData::PostEncoding(json& data) const
-        {
-            FieldPostEncoding<boost::pfr::tuple_size_v<POD_Terrain>>(pod, data["POD"]);
-            return true;
-        }
-
-        bool TerrainData::PreDecoding(const json& data)
-        {
-            pod.coordinates.clear();
-
-            FieldPreDecoding<boost::pfr::tuple_size_v<POD_Terrain>>(pod, data["POD"]);
-            return true;
-        }
-
-        bool TerrainData::PostDecoding(const json& data)
-        {
-            FieldPostDecoding<boost::pfr::tuple_size_v<POD_Terrain>>(pod, data["POD"]);
-            for (auto i = 0; i < pod.coordinates.size(); ++i)
-            {
-                AddNode({ pod.coordinates[i].first,pod.coordinates[i].second }, { pod.heights[i], nullptr });
-            }
-            ApplyDebugMesh();
-            return true;
-        }
-
-        TerrainData::TerrainData()
-            : pod()
-        {
-            assert(soleTerrainData == nullptr && "지형 정보는 단 하나만 존재해야 합니다!");
-            soleTerrainData = this;
-        }
-
-        TerrainData::TerrainData(const std::string& name)
-            : IEditableData(), pod()
-        {
-            assert(soleTerrainData == nullptr && "지형 정보는 단 하나만 존재해야 합니다!");
-            soleTerrainData = this;
-            pod.templateData = static_cast<Terrain_TemplateData*>(templateDataManager.GetTemplateData(name));
-            EnterDataFromTemplate();
-        }
-
-        TerrainData::TerrainData(const TerrainData& prototype)
-            : pod(prototype.pod)
-        {
-            assert(soleTerrainData == nullptr && "지형 정보는 단 하나만 존재해야 합니다!");
-            soleTerrainData = this;
-        }
-
-        TerrainData& TerrainData::operator=(const TerrainData& prototype)
-        {
-            IEditableData::operator=(prototype);
-            pod = prototype.pod;
-            return *this;
-        }
-        DebugStaticMesh* TerrainData::GetDebugMesh()
-        {
-            if (debugMesh)
-                return debugMesh;
-
-            debugMesh = Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugStaticMesh>();
-            debugMesh->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::brown(), true));
+            auto debugMesh = Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugStaticMesh>();
+            //debugMesh->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::brown(), true));
+            debugMesh->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color{0.5f * (debugMeshes.size() % 2), 0.5f * ((debugMeshes.size() / 2) % 2), 1, 1}, true));
+            //debugMesh->SetActive(false);
             return debugMesh;
+        }
+        unsigned int TerrainData::GetOrCreateDebugMeshIndex()
+        {
+            for (unsigned int i = 0; i < debugMeshes.size(); i++)
+            {
+                if (debugMeshes[i].nodes.size() < debugMeshVerticeNumThreshold)
+                    return i;
+            }
+            debugMeshes.push_back(DebugMeshInfo{ .debugMesh = MakeDebugMesh(),.vertices{},.indices{},.nodes{} });
+            return debugMeshes.size() - 1;
         }
     }
 }

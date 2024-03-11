@@ -42,8 +42,7 @@ namespace application
         public:
             struct Node
             {
-                float height;
-                GameObject* debugObject;
+                unsigned int debugMeshIndex;
             };
             ~TerrainData();
             // 지형 인스턴스 정보는 맵에 단 하나만 존재합니다.
@@ -54,9 +53,8 @@ namespace application
             virtual IEditableData* Clone() const override;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
             virtual void ApplyAsPlaytimeObject()override;
-            void MakeUpVerticesList(std::vector<Vector3f>& vertexList, std::vector<int>& indexList);
 
-                void AddNode(const Vector2i& nodeKey, Node&& nodeInfo);
+            void AddNode(const Vector2i& nodeKey);
             void EraseNode(const Vector2i& nodeKey);
             // 디버그 메시를 새로 만들어 교체,적용한다.
             void ApplyDebugMesh();
@@ -76,13 +74,28 @@ namespace application
             virtual bool PostDecoding(const json& data) override;
 
         private:
+            struct DebugMeshInfo
+            {
+                DebugStaticMesh* debugMesh;
+                // 메시생성용 버텍스, 인덱스 리스트
+                std::vector<yunuGI::Vector3> vertices;
+                std::vector<unsigned int> indices;
+                std::vector<yunuGI::Vector3> normals;
+                std::unordered_set<Vector2i> nodes;
+            };
             static DebugStaticMesh* debugMesh;
             unordered_map<Vector2i, Node> nodes;
             static TerrainData* soleTerrainData;
             static Terrain_TemplateData* soleTerrainTemplateData;
             static TemplateDataManager& templateDataManager;
 
-            static DebugStaticMesh* GetDebugMesh();
+            template<typename T>
+            void MakeUpVerticesList(std::vector<yunuGI::Vector3>& vertexList, std::vector<unsigned int>& indexList, const T& nodes);
+            DebugStaticMesh* MakeDebugMesh();
+            unsigned int GetOrCreateDebugMeshIndex();
+            static constexpr unsigned int debugMeshVerticeNumThreshold{ 20000 };
+            std::vector<DebugMeshInfo> debugMeshes;
+            std::set<unsigned int> affectedMeshIndices;
             TerrainData();
             TerrainData(const std::string& name);
             TerrainData(const TerrainData& prototype);

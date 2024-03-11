@@ -1251,5 +1251,8 @@
     <ClCompile Include="FileSystem.cpp">
       <Filter>Editor\IO\FileSystem</Filter>
     </ClCompile>
+    <ClCompile Include="SnippetCustomMeshOnOff.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

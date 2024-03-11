@@ -4,8 +4,8 @@
 class DebugGraphic
 {
 public:
-    static void SetEnabled(bool enabled);
-    static bool IsEnabled();
+    static void SetDebugGraphicsEnabled(bool enabled);
+    static bool AreDebugGraphicsEnabled();
     DebugGraphic(graphics::Renderable<yunuGI::IRenderable>* renderable);
     virtual ~DebugGraphic();
 private:
