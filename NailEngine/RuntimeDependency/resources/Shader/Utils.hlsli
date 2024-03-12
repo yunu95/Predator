@@ -6,10 +6,10 @@
 #include "Matrix.hlsli"
 #include "Quaternion.hlsli"
 
-float CalCulateDepth(float3 pos)
+float CalCulateDepth(float3 pos, int index)
 {
-    float near = 0.1f;
-    float far = 10.f;
+    float near = lights[index].nearPlane;
+    float far = lights[index].farPlane;
     
     float c1 = far / (far - near);
     float c0 = -near * far / (far - near);
@@ -329,7 +329,7 @@ void CalculateLight(int lightIndex, float3 normal, float3 pos, out float4 diffus
         // Shadow 연산하는 코드 넣기
         float4 worldPos = mul(float4(pos.xyz, 1.f), VTMInv);
         //float curDepth = CalCulateDepth((lights[lightIndex].position.xyz - worldPos.xyz));
-        float curDepth = CalCulateDepth((worldPos.xyz - lights[lightIndex].position.xyz));
+        float curDepth = CalCulateDepth((worldPos.xyz - lights[lightIndex].position.xyz), lightIndex);
         
         //float shadow = PointLightShadowMap.Sample(sam, normalize(lights[lightIndex].position.xyz - worldPos.xyz)).r;
         float shadow = PointLightShadowMap.Sample(sam, normalize(worldPos.xyz - lights[lightIndex].position.xyz)).r;

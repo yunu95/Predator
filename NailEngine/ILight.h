@@ -30,7 +30,10 @@ struct LightInfo
 	unsigned int lightType;
 	float range;
 	float angle;
-	unsigned int padding;
+
+	float farPlane = 1.f;
+	float nearPlane = 0.1f;
+	DirectX::SimpleMath::Vector3 padding;
 };
 
 struct LightParams

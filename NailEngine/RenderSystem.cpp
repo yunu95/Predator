@@ -128,6 +128,8 @@ void RenderSystem::PushLightData()
 		else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{
 			params.lights[i].range = e->GetLightInfo().range;
+			params.lights[i].farPlane = e->GetLightInfo().farPlane;
+			params.lights[i].nearPlane = e->GetLightInfo().nearPlane;
 		}
 		else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Spot))
 		{
@@ -414,10 +416,11 @@ void RenderSystem::RenderPointLightShadow()
 				}
 
 				// 뷰 행렬 계산
-				//DirectX::SimpleMath::Matrix viewMatrix = DirectX::SimpleMath::Matrix::CreateLookAt(pos, targetPos, upVec);
 				DirectX::SimpleMath::Matrix viewMatrix = XMMatrixLookAtLH(pos, targetPos, upVec);
-				DirectX::SimpleMath::Matrix projMat = CameraManager::Instance.Get().GetPTM90ByResolution(1024, 1024);
-				//DirectX::SimpleMath::Matrix projMat = DirectX::XMMatrixOrthographicLH(100 * 1.f, 100 * 1.f, 0.0000001f, 500.f);
+
+				DirectX::SimpleMath::Matrix projMat = CameraManager::Instance.Get().GetPTM90ByResolution(1024, 1024,
+					std::static_pointer_cast<PointLight>(e)->GetLightInfo().farPlane, std::static_pointer_cast<PointLight>(e)->GetLightInfo().nearPlane);
+
 				pointLightVP.viewProj[i] = viewMatrix * projMat;
 			}
 

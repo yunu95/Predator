@@ -23,6 +23,7 @@ void PointLight::SetLightPosition(DirectX::SimpleMath::Vector4& position)
 void PointLight::SetRange(float range)
 {
 	this->lightInfo.range = range;
+	this->lightInfo.farPlane = range;
 }
 
 void PointLight::SetWorldTM(const DirectX::SimpleMath::Matrix& wtm)

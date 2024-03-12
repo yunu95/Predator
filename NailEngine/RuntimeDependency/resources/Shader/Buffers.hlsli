@@ -60,7 +60,9 @@ struct LightInfo
     int lightType;
     float range;
     float angle;
-    int padding;
+    float farPlane;
+    float nearPlane;
+    float3 padding;
 };
 
 cbuffer LightParams : register(b2)
