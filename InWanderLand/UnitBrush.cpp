@@ -23,7 +23,7 @@ namespace application
 
                 auto name = static_cast<Unit_TemplateData*>(TemplateDataManager::GetSingletonInstance().GetTemplateData(dataKey))->pod.fbxName;
 
-                auto brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(dataKey);
+                auto brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(name);
 
                 if (brushObj == nullptr)
                     return false;

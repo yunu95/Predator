@@ -5,6 +5,7 @@
 #include "EditorEvents.h"
 #include "EditorCommonEvents.h"
 
+#include "GlobalConstant.h"
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
 #include "Ornament_TemplateData.h"
@@ -21,8 +22,10 @@ namespace application
     namespace editor
     {
         MapFileManager::MapFileManager()
-            : Singleton<MapFileManager>(), instanceManager(InstanceManager::GetSingletonInstance()), templateDataManager(TemplateDataManager::GetSingletonInstance())
-            , currentMapPath()
+            : Singleton<MapFileManager>(), globalConstant(GlobalConstant::GetSingletonInstance()), 
+            instanceManager(InstanceManager::GetSingletonInstance()), 
+            templateDataManager(TemplateDataManager::GetSingletonInstance()),
+            currentMapPath()
         {
 
         }
@@ -157,7 +160,7 @@ namespace application
                 // Manager 초기화
                 Clear();
 
-                if (!instanceManager.PreDecoding(mapData) || !templateDataManager.PreDecoding(mapData))
+                if (!globalConstant.PreDecoding(mapData) || !instanceManager.PreDecoding(mapData) || !templateDataManager.PreDecoding(mapData))
                 {
                     loadFile.close();
                     return false;
@@ -195,7 +198,7 @@ namespace application
                 return false;
             }
             // Pre
-            if (!instanceManager.PreEncoding(mapData) || !templateDataManager.PreEncoding(mapData))
+            if (!globalConstant.PreEncoding(mapData) || !instanceManager.PreEncoding(mapData) || !templateDataManager.PreEncoding(mapData))
             {
                 return false;
             }

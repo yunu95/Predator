@@ -514,6 +514,11 @@ namespace application
                         break;
                     case application::editor::palette::Palette_List::Wave:
                         break;
+                    case application::editor::palette::Palette_List::Cam:
+                    {
+                        templateList = tdm.GetDataList(DataType::CameraData);
+                        break;
+                    }
                     default:
                         break;
                 }

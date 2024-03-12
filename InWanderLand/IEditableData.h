@@ -34,6 +34,7 @@ namespace application
 			OrnamentData,
 			RegionData,
 			WaveData,
+			CameraData,
 		};
 
 		template<typename T>
@@ -59,6 +60,7 @@ namespace application
             virtual void OnDataResourceChange(std::string newName) {};
             palette::PaletteInstance* GetPaletteInstance();
 			virtual void ApplyAsPlaytimeObject() {};
+			virtual bool EnterDataFromGlobalConstant() = 0;
 
 		protected:
 			virtual bool PreSaveCallback() { return true; }

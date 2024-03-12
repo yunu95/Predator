@@ -10,6 +10,8 @@
 #include "RegionEditorInstance.h"
 #include "StaticInstanceRegistry.h"
 #include "RegionPalette.h"
+#include "GlobalConstant.h"
+#include "InstanceManager.h"
 
 namespace application
 {
@@ -59,6 +61,7 @@ namespace application
             virtual void OnRelocate(const Vector3d& newLoc) override;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
             virtual void ApplyAsPlaytimeObject() override {};
+            virtual bool EnterDataFromGlobalConstant() override { return true; };
 
             POD_Region pod;
 

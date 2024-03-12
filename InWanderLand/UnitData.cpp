@@ -130,6 +130,12 @@ namespace application
 			// 웨이브에 속하지 않은 유닛은 UnitSpawnPoint로, 웨이브에 속한 유닛은 따로 처리되어야 하기 때문.
 		}
 
+		bool UnitData::EnterDataFromGlobalConstant()
+		{
+			auto& data = GlobalConstant::GetSingletonInstance().pod;
+			return true;
+		}
+
 		bool UnitData::PreEncoding(json& data) const
 		{
 			FieldPreEncoding<boost::pfr::tuple_size_v<POD_Unit>>(pod, data["POD"]);
@@ -154,6 +160,7 @@ namespace application
 		bool UnitData::PostDecoding(const json& data)
 		{
 			FieldPostDecoding<boost::pfr::tuple_size_v<POD_Unit>>(pod, data["POD"]);
+			EnterDataFromGlobalConstant();
 #ifdef EDITOR
 			ApplyAsPaletteInstance();
 #endif
@@ -171,6 +178,7 @@ namespace application
 		{
 			pod.templateData = static_cast<Unit_TemplateData*>(templateDataManager.GetTemplateData(name));
 			EnterDataFromTemplate();
+			EnterDataFromGlobalConstant();
 		}
 
 		UnitData::UnitData(const UnitData& prototype)

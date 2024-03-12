@@ -12,29 +12,26 @@
 
 namespace application
 {
-	namespace editor
+	class UUIDManager
+		: public Singleton<UUIDManager>
 	{
-		class UUIDManager
-			: public Singleton<UUIDManager>
+		friend class Singleton<UUIDManager>;
+
+	public:
+		bool RegisterUUIDWithPointer(const UUID& uuid, Identifiable* pointer);
+
+		template <typename T> requires std::is_pointer_v<T>
+		T GetPointerFromUUID(const UUID& uuid)
 		{
-			friend class Singleton<UUIDManager>;
+			return static_cast<T>(uuidMap[uuid]);
+		}
 
-		public:
-			bool RegisterUUIDWithPointer(const UUID& uuid, Identifiable* pointer);
+		bool EraseUUID(const UUID& uuid);
+		void Clear();
 
-			template <typename T> requires std::is_pointer_v<T>
-			T GetPointerFromUUID(const UUID& uuid)
-			{
-				return static_cast<T>(uuidMap[uuid]);
-			}
+	private:
+		UUIDManager() = default;
 
-			bool EraseUUID(const UUID& uuid);
-			void Clear();
-
-		private:
-			UUIDManager() = default;
-
-			std::unordered_map<const UUID, Identifiable*> uuidMap;
-		};
-	}
+		std::unordered_map<const UUID, Identifiable*> uuidMap;
+	};
 }

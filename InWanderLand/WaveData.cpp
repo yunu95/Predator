@@ -82,6 +82,7 @@ namespace application
         bool WaveData::PostDecoding(const json& data)
         {
             FieldPostDecoding<boost::pfr::tuple_size_v<POD_Wave>>(pod, data["POD"]);
+            EnterDataFromGlobalConstant();
             return true;
         }
 
@@ -97,6 +98,7 @@ namespace application
             pod.name = MakeUpName();
             pod.templateData = static_cast<Wave_TemplateData*>(templateDataManager.GetTemplateData(name));
             EnterDataFromTemplate();
+            EnterDataFromGlobalConstant();
         }
 
         WaveData::WaveData(const WaveData& prototype)

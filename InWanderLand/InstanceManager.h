@@ -6,9 +6,10 @@
 
 #include "Singleton.h"
 #include "Storable.h"
-#include "TemplateDataManager.h"
 #include "IEditableData.h"
 #include "Identifiable.h"
+#include "EditableDataList.h"
+#include "TemplateDataManager.h"
 
 #include <string>
 #include <memory>
@@ -56,6 +57,64 @@ namespace application
                 return instance;
             }
 
+            template<>
+            IEditableData* CreateInstance<IEditableData>(const std::string& dataName)
+            {
+                auto tdptr = templateDataManager.GetTemplateData(dataName);
+                if (tdptr == nullptr)
+                {
+                    return nullptr;
+                }
+
+                IEditableData* instance = nullptr;
+
+                switch (templateDataManager.GetDataType(dataName))
+                {
+                    case DataType::TerrainData:
+                    {
+                        instance = new TerrainData(dataName);
+                        break;
+                    }
+
+                    case DataType::UnitData:
+                    {
+                        instance = new UnitData(dataName);
+                        break;
+                    }
+
+                    case DataType::OrnamentData:
+                    {
+                        instance = new OrnamentData(dataName);
+                        break;
+                    }
+                    case DataType::RegionData:
+                    {
+                        instance = new RegionData(dataName);
+                        break;
+                    }
+                    case DataType::WaveData:
+                    {
+                        instance = new WaveData(dataName);
+                        break;
+                    }
+                    case DataType::CameraData:
+                    {
+                        instance = new CameraData(dataName);
+                        break;
+                    }
+                    default:
+                        break;
+                }
+
+                if (instance != nullptr)
+                {
+                    list[instance->id] = std::unique_ptr<IEditableData>(instance);
+                    tdMap[instance->id] = tdptr;
+                }
+
+                return instance;
+            }
+
             template<typename T = IEditableData> requires std::derived_from<T, IEditableData>
             T* GetInstance(const UUID& uuid) const
             {
@@ -70,6 +129,7 @@ namespace application
             bool DeleteInstance(const UUID& uuid);
 			void Clear();
 			void ApplyInstancesAsPlaytimeObjects();
+            void EnterDataFromGlobalConstant();
 
             template <typename T>
             std::vector<T*> GetList()

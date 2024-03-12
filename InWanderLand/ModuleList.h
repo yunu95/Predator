@@ -1,7 +1,8 @@
-/// 2023. 12. 27 ±è»óÁØ
-/// ¿¡µðÅÍ¿¡¼­ »ç¿ëÇÒ ¸ðµâÀÇ Çì´õ ÆÄÀÏÀ» ÇÑ °÷¿¡ ¸ð¾ÆµÐ Çì´õ ÆÄÀÏ
-/// ¸ðµâÀÌ Ãß°¡µÇ¸é ¿©±â¿¡ Ãß°¡ÇÏ¿© »ç¿ëÇÏµµ·Ï ±ÇÀå
+/// 2023. 12. 27 ê¹€ìƒì¤€
+/// ì—ë””í„°ì—ì„œ ì‚¬ìš©í•  ëª¨ë“ˆì˜ í—¤ë” íŒŒì¼ì„ í•œ ê³³ì— ëª¨ì•„ë‘” í—¤ë” íŒŒì¼
+/// ëª¨ë“ˆì´ ì¶”ê°€ë˜ë©´ ì—¬ê¸°ì— ì¶”ê°€í•˜ì—¬ ì‚¬ìš©í•˜ë„ë¡ ê¶Œìž¥
 
 #pragma once
 
 #include "Module_TemplateDataEditor.h"
+#include "Module_GlobalConstant.h"

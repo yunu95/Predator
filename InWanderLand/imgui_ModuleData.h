@@ -8,8 +8,10 @@
 
 #include "PodStructs.h"
 #include "EditorResourceManager.h"
+#include "InstanceManager.h"
 #include "TemplateDataManager.h"
 #include "PaletteBrushManager.h"
+#include "GCTemplate.h"
 
 namespace application
 {
@@ -23,7 +25,7 @@ namespace application
 				// 사용자 정의 자료형에 대해서는 이 템플릿 함수에 대한 특수화를 구현하여
 				// 지원하도록 함
 				template <typename T>
-				bool DrawData(std::string label, T& data)
+				bool DrawData(std::string label, T& data, bool global)
 				{
 					ImGui::TableNextRow();
 					ImGui::TableSetColumnIndex(0);
@@ -35,19 +37,68 @@ namespace application
 				}
 
 				template <>
-				bool DrawData(std::string label, const int& data)
+				bool DrawData(std::string label, const int& data, bool global)
 				{
 					return DragInt_2Col(label, const_cast<int&>(data));
 				}
 
 				template <>
-				bool DrawData(std::string label, const float& data)
+				bool DrawData(std::string label, const GC<int>& data, bool global)
+				{
+					if (global)
+					{
+						if (DragInt_2Col(label, const_cast<int&>(data.data)))
+						{
+							TemplateDataManager::GetSingletonInstance().EnterDataFromGlobalConstant();
+							InstanceManager::GetSingletonInstance().EnterDataFromGlobalConstant();
+							return true;
+						}
+						else
+							return false;
+					}
+					else
+					{
+						imgui::SmartStyleColor bgColor1(ImGuiCol_FrameBg, IM_COL32(255, 20, 20, 255));
+						imgui::SmartStyleColor bgColor2(ImGuiCol_FrameBgHovered, IM_COL32(200, 20, 20, 255));
+						imgui::SmartStyleColor bgColor3(ImGuiCol_FrameBgActive, IM_COL32(255, 20, 20, 255));
+						int copyData = data.data;
+						return DragInt_2Col(label, copyData, false);
+					}
+				}
+
+				template <>
+				bool DrawData(std::string label, const float& data, bool global)
 				{
 					return DragFloat_2Col(label, const_cast<float&>(data));
 				}
 
 				template <>
-				bool DrawData(std::string label, const double& data)
+				bool DrawData(std::string label, const GC<float>& data, bool global)
+				{
+					if (global)
+					{
+						if (DragFloat_2Col(label, const_cast<float&>(data.data)))
+						{
+							TemplateDataManager::GetSingletonInstance().EnterDataFromGlobalConstant();
+							InstanceManager::GetSingletonInstance().EnterDataFromGlobalConstant();
+							return true;
+						}
+						else
+							return false;
+
+					}
+					else
+					{
+						imgui::SmartStyleColor bgColor1(ImGuiCol_FrameBg, IM_COL32(255, 20, 20, 255));
+						imgui::SmartStyleColor bgColor2(ImGuiCol_FrameBgHovered, IM_COL32(200, 20, 20, 255));
+						imgui::SmartStyleColor bgColor3(ImGuiCol_FrameBgActive, IM_COL32(255, 20, 20, 255));
+						float copyData = data.data;
+						return DragFloat_2Col(label, copyData, false);
+					}
+				}
+
+				template <>
+				bool DrawData(std::string label, const double& data, bool global)
 				{
 					float val = data;
 					bool returnVal = DragFloat_2Col(label, val);
@@ -56,13 +107,64 @@ namespace application
 				}
 
 				template <>
-				bool DrawData(std::string label, const bool& data)
+				bool DrawData(std::string label, const GC<double>& data, bool global)
+				{
+					float copyData = data.data;
+					if (global)
+					{
+						bool returnVal = DragFloat_2Col(label, copyData, false);
+						if (returnVal)
+						{
+							const_cast<double&>(data.data) = copyData;
+							TemplateDataManager::GetSingletonInstance().EnterDataFromGlobalConstant();
+							InstanceManager::GetSingletonInstance().EnterDataFromGlobalConstant();
+							return true;
+						}
+						else
+							return false;
+
+					}
+					else
+					{
+						imgui::SmartStyleColor bgColor1(ImGuiCol_FrameBg, IM_COL32(255, 20, 20, 255));
+						imgui::SmartStyleColor bgColor2(ImGuiCol_FrameBgHovered, IM_COL32(200, 20, 20, 255));
+						imgui::SmartStyleColor bgColor3(ImGuiCol_FrameBgActive, IM_COL32(255, 20, 20, 255));
+						return DragFloat_2Col(label, copyData, false);
+					}
+				}
+
+				template <>
+				bool DrawData(std::string label, const bool& data, bool global)
 				{
 					return Checkbox_2Col(label, const_cast<bool&>(data));
 				}
 
 				template <>
-				bool DrawData(std::string label, const std::string& data)
+				bool DrawData(std::string label, const GC<bool>& data, bool global)
+				{
+					if (global)
+					{
+						if (Checkbox_2Col(label, const_cast<bool&>(data.data)))
+						{
+							TemplateDataManager::GetSingletonInstance().EnterDataFromGlobalConstant();
+							InstanceManager::GetSingletonInstance().EnterDataFromGlobalConstant();
+							return true;
+						}
+						else
+							return false;
+					}
+					else
+					{
+						imgui::SmartStyleColor bgColor1(ImGuiCol_FrameBg, IM_COL32(255, 20, 20, 255));
+						imgui::SmartStyleColor bgColor2(ImGuiCol_FrameBgHovered, IM_COL32(200, 20, 20, 255));
+						imgui::SmartStyleColor bgColor3(ImGuiCol_FrameBgActive, IM_COL32(255, 20, 20, 255));
+						bool copyData = data.data;
+						return Checkbox_2Col(label, copyData);
+					}
+				}
+
+				template <>
+				bool DrawData(std::string label, const std::string& data, bool global)
 				{
 					ImGui::TableNextRow();
 					ImGui::TableSetColumnIndex(0);
@@ -119,7 +221,7 @@ namespace application
 				}
 
 				template <typename T, int N = 0>
-				void DrawDataField(const T& data)
+				void DrawDataField(const T& data, bool global = false)
 				{
 					if constexpr (N == boost::pfr::tuple_size_v<T>)
 					{
@@ -127,8 +229,8 @@ namespace application
 					}
 					else
 					{
-						DrawData(std::string(boost::pfr::get_name<N, T>()), boost::pfr::get<N>(data));
-						DrawDataField<T, N + 1>(data);
+						DrawData(std::string(boost::pfr::get_name<N, T>()), boost::pfr::get<N>(data), global);
+						DrawDataField<T, N + 1>(data, global);
 					}
 				}
 			}

@@ -132,6 +132,14 @@ namespace application
             selectedData = const_cast<ITemplateData*>(ptr);
         }
 
+        void TemplateDataManager::EnterDataFromGlobalConstant()
+        {
+            for (auto& each : list)
+            {
+                each.second->EnterDataFromGlobalConstant();
+            }
+        }
+
         bool TemplateDataManager::PreSave()
         {
             for (auto& [key, ptr] : list)
@@ -202,6 +210,8 @@ namespace application
         }
         bool TemplateDataManager::PreDecoding(const json& data)
         {
+            if (!data.contains("TemplateList"))
+                return true;
             UUID uuid;
             for (auto& [uuidStr, templateData] : data["TemplateList"].items())
             {
@@ -231,6 +241,8 @@ namespace application
 
         bool TemplateDataManager::PostDecoding(const json& data)
         {
+            if (!data.contains("TemplateList"))
+                return true;
             for (auto& [uuidStr, templateData] : data["TemplateList"].items())
             {
                 if (!list[templateData["key"]]->PostDecoding(templateData["1_Post"]))

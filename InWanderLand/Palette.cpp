@@ -23,6 +23,11 @@ namespace application::editor::palette
         static_cast<Palette&>(WavePalette::SingleInstance()).Reset();
     }
 
+    void Palette::Initialize()
+    {
+
+    }
+
     void Palette::OnLeftClick()
     {
         isClickingLeft = true;

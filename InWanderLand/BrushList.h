@@ -5,3 +5,4 @@
 #include "TerrainBrush.h"
 #include "UnitBrush.h"
 #include "OrnamentBrush.h"
+#include "CameraBrush.h"

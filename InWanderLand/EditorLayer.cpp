@@ -18,11 +18,30 @@
 #include "MenubarCommands.h"
 #include "Application.h"
 
+bool editorInputControl = true;
+
 namespace application
 {
 	namespace editor
 	{
 		std::function<void()> EditorLayer::testInitializer;
+
+#ifdef GEN_TESTS
+		void EditorLayer::AssignTestInitializer(std::function<void()> testInitializer)
+		{
+			EditorLayer::testInitializer = testInitializer;
+		}
+#endif
+
+		void EditorLayer::SetInputControl(bool control)
+		{
+			editorInputControl = control;
+		}
+
+		bool EditorLayer::GetInputControl()
+		{
+			return editorInputControl;
+		}
 
 		void EditorLayer::Initialize()
 		{
@@ -51,6 +70,7 @@ namespace application
 			/// 에디터 모듈 생성 및 초기화 진행
 			editorModuleList.resize((int)Module_List::Size);
 
+			editorModuleList[(int)Module_List::GlobalConstant] = &Module_GlobalConstant::GetSingletonInstance();
 			editorModuleList[(int)Module_List::TemplateDataEditor] = &Module_TemplateDataEditor::GetSingletonInstance();
 
 			for (auto& each : editorPanelList)
@@ -127,9 +147,9 @@ namespace application
 
 		void EditorLayer::LateInitialize()
 		{
+			ResourceManager::GetSingletonInstance().LateInitialize();
 			palette::PaletteManager::GetSingletonInstance().Initialize();
 			palette::PaletteBrushManager::GetSingletonInstance().Initialize();
-			ResourceManager::GetSingletonInstance().LateInitialize();
 			mfm.LoadDefaultMap();
 
 			// 카메라 초기화
@@ -137,11 +157,6 @@ namespace application
 
 			// SceneGizmo
 			InitSceneGizmo();
-		}
-
-		void EditorLayer::AssignTestInitializer(std::function<void()> testInitializer)
-		{
-			EditorLayer::testInitializer = testInitializer;
 		}
 
 		void EditorLayer::InitSceneGizmo()
@@ -229,8 +244,21 @@ namespace application
 			}
 			if (ImGui::BeginMenu("Module"))
 			{
+				bool gc = editorModuleList[(int)Module_List::GlobalConstant]->GetActivation();
+				if (ImGui::MenuItem("GlobalConstant Editor", "F2", gc))
+				{
+					if (gc)
+					{
+						editorModuleList[(int)Module_List::GlobalConstant]->SetActivation(false);
+					}
+					else
+					{
+						editorModuleList[(int)Module_List::GlobalConstant]->SetActivation(true);
+					}
+				}
+
 				bool tde = editorModuleList[(int)Module_List::TemplateDataEditor]->GetActivation();
-				if (ImGui::MenuItem("TemplateData Editor", "F2", tde))
+				if (ImGui::MenuItem("TemplateData Editor", "F3", tde))
 				{
 					if (tde)
 					{
@@ -241,6 +269,7 @@ namespace application
 						editorModuleList[(int)Module_List::TemplateDataEditor]->SetActivation(true);
 					}
 				}
+
 				ImGui::EndMenu();
 			}
 			imgui::ShiftCursorX(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(mfm.GetCurrentMapPath().c_str()).x - 10);

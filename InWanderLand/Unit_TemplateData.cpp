@@ -44,6 +44,11 @@ namespace application
 			return pod.fbxName;
 		}
 
+		bool Unit_TemplateData::EnterDataFromGlobalConstant()
+		{
+			return true;
+		}
+
 		bool Unit_TemplateData::PreEncoding(json& data) const
 		{
 			FieldPreEncoding<boost::pfr::tuple_size_v<POD_Unit_TemplateData>>(pod, data["POD"]);
@@ -68,7 +73,7 @@ namespace application
 		bool Unit_TemplateData::PostDecoding(const json& data)
 		{
 			FieldPostDecoding<boost::pfr::tuple_size_v<POD_Unit_TemplateData>>(pod, data["POD"]);
-
+			EnterDataFromGlobalConstant();
 			return true;
 		}
 
@@ -81,7 +86,7 @@ namespace application
 		Unit_TemplateData::Unit_TemplateData(const Unit_TemplateData& prototype)
 			: ITemplateData(prototype), pod(prototype.pod) 
 		{
-
+			EnterDataFromGlobalConstant();
 		}
 
 		Unit_TemplateData& Unit_TemplateData::operator=(const Unit_TemplateData& prototype)

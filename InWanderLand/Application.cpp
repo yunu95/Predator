@@ -100,7 +100,7 @@ namespace application
 	{
 		return gameFocus;
 	}
-
+	
 	Application::Application(int argc, char** argv)
 	{
 		// Create application window

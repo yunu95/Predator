@@ -34,7 +34,7 @@ namespace application::editor::palette
         UnselectUnitTemplateData();
     }
 
-    UnitData* UnitPalette::PlaceInstance(Vector3d worldPosition)
+    IEditableData* UnitPalette::PlaceInstance(Vector3d worldPosition)
     {
         if (selectedUnitTemplateData == nullptr)
             return nullptr;

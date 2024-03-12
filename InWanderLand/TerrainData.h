@@ -7,6 +7,7 @@
 #include "IEditableData.h"
 #include "Terrain_TemplateData.h"
 #include "DebugStaticMesh.h"
+#include "GlobalConstant.h"
 
 #include <memory>
 #include <string>
@@ -54,6 +55,8 @@ namespace application
             virtual IEditableData* Clone() const override;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
             virtual void ApplyAsPlaytimeObject()override;
+            virtual bool EnterDataFromGlobalConstant() override { return true; };
+
             void MakeUpVerticesList(std::vector<Vector3f>& vertexList, std::vector<int>& indexList);
 
                 void AddNode(const Vector2i& nodeKey, Node&& nodeInfo);

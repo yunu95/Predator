@@ -26,7 +26,11 @@ namespace application
 			: public Layer
 		{
 		public:
+#ifdef GEN_TESTS
 			static void AssignTestInitializer(std::function<void()> testInitializer);
+#endif
+			static void SetInputControl(bool control);
+			static bool GetInputControl();
 
 			virtual void Initialize() override;
 			virtual void Update(float ts) override;
@@ -56,7 +60,8 @@ namespace application
 
 			enum class Module_List
 			{
-				TemplateDataEditor	= 0,
+				GlobalConstant = 0,
+				TemplateDataEditor,
 
 				/// Size를 자동으로 넣기 위해 사용하는 enum
 				/// 첫 enum 값이 0 이고, 모든 간격이 1일 때에 가능함

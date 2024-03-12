@@ -27,6 +27,8 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 std::function<void()> application::contents::ContentsLayer::testInitializer;
 
+bool contentsInputControl = true;
+
 /// 그래픽스 테스트용
 void GraphicsTest()
 {
@@ -37,6 +39,15 @@ void GraphicsTest()
 
 }
 
+void application::contents::ContentsLayer::SetInputControl(bool control)
+{
+	contentsInputControl = control;
+}
+
+bool application::contents::ContentsLayer::GetInputControl()
+{
+	return contentsInputControl;
+}
 
 //void CreateNavPlane(Vector3f botleft, Vector3f topright, std::vector<Vector3f>& worldVertices, std::vector<int>& worldFaces)
 //{
@@ -90,7 +101,6 @@ void application::contents::ContentsLayer::Initialize()
 		ContentsLayer::testInitializer();
 		return;
 	}
-
 
 	//auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	//camObj->GetTransform()->SetLocalPosition(Vector3d(0, 20, -10));

@@ -43,6 +43,12 @@ namespace application
 			return pod.fbxName;
 		}
 
+		bool Ornament_TemplateData::EnterDataFromGlobalConstant()
+		{
+			auto& data = GlobalConstant::GetSingletonInstance().pod;
+			return true;
+		}
+
 		bool Ornament_TemplateData::PreEncoding(json& data) const
 		{
 			FieldPreEncoding<boost::pfr::tuple_size_v<POD_Ornament_TemplateData>>(pod, data["POD"]);
@@ -67,7 +73,7 @@ namespace application
 		bool Ornament_TemplateData::PostDecoding(const json& data)
 		{
 			FieldPostDecoding<boost::pfr::tuple_size_v<POD_Ornament_TemplateData>>(pod, data["POD"]);
-
+			EnterDataFromGlobalConstant();
 			return true;
 		}
 
@@ -80,7 +86,7 @@ namespace application
 		Ornament_TemplateData::Ornament_TemplateData(const Ornament_TemplateData& prototype)
 			: ITemplateData(prototype), pod(prototype.pod)
 		{
-
+			EnterDataFromGlobalConstant();
 		}
 
 		Ornament_TemplateData& Ornament_TemplateData::operator=(const Ornament_TemplateData& prototype)

@@ -13,6 +13,7 @@
 namespace application::editor::palette
 {
     using namespace application::editor;
+ 
     IEditableData* TerrainPalette::PlaceInstance(Vector3d worldPosition)
     {
         auto centerNodeKey = TerrainData::Instance().WorldToNodeSpace(worldPosition);

@@ -96,6 +96,12 @@ namespace application
 			return ornamentInstance;
 		}
 
+		bool OrnamentData::EnterDataFromGlobalConstant()
+		{
+			auto& data = GlobalConstant::GetSingletonInstance().pod;
+			return true;
+		}
+
 		bool OrnamentData::PreEncoding(json& data) const
 		{
 			FieldPreEncoding<boost::pfr::tuple_size_v<POD_Ornament>>(pod, data["POD"]);
@@ -120,6 +126,7 @@ namespace application
 		bool OrnamentData::PostDecoding(const json& data)
 		{
 			FieldPostDecoding<boost::pfr::tuple_size_v<POD_Ornament>>(pod, data["POD"]);
+			EnterDataFromGlobalConstant();
 #ifdef EDITOR
 			ApplyAsPaletteInstance();
 #endif
@@ -137,6 +144,7 @@ namespace application
 		{
 			pod.templateData = static_cast<Ornament_TemplateData*>(templateDataManager.GetTemplateData(name));
 			EnterDataFromTemplate();
+			EnterDataFromGlobalConstant();
 		}
 
 		OrnamentData::OrnamentData(const OrnamentData& prototype)

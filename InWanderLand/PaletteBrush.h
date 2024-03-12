@@ -27,6 +27,8 @@ namespace application
             public:
                 virtual ~PaletteBrush() = default;
 
+                virtual void Initialize() = 0;
+
                 // Load 시 호출 할 모든 Brush 일괄 생성 함수입니다. 
                 virtual void CreateBrush() = 0;
 

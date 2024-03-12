@@ -85,6 +85,7 @@ namespace application
 
             ITemplateData* GetSelectedTemplateData() const;
             void SetSelectedTemplateData(const ITemplateData* ptr);
+            void EnterDataFromGlobalConstant();
 
         protected:
             bool PreSave();

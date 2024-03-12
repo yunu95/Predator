@@ -322,6 +322,15 @@
     <Filter Include="Editor\IO\FileSystem">
       <UniqueIdentifier>{018fec7d-1ab2-4937-a43f-4face4d7b708}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Palette\PaletteBrush\CameraBrush">
+      <UniqueIdentifier>{28e9af65-8004-4ddf-b3ee-42d21d8afc46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\List\CameraPalette">
+      <UniqueIdentifier>{2060c110-4e64-4e2d-90c8-4588b0d2304d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\EditorInstance\CameraInstance">
+      <UniqueIdentifier>{89c64563-a390-4f9b-9c53-4233d18e3b2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -803,9 +812,6 @@
     <ClInclude Include="WaveInstance.h">
       <Filter>Editor\Palette\EditorInstance\WaveInstance</Filter>
     </ClInclude>
-    <ClInclude Include="imgui_ModuleData.h">
-      <Filter>Editor\imgui\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="FileSystem.h">
       <Filter>Editor\IO\FileSystem</Filter>
     </ClInclude>
@@ -820,6 +826,33 @@
     </ClInclude>
     <ClInclude Include="BrushList.h">
       <Filter>Editor\Palette\PaletteBrush</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalConstant.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="GCTemplate.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_ModuleData.h">
+      <Filter>Editor\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Module_GlobalConstant.h">
+      <Filter>Editor\Panel\List\Module\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera_TemplateData.h">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraData.h">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraBrush.h">
+      <Filter>Editor\Palette\PaletteBrush\CameraBrush</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraPalette.h">
+      <Filter>Editor\Palette\List\CameraPalette</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraEditorInstance.h">
+      <Filter>Editor\Palette\EditorInstance\CameraInstance</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1268,6 +1301,27 @@
     </ClCompile>
     <ClCompile Include="PaletteBrushManager.cpp">
       <Filter>Editor\Palette\PaletteBrush</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalConstant.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="Module_GlobalConstant.cpp">
+      <Filter>Editor\Panel\List\Module\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera_TemplateData.cpp">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraData.cpp">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraBrush.cpp">
+      <Filter>Editor\Palette\PaletteBrush\CameraBrush</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraPalette.cpp">
+      <Filter>Editor\Palette\List\CameraPalette</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraEditorInstance.cpp">
+      <Filter>Editor\Palette\EditorInstance\CameraInstance</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -7,6 +7,16 @@ namespace application
     {
         namespace palette
         {
+            RegionData* RegionPalette::GetSingleSelectedRegion()
+            {
+                return selection.empty() ? nullptr : static_cast<RegionData*>(const_cast<IEditableData*>(*selection.begin()));
+            }
+
+            void RegionPalette::SelectRegion(RegionData* region)
+            {
+                Palette::OnSelectSingleInstance(region);
+            }
+
             IEditableData* RegionPalette::PlaceInstance(Vector3d worldPosition)
             {
                 //InstanceManager::GetSingletonInstance().CreateInstance<RegionData>();
@@ -39,6 +49,11 @@ namespace application
                 }
                 state = State::None;
                 CleanUpData();
+            }
+
+            bool RegionPalette::ShouldSelect(IEditableData* instance)
+            {
+                return dynamic_cast<RegionData*>(instance);
             }
         }
     }

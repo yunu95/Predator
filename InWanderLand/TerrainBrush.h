@@ -14,11 +14,12 @@ namespace application
             class TerrainBrush : public PaletteBrush, public yunutyEngine::Component, public yunutyEngine::SingletonComponent<TerrainBrush>
             {
             public:
-                virtual void CreateBrush() override {};
-                virtual bool CreateBrush(const std::string& dataKey) override { return false; };
-                virtual bool ChangeBrushResource(const std::string& dataKey, const std::string& fbxName) override { return false; };
-                virtual void ReadyBrush(const std::string& dataKey) override {};
-                virtual void Clear() override {};
+                virtual void Initialize() {}
+                virtual void CreateBrush() override {}
+                virtual bool CreateBrush(const std::string& dataKey) override { return false; }
+                virtual bool ChangeBrushResource(const std::string& dataKey, const std::string& fbxName) override { return false; }
+                virtual void ReadyBrush(const std::string& dataKey) override {}
+                virtual void Clear() override {}
 
                 void SetBrushSize(unsigned int size)
                 {

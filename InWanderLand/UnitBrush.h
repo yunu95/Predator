@@ -19,6 +19,7 @@ namespace application
             class UnitBrush : public PaletteBrush, public yunutyEngine::Component, public yunutyEngine::SingletonComponent<UnitBrush>
             {
             public:
+                virtual void Initialize() {}
                 virtual void CreateBrush() override;
                 virtual bool CreateBrush(const std::string& dataKey) override;
                 virtual bool ChangeBrushResource(const std::string& dataKey, const std::string& fbxName) override;

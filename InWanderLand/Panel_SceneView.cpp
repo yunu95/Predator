@@ -8,6 +8,7 @@
 #include "EditorCamera.h"
 #include "ImGuizmo/ImGuizmo.h"
 #include "EditorMath.h"
+#include "EditorLayer.h"
 
 #include "imgui.h"
 #include "imgui_internal.h"
@@ -121,7 +122,7 @@ namespace application
                 ImGui_OnResizeRenderImageSize();
             }
 
-            if (Application::IsFocusGameWindow() == false)
+            if (Application::IsFocusGameWindow() == false && EditorLayer::GetInputControl())
             {
                 // 마우스 입력에 대한 처리
                 if (isMouseOver)
@@ -541,6 +542,9 @@ namespace application
                 break;
             case palette::Palette_List::Wave:
                 ImGui::BeginMenu("    Wave", false);
+                break;
+            case palette::Palette_List::Cam:
+                ImGui::BeginMenu("     Cam", false);
                 break;
             default:
                 break;

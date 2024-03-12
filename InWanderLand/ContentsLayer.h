@@ -16,6 +16,9 @@ namespace application
         private:
             static std::function<void()> testInitializer;
         public:
+            static void SetInputControl(bool control);
+            static bool GetInputControl();
+
             virtual void Initialize() override;
             //virtual void EventProgress() override;
             virtual void Update(float ts) override;

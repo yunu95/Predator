@@ -11,6 +11,8 @@
 
 namespace application
 {
+	class GlobalConstant;
+
 	namespace editor
 	{
 		class InstanceManager;
@@ -40,6 +42,7 @@ namespace application
 		private:
 			MapFileManager();
 
+			GlobalConstant& globalConstant;
 			InstanceManager& instanceManager;
 			TemplateDataManager& templateDataManager;
 

@@ -6,6 +6,7 @@
 
 #include "ITemplateData.h"
 #include "PodStructs.h"
+#include "GlobalConstant.h"
 
 #include <string>
 #include <vector>
@@ -19,6 +20,10 @@ namespace application
 		struct POD_Ornament_TemplateData
 		{
 			std::string fbxName = std::string();
+
+			/// GlobalConstant
+
+
 
 			TO_JSON(POD_Ornament_TemplateData)
 			FROM_JSON(POD_Ornament_TemplateData)
@@ -36,6 +41,7 @@ namespace application
 			virtual std::string GetDataKey() const override;
 			virtual void SetDataResourceName(std::string fbxName) override;
 			virtual std::string GetDataResourceName() const override;
+			virtual bool EnterDataFromGlobalConstant() override;
 
 			POD_Ornament_TemplateData pod;
 

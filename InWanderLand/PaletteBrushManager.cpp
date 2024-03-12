@@ -17,6 +17,16 @@ namespace application
                 brushList[(int)Palette_List::Ornament] = &OrnamentBrush::Instance();
                 //brushList[(int)Palette_List::Region] = &RegionBrush::Instance();
                 //brushList[(int)Palette_List::Wave] = &WaveBrush::Instance();
+                
+                // 우선 보류
+                //brushList[(int)Palette_List::Cam] = &CameraBrush::Instance();
+                brushList[3] = &CameraBrush::Instance();
+                brushList.resize(4);
+
+                for (auto& each : brushList)
+                {
+                    each->Initialize();
+                }
             }
 
             void PaletteBrushManager::Clear()
