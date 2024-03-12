@@ -162,6 +162,12 @@ void NailEngine::CreateConstantBuffer()
 		_constantBuffer->CraeteConstantBuffer(sizeof(PointLightVPMatrix));
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
+
+	{
+		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
+		_constantBuffer->CraeteConstantBuffer(sizeof(PointLightIndex));
+		this->constantBuffers.emplace_back(_constantBuffer);
+	}
 }
 
 void NailEngine::CreateRenderTargetGroup()

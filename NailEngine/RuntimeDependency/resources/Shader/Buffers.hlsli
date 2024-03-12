@@ -123,6 +123,13 @@ cbuffer PointLightVPMatrix : register(b7)
     row_major matrix viewProj[6];
 }
 
+cbuffer PointLightIndex : register(b8)
+{
+    int plIndex;
+    float3 padding3;
+}
+
+
 Texture2D AlbedoMap : register(t0);
 Texture2D NormalMap : register(t1);
 Texture2D ARMMap : register(t2);
@@ -139,7 +146,7 @@ TextureCube CubeMap: register(t11);
 TextureCube IrradianceMap : register(t12);
 TextureCube PrefilteredMap : register(t13);
 Texture2D BrdfMap : register(t14);
-TextureCube PointLightShadowMap : register(t15);
+TextureCubeArray PointLightShadowMap : register(t15);
 
 SamplerState sam : register(s0);
 SamplerComparisonState shadowSam : register(s1);

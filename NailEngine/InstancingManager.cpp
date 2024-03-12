@@ -246,27 +246,7 @@ void InstancingManager::RenderStaticPointLightShadow()
 
 		const InstanceID& instanceID = pair.first;
 
-		//if (renderInfoVec.size() == 1)
-		//{
-		//	MatrixBuffer matrixBuffer;
-		//	matrixBuffer.WTM = renderInfoVec[0].wtm;
-		//	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-		//	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
-		//	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-		//	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-		//	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
-		//
-		//	auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(renderInfoVec[0].mesh->GetName()));
-		//
-		//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(renderInfoVec[0].material->GetName()))->PushGraphicsData();
-		//	for (int i = 0; i < mesh->GetMaterialCount(); ++i)
-		//	{
-		//		renderInfoVec[0].mesh->Render(i);
-		//	}
-		//}
-		//else
 		{
-			//for (int i = 0; i < renderInfoVec.size(); ++i)
 			for (auto& i : renderInfoVec)
 			{
 				if (i->isActive == false) continue;

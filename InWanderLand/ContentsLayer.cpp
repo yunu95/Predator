@@ -45,6 +45,17 @@ void GraphicsTest()
 		light->GetGI().SetLightDiffuseColor(color);
 		light->GetGI().SetRange(10);
 	}
+
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,45.32 });
+		//obj->GetTransform()->SetLocalPosition(Vector3d{ -5,0,0});
+		auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
+		yunuGI::Color color{ 1,0,0,1 };
+		light->GetGI().SetLightDiffuseColor(color);
+		light->GetGI().SetRange(10);
+	}
+
 	yunuGI::IMesh* mesh = _resourceManager->GetMesh(L"Cube");
 	yunuGI::IMesh* mesh2 = _resourceManager->GetMesh(L"Sphere");
 	yunuGI::IMesh* mesh3 = _resourceManager->GetMesh(L"Rectangle");
@@ -237,10 +248,10 @@ void application::contents::ContentsLayer::Initialize()
 		yunutyEngine::Collider2D::SetIsOnXYPlane(false);
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
-		directionalLight->GetTransform()->SetLocalPosition(Vector3d{0,0,-20});
+		directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
 		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 		//auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
-		auto color = yunuGI::Color{ 1,0,0,1.f };
+		auto color = yunuGI::Color{ 0,1,0,1.f };
 		light->GetGI().SetLightDiffuseColor(color);
 		//directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
 		//directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{0, 45, 0} };

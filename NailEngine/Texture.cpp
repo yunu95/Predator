@@ -54,20 +54,21 @@ void Texture::CreateFromResource(Microsoft::WRL::ComPtr<ID3D11Texture2D>& tex2D)
 	ResourceBuilder::Instance.Get().device->GetDevice()->CreateRenderTargetView(tex2D.Get(), nullptr, this->RTV.GetAddressOf());
 }
 
-void Texture::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag, int arraySize)
+void Texture::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag, int arraySize, int sliceCount)
 {
 	D3D11_TEXTURE2D_DESC texDesc{};
 	texDesc.Width = width;
 	texDesc.Height = height;
 	texDesc.MipLevels = 1;
-	texDesc.ArraySize = arraySize;
+	texDesc.ArraySize = arraySize * sliceCount;
 	texDesc.Format = format;
 	texDesc.SampleDesc.Count = 1;
 	texDesc.SampleDesc.Quality = 0;
 	texDesc.Usage = D3D11_USAGE_DEFAULT;
 	texDesc.BindFlags = bindFlag;
 	texDesc.CPUAccessFlags = 0;
-	if (arraySize == 6)
+
+	if (arraySize * sliceCount >= 6)
 	{
 		texDesc.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
 	}
@@ -83,25 +84,33 @@ void Texture::CreateTexture(const std::wstring& texturePath, unsigned int width,
 		D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
 		dsvDesc.Flags = 0;
 		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-		if (arraySize == 6)
+		if (arraySize * sliceCount > 6)
 		{
 			dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DARRAY;
 			dsvDesc.Texture2DArray.MipSlice = 0;
 			dsvDesc.Texture2DArray.ArraySize = arraySize;
-			dsvDesc.Texture2DArray.FirstArraySlice = 0;
+
+			for (int i = 0; i < sliceCount; ++i)
+			{
+				dsvDesc.Texture2DArray.FirstArraySlice = i * arraySize;
+
+				ResourceBuilder::Instance.Get().device->GetDevice()->CreateDepthStencilView(this->tex2D.Get(), &dsvDesc, this->dsvArray[i].GetAddressOf());
+			}
 		}
 		else
 		{
 			dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 			dsvDesc.Texture2D.MipSlice = 0;
+			ResourceBuilder::Instance.Get().device->GetDevice()->CreateDepthStencilView(this->tex2D.Get(), &dsvDesc, this->DSV.GetAddressOf());
 		}
-		ResourceBuilder::Instance.Get().device->GetDevice()->CreateDepthStencilView(this->tex2D.Get(), &dsvDesc, this->DSV.GetAddressOf());
-
+		
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 		srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-		if (arraySize == 6)
+		if (arraySize * sliceCount > 6)
 		{
-			srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+			srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBEARRAY;
+			srvDesc.TextureCubeArray.NumCubes = sliceCount;
+			srvDesc.TextureCubeArray.First2DArrayFace = 0;
 		}
 		else
 		{

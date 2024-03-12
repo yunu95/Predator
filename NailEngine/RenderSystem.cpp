@@ -193,7 +193,7 @@ void RenderSystem::Render()
 	RenderUI();
 
 	// 디퍼드 정보 출력
-	DrawDeferredInfo();
+	///DrawDeferredInfo();
 
 	// 디퍼드용 SRV UnBind
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
@@ -318,13 +318,15 @@ void RenderSystem::RenderShadow()
 void RenderSystem::RenderPointLightShadow()
 {
 	auto& lightSet = LightManager::Instance.Get().GetLightList();
-
-	PointLightShadowPass::Instance.Get().Render();
+	
+	int index = 0;
 
 	for (auto& e : lightSet)
 	{
 		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{
+			PointLightShadowPass::Instance.Get().Render(index);
+
 			// Matrix Buffer Set
 			DirectX::SimpleMath::Vector3 pos;
 			DirectX::SimpleMath::Vector3 scale;
@@ -332,7 +334,6 @@ void RenderSystem::RenderPointLightShadow()
 			std::static_pointer_cast<PointLight>(e)->GetWorldTM().Decompose(scale, quat, pos);
 
 			PointLightVPMatrix pointLightVP;
-			//DirectX::SimpleMath::Matrix viewMatrix;
 
 			for (int i = 0; i < 6; ++i)
 			{
@@ -365,77 +366,28 @@ void RenderSystem::RenderPointLightShadow()
 						targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f);
 						upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
 						break;
-						//case 0:
-						//{
-						//	viewMatrix._11 = 0; viewMatrix._12 = 0; viewMatrix._13 = -1; viewMatrix._14 = 0;
-						//	viewMatrix._21 = 0; viewMatrix._22 = 1; viewMatrix._23 = 0; viewMatrix._24 = 0;
-						//	viewMatrix._31 = 1; viewMatrix._32 = 0; viewMatrix._33 = -1; viewMatrix._34 = 0;
-						//	viewMatrix._41 = 0; viewMatrix._42 = 0; viewMatrix._43 = 0; viewMatrix._44 = 1;
-						//}
-						//break;
-						//case 1:
-						//{
-						//	viewMatrix._11 = 0; viewMatrix._12 = 0; viewMatrix._13 = 1; viewMatrix._14 = 0;
-						//	viewMatrix._21 = 0; viewMatrix._22 = 1; viewMatrix._23 = 0; viewMatrix._24 = 0;
-						//	viewMatrix._31 = -1; viewMatrix._32 = 0; viewMatrix._33 = -1; viewMatrix._34 = 0;
-						//	viewMatrix._41 = 0; viewMatrix._42 = 0; viewMatrix._43 = 0; viewMatrix._44 = 1;
-						//}
-						//break;
-						//case 2:
-						//{
-						//	viewMatrix._11 = 1; viewMatrix._12 = 0; viewMatrix._13 = 0; viewMatrix._14 = 0;
-						//	viewMatrix._21 = 0; viewMatrix._22 = 0; viewMatrix._23 = 1; viewMatrix._24 = 0;
-						//	viewMatrix._31 = 0; viewMatrix._32 = -1; viewMatrix._33 = 0; viewMatrix._34 = 0;
-						//	viewMatrix._41 = 0; viewMatrix._42 = 0; viewMatrix._43 = 0; viewMatrix._44 = 1;
-						//}
-						//break;
-						//case 3:
-						//{
-						//	viewMatrix._11 = 1; viewMatrix._12 = 0; viewMatrix._13 = 0; viewMatrix._14 = 0;
-						//	viewMatrix._21 = 0; viewMatrix._22 = 0; viewMatrix._23 = -1; viewMatrix._24 = 0;
-						//	viewMatrix._31 = 0; viewMatrix._32 = 1; viewMatrix._33 = 0; viewMatrix._34 = 0;
-						//	viewMatrix._41 = 0; viewMatrix._42 = 0; viewMatrix._43 = 0; viewMatrix._44 = 1;
-						//}
-						//break;
-						//case 4:
-						//{
-						//	viewMatrix._11 = 1; viewMatrix._12 = 0; viewMatrix._13 = 0; viewMatrix._14 = 0;
-						//	viewMatrix._21 = 0; viewMatrix._22 = 1; viewMatrix._23 = 0; viewMatrix._24 = 0;
-						//	viewMatrix._31 = 0; viewMatrix._32 = 0; viewMatrix._33 = 1; viewMatrix._34 = 0;
-						//	viewMatrix._41 = 0; viewMatrix._42 = 0; viewMatrix._43 = 0; viewMatrix._44 = 1;
-						//}
-						//break;
-						//case 5:
-						//{
-						//	viewMatrix._11 = -1; viewMatrix._12 = 0; viewMatrix._13 = 0; viewMatrix._14 = 0;
-						//	viewMatrix._21 = 0; viewMatrix._22 = 1; viewMatrix._23 = 0; viewMatrix._24 = 0;
-						//	viewMatrix._31 = 0; viewMatrix._32 = 0; viewMatrix._33 = -1; viewMatrix._34 = 0;
-						//	viewMatrix._41 = 0; viewMatrix._42 = 0; viewMatrix._43 = 0; viewMatrix._44 = 1;
-						//}
-						//break;
 				}
 
 				// 뷰 행렬 계산
 				DirectX::SimpleMath::Matrix viewMatrix = XMMatrixLookAtLH(pos, targetPos, upVec);
 
-				DirectX::SimpleMath::Matrix projMat = CameraManager::Instance.Get().GetPTM90ByResolution(1024, 1024,
+				DirectX::SimpleMath::Matrix projMat = CameraManager::Instance.Get().GetPTM90ByResolution(PL_SM_SIZE, PL_SM_SIZE,
 					std::static_pointer_cast<PointLight>(e)->GetLightInfo().farPlane, std::static_pointer_cast<PointLight>(e)->GetLightInfo().nearPlane);
 
 				pointLightVP.viewProj[i] = viewMatrix * projMat;
 			}
 
 			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX))->PushGraphicsData(&pointLightVP, sizeof(PointLightVPMatrix), static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX), true);
-
 			InstancingManager::Instance.Get().RenderStaticPointLightShadow();
+			++index;
 		}
+	
 	}
 	PointLightShadowPass::Instance.Get().EndRender();
 }
 
 void RenderSystem::RenderLight()
 {
-
-
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
 	auto& lightSet = LightManager::Instance.Get().GetLightList();
 	// 라이팅 렌더
@@ -446,6 +398,9 @@ void RenderSystem::RenderLight()
 	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
 	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 
+	PointLightIndex plIndexBuffer;
+
+	int plIndex = 0;
 
 	for (auto& e : lightSet)
 	{
@@ -459,12 +414,17 @@ void RenderSystem::RenderLight()
 		}
 		else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{
-			// 만들어진 Shadow Map Binb
+			// 만들어진 Shadow Map Bind
 			ResourceManager::Instance.Get().GetTexture(L"PointLightShadowDepth")->Bind(15);
 
+			matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
 			matrixBuffer.WTM = std::static_pointer_cast<PointLight>(e)->GetWorldTM();
 			matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 			matrixBuffer.WorldInvTrans = std::static_pointer_cast<PointLight>(e)->GetWorldTM().Invert().Transpose();
+
+			plIndexBuffer.plIndex = plIndex;
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::POINTLIGHT_INDEX))->PushGraphicsData(&plIndexBuffer, sizeof(PointLightIndex), static_cast<int>(CB_TYPE::POINTLIGHT_INDEX));
+			plIndex++;
 		}
 		NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 

@@ -328,18 +328,20 @@ void CalculateLight(int lightIndex, float3 normal, float3 pos, out float4 diffus
 
         // Shadow 연산하는 코드 넣기
         float4 worldPos = mul(float4(pos.xyz, 1.f), VTMInv);
-        //float curDepth = CalCulateDepth((lights[lightIndex].position.xyz - worldPos.xyz));
         float curDepth = CalCulateDepth((worldPos.xyz - lights[lightIndex].position.xyz), lightIndex);
         
-        //float shadow = PointLightShadowMap.Sample(sam, normalize(lights[lightIndex].position.xyz - worldPos.xyz)).r;
-        float shadow = PointLightShadowMap.Sample(sam, normalize(worldPos.xyz - lights[lightIndex].position.xyz)).r;
-        //float shadow = PointLightShadowMap.SampleCmpLevelZero(shadowSam, normalize(worldPos.xyz - lights[lightIndex].position.xyz), curDepth);
-        if (shadow < curDepth - 0.000001)
-            shadow = 0.0f;
-        else
-            shadow = 1.0f;
+        float shadow = PointLightShadowMap.Sample(sam, float4(normalize(worldPos.xyz - lights[lightIndex].position.xyz), plIndex)).r;
         
+        if (shadow < curDepth - 0.01f)
+        {
+            shadow = 0.0f;
+        }
+        else
+        {
+            shadow = 1.0f;
+        }
         diffuse *= shadow;
+       
         
         
         //float zero = 0.f;

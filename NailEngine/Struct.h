@@ -8,12 +8,14 @@ using namespace DirectX::PackedVector;
 #include <memory>
 
 #define SM_SIZE 2048
+#define PL_SM_SIZE 512
 
 #define MAX_TEXTURE 10
 #define MAX_INT 10
 #define MAX_BONE_COUNT 250
 #define MAX_FRAME_COUNT 500
 #define MAX_INSTANCE_MODEL 500
+#define MAX_POINT_LIGHT 10
 
 struct Vertex
 {
@@ -65,6 +67,7 @@ enum class CB_TYPE
 	INST_TRANSITION,
 	FOG,
 	POINTLIGHT_VPMATRIX,
+	POINTLIGHT_INDEX,
 };
 
 struct MatrixBuffer
@@ -152,6 +155,11 @@ struct PointLightVPMatrix
 	DirectX::SimpleMath::Matrix viewProj[6];
 };
 
+struct PointLightIndex
+{
+	int plIndex;
+	DirectX::SimpleMath::Vector3 padding;
+};
 
 class Mesh;
 class Material;

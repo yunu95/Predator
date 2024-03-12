@@ -323,7 +323,6 @@ void PixelShader::CreateBlendState(const std::string& fileContent)
 				blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 				blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-
 				//blendDesc.RenderTarget[0].BlendEnable = true;
 				//blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
 				//blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;

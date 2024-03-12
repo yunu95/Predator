@@ -20,7 +20,7 @@ public:
 
 public:
 	void Init();
-	void Render();
+	void Render(int index);
 	void EndRender();
 
 private:

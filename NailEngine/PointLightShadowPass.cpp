@@ -23,17 +23,19 @@ void PointLightShadowPass::Init()
 	this->ps = reinterpret_cast<PixelShader*>(ResourceManager::Instance.Get().GetShader(L"PointLightShadowPS.cso").get());
 }
 
-void PointLightShadowPass::Render()
+void PointLightShadowPass::Render(int index)
 {
 	// Null RenderTarget / TextureArray DSV Set
 	float clearDepth = 1.0f;
 
-	ResourceBuilder::Instance.Get().device->GetDeviceContext()->ClearDepthStencilView(this->dsTexture->GetDSV().Get(), D3D11_CLEAR_DEPTH| D3D11_CLEAR_STENCIL, clearDepth, 0);
+	auto& dsvArray = this->dsTexture->GetDSVArray();
 
-	D3D11_VIEWPORT viewport = { 0.0f, 0.0f, static_cast<float>(1024), static_cast<float>(1024), 0.0f, 1.0f };
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->ClearDepthStencilView(dsvArray[index].Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, clearDepth, 0);
+
+	D3D11_VIEWPORT viewport = { 0.0f, 0.0f, static_cast<float>(PL_SM_SIZE), static_cast<float>(PL_SM_SIZE), 0.0f, 1.0f };
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
 
-	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(0, nullptr, this->dsTexture->GetDSV().Get());
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(0, nullptr, dsvArray[index].Get());
 
 	// VSSet
 	vs->Bind();
