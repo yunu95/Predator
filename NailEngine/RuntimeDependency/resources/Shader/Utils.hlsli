@@ -341,8 +341,6 @@ void CalculateLight(int lightIndex, float3 normal, float3 pos, out float4 diffus
             shadow = 1.0f;
         }
         diffuse *= shadow;
-       
-        
         
         //float zero = 0.f;
         

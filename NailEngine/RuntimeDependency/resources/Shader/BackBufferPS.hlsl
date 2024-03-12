@@ -16,8 +16,6 @@ float4 main(PixelIn input) : SV_Target
     color.w = 1.f;
     //color = float4(pow(float3(color.xyz), 1.0 / 2.2), 1.0);
     
-   
-    
     float4 viewPos = Temp1Map.Sample(sam, input.uv);
     
     float fogFactor = saturate((fogEnd - (viewPos.z/ viewPos.w)) / (fogEnd - fogStart));

@@ -103,7 +103,7 @@ void RenderSystem::CreateD2D()
 	}
 
 	ResourceBuilder::Instance.Get().swapChain->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(surface.GetAddressOf()));
-	auto d2dRTProps = D2D1::RenderTargetProperties(D2D1_RENDER_TARGET_TYPE_DEFAULT, D2D1::PixelFormat(DXGI_FORMAT_R8G8B8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED), 0, 0);
+	auto d2dRTProps = D2D1::RenderTargetProperties(D2D1_RENDER_TARGET_TYPE_DEFAULT, D2D1::PixelFormat(DXGI_FORMAT_R16G16B16A16_FLOAT, D2D1_ALPHA_MODE_PREMULTIPLIED), 0, 0);
 	d2dFactory->CreateDxgiSurfaceRenderTarget(surface.Get(), &d2dRTProps, d2dRT.GetAddressOf());
 
 	if (FAILED(result)) PostQuitMessage(0);
