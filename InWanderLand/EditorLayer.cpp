@@ -54,6 +54,8 @@ namespace application
 
 			/// 에디터용 리소스 등록
 			const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+			resourceManager->LoadFile("FBX/Directional");
+			resourceManager->LoadFile("FBX/Sphere");
 			resourceManager->LoadFile("FBX/Camera");
 
 			/// 각종 매니저 클래스 메모리 할당

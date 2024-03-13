@@ -519,6 +519,11 @@ namespace application
                         templateList = tdm.GetDataList(DataType::CameraData);
                         break;
                     }
+                    case application::editor::palette::Palette_List::Light:
+                    {
+                        templateList = tdm.GetDataList(DataType::LightData);
+                        break;
+                    }
                     default:
                         break;
                 }

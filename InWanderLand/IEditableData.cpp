@@ -36,4 +36,6 @@ namespace application::editor
     DataType GetDataTypeEnum<Wave_TemplateData>() { return DataType::WaveData; }
     template<>
     DataType GetDataTypeEnum<Camera_TemplateData>() { return DataType::CameraData; }
+    template<>
+    DataType GetDataTypeEnum<Light_TemplateData>() { return DataType::LightData; }
 }
