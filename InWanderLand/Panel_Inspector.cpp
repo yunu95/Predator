@@ -39,7 +39,7 @@ namespace application
                 ImGui_DrawTransform();
                 imgui::draw::Underline();
                 imgui::ShiftCursorY(20);
-                ImGui_DrawFBXData();
+                ImGui_DrawTemplateData();
             }
 
             ImGui::End();
@@ -478,44 +478,78 @@ namespace application
             }
         }
 
-        void InspectorPanel::ImGui_DrawFBXData()
+        void InspectorPanel::ImGui_DrawTemplateData()
         {
+            auto& tdm = TemplateDataManager::GetSingletonInstance();
             auto& selections = pm.GetCurrentPalette()->GetSelections();
             int idx = 0;
-            if (imgui::BeginSection_1Col(idx, "FBX", ImGui::GetContentRegionAvail().x))
+            if (imgui::BeginSection_1Col(idx, "Template", ImGui::GetContentRegionAvail().x))
             {
                 ImGui::TableNextRow();
                 ImGui::TableSetColumnIndex(0);
 
-                static auto& fbxSet = erm.GetFbxList();
-                static std::vector<std::string> fbxList{ fbxSet.begin(), fbxSet.end() };
+                std::vector<ITemplateData*> templateList;
+                std::vector<std::string> list;
                 static int selected = -1;
                 static int count = 0;
 
-                count = fbxList.size();
-
                 const char* current = nullptr;
+
+                auto type = pm.GetCurrentPaletteType();
+                switch (type)
+                {
+                    case application::editor::palette::Palette_List::Terrain:
+                        break;
+                    case application::editor::palette::Palette_List::Unit:
+                    {
+                        templateList = tdm.GetDataList(DataType::UnitData);
+                        break;
+                    }
+                    case application::editor::palette::Palette_List::Ornament:
+                    {
+                        templateList = tdm.GetDataList(DataType::OrnamentData);
+                        break;
+                    }
+                    case application::editor::palette::Palette_List::Region:
+                        break;
+                    case application::editor::palette::Palette_List::Wave:
+                        break;
+                    case application::editor::palette::Palette_List::Cam:
+                    {
+                        templateList = tdm.GetDataList(DataType::CameraData);
+                        break;
+                    }
+                    default:
+                        break;
+                }
+
+                for (auto& each : templateList)
+                {
+                    list.push_back(tdm.GetDataKey(each));
+                }
+
+                count = list.size();
 
                 if (selections.size() == 1)
                 {
                     int fbxIdx = 0;
-                    for (auto& each : fbxList)
+                    for (auto& each : list)
                     {
-                        if (each == (*selections.begin())->GetTemplateData()->GetDataResourceName())
+                        if (each == (*selections.begin())->GetTemplateData()->GetDataKey())
                         {
                             selected = fbxIdx;
                         }
                         fbxIdx++;
                     }
-                    current = fbxList[selected].c_str();
+                    current = list[selected].c_str();
                 }
                 else
                 {
                     bool diff = false;
-                    auto firstName = (*selections.begin())->GetTemplateData()->GetDataResourceName();
+                    auto firstName = (*selections.begin())->GetTemplateData()->GetDataKey();
                     for (auto& each : selections)
                     {
-                        if (each->GetTemplateData()->GetDataResourceName() != firstName)
+                        if (each->GetTemplateData()->GetDataKey() != firstName)
                         {
                             diff = true;
                             break;
@@ -530,7 +564,7 @@ namespace application
                     else
                     {
                         int fbxIdx = 0;
-                        for (auto& each : fbxList)
+                        for (auto& each : list)
                         {
                             if (each == firstName)
                             {
@@ -538,7 +572,7 @@ namespace application
                             }
                             fbxIdx++;
                         }
-                        current = fbxList[selected].c_str();
+                        current = list[selected].c_str();
                     }
                 }
 
@@ -550,15 +584,16 @@ namespace application
                 {
                     for (int i = 0; i < count; i++)
                     {
-                        const bool is_selected = (current == fbxList[i]);
-                        if (ImGui::Selectable(fbxList[i].c_str(), is_selected))
+                        const bool is_selected = (current == list[i]);
+
+                        if (ImGui::Selectable(list[i].c_str(), is_selected))
                         {
-                            current = fbxList[i].c_str();
+                            current = list[i].c_str();
                             selected = i;
 
                             for (auto each : selections)
                             {
-                                each->OnDataResourceChange(fbxList[selected].c_str());
+                                each->SetTemplateData(list[i]);
                             }
                         }
                     }

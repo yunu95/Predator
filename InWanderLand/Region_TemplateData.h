@@ -6,6 +6,9 @@
 #pragma once
 
 #include "ITemplateData.h"
+#include "GlobalConstant.h"
+
+#include "TemplateDataManager.h"
 
 namespace application
 {
@@ -16,7 +19,7 @@ namespace application
         struct POD_Region_TemplateData
         {
             TO_JSON(POD_Region_TemplateData)
-                FROM_JSON(POD_Region_TemplateData)
+            FROM_JSON(POD_Region_TemplateData)
         };
 
         class Region_TemplateData
@@ -27,8 +30,10 @@ namespace application
 
         public:
             virtual std::string GetDataKey() const override;
-            virtual void SetDataResourceName(std::string fbxName) {};
-            virtual std::string GetDataResourceName() const override { return std::string(); };
+            virtual void SetDataResourceName(std::string fbxName) {}
+            virtual std::string GetDataResourceName() const override { return std::string(); }
+            virtual bool EnterDataFromGlobalConstant() override { return true; }
+
             static Region_TemplateData& GetInstance()
             {
                 if (soleRegionTemplateData == nullptr)
@@ -37,9 +42,9 @@ namespace application
                     if (soleRegionTemplateData == nullptr)
                         soleRegionTemplateData = TemplateDataManager::GetSingletonInstance().CreateTemplateData<Region_TemplateData>("DefaultRegionTemplate");
                 }
-                POD_Region_TemplateData pod;
                 return *soleRegionTemplateData;
             }
+
             POD_Region_TemplateData pod;
 
         protected:

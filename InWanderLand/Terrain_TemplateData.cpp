@@ -36,20 +36,20 @@ namespace application
 		bool Terrain_TemplateData::PostDecoding(const json& data)
 		{
 			FieldPostDecoding<boost::pfr::tuple_size_v<POD_Terrain_TemplateData>>(pod, data["POD"]);
-
+			EnterDataFromGlobalConstant();
 			return true;
 		}
 
 		Terrain_TemplateData::Terrain_TemplateData()
 			: ITemplateData(), pod()
 		{
-
+			EnterDataFromGlobalConstant();
 		}
 
 		Terrain_TemplateData::Terrain_TemplateData(const Terrain_TemplateData& prototype)
 			:ITemplateData(prototype), pod(prototype.pod)
 		{		
-
+			EnterDataFromGlobalConstant();
 		}
 
 		Terrain_TemplateData& Terrain_TemplateData::operator=(const Terrain_TemplateData& prototype)

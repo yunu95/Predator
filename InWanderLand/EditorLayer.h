@@ -26,13 +26,22 @@ namespace application
 			: public Layer
 		{
 		public:
+#ifdef GEN_TESTS
 			static void AssignTestInitializer(std::function<void()> testInitializer);
+#endif
+			static void SetInputControl(bool control);
+			static bool GetInputControl();
 
 			virtual void Initialize() override;
 			virtual void Update(float ts) override;
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
 			virtual void OnEvent(EditorEvents& event) override;
+
+			void OnPlayContents();
+			void OnPauseContents();
+			void OnResumeContents();
+			void OnStopContents();
 
 			// Content 레이어의 Initialize 이후에 초기화 되어야 하는
 			// GameEngine 과 관련된 내용들을 초기화하는 함수입니다.
@@ -56,7 +65,8 @@ namespace application
 
 			enum class Module_List
 			{
-				TemplateDataEditor	= 0,
+				GlobalConstant = 0,
+				TemplateDataEditor,
 
 				/// Size를 자동으로 넣기 위해 사용하는 enum
 				/// 첫 enum 값이 0 이고, 모든 간격이 1일 때에 가능함

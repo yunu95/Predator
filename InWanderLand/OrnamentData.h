@@ -11,6 +11,7 @@
 #include "OrnamentEditorInstance.h"
 #include "OrnamentPalette.h"
 #include "PodStructs.h"
+#include "GlobalConstant.h"
 
 namespace application
 {
@@ -33,6 +34,9 @@ namespace application
             POD_Quaternion<double> rotation = POD_Quaternion<double>();
             POD_Vector3<float> scale = { 1,1,1 };
 
+            /// GlobalConstant
+
+
             TO_JSON(POD_Ornament)
                 FROM_JSON(POD_Ornament)
         };
@@ -53,6 +57,7 @@ namespace application
             virtual void OnDataResourceChange(std::string newName) override;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance() override;
             virtual void ApplyAsPlaytimeObject() override;
+            virtual bool EnterDataFromGlobalConstant() override;
 
             POD_Ornament pod;
 

@@ -7,19 +7,32 @@ namespace application
     {
         namespace palette
         {
+            RegionData* RegionPalette::GetSingleSelectedRegion()
+            {
+                return selection.empty() ? nullptr : static_cast<RegionData*>(const_cast<IEditableData*>(*selection.begin()));
+            }
+
+            void RegionPalette::SelectRegion(RegionData* region)
+            {
+                Palette::OnSelectSingleInstance(region);
+            }
+
             void RegionPalette::SetAsSelectingDisablingOrnaments(bool ornamentMode)
             {
                 isSelectingDisablingOrnaments = ornamentMode;
             }
+
             bool RegionPalette::GetIsSelectingDisablingOrnaments()
             {
                 return isSelectingDisablingOrnaments;
             }
+
             IEditableData* RegionPalette::PlaceInstance(Vector3d worldPosition)
             {
                 //InstanceManager::GetSingletonInstance().CreateInstance<RegionData>();
                 return nullptr;
-            };
+            }
+
             bool RegionPalette::ShouldSelect(IEditableData* instance)
             {
                 if (isSelectingDisablingOrnaments && GetSingleSelectedRegion())
@@ -27,7 +40,8 @@ namespace application
                     return dynamic_cast<OrnamentData*>(instance);
                 }
                 return dynamic_cast<RegionData*>(instance);
-            };
+            }
+
             void RegionPalette::OnSelectEmpty()
             {
                 if (!isSelectingDisablingOrnaments)
@@ -35,6 +49,7 @@ namespace application
                     Palette::OnSelectEmpty();
                 }
             }
+
             void RegionPalette::OnSelectSingleInstance(IEditableData* data)
             {
                 if (dynamic_cast<RegionData*>(data))
@@ -57,6 +72,7 @@ namespace application
                     }
                 }
             }
+
             void RegionPalette::OnStartPalette()
             {
                 switch (beforeState)

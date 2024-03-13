@@ -10,6 +10,8 @@
 #include "RegionEditorInstance.h"
 #include "StaticInstanceRegistry.h"
 #include "RegionPalette.h"
+#include "GlobalConstant.h"
+#include "InstanceManager.h"
 
 namespace application
 {
@@ -65,6 +67,7 @@ namespace application
             const std::unordered_set<OrnamentData*>& GetDisablingOrnaments()const;
             void AddDisablingOrnament(OrnamentData* ornament);
             void EraseDisablingOrnament(OrnamentData* ornament);
+            virtual bool EnterDataFromGlobalConstant() override { return true; };
 
             POD_Region pod;
 

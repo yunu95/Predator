@@ -15,8 +15,25 @@ namespace application
 				paletteList[(int)Palette_List::Ornament] = &OrnamentPalette::SingleInstance();
 				paletteList[(int)Palette_List::Region] = &RegionPalette::SingleInstance();
 				paletteList[(int)Palette_List::Wave] = &WavePalette::SingleInstance();
+				paletteList[(int)Palette_List::Cam] = &CameraPalette::SingleInstance();
+
+				for (auto& each : paletteList)
+				{
+					each->Initialize();
+				}
 
 				SetCurrentPalette(paletteList[(int)Palette_List::Terrain]);
+			}
+
+			void PaletteManager::Clear()
+			{
+				for (auto& each : paletteList)
+				{
+					if (each)
+					{
+						each->Reset();
+					}
+				}
 			}
 
 			void PaletteManager::SetCurrentPalette(Palette* palette)
@@ -55,6 +72,10 @@ namespace application
 				else if (currentPalette == paletteList[(int)Palette_List::Wave])
 				{
 					return Palette_List::Wave;
+				}
+				else if (currentPalette == paletteList[(int)Palette_List::Cam])
+				{
+					return Palette_List::Cam;
 				}
 
 				return Palette_List::None;

@@ -5,6 +5,7 @@
 #pragma once
 
 #include "ITemplateData.h"
+#include "GlobalConstant.h"
 
 namespace application
 {
@@ -30,6 +31,7 @@ namespace application
             virtual std::string GetDataKey() const override;
             virtual void SetDataResourceName(std::string fbxName) {};
             virtual std::string GetDataResourceName() const override { return std::string(); };
+            virtual bool EnterDataFromGlobalConstant() override { return true; };
 
             POD_Terrain_TemplateData pod;
 

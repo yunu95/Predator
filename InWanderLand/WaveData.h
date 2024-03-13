@@ -8,6 +8,8 @@
 #include "YunutyEngine.h"
 #include "StaticInstanceRegistry.h"
 #include "RegionData.h"
+#include "GlobalConstant.h"
+
 #include <memory>
 #include <string>
 
@@ -73,6 +75,7 @@ namespace application
             virtual void OnRelocate(const Vector3d& newLoc) override;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
             virtual void ApplyAsPlaytimeObject() override;
+            virtual bool EnterDataFromGlobalConstant() override { return true; };
             void InsertUnitData(WaveUnitData waveUnitData);
             void DeleteUnitData(UnitData* unitData);
             void HideWaveUnitsVisibility();

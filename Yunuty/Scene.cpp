@@ -131,8 +131,6 @@ yunutyEngine::GameObject* yunutyEngine::Scene::AddGameObject(IGameObjectParent* 
     return gameObject;
 }
 
-
-
 yunutyEngine::GameObject* Scene::AddGameObjectFromFBX(string fbxName, yunuGI::Vector3* boundingMin, yunuGI::Vector3* boundingMax)
 {
     auto gameObject = AddGameObject(fbxName);

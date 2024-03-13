@@ -3,33 +3,30 @@
 
 namespace application
 {
-	namespace editor
+	bool UUIDManager::RegisterUUIDWithPointer(const UUID& uuid, Identifiable* pointer)
 	{
-		bool UUIDManager::RegisterUUIDWithPointer(const UUID& uuid, Identifiable* pointer)
+		if (uuidMap.find(uuid) != uuidMap.end())
 		{
-			if (uuidMap.find(uuid) != uuidMap.end())
-			{
-				// 이미 등록된 uuid 가 있을 경우
-				return false;
-			}
-
-			uuidMap[uuid] = pointer;
-			return true;
+			// 이미 등록된 uuid 가 있을 경우
+			return false;
 		}
 
-		bool UUIDManager::EraseUUID(const UUID& uuid)
-		{
-			if (uuidMap.erase(uuid) == 0)
-			{
-				return false;
-			}
+		uuidMap[uuid] = pointer;
+		return true;
+	}
 
-			return true;
+	bool UUIDManager::EraseUUID(const UUID& uuid)
+	{
+		if (uuidMap.erase(uuid) == 0)
+		{
+			return false;
 		}
 
-		void UUIDManager::Clear()
-		{
-			uuidMap.clear();
-		}
+		return true;
+	}
+
+	void UUIDManager::Clear()
+	{
+		uuidMap.clear();
 	}
 }

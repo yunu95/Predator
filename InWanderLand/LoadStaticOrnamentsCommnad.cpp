@@ -24,7 +24,7 @@ namespace application
 			if (!filepath.has_extension())
 				filepath += ".punreal";
 	
-			MapFileManager::GetSingletonInstance().LoadStaticOrnaments(filepath.string());
+			mapFileManager.LoadStaticOrnaments(filepath.string());
 		}
 	}
 }

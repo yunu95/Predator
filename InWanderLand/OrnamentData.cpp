@@ -32,6 +32,7 @@ namespace application
             }
 
             pod.templateData = static_cast<Ornament_TemplateData*>(ptr);
+			OnDataResourceChange(pod.templateData->pod.fbxName);
 
             return true;
         }
@@ -71,14 +72,15 @@ namespace application
             pod.scale.z = newScale.z;
         }
 
-        void OrnamentData::OnDataResourceChange(std::string newName)
-        {
-            SetTemplateData(newName);
-            if (ornamentInstance)
-            {
-                ornamentInstance->ChangeTemplateData(this);
-            }
-        }
+		void OrnamentData::OnDataResourceChange(std::string newName)
+		{
+			// TemplateData 를 유지하고 Resource 만 갱신함
+			if (ornamentInstance)
+			{
+				ornamentInstance->ChangeResource(newName);
+				ApplyAsPaletteInstance();
+			}
+		}
 
         palette::PaletteInstance* OrnamentData::ApplyAsPaletteInstance()
         {
@@ -102,9 +104,15 @@ namespace application
             }
         }
 
-        bool OrnamentData::PreEncoding(json& data) const
-        {
-            FieldPreEncoding<boost::pfr::tuple_size_v<POD_Ornament>>(pod, data["POD"]);
+		bool OrnamentData::EnterDataFromGlobalConstant()
+		{
+			auto& data = GlobalConstant::GetSingletonInstance().pod;
+			return true;
+		}
+
+		bool OrnamentData::PreEncoding(json& data) const
+		{
+			FieldPreEncoding<boost::pfr::tuple_size_v<POD_Ornament>>(pod, data["POD"]);
 
             return true;
         }
@@ -126,6 +134,7 @@ namespace application
         bool OrnamentData::PostDecoding(const json& data)
         {
             FieldPostDecoding<boost::pfr::tuple_size_v<POD_Ornament>>(pod, data["POD"]);
+			EnterDataFromGlobalConstant();
 #ifdef EDITOR
             ApplyAsPaletteInstance();
 #endif
@@ -145,12 +154,13 @@ namespace application
 
         }
 
-        OrnamentData::OrnamentData(const std::string& name)
-            : pod()
-        {
-            pod.templateData = static_cast<Ornament_TemplateData*>(templateDataManager.GetTemplateData(name));
-            EnterDataFromTemplate();
-        }
+		OrnamentData::OrnamentData(const std::string& name)
+			: pod()
+		{
+			pod.templateData = static_cast<Ornament_TemplateData*>(templateDataManager.GetTemplateData(name));
+			EnterDataFromTemplate();
+			EnterDataFromGlobalConstant();
+		}
 
         OrnamentData::OrnamentData(const OrnamentData& prototype)
             : pod(prototype.pod)

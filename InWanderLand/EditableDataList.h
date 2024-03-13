@@ -7,3 +7,4 @@
 #include "OrnamentData.h"
 #include "RegionData.h"
 #include "WaveData.h"
+#include "CameraData.h"

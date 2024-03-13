@@ -10,127 +10,124 @@
 
 namespace application
 {
-	namespace editor
+	template <typename T> requires std::is_floating_point_v<T>
+	struct POD_Vector2
 	{
-		template <typename T> requires std::is_floating_point_v<T>
-		struct POD_Vector2
-		{
-			T x = 0;
-			T y = 0;
+		T x = 0;
+		T y = 0;
 
-			operator yunuGI::Vector2() const
+		operator yunuGI::Vector2() const
+		{
+			yunuGI::Vector2 finalVal;
+			finalVal.x = x;
+			finalVal.y = y;
+			return finalVal;
+		}
+
+		TO_JSON(POD_Vector2)
+		FROM_JSON(POD_Vector2)
+	};
+
+	template <typename T> requires std::is_floating_point_v<T>
+	struct POD_Vector3
+	{
+		T x = 0;
+		T y = 0;
+		T z = 0;
+
+		operator yunuGI::Vector3() const
+		{
+			yunuGI::Vector3 finalVal;
+			finalVal.x = x;
+			finalVal.y = y;
+			finalVal.z = z;
+			return finalVal;
+		}
+
+		TO_JSON(POD_Vector3)
+		FROM_JSON(POD_Vector3)
+	};
+
+	template <typename T> requires std::is_floating_point_v<T>
+	struct POD_Vector4
+	{
+		T x = 0;
+		T y = 0;
+		T z = 0;
+		T w = 1;
+
+		operator yunuGI::Vector4() const
+		{
+			yunuGI::Vector4 finalVal;
+			finalVal.x = x;
+			finalVal.y = y;
+			finalVal.z = z;
+			finalVal.w = w;
+			return finalVal;
+		}
+
+		TO_JSON(POD_Vector4)
+		FROM_JSON(POD_Vector4)
+	};
+
+	template <typename T> requires std::is_floating_point_v<T>
+	struct POD_Quaternion
+	{
+		T x = 0;
+		T y = 0;
+		T z = 0;
+		T w = 1;
+
+		operator yunuGI::Quaternion() const
+		{
+			yunuGI::Quaternion finalVal;
+			finalVal.x = x;
+			finalVal.y = y;
+			finalVal.z = z;
+			finalVal.w = w;
+			return finalVal;
+		}
+
+		TO_JSON(POD_Quaternion)
+		FROM_JSON(POD_Quaternion)
+	};
+
+	namespace imgui
+	{
+		namespace data
+		{
+			template <typename T>
+			bool DrawData(std::string label, const POD_Vector2<T>& data)
 			{
-				yunuGI::Vector2 finalVal;
-				finalVal.x = x;
-				finalVal.y = y;
-				return finalVal;
+				return Vector2_2Col(label, const_cast<T&>(data.x), const_cast<T&>(data.y));
 			}
 
-			TO_JSON(POD_Vector2)
-			FROM_JSON(POD_Vector2)
-		};
-
-		template <typename T> requires std::is_floating_point_v<T>
-		struct POD_Vector3
-		{
-			T x = 0;
-			T y = 0;
-			T z = 0;
-
-			operator yunuGI::Vector3() const
+			template <typename T>
+			bool DrawData(std::string label, const POD_Vector3<T>& data)
 			{
-				yunuGI::Vector3 finalVal;
-				finalVal.x = x;
-				finalVal.y = y;
-				finalVal.z = z;
-				return finalVal;
+				return Vector3_2Col(label, const_cast<T&>(data.x), const_cast<T&>(data.y), const_cast<T&>(data.z));
 			}
 
-			TO_JSON(POD_Vector3)
-				FROM_JSON(POD_Vector3)
-		};
-
-		template <typename T> requires std::is_floating_point_v<T>
-		struct POD_Vector4
-		{
-			T x = 0;
-			T y = 0;
-			T z = 0;
-			T w = 1;
-
-			operator yunuGI::Vector4() const
+			template <typename T>
+			bool DrawData(std::string label, const POD_Vector4<T>& data)
 			{
-				yunuGI::Vector4 finalVal;
-				finalVal.x = x;
-				finalVal.y = y;
-				finalVal.z = z;
-				finalVal.w = w;
-				return finalVal;
+				return Vector4_2Col(label, const_cast<T&>(data.x), const_cast<T&>(data.y), const_cast<T&>(data.z), const_cast<T&>(data.w));
 			}
 
-			TO_JSON(POD_Vector4)
-				FROM_JSON(POD_Vector4)
-		};
-
-		template <typename T> requires std::is_floating_point_v<T>
-		struct POD_Quaternion
-		{
-			T x = 0;
-			T y = 0;
-			T z = 0;
-			T w = 1;
-
-			operator yunuGI::Quaternion() const
+			template <typename T>
+			bool DrawData(std::string label, const POD_Quaternion<T>& data)
 			{
-				yunuGI::Quaternion finalVal;
-				finalVal.x = x;
-				finalVal.y = y;
-				finalVal.z = z;
-				finalVal.w = w;
-				return finalVal;
-			}
+				bool returnVal = false;
+				auto angle = editor::math::GetEulerAngle(data);
 
-			TO_JSON(POD_Quaternion)
-			FROM_JSON(POD_Quaternion)
-		};
+				returnVal = Vector3_2Col(label, angle.x, angle.y, angle.z);
+				auto finalQuat = editor::math::GetQuaternion(angle);
+				const_cast<T&>(data.x) = finalQuat.x;
+				const_cast<T&>(data.y) = finalQuat.y;
+				const_cast<T&>(data.z) = finalQuat.z;
+				const_cast<T&>(data.w) = finalQuat.w;
 
-		namespace imgui
-		{
-			namespace data
-			{
-				template <typename T>
-				bool DrawData(std::string label, const POD_Vector2<T>& data)
-				{
-					return Vector2_2Col(label, const_cast<T&>(data.x), const_cast<T&>(data.y));
-				}
-
-				template <typename T>
-				bool DrawData(std::string label, const POD_Vector3<T>& data)
-				{
-					return Vector3_2Col(label, const_cast<T&>(data.x), const_cast<T&>(data.y), const_cast<T&>(data.z));
-				}
-
-				template <typename T>
-				bool DrawData(std::string label, const POD_Vector4<T>& data)
-				{
-					return Vector4_2Col(label, const_cast<T&>(data.x), const_cast<T&>(data.y), const_cast<T&>(data.z), const_cast<T&>(data.w));
-				}
-
-				template <typename T>
-				bool DrawData(std::string label, const POD_Quaternion<T>& data)
-				{
-					bool returnVal = false;
-					auto angle = math::GetEulerAngle(data);
-
-					returnVal = Vector3_2Col(label, angle.x, angle.y, angle.z);
-					auto finalQuat = math::GetQuaternion(angle);
-					const_cast<T&>(data.x) = finalQuat.x;
-					const_cast<T&>(data.y) = finalQuat.y;
-					const_cast<T&>(data.z) = finalQuat.z;
-					const_cast<T&>(data.w) = finalQuat.w;
-
-					return returnVal;
-				}
+				return returnVal;
 			}
 		}
 	}

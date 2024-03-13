@@ -20,6 +20,8 @@ namespace application
                 void Init(const application::editor::Unit_TemplateData* unitTemplateData);
                 void ChangeTemplateData(const application::editor::UnitData* unitData);
                 void ChangeTemplateData(const application::editor::Unit_TemplateData* unitTemplateData);
+                void ChangeResource(const std::string& fbxName);
+
             protected:
                 virtual void OnHover()
                 {
@@ -30,6 +32,7 @@ namespace application
                     PaletteInstance::OnHoverLeft();
                 }
             private:
+                std::string currentFBX = "";
                 const application::editor::Unit_TemplateData* unitTemplateData;
             };
         }
