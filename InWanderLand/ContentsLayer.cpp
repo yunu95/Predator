@@ -170,7 +170,7 @@ void application::contents::ContentsLayer::Initialize()
 		yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 		auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto camComp = camObj->AddComponent<RTSCam>();
-		camObj->GetTransform()->SetLocalPosition({ 0,10,0 });
+		camObj->GetTransform()->SetLocalPosition({ 0,20,0 });
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 		auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };

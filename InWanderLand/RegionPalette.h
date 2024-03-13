@@ -2,6 +2,7 @@
 #include "Palette.h"
 #include "YunutyEngine.h"
 #include "SingletonClass.h"
+#include "OrnamentData.h"
 
 namespace application
 {
@@ -22,12 +23,17 @@ namespace application
             public:
                 RegionData* GetSingleSelectedRegion();
                 void SelectRegion(RegionData* region);
+                void SetAsSelectingDisablingOrnaments(bool ornamentMode);
+                bool GetIsSelectingDisablingOrnaments();
             protected:
                 virtual IEditableData* PlaceInstance(Vector3d worldPosition) override;
                 virtual bool ShouldSelect(IEditableData* instance) override;
+                virtual void OnSelectEmpty()override;
+                virtual void OnSelectSingleInstance(IEditableData* data) override;
                 virtual void OnStartPalette() override;
                 virtual void OnStandbyPalette() override;
             private:
+                bool isSelectingDisablingOrnaments{false};
             };
         }
     }

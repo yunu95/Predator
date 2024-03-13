@@ -50,14 +50,7 @@ namespace application::editor::palette
             }
             else
             {
-                if (!SceneViewPanel::GetSingletonInstance().IsMouseOverGizmo())
-                {
-                    state = State::DraggingSelectBox;
-                    dragStartPos = currentBrushPos;
-                    ClearSelection();
-                    SelectionBox::Instance().ShowSelectionBox(true);
-                    SelectionBox::Instance().SetCoverage(dragStartPos, currentBrushPos);
-                }
+                OnSelectEmpty();
             }
             break;
         case application::editor::palette::Palette::State::Place:
@@ -218,6 +211,18 @@ namespace application::editor::palette
             break;
         default:
             break;
+        }
+    }
+
+    void Palette::OnSelectEmpty()
+    {
+        if (!SceneViewPanel::GetSingletonInstance().IsMouseOverGizmo())
+        {
+            state = State::DraggingSelectBox;
+            dragStartPos = currentBrushPos;
+            ClearSelection();
+            SelectionBox::Instance().ShowSelectionBox(true);
+            SelectionBox::Instance().SetCoverage(dragStartPos, currentBrushPos);
         }
     }
 

@@ -189,6 +189,7 @@ namespace application
             }
             return true;
         }
+
         ITemplateData* TemplateDataManager::CreateTemplateData(const std::string& name, const DataType& type)
         {
             switch (type)
@@ -203,6 +204,8 @@ namespace application
                 return CreateTemplateData<Region_TemplateData>(name);
             case DataType::WaveData:
                 return CreateTemplateData<Wave_TemplateData>(name);
+            case DataType::CameraData:
+                return CreateTemplateData<Camera_TemplateData>(name);
             default:
                 return nullptr;
                 break;

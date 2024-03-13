@@ -47,6 +47,10 @@ namespace application
             {
                 each.second->ApplyAsPlaytimeObject();
             }
+            for (auto& each : list)
+            {
+                each.second->PostApplyAsPlaytimeObject();
+            }
         }
 
         void InstanceManager::ClearPlaytimeObjects()
@@ -167,6 +171,14 @@ namespace application
                 }
             }
 
+            return true;
+        }
+        bool InstanceManager::PostLoad()
+        {
+            for (auto& [key, ptr] : list)
+            {
+                ptr->PostLoadCallback();
+            }
             return true;
         }
 

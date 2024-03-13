@@ -4,6 +4,7 @@
 #include "Application.h"
 #include "EditorEvents.h"
 #include "EditorCommonEvents.h"
+#include "WavePalette.h"
 
 #include "GlobalConstant.h"
 #include "InstanceManager.h"
@@ -171,17 +172,20 @@ namespace application
                     loadFile.close();
                     return false;
                 }
-                else
+
+                if (!instanceManager.PostLoad())
                 {
-                    loadFile.close();
+                    return false;
+                }
+
+                loadFile.close();
 
 #ifdef EDITOR
-                    Application::DispatchEvent<LoadEvent>();
+                Application::DispatchEvent<LoadEvent>();
                     palette::PaletteBrushManager::GetSingletonInstance().MakeBrush();
 #endif
-                    currentMapPath = path;
-                    return true;
-                }
+                currentMapPath = path;
+                return true;
             }
             else
             {

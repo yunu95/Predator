@@ -1,6 +1,7 @@
 #pragma once
 
 #include <math.h>
+#include "YunuVector3.h" 
 
 #ifdef YUNUTY_EXPORTS
 #define YUNUTY_API __declspec(dllexport)
@@ -65,6 +66,7 @@ namespace yunutyEngine
         Vector3& operator/=(const double& scalar);
         Vector3 operator*(const double& scalar)const;
         Vector3 operator/(const double& scalar)const;
+        operator yunuGI::Vector3() const { return yunuGI::Vector3(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)); }
     };
     using Vector3f = Vector3<float>;
     using Vector3d = Vector3<double>;

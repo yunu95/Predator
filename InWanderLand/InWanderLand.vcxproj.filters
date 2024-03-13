@@ -331,6 +331,15 @@
     <Filter Include="Editor\Palette\EditorInstance\CameraInstance">
       <UniqueIdentifier>{89c64563-a390-4f9b-9c53-4233d18e3b2d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Palette\List\LightPalette">
+      <UniqueIdentifier>{c29542b4-2112-4686-91af-dc0d6231b8e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteBrush\LightBrush">
+      <UniqueIdentifier>{ca7454db-bd09-44c4-94a3-6025dd2f1a81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\EditorInstance\LightInstance">
+      <UniqueIdentifier>{9d637940-714e-4fcc-a9bf-e861067d51c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -854,6 +863,21 @@
     <ClInclude Include="CameraEditorInstance.h">
       <Filter>Editor\Palette\EditorInstance\CameraInstance</Filter>
     </ClInclude>
+    <ClInclude Include="LightData.h">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="Light_TemplateData.h">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="LightPalette.h">
+      <Filter>Editor\Palette\List\LightPalette</Filter>
+    </ClInclude>
+    <ClInclude Include="LightBrush.h">
+      <Filter>Editor\Palette\PaletteBrush\LightBrush</Filter>
+    </ClInclude>
+    <ClInclude Include="LightEditorInstance.h">
+      <Filter>Editor\Palette\EditorInstance\LightInstance</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1322,6 +1346,21 @@
     </ClCompile>
     <ClCompile Include="CameraEditorInstance.cpp">
       <Filter>Editor\Palette\EditorInstance\CameraInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="LightData.cpp">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="Light_TemplateData.cpp">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="LightPalette.cpp">
+      <Filter>Editor\Palette\List\LightPalette</Filter>
+    </ClCompile>
+    <ClCompile Include="LightBrush.cpp">
+      <Filter>Editor\Palette\PaletteBrush\LightBrush</Filter>
+    </ClCompile>
+    <ClCompile Include="LightEditorInstance.cpp">
+      <Filter>Editor\Palette\EditorInstance\LightInstance</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

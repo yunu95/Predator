@@ -134,6 +134,8 @@ namespace application
                 // 선택 박스에 유효한 인스턴스가 접촉되기 시작했을 때, 혹은 접촉이 끝났을 때 호출됩니다.
                 void OnSelectionContactEnter(IEditableData* instance);
                 void OnSelectionContactExit(IEditableData* instance);
+                // 빈 공간을 클릭했을 때 어떤 행동을 취할지 정의합니다. 기본 동작은 선택을 해제하고, 드래깅용 선택 박스를 표시하는 것입니다.
+                virtual void OnSelectEmpty();
                 // 선택 목록에 인스턴스를 추가 / 제거
                 void InsertSelection(IEditableData* instance);
                 void EraseSelection(IEditableData* instance);

@@ -325,6 +325,9 @@
     <Filter Include="yunutyEngine\NavigationSystem\NavigationObstacle">
       <UniqueIdentifier>{45c4293a-020d-43ac-912a-8e711556bcfc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="yunutyEngine\ClientTemplate\HasVariable">
+      <UniqueIdentifier>{a4310430-0c1b-4811-9244-923fb0c183da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -790,6 +793,9 @@
     </ClInclude>
     <ClInclude Include="_YunutyNavigationObstacleImpl.h">
       <Filter>yunutyEngine\NavigationSystem\NavigationObstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="header\HasVariable.h">
+      <Filter>yunutyEngine\ClientTemplate\HasVariable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

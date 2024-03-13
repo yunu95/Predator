@@ -3,13 +3,13 @@
 unordered_set<graphics::Renderable<yunuGI::IRenderable>*> DebugGraphic::debugGraphics;
 bool DebugGraphic::isEnabled{true};
 
-void DebugGraphic::SetEnabled(bool enabled)
+void DebugGraphic::SetDebugGraphicsEnabled(bool enabled)
 {
     isEnabled = enabled;
     for (auto& debugGraphic : debugGraphics)
         debugGraphic->SetActive(enabled);
 }
-bool DebugGraphic::IsEnabled()
+bool DebugGraphic::AreDebugGraphicsEnabled()
 {
     return isEnabled;
 }

@@ -38,7 +38,7 @@ namespace application
 
 
             TO_JSON(POD_Ornament)
-            FROM_JSON(POD_Ornament)
+                FROM_JSON(POD_Ornament)
         };
 
         class OrnamentData
@@ -56,6 +56,7 @@ namespace application
             virtual void OnRescale(const Vector3d& newScale) override;
             virtual void OnDataResourceChange(std::string newName) override;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance() override;
+            virtual void ApplyAsPlaytimeObject() override;
             virtual bool EnterDataFromGlobalConstant() override;
 
             POD_Ornament pod;
@@ -70,6 +71,7 @@ namespace application
             static TemplateDataManager& templateDataManager;
             palette::OrnamentEditorInstance* ornamentInstance{ nullptr };
 
+            virtual ~OrnamentData();
             OrnamentData();
             OrnamentData(const std::string& name);
             OrnamentData(const OrnamentData& prototype);

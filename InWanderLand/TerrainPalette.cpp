@@ -16,20 +16,24 @@ namespace application::editor::palette
  
     IEditableData* TerrainPalette::PlaceInstance(Vector3d worldPosition)
     {
+        vector<Vector2i> nodeKeys;
         auto centerNodeKey = TerrainData::Instance().WorldToNodeSpace(worldPosition);
         for (int x = centerNodeKey.x - brushSize; x <= centerNodeKey.x + brushSize; x++)
         {
             for (int y = centerNodeKey.y - brushSize; y <= centerNodeKey.y + brushSize; y++)
             {
-                auto nodeKey = Vector2i{ x, y };
-                if (isMarking)
-                {
-                    TerrainData::Instance().AddNode(nodeKey, TerrainData::Node{ 0, nullptr });
-                }
-                else
-                {
-                    TerrainData::Instance().EraseNode(nodeKey);
-                }
+                nodeKeys.push_back({ x,y });
+            }
+        }
+        for (auto nodeKey : nodeKeys)
+        {
+            if (isMarking)
+            {
+                TerrainData::Instance().AddNode(nodeKey);
+            }
+            else
+            {
+                TerrainData::Instance().EraseNode(nodeKey);
             }
         }
         TerrainData::Instance().ApplyDebugMesh();

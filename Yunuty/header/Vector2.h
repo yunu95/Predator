@@ -1,5 +1,6 @@
 #pragma once
 #include <math.h>
+#include "YunuVector2.h" 
 
 #ifdef YUNUTY_EXPORTS
 #define YUNUTY_API __declspec(dllexport)
@@ -58,6 +59,7 @@ namespace yunutyEngine
         Vector2& operator/=(const double& scalar);
         Vector2 operator*(const double& scalar)const;
         Vector2 operator/(const double& scalar)const;
+        operator yunuGI::Vector2() const { return yunuGI::Vector2(static_cast<float>(x), static_cast<float>(y)); }
     };
     typedef Vector2<float> Vector2f;
     typedef Vector2<double> Vector2d;

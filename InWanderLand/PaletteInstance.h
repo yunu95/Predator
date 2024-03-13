@@ -33,6 +33,7 @@ namespace application
                 /// 이 세가지 함수들은 중복되어 호출될 수 있습니다. 멱등성을 고려해 구현하십시오. 
                 /// 예를 들어, OnSelected 함수가 두번 연속 호출된 경우와 한번 호출된 경우의 결과는 서로 같아야 합니다.
                 /// </summary>
+                void AdjustPickingCollider(const Vector3f& boundingMin, const Vector3f& boundingMax);
                 virtual void OnHover();
                 virtual void OnHoverLeft();
                 virtual void OnSelected();
@@ -56,8 +57,10 @@ namespace application
                 virtual void EnablePickingCollider();
                 virtual void DisablePickingCollider();
                 float selectCircleRadius{ 1.25 };
+                static constexpr float transparency{ 0.3f };
                 yunutyEngine::physics::BoxCollider* pickingCollider{ nullptr };
             private:
+                void InitPickingCollider();
                 IEditableData* editableData{ nullptr };
                 yunutyEngine::physics::RigidBody* rigidBody{ nullptr };
                 yunutyEngine::graphics::StaticMeshRenderer* selectCircle{nullptr};

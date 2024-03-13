@@ -50,7 +50,8 @@ namespace application::editor::palette
         if (isWaveUnit)
         {
             instance->pod.waveData = wave;
-            wave->InsertUnitData({ .unitData = instance,.waveIdx = waveIdx,.delay = WavePalette::SingleInstance().currentSelectedWaveTimeOffset });
+            wave->InsertUnitData({ .unitData = instance,.waveIdx = waveIdx,.delay = WavePalette::SingleInstance().GetCurrentSelectedWaveTimeOffset() });
+            wave->ApplyMapAsPod();
         }
         instance->ApplyAsPaletteInstance();
         return instance;
@@ -111,7 +112,11 @@ namespace application::editor::palette
         }
         state = State::None;
         CleanUpData();
-        WavePalette::SingleInstance().currentSelectedWaveIndex = -1;
+        if (WavePalette::SingleInstance().currentSelectedWaveIndex >= 0)
+        {
+            WavePalette::SingleInstance().HideWaveUnitsVisibility();
+            WavePalette::SingleInstance().currentSelectedWaveIndex = -1;
+        }
     }
 
     void UnitPalette::CleanUpData()

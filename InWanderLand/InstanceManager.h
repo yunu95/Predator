@@ -118,17 +118,15 @@ namespace application
             template<typename T = IEditableData> requires std::derived_from<T, IEditableData>
             T* GetInstance(const UUID& uuid) const
             {
-                auto itr = list.find(uuid);
-                if (itr == list.end())
-                {
-                    return nullptr;
-                }
+                if (auto itr = list.find(uuid); itr != list.end())
+                    return dynamic_cast<T*>(itr->second.get());
 
-                return dynamic_cast<T*>(itr->second.get());
+                return nullptr;
+
             }
             bool DeleteInstance(const UUID& uuid);
-			void Clear();
-			void ApplyInstancesAsPlaytimeObjects();
+            void Clear();
+            void ApplyInstancesAsPlaytimeObjects();
             void ClearPlaytimeObjects();
             void EnterDataFromGlobalConstant();
 
@@ -153,6 +151,7 @@ namespace application
             virtual bool PostEncoding(json& data) const override;
             virtual bool PreDecoding(const json& data) override;
             virtual bool PostDecoding(const json& data) override;
+            bool PostLoad();
 
         private:
             InstanceManager();

@@ -1005,6 +1005,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="DualCastComponent.h" />
     <ClInclude Include="GCTemplate.h" />
     <ClInclude Include="GlobalConstant.h" />
+    <ClInclude Include="LightBrush.h" />
+    <ClInclude Include="LightData.h" />
+    <ClInclude Include="LightEditorInstance.h" />
+    <ClInclude Include="LightPalette.h" />
+    <ClInclude Include="Light_TemplateData.h" />
     <ClInclude Include="Module_GlobalConstant.h" />
     <ClInclude Include="PaletteBrush.h" />
     <ClInclude Include="EditorResourceManager.h" />
@@ -1183,6 +1188,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="DebugStaticMesh.cpp" />
     <ClCompile Include="HealerSkillSystem.cpp" />
     <ClCompile Include="IEditableData.cpp" />
+    <ClCompile Include="LightBrush.cpp" />
+    <ClCompile Include="LightData.cpp" />
+    <ClCompile Include="LightEditorInstance.cpp" />
+    <ClCompile Include="LightPalette.cpp" />
+    <ClCompile Include="Light_TemplateData.cpp" />
     <ClCompile Include="LoadStaticOrnamentsCommnad.cpp" />
     <ClCompile Include="Module_GlobalConstant.cpp" />
     <ClCompile Include="OrnamentBrush.cpp" />
