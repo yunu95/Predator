@@ -28,6 +28,7 @@ namespace application
     namespace editor
     {
         class RegionData;
+        class OrnamentData;
         class Region_TemplateData;
 
         struct POD_Region
@@ -38,6 +39,8 @@ namespace application
             bool isObstacle{ false };
             int specialEvent{ 0 };
             Region_TemplateData* templateData;
+            // 지역에 들어갔을 때 비활성화시킬 장식물들의 UUID를 저장합니다.
+            std::vector<string> disablingOrnamentUUIDS;
             TO_JSON(POD_Region)
                 FROM_JSON(POD_Region)
         };
@@ -59,20 +62,27 @@ namespace application
             virtual void OnRelocate(const Vector3d& newLoc) override;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
             virtual void ApplyAsPlaytimeObject() override {};
+            const std::unordered_set<OrnamentData*>& GetDisablingOrnaments()const;
+            void AddDisablingOrnament(OrnamentData* ornament);
+            void EraseDisablingOrnament(OrnamentData* ornament);
 
             POD_Region pod;
 
         protected:
+            virtual bool PreSaveCallback() override;
             virtual bool PreEncoding(json& data) const override;
             virtual bool PostEncoding(json& data) const override;
             virtual bool PreDecoding(const json& data) override;
             virtual bool PostDecoding(const json& data) override;
+            virtual bool PostLoadCallback() override;
 
         private:
+
             std::wstring MakeUpName();
             static TemplateDataManager& templateDataManager;
             static RegionData* selectedEditorRegion;
             palette::RegionEditorInstance* regionInstance{ nullptr };
+            std::unordered_set<OrnamentData*> disablingOrnaments;
 
             RegionData();
             RegionData(const std::string& name);

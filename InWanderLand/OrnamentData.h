@@ -34,7 +34,7 @@ namespace application
             POD_Vector3<float> scale = { 1,1,1 };
 
             TO_JSON(POD_Ornament)
-            FROM_JSON(POD_Ornament)
+                FROM_JSON(POD_Ornament)
         };
 
         class OrnamentData
@@ -66,6 +66,7 @@ namespace application
             static TemplateDataManager& templateDataManager;
             palette::OrnamentEditorInstance* ornamentInstance{ nullptr };
 
+            virtual ~OrnamentData();
             OrnamentData();
             OrnamentData(const std::string& name);
             OrnamentData(const OrnamentData& prototype);

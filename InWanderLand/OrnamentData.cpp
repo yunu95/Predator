@@ -1,5 +1,6 @@
 #include "InWanderLand.h"
 #include "OrnamentData.h"
+#include "RegionData.h"
 
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
@@ -131,6 +132,13 @@ namespace application
             return true;
         }
 
+        OrnamentData::~OrnamentData()
+        {
+            for (auto each : RegionData::GetInstances())
+            {
+                each->EraseDisablingOrnament(this);
+            }
+        }
         OrnamentData::OrnamentData()
             : pod()
         {

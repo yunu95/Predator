@@ -537,9 +537,36 @@ namespace application
 
                     ImGui::TableNextRow();
                     ImGui::TableSetColumnIndex(0);
+                    if (!palette::RegionPalette::SingleInstance().GetIsSelectingDisablingOrnaments())
+                    {
+                        if (ImGui::Button("Select disabling ornaments"))
+                        {
+                            palette::RegionPalette::SingleInstance().SetAsSelectingDisablingOrnaments(true);
+                        }
+                    }
+                    else
+                    {
+                        if (ImGui::Button("Select regions"))
+                        {
+                            palette::RegionPalette::SingleInstance().SetAsSelectingDisablingOrnaments(false);
+                        }
+                    }
+
                     if (ImGui::Button("Delete Region"))
                     {
-                        palette::RegionPalette::SingleInstance().Delete(palette::RegionPalette::SingleInstance().GetSingleSelectedRegion());
+                        auto region{ palette::RegionPalette::SingleInstance().GetSingleSelectedRegion() };
+                        for (auto each : WaveData::GetInstances())
+                        {
+                            if (each->pod.contraintRegion == region)
+                            {
+                                each->pod.contraintRegion = nullptr;
+                            }
+                            if (each->pod.triggerRegion == region)
+                            {
+                                each->pod.triggerRegion = nullptr;
+                            }
+                        }
+                        palette::RegionPalette::SingleInstance().OnDeletion();
                     }
                     imgui::EndSection();
                 }
