@@ -9,6 +9,7 @@
 #include "WarriorProductor.h"
 #include "HealerProductor.h"
 #include "MeleeEnemyProductor.h"
+#include "WaveCreator.h"
 
 namespace application
 {
@@ -150,23 +151,35 @@ namespace application
 						break;
 				}
 
-				static int unitCountPerWave = 0;
-				static int delayIndex = 0;
-				static int waveSizeIndex = 0;
+				static int unitCountPerWave = 0;				// 현재 웨이브에 배치된 unit의 수
+				static int delayIndex = 0;						// delay vector의 index
+				static int waveSizeIndex = 0;					// 게임에 배치된 총 wave 수
 
-				productionFactory->PushWaveData(position, pod.waveData->pod.waveDelays[delayIndex]);
+				static std::wstring regionName = L"";			// 다른 지역을 판별하기 위한 변수.
+
+				pod.waveData->pod.waveSizes;
+
+				if (regionName == L"" || regionName != pod.waveData->pod.triggerRegion->pod.name)
+				{
+					/// 다른 region이 들어왔음을 WaveSystem에 알리는 로직
+					WaveCreator::Instance().CreateNewRegion(
+						Vector3d(pod.waveData->pod.triggerRegion->pod.x, 0, pod.waveData->pod.triggerRegion->pod.z),
+						pod.waveData->pod.triggerRegion->pod.width,
+						pod.waveData->pod.triggerRegion->pod.height
+					);
+					WaveCreator::Instance().SetWaveSizeVector(pod.waveData->pod.waveSizes);
+					regionName = pod.waveData->pod.triggerRegion->pod.name;
+				}
+
+				WaveCreator::Instance().PushWaveUnitData(productionFactory, position, pod.waveData->pod.waveDelays[delayIndex]);
+				delayIndex++;
+
 				unitCountPerWave++;
-
 				if (pod.waveData->pod.waveSizes[waveSizeIndex] < unitCountPerWave)
 				{
 					unitCountPerWave = 0;
 					waveSizeIndex++;
 				}
-				else
-				{
-					delayIndex++;
-				}
-				//float waveDelay = pod.waveData->GetWaveUnitDataMap().find()
 			}
 		}
 

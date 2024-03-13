@@ -10,7 +10,7 @@
 class RTSCam;
 class Unit;
 
-class PlayerController
+class PlayerController : public SingletonClass<PlayerController>
 {
 public:
 	enum class OrderType
@@ -19,14 +19,6 @@ public:
 		AttackMove,
 		QSkill,
 	};
-
-private:
-	PlayerController();
-	~PlayerController();
-	static PlayerController* instance;
-
-public:
-	static PlayerController* GetInstance();
 
 private:
 	RTSCam* m_movingSystemComponent;

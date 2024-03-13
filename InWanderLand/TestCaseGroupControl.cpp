@@ -83,7 +83,7 @@ void TestCaseGroupControlInit()
 	navField->BuildField(worldVertices, worldFaces);
 
 	/// PlayerController SetUp
-	PlayerController::GetInstance()->SetMovingSystemComponent(rtsCam);
+	PlayerController::SingleInstance().SetMovingSystemComponent(rtsCam);
 
 	/// UnitFactory
 	unique_ptr<UnitFactory> unitfactory = make_unique<UnitFactory>();

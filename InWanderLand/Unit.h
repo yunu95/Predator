@@ -255,6 +255,9 @@ public:
 
 	void ChangeCurrentOpponentUnitForced(Unit* p_unit);
 	void DeleteTauntingUnit();
+
+	void SetUnitStateToDeath();
+
 public:
 	/// <summary>
 	/// 유닛의 스탯을 조작하는 함수.

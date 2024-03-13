@@ -322,6 +322,15 @@
     <Filter Include="Contents\UnitStatusComponent\Taunting">
       <UniqueIdentifier>{a747ad64-1ec4-4e4a-b3dd-6afdf9903359}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\WaveSystem">
+      <UniqueIdentifier>{b9ce9a4b-15f0-44e2-ad5c-3de09c8231ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitFactory\UnitProductionOrder\EnemyProductor">
+      <UniqueIdentifier>{6633728b-0b6c-4c3f-bad8-74f5a5501357}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitStatusComponent\DamageOnly">
+      <UniqueIdentifier>{c4c2a6e9-7965-47be-99cc-eacaa4137c96}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -524,9 +533,6 @@
     </ClInclude>
     <ClInclude Include="Easing.h">
       <Filter>Contents\Dotween</Filter>
-    </ClInclude>
-    <ClInclude Include="MeleeEnemyProductor.h">
-      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClInclude>
     <ClInclude Include="PlayerController.h">
       <Filter>Contents\InputManager</Filter>
@@ -791,9 +797,6 @@
     <ClInclude Include="UIManager.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="SingletonUpdate.h">
-      <Filter>Contents\SingletonClasses</Filter>
-    </ClInclude>
     <ClInclude Include="SpecialEvent.h">
       <Filter>Contents\SpecialEvent</Filter>
     </ClInclude>
@@ -809,7 +812,21 @@
     <ClInclude Include="FileSystem.h">
       <Filter>Editor\IO\FileSystem</Filter>
     </ClInclude>
-    <ClInclude Include="DamageOnlyComponent.h" />
+    <ClInclude Include="WaveCreator.h">
+      <Filter>Contents\WaveSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="MeleeEnemyProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveSystemComponent.h">
+      <Filter>Contents\WaveSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="DamageOnlyComponent.h">
+      <Filter>Contents\UnitStatusComponent\DamageOnly</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -964,9 +981,6 @@
     </ClCompile>
     <ClCompile Include="TestCaseGroupControl.cpp">
       <Filter>TestCodes</Filter>
-    </ClCompile>
-    <ClCompile Include="MeleeEnemyProductor.cpp">
-      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClCompile>
     <ClCompile Include="PlayerController.cpp">
       <Filter>Contents\InputManager</Filter>
@@ -1252,6 +1266,20 @@
     <ClCompile Include="FileSystem.cpp">
       <Filter>Editor\IO\FileSystem</Filter>
     </ClCompile>
-    <ClCompile Include="DamageOnlyComponent.cpp" />
+    <ClCompile Include="WaveCreator.cpp">
+      <Filter>Contents\WaveSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="MeleeEnemyProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveSystemComponent.cpp">
+      <Filter>Contents\WaveSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="DamageOnlyComponent.cpp">
+      <Filter>Contents\UnitStatusComponent\DamageOnly</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

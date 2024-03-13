@@ -329,7 +329,7 @@ void Unit::SkillUpdate()
 		currentOrder = UnitState::Idle;
 		// 여기서 leftClickFunction을 스킬 사용 못하게 해야 한다....
 		/// 전술모드 추가에 따른 조건식 추가.
-		PlayerController::GetInstance()->SetLeftClickMove();
+		PlayerController::SingleInstance().SetLeftClickMove();
 	}
 }
 
@@ -563,6 +563,11 @@ void Unit::DeleteTauntingUnit()
 	tauntedUnit = nullptr;
 }
 
+void Unit::SetUnitStateToDeath()
+{
+	currentOrder = UnitState::Death;
+}
+
 void Unit::DetermineHitDamage(float p_onceCalculatedDmg)
 {
 	m_finalHitDamage = (m_defensePoint / 10.0f) / (1 - m_criticalDamageDecreaseMultiplier) / (1 - m_dodgeProbability);
@@ -632,7 +637,7 @@ void Unit::OrderAttackMove(Vector3d position)
 	currentOrder = UnitState::AttackMove;
 	dotween->DOLookAt(position, rotationTime, false);
 
-	PlayerController::GetInstance()->SetLeftClickMove();
+	PlayerController::SingleInstance().SetLeftClickMove();
 	// 다음 클릭은 Move로 바꿀 수 있도록 function 재정의.
 
 	isAttackMoving = true;
@@ -645,7 +650,7 @@ void Unit::OrderSkill(SkillEnum p_skillNum, Vector3d position)
 	m_currentSelectedSkill = p_skillNum;
 	dotween->DOLookAt(position, rotationTime, false);
 
-	PlayerController::GetInstance()->SetLeftClickEmpty();
+	PlayerController::SingleInstance().SetLeftClickEmpty();
 
 	m_currentSkillPosition = position;
 }
@@ -656,7 +661,7 @@ void Unit::OrderSkill(SkillEnum p_skillNum)
 	currentOrder = UnitState::Skill;
 	m_currentSelectedSkill = p_skillNum;
 
-	PlayerController::GetInstance()->SetLeftClickEmpty();
+	PlayerController::SingleInstance().SetLeftClickEmpty();
 }
 
 void Unit::SetSkillDuration(float p_duration)

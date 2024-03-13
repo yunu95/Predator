@@ -9,7 +9,7 @@
 /// 3. 최소 하나의 button에 마우스가 올라가 있는가? 를 항상 판별.
 /// </summary>
 
-class UIManager : public SingletonClass<UIManager>
+class UIManager : public Component, public SingletonComponent<UIManager>
 {
 private:
 	std::list<UIButton*> m_currentSelectedButtonList;
@@ -25,6 +25,7 @@ public:
 	void ReportButtonOnMouse(UIButton* p_btn);
 	void ReportMouseExitButton(UIButton* p_btn);
 
-	void Update();
+
+	virtual void Update() override;
 };
 

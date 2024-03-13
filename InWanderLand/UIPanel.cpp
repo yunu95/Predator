@@ -42,7 +42,7 @@ void UIPanel::SetCloseButtonActive(bool p_boolen)
 				e->SetSelfActive(false);
 			}
 			closeButtonComponent->GetGameObject()->SetSelfActive(false);
-			UIManager::SingleInstance().ReportMouseExitButton(closeButtonComponent);
+			UIManager::Instance().ReportMouseExitButton(closeButtonComponent);
 
 			if (m_parentPanel != nullptr)
 			{

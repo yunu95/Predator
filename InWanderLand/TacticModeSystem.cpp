@@ -6,7 +6,7 @@
 
 void TacticModeSystem::SetCurrentSelectedPlayerUnit(Unit::UnitType p_type)
 {
-	currentSelectedUnit = PlayerController::GetInstance()->FindSelectedUnitByUnitType(p_type);
+	currentSelectedUnit = PlayerController::SingleInstance().FindSelectedUnitByUnitType(p_type);
 }
 
 void TacticModeSystem::SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum)
@@ -28,9 +28,9 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
 	currentSelectedUnit = playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second;
 	processingUnitMap.insert({ queueOrderIndex, currentSelectedUnit });
 
-	SkillPreviewSystem::SingleInstance().SetCurrentSelectedPlayerGameObject(currentSelectedUnit->GetGameObject());
-	SkillPreviewSystem::SingleInstance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(currentSelectedSkill));
-	SkillPreviewSystem::SingleInstance().ActivateSkillPreview(true);
+	SkillPreviewSystem::Instance().SetCurrentSelectedPlayerGameObject(currentSelectedUnit->GetGameObject());
+	SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(currentSelectedSkill));
+	SkillPreviewSystem::Instance().ActivateSkillPreview(true);
 
 	m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
 	{
@@ -39,7 +39,7 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
 
 		SetCurrentSelectedQueue(currentSelectedUnit);
 
-		SkillPreviewSystem::SingleInstance().ActivateSkillPreview(false);
+		SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 
 		currentSelectedQueue->push([=]()
 			{
@@ -61,7 +61,7 @@ void TacticModeSystem::EngageTacticMode()
 	/// 1. TimeScale을 0으로 설정한다.
 	/// 2. PlayerController에서 현재 전술모드 적용 가능한 Player Unit의 정보를 가져온다.
 	Time::SetTimeScale(0.0f);
-	playerComponentMap = PlayerController::GetInstance()->GetPlayerMap();
+	playerComponentMap = PlayerController::SingleInstance().GetPlayerMap();
 	queueOrderIndex = 0;
 	executingOrderIndex = 0;
 	processingUnitMap.clear();

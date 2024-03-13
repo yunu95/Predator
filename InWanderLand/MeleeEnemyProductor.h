@@ -1,8 +1,8 @@
 #pragma once
-#include "UnitProductor.h"
+#include "EnemyProductor.h"
 #include "SingletonComponent.h"
 
-class MeleeEnemyProductor : public UnitProductor, public SingletonComponent<MeleeEnemyProductor>
+class MeleeEnemyProductor : public EnemyProductor, public SingletonComponent<MeleeEnemyProductor>
 {
 public:
 	//virtual void SetUnitData(GameObject* fbxObject, NavigationField* navField, Vector3d startPosition) override;

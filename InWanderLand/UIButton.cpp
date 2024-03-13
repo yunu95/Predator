@@ -117,13 +117,13 @@ void UIButton::Update()
 		isMouseNowOnButton = true;
 		isMouseJustEntered = false;
 
-		UIManager::SingleInstance().ReportButtonOnMouse(this);
+		UIManager::Instance().ReportButtonOnMouse(this);
 		//isButtonOnMouseState = false;
 	}
 	else if (!isMouseJustEntered && isMouseNowOnButton)
 	{
 		isMouseNowOnButton = false;
-		UIManager::SingleInstance().ReportMouseExitButton(this);
+		UIManager::Instance().ReportMouseExitButton(this);
 		m_ImageComponent->GetGI().SetImage(m_IdleImage);
 	}
 

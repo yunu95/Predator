@@ -25,7 +25,6 @@
 #include "SkillPreviewSystem.h"
 #include "UIButton.h"
 #include "UIManager.h"
-#include "SingletonUpdate.h"
 #include "UIPanel.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -78,7 +77,7 @@ void SnippetSkillSystemInit()
 {
 	yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 	yunutyEngine::Collider2D::SetIsOnXYPlane(false);
-
+	
 	auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 	auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
@@ -89,11 +88,11 @@ void SnippetSkillSystemInit()
 
 	auto skillPreviewCubeMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(skillPreviewCubeMeshObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
-	SkillPreviewSystem::SingleInstance().SetPathPreviewObject(skillPreviewCubeMeshObject);
+	SkillPreviewSystem::Instance().SetPathPreviewObject(skillPreviewCubeMeshObject);
 
 	auto skillPreviewSphereMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(skillPreviewSphereMeshObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
-	SkillPreviewSystem::SingleInstance().SetRangePreviewObject(skillPreviewSphereMeshObject);
+	SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
 
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
@@ -101,7 +100,7 @@ void SnippetSkillSystemInit()
 	rtsCam->groundHoveringClickCallback = [=](Vector3d pos)
 	{
 		mouseCursorObject->GetTransform()->SetWorldPosition(pos);
-		SkillPreviewSystem::SingleInstance().SetCurrentMousPosition(pos);
+		SkillPreviewSystem::Instance().SetCurrentMousPosition(pos);
 	};
 	std::vector<Vector3f> worldVertices{ };
 	std::vector<int> worldFaces{ };
@@ -116,7 +115,9 @@ void SnippetSkillSystemInit()
 	SingleNavigationField::Instance().BuildField(worldVertices, worldFaces);
 
 	/// PlayerController SetUp
-	PlayerController::GetInstance()->SetMovingSystemComponent(rtsCam);
+	InputManager::Instance();
+	UIManager::Instance();
+	PlayerController::SingleInstance().SetMovingSystemComponent(rtsCam);
 	TacticModeSystem::SingleInstance().SetMovingSystemComponent(rtsCam);
 
 	WarriorProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 0.0f));;
@@ -126,6 +127,7 @@ void SnippetSkillSystemInit()
 	MeleeEnemyProductor::Instance().CreateUnit(Vector3d(7.0f, 0.0f, -7.0f));
 
 	Scene::getCurrentScene()->AddGameObject()->AddComponent<StalkingUI>();
+
 	/// UIButton Test
 	rsrcMgr->LoadFile("Texture/zoro.jpg");
 	rsrcMgr->LoadFile("Texture/zoro_highLighted.jpg");
@@ -398,8 +400,6 @@ void SnippetSkillSystemInit()
 
 	gameManualPanel->SetParentPanel(menuPanel);
 	soundPanel->SetParentPanel(menuPanel);
-
-	auto singletonUpdateComponent = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<SingletonUpdate>();
 
 	/// UItext Test
 	//auto enemy1TextObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();

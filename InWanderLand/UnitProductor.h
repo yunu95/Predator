@@ -32,6 +32,8 @@ protected:
 
 	std::queue<std::pair<Vector3d, float>> m_waveDelayQueue;
 
+
+
 public:
 	string m_objectName;
 	Unit::UnitType m_unitType;

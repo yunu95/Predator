@@ -6,25 +6,6 @@
 #include "Dotween.h"
 #include "SkillPreviewSystem.h"
 
-PlayerController* PlayerController::instance = nullptr;
-
-PlayerController::PlayerController()
-{
-	instance = this;
-}
-
-PlayerController::~PlayerController()
-{
-	delete instance;
-}
-
-PlayerController* PlayerController::GetInstance()
-{
-	if (instance == nullptr)
-		instance = new PlayerController;
-	return instance;
-}
-
 void PlayerController::SetMovingSystemComponent(RTSCam* sys)
 {
 	m_movingSystemComponent = sys;
@@ -104,12 +85,12 @@ void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
 		else
 		{
 			Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
-			SkillPreviewSystem::SingleInstance().SetCurrentSelectedPlayerGameObject(currentSelectedUnit->GetGameObject());
-			SkillPreviewSystem::SingleInstance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(p_skillNum));
-			SkillPreviewSystem::SingleInstance().ActivateSkillPreview(true);
+			SkillPreviewSystem::Instance().SetCurrentSelectedPlayerGameObject(currentSelectedUnit->GetGameObject());
+			SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(p_skillNum));
+			SkillPreviewSystem::Instance().ActivateSkillPreview(true);
 			m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
 			{
-				SkillPreviewSystem::SingleInstance().ActivateSkillPreview(false);
+				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 				playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum, pos);
 			};
 		}

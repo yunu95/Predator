@@ -993,19 +993,20 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
     <ClInclude Include="AttackSystem.h" />
     <ClInclude Include="AutoAttackProjectilePool.h" />
+    <ClInclude Include="WaveSystemComponent.h" />
     <ClInclude Include="BleedingComponent.h" />
     <ClInclude Include="BlindFieldComponent.h" />
     <ClInclude Include="DamageOnlyComponent.h" />
     <ClInclude Include="DebuggingMesh.h" />
     <ClInclude Include="DualCastComponent.h" />
     <ClInclude Include="EditorResourceManager.h" />
+    <ClInclude Include="EnemyProductor.h" />
     <ClInclude Include="FieldDamage.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="HealerAutoAttackProjectile.h" />
     <ClInclude Include="HealerAutoAttackProjectilePool.h" />
     <ClInclude Include="HealerSkillSystem.h" />
     <ClInclude Include="imgui_ModuleData.h" />
-    <ClInclude Include="SingletonUpdate.h" />
     <ClInclude Include="SpecialEvent.h" />
     <ClInclude Include="StaticInstanceRegistry.h" />
     <ClInclude Include="LoadStaticOrnamentsCommand.h" />
@@ -1146,6 +1147,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="WaveData.h" />
     <ClInclude Include="WaveInstance.h" />
     <ClInclude Include="WavePalette.h" />
+    <ClInclude Include="WaveCreator.h" />
     <ClInclude Include="Wave_TemplateData.h" />
     <ClInclude Include="WindowEvents.h" />
     <ClInclude Include="WarriorSkillSystem.h" />
@@ -1154,12 +1156,14 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="..\Include\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="AttackSystem.cpp" />
     <ClCompile Include="AutoAttackProjectilePool.cpp" />
+    <ClCompile Include="WaveSystemComponent.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
     <ClCompile Include="BlindFieldComponent.cpp" />
     <ClCompile Include="DamageOnlyComponent.cpp" />
     <ClCompile Include="DebuggingMesh.cpp" />
     <ClCompile Include="DualCastComponent.cpp" />
     <ClCompile Include="EditorResourceManager.cpp" />
+    <ClCompile Include="EnemyProductor.cpp" />
     <ClCompile Include="FieldDamage.cpp" />
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="HealerAutoAttackProjectile.cpp" />
@@ -1297,6 +1301,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Wave.cpp" />
     <ClCompile Include="WaveData.cpp" />
     <ClCompile Include="WavePalette.cpp" />
+    <ClCompile Include="WaveCreator.cpp" />
     <ClCompile Include="Wave_TemplateData.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

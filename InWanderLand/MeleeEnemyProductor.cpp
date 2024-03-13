@@ -44,6 +44,11 @@ yunutyEngine::GameObject* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
+	if (isWaveUnit)
+	{
+
+	}
+
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
 	auto& animList = rsrcManager->GetAnimationList();

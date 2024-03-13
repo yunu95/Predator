@@ -10,32 +10,32 @@ void InputManager::Update()
 	{
 		if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_1))
 		{
-			PlayerController::GetInstance()->SetCurrentPlayerSerialNumber(Unit::UnitType::Warrior);
+			PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Warrior);
 			currentSelectedSerialNumber = SelectedSerialNumber::One;
 			isPlayerSelected = true;
-			SkillPreviewSystem::SingleInstance().ActivateSkillPreview(false);
+			SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 		}
 		if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_2))
 		{
-			PlayerController::GetInstance()->SetCurrentPlayerSerialNumber(Unit::UnitType::Magician);
+			PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Magician);
 			currentSelectedSerialNumber = SelectedSerialNumber::Two;
 			isPlayerSelected = true;
-			SkillPreviewSystem::SingleInstance().ActivateSkillPreview(false);
+			SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 		}
 		if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_3))
 		{
-			PlayerController::GetInstance()->SetCurrentPlayerSerialNumber(Unit::UnitType::Healer);
+			PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Healer);
 			currentSelectedSerialNumber = SelectedSerialNumber::Three;
 			isPlayerSelected = true;
-			SkillPreviewSystem::SingleInstance().ActivateSkillPreview(false);
+			SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 		}
 
 		if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_4))
 		{
-			PlayerController::GetInstance()->SetCurrentPlayerSerialNumber(Unit::UnitType::AllPlayers);
+			PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::AllPlayers);
 			currentSelectedSerialNumber = SelectedSerialNumber::All;
 			isPlayerSelected = true;
-			SkillPreviewSystem::SingleInstance().ActivateSkillPreview(false);
+			SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 		}
 
 		if (isPlayerSelected)
@@ -45,7 +45,7 @@ void InputManager::Update()
 				if (tacticMode)
 					TacticModeSystem::SingleInstance().SetLeftClickAddQueueForAttackMove(currentSelectedSerialNumber);
 				else
-					PlayerController::GetInstance()->SetLeftClickAttackMove();
+					PlayerController::SingleInstance().SetLeftClickAttackMove();
 			}
 
 			if (yunutyEngine::Input::isKeyPushed(KeyCode::Q))
@@ -53,7 +53,7 @@ void InputManager::Update()
 				if (tacticMode)
 					TacticModeSystem::SingleInstance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, Unit::SkillEnum::Q);
 				else
-					PlayerController::GetInstance()->SetLeftClickSkill(Unit::SkillEnum::Q);
+					PlayerController::SingleInstance().SetLeftClickSkill(Unit::SkillEnum::Q);
 
 				/// Skill Preview Area
 
@@ -64,7 +64,7 @@ void InputManager::Update()
 				if (tacticMode)
 					TacticModeSystem::SingleInstance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, Unit::SkillEnum::W);
 				else
-					PlayerController::GetInstance()->SetLeftClickSkill(Unit::SkillEnum::W);
+					PlayerController::SingleInstance().SetLeftClickSkill(Unit::SkillEnum::W);
 			}
 		}
 

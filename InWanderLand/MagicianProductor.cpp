@@ -90,7 +90,7 @@ yunutyEngine::GameObject* MagicianProductor::CreateUnit(Vector3d startPos)
 
 	/// UnitComponent 추가
 	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
-
+	//m_unitComponent->RegisterToWaveVector
 #pragma region Auto Attack Setting (Including Passive Logic)
 	auto magicianAttackSystem = m_unitGameObject->AddComponent<RangedAttackSystem>();
 	magicianAttackSystem->SetBulletSpeed(10.0f);

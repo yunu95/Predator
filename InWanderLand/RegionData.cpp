@@ -54,7 +54,7 @@ namespace application
             return regionInstance;
         };
 
-        bool RegionData::PreEncoding(json& data) const
+		bool RegionData::PreEncoding(json& data) const
         {
             FieldPreEncoding<boost::pfr::tuple_size_v<POD_Region>>(pod, data["POD"]);
 

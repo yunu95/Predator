@@ -77,7 +77,7 @@ void UnitProductor::SetPlayerRelatedComponents(Unit* playerUnit)
 {
 	playerUnit->SetPlayerSerialNumber(m_unitType);
 	playerUnit->SetSkillPreviewType(qSkillPreviewType, wSkillPreviewType);
-	PlayerController::GetInstance()->AddPlayerUnit(playerUnit);
+	PlayerController::SingleInstance().AddPlayerUnit(playerUnit);
 }
 
 void UnitProductor::PushWaveData(Vector3d startPos, float delay)

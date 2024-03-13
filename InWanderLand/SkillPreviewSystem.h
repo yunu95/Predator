@@ -7,7 +7,7 @@
 /// yunutyEngine::graphics::StaticMeshRenderer는 나중에 아트 리소스로 교체해주자.
 /// </summary>
 
-class SkillPreviewSystem : public SingletonClass<SkillPreviewSystem>
+class SkillPreviewSystem : public Component, public SingletonComponent<SkillPreviewSystem>
 {
 public:
 	enum class SkillPreviewMesh
