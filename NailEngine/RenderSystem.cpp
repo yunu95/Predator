@@ -103,7 +103,7 @@ void RenderSystem::CreateD2D()
 	}
 
 	ResourceBuilder::Instance.Get().swapChain->GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(surface.GetAddressOf()));
-	auto d2dRTProps = D2D1::RenderTargetProperties(D2D1_RENDER_TARGET_TYPE_DEFAULT, D2D1::PixelFormat(DXGI_FORMAT_R16G16B16A16_FLOAT, D2D1_ALPHA_MODE_PREMULTIPLIED), 0, 0);
+	auto d2dRTProps = D2D1::RenderTargetProperties(D2D1_RENDER_TARGET_TYPE_DEFAULT, D2D1::PixelFormat(DXGI_FORMAT_R8G8B8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED), 0, 0);
 	d2dFactory->CreateDxgiSurfaceRenderTarget(surface.Get(), &d2dRTProps, d2dRT.GetAddressOf());
 
 	if (FAILED(result)) PostQuitMessage(0);
@@ -193,7 +193,7 @@ void RenderSystem::Render()
 	RenderUI();
 
 	// 디퍼드 정보 출력
-	///DrawDeferredInfo();
+	DrawDeferredInfo();
 
 	// 디퍼드용 SRV UnBind
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
@@ -325,6 +325,20 @@ void RenderSystem::RenderPointLightShadow()
 	{
 		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{
+			// 현재 카메라 프러스텀에 들어온 포인트 라이트만 쉐도우맵을 만들도록 컬링을 진행한다
+			auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+
+			auto meshName = e->GetMeshName();
+			auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
+
+			auto aabb =  ResourceManager::Instance.Get().GetMesh(e->GetMeshName())->GetBoundingBox(
+				std::static_pointer_cast<PointLight>(e)->GetWorldTM() * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), 0);
+
+			if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
+			{
+				continue;
+			}
+
 			PointLightShadowPass::Instance.Get().Render(index);
 
 			// Matrix Buffer Set
@@ -378,10 +392,9 @@ void RenderSystem::RenderPointLightShadow()
 			}
 
 			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX))->PushGraphicsData(&pointLightVP, sizeof(PointLightVPMatrix), static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX), true);
-			InstancingManager::Instance.Get().RenderStaticPointLightShadow();
+			InstancingManager::Instance.Get().RenderStaticPointLightShadow(pos, std::static_pointer_cast<PointLight>(e));
 			++index;
 		}
-	
 	}
 	PointLightShadowPass::Instance.Get().EndRender();
 }

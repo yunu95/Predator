@@ -33,12 +33,13 @@ public:
 
 	void Render(unsigned int materialIndex = 0, std::shared_ptr<InstanceBuffer> buffer = nullptr);
 
-	DirectX::BoundingBox GetBoundingBox( DirectX::SimpleMath::Matrix wtm, unsigned int materialIndex = 0);
-
 #pragma region Getter
 	unsigned int GetMaterialCount() { return this->materialCount; }
 	std::vector<VertexBuffer>& GetVertex() { return  vertexBufferVec; }
 	std::vector<IndexBuffer>& GetIdx() { return indexBufferVec; }
+	DirectX::BoundingBox GetBoundingBox(DirectX::SimpleMath::Matrix wtm, unsigned int materialIndex = 0);
+	std::vector<DirectX::SimpleMath::Vector3>& GetBoundingVertexList(DirectX::SimpleMath::Matrix& mat, int index);
+
 #pragma endregion
 
 private:
@@ -46,12 +47,15 @@ private:
 	void CreateIndexBuffer(unsigned int indexCount,IndexBuffer& indexBuffer);
 
 	void CheckBigBoundingBox(DirectX::BoundingBox& aabb);
+	
 
 private:
 	std::vector<VertexBuffer> vertexBufferVec;
 	std::vector<IndexBuffer> indexBufferVec;
 
 	std::vector<DirectX::BoundingBox> aabbVec;
+	std::vector<std::vector<DirectX::SimpleMath::Vector3>> boundingVertexList;
+	std::vector<std::vector<DirectX::SimpleMath::Vector3>> tempBoundingVertexList;
 	DirectX::BoundingBox aabb;
 
 	unsigned int materialCount;

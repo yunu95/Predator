@@ -32,7 +32,7 @@ void SwapChain::Init(HWND hWnd, int width, int height)
 	DXGI_SWAP_CHAIN_DESC1 _sd{};
 	_sd.Width = width;
 	_sd.Height = height;
-	_sd.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+	_sd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	_sd.Stereo = FALSE;
 	_sd.SampleDesc.Count = 1;
 	_sd.SampleDesc.Quality = 0;

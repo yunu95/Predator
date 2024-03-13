@@ -291,7 +291,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="SwapChain.cpp" />
-    <ClCompile Include="tempMain.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="UIImage.cpp" />
     <ClCompile Include="UIText.cpp" />

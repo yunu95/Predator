@@ -318,6 +318,7 @@ void CalculateLight(int lightIndex, float3 normal, float3 pos, out float4 diffus
         }
         else
         {
+            //distanceRatio = saturate(1.0f - pow(d / lights[lightIndex].range, 1.f/2.0f));
             distanceRatio = saturate(1.0f - pow(d / lights[lightIndex].range, 2.0f));
         }
         
