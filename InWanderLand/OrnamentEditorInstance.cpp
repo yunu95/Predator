@@ -21,8 +21,8 @@ namespace application::editor::palette
         yunuGI::Vector3 boundingMin, boundingMax;
         auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(ornamentTemplateData->pod.fbxName, &boundingMin, &boundingMax);
         AdjustPickingCollider(reinterpret_cast<const Vector3f&>(boundingMin), reinterpret_cast<const Vector3f&>(boundingMax));
-        obj->setName("FBX");
         obj->SetParent(GetGameObject());
+        currentFBX = ornamentTemplateData->pod.fbxName;
     }
 
     void OrnamentEditorInstance::ChangeTemplateData(const application::editor::OrnamentData* ornamentData)
@@ -34,19 +34,30 @@ namespace application::editor::palette
     {
         if (this->ornamentTemplateData == ornamentTemplateData)
             return;
-
         this->ornamentTemplateData = ornamentTemplateData;
+        ChangeResource(ornamentTemplateData->pod.fbxName);
+    }
+
+    void OrnamentEditorInstance::ChangeResource(const std::string& fbxName)
+    {
+        // TemplateData �� �����ϰ� Resource �� ������
+        if (currentFBX == fbxName)
+            return;
+
         for (auto& each : GetGameObject()->GetChildren())
         {
-            if (each->getName() == "FBX")
+            if (each->getName() == currentFBX)
             {
                 yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(each);
                 break;
             }
         }
-        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(ornamentTemplateData->pod.fbxName);
-        obj->setName("FBX");
+
+        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName);
         obj->SetParent(GetGameObject());
+        currentFBX = fbxName;
+
+        return;
     }
 }
 

@@ -1,8 +1,6 @@
 #include "InWanderLand.h"
 #include "Wave_TemplateData.h"
 
-#include "TemplateDataManager.h"
-
 namespace application
 {
     namespace editor
@@ -11,6 +9,12 @@ namespace application
         std::string Wave_TemplateData::GetDataKey() const
         {
             return TemplateDataManager::GetSingletonInstance().GetDataKey(this);
+        }
+
+        bool Wave_TemplateData::EnterDataFromGlobalConstant()
+        {
+            auto& data = GlobalConstant::GetSingletonInstance().pod;
+            return true;
         }
 
         bool Wave_TemplateData::PreEncoding(json& data) const
@@ -37,20 +41,20 @@ namespace application
         bool Wave_TemplateData::PostDecoding(const json& data)
         {
             FieldPostDecoding<boost::pfr::tuple_size_v<POD_Wave_TemplateData>>(pod, data["POD"]);
-
+            EnterDataFromGlobalConstant();
             return true;
         }
 
         Wave_TemplateData::Wave_TemplateData()
             : ITemplateData(), pod()
         {
-
+            EnterDataFromGlobalConstant();
         }
 
         Wave_TemplateData::Wave_TemplateData(const Wave_TemplateData& prototype)
             :ITemplateData(prototype), pod(prototype.pod)
         {
-
+            EnterDataFromGlobalConstant();
         }
 
         Wave_TemplateData& Wave_TemplateData::operator=(const Wave_TemplateData& prototype)

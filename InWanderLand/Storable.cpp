@@ -4,32 +4,29 @@
 
 namespace application
 {
-    namespace editor
-    {
-        json Storable::Encoding() const
-        {
-            json data;
+	json Storable::Encoding() const
+	{
+		json data;
 
-            PreEncoding(data);
-            PostEncoding(data);
+		PreEncoding(data);
+		PostEncoding(data);
 
-            return data;
-        }
+		return data;
+	}
 
-        bool Storable::Decoding(const json& data)
-        {
-            if (!PreDecoding(data))
-            {
-                return false;
-            }
-            
-            if (!PostDecoding(data))
-            {
-                return false;
-            }
+	bool Storable::Decoding(const json& data)
+	{
+		if (!PreDecoding(data))
+		{
+			return false;
+		}
 
-            return true;
-        }
-    }
+		if (!PostDecoding(data))
+		{
+			return false;
+		}
+
+		return true;
+	}
 }
 #endif

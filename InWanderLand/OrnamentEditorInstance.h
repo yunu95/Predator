@@ -6,6 +6,7 @@
 #include "PaletteInstance.h"
 
 #include "YunuGraphicsInterface.h"
+#include <string>
 
 namespace application::editor
 {
@@ -28,12 +29,14 @@ namespace application
                 void Init(const application::editor::Ornament_TemplateData* ornamentTemplateData);
                 void ChangeTemplateData(const application::editor::OrnamentData* ornamentData);
                 void ChangeTemplateData(const application::editor::Ornament_TemplateData* ornamentTemplateData);
+                void ChangeResource(const std::string& fbxName);
 
             protected:
                 virtual void OnHover() { PaletteInstance::OnHover(); }
                 virtual void OnHoverLeft() { PaletteInstance::OnHoverLeft(); }
 
             private:
+                std::string currentFBX = "";
                 const application::editor::Ornament_TemplateData* ornamentTemplateData;
             };
         }

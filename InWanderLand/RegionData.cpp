@@ -100,6 +100,7 @@ namespace application
         bool RegionData::PostDecoding(const json& data)
         {
             FieldPostDecoding<boost::pfr::tuple_size_v<POD_Region>>(pod, data["POD"]);
+            EnterDataFromGlobalConstant();
 #ifdef EDITOR
             ApplyAsPaletteInstance();
 #endif
@@ -131,6 +132,7 @@ namespace application
             pod.name = MakeUpName();
             pod.templateData = static_cast<Region_TemplateData*>(templateDataManager.GetTemplateData(name));
             EnterDataFromTemplate();
+            EnterDataFromGlobalConstant();
         }
 
         RegionData::RegionData(const RegionData& prototype)

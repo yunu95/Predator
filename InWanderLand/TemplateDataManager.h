@@ -83,6 +83,10 @@ namespace application
             const std::vector<ITemplateData*>& GetDataList(const DataType& type);
             void Clear();
 
+            ITemplateData* GetSelectedTemplateData() const;
+            void SetSelectedTemplateData(const ITemplateData* ptr);
+            void EnterDataFromGlobalConstant();
+
         protected:
             bool PreSave();
             virtual bool PreEncoding(json& data) const override;
@@ -98,6 +102,7 @@ namespace application
             std::unordered_map<const UUID, std::string> uuidKeyMap;
             std::unordered_map<const ITemplateData*, std::string> ptrKeyMap;
             std::vector<ITemplateData*> dataContainer;
+            ITemplateData* selectedData;
         };
     }
 }

@@ -34,7 +34,7 @@ public:
     void Render(unsigned int materialIndex = 0, std::shared_ptr<InstanceBuffer> buffer = nullptr);
 
     DirectX::BoundingBox GetBoundingBox(DirectX::SimpleMath::Matrix wtm, unsigned int materialIndex = 0);
-    virtual void GetBoundingBoxInfo(yunuGI::Vector3* min, yunuGI::Vector3* max);
+    virtual void GetBoundingBoxInfo(const yunuGI::Matrix4x4& wtm, yunuGI::Vector3* min, yunuGI::Vector3* max);
 
 #pragma region Getter
     unsigned int GetMaterialCount() { return this->materialCount; }

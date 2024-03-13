@@ -9,7 +9,8 @@ namespace application
     namespace editor
     {
         TemplateDataManager::TemplateDataManager()
-            : Storable(), Singleton<TemplateDataManager>(), list(), typeMap(), uuidKeyMap(), ptrKeyMap(), dataContainer()
+            : Storable(), Singleton<TemplateDataManager>(), list(), typeMap(), 
+            uuidKeyMap(), ptrKeyMap(), dataContainer(), selectedData(nullptr)
         {
             // 대략 100개 정도의 데이터를 수용할 수 있도록 미리 할당함
             dataContainer.reserve(100);
@@ -118,6 +119,25 @@ namespace application
             ptrKeyMap.clear();
             dataContainer.clear();
             list.clear();
+            selectedData = nullptr;
+        }
+
+        ITemplateData* TemplateDataManager::GetSelectedTemplateData() const
+        {
+            return selectedData;
+        }
+
+        void TemplateDataManager::SetSelectedTemplateData(const ITemplateData* ptr)
+        {
+            selectedData = const_cast<ITemplateData*>(ptr);
+        }
+
+        void TemplateDataManager::EnterDataFromGlobalConstant()
+        {
+            for (auto& each : list)
+            {
+                each.second->EnterDataFromGlobalConstant();
+            }
         }
 
         bool TemplateDataManager::PreSave()
@@ -169,6 +189,7 @@ namespace application
             }
             return true;
         }
+
         ITemplateData* TemplateDataManager::CreateTemplateData(const std::string& name, const DataType& type)
         {
             switch (type)
@@ -183,6 +204,8 @@ namespace application
                 return CreateTemplateData<Region_TemplateData>(name);
             case DataType::WaveData:
                 return CreateTemplateData<Wave_TemplateData>(name);
+            case DataType::CameraData:
+                return CreateTemplateData<Camera_TemplateData>(name);
             default:
                 return nullptr;
                 break;
@@ -190,6 +213,8 @@ namespace application
         }
         bool TemplateDataManager::PreDecoding(const json& data)
         {
+            if (!data.contains("TemplateList"))
+                return true;
             UUID uuid;
             for (auto& [uuidStr, templateData] : data["TemplateList"].items())
             {
@@ -219,6 +244,8 @@ namespace application
 
         bool TemplateDataManager::PostDecoding(const json& data)
         {
+            if (!data.contains("TemplateList"))
+                return true;
             for (auto& [uuidStr, templateData] : data["TemplateList"].items())
             {
                 if (!list[templateData["key"]]->PostDecoding(templateData["1_Post"]))

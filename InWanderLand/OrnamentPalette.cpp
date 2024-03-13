@@ -16,7 +16,14 @@ namespace application
             void OrnamentPalette::SelectOrnamentTemplateData(Ornament_TemplateData* templateData)
             {
                 selectedOrnamentTemplateData = templateData;
-                OrnamentBrush::Instance().ReadyBrush(selectedOrnamentTemplateData);
+                if (selectedOrnamentTemplateData == nullptr)
+                {
+                    OrnamentBrush::Instance().ReadyBrush("");
+                }
+                else
+                {
+                    OrnamentBrush::Instance().ReadyBrush(selectedOrnamentTemplateData->GetDataKey());
+                }
             }
 
             void OrnamentPalette::UnselectOrnamentTemplateData()
@@ -26,11 +33,15 @@ namespace application
 
             void OrnamentPalette::Reset()
             {
+                Palette::Reset();
                 UnselectOrnamentTemplateData();
             }
 
             IEditableData* OrnamentPalette::PlaceInstance(Vector3d worldPosition)
             {
+                if (selectedOrnamentTemplateData == nullptr)
+                    return nullptr;
+
                 auto instance = InstanceManager::GetSingletonInstance().CreateInstance<OrnamentData>(selectedOrnamentTemplateData->GetDataKey());
                 instance->pod.position.x = worldPosition.x;
                 instance->pod.position.y = worldPosition.y;
@@ -58,11 +69,11 @@ namespace application
 
                 if (isSelectMode)
                 {
-                    OrnamentBrush::Instance().ReadyBrush(nullptr);
+                    OrnamentBrush::Instance().ReadyBrush("");
                 }
                 else
                 {
-                    OrnamentBrush::Instance().ReadyBrush(selectedOrnamentTemplateData);
+                    SelectOrnamentTemplateData(selectedOrnamentTemplateData);
                 }
             }
 

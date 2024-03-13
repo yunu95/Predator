@@ -226,6 +226,7 @@ namespace application
         bool TerrainData::PostDecoding(const json& data)
         {
             FieldPostDecoding<boost::pfr::tuple_size_v<POD_Terrain>>(pod, data["POD"]);
+            EnterDataFromGlobalConstant();
             for (auto i = 0; i < pod.coordinates.size(); ++i)
             {
                 AddNode({ pod.coordinates[i].first,pod.coordinates[i].second });
@@ -254,6 +255,7 @@ namespace application
             soleTerrainData = this;
             pod.templateData = static_cast<Terrain_TemplateData*>(templateDataManager.GetTemplateData(name));
             EnterDataFromTemplate();
+            EnterDataFromGlobalConstant();
         }
 
         TerrainData::TerrainData(const TerrainData& prototype)

@@ -7,6 +7,7 @@
 #include "IEditableData.h"
 #include "Terrain_TemplateData.h"
 #include "DebugStaticMesh.h"
+#include "GlobalConstant.h"
 
 #include <memory>
 #include <string>
@@ -53,6 +54,9 @@ namespace application
             virtual IEditableData* Clone() const override;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
             virtual void ApplyAsPlaytimeObject()override;
+            virtual bool EnterDataFromGlobalConstant() override { return true; };
+
+            void MakeUpVerticesList(std::vector<Vector3f>& vertexList, std::vector<int>& indexList);
 
             void AddNode(const Vector2i& nodeKey);
             void EraseNode(const Vector2i& nodeKey);
@@ -65,7 +69,7 @@ namespace application
 
             POD_Terrain pod;
 
-            static constexpr double nodeDistance = 0.25;
+            static constexpr double nodeDistance = 1;
         protected:
             virtual bool PreSaveCallback()  override;
             virtual bool PreEncoding(json& data) const override;

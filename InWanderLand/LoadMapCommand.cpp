@@ -24,7 +24,7 @@ namespace application
 			if (!filepath.has_extension())
 				filepath += ".pmap";
 
-			MapFileManager::GetSingletonInstance().LoadMapFile(filepath.string());
+			mapFileManager.LoadMapFile(filepath.string());
 		}
 	}
 }
