@@ -239,7 +239,7 @@ void InstancingManager::RenderStaticShadow()
 	}
 }
 
-void InstancingManager::RenderStaticPointLightShadow(DirectX::SimpleMath::Vector3& pos, std::shared_ptr<PointLight> light)
+void InstancingManager::RenderStaticPointLightShadow(DirectX::SimpleMath::Matrix& lightWTM, std::shared_ptr<PointLight> light)
 {
 	ClearData();
 
@@ -255,20 +255,12 @@ void InstancingManager::RenderStaticPointLightShadow(DirectX::SimpleMath::Vector
 				if (i->isActive == false) continue;
 
 				// 만일 포인트라이트의 범위 안에 있는 오브젝트가 아니라면 렌더링되지 않게 컬링
-				bool isIn = false;
-				float radius = light->GetLightInfo().range;
-				auto& vertexList = i->mesh->GetBoundingVertexList(i->wtm, i->materialIndex);
+				auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);
 
-				for (auto& each : vertexList)
+				if (light->GetBoundingSphere(lightWTM).Intersects(aabb) == false)
 				{
-					float distance = CalculateDistance(pos, each);
-					if (distance <= radius)
-					{
-						isIn = true;
-					}
+					continue;
 				}
-
-				if (isIn == false) continue;
 
 				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
 				//auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
@@ -437,10 +429,5 @@ void InstancingManager::ClearData()
 void InstancingManager::AddData(const InstanceID& id, InstancingData& instancingData)
 {
 	_buffers[id]->AddData(instancingData);
-}
-
-float InstancingManager::CalculateDistance(DirectX::SimpleMath::Vector3& left, DirectX::SimpleMath::Vector3& right)
-{
-	return std::sqrt(std::pow(left.x - right.x, 2) + std::pow(left.y - right.y, 2) + std::pow(left.z - right.z, 2));
 }
 

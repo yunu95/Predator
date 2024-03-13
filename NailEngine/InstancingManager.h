@@ -29,7 +29,7 @@ public:
 	void RenderStaticForward();
 
 	void RenderStaticShadow();
-	void RenderStaticPointLightShadow(DirectX::SimpleMath::Vector3& pos, std::shared_ptr<PointLight> light);
+	void RenderStaticPointLightShadow(DirectX::SimpleMath::Matrix& lightWTM, std::shared_ptr<PointLight> light);
 
 	void RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& renderInfo);
 	void RegisterStaticForwardData(std::shared_ptr<RenderInfo>& renderInfo);
@@ -44,7 +44,6 @@ public:
 
 private:
 	void AddData(const InstanceID& id, InstancingData& instancingData);
-	float CalculateDistance(DirectX::SimpleMath::Vector3& left, DirectX::SimpleMath::Vector3& right);
 
 private:
 	std::map<InstanceID, std::set<std::shared_ptr<RenderInfo>>> staticMeshDeferredCache;

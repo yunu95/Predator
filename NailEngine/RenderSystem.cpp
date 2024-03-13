@@ -392,7 +392,7 @@ void RenderSystem::RenderPointLightShadow()
 			}
 
 			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX))->PushGraphicsData(&pointLightVP, sizeof(PointLightVPMatrix), static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX), true);
-			InstancingManager::Instance.Get().RenderStaticPointLightShadow(pos, std::static_pointer_cast<PointLight>(e));
+			InstancingManager::Instance.Get().RenderStaticPointLightShadow(std::static_pointer_cast<PointLight>(e)->GetWorldTM(), std::static_pointer_cast<PointLight>(e));
 			++index;
 		}
 	}
