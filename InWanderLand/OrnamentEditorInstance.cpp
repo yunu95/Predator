@@ -53,7 +53,9 @@ namespace application::editor::palette
 			}
 		}
 
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName);
+        yunuGI::Vector3 boundingMin, boundingMax;
+        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName, &boundingMin, &boundingMax);
+        AdjustPickingCollider(reinterpret_cast<const Vector3f&>(boundingMin), reinterpret_cast<const Vector3f&>(boundingMax));
 		obj->SetParent(GetGameObject());
 		currentFBX = fbxName;
 

@@ -611,6 +611,9 @@ namespace application
             case palette::Palette_List::Cam:
                 ImGui::BeginMenu("     Cam", false);
                 break;
+            case palette::Palette_List::Light:
+                ImGui::BeginMenu("   Light", false);
+                break;
             default:
                 break;
             }

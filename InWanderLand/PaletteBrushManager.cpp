@@ -21,7 +21,9 @@ namespace application
                 // 우선 보류
                 //brushList[(int)Palette_List::Cam] = &CameraBrush::Instance();
                 brushList[3] = &CameraBrush::Instance();
-                brushList.resize(4);
+                brushList[4] = &LightBrush::Instance();
+
+                brushList.resize(5);
 
                 for (auto& each : brushList)
                 {

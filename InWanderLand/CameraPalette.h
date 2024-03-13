@@ -11,7 +11,6 @@ namespace application
 {
     namespace editor
     {
-        //class CameraData;
         class Camera_TemplateData;
         namespace palette
         {
@@ -21,7 +20,7 @@ namespace application
             public:
                 virtual void Initialize();
                 virtual void Reset() override;
-                virtual CameraData* PlaceInstance(Vector3d worldPosition) override;
+                virtual IEditableData* PlaceInstance(Vector3d worldPosition) override;
                 virtual void OnMouseMove(Vector3d projectedWorldPos, Vector2d normalizedScreenPos) override;
                 virtual void SetAsSelectMode(bool isSelectMode) override;
                 virtual bool ShouldSelect(IEditableData* instance) override;

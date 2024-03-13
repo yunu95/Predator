@@ -12,7 +12,7 @@ namespace application::editor::palette
 {
     void CameraPalette::Initialize()
     {
-        TemplateDataManager::GetSingletonInstance().CreateTemplateData<Camera_TemplateData>("DefaultCamera");
+        TemplateDataManager::GetSingletonInstance().CreateTemplateData("DefaultCamera", DataType::CameraData);
     }
 
     void CameraPalette::Reset()
@@ -21,7 +21,7 @@ namespace application::editor::palette
         CameraBrush::Instance().ReadyBrush("");
     }
 
-    CameraData* CameraPalette::PlaceInstance(Vector3d worldPosition)
+    IEditableData* CameraPalette::PlaceInstance(Vector3d worldPosition)
     {
         auto instance = InstanceManager::GetSingletonInstance().CreateInstance<CameraData>("DefaultCamera");
         instance->pod.position.x = worldPosition.x;

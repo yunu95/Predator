@@ -90,6 +90,13 @@ namespace application
 					ImGui::EndTabItem();
 				}
 
+				if (ImGui::BeginTabItem("Light"))
+				{
+					ChangePalette(&lp);
+					ImGui_BeginLightPalette();
+					ImGui::EndTabItem();
+				}
+
 				if (ImGui::BeginTabItem("Cam"))
 				{
 					ChangePalette(&cp);
@@ -656,6 +663,67 @@ namespace application
 			}
 		}
 
+		void PalettePanel::ImGui_BeginLightPalette()
+		{
+			imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
+			imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+
+			int countIdx = 0;
+			if (imgui::BeginSection_1Col(countIdx, "Create Light", ImGui::GetContentRegionAvail().x))
+			{
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+
+				if (ImGui::Button("Directional Light", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+				{
+					if (lp.IsSelectMode())
+					{
+						lightCurrentButton = (int)LightType::Directional;
+						lp.SelectLightTemplateData(static_cast<Light_TemplateData*>(tdm.GetTemplateData("Directional_Light")));
+						lp.SetAsSelectMode(false);
+					}
+					else
+					{
+						if (lightCurrentButton == (int)LightType::Directional)
+						{
+							lp.SelectLightTemplateData(nullptr);
+							lp.SetAsSelectMode(true);
+						}
+						else
+						{
+							lightCurrentButton = (int)LightType::Directional;
+							lp.SelectLightTemplateData(static_cast<Light_TemplateData*>(tdm.GetTemplateData("Directional_Light")));
+							lp.SetAsSelectMode(false);
+						}
+					}
+				}
+				if (ImGui::Button("Point Light", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+				{
+					if (lp.IsSelectMode())
+					{
+						lightCurrentButton = (int)LightType::Point;
+						lp.SelectLightTemplateData(static_cast<Light_TemplateData*>(tdm.GetTemplateData("Point_Light")));
+						lp.SetAsSelectMode(false);
+					}
+					else
+					{
+						if (lightCurrentButton == (int)LightType::Point)
+						{
+							lp.SelectLightTemplateData(nullptr);
+							lp.SetAsSelectMode(true);
+						}
+						else
+						{
+							lightCurrentButton = (int)LightType::Point;
+							lp.SelectLightTemplateData(static_cast<Light_TemplateData*>(tdm.GetTemplateData("Point_Light")));
+							lp.SetAsSelectMode(false);
+						}
+					}
+				}
+				imgui::EndSection();
+			}
+		}
+
 		void PalettePanel::ImGui_BeginCameraPalette()
 		{
 			imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
@@ -769,6 +837,9 @@ namespace application
 
 			ornamentCurrentButton = -1;
 			op.SetAsSelectMode(true);
+
+			lightCurrentButton = -1;
+			lp.SetAsSelectMode(true);
 
 			auto uSize = tdm.GetDataList(DataType::UnitData).size();
 		}
