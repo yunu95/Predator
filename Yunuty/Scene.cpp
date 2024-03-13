@@ -33,10 +33,10 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
         {
             auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
             auto mesh = graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(fbxNode->meshName);
-            yunuGI::Vector3 meshBoundingMin, meshBoundingMax;
-            mesh->GetBoundingBoxInfo(&meshBoundingMin, &meshBoundingMax);
             if (boundingMin && boundingMax)
             {
+                yunuGI::Vector3 meshBoundingMin, meshBoundingMax;
+                mesh->GetBoundingBoxInfo(&meshBoundingMin, &meshBoundingMax);
                 if (boundsInit)
                 {
                     ExpandBoundingVolume(boundingMin, boundingMax, meshBoundingMin, meshBoundingMax);
@@ -69,7 +69,20 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
             auto mesh = graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(fbxNode->meshName);
             renderer->GetGI().SetMesh(mesh);
             renderer->GetGI().SetBone(std::wstring{ fbxName.begin(), fbxName.end() });
-
+            if (boundingMin && boundingMax)
+            {
+                yunuGI::Vector3 meshBoundingMin, meshBoundingMax;
+                mesh->GetBoundingBoxInfo(&meshBoundingMin, &meshBoundingMax);
+                if (boundsInit)
+                {
+                    ExpandBoundingVolume(boundingMin, boundingMax, meshBoundingMin, meshBoundingMax);
+                }
+                else
+                {
+                    *boundingMin = meshBoundingMin;
+                    *boundingMax = meshBoundingMax;
+                }
+            }
             auto animator = rootObject->GetComponent<yunutyEngine::graphics::Animator>();
             auto animatorIndex = animator->GetGI().GetID();
             renderer->GetGI().SetAnimatorIndex(animatorIndex);

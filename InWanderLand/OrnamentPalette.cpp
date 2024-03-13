@@ -73,7 +73,8 @@ namespace application
 
             void OrnamentPalette::OnStartPalette()
             {
-                switch (beforeState)
+                Palette::SetAsSelectMode(true);
+                /*switch (beforeState)
                 {
                 case application::editor::palette::Palette::State::Place:
                 {
@@ -83,7 +84,7 @@ namespace application
                 default:
                     SetAsSelectMode(true);
                     break;
-                }
+                }*/
             }
 
             void OrnamentPalette::OnStandbyPalette()

@@ -21,7 +21,7 @@ namespace application
                 }
                 void SelectRegion(RegionData* region)
                 {
-                    Palette::OnSelectSingleInstance(region);
+                    OnSelectSingleInstance(region);
                 }
                 void SetAsSelectingDisablingOrnaments(bool ornamentMode);
                 bool GetIsSelectingDisablingOrnaments();
@@ -32,6 +32,7 @@ namespace application
                 virtual void OnSelectSingleInstance(IEditableData* data) override;
                 virtual void OnStartPalette() override;
                 virtual void OnStandbyPalette() override;
+                virtual void CleanUpData() override;
             private:
                 bool isSelectingDisablingOrnaments{false};
             };

@@ -10,6 +10,21 @@ namespace application
             void RegionPalette::SetAsSelectingDisablingOrnaments(bool ornamentMode)
             {
                 isSelectingDisablingOrnaments = ornamentMode;
+                if (GetSingleSelectedRegion())
+                {
+                    for (auto each : GetSingleSelectedRegion()->GetDisablingOrnaments())
+                    {
+                        if (ornamentMode)
+                        {
+                            each->GetPaletteInstance()->OnSelected();
+                        }
+                        else
+                        {
+                            each->GetPaletteInstance()->OnDeselected();
+                            each->GetPaletteInstance()->OnHover();
+                        }
+                    };
+                }
             }
             bool RegionPalette::GetIsSelectingDisablingOrnaments()
             {
@@ -32,6 +47,15 @@ namespace application
             {
                 if (!isSelectingDisablingOrnaments)
                 {
+                    auto selectedBefore = GetSingleSelectedRegion();
+                    if (selectedBefore)
+                    {
+                        for (auto each : selectedBefore->GetDisablingOrnaments())
+                        {
+                            each->GetPaletteInstance()->OnDeselected();
+                            each->GetPaletteInstance()->OnHoverLeft();
+                        };
+                    }
                     Palette::OnSelectEmpty();
                 }
             }
@@ -39,7 +63,24 @@ namespace application
             {
                 if (dynamic_cast<RegionData*>(data))
                 {
+                    SetAsSelectingDisablingOrnaments(false);
+                    auto selectedBefore = GetSingleSelectedRegion();
                     Palette::OnSelectSingleInstance(data);
+                    if (selectedBefore)
+                    {
+                        for (auto each : selectedBefore->GetDisablingOrnaments())
+                        {
+                            each->GetPaletteInstance()->OnDeselected();
+                            each->GetPaletteInstance()->OnHoverLeft();
+                        };
+                    }
+                    if (GetSingleSelectedRegion())
+                    {
+                        for (auto each : GetSingleSelectedRegion()->GetDisablingOrnaments())
+                        {
+                            each->GetPaletteInstance()->OnHover();
+                        };
+                    }
                 }
                 else
                 {
@@ -48,12 +89,14 @@ namespace application
                     if (GetSingleSelectedRegion()->GetDisablingOrnaments().contains(ornament))
                     {
                         GetSingleSelectedRegion()->EraseDisablingOrnament(ornament);
-                        ornament->GetPaletteInstance()->OnSelected();
+                        ornament->GetPaletteInstance()->OnHoverLeft();
+                        ornament->GetPaletteInstance()->OnDeselected();
                     }
                     else
                     {
                         GetSingleSelectedRegion()->AddDisablingOrnament(ornament);
-                        ornament->GetPaletteInstance()->OnDeselected();
+                        ornament->GetPaletteInstance()->OnHover();
+                        ornament->GetPaletteInstance()->OnSelected();
                     }
                 }
             }
@@ -84,6 +127,11 @@ namespace application
                 }
                 state = State::None;
                 CleanUpData();
+            }
+            void RegionPalette::CleanUpData()
+            {
+                OnSelectEmpty();
+                Palette::CleanUpData();
             }
         }
     }
