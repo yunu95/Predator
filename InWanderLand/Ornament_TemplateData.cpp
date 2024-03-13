@@ -80,7 +80,7 @@ namespace application
 		Ornament_TemplateData::Ornament_TemplateData()
 			: ITemplateData(), pod()
 		{
-
+			EnterDataFromGlobalConstant();
 		}
 
 		Ornament_TemplateData::Ornament_TemplateData(const Ornament_TemplateData& prototype)

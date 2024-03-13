@@ -212,6 +212,27 @@ void application::contents::ContentsLayer::Finalize()
 
 }
 
+void application::contents::ContentsLayer::PlayContents()
+{
+	editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
+}
+
+void application::contents::ContentsLayer::PauseContents()
+{
+	Time::SetTimeScale(0);
+}
+
+void application::contents::ContentsLayer::ResumeContents()
+{
+	Time::SetTimeScale(1);
+}
+
+void application::contents::ContentsLayer::StopContents()
+{
+	Time::SetTimeScale(1);
+	ClearPlaytimeObject();
+}
+
 #ifdef GEN_TESTS
 void application::contents::ContentsLayer::AssignTestInitializer(std::function<void()> testInitializer)
 {
@@ -223,3 +244,8 @@ void application::contents::ContentsLayer::AssignTestInitializer(std::function<v
 	};
 }
 #endif
+
+void application::contents::ContentsLayer::ClearPlaytimeObject()
+{
+	
+}

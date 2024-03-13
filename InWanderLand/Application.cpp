@@ -304,6 +304,38 @@ namespace application
 		editor::TemplateDataManager::GetSingletonInstance().Clear();
 	}
 
+	void Application::PlayContents()
+	{
+		auto el = static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer]);
+		auto cl = static_cast<contents::ContentsLayer*>(layers[(int)LayerList::ContentsLayer]);
+
+		if (isContentsPlaying)
+		{
+			el->OnResumeContents();
+			cl->ResumeContents();
+		}
+		else
+		{
+			el->OnPlayContents();
+			cl->PlayContents();
+			isContentsPlaying = true;
+		}
+	}
+
+	void Application::PauseContents()
+	{
+		static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer])->OnPauseContents();
+		static_cast<contents::ContentsLayer*>(layers[(int)LayerList::ContentsLayer])->PauseContents();
+	}
+
+	void Application::StopContents()
+	{
+		static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer])->OnStopContents();
+		static_cast<contents::ContentsLayer*>(layers[(int)LayerList::ContentsLayer])->StopContents();
+
+		isContentsPlaying = false;
+	}
+
 	void Application::TurnOff()
 	{
 		if (isRunning)

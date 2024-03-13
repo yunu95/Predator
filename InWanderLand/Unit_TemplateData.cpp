@@ -46,6 +46,7 @@ namespace application
 
 		bool Unit_TemplateData::EnterDataFromGlobalConstant()
 		{
+			auto& data = GlobalConstant::GetSingletonInstance().pod;
 			return true;
 		}
 
@@ -80,7 +81,7 @@ namespace application
 		Unit_TemplateData::Unit_TemplateData()
 			: ITemplateData(), pod()
 		{
-
+			EnterDataFromGlobalConstant();
 		}
 
 		Unit_TemplateData::Unit_TemplateData(const Unit_TemplateData& prototype)

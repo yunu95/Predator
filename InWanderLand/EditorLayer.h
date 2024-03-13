@@ -38,6 +38,11 @@ namespace application
 			virtual void Finalize() override;
 			virtual void OnEvent(EditorEvents& event) override;
 
+			void OnPlayContents();
+			void OnPauseContents();
+			void OnResumeContents();
+			void OnStopContents();
+
 			// Content 레이어의 Initialize 이후에 초기화 되어야 하는
 			// GameEngine 과 관련된 내용들을 초기화하는 함수입니다.
 			void LateInitialize();

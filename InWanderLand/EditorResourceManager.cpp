@@ -40,6 +40,8 @@ namespace application
             d3dDevice = device;
 
             // Scene
+            LoadTextureFromFile("ImageButtons/Play.png");
+            LoadTextureFromFile("ImageButtons/Pause.png");
             LoadTextureFromFile("ImageButtons/Setting.png");
             LoadTextureFromFile("ImageButtons/Scene_Select.png");
             LoadTextureFromFile("ImageButtons/Scene_Move.png");

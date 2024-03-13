@@ -43,7 +43,7 @@ namespace application
 		Terrain_TemplateData::Terrain_TemplateData()
 			: ITemplateData(), pod()
 		{
-
+			EnterDataFromGlobalConstant();
 		}
 
 		Terrain_TemplateData::Terrain_TemplateData(const Terrain_TemplateData& prototype)

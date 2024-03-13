@@ -52,6 +52,10 @@ namespace application
 				return;
 			}
 
+			/// 에디터용 리소스 등록
+			const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+			resourceManager->LoadFile("FBX/Camera");
+
 			/// 각종 매니저 클래스 메모리 할당
 			MapFileManager::GetSingletonInstance();
 			palette::PaletteManager::GetSingletonInstance();
@@ -143,6 +147,26 @@ namespace application
 			{
 				each->OnEvent(event);
 			}
+		}
+
+		void EditorLayer::OnPlayContents()
+		{
+			
+		}
+
+		void EditorLayer::OnPauseContents()
+		{
+			
+		}
+
+		void EditorLayer::OnResumeContents()
+		{
+			
+		}
+
+		void EditorLayer::OnStopContents()
+		{
+			
 		}
 
 		void EditorLayer::LateInitialize()

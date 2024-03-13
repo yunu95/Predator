@@ -11,7 +11,7 @@ namespace application
                 if (brush != nullptr)
                     return;
 
-                auto brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stone_001");
+                auto brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Camera");
 
                 if (brushObj == nullptr)
                     return;

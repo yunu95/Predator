@@ -49,6 +49,11 @@ namespace application
             }
         }
 
+        void InstanceManager::ClearPlaytimeObjects()
+        {
+            
+        }
+
         void InstanceManager::EnterDataFromGlobalConstant()
         {
             for (auto& each : list)

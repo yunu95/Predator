@@ -43,7 +43,7 @@ namespace application
 		Camera_TemplateData::Camera_TemplateData()
 			: ITemplateData(), pod()
 		{
-
+			EnterDataFromGlobalConstant();
 		}
 
 		Camera_TemplateData::Camera_TemplateData(const Camera_TemplateData& prototype)

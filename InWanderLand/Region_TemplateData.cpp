@@ -42,7 +42,7 @@ namespace application
         Region_TemplateData::Region_TemplateData()
             : ITemplateData(), pod()
         {
-
+            EnterDataFromGlobalConstant();
         }
 
         Region_TemplateData::Region_TemplateData(const Region_TemplateData& prototype)

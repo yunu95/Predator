@@ -48,7 +48,7 @@ namespace application
         Wave_TemplateData::Wave_TemplateData()
             : ITemplateData(), pod()
         {
-
+            EnterDataFromGlobalConstant();
         }
 
         Wave_TemplateData::Wave_TemplateData(const Wave_TemplateData& prototype)

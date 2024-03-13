@@ -26,6 +26,8 @@ namespace application
 
 		void EditorCamera::Initialize(yunutyEngine::graphics::Camera* gameCam)
 		{
+
+
 			// Game 카메라 세팅
 			this->gameCam = gameCam;
 

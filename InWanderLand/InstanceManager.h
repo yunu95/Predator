@@ -129,6 +129,7 @@ namespace application
             bool DeleteInstance(const UUID& uuid);
 			void Clear();
 			void ApplyInstancesAsPlaytimeObjects();
+            void ClearPlaytimeObjects();
             void EnterDataFromGlobalConstant();
 
             template <typename T>
