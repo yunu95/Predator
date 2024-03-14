@@ -193,7 +193,7 @@ void RenderSystem::Render()
 	RenderUI();
 
 	// 디퍼드 정보 출력
-	DrawDeferredInfo();
+	///DrawDeferredInfo();
 
 	// 디퍼드용 SRV UnBind
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
@@ -332,7 +332,7 @@ void RenderSystem::RenderPointLightShadow()
 			auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
 
 			auto aabb =  ResourceManager::Instance.Get().GetMesh(e->GetMeshName())->GetBoundingBox(
-				std::static_pointer_cast<PointLight>(e)->GetWorldTM() * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), 0);
+				std::static_pointer_cast<PointLight>(e)->GetWorldTM(), 0);
 
 			if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
 			{

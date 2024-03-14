@@ -909,6 +909,10 @@ void ResourceManager::CreateDefaultMaterial()
 		yunuGI::IMaterial* material = CrateMaterial(L"Deferred_PointLight");
 		material->SetVertexShader(GetDeferredShader(L"Deferred_PointLightVS.cso").get());
 		material->SetPixelShader(GetDeferredShader(L"Deferred_PointLightPS.cso").get());
+		material->SetTexture(yunuGI::Texture_Type::ALBEDO,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ALBEDO)).get());
+		material->SetTexture(yunuGI::Texture_Type::ARM,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ARM)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp0,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp1,

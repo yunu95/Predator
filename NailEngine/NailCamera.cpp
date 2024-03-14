@@ -10,6 +10,7 @@ void NailCamera::SetWorldTM(const DirectX::SimpleMath::Matrix wtm)
 	this->vtmOrtho = DirectX::XMMatrixOrthographicLH(this->width * 1.f, this->height * 1.f, this->cameraNear, this->cameraFar);
 
 	CreateFrustum();
+	this->frustum.Transform(this->frustum, wtm);
 }
 
 void NailCamera::SetVerticalFOV(float fov)

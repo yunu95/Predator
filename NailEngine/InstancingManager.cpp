@@ -72,7 +72,7 @@ void InstancingManager::RenderStaticDeferred()
 				if (i->isActive == false) continue;
 
 				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-				auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
+				auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);
 
 				if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
 				{
@@ -151,7 +151,7 @@ void InstancingManager::RenderStaticForward()
 
 				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
 				auto vtm = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
-				auto aabb = i->mesh->GetBoundingBox(i->wtm * vtm, i->materialIndex);
+				auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);
 
 				if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
 				{
@@ -384,9 +384,9 @@ void InstancingManager::RenderSkinned()
 				if (i->renderInfo.isActive == false) continue;
 
 				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-				auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->renderInfo.materialIndex);
+				auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm, i->renderInfo.materialIndex);
 
-				if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
+				if (frustum.Intersects(aabb) == false)
 				{
 					continue;
 				}
