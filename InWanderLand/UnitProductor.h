@@ -3,10 +3,17 @@
 #include "Unit.h"
 #include "SkillPreviewSystem.h"
 
+namespace application
+{
+	namespace editor
+	{
+		class POD_Unit_TemplateData;
+	}
+}
+
 /// <summary>
 /// UnitFactory에서의 유닛 생산을 좀 더 효율적으로 하기 위한 클래스.3
 /// </summary>
-
 class UnitProductor : public Component
 {
 protected:
@@ -70,6 +77,7 @@ public:
 	virtual void SetUnitData() = 0;
 
 	virtual void SetPlayerRelatedComponents(Unit* playerUnit);
+	virtual void MappingUnitData(application::editor::POD_Unit_TemplateData p_podData);
 
 	virtual void Update() override;
 	virtual void Start() override;

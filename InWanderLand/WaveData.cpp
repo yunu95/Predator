@@ -3,6 +3,8 @@
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
 #include "Wave_TemplateData.h"
+#include "PlaytimeWave.h"
+#include "PlaytimeRegion.h"
 
 namespace application
 {
@@ -46,8 +48,12 @@ namespace application
 		{
 			ApplyMapAsPod();
 			ApplyPodAsVector();
-			pod;
-			waveUnitDatasVector;
+			playtimeWave = Scene::getCurrentScene()->AddGameObject()->AddComponent<PlaytimeWave>();
+			playtimeWave->waveData = this;
+		}
+		void WaveData::PostApplyAsPlaytimeObject()
+		{
+			pod.triggerRegion->playtimeRegion->OnEnter.push_back([=]() {playtimeWave->ActivateWave(); });
 		}
 		void WaveData::InsertUnitData(WaveUnitData waveUnitData)
 		{

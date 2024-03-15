@@ -4,6 +4,7 @@
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
 #include "Region_TemplateData.h"
+#include "PlaytimeRegion.h"
 
 namespace application
 {
@@ -53,6 +54,18 @@ namespace application
             regionInstance->Apply(this);
             return regionInstance;
         };
+
+		void RegionData::ApplyAsPlaytimeObject()
+		{
+            auto regionGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+            playtimeRegion = regionGameObject->AddComponent<PlaytimeRegion>();
+            playtimeRegion->regionData = this;
+            pod.name;
+            regionGameObject->AddComponent<physics::BoxCollider>()->SetHalfExtent({ pod.width, 1.0f, pod.height });
+
+            regionGameObject->GetTransform()->SetWorldPosition(Vector3d(pod.x, 1.0f, pod.z));
+            regionGameObject->GetTransform()->SetWorldRotation(Vector3d(0, pod.angle, 0));
+        }
 
 		bool RegionData::PreEncoding(json& data) const
         {

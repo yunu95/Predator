@@ -4,6 +4,7 @@
 #include "PlayerController.h"
 #include "Dotween.h"
 #include "DebugMeshes.h"
+#include "Unit_TemplateData.h"
 
 void UnitProductor::SetCommonComponents()
 {
@@ -78,6 +79,23 @@ void UnitProductor::SetPlayerRelatedComponents(Unit* playerUnit)
 	playerUnit->SetPlayerSerialNumber(m_unitType);
 	playerUnit->SetSkillPreviewType(qSkillPreviewType, wSkillPreviewType);
 	PlayerController::SingleInstance().AddPlayerUnit(playerUnit);
+}
+
+void UnitProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p_podData)
+{
+	m_unitType = static_cast<Unit::UnitType>(p_podData.unitType);
+	m_healthPoint = p_podData.m_healthPoint;
+	m_manaPoint = p_podData.m_manaPoint;
+	m_autoAttackDamage = p_podData.m_autoAttackDamage;
+	m_criticalHitProbability = p_podData.m_criticalHitProbability;
+	m_criticalHitMultiplier = p_podData.m_criticalHitMultiplier;
+	m_defensePoint = p_podData.m_defensePoint;
+	m_dodgeProbability = p_podData.m_dodgeProbability;
+	m_criticalDamageDecreaseMultiplier = p_podData.m_criticalDamageDecreaseMultiplier;
+	m_idRadius = p_podData.m_idRadius;
+	m_atkRadius = p_podData.m_atkRadius;
+	m_unitSpeed = p_podData.m_unitSpeed;
+	m_attackDelay = p_podData.m_attackDelay;
 }
 
 void UnitProductor::PushWaveData(Vector3d startPos, float delay)

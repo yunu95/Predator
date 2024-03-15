@@ -22,6 +22,7 @@ namespace application
         }
     }
 }
+class PlaytimeRegion;
 
 namespace application
 {
@@ -58,7 +59,8 @@ namespace application
             virtual IEditableData* Clone() const override;
             virtual void OnRelocate(const Vector3d& newLoc) override;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
-            virtual void ApplyAsPlaytimeObject() override {};
+			virtual void ApplyAsPlaytimeObject() override;
+			PlaytimeRegion* playtimeRegion{ nullptr };
 
             POD_Region pod;
 
@@ -71,7 +73,7 @@ namespace application
         private:
             std::wstring MakeUpName();
             static TemplateDataManager& templateDataManager;
-            static RegionData* selectedEditorRegion;
+			static RegionData* selectedEditorRegion;
             palette::RegionEditorInstance* regionInstance{ nullptr };
 
             RegionData();

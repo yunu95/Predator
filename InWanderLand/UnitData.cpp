@@ -5,11 +5,13 @@
 
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
-#include "MagicianProductor.h"
+#include "UnitClassifier.h"
+#include "Unit.h"
+#include "UnitProductor.h"
 #include "WarriorProductor.h"
+#include "MagicianProductor.h"
 #include "HealerProductor.h"
 #include "MeleeEnemyProductor.h"
-#include "WaveCreator.h"
 
 namespace application
 {
@@ -104,83 +106,33 @@ namespace application
 		{
 			// 함정과 같은 특수 기믹 객체들도 유닛과 유사하게 위치를 지정해주면 되기 때문에 UnitType에 Bomb, Trap, Bbang/th같은
 			// 타입을 확장하여 유닛 생성 로직에서 같이 처리할 수 있게 만들 수 있다.
-			pod.templateData->pod.m_atkRadius;
-			UnitProductor* productionFactory{ nullptr };
-			Vector3d position{ pod.position.x, pod.position.y, pod.position.z };
-			// 유닛을 생성할 때 쓰일 팩토리를 먼저 지정
-			if (pod.waveData == nullptr)
+			UnitClassifier::SingleInstance().SendPODToClassifier(pod);
+			pod.waveData->pod.waveUnitUUIDS;
+		}
+
+		void UnitData::PostApplyAsPlaytimeObject()
+		{
+			/// 
+			UnitProductor* currentSelectedProductor{ nullptr };
+
+			switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
 			{
-				switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
-				{
-					case Unit::UnitType::Healer:
-						productionFactory = &HealerProductor::Instance();
-						break;
-					case Unit::UnitType::Warrior:
-						productionFactory = &WarriorProductor::Instance();
-						break;
-					case Unit::UnitType::Magician:
-						productionFactory = &MagicianProductor::Instance();
-						break;
-					default:
-						productionFactory = &MeleeEnemyProductor::Instance();
-						break;
-				}
-				// 팩토리의 유닛 스펙을 에디터에서 저장한 데이터로 바꿈(유닛 체력, 공격속도 등등...)
-				productionFactory->m_unitSpeed = pod.templateData->pod.m_unitSpeed;
-				// 팩토리로 유닛을 에디터에서 저장된 위치에 생성
-				productionFactory->CreateUnit(position);
+				case Unit::UnitType::Healer:
+					currentSelectedProductor = &HealerProductor::Instance();
+					break;
+				case Unit::UnitType::Warrior:
+					currentSelectedProductor = &WarriorProductor::Instance();
+					break;
+				case Unit::UnitType::Magician:
+					currentSelectedProductor = &MagicianProductor::Instance();
+					break;
+				default:
+					currentSelectedProductor = &MeleeEnemyProductor::Instance();
+					break;
 			}
-			else
-			{
-				// 웨이브 데이터가 존재하는 경우
-				UnitProductor* productionFactory{ nullptr };
-				Vector3d position{ pod.position.x, pod.position.y, pod.position.z };
-				switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
-				{
-					case Unit::UnitType::Healer:
-						productionFactory = &HealerProductor::Instance();
-						break;
-					case Unit::UnitType::Warrior:
-						productionFactory = &WarriorProductor::Instance();
-						break;
-					case Unit::UnitType::Magician:
-						productionFactory = &MagicianProductor::Instance();
-						break;
-					default:
-						productionFactory = &MeleeEnemyProductor::Instance();
-						break;
-				}
 
-				static int unitCountPerWave = 0;				// 현재 웨이브에 배치된 unit의 수
-				static int delayIndex = 0;						// delay vector의 index
-				static int waveSizeIndex = 0;					// 게임에 배치된 총 wave 수
-
-				static std::wstring regionName = L"";			// 다른 지역을 판별하기 위한 변수.
-
-				pod.waveData->pod.waveSizes;
-
-				if (regionName == L"" || regionName != pod.waveData->pod.triggerRegion->pod.name)
-				{
-					/// 다른 region이 들어왔음을 WaveSystem에 알리는 로직
-					WaveCreator::Instance().CreateNewRegion(
-						Vector3d(pod.waveData->pod.triggerRegion->pod.x, 0, pod.waveData->pod.triggerRegion->pod.z),
-						pod.waveData->pod.triggerRegion->pod.width,
-						pod.waveData->pod.triggerRegion->pod.height
-					);
-					WaveCreator::Instance().SetWaveSizeVector(pod.waveData->pod.waveSizes);
-					regionName = pod.waveData->pod.triggerRegion->pod.name;
-				}
-
-				WaveCreator::Instance().PushWaveUnitData(productionFactory, position, pod.waveData->pod.waveDelays[delayIndex]);
-				delayIndex++;
-
-				unitCountPerWave++;
-				if (pod.waveData->pod.waveSizes[waveSizeIndex] < unitCountPerWave)
-				{
-					unitCountPerWave = 0;
-					waveSizeIndex++;
-				}
-			}
+			currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+			pod.waveData->playtimeWave->m_productorVector.push_back(currentSelectedProductor);		// 이렇게 밀어넣어준다 해서 실제 wave 순서와 맞아 떨어지지 않음. 임시방편
 		}
 
 		bool UnitData::PreEncoding(json& data) const

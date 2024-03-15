@@ -331,6 +331,12 @@
     <Filter Include="Contents\UnitStatusComponent\DamageOnly">
       <UniqueIdentifier>{c4c2a6e9-7965-47be-99cc-eacaa4137c96}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\PlaytimeRegion">
+      <UniqueIdentifier>{3b6c6cf5-6538-42da-8965-70c32e92500b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\PlaytimeWave">
+      <UniqueIdentifier>{81ecb30c-9650-4846-af27-cc4619631d26}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -775,7 +781,6 @@
     <ClInclude Include="OrnamentBrush.h">
       <Filter>Editor\Palette\PaletteBrush\OrnamentBrush</Filter>
     </ClInclude>
-    <ClInclude Include="Wave.h" />
     <ClInclude Include="WaveData.h">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClInclude>
@@ -812,20 +817,23 @@
     <ClInclude Include="FileSystem.h">
       <Filter>Editor\IO\FileSystem</Filter>
     </ClInclude>
-    <ClInclude Include="WaveCreator.h">
-      <Filter>Contents\WaveSystem</Filter>
-    </ClInclude>
     <ClInclude Include="MeleeEnemyProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
     </ClInclude>
     <ClInclude Include="EnemyProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
     </ClInclude>
-    <ClInclude Include="WaveSystemComponent.h">
-      <Filter>Contents\WaveSystem</Filter>
-    </ClInclude>
     <ClInclude Include="DamageOnlyComponent.h">
       <Filter>Contents\UnitStatusComponent\DamageOnly</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitClassifier.h">
+      <Filter>Contents\WaveSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaytimeRegion.h">
+      <Filter>Contents\PlaytimeRegion</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaytimeWave.h">
+      <Filter>Contents\PlaytimeWave</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1238,7 +1246,6 @@
       <Filter>Editor\Palette\PaletteBrush\OrnamentBrush</Filter>
     </ClCompile>
     <ClCompile Include="TestCaseQuaternionWithAxes.cpp" />
-    <ClCompile Include="Wave.cpp" />
     <ClCompile Include="WaveData.cpp">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClCompile>
@@ -1266,20 +1273,23 @@
     <ClCompile Include="FileSystem.cpp">
       <Filter>Editor\IO\FileSystem</Filter>
     </ClCompile>
-    <ClCompile Include="WaveCreator.cpp">
-      <Filter>Contents\WaveSystem</Filter>
-    </ClCompile>
     <ClCompile Include="MeleeEnemyProductor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
     </ClCompile>
     <ClCompile Include="EnemyProductor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
     </ClCompile>
-    <ClCompile Include="WaveSystemComponent.cpp">
-      <Filter>Contents\WaveSystem</Filter>
-    </ClCompile>
     <ClCompile Include="DamageOnlyComponent.cpp">
       <Filter>Contents\UnitStatusComponent\DamageOnly</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitClassifier.cpp">
+      <Filter>Contents\WaveSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaytimeRegion.cpp">
+      <Filter>Contents\PlaytimeRegion</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaytimeWave.cpp">
+      <Filter>Contents\PlaytimeWave</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
