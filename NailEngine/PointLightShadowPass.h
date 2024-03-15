@@ -20,12 +20,13 @@ public:
 
 public:
 	void Init();
-	void Render(int index);
+	void Render(int index, bool isSkinned);
 	void EndRender();
 
 private:
 	Texture* dsTexture;
 	VertexShader* vs;
+	VertexShader* skinnedVS;
 	GeometryShader* gs;
 	PixelShader* ps;
 };

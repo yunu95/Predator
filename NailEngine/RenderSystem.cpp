@@ -175,7 +175,6 @@ void RenderSystem::Render()
 	//RenderShadow();
 	RenderPointLightShadow();
 
-
 	SkyBoxPass::Instance.Get().BindIBLTexture();
 
 	// 라이트 렌더
@@ -339,8 +338,6 @@ void RenderSystem::RenderPointLightShadow()
 				continue;
 			}
 
-			PointLightShadowPass::Instance.Get().Render(index);
-
 			// Matrix Buffer Set
 			DirectX::SimpleMath::Vector3 pos;
 			DirectX::SimpleMath::Vector3 scale;
@@ -392,7 +389,10 @@ void RenderSystem::RenderPointLightShadow()
 			}
 
 			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX))->PushGraphicsData(&pointLightVP, sizeof(PointLightVPMatrix), static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX), true);
+			PointLightShadowPass::Instance.Get().Render(index,false);
 			InstancingManager::Instance.Get().RenderStaticPointLightShadow(std::static_pointer_cast<PointLight>(e)->GetWorldTM(), std::static_pointer_cast<PointLight>(e));
+			PointLightShadowPass::Instance.Get().Render(index, true);
+			InstancingManager::Instance.Get().RenderSkinnedPointLightShadow(std::static_pointer_cast<PointLight>(e)->GetWorldTM(), std::static_pointer_cast<PointLight>(e));
 			++index;
 		}
 	}

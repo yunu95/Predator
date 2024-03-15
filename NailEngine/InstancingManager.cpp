@@ -286,6 +286,56 @@ void InstancingManager::RenderStaticPointLightShadow(DirectX::SimpleMath::Matrix
 	}
 }
 
+void InstancingManager::RenderSkinnedPointLightShadow(DirectX::SimpleMath::Matrix& lightWTM, std::shared_ptr<PointLight> light)
+{
+	ClearData();
+
+	for (auto& pair : this->skinnedMeshCache)
+	{
+		const std::set<std::shared_ptr<SkinnedRenderInfo>>& renderInfoVec = pair.second;
+
+		const InstanceID instanceID = pair.first;
+
+		{
+			int descIndex = 0;
+			for (auto& i : renderInfoVec)
+			{
+				if (i->renderInfo.isActive == false) continue;
+
+				auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm, i->renderInfo.materialIndex);
+
+				if (light->GetBoundingSphere(lightWTM).Intersects(aabb) == false)
+				{
+					continue;
+				}
+
+
+				const RenderInfo& renderInfo = i->renderInfo;
+				InstancingData data;
+				data.wtm = renderInfo.wtm;
+				AddData(instanceID, data);
+				this->instanceTransitionDesc->transitionDesc[descIndex++] = i->animator->GetTransitionDesc();
+			}
+
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::INST_TRANSITION))->PushGraphicsData(this->instanceTransitionDesc.get(),
+				sizeof(InstanceTransitionDesc), static_cast<int>(CB_TYPE::INST_TRANSITION));
+
+			auto animationGroup = ResourceManager::Instance.Get().GetAnimationGroup((*renderInfoVec.begin())->modelName);
+			animationGroup->Bind();
+
+			if (renderInfoVec.size() != 0)
+			{
+				auto& buffer = _buffers[instanceID];
+				if (buffer->GetCount() > 0)
+				{
+					buffer->PushData();
+					(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, buffer);
+				}
+			}
+		}
+	}
+}
+
 void InstancingManager::RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& renderInfo)
 {
 	InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);

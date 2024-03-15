@@ -290,7 +290,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         
             float shadow = PointLightShadowMap.Sample(sam, float4(normalize(worldPos.xyz - lights[lightIndex].position.xyz), plIndex)).r;
         
-            if (shadow < curDepth - 0.01f)
+            if (shadow < curDepth - 0.0001f)
             {
                 shadow = 0.0f;
             }

@@ -550,6 +550,9 @@
     <FxCompile Include="RuntimeDependency\resources\Shader\PointLightShadowPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\Skinned_PointLightShadowVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">

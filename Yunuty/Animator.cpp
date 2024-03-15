@@ -27,6 +27,7 @@ void Animator::Update()
 		desc.curr.speed = currentAnimation->GetPlaySpeed();
 		__int32 ratio = static_cast<__int32>(totalFrame / duration);
 
+
 		desc.curr.sumTime += (desc.curr.speed * Time::GetDeltaTime());
 		if (desc.curr.sumTime >= currentAnimation->GetDuration())
 		{
@@ -38,7 +39,7 @@ void Animator::Update()
 		desc.curr.currFrame = static_cast<__int32>(desc.curr.sumTime * ratio);
 		desc.curr.currFrame = min(static_cast<int>(desc.curr.currFrame), totalFrame - 1);
 		desc.curr.nextFrame = min(static_cast<int>(desc.curr.currFrame+1), totalFrame -1);
-		desc.curr.ratio = static_cast<float>(desc.curr.sumTime - static_cast<float>(desc.curr.sumTime) / ratio);
+		desc.curr.ratio = static_cast<float>(desc.curr.sumTime - static_cast<float>(desc.curr.currFrame) / ratio);
 	}
 
 	auto nextAnimation = gi.GetNextAnimation();
@@ -70,7 +71,7 @@ void Animator::Update()
 			desc.next.currFrame = static_cast<__int32>(desc.next.sumTime * ratio);
 			desc.next.currFrame = min(static_cast<int>(desc.next.currFrame), totalFrame - 1);
 			desc.next.nextFrame = min(static_cast<int>(desc.next.currFrame + 1), totalFrame - 1);
-			desc.next.ratio = static_cast<float>(desc.next.sumTime - static_cast<float>(desc.next.sumTime) / ratio);
+			desc.next.ratio = static_cast<float>(desc.next.sumTime - static_cast<float>(desc.next.currFrame) / ratio);
 		}
 	}
 

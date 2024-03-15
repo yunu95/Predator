@@ -812,6 +812,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateShader(L"PreFilteredVS.cso");
 	CreateShader(L"SpecLUTVS.cso");
 	CreateShader(L"PointLightShadowVS.cso");
+	CreateShader(L"Skinned_PointLightShadowVS.cso");
 #pragma endregion
 
 #pragma region PS
@@ -843,7 +844,6 @@ void ResourceManager::CreateDefaultMesh()
 {
 	LoadFBX("FBX/Cube/Cube.fbx");
 	LoadFBX("FBX/Sphere/Sphere.fbx");
-	//LoadFBX("FBX/Rectangle/Rectangle.fbx");
 	LoadFBX("FBX/Capsule/Capsule.fbx");
 	LoadFBX("FBX/Cylinder/Cylinder.fbx");
 	///CreateMesh(L"Cube");

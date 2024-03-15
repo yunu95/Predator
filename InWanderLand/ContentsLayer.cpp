@@ -44,6 +44,18 @@ void GraphicsTest()
 	yunuGI::ITexture* tex = _resourceManager->GetTexture(L"Texture/Brick_Albedo.jpg");
 	yunuGI::ITexture* tex2 = _resourceManager->GetTexture(L"Texture/Brick_Normal.jpg");
 
+	auto& animationList = _resourceManager->GetAnimationList();
+	yunuGI::IAnimation* animation;
+
+	for (auto& i : animationList)
+	{
+		if (i->GetName() == L"Ani_Monster2_Walk")
+		{
+			i->SetLoop(true);
+			animation = i;
+		}
+	}
+
 	auto& shaderList = _resourceManager->GetShaderList();
 	yunuGI::IShader* shader;
 	for (auto& i : shaderList)
@@ -57,7 +69,6 @@ void GraphicsTest()
 	{
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,44.81 });
-		//obj->GetTransform()->SetLocalPosition(Vector3d{ -5,0,0});
 		auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
 		yunuGI::Color color{ 0,0,1.f,1 };
 		light->GetGI().SetLightDiffuseColor(color);
@@ -66,41 +77,12 @@ void GraphicsTest()
 
 	{
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-
-		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,44.81 });
-		obj->GetTransform()->SetLocalScale(Vector3d{ 20.f,20.f,20.f });
-
-		auto light = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		yunuGI::Color color{ 0,0,1,1 };
-		light->GetGI().SetMesh(mesh2);
-		light->GetGI().GetMaterial()->SetColor(color);
-		light->GetGI().GetMaterial()->SetPixelShader(shader);
-	}
-
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,45.32 });
-		//obj->GetTransform()->SetLocalPosition(Vector3d{ -5,0,0});
 		auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
 		yunuGI::Color color{ 1.f,0,0,1 };
 		light->GetGI().SetLightDiffuseColor(color);
 		light->GetGI().SetRange(10);
 	}
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-
-		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,45.32 });
-		obj->GetTransform()->SetLocalScale(Vector3d{ 20.f,20.f,20.f });
-
-		auto light = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		yunuGI::Color color{ 1,0,0,1 };
-		light->GetGI().SetMesh(mesh2);
-		light->GetGI().GetMaterial()->SetColor(color);
-		light->GetGI().GetMaterial()->SetPixelShader(shader);
-	}
-
-
-
 
 	{
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -125,21 +107,18 @@ void GraphicsTest()
 
 	{
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		//obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
 		obj->GetTransform()->SetLocalPosition(Vector3d{ -48.67,3.67,44.81 });
 		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		renderer->GetGI().SetMesh(mesh);
 	}
 	{
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		//obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
 		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.26,3.67,47.83 });
 		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		renderer->GetGI().SetMesh(mesh);
 	}
 	{
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		//obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
 		obj->GetTransform()->SetLocalPosition(Vector3d{ -48.08,5.32,46.24 });
 		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		renderer->GetGI().SetMesh(mesh);
@@ -147,7 +126,7 @@ void GraphicsTest()
 
 	{
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		//obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
+		obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
 		obj->GetTransform()->SetLocalPosition(Vector3d{ 48.08,5.32,46.24 });
 		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		renderer->GetGI().SetMesh(mesh);
@@ -155,7 +134,12 @@ void GraphicsTest()
 
 	{
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
-		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.55, 0.5,43.53 });
+		auto animator = obj->GetComponent<yunutyEngine::graphics::Animator>();
+		animator->GetGI().PushAnimation(animation);
+		animator->GetGI().Play(animation);
+		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.55, 0.5f,42.53 });
+		obj->GetTransform()->SetLocalScale(Vector3d{ 0.01,0.01,0.01});
+		obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{ 0,0,0} });
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

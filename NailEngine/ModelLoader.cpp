@@ -15,6 +15,11 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 	this->texturePath = std::filesystem::path(filePath).parent_path().wstring()
 		+ L"/" + std::filesystem::path(filePath).stem().wstring() + L".fbm/";
 
+	if (this->texturePath == L"FBX/Monster2/Monster2.fbm/")
+	{
+		int a = 1;
+	}
+
 	// Assimp Importer 객체 생성
 	Assimp::Importer importer;
 	
@@ -25,11 +30,20 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 		aiProcess_FlipWindingOrder | aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
 		aiProcess_SortByPType | aiProcess_LimitBoneWeights;*/
 
-	unsigned int flag = aiProcess_Triangulate |
-		aiProcess_ConvertToLeftHanded  | aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
+	//unsigned int flag = aiProcess_Triangulate |
+	//	aiProcess_ConvertToLeftHanded  | aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
+	//	aiProcess_CalcTangentSpace | aiProcess_PopulateArmatureData |
+	//	aiProcess_FlipWindingOrder | aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
+	//	aiProcess_SortByPType | aiProcess_LimitBoneWeights;
+
+	const unsigned int flag// = aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace | aiProcess_ConvertToLeftHanded | aiProcess_FlipUVs;
+		//*
+		= aiProcess_Triangulate |
+		aiProcess_ConvertToLeftHanded | aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
 		aiProcess_CalcTangentSpace | aiProcess_PopulateArmatureData |
-		aiProcess_FlipWindingOrder | aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
+		aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
 		aiProcess_SortByPType | aiProcess_LimitBoneWeights;
+	//*/
 
 
 	const aiScene* scene = importer.ReadFile(filePath, flag);
@@ -42,11 +56,26 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 	FBXNode* fbxNode = new FBXNode;
 	ParseNode(scene->mRootNode, scene, fbxNode, this->ConvertToCloumnMajor(scene->mRootNode->mTransformation));
 
+	if (scene->HasAnimations())
+	{
+		FillBoneInfoMap(scene);
+	}
+
+	int k = 0;
+	for (auto& i : this->boneInfoMap)
+	{
+		i.second.index = k;
+		k++;
+	}
+
+
 	FillVertexBoneIndexAndWeight(scene, scene->mRootNode, fbxNode);
 
 	ResourceManager::Instance.Get().PushFBXBoneInfo(std::filesystem::path(filePath).stem().wstring(), this->boneInfoMap);
 
 	ResourceManager::Instance.Get().PushFBXNode(std::filesystem::path(filePath).stem().wstring(), fbxNode);
+
+
 
 	if (scene->HasAnimations())
 	{
@@ -66,9 +95,17 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 {
 	fbxNode->nodeName = this->aiStringToWString(node->mName);
 	fbxNode->transformMatrix = this->ConvertToCloumnMajor(node->mTransformation);
-	//fbxNode->worldMatrix = parentMatrix * fbxNode->transformMatrix;
 	fbxNode->worldMatrix = fbxNode->transformMatrix * parentMatrix;
-	//fbxNode->worldMatrix = fbxNode->transformMatrix;
+
+	//if (this->boneInfoMap.find(fbxNode->nodeName) == this->boneInfoMap.end())
+	//{
+	//	BoneInfo boneInfo;
+	//	boneInfo.offset = DirectX::SimpleMath::Matrix::Identity;
+
+	//	std::wstring boneName = fbxNode->nodeName;
+
+	//	auto tempPair = this->boneInfoMap.insert({ boneName, boneInfo });
+	//}
 
 	for (int i = 0; i < node->mNumMeshes; ++i)
 	{
@@ -163,14 +200,11 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 		{
 			BoneInfo boneInfo;
 			boneInfo.offset = this->ConvertToCloumnMajor(mesh->mBones[b]->mOffsetMatrix);
-			//boneInfo.index = boneIndex++;
-			for (int w = 0; w < mesh->mBones[b]->mNumWeights; ++w)
-			{
-				aiBone* bone = mesh->mBones[b];
-				std::wstring boneName = this->aiStringToWString(bone->mName);
 
-				this->boneInfoMap.insert({ boneName, boneInfo });
-			}
+			aiBone* bone = mesh->mBones[b];
+			std::wstring boneName = this->aiStringToWString(bone->mName);
+
+			auto tempPair = this->boneInfoMap.insert({ boneName, boneInfo });
 		}
 
 		for (auto& i : this->boneInfoMap)
@@ -304,32 +338,47 @@ void ModelLoader::LoadAnimation(const aiScene* scene, const std::wstring& fbxNam
 			{
 				unsigned int boneIndex = iter->second.index;
 
-				animationClip.keyFrameInfoVec[boneIndex].resize(nodeAnim->mNumPositionKeys);
+				animationClip.keyFrameInfoVec[boneIndex].resize(animation->mDuration + 1);
+				maxKeyCount = animation->mDuration + 1;
 
-				if (nodeAnim->mNumPositionKeys >= maxKeyCount)
-				{
-					maxKeyCount = nodeAnim->mNumPositionKeys;
-				}
+				//if (nodeAnim->mNumPositionKeys >= maxKeyCount)
+				//{
+				//	maxKeyCount = nodeAnim->mNumPositionKeys;
+				//}
 
 				for (int k = 0; k < nodeAnim->mNumPositionKeys; ++k)
 				{
 					aiVectorKey vectorKey = nodeAnim->mPositionKeys[k];
 
-					animationClip.keyFrameInfoVec[boneIndex][k].pos = DirectX::SimpleMath::Vector3{ vectorKey.mValue.x, vectorKey.mValue.y, vectorKey.mValue.z };
+					for (int m = static_cast<int>(std::round(vectorKey.mTime)); m < animationClip.keyFrameInfoVec[boneIndex].size(); ++m)
+					{
+						animationClip.keyFrameInfoVec[boneIndex][m].pos = DirectX::SimpleMath::Vector3{ vectorKey.mValue.x, vectorKey.mValue.y, vectorKey.mValue.z };
+					}
 				}
+
+
+
+
 
 				for (int k = 0; k < nodeAnim->mNumRotationKeys; ++k)
 				{
 					aiQuatKey quatKey = nodeAnim->mRotationKeys[k];
 
-					animationClip.keyFrameInfoVec[boneIndex][k].rot = DirectX::SimpleMath::Quaternion{ quatKey.mValue.x, quatKey.mValue.y, quatKey.mValue.z, quatKey.mValue.w };
+					for (int m = static_cast<int>(std::round(quatKey.mTime)); m < animationClip.keyFrameInfoVec[boneIndex].size(); ++m)
+					{
+						animationClip.keyFrameInfoVec[boneIndex][m].rot = DirectX::SimpleMath::Quaternion{ quatKey.mValue.x, quatKey.mValue.y, quatKey.mValue.z, quatKey.mValue.w };
+					}
 				}
 
 				for (int k = 0; k < nodeAnim->mNumScalingKeys; ++k)
 				{
 					aiVectorKey vectorKey = nodeAnim->mScalingKeys[k];
 
-					animationClip.keyFrameInfoVec[boneIndex][k].scale = DirectX::SimpleMath::Vector3{ vectorKey.mValue.x,vectorKey.mValue.y, vectorKey.mValue.z };
+
+					for (int m = static_cast<int>(std::round(vectorKey.mTime)); m < animationClip.keyFrameInfoVec[boneIndex].size(); ++m)
+					{
+						animationClip.keyFrameInfoVec[boneIndex][m].scale = DirectX::SimpleMath::Vector3{ vectorKey.mValue.x,vectorKey.mValue.y, vectorKey.mValue.z };
+					}
 				}
 			}
 		}
@@ -344,6 +393,29 @@ void ModelLoader::LoadAnimation(const aiScene* scene, const std::wstring& fbxNam
 	}
 
 	ResourceManager::Instance.Get().CreateAnimation(this->animationClipVec, fbxName);
+}
+
+void ModelLoader::FillBoneInfoMap(const aiScene* scene)
+{
+	for (int i = 0; i < scene->mNumAnimations; ++i)
+	{
+		aiAnimation* animation = scene->mAnimations[i];
+
+		for (int j = 0; j < animation->mNumChannels; ++j)
+		{
+			aiNodeAnim* nodeAnim = animation->mChannels[j];
+
+			auto iter = this->boneInfoMap.find(this->aiStringToWString(nodeAnim->mNodeName));
+
+			if (iter == this->boneInfoMap.end())
+			{
+				BoneInfo boneInfo;
+				boneInfo.offset = DirectX::SimpleMath::Matrix::Identity;
+
+				this->boneInfoMap.insert({ this->aiStringToWString(nodeAnim->mNodeName), boneInfo });
+			}
+		}
+	}
 }
 
 void ModelLoader::FillVertexBoneIndexAndWeight(const aiScene* scene, const aiNode* node, FBXNode* fbxNode)
