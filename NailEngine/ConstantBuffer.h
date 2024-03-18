@@ -12,7 +12,7 @@ public:
 
 	void CraeteConstantBuffer(unsigned int size);
 
-	void PushGraphicsData(void* data, unsigned int size, unsigned int slot);
+	void PushGraphicsData(void* data, unsigned int size, unsigned int slot, bool useGS = false);
 
 	void Clear();
 

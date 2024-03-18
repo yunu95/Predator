@@ -17,7 +17,8 @@ VertexOut main(VertexIn input)
 {
     VertexOut output = (VertexOut) 0;
     
-    output.pos = mul(float4(input.pos, 1.f), WVP);
+    //output.pos = mul(float4(input.pos, 1.f), WVP);
+    output.pos = mul(float4(input.pos, 1.f), mul(mul(WTM, VTM),PTM));
     output.uv = input.uv;
     
     return output;

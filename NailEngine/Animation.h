@@ -14,9 +14,9 @@ using namespace DirectX::PackedVector;
 
 struct KeyFrameInfo
 {
-	DirectX::SimpleMath::Vector3 pos;
-	DirectX::SimpleMath::Quaternion rot;
-	DirectX::SimpleMath::Vector3 scale;
+	DirectX::SimpleMath::Vector3 pos{0,0,0};
+	DirectX::SimpleMath::Quaternion rot{0,0,0,1};
+	DirectX::SimpleMath::Vector3 scale{1,1,1};
 };
 
 struct AnimationClip

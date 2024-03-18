@@ -39,6 +39,7 @@
 
 
 #include "ShadowPass.h"
+#include "PointLightShadowPass.h"
 #include "SkyBoxPass.h"
 #include "BloomPass.h"
 
@@ -127,6 +128,8 @@ void RenderSystem::PushLightData()
 		else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{
 			params.lights[i].range = e->GetLightInfo().range;
+			params.lights[i].farPlane = e->GetLightInfo().farPlane;
+			params.lights[i].nearPlane = e->GetLightInfo().nearPlane;
 		}
 		else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Spot))
 		{
@@ -170,6 +173,7 @@ void RenderSystem::Render()
 
 	// 그림자 맵 생성
 	//RenderShadow();
+	RenderPointLightShadow();
 
 	SkyBoxPass::Instance.Get().BindIBLTexture();
 
@@ -183,11 +187,7 @@ void RenderSystem::Render()
 	RenderForward();
 	RenderBackBuffer();
 
-
-
 	SkyBoxPass::Instance.Get().Render();
-
-
 
 	RenderUI();
 
@@ -314,6 +314,91 @@ void RenderSystem::RenderShadow()
 	InstancingManager::Instance.Get().RenderStaticShadow();
 }
 
+void RenderSystem::RenderPointLightShadow()
+{
+	auto& lightSet = LightManager::Instance.Get().GetLightList();
+	
+	int index = 0;
+
+	for (auto& e : lightSet)
+	{
+		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
+		{
+			// 현재 카메라 프러스텀에 들어온 포인트 라이트만 쉐도우맵을 만들도록 컬링을 진행한다
+			auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+
+			auto meshName = e->GetMeshName();
+			auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
+
+			auto aabb =  ResourceManager::Instance.Get().GetMesh(e->GetMeshName())->GetBoundingBox(
+				std::static_pointer_cast<PointLight>(e)->GetWorldTM(), 0);
+
+			if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
+			{
+				continue;
+			}
+
+			// Matrix Buffer Set
+			DirectX::SimpleMath::Vector3 pos;
+			DirectX::SimpleMath::Vector3 scale;
+			DirectX::SimpleMath::Quaternion quat;
+			std::static_pointer_cast<PointLight>(e)->GetWorldTM().Decompose(scale, quat, pos);
+
+			PointLightVPMatrix pointLightVP;
+
+			for (int i = 0; i < 6; ++i)
+			{
+				// 각 렌더 타겟에 대한 시야 및 방향 설정
+				DirectX::SimpleMath::Vector3 targetPos;
+				DirectX::SimpleMath::Vector3 upVec;
+				switch (i)
+				{
+					case 0: // +X
+						targetPos = pos + DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f);
+						upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
+						break;
+					case 1: // -X
+						targetPos = pos + DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f);
+						upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
+						break;
+					case 2: // +Y
+						targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
+						upVec = DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f);
+						break;
+					case 3: // -Y
+						targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f);
+						upVec = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f);
+						break;
+					case 4: // +Z
+						targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f);
+						upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
+						break;
+					case 5: // -Z
+						targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f);
+						upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
+						break;
+				}
+
+				// 뷰 행렬 계산
+				DirectX::SimpleMath::Matrix viewMatrix = XMMatrixLookAtLH(pos, targetPos, upVec);
+
+				DirectX::SimpleMath::Matrix projMat = CameraManager::Instance.Get().GetPTM90ByResolution(PL_SM_SIZE, PL_SM_SIZE,
+					std::static_pointer_cast<PointLight>(e)->GetLightInfo().farPlane, std::static_pointer_cast<PointLight>(e)->GetLightInfo().nearPlane);
+
+				pointLightVP.viewProj[i] = viewMatrix * projMat;
+			}
+
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX))->PushGraphicsData(&pointLightVP, sizeof(PointLightVPMatrix), static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX), true);
+			PointLightShadowPass::Instance.Get().Render(index,false);
+			InstancingManager::Instance.Get().RenderStaticPointLightShadow(std::static_pointer_cast<PointLight>(e)->GetWorldTM(), std::static_pointer_cast<PointLight>(e));
+			PointLightShadowPass::Instance.Get().Render(index, true);
+			InstancingManager::Instance.Get().RenderSkinnedPointLightShadow(std::static_pointer_cast<PointLight>(e)->GetWorldTM(), std::static_pointer_cast<PointLight>(e));
+			++index;
+		}
+	}
+	PointLightShadowPass::Instance.Get().EndRender();
+}
+
 void RenderSystem::RenderLight()
 {
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
@@ -326,6 +411,9 @@ void RenderSystem::RenderLight()
 	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
 	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 
+	PointLightIndex plIndexBuffer;
+
+	int plIndex = 0;
 
 	for (auto& e : lightSet)
 	{
@@ -339,17 +427,32 @@ void RenderSystem::RenderLight()
 		}
 		else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{
+			// 만들어진 Shadow Map Bind
+			ResourceManager::Instance.Get().GetTexture(L"PointLightShadowDepth")->Bind(15);
+
+			matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
 			matrixBuffer.WTM = std::static_pointer_cast<PointLight>(e)->GetWorldTM();
+			matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 			matrixBuffer.WorldInvTrans = std::static_pointer_cast<PointLight>(e)->GetWorldTM().Invert().Transpose();
+
+			plIndexBuffer.plIndex = plIndex;
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::POINTLIGHT_INDEX))->PushGraphicsData(&plIndexBuffer, sizeof(PointLightIndex), static_cast<int>(CB_TYPE::POINTLIGHT_INDEX));
+			plIndex++;
 		}
 		NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
+
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e->GetMaterialName()))->SetInt(0, e->GetID());
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e->GetMaterialName()))->PushGraphicsData();
 		auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
 		mesh->Render();
 
+		// 만들어진 Shadow Map Binb
+		ResourceManager::Instance.Get().GetTexture(L"PointLightShadowDepth")->UnBind(15);
+
 		//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->UnBind();
 	}
+
+
 }
 
 void RenderSystem::RenderFinal()

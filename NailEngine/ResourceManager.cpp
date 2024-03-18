@@ -12,6 +12,7 @@
 using namespace DirectX::PackedVector;
 
 #include "VertexShader.h"
+#include "GeometryShader.h"
 #include "PixelShader.h"
 #include "ResourceBuilder.h"
 #include "Device.h"
@@ -56,6 +57,11 @@ void ResourceManager::CreateShader(const std::wstring& shaderPath)
 	{
 		shader = std::make_shared<PixelShader>();
 	}
+	else if (shaderType == L"GS")
+	{
+		shader = std::make_shared<GeometryShader>();
+	}
+
 
 	if (shader != nullptr)
 	{
@@ -73,24 +79,9 @@ void ResourceManager::CreateShader(const std::wstring& shaderPath)
 
 void ResourceManager::CreateMesh(const std::wstring& mesh)
 {
-	if (mesh == L"Cube")
-	{
-		LoadCubeMesh();
-		return;
-	}
-	else if (mesh == L"Sphere")
-	{
-		LoadSphereMesh();
-		return;
-	}
-	else if (mesh == L"Rectangle")
+	if (mesh == L"Rectangle")
 	{
 		LoadRactangleMesh();
-		return;
-	}
-	else if (mesh == L"Point")
-	{
-		LoadPointMesh();
 		return;
 	}
 	else if (mesh == L"Line")
@@ -98,16 +89,37 @@ void ResourceManager::CreateMesh(const std::wstring& mesh)
 		LoadLineMesh();
 		return;
 	}
-	else if (mesh == L"Capsule")
-	{
-		LoadCapsuleMesh();
-		return;
-	}
-	else if (mesh == L"Cylinder")
-	{
-		LoadCylinderMesh();
-		return;
-	}
+	//else if (mesh == L"Sphere")
+	//{
+	//	LoadSphereMesh();
+	//	return;
+	//}
+	//else if (mesh == L"Rectangle")
+	//{
+	//	LoadRactangleMesh();
+	//	return;
+	//}
+	//else if (mesh == L"Point")
+	//{
+	//	LoadPointMesh();
+	//	return;
+	//}
+
+	//else if (mesh == L"Capsule")
+	//{
+	//	LoadCapsuleMesh();
+	//	return;
+	//}
+	//else if (mesh == L"Cylinder")
+	//{
+	//	LoadCylinderMesh();
+	//	return;
+	//}
+	//else if (mesh == L"Triangle")
+	//{
+	//	LoadTriangleMesh();
+	//	return;
+	//}
 }
 
 void ResourceManager::CreateMesh(const std::shared_ptr<Mesh>& mesh)
@@ -118,41 +130,41 @@ void ResourceManager::CreateMesh(const std::shared_ptr<Mesh>& mesh)
 
 void ResourceManager::DeleteMesh(yunuGI::IMesh* mesh)
 {
-    if (mesh == nullptr)
-        return;
+	if (mesh == nullptr)
+		return;
 
-    for (auto i = 0; i < meshVec.size(); i++)
-    {
-        if (meshVec[i] == mesh)
-        {
-            meshVec.erase(meshVec.begin() + i);
-            break;
-        }
-    }
-    meshMap.erase(mesh->GetName());
+	for (auto i = 0; i < meshVec.size(); i++)
+	{
+		if (meshVec[i] == mesh)
+		{
+			meshVec.erase(meshVec.begin() + i);
+			break;
+		}
+	}
+	meshMap.erase(mesh->GetName());
 }
 
 yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec)
 {
-    std::shared_ptr<Mesh> tempMesh = std::make_shared<Mesh>();
+	std::shared_ptr<Mesh> tempMesh = std::make_shared<Mesh>();
 
 	tempMesh->SetName(meshName);
 
-    std::vector<Vertex> vertices;
+	std::vector<Vertex> vertices;
 
-    for (int i = 0; i < posVec.size(); ++i)
-    {
-        DirectX::SimpleMath::Vector3 tempNormal = normalVec.size() == 0 ? DirectX::SimpleMath::Vector3{ 0.f, 0.f, 0.f } : DirectX::SimpleMath::Vector3{ normalVec[i].x,normalVec[i].y ,normalVec[i].z };
-        vertices.emplace_back(Vertex{ DirectX::SimpleMath::Vector3{posVec[i].x, posVec[i].y, posVec[i].z},
-                          DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
-                          DirectX::SimpleMath::Vector2{0.5f,0.5f},
-                          tempNormal,
-                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } });
+	for (int i = 0; i < posVec.size(); ++i)
+	{
+		DirectX::SimpleMath::Vector3 tempNormal = normalVec.size() == 0 ? DirectX::SimpleMath::Vector3{ 0.f, 0.f, 0.f } : DirectX::SimpleMath::Vector3{ normalVec[i].x,normalVec[i].y ,normalVec[i].z };
+		vertices.emplace_back(Vertex{ DirectX::SimpleMath::Vector3{posVec[i].x, posVec[i].y, posVec[i].z},
+						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
+						  tempNormal,
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } });
 	}
 
 	auto temp = DirectX::SimpleMath::Vector3{ 1,1,1 };
 	tempMesh->SetData(vertices, idxVec, temp, temp);
-    CreateMesh(tempMesh);
+	CreateMesh(tempMesh);
 
 	return tempMesh.get();
 }
@@ -249,13 +261,13 @@ yunuGI::IMaterial* ResourceManager::CloneMaterial(std::wstring materialName, yun
 	}
 	else
 	{
-        Material* _material = new Material(*(static_cast<Material*>(material)));
+		Material* _material = new Material(*(static_cast<Material*>(material)));
 
-        _material->SetName(materialName);
+		_material->SetName(materialName);
 
-        this->materialMap.insert({ materialName, std::shared_ptr<Material>(_material) });
-        this->materialVec.emplace_back(_material);
-        return _material;
+		this->materialMap.insert({ materialName, std::shared_ptr<Material>(_material) });
+		this->materialVec.emplace_back(_material);
+		return _material;
 	}
 }
 
@@ -270,11 +282,11 @@ void ResourceManager::CreateTexture(const std::wstring& texturePath)
 	textureVec.push_back(texture.get());
 }
 
-std::shared_ptr<Texture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag, int arraySize)
+std::shared_ptr<Texture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag, int arraySize, int sliceCount)
 {
 	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 
-	texture->CreateTexture(texturePath, width, height, format, bindFlag, arraySize);
+	texture->CreateTexture(texturePath, width, height, format, bindFlag, arraySize, sliceCount);
 	texture->SetName(texturePath);
 
 	this->deferredTextureMap.insert({ texturePath, texture });
@@ -795,11 +807,13 @@ void ResourceManager::CreateDefaultShader()
 	CreateDeferredShader(L"Deferred_PointLightVS.cso");
 	CreateDeferredShader(L"Deferred_FinalVS.cso");
 	CreateShader(L"TextureVS.cso");
-    CreateShader(L"TestVS.cso");
-    CreateShader(L"SkyBoxVS.cso");
-    CreateShader(L"IrradianceVS.cso");
-    CreateShader(L"PreFilteredVS.cso");
-    CreateShader(L"SpecLUTVS.cso");
+	CreateShader(L"TestVS.cso");
+	CreateShader(L"SkyBoxVS.cso");
+	CreateShader(L"IrradianceVS.cso");
+	CreateShader(L"PreFilteredVS.cso");
+	CreateShader(L"SpecLUTVS.cso");
+	CreateShader(L"PointLightShadowVS.cso");
+	CreateShader(L"Skinned_PointLightShadowVS.cso");
 #pragma endregion
 
 #pragma region PS
@@ -811,31 +825,36 @@ void ResourceManager::CreateDefaultShader()
 	CreateDeferredShader(L"Deferred_FinalPS.cso");
 	CreateDeferredShader(L"BackBufferPS.cso");
 	CreateShader(L"TexturePS.cso");
-    CreateShader(L"TestPS.cso");
-    CreateShader(L"SkyBoxPS.cso");
-    CreateShader(L"IrradiancePS.cso");
-    CreateShader(L"PreFilteredPS.cso");
-    CreateShader(L"SpecLUTPS.cso");
+	CreateShader(L"TestPS.cso");
+	CreateShader(L"SkyBoxPS.cso");
+	CreateShader(L"IrradiancePS.cso");
+	CreateShader(L"PreFilteredPS.cso");
+	CreateShader(L"SpecLUTPS.cso");
 	CreateDeferredShader(L"CopyPS.cso");
 	CreateDeferredShader(L"BlurPS.cso");
+	CreateShader(L"PointLightShadowPS.cso");
 
+#pragma endregion
+
+#pragma region GS
+	CreateShader(L"PointLightShadowGS.cso");
 #pragma endregion
 }
 
 void ResourceManager::CreateDefaultMesh()
 {
-	//LoadFBX("FBX/Cube/Cube.fbx");
-	//LoadFBX("FBX/Sphere/Sphere.fbx");
-	//LoadFBX("FBX/Rectangle/Rectangle.fbx");
-	//LoadFBX("FBX/Capsule/Capsule.fbx");
-	//LoadFBX("FBX/Cylinder/Cylinder.fbx");
-	CreateMesh(L"Cube");
-	CreateMesh(L"Sphere");
+	LoadFBX("FBX/Cube/Cube.fbx");
+	LoadFBX("FBX/Sphere/Sphere.fbx");
+	LoadFBX("FBX/Capsule/Capsule.fbx");
+	LoadFBX("FBX/Cylinder/Cylinder.fbx");
+	///CreateMesh(L"Cube");
+	///CreateMesh(L"Sphere");
 	CreateMesh(L"Rectangle");
-	CreateMesh(L"Point");
+	///CreateMesh(L"Point");
 	CreateMesh(L"Line");
-	CreateMesh(L"Capsule");
-	CreateMesh(L"Cylinder");
+	///CreateMesh(L"Capsule");
+	///CreateMesh(L"Cylinder");
+	///CreateMesh(L"Triangle");
 }
 
 void ResourceManager::CreateDefaultMaterial()
@@ -855,42 +874,46 @@ void ResourceManager::CreateDefaultMaterial()
 
 	auto& renderTargetGroupVec = NailEngine::Instance.Get().GetRenderTargetGroup();
 
-    // DirectionalLight
-    {
-        yunuGI::IMaterial* material = CrateMaterial(L"Deferred_DirectionalLight");
-        material->SetVertexShader(GetDeferredShader(L"Deferred_DirectionalLightVS.cso").get());
-        material->SetPixelShader(GetDeferredShader(L"Deferred_DirectionalLightPS.cso").get());
+	// DirectionalLight
+	{
+		yunuGI::IMaterial* material = CrateMaterial(L"Deferred_DirectionalLight");
+		material->SetVertexShader(GetDeferredShader(L"Deferred_DirectionalLightVS.cso").get());
+		material->SetPixelShader(GetDeferredShader(L"Deferred_DirectionalLightPS.cso").get());
 
-        material->SetTexture(yunuGI::Texture_Type::ALBEDO,
-            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ALBEDO)).get());
+		material->SetTexture(yunuGI::Texture_Type::ALBEDO,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ALBEDO)).get());
 
-        material->SetTexture(yunuGI::Texture_Type::NORMAL,
-            GetTexture(L"Texture/asdDiffuseHDR.dds").get());
+		material->SetTexture(yunuGI::Texture_Type::NORMAL,
+			GetTexture(L"Texture/asdDiffuseHDR.dds").get());
 
-        material->SetTexture(yunuGI::Texture_Type::HEIGHT,
-            GetTexture(L"Texture/asdSpecularHDR.dds").get());
+		material->SetTexture(yunuGI::Texture_Type::HEIGHT,
+			GetTexture(L"Texture/asdSpecularHDR.dds").get());
 
-        material->SetTexture(yunuGI::Texture_Type::EMISSION,
-            GetTexture(L"Texture/asdBrdf.dds").get());
+		material->SetTexture(yunuGI::Texture_Type::EMISSION,
+			GetTexture(L"Texture/asdBrdf.dds").get());
 
-        material->SetTexture(yunuGI::Texture_Type::ARM,
-            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ARM)).get());
+		material->SetTexture(yunuGI::Texture_Type::ARM,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ARM)).get());
 
-        material->SetTexture(yunuGI::Texture_Type::Temp0,
-            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp0,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
 
-        material->SetTexture(yunuGI::Texture_Type::Temp1,
-            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(NORMAL)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp1,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(NORMAL)).get());
 
-        material->SetTexture(yunuGI::Texture_Type::Temp2,
-            GetTexture(L"ShadowDepth").get());
-    }
+		material->SetTexture(yunuGI::Texture_Type::Temp2,
+			GetTexture(L"ShadowDepth").get());
+	}
 
 	// PointLight
 	{
 		yunuGI::IMaterial* material = CrateMaterial(L"Deferred_PointLight");
 		material->SetVertexShader(GetDeferredShader(L"Deferred_PointLightVS.cso").get());
 		material->SetPixelShader(GetDeferredShader(L"Deferred_PointLightPS.cso").get());
+		material->SetTexture(yunuGI::Texture_Type::ALBEDO,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ALBEDO)).get());
+		material->SetTexture(yunuGI::Texture_Type::ARM,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ARM)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp0,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp1,
@@ -908,19 +931,19 @@ void ResourceManager::CreateDefaultMaterial()
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(DIFFUSE)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp2,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR)).get());
-        material->SetTexture(yunuGI::Texture_Type::Temp3,
-            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)]->GetRTTexture(static_cast<int>(UP4x4_0)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp3,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)]->GetRTTexture(static_cast<int>(UP4x4_0)).get());
 	}
 
 	// BackBuffer
 	{
-        yunuGI::IMaterial* material = CrateMaterial(L"BackBufferMaterial");
-        material->SetVertexShader(GetDeferredShader(L"Deferred_FinalVS.cso").get());
-        material->SetPixelShader(GetDeferredShader(L"BackBufferPS.cso").get());
-        material->SetTexture(yunuGI::Texture_Type::Temp0,
-            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->GetRTTexture(static_cast<int>(FINAL)).get());
-        material->SetTexture(yunuGI::Texture_Type::Temp1,
-            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
+		yunuGI::IMaterial* material = CrateMaterial(L"BackBufferMaterial");
+		material->SetVertexShader(GetDeferredShader(L"Deferred_FinalVS.cso").get());
+		material->SetPixelShader(GetDeferredShader(L"BackBufferPS.cso").get());
+		material->SetTexture(yunuGI::Texture_Type::Temp0,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->GetRTTexture(static_cast<int>(FINAL)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp1,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
 	}
 
 	/// Deferred Debug Info
@@ -961,70 +984,70 @@ void ResourceManager::CreateDefaultMaterial()
 				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(DEPTH)).get());
 		}
 
-        {
-            // ARM
-            yunuGI::IMaterial* material = CrateMaterial(L"DeferredARM");
-            material->SetPixelShader(GetShader(L"TexturePS.cso").get());
-            material->SetVertexShader(GetShader(L"TextureVS.cso").get());
-            material->SetTexture(yunuGI::Texture_Type::Temp0,
-                renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ARM)).get());
-        }
+		{
+			// ARM
+			yunuGI::IMaterial* material = CrateMaterial(L"DeferredARM");
+			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
+			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ARM)).get());
+		}
 
-        {
-            // DiffuseLight
-            yunuGI::IMaterial* material = CrateMaterial(L"DeferredDiffuseLight");
-            material->SetPixelShader(GetShader(L"TexturePS.cso").get());
-            material->SetVertexShader(GetShader(L"TextureVS.cso").get());
-            material->SetTexture(yunuGI::Texture_Type::Temp0,
-                renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(DIFFUSE)).get());
-        }
+		{
+			// DiffuseLight
+			yunuGI::IMaterial* material = CrateMaterial(L"DeferredDiffuseLight");
+			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
+			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(DIFFUSE)).get());
+		}
 
-        {
-            // SpecularLight
-            yunuGI::IMaterial* material = CrateMaterial(L"DeferredSpecularLight");
-            material->SetPixelShader(GetShader(L"TexturePS.cso").get());
-            material->SetVertexShader(GetShader(L"TextureVS.cso").get());
-            material->SetTexture(yunuGI::Texture_Type::Temp0,
-                renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR)).get());
-        }
+		{
+			// SpecularLight
+			yunuGI::IMaterial* material = CrateMaterial(L"DeferredSpecularLight");
+			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
+			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR)).get());
+		}
 
-        {
-            // Shadow
-            yunuGI::IMaterial* material = CrateMaterial(L"DeferredShadow");
-            material->SetPixelShader(GetShader(L"TexturePS.cso").get());
-            material->SetVertexShader(GetShader(L"TextureVS.cso").get());
-            material->SetTexture(yunuGI::Texture_Type::Temp0,
-                GetTexture(L"ShadowDepth").get());
-        }
+		{
+			// Shadow
+			yunuGI::IMaterial* material = CrateMaterial(L"DeferredShadow");
+			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
+			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
+				GetTexture(L"ShadowDepth").get());
+		}
 
 
 
-        /// PBR
-        {
-            // SpecularLight
-            yunuGI::IMaterial* material = CrateMaterial(L"PBRIrradiance");
-            material->SetPixelShader(GetShader(L"TexturePS.cso").get());
-            material->SetVertexShader(GetShader(L"TextureVS.cso").get());
-            material->SetTexture(yunuGI::Texture_Type::Temp0,
-                renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::IRRADIANCE)]->GetRTTexture(static_cast<int>(IRRADIANCE)).get());
-        }
-    }
+		/// PBR
+		{
+			// SpecularLight
+			yunuGI::IMaterial* material = CrateMaterial(L"PBRIrradiance");
+			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
+			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
+			material->SetTexture(yunuGI::Texture_Type::Temp0,
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::IRRADIANCE)]->GetRTTexture(static_cast<int>(IRRADIANCE)).get());
+		}
+	}
 }
 
 void ResourceManager::CreateDefaultTexture()
 {
-    CreateTexture(L"Texture/room.dds");
-    CreateTexture(L"Texture/asdEnvHDR.dds");
-    CreateTexture(L"Texture/asdBrdf.dds");
-    CreateTexture(L"Texture/asdDiffuseHDR.dds");
-    CreateTexture(L"Texture/asdSpecularHDR.dds");
-    /*CreateTexture(L"Texture/zoro.jpg");
-    CreateTexture(L"Texture/Brick_Albedo.jpg");
-    CreateTexture(L"Texture/Brick_Normal.jpg");*/
+	CreateTexture(L"Texture/room.dds");
+	CreateTexture(L"Texture/asdEnvHDR.dds");
+	CreateTexture(L"Texture/asdBrdf.dds");
+	CreateTexture(L"Texture/asdDiffuseHDR.dds");
+	CreateTexture(L"Texture/asdSpecularHDR.dds");
+	/*CreateTexture(L"Texture/zoro.jpg");
+	CreateTexture(L"Texture/Brick_Albedo.jpg");
+	CreateTexture(L"Texture/Brick_Normal.jpg");*/
 
 
 
-    //	auto dsTexture = ResourceManager::Instance.Get().CreateTexture(
+	//	auto dsTexture = ResourceManager::Instance.Get().CreateTexture(
 //		L"ShadowTargetDepth",
 //		SM_SIZE,
 //		SM_SIZE,
@@ -1032,8 +1055,9 @@ void ResourceManager::CreateDefaultTexture()
 //		static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL)
 //	);
 
-    CreateTexture(L"ShadowDepth", SM_SIZE, SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE));
-    CreateTexture(L"PointLightShadowDepth", SM_SIZE, SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE),6);
+	CreateTexture(L"ShadowDepth", SM_SIZE, SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE));
+
+	CreateTexture(L"PointLightShadowDepth", PL_SM_SIZE, PL_SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE), 6 , MAX_POINT_LIGHT);
 }
 
 void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yunuGI::FBXData* fbxData, bool isPreLoad)
@@ -1133,7 +1157,7 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 		for (int i = 0; i < node->child.size(); ++i)
 		{
 			fbxData->child[i] = new yunuGI::FBXData;
-			this->FillFBXData(fbxName, node->child[i], fbxData->child[i],false);
+			this->FillFBXData(fbxName, node->child[i], fbxData->child[i], false);
 		}
 	}
 	else
@@ -1352,235 +1376,235 @@ void ResourceManager::FillFBXBoneInfoVec(const yunuGI::BoneInfo& boneInfo, std::
 //	this->BoneOffsetInfoVecMap.insert({ fbxName, fbxBoneInfo });
 //}
 
-void ResourceManager::LoadCubeMesh()
-{
-	std::shared_ptr<Mesh> cubeMesh = std::make_shared<Mesh>();
-
-	cubeMesh->SetName(L"Cube");
-
-	float w2 = 0.5f;
-	float h2 = 0.5f;
-	float d2 = 0.5f;
-
-	std::vector<Vertex> vec(24);
-
-	// 앞면
-	vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
-	vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
-	vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
-	vec[3] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
-	// 뒷면
-	vec[4] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
-	vec[5] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
-	vec[6] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
-	vec[7] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
-	// 윗면
-	vec[8] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
-	vec[9] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
-	vec[10] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.f, 0.f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
-	vec[11] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.f, 1.f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
-	// 아랫면
-	vec[12] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
-	vec[13] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
-	vec[14] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
-	vec[15] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
-	// 왼쪽면
-	vec[16] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
-	vec[17] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
-	vec[18] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
-	vec[19] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
-	// 오른쪽면
-	vec[20] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
-	vec[21] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
-	vec[22] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
-	vec[23] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
-
-	std::vector<unsigned int> idx(36);
-
-	// 앞면
-	idx[0] = 0; idx[1] = 1; idx[2] = 2;
-	idx[3] = 0; idx[4] = 2; idx[5] = 3;
-	// 뒷면
-	idx[6] = 4; idx[7] = 5; idx[8] = 6;
-	idx[9] = 4; idx[10] = 6; idx[11] = 7;
-	// 윗면
-	idx[12] = 8; idx[13] = 9; idx[14] = 10;
-	idx[15] = 8; idx[16] = 10; idx[17] = 11;
-	// 아랫면
-	idx[18] = 12; idx[19] = 13; idx[20] = 14;
-	idx[21] = 12; idx[22] = 14; idx[23] = 15;
-	// 왼쪽면
-	idx[24] = 16; idx[25] = 17; idx[26] = 18;
-	idx[27] = 16; idx[28] = 18; idx[29] = 19;
-	// 오른쪽면
-	idx[30] = 20; idx[31] = 21; idx[32] = 22;
-	idx[33] = 20; idx[34] = 22; idx[35] = 23;
-
-
-
-	DirectX::SimpleMath::Vector3 minPoint = vec[0].pos;
-	DirectX::SimpleMath::Vector3 maxPoint = vec[0].pos;
-
-	for (const auto& vertex : vec) {
-		// minPoint 업데이트
-		minPoint.x = std::min(minPoint.x, vertex.pos.x);
-		minPoint.y = std::min(minPoint.y, vertex.pos.y);
-		minPoint.z = std::min(minPoint.z, vertex.pos.z);
-
-		// maxPoint 업데이트
-		maxPoint.x = max(maxPoint.x, vertex.pos.x);
-		maxPoint.y = max(maxPoint.y, vertex.pos.y);
-		maxPoint.z = max(maxPoint.z, vertex.pos.z);
-	}
-
-
-
-
-	cubeMesh->SetData(vec, idx, maxPoint, minPoint);
-	CreateMesh(cubeMesh);
-}
-
-void ResourceManager::LoadSphereMesh()
-{
-	std::shared_ptr<Mesh> sphereMesh = std::make_shared<Mesh>();
-
-	sphereMesh->SetName(L"Sphere");
-
-	float radius = 0.5f; // 구의 반지름
-	unsigned int stackCount = 20; // 가로 분할
-	unsigned int sliceCount = 20; // 세로 분할
-
-	std::vector<Vertex> vec;
-
-	Vertex v;
-
-	// 북극
-	v.pos = DirectX::SimpleMath::Vector3{ 0.0f, radius, 0.0f };
-	v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
-	v.uv = DirectX::SimpleMath::Vector2(0.5f, 0.0f);
-	v.normal = v.pos;
-	v.normal.Normalize();
-	v.tangent = DirectX::SimpleMath::Vector3{ 1.f,0.f,1.f };
-	vec.push_back(v);
-
-	float stackAngle = DirectX::XM_PI / stackCount;
-	float sliceAngle = DirectX::XM_2PI / sliceCount;
-
-	float deltaU = 1.f / static_cast<float>(sliceCount);
-	float deltaV = 1.f / static_cast<float>(stackCount);
-
-	// 고리마다 돌면서 정점을 계산한다 (북극/남극 단일점은 고리가 X)
-	for (unsigned int y = 1; y <= stackCount - 1; ++y)
-	{
-		float phi = y * stackAngle;
-
-		// 고리에 위치한 정점
-		for (unsigned int x = 0; x <= sliceCount; ++x)
-		{
-			float theta = x * sliceAngle;
-
-			v.pos.x = radius * sinf(phi) * cosf(theta);
-			v.pos.y = radius * cosf(phi);
-			v.pos.z = radius * sinf(phi) * sinf(theta);
-
-			v.uv = DirectX::SimpleMath::Vector2(deltaU * x, deltaV * y);
-
-			v.normal = v.pos;
-			v.normal.Normalize();
-
-			v.tangent.x = -radius * sinf(phi) * sinf(theta);
-			v.tangent.y = 0.0f;
-			v.tangent.z = radius * sinf(phi) * cosf(theta);
-			v.tangent.Normalize();
-
-			v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
-
-			vec.push_back(v);
-		}
-	}
-
-	// 남극
-	v.pos = DirectX::SimpleMath::Vector3{ 0.0f, -radius, 0.0f };
-	v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
-	v.uv = DirectX::SimpleMath::Vector2(0.5f, 1.0f);
-	v.normal = v.pos;
-	v.normal.Normalize();
-	v.tangent = DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f);
-	vec.push_back(v);
-
-	std::vector<unsigned int> idx(36);
-
-	// 북극 인덱스
-	for (unsigned int i = 0; i <= sliceCount; ++i)
-	{
-		//  [0]
-		//   |  \
-		//  [i+1]-[i+2]
-		idx.push_back(0);
-		idx.push_back(i + 2);
-		idx.push_back(i + 1);
-	}
-
-	// 몸통 인덱스
-	unsigned int ringVertexCount = sliceCount + 1;
-	for (unsigned int y = 0; y < stackCount - 2; ++y)
-	{
-		for (unsigned int x = 0; x < sliceCount; ++x)
-		{
-			//  [y, x]-[y, x+1]
-			//  |		/
-			//  [y+1, x]
-			idx.push_back(1 + (y)*ringVertexCount + (x));
-			idx.push_back(1 + (y)*ringVertexCount + (x + 1));
-			idx.push_back(1 + (y + 1) * ringVertexCount + (x));
-			//		 [y, x+1]
-			//		 /	  |
-			//  [y+1, x]-[y+1, x+1]
-			idx.push_back(1 + (y + 1) * ringVertexCount + (x));
-			idx.push_back(1 + (y)*ringVertexCount + (x + 1));
-			idx.push_back(1 + (y + 1) * ringVertexCount + (x + 1));
-		}
-	}
-
-	// 남극 인덱스
-	unsigned int bottomIndex = static_cast<unsigned int>(vec.size()) - 1;
-	unsigned int lastRingStartIndex = bottomIndex - ringVertexCount;
-	for (unsigned int i = 0; i < sliceCount; ++i)
-	{
-		//  [last+i]-[last+i+1]
-		//  |      /
-		//  [bottom]
-		idx.push_back(bottomIndex);
-		idx.push_back(lastRingStartIndex + i);
-		idx.push_back(lastRingStartIndex + i + 1);
-	}
-
-
-
-
-	DirectX::SimpleMath::Vector3 minPoint = vec[0].pos;
-	DirectX::SimpleMath::Vector3 maxPoint = vec[0].pos;
-
-	for (const auto& vertex : vec) {
-		// minPoint 업데이트
-		minPoint.x = std::min(minPoint.x, vertex.pos.x);
-		minPoint.y = std::min(minPoint.y, vertex.pos.y);
-		minPoint.z = std::min(minPoint.z, vertex.pos.z);
-
-		// maxPoint 업데이트
-		maxPoint.x = max(maxPoint.x, vertex.pos.x);
-		maxPoint.y = max(maxPoint.y, vertex.pos.y);
-		maxPoint.z = max(maxPoint.z, vertex.pos.z);
-	}
-
-
-
-
-
-	sphereMesh->SetData(vec, idx, maxPoint, minPoint);
-	CreateMesh(sphereMesh);
-}
-
+//void ResourceManager::LoadCubeMesh()
+//{
+//	std::shared_ptr<Mesh> cubeMesh = std::make_shared<Mesh>();
+//
+//	cubeMesh->SetName(L"Cube");
+//
+//	float w2 = 0.5f;
+//	float h2 = 0.5f;
+//	float d2 = 0.5f;
+//
+//	std::vector<Vertex> vec(24);
+//
+//	// 앞면
+//	vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+//	vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+//	vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+//	vec[3] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+//	// 뒷면
+//	vec[4] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+//	vec[5] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+//	vec[6] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+//	vec[7] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+//	// 윗면
+//	vec[8] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
+//	vec[9] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
+//	vec[10] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.f, 0.f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
+//	vec[11] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.f, 1.f), DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
+//	// 아랫면
+//	vec[12] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
+//	vec[13] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
+//	vec[14] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
+//	vec[15] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f));
+//	// 왼쪽면
+//	vec[16] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
+//	vec[17] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
+//	vec[18] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
+//	vec[19] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f));
+//	// 오른쪽면
+//	vec[20] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+//	vec[21] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, -d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+//	vec[22] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+//	vec[23] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, +d2), DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+//
+//	std::vector<unsigned int> idx(36);
+//
+//	// 앞면
+//	idx[0] = 0; idx[1] = 1; idx[2] = 2;
+//	idx[3] = 0; idx[4] = 2; idx[5] = 3;
+//	// 뒷면
+//	idx[6] = 4; idx[7] = 5; idx[8] = 6;
+//	idx[9] = 4; idx[10] = 6; idx[11] = 7;
+//	// 윗면
+//	idx[12] = 8; idx[13] = 9; idx[14] = 10;
+//	idx[15] = 8; idx[16] = 10; idx[17] = 11;
+//	// 아랫면
+//	idx[18] = 12; idx[19] = 13; idx[20] = 14;
+//	idx[21] = 12; idx[22] = 14; idx[23] = 15;
+//	// 왼쪽면
+//	idx[24] = 16; idx[25] = 17; idx[26] = 18;
+//	idx[27] = 16; idx[28] = 18; idx[29] = 19;
+//	// 오른쪽면
+//	idx[30] = 20; idx[31] = 21; idx[32] = 22;
+//	idx[33] = 20; idx[34] = 22; idx[35] = 23;
+//
+//
+//
+//	DirectX::SimpleMath::Vector3 minPoint = vec[0].pos;
+//	DirectX::SimpleMath::Vector3 maxPoint = vec[0].pos;
+//
+//	for (const auto& vertex : vec) {
+//		// minPoint 업데이트
+//		minPoint.x = std::min(minPoint.x, vertex.pos.x);
+//		minPoint.y = std::min(minPoint.y, vertex.pos.y);
+//		minPoint.z = std::min(minPoint.z, vertex.pos.z);
+//
+//		// maxPoint 업데이트
+//		maxPoint.x = max(maxPoint.x, vertex.pos.x);
+//		maxPoint.y = max(maxPoint.y, vertex.pos.y);
+//		maxPoint.z = max(maxPoint.z, vertex.pos.z);
+//	}
+//
+//
+//
+//
+//	cubeMesh->SetData(vec, idx, maxPoint, minPoint);
+//	CreateMesh(cubeMesh);
+//}
+//
+//void ResourceManager::LoadSphereMesh()
+//{
+//	std::shared_ptr<Mesh> sphereMesh = std::make_shared<Mesh>();
+//
+//	sphereMesh->SetName(L"Sphere");
+//
+//	float radius = 0.5f; // 구의 반지름
+//	unsigned int stackCount = 20; // 가로 분할
+//	unsigned int sliceCount = 20; // 세로 분할
+//
+//	std::vector<Vertex> vec;
+//
+//	Vertex v;
+//
+//	// 북극
+//	v.pos = DirectX::SimpleMath::Vector3{ 0.0f, radius, 0.0f };
+//	v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
+//	v.uv = DirectX::SimpleMath::Vector2(0.5f, 0.0f);
+//	v.normal = v.pos;
+//	v.normal.Normalize();
+//	v.tangent = DirectX::SimpleMath::Vector3{ 1.f,0.f,1.f };
+//	vec.push_back(v);
+//
+//	float stackAngle = DirectX::XM_PI / stackCount;
+//	float sliceAngle = DirectX::XM_2PI / sliceCount;
+//
+//	float deltaU = 1.f / static_cast<float>(sliceCount);
+//	float deltaV = 1.f / static_cast<float>(stackCount);
+//
+//	// 고리마다 돌면서 정점을 계산한다 (북극/남극 단일점은 고리가 X)
+//	for (unsigned int y = 1; y <= stackCount - 1; ++y)
+//	{
+//		float phi = y * stackAngle;
+//
+//		// 고리에 위치한 정점
+//		for (unsigned int x = 0; x <= sliceCount; ++x)
+//		{
+//			float theta = x * sliceAngle;
+//
+//			v.pos.x = radius * sinf(phi) * cosf(theta);
+//			v.pos.y = radius * cosf(phi);
+//			v.pos.z = radius * sinf(phi) * sinf(theta);
+//
+//			v.uv = DirectX::SimpleMath::Vector2(deltaU * x, deltaV * y);
+//
+//			v.normal = v.pos;
+//			v.normal.Normalize();
+//
+//			v.tangent.x = -radius * sinf(phi) * sinf(theta);
+//			v.tangent.y = 0.0f;
+//			v.tangent.z = radius * sinf(phi) * cosf(theta);
+//			v.tangent.Normalize();
+//
+//			v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
+//
+//			vec.push_back(v);
+//		}
+//	}
+//
+//	// 남극
+//	v.pos = DirectX::SimpleMath::Vector3{ 0.0f, -radius, 0.0f };
+//	v.color = DirectX::SimpleMath::Vector4{ 1.0f, 1.0f, 1.0f,1.f };
+//	v.uv = DirectX::SimpleMath::Vector2(0.5f, 1.0f);
+//	v.normal = v.pos;
+//	v.normal.Normalize();
+//	v.tangent = DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f);
+//	vec.push_back(v);
+//
+//	std::vector<unsigned int> idx(36);
+//
+//	// 북극 인덱스
+//	for (unsigned int i = 0; i <= sliceCount; ++i)
+//	{
+//		//  [0]
+//		//   |  \
+//		//  [i+1]-[i+2]
+//		idx.push_back(0);
+//		idx.push_back(i + 2);
+//		idx.push_back(i + 1);
+//	}
+//
+//	// 몸통 인덱스
+//	unsigned int ringVertexCount = sliceCount + 1;
+//	for (unsigned int y = 0; y < stackCount - 2; ++y)
+//	{
+//		for (unsigned int x = 0; x < sliceCount; ++x)
+//		{
+//			//  [y, x]-[y, x+1]
+//			//  |		/
+//			//  [y+1, x]
+//			idx.push_back(1 + (y)*ringVertexCount + (x));
+//			idx.push_back(1 + (y)*ringVertexCount + (x + 1));
+//			idx.push_back(1 + (y + 1) * ringVertexCount + (x));
+//			//		 [y, x+1]
+//			//		 /	  |
+//			//  [y+1, x]-[y+1, x+1]
+//			idx.push_back(1 + (y + 1) * ringVertexCount + (x));
+//			idx.push_back(1 + (y)*ringVertexCount + (x + 1));
+//			idx.push_back(1 + (y + 1) * ringVertexCount + (x + 1));
+//		}
+//	}
+//
+//	// 남극 인덱스
+//	unsigned int bottomIndex = static_cast<unsigned int>(vec.size()) - 1;
+//	unsigned int lastRingStartIndex = bottomIndex - ringVertexCount;
+//	for (unsigned int i = 0; i < sliceCount; ++i)
+//	{
+//		//  [last+i]-[last+i+1]
+//		//  |      /
+//		//  [bottom]
+//		idx.push_back(bottomIndex);
+//		idx.push_back(lastRingStartIndex + i);
+//		idx.push_back(lastRingStartIndex + i + 1);
+//	}
+//
+//
+//
+//
+//	DirectX::SimpleMath::Vector3 minPoint = vec[0].pos;
+//	DirectX::SimpleMath::Vector3 maxPoint = vec[0].pos;
+//
+//	for (const auto& vertex : vec) {
+//		// minPoint 업데이트
+//		minPoint.x = std::min(minPoint.x, vertex.pos.x);
+//		minPoint.y = std::min(minPoint.y, vertex.pos.y);
+//		minPoint.z = std::min(minPoint.z, vertex.pos.z);
+//
+//		// maxPoint 업데이트
+//		maxPoint.x = max(maxPoint.x, vertex.pos.x);
+//		maxPoint.y = max(maxPoint.y, vertex.pos.y);
+//		maxPoint.z = max(maxPoint.z, vertex.pos.z);
+//	}
+//
+//
+//
+//
+//
+//	sphereMesh->SetData(vec, idx, maxPoint, minPoint);
+//	CreateMesh(sphereMesh);
+//}
+//
 void ResourceManager::LoadRactangleMesh()
 {
 	std::shared_ptr<Mesh> rectangleMesh = std::make_shared<Mesh>();
@@ -1593,8 +1617,8 @@ void ResourceManager::LoadRactangleMesh()
 	std::vector<Vertex> vec(4);
 
 
-    // POS COLOR UV TANGENT
-    // 앞면
+	// POS COLOR UV TANGENT
+	// 앞면
 	vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
 	vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
 	vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
@@ -1625,12 +1649,12 @@ void ResourceManager::LoadRactangleMesh()
 	rectangleMesh->SetData(vec, idx, maxPoint, minPoint);
 	CreateMesh(rectangleMesh);
 }
-
-void ResourceManager::LoadPointMesh()
-{
-
-}
-
+//
+//void ResourceManager::LoadPointMesh()
+//{
+//
+//}
+//
 void ResourceManager::LoadLineMesh()
 {
     std::shared_ptr<Mesh> lineMesh = std::make_shared<Mesh>();
@@ -1683,302 +1707,341 @@ void ResourceManager::LoadLineMesh()
 	lineMesh->SetData(vertices, indices, maxPoint, minPoint);
     CreateMesh(lineMesh);
 }
-
-void ResourceManager::LoadCapsuleMesh()
-{
-	std::shared_ptr<Mesh> capsuleMesh = std::make_shared<Mesh>();
-
-	capsuleMesh->SetName(L"Capsule");
-
-	float radius = 0.5f; // 캡슐의 반지름
-	float height = 1.0f; // 캡슐의 높이
-	int stackCount = 5; // 수평 분할
-	int sliceCount = 20; // 수직 분할
-
-	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
-
-	// 상단 반구 정점
-	vertices.push_back(Vertex{
-		DirectX::SimpleMath::Vector3{0.0f, radius + height * 0.5f, 0.0f},
-		DirectX::SimpleMath::Vector4{1.f, 1.f, 1.f, 1.f} });
-
-	for (int i = 1; i <= stackCount; i++)
-	{
-		// 윗방향 벡터와의 각도
-		float upTheta = DirectX::XM_PI * 0.5f * (i / static_cast<float>(stackCount));
-
-		float xzsize = radius * sinf(upTheta);
-		float ysize = radius * cosf(upTheta);
-
-		for (int j = 0; j < sliceCount; j++)
-		{
-			float zTheta = DirectX::XM_PI * 2.0f * (j / static_cast<float>(sliceCount));
-
-			float x = xzsize * sinf(zTheta);
-			float y = ysize + height * 0.5f;
-			float z = xzsize * cosf(zTheta);
-
-			vertices.push_back(Vertex{
-				DirectX::SimpleMath::Vector3{x, y, z},
-				DirectX::SimpleMath::Vector4(1.f, 1.f,1.f,1.f) }
-			);
-		}
-	}
-
-	size_t middleIdx = vertices.size();
-
-	// 하단 반구 정점
-	for (int i = stackCount; i >= 1; i--)
-	{
-		// 윗방향 벡터와의 각도
-		float upTheta = DirectX::XM_PI * 0.5f * (i / static_cast<float>(stackCount));
-
-		float xzsize = radius * sinf(upTheta);
-		float ysize = radius * cosf(upTheta);
-
-		for (int j = 0; j < sliceCount; j++)
-		{
-			float zTheta = DirectX::XM_PI * 2.0f * (j / static_cast<float>(sliceCount));
-
-			float x = xzsize * sinf(zTheta);
-			float y = ysize + height * 0.5f;
-			float z = xzsize * cosf(zTheta);
-
-			vertices.push_back(Vertex{
-				DirectX::SimpleMath::Vector3(x, -y, z),
-				DirectX::SimpleMath::Vector4(1.f, 1.f,1.f,1.f) }
-			);
-		}
-	}
-
-	vertices.push_back(Vertex{
-		DirectX::SimpleMath::Vector3{0.0f, -(radius + height * 0.5f), 0.0f},
-		DirectX::SimpleMath::Vector4(1.f, 1.f,1.f,1.f) }
-	);
-
-	// 상단 반구 인덱스
-	for (int i = 0; i < sliceCount; i++) {
-		int a = 0;
-		int b = 1 + i;
-		int c = 1 + ((i + 1) % sliceCount);
-
-		indices.push_back(a);
-		indices.push_back(b);
-		indices.push_back(c);
-	}
-
-	for (int i = 1; i < stackCount; i++) {
-		for (int j = 0; j < sliceCount; j++) {
-			int a = 1 + (i - 1) * sliceCount + j;
-			int b = 1 + (i - 1) * sliceCount + ((j + 1) % sliceCount);
-			int c = 1 + i * sliceCount + j;
-			int d = 1 + i * sliceCount + ((j + 1) % sliceCount);
-
-			indices.push_back(a);
-			indices.push_back(c);
-			indices.push_back(d);
-
-			indices.push_back(a);
-			indices.push_back(d);
-			indices.push_back(b);
-		}
-	}
-
-	// 실린더 부분 인덱스
-	for (int i = 0; i < sliceCount; i++)
-	{
-		int a = middleIdx - sliceCount + i;
-		int b = middleIdx - sliceCount + ((i + 1) % sliceCount);
-		int c = middleIdx + i;
-		int d = middleIdx + ((i + 1) % sliceCount);
-
-		indices.push_back(a);
-		indices.push_back(c);
-		indices.push_back(d);
-
-		indices.push_back(a);
-		indices.push_back(d);
-		indices.push_back(b);
-	}
-
-	// 하단 반구 인덱스
-	for (int i = 1; i < stackCount; i++) {
-		for (int j = 0; j < sliceCount; j++) {
-			int a = middleIdx + (i - 1) * sliceCount + j;
-			int b = middleIdx + (i - 1) * sliceCount + ((j + 1) % sliceCount);
-			int c = middleIdx + i * sliceCount + j;
-			int d = middleIdx + i * sliceCount + ((j + 1) % sliceCount);
-
-			indices.push_back(a);
-			indices.push_back(c);
-			indices.push_back(d);
-
-			indices.push_back(a);
-			indices.push_back(d);
-			indices.push_back(b);
-		}
-	}
-
-	for (int i = 0; i < sliceCount; i++) {
-		int a = vertices.size() - 1;
-		int b = vertices.size() - 1 - sliceCount + i;
-		int c = vertices.size() - 1 - sliceCount + ((i + 1) % sliceCount);
-
-		indices.push_back(b);
-		indices.push_back(a);
-		indices.push_back(c);
-	}
-
-
-
-	DirectX::SimpleMath::Vector3 minPoint = vertices[0].pos;
-	DirectX::SimpleMath::Vector3 maxPoint = vertices[0].pos;
-
-	for (const auto& vertex : vertices) {
-		// minPoint 업데이트
-		minPoint.x = std::min(minPoint.x, vertex.pos.x);
-		minPoint.y = std::min(minPoint.y, vertex.pos.y);
-		minPoint.z = std::min(minPoint.z, vertex.pos.z);
-
-		// maxPoint 업데이트
-		maxPoint.x = max(maxPoint.x, vertex.pos.x);
-		maxPoint.y = max(maxPoint.y, vertex.pos.y);
-		maxPoint.z = max(maxPoint.z, vertex.pos.z);
-	}
-
-
-	capsuleMesh->SetData(vertices, indices, maxPoint, minPoint);
-	CreateMesh(capsuleMesh);
-}
-
-void ResourceManager::LoadCylinderMesh()
-{
-	std::shared_ptr<Mesh> cylinderMesh = std::make_shared<Mesh>();
-
-	cylinderMesh->SetName(L"Cylinder");
-
-	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
-
-	float radius = 0.5f; // 실린더의 반지름
-	float height = 1.0f; // 실린더의 높이
-	int sliceCount = 20; // 수직 분할
-
-	// 정상 정점
-	vertices.push_back(Vertex{
-		DirectX::SimpleMath::Vector3{0.0f, height * 0.5f, 0.0f},
-		DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f},
-		DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
-		DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
-	);
-
-	// 바닥 정점
-	vertices.push_back(Vertex{
-		DirectX::SimpleMath::Vector3{0.0f, -height * 0.5f, 0.0f},
-		DirectX::SimpleMath::Vector4{1.f, 1.f, 1.f,1.f} ,
-		DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
-		DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
-	);
-
-	// 윗면
-	for (int i = 0; i < sliceCount; ++i)
-	{
-		float zTheta = DirectX::XM_PI * 2.0f * (i / static_cast<float>(sliceCount));
-
-		float x = radius * sinf(zTheta);
-		float y = height * 0.5f;
-		float z = radius * cosf(zTheta);
-
-		vertices.push_back(Vertex{
-			DirectX::SimpleMath::Vector3{x, y, z},
-			DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f},
-			DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
-			DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
-		);
-	}
-
-	// 밑면
-	for (int i = 0; i < sliceCount; ++i)
-	{
-		float zTheta = DirectX::XM_PI * 2.0f * (i / static_cast<float>(sliceCount));
-
-		float x = radius * sinf(zTheta);
-		float y = height * 0.5f;
-		float z = radius * cosf(zTheta);
-
-		vertices.push_back(Vertex{
-			DirectX::SimpleMath::Vector3{x, -y, z},
-			DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f },
-			DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
-			DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
-		);
-	}
-
-	// 윗면 인덱스
-	for (int i = 0; i < sliceCount; ++i)
-	{
-		int a = 0;
-		int b = 2 + i;
-		int c = 2 + ((i + 1) % sliceCount);
-
-		indices.push_back(a);
-		indices.push_back(b);
-		indices.push_back(c);
-	}
-
-	// 옆면 인덱스
-	for (int i = 0; i < sliceCount; ++i)
-	{
-		int a = 2 + i;
-		int b = 2 + ((i + 1) % sliceCount);
-		int c = 2 + sliceCount + i;
-		int d = 2 + sliceCount + ((i + 1) % sliceCount);
-
-		indices.push_back(a);
-		indices.push_back(c);
-		indices.push_back(d);
-
-		indices.push_back(a);
-		indices.push_back(d);
-		indices.push_back(b);
-	}
-
-	// 밑면 인덱스
-	for (int i = 0; i < sliceCount; ++i)
-	{
-		int a = 1;
-		int b = 2 + sliceCount + i;
-		int c = 2 + sliceCount + ((i + 1) % sliceCount);
-
-		indices.push_back(b);
-		indices.push_back(a);
-		indices.push_back(c);
-	}
-
-
-
-
-	DirectX::SimpleMath::Vector3 minPoint = vertices[0].pos;
-	DirectX::SimpleMath::Vector3 maxPoint = vertices[0].pos;
-
-	for (const auto& vertex : vertices) {
-		// minPoint 업데이트
-		minPoint.x = std::min(minPoint.x, vertex.pos.x);
-		minPoint.y = std::min(minPoint.y, vertex.pos.y);
-		minPoint.z = std::min(minPoint.z, vertex.pos.z);
-
-		// maxPoint 업데이트
-		maxPoint.x = max(maxPoint.x, vertex.pos.x);
-		maxPoint.y = max(maxPoint.y, vertex.pos.y);
-		maxPoint.z = max(maxPoint.z, vertex.pos.z);
-	}
-
-
-
-	cylinderMesh->SetData(vertices, indices, maxPoint, minPoint);
-	CreateMesh(cylinderMesh);
-}
+//
+//void ResourceManager::LoadCapsuleMesh()
+//{
+//	std::shared_ptr<Mesh> capsuleMesh = std::make_shared<Mesh>();
+//
+//	capsuleMesh->SetName(L"Capsule");
+//
+//	float radius = 0.5f; // 캡슐의 반지름
+//	float height = 1.0f; // 캡슐의 높이
+//	int stackCount = 5; // 수평 분할
+//	int sliceCount = 20; // 수직 분할
+//
+//	std::vector<Vertex> vertices;
+//	std::vector<unsigned int> indices;
+//
+//	// 상단 반구 정점
+//	vertices.push_back(Vertex{
+//		DirectX::SimpleMath::Vector3{0.0f, radius + height * 0.5f, 0.0f},
+//		DirectX::SimpleMath::Vector4{1.f, 1.f, 1.f, 1.f} });
+//
+//	for (int i = 1; i <= stackCount; i++)
+//	{
+//		// 윗방향 벡터와의 각도
+//		float upTheta = DirectX::XM_PI * 0.5f * (i / static_cast<float>(stackCount));
+//
+//		float xzsize = radius * sinf(upTheta);
+//		float ysize = radius * cosf(upTheta);
+//
+//		for (int j = 0; j < sliceCount; j++)
+//		{
+//			float zTheta = DirectX::XM_PI * 2.0f * (j / static_cast<float>(sliceCount));
+//
+//			float x = xzsize * sinf(zTheta);
+//			float y = ysize + height * 0.5f;
+//			float z = xzsize * cosf(zTheta);
+//
+//			vertices.push_back(Vertex{
+//				DirectX::SimpleMath::Vector3{x, y, z},
+//				DirectX::SimpleMath::Vector4(1.f, 1.f,1.f,1.f) }
+//			);
+//		}
+//	}
+//
+//	size_t middleIdx = vertices.size();
+//
+//	// 하단 반구 정점
+//	for (int i = stackCount; i >= 1; i--)
+//	{
+//		// 윗방향 벡터와의 각도
+//		float upTheta = DirectX::XM_PI * 0.5f * (i / static_cast<float>(stackCount));
+//
+//		float xzsize = radius * sinf(upTheta);
+//		float ysize = radius * cosf(upTheta);
+//
+//		for (int j = 0; j < sliceCount; j++)
+//		{
+//			float zTheta = DirectX::XM_PI * 2.0f * (j / static_cast<float>(sliceCount));
+//
+//			float x = xzsize * sinf(zTheta);
+//			float y = ysize + height * 0.5f;
+//			float z = xzsize * cosf(zTheta);
+//
+//			vertices.push_back(Vertex{
+//				DirectX::SimpleMath::Vector3(x, -y, z),
+//				DirectX::SimpleMath::Vector4(1.f, 1.f,1.f,1.f) }
+//			);
+//		}
+//	}
+//
+//	vertices.push_back(Vertex{
+//		DirectX::SimpleMath::Vector3{0.0f, -(radius + height * 0.5f), 0.0f},
+//		DirectX::SimpleMath::Vector4(1.f, 1.f,1.f,1.f) }
+//	);
+//
+//	// 상단 반구 인덱스
+//	for (int i = 0; i < sliceCount; i++) {
+//		int a = 0;
+//		int b = 1 + i;
+//		int c = 1 + ((i + 1) % sliceCount);
+//
+//		indices.push_back(a);
+//		indices.push_back(b);
+//		indices.push_back(c);
+//	}
+//
+//	for (int i = 1; i < stackCount; i++) {
+//		for (int j = 0; j < sliceCount; j++) {
+//			int a = 1 + (i - 1) * sliceCount + j;
+//			int b = 1 + (i - 1) * sliceCount + ((j + 1) % sliceCount);
+//			int c = 1 + i * sliceCount + j;
+//			int d = 1 + i * sliceCount + ((j + 1) % sliceCount);
+//
+//			indices.push_back(a);
+//			indices.push_back(c);
+//			indices.push_back(d);
+//
+//			indices.push_back(a);
+//			indices.push_back(d);
+//			indices.push_back(b);
+//		}
+//	}
+//
+//	// 실린더 부분 인덱스
+//	for (int i = 0; i < sliceCount; i++)
+//	{
+//		int a = middleIdx - sliceCount + i;
+//		int b = middleIdx - sliceCount + ((i + 1) % sliceCount);
+//		int c = middleIdx + i;
+//		int d = middleIdx + ((i + 1) % sliceCount);
+//
+//		indices.push_back(a);
+//		indices.push_back(c);
+//		indices.push_back(d);
+//
+//		indices.push_back(a);
+//		indices.push_back(d);
+//		indices.push_back(b);
+//	}
+//
+//	// 하단 반구 인덱스
+//	for (int i = 1; i < stackCount; i++) {
+//		for (int j = 0; j < sliceCount; j++) {
+//			int a = middleIdx + (i - 1) * sliceCount + j;
+//			int b = middleIdx + (i - 1) * sliceCount + ((j + 1) % sliceCount);
+//			int c = middleIdx + i * sliceCount + j;
+//			int d = middleIdx + i * sliceCount + ((j + 1) % sliceCount);
+//
+//			indices.push_back(a);
+//			indices.push_back(c);
+//			indices.push_back(d);
+//
+//			indices.push_back(a);
+//			indices.push_back(d);
+//			indices.push_back(b);
+//		}
+//	}
+//
+//	for (int i = 0; i < sliceCount; i++) {
+//		int a = vertices.size() - 1;
+//		int b = vertices.size() - 1 - sliceCount + i;
+//		int c = vertices.size() - 1 - sliceCount + ((i + 1) % sliceCount);
+//
+//		indices.push_back(b);
+//		indices.push_back(a);
+//		indices.push_back(c);
+//	}
+//
+//
+//
+//	DirectX::SimpleMath::Vector3 minPoint = vertices[0].pos;
+//	DirectX::SimpleMath::Vector3 maxPoint = vertices[0].pos;
+//
+//	for (const auto& vertex : vertices) {
+//		// minPoint 업데이트
+//		minPoint.x = std::min(minPoint.x, vertex.pos.x);
+//		minPoint.y = std::min(minPoint.y, vertex.pos.y);
+//		minPoint.z = std::min(minPoint.z, vertex.pos.z);
+//
+//		// maxPoint 업데이트
+//		maxPoint.x = max(maxPoint.x, vertex.pos.x);
+//		maxPoint.y = max(maxPoint.y, vertex.pos.y);
+//		maxPoint.z = max(maxPoint.z, vertex.pos.z);
+//	}
+//
+//
+//	capsuleMesh->SetData(vertices, indices, maxPoint, minPoint);
+//	CreateMesh(capsuleMesh);
+//}
+//
+//void ResourceManager::LoadCylinderMesh()
+//{
+//	std::shared_ptr<Mesh> cylinderMesh = std::make_shared<Mesh>();
+//
+//	cylinderMesh->SetName(L"Cylinder");
+//
+//	std::vector<Vertex> vertices;
+//	std::vector<unsigned int> indices;
+//
+//	float radius = 0.5f; // 실린더의 반지름
+//	float height = 1.0f; // 실린더의 높이
+//	int sliceCount = 20; // 수직 분할
+//
+//	// 정상 정점
+//	vertices.push_back(Vertex{
+//		DirectX::SimpleMath::Vector3{0.0f, height * 0.5f, 0.0f},
+//		DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f},
+//		DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
+//		DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
+//	);
+//
+//	// 바닥 정점
+//	vertices.push_back(Vertex{
+//		DirectX::SimpleMath::Vector3{0.0f, -height * 0.5f, 0.0f},
+//		DirectX::SimpleMath::Vector4{1.f, 1.f, 1.f,1.f} ,
+//		DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
+//		DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
+//	);
+//
+//	// 윗면
+//	for (int i = 0; i < sliceCount; ++i)
+//	{
+//		float zTheta = DirectX::XM_PI * 2.0f * (i / static_cast<float>(sliceCount));
+//
+//		float x = radius * sinf(zTheta);
+//		float y = height * 0.5f;
+//		float z = radius * cosf(zTheta);
+//
+//		vertices.push_back(Vertex{
+//			DirectX::SimpleMath::Vector3{x, y, z},
+//			DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f},
+//			DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
+//			DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
+//		);
+//	}
+//
+//	// 밑면
+//	for (int i = 0; i < sliceCount; ++i)
+//	{
+//		float zTheta = DirectX::XM_PI * 2.0f * (i / static_cast<float>(sliceCount));
+//
+//		float x = radius * sinf(zTheta);
+//		float y = height * 0.5f;
+//		float z = radius * cosf(zTheta);
+//
+//		vertices.push_back(Vertex{
+//			DirectX::SimpleMath::Vector3{x, -y, z},
+//			DirectX::SimpleMath::Vector4{1.f, 1.f,1.f,1.f },
+//			DirectX::SimpleMath::Vector2{ 0.0f, 1.0f },
+//			DirectX::SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } }
+//		);
+//	}
+//
+//	// 윗면 인덱스
+//	for (int i = 0; i < sliceCount; ++i)
+//	{
+//		int a = 0;
+//		int b = 2 + i;
+//		int c = 2 + ((i + 1) % sliceCount);
+//
+//		indices.push_back(a);
+//		indices.push_back(b);
+//		indices.push_back(c);
+//	}
+//
+//	// 옆면 인덱스
+//	for (int i = 0; i < sliceCount; ++i)
+//	{
+//		int a = 2 + i;
+//		int b = 2 + ((i + 1) % sliceCount);
+//		int c = 2 + sliceCount + i;
+//		int d = 2 + sliceCount + ((i + 1) % sliceCount);
+//
+//		indices.push_back(a);
+//		indices.push_back(c);
+//		indices.push_back(d);
+//
+//		indices.push_back(a);
+//		indices.push_back(d);
+//		indices.push_back(b);
+//	}
+//
+//	// 밑면 인덱스
+//	for (int i = 0; i < sliceCount; ++i)
+//	{
+//		int a = 1;
+//		int b = 2 + sliceCount + i;
+//		int c = 2 + sliceCount + ((i + 1) % sliceCount);
+//
+//		indices.push_back(b);
+//		indices.push_back(a);
+//		indices.push_back(c);
+//	}
+//
+//
+//
+//
+//	DirectX::SimpleMath::Vector3 minPoint = vertices[0].pos;
+//	DirectX::SimpleMath::Vector3 maxPoint = vertices[0].pos;
+//
+//	for (const auto& vertex : vertices) {
+//		// minPoint 업데이트
+//		minPoint.x = std::min(minPoint.x, vertex.pos.x);
+//		minPoint.y = std::min(minPoint.y, vertex.pos.y);
+//		minPoint.z = std::min(minPoint.z, vertex.pos.z);
+//
+//		// maxPoint 업데이트
+//		maxPoint.x = max(maxPoint.x, vertex.pos.x);
+//		maxPoint.y = max(maxPoint.y, vertex.pos.y);
+//		maxPoint.z = max(maxPoint.z, vertex.pos.z);
+//	}
+//
+//
+//
+//	cylinderMesh->SetData(vertices, indices, maxPoint, minPoint);
+//	CreateMesh(cylinderMesh);
+//}
+//
+//void ResourceManager::LoadTriangleMesh()
+//{
+//	std::shared_ptr<Mesh> triangleMesh = std::make_shared<Mesh>();
+//
+//	triangleMesh->SetName(L"Triangle");
+//
+//	float size = 0.5f;
+//
+//	std::vector<Vertex> triangleVertices(3);
+//
+//	// POS COLOR UV TANGENT
+//	// 삼각형
+//	triangleVertices[0] = Vertex(DirectX::SimpleMath::Vector3(-size, 0.0f, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+//	triangleVertices[1] = Vertex(DirectX::SimpleMath::Vector3(0.0f, size, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.5f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+//	triangleVertices[2] = Vertex(DirectX::SimpleMath::Vector3(size, 0.0f, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f));
+//
+//	std::vector<unsigned int> triangleIndices(3);
+//
+//	triangleIndices[0] = 0; triangleIndices[1] = 1; triangleIndices[2] = 2;
+//
+//	DirectX::SimpleMath::Vector3 minPoint = triangleVertices[0].pos;
+//	DirectX::SimpleMath::Vector3 maxPoint = triangleVertices[0].pos;
+//
+//	for (const auto& vertex : triangleVertices) {
+//		// minPoint 업데이트
+//		minPoint.x = std::min(minPoint.x, vertex.pos.x);
+//		minPoint.y = std::min(minPoint.y, vertex.pos.y);
+//		minPoint.z = std::min(minPoint.z, vertex.pos.z);
+//
+//		// maxPoint 업데이트
+//		maxPoint.x = max(maxPoint.x, vertex.pos.x);
+//		maxPoint.y = max(maxPoint.y, vertex.pos.y);
+//		maxPoint.z = max(maxPoint.z, vertex.pos.z);
+//	}
+//
+//	triangleMesh->SetData(triangleVertices, triangleIndices, maxPoint, minPoint);
+//	CreateMesh(triangleMesh);
+//}
 
 std::wstring ResourceManager::String_To_Wstring(const std::string& str)
 {

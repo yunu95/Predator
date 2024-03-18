@@ -11,6 +11,7 @@
 class InstanceBuffer;
 class Mesh;
 class Material;
+class PointLight;
 
 // MeshID / MaterialID
 using InstanceID = std::pair<unsigned __int64, unsigned __int64>;
@@ -28,6 +29,8 @@ public:
 	void RenderStaticForward();
 
 	void RenderStaticShadow();
+	void RenderStaticPointLightShadow(DirectX::SimpleMath::Matrix& lightWTM, std::shared_ptr<PointLight> light);
+	void RenderSkinnedPointLightShadow(DirectX::SimpleMath::Matrix& lightWTM, std::shared_ptr<PointLight> light);
 
 	void RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& renderInfo);
 	void RegisterStaticForwardData(std::shared_ptr<RenderInfo>& renderInfo);

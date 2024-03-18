@@ -56,6 +56,7 @@ public:
 	void RenderObject();
 	void RenderSkinned();
 	void RenderShadow();
+	void RenderPointLightShadow();
 	void RenderLight();
 	void RenderFinal();
 	void RenderBackBuffer();

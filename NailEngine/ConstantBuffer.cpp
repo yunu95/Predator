@@ -40,7 +40,7 @@ void ConstantBuffer::CraeteConstantBuffer(unsigned int size)
 	//buffer.Get()->SetPrivateData(myGuid, this->size * this->count, this->mappedBuffer);
 }
 
-void ConstantBuffer::PushGraphicsData(void* data, unsigned int size, unsigned int slot)
+void ConstantBuffer::PushGraphicsData(void* data, unsigned int size, unsigned int slot, bool useGS)
 {
 	assert(this->size == ((size + 15) & ~15));
 
@@ -52,6 +52,11 @@ void ConstantBuffer::PushGraphicsData(void* data, unsigned int size, unsigned in
 
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->VSSetConstantBuffers(slot, 1, this->buffer.GetAddressOf());
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetConstantBuffers(slot, 1, this->buffer.GetAddressOf());
+
+	if (useGS)
+	{
+		ResourceBuilder::Instance.Get().device->GetDeviceContext()->GSSetConstantBuffers(slot, 1, this->buffer.GetAddressOf());
+	}
 }
 
 void ConstantBuffer::Clear()

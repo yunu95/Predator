@@ -17,17 +17,13 @@ struct VertexIn
 
 struct VertexOut
 {
-    float4 posH : SV_Position;
-    float4 posV : POSITION;
-    float4 color : COLOR;
-    float2 uv : TEXCOORD0;
-    float3 normalV : NORMAL;
-    float3 tangentV : TANGENT;
-    float3 biNormalV : BINORMAL;
+    float4 pos : POSITION;
 };
 
 row_major matrix GetAnimationMatrix(VertexIn input)
 {
+
+    
     float indices[4] = { input.indices.x, input.indices.y, input.indices.z, input.indices.w };
     float weights[4] = { input.weight.x, input.weight.y, input.weight.z, input.weight.w };
 
@@ -40,12 +36,12 @@ row_major matrix GetAnimationMatrix(VertexIn input)
     currFrame[0] = transitionDesc[input.instanceID].curr.currFrame;
     nextFrame[0] = transitionDesc[input.instanceID].curr.nextFrame;
     ratio[0] = transitionDesc[input.instanceID].curr.ratio;
-    
+
     animIndex[1] = transitionDesc[input.instanceID].next.animIndex;
     currFrame[1] = transitionDesc[input.instanceID].next.currFrame;
     nextFrame[1] = transitionDesc[input.instanceID].next.nextFrame;
     ratio[1] = transitionDesc[input.instanceID].next.ratio;
-    
+
     float4 c0, c1, c2, c3;
     float4 n0, n1, n2, n3;
     matrix curr = 0;
@@ -96,41 +92,18 @@ row_major matrix GetAnimationMatrix(VertexIn input)
 VertexOut main(VertexIn input)
 {
     VertexOut output = (VertexOut) 0;
-    row_major matrix _WV = mul(input.world, VTM);
-    row_major matrix _WVP = mul(_WV, PTM);
     
     if (transitionDesc[input.instanceID].curr.animIndex == -1)
     {
-        output.posH = mul(float4(input.pos, 1.f), _WVP);
-        output.posV = mul(float4(input.pos, 1.f), _WV);
-        output.normalV = normalize(mul(float4(input.normal, 0.f), _WV));
-        output.tangentV = normalize(mul(float4(input.tangent, 0.f), _WV));
-        output.biNormalV = normalize(cross(output.tangentV, output.normalV));
+        output.pos = mul(float4(input.pos, 1.f), input.world);
     }
     else
     {
         row_major matrix boneMat = GetAnimationMatrix(input);
         
-        output.posH = mul(float4(input.pos, 1.f), boneMat);
-        output.posH = mul(output.posH, _WVP);
-    
-        output.posV = mul(float4(input.pos, 1.f), boneMat);
-        output.posV = mul(output.posV, _WV);
-        
-        output.normalV = normalize(mul(float4(input.normal, 0.f), boneMat));
-        output.normalV = normalize(mul(float4(output.normalV, 0.f), _WV));
-    
-        output.tangentV = normalize(mul(float4(input.tangent, 0.f), boneMat));
-        output.tangentV = normalize(mul(float4(output.tangentV, 0.f), _WV));
-    
-        output.biNormalV = normalize(cross(output.tangentV, output.normalV));
+        output.pos = mul(float4(input.pos, 1.f), boneMat);
+        output.pos = mul(output.pos, input.world);
     }
-    
-    output.color = input.color;
-    
-    output.uv = input.uv;
-    
-  
     
     return output;
 }

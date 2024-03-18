@@ -108,7 +108,9 @@ CODE
  - Minimize setup and maintenance.
  - Minimize state storage on user side.
  - Minimize state synchronization.
- - Portable, minimize dependencies, run on target (consoles, phones, etc.).
+ - Portable, minimize dependencies, run on target (
+ 
+ s, phones, etc.).
  - Efficient runtime and memory consumption.
 
  Designed primarily for developers and content-creators, not the typical end-user!

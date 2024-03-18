@@ -63,3 +63,8 @@ void CameraManager::GetResolution(yunuGI::ICamera* adapter, float* width, float*
 {
 	this->cameraMap[adapter]->GetResolution(width, height);
 }
+
+DirectX::SimpleMath::Matrix CameraManager::GetPTM90ByResolution(float width, float height, float farPlane, float nearPlane)
+{
+	return DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PI / 2.f, width / height, nearPlane, farPlane);
+}

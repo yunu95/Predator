@@ -20,6 +20,7 @@
 
 #include "InstancingManager.h"
 #include "ShadowPass.h"
+#include "PointLightShadowPass.h"
 #include "SkyBoxPass.h"
 #include "BloomPass.h"
 
@@ -59,6 +60,8 @@ void NailEngine::Init(UINT64 hWnd)
 		ResourceManager::Instance.Get().GetShader(L"SkyBoxPS.cso").get());
 
 	BloomPass::Instance.Get().Init();
+
+	PointLightShadowPass::Instance.Get().Init();
 }
 
 void NailEngine::Render()
@@ -153,6 +156,18 @@ void NailEngine::CreateConstantBuffer()
 		_constantBuffer->CraeteConstantBuffer(sizeof(FogBuffer));
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
+
+	{
+		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
+		_constantBuffer->CraeteConstantBuffer(sizeof(PointLightVPMatrix));
+		this->constantBuffers.emplace_back(_constantBuffer);
+	}
+
+	{
+		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
+		_constantBuffer->CraeteConstantBuffer(sizeof(PointLightIndex));
+		this->constantBuffers.emplace_back(_constantBuffer);
+	}
 }
 
 void NailEngine::CreateRenderTargetGroup()
@@ -237,7 +252,7 @@ void NailEngine::CreateRenderTargetGroup()
 			L"DiffuseLightTarget",
 			this->windowInfo.width,
 			this->windowInfo.height,
-			DXGI_FORMAT_R16G16B16A16_FLOAT,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
 			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 		);
 
@@ -288,7 +303,7 @@ void NailEngine::CreateRenderTargetGroup()
 			L"FinalTarget",
 			this->windowInfo.width,
 			this->windowInfo.height,
-			DXGI_FORMAT_R16G16B16A16_FLOAT,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
 			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 		);
 
@@ -296,6 +311,7 @@ void NailEngine::CreateRenderTargetGroup()
 		rtVec[0].clearColor[1] = 0.8784;
 		rtVec[0].clearColor[2] = 0.9451;
 		rtVec[0].clearColor[3] = 1.f;
+		
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)] = std::make_shared<RenderTargetGroup>();
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->SetRenderTargetVec(rtVec);
 	}

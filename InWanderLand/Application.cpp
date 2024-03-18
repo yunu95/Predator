@@ -114,6 +114,7 @@ namespace application
 		/// 게임 윈도우 생성
 		int winPosX = (GetSystemMetrics(SM_CXSCREEN) - appSpecification.windowWidth) / 2;	// 윈도우 X 좌표
 		int winPosY = (GetSystemMetrics(SM_CYSCREEN) - appSpecification.windowHeight) / 2;	// 윈도우 Y 좌표
+
 		hWND = ::CreateWindow(wc.lpszClassName, wc.lpszClassName, WS_OVERLAPPEDWINDOW, winPosX, winPosY, appSpecification.windowWidth, appSpecification.windowHeight, NULL, NULL, wc.hInstance, NULL);
 
 		RECT wndRect;

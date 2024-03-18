@@ -13,7 +13,9 @@ struct PS_OUT
     float4 specular : SV_Target1;
 };
 
-// Deferred_DirectionalLight
+// Deferred_PointLight
+// Albedo : Deferred Albedo
+// ARMMap : Deferred ARM
 // Temp0Map : View Position
 // Temp1Map : View Normal
 // temp_int0 : light index
@@ -34,6 +36,7 @@ PS_OUT main(PixelIn input)
     int lightIndex = temp_int0;
     float3 viewLightPos = mul(float4(lights[lightIndex].position.xyz, 1.f), VTM).xyz;
     float distance = length(viewPos - viewLightPos);
+   
     if (distance > lights[lightIndex].range)
     {
         clip(-1);
@@ -43,7 +46,20 @@ PS_OUT main(PixelIn input)
     
     LightColor color;
     
-    CalculateLight(lightIndex, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);
+    float3 arm;
+    float3 albedo;
+    if (UseTexture(useARM) == 1)
+    {
+        arm = ARMMap.Sample(sam, uv).xyz;
+        albedo = AlbedoMap.Sample(sam, uv).xyz;
+    }
+    
+    CalculatePBRLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo, arm.r, arm.b, arm.g);
+    //CalculateLight(lightIndex, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);
+    
+    //float3 x = max(0, color.diffuse.xyz - 0.004);
+    //color.diffuse.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
+    //color.diffuse.w = 1;
     
     output.diffuse = (color.diffuse + color.ambient);
     //output.specular = color.specular;
