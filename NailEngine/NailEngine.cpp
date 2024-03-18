@@ -228,7 +228,7 @@ void NailEngine::CreateRenderTargetGroup()
 			L"ARMTarget",
 			this->windowInfo.width,
 			this->windowInfo.height,
-			DXGI_FORMAT_R8G8B8A8_UNORM,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
 			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 		);
 
@@ -252,7 +252,7 @@ void NailEngine::CreateRenderTargetGroup()
 			L"DiffuseLightTarget",
 			this->windowInfo.width,
 			this->windowInfo.height,
-			DXGI_FORMAT_R8G8B8A8_UNORM,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
 			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 		);
 
@@ -303,7 +303,7 @@ void NailEngine::CreateRenderTargetGroup()
 			L"FinalTarget",
 			this->windowInfo.width,
 			this->windowInfo.height,
-			DXGI_FORMAT_R8G8B8A8_UNORM,
+			DXGI_FORMAT_R16G16B16A16_FLOAT,
 			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 		);
 

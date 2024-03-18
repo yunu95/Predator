@@ -138,6 +138,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
     ambient = float4(0.f, 0.f, 0.f, 0.f);
     specular = float4(0.f, 0.f, 0.f, 0.f);
     
+    
     // 뷰 디렉션
     float3 Lo = normalize(pos);
     Lo = -Lo;
@@ -154,7 +155,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
     if (lights[lightIndex].lightType == 0)
     {
         float3 Li = normalize(mul(float4(-lights[lightIndex].direction.xyz, 0.f), VTM).xyz);
-        float3 Lradiance = float3(1.f, 1.f, 1.f);
+        float3 Lradiance = float3(1,1,1);
         
         // 하프 벡터
         float3 Lh = normalize(Li + Lo);
@@ -216,15 +217,15 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
 
         //diffuse = float4(pow(float3(diffuse.xyz), 1.0 / 2.2), 1.0);
         
-        //float exposure = 1.0; // 톤매핑 강도를 조절하는 매개변수
+        //float exposure = 0.7; // 톤매핑 강도를 조절하는 매개변수
         //float3 toneMappedColor = diffuse.xyz / (1.0 + diffuse.xyz / exposure);
         //diffuse.xyz = toneMappedColor;
         
-        //float3 x = max(0, diffuse.xyz - 0.004);
-        //diffuse.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
-        //diffuse.w = 1;
+        float3 x = max(0, diffuse.xyz - 0.004);
+        diffuse.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
+        diffuse.w = 1;
         
-        diffuse = float4(pow(float3(diffuse.xyz), 1.0 / 2.2), 1.0);
+        //diffuse = float4(pow(float3(diffuse.xyz), 1.f/2.2), 1.0);
         
         //diffuse *= shadow;
     }
