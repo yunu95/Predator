@@ -40,7 +40,6 @@ namespace snippets
             xyPlane->GetTransform()->SetWorldPosition({ 0,0,-5 + 2 });
             camObj->GetGI().SetNear(2);
 
-            yunutyEngine::YunutyCycle::SingleInstance().Play();
         }
     public:
         /// <summary>

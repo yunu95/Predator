@@ -6,6 +6,9 @@
 #pragma once
 
 #include "ITemplateData.h"
+#include "GlobalConstant.h"
+
+#include "TemplateDataManager.h"
 
 namespace application
 {
@@ -16,7 +19,7 @@ namespace application
         struct POD_Wave_TemplateData
         {
             TO_JSON(POD_Wave_TemplateData)
-                FROM_JSON(POD_Wave_TemplateData)
+            FROM_JSON(POD_Wave_TemplateData)
         };
 
         class Wave_TemplateData
@@ -29,6 +32,7 @@ namespace application
             virtual std::string GetDataKey() const override;
             virtual void SetDataResourceName(std::string fbxName) {};
             virtual std::string GetDataResourceName() const override { return std::string(); };
+            virtual bool EnterDataFromGlobalConstant() override;
 
             static Wave_TemplateData& GetInstance()
             {

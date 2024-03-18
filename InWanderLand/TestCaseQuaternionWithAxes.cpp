@@ -71,7 +71,6 @@ namespace tests
 
             auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<graphics::DirectionalLight>();
             directionalLight->GetTransform()->SetWorldRotation(Quaternion({ 10,10,0 }));
-            yunutyEngine::YunutyCycle::SingleInstance().Play();
             DelayedTestFunctions* delayedTestFunctions = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DelayedTestFunctions>();
             delayedTestFunctions->todoList.push_back({ 200,[=]() {
                 Assert::IsTrue(collider1->triggerCount == 1);

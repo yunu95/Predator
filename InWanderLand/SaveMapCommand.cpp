@@ -16,7 +16,6 @@ namespace application
 
         void SaveMapCommand::Execute()
         {
-            auto& mfm = MapFileManager::GetSingletonInstance();
             if (saveAs)
             {
                 std::filesystem::path filepath = fileSystem::SaveFileDialog("Map File (*.pmap)\0*.pmap\0");
@@ -27,16 +26,16 @@ namespace application
                 if (!filepath.has_extension())
                     filepath += ".pmap";
 
-                mfm.SetCurrentMapPath(filepath.string());
-                MapFileManager::GetSingletonInstance().SaveMapFile(filepath.string());
+                mapFileManager.SetCurrentMapPath(filepath.string());
+                mapFileManager.SaveMapFile(filepath.string());
             }
             else
             {
-                if (mfm.GetCurrentMapPath().empty())
+                if (mapFileManager.GetCurrentMapPath().empty())
                 {
                     return;
                 }
-			    MapFileManager::GetSingletonInstance().SaveMapFile(mfm.GetCurrentMapPath());
+                mapFileManager.SaveMapFile(mapFileManager.GetCurrentMapPath());
             }
         }
     }

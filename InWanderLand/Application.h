@@ -41,6 +41,14 @@ namespace application
         void Finalize();		// 마무리
 
         /// 기능 단위 요소
+        // 에디터 환경에서의 작업을 중단시키고 게임 진행 환경으로 전환함
+        // 이미 게임이 진행중인 경우, 현재 인스턴스들에 데이터만 Update 함
+        void PlayContents();
+        // 게임 진행 환경일 때, 게임을 일시 정지하고 에디터 작업이 가능하도록 함
+        void PauseContents();
+        // 게임 진행 환경일 때, 게임을 중단하고 에디터 환경으로 전환함
+        void StopContents();
+
         void TurnOff();			// Run 상태일 때, 루프를 탈출함
         // 메인 스레드 루프가 끝나기 전에 실행할 함수를 등록합니다. 등록된 동작은 한번 실행후 사라집니다.
         // AddMainLoopTodo 함수는 메인 스레드 루프에 뮤텍스 락을 겁니다.
@@ -109,6 +117,8 @@ namespace application
         ApplicationSpecification appSpecification;
         bool isRunning = false;
         std::vector<Layer*> layers;
+
+        bool isContentsPlaying = false;
 
         editor::ResourceManager& erm = editor::ResourceManager::GetSingletonInstance();
         editor::CommandManager& cm = editor::CommandManager::GetSingletonInstance();

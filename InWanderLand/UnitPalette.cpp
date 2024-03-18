@@ -13,18 +13,32 @@ namespace application::editor::palette
     void UnitPalette::SelectUnitTemplateData(Unit_TemplateData* templateData)
     {
         selectedUnitTemplateData = templateData;
-        UnitBrush::Instance().ReadyBrush(selectedUnitTemplateData);
+        if (selectedUnitTemplateData == nullptr)
+        {
+            UnitBrush::Instance().ReadyBrush("");
+        }
+        else
+        {
+            UnitBrush::Instance().ReadyBrush(selectedUnitTemplateData->GetDataKey());
+        }
     }
+
     void UnitPalette::UnselectUnitTemplateData()
     {
         SelectUnitTemplateData(nullptr);
     }
+
     void UnitPalette::Reset()
     {
+        Palette::Reset();
         UnselectUnitTemplateData();
     }
-    UnitData* UnitPalette::PlaceInstance(Vector3d worldPosition)
+
+    IEditableData* UnitPalette::PlaceInstance(Vector3d worldPosition)
     {
+        if (selectedUnitTemplateData == nullptr)
+            return nullptr;
+
         auto instance = InstanceManager::GetSingletonInstance().CreateInstance<UnitData>(selectedUnitTemplateData->GetDataKey());
         instance->pod.position.x = worldPosition.x;
         instance->pod.position.y = worldPosition.y;
@@ -36,7 +50,8 @@ namespace application::editor::palette
         if (isWaveUnit)
         {
             instance->pod.waveData = wave;
-            wave->InsertUnitData({ .unitData = instance,.waveIdx = waveIdx,.delay = WavePalette::SingleInstance().currentSelectedWaveTimeOffset });
+            wave->InsertUnitData({ .unitData = instance,.waveIdx = waveIdx,.delay = WavePalette::SingleInstance().GetCurrentSelectedWaveTimeOffset() });
+            wave->ApplyMapAsPod();
         }
         instance->ApplyAsPaletteInstance();
         return instance;
@@ -57,11 +72,11 @@ namespace application::editor::palette
 
         if (isSelectMode)
         {
-            UnitBrush::Instance().ReadyBrush(nullptr);
+            UnitBrush::Instance().ReadyBrush("");
         }
         else
         {
-            UnitBrush::Instance().ReadyBrush(selectedUnitTemplateData);
+            SelectUnitTemplateData(selectedUnitTemplateData);
         }
     }
 
@@ -97,7 +112,11 @@ namespace application::editor::palette
         }
         state = State::None;
         CleanUpData();
-        WavePalette::SingleInstance().currentSelectedWaveIndex = -1;
+        if (WavePalette::SingleInstance().currentSelectedWaveIndex >= 0)
+        {
+            WavePalette::SingleInstance().HideWaveUnitsVisibility();
+            WavePalette::SingleInstance().currentSelectedWaveIndex = -1;
+        }
     }
 
     void UnitPalette::CleanUpData()
@@ -105,6 +124,7 @@ namespace application::editor::palette
         Palette::CleanUpData();
         Reset();
     }
+
     void UnitPalette::Delete(IEditableData* data)
     {
         auto unitData = dynamic_cast<UnitData*>(data);

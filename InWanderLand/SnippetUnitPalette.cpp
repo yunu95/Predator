@@ -68,7 +68,6 @@ namespace snippets
                 //tempUnit3->GetTransform()->position = Vector3d(0, 0, 3);
 
                 SelectionBox::Instance();
-                yunutyEngine::YunutyCycle::SingleInstance().Play();
             }
             // 테스트 함수의 이름이 Snippet으로 시작하는 테스트들은 빌드의 성공 여부 판단에 쓰이지 않습니다.
             // RunTests.bat를 실행해도 이 테스트들은 실행되지 않으며, Jenkins에서도 이 테스트들은 실행되지 않습니다.

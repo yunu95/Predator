@@ -70,22 +70,28 @@ namespace application
             protected:
                 virtual void OnTriggerEnter(physics::Collider* other) override
                 {
-                    if (auto instance = other->GetGameObject()->GetComponent<PaletteInstance>())
+                    if (auto parentObj = other->GetGameObject()->GetParentGameObject(); parentObj != nullptr)
                     {
-                        contactingInstances.insert(instance);
-                        if (pm.GetCurrentPalette()->ShouldSelect(instance->GetEditableData()))
-                            pm.GetCurrentPalette()->OnSelectionContactEnter(instance->GetEditableData());
+                        if (auto instance = parentObj->GetComponent<PaletteInstance>())
+                        {
+                            contactingInstances.insert(instance);
+                            if (pm.GetCurrentPalette()->ShouldSelect(instance->GetEditableData()))
+                                pm.GetCurrentPalette()->OnSelectionContactEnter(instance->GetEditableData());
+                        }
                     }
                 }
                 virtual void OnTriggerExit(physics::Collider* other) override
                 {
                     if (other == nullptr)
                         return;
-                    if (auto instance = other->GetGameObject()->GetComponent<PaletteInstance>(); instance != nullptr)
+                    if (auto parentObj = other->GetGameObject()->GetParentGameObject(); parentObj != nullptr)
                     {
-                        contactingInstances.erase(instance);
-                        if (pm.GetCurrentPalette()->ShouldSelect(instance->GetEditableData()))
-                            pm.GetCurrentPalette()->OnSelectionContactExit(instance->GetEditableData());
+                        if (auto instance = parentObj->GetComponent<PaletteInstance>(); instance != nullptr)
+                        {
+                            contactingInstances.erase(instance);
+                            if (pm.GetCurrentPalette()->ShouldSelect(instance->GetEditableData()))
+                                pm.GetCurrentPalette()->OnSelectionContactExit(instance->GetEditableData());
+                        }
                     }
                 }
             private:

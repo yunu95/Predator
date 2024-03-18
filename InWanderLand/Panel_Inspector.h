@@ -30,7 +30,7 @@ namespace application
 			InspectorPanel();
 
 			void ImGui_DrawTransform();
-			void ImGui_DrawFBXData();
+			void ImGui_DrawTemplateData();
 
 			palette::PaletteManager& pm = palette::PaletteManager::GetSingletonInstance();
 			ResourceManager& erm = ResourceManager::GetSingletonInstance();

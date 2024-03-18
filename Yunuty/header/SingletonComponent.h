@@ -13,6 +13,7 @@ namespace yunutyEngine
         static bool isAvailable() { return yunutyEngine::Scene::getCurrentScene(); }
         virtual void SingletonInitializer() {};
     protected:
+        SingletonComponent() = default;
         virtual ~SingletonComponent() = default;
     private:
         static T* instance;

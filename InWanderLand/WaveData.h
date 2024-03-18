@@ -8,6 +8,8 @@
 #include "YunutyEngine.h"
 #include "StaticInstanceRegistry.h"
 #include "RegionData.h"
+#include "GlobalConstant.h"
+
 #include <memory>
 #include <string>
 
@@ -72,17 +74,24 @@ namespace application
             virtual IEditableData* Clone() const override;
             virtual void OnRelocate(const Vector3d& newLoc) override;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
-            virtual void ApplyAsPlaytimeObject() override {};
+            virtual void ApplyAsPlaytimeObject() override;
+            virtual bool EnterDataFromGlobalConstant() override { return true; };
             void InsertUnitData(WaveUnitData waveUnitData);
             void DeleteUnitData(UnitData* unitData);
+            void HideWaveUnitsVisibility();
+            unordered_map<UnitData*, WaveUnitData>& GetWaveUnitDataMap() { return waveUnitDataMap; }
 
             POD_Wave pod;
+            void ApplyPodAsMap();
+            void ApplyMapAsPod();
 
         protected:
             virtual bool PreEncoding(json& data) const override;
             virtual bool PostEncoding(json& data) const override;
             virtual bool PreDecoding(const json& data) override;
             virtual bool PostDecoding(const json& data) override;
+            virtual bool PostLoadCallback() override;
+            virtual bool PreSaveCallback() override;
 
         private:
             static TemplateDataManager& templateDataManager;

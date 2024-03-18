@@ -82,7 +82,6 @@ void SnippetAllGraphicsWorkedInit()
 		light->GetGI().SetRange(0.3);
 	}
 
-	yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 namespace snippets

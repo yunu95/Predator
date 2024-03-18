@@ -144,7 +144,6 @@ void TestCaseNavigationInit()
             application::Application::GetInstance().TurnOff();
                 });
             } });
-    yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 namespace tests

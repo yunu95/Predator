@@ -1,4 +1,5 @@
 #include "WaveData.h"
+#include "UnitData.h"
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
 #include "Wave_TemplateData.h"
@@ -40,15 +41,11 @@ namespace application
         palette::PaletteInstance* WaveData::ApplyAsPaletteInstance()
         {
             return nullptr;
-            //if (GetPaletteInstance() == nullptr)
-            //{
-            //    waveInstance = Scene::getCurrentScene()->AddGameObject()->AddComponent<palette::WaveEditorInstance>();
-            //    SetPaletteInstance(waveInstance);
-            //    waveInstance->SetEditableData(this);
-            //}
-            //waveInstance->Apply(this);
-            //return waveInstance;
         };
+        void WaveData::ApplyAsPlaytimeObject()
+        {
+            ApplyMapAsPod();
+        }
         void WaveData::InsertUnitData(WaveUnitData waveUnitData)
         {
             waveUnitDataMap[waveUnitData.unitData] = waveUnitData;
@@ -56,6 +53,13 @@ namespace application
         void WaveData::DeleteUnitData(UnitData* unitData)
         {
             waveUnitDataMap.erase(unitData);
+        }
+        void WaveData::HideWaveUnitsVisibility()
+        {
+            for (auto each : waveUnitDataMap)
+            {
+                each.first->GetPaletteInstance()->GetGameObject()->SetSelfActive(false);
+            }
         }
 
         bool WaveData::PreEncoding(json& data) const
@@ -82,7 +86,70 @@ namespace application
         bool WaveData::PostDecoding(const json& data)
         {
             FieldPostDecoding<boost::pfr::tuple_size_v<POD_Wave>>(pod, data["POD"]);
+            EnterDataFromGlobalConstant();
             return true;
+        }
+        bool WaveData::PostLoadCallback()
+        {
+            ApplyPodAsMap();
+            HideWaveUnitsVisibility();
+
+            return true;
+        }
+        bool WaveData::PreSaveCallback()
+        {
+            ApplyMapAsPod();
+
+            return true;
+        }
+        void WaveData::ApplyPodAsMap()
+        {
+            for (int i = 0; i < pod.waveUnitUUIDS.size(); i++)
+            {
+                UnitData* unit = dynamic_cast<UnitData*>(InstanceManager::GetSingletonInstance().GetInstance(String_To_UUID(pod.waveUnitUUIDS[i])));
+                assert(unit && "wave has uuids but there is no corresponding unitdata!");
+                int waveIdx = 0;
+                int waveCount = 0;
+                for (int j = 0; j < pod.waveSizes.size(); j++)
+                {
+                    waveCount += pod.waveSizes[j];
+                    waveIdx = j;
+                    if (i < waveCount)
+                    {
+                        break;
+                    }
+                }
+                waveUnitDataMap[unit] = { .unitData = unit,.waveIdx = waveIdx,.delay = pod.waveDelays[i] };
+            }
+        }
+        void WaveData::ApplyMapAsPod()
+        {
+            vector<WaveUnitData> waveUnitDatas;
+            for (auto each : waveUnitDataMap)
+            {
+                waveUnitDatas.push_back(each.second);
+            }
+            sort(waveUnitDatas.begin(), waveUnitDatas.end(), [](const WaveUnitData& a, const WaveUnitData& b) {
+                if (a.waveIdx < b.waveIdx) {
+                    return true;
+                }
+
+                if (a.waveIdx > b.waveIdx) {
+                    return false;
+                }
+
+                return a.delay < b.delay; });
+
+            pod.waveUnitUUIDS.clear();
+            pod.waveDelays.clear();
+            for (auto& eachSize : pod.waveSizes)
+                eachSize = 0;
+            for (auto each : waveUnitDatas)
+            {
+                pod.waveUnitUUIDS.push_back(UUID_To_String(each.unitData->GetUUID()));
+                pod.waveDelays.push_back(each.delay);
+                pod.waveSizes[each.waveIdx]++;
+            }
         }
 
         WaveData::WaveData()
@@ -97,6 +164,7 @@ namespace application
             pod.name = MakeUpName();
             pod.templateData = static_cast<Wave_TemplateData*>(templateDataManager.GetTemplateData(name));
             EnterDataFromTemplate();
+            EnterDataFromGlobalConstant();
         }
 
         WaveData::WaveData(const WaveData& prototype)

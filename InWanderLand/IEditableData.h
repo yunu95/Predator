@@ -12,14 +12,14 @@
 
 namespace application
 {
-	namespace editor
-	{
-		class ITemplateData;
-		namespace palette
-		{
-			class PaletteInstance;
-		}
-	}
+    namespace editor
+    {
+        class ITemplateData;
+        namespace palette
+        {
+            class PaletteInstance;
+        }
+    }
 }
 
 namespace application
@@ -34,19 +34,21 @@ namespace application
 			OrnamentData,
 			RegionData,
 			WaveData,
+			CameraData,
+            LightData,
 		};
 
-		template<typename T>
-		DataType GetDataTypeEnum() { return DataType::None; }
+        template<typename T>
+        DataType GetDataTypeEnum() { return DataType::None; }
 
-		// 이 클래스는 하나의 인스턴스 데이터를 나타냅니다.
-		class IEditableData
-			: public Identifiable, public Storable
-		{
-			friend class InstanceManager;
+        // 이 클래스는 하나의 인스턴스 데이터를 나타냅니다.
+        class IEditableData
+            : public Identifiable, public Storable
+        {
+            friend class InstanceManager;
 
-		public:
-			virtual ~IEditableData();
+        public:
+            virtual ~IEditableData();
 
             virtual bool EnterDataFromTemplate() = 0;
             virtual ITemplateData* GetTemplateData() = 0;
@@ -58,17 +60,20 @@ namespace application
             virtual void OnRescale(const Vector3d& newScale) {};
             virtual void OnDataResourceChange(std::string newName) {};
             palette::PaletteInstance* GetPaletteInstance();
-			virtual void ApplyAsPlaytimeObject() {};
+            virtual void ApplyAsPlaytimeObject() {};
+            virtual void PostApplyAsPlaytimeObject() {};
+			virtual bool EnterDataFromGlobalConstant() = 0;
 
-		protected:
-			virtual bool PreSaveCallback() { return true; }
-			virtual bool PreEncoding(json& data) const = 0;
-			virtual bool PostEncoding(json& data) const = 0;
-			virtual bool PreDecoding(const json& data) = 0;
-			virtual bool PostDecoding(const json& data) = 0;
-			void SetPaletteInstance(palette::PaletteInstance* paletteInstance);
-		private:
-			palette::PaletteInstance* paletteInstance{ nullptr };
-		};
-	}
+        protected:
+            virtual bool PreSaveCallback() { return true; }
+            virtual bool PreEncoding(json& data) const = 0;
+            virtual bool PostEncoding(json& data) const = 0;
+            virtual bool PreDecoding(const json& data) = 0;
+            virtual bool PostDecoding(const json& data) = 0;
+            virtual bool PostLoadCallback() { return true; }
+            void SetPaletteInstance(palette::PaletteInstance* paletteInstance);
+        private:
+            palette::PaletteInstance* paletteInstance{ nullptr };
+        };
+    }
 }

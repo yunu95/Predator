@@ -37,7 +37,6 @@ void SnippetInitializerTemplate()
 
     camObj->GetTransform()->SetWorldPosition({ 0,0,-5 });
 
-    yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 namespace snippets

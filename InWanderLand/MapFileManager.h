@@ -4,12 +4,15 @@
 #pragma once
 
 #include "Singleton.h"
+#include "Storable.h"
 
 #include <string>
 #include <memory>
 
 namespace application
 {
+	class GlobalConstant;
+
 	namespace editor
 	{
 		class InstanceManager;
@@ -33,11 +36,13 @@ namespace application
 			bool SaveMapFile(const std::string& path);
 			std::string GetCurrentMapPath() const;
 			void SetCurrentMapPath(const std::string& path);
+			bool LoadDefaultMap();
 			void Clear();
 
 		private:
 			MapFileManager();
 
+			GlobalConstant& globalConstant;
 			InstanceManager& instanceManager;
 			TemplateDataManager& templateDataManager;
 

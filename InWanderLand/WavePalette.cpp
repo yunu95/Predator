@@ -1,5 +1,6 @@
 #include "WavePalette.h"
 #include "WaveData.h"
+#include "UnitData.h"
 
 namespace application
 {
@@ -7,6 +8,35 @@ namespace application
     {
         namespace palette
         {
+            void WavePalette::SetCurrentSelectedWaveTimeOffset(float timeOffset)
+            {
+                currentSelectedWaveTimeOffset = timeOffset;
+                UpdateWaveUnitsVisibility();
+            }
+            void WavePalette::UpdateWaveUnitsVisibility()
+            {
+                if (currentWaveData && currentSelectedWaveIndex >= 0)
+                {
+                    // 현재 시점으로부터 fading time초 전에 생성된 유닛들은 숨김처리한다.
+                    // 현재 아직 생성되지 않은 유닛들도 숨김처리한다.
+                    for (auto each : currentWaveData->GetWaveUnitDataMap())
+                    {
+                        bool shouldVisible = each.second.waveIdx == currentSelectedWaveIndex && currentSelectedWaveTimeOffset - waveIndicatorFadingTime < each.second.delay && each.second.delay <= currentSelectedWaveTimeOffset;
+                        each.first->GetPaletteInstance()->GetGameObject()->SetSelfActive(shouldVisible);
+                    }
+                }
+            }
+            void WavePalette::HideWaveUnitsVisibility()
+            {
+                if (currentWaveData && currentSelectedWaveIndex >= 0)
+                {
+                    // 유닛들을 모두 숨김처리한다.
+                    for (auto each : currentWaveData->GetWaveUnitDataMap())
+                    {
+                        each.first->GetPaletteInstance()->GetGameObject()->SetSelfActive(false);
+                    }
+                }
+            }
             void WavePalette::OnStartPalette()
             {
                 switch (beforeState)
@@ -50,6 +80,13 @@ namespace application
                     wavePaletteState = WavePaletteState::None;
                     break;
                 }
+            }
+            void WavePalette::Reset() 
+            {
+                Palette::Reset();
+                currentSelectedWaveIndex = -1;
+                currentSelectedWaveTimeOffset = 0;
+                currentWaveData = nullptr;
             }
         }
     }

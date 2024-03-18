@@ -13,18 +13,21 @@ void InputManager::Update()
 			PlayerController::GetInstance()->SetCurrentPlayerSerialNumber(Unit::UnitType::Warrior);
 			currentSelectedSerialNumber = SelectedSerialNumber::One;
 			isPlayerSelected = true;
+			SkillPreviewSystem::SingleInstance().ActivateSkillPreview(false);
 		}
 		if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_2))
 		{
 			PlayerController::GetInstance()->SetCurrentPlayerSerialNumber(Unit::UnitType::Magician);
 			currentSelectedSerialNumber = SelectedSerialNumber::Two;
 			isPlayerSelected = true;
+			SkillPreviewSystem::SingleInstance().ActivateSkillPreview(false);
 		}
 		if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_3))
 		{
 			PlayerController::GetInstance()->SetCurrentPlayerSerialNumber(Unit::UnitType::Healer);
 			currentSelectedSerialNumber = SelectedSerialNumber::Three;
 			isPlayerSelected = true;
+			SkillPreviewSystem::SingleInstance().ActivateSkillPreview(false);
 		}
 
 		if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_4))
@@ -32,6 +35,7 @@ void InputManager::Update()
 			PlayerController::GetInstance()->SetCurrentPlayerSerialNumber(Unit::UnitType::AllPlayers);
 			currentSelectedSerialNumber = SelectedSerialNumber::All;
 			isPlayerSelected = true;
+			SkillPreviewSystem::SingleInstance().ActivateSkillPreview(false);
 		}
 
 		if (isPlayerSelected)

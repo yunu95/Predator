@@ -44,7 +44,6 @@ void SnippetInitializerRegionPalette()
     tempRegion3->SetHalfExtent({ 1.5,2 });
 
     SelectionBox::Instance();
-    yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 namespace snippets

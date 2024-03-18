@@ -4,6 +4,12 @@
 
 extern const float DRAG_MOUSE_THRESHOLD_FACTOR;
 
+#define BIT(x) (1u << x)
+
+#define MESSAGE_BOX_OK_BUTTON BIT(0)
+#define MESSAGE_BOX_CANCEL_BUTTON BIT(1)
+#define MESSAGE_BOX_USER_FUNC BIT(2)
+
 namespace application
 {
 	namespace editor
@@ -110,7 +116,7 @@ namespace application
 				return result;
 			}
 
-			bool SliderFloat_2Col(std::string valName, float& value, float min, float max)
+			bool SliderFloat_2Col(std::string valName, float& value, bool editable, float min, float max)
 			{
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
@@ -119,10 +125,13 @@ namespace application
 				ImGui::Text(valName.c_str());
 				ImGui::TableSetColumnIndex(1);
 				ImGui::SetNextItemWidth(-1);
-				return ImGui::SliderFloat(("##" + valName).c_str(), &value, min, max);
+				ImGuiSliderFlags flag = 0;
+				if (!editable)
+					flag = ImGuiSliderFlags_NoInput;
+				return ImGui::SliderFloat(("##" + valName).c_str(), &value, min, max, "%.3f", flag);
 			}
 
-			bool SliderInt_2Col(std::string valName, int& value, int min, int max)
+			bool SliderInt_2Col(std::string valName, int& value, bool editable, int min, int max)
 			{
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
@@ -131,10 +140,13 @@ namespace application
 				ImGui::Text(valName.c_str());
 				ImGui::TableSetColumnIndex(1);
 				ImGui::SetNextItemWidth(-1);
-				return ImGui::SliderInt(("##" + valName).c_str(), &value, min, max);
+				ImGuiSliderFlags flag = 0;
+				if (!editable)
+					flag = ImGuiSliderFlags_NoInput;
+				return ImGui::SliderInt(("##" + valName).c_str(), &value, min, max, "%d", flag);
 			}
 
-			bool DragFloat_2Col(std::string valName, float& value, float speed, float min, float max)
+			bool DragFloat_2Col(std::string valName, float& value, bool editable, float speed, float min, float max)
 			{
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
@@ -143,10 +155,13 @@ namespace application
 				ImGui::Text(valName.c_str());
 				ImGui::TableSetColumnIndex(1);
 				ImGui::SetNextItemWidth(-1);
-				return ImGui::DragFloat(("##" + valName).c_str(), &value, speed, min, max);
+				ImGuiSliderFlags flag = 0;
+				if (!editable)
+					flag = ImGuiSliderFlags_NoInput;
+				return ImGui::DragFloat(("##" + valName).c_str(), &value, speed, min, max, "%.3f", flag);
 			}
 
-			bool DragInt_2Col(std::string valName, int& value, float speed, int min, int max)
+			bool DragInt_2Col(std::string valName, int& value, bool editable, float speed, int min, int max)
 			{
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
@@ -155,7 +170,10 @@ namespace application
 				ImGui::Text(valName.c_str());
 				ImGui::TableSetColumnIndex(1);
 				ImGui::SetNextItemWidth(-1);
-				return ImGui::DragInt(("##" + valName).c_str(), &value, speed, min, max);
+				ImGuiSliderFlags flag = 0;
+				if (!editable)
+					flag = ImGuiSliderFlags_NoInput;
+				return ImGui::DragInt(("##" + valName).c_str(), &value, speed, min, max, "%d", flag);
 			}
 
 			bool Checkbox_2Col(std::string valName, bool& value)
@@ -433,7 +451,7 @@ namespace application
 				return returnVal;
 			}
 
-			bool DragFloatLabel(std::string dragKey, std::string label, float& value, float speed, float min, float max)
+			bool DragFloatLabel(std::string dragKey, std::string label, float& value, bool editable, float speed, float min, float max)
 			{
 				using namespace ImGui;
 
@@ -450,8 +468,9 @@ namespace application
 				const ImRect frame_bb(window->DC.CursorPos, ImVec2(window->DC.CursorPos.x + w, window->DC.CursorPos.y + label_size.y + style.FramePadding.y * 2.0f));
 				const ImRect total_bb(frame_bb.Min, frame_bb.Max);
 
+				bool temp_input_allowed = editable;
 				ItemSize(total_bb, style.FramePadding.y);
-				if (!ItemAdd(total_bb, id, &frame_bb, ImGuiItemFlags_Inputable))
+				if (!ItemAdd(total_bb, id, &frame_bb, temp_input_allowed ? ImGuiItemFlags_Inputable : 0))
 					return false;
 
 				// Default format string when passing NULL
@@ -513,7 +532,7 @@ namespace application
 				return false;
 			}
 
-			bool DragIntLabel(std::string dragKey, std::string label, int& value, float speed, int min, int max)
+			bool DragIntLabel(std::string dragKey, std::string label, int& value, bool editable, float speed, int min, int max)
 			{
 				using namespace ImGui;
 
@@ -530,8 +549,9 @@ namespace application
 				const ImRect frame_bb(window->DC.CursorPos, ImVec2(window->DC.CursorPos.x + w, window->DC.CursorPos.y + label_size.y + style.FramePadding.y * 2.0f));
 				const ImRect total_bb(frame_bb.Min, frame_bb.Max);
 
+				bool temp_input_allowed = editable;
 				ItemSize(total_bb, style.FramePadding.y);
-				if (!ItemAdd(total_bb, id, &frame_bb, ImGuiItemFlags_Inputable))
+				if (!ItemAdd(total_bb, id, &frame_bb, temp_input_allowed ? ImGuiItemFlags_Inputable : 0))
 					return false;
 
 				// Default format string when passing NULL
@@ -711,6 +731,72 @@ namespace application
 					imgui::SmartStyleVar tooltipPadding(ImGuiStyleVar_WindowPadding, padding);
 					imgui::SmartStyleColor textCol(ImGuiCol_Text, IM_COL32(210, 210, 210, 255));
 					ImGui::SetTooltip(tooltip.c_str());
+				}
+			}
+
+			std::unordered_map<std::string, MessageBoxData> s_MessageBoxes = std::unordered_map<std::string, MessageBoxData>();
+
+			void ShowMessageBox(std::string title, const std::function<void()>& renderFunction, uint32_t width, uint32_t height)
+			{
+				auto& messageBoxData = s_MessageBoxes[title];
+				messageBoxData.Title = title;
+				messageBoxData.UserRenderFunction = renderFunction;
+				messageBoxData.Flags = MESSAGE_BOX_USER_FUNC;
+				messageBoxData.Width = width;
+				messageBoxData.Height = height;
+				messageBoxData.ShouldOpen = true;
+			}
+
+			void CloseMessageBox(std::string title)
+			{
+				s_MessageBoxes[title].ShouldOpen = false;
+			}
+
+			void RenderMessageBoxes()
+			{
+				for (auto& [key, messageBoxData] : s_MessageBoxes)
+				{
+					if (messageBoxData.ShouldOpen && !ImGui::IsPopupOpen(nullptr, ImGuiPopupFlags_AnyPopupId))
+					{
+						ImGui::OpenPopup(messageBoxData.Title.c_str());
+						messageBoxData.ShouldOpen = false;
+						messageBoxData.IsOpen = true;
+					}
+
+					if (!messageBoxData.IsOpen)
+						continue;
+
+					ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+					ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+					ImGui::SetNextWindowSize(ImVec2{ (float)messageBoxData.Width, (float)messageBoxData.Height });
+
+					if (ImGui::BeginPopupModal(messageBoxData.Title.c_str(), &messageBoxData.IsOpen, ImGuiWindowFlags_AlwaysAutoResize))
+					{
+						if (messageBoxData.Flags & MESSAGE_BOX_USER_FUNC)
+						{
+							messageBoxData.UserRenderFunction();
+						}
+						else
+						{
+							ImGui::TextWrapped(messageBoxData.Body.c_str());
+
+							if (messageBoxData.Flags & MESSAGE_BOX_OK_BUTTON)
+							{
+								if (ImGui::Button("Ok"))
+									ImGui::CloseCurrentPopup();
+
+								if (messageBoxData.Flags & MESSAGE_BOX_CANCEL_BUTTON)
+									ImGui::SameLine();
+							}
+
+							if (messageBoxData.Flags & MESSAGE_BOX_CANCEL_BUTTON && ImGui::Button("Cancel"))
+							{
+								ImGui::CloseCurrentPopup();
+							}
+						}
+
+						ImGui::EndPopup();
+					}
 				}
 			}
 			

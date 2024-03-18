@@ -6,9 +6,10 @@
 
 #include "Singleton.h"
 #include "Storable.h"
-#include "TemplateDataManager.h"
 #include "IEditableData.h"
 #include "Identifiable.h"
+#include "EditableDataList.h"
+#include "TemplateDataManager.h"
 
 #include <string>
 #include <memory>
@@ -56,20 +57,98 @@ namespace application
                 return instance;
             }
 
-            template<typename T = IEditableData> requires std::derived_from<T, IEditableData>
-            T* GetInstance(const UUID& uuid) const
+            template<>
+            IEditableData* CreateInstance<IEditableData>(const std::string& dataName)
             {
-                auto itr = list.find(uuid);
-                if (itr == list.end())
+                auto tdptr = templateDataManager.GetTemplateData(dataName);
+                if (tdptr == nullptr)
                 {
                     return nullptr;
                 }
 
-                return dynamic_cast<T*>(itr->second.get());
+                IEditableData* instance = nullptr;
+
+                switch (templateDataManager.GetDataType(dataName))
+                {
+                    case DataType::TerrainData:
+                    {
+                        instance = new TerrainData(dataName);
+                        break;
+                    }
+
+                    case DataType::UnitData:
+                    {
+                        instance = new UnitData(dataName);
+                        break;
+                    }
+
+                    case DataType::OrnamentData:
+                    {
+                        instance = new OrnamentData(dataName);
+                        break;
+                    }
+                    case DataType::RegionData:
+                    {
+                        instance = new RegionData(dataName);
+                        break;
+                    }
+                    case DataType::WaveData:
+                    {
+                        instance = new WaveData(dataName);
+                        break;
+                    }
+                    case DataType::CameraData:
+                    {
+                        instance = new CameraData(dataName);
+                        break;
+                    }
+                    case DataType::LightData:
+                    {
+                        instance = new LightData(dataName);
+                        break;
+                    }
+                    default:
+                        break;
+                }
+
+                if (instance != nullptr)
+                {
+                    list[instance->id] = std::unique_ptr<IEditableData>(instance);
+                    tdMap[instance->id] = tdptr;
+                }
+
+                return instance;
+            }
+
+            template<typename T = IEditableData> requires std::derived_from<T, IEditableData>
+            T* GetInstance(const UUID& uuid) const
+            {
+                if (auto itr = list.find(uuid); itr != list.end())
+                    return dynamic_cast<T*>(itr->second.get());
+
+                return nullptr;
+
             }
             bool DeleteInstance(const UUID& uuid);
-			void Clear();
-			void ApplyInstancesAsPlaytimeObjects();
+            void Clear();
+            void ApplyInstancesAsPlaytimeObjects();
+            void ClearPlaytimeObjects();
+            void EnterDataFromGlobalConstant();
+
+            template <typename T>
+            std::vector<T*> GetList()
+            {
+                std::vector<T*> returnList;
+                for (auto& each : list)
+                {
+                    auto ptr = dynamic_cast<T*>(each.second.get());
+                    if (ptr)
+                    {
+                        returnList.push_back(ptr);
+                    }
+                }
+                return returnList;
+            }
 
         protected:
             bool PreSave();
@@ -77,6 +156,7 @@ namespace application
             virtual bool PostEncoding(json& data) const override;
             virtual bool PreDecoding(const json& data) override;
             virtual bool PostDecoding(const json& data) override;
+            bool PostLoad();
 
         private:
             InstanceManager();

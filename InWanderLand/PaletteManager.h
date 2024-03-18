@@ -31,6 +31,8 @@ namespace application
                 Ornament,
                 Region,
                 Wave,
+                Cam,
+                Light,
 
                 /// Size를 자동으로 넣기 위해 사용하는 enum
                 /// 첫 enum 값이 0 이고, 모든 간격이 1일 때에 가능함
@@ -46,6 +48,7 @@ namespace application
 
             public:
                 void Initialize();
+                void Clear();
 
                 /// <summary>
                 /// 현재 활성화된 팔레트를 지정하거나 가져올 수 있습니다.

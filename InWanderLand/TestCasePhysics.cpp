@@ -138,7 +138,6 @@ void TestCasePhysicsInit()
                 });
             } });
 
-    yunutyEngine::YunutyCycle::SingleInstance().Play();
 }
 
 namespace tests

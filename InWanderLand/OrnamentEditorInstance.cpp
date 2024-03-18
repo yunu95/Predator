@@ -5,46 +5,61 @@
 
 namespace application::editor::palette
 {
-	void OrnamentEditorInstance::Start()
-	{
-		PaletteInstance::Start();
-	}
+    void OrnamentEditorInstance::Start()
+    {
+        PaletteInstance::Start();
+    }
 
-	void OrnamentEditorInstance::Init(const application::editor::OrnamentData* ornamentData)
-	{
-		Init(ornamentData->pod.templateData);
-	}
+    void OrnamentEditorInstance::Init(const application::editor::OrnamentData* ornamentData)
+    {
+        Init(ornamentData->pod.templateData);
+    }
 
-	void OrnamentEditorInstance::Init(const application::editor::Ornament_TemplateData* ornamentTemplateData)
-	{
+    void OrnamentEditorInstance::Init(const application::editor::Ornament_TemplateData* ornamentTemplateData)
+    {
+        this->ornamentTemplateData = ornamentTemplateData;
+        yunuGI::Vector3 boundingMin, boundingMax;
+        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(ornamentTemplateData->pod.fbxName, &boundingMin, &boundingMax);
+        AdjustPickingCollider(reinterpret_cast<const Vector3f&>(boundingMin), reinterpret_cast<const Vector3f&>(boundingMax));
+        obj->SetParent(GetGameObject());
+		currentFBX = ornamentTemplateData->pod.fbxName;
+    }
+
+    void OrnamentEditorInstance::ChangeTemplateData(const application::editor::OrnamentData* ornamentData)
+    {
+        ChangeTemplateData(ornamentData->pod.templateData);
+    }
+
+    void OrnamentEditorInstance::ChangeTemplateData(const application::editor::Ornament_TemplateData* ornamentTemplateData)
+    {
+        if (this->ornamentTemplateData == ornamentTemplateData)
+            return;
 		this->ornamentTemplateData = ornamentTemplateData;
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(ornamentTemplateData->pod.fbxName);
-		obj->setName("FBX");
-		obj->SetParent(GetGameObject());
+		ChangeResource(ornamentTemplateData->pod.fbxName);
 	}
 
-	void OrnamentEditorInstance::ChangeTemplateData(const application::editor::OrnamentData* ornamentData)
+	void OrnamentEditorInstance::ChangeResource(const std::string& fbxName)
 	{
-		ChangeTemplateData(ornamentData->pod.templateData);
-	}
-
-	void OrnamentEditorInstance::ChangeTemplateData(const application::editor::Ornament_TemplateData* ornamentTemplateData)
-	{
-		if (this->ornamentTemplateData == ornamentTemplateData)
+		// TemplateData �� �����ϰ� Resource �� ������
+		if (currentFBX == fbxName)
 			return;
 
-		this->ornamentTemplateData = ornamentTemplateData;
 		for (auto& each : GetGameObject()->GetChildren())
 		{
-			if (each->getName() == "FBX")
+			if (each->getName() == currentFBX)
 			{
 				yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(each);
 				break;
 			}
 		}
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(ornamentTemplateData->pod.fbxName);
-		obj->setName("FBX");
+
+        yunuGI::Vector3 boundingMin, boundingMax;
+        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName, &boundingMin, &boundingMax);
+        AdjustPickingCollider(reinterpret_cast<const Vector3f&>(boundingMin), reinterpret_cast<const Vector3f&>(boundingMax));
 		obj->SetParent(GetGameObject());
+		currentFBX = fbxName;
+
+		return;
 	}
 }
 
