@@ -1,6 +1,7 @@
 #pragma once
 #include "IResource.h"
-
+#include <functional>
+#include <map>
 namespace yunuGI
 {
 	class IAnimation : virtual public IResource
@@ -18,6 +19,9 @@ namespace yunuGI
 		virtual void SetLoop(bool isLoop) = 0;
 		virtual bool GetLoop() = 0;
 
+		virtual void SetEventFunc(int frame, std::function<void()> func) = 0;
+		virtual std::map<int, std::pair<bool,std::function<void()>>>& GetEventFuncMap() = 0;
+		virtual void ClearEvent() = 0;
 	private:
 
 	};
