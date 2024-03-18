@@ -155,10 +155,20 @@ void GraphicsTest()
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 		obj->GetTransform()->SetLocalPosition({ Vector3d{0,0,-5} });
 	}
+
 	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Cuptower");
-		obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{0,180,0} });
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
+		obj->GetTransform()->SetLocalPosition({ Vector3d{5,0,-5} });
 	}
+
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
+		obj->GetTransform()->SetLocalPosition({ Vector3d{10,0,-5} });
+	}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Cuptower");
+	//	obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{0,180,0} });
+	//}
 
 
 	//{
@@ -287,7 +297,7 @@ void application::contents::ContentsLayer::Initialize()
 		//directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
 		directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
 		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-		auto color = yunuGI::Color{ 0.7,0.7,0.7,1.f };
+		auto color = yunuGI::Color{ 0.5,0.5,0.5,1.f };
 		light->GetGI().SetLightDiffuseColor(color);
 		//directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
 		//directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{0, 45, 0} };

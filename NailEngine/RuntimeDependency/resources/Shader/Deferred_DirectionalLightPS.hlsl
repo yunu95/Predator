@@ -48,12 +48,8 @@ PS_OUT main(PixelIn input)
     CalculatePBRLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo,arm.r, arm.b, arm.g);
     //CalculateLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);
     
-    //float3 x = max(0, color.diffuse.xyz - 0.004);
-    //color.diffuse.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
-    //color.diffuse.w = 1;
-    
-    //color.diffuse = float4(pow(float3(color.diffuse.xyz), 1.0 / 2.2), 1.0);
     output.diffuse = color.diffuse + color.ambient;
+    
     //output.specular = color.specular;
     
 

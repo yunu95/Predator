@@ -210,8 +210,18 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         }
         ///
         
+        float expo = 0.2f;
+        directionalLighting *= expo;
+        float3 x = max(0, directionalLighting.xyz - 0.004);
+        directionalLighting.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
+        
         diffuse.xyz += directionalLighting.xyz * lights[lightIndex].color.diffuse.xyz;
         diffuse.w = 1.f;
+        
+        
+        ambientLighting *= 0.4;
+        float3 y = max(0, ambientLighting.xyz - 0.004);
+        ambientLighting.xyz = (y * (6.2 * y + 0.5)) / (y * (6.2 * y + 1.7) + 0.06);
         
         ambient.xyz = ambientLighting + lights[lightIndex].color.ambient.xyz;
 
@@ -220,10 +230,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         //float exposure = 0.7; // 톤매핑 강도를 조절하는 매개변수
         //float3 toneMappedColor = diffuse.xyz / (1.0 + diffuse.xyz / exposure);
         //diffuse.xyz = toneMappedColor;
-        
-        float3 x = max(0, diffuse.xyz - 0.004);
-        diffuse.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
-        diffuse.w = 1;
+
         
         //diffuse = float4(pow(float3(diffuse.xyz), 1.f/2.2), 1.0);
         
