@@ -3,6 +3,7 @@
 
 #pragma once
 #include "LoadStaticOrnamentsCommand.h"
+#include "SaveStaticOrnamentsCommnad.h"
 #include "LoadMapCommand.h"
 #include "SaveMapCommand.h"
 #include "ProgramExitCommand.h"

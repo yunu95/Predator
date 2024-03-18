@@ -2,7 +2,8 @@
 #include "UnitData.h"
 #include "WaveData.h"
 #include "UnitProductor.h"
-
+#include "Unit.h"
+#include "MeleeEnemyProductor.h"
 
 PlaytimeWave::~PlaytimeWave()
 {
@@ -20,7 +21,7 @@ void PlaytimeWave::DeActivateWave()
 
 void PlaytimeWave::Start()
 {
-
+	ActivateWave();
 }
 
 void PlaytimeWave::Update()
@@ -41,12 +42,23 @@ void PlaytimeWave::Update()
 		{
 			// 유닛을 소환하고 인덱스를 증가시킨다.
 			// 유닛 데이터는 아래 값을 사용하면 됨.
-			waveData->waveUnitDatasVector[nextSummonUnitIndex];
 			Vector3d pos = { waveData->waveUnitDatasVector[nextSummonUnitIndex]->pod.position.x,
 				waveData->waveUnitDatasVector[nextSummonUnitIndex]->pod.position.y,
 				waveData->waveUnitDatasVector[nextSummonUnitIndex]->pod.position.z };
+
+			UnitProductor* currentSelectedProductor;
+
 			// 유닛 소환 코드 ....
-			m_productorVector[nextSummonUnitIndex]->CreateUnit(pos);
+			switch (static_cast<Unit::UnitType>(waveData->waveUnitDatasVector[nextSummonUnitIndex]->pod.templateData->pod.unitType))
+			{
+				case Unit::UnitType::MeleeEnemy:
+					currentSelectedProductor = &MeleeEnemyProductor::Instance();
+					break;
+				default:
+					currentSelectedProductor = &MeleeEnemyProductor::Instance();
+					break;
+			}
+			currentSelectedProductor->CreateUnit(pos);
 			nextSummonUnitIndex++;
 		}
 	}

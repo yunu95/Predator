@@ -6,12 +6,15 @@
 #include "EditorCommonEvents.h"
 #include "WavePalette.h"
 
-#include "Storable.h"
+#include "GlobalConstant.h"
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
 #include "Ornament_TemplateData.h"
 #include "OrnamentData.h"
 #include "UUIDManager.h"
+#include "PaletteManager.h"
+#include "PaletteBrushManager.h"
+#include "EditorResourceManager.h"
 
 #include <fstream>
 
@@ -20,8 +23,10 @@ namespace application
     namespace editor
     {
         MapFileManager::MapFileManager()
-            : Singleton<MapFileManager>(), instanceManager(InstanceManager::GetSingletonInstance()), templateDataManager(TemplateDataManager::GetSingletonInstance())
-            , currentMapPath()
+            : Singleton<MapFileManager>(), globalConstant(GlobalConstant::GetSingletonInstance()), 
+            instanceManager(InstanceManager::GetSingletonInstance()), 
+            templateDataManager(TemplateDataManager::GetSingletonInstance()),
+            currentMapPath()
         {
 
         }
@@ -88,7 +93,53 @@ namespace application
 
         bool MapFileManager::SaveStaticOrnaments(const std::string& path)
         {
-            return false;
+            json punrealData;
+            json ornamentData;
+
+            for (auto& each : instanceManager.list)
+            {
+                auto ptr = dynamic_cast<OrnamentData*>(each.second.get());
+                if (ptr)
+                {
+                    ornamentData["ResourceName"] = ptr->pod.templateData->pod.fbxName;
+                    ornamentData["Location"].push_back(ptr->pod.position.x * 100);
+                    ornamentData["Location"].push_back(-ptr->pod.position.z * 100);
+                    ornamentData["Location"].push_back(ptr->pod.position.y * 100);
+                    Quaternion quat;
+                    quat.w = ptr->pod.rotation.w;
+                    quat.x = ptr->pod.rotation.x;
+                    quat.y = ptr->pod.rotation.y;
+                    quat.z = ptr->pod.rotation.z;
+                    ornamentData["Rotation"].push_back(-quat.Euler().x);
+                    ornamentData["Rotation"].push_back(quat.Euler().z);
+                    ornamentData["Rotation"].push_back(quat.Euler().y);
+                    ornamentData["Scale"].push_back(ptr->pod.scale.x);
+                    ornamentData["Scale"].push_back(ptr->pod.scale.z);
+                    ornamentData["Scale"].push_back(ptr->pod.scale.y);
+
+                    punrealData.push_back(ornamentData);
+                    ornamentData.clear();
+                }
+            }
+
+            if (punrealData.is_null())
+            {
+                return false;
+            }
+
+            std::ofstream saveFile{ path };
+
+            if (saveFile.is_open())
+            {
+                saveFile << punrealData.dump(4);
+                saveFile.close();
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         bool MapFileManager::LoadMapFile(const std::string& path)
@@ -109,12 +160,8 @@ namespace application
 
                 // Manager 초기화
                 Clear();
-#ifdef EDITOR
-                // Palette 초기화
-                palette::Palette::ResetPalettes();
-#endif
 
-                if (!instanceManager.PreDecoding(mapData) || !templateDataManager.PreDecoding(mapData))
+                if (!globalConstant.PreDecoding(mapData) || !instanceManager.PreDecoding(mapData) || !templateDataManager.PreDecoding(mapData))
                 {
                     loadFile.close();
                     return false;
@@ -135,6 +182,7 @@ namespace application
 
 #ifdef EDITOR
                 Application::DispatchEvent<LoadEvent>();
+                    palette::PaletteBrushManager::GetSingletonInstance().MakeBrush();
 #endif
                 currentMapPath = path;
                 return true;
@@ -154,7 +202,7 @@ namespace application
                 return false;
             }
             // Pre
-            if (!instanceManager.PreEncoding(mapData) || !templateDataManager.PreEncoding(mapData))
+            if (!globalConstant.PreEncoding(mapData) || !instanceManager.PreEncoding(mapData) || !templateDataManager.PreEncoding(mapData))
             {
                 return false;
             }
@@ -202,8 +250,31 @@ namespace application
             currentMapPath = path;
         }
 
+        bool MapFileManager::LoadDefaultMap()
+        {
+            bool returnVal = LoadMapFile("Default.pmap");
+
+            if (returnVal == false)
+            {
+                for (auto& each : ResourceManager::GetSingletonInstance().GetFbxList())
+                {
+                    auto td = templateDataManager.CreateTemplateData<Ornament_TemplateData>(each);
+                    td->SetDataResourceName(each);
+                }
+                palette::PaletteBrushManager::GetSingletonInstance().MakeBrush();
+            }
+
+            currentMapPath.clear();
+            
+            return returnVal;
+        }
+
         void MapFileManager::Clear()
         {
+#ifdef EDITOR
+            palette::PaletteBrushManager::GetSingletonInstance().Clear();
+            palette::PaletteManager::GetSingletonInstance().Clear();
+#endif
             instanceManager.Clear();
             templateDataManager.Clear();
             UUIDManager::GetSingletonInstance().Clear();

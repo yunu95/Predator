@@ -9,37 +9,31 @@
 
 namespace application
 {
-	namespace editor
-	{
-		class UUIDManager;
-	}
+	class UUIDManager;
 }
 
 namespace application
 {
-	namespace editor
+	std::string UUID_To_String(UUID uuid);
+	UUID String_To_UUID(std::string str);
+
+	class Identifiable
 	{
-		std::string UUID_To_String(UUID uuid);
-		UUID String_To_UUID(std::string str);
+	public:
+		virtual ~Identifiable();
 
-		class Identifiable
-		{
-		public:
-			virtual ~Identifiable();
+		Identifiable();
+		Identifiable(const UUID& id);
 
-			Identifiable();
-			Identifiable(const UUID& id);
+		UUID GetUUID() const;
 
-			UUID GetUUID() const;
+		// SetUUID 를 통해 UUID 를 바꾸어야만 UUIDManager 에서 변경사항이 적용되므로 주의
+		void SetUUID(const UUID& id);
 
-			// SetUUID 를 통해 UUID 를 바꾸어야만 UUIDManager 에서 변경사항이 적용되므로 주의
-			void SetUUID(const UUID& id);
+	protected:
+		UUID id;
 
-		protected:
-			UUID id;
-
-		private:
-			static UUIDManager& uuidManager;
-		};
-	}
+	private:
+		static UUIDManager& uuidManager;
+	};
 }

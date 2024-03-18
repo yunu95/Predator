@@ -27,6 +27,8 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 std::function<void()> application::contents::ContentsLayer::testInitializer;
 
+bool contentsInputControl = true;
+
 /// 그래픽스 테스트용
 void GraphicsTest()
 {
@@ -37,6 +39,15 @@ void GraphicsTest()
 
 }
 
+void application::contents::ContentsLayer::SetInputControl(bool control)
+{
+	contentsInputControl = control;
+}
+
+bool application::contents::ContentsLayer::GetInputControl()
+{
+	return contentsInputControl;
+}
 
 //void CreateNavPlane(Vector3f botleft, Vector3f topright, std::vector<Vector3f>& worldVertices, std::vector<int>& worldFaces)
 //{
@@ -90,7 +101,6 @@ void application::contents::ContentsLayer::Initialize()
 		ContentsLayer::testInitializer();
 		return;
 	}
-
 
 	//auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	//camObj->GetTransform()->SetLocalPosition(Vector3d(0, 20, -10));
@@ -189,7 +199,7 @@ void application::contents::ContentsLayer::Initialize()
 
 void application::contents::ContentsLayer::Update(float ts)
 {
-	//std::cout << Time::GetFPS() << std::endl;
+	std::cout << Time::GetFPS() << std::endl;
 }
 
 void application::contents::ContentsLayer::GUIProgress()
@@ -200,6 +210,27 @@ void application::contents::ContentsLayer::GUIProgress()
 void application::contents::ContentsLayer::Finalize()
 {
 
+}
+
+void application::contents::ContentsLayer::PlayContents()
+{
+	editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
+}
+
+void application::contents::ContentsLayer::PauseContents()
+{
+	Time::SetTimeScale(0);
+}
+
+void application::contents::ContentsLayer::ResumeContents()
+{
+	Time::SetTimeScale(1);
+}
+
+void application::contents::ContentsLayer::StopContents()
+{
+	Time::SetTimeScale(1);
+	ClearPlaytimeObject();
 }
 
 #ifdef GEN_TESTS
@@ -213,3 +244,8 @@ void application::contents::ContentsLayer::AssignTestInitializer(std::function<v
 	};
 }
 #endif
+
+void application::contents::ContentsLayer::ClearPlaytimeObject()
+{
+	
+}

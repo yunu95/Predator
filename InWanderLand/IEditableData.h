@@ -24,17 +24,19 @@ namespace application
 
 namespace application
 {
-    namespace editor
-    {
-        enum class DataType
-        {
-            None,			// 예외용
-            TerrainData,
-            UnitData,
-            OrnamentData,
-            RegionData,
-            WaveData,
-        };
+	namespace editor
+	{
+		enum class DataType
+		{
+			None,			// 예외용
+			TerrainData,
+			UnitData,
+			OrnamentData,
+			RegionData,
+			WaveData,
+			CameraData,
+            LightData,
+		};
 
         template<typename T>
         DataType GetDataTypeEnum() { return DataType::None; }
@@ -60,6 +62,7 @@ namespace application
             palette::PaletteInstance* GetPaletteInstance();
             virtual void ApplyAsPlaytimeObject() {};
             virtual void PostApplyAsPlaytimeObject() {};
+			virtual bool EnterDataFromGlobalConstant() = 0;
 
         protected:
             virtual bool PreSaveCallback() { return true; }

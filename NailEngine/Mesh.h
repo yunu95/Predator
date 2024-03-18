@@ -12,16 +12,16 @@
 
 struct VertexBuffer
 {
-	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
-	size_t vertexCount;
-	std::vector<Vertex> vertexVec;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
+    size_t vertexCount;
+    std::vector<Vertex> vertexVec;
 };
 
 struct IndexBuffer
 {
-	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
-	size_t indexCount;
-	std::vector<unsigned int> indexVec;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
+    size_t indexCount;
+    std::vector<unsigned int> indexVec;
 };
 
 class InstanceBuffer;
@@ -29,32 +29,33 @@ class InstanceBuffer;
 class Mesh : public yunuGI::IMesh, public Resource
 {
 public:
-	void SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& indexVec, DirectX::SimpleMath::Vector3& maxPoint, DirectX::SimpleMath::Vector3& minPoint);
+    void SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& indexVec, DirectX::SimpleMath::Vector3& maxPoint, DirectX::SimpleMath::Vector3& minPoint);
 
-	void Render(unsigned int materialIndex = 0, std::shared_ptr<InstanceBuffer> buffer = nullptr);
+    void Render(unsigned int materialIndex = 0, std::shared_ptr<InstanceBuffer> buffer = nullptr);
 
-	DirectX::BoundingBox GetBoundingBox( DirectX::SimpleMath::Matrix wtm, unsigned int materialIndex = 0);
+    DirectX::BoundingBox GetBoundingBox(DirectX::SimpleMath::Matrix wtm, unsigned int materialIndex = 0);
+    virtual void GetBoundingBoxInfo(yunuGI::Vector3* min, yunuGI::Vector3* max);
 
 #pragma region Getter
-	unsigned int GetMaterialCount() { return this->materialCount; }
-	std::vector<VertexBuffer>& GetVertex() { return  vertexBufferVec; }
-	std::vector<IndexBuffer>& GetIdx() { return indexBufferVec; }
+    unsigned int GetMaterialCount() { return this->materialCount; }
+    std::vector<VertexBuffer>& GetVertex() { return  vertexBufferVec; }
+    std::vector<IndexBuffer>& GetIdx() { return indexBufferVec; }
 #pragma endregion
 
 private:
-	void CreateVertexBuffer(unsigned int vertexCount, VertexBuffer& vertexBuffer);
-	void CreateIndexBuffer(unsigned int indexCount,IndexBuffer& indexBuffer);
+    void CreateVertexBuffer(unsigned int vertexCount, VertexBuffer& vertexBuffer);
+    void CreateIndexBuffer(unsigned int indexCount, IndexBuffer& indexBuffer);
 
-	void CheckBigBoundingBox(DirectX::BoundingBox& aabb);
+    void CheckBigBoundingBox(DirectX::BoundingBox& aabb);
 
 private:
-	std::vector<VertexBuffer> vertexBufferVec;
-	std::vector<IndexBuffer> indexBufferVec;
+    std::vector<VertexBuffer> vertexBufferVec;
+    std::vector<IndexBuffer> indexBufferVec;
 
-	std::vector<DirectX::BoundingBox> aabbVec;
-	DirectX::BoundingBox aabb;
+    std::vector<DirectX::BoundingBox> aabbVec;
+    DirectX::BoundingBox aabb;
 
-	unsigned int materialCount;
-	
+    unsigned int materialCount;
+
 };
 

@@ -8,7 +8,10 @@ namespace yunutyEngine
     {
     public:
         static T& SingleInstance();
+        SingletonClass(const SingletonClass&) = delete;
+        SingletonClass& operator=(const SingletonClass&) = delete;
     protected:
+        SingletonClass() = default;
         virtual ~SingletonClass() = default;
     private:
         static T* instance;

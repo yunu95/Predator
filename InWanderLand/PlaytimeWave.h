@@ -28,8 +28,6 @@ private:
 	float m_elapsed = 0.0f;
 
 public:
-	std::vector<UnitProductor*> m_productorVector;
-
 	virtual ~PlaytimeWave();
 
 	void ActivateWave();

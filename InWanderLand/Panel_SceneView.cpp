@@ -8,6 +8,7 @@
 #include "EditorCamera.h"
 #include "ImGuizmo/ImGuizmo.h"
 #include "EditorMath.h"
+#include "EditorLayer.h"
 
 #include "imgui.h"
 #include "imgui_internal.h"
@@ -121,7 +122,7 @@ namespace application
                 ImGui_OnResizeRenderImageSize();
             }
 
-            if (Application::IsFocusGameWindow() == false)
+            if (Application::IsFocusGameWindow() == false && EditorLayer::GetInputControl())
             {
                 // 마우스 입력에 대한 처리
                 if (isMouseOver)
@@ -135,7 +136,7 @@ namespace application
                         auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint({ cursorPos_InScreenSpace.first, cursorPos_InScreenSpace.second }, distToXZPlane, Vector3d(0, 1, 0));
                         pm->GetCurrentPalette()->OnMouseMove(projectedPos, { cursorPos_InScreenSpace.first, cursorPos_InScreenSpace.second });
 
-                        if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui_IsCursorInGizmoButtonRect())
+                        if (eim.IsMouseButtonPressed(MouseCode::Left) && !ImGui_IsCursorInGizmoButtonRect())
                         {
                             if (Vector3d::Dot(projectedPos - yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition(), front) > 0)
                             {
@@ -143,7 +144,7 @@ namespace application
                             }
                         }
 
-                        if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+                        if (eim.IsMouseButtonUp(MouseCode::Left))
                         {
                             pm->GetCurrentPalette()->OnLeftClickRelease();
                             isGuizmoControl = false;
@@ -429,11 +430,76 @@ namespace application
             imgui::SmartStyleVar windowRounding(ImGuiStyleVar_WindowRounding, 4.0f);
             imgui::SmartStyleVar disablePadding(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 
+            ImVec4 selectedColor = ImVec4(1.0f, 0.3f, 0.1f, 1.0f);
+
             ImVec2 buttonSize = ImVec2(20, 20);
 
-            ImVec2 pos = ImVec2(ImGui::GetWindowPos().x + currentWindowSize.first - buttonSize.x, ImGui::GetWindowPos().y - 5);
+            /// PlayMode
+            ImVec2 pos1 = ImVec2(ImGui::GetWindowPos().x + currentWindowSize.first / 2 - buttonSize.x - 2, ImGui::GetWindowPos().y - 5);
 
-            ImGui::SetNextWindowPos(pos);
+            ImGui::SetNextWindowPos(pos1);
+            ImGui::SetNextWindowSize(ImVec2(buttonSize.x * 2 + 4, buttonSize.y));
+            ImGui::SetNextWindowBgAlpha(0.0f);
+
+            ImGui::Begin("##PlayMode", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking);
+            static bool nowPlaying = false;
+            static bool nowPausing = false;
+            {
+                {
+                    imgui::SmartStyleVar framePadding(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+                    imgui::SmartStyleColor settingButtonBGColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+
+                    ImVec4 buttonColor = nowPlaying ? selectedColor : ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+                    if (ImGui::ImageButton("Play", (ImTextureID)erm.GetTexture2D("ImageButtons/Play.png")->GetID(), buttonSize, ImVec2(0, 0), ImVec2(1, 1), ImVec4(0.0f, 0.0f, 0.0f, 0.0f), buttonColor))
+                    {
+                        if (nowPlaying)
+                        {
+                            app->StopContents();
+                            nowPlaying = false;
+                            nowPausing = false;
+                        }
+                        else
+                        {
+                            app->PlayContents();
+                            nowPlaying = true;
+                        }
+                    }
+                }
+
+                ImGui::SameLine();
+
+                {
+                    imgui::SmartStyleVar framePadding(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+                    imgui::SmartStyleColor settingButtonBGColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+
+                    ImVec4 buttonColor = nowPausing ? selectedColor : ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+                    if (ImGui::ImageButton("Pause", (ImTextureID)erm.GetTexture2D("ImageButtons/Pause.png")->GetID(), buttonSize, ImVec2(0, 0), ImVec2(1, 1), ImVec4(0.0f, 0.0f, 0.0f, 0.0f), buttonColor))
+                    {
+                        if (nowPausing)
+                        {
+                            app->PlayContents();
+                            nowPausing = false;
+                        }
+                        else
+                        {
+                            if (nowPlaying)
+                            {
+                                app->PauseContents();
+                                nowPausing = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            ImGui::End();
+
+            /// Setting
+            ImVec2 pos2 = ImVec2(ImGui::GetWindowPos().x + currentWindowSize.first - buttonSize.x, ImGui::GetWindowPos().y - 5);
+
+            ImGui::SetNextWindowPos(pos2);
             ImGui::SetNextWindowSize(buttonSize);
             ImGui::SetNextWindowBgAlpha(0.0f);
 
@@ -541,6 +607,12 @@ namespace application
                 break;
             case palette::Palette_List::Wave:
                 ImGui::BeginMenu("    Wave", false);
+                break;
+            case palette::Palette_List::Cam:
+                ImGui::BeginMenu("     Cam", false);
+                break;
+            case palette::Palette_List::Light:
+                ImGui::BeginMenu("   Light", false);
                 break;
             default:
                 break;

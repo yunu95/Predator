@@ -93,15 +93,16 @@ namespace application
 			return true;
 		}
 
-		bool WaveData::PostDecoding(const json& data)
-		{
-			FieldPostDecoding<boost::pfr::tuple_size_v<POD_Wave>>(pod, data["POD"]);
-			return true;
-		}
-		bool WaveData::PostLoadCallback()
-		{
-			ApplyPodAsMap();
-			HideWaveUnitsVisibility();
+        bool WaveData::PostDecoding(const json& data)
+        {
+            FieldPostDecoding<boost::pfr::tuple_size_v<POD_Wave>>(pod, data["POD"]);
+            EnterDataFromGlobalConstant();
+            return true;
+        }
+        bool WaveData::PostLoadCallback()
+        {
+            ApplyPodAsMap();
+            HideWaveUnitsVisibility();
 
 			return true;
 		}
@@ -177,13 +178,14 @@ namespace application
 			pod.name = MakeUpName();
 		}
 
-		WaveData::WaveData(const std::string& name)
-			: IEditableData(), pod()
-		{
-			pod.name = MakeUpName();
-			pod.templateData = static_cast<Wave_TemplateData*>(templateDataManager.GetTemplateData(name));
-			EnterDataFromTemplate();
-		}
+        WaveData::WaveData(const std::string& name)
+            : IEditableData(), pod()
+        {
+            pod.name = MakeUpName();
+            pod.templateData = static_cast<Wave_TemplateData*>(templateDataManager.GetTemplateData(name));
+            EnterDataFromTemplate();
+            EnterDataFromGlobalConstant();
+        }
 
 		WaveData::WaveData(const WaveData& prototype)
 			: pod(prototype.pod)

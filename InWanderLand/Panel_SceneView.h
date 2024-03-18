@@ -72,6 +72,7 @@ namespace application
 			void ImGui_UpdateEditableDataWTM(IEditableData* target, const yunuGI::Matrix4x4& wtm) const;
 
 			void OnStartControlGizmo();
+
 			Application* app;
 			EditorCamera* ec;
 			ResourceManager& erm = ResourceManager::GetSingletonInstance();
@@ -83,7 +84,6 @@ namespace application
 			std::pair<unsigned int, unsigned int> renderImageSize;
 			std::pair<double, double> cursorPos_InScreenSpace;
 			
-
 			// Gizmo
 			ImGuizmo::OPERATION operation = (ImGuizmo::OPERATION)0;
 			ImGuizmo::MODE mode = ImGuizmo::WORLD;

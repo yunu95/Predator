@@ -43,6 +43,10 @@ namespace application
             void ImGui_BeginOrnamentPalette();
             void ImGui_BeginRegionPalette();
             void ImGui_BeginWavePalette();
+            void ImGui_BeginLightPalette();
+            void ImGui_BeginCameraPalette();
+
+            bool ImGui_CreateUnitPopup();
 
             void LoadCallback();
 
@@ -57,11 +61,13 @@ namespace application
             palette::OrnamentPalette& op = palette::OrnamentPalette::SingleInstance();
             palette::RegionPalette& rp = palette::RegionPalette::SingleInstance();
             palette::WavePalette& wp = palette::WavePalette::SingleInstance();
+            palette::CameraPalette& cp = palette::CameraPalette::SingleInstance();
+            palette::LightPalette& lp = palette::LightPalette::SingleInstance();
 
+            bool createUnitPopup = false;
             int unitCurrentButton = -1;
-            std::vector<bool> unitButton = std::vector<bool>();
-
             int ornamentCurrentButton = -1;
+            int lightCurrentButton = -1;
         };
     }
 }

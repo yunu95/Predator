@@ -1,8 +1,6 @@
 #include "InWanderLand.h"
 #include "Region_TemplateData.h"
 
-#include "TemplateDataManager.h"
-
 namespace application
 {
     namespace editor
@@ -37,20 +35,20 @@ namespace application
         bool Region_TemplateData::PostDecoding(const json& data)
         {
             FieldPostDecoding<boost::pfr::tuple_size_v<POD_Region_TemplateData>>(pod, data["POD"]);
-
+            EnterDataFromGlobalConstant();
             return true;
         }
 
         Region_TemplateData::Region_TemplateData()
             : ITemplateData(), pod()
         {
-
+            EnterDataFromGlobalConstant();
         }
 
         Region_TemplateData::Region_TemplateData(const Region_TemplateData& prototype)
             :ITemplateData(prototype), pod(prototype.pod)
         {
-
+            EnterDataFromGlobalConstant();
         }
 
         Region_TemplateData& Region_TemplateData::operator=(const Region_TemplateData& prototype)

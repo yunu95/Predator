@@ -8,35 +8,32 @@
 
 namespace application
 {
-	namespace editor
+	template <typename T>
+	class Singleton
 	{
-		template <typename T>
-		class Singleton
+	public:
+		static T& GetSingletonInstance()
 		{
-		public:
-			static T& GetSingletonInstance()
+			static std::unique_ptr<T> instance = nullptr;
+			if (instance == nullptr)
 			{
-				static std::unique_ptr<T> instance = nullptr;
-				if (instance == nullptr)
-				{
-					instance = std::unique_ptr<T>(new T);
-				}
-				return *instance;
+				instance = std::unique_ptr<T>(new T);
 			}
+			return *instance;
+		}
 
-		protected:
-			Singleton()
-			{
+	protected:
+		Singleton()
+		{
 
-			}
+		}
 
-			~Singleton()
-			{
+		~Singleton()
+		{
 
-			}
+		}
 
-			Singleton(const Singleton&) = delete;
-			Singleton& operator=(const Singleton&) = delete;
-		};
-	}
+		Singleton(const Singleton&) = delete;
+		Singleton& operator=(const Singleton&) = delete;
+	};
 }

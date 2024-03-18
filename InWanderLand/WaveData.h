@@ -8,6 +8,8 @@
 #include "YunutyEngine.h"
 #include "StaticInstanceRegistry.h"
 #include "RegionData.h"
+#include "GlobalConstant.h"
+
 #include <memory>
 #include <string>
 
@@ -53,32 +55,33 @@ namespace application
 				FROM_JSON(POD_Wave)
 		};
 
-		class WaveData : public IEditableData, public StaticInstanceRegistry<WaveData>
-		{
-			friend class InstanceManager;
-		public:
-			struct WaveUnitData
-			{
-				UnitData* unitData;
-				int waveIdx;
-				float delay;
-			};
-			// 에디터에서 특정 웨이브에 종속적인 액션을 취하고 싶을 때 부르는 함수입니다.
-			// 웨이브에서 소환되는 유닛들을 배치하고 싶을 때 사용됩니다.
-			// 웨이브에 종속적이지 않은 동작을 하고 싶다면 이 함수의 매개변수로 nullptr을 넘겨주십시오.
-			static void SelectEditingWave(WaveData* waveData);
-			virtual bool EnterDataFromTemplate() override;
-			virtual ITemplateData* GetTemplateData() override;
-			virtual bool SetTemplateData(const std::string& dataName) override;
-			virtual IEditableData* Clone() const override;
-			virtual void OnRelocate(const Vector3d& newLoc) override;
-			virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
-			virtual void ApplyAsPlaytimeObject() override;
+        class WaveData : public IEditableData, public StaticInstanceRegistry<WaveData>
+        {
+            friend class InstanceManager;
+        public:
+            struct WaveUnitData
+            {
+                UnitData* unitData;
+                int waveIdx;
+                float delay;
+            };
+            // 에디터에서 특정 웨이브에 종속적인 액션을 취하고 싶을 때 부르는 함수입니다.
+            // 웨이브에서 소환되는 유닛들을 배치하고 싶을 때 사용됩니다.
+            // 웨이브에 종속적이지 않은 동작을 하고 싶다면 이 함수의 매개변수로 nullptr을 넘겨주십시오.
+            static void SelectEditingWave(WaveData* waveData);
+            virtual bool EnterDataFromTemplate() override;
+            virtual ITemplateData* GetTemplateData() override;
+            virtual bool SetTemplateData(const std::string& dataName) override;
+            virtual IEditableData* Clone() const override;
+            virtual void OnRelocate(const Vector3d& newLoc) override;
+            virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
+            virtual void ApplyAsPlaytimeObject() override;
 			virtual void PostApplyAsPlaytimeObject() override;
-			void InsertUnitData(WaveUnitData waveUnitData);
-			void DeleteUnitData(UnitData* unitData);
-			void HideWaveUnitsVisibility();
-			unordered_map<UnitData*, WaveUnitData>& GetWaveUnitDataMap() { return waveUnitDataMap; }
+            virtual bool EnterDataFromGlobalConstant() override { return true; };
+            void InsertUnitData(WaveUnitData waveUnitData);
+            void DeleteUnitData(UnitData* unitData);
+            void HideWaveUnitsVisibility();
+            unordered_map<UnitData*, WaveUnitData>& GetWaveUnitDataMap() { return waveUnitDataMap; }
 
 			POD_Wave pod;
 			void ApplyPodAsMap();

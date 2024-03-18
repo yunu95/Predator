@@ -5,6 +5,7 @@
 #include "TemplateDataManager.h"
 #include "Region_TemplateData.h"
 #include "PlaytimeRegion.h"
+#include "OrnamentData.h"
 
 namespace application
 {
@@ -54,6 +55,18 @@ namespace application
             regionInstance->Apply(this);
             return regionInstance;
         };
+        const std::unordered_set<OrnamentData*>& RegionData::GetDisablingOrnaments()const
+        {
+            return disablingOrnaments;
+        }
+        void RegionData::AddDisablingOrnament(OrnamentData* ornament)
+        {
+            disablingOrnaments.insert(ornament);
+        }
+        void RegionData::EraseDisablingOrnament(OrnamentData* ornament)
+        {
+            disablingOrnaments.erase(ornament);
+        }
 
 		void RegionData::ApplyAsPlaytimeObject()
 		{
@@ -67,7 +80,17 @@ namespace application
             regionGameObject->GetTransform()->SetWorldRotation(Vector3d(0, pod.angle, 0));
         }
 
-		bool RegionData::PreEncoding(json& data) const
+
+        bool RegionData::PreSaveCallback()
+        {
+            pod.disablingOrnamentUUIDS.clear();
+            for (auto each : disablingOrnaments)
+            {
+                pod.disablingOrnamentUUIDS.emplace_back(UUID_To_String(each->GetUUID()));
+            }
+            return true;
+        }
+        bool RegionData::PreEncoding(json& data) const
         {
             FieldPreEncoding<boost::pfr::tuple_size_v<POD_Region>>(pod, data["POD"]);
 
@@ -91,9 +114,18 @@ namespace application
         bool RegionData::PostDecoding(const json& data)
         {
             FieldPostDecoding<boost::pfr::tuple_size_v<POD_Region>>(pod, data["POD"]);
+            EnterDataFromGlobalConstant();
 #ifdef EDITOR
             ApplyAsPaletteInstance();
 #endif
+            return true;
+        }
+        bool RegionData::PostLoadCallback()
+        {
+            for (auto each : pod.disablingOrnamentUUIDS)
+            {
+                AddDisablingOrnament(InstanceManager::GetSingletonInstance().GetInstance<OrnamentData>(String_To_UUID(each)));
+            }
             return true;
         }
         std::wstring RegionData::MakeUpName()
@@ -114,6 +146,7 @@ namespace application
             pod.name = MakeUpName();
             pod.templateData = static_cast<Region_TemplateData*>(templateDataManager.GetTemplateData(name));
             EnterDataFromTemplate();
+            EnterDataFromGlobalConstant();
         }
 
         RegionData::RegionData(const RegionData& prototype)

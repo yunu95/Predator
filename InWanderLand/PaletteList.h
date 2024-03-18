@@ -7,3 +7,5 @@
 #include "OrnamentPalette.h"
 #include "RegionPalette.h"
 #include "WavePalette.h"
+#include "CameraPalette.h"
+#include "LightPalette.h"

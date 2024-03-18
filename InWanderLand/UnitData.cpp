@@ -40,6 +40,7 @@ namespace application
 			}
 
 			pod.templateData = static_cast<Unit_TemplateData*>(ptr);
+			OnDataResourceChange(pod.templateData->pod.fbxName);
 
 			return true;
 		}
@@ -81,10 +82,11 @@ namespace application
 
 		void UnitData::OnDataResourceChange(std::string newName)
 		{
-			SetTemplateData(newName);
+			// TemplateData 를 유지하고 Resource 만 갱신함
 			if (unitInstance)
 			{
-				unitInstance->ChangeTemplateData(this);
+				unitInstance->ChangeResource(newName);
+				ApplyAsPaletteInstance();
 			}
 		}
 
@@ -106,14 +108,14 @@ namespace application
 		{
 			// 함정과 같은 특수 기믹 객체들도 유닛과 유사하게 위치를 지정해주면 되기 때문에 UnitType에 Bomb, Trap, Bbang/th같은
 			// 타입을 확장하여 유닛 생성 로직에서 같이 처리할 수 있게 만들 수 있다.
-			UnitClassifier::SingleInstance().SendPODToClassifier(pod);
+			//UnitClassifier::SingleInstance().SendPODToClassifier(pod);
 			pod.waveData->pod.waveUnitUUIDS;
 		}
 
 		void UnitData::PostApplyAsPlaytimeObject()
 		{
 			/// 
-			UnitProductor* currentSelectedProductor{ nullptr };
+		/*	UnitProductor* currentSelectedProductor{ nullptr };
 
 			switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
 			{
@@ -131,8 +133,14 @@ namespace application
 					break;
 			}
 
-			currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-			pod.waveData->playtimeWave->m_productorVector.push_back(currentSelectedProductor);		// 이렇게 밀어넣어준다 해서 실제 wave 순서와 맞아 떨어지지 않음. 임시방편
+			currentSelectedProductor->MappingUnitData(pod.templateData->pod);*/
+			//pod.waveData->playtimeWave->m_productorVector.push_back(currentSelectedProductor);		// 이렇게 밀어넣어준다 해서 실제 wave 순서와 맞아 떨어지지 않음. 임시방편
+		}
+
+		bool UnitData::EnterDataFromGlobalConstant()
+		{
+			auto& data = GlobalConstant::GetSingletonInstance().pod;
+			return true;
 		}
 
 		bool UnitData::PreEncoding(json& data) const
@@ -159,6 +167,7 @@ namespace application
 		bool UnitData::PostDecoding(const json& data)
 		{
 			FieldPostDecoding<boost::pfr::tuple_size_v<POD_Unit>>(pod, data["POD"]);
+			EnterDataFromGlobalConstant();
 #ifdef EDITOR
 			ApplyAsPaletteInstance();
 #endif
@@ -176,6 +185,7 @@ namespace application
 		{
 			pod.templateData = static_cast<Unit_TemplateData*>(templateDataManager.GetTemplateData(name));
 			EnterDataFromTemplate();
+			EnterDataFromGlobalConstant();
 		}
 
 		UnitData::UnitData(const UnitData& prototype)

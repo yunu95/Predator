@@ -48,10 +48,10 @@ namespace yunutyEngine
         void DestroyGameObject(GameObject* gameObj);
         GameObject* AddGameObject(IGameObjectParent* parent = nullptr);
         GameObject* AddGameObject(string name, IGameObjectParent* parent = nullptr);
-        GameObject* AddGameObjectFromFBX(string fbxName);
+        GameObject* AddGameObjectFromFBX(string fbxName, yunuGI::Vector3* boundingMin = nullptr, yunuGI::Vector3* boundingMax = nullptr);
         friend YunutyCycle;
 
     private:
-        
+
     };
 }

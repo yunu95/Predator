@@ -9,6 +9,7 @@
 #include "PodStructs.h"
 #include "UnitEditorInstance.h"
 #include "UnitPalette.h"
+#include "GlobalConstant.h"
 
 #include <memory>
 #include <string>
@@ -18,6 +19,7 @@ namespace application
     namespace editor
     {
         class TemplateDataManager;
+        class WaveData;
     }
 }
 
@@ -67,6 +69,7 @@ namespace application
             virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
             virtual void ApplyAsPlaytimeObject() override;
             virtual void PostApplyAsPlaytimeObject() override;
+            virtual bool EnterDataFromGlobalConstant() override;
 
             POD_Unit pod;
 

@@ -7,3 +7,5 @@
 #include "Ornament_TemplateData.h"
 #include "Region_TemplateData.h"
 #include "Wave_TemplateData.h"
+#include "Camera_TemplateData.h"
+#include "Light_TemplateData.h"

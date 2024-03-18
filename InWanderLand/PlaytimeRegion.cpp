@@ -15,7 +15,7 @@ void PlaytimeRegion::OnTriggerEnter(physics::Collider* collider)
 {
 	// 조건 더 다듬을 것
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
-		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+		colliderUnitComponent != nullptr && colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
 	{
 		for (auto& each : OnEnter)
 		{
@@ -28,7 +28,7 @@ void PlaytimeRegion::OnTriggerExit(physics::Collider* collider)
 {
 	// 조건 더 다듬을 것
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
-		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+		colliderUnitComponent != nullptr && colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
 	{
 		for (auto& each : OnLeave)
 		{

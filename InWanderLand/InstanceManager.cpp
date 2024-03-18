@@ -1,9 +1,6 @@
 #include "InWanderLand.h"
 #include "InstanceManager.h"
 
-#include "EditableDataList.h"
-#include "TemplateDataManager.h"
-
 namespace application
 {
     namespace editor
@@ -13,60 +10,6 @@ namespace application
             , list(), tdMap(), listBeforeMatching(), mould(nullptr)
         {
 
-        }
-
-        template<>
-        IEditableData* InstanceManager::CreateInstance<IEditableData>(const std::string& dataName)
-        {
-            auto tdptr = templateDataManager.GetTemplateData(dataName);
-            if (tdptr == nullptr)
-            {
-                return nullptr;
-            }
-
-            IEditableData* instance = nullptr;
-
-            switch (templateDataManager.GetDataType(dataName))
-            {
-            case DataType::TerrainData:
-            {
-                instance = new TerrainData(dataName);
-                break;
-            }
-
-            case DataType::UnitData:
-            {
-                instance = new UnitData(dataName);
-                break;
-            }
-
-            case DataType::OrnamentData:
-            {
-                instance = new OrnamentData(dataName);
-                break;
-            }
-            case DataType::RegionData:
-            {
-                instance = new RegionData(dataName);
-                break;
-            }
-            case DataType::WaveData:
-            {
-                instance = new WaveData(dataName);
-                break;
-            }
-
-            default:
-                break;
-            }
-
-            if (instance != nullptr)
-            {
-                list[instance->id] = std::unique_ptr<IEditableData>(instance);
-                tdMap[instance->id] = tdptr;
-            }
-
-            return instance;
         }
 
         bool InstanceManager::DeleteInstance(const UUID& uuid)
@@ -109,6 +52,20 @@ namespace application
                 each.second->PostApplyAsPlaytimeObject();
             }
         }
+
+        void InstanceManager::ClearPlaytimeObjects()
+        {
+            
+        }
+
+        void InstanceManager::EnterDataFromGlobalConstant()
+        {
+            for (auto& each : list)
+            {
+                each.second->EnterDataFromGlobalConstant();
+            }
+        }
+ 
         bool InstanceManager::PreSave()
         {
             for (auto& [key, ptr] : list)
@@ -158,9 +115,9 @@ namespace application
 
         bool InstanceManager::PreDecoding(const json& data)
         {
-            UUID uuid;
             if (!data.contains("InstanceList"))
                 return true;
+            UUID uuid;
             for (auto& [uuidStr, instanceData] : data["InstanceList"].items())
             {
                 uuid = String_To_UUID(uuidStr);
@@ -189,9 +146,9 @@ namespace application
 
         bool InstanceManager::PostDecoding(const json& data)
         {
-            UUID uuid;
             if (!data.contains("InstanceList"))
                 return true;
+            UUID uuid;
             for (auto& [uuidStr, instanceData] : data["InstanceList"].items())
             {
                 uuid = String_To_UUID(uuidStr);
@@ -257,6 +214,16 @@ namespace application
             case DataType::WaveData:
             {
                 instance = new WaveData();
+                break;
+            }
+            case DataType::CameraData:
+            {
+                instance = new CameraData();
+                break;
+            }
+            case DataType::LightData:
+            {
+                instance = new LightData();
                 break;
             }
             default:

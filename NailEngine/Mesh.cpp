@@ -31,9 +31,9 @@ void Mesh::SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& in
     aabb.Extents = DirectX::SimpleMath::Vector3((maxPoint.x - minPoint.x) * 0.5f, (maxPoint.y - minPoint.y) * 0.5f, (maxPoint.z - minPoint.z) * 0.5f);
     this->aabbVec.emplace_back(aabb);
 
-	CheckBigBoundingBox(aabb);
+    CheckBigBoundingBox(aabb);
 
-	this->materialCount = this->indexBufferVec.size();
+    this->materialCount = this->indexBufferVec.size();
 }
 
 void Mesh::Render(unsigned int materialIndex /*= 0*/, std::shared_ptr<InstanceBuffer> buffer /*= nullptr*/)
@@ -69,9 +69,20 @@ DirectX::BoundingBox Mesh::GetBoundingBox(DirectX::SimpleMath::Matrix wtm, unsig
     XMStoreFloat3(&transformedAABB.Center, DirectX::XMLoadFloat3(&this->aabbVec[materialIndex].Center));
     XMStoreFloat3(&transformedAABB.Extents, DirectX::XMLoadFloat3(&this->aabbVec[materialIndex].Extents));
 
-	transformedAABB.Transform(transformedAABB, wtm);
+    transformedAABB.Transform(transformedAABB, wtm);
 
     return transformedAABB;
+}
+void Mesh::GetBoundingBoxInfo(yunuGI::Vector3* min, yunuGI::Vector3* max)
+{
+    if (min)
+    {
+        *min = yunuGI::Vector3(aabb.Center.x - aabb.Extents.x, aabb.Center.y - aabb.Extents.y, aabb.Center.z - aabb.Extents.z);
+    }
+    if (max)
+    {
+        *max = yunuGI::Vector3(aabb.Center.x + aabb.Extents.x, aabb.Center.y + aabb.Extents.y, aabb.Center.z + aabb.Extents.z);
+    }
 }
 
 void Mesh::CreateVertexBuffer(unsigned int vertexCount, VertexBuffer& vertexBuffer)
@@ -112,11 +123,11 @@ void Mesh::CreateIndexBuffer(unsigned int indexCount, IndexBuffer& indexBuffer)
 
 void Mesh::CheckBigBoundingBox(DirectX::BoundingBox& aabb)
 {
-	float v1 = this->aabb.Extents.x * this->aabb.Extents.y * this->aabb.Extents.z;
-	float v2 = aabb.Extents.x * aabb.Extents.y * aabb.Extents.z;
+    float v1 = this->aabb.Extents.x * this->aabb.Extents.y * this->aabb.Extents.z;
+    float v2 = aabb.Extents.x * aabb.Extents.y * aabb.Extents.z;
 
-	if (v1 < v2)
-	{
-		this->aabb = aabb;
-	}
+    if (v1 < v2)
+    {
+        this->aabb = aabb;
+    }
 }
