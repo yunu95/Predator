@@ -35,6 +35,7 @@ namespace application
 			RegionData,
 			WaveData,
 			CameraData,
+            LightData,
 		};
 
         template<typename T>

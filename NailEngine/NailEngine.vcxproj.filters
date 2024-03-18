@@ -121,6 +121,9 @@
     <Filter Include="RenderSystem\BloomPass">
       <UniqueIdentifier>{9493c1fc-363e-4926-ad26-5bc11d772bf5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RenderSystem\PointLightShadowPass">
+      <UniqueIdentifier>{97b51f6e-024a-41da-88f3-d68f8ca927ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -309,6 +312,12 @@
     <ClInclude Include="BloomPass.h">
       <Filter>RenderSystem\BloomPass</Filter>
     </ClInclude>
+    <ClInclude Include="PointLightShadowPass.h">
+      <Filter>RenderSystem\PointLightShadowPass</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryShader.h">
+      <Filter>Resource\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -422,7 +431,6 @@
     <ClCompile Include="Device.cpp">
       <Filter>GraphicsEngine\Device</Filter>
     </ClCompile>
-    <ClCompile Include="tempMain.cpp" />
     <ClCompile Include="CameraManager.cpp">
       <Filter>NailCamera</Filter>
     </ClCompile>
@@ -431,6 +439,12 @@
     </ClCompile>
     <ClCompile Include="BloomPass.cpp">
       <Filter>RenderSystem\BloomPass</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLightShadowPass.cpp">
+      <Filter>RenderSystem\PointLightShadowPass</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryShader.cpp">
+      <Filter>Resource\Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -525,6 +539,18 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="RuntimeDependency\resources\Shader\BlurPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\PointLightShadowVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\PointLightShadowGS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\PointLightShadowPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\Skinned_PointLightShadowVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

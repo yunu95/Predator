@@ -334,8 +334,8 @@ void FBXLoad()
 
 	// Model
 	resourceManager->LoadFile("FBX/Monster2");
-	resourceManager->LoadFile("FBX/SM_Bush_001");
-	resourceManager->LoadFile("FBX/SM_Bush_002");
+	//resourceManager->LoadFile("FBX/SM_Bush_001");
+	//resourceManager->LoadFile("FBX/SM_Bush_002");
 	//resourceManager->LoadFile("FBX/SM_CastleWall");
 	//resourceManager->LoadFile("FBX/SM_CastleWall_Door");
 	//resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");

@@ -34,6 +34,7 @@ private:
 	void ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMeshData& fbxMeshData);
 	void AddHasAnimation(FBXNode* fbxNode);
 	void LoadAnimation(const aiScene* scene, const std::wstring& fbxName);
+	void FillBoneInfoMap(const aiScene* scene);
 
 	void FillVertexBoneIndexAndWeight(const aiScene* scene, const aiNode* node, FBXNode* fbxNode);
 

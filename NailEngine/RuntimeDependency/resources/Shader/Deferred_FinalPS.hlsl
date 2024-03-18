@@ -21,9 +21,6 @@ float4 main(PixelIn input) : SV_Target
     {
         clip(-1);
     }
-
-    
-
     
     //float4 color = Temp0Map.Sample(sam, input.uv);
     //color = saturate((color * (a * color + b)) / (color * (c * color + d) + e));
@@ -35,9 +32,6 @@ float4 main(PixelIn input) : SV_Target
     float4 specular = Temp2Map.Sample(sam, input.uv);
     float4 emissive = Temp3Map.Sample(sam, input.uv);
     output = lightPower + emissive + specular;
-    
-   
-    
     
     return output;
 }

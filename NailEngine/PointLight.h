@@ -18,7 +18,7 @@ public:
 	void SetRange(float range);
 	void SetWorldTM(const DirectX::SimpleMath::Matrix& wtm);
 	DirectX::SimpleMath::Matrix& GetWorldTM();
-
+	DirectX::BoundingSphere GetBoundingSphere(DirectX::SimpleMath::Matrix& wtm);
 private:
 	DirectX::SimpleMath::Matrix wtm;
 

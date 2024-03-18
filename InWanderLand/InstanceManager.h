@@ -102,6 +102,11 @@ namespace application
                         instance = new CameraData(dataName);
                         break;
                     }
+                    case DataType::LightData:
+                    {
+                        instance = new LightData(dataName);
+                        break;
+                    }
                     default:
                         break;
                 }

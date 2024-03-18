@@ -7,6 +7,7 @@ PointLight::PointLight()
 
 	this->meshName = L"Sphere";
 	this->materialName = L"Deferred_PointLight";
+
 }
 
 void PointLight::SetLightDiffuseColor(DirectX::SimpleMath::Vector4& color)
@@ -23,6 +24,7 @@ void PointLight::SetLightPosition(DirectX::SimpleMath::Vector4& position)
 void PointLight::SetRange(float range)
 {
 	this->lightInfo.range = range;
+	this->lightInfo.farPlane = range;
 }
 
 void PointLight::SetWorldTM(const DirectX::SimpleMath::Matrix& wtm)
@@ -36,4 +38,11 @@ DirectX::SimpleMath::Matrix& PointLight::GetWorldTM()
 	this->wtm._22 = this->lightInfo.range * 2;
 	this->wtm._33 = this->lightInfo.range * 2;
 	return this->wtm;
+}
+
+DirectX::BoundingSphere PointLight::GetBoundingSphere(DirectX::SimpleMath::Matrix& wtm)
+{
+	DirectX::BoundingSphere temp;
+	temp.Transform(temp, wtm);
+	return temp;
 }

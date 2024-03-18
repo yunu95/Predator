@@ -11,7 +11,9 @@
 #include "ConstantBuffer.h"
 #include "ResourceManager.h"
 #include "PixelShader.h"
+#include "PointLight.h"
 
+#include <cmath>
 
 LazyObjects<InstancingManager> InstancingManager::Instance;
 
@@ -71,8 +73,8 @@ void InstancingManager::RenderStaticDeferred()
 
                 if (i->isActive == false) continue;
 
-                auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-                auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
+				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+				auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);
 
                 if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
                 {
@@ -148,11 +150,11 @@ void InstancingManager::RenderStaticForward()
             for (auto& i : renderInfoVec)
             {
                 if (i->mesh == nullptr) continue;
-
                 if (i->isActive == false) continue;
 
-                auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-                auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
+				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+
+				auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);
 
                 if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
                 {
@@ -239,6 +241,103 @@ void InstancingManager::RenderStaticShadow()
             }
         }
     }
+}
+
+void InstancingManager::RenderStaticPointLightShadow(DirectX::SimpleMath::Matrix& lightWTM, std::shared_ptr<PointLight> light)
+{
+	ClearData();
+
+	for (auto& pair : this->staticMeshDeferredCache)
+	{
+		std::set<std::shared_ptr<RenderInfo>>& renderInfoVec = pair.second;
+
+		const InstanceID& instanceID = pair.first;
+
+		{
+			for (auto& i : renderInfoVec)
+			{
+				if (i->isActive == false) continue;
+
+				// 만일 포인트라이트의 범위 안에 있는 오브젝트가 아니라면 렌더링되지 않게 컬링
+				auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);
+
+				if (light->GetBoundingSphere(lightWTM).Intersects(aabb) == false)
+				{
+					continue;
+				}
+
+				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+				//auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
+
+				//if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
+				//{
+				//	continue;
+				//}
+
+				const std::shared_ptr<RenderInfo>& renderInfo = i;
+				InstancingData data;
+				data.wtm = renderInfo->wtm;
+				AddData(instanceID, data);
+			}
+
+			if (renderInfoVec.size() != 0)
+			{
+				auto& buffer = _buffers[instanceID];
+				buffer->PushData();
+				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, buffer);
+			}
+		}
+	}
+}
+
+void InstancingManager::RenderSkinnedPointLightShadow(DirectX::SimpleMath::Matrix& lightWTM, std::shared_ptr<PointLight> light)
+{
+	ClearData();
+
+	for (auto& pair : this->skinnedMeshCache)
+	{
+		const std::set<std::shared_ptr<SkinnedRenderInfo>>& renderInfoVec = pair.second;
+
+		const InstanceID instanceID = pair.first;
+
+		{
+			int descIndex = 0;
+			for (auto& i : renderInfoVec)
+			{
+				if (i->renderInfo.isActive == false) continue;
+
+				auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm, i->renderInfo.materialIndex);
+
+				if (light->GetBoundingSphere(lightWTM).Intersects(aabb) == false)
+				{
+					continue;
+				}
+
+
+				const RenderInfo& renderInfo = i->renderInfo;
+				InstancingData data;
+				data.wtm = renderInfo.wtm;
+				AddData(instanceID, data);
+				this->instanceTransitionDesc->transitionDesc[descIndex++] = i->animator->GetTransitionDesc();
+			}
+
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::INST_TRANSITION))->PushGraphicsData(this->instanceTransitionDesc.get(),
+				sizeof(InstanceTransitionDesc), static_cast<int>(CB_TYPE::INST_TRANSITION));
+
+			auto animationGroup = ResourceManager::Instance.Get().GetAnimationGroup((*renderInfoVec.begin())->modelName);
+			animationGroup->Bind();
+
+			if (renderInfoVec.size() != 0)
+			{
+				auto& buffer = _buffers[instanceID];
+				if (buffer->GetCount() > 0)
+				{
+					buffer->PushData();
+					(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, buffer);
+				}
+			}
+		}
+	}
 }
 
 void InstancingManager::RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& renderInfo)
@@ -338,13 +437,13 @@ void InstancingManager::RenderSkinned()
             {
                 if (i->renderInfo.isActive == false) continue;
 
-                auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-                auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->renderInfo.materialIndex);
+				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+				auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm, i->renderInfo.materialIndex);
 
-                if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
-                {
-                    continue;
-                }
+				if (frustum.Intersects(aabb) == false)
+				{
+					continue;
+				}
 
                 const RenderInfo& renderInfo = i->renderInfo;
                 InstancingData data;

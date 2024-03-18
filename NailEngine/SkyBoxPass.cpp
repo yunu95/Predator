@@ -59,7 +59,8 @@ void SkyBoxPass::Render()
 	//NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
 	//// Bind Texture
-	//this->texture->Bind(9);
+	////this->texture->Bind(9);
+	////ResourceManager::Instance.Get().GetTexture(L"PointLightShadowDepth")->Bind(9);
 	////ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShaderResources(9, 1, this->irradianceSRV.GetAddressOf());
 	////ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShaderResources(9, 1, this->prefilteredSRV.GetAddressOf());
 

@@ -6,6 +6,20 @@
 #include "Matrix.hlsli"
 #include "Quaternion.hlsli"
 
+float CalCulateDepth(float3 pos, int index)
+{
+    float near = lights[index].nearPlane;
+    float far = lights[index].farPlane;
+    
+    float c1 = far / (far - near);
+    float c0 = -near * far / (far - near);
+    float3 m = abs(pos).xyz;
+    float major = max(m.x, max(m.y, m.z));
+    float depth = (c1 * major + c0) / major;
+    //return PointLightShadowMap.SampleCmpLevelZero(shadowSam, pos, depth);
+    return depth;
+}
+
 float4x4 LerpTransformMatrix(float4x4 matrix1, float4x4 matrix2, float ratio)
 {
     float3 pos1;
@@ -49,7 +63,11 @@ float ndfGGX(float cosLh, float roughness)
     float alphaSq = alpha * alpha;
 
     float denom = (cosLh * cosLh) * (alphaSq - 1.0) + 1.0;
-    return alphaSq / (PI * denom * denom);
+    float ndf = alphaSq / (PI * denom * denom);
+    
+    ndf = max(ndf, 0.0); // 최소값은 0으로 제한
+
+    return ndf;
 }
 
 float gaSchlickG1(float cosTheta, float k)
@@ -113,7 +131,7 @@ float CalcShadowFactor(SamplerComparisonState samShadow,
     return percentLit /= 9.0f;
 }
 
-void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 diffuse, out float4 ambient, out float4 specular, float3 albedo,float ao, float metalness, float roughness)
+void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 diffuse, out float4 ambient, out float4 specular, float3 albedo, float ao, float metalness, float roughness)
 {
     // 나는 별도의 렌더타겟에 View Space에 대한 정보가 담겨 있어 연산은 View Space에서 이루어진다.
     diffuse = float4(0.f, 0.f, 0.f, 0.f);
@@ -136,7 +154,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
     if (lights[lightIndex].lightType == 0)
     {
         float3 Li = normalize(mul(float4(-lights[lightIndex].direction.xyz, 0.f), VTM).xyz);
-        float3 Lradiance = float3(1.f,1.f,1.f);
+        float3 Lradiance = float3(1.f, 1.f, 1.f);
         
         // 하프 벡터
         float3 Lh = normalize(Li + Lo);
@@ -156,7 +174,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         
         float3 directionalLighting = 0;
         
-        directionalLighting += (diffuseBRDF  + specularBRDF) * (Lradiance * cosLi);
+        directionalLighting += (diffuseBRDF + specularBRDF) * (Lradiance * cosLi);
         
         float3 ambientLighting = float3(0, 0, 0);
         {
@@ -168,7 +186,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
             float3 specularIrradiance = PrefilteredMap.SampleLevel(sam, Lr, roughness * specularTextureLevels).rgb;
             float2 specularBRDF = BrdfMap.Sample(spBRDF_Sampler, float2(cosLo, roughness)).rg;
             float3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;
-            ambientLighting = (diffuseIBL + specularIBL)*ao;
+            ambientLighting = (diffuseIBL + specularIBL) * ao;
         }
        
         ///
@@ -209,6 +227,80 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         diffuse = float4(pow(float3(diffuse.xyz), 1.0 / 2.2), 1.0);
         
         //diffuse *= shadow;
+    }
+    else if (lights[lightIndex].lightType == 1)
+    {
+        // Point light의 위치
+        float3 lightPos = mul(lights[lightIndex].position, VTM).xyz;
+        
+        // 표면과 Point light 사이의 거리 계산
+        float distance = length(lightPos - pos);
+        
+        float distanceRatio = 1.f;
+        
+        // 조명 반경 내에 있는 표면의 영향 계산
+        if (distance <= lights[lightIndex].range)
+        {
+            distanceRatio = saturate(1.0f - pow(distance / lights[lightIndex].range, 2.0f));
+            
+            // Point light의 빛 세기
+            float3 Lradiance = float3(1.f, 1.f, 1.f);
+            
+            // 빛의 방향 벡터
+            float3 Li = normalize(pos - lightPos);
+            Li = -Li;
+            
+            // 하프 벡터
+            float3 Lh = normalize(Li + Lo);
+            
+            float cosLi = max(0.0, dot(normal, Li));
+            float cosLh = max(0.0, dot(normal, Lh));
+            
+            float3 F = fresnelSchlick(F0, max(0.0, dot(Lh, Lo)));
+            float D = ndfGGX(cosLh, max(0.01, roughness));
+            float G = gaSchlickGGX(cosLi, cosLo, roughness);
+           
+            float3 kd = lerp(float3(1, 1, 1) - F, float3(0, 0, 0), metalness);
+            
+            float3 diffuseBRDF = kd * albedo / PI;
+            
+            float3 specularBRDF = (F * D * G) / max(Epsilon, 4.0 * cosLi * cosLo);
+            
+            float3 pointLighting = (diffuseBRDF + specularBRDF) * (Lradiance * cosLi);
+            
+            diffuse.xyz += pointLighting.xyz * lights[lightIndex].color.diffuse.xyz * distanceRatio;
+            diffuse.w = 1.f;
+            
+            float3 ambientLighting = float3(0, 0, 0);
+            {
+                float3 irradiance = IrradianceMap.Sample(sam, normal).rgb;
+                float3 F = fresnelSchlick(F0, cosLo);
+                float3 kd = lerp(1.0 - F, 0.0, metalness);
+                float3 diffuseIBL = kd * albedo * irradiance;
+                uint specularTextureLevels = querySpecularTextureLevels(); //  텍스쳐의 최대 LOD 개수를 구한다.	
+                float3 specularIrradiance = PrefilteredMap.SampleLevel(sam, Lr, roughness * specularTextureLevels).rgb;
+                float2 specularBRDF = BrdfMap.Sample(spBRDF_Sampler, float2(cosLo, roughness)).rg;
+                float3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;
+                ambientLighting = (diffuseIBL + specularIBL) * ao;
+            }
+            
+            // Shadow 연산하는 코드 넣기
+            float4 worldPos = mul(float4(pos.xyz, 1.f), VTMInv);
+            float curDepth = CalCulateDepth((worldPos.xyz - lights[lightIndex].position.xyz), lightIndex);
+        
+            float shadow = PointLightShadowMap.Sample(sam, float4(normalize(worldPos.xyz - lights[lightIndex].position.xyz), plIndex)).r;
+        
+            if (shadow < curDepth - 0.0001f)
+            {
+                shadow = 0.0f;
+            }
+            else
+            {
+                shadow = 1.0f;
+            }
+            
+            diffuse *= shadow;
+        }
     }
 }
 
@@ -304,12 +396,31 @@ void CalculateLight(int lightIndex, float3 normal, float3 pos, out float4 diffus
         }
         else
         {
-            distanceRatio = saturate(1.f - pow(d / lights[lightIndex].range, 2));
+            //distanceRatio = saturate(1.0f - pow(d / lights[lightIndex].range, 1.f/2.0f));
+            distanceRatio = saturate(1.0f - pow(d / lights[lightIndex].range, 2.0f));
         }
+        
         
         ambient = lights[lightIndex].color.ambient * distanceRatio;
         diffuse = lights[lightIndex].color.diffuse * diffuseRatio * distanceRatio;
-       
+        
+
+        // Shadow 연산하는 코드 넣기
+        float4 worldPos = mul(float4(pos.xyz, 1.f), VTMInv);
+        float curDepth = CalCulateDepth((worldPos.xyz - lights[lightIndex].position.xyz), lightIndex);
+        
+        float shadow = PointLightShadowMap.Sample(sam, float4(normalize(worldPos.xyz - lights[lightIndex].position.xyz), plIndex)).r;
+        
+        if (shadow < curDepth - 0.01f)
+        {
+            shadow = 0.0f;
+        }
+        else
+        {
+            shadow = 1.0f;
+        }
+        diffuse *= shadow;
+        
         //float zero = 0.f;
         
         //if(diffuseFactor > zero)
