@@ -84,6 +84,11 @@ void ResourceManager::CreateMesh(const std::wstring& mesh)
 		LoadRactangleMesh();
 		return;
 	}
+	else if (mesh == L"Line")
+	{
+		LoadLineMesh();
+		return;
+	}
 	//else if (mesh == L"Sphere")
 	//{
 	//	LoadSphereMesh();
@@ -99,11 +104,7 @@ void ResourceManager::CreateMesh(const std::wstring& mesh)
 	//	LoadPointMesh();
 	//	return;
 	//}
-	//else if (mesh == L"Line")
-	//{
-	//	LoadLineMesh();
-	//	return;
-	//}
+
 	//else if (mesh == L"Capsule")
 	//{
 	//	LoadCapsuleMesh();
@@ -1654,58 +1655,58 @@ void ResourceManager::LoadRactangleMesh()
 //
 //}
 //
-//void ResourceManager::LoadLineMesh()
-//{
-//    std::shared_ptr<Mesh> lineMesh = std::make_shared<Mesh>();
-//
-//	lineMesh->SetName(L"Line");
-//
-//    std::vector<Vertex> vertices(3);
-//
-//	vertices[0] = Vertex{ DirectX::SimpleMath::Vector3{0.0f, 0, 0 },
-//						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
-//						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
-//						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
-//						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
-//
-//    vertices[1] = Vertex{ DirectX::SimpleMath::Vector3{1.0f, 0, 0 },
-//                          DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
-//                          DirectX::SimpleMath::Vector2{0.5f,0.5f},
-//                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
-//                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
-//
-//    vertices[2] = Vertex{ DirectX::SimpleMath::Vector3{1.0f, 0, 0 },
-//                          DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
-//                          DirectX::SimpleMath::Vector2{0.5f,0.5f},
-//                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
-//                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
-//
-//    std::vector<unsigned int> indices(3);
-//
-//	indices[0] = 0;
-//	indices[1] = 1;
-//	indices[1] = 2;
-//
-//
-//	DirectX::SimpleMath::Vector3 minPoint = vertices[0].pos;
-//	DirectX::SimpleMath::Vector3 maxPoint = vertices[0].pos;
-//
-//	for (const auto& vertex : vertices) {
-//		// minPoint 업데이트
-//		minPoint.x = std::min(minPoint.x, vertex.pos.x);
-//		minPoint.y = std::min(minPoint.y, vertex.pos.y);
-//		minPoint.z = std::min(minPoint.z, vertex.pos.z);
-//
-//		// maxPoint 업데이트
-//		maxPoint.x = max(maxPoint.x, vertex.pos.x);
-//		maxPoint.y = max(maxPoint.y, vertex.pos.y);
-//		maxPoint.z = max(maxPoint.z, vertex.pos.z);
-//	}
-//
-//
-//	lineMesh->SetData(vertices, indices, maxPoint, minPoint);
-//    CreateMesh(lineMesh);
-//}
+void ResourceManager::LoadLineMesh()
+{
+    std::shared_ptr<Mesh> lineMesh = std::make_shared<Mesh>();
+
+	lineMesh->SetName(L"Line");
+
+    std::vector<Vertex> vertices(3);
+
+	vertices[0] = Vertex{ DirectX::SimpleMath::Vector3{0.0f, 0, 0 },
+						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
+
+    vertices[1] = Vertex{ DirectX::SimpleMath::Vector3{1.0f, 0, 0 },
+                          DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+                          DirectX::SimpleMath::Vector2{0.5f,0.5f},
+                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
+                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
+
+    vertices[2] = Vertex{ DirectX::SimpleMath::Vector3{1.0f, 0, 0 },
+                          DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+                          DirectX::SimpleMath::Vector2{0.5f,0.5f},
+                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
+                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
+
+    std::vector<unsigned int> indices(3);
+
+	indices[0] = 0;
+	indices[1] = 1;
+	indices[1] = 2;
+
+
+	DirectX::SimpleMath::Vector3 minPoint = vertices[0].pos;
+	DirectX::SimpleMath::Vector3 maxPoint = vertices[0].pos;
+
+	for (const auto& vertex : vertices) {
+		// minPoint 업데이트
+		minPoint.x = std::min(minPoint.x, vertex.pos.x);
+		minPoint.y = std::min(minPoint.y, vertex.pos.y);
+		minPoint.z = std::min(minPoint.z, vertex.pos.z);
+
+		// maxPoint 업데이트
+		maxPoint.x = max(maxPoint.x, vertex.pos.x);
+		maxPoint.y = max(maxPoint.y, vertex.pos.y);
+		maxPoint.z = max(maxPoint.z, vertex.pos.z);
+	}
+
+
+	lineMesh->SetData(vertices, indices, maxPoint, minPoint);
+    CreateMesh(lineMesh);
+}
 //
 //void ResourceManager::LoadCapsuleMesh()
 //{

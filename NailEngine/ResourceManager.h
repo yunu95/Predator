@@ -107,7 +107,7 @@ private:
 	//void LoadSphereMesh();
 	void LoadRactangleMesh();
 	//void LoadPointMesh();
-	//void LoadLineMesh();
+	void LoadLineMesh();
 	//void LoadCapsuleMesh();
 	//void LoadCylinderMesh();
 	//void LoadTriangleMesh();
