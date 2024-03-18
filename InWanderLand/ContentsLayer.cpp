@@ -115,6 +115,7 @@ void application::contents::ContentsLayer::Initialize()
 	resourceManager->LoadFile("LeavesVS.cso");
 	resourceManager->LoadFile("LeavesPS.cso");
 
+	resourceManager->LoadFile("FBX/Monster1");
 	resourceManager->LoadFile("FBX/Monster2");
 	resourceManager->LoadFile("FBX/Stone");
 	resourceManager->LoadFile("FBX/SM_Bush_001");
