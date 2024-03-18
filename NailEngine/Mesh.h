@@ -40,6 +40,7 @@ public:
     std::vector<VertexBuffer>& GetVertex() { return  vertexBufferVec; }
     std::vector<IndexBuffer>& GetIdx() { return indexBufferVec; }
 	DirectX::BoundingBox GetBoundingBox(DirectX::SimpleMath::Matrix wtm, unsigned int materialIndex = 0);
+    //virtual void GetBoundingBoxInfo(yunuGI::Vector3* min, yunuGI::Vector3* max);
 	std::vector<DirectX::SimpleMath::Vector3>& GetBoundingVertexList(DirectX::SimpleMath::Matrix& mat, int index);
 
 #pragma endregion
