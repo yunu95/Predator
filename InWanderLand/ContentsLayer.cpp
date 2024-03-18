@@ -68,84 +68,90 @@ void GraphicsTest()
 		}
 	}
 
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,44.81 });
-		auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
-		yunuGI::Color color{ 0,0,1.f,1 };
-		light->GetGI().SetLightDiffuseColor(color);
-		light->GetGI().SetRange(10);
-	}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,44.81 });
+	//	auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
+	//	yunuGI::Color color{ 0,0,1.f,1 };
+	//	light->GetGI().SetLightDiffuseColor(color);
+	//	light->GetGI().SetRange(10);
+	//}
 
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,45.32 });
-		auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
-		yunuGI::Color color{ 1.f,0,0,1 };
-		light->GetGI().SetLightDiffuseColor(color);
-		light->GetGI().SetRange(10);
-	}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,45.32 });
+	//	auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
+	//	yunuGI::Color color{ 1.f,0,0,1 };
+	//	light->GetGI().SetLightDiffuseColor(color);
+	//	light->GetGI().SetRange(10);
+	//}
 
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->SetLocalScale(Vector3d{ 100,1,100 });
-		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		renderer->GetGI().SetMesh(mesh);
-	}
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,1 });
-		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,50,50 });
-		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		renderer->GetGI().SetMesh(mesh);
-	}
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
-		obj->GetTransform()->SetLocalPosition(Vector3d{ -50,50,0 });
-		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		renderer->GetGI().SetMesh(mesh);
-	}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//	obj->GetTransform()->SetLocalScale(Vector3d{ 100,1,100 });
+	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//	renderer->GetGI().SetMesh(mesh);
+	//}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//	obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,1 });
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,50,50 });
+	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//	renderer->GetGI().SetMesh(mesh);
+	//}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//	obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ -50,50,0 });
+	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//	renderer->GetGI().SetMesh(mesh);
+	//}
 
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->SetLocalPosition(Vector3d{ -48.67,3.67,44.81 });
-		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		renderer->GetGI().SetMesh(mesh);
-	}
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.26,3.67,47.83 });
-		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		renderer->GetGI().SetMesh(mesh);
-	}
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->SetLocalPosition(Vector3d{ -48.08,5.32,46.24 });
-		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		renderer->GetGI().SetMesh(mesh);
-	}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ -48.67,3.67,44.81 });
+	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//	renderer->GetGI().SetMesh(mesh);
+	//}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.26,3.67,47.83 });
+	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//	renderer->GetGI().SetMesh(mesh);
+	//}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ -48.08,5.32,46.24 });
+	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//	renderer->GetGI().SetMesh(mesh);
+	//}
 
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
-		obj->GetTransform()->SetLocalPosition(Vector3d{ 48.08,5.32,46.24 });
-		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		renderer->GetGI().SetMesh(mesh);
-	}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//	obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 48.08,5.32,46.24 });
+	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//	renderer->GetGI().SetMesh(mesh);
+	//}
 
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
-		auto animator = obj->GetComponent<yunutyEngine::graphics::Animator>();
-		animator->GetGI().PushAnimation(animation);
-		animator->GetGI().Play(animation);
-		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.55, 0.5f,42.53 });
-		obj->GetTransform()->SetLocalScale(Vector3d{ 0.01,0.01,0.01});
-		obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{ 0,0,0} });
-	}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
+	//	auto animator = obj->GetComponent<yunutyEngine::graphics::Animator>();
+	//	animator->GetGI().PushAnimation(animation);
+	//	animator->GetGI().Play(animation);
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.55, 0.5f,42.53 });
+	//}
 
+
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//	renderer->GetGI().SetMesh(mesh);
+	//}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+	}
 
 
 	//{
@@ -234,35 +240,35 @@ void application::contents::ContentsLayer::Initialize()
 	//resourceManager->LoadFile("LeavesVS.cso");
 	//resourceManager->LoadFile("LeavesPS.cso");
 
-	resourceManager->LoadFile("FBX/Monster2");
-	//resourceManager->LoadFile("FBX/Stone");
-	//resourceManager->LoadFile("FBX/SM_Bush_001");
-	//resourceManager->LoadFile("FBX/SM_Bush_002");
-	//resourceManager->LoadFile("FBX/SM_Trunk_001");
-	//resourceManager->LoadFile("FBX/SM_CastleWall");
-	//resourceManager->LoadFile("FBX/SM_CastleWall_Door");
-	//resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
-	//resourceManager->LoadFile("FBX/SM_Chair");
-	//resourceManager->LoadFile("FBX/SM_Cuptower");
-	//resourceManager->LoadFile("FBX/SM_Fork");
-	//resourceManager->LoadFile("FBX/SM_GuideBook");
-	//resourceManager->LoadFile("FBX/SM_Hat01");
-	//resourceManager->LoadFile("FBX/SM_Hat02");
-	//resourceManager->LoadFile("FBX/SM_SmallBush_001");
-	//resourceManager->LoadFile("FBX/SM_Stone_001");
-	//resourceManager->LoadFile("FBX/SM_Stone_002");
-	//resourceManager->LoadFile("FBX/SM_Stump");
-	//resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
-	//resourceManager->LoadFile("FBX/SM_Temple_Books");
-	//resourceManager->LoadFile("FBX/SM_Temple_Floor");
-	//resourceManager->LoadFile("FBX/SM_Temple_Pillar");
-	//resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
-	//resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
-	//resourceManager->LoadFile("FBX/SM_Temple_Stairs");
-	//resourceManager->LoadFile("FBX/SM_Temple_Welcome");
-	//resourceManager->LoadFile("FBX/SM_Trunk_001");
-	//resourceManager->LoadFile("FBX/SM_Stage1_Floor");
-	//resourceManager->LoadFile("FBX/Spear");
+	resourceManager->LoadFile("FBX/SKM_Monster1");
+	resourceManager->LoadFile("FBX/SKM_Monster2");
+	resourceManager->LoadFile("FBX/SKM_Robin");
+	resourceManager->LoadFile("FBX/SM_Bush_001");
+	resourceManager->LoadFile("FBX/SM_Bush_002");
+	resourceManager->LoadFile("FBX/SM_Trunk_001");
+	resourceManager->LoadFile("FBX/SM_CastleWall");
+	resourceManager->LoadFile("FBX/SM_CastleWall_Door");
+	resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
+	resourceManager->LoadFile("FBX/SM_Chair");
+	resourceManager->LoadFile("FBX/SM_Cuptower");
+	resourceManager->LoadFile("FBX/SM_Fork");
+	resourceManager->LoadFile("FBX/SM_GuideBook");
+	resourceManager->LoadFile("FBX/SM_Hat01");
+	resourceManager->LoadFile("FBX/SM_Hat02");
+	resourceManager->LoadFile("FBX/SM_SmallBush_001");
+	resourceManager->LoadFile("FBX/SM_Stone_001");
+	resourceManager->LoadFile("FBX/SM_Stone_002");
+	resourceManager->LoadFile("FBX/SM_Stump");
+	resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
+	resourceManager->LoadFile("FBX/SM_Temple_Books");
+	resourceManager->LoadFile("FBX/SM_Temple_Floor");
+	resourceManager->LoadFile("FBX/SM_Temple_Pillar");
+	resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
+	resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
+	resourceManager->LoadFile("FBX/SM_Mushroom01");
+	resourceManager->LoadFile("FBX/SM_Mushroom02");
+	resourceManager->LoadFile("FBX/SM_Temple_Welcome");
+	resourceManager->LoadFile("FBX/SM_Stage1_Floor");
 
 #ifndef EDITOR
 #ifdef GRAPHICS_TEST
@@ -274,7 +280,6 @@ void application::contents::ContentsLayer::Initialize()
 		directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
 		directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
 		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-		//auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
 		auto color = yunuGI::Color{ 0.2,0.2,0.2,1.f };
 		light->GetGI().SetLightDiffuseColor(color);
 		//directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
@@ -360,12 +365,12 @@ void application::contents::ContentsLayer::AssignTestInitializer(std::function<v
 	YunutyCycle::SingleInstance().onExceptionThrown = [](const std::exception& e) {
 		application::Application::GetInstance().AddMainLoopTodo([=]() {
 			Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
-			});
-	};
+});
+};
 }
 #endif
 
 void application::contents::ContentsLayer::ClearPlaytimeObject()
 {
-	
+
 }
