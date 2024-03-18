@@ -851,7 +851,7 @@ void ResourceManager::CreateDefaultMesh()
 	///CreateMesh(L"Sphere");
 	CreateMesh(L"Rectangle");
 	///CreateMesh(L"Point");
-	///CreateMesh(L"Line");
+	CreateMesh(L"Line");
 	///CreateMesh(L"Capsule");
 	///CreateMesh(L"Cylinder");
 	///CreateMesh(L"Triangle");
