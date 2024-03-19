@@ -47,7 +47,7 @@ namespace application
                     ShowSelectionBox(false);
                     //auto nearPoint = cam->GetProjectedPoint(screenSpacePos, 0);
                     auto nearPoint = cam->GetTransform()->GetWorldPosition() - cam->GetTransform()->GetWorldRotation().Forward() * cam->GetGI().GetNear();
-                    auto farPoint = cam->GetProjectedPoint(screenSpacePos, 100);
+                    auto farPoint = cam->GetProjectedPoint(screenSpacePos, 2000);
                     //auto farPoint = cam->GetProjectedPoint(screenSpacePos, cam->GetGI().GetFar());
 
                     //debugBoxColliderNear->GetTransform()->SetLocalPosition(nearPoint);
