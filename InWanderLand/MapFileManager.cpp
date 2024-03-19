@@ -74,9 +74,10 @@ namespace application
                     odt->pod.rotation.y = quat.y;
                     odt->pod.rotation.z = quat.z;
                     odt->pod.rotation.w = quat.w;
-                    odt->pod.position.x = location[0];
+                    odt->pod.position.x = -location[0];
                     odt->pod.position.y = location[2];
-                    odt->pod.position.z = -location[1];
+                    odt->pod.position.z = location[1];
+
                     auto pi = odt->ApplyAsPaletteInstance();
                 }
 

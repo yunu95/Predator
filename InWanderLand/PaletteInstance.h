@@ -59,11 +59,11 @@ namespace application
                 float selectCircleRadius{ 1.25 };
                 static constexpr float transparency{ 0.3f };
                 yunutyEngine::physics::BoxCollider* pickingCollider{ nullptr };
+                yunutyEngine::graphics::StaticMeshRenderer* selectCircle{nullptr};
             private:
                 void InitPickingCollider();
                 IEditableData* editableData{ nullptr };
                 yunutyEngine::physics::RigidBody* rigidBody{ nullptr };
-                yunutyEngine::graphics::StaticMeshRenderer* selectCircle{nullptr};
                 bool isSelected{ false };
                 bool isHovering{ false };
                 friend IEditableData;

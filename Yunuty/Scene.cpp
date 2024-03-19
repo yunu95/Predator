@@ -1,6 +1,7 @@
 #include "YunutyEngine.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include "_XMMath.h"
 
 void ExpandBoundingVolume(yunuGI::Vector3* boundingMin, yunuGI::Vector3* boundingMax, const yunuGI::Vector3& newBoundingMin, const yunuGI::Vector3& newBoundingMax)
 {
@@ -34,6 +35,7 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
             auto mesh = graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(fbxNode->meshName);
             yunuGI::Vector3 meshBoundingMin, meshBoundingMax;
             mesh->GetBoundingBoxInfo(&meshBoundingMin, &meshBoundingMax);
+            //math::TO_XMMATRIX... gameObjectChild->GetTransform()->GetLocalTM();
             if (boundingMin && boundingMax)
             {
                 if (boundsInit)
