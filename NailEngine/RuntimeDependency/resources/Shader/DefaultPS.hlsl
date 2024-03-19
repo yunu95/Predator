@@ -47,9 +47,8 @@ PS_OUT main(PixelIn input)
     if (UseTexture(useNormal) == 1)
     {
         // [0, 255] 범위에서 [0, 1]로 변환
-        //float3 tangentSpaceNormal = pow(NormalMap.Sample(sam, input.uv).xyz, 1 / 2.2f);
-        //float3 tangentSpaceNormal = pow(NormalMap.Sample(sam, input.uv).xyz, 2.2f);
         float3 tangentSpaceNormal = NormalMap.Sample(sam, input.uv).xyz;
+        tangentSpaceNormal.y = 1 - tangentSpaceNormal.y;
         
         // [0, 1] 범위에서 [-1, 1]로 변환
         tangentSpaceNormal = (tangentSpaceNormal - 0.5f) * 2.f;
@@ -59,7 +58,8 @@ PS_OUT main(PixelIn input)
     
     if (UseTexture(useARM) == 1)
     {
-        float3 arm = ARMMap.Sample(sam, input.uv);
+        float3 arm = ARMMap.Sample(sam, input.uv).xyz;
+        
         output.arm.x = arm.x;
         output.arm.y = arm.y;
         output.arm.z = arm.z;
@@ -73,9 +73,6 @@ PS_OUT main(PixelIn input)
     
     output.position = input.posV;
     output.normal = float4(viewNormal.xyz, 1.f);
-    
-    //float3 fogFactor = saturate(abs(fogEnd - input.posV.z) / abs(fogEnd - fogStart));
-    //float3 fogColor = fogFactor * color.xyz + (1 - fogFactor) * float3(0.7686, 0.8784, 0.9451);
     
     output.color = color * materialColor;
     

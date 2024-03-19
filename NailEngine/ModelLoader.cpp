@@ -15,10 +15,6 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 	this->texturePath = std::filesystem::path(filePath).parent_path().wstring()
 		+ L"/" + std::filesystem::path(filePath).stem().wstring() + L".fbm/";
 
-	if (this->texturePath == L"FBX/Monster2/Monster2.fbm/")
-	{
-		int a = 1;
-	}
 
 	// Assimp Importer 객체 생성
 	Assimp::Importer importer;
@@ -36,15 +32,11 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 	//	aiProcess_FlipWindingOrder | aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
 	//	aiProcess_SortByPType | aiProcess_LimitBoneWeights;
 
-	const unsigned int flag// = aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace | aiProcess_ConvertToLeftHanded | aiProcess_FlipUVs;
-		//*
-		= aiProcess_Triangulate |
+	const unsigned int flag		= aiProcess_Triangulate |
 		aiProcess_ConvertToLeftHanded | aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
 		aiProcess_CalcTangentSpace | aiProcess_PopulateArmatureData |
 		aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
 		aiProcess_SortByPType | aiProcess_LimitBoneWeights;
-	//*/
-
 
 	const aiScene* scene = importer.ReadFile(filePath, flag);
 	auto temp = importer.GetErrorString();

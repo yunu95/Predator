@@ -55,6 +55,8 @@ void GraphicsTest()
 		{
 			i->SetLoop(true);
 			animation = i;
+			int a = 1;
+			i->SetEventFunc(20, []() {std::cout << "TEST" << std::endl; });
 		}
 	}
 
@@ -135,17 +137,38 @@ void GraphicsTest()
 	}
 
 	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Monster2");
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
 		auto animator = obj->GetComponent<yunutyEngine::graphics::Animator>();
 		animator->GetGI().PushAnimation(animation);
 		animator->GetGI().Play(animation);
 		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.55, 0.5f,42.53 });
-		obj->GetTransform()->SetLocalScale(Vector3d{ 0.01,0.01,0.01});
-		obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{ 0,0,0} });
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//	renderer->GetGI().SetMesh(mesh);
+	//}
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+	//	obj->GetTransform()->SetLocalPosition({ Vector3d{0,0,-5} });
+	//}
+
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
+	//	obj->GetTransform()->SetLocalPosition({ Vector3d{5,0,-5} });
+	//}
+	//
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
+	//	obj->GetTransform()->SetLocalPosition({ Vector3d{10,0,-5} });
+	//}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Cuptower");
+	//	obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{0,180,0} });
+	//}
 
 
 	//{
@@ -234,36 +257,35 @@ void application::contents::ContentsLayer::Initialize()
 	//resourceManager->LoadFile("LeavesVS.cso");
 	//resourceManager->LoadFile("LeavesPS.cso");
 
-	resourceManager->LoadFile("FBX/Monster1");
-	resourceManager->LoadFile("FBX/Monster2");
-	//resourceManager->LoadFile("FBX/Stone");
-	//resourceManager->LoadFile("FBX/SM_Bush_001");
-	//resourceManager->LoadFile("FBX/SM_Bush_002");
-	//resourceManager->LoadFile("FBX/SM_Trunk_001");
-	//resourceManager->LoadFile("FBX/SM_CastleWall");
-	//resourceManager->LoadFile("FBX/SM_CastleWall_Door");
-	//resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
-	//resourceManager->LoadFile("FBX/SM_Chair");
-	//resourceManager->LoadFile("FBX/SM_Cuptower");
-	//resourceManager->LoadFile("FBX/SM_Fork");
-	//resourceManager->LoadFile("FBX/SM_GuideBook");
-	//resourceManager->LoadFile("FBX/SM_Hat01");
-	//resourceManager->LoadFile("FBX/SM_Hat02");
-	//resourceManager->LoadFile("FBX/SM_SmallBush_001");
-	//resourceManager->LoadFile("FBX/SM_Stone_001");
-	//resourceManager->LoadFile("FBX/SM_Stone_002");
-	//resourceManager->LoadFile("FBX/SM_Stump");
-	//resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
-	//resourceManager->LoadFile("FBX/SM_Temple_Books");
-	//resourceManager->LoadFile("FBX/SM_Temple_Floor");
-	//resourceManager->LoadFile("FBX/SM_Temple_Pillar");
-	//resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
-	//resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
-	//resourceManager->LoadFile("FBX/SM_Temple_Stairs");
-	//resourceManager->LoadFile("FBX/SM_Temple_Welcome");
-	//resourceManager->LoadFile("FBX/SM_Trunk_001");
-	//resourceManager->LoadFile("FBX/SM_Stage1_Floor");
-	//resourceManager->LoadFile("FBX/Spear");
+	resourceManager->LoadFile("FBX/SKM_Monster1");
+	resourceManager->LoadFile("FBX/SKM_Monster2");
+	resourceManager->LoadFile("FBX/SKM_Robin");
+	resourceManager->LoadFile("FBX/SM_Bush_001");
+	resourceManager->LoadFile("FBX/SM_Bush_002");
+	resourceManager->LoadFile("FBX/SM_Trunk_001");
+	resourceManager->LoadFile("FBX/SM_CastleWall");
+	resourceManager->LoadFile("FBX/SM_CastleWall_Door");
+	resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
+	resourceManager->LoadFile("FBX/SM_Chair");
+	resourceManager->LoadFile("FBX/SM_Cuptower");
+	resourceManager->LoadFile("FBX/SM_Fork");
+	resourceManager->LoadFile("FBX/SM_GuideBook");
+	resourceManager->LoadFile("FBX/SM_Hat01");
+	resourceManager->LoadFile("FBX/SM_Hat02");
+	resourceManager->LoadFile("FBX/SM_SmallBush_001");
+	resourceManager->LoadFile("FBX/SM_Stone_001");
+	resourceManager->LoadFile("FBX/SM_Stone_002");
+	resourceManager->LoadFile("FBX/SM_Stump");
+	resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
+	resourceManager->LoadFile("FBX/SM_Temple_Books");
+	resourceManager->LoadFile("FBX/SM_Temple_Floor");
+	resourceManager->LoadFile("FBX/SM_Temple_Pillar");
+	resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
+	resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
+	resourceManager->LoadFile("FBX/SM_Mushroom01");
+	resourceManager->LoadFile("FBX/SM_Mushroom02");
+	resourceManager->LoadFile("FBX/SM_Temple_Welcome");
+	resourceManager->LoadFile("FBX/SM_Stage1_Floor");
 
 #ifndef EDITOR
 #ifdef GRAPHICS_TEST
@@ -272,16 +294,11 @@ void application::contents::ContentsLayer::Initialize()
 		//yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 		yunutyEngine::Collider2D::SetIsOnXYPlane(false);
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
+		//directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
 		directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
 		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-		//auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
-		auto color = yunuGI::Color{ 0.2,0.2,0.2,1.f };
+		auto color = yunuGI::Color{ 0.5,0.5,0.5,1.f };
 		light->GetGI().SetLightDiffuseColor(color);
-		//directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
-		//directionalLight->GetTransform()->rotation = Quaternion{ Vector3d{0, 45, 0} };
-		//auto test = directionalLight->AddComponent<TestComponent2>();
-		//test->gameObject = directionalLight;
 
 		editor::MapFileManager::GetSingletonInstance().LoadStaticOrnaments("TestOrnaments.punreal");
 	}
@@ -362,11 +379,11 @@ void application::contents::ContentsLayer::AssignTestInitializer(std::function<v
 		application::Application::GetInstance().AddMainLoopTodo([=]() {
 			Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
 			});
-	};
+};
 }
 #endif
 
 void application::contents::ContentsLayer::ClearPlaytimeObject()
 {
-	
+
 }
