@@ -58,6 +58,10 @@ namespace application
 			resourceManager->LoadFile("FBX/Sphere");
 			resourceManager->LoadFile("FBX/Camera");
 
+			// 재귀적으로 모든 FBX 로드하기
+			ResourceManager::GetSingletonInstance();
+
+
 			/// 각종 매니저 클래스 메모리 할당
 			MapFileManager::GetSingletonInstance();
 			palette::PaletteManager::GetSingletonInstance();
