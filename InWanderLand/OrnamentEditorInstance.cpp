@@ -22,9 +22,6 @@ namespace application::editor::palette
 		meshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(ornamentTemplateData->pod.fbxName, &boundingMin, &boundingMax);
 		AdjustPickingCollider(reinterpret_cast<const Vector3f&>(boundingMin), reinterpret_cast<const Vector3f&>(boundingMax));
 		meshObject->SetParent(GetGameObject());
-		selectCircle->GetTransform()->SetLocalPosition(meshObject->GetTransform()->GetLocalPosition());
-		selectCircle->GetTransform()->SetLocalRotation(meshObject->GetTransform()->GetLocalRotation());
-		selectCircle->GetTransform()->SetLocalScale(meshObject->GetTransform()->GetLocalScale());
 		currentFBX = ornamentTemplateData->pod.fbxName;
 	}
 
