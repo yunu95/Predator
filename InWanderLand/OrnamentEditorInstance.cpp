@@ -40,21 +40,21 @@ namespace application::editor::palette
 		this->ornamentTemplateData = ornamentTemplateData;
 		ChangeResource(ornamentTemplateData->pod.fbxName);
 	}
+  
+    void OrnamentEditorInstance::ChangeResource(const std::string& fbxName)
+    {
+        // TemplateData �� �����ϰ� Resource �� ������
+        if (currentFBX == fbxName)
+            return;
 
-	void OrnamentEditorInstance::ChangeResource(const std::string& fbxName)
-	{
-		// TemplateData �� �����ϰ� Resource �� ������
-		if (currentFBX == fbxName)
-			return;
-
-		for (auto& each : GetGameObject()->GetChildren())
-		{
-			if (each->getName() == currentFBX)
-			{
-				yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(each);
-				break;
-			}
-		}
+        for (auto& each : GetGameObject()->GetChildren())
+        {
+            if (each->getName() == currentFBX)
+            {
+                yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(each);
+                break;
+            }
+        }
 
 		yunuGI::Vector3 boundingMin, boundingMax;
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName, &boundingMin, &boundingMax);
@@ -62,7 +62,7 @@ namespace application::editor::palette
 		obj->SetParent(GetGameObject());
 		currentFBX = fbxName;
 
-		return;
-	}
+        return;
+    }
 }
 

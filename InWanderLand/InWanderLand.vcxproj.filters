@@ -1362,5 +1362,8 @@
     <ClCompile Include="LightEditorInstance.cpp">
       <Filter>Editor\Palette\EditorInstance\LightInstance</Filter>
     </ClCompile>
+    <ClCompile Include="SnippetSkinnedMeshes.cpp">
+      <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
