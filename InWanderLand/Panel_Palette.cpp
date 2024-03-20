@@ -309,7 +309,7 @@ namespace application
 								up.SelectUnitTemplateData(nullptr);
 								up.SetAsSelectMode(true);
 							}
-							createUnitPopup = true;
+							ImGui_CreateUnitPopup();
 							EditorLayer::SetInputControl(false);
 						}
 					}
@@ -342,11 +342,6 @@ namespace application
 					}
 				}
 				imgui::EndSection();
-			}
-
-			if (createUnitPopup)
-			{
-				ImGui_CreateUnitPopup();
 			}
 		}
 
@@ -781,7 +776,7 @@ namespace application
 
 					ImGui::Separator();
 
-					static auto& fbxSet = ResourceManager::GetSingletonInstance().GetFbxList();
+					static auto& fbxSet = ResourceManager::GetSingletonInstance().GetSkinnedFBXList();
 					static std::vector<std::string> selections = std::vector<std::string>();
 					static std::string fbxName = "None";
 					std::string currentFBX = fbxName;
@@ -832,7 +827,6 @@ namespace application
 								fbxName = "None";
 								returnVal = true;
 								ImGui::CloseCurrentPopup();
-								createUnitPopup = false;
 								EditorLayer::SetInputControl(true);
 							}
 							else
@@ -848,12 +842,9 @@ namespace application
 						memset(unitNameBuffer, 0, bufferSize);
 						fbxName = "None";
 						ImGui::CloseCurrentPopup();
-						createUnitPopup = false;
 						EditorLayer::SetInputControl(true);
 					}
 				}, 600);
-			imgui::RenderMessageBoxes();
-			imgui::CloseMessageBox("Create Unit");
 			return returnVal;
 		}
 

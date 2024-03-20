@@ -17,6 +17,7 @@
 
 #include "MenubarCommands.h"
 #include "Application.h"
+#include "FileSystem.h"
 
 bool editorInputControl = true;
 
@@ -53,14 +54,7 @@ namespace application
 			}
 
 			/// 에디터용 리소스 등록
-			const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-			resourceManager->LoadFile("FBX/Directional");
-			resourceManager->LoadFile("FBX/Sphere");
-			resourceManager->LoadFile("FBX/Camera");
-
-			// 재귀적으로 모든 FBX 로드하기
-			ResourceManager::GetSingletonInstance();
-
+			LoadAllFBXFile();
 
 			/// 각종 매니저 클래스 메모리 할당
 			MapFileManager::GetSingletonInstance();
@@ -124,6 +118,8 @@ namespace application
 			{
 				each->GUIProgress();
 			}
+
+			imgui::RenderMessageBoxes();
 		}
 
 		void EditorLayer::Finalize()
@@ -187,6 +183,18 @@ namespace application
 
 			// SceneGizmo
 			InitSceneGizmo();
+		}
+
+		void EditorLayer::LoadAllFBXFile()
+		{
+			// 재귀적으로 모든 FBX 로드하기
+			const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+			auto directorList = fileSystem::GetSubdirectories("FBX");
+			for (auto each : directorList)
+			{
+				resourceManager->LoadFile(("FBX/" + each.string()).c_str());
+			}
 		}
 
 		void EditorLayer::InitSceneGizmo()

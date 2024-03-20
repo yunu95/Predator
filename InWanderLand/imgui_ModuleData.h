@@ -176,10 +176,10 @@ namespace application
 
 					imgui::SmartStyleColor textColor2(ImGuiCol_Text, IM_COL32_WHITE);
 
-					if (label == "fbxName")
+					if (label == "staticFBXName")
 					{
 						bool returnVal = false;
-						static auto& fbxSet = ResourceManager::GetSingletonInstance().GetFbxList();
+						static auto& fbxSet = ResourceManager::GetSingletonInstance().GetStaticFBXList();
 						static std::vector<std::string> selections = std::vector<std::string>();
 						std::string current = data;
 
@@ -191,7 +191,7 @@ namespace application
 							}
 						}
 
-						if (ImGui::BeginCombo("##fbxCombo", data.c_str()))
+						if (ImGui::BeginCombo("##staticFBXCombo", data.c_str()))
 						{
 							for (int i = 0; i < fbxSet.size(); i++)
 							{
@@ -211,6 +211,43 @@ namespace application
 						}
 						ImGui::PopItemWidth();
 						return returnVal;
+					}
+					else if (label == "skinnedFBXName")
+					{
+						bool returnVal = false;
+						static auto& fbxSet = ResourceManager::GetSingletonInstance().GetSkinnedFBXList();
+						static std::vector<std::string> selections = std::vector<std::string>();
+						std::string current = data;
+
+						if (selections.empty())
+						{
+							for (auto each : fbxSet)
+							{
+								selections.push_back(each);
+							}
+						}
+
+						if (ImGui::BeginCombo("##skinnedFBXCombo", data.c_str()))
+						{
+							for (int i = 0; i < fbxSet.size(); i++)
+							{
+								const bool is_selected = (current == selections[i]);
+								if (ImGui::Selectable(selections[i].c_str(), is_selected))
+								{
+									current = selections[i];
+									TemplateDataManager::GetSingletonInstance().GetSelectedTemplateData()->SetDataResourceName(current);
+									const_cast<std::string&>(data) = current;
+									returnVal = true;
+								}
+
+								if (is_selected)
+									ImGui::SetItemDefaultFocus();
+							}
+							ImGui::EndCombo();
+						}
+						ImGui::PopItemWidth();
+						return returnVal;
+
 					}
 					else
 					{

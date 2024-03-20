@@ -18,6 +18,7 @@
 #include "EditorCamera.h"
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
+#include "PaletteBrushManager.h"
 
 #include <d3d11.h>
 #include <dxgi1_4.h>
@@ -315,6 +316,7 @@ namespace application
 		editor::TemplateDataManager::GetSingletonInstance().Clear();
 	}
 
+
 	void Application::PlayContents()
 	{
 		auto el = static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer]);
@@ -366,7 +368,6 @@ namespace application
 		return appSpecification;
 	}
 
-
 	void* Application::GetSceneSRV()
 	{
 		static auto resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
@@ -376,6 +377,19 @@ namespace application
 	void* Application::GetWindowHandle()
 	{
 		return hWND;
+	}
+
+	void Application::ReadyOrnament()
+	{
+		auto& templateDataManager = editor::TemplateDataManager::GetSingletonInstance();
+		for (auto& each : erm.GetStaticFBXList())
+		{
+			auto td = templateDataManager.CreateTemplateData<editor::Ornament_TemplateData>(each);
+			if (td)
+			{
+				td->SetDataResourceName(each);
+			}
+		}
 	}
 
 	void Application::ImGuiUpdate()

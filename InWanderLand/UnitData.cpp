@@ -42,7 +42,7 @@ namespace application
 			}
 
 			pod.templateData = static_cast<Unit_TemplateData*>(ptr);
-			OnDataResourceChange(pod.templateData->pod.fbxName);
+			OnDataResourceChange(pod.templateData->pod.skinnedFBXName);
 
 			return true;
 		}
