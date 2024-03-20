@@ -74,6 +74,7 @@ namespace application
             playtimeRegion = regionGameObject->AddComponent<PlaytimeRegion>();
             playtimeRegion->regionData = this;
             pod.name;
+            pod.isObstacle;
             regionGameObject->AddComponent<physics::BoxCollider>()->SetHalfExtent({ pod.width, 1.0f, pod.height });
 
             regionGameObject->GetTransform()->SetWorldPosition(Vector3d(pod.x, 1.0f, pod.z));

@@ -48,7 +48,7 @@ void WarriorProductor::SingletonInitializer()
 	SetUnitData();
 }
 
-GameObject* WarriorProductor::CreateUnit(Vector3d startPos)
+Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
@@ -172,7 +172,7 @@ GameObject* WarriorProductor::CreateUnit(Vector3d startPos)
 
 	UnitProductor::SetCommonComponents();
 
-	return m_unitGameObject;
+	return m_unitComponent;
 }
 
 // 전략 패턴을 설명하기 위한 예시 코드

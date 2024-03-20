@@ -69,7 +69,7 @@ public:
 
 	float m_attackDelay;
 
-	virtual GameObject* CreateUnit(Vector3d startPos) = 0;
+	virtual Unit* CreateUnit(Vector3d startPos) = 0;
 	virtual void PushWaveData(Vector3d startPos, float delay);
 
 	void SetCommonComponents();

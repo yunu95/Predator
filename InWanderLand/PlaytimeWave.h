@@ -13,6 +13,7 @@ namespace application
 }
 
 class UnitProductor;
+class Unit;
 
 /// <summary>
 /// 플레이타임에서 웨이브 하나에 대응되는 컴포넌트
@@ -22,10 +23,13 @@ class PlaytimeWave : public Component
 private:
 	int currentSequenceIndex{ 0 };
 	int nextSummonUnitIndex{ 0 };
+	int waveDataIndex{ 0 };
 
 	bool isWaveActivated = false;
 
 	float m_elapsed = 0.0f;
+
+	std::vector<Unit*> m_currentWaveUnitVector;
 
 public:
 	virtual ~PlaytimeWave();

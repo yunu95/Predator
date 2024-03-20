@@ -10,7 +10,7 @@ void MeleeEnemyProductor::SetUnitData()
 	m_unitType = Unit::UnitType::MeleeEnemy;
 	m_unitSide = Unit::UnitSide::Enemy;
 
-	m_healthPoint = 500;
+	m_healthPoint = 10;
 	m_manaPoint = 100;
 
 	m_autoAttackDamage = 10;
@@ -21,7 +21,7 @@ void MeleeEnemyProductor::SetUnitData()
 	m_dodgeProbability = 0.2f;
 	m_criticalDamageDecreaseMultiplier = 0.2f;
 
-	m_maxAggroNumber = 3;
+	m_maxAggroNumber = 10;
 
 	m_idRadius = 4.0f * lengthUnit;
 	m_atkRadius = 1.7f * lengthUnit;
@@ -38,7 +38,7 @@ void MeleeEnemyProductor::SingletonInitializer()
 	SetUnitData();
 }
 
-yunutyEngine::GameObject* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
+Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
@@ -110,5 +110,5 @@ yunutyEngine::GameObject* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 #pragma endregion
 
 	UnitProductor::SetCommonComponents();
-	return m_unitGameObject;
+	return m_unitComponent;
 }

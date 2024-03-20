@@ -92,9 +92,6 @@ private:
 	int m_criticalHitProbability;
 	int m_randcriticalHitNumber;
 
-	int m_maxAggroNumber;
-	int m_currentAggroNumber = 0;
-
 	float m_criticalHitMultiplier;
 
 	float m_speed;
@@ -150,10 +147,15 @@ private:
 
 	UnitType playerSerialNumber;
 
-	std::set<Unit*> m_opponentObjectSet;		
-	std::list<Unit*> m_recognizedThisList;	// 현재 이 오브젝트를 적군으로 인식한 다른 유닛들의 리스트.
+	std::set<Unit*> m_opponentObjectSet;		// idradius에 닿는 모든 상대 유닛을 담아줍니다.
+	std::list<Unit*> m_recognizedThisList;		// 현재 이 유닛을 적군으로 인식한 다른 유닛들의 리스트.
+
+	std::set<Unit*> m_attackingThisUnitSet;		// 현재 이 유닛을 공격하고 있는 유닛들
+	int m_currentAggroNumber;
+	int m_maxAggroNumber;
 
 	Unit* m_currentTargetUnit;		// Attack이나 Chase 때 사용할 적군  오브젝트
+	Unit* m_previousTargetUnit;		
 	Unit* tauntedUnit;				// 현재 this 유닛이 도발당한 주체.
 	Vector3d m_currentMovePosition;							// 현재 상대의 위치
 

@@ -22,10 +22,13 @@ public:
 
 private:
 	RTSCam* m_movingSystemComponent;
+	Dotween* m_dotween;
 	std::unordered_map<Unit::UnitType, Unit*> playerComponentMap;
 	Unit::UnitType currentSelectedSerialNumber;
 	int previousSerialNumber = 0;
 
+	Vector3d cameraOffset = { 0, 20, -15 };
+	float cameraMoveDuration{ 0.3f };
 public:
 	float lookRotationDuration = 0.1f;
 

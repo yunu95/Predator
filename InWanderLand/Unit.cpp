@@ -56,7 +56,8 @@ void Unit::Start()
 		[this]()
 		{
 			return m_currentTargetUnit == nullptr || 
-				(((GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetUnit->GetTransform()->GetWorldPosition()).Magnitude() > m_atkDistance + 0.4f) && m_currentTargetUnit != tauntedUnit
+				(((GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetUnit->GetTransform()->GetWorldPosition()).Magnitude() > m_atkDistance + 0.4f)
+					&& m_currentTargetUnit != tauntedUnit
 					|| currentOrder == UnitState::Idle);
 		} });
 
@@ -111,6 +112,9 @@ void Unit::Start()
 void Unit::Update()
 {
 	unitFSM.UpdateState();
+
+	// 해당 유닛을 공격하는 유닛들의 컨테이너를 만들어서, 해당 컨테이너의 size를 m_currentAggroNumber로 주기적으로 갱신하자.
+	m_currentAggroNumber = m_attackingThisUnitSet.size();
 }
 
 Unit::UnitType Unit::GetUnitType() const
@@ -579,22 +583,30 @@ void Unit::DetermineCurrentTargetObject()
 	{
 		m_currentTargetUnit = tauntedUnit;
 	}
-	
 	else
 	{
-		bool isDistanceComparingStarted = false;
-
-		float tempShortestDistance = 0.0f;
-
-		for (auto e : m_opponentObjectSet)
+		if (m_opponentObjectSet.empty())
 		{
-			float distance = (GetGameObject()->GetTransform()->GetWorldPosition() - e->GetTransform()->GetWorldPosition()).Magnitude();
+			m_currentTargetUnit = nullptr;
+		}
+		else
+		{
+			bool isDistanceComparingStarted = false;
 
-			if ((!isDistanceComparingStarted || tempShortestDistance > distance) && e->currentOrder != UnitState::Death)
+			float tempShortestDistance = 0.0f;
+
+			for (auto e : m_opponentObjectSet)
 			{
-				tempShortestDistance = distance;
-				m_currentTargetUnit = e;
-				isDistanceComparingStarted = true;
+				float distance = (GetGameObject()->GetTransform()->GetWorldPosition() - e->GetTransform()->GetWorldPosition()).Magnitude();
+
+				if ((!isDistanceComparingStarted || tempShortestDistance > distance) && e->currentOrder != UnitState::Death
+					&& e->m_currentAggroNumber < e->m_maxAggroNumber)
+				{
+					tempShortestDistance = distance;
+					m_currentTargetUnit = e;
+					e->m_attackingThisUnitSet.insert(this);
+					isDistanceComparingStarted = true;
+				}
 			}
 		}
 	}
@@ -611,12 +623,15 @@ void Unit::ReportUnitDeath()
 
 void Unit::IdentifiedOpponentDeath(Unit* p_unit)
 {
-	/// 죽은 유닛이 현재 타겟으로 지정한 유닛이라면
 	if (m_currentTargetUnit == p_unit)
+	{
 		m_currentTargetUnit = nullptr;
+	}
+	m_attackingThisUnitSet.erase(p_unit);
 
 	/// 적군을 담고 있는 list에서 죽은 오브젝트 유닛을 빼준다.
 	m_opponentObjectSet.erase(p_unit);
+	DetermineCurrentTargetObject();
 }
 
 void Unit::SetPlayerSerialNumber(UnitType serialNum)
@@ -682,37 +697,25 @@ void Unit::SetMaxAggroNumber(int p_num)
 
 void Unit::AddToOpponentObjectList(Unit* p_unit)
 {
-	if (p_unit->currentOrder != UnitState::Death && this->currentOrder != UnitState::Death 
-		&& p_unit->m_currentAggroNumber < p_unit->m_maxAggroNumber && m_opponentObjectSet.find(p_unit) == m_opponentObjectSet.end())
-	{
-		m_opponentObjectSet.insert(p_unit);
-
-		if (m_currentTargetUnit == nullptr)
-			m_currentTargetUnit = p_unit;
-
-		p_unit->AddToRecognizeList(this);
-	}
+	m_opponentObjectSet.insert(p_unit);
+	DetermineCurrentTargetObject();
+	p_unit->AddToRecognizeList(this);
 }
 
 void Unit::DeleteFromOpponentObjectList(Unit* p_unit)
 {
 	m_opponentObjectSet.erase(p_unit);
-
-	if (m_currentTargetUnit == p_unit)
-		m_currentTargetUnit = nullptr;
-
+	DetermineCurrentTargetObject();
 	p_unit->DeleteFromRecognizeList(this);
 }
 
 void Unit::AddToRecognizeList(Unit* p_unit)
 {
-	m_currentAggroNumber++;
 	m_recognizedThisList.push_back(p_unit);
 }
 
 void Unit::DeleteFromRecognizeList(Unit* p_unit)
 {
-	m_currentAggroNumber--;
 	m_recognizedThisList.remove(p_unit);
 }
 

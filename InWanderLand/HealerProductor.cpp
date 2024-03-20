@@ -44,7 +44,7 @@ void HealerProductor::SingletonInitializer()
 	SetUnitData();
 }
 
-yunutyEngine::GameObject* HealerProductor::CreateUnit(Vector3d startPos)
+Unit* HealerProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
@@ -147,5 +147,5 @@ yunutyEngine::GameObject* HealerProductor::CreateUnit(Vector3d startPos)
 
 	UnitProductor::SetCommonComponents();
 	
-	return m_unitGameObject;
+	return m_unitComponent;
 }

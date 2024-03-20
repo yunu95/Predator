@@ -88,8 +88,8 @@ namespace application
 
             std::vector<Vector3f> vertexList2;
             std::vector<int> indexList2;
-            vertexList2.resize(vertexList.size());
-            indexList2.resize(indexList.size());
+            vertexList2.reserve(vertexList.size());
+            indexList2.reserve(indexList.size());
             for (auto i : vertexList)
             {
                 vertexList2.push_back({ i.x, i.y, i.z });

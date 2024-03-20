@@ -43,7 +43,7 @@ void MagicianProductor::SingletonInitializer()
 	graphics::Renderer::SingleInstance().GetResourceManager()->LoadFile("FBX/Boss");
 	SetUnitData();
 }
-yunutyEngine::GameObject* MagicianProductor::CreateUnit(Vector3d startPos)
+Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
@@ -169,5 +169,5 @@ yunutyEngine::GameObject* MagicianProductor::CreateUnit(Vector3d startPos)
 	clonedMaterial->SetColor(yunuGI::Color::red());
 	skinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial);
 
-	return m_unitGameObject;
+	return m_unitComponent;
 }
