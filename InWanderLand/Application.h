@@ -86,6 +86,8 @@ namespace application
         // 본 함수는 미리 준비된 FBX 로 TemplateData 를 생성하는 함수입니다.
         void ReadyOrnament();
 
+      Layer* GetContentsLayer();
+
     private:
         // ImGui 단계 처리
         void ImGuiUpdate();

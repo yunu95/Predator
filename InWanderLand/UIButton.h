@@ -34,6 +34,9 @@ private:
 	bool isMouseNowOnButton;
 	int m_layer;
 
+	LONG initialRectRight;
+	LONG initialRectBottom;
+
 public:
 	void SetIdleImage(yunuGI::ITexture* p_IdleImage);
 	void SetOnMouseImage(yunuGI::ITexture* p_OnMouseImage);

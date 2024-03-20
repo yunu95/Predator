@@ -38,6 +38,7 @@ namespace application
 
 			float m_attackDelay;
 
+
 			TO_JSON(POD_Unit_TemplateData)
 			FROM_JSON(POD_Unit_TemplateData)
 		};

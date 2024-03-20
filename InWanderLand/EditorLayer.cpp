@@ -17,6 +17,7 @@
 
 #include "MenubarCommands.h"
 #include "Application.h"
+#include "FileSystem.h"
 
 bool editorInputControl = true;
 
@@ -117,6 +118,8 @@ namespace application
 			{
 				each->GUIProgress();
 			}
+
+			imgui::RenderMessageBoxes();
 		}
 
 		void EditorLayer::Finalize()
@@ -187,9 +190,11 @@ namespace application
 			// 재귀적으로 모든 FBX 로드하기
 			const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-			resourceManager->LoadFile("FBX/Camera");
-			resourceManager->LoadFile("FBX/Sphere");
-			resourceManager->LoadFile("FBX/Directional");
+			auto directorList = fileSystem::GetSubdirectories("FBX");
+			for (auto each : directorList)
+			{
+				resourceManager->LoadFile(("FBX/" + each.string()).c_str());
+			}
 		}
 
 		void EditorLayer::InitSceneGizmo()

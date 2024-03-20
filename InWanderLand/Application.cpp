@@ -118,6 +118,16 @@ namespace application
 
 		hWND = ::CreateWindow(wc.lpszClassName, wc.lpszClassName, WS_OVERLAPPEDWINDOW, winPosX, winPosY, appSpecification.windowWidth, appSpecification.windowHeight, NULL, NULL, wc.hInstance, NULL);
 
+		RECT wndRect;
+		GetClientRect(hWND, &wndRect);
+
+		int newWidth = 1920 + (1920 - wndRect.right);
+		int newHeight = 1080 + (1080 - wndRect.bottom);
+
+		//float desiredRatio = 1920.0f / 1080.0f;
+
+		SetWindowPos(hWND, NULL, 0, 0, newWidth, newHeight, SWP_NOMOVE | SWP_NOZORDER);
+
 		::ShowWindow(hWND, SW_SHOWDEFAULT);
 		::UpdateWindow(hWND);
 
@@ -629,6 +639,12 @@ namespace application
 		GetWindowRect(hWND, &winRect);
 		return (cursorPos.x >= winRect.left && cursorPos.x <= winRect.right) && (cursorPos.y >= winRect.top && cursorPos.y <= winRect.bottom);
 	}
+
+	Layer* Application::GetContentsLayer()
+	{
+		return layers[(int)LayerList::ContentsLayer];
+	}
+
 }
 
 #ifdef EDITOR

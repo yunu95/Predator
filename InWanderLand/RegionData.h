@@ -24,6 +24,7 @@ namespace application
         }
     }
 }
+class PlaytimeRegion;
 
 namespace application
 {
@@ -63,7 +64,8 @@ namespace application
             virtual IEditableData* Clone() const override;
             virtual void OnRelocate(const Vector3d& newLoc) override;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
-            virtual void ApplyAsPlaytimeObject() override {};
+			virtual void ApplyAsPlaytimeObject() override;
+			PlaytimeRegion* playtimeRegion{ nullptr };
             const std::unordered_set<OrnamentData*>& GetDisablingOrnaments()const;
             void AddDisablingOrnament(OrnamentData* ornament);
             void EraseDisablingOrnament(OrnamentData* ornament);
@@ -83,7 +85,7 @@ namespace application
 
             std::wstring MakeUpName();
             static TemplateDataManager& templateDataManager;
-            static RegionData* selectedEditorRegion;
+			static RegionData* selectedEditorRegion;
             palette::RegionEditorInstance* regionInstance{ nullptr };
             std::unordered_set<OrnamentData*> disablingOrnaments;
 

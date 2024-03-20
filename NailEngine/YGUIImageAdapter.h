@@ -58,6 +58,10 @@ namespace yunuGIAdapter
         {
             return renderable->GetHeight();
         };
+        virtual int GetLayer() override
+        {
+            return renderable->GetLayer();
+        }
 
     private:
         std::shared_ptr<UIImage> renderable;

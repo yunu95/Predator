@@ -65,11 +65,11 @@ void UIManager::Update()
 {
 	if (m_currentSelectedButtonList.empty())
 	{
-		InputManager::SingleInstance().IsMouseOnUI(false);
+		InputManager::Instance().IsMouseOnUI(false);
 	}
 	else
 	{
-		InputManager::SingleInstance().IsMouseOnUI(true);
+		InputManager::Instance().IsMouseOnUI(true);
 	}
 
 	if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::MouseLeftClick))

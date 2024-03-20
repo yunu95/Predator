@@ -24,7 +24,7 @@ void KnockBackComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 	{
 		crushedUnitList.push_back(opponentUnit);
 		opponentUnit->MakeUnitPushedState(true);
-		opponentUnit->Damaged(ownerUnit->GetGameObject(), ownerUnit->DetermineAttackDamage(m_ap));
+		opponentUnit->Damaged(ownerUnit, ownerUnit->DetermineAttackDamage(m_ap));
 		opponentUnit->GetGameObject()->GetComponent<NavigationAgent>()->SetActive(false);
 		Vector3d startPosition = opponentUnit->GetGameObject()->GetTransform()->GetWorldPosition();
 

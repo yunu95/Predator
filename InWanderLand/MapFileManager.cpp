@@ -47,7 +47,7 @@ namespace application
 
                 std::string fbxName;
                 std::vector<float> scale(3);
-                std::vector<double> rotation(3);
+                std::vector<double> rotation(4);
                 std::vector<float> location(3);
 
                 for (int i = 0; i < objSize; i++)
@@ -59,6 +59,7 @@ namespace application
                     rotation[0] = mapData[i]["Rotation"][0];
                     rotation[1] = mapData[i]["Rotation"][1];
                     rotation[2] = mapData[i]["Rotation"][2];
+                    rotation[3] = mapData[i]["Rotation"][3];
                     location[0] = (float)(mapData[i]["Location"][0]) / 100.f;
                     location[1] = (float)(mapData[i]["Location"][1]) / 100.f;
                     location[2] = (float)(mapData[i]["Location"][2]) / 100.f;
@@ -69,11 +70,10 @@ namespace application
                     odt->pod.scale.x = scale[0];
                     odt->pod.scale.y = scale[2];
                     odt->pod.scale.z = scale[1];
-                    auto quat = Quaternion(Vector3d(rotation[0], rotation[2], -rotation[1]));
-                    odt->pod.rotation.x = quat.x;
-                    odt->pod.rotation.y = quat.y;
-                    odt->pod.rotation.z = quat.z;
-                    odt->pod.rotation.w = quat.w;
+                    odt->pod.rotation.x = -rotation[1];
+                    odt->pod.rotation.y = rotation[3];
+                    odt->pod.rotation.z = rotation[2];
+                    odt->pod.rotation.w = rotation[0];
                     odt->pod.position.x = -location[0];
                     odt->pod.position.y = location[2];
                     odt->pod.position.z = location[1];
@@ -103,17 +103,13 @@ namespace application
                 if (ptr)
                 {
                     ornamentData["ResourceName"] = ptr->pod.templateData->pod.staticFBXName;
-                    ornamentData["Location"].push_back(ptr->pod.position.x * 100);
-                    ornamentData["Location"].push_back(-ptr->pod.position.z * 100);
+                    ornamentData["Location"].push_back(-ptr->pod.position.x * 100);
+                    ornamentData["Location"].push_back(ptr->pod.position.z * 100);
                     ornamentData["Location"].push_back(ptr->pod.position.y * 100);
-                    Quaternion quat;
-                    quat.w = ptr->pod.rotation.w;
-                    quat.x = ptr->pod.rotation.x;
-                    quat.y = ptr->pod.rotation.y;
-                    quat.z = ptr->pod.rotation.z;
-                    ornamentData["Rotation"].push_back(-quat.Euler().x);
-                    ornamentData["Rotation"].push_back(quat.Euler().z);
-                    ornamentData["Rotation"].push_back(quat.Euler().y);
+                    ornamentData["Rotation"].push_back(ptr->pod.rotation.w);
+                    ornamentData["Rotation"].push_back(-ptr->pod.rotation.x);
+                    ornamentData["Rotation"].push_back(ptr->pod.rotation.z);
+                    ornamentData["Rotation"].push_back(ptr->pod.rotation.y);
                     ornamentData["Scale"].push_back(ptr->pod.scale.x);
                     ornamentData["Scale"].push_back(ptr->pod.scale.z);
                     ornamentData["Scale"].push_back(ptr->pod.scale.y);

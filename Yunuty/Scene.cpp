@@ -117,7 +117,7 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
 
     for (int i = 0; i < fbxNode->child.size(); ++i)
     {
-        AddGameObjectFromFBXNode(gameObjectChild, fbxNode->child[i], fbxName, rootObject, boundingMin, boundingMax,boundsInit);
+        AddGameObjectFromFBXNode(gameObjectChild, fbxNode->child[i], fbxName, rootObject, boundingMin, boundingMax, boundsInit);
     }
 }
 

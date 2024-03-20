@@ -6,28 +6,10 @@
 #include "Dotween.h"
 #include "SkillPreviewSystem.h"
 
-PlayerController* PlayerController::instance = nullptr;
-
-PlayerController::PlayerController()
-{
-	instance = this;
-}
-
-PlayerController::~PlayerController()
-{
-	delete instance;
-}
-
-PlayerController* PlayerController::GetInstance()
-{
-	if (instance == nullptr)
-		instance = new PlayerController;
-	return instance;
-}
-
 void PlayerController::SetMovingSystemComponent(RTSCam* sys)
 {
 	m_movingSystemComponent = sys;
+	m_dotween = sys->GetGameObject()->GetComponent<Dotween>();
 }
 
 void PlayerController::AddPlayerUnit(Unit* p_playerUnit)
@@ -104,12 +86,12 @@ void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
 		else
 		{
 			Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
-			SkillPreviewSystem::SingleInstance().SetCurrentSelectedPlayerGameObject(currentSelectedUnit->GetGameObject());
-			SkillPreviewSystem::SingleInstance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(p_skillNum));
-			SkillPreviewSystem::SingleInstance().ActivateSkillPreview(true);
+			SkillPreviewSystem::Instance().SetCurrentSelectedPlayerGameObject(currentSelectedUnit->GetGameObject());
+			SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(p_skillNum));
+			SkillPreviewSystem::Instance().ActivateSkillPreview(true);
 			m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
 			{
-				SkillPreviewSystem::SingleInstance().ActivateSkillPreview(false);
+				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 				playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum, pos);
 			};
 		}
@@ -130,6 +112,16 @@ void PlayerController::SetRightClickEmpty()
 void PlayerController::SetCurrentPlayerSerialNumber(Unit::UnitType p_num)
 {
 	currentSelectedSerialNumber = p_num;
+	Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
+	Vector3d unitPos = currentSelectedUnit->GetTransform()->GetWorldPosition();
+	//m_dotween->DOMove(unitPos + cameraOffset, cameraMoveDuration);
+	//m_dotween->DORotate(Vector3d(60, 0, 0), cameraMoveDuration);
+	
+	Vector3d camRotation = m_movingSystemComponent->GetTransform()->GetWorldRotation().Euler();
+	//m_dotween->DOLookAt(unitPos, cameraMoveDuration, true);
+	
+	//m_movingSystemComponent->GetTransform()->SetWorldPosition({ unitPos + cameraOffset });
+
 	SetLeftClickMove();
 }
 
@@ -143,105 +135,5 @@ Unit* PlayerController::FindSelectedUnitByUnitType(Unit::UnitType p_type)
 	return playerComponentMap.find(p_type)->second;
 }
 
-//void PlayerController::ApplyCurrentPlayerOrder(int unitSerialNumber, OrderType orderType)
-//{
-//	m_movingSystemComponent->GetMouseCursorObject()
-//		->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 1, 1, 0 });
-//
-//	// 이전에 선택한 유닛과 같다면 그대로 둔다.
-//	SelectFunctionByOrderType(unitSerialNumber, orderType);
-//
-//	previousSerialNumber = unitSerialNumber;
-//}
-//
-//void PlayerController::SelectFunctionByOrderType(int unitSerialNumber, OrderType p_orderType)
-//{
-//	switch (p_orderType)
-//	{
-//		case PlayerController::OrderType::Move:
-//		{
-//
-//				if (unitSerialNumber == InputManager::SelectedSerialNumber::All)
-//				{
-//					m_movingSystemComponent->groundRightClickCallback = [=](Vector3d position)
-//					{
-//						for (auto e : playerComponentMap)
-//						{
-//							e.first->OrderMove(position);
-//						}
-//					};
-//				}
-//				else
-//				{
-//					for (auto e : playerComponentMap)
-//					{
-//						if (e.second == unitSerialNumber)
-//						{
-//							m_movingSystemComponent->groundRightClickCallback = [=](Vector3d position)
-//							{
-//								e.first->OrderMove(position);
-//							};
-//						}
-//					}
-//				}
-//			break;
-//		}
-//
-//		case PlayerController::OrderType::AttackMove:
-//		{
-//			if (unitSerialNumber == InputManager::SelectedSerialNumber::All)
-//			{
-//				m_movingSystemComponent->groundRightClickCallback = [=](Vector3d position)
-//				{
-//					for (auto e : playerComponentMap)
-//					{
-//						e.first->OrderAttackMove(position, true);
-//					}
-//				};
-//			}
-//			else
-//			{
-//				for (auto e : playerComponentMap)
-//				{
-//					if (e.second == unitSerialNumber)
-//					{
-//						m_movingSystemComponent->groundRightClickCallback = [=](Vector3d position)
-//						{
-//							e.first->OrderAttackMove(position, false);
-//						};
-//					}
-//				}
-//			}
-//			break;
-//		}
-//		case PlayerController::OrderType::QSkill:
-//		{
-//			if (unitSerialNumber == InputManager::SelectedSerialNumber::All)
-//			{
-//				m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d position)
-//				{
-//					for (auto e : playerComponentMap)
-//					{
-//						e.first->OrderQSkill(position, true);
-//					}
-//				};
-//			}
-//			else
-//			{
-//				for (auto e : playerComponentMap)
-//				{
-//					if (e.second == unitSerialNumber)
-//					{
-//						m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d position)
-//						{
-//							e.first->OrderQSkill(position, false);
-//						};
-//					}
-//				}
-//			}
-//			break;
-//		}
-//	}
-//}
 
 

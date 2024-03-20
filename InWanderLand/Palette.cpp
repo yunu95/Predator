@@ -153,12 +153,15 @@ namespace application::editor::palette
     }
     void Palette::OnSelectSingleInstance(IEditableData* data)
     {
-        if (selection.find(data) == selection.end())
+        if (!SceneViewPanel::GetSingletonInstance().IsMouseOverGizmo())
         {
-            ClearSelection();
-            InsertSelection(data);
+            if (selection.find(data) == selection.end())
+            {
+                ClearSelection();
+                InsertSelection(data);
+            }
+            state = State::DraggingObjects;
         }
-        state = State::DraggingObjects;
     }
     bool Palette::IsClickingLeft()
     {
@@ -272,7 +275,7 @@ namespace application::editor::palette
                 if (newPendingSelection == nullptr)
                     break;
                 if (ShouldSelect(each->GetEditableData()) &&
-                    (each->GetTransform()->GetWorldPosition() - currentBrushPos).MagnitudeSqr() < (newPendingSelection->GetPaletteInstance()->GetTransform()->GetWorldPosition() - currentBrushPos).MagnitudeSqr())
+                    (each->GetTransform()->GetWorldPosition() - graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition()).MagnitudeSqr() < (newPendingSelection->GetPaletteInstance()->GetTransform()->GetWorldPosition() - graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition()).MagnitudeSqr())
                     newPendingSelection = each->GetEditableData();
             }
         }

@@ -13,6 +13,6 @@ private:
 public:
 	virtual void SetUnitData() override;
 	virtual void SingletonInitializer() override;
-	virtual GameObject* CreateUnit(Vector3d startPos) override;
+	virtual Unit* CreateUnit(Vector3d startPos) override;
 };
 

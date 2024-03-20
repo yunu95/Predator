@@ -37,7 +37,6 @@ namespace application::editor::palette
         this->ornamentTemplateData = ornamentTemplateData;
         ChangeResource(ornamentTemplateData->pod.staticFBXName);
     }
-
     void OrnamentEditorInstance::ChangeResource(const std::string& fbxName)
     {
         // TemplateData �� �����ϰ� Resource �� ������

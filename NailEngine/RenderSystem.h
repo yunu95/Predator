@@ -109,7 +109,7 @@ private:
 	std::map<nail::IRenderable*, std::vector<std::shared_ptr<RenderInfo>>> staticMeshRenderInfoMap;
 	std::map<nail::IRenderable*, std::vector<std::shared_ptr<SkinnedRenderInfo>>> skinnedMeshRenderInfoMap;
 
-	std::set<std::shared_ptr<nail::IRenderable>, CompareSmartPtr> UIImageSet;
+	std::multiset<std::shared_ptr<nail::IRenderable>, CompareSmartPtr> UIImageSet;
 	std::set<std::shared_ptr<nail::IRenderable>> UITextSet;
 
 	/// D2D 관련 멤버 변수

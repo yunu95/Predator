@@ -72,8 +72,25 @@ namespace application
 
 			std::vector<std::filesystem::path> GetSubdirectories(const std::filesystem::path& directoryPath)
 			{
+				std::vector<std::filesystem::path> subdirectories;
+				WIN32_FIND_DATAA findData;
+				HANDLE hFind = FindFirstFileA((directoryPath.string() + "\\*").c_str(), &findData);
+				if (hFind != INVALID_HANDLE_VALUE)
+				{
+					do
+					{
+						if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
+						{
+							if (strcmp(findData.cFileName, ".") != 0 && strcmp(findData.cFileName, "..") != 0) 
+							{
+								subdirectories.push_back(findData.cFileName);
+							}
+						}
+					} while (FindNextFileA(hFind, &findData));
+					FindClose(hFind);
+				}
 
-				return std::vector<std::filesystem::path>();
+				return subdirectories;
 			}
 		}
 	}
