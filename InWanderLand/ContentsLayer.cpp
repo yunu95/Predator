@@ -314,7 +314,7 @@ void application::contents::ContentsLayer::Initialize()
 		yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 		auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto camComp = camObj->AddComponent<RTSCam>();
-		camObj->GetTransform()->SetLocalPosition({ 0,20,0 });
+		camObj->GetTransform()->SetLocalPosition({ 0,35,0 });
 		camObj->AddComponent<Dotween>();
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
@@ -330,9 +330,9 @@ void application::contents::ContentsLayer::Initialize()
 		mouseCursorMesh->GetGI().SetMesh(sphereMesh);
 		mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
 
-		WarriorProductor::Instance().CreateUnit(Vector3d(-11.0f, 0.0f, 3.0f));;
-		//MagicianProductor::Instance().CreateUnit(Vector3d(-11.0f, 0.0f, -4.0f));;
-		//HealerProductor::Instance().CreateUnit(Vector3d(-11.0f, 0.0f, 4.0f));
+		/*WarriorProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 0.0f));;
+		MagicianProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 2.0f));;
+		HealerProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, -2.0f));*/
 
 		auto skillPreviewCubeMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		AttachDebugMesh(skillPreviewCubeMeshObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
@@ -449,5 +449,14 @@ void application::contents::ContentsLayer::AssignTestInitializer(std::function<v
 
 void application::contents::ContentsLayer::ClearPlaytimeObject()
 {
+	/// 생성된 모든 게임 플레이 오브젝트 삭제
+	for (auto e : objectCreatedByEditorVector)
+	{
+		e->SetSelfActive(false);
+	}
+}
 
+void application::contents::ContentsLayer::RegisterToEditorObjectVector(GameObject* p_obj)
+{
+	objectCreatedByEditorVector.push_back(p_obj);
 }

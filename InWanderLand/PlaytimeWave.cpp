@@ -4,6 +4,8 @@
 #include "UnitProductor.h"
 #include "Unit.h"
 #include "MeleeEnemyProductor.h"
+#include "Application.h"
+#include "ContentsLayer.h"
 
 PlaytimeWave::~PlaytimeWave()
 {
@@ -23,7 +25,7 @@ void PlaytimeWave::DeActivateWave()
 
 void PlaytimeWave::Start()
 {
-	ActivateWave();
+	//ActivateWave();
 }
 
 void PlaytimeWave::Update()
@@ -60,7 +62,15 @@ void PlaytimeWave::Update()
 					currentSelectedProductor = &MeleeEnemyProductor::Instance();
 					break;
 			}
-			m_currentWaveUnitVector.push_back(currentSelectedProductor->CreateUnit(pos));
+
+			Unit* unitComponent = currentSelectedProductor->CreateUnit(pos);
+			GameObject* unitObject = unitComponent->GetGameObject();
+
+			m_currentWaveUnitVector.push_back(unitComponent);
+
+			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+			contentsLayer->RegisterToEditorObjectVector(unitObject);
+			
 			nextSummonUnitIndex++;
 			waveDataIndex++;
 		}

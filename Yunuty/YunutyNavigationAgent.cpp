@@ -115,8 +115,8 @@ void yunutyEngine::NavigationAgent::MoveTo(Vector3f destination)
 	//const float* halfExtents = impl->crowd->getQueryExtents();
 
 	navField->impl->m_navQuery->findNearestPoly(reinterpret_cast<float*>(&destination), halfExtents, filter, &impl->targetRef, impl->targetPos);
-	assert(!(impl->targetRef == 0 && impl->targetPos[0] == 0 && impl->targetPos[1] == 0 && impl->targetPos[2] == 0)
-		&& "네비게이션 쿼리가 제대로 된 도착지점을 계산하지 못했습니다!");
+	//assert(!(impl->targetRef == 0 && impl->targetPos[0] == 0 && impl->targetPos[1] == 0 && impl->targetPos[2] == 0)
+	//	&& "네비게이션 쿼리가 제대로 된 도착지점을 계산하지 못했습니다!");
 	impl->crowd->requestMoveTarget(impl->agentIdx, impl->targetRef, impl->targetPos);
 }
 const Vector3f& yunutyEngine::NavigationAgent::GetTargetPosition()

@@ -625,6 +625,12 @@ namespace application
 		GetWindowRect(hWND, &winRect);
 		return (cursorPos.x >= winRect.left && cursorPos.x <= winRect.right) && (cursorPos.y >= winRect.top && cursorPos.y <= winRect.bottom);
 	}
+
+	Layer* Application::GetContentsLayer()
+	{
+		return layers[(int)LayerList::ContentsLayer];
+	}
+
 }
 
 #ifdef EDITOR

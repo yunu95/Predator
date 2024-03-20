@@ -26,6 +26,8 @@ void UnitProductor::SetCommonComponents()
 	/// 3. Collider Component 추가
 	auto unitCollider = m_unitGameObject->AddComponent<physics::SphereCollider>();	// 빈 껍데기에 
 	unitCollider->SetRadius(lengthUnit);
+	//m_unitGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+
 
 	auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(unitColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
