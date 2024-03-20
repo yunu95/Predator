@@ -44,14 +44,14 @@ void WarriorProductor::SetUnitData()
 
 void WarriorProductor::SingletonInitializer()
 {
-	graphics::Renderer::SingleInstance().GetResourceManager()->LoadFile("FBX/Boss");
+	//graphics::Renderer::SingleInstance().GetResourceManager()->LoadFile("FBX/Boss");
 	SetUnitData();
 }
 
 Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
-	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
