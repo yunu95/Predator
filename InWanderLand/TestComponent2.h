@@ -5,49 +5,29 @@
 class TestComponent2 : public yunutyEngine::Component
 {
 public:
-	/*graphics::SkinnedMesh* renderer;
-	yunuGI::IShader* shader;
-	yunuGI::IMaterial* material;
-	GameObject* obj;
-	void Update()
-	{
-		if (Input::isKeyPushed(KeyCode::I))
-		{
-			obj->SetSelfActive(false);
-		}
-		if (Input::isKeyDown(KeyCode::K))
-		{
-			obj->SetSelfActive(true);
-		}
-		if (Input::isKeyPushed(KeyCode::J))
-		{
-			Scene::getCurrentScene()->DestroyGameObject(obj);
-		}
-		if (Input::isKeyDown(KeyCode::L))
-		{
-			renderer->GetGI().SetMaterial(0, material);
-		}
-	}*/
-
 	yunutyEngine::graphics::Animator* anim;
-	yunuGI::IAnimation* dead;
-	yunuGI::IAnimation* idle;
+	yunuGI::IAnimation* idleAnimation;
+	yunuGI::IAnimation* battleIdleAnimation;
+	yunuGI::IAnimation* walkAnimation;
+	yunuGI::IAnimation* battleStartAnimation;
 
 	void Update()
 	{
-		if (Input::isKeyPushed(KeyCode::I))
+		if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::U))
 		{
-			anim->GetGI().ChangeAnimation(idle, 2, 1);
+			anim->GetGI().ChangeAnimation(idleAnimation, 0.5, 1);
 		}
-		if (Input::isKeyPushed(KeyCode::K))
+		if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::I))
 		{
-			anim->GetGI().ChangeAnimation(dead, 2, 1);
+			anim->GetGI().ChangeAnimation(battleIdleAnimation, 1, 1);
 		}
-		if (Input::isKeyPushed(KeyCode::J))
+		if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::O))
 		{
+			anim->GetGI().ChangeAnimation(walkAnimation, 1, 1);
 		}
-		if (Input::isKeyDown(KeyCode::L))
+		if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::P))
 		{
+			anim->GetGI().ChangeAnimation(battleStartAnimation, 0.5, 1);
 		}
 	}
 };

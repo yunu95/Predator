@@ -362,6 +362,7 @@ void FBXLoad()
 	resourceManager->LoadFile("FBX/SM_Mushroom02");
 	resourceManager->LoadFile("FBX/SM_Temple_Welcome");
 	resourceManager->LoadFile("FBX/SM_Stage1_Floor");
+
 	g_fbxMap = resourceManager->GetFBXDataMap();
 
 	g_fbxLoad = false;
