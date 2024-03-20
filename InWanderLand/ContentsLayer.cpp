@@ -47,18 +47,38 @@ void GraphicsTest()
 	yunuGI::ITexture* tex2 = _resourceManager->GetTexture(L"Texture/Brick_Normal.jpg");
 
 	auto& animationList = _resourceManager->GetAnimationList();
-	yunuGI::IAnimation* animation;
+	yunuGI::IAnimation* idleAnimation;
+	yunuGI::IAnimation* battleIdleAnimation;
+	yunuGI::IAnimation* walkAnimation;
+	yunuGI::IAnimation* battleStartAnimation;
 
 	for (auto& i : animationList)
 	{
-		if (i->GetName() == L"Ani_Monster2_Walk")
+		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
 		{
 			i->SetLoop(true);
-			animation = i;
-			int a = 1;
-			i->SetEventFunc(20, []() {std::cout << "TEST" << std::endl; });
+			idleAnimation = i;
+		}
+
+		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		{
+			i->SetLoop(true);
+			battleIdleAnimation = i;
+		}
+
+		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
+		{
+			i->SetLoop(true);
+			walkAnimation = i;
+		}
+
+		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+		{
+			battleStartAnimation = i;
 		}
 	}
+
+
 
 	auto& shaderList = _resourceManager->GetShaderList();
 	yunuGI::IShader* shader;
@@ -137,12 +157,22 @@ void GraphicsTest()
 	}
 
 	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
-		auto animator = obj->GetComponent<yunutyEngine::graphics::Animator>();
-		animator->GetGI().PushAnimation(animation);
-		animator->GetGI().Play(animation);
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.55, 0.5f,42.53 });
+		auto animator = obj->GetComponent<yunutyEngine::graphics::Animator>();
+		auto testCom = obj->AddComponent<TestComponent2>();
+		testCom->anim = animator;
+		testCom->battleIdleAnimation = battleIdleAnimation;
+		testCom->battleStartAnimation = battleStartAnimation;
+		testCom->walkAnimation = walkAnimation;
+		testCom->idleAnimation = idleAnimation;
+		animator->GetGI().PushAnimation(idleAnimation);
+		animator->GetGI().PushAnimation(battleIdleAnimation);
+		animator->GetGI().PushAnimation(walkAnimation);
+		animator->GetGI().PushAnimation(battleStartAnimation);
+		animator->GetGI().Play(idleAnimation);
 	}
+
 
 
 	//{
@@ -156,17 +186,14 @@ void GraphicsTest()
 	//	obj->GetTransform()->SetLocalPosition({ Vector3d{0,0,-5} });
 	//}
 
+
+
 	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
-	//	obj->GetTransform()->SetLocalPosition({ Vector3d{5,0,-5} });
-	//}
-	//
-	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CastleWall_Door");
 	//	obj->GetTransform()->SetLocalPosition({ Vector3d{10,0,-5} });
 	//}
 	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Cuptower");
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CastleWall_Door");
 	//	obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{0,180,0} });
 	//}
 
@@ -325,12 +352,12 @@ void application::contents::ContentsLayer::Initialize()
 			staticMesh->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(L"Capsule"));
 			staticMesh->GetGI().GetMaterial()->SetColor({ 0.75,0.75,0.75,1 });
 			staticMesh->GetTransform()->SetLocalPosition(Vector3d{ 0,0.5,0 });
-		}
+	}
 
 		editor::MapFileManager::GetSingletonInstance().LoadMapFile("TestMap.pmap");
 		editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
-	}
+}
 #endif
 #endif // ! EDITOR
 }
@@ -379,7 +406,7 @@ void application::contents::ContentsLayer::AssignTestInitializer(std::function<v
 		application::Application::GetInstance().AddMainLoopTodo([=]() {
 			Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
 			});
-};
+	};
 }
 #endif
 
