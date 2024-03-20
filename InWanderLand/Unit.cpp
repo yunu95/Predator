@@ -632,6 +632,11 @@ void Unit::IdentifiedOpponentDeath(Unit* p_unit)
 	/// 적군을 담고 있는 list에서 죽은 오브젝트 유닛을 빼준다.
 	m_opponentObjectSet.erase(p_unit);
 	DetermineCurrentTargetObject();
+
+	for (auto e : m_recognizedThisList)
+	{
+		e->DetermineCurrentTargetObject();
+	}
 }
 
 void Unit::SetPlayerSerialNumber(UnitType serialNum)
