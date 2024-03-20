@@ -19,7 +19,7 @@ namespace application
 		{
 			std::string fbxName = std::string();
 
-			unsigned int unitType;
+			int unitType;
 			float m_healthPoint;
 			int m_manaPoint;
 

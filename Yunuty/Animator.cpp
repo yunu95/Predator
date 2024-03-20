@@ -40,6 +40,26 @@ void Animator::Update()
 		desc.curr.currFrame = min(static_cast<int>(desc.curr.currFrame), totalFrame - 1);
 		desc.curr.nextFrame = min(static_cast<int>(desc.curr.currFrame+1), totalFrame -1);
 		desc.curr.ratio = static_cast<float>(desc.curr.sumTime - static_cast<float>(desc.curr.currFrame) / ratio);
+
+		// 등록된 프레임에 이벤트 함수 실행
+		auto& eventMap = currentAnimation->GetEventFuncMap();
+		if (eventMap.empty() == false)
+		{
+			auto iter = eventMap.find(desc.curr.currFrame);
+			if (iter != eventMap.end())
+			{
+				if (iter->second.first == false)
+				{
+					iter->second.first = true;
+					iter->second.second();
+				}
+			}
+			else
+			{
+				currentAnimation->ClearEvent();
+			}
+		}
+		
 	}
 
 	auto nextAnimation = gi.GetNextAnimation();

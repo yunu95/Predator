@@ -1,6 +1,7 @@
 #include "YunutyEngine.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include "_XMMath.h"
 
 void ExpandBoundingVolume(yunuGI::Vector3* boundingMin, yunuGI::Vector3* boundingMax, const yunuGI::Vector3& newBoundingMin, const yunuGI::Vector3& newBoundingMax)
 {
@@ -17,15 +18,14 @@ void ExpandBoundingVolume(yunuGI::Vector3* boundingMin, yunuGI::Vector3* boundin
         boundingMax->z = max(boundingMax->z, newBoundingMax.z);
     }
 }
-void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode, const std::string& fbxName, GameObject* rootObject, yunuGI::Vector3* boundingMin, yunuGI::Vector3* boundingMax, bool boundsInit = true)
+void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode, const std::string& fbxName, GameObject* rootObject, yunuGI::Vector3* boundingMin, yunuGI::Vector3* boundingMax, bool& boundsInit)
 {
     auto gameObjectChild = parentObject->AddGameObject();
     gameObjectChild->setName(std::string{ fbxNode->nodeName.begin(), fbxNode->nodeName.end() });
 
-
     gameObjectChild->GetTransform()->SetLocalPosition(Vector3d{ fbxNode->pos.x,fbxNode->pos.y ,fbxNode->pos.z });
     gameObjectChild->GetTransform()->SetLocalScale(Vector3d{ fbxNode->scale.x,fbxNode->scale.y ,fbxNode->scale.z });
-    //gameObjectChild->GetTransform()->SetLocalRotation(Quaternion{ fbxNode->quat.w, fbxNode->quat.x,fbxNode->quat.y,fbxNode->quat.z });
+    gameObjectChild->GetTransform()->SetLocalRotation(Quaternion{ fbxNode->quat.w, fbxNode->quat.x,fbxNode->quat.y,fbxNode->quat.z });
 
     if (!fbxNode->hasAnimation)
     {
@@ -33,16 +33,21 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
         {
             auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
             auto mesh = graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(fbxNode->meshName);
-            yunuGI::Vector3 meshBoundingMin, meshBoundingMax;
-            mesh->GetBoundingBoxInfo(&meshBoundingMin, &meshBoundingMax);
+
+            //mesh->GetBoundingBoxInfo(gameObjectChild->GetTransform()->GetWorldTM(), &meshBoundingMin, &meshBoundingMax);
+            //math::TO_XMMATRIX... gameObjectChild->GetTransform()->GetLocalTM();
+
             if (boundingMin && boundingMax)
             {
+                yunuGI::Vector3 meshBoundingMin, meshBoundingMax;
+                mesh->GetBoundingBoxInfo(gameObjectChild->GetTransform()->GetWorldTM(), &meshBoundingMin, &meshBoundingMax);
                 if (boundsInit)
                 {
                     ExpandBoundingVolume(boundingMin, boundingMax, meshBoundingMin, meshBoundingMax);
                 }
                 else
                 {
+                    boundsInit = true;
                     *boundingMin = meshBoundingMin;
                     *boundingMax = meshBoundingMax;
                 }
@@ -69,7 +74,21 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
             auto mesh = graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(fbxNode->meshName);
             renderer->GetGI().SetMesh(mesh);
             renderer->GetGI().SetBone(std::wstring{ fbxName.begin(), fbxName.end() });
-
+            if (boundingMin && boundingMax)
+            {
+                yunuGI::Vector3 meshBoundingMin, meshBoundingMax;
+                mesh->GetBoundingBoxInfo(gameObjectChild->GetTransform()->GetWorldTM(), &meshBoundingMin, &meshBoundingMax);
+                if (boundsInit)
+                {
+                    ExpandBoundingVolume(boundingMin, boundingMax, meshBoundingMin, meshBoundingMax);
+                }
+                else
+                {
+                    boundsInit = true;
+                    *boundingMin = meshBoundingMin;
+                    *boundingMax = meshBoundingMax;
+                }
+            }
             auto animator = rootObject->GetComponent<yunutyEngine::graphics::Animator>();
             auto animatorIndex = animator->GetGI().GetID();
             renderer->GetGI().SetAnimatorIndex(animatorIndex);
@@ -101,7 +120,7 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
 
     for (int i = 0; i < fbxNode->child.size(); ++i)
     {
-        AddGameObjectFromFBXNode(gameObjectChild, fbxNode->child[i], fbxName, rootObject, boundingMin, boundingMax);
+        AddGameObjectFromFBXNode(gameObjectChild, fbxNode->child[i], fbxName, rootObject, boundingMin, boundingMax, boundsInit);
     }
 }
 
@@ -147,7 +166,6 @@ yunutyEngine::GameObject* Scene::AddGameObjectFromFBX(string fbxName, yunuGI::Ve
         for (int i = 0; i < data->child.size(); ++i)
         {
             AddGameObjectFromFBXNode(gameObject, data->child[i], fbxName, gameObject, boundingMin, boundingMax, boundsInit);
-            boundsInit = true;
         }
     }
 

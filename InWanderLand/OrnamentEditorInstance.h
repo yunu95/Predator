@@ -35,9 +35,11 @@ namespace application
                 virtual void OnHover() { PaletteInstance::OnHover(); }
                 virtual void OnHoverLeft() { PaletteInstance::OnHoverLeft(); }
 
+
             private:
                 std::string currentFBX = "";
                 const application::editor::Ornament_TemplateData* ornamentTemplateData;
+                GameObject* meshObject;
             };
         }
     }
