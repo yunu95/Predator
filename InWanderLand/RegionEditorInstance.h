@@ -21,6 +21,7 @@ namespace application
 
                 // 지역의 가로세로 절반 길이를 반환합니다.
                 void SetHalfExtent(const Vector2f& halfExtent);
+                static constexpr double debugMeshYPos{ 0.02 };
             protected:
             private:
                 static constexpr float regionTransparency{ 0.3f };
