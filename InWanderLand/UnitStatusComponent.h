@@ -10,7 +10,7 @@ class Unit;
 
 class UnitStatusComponent : public Component
 {
-private:
+protected:
 	Unit* m_ownerUnit;
 
 	friend class DualCastComponent;

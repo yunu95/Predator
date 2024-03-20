@@ -42,7 +42,7 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 	auto temp = importer.GetErrorString();
 
 	if (!scene) {
-		assert(FALSE);
+		assert(FALSE&& "FBX 파일 로드에 실패했습니다. 파일이 있는지 확인해주세요.");
 	}
 
 	FBXNode* fbxNode = new FBXNode;

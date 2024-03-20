@@ -7,7 +7,7 @@
 /// yunutyEngine::graphics::StaticMeshRenderer는 나중에 아트 리소스로 교체해주자.
 /// </summary>
 
-class SkillPreviewSystem : public SingletonClass<SkillPreviewSystem>
+class SkillPreviewSystem : public Component, public SingletonComponent<SkillPreviewSystem>
 {
 public:
 	enum class SkillPreviewMesh
@@ -34,8 +34,12 @@ private:
 
 	bool isOnceRotated = false;
 	double previousDegree = 0.0f;
+
 public:
 	void Update();
+
+	void SetPathPreviewObjectRotation();
+	void SetRangePreviewObjectPosition();
 
 	void SetPathPreviewObject(GameObject* p_obj);
 	void SetRangePreviewObject(GameObject* p_obj);

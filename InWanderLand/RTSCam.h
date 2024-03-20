@@ -16,6 +16,13 @@ public:
     function<void()> deleteButtonCallback{ []() {} };
     function<void()> tabButtonCallback{ []() {} };
     function<void()> xButtonCallback{ []() {} };
+    
+    virtual void Start()
+    {
+		Quaternion quat = Quaternion(Vector3d(60, 0, 0));
+		GetTransform()->SetLocalRotation(quat);
+    }
+
     void Update()
     {
         if (Input::isKeyPushed(KeyCode::Tab))
@@ -56,8 +63,6 @@ public:
                 deltaDirection -= Vector3d::forward;
 
             GetTransform()->SetLocalPosition(GetTransform()->GetLocalPosition() + deltaDirection.Normalized() * Time::GetDeltaTime() * cameraSpeed);
-            Quaternion quat = Quaternion(Vector3d(60, 0, 0));
-            GetTransform()->SetLocalRotation(quat);
         }
         else
         {

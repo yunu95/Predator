@@ -14,7 +14,13 @@
 #include "InstanceManager.h"
 #include "SingleNavigationField.h"
 #include "TestUtilRTSTestCam.h"
+#include "WarriorProductor.h"
 #include "MagicianProductor.h"
+#include "HealerProductor.h"
+#include "InputManager.h"
+#include "UIManager.h"
+#include "PlayerController.h"
+#include "TacticModeSystem.h"
 
 #include <algorithm>
 #include <string>
@@ -47,38 +53,18 @@ void GraphicsTest()
 	yunuGI::ITexture* tex2 = _resourceManager->GetTexture(L"Texture/Brick_Normal.jpg");
 
 	auto& animationList = _resourceManager->GetAnimationList();
-	yunuGI::IAnimation* idleAnimation;
-	yunuGI::IAnimation* battleIdleAnimation;
-	yunuGI::IAnimation* walkAnimation;
-	yunuGI::IAnimation* battleStartAnimation;
+	yunuGI::IAnimation* animation;
 
 	for (auto& i : animationList)
 	{
-		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
+		if (i->GetName() == L"Ani_Monster2_Walk")
 		{
 			i->SetLoop(true);
-			idleAnimation = i;
-		}
-
-		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
-		{
-			i->SetLoop(true);
-			battleIdleAnimation = i;
-		}
-
-		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
-		{
-			i->SetLoop(true);
-			walkAnimation = i;
-		}
-
-		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
-		{
-			battleStartAnimation = i;
+			animation = i;
+			int a = 1;
+			i->SetEventFunc(20, []() {std::cout << "TEST" << std::endl; });
 		}
 	}
-
-
 
 	auto& shaderList = _resourceManager->GetShaderList();
 	yunuGI::IShader* shader;
@@ -157,22 +143,12 @@ void GraphicsTest()
 	}
 
 	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.55, 0.5f,42.53 });
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
 		auto animator = obj->GetComponent<yunutyEngine::graphics::Animator>();
-		auto testCom = obj->AddComponent<TestComponent2>();
-		testCom->anim = animator;
-		testCom->battleIdleAnimation = battleIdleAnimation;
-		testCom->battleStartAnimation = battleStartAnimation;
-		testCom->walkAnimation = walkAnimation;
-		testCom->idleAnimation = idleAnimation;
-		animator->GetGI().PushAnimation(idleAnimation);
-		animator->GetGI().PushAnimation(battleIdleAnimation);
-		animator->GetGI().PushAnimation(walkAnimation);
-		animator->GetGI().PushAnimation(battleStartAnimation);
-		animator->GetGI().Play(idleAnimation);
+		animator->GetGI().PushAnimation(animation);
+		animator->GetGI().Play(animation);
+		obj->GetTransform()->SetLocalPosition(Vector3d{ -47.55, 0.5f,42.53 });
 	}
-
 
 
 	//{
@@ -186,14 +162,17 @@ void GraphicsTest()
 	//	obj->GetTransform()->SetLocalPosition({ Vector3d{0,0,-5} });
 	//}
 
-
-
 	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CastleWall_Door");
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
+	//	obj->GetTransform()->SetLocalPosition({ Vector3d{5,0,-5} });
+	//}
+	//
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
 	//	obj->GetTransform()->SetLocalPosition({ Vector3d{10,0,-5} });
 	//}
 	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CastleWall_Door");
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Cuptower");
 	//	obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{0,180,0} });
 	//}
 
@@ -335,29 +314,87 @@ void application::contents::ContentsLayer::Initialize()
 		yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 		auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto camComp = camObj->AddComponent<RTSCam>();
-		camObj->GetTransform()->SetLocalPosition({ 0,20,0 });
+		camObj->GetTransform()->SetLocalPosition({ 0,35,0 });
+		camObj->AddComponent<Dotween>();
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 		auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
 		light->GetGI().SetLightDiffuseColor(color);
 		directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
-		yunutyEngine::NavigationAgent* agent = nullptr;
-		{
-			agent = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationAgent>();
-			agent->GetTransform()->SetLocalPosition(Vector3d{ 0,0,20 });
-			agent->SetSpeed(5);
-			agent->SetRadius(0.5);
-			agent->AssignToNavigationField(&SingleNavigationField::Instance());
-			auto staticMesh = agent->GetGameObject()->AddGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-			staticMesh->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(L"Capsule"));
-			staticMesh->GetGI().GetMaterial()->SetColor({ 0.75,0.75,0.75,1 });
-			staticMesh->GetTransform()->SetLocalPosition(Vector3d{ 0,0.5,0 });
-	}
 
-		editor::MapFileManager::GetSingletonInstance().LoadMapFile("TestMap.pmap");
+		auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+		auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
+		auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		mouseCursorMesh->GetGI().SetMesh(sphereMesh);
+		mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
+
+		/*WarriorProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 0.0f));;
+		MagicianProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 2.0f));;
+		HealerProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, -2.0f));*/
+
+		auto skillPreviewCubeMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		AttachDebugMesh(skillPreviewCubeMeshObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
+		SkillPreviewSystem::Instance().SetPathPreviewObject(skillPreviewCubeMeshObject);
+
+		auto skillPreviewSphereMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		AttachDebugMesh(skillPreviewSphereMeshObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
+		SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
+
+		camComp->groundHoveringClickCallback = [=](Vector3d pos)
+		{
+			mouseCursorObject->GetTransform()->SetWorldPosition(pos);
+			SkillPreviewSystem::Instance().SetCurrentMousPosition(pos);
+		};
+
+		InputManager::Instance();
+		UIManager::Instance();
+		PlayerController::SingleInstance().SetMovingSystemComponent(camComp);
+		TacticModeSystem::SingleInstance().SetMovingSystemComponent(camComp);
+
+		// UIButton Test
+		//rsrcMgr->LoadFile("Texture/zoro.jpg");
+		//rsrcMgr->LoadFile("Texture/zoro_highLighted.jpg");
+		//rsrcMgr->LoadFile("Texture/zoro_Clicked.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Menu.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/TacticMode.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Robin_ParentUI.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Ursula_ParentUI.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Gretel_ParentUI.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Robin_Portrait.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Ursula_Portrait.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Gretel_Portrait.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Robin_Skill1_Ikon.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Ursula_Skill1_Ikon.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Gretel_Skill1_Ikon.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Robin_Skill2_Ikon.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Ursula_Skill2_Ikon.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Gretel_Skill2_Ikon.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/CloseButton.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/menu_window.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/GameManual_Button.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/GameManual.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Sound_Window.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Sound_Button.jpg");
+		//rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Restart_Button.jpg");
+		//yunutyEngine::NavigationAgent* agent = nullptr;
+		//{
+		//	agent = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationAgent>();
+		//	agent->GetTransform()->SetLocalPosition(Vector3d{ 0,0,20 });
+		//	agent->SetSpeed(5);
+		//	agent->SetRadius(0.5);
+		//	agent->AssignToNavigationField(&SingleNavigationField::Instance());
+		//	auto staticMesh = agent->GetGameObject()->AddGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		//	staticMesh->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(L"Capsule"));
+		//	staticMesh->GetGI().GetMaterial()->SetColor({ 0.75,0.75,0.75,1 });
+		//	staticMesh->GetTransform()->SetLocalPosition(Vector3d{ 0,0.5,0 });
+		//}
+
+		editor::MapFileManager::GetSingletonInstance().LoadMapFile("TestMap2.pmap");
 		editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
-}
+	}
 #endif
 #endif // ! EDITOR
 }
@@ -406,11 +443,20 @@ void application::contents::ContentsLayer::AssignTestInitializer(std::function<v
 		application::Application::GetInstance().AddMainLoopTodo([=]() {
 			Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
 			});
-	};
+};
 }
 #endif
 
 void application::contents::ContentsLayer::ClearPlaytimeObject()
 {
+	/// 생성된 모든 게임 플레이 오브젝트 삭제
+	for (auto e : objectCreatedByEditorVector)
+	{
+		e->SetSelfActive(false);
+	}
+}
 
+void application::contents::ContentsLayer::RegisterToEditorObjectVector(GameObject* p_obj)
+{
+	objectCreatedByEditorVector.push_back(p_obj);
 }

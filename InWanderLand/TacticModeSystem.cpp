@@ -6,7 +6,7 @@
 
 void TacticModeSystem::SetCurrentSelectedPlayerUnit(Unit::UnitType p_type)
 {
-	currentSelectedUnit = PlayerController::GetInstance()->FindSelectedUnitByUnitType(p_type);
+	currentSelectedUnit = PlayerController::SingleInstance().FindSelectedUnitByUnitType(p_type);
 }
 
 void TacticModeSystem::SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum)
@@ -28,19 +28,24 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
 	currentSelectedUnit = playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second;
 	processingUnitMap.insert({ queueOrderIndex, currentSelectedUnit });
 
+	SkillPreviewSystem::Instance().SetCurrentSelectedPlayerGameObject(currentSelectedUnit->GetGameObject());
+	SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(currentSelectedSkill));
+	SkillPreviewSystem::Instance().ActivateSkillPreview(true);
+
 	m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
 	{
 		processingSkillPosMap.insert({ currentSelectedUnit, pos });
 		queueOrderIndex++;
 
 		SetCurrentSelectedQueue(currentSelectedUnit);
-		
+
+		SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+
 		currentSelectedQueue->push([=]()
 			{
 				if (auto itr = processingSkillPosMap.find(currentActivatedUnit);
 					itr != processingSkillPosMap.end())
 				{
-					/*Unit* currentActivatedUnit = processingUnitMap.find(executingOrderIndex)->second;*/
 					Vector3d currentSkillPos = processingSkillPosMap.find(currentActivatedUnit)->second;
 					currentActivatedUnit->OrderSkill(currentSelectedSkill, currentSkillPos);
 					processingSkillPosMap.erase(itr);
@@ -56,7 +61,7 @@ void TacticModeSystem::EngageTacticMode()
 	/// 1. TimeScale을 0으로 설정한다.
 	/// 2. PlayerController에서 현재 전술모드 적용 가능한 Player Unit의 정보를 가져온다.
 	Time::SetTimeScale(0.0f);
-	playerComponentMap = PlayerController::GetInstance()->GetPlayerMap();
+	playerComponentMap = PlayerController::SingleInstance().GetPlayerMap();
 	queueOrderIndex = 0;
 	executingOrderIndex = 0;
 	processingUnitMap.clear();
@@ -70,7 +75,6 @@ void TacticModeSystem::ExitTacticMode()
 	// 하나라도 Queue에 등록되어 있다면 전술모드를 실행한다.
 	if (!(warriorQueue.empty() && magicianQueue.empty() && healerQueue.empty()))
 	{
-
 		isTacticModeStarted = true;
 	}
 }

@@ -15,9 +15,10 @@ namespace application::editor::palette
     void UnitEditorInstance::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     {
         this->unitTemplateData = unitTemplateData;
-        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(unitTemplateData->pod.fbxName);
+        yunuGI::Vector3 boundingMin, boundingMax;
+        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(unitTemplateData->pod.fbxName, &boundingMin, &boundingMax);
         obj->SetParent(GetGameObject());
-		currentFBX = unitTemplateData->pod.fbxName;
+        currentFBX = unitTemplateData->pod.fbxName;
     }
 
     void UnitEditorInstance::ChangeTemplateData(const application::editor::UnitData* unitData)

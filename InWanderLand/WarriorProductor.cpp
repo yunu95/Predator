@@ -4,7 +4,7 @@
 #include "KnockBackComponent.h"
 #include "MeleeAttackSystem.h"
 #include "WarriorSkillSystem.h"
-#include "OnlyDamageComponent.h"
+#include "TauntingComponent.h"
 #include "DebugMeshes.h"
 #include "HealerProductor.h"
 #include "MagicianProductor.h"
@@ -28,6 +28,8 @@ void WarriorProductor::SetUnitData()
 	m_dodgeProbability = 0.2f;
 	m_criticalDamageDecreaseMultiplier = 0.2f;
 
+	m_maxAggroNumber = 2;
+
 	m_idRadius = 4.0f * lengthUnit;
 	m_atkRadius = 1.7f * lengthUnit;
 	m_unitSpeed = 4.5f;
@@ -46,7 +48,7 @@ void WarriorProductor::SingletonInitializer()
 	SetUnitData();
 }
 
-GameObject* WarriorProductor::CreateUnit(Vector3d startPos)
+Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
@@ -129,7 +131,7 @@ GameObject* WarriorProductor::CreateUnit(Vector3d startPos)
 
 	auto qSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(qSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), true);
-	qSkillColliderDebugObject->GetTransform()->SetLocalScale({ m_QSkillRadius, m_QSkillRadius, m_QSkillRadius });
+	qSkillColliderDebugObject->GetTransform()->SetLocalScale({ m_QSkillRadius * 2, m_QSkillRadius * 2, m_QSkillRadius * 2 });
 
 	auto knockBackComponent = qSkillKnockBackObject->AddComponent<KnockBackComponent>();
 	knockBackComponent->SetSkillOwnerUnit(m_unitComponent);
@@ -144,13 +146,13 @@ GameObject* WarriorProductor::CreateUnit(Vector3d startPos)
 	wSkillColliderComponent->SetRadius(m_WSkillRadius);
 	wSkillColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	wSkillColliderObject->SetParent(m_unitGameObject);
-	auto wSkillDamageComponent = wSkillColliderObject->AddComponent<OnlyDamageComponent>();
+	auto wSkillDamageComponent = wSkillColliderObject->AddComponent<TauntingComponent>();
 	wSkillDamageComponent->SetSkillOwnerUnit(m_unitComponent);
 	wSkillDamageComponent->SetSkillDamage(10.0f);
 
 	auto wSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(wSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), true);
-	wSkillColliderDebugObject->GetTransform()->SetLocalScale({ m_WSkillRadius, m_WSkillRadius, m_WSkillRadius });
+	wSkillColliderDebugObject->GetTransform()->SetLocalScale({ m_WSkillRadius * 2, m_WSkillRadius * 2, m_WSkillRadius * 2 });
 #pragma endregion
 
 //#pragma region Skill Area Preview System
@@ -170,7 +172,7 @@ GameObject* WarriorProductor::CreateUnit(Vector3d startPos)
 
 	UnitProductor::SetCommonComponents();
 
-	return m_unitGameObject;
+	return m_unitComponent;
 }
 
 // 전략 패턴을 설명하기 위한 예시 코드

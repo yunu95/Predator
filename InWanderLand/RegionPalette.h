@@ -32,6 +32,7 @@ namespace application
                 virtual void OnSelectSingleInstance(IEditableData* data) override;
                 virtual void OnStartPalette() override;
                 virtual void OnStandbyPalette() override;
+                virtual void CleanUpData() override;
             private:
                 bool isSelectingDisablingOrnaments{false};
             };

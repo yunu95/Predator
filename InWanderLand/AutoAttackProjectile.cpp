@@ -57,7 +57,7 @@ void AutoAttackProjectile::ShootUpdateFunction()
 		AutoAttackProjectilePool::SingleInstance().Return(this);
 
 		/// 충돌 (목적지 도착 시) 호출하고자 하는 로직은 여기에
-		m_opponentUnit->Damaged(m_ownerUnit->GetGameObject(), m_ownerUnit->DetermineAttackDamage(m_ownerUnit->GetUnitDamage()));
+		m_opponentUnit->Damaged(m_ownerUnit, m_ownerUnit->DetermineAttackDamage(m_ownerUnit->GetUnitDamage()));
 
 		isShootOperating = false;
 	}

@@ -81,6 +81,8 @@ namespace application
 
         void* GetWindowHandle();
 
+      Layer* GetContentsLayer();
+
     private:
         // ImGui 단계 처리
         void ImGuiUpdate();

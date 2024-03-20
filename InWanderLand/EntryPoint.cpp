@@ -1,5 +1,10 @@
 #include "InWanderLand.h"
 #include "Application.h"
+#include "WarriorProductor.h"
+#include "MagicianProductor.h"
+#include "HealerProductor.h"
+#include "DebugMeshes.h"
+#include "RTSCam.h"
 
 
 // Main code

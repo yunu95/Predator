@@ -31,6 +31,11 @@ public:
 		return layer < other.layer;
 	}
 
+	int GetLayer()
+	{
+		return layer;
+	}
+
 public:
 	DirectX::SimpleMath::Vector2 pos;
 	int layer = 0;

@@ -51,7 +51,17 @@ void UIButton::Start()
 	m_Height = m_IdleImage->GetHeight();
 
 	Vector2d leftTopPos = GetTransform()->GetWorldPosition();
-	m_ImageCenterPostion = Vector2d(leftTopPos.x + m_Width / 2, leftTopPos.y + m_Height / 2);
+
+	HWND hWnd = GetForegroundWindow();
+	RECT wndRect;
+	GetClientRect(hWnd, &wndRect);
+
+	initialRectRight = wndRect.right;
+	initialRectBottom = wndRect.bottom;
+	
+	Vector3d fixedLeftTopPos = Vector3d(leftTopPos.x / 1920 * wndRect.right, leftTopPos.y / 1080 * wndRect.bottom, 0);
+	GetTransform()->SetWorldPosition(fixedLeftTopPos);
+	m_ImageCenterPostion = Vector2d(fixedLeftTopPos.x + m_Width / 2, fixedLeftTopPos.y + m_Height / 2);
 
 	m_onMouseFunction = [=]()
 	{
@@ -91,7 +101,9 @@ void UIButton::Start()
 
 void UIButton::Update()
 {
-	auto mousePos = Input::getMouseScreenPosition();
+	auto mousePos = Input::getMouseScreenPositionNormalized();
+	mousePos.x *= 1920;
+	mousePos.y *= 1080;
 	bool isMouseJustEntered = false;
 
 	if (mousePos.x <= m_ImageCenterPostion.x + (m_Width / 2) && mousePos.x >= m_ImageCenterPostion.x - (m_Width / 2) &&
@@ -105,13 +117,13 @@ void UIButton::Update()
 		isMouseNowOnButton = true;
 		isMouseJustEntered = false;
 
-		UIManager::SingleInstance().ReportButtonOnMouse(this);
+		UIManager::Instance().ReportButtonOnMouse(this);
 		//isButtonOnMouseState = false;
 	}
 	else if (!isMouseJustEntered && isMouseNowOnButton)
 	{
 		isMouseNowOnButton = false;
-		UIManager::SingleInstance().ReportMouseExitButton(this);
+		UIManager::Instance().ReportMouseExitButton(this);
 		m_ImageComponent->GetGI().SetImage(m_IdleImage);
 	}
 

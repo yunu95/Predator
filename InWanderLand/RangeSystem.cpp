@@ -17,7 +17,7 @@ void RangeSystem::OnTriggerEnter(physics::Collider* collider)
 	{
 		float distance = (collider->GetGameObject()->GetTransform()->GetWorldPosition() - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
 
-		m_unitComponent->AddToOpponentObjectList(collider->GetGameObject());
+		m_unitComponent->AddToOpponentObjectList(colliderUnitComponent);
 		//m_unitComponent->IdleTransition();
 	}
 }
@@ -31,7 +31,7 @@ void RangeSystem::OnTriggerExit(physics::Collider* collider)
 	{
 		/// 넉백공격 당하면서 Exit불릴 때는 지우면 안되는데...
 		/// unit에 멤버를 추가
-		m_unitComponent->DeleteFromOpponentObjectList(collider->GetGameObject());
+		m_unitComponent->DeleteFromOpponentObjectList(colliderUnitComponent);
 	}
 }
 
