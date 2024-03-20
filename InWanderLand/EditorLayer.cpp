@@ -53,14 +53,7 @@ namespace application
 			}
 
 			/// 에디터용 리소스 등록
-			const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-			resourceManager->LoadFile("FBX/Directional");
-			resourceManager->LoadFile("FBX/Sphere");
-			resourceManager->LoadFile("FBX/Camera");
-
-			// 재귀적으로 모든 FBX 로드하기
-			ResourceManager::GetSingletonInstance();
-
+			LoadAllFBXFile();
 
 			/// 각종 매니저 클래스 메모리 할당
 			MapFileManager::GetSingletonInstance();
@@ -187,6 +180,16 @@ namespace application
 
 			// SceneGizmo
 			InitSceneGizmo();
+		}
+
+		void EditorLayer::LoadAllFBXFile()
+		{
+			// 재귀적으로 모든 FBX 로드하기
+			const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+			resourceManager->LoadFile("FBX/Camera");
+			resourceManager->LoadFile("FBX/Sphere");
+			resourceManager->LoadFile("FBX/Directional");
 		}
 
 		void EditorLayer::InitSceneGizmo()

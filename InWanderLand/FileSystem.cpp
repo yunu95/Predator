@@ -69,6 +69,12 @@ namespace application
 
 				return std::filesystem::path();
 			}
+
+			std::vector<std::filesystem::path> GetSubdirectories(const std::filesystem::path& directoryPath)
+			{
+
+				return std::vector<std::filesystem::path>();
+			}
 		}
 	}
 }

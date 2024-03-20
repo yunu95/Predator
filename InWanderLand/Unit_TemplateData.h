@@ -17,9 +17,9 @@ namespace application
 
 		struct POD_Unit_TemplateData
 		{
-			std::string fbxName = std::string();
+			std::string skinnedFBXName = std::string();
 
-			unsigned int unitType;
+			int unitType;
 			float m_healthPoint;
 			int m_manaPoint;
 

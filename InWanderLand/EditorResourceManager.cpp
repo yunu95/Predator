@@ -65,7 +65,7 @@ namespace application
         {
             // Shader 를 먼저 Load 해야 합니다.
             LoadShaderList();
-            LoadFbxList();
+            LoadFBXList();
         }
 
         void ResourceManager::RematchTemplateData()
@@ -144,16 +144,24 @@ namespace application
             return shaderMap[shaderName];
         }
 
-        void ResourceManager::LoadFbxList()
+        void ResourceManager::LoadFBXList()
         {
-            auto fbxList = graphics::Renderer::SingleInstance().GetResourceManager()->GetFBXList();
-
-            auto& tdm = TemplateDataManager::GetSingletonInstance();
+            const auto rm = graphics::Renderer::SingleInstance().GetResourceManager();
+            auto fbxList = rm->GetFBXList();
             std::string fbxSname = std::string();
+            yunuGI::FBXData* data = nullptr;
             for (auto each : fbxList)
             {
                 fbxSname = std::string(each.begin(), each.end());
-                fbxSet.insert(fbxSname);
+                rm->GetFBXData(fbxSname, data);
+                if (data->hasAnimation)
+                {
+                    skinnedFBXSet.insert(fbxSname);
+                }
+                else
+                {
+                    staticFBXSet.insert(fbxSname);
+                }
             }
         }
 

@@ -15,9 +15,10 @@ namespace application::editor::palette
     void UnitEditorInstance::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     {
         this->unitTemplateData = unitTemplateData;
-        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(unitTemplateData->pod.fbxName);
+        yunuGI::Vector3 boundingMin, boundingMax;
+        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(unitTemplateData->pod.skinnedFBXName, &boundingMin, &boundingMax);
         obj->SetParent(GetGameObject());
-		currentFBX = unitTemplateData->pod.fbxName;
+        currentFBX = unitTemplateData->pod.skinnedFBXName;
     }
 
     void UnitEditorInstance::ChangeTemplateData(const application::editor::UnitData* unitData)
@@ -30,7 +31,7 @@ namespace application::editor::palette
         if (unitTemplateData == nullptr)
             return;
         this->unitTemplateData = unitTemplateData;
-        ChangeResource(unitTemplateData->pod.fbxName);
+        ChangeResource(unitTemplateData->pod.skinnedFBXName);
     }
 
     void UnitEditorInstance::ChangeResource(const std::string& fbxName)

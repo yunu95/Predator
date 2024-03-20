@@ -7,7 +7,7 @@ namespace yunuGI
     class IMesh : virtual public IResource
     {
     public:
-        virtual void GetBoundingBoxInfo(Vector3* min, Vector3* max) = 0;
+        virtual void GetBoundingBoxInfo(const yunuGI::Matrix4x4& wtm,Vector3* min, Vector3* max) = 0;
     private:
 
     };

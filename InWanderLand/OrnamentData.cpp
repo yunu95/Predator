@@ -32,7 +32,7 @@ namespace application
             }
 
             pod.templateData = static_cast<Ornament_TemplateData*>(ptr);
-			OnDataResourceChange(pod.templateData->pod.fbxName);
+			OnDataResourceChange(pod.templateData->pod.staticFBXName);
 
             return true;
         }

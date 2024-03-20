@@ -41,6 +41,7 @@ namespace application
         void Finalize();		// 마무리
 
         /// 기능 단위 요소
+        
         // 에디터 환경에서의 작업을 중단시키고 게임 진행 환경으로 전환함
         // 이미 게임이 진행중인 경우, 현재 인스턴스들에 데이터만 Update 함
         void PlayContents();
@@ -81,6 +82,10 @@ namespace application
 
         void* GetWindowHandle();
 
+        // Ornament 의 경우, 미리 준비된 FBX 를 사용하는 방식을 사용합니다.
+        // 본 함수는 미리 준비된 FBX 로 TemplateData 를 생성하는 함수입니다.
+        void ReadyOrnament();
+
     private:
         // ImGui 단계 처리
         void ImGuiUpdate();
@@ -94,6 +99,7 @@ namespace application
         void CheckContentsLayerInit();
         // 게임 윈도우 상에 마우스 커서가 있는지 확인하는 함수입니다.
         bool IsCursorInGameWindow();
+
 
         std::mutex loopTodoRegistrationMutex;
         // AddMainLoopTodo로 등록된 휘발성 콜백 함수들입니다.

@@ -59,9 +59,9 @@ namespace application
                     rotation[0] = mapData[i]["Rotation"][0];
                     rotation[1] = mapData[i]["Rotation"][1];
                     rotation[2] = mapData[i]["Rotation"][2];
-                    location[0] = mapData[i]["Location"][0] / 100;
-                    location[1] = mapData[i]["Location"][1] / 100;
-                    location[2] = mapData[i]["Location"][2] / 100;
+                    location[0] = (float)(mapData[i]["Location"][0]) / 100.f;
+                    location[1] = (float)(mapData[i]["Location"][1]) / 100.f;
+                    location[2] = (float)(mapData[i]["Location"][2]) / 100.f;
 
                     auto odt = instanceManager.CreateInstance<OrnamentData>(fbxName);
 
@@ -69,7 +69,7 @@ namespace application
                     odt->pod.scale.x = scale[0];
                     odt->pod.scale.y = scale[2];
                     odt->pod.scale.z = scale[1];
-                    auto quat = Quaternion(Vector3d(-rotation[0], rotation[2], rotation[1]));
+                    auto quat = Quaternion(Vector3d(rotation[0], rotation[2], -rotation[1]));
                     odt->pod.rotation.x = quat.x;
                     odt->pod.rotation.y = quat.y;
                     odt->pod.rotation.z = quat.z;
@@ -102,7 +102,7 @@ namespace application
                 auto ptr = dynamic_cast<OrnamentData*>(each.second.get());
                 if (ptr)
                 {
-                    ornamentData["ResourceName"] = ptr->pod.templateData->pod.fbxName;
+                    ornamentData["ResourceName"] = ptr->pod.templateData->pod.staticFBXName;
                     ornamentData["Location"].push_back(ptr->pod.position.x * 100);
                     ornamentData["Location"].push_back(-ptr->pod.position.z * 100);
                     ornamentData["Location"].push_back(ptr->pod.position.y * 100);
@@ -183,7 +183,10 @@ namespace application
 
 #ifdef EDITOR
                 Application::DispatchEvent<LoadEvent>();
-                    palette::PaletteBrushManager::GetSingletonInstance().MakeBrush();
+
+                // 기본 Ornament 추가
+                Application::GetInstance().ReadyOrnament();
+                palette::PaletteBrushManager::GetSingletonInstance().MakeBrush();
 #endif
                 currentMapPath = path;
                 return true;
@@ -254,17 +257,8 @@ namespace application
         bool MapFileManager::LoadDefaultMap()
         {
             bool returnVal = LoadMapFile("Default.pmap");
-
-            if (returnVal == false)
-            {
-                for (auto& each : ResourceManager::GetSingletonInstance().GetFbxList())
-                {
-                    auto td = templateDataManager.CreateTemplateData<Ornament_TemplateData>(each);
-                    td->SetDataResourceName(each);
-                }
-                palette::PaletteBrushManager::GetSingletonInstance().MakeBrush();
-            }
-
+            Application::GetInstance().ReadyOrnament();
+            palette::PaletteBrushManager::GetSingletonInstance().MakeBrush();
             currentMapPath.clear();
             
             return returnVal;

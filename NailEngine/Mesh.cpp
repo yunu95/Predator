@@ -86,8 +86,9 @@ DirectX::BoundingBox Mesh::GetBoundingBox(DirectX::SimpleMath::Matrix wtm, unsig
 
 	return transformedAABB;
 }
-void Mesh::GetBoundingBoxInfo(yunuGI::Vector3* min, yunuGI::Vector3* max)
+void Mesh::GetBoundingBoxInfo(const yunuGI::Matrix4x4& wtm, yunuGI::Vector3* min, yunuGI::Vector3* max)
 {
+    auto aabb = GetBoundingBox(reinterpret_cast<const DirectX::SimpleMath::Matrix&>(wtm), 0);
     if (min)
     {
         *min = yunuGI::Vector3(aabb.Center.x - aabb.Extents.x, aabb.Center.y - aabb.Extents.y, aabb.Center.z - aabb.Extents.z);

@@ -87,17 +87,18 @@ namespace application::editor::palette
 
     void UnitPalette::OnStartPalette()
     {
-        switch (beforeState)
-        {
-        case application::editor::palette::Palette::State::Place:
-        {
-            SetAsSelectMode(false);
-            break;
-        }
-        default:
-            SetAsSelectMode(true);
-            break;
-        }
+        Palette::SetAsSelectMode(true);
+        //switch (beforeState)
+        //{
+        //case application::editor::palette::Palette::State::Place:
+        //{
+        //    SetAsSelectMode(false);
+        //    break;
+        //}
+        //default:
+        //    SetAsSelectMode(true);
+        //    break;
+        //}
     }
 
     void UnitPalette::OnStandbyPalette()
@@ -110,7 +111,6 @@ namespace application::editor::palette
         {
             beforeState = State::Place;
         }
-        state = State::None;
         CleanUpData();
         if (WavePalette::SingleInstance().currentSelectedWaveIndex >= 0)
         {
@@ -122,6 +122,7 @@ namespace application::editor::palette
     void UnitPalette::CleanUpData()
     {
         Palette::CleanUpData();
+        selectedUnitTemplateData = nullptr;
         Reset();
     }
 
