@@ -70,6 +70,8 @@ namespace application
             POD_Terrain pod;
 
             static constexpr double nodeDistance = 1;
+            // 0 높이에서의 z 파이팅을 방지하기 위해 디버그 메시에 더해주는 높이값
+            static constexpr double debugMeshYPos = 0.01;
         protected:
             virtual bool PreSaveCallback()  override;
             virtual bool PreEncoding(json& data) const override;
