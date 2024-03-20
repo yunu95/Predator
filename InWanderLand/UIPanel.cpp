@@ -11,6 +11,7 @@ void UIPanel::SetWindowImage(yunutyEngine::graphics::UIImage* img)
 void UIPanel::SetUIButtonComponent(UIButton* btn)
 {
 	m_panelObjects.push_back(btn->GetGameObject());
+	btn->SetLayer(m_windowImage->GetGI().GetLayer() + 1);;
 }
 
 void UIPanel::SetPanelActive(bool p_boolen)
@@ -33,8 +34,7 @@ void UIPanel::SetCloseButtonActive(bool p_boolen)
 		m_closeButtonImage = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetTexture(L"Texture/UI/InGameUITemp/CloseButton.jpg");
 		closeButtonComponent->SetImageComponent(closeImageComponent);
 		closeButtonComponent->SetIdleImage(m_closeButtonImage);
-		//closeButtonComponent->SetLayer(m_windowImage->GetGI().GetLayer() + 1);
-		closeButtonComponent->SetLayer(1000);
+		closeButtonComponent->SetLayer(m_windowImage->GetGI().GetLayer() + 2);
 		closeButtonComponent->m_mouseLiftedEventFunction = [=]()
 		{
 			for (auto e : m_panelObjects)
@@ -42,11 +42,21 @@ void UIPanel::SetCloseButtonActive(bool p_boolen)
 				e->SetSelfActive(false);
 			}
 			closeButtonComponent->GetGameObject()->SetSelfActive(false);
-			UIManager::SingleInstance().ReportMouseExitButton(closeButtonComponent);
+			UIManager::Instance().ReportMouseExitButton(closeButtonComponent);
+
+			if (m_parentPanel != nullptr)
+			{
+				m_parentPanel->SetPanelActive(true);
+			}
 		};
 		m_closeImageObject->GetTransform()->SetWorldPosition({ m_windowImage->GetGameObject()->GetTransform()->GetWorldPosition().x + m_windowImage->GetGI().GetWidth() - m_closeButtonImage->GetWidth(),
 			m_windowImage->GetGameObject()->GetTransform()->GetWorldPosition().y, 0 });
 	}
+}
+
+void UIPanel::SetParentPanel(UIPanel* p_parentPanel)
+{
+	m_parentPanel = p_parentPanel;
 }
 
 void UIPanel::Start()

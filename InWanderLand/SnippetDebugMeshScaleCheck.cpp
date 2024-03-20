@@ -22,37 +22,42 @@ public:
 };
 
 // 이 함수는 게임의 기본 초기화 함수를 오버라이드합니다.
+
+
+/// <summary>
+/// Collider의 radius 는 object scale의 절반
+/// </summary>
 void SnippetDebugMeshScaleCheckInit()
 {
 	yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 	
 	auto testObject1 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto patrol1 = testObject1->AddComponent<ObjectPatrolMove>();
-	patrol1->a = 3;
+	//auto patrol1 = testObject1->AddComponent<ObjectPatrolMove>();
+	//patrol1->a = 3;
 	auto object1DebugObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
 	auto testObject2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto patrol2 = testObject2->AddComponent<ObjectPatrolMove>();
-	patrol2->a = -3;
+	//auto patrol2 = testObject2->AddComponent<ObjectPatrolMove>();
+	//patrol2->a = -3;
 	auto object2DebugObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	
 	auto obj1Collider = testObject1->AddComponent<physics::SphereCollider>();
-	obj1Collider->SetRadius(2.0f);
-	object1DebugObj->GetTransform()->SetLocalScale( { 2.0f, 2.0f, 2.0f });
-	testObject1->AddComponent<physics::RigidBody>();
+	obj1Collider->SetRadius(8.0f);
+	object1DebugObj->GetTransform()->SetLocalScale( { 16, 16, 16 });
+	testObject1->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	auto obj1DebugMesh = AttachDebugMesh(object1DebugObj, DebugMeshType::Sphere, yunuGI::Color::red(), false);
-	object1DebugObj->SetParent(testObject1);
+	object1DebugObj->GetTransform()->SetWorldPosition({ 0,0,0 });
 
 
 	auto obj2Collider = testObject2->AddComponent<physics::SphereCollider>();
-	obj2Collider->SetRadius(3.0f);
-	object2DebugObj->GetTransform()->SetLocalScale( { 5.0f, 5.0f, 5.0f });
+	obj2Collider->SetRadius(8.0f);
+	object2DebugObj->GetTransform()->SetLocalScale({ 16, 16, 16 });
 	testObject2->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	auto obj2DebugMesh = AttachDebugMesh(object2DebugObj, DebugMeshType::Sphere, yunuGI::Color::green(), false);
-	object2DebugObj->SetParent(testObject2);
+	object2DebugObj->GetTransform()->SetWorldPosition({ 16,0,0 });
 
-	testObject1->GetTransform()->SetWorldPosition({-5, 0, 0});
-	testObject2->GetTransform()->SetWorldPosition({5, 0, 0});
+	testObject1->GetTransform()->SetWorldPosition({-8, 0, 0});
+	testObject2->GetTransform()->SetWorldPosition({8, 0, 0});
 
 	
 
@@ -61,7 +66,7 @@ void SnippetDebugMeshScaleCheckInit()
 
 	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::Camera>();
 
-	camObj->GetTransform()->SetWorldPosition({ 0,0,-25 });
+	camObj->GetTransform()->SetWorldPosition({ 0,0,-55 });
 
 }
 

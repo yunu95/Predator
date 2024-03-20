@@ -995,6 +995,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="AutoAttackProjectilePool.h" />
     <ClInclude Include="BleedingComponent.h" />
     <ClInclude Include="BlindFieldComponent.h" />
+    <ClInclude Include="DamageOnlyComponent.h" />
     <ClInclude Include="BrushList.h" />
     <ClInclude Include="CameraBrush.h" />
     <ClInclude Include="CameraEditorInstance.h" />
@@ -1019,6 +1020,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="HealerAutoAttackProjectilePool.h" />
     <ClInclude Include="HealerSkillSystem.h" />
     <ClInclude Include="imgui_ModuleData.h" />
+    <ClInclude Include="PlaytimeWave.h" />
     <ClInclude Include="PaletteBrushManager.h" />
     <ClInclude Include="SaveStaticOrnamentsCommnad.h" />
     <ClInclude Include="SingletonUpdate.h" />
@@ -1051,7 +1053,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="MagicianSkillOneProjectilePool.h" />
     <ClInclude Include="MagicianSkillSystem.h" />
     <ClInclude Include="MeleeAttackSystem.h" />
-    <ClInclude Include="OnlyDamageComponent.h" />
+    <ClInclude Include="TauntingComponent.h" />
     <ClInclude Include="RangedAttackSystem.h" />
     <ClInclude Include="StatusTimer.h" />
     <ClInclude Include="StatusTimerPool.h" />
@@ -1144,6 +1146,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UIPanel.h" />
+    <ClInclude Include="UnitClassifier.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="UnitStatusComponent.h" />
@@ -1158,10 +1161,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UnitEditorInstance.h" />
     <ClInclude Include="UnitPalette.h" />
     <ClInclude Include="PlayerSkillSystem.h" />
-    <ClInclude Include="Wave.h" />
     <ClInclude Include="WaveData.h" />
     <ClInclude Include="WaveInstance.h" />
     <ClInclude Include="WavePalette.h" />
+    <ClInclude Include="PlaytimeRegion.h" />
     <ClInclude Include="Wave_TemplateData.h" />
     <ClInclude Include="WindowEvents.h" />
     <ClInclude Include="WarriorSkillSystem.h" />
@@ -1172,6 +1175,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="AutoAttackProjectilePool.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
     <ClCompile Include="BlindFieldComponent.cpp" />
+    <ClCompile Include="DamageOnlyComponent.cpp" />
     <ClCompile Include="CameraBrush.cpp" />
     <ClCompile Include="CameraEditorInstance.cpp" />
     <ClCompile Include="CameraPalette.cpp" />
@@ -1211,7 +1215,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="MagicianAutoAttackProjectile.cpp" />
     <ClCompile Include="MagicianSkillSystem.cpp" />
     <ClCompile Include="MeleeAttackSystem.cpp" />
-    <ClCompile Include="OnlyDamageComponent.cpp" />
+    <ClCompile Include="PlaytimeWave.cpp" />
+    <ClCompile Include="TauntingComponent.cpp" />
     <ClCompile Include="OrnamentEditorInstance.cpp" />
     <ClCompile Include="PaletteBrushManager.cpp" />
     <ClCompile Include="ParalysisFieldComponent.cpp" />
@@ -1304,6 +1309,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UIPanel.cpp" />
     <ClCompile Include="UnitBrush.cpp" />
+    <ClCompile Include="UnitClassifier.cpp" />
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="UnitEditorInstance.cpp" />
     <ClCompile Include="UnitPalette.cpp" />
@@ -1324,9 +1330,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="WarriorProductor.cpp" />
     <ClCompile Include="PlayerSkillSystem.cpp" />
     <ClCompile Include="WarriorSkillSystem.cpp" />
-    <ClCompile Include="Wave.cpp" />
     <ClCompile Include="WaveData.cpp" />
     <ClCompile Include="WavePalette.cpp" />
+    <ClCompile Include="PlaytimeRegion.cpp" />
     <ClCompile Include="Wave_TemplateData.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

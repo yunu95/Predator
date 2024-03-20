@@ -4,6 +4,7 @@
 #include "PlayerController.h"
 #include "Dotween.h"
 #include "DebugMeshes.h"
+#include "Unit_TemplateData.h"
 
 void UnitProductor::SetCommonComponents()
 {
@@ -25,11 +26,13 @@ void UnitProductor::SetCommonComponents()
 	/// 3. Collider Component 추가
 	auto unitCollider = m_unitGameObject->AddComponent<physics::SphereCollider>();	// 빈 껍데기에 
 	unitCollider->SetRadius(lengthUnit);
+	//m_unitGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+
 
 	auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(unitColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
 	unitColliderDebugObject->SetParent(m_unitGameObject);
-	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(lengthUnit, lengthUnit, lengthUnit));
+	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(lengthUnit * 2, lengthUnit * 2, lengthUnit * 2));
 	m_unitComponent->SetStaticMeshComponent(unitColliderDebugObject->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>());
 
 	auto frontDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -66,6 +69,8 @@ void UnitProductor::SetCommonComponents()
 
 	m_unitComponent->SetNavField(m_navField);
 
+	m_unitComponent->SetMaxAggroNumber(m_maxAggroNumber);
+
 	/// + 플레이어 유닛일 경우 특수 처리
 	if (m_unitSide == Unit::UnitSide::Player)
 		SetPlayerRelatedComponents(m_unitComponent);
@@ -75,6 +80,59 @@ void UnitProductor::SetPlayerRelatedComponents(Unit* playerUnit)
 {
 	playerUnit->SetPlayerSerialNumber(m_unitType);
 	playerUnit->SetSkillPreviewType(qSkillPreviewType, wSkillPreviewType);
-	PlayerController::GetInstance()->AddPlayerUnit(playerUnit);
+	PlayerController::SingleInstance().AddPlayerUnit(playerUnit);
+}
+
+void UnitProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p_podData)
+{
+	m_unitType = static_cast<Unit::UnitType>(p_podData.unitType);
+	m_healthPoint = p_podData.m_healthPoint;
+	m_manaPoint = p_podData.m_manaPoint;
+	m_autoAttackDamage = p_podData.m_autoAttackDamage;
+	m_criticalHitProbability = p_podData.m_criticalHitProbability;
+	m_criticalHitMultiplier = p_podData.m_criticalHitMultiplier;
+	m_defensePoint = p_podData.m_defensePoint;
+	m_dodgeProbability = p_podData.m_dodgeProbability;
+	m_criticalDamageDecreaseMultiplier = p_podData.m_criticalDamageDecreaseMultiplier;
+	m_idRadius = p_podData.m_idRadius;
+	m_atkRadius = p_podData.m_atkRadius;
+	m_unitSpeed = p_podData.m_unitSpeed;
+	m_attackDelay = p_podData.m_attackDelay;
+}
+
+void UnitProductor::PushWaveData(Vector3d startPos, float delay)
+{
+	m_waveDelayQueue.push({ startPos, delay });
+	if (!isWaveUnitCreated)
+	{
+		m_duration = delay;
+		isWaveUnitCreated = true;
+	}
+}
+
+void UnitProductor::Update()
+{
+	if (isWaveTimerStarted && !(m_waveDelayQueue.empty()))
+	{
+		m_elapsed += Time::GetDeltaTime();
+
+		if (m_elapsed >= m_duration)
+		{
+			CreateUnit(m_waveDelayQueue.front().first);
+			m_waveDelayQueue.pop();
+			m_elapsed = 0.0f;
+
+			if (m_waveDelayQueue.empty())
+				isWaveTimerStarted = false;
+			else
+				m_duration = m_waveDelayQueue.front().second;
+		}
+	}
+}
+
+void UnitProductor::Start()
+{
+	/// 원래는 플레이어 유닛이 들어오면 ok지만 우선은 실행 시 wave Trigger On
+	isWaveTimerStarted = true;
 }
 

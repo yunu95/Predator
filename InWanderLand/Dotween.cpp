@@ -226,7 +226,7 @@ Dotween& Dotween::DORotate(Vector3d endRotation, double p_duration)
 		if (m_doRotatetweenTimer->finalZvalue < 0)
 			AdjustRotation(m_doRotatetweenTimer->finalZvalue);
 
-		GetGameObject()->GetTransform()->SetWorldRotation(Vector3d(m_doRotatetweenTimer->finalXvalue, m_doRotatetweenTimer->finalYvalue, m_doRotatetweenTimer->finalZvalue));
+		GetGameObject()->GetTransform()->SetWorldRotation(Quaternion(Vector3d(m_doRotatetweenTimer->finalXvalue, m_doRotatetweenTimer->finalYvalue, m_doRotatetweenTimer->finalZvalue)));
 	};
 
 	currentTimerIndex = TimerIndex::RotateTimer;

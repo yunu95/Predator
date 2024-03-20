@@ -136,9 +136,6 @@
     <Filter Include="Contents\UnitStatusComponent\KnockBack">
       <UniqueIdentifier>{0562aa4c-cdda-4cb7-845e-b4dd252c119b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\UnitStatusComponent\OnlyDamage">
-      <UniqueIdentifier>{a747ad64-1ec4-4e4a-b3dd-6afdf9903359}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Editor\Events\Category">
       <UniqueIdentifier>{8039b949-8b1d-456e-950b-17344a38e1cc}</UniqueIdentifier>
     </Filter>
@@ -321,6 +318,24 @@
     </Filter>
     <Filter Include="Editor\IO\FileSystem">
       <UniqueIdentifier>{018fec7d-1ab2-4937-a43f-4face4d7b708}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitStatusComponent\Taunting">
+      <UniqueIdentifier>{a747ad64-1ec4-4e4a-b3dd-6afdf9903359}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\WaveSystem">
+      <UniqueIdentifier>{b9ce9a4b-15f0-44e2-ad5c-3de09c8231ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitFactory\UnitProductionOrder\EnemyProductor">
+      <UniqueIdentifier>{6633728b-0b6c-4c3f-bad8-74f5a5501357}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitStatusComponent\DamageOnly">
+      <UniqueIdentifier>{c4c2a6e9-7965-47be-99cc-eacaa4137c96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\PlaytimeRegion">
+      <UniqueIdentifier>{3b6c6cf5-6538-42da-8965-70c32e92500b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\PlaytimeWave">
+      <UniqueIdentifier>{81ecb30c-9650-4846-af27-cc4619631d26}</UniqueIdentifier>
     </Filter>
     <Filter Include="Editor\Palette\PaletteBrush\CameraBrush">
       <UniqueIdentifier>{28e9af65-8004-4ddf-b3ee-42d21d8afc46}</UniqueIdentifier>
@@ -543,9 +558,6 @@
     <ClInclude Include="Easing.h">
       <Filter>Contents\Dotween</Filter>
     </ClInclude>
-    <ClInclude Include="MeleeEnemyProductor.h">
-      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerController.h">
       <Filter>Contents\InputManager</Filter>
     </ClInclude>
@@ -645,8 +657,8 @@
     <ClInclude Include="WindowEvents.h">
       <Filter>Editor\Events\Category\2_Window</Filter>
     </ClInclude>
-    <ClInclude Include="OnlyDamageComponent.h">
-      <Filter>Contents\UnitStatusComponent\OnlyDamage</Filter>
+    <ClInclude Include="TauntingComponent.h">
+      <Filter>Contents\UnitStatusComponent\Taunting</Filter>
     </ClInclude>
     <ClInclude Include="EditorCommonEvents.h">
       <Filter>Editor\Events\Category\1_Editor</Filter>
@@ -787,7 +799,6 @@
     <ClInclude Include="OrnamentBrush.h">
       <Filter>Editor\Palette\PaletteBrush\OrnamentBrush</Filter>
     </ClInclude>
-    <ClInclude Include="Wave.h" />
     <ClInclude Include="WaveData.h">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClInclude>
@@ -809,9 +820,6 @@
     <ClInclude Include="UIManager.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="SingletonUpdate.h">
-      <Filter>Contents\SingletonClasses</Filter>
-    </ClInclude>
     <ClInclude Include="SpecialEvent.h">
       <Filter>Contents\SpecialEvent</Filter>
     </ClInclude>
@@ -823,6 +831,21 @@
     </ClInclude>
     <ClInclude Include="FileSystem.h">
       <Filter>Editor\IO\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="MeleeEnemyProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="DamageOnlyComponent.h">
+      <Filter>Contents\UnitStatusComponent\DamageOnly</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitClassifier.h">
+      <Filter>Contents\WaveSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaytimeRegion.h">
+      <Filter>Contents\PlaytimeRegion</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaytimeWave.h">
+      <Filter>Contents\PlaytimeWave</Filter>
     </ClInclude>
     <ClInclude Include="SaveStaticOrnamentsCommnad.h">
       <Filter>Editor\Commands\MenubarCommands\File</Filter>
@@ -878,6 +901,7 @@
     <ClInclude Include="LightEditorInstance.h">
       <Filter>Editor\Palette\EditorInstance\LightInstance</Filter>
     </ClInclude>
+    <ClInclude Include="SingletonUpdate.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1033,9 +1057,6 @@
     <ClCompile Include="TestCaseGroupControl.cpp">
       <Filter>TestCodes</Filter>
     </ClCompile>
-    <ClCompile Include="MeleeEnemyProductor.cpp">
-      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerController.cpp">
       <Filter>Contents\InputManager</Filter>
     </ClCompile>
@@ -1072,8 +1093,8 @@
     <ClCompile Include="WarriorSkillSystem.cpp">
       <Filter>Contents\SkillSystem</Filter>
     </ClCompile>
-    <ClCompile Include="OnlyDamageComponent.cpp">
-      <Filter>Contents\UnitStatusComponent\OnlyDamage</Filter>
+    <ClCompile Include="TauntingComponent.cpp">
+      <Filter>Contents\UnitStatusComponent\Taunting</Filter>
     </ClCompile>
     <ClCompile Include="SnippetTemplate.cpp">
       <Filter>TestCodes\snippets</Filter>
@@ -1292,7 +1313,6 @@
       <Filter>Editor\Palette\PaletteBrush\OrnamentBrush</Filter>
     </ClCompile>
     <ClCompile Include="TestCaseQuaternionWithAxes.cpp" />
-    <ClCompile Include="Wave.cpp" />
     <ClCompile Include="WaveData.cpp">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClCompile>
@@ -1319,6 +1339,21 @@
     </ClCompile>
     <ClCompile Include="FileSystem.cpp">
       <Filter>Editor\IO\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="MeleeEnemyProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="DamageOnlyComponent.cpp">
+      <Filter>Contents\UnitStatusComponent\DamageOnly</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitClassifier.cpp">
+      <Filter>Contents\WaveSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaytimeRegion.cpp">
+      <Filter>Contents\PlaytimeRegion</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaytimeWave.cpp">
+      <Filter>Contents\PlaytimeWave</Filter>
     </ClCompile>
     <ClCompile Include="SaveStaticOrnamentsCommnad.cpp">
       <Filter>Editor\Commands\MenubarCommands\File</Filter>

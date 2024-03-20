@@ -20,6 +20,7 @@ private:
 	yunutyEngine::graphics::UIImage* closeImageComponent;
 	UIButton* closeButtonComponent;
 
+	UIPanel* m_parentPanel;
 
 	Vector2d m_closeButtonCenterPosition;
 
@@ -29,6 +30,7 @@ public:
 	void SetPanelActive(bool p_boolen);
 	void SetCloseButtonActive(bool p_boolen);
 
+	void SetParentPanel(UIPanel* p_parentPanel);
 	virtual void Start() override;
 };
 

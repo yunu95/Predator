@@ -24,6 +24,8 @@ void MagicianProductor::SetUnitData()
 	m_dodgeProbability = 0.05f;
 	m_criticalDamageDecreaseMultiplier = 0.05f;
 
+	m_maxAggroNumber = 1;
+
 	m_idRadius = 10.0f * lengthUnit;
 	m_atkRadius = 3.5f * lengthUnit;
 	m_unitSpeed = 4.5f;
@@ -41,7 +43,7 @@ void MagicianProductor::SingletonInitializer()
 	graphics::Renderer::SingleInstance().GetResourceManager()->LoadFile("FBX/Boss");
 	SetUnitData();
 }
-yunutyEngine::GameObject* MagicianProductor::CreateUnit(Vector3d startPos)
+Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
@@ -88,7 +90,7 @@ yunutyEngine::GameObject* MagicianProductor::CreateUnit(Vector3d startPos)
 
 	/// UnitComponent 추가
 	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
-
+	//m_unitComponent->RegisterToWaveVector
 #pragma region Auto Attack Setting (Including Passive Logic)
 	auto magicianAttackSystem = m_unitGameObject->AddComponent<RangedAttackSystem>();
 	magicianAttackSystem->SetBulletSpeed(10.0f);
@@ -106,7 +108,7 @@ yunutyEngine::GameObject* MagicianProductor::CreateUnit(Vector3d startPos)
 
 	auto QSkillProjectileDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(QSkillProjectileDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), false);
-	QSkillProjectileDebugObject->GetTransform()->SetLocalScale({ m_QSkillProjectileRadius , m_QSkillProjectileRadius , m_QSkillProjectileRadius });
+	QSkillProjectileDebugObject->GetTransform()->SetLocalScale({ m_QSkillProjectileRadius * 2 , m_QSkillProjectileRadius * 2 , m_QSkillProjectileRadius * 2 });
 
 	auto QSkillFieldObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	QSkillFieldObject->AddComponent<Dotween>();
@@ -118,7 +120,7 @@ yunutyEngine::GameObject* MagicianProductor::CreateUnit(Vector3d startPos)
 	QSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	auto QSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(QSkillFieldDebugObject, DebugMeshType::Sphere, yunuGI::Color::white(), false);
-	QSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_QSkillFieldRadius , m_QSkillFieldRadius , m_QSkillFieldRadius });
+	QSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_QSkillFieldRadius * 2, m_QSkillFieldRadius * 2 , m_QSkillFieldRadius * 2 });
 #pragma endregion
 
 #pragma region W Skill Setting
@@ -132,7 +134,7 @@ yunutyEngine::GameObject* MagicianProductor::CreateUnit(Vector3d startPos)
 
 	auto WSkillProjectileDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(WSkillProjectileDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
-	WSkillProjectileDebugObject->GetTransform()->SetLocalScale({ m_WSkillProjectileRadius , m_WSkillProjectileRadius , m_WSkillProjectileRadius });
+	WSkillProjectileDebugObject->GetTransform()->SetLocalScale({ m_WSkillProjectileRadius * 2 , m_WSkillProjectileRadius * 2, m_WSkillProjectileRadius * 2 });
 
 	auto WSkillFieldObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	WSkillFieldObject->AddComponent<Dotween>();
@@ -144,7 +146,7 @@ yunutyEngine::GameObject* MagicianProductor::CreateUnit(Vector3d startPos)
 	WSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(WSkillFieldDebugObject, DebugMeshType::Sphere, yunuGI::Color::blue(), true);
-	WSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_WSkillFieldRadius , m_WSkillFieldRadius , m_WSkillFieldRadius });
+	WSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_WSkillFieldRadius * 2 , m_WSkillFieldRadius * 2 , m_WSkillFieldRadius * 2 });
 #pragma endregion
 
 #pragma region SkillSystem Setting
@@ -167,5 +169,5 @@ yunutyEngine::GameObject* MagicianProductor::CreateUnit(Vector3d startPos)
 	clonedMaterial->SetColor(yunuGI::Color::red());
 	skinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial);
 
-	return m_unitGameObject;
+	return m_unitComponent;
 }

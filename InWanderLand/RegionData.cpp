@@ -4,7 +4,10 @@
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
 #include "Region_TemplateData.h"
+#include "PlaytimeRegion.h"
 #include "OrnamentData.h"
+#include "Application.h"
+#include "ContentsLayer.h"
 
 namespace application
 {
@@ -65,6 +68,22 @@ namespace application
         void RegionData::EraseDisablingOrnament(OrnamentData* ornament)
         {
             disablingOrnaments.erase(ornament);
+        }
+
+		void RegionData::ApplyAsPlaytimeObject()
+		{
+            auto regionGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+            playtimeRegion = regionGameObject->AddComponent<PlaytimeRegion>();
+            playtimeRegion->regionData = this;
+            pod.name;
+            pod.isObstacle;
+            regionGameObject->AddComponent<physics::BoxCollider>()->SetHalfExtent({ pod.width/2.0f, 1.0f, pod.height/2.0f });
+            regionGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+            regionGameObject->GetTransform()->SetWorldPosition(Vector3d(pod.x, 1.0f, pod.z));
+            regionGameObject->GetTransform()->SetWorldRotation(Vector3d(0, pod.angle, 0));
+
+			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+			contentsLayer->RegisterToEditorObjectVector(regionGameObject);
         }
 
         bool RegionData::PreSaveCallback()

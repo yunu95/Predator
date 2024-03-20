@@ -5,9 +5,15 @@
 
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
-#include "MagicianProductor.h"
+#include "UnitClassifier.h"
+#include "Unit.h"
+#include "UnitProductor.h"
 #include "WarriorProductor.h"
+#include "MagicianProductor.h"
 #include "HealerProductor.h"
+#include "MeleeEnemyProductor.h"
+#include "Application.h"
+#include "ContentsLayer.h"
 
 namespace application
 {
@@ -104,30 +110,63 @@ namespace application
 		{
 			// 함정과 같은 특수 기믹 객체들도 유닛과 유사하게 위치를 지정해주면 되기 때문에 UnitType에 Bomb, Trap, Bbang/th같은
 			// 타입을 확장하여 유닛 생성 로직에서 같이 처리할 수 있게 만들 수 있다.
-			pod.templateData->pod.m_atkRadius;
-			UnitProductor* productionFactory{ nullptr };
-			Vector3d position{ pod.position.x, pod.position.y, pod.position.z };
-			// 유닛을 생성할 때 쓰일 팩토리를 먼저 지정
+			//UnitClassifier::SingleInstance().SendPODToClassifier(pod);
+			pod.waveData->pod.waveUnitUUIDS;
+			/// 2024.03.20 추가
+			// 이제 templateData에서 UnitType에 대한 int값을 가져올 수 있다.
+			// 이 값을 통해 타입을 분류해 유닛을 배치해보자.
+
+			UnitProductor* currentSelectedProductor{ nullptr };
+
+			if (pod.waveData == nullptr)
+			{
+				switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
+				{
+					case Unit::UnitType::Healer:
+						currentSelectedProductor = &HealerProductor::Instance();
+						break;
+					case Unit::UnitType::Warrior:
+						currentSelectedProductor = &WarriorProductor::Instance();
+						break;
+					case Unit::UnitType::Magician:
+						currentSelectedProductor = &MagicianProductor::Instance();
+						break;
+					default:
+						currentSelectedProductor = &MeleeEnemyProductor::Instance();
+						break;
+				}
+				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+
+				Vector3d startPosition = Vector3d(pod.position.x, pod.position.y, pod.position.z);
+
+				application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+				contentsLayer->RegisterToEditorObjectVector(currentSelectedProductor->CreateUnit(startPosition)->GetGameObject());
+			}
+		}
+
+		void UnitData::PostApplyAsPlaytimeObject()
+		{
+			/// 
+		/*	UnitProductor* currentSelectedProductor{ nullptr };
+
 			switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
 			{
 				case Unit::UnitType::Healer:
-					productionFactory = &HealerProductor::Instance();
+					currentSelectedProductor = &HealerProductor::Instance();
 					break;
 				case Unit::UnitType::Warrior:
-					productionFactory = &WarriorProductor::Instance();
+					currentSelectedProductor = &WarriorProductor::Instance();
 					break;
 				case Unit::UnitType::Magician:
-					productionFactory = &MagicianProductor::Instance();
+					currentSelectedProductor = &MagicianProductor::Instance();
 					break;
 				default:
+					currentSelectedProductor = &MeleeEnemyProductor::Instance();
 					break;
 			}
-			// 팩토리의 유닛 스펙을 에디터에서 저장한 데이터로 바꿈(유닛 체력, 공격속도 등등...)
-			productionFactory->m_unitSpeed = pod.templateData->pod.m_unitSpeed;
-			// 팩토리로 유닛을 에디터에서 저장된 위치에 생성
-			productionFactory->CreateUnit(position);
-			// 하지만 이 코드도 수정되어야 함. 유닛 데이터가 바로 유닛 생성으로 이어지는게 아니라,
-			// 웨이브에 속하지 않은 유닛은 UnitSpawnPoint로, 웨이브에 속한 유닛은 따로 처리되어야 하기 때문.
+
+			currentSelectedProductor->MappingUnitData(pod.templateData->pod);*/
+			//pod.waveData->playtimeWave->m_productorVector.push_back(currentSelectedProductor);		// 이렇게 밀어넣어준다 해서 실제 wave 순서와 맞아 떨어지지 않음. 임시방편
 		}
 
 		bool UnitData::EnterDataFromGlobalConstant()

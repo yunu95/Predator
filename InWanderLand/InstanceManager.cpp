@@ -3,239 +3,240 @@
 
 namespace application
 {
-    namespace editor
-    {
-        InstanceManager::InstanceManager()
-            : Storable(), Singleton<InstanceManager>(), templateDataManager(TemplateDataManager::GetSingletonInstance())
-            , list(), tdMap(), listBeforeMatching(), mould(nullptr)
-        {
+	namespace editor
+	{
+		InstanceManager::InstanceManager()
+			: Storable(), Singleton<InstanceManager>(), templateDataManager(TemplateDataManager::GetSingletonInstance())
+			, list(), tdMap(), listBeforeMatching(), mould(nullptr)
+		{
 
-        }
+		}
 
-        bool InstanceManager::DeleteInstance(const UUID& uuid)
-        {
-            if (list[uuid].get() == mould)
-            {
-                mould = nullptr;
-            }
+		bool InstanceManager::DeleteInstance(const UUID& uuid)
+		{
+			if (list[uuid].get() == mould)
+			{
+				mould = nullptr;
+			}
 
-            if (list.erase(uuid) == 0)
-            {
-                return false;
-            }
+			if (list.erase(uuid) == 0)
+			{
+				return false;
+			}
 
-            tdMap.erase(uuid);
+			tdMap.erase(uuid);
 
-            return true;
-        }
+			return true;
+		}
 
-        void InstanceManager::Clear()
-        {
-            tdMap.clear();
-            listBeforeMatching.clear();
-            list.clear();
-            mould = nullptr;
-        }
-        void InstanceManager::ApplyInstancesAsPlaytimeObjects()
-        {
-            for (auto& each : list)
-            {
-                if (dynamic_cast<TerrainData*>(each.second.get()))
-                    each.second->ApplyAsPlaytimeObject();
-            }
-            for (auto& each : list)
-            {
-                each.second->ApplyAsPlaytimeObject();
-            }
-            for (auto& each : list)
-            {
-                each.second->PostApplyAsPlaytimeObject();
-            }
-        }
+		void InstanceManager::Clear()
+		{
+			tdMap.clear();
+			listBeforeMatching.clear();
+			list.clear();
+			mould = nullptr;
+		}
+		void InstanceManager::ApplyInstancesAsPlaytimeObjects()
+		{
+			for (auto& each : list)
+			{
+				if (dynamic_cast<TerrainData*>(each.second.get()))
+					each.second->ApplyAsPlaytimeObject();
+			}
+			for (auto& each : list)
+			{
+				if (!dynamic_cast<TerrainData*>(each.second.get()))
+					each.second->ApplyAsPlaytimeObject();
+			}
+			for (auto& each : list)
+			{
+				each.second->PostApplyAsPlaytimeObject();
+			}
+		}
 
-        void InstanceManager::ClearPlaytimeObjects()
-        {
-            
-        }
+		void InstanceManager::ClearPlaytimeObjects()
+		{
 
-        void InstanceManager::EnterDataFromGlobalConstant()
-        {
-            for (auto& each : list)
-            {
-                each.second->EnterDataFromGlobalConstant();
-            }
-        }
- 
-        bool InstanceManager::PreSave()
-        {
-            for (auto& [key, ptr] : list)
-            {
-                ptr->PreSaveCallback();
-            }
-            return true;
-        }
-        bool InstanceManager::PreEncoding(json& data) const
-        {
-            std::string uuidStr;
-            for (auto& [uuid, ptr] : list)
-            {
-                uuidStr = UUID_To_String(uuid);
+		}
 
-                data["InstanceList"][uuidStr]["type"] = templateDataManager.GetDataType(tdMap.find(uuid)->second);
-                if (!ptr->PreEncoding(data["InstanceList"][uuidStr]["0_Pre"]))
-                {
-                    return false;
-                }
-            }
+		void InstanceManager::EnterDataFromGlobalConstant()
+		{
+			for (auto& each : list)
+			{
+				each.second->EnterDataFromGlobalConstant();
+			}
+		}
 
-            return true;
-        }
+		bool InstanceManager::PreSave()
+		{
+			for (auto& [key, ptr] : list)
+			{
+				ptr->PreSaveCallback();
+			}
+			return true;
+		}
+		bool InstanceManager::PreEncoding(json& data) const
+		{
+			std::string uuidStr;
+			for (auto& [uuid, ptr] : list)
+			{
+				uuidStr = UUID_To_String(uuid);
 
-        bool InstanceManager::PostEncoding(json& data) const
-        {
-            std::string uuidStr;
-            for (auto& [uuid, ptr] : list)
-            {
-                uuidStr = UUID_To_String(uuid);
+				data["InstanceList"][uuidStr]["type"] = templateDataManager.GetDataType(tdMap.find(uuid)->second);
+				if (!ptr->PreEncoding(data["InstanceList"][uuidStr]["0_Pre"]))
+				{
+					return false;
+				}
+			}
 
-                auto itr = data["InstanceList"].find(uuidStr);
-                if (itr == data["InstanceList"].end())
-                {
-                    return false;
-                }
+			return true;
+		}
 
-                if (!ptr->PostEncoding(itr.value()["1_Post"]))
-                {
-                    return false;
-                }
-            }
+		bool InstanceManager::PostEncoding(json& data) const
+		{
+			std::string uuidStr;
+			for (auto& [uuid, ptr] : list)
+			{
+				uuidStr = UUID_To_String(uuid);
 
-            return true;
-        }
+				auto itr = data["InstanceList"].find(uuidStr);
+				if (itr == data["InstanceList"].end())
+				{
+					return false;
+				}
 
-        bool InstanceManager::PreDecoding(const json& data)
-        {
-            if (!data.contains("InstanceList"))
-                return true;
-            UUID uuid;
-            for (auto& [uuidStr, instanceData] : data["InstanceList"].items())
-            {
-                uuid = String_To_UUID(uuidStr);
+				if (!ptr->PostEncoding(itr.value()["1_Post"]))
+				{
+					return false;
+				}
+			}
 
-                auto instance = CreateEmptyInstance(instanceData["type"]);
+			return true;
+		}
 
-                assert(instance != nullptr && "incorrect type detected, make sure that datas are stored with proper type value");
-                if (instance == nullptr)
-                {
-                    Clear();
-                    return false;
-                }
+		bool InstanceManager::PreDecoding(const json& data)
+		{
+			if (!data.contains("InstanceList"))
+				return true;
+			UUID uuid;
+			for (auto& [uuidStr, instanceData] : data["InstanceList"].items())
+			{
+				uuid = String_To_UUID(uuidStr);
 
-                // UUID
-                instance->SetUUID(uuid);
+				auto instance = CreateEmptyInstance(instanceData["type"]);
 
-                if (!instance->PreDecoding(instanceData["0_Pre"]))
-                {
-                    Clear();
-                    return false;
-                }
-            }
+				assert(instance != nullptr && "incorrect type detected, make sure that datas are stored with proper type value");
+				if (instance == nullptr)
+				{
+					Clear();
+					return false;
+				}
 
-            return true;
-        }
+				// UUID
+				instance->SetUUID(uuid);
 
-        bool InstanceManager::PostDecoding(const json& data)
-        {
-            if (!data.contains("InstanceList"))
-                return true;
-            UUID uuid;
-            for (auto& [uuidStr, instanceData] : data["InstanceList"].items())
-            {
-                uuid = String_To_UUID(uuidStr);
+				if (!instance->PreDecoding(instanceData["0_Pre"]))
+				{
+					Clear();
+					return false;
+				}
+			}
 
-                for (auto each : listBeforeMatching)
-                {
-                    if (each->id == uuid)
-                    {
-                        if (!each->PostDecoding(instanceData["1_Post"]))
-                        {
-                            Clear();
-                            return false;
-                        }
+			return true;
+		}
 
-                        list[uuid] = std::unique_ptr<IEditableData>(each);
-                        tdMap[uuid] = each->GetTemplateData();
-                        listBeforeMatching.erase(each);
-                        break;
-                    }
-                }
-            }
+		bool InstanceManager::PostDecoding(const json& data)
+		{
+			if (!data.contains("InstanceList"))
+				return true;
+			UUID uuid;
+			for (auto& [uuidStr, instanceData] : data["InstanceList"].items())
+			{
+				uuid = String_To_UUID(uuidStr);
 
-            return true;
-        }
-        bool InstanceManager::PostLoad()
-        {
-            for (auto& [key, ptr] : list)
-            {
-                ptr->PostLoadCallback();
-            }
-            return true;
-        }
+				for (auto each : listBeforeMatching)
+				{
+					if (each->id == uuid)
+					{
+						if (!each->PostDecoding(instanceData["1_Post"]))
+						{
+							Clear();
+							return false;
+						}
 
-        /// private
-        IEditableData* InstanceManager::CreateEmptyInstance(const DataType& type)
-        {
-            IEditableData* instance = nullptr;
+						list[uuid] = std::unique_ptr<IEditableData>(each);
+						tdMap[uuid] = each->GetTemplateData();
+						listBeforeMatching.erase(each);
+						break;
+					}
+				}
+			}
 
-            switch (type)
-            {
-            case DataType::TerrainData:
-            {
-                instance = new TerrainData();
-                break;
-            }
+			return true;
+		}
+		bool InstanceManager::PostLoad()
+		{
+			for (auto& [key, ptr] : list)
+			{
+				ptr->PostLoadCallback();
+			}
+			return true;
+		}
 
-            case DataType::UnitData:
-            {
-                instance = new UnitData();
-                break;
-            }
+		/// private
+		IEditableData* InstanceManager::CreateEmptyInstance(const DataType& type)
+		{
+			IEditableData* instance = nullptr;
 
-            case DataType::OrnamentData:
-            {
-                instance = new OrnamentData();
-                break;
-            }
-            case DataType::RegionData:
-            {
-                instance = new RegionData();
-                break;
-            }
-            case DataType::WaveData:
-            {
-                instance = new WaveData();
-                break;
-            }
-            case DataType::CameraData:
-            {
-                instance = new CameraData();
-                break;
-            }
-            case DataType::LightData:
-            {
-                instance = new LightData();
-                break;
-            }
-            default:
-                break;
-            }
+			switch (type)
+			{
+				case DataType::TerrainData:
+				{
+					instance = new TerrainData();
+					break;
+				}
 
-            if (instance != nullptr)
-            {
-                listBeforeMatching.insert(instance);
-            }
+				case DataType::UnitData:
+				{
+					instance = new UnitData();
+					break;
+				}
 
-            return instance;
-        }
-    }
+				case DataType::OrnamentData:
+				{
+					instance = new OrnamentData();
+					break;
+				}
+				case DataType::RegionData:
+				{
+					instance = new RegionData();
+					break;
+				}
+				case DataType::WaveData:
+				{
+					instance = new WaveData();
+					break;
+				}
+				case DataType::CameraData:
+				{
+					instance = new CameraData();
+					break;
+				}
+				case DataType::LightData:
+				{
+					instance = new LightData();
+					break;
+				}
+				default:
+					break;
+			}
+
+			if (instance != nullptr)
+			{
+				listBeforeMatching.insert(instance);
+			}
+
+			return instance;
+		}
+	}
 }
