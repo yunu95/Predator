@@ -22,10 +22,10 @@ namespace application
 
 		void Ornament_TemplateData::SetDataResourceName(std::string fbxName)
 		{
-			if (pod.fbxName == fbxName)
+			if (pod.staticFBXName == fbxName)
 				return;
 
-			pod.fbxName = fbxName;
+			pod.staticFBXName = fbxName;
 
 			palette::OrnamentBrush::Instance().ChangeBrushResource(this->GetDataKey(), fbxName);
 
@@ -40,7 +40,7 @@ namespace application
 
 		std::string Ornament_TemplateData::GetDataResourceName() const
 		{
-			return pod.fbxName;
+			return pod.staticFBXName;
 		}
 
 		bool Ornament_TemplateData::EnterDataFromGlobalConstant()

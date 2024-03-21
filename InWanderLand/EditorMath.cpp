@@ -12,6 +12,36 @@ namespace application
 			const double DEGTORAD = PI / 180;
 			const double RADTODEG = 180 / PI;
 
+			int GetIntMax()
+			{
+				return INT_MAX;
+			}
+
+			int GetIntMin()
+			{
+				return INT_MIN;
+			}
+
+			float GetFloatMax()
+			{
+				return FLT_MAX;
+			}
+
+			float GetFloatMin()
+			{
+				return FLT_MIN;
+			}
+
+			double GetDoubleMax()
+			{
+				return DBL_MAX;
+			}
+
+			double GetDoubleMin()
+			{
+				return DBL_MIN;
+			}
+
 			yunuGI::Vector3 ConvertVector3(const glm::vec3& vec)
 			{
 				yunuGI::Vector3 finalVec;

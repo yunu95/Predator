@@ -76,6 +76,7 @@ namespace application
 
 			static std::function<void()> testInitializer;
 
+			void LoadAllFBXFile();
 			void InitSceneGizmo();
 			void UI_DrawMenubar();
 

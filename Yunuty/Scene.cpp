@@ -33,10 +33,7 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
         {
             auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
             auto mesh = graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(fbxNode->meshName);
-
-            //mesh->GetBoundingBoxInfo(gameObjectChild->GetTransform()->GetWorldTM(), &meshBoundingMin, &meshBoundingMax);
             //math::TO_XMMATRIX... gameObjectChild->GetTransform()->GetLocalTM();
-
             if (boundingMin && boundingMax)
             {
                 yunuGI::Vector3 meshBoundingMin, meshBoundingMax;

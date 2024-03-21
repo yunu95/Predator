@@ -18,6 +18,13 @@ namespace application
 	{
 		namespace math
 		{
+			int GetIntMax();
+			int GetIntMin();
+			float GetFloatMax();
+			float GetFloatMin();
+			double GetDoubleMax();
+			double GetDoubleMin();
+
 			yunuGI::Vector3 ConvertVector3(const glm::vec3& vec);
 			yunuGI::Vector4 ConvertVector4(const glm::vec4& vec);
 			yunuGI::Matrix4x4 ConvertWTM(const glm::mat4& mat);

@@ -164,6 +164,20 @@ namespace application
 
                     (*selections.begin())->OnRelocate(position);
                     (*selections.begin())->OnRerotate(Quaternion(rotation));
+
+                    if (scale.x == 0)
+                    {
+                        scale.x = 0.000001;
+                    }
+                    if (scale.y == 0)
+                    {
+                        scale.y = 0.000001;
+                    }
+                    if (scale.z == 0)
+                    {
+                        scale.z = 0.000001;
+                    }
+
                     (*selections.begin())->OnRescale(scale);
                     (*selections.begin())->ApplyAsPaletteInstance();
                 }
@@ -469,6 +483,20 @@ namespace application
 
                         each->OnRelocate(finalPosition);
                         each->OnRerotate(finalRotation);
+
+                        if (finalScale.x == 0)
+                        {
+                            finalScale.x = 0.000001;
+                        }
+                        if (finalScale.y == 0)
+                        {
+                            finalScale.y = 0.000001;
+                        }
+                        if (finalScale.z == 0)
+                        {
+                            finalScale.z = 0.000001;
+                        }
+
                         each->OnRescale(finalScale);
                         each->ApplyAsPaletteInstance();
                     }

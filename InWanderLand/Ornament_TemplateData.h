@@ -19,7 +19,7 @@ namespace application
 		
 		struct POD_Ornament_TemplateData
 		{
-			std::string fbxName = std::string();
+			std::string staticFBXName = std::string();
 
 			/// GlobalConstant
 

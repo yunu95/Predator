@@ -64,7 +64,6 @@ namespace application
             palette::CameraPalette& cp = palette::CameraPalette::SingleInstance();
             palette::LightPalette& lp = palette::LightPalette::SingleInstance();
 
-            bool createUnitPopup = false;
             int unitCurrentButton = -1;
             int ornamentCurrentButton = -1;
             int lightCurrentButton = -1;
