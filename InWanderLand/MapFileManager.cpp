@@ -179,10 +179,7 @@ namespace application
 
 #ifdef EDITOR
                 Application::DispatchEvent<LoadEvent>();
-
-                // 기본 Ornament 추가
-                Application::GetInstance().ReadyOrnament();
-                palette::PaletteBrushManager::GetSingletonInstance().MakeBrush();
+                Application::GetInstance().OnDataLoad();
 #endif
                 currentMapPath = path;
                 return true;
@@ -252,11 +249,16 @@ namespace application
 
         bool MapFileManager::LoadDefaultMap()
         {
-            bool returnVal = LoadMapFile("Default.pmap");
-            Application::GetInstance().ReadyOrnament();
-            palette::PaletteBrushManager::GetSingletonInstance().MakeBrush();
-            currentMapPath.clear();
-            
+            bool returnVal = false;
+            if (currentMapPath.empty())
+            {
+                returnVal = LoadMapFile("Default.pmap");
+                if (returnVal == false)
+                {
+                    Application::GetInstance().OnDataLoad();
+                }
+                currentMapPath.clear();
+            }            
             return returnVal;
         }
 

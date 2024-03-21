@@ -379,17 +379,14 @@ namespace application
 		return hWND;
 	}
 
-	void Application::ReadyOrnament()
+	void Application::OnDataLoad()
 	{
-		auto& templateDataManager = editor::TemplateDataManager::GetSingletonInstance();
-		for (auto& each : erm.GetStaticFBXList())
-		{
-			auto td = templateDataManager.CreateTemplateData<editor::Ornament_TemplateData>(each);
-			if (td)
-			{
-				td->SetDataResourceName(each);
-			}
-		}
+#ifdef EDITOR
+		auto el = static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer]);
+		el->ReadyOrnament();
+		el->CreateDirectionalLight();
+		editor::palette::PaletteBrushManager::GetSingletonInstance().MakeBrush();
+#endif
 	}
 
 	void Application::ImGuiUpdate()
@@ -609,24 +606,6 @@ namespace application
 		if (scene == nullptr)
 		{
 			yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-			auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-			directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-			directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,30} });
-		}
-		else
-		{
-			for (auto each : scene->GetChildren())
-			{
-				auto ptr = each->GetComponent<yunutyEngine::graphics::DirectionalLight>();
-				if (ptr)
-				{
-					return;
-				}
-			}
-
-			auto directionalLight = scene->AddGameObject();
-			directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-			directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,30} });
 		}
 #endif
 	}

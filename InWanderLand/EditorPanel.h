@@ -19,10 +19,16 @@ namespace application
 			virtual ~Panel() = default;
 
 			virtual void Initialize() = 0;
+			virtual void LateInitialize() {};
 			virtual void Update(float ts) = 0;
 			virtual void GUIProgress() = 0;
 			virtual void Finalize() = 0;
 			virtual void OnEvent(EditorEvents& event) {};
+
+			virtual void OnPlayContents() {};
+			virtual void OnPauseContents() {};
+			virtual void OnResumeContents() {};
+			virtual void OnStopContents() {};
 
 			inline bool IsPanelMouseOver() { return isMouseOver; }
 			inline bool IsPanelFocused() { return isFocused; }

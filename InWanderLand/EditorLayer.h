@@ -47,6 +47,14 @@ namespace application
 			// GameEngine 과 관련된 내용들을 초기화하는 함수입니다.
 			void LateInitialize();
 
+			// Ornament 의 경우, 미리 준비된 FBX 를 사용하는 방식을 사용합니다.
+			// 본 함수는 미리 준비된 FBX 로 TemplateData 를 생성하는 함수입니다.
+			void ReadyOrnament();
+
+			// Content 레이어에서 Directional Light 가 추가되지 않았을 경우,
+			// 내부적으로 DirectionalLight 를 생성하는 함수입니다.
+			void CreateDirectionalLight();
+
 		private:
 			enum class Panel_List
 			{

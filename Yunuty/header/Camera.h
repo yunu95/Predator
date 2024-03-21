@@ -24,10 +24,12 @@ namespace yunutyEngine::graphics
     protected:
         //virtual void Render() = 0;
         virtual void Update() override;
+        virtual void OnTransformUpdate() override;
     public:
         Camera();
         void SetCameraMain();
         yunuGI::ICamera& GetGI();
+
         /// <summary>
         /// 화면의 중심이 {0,0} 상단이 0.5, 하단이 -0.5인 좌단이 -0.5, 우단이 0.5인 스크린 좌표계에서 좌표를 받아 이를 월드 좌표계로 변환해 반환합니다.
         /// 스크린 스페이스의 좌표는 카메라의 near plane으로부터 distance만큼 떨어져 있는 평면에 사영됩니다. 

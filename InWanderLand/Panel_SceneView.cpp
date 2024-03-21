@@ -259,7 +259,6 @@ namespace application
         void SceneViewPanel::ImGui_DrawGizmo()
         {
             // Gizmo Option Button
-
             {
                 imgui::SmartStyleVar framePadding(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
                 imgui::SmartStyleVar itemSpacing(ImGuiStyleVar_ItemSpacing, ImVec2(5, 5));
