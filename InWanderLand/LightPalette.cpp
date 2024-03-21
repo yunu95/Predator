@@ -30,10 +30,11 @@ namespace application::editor::palette
 
     void LightPalette::Initialize()
     {
-        auto dl = TemplateDataManager::GetSingletonInstance().CreateTemplateData<Light_TemplateData>("Directional_Light");
-        dl->pod.type = LightType::Directional;
         auto pl = TemplateDataManager::GetSingletonInstance().CreateTemplateData<Light_TemplateData>("Point_Light");
-        pl->pod.type = LightType::Point;
+        if (pl)
+        {
+            pl->pod.type = LightType::Point;
+        }
     }
 
     void LightPalette::Reset()
