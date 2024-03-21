@@ -138,7 +138,6 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
     ambient = float4(0.f, 0.f, 0.f, 0.f);
     specular = float4(0.f, 0.f, 0.f, 0.f);
     
-    
     // 뷰 디렉션
     float3 Lo = normalize(pos);
     Lo = -Lo;
@@ -178,6 +177,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         directionalLighting += (diffuseBRDF + specularBRDF) * (Lradiance * cosLi);
         
         float3 ambientLighting = float3(0, 0, 0);
+        // 나중에 IBL쓰면 아래 코드 사용 만일 안쓴다면 기본 라이트의 엠비언트사용하게 해야 함
         {
             float3 irradiance = IrradianceMap.Sample(sam, normal).rgb;
             float3 F = fresnelSchlick(F0, cosLo);
@@ -210,20 +210,23 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         }
         ///
         
-        float expo = 0.2f;
-        directionalLighting *= expo;
+        //float expo = 0.5f;
+        directionalLighting *= DiffuseExposure;
         float3 x = max(0, directionalLighting.xyz - 0.004);
         directionalLighting.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
         
         diffuse.xyz += directionalLighting.xyz * lights[lightIndex].color.diffuse.xyz;
         diffuse.w = 1.f;
         
+        ambientLighting *= AmbientExposure;
+        ambientLighting = ambientLighting / (1 + ambientLighting);
+        ambientLighting = pow(ambientLighting, 1 / 2.2);
+
+        //float3 y = max(0, ambientLighting.xyz - 0.004);
+        //ambientLighting.xyz = (y * (6.2 * y + 0.5)) / (y * (6.2 * y + 1.7) + 0.06);
         
-        ambientLighting *= 0.4;
-        float3 y = max(0, ambientLighting.xyz - 0.004);
-        ambientLighting.xyz = (y * (6.2 * y + 0.5)) / (y * (6.2 * y + 1.7) + 0.06);
-        
-        ambient.xyz = ambientLighting + lights[lightIndex].color.ambient.xyz;
+        //ambient.xyz = ambientLighting + lights[lightIndex].color.ambient.xyz;
+        ambient.xyz = ambientLighting;
 
         //diffuse = float4(pow(float3(diffuse.xyz), 1.0 / 2.2), 1.0);
         

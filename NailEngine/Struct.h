@@ -10,7 +10,7 @@ using namespace DirectX::PackedVector;
 #define SM_SIZE 2048
 #define PL_SM_SIZE 512
 
-#define MAX_TEXTURE 10
+#define MAX_TEXTURE 18
 #define MAX_INT 10
 #define MAX_BONE_COUNT 250
 #define MAX_FRAME_COUNT 500
@@ -68,6 +68,7 @@ enum class CB_TYPE
 	FOG,
 	POINTLIGHT_VPMATRIX,
 	POINTLIGHT_INDEX,
+	EXPOSURE,
 };
 
 struct MatrixBuffer
@@ -181,6 +182,13 @@ struct SkinnedRenderInfo
 	std::wstring modelName;
 	std::shared_ptr<NailAnimator> animator;
 	TransitionDesc transitionDesc;
+};
+
+struct ExposureBuffer
+{
+	float diffuseExposure;
+	float ambientExposure;
+	DirectX::SimpleMath::Vector2 padding;
 };
 
 // Deferred Only

@@ -648,8 +648,8 @@ void ImGui::TableBeginApplyRequests(ImGuiTable* table)
         if (table->ReorderColumn != -1 && table->ReorderColumnDir != 0)
         {
             // We need to handle reordering across hidden columns.
-            // In the configuration below, moving C to the right of Alphabet_E will lead to:
-            //    ... C [D] Alphabet_E  --->  ... [D] Alphabet_E  C   (Column name/index)
+            // In the configuration below, moving C to the right of E will lead to:
+            //    ... C [D] E  --->  ... [D] E  C   (Column name/index)
             //    ... 2  3  4        ...  2  3  4   (Display order)
             const int reorder_dir = table->ReorderColumnDir;
             IM_ASSERT(reorder_dir == -1 || reorder_dir == +1);

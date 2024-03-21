@@ -163,6 +163,65 @@ void GraphicsTest()
 	//	renderer->GetGI().SetMesh(mesh);
 	//}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
+	//}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 10,0,0 });
+	//}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 10,0,0 });
+	//}
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Cuptower");
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 30,0,0 });
+	}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stump");
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 50,0,0 });
+	//}
+
+	////////////{
+	////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+	////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+	////////////}
+	////////////{
+	////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CastleWall_Door");
+	////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 50,0,0 });
+	////////////	obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{0,180,0} });
+	////////////}
+	////////////{
+	////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Cuptower");
+	////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 70,0,0 });
+	////////////}
+	////////////{
+	////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Fork");
+	////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 90,0,0 });
+	////////////}
+	////////////{
+	////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Hat01");
+	////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 110,0,0 });
+	////////////}
+	////////////{
+	////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Hat02");
+	////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 130,0,0 });
+	////////////}
+	////////////{
+	////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stump");
+	////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 150,0,0 });
+	////////////}
+	////////////{
+	////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Mushroom01");
+	////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 170,0,0 });
+	////////////}
+	////////////{
+	////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Mushroom02");
+	////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 190,0,0 });
+	////////////}
+
 	//{
 	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 	//	obj->GetTransform()->SetLocalPosition({ Vector3d{0,0,-5} });
@@ -268,7 +327,29 @@ void application::contents::ContentsLayer::Initialize()
 
 	resourceManager->LoadFile("LeavesVS.cso");
 	resourceManager->LoadFile("LeavesPS.cso");
+	resourceManager->LoadFile("Stage_1_FloorPS.cso");
 
+	resourceManager->LoadFile("Texture/VertexColor/T_Dirt_ARM.png");
+	resourceManager->LoadFile("Texture/VertexColor/T_Dirt_BaseColor.png");
+	resourceManager->LoadFile("Texture/VertexColor/T_Dirt_Normal.png");
+
+	resourceManager->LoadFile("Texture/VertexColor/T_Grass_ARM.png");
+	resourceManager->LoadFile("Texture/VertexColor/T_Grass_BaseColor.png");
+	resourceManager->LoadFile("Texture/VertexColor/T_Grass_Normal.png");
+
+	resourceManager->LoadFile("Texture/VertexColor/T_GrassBlend_ARM.png");
+	resourceManager->LoadFile("Texture/VertexColor/T_GrassBlend_BaseColor.png");
+	resourceManager->LoadFile("Texture/VertexColor/T_GrassBlend_Normal.png");
+
+	resourceManager->LoadFile("Texture/VertexColor/T_Tile_ARM.png");
+	resourceManager->LoadFile("Texture/VertexColor/T_Tile_BaseColor.png");
+	resourceManager->LoadFile("Texture/VertexColor/T_Tile_Normal.png");
+
+	resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_ARM.png");
+	resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_BaseColor.png");
+	resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_Normal.png");
+
+	resourceManager->LoadFile("FBX/SM_VertexColor");
 	resourceManager->LoadFile("FBX/SKM_Monster1");
 	resourceManager->LoadFile("FBX/SKM_Monster2");
 	resourceManager->LoadFile("FBX/SKM_Robin");
@@ -279,7 +360,7 @@ void application::contents::ContentsLayer::Initialize()
 	resourceManager->LoadFile("FBX/SM_CastleWall_Door");
 	resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
 	resourceManager->LoadFile("FBX/SM_Chair");
-	resourceManager->LoadFile("FBX/SM_Cuptower");
+	resourceManager->LoadFile("FBX/SM_CupTower");
 	resourceManager->LoadFile("FBX/SM_Fork");
 	resourceManager->LoadFile("FBX/SM_GuideBook");
 	resourceManager->LoadFile("FBX/SM_Hat01");
@@ -306,10 +387,10 @@ void application::contents::ContentsLayer::Initialize()
 		//yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 		yunutyEngine::Collider2D::SetIsOnXYPlane(false);
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		//directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
+		directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
 		directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
 		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-		auto color = yunuGI::Color{ 0.5,0.5,0.5,1.f };
+		auto color = yunuGI::Color{ 1,1,1,1.f };
 		light->GetGI().SetLightDiffuseColor(color);
 
 		editor::MapFileManager::GetSingletonInstance().LoadStaticOrnaments("TestOrnaments.punreal");

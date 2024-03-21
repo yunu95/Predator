@@ -609,6 +609,14 @@ void ResourceManager::SaveFBXChildData(const yunuGI::FBXData* data, nlohmann::js
 		materialJson["temp1Map"] = std::string{ material.temp1Map.begin(),material.temp1Map.end() };
 		materialJson["temp2Map"] = std::string{ material.temp2Map.begin(),material.temp2Map.end() };
 		materialJson["temp3Map"] = std::string{ material.temp3Map.begin(), material.temp3Map.end() };
+		materialJson["temp4Map"] = std::string{ material.temp4Map.begin(), material.temp4Map.end() };
+		materialJson["temp5Map"] = std::string{ material.temp5Map.begin(), material.temp5Map.end() };
+		materialJson["temp6Map"] = std::string{ material.temp6Map.begin(), material.temp6Map.end() };
+		materialJson["temp7Map"] = std::string{ material.temp7Map.begin(), material.temp7Map.end() };
+		materialJson["temp8Map"] = std::string{ material.temp8Map.begin(), material.temp8Map.end() };
+		materialJson["temp9Map"] = std::string{ material.temp9Map.begin(), material.temp9Map.end() };
+		materialJson["temp10Map"] = std::string{ material.temp10Map.begin(), material.temp10Map.end() };
+		materialJson["temp11Map"] = std::string{ material.temp11Map.begin(), material.temp11Map.end() };
 		materialJson["vs"] = std::string{ material.vs.begin(),material.vs.end() };
 		materialJson["ps"] = std::string{ material.ps.begin(), material.ps.end() };
 
@@ -750,6 +758,14 @@ void ResourceManager::LoadFBXData(const nlohmann::json& jsonData, yunuGI::FBXDat
 			material.temp1Map = String_To_Wstring(materialJson["temp1Map"]);
 			material.temp2Map = String_To_Wstring(materialJson["temp2Map"]);
 			material.temp3Map = String_To_Wstring(materialJson["temp3Map"]);
+			material.temp4Map = String_To_Wstring(materialJson["temp4Map"]);
+			material.temp5Map = String_To_Wstring(materialJson["temp5Map"]);
+			material.temp6Map = String_To_Wstring(materialJson["temp6Map"]);
+			material.temp7Map = String_To_Wstring(materialJson["temp7Map"]);
+			material.temp8Map = String_To_Wstring(materialJson["temp8Map"]);
+			material.temp9Map = String_To_Wstring(materialJson["temp9Map"]);
+			material.temp10Map = String_To_Wstring(materialJson["temp10Map"]);
+			material.temp11Map = String_To_Wstring(materialJson["temp11Map"]);
 			material.vs = String_To_Wstring(materialJson["vs"]);
 			material.ps = String_To_Wstring(materialJson["ps"]);
 
@@ -1252,6 +1268,46 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 				{
 					this->CreateTexture(fbxData->materialVec[i].temp3Map);
 					material->SetTexture(yunuGI::Texture_Type::Temp3, GetTexture(fbxData->materialVec[i].temp3Map).get());
+				}
+				if (!fbxData->materialVec[i].temp4Map.empty())
+				{
+					this->CreateTexture(fbxData->materialVec[i].temp4Map);
+					material->SetTexture(yunuGI::Texture_Type::Temp4, GetTexture(fbxData->materialVec[i].temp4Map).get());
+				}
+				if (!fbxData->materialVec[i].temp5Map.empty())
+				{
+					this->CreateTexture(fbxData->materialVec[i].temp5Map);
+					material->SetTexture(yunuGI::Texture_Type::Temp5, GetTexture(fbxData->materialVec[i].temp5Map).get());
+				}
+				if (!fbxData->materialVec[i].temp6Map.empty())
+				{
+					this->CreateTexture(fbxData->materialVec[i].temp6Map);
+					material->SetTexture(yunuGI::Texture_Type::Temp6, GetTexture(fbxData->materialVec[i].temp6Map).get());
+				}
+				if (!fbxData->materialVec[i].temp7Map.empty())
+				{
+					this->CreateTexture(fbxData->materialVec[i].temp7Map);
+					material->SetTexture(yunuGI::Texture_Type::Temp7, GetTexture(fbxData->materialVec[i].temp7Map).get());
+				}
+				if (!fbxData->materialVec[i].temp8Map.empty())
+				{
+					this->CreateTexture(fbxData->materialVec[i].temp8Map);
+					material->SetTexture(yunuGI::Texture_Type::Temp8, GetTexture(fbxData->materialVec[i].temp8Map).get());
+				}
+				if (!fbxData->materialVec[i].temp9Map.empty())
+				{
+					this->CreateTexture(fbxData->materialVec[i].temp9Map);
+					material->SetTexture(yunuGI::Texture_Type::Temp9, GetTexture(fbxData->materialVec[i].temp9Map).get());
+				}
+				if (!fbxData->materialVec[i].temp10Map.empty())
+				{
+					this->CreateTexture(fbxData->materialVec[i].temp10Map);
+					material->SetTexture(yunuGI::Texture_Type::Temp10, GetTexture(fbxData->materialVec[i].temp10Map).get());
+				}
+				if (!fbxData->materialVec[i].temp11Map.empty())
+				{
+					this->CreateTexture(fbxData->materialVec[i].temp11Map);
+					material->SetTexture(yunuGI::Texture_Type::Temp11, GetTexture(fbxData->materialVec[i].temp11Map).get());
 				}
 
 				if (!fbxData->materialVec[i].vs.empty())

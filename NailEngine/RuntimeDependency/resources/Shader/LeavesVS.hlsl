@@ -26,7 +26,7 @@ struct VertexOut
 
 VertexOut main(VertexIn input)
 {
-    VertexOut output = (VertexOut)0;
+    VertexOut output = (VertexOut) 0;
     
     row_major matrix WV = mul(input.world, VTM);
     row_major matrix VP = mul(VTM, PTM);

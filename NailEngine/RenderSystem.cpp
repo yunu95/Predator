@@ -192,7 +192,7 @@ void RenderSystem::Render()
 	RenderUI();
 
 	// 디퍼드 정보 출력
-	///DrawDeferredInfo();
+	DrawDeferredInfo();
 
 	// 디퍼드용 SRV UnBind
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
@@ -446,8 +446,8 @@ void RenderSystem::RenderLight()
 		auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
 		mesh->Render();
 
-		// 만들어진 Shadow Map Binb
-		ResourceManager::Instance.Get().GetTexture(L"PointLightShadowDepth")->UnBind(15);
+		// 만들어진 Shadow Map Bind
+		ResourceManager::Instance.Get().GetTexture(L"PointLightShadowDepth")->UnBind(23);
 
 		//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->UnBind();
 	}
