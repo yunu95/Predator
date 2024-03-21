@@ -1,5 +1,373 @@
 [
     {
+        "FBXName : ": "Sphere",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "aabb": {
+                    "maxPoint": {
+                        "x": 0.5000001192092896,
+                        "y": 0.5000000596046448,
+                        "z": 0.5000001788139343
+                    },
+                    "minPoint": {
+                        "x": -0.4999998211860657,
+                        "y": -0.5000000596046448,
+                        "z": -0.49999988079071045
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "DefaultMaterial",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "Sphere",
+                "nodeName": "Sphere",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "FBXName : ": "Cube",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "aabb": {
+                    "maxPoint": {
+                        "x": 0.4999999701976776,
+                        "y": 0.4999999701976776,
+                        "z": 0.4999999701976776
+                    },
+                    "minPoint": {
+                        "x": -0.4999999701976776,
+                        "y": -0.4999999701976776,
+                        "z": -0.4999999701976776
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "Material",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "Cube",
+                "nodeName": "Cube",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "FBXName : ": "Capsule",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "aabb": {
+                    "maxPoint": {
+                        "x": 0.5000000596046448,
+                        "y": 1.0000001192092896,
+                        "z": 0.5000003576278687
+                    },
+                    "minPoint": {
+                        "x": -0.49999985098838806,
+                        "y": -1.0000001192092896,
+                        "z": -0.5000000596046448
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "DefaultMaterial",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "Capsule",
+                "nodeName": "Capsule",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "FBXName : ": "Cylinder",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "aabb": {
+                    "maxPoint": {
+                        "x": 0.5,
+                        "y": 0.5000001788139343,
+                        "z": 0.5000001788139343
+                    },
+                    "minPoint": {
+                        "x": -0.5,
+                        "y": -0.5000001788139343,
+                        "z": -0.5000001788139343
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "DefaultMaterial",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "Cylinder",
+                "nodeName": "Cylinder",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
         "FBXName : ": "Monster2",
         "aabb": {
             "maxPoint": {
@@ -930,10 +1298,10 @@
                                                     "z": -0.05058218538761139
                                                 },
                                                 "quat": {
-                                                    "w": 0.5558269619941711,
-                                                    "x": 0.43854767084121704,
-                                                    "y": 0.47893083095550537,
-                                                    "z": -0.5189965963363647
+                                                    "w": 0.5558270215988159,
+                                                    "x": 0.43854770064353943,
+                                                    "y": 0.47893086075782776,
+                                                    "z": -0.5189966559410095
                                                 },
                                                 "scale": {
                                                     "x": 1.0,
