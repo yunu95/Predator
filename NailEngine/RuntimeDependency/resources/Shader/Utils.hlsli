@@ -154,7 +154,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
     if (lights[lightIndex].lightType == 0)
     {
         float3 Li = normalize(mul(float4(-lights[lightIndex].direction.xyz, 0.f), VTM).xyz);
-        float3 Lradiance = float3(1,1,1);
+        float3 Lradiance = float3(1, 1, 1);
         
         // 하프 벡터
         float3 Lh = normalize(Li + Lo);
@@ -178,17 +178,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         
         float3 ambientLighting = float3(0, 0, 0);
         // 나중에 IBL쓰면 아래 코드 사용 만일 안쓴다면 기본 라이트의 엠비언트사용하게 해야 함
-        {
-            float3 irradiance = IrradianceMap.Sample(sam, normal).rgb;
-            float3 F = fresnelSchlick(F0, cosLo);
-            float3 kd = lerp(1.0 - F, 0.0, metalness);
-            float3 diffuseIBL = kd * albedo * irradiance;
-            uint specularTextureLevels = querySpecularTextureLevels(); //  텍스쳐의 최대 LOD 개수를 구한다.	
-            float3 specularIrradiance = PrefilteredMap.SampleLevel(sam, Lr, roughness * specularTextureLevels).rgb;
-            float2 specularBRDF = BrdfMap.Sample(spBRDF_Sampler, float2(cosLo, roughness)).rg;
-            float3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;
-            ambientLighting = (diffuseIBL + specularIBL) * ao;
-        }
+       
        
         ///
         float shadow = 1.f;
@@ -218,15 +208,36 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         diffuse.xyz += directionalLighting.xyz * lights[lightIndex].color.diffuse.xyz;
         diffuse.w = 1.f;
         
-        ambientLighting *= AmbientExposure;
-        ambientLighting = ambientLighting / (1 + ambientLighting);
-        ambientLighting = pow(ambientLighting, 1 / 2.2);
+        
+        if (useIBL == 1)
+        {
+            float3 irradiance = IrradianceMap.Sample(sam, normal).rgb;
+            float3 F = fresnelSchlick(F0, cosLo);
+            float3 kd = lerp(1.0 - F, 0.0, metalness);
+            float3 diffuseIBL = kd * albedo * irradiance;
+            uint specularTextureLevels = querySpecularTextureLevels(); //  텍스쳐의 최대 LOD 개수를 구한다.	
+            float3 specularIrradiance = PrefilteredMap.SampleLevel(sam, Lr, roughness * specularTextureLevels).rgb;
+            float2 specularBRDF = BrdfMap.Sample(spBRDF_Sampler, float2(cosLo, roughness)).rg;
+            float3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;
+            ambientLighting = (diffuseIBL + specularIBL) * ao;
+            
+            ambientLighting *= AmbientExposure;
+            ambientLighting = ambientLighting / (1 + ambientLighting);
+            ambientLighting = pow(ambientLighting, 1 / 2.2);
+            
+            ambient.xyz = ambientLighting;
+        }
+        else
+        {
+            ambient.xyz = lights[lightIndex].color.ambient;
+        }
+       
 
         //float3 y = max(0, ambientLighting.xyz - 0.004);
         //ambientLighting.xyz = (y * (6.2 * y + 0.5)) / (y * (6.2 * y + 1.7) + 0.06);
         
         //ambient.xyz = ambientLighting + lights[lightIndex].color.ambient.xyz;
-        ambient.xyz = ambientLighting;
+       
 
         //diffuse = float4(pow(float3(diffuse.xyz), 1.0 / 2.2), 1.0);
         

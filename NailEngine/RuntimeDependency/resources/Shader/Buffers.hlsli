@@ -143,6 +143,14 @@ cbuffer ExposureBuffer : register(b9)
     float2 padding4;
 }
 
+cbuffer ExposureBuffer : register(b10)
+{
+    float windowWidth;
+    float windowHeight;
+    float deltaTime;
+    int useIBL;
+}
+
 Texture2D AlbedoMap : register(t0);
 Texture2D NormalMap : register(t1);
 Texture2D ARMMap : register(t2);

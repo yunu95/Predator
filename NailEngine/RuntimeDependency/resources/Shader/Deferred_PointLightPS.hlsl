@@ -26,7 +26,7 @@ PS_OUT main(PixelIn input)
     PS_OUT output = (PS_OUT) 0;
     
      // input.pos = SV_Position = Screen 좌표
-    float2 uv = float2(input.pos.x / 1920, input.pos.y / 1080);
+    float2 uv = float2(input.pos.x / windowWidth, input.pos.y / windowHeight);
     float3 viewPos = Temp0Map.Sample(sam, uv).xyz;
     if (viewPos.z <= 0.f)
     {

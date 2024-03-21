@@ -108,9 +108,19 @@ void NailEngine::SetResolution(unsigned int width, unsigned int height)
 	this->windowInfo.height = height;
 }
 
+void NailEngine::SetUseIBL(bool useIBL)
+{
+	this->useIBL = useIBL;
+}
+
 std::shared_ptr<ConstantBuffer>& NailEngine::GetConstantBuffer(unsigned int index)
 {
 	return this->constantBuffers[index];
+}
+
+bool NailEngine::GetUseIBL()
+{
+	return this->useIBL;
 }
 
 void NailEngine::CreateConstantBuffer()
@@ -172,6 +182,12 @@ void NailEngine::CreateConstantBuffer()
 	{
 		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
 		_constantBuffer->CraeteConstantBuffer(sizeof(ExposureBuffer));
+		this->constantBuffers.emplace_back(_constantBuffer);
+	}
+
+	{
+		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
+		_constantBuffer->CraeteConstantBuffer(sizeof(UtilBuffer));
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
 }

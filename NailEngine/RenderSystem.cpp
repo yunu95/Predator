@@ -159,8 +159,11 @@ void RenderSystem::Render()
 {
 	//ClearRenderInfo();
 	//SortObject();
-
-
+	UtilBuffer utilBuffer;
+	utilBuffer.windowWidth = NailEngine::Instance.Get().GetWindowInfo().width;
+	utilBuffer.windowHeight = NailEngine::Instance.Get().GetWindowInfo().height;
+	utilBuffer.useIBL = NailEngine::Instance.Get().GetUseIBL();
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::UTIL))->PushGraphicsData(&utilBuffer, sizeof(UtilBuffer), static_cast<int>(CB_TYPE::UTIL));
 
 	PushCameraData();
 	PushLightData();

@@ -69,6 +69,7 @@ enum class CB_TYPE
 	POINTLIGHT_VPMATRIX,
 	POINTLIGHT_INDEX,
 	EXPOSURE,
+	UTIL,
 };
 
 struct MatrixBuffer
@@ -189,6 +190,14 @@ struct ExposureBuffer
 	float diffuseExposure;
 	float ambientExposure;
 	DirectX::SimpleMath::Vector2 padding;
+};
+
+struct UtilBuffer
+{
+	float windowWidth;
+	float windowHeight;
+	float deltaTime;
+	int useIBL;
 };
 
 // Deferred Only
