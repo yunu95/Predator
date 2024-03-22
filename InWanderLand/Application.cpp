@@ -18,6 +18,7 @@
 #include "EditorCamera.h"
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
+#include "PaletteBrushManager.h"
 
 #include <d3d11.h>
 #include <dxgi1_4.h>
@@ -315,6 +316,7 @@ namespace application
 		editor::TemplateDataManager::GetSingletonInstance().Clear();
 	}
 
+
 	void Application::PlayContents()
 	{
 		auto el = static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer]);
@@ -366,7 +368,6 @@ namespace application
 		return appSpecification;
 	}
 
-
 	void* Application::GetSceneSRV()
 	{
 		static auto resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
@@ -376,6 +377,16 @@ namespace application
 	void* Application::GetWindowHandle()
 	{
 		return hWND;
+	}
+
+	void Application::OnDataLoad()
+	{
+#ifdef EDITOR
+		auto el = static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer]);
+		el->ReadyOrnament();
+		el->CreateDirectionalLight();
+		editor::palette::PaletteBrushManager::GetSingletonInstance().MakeBrush();
+#endif
 	}
 
 	void Application::ImGuiUpdate()
@@ -595,24 +606,6 @@ namespace application
 		if (scene == nullptr)
 		{
 			yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-			auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-			directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-			directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,30} });
-		}
-		else
-		{
-			for (auto each : scene->GetChildren())
-			{
-				auto ptr = each->GetComponent<yunutyEngine::graphics::DirectionalLight>();
-				if (ptr)
-				{
-					return;
-				}
-			}
-
-			auto directionalLight = scene->AddGameObject();
-			directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-			directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,30} });
 		}
 #endif
 	}

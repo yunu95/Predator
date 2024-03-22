@@ -44,14 +44,13 @@ void WarriorProductor::SetUnitData()
 
 void WarriorProductor::SingletonInitializer()
 {
-	graphics::Renderer::SingleInstance().GetResourceManager()->LoadFile("FBX/Boss");
 	SetUnitData();
 }
 
 Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
-	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
@@ -59,32 +58,32 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	auto& animList = rsrcManager->GetAnimationList();
 	for (auto each : animList)
 	{
-		if (each->GetName() == L"root|000.Idle")
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
 		{
 			m_baseUnitAnimations.m_idleAnimation = each;
 			m_baseUnitAnimations.m_idleAnimation->SetLoop(true);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_idleAnimation);
 			animator->GetGI().Play(m_baseUnitAnimations.m_idleAnimation);
 		}
-		else if (each->GetName() == L"root|001-2.Walk")
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
 		{
 			m_baseUnitAnimations.m_walkAnimation = each;
 			m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_walkAnimation);
 		}
-		else if (each->GetName() == L"root|003-1.NormalAttack_L")
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
 		{
 			m_baseUnitAnimations.m_attackAnimation = each;
 			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_attackAnimation);
 		}
-		else if (each->GetName() == L"root|011-1.Groggy")
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
 		{
 			m_baseUnitAnimations.m_paralysisAnimation = each;
 			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
 		}
-		else if (each->GetName() == L"root|012.Death")
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_APose")
 		{
 			m_baseUnitAnimations.m_deathAnimation = each;
 			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
@@ -97,27 +96,33 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
 
 #pragma region Auto Attack Setting (Including Passive Logic)
-	auto unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	unitAttackColliderObject->setName("WarriorAutoAttackCollider");
-	auto m_physicsCollider = unitAttackColliderObject->AddComponent<physics::BoxCollider>();
-	m_physicsCollider->SetHalfExtent({ 1.0f * lengthUnit, 1.0f * lengthUnit, 3.0f * lengthUnit });
-	unitAttackColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-	//unitAttackColliderObject->SetParent(m_unitGameObject);
-	unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, 3.0f * lengthUnit });
+	//auto unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//unitAttackColliderObject->setName("WarriorAutoAttackCollider");
+	//auto m_physicsCollider = unitAttackColliderObject->AddComponent<physics::BoxCollider>();
+	//m_physicsCollider->SetHalfExtent({ 1.0f * lengthUnit / 2, 1.0f * lengthUnit / 2, 3.0f * lengthUnit / 2 });
+	//unitAttackColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+	////unitAttackColliderObject->SetParent(m_unitGameObject);
+	//unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, 3.0f * lengthUnit });
 
 	// warrior Passive Bleeding System
-	auto warriorBleedingSystem = unitAttackColliderObject->AddComponent<BleedingComponent>();
-	warriorBleedingSystem->SetSkillOwnerUnit(m_unitComponent);
+	//auto warriorBleedingSystem = unitAttackColliderObject->AddComponent<BleedingComponent>();
+	//warriorBleedingSystem->SetSkillOwnerUnit(m_unitComponent);
 
-	auto autoAttackDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	/*auto autoAttackDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(autoAttackDebugMesh, DebugMeshType::Cube, yunuGI::Color::red(), true);
-	autoAttackDebugMesh->GetTransform()->SetLocalScale({ 1.0f * lengthUnit, 1.0f * lengthUnit, 3.0f * lengthUnit });
+	autoAttackDebugMesh->GetTransform()->SetLocalScale({ 1.0f * lengthUnit, 1.0f * lengthUnit, 3.0f * lengthUnit });*/
+
+	auto bleedingSystem = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<BleedingComponent>();
 
 	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
-	warriorAttackSystem->SetColliderObject(unitAttackColliderObject);
-	warriorAttackSystem->SetColliderDebugObject(autoAttackDebugMesh);
+	//warriorAttackSystem->SetColliderObject(unitAttackColliderObject);
+	//warriorAttackSystem->SetColliderDebugObject(autoAttackDebugMesh);
+	//warriorAttackSystem->SetColliderRemainTime(0.8f);
+
+	warriorAttackSystem->SetMeleeAttackType(MeleeAttackType::DirectAttack);
 	warriorAttackSystem->SetOwnerUnitObject(m_unitGameObject);
-	warriorAttackSystem->SetColliderRemainTime(0.8f);
+	warriorAttackSystem->SetDirectAttackSpecialEffect(bleedingSystem);
+	warriorAttackSystem->SetDamage(1.0f);
 #pragma endregion
 
 #pragma region Q Skill Setting
@@ -173,6 +178,11 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	UnitProductor::SetCommonComponents();
 
 	return m_unitComponent;
+}
+
+void WarriorProductor::SetUnitFbxName()
+{
+	m_unitFbxName = "SKM_Robin";
 }
 
 // 전략 패턴을 설명하기 위한 예시 코드

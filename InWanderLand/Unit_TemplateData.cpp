@@ -22,10 +22,10 @@ namespace application
 
 		void Unit_TemplateData::SetDataResourceName(std::string fbxName)
 		{
-			if (pod.fbxName == fbxName)
+			if (pod.skinnedFBXName == fbxName)
 				return;
 
-			pod.fbxName = fbxName;
+			pod.skinnedFBXName = fbxName;
 
 			palette::UnitBrush::Instance().ChangeBrushResource(this->GetDataKey(), fbxName);
 
@@ -41,7 +41,7 @@ namespace application
 
 		std::string Unit_TemplateData::GetDataResourceName() const
 		{
-			return pod.fbxName;
+			return pod.skinnedFBXName;
 		}
 
 		bool Unit_TemplateData::EnterDataFromGlobalConstant()

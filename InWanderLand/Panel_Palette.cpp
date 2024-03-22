@@ -12,6 +12,7 @@
 #include "RegionPalette.h"
 #include "EditorLayer.h"
 #include "UnitBrush.h"
+#include "InstanceManager.h"
 
 #include "YunutyEngine.h"
 
@@ -40,7 +41,23 @@ namespace application
 
 		void PalettePanel::Update(float ts)
 		{
+			static Vector3d offset{ 0.1, 0.072, 0.2 };
+			if (lightGizmo)
+			{
+				yunuGI::Vector3 camPos = ec.GetPosition();
+				Vector3f pos = *reinterpret_cast<Vector3f*>(&camPos);
+				yunuGI::Vector3 front = ec.GetForwardDirection();
+				yunuGI::Vector3 right = ec.GetRightDirection();
+				yunuGI::Vector3 up = ec.GetUpDirection();
+				Vector3f finalPos = pos + (*reinterpret_cast<Vector3f*>(&front) * offset.z)
+					+ (*reinterpret_cast<Vector3f*>(&right) * offset.x)
+					+ (*reinterpret_cast<Vector3f*>(&up) * offset.y);
+				lightGizmo->GetTransform()->SetWorldPosition(finalPos);
 
+				/// 선택 안되게 카메라 뒤로 보내버림
+				finalPos = pos - (*reinterpret_cast<Vector3f*>(&front) * 200);
+				directionalLight->GetPaletteInstance()->GetTransform()->SetWorldPosition(finalPos);
+			}
 		}
 
 		void PalettePanel::GUIProgress()
@@ -123,6 +140,59 @@ namespace application
 					LoadCallback();
 					return true;
 				});
+		}
+
+		void PalettePanel::OnPlayContents()
+		{
+			lightGizmo->SetSelfActive(false);
+		}
+
+		void PalettePanel::OnPauseContents()
+		{
+			lightGizmo->SetSelfActive(true);
+		}
+
+		void PalettePanel::OnResumeContents()
+		{
+			lightGizmo->SetSelfActive(false);
+		}
+
+		void PalettePanel::OnStopContents()
+		{
+			lightGizmo->SetSelfActive(true);
+		}
+
+		void PalettePanel::ChangeDirectionalLight(LightData* light)
+		{
+			if (directionalLight == light)
+			{
+				return;
+			}
+
+			directionalLight = light;
+			directionalLight->GetPaletteInstance()->HideEditorInstance();
+
+			if (lightGizmo == nullptr)
+			{
+				lightGizmo = Scene::getCurrentScene()->AddGameObject();
+				lightGizmo->GetTransform()->SetLocalScale(Vector3d(0.0016, 0.0016, 0.0016));
+				auto mesh = Scene::getCurrentScene()->AddGameObjectFromFBX("Directional");
+				for (auto each : mesh->GetChildren())
+				{
+					auto comp = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+
+					if (comp)
+					{
+						for (int i = 0; i < comp->GetGI().GetMaterialCount(); ++i)
+						{
+							comp->GetGI().GetMaterial(i)->SetPixelShader(erm.GetShader("Debug_AlphaPS.cso"));
+							comp->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,0.9,0,0.5 });
+						}
+					}
+				}
+				mesh->SetParent(lightGizmo);
+			}
+			UpdataLightGizmo();
 		}
 
 		PalettePanel::PalettePanel()
@@ -273,21 +343,21 @@ namespace application
 			imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
 			imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 
-            int countIdx = 0;
-            bool isPlacingWaveUnit = palette::WavePalette::SingleInstance().currentWaveData && palette::WavePalette::SingleInstance().currentSelectedWaveIndex >= 0;
-            if (isPlacingWaveUnit)
-            {
-                //stringstream ss;
-                //ss << "Wave is selected. Please select time offset and unit type to place.";
-                //ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 0.04f, 0.0f, 0.96f, 1.0f });
-                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1.0f, 0.0f, 0.0f, 1.0f });
-                //ImGui::TextColored({ 1,0,0,1 }, "Wave is selected. Please select time offset and unit type to place.");
-                ImGui::TextWrapped("Wave is selected. Please select time offset and unit type to place.");
-                ImGui::PopStyleColor();
-                float timeOffset = palette::WavePalette::SingleInstance().GetCurrentSelectedWaveTimeOffset();
-                ImGui::DragFloat("time offset", &timeOffset, 0.005, 0, 10000);
-                palette::WavePalette::SingleInstance().SetCurrentSelectedWaveTimeOffset(timeOffset);
-            }
+			int countIdx = 0;
+			bool isPlacingWaveUnit = palette::WavePalette::SingleInstance().currentWaveData && palette::WavePalette::SingleInstance().currentSelectedWaveIndex >= 0;
+			if (isPlacingWaveUnit)
+			{
+				//stringstream ss;
+				//ss << "Wave is selected. Please select time offset and unit type to place.";
+				//ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 0.04f, 0.0f, 0.96f, 1.0f });
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 1.0f, 0.0f, 0.0f, 1.0f });
+				//ImGui::TextColored({ 1,0,0,1 }, "Wave is selected. Please select time offset and unit type to place.");
+				ImGui::TextWrapped("Wave is selected. Please select time offset and unit type to place.");
+				ImGui::PopStyleColor();
+				float timeOffset = palette::WavePalette::SingleInstance().GetCurrentSelectedWaveTimeOffset();
+				ImGui::DragFloat("time offset", &timeOffset, 0.005, 0, 10000);
+				palette::WavePalette::SingleInstance().SetCurrentSelectedWaveTimeOffset(timeOffset);
+			}
 
 			if (imgui::BeginSection_1Col(countIdx, "Unit List", ImGui::GetContentRegionAvail().x))
 			{
@@ -309,7 +379,7 @@ namespace application
 								up.SelectUnitTemplateData(nullptr);
 								up.SetAsSelectMode(true);
 							}
-							createUnitPopup = true;
+							ImGui_CreateUnitPopup();
 							EditorLayer::SetInputControl(false);
 						}
 					}
@@ -342,11 +412,6 @@ namespace application
 					}
 				}
 				imgui::EndSection();
-			}
-
-			if (createUnitPopup)
-			{
-				ImGui_CreateUnitPopup();
 			}
 		}
 
@@ -397,141 +462,141 @@ namespace application
 		}
 
 		void PalettePanel::ImGui_BeginRegionPalette()
-        {
-            imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
-            imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+		{
+			imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
+			imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 
-            //static int selectedRegionIdx = 0;
-            //RegionData* selectedRegion = nullptr;
-            if (ImGui::Button("Make new region"))
-            {
-                auto newInstance = InstanceManager::GetSingletonInstance().CreateInstance<RegionData>(Region_TemplateData::GetInstance().GetDataKey());
-                auto createPoint = graphics::Camera::GetMainCamera()->GetProjectedPoint({ 0.0,0.0 }, graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().Magnitude(), { 0,1,0 });
-                newInstance->pod.angle = 0;
-                newInstance->pod.width = 5;
-                newInstance->pod.height = 5;
-                newInstance->pod.x = createPoint.x;
-                newInstance->pod.z = createPoint.z;
-                newInstance->ApplyAsPaletteInstance();
-            }
+			//static int selectedRegionIdx = 0;
+			//RegionData* selectedRegion = nullptr;
+			if (ImGui::Button("Make new region"))
+			{
+				auto newInstance = InstanceManager::GetSingletonInstance().CreateInstance<RegionData>(Region_TemplateData::GetInstance().GetDataKey());
+				auto createPoint = graphics::Camera::GetMainCamera()->GetProjectedPoint({ 0.0,0.0 }, graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().Magnitude(), { 0,1,0 });
+				newInstance->pod.angle = 0;
+				newInstance->pod.width = 5;
+				newInstance->pod.height = 5;
+				newInstance->pod.x = createPoint.x;
+				newInstance->pod.z = createPoint.z;
+				newInstance->ApplyAsPaletteInstance();
+			}
 
-            int countIdx{ 0 };
-            if (imgui::BeginSection_1Col(countIdx, "Region List", ImGui::GetContentRegionAvail().x))
-            {
-                ImGui::TableNextRow();
-                ImGui::TableSetColumnIndex(0);
-                if (ImGui::BeginListBox("", { ImGui::GetContentRegionAvail().x * 0.8f,400 }))
-                {
-                    int countIdx = 0;
-                    for (auto each : RegionData::GetInstances())
-                    {
-                        stringstream ss;
-                        ss << yutility::GetString(each->pod.name).c_str() << " ##RegionSelectable" << countIdx;
-                        if (ImGui::Selectable(ss.str().c_str(), palette::RegionPalette::SingleInstance().GetSingleSelectedRegion() == each))
-                        {
-                            palette::RegionPalette::SingleInstance().SelectRegion(each);
-                        }
-                        if (palette::RegionPalette::SingleInstance().GetSingleSelectedRegion() == each)
-                        {
-                            ImGui::SetItemDefaultFocus();
-                        }
-                        countIdx++;
-                    }
-                    ImGui::EndListBox();
-                }
-                imgui::EndSection();
-            }
-            if (palette::RegionPalette::SingleInstance().GetSingleSelectedRegion())
-            {
-                if (imgui::BeginSection_2Col(countIdx, "Region info", ImGui::GetContentRegionAvail().x))
-                {
-                    ImGui::TableNextRow();
-                    ImGui::TableSetColumnIndex(0);
-                    ImGui::Text("Region name");
-                    ImGui::TableNextColumn();
-                    string charBuffer = yutility::GetString(palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.name);
-                    charBuffer.reserve(64);
-                    ImGui::InputText("##RegionNameInputText", &charBuffer[0], 64);
-                    palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.name = yutility::GetWString(charBuffer);
-                    ImGui::TableNextRow();
-                    ImGui::TableSetColumnIndex(0);
-                    ImGui::Text("width");
-                    ImGui::TableNextColumn();
-                    if (ImGui::DragFloat("##RegionWidthInputText", &palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.width, 0.005f, 0.0f, FLT_MAX, "%.2f", 0))
-                        palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->ApplyAsPaletteInstance();
-                    ImGui::TableNextRow();
-                    ImGui::TableSetColumnIndex(0);
-                    ImGui::Text("height");
-                    ImGui::TableNextColumn();
-                    if (ImGui::DragFloat("##RegionHeightInputText", &palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.height, 0.005f, 0.0f, FLT_MAX, "%.2f", 0))
-                        palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->ApplyAsPaletteInstance();
-                    ImGui::TableNextRow();
-                    ImGui::TableSetColumnIndex(0);
-                    ImGui::Text("angle");
-                    ImGui::TableNextColumn();
-                    if (ImGui::DragFloat("##RegionAngleInputText", &palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.angle, 0.05f, 0.0f, 360, "%.2f", 0))
-                        palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->ApplyAsPaletteInstance();
-                    ImGui::TableNextRow();
-                    ImGui::TableSetColumnIndex(0);
-                    ImGui::Text("special event");
-                    ImGui::TableNextColumn();
-                    if (ImGui::BeginCombo("##RegionSpecialEvent", SpecialEventTypeToString(static_cast<SpecialEventType>(palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.specialEvent)).c_str()))
-                    {
-                        for (int n = 0; n < SpecialEventTypes().size(); n++)
-                        {
-                            const bool is_selected = (palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.specialEvent == n);
-                            if (ImGui::Selectable((SpecialEventTypeStrings()[n] + "##SpecialEventSelectable").c_str(), is_selected))
-                                palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.specialEvent = n;
+			int countIdx{ 0 };
+			if (imgui::BeginSection_1Col(countIdx, "Region List", ImGui::GetContentRegionAvail().x))
+			{
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				if (ImGui::BeginListBox("", { ImGui::GetContentRegionAvail().x * 0.8f,400 }))
+				{
+					int countIdx = 0;
+					for (auto each : RegionData::GetInstances())
+					{
+						stringstream ss;
+						ss << yutility::GetString(each->pod.name).c_str() << " ##RegionSelectable" << countIdx;
+						if (ImGui::Selectable(ss.str().c_str(), palette::RegionPalette::SingleInstance().GetSingleSelectedRegion() == each))
+						{
+							palette::RegionPalette::SingleInstance().SelectRegion(each);
+						}
+						if (palette::RegionPalette::SingleInstance().GetSingleSelectedRegion() == each)
+						{
+							ImGui::SetItemDefaultFocus();
+						}
+						countIdx++;
+					}
+					ImGui::EndListBox();
+				}
+				imgui::EndSection();
+			}
+			if (palette::RegionPalette::SingleInstance().GetSingleSelectedRegion())
+			{
+				if (imgui::BeginSection_2Col(countIdx, "Region info", ImGui::GetContentRegionAvail().x))
+				{
+					ImGui::TableNextRow();
+					ImGui::TableSetColumnIndex(0);
+					ImGui::Text("Region name");
+					ImGui::TableNextColumn();
+					string charBuffer = yutility::GetString(palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.name);
+					charBuffer.reserve(64);
+					ImGui::InputText("##RegionNameInputText", &charBuffer[0], 64);
+					palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.name = yutility::GetWString(charBuffer);
+					ImGui::TableNextRow();
+					ImGui::TableSetColumnIndex(0);
+					ImGui::Text("width");
+					ImGui::TableNextColumn();
+					if (ImGui::DragFloat("##RegionWidthInputText", &palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.width, 0.005f, 0.0f, FLT_MAX, "%.2f", 0))
+						palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->ApplyAsPaletteInstance();
+					ImGui::TableNextRow();
+					ImGui::TableSetColumnIndex(0);
+					ImGui::Text("height");
+					ImGui::TableNextColumn();
+					if (ImGui::DragFloat("##RegionHeightInputText", &palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.height, 0.005f, 0.0f, FLT_MAX, "%.2f", 0))
+						palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->ApplyAsPaletteInstance();
+					ImGui::TableNextRow();
+					ImGui::TableSetColumnIndex(0);
+					ImGui::Text("angle");
+					ImGui::TableNextColumn();
+					if (ImGui::DragFloat("##RegionAngleInputText", &palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.angle, 0.05f, 0.0f, 360, "%.2f", 0))
+						palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->ApplyAsPaletteInstance();
+					ImGui::TableNextRow();
+					ImGui::TableSetColumnIndex(0);
+					ImGui::Text("special event");
+					ImGui::TableNextColumn();
+					if (ImGui::BeginCombo("##RegionSpecialEvent", SpecialEventTypeToString(static_cast<SpecialEventType>(palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.specialEvent)).c_str()))
+					{
+						for (int n = 0; n < SpecialEventTypes().size(); n++)
+						{
+							const bool is_selected = (palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.specialEvent == n);
+							if (ImGui::Selectable((SpecialEventTypeStrings()[n] + "##SpecialEventSelectable").c_str(), is_selected))
+								palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.specialEvent = n;
 
-                            // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-                            if (is_selected)
-                                ImGui::SetItemDefaultFocus();
-                        }
-                        ImGui::EndCombo();
-                    }
-                    ImGui::TableNextRow();
-                    ImGui::TableSetColumnIndex(0);
-                    ImGui::Text("is obstacle?");
-                    ImGui::TableNextColumn();
-                    ImGui::Checkbox("##RegionIsObstacle", &palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.isObstacle);
+							// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+							if (is_selected)
+								ImGui::SetItemDefaultFocus();
+						}
+						ImGui::EndCombo();
+					}
+					ImGui::TableNextRow();
+					ImGui::TableSetColumnIndex(0);
+					ImGui::Text("is obstacle?");
+					ImGui::TableNextColumn();
+					ImGui::Checkbox("##RegionIsObstacle", &palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.isObstacle);
 
-                    ImGui::TableNextRow();
-                    ImGui::TableSetColumnIndex(0);
-                    if (!palette::RegionPalette::SingleInstance().GetIsSelectingDisablingOrnaments())
-                    {
-                        if (ImGui::Button("Select disabling ornaments"))
-                        {
-                            palette::RegionPalette::SingleInstance().SetAsSelectingDisablingOrnaments(true);
-                        }
-                    }
-                    else
-                    {
-                        if (ImGui::Button("Select regions"))
-                        {
-                            palette::RegionPalette::SingleInstance().SetAsSelectingDisablingOrnaments(false);
-                        }
-                    }
+					ImGui::TableNextRow();
+					ImGui::TableSetColumnIndex(0);
+					if (!palette::RegionPalette::SingleInstance().GetIsSelectingDisablingOrnaments())
+					{
+						if (ImGui::Button("Select disabling ornaments"))
+						{
+							palette::RegionPalette::SingleInstance().SetAsSelectingDisablingOrnaments(true);
+						}
+					}
+					else
+					{
+						if (ImGui::Button("Select regions"))
+						{
+							palette::RegionPalette::SingleInstance().SetAsSelectingDisablingOrnaments(false);
+						}
+					}
 
-                    if (ImGui::Button("Delete Region"))
-                    {
-                        auto region{ palette::RegionPalette::SingleInstance().GetSingleSelectedRegion() };
-                        for (auto each : WaveData::GetInstances())
-                        {
-                            if (each->pod.contraintRegion == region)
-                            {
-                                each->pod.contraintRegion = nullptr;
-                            }
-                            if (each->pod.triggerRegion == region)
-                            {
-                                each->pod.triggerRegion = nullptr;
-                            }
-                        }
-                        palette::RegionPalette::SingleInstance().OnDeletion();
-                    }
-                    imgui::EndSection();
-                }
-            }
-        }
+					if (ImGui::Button("Delete Region"))
+					{
+						auto region{ palette::RegionPalette::SingleInstance().GetSingleSelectedRegion() };
+						for (auto each : WaveData::GetInstances())
+						{
+							if (each->pod.contraintRegion == region)
+							{
+								each->pod.contraintRegion = nullptr;
+							}
+							if (each->pod.triggerRegion == region)
+							{
+								each->pod.triggerRegion = nullptr;
+							}
+						}
+						palette::RegionPalette::SingleInstance().OnDeletion();
+					}
+					imgui::EndSection();
+				}
+			}
+		}
 
 		void PalettePanel::ImGui_BeginWavePalette()
 		{
@@ -696,34 +761,73 @@ namespace application
 			imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 
 			int countIdx = 0;
+			if (imgui::BeginSection_1Col(countIdx, "Directional Light", ImGui::GetContentRegionAvail().x))
+			{
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+
+				if (lightGizmo)
+				{
+					auto tg = lightGizmo->GetTransform();
+					Quaternion rotationQ = { directionalLight->pod.rotation.w, directionalLight->pod.rotation.x, directionalLight->pod.rotation.y, directionalLight->pod.rotation.z };
+					yunutyEngine::Vector3f rotation = rotationQ.Euler();
+					auto resetRotation = imgui::Vector3Control("Rotation", rotation.x, rotation.y, rotation.z);
+					switch (resetRotation)
+					{
+						case application::editor::imgui::Vector3Flags::ResetX:
+							rotation.x = 0;
+							break;
+						case application::editor::imgui::Vector3Flags::ResetY:
+							rotation.y = 0;
+							break;
+						case application::editor::imgui::Vector3Flags::ResetZ:
+							rotation.z = 0;
+							break;
+						default:
+							break;
+					}
+					rotationQ = Quaternion(rotation);
+					directionalLight->pod.rotation.w = rotationQ.w;
+					directionalLight->pod.rotation.x = rotationQ.x;
+					directionalLight->pod.rotation.y = rotationQ.y;
+					directionalLight->pod.rotation.z = rotationQ.z;
+					directionalLight->ApplyAsPaletteInstance();
+					tg->SetLocalRotation(Quaternion(rotation));
+				}
+
+				imgui::EndSection();
+			}
+
 			if (imgui::BeginSection_1Col(countIdx, "Create Light", ImGui::GetContentRegionAvail().x))
 			{
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 
-				if (ImGui::Button("Directional Light", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
-				{
-					if (lp.IsSelectMode())
-					{
-						lightCurrentButton = (int)LightType::Directional;
-						lp.SelectLightTemplateData(static_cast<Light_TemplateData*>(tdm.GetTemplateData("Directional_Light")));
-						lp.SetAsSelectMode(false);
-					}
-					else
-					{
-						if (lightCurrentButton == (int)LightType::Directional)
-						{
-							lp.SelectLightTemplateData(nullptr);
-							lp.SetAsSelectMode(true);
-						}
-						else
-						{
-							lightCurrentButton = (int)LightType::Directional;
-							lp.SelectLightTemplateData(static_cast<Light_TemplateData*>(tdm.GetTemplateData("Directional_Light")));
-							lp.SetAsSelectMode(false);
-						}
-					}
-				}
+				/// Directional Light 는 하나의 인스턴스로부터 컨트롤할 수 있도록 변경
+				//if (ImGui::Button("Directional Light", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+				//{
+				//	if (lp.IsSelectMode())
+				//	{
+				//		lightCurrentButton = (int)LightType::Directional;
+				//		lp.SelectLightTemplateData(static_cast<Light_TemplateData*>(tdm.GetTemplateData("Directional_Light")));
+				//		lp.SetAsSelectMode(false);
+				//	}
+				//	else
+				//	{
+				//		if (lightCurrentButton == (int)LightType::Directional)
+				//		{
+				//			lp.SelectLightTemplateData(nullptr);
+				//			lp.SetAsSelectMode(true);
+				//		}
+				//		else
+				//		{
+				//			lightCurrentButton = (int)LightType::Directional;
+				//			lp.SelectLightTemplateData(static_cast<Light_TemplateData*>(tdm.GetTemplateData("Directional_Light")));
+				//			lp.SetAsSelectMode(false);
+				//		}
+				//	}
+				//}
+
 				if (ImGui::Button("Point Light", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
 				{
 					if (lp.IsSelectMode())
@@ -747,6 +851,28 @@ namespace application
 						}
 					}
 				}
+				imgui::EndSection();
+			}
+
+			if (imgui::BeginSection_2Col(countIdx, "Selected Point Light", ImGui::GetContentRegionAvail().x, 0.2f))
+			{
+				const auto& selection = pm.GetCurrentPalette()->GetSelections();
+
+				if (selection.size() == 1)
+				{
+					auto pl = static_cast<LightData*>(*selection.begin());
+					imgui::DragFloat_2Col("Range", pl->pod.range, true, 0.1f, 0.0f, 100.0f);
+					ImGui::TableNextRow();
+					ImGui::TableSetColumnIndex(0);
+					imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
+					ImGui::AlignTextToFramePadding();
+					ImGui::Text("Color");
+					ImGui::TableSetColumnIndex(1);
+					ImGui::SetNextItemWidth(-1);
+					ImGui::ColorPicker4("Light Color", (float*)&pl->pod.color);
+					pl->ApplyAsPaletteInstance();
+				}
+
 				imgui::EndSection();
 			}
 		}
@@ -781,7 +907,7 @@ namespace application
 
 					ImGui::Separator();
 
-					static auto& fbxSet = ResourceManager::GetSingletonInstance().GetFbxList();
+					static auto& fbxSet = ResourceManager::GetSingletonInstance().GetSkinnedFBXList();
 					static std::vector<std::string> selections = std::vector<std::string>();
 					static std::string fbxName = "None";
 					std::string currentFBX = fbxName;
@@ -832,7 +958,6 @@ namespace application
 								fbxName = "None";
 								returnVal = true;
 								ImGui::CloseCurrentPopup();
-								createUnitPopup = false;
 								EditorLayer::SetInputControl(true);
 							}
 							else
@@ -848,12 +973,9 @@ namespace application
 						memset(unitNameBuffer, 0, bufferSize);
 						fbxName = "None";
 						ImGui::CloseCurrentPopup();
-						createUnitPopup = false;
 						EditorLayer::SetInputControl(true);
 					}
 				}, 600);
-			imgui::RenderMessageBoxes();
-			imgui::CloseMessageBox("Create Unit");
 			return returnVal;
 		}
 
@@ -869,6 +991,12 @@ namespace application
 			lp.SetAsSelectMode(true);
 
 			auto uSize = tdm.GetDataList(DataType::UnitData).size();
+		}
+
+		void PalettePanel::UpdataLightGizmo()
+		{
+			Quaternion quat = { directionalLight->pod.rotation.w, directionalLight->pod.rotation.x, directionalLight->pod.rotation.y, directionalLight->pod.rotation.z };
+			lightGizmo->GetTransform()->SetLocalRotation(quat);
 		}
 	}
 }

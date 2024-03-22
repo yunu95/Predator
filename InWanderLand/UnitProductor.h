@@ -39,7 +39,7 @@ protected:
 
 	std::queue<std::pair<Vector3d, float>> m_waveDelayQueue;
 
-
+	std::string m_unitFbxName;
 
 public:
 	string m_objectName;
@@ -73,6 +73,9 @@ public:
 	virtual void PushWaveData(Vector3d startPos, float delay);
 
 	void SetCommonComponents();
+
+	virtual bool SelectUnitProductorByFbxName(std::string p_name);
+	virtual void SetUnitFbxName() = 0;
 
 	virtual void SetUnitData() = 0;
 

@@ -18,6 +18,8 @@ public:
 	
 	virtual bool IsSkillEnd() const;
 
+	virtual void RotateProjectile(GameObject* p_projectileObject, Vector3d p_endPosition);
+
 protected:
 	struct SkillRequirements
 	{

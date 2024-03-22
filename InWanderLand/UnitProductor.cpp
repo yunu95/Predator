@@ -30,9 +30,10 @@ void UnitProductor::SetCommonComponents()
 
 
 	auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	
 	AttachDebugMesh(unitColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
 	unitColliderDebugObject->SetParent(m_unitGameObject);
-	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(lengthUnit * 2, lengthUnit * 2, lengthUnit * 2));
+	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(lengthUnit, lengthUnit, lengthUnit));
 	m_unitComponent->SetStaticMeshComponent(unitColliderDebugObject->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>());
 
 	auto frontDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -74,6 +75,16 @@ void UnitProductor::SetCommonComponents()
 	/// + 플레이어 유닛일 경우 특수 처리
 	if (m_unitSide == Unit::UnitSide::Player)
 		SetPlayerRelatedComponents(m_unitComponent);
+}
+
+bool UnitProductor::SelectUnitProductorByFbxName(std::string p_name)
+{
+	SetUnitFbxName();
+
+	if (m_unitFbxName == p_name)
+		return true;
+	else
+		return false;
 }
 
 void UnitProductor::SetPlayerRelatedComponents(Unit* playerUnit)

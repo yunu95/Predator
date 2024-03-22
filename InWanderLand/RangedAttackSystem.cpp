@@ -3,6 +3,7 @@
 #include "AutoAttackProjectilePool.h"
 #include "MagicianAutoAttackProjectilePool.h"
 #include "HealerAutoAttackProjectilePool.h"
+#include "EnemyAutoAttackProjectilePool.h"
 
 void RangedAttackSystem::Attack(Unit* opponentUnit)
 {
@@ -19,6 +20,11 @@ void RangedAttackSystem::Attack(Unit* opponentUnit)
 			tempHealerBullet->GetGameObject()->SetSelfActive(false);
 
 			tempHealerBullet->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed);
+			break;
+		}
+		case Unit::UnitType::RangedEnemy:
+		{
+			EnemyAutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed);
 			break;
 		}
 		default:

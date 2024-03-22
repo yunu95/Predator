@@ -39,6 +39,7 @@ public:
 		Healer,
 		AllPlayers,
 		MeleeEnemy,
+		RangedEnemy,
 		Boss
 	};
 
@@ -148,10 +149,9 @@ private:
 	UnitType playerSerialNumber;
 
 	std::set<Unit*> m_opponentObjectSet;		// idradius에 닿는 모든 상대 유닛을 담아줍니다.
-	std::list<Unit*> m_recognizedThisList;		// 현재 이 유닛을 적군으로 인식한 다른 유닛들의 리스트.
+	std::set<Unit*> m_recognizedThisSet;		// 현재 이 유닛을 적군으로 인식한 다른 유닛들의 리스트.
 
 	std::set<Unit*> m_attackingThisUnitSet;		// 현재 이 유닛을 공격하고 있는 유닛들
-	int m_currentAggroNumber;
 	int m_maxAggroNumber;
 
 	Unit* m_currentTargetUnit;		// Attack이나 Chase 때 사용할 적군  오브젝트
@@ -201,6 +201,7 @@ private:
 
 	void DetermineHitDamage(float p_onceCalculatedDmg);					// 피격유닛이 받는 최종 데미지 계산
 
+	void RotateUnit(Vector3d endPosition);
 public:
 	BaseUnitAnimationStruct unitAnimations;
 
@@ -233,9 +234,6 @@ public:
 	void DetermineCurrentTargetObject();
 	void AddToOpponentObjectList(Unit* p_unit);
 	void DeleteFromOpponentObjectList(Unit* p_unit);
-
-	void AddToRecognizeList(Unit* p_unit);
-	void DeleteFromRecognizeList(Unit* p_unit);
 
 	void SetNavField(NavigationField* p_navField);
 	NavigationField* GetNavField() const;

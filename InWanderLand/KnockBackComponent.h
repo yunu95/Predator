@@ -1,5 +1,5 @@
 #pragma once
-#include "UnitStatusComponent.h"
+#include "SpecialEffectTrigger.h"
 #include <list>
 /// <summary>
 /// 피격 유닛을 밀어내도록 하는 컴포넌트
@@ -7,7 +7,7 @@
 
 class StatusTimer;
 
-class KnockBackComponent : public UnitStatusComponent
+class KnockBackComponent : public SpecialEffectTrigger
 {
 private:
 	float m_pushPower = 6.5f;

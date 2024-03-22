@@ -747,11 +747,6 @@ namespace application
 				messageBoxData.ShouldOpen = true;
 			}
 
-			void CloseMessageBox(std::string title)
-			{
-				s_MessageBoxes[title].ShouldOpen = false;
-			}
-
 			void RenderMessageBoxes()
 			{
 				for (auto& [key, messageBoxData] : s_MessageBoxes)

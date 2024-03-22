@@ -3,7 +3,9 @@
 #include "Dotween.h"
 #include "AutoAttackProjectilePool.h"
 #include "Unit.h"
-#include "UnitStatusComponent.h"
+#include "SpecialEffect.h"
+#include <float.h>
+#include <cmath>
 
 void AutoAttackProjectile::SetOwnerType(Unit::UnitType type)
 {
@@ -15,9 +17,8 @@ void AutoAttackProjectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, float spee
 	m_speed = speed;
 	m_ownerUnit = ownerUnit;
 	m_opponentUnit = opponentUnit;
-	auto temp = GetGameObject();
-	//GetGameObject()->SetSelfActive(false);
 	GetGameObject()->GetTransform()->SetWorldPosition(ownerUnit->GetGameObject()->GetTransform()->GetWorldPosition());
+	RotateBulletPerFrame();
 	GetGameObject()->SetSelfActive(true);
 
 	isShootOperating = true;
@@ -40,15 +41,12 @@ void AutoAttackProjectile::ShootUpdateFunction()
 	// 움직이고 나서의 투사체 -> 목표물 방향 벡터
 	Vector3d afterDirectionVector = (endPosition - movedPositionPerFrame).Normalized();
 
-	GetGameObject()->GetTransform()->SetWorldRotation(directionVector);
 	GetGameObject()->GetTransform()->SetWorldPosition(movedPositionPerFrame);
 
 	float dotProducted = Vector3d::Dot(directionVector, afterDirectionVector);
 	float multipledLength = directionVector.Magnitude() * afterDirectionVector.Magnitude();
 
 	float angle = dotProducted / multipledLength;
-
-	float finalAngle = acos(angle);
 
 	if (angle < 0)
 	{
@@ -61,6 +59,43 @@ void AutoAttackProjectile::ShootUpdateFunction()
 
 		isShootOperating = false;
 	}
+
+	RotateBulletPerFrame();
+
+}
+
+void AutoAttackProjectile::RotateBulletPerFrame()
+{
+	Vector3d startPosition = GetGameObject()->GetTransform()->GetWorldPosition();
+	Vector3d endPosition = m_opponentUnit->GetGameObject()->GetTransform()->GetWorldPosition();
+	Vector3d objectFront = GetGameObject()->GetTransform()->GetWorldRotation().Forward();
+	Vector3d distanceVec = endPosition - startPosition;
+
+	double dot = Vector3d::Dot(objectFront, startPosition - endPosition);
+
+	double angle;
+	double sq;
+	double finalAngle;
+	double finalDegree;
+
+	// 회전 방향 판정
+	Vector3d axis = Vector3d::Cross(objectFront, distanceVec);
+
+	angle = (objectFront.x * distanceVec.x + objectFront.z * distanceVec.z);
+	sq = (sqrt(pow(objectFront.x, 2) + pow(objectFront.z, 2)) *
+		sqrt(pow(distanceVec.x, 2) + pow(distanceVec.z, 2)));
+
+	// 두 벡터의 각도가 180도 이상이면 180을, -180 이하 이라면 -180을 
+	//finalAngle = acos( max( -1.0f, min(1.0f, angle / sq) ) );
+	finalAngle = acos(std::clamp(angle / sq, -1.0, 1.0));			// c++17 된다면
+	finalDegree = 57.2969f * (finalAngle);
+
+	if (axis.y < 0)
+		finalDegree *= -1;
+
+	if (abs(finalDegree) > 0.05)
+		GetGameObject()->GetTransform()->SetWorldRotation(Quaternion({ 0.0f, finalDegree, 0.0f }));
+
 }
 
 void AutoAttackProjectile::Start()
