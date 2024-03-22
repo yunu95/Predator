@@ -49,6 +49,8 @@ void Mesh::SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& in
     this->materialCount = this->indexBufferVec.size();
 }
 
+
+
 void Mesh::SetDiffuseExposure(float exposure)
 {
 	this->diffuseExposure = exposure;

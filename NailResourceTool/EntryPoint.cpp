@@ -16,6 +16,7 @@
 #include <codecvt>
 
 bool g_fbxLoad = false;
+bool g_useIBL = true;
 std::unordered_map<std::wstring, yunuGI::FBXData*> g_fbxMap;
 yunuGI::FBXData* g_selectFBX = nullptr;
 yunutyEngine::GameObject* g_selectGameObject = nullptr;
@@ -58,6 +59,9 @@ void ShowFBXList();
 void ShowSeleteFBXInfo();
 void CreateComboByTexture(std::string comboName, std::wstring& textureName, std::vector<yunuGI::ITexture*>& textureList);
 void CreateComboByShader(std::string comboName, std::wstring& shaderName, std::vector<yunuGI::IShader*>& shaderList);
+
+void ApplyMaterial(yunuGI::MaterialData& data, yunuGI::IMaterial* material);
+
 
 void SaveFBXMaterial();
 void LoadFBXMaterial();
@@ -223,7 +227,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param
 	return 0;
 }
 
-LRESULT CALLBACK WndProcTool(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param) 
+LRESULT CALLBACK WndProcTool(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param)
 {
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, message, w_param, l_param))
 		return true;
@@ -438,6 +442,11 @@ void ShowFBXData(yunuGI::FBXData* data)
 {
 	if (data->nodeName != L"RootNode")
 	{
+		if (data->materialVec.size() == 0)
+		{
+			return;
+		}
+
 		// nodeName이 "RootNode"가 아닌 경우에만 트리 노드를 생성
 		if (ImGui::TreeNode(std::string{ data->nodeName.begin(), data->nodeName.end() }.c_str()))
 		{
@@ -486,10 +495,14 @@ void ShowSeleteFBXInfo()
 		{
 			Scene::getCurrentScene()->DestroyGameObject(g_selectGameObject);
 		}
-		std::string str = std::string{ g_selectFBX->meshName.begin(), g_selectFBX->meshName.end()};
+
+		std::string str = std::string{ g_selectFBX->meshName.begin(), g_selectFBX->meshName.end() };
 		g_selectGameObject = Scene::getCurrentScene()->AddGameObjectFromFBX(str);
 
+		ImGui::InputFloat("DiffuseExposure", &g_selectFBX->diffuseExposure);
+		ImGui::InputFloat("AmbientExposure", &g_selectFBX->ambientExposure);
 
+		int materialIndex = 0;
 		for (auto& each : g_selectFBX->materialVec)
 		{
 			ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "MaterialName : %ls", each.materialName.c_str());
@@ -578,7 +591,23 @@ void ShowSeleteFBXInfo()
 			ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "PixelShader : %ls", each.ps.c_str());
 			CreateComboByShader(std::string{ "##" } + std::string{ each.materialName.begin(),each.materialName.end() } + std::string{ "PixelShader" },
 				each.ps, shaderList);
+
+			if (g_selectFBX->hasAnimation)
+			{
+				auto renderer = g_selectGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
+				ApplyMaterial(each, renderer->GetGI().GetMaterial(materialIndex));
+			}
+			else
+			{
+				auto renderer = g_selectGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+				ApplyMaterial(each, renderer->GetGI().GetMaterial(materialIndex));
+			}
+
+			materialIndex++;
 		}
+
+		resourceManager->GetMesh(g_selectFBX->meshName)->SetDiffuseExposure(g_selectFBX->diffuseExposure);
+		resourceManager->GetMesh(g_selectFBX->meshName)->SetAmbientExposure(g_selectFBX->ambientExposure);
 	}
 }
 
@@ -611,6 +640,88 @@ void CreateComboByShader(std::string comboName, std::wstring& shaderName, std::v
 		}
 
 		ImGui::EndCombo();
+	}
+}
+
+
+void ApplyMaterial(yunuGI::MaterialData& data, yunuGI::IMaterial* material)
+{
+	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+	material->SetVertexShader(resourceManager->GetShader(data.vs));
+	material->SetPixelShader(resourceManager->GetShader(data.ps));
+
+	if (!data.albedoMap.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::ALBEDO, resourceManager->GetTexture(data.albedoMap));
+	}
+	if (!data.normalMap.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::NORMAL, resourceManager->GetTexture(data.normalMap));
+	}
+	if (!data.armMap.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::ARM, resourceManager->GetTexture(data.armMap));
+	}
+	if (!data.emissionMap.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::EMISSION, resourceManager->GetTexture(data.emissionMap));
+	}
+	if (!data.heightMap.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::HEIGHT, resourceManager->GetTexture(data.heightMap));
+	}
+	if (!data.opacityMap.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::OPACITY, resourceManager->GetTexture(data.opacityMap));
+	}
+	if (!data.temp0Map.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::Temp0, resourceManager->GetTexture(data.temp0Map));
+	}
+	if (!data.temp1Map.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::Temp1, resourceManager->GetTexture(data.temp1Map));
+	}
+	if (!data.temp2Map.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::Temp2, resourceManager->GetTexture(data.temp2Map));
+	}
+	if (!data.temp3Map.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::Temp3, resourceManager->GetTexture(data.temp3Map));
+	}
+	if (!data.temp4Map.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::Temp4, resourceManager->GetTexture(data.temp4Map));
+	}
+	if (!data.temp5Map.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::Temp5, resourceManager->GetTexture(data.temp5Map));
+	}
+	if (!data.temp6Map.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::Temp6, resourceManager->GetTexture(data.temp6Map));
+	}
+	if (!data.temp7Map.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::Temp7, resourceManager->GetTexture(data.temp7Map));
+	}
+	if (!data.temp8Map.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::Temp8, resourceManager->GetTexture(data.temp8Map));
+	}
+	if (!data.temp9Map.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::Temp9, resourceManager->GetTexture(data.temp9Map));
+	}
+	if (!data.temp10Map.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::Temp10, resourceManager->GetTexture(data.temp10Map));
+	}
+	if (!data.temp11Map.empty())
+	{
+		material->SetTexture(yunuGI::Texture_Type::Temp11, resourceManager->GetTexture(data.temp11Map));
 	}
 }
 
@@ -689,6 +800,12 @@ void ImGuiUpdate()
 				FBXLoad();
 			}
 
+			// IBL을 껐다 켰다하는 토글
+			if (ImGui::Checkbox("UseIBL", &g_useIBL))
+			{
+				yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(g_useIBL);
+			}
+			
 			ImGui::End();
 		}
 
@@ -741,7 +858,7 @@ void ImGuiUpdate()
 	}
 
 	ImGui::Render();
-	
+
 	const float clear_color_with_alpha[4] = { clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w };
 
 	g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);

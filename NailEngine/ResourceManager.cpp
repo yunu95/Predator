@@ -623,6 +623,9 @@ void ResourceManager::SaveFBXChildData(const yunuGI::FBXData* data, nlohmann::js
 		jsonData["materialVec"].push_back(materialJson);
 	}
 
+	jsonData["DiffuseExposure"] = data->diffuseExposure;
+	jsonData["AmbientExposure"] = data->ambientExposure;
+
 	for (const auto& child : data->child)
 	{
 		nlohmann::json childJson;
@@ -772,6 +775,9 @@ void ResourceManager::LoadFBXData(const nlohmann::json& jsonData, yunuGI::FBXDat
 			data->materialVec.push_back(material);
 		}
 	}
+
+	data->diffuseExposure = jsonData["DiffuseExposure"];
+	data->ambientExposure = jsonData["AmbientExposure"];
 
 	if (jsonData.contains("child"))
 	{
@@ -1203,6 +1209,10 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 				std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
 				mesh->SetName(node->meshVec[i].meshName);
 				mesh->SetData(node->meshVec[i].vertex, node->meshVec[i].indices, node->meshVec[i].aabb[0], node->meshVec[i].aabb[1]);
+
+				mesh->SetDiffuseExposure(fbxData->diffuseExposure);
+				mesh->SetAmbientExposure(fbxData->ambientExposure);
+
 				this->meshMap.insert({ node->meshVec[i].meshName, mesh });
 			}
 			else

@@ -76,6 +76,10 @@ namespace yunuGIAdapter
 		{
 			return ResourceManager::Instance.Get().GetTexture(textureName.c_str()).get();
 		}
+		virtual yunuGI::IShader* GetShader(const std::wstring& shaderName)const
+		{
+			return ResourceManager::Instance.Get().GetShader(shaderName.c_str()).get();
+		};
 		virtual bool GetFBXData(const std::string& fbxName, yunuGI::FBXData*& fbxData)const override
 		{
 			auto _fbxData = ResourceManager::Instance.Get().GetFBXData(fbxName);

@@ -176,8 +176,8 @@ void GraphicsTest()
 	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 10,0,0 });
 	//}
 	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CupTower");
-		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+		obj->GetTransform()->SetLocalScale(Vector3d{ 2,2,2 });
 	}
 	//{
 	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stump");

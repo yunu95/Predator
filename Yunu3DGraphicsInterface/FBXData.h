@@ -60,6 +60,9 @@ namespace yunuGI
 
 		std::vector<FBXData*> child;
 		std::vector<MaterialData> materialVec;
+
+		float diffuseExposure = 1.f;
+		float ambientExposure = 1.f;
 	};
 
 

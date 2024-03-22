@@ -31,8 +31,8 @@ class Mesh : public yunuGI::IMesh, public Resource
 public:
     void SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& indexVec, DirectX::SimpleMath::Vector3& maxPoint, DirectX::SimpleMath::Vector3& minPoint);
 
-    void SetDiffuseExposure(float exposure);
-    void SetAmbientExposure(float exposure);
+	virtual void SetDiffuseExposure(float exposure) override;
+	virtual void SetAmbientExposure(float exposure) override;
 
     void Render(unsigned int materialIndex = 0, std::shared_ptr<InstanceBuffer> buffer = nullptr);
 
