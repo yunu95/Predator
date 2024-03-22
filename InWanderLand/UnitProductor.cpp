@@ -33,7 +33,7 @@ void UnitProductor::SetCommonComponents()
 
 
 	auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	
+
 	AttachDebugMesh(unitColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
 	unitColliderDebugObject->SetParent(m_unitGameObject);
 	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(lengthUnit, lengthUnit, lengthUnit));
@@ -41,7 +41,7 @@ void UnitProductor::SetCommonComponents()
 
 	auto frontDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(frontDebugObject, DebugMeshType::Cube, yunuGI::Color::black(), true);
-	frontDebugObject->GetTransform()->SetLocalScale( { 0.5, 0.5, 0.5 });
+	frontDebugObject->GetTransform()->SetLocalScale({ 0.5, 0.5, 0.5 });
 	frontDebugObject->GetTransform()->SetWorldPosition(m_unitGameObject->GetTransform()->GetLocalRotation().Forward());
 	frontDebugObject->SetParent(m_unitGameObject);
 
