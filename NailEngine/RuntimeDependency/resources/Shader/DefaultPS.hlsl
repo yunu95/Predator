@@ -66,7 +66,7 @@ PS_OUT main(PixelIn input)
     }
     else
     {
-        output.arm.x = 0.0f;
+        output.arm.x = 1.0f;
         output.arm.y = 1.0f;
         output.arm.z = 0.0f; 
     }

@@ -37,5 +37,10 @@ namespace yunuGIAdapter
         {
             NailEngine::Instance.Get().Finalize();
         };
+
+        virtual void SetUseIBL(bool useIBL)
+        {
+            NailEngine::Instance.Get().SetUseIBL(useIBL);
+        }
     };
 }

@@ -159,8 +159,11 @@ void RenderSystem::Render()
 {
 	//ClearRenderInfo();
 	//SortObject();
-
-
+	UtilBuffer utilBuffer;
+	utilBuffer.windowWidth = NailEngine::Instance.Get().GetWindowInfo().width;
+	utilBuffer.windowHeight = NailEngine::Instance.Get().GetWindowInfo().height;
+	utilBuffer.useIBL = NailEngine::Instance.Get().GetUseIBL();
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::UTIL))->PushGraphicsData(&utilBuffer, sizeof(UtilBuffer), static_cast<int>(CB_TYPE::UTIL));
 
 	PushCameraData();
 	PushLightData();
@@ -192,7 +195,7 @@ void RenderSystem::Render()
 	RenderUI();
 
 	// 디퍼드 정보 출력
-	///DrawDeferredInfo();
+	DrawDeferredInfo();
 
 	// 디퍼드용 SRV UnBind
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
@@ -317,20 +320,25 @@ void RenderSystem::RenderShadow()
 void RenderSystem::RenderPointLightShadow()
 {
 	auto& lightSet = LightManager::Instance.Get().GetLightList();
-	
+
 	int index = 0;
 
 	for (auto& e : lightSet)
 	{
 		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{
+			if (index > MAX_POINT_LIGHT - 1)
+			{
+				continue;
+			}
+
 			// 현재 카메라 프러스텀에 들어온 포인트 라이트만 쉐도우맵을 만들도록 컬링을 진행한다
 			auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
 
 			auto meshName = e->GetMeshName();
 			auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
 
-			auto aabb =  ResourceManager::Instance.Get().GetMesh(e->GetMeshName())->GetBoundingBox(
+			auto aabb = ResourceManager::Instance.Get().GetMesh(e->GetMeshName())->GetBoundingBox(
 				std::static_pointer_cast<PointLight>(e)->GetWorldTM(), 0);
 
 			if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
@@ -389,7 +397,7 @@ void RenderSystem::RenderPointLightShadow()
 			}
 
 			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX))->PushGraphicsData(&pointLightVP, sizeof(PointLightVPMatrix), static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX), true);
-			PointLightShadowPass::Instance.Get().Render(index,false);
+			PointLightShadowPass::Instance.Get().Render(index, false);
 			InstancingManager::Instance.Get().RenderStaticPointLightShadow(std::static_pointer_cast<PointLight>(e)->GetWorldTM(), std::static_pointer_cast<PointLight>(e));
 			PointLightShadowPass::Instance.Get().Render(index, true);
 			InstancingManager::Instance.Get().RenderSkinnedPointLightShadow(std::static_pointer_cast<PointLight>(e)->GetWorldTM(), std::static_pointer_cast<PointLight>(e));
@@ -446,8 +454,8 @@ void RenderSystem::RenderLight()
 		auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
 		mesh->Render();
 
-		// 만들어진 Shadow Map Binb
-		ResourceManager::Instance.Get().GetTexture(L"PointLightShadowDepth")->UnBind(15);
+		// 만들어진 Shadow Map Bind
+		ResourceManager::Instance.Get().GetTexture(L"PointLightShadowDepth")->UnBind(23);
 
 		//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->UnBind();
 	}

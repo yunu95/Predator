@@ -1,4 +1,5 @@
 #include "Buffers.hlsli"
+#include "Matrix.hlsli"
 
 struct VertexIn
 {
@@ -26,13 +27,18 @@ struct VertexOut
 
 VertexOut main(VertexIn input)
 {
-    VertexOut output = (VertexOut)0;
+    VertexOut output = (VertexOut) 0;
     
     row_major matrix WV = mul(input.world, VTM);
     row_major matrix VP = mul(VTM, PTM);
     
+    
+    float3 scale;
+    float3 pos;
+    float4 quat;
+    decompose(input.world,pos, quat,scale);
    
-   
+    
     output.posH = mul(float4(input.pos, 1.f), input.world);
      ///
     float2 tempUV = input.uv;
@@ -44,6 +50,8 @@ VertexOut main(VertexIn input)
     float4 tempVec = float4(tempUV, 0, 0);
     tempVec = mul(tempVec, VTMInv);
     tempVec = normalize(tempVec);
+    tempVec *= scale.y;
+    
     
     float3 tempNormal = mul(float4(input.normal, 0), input.world);
     tempNormal *= 0.1f;

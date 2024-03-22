@@ -53,6 +53,8 @@ namespace yunuGI
         // imgui에 렌더 출력물을 전달해주기 위한 쿼리
         //virtual D3D12_GPU_DESCRIPTOR_HANDLE* QueryD3D12RenderOutputGDH() { return nullptr; }
 
+        virtual void SetUseIBL(bool useIBL) = 0;
+
         virtual void Finalize() = 0;
     };
 }

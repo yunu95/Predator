@@ -49,6 +49,18 @@ void Mesh::SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& in
     this->materialCount = this->indexBufferVec.size();
 }
 
+
+
+void Mesh::SetDiffuseExposure(float exposure)
+{
+	this->diffuseExposure = exposure;
+}
+
+void Mesh::SetAmbientExposure(float exposure)
+{
+	this->ambientExposure = exposure;
+}
+
 void Mesh::Render(unsigned int materialIndex /*= 0*/, std::shared_ptr<InstanceBuffer> buffer /*= nullptr*/)
 {
 	if (buffer != nullptr)
@@ -154,4 +166,14 @@ std::vector<DirectX::SimpleMath::Vector3>& Mesh::GetBoundingVertexList(DirectX::
 	}
 
 	return this->tempBoundingVertexList[index];
+}
+
+float Mesh::GetDiffuseExposure()
+{
+	return this->diffuseExposure;
+}
+
+float Mesh::GetAmbientExposure()
+{
+	return this->ambientExposure;
 }

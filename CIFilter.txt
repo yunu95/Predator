@@ -1,0 +1,11 @@
+매 빌드마다 새로운 버전으로 배포되어야 하는 파일의 파일명과 파일 확장자명을 아래에 수록하시오.
+
+.txt
+.cso
+.hlsl
+InWanderLand_ReleaseEditorExe.exe
+InWanderLand_ReleaseExe.exe
+InWanderLand.dll
+NailEngine.dll
+Yunuty.dll
+InitResources.bat

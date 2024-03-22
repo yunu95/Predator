@@ -25,6 +25,11 @@ void PointLight::SetRange(float range)
 {
 	this->lightInfo.range = range;
 	this->lightInfo.farPlane = range;
+
+	if (range <= 0.f || range <= this->lightInfo.nearPlane)
+	{
+		this->lightInfo.farPlane = this->lightInfo.nearPlane += 1.f;
+	}
 }
 
 void PointLight::SetWorldTM(const DirectX::SimpleMath::Matrix& wtm)
