@@ -374,10 +374,10 @@ void Unit::DeathUpdate()
 	if (deathFunctionElapsed >= deathAnimationDelay)
 	{
 		deathFunctionElapsed = 0.0f;
-
 		m_navAgentComponent->SetRadius(0.0f);
 		m_navAgentComponent->SetActive(false);
 		GetGameObject()->SetSelfActive(false);
+		GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(1000, 1000, 1000));
 	}
 }
 #pragma endregion
@@ -458,6 +458,11 @@ SkillPreviewSystem::SkillPreviewMesh Unit::GetSkillPreviewType(SkillEnum p_curre
 		default:
 			break;
 	}
+}
+
+std::string Unit::GetUnitFbxName() const
+{
+	return m_fbxName;
 }
 
 void Unit::SetCurrentOrderMove()
@@ -751,6 +756,11 @@ void Unit::SetSkillPreviewType(SkillPreviewSystem::SkillPreviewMesh p_qskill, Sk
 void Unit::SetMaxAggroNumber(int p_num)
 {
 	m_maxAggroNumber = p_num;
+}
+
+void Unit::SetFbxName(std::string p_string)
+{
+	m_fbxName = p_string;
 }
 
 /// <summary>

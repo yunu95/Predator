@@ -5,7 +5,6 @@
 
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
-#include "UnitClassifier.h"
 #include "Unit.h"
 #include "UnitProductor.h"
 #include "WarriorProductor.h"
@@ -116,65 +115,41 @@ namespace application
 			/// 2024.03.20 추가
 			// 이제 templateData에서 UnitType에 대한 int값을 가져올 수 있다.
 			// 이 값을 통해 타입을 분류해 유닛을 배치해보자.
-
-
-			if (!isSelectorInitialized)
+			if (pod.waveData == nullptr)
 			{
-				productorSelector.push_back(&HealerProductor::Instance());
-				productorSelector.push_back(&WarriorProductor::Instance());
-				productorSelector.push_back(&MagicianProductor::Instance());
-				productorSelector.push_back(&MeleeEnemyProductor::Instance());
-				productorSelector.push_back(&RangedEnemyProductor::Instance());
-				isSelectorInitialized = true;
-			}
-
-			UnitProductor* currentSelectedProductor{ nullptr };
-
-			for (auto& e : productorSelector)
-			{
-				if (e->SelectUnitProductorByFbxName(pod.templateData->pod.skinnedFBXName))
+				if (!isSelectorInitialized)
 				{
-					currentSelectedProductor = e;
-					break;
+					productorSelector.push_back(&HealerProductor::Instance());
+					productorSelector.push_back(&WarriorProductor::Instance());
+					productorSelector.push_back(&MagicianProductor::Instance());
+					productorSelector.push_back(&MeleeEnemyProductor::Instance());
+					productorSelector.push_back(&RangedEnemyProductor::Instance());
+					isSelectorInitialized = true;
 				}
+
+				UnitProductor* currentSelectedProductor{ nullptr };
+
+				for (auto& e : productorSelector)
+				{
+					if (e->SelectUnitProductorByFbxName(pod.templateData->pod.skinnedFBXName))
+					{
+						currentSelectedProductor = e;
+						break;
+					}
+				}
+
+				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+
+				Vector3d startPosition = Vector3d(pod.position.x, pod.position.y, pod.position.z);
+
+				application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+				contentsLayer->RegisterToEditorObjectVector(currentSelectedProductor->CreateUnit(startPosition)->GetGameObject());
+
 			}
-
-
-			//pod.templateData->pod.fbxName;
-			
-
-			currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-
-			Vector3d startPosition = Vector3d(pod.position.x, pod.position.y, pod.position.z);
-
-			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-			contentsLayer->RegisterToEditorObjectVector(currentSelectedProductor->CreateUnit(startPosition)->GetGameObject());
-
 		}
 
 		void UnitData::PostApplyAsPlaytimeObject()
 		{
-			/// 
-		/*	UnitProductor* currentSelectedProductor{ nullptr };
-
-			switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
-			{
-				case Unit::UnitType::Healer:
-					currentSelectedProductor = &HealerProductor::Instance();
-					break;
-				case Unit::UnitType::Warrior:
-					currentSelectedProductor = &WarriorProductor::Instance();
-					break;
-				case Unit::UnitType::Magician:
-					currentSelectedProductor = &MagicianProductor::Instance();
-					break;
-				default:
-					currentSelectedProductor = &MeleeEnemyProductor::Instance();
-					break;
-			}
-
-			currentSelectedProductor->MappingUnitData(pod.templateData->pod);*/
-			//pod.waveData->playtimeWave->m_productorVector.push_back(currentSelectedProductor);		// 이렇게 밀어넣어준다 해서 실제 wave 순서와 맞아 떨어지지 않음. 임시방편
 		}
 
 		bool UnitData::EnterDataFromGlobalConstant()

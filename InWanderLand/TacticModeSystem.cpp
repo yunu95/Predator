@@ -4,6 +4,11 @@
 #include "RTSCam.h"
 #include "PlayerController.h"
 
+TacticModeSystem::TacticModeSystem()
+{
+	m_queueSelector.insert({ "SKM_Robin" , &warriorQueue });
+}
+
 void TacticModeSystem::SetCurrentSelectedPlayerUnit(Unit::UnitType p_type)
 {
 	currentSelectedUnit = PlayerController::SingleInstance().FindSelectedUnitByUnitType(p_type);
@@ -99,18 +104,10 @@ bool TacticModeSystem::IsTacticModeActivated(Unit* p_unit)
 
 void TacticModeSystem::SetCurrentSelectedQueue(Unit* p_currentUnit)
 {
-	switch (p_currentUnit->GetUnitType())
-	{
-		case Unit::UnitType::Warrior:
-			currentSelectedQueue = &warriorQueue;
-			break;
-		case Unit::UnitType::Magician:
-			currentSelectedQueue = &magicianQueue;
-			break;
-		case Unit::UnitType::Healer:
-			currentSelectedQueue = &healerQueue;
-			break;
-	}
+	std::string unitFbxName = p_currentUnit->GetUnitFbxName();
+
+	currentSelectedQueue = m_queueSelector.find(unitFbxName)->second;
+
 	currentActivatedUnit = p_currentUnit;
 }
 

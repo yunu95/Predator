@@ -1150,7 +1150,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UIPanel.h" />
-    <ClInclude Include="UnitClassifier.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="SpecialEffect.h" />
@@ -1316,7 +1315,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UIPanel.cpp" />
     <ClCompile Include="UnitBrush.cpp" />
-    <ClCompile Include="UnitClassifier.cpp" />
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="UnitEditorInstance.cpp" />
     <ClCompile Include="UnitPalette.cpp" />

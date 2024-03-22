@@ -16,6 +16,8 @@ class RTSCam;
 class TacticModeSystem : public SingletonClass<TacticModeSystem>
 {
 public:
+	TacticModeSystem();
+
 	enum OrderType
 	{
 		Move,
@@ -52,6 +54,7 @@ private:
 	std::multimap<Unit*, Vector3d> processingSkillPosMap;						
 
 	std::queue<std::function<void()>>* currentSelectedQueue;
+	std::unordered_map<std::string, std::queue<std::function<void()>>*> m_queueSelector;
 
 	std::queue<std::function<void()>> warriorQueue;
 	std::queue<std::function<void()>> magicianQueue;
