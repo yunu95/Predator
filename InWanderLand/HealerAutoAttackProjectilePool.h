@@ -4,6 +4,8 @@
 #include "PassiveCakePool.h"
 #include "DebugMeshes.h"
 #include "StaticMeshRenderer.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
 class HealerAutoAttackProjectilePool :
 	public GameObjectPool<HealerAutoAttackProjectile>, public SingletonClass<HealerAutoAttackProjectilePool>
@@ -18,6 +20,9 @@ public:
 		auto projectileComponent = projectile->GetGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		projectileComponent->GetGI().SetMesh(capsuleMesh);
 		projectileComponent->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::blue(), false));
+
+		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+		contentsLayer->RegisterToEditorObjectVector(projectile->GetGameObject());
 	}
 };
 

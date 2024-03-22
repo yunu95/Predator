@@ -60,4 +60,3 @@ for /r "%sourceDir%" %%i in (*.*) do (
 )
 
 echo Files copied successfully.
-pause
