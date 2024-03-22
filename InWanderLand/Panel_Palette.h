@@ -10,8 +10,22 @@
 #include "TemplateDataManager.h"
 #include "PaletteManager.h"
 #include "PaletteList.h"
+#include "EditorCamera.h"
 
 #include <vector>
+
+namespace yunutyEngine
+{
+    class GameObject;
+}
+
+namespace application
+{
+    namespace editor
+    {
+        class LightData;
+    }
+}
 
 namespace application
 {
@@ -31,6 +45,13 @@ namespace application
             virtual void Finalize() override;
             virtual void OnEvent(EditorEvents& event) override;
 
+            virtual void OnPlayContents() override;
+            virtual void OnPauseContents() override;
+            virtual void OnResumeContents() override;
+            virtual void OnStopContents() override;
+
+            void ChangeDirectionalLight(LightData* light);
+
         private:
             PalettePanel();
 
@@ -49,6 +70,7 @@ namespace application
             bool ImGui_CreateUnitPopup();
 
             void LoadCallback();
+            void UpdataLightGizmo();
 
             palette::Palette* currentPalette = nullptr;
 
@@ -64,7 +86,10 @@ namespace application
             palette::CameraPalette& cp = palette::CameraPalette::SingleInstance();
             palette::LightPalette& lp = palette::LightPalette::SingleInstance();
 
-            bool createUnitPopup = false;
+            EditorCamera& ec = EditorCamera::GetSingletonInstance();
+            LightData* directionalLight = nullptr;
+            GameObject* lightGizmo = nullptr;
+
             int unitCurrentButton = -1;
             int ornamentCurrentButton = -1;
             int lightCurrentButton = -1;

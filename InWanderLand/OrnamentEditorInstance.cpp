@@ -19,10 +19,10 @@ namespace application::editor::palette
 	{
 		this->ornamentTemplateData = ornamentTemplateData;
 		yunuGI::Vector3 boundingMin, boundingMax;
-		meshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(ornamentTemplateData->pod.fbxName, &boundingMin, &boundingMax);
+		meshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(ornamentTemplateData->pod.staticFBXName, &boundingMin, &boundingMax);
 		AdjustPickingCollider(reinterpret_cast<const Vector3f&>(boundingMin), reinterpret_cast<const Vector3f&>(boundingMax));
 		meshObject->SetParent(GetGameObject());
-		currentFBX = ornamentTemplateData->pod.fbxName;
+        currentFBX = ornamentTemplateData->pod.staticFBXName;
 	}
 
 	void OrnamentEditorInstance::ChangeTemplateData(const application::editor::OrnamentData* ornamentData)
@@ -34,10 +34,9 @@ namespace application::editor::palette
 	{
 		if (this->ornamentTemplateData == ornamentTemplateData)
 			return;
-		this->ornamentTemplateData = ornamentTemplateData;
-		ChangeResource(ornamentTemplateData->pod.fbxName);
-	}
-  
+        this->ornamentTemplateData = ornamentTemplateData;
+        ChangeResource(ornamentTemplateData->pod.staticFBXName);
+    }
     void OrnamentEditorInstance::ChangeResource(const std::string& fbxName)
     {
         // TemplateData �� �����ϰ� Resource �� ������

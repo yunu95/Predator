@@ -23,7 +23,6 @@ namespace yunuGIAdapter
 			std::wstring wFilePath(bufferSize, L'\0');
 			MultiByteToWideChar(CP_UTF8, 0, filePath, -1, &wFilePath[0], bufferSize);
 
-
 			std::filesystem::path topLevelPath;
 			for (const auto& p : std::filesystem::path(filePath)) {
 				topLevelPath = p;

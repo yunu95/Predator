@@ -17,7 +17,7 @@ namespace application
 
 		struct POD_Unit_TemplateData
 		{
-			std::string fbxName = std::string();
+			std::string skinnedFBXName = std::string();
 
 			int unitType;
 			float m_healthPoint;
@@ -37,6 +37,7 @@ namespace application
 			float m_unitSpeed;
 
 			float m_attackDelay;
+
 
 			TO_JSON(POD_Unit_TemplateData)
 			FROM_JSON(POD_Unit_TemplateData)

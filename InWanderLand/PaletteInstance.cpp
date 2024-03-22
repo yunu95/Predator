@@ -87,7 +87,19 @@ namespace application::editor::palette
     {
         editableData = data;
     }
+
+    void PaletteInstance::ShowEditorInstance()
+    {
+        GetGameObject()->SetSelfActive(true);
+    }
+
+    void PaletteInstance::HideEditorInstance()
+    {
+        GetGameObject()->SetSelfActive(false);
+    }
+
     void PaletteInstance::ApplyInstances()
     {
+
     }
 }

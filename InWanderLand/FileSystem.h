@@ -12,6 +12,7 @@ namespace application
 		{
 			std::filesystem::path SaveFileDialog(const char* filter = "All\0*.*\0", const char* initialDir = "");
 			std::filesystem::path LoadFileDialog(const char* filter = "All\0*.*\0", const char* initialDir = "");
+			std::vector<std::filesystem::path> GetSubdirectories(const std::filesystem::path& directoryPath = "");
 		};
 	}
 }

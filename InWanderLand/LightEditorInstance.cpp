@@ -28,12 +28,18 @@ namespace application::editor::palette
 			{
 				fbxType = "Directional";
 				currentLight = LightType::Directional;
+				lightObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+				lightObj->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+				lightObj->SetParent(GetGameObject());
 				break;
 			}
 			case LightType::Point:
 			{
 				fbxType = "Sphere";
 				currentLight = LightType::Point;
+				lightObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+				lightObj->AddComponent<yunutyEngine::graphics::PointLight>();
+				lightObj->SetParent(GetGameObject());
 				break;
 			}
 			default:
@@ -41,14 +47,13 @@ namespace application::editor::palette
 		}
 
 		yunuGI::Vector3 boundingMin, boundingMax;
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxType, &boundingMin, &boundingMax);
+		fbxObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxType, &boundingMin, &boundingMax);
 		AdjustPickingCollider(reinterpret_cast<const Vector3f&>(boundingMin), reinterpret_cast<const Vector3f&>(boundingMax));
-		obj->setName("LightFBX");
-		obj->SetParent(GetGameObject());
+		fbxObj->SetParent(GetGameObject());
 
 		auto& erm = ResourceManager::GetSingletonInstance();
 
-		for (auto each : obj->GetChildren())
+		for (auto each : fbxObj->GetChildren())
 		{
 			auto comp = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 
@@ -57,7 +62,7 @@ namespace application::editor::palette
 				for (int i = 0; i < comp->GetGI().GetMaterialCount(); ++i)
 				{
 					comp->GetGI().GetMaterial(i)->SetPixelShader(erm.GetShader("Debug_AlphaPS.cso"));
-					comp->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,0.3,1,0.5 });
+					comp->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,0.3,1,0.1 });
 				}
 			}
 		}
@@ -90,14 +95,8 @@ namespace application::editor::palette
 		if (currentLight == type)
 			return;
 
-		for (auto& each : GetGameObject()->GetChildren())
-		{
-			if (each->getName() == "LightFBX")
-			{
-				yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(each);
-				break;
-			}
-		}
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(fbxObj);
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(lightObj);
 
 		std::string fbxType;
 
@@ -106,11 +105,17 @@ namespace application::editor::palette
 			case LightType::Directional:
 			{
 				fbxType = "Directional";
+				lightObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+				lightObj->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+				lightObj->SetParent(GetGameObject());
 				break;
 			}
 			case LightType::Point:
 			{
 				fbxType = "Sphere";
+				lightObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+				lightObj->AddComponent<yunutyEngine::graphics::PointLight>();
+				lightObj->SetParent(GetGameObject());
 				break;
 			}
 			default:
@@ -118,14 +123,14 @@ namespace application::editor::palette
 		}
 
 		yunuGI::Vector3 boundingMin, boundingMax;
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxType, &boundingMin, &boundingMax);
+		fbxObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxType, &boundingMin, &boundingMax);
 		AdjustPickingCollider(reinterpret_cast<const Vector3f&>(boundingMin), reinterpret_cast<const Vector3f&>(boundingMax));
-		obj->setName("LightFBX");
-		obj->SetParent(GetGameObject());
+		fbxObj->setName("LightFBX");
+		fbxObj->SetParent(GetGameObject());
 
 		auto& erm = ResourceManager::GetSingletonInstance();
 
-		for (auto each : obj->GetChildren())
+		for (auto each : fbxObj->GetChildren())
 		{
 			auto comp = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 
@@ -134,7 +139,7 @@ namespace application::editor::palette
 				for (int i = 0; i < comp->GetGI().GetMaterialCount(); ++i)
 				{
 					comp->GetGI().GetMaterial(i)->SetPixelShader(erm.GetShader("Debug_AlphaPS.cso"));
-					comp->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,0.3,1,0.5 });
+					comp->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,0.3,1,0.1 });
 				}
 			}
 		}
@@ -142,6 +147,45 @@ namespace application::editor::palette
 		currentLight = type;
 
 		return;
+	}
+
+	void LightEditorInstance::ApplyLightComponent(float range, yunuGI::Color color)
+	{
+		if (lightObj)
+		{
+			lightObj->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+			lightObj->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
+			lightObj->GetTransform()->SetLocalScale(GetTransform()->GetWorldScale());
+			
+			switch (currentLight)
+			{
+				case application::editor::LightType::Point:
+				{
+					auto lc = lightObj->GetComponent<yunutyEngine::graphics::PointLight>();
+					lc->GetGI().SetRange(range);
+					lc->GetGI().SetLightDiffuseColor(color);
+					break;
+				}
+				default:
+					break;
+			}
+		}
+	}
+
+	void LightEditorInstance::ShowEditorInstance()
+	{
+		if (fbxObj && currentLight != LightType::Directional)
+		{
+			fbxObj->SetSelfActive(true);
+		}
+	}
+
+	void LightEditorInstance::HideEditorInstance()
+	{
+		if (fbxObj)
+		{
+			fbxObj->SetSelfActive(false);
+		}
 	}
 }
 

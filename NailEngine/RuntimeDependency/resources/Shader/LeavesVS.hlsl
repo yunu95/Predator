@@ -26,31 +26,32 @@ struct VertexOut
 
 VertexOut main(VertexIn input)
 {
-    VertexOut output;
+    VertexOut output = (VertexOut)0;
     
     row_major matrix WV = mul(input.world, VTM);
     row_major matrix VP = mul(VTM, PTM);
     
-    ///
+   
+   
+    output.posH = mul(float4(input.pos, 1.f), input.world);
+     ///
     float2 tempUV = input.uv;
     tempUV.y = 1 - tempUV.y;
     tempUV *= 2;
     tempUV -= 1;
     tempUV.y *= -1;
     tempUV.x *= 1;
-    float4 tempVec = float4(tempUV, 0,0);
+    float4 tempVec = float4(tempUV, 0, 0);
     tempVec = mul(tempVec, VTMInv);
     tempVec = normalize(tempVec);
     
-    float3 tempNormal = mul(float4(input.normal,0), input.world);
+    float3 tempNormal = mul(float4(input.normal, 0), input.world);
     tempNormal *= 0.1f;
     
     float3 tempPos = (tempVec.xyz + tempNormal) * 2;
     
-    input.pos += tempPos;
+    output.posH.xyz += tempPos;
     ///
-   
-    output.posH = mul(float4(input.pos, 1.f), input.world);
     output.posH = mul(output.posH, VP);
     output.posV = mul(float4(input.pos, 1.f), WV);
     output.color = input.color;

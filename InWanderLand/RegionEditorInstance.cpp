@@ -7,7 +7,7 @@ namespace application::editor::palette
     void RegionEditorInstance::Start()
     {
         PaletteInstance::Start();
-        mesh = AttachDebugMesh(GetGameObject()->AddGameObject(), DebugMeshType::Rectangle, yunuGI::Color{0, 0, 1}, true);
+        mesh = AttachDebugMesh(GetGameObject()->AddGameObject(), DebugMeshType::Rectangle, yunuGI::Color{ 0, 0, 1 }, true);
         mesh->GetGI().SetMaterial(0, GetColoredDebugMaterialTransparent({ 0,0,1 ,regionTransparency }));
         mesh->GetTransform()->SetLocalRotation(Quaternion({ 90,0,0 }));
         SetHalfExtent(halfExtent);
@@ -45,7 +45,7 @@ namespace application::editor::palette
     void RegionEditorInstance::Apply(const application::editor::RegionData* regionData)
     {
         SetHalfExtent({ regionData->pod.width, regionData->pod.height });
-        GetTransform()->SetWorldPosition({ regionData->pod.x, 0, regionData->pod.z });
+        GetTransform()->SetWorldPosition({ regionData->pod.x, debugMeshYPos, regionData->pod.z });
         GetTransform()->SetWorldRotation(Vector3d{ 0,regionData->pod.angle ,0 });
     }
     void RegionEditorInstance::SetHalfExtent(const Vector2f& halfExtent)

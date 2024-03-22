@@ -13,8 +13,8 @@ namespace application
     namespace editor
     {
         TerrainData* TerrainData::soleTerrainData{ nullptr };
-        Terrain_TemplateData* TerrainData::soleTerrainTemplateData{nullptr};
-        DebugStaticMesh* TerrainData::debugMesh{nullptr};
+        Terrain_TemplateData* TerrainData::soleTerrainTemplateData{ nullptr };
+        DebugStaticMesh* TerrainData::debugMesh{ nullptr };
         TerrainData::~TerrainData()
         {
             assert(soleTerrainData == this && "지형 정보는 단 하나만 존재해야 합니다!");
@@ -185,7 +185,7 @@ namespace application
             auto node = Scene::getCurrentScene()->AddGameObject();
             node->GetTransform()->SetWorldPosition(GetNodePosition(nodeKey) - nodeHeight * Vector3d::up * 0.5);
             node->GetTransform()->SetLocalScale({ nodeDistance, nodeHeight, nodeDistance });
-            auto mesh = AttachDebugMesh(node, DebugMeshType::Cube, yunuGI::Color{0.788, 0.647, 0.215}, false);
+            auto mesh = AttachDebugMesh(node, DebugMeshType::Cube, yunuGI::Color{ 0.788, 0.647, 0.215 }, false);
             mesh->SetIsUpdating(false);
             return node;
         }
@@ -293,10 +293,10 @@ namespace application
                 bool rightExists{ nodes.find(nodeKey + Vector2i{1, 0}) != nodes.end() };
                 if (toprightExists && topExists && rightExists)
                 {
-                    vertexList.push_back(GetNodePosition(nodeKey));
-                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{1, 0}));
-                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{0, 1}));
-                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{1, 1}));
+                    vertexList.push_back(GetNodePosition(nodeKey) + Vector3d::up * debugMeshYPos);
+                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{ 1, 0 }) + Vector3d::up * debugMeshYPos);
+                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{ 0, 1 }) + Vector3d::up * debugMeshYPos);
+                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{ 1, 1 }) + Vector3d::up * debugMeshYPos);
                     indexList.push_back(vertexList.size() - 2);
                     indexList.push_back(vertexList.size() - 3);
                     indexList.push_back(vertexList.size() - 4);
@@ -306,27 +306,27 @@ namespace application
                 }
                 else if (toprightExists && topExists)
                 {
-                    vertexList.push_back(GetNodePosition(nodeKey));
-                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{1, 1}));
-                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{0, 1}));
+                    vertexList.push_back(GetNodePosition(nodeKey) + Vector3d::up * debugMeshYPos);
+                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{ 1, 1 }) + Vector3d::up * debugMeshYPos);
+                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{ 0, 1 }) + Vector3d::up * debugMeshYPos);
                     indexList.push_back(vertexList.size() - 1);
                     indexList.push_back(vertexList.size() - 2);
                     indexList.push_back(vertexList.size() - 3);
                 }
                 else if (toprightExists && rightExists)
                 {
-                    vertexList.push_back(GetNodePosition(nodeKey));
-                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{1, 1}));
-                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{1, 0}));
+                    vertexList.push_back(GetNodePosition(nodeKey) + Vector3d::up * debugMeshYPos);
+                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{ 1, 1 }) + Vector3d::up * debugMeshYPos);
+                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{ 1, 0 }) + Vector3d::up * debugMeshYPos);
                     indexList.push_back(vertexList.size() - 3);
                     indexList.push_back(vertexList.size() - 2);
                     indexList.push_back(vertexList.size() - 1);
                 }
                 else if (topExists && rightExists)
                 {
-                    vertexList.push_back(GetNodePosition(nodeKey));
-                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{0, 1}));
-                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{1, 0}));
+                    vertexList.push_back(GetNodePosition(nodeKey) + Vector3d::up * debugMeshYPos);
+                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{ 0, 1 }) + Vector3d::up * debugMeshYPos);
+                    vertexList.push_back(GetNodePosition(nodeKey + Vector2i{ 1, 0 }) + Vector3d::up * debugMeshYPos);
                     indexList.push_back(vertexList.size() - 3);
                     indexList.push_back(vertexList.size() - 2);
                     indexList.push_back(vertexList.size() - 1);
@@ -337,7 +337,7 @@ namespace application
         {
             auto debugMesh = Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugStaticMesh>();
             //debugMesh->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::brown(), true));
-            debugMesh->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color{0.5f * (debugMeshes.size() % 2), 0.5f * ((debugMeshes.size() / 2) % 2), 1, 1}, true));
+            debugMesh->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color{ 0.5f * (debugMeshes.size() % 2), 0.5f * ((debugMeshes.size() / 2) % 2), 1, 1 }, true));
             //debugMesh->SetActive(false);
             return debugMesh;
         }

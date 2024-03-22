@@ -51,8 +51,6 @@ namespace application
 
         void SceneViewPanel::GUIProgress()
         {
-            imgui::SmartStyleColor sceneViewColor(ImGuiCol_WindowBg, ImVec4(1, 0, 1, 1));
-
             ImGui::Begin("SceneView", 0, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_MenuBar);
 
             ImGui_Update();
@@ -93,7 +91,7 @@ namespace application
 
         bool SceneViewPanel::IsMouseOverGizmo()
         {
-            return ImGuizmo::IsOver();
+            return pm->GetCurrentPalette()->AreThereAnyObjectSelected() && ImGuizmo::IsOver();
         }
 
         void SceneViewPanel::ImGui_Update()
@@ -261,7 +259,6 @@ namespace application
         void SceneViewPanel::ImGui_DrawGizmo()
         {
             // Gizmo Option Button
-
             {
                 imgui::SmartStyleVar framePadding(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
                 imgui::SmartStyleVar itemSpacing(ImGuiStyleVar_ItemSpacing, ImVec2(5, 5));
@@ -461,8 +458,11 @@ namespace application
                         }
                         else
                         {
-                            app->PlayContents();
-                            nowPlaying = true;
+                            if (!TerrainData::Instance().IsEmpty())
+                            {
+                                app->PlayContents();
+                                nowPlaying = true;
+                            }
                         }
                     }
                 }
