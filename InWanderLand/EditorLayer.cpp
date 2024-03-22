@@ -164,6 +164,15 @@ namespace application
 			{
 				each->OnPlayContents();
 			}
+
+			for (auto each : InstanceManager::GetSingletonInstance().GetList())
+			{
+				auto ptr = each->GetPaletteInstance();
+				if (ptr)
+				{
+					ptr->HideEditorInstance();
+				}
+			}
 		}
 
 		void EditorLayer::OnPauseContents()
@@ -176,6 +185,15 @@ namespace application
 			for (auto& each : editorModuleList)
 			{
 				each->OnPauseContents();
+			}
+
+			for (auto each : InstanceManager::GetSingletonInstance().GetList())
+			{
+				auto ptr = each->GetPaletteInstance();
+				if (ptr)
+				{
+					ptr->ShowEditorInstance();
+				}
 			}
 		}
 
@@ -190,6 +208,15 @@ namespace application
 			{
 				each->OnResumeContents();
 			}
+
+			for (auto each : InstanceManager::GetSingletonInstance().GetList())
+			{
+				auto ptr = each->GetPaletteInstance();
+				if (ptr)
+				{
+					ptr->HideEditorInstance();
+				}
+			}
 		}
 
 		void EditorLayer::OnStopContents()
@@ -202,6 +229,15 @@ namespace application
 			for (auto& each : editorModuleList)
 			{
 				each->OnStopContents();
+			}
+
+			for (auto each : InstanceManager::GetSingletonInstance().GetList())
+			{
+				auto ptr = each->GetPaletteInstance();
+				if (ptr)
+				{
+					ptr->ShowEditorInstance();
+				}
 			}
 		}
 

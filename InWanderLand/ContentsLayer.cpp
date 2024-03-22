@@ -431,7 +431,7 @@ void application::contents::ContentsLayer::PlayContents()
 
 void application::contents::ContentsLayer::PauseContents()
 {
-	Time::SetTimeScale(0);
+	Time::SetTimeScale(FLT_MIN * 1000);
 }
 
 void application::contents::ContentsLayer::ResumeContents()
