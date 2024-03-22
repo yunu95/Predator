@@ -6,6 +6,7 @@
 #include "PlayerSkillSystem.h"
 #include "Dotween.h"
 #include "TacticModeSystem.h"
+#include "IAnimation.h"
 
 
 void Unit::Start()
@@ -112,9 +113,6 @@ void Unit::Start()
 void Unit::Update()
 {
 	unitFSM.UpdateState();
-
-	// 해당 유닛을 공격하는 유닛들의 컨테이너를 만들어서, 해당 컨테이너의 size를 m_currentAggroNumber로 주기적으로 갱신하자.
-	m_currentAggroNumber = m_attackingThisUnitSet.size();
 }
 
 Unit::UnitType Unit::GetUnitType() const
@@ -184,12 +182,13 @@ void Unit::AttackEngage()
 
 	m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::red());
 
-	m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
+	//m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 
 	attackFunctionElapsed = 0.0f;
 	attackAnimationFrameCheckNumber = 0;
 	isAttackStarted = false;
-	dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotationTime, false);
+	RotateUnit(m_currentTargetUnit->GetTransform()->GetWorldPosition());
+	//dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotationTime, false);
 	CheckCurrentAnimation(unitAnimations.m_idleAnimation);
 
 
@@ -252,6 +251,9 @@ void Unit::IdleUpdate()
 
 	idleElapsed += Time::GetDeltaTime();
 
+	if (idleElapsed >= 3.0f)
+		DetermineCurrentTargetObject();
+
 	// 데미지를 입으면 공격한 상대의 정보를 list에 등록하고 쫓아가기
 }
 
@@ -297,6 +299,7 @@ void Unit::AttackUpdate()
 	//CheckCurrentAnimation(m_attackAnimation);
 
 	attackFunctionElapsed += Time::GetDeltaTime();
+	//RotateUnit(m_currentTargetUnit->GetTransform()->GetWorldPosition());
 
 	//LookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition());
 
@@ -309,18 +312,23 @@ void Unit::AttackUpdate()
 			m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 			attackAnimationFrameCheckNumber = 0;
 			isAttackAnimationOperating = false;
-			dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotationTime, false);
+			//dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotationTime, false);
 		}
 	}
 
-	if (attackFunctionElapsed >= attackFunctionCallDelay/* || !isAttackStarted*/)
+	if (attackFunctionElapsed >= attackFunctionCallDelay || !isAttackStarted)
 	{
 		isAttackStarted = true;
 		isAttackAnimationOperating = true;
 		attackFunctionElapsed = 0.0f;
 		m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_attackAnimation, animationLerpDuration, animationTransitionSpeed);
 		GetGameObject()->GetComponent<AttackSystem>()->Attack(m_currentTargetUnit);
+		DetermineCurrentTargetObject();
 		CheckCurrentAnimation(unitAnimations.m_attackAnimation);
+	}
+	else if (attackFunctionElapsed < attackFunctionCallDelay)
+	{
+		dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotationTime, false);
 	}
 }
 
@@ -577,6 +585,38 @@ void Unit::DetermineHitDamage(float p_onceCalculatedDmg)
 	m_finalHitDamage = (m_defensePoint / 10.0f) / (1 - m_criticalDamageDecreaseMultiplier) / (1 - m_dodgeProbability);
 }
 
+void Unit::RotateUnit(Vector3d endPosition)
+{
+	Vector3d startPosition = GetGameObject()->GetTransform()->GetWorldPosition();
+	Vector3d objectFront = GetGameObject()->GetTransform()->GetWorldRotation().Forward();
+	Vector3d distanceVec = endPosition - startPosition;
+
+	double dot = Vector3d::Dot(objectFront, startPosition - endPosition);
+
+	double angle;
+	double sq;
+	double finalAngle;
+	double finalDegree;
+
+	// 회전 방향 판정
+	Vector3d axis = Vector3d::Cross(objectFront, distanceVec);
+
+	angle = (objectFront.x * distanceVec.x + objectFront.z * distanceVec.z);
+	sq = (sqrt(pow(objectFront.x, 2) + pow(objectFront.z, 2)) *
+		sqrt(pow(distanceVec.x, 2) + pow(distanceVec.z, 2)));
+
+	// 두 벡터의 각도가 180도 이상이면 180을, -180 이하 이라면 -180을 
+	//finalAngle = acos( max( -1.0f, min(1.0f, angle / sq) ) );
+	finalAngle = acos(std::clamp(angle / sq, -1.0, 1.0));			// c++17 된다면
+	finalDegree = 57.2969f * (finalAngle);
+
+	if (axis.y < 0)
+		finalDegree *= -1;
+
+	if (abs(finalDegree) > 0.05)
+		GetGameObject()->GetTransform()->SetWorldRotation(Quaternion({ 0.0f, finalDegree, 0.0f }));
+}
+
 void Unit::DetermineCurrentTargetObject()
 {
 	if (tauntedUnit != nullptr)
@@ -591,6 +631,9 @@ void Unit::DetermineCurrentTargetObject()
 		}
 		else
 		{
+			Unit* previousTargetUnit{ nullptr };
+			previousTargetUnit = m_currentTargetUnit;
+
 			bool isDistanceComparingStarted = false;
 
 			float tempShortestDistance = 0.0f;
@@ -599,14 +642,24 @@ void Unit::DetermineCurrentTargetObject()
 			{
 				float distance = (GetGameObject()->GetTransform()->GetWorldPosition() - e->GetTransform()->GetWorldPosition()).Magnitude();
 
-				if ((!isDistanceComparingStarted || tempShortestDistance > distance) && e->currentOrder != UnitState::Death
-					&& e->m_currentAggroNumber < e->m_maxAggroNumber)
+				if ((!isDistanceComparingStarted || tempShortestDistance > distance) 
+					&& (e->m_attackingThisUnitSet.size() < e->m_maxAggroNumber || e->m_attackingThisUnitSet.find(this) != e->m_attackingThisUnitSet.end()))
 				{
 					tempShortestDistance = distance;
 					m_currentTargetUnit = e;
-					e->m_attackingThisUnitSet.insert(this);
 					isDistanceComparingStarted = true;
 				}
+			}
+
+			if (m_currentTargetUnit != nullptr)
+			{
+				// 어그로 최대 수 제한 때문에 현재 타겟이 없을 경우
+				m_currentTargetUnit->m_attackingThisUnitSet.insert(this);
+				//previousTargetUnit = m_currentTargetUnit;
+			}
+			if (previousTargetUnit != nullptr && previousTargetUnit != m_currentTargetUnit)
+			{
+				previousTargetUnit->m_attackingThisUnitSet.erase(this);
 			}
 		}
 	}
@@ -614,7 +667,7 @@ void Unit::DetermineCurrentTargetObject()
 
 void Unit::ReportUnitDeath()
 {
-	for (auto e : m_recognizedThisList)
+	for (auto e : m_recognizedThisSet)
 	{
 		// 죽은 유닛이 아닌 죽은 유닛을 list에 갖고 있는 유닛의 함수 호출
 		e->IdentifiedOpponentDeath(this);
@@ -632,6 +685,11 @@ void Unit::IdentifiedOpponentDeath(Unit* p_unit)
 	/// 적군을 담고 있는 list에서 죽은 오브젝트 유닛을 빼준다.
 	m_opponentObjectSet.erase(p_unit);
 	DetermineCurrentTargetObject();
+
+	//for (auto e : m_recognizedThisList)
+	//{
+	//	e->DetermineCurrentTargetObject();
+	//}
 }
 
 void Unit::SetPlayerSerialNumber(UnitType serialNum)
@@ -695,28 +753,24 @@ void Unit::SetMaxAggroNumber(int p_num)
 	m_maxAggroNumber = p_num;
 }
 
+/// <summary>
+/// 1. p_unit을 this->m_opponentObjectSet에 저장.
+/// 2. p_unit->recognizeSet에 this를 저장
+/// </summary>
+/// <param name="p_unit"></param>
 void Unit::AddToOpponentObjectList(Unit* p_unit)
 {
 	m_opponentObjectSet.insert(p_unit);
-	DetermineCurrentTargetObject();
-	p_unit->AddToRecognizeList(this);
+	p_unit->m_recognizedThisSet.insert(this);
+	this->DetermineCurrentTargetObject();
 }
 
 void Unit::DeleteFromOpponentObjectList(Unit* p_unit)
 {
 	m_opponentObjectSet.erase(p_unit);
-	DetermineCurrentTargetObject();
-	p_unit->DeleteFromRecognizeList(this);
-}
-
-void Unit::AddToRecognizeList(Unit* p_unit)
-{
-	m_recognizedThisList.push_back(p_unit);
-}
-
-void Unit::DeleteFromRecognizeList(Unit* p_unit)
-{
-	m_recognizedThisList.remove(p_unit);
+	p_unit->m_recognizedThisSet.erase(this);
+	p_unit->m_attackingThisUnitSet.erase(this);
+	this->DetermineCurrentTargetObject();
 }
 
 void Unit::SetNavField(NavigationField* p_navField)

@@ -135,7 +135,7 @@ namespace application
             void ClearPlaytimeObjects();
             void EnterDataFromGlobalConstant();
 
-            template <typename T>
+            template <typename T = IEditableData>
             std::vector<T*> GetList()
             {
                 std::vector<T*> returnList;

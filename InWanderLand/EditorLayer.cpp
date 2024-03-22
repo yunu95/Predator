@@ -9,6 +9,8 @@
 #include "Camera.h"
 #include "DebugMeshes.h"
 #include "EditorResourceManager.h"
+#include "TemplateDataManager.h"
+#include "InstanceManager.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -53,7 +55,7 @@ namespace application
 				return;
 			}
 
-			/// 에디터용 리소스 등록
+			/// 에디터용 리소스 게임 엔진 리소스 매니저에 등록
 			LoadAllFBXFile();
 
 			/// 각종 매니저 클래스 메모리 할당
@@ -153,22 +155,90 @@ namespace application
 
 		void EditorLayer::OnPlayContents()
 		{
-			
+			for (auto& each : editorPanelList)
+			{
+				each->OnPlayContents();
+			}
+
+			for (auto& each : editorModuleList)
+			{
+				each->OnPlayContents();
+			}
+
+			for (auto each : InstanceManager::GetSingletonInstance().GetList())
+			{
+				auto ptr = each->GetPaletteInstance();
+				if (ptr)
+				{
+					ptr->HideEditorInstance();
+				}
+			}
 		}
 
 		void EditorLayer::OnPauseContents()
 		{
-			
+			for (auto& each : editorPanelList)
+			{
+				each->OnPauseContents();
+			}
+
+			for (auto& each : editorModuleList)
+			{
+				each->OnPauseContents();
+			}
+
+			for (auto each : InstanceManager::GetSingletonInstance().GetList())
+			{
+				auto ptr = each->GetPaletteInstance();
+				if (ptr)
+				{
+					ptr->ShowEditorInstance();
+				}
+			}
 		}
 
 		void EditorLayer::OnResumeContents()
 		{
-			
+			for (auto& each : editorPanelList)
+			{
+				each->OnResumeContents();
+			}
+
+			for (auto& each : editorModuleList)
+			{
+				each->OnResumeContents();
+			}
+
+			for (auto each : InstanceManager::GetSingletonInstance().GetList())
+			{
+				auto ptr = each->GetPaletteInstance();
+				if (ptr)
+				{
+					ptr->HideEditorInstance();
+				}
+			}
 		}
 
 		void EditorLayer::OnStopContents()
 		{
-			
+			for (auto& each : editorPanelList)
+			{
+				each->OnStopContents();
+			}
+
+			for (auto& each : editorModuleList)
+			{
+				each->OnStopContents();
+			}
+
+			for (auto each : InstanceManager::GetSingletonInstance().GetList())
+			{
+				auto ptr = each->GetPaletteInstance();
+				if (ptr)
+				{
+					ptr->ShowEditorInstance();
+				}
+			}
 		}
 
 		void EditorLayer::LateInitialize()
@@ -183,6 +253,60 @@ namespace application
 
 			// SceneGizmo
 			InitSceneGizmo();
+
+			for (auto& each : editorPanelList)
+			{
+				each->LateInitialize();
+			}
+
+			for (auto& each : editorModuleList)
+			{
+				each->LateInitialize();
+			}
+		}
+
+		void EditorLayer::ReadyOrnament()
+		{
+			auto& templateDataManager = TemplateDataManager::GetSingletonInstance();
+			for (auto& each : ResourceManager::GetSingletonInstance().GetStaticFBXList())
+			{
+				auto td = templateDataManager.CreateTemplateData<Ornament_TemplateData>(each);
+				if (td)
+				{
+					td->SetDataResourceName(each);
+				}
+			}
+		}
+
+		void EditorLayer::CreateDirectionalLight()
+		{
+			auto dl = TemplateDataManager::GetSingletonInstance().CreateTemplateData<Light_TemplateData>("Directional_Light");
+			if (dl)
+			{
+				dl->pod.type = LightType::Directional;
+				auto ld = InstanceManager::GetSingletonInstance().CreateInstance<LightData>("Directional_Light");
+				auto rot = Quaternion{ Vector3d{90,0,30} };
+				ld->pod.rotation.w = rot.w;
+				ld->pod.rotation.x = rot.x;
+				ld->pod.rotation.y = rot.y;
+				ld->pod.rotation.z = rot.z;
+				ld->pod.position.x = -999;
+				ld->pod.position.y = 999;
+				ld->pod.position.z = -999;
+				ld->ApplyAsPaletteInstance();
+				static_cast<PalettePanel*>(editorPanelList[(int)Panel_List::PALETTE])->ChangeDirectionalLight(ld);
+			}
+			else
+			{
+				for (auto each : InstanceManager::GetSingletonInstance().GetList<LightData>())
+				{
+					if (each->pod.templateData->pod.type == LightType::Directional)
+					{
+						static_cast<PalettePanel*>(editorPanelList[(int)Panel_List::PALETTE])->ChangeDirectionalLight(each);
+						break;
+					}
+				}
+			}
 		}
 
 		void EditorLayer::LoadAllFBXFile()

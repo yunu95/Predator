@@ -59,7 +59,7 @@ namespace application
 			yunuGI::Vector3 GetUpDirection() const;
 			yunuGI::Vector3 GetRightDirection() const;
 			yunuGI::Vector3 GetForwardDirection() const;
-			const yunuGI::Vector3& GetPosition() const { return position; }
+			yunuGI::Vector3 GetPosition() const;
 			yunuGI::Quaternion GetOrientation() const;
 
 			yunuGI::Matrix4x4 GetWTM() const;

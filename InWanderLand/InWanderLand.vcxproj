@@ -998,6 +998,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="CameraData.h" />
     <ClInclude Include="DebuggingMesh.h" />
     <ClInclude Include="DualCastComponent.h" />
+    <ClInclude Include="EnemyAutoAttackProjectile.h" />
+    <ClInclude Include="EnemyAutoAttackProjectilePool.h" />
     <ClInclude Include="GCTemplate.h" />
     <ClInclude Include="GlobalConstant.h" />
     <ClInclude Include="LightBrush.h" />
@@ -1016,8 +1018,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="imgui_ModuleData.h" />
     <ClInclude Include="PlaytimeWave.h" />
     <ClInclude Include="PaletteBrushManager.h" />
+    <ClInclude Include="RangedEnemyProductor.h" />
     <ClInclude Include="SaveStaticOrnamentsCommnad.h" />
     <ClInclude Include="SingletonUpdate.h" />
+    <ClInclude Include="SpecialEffectTrigger.h" />
     <ClInclude Include="SpecialEvent.h" />
     <ClInclude Include="StaticInstanceRegistry.h" />
     <ClInclude Include="LoadStaticOrnamentsCommand.h" />
@@ -1143,7 +1147,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UnitClassifier.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
-    <ClInclude Include="UnitStatusComponent.h" />
+    <ClInclude Include="SpecialEffect.h" />
     <ClInclude Include="Unit_TemplateData.h" />
     <ClInclude Include="UUID.h" />
     <ClInclude Include="UUIDManager.h" />
@@ -1178,6 +1182,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="DebuggingMesh.cpp" />
     <ClCompile Include="DualCastComponent.cpp" />
     <ClCompile Include="EditorResourceManager.cpp" />
+    <ClCompile Include="EnemyAutoAttackProjectile.cpp" />
     <ClCompile Include="FieldDamage.cpp" />
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="GlobalConstant.cpp" />
@@ -1210,6 +1215,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="MagicianSkillSystem.cpp" />
     <ClCompile Include="MeleeAttackSystem.cpp" />
     <ClCompile Include="PlaytimeWave.cpp" />
+    <ClCompile Include="RangedEnemyProductor.cpp" />
+    <ClCompile Include="SpecialEffectTrigger.cpp" />
     <ClCompile Include="TauntingComponent.cpp" />
     <ClCompile Include="OrnamentEditorInstance.cpp" />
     <ClCompile Include="PaletteBrushManager.cpp" />
@@ -1307,7 +1314,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="UnitEditorInstance.cpp" />
     <ClCompile Include="UnitPalette.cpp" />
-    <ClCompile Include="UnitStatusComponent.cpp" />
+    <ClCompile Include="SpecialEffect.cpp" />
     <ClCompile Include="Unit_TemplateData.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObj.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObjImgui.cpp" />

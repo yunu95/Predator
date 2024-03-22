@@ -2,14 +2,8 @@
 #include "UnitProductor.h"
 #include "SingletonComponent.h"
 
-class HealerProductor : public UnitProductor, public SingletonComponent<HealerProductor>
+class RangedEnemyProductor : public UnitProductor, public SingletonComponent<RangedEnemyProductor>
 {
-private:
-	float m_QSkillFieldRadius;
-
-	float m_WSkillFieldWidth;
-	float m_WSkillFieldHeight;
-
 public:
 	virtual void SetUnitData() override;
 	virtual void SingletonInitializer() override;
