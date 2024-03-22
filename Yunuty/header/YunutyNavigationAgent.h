@@ -18,6 +18,7 @@ namespace yunutyEngine
         NavigationAgent();
         virtual ~NavigationAgent();
         virtual void Update();
+        void DetachFromNavigationField();
         void AssignToNavigationField(NavigationField* navField);
         void SetSpeed(float speed);
         void SetAcceleration(float accel);
@@ -30,6 +31,8 @@ namespace yunutyEngine
         void Relocate(Vector3d destination) { Relocate(Vector3f{ destination }); };
         void MoveTo(Vector3f destination);
         void MoveTo(Vector3d destination) { MoveTo(Vector3f{ destination }); }
+        virtual void OnEnable() override;
+        virtual void OnDisable() override;
     private:
         Impl* impl;
         NavigationField* navField;
