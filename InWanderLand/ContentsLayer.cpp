@@ -342,7 +342,7 @@ void application::contents::ContentsLayer::Initialize()
 
     const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	//resourceManager->LoadFile("FBXMaterial.scres");
+	resourceManager->LoadFile("FBXMaterial.scres");
 
     resourceManager->LoadFile("LeavesVS.cso");
     resourceManager->LoadFile("LeavesPS.cso");
@@ -513,7 +513,7 @@ void application::contents::ContentsLayer::Initialize()
             }
         }*/
         //assert(mapFound && "there is no map to load in current directory!");
-        editor::MapFileManager::GetSingletonInstance().LoadMapFile("TestStage1.pmap");
+        //editor::MapFileManager::GetSingletonInstance().LoadMapFile("TestStage1.pmap");
         editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
     }

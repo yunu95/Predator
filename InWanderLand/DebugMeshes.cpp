@@ -23,9 +23,13 @@ yunuGI::IMaterial* GetColoredDebugMaterial(yunuGI::Color color, bool isWireFrame
         for (auto each : shaderList)
         {
             if (isWireFrame && each->GetName() == L"DebugPS.cso")
+            {
                 shader = each;
+            }
             if (!isWireFrame && each->GetName() == L"Debug_AlphaPS.cso")
+            {
                 shader = each;
+            }
         }
         ret->SetPixelShader(shader);
         return ret;

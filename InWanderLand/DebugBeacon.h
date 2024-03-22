@@ -21,7 +21,8 @@ public:
         debugBeacon->maxScale = scale;
         debugBeacon->duration = duration;
         staticMesh->GetGI().SetMesh(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(L"Sphere"));
-        staticMesh->GetGI().SetMaterial(0, GetColoredDebugMaterial(color, false));
+        auto mat = GetColoredDebugMaterial(color, false);
+        staticMesh->GetGI().SetMaterial(0, mat);
         // 와이어
         //staticMesh->GetGI().GetMaterial()->SetPixelShader(L"DebugPS.cso");
         // 솔리드
