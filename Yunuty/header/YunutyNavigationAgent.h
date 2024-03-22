@@ -34,8 +34,8 @@ namespace yunutyEngine
         virtual void OnEnable() override;
         virtual void OnDisable() override;
     private:
-        Impl* impl;
-        NavigationField* navField;
+        Impl* impl{nullptr};
+        NavigationField* navField{nullptr};
         friend NavigationField;
     };
 }
