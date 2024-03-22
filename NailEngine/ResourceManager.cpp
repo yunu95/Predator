@@ -446,7 +446,7 @@ std::shared_ptr<Texture> ResourceManager::GetTexture(const std::wstring& texture
 	}
 	iter = deferredTextureMap.find(textureName);
 	if (iter != deferredTextureMap.end())
-	{
+	{ 
 		return std::static_pointer_cast<Texture>(iter->second);
 	}
 	return nullptr;

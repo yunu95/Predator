@@ -8,7 +8,8 @@ enum class SpecialEventType
     None = 0,
     // None과 End는 유효한 이벤트타입으로 취급되지 않습니다.
     // None과 End 사이에 필요한 이벤트 타입을 추가하십시오.
-    SomeEvent,
+    Stage1To2Transition,
+    Stage2StartRegion,
     End,
 };
 // SpecialEventType들을 문자열 리스트로 변환합니다. 새로운 이벤트 타입을 추가할 때마다 이 함수를 확장하십시오. 이 함수는 에디터에서 이벤트 타입을 표시할 때 사용됩니다.
@@ -17,7 +18,8 @@ constexpr array<std::string, static_cast<size_t>(SpecialEventType::End) + 1> Spe
     return std::array<std::string, static_cast<size_t>(SpecialEventType::End) + 1>
     {
         "None",
-        "SomeEvent",
+        "Stage1To2Transition",
+        "Stage2StartRegion",
         "End",
     };
 };
@@ -32,12 +34,4 @@ constexpr array<SpecialEventType, static_cast<size_t>(SpecialEventType::End) + 1
 constexpr std::string SpecialEventTypeToString(SpecialEventType type)
 {
     return SpecialEventTypeStrings()[static_cast<size_t>(type)];
-}
-// 기본적으로 각 이벤트의 동작은 아무것도 하지 않는 빈 동작으로 정의됩니다.
-template<SpecialEventType value>
-void SpecialEvent() {}
-template<>
-void SpecialEvent<SpecialEventType::SomeEvent>()
-{
-    // SomeEvent가 발생했을 때 실행할 동작은 이렇게 템플릿 특수화로 정의합니다.
 }

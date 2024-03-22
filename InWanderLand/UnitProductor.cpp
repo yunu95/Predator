@@ -5,10 +5,13 @@
 #include "Dotween.h"
 #include "DebugMeshes.h"
 #include "Unit_TemplateData.h"
+#include "SingleNavigationField.h"
 
 void UnitProductor::SetCommonComponents()
 {
 	//m_unitGameObject->GetTransform()->SetWorldPosition(m_startPosition);
+
+	m_navField = &SingleNavigationField::Instance();
 
 	/// 2. RangeSystem Gameobject 및 Component 추가
 	auto unitRangeSystemObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -30,7 +33,7 @@ void UnitProductor::SetCommonComponents()
 
 
 	auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	
+
 	AttachDebugMesh(unitColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
 	unitColliderDebugObject->SetParent(m_unitGameObject);
 	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(lengthUnit, lengthUnit, lengthUnit));
@@ -38,7 +41,7 @@ void UnitProductor::SetCommonComponents()
 
 	auto frontDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(frontDebugObject, DebugMeshType::Cube, yunuGI::Color::black(), true);
-	frontDebugObject->GetTransform()->SetLocalScale( { 0.5, 0.5, 0.5 });
+	frontDebugObject->GetTransform()->SetLocalScale({ 0.5, 0.5, 0.5 });
 	frontDebugObject->GetTransform()->SetWorldPosition(m_unitGameObject->GetTransform()->GetLocalRotation().Forward());
 	frontDebugObject->SetParent(m_unitGameObject);
 
