@@ -32,7 +32,7 @@ namespace application
 
                 // 팔레트와 맵 데이터는 서로 밀접한 관계를 가지고 있으므로, 맵 데이터를 로드할때마다 팔레트를 초기화할 필요가 있습니다.
                 // ResetPalettes 함수는 모든 팔레트들의 상태를 초기화합니다.
-                static void ResetPalettes();
+                //static void ResetPalettes();
 
                 virtual void Initialize();
 
