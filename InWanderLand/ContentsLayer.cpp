@@ -426,6 +426,11 @@ void application::contents::ContentsLayer::Initialize()
 		camObj->AddComponent<Dotween>();
 		RegisterToEditorObjectVector(camObj);
 
+		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
+		directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
+		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+
         auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 		auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
