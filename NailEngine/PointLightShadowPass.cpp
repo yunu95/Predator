@@ -67,5 +67,11 @@ void PointLightShadowPass::EndRender()
 
 	// PSSet
 	ps->UnBind();
+
+	auto& dsvArray = this->dsTexture->GetDSVArray();
+	for (int i = 0; i < dsvArray.size(); ++i)
+	{
+		ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(0, nullptr, nullptr);
+	}
 }
 

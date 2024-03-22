@@ -5,6 +5,15 @@
 
 namespace application::editor::palette
 {
+	OrnamentEditorInstance::~OrnamentEditorInstance()
+	{
+		if (meshObject)
+		{
+			Scene::getCurrentScene()->DestroyGameObject(meshObject);
+			meshObject = nullptr;
+		}
+	}
+
 	void OrnamentEditorInstance::Start()
 	{
 		PaletteInstance::Start();
@@ -21,7 +30,6 @@ namespace application::editor::palette
 		yunuGI::Vector3 boundingMin, boundingMax;
 		meshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(ornamentTemplateData->pod.staticFBXName, &boundingMin, &boundingMax);
 		AdjustPickingCollider(reinterpret_cast<const Vector3f&>(boundingMin), reinterpret_cast<const Vector3f&>(boundingMax));
-		meshObject->SetParent(GetGameObject());
         currentFBX = ornamentTemplateData->pod.staticFBXName;
 	}
 
@@ -55,10 +63,19 @@ namespace application::editor::palette
 		yunuGI::Vector3 boundingMin, boundingMax;
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName, &boundingMin, &boundingMax);
 		AdjustPickingCollider(reinterpret_cast<const Vector3f&>(boundingMin), reinterpret_cast<const Vector3f&>(boundingMax));
-		obj->SetParent(GetGameObject());
 		currentFBX = fbxName;
 
         return;
     }
+
+	void OrnamentEditorInstance::ApplyMeshTransform()
+	{
+		if (meshObject)
+		{
+			meshObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+			meshObject->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
+			meshObject->GetTransform()->SetLocalScale(GetTransform()->GetWorldScale());
+		}
+	}
 }
 

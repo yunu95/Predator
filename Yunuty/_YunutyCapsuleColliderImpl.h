@@ -19,7 +19,14 @@ namespace yunutyEngine
 				//assert(radius != 0);
 				halfHeight = abs(halfHeight);
 				radius = abs(radius);
-				geometry = PxCapsuleGeometry{ radius,halfHeight };
+				if (halfHeight * radius == 0.0f)
+				{
+					geometry = PxCapsuleGeometry{ minimumScale, minimumScale };
+				}
+				else
+				{
+					geometry = PxCapsuleGeometry{ radius, halfHeight };
+				}
 				return geometry;
 			}
 		};

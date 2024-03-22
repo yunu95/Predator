@@ -17,7 +17,15 @@ namespace yunutyEngine
 			{
 				static_assert(sizeof(Vector3f) == sizeof(PxVec3));
 				halfExtent = halfExtent.Abs();
-				geometry = PxBoxGeometry{ reinterpret_cast<const PxVec3&>(halfExtent) };
+				if (halfExtent.x * halfExtent.y * halfExtent.z == 0.0f)
+				{
+					Vector3f minimumHalfExtent{ minimumScale,minimumScale,minimumScale };
+					geometry = PxBoxGeometry{ reinterpret_cast<const PxVec3&>(minimumHalfExtent) };
+				}
+				else
+				{
+					geometry = PxBoxGeometry{ reinterpret_cast<const PxVec3&>(halfExtent) };
+				}
 				return geometry;
 			}
 		};

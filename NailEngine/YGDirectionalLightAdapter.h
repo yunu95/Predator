@@ -19,7 +19,7 @@ namespace yunuGIAdapter
 			LightManager::Instance.Get().PushLightInstance(this->light);
 		}
 
-		~DirectionalLightAdapter()
+		virtual ~DirectionalLightAdapter()
 		{
 			LightManager::Instance.Get().PopLightInstance(this->light);
 		}

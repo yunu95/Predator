@@ -7,6 +7,7 @@ namespace yunuGIAdapter
 	{
 	public:
 		LightAdapter() { }
+		virtual ~LightAdapter() = default;
 		static LightAdapter* GetWrapper() { }
 
 		virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM) { };
