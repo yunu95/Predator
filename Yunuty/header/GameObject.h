@@ -149,6 +149,7 @@ namespace yunutyEngine
         void setName(const string& name);
     private:
         void HandleComponentUpdateState(Component* component);
+        void PropagateActiveEvent(bool activeBefore, bool activeAfter);
         Scene* scene = nullptr;
         string name = "";
         bool selfActive = true;
