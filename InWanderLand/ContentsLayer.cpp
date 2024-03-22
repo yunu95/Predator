@@ -341,7 +341,7 @@ void application::contents::ContentsLayer::Initialize()
 
 	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	resourceManager->LoadFile("FBXMaterial.scres");
+	//resourceManager->LoadFile("FBXMaterial.scres");
 
 	resourceManager->LoadFile("LeavesVS.cso");
 	resourceManager->LoadFile("LeavesPS.cso");
@@ -423,18 +423,13 @@ void application::contents::ContentsLayer::Initialize()
 		auto camComp = camObj->AddComponent<RTSCam>();
 		camObj->GetTransform()->SetLocalPosition({ 0,25,0 });
 		camObj->AddComponent<Dotween>();
-		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-		auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
-		light->GetGI().SetLightDiffuseColor(color);
-		directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
-		///
-
+		RegisterToEditorObjectVector(camObj);
 
 		auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 		auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
 		auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		RegisterToEditorObjectVector(mouseCursorObject);
 		auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		mouseCursorMesh->GetGI().SetMesh(sphereMesh);
 		mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
@@ -446,10 +441,12 @@ void application::contents::ContentsLayer::Initialize()
 		auto skillPreviewCubeMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		AttachDebugMesh(skillPreviewCubeMeshObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
 		SkillPreviewSystem::Instance().SetPathPreviewObject(skillPreviewCubeMeshObject);
+		RegisterToEditorObjectVector(skillPreviewCubeMeshObject);
 
 		auto skillPreviewSphereMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		AttachDebugMesh(skillPreviewSphereMeshObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
 		SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
+		RegisterToEditorObjectVector(skillPreviewSphereMeshObject);
 
 		camComp->groundHoveringClickCallback = [=](Vector3d pos)
 		{
@@ -526,6 +523,47 @@ void application::contents::ContentsLayer::Finalize()
 void application::contents::ContentsLayer::PlayContents()
 {
 	editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
+
+	/// Editor 에서 수정하여 Map Data 에 저장할 부분
+	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	auto camComp = camObj->AddComponent<RTSCam>();
+	camObj->GetTransform()->SetLocalPosition({ 0,25,0 });
+	camObj->AddComponent<Dotween>();
+	RegisterToEditorObjectVector(camObj);
+
+	auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+	auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
+	auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	RegisterToEditorObjectVector(mouseCursorObject);
+	auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	mouseCursorMesh->GetGI().SetMesh(sphereMesh);
+	mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
+
+	/*WarriorProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 0.0f));;
+	MagicianProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 2.0f));;
+	HealerProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, -2.0f));*/
+
+	auto skillPreviewCubeMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	AttachDebugMesh(skillPreviewCubeMeshObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
+	SkillPreviewSystem::Instance().SetPathPreviewObject(skillPreviewCubeMeshObject);
+	RegisterToEditorObjectVector(skillPreviewCubeMeshObject);
+
+	auto skillPreviewSphereMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	AttachDebugMesh(skillPreviewSphereMeshObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
+	SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
+	RegisterToEditorObjectVector(skillPreviewSphereMeshObject);
+
+	camComp->groundHoveringClickCallback = [=](Vector3d pos)
+		{
+			mouseCursorObject->GetTransform()->SetWorldPosition(pos);
+			SkillPreviewSystem::Instance().SetCurrentMousPosition(pos);
+		};
+
+	InputManager::Instance();
+	UIManager::Instance();
+	PlayerController::SingleInstance().SetMovingSystemComponent(camComp);
+	TacticModeSystem::SingleInstance().SetMovingSystemComponent(camComp);
 }
 
 void application::contents::ContentsLayer::PauseContents()
@@ -562,7 +600,9 @@ void application::contents::ContentsLayer::ClearPlaytimeObject()
 	for (auto e : objectCreatedByEditorVector)
 	{
 		e->SetSelfActive(false);
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(e);
 	}
+	objectCreatedByEditorVector.clear();
 }
 
 void application::contents::ContentsLayer::RegisterToEditorObjectVector(GameObject* p_obj)

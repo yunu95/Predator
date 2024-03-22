@@ -5,10 +5,13 @@
 #include "Dotween.h"
 #include "DebugMeshes.h"
 #include "Unit_TemplateData.h"
+#include "SingleNavigationField.h"
 
 void UnitProductor::SetCommonComponents()
 {
 	//m_unitGameObject->GetTransform()->SetWorldPosition(m_startPosition);
+
+	m_navField = &SingleNavigationField::Instance();
 
 	/// 2. RangeSystem Gameobject 및 Component 추가
 	auto unitRangeSystemObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();

@@ -1,6 +1,8 @@
 #pragma once
 #include "PassiveCake.h"
 #include "DebugMeshes.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
 class PassiveCakePool :
 	public GameObjectPool<PassiveCake>, public SingletonClass<PassiveCakePool>
@@ -22,5 +24,8 @@ public:
 
 		passiveCake->GetGameObject()->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 		cakeCollider->SetActive(false);
+
+		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+		contentsLayer->RegisterToEditorObjectVector(passiveCake->GetGameObject());
 	}
 };
