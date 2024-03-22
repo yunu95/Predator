@@ -31,6 +31,8 @@ private:
 
 	std::vector<Unit*> m_currentWaveUnitVector;
 
+	std::vector<UnitProductor*> productorSelector;
+
 public:
 	virtual ~PlaytimeWave();
 

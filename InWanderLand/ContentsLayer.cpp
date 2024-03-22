@@ -500,7 +500,7 @@ void application::contents::ContentsLayer::Initialize()
 		//	staticMesh->GetTransform()->SetLocalPosition(Vector3d{ 0,0.5,0 });
 		//}
 
-		editor::MapFileManager::GetSingletonInstance().LoadMapFile("TestMap2.pmap");
+		editor::MapFileManager::GetSingletonInstance().LoadMapFile("TestStage1.pmap");
 		editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
 	}

@@ -76,6 +76,7 @@ private:
 	UnitSide m_unitSide;
 	AttackType m_attackType;
 
+	std::string m_fbxName;
 	float m_healthPoint;
 	float m_autoAttackDamage;
 	float m_beforeBlindDamage;
@@ -222,6 +223,7 @@ public:
 	void SetSkillDuration(float p_duration);
 	void SetSkillPreviewType(SkillPreviewSystem::SkillPreviewMesh p_qskill, SkillPreviewSystem::SkillPreviewMesh p_wskill);
 	void SetMaxAggroNumber(int p_num);
+	void SetFbxName(std::string p_string);
 
 	void SetCurrentOrderMove();
 	void SetCurrentOrderAttackMove();
@@ -248,6 +250,7 @@ public:
 	UnitType GetPlayerSerialNumber() const;
 	UnitState GetCurrentUnitState() const;
 	SkillPreviewSystem::SkillPreviewMesh GetSkillPreviewType(Unit::SkillEnum p_currentSkillType) const;
+	std::string GetUnitFbxName() const;
 
 	float DetermineAttackDamage(float p_damage);			// 공격유닛이 피격유닛에게 전달하는 데미지 계산.
 
