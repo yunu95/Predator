@@ -31,11 +31,13 @@ public:
 	void Finalize();
 public:
 	void SetResolution(unsigned int width, unsigned int height);
+	void SetUseIBL(bool useIBL);
 
 	std::shared_ptr<ConstantBuffer>& GetConstantBuffer(unsigned int index);
 	std::vector<std::shared_ptr<RenderTargetGroup>>& GetRenderTargetGroup() { return this->renderTargetGroup; }
 
 	WindowInfo& GetWindowInfo() { return this->windowInfo; }
+	bool GetUseIBL();
 
 private:
 	void CreateConstantBuffer();
@@ -50,5 +52,6 @@ private:
 	std::vector<std::shared_ptr<ConstantBuffer>> constantBuffers;
 	std::vector<std::shared_ptr<RenderTargetGroup>> renderTargetGroup;
 	
+	bool useIBL = true;
 };
 

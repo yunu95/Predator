@@ -8,10 +8,13 @@
     <ClCompile Include="imgui_tables.cpp" />
     <ClCompile Include="imgui_impl_dx11.cpp" />
     <ClCompile Include="imgui_impl_win32.cpp" />
+    <ClCompile Include="imgui_demo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui.h" />
     <ClInclude Include="imgui_impl_dx11.h" />
     <ClInclude Include="imgui_impl_win32.h" />
+    <ClInclude Include="imgui_internal.h" />
+    <ClInclude Include="TestUtilGraphicsTestCam.h" />
   </ItemGroup>
 </Project>

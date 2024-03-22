@@ -104,22 +104,22 @@ void yunutyEngine::YunutyCycle::ThreadFunction()
 }
 void yunutyEngine::YunutyCycle::ResetUpdateTargetComponents()
 {
-    if (updateTargetComponents.size() < Component::guidPtrMap.size())
-        updateTargetComponents.resize(Component::guidPtrMap.size() * 2);
-    updateTargetComponentsSize = 0;
+	if (updateTargetComponents.size() < Component::guidPtrMap.size())
+		updateTargetComponents.resize(Component::guidPtrMap.size() * 2);
+	updateTargetComponentsSize = 0;
 
-    static std::stack<GameObject*> gameObjectStack;
-    for (auto eachGameObject : Scene::getCurrentScene()->GetUpdatingChildren())
-        gameObjectStack.push(eachGameObject);
-    while (!gameObjectStack.empty())
-    {
-        GameObject* gameObject = gameObjectStack.top();
-        gameObjectStack.pop();
-        for (auto each : gameObject->GetUpdatingChildren())
-            gameObjectStack.push(each);
-        for (auto eachComp : gameObject->updatingComponents)
-            updateTargetComponents[updateTargetComponentsSize++] = eachComp;
-    }
+	static std::stack<GameObject*> gameObjectStack;
+	for (auto eachGameObject : Scene::getCurrentScene()->GetUpdatingChildren())
+		gameObjectStack.push(eachGameObject);
+	while (!gameObjectStack.empty())
+	{
+		GameObject* gameObject = gameObjectStack.top();
+		gameObjectStack.pop();
+		for (auto each : gameObject->GetUpdatingChildren())
+			gameObjectStack.push(each);
+		for (auto eachComp : gameObject->updatingComponents)
+			updateTargetComponents[updateTargetComponentsSize++] = eachComp;
+	}
 }
 
 // Update components and render camera
@@ -135,19 +135,30 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 
 		assert(Scene::getCurrentScene() != nullptr && "Main Scene을 하나 생성해야 합니다!");
 		// 살생부에 올라온 게임오브젝트들을 파괴합니다.
-		for (auto each : Scene::getCurrentScene()->destroyList)
+		while (!Scene::getCurrentScene()->destroyList.empty())
 		{
-			for (auto each : each->GetIndexedComponents())
-				each->OnDestroy();
-			each->parent->MoveChild(each);
+			static std::set<GameObject*> tempDestroyList;
+			tempDestroyList = Scene::getCurrentScene()->destroyList;
+			for (auto each : tempDestroyList)
+			{
+				for (auto each : each->GetIndexedComponents())
+				{
+					each->OnDestroy();
+				}
+				// 컴포넌트를 우측값으로 만들고 이를 다른 값에 할당하지 않으면 자연스레 할당해제된다.
+				each->parent->MoveChild(each);
+			}
+			for (auto each : tempDestroyList)
+			{
+				Scene::getCurrentScene()->destroyList.erase(each);
+			}
 		}
-		Scene::getCurrentScene()->destroyList.clear();
 
-        ResetUpdateTargetComponents();
-        for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
-             StartComponent(updateTargetComponents[i]);
-        for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
-            UpdateComponent(updateTargetComponents[i]);
+		ResetUpdateTargetComponents();
+		for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
+			StartComponent(updateTargetComponents[i]);
+		for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
+			UpdateComponent(updateTargetComponents[i]);
 
 		auto pxScene = physics::_PhysxGlobal::SingleInstance().RequestPxScene(Scene::currentScene);
 		if (Time::GetDeltaTime() > 0 && pxScene)

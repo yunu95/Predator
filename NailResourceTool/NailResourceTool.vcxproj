@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="imgui.cpp" />
+    <ClCompile Include="imgui_demo.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
     <ClCompile Include="imgui_impl_dx11.cpp" />
     <ClCompile Include="imgui_impl_win32.cpp" />
@@ -154,6 +155,8 @@
     <ClInclude Include="imgui.h" />
     <ClInclude Include="imgui_impl_dx11.h" />
     <ClInclude Include="imgui_impl_win32.h" />
+    <ClInclude Include="imgui_internal.h" />
+    <ClInclude Include="TestUtilGraphicsTestCam.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

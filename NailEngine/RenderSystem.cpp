@@ -137,7 +137,6 @@ void RenderSystem::PushLightData()
 			params.lights[i].angle = e->GetLightInfo().angle;
 			params.lights[i].direction = e->GetLightInfo().direction;
 		}
-
 		i++;
 	}
 
@@ -159,8 +158,11 @@ void RenderSystem::Render()
 {
 	//ClearRenderInfo();
 	//SortObject();
-
-
+	UtilBuffer utilBuffer;
+	utilBuffer.windowWidth = NailEngine::Instance.Get().GetWindowInfo().width;
+	utilBuffer.windowHeight = NailEngine::Instance.Get().GetWindowInfo().height;
+	utilBuffer.useIBL = NailEngine::Instance.Get().GetUseIBL();
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::UTIL))->PushGraphicsData(&utilBuffer, sizeof(UtilBuffer), static_cast<int>(CB_TYPE::UTIL));
 
 	PushCameraData();
 	PushLightData();
@@ -305,7 +307,7 @@ void RenderSystem::RenderShadow()
 		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Directional))
 		{
 			MatrixBuffer matrixBuffer;
-			matrixBuffer.VTM = std::static_pointer_cast<DirectionalLight>(e)->GetWorldTM().Invert();
+			matrixBuffer.VTM = static_cast<DirectionalLight*>(e)->GetWorldTM().Invert();
 			matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(100 * 1.f, 100 * 1.f, 0.0000001f, 500.f);
 			//matrixBuffer.PTM = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PI/4.f, 1920/ 1080, 0.1f, 1000.f);
 			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
@@ -317,21 +319,26 @@ void RenderSystem::RenderShadow()
 void RenderSystem::RenderPointLightShadow()
 {
 	auto& lightSet = LightManager::Instance.Get().GetLightList();
-	
+
 	int index = 0;
 
 	for (auto& e : lightSet)
 	{
 		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{
+			if (index > MAX_POINT_LIGHT - 1)
+			{
+				continue;
+			}
+
 			// 현재 카메라 프러스텀에 들어온 포인트 라이트만 쉐도우맵을 만들도록 컬링을 진행한다
 			auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
 
 			auto meshName = e->GetMeshName();
 			auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
 
-			auto aabb =  ResourceManager::Instance.Get().GetMesh(e->GetMeshName())->GetBoundingBox(
-				std::static_pointer_cast<PointLight>(e)->GetWorldTM(), 0);
+			auto aabb = ResourceManager::Instance.Get().GetMesh(e->GetMeshName())->GetBoundingBox(
+				static_cast<PointLight*>(e)->GetWorldTM(), 0);
 
 			if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
 			{
@@ -342,7 +349,7 @@ void RenderSystem::RenderPointLightShadow()
 			DirectX::SimpleMath::Vector3 pos;
 			DirectX::SimpleMath::Vector3 scale;
 			DirectX::SimpleMath::Quaternion quat;
-			std::static_pointer_cast<PointLight>(e)->GetWorldTM().Decompose(scale, quat, pos);
+			static_cast<PointLight*>(e)->GetWorldTM().Decompose(scale, quat, pos);
 
 			PointLightVPMatrix pointLightVP;
 
@@ -383,16 +390,16 @@ void RenderSystem::RenderPointLightShadow()
 				DirectX::SimpleMath::Matrix viewMatrix = XMMatrixLookAtLH(pos, targetPos, upVec);
 
 				DirectX::SimpleMath::Matrix projMat = CameraManager::Instance.Get().GetPTM90ByResolution(PL_SM_SIZE, PL_SM_SIZE,
-					std::static_pointer_cast<PointLight>(e)->GetLightInfo().farPlane, std::static_pointer_cast<PointLight>(e)->GetLightInfo().nearPlane);
+					static_cast<PointLight*>(e)->GetLightInfo().farPlane, static_cast<PointLight*>(e)->GetLightInfo().nearPlane);
 
 				pointLightVP.viewProj[i] = viewMatrix * projMat;
 			}
 
 			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX))->PushGraphicsData(&pointLightVP, sizeof(PointLightVPMatrix), static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX), true);
-			PointLightShadowPass::Instance.Get().Render(index,false);
-			InstancingManager::Instance.Get().RenderStaticPointLightShadow(std::static_pointer_cast<PointLight>(e)->GetWorldTM(), std::static_pointer_cast<PointLight>(e));
+			PointLightShadowPass::Instance.Get().Render(index, false);
+			InstancingManager::Instance.Get().RenderStaticPointLightShadow(static_cast<PointLight*>(e)->GetWorldTM(), static_cast<PointLight*>(e));
 			PointLightShadowPass::Instance.Get().Render(index, true);
-			InstancingManager::Instance.Get().RenderSkinnedPointLightShadow(std::static_pointer_cast<PointLight>(e)->GetWorldTM(), std::static_pointer_cast<PointLight>(e));
+			InstancingManager::Instance.Get().RenderSkinnedPointLightShadow(static_cast<PointLight*>(e)->GetWorldTM(), static_cast<PointLight*>(e));
 			++index;
 		}
 	}
@@ -414,7 +421,7 @@ void RenderSystem::RenderLight()
 	PointLightIndex plIndexBuffer;
 
 	int plIndex = 0;
-
+	int lightIndex = 0;
 	for (auto& e : lightSet)
 	{
 		// Point Light의 경우 실제 Sphere Mesh를 렌더링 파이프라인에 넘긴다.
@@ -422,18 +429,17 @@ void RenderSystem::RenderLight()
 		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Directional))
 		{
 			matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
-			matrixBuffer.lightVP = std::static_pointer_cast<DirectionalLight>(e)->GetWorldTM().Invert() * DirectX::XMMatrixOrthographicLH(100 * 1.f, 100 * 1.f, 0.0000001f, 500.f);
-			//matrixBuffer.lightVP = std::static_pointer_cast<DirectionalLight>(e)->GetWorldTM().Invert() * DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PI / 4.f, 1920 / 1080, 0.1f, 1000.f);
+			matrixBuffer.lightVP = static_cast<DirectionalLight*>(e)->GetWorldTM().Invert() * DirectX::XMMatrixOrthographicLH(100 * 1.f, 100 * 1.f, 0.0000001f, 500.f);
 		}
 		else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{
 			// 만들어진 Shadow Map Bind
-			ResourceManager::Instance.Get().GetTexture(L"PointLightShadowDepth")->Bind(15);
+			ResourceManager::Instance.Get().GetTexture(L"PointLightShadowDepth")->Bind(23);
 
 			matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
-			matrixBuffer.WTM = std::static_pointer_cast<PointLight>(e)->GetWorldTM();
+			matrixBuffer.WTM = static_cast<PointLight*>(e)->GetWorldTM();
 			matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-			matrixBuffer.WorldInvTrans = std::static_pointer_cast<PointLight>(e)->GetWorldTM().Invert().Transpose();
+			matrixBuffer.WorldInvTrans = static_cast<PointLight*>(e)->GetWorldTM().Invert().Transpose();
 
 			plIndexBuffer.plIndex = plIndex;
 			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::POINTLIGHT_INDEX))->PushGraphicsData(&plIndexBuffer, sizeof(PointLightIndex), static_cast<int>(CB_TYPE::POINTLIGHT_INDEX));
@@ -441,18 +447,15 @@ void RenderSystem::RenderLight()
 		}
 		NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
-		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e->GetMaterialName()))->SetInt(0, e->GetID());
+		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e->GetMaterialName()))->SetInt(0, lightIndex);
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e->GetMaterialName()))->PushGraphicsData();
 		auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
 		mesh->Render();
 
-		// 만들어진 Shadow Map Binb
-		ResourceManager::Instance.Get().GetTexture(L"PointLightShadowDepth")->UnBind(15);
-
-		//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->UnBind();
+		// 만들어진 Shadow Map Bind
+		ResourceManager::Instance.Get().GetTexture(L"PointLightShadowDepth")->UnBind(23);
+		lightIndex++;
 	}
-
-
 }
 
 void RenderSystem::RenderFinal()

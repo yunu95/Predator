@@ -20,6 +20,14 @@ namespace yunuGI
 		Temp1,
 		Temp2,
 		Temp3,
+		Temp4,
+		Temp5,
+		Temp6,
+		Temp7,
+		Temp8,
+		Temp9,
+		Temp10,
+		Temp11,
 	};
 
 	class IMaterial : virtual public IResource

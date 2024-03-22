@@ -4,6 +4,7 @@
 #include "UnitProductor.h"
 #include "Unit.h"
 #include "MeleeEnemyProductor.h"
+#include "RangedEnemyProductor.h"
 #include "Application.h"
 #include "ContentsLayer.h"
 
@@ -26,6 +27,8 @@ void PlaytimeWave::DeActivateWave()
 void PlaytimeWave::Start()
 {
 	//ActivateWave();
+	productorSelector.push_back(&MeleeEnemyProductor::Instance());
+	productorSelector.push_back(&RangedEnemyProductor::Instance());
 }
 
 void PlaytimeWave::Update()
@@ -52,15 +55,13 @@ void PlaytimeWave::Update()
 
 			UnitProductor* currentSelectedProductor;
 
-			// 유닛 소환 코드 ....
-			switch (static_cast<Unit::UnitType>(waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod.unitType))
+			for (auto& e : productorSelector)
 			{
-				case Unit::UnitType::MeleeEnemy:
-					currentSelectedProductor = &MeleeEnemyProductor::Instance();
+				if (e->SelectUnitProductorByFbxName(waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod.skinnedFBXName))
+				{
+					currentSelectedProductor = e;
 					break;
-				default:
-					currentSelectedProductor = &MeleeEnemyProductor::Instance();
-					break;
+				}
 			}
 
 			Unit* unitComponent = currentSelectedProductor->CreateUnit(pos);

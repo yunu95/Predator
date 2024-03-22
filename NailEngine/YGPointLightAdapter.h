@@ -18,6 +18,11 @@ namespace yunuGIAdapter
 			LightManager::Instance.Get().PushLightInstance(this->light);
 		}
 
+		virtual ~PointLightAdapter()
+		{
+			LightManager::Instance.Get().PopLightInstance(this->light);
+		}
+
 		virtual void SetLightDiffuseColor(yunuGI::Color& color) override
 		{
 			light->SetLightDiffuseColor(reinterpret_cast<DirectX::SimpleMath::Vector4&>(color));
@@ -33,7 +38,7 @@ namespace yunuGIAdapter
 
 			DirectX::SimpleMath::Matrix rot = DirectX::XMMatrixRotationQuaternion(quat);
 
-			// ¶óÀÌÆ®ÀÇ À§Ä¡¸¦ ³Ö¾îÁÜ
+			// ë¼ì´íŠ¸ì˜ ìœ„ì¹˜ë¥¼ ë„£ì–´ì¤Œ
 			DirectX::SimpleMath::Vector4 lightPos = { pos.x,pos.y,pos.z, 1.f };
 			light->SetLightPosition(lightPos);
 

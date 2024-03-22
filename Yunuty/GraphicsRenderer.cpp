@@ -117,3 +117,8 @@ const yunuGI::IResourceManager* yunutyEngine::graphics::Renderer::GetResourceMan
 {
     return _YunuGIObjects::SingleInstance().resourceManager.Get();
 }
+
+void Renderer::SetUseIBL(bool useIBL)
+{
+    _YunuGIObjects::SingleInstance().renderer->SetUseIBL(useIBL);
+}

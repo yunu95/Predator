@@ -9,7 +9,7 @@
 
 namespace yunuGIAdapter
 {
-	class AnimatorAdapter : public yunuGIAdapter::RenderableAdapter, public yunuGI::IAnimator
+	class AnimatorAdapter : virtual public yunuGIAdapter::RenderableAdapter, virtual public yunuGI::IAnimator
 	{
 	public:
 		AnimatorAdapter() :RenderableAdapter()
@@ -20,7 +20,7 @@ namespace yunuGIAdapter
 			this->animator = _animator;
 		}
 
-		~AnimatorAdapter()
+		virtual ~AnimatorAdapter()
 		{
 			
 		}
@@ -108,11 +108,13 @@ namespace yunuGIAdapter
 
 		virtual void SetPickingMode(bool isPickingModeOn) {}
 
+		virtual void SetWorldTM(const yunuGI::Matrix4x4& tm)
+		{
+			yunuGI::IAnimator::SetWorldTM(tm);
+		}
+
 	private:
 		std::shared_ptr<NailAnimator> animator;
-
-
-		
 
 	};
 }

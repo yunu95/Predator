@@ -838,9 +838,6 @@
     <ClInclude Include="DamageOnlyComponent.h">
       <Filter>Contents\UnitStatusComponent\DamageOnly</Filter>
     </ClInclude>
-    <ClInclude Include="UnitClassifier.h">
-      <Filter>Contents\WaveSystem</Filter>
-    </ClInclude>
     <ClInclude Include="PlaytimeRegion.h">
       <Filter>Contents\PlaytimeRegion</Filter>
     </ClInclude>
@@ -1354,9 +1351,6 @@
     </ClCompile>
     <ClCompile Include="DamageOnlyComponent.cpp">
       <Filter>Contents\UnitStatusComponent\DamageOnly</Filter>
-    </ClCompile>
-    <ClCompile Include="UnitClassifier.cpp">
-      <Filter>Contents\WaveSystem</Filter>
     </ClCompile>
     <ClCompile Include="PlaytimeRegion.cpp">
       <Filter>Contents\PlaytimeRegion</Filter>

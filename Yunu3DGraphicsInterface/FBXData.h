@@ -24,6 +24,14 @@ namespace yunuGI
 		std::wstring temp1Map;
 		std::wstring temp2Map;
 		std::wstring temp3Map;
+		std::wstring temp4Map;
+		std::wstring temp5Map;
+		std::wstring temp6Map;
+		std::wstring temp7Map;
+		std::wstring temp8Map;
+		std::wstring temp9Map;
+		std::wstring temp10Map;
+		std::wstring temp11Map;
 
 		std::wstring vs{ L"DefaultVS.cso" };
 		std::wstring ps{ L"DefaultPS.cso" };
@@ -52,6 +60,9 @@ namespace yunuGI
 
 		std::vector<FBXData*> child;
 		std::vector<MaterialData> materialVec;
+
+		float diffuseExposure = 1.f;
+		float ambientExposure = 1.f;
 	};
 
 

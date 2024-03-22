@@ -14,7 +14,6 @@ cbuffer MatrixBuffer : register(b0)
     row_major matrix WorldInvTrans;
     row_major matrix VTMInv;
     row_major matrix lightVP;
-    //float4 objectID;
 }
 
 cbuffer MaterialBuffer : register(b1)
@@ -31,6 +30,14 @@ cbuffer MaterialBuffer : register(b1)
     uint useTemp1;
     uint useTemp2;
     uint useTemp3;
+    uint useTemp4;
+    uint useTemp5;
+    uint useTemp6;
+    uint useTemp7;
+    uint useTemp8;
+    uint useTemp9;
+    uint useTemp10;
+    uint useTemp11;
     
     int temp_int0;
     int temp_int1;
@@ -129,6 +136,20 @@ cbuffer PointLightIndex : register(b8)
     float3 padding3;
 }
 
+cbuffer ExposureBuffer : register(b9)
+{
+    float DiffuseExposure;
+    float AmbientExposure;
+    float2 padding4;
+}
+
+cbuffer ExposureBuffer : register(b10)
+{
+    float windowWidth;
+    float windowHeight;
+    float deltaTime;
+    int useIBL;
+}
 
 Texture2D AlbedoMap : register(t0);
 Texture2D NormalMap : register(t1);
@@ -140,13 +161,21 @@ Texture2D Temp0Map : register(t6);
 Texture2D Temp1Map : register(t7);
 Texture2D Temp2Map : register(t8);
 Texture2D Temp3Map : register(t9);
+Texture2D Temp4Map : register(t10);
+Texture2D Temp5Map : register(t11);
+Texture2D Temp6Map : register(t12);
+Texture2D Temp7Map : register(t13);
+Texture2D Temp8Map : register(t14);
+Texture2D Temp9Map : register(t15);
+Texture2D Temp10Map : register(t16);
+Texture2D Temp11Map : register(t17);
 
-Texture2DArray TransformMap : register(t10);
-TextureCube CubeMap: register(t11);
-TextureCube IrradianceMap : register(t12);
-TextureCube PrefilteredMap : register(t13);
-Texture2D BrdfMap : register(t14);
-TextureCubeArray PointLightShadowMap : register(t15);
+Texture2DArray TransformMap : register(t18);
+TextureCube CubeMap: register(t19);
+TextureCube IrradianceMap : register(t20);
+TextureCube PrefilteredMap : register(t21);
+Texture2D BrdfMap : register(t22);
+TextureCubeArray PointLightShadowMap : register(t23);
 
 SamplerState sam : register(s0);
 SamplerComparisonState shadowSam : register(s1);

@@ -84,6 +84,8 @@ namespace yunutyEngine
             // 그래픽스 엔진에서 클릭이벤트가 발생했을 때, 이를 처리해줄 콜백 함수를 등록합니다.
             //void RegisterClickEventHandler(function<void(yunuGI::IRenderable*)> callback) 
             //{ clickEventCallback = callback; };
+
+            void SetUseIBL(bool useIBL);
         private:
             //static void CallClickEventCallback(yunuGI::IRenderable* arg) { instance->clickEventCallback(arg); }
             void Render();
