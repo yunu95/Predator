@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 set "sourceDir=%~dp0Bin\x64\Release"
-set "baseDestinationDir=C:\1_Executable"
+set "baseDestinationDir=C:\1_Executable\autoRelease"
 set "filterFile=%~dp0CIFilter.txt"
 
 :: Create a timestamped destination directory
