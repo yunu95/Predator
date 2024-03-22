@@ -355,6 +355,9 @@
     <Filter Include="Editor\Palette\EditorInstance\LightInstance">
       <UniqueIdentifier>{9d637940-714e-4fcc-a9bf-e861067d51c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\ProjectilePools\RangedEnemy">
+      <UniqueIdentifier>{1ef27289-47ec-4e7d-a7a5-6d0258af3b98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -599,9 +602,6 @@
     </ClInclude>
     <ClInclude Include="Singleton.h">
       <Filter>Editor\Etc</Filter>
-    </ClInclude>
-    <ClInclude Include="UnitStatusComponent.h">
-      <Filter>Contents\UnitStatusComponent</Filter>
     </ClInclude>
     <ClInclude Include="BleedingComponent.h">
       <Filter>Contents\UnitStatusComponent\Bleeding</Filter>
@@ -902,6 +902,21 @@
       <Filter>Editor\Palette\EditorInstance\LightInstance</Filter>
     </ClInclude>
     <ClInclude Include="SingletonUpdate.h" />
+    <ClInclude Include="RangedEnemyProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyAutoAttackProjectilePool.h">
+      <Filter>Contents\ProjectilePools\RangedEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyAutoAttackProjectile.h">
+      <Filter>Contents\ProjectileComponents\Magician\Passive</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecialEffectTrigger.h">
+      <Filter>Contents\UnitStatusComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecialEffect.h">
+      <Filter>Contents\UnitStatusComponent</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1059,9 +1074,6 @@
     </ClCompile>
     <ClCompile Include="PlayerController.cpp">
       <Filter>Contents\InputManager</Filter>
-    </ClCompile>
-    <ClCompile Include="UnitStatusComponent.cpp">
-      <Filter>Contents\UnitStatusComponent</Filter>
     </ClCompile>
     <ClCompile Include="BleedingComponent.cpp">
       <Filter>Contents\UnitStatusComponent\Bleeding</Filter>
@@ -1399,6 +1411,18 @@
     </ClCompile>
     <ClCompile Include="SnippetSkinnedMeshes.cpp">
       <Filter>TestCodes\snippets</Filter>
+    </ClCompile>
+    <ClCompile Include="RangedEnemyProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyAutoAttackProjectile.cpp">
+      <Filter>Contents\ProjectileComponents\Magician\Passive</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecialEffect.cpp">
+      <Filter>Contents\UnitStatusComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecialEffectTrigger.cpp">
+      <Filter>Contents\UnitStatusComponent</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

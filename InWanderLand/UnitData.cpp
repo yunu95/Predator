@@ -12,6 +12,7 @@
 #include "MagicianProductor.h"
 #include "HealerProductor.h"
 #include "MeleeEnemyProductor.h"
+#include "RangedEnemyProductor.h"
 #include "Application.h"
 #include "ContentsLayer.h"
 
@@ -116,32 +117,39 @@ namespace application
 			// 이제 templateData에서 UnitType에 대한 int값을 가져올 수 있다.
 			// 이 값을 통해 타입을 분류해 유닛을 배치해보자.
 
+
+			if (!isSelectorInitialized)
+			{
+				productorSelector.push_back(&HealerProductor::Instance());
+				productorSelector.push_back(&WarriorProductor::Instance());
+				productorSelector.push_back(&MagicianProductor::Instance());
+				productorSelector.push_back(&MeleeEnemyProductor::Instance());
+				productorSelector.push_back(&RangedEnemyProductor::Instance());
+				isSelectorInitialized = true;
+			}
+
 			UnitProductor* currentSelectedProductor{ nullptr };
 
-			if (pod.waveData == nullptr)
+			for (auto& e : productorSelector)
 			{
-				switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
+				if (e->SelectUnitProductorByFbxName(pod.templateData->pod.skinnedFBXName))
 				{
-					case Unit::UnitType::Healer:
-						currentSelectedProductor = &HealerProductor::Instance();
-						break;
-					case Unit::UnitType::Warrior:
-						currentSelectedProductor = &WarriorProductor::Instance();
-						break;
-					case Unit::UnitType::Magician:
-						currentSelectedProductor = &MagicianProductor::Instance();
-						break;
-					default:
-						currentSelectedProductor = &MeleeEnemyProductor::Instance();
-						break;
+					currentSelectedProductor = e;
+					break;
 				}
-				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-
-				Vector3d startPosition = Vector3d(pod.position.x, pod.position.y, pod.position.z);
-
-				application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-				contentsLayer->RegisterToEditorObjectVector(currentSelectedProductor->CreateUnit(startPosition)->GetGameObject());
 			}
+
+
+			//pod.templateData->pod.fbxName;
+			
+
+			currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+
+			Vector3d startPosition = Vector3d(pod.position.x, pod.position.y, pod.position.z);
+
+			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+			contentsLayer->RegisterToEditorObjectVector(currentSelectedProductor->CreateUnit(startPosition)->GetGameObject());
+
 		}
 
 		void UnitData::PostApplyAsPlaytimeObject()

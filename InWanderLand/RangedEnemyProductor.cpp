@@ -1,16 +1,14 @@
-#include "InWanderLand.h"
-#include "MeleeEnemyProductor.h"
-#include "MeleeAttackSystem.h"
-#include "DebugMeshes.h"
+#include "RangedEnemyProductor.h"
 #include "SingleNavigationField.h"
+#include "RangedAttackSystem.h"
 
-void MeleeEnemyProductor::SetUnitData()
+void RangedEnemyProductor::SetUnitData()
 {
 	m_objectName = "MeleeEnenmy";
-	m_unitType = Unit::UnitType::MeleeEnemy;
+	m_unitType = Unit::UnitType::RangedEnemy;
 	m_unitSide = Unit::UnitSide::Enemy;
 
-	m_healthPoint = 50;
+	m_healthPoint = 10;
 	m_manaPoint = 100;
 
 	m_autoAttackDamage = 10;
@@ -32,15 +30,15 @@ void MeleeEnemyProductor::SetUnitData()
 	m_navField = &SingleNavigationField::Instance();
 }
 
-void MeleeEnemyProductor::SingletonInitializer()
+void RangedEnemyProductor::SingletonInitializer()
 {
 	SetUnitData();
 }
 
-Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
+Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
-	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
+	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
@@ -48,32 +46,32 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 	auto& animList = rsrcManager->GetAnimationList();
 	for (auto each : animList)
 	{
-		if (each->GetName() == L"Ani_Monster1_Idle")
+		if (each->GetName() == L"Ani_Monster2_Idle")
 		{
 			m_baseUnitAnimations.m_idleAnimation = each;
 			m_baseUnitAnimations.m_idleAnimation->SetLoop(true);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_idleAnimation);
 			animator->GetGI().Play(m_baseUnitAnimations.m_idleAnimation);
 		}
-		else if (each->GetName() == L"Ani_Monster1_Walk")
+		else if (each->GetName() == L"Ani_Monster2_Walk")
 		{
 			m_baseUnitAnimations.m_walkAnimation = each;
 			m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_walkAnimation);
 		}
-		else if (each->GetName() == L"Ani_Monster1_Attack")
+		else if (each->GetName() == L"Ani_Monster2_Attack")
 		{
 			m_baseUnitAnimations.m_attackAnimation = each;
 			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_attackAnimation);
 		}
-		else if (each->GetName() == L"Ani_Monster1_BattleIdle")
+		else if (each->GetName() == L"Ani_Monster2_BattleIdle")
 		{
 			m_baseUnitAnimations.m_paralysisAnimation = each;
 			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
 		}
-		else if (each->GetName() == L"Ani_Monster1_Skill")
+		else if (each->GetName() == L"Ani_Monster2_Skill")
 		{
 			m_baseUnitAnimations.m_deathAnimation = each;
 			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
@@ -81,39 +79,20 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 		}
 	}
 #pragma endregion
-
 	/// UnitComponent 추가
 	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
 
 #pragma region Auto Attack Setting
-	auto unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	unitAttackColliderObject->setName("UnitAttackCollider");
-
-	auto m_physicsCollider = unitAttackColliderObject->AddComponent<physics::BoxCollider>();
-	m_physicsCollider->SetHalfExtent({ 0.5 * lengthUnit,0.5 * lengthUnit,0.5 * lengthUnit });
-
-	auto autoAttackDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	AttachDebugMesh(autoAttackDebugMesh, DebugMeshType::Cube, yunuGI::Color::red(), true);
-	autoAttackDebugMesh->GetTransform()->SetLocalScale({ 1.0f * lengthUnit, 1.0f * lengthUnit, 3.0f * lengthUnit });
-
-	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
-	warriorAttackSystem->SetMeleeAttackType(MeleeAttackType::Collider);
-	warriorAttackSystem->SetColliderObject(unitAttackColliderObject);
-	warriorAttackSystem->SetColliderDebugObject(autoAttackDebugMesh);
-	warriorAttackSystem->SetOwnerUnitObject(m_unitGameObject);
-	warriorAttackSystem->SetColliderRemainTime(0.3f);
-
-	//unitAttackColliderObject->SetParent(m_unitGameObject);
-	unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -2.0f });
-	//autoAttackDebugMesh->SetParent(m_unitGameObject);
-	autoAttackDebugMesh->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -2.0f });
+	auto rangedAttackSystem = m_unitGameObject->AddComponent<RangedAttackSystem>();
+	rangedAttackSystem->SetBulletSpeed(10.0f);
 #pragma endregion
 
 	UnitProductor::SetCommonComponents();
+
 	return m_unitComponent;
 }
 
-void MeleeEnemyProductor::SetUnitFbxName()
+void RangedEnemyProductor::SetUnitFbxName()
 {
-	m_unitFbxName = "SKM_Monster1";
+	m_unitFbxName = "SKM_Monster2";
 }

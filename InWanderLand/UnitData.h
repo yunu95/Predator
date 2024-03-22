@@ -14,6 +14,8 @@
 #include <memory>
 #include <string>
 
+class UnitProductor;
+
 namespace application
 {
     namespace editor
@@ -82,6 +84,9 @@ namespace application
         private:
             static TemplateDataManager& templateDataManager;
             palette::UnitEditorInstance* unitInstance{ nullptr };
+
+            std::vector<UnitProductor*> productorSelector;
+            bool isSelectorInitialized{ false };
 
             UnitData();
             UnitData(const std::string& name);

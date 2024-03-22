@@ -318,15 +318,19 @@ void application::contents::ContentsLayer::Initialize()
 #else
 	{
 		yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+
+		/// Editor 에서 수정하여 Map Data 에 저장할 부분
 		auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto camComp = camObj->AddComponent<RTSCam>();
-		camObj->GetTransform()->SetLocalPosition({ 0,35,0 });
+		camObj->GetTransform()->SetLocalPosition({ 0,25,0 });
 		camObj->AddComponent<Dotween>();
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 		auto color = yunuGI::Color{ 0.831,0.722,0.569,1.f };
 		light->GetGI().SetLightDiffuseColor(color);
 		directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
+		///
+
 
 		auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 

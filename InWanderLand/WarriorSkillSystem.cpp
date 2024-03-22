@@ -21,23 +21,32 @@ void WarriorSkillSystem::QSkillActivate(Vector3d skillPos)
 	m_unitNavComponent->SetActive(false);
 
 	float tempDistance = (skillPos - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
-	m_unitComponent->SetSkillDuration(tempDistance / m_QskillRushSpeed + m_knockBackObjectRemainTime);
+	m_unitComponent->SetSkillDuration(tempDistance / m_QskillRushSpeed);
 	// 1. 목표 위치로 돌진
 	m_unitDotween->DOMove(skillPos, tempDistance / m_QskillRushSpeed).OnComplete([=]()
 		{
-			// 2. remainTime 이후에 collider 비활성화
-			m_unitDotween->DONothing(m_knockBackObjectRemainTime).OnComplete([=]()
-				{
-					SetSkillRequirmentsActive(QknockBackSkill, false);
+			SetSkillRequirmentsActive(QknockBackSkill, false);
 
-					QknockBackSkill.colliderObject->GetComponent<KnockBackComponent>()->ClearCrushedUnitList();
+			QknockBackSkill.colliderObject->GetComponent<KnockBackComponent>()->ClearCrushedUnitList();
 
-					m_unitNavComponent->SetActive(true);
-					m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
-					m_unitNavComponent->Relocate(skillPos);
+			m_unitNavComponent->SetActive(true);
+			m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
+			m_unitNavComponent->Relocate(skillPos);
 
-					isQSkillStarted = false;
-				});
+			isQSkillStarted = false;
+			//// 2. remainTime 이후에 collider 비활성화
+			//m_unitDotween->DONothing(m_knockBackObjectRemainTime).OnComplete([=]()
+			//	{
+			//		SetSkillRequirmentsActive(QknockBackSkill, false);
+
+			//		QknockBackSkill.colliderObject->GetComponent<KnockBackComponent>()->ClearCrushedUnitList();
+
+			//		m_unitNavComponent->SetActive(true);
+			//		m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
+			//		m_unitNavComponent->Relocate(skillPos);
+
+			//		isQSkillStarted = false;
+			//	});
 		});
 }
 
