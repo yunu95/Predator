@@ -13,6 +13,7 @@ public:
 
 public:
 	void PushLightInstance(std::shared_ptr<ILight> light);
+	void PopLightInstance(std::shared_ptr<ILight> light);
 
 #pragma region Getter
 	std::vector<std::shared_ptr<ILight>>& GetLightList() { return this->lightSet; }

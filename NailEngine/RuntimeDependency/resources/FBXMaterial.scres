@@ -6804,7 +6804,7 @@
         },
         "child": [
             {
-                "AmbientExposure": 0.5,
+                "AmbientExposure": 1.0,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -6831,7 +6831,7 @@
                         "materialName": "M_Leaves",
                         "normalMap": "",
                         "opacityMap": "FBX/SM_Bush_001/SM_Bush_001.fbm/T_Leaf_Opacity.png",
-                        "ps": "LeavesPS.cso",
+                        "ps": "DefaultPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
                         "temp11Map": "",
@@ -6844,7 +6844,7 @@
                         "temp7Map": "",
                         "temp8Map": "",
                         "temp9Map": "",
-                        "vs": "LeavesVS.cso"
+                        "vs": "DefaultVS.cso"
                     }
                 ],
                 "meshName": "SM_Bush_001",
@@ -6908,8 +6908,8 @@
         },
         "child": [
             {
-                "AmbientExposure": 1.0,
-                "DiffuseExposure": 1.0,
+                "AmbientExposure": 0.4000000059604645,
+                "DiffuseExposure": 0.10000000149011612,
                 "aabb": {
                     "maxPoint": {
                         "x": 3.3525338172912598,
@@ -6935,7 +6935,7 @@
                         "materialName": "M_Bush",
                         "normalMap": "",
                         "opacityMap": "FBX/SM_Bush_002/SM_Bush_002.fbm/T_Bush_Opacity.png",
-                        "ps": "DefaultPS.cso",
+                        "ps": "LeavesPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
                         "temp11Map": "",
@@ -6948,7 +6948,7 @@
                         "temp7Map": "",
                         "temp8Map": "",
                         "temp9Map": "",
-                        "vs": "DefaultVS.cso"
+                        "vs": "LeavesVS.cso"
                     }
                 ],
                 "meshName": "SM_Bush_002",

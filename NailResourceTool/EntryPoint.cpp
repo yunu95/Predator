@@ -499,8 +499,12 @@ void ShowSeleteFBXInfo()
 		std::string str = std::string{ g_selectFBX->meshName.begin(), g_selectFBX->meshName.end() };
 		g_selectGameObject = Scene::getCurrentScene()->AddGameObjectFromFBX(str);
 
-		ImGui::InputFloat("DiffuseExposure", &g_selectFBX->diffuseExposure);
-		ImGui::InputFloat("AmbientExposure", &g_selectFBX->ambientExposure);
+		ImGui::Text("DiffuseExposure :");
+		ImGui::DragFloat("##DiffuseExposure", &g_selectFBX->diffuseExposure, 0.1f,0.0, 10.0);
+
+		//ImGui::InputFloat("DiffuseExposure", &g_selectFBX->diffuseExposure);
+		ImGui::Text("AmbientExposure :");
+		ImGui::DragFloat("##AmbientExposure", &g_selectFBX->ambientExposure, 0.1f, 0.0, 10.0);
 
 		int materialIndex = 0;
 		for (auto& each : g_selectFBX->materialVec)

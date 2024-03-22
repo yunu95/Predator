@@ -320,20 +320,25 @@ void RenderSystem::RenderShadow()
 void RenderSystem::RenderPointLightShadow()
 {
 	auto& lightSet = LightManager::Instance.Get().GetLightList();
-	
+
 	int index = 0;
 
 	for (auto& e : lightSet)
 	{
 		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{
+			if (index > MAX_POINT_LIGHT - 1)
+			{
+				continue;
+			}
+
 			// 현재 카메라 프러스텀에 들어온 포인트 라이트만 쉐도우맵을 만들도록 컬링을 진행한다
 			auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
 
 			auto meshName = e->GetMeshName();
 			auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
 
-			auto aabb =  ResourceManager::Instance.Get().GetMesh(e->GetMeshName())->GetBoundingBox(
+			auto aabb = ResourceManager::Instance.Get().GetMesh(e->GetMeshName())->GetBoundingBox(
 				std::static_pointer_cast<PointLight>(e)->GetWorldTM(), 0);
 
 			if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
@@ -392,7 +397,7 @@ void RenderSystem::RenderPointLightShadow()
 			}
 
 			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX))->PushGraphicsData(&pointLightVP, sizeof(PointLightVPMatrix), static_cast<int>(CB_TYPE::POINTLIGHT_VPMATRIX), true);
-			PointLightShadowPass::Instance.Get().Render(index,false);
+			PointLightShadowPass::Instance.Get().Render(index, false);
 			InstancingManager::Instance.Get().RenderStaticPointLightShadow(std::static_pointer_cast<PointLight>(e)->GetWorldTM(), std::static_pointer_cast<PointLight>(e));
 			PointLightShadowPass::Instance.Get().Render(index, true);
 			InstancingManager::Instance.Get().RenderSkinnedPointLightShadow(std::static_pointer_cast<PointLight>(e)->GetWorldTM(), std::static_pointer_cast<PointLight>(e));
