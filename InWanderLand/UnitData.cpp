@@ -132,7 +132,7 @@ namespace application
 
 			for (auto& e : productorSelector)
 			{
-				if (e->SelectUnitProductorByFbxName(pod.templateData->pod.fbxName))
+				if (e->SelectUnitProductorByFbxName(pod.templateData->pod.skinnedFBXName))
 				{
 					currentSelectedProductor = e;
 					break;
@@ -140,7 +140,7 @@ namespace application
 			}
 
 
-			pod.templateData->pod.fbxName;
+			//pod.templateData->pod.fbxName;
 			
 
 			currentSelectedProductor->MappingUnitData(pod.templateData->pod);
