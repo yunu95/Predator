@@ -1,7 +1,7 @@
 #pragma once
-#include "UnitStatusComponent.h"
+#include "SpecialEffectTrigger.h"
 
-class DamageOnlyComponent : public UnitStatusComponent
+class DamageOnlyComponent : public SpecialEffectTrigger
 {
 protected:
 	float m_skillDamage;

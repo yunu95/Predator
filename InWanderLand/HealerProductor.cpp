@@ -40,14 +40,14 @@ void HealerProductor::SetUnitData()
 
 void HealerProductor::SingletonInitializer()
 {
-	graphics::Renderer::SingleInstance().GetResourceManager()->LoadFile("FBX/Boss");
+	//graphics::Renderer::SingleInstance().GetResourceManager()->LoadFile("FBX/Boss");
 	SetUnitData();
 }
 
 Unit* HealerProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
-	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Boss");
+	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
@@ -55,32 +55,32 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
 	auto& animList = rsrcManager->GetAnimationList();
 	for (auto each : animList)
 	{
-		if (each->GetName() == L"root|000.Idle")
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
 		{
 			m_baseUnitAnimations.m_idleAnimation = each;
 			m_baseUnitAnimations.m_idleAnimation->SetLoop(true);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_idleAnimation);
 			animator->GetGI().Play(m_baseUnitAnimations.m_idleAnimation);
 		}
-		else if (each->GetName() == L"root|001-2.Walk")
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
 		{
 			m_baseUnitAnimations.m_walkAnimation = each;
 			m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_walkAnimation);
 		}
-		else if (each->GetName() == L"root|003-1.NormalAttack_L")
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
 		{
 			m_baseUnitAnimations.m_attackAnimation = each;
-			m_baseUnitAnimations.m_attackAnimation->SetLoop(true);
+			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_attackAnimation);
 		}
-		else if (each->GetName() == L"root|011-1.Groggy")
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
 		{
 			m_baseUnitAnimations.m_paralysisAnimation = each;
 			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
 		}
-		else if (each->GetName() == L"root|012.Death")
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_APose")
 		{
 			m_baseUnitAnimations.m_deathAnimation = each;
 			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
@@ -148,4 +148,9 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
 	UnitProductor::SetCommonComponents();
 	
 	return m_unitComponent;
+}
+
+void HealerProductor::SetUnitFbxName()
+{
+	m_unitFbxName = "Sphere";
 }

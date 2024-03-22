@@ -1,8 +1,7 @@
-#include "InWanderLand.h"
-#include "UnitStatusComponent.h"
+#include "SpecialEffectTrigger.h"
 #include "Unit.h"
 
-void UnitStatusComponent::OnTriggerEnter(physics::Collider* collider)
+void SpecialEffectTrigger::OnTriggerEnter(physics::Collider* collider)
 {
 	// Request StatusTimer To TimerPool here
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
@@ -12,9 +11,3 @@ void UnitStatusComponent::OnTriggerEnter(physics::Collider* collider)
 		ApplyStatus(m_ownerUnit, colliderUnitComponent);
 	}
 }
-
-void UnitStatusComponent::SetSkillOwnerUnit(Unit* p_unit)
-{
-	m_ownerUnit = p_unit;
-}
-

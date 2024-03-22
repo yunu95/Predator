@@ -16,7 +16,10 @@ void MagicianSkillSystem::QSkillActivate(Vector3d skillPos)
 	isQSkillActivating = true;
 
 	QSkillProjectile.colliderObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());	
+	QSkillProjectile.colliderObject->GetTransform()->SetWorldRotation(Quaternion(Vector3d::zero));
 	QSkillProjectile.debugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());	
+
+	RotateProjectile(QSkillProjectile.colliderObject, skillPos);
 
 	SetSkillRequirmentsActive(QSkillProjectile, true);
 

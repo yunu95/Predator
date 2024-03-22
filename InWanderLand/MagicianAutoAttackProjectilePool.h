@@ -10,12 +10,16 @@ class MagicianAutoAttackProjectilePool :
 public:
 	virtual void ObjectInitializer(MagicianAutoAttackProjectile* projectile) override
 	{
-		const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-		auto capsuleMesh = _resourceManager->GetMesh(L"Capsule");
+		//const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+		//auto capsuleMesh = _resourceManager->GetMesh(L"Capsule");
 
-		auto projectileComponent = projectile->GetGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		projectileComponent->GetGI().SetMesh(capsuleMesh);
-		projectileComponent->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
+		//auto projectileComponent = projectile->GetGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		//projectileComponent->GetGI().SetMesh(capsuleMesh);
+		//projectileComponent->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));	
+		auto bulletGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Fork");
+		bulletGameObject->SetParent(projectile->GetGameObject());
+		//bulletGameObject->GetTransform()->SetLocalRotation(Quaternion(Vector3d( 90, 0, 0 )));
+		//bulletGameObject->GetTransform()->SetLocalRotation(projectile->GetGameObject()->GetTransform()->GetWorldRotation());
 	}
 };
 
