@@ -48,7 +48,7 @@ void yunutyEngine::NavigationAgent::AssignToNavigationField(NavigationField* nav
         impl->crowd->removeAgent(impl->agentIdx);
 
     if (this->navField != nullptr)
-        navField->agents.erase(this);
+        this->navField->agents.erase(this);
 
     if (navField != nullptr)
     {
