@@ -175,10 +175,10 @@ void GraphicsTest()
 	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
 	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 10,0,0 });
 	//}
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
-		obj->GetTransform()->SetLocalScale(Vector3d{ 2,2,2 });
-	}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+	//	obj->GetTransform()->SetLocalScale(Vector3d{ 2,2,2 });
+	//}
 	//{
 	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stump");
 	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 50,0,0 });
@@ -241,15 +241,33 @@ void GraphicsTest()
 	//	obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{0,180,0} });
 	//}
 
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CastleWall");
+		auto renderer = obj->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
+		{
+			renderer->GetGI().GetMaterial(i)->SetPixelShader(_resourceManager->GetShader(L"Debug_AlphaPS.cso"));
+			yunuGI::Color color{ 1,0,0,0.2 };
+			renderer->GetGI().GetMaterial(i)->SetColor(color);
+		}
+	}
 
-	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
-	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	//	renderer->GetGI().SetMesh(mesh);
-	//	renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, tex);
-	//	renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::NORMAL, tex2);
-	//}
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(mesh);
+		renderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"Debug_AlphaPS.cso"));
+		yunuGI::Color color{ 1,0,0,0.1 };
+		renderer->GetGI().GetMaterial()->SetColor(color);
+	}
+
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(mesh2);
+	}
 }
 
 void application::contents::ContentsLayer::SetInputControl(bool control)

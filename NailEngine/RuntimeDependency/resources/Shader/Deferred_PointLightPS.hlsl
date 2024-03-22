@@ -72,5 +72,5 @@ PS_OUT main(PixelIn input)
 // RasterType : Solid
 // CullType : CullFront
 // DepthType : NoDepthTestNoWrite
-// BlendType : AlphaBlend
+// BlendType : Light
 // Sampler : Shadow
