@@ -48,7 +48,7 @@ namespace yunuGI
 		KeyframeDesc next;
 	};
 
-	class IAnimator : public yunuGI::IRenderable
+	class IAnimator : virtual public yunuGI::IRenderable
 	{
 	public:
 		virtual void PushAnimation(yunuGI::IAnimation* animation) = 0;
@@ -74,6 +74,7 @@ namespace yunuGI
 		virtual void SetTransitionDesc(TransitionDesc& tansitionDesc) = 0;
 
 		virtual unsigned int GetID() = 0;
+		virtual  ~IAnimator() {};
 
 	protected:
 		/*float playSpeed = 1.f;

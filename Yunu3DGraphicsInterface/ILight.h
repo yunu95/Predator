@@ -46,5 +46,6 @@ namespace yunuGI
 	{
 	public:
 		virtual void SetLightDiffuseColor(yunuGI::Color& color) = 0;
+		virtual ~ILight() = default;
 	};
 }
