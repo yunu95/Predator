@@ -527,7 +527,10 @@ namespace application
                 switch (type)
                 {
                     case application::editor::palette::Palette_List::Terrain:
-                        break;
+                    {
+                        imgui::EndSection();
+                        return;
+                    }
                     case application::editor::palette::Palette_List::Unit:
                     {
                         templateList = tdm.GetDataList(DataType::UnitData);
@@ -539,9 +542,15 @@ namespace application
                         break;
                     }
                     case application::editor::palette::Palette_List::Region:
-                        break;
+                    {
+                        imgui::EndSection();
+                        return;
+                    }
                     case application::editor::palette::Palette_List::Wave:
-                        break;
+                    {
+                        imgui::EndSection();
+                        return;
+                    }
                     case application::editor::palette::Palette_List::Cam:
                     {
                         templateList = tdm.GetDataList(DataType::CameraData);

@@ -205,7 +205,7 @@ namespace application
 			if (currentPalette != palette)
 			{
 				pm.SetCurrentPalette(palette);
-				currentPalette = palette;
+				currentPalette = palette;		
 			}
 		}
 
@@ -982,15 +982,16 @@ namespace application
 		void PalettePanel::LoadCallback()
 		{
 			unitCurrentButton = -1;
-			up.SetAsSelectMode(true);
-
 			ornamentCurrentButton = -1;
-			op.SetAsSelectMode(true);
-
 			lightCurrentButton = -1;
+			
+			tp.SetAsSelectMode(true);
+			up.SetAsSelectMode(true);
+			op.SetAsSelectMode(true);
+			rp.SetAsSelectMode(true);
+			wp.SetAsSelectMode(true);
+			cp.SetAsSelectMode(true);
 			lp.SetAsSelectMode(true);
-
-			auto uSize = tdm.GetDataList(DataType::UnitData).size();
 		}
 
 		void PalettePanel::UpdataLightGizmo()

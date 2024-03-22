@@ -89,7 +89,6 @@ namespace application
                     beforeState = State::None;
                 }
 
-
             protected:
                 // 단일 객체에 대한 선택이 일어났을때 호출되는 콜백 함수, 기본 동작은 해당 객체를 선택 리스트에 추가한다.
                 virtual void OnSelectSingleInstance(IEditableData* data);

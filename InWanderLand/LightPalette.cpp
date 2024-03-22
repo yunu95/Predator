@@ -97,6 +97,7 @@ namespace application::editor::palette
                 SetAsSelectMode(true);
                 break;
         }
+        LightBrush::Instance().GetGameObject()->SetSelfActive(true);
     }
 
     void LightPalette::OnStandbyPalette()
@@ -110,12 +111,7 @@ namespace application::editor::palette
             beforeState = State::Place;
         }
         state = State::None;
+        LightBrush::Instance().GetGameObject()->SetSelfActive(false);
         CleanUpData();
-    }
-
-    void LightPalette::CleanUpData()
-    {
-        Palette::CleanUpData();
-        Reset();
     }
 }

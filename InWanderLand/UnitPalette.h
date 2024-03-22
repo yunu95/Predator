@@ -26,7 +26,6 @@ namespace application
                 virtual bool ShouldSelect(IEditableData* instance) override;
                 virtual void OnStartPalette() override;
                 virtual void OnStandbyPalette() override;
-                virtual void CleanUpData() override;
                 virtual void Delete(IEditableData* data) override;
 
             private:

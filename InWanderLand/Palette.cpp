@@ -151,6 +151,7 @@ namespace application::editor::palette
     {
         return state != State::Place;
     }
+
     void Palette::OnSelectSingleInstance(IEditableData* data)
     {
         if (!SceneViewPanel::GetSingletonInstance().IsMouseOverGizmo())
