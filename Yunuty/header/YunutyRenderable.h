@@ -82,7 +82,14 @@ namespace yunutyEngine::graphics
             instancePtr = yunuGI;
         }
         YunuGIType& GetGI() { return *instancePtr.Get(); }
+
+
     public:
+		virtual ~Renderable()
+		{
+
+		};
+
         friend Renderer;
         friend EventHandler;
     };

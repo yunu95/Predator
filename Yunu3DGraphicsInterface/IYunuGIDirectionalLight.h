@@ -9,6 +9,7 @@ namespace yunuGI
     {
     public:
         virtual void SetLightDiffuseColor(yunuGI::Color& color) override {};
+        virtual ~IDirectionalLight() = default;
 
     };
     struct IDirectionalLightDesc

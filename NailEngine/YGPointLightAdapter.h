@@ -18,7 +18,7 @@ namespace yunuGIAdapter
 			LightManager::Instance.Get().PushLightInstance(this->light);
 		}
 
-		~PointLightAdapter()
+		virtual ~PointLightAdapter()
 		{
 			LightManager::Instance.Get().PopLightInstance(this->light);
 		}

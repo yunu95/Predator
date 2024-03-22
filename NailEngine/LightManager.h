@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <set>
 class ILight;
 
 class LightManager
@@ -16,12 +17,12 @@ public:
 	void PopLightInstance(std::shared_ptr<ILight> light);
 
 #pragma region Getter
-	std::vector<std::shared_ptr<ILight>>& GetLightList() { return this->lightSet; }
-	unsigned int& GetLightCount() { return lightCount; }
+	std::set<ILight*>& GetLightList() { return this->lightSet; }
+	unsigned int GetLightCount() { return this->lightSet.size(); }
 #pragma endregion
 
 private:
 	unsigned int lightCount;
-	std::vector<std::shared_ptr<ILight>> lightSet;
+	std::set<ILight*> lightSet;
 };
 
