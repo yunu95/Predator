@@ -30,6 +30,7 @@ namespace application
                 : public PaletteInstance
             {
             public:
+                virtual ~LightEditorInstance();
                 virtual void Start() override;
                 void Init(const application::editor::LightData* lightData);
                 void Init(const application::editor::Light_TemplateData* lightTemplateData);
@@ -41,11 +42,8 @@ namespace application
                 // 실제 Light Component 에 PaletteInstance 의 내용을 반영합니다.
                 void ApplyLightComponent(float range, yunuGI::Color color);
 
-                // 실제 Light Component 외의 FBX SelfActive 를 false 처리합니다.
+                // Directional Light 는 fbxObj 를 활성화하지 않습니다.
                 virtual void ShowEditorInstance() override;
-
-                // 실제 Light Component 외의 FBX SelfActive 를 false 처리합니다.
-                virtual void HideEditorInstance() override;
 
             protected:
                 virtual void OnHover() { PaletteInstance::OnHover(); }

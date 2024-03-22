@@ -6,6 +6,16 @@
 
 namespace application::editor::palette
 {
+	LightEditorInstance::~LightEditorInstance()
+	{
+		if (lightObj)
+		{
+			Scene::getCurrentScene()->DestroyGameObject(lightObj);
+			fbxObj = nullptr;
+			lightObj = nullptr;
+		}
+	}
+
 	void LightEditorInstance::Start()
 	{
 		PaletteInstance::Start();
@@ -30,7 +40,6 @@ namespace application::editor::palette
 				currentLight = LightType::Directional;
 				lightObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 				lightObj->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-				lightObj->SetParent(GetGameObject());
 				break;
 			}
 			case LightType::Point:
@@ -39,7 +48,6 @@ namespace application::editor::palette
 				currentLight = LightType::Point;
 				lightObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 				lightObj->AddComponent<yunutyEngine::graphics::PointLight>();
-				lightObj->SetParent(GetGameObject());
 				break;
 			}
 			default:
@@ -66,6 +74,35 @@ namespace application::editor::palette
 				}
 			}
 		}
+
+		/// Light Range 가이드입니다.
+		//switch (lightTemplateData->pod.type)
+		//{
+		//	case LightType::Point:
+		//	{
+		//		auto range = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sphere");
+		//		range->SetParent(fbxObj);
+		//		range->setName("Range");
+
+		//		for (auto each : range->GetChildren())
+		//		{
+		//			auto comp = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+
+		//			if (comp)
+		//			{
+		//				for (int i = 0; i < comp->GetGI().GetMaterialCount(); ++i)
+		//				{
+		//					comp->GetGI().GetMaterial(i)->SetPixelShader(erm.GetShader("Debug_AlphaPS.cso"));
+		//					comp->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,0.3,1,0.1 });
+		//				}
+		//			}
+		//		}
+
+		//		break;
+		//	}
+		//	default:
+		//		break;
+		//}
 	}
 
 	void LightEditorInstance::ChangeTemplateData(const application::editor::LightData* lightData)
@@ -107,7 +144,6 @@ namespace application::editor::palette
 				fbxType = "Directional";
 				lightObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 				lightObj->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-				lightObj->SetParent(GetGameObject());
 				break;
 			}
 			case LightType::Point:
@@ -115,7 +151,6 @@ namespace application::editor::palette
 				fbxType = "Sphere";
 				lightObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 				lightObj->AddComponent<yunutyEngine::graphics::PointLight>();
-				lightObj->SetParent(GetGameObject());
 				break;
 			}
 			default:
@@ -144,6 +179,35 @@ namespace application::editor::palette
 			}
 		}
 
+		/// Light Range 가이드입니다.
+		//switch (lightTemplateData->pod.type)
+		//{
+		//	case LightType::Point:
+		//	{
+		//		auto range = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sphere");
+		//		range->SetParent(fbxObj);
+		//		range->setName("Range");
+
+		//		for (auto each : range->GetChildren())
+		//		{
+		//			auto comp = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+
+		//			if (comp)
+		//			{
+		//				for (int i = 0; i < comp->GetGI().GetMaterialCount(); ++i)
+		//				{
+		//					comp->GetGI().GetMaterial(i)->SetPixelShader(erm.GetShader("Debug_AlphaPS.cso"));
+		//					comp->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,0.3,1,0.1 });
+		//				}
+		//			}
+		//		}
+
+		//		break;
+		//	}
+		//	default:
+		//		break;
+		//}
+
 		currentLight = type;
 
 		return;
@@ -164,6 +228,42 @@ namespace application::editor::palette
 					auto lc = lightObj->GetComponent<yunutyEngine::graphics::PointLight>();
 					lc->GetGI().SetRange(range);
 					lc->GetGI().SetLightDiffuseColor(color);
+
+					auto& erm = ResourceManager::GetSingletonInstance();
+
+					for (auto each : fbxObj->GetChildren())
+					{
+						auto comp = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+
+						if (comp)
+						{
+							for (int i = 0; i < comp->GetGI().GetMaterialCount(); ++i)
+							{
+								comp->GetGI().GetMaterial(i)->SetPixelShader(erm.GetShader("DebugPS.cso"));
+								comp->GetGI().GetMaterial(i)->SetColor(color);
+							}
+						}
+
+						/// Light Range 가이드입니다.
+						//if (each->getName() == "Range")
+						//{
+						//	each->GetTransform()->SetWorldScale(Vector3d(range * 2, range * 2, range * 2));
+
+						//	for (auto reach : each->GetChildren())
+						//	{
+						//		auto comp = reach->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+
+						//		if (comp)
+						//		{
+						//			for (int i = 0; i < comp->GetGI().GetMaterialCount(); ++i)
+						//			{
+						//				comp->GetGI().GetMaterial(i)->SetPixelShader(erm.GetShader("DebugPS.cso"));
+						//				comp->GetGI().GetMaterial(i)->SetColor(yunuGI::Color(color.r, color.g, color.b, 0.1));
+						//			}
+						//		}
+						//	}
+						//}
+					}
 					break;
 				}
 				default:
@@ -174,17 +274,9 @@ namespace application::editor::palette
 
 	void LightEditorInstance::ShowEditorInstance()
 	{
-		if (fbxObj && currentLight != LightType::Directional)
+		if (currentLight != LightType::Directional)
 		{
-			fbxObj->SetSelfActive(true);
-		}
-	}
-
-	void LightEditorInstance::HideEditorInstance()
-	{
-		if (fbxObj)
-		{
-			fbxObj->SetSelfActive(false);
+			GetGameObject()->SetSelfActive(true);
 		}
 	}
 }
