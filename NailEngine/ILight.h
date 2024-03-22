@@ -18,7 +18,7 @@ enum class LightType
 struct LightColor
 {
 	DirectX::SimpleMath::Vector4 diffuse{ 1.f,1.f,1.f,1.f };
-	DirectX::SimpleMath::Vector4 ambient{ 0.2f,0.2f,0.2f,1.f };
+	DirectX::SimpleMath::Vector4 ambient{ 0.3f,0.3f,0.3f,1.f };
 	DirectX::SimpleMath::Vector4 specular{ 1.f,1.f,1.f,1.f };
 };
 

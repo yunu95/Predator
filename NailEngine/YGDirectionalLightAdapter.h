@@ -19,6 +19,11 @@ namespace yunuGIAdapter
 			LightManager::Instance.Get().PushLightInstance(this->light);
 		}
 
+		~DirectionalLightAdapter()
+		{
+			LightManager::Instance.Get().PopLightInstance(this->light);
+		}
+
 		virtual void SetWorldTM(const yunuGI::Matrix4x4& tm) override
 		{
 			light->SetWorldTM(reinterpret_cast<const DirectX::SimpleMath::Matrix&>(tm));

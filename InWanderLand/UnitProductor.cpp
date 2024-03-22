@@ -72,6 +72,8 @@ void UnitProductor::SetCommonComponents()
 
 	m_unitComponent->SetMaxAggroNumber(m_maxAggroNumber);
 
+	m_unitComponent->SetFbxName(m_unitFbxName);
+
 	/// + 플레이어 유닛일 경우 특수 처리
 	if (m_unitSide == Unit::UnitSide::Player)
 		SetPlayerRelatedComponents(m_unitComponent);
@@ -96,7 +98,7 @@ void UnitProductor::SetPlayerRelatedComponents(Unit* playerUnit)
 
 void UnitProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p_podData)
 {
-	m_unitType = static_cast<Unit::UnitType>(p_podData.unitType);
+	//m_unitType = static_cast<Unit::UnitType>(p_podData.unitType);
 	m_healthPoint = p_podData.m_healthPoint;
 	m_manaPoint = p_podData.m_manaPoint;
 	m_autoAttackDamage = p_podData.m_autoAttackDamage;

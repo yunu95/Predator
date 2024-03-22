@@ -50,6 +50,10 @@ namespace application
             POD_Quaternion<float> rotation = POD_Quaternion<float>();
             POD_Vector3<float> scale = { 1,1,1 };
 
+            /// Global Constant
+
+
+
             TO_JSON(POD_Unit)
             FROM_JSON(POD_Unit)
         };

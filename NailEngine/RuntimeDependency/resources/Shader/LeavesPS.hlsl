@@ -19,56 +19,25 @@ struct PS_OUT
     float4 color : SV_Target2;
     float4 depth : SV_Target3;
     float4 arm : SV_Target4;
+    float4 emissive : SV_Target5;
 };
 
 
 PS_OUT main(PixelIn input)
 {
-    //input.normalV = normalize(input.normalV);
-    
-    //float3 viewDirection = normalize(cameraPos.xyz - input.posW.xyz);
-    
-    //LightColor totalColor = (LightColor) 0.f;
-
-    //float3 normal = input.normalV;
-    
-    //if(UseTexture(useNormal))
-    //{
-    //    float3 tNormal = NormalMap.Sample(sam, input.uv).xyz;
-    //    tNormal = (tNormal - 0.5f) * 2.f;
-    //    float3x3 matTBN = { input.tangentV, input.biNormalV, input.normalV };
-    //    normal = normalize(mul(tNormal, matTBN));
-    //}
-    
-    //for (int i = 0; i < lightCount; ++i)
-    //{
-    //    LightColor color;
-    //    CalculateLight(i, normal, viewDirection, input.posW, color.diffuse, color.ambient, color.specular);
-    //    totalColor.diffuse += color.diffuse;
-    //    totalColor.ambient += color.ambient;
-    //    totalColor.specular += color.specular;
-    //}
-    
-    //if(UseTexture(useAlbedo))
-    //{
-    //    return AlbedoMap.Sample(sam,input.uv) * (totalColor.ambient + totalColor.diffuse) + totalColor.specular;
-    //}
-    //else
-    //{
-    //    return materialColor * (totalColor.ambient + totalColor.diffuse) + totalColor.specular;
-    //}
-    
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
     PS_OUT output = (PS_OUT) 0;
     
     float4 color = float4(0.5f, 0.5f, 0.5f, 1.f);
+    
+    if (UseTexture(useOpacity) == 1)
+    {
+        clip(OpacityMap.Sample(sam, input.uv).w - 1);
+    }
     
     if (UseTexture(useAlbedo) == 1)
     {
         color = AlbedoMap.Sample(sam, input.uv);
         color.rgb = pow(color.rgb, 2.2f);
-        clip(color.w - 1);
     }
     
     float3 viewNormal = input.normalV;
@@ -85,15 +54,9 @@ PS_OUT main(PixelIn input)
         viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
     }
     
-    if (UseTexture(useOpacity) == 1)
-    {
-        color = OpacityMap.Sample(sam, input.uv);
-        clip(color.w - 1);
-    }
-    
-    output.arm.x = 1.f;
-    output.arm.y = 0.5f;
-    output.arm.z = 1.f;
+    output.arm.x = 1.0f;
+    output.arm.y = 1.0f;
+    output.arm.z = 0.0f;
     
     output.position = float4(input.posV.xyz, 1.f);
     output.normal = float4(viewNormal.xyz, 1.f);
