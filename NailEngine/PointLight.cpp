@@ -28,7 +28,7 @@ void PointLight::SetRange(float range)
 
 	if (range <= 0.f || range <= this->lightInfo.nearPlane)
 	{
-		this->lightInfo.farPlane = this->lightInfo.nearPlane += 1.f;
+		this->lightInfo.farPlane = this->lightInfo.nearPlane + 1.f;
 	}
 }
 
