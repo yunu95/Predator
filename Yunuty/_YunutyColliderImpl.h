@@ -32,6 +32,7 @@ namespace yunutyEngine
             friend _PhysxGlobal;
         protected:
         public:
+			static constexpr float minimumScale = 0.001f;
             // Rigidbody가 존재하지 않으면 isTrigger는 참, Rigidbody가 존재하면 Trigger는 거짓입니다.
             /*bool GetIsTrigger()
             {

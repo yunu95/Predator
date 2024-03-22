@@ -1141,9 +1141,6 @@
     <ClCompile Include="PaletteInstance.cpp">
       <Filter>Editor\Palette\EditorInstance</Filter>
     </ClCompile>
-    <ClCompile Include="UnitStatusComponent.cpp">
-      <Filter>Contents\UnitStatusComponent</Filter>
-    </ClCompile>
     <ClCompile Include="DebugMeshes.cpp">
       <Filter>DebugGraphics\DebugMeshes</Filter>
     </ClCompile>
