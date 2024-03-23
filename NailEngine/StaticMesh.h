@@ -128,11 +128,12 @@ public:
 				}
 				else
 				{
-					//RenderSystem::Instance.Get().RegisterRenderInfo(this, this->renderInfoVec.back());
-					//RenderSystem::Instance.Get().ReSortRenderInfo(this, index);
 					InstancingManager::Instance.Get().RegisterStaticForwardData(renderInfoVec[index]);
 				}
 			}
+
+			RenderSystem::Instance.Get().RegisterRenderInfo(this, this->renderInfoVec.back());
+			RenderSystem::Instance.Get().ReSortRenderInfo(this, index);
 		}
 	}
 
