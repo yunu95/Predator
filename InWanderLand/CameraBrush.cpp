@@ -16,7 +16,6 @@ namespace application
                 if (brushObj == nullptr)
                     return;
 
-                brushObj->SetParent(GetGameObject());
 
                 for (auto each : brushObj->GetChildren())
                 {
@@ -33,6 +32,7 @@ namespace application
                 }
 
                 brushObj->SetSelfActive(false);
+                brushObj->SetParent(GetGameObject());
 
                 brush = brushObj;
 

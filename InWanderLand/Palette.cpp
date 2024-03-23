@@ -14,14 +14,16 @@
 
 namespace application::editor::palette
 {
-    void Palette::ResetPalettes()
+    /*void Palette::ResetPalettes()
     {
         static_cast<Palette&>(UnitPalette::SingleInstance()).Reset();
         static_cast<Palette&>(TerrainPalette::SingleInstance()).Reset();
         static_cast<Palette&>(OrnamentPalette::SingleInstance()).Reset();
         static_cast<Palette&>(RegionPalette::SingleInstance()).Reset();
         static_cast<Palette&>(WavePalette::SingleInstance()).Reset();
-    }
+        static_cast<Palette&>(LightPalette::SingleInstance()).Reset();
+        static_cast<Palette&>(CameraPalette::SingleInstance()).Reset();
+    }*/
 
     void Palette::Initialize()
     {
@@ -151,6 +153,7 @@ namespace application::editor::palette
     {
         return state != State::Place;
     }
+
     void Palette::OnSelectSingleInstance(IEditableData* data)
     {
         if (!SceneViewPanel::GetSingletonInstance().IsMouseOverGizmo())

@@ -87,18 +87,18 @@ namespace application::editor::palette
 
     void UnitPalette::OnStartPalette()
     {
-        Palette::SetAsSelectMode(true);
-        //switch (beforeState)
-        //{
-        //case application::editor::palette::Palette::State::Place:
-        //{
-        //    SetAsSelectMode(false);
-        //    break;
-        //}
-        //default:
-        //    SetAsSelectMode(true);
-        //    break;
-        //}
+        switch (beforeState)
+        {
+        case application::editor::palette::Palette::State::Place:
+        {
+            SetAsSelectMode(false);
+            break;
+        }
+        default:
+            SetAsSelectMode(true);
+            break;
+        }
+        UnitBrush::Instance().GetGameObject()->SetSelfActive(true);
     }
 
     void UnitPalette::OnStandbyPalette()
@@ -111,19 +111,13 @@ namespace application::editor::palette
         {
             beforeState = State::Place;
         }
+        UnitBrush::Instance().GetGameObject()->SetSelfActive(false);
         CleanUpData();
         if (WavePalette::SingleInstance().currentSelectedWaveIndex >= 0)
         {
             WavePalette::SingleInstance().HideWaveUnitsVisibility();
             WavePalette::SingleInstance().currentSelectedWaveIndex = -1;
         }
-    }
-
-    void UnitPalette::CleanUpData()
-    {
-        Palette::CleanUpData();
-        selectedUnitTemplateData = nullptr;
-        Reset();
     }
 
     void UnitPalette::Delete(IEditableData* data)

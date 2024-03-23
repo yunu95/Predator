@@ -84,8 +84,7 @@ namespace application
 
             void OrnamentPalette::OnStartPalette()
             {
-                Palette::SetAsSelectMode(true);
-                /*switch (beforeState)
+                switch (beforeState)
                 {
                 case application::editor::palette::Palette::State::Place:
                 {
@@ -95,7 +94,8 @@ namespace application
                 default:
                     SetAsSelectMode(true);
                     break;
-                }*/
+                }
+                OrnamentBrush::Instance().GetGameObject()->SetSelfActive(true);
             }
 
             void OrnamentPalette::OnStandbyPalette()
@@ -109,13 +109,8 @@ namespace application
                     beforeState = State::Place;
                 }
                 state = State::None;
+                OrnamentBrush::Instance().GetGameObject()->SetSelfActive(false);
                 CleanUpData();
-            }
-
-            void OrnamentPalette::CleanUpData()
-            {
-                Palette::CleanUpData();
-                Reset();
             }
         }
     }

@@ -102,6 +102,7 @@ namespace application
                 PaletteManager& pm = PaletteManager::GetSingletonInstance();
                 unordered_set<PaletteInstance*> contactingInstances;
                 graphics::StaticMeshRenderer* boxMesh;
+                friend PaletteManager;
             };
         }
     }

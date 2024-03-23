@@ -28,8 +28,6 @@ namespace application
                 if (brushObj == nullptr)
                     return false;
 
-                brushObj->SetParent(GetGameObject());
-
                 for (auto each : brushObj->GetChildren())
                 {
                     auto comp = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
@@ -44,6 +42,8 @@ namespace application
                     }
                 }
 
+                brushObj->setName(dataKey);
+                brushObj->SetParent(GetGameObject());
                 brushObj->SetSelfActive(false);
 
                 brushList[dataKey] = brushObj;
@@ -63,8 +63,6 @@ namespace application
                 if (brushObj == nullptr)
                     return false;
 
-                brushObj->setName(dataKey);
-                brushObj->SetParent(GetGameObject());
 
                 for (auto each : brushObj->GetChildren())
                 {
@@ -80,7 +78,9 @@ namespace application
                     }
                 }
 
+                brushObj->setName(dataKey);
                 brushObj->SetSelfActive(false);
+                brushObj->SetParent(GetGameObject());
 
                 brushList[dataKey] = brushObj;
 
