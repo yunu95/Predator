@@ -72,6 +72,7 @@ namespace application::editor::palette
                 SetAsSelectMode(true);
                 break;
         }
+        CameraBrush::Instance().GetGameObject()->SetSelfActive(true);
     }
 
     void CameraPalette::OnStandbyPalette()
@@ -85,13 +86,7 @@ namespace application::editor::palette
             beforeState = State::Place;
         }
         state = State::None;
+        CameraBrush::Instance().GetGameObject()->SetSelfActive(false);
         CleanUpData();
-        WavePalette::SingleInstance().currentSelectedWaveIndex = -1;
-    }
-
-    void CameraPalette::CleanUpData()
-    {
-        Palette::CleanUpData();
-        Reset();
     }
 }
