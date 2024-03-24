@@ -88,6 +88,19 @@ namespace application
 			rawKeyEnumMap.insert(std::make_pair(VK_OEM_MINUS, KeyCode::Minus));
 			rawKeyEnumMap.insert(std::make_pair(VK_OEM_2, KeyCode::Slash));
 			rawKeyEnumMap.insert(std::make_pair(VK_OEM_5, KeyCode::BackSlash));
+
+			rawKeyEnumMap.insert(std::make_pair(VK_F1, KeyCode::F1));
+			rawKeyEnumMap.insert(std::make_pair(VK_F2, KeyCode::F2));
+			rawKeyEnumMap.insert(std::make_pair(VK_F3, KeyCode::F3));
+			rawKeyEnumMap.insert(std::make_pair(VK_F4, KeyCode::F4));
+			rawKeyEnumMap.insert(std::make_pair(VK_F5, KeyCode::F5));
+			rawKeyEnumMap.insert(std::make_pair(VK_F6, KeyCode::F6));
+			rawKeyEnumMap.insert(std::make_pair(VK_F7, KeyCode::F7));
+			rawKeyEnumMap.insert(std::make_pair(VK_F8, KeyCode::F8));
+			rawKeyEnumMap.insert(std::make_pair(VK_F9, KeyCode::F9));
+			rawKeyEnumMap.insert(std::make_pair(VK_F10, KeyCode::F10));
+			rawKeyEnumMap.insert(std::make_pair(VK_F11, KeyCode::F11));
+			rawKeyEnumMap.insert(std::make_pair(VK_F12, KeyCode::F12));
 		}
 
 		KeyCode EditorInputManager::GetKeyCode(const int& key)

@@ -89,4 +89,15 @@ namespace application::editor::palette
         CameraBrush::Instance().GetGameObject()->SetSelfActive(false);
         CleanUpData();
     }
+
+    void CameraPalette::Delete(IEditableData* data)
+    {
+        auto camData = dynamic_cast<CameraData*>(data);
+        if (camData && camData->pod.isMain)
+        {
+            camData->ApplyAsPaletteInstance()->OnDeselected();
+            return;
+        }
+        Palette::Delete(data);
+    }
 }

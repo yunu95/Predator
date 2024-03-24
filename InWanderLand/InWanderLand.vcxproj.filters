@@ -914,6 +914,9 @@
     <ClInclude Include="SpecialEffect.h">
       <Filter>Contents\UnitStatusComponent</Filter>
     </ClInclude>
+    <ClInclude Include="EditorCameraManager.h">
+      <Filter>Editor\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1414,6 +1417,9 @@
     </ClCompile>
     <ClCompile Include="SpecialEffectTrigger.cpp">
       <Filter>Contents\UnitStatusComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorCameraManager.cpp">
+      <Filter>Editor\Camera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

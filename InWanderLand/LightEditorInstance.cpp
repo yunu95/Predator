@@ -213,7 +213,7 @@ namespace application::editor::palette
 		return;
 	}
 
-	void LightEditorInstance::ApplyLightComponent(float range, yunuGI::Color color)
+	void LightEditorInstance::ApplyLightComponent(LightData* data)
 	{
 		if (lightObj)
 		{
@@ -226,8 +226,8 @@ namespace application::editor::palette
 				case application::editor::LightType::Point:
 				{
 					auto lc = lightObj->GetComponent<yunutyEngine::graphics::PointLight>();
-					lc->GetGI().SetRange(range);
-					lc->GetGI().SetLightDiffuseColor(color);
+					lc->GetGI().SetRange(data->pod.range);
+					lc->GetGI().SetLightDiffuseColor(*reinterpret_cast<yunuGI::Color*>(&data->pod.color));
 
 					auto& erm = ResourceManager::GetSingletonInstance();
 
@@ -240,7 +240,7 @@ namespace application::editor::palette
 							for (int i = 0; i < comp->GetGI().GetMaterialCount(); ++i)
 							{
 								comp->GetGI().GetMaterial(i)->SetPixelShader(erm.GetShader("DebugPS.cso"));
-								comp->GetGI().GetMaterial(i)->SetColor(color);
+								comp->GetGI().GetMaterial(i)->SetColor(*reinterpret_cast<yunuGI::Color*>(&data->pod.color));
 							}
 						}
 

@@ -87,6 +87,8 @@ namespace application
 
 		Layer* GetContentsLayer();
 
+		bool IsContentsPlaying() { return isContentsPlaying; }
+
 	private:
 		// ImGui 단계 처리
 		void ImGuiUpdate();

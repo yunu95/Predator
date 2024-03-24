@@ -19,6 +19,8 @@
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
 #include "PaletteBrushManager.h"
+#include "EditorCameraManager.h"
+#include "EditorCamera.h"
 
 #include <d3d11.h>
 #include <dxgi1_4.h>
@@ -316,35 +318,34 @@ namespace application
 		editor::TemplateDataManager::GetSingletonInstance().Clear();
 	}
 
-
 	void Application::PlayContents()
 	{
-		auto el = static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer]);
 		auto cl = static_cast<contents::ContentsLayer*>(layers[(int)LayerList::ContentsLayer]);
+		auto el = static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer]);
 
 		if (isContentsPlaying)
 		{
-			el->OnResumeContents();
 			cl->ResumeContents();
+			el->OnResumeContents();
 		}
 		else
 		{
-			el->OnPlayContents();
 			cl->PlayContents();
+			el->OnPlayContents();
 			isContentsPlaying = true;
 		}
 	}
 
 	void Application::PauseContents()
 	{
-		static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer])->OnPauseContents();
 		static_cast<contents::ContentsLayer*>(layers[(int)LayerList::ContentsLayer])->PauseContents();
+		static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer])->OnPauseContents();
 	}
 
 	void Application::StopContents()
 	{
-		static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer])->OnStopContents();
 		static_cast<contents::ContentsLayer*>(layers[(int)LayerList::ContentsLayer])->StopContents();
+		static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer])->OnStopContents();
 
 		isContentsPlaying = false;
 	}
@@ -385,6 +386,7 @@ namespace application
 		auto el = static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer]);
 		el->ReadyOrnament();
 		el->CreateDirectionalLight();
+		editor::EditorCamera::GetSingletonInstance().ReloadGameCamera();
 		editor::palette::PaletteBrushManager::GetSingletonInstance().MakeBrush();
 #endif
 	}

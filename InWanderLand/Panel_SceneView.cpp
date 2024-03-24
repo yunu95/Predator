@@ -458,7 +458,7 @@ namespace application
                         }
                         else
                         {
-                            if (!TerrainData::Instance().IsEmpty())
+                            if (!TerrainData::Instance().IsEmpty() && EditorCamera::GetSingletonInstance().GetCameraTypeState() == CameraTypeState::Editor)
                             {
                                 app->PlayContents();
                                 nowPlaying = true;

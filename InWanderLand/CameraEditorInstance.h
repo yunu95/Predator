@@ -24,6 +24,7 @@ namespace application
                 : public PaletteInstance
             {
             public:
+                virtual ~CameraEditorInstance();
                 virtual void Start() override;
                 void Init(const application::editor::CameraData* cameraData);
                 void Init(const application::editor::Camera_TemplateData* cameraTemplateData);
@@ -31,11 +32,20 @@ namespace application
                 void ChangeTemplateData(const application::editor::Camera_TemplateData* cameraTemplateData) {}
                 void ChangeResource(const std::string& fbxName) {}
 
+                // 실제 Cam Component 에 PaletteInstance 의 내용을 반영합니다.
+                void ApplyCamComponent(CameraData* data);
+
+                yunutyEngine::graphics::Camera* GetCameraComponent();
+
+                void SetAsMain();
+
             protected:
                 virtual void OnHover() { PaletteInstance::OnHover(); }
                 virtual void OnHoverLeft() { PaletteInstance::OnHoverLeft(); }
 
             private:
+                GameObject* fbxObj;
+                GameObject* camObj;
                 const application::editor::Camera_TemplateData* cameraTemplateData;
             };
         }

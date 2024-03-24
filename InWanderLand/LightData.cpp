@@ -93,7 +93,7 @@ namespace application
 			lightInstance->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
 			lightInstance->GetTransform()->SetWorldRotation({ pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z });
 			lightInstance->GetTransform()->SetLocalScale({ pod.scale.x,pod.scale.y,pod.scale.z });
-			lightInstance->ApplyLightComponent(pod.range, *reinterpret_cast<yunuGI::Color*>(&pod.color));
+			lightInstance->ApplyLightComponent(this);
 			return lightInstance;
 		}
 

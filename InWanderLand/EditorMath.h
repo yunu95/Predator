@@ -18,6 +18,8 @@ namespace application
 	{
 		namespace math
 		{
+			double GetPI();
+
 			int GetIntMax();
 			int GetIntMin();
 			float GetFloatMax();

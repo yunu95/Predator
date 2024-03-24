@@ -541,20 +541,22 @@ void application::contents::ContentsLayer::PlayContents()
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
 	/// Editor 에서 수정하여 Map Data 에 저장할 부분
-	auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto camComp = camObj->AddComponent<RTSCam>();
-	camObj->GetTransform()->SetLocalPosition({ 0,25,0 });
-	camObj->AddComponent<Dotween>();
-	RegisterToEditorObjectVector(camObj);
 
-	auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+    /// 카메라의 경우 CameraData 의 ApplyInstancesAsPlaytimeObjects 에서 처리함
+	//auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//auto camComp = camObj->AddComponent<RTSCam>();
+	//camObj->GetTransform()->SetLocalPosition({ 0,25,0 });
+	//camObj->AddComponent<Dotween>();
+	//RegisterToEditorObjectVector(camObj);
 
-	auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
-	auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	RegisterToEditorObjectVector(mouseCursorObject);
-	auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	mouseCursorMesh->GetGI().SetMesh(sphereMesh);
-	mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
+	//auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+	//auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
+	//auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	//RegisterToEditorObjectVector(mouseCursorObject);
+	//auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//mouseCursorMesh->GetGI().SetMesh(sphereMesh);
+	//mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
 
 	/*WarriorProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 0.0f));;
 	MagicianProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 2.0f));;
@@ -570,16 +572,16 @@ void application::contents::ContentsLayer::PlayContents()
 	SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
 	RegisterToEditorObjectVector(skillPreviewSphereMeshObject);
 
-	camComp->groundHoveringClickCallback = [=](Vector3d pos)
-		{
-			mouseCursorObject->GetTransform()->SetWorldPosition(pos);
-			SkillPreviewSystem::Instance().SetCurrentMousPosition(pos);
-		};
+	//camComp->groundHoveringClickCallback = [=](Vector3d pos)
+	//	{
+	//		mouseCursorObject->GetTransform()->SetWorldPosition(pos);
+	//		SkillPreviewSystem::Instance().SetCurrentMousPosition(pos);
+	//	};
 
 	InputManager::Instance();
 	UIManager::Instance();
-	PlayerController::SingleInstance().SetMovingSystemComponent(camComp);
-	TacticModeSystem::SingleInstance().SetMovingSystemComponent(camComp);
+	//PlayerController::SingleInstance().SetMovingSystemComponent(camComp);
+	//TacticModeSystem::SingleInstance().SetMovingSystemComponent(camComp);
 }
 
 void application::contents::ContentsLayer::PauseContents()

@@ -39,8 +39,8 @@ namespace application
                 void ChangeResource(const std::string& fbxName) {}
                 void ChangeLight(LightType type);
 
-                // 실제 Light Component 에 PaletteInstance 의 내용을 반영합니다.
-                void ApplyLightComponent(float range, yunuGI::Color color);
+                // 실제 Light Component 에 LightData 의 내용을 반영합니다.
+                void ApplyLightComponent(LightData* data);
 
                 // Directional Light 는 fbxObj 를 활성화하지 않습니다.
                 virtual void ShowEditorInstance() override;

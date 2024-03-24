@@ -84,7 +84,7 @@ namespace application
                 {
                     pendingSelection = nullptr;
                     draggingObject = nullptr;
-                    selection.clear();
+                    ClearSelection();
                     state = State::Select;
                     beforeState = State::None;
                 }
