@@ -22,7 +22,6 @@ namespace yunuGIAdapter
             std::shared_ptr<MaterialWrapper> material = std::make_shared<MaterialWrapper>(true, 0);
             material->SetRenderable(this->renderable);
             this->materialVec.emplace_back(material);
-
         }
 
         ~StaticMeshAdapter()

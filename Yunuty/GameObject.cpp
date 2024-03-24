@@ -56,34 +56,7 @@ void yunutyEngine::GameObject::SetSelfActive(bool selfActive)
     this->selfActive = selfActive;
 
     activeAfter = GetActive();
-    if (activeBefore != activeAfter)
-    {
-        stack<GameObject*> activeStack;
-        activeStack.push(this);
-        while (!activeStack.empty())
-        {
-            auto child = activeStack.top();
-            activeStack.pop();
-            for (auto each : child->childrenIndexed)
-                if (each->selfActive)
-                    activeStack.push(each);
-
-            for (auto eachComp = child->components.begin(); eachComp != child->components.end(); eachComp++)
-            {
-                if (activeAfter)
-                {
-                    if (eachComp->first->GetActive())
-                        eachComp->first->OnEnable();
-                }
-                else
-                {
-                    if (eachComp->first->GetActive())
-                        eachComp->first->OnDisable();
-                }
-            }
-        }
-        parent->HandleChildUpdateState(this);
-    }
+    PropagateActiveEvent(activeBefore, activeAfter);
 }
 GameObject* yunutyEngine::GameObject::GetParentGameObject()
 {
@@ -99,6 +72,7 @@ Scene* yunutyEngine::GameObject::GetScene()
 }
 void yunutyEngine::GameObject::SetParent(IGameObjectParent* parent)
 {
+    bool activeBefore = GetActive();
     DoThingsOnParents([](GameObject* parent) {parent->childrenNum--; });
     if (this->parent)
         parent->ReceiveChild(this->parent->MoveChild(this));
@@ -107,6 +81,8 @@ void yunutyEngine::GameObject::SetParent(IGameObjectParent* parent)
     this->parent = parent;
     this->parentGameObject = dynamic_cast<GameObject*>(parent);
     DoThingsOnParents([](GameObject* parent) {parent->childrenNum++; });
+    bool activeAfter = GetActive();
+    PropagateActiveEvent(activeBefore, activeAfter);
     parent->HandleChildUpdateState(this);
 }
 // 이거 복잡도 n임.
@@ -280,6 +256,37 @@ void yunutyEngine::GameObject::HandleComponentUpdateState(Component* component)
     //if (deservesUpdateBefore != DeservesUpdate())
     if (parent)
         parent->HandleChildUpdateState(this);
+}
+void yunutyEngine::GameObject::PropagateActiveEvent(bool activeBefore, bool activeAfter)
+{
+    if (activeBefore != activeAfter)
+    {
+        stack<GameObject*> activeStack;
+        activeStack.push(this);
+        while (!activeStack.empty())
+        {
+            auto child = activeStack.top();
+            activeStack.pop();
+            for (auto each : child->childrenIndexed)
+                if (each->selfActive)
+                    activeStack.push(each);
+
+            for (auto eachComp = child->components.begin(); eachComp != child->components.end(); eachComp++)
+            {
+                if (activeAfter)
+                {
+                    if (eachComp->first->GetActive())
+                        eachComp->first->OnEnable();
+                }
+                else
+                {
+                    if (eachComp->first->GetActive())
+                        eachComp->first->OnDisable();
+                }
+            }
+        }
+        parent->HandleChildUpdateState(this);
+    }
 }
 void yunutyEngine::GameObject::SetCacheDirty()
 {

@@ -162,8 +162,23 @@ yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yu
 						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } });
 	}
 
-	auto temp = DirectX::SimpleMath::Vector3{ 1,1,1 };
-	tempMesh->SetData(vertices, idxVec, temp, temp);
+
+	DirectX::SimpleMath::Vector3 minPoint = vertices[0].pos;
+	DirectX::SimpleMath::Vector3 maxPoint = vertices[0].pos;
+
+	for (const auto& vertex : vertices) {
+		// minPoint 업데이트
+		minPoint.x = std::min(minPoint.x, vertex.pos.x);
+		minPoint.y = std::min(minPoint.y, vertex.pos.y);
+		minPoint.z = std::min(minPoint.z, vertex.pos.z);
+
+		// maxPoint 업데이트
+		maxPoint.x = max(maxPoint.x, vertex.pos.x);
+		maxPoint.y = max(maxPoint.y, vertex.pos.y);
+		maxPoint.z = max(maxPoint.z, vertex.pos.z);
+	}
+
+	tempMesh->SetData(vertices, idxVec, maxPoint, minPoint);
 	CreateMesh(tempMesh);
 
 	return tempMesh.get();

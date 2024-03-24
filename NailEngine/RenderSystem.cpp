@@ -156,8 +156,6 @@ void RenderSystem::PushCameraData()
 
 void RenderSystem::Render()
 {
-	//ClearRenderInfo();
-	//SortObject();
 	UtilBuffer utilBuffer;
 	utilBuffer.windowWidth = NailEngine::Instance.Get().GetWindowInfo().width;
 	utilBuffer.windowHeight = NailEngine::Instance.Get().GetWindowInfo().height;
@@ -711,8 +709,7 @@ void RenderSystem::ReSortUIObject(int layer, std::shared_ptr<nail::IRenderable> 
 
 void RenderSystem::ReSortRenderInfo(nail::IRenderable* renderable, int index)
 {
-	if (staticMeshRenderInfoMap[renderable][index]->material->GetPixelShader()->GetShaderInfo().shaderType ==
-		yunuGI::ShaderType::Deferred)
+	if (staticMeshRenderInfoMap[renderable][index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
 	{
 		auto iter = forwardSet.find(staticMeshRenderInfoMap[renderable][index]);
 		if (iter == forwardSet.end())
@@ -751,10 +748,23 @@ void RenderSystem::RegisterRenderInfo(nail::IRenderable* renderable, std::shared
 	auto iter = staticMeshRenderInfoMap.find(renderable);
 	if (iter != staticMeshRenderInfoMap.end())
 	{
-		staticMeshRenderInfoMap[renderable].emplace_back(renderInfo);
-		deferredSet.insert(renderInfo);
+		if (staticMeshRenderInfoMap[renderable].size() <= renderInfo->materialIndex)
+		{
+			staticMeshRenderInfoMap[renderable].emplace_back(renderInfo);
+		}
 
-		InstancingManager::Instance.Get().RegisterStaticDeferredData(renderInfo);
+		if (renderInfo->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+		{
+			deferredSet.insert(renderInfo);
+
+			InstancingManager::Instance.Get().RegisterStaticDeferredData(renderInfo);
+		}
+		else if(renderInfo->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+		{
+			forwardSet.insert(renderInfo);
+
+			InstancingManager::Instance.Get().RegisterStaticForwardData(renderInfo);
+		}
 	}
 }
 

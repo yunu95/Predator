@@ -43,8 +43,8 @@ namespace application
                 }
 
                 brushObj->setName(dataKey);
-                brushObj->SetSelfActive(false);
                 brushObj->SetParent(GetGameObject());
+                brushObj->SetSelfActive(false);
 
                 brushList[dataKey] = brushObj;
 
