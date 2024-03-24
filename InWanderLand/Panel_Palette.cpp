@@ -14,6 +14,7 @@
 #include "UnitBrush.h"
 #include "InstanceManager.h"
 #include "EditorCameraManager.h"
+#include "EditorCamera.h"
 
 #include "YunutyEngine.h"
 
@@ -202,7 +203,7 @@ namespace application
 			if (currentPalette != palette)
 			{
 				pm.SetCurrentPalette(palette);
-				currentPalette = palette;		
+				currentPalette = palette;
 			}
 		}
 
@@ -879,12 +880,14 @@ namespace application
 			imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
 			imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
 
+			auto type = EditorCamera::GetSingletonInstance().GetCameraTypeState();
+
 			int countIdx = 0;
 			if (imgui::BeginSection_1Col(countIdx, "Create Camera", ImGui::GetContentRegionAvail().x))
 			{
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
-				if (ImGui::Button("Create Here", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+				if (ImGui::Button("Create Here", ImVec2(ImGui::GetContentRegionAvail().x, 0)) && type == CameraTypeState::Editor)
 				{
 					auto cam = InstanceManager::GetSingletonInstance().CreateInstance<CameraData>("DefaultCamera");
 					auto& ecam = EditorCamera::GetSingletonInstance();
@@ -906,7 +909,7 @@ namespace application
 
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
-				if (ImGui::Button(" + ", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+				if (ImGui::Button(" + ", ImVec2(ImGui::GetContentRegionAvail().x, 0)) && type == CameraTypeState::Editor)
 				{
 					cp.SetAsSelectMode(!cp.IsSelectMode());
 				}
@@ -916,10 +919,19 @@ namespace application
 			if (imgui::BeginSection_2Col(countIdx, "Selected Camera", ImGui::GetContentRegionAvail().x, 0.2f))
 			{
 				const auto& selection = pm.GetCurrentPalette()->GetSelections();
+				CameraData* cam = nullptr;
 
-				if (selection.size() == 1)
+				if (type == CameraTypeState::Game)
 				{
-					auto cam = static_cast<CameraData*>(*selection.begin());
+					cam = CameraManager::GetSingletonInstance().GetMainCam();
+				}
+				else if (selection.size() == 1)
+				{
+					cam = static_cast<CameraData*>(*selection.begin());
+				}
+
+				if (cam)
+				{
 					imgui::DragFloat_2Col("Vertical FOV", cam->pod.vertical_FOV, true, 0.1f, 0.0f, 100.0f);
 					imgui::DragFloat_2Col("Near", cam->pod.dis_Near, true, 0.01f, 0.01f, 100.0f);
 					imgui::DragFloat_2Col("Far", cam->pod.dis_Far, true, 0.01f, 500.0f, 1500.0f);
@@ -1040,7 +1052,7 @@ namespace application
 			unitCurrentButton = -1;
 			ornamentCurrentButton = -1;
 			lightCurrentButton = -1;
-			
+
 			tp.SetAsSelectMode(true);
 			up.SetAsSelectMode(true);
 			op.SetAsSelectMode(true);

@@ -61,7 +61,7 @@ namespace application::editor::palette
 		{
 			camObj->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
 			camObj->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
-			camObj->GetTransform()->SetLocalScale(GetTransform()->GetWorldScale());
+			camObj->GetTransform()->SetLocalScale(GetTransform()->GetLocalScale());
 
 			auto camComp = camObj->GetComponent<yunutyEngine::graphics::Camera>();
 
