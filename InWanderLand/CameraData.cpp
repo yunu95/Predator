@@ -3,12 +3,27 @@
 
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
+#include "EditorCameraManager.h"
+
+#include "RTSCam.h"
+#include "Dotween.h"
+#include "Application.h"
+#include "ContentsLayer.h"
+
+#include "SkillPreviewSystem.h"
+#include "PlayerController.h"
+#include "TacticModeSystem.h"
 
 namespace application
 {
 	namespace editor
 	{
 		TemplateDataManager& CameraData::templateDataManager = TemplateDataManager::GetSingletonInstance();
+
+		CameraData::~CameraData()
+		{
+			CameraManager::GetSingletonInstance().EraseCamera(this);
+		}
 
 		bool CameraData::EnterDataFromTemplate()
 		{
@@ -92,12 +107,64 @@ namespace application
 			cameraInstance->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
 			cameraInstance->GetTransform()->SetWorldRotation({ pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z });
 			cameraInstance->GetTransform()->SetLocalScale({ pod.scale.x,pod.scale.y,pod.scale.z });
+			cameraInstance->ApplyCamComponent(this);
 			return cameraInstance;
 		}
 
 		void CameraData::ApplyAsPlaytimeObject()
 		{
+			if (pod.isMain == false)
+			{
+				return;
+			}
 
+			auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			auto camComp = camObj->AddComponent<RTSCam>();
+			camObj->GetTransform()->SetLocalPosition({ 0,25,0 });
+			camObj->AddComponent<Dotween>();
+
+			camObj->GetTransform()->SetWorldPosition(cameraInstance->GetTransform()->GetWorldPosition());
+			camObj->GetTransform()->SetWorldRotation(cameraInstance->GetTransform()->GetWorldRotation());
+			camObj->GetTransform()->SetWorldScale(cameraInstance->GetTransform()->GetWorldScale());
+
+			camComp->GetGI().SetVerticalFOV(pod.vertical_FOV);
+			camComp->GetGI().SetNear(pod.dis_Near);
+			camComp->GetGI().SetFar(pod.dis_Far);
+			camComp->GetGI().SetResolution(pod.res_Width, pod.res_Height);
+
+			/// Main 으로 등록해야 추후 Editor Camera 로직에서 처리 가능합니다.
+			camComp->SetCameraMain();
+
+			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+			contentsLayer->RegisterToEditorObjectVector(camObj);
+
+			auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+			auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
+			auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			contentsLayer->RegisterToEditorObjectVector(mouseCursorObject);
+			auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+			mouseCursorMesh->GetGI().SetMesh(sphereMesh);
+			mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
+
+			camComp->groundHoveringClickCallback = [=](Vector3d pos)
+			{
+				mouseCursorObject->GetTransform()->SetWorldPosition(pos);
+				SkillPreviewSystem::Instance().SetCurrentMousPosition(pos);
+			};
+
+			PlayerController::SingleInstance().SetMovingSystemComponent(camComp);
+			TacticModeSystem::SingleInstance().SetMovingSystemComponent(camComp);
+		}
+
+		yunutyEngine::graphics::Camera* CameraData::GetCameraComponent()
+		{
+			if (cameraInstance)
+			{
+				return cameraInstance->GetCameraComponent();
+			}
+
+			return nullptr;
 		}
 
 		bool CameraData::PreEncoding(json& data) const
@@ -134,7 +201,7 @@ namespace application
 		CameraData::CameraData()
 			: pod()
 		{
-
+			CameraManager::GetSingletonInstance().RegisterCamera(this);
 		}
 
 		CameraData::CameraData(const std::string& name)
@@ -143,12 +210,13 @@ namespace application
 			pod.templateData = static_cast<Camera_TemplateData*>(templateDataManager.GetTemplateData(name));
 			EnterDataFromTemplate();
 			EnterDataFromGlobalConstant();
+			CameraManager::GetSingletonInstance().RegisterCamera(this);
 		}
 
 		CameraData::CameraData(const CameraData& prototype)
 			: pod(prototype.pod)
 		{
-
+			CameraManager::GetSingletonInstance().RegisterCamera(this);
 		}
 
 		CameraData& CameraData::operator=(const CameraData& prototype)

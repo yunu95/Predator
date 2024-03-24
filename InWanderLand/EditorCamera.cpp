@@ -6,6 +6,11 @@
 #include "YunutyEngine.h"
 #include "DebugMeshes.h"
 
+#include "InstanceManager.h"
+#include "CameraData.h"
+#include "EditorCameraManager.h"
+#include "Application.h"
+
 #include <DirectXMath.h>
 
 // 게임 엔진에서 사용할 Component 용 EditorCamera
@@ -24,27 +29,53 @@ namespace application
 		float EditorCamera::min_Speed = 0.002f;
 		float EditorCamera::max_Speed = 2.0f;
 
-		void EditorCamera::Initialize(yunutyEngine::graphics::Camera* gameCam)
+		void EditorCamera::Initialize()
 		{
-			// Game 카메라 세팅
-			this->gameCam = gameCam;
-
 			// Editor 카메라를 Scene에 생성하고 해당 카메라를 메인으로 변경
 			auto scene = yunutyEngine::Scene::getCurrentScene();
 			auto ecc = scene->AddGameObject()->AddComponent<EditorCameraComponent>();
 			ecc->SetCameraMain();
 			auto ts = ecc->GetTransform();
-			if (gameCam)
+
+			auto camData = CameraManager::GetSingletonInstance().GetMainCam();
+
+			if (camData)
 			{
+				gameCam = camData->GetCameraComponent();
 				auto gcts = gameCam->GetTransform();
 				ts->SetWorldPosition(gcts->GetWorldPosition());
 				ts->SetWorldRotation(gcts->GetWorldRotation());
+				ts->SetWorldScale(gcts->GetWorldScale());
 				cameraPState = CameraPerspectiveState::Game;
 			}
 			else
 			{
-				ts->SetWorldPosition(Vector3d{ 0, 10, -5 });
-				ts->SetWorldRotation(Vector3d{ 60, 0, 0 });
+				Vector3d pos = Vector3d( 0, 10, -5 );
+				Quaternion rot = Quaternion(Vector3d( 60, 0, 0 ));
+				Vector3d scl = Vector3d( 1, 1, 1 );
+
+				ts->SetWorldPosition(pos);
+				ts->SetWorldRotation(rot);
+				ts->SetWorldScale(scl);
+
+				auto cam = InstanceManager::GetSingletonInstance().CreateInstance<CameraData>("DefaultCamera");
+				cam->pod.position.x = pos.x;
+				cam->pod.position.y = pos.y;
+				cam->pod.position.z = pos.z;
+				cam->pod.rotation.w = rot.w;
+				cam->pod.rotation.x = rot.x;
+				cam->pod.rotation.y = rot.y;
+				cam->pod.rotation.z = rot.z;
+				cam->pod.scale.x = scl.x;
+				cam->pod.scale.y = scl.y;
+				cam->pod.scale.z = scl.z;
+				cam->pod.isMain = true;
+
+				cam->ApplyAsPaletteInstance();
+				gameCam = cam->GetCameraComponent();
+
+				CameraManager::GetSingletonInstance().SetMainCam(cam);
+
 				cameraPState = CameraPerspectiveState::Free;
 			}
 
@@ -83,14 +114,28 @@ namespace application
 				{
 					if (gameCam)
 					{
+						if (Application::GetInstance().IsContentsPlaying())
+						{
+							return;
+						}
+
 						cameraTState = CameraTypeState::Game;
+						for (auto each : InstanceManager::GetSingletonInstance().GetList<CameraData>())
+						{
+							each->ApplyAsPaletteInstance()->HideEditorInstance();
+						}
 						gameCam->SetCameraMain();
+						palette::CameraPalette::SingleInstance().Reset();
 					}
 					break;
 				}
 				case application::editor::CameraTypeState::Game:
 				{
 					cameraTState = CameraTypeState::Editor;
+					for (auto each : InstanceManager::GetSingletonInstance().GetList<CameraData>())
+					{
+						each->ApplyAsPaletteInstance()->ShowEditorInstance();
+					}
 					editorCam->SetCameraMain();
 					break;
 				}
@@ -289,34 +334,153 @@ namespace application
 			return glm::clamp(speed, min_Speed, max_Speed);
 		}
 
+		void EditorCamera::OnPlayContents()
+		{
+			playCam = yunutyEngine::graphics::Camera::GetMainCamera();
+		}
+
+		void EditorCamera::OnPauseContents()
+		{
+			editorCam->SetCameraMain();
+		}
+
+		void EditorCamera::OnResumeContents()
+		{
+			playCam->SetCameraMain();
+		}
+
+		void EditorCamera::OnStopContents()
+		{
+			editorCam->SetCameraMain();
+			playCam = nullptr;
+		}
+
+		void EditorCamera::ReloadGameCamera()
+		{
+			if (CameraManager::GetSingletonInstance().GetMainCam() != nullptr)
+			{
+				gameCam = CameraManager::GetSingletonInstance().GetMainCam()->GetCameraComponent();
+			}
+		}
+
 		yunuGI::Vector3 EditorCamera::GetUpDirection() const
 		{
-			auto up = editorCam->GetTransform()->GetWorldRotation().Up().Normalized();
-			return yunuGI::Vector3(up.x, up.y, up.z);
+			switch (cameraTState)
+			{
+				case application::editor::CameraTypeState::Editor:
+				{
+					auto up = editorCam->GetTransform()->GetWorldRotation().Up().Normalized();
+					return yunuGI::Vector3(up.x, up.y, up.z);
+				}
+				case application::editor::CameraTypeState::Game:
+				{
+					auto up = gameCam->GetTransform()->GetWorldRotation().Up().Normalized();
+					return yunuGI::Vector3(up.x, up.y, up.z);
+				}
+				default:
+					break;
+			}
+			return yunuGI::Vector3();
 		}
 
 		yunuGI::Vector3 EditorCamera::GetRightDirection() const
 		{
-			auto right = editorCam->GetTransform()->GetWorldRotation().Right().Normalized();
-			return yunuGI::Vector3(right.x, right.y, right.z);
+			switch (cameraTState)
+			{
+				case application::editor::CameraTypeState::Editor:
+				{
+					auto right = editorCam->GetTransform()->GetWorldRotation().Right().Normalized();
+					return yunuGI::Vector3(right.x, right.y, right.z);
+				}
+				case application::editor::CameraTypeState::Game:
+				{
+					auto right = gameCam->GetTransform()->GetWorldRotation().Right().Normalized();
+					return yunuGI::Vector3(right.x, right.y, right.z);
+				}
+				default:
+					break;
+			}
+			return yunuGI::Vector3();
 		}
 
 		yunuGI::Vector3 EditorCamera::GetForwardDirection() const
 		{
-			auto forward = editorCam->GetTransform()->GetWorldRotation().Forward().Normalized();
-			return yunuGI::Vector3(forward.x, forward.y, forward.z);
+			switch (cameraTState)
+			{
+				case application::editor::CameraTypeState::Editor:
+				{
+					auto forward = editorCam->GetTransform()->GetWorldRotation().Forward().Normalized();
+					return yunuGI::Vector3(forward.x, forward.y, forward.z);
+				}
+				case application::editor::CameraTypeState::Game:
+				{
+					auto forward = gameCam->GetTransform()->GetWorldRotation().Forward().Normalized();
+					return yunuGI::Vector3(forward.x, forward.y, forward.z);
+				}
+				default:
+					break;
+			}
+			return yunuGI::Vector3();
 		}
 
 		yunuGI::Vector3 EditorCamera::GetPosition() const
 		{
-			auto pos = editorCam->GetTransform()->GetWorldPosition();
-			return yunuGI::Vector3(pos.x, pos.y, pos.z);
+			switch (cameraTState)
+			{
+				case application::editor::CameraTypeState::Editor:
+				{
+					auto pos = editorCam->GetTransform()->GetWorldPosition();
+					return yunuGI::Vector3(pos.x, pos.y, pos.z);
+				}
+				case application::editor::CameraTypeState::Game:
+				{
+					auto pos = gameCam->GetTransform()->GetWorldPosition();
+					return yunuGI::Vector3(pos.x, pos.y, pos.z);
+				}
+				default:
+					break;
+			}
+			return yunuGI::Vector3();
 		}
 
 		yunuGI::Quaternion EditorCamera::GetOrientation() const
 		{
-			auto rot = editorCam->GetTransform()->GetWorldRotation();
-			return yunuGI::Quaternion(rot.x, rot.y, rot.z, rot.w);
+			switch (cameraTState)
+			{
+				case application::editor::CameraTypeState::Editor:
+				{
+					auto rot = editorCam->GetTransform()->GetWorldRotation();
+					return yunuGI::Quaternion(rot.x, rot.y, rot.z, rot.w);
+				}
+				case application::editor::CameraTypeState::Game:
+				{
+					auto rot = gameCam->GetTransform()->GetWorldRotation();
+					return yunuGI::Quaternion(rot.x, rot.y, rot.z, rot.w);
+				}
+				default:
+					break;
+			}
+			return yunuGI::Quaternion();
+		}
+
+		yunuGI::Vector3 EditorCamera::GetScale() const
+		{
+			switch (cameraTState)
+			{
+				case application::editor::CameraTypeState::Editor:
+				{
+					auto scale = editorCam->GetTransform()->GetWorldScale();
+					return yunuGI::Vector3(scale.x, scale.y, scale.z);
+				}
+				case application::editor::CameraTypeState::Game:
+				{
+					auto scale = gameCam->GetTransform()->GetWorldScale();
+					return yunuGI::Vector3(scale.x, scale.y, scale.z);
+				}
+				default:
+					break;
+			}
+			return yunuGI::Vector3();
 		}
 
 		yunuGI::ICamera& EditorCamera::GetGI()

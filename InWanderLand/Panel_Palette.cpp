@@ -13,6 +13,7 @@
 #include "EditorLayer.h"
 #include "UnitBrush.h"
 #include "InstanceManager.h"
+#include "EditorCameraManager.h"
 
 #include "YunutyEngine.h"
 
@@ -53,10 +54,6 @@ namespace application
 					+ (*reinterpret_cast<Vector3f*>(&right) * offset.x)
 					+ (*reinterpret_cast<Vector3f*>(&up) * offset.y);
 				lightGizmo->GetTransform()->SetWorldPosition(finalPos);
-
-				/// 선택 안되게 카메라 뒤로 보내버림
-				finalPos = pos - (*reinterpret_cast<Vector3f*>(&front) * 200);
-				directionalLight->GetPaletteInstance()->GetTransform()->SetWorldPosition(finalPos);
 			}
 		}
 
@@ -887,10 +884,69 @@ namespace application
 			{
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
+				if (ImGui::Button("Create Here", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+				{
+					auto cam = InstanceManager::GetSingletonInstance().CreateInstance<CameraData>("DefaultCamera");
+					auto& ecam = EditorCamera::GetSingletonInstance();
+					auto pos = ecam.GetPosition();
+					auto rot = ecam.GetOrientation();
+					auto scal = ecam.GetScale();
+					cam->pod.position.x = pos.x;
+					cam->pod.position.y = pos.y;
+					cam->pod.position.z = pos.z;
+					cam->pod.rotation.w = rot.w;
+					cam->pod.rotation.x = rot.x;
+					cam->pod.rotation.y = rot.y;
+					cam->pod.rotation.z = rot.z;
+					cam->pod.scale.x = scal.x;
+					cam->pod.scale.y = scal.y;
+					cam->pod.scale.z = scal.z;
+					cam->ApplyAsPaletteInstance();
+				}
+
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
 				if (ImGui::Button(" + ", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
 				{
 					cp.SetAsSelectMode(!cp.IsSelectMode());
 				}
+				imgui::EndSection();
+			}
+
+			if (imgui::BeginSection_2Col(countIdx, "Selected Camera", ImGui::GetContentRegionAvail().x, 0.2f))
+			{
+				const auto& selection = pm.GetCurrentPalette()->GetSelections();
+
+				if (selection.size() == 1)
+				{
+					auto cam = static_cast<CameraData*>(*selection.begin());
+					imgui::DragFloat_2Col("Vertical FOV", cam->pod.vertical_FOV, true, 0.1f, 0.0f, 100.0f);
+					imgui::DragFloat_2Col("Near", cam->pod.dis_Near, true, 0.01f, 0.01f, 100.0f);
+					imgui::DragFloat_2Col("Far", cam->pod.dis_Far, true, 0.01f, 500.0f, 1500.0f);
+					imgui::DragFloat_2Col("Width", cam->pod.res_Width, true, 10.0f, 100.0f, 2000.0f);
+					imgui::DragFloat_2Col("Height", cam->pod.res_Height, true, 10.0f, 100.0f, 2000.0f);
+					imgui::Checkbox_2Col("Main Cam", cam->pod.isMain);
+
+					if (CameraManager::GetSingletonInstance().GetMainCam() == cam)
+					{
+						if (!cam->pod.isMain)
+						{
+							cam->pod.isMain = true;
+						}
+					}
+					else
+					{
+						if (cam->pod.isMain)
+						{
+							CameraManager::GetSingletonInstance().GetMainCam()->pod.isMain = false;
+							CameraManager::GetSingletonInstance().SetMainCam(cam);
+							EditorCamera::GetSingletonInstance().ReloadGameCamera();
+						}
+					}
+
+					cam->ApplyAsPaletteInstance();
+				}
+
 				imgui::EndSection();
 			}
 		}

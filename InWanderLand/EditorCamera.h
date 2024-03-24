@@ -7,8 +7,11 @@
 #include "Singleton.h"
 #include "EditorInputManager.h"
 #include "EditorEvents.h"
+#include "EditorMath.h"
 
 #include "Camera.h"
+
+
 
 namespace yunutyEngine
 {
@@ -39,7 +42,7 @@ namespace application
 			friend class Singleton<EditorCamera>;
 
 		public:
-			void Initialize(yunutyEngine::graphics::Camera* gameCam);
+			void Initialize();
 			void OnEvent(EditorEvents& event);
 			void Update(float ts);
 
@@ -54,13 +57,25 @@ namespace application
 			// 카메라 움직임 속도 획득
 			float GetCameraSpeed() const;
 
+			CameraTypeState GetCameraTypeState() { return cameraTState; }
 			CameraPerspectiveState GetGamePerspective() { return cameraPState; }
+
+			yunutyEngine::graphics::Camera* GetGameCam() const { return gameCam; }
+			void SetGameCam(yunutyEngine::graphics::Camera* cam) { gameCam = cam; }
+
+			void OnPlayContents();
+			void OnPauseContents();
+			void OnResumeContents();
+			void OnStopContents();
+
+			void ReloadGameCamera();
 
 			yunuGI::Vector3 GetUpDirection() const;
 			yunuGI::Vector3 GetRightDirection() const;
 			yunuGI::Vector3 GetForwardDirection() const;
 			yunuGI::Vector3 GetPosition() const;
 			yunuGI::Quaternion GetOrientation() const;
+			yunuGI::Vector3 GetScale() const;
 
 			yunuGI::Matrix4x4 GetWTM() const;
 			yunuGI::Matrix4x4 GetVTM() const;
@@ -82,6 +97,7 @@ namespace application
 			CameraPerspectiveState cameraPState = CameraPerspectiveState::None;
 			yunutyEngine::graphics::Camera* editorCam = nullptr;
 			yunutyEngine::graphics::Camera* gameCam = nullptr;
+			yunutyEngine::graphics::Camera* playCam = nullptr;
 			EditorInputManager& eim = EditorInputManager::GetSingletonInstance();
 
 			yunuGI::Vector3 position = yunuGI::Vector3();

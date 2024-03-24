@@ -11,6 +11,8 @@
 #include "EditorResourceManager.h"
 #include "TemplateDataManager.h"
 #include "InstanceManager.h"
+#include "EditorCamera.h"
+#include "EditorInputManager.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -20,6 +22,7 @@
 #include "MenubarCommands.h"
 #include "Application.h"
 #include "FileSystem.h"
+
 
 bool editorInputControl = true;
 
@@ -105,6 +108,32 @@ namespace application
 
 				each->Update(ts);
 			}
+
+			/// Input 처리
+			if (editorInputControl)
+			{
+				static auto& eim = EditorInputManager::GetSingletonInstance();
+
+				/// Function
+				if (eim.IsKeyboardPressed(KeyCode::F2))
+				{
+					editorModuleList[(int)Module_List::GlobalConstant]->SetActivation(!editorModuleList[(int)Module_List::GlobalConstant]->GetActivation());
+				}
+
+				if (eim.IsKeyboardPressed(KeyCode::F3))
+				{
+					editorModuleList[(int)Module_List::TemplateDataEditor]->SetActivation(!editorModuleList[(int)Module_List::TemplateDataEditor]->GetActivation());
+				}
+
+				/// Ctrl 조합
+				if (eim.IsKeyboardDown(KeyCode::Control))
+				{
+					if (eim.IsKeyboardPressed(KeyCode::S) && !mfm.GetCurrentMapPath().empty())
+					{
+						cm.AddQueue(std::make_shared<SaveMapCommand>());
+					}
+				}
+			}
 		}
 
 		void EditorLayer::GUIProgress()
@@ -173,6 +202,8 @@ namespace application
 					ptr->HideEditorInstance();
 				}
 			}
+
+			EditorCamera::GetSingletonInstance().OnPlayContents();
 		}
 
 		void EditorLayer::OnPauseContents()
@@ -195,6 +226,8 @@ namespace application
 					ptr->ShowEditorInstance();
 				}
 			}
+
+			EditorCamera::GetSingletonInstance().OnPauseContents();
 		}
 
 		void EditorLayer::OnResumeContents()
@@ -217,6 +250,8 @@ namespace application
 					ptr->HideEditorInstance();
 				}
 			}
+
+			EditorCamera::GetSingletonInstance().OnResumeContents();
 		}
 
 		void EditorLayer::OnStopContents()
@@ -239,6 +274,8 @@ namespace application
 					ptr->ShowEditorInstance();
 				}
 			}
+
+			EditorCamera::GetSingletonInstance().OnStopContents();
 		}
 
 		void EditorLayer::LateInitialize()
@@ -249,7 +286,7 @@ namespace application
 			mfm.LoadDefaultMap();
 
 			// 카메라 초기화
-			editorCamera.Initialize(yunutyEngine::graphics::Camera::GetMainCamera());
+			editorCamera.Initialize();
 
 			// SceneGizmo
 			InitSceneGizmo();
@@ -351,21 +388,21 @@ namespace application
 					else if (intervalPos % accentUnit == 0)
 					{
 						// x축 평행
-						auto lineX = CreateLine(Vector3d(-length/2, 0, intervalPos), Vector3d(length/2, 0, intervalPos), yunuGI::Color::white());
+						auto lineX = CreateLine(Vector3d(-length / 2, 0, intervalPos), Vector3d(length / 2, 0, intervalPos), yunuGI::Color::white());
 						lineX->SetIsUpdating(false);
 
 						// z축 평행
-						auto lineZ = CreateLine(Vector3d(intervalPos, 0, -length/2), Vector3d(intervalPos, 0, length/2), yunuGI::Color::white());
+						auto lineZ = CreateLine(Vector3d(intervalPos, 0, -length / 2), Vector3d(intervalPos, 0, length / 2), yunuGI::Color::white());
 						lineZ->SetIsUpdating(false);
 					}
 					else
 					{
 						// x축 평행
-						auto lineX = CreateLine(Vector3d(-length/2, 0, intervalPos), Vector3d(length/2, 0, intervalPos), yunuGI::Color::gray());
+						auto lineX = CreateLine(Vector3d(-length / 2, 0, intervalPos), Vector3d(length / 2, 0, intervalPos), yunuGI::Color::gray());
 						lineX->SetIsUpdating(false);
 
 						// z축 평행
-						auto lineZ = CreateLine(Vector3d(intervalPos, 0, -length/2), Vector3d(intervalPos, 0, length/2), yunuGI::Color::gray());
+						auto lineZ = CreateLine(Vector3d(intervalPos, 0, -length / 2), Vector3d(intervalPos, 0, length / 2), yunuGI::Color::gray());
 						lineZ->SetIsUpdating(false);
 					}
 				}

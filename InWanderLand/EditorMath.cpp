@@ -12,6 +12,11 @@ namespace application
 			const double DEGTORAD = PI / 180;
 			const double RADTODEG = 180 / PI;
 
+			double GetPI()
+			{
+				return PI;
+			}
+
 			int GetIntMax()
 			{
 				return INT_MAX;

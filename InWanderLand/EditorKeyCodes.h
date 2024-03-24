@@ -9,6 +9,7 @@ namespace application
 	{
 		/// Yunuty 와 동일한 KeyCode 를 사용하도록 함
         /// 단, Mouse 관련 부분을 따로 빼내어 분리함
+        /// 추가로 Function Key 에 대해서도 지원
 		enum class KeyCode : unsigned char
 		{
             NoKey = 0,
@@ -37,7 +38,8 @@ namespace application
             A = 20, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
             NUM_1, NUM_2, NUM_3, NUM_4, NUM_5, NUM_6, NUM_7, NUM_8, NUM_9, NUM_0,
             NUMPAD_1, NUMPAD_2, NUMPAD_3, NUMPAD_4, NUMPAD_5, NUMPAD_6, NUMPAD_7, NUMPAD_8, NUMPAD_9, NUMPAD_0,
-            Plus, Comma, Minus, Perido, Slash, BackSlash
+            Plus, Comma, Minus, Perido, Slash, BackSlash,
+            F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12
 		};
 
         enum class MouseCode

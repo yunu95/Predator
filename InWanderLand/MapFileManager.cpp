@@ -15,6 +15,7 @@
 #include "PaletteManager.h"
 #include "PaletteBrushManager.h"
 #include "EditorResourceManager.h"
+#include "EditorCameraManager.h"
 
 #include <fstream>
 
@@ -267,6 +268,7 @@ namespace application
 #ifdef EDITOR
             palette::PaletteBrushManager::GetSingletonInstance().Clear();
             palette::PaletteManager::GetSingletonInstance().Clear();
+            CameraManager::GetSingletonInstance().Clear();
 #endif
             instanceManager.Clear();
             templateDataManager.Clear();

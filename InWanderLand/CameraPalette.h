@@ -26,6 +26,7 @@ namespace application
                 virtual bool ShouldSelect(IEditableData* instance) override;
                 virtual void OnStartPalette() override;
                 virtual void OnStandbyPalette() override;
+                virtual void Delete(IEditableData* data) override;
 
             private:
                 unordered_set<CameraEditorInstance*> cameraInstances;
