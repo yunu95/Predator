@@ -4,6 +4,9 @@
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
 
+#include "Application.h"
+#include "ContentsLayer.h"
+
 namespace application
 {
 	namespace editor
@@ -99,7 +102,34 @@ namespace application
 
 		void LightData::ApplyAsPlaytimeObject()
 		{
+			auto comp = Scene::getCurrentScene()->AddGameObject();
+			switch (pod.templateData->pod.type)
+			{
+				case LightType::Directional:
+				{
+					auto light = comp->AddComponent<graphics::DirectionalLight>();
+					//light->GetGI().SetLightDiffuseColor(*reinterpret_cast<yunuGI::Color*>(&pod.color));
+					//light->GetGI().SetIntensity(pod.intensity);
+					break;
+				}
+				case LightType::Point:
+				{
+					auto light = comp->AddComponent<graphics::PointLight>();
+					light->GetGI().SetLightDiffuseColor(*reinterpret_cast<yunuGI::Color*>(&pod.color));
+					light->GetGI().SetIntensity(pod.intensity);
+					light->GetGI().SetRange(pod.range);
+					break;
+				}
+				default:
+					break;
+			}
 
+			comp->GetTransform()->SetWorldPosition(Vector3d(pod.position.x, pod.position.y, pod.position.z));
+			comp->GetTransform()->SetWorldRotation(Quaternion(pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z));
+			comp->GetTransform()->SetLocalScale(Vector3d(pod.scale.x, pod.scale.y, pod.scale.z));
+
+			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+			contentsLayer->RegisterToEditorObjectVector(comp);
 		}
 
 		void LightData::OnLightTypeChange(LightType type)
