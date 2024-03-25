@@ -118,20 +118,24 @@ namespace application
             // 이 값을 통해 타입을 분류해 유닛을 배치해보자.
 			if (pod.waveData == nullptr)
 			{
-				if (!isSelectorInitialized)
-				{
+                if (!isSelectorInitialized)
+                {
 					productorSelector.push_back(&HealerProductor::Instance());
 					productorSelector.push_back(&WarriorProductor::Instance());
 					productorSelector.push_back(&MagicianProductor::Instance());
 					productorSelector.push_back(&MeleeEnemyProductor::Instance());
 					productorSelector.push_back(&RangedEnemyProductor::Instance());
-					contentsLayer->RegisterToEditorObjectVector(HealerProductor::Instance().GetGameObject());
-					contentsLayer->RegisterToEditorObjectVector(WarriorProductor::Instance().GetGameObject());
-					contentsLayer->RegisterToEditorObjectVector(MagicianProductor::Instance().GetGameObject());
-					contentsLayer->RegisterToEditorObjectVector(MeleeEnemyProductor::Instance().GetGameObject());
-					contentsLayer->RegisterToEditorObjectVector(RangedEnemyProductor::Instance().GetGameObject());
-					isSelectorInitialized = true;
-				}
+                    isSelectorInitialized = true;
+                }
+
+                if (contentsLayer->isStoppedOnce && isSelectorInitialized)
+                {
+                    for (auto e : productorSelector)
+                    {
+                        e->SetUnitData();
+                    }
+                    contentsLayer->isStoppedOnce = false;
+                }
 
 				UnitProductor* currentSelectedProductor{ nullptr };
 

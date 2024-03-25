@@ -79,7 +79,6 @@ namespace application
 
             POD_Unit pod;
 
-			bool isSelectorInitialized{ false };
         protected:
             virtual bool PreEncoding(json& data) const override;
             virtual bool PostEncoding(json& data) const override;
@@ -91,6 +90,7 @@ namespace application
             palette::UnitEditorInstance* unitInstance{ nullptr };
 
             std::vector<UnitProductor*> productorSelector;
+			bool isSelectorInitialized{ false };
 
             UnitData();
             UnitData(const std::string& name);

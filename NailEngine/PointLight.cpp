@@ -26,6 +26,16 @@ void PointLight::SetIntensity(float intensity)
 	this->lightInfo.intensity = intensity;
 }
 
+void PointLight::SetActive(bool isActive)
+{
+	this->isActive = isActive;
+}
+
+bool PointLight::IsActive()
+{
+	return this->isActive;
+}
+
 void PointLight::SetRange(float range)
 {
 	this->lightInfo.range = range;

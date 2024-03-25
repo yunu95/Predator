@@ -14,7 +14,8 @@ public:
 	virtual void SetLightDiffuseColor(DirectX::SimpleMath::Vector4& color) override;
 	virtual void SetLightPosition(DirectX::SimpleMath::Vector4& position) override;
 	virtual void SetIntensity(float intensity) override;
-
+	virtual void SetActive(bool isActive) override;
+	virtual bool IsActive() override;
 public:
 	void SetRange(float range);
 	void SetWorldTM(const DirectX::SimpleMath::Matrix& wtm);

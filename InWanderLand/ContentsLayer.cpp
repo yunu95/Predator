@@ -598,6 +598,7 @@ void application::contents::ContentsLayer::ResumeContents()
 void application::contents::ContentsLayer::StopContents()
 {
     Time::SetTimeScale(1);
+    isStoppedOnce = true;
     ClearPlaytimeObject();
 }
 
