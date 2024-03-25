@@ -39,6 +39,9 @@ namespace application
 
                 void SetAsMain();
 
+                virtual void ShowEditorInstance() override;
+                virtual void HideEditorInstance() override;
+
             protected:
                 virtual void OnHover() { PaletteInstance::OnHover(); }
                 virtual void OnHoverLeft() { PaletteInstance::OnHoverLeft(); }
