@@ -102,5 +102,23 @@ namespace application::editor::palette
 			}
 		}
 	}
+
+	void CameraEditorInstance::ShowEditorInstance()
+	{
+		GetGameObject()->SetSelfActive(true);
+		if (camObj)
+		{
+			camObj->SetSelfActive(true);
+		}
+	}
+
+	void CameraEditorInstance::HideEditorInstance()
+	{
+		GetGameObject()->SetSelfActive(false);
+		if (camObj)
+		{
+			camObj->SetSelfActive(false);
+		}
+	}
 }
 

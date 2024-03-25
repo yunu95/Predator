@@ -279,6 +279,20 @@ namespace application::editor::palette
 		{
 			GetGameObject()->SetSelfActive(true);
 		}
+
+		if (lightObj)
+		{
+			lightObj->SetSelfActive(true);
+		}
+	}
+
+	void LightEditorInstance::HideEditorInstance()
+	{
+		GetGameObject()->SetSelfActive(false);
+		if (lightObj)
+		{
+			lightObj->SetSelfActive(false);
+		}
 	}
 }
 
