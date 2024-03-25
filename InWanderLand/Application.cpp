@@ -261,6 +261,7 @@ namespace application
 		yunutyEngine::YunutyCycle::SingleInstance().Play();
 		while (isRunning)
 		{
+			Sleep(10);
 			MSG msg;
 			while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
 			{
