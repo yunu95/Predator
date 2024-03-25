@@ -31,6 +31,7 @@ namespace application
             void StopContents();
 
 			void RegisterToEditorObjectVector(GameObject* p_obj);
+
             // 테스트 코드에서 임의로 ContentsLayer의 Initialize 코드를 오버라이드 하고 싶을때 쓰이는 함수
             // 이 함수를 호출하면 YunutyCycle에서 발생한 예외를 잡아서 테스트 스레드에서 예외를 던집니다.
 #ifdef GEN_TESTS

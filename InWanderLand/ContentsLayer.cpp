@@ -628,3 +628,4 @@ void application::contents::ContentsLayer::RegisterToEditorObjectVector(GameObje
 {
     objectCreatedByEditorVector.push_back(p_obj);
 }
+

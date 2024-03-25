@@ -920,6 +920,9 @@
     <ClInclude Include="PlayTimeRegionManager.h">
       <Filter>Contents\PlaytimeRegion</Filter>
     </ClInclude>
+    <ClInclude Include="UnitProductorSelector.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1426,6 +1429,9 @@
     </ClCompile>
     <ClCompile Include="PlayTimeRegionManager.cpp">
       <Filter>Contents\PlaytimeRegion</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitProductorSelector.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
