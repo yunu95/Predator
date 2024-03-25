@@ -328,6 +328,12 @@
     <Filter Include="yunutyEngine\ClientTemplate\HasVariable">
       <UniqueIdentifier>{a4310430-0c1b-4811-9244-923fb0c183da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="yunutyEngine\ClientTemplate\Billboard">
+      <UniqueIdentifier>{49677ff5-f16d-4c0f-acc9-9d193ba5ea36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\ClientTemplate\SpriteAnimation">
+      <UniqueIdentifier>{115f4099-b1d4-40a0-82f3-ea32354d1b0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -796,6 +802,9 @@
     </ClInclude>
     <ClInclude Include="header\HasVariable.h">
       <Filter>yunutyEngine\ClientTemplate\HasVariable</Filter>
+    </ClInclude>
+    <ClInclude Include="Billboard.h">
+      <Filter>yunutyEngine\ClientTemplate\Billboard</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
