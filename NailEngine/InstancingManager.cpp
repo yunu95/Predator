@@ -160,7 +160,6 @@ void InstancingManager::RenderStaticForward()
 				if (i->isActive == false) continue;
 
 				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-
 				auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);
 
 				if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)

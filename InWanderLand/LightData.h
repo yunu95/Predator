@@ -45,6 +45,7 @@ namespace application
             POD_Quaternion<double> rotation = POD_Quaternion<double>();
             POD_Vector3<float> scale = { 1,1,1 };
             LightColor color = { 1,1,1,1 };
+            float intensity = 1;
             float range = 1;
 
             /// GlobalConstant

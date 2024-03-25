@@ -21,6 +21,11 @@ void PointLight::SetLightPosition(DirectX::SimpleMath::Vector4& position)
 	this->lightInfo.position = position;
 }
 
+void PointLight::SetIntensity(float intensity)
+{
+	this->lightInfo.intensity = intensity;
+}
+
 void PointLight::SetRange(float range)
 {
 	this->lightInfo.range = range;
