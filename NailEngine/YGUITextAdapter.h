@@ -65,6 +65,11 @@ namespace yunuGIAdapter
             renderable->SetColor(color);
         };
 
+
+		virtual bool IsActive() override
+		{
+            return true;
+		}
     private:
         std::shared_ptr<UIText> renderable;
     };

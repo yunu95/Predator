@@ -44,6 +44,11 @@ namespace yunuGIAdapter
             renderable->SetMesh(reinterpret_cast<Mesh*>(mesh));
         };
 
+        virtual bool IsActive() override
+        {
+            return true;
+        }
+
         virtual yunuGI::IMesh* GetMesh() const override
         {
             return renderable->GetMesh();

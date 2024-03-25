@@ -17,7 +17,10 @@ namespace yunuGIAdapter
         virtual void SetFillModeSolid() override{ };
         virtual void SetFillModeWireframe() override{ };
         virtual void SetColor(const yunuGI::Color& color) override{};
-       
+		virtual bool IsActive() override
+		{
+            return true;
+		}
     private:
     };
 }

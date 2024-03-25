@@ -51,6 +51,8 @@ public:
 	virtual void SetLightDiffuseColor(DirectX::SimpleMath::Vector4& color) = 0;
 	virtual void SetLightPosition(DirectX::SimpleMath::Vector4& position) = 0;
 	virtual void SetIntensity(float intensity) = 0;
+	virtual void SetActive(bool isActive) = 0;
+	virtual bool IsActive() = 0;
 
 	void SetID(int id)
 	{
@@ -67,4 +69,5 @@ protected:
 	std::wstring meshName;
 	std::wstring materialName;
 
+	bool isActive = true;
 };
