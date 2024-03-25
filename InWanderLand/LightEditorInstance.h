@@ -44,6 +44,7 @@ namespace application
 
                 // Directional Light 는 fbxObj 를 활성화하지 않습니다.
                 virtual void ShowEditorInstance() override;
+                virtual void HideEditorInstance() override;
 
             protected:
                 virtual void OnHover() { PaletteInstance::OnHover(); }

@@ -26,7 +26,10 @@ public:
 
 	DirectX::SimpleMath::Matrix GetPTM90();
     
-    DirectX::BoundingFrustum& GetFrustum() { return this->frustum; };
+    DirectX::BoundingFrustum& GetFrustum() 
+    {
+        return this->frustum; 
+    };
 
 private:
     void CreateFrustum();

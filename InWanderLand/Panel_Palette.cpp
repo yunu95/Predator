@@ -859,6 +859,7 @@ namespace application
 				if (selection.size() == 1)
 				{
 					auto pl = static_cast<LightData*>(*selection.begin());
+					imgui::DragFloat_2Col("Intensity", pl->pod.intensity, true, 0.1f, 0.0f, 100.0f);
 					imgui::DragFloat_2Col("Range", pl->pod.range, true, 0.1f, 0.0f, 100.0f);
 					ImGui::TableNextRow();
 					ImGui::TableSetColumnIndex(0);
@@ -945,6 +946,7 @@ namespace application
 						{
 							cam->pod.isMain = true;
 						}
+						cam->ApplyAsPaletteInstance();
 					}
 					else
 					{
@@ -953,10 +955,9 @@ namespace application
 							CameraManager::GetSingletonInstance().GetMainCam()->pod.isMain = false;
 							CameraManager::GetSingletonInstance().SetMainCam(cam);
 							EditorCamera::GetSingletonInstance().ReloadGameCamera();
+							cam->ApplyAsPaletteInstance();
 						}
 					}
-
-					cam->ApplyAsPaletteInstance();
 				}
 
 				imgui::EndSection();

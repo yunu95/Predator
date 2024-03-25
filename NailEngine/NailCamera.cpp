@@ -1,7 +1,5 @@
 #include "NailCamera.h"
 
-
-
 void NailCamera::SetWorldTM(const DirectX::SimpleMath::Matrix wtm)
 {
 	this->wtm = wtm;
@@ -10,29 +8,48 @@ void NailCamera::SetWorldTM(const DirectX::SimpleMath::Matrix wtm)
 	this->vtmOrtho = DirectX::XMMatrixOrthographicLH(this->width * 1.f, this->height * 1.f, this->cameraNear, this->cameraFar);
 
 	CreateFrustum();
-	this->frustum.Transform(this->frustum, wtm);
 }
 
 void NailCamera::SetVerticalFOV(float fov)
 {
+	if (fov <= 0.f)
+	{
+		return;
+	}
+
 	this->fov = fov;
 	CreateFrustum();
 }
 
 void NailCamera::SetNear(float cameraNear)
 {
+	if (cameraNear <= 0.f)
+	{
+		return;
+	}
+
 	this->cameraNear = cameraNear;
 	CreateFrustum();
 }
 
 void NailCamera::SetFar(float cameraFar)
 {
+	if (cameraFar <= 0.f || cameraFar <= this->cameraNear)
+	{
+		return;
+	}
+
 	this->cameraFar = cameraFar;
 	CreateFrustum();
 }
 
 void NailCamera::SetResolution(float width, float height)
 {
+	if (width <= 0.f || height <= 0.f)
+	{
+		return;
+	}
+
 	this->width = width;
 	this->height = height;
 	CreateFrustum();
@@ -68,4 +85,5 @@ DirectX::SimpleMath::Matrix NailCamera::GetPTM90()
 void NailCamera::CreateFrustum()
 {
 	this->frustum.CreateFromMatrix(this->frustum, ptm);
+	this->frustum.Transform(this->frustum, wtm);
 }

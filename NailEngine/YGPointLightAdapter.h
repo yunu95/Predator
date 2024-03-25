@@ -50,6 +50,21 @@ namespace yunuGIAdapter
 			light->SetRange(range);
 		};
 
+		virtual void SetIntensity(float intensity) override
+		{
+			light->SetIntensity(intensity);
+		};
+
+		virtual void SetActive(bool isActive) override
+		{
+			light->SetActive(isActive);
+		}
+
+		virtual bool IsActive() override
+		{
+			return light->IsActive();
+		}
+
 	private:
 		std::shared_ptr<PointLight> light;
 	};
