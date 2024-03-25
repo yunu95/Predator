@@ -420,16 +420,17 @@ void application::contents::ContentsLayer::Initialize()
         yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 
 		/// Editor 에서 수정하여 Map Data 에 저장할 부분
-		auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		auto camComp = camObj->AddComponent<RTSCam>();
-		camObj->GetTransform()->SetLocalPosition({ 0,25,0 });
-		camObj->AddComponent<Dotween>();
-		RegisterToEditorObjectVector(camObj);
+		/*auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto camComp = camObj->AddComponent<graphics::Camera>();
+		camComp->SetCameraMain();*/
+		//camObj->GetTransform()->SetLocalPosition({ 0,25,0 });
+		//camObj->AddComponent<Dotween>();
+		//RegisterToEditorObjectVector(camObj);
 
-		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
-		directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
-		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+		//auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		//directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
+		//directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
+		//auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 
         auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
@@ -454,16 +455,16 @@ void application::contents::ContentsLayer::Initialize()
         SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
 		RegisterToEditorObjectVector(skillPreviewSphereMeshObject);
 
-        camComp->groundHoveringClickCallback = [=](Vector3d pos)
-            {
-                mouseCursorObject->GetTransform()->SetWorldPosition(pos);
-                SkillPreviewSystem::Instance().SetCurrentMousPosition(pos);
-            };
+        //camComp->groundHoveringClickCallback = [=](Vector3d pos)
+        //    {
+        //        mouseCursorObject->GetTransform()->SetWorldPosition(pos);
+        //        SkillPreviewSystem::Instance().SetCurrentMousPosition(pos);
+        //    };
 
         InputManager::Instance();
         UIManager::Instance();
-        PlayerController::SingleInstance().SetMovingSystemComponent(camComp);
-        TacticModeSystem::SingleInstance().SetMovingSystemComponent(camComp);
+        //PlayerController::SingleInstance().SetMovingSystemComponent(camComp);
+        //TacticModeSystem::SingleInstance().SetMovingSystemComponent(camComp);
 
         // UIButton Test
         //rsrcMgr->LoadFile("Texture/zoro.jpg");

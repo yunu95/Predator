@@ -1017,6 +1017,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="HealerAutoAttackProjectilePool.h" />
     <ClInclude Include="HealerSkillSystem.h" />
     <ClInclude Include="imgui_ModuleData.h" />
+    <ClInclude Include="PlayTimeRegionManager.h" />
     <ClInclude Include="PlaytimeWave.h" />
     <ClInclude Include="PaletteBrushManager.h" />
     <ClInclude Include="RangedEnemyProductor.h" />
@@ -1215,6 +1216,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="MagicianAutoAttackProjectile.cpp" />
     <ClCompile Include="MagicianSkillSystem.cpp" />
     <ClCompile Include="MeleeAttackSystem.cpp" />
+    <ClCompile Include="PlayTimeRegionManager.cpp" />
     <ClCompile Include="PlaytimeWave.cpp" />
     <ClCompile Include="RangedEnemyProductor.cpp" />
     <ClCompile Include="SpecialEffectTrigger.cpp" />

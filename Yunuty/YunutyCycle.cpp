@@ -175,7 +175,10 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 
 		if (autoRendering)
 		{
-			graphics::Renderer::SingleInstance().Render();
+			if (graphics::Camera::GetMainCamera())
+			{
+				graphics::Renderer::SingleInstance().Render();
+			}
 		}
 
 		{

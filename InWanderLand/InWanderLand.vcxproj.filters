@@ -917,6 +917,9 @@
     <ClInclude Include="EditorCameraManager.h">
       <Filter>Editor\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="PlayTimeRegionManager.h">
+      <Filter>Contents\PlaytimeRegion</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1420,6 +1423,9 @@
     </ClCompile>
     <ClCompile Include="EditorCameraManager.cpp">
       <Filter>Editor\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayTimeRegionManager.cpp">
+      <Filter>Contents\PlaytimeRegion</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
