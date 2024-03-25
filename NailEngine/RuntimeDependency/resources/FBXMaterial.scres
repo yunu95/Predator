@@ -6908,8 +6908,8 @@
         },
         "child": [
             {
-                "AmbientExposure": 0.4000000059604645,
-                "DiffuseExposure": 0.10000000149011612,
+                "AmbientExposure": 0.20000000298023224,
+                "DiffuseExposure": 5.300000190734863,
                 "aabb": {
                     "maxPoint": {
                         "x": 3.3525338172912598,

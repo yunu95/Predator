@@ -375,6 +375,8 @@ void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_
 
 void FBXLoad()
 {
+	LoadFBXMaterial();
+
 	g_fbxLoad = true;
 
 	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
@@ -790,12 +792,6 @@ void ImGuiUpdate()
 			if (ImGui::Button("SaveButton"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
 			{
 				SaveFBXMaterial();
-			}
-
-			// 바뀐 머터리얼을 로드하는 버튼
-			if (ImGui::Button("LoadButton"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-			{
-				LoadFBXMaterial();
 			}
 
 			// FBX를 로드하는 버튼
