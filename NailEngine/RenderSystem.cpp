@@ -424,7 +424,10 @@ void RenderSystem::RenderLight()
 	int lightIndex = 0;
 	for (auto& e : lightSet)
 	{
-		if (e->IsActive() == false) continue;
+		if (e->IsActive() == false)
+		{
+			continue;
+		}
 
 		// Point Light의 경우 실제 Sphere Mesh를 렌더링 파이프라인에 넘긴다.
 		// 이때 WVP이 필요하기에 상수버퍼에 밀어넣어야 한다.

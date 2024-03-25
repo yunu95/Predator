@@ -13,7 +13,7 @@ set "timestamp=%dt:~0,4%-%dt:~4,2%-%dt:~6,2%-%dt:~8,2%-%dt:~10,2%"
 set "destinationDir=%baseDestinationDir%\%timestamp%"
 set "destinationDirAlt=%baseDestinationDir%\resources"
 
-del %destinationDirAlt% /F /Q
+rmdir /S /Q %destinationDirAlt%
 :: Create an associative array (kind of) for filenames and extensions
 set "index=0"
 for /f "tokens=*" %%a in (%filterFile%) do (
