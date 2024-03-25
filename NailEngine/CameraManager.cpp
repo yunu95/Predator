@@ -26,6 +26,7 @@ void CameraManager::SetWorldTM(yunuGI::ICamera* adapter, DirectX::SimpleMath::Ma
 
 void CameraManager::SetVerticalFOV(yunuGI::ICamera* adapter, float fov)
 {
+	//mainCamera->SetVerticalFOV(fov);
 	this->cameraMap[adapter]->SetVerticalFOV(fov);
 }
 
@@ -36,6 +37,7 @@ float CameraManager::GetVerticalFOV(yunuGI::ICamera* adapter)
 
 void CameraManager::SetNear(yunuGI::ICamera* adapter, float cameraNear)
 {
+	//mainCamera->SetNear(cameraNear);
 	this->cameraMap[adapter]->SetNear(cameraNear);
 }
 
@@ -46,6 +48,7 @@ float CameraManager::GetNear(yunuGI::ICamera* adapter)
 
 void CameraManager::SetFar(yunuGI::ICamera* adapter, float cameraFar)
 {
+	//mainCamera->SetFar(cameraFar);
 	this->cameraMap[adapter]->SetFar(cameraFar);
 }
 
@@ -56,6 +59,7 @@ float CameraManager::GetFar(yunuGI::ICamera* adapter)
 
 void CameraManager::SetResolution(yunuGI::ICamera* adapter, float width, float height)
 {
+	//mainCamera->SetResolution(width, height);
 	this->cameraMap[adapter]->SetResolution(width, height);
 }
 
