@@ -34,6 +34,10 @@ namespace yunuGIAdapter
         {
             renderable->SetActive(isActive);
         };
+		virtual bool IsActive() override
+		{
+            return true;
+		}
 
         virtual void SetImage(yunuGI::ITexture* texture)
         {

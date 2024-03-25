@@ -14,6 +14,15 @@ public:
 		this->lightInfo.intensity = intensity;
 	};
 
+	virtual void SetActive(bool isActive) override
+	{
+
+	}
+	virtual bool IsActive() override
+	{
+		return true;
+	}
+
 public:
 	void SetLightDirection(DirectX::SimpleMath::Vector4& direction);
 	DirectX::SimpleMath::Vector4& GetDirection();

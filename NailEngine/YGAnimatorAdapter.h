@@ -105,7 +105,10 @@ namespace yunuGIAdapter
 
 		virtual void SetActive(bool isActive)
 		{};
-
+		virtual bool IsActive() override
+		{
+			return true;
+		}
 		virtual void SetPickingMode(bool isPickingModeOn) {}
 
 		virtual void SetWorldTM(const yunuGI::Matrix4x4& tm)

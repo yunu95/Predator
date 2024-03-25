@@ -55,6 +55,15 @@ namespace yunuGIAdapter
 		{
 			light->SetIntensity(intensity);
 		};
+		virtual void SetActive(bool isActive) override
+		{
+
+		}
+
+		virtual bool IsActive() override
+		{
+			return true;
+		}
 	private:
 		std::shared_ptr<SpotLight> light;
 	};
