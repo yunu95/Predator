@@ -49,6 +49,11 @@ namespace yunuGIAdapter
 			light->SetLightDiffuseColor(reinterpret_cast<DirectX::SimpleMath::Vector4&>(color));
 		}
 
+		virtual void SetIntensity(float intensity) override
+		{
+			light->SetIntensity(intensity);
+		};
+
 	private:
 		std::shared_ptr<DirectionalLight> light;
 	};

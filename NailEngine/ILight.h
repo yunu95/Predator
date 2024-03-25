@@ -33,7 +33,8 @@ struct LightInfo
 
 	float farPlane = 1.f;
 	float nearPlane = 0.1f;
-	DirectX::SimpleMath::Vector3 padding;
+	float intensity = 1.f;
+	DirectX::SimpleMath::Vector2 padding;
 };
 
 struct LightParams
@@ -49,6 +50,7 @@ public:
 	LightInfo& GetLightInfo() { return this->lightInfo; }
 	virtual void SetLightDiffuseColor(DirectX::SimpleMath::Vector4& color) = 0;
 	virtual void SetLightPosition(DirectX::SimpleMath::Vector4& position) = 0;
+	virtual void SetIntensity(float intensity) = 0;
 
 	void SetID(int id)
 	{

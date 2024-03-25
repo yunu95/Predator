@@ -205,7 +205,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         float3 x = max(0, directionalLighting.xyz - 0.004);
         directionalLighting.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
         
-        diffuse.xyz += directionalLighting.xyz * lights[lightIndex].color.diffuse.xyz;
+        diffuse.xyz += directionalLighting.xyz * lights[lightIndex].color.diffuse.xyz * lights[lightIndex].intensity;
         diffuse.w = 1.f;
         
         
@@ -290,10 +290,15 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
             
             float3 pointLighting = (diffuseBRDF + specularBRDF) * (Lradiance * cosLi);
             
-            diffuse.xyz += pointLighting.xyz * lights[lightIndex].color.diffuse.xyz * distanceRatio;
+            
+            pointLighting *= DiffuseExposure;
+            float3 x = max(0, pointLighting.xyz - 0.004);
+            pointLighting.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
+            diffuse.xyz += pointLighting.xyz * lights[lightIndex].color.diffuse.xyz * distanceRatio * lights[lightIndex].intensity;
             diffuse.w = 1.f;
             
             float3 ambientLighting = float3(0, 0, 0);
+            if (useIBL == 1)
             {
                 float3 irradiance = IrradianceMap.Sample(sam, normal).rgb;
                 float3 F = fresnelSchlick(F0, cosLo);
@@ -304,6 +309,16 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
                 float2 specularBRDF = BrdfMap.Sample(spBRDF_Sampler, float2(cosLo, roughness)).rg;
                 float3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;
                 ambientLighting = (diffuseIBL + specularIBL) * ao;
+                
+                ambientLighting *= AmbientExposure;
+                ambientLighting = ambientLighting / (1 + ambientLighting);
+                ambientLighting = pow(ambientLighting, 1 / 2.2);
+            
+                ambient.xyz = ambientLighting;
+            }
+            else
+            {
+                ambient.xyz = lights[lightIndex].color.ambient;
             }
             
             // Shadow 연산하는 코드 넣기
