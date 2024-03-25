@@ -383,6 +383,16 @@ void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_
 
 void FBXLoad()
 {
+	if (g_selectFBX)
+	{
+		if (g_selectGameObject)
+		{
+			Scene::getCurrentScene()->DestroyGameObject(g_selectGameObject);
+		}
+	}
+	g_selectFBX = nullptr;
+	g_selectGameObject = nullptr;
+
 	LoadFBXMaterial();
 
 	g_fbxLoad = true;
@@ -586,12 +596,12 @@ void ShowSeleteFBXInfo()
 			if (g_selectFBX->hasAnimation)
 			{
 				auto renderer = g_selectGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
-				ApplyMaterial(each, renderer->GetGI().GetMaterial(materialIndex));
+				ApplyMaterial(each, resourceManager->GetMaterial(g_selectFBX->materialVec[materialIndex].materialName));
 			}
 			else
 			{
 				auto renderer = g_selectGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-				ApplyMaterial(each, renderer->GetGI().GetMaterial(materialIndex));
+				ApplyMaterial(each, resourceManager->GetMaterial(g_selectFBX->materialVec[materialIndex].materialName));
 			}
 
 			materialIndex++;
