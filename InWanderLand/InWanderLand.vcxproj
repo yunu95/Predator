@@ -1024,6 +1024,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="SingletonUpdate.h" />
     <ClInclude Include="SpecialEffectTrigger.h" />
     <ClInclude Include="SpecialEvent.h" />
+    <ClInclude Include="SpriteAnimation.h" />
     <ClInclude Include="StaticInstanceRegistry.h" />
     <ClInclude Include="LoadStaticOrnamentsCommand.h" />
     <ClInclude Include="OrnamentBrush.h" />
@@ -1110,7 +1111,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Panel_Palette.h" />
     <ClInclude Include="Panel_Preview.h" />
     <ClInclude Include="PeriodicAction.h" />
-    <ClInclude Include="PathField.h" />
     <ClInclude Include="RoamingCam.h" />
     <ClInclude Include="RTSCam.h" />
     <ClInclude Include="Application.h" />
@@ -1149,6 +1149,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="SpecialEffect.h" />
     <ClInclude Include="Unit_TemplateData.h" />
+    <ClInclude Include="WanderUtils.h" />
     <ClInclude Include="UUID.h" />
     <ClInclude Include="UUIDManager.h" />
     <ClInclude Include="Unit.h" />
@@ -1217,7 +1218,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="MeleeAttackSystem.cpp" />
     <ClCompile Include="PlaytimeWave.cpp" />
     <ClCompile Include="RangedEnemyProductor.cpp" />
+    <ClCompile Include="SnippetBillboardSpriteAnim.cpp" />
     <ClCompile Include="SpecialEffectTrigger.cpp" />
+    <ClCompile Include="SpriteAnimation.cpp" />
     <ClCompile Include="TauntingComponent.cpp" />
     <ClCompile Include="OrnamentEditorInstance.cpp" />
     <ClCompile Include="PaletteBrushManager.cpp" />

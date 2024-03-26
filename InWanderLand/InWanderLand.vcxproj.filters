@@ -58,9 +58,6 @@
     <Filter Include="Editor\DataSystem\EditableData\TemplateData\DataType">
       <UniqueIdentifier>{12c926e0-9622-4f19-940e-0f9fed6da0ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Path">
-      <UniqueIdentifier>{fd700d27-99c8-48fe-a7fa-d50f17beb154}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents\Units">
       <UniqueIdentifier>{405ea7bd-7f87-4f62-bbaa-63df3fb1cb29}</UniqueIdentifier>
     </Filter>
@@ -217,9 +214,6 @@
     <Filter Include="DebugGraphics\DebugMeshes">
       <UniqueIdentifier>{63795638-a23d-4b7e-a43d-3da8d1088678}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sources\DebugPlane">
-      <UniqueIdentifier>{028fb8ff-0f7e-465c-894d-222249262cc3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="TestCodes\TestUtils\PeriodicAction">
       <UniqueIdentifier>{d31814ce-faa7-415f-8b5a-672e90071988}</UniqueIdentifier>
     </Filter>
@@ -358,6 +352,12 @@
     <Filter Include="Contents\ProjectilePools\RangedEnemy">
       <UniqueIdentifier>{1ef27289-47ec-4e7d-a7a5-6d0258af3b98}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SpriteAnimation">
+      <UniqueIdentifier>{b947e4e7-accc-44c7-b318-9804fcfa30f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestCodes\TestUtils\DebugTilePlane">
+      <UniqueIdentifier>{028fb8ff-0f7e-465c-894d-222249262cc3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -394,7 +394,7 @@
       <Filter>RoamingCam</Filter>
     </ClInclude>
     <ClInclude Include="DebugTilePlane.h">
-      <Filter>sources\DebugPlane</Filter>
+      <Filter>TestCodes\TestUtils\DebugTilePlane</Filter>
     </ClInclude>
     <ClInclude Include="DebugBeacon.h">
       <Filter>DebugGraphics\DebugBeacon</Filter>
@@ -506,9 +506,6 @@
     </ClInclude>
     <ClInclude Include="LoadMapCommand.h">
       <Filter>Editor\Commands\MenubarCommands\File</Filter>
-    </ClInclude>
-    <ClInclude Include="PathField.h">
-      <Filter>Path</Filter>
     </ClInclude>
     <ClInclude Include="TestColliderEnableDeath.h">
       <Filter>TestCodes</Filter>
@@ -916,6 +913,12 @@
     </ClInclude>
     <ClInclude Include="EditorCameraManager.h">
       <Filter>Editor\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="WanderUtils.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteAnimation.h">
+      <Filter>SpriteAnimation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1420,6 +1423,12 @@
     </ClCompile>
     <ClCompile Include="EditorCameraManager.cpp">
       <Filter>Editor\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteAnimation.cpp">
+      <Filter>SpriteAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="SnippetBillboardSpriteAnim.cpp">
+      <Filter>TestCodes\snippets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

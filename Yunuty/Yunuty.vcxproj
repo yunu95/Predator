@@ -278,7 +278,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\fastlz\fastlz.h" />
-    <ClInclude Include="Billboard.h" />
+    <ClInclude Include="header\Billboard.h" />
     <ClInclude Include="ChunkyTriMesh.h" />
     <ClInclude Include="header\HasVariable.h" />
     <ClInclude Include="header\Animator.h" />
