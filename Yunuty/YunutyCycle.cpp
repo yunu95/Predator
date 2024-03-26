@@ -86,7 +86,7 @@ void yunutyEngine::YunutyCycle::ThreadFunction()
 	while (isGameRunning)
 	{
 		{
-			{std::unique_lock lock{ preUpdateMutex }; }
+			{ std::unique_lock lock{ preUpdateMutex }; }
 			isUpdating = true;
 			ThreadUpdate();
 			isUpdating = false;

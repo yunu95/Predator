@@ -1,0 +1,23 @@
+#pragma once
+#include "YunutyEngine.h"
+
+namespace application::editor
+{
+	class RegionData;
+}
+
+/// <summary>
+/// region간의 상관관계를 성립시켜주는 클래스.
+/// </summary>
+class PlayTimeRegionManager : public Component, public SingletonComponent<PlayTimeRegionManager>
+{
+private:
+	Vector3d stage2StartPosition;
+	std::function<void()> stage1ToStage2Function;
+
+public:
+	void AddRegionData(application::editor::RegionData* p_data);
+
+	friend PlaytimeRegion;
+};
+
