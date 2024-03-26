@@ -44,10 +44,8 @@ for /r "%sourceDir%" %%i in (*.*) do (
         set "relativePath=!filePath:%sourceDir%=!"
         set "targetDir=%destinationDir%!relativePath:%%~nxi=!"
 
-        echo "!relativePath!"
-        echo "!targetDir!"
         if not exist "!targetDir!" mkdir "!targetDir!"
-        xcopy "%%i" "!targetDir!" /Y
+        xcopy "%%i" "!targetDir!" /Y /Q
     ) else (
         set "filePath=%%i"
         set "relativePath=!filePath:%sourceDir%=!"

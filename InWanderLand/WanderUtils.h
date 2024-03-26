@@ -1,0 +1,44 @@
+#pragma once
+#include "YunutyEngine.h"
+#include "FileSystem.h"
+
+namespace wanderUtils
+{
+    void LoadResourcesRecursively()
+    {
+        const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+        // FBX 로드하기
+        {
+            auto directorList = application::editor::fileSystem::GetSubdirectories("FBX");
+            for (auto each : directorList)
+            {
+                resourceManager->LoadFile(("FBX/" + each.string()).c_str());
+            }
+        }
+        // 나머지 기타등등 파일들 로드하기
+        {
+            namespace fs = std::filesystem;
+            std::set<std::string> validExtensions{ ".jpg", ".png", ".bmp", ".tga", ".dds", ".hdr" };
+            fs::path basePath{ "./" };
+            try 
+            {
+                if (fs::exists(basePath) && fs::is_directory(basePath))
+                {
+                    for (const auto& entry : fs::recursive_directory_iterator(basePath))
+                    {
+                        if (fs::is_regular_file(entry) && validExtensions.contains(entry.path().extension().string()))
+                        {
+                            auto relativePath = fs::relative(entry.path(), basePath);
+                            resourceManager->LoadFile(relativePath.string().c_str());
+                        }
+                    }
+                }
+            }
+            catch (const fs::filesystem_error& err) {
+                std::cerr << "Error: " << err.what() << std::endl;
+            }
+        }
+
+    }
+}
