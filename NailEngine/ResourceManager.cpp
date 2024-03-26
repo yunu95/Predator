@@ -715,7 +715,10 @@ void ResourceManager::LoadFBXData(std::filesystem::path path)
 		LoadFBXData(fbxJson, fbxData);
 
 		auto str = String_To_Wstring(fbxJson["FBXName : "]);
-
+		if (str == L"SM_Mushroom01")
+		{
+			int a = 1;
+		}
 		auto iter = fbxDataMap.find(String_To_Wstring(fbxJson["FBXName : "]));
 		if (iter == fbxDataMap.end())
 		{
@@ -723,20 +726,6 @@ void ResourceManager::LoadFBXData(std::filesystem::path path)
 		}
 		fbxDataMap[String_To_Wstring(fbxJson["FBXName : "])] = fbxData;
 	}
-
-	//yunuGI::FBXData* fbxData = new yunuGI::FBXData;
-	//fbxData->hasAnimation = node->hasAnimation;
-	//fbxData->nodeName = node->nodeName;
-	//fbxData->child.resize(node->child.size());
-
-	//for (int i = 0; i < node->child.size(); ++i)
-	//{
-	//	fbxData->child[i] = new yunuGI::FBXData;
-	//	this->FillFBXData(fbxName, node->child[i], fbxData->child[i]);
-	//}
-
-	//this->fbxDataMap.insert({ fbxName, fbxData });
-	//this->fbxMap.emplace_back(fbxName);
 }
 
 void ResourceManager::LoadFBXData(const nlohmann::json& jsonData, yunuGI::FBXData* data)

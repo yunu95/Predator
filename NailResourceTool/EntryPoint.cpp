@@ -20,6 +20,7 @@ bool g_fbxLoad = false;
 bool g_useIBL = true;
 std::unordered_map<std::wstring, yunuGI::FBXData*> g_fbxMap;
 yunuGI::FBXData* g_selectFBX = nullptr;
+yunuGI::FBXData* g_prevFBX = nullptr;
 yunutyEngine::GameObject* g_selectGameObject = nullptr;
 // Data
 static ID3D11Device* g_pd3dDevice = nullptr;
@@ -62,6 +63,7 @@ void CreateComboByTexture(std::string comboName, std::wstring& textureName, std:
 void CreateComboByShader(std::string comboName, std::wstring& shaderName, std::vector<yunuGI::IShader*>& shaderList);
 
 void ApplyMaterial(yunuGI::MaterialData& data, yunuGI::IMaterial* material);
+void ApplyFirstMaterial(yunuGI::MaterialData& data, yunuGI::IMaterial* material);
 
 
 void SaveFBXMaterial();
@@ -91,81 +93,81 @@ int WINAPI main(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_li
 	CreateMyWindow(h_instance, h_prev_instance, lp_cmd_line, n_cmd_show);
 
 	yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [&]()
+	{
+		CreateToolWindow(h_instance, nullptr, lp_cmd_line, n_cmd_show);
+
+		// Setup Platform/Renderer backends
+		g_pd3dDevice = reinterpret_cast<ID3D11Device*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDevice());
+		g_pd3dDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDeviceContext());
+
+		// Initialize Direct3D
+		if (!CreateDeviceD3D(g_Toolhwnd))
 		{
-			CreateToolWindow(h_instance, nullptr, lp_cmd_line, n_cmd_show);
+			CleanupDeviceD3D();
+			return 1;
+		}
 
-			// Setup Platform/Renderer backends
-			g_pd3dDevice = reinterpret_cast<ID3D11Device*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDevice());
-			g_pd3dDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDeviceContext());
+		::ShowWindow(g_Toolhwnd, SW_SHOWDEFAULT);
+		::UpdateWindow(g_Toolhwnd);
 
-			// Initialize Direct3D
-			if (!CreateDeviceD3D(g_Toolhwnd))
-			{
-				CleanupDeviceD3D();
-				return 1;
-			}
+		// Setup Dear ImGui context
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+		//io.ConfigViewportsNoAutoMerge = true;
+		//io.ConfigViewportsNoTaskBarIcon = true;
+		//io.ConfigViewportsNoDefaultParent = true;
+		//io.ConfigDockingAlwaysTabBar = true;
+		//io.ConfigDockingTransparentPayload = true;
+		//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: Experimental. THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
+		//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI: Experimental.
 
-			::ShowWindow(g_Toolhwnd, SW_SHOWDEFAULT);
-			::UpdateWindow(g_Toolhwnd);
+		/// Custom 영역
+		// 타이틀 바를 컨트롤 할 때에만 움직임
+		io.ConfigWindowsMoveFromTitleBarOnly = true;
+		///
 
-			// Setup Dear ImGui context
-			IMGUI_CHECKVERSION();
-			ImGui::CreateContext();
-			ImGuiIO& io = ImGui::GetIO(); (void)io;
-			io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-			io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-			io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
-			//io.ConfigViewportsNoAutoMerge = true;
-			//io.ConfigViewportsNoTaskBarIcon = true;
-			//io.ConfigViewportsNoDefaultParent = true;
-			//io.ConfigDockingAlwaysTabBar = true;
-			//io.ConfigDockingTransparentPayload = true;
-			//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: Experimental. THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
-			//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI: Experimental.
+		// Setup Dear ImGui style
+		ImGui::StyleColorsDark();
+		//ImGui::StyleColorsLight();
 
-			/// Custom 영역
-			// 타이틀 바를 컨트롤 할 때에만 움직임
-			io.ConfigWindowsMoveFromTitleBarOnly = true;
-			///
+		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+		ImGuiStyle& style = ImGui::GetStyle();
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			style.WindowRounding = 0.0f;
+			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+		}
 
-			// Setup Dear ImGui style
-			ImGui::StyleColorsDark();
-			//ImGui::StyleColorsLight();
+		// Setup Platform/Renderer backends
+		ImGui_ImplWin32_Init(g_Toolhwnd);
+		ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 
-			// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
-			ImGuiStyle& style = ImGui::GetStyle();
-			if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-			{
-				style.WindowRounding = 0.0f;
-				style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-			}
-
-			// Setup Platform/Renderer backends
-			ImGui_ImplWin32_Init(g_Toolhwnd);
-			ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
-
-			// Load Fonts
-			// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-			// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-			// - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-			// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-			// - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
-			// - Read 'docs/FONTS.md' for more instructions and details.
-			// - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-			//io.Fonts->AddFontDefault();
-			//io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
-			//io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-			//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-			//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-			//ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
-			//IM_ASSERT(font != nullptr);
-		};
+		// Load Fonts
+		// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+		// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+		// - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+		// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+		// - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
+		// - Read 'docs/FONTS.md' for more instructions and details.
+		// - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+		//io.Fonts->AddFontDefault();
+		//io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
+		//io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
+		//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
+		//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
+		//ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
+		//IM_ASSERT(font != nullptr);
+	};
 
 	yunutyEngine::YunutyCycle::SingleInstance().postUpdateAction = [&]() { ImGuiUpdate(); };
 	yunutyEngine::YunutyCycle::SingleInstance().postThreadAction = []()
-		{
-		};
+	{
+	};
 
 	yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
 	yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(1920, 1080);
@@ -506,6 +508,13 @@ void ShowSeleteFBXInfo()
 		int materialIndex = 0;
 		for (auto& each : g_selectFBX->materialVec)
 		{
+			if (g_selectFBX != g_prevFBX)
+			{
+				// 맨 처음 한 번은 머터리얼 값 적용
+				ApplyFirstMaterial(each, resourceManager->GetMaterial(g_selectFBX->materialVec[materialIndex].materialName));
+			}
+
+
 			ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "MaterialName : %ls", each.materialName.c_str());
 
 			/// Texture
@@ -609,6 +618,8 @@ void ShowSeleteFBXInfo()
 
 		resourceManager->GetMesh(g_selectFBX->meshName)->SetDiffuseExposure(g_selectFBX->diffuseExposure);
 		resourceManager->GetMesh(g_selectFBX->meshName)->SetAmbientExposure(g_selectFBX->ambientExposure);
+
+		g_prevFBX = g_selectFBX;
 	}
 }
 
@@ -731,6 +742,254 @@ void ApplyMaterial(yunuGI::MaterialData& data, yunuGI::IMaterial* material)
 	if (!data.temp11Map.empty())
 	{
 		material->SetTexture(yunuGI::Texture_Type::Temp11, resourceManager->GetTexture(data.temp11Map));
+	}
+}
+
+
+
+void ApplyFirstMaterial(yunuGI::MaterialData& data, yunuGI::IMaterial* material)
+{
+	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+	data.vs = material->GetVertexShader()->GetName();
+	data.ps = material->GetPixelShader()->GetName();
+
+	material->SetVertexShader(resourceManager->GetShader(data.vs));
+	material->SetPixelShader(resourceManager->GetShader(data.ps));
+
+	if (!data.albedoMap.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::ALBEDO);
+		if (texture)
+		{
+			if (texture->GetName() != data.albedoMap)
+			{
+				data.albedoMap = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::ALBEDO, texture);
+		}
+	}
+	if (!data.normalMap.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::NORMAL);
+		if (texture)
+		{
+			if (texture->GetName() != data.normalMap)
+			{
+				data.normalMap = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::NORMAL, texture);
+		}
+	}
+	if (!data.armMap.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::ARM);
+		if (texture)
+		{
+			if (texture->GetName() != data.armMap)
+			{
+				data.armMap = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::ARM, texture);
+		}
+	}
+	if (!data.emissionMap.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::EMISSION);
+		if (texture)
+		{
+			if (texture->GetName() != data.emissionMap)
+			{
+				data.emissionMap = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::EMISSION, texture);
+		}
+	}
+	if (!data.heightMap.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::HEIGHT);
+		if (texture)
+		{
+			if (texture->GetName() != data.heightMap)
+			{
+				data.heightMap = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::HEIGHT, texture);
+		}
+	}
+	if (!data.opacityMap.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::OPACITY);
+		if (texture)
+		{
+			if (texture->GetName() != data.opacityMap)
+			{
+				data.opacityMap = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::OPACITY, texture);
+		}
+	}
+	if (!data.temp0Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp0);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp0Map)
+			{
+				data.temp0Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp0, texture);
+		}
+	}
+	if (!data.temp1Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp1);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp1Map)
+			{
+				data.temp1Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp1, texture);
+		}
+	}
+	if (!data.temp2Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp2);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp2Map)
+			{
+				data.temp2Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp2, texture);
+		}
+	}
+	if (!data.temp3Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp3);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp3Map)
+			{
+				data.temp3Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp3, texture);
+		}
+	}
+	if (!data.temp4Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp4);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp4Map)
+			{
+				data.temp4Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp4, texture);
+		}
+	}
+	if (!data.temp5Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp5);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp5Map)
+			{
+				data.temp5Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp5, texture);
+		}
+	}
+	if (!data.temp6Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp6);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp6Map)
+			{
+				data.temp6Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp6, texture);
+		}
+	}
+	if (!data.temp7Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp7);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp7Map)
+			{
+				data.temp7Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp7, texture);
+		}
+	}
+	if (!data.temp8Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp8);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp8Map)
+			{
+				data.temp8Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp8, texture);
+		}
+	}
+	if (!data.temp9Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp9);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp9Map)
+			{
+				data.temp9Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp9, texture);
+		}
+	}
+	if (!data.temp10Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp10);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp10Map)
+			{
+				data.temp10Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp10, texture);
+		}
+	}
+	if (!data.temp11Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp11);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp11Map)
+			{
+				data.temp11Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp11, texture);
+		}
 	}
 }
 
