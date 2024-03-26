@@ -7,6 +7,7 @@
 TacticModeSystem::TacticModeSystem()
 {
 	m_queueSelector.insert({ "SKM_Robin" , &warriorQueue });
+	//m_queueSelector.insert({ "Sphere" , &magicianQueue });
 }
 
 void TacticModeSystem::SetCurrentSelectedPlayerUnit(Unit::UnitType p_type)
