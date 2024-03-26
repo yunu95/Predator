@@ -4,11 +4,12 @@
 #include "StatusTimer.h"
 #include "ContentsLayer.h"
 #include "Application.h"
+#include "LazySingletonClass.h"
 
 class Unit;
 class StatusTimer;
 
-class StatusTimerPool : public GameObjectPool<StatusTimer>, public SingletonClass<StatusTimerPool>
+class StatusTimerPool : public GameObjectPool<StatusTimer>, public GHContents::LazySingletonClass<StatusTimerPool>
 {
 public:
 	virtual void ObjectInitializer(StatusTimer* timer) override

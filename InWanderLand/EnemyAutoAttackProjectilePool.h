@@ -3,9 +3,10 @@
 #include "EnemyAutoAttackProjectile.h"
 #include "ContentsLayer.h"
 #include "Application.h"
+#include "LazySingletonClass.h"
 
 class EnemyAutoAttackProjectilePool :
-	public GameObjectPool<EnemyAutoAttackProjectile>, public SingletonClass<EnemyAutoAttackProjectilePool>
+	public GameObjectPool<EnemyAutoAttackProjectile>, public GHContents::LazySingletonClass<EnemyAutoAttackProjectilePool>
 {
 public:
 	virtual void ObjectInitializer(EnemyAutoAttackProjectile* projectile) override

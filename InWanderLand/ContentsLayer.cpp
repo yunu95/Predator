@@ -514,7 +514,7 @@ void application::contents::ContentsLayer::Initialize()
             }
         }*/
         //assert(mapFound && "there is no map to load in current directory!");
-        editor::MapFileManager::GetSingletonInstance().LoadMapFile("TestStage1.pmap");
+        editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
         editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
     }
@@ -619,10 +619,14 @@ void application::contents::ContentsLayer::ClearPlaytimeObject()
 	/// 생성된 모든 게임 플레이 오브젝트 삭제
 	for (auto e : objectCreatedByEditorVector)
 	{
-		e->SetSelfActive(false);
+  //      if (e->getName() == "")
+		//e->SetSelfActive(false);
 		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(e);
 	}
 	objectCreatedByEditorVector.clear();
+
+    PlayerController::SingleInstance().ProhibitCreateInstance();
+    PlayerController::SingleInstance().InitInstance();
 }
 
 void application::contents::ContentsLayer::RegisterToEditorObjectVector(GameObject* p_obj)

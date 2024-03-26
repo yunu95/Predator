@@ -322,9 +322,6 @@
     <Filter Include="Contents\UnitStatusComponent\Taunting">
       <UniqueIdentifier>{a747ad64-1ec4-4e4a-b3dd-6afdf9903359}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\WaveSystem">
-      <UniqueIdentifier>{b9ce9a4b-15f0-44e2-ad5c-3de09c8231ea}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents\UnitFactory\UnitProductionOrder\EnemyProductor">
       <UniqueIdentifier>{6633728b-0b6c-4c3f-bad8-74f5a5501357}</UniqueIdentifier>
     </Filter>
@@ -357,6 +354,18 @@
     </Filter>
     <Filter Include="Contents\ProjectilePools\RangedEnemy">
       <UniqueIdentifier>{1ef27289-47ec-4e7d-a7a5-6d0258af3b98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\LazySingleton">
+      <UniqueIdentifier>{f4a8b620-e203-472c-b65f-46a1f508be8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Containers">
+      <UniqueIdentifier>{b9ce9a4b-15f0-44e2-ad5c-3de09c8231ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Containers\GameObjectContainer">
+      <UniqueIdentifier>{acd31600-7478-4ec2-825b-24a79ac266e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Containers\SingletonInstanceContainer">
+      <UniqueIdentifier>{7f68797a-b5d4-4fc8-a674-f9ce87bc3fc2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -923,6 +932,15 @@
     <ClInclude Include="UnitProductorSelector.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClInclude>
+    <ClInclude Include="LazySingletonClass.h">
+      <Filter>Contents\LazySingleton</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectContainer.h">
+      <Filter>Contents\Containers\GameObjectContainer</Filter>
+    </ClInclude>
+    <ClInclude Include="SingletonInstanceContainer.h">
+      <Filter>Contents\Containers\SingletonInstanceContainer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1432,6 +1450,12 @@
     </ClCompile>
     <ClCompile Include="UnitProductorSelector.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectContainer.cpp">
+      <Filter>Contents\Containers\GameObjectContainer</Filter>
+    </ClCompile>
+    <ClCompile Include="SingletonInstanceContainer.cpp">
+      <Filter>Contents\Containers\SingletonInstanceContainer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
