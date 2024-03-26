@@ -120,7 +120,6 @@ namespace application
 
 			auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 			auto camComp = camObj->AddComponent<RTSCam>();
-			camObj->GetTransform()->SetLocalPosition({ 0,25,0 });
 			camObj->AddComponent<Dotween>();
 
 			camObj->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });

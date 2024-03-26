@@ -1027,6 +1027,7 @@ namespace application
 								fbxName = "None";
 								returnVal = true;
 								ImGui::CloseCurrentPopup();
+								imgui::CloseMessageBox("Create Unit");
 								EditorLayer::SetInputControl(true);
 							}
 							else
@@ -1042,6 +1043,7 @@ namespace application
 						memset(unitNameBuffer, 0, bufferSize);
 						fbxName = "None";
 						ImGui::CloseCurrentPopup();
+						imgui::CloseMessageBox("Create Unit");
 						EditorLayer::SetInputControl(true);
 					}
 				}, 600);
