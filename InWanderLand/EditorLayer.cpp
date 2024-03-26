@@ -58,9 +58,9 @@ namespace application
                 return;
             }
 
-            /// 에디터용 리소스 게임 엔진 리소스 매니저에 등록
-            //LoadAllFBXFile();
-            wanderUtils::LoadResourcesRecursively();
+            /// 게임 엔진의 리소스 매니저에는
+            /// 콘텐츠 레이어에서 등록해준다고 봄
+            ///wanderUtils::LoadResourcesRecursively();
 
             /// 각종 매니저 클래스 메모리 할당
             MapFileManager::GetSingletonInstance();
