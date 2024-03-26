@@ -534,6 +534,7 @@ void ResourceManager::SaveFBXData()
 	current_path = current_path.parent_path();
 	current_path = current_path.parent_path();
 	current_path = current_path.parent_path();
+
 	current_path += L"//NailEngine//RuntimeDependency//resources//FBXMaterial.scres";
 
 	std::ofstream file(current_path);
@@ -687,10 +688,8 @@ void ResourceManager::LoadFBXData()
 {
 	std::filesystem::path current_path = std::filesystem::current_path();
 
-	current_path = current_path.parent_path();
-	current_path = current_path.parent_path();
-	current_path = current_path.parent_path();
-	current_path += L"//NailEngine//RuntimeDependency//resources//FBXMaterial.scres";
+
+	current_path += L"\\FBXMaterial.scres";
 
 	std::ifstream file(current_path);
 

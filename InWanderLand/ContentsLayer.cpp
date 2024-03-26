@@ -83,86 +83,86 @@ void GraphicsTest()
         }
     }
 
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,44.81 });
-    //	auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
-    //	yunuGI::Color color{ 0,0,1.f,1 };
-    //	light->GetGI().SetLightDiffuseColor(color);
-    //	light->GetGI().SetRange(10);
-    //}
+    {
+    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,44.81 });
+    	auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
+    	yunuGI::Color color{ 0,0,1.f,1 };
+    	light->GetGI().SetLightDiffuseColor(color);
+    	light->GetGI().SetRange(10);
+    }
 
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,45.32 });
-    //	auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
-    //	yunuGI::Color color{ 1.f,0,0,1 };
-    //	light->GetGI().SetLightDiffuseColor(color);
-    //	light->GetGI().SetRange(10);
-    //}
+    {
+    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,45.32 });
+    	auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
+    	yunuGI::Color color{ 1.f,0,0,1 };
+    	light->GetGI().SetLightDiffuseColor(color);
+    	light->GetGI().SetRange(10);
+    }
 
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //	obj->GetTransform()->SetLocalScale(Vector3d{ 100,1,100 });
-    //	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    //	renderer->GetGI().SetMesh(mesh);
-    //}
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //	obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,1 });
-    //	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,50,50 });
-    //	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    //	renderer->GetGI().SetMesh(mesh);
-    //}
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //	obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
-    //	obj->GetTransform()->SetLocalPosition(Vector3d{ -50,50,0 });
-    //	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    //	renderer->GetGI().SetMesh(mesh);
-    //}
+    {
+    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    	obj->GetTransform()->SetLocalScale(Vector3d{ 100,1,100 });
+    	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+    	renderer->GetGI().SetMesh(mesh);
+    }
+    {
+    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    	obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,1 });
+    	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,50,50 });
+    	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+    	renderer->GetGI().SetMesh(mesh);
+    }
+    {
+    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    	obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
+    	obj->GetTransform()->SetLocalPosition(Vector3d{ -50,50,0 });
+    	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+    	renderer->GetGI().SetMesh(mesh);
+    }
 
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //	obj->GetTransform()->SetLocalPosition(Vector3d{ -48.67,3.67,44.81 });
-    //	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    //	renderer->GetGI().SetMesh(mesh);
-    //}
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.26,3.67,47.83 });
-    //	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    //	renderer->GetGI().SetMesh(mesh);
-    //}
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //	obj->GetTransform()->SetLocalPosition(Vector3d{ -48.08,5.32,46.24 });
-    //	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    //	renderer->GetGI().SetMesh(mesh);
-    //}
+    {
+    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    	obj->GetTransform()->SetLocalPosition(Vector3d{ -48.67,3.67,44.81 });
+    	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+    	renderer->GetGI().SetMesh(mesh);
+    }
+    {
+    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.26,3.67,47.83 });
+    	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+    	renderer->GetGI().SetMesh(mesh);
+    }
+    {
+    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    	obj->GetTransform()->SetLocalPosition(Vector3d{ -48.08,5.32,46.24 });
+    	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+    	renderer->GetGI().SetMesh(mesh);
+    }
 
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //	obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
-    //	obj->GetTransform()->SetLocalPosition(Vector3d{ 48.08,5.32,46.24 });
-    //	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    //	renderer->GetGI().SetMesh(mesh);
-    //}
+    {
+    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    	obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
+    	obj->GetTransform()->SetLocalPosition(Vector3d{ 48.08,5.32,46.24 });
+    	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+    	renderer->GetGI().SetMesh(mesh);
+    }
 
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
-    //	auto animator = obj->GetComponent<yunutyEngine::graphics::Animator>();
-    //	animator->GetGI().PushAnimation(animation);
-    //	animator->GetGI().Play(animation);
-    //	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.55, 0.5f,42.53 });
-    //}
+    {
+    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
+    	auto animator = obj->GetComponent<yunutyEngine::graphics::Animator>();
+    	animator->GetGI().PushAnimation(animation);
+    	animator->GetGI().Play(animation);
+    	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.55, 0.5f,42.53 });
+    }
 
 
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    //	renderer->GetGI().SetMesh(mesh);
-    //}
+    {
+    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+    	renderer->GetGI().SetMesh(mesh);
+    }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //{
@@ -242,33 +242,33 @@ void GraphicsTest()
     //	obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{0,180,0} });
     //}
 
-    {
-        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CastleWall");
-        auto renderer = obj->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-        for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
-        {
-            renderer->GetGI().GetMaterial(i)->SetPixelShader(_resourceManager->GetShader(L"Debug_AlphaPS.cso"));
-            yunuGI::Color color{ 1,0,0,0.2 };
-            renderer->GetGI().GetMaterial(i)->SetColor(color);
-        }
-    }
+ /*   {
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CastleWall");
+		auto renderer = obj->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
+		{
+			renderer->GetGI().GetMaterial(i)->SetPixelShader(_resourceManager->GetShader(L"Debug_AlphaPS.cso"));
+			yunuGI::Color color{ 1,0,0,0.2 };
+			renderer->GetGI().GetMaterial(i)->SetColor(color);
+		}
+	}
 
-    {
-        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
-        auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-        renderer->GetGI().SetMesh(mesh);
-        renderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"Debug_AlphaPS.cso"));
-        yunuGI::Color color{ 1,0,0,0.1 };
-        renderer->GetGI().GetMaterial()->SetColor(color);
-    }
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(mesh);
+		renderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"Debug_AlphaPS.cso"));
+		yunuGI::Color color{ 1,0,0,0.1 };
+		renderer->GetGI().GetMaterial()->SetColor(color);
+	}
 
-    {
-        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
-        auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-        renderer->GetGI().SetMesh(mesh2);
-    }
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(mesh2);
+	}*/
 }
 
 void application::contents::ContentsLayer::SetInputControl(bool control)
@@ -409,7 +409,7 @@ void application::contents::ContentsLayer::Initialize()
         directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
         directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
         auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-        auto color = yunuGI::Color{ 1,1,1,1.f };
+        auto color = yunuGI::Color{ 0.3,0.3,0.3,1.f };
         light->GetGI().SetLightDiffuseColor(color);
 
         editor::MapFileManager::GetSingletonInstance().LoadStaticOrnaments("TestOrnaments.punreal");

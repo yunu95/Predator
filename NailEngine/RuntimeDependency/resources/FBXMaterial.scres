@@ -6831,7 +6831,7 @@
                         "materialName": "M_Leaves",
                         "normalMap": "",
                         "opacityMap": "FBX/SM_Bush_001/SM_Bush_001.fbm/T_Leaf_Opacity.png",
-                        "ps": "DefaultPS.cso",
+                        "ps": "LeavesPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
                         "temp11Map": "",
@@ -6844,7 +6844,7 @@
                         "temp7Map": "",
                         "temp8Map": "",
                         "temp9Map": "",
-                        "vs": "DefaultVS.cso"
+                        "vs": "LeavesVS.cso"
                     }
                 ],
                 "meshName": "SM_Bush_001",
@@ -6908,8 +6908,8 @@
         },
         "child": [
             {
-                "AmbientExposure": 0.20000000298023224,
-                "DiffuseExposure": 5.300000190734863,
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
                         "x": 3.3525338172912598,
