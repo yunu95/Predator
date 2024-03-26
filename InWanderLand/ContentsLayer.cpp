@@ -21,6 +21,7 @@
 #include "UIManager.h"
 #include "PlayerController.h"
 #include "TacticModeSystem.h"
+#include "SingletonInstanceContainer.h"
 
 #include <algorithm>
 #include <string>
@@ -539,6 +540,7 @@ void application::contents::ContentsLayer::Finalize()
 
 void application::contents::ContentsLayer::PlayContents()
 {
+	SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
 	/// Editor 에서 수정하여 Map Data 에 저장할 부분
@@ -625,8 +627,7 @@ void application::contents::ContentsLayer::ClearPlaytimeObject()
 	}
 	objectCreatedByEditorVector.clear();
 
-    PlayerController::SingleInstance().ProhibitCreateInstance();
-    PlayerController::SingleInstance().InitInstance();
+    SingletonInstanceContainer::SingleInstance().ClearLazySingletonInstances();
 }
 
 void application::contents::ContentsLayer::RegisterToEditorObjectVector(GameObject* p_obj)
