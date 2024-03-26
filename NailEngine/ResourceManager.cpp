@@ -392,7 +392,7 @@ void ResourceManager::CreateAnimation(const std::vector<AnimationClip>& animatio
 			{
 				std::shared_ptr<AnimationGroup> animationGroup = std::make_shared<AnimationGroup>();
 				animationGroup->SetFBXName(fbxName);
-			
+
 				std::static_pointer_cast<Animation>(animation)->SetAnimationIndex(animationGroup->GetAnimationVec().size());
 				animationGroup->GetAnimationVec().emplace_back(std::static_pointer_cast<Animation>(animation));
 				this->animationGroupMap.insert({ fbxName, animationGroup });
@@ -400,11 +400,7 @@ void ResourceManager::CreateAnimation(const std::vector<AnimationClip>& animatio
 		}
 	}
 
-	//auto iter = this->animationGroupMap.find(fbxName);
-	//if (iter == this->animationGroupMap.end())
-	//{
-		this->animationGroupMap[fbxName]->CreateTexture();
-	//}
+	this->animationGroupMap[fbxName]->CreateTexture();
 }
 
 std::shared_ptr<yunuGI::IMaterial> ResourceManager::GetMaterial(const std::wstring& materialName)
