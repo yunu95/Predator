@@ -36,10 +36,14 @@ namespace application
             /// 실제 패널에 그리는 영역
             if (pm.GetCurrentPalette() && pm.GetCurrentPalette()->AreThereAnyObjectSelected())
             {
-                ImGui_DrawTransform();
+                int idx = 0;
+                ImGui_DrawTransform(idx);
+                imgui::draw::Underline();
+                imgui::ShiftCursorY(10);
+                ImGui_DrawTemplateData(idx);
                 imgui::draw::Underline();
                 imgui::ShiftCursorY(20);
-                ImGui_DrawTemplateData();
+                ImGui_DrawRestPOD(idx);
             }
 
             ImGui::End();
@@ -55,10 +59,9 @@ namespace application
 
         }
 
-        void InspectorPanel::ImGui_DrawTransform()
+        void InspectorPanel::ImGui_DrawTransform(int& idx)
         {
             auto& selections = pm.GetCurrentPalette()->GetSelections();
-            int idx = 0;
             if (imgui::BeginSection_1Col(idx, "TransForm", ImGui::GetContentRegionAvail().x))
             {
                 ImGui::TableNextRow();
@@ -506,11 +509,10 @@ namespace application
             }
         }
 
-        void InspectorPanel::ImGui_DrawTemplateData()
+        void InspectorPanel::ImGui_DrawTemplateData(int& idx)
         {
             auto& tdm = TemplateDataManager::GetSingletonInstance();
             auto& selections = pm.GetCurrentPalette()->GetSelections();
-            int idx = 0;
             if (imgui::BeginSection_1Col(idx, "Template", ImGui::GetContentRegionAvail().x))
             {
                 ImGui::TableNextRow();
@@ -642,6 +644,57 @@ namespace application
                     ImGui::EndCombo();
                 }
                 ImGui::PopItemWidth();
+
+                imgui::EndSection();
+            }
+        }
+
+        void InspectorPanel::ImGui_DrawRestPOD(int& idx)
+        {
+            auto& selections = pm.GetCurrentPalette()->GetSelections();
+            if (imgui::BeginSection_2Col(idx, "Rest POD Data", ImGui::GetContentRegionAvail().x))
+            {
+                ImGui::TableNextRow();
+                ImGui::TableSetColumnIndex(0);
+
+                if (selections.size() == 1)
+                {
+                    auto type = TemplateDataManager::GetSingletonInstance().GetDataType((*selections.begin())->GetTemplateData());
+                    switch (type)
+                    {
+                        case application::editor::DataType::TerrainData:
+                        {
+                            break;
+                        }
+                        case application::editor::DataType::UnitData:
+                        {
+                            DrawRestPOD<POD_Unit>(static_cast<UnitData*>(*selections.begin())->pod);
+                            break;
+                        }
+                        case application::editor::DataType::OrnamentData:
+                        {
+                            break;
+                        }
+                        case application::editor::DataType::RegionData:
+                        {
+                            break;
+                        }
+                        case application::editor::DataType::WaveData:
+                        {
+                            break;
+                        }
+                        case application::editor::DataType::CameraData:
+                        {
+                            break;
+                        }
+                        case application::editor::DataType::LightData:
+                        {
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                }
 
                 imgui::EndSection();
             }

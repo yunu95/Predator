@@ -4,7 +4,6 @@
 #include "YunutyEngine.h"
 #include "ShakyCam.h"
 #include "RTSCam.h"   
-#include "DebugTilePlane.h"
 #include "DebugBeacon.h"
 #include "DebugMeshes.h"
 #include "Application.h"
@@ -26,6 +25,8 @@
 #include <algorithm>
 #include <string>
 #include <filesystem>
+#include "WanderUtils.h"
+
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -341,64 +342,65 @@ void application::contents::ContentsLayer::Initialize()
     //auto roamingCam = camObj->AddComponent<RTSCam>();
     //roamingCam->SetCameraMain();
 
-    const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+    wanderUtils::LoadResourcesRecursively();
+    //const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	resourceManager->LoadFile("FBXMaterial.scres");
+    //resourceManager->LoadFile("FBXMaterial.scres");
 
-    resourceManager->LoadFile("LeavesVS.cso");
-    resourceManager->LoadFile("LeavesPS.cso");
-    resourceManager->LoadFile("Stage_1_FloorPS.cso");
+    //resourceManager->LoadFile("LeavesVS.cso");
+    //resourceManager->LoadFile("LeavesPS.cso");
+    //resourceManager->LoadFile("Stage_1_FloorPS.cso");
 
-    resourceManager->LoadFile("Texture/VertexColor/T_Dirt_ARM.png");
-    resourceManager->LoadFile("Texture/VertexColor/T_Dirt_BaseColor.png");
-    resourceManager->LoadFile("Texture/VertexColor/T_Dirt_Normal.png");
+    //resourceManager->LoadFile("Texture/VertexColor/T_Dirt_ARM.png");
+    //resourceManager->LoadFile("Texture/VertexColor/T_Dirt_BaseColor.png");
+    //resourceManager->LoadFile("Texture/VertexColor/T_Dirt_Normal.png");
 
-    resourceManager->LoadFile("Texture/VertexColor/T_Grass_ARM.png");
-    resourceManager->LoadFile("Texture/VertexColor/T_Grass_BaseColor.png");
-    resourceManager->LoadFile("Texture/VertexColor/T_Grass_Normal.png");
+    //resourceManager->LoadFile("Texture/VertexColor/T_Grass_ARM.png");
+    //resourceManager->LoadFile("Texture/VertexColor/T_Grass_BaseColor.png");
+    //resourceManager->LoadFile("Texture/VertexColor/T_Grass_Normal.png");
 
-    resourceManager->LoadFile("Texture/VertexColor/T_GrassBlend_ARM.png");
-    resourceManager->LoadFile("Texture/VertexColor/T_GrassBlend_BaseColor.png");
-    resourceManager->LoadFile("Texture/VertexColor/T_GrassBlend_Normal.png");
+    //resourceManager->LoadFile("Texture/VertexColor/T_GrassBlend_ARM.png");
+    //resourceManager->LoadFile("Texture/VertexColor/T_GrassBlend_BaseColor.png");
+    //resourceManager->LoadFile("Texture/VertexColor/T_GrassBlend_Normal.png");
 
-    resourceManager->LoadFile("Texture/VertexColor/T_Tile_ARM.png");
-    resourceManager->LoadFile("Texture/VertexColor/T_Tile_BaseColor.png");
-    resourceManager->LoadFile("Texture/VertexColor/T_Tile_Normal.png");
+    //resourceManager->LoadFile("Texture/VertexColor/T_Tile_ARM.png");
+    //resourceManager->LoadFile("Texture/VertexColor/T_Tile_BaseColor.png");
+    //resourceManager->LoadFile("Texture/VertexColor/T_Tile_Normal.png");
 
-    resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_ARM.png");
-    resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_BaseColor.png");
-    resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_Normal.png");
+    //resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_ARM.png");
+    //resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_BaseColor.png");
+    //resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_Normal.png");
 
-    resourceManager->LoadFile("FBX/SM_VertexColor");
-    resourceManager->LoadFile("FBX/SKM_Monster1");
-    resourceManager->LoadFile("FBX/SKM_Monster2");
-    resourceManager->LoadFile("FBX/SKM_Robin");
-    resourceManager->LoadFile("FBX/SM_Bush_001");
-    resourceManager->LoadFile("FBX/SM_Bush_002");
-    resourceManager->LoadFile("FBX/SM_Trunk_001");
-    resourceManager->LoadFile("FBX/SM_CastleWall");
-    resourceManager->LoadFile("FBX/SM_CastleWall_Door");
-    resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
-    resourceManager->LoadFile("FBX/SM_Chair");
-    resourceManager->LoadFile("FBX/SM_CupTower");
-    resourceManager->LoadFile("FBX/SM_Fork");
-    resourceManager->LoadFile("FBX/SM_GuideBook");
-    resourceManager->LoadFile("FBX/SM_Hat01");
-    resourceManager->LoadFile("FBX/SM_Hat02");
-    resourceManager->LoadFile("FBX/SM_SmallBush_001");
-    resourceManager->LoadFile("FBX/SM_Stone_001");
-    resourceManager->LoadFile("FBX/SM_Stone_002");
-    resourceManager->LoadFile("FBX/SM_Stump");
-    resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
-    resourceManager->LoadFile("FBX/SM_Temple_Books");
-    resourceManager->LoadFile("FBX/SM_Temple_Floor");
-    resourceManager->LoadFile("FBX/SM_Temple_Pillar");
-    resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
-    resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
-    resourceManager->LoadFile("FBX/SM_Mushroom01");
-    resourceManager->LoadFile("FBX/SM_Mushroom02");
-    resourceManager->LoadFile("FBX/SM_Temple_Welcome");
-    resourceManager->LoadFile("FBX/SM_Stage1_Floor");
+    //resourceManager->LoadFile("FBX/SM_VertexColor");
+    //resourceManager->LoadFile("FBX/SKM_Monster1");
+    //resourceManager->LoadFile("FBX/SKM_Monster2");
+    //resourceManager->LoadFile("FBX/SKM_Robin");
+    //resourceManager->LoadFile("FBX/SM_Bush_001");
+    //resourceManager->LoadFile("FBX/SM_Bush_002");
+    //resourceManager->LoadFile("FBX/SM_Trunk_001");
+    //resourceManager->LoadFile("FBX/SM_CastleWall");
+    //resourceManager->LoadFile("FBX/SM_CastleWall_Door");
+    //resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
+    //resourceManager->LoadFile("FBX/SM_Chair");
+    //resourceManager->LoadFile("FBX/SM_CupTower");
+    //resourceManager->LoadFile("FBX/SM_Fork");
+    //resourceManager->LoadFile("FBX/SM_GuideBook");
+    //resourceManager->LoadFile("FBX/SM_Hat01");
+    //resourceManager->LoadFile("FBX/SM_Hat02");
+    //resourceManager->LoadFile("FBX/SM_SmallBush_001");
+    //resourceManager->LoadFile("FBX/SM_Stone_001");
+    //resourceManager->LoadFile("FBX/SM_Stone_002");
+    //resourceManager->LoadFile("FBX/SM_Stump");
+    //resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
+    //resourceManager->LoadFile("FBX/SM_Temple_Books");
+    //resourceManager->LoadFile("FBX/SM_Temple_Floor");
+    //resourceManager->LoadFile("FBX/SM_Temple_Pillar");
+    //resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
+    //resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
+    //resourceManager->LoadFile("FBX/SM_Mushroom01");
+    //resourceManager->LoadFile("FBX/SM_Mushroom02");
+    //resourceManager->LoadFile("FBX/SM_Temple_Welcome");
+    //resourceManager->LoadFile("FBX/SM_Stage1_Floor");
 
 #ifndef EDITOR
 #ifdef GRAPHICS_TEST
@@ -428,19 +430,19 @@ void application::contents::ContentsLayer::Initialize()
 		//camObj->AddComponent<Dotween>();
 		//RegisterToEditorObjectVector(camObj);
 
-		//auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		//directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
-		//directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
-		//auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+        //auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        //directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
+        //directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
+        //auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 
         auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-		auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
-		auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		RegisterToEditorObjectVector(mouseCursorObject);
-		auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		mouseCursorMesh->GetGI().SetMesh(sphereMesh);
-		mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
+        auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
+        auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        RegisterToEditorObjectVector(mouseCursorObject);
+        auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+        mouseCursorMesh->GetGI().SetMesh(sphereMesh);
+        mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
 
         /*WarriorProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 0.0f));;
         MagicianProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 2.0f));;
@@ -449,12 +451,12 @@ void application::contents::ContentsLayer::Initialize()
         auto skillPreviewCubeMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
         AttachDebugMesh(skillPreviewCubeMeshObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
         SkillPreviewSystem::Instance().SetPathPreviewObject(skillPreviewCubeMeshObject);
-		RegisterToEditorObjectVector(skillPreviewCubeMeshObject);
+        RegisterToEditorObjectVector(skillPreviewCubeMeshObject);
 
         auto skillPreviewSphereMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
         AttachDebugMesh(skillPreviewSphereMeshObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
         SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
-		RegisterToEditorObjectVector(skillPreviewSphereMeshObject);
+        RegisterToEditorObjectVector(skillPreviewSphereMeshObject);
 
         //camComp->groundHoveringClickCallback = [=](Vector3d pos)
         //    {
@@ -543,48 +545,48 @@ void application::contents::ContentsLayer::PlayContents()
 	SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
-	/// Editor 에서 수정하여 Map Data 에 저장할 부분
+    /// Editor 에서 수정하여 Map Data 에 저장할 부분
 
     /// 카메라의 경우 CameraData 의 ApplyInstancesAsPlaytimeObjects 에서 처리함
-	//auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//auto camComp = camObj->AddComponent<RTSCam>();
-	//camObj->GetTransform()->SetLocalPosition({ 0,25,0 });
-	//camObj->AddComponent<Dotween>();
-	//RegisterToEditorObjectVector(camObj);
+    //auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    //auto camComp = camObj->AddComponent<RTSCam>();
+    //camObj->GetTransform()->SetLocalPosition({ 0,25,0 });
+    //camObj->AddComponent<Dotween>();
+    //RegisterToEditorObjectVector(camObj);
 
-	//auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+    //auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	//auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
-	//auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//RegisterToEditorObjectVector(mouseCursorObject);
-	//auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	//mouseCursorMesh->GetGI().SetMesh(sphereMesh);
-	//mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
+    //auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
+    //auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    //RegisterToEditorObjectVector(mouseCursorObject);
+    //auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+    //mouseCursorMesh->GetGI().SetMesh(sphereMesh);
+    //mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
 
-	/*WarriorProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 0.0f));;
-	MagicianProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 2.0f));;
-	HealerProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, -2.0f));*/
+    /*WarriorProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 0.0f));;
+    MagicianProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 2.0f));;
+    HealerProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, -2.0f));*/
 
-	auto skillPreviewCubeMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	AttachDebugMesh(skillPreviewCubeMeshObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
-	SkillPreviewSystem::Instance().SetPathPreviewObject(skillPreviewCubeMeshObject);
-	RegisterToEditorObjectVector(skillPreviewCubeMeshObject);
+    auto skillPreviewCubeMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    AttachDebugMesh(skillPreviewCubeMeshObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
+    SkillPreviewSystem::Instance().SetPathPreviewObject(skillPreviewCubeMeshObject);
+    RegisterToEditorObjectVector(skillPreviewCubeMeshObject);
 
-	auto skillPreviewSphereMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	AttachDebugMesh(skillPreviewSphereMeshObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
-	SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
-	RegisterToEditorObjectVector(skillPreviewSphereMeshObject);
+    auto skillPreviewSphereMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    AttachDebugMesh(skillPreviewSphereMeshObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
+    SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
+    RegisterToEditorObjectVector(skillPreviewSphereMeshObject);
 
-	//camComp->groundHoveringClickCallback = [=](Vector3d pos)
-	//	{
-	//		mouseCursorObject->GetTransform()->SetWorldPosition(pos);
-	//		SkillPreviewSystem::Instance().SetCurrentMousPosition(pos);
-	//	};
+    //camComp->groundHoveringClickCallback = [=](Vector3d pos)
+    //	{
+    //		mouseCursorObject->GetTransform()->SetWorldPosition(pos);
+    //		SkillPreviewSystem::Instance().SetCurrentMousPosition(pos);
+    //	};
 
-	InputManager::Instance();
-	UIManager::Instance();
-	//PlayerController::SingleInstance().SetMovingSystemComponent(camComp);
-	//TacticModeSystem::SingleInstance().SetMovingSystemComponent(camComp);
+    InputManager::Instance();
+    UIManager::Instance();
+    //PlayerController::SingleInstance().SetMovingSystemComponent(camComp);
+    //TacticModeSystem::SingleInstance().SetMovingSystemComponent(camComp);
 }
 
 void application::contents::ContentsLayer::PauseContents()
