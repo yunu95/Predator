@@ -15,28 +15,28 @@ void InputManager::Update()
 			isPlayerSelected = true;
 			SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 		}
-		if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_2))
-		{
-			PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Magician);
-			currentSelectedSerialNumber = SelectedSerialNumber::Two;
-			isPlayerSelected = true;
-			SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-		}
-		if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_3))
-		{
-			PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Healer);
-			currentSelectedSerialNumber = SelectedSerialNumber::Three;
-			isPlayerSelected = true;
-			SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-		}
+		//if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_2))
+		//{
+		//	PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Magician);
+		//	currentSelectedSerialNumber = SelectedSerialNumber::Two;
+		//	isPlayerSelected = true;
+		//	SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+		//}
+		//if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_3))
+		//{
+		//	PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Healer);
+		//	currentSelectedSerialNumber = SelectedSerialNumber::Three;
+		//	isPlayerSelected = true;
+		//	SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+		//}
 
-		if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_4))
-		{
-			PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::AllPlayers);
-			currentSelectedSerialNumber = SelectedSerialNumber::All;
-			isPlayerSelected = true;
-			SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-		}
+		//if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_4))
+		//{
+		//	PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::AllPlayers);
+		//	currentSelectedSerialNumber = SelectedSerialNumber::All;
+		//	isPlayerSelected = true;
+		//	SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+		//}
 
 		if (isPlayerSelected)
 		{

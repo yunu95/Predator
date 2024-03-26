@@ -13,6 +13,7 @@
 #include "SkillPreviewSystem.h"
 #include "PlayerController.h"
 #include "TacticModeSystem.h"
+#include "PlayTimeRegionManager.h"
 
 namespace application
 {
@@ -120,7 +121,7 @@ namespace application
 
 			auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 			auto camComp = camObj->AddComponent<RTSCam>();
-			camObj->AddComponent<Dotween>();
+			PlayTimeRegionManager::Instance().SetCameraDotween(camObj->AddComponent<Dotween>());
 
 			camObj->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
 			camObj->GetTransform()->SetWorldRotation({ pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z });

@@ -36,7 +36,6 @@ protected:
 	int m_currentIndex = 0;
 	float m_previousDelay;
 
-
 	std::queue<std::pair<Vector3d, float>> m_waveDelayQueue;
 
 	std::string m_unitFbxName;
