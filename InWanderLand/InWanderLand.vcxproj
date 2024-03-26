@@ -999,8 +999,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="EditorCameraManager.h" />
     <ClInclude Include="EnemyAutoAttackProjectile.h" />
     <ClInclude Include="EnemyAutoAttackProjectilePool.h" />
+    <ClInclude Include="GameObjectContainer.h" />
     <ClInclude Include="GCTemplate.h" />
     <ClInclude Include="GlobalConstant.h" />
+    <ClInclude Include="LazySingletonClass.h" />
     <ClInclude Include="LightBrush.h" />
     <ClInclude Include="LightData.h" />
     <ClInclude Include="LightEditorInstance.h" />
@@ -1015,10 +1017,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="HealerAutoAttackProjectilePool.h" />
     <ClInclude Include="HealerSkillSystem.h" />
     <ClInclude Include="imgui_ModuleData.h" />
+    <ClInclude Include="PlayTimeRegionManager.h" />
     <ClInclude Include="PlaytimeWave.h" />
     <ClInclude Include="PaletteBrushManager.h" />
     <ClInclude Include="RangedEnemyProductor.h" />
     <ClInclude Include="SaveStaticOrnamentsCommnad.h" />
+    <ClInclude Include="SingletonInstanceContainer.h" />
     <ClInclude Include="SingletonUpdate.h" />
     <ClInclude Include="SpecialEffectTrigger.h" />
     <ClInclude Include="SpecialEvent.h" />
@@ -1146,6 +1150,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="SpecialEffect.h" />
+    <ClInclude Include="UnitProductorSelector.h" />
     <ClInclude Include="Unit_TemplateData.h" />
     <ClInclude Include="UUID.h" />
     <ClInclude Include="UUIDManager.h" />
@@ -1184,6 +1189,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="EnemyAutoAttackProjectile.cpp" />
     <ClCompile Include="FieldDamage.cpp" />
     <ClCompile Include="FileSystem.cpp" />
+    <ClCompile Include="GameObjectContainer.cpp" />
     <ClCompile Include="GlobalConstant.cpp" />
     <ClCompile Include="HealerAutoAttackProjectile.cpp" />
     <ClCompile Include="DebugGraphic.cpp" />
@@ -1213,8 +1219,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="MagicianAutoAttackProjectile.cpp" />
     <ClCompile Include="MagicianSkillSystem.cpp" />
     <ClCompile Include="MeleeAttackSystem.cpp" />
+    <ClCompile Include="PlayTimeRegionManager.cpp" />
     <ClCompile Include="PlaytimeWave.cpp" />
     <ClCompile Include="RangedEnemyProductor.cpp" />
+    <ClCompile Include="SingletonInstanceContainer.cpp" />
     <ClCompile Include="SpecialEffectTrigger.cpp" />
     <ClCompile Include="TauntingComponent.cpp" />
     <ClCompile Include="OrnamentEditorInstance.cpp" />
@@ -1313,6 +1321,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UnitEditorInstance.cpp" />
     <ClCompile Include="UnitPalette.cpp" />
     <ClCompile Include="SpecialEffect.cpp" />
+    <ClCompile Include="UnitProductorSelector.cpp" />
     <ClCompile Include="Unit_TemplateData.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObj.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObjImgui.cpp" />

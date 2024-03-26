@@ -1,5 +1,10 @@
 #include "SkillPreviewSystem.h"
 
+SkillPreviewSystem::~SkillPreviewSystem()
+{
+
+}
+
 void SkillPreviewSystem::Update()
 {
 	if (isActivated)

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cfloat>
 
+#include "Material.h"
 #include "Animation.h"
 
 #include "ResourceManager.h"
@@ -14,7 +15,6 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 {
 	this->texturePath = std::filesystem::path(filePath).parent_path().wstring()
 		+ L"/" + std::filesystem::path(filePath).stem().wstring() + L".fbm/";
-
 
 	// Assimp Importer 객체 생성
 	Assimp::Importer importer;
@@ -60,14 +60,11 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 		k++;
 	}
 
-
 	FillVertexBoneIndexAndWeight(scene, scene->mRootNode, fbxNode);
 
 	ResourceManager::Instance.Get().PushFBXBoneInfo(std::filesystem::path(filePath).stem().wstring(), this->boneInfoMap);
 
 	ResourceManager::Instance.Get().PushFBXNode(std::filesystem::path(filePath).stem().wstring(), fbxNode);
-
-
 
 	if (scene->HasAnimations())
 	{
@@ -224,6 +221,8 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 	// Material Name
 	fbxMeshData.material.materialName = aiStringToWString(material->GetName());
 
+	auto materialPtr = ResourceManager::Instance.Get().GetMaterial(fbxMeshData.material.materialName);
+
 	// Albedo Texture
 	if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0)
 	{
@@ -234,7 +233,14 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 			std::filesystem::path pathName(_path);
 			std::wstring fileName = pathName.filename().wstring();
 
-			fbxMeshData.material.albedoMap = this->texturePath + fileName;
+			if (materialPtr)
+			{
+				fbxMeshData.material.albedoMap = std::static_pointer_cast<Material>(materialPtr)->GetTexture(yunuGI::Texture_Type::ALBEDO)->GetName();
+			}
+			else
+			{
+				fbxMeshData.material.albedoMap = this->texturePath + fileName;
+			}
 		}
 	}
 
@@ -248,7 +254,14 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 			std::filesystem::path pathName(_path);
 			std::wstring fileName = pathName.filename().wstring();
 
-			fbxMeshData.material.normalMap = this->texturePath + fileName;
+			if (materialPtr)
+			{
+				fbxMeshData.material.normalMap = std::static_pointer_cast<Material>(materialPtr)->GetTexture(yunuGI::Texture_Type::NORMAL)->GetName();
+			}
+			else
+			{
+				fbxMeshData.material.normalMap = this->texturePath + fileName;
+			}
 		}
 	}
 
@@ -262,7 +275,15 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 			std::filesystem::path pathName(_path);
 			std::wstring fileName = pathName.filename().wstring();
 
-			fbxMeshData.material.armMap = this->texturePath + fileName;
+
+			if (materialPtr)
+			{
+				fbxMeshData.material.armMap = std::static_pointer_cast<Material>(materialPtr)->GetTexture(yunuGI::Texture_Type::ARM)->GetName();
+			}
+			else
+			{
+				fbxMeshData.material.armMap = this->texturePath + fileName;
+			}
 		}
 	}
 
@@ -276,7 +297,14 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 			std::filesystem::path pathName(_path);
 			std::wstring fileName = pathName.filename().wstring();
 
-			fbxMeshData.material.emissionMap = this->texturePath + fileName;
+			if (materialPtr)
+			{
+				fbxMeshData.material.emissionMap = std::static_pointer_cast<Material>(materialPtr)->GetTexture(yunuGI::Texture_Type::EMISSION)->GetName();
+			}
+			else
+			{
+				fbxMeshData.material.emissionMap = this->texturePath + fileName;
+			}
 		}
 	}
 
@@ -290,7 +318,14 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 			std::filesystem::path pathName(_path);
 			std::wstring fileName = pathName.filename().wstring();
 
-			fbxMeshData.material.opacityMap = this->texturePath + fileName;
+			if (materialPtr)
+			{
+				fbxMeshData.material.opacityMap = std::static_pointer_cast<Material>(materialPtr)->GetTexture(yunuGI::Texture_Type::OPACITY)->GetName();
+			}
+			else
+			{
+				fbxMeshData.material.opacityMap = this->texturePath + fileName;
+			}
 		}
 	}
 }

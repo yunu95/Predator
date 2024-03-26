@@ -3,6 +3,8 @@
 #include "RegionData.h"
 #include "SpecialEvent.h"
 #include "PlayerController.h"
+#include "SingleNavigationField.h"
+#include "PlayTimeRegionManager.h"
 
 PlaytimeRegion::~PlaytimeRegion()
 {
@@ -11,19 +13,6 @@ PlaytimeRegion::~PlaytimeRegion()
 
 void PlaytimeRegion::Start()
 {
-	if (static_cast<SpecialEventType>(regionData->pod.specialEvent) == SpecialEventType::Stage2StartRegion)
-	{
-		stage2StartPosition = Vector3d(regionData->pod.x, 0, regionData->pod.z);
-	}
-
-	stage1ToStage2Function = [=]()
-		{
-			for (auto e : PlayerController::SingleInstance().GetPlayerMap())
-			{
-				e.second->GetTransform()->SetWorldPosition({ stage2StartPosition });
-			}
-			//PlayerController::SingleInstance().GetPlayerMap();
-		};
 }
 
 //void PlaytimeRegion::SetRegionName(std::wstring p_name)
@@ -44,7 +33,7 @@ void PlaytimeRegion::OnTriggerEnter(physics::Collider* collider)
 		switch (static_cast<SpecialEventType>(regionData->pod.specialEvent))
 		{
 			case SpecialEventType::Stage1To2Transition :
-				stage1ToStage2Function();
+				PlayTimeRegionManager::Instance().stage1ToStage2Function();
 				break;
 		}
 		// 가려야 하는 장식물들을 가리는 부분

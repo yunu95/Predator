@@ -36,6 +36,7 @@ namespace application
 			list.clear();
 			mould = nullptr;
 		}
+
 		void InstanceManager::ApplyInstancesAsPlaytimeObjects()
 		{
 			for (auto& each : list)

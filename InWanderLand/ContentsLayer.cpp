@@ -21,6 +21,7 @@
 #include "UIManager.h"
 #include "PlayerController.h"
 #include "TacticModeSystem.h"
+#include "SingletonInstanceContainer.h"
 
 #include <algorithm>
 #include <string>
@@ -420,8 +421,9 @@ void application::contents::ContentsLayer::Initialize()
         yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 
 		/// Editor 에서 수정하여 Map Data 에 저장할 부분
-		//auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		//auto camComp = camObj->AddComponent<RTSCam>();
+		/*auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto camComp = camObj->AddComponent<graphics::Camera>();
+		camComp->SetCameraMain();*/
 		//camObj->GetTransform()->SetLocalPosition({ 0,25,0 });
 		//camObj->AddComponent<Dotween>();
 		//RegisterToEditorObjectVector(camObj);
@@ -513,7 +515,6 @@ void application::contents::ContentsLayer::Initialize()
             }
         }*/
         //assert(mapFound && "there is no map to load in current directory!");
-
         editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
         editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
@@ -539,6 +540,7 @@ void application::contents::ContentsLayer::Finalize()
 
 void application::contents::ContentsLayer::PlayContents()
 {
+	SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
 	/// Editor 에서 수정하여 Map Data 에 저장할 부분
@@ -598,6 +600,7 @@ void application::contents::ContentsLayer::ResumeContents()
 void application::contents::ContentsLayer::StopContents()
 {
     Time::SetTimeScale(1);
+    isStoppedOnce = true;
     ClearPlaytimeObject();
 }
 
@@ -618,13 +621,17 @@ void application::contents::ContentsLayer::ClearPlaytimeObject()
 	/// 생성된 모든 게임 플레이 오브젝트 삭제
 	for (auto e : objectCreatedByEditorVector)
 	{
-		e->SetSelfActive(false);
+  //      if (e->getName() == "")
+		//e->SetSelfActive(false);
 		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(e);
 	}
 	objectCreatedByEditorVector.clear();
+
+    SingletonInstanceContainer::SingleInstance().ClearLazySingletonInstances();
 }
 
 void application::contents::ContentsLayer::RegisterToEditorObjectVector(GameObject* p_obj)
 {
     objectCreatedByEditorVector.push_back(p_obj);
 }
+

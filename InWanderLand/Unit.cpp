@@ -65,8 +65,14 @@ void Unit::Start()
 	unitFSM.transitions[UnitState::Attack].push_back({ UnitState::Move,
 		[this]() { return currentOrder == UnitState::Move; } });
 
-	unitFSM.transitions[UnitState::Skill].push_back({ UnitState::Idle,
+	for (int i = static_cast<int>(UnitState::Move); i < static_cast<int>(UnitState::Death); i++)
+	{
+		unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::Idle,
 		[this]() { return currentOrder == UnitState::Idle; } });
+	}
+
+	//unitFSM.transitions[UnitState::Skill].push_back({ UnitState::Idle,
+	//	[this]() { return currentOrder == UnitState::Idle; } });
 
 	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Skill); i++)
 	{
@@ -803,7 +809,7 @@ void Unit::MakeUnitParalysisState()
 	currentOrder = UnitState::Paralysis;
 }
 
-void Unit::MakeUnitParalysisEnd()
+void Unit::MakeUnitStateIdle()
 {
 	currentOrder = UnitState::Idle;
 }

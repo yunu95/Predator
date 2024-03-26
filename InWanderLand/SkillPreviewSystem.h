@@ -36,6 +36,8 @@ private:
 	double previousDegree = 0.0f;
 
 public:
+	~SkillPreviewSystem();
+
 	void Update();
 
 	void SetPathPreviewObjectRotation();

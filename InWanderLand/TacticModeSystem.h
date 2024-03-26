@@ -2,7 +2,9 @@
 #include "YunutyEngine.h"
 #include "InputManager.h"
 #include "Unit.h"
+#include "LazySingletonClass.h"
 #include <unordered_map>
+
 /// <summary>
 /// 전술모드 시스템.
 /// 활성화 시 TimeScale(0.0f), queue에 스킬 등록.
@@ -13,7 +15,7 @@
 
 class RTSCam;
 
-class TacticModeSystem : public SingletonClass<TacticModeSystem>
+class TacticModeSystem : public GHContents::LazySingletonClass<TacticModeSystem>
 {
 public:
 	TacticModeSystem();

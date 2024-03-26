@@ -6,11 +6,12 @@
 #include "DebuggingMesh.h"
 #include "ContentsLayer.h"
 #include "Application.h"
+#include "LazySingletonClass.h"
 
 /// <summary>
 /// 유닛이 현재 어떤 공격을 받고 있는지, 어떤 상태이상이 적용 중인지를 알려주는 컴포넌트.
 /// </summary>
-class DebuggingMeshPool : public GameObjectPool<DebuggingMesh>, public SingletonClass<DebuggingMeshPool>
+class DebuggingMeshPool : public GameObjectPool<DebuggingMesh>, public GHContents::LazySingletonClass<DebuggingMeshPool>
 {
 	virtual void ObjectInitializer(DebuggingMesh* comp) override
 	{
