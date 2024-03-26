@@ -527,16 +527,9 @@ std::shared_ptr<AnimationGroup> ResourceManager::GetAnimationGroup(const std::ws
 	return this->animationGroupMap.find(modelName)->second;
 }
 
-void ResourceManager::SaveFBXData()
+void ResourceManager::SaveFBXData(std::filesystem::path path)
 {
-	std::filesystem::path current_path = std::filesystem::current_path();
-
-	current_path = current_path.parent_path();
-	current_path = current_path.parent_path();
-	current_path = current_path.parent_path();
-	current_path += L"//NailEngine//RuntimeDependency//resources//FBXMaterial.scres";
-
-	std::ofstream file(current_path);
+	std::ofstream file(path);
 
 	//if (file.is_open())
 	//{
@@ -683,16 +676,9 @@ void ResourceManager::SaveFBXChildData(const yunuGI::FBXData* data, nlohmann::js
 	//file << L"}" << std::endl;
 }
 
-void ResourceManager::LoadFBXData()
+void ResourceManager::LoadFBXData(std::filesystem::path path)
 {
-	std::filesystem::path current_path = std::filesystem::current_path();
-
-	current_path = current_path.parent_path();
-	current_path = current_path.parent_path();
-	current_path = current_path.parent_path();
-	current_path += L"//NailEngine//RuntimeDependency//resources//FBXMaterial.scres";
-
-	std::ifstream file(current_path);
+	std::ifstream file(path);
 
 	if (!file.is_open())
 	{

@@ -168,7 +168,7 @@ namespace application
 			}
 
 			directionalLight = light;
-			directionalLight->GetPaletteInstance()->HideEditorInstance();
+			directionalLight->GetPaletteInstance()->SetActive(false);
 
 			if (lightGizmo == nullptr)
 			{

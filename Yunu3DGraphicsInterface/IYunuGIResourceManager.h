@@ -7,6 +7,8 @@
 
 #include "FBXData.h"
 
+#include <filesystem>
+
 // 리소스 매니저는 텍스처, 메시와 같은 그래픽스 리소스들을 명시적으로 불러오거나 할당해제하고 싶을 때 사용한다.
 namespace yunuGI
 {
@@ -42,8 +44,8 @@ namespace yunuGI
         virtual std::vector<std::wstring>& GetFBXList()const = 0;
         virtual std::unordered_map<std::wstring, yunuGI::FBXData*>& GetFBXDataMap()const = 0;
 
-        virtual void SaveFBXData()const =0;
-        virtual void LoadFBXData()const =0;
+        virtual void SaveFBXData(std::filesystem::path path)const =0;
+        virtual void LoadFBXData(std::filesystem::path path)const =0;
     };
 }
 
