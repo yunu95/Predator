@@ -24,7 +24,6 @@
 #include "Application.h"
 #include "FileSystem.h"
 
-
 bool editorInputControl = true;
 
 namespace application
@@ -223,7 +222,7 @@ namespace application
             for (auto each : InstanceManager::GetSingletonInstance().GetList())
             {
                 auto ptr = each->GetPaletteInstance();
-                if (ptr)
+                if (ptr && !dynamic_cast<palette::LightEditorInstance*>(ptr))
                 {
                     ptr->ShowEditorInstance();
                 }
