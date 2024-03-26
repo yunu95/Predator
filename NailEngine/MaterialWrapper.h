@@ -85,6 +85,14 @@ public:
 			return variation->GetPixelShader();
 	}
 
+	virtual const yunuGI::IShader* GetVertexShader() const override
+	{
+		return nullptr;
+	};
+	virtual yunuGI::ITexture* GetTexture(yunuGI::Texture_Type textureType) override
+	{
+		return nullptr;
+	};
 	Material* GetMaterial()
 	{
 		if (usingOriginal)

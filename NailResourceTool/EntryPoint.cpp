@@ -14,11 +14,13 @@
 #include <unordered_map>
 #include <locale>
 #include <codecvt>
+#include <filesystem>
 
 bool g_fbxLoad = false;
 bool g_useIBL = true;
 std::unordered_map<std::wstring, yunuGI::FBXData*> g_fbxMap;
 yunuGI::FBXData* g_selectFBX = nullptr;
+yunuGI::FBXData* g_prevFBX = nullptr;
 yunutyEngine::GameObject* g_selectGameObject = nullptr;
 // Data
 static ID3D11Device* g_pd3dDevice = nullptr;
@@ -61,12 +63,22 @@ void CreateComboByTexture(std::string comboName, std::wstring& textureName, std:
 void CreateComboByShader(std::string comboName, std::wstring& shaderName, std::vector<yunuGI::IShader*>& shaderList);
 
 void ApplyMaterial(yunuGI::MaterialData& data, yunuGI::IMaterial* material);
+void ApplyFirstMaterial(yunuGI::MaterialData& data, yunuGI::IMaterial* material);
 
 
 void SaveFBXMaterial();
 void LoadFBXMaterial();
 
 void ImGuiUpdate();
+void DrawMenuBar();
+
+void InputUpdate();
+
+std::filesystem::path SaveFileDialog(const char* filter = ".\0*.*\0", const char* initialDir = "");
+std::filesystem::path LoadFileDialog(const char* filter = "All\0*.*\0", const char* initialDir = "");
+std::vector<std::filesystem::path> GetSubdirectories(const std::filesystem::path& directoryPath = "");
+
+std::filesystem::path currentPath = "";
 
 bool isRunning = true;
 
@@ -359,8 +371,6 @@ void CreateMyWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cm
 	// 윈도우를 화면에 표시
 	ShowWindow(g_hwnd, SW_SHOWDEFAULT);
 	UpdateWindow(g_hwnd);
-
-
 }
 
 void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show)
@@ -375,11 +385,23 @@ void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_
 
 void FBXLoad()
 {
+	if (g_selectFBX)
+	{
+		if (g_selectGameObject)
+		{
+			Scene::getCurrentScene()->DestroyGameObject(g_selectGameObject);
+		}
+	}
+	g_selectFBX = nullptr;
+	g_selectGameObject = nullptr;
+
 	LoadFBXMaterial();
 
 	g_fbxLoad = true;
 
+	// 재귀적으로 모든 FBX 로드하기
 	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
 	resourceManager->LoadFile("LeavesVS.cso");
 	resourceManager->LoadFile("LeavesPS.cso");
 	resourceManager->LoadFile("Stage_1_FloorPS.cso");
@@ -404,36 +426,11 @@ void FBXLoad()
 	resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_BaseColor.png");
 	resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_Normal.png");
 
-	resourceManager->LoadFile("FBX/SM_VertexColor");
-	resourceManager->LoadFile("FBX/SKM_Monster1");
-	resourceManager->LoadFile("FBX/SKM_Monster2");
-	resourceManager->LoadFile("FBX/SKM_Robin");
-	resourceManager->LoadFile("FBX/SM_Bush_001");
-	resourceManager->LoadFile("FBX/SM_Bush_002");
-	resourceManager->LoadFile("FBX/SM_Trunk_001");
-	resourceManager->LoadFile("FBX/SM_CastleWall");
-	resourceManager->LoadFile("FBX/SM_CastleWall_Door");
-	resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
-	resourceManager->LoadFile("FBX/SM_Chair");
-	resourceManager->LoadFile("FBX/SM_CupTower");
-	resourceManager->LoadFile("FBX/SM_Fork");
-	resourceManager->LoadFile("FBX/SM_GuideBook");
-	resourceManager->LoadFile("FBX/SM_Hat01");
-	resourceManager->LoadFile("FBX/SM_Hat02");
-	resourceManager->LoadFile("FBX/SM_SmallBush_001");
-	resourceManager->LoadFile("FBX/SM_Stone_001");
-	resourceManager->LoadFile("FBX/SM_Stone_002");
-	resourceManager->LoadFile("FBX/SM_Stump");
-	resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
-	resourceManager->LoadFile("FBX/SM_Temple_Books");
-	resourceManager->LoadFile("FBX/SM_Temple_Floor");
-	resourceManager->LoadFile("FBX/SM_Temple_Pillar");
-	resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
-	resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
-	resourceManager->LoadFile("FBX/SM_Mushroom01");
-	resourceManager->LoadFile("FBX/SM_Mushroom02");
-	resourceManager->LoadFile("FBX/SM_Temple_Welcome");
-	resourceManager->LoadFile("FBX/SM_Stage1_Floor");
+	auto directorList = GetSubdirectories("FBX");
+	for (auto each : directorList)
+	{
+		resourceManager->LoadFile(("FBX/" + each.string()).c_str());
+	}
 
 	g_fbxMap = resourceManager->GetFBXDataMap();
 
@@ -502,7 +499,7 @@ void ShowSeleteFBXInfo()
 		g_selectGameObject = Scene::getCurrentScene()->AddGameObjectFromFBX(str);
 
 		ImGui::Text("DiffuseExposure :");
-		ImGui::DragFloat("##DiffuseExposure", &g_selectFBX->diffuseExposure, 0.1f,0.0, 10.0);
+		ImGui::DragFloat("##DiffuseExposure", &g_selectFBX->diffuseExposure, 0.1f, 0.0, 10.0);
 
 		//ImGui::InputFloat("DiffuseExposure", &g_selectFBX->diffuseExposure);
 		ImGui::Text("AmbientExposure :");
@@ -511,6 +508,13 @@ void ShowSeleteFBXInfo()
 		int materialIndex = 0;
 		for (auto& each : g_selectFBX->materialVec)
 		{
+			if (g_selectFBX != g_prevFBX)
+			{
+				// 맨 처음 한 번은 머터리얼 값 적용
+				ApplyFirstMaterial(each, resourceManager->GetMaterial(g_selectFBX->materialVec[materialIndex].materialName));
+			}
+
+
 			ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "MaterialName : %ls", each.materialName.c_str());
 
 			/// Texture
@@ -601,12 +605,12 @@ void ShowSeleteFBXInfo()
 			if (g_selectFBX->hasAnimation)
 			{
 				auto renderer = g_selectGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
-				ApplyMaterial(each, renderer->GetGI().GetMaterial(materialIndex));
+				ApplyMaterial(each, resourceManager->GetMaterial(g_selectFBX->materialVec[materialIndex].materialName));
 			}
 			else
 			{
 				auto renderer = g_selectGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-				ApplyMaterial(each, renderer->GetGI().GetMaterial(materialIndex));
+				ApplyMaterial(each, resourceManager->GetMaterial(g_selectFBX->materialVec[materialIndex].materialName));
 			}
 
 			materialIndex++;
@@ -614,6 +618,8 @@ void ShowSeleteFBXInfo()
 
 		resourceManager->GetMesh(g_selectFBX->meshName)->SetDiffuseExposure(g_selectFBX->diffuseExposure);
 		resourceManager->GetMesh(g_selectFBX->meshName)->SetAmbientExposure(g_selectFBX->ambientExposure);
+
+		g_prevFBX = g_selectFBX;
 	}
 }
 
@@ -631,6 +637,14 @@ void CreateComboByTexture(std::string comboName, std::wstring& textureName, std:
 
 		ImGui::EndCombo();
 	}
+
+	ImGui::SameLine();
+	ImGui::PushID(comboName.c_str());
+	if (ImGui::Button("Reset"))
+	{
+		textureName = L"";
+	}
+	ImGui::PopID();
 }
 
 void CreateComboByShader(std::string comboName, std::wstring& shaderName, std::vector<yunuGI::IShader*>& shaderList)
@@ -731,16 +745,270 @@ void ApplyMaterial(yunuGI::MaterialData& data, yunuGI::IMaterial* material)
 	}
 }
 
-void SaveFBXMaterial()
+
+
+void ApplyFirstMaterial(yunuGI::MaterialData& data, yunuGI::IMaterial* material)
 {
 	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-	resourceManager->SaveFBXData();
+
+	data.vs = material->GetVertexShader()->GetName();
+	data.ps = material->GetPixelShader()->GetName();
+
+	material->SetVertexShader(resourceManager->GetShader(data.vs));
+	material->SetPixelShader(resourceManager->GetShader(data.ps));
+
+	if (!data.albedoMap.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::ALBEDO);
+		if (texture)
+		{
+			if (texture->GetName() != data.albedoMap)
+			{
+				data.albedoMap = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::ALBEDO, texture);
+		}
+	}
+	if (!data.normalMap.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::NORMAL);
+		if (texture)
+		{
+			if (texture->GetName() != data.normalMap)
+			{
+				data.normalMap = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::NORMAL, texture);
+		}
+	}
+	if (!data.armMap.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::ARM);
+		if (texture)
+		{
+			if (texture->GetName() != data.armMap)
+			{
+				data.armMap = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::ARM, texture);
+		}
+	}
+	if (!data.emissionMap.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::EMISSION);
+		if (texture)
+		{
+			if (texture->GetName() != data.emissionMap)
+			{
+				data.emissionMap = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::EMISSION, texture);
+		}
+	}
+	if (!data.heightMap.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::HEIGHT);
+		if (texture)
+		{
+			if (texture->GetName() != data.heightMap)
+			{
+				data.heightMap = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::HEIGHT, texture);
+		}
+	}
+	if (!data.opacityMap.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::OPACITY);
+		if (texture)
+		{
+			if (texture->GetName() != data.opacityMap)
+			{
+				data.opacityMap = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::OPACITY, texture);
+		}
+	}
+	if (!data.temp0Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp0);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp0Map)
+			{
+				data.temp0Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp0, texture);
+		}
+	}
+	if (!data.temp1Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp1);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp1Map)
+			{
+				data.temp1Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp1, texture);
+		}
+	}
+	if (!data.temp2Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp2);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp2Map)
+			{
+				data.temp2Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp2, texture);
+		}
+	}
+	if (!data.temp3Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp3);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp3Map)
+			{
+				data.temp3Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp3, texture);
+		}
+	}
+	if (!data.temp4Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp4);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp4Map)
+			{
+				data.temp4Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp4, texture);
+		}
+	}
+	if (!data.temp5Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp5);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp5Map)
+			{
+				data.temp5Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp5, texture);
+		}
+	}
+	if (!data.temp6Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp6);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp6Map)
+			{
+				data.temp6Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp6, texture);
+		}
+	}
+	if (!data.temp7Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp7);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp7Map)
+			{
+				data.temp7Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp7, texture);
+		}
+	}
+	if (!data.temp8Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp8);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp8Map)
+			{
+				data.temp8Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp8, texture);
+		}
+	}
+	if (!data.temp9Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp9);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp9Map)
+			{
+				data.temp9Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp9, texture);
+		}
+	}
+	if (!data.temp10Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp10);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp10Map)
+			{
+				data.temp10Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp10, texture);
+		}
+	}
+	if (!data.temp11Map.empty())
+	{
+		auto texture = material->GetTexture(yunuGI::Texture_Type::Temp11);
+		if (texture)
+		{
+			if (texture->GetName() != data.temp11Map)
+			{
+				data.temp11Map = texture->GetName();
+			}
+
+			material->SetTexture(yunuGI::Texture_Type::Temp11, texture);
+		}
+	}
+}
+
+void SaveFBXMaterial()
+{
+	std::filesystem::path path = SaveFileDialog("Resource File (*.scres)\0*.scres\0");
+
+	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	resourceManager->SaveFBXData(path);
 }
 
 void LoadFBXMaterial()
 {
+	std::filesystem::path path = LoadFileDialog("Resource File (*.scres)\0*.scres\0");
+
 	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-	resourceManager->LoadFBXData();
+	resourceManager->LoadFBXData(path);
+
+	currentPath = path;
 }
 
 void ImGuiUpdate()
@@ -780,34 +1048,14 @@ void ImGuiUpdate()
 		ImGui::SetNextWindowSize(dockspaceArea);
 		ImGui::SetNextWindowPos(dockspaceStartPoint);
 
+		InputUpdate();
+
 		ImGui::Begin("DockSpace", nullptr, window_flags);
 
 		// Dockspace
 		ImGui::DockSpace(ImGui::GetID("MyDockspace"));
 
-		{
-			ImGui::Begin("Buttons");                          // Create a window called "Hello, world!" and append into it.
-
-			// 바꾼 머터리얼을 저장하는 버튼
-			if (ImGui::Button("SaveButton"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-			{
-				SaveFBXMaterial();
-			}
-
-			// FBX를 로드하는 버튼
-			if (ImGui::Button("FBXLoadButton"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-			{
-				FBXLoad();
-			}
-
-			// IBL을 껐다 켰다하는 토글
-			if (ImGui::Checkbox("UseIBL", &g_useIBL))
-			{
-				yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(g_useIBL);
-			}
-			
-			ImGui::End();
-		}
+		DrawMenuBar();
 
 		{
 			ImGui::Begin("FBXList");
@@ -874,4 +1122,145 @@ void ImGuiUpdate()
 
 	//g_EditorpSwapChain->Present(1, 0); // Present with vsync
 	g_pSwapChain->Present(0, 0); // Present without vsync
+}
+
+void DrawMenuBar()
+{
+	ImGui::BeginMenuBar();
+
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2());
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
+	if (ImGui::Button("Load"))
+	{
+		FBXLoad();
+	}
+	if (ImGui::Button("Save As"))
+	{
+		SaveFBXMaterial();
+	}
+	if (ImGui::Button("Save"))
+	{
+		if (!currentPath.empty())
+		{
+			const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+			resourceManager->SaveFBXData(currentPath);
+		}
+	}
+	ImGui::Text(" | Use IBL : ");
+	if (ImGui::Checkbox("##Use IBL", &g_useIBL))
+	{
+		yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(g_useIBL);
+	}
+
+	if (!currentPath.empty())
+	{
+		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(currentPath.string().c_str()).x - 10);
+		ImGui::Text(currentPath.string().c_str());
+	}
+
+	ImGui::PopStyleVar();
+	ImGui::PopStyleColor();
+	ImGui::EndMenuBar();
+}
+
+std::filesystem::path SaveFileDialog(const char* filter, const char* initialDir)
+{
+	OPENFILENAMEA ofn;       // common dialog box structure
+	CHAR szFile[260] = { 0 };       // if using TCHAR macros
+
+	// Initialize OPENFILENAME
+	ZeroMemory(&ofn, sizeof(OPENFILENAME));
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = g_Toolhwnd;
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = filter;
+	ofn.nFilterIndex = 1;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+
+	if (initialDir != "")
+	{
+		ofn.lpstrInitialDir = initialDir;
+	}
+
+	if (GetSaveFileNameA(&ofn) == TRUE)
+	{
+		std::string fp = ofn.lpstrFile;
+		std::replace(fp.begin(), fp.end(), '\\', '/');
+		return std::filesystem::path(fp);
+	}
+
+	return std::filesystem::path();
+}
+
+std::filesystem::path LoadFileDialog(const char* filter, const char* initialDir)
+{
+	OPENFILENAMEA ofn;       // common dialog box structure
+	CHAR szFile[260] = { 0 };       // if using TCHAR macros
+
+	// Initialize OPENFILENAME
+	ZeroMemory(&ofn, sizeof(OPENFILENAME));
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = g_Toolhwnd;
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = filter;
+	ofn.nFilterIndex = 1;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+
+	if (initialDir != "")
+	{
+		ofn.lpstrInitialDir = initialDir;
+	}
+
+	if (GetOpenFileNameA(&ofn) == TRUE)
+	{
+		std::string fp = ofn.lpstrFile;
+		std::replace(fp.begin(), fp.end(), '\\', '/');
+		return std::filesystem::path(fp);
+	}
+
+	return std::filesystem::path();
+}
+
+std::vector<std::filesystem::path> GetSubdirectories(const std::filesystem::path& directoryPath)
+{
+	std::vector<std::filesystem::path> subdirectories;
+	WIN32_FIND_DATAA findData;
+	HANDLE hFind = FindFirstFileA((directoryPath.string() + "\\*").c_str(), &findData);
+	if (hFind != INVALID_HANDLE_VALUE)
+	{
+		do
+		{
+			if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+			{
+				if (strcmp(findData.cFileName, ".") != 0 && strcmp(findData.cFileName, "..") != 0)
+				{
+					subdirectories.push_back(findData.cFileName);
+				}
+			}
+		} while (FindNextFileA(hFind, &findData));
+		FindClose(hFind);
+	}
+
+	return subdirectories;
+}
+
+void InputUpdate()
+{
+	if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
+	{
+		if (ImGui::IsKeyPressed(ImGuiKey_S, false))
+		{
+			if (!currentPath.empty())
+			{
+				const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+				resourceManager->SaveFBXData(currentPath);
+			}
+			else
+			{
+				SaveFBXMaterial();
+			}
+		}
+	}
 }

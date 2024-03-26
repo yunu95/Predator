@@ -16,19 +16,24 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 void SnippetInitializerBillboardSpriteAnim()
 {
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+    auto rsrc = graphics::Renderer::SingleInstance().GetResourceManager();
     wanderUtils::LoadResourcesRecursively();
     auto gameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    auto gameObject2 = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    auto staticMesh2 = gameObject2->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+    staticMesh2->GetGI().SetMesh(rsrc->GetMesh(L"Cube"));
+    gameObject2->GetTransform()->SetLocalPosition({ 0,4,0 });
     auto anim = gameObject->AddComponent<SpriteAnimation>();
 
     anim->SetSprites(L"Texture/fire_forward");
     auto billboard = gameObject->AddComponent<yunutyEngine::Billboard>();
+    auto billboard2 = gameObject2->AddComponent<yunutyEngine::Billboard>();
     auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<graphics::DirectionalLight>();
     directionalLight->GetTransform()->SetWorldRotation(Quaternion({ 100,10,0 }));
 
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<tests::GraphicsTestCam>();
 
     camObj->GetTransform()->SetWorldPosition({ 0,0,-15 });
-
 }
 
 namespace snippets

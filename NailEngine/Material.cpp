@@ -67,6 +67,16 @@ const yunuGI::IShader* Material::GetPixelShader() const
 	return this->ps.get();
 }
 
+const yunuGI::IShader* Material::GetVertexShader() const
+{
+	return this->vs.get();
+}
+
+yunuGI::ITexture* Material::GetTexture(yunuGI::Texture_Type textureType)
+{
+	return textures[static_cast<int>(textureType)].get();
+}
+
 Material::~Material()
 {
 }

@@ -112,20 +112,30 @@ namespace application
             // 타입을 확장하여 유닛 생성 로직에서 같이 처리할 수 있게 만들 수 있다.
             //UnitClassifier::SingleInstance().SendPODToClassifier(pod);
             pod.waveData->pod.waveUnitUUIDS;
+			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
             /// 2024.03.20 추가
             // 이제 templateData에서 UnitType에 대한 int값을 가져올 수 있다.
             // 이 값을 통해 타입을 분류해 유닛을 배치해보자.
 			if (pod.waveData == nullptr)
 			{
-				if (!isSelectorInitialized)
-				{
+                if (!isSelectorInitialized)
+                {
 					productorSelector.push_back(&HealerProductor::Instance());
 					productorSelector.push_back(&WarriorProductor::Instance());
 					productorSelector.push_back(&MagicianProductor::Instance());
 					productorSelector.push_back(&MeleeEnemyProductor::Instance());
 					productorSelector.push_back(&RangedEnemyProductor::Instance());
-					isSelectorInitialized = true;
-				}
+                    isSelectorInitialized = true;
+                }
+
+                if (contentsLayer->isStoppedOnce && isSelectorInitialized)
+                {
+                    for (auto e : productorSelector)
+                    {
+                        e->SetUnitData();
+                    }
+                    contentsLayer->isStoppedOnce = false;
+                }
 
 				UnitProductor* currentSelectedProductor{ nullptr };
 
@@ -142,7 +152,6 @@ namespace application
 
 				Vector3d startPosition = Vector3d(pod.position.x, pod.position.y, pod.position.z);
 
-				application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
 				contentsLayer->RegisterToEditorObjectVector(currentSelectedProductor->CreateUnit(startPosition)->GetGameObject());
 
 			}

@@ -164,6 +164,12 @@ void RenderSystem::Render()
 	utilBuffer.useIBL = NailEngine::Instance.Get().GetUseIBL();
 	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::UTIL))->PushGraphicsData(&utilBuffer, sizeof(UtilBuffer), static_cast<int>(CB_TYPE::UTIL));
 
+
+	FogBuffer fogBuffer;
+	fogBuffer.start = 15.f;
+	fogBuffer.end = 1000.f;
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::FOG))->PushGraphicsData(&fogBuffer, sizeof(FogBuffer), static_cast<int>(CB_TYPE::FOG));
+
 	PushCameraData();
 	PushLightData();
 
@@ -209,10 +215,7 @@ void RenderSystem::RenderObject()
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
 	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->OMSetRenderTarget();
 
-	FogBuffer fogBuffer;
-	fogBuffer.start = 15.f;
-	fogBuffer.end = 1000.f;
-	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::FOG))->PushGraphicsData(&fogBuffer, sizeof(FogBuffer), static_cast<int>(CB_TYPE::FOG));
+	
 
 	MatrixBuffer matrixBuffer;
 	//matrixBuffer.WTM = e.wtm;

@@ -7,6 +7,7 @@
 #include "PlaytimeRegion.h"
 #include "OrnamentData.h"
 #include "Application.h"
+#include "PlayTimeRegionManager.h"
 #include "ContentsLayer.h"
 
 namespace application
@@ -72,6 +73,7 @@ namespace application
 
 		void RegionData::ApplyAsPlaytimeObject()
 		{
+            PlayTimeRegionManager::Instance().AddRegionData(this);
             auto regionGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
             playtimeRegion = regionGameObject->AddComponent<PlaytimeRegion>();
             playtimeRegion->regionData = this;

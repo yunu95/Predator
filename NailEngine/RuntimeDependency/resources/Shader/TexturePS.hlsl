@@ -14,7 +14,9 @@ struct PixelIn
 
 float4 main(PixelIn input) : SV_TARGET
 {
-    return Temp0Map.Sample(sam, input.uv);
+    float4 color = Temp0Map.Sample(sam, input.uv);
+    clip(color.w - 1);
+    return color;
 }
 
 // ShaderInfo

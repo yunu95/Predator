@@ -5,8 +5,9 @@
 #include "StaticMeshRenderer.h"
 #include "ContentsLayer.h"
 #include "Application.h"
+#include "LazySingletonClass.h"
 
-class AutoAttackProjectilePool : public GameObjectPool<AutoAttackProjectile>, public SingletonClass<AutoAttackProjectilePool>
+class AutoAttackProjectilePool : public GameObjectPool<AutoAttackProjectile>, public GHContents::LazySingletonClass<AutoAttackProjectilePool>
 {	
 public:
 	virtual void ObjectInitializer(AutoAttackProjectile* projectile) override 

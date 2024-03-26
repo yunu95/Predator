@@ -35,7 +35,7 @@ namespace yunuGIAdapter
 			}
 			if (ext == L".scres")
 			{
-				ResourceManager::Instance.Get().LoadFBXData();
+				ResourceManager::Instance.Get().LoadFBXData(filePath);
 			}
 			else if (parentFolderName == "FBX")
 			{
@@ -154,14 +154,14 @@ namespace yunuGIAdapter
 			return ResourceManager::Instance.Get().GetFBXDataMap();
 		};
 
-		virtual void SaveFBXData()const override
+		virtual void SaveFBXData(std::filesystem::path path)const override
 		{
-			ResourceManager::Instance.Get().SaveFBXData();
+			ResourceManager::Instance.Get().SaveFBXData(path);
 		};
 
-		virtual void LoadFBXData()const override
+		virtual void LoadFBXData(std::filesystem::path path)const override
 		{
-			ResourceManager::Instance.Get().LoadFBXData();
+			ResourceManager::Instance.Get().LoadFBXData(path);
 		};
 	};
 }

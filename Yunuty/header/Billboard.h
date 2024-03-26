@@ -10,6 +10,13 @@ namespace yunutyEngine
         {
             if (auto cam = graphics::Camera::GetMainCamera())
             {
+                //static Quaternion newQuat{};
+                //static Vector3d newEuler{};
+                //newEuler.y += 10 * Time::GetDeltaTime();
+                //auto currRot = GetTransform()->GetWorldRotation();
+                //newQuat = Quaternion( newEuler );
+                ////newQuat = cam->GetTransform()->GetWorldRotation();
+                //GetTransform()->SetWorldRotation(newQuat);
                 GetTransform()->SetWorldRotation(cam->GetTransform()->GetWorldRotation());
             }
         }

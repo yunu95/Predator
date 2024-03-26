@@ -90,7 +90,7 @@ namespace application
             palette::UnitEditorInstance* unitInstance{ nullptr };
 
             std::vector<UnitProductor*> productorSelector;
-            bool isSelectorInitialized{ false };
+			bool isSelectorInitialized{ false };
 
             UnitData();
             UnitData(const std::string& name);

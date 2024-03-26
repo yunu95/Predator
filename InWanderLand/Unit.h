@@ -195,7 +195,6 @@ private:
 	
 	void CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation);
 
-	void StopMove();
 	
 	void ReportUnitDeath();												// this 유닛이 죽었다는 정보를 전달
 	void IdentifiedOpponentDeath(Unit* p_unit);		// 상대 유닛이 죽었을 경우 처리할 내용을 담은 함수
@@ -209,6 +208,7 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 
+	void StopMove();
 	UnitType GetUnitType() const;
 	UnitSide GetUnitSide() const;
 	void SetUnitType(UnitType type);
@@ -242,7 +242,7 @@ public:
 
 	void MakeUnitPushedState(bool p_isCrushed);
 	void MakeUnitParalysisState();
-	void MakeUnitParalysisEnd();
+	void MakeUnitStateIdle();
 
 	bool GetJustCrushedState() const;
 	bool IsUnitDead() const;

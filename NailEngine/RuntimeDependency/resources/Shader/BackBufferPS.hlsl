@@ -24,8 +24,8 @@ float4 main(PixelIn input) : SV_Target
     
     float fogFactor = saturate((fogEnd - (viewPos.z/ viewPos.w)) / (fogEnd - fogStart));
     float4 fogColor = fogFactor * color + (1 - fogFactor) * float4(0.7686, 0.8784, 0.9451,1.f);
-    //return fogColor;
-    return color;
+    return fogColor;
+    //return color;
 }
 
 // ShaderInfo

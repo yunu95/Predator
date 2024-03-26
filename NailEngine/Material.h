@@ -27,6 +27,8 @@ public:
 	virtual void SetColor(const yunuGI::Color& color) override;
 	virtual void SetInt(int index, int val) override;
 	virtual const yunuGI::IShader* GetPixelShader() const override;
+	virtual const yunuGI::IShader* GetVertexShader() const override;
+	virtual yunuGI::ITexture* GetTexture(yunuGI::Texture_Type textureType) override;
 
 public:
 	void PushGraphicsData();

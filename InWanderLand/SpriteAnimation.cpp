@@ -61,9 +61,13 @@ void SpriteAnimation::Update()
         elapsed += yunutyEngine::Time::GetDeltaTime();
         if (elapsed > spriteSheet->at(currentIdx).timeOffset)
         {
-            elapsed = 0;
-            currentIdx = (currentIdx + 1) % spriteSheet->size();
             GetGI().SetMaterial(0, spriteSheet->at(currentIdx).material);
+            currentIdx++;
+            if (currentIdx >= spriteSheet->size())
+            {
+                currentIdx = 0;
+                elapsed -= spriteSheet->rbegin()->timeOffset;
+            }
         }
     }
 }
