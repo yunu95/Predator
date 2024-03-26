@@ -106,8 +106,9 @@ namespace application
 			};
 
 			void ShowMessageBox(std::string title, const std::function<void()>& renderFunction, uint32_t width = 600, uint32_t height = 0);
-
+			void CloseMessageBox(std::string title);
 			void RenderMessageBoxes();
+			void RenderMessageBox(std::string title);
 
 			namespace draw
 			{
