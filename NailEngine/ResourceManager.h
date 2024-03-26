@@ -83,10 +83,10 @@ public:
 	std::shared_ptr<AnimationGroup> GetAnimationGroup(const std::wstring& modelName);
 	std::unordered_map<std::wstring, yunuGI::FBXData*>& GetFBXDataMap() { return fbxDataMap; }
 
-	void SaveFBXData();
+	void SaveFBXData(std::filesystem::path path);
 	void SaveFBXChildData(const yunuGI::FBXData* data, nlohmann::json& jsonData);
 
-	void LoadFBXData();
+	void LoadFBXData(std::filesystem::path path);
 	void LoadFBXData(const nlohmann::json& jsonData, yunuGI::FBXData* data);
 #pragma endregion
 

@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include <locale>
 #include <codecvt>
+#include <filesystem>
 
 bool g_fbxLoad = false;
 bool g_useIBL = true;
@@ -67,6 +68,15 @@ void SaveFBXMaterial();
 void LoadFBXMaterial();
 
 void ImGuiUpdate();
+void DrawMenuBar();
+
+void InputUpdate();
+
+std::filesystem::path SaveFileDialog(const char* filter = ".\0*.*\0", const char* initialDir = "");
+std::filesystem::path LoadFileDialog(const char* filter = "All\0*.*\0", const char* initialDir = "");
+std::vector<std::filesystem::path> GetSubdirectories(const std::filesystem::path& directoryPath = "");
+
+std::filesystem::path currentPath = "";
 
 bool isRunning = true;
 
@@ -81,81 +91,81 @@ int WINAPI main(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_li
 	CreateMyWindow(h_instance, h_prev_instance, lp_cmd_line, n_cmd_show);
 
 	yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [&]()
-	{
-		CreateToolWindow(h_instance, nullptr, lp_cmd_line, n_cmd_show);
-
-		// Setup Platform/Renderer backends
-		g_pd3dDevice = reinterpret_cast<ID3D11Device*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDevice());
-		g_pd3dDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDeviceContext());
-
-		// Initialize Direct3D
-		if (!CreateDeviceD3D(g_Toolhwnd))
 		{
-			CleanupDeviceD3D();
-			return 1;
-		}
+			CreateToolWindow(h_instance, nullptr, lp_cmd_line, n_cmd_show);
 
-		::ShowWindow(g_Toolhwnd, SW_SHOWDEFAULT);
-		::UpdateWindow(g_Toolhwnd);
+			// Setup Platform/Renderer backends
+			g_pd3dDevice = reinterpret_cast<ID3D11Device*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDevice());
+			g_pd3dDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDeviceContext());
 
-		// Setup Dear ImGui context
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
-		//io.ConfigViewportsNoAutoMerge = true;
-		//io.ConfigViewportsNoTaskBarIcon = true;
-		//io.ConfigViewportsNoDefaultParent = true;
-		//io.ConfigDockingAlwaysTabBar = true;
-		//io.ConfigDockingTransparentPayload = true;
-		//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: Experimental. THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
-		//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI: Experimental.
+			// Initialize Direct3D
+			if (!CreateDeviceD3D(g_Toolhwnd))
+			{
+				CleanupDeviceD3D();
+				return 1;
+			}
 
-		/// Custom 영역
-		// 타이틀 바를 컨트롤 할 때에만 움직임
-		io.ConfigWindowsMoveFromTitleBarOnly = true;
-		///
+			::ShowWindow(g_Toolhwnd, SW_SHOWDEFAULT);
+			::UpdateWindow(g_Toolhwnd);
 
-		// Setup Dear ImGui style
-		ImGui::StyleColorsDark();
-		//ImGui::StyleColorsLight();
+			// Setup Dear ImGui context
+			IMGUI_CHECKVERSION();
+			ImGui::CreateContext();
+			ImGuiIO& io = ImGui::GetIO(); (void)io;
+			io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+			io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+			io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+			//io.ConfigViewportsNoAutoMerge = true;
+			//io.ConfigViewportsNoTaskBarIcon = true;
+			//io.ConfigViewportsNoDefaultParent = true;
+			//io.ConfigDockingAlwaysTabBar = true;
+			//io.ConfigDockingTransparentPayload = true;
+			//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: Experimental. THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
+			//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI: Experimental.
 
-		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
-		ImGuiStyle& style = ImGui::GetStyle();
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			style.WindowRounding = 0.0f;
-			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-		}
+			/// Custom 영역
+			// 타이틀 바를 컨트롤 할 때에만 움직임
+			io.ConfigWindowsMoveFromTitleBarOnly = true;
+			///
 
-		// Setup Platform/Renderer backends
-		ImGui_ImplWin32_Init(g_Toolhwnd);
-		ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
+			// Setup Dear ImGui style
+			ImGui::StyleColorsDark();
+			//ImGui::StyleColorsLight();
 
-		// Load Fonts
-		// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-		// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-		// - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-		// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-		// - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
-		// - Read 'docs/FONTS.md' for more instructions and details.
-		// - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-		//io.Fonts->AddFontDefault();
-		//io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
-		//io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-		//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-		//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-		//ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
-		//IM_ASSERT(font != nullptr);
-	};
+			// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+			ImGuiStyle& style = ImGui::GetStyle();
+			if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+			{
+				style.WindowRounding = 0.0f;
+				style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+			}
+
+			// Setup Platform/Renderer backends
+			ImGui_ImplWin32_Init(g_Toolhwnd);
+			ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
+
+			// Load Fonts
+			// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+			// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+			// - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+			// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+			// - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
+			// - Read 'docs/FONTS.md' for more instructions and details.
+			// - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+			//io.Fonts->AddFontDefault();
+			//io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
+			//io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
+			//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
+			//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
+			//ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
+			//IM_ASSERT(font != nullptr);
+		};
 
 	yunutyEngine::YunutyCycle::SingleInstance().postUpdateAction = [&]() { ImGuiUpdate(); };
 	yunutyEngine::YunutyCycle::SingleInstance().postThreadAction = []()
-	{
-	};
+		{
+		};
 
 	yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
 	yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(1920, 1080);
@@ -359,8 +369,6 @@ void CreateMyWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cm
 	// 윈도우를 화면에 표시
 	ShowWindow(g_hwnd, SW_SHOWDEFAULT);
 	UpdateWindow(g_hwnd);
-
-
 }
 
 void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show)
@@ -375,11 +383,23 @@ void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_
 
 void FBXLoad()
 {
+	if (g_selectFBX)
+	{
+		if (g_selectGameObject)
+		{
+			Scene::getCurrentScene()->DestroyGameObject(g_selectGameObject);
+		}
+	}
+	g_selectFBX = nullptr;
+	g_selectGameObject = nullptr;
+
 	LoadFBXMaterial();
 
 	g_fbxLoad = true;
 
+	// 재귀적으로 모든 FBX 로드하기
 	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
 	resourceManager->LoadFile("LeavesVS.cso");
 	resourceManager->LoadFile("LeavesPS.cso");
 	resourceManager->LoadFile("Stage_1_FloorPS.cso");
@@ -404,36 +424,11 @@ void FBXLoad()
 	resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_BaseColor.png");
 	resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_Normal.png");
 
-	resourceManager->LoadFile("FBX/SM_VertexColor");
-	resourceManager->LoadFile("FBX/SKM_Monster1");
-	resourceManager->LoadFile("FBX/SKM_Monster2");
-	resourceManager->LoadFile("FBX/SKM_Robin");
-	resourceManager->LoadFile("FBX/SM_Bush_001");
-	resourceManager->LoadFile("FBX/SM_Bush_002");
-	resourceManager->LoadFile("FBX/SM_Trunk_001");
-	resourceManager->LoadFile("FBX/SM_CastleWall");
-	resourceManager->LoadFile("FBX/SM_CastleWall_Door");
-	resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
-	resourceManager->LoadFile("FBX/SM_Chair");
-	resourceManager->LoadFile("FBX/SM_CupTower");
-	resourceManager->LoadFile("FBX/SM_Fork");
-	resourceManager->LoadFile("FBX/SM_GuideBook");
-	resourceManager->LoadFile("FBX/SM_Hat01");
-	resourceManager->LoadFile("FBX/SM_Hat02");
-	resourceManager->LoadFile("FBX/SM_SmallBush_001");
-	resourceManager->LoadFile("FBX/SM_Stone_001");
-	resourceManager->LoadFile("FBX/SM_Stone_002");
-	resourceManager->LoadFile("FBX/SM_Stump");
-	resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
-	resourceManager->LoadFile("FBX/SM_Temple_Books");
-	resourceManager->LoadFile("FBX/SM_Temple_Floor");
-	resourceManager->LoadFile("FBX/SM_Temple_Pillar");
-	resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
-	resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
-	resourceManager->LoadFile("FBX/SM_Mushroom01");
-	resourceManager->LoadFile("FBX/SM_Mushroom02");
-	resourceManager->LoadFile("FBX/SM_Temple_Welcome");
-	resourceManager->LoadFile("FBX/SM_Stage1_Floor");
+	auto directorList = GetSubdirectories("FBX");
+	for (auto each : directorList)
+	{
+		resourceManager->LoadFile(("FBX/" + each.string()).c_str());
+	}
 
 	g_fbxMap = resourceManager->GetFBXDataMap();
 
@@ -502,7 +497,7 @@ void ShowSeleteFBXInfo()
 		g_selectGameObject = Scene::getCurrentScene()->AddGameObjectFromFBX(str);
 
 		ImGui::Text("DiffuseExposure :");
-		ImGui::DragFloat("##DiffuseExposure", &g_selectFBX->diffuseExposure, 0.1f,0.0, 10.0);
+		ImGui::DragFloat("##DiffuseExposure", &g_selectFBX->diffuseExposure, 0.1f, 0.0, 10.0);
 
 		//ImGui::InputFloat("DiffuseExposure", &g_selectFBX->diffuseExposure);
 		ImGui::Text("AmbientExposure :");
@@ -601,12 +596,12 @@ void ShowSeleteFBXInfo()
 			if (g_selectFBX->hasAnimation)
 			{
 				auto renderer = g_selectGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
-				ApplyMaterial(each, renderer->GetGI().GetMaterial(materialIndex));
+				ApplyMaterial(each, resourceManager->GetMaterial(g_selectFBX->materialVec[materialIndex].materialName));
 			}
 			else
 			{
 				auto renderer = g_selectGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-				ApplyMaterial(each, renderer->GetGI().GetMaterial(materialIndex));
+				ApplyMaterial(each, resourceManager->GetMaterial(g_selectFBX->materialVec[materialIndex].materialName));
 			}
 
 			materialIndex++;
@@ -631,6 +626,14 @@ void CreateComboByTexture(std::string comboName, std::wstring& textureName, std:
 
 		ImGui::EndCombo();
 	}
+
+	ImGui::SameLine();
+	ImGui::PushID(comboName.c_str());
+	if (ImGui::Button("Reset"))
+	{
+		textureName = L"";
+	}
+	ImGui::PopID();
 }
 
 void CreateComboByShader(std::string comboName, std::wstring& shaderName, std::vector<yunuGI::IShader*>& shaderList)
@@ -733,14 +736,20 @@ void ApplyMaterial(yunuGI::MaterialData& data, yunuGI::IMaterial* material)
 
 void SaveFBXMaterial()
 {
+	std::filesystem::path path = SaveFileDialog("Resource File (*.scres)\0*.scres\0");
+
 	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-	resourceManager->SaveFBXData();
+	resourceManager->SaveFBXData(path);
 }
 
 void LoadFBXMaterial()
 {
+	std::filesystem::path path = LoadFileDialog("Resource File (*.scres)\0*.scres\0");
+
 	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-	resourceManager->LoadFBXData();
+	resourceManager->LoadFBXData(path);
+
+	currentPath = path;
 }
 
 void ImGuiUpdate()
@@ -780,34 +789,14 @@ void ImGuiUpdate()
 		ImGui::SetNextWindowSize(dockspaceArea);
 		ImGui::SetNextWindowPos(dockspaceStartPoint);
 
+		InputUpdate();
+
 		ImGui::Begin("DockSpace", nullptr, window_flags);
 
 		// Dockspace
 		ImGui::DockSpace(ImGui::GetID("MyDockspace"));
 
-		{
-			ImGui::Begin("Buttons");                          // Create a window called "Hello, world!" and append into it.
-
-			// 바꾼 머터리얼을 저장하는 버튼
-			if (ImGui::Button("SaveButton"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-			{
-				SaveFBXMaterial();
-			}
-
-			// FBX를 로드하는 버튼
-			if (ImGui::Button("FBXLoadButton"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-			{
-				FBXLoad();
-			}
-
-			// IBL을 껐다 켰다하는 토글
-			if (ImGui::Checkbox("UseIBL", &g_useIBL))
-			{
-				yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(g_useIBL);
-			}
-			
-			ImGui::End();
-		}
+		DrawMenuBar();
 
 		{
 			ImGui::Begin("FBXList");
@@ -874,4 +863,145 @@ void ImGuiUpdate()
 
 	//g_EditorpSwapChain->Present(1, 0); // Present with vsync
 	g_pSwapChain->Present(0, 0); // Present without vsync
+}
+
+void DrawMenuBar()
+{
+	ImGui::BeginMenuBar();
+
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2());
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
+	if (ImGui::Button("Load"))
+	{
+		FBXLoad();
+	}
+	if (ImGui::Button("Save As"))
+	{
+		SaveFBXMaterial();
+	}
+	if (ImGui::Button("Save"))
+	{
+		if (!currentPath.empty())
+		{
+			const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+			resourceManager->SaveFBXData(currentPath);
+		}
+	}
+	ImGui::Text(" | Use IBL : ");
+	if (ImGui::Checkbox("##Use IBL", &g_useIBL))
+	{
+		yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(g_useIBL);
+	}
+
+	if (!currentPath.empty())
+	{
+		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(currentPath.string().c_str()).x - 10);
+		ImGui::Text(currentPath.string().c_str());
+	}
+
+	ImGui::PopStyleVar();
+	ImGui::PopStyleColor();
+	ImGui::EndMenuBar();
+}
+
+std::filesystem::path SaveFileDialog(const char* filter, const char* initialDir)
+{
+	OPENFILENAMEA ofn;       // common dialog box structure
+	CHAR szFile[260] = { 0 };       // if using TCHAR macros
+
+	// Initialize OPENFILENAME
+	ZeroMemory(&ofn, sizeof(OPENFILENAME));
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = g_Toolhwnd;
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = filter;
+	ofn.nFilterIndex = 1;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+
+	if (initialDir != "")
+	{
+		ofn.lpstrInitialDir = initialDir;
+	}
+
+	if (GetSaveFileNameA(&ofn) == TRUE)
+	{
+		std::string fp = ofn.lpstrFile;
+		std::replace(fp.begin(), fp.end(), '\\', '/');
+		return std::filesystem::path(fp);
+	}
+
+	return std::filesystem::path();
+}
+
+std::filesystem::path LoadFileDialog(const char* filter, const char* initialDir)
+{
+	OPENFILENAMEA ofn;       // common dialog box structure
+	CHAR szFile[260] = { 0 };       // if using TCHAR macros
+
+	// Initialize OPENFILENAME
+	ZeroMemory(&ofn, sizeof(OPENFILENAME));
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = g_Toolhwnd;
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = filter;
+	ofn.nFilterIndex = 1;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+
+	if (initialDir != "")
+	{
+		ofn.lpstrInitialDir = initialDir;
+	}
+
+	if (GetOpenFileNameA(&ofn) == TRUE)
+	{
+		std::string fp = ofn.lpstrFile;
+		std::replace(fp.begin(), fp.end(), '\\', '/');
+		return std::filesystem::path(fp);
+	}
+
+	return std::filesystem::path();
+}
+
+std::vector<std::filesystem::path> GetSubdirectories(const std::filesystem::path& directoryPath)
+{
+	std::vector<std::filesystem::path> subdirectories;
+	WIN32_FIND_DATAA findData;
+	HANDLE hFind = FindFirstFileA((directoryPath.string() + "\\*").c_str(), &findData);
+	if (hFind != INVALID_HANDLE_VALUE)
+	{
+		do
+		{
+			if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+			{
+				if (strcmp(findData.cFileName, ".") != 0 && strcmp(findData.cFileName, "..") != 0)
+				{
+					subdirectories.push_back(findData.cFileName);
+				}
+			}
+		} while (FindNextFileA(hFind, &findData));
+		FindClose(hFind);
+	}
+
+	return subdirectories;
+}
+
+void InputUpdate()
+{
+	if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
+	{
+		if (ImGui::IsKeyPressed(ImGuiKey_S, false))
+		{
+			if (!currentPath.empty())
+			{
+				const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+				resourceManager->SaveFBXData(currentPath);
+			}
+			else
+			{
+				SaveFBXMaterial();
+			}
+		}
+	}
 }

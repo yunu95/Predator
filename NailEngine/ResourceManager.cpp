@@ -49,32 +49,36 @@ void ResourceManager::CreateShader(const std::wstring& shaderPath)
 	std::wstring shaderType = shaderPath.substr(dotPos - 2, 2);
 	std::shared_ptr<yunuGI::IShader> shader = nullptr;
 
-	if (shaderType == L"VS")
-	{
-		shader = std::make_shared<VertexShader>();
-	}
-	else if (shaderType == L"PS")
-	{
-		shader = std::make_shared<PixelShader>();
-	}
-	else if (shaderType == L"GS")
-	{
-		shader = std::make_shared<GeometryShader>();
-	}
-
-
-	if (shader != nullptr)
-	{
-		std::static_pointer_cast<Shader>(shader)->CreateShader(shaderPath);
-	}
-
 	std::filesystem::path _shaderName(shaderPath);
 	std::wstring shaderName = _shaderName.filename().wstring();
 
-	shader->SetName(shaderName);
+	auto iter = shaderMap.find(shaderName);
+	if (iter == shaderMap.end())
+	{
+		if (shaderType == L"VS")
+		{
+			shader = std::make_shared<VertexShader>();
+		}
+		else if (shaderType == L"PS")
+		{
+			shader = std::make_shared<PixelShader>();
+		}
+		else if (shaderType == L"GS")
+		{
+			shader = std::make_shared<GeometryShader>();
+		}
 
-	shaderVec.emplace_back(shader.get());
-	shaderMap.insert({ shaderName , std::move(shader) });
+
+		if (shader != nullptr)
+		{
+			std::static_pointer_cast<Shader>(shader)->CreateShader(shaderPath);
+		}
+
+		shader->SetName(shaderName);
+
+		shaderVec.emplace_back(shader.get());
+		shaderMap.insert({ shaderName , std::move(shader) });
+	}
 }
 
 void ResourceManager::CreateMesh(const std::wstring& mesh)
@@ -288,13 +292,17 @@ yunuGI::IMaterial* ResourceManager::CloneMaterial(std::wstring materialName, yun
 
 void ResourceManager::CreateTexture(const std::wstring& texturePath)
 {
-	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+	auto iter = textureMap.find(texturePath);
+	if (iter == textureMap.end())
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 
-	texture->LoadTexture(texturePath);
-	texture->SetName(texturePath);
+		texture->LoadTexture(texturePath);
+		texture->SetName(texturePath);
 
-	textureMap.insert({ texturePath, texture });
-	textureVec.push_back(texture.get());
+		textureMap.insert({ texturePath, texture });
+		textureVec.push_back(texture.get());
+	}
 }
 
 std::shared_ptr<Texture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag, int arraySize, int sliceCount)
@@ -359,35 +367,44 @@ void ResourceManager::CreateAnimation(const std::vector<AnimationClip>& animatio
 {
 	for (int i = 0; i < animationClip.size(); ++i)
 	{
-		std::shared_ptr<yunuGI::IAnimation> animation = std::make_shared<Animation>();
+		auto iter = this->animationMap.find(animationClip[i].name);
 
-		animation->SetName(animationClip[i].name);
-		animation->SetDuration(animationClip[i].duration);
-		animation->SetTotalFrame(animationClip[i].totalFrame);
-
-		std::static_pointer_cast<Animation>(animation)->SetAnimationClip((animationClip[i]));
-
-		this->animationVec.emplace_back(animation.get());
-		this->animationMap.insert({ animation->GetName(), animation });
-
-		auto iter = this->animationGroupMap.find(fbxName);
-		if (iter != this->animationGroupMap.end())
+		if (iter == this->animationMap.end())
 		{
-			std::static_pointer_cast<Animation>(animation)->SetAnimationIndex(this->animationGroupMap[fbxName]->GetAnimationVec().size());
-			this->animationGroupMap[fbxName]->GetAnimationVec().emplace_back(std::static_pointer_cast<Animation>(animation));
-		}
-		else
-		{
-			std::shared_ptr<AnimationGroup> animationGroup = std::make_shared<AnimationGroup>();
-			animationGroup->SetFBXName(fbxName);
+			std::shared_ptr<yunuGI::IAnimation> animation = std::make_shared<Animation>();
 
-			std::static_pointer_cast<Animation>(animation)->SetAnimationIndex(animationGroup->GetAnimationVec().size());
-			animationGroup->GetAnimationVec().emplace_back(std::static_pointer_cast<Animation>(animation));
-			this->animationGroupMap.insert({ fbxName, animationGroup });
+			animation->SetName(animationClip[i].name);
+			animation->SetDuration(animationClip[i].duration);
+			animation->SetTotalFrame(animationClip[i].totalFrame);
+
+			std::static_pointer_cast<Animation>(animation)->SetAnimationClip((animationClip[i]));
+
+			this->animationVec.emplace_back(animation.get());
+			this->animationMap.insert({ animation->GetName(), animation });
+
+			auto iter = this->animationGroupMap.find(fbxName);
+			if (iter != this->animationGroupMap.end())
+			{
+				std::static_pointer_cast<Animation>(animation)->SetAnimationIndex(this->animationGroupMap[fbxName]->GetAnimationVec().size());
+				this->animationGroupMap[fbxName]->GetAnimationVec().emplace_back(std::static_pointer_cast<Animation>(animation));
+			}
+			else
+			{
+				std::shared_ptr<AnimationGroup> animationGroup = std::make_shared<AnimationGroup>();
+				animationGroup->SetFBXName(fbxName);
+
+				std::static_pointer_cast<Animation>(animation)->SetAnimationIndex(animationGroup->GetAnimationVec().size());
+				animationGroup->GetAnimationVec().emplace_back(std::static_pointer_cast<Animation>(animation));
+				this->animationGroupMap.insert({ fbxName, animationGroup });
+			}
 		}
 	}
 
-	this->animationGroupMap[fbxName]->CreateTexture();
+	auto iter = this->animationGroupMap.find(fbxName);
+	if (iter == this->animationGroupMap.end())
+	{
+		this->animationGroupMap[fbxName]->CreateTexture();
+	}
 }
 
 std::shared_ptr<yunuGI::IMaterial> ResourceManager::GetMaterial(const std::wstring& materialName)
@@ -461,7 +478,7 @@ std::shared_ptr<Texture> ResourceManager::GetTexture(const std::wstring& texture
 	}
 	iter = deferredTextureMap.find(textureName);
 	if (iter != deferredTextureMap.end())
-	{ 
+	{
 		return std::static_pointer_cast<Texture>(iter->second);
 	}
 	return nullptr;
@@ -527,17 +544,9 @@ std::shared_ptr<AnimationGroup> ResourceManager::GetAnimationGroup(const std::ws
 	return this->animationGroupMap.find(modelName)->second;
 }
 
-void ResourceManager::SaveFBXData()
+void ResourceManager::SaveFBXData(std::filesystem::path path)
 {
-	std::filesystem::path current_path = std::filesystem::current_path();
-
-	current_path = current_path.parent_path();
-	current_path = current_path.parent_path();
-	current_path = current_path.parent_path();
-
-	current_path += L"//NailEngine//RuntimeDependency//resources//FBXMaterial.scres";
-
-	std::ofstream file(current_path);
+	std::ofstream file(path);
 
 	//if (file.is_open())
 	//{
@@ -684,14 +693,9 @@ void ResourceManager::SaveFBXChildData(const yunuGI::FBXData* data, nlohmann::js
 	//file << L"}" << std::endl;
 }
 
-void ResourceManager::LoadFBXData()
+void ResourceManager::LoadFBXData(std::filesystem::path path)
 {
-	std::filesystem::path current_path = std::filesystem::current_path();
-
-
-	current_path += L"\\FBXMaterial.scres";
-
-	std::ifstream file(current_path);
+	std::ifstream file(path);
 
 	if (!file.is_open())
 	{
@@ -710,8 +714,14 @@ void ResourceManager::LoadFBXData()
 
 		LoadFBXData(fbxJson, fbxData);
 
+		auto str = String_To_Wstring(fbxJson["FBXName : "]);
+
+		auto iter = fbxDataMap.find(String_To_Wstring(fbxJson["FBXName : "]));
+		if (iter == fbxDataMap.end())
+		{
+			fbxVec.emplace_back(String_To_Wstring(fbxJson["FBXName : "]));
+		}
 		fbxDataMap[String_To_Wstring(fbxJson["FBXName : "])] = fbxData;
-		fbxVec.emplace_back(String_To_Wstring(fbxJson["FBXName : "]));
 	}
 
 	//yunuGI::FBXData* fbxData = new yunuGI::FBXData;
@@ -1093,7 +1103,7 @@ void ResourceManager::CreateDefaultTexture()
 
 	CreateTexture(L"ShadowDepth", SM_SIZE, SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE));
 
-	CreateTexture(L"PointLightShadowDepth", PL_SM_SIZE, PL_SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE), 6 , MAX_POINT_LIGHT);
+	CreateTexture(L"PointLightShadowDepth", PL_SM_SIZE, PL_SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE), 6, MAX_POINT_LIGHT);
 }
 
 void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yunuGI::FBXData* fbxData, bool isPreLoad)
@@ -1737,11 +1747,11 @@ void ResourceManager::LoadRactangleMesh()
 //
 void ResourceManager::LoadLineMesh()
 {
-    std::shared_ptr<Mesh> lineMesh = std::make_shared<Mesh>();
+	std::shared_ptr<Mesh> lineMesh = std::make_shared<Mesh>();
 
 	lineMesh->SetName(L"Line");
 
-    std::vector<Vertex> vertices(3);
+	std::vector<Vertex> vertices(3);
 
 	vertices[0] = Vertex{ DirectX::SimpleMath::Vector3{0.0f, 0, 0 },
 						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
@@ -1749,19 +1759,19 @@ void ResourceManager::LoadLineMesh()
 						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
 						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
 
-    vertices[1] = Vertex{ DirectX::SimpleMath::Vector3{1.0f, 0, 0 },
-                          DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
-                          DirectX::SimpleMath::Vector2{0.5f,0.5f},
-                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
-                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
+	vertices[1] = Vertex{ DirectX::SimpleMath::Vector3{1.0f, 0, 0 },
+						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
 
-    vertices[2] = Vertex{ DirectX::SimpleMath::Vector3{1.0f, 0, 0 },
-                          DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
-                          DirectX::SimpleMath::Vector2{0.5f,0.5f},
-                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
-                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
+	vertices[2] = Vertex{ DirectX::SimpleMath::Vector3{1.0f, 0, 0 },
+						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
 
-    std::vector<unsigned int> indices(3);
+	std::vector<unsigned int> indices(3);
 
 	indices[0] = 0;
 	indices[1] = 1;
@@ -1785,7 +1795,7 @@ void ResourceManager::LoadLineMesh()
 
 
 	lineMesh->SetData(vertices, indices, maxPoint, minPoint);
-    CreateMesh(lineMesh);
+	CreateMesh(lineMesh);
 }
 //
 //void ResourceManager::LoadCapsuleMesh()
