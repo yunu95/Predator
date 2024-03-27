@@ -4,8 +4,9 @@
 #include "MeleeEnemyProductor.h"
 #include "ContentsLayer.h"
 #include "Application.h"
+#include "LazySingletonClass.h"
 
-class MeleeEnemyPool : public GameObjectPool<DummyComponent>, public SingletonClass<MeleeEnemyPool>
+class MeleeEnemyPool : public GameObjectPool<DummyComponent>, public GHContents::LazySingletonClass<MeleeEnemyPool>
 {
 private:
 	Vector3d m_startPos;

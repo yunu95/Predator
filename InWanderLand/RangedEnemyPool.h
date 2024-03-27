@@ -4,8 +4,9 @@
 #include "RangedEnemyProductor.h"
 #include "ContentsLayer.h"
 #include "Application.h"
+#include "LazySingletonClass.h"
 
-class RangedEnemyPool : public GameObjectPool<DummyComponent>, public SingletonClass<RangedEnemyPool>
+class RangedEnemyPool : public GameObjectPool<DummyComponent>, public GHContents::LazySingletonClass<RangedEnemyPool>
 {
 private:
 	Vector3d m_startPos;

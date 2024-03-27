@@ -20,7 +20,8 @@ void UIManager::ReportButtonOnMouse(UIButton* p_btn)
 
 	/// 4. 현재 상호작용할 버튼의 click함수로 leftClick함수를 재정의합니다.
 	// 마우스를 올렸을 때 호출되는 함수도 호출합니다.
-	m_highestPriorityButton->m_onMouseFunction();
+	if (m_highestPriorityButton != nullptr && m_highestPriorityButton->m_onMouseFunction != nullptr)
+		m_highestPriorityButton->m_onMouseFunction();
 
 	/// 버튼 클릭이 가능하도록 bool값을 켜줍니다.
 	isButtonActiviated = true;
