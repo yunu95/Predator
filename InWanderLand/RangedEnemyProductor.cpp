@@ -28,6 +28,8 @@ void RangedEnemyProductor::SetUnitData()
 	m_attackDelay = 1.0f;
 
 	m_navField = &SingleNavigationField::Instance();
+
+	m_unitFbxName = "SKM_Monster2";
 }
 
 void RangedEnemyProductor::SingletonInitializer()
@@ -90,9 +92,4 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 	UnitProductor::SetCommonComponents();
 
 	return m_unitComponent;
-}
-
-void RangedEnemyProductor::SetUnitFbxName()
-{
-	m_unitFbxName = "SKM_Monster2";
 }

@@ -8,6 +8,5 @@ public:
 	virtual void SetUnitData() override;
 	virtual void SingletonInitializer() override;
 	virtual Unit* CreateUnit(Vector3d startPos) override;
-	virtual void SetUnitFbxName() override;
 };
 

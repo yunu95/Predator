@@ -22,6 +22,7 @@
 #include "TacticModeSystem.h"
 #include "SingletonInstanceContainer.h"
 #include "ShortcutSystem.h"
+#include "RobinSkillDevelopmentSystem.h"
 
 #include <algorithm>
 #include <string>
@@ -520,6 +521,307 @@ void application::contents::ContentsLayer::Initialize()
             }
         }*/
         //assert(mapFound && "there is no map to load in current directory!");
+
+        /// 임시
+		MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f));;
+		HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f));
+
+#pragma region UI Region
+
+		    /// UIButton Test
+		    rsrcMgr->LoadFile("Texture/zoro.jpg");
+		  //  rsrcMgr->LoadFile("Texture/zoro_highLighted.jpg");
+		  //  rsrcMgr->LoadFile("Texture/zoro_Clicked.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Menu.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/TacticMode.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Robin_ParentUI.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Ursula_ParentUI.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Gretel_ParentUI.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Robin_Portrait.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Ursula_Portrait.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Gretel_Portrait.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Robin_Skill1_Ikon.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Ursula_Skill1_Ikon.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Gretel_Skill1_Ikon.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Robin_Skill2_Ikon.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Ursula_Skill2_Ikon.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Gretel_Skill2_Ikon.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/CloseButton.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/menu_window.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/GameManual_Button.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/GameManual.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Sound_Window.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Sound_Button.jpg");
+		  //  rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Restart_Button.jpg");
+
+
+		  //  const int inGameLayer = 1;
+
+		  //  auto menuPanel = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<UIPanel>();
+		  //  //SoundSystem::PlayMusic("Texture/UI/InGameUITemp/Game_BGM.mp3");
+
+    //#pragma region MenuButton
+		  //  auto menuUIObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		  //  auto menuUIImageComponent = menuUIObject->AddComponent<yunutyEngine::graphics::UIImage>();
+		  //  auto menuUIButtonComponent = menuUIObject->AddComponent<UIButton>();
+		  //  menuUIButtonComponent->SetImageComponent(menuUIImageComponent);
+		  //  menuUIButtonComponent->SetIdleImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Menu.jpg"));
+		  //  menuUIButtonComponent->SetLayer(100);
+		  //  menuUIButtonComponent->SetButtonClickFunction([=]()
+			 //   {
+				//    menuPanel->SetPanelActive(true);
+				//    SoundSystem::PlaySoundfile("Texture/UI/InGameUITemp/TestClick2.wav");
+				//    SoundSystem::PlaySoundfile("Texture/UI/InGameUITemp/TestClick.wav");
+			 //   });
+		  //  menuUIObject->GetTransform()->SetLocalPosition({ 0, 1000, 0 });
+    //#pragma endregion
+
+		  //  const int penalLayer = 10;
+		  //  //const int buttonLayer = 11;
+
+    //#pragma region Menu Window
+		  //  const int menuWindowXpos = 760;
+		  //  const int menuWindowYpos = 540 - 350 / 2;
+
+		  //  auto menuWindowUIObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		  //  auto menuWindowImageComponent = menuWindowUIObject->AddComponent<yunutyEngine::graphics::UIImage>();
+		  //  menuWindowImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/menu_window.jpg"));
+		  //  menuWindowImageComponent->GetGI().SetLayer(penalLayer);
+		  //  menuWindowUIObject->SetSelfActive(false);
+		  //  menuWindowUIObject->GetTransform()->SetWorldPosition({ menuWindowXpos, menuWindowYpos, 0 });
+		  //  menuPanel->SetWindowImage(menuWindowImageComponent);
+    //#pragma endregion
+
+    //#pragma region Game Manual Panel
+		  //  auto gameManualPanel = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<UIPanel>();
+		  //  auto gameManualWindowObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		  //  auto gameManualWindowImageComponent = gameManualWindowObject->AddComponent<yunutyEngine::graphics::UIImage>();
+		  //  gameManualWindowImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/GameManual.jpg"));
+		  //  gameManualWindowImageComponent->GetGI().SetLayer(penalLayer);
+		  //  gameManualWindowObject->SetSelfActive(false);
+		  //  gameManualWindowObject->GetTransform()->SetWorldPosition({ menuWindowXpos, menuWindowYpos, 0 });
+		  //  gameManualPanel->SetWindowImage(gameManualWindowImageComponent);
+    //#pragma endregion
+
+    //#pragma region Game Manual Button
+		  //  {
+			 //   auto gameManualButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			 //   auto gameManualImageComponent = gameManualButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+			 //   auto gameManualButtonComponent = gameManualButtonObject->AddComponent<UIButton>();
+			 //   gameManualButtonComponent->SetImageComponent(gameManualImageComponent);
+			 //   gameManualButtonComponent->SetIdleImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/GameManual_Button.jpg"));
+			 //   //gameManualButtonComponent->SetLayer(buttonLayer);
+			 //   gameManualButtonComponent->SetButtonClickFunction([=]()
+				//    {
+				//	    gameManualPanel->SetPanelActive(true);
+				//	    menuPanel->SetPanelActive(false);
+				//    });
+			 //   gameManualButtonObject->GetTransform()->SetLocalPosition({ menuWindowXpos + 200 - 100, menuWindowYpos + 83 - 25, 0 });
+			 //   gameManualButtonObject->SetSelfActive(false);
+			 //   menuPanel->SetUIButtonComponent(gameManualButtonComponent);
+		  //  }
+    //#pragma endregion
+
+    //#pragma region Sound Panel
+		  //  auto soundPanel = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<UIPanel>();
+		  //  auto soundWindowObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		  //  auto soundWindowImageComponent = soundWindowObject->AddComponent<yunutyEngine::graphics::UIImage>();
+		  //  soundWindowImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Sound_Window.jpg"));
+		  //  soundWindowImageComponent->GetGI().SetLayer(penalLayer);
+		  //  soundWindowObject->SetSelfActive(false);
+		  //  soundWindowObject->GetTransform()->SetWorldPosition({ menuWindowXpos, menuWindowYpos, 0 });
+		  //  soundPanel->SetWindowImage(soundWindowImageComponent);
+    //#pragma endregion
+
+    //#pragma region Sound Button
+		  //  {
+			 //   auto soundButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			 //   auto soundButtonImageComponent = soundButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+			 //   auto soundButtonComponent = soundButtonObject->AddComponent<UIButton>();
+			 //   soundButtonComponent->SetImageComponent(soundButtonImageComponent);
+			 //   soundButtonComponent->SetIdleImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Sound_Button.jpg"));
+			 //   //soundButtonComponent->SetLayer(buttonLayer);
+			 //   soundButtonComponent->SetButtonClickFunction([=]()
+				//    {
+				//	    soundPanel->SetPanelActive(true);
+				//	    menuPanel->SetPanelActive(false);
+				//    });
+			 //   soundButtonObject->GetTransform()->SetLocalPosition({ menuWindowXpos + 200 - 100, menuWindowYpos + 158 - 25, 0 });
+			 //   soundButtonObject->SetSelfActive(false);
+			 //   menuPanel->SetUIButtonComponent(soundButtonComponent);
+		  //  }
+    //#pragma endregion
+
+    //#pragma region Restart Button
+		  //  {
+			 //   auto restartButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			 //   auto restartButtonImageComponent = restartButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+			 //   auto restartButtonComponent = restartButtonObject->AddComponent<UIButton>();
+			 //   restartButtonComponent->SetImageComponent(restartButtonImageComponent);
+			 //   restartButtonComponent->SetIdleImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Restart_Button.jpg"));
+			 //   //restartButtonComponent->SetLayer(penalLayer + 1);
+			 //   restartButtonComponent->SetButtonClickFunction([=]()
+				//    {
+				//	    /// 게임을 재시작하는 로직
+				//    });
+			 //   restartButtonObject->GetTransform()->SetLocalPosition({ menuWindowXpos + 200 - 100, menuWindowYpos + 233 - 25, 0 });
+			 //   restartButtonObject->SetSelfActive(false);
+			 //   menuPanel->SetUIButtonComponent(restartButtonComponent);
+		  //  }
+    //#pragma endregion
+
+    //#pragma region TacticMode UI
+		  //  auto tacticModeUIObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		  //  auto tacticModeImageComponent = tacticModeUIObject->AddComponent<yunutyEngine::graphics::UIImage>();
+		  //  tacticModeImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/TacticMode.jpg"));
+		  //  tacticModeImageComponent->GetGI().SetLayer(inGameLayer);
+		  //  tacticModeUIObject->GetTransform()->SetWorldPosition({ 420 - 150 / 2, 1000 - 150 / 2, 0 });
+    //#pragma endregion
+
+    //#pragma region Robin State
+		  //  const int robinStateBarPosX = 656 - 300 / 2;
+		  //  const int robinStateBarPosY = 908 - 20 / 2;
+
+		  //  {
+			 //   auto robinStateBarObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			 //   auto robinStateBarImageComponent = robinStateBarObject->AddComponent<yunutyEngine::graphics::UIImage>();
+			 //   robinStateBarImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Robin_ParentUI.jpg"));
+			 //   robinStateBarImageComponent->GetGI().SetLayer(inGameLayer);
+			 //   robinStateBarObject->GetTransform()->SetWorldPosition({ robinStateBarPosX, robinStateBarPosY, 0 });
+		  //  }
+
+		  //  {
+			 //   auto robinPortraitObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			 //   auto robinPortraitImageComponent = robinPortraitObject->AddComponent<yunutyEngine::graphics::UIImage>();
+			 //   robinPortraitImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Robin_Portrait.jpg"));
+			 //   robinPortraitImageComponent->GetGI().SetLayer(inGameLayer);
+			 //   robinPortraitObject->GetTransform()->SetWorldPosition({ robinStateBarPosX + 50 - 50, robinStateBarPosY + 73 - 50, 0 });
+		  //  }
+
+		  //  {
+			 //   auto robinSkill1UIObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			 //   auto robinSkill1UIImageComponent = robinSkill1UIObject->AddComponent<yunutyEngine::graphics::UIImage>();
+			 //   robinSkill1UIImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Robin_Skill1_Ikon.jpg"));
+			 //   robinSkill1UIImageComponent->GetGI().SetLayer(inGameLayer);
+			 //   robinSkill1UIObject->GetTransform()->SetWorldPosition({ robinStateBarPosX + 150 - 50, robinStateBarPosY + 73 - 50, 0 });
+		  //  }
+
+		  //  {
+			 //   auto robinSkill2UIObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			 //   auto robinSkill2UIImageComponent = robinSkill2UIObject->AddComponent<yunutyEngine::graphics::UIImage>();
+			 //   robinSkill2UIImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Robin_Skill2_Ikon.jpg"));
+			 //   robinSkill2UIImageComponent->GetGI().SetLayer(inGameLayer);
+			 //   robinSkill2UIObject->GetTransform()->SetWorldPosition({ robinStateBarPosX + 250 - 50, robinStateBarPosY + 73 - 50, 0 });
+		  //  }
+    //#pragma endregion
+
+    //#pragma region Ursula State
+		  //  const int ursulaStateBarPosX = 1006 - 300 / 2;
+		  //  const int ursulaStateBarPosY = 908 - 20 / 2;
+
+		  //  {
+			 //   auto ursulaStateBarObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			 //   auto ursulaStateBarImageComponent = ursulaStateBarObject->AddComponent<yunutyEngine::graphics::UIImage>();
+			 //   ursulaStateBarImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Ursula_ParentUI.jpg"));
+			 //   ursulaStateBarImageComponent->GetGI().SetLayer(inGameLayer);
+			 //   ursulaStateBarObject->GetTransform()->SetWorldPosition({ ursulaStateBarPosX, ursulaStateBarPosY, 0 });
+		  //  }
+
+		  //  {
+			 //   auto ursulaPortraitObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			 //   auto ursulaPortraitImageComponent = ursulaPortraitObject->AddComponent<yunutyEngine::graphics::UIImage>();
+			 //   ursulaPortraitImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Ursula_Portrait.jpg"));
+			 //   ursulaPortraitImageComponent->GetGI().SetLayer(inGameLayer);
+			 //   ursulaPortraitObject->GetTransform()->SetWorldPosition({ ursulaStateBarPosX + 50 - 50, ursulaStateBarPosY + 73 - 50, 0 });
+		  //  }
+
+		  //  {
+			 //   auto ursulaSkill1UIObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			 //   auto ursulaSkill1UIImageComponent = ursulaSkill1UIObject->AddComponent<yunutyEngine::graphics::UIImage>();
+			 //   ursulaSkill1UIImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Ursula_Skill1_Ikon.jpg"));
+			 //   ursulaSkill1UIImageComponent->GetGI().SetLayer(inGameLayer);
+			 //   ursulaSkill1UIObject->GetTransform()->SetWorldPosition({ ursulaStateBarPosX + 150 - 50, ursulaStateBarPosY + 73 - 50, 0 });
+		  //  }
+
+		  //  {
+			 //   auto ursulaSkill2UIObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			 //   auto ursulaSkill2UIImageComponent = ursulaSkill2UIObject->AddComponent<yunutyEngine::graphics::UIImage>();
+			 //   ursulaSkill2UIImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Ursula_Skill2_Ikon.jpg"));
+			 //   ursulaSkill2UIImageComponent->GetGI().SetLayer(inGameLayer);
+			 //   ursulaSkill2UIObject->GetTransform()->SetWorldPosition({ ursulaStateBarPosX + 250 - 50, ursulaStateBarPosY + 73 - 50, 0 });
+		  //  }
+    //#pragma endregion
+
+    //#pragma region Gretel State
+		  //  const int gretelStateBarPosX = 1357 - 300 / 2;
+		  //  const int gretelStateBarPosY = 908 - 20 / 2;
+
+		  //  {
+			 //   auto gretelStateBarObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			 //   auto gretelStateBarImageComponent = gretelStateBarObject->AddComponent<yunutyEngine::graphics::UIImage>();
+			 //   gretelStateBarImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Gretel_ParentUI.jpg"));
+			 //   gretelStateBarImageComponent->GetGI().SetLayer(inGameLayer);
+			 //   gretelStateBarObject->GetTransform()->SetWorldPosition({ gretelStateBarPosX, gretelStateBarPosY, 0 });
+		  //  }
+
+		  //  {
+			 //   auto gretelPortraitObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			 //   auto gretelPortraitImageComponent = gretelPortraitObject->AddComponent<yunutyEngine::graphics::UIImage>();
+			 //   gretelPortraitImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Gretel_Portrait.jpg"));
+			 //   gretelPortraitImageComponent->GetGI().SetLayer(inGameLayer);
+			 //   gretelPortraitObject->GetTransform()->SetWorldPosition({ gretelStateBarPosX + 50 - 50, gretelStateBarPosY + 73 - 50, 0 });
+		  //  }
+
+		  //  {
+			 //   auto gretelSkill1UIObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			 //   auto gretelSkill1UIImageComponent = gretelSkill1UIObject->AddComponent<yunutyEngine::graphics::UIImage>();
+			 //   gretelSkill1UIImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Gretel_Skill1_Ikon.jpg"));
+			 //   gretelSkill1UIImageComponent->GetGI().SetLayer(inGameLayer);
+			 //   gretelSkill1UIObject->GetTransform()->SetWorldPosition({ gretelStateBarPosX + 150 - 50, gretelStateBarPosY + 73 - 50, 0 });
+		  //  }
+
+		  //  {
+			 //   auto gretelSkill2UIObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			 //   auto gretelSkill2UIImageComponent = gretelSkill2UIObject->AddComponent<yunutyEngine::graphics::UIImage>();
+			 //   gretelSkill2UIImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/UI/InGameUITemp/Gretel_Skill2_Ikon.jpg"));
+			 //   gretelSkill2UIImageComponent->GetGI().SetLayer(inGameLayer);
+			 //   gretelSkill2UIObject->GetTransform()->SetWorldPosition({ gretelStateBarPosX + 250 - 50, gretelStateBarPosY + 73 - 50, 0 });
+		  //  }
+    //#pragma endregion
+
+		  //  menuPanel->SetCloseButtonActive(true);
+		  //  gameManualPanel->SetCloseButtonActive(true);
+		  //  soundPanel->SetCloseButtonActive(true);
+
+		  //  gameManualPanel->SetParentPanel(menuPanel);
+		  //  soundPanel->SetParentPanel(menuPanel);
+
+		    auto robinPassiveActivateButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		    auto robinPassiveActivateImage = robinPassiveActivateButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+		    auto robinPassiveActivateButton = robinPassiveActivateButtonObject->AddComponent<UIButton>();
+		    robinPassiveActivateButton->SetImageComponent(robinPassiveActivateImage);
+		    robinPassiveActivateButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+		    robinPassiveActivateButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+		    robinPassiveActivateButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+		    robinPassiveActivateButton->SetLayer(10.0);
+
+		    RobinSkillDevelopmentSystem::Instance().AddTopLayerButton(robinPassiveActivateButton);
+		    robinPassiveActivateButtonObject->GetTransform()->SetLocalPosition({ 0, 700, 0 });
+
+
+		    auto robinWSkillUpgradeButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		    auto robinWSkillUpgradeImage = robinWSkillUpgradeButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+		    auto robinWSkillUpgradeButton = robinWSkillUpgradeButtonObject->AddComponent<UIButton>();
+		    robinWSkillUpgradeButton->SetImageComponent(robinWSkillUpgradeImage);
+		    robinWSkillUpgradeButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+		    robinWSkillUpgradeButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+		    robinWSkillUpgradeButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+		    robinWSkillUpgradeButton->SetLayer(10.0);
+		    RobinSkillDevelopmentSystem::Instance().AddMiddleLayerButton(robinWSkillUpgradeButton);
+		    robinWSkillUpgradeButtonObject->GetTransform()->SetLocalPosition({ 100, 700, 0 });
+#pragma endregion
+
+
         editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
         editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
@@ -548,27 +850,12 @@ void application::contents::ContentsLayer::PlayContents()
 	SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
+	InputManager::Instance();
+	UIManager::Instance();
+
     /// Editor 에서 수정하여 Map Data 에 저장할 부분
 
     /// 카메라의 경우 CameraData 의 ApplyInstancesAsPlaytimeObjects 에서 처리함
-    //auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //auto camComp = camObj->AddComponent<RTSCam>();
-    //camObj->GetTransform()->SetLocalPosition({ 0,25,0 });
-    //camObj->AddComponent<Dotween>();
-    //RegisterToEditorObjectVector(camObj);
-
-    //auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-
-    //auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
-    //auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //RegisterToEditorObjectVector(mouseCursorObject);
-    //auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    //mouseCursorMesh->GetGI().SetMesh(sphereMesh);
-    //mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
-
-    /*WarriorProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 0.0f));;
-    MagicianProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 2.0f));;
-    HealerProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, -2.0f));*/
 
     auto skillPreviewCubeMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     AttachDebugMesh(skillPreviewCubeMeshObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
@@ -580,16 +867,26 @@ void application::contents::ContentsLayer::PlayContents()
     SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
     RegisterToEditorObjectVector(skillPreviewSphereMeshObject);
 
-    //camComp->groundHoveringClickCallback = [=](Vector3d pos)
-    //	{
-    //		mouseCursorObject->GetTransform()->SetWorldPosition(pos);
-    //		SkillPreviewSystem::Instance().SetCurrentMousPosition(pos);
-    //	};
+    /// UI 작업
+	const int menuWindowXpos = 760;
+	const int menuWindowYpos = 540 - 350 / 2;
 
-    InputManager::Instance();
-    UIManager::Instance();
-    //PlayerController::SingleInstance().SetMovingSystemComponent(camComp);
-    //TacticModeSystem::SingleInstance().SetMovingSystemComponent(camComp);
+	auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	rsrcMgr->LoadFile("Texture/zoro.jpg");
+	rsrcMgr->LoadFile("Texture/zoro_highLighted.jpg");
+	rsrcMgr->LoadFile("Texture/zoro_Clicked.jpg");
+
+    auto robinPassiveActivateButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    auto robinPassiveActivateImage = robinPassiveActivateButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+    auto robinPassiveActivateButton = robinPassiveActivateButtonObject->AddComponent<UIButton>();
+    robinPassiveActivateButton->SetImageComponent(robinPassiveActivateImage);
+    robinPassiveActivateButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+    robinPassiveActivateButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro_highLighted.jpg"));
+    robinPassiveActivateButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro_Clicked.jpg"));
+
+    RobinSkillDevelopmentSystem::Instance().AddTopLayerButton(robinPassiveActivateButton);
+    robinPassiveActivateButtonObject->GetTransform()->SetLocalPosition({ menuWindowXpos + 200 - 100, menuWindowYpos + 83 - 25, 0 });
+
 }
 
 void application::contents::ContentsLayer::PauseContents()

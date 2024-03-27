@@ -10,6 +10,7 @@
 #include "MagicianProductor.h"
 #include "SingleNavigationField.h"
 #include "UnitData.h"
+#include "RobinSkillDevelopmentSystem.h"
 
 void WarriorProductor::SetUnitData()
 {
@@ -40,6 +41,8 @@ void WarriorProductor::SetUnitData()
 
 	qSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::OnlyPath;
 	wSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::None;
+
+	m_unitFbxName = "SKM_Robin";
 }
 
 void WarriorProductor::SingletonInitializer()
@@ -94,6 +97,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 
 	/// UnitComponent 추가
 	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+	RobinSkillDevelopmentSystem::Instance().SetOwnerUnit(m_unitComponent);
 
 #pragma region Auto Attack Setting (Including Passive Logic)
 	//auto unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -113,7 +117,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	autoAttackDebugMesh->GetTransform()->SetLocalScale({ 1.0f * lengthUnit, 1.0f * lengthUnit, 3.0f * lengthUnit });*/
 
 	auto bleedingSystem = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<BleedingComponent>();
-
+	RobinSkillDevelopmentSystem::Instance().SetRobinPassiveComponent(bleedingSystem);
 	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
 	//warriorAttackSystem->SetColliderObject(unitAttackColliderObject);
 	//warriorAttackSystem->SetColliderDebugObject(autoAttackDebugMesh);
@@ -175,14 +179,11 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	warriorSkillSystem->SetKnockBackDebugObject(qSkillColliderDebugObject, m_QSkillRadius);
 	warriorSkillSystem->SetWSkillDebugObject(wSkillColliderDebugObject, m_WSkillRadius);
 
+	RobinSkillDevelopmentSystem::Instance().SetSkillSystemComponent(warriorSkillSystem);
+
 	UnitProductor::SetCommonComponents();
 
 	return m_unitComponent;
-}
-
-void WarriorProductor::SetUnitFbxName()
-{
-	m_unitFbxName = "SKM_Robin";
 }
 
 // 전략 패턴을 설명하기 위한 예시 코드
