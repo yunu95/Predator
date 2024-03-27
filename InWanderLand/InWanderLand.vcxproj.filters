@@ -349,7 +349,6 @@
     <Filter Include="Contents\ProjectilePools\RangedEnemy">
       <UniqueIdentifier>{1ef27289-47ec-4e7d-a7a5-6d0258af3b98}</UniqueIdentifier>
     </Filter>
-
     <Filter Include="Contents\GlobalConstant">
       <UniqueIdentifier>{99c7c714-606b-4989-b2cc-02aeec3f546a}</UniqueIdentifier>
     </Filter>
@@ -370,6 +369,9 @@
     </Filter>
     <Filter Include="Contents\Containers\SingletonInstanceContainer">
       <UniqueIdentifier>{7f68797a-b5d4-4fc8-a674-f9ce87bc3fc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DevelopmentSupportSystem">
+      <UniqueIdentifier>{a4b24e4c-87c4-4bd3-8d5d-cdba26aa9f71}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -948,6 +950,9 @@
     <ClInclude Include="SingletonInstanceContainer.h">
       <Filter>Contents\Containers\SingletonInstanceContainer</Filter>
     </ClInclude>
+    <ClInclude Include="ShortcutSystem.h">
+      <Filter>DevelopmentSupportSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1469,6 +1474,9 @@
     </ClCompile>
     <ClCompile Include="SingletonInstanceContainer.cpp">
       <Filter>Contents\Containers\SingletonInstanceContainer</Filter>
+    </ClCompile>
+    <ClCompile Include="ShortcutSystem.cpp">
+      <Filter>DevelopmentSupportSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

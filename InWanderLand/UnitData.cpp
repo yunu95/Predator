@@ -14,6 +14,7 @@
 #include "RangedEnemyProductor.h"
 #include "Application.h"
 #include "ContentsLayer.h"
+#include "ShortcutSystem.h"
 
 namespace application
 {
@@ -152,8 +153,24 @@ namespace application
 
 				Vector3d startPosition = Vector3d(pod.position.x, pod.position.y, pod.position.z);
 
-				contentsLayer->RegisterToEditorObjectVector(currentSelectedProductor->CreateUnit(startPosition)->GetGameObject());
-
+                auto unit = currentSelectedProductor->CreateUnit(startPosition);
+				contentsLayer->RegisterToEditorObjectVector(unit->GetGameObject());
+                
+                switch (unit->GetUnitSide())
+                {
+                    case Unit::UnitSide::Player:
+                    {
+                        ShortcutSystem::Instance().RegisterObject(1, unit->GetGameObject());
+                        break;
+                    }
+                    case Unit::UnitSide::Enemy:
+                    {
+                        ShortcutSystem::Instance().RegisterObject(2, unit->GetGameObject());
+                        break;
+                    }
+                    default:
+                        break;
+                }
 			}
 		}
 

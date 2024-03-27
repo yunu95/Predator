@@ -995,6 +995,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Camera_TemplateData.h" />
     <ClInclude Include="CameraData.h" />
     <ClInclude Include="DebuggingMesh.h" />
+    <ClInclude Include="ShortcutSystem.h" />
     <ClInclude Include="DualCastComponent.h" />
     <ClInclude Include="EditorCameraManager.h" />
     <ClInclude Include="EnemyAutoAttackProjectile.h" />
@@ -1184,6 +1185,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Camera_TemplateData.cpp" />
     <ClCompile Include="CameraData.cpp" />
     <ClCompile Include="DebuggingMesh.cpp" />
+    <ClCompile Include="ShortcutSystem.cpp" />
     <ClCompile Include="DualCastComponent.cpp" />
     <ClCompile Include="EditorCameraManager.cpp" />
     <ClCompile Include="EditorResourceManager.cpp" />
