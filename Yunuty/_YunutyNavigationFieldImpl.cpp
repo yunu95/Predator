@@ -8,6 +8,7 @@ namespace yunutyEngine
         static constexpr int EXPECTED_LAYERS_PER_TILE = 4;
         dtStatus status;
 
+        // bmin, bmax 정보는 파일 입출력의 대상
         float bmin[3]{ std::numeric_limits<float>::max(),std::numeric_limits<float>::max(),std::numeric_limits<float>::max() };
         float bmax[3]{ -std::numeric_limits<float>::max(),-std::numeric_limits<float>::max(),-std::numeric_limits<float>::max() };
         // 바운더리 정보부터 설정
@@ -140,6 +141,7 @@ namespace yunutyEngine
         {
             for (int x = 0; x < tw; ++x)
             {
+                // tileCacheData 또한 파일 저장의 대상
                 TileCacheData tiles[MAX_LAYERS];
                 memset(tiles, 0, sizeof(tiles));
                 int ntiles = rasterizeTileLayers(worldVertices, verticesNum, faces, facesNum, x, y, cfg, tiles, MAX_LAYERS);
