@@ -74,7 +74,8 @@ public:
 	void SetCommonComponents();
 
 	virtual bool SelectUnitProductorByFbxName(std::string p_name);
-	virtual void SetUnitFbxName() = 0;
+
+	virtual std::string GetUnitFBXName() const;
 
 	virtual void SetUnitData() = 0;
 

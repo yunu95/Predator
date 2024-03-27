@@ -36,6 +36,8 @@ void MagicianProductor::SetUnitData()
 
 	qSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::Both;
 	wSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::Both;
+
+	m_unitFbxName = "SKM_Robin";
 }
 
 void MagicianProductor::SingletonInitializer()
@@ -170,9 +172,4 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 	skinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial);
 
 	return m_unitComponent;
-}
-
-void MagicianProductor::SetUnitFbxName()
-{
-	m_unitFbxName = "Sphere";
 }

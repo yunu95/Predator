@@ -519,6 +519,10 @@ void application::contents::ContentsLayer::Initialize()
         }*/
         //assert(mapFound && "there is no map to load in current directory!");
 
+        /// 임시
+		MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f));;
+		HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f));
+
 #pragma region UI Region
 
 		    /// UIButton Test

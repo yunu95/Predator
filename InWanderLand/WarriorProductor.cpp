@@ -41,6 +41,8 @@ void WarriorProductor::SetUnitData()
 
 	qSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::OnlyPath;
 	wSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::None;
+
+	m_unitFbxName = "SKM_Robin";
 }
 
 void WarriorProductor::SingletonInitializer()
@@ -182,11 +184,6 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	UnitProductor::SetCommonComponents();
 
 	return m_unitComponent;
-}
-
-void WarriorProductor::SetUnitFbxName()
-{
-	m_unitFbxName = "SKM_Robin";
 }
 
 // 전략 패턴을 설명하기 위한 예시 코드

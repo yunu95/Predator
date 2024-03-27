@@ -96,6 +96,8 @@ void WarriorSkillSystem::Start()
 
 	SetSkillRequirmentsActive(QknockBackSkill, false);
 	SetSkillRequirmentsActive(WTauntSkill, false);
+
+	m_developedFunctionToWSkill = []() {};
 }
 
 void WarriorSkillSystem::Update()

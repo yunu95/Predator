@@ -36,6 +36,8 @@ void HealerProductor::SetUnitData()
 
 	qSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::OnlyPath;
 	wSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::OnlyPath;
+
+	m_unitFbxName = "SKM_Robin";
 }
 
 void HealerProductor::SingletonInitializer()
@@ -148,9 +150,4 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
 	UnitProductor::SetCommonComponents();
 	
 	return m_unitComponent;
-}
-
-void HealerProductor::SetUnitFbxName()
-{
-	m_unitFbxName = "Sphere";
 }

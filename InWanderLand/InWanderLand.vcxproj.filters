@@ -385,6 +385,9 @@
     <Filter Include="Contents\SkillDevelopmentSystem\Ursual">
       <UniqueIdentifier>{8e84e27b-c9a5-492c-81a4-b570301f18ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\UnitFactory\UnitPool">
+      <UniqueIdentifier>{0c84d392-f6f0-438d-92d0-0daa5729154b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -973,6 +976,15 @@
     </ClInclude>
     <ClInclude Include="UrsulaSkillDevelopmentSystem.h">
       <Filter>Contents\SkillDevelopmentSystem\Ursual</Filter>
+    </ClInclude>
+    <ClInclude Include="MeleeEnemyPool.h">
+      <Filter>Contents\UnitFactory\UnitPool</Filter>
+    </ClInclude>
+    <ClInclude Include="DummyComponent.h">
+      <Filter>Contents\UnitFactory\UnitPool</Filter>
+    </ClInclude>
+    <ClInclude Include="RangedEnemyPool.h">
+      <Filter>Contents\UnitFactory\UnitPool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

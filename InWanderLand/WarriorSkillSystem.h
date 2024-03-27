@@ -25,7 +25,7 @@ private:
 	void SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen);
 
 public:
-	std::function<void()> m_developedFunctionToWSkill;
+	std::function<void()> m_developedFunctionToWSkill{ nullptr };
 
 	virtual void QSkillActivate(Vector3d skillPos) override;
 	virtual void WSkillActivate(Vector3d skillPos) override;
