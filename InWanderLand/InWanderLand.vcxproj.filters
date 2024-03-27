@@ -968,6 +968,7 @@
     <ClInclude Include="SingletonInstanceContainer.h">
       <Filter>Contents\Containers\SingletonInstanceContainer</Filter>
     </ClInclude>
+
     <ClInclude Include="ShortcutSystem.h">
       <Filter>DevelopmentSupportSystem</Filter>
     </ClInclude>
