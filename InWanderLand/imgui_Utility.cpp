@@ -747,51 +747,74 @@ namespace application
 				messageBoxData.ShouldOpen = true;
 			}
 
+			void CloseMessageBox(std::string title)
+			{
+				if (s_MessageBoxes.find(title) != s_MessageBoxes.end())
+				{
+					s_MessageBoxes[title].IsOpen = false;
+				}
+			}
+
 			void RenderMessageBoxes()
 			{
-				for (auto& [key, messageBoxData] : s_MessageBoxes)
+				for (auto& each : s_MessageBoxes)
 				{
-					if (messageBoxData.ShouldOpen && !ImGui::IsPopupOpen(nullptr, ImGuiPopupFlags_AnyPopupId))
+					RenderMessageBox(each.first);
+				}
+			}
+
+			void RenderMessageBox(std::string title)
+			{
+				auto& messageBoxData = s_MessageBoxes.at(title);
+
+				if (messageBoxData.ShouldOpen && !ImGui::IsPopupOpen(nullptr, ImGuiPopupFlags_AnyPopupId))
+				{
+					ImGui::OpenPopup(messageBoxData.Title.c_str());
+					messageBoxData.ShouldOpen = false;
+					messageBoxData.IsOpen = true;
+				}
+
+				if (!messageBoxData.IsOpen)
+				{
+					return;
+				}
+
+				ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+				ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+				ImGui::SetNextWindowSize(ImVec2((float)messageBoxData.Width, (float)messageBoxData.Height));
+
+				if (ImGui::BeginPopupModal(messageBoxData.Title.c_str(), &messageBoxData.IsOpen, ImGuiWindowFlags_AlwaysAutoResize))
+				{
+					if (messageBoxData.Flags & MESSAGE_BOX_USER_FUNC)
 					{
-						ImGui::OpenPopup(messageBoxData.Title.c_str());
-						messageBoxData.ShouldOpen = false;
-						messageBoxData.IsOpen = true;
+						messageBoxData.UserRenderFunction();
 					}
-
-					if (!messageBoxData.IsOpen)
-						continue;
-
-					ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-					ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-					ImGui::SetNextWindowSize(ImVec2{ (float)messageBoxData.Width, (float)messageBoxData.Height });
-
-					if (ImGui::BeginPopupModal(messageBoxData.Title.c_str(), &messageBoxData.IsOpen, ImGuiWindowFlags_AlwaysAutoResize))
+					else
 					{
-						if (messageBoxData.Flags & MESSAGE_BOX_USER_FUNC)
+						ImGui::TextWrapped(messageBoxData.Body.c_str());
+
+						if (messageBoxData.Flags & MESSAGE_BOX_OK_BUTTON)
 						{
-							messageBoxData.UserRenderFunction();
-						}
-						else
-						{
-							ImGui::TextWrapped(messageBoxData.Body.c_str());
-
-							if (messageBoxData.Flags & MESSAGE_BOX_OK_BUTTON)
-							{
-								if (ImGui::Button("Ok"))
-									ImGui::CloseCurrentPopup();
-
-								if (messageBoxData.Flags & MESSAGE_BOX_CANCEL_BUTTON)
-									ImGui::SameLine();
-							}
-
-							if (messageBoxData.Flags & MESSAGE_BOX_CANCEL_BUTTON && ImGui::Button("Cancel"))
+							if (ImGui::Button("Ok"))
 							{
 								ImGui::CloseCurrentPopup();
+								messageBoxData.IsOpen = false;
+							}
+
+							if (messageBoxData.Flags & MESSAGE_BOX_CANCEL_BUTTON)
+							{
+								ImGui::SameLine();
 							}
 						}
 
-						ImGui::EndPopup();
+						if (messageBoxData.Flags & MESSAGE_BOX_CANCEL_BUTTON && ImGui::Button("Cancel"))
+						{
+							ImGui::CloseCurrentPopup();
+							messageBoxData.IsOpen = false;
+						}
 					}
+
+					ImGui::EndPopup();
 				}
 			}
 			

@@ -400,11 +400,7 @@ void ResourceManager::CreateAnimation(const std::vector<AnimationClip>& animatio
 		}
 	}
 
-	auto iter = this->animationGroupMap.find(fbxName);
-	if (iter == this->animationGroupMap.end())
-	{
-		this->animationGroupMap[fbxName]->CreateTexture();
-	}
+	this->animationGroupMap[fbxName]->CreateTexture();
 }
 
 std::shared_ptr<yunuGI::IMaterial> ResourceManager::GetMaterial(const std::wstring& materialName)

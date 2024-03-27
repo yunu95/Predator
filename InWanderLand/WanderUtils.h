@@ -8,18 +8,13 @@ namespace wanderUtils
     {
         const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-        // FBX 로드하기
-        {
-            auto directorList = application::editor::fileSystem::GetSubdirectories("FBX");
-            for (auto each : directorList)
-            {
-                resourceManager->LoadFile(("FBX/" + each.string()).c_str());
-            }
-        }
+        /// SCRES 우선 로드
+        resourceManager->LoadFile("FBXMaterial.scres");
+
         // 나머지 기타등등 파일들 로드하기
         {
             namespace fs = std::filesystem;
-            std::set<std::string> validExtensions{ ".jpg", ".png", ".bmp", ".tga", ".dds", ".hdr" };
+            std::set<std::string> validExtensions{ ".jpg", ".png", ".bmp", ".tga", ".dds", ".hdr", ".cso"};
             fs::path basePath{ "./" };
             try 
             {
@@ -40,5 +35,13 @@ namespace wanderUtils
             }
         }
 
+        // FBX 로드하기
+        {
+            auto directorList = application::editor::fileSystem::GetSubdirectories("FBX");
+            for (auto each : directorList)
+            {
+                resourceManager->LoadFile(("FBX/" + each.string()).c_str());
+            }
+        }
     }
 }

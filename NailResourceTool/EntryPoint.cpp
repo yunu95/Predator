@@ -1050,10 +1050,10 @@ void ImGuiUpdate()
 
 		InputUpdate();
 
-		ImGui::Begin("DockSpace", nullptr, window_flags);
+		ImGui::Begin("ResourceToolDockSpace", nullptr, window_flags);
 
 		// Dockspace
-		ImGui::DockSpace(ImGui::GetID("MyDockspace"));
+		ImGui::DockSpace(ImGui::GetID("ResourceToolDockspace"));
 
 		DrawMenuBar();
 

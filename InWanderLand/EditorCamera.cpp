@@ -60,7 +60,7 @@ namespace application
 
 				auto cam = InstanceManager::GetSingletonInstance().CreateInstance<CameraData>("DefaultCamera");
 				cam->pod.position.x = pos.x;
-				cam->pod.position.y = pos.y;
+				cam->pod.position.y = pos.y + 1;
 				cam->pod.position.z = pos.z;
 				cam->pod.rotation.w = rot.w;
 				cam->pod.rotation.x = rot.x;

@@ -30,6 +30,7 @@ void PlayTimeRegionManager::AddRegionData(application::editor::RegionData* p_reg
 						e.second->StopMove();
 					}
 					//PlayerController::SingleInstance().GetPlayerMap();
+					cameraDotween->DOMove(stage2StartPosition + Vector3d(0, 25, -20), 2.0f);
 				};
 		}
 		break;
@@ -37,4 +38,9 @@ void PlayTimeRegionManager::AddRegionData(application::editor::RegionData* p_reg
 		default:
 			break;
 	}
+}
+
+void PlayTimeRegionManager::SetCameraDotween(Dotween* p_dot)
+{
+	cameraDotween = p_dot;
 }
