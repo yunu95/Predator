@@ -1002,6 +1002,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="GameObjectContainer.h" />
     <ClInclude Include="GCTemplate.h" />
     <ClInclude Include="GlobalConstant.h" />
+    <ClInclude Include="GretelSkillDevelopmentSystem.h" />
     <ClInclude Include="LazySingletonClass.h" />
     <ClInclude Include="LightBrush.h" />
     <ClInclude Include="LightData.h" />
@@ -1021,9 +1022,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="PlaytimeWave.h" />
     <ClInclude Include="PaletteBrushManager.h" />
     <ClInclude Include="RangedEnemyProductor.h" />
+    <ClInclude Include="RobinSkillDevelopmentSystem.h" />
     <ClInclude Include="SaveStaticOrnamentsCommnad.h" />
     <ClInclude Include="SingletonInstanceContainer.h" />
     <ClInclude Include="SingletonUpdate.h" />
+    <ClInclude Include="SkillDevelopmentSystem.h" />
     <ClInclude Include="SpecialEffectTrigger.h" />
     <ClInclude Include="SpecialEvent.h" />
     <ClInclude Include="SpriteAnimation.h" />
@@ -1152,6 +1155,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="SpecialEffect.h" />
     <ClInclude Include="UnitProductorSelector.h" />
     <ClInclude Include="Unit_TemplateData.h" />
+    <ClInclude Include="UrsulaSkillDevelopmentSystem.h" />
     <ClInclude Include="WanderUtils.h" />
     <ClInclude Include="UUID.h" />
     <ClInclude Include="UUIDManager.h" />
@@ -1192,6 +1196,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="GameObjectContainer.cpp" />
     <ClCompile Include="GlobalConstant.cpp" />
+    <ClCompile Include="GretelSkillDevelopmentSystem.cpp" />
     <ClCompile Include="HealerAutoAttackProjectile.cpp" />
     <ClCompile Include="DebugGraphic.cpp" />
     <ClCompile Include="DebugStaticMesh.cpp" />
@@ -1223,6 +1228,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="PlayTimeRegionManager.cpp" />
     <ClCompile Include="PlaytimeWave.cpp" />
     <ClCompile Include="RangedEnemyProductor.cpp" />
+    <ClCompile Include="RobinSkillDevelopmentSystem.cpp" />
+    <ClCompile Include="SkillDevelopmentSystem.cpp" />
     <ClCompile Include="SnippetBillboardSpriteAnim.cpp" />
     <ClCompile Include="SingletonInstanceContainer.cpp" />
     <ClCompile Include="SpecialEffectTrigger.cpp" />
@@ -1333,6 +1340,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="TestCasePhysics.cpp" />
     <ClCompile Include="TestCaseTemplate.cpp" />
     <ClCompile Include="TestComponent2.cpp" />
+    <ClCompile Include="UrsulaSkillDevelopmentSystem.cpp" />
     <ClCompile Include="UUIDManager.cpp" />
     <ClCompile Include="TestUnitAnimation.cpp" />
     <ClCompile Include="Unit.cpp" />

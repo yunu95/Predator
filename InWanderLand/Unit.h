@@ -5,6 +5,7 @@
 #include "Dotween.h"
 #include <list>
 #include "SkillPreviewSystem.h"
+#include "RobinSkillDevelopmentSystem.h"
 
 /// <summary>
 /// 유닛들이 공유하는 멤버.
@@ -276,5 +277,7 @@ public:
 
 	void SetUnitDamageToZero(bool p_bool);
 	void MultipleUnitSpeed(float p_mul);
+
+	friend RobinSkillDevelopmentSystem;
 };
 

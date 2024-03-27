@@ -63,6 +63,7 @@ void WarriorSkillSystem::WSkillActivate(Vector3d skillPos)
 			SetSkillRequirmentsActive(WTauntSkill, false);
 			isWSkillStarted = false;
 		});
+	m_developedFunctionToWSkill();
 }
 
 void WarriorSkillSystem::SetQSkillKnockBackObject(GameObject* obj)
