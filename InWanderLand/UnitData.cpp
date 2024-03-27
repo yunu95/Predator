@@ -173,8 +173,6 @@ namespace application
 
 				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
 
-				Vector3d startPosition = Vector3d(pod.position.x, pod.position.y, pod.position.z);
-
                 auto unit = currentSelectedProductor->CreateUnit(startPosition);
 				contentsLayer->RegisterToEditorObjectVector(unit->GetGameObject());
                 
