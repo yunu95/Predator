@@ -274,20 +274,20 @@ Global
 		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseEditorExe|x64.Build.0 = Release|x64
 		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseEditorExe|x86.ActiveCfg = Release|Win32
 		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseEditorExe|x86.Build.0 = Release|Win32
-		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseEditorUnitTests|x64.ActiveCfg = Debug|x64
-		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseEditorUnitTests|x64.Build.0 = Debug|x64
+		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseEditorUnitTests|x64.ActiveCfg = Release|x64
+		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseEditorUnitTests|x64.Build.0 = Release|x64
 		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseEditorUnitTests|x86.ActiveCfg = Release|Win32
 		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseEditorUnitTests|x86.Build.0 = Release|Win32
 		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseExe|x64.ActiveCfg = Release|x64
 		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseExe|x64.Build.0 = Release|x64
 		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseExe|x86.ActiveCfg = Release|Win32
 		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseExe|x86.Build.0 = Release|Win32
-		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseGraphicsExe|x64.ActiveCfg = Debug|x64
-		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseGraphicsExe|x64.Build.0 = Debug|x64
+		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseGraphicsExe|x64.ActiveCfg = Release|x64
+		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseGraphicsExe|x64.Build.0 = Release|x64
 		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseGraphicsExe|x86.ActiveCfg = Release|Win32
 		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseGraphicsExe|x86.Build.0 = Release|Win32
-		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseUnitTests|x64.ActiveCfg = Debug|x64
-		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseUnitTests|x64.Build.0 = Debug|x64
+		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseUnitTests|x64.ActiveCfg = Release|x64
+		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseUnitTests|x64.Build.0 = Release|x64
 		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseUnitTests|x86.ActiveCfg = Release|Win32
 		{D2DF305D-D19B-414A-BBE7-888B948DFF62}.ReleaseUnitTests|x86.Build.0 = Release|Win32
 	EndGlobalSection
