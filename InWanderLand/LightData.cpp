@@ -6,6 +6,7 @@
 
 #include "Application.h"
 #include "ContentsLayer.h"
+#include "ShortcutSystem.h"
 
 namespace application
 {
@@ -130,6 +131,11 @@ namespace application
 
 			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
 			contentsLayer->RegisterToEditorObjectVector(comp);
+
+			if (pod.templateData->pod.type != LightType::Directional)
+			{
+				ShortcutSystem::Instance().RegisterObject(4, comp);
+			}
 		}
 
 		void LightData::OnLightTypeChange(LightType type)

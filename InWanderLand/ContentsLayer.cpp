@@ -21,6 +21,7 @@
 #include "PlayerController.h"
 #include "TacticModeSystem.h"
 #include "SingletonInstanceContainer.h"
+#include "ShortcutSystem.h"
 #include "RobinSkillDevelopmentSystem.h"
 
 #include <algorithm>
@@ -335,7 +336,7 @@ void application::contents::ContentsLayer::Initialize()
     {
         ContentsLayer::testInitializer();
         return;
-    }
+    }    
 
     //auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     //camObj->GetTransform()->SetLocalPosition(Vector3d(0, 20, -10));
@@ -422,6 +423,8 @@ void application::contents::ContentsLayer::Initialize()
 #else
     {
         yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+
+        ShortcutSystem::Instance();
 
 		/// Editor 에서 수정하여 Map Data 에 저장할 부분
 		/*auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -901,6 +904,7 @@ void application::contents::ContentsLayer::StopContents()
     Time::SetTimeScale(1);
     isStoppedOnce = true;
     ClearPlaytimeObject();
+    ShortcutSystem::Instance().ClearObject();
 }
 
 #ifdef GEN_TESTS
