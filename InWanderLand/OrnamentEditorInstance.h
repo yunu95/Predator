@@ -24,26 +24,21 @@ namespace application
                 : public PaletteInstance
             {
             public:
-                virtual ~OrnamentEditorInstance();
                 virtual void Start() override;
                 void Init(const application::editor::OrnamentData* ornamentData);
                 void Init(const application::editor::Ornament_TemplateData* ornamentTemplateData);
                 void ChangeTemplateData(const application::editor::OrnamentData* ornamentData);
                 void ChangeTemplateData(const application::editor::Ornament_TemplateData* ornamentTemplateData);
                 void ChangeResource(const std::string& fbxName);
-
-                // meshObject 의 Transform 정보를 갱신합니다.
-                void ApplyMeshTransform();
+                virtual void HideEditorInstance() override {}
 
             protected:
                 virtual void OnHover() { PaletteInstance::OnHover(); }
                 virtual void OnHoverLeft() { PaletteInstance::OnHoverLeft(); }
 
-
             private:
                 std::string currentFBX = "";
                 const application::editor::Ornament_TemplateData* ornamentTemplateData;
-                GameObject* meshObject;
             };
         }
     }

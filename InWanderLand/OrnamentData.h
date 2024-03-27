@@ -38,7 +38,7 @@ namespace application
 
 
             TO_JSON(POD_Ornament)
-                FROM_JSON(POD_Ornament)
+            FROM_JSON(POD_Ornament)
         };
 
         class OrnamentData

@@ -370,6 +370,9 @@
     <Filter Include="Contents\Containers\SingletonInstanceContainer">
       <UniqueIdentifier>{7f68797a-b5d4-4fc8-a674-f9ce87bc3fc2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DevelopmentSupportSystem">
+      <UniqueIdentifier>{a4b24e4c-87c4-4bd3-8d5d-cdba26aa9f71}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Contents\SkillDevelopmentSystem">
       <UniqueIdentifier>{dad6a79f-dac9-4615-ad94-c4d5c6c6124e}</UniqueIdentifier>
     </Filter>
@@ -965,6 +968,10 @@
     <ClInclude Include="SingletonInstanceContainer.h">
       <Filter>Contents\Containers\SingletonInstanceContainer</Filter>
     </ClInclude>
+
+    <ClInclude Include="ShortcutSystem.h">
+      <Filter>DevelopmentSupportSystem</Filter>
+    </ClInclude>
     <ClInclude Include="SkillDevelopmentSystem.h">
       <Filter>Contents\SkillDevelopmentSystem\Based</Filter>
     </ClInclude>
@@ -1507,6 +1514,9 @@
     </ClCompile>
     <ClCompile Include="SingletonInstanceContainer.cpp">
       <Filter>Contents\Containers\SingletonInstanceContainer</Filter>
+    </ClCompile>
+    <ClCompile Include="ShortcutSystem.cpp">
+      <Filter>DevelopmentSupportSystem</Filter>
     </ClCompile>
     <ClCompile Include="SkillDevelopmentSystem.cpp">
       <Filter>Contents\SkillDevelopmentSystem\Based</Filter>
