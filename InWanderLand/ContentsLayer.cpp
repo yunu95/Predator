@@ -526,35 +526,35 @@ void application::contents::ContentsLayer::Initialize()
 		MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f));;
 		HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f));
 
-#pragma region UI Region
-
-		    /// UIButton Test
-		    rsrcMgr->LoadFile("Texture/zoro.jpg");
-
-		    auto robinPassiveActivateButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		    auto robinPassiveActivateImage = robinPassiveActivateButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
-		    auto robinPassiveActivateButton = robinPassiveActivateButtonObject->AddComponent<UIButton>();
-		    robinPassiveActivateButton->SetImageComponent(robinPassiveActivateImage);
-		    robinPassiveActivateButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-		    robinPassiveActivateButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-		    robinPassiveActivateButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-		    robinPassiveActivateButton->SetLayer(10.0);
-
-		    RobinSkillDevelopmentSystem::Instance().AddTopLayerButton(robinPassiveActivateButton);
-		    robinPassiveActivateButtonObject->GetTransform()->SetLocalPosition({ 0, 700, 0 });
-
-
-		    auto robinWSkillUpgradeButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		    auto robinWSkillUpgradeImage = robinWSkillUpgradeButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
-		    auto robinWSkillUpgradeButton = robinWSkillUpgradeButtonObject->AddComponent<UIButton>();
-		    robinWSkillUpgradeButton->SetImageComponent(robinWSkillUpgradeImage);
-		    robinWSkillUpgradeButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-		    robinWSkillUpgradeButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-		    robinWSkillUpgradeButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-		    robinWSkillUpgradeButton->SetLayer(10.0);
-		    RobinSkillDevelopmentSystem::Instance().AddMiddleLayerButton(robinWSkillUpgradeButton);
-		    robinWSkillUpgradeButtonObject->GetTransform()->SetLocalPosition({ 100, 700, 0 });
-#pragma endregion
+//#pragma region UI Region
+//
+//		    /// UIButton Test
+//		    rsrcMgr->LoadFile("Texture/zoro.jpg");
+//
+//		    auto robinPassiveActivateButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+//		    auto robinPassiveActivateImage = robinPassiveActivateButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+//		    auto robinPassiveActivateButton = robinPassiveActivateButtonObject->AddComponent<UIButton>();
+//		    robinPassiveActivateButton->SetImageComponent(robinPassiveActivateImage);
+//		    robinPassiveActivateButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinPassiveActivateButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinPassiveActivateButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinPassiveActivateButton->SetLayer(10.0);
+//
+//		    RobinSkillDevelopmentSystem::Instance().AddTopLayerButton(robinPassiveActivateButton);
+//		    robinPassiveActivateButtonObject->GetTransform()->SetLocalPosition({ 0, 700, 0 });
+//
+//
+//		    auto robinWSkillUpgradeButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+//		    auto robinWSkillUpgradeImage = robinWSkillUpgradeButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+//		    auto robinWSkillUpgradeButton = robinWSkillUpgradeButtonObject->AddComponent<UIButton>();
+//		    robinWSkillUpgradeButton->SetImageComponent(robinWSkillUpgradeImage);
+//		    robinWSkillUpgradeButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinWSkillUpgradeButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinWSkillUpgradeButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinWSkillUpgradeButton->SetLayer(10.0);
+//		    RobinSkillDevelopmentSystem::Instance().AddMiddleLayerButton(robinWSkillUpgradeButton);
+//		    robinWSkillUpgradeButtonObject->GetTransform()->SetLocalPosition({ 100, 700, 0 });
+//#pragma endregion
 
 
         editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
