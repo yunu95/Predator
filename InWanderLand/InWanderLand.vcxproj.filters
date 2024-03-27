@@ -373,6 +373,24 @@
     <Filter Include="DevelopmentSupportSystem">
       <UniqueIdentifier>{a4b24e4c-87c4-4bd3-8d5d-cdba26aa9f71}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\SkillDevelopmentSystem">
+      <UniqueIdentifier>{dad6a79f-dac9-4615-ad94-c4d5c6c6124e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\SkillDevelopmentSystem\Based">
+      <UniqueIdentifier>{66f5b1ab-a90a-49a2-84fc-924842694f1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\SkillDevelopmentSystem\Robin">
+      <UniqueIdentifier>{a6667148-b1e8-492a-b24f-362eeb961e0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\SkillDevelopmentSystem\Gretel">
+      <UniqueIdentifier>{aa1cecd5-78f4-4bb4-a6a1-9a1f3b51e238}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\SkillDevelopmentSystem\Ursual">
+      <UniqueIdentifier>{8e84e27b-c9a5-492c-81a4-b570301f18ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitFactory\UnitPool">
+      <UniqueIdentifier>{0c84d392-f6f0-438d-92d0-0daa5729154b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -950,8 +968,30 @@
     <ClInclude Include="SingletonInstanceContainer.h">
       <Filter>Contents\Containers\SingletonInstanceContainer</Filter>
     </ClInclude>
+
     <ClInclude Include="ShortcutSystem.h">
       <Filter>DevelopmentSupportSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillDevelopmentSystem.h">
+      <Filter>Contents\SkillDevelopmentSystem\Based</Filter>
+    </ClInclude>
+    <ClInclude Include="GretelSkillDevelopmentSystem.h">
+      <Filter>Contents\SkillDevelopmentSystem\Gretel</Filter>
+    </ClInclude>
+    <ClInclude Include="RobinSkillDevelopmentSystem.h">
+      <Filter>Contents\SkillDevelopmentSystem\Robin</Filter>
+    </ClInclude>
+    <ClInclude Include="UrsulaSkillDevelopmentSystem.h">
+      <Filter>Contents\SkillDevelopmentSystem\Ursual</Filter>
+    </ClInclude>
+    <ClInclude Include="MeleeEnemyPool.h">
+      <Filter>Contents\UnitFactory\UnitPool</Filter>
+    </ClInclude>
+    <ClInclude Include="DummyComponent.h">
+      <Filter>Contents\UnitFactory\UnitPool</Filter>
+    </ClInclude>
+    <ClInclude Include="RangedEnemyPool.h">
+      <Filter>Contents\UnitFactory\UnitPool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1477,6 +1517,18 @@
     </ClCompile>
     <ClCompile Include="ShortcutSystem.cpp">
       <Filter>DevelopmentSupportSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillDevelopmentSystem.cpp">
+      <Filter>Contents\SkillDevelopmentSystem\Based</Filter>
+    </ClCompile>
+    <ClCompile Include="GretelSkillDevelopmentSystem.cpp">
+      <Filter>Contents\SkillDevelopmentSystem\Gretel</Filter>
+    </ClCompile>
+    <ClCompile Include="RobinSkillDevelopmentSystem.cpp">
+      <Filter>Contents\SkillDevelopmentSystem\Robin</Filter>
+    </ClCompile>
+    <ClCompile Include="UrsulaSkillDevelopmentSystem.cpp">
+      <Filter>Contents\SkillDevelopmentSystem\Ursual</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -19,6 +19,7 @@ void Unit::Start()
 	m_navAgentComponent = GetGameObject()->GetComponent<NavigationAgent>();
 	m_animatorComponent = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
 
+	returnToPoolFunction = []() {};
 	unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Move,
 		[this]() { return currentOrder == UnitState::Move; } });
 
@@ -379,11 +380,12 @@ void Unit::DeathUpdate()
 
 	if (deathFunctionElapsed >= deathAnimationDelay)
 	{
+		returnToPoolFunction();
 		deathFunctionElapsed = 0.0f;
 		m_navAgentComponent->SetRadius(0.0f);
-		m_navAgentComponent->SetActive(false);
-		GetGameObject()->SetSelfActive(false);
-		GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(1000, 1000, 1000));
+		//m_navAgentComponent->SetActive(false);
+		//GetGameObject()->SetSelfActive(false);
+		//GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(1000, 1000, 1000));
 	}
 }
 #pragma endregion

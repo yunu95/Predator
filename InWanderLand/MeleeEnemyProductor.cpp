@@ -30,6 +30,7 @@ void MeleeEnemyProductor::SetUnitData()
 	m_attackDelay = 1.0f;
 
 	m_navField = &SingleNavigationField::Instance();
+	m_unitFbxName = "SKM_Monster1";
 }
 
 void MeleeEnemyProductor::SingletonInitializer()
@@ -111,9 +112,4 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 
 	UnitProductor::SetCommonComponents();
 	return m_unitComponent;
-}
-
-void MeleeEnemyProductor::SetUnitFbxName()
-{
-	m_unitFbxName = "SKM_Monster1";
 }
