@@ -22,7 +22,7 @@ public:
 		p_dummy->m_pairUnit = unitComponent;
 		//p_dummy->GetGameObject()->SetParent(unitComponent->GetGameObject());
 		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-		contentsLayer->RegisterToEditorObjectVector(unitComponent->GetGameObject());
+		contentsLayer->RegisterToEditorObjectVector(p_dummy->GetGameObject());
 		contentsLayer->RegisterToEditorObjectVector(unitComponent->GetGameObject());
 	}
 };
