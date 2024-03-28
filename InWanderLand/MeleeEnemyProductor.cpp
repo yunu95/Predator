@@ -87,27 +87,30 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
 
 #pragma region Auto Attack Setting
+	float meleeAttackColliderRange = 3.0f;
+	float meleeAttackColliderLength = 1.0f;
+
 	auto unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	unitAttackColliderObject->setName("UnitAttackCollider");
 
 	auto m_physicsCollider = unitAttackColliderObject->AddComponent<physics::BoxCollider>();
-	m_physicsCollider->SetHalfExtent({ 0.5 * lengthUnit,0.5 * lengthUnit,0.5 * lengthUnit });
+	m_physicsCollider->SetHalfExtent({ meleeAttackColliderLength * 0.5f * lengthUnit, meleeAttackColliderLength * 0.5f * lengthUnit, meleeAttackColliderRange * 0.5f * lengthUnit });
 
 	auto autoAttackDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(autoAttackDebugMesh, DebugMeshType::Cube, yunuGI::Color::red(), true);
-	autoAttackDebugMesh->GetTransform()->SetLocalScale({ 1.0f * lengthUnit, 1.0f * lengthUnit, 3.0f * lengthUnit });
+	autoAttackDebugMesh->GetTransform()->SetLocalScale({ meleeAttackColliderLength * lengthUnit, meleeAttackColliderLength * lengthUnit, meleeAttackColliderRange * lengthUnit });
 
-	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
-	warriorAttackSystem->SetMeleeAttackType(MeleeAttackType::Collider);
-	warriorAttackSystem->SetColliderObject(unitAttackColliderObject);
-	warriorAttackSystem->SetColliderDebugObject(autoAttackDebugMesh);
-	warriorAttackSystem->SetOwnerUnitObject(m_unitGameObject);
-	warriorAttackSystem->SetColliderRemainTime(0.3f);
+	auto meleeAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
+	meleeAttackSystem->SetMeleeAttackType(MeleeAttackType::Collider);
+	meleeAttackSystem->SetColliderObject(unitAttackColliderObject);
+	meleeAttackSystem->SetColliderDebugObject(autoAttackDebugMesh);
+	meleeAttackSystem->SetOwnerUnitObject(m_unitGameObject);
+	meleeAttackSystem->SetColliderRemainTime(0.3f);
 
 	//unitAttackColliderObject->SetParent(m_unitGameObject);
-	unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -2.0f });
+	unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -1 * meleeAttackColliderRange });
 	//autoAttackDebugMesh->SetParent(m_unitGameObject);
-	autoAttackDebugMesh->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -2.0f });
+	autoAttackDebugMesh->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -1 * meleeAttackColliderRange });
 #pragma endregion
 
 	UnitProductor::SetCommonComponents();

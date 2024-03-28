@@ -968,7 +968,6 @@
     <ClInclude Include="SingletonInstanceContainer.h">
       <Filter>Contents\Containers\SingletonInstanceContainer</Filter>
     </ClInclude>
-
     <ClInclude Include="ShortcutSystem.h">
       <Filter>DevelopmentSupportSystem</Filter>
     </ClInclude>
@@ -992,6 +991,9 @@
     </ClInclude>
     <ClInclude Include="RangedEnemyPool.h">
       <Filter>Contents\UnitFactory\UnitPool</Filter>
+    </ClInclude>
+    <ClInclude Include="BossProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1529,6 +1531,9 @@
     </ClCompile>
     <ClCompile Include="UrsulaSkillDevelopmentSystem.cpp">
       <Filter>Contents\SkillDevelopmentSystem\Ursual</Filter>
+    </ClCompile>
+    <ClCompile Include="BossProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

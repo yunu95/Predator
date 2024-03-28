@@ -146,21 +146,23 @@ namespace application
 
 				UnitProductor* currentSelectedProductor{ nullptr };
 
+				Unit* unitComponent{ nullptr };
+
                 if (pod.templateData->pod.skinnedFBXName == "SKM_Monster1")
                 {
                     currentSelectedProductor = &MeleeEnemyProductor::Instance();
 					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                     MeleeEnemyPool::SingleInstance().SetStartPosition(startPosition);
-                    MeleeEnemyPool::SingleInstance().Borrow();
-					ShortcutSystem::Instance().RegisterObject(2, MeleeEnemyPool::SingleInstance().GetUnitComponent()->GetGameObject());
+					unitComponent = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+					ShortcutSystem::Instance().RegisterObject(2, unitComponent->GetGameObject());
                 }
                 else if (pod.templateData->pod.skinnedFBXName == "SKM_Monster2")
                 {
 					currentSelectedProductor = &RangedEnemyProductor::Instance();
 					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                     RangedEnemyPool::SingleInstance().SetStartPosition(startPosition);
-                    RangedEnemyPool::SingleInstance().Borrow();
-					ShortcutSystem::Instance().RegisterObject(2, RangedEnemyPool::SingleInstance().GetUnitComponent()->GetGameObject());
+					unitComponent = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+					ShortcutSystem::Instance().RegisterObject(2, unitComponent->GetGameObject());
                 }
                 else
                 {

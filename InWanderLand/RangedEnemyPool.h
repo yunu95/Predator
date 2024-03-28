@@ -10,30 +10,24 @@ class RangedEnemyPool : public GameObjectPool<DummyComponent>, public GHContents
 {
 private:
 	Vector3d m_startPos;
-	Unit* m_unitComponent{ nullptr };
 public:
 	void SetStartPosition(Vector3d pos);
-	Unit* GetUnitComponent() const;
 	virtual void ObjectInitializer(DummyComponent* p_dummy) override
 	{
-		m_unitComponent = RangedEnemyProductor::Instance().CreateUnit(m_startPos);
-		m_unitComponent->returnToPoolFunction = [=]()
+		auto unitComponent = RangedEnemyProductor::Instance().CreateUnit(m_startPos);
+		unitComponent->returnToPoolFunction = [=]()
 			{
 				Return(p_dummy);
 			};
-		m_unitComponent->GetGameObject()->SetParent(p_dummy->GetGameObject());
+		p_dummy->m_pairUnit = unitComponent;
+		//p_dummy->GetGameObject()->SetParent(unitComponent->GetGameObject());
 		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
 		contentsLayer->RegisterToEditorObjectVector(p_dummy->GetGameObject());
-		//contentsLayer->RegisterToEditorObjectVector(m_unitComponent->GetGameObject());
+		contentsLayer->RegisterToEditorObjectVector(unitComponent->GetGameObject());
 	}
 };
 
 void RangedEnemyPool::SetStartPosition(Vector3d pos)
 {
 	m_startPos = pos;
-}
-
-Unit* RangedEnemyPool::GetUnitComponent() const
-{
-	return m_unitComponent;
 }

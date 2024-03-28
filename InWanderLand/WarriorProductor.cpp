@@ -126,7 +126,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	warriorAttackSystem->SetMeleeAttackType(MeleeAttackType::DirectAttack);
 	warriorAttackSystem->SetOwnerUnitObject(m_unitGameObject);
 	warriorAttackSystem->SetDirectAttackSpecialEffect(bleedingSystem);
-	warriorAttackSystem->SetDamage(1.0f);
+	warriorAttackSystem->SetDamage(m_autoAttackDamage);
 #pragma endregion
 
 #pragma region Q Skill Setting

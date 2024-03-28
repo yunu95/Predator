@@ -64,8 +64,9 @@ void PlaytimeWave::Update()
 				currentSelectedProductor = &MeleeEnemyProductor::Instance();
 				currentSelectedProductor->MappingUnitData(waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod);
 				MeleeEnemyPool::SingleInstance().SetStartPosition(pos);
-				MeleeEnemyPool::SingleInstance().Borrow();
-				unitComponent = MeleeEnemyPool::SingleInstance().GetUnitComponent();
+				unitComponent = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+				unitComponent->GetTransform()->SetWorldPosition(pos);
+				unitComponent->GetGameObject()->SetSelfActive(true);
 				application::ShortcutSystem::Instance().RegisterObject(2, unitComponent->GetGameObject());
 
 			}
@@ -74,8 +75,9 @@ void PlaytimeWave::Update()
 				currentSelectedProductor = &RangedEnemyProductor::Instance();
 				currentSelectedProductor->MappingUnitData(waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod);
 				RangedEnemyPool::SingleInstance().SetStartPosition(pos);
-				RangedEnemyPool::SingleInstance().Borrow();
-				unitComponent = RangedEnemyPool::SingleInstance().GetUnitComponent();
+				unitComponent = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+				unitComponent->GetTransform()->SetWorldPosition(pos);
+				unitComponent->GetGameObject()->SetSelfActive(true);
 				application::ShortcutSystem::Instance().RegisterObject(2, unitComponent->GetGameObject());
 			}
 

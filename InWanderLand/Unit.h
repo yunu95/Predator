@@ -79,7 +79,8 @@ private:
 	AttackType m_attackType;
 
 	std::string m_fbxName;
-	float m_healthPoint;
+	float m_maxHealthPoint;
+	float m_currentHealthPoint;
 	float m_autoAttackDamage;
 	float m_beforeBlindDamage;
 	float m_initialAutoAttackDamage;
@@ -215,7 +216,7 @@ public:
 	UnitSide GetUnitSide() const;
 	void SetUnitType(UnitType type);
 	void SetUnitSide(UnitSide side);
-	void SetUnitHp(int p_Hp);
+	void SetUnitMaxHp(int p_Hp);
 	void SetUnitAp(int p_Ap);
 	void SetIdRadius(float radius);
 	void SetAtkRadius(float radius);
@@ -279,7 +280,10 @@ public:
 	void SetUnitDamageToZero(bool p_bool);
 	void MultipleUnitSpeed(float p_mul);
 
+	void ResetUnitMembers();
+
 	std::function<void()> returnToPoolFunction{ nullptr };
+	DummyComponent* m_dummyCom;
 
 	friend RobinSkillDevelopmentSystem;
 };

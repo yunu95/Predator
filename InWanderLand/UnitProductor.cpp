@@ -60,7 +60,7 @@ void UnitProductor::SetCommonComponents()
 	m_unitComponent->SetUnitType(m_unitType);
 	m_unitComponent->SetUnitSide(m_unitSide);
 
-	m_unitComponent->SetUnitHp(m_healthPoint);
+	m_unitComponent->SetUnitMaxHp(m_healthPoint);
 	m_unitComponent->SetUnitAp(m_autoAttackDamage);
 
 	m_unitComponent->SetAtkRadius(m_atkRadius);
