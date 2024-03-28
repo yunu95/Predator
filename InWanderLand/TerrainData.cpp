@@ -82,6 +82,13 @@ namespace application
         {
             if (!nodes.empty())
                 PreSaveCallback();
+
+            // 지형정보가 이미 빌드되어 있고 다시 빌드할 필요가 없으면 이미 존재하는 정보를 사용한다.
+            if (isTerrainfoCached)
+            {
+                return;
+            }
+
             std::vector<yunuGI::Vector3> vertexList;
             std::vector<unsigned int> indexList;
             MakeUpVerticesList(vertexList, indexList, nodes);
@@ -107,10 +114,12 @@ namespace application
             ApplyDebugMesh();
 #endif
             SingleNavigationField::Instance().BuildField(vertexList2, indexList2);
+            isTerrainfoCached = true;
         }
 
         void TerrainData::AddNode(const Vector2i& nodeKey)
         {
+            isTerrainfoCached = false;
             if (nodes.find(nodeKey) != nodes.end())
                 return;
             auto debugMeshIdx = GetOrCreateDebugMeshIndex();
@@ -120,6 +129,7 @@ namespace application
         }
         void TerrainData::EraseNode(const Vector2i& nodeKey)
         {
+            isTerrainfoCached = false;
             if (nodes.find(nodeKey) == nodes.end())
                 return;
 

@@ -88,13 +88,13 @@
     <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include/DirectXTex;$(SolutionDir)Yunu3DGraphicsInterface;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>Intermediate\$(Platform)\$(Configuration)\</IntDir>
-    <LibraryPath>$(SolutionDir)Lib/$(platform)/$(configuration);$(SolutionDIr)Lib/x64/Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Lib/$(platform)/$(configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include/DirectXTex;$(SolutionDir)Yunu3DGraphicsInterface;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>Intermediate\$(Platform)\$(Configuration)\</IntDir>
-    <LibraryPath>$(SolutionDir)Lib/$(platform)/$(configuration);$(SolutionDir)Lib/x64/Release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Lib/$(platform)/$(configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

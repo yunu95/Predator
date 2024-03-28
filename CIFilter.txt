@@ -5,6 +5,7 @@
 .hlsl
 InWanderLand_ReleaseEditorExe.exe
 InWanderLand_ReleaseExe.exe
+NailResourceTool_Release.exe
 InWanderLand.dll
 NailEngine.dll
 Yunuty.dll

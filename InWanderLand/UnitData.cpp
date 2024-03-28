@@ -12,8 +12,11 @@
 #include "HealerProductor.h"
 #include "MeleeEnemyProductor.h"
 #include "RangedEnemyProductor.h"
+#include "MeleeEnemyPool.h"
+#include "RangedEnemyPool.h"
 #include "Application.h"
 #include "ContentsLayer.h"
+#include "ShortcutSystem.h"
 
 namespace application
 {
@@ -106,6 +109,7 @@ namespace application
             unitInstance->GetTransform()->SetLocalScale({ pod.scale.x,pod.scale.y,pod.scale.z });
             return unitInstance;
         };
+
         void UnitData::ApplyAsPlaytimeObject()
         {
             // 함정과 같은 특수 기믹 객체들도 유닛과 유사하게 위치를 지정해주면 되기 때문에 UnitType에 Bomb, Trap, Bbang/th같은
@@ -116,13 +120,16 @@ namespace application
             /// 2024.03.20 추가
             // 이제 templateData에서 UnitType에 대한 int값을 가져올 수 있다.
             // 이 값을 통해 타입을 분류해 유닛을 배치해보자.
-			if (pod.waveData == nullptr)
+			
+            if (pod.waveData == nullptr)
 			{
+				Vector3d startPosition = Vector3d(pod.position.x, pod.position.y, pod.position.z);
+
                 if (!isSelectorInitialized)
                 {
-					productorSelector.push_back(&HealerProductor::Instance());
 					productorSelector.push_back(&WarriorProductor::Instance());
-					productorSelector.push_back(&MagicianProductor::Instance());
+					/*productorSelector.push_back(&HealerProductor::Instance());
+					productorSelector.push_back(&MagicianProductor::Instance());*/
 					productorSelector.push_back(&MeleeEnemyProductor::Instance());
 					productorSelector.push_back(&RangedEnemyProductor::Instance());
                     isSelectorInitialized = true;
@@ -139,21 +146,39 @@ namespace application
 
 				UnitProductor* currentSelectedProductor{ nullptr };
 
-				for (auto& e : productorSelector)
-				{
-					if (e->SelectUnitProductorByFbxName(pod.templateData->pod.skinnedFBXName))
+                if (pod.templateData->pod.skinnedFBXName == "SKM_Monster1")
+                {
+                    currentSelectedProductor = &MeleeEnemyProductor::Instance();
+					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+                    MeleeEnemyPool::SingleInstance().SetStartPosition(startPosition);
+                    MeleeEnemyPool::SingleInstance().Borrow();
+					ShortcutSystem::Instance().RegisterObject(2, MeleeEnemyPool::SingleInstance().GetUnitComponent()->GetGameObject());
+                }
+                else if (pod.templateData->pod.skinnedFBXName == "SKM_Monster2")
+                {
+					currentSelectedProductor = &RangedEnemyProductor::Instance();
+					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+                    RangedEnemyPool::SingleInstance().SetStartPosition(startPosition);
+                    RangedEnemyPool::SingleInstance().Borrow();
+					ShortcutSystem::Instance().RegisterObject(2, RangedEnemyPool::SingleInstance().GetUnitComponent()->GetGameObject());
+                }
+                else
+                {
+					for (auto& e : productorSelector)
 					{
-						currentSelectedProductor = e;
-						break;
+						if (e->SelectUnitProductorByFbxName(pod.templateData->pod.skinnedFBXName))
+						{
+							currentSelectedProductor = e;
+							break;
+						}
 					}
-				}
+					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
 
-				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+					auto unit = currentSelectedProductor->CreateUnit(startPosition);
+					contentsLayer->RegisterToEditorObjectVector(unit->GetGameObject());
 
-				Vector3d startPosition = Vector3d(pod.position.x, pod.position.y, pod.position.z);
-
-				contentsLayer->RegisterToEditorObjectVector(currentSelectedProductor->CreateUnit(startPosition)->GetGameObject());
-
+					ShortcutSystem::Instance().RegisterObject(1, unit->GetGameObject());
+                }
 			}
 		}
 
