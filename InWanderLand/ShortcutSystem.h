@@ -31,7 +31,7 @@ namespace application
 	private:
 		ShortcutSystem();
 		
-		unsigned int keyCount = 10;
+		unsigned int keyCount = 72;
 		std::vector<std::unordered_set<GameObject*>> list;
 		std::unordered_map<unsigned int, std::vector<std::pair<KeyCode, bool>>> triggerKeys;
 		std::unordered_map<unsigned int, std::function<void(GameObject*)>> triggerFunc;
