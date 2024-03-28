@@ -25,7 +25,7 @@ public:
 		m_unitComponent->GetGameObject()->SetParent(p_dummy->GetGameObject());
 		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
 		contentsLayer->RegisterToEditorObjectVector(p_dummy->GetGameObject());
-		contentsLayer->RegisterToEditorObjectVector(m_unitComponent->GetGameObject());
+		//contentsLayer->RegisterToEditorObjectVector(m_unitComponent->GetGameObject());
 	}
 };
 
