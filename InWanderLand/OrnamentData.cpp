@@ -101,6 +101,7 @@ namespace application
                 {
                     if (fbxName == std::string(each.begin(), each.end()))
                     {
+                        ShortcutSystem::Instance().RegisterObject(3, ornamentInstance->GetGameObject());
                         ShortcutSystem::Instance().RegisterObject(idx, ornamentInstance->GetGameObject());
                         break;
                     }

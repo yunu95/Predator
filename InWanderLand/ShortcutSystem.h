@@ -28,6 +28,9 @@ namespace application
 		bool RegisterObject(unsigned int groupNum, GameObject* obj);
 		void ClearObject();
 
+		/// 통일된 동작을 수행하도록 기능을 구현하고 싶을 경우 사용하는 플래그 획득 함수
+		bool GetTriggerSwitch(unsigned int groupNum);
+
 	private:
 		ShortcutSystem();
 		
@@ -35,6 +38,7 @@ namespace application
 		std::vector<std::unordered_set<GameObject*>> list;
 		std::unordered_map<unsigned int, std::vector<std::pair<KeyCode, bool>>> triggerKeys;
 		std::unordered_map<unsigned int, std::function<void(GameObject*)>> triggerFunc;
+		std::unordered_map<unsigned int, bool> triggerSwitch;
 	};
 }
 
