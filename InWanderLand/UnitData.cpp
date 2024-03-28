@@ -151,6 +151,7 @@ namespace application
 					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                     MeleeEnemyPool::SingleInstance().SetStartPosition(startPosition);
                     MeleeEnemyPool::SingleInstance().Borrow();
+					ShortcutSystem::Instance().RegisterObject(2, MeleeEnemyPool::SingleInstance().GetUnitComponent()->GetGameObject());
                 }
                 else if (pod.templateData->pod.skinnedFBXName == "SKM_Monster2")
                 {
@@ -158,6 +159,7 @@ namespace application
 					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                     RangedEnemyPool::SingleInstance().SetStartPosition(startPosition);
                     RangedEnemyPool::SingleInstance().Borrow();
+					ShortcutSystem::Instance().RegisterObject(2, RangedEnemyPool::SingleInstance().GetUnitComponent()->GetGameObject());
                 }
                 else
                 {
@@ -169,27 +171,29 @@ namespace application
 							break;
 						}
 					}
-				}
+					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
 
-				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+					auto unit = currentSelectedProductor->CreateUnit(startPosition);
+					contentsLayer->RegisterToEditorObjectVector(unit->GetGameObject());
 
-                auto unit = currentSelectedProductor->CreateUnit(startPosition);
-				contentsLayer->RegisterToEditorObjectVector(unit->GetGameObject());
-                
-                switch (unit->GetUnitSide())
-                {
-                    case Unit::UnitSide::Player:
-                    {
-                        ShortcutSystem::Instance().RegisterObject(1, unit->GetGameObject());
-                        break;
-                    }
-                    case Unit::UnitSide::Enemy:
-                    {
-                        ShortcutSystem::Instance().RegisterObject(2, unit->GetGameObject());
-                        break;
-                    }
-                    default:
-                        break;
+					ShortcutSystem::Instance().RegisterObject(1, unit->GetGameObject());
+
+
+					//switch (unit->GetUnitSide())
+					//{
+					//	case Unit::UnitSide::Player:
+					//	{
+					//		ShortcutSystem::Instance().RegisterObject(1, unit->GetGameObject());
+					//		break;
+					//	}
+					//	case Unit::UnitSide::Enemy:
+					//	{
+					//		ShortcutSystem::Instance().RegisterObject(2, unit->GetGameObject());
+					//		break;
+					//	}
+					//	default:
+					//		break;
+					//}
                 }
 			}
 		}

@@ -7,6 +7,9 @@
 #include "RangedEnemyProductor.h"
 #include "Application.h"
 #include "ContentsLayer.h"
+#include "MeleeEnemyPool.h"
+#include "RangedEnemyPool.h"
+#include "ShortcutSystem.h"
 
 PlaytimeWave::~PlaytimeWave()
 {
@@ -54,23 +57,40 @@ void PlaytimeWave::Update()
 				waveData->waveUnitDatasVector[waveDataIndex]->pod.position.z };
 
 			UnitProductor* currentSelectedProductor;
+			Unit* unitComponent{ nullptr };
 
-			for (auto& e : productorSelector)
+			if (waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod.skinnedFBXName == "SKM_Monster1")
 			{
-				if (e->SelectUnitProductorByFbxName(waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod.skinnedFBXName))
-				{
-					currentSelectedProductor = e;
-					break;
-				}
+				currentSelectedProductor = &MeleeEnemyProductor::Instance();
+				currentSelectedProductor->MappingUnitData(waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod);
+				MeleeEnemyPool::SingleInstance().SetStartPosition(pos);
+				MeleeEnemyPool::SingleInstance().Borrow();
+				unitComponent = MeleeEnemyPool::SingleInstance().GetUnitComponent();
+				application::ShortcutSystem::Instance().RegisterObject(2, unitComponent->GetGameObject());
+
+			}
+			else if (waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod.skinnedFBXName == "SKM_Monster2")
+			{
+				currentSelectedProductor = &RangedEnemyProductor::Instance();
+				currentSelectedProductor->MappingUnitData(waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod);
+				RangedEnemyPool::SingleInstance().SetStartPosition(pos);
+				RangedEnemyPool::SingleInstance().Borrow();
+				unitComponent = RangedEnemyPool::SingleInstance().GetUnitComponent();
+				application::ShortcutSystem::Instance().RegisterObject(2, unitComponent->GetGameObject());
 			}
 
-			Unit* unitComponent = currentSelectedProductor->CreateUnit(pos);
+			//for (auto& e : productorSelector)
+			//{
+			//	if (e->SelectUnitProductorByFbxName(waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod.skinnedFBXName))
+			//	{
+			//		currentSelectedProductor = e;
+			//		break;
+			//	}
+			//}
+
 			GameObject* unitObject = unitComponent->GetGameObject();
 
 			m_currentWaveUnitVector.push_back(unitComponent);
-
-			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-			contentsLayer->RegisterToEditorObjectVector(unitObject);
 			
 			nextSummonUnitIndex++;
 			waveDataIndex++;
