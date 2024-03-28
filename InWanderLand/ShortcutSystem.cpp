@@ -9,6 +9,7 @@ namespace application
 		list.resize(keyCount);
 		triggerKeys.reserve(keyCount);
 		triggerFunc.reserve(keyCount);
+		triggerSwitch.reserve(keyCount);
 
 		/// 콘텐츠 영역에서 세팅할 수 있도록 public 으로 함수를 열었으나,
 		/// 우선 여기에서 일괄 처리하는 방식으로 구현함
@@ -163,6 +164,15 @@ namespace application
 
 		for (int i = 0; i < keyCount; i++)
 		{
+			if (i == 3)
+			{
+				triggerFunc[3] = [&](GameObject* obj)
+					{
+						obj->SetSelfActive(GetTriggerSwitch(3));
+					};
+				continue;
+			}
+
 			triggerFunc[i] = [&](GameObject* obj)
 				{
 					obj->SetSelfActive(!obj->GetActive());
@@ -193,6 +203,8 @@ namespace application
 				{
 					triggerFunc[i](each);
 				}
+
+				triggerSwitch[i] = !triggerSwitch[i];
 			}
 		}
 	}
@@ -241,10 +253,25 @@ namespace application
 
 		list.clear();
 		list.resize(keyCount);
+
+		for (auto& [key, val] : triggerSwitch)
+		{
+			val = false;
+		}
+	}
+
+	bool ShortcutSystem::GetTriggerSwitch(unsigned int groupNum)
+	{
+		if (groupNum >= keyCount)
+		{
+			return false;
+		}
+
+		return triggerSwitch[groupNum];
 	}
 
 	ShortcutSystem::ShortcutSystem()
-		: list(), triggerKeys(), triggerFunc()
+		: list(), triggerKeys(), triggerFunc(), triggerSwitch()
 	{
 
 	}
