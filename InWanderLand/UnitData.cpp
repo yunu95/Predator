@@ -109,6 +109,7 @@ namespace application
             unitInstance->GetTransform()->SetLocalScale({ pod.scale.x,pod.scale.y,pod.scale.z });
             return unitInstance;
         };
+
         void UnitData::ApplyAsPlaytimeObject()
         {
             // 함정과 같은 특수 기믹 객체들도 유닛과 유사하게 위치를 지정해주면 되기 때문에 UnitType에 Bomb, Trap, Bbang/th같은
@@ -177,23 +178,6 @@ namespace application
 					contentsLayer->RegisterToEditorObjectVector(unit->GetGameObject());
 
 					ShortcutSystem::Instance().RegisterObject(1, unit->GetGameObject());
-
-
-					//switch (unit->GetUnitSide())
-					//{
-					//	case Unit::UnitSide::Player:
-					//	{
-					//		ShortcutSystem::Instance().RegisterObject(1, unit->GetGameObject());
-					//		break;
-					//	}
-					//	case Unit::UnitSide::Enemy:
-					//	{
-					//		ShortcutSystem::Instance().RegisterObject(2, unit->GetGameObject());
-					//		break;
-					//	}
-					//	default:
-					//		break;
-					//}
                 }
 			}
 		}
