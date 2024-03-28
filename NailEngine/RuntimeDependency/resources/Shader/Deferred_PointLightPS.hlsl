@@ -69,7 +69,7 @@ PS_OUT main(PixelIn input)
 
 // ShaderInfo
 // ShaderType : Light
-// RasterType : Solid
+// RasterType : Light
 // CullType : CullFront
 // DepthType : NoDepthTestNoWrite
 // BlendType : Light

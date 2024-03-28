@@ -16,6 +16,7 @@ float4 main(PixelIn input) : SV_TARGET
     float4 color = 0.0;
     float weights[9] = { 1, 2, 1, 2, 4, 2, 1, 2, 1 };
 
+    [unroll]
     for (int i = -1; i <= 1; ++i)
     {
         for (int j = -1; j <= 1; ++j)

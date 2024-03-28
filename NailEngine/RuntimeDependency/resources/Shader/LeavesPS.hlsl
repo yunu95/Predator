@@ -28,31 +28,25 @@ PS_OUT main(PixelIn input)
     PS_OUT output = (PS_OUT) 0;
     
     float4 color = float4(0.5f, 0.5f, 0.5f, 1.f);
+
+    clip(OpacityMap.Sample(sam, input.uv).w - 1);
     
-    if (UseTexture(useOpacity) == 1)
-    {
-        clip(OpacityMap.Sample(sam, input.uv).w - 1);
-    }
-    
-    if (UseTexture(useAlbedo) == 1)
-    {
-        color = AlbedoMap.Sample(sam, input.uv);
-        color.rgb = pow(color.rgb, 2.2f);
-    }
+    color = AlbedoMap.Sample(sam, input.uv);
+    color.rgb = pow(color.rgb, 2.2f);
     
     float3 viewNormal = input.normalV;
-    if (UseTexture(useNormal) == 1)
-    {
-        // [0, 255] 범위에서 [0, 1]로 변환
-        //float3 tangentSpaceNormal = pow(NormalMap.Sample(sam, input.uv).xyz, 1 / 2.2f);
-        //float3 tangentSpaceNormal = pow(NormalMap.Sample(sam, input.uv).xyz, 2.2f);
-        float3 tangentSpaceNormal = NormalMap.Sample(sam, input.uv).xyz;
+    //if (UseTexture(useNormal) == 1)
+    //{
+    //    // [0, 255] 범위에서 [0, 1]로 변환
+    //    //float3 tangentSpaceNormal = pow(NormalMap.Sample(sam, input.uv).xyz, 1 / 2.2f);
+    //    //float3 tangentSpaceNormal = pow(NormalMap.Sample(sam, input.uv).xyz, 2.2f);
+    //    float3 tangentSpaceNormal = NormalMap.Sample(sam, input.uv).xyz;
         
-        // [0, 1] 범위에서 [-1, 1]로 변환
-        tangentSpaceNormal = (tangentSpaceNormal - 0.5f) * 2.f;
-        float3x3 matTBN = { input.tangentV, input.biNormalV, input.normalV };
-        viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
-    }
+    //    // [0, 1] 범위에서 [-1, 1]로 변환
+    //    tangentSpaceNormal = (tangentSpaceNormal - 0.5f) * 2.f;
+    //    float3x3 matTBN = { input.tangentV, input.biNormalV, input.normalV };
+    //    viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
+    //}
     
     output.arm.x = 1.0f;
     output.arm.y = 1.0f;
