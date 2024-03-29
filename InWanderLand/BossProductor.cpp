@@ -9,7 +9,7 @@ void BossProductor::SetUnitData()
 	m_unitType = Unit::UnitType::Boss;
 	m_unitSide = Unit::UnitSide::Enemy;
 
-	m_healthPoint = 250;
+	m_healthPoint = 100000;
 	m_manaPoint = 100;
 
 	m_autoAttackDamage = 10;
@@ -29,9 +29,6 @@ void BossProductor::SetUnitData()
 	m_attackDelay = 1.0f;
 
 	m_navField = &SingleNavigationField::Instance();
-
-	qSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::OnlyPath;
-	wSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::None;
 
 	m_unitFbxName = "SKM_Robin";
 }
