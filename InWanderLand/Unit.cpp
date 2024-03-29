@@ -75,8 +75,8 @@ void Unit::Start()
 		[this]() { return currentOrder == UnitState::Idle; } });
 	}
 
-	//unitFSM.transitions[UnitState::Skill].push_back({ UnitState::Idle,
-	//	[this]() { return currentOrder == UnitState::Idle; } });
+	unitFSM.transitions[UnitState::Skill].push_back({ UnitState::Idle,
+		[this]() { return currentOrder == UnitState::Idle; } });
 
 	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Skill); i++)
 	{
