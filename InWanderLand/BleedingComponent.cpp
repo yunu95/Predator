@@ -47,6 +47,7 @@ void BleedingComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 					/// 출혈의 지속시간이 종료되거나 유닛이 사망하면 erase해준다.
 					if (opponentUnits.find(opponentUnit)->second->currentDamagedCount == m_maxDamageCount || opponentUnits.find(opponentUnit)->second->bleedingUnit->IsUnitDead())
 					{
+						bleedingTimer->StopTimer();
 						StatusTimerPool::SingleInstance().Return(bleedingTimer);
 						opponentUnits.erase(opponentUnits.find(opponentUnit)->second->bleedingUnit);
 					}

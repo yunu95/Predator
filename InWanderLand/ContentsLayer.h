@@ -32,6 +32,7 @@ namespace application
             void StopContents();
 
 			void RegisterToEditorObjectVector(GameObject* p_obj);
+			void RegisterToEditorComponentVector(Component* p_obj);
 
             bool isStoppedOnce{ false };
             // 테스트 코드에서 임의로 ContentsLayer의 Initialize 코드를 오버라이드 하고 싶을때 쓰이는 함수
@@ -44,6 +45,8 @@ namespace application
 
             // container. Editor의 Stop버튼을 눌렀을 경우 해당 container 내의 Object들을 Destroy 해줍니다.
 			std::vector<GameObject*> objectCreatedByEditorVector;
+
+			std::vector<Component*> componentsCreatedByEditorVector;
         };
     }
 }

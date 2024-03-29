@@ -12,7 +12,7 @@
 #include "LazySingletonClass.h"
 #include "PassiveCakePool.h"
 
-void SingletonInstanceContainer::ClearLazySingletonInstances()
+void SingletonInstanceContainer::ClearSingletonInstances()
 {
 	PlayerController::SingleInstance().ProhibitCreateInstance();
 	MeleeEnemyPool::SingleInstance().ProhibitCreateInstance();

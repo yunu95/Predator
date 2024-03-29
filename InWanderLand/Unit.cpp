@@ -840,10 +840,6 @@ bool Unit::GetJustCrushedState() const
 
 bool Unit::IsUnitDead() const
 {
-	if (m_maxHealthPoint <= 0)
-		return true;
-
-	else
-		return false;
+	return (m_currentHealthPoint <= 0);
 }
 

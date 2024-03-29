@@ -585,6 +585,11 @@ void application::contents::ContentsLayer::PlayContents()
 	SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
+	for (auto e : componentsCreatedByEditorVector)
+	{
+		e->SetActive(true);
+	}
+
 	InputManager::Instance();
 	UIManager::Instance();
 
@@ -644,11 +649,19 @@ void application::contents::ContentsLayer::PlayContents()
 void application::contents::ContentsLayer::PauseContents()
 {
     Time::SetTimeScale(FLT_MIN * 1000);
+	for (auto e : componentsCreatedByEditorVector)
+	{
+		e->SetActive(false);
+	}
 }
 
 void application::contents::ContentsLayer::ResumeContents()
 {
     Time::SetTimeScale(1);
+	for (auto e : componentsCreatedByEditorVector)
+	{
+		e->SetActive(true);
+	}
 }
 
 void application::contents::ContentsLayer::StopContents()
@@ -657,6 +670,10 @@ void application::contents::ContentsLayer::StopContents()
     isStoppedOnce = true;
     ClearPlaytimeObject();
     ShortcutSystem::Instance().ClearObject();
+	for (auto e : componentsCreatedByEditorVector)
+	{
+		e->SetActive(false);
+	}
 }
 
 #ifdef GEN_TESTS
@@ -680,13 +697,23 @@ void application::contents::ContentsLayer::ClearPlaytimeObject()
 		//e->SetSelfActive(false);
 		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(e);
 	}
+
+    for (auto e : componentsCreatedByEditorVector)
+    {
+        e->SetActive(false);
+    }
 	objectCreatedByEditorVector.clear();
 
-    SingletonInstanceContainer::SingleInstance().ClearLazySingletonInstances();
+    SingletonInstanceContainer::SingleInstance().ClearSingletonInstances();
 }
 
 void application::contents::ContentsLayer::RegisterToEditorObjectVector(GameObject* p_obj)
 {
     objectCreatedByEditorVector.push_back(p_obj);
+}
+
+void application::contents::ContentsLayer::RegisterToEditorComponentVector(Component* p_com)
+{
+    componentsCreatedByEditorVector.push_back(p_com);
 }
 
