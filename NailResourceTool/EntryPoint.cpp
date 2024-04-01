@@ -395,7 +395,7 @@ void FBXLoad()
 	g_selectFBX = nullptr;
 	g_selectGameObject = nullptr;
 
-	LoadFBXMaterial();
+	//LoadFBXMaterial();
 
 	g_fbxLoad = true;
 

@@ -9,12 +9,12 @@ namespace wanderUtils
 		const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 		/// SCRES 우선 로드
-		resourceManager->LoadFile("FBXMaterial8.scres");
+		resourceManager->LoadFile("FBXMaterial.scres");
 
 		// 나머지 기타등등 파일들 로드하기
 		{
 			namespace fs = std::filesystem;
-			std::set<std::string> validExtensions{ ".jpg", ".png", ".bmp", ".tga", ".dds", ".hdr", ".cso" };
+			std::set<std::string> validExtensions{ ".jpg", ".bmp", ".tga", ".dds", ".cso" };
 			fs::path basePath{ "./" };
 			try
 			{

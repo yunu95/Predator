@@ -81,7 +81,7 @@ void NailEngine::Render()
 	RenderSystem::Instance.Get().Render();
 
 	// End
-	ResourceBuilder::Instance.Get().swapChain->GetSwapChain().Get()->Present(0, 0);
+	ResourceBuilder::Instance.Get().swapChain->GetSwapChain().Get()->Present(1, 0);
 
 	for (auto& iter : this->constantBuffers)
 	{
