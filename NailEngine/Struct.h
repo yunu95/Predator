@@ -160,7 +160,8 @@ struct PointLightVPMatrix
 struct PointLightIndex
 {
 	int plIndex;
-	DirectX::SimpleMath::Vector3 padding;
+	int isShadowCast;
+	DirectX::SimpleMath::Vector2 padding;
 };
 
 class Mesh;
