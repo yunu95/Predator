@@ -671,7 +671,7 @@ void application::contents::ContentsLayer::StopContents()
     Time::SetTimeScale(1);
     isStoppedOnce = true;
     ClearPlaytimeObject();
-    ShortcutSystem::Instance().ClearObject();
+    ShortcutSystem::Instance().Clear();
 	for (auto e : componentsCreatedByEditorVector)
 	{
 		e->SetActive(false);

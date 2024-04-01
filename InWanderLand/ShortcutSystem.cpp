@@ -1,4 +1,5 @@
 #include "ShortcutSystem.h"
+#include "DebugGraphic.h"
 
 #include "YunutyEngine.h"
 
@@ -6,9 +7,9 @@ namespace application
 {
 	void ShortcutSystem::SingletonInitializer()
 	{
-		list.resize(keyCount);
 		triggerKeys.reserve(keyCount);
 		triggerFunc.reserve(keyCount);
+		managedTriggerFunc.reserve(keyCount);
 		triggerSwitch.reserve(keyCount);
 
 		/// 콘텐츠 영역에서 세팅할 수 있도록 public 으로 함수를 열었으나,
@@ -161,23 +162,6 @@ namespace application
 		RegisterTriggerKey(70, keys);
 		keys[1] = { KeyCode::M, false };
 		RegisterTriggerKey(71, keys);
-
-		for (int i = 0; i < keyCount; i++)
-		{
-			if (i == 3)
-			{
-				triggerFunc[3] = [&](GameObject* obj)
-					{
-						obj->SetSelfActive(GetTriggerSwitch(3));
-					};
-				continue;
-			}
-
-			triggerFunc[i] = [&](GameObject* obj)
-				{
-					obj->SetSelfActive(!obj->GetActive());
-				};
-		}
 	}
 
 	void ShortcutSystem::Update()
@@ -199,12 +183,7 @@ namespace application
 
 			if (trigger)
 			{
-				for (auto& each : list[i])
-				{
-					triggerFunc[i](each);
-				}
-
-				triggerSwitch[i] = !triggerSwitch[i];
+				PullTrigger(i);
 			}
 		}
 	}
@@ -221,38 +200,53 @@ namespace application
 		return true;
 	}
 
-	bool ShortcutSystem::RegisterTriggerFunction(unsigned int groupNum, const std::function<void(GameObject*)>& funcs)
-	{
-		if (groupNum >= keyCount || triggerFunc.find(groupNum) != triggerFunc.end())
-		{
-			return false;
-		}
-
-		triggerFunc[groupNum] = funcs;
-
-		return true;
-	}
-
-	bool ShortcutSystem::RegisterObject(unsigned int groupNum, GameObject* obj)
+	bool ShortcutSystem::RegisterTriggerFunction(unsigned int groupNum, const std::function<void()>& funcs, const std::string& findKey)
 	{
 		if (groupNum >= keyCount)
 		{
 			return false;
 		}
 
-		list[groupNum].insert(obj);
+		if (findKey.empty())
+		{
+			triggerFunc[groupNum].push_back(funcs);
+		}
+		else
+		{
+			if (managedTriggerFunc[groupNum].find(findKey) != managedTriggerFunc[groupNum].end())
+			{
+				return false;
+			}
+
+			managedTriggerFunc[groupNum][findKey] = funcs;
+		}
+
+		return true;
+	}
+
+	bool ShortcutSystem::RemoveTriggerFunction(unsigned int groupNum, const std::string& findKey)
+	{
+		if (groupNum >= keyCount || managedTriggerFunc.find(groupNum) != managedTriggerFunc.end())
+		{
+			return false;
+		}
+
+		for (auto& [key, func] : managedTriggerFunc[groupNum])
+		{
+			if (key == findKey)
+			{
+				managedTriggerFunc[groupNum].erase(findKey);
+				return true;
+			}
+		}
 
 		return false;
 	}
 
-	void ShortcutSystem::ClearObject()
+	void ShortcutSystem::Clear()
 	{
-		/// Object 가 게임 중에서 소멸되어 잘못된 메모리에 접근할 가능성이 있음
-		/// 우선, 게임 진행 중에서는 그러한 경우가 없다고 가정하고
-		/// 플레이 전/후 에 RegisterObject 와 ClearObject 로 처리하는 방식을 사용함
-
-		list.clear();
-		list.resize(keyCount);
+		triggerFunc.clear();
+		triggerFunc.reserve(keyCount);
 
 		for (auto& [key, val] : triggerSwitch)
 		{
@@ -270,8 +264,36 @@ namespace application
 		return triggerSwitch[groupNum];
 	}
 
+	bool ShortcutSystem::PullTrigger(unsigned int groupNum)
+	{
+		if (groupNum >= keyCount)
+		{
+			return false;
+		}
+
+		triggerSwitch[groupNum] = !triggerSwitch[groupNum];
+
+		if (triggerFunc.find(groupNum) != triggerFunc.end())
+		{
+			for (auto& each : triggerFunc[groupNum])
+			{
+				each();
+			}
+		}
+
+		if (managedTriggerFunc.find(groupNum) != managedTriggerFunc.end())
+		{
+			for (auto& each : managedTriggerFunc[groupNum])
+			{
+				each.second();
+			}
+		}
+
+		return triggerSwitch[groupNum];
+	}
+
 	ShortcutSystem::ShortcutSystem()
-		: list(), triggerKeys(), triggerFunc(), triggerSwitch()
+		: triggerKeys(), triggerFunc(), managedTriggerFunc(), triggerSwitch()
 	{
 
 	}

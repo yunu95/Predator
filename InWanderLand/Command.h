@@ -9,15 +9,42 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 namespace application
 {
 	namespace editor
 	{
+		enum class CommandType
+		{
+			None = 0,
+			Simple,
+			Exit,
+			SaveMap,
+			LoadMap,
+			SaveOrnaments,
+			LoadOrnaments,
+			Create,
+			Delete,
+			EditTransform,
+		};
+
+		#define COMMAND_SETTING(type) \
+		static CommandType GetStaticType() { return type; } \
+		virtual CommandType GetCommandType() const override { return GetStaticType(); } \
+		virtual std::string GetName() const override { return #type; }
+
 		class Command
 		{
 		public:
+			virtual ~Command() = default;
 			virtual void Execute() = 0;	// 해당 커맨드를 실행함
+
+			virtual CommandType GetCommandType() const = 0;
+
+			// 디버그 용도로 쓰기 위함
+			virtual std::string GetName() const = 0;
+			virtual std::string GetDebugString() const { return std::string(); }
 		};
 		
 		/// Undo / Redo 가능한 Command 는 선별하여 처리할 수 있도록 지원하기 위해
@@ -26,6 +53,10 @@ namespace application
 			: public Command
 		{
 		public:
+			virtual ~UndoableCommand() = default;
+
+			virtual CommandType GetCommandType() const = 0;
+			virtual std::string GetName() const = 0;
 			virtual void Execute() = 0;
 			virtual void Undo() = 0;	// 해당 커맨드 실행의 이전 상태로 되돌림
 		};
@@ -37,7 +68,11 @@ namespace application
 			: public Command
 		{
 		public:
+			COMMAND_SETTING(CommandType::Simple)
+
 			using Action = void (Receiver::*)();
+			
+			virtual ~SimpleCommands() = default;
 
 			SimpleCommands(Receiver* receiver, Action action)
 				: receiver(receiver), action(action)

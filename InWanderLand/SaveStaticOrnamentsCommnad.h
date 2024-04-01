@@ -22,6 +22,8 @@ namespace application
 			: public Command
 		{
 		public:
+			COMMAND_SETTING(CommandType::SaveOrnaments)
+
 			SaveStaticOrnamentsCommand();
 
 			virtual void Execute() override;

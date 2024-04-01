@@ -9,6 +9,8 @@
 #include "ImGuizmo/ImGuizmo.h"
 #include "EditorMath.h"
 #include "EditorLayer.h"
+#include "CommandManager.h"
+#include "TransformEditCommand.h"
 
 #include "imgui.h"
 #include "imgui_internal.h"

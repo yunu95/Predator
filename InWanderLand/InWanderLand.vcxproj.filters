@@ -391,6 +391,12 @@
     <Filter Include="Contents\UnitFactory\UnitPool">
       <UniqueIdentifier>{0c84d392-f6f0-438d-92d0-0daa5729154b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Commands\SystemCommands">
+      <UniqueIdentifier>{f061485a-9870-4034-883b-a10e725acf7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Commands\SystemCommands\Edit">
+      <UniqueIdentifier>{015fea93-15af-4593-a062-6f56e5928bbe}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Contents\SkillSystem\PlayerSkillSystems">
       <UniqueIdentifier>{2d2f0218-46d3-4ff6-afbf-032928c37cf2}</UniqueIdentifier>
     </Filter>
@@ -1010,6 +1016,18 @@
     <ClInclude Include="UnitObjectPool.h">
       <Filter>Contents\UnitFactory\UnitPool</Filter>
     </ClInclude>
+    <ClInclude Include="SystemCommands.h">
+      <Filter>Editor\Commands\SystemCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformEditCommand.h">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="DeleteInstanceCommand.h">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateInstanceCommand.h">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1531,6 +1549,15 @@
     </ClCompile>
     <ClCompile Include="UrsulaSkillDevelopmentSystem.cpp">
       <Filter>Contents\SkillDevelopmentSystem\Ursual</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformEditCommand.cpp">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
+    </ClCompile>
+    <ClCompile Include="DeleteInstanceCommand.cpp">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateInstanceCommand.cpp">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
     </ClCompile>
     <ClCompile Include="BossProductor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
