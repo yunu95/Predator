@@ -179,7 +179,7 @@ namespace application
 				UnitObjectPool::SingleInstance().SetStartPosition(startPosition);
 				unitComponent = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
 				ShortcutSystem::Instance().RegisterTriggerFunction(tempShortCutIndex, 
-                        [=]() { unit->GetGameObject()->SetSelfActive(!unit->GetGameObject()->GetSelfActive()); });
+                        [=]() { unitComponent->GetGameObject()->SetSelfActive(!unitComponent->GetGameObject()->GetSelfActive()); });
 			}
 		}
 
