@@ -88,7 +88,17 @@ void GraphicsTest()
         }
     }
 
-    {
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		//obj->GetTransform()->SetLocalPosition(Vector3d{ -500,500,1 });
+		obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,100 });
+		auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
+		text->GetGI().SetFontSize(20);
+		auto test = obj->AddComponent<TestComponent2>();
+		test->text = text;
+	}
+
+ /*   {
     	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,44.81 });
     	auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
@@ -167,7 +177,7 @@ void GraphicsTest()
     	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
     	renderer->GetGI().SetMesh(mesh);
-    }
+    }*/
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //{
@@ -228,10 +238,9 @@ void GraphicsTest()
     ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 190,0,0 });
     ////////////}
 
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-    //	obj->GetTransform()->SetLocalPosition({ Vector3d{0,0,-5} });
-    //}
+    {
+    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+    }
 
     //{
     //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
@@ -412,13 +421,13 @@ void application::contents::ContentsLayer::Initialize()
         //yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
         yunutyEngine::Collider2D::SetIsOnXYPlane(false);
         auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
+        directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
         directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
         auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
         auto color = yunuGI::Color{ 1,1,1,1.f };
         light->GetGI().SetLightDiffuseColor(color);
 
-        editor::MapFileManager::GetSingletonInstance().LoadStaticOrnaments("TestOrnaments.punreal");
+        //editor::MapFileManager::GetSingletonInstance().LoadStaticOrnaments("TestOrnaments.punreal");
     }
     GraphicsTest();
 #else
@@ -426,6 +435,16 @@ void application::contents::ContentsLayer::Initialize()
         yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 
         ShortcutSystem::Instance();
+
+		{
+			auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			//obj->GetTransform()->SetLocalPosition(Vector3d{ -500,500,1 });
+			obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,100 });
+			auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
+			text->GetGI().SetFontSize(20);
+			auto test = obj->AddComponent<TestComponent2>();
+			test->text = text;
+		}
 
 		/// Editor 에서 수정하여 Map Data 에 저장할 부분
 		/*auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();

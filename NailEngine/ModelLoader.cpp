@@ -232,7 +232,8 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 			std::wstring _path = aiStringToWString(path);
 			std::filesystem::path pathName(_path);
 			std::wstring fileName = pathName.filename().wstring();
-
+			fileName.erase(fileName.length() - 3);
+			fileName += L"dds";
 			if (materialPtr)
 			{
 				fbxMeshData.material.albedoMap = std::static_pointer_cast<Material>(materialPtr)->GetTexture(yunuGI::Texture_Type::ALBEDO)->GetName();
@@ -253,7 +254,8 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 			std::wstring _path = aiStringToWString(path);
 			std::filesystem::path pathName(_path);
 			std::wstring fileName = pathName.filename().wstring();
-
+			fileName.erase(fileName.length() - 3);
+			fileName += L"dds";
 			if (materialPtr)
 			{
 				fbxMeshData.material.normalMap = std::static_pointer_cast<Material>(materialPtr)->GetTexture(yunuGI::Texture_Type::NORMAL)->GetName();
@@ -274,7 +276,8 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 			std::wstring _path = aiStringToWString(path);
 			std::filesystem::path pathName(_path);
 			std::wstring fileName = pathName.filename().wstring();
-
+			fileName.erase(fileName.length() - 3);
+			fileName += L"dds";
 
 			if (materialPtr)
 			{
@@ -296,7 +299,8 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 			std::wstring _path = aiStringToWString(path);
 			std::filesystem::path pathName(_path);
 			std::wstring fileName = pathName.filename().wstring();
-
+			fileName.erase(fileName.length() - 3);
+			fileName += L"dds";
 			if (materialPtr)
 			{
 				fbxMeshData.material.emissionMap = std::static_pointer_cast<Material>(materialPtr)->GetTexture(yunuGI::Texture_Type::EMISSION)->GetName();
@@ -317,7 +321,8 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 			std::wstring _path = aiStringToWString(path);
 			std::filesystem::path pathName(_path);
 			std::wstring fileName = pathName.filename().wstring();
-
+			fileName.erase(fileName.length() - 3);
+			fileName += L"dds";
 			if (materialPtr)
 			{
 				fbxMeshData.material.opacityMap = std::static_pointer_cast<Material>(materialPtr)->GetTexture(yunuGI::Texture_Type::OPACITY)->GetName();

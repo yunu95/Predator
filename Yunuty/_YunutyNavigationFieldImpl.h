@@ -19,6 +19,25 @@ namespace yunutyEngine
     class NavigationField::Impl
     {
     private:
+        // 파일 입출력시 파일의 첫 부분에 저장되는 헤더 정보
+        struct FileHeader
+        {
+            BuildSettings buildSettings;
+            rcConfig cfg;
+            dtTileCacheParams tcparams;
+            dtNavMeshParams navMeshParams;
+            float bmin[3];
+            float bmax[3];
+            int ts;
+            int tw;
+            int th;
+            int gw;
+            int gh;
+        };
+        /*struct TileHeader
+        {
+            int nTiles;
+        };*/
         Impl(NavigationField* navFieldComponent) :navFieldComponent(navFieldComponent)
         {
             m_navQuery = dtAllocNavMeshQuery();
@@ -51,7 +70,8 @@ namespace yunutyEngine
         }
         friend NavigationField;
     public:
-        bool handleBuild(const float* worldVertices, size_t verticesNum, const int* faces, size_t facesNum, const BuildSettings& buildSettings);
+        bool handleBuild(std::ifstream* importingFile = nullptr);
+        bool handleBuild(const float* worldVertices, size_t verticesNum, const int* faces, size_t facesNum, const BuildSettings& buildSettings, std::ofstream* exportingFile = nullptr);
         int rasterizeTileLayers(const float* worldVertices, size_t verticesNum, const int* faces, size_t facesNum, const int tx, const int ty, const rcConfig& cfg, struct TileCacheData* tiles, const int maxTiles);
         int calcLayerBufferSize(const int gridWidth, const int gridHeight);
         dtObstacleRef AddBoxObstacle(Vector3f center, Vector3f halfExtents, const float yRadians);

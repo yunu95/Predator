@@ -1,9 +1,11 @@
 #include "_YunutyNavigationFieldImpl.h"
+#include <iostream>
+#include <fstream>
 
 
 namespace yunutyEngine
 {
-    bool NavigationField::Impl::handleBuild(const float* worldVertices, size_t verticesNum, const int* faces, size_t facesNum, const BuildSettings& buildSettings)
+    bool NavigationField::Impl::handleBuild(const float* worldVertices, size_t verticesNum, const int* faces, size_t facesNum, const BuildSettings& buildSettings, std::ofstream* exportingFile)
     {
         static constexpr int EXPECTED_LAYERS_PER_TILE = 4;
         dtStatus status;
@@ -141,7 +143,7 @@ namespace yunutyEngine
         {
             for (int x = 0; x < tw; ++x)
             {
-                // tileCacheData 또한 파일 저장의 대상
+                // tileCacheData는 파일 저장의 대상
                 TileCacheData tiles[MAX_LAYERS];
                 memset(tiles, 0, sizeof(tiles));
                 int ntiles = rasterizeTileLayers(worldVertices, verticesNum, faces, facesNum, x, y, cfg, tiles, MAX_LAYERS);
@@ -159,6 +161,126 @@ namespace yunutyEngine
 
                     m_cacheLayerCount++;
                     m_cacheCompressedSize += tile->dataSize;
+                    m_cacheRawSize += calcLayerBufferSize(tcparams.width, tcparams.height);
+                }
+            }
+        }
+
+        // Build initial meshes
+        m_ctx->startTimer(RC_TIMER_TOTAL);
+        for (int y = 0; y < th; ++y)
+            for (int x = 0; x < tw; ++x)
+                m_tileCache->buildNavMeshTilesAt(x, y, m_navMesh);
+        m_ctx->stopTimer(RC_TIMER_TOTAL);
+
+        m_cacheBuildTimeMs = m_ctx->getAccumulatedTime(RC_TIMER_TOTAL) / 1000.0f;
+        m_cacheBuildMemUsage = static_cast<unsigned int>(m_talloc->high);
+
+
+        const dtNavMesh* nav = m_navMesh;
+        int navmeshMemUsage = 0;
+        for (int i = 0; i < nav->getMaxTiles(); ++i)
+        {
+            const dtMeshTile* tile = nav->getTile(i);
+            if (tile->header)
+                navmeshMemUsage += tile->dataSize;
+        }
+        printf("navmeshMemUsage = %.1f kB", navmeshMemUsage / 1024.0f);
+
+        m_crowd->init(buildSettings.maxCrowdNumber, buildSettings.agentRadius, m_navMesh);
+        return true;
+    }
+    bool NavigationField::Impl::handleBuild(std::ifstream* importingFile)
+    {
+        static constexpr int EXPECTED_LAYERS_PER_TILE = 4;
+        dtStatus status;
+
+        // 파일의 헤더를 읽어 빌드세팅 정보를 들여온다.
+        FileHeader fileHeader;
+
+        const int& ts = fileHeader.ts;
+        const int& tw = fileHeader.tw;
+        const int& th = fileHeader.th;
+        const float* bmin = fileHeader.bmin;
+        const float* bmax = fileHeader.bmax;
+        const dtTileCacheParams& tcparams = fileHeader.tcparams;
+        const dtNavMeshParams& params = fileHeader.navMeshParams;
+        const BuildSettings& buildSettings = fileHeader.buildSettings;
+
+        dtFreeTileCache(m_tileCache);
+
+        m_tileCache = dtAllocTileCache();
+        if (!m_tileCache)
+        {
+            m_ctx->log(RC_LOG_ERROR, "buildTiledNavigation: Could not allocate tile cache.");
+            return false;
+        }
+        status = m_tileCache->init(&tcparams, m_talloc, m_tcomp, m_tmproc);
+        if (dtStatusFailed(status))
+        {
+            m_ctx->log(RC_LOG_ERROR, "buildTiledNavigation: Could not init tile cache.");
+            return false;
+        }
+
+        dtFreeNavMesh(m_navMesh);
+
+        m_navMesh = dtAllocNavMesh();
+        if (!m_navMesh)
+        {
+            m_ctx->log(RC_LOG_ERROR, "buildTiledNavigation: Could not allocate navmesh.");
+            return false;
+        }
+
+        status = m_navMesh->init(&params);
+        if (dtStatusFailed(status))
+        {
+            m_ctx->log(RC_LOG_ERROR, "buildTiledNavigation: Could not init navmesh.");
+            return false;
+        }
+
+        status = m_navQuery->init(m_navMesh, 2048);
+        if (dtStatusFailed(status))
+        {
+            m_ctx->log(RC_LOG_ERROR, "buildTiledNavigation: Could not init Detour navmesh query");
+            return false;
+        }
+
+
+        // Preprocess tiles.
+        m_ctx->resetTimers();
+
+        m_cacheLayerCount = 0;
+        m_cacheCompressedSize = 0;
+        m_cacheRawSize = 0;
+
+        for (int y = 0; y < th; ++y)
+        {
+            for (int x = 0; x < tw; ++x)
+            {
+                // tileCacheData는 파일 저장의 대상
+                TileCacheData tiles[MAX_LAYERS];
+                memset(tiles, 0, sizeof(tiles));
+                static constexpr int maxTileDataSize = 4096;
+                int nTiles;
+
+                importingFile->read(reinterpret_cast<char*>(&nTiles), sizeof(int));
+
+                for (int i = 0; i < nTiles; ++i)
+                {
+                    int tileDataSize;
+                    byte tileData[maxTileDataSize];
+                    importingFile->read(reinterpret_cast<char*>(&tileDataSize), sizeof(int));
+                    assert(tileDataSize < maxTileDataSize);
+                    importingFile->read(reinterpret_cast<char*>(tileData), tileDataSize);
+
+                    status = m_tileCache->addTile(tileData, tileDataSize, DT_COMPRESSEDTILE_FREE_DATA, 0);
+                    if (dtStatusFailed(status))
+                    {
+                        continue;
+                    }
+
+                    m_cacheLayerCount++;
+                    m_cacheCompressedSize += tileDataSize;
                     m_cacheRawSize += calcLayerBufferSize(tcparams.width, tcparams.height);
                 }
             }

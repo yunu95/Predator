@@ -51,7 +51,9 @@ void NailEngine::Init(UINT64 hWnd)
 
 	InstancingManager::Instance.Get().Init();
 
-	ShadowPass::Instance.Get().Init(ResourceManager::Instance.Get().GetTexture(L"ShadowDepth").get());
+	ShadowPass::Instance.Get().Init(ResourceManager::Instance.Get().GetTexture(L"ShadowDepth").get(), 
+		reinterpret_cast<VertexShader*>(ResourceManager::Instance.Get().GetShader(L"TestVS.cso").get()),
+		reinterpret_cast<PixelShader*>(ResourceManager::Instance.Get().GetShader(L"TestPS.cso").get()));
 
 	SkyBoxPass::Instance.Get().Init(
 		ResourceManager::Instance.Get().GetTexture(L"Texture/asdEnvHDR.dds").get(),
@@ -80,7 +82,6 @@ void NailEngine::Render()
 
 	// End
 	ResourceBuilder::Instance.Get().swapChain->GetSwapChain().Get()->Present(1, 0);
-
 
 	for (auto& iter : this->constantBuffers)
 	{
@@ -429,6 +430,20 @@ void NailEngine::CreateRenderTargetGroup()
 			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)] = std::make_shared<RenderTargetGroup>();
 			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)]->SetRenderTargetVec(rtVec);
 		}
+	}
+	{
+		std::vector<RenderTarget> rtVec(1);
+		rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
+			L"TempRTV",
+			SM_SIZE,
+			SM_SIZE,
+			//this->windowInfo.width,
+			//this->windowInfo.height,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+		);
+		//this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)] = std::make_shared<RenderTargetGroup>();
+		//this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)]->SetRenderTargetVec(rtVec);
 	}
 
 	//// SHADOW

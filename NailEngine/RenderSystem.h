@@ -120,6 +120,8 @@ private:
 
 	std::unordered_map<yunuGI::Color, Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>> brushMap;
 	std::map<std::wstring, Microsoft::WRL::ComPtr<IDWriteTextFormat>> wFormatMap;
+
+	DirectX::SimpleMath::Vector3 mainCamPos;
 };
 
 

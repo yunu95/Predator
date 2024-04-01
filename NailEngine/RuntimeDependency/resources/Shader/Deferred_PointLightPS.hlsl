@@ -62,6 +62,7 @@ PS_OUT main(PixelIn input)
     //color.diffuse.w = 1;
     
     output.diffuse = (color.diffuse + color.ambient);
+    output.diffuse.w = 1;
     //output.specular = color.specular;
     
     return output;
