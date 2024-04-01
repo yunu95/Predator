@@ -7,6 +7,8 @@
 #include <wrl.h>
 
 class Texture;
+class VertexShader;
+class PixelShader;
 
 class ShadowPass
 {
@@ -15,11 +17,12 @@ public:
 	friend LazyObjects<ShadowPass>;
 
 public:
-	void Init(Texture* dsTexture);
+	void Init(Texture* dsTexture, VertexShader* vs, PixelShader* ps);
 	void Bind();
 
 private:
 	Texture* dsTexture;
-
+	VertexShader* vs;
+	PixelShader* ps;
 };
 

@@ -9,7 +9,7 @@ namespace wanderUtils
 		const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 		/// SCRES 우선 로드
-		resourceManager->LoadFile("FBXMaterial.scres");
+		resourceManager->LoadFile("FBXMaterial8.scres");
 
 		// 나머지 기타등등 파일들 로드하기
 		{

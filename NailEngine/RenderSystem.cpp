@@ -148,11 +148,10 @@ void RenderSystem::PushLightData()
 void RenderSystem::PushCameraData()
 {
 	CameraBuffer buffer;
-	DirectX::SimpleMath::Vector3 pos;
 	DirectX::SimpleMath::Vector3 scale;
 	DirectX::SimpleMath::Quaternion quat;
-	CameraManager::Instance.Get().GetMainCamera()->GetWTM().Decompose(scale, quat, pos);
-	buffer.position = pos;
+	CameraManager::Instance.Get().GetMainCamera()->GetWTM().Decompose(scale, quat, mainCamPos);
+	buffer.position = mainCamPos;
 	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::CAMERA))->PushGraphicsData(&buffer, sizeof(CameraBuffer), static_cast<int>(CB_TYPE::CAMERA));
 }
 
@@ -180,7 +179,7 @@ void RenderSystem::Render()
 	RenderSkinned();
 
 	// 그림자 맵 생성
-	//RenderShadow();
+	RenderShadow();
 	RenderPointLightShadow();
 
 	SkyBoxPass::Instance.Get().BindIBLTexture();
@@ -215,7 +214,7 @@ void RenderSystem::RenderObject()
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
 	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->OMSetRenderTarget();
 
-	
+
 
 	MatrixBuffer matrixBuffer;
 	//matrixBuffer.WTM = e.wtm;
@@ -255,64 +254,30 @@ void RenderSystem::RenderSkinned()
 	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
 	InstancingManager::Instance.Get().RenderSkinned();
-
-	//for (auto& e : this->skinnedVec)
-	//{
-	//	// 본TM 구해서 넘기기
-	//	//BoneUpdate(e);
-
-	//	auto animator = NailAnimatorManager::Instance.Get().GetAnimator(e.animatorIndex);
-	//	auto modelName = animator->GetModel();
-	//	ResourceManager::Instance.Get().GetAnimationGroup(modelName)->Bind();
-
-	//	//KeyframeDesc keyFrameDesc;
-	//	//keyFrameDesc.animIndex = animator->GetTransitionDesc().curr.animIndex;
-	//	//keyFrameDesc.currFrame = animator->GetCurrentFrame();
-	//	//keyFrameDesc.nextFrame = animator->GetCurrentFrame()+1;
-	//	//keyFrameDesc.ratio = animator->GetFrameRatio();
-	//	auto& transitionDesc = animator->GetTransitionDesc();
-	//	NailEngine::Instance.Get().GetConstantBuffer(5)->PushGraphicsData(&transitionDesc, sizeof(InstanceTransitionDesc), 5);
-
-	//	MatrixBuffer matrixBuffer;
-	//	matrixBuffer.WTM = e.renderInfo.wtm;
-	//	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-	//	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
-	//	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-	//	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-	//	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{e.renderInfo.objecID,0,0,0};
-	//	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
-
-	//	auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.renderInfo.mesh->GetName()));
-
-	//	auto animationGroup = ResourceManager::Instance.Get().GetAnimationGroup(e.modelName);
-	//	animationGroup->Bind();
-
-	//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.renderInfo.material->GetName()))->PushGraphicsData();
-	//	mesh->Render(e.renderInfo.materialIndex,nullptr);
-	//}
 }
 
 void RenderSystem::RenderShadow()
 {
 	auto& lightSet = LightManager::Instance.Get().GetLightList();
 	ShadowPass::Instance.Get().Bind();
-	//auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
-	//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SHADOW)]->OMSetRenderTarget();
 
-	//MatrixBuffer matrixBuffer;
-	//matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-	//matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
-	//matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-	//matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-	//NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
 	for (auto& e : lightSet)
 	{
 		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Directional))
 		{
 			MatrixBuffer matrixBuffer;
-			matrixBuffer.VTM = static_cast<DirectionalLight*>(e)->GetWorldTM().Invert();
-			matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(100 * 1.f, 100 * 1.f, 0.0000001f, 500.f);
-			//matrixBuffer.PTM = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PI/4.f, 1920/ 1080, 0.1f, 1000.f);
+			auto wtm = static_cast<DirectionalLight*>(e)->GetWorldTM();
+			wtm._41 = mainCamPos.x;
+			wtm._42 = mainCamPos.y;
+			wtm._43 = mainCamPos.z;
+			auto back = -static_cast<DirectionalLight*>(e)->GetDirection() * 80;
+			DirectX::SimpleMath::Vector3 temp;
+			temp = back + wtm.Translation();
+			wtm._41 = temp.x;
+			wtm._42 = temp.y;
+			wtm._43 = temp.z;
+			matrixBuffer.VTM = wtm.Invert();
+			matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(163.84 * 1.f, 163.84 * 1.f, 1.f, 160);
 			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 		}
 	}
@@ -437,7 +402,19 @@ void RenderSystem::RenderLight()
 		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Directional))
 		{
 			matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
-			matrixBuffer.lightVP = static_cast<DirectionalLight*>(e)->GetWorldTM().Invert() * DirectX::XMMatrixOrthographicLH(100 * 1.f, 100 * 1.f, 0.0000001f, 500.f);
+
+			auto wtm = static_cast<DirectionalLight*>(e)->GetWorldTM();
+			wtm._41 = mainCamPos.x;
+			wtm._42 = mainCamPos.y;
+			wtm._43 = mainCamPos.z;
+			auto back = -static_cast<DirectionalLight*>(e)->GetDirection() * 80;
+			DirectX::SimpleMath::Vector3 temp;
+			temp = back + wtm.Translation();
+			wtm._41 = temp.x;
+			wtm._42 = temp.y;
+			wtm._43 = temp.z;
+
+			matrixBuffer.lightVP = wtm.Invert() * DirectX::XMMatrixOrthographicLH(163.84 * 1.f, 163.84 * 1.f, 1.f, 160);
 		}
 		else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{
@@ -769,7 +746,7 @@ void RenderSystem::RegisterRenderInfo(nail::IRenderable* renderable, std::shared
 
 			InstancingManager::Instance.Get().RegisterStaticDeferredData(renderInfo);
 		}
-		else if(renderInfo->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+		else if (renderInfo->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
 		{
 			forwardSet.insert(renderInfo);
 
