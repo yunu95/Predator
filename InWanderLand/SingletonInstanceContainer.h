@@ -9,7 +9,7 @@
 class SingletonInstanceContainer : public SingletonClass<SingletonInstanceContainer>
 {
 public:
-	void ClearLazySingletonInstances();
+	void ClearSingletonInstances();
 	void PermitCreateInstances();
 };
 

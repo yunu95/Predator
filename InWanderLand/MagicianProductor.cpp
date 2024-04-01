@@ -1,4 +1,3 @@
-#include "InWanderLand.h"
 #include "MagicianProductor.h"
 #include "RangedAttackSystem.h"
 #include "MagicianSkillSystem.h"
@@ -163,7 +162,12 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 	magicianSkillSystem->SetWSkillObject(WSkillProjectileObject, WSkillFieldObject);
 #pragma endregion
 
-	UnitProductor::SetCommonComponents();
+	UnitProductor::AddRangeSystemComponent();
+	UnitProductor::AddColliderComponent();
+	UnitProductor::AddNavigationComponent();
+	UnitProductor::AddDotweenComponent();
+	UnitProductor::SetUnitComponentMembers();
+	UnitProductor::SetPlayerRelatedComponents(m_unitComponent);
 
 	auto skinnedMeshRenderer = m_unitGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
 	auto material = skinnedMeshRenderer->GetGI().GetMaterial();

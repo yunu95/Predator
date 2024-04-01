@@ -5,6 +5,8 @@
 #include "Wave_TemplateData.h"
 #include "PlaytimeWave.h"
 #include "PlaytimeRegion.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
 namespace application
 {
@@ -48,8 +50,11 @@ namespace application
 		{
 			ApplyMapAsPod();
 			ApplyPodAsVector();
-			playtimeWave = Scene::getCurrentScene()->AddGameObject()->AddComponent<PlaytimeWave>();
+			auto waveSystemObject = Scene::getCurrentScene()->AddGameObject();
+			playtimeWave = waveSystemObject->AddComponent<PlaytimeWave>();
 			playtimeWave->waveData = this;
+			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+			contentsLayer->RegisterToEditorObjectVector(waveSystemObject);
 		}
 		void WaveData::PostApplyAsPlaytimeObject()
 		{

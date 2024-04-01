@@ -2,24 +2,19 @@
 #include "PlayerSkillSystem.h"
 #include "Unit.h"
 
-void PlayerSkillSystem::SkillActivate(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition)
+void PlayerSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition)
 {
 	switch (p_currentSkill)
 	{
 		case Unit::SkillEnum::Q:
-			QSkillActivate(p_skillPosition);
+			ActivateSkillOne(p_skillPosition);
 			break;
 		case Unit::SkillEnum::W:
-			WSkillActivate(p_skillPosition);
+			ActivateSkillTwo(p_skillPosition);
 			break;
 		default:
 			break;
 	}
-}
-
-bool PlayerSkillSystem::IsSkillEnd() const
-{
-	return isSkillEnd;
 }
 
 void PlayerSkillSystem::RotateProjectile(GameObject* p_projectileObject, Vector3d p_endPosition)
@@ -52,11 +47,4 @@ void PlayerSkillSystem::RotateProjectile(GameObject* p_projectileObject, Vector3
 
 	if (abs(finalDegree) > 0.05)
 		p_projectileObject->GetTransform()->SetWorldRotation(Quaternion({ 0.0f, finalDegree, 0.0f }));
-}
-
-void PlayerSkillSystem::SetOtherComponentsAsMember()
-{
-	m_unitComponent = GetGameObject()->GetComponent<Unit>();
-	m_unitDotween = GetGameObject()->GetComponent<Dotween>();
-	m_unitNavComponent = GetGameObject()->GetComponent<NavigationAgent>();
 }

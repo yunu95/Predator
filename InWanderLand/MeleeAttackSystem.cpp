@@ -10,7 +10,7 @@ void MeleeAttackSystem::Attack(Unit* opponentUnit)
 		case MeleeAttackType::Collider: 
 		{
 			meleeAttackColliderObject->GetTransform()->
-				SetWorldPosition(ownerUnitObject->GetTransform()->GetWorldPosition() + ownerUnitObject->GetTransform()->GetWorldRotation().Forward() * -3);
+				SetWorldPosition(ownerUnitObject->GetTransform()->GetWorldPosition() + ownerUnitObject->GetTransform()->GetWorldRotation().Forward() *  -3);
 			meleeAttackColliderObject->GetTransform()->SetWorldRotation(ownerUnitObject->GetTransform()->GetWorldRotation());
 
 			meleeAttackColliderObject->SetSelfActive(true);
@@ -72,6 +72,7 @@ void MeleeAttackSystem::Start()
 {
 	if (m_meleeAttackType == MeleeAttackType::Collider)
 	{
+
 		meleeAttackColliderObject->SetSelfActive(false);
 		meleeAttackColliderDebugObject->SetSelfActive(false);
 	}

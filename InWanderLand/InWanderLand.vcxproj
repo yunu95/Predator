@@ -988,6 +988,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="BleedingComponent.h" />
     <ClInclude Include="BlindFieldComponent.h" />
     <ClInclude Include="CreateInstanceCommand.h" />
+    <ClInclude Include="BossProductor.h" />
+    <ClInclude Include="BossSkillSystem.h" />
     <ClInclude Include="DamageOnlyComponent.h" />
     <ClInclude Include="BrushList.h" />
     <ClInclude Include="CameraBrush.h" />
@@ -997,6 +999,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="CameraData.h" />
     <ClInclude Include="DebuggingMesh.h" />
     <ClInclude Include="DeleteInstanceCommand.h" />
+    <ClInclude Include="EnemySkillSystem.h" />
+    <ClInclude Include="EnemySpawnGateProductor.h" />
+    <ClInclude Include="EnemySummonSkillSystem.h" />
     <ClInclude Include="ShortcutSystem.h" />
     <ClInclude Include="DualCastComponent.h" />
     <ClInclude Include="DummyComponent.h" />
@@ -1025,7 +1030,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="PlayTimeRegionManager.h" />
     <ClInclude Include="PlaytimeWave.h" />
     <ClInclude Include="PaletteBrushManager.h" />
-    <ClInclude Include="RangedEnemyPool.h" />
     <ClInclude Include="RangedEnemyProductor.h" />
     <ClInclude Include="RobinSkillDevelopmentSystem.h" />
     <ClInclude Include="SaveStaticOrnamentsCommnad.h" />
@@ -1160,7 +1164,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="SpecialEffect.h" />
-    <ClInclude Include="MeleeEnemyPool.h" />
+    <ClInclude Include="UnitObjectPool.h" />
     <ClInclude Include="UnitProductorSelector.h" />
     <ClInclude Include="Unit_TemplateData.h" />
     <ClInclude Include="UrsulaSkillDevelopmentSystem.h" />
@@ -1190,6 +1194,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="BleedingComponent.cpp" />
     <ClCompile Include="BlindFieldComponent.cpp" />
     <ClCompile Include="CreateInstanceCommand.cpp" />
+    <ClCompile Include="BossProductor.cpp" />
+    <ClCompile Include="BossSkillSystem.cpp" />
     <ClCompile Include="DamageOnlyComponent.cpp" />
     <ClCompile Include="CameraBrush.cpp" />
     <ClCompile Include="CameraEditorInstance.cpp" />
@@ -1198,6 +1204,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="CameraData.cpp" />
     <ClCompile Include="DebuggingMesh.cpp" />
     <ClCompile Include="DeleteInstanceCommand.cpp" />
+    <ClCompile Include="EnemySkillSystem.cpp" />
+    <ClCompile Include="EnemySpawnGateProductor.cpp" />
+    <ClCompile Include="EnemySummonSkillSystem.cpp" />
     <ClCompile Include="ShortcutSystem.cpp" />
     <ClCompile Include="DualCastComponent.cpp" />
     <ClCompile Include="EditorCameraManager.cpp" />

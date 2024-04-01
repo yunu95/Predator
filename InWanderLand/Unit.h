@@ -42,7 +42,8 @@ public:
 		AllPlayers,
 		MeleeEnemy,
 		RangedEnemy,
-		Boss
+		Boss,
+		EnemySpawnGate
 	};
 
 	enum class UnitSide
@@ -54,7 +55,11 @@ public:
 	enum class SkillEnum
 	{
 		Q,
-		W
+		W,
+		BossSkillOne,
+		BossSkillTwo,
+		BossSkillThree,
+		BossSkillFour
 	};
 
 	struct BaseUnitAnimationStruct
@@ -79,7 +84,8 @@ private:
 	AttackType m_attackType;
 
 	std::string m_fbxName;
-	float m_healthPoint;
+	float m_maxHealthPoint;
+	float m_currentHealthPoint;
 	float m_autoAttackDamage;
 	float m_beforeBlindDamage;
 	float m_initialAutoAttackDamage;
@@ -159,7 +165,7 @@ private:
 
 	Unit* m_currentTargetUnit;		// Attack이나 Chase 때 사용할 적군  오브젝트
 	Unit* m_previousTargetUnit;		
-	Unit* tauntedUnit;				// 현재 this 유닛이 도발당한 주체.
+	Unit* tauntingThisUnit;				// 현재 this 유닛이 도발당한 주체.
 	Vector3d m_currentMovePosition;							// 현재 상대의 위치
 
 	Vector3d m_currentSkillPosition;
@@ -215,7 +221,7 @@ public:
 	UnitSide GetUnitSide() const;
 	void SetUnitType(UnitType type);
 	void SetUnitSide(UnitSide side);
-	void SetUnitHp(int p_Hp);
+	void SetUnitMaxHp(int p_Hp);
 	void SetUnitAp(int p_Ap);
 	void SetIdRadius(float radius);
 	void SetAtkRadius(float radius);
@@ -262,6 +268,7 @@ public:
 	void DeleteTauntingUnit();
 
 	void SetUnitStateToDeath();
+	void SetUnitStateToSkill();
 
 public:
 	/// <summary>
@@ -279,7 +286,10 @@ public:
 	void SetUnitDamageToZero(bool p_bool);
 	void MultipleUnitSpeed(float p_mul);
 
+	void ResetUnitMembers();
+
 	std::function<void()> returnToPoolFunction{ nullptr };
+	DummyComponent* m_dummyCom;
 
 	friend RobinSkillDevelopmentSystem;
 };

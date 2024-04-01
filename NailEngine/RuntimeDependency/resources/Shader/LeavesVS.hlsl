@@ -32,12 +32,10 @@ VertexOut main(VertexIn input)
     row_major matrix WV = mul(input.world, VTM);
     row_major matrix VP = mul(VTM, PTM);
     
-    
     float3 scale;
     float3 pos;
     float4 quat;
     decompose(input.world,pos, quat,scale);
-   
     
     output.posH = mul(float4(input.pos, 1.f), input.world);
      ///
@@ -52,10 +50,8 @@ VertexOut main(VertexIn input)
     tempVec = normalize(tempVec);
     tempVec *= scale.y;
     
-    
     float3 tempNormal = mul(float4(input.normal, 0), input.world);
-    tempNormal *= 0.1f;
-    
+    tempNormal *= 0.5f;
     float3 tempPos = (tempVec.xyz + tempNormal) * 2;
     
     output.posH.xyz += tempPos;

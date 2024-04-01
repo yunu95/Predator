@@ -1,46 +1,48 @@
-#include "RangedEnemyProductor.h"
+#include "EnemySpawnGateProductor.h"
 #include "SingleNavigationField.h"
-#include "RangedAttackSystem.h"
 
-void RangedEnemyProductor::SetUnitData()
+void EnemySpawnGateProductor::SetUnitData()
 {
-	m_objectName = "MeleeEnenmy";
-	m_unitType = Unit::UnitType::RangedEnemy;
-	m_unitSide = Unit::UnitSide::Enemy;
+	m_objectName = "EnemySpawnGate";
+	m_unitType = Unit::UnitType::EnemySpawnGate;
+	m_unitSide = Unit::UnitSide::Player;
 
-	m_healthPoint = 10;
+	m_healthPoint = 150;
 	m_manaPoint = 100;
 
-	m_autoAttackDamage = 10;
-	m_criticalHitProbability = 0.2f;
+	m_autoAttackDamage = 15;
+	m_criticalHitProbability = 0.5f;
 	m_criticalHitMultiplier = 1.5f;
 
-	m_defensePoint = 15;
-	m_dodgeProbability = 0.2f;
-	m_criticalDamageDecreaseMultiplier = 0.2f;
+	m_defensePoint = 5;
+	m_dodgeProbability = 0.05f;
+	m_criticalDamageDecreaseMultiplier = 0.05f;
 
-	m_maxAggroNumber = 10;
+	m_maxAggroNumber = 1;
 
-	m_idRadius = 4.0f * lengthUnit;
-	m_atkRadius = 1.7f * lengthUnit;
+	m_idRadius = 10.0f * lengthUnit;
+	m_atkRadius = 3.5f * lengthUnit;
 	m_unitSpeed = 4.5f;
 
-	m_attackDelay = 1.0f;
+	m_attackDelay = 5.0f;
 
 	m_navField = &SingleNavigationField::Instance();
 
-	m_unitFbxName = "SKM_Monster2";
+	qSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::Both;
+	wSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::Both;
+
+	m_unitFbxName = "SKM_Robin";
 }
 
-void RangedEnemyProductor::SingletonInitializer()
+void EnemySpawnGateProductor::SingletonInitializer()
 {
 	SetUnitData();
 }
 
-Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
+Unit* EnemySpawnGateProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
-	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
+	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
@@ -48,32 +50,32 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 	auto& animList = rsrcManager->GetAnimationList();
 	for (auto each : animList)
 	{
-		if (each->GetName() == L"Ani_Monster2_Idle")
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
 		{
 			m_baseUnitAnimations.m_idleAnimation = each;
 			m_baseUnitAnimations.m_idleAnimation->SetLoop(true);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_idleAnimation);
 			animator->GetGI().Play(m_baseUnitAnimations.m_idleAnimation);
 		}
-		else if (each->GetName() == L"Ani_Monster2_Walk")
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
 		{
 			m_baseUnitAnimations.m_walkAnimation = each;
 			m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_walkAnimation);
 		}
-		else if (each->GetName() == L"Ani_Monster2_Attack")
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
 		{
 			m_baseUnitAnimations.m_attackAnimation = each;
 			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_attackAnimation);
 		}
-		else if (each->GetName() == L"Ani_Monster2_BattleIdle")
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
 		{
 			m_baseUnitAnimations.m_paralysisAnimation = each;
 			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
 		}
-		else if (each->GetName() == L"Ani_Monster2_Skill")
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_APose")
 		{
 			m_baseUnitAnimations.m_deathAnimation = each;
 			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
@@ -81,18 +83,17 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 		}
 	}
 #pragma endregion
+
 	/// UnitComponent 추가
 	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
 
-#pragma region Auto Attack Setting
-	auto rangedAttackSystem = m_unitGameObject->AddComponent<RangedAttackSystem>();
-	rangedAttackSystem->SetBulletSpeed(10.0f);
-#pragma endregion
 
-	UnitProductor::AddRangeSystemComponent();
+
+
+	/// rangeSystem만 제외한다면 Boss와 다름 없는 유닛.
+	/// chase, move, attack 없고, 주기적으로 skill만 사용하는 유닛이다.
+
 	UnitProductor::AddColliderComponent();
-	UnitProductor::AddNavigationComponent();
-	UnitProductor::AddDotweenComponent();
 	UnitProductor::SetUnitComponentMembers();
 
 	return m_unitComponent;

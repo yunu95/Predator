@@ -144,7 +144,7 @@ cbuffer ExposureBuffer : register(b9)
     float2 padding4;
 }
 
-cbuffer ExposureBuffer : register(b10)
+cbuffer UtilBuffer : register(b10)
 {
     float windowWidth;
     float windowHeight;

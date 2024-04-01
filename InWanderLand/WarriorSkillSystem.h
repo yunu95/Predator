@@ -22,13 +22,12 @@ private:
 
 	float m_wSkillColliderRemainTime = 1.0f;
 
-	void SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen);
 
 public:
 	std::function<void()> m_developedFunctionToWSkill{ nullptr };
 
-	virtual void QSkillActivate(Vector3d skillPos) override;
-	virtual void WSkillActivate(Vector3d skillPos) override;
+	virtual void ActivateSkillOne(Vector3d skillPos) override;
+	virtual void ActivateSkillTwo(Vector3d skillPos) override;
 
 public:
 	void SetQSkillKnockBackObject(GameObject* obj);

@@ -1,12 +1,5 @@
 #include "HealerSkillSystem.h"
 
-void HealerSkillSystem::SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen)
-{
-	p_requirments.skillCollider->SetActive(p_boolen);
-	p_requirments.colliderObject->SetSelfActive(p_boolen);
-	p_requirments.debugObject->SetSelfActive(p_boolen);
-}
-
 void HealerSkillSystem::CrushDown(int p_times)
 {
 	static int crushedCount = 0;
@@ -69,7 +62,7 @@ void HealerSkillSystem::SetWSkillDebugInfo(GameObject* p_fieldDebugObject)
 	WSkillFieldDamage.debugObject = p_fieldDebugObject;
 }
 
-void HealerSkillSystem::QSkillActivate(Vector3d skillPos)
+void HealerSkillSystem::ActivateSkillOne(Vector3d skillPos)
 {
 	startPosition = GetTransform()->GetWorldPosition();
 
@@ -87,7 +80,7 @@ void HealerSkillSystem::QSkillActivate(Vector3d skillPos)
 		});
 }
 
-void HealerSkillSystem::WSkillActivate(Vector3d skillPos)
+void HealerSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 {
 	m_unitComponent->SetSkillDuration(2.0f);
 

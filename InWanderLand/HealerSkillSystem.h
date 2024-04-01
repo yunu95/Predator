@@ -28,9 +28,6 @@ private:
 
 	Vector3d startPosition;
 
-	void SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen);
-
-
 private:
 	void CrushDown(int p_times);
 
@@ -44,8 +41,8 @@ public:
 	void SetWSkillDebugInfo(GameObject* p_fieldDebugObject);
 
 public:
-	virtual void QSkillActivate(Vector3d skillPos) override;
-	virtual void WSkillActivate(Vector3d skillPos) override;
+	virtual void ActivateSkillOne(Vector3d skillPos) override;
+	virtual void ActivateSkillTwo(Vector3d skillPos) override;
 
 public:
 	virtual void Start() override;

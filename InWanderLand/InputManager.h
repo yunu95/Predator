@@ -22,6 +22,7 @@ private:
 	bool isMouseOnUIButton = false;
 
 public:
+	virtual void Start() override;
 	virtual void Update() override;
 
 	void IsMouseOnUI(bool p_boolen);

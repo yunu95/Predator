@@ -7,16 +7,14 @@
 #include "StatusTimerPool.h"
 #include "DebuggingMeshPool.h"
 #include "TacticModeSystem.h"
-#include "MeleeEnemyPool.h"
-#include "RangedEnemyPool.h"
+#include "UnitObjectPool.h"
 #include "LazySingletonClass.h"
 #include "PassiveCakePool.h"
 
-void SingletonInstanceContainer::ClearLazySingletonInstances()
+void SingletonInstanceContainer::ClearSingletonInstances()
 {
 	PlayerController::SingleInstance().ProhibitCreateInstance();
-	MeleeEnemyPool::SingleInstance().ProhibitCreateInstance();
-	RangedEnemyPool::SingleInstance().ProhibitCreateInstance();
+	UnitObjectPool::SingleInstance().ProhibitCreateInstance();
 	AutoAttackProjectilePool::SingleInstance().ProhibitCreateInstance();
 	EnemyAutoAttackProjectilePool::SingleInstance().ProhibitCreateInstance();
 	HealerAutoAttackProjectilePool::SingleInstance().ProhibitCreateInstance();
@@ -26,8 +24,7 @@ void SingletonInstanceContainer::ClearLazySingletonInstances()
 	PassiveCakePool::SingleInstance().ProhibitCreateInstance();
 	TacticModeSystem::SingleInstance().ProhibitCreateInstance();
 
-	MeleeEnemyPool::SingleInstance().ClearPool();
-	RangedEnemyPool::SingleInstance().ClearPool();
+	UnitObjectPool::SingleInstance().ClearPool();
 	AutoAttackProjectilePool::SingleInstance().ClearPool();
 	EnemyAutoAttackProjectilePool::SingleInstance().ClearPool();
 	HealerAutoAttackProjectilePool::SingleInstance().ClearPool();
@@ -37,8 +34,7 @@ void SingletonInstanceContainer::ClearLazySingletonInstances()
 	PassiveCakePool::SingleInstance().ClearPool();
 
 	PlayerController::SingleInstance().InitInstance();
-	MeleeEnemyPool::SingleInstance().InitInstance();
-	RangedEnemyPool::SingleInstance().InitInstance();
+	UnitObjectPool::SingleInstance().InitInstance();
 	AutoAttackProjectilePool::SingleInstance().InitInstance();
 	EnemyAutoAttackProjectilePool::SingleInstance().InitInstance();
 	HealerAutoAttackProjectilePool::SingleInstance().InitInstance();
@@ -60,6 +56,5 @@ void SingletonInstanceContainer::PermitCreateInstances()
 	DebuggingMeshPool::SingleInstance().PermitCreateInstance();
 	TacticModeSystem::SingleInstance().PermitCreateInstance();
 	PassiveCakePool::SingleInstance().PermitCreateInstance();
-	MeleeEnemyPool::SingleInstance().PermitCreateInstance();
-	RangedEnemyPool::SingleInstance().PermitCreateInstance();
+	UnitObjectPool::SingleInstance().PermitCreateInstance();
 }
