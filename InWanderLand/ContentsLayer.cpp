@@ -88,7 +88,17 @@ void GraphicsTest()
         }
     }
 
-    {
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		//obj->GetTransform()->SetLocalPosition(Vector3d{ -500,500,1 });
+		obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,100 });
+		auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
+		text->GetGI().SetFontSize(20);
+		auto test = obj->AddComponent<TestComponent2>();
+		test->text = text;
+	}
+
+ /*   {
     	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,44.81 });
     	auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
@@ -167,7 +177,7 @@ void GraphicsTest()
     	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
     	renderer->GetGI().SetMesh(mesh);
-    }
+    }*/
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //{
@@ -228,10 +238,9 @@ void GraphicsTest()
     ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 190,0,0 });
     ////////////}
 
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-    //	obj->GetTransform()->SetLocalPosition({ Vector3d{0,0,-5} });
-    //}
+    {
+    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+    }
 
     //{
     //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");

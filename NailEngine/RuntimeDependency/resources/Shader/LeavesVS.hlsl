@@ -40,7 +40,7 @@ VertexOut main(VertexIn input)
     output.posH = mul(float4(input.pos, 1.f), input.world);
      ///
     float2 tempUV = input.uv;
-    //tempUV.y = 1 - tempUV.y;
+    tempUV.y = 1 - tempUV.y;
     
     
     tempUV.x = 1 - tempUV.x;
