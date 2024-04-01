@@ -899,6 +899,7 @@ namespace application
 					auto pl = static_cast<LightData*>(*selection.begin());
 					imgui::DragFloat_2Col("Intensity", pl->pod.intensity, true, 0.1f, 0.0f, 100.0f);
 					imgui::DragFloat_2Col("Range", pl->pod.range, true, 0.1f, 0.0f, 100.0f);
+					imgui::Checkbox_2Col("Is Cast", pl->pod.isCast);
 					ImGui::TableNextRow();
 					ImGui::TableSetColumnIndex(0);
 					imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
