@@ -161,7 +161,7 @@ namespace application
 		keys[1] = { KeyCode::N, false };
 		RegisterTriggerKey(70, keys);
 		keys[1] = { KeyCode::M, false };
-		RegisterTriggerKey(71, keys);
+		RegisterTriggerKey(71, keys);		
 	}
 
 	void ShortcutSystem::Update()
@@ -181,9 +181,30 @@ namespace application
 				}
 			}
 
-			if (trigger)
+			if (trigger && (triggerKeys[i].size() != 0))
 			{
 				PullTrigger(i);
+			}
+		}
+
+		for (auto& [keys, func] : uniqueTrigger)
+		{
+			bool trigger = true;
+			for (auto& [keyCode, flag] : keys)
+			{
+				if (flag)
+				{
+					trigger &= Input::isKeyDown(keyCode);
+				}
+				else
+				{
+					trigger &= Input::isKeyPushed(keyCode);
+				}
+			}
+
+			if (trigger && (keys.size() != 0))
+			{
+				func();
 			}
 		}
 	}
@@ -195,7 +216,15 @@ namespace application
 			return false;
 		}
 
-		triggerKeys[groupNum] = keys;
+		if (!CheckUniqueKeyWithinUniqueRange(keys))
+		{
+			return false;
+		}
+
+		for (auto& each : keys)
+		{
+			triggerKeys[groupNum].insert(each);
+		}
 
 		return true;
 	}
@@ -238,6 +267,73 @@ namespace application
 				managedTriggerFunc[groupNum].erase(findKey);
 				return true;
 			}
+		}
+
+		return false;
+	}
+
+	bool ShortcutSystem::RegisterUniqueTrigger(const std::vector<std::pair<KeyCode, bool>>& keys, const std::function<void()>& funcs)
+	{
+		if (!CheckUniqueKey(keys))
+		{
+			return false;
+		}
+
+		std::set<std::pair<KeyCode, bool>, PairFirstComparator> keyList;
+		for (auto& each : keys)
+		{
+			keyList.insert(each);
+		}
+
+		uniqueTrigger.push_back({ keyList, funcs });
+
+		return true;
+	}
+
+	bool ShortcutSystem::RemoveUniqueTrigger(const std::vector<std::pair<KeyCode, bool>>& keys)
+	{
+		if (uniqueTrigger.empty())
+		{
+			return false;
+		}
+
+		auto rmItr = uniqueTrigger.begin();
+		for (auto& [triggerKey, func] : uniqueTrigger)
+		{
+			if (keys.size() != triggerKey.size())
+			{
+				rmItr += 1;
+				continue;
+			}
+
+			std::set<std::pair<KeyCode, bool>, PairFirstComparator> sortedList;
+			for (auto& each : keys)
+			{
+				sortedList.insert(each);
+			}
+
+			auto itr1 = sortedList.begin();
+			auto itr2 = triggerKey.begin();
+
+			bool isSame = true;
+			for (int i = 0; i < sortedList.size(); i++)
+			{
+				if (itr1->first != itr2->first)
+				{
+					isSame = false;
+					break;
+				}
+				itr1 = ++itr1;
+				itr2 = ++itr2;
+			}
+
+			if (isSame)
+			{
+				uniqueTrigger.erase(rmItr);
+				return true;
+			}
+
+			rmItr += 1;
 		}
 
 		return false;
@@ -296,5 +392,83 @@ namespace application
 		: triggerKeys(), triggerFunc(), managedTriggerFunc(), triggerSwitch()
 	{
 
+	}
+
+	bool ShortcutSystem::CheckUniqueKey(const std::vector<std::pair<KeyCode, bool>>& keys)
+	{
+		for (auto& [idx, triggerKey] : triggerKeys)
+		{
+			if (keys.size() != triggerKey.size())
+			{
+				continue;
+			}
+
+			std::set<std::pair<KeyCode, bool>, PairFirstComparator> sortedList;
+			for (auto& each : keys)
+			{
+				sortedList.insert(each);
+			}
+
+			auto itr1 = sortedList.begin();
+			auto itr2 = triggerKey.begin();
+
+			bool isSame = true;
+			for (int i = 0; i < sortedList.size(); i++)
+			{
+				if (itr1->first != itr2->first)
+				{
+					isSame = false;
+					break;
+				}
+				itr1 = ++itr1;
+				itr2 = ++itr2;
+			}
+
+			if (isSame)
+			{
+				return false;
+			}
+		}
+
+		return CheckUniqueKeyWithinUniqueRange(keys);
+	}
+
+	bool ShortcutSystem::CheckUniqueKeyWithinUniqueRange(const std::vector<std::pair<KeyCode, bool>>& keys)
+	{
+		for (auto& [triggerKey, func] : uniqueTrigger)
+		{
+			if (keys.size() != triggerKey.size())
+			{
+				continue;
+			}
+
+			std::set<std::pair<KeyCode, bool>, PairFirstComparator> sortedList;
+			for (auto& each : keys)
+			{
+				sortedList.insert(each);
+			}
+
+			auto itr1 = sortedList.begin();
+			auto itr2 = triggerKey.begin();
+
+			bool isSame = true;
+			for (int i = 0; i < sortedList.size(); i++)
+			{
+				if (itr1->first != itr2->first)
+				{
+					isSame = false;
+					break;
+				}
+				itr1 = ++itr1;
+				itr2 = ++itr2;
+			}
+
+			if (isSame)
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

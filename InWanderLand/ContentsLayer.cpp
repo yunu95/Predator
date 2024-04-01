@@ -89,158 +89,158 @@ void GraphicsTest()
         }
     }
 
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		//obj->GetTransform()->SetLocalPosition(Vector3d{ -500,500,1 });
-		obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,100 });
-		auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
-		text->GetGI().SetFontSize(20);
-		auto test = obj->AddComponent<TestComponent2>();
-		test->text = text;
-	}
-
- /*   {
-    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,44.81 });
-    	auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
-    	yunuGI::Color color{ 0,0,1.f,1 };
-    	light->GetGI().SetLightDiffuseColor(color);
-    	light->GetGI().SetRange(10);
+    {
+        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        //obj->GetTransform()->SetLocalPosition(Vector3d{ -500,500,1 });
+        obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,100 });
+        auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
+        text->GetGI().SetFontSize(20);
+        auto test = obj->AddComponent<TestComponent2>();
+        test->text = text;
     }
 
-    {
-    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,45.32 });
-    	auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
-    	yunuGI::Color color{ 1.f,0,0,1 };
-    	light->GetGI().SetLightDiffuseColor(color);
-    	light->GetGI().SetRange(10);
-    }
+    /*   {
+           auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+           obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,44.81 });
+           auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
+           yunuGI::Color color{ 0,0,1.f,1 };
+           light->GetGI().SetLightDiffuseColor(color);
+           light->GetGI().SetRange(10);
+       }
+
+       {
+           auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+           obj->GetTransform()->SetLocalPosition(Vector3d{ -47.56,3.67,45.32 });
+           auto light = obj->AddComponent<yunutyEngine::graphics::PointLight>();
+           yunuGI::Color color{ 1.f,0,0,1 };
+           light->GetGI().SetLightDiffuseColor(color);
+           light->GetGI().SetRange(10);
+       }
+
+       {
+           auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+           obj->GetTransform()->SetLocalScale(Vector3d{ 100,1,100 });
+           auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+           renderer->GetGI().SetMesh(mesh);
+       }
+       {
+           auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+           obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,1 });
+           obj->GetTransform()->SetLocalPosition(Vector3d{ 0,50,50 });
+           auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+           renderer->GetGI().SetMesh(mesh);
+       }
+       {
+           auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+           obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
+           obj->GetTransform()->SetLocalPosition(Vector3d{ -50,50,0 });
+           auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+           renderer->GetGI().SetMesh(mesh);
+       }
+
+       {
+           auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+           obj->GetTransform()->SetLocalPosition(Vector3d{ -48.67,3.67,44.81 });
+           auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+           renderer->GetGI().SetMesh(mesh);
+       }
+       {
+           auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+           obj->GetTransform()->SetLocalPosition(Vector3d{ -47.26,3.67,47.83 });
+           auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+           renderer->GetGI().SetMesh(mesh);
+       }
+       {
+           auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+           obj->GetTransform()->SetLocalPosition(Vector3d{ -48.08,5.32,46.24 });
+           auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+           renderer->GetGI().SetMesh(mesh);
+       }
+
+       {
+           auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+           obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
+           obj->GetTransform()->SetLocalPosition(Vector3d{ 48.08,5.32,46.24 });
+           auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+           renderer->GetGI().SetMesh(mesh);
+       }
+
+       {
+           auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
+           auto animator = obj->GetComponent<yunutyEngine::graphics::Animator>();
+           animator->GetGI().PushAnimation(animation);
+           animator->GetGI().Play(animation);
+           obj->GetTransform()->SetLocalPosition(Vector3d{ -47.55, 0.5f,42.53 });
+       }
+
+
+       {
+           auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+           auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+           renderer->GetGI().SetMesh(mesh);
+       }*/
+       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+       //{
+       //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
+       //}
+       //{
+       //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+       //	obj->GetTransform()->SetLocalPosition(Vector3d{ 10,0,0 });
+       //}
+       //{
+       //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+       //	obj->GetTransform()->SetLocalPosition(Vector3d{ 10,0,0 });
+       //}
+       //{
+       //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+       //	obj->GetTransform()->SetLocalScale(Vector3d{ 2,2,2 });
+       //}
+       //{
+       //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stump");
+       //	obj->GetTransform()->SetLocalPosition(Vector3d{ 50,0,0 });
+       //}
+
+       ////////////{
+       ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+       ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+       ////////////}
+       ////////////{
+       ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CastleWall_Door");
+       ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 50,0,0 });
+       ////////////	obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{0,180,0} });
+       ////////////}
+       ////////////{
+       ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Cuptower");
+       ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 70,0,0 });
+       ////////////}
+       ////////////{
+       ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Fork");
+       ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 90,0,0 });
+       ////////////}
+       ////////////{
+       ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Hat01");
+       ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 110,0,0 });
+       ////////////}
+       ////////////{
+       ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Hat02");
+       ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 130,0,0 });
+       ////////////}
+       ////////////{
+       ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stump");
+       ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 150,0,0 });
+       ////////////}
+       ////////////{
+       ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Mushroom01");
+       ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 170,0,0 });
+       ////////////}
+       ////////////{
+       ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Mushroom02");
+       ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 190,0,0 });
+       ////////////}
 
     {
-    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    	obj->GetTransform()->SetLocalScale(Vector3d{ 100,1,100 });
-    	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    	renderer->GetGI().SetMesh(mesh);
-    }
-    {
-    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    	obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,1 });
-    	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,50,50 });
-    	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    	renderer->GetGI().SetMesh(mesh);
-    }
-    {
-    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    	obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
-    	obj->GetTransform()->SetLocalPosition(Vector3d{ -50,50,0 });
-    	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    	renderer->GetGI().SetMesh(mesh);
-    }
-
-    {
-    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    	obj->GetTransform()->SetLocalPosition(Vector3d{ -48.67,3.67,44.81 });
-    	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    	renderer->GetGI().SetMesh(mesh);
-    }
-    {
-    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.26,3.67,47.83 });
-    	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    	renderer->GetGI().SetMesh(mesh);
-    }
-    {
-    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    	obj->GetTransform()->SetLocalPosition(Vector3d{ -48.08,5.32,46.24 });
-    	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    	renderer->GetGI().SetMesh(mesh);
-    }
-
-    {
-    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    	obj->GetTransform()->SetLocalScale(Vector3d{ 1,100,100 });
-    	obj->GetTransform()->SetLocalPosition(Vector3d{ 48.08,5.32,46.24 });
-    	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    	renderer->GetGI().SetMesh(mesh);
-    }
-
-    {
-    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
-    	auto animator = obj->GetComponent<yunutyEngine::graphics::Animator>();
-    	animator->GetGI().PushAnimation(animation);
-    	animator->GetGI().Play(animation);
-    	obj->GetTransform()->SetLocalPosition(Vector3d{ -47.55, 0.5f,42.53 });
-    }
-
-
-    {
-    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    	renderer->GetGI().SetMesh(mesh);
-    }*/
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
-    //}
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-    //	obj->GetTransform()->SetLocalPosition(Vector3d{ 10,0,0 });
-    //}
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
-    //	obj->GetTransform()->SetLocalPosition(Vector3d{ 10,0,0 });
-    //}
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
-    //	obj->GetTransform()->SetLocalScale(Vector3d{ 2,2,2 });
-    //}
-    //{
-    //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stump");
-    //	obj->GetTransform()->SetLocalPosition(Vector3d{ 50,0,0 });
-    //}
-
-    ////////////{
-    ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-    ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
-    ////////////}
-    ////////////{
-    ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CastleWall_Door");
-    ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 50,0,0 });
-    ////////////	obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{0,180,0} });
-    ////////////}
-    ////////////{
-    ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Cuptower");
-    ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 70,0,0 });
-    ////////////}
-    ////////////{
-    ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Fork");
-    ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 90,0,0 });
-    ////////////}
-    ////////////{
-    ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Hat01");
-    ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 110,0,0 });
-    ////////////}
-    ////////////{
-    ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Hat02");
-    ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 130,0,0 });
-    ////////////}
-    ////////////{
-    ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stump");
-    ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 150,0,0 });
-    ////////////}
-    ////////////{
-    ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Mushroom01");
-    ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 170,0,0 });
-    ////////////}
-    ////////////{
-    ////////////	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Mushroom02");
-    ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 190,0,0 });
-    ////////////}
-
-    {
-    	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
     }
 
     //{
@@ -347,79 +347,17 @@ void application::contents::ContentsLayer::Initialize()
     {
         ContentsLayer::testInitializer();
         return;
-    }    
-
-    //auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //camObj->GetTransform()->SetLocalPosition(Vector3d(0, 20, -10));
-    //camObj->GetTransform()->SetLocalRotation( Quaternion(Vector3d(60, 0, 0)));
-    //auto roamingCam = camObj->AddComponent<RTSCam>();
-    //roamingCam->SetCameraMain();
+    }
+    yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+    ShortcutSystem::Instance().RegisterUniqueTrigger({
+        { KeyCode::Control, true },{ KeyCode::LShift, true }, { KeyCode::NUM_0, false } }, [=]() { DebugGraphic::SetDebugGraphicsEnabled(!DebugGraphic::AreDebugGraphicsEnabled()); }
+    );
 
     wanderUtils::LoadResourcesRecursively();
-    //const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-
-    //resourceManager->LoadFile("FBXMaterial.scres");
-
-    //resourceManager->LoadFile("LeavesVS.cso");
-    //resourceManager->LoadFile("LeavesPS.cso");
-    //resourceManager->LoadFile("Stage_1_FloorPS.cso");
-
-    //resourceManager->LoadFile("Texture/VertexColor/T_Dirt_ARM.png");
-    //resourceManager->LoadFile("Texture/VertexColor/T_Dirt_BaseColor.png");
-    //resourceManager->LoadFile("Texture/VertexColor/T_Dirt_Normal.png");
-
-    //resourceManager->LoadFile("Texture/VertexColor/T_Grass_ARM.png");
-    //resourceManager->LoadFile("Texture/VertexColor/T_Grass_BaseColor.png");
-    //resourceManager->LoadFile("Texture/VertexColor/T_Grass_Normal.png");
-
-    //resourceManager->LoadFile("Texture/VertexColor/T_GrassBlend_ARM.png");
-    //resourceManager->LoadFile("Texture/VertexColor/T_GrassBlend_BaseColor.png");
-    //resourceManager->LoadFile("Texture/VertexColor/T_GrassBlend_Normal.png");
-
-    //resourceManager->LoadFile("Texture/VertexColor/T_Tile_ARM.png");
-    //resourceManager->LoadFile("Texture/VertexColor/T_Tile_BaseColor.png");
-    //resourceManager->LoadFile("Texture/VertexColor/T_Tile_Normal.png");
-
-    //resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_ARM.png");
-    //resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_BaseColor.png");
-    //resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_Normal.png");
-
-    //resourceManager->LoadFile("FBX/SM_VertexColor");
-    //resourceManager->LoadFile("FBX/SKM_Monster1");
-    //resourceManager->LoadFile("FBX/SKM_Monster2");
-    //resourceManager->LoadFile("FBX/SKM_Robin");
-    //resourceManager->LoadFile("FBX/SM_Bush_001");
-    //resourceManager->LoadFile("FBX/SM_Bush_002");
-    //resourceManager->LoadFile("FBX/SM_Trunk_001");
-    //resourceManager->LoadFile("FBX/SM_CastleWall");
-    //resourceManager->LoadFile("FBX/SM_CastleWall_Door");
-    //resourceManager->LoadFile("FBX/SM_CastleWall_Pillar");
-    //resourceManager->LoadFile("FBX/SM_Chair");
-    //resourceManager->LoadFile("FBX/SM_CupTower");
-    //resourceManager->LoadFile("FBX/SM_Fork");
-    //resourceManager->LoadFile("FBX/SM_GuideBook");
-    //resourceManager->LoadFile("FBX/SM_Hat01");
-    //resourceManager->LoadFile("FBX/SM_Hat02");
-    //resourceManager->LoadFile("FBX/SM_SmallBush_001");
-    //resourceManager->LoadFile("FBX/SM_Stone_001");
-    //resourceManager->LoadFile("FBX/SM_Stone_002");
-    //resourceManager->LoadFile("FBX/SM_Stump");
-    //resourceManager->LoadFile("FBX/SM_Temple_Book_etc");
-    //resourceManager->LoadFile("FBX/SM_Temple_Books");
-    //resourceManager->LoadFile("FBX/SM_Temple_Floor");
-    //resourceManager->LoadFile("FBX/SM_Temple_Pillar");
-    //resourceManager->LoadFile("FBX/SM_Temple_Pillar_Broken");
-    //resourceManager->LoadFile("FBX/SM_Temple_Rabbit");
-    //resourceManager->LoadFile("FBX/SM_Mushroom01");
-    //resourceManager->LoadFile("FBX/SM_Mushroom02");
-    //resourceManager->LoadFile("FBX/SM_Temple_Welcome");
-    //resourceManager->LoadFile("FBX/SM_Stage1_Floor");
 
 #ifndef EDITOR
 #ifdef GRAPHICS_TEST
     {
-        yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-        //yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
         yunutyEngine::Collider2D::SetIsOnXYPlane(false);
         auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
         directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
@@ -433,32 +371,18 @@ void application::contents::ContentsLayer::Initialize()
     GraphicsTest();
 #else
     {
-        yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 
         ShortcutSystem::Instance();
 
-		{
-			auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-			//obj->GetTransform()->SetLocalPosition(Vector3d{ -500,500,1 });
-			obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,100 });
-			auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
-			text->GetGI().SetFontSize(20);
-			auto test = obj->AddComponent<TestComponent2>();
-			test->text = text;
-		}
-
-		/// Editor 에서 수정하여 Map Data 에 저장할 부분
-		/*auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		auto camComp = camObj->AddComponent<graphics::Camera>();
-		camComp->SetCameraMain();*/
-		//camObj->GetTransform()->SetLocalPosition({ 0,25,0 });
-		//camObj->AddComponent<Dotween>();
-		//RegisterToEditorObjectVector(camObj);
-
-        //auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        //directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
-        //directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
-        //auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+        {
+            auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+            //obj->GetTransform()->SetLocalPosition(Vector3d{ -500,500,1 });
+            obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,100 });
+            auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
+            text->GetGI().SetFontSize(20);
+            auto test = obj->AddComponent<TestComponent2>();
+            test->text = text;
+        }
 
         auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
@@ -482,12 +406,6 @@ void application::contents::ContentsLayer::Initialize()
         AttachDebugMesh(skillPreviewSphereMeshObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
         SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
         RegisterToEditorObjectVector(skillPreviewSphereMeshObject);
-
-        //camComp->groundHoveringClickCallback = [=](Vector3d pos)
-        //    {
-        //        mouseCursorObject->GetTransform()->SetWorldPosition(pos);
-        //        SkillPreviewSystem::Instance().SetCurrentMousPosition(pos);
-        //    };
 
         InputManager::Instance();
         UIManager::Instance();
@@ -605,16 +523,16 @@ void application::contents::ContentsLayer::Finalize()
 
 void application::contents::ContentsLayer::PlayContents()
 {
-	SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
+    SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
-	for (auto e : componentsCreatedByEditorVector)
-	{
-		e->SetActive(true);
-	}
+    for (auto e : componentsCreatedByEditorVector)
+    {
+        e->SetActive(true);
+    }
 
-	InputManager::Instance();
-	UIManager::Instance();
+    InputManager::Instance();
+    UIManager::Instance();
 
     /// Editor 에서 수정하여 Map Data 에 저장할 부분
 
@@ -630,63 +548,63 @@ void application::contents::ContentsLayer::PlayContents()
     SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
     RegisterToEditorObjectVector(skillPreviewSphereMeshObject);
 
-	/// 임시
+    /// 임시
     //RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
     //RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
     //RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
     RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
 
     /// UI 작업
-	const int menuWindowXpos = 760;
-	const int menuWindowYpos = 540 - 350 / 2;
+    const int menuWindowXpos = 760;
+    const int menuWindowYpos = 540 - 350 / 2;
 
-	auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-	rsrcMgr->LoadFile("Texture/zoro.jpg");
-	rsrcMgr->LoadFile("Texture/zoro_highLighted.jpg");
-	rsrcMgr->LoadFile("Texture/zoro_Clicked.jpg");
+    auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+    rsrcMgr->LoadFile("Texture/zoro.jpg");
+    rsrcMgr->LoadFile("Texture/zoro_highLighted.jpg");
+    rsrcMgr->LoadFile("Texture/zoro_Clicked.jpg");
 
-  /*  auto robinPassiveActivateButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    auto robinPassiveActivateImage = robinPassiveActivateButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
-    auto robinPassiveActivateButton = robinPassiveActivateButtonObject->AddComponent<UIButton>();
-    robinPassiveActivateButton->SetImageComponent(robinPassiveActivateImage);
-    robinPassiveActivateButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-    robinPassiveActivateButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro_highLighted.jpg"));
-    robinPassiveActivateButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro_Clicked.jpg"));
-    robinPassiveActivateButton->SetLayer(10.0);
-    RobinSkillDevelopmentSystem::Instance().AddTopLayerButton(robinPassiveActivateButton);
-    robinPassiveActivateButtonObject->GetTransform()->SetLocalPosition({ 0, 700, 0 });
-	RegisterToEditorObjectVector(robinPassiveActivateButtonObject);
+    /*  auto robinPassiveActivateButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+      auto robinPassiveActivateImage = robinPassiveActivateButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+      auto robinPassiveActivateButton = robinPassiveActivateButtonObject->AddComponent<UIButton>();
+      robinPassiveActivateButton->SetImageComponent(robinPassiveActivateImage);
+      robinPassiveActivateButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+      robinPassiveActivateButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro_highLighted.jpg"));
+      robinPassiveActivateButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro_Clicked.jpg"));
+      robinPassiveActivateButton->SetLayer(10.0);
+      RobinSkillDevelopmentSystem::Instance().AddTopLayerButton(robinPassiveActivateButton);
+      robinPassiveActivateButtonObject->GetTransform()->SetLocalPosition({ 0, 700, 0 });
+      RegisterToEditorObjectVector(robinPassiveActivateButtonObject);
 
-	auto robinWSkillUpgradeButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	auto robinWSkillUpgradeImage = robinWSkillUpgradeButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
-	auto robinWSkillUpgradeButton = robinWSkillUpgradeButtonObject->AddComponent<UIButton>();
-	robinWSkillUpgradeButton->SetImageComponent(robinWSkillUpgradeImage);
-	robinWSkillUpgradeButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-	robinWSkillUpgradeButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-	robinWSkillUpgradeButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-	robinWSkillUpgradeButton->SetLayer(10.0);
-	RobinSkillDevelopmentSystem::Instance().AddMiddleLayerButton(robinWSkillUpgradeButton);
-	robinWSkillUpgradeButtonObject->GetTransform()->SetLocalPosition({ 100, 700, 0 });
-	RegisterToEditorObjectVector(robinWSkillUpgradeButtonObject);*/
+      auto robinWSkillUpgradeButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+      auto robinWSkillUpgradeImage = robinWSkillUpgradeButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+      auto robinWSkillUpgradeButton = robinWSkillUpgradeButtonObject->AddComponent<UIButton>();
+      robinWSkillUpgradeButton->SetImageComponent(robinWSkillUpgradeImage);
+      robinWSkillUpgradeButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+      robinWSkillUpgradeButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+      robinWSkillUpgradeButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+      robinWSkillUpgradeButton->SetLayer(10.0);
+      RobinSkillDevelopmentSystem::Instance().AddMiddleLayerButton(robinWSkillUpgradeButton);
+      robinWSkillUpgradeButtonObject->GetTransform()->SetLocalPosition({ 100, 700, 0 });
+      RegisterToEditorObjectVector(robinWSkillUpgradeButtonObject);*/
 
 }
 
 void application::contents::ContentsLayer::PauseContents()
 {
     Time::SetTimeScale(FLT_MIN * 1000);
-	for (auto e : componentsCreatedByEditorVector)
-	{
-		e->SetActive(false);
-	}
+    for (auto e : componentsCreatedByEditorVector)
+    {
+        e->SetActive(false);
+    }
 }
 
 void application::contents::ContentsLayer::ResumeContents()
 {
     Time::SetTimeScale(1);
-	for (auto e : componentsCreatedByEditorVector)
-	{
-		e->SetActive(true);
-	}
+    for (auto e : componentsCreatedByEditorVector)
+    {
+        e->SetActive(true);
+    }
 }
 
 void application::contents::ContentsLayer::StopContents()
@@ -695,10 +613,10 @@ void application::contents::ContentsLayer::StopContents()
     isStoppedOnce = true;
     ClearPlaytimeObject();
     ShortcutSystem::Instance().Clear();
-	for (auto e : componentsCreatedByEditorVector)
-	{
-		e->SetActive(false);
-	}
+    for (auto e : componentsCreatedByEditorVector)
+    {
+        e->SetActive(false);
+    }
 }
 
 #ifdef GEN_TESTS
@@ -715,19 +633,19 @@ void application::contents::ContentsLayer::AssignTestInitializer(std::function<v
 
 void application::contents::ContentsLayer::ClearPlaytimeObject()
 {
-	/// 생성된 모든 게임 플레이 오브젝트 삭제
-	for (auto e : objectCreatedByEditorVector)
-	{
-  //      if (e->getName() == "")
-		//e->SetSelfActive(false);
-		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(e);
-	}
+    /// 생성된 모든 게임 플레이 오브젝트 삭제
+    for (auto e : objectCreatedByEditorVector)
+    {
+        //      if (e->getName() == "")
+              //e->SetSelfActive(false);
+        yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(e);
+    }
 
     for (auto e : componentsCreatedByEditorVector)
     {
         e->SetActive(false);
     }
-	objectCreatedByEditorVector.clear();
+    objectCreatedByEditorVector.clear();
 
     SingletonInstanceContainer::SingleInstance().ClearSingletonInstances();
 }
