@@ -50,19 +50,10 @@ void PointLightShadowPass::Render(int index, bool isSkinned)
 
 	// PSSet
 	ps->Bind();
-
 }
 
 void PointLightShadowPass::EndRender()
 {
-	float clearDepth = 1.0f;
-
-	auto& dsvArray = this->dsTexture->GetDSVArray();
-	for (auto& each : dsvArray)
-	{
-		ResourceBuilder::Instance.Get().device->GetDeviceContext()->ClearDepthStencilView(each.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, clearDepth, 0);
-	}
-
 	// VSSet
 	vs->UnBind();
 
@@ -71,10 +62,20 @@ void PointLightShadowPass::EndRender()
 
 	// PSSet
 	ps->UnBind();
-
+	auto& dsvArray = this->dsTexture->GetDSVArray();
 	for (int i = 0; i < dsvArray.size(); ++i)
 	{
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(0, nullptr, nullptr);
+	}
+}
+
+void PointLightShadowPass::ClearDSVArray()
+{
+	float clearDepth = 1.0f;
+	auto& dsvArray = this->dsTexture->GetDSVArray();
+	for (auto& each : dsvArray)
+	{
+		ResourceBuilder::Instance.Get().device->GetDeviceContext()->ClearDepthStencilView(each.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, clearDepth, 0);
 	}
 }
 

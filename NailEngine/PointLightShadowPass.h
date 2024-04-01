@@ -22,6 +22,7 @@ public:
 	void Init();
 	void Render(int index, bool isSkinned);
 	void EndRender();
+	void ClearDSVArray();
 
 private:
 	Texture* dsTexture;

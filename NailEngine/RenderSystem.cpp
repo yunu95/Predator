@@ -289,7 +289,7 @@ void RenderSystem::RenderPointLightShadow()
 	auto& lightSet = LightManager::Instance.Get().GetLightList();
 
 	int index = 0;
-
+	PointLightShadowPass::Instance.Get().ClearDSVArray();
 	for (auto& e : lightSet)
 	{
 		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
