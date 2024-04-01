@@ -18,7 +18,8 @@ void AutoAttackProjectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, float spee
 	m_ownerUnit = ownerUnit;
 	m_opponentUnit = opponentUnit;
 	GetGameObject()->GetTransform()->SetWorldPosition(ownerUnit->GetGameObject()->GetTransform()->GetWorldPosition());
-	RotateBulletPerFrame();
+	GetGameObject()->GetComponent<Dotween>()->DOLookAt(m_opponentUnit->GetGameObject()->GetTransform()->GetWorldPosition(), Time::GetDeltaTime(), false);
+	//RotateBulletPerFrame();
 	GetGameObject()->SetSelfActive(true);
 
 	isShootOperating = true;
@@ -60,8 +61,8 @@ void AutoAttackProjectile::ShootUpdateFunction()
 		isShootOperating = false;
 	}
 
-	RotateBulletPerFrame();
-
+	//RotateBulletPerFrame();
+	GetGameObject()->GetComponent<Dotween>()->DOLookAt(m_opponentUnit->GetGameObject()->GetTransform()->GetWorldPosition(), Time::GetDeltaTime(), false);
 }
 
 void AutoAttackProjectile::RotateBulletPerFrame()

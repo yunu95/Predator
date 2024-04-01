@@ -1,8 +1,13 @@
 #include "SkillPreviewSystem.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
-SkillPreviewSystem::~SkillPreviewSystem()
+void SkillPreviewSystem::Start()
 {
-
+	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+	//contentsLayer->RegisterToEditorObjectVector(m_currentSelectedPlayerObject);
+	contentsLayer->RegisterToEditorComponentVector(this);
+	//contentsLayer->RegisterToEditorObjectVector(GetGameObject());
 }
 
 void SkillPreviewSystem::Update()

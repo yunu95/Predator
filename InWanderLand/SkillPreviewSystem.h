@@ -36,9 +36,8 @@ private:
 	double previousDegree = 0.0f;
 
 public:
-	~SkillPreviewSystem();
-
-	void Update();
+	virtual void Start() override;
+	virtual void Update() override;
 
 	void SetPathPreviewObjectRotation();
 	void SetRangePreviewObjectPosition();

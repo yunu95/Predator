@@ -6,6 +6,7 @@
 #include "ContentsLayer.h"
 #include "Application.h"
 #include "LazySingletonClass.h"
+#include "Dotween.h"
 
 class MagicianAutoAttackProjectilePool :
 	public GameObjectPool<MagicianAutoAttackProjectile>, public GHContents::LazySingletonClass<MagicianAutoAttackProjectilePool>
@@ -21,6 +22,8 @@ public:
 		//projectileComponent->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));	
 		auto bulletGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Fork");
 		bulletGameObject->SetParent(projectile->GetGameObject());
+
+		projectile->GetGameObject()->AddComponent<Dotween>();
 
 		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
 		contentsLayer->RegisterToEditorObjectVector(projectile->GetGameObject());

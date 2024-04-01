@@ -25,7 +25,7 @@ private:
 	RTSCam* m_movingSystemComponent;
 	Dotween* m_dotween;
 	std::unordered_map<Unit::UnitType, Unit*> playerComponentMap;
-	Unit::UnitType currentSelectedSerialNumber;
+	Unit::UnitType currentSelectedSerialNumber = Unit::UnitType::Warrior;
 	int previousSerialNumber = 0;
 
 	Vector3d cameraOffset = { 0, 20, -15 };

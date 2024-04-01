@@ -10,6 +10,8 @@ void InputManager::Start()
 {
 	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
 	contentsLayer->RegisterToEditorComponentVector(this);
+	currentSelectedSerialNumber = SelectedSerialNumber::One;
+	PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Warrior);
 }
 
 void InputManager::Update()
