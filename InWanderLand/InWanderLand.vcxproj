@@ -987,7 +987,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="AutoAttackProjectilePool.h" />
     <ClInclude Include="BleedingComponent.h" />
     <ClInclude Include="BlindFieldComponent.h" />
+    <ClInclude Include="CreateInstanceCommand.h" />
     <ClInclude Include="BossProductor.h" />
+    <ClInclude Include="BossSkillSystem.h" />
     <ClInclude Include="DamageOnlyComponent.h" />
     <ClInclude Include="BrushList.h" />
     <ClInclude Include="CameraBrush.h" />
@@ -996,6 +998,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Camera_TemplateData.h" />
     <ClInclude Include="CameraData.h" />
     <ClInclude Include="DebuggingMesh.h" />
+    <ClInclude Include="DeleteInstanceCommand.h" />
+    <ClInclude Include="EnemySkillSystem.h" />
+    <ClInclude Include="EnemySpawnGateProductor.h" />
+    <ClInclude Include="EnemySummonSkillSystem.h" />
     <ClInclude Include="ShortcutSystem.h" />
     <ClInclude Include="DualCastComponent.h" />
     <ClInclude Include="DummyComponent.h" />
@@ -1024,7 +1030,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="PlayTimeRegionManager.h" />
     <ClInclude Include="PlaytimeWave.h" />
     <ClInclude Include="PaletteBrushManager.h" />
-    <ClInclude Include="RangedEnemyPool.h" />
     <ClInclude Include="RangedEnemyProductor.h" />
     <ClInclude Include="RobinSkillDevelopmentSystem.h" />
     <ClInclude Include="SaveStaticOrnamentsCommnad.h" />
@@ -1053,6 +1058,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Region_TemplateData.h" />
     <ClInclude Include="SingleNavigationField.h" />
     <ClInclude Include="SkillPreviewSystem.h" />
+    <ClInclude Include="SystemCommands.h" />
     <ClInclude Include="TacticModeSystem.h" />
     <ClInclude Include="TestUtilButtonEvent.h" />
     <ClInclude Include="InWanderLand.h" />
@@ -1151,13 +1157,14 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="TestUtilNavAgent.h" />
     <ClInclude Include="TestUtilRTSTestCam.h" />
     <ClInclude Include="TestUtils.h" />
+    <ClInclude Include="TransformEditCommand.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UIPanel.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="SpecialEffect.h" />
-    <ClInclude Include="MeleeEnemyPool.h" />
+    <ClInclude Include="UnitObjectPool.h" />
     <ClInclude Include="UnitProductorSelector.h" />
     <ClInclude Include="Unit_TemplateData.h" />
     <ClInclude Include="UrsulaSkillDevelopmentSystem.h" />
@@ -1186,7 +1193,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="AutoAttackProjectilePool.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
     <ClCompile Include="BlindFieldComponent.cpp" />
+    <ClCompile Include="CreateInstanceCommand.cpp" />
     <ClCompile Include="BossProductor.cpp" />
+    <ClCompile Include="BossSkillSystem.cpp" />
     <ClCompile Include="DamageOnlyComponent.cpp" />
     <ClCompile Include="CameraBrush.cpp" />
     <ClCompile Include="CameraEditorInstance.cpp" />
@@ -1194,6 +1203,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Camera_TemplateData.cpp" />
     <ClCompile Include="CameraData.cpp" />
     <ClCompile Include="DebuggingMesh.cpp" />
+    <ClCompile Include="DeleteInstanceCommand.cpp" />
+    <ClCompile Include="EnemySkillSystem.cpp" />
+    <ClCompile Include="EnemySpawnGateProductor.cpp" />
+    <ClCompile Include="EnemySummonSkillSystem.cpp" />
     <ClCompile Include="ShortcutSystem.cpp" />
     <ClCompile Include="DualCastComponent.cpp" />
     <ClCompile Include="EditorCameraManager.cpp" />
@@ -1330,6 +1343,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="TestCasePhysxTrigger.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TestCaseUpdateComponents.cpp" />
+    <ClCompile Include="TransformEditCommand.cpp" />
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UIPanel.cpp" />

@@ -18,6 +18,8 @@ namespace application
 			: public Command
 		{
 		public:
+			COMMAND_SETTING(CommandType::Exit)
+
 			ProgramExitCommand();
 
 			virtual void Execute() override;

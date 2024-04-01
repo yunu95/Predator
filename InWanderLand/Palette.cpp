@@ -11,6 +11,10 @@
 #include "RegionPalette.h"
 #include "WavePalette.h"
 #include "Panel_SceneView.h"
+#include "CommandManager.h"
+#include "DeleteInstanceCommand.h"
+
+#include <vector>
 
 namespace application::editor::palette
 {
@@ -123,8 +127,13 @@ namespace application::editor::palette
     }
     void Palette::OnDeletion()
     {
+        std::vector<IEditableData*> list;
         for (auto each : selection)
+        {
+            list.push_back(each);
             Delete(each);
+        }
+        CommandManager::GetSingletonInstance().AddQueue(std::make_shared<DeleteInstanceCommand>(list));
         selection.clear();
     }
     void Palette::Delete(IEditableData* data)

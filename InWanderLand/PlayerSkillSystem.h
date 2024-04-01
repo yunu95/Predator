@@ -10,33 +10,14 @@ class Dotween;
 class PlayerSkillSystem : public SkillSystem
 {
 public:
-	virtual void SkillActivate(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition) override;
-
-public:
-	virtual void QSkillActivate(Vector3d skillPos) = 0;
-	virtual void WSkillActivate(Vector3d skillPos) = 0;
-	
-	virtual bool IsSkillEnd() const;
-
+	virtual void ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition);	
 	virtual void RotateProjectile(GameObject* p_projectileObject, Vector3d p_endPosition);
 
-protected:
-	struct SkillRequirements
-	{
-		physics::Collider* skillCollider;
-		GameObject* colliderObject;
-		GameObject* debugObject;
-		Dotween* dotweenComponent;
-	};
-	
-	Unit* m_unitComponent;
-	Dotween* m_unitDotween;
-	NavigationAgent* m_unitNavComponent;
+	virtual void ActivateSkillOne(Vector3d skillPos) = 0;
+	virtual void ActivateSkillTwo(Vector3d skillPos) = 0;
 
 	Vector3d m_currentSelectedSkillPosition;
 
 	bool isSkillEnd = false;
-
-	virtual void SetOtherComponentsAsMember();
 };
 

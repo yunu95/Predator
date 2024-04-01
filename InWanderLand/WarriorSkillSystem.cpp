@@ -3,14 +3,7 @@
 #include "KnockBackComponent.h"
 #include "Dotween.h"
 
-void WarriorSkillSystem::SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen)
-{
-	p_requirments.skillCollider->SetActive(p_boolen);
-	//p_requirments.colliderObject->SetSelfActive(p_boolen);
-	p_requirments.debugObject->SetSelfActive(p_boolen);
-}
-
-void WarriorSkillSystem::QSkillActivate(Vector3d skillPos)
+void WarriorSkillSystem::ActivateSkillOne(Vector3d skillPos)
 {
 	isQSkillStarted = true;
 
@@ -37,7 +30,7 @@ void WarriorSkillSystem::QSkillActivate(Vector3d skillPos)
 		});
 }
 
-void WarriorSkillSystem::WSkillActivate(Vector3d skillPos)
+void WarriorSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 {
 	isWSkillStarted = true;
 

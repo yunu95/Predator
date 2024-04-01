@@ -10,6 +10,8 @@ extern const float DRAG_MOUSE_THRESHOLD_FACTOR;
 #define MESSAGE_BOX_CANCEL_BUTTON BIT(1)
 #define MESSAGE_BOX_USER_FUNC BIT(2)
 
+#include <iostream>
+
 namespace application
 {
 	namespace editor
@@ -451,13 +453,13 @@ namespace application
 				return returnVal;
 			}
 
-			bool DragFloatLabel(std::string dragKey, std::string label, float& value, bool editable, float speed, float min, float max)
+			DragFlags DragFloatLabel(std::string dragKey, std::string label, float& value, bool editable, float speed, float min, float max)
 			{
 				using namespace ImGui;
-
+				DragFlags returnVal = DragFlags::None;
 				ImGuiWindow* window = GetCurrentWindow();
 				if (window->SkipItems)
-					return false;
+					return returnVal;
 
 				ImGuiContext& g = *GImGui;
 				const ImGuiStyle& style = g.Style;
@@ -471,7 +473,7 @@ namespace application
 				bool temp_input_allowed = editable;
 				ItemSize(total_bb, style.FramePadding.y);
 				if (!ItemAdd(total_bb, id, &frame_bb, temp_input_allowed ? ImGuiItemFlags_Inputable : 0))
-					return false;
+					return returnVal;
 
 				// Default format string when passing NULL
 				auto format = "%.3f";
@@ -511,7 +513,8 @@ namespace application
 
 				if (temp_input_is_active)
 				{
-					return TempInputScalar(frame_bb, id, dragKey.c_str(), ImGuiDataType_Float, &value, format, NULL, NULL);
+					TempInputScalar(frame_bb, id, dragKey.c_str(), ImGuiDataType_Float, &value, format, NULL, NULL);
+					return DragFlags::Type;
 				}
 
 				// Draw frame
@@ -522,23 +525,26 @@ namespace application
 				// Drag behavior
 				const bool value_changed = DragBehavior(id, ImGuiDataType_Float, &value, speed, &min, &max, format, 0);
 				if (value_changed)
+				{
 					MarkItemEdited(id);
+					returnVal = DragFlags::Drag;
+				}
 
 				// Display value using user-provided display format so user can add prefix/suffix/decorations to the value.
 				if (g.LogEnabled)
 					LogSetNextTextDecoration("{", "}");
 				RenderTextClipped(frame_bb.Min, frame_bb.Max, label.c_str(), label.c_str() + label.size(), NULL, ImVec2(0.5f, 0.5f));
 	
-				return false;
+				return returnVal;
 			}
 
-			bool DragIntLabel(std::string dragKey, std::string label, int& value, bool editable, float speed, int min, int max)
+			DragFlags DragIntLabel(std::string dragKey, std::string label, int& value, bool editable, float speed, int min, int max)
 			{
 				using namespace ImGui;
-
+				DragFlags returnVal = DragFlags::None;
 				ImGuiWindow* window = GetCurrentWindow();
 				if (window->SkipItems)
-					return false;
+					return returnVal;
 
 				ImGuiContext& g = *GImGui;
 				const ImGuiStyle& style = g.Style;
@@ -552,7 +558,7 @@ namespace application
 				bool temp_input_allowed = editable;
 				ItemSize(total_bb, style.FramePadding.y);
 				if (!ItemAdd(total_bb, id, &frame_bb, temp_input_allowed ? ImGuiItemFlags_Inputable : 0))
-					return false;
+					return returnVal;
 
 				// Default format string when passing NULL
 				auto format = "%d";
@@ -592,7 +598,8 @@ namespace application
 
 				if (temp_input_is_active)
 				{
-					return TempInputScalar(frame_bb, id, dragKey.c_str(), ImGuiDataType_S32, &value, format, NULL, NULL);
+					TempInputScalar(frame_bb, id, dragKey.c_str(), ImGuiDataType_S32, &value, format, NULL, NULL);
+					return DragFlags::Type;
 				}
 
 				// Draw frame
@@ -603,14 +610,17 @@ namespace application
 				// Drag behavior
 				const bool value_changed = DragBehavior(id, ImGuiDataType_S32, &value, speed, &min, &max, format, 0);
 				if (value_changed)
+				{
 					MarkItemEdited(id);
+					returnVal = DragFlags::Drag;
+				}
 
 				// Display value using user-provided display format so user can add prefix/suffix/decorations to the value.
 				if (g.LogEnabled)
 					LogSetNextTextDecoration("{", "}");
 				RenderTextClipped(frame_bb.Min, frame_bb.Max, label.c_str(), label.c_str() + label.size(), NULL, ImVec2(0.5f, 0.5f));
 
-				return false;
+				return returnVal;
 			}
 
 			Vector3Flags Vector3Control(std::string valName, float& x, float& y, float& z, bool x_multiSelect, bool y_multiSelect, bool z_multiSelect)
@@ -645,16 +655,55 @@ namespace application
 
 					ImGui::SetNextItemWidth(boxWidth);
 					ImGui::SameLine();
+
+					static bool editFlagX = false;
+					static bool editTypeX = false;
 					if (x_multiSelect)
 					{
-						if (DragFloatLabel(("##" + valName + "multiX").c_str(), "---", x, 0.1f))
+						auto flag = DragFloatLabel(("##" + valName + "multiX").c_str(), "---", x, 0.1f);
+						switch (flag)
 						{
-							returnVal = Vector3Flags::TypeX;
+							case application::editor::imgui::DragFlags::Drag:
+							{
+								editFlagX = true;
+								editTypeX = false;
+								break;
+							}
+							case application::editor::imgui::DragFlags::Type:
+							{
+								editFlagX = true;
+								editTypeX = true;
+								returnVal = Vector3Flags::TypeX;
+								break;
+							}
+							default:
+								break;
 						}
 					}
 					else
 					{
-						ImGui::DragFloat(("##" + valName + "X").c_str(), &x, 0.1f);
+						if (ImGui::DragFloat(("##" + valName + "X").c_str(), &x, 0.1f))
+						{
+							editFlagX = true;
+							editTypeX = false;
+						}
+					}
+
+					if (editFlagX)
+					{
+						if (ImGui::GetFocusID() != ImGui::GetActiveID())
+						{
+							if (editTypeX)
+							{
+								returnVal = Vector3Flags::EndTypeX;
+							}
+							else
+							{
+								returnVal = Vector3Flags::EndEditX;
+							}
+							editFlagX = false;
+							editTypeX = false;
+						}
 					}
 
 					ImGui::SameLine();
@@ -671,16 +720,55 @@ namespace application
 
 					ImGui::SetNextItemWidth(boxWidth);
 					ImGui::SameLine();
+
+					static bool editFlagY = false;
+					static bool editTypeY = false;
 					if (y_multiSelect)
 					{
-						if (DragFloatLabel(("##" + valName + "multiY").c_str(), "---", y, 0.1f))
+						auto flag = DragFloatLabel(("##" + valName + "multiY").c_str(), "---", y, 0.1f);
+						switch (flag)
 						{
-							returnVal = Vector3Flags::TypeY;
+							case application::editor::imgui::DragFlags::Drag:
+							{
+								editFlagY = true;
+								editTypeY = false;
+								break;
+							}
+							case application::editor::imgui::DragFlags::Type:
+							{
+								editFlagY = true;
+								editTypeY = true;
+								returnVal = Vector3Flags::TypeY;
+								break;
+							}
+							default:
+								break;
 						}
 					}
 					else
 					{
-						ImGui::DragFloat(("##" + valName + "Y").c_str(), &y, 0.1f);
+						if (ImGui::DragFloat(("##" + valName + "Y").c_str(), &y, 0.1f))
+						{
+							editFlagY = true;
+							editTypeY = false;
+						}
+					}
+
+					if (editFlagY)
+					{
+						if (ImGui::GetFocusID() != ImGui::GetActiveID())
+						{
+							if (editTypeY)
+							{
+								returnVal = Vector3Flags::EndTypeY;
+							}
+							else
+							{
+								returnVal = Vector3Flags::EndEditY;
+							}
+							editFlagY = false;
+							editTypeY = false;
+						}
 					}
 
 					ImGui::SameLine();
@@ -697,16 +785,55 @@ namespace application
 
 					ImGui::SetNextItemWidth(boxWidth);
 					ImGui::SameLine();
+
+					static bool editFlagZ = false;
+					static bool editTypeZ = false;
 					if (z_multiSelect)
 					{
-						if (DragFloatLabel(("##" + valName + "multiZ").c_str(), "---", z, 0.1f))
+						auto flag = DragFloatLabel(("##" + valName + "multiZ").c_str(), "---", z, 0.1f);
+						switch (flag)
 						{
-							returnVal = Vector3Flags::TypeZ;
+							case application::editor::imgui::DragFlags::Drag:
+							{
+								editFlagZ = true;
+								editTypeZ = false;
+								break;
+							}
+							case application::editor::imgui::DragFlags::Type:
+							{
+								editFlagZ = true;
+								editTypeZ = true;
+								returnVal = Vector3Flags::TypeZ;
+								break;
+							}
+							default:
+								break;
 						}
 					}
 					else
 					{
-						ImGui::DragFloat(("##" + valName + "Z").c_str(), &z, 0.1f);
+						if (ImGui::DragFloat(("##" + valName + "Z").c_str(), &z, 0.1f))
+						{
+							editFlagZ = true;
+							editTypeZ = false;
+						}
+					}
+
+					if (editFlagZ)
+					{
+						if (ImGui::GetFocusID() != ImGui::GetActiveID())
+						{
+							if (editTypeZ)
+							{
+								returnVal = Vector3Flags::EndTypeZ;
+							}
+							else
+							{
+								returnVal = Vector3Flags::EndEditZ;
+							}
+							editFlagZ = false;
+							editTypeZ = false;
+						}
 					}
 
 					ImGui::EndTable();

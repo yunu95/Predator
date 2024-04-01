@@ -101,8 +101,10 @@ namespace application
                 {
                     if (fbxName == std::string(each.begin(), each.end()))
                     {
-                        ShortcutSystem::Instance().RegisterObject(3, ornamentInstance->GetGameObject());
-                        ShortcutSystem::Instance().RegisterObject(idx, ornamentInstance->GetGameObject());
+                        ShortcutSystem::Instance().RegisterTriggerFunction(3,
+                            [=]() { ornamentInstance->GetGameObject()->SetSelfActive(ShortcutSystem::Instance().GetTriggerSwitch(3)); });
+                        ShortcutSystem::Instance().RegisterTriggerFunction(idx,
+                            [=]() { ornamentInstance->GetGameObject()->SetSelfActive(!ornamentInstance->GetGameObject()->GetSelfActive()); });
                         break;
                     }
                     idx++;

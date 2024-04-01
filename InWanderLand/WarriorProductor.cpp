@@ -189,7 +189,12 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 
 	//RobinSkillDevelopmentSystem::Instance().SetSkillSystemComponent(warriorSkillSystem);
 
-	UnitProductor::SetCommonComponents();
+	UnitProductor::AddRangeSystemComponent();
+	UnitProductor::AddColliderComponent();
+	UnitProductor::AddNavigationComponent();
+	UnitProductor::AddDotweenComponent();
+	UnitProductor::SetUnitComponentMembers();
+	UnitProductor::SetPlayerRelatedComponents(m_unitComponent);
 
 	return m_unitComponent;
 }

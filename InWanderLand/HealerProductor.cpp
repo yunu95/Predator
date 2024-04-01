@@ -147,7 +147,12 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
 	healerSkillSystem->SetWSkillDebugInfo(WSkillFieldDebugObject);
 #pragma endregion
 
-	UnitProductor::SetCommonComponents();
-	
+	UnitProductor::AddRangeSystemComponent();
+	UnitProductor::AddColliderComponent();
+	UnitProductor::AddNavigationComponent();
+	UnitProductor::AddDotweenComponent();
+	UnitProductor::SetUnitComponentMembers();
+	UnitProductor::SetPlayerRelatedComponents(m_unitComponent);
+
 	return m_unitComponent;
 }

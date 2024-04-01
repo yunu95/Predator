@@ -21,6 +21,8 @@
 #include "imgui_Utility.h"
 
 #include "MenubarCommands.h"
+#include "SystemCommands.h"
+
 #include "Application.h"
 #include "FileSystem.h"
 
@@ -132,6 +134,22 @@ namespace application
                     if (eim.IsKeyboardPressed(KeyCode::S) && !mfm.GetCurrentMapPath().empty())
                     {
                         cm.AddQueue(std::make_shared<SaveMapCommand>());
+                    }
+
+                    /// Shift 조합
+                    if (eim.IsKeyboardDown(KeyCode::Shift))
+                    {
+                        if (eim.IsKeyboardPressed(KeyCode::Z))
+                        {
+                            cm.RedoCommand();
+                        }
+                    }
+                    else
+                    {
+                        if (eim.IsKeyboardPressed(KeyCode::Z))
+                        {
+                            cm.UndoCommand();
+                        }
                     }
                 }
             }
@@ -470,6 +488,46 @@ namespace application
                     }
                 }
 
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Edit"))
+            {
+                if (ImGui::MenuItem("Undo", "Ctrl + Z", false, !cm.undoQueue.empty()))
+                {
+                    cm.UndoCommand();
+                }
+                if (ImGui::MenuItem("Redo", "Ctrl + Shift + Z", false, !cm.redoStack.empty()))
+                {
+                    cm.RedoCommand();
+                }
+                if (ImGui::BeginMenu("Undo History"))
+                {
+                    if (!cm.redoStack.empty())
+                    {
+                        int idx = 0;
+                        for (auto itr = cm.redoStack.begin(); itr != cm.redoStack.end(); itr++)
+                        {
+                            imgui::SmartStyleColor textColor = { ImGuiCol_Text, ImColor(1.f, 1.f, 1.f, 0.2f) };
+                            ImGui::PushID(((*itr)->GetName() + std::to_string(idx)).c_str());
+                            ImGui::MenuItem((*itr)->GetName().c_str(), nullptr, nullptr, false);
+                            ImGui::PopID();
+                        }
+                    }
+
+                    imgui::draw::Underline(ImColor(1.f, 0.f, 0.f, 1.f));
+
+                    if (!cm.undoQueue.empty())
+                    {
+                        int idx = 0;
+                        for (auto itr = cm.undoQueue.rbegin(); itr != cm.undoQueue.rend(); itr++)
+                        {
+                            ImGui::PushID(((*itr)->GetName() + std::to_string(idx)).c_str());
+                            ImGui::MenuItem((*itr)->GetName().c_str(), nullptr, nullptr, false);
+                            ImGui::PopID();
+                        }
+                    }
+                    ImGui::EndMenu();
+                }
                 ImGui::EndMenu();
             }
             imgui::ShiftCursorX(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(mfm.GetCurrentMapPath().c_str()).x - 10);
