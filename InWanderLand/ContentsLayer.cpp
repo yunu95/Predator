@@ -16,6 +16,7 @@
 #include "WarriorProductor.h"
 #include "MagicianProductor.h"
 #include "HealerProductor.h"
+#include "BossProductor.h"
 #include "InputManager.h"
 #include "UIManager.h"
 #include "PlayerController.h"
@@ -523,8 +524,8 @@ void application::contents::ContentsLayer::Initialize()
         //assert(mapFound && "there is no map to load in current directory!");
 
         /// 임시
-		RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
-		RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
+		//RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
+		//RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
 
 //#pragma region UI Region
 //
@@ -608,8 +609,9 @@ void application::contents::ContentsLayer::PlayContents()
     RegisterToEditorObjectVector(skillPreviewSphereMeshObject);
 
 	/// 임시
-    RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
-    RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
+    //RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
+    //RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
+    RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
 
     /// UI 작업
 	const int menuWindowXpos = 760;

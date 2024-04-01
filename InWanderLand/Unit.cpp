@@ -4,12 +4,11 @@
 #include "AttackSystem.h"
 #include "InputManager.h"
 #include "PlayerSkillSystem.h"
+#include "BossSkillSystem.h"
 #include "Dotween.h"
 #include "TacticModeSystem.h"
 #include "IAnimation.h"
-#include "MeleeEnemyPool.h"
-#include "RangedEnemyPool.h"
-
+#include "UnitObjectPool.h"
 
 void Unit::Start()
 {
@@ -62,7 +61,7 @@ void Unit::Start()
 		{
 			return m_currentTargetUnit == nullptr || 
 				(((GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetUnit->GetTransform()->GetWorldPosition()).Magnitude() > m_atkDistance + 0.4f)
-					&& m_currentTargetUnit != tauntedUnit
+					&& m_currentTargetUnit != tauntingThisUnit
 					|| currentOrder == UnitState::Idle);
 		} });
 
@@ -227,8 +226,14 @@ void Unit::SkillEngage()
 		TacticModeSystem::SingleInstance().CallQueueFunction(this);
 	}
 
-	GetGameObject()->GetComponent<PlayerSkillSystem>()->SkillActivate(m_currentSelectedSkill, m_currentSkillPosition);
-
+	if (this->m_unitType == UnitType::Boss)
+	{
+		GetGameObject()->GetComponent<BossSkillSystem>()->ActivateSkillRandomly();
+	}
+	else
+	{
+		GetGameObject()->GetComponent<PlayerSkillSystem>()->ActivateSkill(m_currentSelectedSkill, m_currentSkillPosition);
+	}
 
 	StopMove();
 }
@@ -280,7 +285,7 @@ void Unit::MoveUpdate()
 	if (moveFunctionElapsed >= moveFunctionCallDelay)
 	{
 		moveFunctionElapsed = 0.0f;
-
+		//RotateUnit(m_currentMovePosition);
 		m_navAgentComponent->MoveTo(m_currentMovePosition);
 	}
 }
@@ -298,7 +303,7 @@ void Unit::AttackMoveUpdate()
 	if (moveFunctionElapsed >= moveFunctionCallDelay)
 	{
 		moveFunctionElapsed = 0.0f;
-
+		//RotateUnit(m_currentMovePosition);
 		m_navAgentComponent->MoveTo(m_currentMovePosition);
 	}
 }
@@ -350,9 +355,8 @@ void Unit::SkillUpdate()
 	{
 		isSkillStarted = false;
 		currentOrder = UnitState::Idle;
-		// 여기서 leftClickFunction을 스킬 사용 못하게 해야 한다....
-		/// 전술모드 추가에 따른 조건식 추가.
-		PlayerController::SingleInstance().SetLeftClickMove();
+		if (this->m_unitSide == UnitSide::Player)
+			PlayerController::SingleInstance().SetLeftClickMove();
 	}
 }
 
@@ -564,6 +568,7 @@ void Unit::ResetUnitMembers()
 {
 	m_currentHealthPoint = m_maxHealthPoint;
 	unitFSM.currentState = UnitState::Idle;
+	m_currentTargetUnit = nullptr;
 	m_opponentObjectSet.clear();
 	m_recognizedThisSet.clear();
 	m_attackingThisUnitSet.clear();
@@ -591,23 +596,29 @@ void Unit::SetStaticMeshComponent(yunutyEngine::graphics::StaticMeshRenderer* p_
 
 void Unit::ChangeCurrentOpponentUnitForced(Unit* p_unit)
 {
-	if (tauntedUnit == nullptr)
+	if (tauntingThisUnit == nullptr)
 	{
-		m_currentTargetUnit = nullptr;
-		tauntedUnit = p_unit;
+		//m_currentTargetUnit = nullptr;
+		tauntingThisUnit = p_unit;
 	}
 
-	currentOrder = UnitState::Idle;
+	DetermineCurrentTargetObject();
 }
 
 void Unit::DeleteTauntingUnit()
 {
-	tauntedUnit = nullptr;
+	tauntingThisUnit = nullptr;
+	DetermineCurrentTargetObject();
 }
 
 void Unit::SetUnitStateToDeath()
 {
 	currentOrder = UnitState::Death;
+}
+
+void Unit::SetUnitStateToSkill()
+{
+	currentOrder = UnitState::Skill;
 }
 
 void Unit::DetermineHitDamage(float p_onceCalculatedDmg)
@@ -649,9 +660,9 @@ void Unit::RotateUnit(Vector3d endPosition)
 
 void Unit::DetermineCurrentTargetObject()
 {
-	if (tauntedUnit != nullptr)
+	if (tauntingThisUnit != nullptr)
 	{
-		m_currentTargetUnit = tauntedUnit;
+		m_currentTargetUnit = tauntingThisUnit;
 	}
 	else
 	{

@@ -12,8 +12,8 @@
 #include "HealerProductor.h"
 #include "MeleeEnemyProductor.h"
 #include "RangedEnemyProductor.h"
-#include "MeleeEnemyPool.h"
-#include "RangedEnemyPool.h"
+#include "BossProductor.h"
+#include "UnitObjectPool.h"
 #include "Application.h"
 #include "ContentsLayer.h"
 #include "ShortcutSystem.h"
@@ -132,6 +132,7 @@ namespace application
 					productorSelector.push_back(&MagicianProductor::Instance());*/
 					productorSelector.push_back(&MeleeEnemyProductor::Instance());
 					productorSelector.push_back(&RangedEnemyProductor::Instance());
+					//productorSelector.push_back(&BossProductor::Instance());
                     isSelectorInitialized = true;
                 }
 
@@ -148,39 +149,36 @@ namespace application
 
 				Unit* unitComponent{ nullptr };
 
+                int tempShortCutIndex = 0;
+
                 if (pod.templateData->pod.skinnedFBXName == "SKM_Monster1")
                 {
                     currentSelectedProductor = &MeleeEnemyProductor::Instance();
-					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-                    MeleeEnemyPool::SingleInstance().SetStartPosition(startPosition);
-					unitComponent = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
-					ShortcutSystem::Instance().RegisterObject(2, unitComponent->GetGameObject());
+                    tempShortCutIndex = 2;
                 }
                 else if (pod.templateData->pod.skinnedFBXName == "SKM_Monster2")
                 {
-					currentSelectedProductor = &RangedEnemyProductor::Instance();
-					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-                    RangedEnemyPool::SingleInstance().SetStartPosition(startPosition);
-					unitComponent = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
-					ShortcutSystem::Instance().RegisterObject(2, unitComponent->GetGameObject());
+                    currentSelectedProductor = &RangedEnemyProductor::Instance();
+					tempShortCutIndex = 2;
                 }
                 else
                 {
-					for (auto& e : productorSelector)
-					{
-						if (e->SelectUnitProductorByFbxName(pod.templateData->pod.skinnedFBXName))
-						{
-							currentSelectedProductor = e;
-							break;
-						}
-					}
-					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-
-					auto unit = currentSelectedProductor->CreateUnit(startPosition);
-					contentsLayer->RegisterToEditorObjectVector(unit->GetGameObject());
-
-					ShortcutSystem::Instance().RegisterObject(1, unit->GetGameObject());
+					tempShortCutIndex = 1;
+                    for (auto& e : productorSelector)
+                    {
+                        if (e->SelectUnitProductorByFbxName(pod.templateData->pod.skinnedFBXName))
+                        {
+                            currentSelectedProductor = e;
+                            break;
+                        }
+                    }
                 }
+                
+                currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+				UnitObjectPool::SingleInstance().ChooseProductor(currentSelectedProductor);
+				UnitObjectPool::SingleInstance().SetStartPosition(startPosition);
+				unitComponent = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
+				ShortcutSystem::Instance().RegisterObject(tempShortCutIndex, unitComponent->GetGameObject());
 			}
 		}
 
