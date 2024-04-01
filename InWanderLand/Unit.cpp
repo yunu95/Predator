@@ -29,7 +29,7 @@ void Unit::Start()
 		[this]() { return currentOrder == UnitState::AttackMove || (unitFSM.previousState == UnitState::Attack && isAttackMoving); } });
 
 	unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Chase,
-		[this]() { return (m_currentTargetUnit != nullptr && idleElapsed >= idleToChaseDelay) && m_currentTargetUnit->currentOrder != UnitState::Death; } });
+		[this]() { return (m_currentTargetUnit != nullptr && idleElapsed >= idleToChaseDelay) && m_currentTargetUnit->currentOrder != UnitState::Death && m_idDistance > 0.1f && m_atkDistance > 0.1f; } });
 
 	unitFSM.transitions[UnitState::Move].push_back({ UnitState::Idle,
 		[this]() { return (GetGameObject()->GetTransform()->GetWorldPosition() - m_currentMovePosition).Magnitude() < 0.3f; } });
@@ -412,7 +412,8 @@ void Unit::CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation)
 
 void Unit::StopMove()
 {
-	m_navAgentComponent->MoveTo(GetGameObject()->GetTransform()->GetWorldPosition());
+	if (m_navAgentComponent != nullptr)
+		m_navAgentComponent->MoveTo(GetGameObject()->GetTransform()->GetWorldPosition());
 }
 
 void Unit::SetUnitType(UnitType type)

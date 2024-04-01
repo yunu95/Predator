@@ -17,6 +17,7 @@
 #include "MagicianProductor.h"
 #include "HealerProductor.h"
 #include "BossProductor.h"
+#include "EnemySummonGateProductor.h"
 #include "InputManager.h"
 #include "UIManager.h"
 #include "PlayerController.h"
@@ -611,6 +612,7 @@ void application::contents::ContentsLayer::PlayContents()
 	/// 임시
     //RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
     //RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
+    //RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
     RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
 
     /// UI 작업

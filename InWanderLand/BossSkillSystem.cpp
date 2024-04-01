@@ -1,6 +1,10 @@
 #include "BossSkillSystem.h"
 #include "PlayerController.h"
 #include "Unit.h"
+#include "UnitObjectPool.h"
+#include "EnemySummonGateProductor.h"
+#include "EnemySummonSkillSystem.h"
+#include "ShortcutSystem.h"
 
 void BossSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill)
 {
@@ -47,6 +51,10 @@ void BossSkillSystem::ActivateSkillTwo()
 void BossSkillSystem::ActivateSkillThree()
 {
 	/// 유닛을 생성하는 문 오브젝트를 생성하는 로직
+	Vector3d doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * -5.0f;
+	UnitObjectPool::SingleInstance().ChooseProductor(&EnemySummonGateProductor::Instance());
+	UnitObjectPool::SingleInstance().SetStartPosition(doorSummonPosition);
+	application::ShortcutSystem::Instance().RegisterObject(2, UnitObjectPool::SingleInstance().Borrow()->m_pairUnit->GetGameObject());
 
 }
 

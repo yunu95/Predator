@@ -980,7 +980,7 @@
     <ClInclude Include="BossProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
     </ClInclude>
-    <ClInclude Include="EnemySpawnGateProductor.h">
+    <ClInclude Include="EnemySummonGateProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
     </ClInclude>
     <ClInclude Include="WarriorSkillSystem.h">
@@ -1535,7 +1535,7 @@
     <ClCompile Include="BossProductor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
     </ClCompile>
-    <ClCompile Include="EnemySpawnGateProductor.cpp">
+    <ClCompile Include="EnemySummonGateProductor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
     </ClCompile>
     <ClCompile Include="WarriorSkillSystem.cpp">

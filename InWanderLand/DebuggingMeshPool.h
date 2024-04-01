@@ -13,9 +13,10 @@
 /// </summary>
 class DebuggingMeshPool : public GameObjectPool<DebuggingMesh>, public GHContents::LazySingletonClass<DebuggingMeshPool>
 {
+private:
 	virtual void ObjectInitializer(DebuggingMesh* comp) override
 	{
-		comp->m_staticMeshRendererComp = AttachDebugMesh(comp->GetGameObject(), DebugMeshType::Sphere, yunuGI::Color::red(), false);
+		comp->m_staticMeshRendererComp = AttachDebugMesh(comp->GetGameObject(), DebugMeshType::Sphere, yunuGI::Color::red(), isWireFrame);
 		comp->m_staticMeshRendererComp->SetActive(false);
 		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
 		contentsLayer->RegisterToEditorObjectVector(comp->GetGameObject());

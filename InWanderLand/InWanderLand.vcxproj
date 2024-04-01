@@ -998,7 +998,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="CameraData.h" />
     <ClInclude Include="DebuggingMesh.h" />
     <ClInclude Include="EnemySkillSystem.h" />
-    <ClInclude Include="EnemySpawnGateProductor.h" />
+    <ClInclude Include="EnemySummonGateProductor.h" />
     <ClInclude Include="EnemySummonSkillSystem.h" />
     <ClInclude Include="ShortcutSystem.h" />
     <ClInclude Include="DualCastComponent.h" />
@@ -1199,7 +1199,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="CameraData.cpp" />
     <ClCompile Include="DebuggingMesh.cpp" />
     <ClCompile Include="EnemySkillSystem.cpp" />
-    <ClCompile Include="EnemySpawnGateProductor.cpp" />
+    <ClCompile Include="EnemySummonGateProductor.cpp" />
     <ClCompile Include="EnemySummonSkillSystem.cpp" />
     <ClCompile Include="ShortcutSystem.cpp" />
     <ClCompile Include="DualCastComponent.cpp" />
