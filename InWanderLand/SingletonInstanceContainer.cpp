@@ -24,14 +24,14 @@ void SingletonInstanceContainer::ClearSingletonInstances()
 	PassiveCakePool::SingleInstance().ProhibitCreateInstance();
 	TacticModeSystem::SingleInstance().ProhibitCreateInstance();
 
-	UnitObjectPool::SingleInstance().ClearPool();
-	AutoAttackProjectilePool::SingleInstance().ClearPool();
-	EnemyAutoAttackProjectilePool::SingleInstance().ClearPool();
-	HealerAutoAttackProjectilePool::SingleInstance().ClearPool();
-	MagicianAutoAttackProjectilePool::SingleInstance().ClearPool();
-	StatusTimerPool::SingleInstance().ClearPool();
-	DebuggingMeshPool::SingleInstance().ClearPool();
-	PassiveCakePool::SingleInstance().ClearPool();
+	//UnitObjectPool::SingleInstance().ClearPool();
+	//AutoAttackProjectilePool::SingleInstance().ClearPool();
+	//EnemyAutoAttackProjectilePool::SingleInstance().ClearPool();
+	//HealerAutoAttackProjectilePool::SingleInstance().ClearPool();
+	//MagicianAutoAttackProjectilePool::SingleInstance().ClearPool();
+	//StatusTimerPool::SingleInstance().ClearPool();
+	//DebuggingMeshPool::SingleInstance().ClearPool();
+	//PassiveCakePool::SingleInstance().ClearPool();
 
 	PlayerController::SingleInstance().InitInstance();
 	UnitObjectPool::SingleInstance().InitInstance();

@@ -10,7 +10,6 @@
 #include "EditorMath.h"
 #include "EditorLayer.h"
 #include "CommandManager.h"
-#include "TransformEditCommand.h"
 
 #include "imgui.h"
 #include "imgui_internal.h"
@@ -31,7 +30,7 @@ namespace application
         SceneViewPanel::SceneViewPanel()
             : app(nullptr), ec(nullptr), pm(nullptr), prevWindowSize(), currentWindowSize(), imageStartPos(), renderImageSize(), cursorPos_InScreenSpace()
         {
-
+            beforeTS.reserve(30);
         }
 
         SceneViewPanel::~SceneViewPanel()
@@ -146,6 +145,18 @@ namespace application
 
                         if (eim.IsMouseButtonUp(MouseCode::Left))
                         {
+                            if (isGuizmoControl)
+                            {
+                                int idx = 0;
+                                std::vector<std::tuple<IEditableData*, TransformData, TransformData>> vecList;
+                                for (auto& each : pm->GetCurrentPalette()->GetSelections())
+                                {
+                                    each->GetPaletteInstance()->GetGameObject();
+                                    vecList.push_back({ each, beforeTS[idx], each->GetPaletteInstance()->GetGameObject()->GetTransform()});
+                                    idx++;
+                                }
+                                CommandManager::GetSingletonInstance().AddQueue(std::make_shared<TransformEditCommand>(vecList));
+                            }
                             pm->GetCurrentPalette()->OnLeftClickRelease();
                             isGuizmoControl = false;
                         }
@@ -336,6 +347,7 @@ namespace application
             auto beforeVTM = gvtm;
 
             ImGuizmo::ViewManipulate(reinterpret_cast<float*>(&gvtm), 10 * sqrt(3), ImVec2(ImGui::GetWindowPos().x + renderImageSize.first - 128, ImGui::GetWindowPos().y + imageStartPos.second), ImVec2(128, 128), 0x10101010);
+
 
             if (pm->GetCurrentPalette()->AreThereAnyObjectSelected())
             {
@@ -651,6 +663,7 @@ namespace application
         {
             isGuizmoControl = true;
             initScale.resize(pm->GetCurrentPalette()->GetSelections().size());
+            beforeTS.resize(initScale.size());
             int idx = 0;
             Vector3d tempScale = Vector3d();
             for (auto each : pm->GetCurrentPalette()->GetSelections())
@@ -659,6 +672,9 @@ namespace application
                 initScale[idx].x = tempScale.x;
                 initScale[idx].y = tempScale.y;
                 initScale[idx].z = tempScale.z;
+
+                beforeTS[idx] = each->GetPaletteInstance()->GetTransform();
+
                 idx++;
             }
         }

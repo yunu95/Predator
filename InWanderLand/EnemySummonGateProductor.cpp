@@ -1,13 +1,14 @@
-#include "EnemySpawnGateProductor.h"
+#include "EnemySummonGateProductor.h"
 #include "SingleNavigationField.h"
+#include "EnemySummonSkillSystem.h"
 
-void EnemySpawnGateProductor::SetUnitData()
+void EnemySummonGateProductor::SetUnitData()
 {
 	m_objectName = "EnemySpawnGate";
 	m_unitType = Unit::UnitType::EnemySpawnGate;
-	m_unitSide = Unit::UnitSide::Player;
+	m_unitSide = Unit::UnitSide::Enemy;
 
-	m_healthPoint = 150;
+	m_healthPoint = 1;
 	m_manaPoint = 100;
 
 	m_autoAttackDamage = 15;
@@ -18,10 +19,10 @@ void EnemySpawnGateProductor::SetUnitData()
 	m_dodgeProbability = 0.05f;
 	m_criticalDamageDecreaseMultiplier = 0.05f;
 
-	m_maxAggroNumber = 1;
+	m_maxAggroNumber = 3;
 
-	m_idRadius = 10.0f * lengthUnit;
-	m_atkRadius = 3.5f * lengthUnit;
+	m_idRadius = 0.0f * lengthUnit;
+	m_atkRadius = 0.0f * lengthUnit;
 	m_unitSpeed = 4.5f;
 
 	m_attackDelay = 5.0f;
@@ -34,12 +35,12 @@ void EnemySpawnGateProductor::SetUnitData()
 	m_unitFbxName = "SKM_Robin";
 }
 
-void EnemySpawnGateProductor::SingletonInitializer()
+void EnemySummonGateProductor::SingletonInitializer()
 {
 	SetUnitData();
 }
 
-Unit* EnemySpawnGateProductor::CreateUnit(Vector3d startPos)
+Unit* EnemySummonGateProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
@@ -87,14 +88,21 @@ Unit* EnemySpawnGateProductor::CreateUnit(Vector3d startPos)
 	/// UnitComponent 추가
 	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
 
-
-
+	auto gateSkillSystem = m_unitGameObject->AddComponent<EnemySummonSkillSystem>();
 
 	/// rangeSystem만 제외한다면 Boss와 다름 없는 유닛.
 	/// chase, move, attack 없고, 주기적으로 skill만 사용하는 유닛이다.
 
-	UnitProductor::AddColliderComponent();
+	if (isDamagedUnit)
+	{
+		UnitProductor::AddColliderComponent();
+	}
 	UnitProductor::SetUnitComponentMembers();
 
 	return m_unitComponent;
+}
+
+void EnemySummonGateProductor::SetUnitCanBeDamaged(bool p_boolen)
+{
+	isDamagedUnit = p_boolen;
 }

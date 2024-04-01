@@ -13,6 +13,7 @@
 /// </summary>
 class DebuggingMeshPool : public GameObjectPool<DebuggingMesh>, public GHContents::LazySingletonClass<DebuggingMeshPool>
 {
+private:
 	virtual void ObjectInitializer(DebuggingMesh* comp) override
 	{
 		comp->m_staticMeshRendererComp = AttachDebugMesh(comp->GetGameObject(), DebugMeshType::Sphere, yunuGI::Color::red(), false);
