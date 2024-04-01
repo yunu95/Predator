@@ -31,11 +31,7 @@ void PointLightShadowPass::Render(int index, bool isSkinned)
 	if (isSkinned == false)
 	{
 		// Null RenderTarget / TextureArray DSV Set
-		float clearDepth = 1.0f;
-
-		auto& dsvArray = this->dsTexture->GetDSVArray();
-
-		ResourceBuilder::Instance.Get().device->GetDeviceContext()->ClearDepthStencilView(dsvArray[index].Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, clearDepth, 0);
+		
 
 		D3D11_VIEWPORT viewport = { 0.0f, 0.0f, static_cast<float>(PL_SM_SIZE), static_cast<float>(PL_SM_SIZE), 0.0f, 1.0f };
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
@@ -59,6 +55,14 @@ void PointLightShadowPass::Render(int index, bool isSkinned)
 
 void PointLightShadowPass::EndRender()
 {
+	float clearDepth = 1.0f;
+
+	auto& dsvArray = this->dsTexture->GetDSVArray();
+	for (auto& each : dsvArray)
+	{
+		ResourceBuilder::Instance.Get().device->GetDeviceContext()->ClearDepthStencilView(each.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, clearDepth, 0);
+	}
+
 	// VSSet
 	vs->UnBind();
 
