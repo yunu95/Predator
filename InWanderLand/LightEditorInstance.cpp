@@ -229,6 +229,7 @@ namespace application::editor::palette
 					lc->GetGI().SetLightDiffuseColor(*reinterpret_cast<yunuGI::Color*>(&data->pod.color));
 					lc->GetGI().SetIntensity(data->pod.intensity);
 					lc->GetGI().SetRange(data->pod.range);
+					lc->GetGI().SetIsShadowCast(data->pod.isCast);
 
 					auto& erm = ResourceManager::GetSingletonInstance();
 

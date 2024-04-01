@@ -47,6 +47,7 @@ namespace application
             LightColor color = { 1,1,1,1 };
             float intensity = 1;
             float range = 1;
+            bool isCast = true;
 
             /// GlobalConstant
 
