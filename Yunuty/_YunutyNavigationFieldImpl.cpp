@@ -141,7 +141,7 @@ namespace yunutyEngine
         {
             for (int x = 0; x < tw; ++x)
             {
-                // tileCacheData 또한 파일 저장의 대상
+                // tileCacheData는 파일 저장의 대상
                 TileCacheData tiles[MAX_LAYERS];
                 memset(tiles, 0, sizeof(tiles));
                 int ntiles = rasterizeTileLayers(worldVertices, verticesNum, faces, facesNum, x, y, cfg, tiles, MAX_LAYERS);
