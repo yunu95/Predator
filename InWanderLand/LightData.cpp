@@ -98,6 +98,7 @@ namespace application
 			lightInstance->GetTransform()->SetWorldRotation({ pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z });
 			lightInstance->GetTransform()->SetLocalScale({ pod.scale.x,pod.scale.y,pod.scale.z });
 			lightInstance->ApplyLightComponent(this);
+
 			return lightInstance;
 		}
 
