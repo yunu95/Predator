@@ -7,7 +7,7 @@ using namespace DirectX::PackedVector;
 #include <array>
 #include <memory>
 
-#define SM_SIZE 2048
+#define SM_SIZE 4096
 #define PL_SM_SIZE 512
 
 #define MAX_TEXTURE 18
@@ -169,8 +169,6 @@ struct RenderInfo
 {
 	Mesh* mesh;
 	Material* material;
-	Material* shadowMaterial;
-	//Material shadowMaterial;
 	unsigned int materialIndex;
 	DirectX::SimpleMath::Matrix wtm;
 	bool isActive = true;

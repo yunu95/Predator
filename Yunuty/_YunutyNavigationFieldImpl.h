@@ -34,6 +34,10 @@ namespace yunutyEngine
             int gw;
             int gh;
         };
+        /*struct TileHeader
+        {
+            int nTiles;
+        };*/
         Impl(NavigationField* navFieldComponent) :navFieldComponent(navFieldComponent)
         {
             m_navQuery = dtAllocNavMeshQuery();

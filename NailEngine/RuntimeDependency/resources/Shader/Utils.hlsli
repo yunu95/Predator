@@ -49,7 +49,7 @@ bool UseTexture(uint useTexture)
     }
     return false;
 }
-static const float SMAP_SIZE = 2048.0f;
+static const float SMAP_SIZE = 4096.0f;
 static const float SMAP_DX = 1.0f / SMAP_SIZE;
 
 //static const float PI = 3.141592;
@@ -123,11 +123,16 @@ float CalcShadowFactor(SamplerComparisonState samShadow,
     tempuv.y = -tempuv.y;
     tempuv = tempuv * 0.5 + 0.5;
     
-	[unroll]
+    if (tempuv.x < 0 || tempuv.x > 1 || tempuv.y < 0 || tempuv.y > 1)
+    {
+        return 1;
+    }
+    
     for (int i = 0; i < 9; ++i)
     {
         percentLit += shadowMap.SampleCmpLevelZero(samShadow, tempuv + offsets[i], depth).r;
     }
+    
     return percentLit /= 9.0f;
 }
 
@@ -195,7 +200,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
             float4 shadowClipPos = mul(worldPos, shadowVP);
             
             shadow = CalcShadowFactor(shadowSam, Temp2Map, shadowClipPos);
-            //directionalLighting *= shadow;
+            
             specular = (float4) 0;
         }
         ///
@@ -232,24 +237,8 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         {
             ambient.xyz = lights[lightIndex].color.ambient;
         }
-       
-
-        //float3 y = max(0, ambientLighting.xyz - 0.004);
-        //ambientLighting.xyz = (y * (6.2 * y + 0.5)) / (y * (6.2 * y + 1.7) + 0.06);
         
-        //ambient.xyz = ambientLighting + lights[lightIndex].color.ambient.xyz;
-       
-
-        //diffuse = float4(pow(float3(diffuse.xyz), 1.0 / 2.2), 1.0);
-        
-        //float exposure = 0.7; // 톤매핑 강도를 조절하는 매개변수
-        //float3 toneMappedColor = diffuse.xyz / (1.0 + diffuse.xyz / exposure);
-        //diffuse.xyz = toneMappedColor;
-
-        
-        //diffuse = float4(pow(float3(diffuse.xyz), 1.f/2.2), 1.0);
-        
-        //diffuse *= shadow;
+        diffuse *= shadow;
     }
     else if (lights[lightIndex].lightType == 1)
     {

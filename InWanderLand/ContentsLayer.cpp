@@ -348,13 +348,13 @@ void application::contents::ContentsLayer::Initialize()
     {
         yunutyEngine::Collider2D::SetIsOnXYPlane(false);
         auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
+        directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
         directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
         auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
         auto color = yunuGI::Color{ 1,1,1,1.f };
         light->GetGI().SetLightDiffuseColor(color);
 
-        editor::MapFileManager::GetSingletonInstance().LoadStaticOrnaments("TestOrnaments.punreal");
+        //editor::MapFileManager::GetSingletonInstance().LoadStaticOrnaments("TestOrnaments.punreal");
     }
     GraphicsTest();
 #else
@@ -381,6 +381,8 @@ void application::contents::ContentsLayer::Initialize()
 
         InputManager::Instance();
         UIManager::Instance();
+                editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
+        editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
     }
 #endif
 #endif // ! EDITOR

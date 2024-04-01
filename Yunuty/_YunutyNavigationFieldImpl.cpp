@@ -1,4 +1,6 @@
 #include "_YunutyNavigationFieldImpl.h"
+#include <iostream>
+#include <fstream>
 
 
 namespace yunutyEngine
@@ -251,32 +253,38 @@ namespace yunutyEngine
         m_cacheCompressedSize = 0;
         m_cacheRawSize = 0;
 
-        //for (int y = 0; y < th; ++y)
-        //{
-        //    for (int x = 0; x < tw; ++x)
-        //    {
-        //        // tileCacheData는 파일 저장의 대상
-        //        TileCacheData tiles[MAX_LAYERS];
-        //        memset(tiles, 0, sizeof(tiles));
-        //        int ntiles = rasterizeTileLayers(worldVertices, verticesNum, faces, facesNum, x, y, cfg, tiles, MAX_LAYERS);
+        for (int y = 0; y < th; ++y)
+        {
+            for (int x = 0; x < tw; ++x)
+            {
+                // tileCacheData는 파일 저장의 대상
+                TileCacheData tiles[MAX_LAYERS];
+                memset(tiles, 0, sizeof(tiles));
+                static constexpr int maxTileDataSize = 4096;
+                int nTiles;
 
-        //        for (int i = 0; i < ntiles; ++i)
-        //        {
-        //            TileCacheData* tile = &tiles[i];
-        //            status = m_tileCache->addTile(tile->data, tile->dataSize, DT_COMPRESSEDTILE_FREE_DATA, 0);
-        //            if (dtStatusFailed(status))
-        //            {
-        //                dtFree(tile->data);
-        //                tile->data = 0;
-        //                continue;
-        //            }
+                importingFile->read(reinterpret_cast<char*>(&nTiles), sizeof(int));
 
-        //            m_cacheLayerCount++;
-        //            m_cacheCompressedSize += tile->dataSize;
-        //            m_cacheRawSize += calcLayerBufferSize(tcparams.width, tcparams.height);
-        //        }
-        //    }
-        //}
+                for (int i = 0; i < nTiles; ++i)
+                {
+                    int tileDataSize;
+                    byte tileData[maxTileDataSize];
+                    importingFile->read(reinterpret_cast<char*>(&tileDataSize), sizeof(int));
+                    assert(tileDataSize < maxTileDataSize);
+                    importingFile->read(reinterpret_cast<char*>(tileData), tileDataSize);
+
+                    status = m_tileCache->addTile(tileData, tileDataSize, DT_COMPRESSEDTILE_FREE_DATA, 0);
+                    if (dtStatusFailed(status))
+                    {
+                        continue;
+                    }
+
+                    m_cacheLayerCount++;
+                    m_cacheCompressedSize += tileDataSize;
+                    m_cacheRawSize += calcLayerBufferSize(tcparams.width, tcparams.height);
+                }
+            }
+        }
 
         // Build initial meshes
         m_ctx->startTimer(RC_TIMER_TOTAL);

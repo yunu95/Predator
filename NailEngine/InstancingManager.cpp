@@ -73,13 +73,13 @@ void InstancingManager::RenderStaticDeferred()
 
 				if (i->isActive == false) continue;
 
-				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-				auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);
+				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+				//auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);
 
-				if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
-				{
-					continue;
-				}
+				//if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
+				//{
+				//	continue;
+				//}
 
 				const std::shared_ptr<RenderInfo>& renderInfo = i;
 				InstancingData data;
@@ -199,27 +199,7 @@ void InstancingManager::RenderStaticShadow()
 
 		const InstanceID& instanceID = pair.first;
 
-		//if (renderInfoVec.size() == 1)
-		//{
-		//	MatrixBuffer matrixBuffer;
-		//	matrixBuffer.WTM = renderInfoVec[0].wtm;
-		//	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-		//	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
-		//	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-		//	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-		//	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
-		//
-		//	auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(renderInfoVec[0].mesh->GetName()));
-		//
-		//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(renderInfoVec[0].material->GetName()))->PushGraphicsData();
-		//	for (int i = 0; i < mesh->GetMaterialCount(); ++i)
-		//	{
-		//		renderInfoVec[0].mesh->Render(i);
-		//	}
-		//}
-		//else
 		{
-			//for (int i = 0; i < renderInfoVec.size(); ++i)
 			for (auto& i : renderInfoVec)
 			{
 				if (i->isActive == false) continue;
@@ -241,7 +221,22 @@ void InstancingManager::RenderStaticShadow()
 			if (renderInfoVec.size() != 0)
 			{
 				auto& buffer = _buffers[instanceID];
-				(*renderInfoVec.begin())->shadowMaterial->PushGraphicsData();
+
+				auto opacityMap = (*renderInfoVec.begin())->material->GetTexture(yunuGI::Texture_Type::OPACITY);
+				if (opacityMap)
+				{
+					static_cast<Texture*>(opacityMap)->Bind(static_cast<unsigned int>(yunuGI::Texture_Type::OPACITY));
+					MaterialBuffer materialBuffer;
+					materialBuffer.useTexture[static_cast<unsigned int>(yunuGI::Texture_Type::OPACITY)] = 1;
+					NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATERIAL))->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer), static_cast<int>(CB_TYPE::MATERIAL));
+				}
+				else
+				{
+					MaterialBuffer materialBuffer;
+					materialBuffer.useTexture[static_cast<unsigned int>(yunuGI::Texture_Type::OPACITY)] = 0;
+					NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATERIAL))->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer), static_cast<int>(CB_TYPE::MATERIAL));
+				}
+
 				buffer->PushData();
 				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, buffer);
 			}
