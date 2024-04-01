@@ -161,7 +161,7 @@ namespace application
 		keys[1] = { KeyCode::N, false };
 		RegisterTriggerKey(70, keys);
 		keys[1] = { KeyCode::M, false };
-		RegisterTriggerKey(71, keys);
+		RegisterTriggerKey(71, keys);		
 	}
 
 	void ShortcutSystem::Update()
@@ -181,9 +181,30 @@ namespace application
 				}
 			}
 
-			if (trigger)
+			if (trigger && (triggerKeys[i].size() != 0))
 			{
 				PullTrigger(i);
+			}
+		}
+
+		for (auto& [keys, func] : uniqueTrigger)
+		{
+			bool trigger = true;
+			for (auto& [keyCode, flag] : keys)
+			{
+				if (flag)
+				{
+					trigger &= Input::isKeyDown(keyCode);
+				}
+				else
+				{
+					trigger &= Input::isKeyPushed(keyCode);
+				}
+			}
+
+			if (trigger && (keys.size() != 0))
+			{
+				func();
 			}
 		}
 	}
