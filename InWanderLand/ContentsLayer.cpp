@@ -21,6 +21,8 @@
 #include "PlayerController.h"
 #include "TacticModeSystem.h"
 #include "SingletonInstanceContainer.h"
+#include "ShortcutSystem.h"
+#include "RobinSkillDevelopmentSystem.h"
 
 #include <algorithm>
 #include <string>
@@ -334,7 +336,7 @@ void application::contents::ContentsLayer::Initialize()
     {
         ContentsLayer::testInitializer();
         return;
-    }
+    }    
 
     //auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     //camObj->GetTransform()->SetLocalPosition(Vector3d(0, 20, -10));
@@ -421,6 +423,8 @@ void application::contents::ContentsLayer::Initialize()
 #else
     {
         yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+
+        ShortcutSystem::Instance();
 
 		/// Editor 에서 수정하여 Map Data 에 저장할 부분
 		/*auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -517,6 +521,42 @@ void application::contents::ContentsLayer::Initialize()
             }
         }*/
         //assert(mapFound && "there is no map to load in current directory!");
+
+        /// 임시
+		RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
+		RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
+
+//#pragma region UI Region
+//
+//		    /// UIButton Test
+//		    rsrcMgr->LoadFile("Texture/zoro.jpg");
+//
+//		    auto robinPassiveActivateButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+//		    auto robinPassiveActivateImage = robinPassiveActivateButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+//		    auto robinPassiveActivateButton = robinPassiveActivateButtonObject->AddComponent<UIButton>();
+//		    robinPassiveActivateButton->SetImageComponent(robinPassiveActivateImage);
+//		    robinPassiveActivateButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinPassiveActivateButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinPassiveActivateButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinPassiveActivateButton->SetLayer(10.0);
+//
+//		    RobinSkillDevelopmentSystem::Instance().AddTopLayerButton(robinPassiveActivateButton);
+//		    robinPassiveActivateButtonObject->GetTransform()->SetLocalPosition({ 0, 700, 0 });
+//
+//
+//		    auto robinWSkillUpgradeButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+//		    auto robinWSkillUpgradeImage = robinWSkillUpgradeButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+//		    auto robinWSkillUpgradeButton = robinWSkillUpgradeButtonObject->AddComponent<UIButton>();
+//		    robinWSkillUpgradeButton->SetImageComponent(robinWSkillUpgradeImage);
+//		    robinWSkillUpgradeButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinWSkillUpgradeButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinWSkillUpgradeButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinWSkillUpgradeButton->SetLayer(10.0);
+//		    RobinSkillDevelopmentSystem::Instance().AddMiddleLayerButton(robinWSkillUpgradeButton);
+//		    robinWSkillUpgradeButtonObject->GetTransform()->SetLocalPosition({ 100, 700, 0 });
+//#pragma endregion
+
+
         editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
         editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
@@ -545,27 +585,17 @@ void application::contents::ContentsLayer::PlayContents()
 	SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
+	for (auto e : componentsCreatedByEditorVector)
+	{
+		e->SetActive(true);
+	}
+
+	InputManager::Instance();
+	UIManager::Instance();
+
     /// Editor 에서 수정하여 Map Data 에 저장할 부분
 
     /// 카메라의 경우 CameraData 의 ApplyInstancesAsPlaytimeObjects 에서 처리함
-    //auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //auto camComp = camObj->AddComponent<RTSCam>();
-    //camObj->GetTransform()->SetLocalPosition({ 0,25,0 });
-    //camObj->AddComponent<Dotween>();
-    //RegisterToEditorObjectVector(camObj);
-
-    //auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-
-    //auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
-    //auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //RegisterToEditorObjectVector(mouseCursorObject);
-    //auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-    //mouseCursorMesh->GetGI().SetMesh(sphereMesh);
-    //mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
-
-    /*WarriorProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 0.0f));;
-    MagicianProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 2.0f));;
-    HealerProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, -2.0f));*/
 
     auto skillPreviewCubeMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     AttachDebugMesh(skillPreviewCubeMeshObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
@@ -577,26 +607,61 @@ void application::contents::ContentsLayer::PlayContents()
     SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
     RegisterToEditorObjectVector(skillPreviewSphereMeshObject);
 
-    //camComp->groundHoveringClickCallback = [=](Vector3d pos)
-    //	{
-    //		mouseCursorObject->GetTransform()->SetWorldPosition(pos);
-    //		SkillPreviewSystem::Instance().SetCurrentMousPosition(pos);
-    //	};
+	/// 임시
+    RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
+    RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
 
-    InputManager::Instance();
-    UIManager::Instance();
-    //PlayerController::SingleInstance().SetMovingSystemComponent(camComp);
-    //TacticModeSystem::SingleInstance().SetMovingSystemComponent(camComp);
+    /// UI 작업
+	const int menuWindowXpos = 760;
+	const int menuWindowYpos = 540 - 350 / 2;
+
+	auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	rsrcMgr->LoadFile("Texture/zoro.jpg");
+	rsrcMgr->LoadFile("Texture/zoro_highLighted.jpg");
+	rsrcMgr->LoadFile("Texture/zoro_Clicked.jpg");
+
+  /*  auto robinPassiveActivateButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    auto robinPassiveActivateImage = robinPassiveActivateButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+    auto robinPassiveActivateButton = robinPassiveActivateButtonObject->AddComponent<UIButton>();
+    robinPassiveActivateButton->SetImageComponent(robinPassiveActivateImage);
+    robinPassiveActivateButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+    robinPassiveActivateButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro_highLighted.jpg"));
+    robinPassiveActivateButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro_Clicked.jpg"));
+    robinPassiveActivateButton->SetLayer(10.0);
+    RobinSkillDevelopmentSystem::Instance().AddTopLayerButton(robinPassiveActivateButton);
+    robinPassiveActivateButtonObject->GetTransform()->SetLocalPosition({ 0, 700, 0 });
+	RegisterToEditorObjectVector(robinPassiveActivateButtonObject);
+
+	auto robinWSkillUpgradeButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	auto robinWSkillUpgradeImage = robinWSkillUpgradeButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+	auto robinWSkillUpgradeButton = robinWSkillUpgradeButtonObject->AddComponent<UIButton>();
+	robinWSkillUpgradeButton->SetImageComponent(robinWSkillUpgradeImage);
+	robinWSkillUpgradeButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+	robinWSkillUpgradeButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+	robinWSkillUpgradeButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+	robinWSkillUpgradeButton->SetLayer(10.0);
+	RobinSkillDevelopmentSystem::Instance().AddMiddleLayerButton(robinWSkillUpgradeButton);
+	robinWSkillUpgradeButtonObject->GetTransform()->SetLocalPosition({ 100, 700, 0 });
+	RegisterToEditorObjectVector(robinWSkillUpgradeButtonObject);*/
+
 }
 
 void application::contents::ContentsLayer::PauseContents()
 {
     Time::SetTimeScale(FLT_MIN * 1000);
+	for (auto e : componentsCreatedByEditorVector)
+	{
+		e->SetActive(false);
+	}
 }
 
 void application::contents::ContentsLayer::ResumeContents()
 {
     Time::SetTimeScale(1);
+	for (auto e : componentsCreatedByEditorVector)
+	{
+		e->SetActive(true);
+	}
 }
 
 void application::contents::ContentsLayer::StopContents()
@@ -604,6 +669,11 @@ void application::contents::ContentsLayer::StopContents()
     Time::SetTimeScale(1);
     isStoppedOnce = true;
     ClearPlaytimeObject();
+    ShortcutSystem::Instance().ClearObject();
+	for (auto e : componentsCreatedByEditorVector)
+	{
+		e->SetActive(false);
+	}
 }
 
 #ifdef GEN_TESTS
@@ -627,13 +697,23 @@ void application::contents::ContentsLayer::ClearPlaytimeObject()
 		//e->SetSelfActive(false);
 		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(e);
 	}
+
+    for (auto e : componentsCreatedByEditorVector)
+    {
+        e->SetActive(false);
+    }
 	objectCreatedByEditorVector.clear();
 
-    SingletonInstanceContainer::SingleInstance().ClearLazySingletonInstances();
+    SingletonInstanceContainer::SingleInstance().ClearSingletonInstances();
 }
 
 void application::contents::ContentsLayer::RegisterToEditorObjectVector(GameObject* p_obj)
 {
     objectCreatedByEditorVector.push_back(p_obj);
+}
+
+void application::contents::ContentsLayer::RegisterToEditorComponentVector(Component* p_com)
+{
+    componentsCreatedByEditorVector.push_back(p_com);
 }
 

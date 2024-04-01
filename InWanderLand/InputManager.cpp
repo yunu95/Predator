@@ -3,6 +3,14 @@
 #include "PlayerController.h"
 #include "TacticModeSystem.h"
 #include "Unit.h"
+#include "ContentsLayer.h"
+#include "Application.h"
+
+void InputManager::Start()
+{
+	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+	contentsLayer->RegisterToEditorComponentVector(this);
+}
 
 void InputManager::Update()
 {
@@ -15,20 +23,20 @@ void InputManager::Update()
 			isPlayerSelected = true;
 			SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 		}
-		//if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_2))
-		//{
-		//	PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Magician);
-		//	currentSelectedSerialNumber = SelectedSerialNumber::Two;
-		//	isPlayerSelected = true;
-		//	SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-		//}
-		//if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_3))
-		//{
-		//	PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Healer);
-		//	currentSelectedSerialNumber = SelectedSerialNumber::Three;
-		//	isPlayerSelected = true;
-		//	SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-		//}
+		if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_2))
+		{
+			PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Magician);
+			currentSelectedSerialNumber = SelectedSerialNumber::Two;
+			isPlayerSelected = true;
+			SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+		}
+		if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_3))
+		{
+			PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Healer);
+			currentSelectedSerialNumber = SelectedSerialNumber::Three;
+			isPlayerSelected = true;
+			SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+		}
 
 		//if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_4))
 		//{

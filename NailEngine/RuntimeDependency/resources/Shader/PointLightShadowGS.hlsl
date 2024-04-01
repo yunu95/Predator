@@ -9,6 +9,7 @@ struct GS_OUTPUT
 [maxvertexcount(18)]
  void main(triangle float4 InPos[3] : POSITION, inout TriangleStream<GS_OUTPUT> OutStream)
 {
+    [unroll]
     for (int iFace = 0; iFace < 6; iFace++)
     {
         GS_OUTPUT output;

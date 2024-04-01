@@ -11,24 +11,29 @@ public:
 	yunuGI::IAnimation* walkAnimation;
 	yunuGI::IAnimation* battleStartAnimation;
 
+	yunutyEngine::graphics::UIText* text;
+
 	void Update()
 	{
-		if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::U))
-		{
-			anim->GetGI().ChangeAnimation(idleAnimation, 0.5, 1);
-		}
-		if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::I))
-		{
-			anim->GetGI().ChangeAnimation(battleIdleAnimation, 1, 1);
-		}
-		if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::O))
-		{
-			anim->GetGI().ChangeAnimation(walkAnimation, 1, 1);
-		}
-		if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::P))
-		{
-			anim->GetGI().ChangeAnimation(battleStartAnimation, 0.5, 1);
-		}
+		std::wstring str = std::to_wstring(Time::GetFPS());
+		text->GetGI().SetText(str);
+
+		//if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::U))
+		//{
+		//	anim->GetGI().ChangeAnimation(idleAnimation, 0.5, 1);
+		//}
+		//if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::I))
+		//{
+		//	anim->GetGI().ChangeAnimation(battleIdleAnimation, 1, 1);
+		//}
+		//if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::O))
+		//{
+		//	anim->GetGI().ChangeAnimation(walkAnimation, 1, 1);
+		//}
+		//if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::P))
+		//{
+		//	anim->GetGI().ChangeAnimation(battleStartAnimation, 0.5, 1);
+		//}
 	}
 };
 

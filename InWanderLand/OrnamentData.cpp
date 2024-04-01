@@ -4,6 +4,8 @@
 
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
+#include "ShortcutSystem.h"
+#include "EditorResourceManager.h"
 
 namespace application
 {
@@ -90,13 +92,28 @@ namespace application
                 SetPaletteInstance(ornamentInstance);
                 ornamentInstance->SetEditableData(this);
                 ornamentInstance->Init(this);
+                
+                auto fbxName = pod.templateData->pod.staticFBXName;
+
+                static auto& List = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetFBXList();
+                int idx = 10;
+                for (auto each : List)
+                {
+                    if (fbxName == std::string(each.begin(), each.end()))
+                    {
+                        ShortcutSystem::Instance().RegisterObject(3, ornamentInstance->GetGameObject());
+                        ShortcutSystem::Instance().RegisterObject(idx, ornamentInstance->GetGameObject());
+                        break;
+                    }
+                    idx++;
+                }
             }
             ornamentInstance->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
             ornamentInstance->GetTransform()->SetWorldRotation({ pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z });
             ornamentInstance->GetTransform()->SetLocalScale({ pod.scale.x,pod.scale.y,pod.scale.z });
-            ornamentInstance->ApplyMeshTransform();
             return ornamentInstance;
         }
+
         void OrnamentData::ApplyAsPlaytimeObject()
         {
             if (ornamentInstance == nullptr)

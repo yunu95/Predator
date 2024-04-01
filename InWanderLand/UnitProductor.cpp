@@ -60,7 +60,7 @@ void UnitProductor::SetCommonComponents()
 	m_unitComponent->SetUnitType(m_unitType);
 	m_unitComponent->SetUnitSide(m_unitSide);
 
-	m_unitComponent->SetUnitHp(m_healthPoint);
+	m_unitComponent->SetUnitMaxHp(m_healthPoint);
 	m_unitComponent->SetUnitAp(m_autoAttackDamage);
 
 	m_unitComponent->SetAtkRadius(m_atkRadius);
@@ -82,14 +82,14 @@ void UnitProductor::SetCommonComponents()
 		SetPlayerRelatedComponents(m_unitComponent);
 }
 
+std::string UnitProductor::GetUnitFBXName() const
+{
+	return m_unitFbxName;
+}
+
 bool UnitProductor::SelectUnitProductorByFbxName(std::string p_name)
 {
-	SetUnitFbxName();
-
-	if (m_unitFbxName == p_name)
-		return true;
-	else
-		return false;
+	return (m_unitFbxName == p_name);
 }
 
 void UnitProductor::SetPlayerRelatedComponents(Unit* playerUnit)

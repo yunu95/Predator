@@ -142,6 +142,12 @@ void PixelShader::CreateRasterizerState(const std::string& fileContent)
 				this->shaderInfo.rasterizer = yunuGI::Rasterizer::Wire;
 				rasterDesc.FillMode = D3D11_FILL_WIREFRAME;
 			}
+			else if (shaderType == "Light")
+			{
+				this->shaderInfo.rasterizer = yunuGI::Rasterizer::Solid;
+				rasterDesc.FillMode = D3D11_FILL_SOLID;
+				rasterDesc.DepthClipEnable = false;
+			}
 			else if (shaderType == "Shadow")
 			{
 				//rasterDesc.DepthBias = 1000;

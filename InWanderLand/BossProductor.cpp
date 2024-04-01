@@ -1,16 +1,15 @@
-#include "InWanderLand.h"
-#include "MeleeEnemyProductor.h"
-#include "MeleeAttackSystem.h"
+#include "BossProductor.h"
 #include "DebugMeshes.h"
 #include "SingleNavigationField.h"
+#include "MeleeAttackSystem.h"
 
-void MeleeEnemyProductor::SetUnitData()
+void BossProductor::SetUnitData()
 {
-	m_objectName = "MeleeEnenmy";
-	m_unitType = Unit::UnitType::MeleeEnemy;
+	m_objectName = "Boss";
+	m_unitType = Unit::UnitType::Boss;
 	m_unitSide = Unit::UnitSide::Enemy;
 
-	m_healthPoint = 50;
+	m_healthPoint = 100000;
 	m_manaPoint = 100;
 
 	m_autoAttackDamage = 10;
@@ -21,7 +20,7 @@ void MeleeEnemyProductor::SetUnitData()
 	m_dodgeProbability = 0.2f;
 	m_criticalDamageDecreaseMultiplier = 0.2f;
 
-	m_maxAggroNumber = 10;
+	m_maxAggroNumber = 2;
 
 	m_idRadius = 4.0f * lengthUnit;
 	m_atkRadius = 1.7f * lengthUnit;
@@ -30,18 +29,19 @@ void MeleeEnemyProductor::SetUnitData()
 	m_attackDelay = 1.0f;
 
 	m_navField = &SingleNavigationField::Instance();
-	m_unitFbxName = "SKM_Monster1";
+
+	m_unitFbxName = "SKM_Robin";
 }
 
-void MeleeEnemyProductor::SingletonInitializer()
+void BossProductor::SingletonInitializer()
 {
 	SetUnitData();
 }
 
-Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
+Unit* BossProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
-	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
+	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
@@ -49,32 +49,32 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 	auto& animList = rsrcManager->GetAnimationList();
 	for (auto each : animList)
 	{
-		if (each->GetName() == L"Ani_Monster1_Idle")
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
 		{
 			m_baseUnitAnimations.m_idleAnimation = each;
 			m_baseUnitAnimations.m_idleAnimation->SetLoop(true);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_idleAnimation);
 			animator->GetGI().Play(m_baseUnitAnimations.m_idleAnimation);
 		}
-		else if (each->GetName() == L"Ani_Monster1_Walk")
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
 		{
 			m_baseUnitAnimations.m_walkAnimation = each;
 			m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_walkAnimation);
 		}
-		else if (each->GetName() == L"Ani_Monster1_Attack")
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
 		{
 			m_baseUnitAnimations.m_attackAnimation = each;
 			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_attackAnimation);
 		}
-		else if (each->GetName() == L"Ani_Monster1_BattleIdle")
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
 		{
 			m_baseUnitAnimations.m_paralysisAnimation = each;
 			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
 		}
-		else if (each->GetName() == L"Ani_Monster1_Skill")
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_APose")
 		{
 			m_baseUnitAnimations.m_deathAnimation = each;
 			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
@@ -82,11 +82,10 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 		}
 	}
 #pragma endregion
-
 	/// UnitComponent 추가
 	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
 
-#pragma region Auto Attack Setting
+#pragma region Auto Attack Setting (Including Passive Logic)
 	float meleeAttackColliderRange = 3.0f;
 	float meleeAttackColliderLength = 1.0f;
 
@@ -111,8 +110,9 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 	unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -1 * meleeAttackColliderRange });
 	//autoAttackDebugMesh->SetParent(m_unitGameObject);
 	autoAttackDebugMesh->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -1 * meleeAttackColliderRange });
+
+
 #pragma endregion
 
-	UnitProductor::SetCommonComponents();
 	return m_unitComponent;
 }

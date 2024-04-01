@@ -3,9 +3,10 @@
 #include "DebugMeshes.h"
 #include "ContentsLayer.h"
 #include "Application.h"
+#include "LazySingletonClass.h"
 
 class PassiveCakePool :
-	public GameObjectPool<PassiveCake>, public SingletonClass<PassiveCakePool>
+	public GameObjectPool<PassiveCake>, public GHContents::LazySingletonClass<PassiveCakePool>
 {
 public:
 	virtual void ObjectInitializer(PassiveCake* passiveCake) override
@@ -27,5 +28,6 @@ public:
 
 		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
 		contentsLayer->RegisterToEditorObjectVector(passiveCake->GetGameObject());
+		contentsLayer->RegisterToEditorObjectVector(cakeMeshObject);
 	}
 };

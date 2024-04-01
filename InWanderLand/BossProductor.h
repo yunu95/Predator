@@ -1,8 +1,7 @@
 #pragma once
 #include "UnitProductor.h"
-#include "SingletonComponent.h"
 
-class RangedEnemyProductor : public UnitProductor, public SingletonComponent<RangedEnemyProductor>
+class BossProductor : public UnitProductor, public SingletonComponent<BossProductor>
 {
 public:
 	virtual void SetUnitData() override;

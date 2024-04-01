@@ -8,6 +8,9 @@ double yunutyEngine::Time::deltaTimeUnscaled = 0;
 double yunutyEngine::Time::timeElapsed = 0;
 double yunutyEngine::Time::timeElapsedUnscaled = 0;
 queue<double> yunutyEngine::Time::fpsQueue;
+
+
+
 void yunutyEngine::Time::Update()
 {
     auto now = chrono::system_clock::now();
@@ -32,18 +35,30 @@ void yunutyEngine::Time::Update()
     timeElapsed += deltaTimeUnscaled * timeScale;
     timeElapsedUnscaled += deltaTimeUnscaled;
 }
+
+
+
 void yunutyEngine::Time::SetTimeScale(const float& timeScale)
 {
     Time::timeScale = timeScale;
 }
+
+
+
 double yunutyEngine::Time::GetTimeScale()
 {
     return timeScale;
 }
+
+
+
 double yunutyEngine::Time::GetDeltaTime()
 {
     return deltaTimeUnscaled * timeScale;
 }
+
+
+
 double yunutyEngine::Time::GetDeltaTimeUnscaled()
 {
     return deltaTimeUnscaled;

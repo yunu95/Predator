@@ -28,6 +28,8 @@ private:
 	std::unordered_map< Unit*,std::unique_ptr<bleededUnitInfo> > opponentUnits;
 
 public:
+	bool isActivated = true;
+
 	virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) override;
 	
 public:
