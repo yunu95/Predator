@@ -71,7 +71,11 @@ public:
 	virtual Unit* CreateUnit(Vector3d startPos) = 0;
 	virtual void PushWaveData(Vector3d startPos, float delay);
 
-	void SetCommonComponents();
+	void SetUnitComponentMembers();
+	void AddRangeSystemComponent() const;
+	void AddColliderComponent() const;
+	void AddNavigationComponent();
+	void AddDotweenComponent() const;
 
 	virtual bool SelectUnitProductorByFbxName(std::string p_name);
 

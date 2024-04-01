@@ -111,18 +111,21 @@ void PlayerController::SetRightClickEmpty()
 
 void PlayerController::SetCurrentPlayerSerialNumber(Unit::UnitType p_num)
 {
-	currentSelectedSerialNumber = p_num;
-	Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
-	Vector3d unitPos = currentSelectedUnit->GetTransform()->GetWorldPosition();
-	//m_dotween->DOMove(unitPos + cameraOffset, cameraMoveDuration);
-	//m_dotween->DORotate(Vector3d(60, 0, 0), cameraMoveDuration);
-	
-	Vector3d camRotation = m_movingSystemComponent->GetTransform()->GetWorldRotation().Euler();
-	//m_dotween->DOLookAt(unitPos, cameraMoveDuration, true);
-	
-	//m_movingSystemComponent->GetTransform()->SetWorldPosition({ unitPos + cameraOffset });
+	if (playerComponentMap.find(p_num) != playerComponentMap.end())
+	{
+		currentSelectedSerialNumber = p_num;
+		Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
+		Vector3d unitPos = currentSelectedUnit->GetTransform()->GetWorldPosition();
+		//m_dotween->DOMove(unitPos + cameraOffset, cameraMoveDuration);
+		//m_dotween->DORotate(Vector3d(60, 0, 0), cameraMoveDuration);
 
-	SetLeftClickMove();
+		Vector3d camRotation = m_movingSystemComponent->GetTransform()->GetWorldRotation().Euler();
+		//m_dotween->DOLookAt(unitPos, cameraMoveDuration, true);
+
+		//m_movingSystemComponent->GetTransform()->SetWorldPosition({ unitPos + cameraOffset });
+
+		SetLeftClickMove();
+	}
 }
 
 std::unordered_map<Unit::UnitType, Unit*> PlayerController::GetPlayerMap() const

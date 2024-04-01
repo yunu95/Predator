@@ -32,11 +32,9 @@ private:
 
 	bool isColliderSetActiveFalseSet = false;
 
-	void SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen);
-
 public:
-	virtual void QSkillActivate(Vector3d skillPos) override;
-	virtual void WSkillActivate(Vector3d skillPos) override;
+	virtual void ActivateSkillOne(Vector3d skillPos) override;
+	virtual void ActivateSkillTwo(Vector3d skillPos) override;
 public:
 	void SetInterActionComponent(BlindFieldComponent* p_QSkillComponent, ParalysisFieldComponent* p_WSkillComponent);
 	

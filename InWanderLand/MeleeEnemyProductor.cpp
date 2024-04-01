@@ -113,6 +113,11 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 	autoAttackDebugMesh->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -1 * meleeAttackColliderRange });
 #pragma endregion
 
-	UnitProductor::SetCommonComponents();
+	UnitProductor::AddRangeSystemComponent();
+	UnitProductor::AddColliderComponent();
+	UnitProductor::AddNavigationComponent();
+	UnitProductor::AddDotweenComponent();
+	UnitProductor::SetUnitComponentMembers();
+
 	return m_unitComponent;
 }

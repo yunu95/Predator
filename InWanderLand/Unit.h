@@ -42,7 +42,8 @@ public:
 		AllPlayers,
 		MeleeEnemy,
 		RangedEnemy,
-		Boss
+		Boss,
+		EnemySpawnGate
 	};
 
 	enum class UnitSide
@@ -54,7 +55,11 @@ public:
 	enum class SkillEnum
 	{
 		Q,
-		W
+		W,
+		BossSkillOne,
+		BossSkillTwo,
+		BossSkillThree,
+		BossSkillFour
 	};
 
 	struct BaseUnitAnimationStruct
@@ -160,7 +165,7 @@ private:
 
 	Unit* m_currentTargetUnit;		// Attack이나 Chase 때 사용할 적군  오브젝트
 	Unit* m_previousTargetUnit;		
-	Unit* tauntedUnit;				// 현재 this 유닛이 도발당한 주체.
+	Unit* tauntingThisUnit;				// 현재 this 유닛이 도발당한 주체.
 	Vector3d m_currentMovePosition;							// 현재 상대의 위치
 
 	Vector3d m_currentSkillPosition;
@@ -263,6 +268,7 @@ public:
 	void DeleteTauntingUnit();
 
 	void SetUnitStateToDeath();
+	void SetUnitStateToSkill();
 
 public:
 	/// <summary>

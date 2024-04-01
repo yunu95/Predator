@@ -9,7 +9,6 @@
 #include <memory>
 #include <queue>
 #include <deque>
-#include <stack>
 #include <concepts>
 
 namespace application
@@ -20,6 +19,11 @@ namespace application
 			: public Singleton<CommandManager>
 		{
 			friend class Singleton<CommandManager>;
+			friend class EditorLayer;
+
+			/// 원래는 해당 방식으로 처리하면 안되지만,
+			/// 임시로 Delete 에 대해서 직접 접근을 허용하여 처리하도록 함
+			friend class DeleteInstanceCommand;
 
 		public:	
 			virtual ~CommandManager();
@@ -40,6 +44,7 @@ namespace application
 			{
 				commandQueue.emplace(command);
 				undoQueue.emplace_back(command);
+				redoStack.clear();
 
 				ResizeBuffer();
 			}
@@ -49,6 +54,8 @@ namespace application
 			void UndoCommand();												// 마지막으로 실행했던 커맨드를 취소하고 되돌림
 			void RedoCommand();												// 실행 취소했던 커맨드를 다시 실행함
 
+			void Clear();
+
 		private:
 			CommandManager();
 
@@ -56,8 +63,9 @@ namespace application
 
 			int bufferSize = 50;
 			std::queue<std::shared_ptr<Command>> commandQueue;
+			std::queue<std::shared_ptr<UndoableCommand>> undoableCommandQueue;
 			std::deque<std::shared_ptr<UndoableCommand>> undoQueue;
-			std::stack<std::shared_ptr<UndoableCommand>> redoStack;
+			std::deque<std::shared_ptr<UndoableCommand>> redoStack;
 		};
 	}
 }

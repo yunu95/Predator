@@ -1,14 +1,7 @@
 #include "MagicianSkillSystem.h"
 #include "Dotween.h"
 
-void MagicianSkillSystem::SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen)
-{
-	p_requirments.skillCollider->SetActive(p_boolen);
-	p_requirments.colliderObject->SetSelfActive(p_boolen);
-	p_requirments.debugObject->SetSelfActive(p_boolen);
-}
-
-void MagicianSkillSystem::QSkillActivate(Vector3d skillPos)
+void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 {
 	/// 장판의 타이머를 Activate하는 함수가 필요...
 	//m_QSkillComponent->ActivateFieldTimer();
@@ -39,7 +32,7 @@ void MagicianSkillSystem::QSkillActivate(Vector3d skillPos)
 		});
 }
 
-void MagicianSkillSystem::WSkillActivate(Vector3d skillPos)
+void MagicianSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 {
 	isWSkillActivating = true;
 

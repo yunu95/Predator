@@ -391,6 +391,18 @@
     <Filter Include="Contents\UnitFactory\UnitPool">
       <UniqueIdentifier>{0c84d392-f6f0-438d-92d0-0daa5729154b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Commands\SystemCommands">
+      <UniqueIdentifier>{f061485a-9870-4034-883b-a10e725acf7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Commands\SystemCommands\Edit">
+      <UniqueIdentifier>{015fea93-15af-4593-a062-6f56e5928bbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\SkillSystem\PlayerSkillSystems">
+      <UniqueIdentifier>{2d2f0218-46d3-4ff6-afbf-032928c37cf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\SkillSystem\BossRelated">
+      <UniqueIdentifier>{0ffcdec1-266a-4e1d-b50d-cd12a18a9db8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -576,9 +588,6 @@
     <ClInclude Include="UnitFactory.h">
       <Filter>Contents\UnitFactory</Filter>
     </ClInclude>
-    <ClInclude Include="SkillSystem.h">
-      <Filter>Contents\SkillSystem</Filter>
-    </ClInclude>
     <ClInclude Include="RangeSystem.h">
       <Filter>Contents\RangeSystem</Filter>
     </ClInclude>
@@ -675,14 +684,8 @@
     <ClInclude Include="RegionPalette.h">
       <Filter>Editor\Palette\List\RegionPalette</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerSkillSystem.h">
-      <Filter>Contents\SkillSystem</Filter>
-    </ClInclude>
     <ClInclude Include="EventManager.h">
       <Filter>Editor\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="WarriorSkillSystem.h">
-      <Filter>Contents\SkillSystem</Filter>
     </ClInclude>
     <ClInclude Include="WindowEvents.h">
       <Filter>Editor\Events\Category\2_Window</Filter>
@@ -745,9 +748,6 @@
     <ClInclude Include="ParalysisFieldComponent.h">
       <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
     </ClInclude>
-    <ClInclude Include="MagicianSkillSystem.h">
-      <Filter>Contents\SkillSystem</Filter>
-    </ClInclude>
     <ClInclude Include="BlindFieldComponent.h">
       <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
     </ClInclude>
@@ -798,9 +798,6 @@
     </ClInclude>
     <ClInclude Include="..\Include\ImGuizmo\ImGuizmo.h">
       <Filter>Editor\imgui\ImGuizmo</Filter>
-    </ClInclude>
-    <ClInclude Include="HealerSkillSystem.h">
-      <Filter>Contents\SkillSystem</Filter>
     </ClInclude>
     <ClInclude Include="DualCastComponent.h">
       <Filter>Contents\UnitStatusComponent\DualCast</Filter>
@@ -983,17 +980,53 @@
     <ClInclude Include="UrsulaSkillDevelopmentSystem.h">
       <Filter>Contents\SkillDevelopmentSystem\Ursual</Filter>
     </ClInclude>
-    <ClInclude Include="MeleeEnemyPool.h">
-      <Filter>Contents\UnitFactory\UnitPool</Filter>
-    </ClInclude>
     <ClInclude Include="DummyComponent.h">
-      <Filter>Contents\UnitFactory\UnitPool</Filter>
-    </ClInclude>
-    <ClInclude Include="RangedEnemyPool.h">
       <Filter>Contents\UnitFactory\UnitPool</Filter>
     </ClInclude>
     <ClInclude Include="BossProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySpawnGateProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="WarriorSkillSystem.h">
+      <Filter>Contents\SkillSystem\PlayerSkillSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerSkillSystem.h">
+      <Filter>Contents\SkillSystem\PlayerSkillSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="MagicianSkillSystem.h">
+      <Filter>Contents\SkillSystem\PlayerSkillSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="HealerSkillSystem.h">
+      <Filter>Contents\SkillSystem\PlayerSkillSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="BossSkillSystem.h">
+      <Filter>Contents\SkillSystem\BossRelated</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySummonSkillSystem.h">
+      <Filter>Contents\SkillSystem\BossRelated</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySkillSystem.h">
+      <Filter>Contents\SkillSystem\BossRelated</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillSystem.h">
+      <Filter>Contents\SkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitObjectPool.h">
+      <Filter>Contents\UnitFactory\UnitPool</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemCommands.h">
+      <Filter>Editor\Commands\SystemCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformEditCommand.h">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="DeleteInstanceCommand.h">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateInstanceCommand.h">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1132,9 +1165,6 @@
     <ClCompile Include="UnitFactory.cpp">
       <Filter>Contents\UnitFactory</Filter>
     </ClCompile>
-    <ClCompile Include="SkillSystem.cpp">
-      <Filter>Contents\SkillSystem</Filter>
-    </ClCompile>
     <ClCompile Include="RangeSystem.cpp">
       <Filter>Contents\RangeSystem</Filter>
     </ClCompile>
@@ -1176,12 +1206,6 @@
     </ClCompile>
     <ClCompile Include="KnockBackComponent.cpp">
       <Filter>Contents\UnitStatusComponent\KnockBack</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerSkillSystem.cpp">
-      <Filter>Contents\SkillSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="WarriorSkillSystem.cpp">
-      <Filter>Contents\SkillSystem</Filter>
     </ClCompile>
     <ClCompile Include="TauntingComponent.cpp">
       <Filter>Contents\UnitStatusComponent\Taunting</Filter>
@@ -1300,9 +1324,6 @@
     <ClCompile Include="ParalysisFieldComponent.cpp">
       <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
     </ClCompile>
-    <ClCompile Include="MagicianSkillSystem.cpp">
-      <Filter>Contents\SkillSystem</Filter>
-    </ClCompile>
     <ClCompile Include="BlindFieldComponent.cpp">
       <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
     </ClCompile>
@@ -1356,9 +1377,6 @@
     </ClCompile>
     <ClCompile Include="PassiveCake.cpp">
       <Filter>Contents\ProjectileComponents\Supporter\Passive</Filter>
-    </ClCompile>
-    <ClCompile Include="HealerSkillSystem.cpp">
-      <Filter>Contents\SkillSystem</Filter>
     </ClCompile>
     <ClCompile Include="DualCastComponent.cpp">
       <Filter>Contents\UnitStatusComponent\DualCast</Filter>
@@ -1532,8 +1550,44 @@
     <ClCompile Include="UrsulaSkillDevelopmentSystem.cpp">
       <Filter>Contents\SkillDevelopmentSystem\Ursual</Filter>
     </ClCompile>
+    <ClCompile Include="TransformEditCommand.cpp">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
+    </ClCompile>
+    <ClCompile Include="DeleteInstanceCommand.cpp">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateInstanceCommand.cpp">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
+    </ClCompile>
     <ClCompile Include="BossProductor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemySpawnGateProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="WarriorSkillSystem.cpp">
+      <Filter>Contents\SkillSystem\PlayerSkillSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerSkillSystem.cpp">
+      <Filter>Contents\SkillSystem\PlayerSkillSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="MagicianSkillSystem.cpp">
+      <Filter>Contents\SkillSystem\PlayerSkillSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="HealerSkillSystem.cpp">
+      <Filter>Contents\SkillSystem\PlayerSkillSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSkillSystem.cpp">
+      <Filter>Contents\SkillSystem\BossRelated</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemySummonSkillSystem.cpp">
+      <Filter>Contents\SkillSystem\BossRelated</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemySkillSystem.cpp">
+      <Filter>Contents\SkillSystem\BossRelated</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillSystem.cpp">
+      <Filter>Contents\SkillSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

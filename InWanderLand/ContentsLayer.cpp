@@ -16,6 +16,7 @@
 #include "WarriorProductor.h"
 #include "MagicianProductor.h"
 #include "HealerProductor.h"
+#include "BossProductor.h"
 #include "InputManager.h"
 #include "UIManager.h"
 #include "PlayerController.h"
@@ -533,8 +534,8 @@ void application::contents::ContentsLayer::Initialize()
         //assert(mapFound && "there is no map to load in current directory!");
 
         /// 임시
-		RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
-		RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
+		//RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
+		//RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
 
 //#pragma region UI Region
 //
@@ -595,6 +596,11 @@ void application::contents::ContentsLayer::PlayContents()
 	SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
+	for (auto e : componentsCreatedByEditorVector)
+	{
+		e->SetActive(true);
+	}
+
 	InputManager::Instance();
 	UIManager::Instance();
 
@@ -613,8 +619,9 @@ void application::contents::ContentsLayer::PlayContents()
     RegisterToEditorObjectVector(skillPreviewSphereMeshObject);
 
 	/// 임시
-    RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
-    RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
+    //RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
+    //RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
+    RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
 
     /// UI 작업
 	const int menuWindowXpos = 760;
@@ -654,11 +661,19 @@ void application::contents::ContentsLayer::PlayContents()
 void application::contents::ContentsLayer::PauseContents()
 {
     Time::SetTimeScale(FLT_MIN * 1000);
+	for (auto e : componentsCreatedByEditorVector)
+	{
+		e->SetActive(false);
+	}
 }
 
 void application::contents::ContentsLayer::ResumeContents()
 {
     Time::SetTimeScale(1);
+	for (auto e : componentsCreatedByEditorVector)
+	{
+		e->SetActive(true);
+	}
 }
 
 void application::contents::ContentsLayer::StopContents()
@@ -666,7 +681,11 @@ void application::contents::ContentsLayer::StopContents()
     Time::SetTimeScale(1);
     isStoppedOnce = true;
     ClearPlaytimeObject();
-    ShortcutSystem::Instance().ClearObject();
+    ShortcutSystem::Instance().Clear();
+	for (auto e : componentsCreatedByEditorVector)
+	{
+		e->SetActive(false);
+	}
 }
 
 #ifdef GEN_TESTS
@@ -690,13 +709,23 @@ void application::contents::ContentsLayer::ClearPlaytimeObject()
 		//e->SetSelfActive(false);
 		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(e);
 	}
+
+    for (auto e : componentsCreatedByEditorVector)
+    {
+        e->SetActive(false);
+    }
 	objectCreatedByEditorVector.clear();
 
-    SingletonInstanceContainer::SingleInstance().ClearLazySingletonInstances();
+    SingletonInstanceContainer::SingleInstance().ClearSingletonInstances();
 }
 
 void application::contents::ContentsLayer::RegisterToEditorObjectVector(GameObject* p_obj)
 {
     objectCreatedByEditorVector.push_back(p_obj);
+}
+
+void application::contents::ContentsLayer::RegisterToEditorComponentVector(Component* p_com)
+{
+    componentsCreatedByEditorVector.push_back(p_com);
 }
 
