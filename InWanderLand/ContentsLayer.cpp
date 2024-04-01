@@ -381,7 +381,7 @@ void application::contents::ContentsLayer::Initialize()
 
         InputManager::Instance();
         UIManager::Instance();
-                editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
+        editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
         editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
     }
 #endif
