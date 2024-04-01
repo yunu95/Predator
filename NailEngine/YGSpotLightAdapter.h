@@ -64,6 +64,16 @@ namespace yunuGIAdapter
 		{
 			return true;
 		}
+
+		virtual void SetIsShadowCast(bool isCast) override
+		{
+
+		};
+		virtual bool IsShadowCast() override
+		{
+			return true;
+		};
+
 	private:
 		std::shared_ptr<SpotLight> light;
 	};

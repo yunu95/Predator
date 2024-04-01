@@ -16,6 +16,8 @@ public:
 	virtual void SetIntensity(float intensity) override;
 	virtual void SetActive(bool isActive) override;
 	virtual bool IsActive() override;
+	virtual void SetIsShadowCast(bool isCast) override;
+	virtual bool IsShadowCast() override;
 public:
 	void SetRange(float range);
 	void SetWorldTM(const DirectX::SimpleMath::Matrix& wtm);

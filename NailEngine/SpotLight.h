@@ -21,7 +21,15 @@ public:
 	virtual bool IsActive() override
 	{
 		return true;
-	}
+	}		
+	virtual void SetIsShadowCast(bool isCast) override
+	{
+
+	};
+	virtual bool IsShadowCast() override
+	{
+		return true;
+	};
 
 public:
 	void SetLightDirection(DirectX::SimpleMath::Vector4& direction);

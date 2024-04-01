@@ -294,6 +294,11 @@ void RenderSystem::RenderPointLightShadow()
 	{
 		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{
+			if (e->IsShadowCast() == false)
+			{
+				continue;
+			}
+
 			if (index > MAX_POINT_LIGHT - 1)
 			{
 				continue;
