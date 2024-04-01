@@ -40,21 +40,26 @@ VertexOut main(VertexIn input)
     output.posH = mul(float4(input.pos, 1.f), input.world);
      ///
     float2 tempUV = input.uv;
-    tempUV.y = 1 - tempUV.y;
+    //tempUV.y = 1 - tempUV.y;
+    
+    
+    tempUV.x = 1 - tempUV.x;
+    
     tempUV *= 2;
     tempUV -= 1;
-    tempUV.y *= -1;
-    tempUV.x *= 1;
+    tempUV.y *= 1;
+    tempUV.x *= -1;
     float4 tempVec = float4(tempUV, 0, 0);
     tempVec = mul(tempVec, VTMInv);
     tempVec = normalize(tempVec);
     tempVec *= scale.y;
     
-    float3 tempNormal = mul(float4(input.normal, 0), input.world);
-    tempNormal *= 0.5f;
-    float3 tempPos = (tempVec.xyz + tempNormal) * 2;
-    
+    //float3 tempNormal = mul(float4(input.normal, 0), input.world);
+    //tempNormal *= 0.5f;
+    //float3 tempPos = (tempVec.xyz + tempNormal) * 1.1f;
+    float3 tempPos = (tempVec.xyz) * 1.1f;
     output.posH.xyz += tempPos;
+    
     ///
     output.posH = mul(output.posH, VP);
     output.posV = mul(float4(input.pos, 1.f), WV);

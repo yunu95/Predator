@@ -27,7 +27,20 @@ namespace application
 				ResetZ,
 				TypeX,
 				TypeY,
-				TypeZ
+				TypeZ,
+				EndEditX,
+				EndEditY,
+				EndEditZ,
+				EndTypeX,
+				EndTypeY,
+				EndTypeZ
+			};
+
+			enum class DragFlags
+			{
+				None,
+				Drag,
+				Type
 			};
 
 			// x, y 크기만큼 확장한 ImRect 획득
@@ -81,10 +94,8 @@ namespace application
 			bool Vector4_2Col(std::string valName, float& x, float& y, float& z, float& w, float reset_x = 0.0f, float reset_y = 0.0f, float reset_z = 0.0f, float reset_w = 1.0f);
 #pragma endregion
 
-			// 여기서 bool은 직접 값을 넣어서 변경했는지에 대한 여부를 반환함
-			bool DragFloatLabel(std::string dragKey, std::string label, float& value, bool editable = true, float speed = 1.0f, float min = 0.0f, float max = 0.0f);
-			// 여기서 bool은 직접 값을 넣어서 변경했는지에 대한 여부를 반환함
-			bool DragIntLabel(std::string dragKey, std::string label, int& value, bool editable = true, float speed = 1.0f, int min = 0, int max = 0);
+			DragFlags DragFloatLabel(std::string dragKey, std::string label, float& value, bool editable = true, float speed = 1.0f, float min = 0.0f, float max = 0.0f);
+			DragFlags DragIntLabel(std::string dragKey, std::string label, int& value, bool editable = true, float speed = 1.0f, int min = 0, int max = 0);
 			Vector3Flags Vector3Control(std::string valName, float& x, float& y, float& z, bool x_multiSelect = false, bool y_multiSelect = false, bool z_multiSelect = false);
 
 			void EndSection();

@@ -8,7 +8,7 @@ void EnemySummonGateProductor::SetUnitData()
 	m_unitType = Unit::UnitType::EnemySpawnGate;
 	m_unitSide = Unit::UnitSide::Enemy;
 
-	m_healthPoint = 20000;
+	m_healthPoint = 1;
 	m_manaPoint = 100;
 
 	m_autoAttackDamage = 15;
@@ -93,8 +93,16 @@ Unit* EnemySummonGateProductor::CreateUnit(Vector3d startPos)
 	/// rangeSystem만 제외한다면 Boss와 다름 없는 유닛.
 	/// chase, move, attack 없고, 주기적으로 skill만 사용하는 유닛이다.
 
-	UnitProductor::AddColliderComponent();
+	if (isDamagedUnit)
+	{
+		UnitProductor::AddColliderComponent();
+	}
 	UnitProductor::SetUnitComponentMembers();
 
 	return m_unitComponent;
+}
+
+void EnemySummonGateProductor::SetUnitCanBeDamaged(bool p_boolen)
+{
+	isDamagedUnit = p_boolen;
 }

@@ -21,6 +21,8 @@ namespace application
 			: public Command
 		{
 		public:
+			COMMAND_SETTING(CommandType::LoadMap)
+
 			LoadMapCommand();
 
 			virtual void Execute() override;

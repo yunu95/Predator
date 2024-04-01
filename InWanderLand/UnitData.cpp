@@ -178,7 +178,8 @@ namespace application
 				UnitObjectPool::SingleInstance().ChooseProductor(currentSelectedProductor);
 				UnitObjectPool::SingleInstance().SetStartPosition(startPosition);
 				unitComponent = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
-				ShortcutSystem::Instance().RegisterObject(tempShortCutIndex, unitComponent->GetGameObject());
+				ShortcutSystem::Instance().RegisterTriggerFunction(tempShortCutIndex, 
+                        [=]() { unitComponent->GetGameObject()->SetSelfActive(!unitComponent->GetGameObject()->GetSelfActive()); });
 			}
 		}
 

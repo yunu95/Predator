@@ -413,13 +413,13 @@ void application::contents::ContentsLayer::Initialize()
         //yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
         yunutyEngine::Collider2D::SetIsOnXYPlane(false);
         auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
+        directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
         directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
         auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
         auto color = yunuGI::Color{ 1,1,1,1.f };
         light->GetGI().SetLightDiffuseColor(color);
 
-        editor::MapFileManager::GetSingletonInstance().LoadStaticOrnaments("TestOrnaments.punreal");
+        //editor::MapFileManager::GetSingletonInstance().LoadStaticOrnaments("TestOrnaments.punreal");
     }
     GraphicsTest();
 #else
@@ -427,6 +427,16 @@ void application::contents::ContentsLayer::Initialize()
         yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 
         ShortcutSystem::Instance();
+
+		{
+			auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			//obj->GetTransform()->SetLocalPosition(Vector3d{ -500,500,1 });
+			obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,100 });
+			auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
+			text->GetGI().SetFontSize(20);
+			auto test = obj->AddComponent<TestComponent2>();
+			test->text = text;
+		}
 
 		/// Editor 에서 수정하여 Map Data 에 저장할 부분
 		/*auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -527,6 +537,8 @@ void application::contents::ContentsLayer::Initialize()
         /// 임시
 		//RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
 		//RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
+		RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
+
 
 //#pragma region UI Region
 //
@@ -673,7 +685,7 @@ void application::contents::ContentsLayer::StopContents()
     Time::SetTimeScale(1);
     isStoppedOnce = true;
     ClearPlaytimeObject();
-    ShortcutSystem::Instance().ClearObject();
+    ShortcutSystem::Instance().Clear();
 	for (auto e : componentsCreatedByEditorVector)
 	{
 		e->SetActive(false);

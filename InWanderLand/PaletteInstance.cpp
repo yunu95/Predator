@@ -7,10 +7,13 @@ namespace application::editor::palette
 {
     void PaletteInstance::Start()
     {
+#ifdef EDITOR
         InitPickingCollider();
+#endif
     }
     void PaletteInstance::AdjustPickingCollider(const Vector3f& boundingMin, const Vector3f& boundingMax)
     {
+#ifdef EDITOR
         static constexpr float epsilonFactor{ 0.001f };
         static constexpr float epsilonDelta{ 0.05f };
         InitPickingCollider();
@@ -18,6 +21,7 @@ namespace application::editor::palette
         pickingCollider->GetTransform()->SetLocalPosition((boundingMax + boundingMin) / 2.0);
         selectCircle->GetTransform()->SetLocalScale((boundingMax - boundingMin + epsilonDelta * Vector3f::one) / (1.0 - epsilonFactor));
         selectCircle->GetTransform()->SetLocalPosition((boundingMax + boundingMin) / 2.0);
+#endif
     }
     void PaletteInstance::OnHover()
     {

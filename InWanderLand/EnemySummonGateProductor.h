@@ -6,9 +6,14 @@
 /// </summary>
 class EnemySummonGateProductor : public UnitProductor, public SingletonComponent<EnemySummonGateProductor>
 {
+private:
+	bool isDamagedUnit = false;
+
 public:
 	virtual void SetUnitData() override;
 	virtual void SingletonInitializer() override;
 	virtual Unit* CreateUnit(Vector3d startPos) override;
+
+	void SetUnitCanBeDamaged(bool p_boolen);
 };
 

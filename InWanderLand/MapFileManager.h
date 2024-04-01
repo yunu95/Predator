@@ -17,6 +17,7 @@ namespace application
 	{
 		class InstanceManager;
 		class TemplateDataManager;
+		class CommandManager;
 	}
 }
 
@@ -45,6 +46,7 @@ namespace application
 			GlobalConstant& globalConstant;
 			InstanceManager& instanceManager;
 			TemplateDataManager& templateDataManager;
+			CommandManager& commandManager;
 
 			std::string currentMapPath;
 		};

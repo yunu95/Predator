@@ -8,6 +8,8 @@ private:
 	float m_enemySpawnDuration;
 	bool isThisUnitSummoned;
 
+	Unit* m_currentSummonedUnit;
+
 public:
 	virtual void Start() override;
 	virtual void Update() override;
