@@ -316,15 +316,19 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
             float4 worldPos = mul(float4(pos.xyz, 1.f), VTMInv);
             float curDepth = CalCulateDepth((worldPos.xyz - lights[lightIndex].position.xyz), lightIndex);
         
-            float shadow = PointLightShadowMap.Sample(sam, float4(normalize(worldPos.xyz - lights[lightIndex].position.xyz), plIndex)).r;
-        
-            if (shadow < curDepth - 0.0001f)
+            float shadow = 1;
+            if(isShadowCast)
             {
-                shadow = 0.0f;
-            }
-            else
-            {
-                shadow = 1.0f;
+                shadow = PointLightShadowMap.Sample(sam, float4(normalize(worldPos.xyz - lights[lightIndex].position.xyz), plIndex)).r;
+                
+                if (shadow < curDepth - 0.0001f)
+                {
+                    shadow = 0.0f;
+                }
+                else
+                {
+                    shadow = 1.0f;
+                }
             }
             
             diffuse *= shadow;

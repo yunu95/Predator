@@ -134,7 +134,8 @@ cbuffer PointLightVPMatrix : register(b7)
 cbuffer PointLightIndex : register(b8)
 {
     int plIndex;
-    float3 padding3;
+    int isShadowCast;
+    float2 padding3;
 }
 
 cbuffer ExposureBuffer : register(b9)

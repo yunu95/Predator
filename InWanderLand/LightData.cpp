@@ -121,6 +121,7 @@ namespace application
 					light->GetGI().SetLightDiffuseColor(*reinterpret_cast<yunuGI::Color*>(&pod.color));
 					light->GetGI().SetIntensity(pod.intensity);
 					light->GetGI().SetRange(pod.range);
+					light->GetGI().SetIsShadowCast(pod.isCast);
 					break;
 				}
 				default:
