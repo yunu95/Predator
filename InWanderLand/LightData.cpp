@@ -134,7 +134,8 @@ namespace application
 
 			if (pod.templateData->pod.type != LightType::Directional)
 			{
-				ShortcutSystem::Instance().RegisterObject(4, comp);
+				ShortcutSystem::Instance().RegisterTriggerFunction(4, 
+					[=]() { comp->SetSelfActive(!comp->GetSelfActive()); });
 			}
 		}
 

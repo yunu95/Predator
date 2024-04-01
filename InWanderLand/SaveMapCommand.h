@@ -21,6 +21,8 @@ namespace application
 			: public Command
 		{
 		public:
+			COMMAND_SETTING(CommandType::SaveMap)
+
 			SaveMapCommand(bool saveAs = false);
 
 			virtual void Execute() override;

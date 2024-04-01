@@ -16,6 +16,7 @@
 #include "PaletteBrushManager.h"
 #include "EditorResourceManager.h"
 #include "EditorCameraManager.h"
+#include "ShortcutSystem.h"
 
 #include <fstream>
 
@@ -27,6 +28,7 @@ namespace application
             : Singleton<MapFileManager>(), globalConstant(GlobalConstant::GetSingletonInstance()), 
             instanceManager(InstanceManager::GetSingletonInstance()), 
             templateDataManager(TemplateDataManager::GetSingletonInstance()),
+            commandManager(CommandManager::GetSingletonInstance()),
             currentMapPath()
         {
 
@@ -269,7 +271,9 @@ namespace application
             palette::PaletteBrushManager::GetSingletonInstance().Clear();
             palette::PaletteManager::GetSingletonInstance().Clear();
             CameraManager::GetSingletonInstance().Clear();
+            commandManager.Clear();
 #endif
+            ShortcutSystem::Instance().Clear();
             instanceManager.Clear();
             templateDataManager.Clear();
             UUIDManager::GetSingletonInstance().Clear();

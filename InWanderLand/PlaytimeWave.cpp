@@ -66,7 +66,8 @@ void PlaytimeWave::Update()
 				MeleeEnemyPool::SingleInstance().SetStartPosition(pos);
 				MeleeEnemyPool::SingleInstance().Borrow();
 				unitComponent = MeleeEnemyPool::SingleInstance().GetUnitComponent();
-				application::ShortcutSystem::Instance().RegisterObject(2, unitComponent->GetGameObject());
+				application::ShortcutSystem::Instance().RegisterTriggerFunction(2, 
+					[&]() { unitComponent->GetGameObject()->SetSelfActive(!unitComponent->GetGameObject()->GetSelfActive()); });
 
 			}
 			else if (waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod.skinnedFBXName == "SKM_Monster2")
@@ -76,7 +77,8 @@ void PlaytimeWave::Update()
 				RangedEnemyPool::SingleInstance().SetStartPosition(pos);
 				RangedEnemyPool::SingleInstance().Borrow();
 				unitComponent = RangedEnemyPool::SingleInstance().GetUnitComponent();
-				application::ShortcutSystem::Instance().RegisterObject(2, unitComponent->GetGameObject());
+				application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
+					[&]() { unitComponent->GetGameObject()->SetSelfActive(!unitComponent->GetGameObject()->GetSelfActive()); });
 			}
 
 			//for (auto& e : productorSelector)

@@ -152,7 +152,9 @@ namespace application
 					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                     MeleeEnemyPool::SingleInstance().SetStartPosition(startPosition);
                     MeleeEnemyPool::SingleInstance().Borrow();
-					ShortcutSystem::Instance().RegisterObject(2, MeleeEnemyPool::SingleInstance().GetUnitComponent()->GetGameObject());
+                    auto obj = MeleeEnemyPool::SingleInstance().GetUnitComponent()->GetGameObject();
+					ShortcutSystem::Instance().RegisterTriggerFunction(2,
+                        [=]() { obj->SetSelfActive(!obj->GetSelfActive()); });
                 }
                 else if (pod.templateData->pod.skinnedFBXName == "SKM_Monster2")
                 {
@@ -160,7 +162,9 @@ namespace application
 					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                     RangedEnemyPool::SingleInstance().SetStartPosition(startPosition);
                     RangedEnemyPool::SingleInstance().Borrow();
-					ShortcutSystem::Instance().RegisterObject(2, RangedEnemyPool::SingleInstance().GetUnitComponent()->GetGameObject());
+                    auto obj = RangedEnemyPool::SingleInstance().GetUnitComponent()->GetGameObject();
+                    ShortcutSystem::Instance().RegisterTriggerFunction(2,
+                        [=]() { obj->SetSelfActive(!obj->GetSelfActive()); });
                 }
                 else
                 {
@@ -177,7 +181,8 @@ namespace application
 					auto unit = currentSelectedProductor->CreateUnit(startPosition);
 					contentsLayer->RegisterToEditorObjectVector(unit->GetGameObject());
 
-					ShortcutSystem::Instance().RegisterObject(1, unit->GetGameObject());
+					ShortcutSystem::Instance().RegisterTriggerFunction(1, 
+                        [=]() { unit->GetGameObject()->SetSelfActive(!unit->GetGameObject()->GetSelfActive()); });
                 }
 			}
 		}

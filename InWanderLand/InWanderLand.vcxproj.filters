@@ -391,6 +391,12 @@
     <Filter Include="Contents\UnitFactory\UnitPool">
       <UniqueIdentifier>{0c84d392-f6f0-438d-92d0-0daa5729154b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Commands\SystemCommands">
+      <UniqueIdentifier>{f061485a-9870-4034-883b-a10e725acf7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Commands\SystemCommands\Edit">
+      <UniqueIdentifier>{015fea93-15af-4593-a062-6f56e5928bbe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -968,7 +974,6 @@
     <ClInclude Include="SingletonInstanceContainer.h">
       <Filter>Contents\Containers\SingletonInstanceContainer</Filter>
     </ClInclude>
-
     <ClInclude Include="ShortcutSystem.h">
       <Filter>DevelopmentSupportSystem</Filter>
     </ClInclude>
@@ -992,6 +997,18 @@
     </ClInclude>
     <ClInclude Include="RangedEnemyPool.h">
       <Filter>Contents\UnitFactory\UnitPool</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemCommands.h">
+      <Filter>Editor\Commands\SystemCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformEditCommand.h">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="DeleteInstanceCommand.h">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateInstanceCommand.h">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1529,6 +1546,15 @@
     </ClCompile>
     <ClCompile Include="UrsulaSkillDevelopmentSystem.cpp">
       <Filter>Contents\SkillDevelopmentSystem\Ursual</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformEditCommand.cpp">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
+    </ClCompile>
+    <ClCompile Include="DeleteInstanceCommand.cpp">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateInstanceCommand.cpp">
+      <Filter>Editor\Commands\SystemCommands\Edit</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
