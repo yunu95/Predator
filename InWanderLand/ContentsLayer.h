@@ -42,6 +42,7 @@ namespace application
 #endif
         private:
             void ClearPlaytimeObject();
+            void ShortcutInit();
 
             // container. Editor의 Stop버튼을 눌렀을 경우 해당 container 내의 Object들을 Destroy 해줍니다.
 			std::vector<GameObject*> objectCreatedByEditorVector;

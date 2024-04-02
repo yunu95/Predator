@@ -56,9 +56,6 @@ void BossSkillSystem::ActivateSkillThree()
 	UnitObjectPool::SingleInstance().SetStartPosition(doorSummonPosition);
 	EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(true);
 	currentSummonedDoorUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
-	application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
-		[=]() { currentSummonedDoorUnit->GetGameObject()->SetSelfActive(!currentSummonedDoorUnit->GetGameObject()->GetSelfActive()); });
-
 
 	if (currentDerivedDoorUnit == nullptr)
 	{
@@ -67,8 +64,6 @@ void BossSkillSystem::ActivateSkillThree()
 		UnitObjectPool::SingleInstance().SetStartPosition(doorSummonPosition);
 		EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(false);
 		currentDerivedDoorUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
-		application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
-			[=]() { currentDerivedDoorUnit->GetGameObject()->SetSelfActive(!currentDerivedDoorUnit->GetGameObject()->GetSelfActive()); });
 	}
 	else
 	{

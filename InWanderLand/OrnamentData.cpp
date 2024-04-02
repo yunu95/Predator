@@ -4,7 +4,6 @@
 
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
-#include "ShortcutSystem.h"
 #include "EditorResourceManager.h"
 
 namespace application
@@ -92,23 +91,6 @@ namespace application
                 SetPaletteInstance(ornamentInstance);
                 ornamentInstance->SetEditableData(this);
                 ornamentInstance->Init(this);
-                
-                auto fbxName = pod.templateData->pod.staticFBXName;
-
-                static auto& List = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetFBXList();
-                int idx = 10;
-                for (auto each : List)
-                {
-                    if (fbxName == std::string(each.begin(), each.end()))
-                    {
-                        ShortcutSystem::Instance().RegisterTriggerFunction(3,
-                            [=]() { ornamentInstance->GetGameObject()->SetSelfActive(ShortcutSystem::Instance().GetTriggerSwitch(3)); });
-                        ShortcutSystem::Instance().RegisterTriggerFunction(idx,
-                            [=]() { ornamentInstance->GetGameObject()->SetSelfActive(!ornamentInstance->GetGameObject()->GetSelfActive()); });
-                        break;
-                    }
-                    idx++;
-                }
             }
             ornamentInstance->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
             ornamentInstance->GetTransform()->SetWorldRotation({ pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z });
@@ -161,13 +143,6 @@ namespace application
             return true;
         }
 
-        OrnamentData::~OrnamentData()
-        {
-            for (auto each : RegionData::GetInstances())
-            {
-                each->EraseDisablingOrnament(this);
-            }
-        }
         OrnamentData::OrnamentData()
             : pod()
         {
@@ -193,6 +168,14 @@ namespace application
             IEditableData::operator=(prototype);
             pod = prototype.pod;
             return *this;
+        }
+
+        OrnamentData::~OrnamentData()
+        {
+            for (auto each : RegionData::GetInstances())
+            {
+                each->EraseDisablingOrnament(this);
+            }
         }
     }
 }

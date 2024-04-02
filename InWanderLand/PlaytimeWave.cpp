@@ -73,8 +73,6 @@ void PlaytimeWave::Update()
 			unitComponent = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
 			unitComponent->GetTransform()->SetWorldPosition(pos);
 			unitComponent->GetGameObject()->SetSelfActive(true);
-			application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
-				[&]() { unitComponent->GetGameObject()->SetSelfActive(!unitComponent->GetGameObject()->GetSelfActive()); });
 
 			GameObject* unitObject = unitComponent->GetGameObject();
 

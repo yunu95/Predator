@@ -6,13 +6,13 @@
 
 #include "Application.h"
 #include "ContentsLayer.h"
-#include "ShortcutSystem.h"
 
 namespace application
 {
 	namespace editor
 	{
 		TemplateDataManager& LightData::templateDataManager = TemplateDataManager::GetSingletonInstance();
+
 
 		bool LightData::EnterDataFromTemplate()
 		{
@@ -134,12 +134,6 @@ namespace application
 
 			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
 			contentsLayer->RegisterToEditorObjectVector(comp);
-
-			if (pod.templateData->pod.type != LightType::Directional)
-			{
-				ShortcutSystem::Instance().RegisterTriggerFunction(4, 
-					[=]() { comp->SetSelfActive(!comp->GetSelfActive()); });
-			}
 		}
 
 		void LightData::OnLightTypeChange(LightType type)

@@ -349,9 +349,7 @@ void application::contents::ContentsLayer::Initialize()
         return;
     }
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-    ShortcutSystem::Instance().RegisterUniqueTrigger({
-        { KeyCode::Control, true },{ KeyCode::LShift, true }, { KeyCode::NUM_0, false } }, [=]() { DebugGraphic::SetDebugGraphicsEnabled(!DebugGraphic::AreDebugGraphicsEnabled()); }
-    );
+    ShortcutInit();
 
     wanderUtils::LoadResourcesRecursively();
 
@@ -648,6 +646,77 @@ void application::contents::ContentsLayer::ClearPlaytimeObject()
     objectCreatedByEditorVector.clear();
 
     SingletonInstanceContainer::SingleInstance().ClearSingletonInstances();
+}
+
+void application::contents::ContentsLayer::ShortcutInit()
+{
+    auto& scsys = ShortcutSystem::Instance();
+    scsys.RegisterUniqueTrigger({{ KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::NUM_1, false } },
+        [=]() 
+        { 
+            DebugGraphic::SetDebugGraphicsEnabled(!DebugGraphic::AreDebugGraphicsEnabled());
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::NUM_1, false } },
+        [=]()
+        {
+            for (auto& each : yunutyEngine::Scene::getCurrentScene()->GetChildren())
+            {
+                auto comp = each->GetComponent<Unit>();
+                if (comp == nullptr)
+                {
+                    continue;
+                }
+
+                if (comp->GetUnitSide() == Unit::UnitSide::Player)
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    comp->GetGameObject()->SetSelfActive(scsysIns.GetTriggerSwitch(scsysIns.GetKeyIndex({ { KeyCode::Control, true }, { KeyCode::NUM_1, false } })));
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::NUM_2, false } },
+        [=]()
+        {
+            for (auto& each : yunutyEngine::Scene::getCurrentScene()->GetChildren())
+            {
+                auto comp = each->GetComponent<Unit>();
+                if (comp == nullptr)
+                {
+                    continue;
+                }
+
+                if (comp->GetUnitSide() == Unit::UnitSide::Enemy)
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    comp->GetGameObject()->SetSelfActive(scsysIns.GetTriggerSwitch(scsysIns.GetKeyIndex({ { KeyCode::Control, true }, { KeyCode::NUM_2, false } })));
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::NUM_3, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                auto& scsysIns = ShortcutSystem::Instance();
+                each->GetPaletteInstance()->GetGameObject()->SetSelfActive(scsysIns.GetTriggerSwitch(scsysIns.GetKeyIndex({ { KeyCode::Control, true }, { KeyCode::NUM_3, false } })));
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::NUM_4, false } },
+        [=]()
+        {
+            for (auto& each : yunutyEngine::Scene::getCurrentScene()->GetChildren())
+            {
+                auto comp = each->GetComponent<yunutyEngine::graphics::PointLight>();
+                if (comp == nullptr)
+                {
+                    continue;
+                }
+
+                auto& scsysIns = ShortcutSystem::Instance();
+                comp->GetGameObject()->SetSelfActive(scsysIns.GetTriggerSwitch(scsysIns.GetKeyIndex({ { KeyCode::Control, true }, { KeyCode::NUM_4, false } })));
+            }
+        });
+    
 }
 
 void application::contents::ContentsLayer::RegisterToEditorObjectVector(GameObject* p_obj)
