@@ -110,7 +110,8 @@ namespace application
 				case LightType::Directional:
 				{
 					auto light = comp->AddComponent<graphics::DirectionalLight>();
-					//yunuGI::Color color{ 0.3,0.3,0.3,1.f };
+					//yunuGI::Color color{ 0.67 * 0.0015,0.65 * 0.0015,0.61 * 0.0015,1.f };
+					//yunuGI::Color color{ 0.0015,0.0015,0.0015,1.f };
 					//light->GetGI().SetLightDiffuseColor(color);
 					//light->GetGI().SetIntensity(pod.intensity);
 					break;

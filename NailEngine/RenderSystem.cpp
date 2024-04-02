@@ -119,7 +119,11 @@ void RenderSystem::PushLightData()
 
 	for (auto& e : lightSet)
 	{
-		if (e->IsActive() == false) continue;
+		if (e->IsActive() == false)
+		{
+			i++;
+			continue;
+		}
 
 		params.lights[i] = e->GetLightInfo();
 

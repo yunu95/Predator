@@ -66,6 +66,10 @@ void ApplyMaterial(yunuGI::MaterialData& data, yunuGI::IMaterial* material);
 void ApplyFirstMaterial(yunuGI::MaterialData& data, yunuGI::IMaterial* material);
 
 
+void LoadResourcesRecursively();
+
+
+
 void SaveFBXMaterial();
 void LoadFBXMaterial();
 
@@ -402,35 +406,7 @@ void FBXLoad()
 	// 재귀적으로 모든 FBX 로드하기
 	const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-	resourceManager->LoadFile("LeavesVS.cso");
-	resourceManager->LoadFile("LeavesPS.cso");
-	resourceManager->LoadFile("Stage_1_FloorPS.cso");
-
-	resourceManager->LoadFile("Texture/VertexColor/T_Dirt_ARM.png");
-	resourceManager->LoadFile("Texture/VertexColor/T_Dirt_BaseColor.png");
-	resourceManager->LoadFile("Texture/VertexColor/T_Dirt_Normal.png");
-
-	resourceManager->LoadFile("Texture/VertexColor/T_Grass_ARM.png");
-	resourceManager->LoadFile("Texture/VertexColor/T_Grass_BaseColor.png");
-	resourceManager->LoadFile("Texture/VertexColor/T_Grass_Normal.png");
-
-	resourceManager->LoadFile("Texture/VertexColor/T_GrassBlend_ARM.png");
-	resourceManager->LoadFile("Texture/VertexColor/T_GrassBlend_BaseColor.png");
-	resourceManager->LoadFile("Texture/VertexColor/T_GrassBlend_Normal.png");
-
-	resourceManager->LoadFile("Texture/VertexColor/T_Tile_ARM.png");
-	resourceManager->LoadFile("Texture/VertexColor/T_Tile_BaseColor.png");
-	resourceManager->LoadFile("Texture/VertexColor/T_Tile_Normal.png");
-
-	resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_ARM.png");
-	resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_BaseColor.png");
-	resourceManager->LoadFile("Texture/VertexColor/T_TileBlend_Normal.png");
-
-	auto directorList = GetSubdirectories("FBX");
-	for (auto each : directorList)
-	{
-		resourceManager->LoadFile(("FBX/" + each.string()).c_str());
-	}
+	LoadResourcesRecursively();
 
 	g_fbxMap = resourceManager->GetFBXDataMap();
 
@@ -1260,6 +1236,50 @@ void InputUpdate()
 			else
 			{
 				SaveFBXMaterial();
+			}
+		}
+	}
+}
+
+
+void LoadResourcesRecursively()
+{
+	{
+		const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+		/// SCRES 우선 로드
+		//resourceManager->LoadFile("FBXMaterial.scres");
+
+		// 나머지 기타등등 파일들 로드하기
+		{
+			namespace fs = std::filesystem;
+			std::set<std::string> validExtensions{ ".jpg", ".bmp", ".tga", ".dds", ".cso" };
+			fs::path basePath{ "./" };
+			try
+			{
+				if (fs::exists(basePath) && fs::is_directory(basePath))
+				{
+					for (const auto& entry : fs::recursive_directory_iterator(basePath))
+					{
+						if (fs::is_regular_file(entry) && validExtensions.contains(entry.path().extension().string()))
+						{
+							auto relativePath = fs::relative(entry.path(), basePath);
+							resourceManager->LoadFile(relativePath.string().c_str());
+						}
+					}
+				}
+			}
+			catch (const fs::filesystem_error& err) {
+				std::cerr << "Error: " << err.what() << std::endl;
+			}
+		}
+
+		// FBX 로드하기
+		{
+			auto directorList = GetSubdirectories("FBX");
+			for (auto each : directorList)
+			{
+				resourceManager->LoadFile(("FBX/" + each.string()).c_str());
 			}
 		}
 	}
