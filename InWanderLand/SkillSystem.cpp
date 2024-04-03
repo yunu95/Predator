@@ -15,7 +15,6 @@ void SkillSystem::SetOtherComponentsAsMember()
 
 void SkillSystem::SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen)
 {
-	p_requirments.skillCollider->SetActive(p_boolen);
 	p_requirments.colliderObject->SetSelfActive(p_boolen);
 	p_requirments.debugObject->SetSelfActive(p_boolen);
 }

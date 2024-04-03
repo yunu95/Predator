@@ -45,13 +45,11 @@ void WarriorSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 void WarriorSkillSystem::SetQSkillKnockBackObject(GameObject* obj)
 {
 	QknockBackSkill.colliderObject = obj;
-	QknockBackSkill.skillCollider = obj->GetComponent<physics::Collider>();
 }
 
 void WarriorSkillSystem::SetWSkillObject(GameObject* obj)
 {
 	WTauntSkill.colliderObject = obj;
-	WTauntSkill.skillCollider = obj->GetComponent<physics::Collider>();
 }
 
 void WarriorSkillSystem::SetKnockBackDebugObject(GameObject* obj, float radius)
@@ -83,5 +81,4 @@ void WarriorSkillSystem::Start()
 
 void WarriorSkillSystem::Update()
 {
-
 }

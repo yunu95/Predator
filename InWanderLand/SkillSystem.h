@@ -20,7 +20,6 @@ protected:
 
 	struct SkillRequirements
 	{
-		physics::Collider* skillCollider;
 		GameObject* colliderObject;
 		GameObject* debugObject;
 		Dotween* dotweenComponent;

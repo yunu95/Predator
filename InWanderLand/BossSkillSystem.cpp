@@ -117,17 +117,15 @@ void BossSkillSystem::ActivateSkillRandomly()
 	}
 }
 
-void BossSkillSystem::SetSkillOneRequirments(GameObject* p_obj, physics::SphereCollider* p_projectileCollider, GameObject* p_debugObj)
+void BossSkillSystem::SetSkillOneRequirments(GameObject* p_obj, GameObject* p_debugObj)
 {
 	m_skillOneRequirments.colliderObject = p_obj;
-	m_skillOneRequirments.skillCollider = p_projectileCollider;
 	m_skillOneRequirments.debugObject = p_debugObj;
 }
 
-void BossSkillSystem::SetSkillTwoRequirments(GameObject* p_obj, physics::BoxCollider* p_projectileCollider, GameObject* p_debugObj)
+void BossSkillSystem::SetSkillTwoRequirments(GameObject* p_obj, GameObject* p_debugObj)
 {
 	m_skillTwoRequirments.colliderObject = p_obj;
-	m_skillTwoRequirments.skillCollider = p_projectileCollider;
 	m_skillTwoRequirments.debugObject = p_debugObj;
 }
 
@@ -139,7 +137,6 @@ void BossSkillSystem::SetSkillTwoRange(float p_range)
 void BossSkillSystem::SetSkillFourRequirments(GameObject* p_obj, physics::SphereCollider* p_projectileCollider, GameObject* p_debugObj)
 {
 	m_skillFourRequirments.colliderObject = p_obj;
-	m_skillFourRequirments.skillCollider = p_projectileCollider;
 	m_skillFourRequirments.debugObject = p_debugObj;
 }
 

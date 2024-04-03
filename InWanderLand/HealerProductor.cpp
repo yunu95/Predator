@@ -108,7 +108,6 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
 	m_QSkillFieldRadius = 2.0f * lengthUnit;
 	QSkillFieldCollider->SetRadius(m_QSkillFieldRadius);
 	QSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-	QSkillFieldObject->SetParent(m_unitGameObject);
 
 	auto QSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(QSkillFieldDebugObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::white(), true));
@@ -127,7 +126,6 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
 
 	WSkillFieldCollider->SetHalfExtent({ m_WSkillFieldWidth, 0.1, m_WSkillFieldHeight });
 	WSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-	WSkillFieldObject->SetParent(m_unitGameObject);
 
 	auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(WSkillFieldDebugObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::blue(), true));
@@ -138,11 +136,9 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
 #pragma region SkillSystem Setting
 	auto healerSkillSystem = m_unitGameObject->AddComponent<HealerSkillSystem>();
 
-	healerSkillSystem->SetQSkillCollider(QSkillFieldCollider);
 	healerSkillSystem->SetQSkillObject(QSkillFieldObject);
 	healerSkillSystem->SetQSkillDebugInfo(QSkillFieldDebugObject);
 
-	healerSkillSystem->SetWSkillCollider(WSkillFieldCollider);
 	healerSkillSystem->SetWSkillObject(WSkillFieldObject);
 	healerSkillSystem->SetWSkillDebugInfo(WSkillFieldDebugObject);
 #pragma endregion

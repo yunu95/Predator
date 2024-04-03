@@ -10,8 +10,6 @@ private:
 	bool isQSkillPreviewOn;
 	bool isColliderSetActiveFalseSet;
 
-
-
 	float m_QSkillRadius;
 	float m_WSkillRadius;
 

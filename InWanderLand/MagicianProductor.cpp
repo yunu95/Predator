@@ -153,11 +153,9 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 #pragma region SkillSystem Setting
 	auto magicianSkillSystem = m_unitGameObject->AddComponent<MagicianSkillSystem>();
 
-	magicianSkillSystem->SetQSkillCollider(QSkillProjectileCollider, QSkillFieldCollider);
 	magicianSkillSystem->SetQSkillDebugPair({ QSkillProjectileDebugObject, m_QSkillProjectileRadius }, { QSkillFieldDebugObject, m_QSkillFieldRadius });
 	magicianSkillSystem->SetQSkillObject(QSkillProjectileObject, QSkillFieldObject);
 
-	magicianSkillSystem->SetWSkillCollider(WSkillProjectileCollider, WSkillFieldCollider);
 	magicianSkillSystem->SetWSkillDebugPair({ WSkillProjectileDebugObject, m_WSkillProjectileRadius }, { WSkillFieldDebugObject, m_WSkillFieldRadius });
 	magicianSkillSystem->SetWSkillObject(WSkillProjectileObject, WSkillFieldObject);
 #pragma endregion

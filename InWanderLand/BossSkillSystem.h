@@ -35,8 +35,8 @@ private:
 public:
 	void ActivateSkillRandomly();
 
-	void SetSkillOneRequirments(GameObject* p_obj, physics::SphereCollider* p_projectileCollider, GameObject* p_debugObj);
-	void SetSkillTwoRequirments(GameObject* p_obj, physics::BoxCollider* p_projectileCollider, GameObject* p_debugObj);
+	void SetSkillOneRequirments(GameObject* p_obj, GameObject* p_debugObj);
+	void SetSkillTwoRequirments(GameObject* p_obj, GameObject* p_debugObj);
 	void SetSkillTwoRange(float p_range);
 	void SetSkillFourRequirments(GameObject* p_obj, physics::SphereCollider* p_projectileCollider, GameObject* p_debugObj);
 

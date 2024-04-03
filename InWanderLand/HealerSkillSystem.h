@@ -32,11 +32,9 @@ private:
 	void CrushDown(int p_times);
 
 public:
-	void SetQSkillCollider(physics::SphereCollider* p_fieldDamageCollider);
 	void SetQSkillObject(GameObject* p_fieldDamageObj);
 	void SetQSkillDebugInfo(GameObject* p_fieldDebugObject);
 
-	void SetWSkillCollider(physics::BoxCollider* p_fieldDamageCollider);
 	void SetWSkillObject(GameObject* p_fieldDamageObj);
 	void SetWSkillDebugInfo(GameObject* p_fieldDebugObject);
 

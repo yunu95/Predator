@@ -65,12 +65,6 @@ void MagicianSkillSystem::SetInterActionComponent(BlindFieldComponent* p_QSkillC
 	m_WSkillComponent = p_WSkillComponent;
 }
 
-void MagicianSkillSystem::SetQSkillCollider(physics::SphereCollider* p_projectileCollider, physics::SphereCollider* p_fieldDamageCollider)
-{
-	QSkillProjectile.skillCollider = p_projectileCollider;
-	QSkillFieldDamage.skillCollider = p_fieldDamageCollider;
-}
-
 void MagicianSkillSystem::SetQSkillObject(GameObject* p_projectileObj, GameObject* p_fieldDamageObj)
 {
 	QSkillProjectile.colliderObject = p_projectileObj;
@@ -87,12 +81,6 @@ void MagicianSkillSystem::SetQSkillDebugPair(std::pair<GameObject*, float> p_pro
 
 	m_QSkillProjectileRadius = p_projectileObjectPair.second;
 	m_QSkillFieldRadius = p_fieldObjectPair.second;
-}
-
-void MagicianSkillSystem::SetWSkillCollider(physics::SphereCollider* p_projectileCollider, physics::SphereCollider* p_fieldDamageCollider)
-{
-	WSkillProjectile.skillCollider = p_projectileCollider;
-	WSkillFieldDamage.skillCollider = p_fieldDamageCollider;
 }
 
 void MagicianSkillSystem::SetWSkillObject(GameObject* p_projectileObj, GameObject* p_fieldDamageObj)
