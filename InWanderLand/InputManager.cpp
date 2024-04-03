@@ -5,6 +5,7 @@
 #include "Unit.h"
 #include "ContentsLayer.h"
 #include "Application.h"
+#include "RTSCam.h"
 
 void InputManager::Start()
 {
@@ -21,6 +22,7 @@ void InputManager::Update()
 		if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_1))
 		{
 			PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Warrior);
+			rtscam->SetTarget(PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetGameObject());
 			currentSelectedSerialNumber = SelectedSerialNumber::One;
 			isPlayerSelected = true;
 			SkillPreviewSystem::Instance().ActivateSkillPreview(false);
@@ -28,6 +30,7 @@ void InputManager::Update()
 		if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_2))
 		{
 			PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Magician);
+			rtscam->SetTarget(PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Magician)->second->GetGameObject());
 			currentSelectedSerialNumber = SelectedSerialNumber::Two;
 			isPlayerSelected = true;
 			SkillPreviewSystem::Instance().ActivateSkillPreview(false);
@@ -35,6 +38,7 @@ void InputManager::Update()
 		if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_3))
 		{
 			PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Healer);
+			rtscam->SetTarget(PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Healer)->second->GetGameObject());
 			currentSelectedSerialNumber = SelectedSerialNumber::Three;
 			isPlayerSelected = true;
 			SkillPreviewSystem::Instance().ActivateSkillPreview(false);

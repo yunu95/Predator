@@ -122,7 +122,7 @@ namespace application
 			auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 			auto camComp = camObj->AddComponent<RTSCam>();
 			PlayTimeRegionManager::Instance().SetCameraDotween(camObj->AddComponent<Dotween>());
-
+			InputManager::Instance().rtscam = camComp;
 			camObj->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
 			camObj->GetTransform()->SetWorldRotation({ pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z });
 			camObj->GetTransform()->SetWorldScale({ pod.scale.x,pod.scale.y,pod.scale.z });

@@ -173,14 +173,30 @@ namespace application
                 else
                 {
 					tempShortCutIndex = 1;
-                    for (auto& e : productorSelector)
+                    /*for (auto& e : productorSelector)
                     {
                         if (e->SelectUnitProductorByFbxName(pod.templateData->pod.skinnedFBXName))
                         {
                             currentSelectedProductor = e;
                             break;
                         }
+                    }*/
+
+                    switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
+                    {
+                        case Unit::UnitType::Warrior :
+                            currentSelectedProductor = &WarriorProductor::Instance();
+                            break;
+                        case Unit::UnitType::Magician :
+							currentSelectedProductor = &MagicianProductor::Instance();
+							break;
+						case Unit::UnitType::Healer:
+							currentSelectedProductor = &HealerProductor::Instance();
+							break;
+                        default:
+                            break;
                     }
+
                     currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                     unitComponent = currentSelectedProductor->CreateUnit(startPosition);
 					contentsLayer->RegisterToEditorObjectVector(unitComponent->GetGameObject());

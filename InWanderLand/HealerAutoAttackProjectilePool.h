@@ -14,13 +14,10 @@ class HealerAutoAttackProjectilePool :
 public:
 	virtual void ObjectInitializer(HealerAutoAttackProjectile* projectile) override
 	{
-		projectile->GetGameObject()->SetSelfActive(false);
-		const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-		auto capsuleMesh = _resourceManager->GetMesh(L"Capsule");
+		auto bulletGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Fork");
+		bulletGameObject->SetParent(projectile->GetGameObject());
 
-		auto projectileComponent = projectile->GetGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		projectileComponent->GetGI().SetMesh(capsuleMesh);
-		projectileComponent->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::blue(), false));
+		projectile->GetGameObject()->AddComponent<Dotween>();
 
 		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
 		contentsLayer->RegisterToEditorObjectVector(projectile->GetGameObject());

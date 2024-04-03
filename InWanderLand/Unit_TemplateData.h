@@ -19,7 +19,7 @@ namespace application
 		{
 			std::string skinnedFBXName = std::string();
 
-			//int unitType;
+			int unitType;
 			float m_healthPoint;
 			int m_manaPoint;
 

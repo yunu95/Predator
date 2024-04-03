@@ -7,9 +7,8 @@
 
 void WarriorSkillSystem::ActivateSkillOne(Vector3d skillPos)
 {
-	isQSkillStarted = true;
-
 	QknockBackSkill.colliderObject->GetComponent<KnockBackComponent>()->SkillStarted();
+	QknockBackSkill.colliderObject->SetParent(GetGameObject());
 
 	SetSkillRequirmentsActive(QknockBackSkill, true);
 
@@ -27,15 +26,11 @@ void WarriorSkillSystem::ActivateSkillOne(Vector3d skillPos)
 			m_unitNavComponent->SetActive(true);
 			m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
 			m_unitNavComponent->Relocate(skillPos);
-
-			isQSkillStarted = false;
 		});
 }
 
 void WarriorSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 {
-	isWSkillStarted = true;
-
 	SetSkillRequirmentsActive(WTauntSkill, true);
 
 	m_unitComponent->SetSkillDuration(m_wSkillColliderRemainTime);
@@ -43,7 +38,6 @@ void WarriorSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 	m_unitDotween->DONothing(m_wSkillColliderRemainTime).OnComplete([=]()
 		{
 			SetSkillRequirmentsActive(WTauntSkill, false);
-			isWSkillStarted = false;
 		});
 	m_developedFunctionToWSkill();
 }
@@ -79,20 +73,15 @@ void WarriorSkillSystem::Start()
 	SetSkillRequirmentsActive(QknockBackSkill, false);
 	SetSkillRequirmentsActive(WTauntSkill, false);
 
+	QknockBackSkill.colliderObject->SetParent(GetGameObject());
+	QknockBackSkill.debugObject->SetParent(GetGameObject());
+	WTauntSkill.colliderObject->SetParent(GetGameObject());
+	WTauntSkill.debugObject->SetParent(GetGameObject());
+
 	m_developedFunctionToWSkill = []() {};
 }
 
 void WarriorSkillSystem::Update()
 {
 
-	//QknockBackSkill.colliderObject->GetTransform()->SetLocalPosition(Vector3d::zero);
-	if (isQSkillStarted)
-	{
-		QknockBackSkill.debugObject->GetTransform()->SetWorldPosition(QknockBackSkill.colliderObject->GetTransform()->GetWorldPosition());
-	}
-
-	if (isWSkillStarted)
-	{
-		WTauntSkill.debugObject->GetTransform()->SetWorldPosition(WTauntSkill.colliderObject->GetTransform()->GetWorldPosition());
-	}
 }

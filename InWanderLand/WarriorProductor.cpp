@@ -142,6 +142,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	auto qSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(qSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), true);
 	qSkillColliderDebugObject->GetTransform()->SetLocalScale({ m_QSkillRadius * 2, m_QSkillRadius * 2, m_QSkillRadius * 2 });
+	qSkillColliderDebugObject->SetParent(m_unitGameObject);
 
 	auto knockBackComponent = qSkillKnockBackObject->AddComponent<KnockBackComponent>();
 	knockBackComponent->SetSkillOwnerUnit(m_unitComponent);
@@ -163,6 +164,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	auto wSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(wSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), true);
 	wSkillColliderDebugObject->GetTransform()->SetLocalScale({ m_WSkillRadius * 2, m_WSkillRadius * 2, m_WSkillRadius * 2 });
+	wSkillColliderDebugObject->SetParent(m_unitGameObject);
 #pragma endregion
 
 //#pragma region Skill Area Preview System

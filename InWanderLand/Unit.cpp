@@ -33,13 +33,13 @@ void Unit::Start()
 		[this]() { return (m_currentTargetUnit != nullptr && idleElapsed >= idleToChaseDelay) && m_currentTargetUnit->currentOrder != UnitState::Death && m_idDistance > 0.1f && m_atkDistance > 0.1f; } });
 
 	unitFSM.transitions[UnitState::Move].push_back({ UnitState::Idle,
-		[this]() { return abs(GetGameObject()->GetTransform()->GetWorldPosition().x - m_currentMovePosition.x) < 0.2f && abs(GetGameObject()->GetTransform()->GetWorldPosition().z - m_currentMovePosition.z); } });
+		[this]() { return abs(GetGameObject()->GetTransform()->GetWorldPosition().x - m_currentMovePosition.x) < 0.2f && abs(GetGameObject()->GetTransform()->GetWorldPosition().z - m_currentMovePosition.z) < 0.2f; } });
 
 	unitFSM.transitions[UnitState::Move].push_back({ UnitState::AttackMove,
 		[this]() { return currentOrder == UnitState::AttackMove; } });
 
 	unitFSM.transitions[UnitState::AttackMove].push_back({ UnitState::Idle,
-		[this]() { return abs(GetGameObject()->GetTransform()->GetWorldPosition().x - m_currentMovePosition.x) < 0.2f && abs(GetGameObject()->GetTransform()->GetWorldPosition().z - m_currentMovePosition.z);; } });
+		[this]() { return abs(GetGameObject()->GetTransform()->GetWorldPosition().x - m_currentMovePosition.x) < 0.2f && abs(GetGameObject()->GetTransform()->GetWorldPosition().z - m_currentMovePosition.z) < 0.2f; } });
 
 	unitFSM.transitions[UnitState::AttackMove].push_back({ UnitState::Move,
 		[this]() { return currentOrder == UnitState::Move; } });
