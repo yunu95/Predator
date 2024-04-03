@@ -127,7 +127,7 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
 
 	WSkillFieldCollider->SetHalfExtent({ m_WSkillFieldWidth, 0.1, m_WSkillFieldHeight });
 	WSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-	//WSkillFieldObject->SetParent(m_unitGameObject);
+	WSkillFieldObject->SetParent(m_unitGameObject);
 
 	auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(WSkillFieldDebugObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::blue(), true));

@@ -58,7 +58,7 @@ namespace application
 		}
 		void WaveData::PostApplyAsPlaytimeObject()
 		{
-			pod.triggerRegion->playtimeRegion->OnEnter.push_back([=]() {playtimeWave->ActivateWave(); });
+			pod.triggerRegion->playtimeRegion->OnEnter.push_back([=]() { playtimeWave->ActivateWave(); });
 		}
 		void WaveData::InsertUnitData(WaveUnitData waveUnitData)
 		{

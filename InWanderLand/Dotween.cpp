@@ -5,6 +5,8 @@
 #include <cmath>
 #include <float.h>
 #include "DotweenTimerPool.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
 Dotween::Dotween()
 {
@@ -16,6 +18,11 @@ Dotween::~Dotween()
 
 
 	//delete tempTimer;
+}
+
+void Dotween::Start()
+{
+
 }
 
 void Dotween::Awake()

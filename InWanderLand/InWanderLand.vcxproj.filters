@@ -406,6 +406,9 @@
     <Filter Include="Contents\SkillSystem\SkillWarningSystem">
       <UniqueIdentifier>{da296b97-f2d7-479a-bba9-0c0198bb86f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\GameManager">
+      <UniqueIdentifier>{2990a352-2268-45cf-b6d7-394bb104eff6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -956,9 +959,6 @@
     <ClInclude Include="PlayTimeRegionManager.h">
       <Filter>Contents\PlaytimeRegion</Filter>
     </ClInclude>
-    <ClInclude Include="UnitProductorSelector.h">
-      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
-    </ClInclude>
     <ClInclude Include="LazySingletonClass.h">
       <Filter>Contents\LazySingleton</Filter>
     </ClInclude>
@@ -1016,9 +1016,6 @@
     <ClInclude Include="SkillSystem.h">
       <Filter>Contents\SkillSystem</Filter>
     </ClInclude>
-    <ClInclude Include="UnitObjectPool.h">
-      <Filter>Contents\UnitFactory\UnitPool</Filter>
-    </ClInclude>
     <ClInclude Include="SystemCommands.h">
       <Filter>Editor\Commands\SystemCommands</Filter>
     </ClInclude>
@@ -1033,6 +1030,15 @@
     </ClInclude>
     <ClInclude Include="SkillWarningSystem.h">
       <Filter>Contents\SkillSystem\SkillWarningSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="MeleeEnemyPool.h">
+      <Filter>Contents\UnitFactory\UnitPool</Filter>
+    </ClInclude>
+    <ClInclude Include="RangedEnemyPool.h">
+      <Filter>Contents\UnitFactory\UnitPool</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Contents\GameManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1532,9 +1538,6 @@
     <ClCompile Include="PlayTimeRegionManager.cpp">
       <Filter>Contents\PlaytimeRegion</Filter>
     </ClCompile>
-    <ClCompile Include="UnitProductorSelector.cpp">
-      <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
-    </ClCompile>
     <ClCompile Include="GameObjectContainer.cpp">
       <Filter>Contents\Containers\GameObjectContainer</Filter>
     </ClCompile>
@@ -1597,6 +1600,9 @@
     </ClCompile>
     <ClCompile Include="SkillWarningSystem.cpp">
       <Filter>Contents\SkillSystem\SkillWarningSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Contents\GameManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

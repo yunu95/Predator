@@ -1,6 +1,8 @@
 #include "InWanderLand.h"
 #include "PlayerSkillSystem.h"
 #include "Unit.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
 void PlayerSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition)
 {
@@ -47,4 +49,9 @@ void PlayerSkillSystem::RotateProjectile(GameObject* p_projectileObject, Vector3
 
 	if (abs(finalDegree) > 0.05)
 		p_projectileObject->GetTransform()->SetWorldRotation(Quaternion({ 0.0f, finalDegree, 0.0f }));
+}
+
+void PlayerSkillSystem::Start()
+{
+
 }

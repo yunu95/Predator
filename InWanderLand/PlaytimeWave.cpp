@@ -7,7 +7,9 @@
 #include "RangedEnemyProductor.h"
 #include "Application.h"
 #include "ContentsLayer.h"
-#include "UnitObjectPool.h"
+//#include "UnitObjectPool.h"
+#include "MeleeEnemyPool.h"
+#include "RangedEnemyPool.h"
 #include "ShortcutSystem.h"
 
 PlaytimeWave::~PlaytimeWave()
@@ -28,7 +30,6 @@ void PlaytimeWave::DeActivateWave()
 
 void PlaytimeWave::Start()
 {
-	//ActivateWave();
 	productorSelector.push_back(&MeleeEnemyProductor::Instance());
 	productorSelector.push_back(&RangedEnemyProductor::Instance());
 }
@@ -61,17 +62,18 @@ void PlaytimeWave::Update()
 			if (waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod.skinnedFBXName == "SKM_Monster1")
 			{
 				currentSelectedProductor = &MeleeEnemyProductor::Instance();
+				currentSelectedProductor->MappingUnitData(waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod);
+				MeleeEnemyPool::SingleInstance().SetStartPosition(pos);
+				unitComponent = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
 			}
 			else if (waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod.skinnedFBXName == "SKM_Monster2")
 			{
 				currentSelectedProductor = &RangedEnemyProductor::Instance();
+				currentSelectedProductor->MappingUnitData(waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod);
+				RangedEnemyPool::SingleInstance().SetStartPosition(pos);
+				unitComponent = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
 			}
 
-			currentSelectedProductor->MappingUnitData(waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod);
-			UnitObjectPool::SingleInstance().SetStartPosition(pos);
-			UnitObjectPool::SingleInstance().ChooseProductor(currentSelectedProductor);
-			unitComponent = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
-			unitComponent->GetTransform()->SetWorldPosition(pos);
 			unitComponent->GetGameObject()->SetSelfActive(true);
 			application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
 				[&]() { unitComponent->GetGameObject()->SetSelfActive(!unitComponent->GetGameObject()->GetSelfActive()); });

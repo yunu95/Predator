@@ -13,8 +13,8 @@ void RangeSystem::OnTriggerEnter(physics::Collider* collider)
 	// 부모 오브젝트 (유닛) 의 타입이 다르다면 충돌 처리
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
 		colliderUnitComponent != nullptr &&
-		m_unitComponent->GetUnitSide() != colliderUnitComponent->GetUnitSide() &&
-		!colliderUnitComponent->IsUnitDead())
+		m_unitComponent->GetUnitSide() != colliderUnitComponent->GetUnitSide() /*&&
+		!colliderUnitComponent->IsUnitDead()*/)
 	{
 		m_unitComponent->AddToOpponentObjectList(colliderUnitComponent);
 	}

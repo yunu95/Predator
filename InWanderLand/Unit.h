@@ -76,6 +76,7 @@ public:
 	yunutyEngine::graphics::Animator* m_animatorComponent;
 	NavigationAgent* m_navAgentComponent;
 
+	//Vector3d startPosition;
 private:
 	FSM<UnitState> unitFSM{UnitState::Idle};
 
@@ -290,7 +291,7 @@ public:
 
 	std::function<void()> returnToPoolFunction{ nullptr };
 	DummyComponent* m_dummyCom;
-
+	int stageNumber;
 	friend RobinSkillDevelopmentSystem;
 };
 

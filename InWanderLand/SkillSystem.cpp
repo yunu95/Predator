@@ -3,6 +3,8 @@
 #include "Unit.h"
 #include "Dotween.h"
 #include "YunutyEngine.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
 void SkillSystem::SetOtherComponentsAsMember()
 {

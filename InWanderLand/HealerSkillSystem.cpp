@@ -1,4 +1,6 @@
 #include "HealerSkillSystem.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
 void HealerSkillSystem::CrushDown(int p_times)
 {
@@ -95,6 +97,7 @@ void HealerSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 void HealerSkillSystem::Start()
 {
 	SetOtherComponentsAsMember();
+
 	QSkillFieldDamage.skillCollider->SetActive(false);
 }
 

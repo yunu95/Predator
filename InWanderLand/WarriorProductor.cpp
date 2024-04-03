@@ -11,8 +11,6 @@
 #include "SingleNavigationField.h"
 #include "UnitData.h"
 #include "RobinSkillDevelopmentSystem.h"
-#include "ContentsLayer.h"
-#include "Application.h"
 
 void WarriorProductor::SetUnitData()
 {
@@ -57,8 +55,6 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 #pragma region Animation Related Member Setting
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
-
-	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
 
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
@@ -121,7 +117,6 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	autoAttackDebugMesh->GetTransform()->SetLocalScale({ 1.0f * lengthUnit, 1.0f * lengthUnit, 3.0f * lengthUnit });*/
 
 	auto bleedingSystemObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	contentsLayer->RegisterToEditorObjectVector(bleedingSystemObject);
 	auto bleedingSystem = bleedingSystemObject->AddComponent<BleedingComponent>();
 	//RobinSkillDevelopmentSystem::Instance().SetRobinPassiveComponent(bleedingSystem);
 	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
@@ -145,7 +140,6 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	qSkillKnockBackObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
 	auto qSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	contentsLayer->RegisterToEditorObjectVector(qSkillColliderDebugObject);
 	AttachDebugMesh(qSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), true);
 	qSkillColliderDebugObject->GetTransform()->SetLocalScale({ m_QSkillRadius * 2, m_QSkillRadius * 2, m_QSkillRadius * 2 });
 
@@ -167,7 +161,6 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	wSkillDamageComponent->SetSkillDamage(10.0f);
 
 	auto wSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	contentsLayer->RegisterToEditorObjectVector(wSkillColliderDebugObject);
 	AttachDebugMesh(wSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), true);
 	wSkillColliderDebugObject->GetTransform()->SetLocalScale({ m_WSkillRadius * 2, m_WSkillRadius * 2, m_WSkillRadius * 2 });
 #pragma endregion

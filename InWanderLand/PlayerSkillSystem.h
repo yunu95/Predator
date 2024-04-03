@@ -16,6 +16,8 @@ public:
 	virtual void ActivateSkillOne(Vector3d skillPos) = 0;
 	virtual void ActivateSkillTwo(Vector3d skillPos) = 0;
 
+	virtual void Start() override;
+
 	Vector3d m_currentSelectedSkillPosition;
 
 	bool isSkillEnd = false;

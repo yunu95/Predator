@@ -5,6 +5,8 @@
 #include "PlayerController.h"
 #include "SingleNavigationField.h"
 #include "PlayTimeRegionManager.h"
+#include "Application.h"
+#include "ContentsLayer.h"
 
 PlaytimeRegion::~PlaytimeRegion()
 {
@@ -13,6 +15,8 @@ PlaytimeRegion::~PlaytimeRegion()
 
 void PlaytimeRegion::Start()
 {
+	//application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+	//contentsLayer->RegisterToEditorComponentVector(this);
 }
 
 //void PlaytimeRegion::SetRegionName(std::wstring p_name)

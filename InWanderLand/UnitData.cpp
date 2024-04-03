@@ -13,7 +13,9 @@
 #include "MeleeEnemyProductor.h"
 #include "RangedEnemyProductor.h"
 #include "BossProductor.h"
-#include "UnitObjectPool.h"
+#include "RangedEnemyPool.h"
+#include "MeleeEnemyPool.h"
+#include "GameManager.h"
 #include "Application.h"
 #include "ContentsLayer.h"
 #include "ShortcutSystem.h"
@@ -153,13 +155,20 @@ namespace application
 
                 if (pod.templateData->pod.skinnedFBXName == "SKM_Monster1")
                 {
-                    currentSelectedProductor = &MeleeEnemyProductor::Instance();
-                    tempShortCutIndex = 2;
+					currentSelectedProductor = &MeleeEnemyProductor::Instance();
+					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+                    MeleeEnemyPool::SingleInstance().SetStageNumber(pod.stage);
+                    MeleeEnemyPool::SingleInstance().SetStartPosition(startPosition);
+					unitComponent = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+					tempShortCutIndex = 2;
                 }
                 else if (pod.templateData->pod.skinnedFBXName == "SKM_Monster2")
                 {
                     currentSelectedProductor = &RangedEnemyProductor::Instance();
-					tempShortCutIndex = 2;
+					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+					RangedEnemyPool::SingleInstance().SetStartPosition(startPosition);
+                    unitComponent = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+                    tempShortCutIndex = 2;
                 }
                 else
                 {
@@ -172,12 +181,11 @@ namespace application
                             break;
                         }
                     }
+                    currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+                    unitComponent = currentSelectedProductor->CreateUnit(startPosition);
+					contentsLayer->RegisterToEditorObjectVector(unitComponent->GetGameObject());
                 }
-                
-                currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-				UnitObjectPool::SingleInstance().ChooseProductor(currentSelectedProductor);
-				UnitObjectPool::SingleInstance().SetStartPosition(startPosition);
-				unitComponent = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
+
 				ShortcutSystem::Instance().RegisterTriggerFunction(tempShortCutIndex, 
                         [=]() { unitComponent->GetGameObject()->SetSelfActive(!unitComponent->GetGameObject()->GetSelfActive()); });
 			}

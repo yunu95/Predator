@@ -6,6 +6,8 @@
 #include "DebugMeshes.h"
 #include "Unit_TemplateData.h"
 #include "SingleNavigationField.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
 void UnitProductor::SetUnitComponentMembers()
 {
@@ -76,6 +78,7 @@ void UnitProductor::AddNavigationComponent()
 	unitNavigationComponent->AssignToNavigationField(m_navField);
 	unitNavigationComponent->SetRadius(0.3f);
 	m_unitComponent->SetNavField(m_navField);
+	m_unitComponent->m_navAgentComponent = unitNavigationComponent;
 }
 
 void UnitProductor::AddDotweenComponent() const
@@ -119,39 +122,14 @@ void UnitProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p
 	m_attackDelay = p_podData.m_attackDelay;
 }
 
-void UnitProductor::PushWaveData(Vector3d startPos, float delay)
-{
-	m_waveDelayQueue.push({ startPos, delay });
-	if (!isWaveUnitCreated)
-	{
-		m_duration = delay;
-		isWaveUnitCreated = true;
-	}
-}
-
 void UnitProductor::Update()
 {
-	if (isWaveTimerStarted && !(m_waveDelayQueue.empty()))
-	{
-		m_elapsed += Time::GetDeltaTime();
 
-		if (m_elapsed >= m_duration)
-		{
-			CreateUnit(m_waveDelayQueue.front().first);
-			m_waveDelayQueue.pop();
-			m_elapsed = 0.0f;
-
-			if (m_waveDelayQueue.empty())
-				isWaveTimerStarted = false;
-			else
-				m_duration = m_waveDelayQueue.front().second;
-		}
-	}
 }
 
 void UnitProductor::Start()
 {
-	/// 원래는 플레이어 유닛이 들어오면 ok지만 우선은 실행 시 wave Trigger On
-	isWaveTimerStarted = true;
+	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+	//contentsLayer->RegisterToEditorComponentVector(this);
 }
 

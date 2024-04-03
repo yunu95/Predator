@@ -1,5 +1,7 @@
 #include "MagicianSkillSystem.h"
 #include "Dotween.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
 void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 {
@@ -114,6 +116,15 @@ void MagicianSkillSystem::SetWSkillDebugPair(std::pair<GameObject*, float> p_pro
 void MagicianSkillSystem::Start()
 {
 	SetOtherComponentsAsMember();
+
+	QSkillProjectile.colliderObject->SetParent(GetGameObject());
+	QSkillProjectile.debugObject->SetParent(GetGameObject());
+	QSkillFieldDamage.colliderObject->SetParent(GetGameObject());
+	QSkillFieldDamage.debugObject->SetParent(GetGameObject());
+	WSkillProjectile.colliderObject->SetParent(GetGameObject());
+	WSkillProjectile.debugObject->SetParent(GetGameObject());
+	WSkillFieldDamage.colliderObject->SetParent(GetGameObject());
+	WSkillFieldDamage.debugObject->SetParent(GetGameObject());
 
 	QSkillProjectile.debugObject->SetSelfActive(false);
 	QSkillFieldDamage.debugObject->SetSelfActive(false);

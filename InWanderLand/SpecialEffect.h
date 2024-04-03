@@ -15,6 +15,7 @@ protected:
 	friend class DualCastComponent;
 
 public:
+	virtual void Start() override;
 	virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) = 0;
 	virtual void SetSkillOwnerUnit(Unit* p_unit);
 };

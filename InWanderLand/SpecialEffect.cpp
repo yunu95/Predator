@@ -1,6 +1,12 @@
 #include "InWanderLand.h"
 #include "SpecialEffect.h"
 #include "Unit.h"
+#include "ContentsLayer.h"
+#include "Application.h"
+
+void SpecialEffect::Start()
+{
+}
 
 //void SpecialEffect::OnTriggerEnter(physics::Collider* collider)
 //{

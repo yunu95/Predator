@@ -1,7 +1,6 @@
 #include "BossSkillSystem.h"
 #include "PlayerController.h"
 #include "Unit.h"
-#include "UnitObjectPool.h"
 #include "EnemySummonGateProductor.h"
 #include "EnemySummonSkillSystem.h"
 #include "ShortcutSystem.h"
@@ -50,32 +49,32 @@ void BossSkillSystem::ActivateSkillTwo()
 
 void BossSkillSystem::ActivateSkillThree()
 {
-	/// 유닛을 생성하는 문 오브젝트를 생성하는 로직
-	Vector3d doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * -5.0f;
-	UnitObjectPool::SingleInstance().ChooseProductor(&EnemySummonGateProductor::Instance());
-	UnitObjectPool::SingleInstance().SetStartPosition(doorSummonPosition);
-	EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(true);
-	currentSummonedDoorUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
-	application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
-		[=]() { currentSummonedDoorUnit->GetGameObject()->SetSelfActive(!currentSummonedDoorUnit->GetGameObject()->GetSelfActive()); });
+	///// 유닛을 생성하는 문 오브젝트를 생성하는 로직
+	//Vector3d doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * -5.0f;
+	////UnitObjectPool::SingleInstance().ChooseProductor(&EnemySummonGateProductor::Instance());
+	////UnitObjectPool::SingleInstance().SetStartPosition(doorSummonPosition);
+	//EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(true);
+	//currentSummonedDoorUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
+	//application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
+	//	[=]() { currentSummonedDoorUnit->GetGameObject()->SetSelfActive(!currentSummonedDoorUnit->GetGameObject()->GetSelfActive()); });
 
 
-	if (currentDerivedDoorUnit == nullptr)
-	{
-		doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * 5.0f;
-		UnitObjectPool::SingleInstance().ChooseProductor(&EnemySummonGateProductor::Instance());
-		UnitObjectPool::SingleInstance().SetStartPosition(doorSummonPosition);
-		EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(false);
-		currentDerivedDoorUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
-		application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
-			[=]() { currentDerivedDoorUnit->GetGameObject()->SetSelfActive(!currentDerivedDoorUnit->GetGameObject()->GetSelfActive()); });
-	}
-	else
-	{
-		doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * 5.0f;
-		currentDerivedDoorUnit->GetTransform()->SetWorldPosition(doorSummonPosition);
-		currentDerivedDoorUnit->GetGameObject()->SetSelfActive(true);
-	}
+	//if (currentDerivedDoorUnit == nullptr)
+	//{
+	//	doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * 5.0f;
+	//	UnitObjectPool::SingleInstance().ChooseProductor(&EnemySummonGateProductor::Instance());
+	//	UnitObjectPool::SingleInstance().SetStartPosition(doorSummonPosition);
+	//	EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(false);
+	//	currentDerivedDoorUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
+	//	application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
+	//		[=]() { currentDerivedDoorUnit->GetGameObject()->SetSelfActive(!currentDerivedDoorUnit->GetGameObject()->GetSelfActive()); });
+	//}
+	//else
+	//{
+	//	doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * 5.0f;
+	//	currentDerivedDoorUnit->GetTransform()->SetWorldPosition(doorSummonPosition);
+	//	currentDerivedDoorUnit->GetGameObject()->SetSelfActive(true);
+	//}
 
 }
 

@@ -2,6 +2,8 @@
 #include "MeleeAttackSystem.h"
 #include "UnitProductor.h"
 #include "SpecialEffect.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
 void MeleeAttackSystem::Attack(Unit* opponentUnit)
 {
@@ -77,6 +79,9 @@ void MeleeAttackSystem::Start()
 		meleeAttackColliderDebugObject->SetSelfActive(false);
 	}
 	m_unitComponent = ownerUnitObject->GetComponent<Unit>();
+	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+	contentsLayer->RegisterToEditorObjectVector(meleeAttackColliderObject);
+	contentsLayer->RegisterToEditorObjectVector(meleeAttackColliderDebugObject);
 }
 
 void MeleeAttackSystem::Update()

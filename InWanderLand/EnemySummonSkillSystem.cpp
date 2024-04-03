@@ -1,5 +1,4 @@
 #include "EnemySummonSkillSystem.h"
-#include "UnitObjectPool.h"
 #include "MeleeEnemyProductor.h"
 #include "RangedEnemyProductor.h"
 #include "ShortcutSystem.h"
@@ -33,21 +32,21 @@ void EnemySummonSkillSystem::ActivateSkillOne()
 	
 	/// 예시로 근접 유닛 두 마리, 원거리 유닛 1마리를 생성해보자.
 	
-	UnitObjectPool::SingleInstance().ChooseProductor(&RangedEnemyProductor::Instance());
-	UnitObjectPool::SingleInstance().SetStartPosition(summonPosition);
-	m_currentSummonedUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
-	application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
-		[=]() { m_currentSummonedUnit->GetGameObject()->SetSelfActive(!m_currentSummonedUnit->GetGameObject()->GetSelfActive()); });
+	//UnitObjectPool::SingleInstance().ChooseProductor(&RangedEnemyProductor::Instance());
+	//UnitObjectPool::SingleInstance().SetStartPosition(summonPosition);
+	//m_currentSummonedUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
+	//application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
+	//	[=]() { m_currentSummonedUnit->GetGameObject()->SetSelfActive(!m_currentSummonedUnit->GetGameObject()->GetSelfActive()); });
 
-	UnitObjectPool::SingleInstance().ChooseProductor(&MeleeEnemyProductor::Instance());
-	UnitObjectPool::SingleInstance().SetStartPosition(summonPosition + GetTransform()->GetWorldRotation().Right() * 3.0f);
-	m_currentSummonedUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
-	application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
-		[=]() { m_currentSummonedUnit->GetGameObject()->SetSelfActive(!m_currentSummonedUnit->GetGameObject()->GetSelfActive()); });
+	//UnitObjectPool::SingleInstance().ChooseProductor(&MeleeEnemyProductor::Instance());
+	//UnitObjectPool::SingleInstance().SetStartPosition(summonPosition + GetTransform()->GetWorldRotation().Right() * 3.0f);
+	//m_currentSummonedUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
+	//application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
+	//	[=]() { m_currentSummonedUnit->GetGameObject()->SetSelfActive(!m_currentSummonedUnit->GetGameObject()->GetSelfActive()); });
 
-	UnitObjectPool::SingleInstance().ChooseProductor(&MeleeEnemyProductor::Instance());
-	UnitObjectPool::SingleInstance().SetStartPosition(summonPosition + GetTransform()->GetWorldRotation().Right() * -3.0f);
-	m_currentSummonedUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
-	application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
-		[=]() { m_currentSummonedUnit->GetGameObject()->SetSelfActive(!m_currentSummonedUnit->GetGameObject()->GetSelfActive()); });
+	//UnitObjectPool::SingleInstance().ChooseProductor(&MeleeEnemyProductor::Instance());
+	//UnitObjectPool::SingleInstance().SetStartPosition(summonPosition + GetTransform()->GetWorldRotation().Right() * -3.0f);
+	//m_currentSummonedUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
+	//application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
+	//	[=]() { m_currentSummonedUnit->GetGameObject()->SetSelfActive(!m_currentSummonedUnit->GetGameObject()->GetSelfActive()); });
 }

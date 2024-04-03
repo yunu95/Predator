@@ -5,9 +5,9 @@
 void SkillPreviewSystem::Start()
 {
 	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-	//contentsLayer->RegisterToEditorObjectVector(m_currentSelectedPlayerObject);
 	contentsLayer->RegisterToEditorComponentVector(this);
-	//contentsLayer->RegisterToEditorObjectVector(GetGameObject());
+	contentsLayer->RegisterToEditorObjectVector(m_rangePreviewObject);
+	contentsLayer->RegisterToEditorObjectVector(m_pathPreviewObject);
 }
 
 void SkillPreviewSystem::Update()

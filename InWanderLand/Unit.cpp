@@ -8,7 +8,6 @@
 #include "Dotween.h"
 #include "TacticModeSystem.h"
 #include "IAnimation.h"
-#include "UnitObjectPool.h"
 
 void Unit::Start()
 {
@@ -17,8 +16,10 @@ void Unit::Start()
 	chaseUpdateDelay = 0.1f;
 	m_currentHealthPoint = m_maxHealthPoint;
 
+	//GetTransform()->SetWorldPosition(startPosition);
+
 	dotween = GetGameObject()->GetComponent<Dotween>();
-	m_navAgentComponent = GetGameObject()->GetComponent<NavigationAgent>();
+	//m_navAgentComponent = GetGameObject()->GetComponent<NavigationAgent>();
 	m_animatorComponent = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
 
 	//returnToPoolFunction = []() {};
@@ -372,23 +373,23 @@ Unit::UnitSide Unit::GetUnitSide() const
 
 	void Unit::DeathUpdate()
 	{
-	CheckCurrentAnimation(unitAnimations.m_deathAnimation);
+		CheckCurrentAnimation(unitAnimations.m_deathAnimation);
 
-	deathFunctionElapsed += Time::GetDeltaTime();
+		deathFunctionElapsed += Time::GetDeltaTime();
 
-	if (deathFunctionElapsed >= deathAnimationDelay)
-		{
-			if (returnToPoolFunction != nullptr)
+		if (deathFunctionElapsed >= deathAnimationDelay)
 			{
-				returnToPoolFunction();
-				ResetUnitMembers();
+				if (returnToPoolFunction != nullptr)
+				{
+					returnToPoolFunction();
+					//ResetUnitMembers();
+				}
+				deathFunctionElapsed = 0.0f;
+				//m_navAgentComponent->SetRadius(0.0f);
+				//m_navAgentComponent->SetActive(false);
+				GetGameObject()->SetSelfActive(false);
+				//GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(1000, 1000, 1000));
 			}
-			deathFunctionElapsed = 0.0f;
-			//m_navAgentComponent->SetRadius(0.0f);
-			//m_navAgentComponent->SetActive(false);
-			GetGameObject()->SetSelfActive(false);
-			//GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(1000, 1000, 1000));
-		}
 	}
 #pragma endregion
 

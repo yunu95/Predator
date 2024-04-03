@@ -1002,6 +1002,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="EnemySkillSystem.h" />
     <ClInclude Include="EnemySummonGateProductor.h" />
     <ClInclude Include="EnemySummonSkillSystem.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="MeleeEnemyPool.h" />
+    <ClInclude Include="RangedEnemyPool.h" />
     <ClInclude Include="ShortcutSystem.h" />
     <ClInclude Include="DualCastComponent.h" />
     <ClInclude Include="DummyComponent.h" />
@@ -1165,8 +1168,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="SpecialEffect.h" />
-    <ClInclude Include="UnitObjectPool.h" />
-    <ClInclude Include="UnitProductorSelector.h" />
     <ClInclude Include="Unit_TemplateData.h" />
     <ClInclude Include="UrsulaSkillDevelopmentSystem.h" />
     <ClInclude Include="WanderUtils.h" />
@@ -1208,6 +1209,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="EnemySkillSystem.cpp" />
     <ClCompile Include="EnemySummonGateProductor.cpp" />
     <ClCompile Include="EnemySummonSkillSystem.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="ShortcutSystem.cpp" />
     <ClCompile Include="DualCastComponent.cpp" />
     <ClCompile Include="EditorCameraManager.cpp" />
@@ -1354,7 +1356,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UnitEditorInstance.cpp" />
     <ClCompile Include="UnitPalette.cpp" />
     <ClCompile Include="SpecialEffect.cpp" />
-    <ClCompile Include="UnitProductorSelector.cpp" />
     <ClCompile Include="Unit_TemplateData.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObj.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObjImgui.cpp" />

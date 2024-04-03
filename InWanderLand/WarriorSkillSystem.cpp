@@ -2,6 +2,8 @@
 #include "WarriorSkillSystem.h"
 #include "KnockBackComponent.h"
 #include "Dotween.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
 void WarriorSkillSystem::ActivateSkillOne(Vector3d skillPos)
 {

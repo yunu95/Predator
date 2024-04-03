@@ -27,7 +27,5 @@ protected:
 	};
 
 	virtual void SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen);
-
-
 };
 

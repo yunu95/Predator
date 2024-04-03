@@ -27,16 +27,11 @@ protected:
 
 	NavigationField* m_navField;
 
-	bool isWaveTimerStarted;
-	bool isWaveUnitCreated;
-
 	float m_elapsed;
 	float m_duration;
 
 	int m_currentIndex = 0;
 	float m_previousDelay;
-
-	std::queue<std::pair<Vector3d, float>> m_waveDelayQueue;
 
 	std::string m_unitFbxName;
 
@@ -69,7 +64,6 @@ public:
 	float m_attackDelay;
 
 	virtual Unit* CreateUnit(Vector3d startPos) = 0;
-	virtual void PushWaveData(Vector3d startPos, float delay);
 
 	void SetUnitComponentMembers();
 	void AddRangeSystemComponent() const;
