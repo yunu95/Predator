@@ -20,6 +20,8 @@ PlaytimeWave::~PlaytimeWave()
 void PlaytimeWave::ActivateWave()
 {
 	isWaveActivated = true;
+	/// 플레이어 유닛 전투상태 돌입
+
 }
 void PlaytimeWave::DeActivateWave()
 {

@@ -1,9 +1,17 @@
 #include "GameManager.h"
-#include "Unit.h"
-#include "MeleeEnemyPool.h"
-#include "RangedEnemyPool.h"
-#include "MeleeEnemyProductor.h"
-#include "RangedEnemyProductor.h"
-#include "ShortcutSystem.h"
 
 
+void GameManager::EngageBattle()
+{
+	isBattleModeOn = true;
+}
+
+void GameManager::EndBattle()
+{
+	isBattleModeOn = false;
+}
+
+bool GameManager::IsBattleSystemOperating() const
+{
+	return isBattleModeOn;
+}

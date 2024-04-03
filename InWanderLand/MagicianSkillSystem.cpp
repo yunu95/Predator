@@ -10,10 +10,6 @@ void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 
 	isQSkillActivating = true;
 
-	QSkillProjectile.colliderObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());	
-	QSkillProjectile.colliderObject->GetTransform()->SetWorldRotation(Quaternion(Vector3d::zero));
-	QSkillProjectile.debugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());	
-
 	RotateProjectile(QSkillProjectile.colliderObject, skillPos);
 
 	SetSkillRequirmentsActive(QSkillProjectile, true);
@@ -114,11 +110,10 @@ void MagicianSkillSystem::Start()
 	WSkillFieldDamage.colliderObject->SetParent(GetGameObject());
 	WSkillFieldDamage.debugObject->SetParent(GetGameObject());
 
-	QSkillProjectile.debugObject->SetSelfActive(false);
-	QSkillFieldDamage.debugObject->SetSelfActive(false);
-	
-	WSkillProjectile.debugObject->SetSelfActive(false);
-	WSkillFieldDamage.debugObject->SetSelfActive(false);
+	SetSkillRequirmentsActive(QSkillProjectile, false);
+	SetSkillRequirmentsActive(QSkillFieldDamage, false);
+	SetSkillRequirmentsActive(WSkillProjectile, false);
+	SetSkillRequirmentsActive(WSkillFieldDamage, false);
 }
 
 void MagicianSkillSystem::Update()
@@ -131,17 +126,5 @@ void MagicianSkillSystem::Update()
 		SetSkillRequirmentsActive(WSkillProjectile, false);
 		SetSkillRequirmentsActive(WSkillFieldDamage, false);
 		isColliderSetActiveFalseSet = true;
-	}
-
-	if (isQSkillActivating)
-	{
-		QSkillProjectile.debugObject->GetTransform()->SetWorldPosition(QSkillProjectile.colliderObject->GetTransform()->GetWorldPosition());
-		QSkillFieldDamage.debugObject->GetTransform()->SetWorldPosition(QSkillFieldDamage.colliderObject->GetTransform()->GetWorldPosition());
-	}
-
-	if (isWSkillActivating)
-	{
-		WSkillProjectile.debugObject->GetTransform()->SetWorldPosition(WSkillProjectile.colliderObject->GetTransform()->GetWorldPosition());
-		WSkillFieldDamage.debugObject->GetTransform()->SetWorldPosition(WSkillFieldDamage.colliderObject->GetTransform()->GetWorldPosition());
 	}
 }
