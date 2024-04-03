@@ -124,7 +124,7 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
 	m_WSkillFieldWidth = 2.0f * lengthUnit / 2;
 	m_WSkillFieldHeight = 4.0f * lengthUnit / 2;
 
-	WSkillFieldCollider->SetHalfExtent({ m_WSkillFieldWidth, 0.1, m_WSkillFieldHeight });
+	WSkillFieldCollider->SetHalfExtent({ m_WSkillFieldWidth / 2.0f, 0.1, m_WSkillFieldHeight / 2.0f });
 	WSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
 	auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
