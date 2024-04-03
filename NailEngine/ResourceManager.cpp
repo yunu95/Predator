@@ -711,10 +711,7 @@ void ResourceManager::LoadFBXData(std::filesystem::path path)
 		LoadFBXData(fbxJson, fbxData);
 
 		auto str = String_To_Wstring(fbxJson["FBXName : "]);
-		if (str == L"SM_Mushroom01")
-		{
-			int a = 1;
-		}
+
 		auto iter = fbxDataMap.find(String_To_Wstring(fbxJson["FBXName : "]));
 		if (iter == fbxDataMap.end())
 		{

@@ -16,7 +16,6 @@
 #include "UnitObjectPool.h"
 #include "Application.h"
 #include "ContentsLayer.h"
-#include "ShortcutSystem.h"
 
 namespace application
 {
@@ -149,21 +148,16 @@ namespace application
 
 				Unit* unitComponent{ nullptr };
 
-                int tempShortCutIndex = 0;
-
                 if (pod.templateData->pod.skinnedFBXName == "SKM_Monster1")
                 {
                     currentSelectedProductor = &MeleeEnemyProductor::Instance();
-                    tempShortCutIndex = 2;
                 }
                 else if (pod.templateData->pod.skinnedFBXName == "SKM_Monster2")
                 {
                     currentSelectedProductor = &RangedEnemyProductor::Instance();
-					tempShortCutIndex = 2;
                 }
                 else
                 {
-					tempShortCutIndex = 1;
                     for (auto& e : productorSelector)
                     {
                         if (e->SelectUnitProductorByFbxName(pod.templateData->pod.skinnedFBXName))
@@ -178,8 +172,6 @@ namespace application
 				UnitObjectPool::SingleInstance().ChooseProductor(currentSelectedProductor);
 				UnitObjectPool::SingleInstance().SetStartPosition(startPosition);
 				unitComponent = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
-				ShortcutSystem::Instance().RegisterTriggerFunction(tempShortCutIndex, 
-                        [=]() { unitComponent->GetGameObject()->SetSelfActive(!unitComponent->GetGameObject()->GetSelfActive()); });
 			}
 		}
 

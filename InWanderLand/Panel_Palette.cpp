@@ -15,6 +15,8 @@
 #include "InstanceManager.h"
 #include "EditorCameraManager.h"
 #include "EditorCamera.h"
+#include "CommandManager.h"
+#include "TransformEditCommand.h"
 
 #include "YunutyEngine.h"
 
@@ -766,6 +768,9 @@ namespace application
 
 				if (lightGizmo)
 				{
+					static bool isEditing = false;
+					static TransformData td;
+					bool endEdit = false;
 					auto tg = lightGizmo->GetTransform();
 					Quaternion rotationQ = { directionalLight->pod.rotation.w, directionalLight->pod.rotation.x, directionalLight->pod.rotation.y, directionalLight->pod.rotation.z };
 					yunutyEngine::Vector3f rotation = rotationQ.Euler();
@@ -773,17 +778,44 @@ namespace application
 					switch (resetRotation)
 					{
 						case application::editor::imgui::Vector3Flags::ResetX:
+						{
 							rotation.x = 0;
+							endEdit = true;
 							break;
+						}
 						case application::editor::imgui::Vector3Flags::ResetY:
+						{
 							rotation.y = 0;
+							endEdit = true;
 							break;
+						}
 						case application::editor::imgui::Vector3Flags::ResetZ:
+						{
 							rotation.z = 0;
+							endEdit = true;
+							break;
+						}
+						case application::editor::imgui::Vector3Flags::EndEditX:
+							endEdit = true;
+							break;
+						case application::editor::imgui::Vector3Flags::EndEditY:
+							endEdit = true;
+							break;
+						case application::editor::imgui::Vector3Flags::EndEditZ:
+							endEdit = true;
 							break;
 						default:
 							break;
 					}
+
+					auto obj = directionalLight->GetPaletteInstance()->GetGameObject();
+					if (isEditing == false &&
+						(rotation != Vector3f(rotationQ.Euler())))
+					{
+						td = obj->GetTransform();
+						isEditing = true;
+					}
+
 					rotationQ = Quaternion(rotation);
 					directionalLight->pod.rotation.w = rotationQ.w;
 					directionalLight->pod.rotation.x = rotationQ.x;
@@ -791,6 +823,12 @@ namespace application
 					directionalLight->pod.rotation.z = rotationQ.z;
 					directionalLight->ApplyAsPaletteInstance();
 					tg->SetLocalRotation(Quaternion(rotation));
+
+					if (endEdit)
+					{
+						CommandManager::GetSingletonInstance().AddQueue(std::make_shared<TransformEditCommand>(std::vector<std::tuple<IEditableData*, TransformData, TransformData>>(1, { directionalLight, td, obj->GetTransform() })));
+						isEditing = false;
+					}
 				}
 
 				imgui::EndSection();
@@ -861,6 +899,7 @@ namespace application
 					auto pl = static_cast<LightData*>(*selection.begin());
 					imgui::DragFloat_2Col("Intensity", pl->pod.intensity, true, 0.1f, 0.0f, 100.0f);
 					imgui::DragFloat_2Col("Range", pl->pod.range, true, 0.1f, 0.0f, 100.0f);
+					imgui::Checkbox_2Col("Is Cast", pl->pod.isCast);
 					ImGui::TableNextRow();
 					ImGui::TableSetColumnIndex(0);
 					imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));

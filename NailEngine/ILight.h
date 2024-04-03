@@ -53,6 +53,8 @@ public:
 	virtual void SetIntensity(float intensity) = 0;
 	virtual void SetActive(bool isActive) = 0;
 	virtual bool IsActive() = 0;
+	virtual void SetIsShadowCast(bool isCast) = 0;
+	virtual bool IsShadowCast() = 0;
 
 	void SetID(int id)
 	{
@@ -70,4 +72,5 @@ protected:
 	std::wstring materialName;
 
 	bool isActive = true;
+	bool isCast = true;
 };

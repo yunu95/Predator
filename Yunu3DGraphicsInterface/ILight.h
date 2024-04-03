@@ -47,6 +47,8 @@ namespace yunuGI
 	public:
 		virtual void SetLightDiffuseColor(yunuGI::Color& color) = 0;
 		virtual void SetIntensity(float intensity) = 0;
+		virtual void SetIsShadowCast(bool isCast) = 0;
+		virtual bool IsShadowCast() = 0;
 		virtual ~ILight() = default;
 	};
 }

@@ -6,13 +6,13 @@
 
 #include "Application.h"
 #include "ContentsLayer.h"
-#include "ShortcutSystem.h"
 
 namespace application
 {
 	namespace editor
 	{
 		TemplateDataManager& LightData::templateDataManager = TemplateDataManager::GetSingletonInstance();
+
 
 		bool LightData::EnterDataFromTemplate()
 		{
@@ -110,7 +110,8 @@ namespace application
 				case LightType::Directional:
 				{
 					auto light = comp->AddComponent<graphics::DirectionalLight>();
-					//yunuGI::Color color{ 0.3,0.3,0.3,1.f };
+					//yunuGI::Color color{ 0.67 * 0.0015,0.65 * 0.0015,0.61 * 0.0015,1.f };
+					//yunuGI::Color color{ 0.0015,0.0015,0.0015,1.f };
 					//light->GetGI().SetLightDiffuseColor(color);
 					//light->GetGI().SetIntensity(pod.intensity);
 					break;
@@ -121,6 +122,7 @@ namespace application
 					light->GetGI().SetLightDiffuseColor(*reinterpret_cast<yunuGI::Color*>(&pod.color));
 					light->GetGI().SetIntensity(pod.intensity);
 					light->GetGI().SetRange(pod.range);
+					light->GetGI().SetIsShadowCast(pod.isCast);
 					break;
 				}
 				default:
@@ -133,12 +135,6 @@ namespace application
 
 			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
 			contentsLayer->RegisterToEditorObjectVector(comp);
-
-			if (pod.templateData->pod.type != LightType::Directional)
-			{
-				ShortcutSystem::Instance().RegisterTriggerFunction(4, 
-					[=]() { comp->SetSelfActive(!comp->GetSelfActive()); });
-			}
 		}
 
 		void LightData::OnLightTypeChange(LightType type)

@@ -24,6 +24,9 @@ private:
 	Unit* m_magicianUnit;
 	Unit* m_healerUnit;
 
+	Unit* currentSummonedDoorUnit;
+	Unit* currentDerivedDoorUnit;
+
 	SkillRequirements m_skillOneRequirments;
 	SkillRequirements m_skillTwoRequirments;
 	SkillRequirements m_skillThreeRequirments;

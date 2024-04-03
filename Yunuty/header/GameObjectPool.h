@@ -35,14 +35,7 @@ namespace yunutyEngine
 		void Return(RepresenstativeComponent*);
 		int poolObjectsSize() { return poolObjects.size(); };
 		int expendableObjectsSize() { return expendableObjects.size(); };
-		void ClearPool() 
-		{
-			if (!poolObjects.empty())
-				poolObjects.clear(); 
-			
-			if(!expendableObjects.empty())
-				expendableObjects.clear();
-		}
+
 	protected:
 		const unordered_set<RepresenstativeComponent*>& GetPoolObjects() {
 			return poolObjects;

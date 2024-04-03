@@ -1,6 +1,10 @@
 #include "BossSkillSystem.h"
 #include "PlayerController.h"
 #include "Unit.h"
+#include "UnitObjectPool.h"
+#include "EnemySummonGateProductor.h"
+#include "EnemySummonSkillSystem.h"
+#include "ShortcutSystem.h"
 
 void BossSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill)
 {
@@ -47,6 +51,26 @@ void BossSkillSystem::ActivateSkillTwo()
 void BossSkillSystem::ActivateSkillThree()
 {
 	/// 유닛을 생성하는 문 오브젝트를 생성하는 로직
+	Vector3d doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * -5.0f;
+	UnitObjectPool::SingleInstance().ChooseProductor(&EnemySummonGateProductor::Instance());
+	UnitObjectPool::SingleInstance().SetStartPosition(doorSummonPosition);
+	EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(true);
+	currentSummonedDoorUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
+
+	if (currentDerivedDoorUnit == nullptr)
+	{
+		doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * 5.0f;
+		UnitObjectPool::SingleInstance().ChooseProductor(&EnemySummonGateProductor::Instance());
+		UnitObjectPool::SingleInstance().SetStartPosition(doorSummonPosition);
+		EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(false);
+		currentDerivedDoorUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
+	}
+	else
+	{
+		doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * 5.0f;
+		currentDerivedDoorUnit->GetTransform()->SetWorldPosition(doorSummonPosition);
+		currentDerivedDoorUnit->GetGameObject()->SetSelfActive(true);
+	}
 
 }
 
@@ -77,8 +101,16 @@ void BossSkillSystem::ActivateSkillFour()
 void BossSkillSystem::ActivateSkillRandomly()
 {
 	m_skillNum = rand() % 4 + 2;
-	//m_skillNum = 3;
-	ActivateSkill(static_cast<Unit::SkillEnum>(m_skillNum));
+
+	if (m_skillNum == static_cast<int>(Unit::SkillEnum::BossSkillThree) && currentSummonedDoorUnit != nullptr && currentSummonedDoorUnit->GetCurrentUnitState() != Unit::UnitState::Death)
+	{
+		ActivateSkillRandomly();
+	}
+	else
+	{
+		//m_skillNum = 3;
+		ActivateSkill(static_cast<Unit::SkillEnum>(m_skillNum));
+	}
 }
 
 void BossSkillSystem::SetSkillOneRequirments(GameObject* p_obj, physics::SphereCollider* p_projectileCollider, GameObject* p_debugObj)
@@ -139,6 +171,13 @@ void BossSkillSystem::Update()
 	{
 		m_unitComponent->SetUnitStateToSkill();
 		m_elapsed = 0.0f;
+	}
+
+
+	if (currentSummonedDoorUnit != nullptr && currentSummonedDoorUnit->GetCurrentUnitState() == Unit::UnitState::Death)
+	{
+		currentSummonedDoorUnit = nullptr;
+		currentDerivedDoorUnit->GetGameObject()->SetSelfActive(false);
 	}
 }
 

@@ -17,6 +17,7 @@
 #include "MagicianProductor.h"
 #include "HealerProductor.h"
 #include "BossProductor.h"
+#include "EnemySummonGateProductor.h"
 #include "InputManager.h"
 #include "UIManager.h"
 #include "PlayerController.h"
@@ -348,9 +349,7 @@ void application::contents::ContentsLayer::Initialize()
         return;
     }
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
-    ShortcutSystem::Instance().RegisterUniqueTrigger({
-        { KeyCode::Control, true },{ KeyCode::LShift, true }, { KeyCode::NUM_0, false } }, [=]() { DebugGraphic::SetDebugGraphicsEnabled(!DebugGraphic::AreDebugGraphicsEnabled()); }
-    );
+    ShortcutInit();
 
     wanderUtils::LoadResourcesRecursively();
 
@@ -407,6 +406,95 @@ void application::contents::ContentsLayer::Initialize()
 
         InputManager::Instance();
         UIManager::Instance();
+        //PlayerController::SingleInstance().SetMovingSystemComponent(camComp);
+        //TacticModeSystem::SingleInstance().SetMovingSystemComponent(camComp);
+
+        // UIButton Test
+        //rsrcMgr->LoadFile("Texture/zoro.jpg");
+        //rsrcMgr->LoadFile("Texture/zoro_highLighted.jpg");
+        //rsrcMgr->LoadFile("Texture/zoro_Clicked.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Menu.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/TacticMode.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Robin_ParentUI.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Ursula_ParentUI.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Gretel_ParentUI.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Robin_Portrait.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Ursula_Portrait.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Gretel_Portrait.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Robin_Skill1_Ikon.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Ursula_Skill1_Ikon.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Gretel_Skill1_Ikon.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Robin_Skill2_Ikon.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Ursula_Skill2_Ikon.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Gretel_Skill2_Ikon.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/CloseButton.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/menu_window.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/GameManual_Button.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/GameManual.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Sound_Window.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Sound_Button.jpg");
+        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Restart_Button.jpg");
+        //yunutyEngine::NavigationAgent* agent = nullptr;
+        //{
+        //	agent = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationAgent>();
+        //	agent->GetTransform()->SetLocalPosition(Vector3d{ 0,0,20 });
+        //	agent->SetSpeed(5);
+        //	agent->SetRadius(0.5);
+        //	agent->AssignToNavigationField(&SingleNavigationField::Instance());
+        //	auto staticMesh = agent->GetGameObject()->AddGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+        //	staticMesh->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(L"Capsule"));
+        //	staticMesh->GetGI().GetMaterial()->SetColor({ 0.75,0.75,0.75,1 });
+        //	staticMesh->GetTransform()->SetLocalPosition(Vector3d{ 0,0.5,0 });
+        //}
+        bool mapFound = false;
+        /*for (const auto& entry : std::filesystem::directory_iterator("./"))
+        {
+            if (entry.is_regular_file() && entry.path().extension() == ".pmap")
+            {
+                editor::MapFileManager::GetSingletonInstance().LoadMapFile(entry.path().filename().string());
+                mapFound = true;
+                break;
+            }
+        }*/
+        //assert(mapFound && "there is no map to load in current directory!");
+
+        /// 임시
+		//RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
+		//RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
+		RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
+
+
+//#pragma region UI Region
+//
+//		    /// UIButton Test
+//		    rsrcMgr->LoadFile("Texture/zoro.jpg");
+//
+//		    auto robinPassiveActivateButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+//		    auto robinPassiveActivateImage = robinPassiveActivateButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+//		    auto robinPassiveActivateButton = robinPassiveActivateButtonObject->AddComponent<UIButton>();
+//		    robinPassiveActivateButton->SetImageComponent(robinPassiveActivateImage);
+//		    robinPassiveActivateButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinPassiveActivateButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinPassiveActivateButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinPassiveActivateButton->SetLayer(10.0);
+//
+//		    RobinSkillDevelopmentSystem::Instance().AddTopLayerButton(robinPassiveActivateButton);
+//		    robinPassiveActivateButtonObject->GetTransform()->SetLocalPosition({ 0, 700, 0 });
+//
+//
+//		    auto robinWSkillUpgradeButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+//		    auto robinWSkillUpgradeImage = robinWSkillUpgradeButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
+//		    auto robinWSkillUpgradeButton = robinWSkillUpgradeButtonObject->AddComponent<UIButton>();
+//		    robinWSkillUpgradeButton->SetImageComponent(robinWSkillUpgradeImage);
+//		    robinWSkillUpgradeButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinWSkillUpgradeButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinWSkillUpgradeButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+//		    robinWSkillUpgradeButton->SetLayer(10.0);
+//		    RobinSkillDevelopmentSystem::Instance().AddMiddleLayerButton(robinWSkillUpgradeButton);
+//		    robinWSkillUpgradeButtonObject->GetTransform()->SetLocalPosition({ 100, 700, 0 });
+//#pragma endregion
+
+
         editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
         editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
@@ -460,6 +548,7 @@ void application::contents::ContentsLayer::PlayContents()
     /// 임시
     //RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
     //RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
+    //RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
     RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
 
     /// UI 작업
@@ -556,6 +645,764 @@ void application::contents::ContentsLayer::ClearPlaytimeObject()
     objectCreatedByEditorVector.clear();
 
     SingletonInstanceContainer::SingleInstance().ClearSingletonInstances();
+}
+
+void application::contents::ContentsLayer::ShortcutInit()
+{
+    auto& scsys = ShortcutSystem::Instance();
+    scsys.RegisterUniqueTrigger({{ KeyCode::Control, true }, { KeyCode::D, false } },
+        [=]() 
+        { 
+            DebugGraphic::SetDebugGraphicsEnabled(!DebugGraphic::AreDebugGraphicsEnabled());
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::NUM_1, false } },
+        [=]()
+        {
+            for (auto& each : yunutyEngine::Scene::getCurrentScene()->GetChildren())
+            {
+                auto comp = each->GetComponent<Unit>();
+                if (comp == nullptr)
+                {
+                    continue;
+                }
+
+                if (comp->GetUnitSide() == Unit::UnitSide::Player)
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    comp->GetGameObject()->SetSelfActive(scsysIns.GetTriggerSwitch(scsysIns.GetKeyIndex({ { KeyCode::Control, true }, { KeyCode::NUM_1, false } })));
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::NUM_2, false } },
+        [=]()
+        {
+            for (auto& each : yunutyEngine::Scene::getCurrentScene()->GetChildren())
+            {
+                auto comp = each->GetComponent<Unit>();
+                if (comp == nullptr)
+                {
+                    continue;
+                }
+
+                if (comp->GetUnitSide() == Unit::UnitSide::Enemy)
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    comp->GetGameObject()->SetSelfActive(scsysIns.GetTriggerSwitch(scsysIns.GetKeyIndex({ { KeyCode::Control, true }, { KeyCode::NUM_2, false } })));
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::NUM_3, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                auto& scsysIns = ShortcutSystem::Instance();
+                each->GetPaletteInstance()->GetGameObject()->SetSelfActive(scsysIns.GetTriggerSwitch(scsysIns.GetKeyIndex({ { KeyCode::Control, true }, { KeyCode::NUM_3, false } })));
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::NUM_4, false } },
+        [=]()
+        {
+            for (auto& each : yunutyEngine::Scene::getCurrentScene()->GetChildren())
+            {
+                auto comp = each->GetComponent<yunutyEngine::graphics::PointLight>();
+                if (comp == nullptr)
+                {
+                    continue;
+                }
+
+                auto& scsysIns = ShortcutSystem::Instance();
+                comp->GetGameObject()->SetSelfActive(scsysIns.GetTriggerSwitch(scsysIns.GetKeyIndex({ { KeyCode::Control, true }, { KeyCode::NUM_4, false } })));
+            }
+        });
+
+    /// Ornament 개별 적용
+#pragma region
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::NUM_1, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Bush_001")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::NUM_2, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Bush_002")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::NUM_3, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Stone_001")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::NUM_4, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Stone_002")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::NUM_5, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Grass_001")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::NUM_6, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Grass_002")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::NUM_7, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_LeafShadow")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::NUM_8, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Pebbles_001")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::NUM_9, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Book01")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::NUM_0, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Book03")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Q, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Book05")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::W, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Book06")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alphabet_E, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Bookshelf01")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::R, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Bookshelf02")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::T, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Bookshelf03")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Y, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Bookshelf04")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::U, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Mushroom01")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::I, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Mushroom02")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::O, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_BigTree_001")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::P, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_BossCorrider_Floor")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::A, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Candle")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::S, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_CastleWall")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::D, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_CastleWall_Door")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::F, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_CastleWall_Pillar")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::G, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Chair")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::H, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Corrider_Floor")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::J, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Corrider_Floor06")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::K, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_CupTower")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::L, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Entrance_Floor")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Z, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_FloorBrick")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::X, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Fork")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::C, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_GuideBook")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::V, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Hall_Corrider_Floor")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::B, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Hall_Entrance_Floor")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::N, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Hall_Floor")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::M, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Hat01")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::NUM_1, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Hat02")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::NUM_2, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Key_Room_Floor")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::NUM_3, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Lamp")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::NUM_4, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Pillar")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::NUM_5, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Room_Floor01")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::NUM_6, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_SmallBush_001")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::NUM_7, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Stage1_Floor")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::NUM_8, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Stump")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::NUM_9, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Temple_Book_etc")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::NUM_0, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Temple_Books")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::Q, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Temple_Floor")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::W, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Temple_Pillar")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::Alphabet_E, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Temple_Pillar_Broken")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::R, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Temple_Rabbit")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::T, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Temple_Welcome")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::Y, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Trunk_001")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::U, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_VertexColor")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::I, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Wall_3m")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::O, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Wall_7m")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::P, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Wall_21m")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::LShift, true }, { KeyCode::Alt, true }, { KeyCode::A, false } },
+        [=]()
+        {
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::OrnamentData>())
+            {
+                if (each->pod.templateData->pod.staticFBXName == "SM_Arch_Window_7m")
+                {
+                    auto& scsysIns = ShortcutSystem::Instance();
+                    each->GetPaletteInstance()->GetGameObject()->SetSelfActive(!each->GetPaletteInstance()->GetGameObject()->GetSelfActive());
+                }
+            }
+        });
+#pragma endregion Ornament Shortcut
 }
 
 void application::contents::ContentsLayer::RegisterToEditorObjectVector(GameObject* p_obj)

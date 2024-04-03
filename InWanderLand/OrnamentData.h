@@ -12,6 +12,7 @@
 #include "OrnamentPalette.h"
 #include "PodStructs.h"
 #include "GlobalConstant.h"
+#include "ShortcutSystem.h"
 
 namespace application
 {
@@ -71,11 +72,11 @@ namespace application
             static TemplateDataManager& templateDataManager;
             palette::OrnamentEditorInstance* ornamentInstance{ nullptr };
 
-            virtual ~OrnamentData();
             OrnamentData();
             OrnamentData(const std::string& name);
             OrnamentData(const OrnamentData& prototype);
             OrnamentData& operator=(const OrnamentData& prototype);
+            virtual ~OrnamentData();
         };
     }
 }

@@ -32,6 +32,16 @@ bool DirectionalLight::IsActive()
 	return this->isActive;
 }
 
+void DirectionalLight::SetIsShadowCast(bool isCast)
+{
+	this->isCast = isCast;
+}
+
+bool DirectionalLight::IsShadowCast()
+{
+	return this->isCast;
+}
+
 void DirectionalLight::SetLightDirection(DirectX::SimpleMath::Vector4& direction)
 {
 	this->lightInfo.direction = direction;

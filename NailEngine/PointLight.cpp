@@ -36,6 +36,16 @@ bool PointLight::IsActive()
 	return this->isActive;
 }
 
+void PointLight::SetIsShadowCast(bool isCast)
+{
+	this->isCast = isCast;
+}
+
+bool PointLight::IsShadowCast()
+{
+	return isCast;
+}
+
 void PointLight::SetRange(float range)
 {
 	this->lightInfo.range = range;

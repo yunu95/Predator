@@ -7,394 +7,81 @@ namespace application
 {
 	void ShortcutSystem::SingletonInitializer()
 	{
-		triggerKeys.reserve(keyCount);
-		triggerFunc.reserve(keyCount);
-		managedTriggerFunc.reserve(keyCount);
-		triggerSwitch.reserve(keyCount);
 
-		/// 콘텐츠 영역에서 세팅할 수 있도록 public 으로 함수를 열었으나,
-		/// 우선 여기에서 일괄 처리하는 방식으로 구현함
-		std::vector<std::pair<KeyCode, bool>> keys;
-		keys.push_back({ KeyCode::Control, true });
-		keys.push_back({ KeyCode::NUM_1, false });
-		RegisterTriggerKey(1, keys);
-		keys[1] = { KeyCode::NUM_2, false };
-		RegisterTriggerKey(2, keys);
-		keys[1] = { KeyCode::NUM_3, false };
-		RegisterTriggerKey(3, keys);
-		keys[1] = { KeyCode::NUM_4, false };
-		RegisterTriggerKey(4, keys);
-		keys[1] = { KeyCode::NUM_5, false };
-		RegisterTriggerKey(5, keys);
-		keys[1] = { KeyCode::NUM_6, false };
-		RegisterTriggerKey(6, keys);
-		keys[1] = { KeyCode::NUM_7, false };
-		RegisterTriggerKey(7, keys);
-		keys[1] = { KeyCode::NUM_8, false };
-		RegisterTriggerKey(8, keys);
-		keys[1] = { KeyCode::NUM_9, false };
-		RegisterTriggerKey(9, keys);
-		keys[1] = { KeyCode::NUM_0, false };
-		RegisterTriggerKey(0, keys);
-		keys[1] = { KeyCode::Q, false };
-		RegisterTriggerKey(10, keys);
-		keys[1] = { KeyCode::W, false };
-		RegisterTriggerKey(11, keys);
-		keys[1] = { KeyCode::Alphabet_E, false };
-		RegisterTriggerKey(12, keys);
-		keys[1] = { KeyCode::R, false };
-		RegisterTriggerKey(13, keys);
-		keys[1] = { KeyCode::T, false };
-		RegisterTriggerKey(14, keys);
-		keys[1] = { KeyCode::Y, false };
-		RegisterTriggerKey(15, keys);
-		keys[1] = { KeyCode::U, false };
-		RegisterTriggerKey(16, keys);
-		keys[1] = { KeyCode::I, false };
-		RegisterTriggerKey(17, keys);
-		keys[1] = { KeyCode::O, false };
-		RegisterTriggerKey(18, keys);
-		keys[1] = { KeyCode::P, false };
-		RegisterTriggerKey(19, keys);
-		keys[1] = { KeyCode::A, false };
-		RegisterTriggerKey(20, keys);
-		keys[1] = { KeyCode::S, false };
-		RegisterTriggerKey(21, keys);
-		keys[1] = { KeyCode::D, false };
-		RegisterTriggerKey(22, keys);
-		keys[1] = { KeyCode::F, false };
-		RegisterTriggerKey(23, keys);
-		keys[1] = { KeyCode::G, false };
-		RegisterTriggerKey(24, keys);
-		keys[1] = { KeyCode::H, false };
-		RegisterTriggerKey(25, keys);
-		keys[1] = { KeyCode::J, false };
-		RegisterTriggerKey(26, keys);
-		keys[1] = { KeyCode::K, false };
-		RegisterTriggerKey(27, keys);
-		keys[1] = { KeyCode::L, false };
-		RegisterTriggerKey(28, keys);
-		keys[1] = { KeyCode::Z, false };
-		RegisterTriggerKey(29, keys);
-		keys[1] = { KeyCode::X, false };
-		RegisterTriggerKey(30, keys);
-		keys[1] = { KeyCode::C, false };
-		RegisterTriggerKey(31, keys);
-		keys[1] = { KeyCode::V, false };
-		RegisterTriggerKey(32, keys);
-		keys[1] = { KeyCode::B, false };
-		RegisterTriggerKey(33, keys);
-		keys[1] = { KeyCode::N, false };
-		RegisterTriggerKey(34, keys);
-		keys[1] = { KeyCode::M, false };
-		RegisterTriggerKey(35, keys);
-
-		keys[0] = { KeyCode::LShift, true };
-		keys[1] = { KeyCode::NUM_1, false };
-		RegisterTriggerKey(36, keys);
-		keys[1] = { KeyCode::NUM_2, false };
-		RegisterTriggerKey(37, keys);
-		keys[1] = { KeyCode::NUM_3, false };
-		RegisterTriggerKey(38, keys);
-		keys[1] = { KeyCode::NUM_4, false };
-		RegisterTriggerKey(39, keys);
-		keys[1] = { KeyCode::NUM_5, false };
-		RegisterTriggerKey(40, keys);
-		keys[1] = { KeyCode::NUM_6, false };
-		RegisterTriggerKey(41, keys);
-		keys[1] = { KeyCode::NUM_7, false };
-		RegisterTriggerKey(42, keys);
-		keys[1] = { KeyCode::NUM_8, false };
-		RegisterTriggerKey(43, keys);
-		keys[1] = { KeyCode::NUM_9, false };
-		RegisterTriggerKey(44, keys);
-		keys[1] = { KeyCode::NUM_0, false };
-		RegisterTriggerKey(45, keys);
-		keys[1] = { KeyCode::Q, false };
-		RegisterTriggerKey(46, keys);
-		keys[1] = { KeyCode::W, false };
-		RegisterTriggerKey(47, keys);
-		keys[1] = { KeyCode::Alphabet_E, false };
-		RegisterTriggerKey(48, keys);
-		keys[1] = { KeyCode::R, false };
-		RegisterTriggerKey(49, keys);
-		keys[1] = { KeyCode::T, false };
-		RegisterTriggerKey(50, keys);
-		keys[1] = { KeyCode::Y, false };
-		RegisterTriggerKey(51, keys);
-		keys[1] = { KeyCode::U, false };
-		RegisterTriggerKey(52, keys);
-		keys[1] = { KeyCode::I, false };
-		RegisterTriggerKey(53, keys);
-		keys[1] = { KeyCode::O, false };
-		RegisterTriggerKey(54, keys);
-		keys[1] = { KeyCode::P, false };
-		RegisterTriggerKey(55, keys);
-		keys[1] = { KeyCode::A, false };
-		RegisterTriggerKey(56, keys);
-		keys[1] = { KeyCode::S, false };
-		RegisterTriggerKey(57, keys);
-		keys[1] = { KeyCode::D, false };
-		RegisterTriggerKey(58, keys);
-		keys[1] = { KeyCode::F, false };
-		RegisterTriggerKey(59, keys);
-		keys[1] = { KeyCode::G, false };
-		RegisterTriggerKey(60, keys);
-		keys[1] = { KeyCode::H, false };
-		RegisterTriggerKey(61, keys);
-		keys[1] = { KeyCode::J, false };
-		RegisterTriggerKey(62, keys);
-		keys[1] = { KeyCode::K, false };
-		RegisterTriggerKey(63, keys);
-		keys[1] = { KeyCode::L, false };
-		RegisterTriggerKey(64, keys);
-		keys[1] = { KeyCode::Z, false };
-		RegisterTriggerKey(65, keys);
-		keys[1] = { KeyCode::X, false };
-		RegisterTriggerKey(66, keys);
-		keys[1] = { KeyCode::C, false };
-		RegisterTriggerKey(67, keys);
-		keys[1] = { KeyCode::V, false };
-		RegisterTriggerKey(68, keys);
-		keys[1] = { KeyCode::B, false };
-		RegisterTriggerKey(69, keys);
-		keys[1] = { KeyCode::N, false };
-		RegisterTriggerKey(70, keys);
-		keys[1] = { KeyCode::M, false };
-		RegisterTriggerKey(71, keys);		
 	}
 
 	void ShortcutSystem::Update()
 	{
-		for (int i = 0; i < keyCount; i++)
+		InitSubGroup();
+
+		for (auto& idx : allKeys)
 		{
-			bool trigger = true;
-			for (auto& [key, flag] : triggerKeys[i])
+			if (idx.isUnique)
 			{
-				if (flag)
+				bool trigger = true;
+				for (auto& [keyCode, flag] : uniqueTrigger[idx].first)
 				{
-					trigger &= Input::isKeyDown(key);
+					if (flag)
+					{
+						trigger &= Input::isKeyDown(keyCode);
+					}
+					else
+					{
+						trigger &= Input::isKeyPushed(keyCode);
+					}
 				}
-				else
+
+				if (trigger && (uniqueTrigger[idx].first.size() != 0))
 				{
-					trigger &= Input::isKeyPushed(key);
+					PullUniqueTrigger(idx);
 				}
 			}
-
-			if (trigger && (triggerKeys[i].size() != 0))
+			else
 			{
-				PullTrigger(i);
-			}
-		}
-
-		for (auto& [keys, func] : uniqueTrigger)
-		{
-			bool trigger = true;
-			for (auto& [keyCode, flag] : keys)
-			{
-				if (flag)
+				bool trigger = true;
+				for (auto& [keyCode, flag] : triggerKeys[idx])
 				{
-					trigger &= Input::isKeyDown(keyCode);
+					if (flag)
+					{
+						trigger &= Input::isKeyDown(keyCode);
+					}
+					else
+					{
+						trigger &= Input::isKeyPushed(keyCode);
+					}
 				}
-				else
-				{
-					trigger &= Input::isKeyPushed(keyCode);
-				}
-			}
 
-			if (trigger && (keys.size() != 0))
-			{
-				func();
+				if (trigger && (triggerKeys[idx].size() != 0))
+				{
+					PullTrigger(idx);
+				}
 			}
 		}
 	}
 
-	bool ShortcutSystem::RegisterTriggerKey(unsigned int groupNum, const std::vector<std::pair<KeyCode, bool>>& keys)
+	ShortcutSystem::KeyIndex ShortcutSystem::RegisterTriggerKey(const std::vector<std::pair<KeyCode, bool>>& keys)
 	{
-		if (groupNum >= keyCount || triggerKeys.find(groupNum) != triggerKeys.end())
-		{
-			return false;
-		}
+		assert(keys.size() != 0 && "Key is empty.");
+		assert(!GetKeyIndex(keys).IsValid() && "There is already a registered key.");
 
-		if (!CheckUniqueKeyWithinUniqueRange(keys))
-		{
-			return false;
-		}
+		auto returnVal = KeyIndex(keyIdx);
+		returnVal.keySize = keys.size();
+		keyIdx++;
 
 		for (auto& each : keys)
 		{
-			triggerKeys[groupNum].insert(each);
+			triggerKeys[returnVal].insert(each);
 		}
 
-		return true;
+		triggerSwitch[returnVal] = false;
+		allKeys.insert(returnVal);
+
+		UpdateSubIndexGroup();
+
+		return returnVal;
 	}
 
-	bool ShortcutSystem::RegisterTriggerFunction(unsigned int groupNum, const std::function<void()>& funcs, const std::string& findKey)
-	{
-		if (groupNum >= keyCount)
-		{
-			return false;
-		}
-
-		if (findKey.empty())
-		{
-			triggerFunc[groupNum].push_back(funcs);
-		}
-		else
-		{
-			if (managedTriggerFunc[groupNum].find(findKey) != managedTriggerFunc[groupNum].end())
-			{
-				return false;
-			}
-
-			managedTriggerFunc[groupNum][findKey] = funcs;
-		}
-
-		return true;
-	}
-
-	bool ShortcutSystem::RemoveTriggerFunction(unsigned int groupNum, const std::string& findKey)
-	{
-		if (groupNum >= keyCount || managedTriggerFunc.find(groupNum) != managedTriggerFunc.end())
-		{
-			return false;
-		}
-
-		for (auto& [key, func] : managedTriggerFunc[groupNum])
-		{
-			if (key == findKey)
-			{
-				managedTriggerFunc[groupNum].erase(findKey);
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	bool ShortcutSystem::RegisterUniqueTrigger(const std::vector<std::pair<KeyCode, bool>>& keys, const std::function<void()>& funcs)
-	{
-		if (!CheckUniqueKey(keys))
-		{
-			return false;
-		}
-
-		std::set<std::pair<KeyCode, bool>, PairFirstComparator> keyList;
-		for (auto& each : keys)
-		{
-			keyList.insert(each);
-		}
-
-		uniqueTrigger.push_back({ keyList, funcs });
-
-		return true;
-	}
-
-	bool ShortcutSystem::RemoveUniqueTrigger(const std::vector<std::pair<KeyCode, bool>>& keys)
-	{
-		if (uniqueTrigger.empty())
-		{
-			return false;
-		}
-
-		auto rmItr = uniqueTrigger.begin();
-		for (auto& [triggerKey, func] : uniqueTrigger)
-		{
-			if (keys.size() != triggerKey.size())
-			{
-				rmItr += 1;
-				continue;
-			}
-
-			std::set<std::pair<KeyCode, bool>, PairFirstComparator> sortedList;
-			for (auto& each : keys)
-			{
-				sortedList.insert(each);
-			}
-
-			auto itr1 = sortedList.begin();
-			auto itr2 = triggerKey.begin();
-
-			bool isSame = true;
-			for (int i = 0; i < sortedList.size(); i++)
-			{
-				if (itr1->first != itr2->first)
-				{
-					isSame = false;
-					break;
-				}
-				itr1 = ++itr1;
-				itr2 = ++itr2;
-			}
-
-			if (isSame)
-			{
-				uniqueTrigger.erase(rmItr);
-				return true;
-			}
-
-			rmItr += 1;
-		}
-
-		return false;
-	}
-
-	void ShortcutSystem::Clear()
-	{
-		triggerFunc.clear();
-		triggerFunc.reserve(keyCount);
-
-		for (auto& [key, val] : triggerSwitch)
-		{
-			val = false;
-		}
-	}
-
-	bool ShortcutSystem::GetTriggerSwitch(unsigned int groupNum)
-	{
-		if (groupNum >= keyCount)
-		{
-			return false;
-		}
-
-		return triggerSwitch[groupNum];
-	}
-
-	bool ShortcutSystem::PullTrigger(unsigned int groupNum)
-	{
-		if (groupNum >= keyCount)
-		{
-			return false;
-		}
-
-		triggerSwitch[groupNum] = !triggerSwitch[groupNum];
-
-		if (triggerFunc.find(groupNum) != triggerFunc.end())
-		{
-			for (auto& each : triggerFunc[groupNum])
-			{
-				each();
-			}
-		}
-
-		if (managedTriggerFunc.find(groupNum) != managedTriggerFunc.end())
-		{
-			for (auto& each : managedTriggerFunc[groupNum])
-			{
-				each.second();
-			}
-		}
-
-		return triggerSwitch[groupNum];
-	}
-
-	ShortcutSystem::ShortcutSystem()
-		: triggerKeys(), triggerFunc(), managedTriggerFunc(), triggerSwitch()
-	{
-
-	}
-
-	bool ShortcutSystem::CheckUniqueKey(const std::vector<std::pair<KeyCode, bool>>& keys)
+	ShortcutSystem::KeyIndex ShortcutSystem::GetKeyIndex(const std::vector<std::pair<KeyCode, bool>>& keys)
 	{
 		for (auto& [idx, triggerKey] : triggerKeys)
 		{
@@ -426,18 +113,13 @@ namespace application
 
 			if (isSame)
 			{
-				return false;
+				return idx;
 			}
 		}
 
-		return CheckUniqueKeyWithinUniqueRange(keys);
-	}
-
-	bool ShortcutSystem::CheckUniqueKeyWithinUniqueRange(const std::vector<std::pair<KeyCode, bool>>& keys)
-	{
-		for (auto& [triggerKey, func] : uniqueTrigger)
+		for (auto& [idx, pair] : uniqueTrigger)
 		{
-			if (keys.size() != triggerKey.size())
+			if (keys.size() != pair.first.size())
 			{
 				continue;
 			}
@@ -449,7 +131,7 @@ namespace application
 			}
 
 			auto itr1 = sortedList.begin();
-			auto itr2 = triggerKey.begin();
+			auto itr2 = pair.first.begin();
 
 			bool isSame = true;
 			for (int i = 0; i < sortedList.size(); i++)
@@ -465,10 +147,294 @@ namespace application
 
 			if (isSame)
 			{
-				return false;
+				return idx;
+			}
+		}
+
+		return KeyIndex(MAXLONGLONG);
+	}
+
+	ShortcutSystem::FuncIndex ShortcutSystem::RegisterTriggerFunction(const KeyIndex& idx, const std::function<void()>& func)
+	{
+		assert(!idx.isUnique && "You cannot register with Unique Key.");
+		unsigned int funcIdx = 0;
+		if (funcIndexMap.find(idx) == funcIndexMap.end())
+		{
+			funcIndexMap[idx] = 0;
+		}
+		else
+		{
+			funcIdx = funcIndexMap[idx];
+		}
+
+		auto returnVal = FuncIndex(idx.keyIndex, funcIdx);
+
+		triggerFunc[idx].insert({ returnVal, func });
+
+		funcIndexMap[idx] += 1;
+
+		return returnVal;
+	}
+
+	bool ShortcutSystem::RemoveTriggerFunction(const FuncIndex& idx)
+	{
+		auto itr = triggerFunc.find(idx.keyIndex);
+		if (itr == triggerFunc.end())
+		{
+			return false;
+		}
+
+		auto funcItr = itr->second.find(idx);
+		if (funcItr == itr->second.end())
+		{
+			return false;
+		}
+
+		itr->second.erase(idx);
+		return true;
+	}
+
+	ShortcutSystem::KeyIndex ShortcutSystem::RegisterUniqueTrigger(const std::vector<std::pair<KeyCode, bool>>& keys, const std::function<void()>& func)
+	{
+		assert(keys.size() != 0 && "Key is empty.");
+		assert(!GetKeyIndex(keys).IsValid() && "There is already a registered key.");
+
+		auto returnVal = KeyIndex(keyIdx);
+		returnVal.isUnique = true;
+		returnVal.keySize = keys.size();
+		keyIdx++;
+
+		std::set<std::pair<KeyCode, bool>, PairFirstComparator> keyList;
+		for (auto& each : keys)
+		{
+			keyList.insert(each);
+		}
+
+		uniqueTrigger.insert({ returnVal, {keyList, func} });
+
+		triggerSwitch[returnVal] = false;
+		allKeys.insert(returnVal);
+
+		UpdateSubIndexGroup();
+
+		return returnVal;
+	}
+
+	bool ShortcutSystem::RemoveUniqueTrigger(const KeyIndex& idx)
+	{
+		if (!idx.isUnique)
+		{
+			return false;
+		}
+
+		auto itr = uniqueTrigger.find(idx);
+		if (itr == uniqueTrigger.end())
+		{
+			return false;
+		}
+
+		uniqueTrigger.erase(idx);
+		allKeys.erase(idx);
+		triggerSwitch.erase(idx);
+		subIndexGroup.erase(idx);
+		return true;
+	}
+
+	void ShortcutSystem::Clear()
+	{
+		for (auto& [key, val] : triggerSwitch)
+		{
+			val = false;
+		}
+	}
+
+	bool ShortcutSystem::GetTriggerSwitch(const KeyIndex& idx)
+	{
+		auto itr = triggerSwitch.find(idx);
+		assert(itr != triggerSwitch.end() && "There is no corresponding trigger.");
+
+		return itr->second;
+	}
+
+	bool ShortcutSystem::PullTrigger(const KeyIndex& idx)
+	{
+		auto itr = triggerKeys.find(idx);
+		assert(itr != triggerKeys.end() && "There is no corresponding trigger.");
+
+		if (idx.isParentCalled)
+		{
+			return false;
+		}
+
+		for (auto& each : triggerFunc[idx])
+		{
+			each.second();
+		}
+
+		triggerSwitch[idx] = !triggerSwitch[idx];
+
+		auto subItr = subIndexGroup.find(idx);
+		if (subItr != subIndexGroup.end())
+		{
+			for (auto& each : subIndexGroup[idx])
+			{
+				const_cast<KeyIndex&>(*allKeys.find(each)).isParentCalled = true;
 			}
 		}
 
 		return true;
+	}
+
+	ShortcutSystem::ShortcutSystem()
+		: triggerKeys(), triggerFunc(), funcIndexMap(), uniqueTrigger(), triggerSwitch(), subIndexGroup(), allKeys()
+	{
+
+	}
+
+	bool ShortcutSystem::PullUniqueTrigger(const KeyIndex& idx)
+	{
+		assert(idx.isUnique && "Generic triggers can not be triggered by this function.");
+
+		auto itr = uniqueTrigger.find(idx);
+		assert(itr != uniqueTrigger.end() && "There is no corresponding unique trigger.");
+
+		if (idx.isParentCalled)
+		{
+			return false;
+		}
+
+		uniqueTrigger[idx].second();
+		triggerSwitch[idx] = !triggerSwitch[idx];
+
+		auto subItr = subIndexGroup.find(idx);
+		if (subItr != subIndexGroup.end())
+		{
+			for (auto& each : subIndexGroup[idx])
+			{
+				const_cast<KeyIndex&>(*allKeys.find(each)).isParentCalled = true;
+			}
+		}
+
+		return true;
+	}
+
+	void ShortcutSystem::UpdateSubIndexGroup()
+	{
+		for (auto& each : allKeys)
+		{
+			for (auto& [compIdx, keyCodes] : triggerKeys)
+			{
+				bool subIndex = true;
+				if (compIdx.keySize >= each.keySize)
+				{
+					continue;
+				}
+
+				for (auto& [keyCode, flag] : keyCodes)
+				{
+					bool exist = false;
+					if (each.isUnique)
+					{
+						for (auto& keyPair : uniqueTrigger[each].first)
+						{
+							if (keyPair.first == keyCode)
+							{
+								exist = true;
+								break;
+							}
+						}
+					}
+					else
+					{
+						for (auto& keyPair : triggerKeys[each])
+						{
+							if (keyPair.first == keyCode)
+							{
+								exist = true;
+								break;
+							}
+						}
+					}
+
+					if (!exist)
+					{
+						subIndex = false;
+						break;
+					}
+				}
+
+				if (subIndex)
+				{
+					subIndexGroup[each].insert(compIdx);
+				}
+			}
+
+			for (auto& [compIdx, compPair] : uniqueTrigger)
+			{
+				bool subIndex = true;
+				if (compIdx.keySize >= each.keySize)
+				{
+					continue;
+				}
+
+				for (auto& [keyCode, flag] : compPair.first)
+				{
+					bool exist = false;
+					if (each.isUnique)
+					{
+						for (auto& keyPair : uniqueTrigger[each].first)
+						{
+							if (keyPair.first == keyCode)
+							{
+								exist = true;
+								break;
+							}
+						}
+					}
+					else
+					{
+						for (auto& keyPair : triggerKeys[each])
+						{
+							if (keyPair.first == keyCode)
+							{
+								exist = true;
+								break;
+							}
+						}
+					}
+
+					if (!exist)
+					{
+						subIndex = false;
+						break;
+					}
+				}
+
+				if (subIndex)
+				{
+					subIndexGroup[each].insert(compIdx);
+				}
+			}
+		}
+	}
+
+	bool ShortcutSystem::RemoveSubIndesGroup(const KeyIndex& idx)
+	{
+		auto itr = subIndexGroup.find(idx);
+		if (itr != subIndexGroup.end())
+		{
+			subIndexGroup.erase(idx);
+			return true;
+		}
+
+		return false;
+	}
+
+	void ShortcutSystem::InitSubGroup()
+	{
+		for (auto& each : allKeys)
+		{
+			const_cast<KeyIndex&>(each).isParentCalled = false;
+		}
 	}
 }
