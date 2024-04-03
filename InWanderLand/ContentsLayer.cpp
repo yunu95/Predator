@@ -375,7 +375,6 @@ void application::contents::ContentsLayer::Initialize()
 
         {
             auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-            //obj->GetTransform()->SetLocalPosition(Vector3d{ -500,500,1 });
             obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,100 });
             auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
             text->GetGI().SetFontSize(20);
