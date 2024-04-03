@@ -186,8 +186,8 @@ namespace application
 					contentsLayer->RegisterToEditorObjectVector(unitComponent->GetGameObject());
                 }
 
-				ShortcutSystem::Instance().RegisterTriggerFunction(tempShortCutIndex, 
-                        [=]() { unitComponent->GetGameObject()->SetSelfActive(!unitComponent->GetGameObject()->GetSelfActive()); });
+				/*ShortcutSystem::Instance().RegisterTriggerFunction(ShortcutSystem::KeyIndex::, 
+                        [=]() { unitComponent->GetGameObject()->SetSelfActive(!unitComponent->GetGameObject()->GetSelfActive()); });*/
 			}
 		}
 

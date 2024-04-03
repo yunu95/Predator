@@ -119,7 +119,11 @@ void RenderSystem::PushLightData()
 
 	for (auto& e : lightSet)
 	{
-		if (e->IsActive() == false) continue;
+		if (e->IsActive() == false)
+		{
+			i++;
+			continue;
+		}
 
 		params.lights[i] = e->GetLightInfo();
 
@@ -289,11 +293,17 @@ void RenderSystem::RenderPointLightShadow()
 	auto& lightSet = LightManager::Instance.Get().GetLightList();
 
 	int index = 0;
-
+	
 	for (auto& e : lightSet)
 	{
 		if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
 		{
+			if (e->IsShadowCast() == false)
+			{
+				PointLightShadowPass::Instance.Get().ClearDSVArray(index);
+				continue;
+			}
+
 			if (index > MAX_POINT_LIGHT - 1)
 			{
 				continue;
@@ -328,30 +338,30 @@ void RenderSystem::RenderPointLightShadow()
 				DirectX::SimpleMath::Vector3 upVec;
 				switch (i)
 				{
-					case 0: // +X
-						targetPos = pos + DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f);
-						upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
-						break;
-					case 1: // -X
-						targetPos = pos + DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f);
-						upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
-						break;
-					case 2: // +Y
-						targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
-						upVec = DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f);
-						break;
-					case 3: // -Y
-						targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f);
-						upVec = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f);
-						break;
-					case 4: // +Z
-						targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f);
-						upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
-						break;
-					case 5: // -Z
-						targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f);
-						upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
-						break;
+				case 0: // +X
+					targetPos = pos + DirectX::SimpleMath::Vector3(1.0f, 0.0f, 0.0f);
+					upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
+					break;
+				case 1: // -X
+					targetPos = pos + DirectX::SimpleMath::Vector3(-1.0f, 0.0f, 0.0f);
+					upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
+					break;
+				case 2: // +Y
+					targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
+					upVec = DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f);
+					break;
+				case 3: // -Y
+					targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, -1.0f, 0.0f);
+					upVec = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f);
+					break;
+				case 4: // +Z
+					targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f);
+					upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
+					break;
+				case 5: // -Z
+					targetPos = pos + DirectX::SimpleMath::Vector3(0.0f, 0.0f, -1.0f);
+					upVec = DirectX::SimpleMath::Vector3(0.0f, 1.0f, 0.0f);
+					break;
 				}
 
 				// 뷰 행렬 계산
@@ -386,7 +396,7 @@ void RenderSystem::RenderLight()
 	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
 	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 
-	PointLightIndex plIndexBuffer;
+
 
 	int plIndex = 0;
 	int lightIndex = 0;
@@ -394,6 +404,7 @@ void RenderSystem::RenderLight()
 	{
 		if (e->IsActive() == false)
 		{
+			lightIndex++;
 			continue;
 		}
 
@@ -426,10 +437,17 @@ void RenderSystem::RenderLight()
 			matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 			matrixBuffer.WorldInvTrans = static_cast<PointLight*>(e)->GetWorldTM().Invert().Transpose();
 
-			plIndexBuffer.plIndex = plIndex;
+			PointLightIndex plIndexBuffer;
+
+			plIndexBuffer.isShadowCast = e->IsShadowCast();
+			if (plIndexBuffer.isShadowCast)
+			{
+				plIndexBuffer.plIndex = plIndex;
+				plIndex++;
+			}
 			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::POINTLIGHT_INDEX))->PushGraphicsData(&plIndexBuffer, sizeof(PointLightIndex), static_cast<int>(CB_TYPE::POINTLIGHT_INDEX));
-			plIndex++;
 		}
+
 		NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
 		std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e->GetMaterialName()))->SetInt(0, lightIndex);
@@ -437,7 +455,7 @@ void RenderSystem::RenderLight()
 		auto mesh = ResourceManager::Instance.Get().GetMesh(e->GetMeshName());
 		mesh->Render();
 
-		// 만들어진 Shadow Map Bind
+		// 만들어진 Shadow Map UnBind
 		ResourceManager::Instance.Get().GetTexture(L"PointLightShadowDepth")->UnBind(23);
 		lightIndex++;
 	}

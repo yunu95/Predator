@@ -548,7 +548,7 @@ void application::contents::ContentsLayer::PlayContents()
     SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
 
     /// 임시
-    //RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
+    RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
     //RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
     //RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
     //RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());

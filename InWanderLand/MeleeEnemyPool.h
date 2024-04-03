@@ -24,9 +24,8 @@ public:
 		p_dummy->m_pairUnit = unitComponent;
 		unitComponent->returnToPoolFunction = [=]()
 			{
+				p_dummy->m_pairUnit->m_navAgentComponent->DetachFromNavigationField();
 				Return(p_dummy);
-				//p_dummy->m_pairUnit->m_navAgentComponent->DetachFromNavigationField();
-				p_dummy->m_pairUnit->m_navAgentComponent->SetActive(false);
 			};
 		//unitComponent->GetGameObject()->SetParent(p_dummy->GetGameObject());
 		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
@@ -37,15 +36,13 @@ public:
 	virtual void OnBorrow(DummyComponent* p_dummy) override
 	{
 		p_dummy->m_pairUnit->ResetUnitMembers();
-		p_dummy->m_pairUnit->m_navAgentComponent;
 		//tempNav->DetachFromNavigationField();
 		//tempNav->SetActive(false);
+		//p_dummy->GetGameObject()->SetSelfActive(true);
 		p_dummy->m_pairUnit->GetTransform()->SetWorldPosition(m_unitPosition);
-		p_dummy->GetGameObject()->SetSelfActive(true);
-		p_dummy->m_pairUnit->m_navAgentComponent->SetActive(true);
 		p_dummy->m_pairUnit->m_navAgentComponent->AssignToNavigationField(p_dummy->m_pairUnit->GetNavField());
-		p_dummy->m_pairUnit->m_navAgentComponent->Relocate(m_unitPosition);
-
+		//p_dummy->m_pairUnit->m_navAgentComponent->Relocate(m_unitPosition);
+		//p_dummy->m_pairUnit->m_navAgentComponent->SetActive(true);
 	}
 
 	void SetStartPosition(Vector3d p_pos)

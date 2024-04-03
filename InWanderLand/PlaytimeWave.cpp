@@ -75,8 +75,6 @@ void PlaytimeWave::Update()
 			}
 
 			unitComponent->GetGameObject()->SetSelfActive(true);
-			application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
-				[&]() { unitComponent->GetGameObject()->SetSelfActive(!unitComponent->GetGameObject()->GetSelfActive()); });
 
 			GameObject* unitObject = unitComponent->GetGameObject();
 

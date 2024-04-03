@@ -74,11 +74,10 @@ void UnitProductor::AddColliderComponent() const
 void UnitProductor::AddNavigationComponent() 
 {
 	m_navField = &SingleNavigationField::Instance();
-	auto unitNavigationComponent = m_unitGameObject->AddComponent<NavigationAgent>();
-	unitNavigationComponent->AssignToNavigationField(m_navField);
-	unitNavigationComponent->SetRadius(0.3f);
+	m_unitComponent->m_navAgentComponent = m_unitGameObject->AddComponent<NavigationAgent>();
+	m_unitComponent->m_navAgentComponent->AssignToNavigationField(m_navField);
+	m_unitComponent->m_navAgentComponent->SetRadius(0.3f);
 	m_unitComponent->SetNavField(m_navField);
-	m_unitComponent->m_navAgentComponent = unitNavigationComponent;
 }
 
 void UnitProductor::AddDotweenComponent() const

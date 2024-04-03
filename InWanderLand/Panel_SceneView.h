@@ -8,6 +8,7 @@
 #include "EditorResourceManager.h"
 #include "PaletteManager.h"
 #include "EditorInputManager.h"
+#include "TransformEditCommand.h"
 #include "YunuGraphicsInterface.h"
 
 #include "ImGuizmo/ImGuizmo.h"
@@ -93,6 +94,7 @@ namespace application
 
 			bool isGuizmoControl = false;
 			std::vector<yunuGI::Vector3> initScale = std::vector<yunuGI::Vector3>(64, yunuGI::Vector3{1, 1, 1});
+			std::vector<TransformData> beforeTS;
 		};
 	}
 }

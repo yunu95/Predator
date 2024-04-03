@@ -62,6 +62,15 @@ namespace yunuGIAdapter
 		{
 			return light->IsActive();
 		}
+
+		virtual void SetIsShadowCast(bool isCast) override
+		{
+			light->SetIsShadowCast(isCast);
+		};
+		virtual bool IsShadowCast() override
+		{
+			return light->IsShadowCast();
+		};
 	private:
 		std::shared_ptr<DirectionalLight> light;
 	};
