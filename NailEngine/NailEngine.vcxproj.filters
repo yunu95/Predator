@@ -124,6 +124,9 @@
     <Filter Include="RenderSystem\PointLightShadowPass">
       <UniqueIdentifier>{97b51f6e-024a-41da-88f3-d68f8ca927ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GraphicsEngine\RenderableManager\ParticleSystem">
+      <UniqueIdentifier>{c338a971-d9d2-4886-acf8-8b5ccdc7f019}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -318,6 +321,12 @@
     <ClInclude Include="GeometryShader.h">
       <Filter>Resource\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleRendererAdapter.h">
+      <Filter>AdaptorInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>GraphicsEngine\RenderableManager\ParticleSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -446,6 +455,9 @@
     <ClCompile Include="GeometryShader.cpp">
       <Filter>Resource\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>GraphicsEngine\RenderableManager\ParticleSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="RuntimeDependency\resources\Shader\DefaultVS.hlsl">
@@ -554,6 +566,15 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="RuntimeDependency\resources\Shader\Stage_1_FloorPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\ParticleGS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\ParticleVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\ParticlePS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

@@ -184,6 +184,13 @@ struct SkinnedRenderInfo
 	TransitionDesc transitionDesc;
 };
 
+struct ParticleRenderInfo
+{
+	Mesh* mesh;
+	Material* material;
+	bool isActive = true;
+};
+
 struct ExposureBuffer
 {
 	float diffuseExposure;

@@ -241,7 +241,14 @@ void GraphicsTest()
 
     {
         auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+        auto particle = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
+        particle->GetGI();
     }
+
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+        obj->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
+	}
 
     //{
     //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
@@ -461,7 +468,7 @@ void application::contents::ContentsLayer::Initialize()
         /// 임시
 		//RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
 		//RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
-		RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
+		//RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
 
 
 //#pragma region UI Region

@@ -128,7 +128,7 @@ public:
 	virtual void SetActive(bool isActive) override
 	{
 		this->isActive = isActive;
-
+		
 		for (auto& i : this->renderInfoVec)
 		{
 			i->isActive = isActive;

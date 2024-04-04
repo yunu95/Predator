@@ -37,6 +37,7 @@ class Material;
 class yunuGI::IShader;
 class Animation;
 class NailAnimator;
+class ParticleSystem;
 
 class RenderSystem
 {
@@ -63,6 +64,7 @@ public:
 	void RenderUI();
 
 	void RenderForward();
+	void RenderParticle();
 
 	void DrawDeferredInfo();
 
@@ -72,6 +74,9 @@ public:
 
 	void PushSkinnedRenderableObject(nail::IRenderable* renderable);
 	void PopSkinnedRenderableObject(nail::IRenderable* renderable);
+
+	void PushParticleSystem(ParticleSystem* particleSystem);
+	void PopParticleSystem(ParticleSystem* particleSystem);
 
 	void PushUIObject(std::shared_ptr<nail::IRenderable> renderable);
 	void PopUIObject(std::shared_ptr<nail::IRenderable> renderable);
@@ -108,6 +113,7 @@ private:
 
 	std::map<nail::IRenderable*, std::vector<std::shared_ptr<RenderInfo>>> staticMeshRenderInfoMap;
 	std::map<nail::IRenderable*, std::vector<std::shared_ptr<SkinnedRenderInfo>>> skinnedMeshRenderInfoMap;
+	std::map<ParticleSystem*, ParticleRenderInfo> particleRenderInfoMap;
 
 	std::multiset<std::shared_ptr<nail::IRenderable>, CompareSmartPtr> UIImageSet;
 	std::set<std::shared_ptr<nail::IRenderable>> UITextSet;

@@ -48,21 +48,19 @@ PS_OUT main(PixelIn input)
     //    viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
     //}
     
-    output.arm.x = 1.0f;
-    output.arm.y = 1.0f;
-    output.arm.z = 0.0f;
+    output.arm.xyz = float3(1.f, 1.f, 0.f);
     
     output.position = float4(input.posV.xyz, 1.f);
     output.normal = float4(viewNormal.xyz, 1.f);
     output.color = color * materialColor;
     
-    float4 projPos = { 0, 0, 0, 0 };
+    //float4 projPos = { 0, 0, 0, 0 };
     
-    projPos = mul(input.posV, PTM);
+    //projPos = mul(input.posV, PTM);
     
-    float depth = projPos.z / projPos.w;
+    //float depth = projPos.z / projPos.w;
     
-    output.depth = float4(depth, depth, depth, depth);
+    //output.depth = float4(depth, depth, depth, depth);
     //output.depth = float4(objectID.x, 0, 0, 0);
     return output;
 }

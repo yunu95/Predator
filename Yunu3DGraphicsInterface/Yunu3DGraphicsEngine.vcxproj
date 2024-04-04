@@ -172,6 +172,7 @@
     <ClInclude Include="IYunuGIDebugCube.h" />
     <ClInclude Include="IYunuGIDebugObject.h" />
     <ClInclude Include="IYunuGIDebugSphere.h" />
+    <ClInclude Include="IYunuGIParticleRenderer.h" />
     <ClInclude Include="IYunuGIRenderable.h" />
     <ClInclude Include="IYunuGIDirectionalLight.h" />
     <ClInclude Include="IYunuGIEventHandler.h" />

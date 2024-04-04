@@ -220,6 +220,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="LineCollider2D.cpp" />
     <ClCompile Include="MetaData.cpp" />
     <ClCompile Include="MetafileManager.cpp" />
+    <ClCompile Include="ParticleRenderer.cpp" />
     <ClCompile Include="YunutyBoxCollider.cpp" />
     <ClCompile Include="YunutyCapsuleCollider.cpp" />
     <ClCompile Include="YunutyCollider.cpp" />
@@ -308,6 +309,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="header\YunutySphereCollider.h" />
     <ClInclude Include="header\YunutyPhysicsMaterialInfo.h" />
     <ClInclude Include="header\YunutyNavigationObstacle.h" />
+    <ClInclude Include="ParticleRenderer.h" />
     <ClInclude Include="_YunutyBoxColliderImpl.h" />
     <ClInclude Include="_YunutyCapsuleColliderImpl.h" />
     <ClInclude Include="_YunutyColliderImpl.h" />

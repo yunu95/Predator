@@ -93,6 +93,11 @@ void ResourceManager::CreateMesh(const std::wstring& mesh)
 		LoadLineMesh();
 		return;
 	}
+	else if (mesh == L"Point")
+	{
+		LoadPointMesh();
+		return;
+	}
 	//else if (mesh == L"Sphere")
 	//{
 	//	LoadSphereMesh();
@@ -103,11 +108,7 @@ void ResourceManager::CreateMesh(const std::wstring& mesh)
 	//	LoadRactangleMesh();
 	//	return;
 	//}
-	//else if (mesh == L"Point")
-	//{
-	//	LoadPointMesh();
-	//	return;
-	//}
+
 
 	//else if (mesh == L"Capsule")
 	//{
@@ -842,6 +843,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateShader(L"SpecLUTVS.cso");
 	CreateShader(L"PointLightShadowVS.cso");
 	CreateShader(L"Skinned_PointLightShadowVS.cso");
+	CreateShader(L"ParticleVS.cso");
 #pragma endregion
 
 #pragma region PS
@@ -861,11 +863,12 @@ void ResourceManager::CreateDefaultShader()
 	CreateDeferredShader(L"CopyPS.cso");
 	CreateDeferredShader(L"BlurPS.cso");
 	CreateShader(L"PointLightShadowPS.cso");
-
+	CreateShader(L"ParticlePS.cso");
 #pragma endregion
 
 #pragma region GS
 	CreateShader(L"PointLightShadowGS.cso");
+	CreateShader(L"ParticleGS.cso");
 #pragma endregion
 }
 
@@ -878,7 +881,7 @@ void ResourceManager::CreateDefaultMesh()
 	///CreateMesh(L"Cube");
 	///CreateMesh(L"Sphere");
 	CreateMesh(L"Rectangle");
-	///CreateMesh(L"Point");
+	CreateMesh(L"Point");
 	CreateMesh(L"Line");
 	///CreateMesh(L"Capsule");
 	///CreateMesh(L"Cylinder");
@@ -972,6 +975,13 @@ void ResourceManager::CreateDefaultMaterial()
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->GetRTTexture(static_cast<int>(FINAL)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp1,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
+	}
+
+	// 파티클 전용 머터리얼
+	{
+		yunuGI::IMaterial* material = CrateMaterial(L"ParticleMaterial");
+		material->SetVertexShader(GetShader(L"ParticleVS.cso").get());
+		material->SetPixelShader(GetShader(L"ParticlePS.cso").get());
 	}
 
 	/// Deferred Debug Info
@@ -1722,10 +1732,29 @@ void ResourceManager::LoadRactangleMesh()
 	CreateMesh(rectangleMesh);
 }
 //
-//void ResourceManager::LoadPointMesh()
-//{
-//
-//}
+void ResourceManager::LoadPointMesh()
+{
+	std::shared_ptr<Mesh> pointMesh = std::make_shared<Mesh>();
+
+	pointMesh->SetName(L"Line");
+
+	std::vector<Vertex> vertices(1);
+	vertices[0] = Vertex{ DirectX::SimpleMath::Vector3{0.0f, 0, 0 },
+						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+						  DirectX::SimpleMath::Vector2{0.f,0.f},
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
+
+	std::vector<unsigned int> indices(1);
+
+	indices[0] = 0;
+
+	DirectX::SimpleMath::Vector3 minPoint = vertices[0].pos;
+	DirectX::SimpleMath::Vector3 maxPoint = vertices[0].pos;
+
+	pointMesh->SetData(vertices, indices, maxPoint, minPoint);
+	CreateMesh(pointMesh);
+}
 //
 void ResourceManager::LoadLineMesh()
 {

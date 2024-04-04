@@ -13,6 +13,7 @@
 #include "NailCamera.h"
 #include "IRenderable.h"
 #include "SKinnedMesh.h"
+#include "ParticleSystem.h"
 
 #include "ILight.h"
 #include "LightManager.h"
@@ -196,9 +197,10 @@ void RenderSystem::Render()
 	// Final 출력
 	RenderFinal();
 	RenderForward();
+	RenderParticle();
 	RenderBackBuffer();
 
-	SkyBoxPass::Instance.Get().Render();
+	//SkyBoxPass::Instance.Get().Render();
 
 	RenderUI();
 
@@ -575,6 +577,11 @@ void RenderSystem::RenderForward()
 	InstancingManager::Instance.Get().RenderStaticForward();
 }
 
+void RenderSystem::RenderParticle()
+{
+
+}
+
 void RenderSystem::DrawDeferredInfo()
 {
 	auto windowInfo = NailEngine::Instance.Get().GetWindowInfo();
@@ -675,6 +682,16 @@ void RenderSystem::PopSkinnedRenderableObject(nail::IRenderable* renderable)
 	}
 
 	this->skinnedMeshRenderInfoMap.erase(renderable);
+}
+
+void RenderSystem::PushParticleSystem(ParticleSystem* particleSystem)
+{
+	this->particleRenderInfoMap.insert({ particleSystem, particleSystem->GetParticleRenderInfo() });
+}
+
+void RenderSystem::PopParticleSystem(ParticleSystem* particleSystem)
+{
+	this->particleRenderInfoMap.erase(particleSystem);
 }
 
 void RenderSystem::PushUIObject(std::shared_ptr<nail::IRenderable> renderable)

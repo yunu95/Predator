@@ -245,6 +245,9 @@
     <ClInclude Include="YunuGIQuaternion.h">
       <Filter>raw</Filter>
     </ClInclude>
+    <ClInclude Include="IYunuGIParticleRenderer.h">
+      <Filter>Header Files\Renderable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Yunu3DGraphicsEngine.rc">

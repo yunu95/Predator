@@ -1,6 +1,7 @@
 #pragma once
 #include "IYunuGIStaticMeshRenderer.h"
 #include "IYunuGISkinnedMesh.h"
+#include "IYunuGIParticleRenderer.h"
 #include "IYunuGIDirectionalLight.h"
 #include "IYunuGIPointLight.h"
 #include "IYunuGICamera.h"
@@ -10,7 +11,7 @@
 #include "IAnimator.h"
 #include "IUnknown.h"
 
-// ÆÑÅä¸® °´Ã¼´Â Ä«¸Ş¶ó, ¸Ş½¬¿Í °°ÀÌ ·»´õ¸µ¿¡ ÇÊ¿äÇÑ °´Ã¼µéÀ» »ı¼ºÇÑ´Ù.
+// íŒ©í† ë¦¬ ê°ì²´ëŠ” ì¹´ë©”ë¼, ë©”ì‰¬ì™€ ê°™ì´ ë Œë”ë§ì— í•„ìš”í•œ ê°ì²´ë“¤ì„ ìƒì„±í•œë‹¤.
 namespace yunuGI
 {
     struct IFactoryDesc
@@ -22,6 +23,7 @@ namespace yunuGI
         virtual yunuGI::ICamera* CreateCamera(const yunuGI::ICameraDesc& desc) = 0;
         virtual yunuGI::IStaticMeshRenderer* CreateStaticMesh(const yunuGI::IStaticMeshRendererDesc& desc) = 0;
         virtual yunuGI::ISkinnedMesh* CreateSkinnedMesh(const yunuGI::ISkinnedMeshDesc& desc)=0;
+        virtual yunuGI::IParticleRenderer* CreateParticleRenderer(const yunuGI::IParticleRendererDesc& desc)=0;
         virtual yunuGI::IDebugCube* CreateDebugCube(const yunuGI::IDebugCubeDesc& desc) = 0;
         virtual yunuGI::IUIImage* CreateUIImage(const yunuGI::IUIImageDesc& desc) = 0;
         virtual yunuGI::IUIText* CreateUIText(const yunuGI::IUITextDesc& desc) = 0;

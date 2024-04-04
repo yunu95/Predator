@@ -98,27 +98,27 @@ public:
 
 				if (Input::isKeyDown(KeyCode::Q))
 				{
-					positionDelta.y -= speed * Vector3d(0.0, yawSign, 0.0).y;
+					positionDelta.y -= speed * Vector3d(0.0, yawSign, 0.0).y * Time::GetDeltaTime();
 				}
 				if (Input::isKeyDown(KeyCode::Alphabet_E))
 				{
-					positionDelta.y += speed * Vector3d(0.0, yawSign, 0.0).y;
+					positionDelta.y += speed * Vector3d(0.0, yawSign, 0.0).y * Time::GetDeltaTime();
 				}
 				if (Input::isKeyDown(KeyCode::S))
 				{
-					positionDelta -= speed * forwardDirection;
+					positionDelta -= speed * forwardDirection * Time::GetDeltaTime();
 				}
 				if (Input::isKeyDown(KeyCode::W))
 				{
-					positionDelta += speed * forwardDirection;
+					positionDelta += speed * forwardDirection * Time::GetDeltaTime();
 				}
 				if (Input::isKeyDown(KeyCode::A))
 				{
-					positionDelta -= speed * rightDirection;
+					positionDelta -= speed * rightDirection * Time::GetDeltaTime();
 				}
 				if (Input::isKeyDown(KeyCode::D))
 				{
-					positionDelta += speed * rightDirection;
+					positionDelta += speed * rightDirection * Time::GetDeltaTime();
 				}
 
 				double maxRate = 0.12f;
@@ -224,8 +224,8 @@ private:
 	float yaw = 0.0;
 	float yawDelta = 0.0;
 
-	float min_Speed = 0.002;
-	float max_Speed = 2.0;
+	float min_Speed = 5.f;
+	float max_Speed = 40.0;
 	float defaultMoveSpeed = 0.03;
 	float rotationSpeed = 0.3;
 
