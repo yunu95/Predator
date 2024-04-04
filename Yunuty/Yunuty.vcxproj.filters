@@ -809,7 +809,7 @@
     <ClInclude Include="header\Billboard.h">
       <Filter>yunutyEngine\ClientTemplate\Billboard</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleRenderer.h">
+    <ClInclude Include="header\ParticleRenderer.h">
       <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\ParticleRenderer</Filter>
     </ClInclude>
   </ItemGroup>

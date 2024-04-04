@@ -25,5 +25,18 @@ namespace yunutyEngine::graphics
 		// GI는 Graphics Interface라는 뜻임.
 		yunuGI::IParticleRenderer& GetGI() { return Renderable<yunuGI::IParticleRenderer>::GetGI(); }
 		ParticleRenderer();
+
+		virtual void Update() override;
+
+		void Play();
+
+	private:
+		bool isPlay;
+
+		float accTime;
+		bool isLoop;
+
+		float curCreationCycle;
+		float creationCycle;
 	};
 }

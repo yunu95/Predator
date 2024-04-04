@@ -283,6 +283,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="ChunkyTriMesh.h" />
     <ClInclude Include="header\HasVariable.h" />
     <ClInclude Include="header\Animator.h" />
+    <ClInclude Include="header\ParticleRenderer.h" />
     <ClInclude Include="header\YunutyBoxCollider.h" />
     <ClInclude Include="header\DebugCube.h" />
     <ClInclude Include="header\DirectionalLight.h" />
@@ -309,7 +310,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="header\YunutySphereCollider.h" />
     <ClInclude Include="header\YunutyPhysicsMaterialInfo.h" />
     <ClInclude Include="header\YunutyNavigationObstacle.h" />
-    <ClInclude Include="ParticleRenderer.h" />
     <ClInclude Include="_YunutyBoxColliderImpl.h" />
     <ClInclude Include="_YunutyCapsuleColliderImpl.h" />
     <ClInclude Include="_YunutyColliderImpl.h" />

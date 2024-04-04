@@ -16,12 +16,15 @@ public:
 	ParticleRenderInfo& GetParticleRenderInfo() { return particleRenderInfo; }
 
 	void SetMaxParticle(unsigned int maxParticle);
+	void SetDuration(float duration);
+	float GetDuration();
+
 
 private:
 	ParticleRenderInfo particleRenderInfo;
 
 	unsigned int maxParticle = 500;
-
+	float duration;
 
 };
 

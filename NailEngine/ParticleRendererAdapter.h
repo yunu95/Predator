@@ -58,6 +58,16 @@ namespace yunuGIAdapter
 			return 0;
 		};
 
+		virtual void SetDuration(float duration) override
+		{
+			particleSystem->SetDuration(duration);
+		};
+
+		virtual float GetDuration() override
+		{
+			return particleSystem->GetDuration();
+		};
+
 	private:
 		std::shared_ptr<ParticleSystem> particleSystem;
 	};
