@@ -9,9 +9,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Light">
-      <UniqueIdentifier>{adaa4b96-5851-486e-b2ce-2dc74cf10535}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Renderable">
       <UniqueIdentifier>{403431dd-669e-49b7-b796-81caf1a7d5bd}</UniqueIdentifier>
     </Filter>
@@ -74,6 +71,9 @@
     </Filter>
     <Filter Include="Header Files\Animator">
       <UniqueIdentifier>{3532cc9e-1207-485a-8766-aec11fd2a817}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Particle">
+      <UniqueIdentifier>{6a6dfff4-0df6-449e-8aa5-8d810ac4a314}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -247,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="IYunuGIParticleRenderer.h">
       <Filter>Header Files\Renderable</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleRenderInfo.h">
+      <Filter>Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

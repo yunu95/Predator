@@ -61,16 +61,26 @@ void Mesh::SetAmbientExposure(float exposure)
 	this->ambientExposure = exposure;
 }
 
-void Mesh::Render(unsigned int materialIndex /*= 0*/, std::shared_ptr<InstanceBuffer> buffer /*= nullptr*/)
+void Mesh::Render(unsigned int materialIndex, D3D_PRIMITIVE_TOPOLOGY topology, bool isInstancing ,std::shared_ptr<InstanceBuffer> buffer)
 {
-	if (buffer != nullptr)
+	if (buffer != nullptr && isInstancing)
 	{
 		unsigned int stride = sizeof(Vertex);
 		unsigned int offset = 0;
 
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetVertexBuffers(0, 1, this->vertexBufferVec[materialIndex].vertexBuffer.GetAddressOf(), &stride, &offset);
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetIndexBuffer(this->indexBufferVec[materialIndex].indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetPrimitiveTopology(topology);
+
+		ResourceBuilder::Instance.Get().device->GetDeviceContext()->DrawIndexedInstanced(this->indexBufferVec[materialIndex].indexCount, buffer->GetCount(), 0, 0, 0);
+	}
+	else if (buffer == nullptr && isInstancing == true)
+	{
+		unsigned int stride = sizeof(Vertex);
+		unsigned int offset = 0;
+
+		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetVertexBuffers(0, 1, this->vertexBufferVec[materialIndex].vertexBuffer.GetAddressOf(), &stride, &offset);
+		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetPrimitiveTopology(topology);
 
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->DrawIndexedInstanced(this->indexBufferVec[materialIndex].indexCount, buffer->GetCount(), 0, 0, 0);
 	}
@@ -81,7 +91,7 @@ void Mesh::Render(unsigned int materialIndex /*= 0*/, std::shared_ptr<InstanceBu
 
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetVertexBuffers(0, 1, this->vertexBufferVec[materialIndex].vertexBuffer.GetAddressOf(), &stride, &offset);
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetIndexBuffer(this->indexBufferVec[materialIndex].indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetPrimitiveTopology(topology);
 
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->DrawIndexed(this->indexBufferVec[materialIndex].indexCount, 0, 0);
 	}

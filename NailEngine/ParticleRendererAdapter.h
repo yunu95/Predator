@@ -17,7 +17,6 @@ namespace yunuGIAdapter
 		ParticleRendererAdapter() : RenderableAdapter()
 		{
 			particleSystem = std::make_shared<ParticleSystem>();
-			RenderSystem::Instance.Get().PushParticleSystem(particleSystem.get());
 		}
 
 		~ParticleRendererAdapter()
@@ -67,7 +66,10 @@ namespace yunuGIAdapter
 		{
 			return particleSystem->GetDuration();
 		};
-
+		virtual void SetParticleInfoList(std::list<yunuGI::ParticleRenderInfo>& particleRenderInfo) override
+		{
+			InstancingManager::Instance.Get().RegisterParticleRenderInfo(particleSystem.get(), &particleRenderInfo);
+		};
 	private:
 		std::shared_ptr<ParticleSystem> particleSystem;
 	};

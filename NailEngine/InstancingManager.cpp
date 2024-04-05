@@ -20,6 +20,7 @@ LazyObjects<InstancingManager> InstancingManager::Instance;
 void InstancingManager::Init()
 {
 	instanceTransitionDesc = std::make_shared<InstanceTransitionDesc>();
+	particleBuffer = std::make_shared<ParticleBuffer>();
 }
 
 void InstancingManager::RenderStaticDeferred()
@@ -101,7 +102,7 @@ void InstancingManager::RenderStaticDeferred()
 
 					(*renderInfoVec.begin())->material->PushGraphicsData();
 					buffer->PushData();
-					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, buffer);
+					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,true, buffer);
 				}
 			}
 		}
@@ -182,7 +183,7 @@ void InstancingManager::RenderStaticForward()
 					(*renderInfoVec.begin())->material->PushGraphicsData();
 					auto test = (*renderInfoVec.begin())->mesh->GetMaterialCount();
 					buffer->PushData();
-					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, buffer);
+					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer);
 				}
 			}
 		}
@@ -238,7 +239,7 @@ void InstancingManager::RenderStaticShadow()
 				}
 
 				buffer->PushData();
-				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, buffer);
+				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer);
 			}
 		}
 	}
@@ -285,7 +286,7 @@ void InstancingManager::RenderStaticPointLightShadow(DirectX::SimpleMath::Matrix
 			{
 				auto& buffer = _buffers[instanceID];
 				buffer->PushData();
-				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, buffer);
+				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer);
 			}
 		}
 	}
@@ -334,7 +335,7 @@ void InstancingManager::RenderSkinnedPointLightShadow(DirectX::SimpleMath::Matri
 				if (buffer->GetCount() > 0)
 				{
 					buffer->PushData();
-					(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, buffer);
+					(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer);
 				}
 			}
 		}
@@ -422,6 +423,11 @@ void InstancingManager::PopSkinnedData(std::shared_ptr<SkinnedRenderInfo>& rende
 	}
 }
 
+void InstancingManager::RegisterParticleRenderInfo(ParticleSystem* particleSystem, std::list<yunuGI::ParticleRenderInfo>* particleInfoList)
+{
+	this->particleRenderInfoMap.insert({ particleSystem, particleInfoList });
+}
+
 void InstancingManager::RenderSkinned()
 {
 	ClearData();
@@ -475,7 +481,7 @@ void InstancingManager::RenderSkinned()
 				{
 					(*renderInfoVec.begin())->renderInfo.material->PushGraphicsData();
 					buffer->PushData();
-					(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, buffer);
+					(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true,buffer);
 				}
 			}
 		}
@@ -487,6 +493,25 @@ void InstancingManager::ClearData()
 	for (auto& pair : _buffers)
 	{
 		pair.second->ClearData();
+	}
+}
+
+void InstancingManager::RenderParticle()
+{
+	for (auto& each : this->particleRenderInfoMap)
+	{
+		auto& tempList = each.second;
+
+		int index = 0;
+		for (auto& each2 : *tempList)
+		{
+			this->particleBuffer->particleDesc[index].pos = reinterpret_cast<DirectX::SimpleMath::Vector3&>(each2.position);
+			this->particleBuffer->particleDesc[index].scale = each2.scale;
+		}
+
+		NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::PARTICLE))->PushGraphicsData(&this->particleBuffer,
+			sizeof(ParticleBuffer),
+			static_cast<int>(CB_TYPE::PARTICLE), true);
 	}
 }
 

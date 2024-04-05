@@ -22,3 +22,4 @@ float ParticleSystem::GetDuration()
 {
 	return this->duration;
 }
+

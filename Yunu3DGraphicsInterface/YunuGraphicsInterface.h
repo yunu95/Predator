@@ -28,3 +28,4 @@
 #include "YunuVector4.h"
 #include "FBXData.h"
 #include "IAnimator.h"
+#include "ParticleRenderInfo.h"

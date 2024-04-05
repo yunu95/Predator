@@ -182,6 +182,7 @@
     <ClInclude Include="IYunuGIUIObject.h" />
     <ClInclude Include="IYunuGIUIText.h" />
     <ClInclude Include="IYunuMeshRenderer.h" />
+    <ClInclude Include="ParticleRenderInfo.h" />
     <ClInclude Include="YGCameraAdapter.h" />
     <ClInclude Include="YGDebugCubeAdapter.h" />
     <ClInclude Include="YGDebugSphereAdapter.h" />

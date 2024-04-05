@@ -2,8 +2,9 @@
 #include "IYunuMeshRenderer.h"
 #include "YunuGIMatrix4x4.h"
 #include "IUnknown.h"
+#include "ParticleRenderInfo.h"
 
-#include <string>
+#include <list>
 
 namespace yunuGI
 {
@@ -17,6 +18,7 @@ namespace yunuGI
 
 		virtual void SetDuration(float duration) = 0;
 		virtual float GetDuration() = 0;
+		virtual void SetParticleInfoList(std::list<yunuGI::ParticleRenderInfo>& particleRenderInfo) = 0;
 	};
 
 	struct IParticleRendererDesc

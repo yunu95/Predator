@@ -197,7 +197,7 @@ void RenderSystem::Render()
 	// Final 출력
 	RenderFinal();
 	RenderForward();
-	RenderParticle();
+	//RenderParticle();
 	RenderBackBuffer();
 
 	//SkyBoxPass::Instance.Get().Render();
@@ -579,7 +579,7 @@ void RenderSystem::RenderForward()
 
 void RenderSystem::RenderParticle()
 {
-
+	InstancingManager::Instance.Get().RenderParticle();
 }
 
 void RenderSystem::DrawDeferredInfo()
@@ -682,16 +682,6 @@ void RenderSystem::PopSkinnedRenderableObject(nail::IRenderable* renderable)
 	}
 
 	this->skinnedMeshRenderInfoMap.erase(renderable);
-}
-
-void RenderSystem::PushParticleSystem(ParticleSystem* particleSystem)
-{
-	this->particleRenderInfoMap.insert({ particleSystem, particleSystem->GetParticleRenderInfo() });
-}
-
-void RenderSystem::PopParticleSystem(ParticleSystem* particleSystem)
-{
-	this->particleRenderInfoMap.erase(particleSystem);
 }
 
 void RenderSystem::PushUIObject(std::shared_ptr<nail::IRenderable> renderable)

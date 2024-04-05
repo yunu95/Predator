@@ -4,6 +4,7 @@
 #define MAX_BONE_COUNT 250
 #define MAX_FRAME_COUNT 500
 #define MAX_INSTANCE_MODEL 500
+#define MAX_PARTICLE 500
 
 cbuffer MatrixBuffer : register(b0)
 {
@@ -152,6 +153,17 @@ cbuffer UtilBuffer : register(b10)
     float deltaTime;
     int useIBL;
 }
+
+struct ParticleDesc
+{
+    float3 pos;
+    float scale;
+};
+
+cbuffer ParticleBuffer : register(b11)
+{
+    ParticleDesc particleDesc[MAX_PARTICLE];
+};
 
 Texture2D AlbedoMap : register(t0);
 Texture2D NormalMap : register(t1);

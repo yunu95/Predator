@@ -16,6 +16,7 @@ using namespace DirectX::PackedVector;
 #define MAX_FRAME_COUNT 500
 #define MAX_INSTANCE_MODEL 500
 #define MAX_POINT_LIGHT 10
+#define MAX_PARTICLE 500
 
 struct Vertex
 {
@@ -70,6 +71,7 @@ enum class CB_TYPE
 	POINTLIGHT_INDEX,
 	EXPOSURE,
 	UTIL,
+	PARTICLE,
 };
 
 struct MatrixBuffer
@@ -184,12 +186,15 @@ struct SkinnedRenderInfo
 	TransitionDesc transitionDesc;
 };
 
-struct ParticleRenderInfo
+namespace nail
 {
-	Mesh* mesh;
-	Material* material;
-	bool isActive = true;
-};
+	struct ParticleRenderInfo
+	{
+		Mesh* mesh;
+		Material* material;
+		bool isActive = true;
+	};
+}
 
 struct ExposureBuffer
 {
@@ -205,6 +210,18 @@ struct UtilBuffer
 	float deltaTime;
 	int useIBL;
 };
+
+struct ParticleDesc
+{
+	DirectX::SimpleMath::Vector3 pos;
+	float scale;
+};
+
+struct ParticleBuffer
+{
+	ParticleDesc particleDesc[MAX_PARTICLE];
+};
+
 
 // Deferred Only
 class Texture;

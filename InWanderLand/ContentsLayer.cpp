@@ -241,13 +241,21 @@ void GraphicsTest()
 
     {
         auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
-        auto particle = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
-        particle->GetGI();
     }
+
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+        obj->GetTransform()->SetLocalPosition(Vector3d{ -15,0,0 });
+	}
 
 	{
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
         obj->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
+	}
+
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 15,0,0 });
 	}
 
     //{
