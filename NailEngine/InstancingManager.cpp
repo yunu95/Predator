@@ -11,7 +11,9 @@
 #include "ConstantBuffer.h"
 #include "ResourceManager.h"
 #include "PixelShader.h"
+#include "GeometryShader.h"
 #include "PointLight.h"
+#include "ParticleSystem.h"
 
 #include <cmath>
 
@@ -102,7 +104,7 @@ void InstancingManager::RenderStaticDeferred()
 
 					(*renderInfoVec.begin())->material->PushGraphicsData();
 					buffer->PushData();
-					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,true, buffer);
+					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,true, buffer->GetCount(),buffer);
 				}
 			}
 		}
@@ -183,7 +185,7 @@ void InstancingManager::RenderStaticForward()
 					(*renderInfoVec.begin())->material->PushGraphicsData();
 					auto test = (*renderInfoVec.begin())->mesh->GetMaterialCount();
 					buffer->PushData();
-					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer);
+					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
 				}
 			}
 		}
@@ -239,7 +241,7 @@ void InstancingManager::RenderStaticShadow()
 				}
 
 				buffer->PushData();
-				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer);
+				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
 			}
 		}
 	}
@@ -286,7 +288,7 @@ void InstancingManager::RenderStaticPointLightShadow(DirectX::SimpleMath::Matrix
 			{
 				auto& buffer = _buffers[instanceID];
 				buffer->PushData();
-				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer);
+				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
 			}
 		}
 	}
@@ -335,7 +337,7 @@ void InstancingManager::RenderSkinnedPointLightShadow(DirectX::SimpleMath::Matri
 				if (buffer->GetCount() > 0)
 				{
 					buffer->PushData();
-					(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer);
+					(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
 				}
 			}
 		}
@@ -481,7 +483,7 @@ void InstancingManager::RenderSkinned()
 				{
 					(*renderInfoVec.begin())->renderInfo.material->PushGraphicsData();
 					buffer->PushData();
-					(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true,buffer);
+					(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
 				}
 			}
 		}
@@ -498,6 +500,10 @@ void InstancingManager::ClearData()
 
 void InstancingManager::RenderParticle()
 {
+	MatrixBuffer matrixBuffer;
+	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
+
 	for (auto& each : this->particleRenderInfoMap)
 	{
 		auto& tempList = each.second;
@@ -507,12 +513,26 @@ void InstancingManager::RenderParticle()
 		{
 			this->particleBuffer->particleDesc[index].pos = reinterpret_cast<DirectX::SimpleMath::Vector3&>(each2.position);
 			this->particleBuffer->particleDesc[index].scale = each2.scale;
+			index++;
 		}
 
-		NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::PARTICLE))->PushGraphicsData(&this->particleBuffer,
-			sizeof(ParticleBuffer),
-			static_cast<int>(CB_TYPE::PARTICLE), true);
+		if (index != 0)
+		{
+			static_cast<Material*>(each.first->GetMaterial())->PushGraphicsData();
+			static_cast<GeometryShader*>(ResourceManager::Instance.Get().GetShader(L"ParticleGS.cso").get())->Bind();
+
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::PARTICLE))->PushGraphicsData(this->particleBuffer.get(),
+				sizeof(ParticleBuffer),
+				static_cast<int>(CB_TYPE::PARTICLE), true);
+
+			matrixBuffer.WTM = DirectX::SimpleMath::Matrix::Identity;
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX), true);
+
+			ResourceManager::Instance.Get().GetMesh(L"Point")->Render(0, D3D11_PRIMITIVE_TOPOLOGY_POINTLIST, true, index);
+		}
 	}
+
+	static_cast<GeometryShader*>(ResourceManager::Instance.Get().GetShader(L"ParticleGS.cso").get())->UnBind();
 }
 
 void InstancingManager::AddData(const InstanceID& id, InstancingData& instancingData)

@@ -982,6 +982,7 @@ void ResourceManager::CreateDefaultMaterial()
 		yunuGI::IMaterial* material = CrateMaterial(L"ParticleMaterial");
 		material->SetVertexShader(GetShader(L"ParticleVS.cso").get());
 		material->SetPixelShader(GetShader(L"ParticlePS.cso").get());
+		material->SetTexture(yunuGI::Texture_Type::ALBEDO, GetTexture(L"Texture/zoro.jpg").get());
 	}
 
 	/// Deferred Debug Info
@@ -1079,9 +1080,9 @@ void ResourceManager::CreateDefaultTexture()
 	CreateTexture(L"Texture/asdBrdf.dds");
 	CreateTexture(L"Texture/asdDiffuseHDR.dds");
 	CreateTexture(L"Texture/asdSpecularHDR.dds");
-	/*CreateTexture(L"Texture/zoro.jpg");
-	CreateTexture(L"Texture/Brick_Albedo.jpg");
-	CreateTexture(L"Texture/Brick_Normal.jpg");*/
+	CreateTexture(L"Texture/zoro.jpg");
+	//CreateTexture(L"Texture/Brick_Albedo.jpg");
+	//CreateTexture(L"Texture/Brick_Normal.jpg");
 
 
 
@@ -1736,7 +1737,7 @@ void ResourceManager::LoadPointMesh()
 {
 	std::shared_ptr<Mesh> pointMesh = std::make_shared<Mesh>();
 
-	pointMesh->SetName(L"Line");
+	pointMesh->SetName(L"Point");
 
 	std::vector<Vertex> vertices(1);
 	vertices[0] = Vertex{ DirectX::SimpleMath::Vector3{0.0f, 0, 0 },

@@ -61,7 +61,7 @@ void Mesh::SetAmbientExposure(float exposure)
 	this->ambientExposure = exposure;
 }
 
-void Mesh::Render(unsigned int materialIndex, D3D_PRIMITIVE_TOPOLOGY topology, bool isInstancing ,std::shared_ptr<InstanceBuffer> buffer)
+void Mesh::Render(unsigned int materialIndex, D3D_PRIMITIVE_TOPOLOGY topology, bool isInstancing , int instanceCount,std::shared_ptr<InstanceBuffer> buffer)
 {
 	if (buffer != nullptr && isInstancing)
 	{
@@ -82,7 +82,7 @@ void Mesh::Render(unsigned int materialIndex, D3D_PRIMITIVE_TOPOLOGY topology, b
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetVertexBuffers(0, 1, this->vertexBufferVec[materialIndex].vertexBuffer.GetAddressOf(), &stride, &offset);
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetPrimitiveTopology(topology);
 
-		ResourceBuilder::Instance.Get().device->GetDeviceContext()->DrawIndexedInstanced(this->indexBufferVec[materialIndex].indexCount, buffer->GetCount(), 0, 0, 0);
+		ResourceBuilder::Instance.Get().device->GetDeviceContext()->DrawIndexedInstanced(this->indexBufferVec[materialIndex].indexCount, instanceCount, 0, 0, 0);
 	}
 	else
 	{

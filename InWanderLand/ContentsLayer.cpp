@@ -239,24 +239,34 @@ void GraphicsTest()
        ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 190,0,0 });
        ////////////}
 
-    {
-        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
-    }
-
 	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
-        obj->GetTransform()->SetLocalPosition(Vector3d{ -15,0,0 });
+	    auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        auto particleSystem = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
+        particleSystem->Play();
+        particleSystem->SetRateOverTime(10.f);
+        particleSystem->SetSpeed(1.f);
+        particleSystem->SetLoop(true);
 	}
 
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-        obj->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
-	}
 
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-		obj->GetTransform()->SetLocalPosition(Vector3d{ 15,0,0 });
-	}
+    //{
+    //    auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+    //}
+
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+ //       obj->GetTransform()->SetLocalPosition(Vector3d{ -15,0,0 });
+	//}
+
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+ //       obj->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
+	//}
+
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 15,0,0 });
+	//}
 
     //{
     //	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");

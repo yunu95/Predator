@@ -31,7 +31,15 @@ namespace yunutyEngine::graphics
 
 		virtual void Update() override;
 		void SetMaxParticle(unsigned int maxParticle);
+		void SetRateOverTime(float rateOverTime);
 		void Play();
+		void SetLoop(bool isLoop);
+		void SetLifeTime(float lifeTime);
+		void SetScale(float scale);
+		void SetSpeed(float speed);
+
+	private:
+		yunuGI::Vector3 GenerateRandomDirectionInCone(float angle);
 
 	private:
 		bool isPlay = false;
@@ -40,7 +48,11 @@ namespace yunutyEngine::graphics
 		bool isLoop = false;
 
 		double curCreationCycle = 0.f;
-		float rateOverTime = 1.f;
+		float rateOverTime = 10.f;
+
+		float lifeTime = 5.f;
+		float scale = 1.f;
+		float speed = 1.f;
 
 		unsigned int maxParticle = 500;
 

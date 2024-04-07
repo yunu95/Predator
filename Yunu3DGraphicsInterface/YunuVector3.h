@@ -23,5 +23,24 @@ namespace yunuGI
 
 			return *this;
 		}
+
+		float Length(const Vector3& vector)
+		{
+			return std::sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+		}
+
+		Vector3 Normalize(const Vector3& vector)
+		{
+			float length = Length(vector);
+			if (length != 0)
+			{
+				float invLength = 1.0f / length;
+				return { vector.x * invLength, vector.y * invLength, vector.z * invLength };
+			}
+			else
+			{
+				return { 0.0f, 0.0f, 0.0f }; 
+			}
+		}
 	};
 }

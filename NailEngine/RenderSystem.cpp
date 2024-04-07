@@ -197,7 +197,7 @@ void RenderSystem::Render()
 	// Final 출력
 	RenderFinal();
 	RenderForward();
-	//RenderParticle();
+	RenderParticle();
 	RenderBackBuffer();
 
 	//SkyBoxPass::Instance.Get().Render();

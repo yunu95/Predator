@@ -10,6 +10,53 @@ yunutyEngine::graphics::ParticleRenderer::ParticleRenderer() :
 	GetGI().SetParticleInfoList(this->ableParticles);
 }
 
+yunuGI::Vector3 ParticleRenderer::GenerateRandomDirectionInCone(float angle)
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+
+	// Cone의 반지름 및 높이 계산
+	float coneRadius = tan(angle);
+	float coneHeight = 1.0f;
+
+	// 무작위 각도 및 반지름 생성
+	float theta = dist(gen) * 6.283185307f;
+	float r = sqrt(dist(gen));
+
+	// 무작위로 선택된 방향 생성
+	float x = coneRadius * r * cos(theta);
+	float y = coneHeight * r;
+	float z = coneRadius * r * sin(theta);
+
+	return yunuGI::Vector3(x, y, z);
+}
+
+void ParticleRenderer::SetSpeed(float speed)
+{
+	this->speed = speed;
+}
+
+void ParticleRenderer::SetScale(float scale)
+{
+	this->scale = scale;
+}
+
+void ParticleRenderer::SetLifeTime(float lifeTime)
+{
+	this->lifeTime = lifeTime;
+}
+
+void ParticleRenderer::SetRateOverTime(float rateOverTime)
+{
+	this->rateOverTime = rateOverTime;
+}
+
+void ParticleRenderer::SetLoop(bool isLoop)
+{
+	this->isLoop = isLoop;
+}
+
 void ParticleRenderer::SetMaxParticle(unsigned int maxParticle)
 {
 	this->maxParticle = maxParticle;
@@ -38,6 +85,7 @@ void ParticleRenderer::Update()
 			// 이제 입자 활성화
 			auto& particle = this->disableParticles.front();
 			particle.position = GetTransform()->GetLocalPosition();
+			particle.direction = this->GenerateRandomDirectionInCone(60).Normalize(this->GenerateRandomDirectionInCone(60));
 			this->disableParticles.pop_front();
 
 			this->ableParticles.push_back(particle);
@@ -49,10 +97,12 @@ void ParticleRenderer::Update()
 
 			each.curLifeTime += Time::GetDeltaTime();
 
+			each.lifeTime = this->lifeTime;
+			each.scale = this->scale;
+
 			// 생성된 입자의 생명주기가 다하면 다시 비활성
 			if (each.curLifeTime >= each.lifeTime)
 			{
-				each.curLifeTime = 0;
 				each.Reset();
 				this->disableParticles.push_back(*iter);
 
@@ -61,8 +111,8 @@ void ParticleRenderer::Update()
 				continue;
 			}
 
-			each.position += (yunuGI::Vector3{ 0,1,0 }*Time::GetDeltaTime());
-			each.scale = 1.f;
+			each.position += (each.direction *this->speed * Time::GetDeltaTime());
+			
 			++iter;
 		}
 	}
@@ -70,10 +120,37 @@ void ParticleRenderer::Update()
 	{
 		isPlay = false;
 
+
 		if (isLoop)
 		{
 			isPlay = true;
 			accTime = 0.f;
+		}
+		else
+		{
+			for (auto iter = this->ableParticles.begin(); iter != this->ableParticles.end();)
+			{
+				auto& each = *iter;
+
+				each.curLifeTime += Time::GetDeltaTime();
+
+				each.lifeTime = this->lifeTime;
+				each.scale = this->scale;
+
+				// 생성된 입자의 생명주기가 다하면 다시 비활성
+				if (each.curLifeTime >= each.lifeTime)
+				{
+					each.Reset();
+					this->disableParticles.push_back(*iter);
+
+					iter = this->ableParticles.erase(iter);
+
+					continue;
+				}
+
+				each.position += (each.direction * this->speed * Time::GetDeltaTime());
+				++iter;
+			}
 		}
 	}
 }

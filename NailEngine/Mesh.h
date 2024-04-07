@@ -34,7 +34,7 @@ public:
 	virtual void SetDiffuseExposure(float exposure) override;
 	virtual void SetAmbientExposure(float exposure) override;
 
-    void Render(unsigned int materialIndex = 0, D3D_PRIMITIVE_TOPOLOGY topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ,bool isInstancing = false, std::shared_ptr<InstanceBuffer> buffer = nullptr);
+    void Render(unsigned int materialIndex = 0, D3D_PRIMITIVE_TOPOLOGY topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ,bool isInstancing = false, int instanceCount = 1, std::shared_ptr<InstanceBuffer> buffer = nullptr);
 
     virtual void GetBoundingBoxInfo(const yunuGI::Matrix4x4& wtm, yunuGI::Vector3* min, yunuGI::Vector3* max);
 

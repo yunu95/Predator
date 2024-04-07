@@ -25,14 +25,17 @@ namespace yunuGIAdapter
 
 		virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)
 		{
+
 		};
 
 		virtual void SetActive(bool isActive)
 		{
+
 		};
 
 		virtual void SetMesh(yunuGI::IMesh* mesh) override
 		{
+
 		};
 
 		virtual bool IsActive() override
@@ -50,6 +53,11 @@ namespace yunuGIAdapter
 		virtual void SetMaterial(unsigned int index, yunuGI::IMaterial* material) override
 		{
 		
+		}
+
+		virtual yunuGI::IMaterial* GetMaterial(unsigned int index = 0) override
+		{
+			return particleSystem->GetMaterial();
 		}
 
 		virtual int GetMaterialCount() override
@@ -72,5 +80,6 @@ namespace yunuGIAdapter
 		};
 	private:
 		std::shared_ptr<ParticleSystem> particleSystem;
+
 	};
 }

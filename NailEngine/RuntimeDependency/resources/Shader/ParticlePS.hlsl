@@ -1,6 +1,16 @@
-float4 main() : SV_TARGET
+#include "Buffers.hlsli"
+
+struct GS_OUT
 {
-	return float4(1.0f, 1.0f, 1.0f, 1.0f);
+    float4 position : SV_Position;
+    float2 uv : TEXCOORD;
+    uint id : SV_InstanceID;
+};
+
+
+float4 main(GS_OUT input) : SV_TARGET
+{
+    return AlbedoMap.Sample(sam, input.uv);
 }
 
 // ShaderInfo
