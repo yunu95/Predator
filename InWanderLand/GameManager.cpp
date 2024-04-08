@@ -21,7 +21,7 @@ void GameManager::Update()
 
 void GameManager::EngageBattle()
 {
-	isBattleModeOn = true;		
+	isBattleModeOn = true;
 }
 
 void GameManager::EndBattle()

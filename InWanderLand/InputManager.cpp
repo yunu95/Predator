@@ -46,23 +46,26 @@ void InputManager::Update()
 				isPlayerSelected = true;
 				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 			}
-			//if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_4))
-			//{
-			//	PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::AllPlayers);
-			//	currentSelectedSerialNumber = SelectedSerialNumber::All;
-			//	isPlayerSelected = true;
-			//	SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-			//}
+			if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_4))
+			{
+				PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::AllPlayers);
+				currentSelectedSerialNumber = SelectedSerialNumber::All;
+				isPlayerSelected = true;
+				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+			}
 		}
 
-		if (isPlayerSelected && GameManager::Instance().IsBattleSystemOperating())
+		if (isPlayerSelected && GameManager::Instance().IsBattleSystemOperating() && currentSelectedSerialNumber != All)
 		{
 			if (yunutyEngine::Input::isKeyPushed(KeyCode::A))
 			{
 				if (tacticMode)
 					TacticModeSystem::SingleInstance().SetLeftClickAddQueueForAttackMove(currentSelectedSerialNumber);
 				else
+				{
+					PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
 					PlayerController::SingleInstance().SetLeftClickAttackMove();
+				}
 			}
 
 			if (yunutyEngine::Input::isKeyPushed(KeyCode::Q))
@@ -70,10 +73,10 @@ void InputManager::Update()
 				if (tacticMode)
 					TacticModeSystem::SingleInstance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, Unit::SkillEnum::Q);
 				else
+				{
+					PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
 					PlayerController::SingleInstance().SetLeftClickSkill(Unit::SkillEnum::Q);
-
-				/// Skill Preview Area
-
+				}
 			}
 
 			if (yunutyEngine::Input::isKeyPushed(KeyCode::Alphabet_E))
@@ -81,7 +84,10 @@ void InputManager::Update()
 				if (tacticMode)
 					TacticModeSystem::SingleInstance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, Unit::SkillEnum::W);
 				else
+				{
+					PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
 					PlayerController::SingleInstance().SetLeftClickSkill(Unit::SkillEnum::W);
+				}
 			}
 		}
 

@@ -70,9 +70,4 @@ void GameObjectPool<RepresenstativeComponent>::Return(RepresenstativeComponent* 
 		expendableObjects.insert(obj);
 		obj->GetGameObject()->SetSelfActive(false);
 	}
-
-	else
-	{
-		int a = 100;
-	}
 }
