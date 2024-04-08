@@ -21,8 +21,8 @@ void RangedEnemyProductor::SetUnitData()
 
 	m_maxAggroNumber = 10;
 
-	m_idRadius = 4.0f * lengthUnit;
-	m_atkRadius = 1.7f * lengthUnit;
+	m_idRadius = 4.0f * UNIT_LENGTH;
+	m_atkRadius = 1.7f * UNIT_LENGTH;
 	m_unitSpeed = 4.5f;
 
 	m_attackDelay = 1.0f;

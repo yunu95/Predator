@@ -29,7 +29,7 @@ namespace application
 
 			/// Decreasing Damage Elements
 			int m_defensePoint;
-			int m_dodgeProbability;					// 회피율
+			float m_dodgeProbability;					// 회피율
 			float m_criticalDamageDecreaseMultiplier;	// 피격 시 치명타 피해 감소 배율
 
 			float m_idRadius;

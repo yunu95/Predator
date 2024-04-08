@@ -14,9 +14,12 @@ void WarriorSkillSystem::ActivateSkillOne(Vector3d skillPos)
 
 	m_unitNavComponent->SetActive(false);
 
+	skillPos = CheckSkillRange(skillPos, Unit::SkillEnum::Q);
+
 	float tempDistance = (skillPos - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
+
 	m_unitComponent->SetSkillDuration(tempDistance / m_QskillRushSpeed);
-	// 1. 목표 위치로 돌진
+	// 목표 위치로 돌진
 	m_unitDotween->DOMove(skillPos, tempDistance / m_QskillRushSpeed).OnComplete([=]()
 		{
 			SetSkillRequirmentsActive(QknockBackSkill, false);

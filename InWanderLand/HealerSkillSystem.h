@@ -28,6 +28,8 @@ private:
 
 	Vector3d startPosition;
 
+	physics::BoxCollider* m_wSkillColliderComponent;
+
 private:
 	void CrushDown(int p_times);
 

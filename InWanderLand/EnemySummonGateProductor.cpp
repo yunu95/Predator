@@ -21,16 +21,13 @@ void EnemySummonGateProductor::SetUnitData()
 
 	m_maxAggroNumber = 3;
 
-	m_idRadius = 0.0f * lengthUnit;
-	m_atkRadius = 0.0f * lengthUnit;
+	m_idRadius = 0.0f * UNIT_LENGTH;
+	m_atkRadius = 0.0f * UNIT_LENGTH;
 	m_unitSpeed = 4.5f;
 
 	m_attackDelay = 5.0f;
 
 	m_navField = &SingleNavigationField::Instance();
-
-	qSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::Both;
-	wSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::Both;
 
 	m_unitFbxName = "SKM_Robin";
 }

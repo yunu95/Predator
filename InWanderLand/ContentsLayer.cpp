@@ -524,14 +524,14 @@ void application::contents::ContentsLayer::PlayContents()
 {
     SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
-
+    GameManager::Instance().Reset();
     for (auto e : componentsCreatedByEditorVector)
     {
         e->SetActive(true);
     }
 
-    InputManager::Instance();
-    UIManager::Instance();
+    //InputManager::Instance();
+    //UIManager::Instance();
 
     /// Editor 에서 수정하여 Map Data 에 저장할 부분
 

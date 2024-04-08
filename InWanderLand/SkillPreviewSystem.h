@@ -1,26 +1,23 @@
 #pragma once
 #include "YunutyEngine.h"
+#include "Unit.h"
 
-/// <summary>
-/// InputManager에서 플레이어의 스킬 키를 입력받았을 때,
-/// Player Unit - Mouse Cursor 사이에 스킬 경로 및 범위를 표시해주는 컴포넌트.
-/// yunutyEngine::graphics::StaticMeshRenderer는 나중에 아트 리소스로 교체해주자.
-/// </summary>
+enum class SkillPreviewMesh
+{
+	OnlyPath,
+	OnlyRange,
+	Both,
+	None
+};
 
 class SkillPreviewSystem : public Component, public SingletonComponent<SkillPreviewSystem>
 {
 public:
-	enum class SkillPreviewMesh
-	{
-		OnlyPath,
-		OnlyRange,
-		Both,
-		None
-	};
+
 
 private:
 	Vector3d m_currentMousePosition;
-	GameObject* m_currentSelectedPlayerObject;
+	Unit* m_currentSelectedPlayerUnit;
 
 	GameObject* m_pathPreviewObject;
 	yunutyEngine::graphics::StaticMeshRenderer* m_pathMeshComponent;
@@ -35,6 +32,13 @@ private:
 	bool isOnceRotated = false;
 	double previousDegree = 0.0f;
 
+	float currentSkillRange;
+	Unit::SkillEnum currentSkillNum;
+
+	std::unordered_map<Unit::SkillEnum, float> warriorSkillRangeInfo;
+	std::unordered_map<Unit::SkillEnum, float> magicianSkillRangeInfo;
+	std::unordered_map<Unit::SkillEnum, float> healerSkillRangeInfo;
+
 public:
 	virtual void Start() override;
 	virtual void Update() override;
@@ -46,9 +50,13 @@ public:
 	void SetRangePreviewObject(GameObject* p_obj);
 
 	void SetCurrentMousPosition(Vector3d pos);
-	void SetCurrentSelectedPlayerGameObject(GameObject* obj);
-	void SetCurrentSkillPreviewType(SkillPreviewSystem::SkillPreviewMesh p_type);
+	void SetCurrentSelectedPlayerUnit(Unit* obj);
+	void SetCurrentSelectedSkillNum(Unit::SkillEnum p_num);
+	void SetCurrentSkillPreviewType(SkillPreviewMesh p_type);
 
 	void ActivateSkillPreview(bool p_boolen);
+
+	void SetCurrentSkillRange(float p_flt);
+	void SetDefaultSkillRange(Unit* p_unit, Unit::SkillEnum skillEnum, float p_rng);
 };
 

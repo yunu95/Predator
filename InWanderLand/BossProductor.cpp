@@ -23,8 +23,8 @@ void BossProductor::SetUnitData()
 
 	m_maxAggroNumber = 2;
 
-	m_idRadius = 4.0f * lengthUnit;
-	m_atkRadius = 1.7f * lengthUnit;
+	m_idRadius = 4.0f * UNIT_LENGTH;
+	m_atkRadius = 1.7f * UNIT_LENGTH;
 	m_unitSpeed = 4.5f;
 
 	m_attackDelay = 1.0f;
@@ -94,11 +94,11 @@ Unit* BossProductor::CreateUnit(Vector3d startPos)
 	unitAttackColliderObject->setName("UnitAttackCollider");
 
 	auto m_physicsCollider = unitAttackColliderObject->AddComponent<physics::BoxCollider>();
-	m_physicsCollider->SetHalfExtent({ meleeAttackColliderLength * 0.5f * lengthUnit, meleeAttackColliderLength * 0.5f * lengthUnit, meleeAttackColliderRange * 0.5f * lengthUnit });
+	m_physicsCollider->SetHalfExtent({ meleeAttackColliderLength * 0.5f * UNIT_LENGTH, meleeAttackColliderLength * 0.5f * UNIT_LENGTH, meleeAttackColliderRange * 0.5f * UNIT_LENGTH });
 
 	auto autoAttackDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(autoAttackDebugMesh, DebugMeshType::Cube, yunuGI::Color::red(), true);
-	autoAttackDebugMesh->GetTransform()->SetWorldScale({ meleeAttackColliderLength * lengthUnit, meleeAttackColliderLength * lengthUnit, meleeAttackColliderRange * lengthUnit });
+	autoAttackDebugMesh->GetTransform()->SetWorldScale({ meleeAttackColliderLength * UNIT_LENGTH, meleeAttackColliderLength * UNIT_LENGTH, meleeAttackColliderRange * UNIT_LENGTH });
 
 	auto meleeAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
 	meleeAttackSystem->SetMeleeAttackType(MeleeAttackType::Collider);
@@ -116,7 +116,7 @@ Unit* BossProductor::CreateUnit(Vector3d startPos)
 #pragma region Boss Skill_1 Object Setting
 	auto skillOneColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto skillOneCollider = skillOneColliderObject->AddComponent<physics::SphereCollider>();
-	float skillOneRadius = 5.0f * lengthUnit;
+	float skillOneRadius = 5.0f * UNIT_LENGTH;
 	skillOneCollider->SetRadius(skillOneRadius);
 
 	auto skillOneDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -127,8 +127,8 @@ Unit* BossProductor::CreateUnit(Vector3d startPos)
 #pragma region Boss Skill_2 Object Setting
 	auto skillTwoColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto skillTwoCollider = skillTwoColliderObject->AddComponent<physics::BoxCollider>();
-	float skillTwoColliderRange = 7.0f * lengthUnit;
-	float skillTwoColliderLength = 3.0f * lengthUnit;
+	float skillTwoColliderRange = 7.0f * UNIT_LENGTH;
+	float skillTwoColliderLength = 3.0f * UNIT_LENGTH;
 	skillTwoCollider->SetHalfExtent({ skillTwoColliderLength * 0.5f,skillTwoColliderLength * 0.5f, skillTwoColliderRange * 0.5f });
 
 	auto skillTwoDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -139,7 +139,7 @@ Unit* BossProductor::CreateUnit(Vector3d startPos)
 #pragma region Boss Skill_4 Object Setting
 	auto skillFourColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto skillFourCollider = skillFourColliderObject->AddComponent<physics::SphereCollider>();
-	float skillFourColliderRadius = 7.0f * lengthUnit;
+	float skillFourColliderRadius = 7.0f * UNIT_LENGTH;
 	skillFourCollider->SetRadius(skillFourColliderRadius);
 
 	auto skillFourDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();

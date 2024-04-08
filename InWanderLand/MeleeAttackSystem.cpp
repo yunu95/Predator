@@ -25,7 +25,7 @@ void MeleeAttackSystem::Attack(Unit* opponentUnit)
 		{
 			/// collider 생성이 아닌, Unit->Damaged 함수를 호출하는 단일 공격로직 적용.
 			/// 그렇다면 Robin의 경우 패시브는 어떻게 적용시킬 것인가?
-			opponentUnit->Damaged(m_unitComponent, m_attackDamage);
+			opponentUnit->Damaged(m_unitComponent, m_unitComponent->DetermineAttackDamage(m_unitComponent->GetUnitDamage()));
 			if (m_specialEffect != nullptr)
 				m_specialEffect->ApplyStatus(m_unitComponent, opponentUnit);
 		}

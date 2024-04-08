@@ -23,8 +23,8 @@ void MeleeEnemyProductor::SetUnitData()
 
 	m_maxAggroNumber = 10;
 
-	m_idRadius = 4.0f * lengthUnit;
-	m_atkRadius = 1.7f * lengthUnit;
+	m_idRadius = 4.0f * UNIT_LENGTH;
+	m_atkRadius = 1.7f * UNIT_LENGTH;
 	m_unitSpeed = 4.5f;
 
 	m_attackDelay = 1.0f;
@@ -94,11 +94,11 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 	unitAttackColliderObject->setName("UnitAttackCollider");
 
 	auto m_physicsCollider = unitAttackColliderObject->AddComponent<physics::BoxCollider>();
-	m_physicsCollider->SetHalfExtent({ meleeAttackColliderLength * 0.5f * lengthUnit, meleeAttackColliderLength * 0.5f * lengthUnit, meleeAttackColliderRange * 0.5f * lengthUnit });
+	m_physicsCollider->SetHalfExtent({ meleeAttackColliderLength * 0.5f * UNIT_LENGTH, meleeAttackColliderLength * 0.5f * UNIT_LENGTH, meleeAttackColliderRange * 0.5f * UNIT_LENGTH });
 
 	auto autoAttackDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(autoAttackDebugMesh, DebugMeshType::Cube, yunuGI::Color::red(), true);
-	autoAttackDebugMesh->GetTransform()->SetLocalScale({ meleeAttackColliderLength * lengthUnit, meleeAttackColliderLength * lengthUnit, meleeAttackColliderRange * lengthUnit });
+	autoAttackDebugMesh->GetTransform()->SetLocalScale({ meleeAttackColliderLength * UNIT_LENGTH, meleeAttackColliderLength * UNIT_LENGTH, meleeAttackColliderRange * UNIT_LENGTH });
 
 	auto meleeAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
 	meleeAttackSystem->SetMeleeAttackType(MeleeAttackType::Collider);

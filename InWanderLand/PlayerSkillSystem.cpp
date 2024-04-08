@@ -51,6 +51,51 @@ void PlayerSkillSystem::RotateProjectile(GameObject* p_projectileObject, Vector3
 		p_projectileObject->GetTransform()->SetWorldRotation(Quaternion({ 0.0f, finalDegree, 0.0f }));
 }
 
+void PlayerSkillSystem::SetSkillOneRange(float p_rng)
+{
+	m_skillOneRange = p_rng;
+}
+
+void PlayerSkillSystem::SetSkillTwoRange(float p_rng)
+{
+	m_skillTwoRange = p_rng;
+}
+
+float PlayerSkillSystem::GetSkillOneRange() const
+{
+	return m_skillOneRange;
+}
+
+float PlayerSkillSystem::GetSkillTwoRange() const
+{
+	return m_skillTwoRange;
+}
+
+Vector3d PlayerSkillSystem::CheckSkillRange(Vector3d p_skillPos, Unit::SkillEnum p_num)
+{
+	float tempRng;
+
+	switch (p_num)
+	{
+		case Unit::SkillEnum::Q:
+			tempRng = m_skillOneRange;
+			break;
+		case Unit::SkillEnum::W:
+			tempRng = m_skillTwoRange;
+			break;
+	}
+
+	float tempDistance = (p_skillPos - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
+	if (tempDistance > tempRng)
+	{
+		tempDistance = tempRng;
+		Vector3d finalPosition = GetTransform()->GetWorldPosition() + (p_skillPos - GetTransform()->GetWorldPosition()).Normalized() * tempRng;
+		p_skillPos = finalPosition;
+	}
+
+	return p_skillPos;
+}
+
 void PlayerSkillSystem::Start()
 {
 

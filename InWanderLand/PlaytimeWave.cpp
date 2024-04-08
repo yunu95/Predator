@@ -11,6 +11,7 @@
 #include "MeleeEnemyPool.h"
 #include "RangedEnemyPool.h"
 #include "ShortcutSystem.h"
+#include "GameManager.h"
 
 PlaytimeWave::~PlaytimeWave()
 {
@@ -21,11 +22,13 @@ void PlaytimeWave::ActivateWave()
 {
 	isWaveActivated = true;
 	/// 플레이어 유닛 전투상태 돌입
+	GameManager::Instance().EngageBattle();
 
 }
 void PlaytimeWave::DeActivateWave()
 {
 	waveDataIndex = 0;
+	GameManager::Instance().EndBattle();
 	this->SetActive(false);
 	// 여기엔 wave 종료 시 카메라 락 해제 등의 로직이 들어가야 한다.
 }

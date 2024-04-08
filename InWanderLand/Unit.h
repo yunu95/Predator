@@ -4,9 +4,11 @@
 #include "Timer.h"
 #include "Dotween.h"
 #include <list>
-#include "SkillPreviewSystem.h"
 #include "RobinSkillDevelopmentSystem.h"
 #include "DummyComponent.h"
+
+class UnitProductor;
+enum class SkillPreviewMesh;
 
 /// <summary>
 /// 유닛들이 공유하는 멤버.
@@ -96,14 +98,14 @@ private:
 	float m_finalAttackDamage;
 	float m_finalHitDamage;
 
+	int m_randcriticalHitNumber;
+
 	float m_defensePoint;
 	float m_dodgeProbability;
 	float m_criticalDamageDecreaseMultiplier;
+	float m_criticalHitMultiplier;
 
 	int m_criticalHitProbability;
-	int m_randcriticalHitNumber;
-
-	float m_criticalHitMultiplier;
 
 	float m_speed;
 	float m_bulletSpeed;
@@ -173,8 +175,8 @@ private:
 
 	yunutyEngine::graphics::StaticMeshRenderer* m_staticMeshRenderer;
 
-	SkillPreviewSystem::SkillPreviewMesh m_qSkillPreviewType;
-	SkillPreviewSystem::SkillPreviewMesh m_wSkillPreviewType;
+	SkillPreviewMesh m_qSkillPreviewType;
+	SkillPreviewMesh m_wSkillPreviewType;
 
 private:
 	/// 유닛이 속해있는 field
@@ -230,7 +232,7 @@ public:
 	void SetAttackDelay(float p_delay);
 	void SetPlayerSerialNumber(UnitType serialNum);
 	void SetSkillDuration(float p_duration);
-	void SetSkillPreviewType(SkillPreviewSystem::SkillPreviewMesh p_qskill, SkillPreviewSystem::SkillPreviewMesh p_wskill);
+	void SetSkillPreviewType(SkillPreviewMesh p_qskill, SkillPreviewMesh p_wskill);
 	void SetMaxAggroNumber(int p_num);
 	void SetFbxName(std::string p_string);
 
@@ -258,7 +260,7 @@ public:
 
 	UnitType GetPlayerSerialNumber() const;
 	UnitState GetCurrentUnitState() const;
-	SkillPreviewSystem::SkillPreviewMesh GetSkillPreviewType(Unit::SkillEnum p_currentSkillType) const;
+	SkillPreviewMesh GetSkillPreviewType(Unit::SkillEnum p_currentSkillType) const;
 	std::string GetUnitFbxName() const;
 
 	float DetermineAttackDamage(float p_damage);			// 공격유닛이 피격유닛에게 전달하는 데미지 계산.
@@ -293,5 +295,6 @@ public:
 	DummyComponent* m_dummyCom;
 	int stageNumber;
 	friend RobinSkillDevelopmentSystem;
+	friend UnitProductor;
 };
 

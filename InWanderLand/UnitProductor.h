@@ -11,14 +11,14 @@ namespace application
 	}
 }
 
+static float constexpr UNIT_LENGTH = 2.0f;
+
 /// <summary>
 /// UnitFactory에서의 유닛 생산을 좀 더 효율적으로 하기 위한 클래스.3
 /// </summary>
 class UnitProductor : public Component
 {
 protected:
-	static float constexpr lengthUnit = 2.0f;
-
 	// 임시. 모델링 파일로 대체해주기
 	GameObject* m_unitGameObject;
 	Unit* m_unitComponent;
@@ -40,8 +40,8 @@ public:
 	Unit::UnitType m_unitType;
 	Unit::UnitSide m_unitSide;
 
-	SkillPreviewSystem::SkillPreviewMesh qSkillPreviewType;
-	SkillPreviewSystem::SkillPreviewMesh wSkillPreviewType;
+	SkillPreviewMesh qSkillPreviewType;
+	SkillPreviewMesh wSkillPreviewType;
 
 	float m_healthPoint;
 	int m_manaPoint;

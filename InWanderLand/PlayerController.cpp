@@ -86,8 +86,9 @@ void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
 		else
 		{
 			Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
-			SkillPreviewSystem::Instance().SetCurrentSelectedPlayerGameObject(currentSelectedUnit->GetGameObject());
+			SkillPreviewSystem::Instance().SetCurrentSelectedPlayerUnit(currentSelectedUnit);
 			SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(p_skillNum));
+			SkillPreviewSystem::Instance().SetCurrentSelectedSkillNum(p_skillNum);
 			SkillPreviewSystem::Instance().ActivateSkillPreview(true);
 			m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
 			{
@@ -111,19 +112,9 @@ void PlayerController::SetRightClickEmpty()
 
 void PlayerController::SetCurrentPlayerSerialNumber(Unit::UnitType p_num)
 {
-	if (playerComponentMap.find(p_num) != playerComponentMap.end())
+	if (playerComponentMap.find(p_num) != playerComponentMap.end() || p_num == Unit::UnitType::AllPlayers)
 	{
-		currentSelectedSerialNumber = p_num;
-		Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
-		Vector3d unitPos = currentSelectedUnit->GetTransform()->GetWorldPosition();
-		//m_dotween->DOMove(unitPos + cameraOffset, cameraMoveDuration);
-		//m_dotween->DORotate(Vector3d(60, 0, 0), cameraMoveDuration);
-
-		Vector3d camRotation = m_movingSystemComponent->GetTransform()->GetWorldRotation().Euler();
-		//m_dotween->DOLookAt(unitPos, cameraMoveDuration, true);
-
-		//m_movingSystemComponent->GetTransform()->SetWorldPosition({ unitPos + cameraOffset });
-
+		currentSelectedSerialNumber = p_num;		
 		SetLeftClickMove();
 	}
 }
