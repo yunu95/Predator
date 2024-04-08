@@ -291,6 +291,7 @@ namespace application
 				YunutyCycle::SingleInstance().Release();
 				isRunning = false;
 			}
+			Sleep(10);
 		}
 		if (YunutyCycle::SingleInstance().IsGameRunning())
 			YunutyCycle::SingleInstance().Release();

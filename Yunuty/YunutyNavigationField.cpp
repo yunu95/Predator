@@ -27,7 +27,11 @@ void yunutyEngine::NavigationField::Update()
 }
 Vector3d yunutyEngine::NavigationField::GetClosestPointOnField(const Vector3d& worldPosition) const
 {
-    return Vector3d::zero;
+    float pos[3]{ worldPosition.x,worldPosition.y,worldPosition.z };
+    float halfExtent[3]{ 100,100,100 };
+    dtPolyRef ref = 0;
+    dtStatus status = impl->m_navQuery->findNearestPoly(pos, halfExtent, impl->m_crowd->getFilter(0), &ref, pos);
+    return Vector3d{ Vector3f{pos[0],pos[1],pos[2]} };
 }
 void yunutyEngine::NavigationField::BuildField(const float* worldVertices, size_t verticesNum, const int* faces, size_t facesNum, const BuildSettings& buildSettings)
 {
