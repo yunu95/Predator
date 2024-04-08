@@ -63,7 +63,7 @@ void Unit::Start()
 		{
 			return m_currentTargetUnit == nullptr || 
 				(((GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetUnit->GetTransform()->GetWorldPosition()).Magnitude() > m_atkDistance + 0.4f)
-					&& m_currentTargetUnit != tauntingThisUnit
+					/*&& m_currentTargetUnit != tauntingThisUnit*/
 					|| currentOrder == UnitState::Idle);
 		} });
 
@@ -601,6 +601,7 @@ void Unit::ChangeCurrentOpponentUnitForced(Unit* p_unit)
 void Unit::DeleteTauntingUnit()
 {
 	tauntingThisUnit = nullptr;
+	m_currentTargetUnit = nullptr;
 	DetermineCurrentTargetObject();
 }
 
@@ -632,7 +633,6 @@ void Unit::RotateUnit(Vector3d endPosition)
 	Vector3d movedPositionPerFrame = GetGameObject()->GetTransform()->GetWorldPosition() + (directionVector * m_speed * Time::GetDeltaTime());
 
 	Vector3d afterDirectionVector = (endPosition - movedPositionPerFrame).Normalized();
-
 
 	double dot = Vector3d::Dot(objectFront, startPosition - endPosition);
 
