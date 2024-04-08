@@ -13,6 +13,10 @@ yunutyEngine::graphics::ParticleRenderer::ParticleRenderer() :
 	GetGI().SetParticleInfoList(this->ableParticles);
 }
 
+void ParticleRenderer::OnTransformUpdate()
+{
+}
+
 void ParticleRenderer::SetEndScale(float scale)
 {
 	this->endScale = scale;
@@ -51,7 +55,7 @@ yunuGI::Vector2 ParticleRenderer::getRandomPointInCircle(double centerX, double 
 	return yunuGI::Vector2{ x, y };
 }
 
-void ParticleRenderer::SetParticleShape(ParticleType particleType)
+void ParticleRenderer::SetParticleShape(ParticleShape particleType)
 {
 	this->particleType = particleType;
 }
@@ -83,9 +87,9 @@ void ParticleRenderer::ParticleUpdate()
 
 		if (this->mode == ParticleMode::Default)
 		{
-			auto tempDir = yunuGI::Vector4(each.direction.x, each.direction.y, each.direction.z, 0.f)
-				* GetTransform()->GetWorldTM();
-			each.direction = yunuGI::Vector3{ tempDir.x,tempDir.y, tempDir.z };
+			//auto tempDir = yunuGI::Vector4(each.direction.x, each.direction.y, each.direction.z, 0.f)
+			//	* GetTransform()->GetWorldTM();
+			//each.direction = yunuGI::Vector3{ tempDir.x,tempDir.y, tempDir.z };
 
 			each.position += (each.direction * this->speed * Time::GetDeltaTime());
 		}
@@ -170,7 +174,7 @@ void ParticleRenderer::Update()
 			// 이제 입자 활성화
 			auto& particle = this->disableParticles.front();
 
-			if (this->particleType == ParticleType::Cone)
+			if (this->particleType == ParticleShape::Cone)
 			{
 				if (this->mode == ParticleMode::Default)
 				{
@@ -184,11 +188,17 @@ void ParticleRenderer::Update()
 
 				}
 			}
-			else if (this->particleType == ParticleType::Circle)
+			else if (this->particleType == ParticleShape::Circle)
 			{
 				if (this->mode == ParticleMode::Default)
 				{
-					
+					auto tempPos = getRandomPointInCircle(0, 0, this->shape.circle.radius);
+					particle.position = yunuGI::Vector3{ tempPos.x,0,tempPos.y };
+					particle.direction = yunuGI::Vector3{ tempPos.x,0,tempPos.y }.Normalize(yunuGI::Vector3{ tempPos.x,0,tempPos.y });;
+
+					auto tempDir = yunuGI::Vector4(particle.direction.x, particle.direction.y, particle.direction.z, 0.f)
+						* GetTransform()->GetWorldTM();
+					particle.direction = yunuGI::Vector3{ tempDir.x,tempDir.y, tempDir.z };
 				}
 				else
 				{

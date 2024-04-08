@@ -20,7 +20,7 @@
 
 namespace yunutyEngine::graphics
 {
-	enum class ParticleType
+	enum class ParticleShape
 	{
 		Cone,
 		Circle,
@@ -59,10 +59,11 @@ namespace yunutyEngine::graphics
 		ParticleRenderer();
 
 		virtual void Update() override;
+		virtual void OnTransformUpdate() override;
 
 		void ParticleUpdate();
 
-		void SetParticleShape(ParticleType particleType);
+		void SetParticleShape(ParticleShape particleType);
 		void SetMaxParticle(unsigned int maxParticle);
 		void SetRateOverTime(float rateOverTime);
 		void Play();
@@ -81,7 +82,7 @@ namespace yunutyEngine::graphics
 		yunuGI::Vector2 getRandomPointInCircle(double centerX, double centerY, double radius);
 
 	private:
-		ParticleType particleType = ParticleType::Cone;
+		ParticleShape particleType = ParticleShape::Cone;
 
 		bool isPlay = false;
 

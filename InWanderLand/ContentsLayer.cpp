@@ -242,10 +242,13 @@ void GraphicsTest()
 	{
 	    auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
         auto particleSystem = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
+        //obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
         particleSystem->Play();
+        particleSystem->SetParticleShape(yunutyEngine::graphics::ParticleShape::Circle);
         particleSystem->SetRateOverTime(50.f);
         particleSystem->SetSpeed(5.f);
         particleSystem->SetLoop(true);
+        particleSystem->SetRadius(10);
 	}
 
  //   for(int i = 0 ; i < 23; ++i)
