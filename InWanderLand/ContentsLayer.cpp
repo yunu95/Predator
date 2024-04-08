@@ -243,19 +243,18 @@ void GraphicsTest()
 	    auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
         auto particleSystem = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
         particleSystem->Play();
-        particleSystem->SetRateOverTime(10.f);
-        particleSystem->SetSpeed(1.f);
+        particleSystem->SetRateOverTime(50.f);
+        particleSystem->SetSpeed(5.f);
         particleSystem->SetLoop(true);
 	}
 
-
-    //{
-    //    auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
-    //}
-
+ //   for(int i = 0 ; i < 23; ++i)
 	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
- //       obj->GetTransform()->SetLocalPosition(Vector3d{ -15,0,0 });
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+ //       Vector3d pos{ 0.f,float(i),0.f }; 
+ //       obj->GetTransform()->SetLocalPosition(pos);
+ //       auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+ //       renderer->GetGI().SetMesh(mesh);
 	//}
 
 	//{

@@ -8,7 +8,10 @@ namespace yunuGI
 	{
 		Vector3 position;
 		Vector3 direction;
-		float scale;
+
+		float startScale;
+		float curScale;
+		float endScale;
 
 		float lifeTime;
 		float curLifeTime;
@@ -17,7 +20,7 @@ namespace yunuGI
 		{
 			position = Vector3(0, 0, 0);
 			direction = Vector3(0, 0, 0);
-			scale = 0.f;
+			curScale = 0.f;
 			lifeTime = 0.f;
 			curLifeTime = 0.f;
 		}

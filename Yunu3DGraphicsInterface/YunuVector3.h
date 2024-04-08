@@ -15,21 +15,17 @@ namespace yunuGI
 			this->z += rhs.z;
 		}
 
-		Vector3 operator* (const double& val)
+		Vector3 operator* (const float& val) const // 수정: const 멤버 함수로 변경
 		{
-			this->x *= val;
-			this->y *= val;
-			this->z *= val;
-
-			return *this;
+			return { this->x * val, this->y * val, this->z * val }; // 수정: 벡터의 각 요소에 스칼라 값 곱한 후 반환
 		}
 
-		float Length(const Vector3& vector)
+		static float Length(const Vector3& vector) // 수정: 정적 멤버 함수로 변경
 		{
 			return std::sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
 		}
 
-		Vector3 Normalize(const Vector3& vector)
+		static Vector3 Normalize(const Vector3& vector) // 수정: 정적 멤버 함수로 변경
 		{
 			float length = Length(vector);
 			if (length != 0)
@@ -39,7 +35,7 @@ namespace yunuGI
 			}
 			else
 			{
-				return { 0.0f, 0.0f, 0.0f }; 
+				return { 0.0f, 0.0f, 0.0f };
 			}
 		}
 	};

@@ -1,45 +1,130 @@
 #include "YunutyEngine.h"
 #include "ParticleRenderer.h"
 #include "_YunuGIObjects.h"
+
+#include <random>
+#include <chrono>
 using namespace yunutyEngine::graphics;
 
 yunutyEngine::graphics::ParticleRenderer::ParticleRenderer() :
-	Renderable<yunuGI::IParticleRenderer>(_YunuGIObjects::SingleInstance().factory->CreateParticleRenderer({}))
+	Renderable<yunuGI::IParticleRenderer>(_YunuGIObjects::SingleInstance().factory->CreateParticleRenderer({})), shape{}
 {
 	disableParticles.assign(this->maxParticle, yunuGI::ParticleRenderInfo{});
 	GetGI().SetParticleInfoList(this->ableParticles);
 }
 
-yunuGI::Vector3 ParticleRenderer::GenerateRandomDirectionInCone(float angle)
+void ParticleRenderer::SetEndScale(float scale)
 {
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+	this->endScale = scale;
+}
 
-	// Cone의 반지름 및 높이 계산
-	float coneRadius = tan(angle);
-	float coneHeight = 1.0f;
+void ParticleRenderer::SetStartScale(float scale)
+{
+	this->startScale = scale;
+}
 
-	// 무작위 각도 및 반지름 생성
-	float theta = dist(gen) * 6.283185307f;
-	float r = sqrt(dist(gen));
+void ParticleRenderer::SetAngle(float angle)
+{
+	this->shape.cone.angle = angle;
+}
 
-	// 무작위로 선택된 방향 생성
-	float x = coneRadius * r * cos(theta);
-	float y = coneHeight * r;
-	float z = coneRadius * r * sin(theta);
+void ParticleRenderer::SetRadius(float radius)
+{
+	this->shape.cone.radius = radius;
+}
 
-	return yunuGI::Vector3(x, y, z);
+yunuGI::Vector2 ParticleRenderer::getRandomPointInCircle(double centerX, double centerY, double radius)
+{
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::mt19937 gen(seed);
+	std::uniform_real_distribution<double> distRadius(0, radius); // 0부터 반지름까지의 랜덤한 거리
+	std::uniform_real_distribution<double> distAngle(0, 2 * 3.14159265358979323846); // 0부터 2π(360도) 사이의 랜덤한 각도
+
+	// 랜덤한 거리와 각도 생성
+	float randomRadius = distRadius(gen);
+	float randomAngle = distAngle(gen);
+
+	// 랜덤한 각도와 반지름을 사용하여 원 안의 점 좌표 계산
+	float x = centerX + randomRadius * cos(randomAngle);
+	float y = centerY + randomRadius * sin(randomAngle);
+
+	return yunuGI::Vector2{ x, y };
+}
+
+void ParticleRenderer::SetParticleShape(ParticleType particleType)
+{
+	this->particleType = particleType;
+}
+
+void ParticleRenderer::ParticleUpdate()
+{
+	for (auto iter = this->ableParticles.begin(); iter != this->ableParticles.end();)
+	{
+		auto& each = *iter;
+
+		each.curLifeTime += Time::GetDeltaTime();
+
+		each.lifeTime = this->lifeTime;
+
+		float ratio = each.curLifeTime / each.lifeTime;
+		float curScale = yunutyEngine::math::LerpF(this->startScale, this->endScale, ratio);
+		each.curScale = curScale;
+
+		// 생성된 입자의 생명주기가 다하면 다시 비활성
+		if (each.curLifeTime >= each.lifeTime)
+		{
+			each.Reset();
+			this->disableParticles.push_back(*iter);
+
+			iter = this->ableParticles.erase(iter);
+
+			continue;
+		}
+
+		if (this->mode == ParticleMode::Default)
+		{
+			auto tempDir = yunuGI::Vector4(each.direction.x, each.direction.y, each.direction.z, 0.f)
+				* GetTransform()->GetWorldTM();
+			each.direction = yunuGI::Vector3{ tempDir.x,tempDir.y, tempDir.z };
+
+			each.position += (each.direction * this->speed * Time::GetDeltaTime());
+		}
+		else
+		{
+
+		}
+
+		++iter;
+	}
+}
+
+yunuGI::Vector3 ParticleRenderer::GenerateRandomDirectionInCone(yunuGI::ParticleRenderInfo& particle)
+{
+	auto randomPoint = getRandomPointInCircle(0, 0, this->shape.cone.radius);
+
+	float height = 4.f;
+
+	float theta = this->shape.cone.angle * (3.14159265358979323846 / 180);
+
+	yunuGI::Vector3 bottomPos{ randomPoint.x, 0, randomPoint.y };
+	particle.position = bottomPos;
+
+	float bottomHeight = this->shape.cone.radius / tan(theta);
+
+	float upCircleRadius = tan(theta) * (height + (this->shape.cone.radius / tan(theta)));
+
+	yunuGI::Vector3 topPos{ upCircleRadius * bottomPos.x / this->shape.cone.radius ,
+		height,
+		upCircleRadius * bottomPos.z / this->shape.cone.radius
+	};
+
+	return yunuGI::Vector3(topPos.x - bottomPos.x, topPos.y - bottomPos.y, topPos.z - bottomPos.z).Normalize(
+		yunuGI::Vector3(topPos.x - bottomPos.x, topPos.y - bottomPos.y, topPos.z - bottomPos.z));
 }
 
 void ParticleRenderer::SetSpeed(float speed)
 {
 	this->speed = speed;
-}
-
-void ParticleRenderer::SetScale(float scale)
-{
-	this->scale = scale;
 }
 
 void ParticleRenderer::SetLifeTime(float lifeTime)
@@ -84,37 +169,38 @@ void ParticleRenderer::Update()
 
 			// 이제 입자 활성화
 			auto& particle = this->disableParticles.front();
-			particle.position = GetTransform()->GetLocalPosition();
-			particle.direction = this->GenerateRandomDirectionInCone(60).Normalize(this->GenerateRandomDirectionInCone(60));
-			this->disableParticles.pop_front();
 
+			if (this->particleType == ParticleType::Cone)
+			{
+				if (this->mode == ParticleMode::Default)
+				{
+					particle.direction = this->GenerateRandomDirectionInCone(particle);
+					auto tempDir = yunuGI::Vector4(particle.direction.x, particle.direction.y, particle.direction.z, 0.f)
+						* GetTransform()->GetWorldTM();
+					particle.direction = yunuGI::Vector3{ tempDir.x,tempDir.y, tempDir.z };
+				}
+				else
+				{
+
+				}
+			}
+			else if (this->particleType == ParticleType::Circle)
+			{
+				if (this->mode == ParticleMode::Default)
+				{
+					
+				}
+				else
+				{
+
+				}
+			}
+
+			this->disableParticles.pop_front();
 			this->ableParticles.push_back(particle);
 		}
 		// 생성된 입자들은 포지션, 스케일 업데이트
-		for (auto iter = this->ableParticles.begin(); iter != this->ableParticles.end();)
-		{
-			auto& each = *iter;
-
-			each.curLifeTime += Time::GetDeltaTime();
-
-			each.lifeTime = this->lifeTime;
-			each.scale = this->scale;
-
-			// 생성된 입자의 생명주기가 다하면 다시 비활성
-			if (each.curLifeTime >= each.lifeTime)
-			{
-				each.Reset();
-				this->disableParticles.push_back(*iter);
-
-				iter = this->ableParticles.erase(iter);
-
-				continue;
-			}
-
-			each.position += (each.direction *this->speed * Time::GetDeltaTime());
-			
-			++iter;
-		}
+		ParticleUpdate();
 	}
 	else
 	{
@@ -128,29 +214,7 @@ void ParticleRenderer::Update()
 		}
 		else
 		{
-			for (auto iter = this->ableParticles.begin(); iter != this->ableParticles.end();)
-			{
-				auto& each = *iter;
-
-				each.curLifeTime += Time::GetDeltaTime();
-
-				each.lifeTime = this->lifeTime;
-				each.scale = this->scale;
-
-				// 생성된 입자의 생명주기가 다하면 다시 비활성
-				if (each.curLifeTime >= each.lifeTime)
-				{
-					each.Reset();
-					this->disableParticles.push_back(*iter);
-
-					iter = this->ableParticles.erase(iter);
-
-					continue;
-				}
-
-				each.position += (each.direction * this->speed * Time::GetDeltaTime());
-				++iter;
-			}
+			ParticleUpdate();
 		}
 	}
 }

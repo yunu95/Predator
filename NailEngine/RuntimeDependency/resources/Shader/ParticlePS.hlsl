@@ -17,6 +17,6 @@ float4 main(GS_OUT input) : SV_TARGET
 // ShaderType : Particle
 // RasterType : Solid
 // CullType : CullBack
-// DepthType : Less
-// BlendType : Default
+// DepthType : NoDepthTest
+// BlendType : AlphaBlend
 // Sampler : Default

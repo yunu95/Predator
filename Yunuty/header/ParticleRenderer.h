@@ -20,6 +20,35 @@
 
 namespace yunutyEngine::graphics
 {
+	enum class ParticleType
+	{
+		Cone,
+		Circle,
+	};
+
+	enum class ParticleMode
+	{
+		Default,
+		Bursts,
+	};
+
+	struct Cone
+	{
+		float radius = 1.f;
+		float angle = 25.f;
+	};
+
+	struct Circle
+	{
+		float radius = 1.f;
+	};
+
+	union Shape
+	{
+		Cone cone;
+		Circle circle;
+	};
+
 	class YunutyCycle;
 	class YUNUTY_API ParticleRenderer : public Renderable<yunuGI::IParticleRenderer>
 	{
@@ -30,18 +59,30 @@ namespace yunutyEngine::graphics
 		ParticleRenderer();
 
 		virtual void Update() override;
+
+		void ParticleUpdate();
+
+		void SetParticleShape(ParticleType particleType);
 		void SetMaxParticle(unsigned int maxParticle);
 		void SetRateOverTime(float rateOverTime);
 		void Play();
 		void SetLoop(bool isLoop);
 		void SetLifeTime(float lifeTime);
-		void SetScale(float scale);
 		void SetSpeed(float speed);
 
-	private:
-		yunuGI::Vector3 GenerateRandomDirectionInCone(float angle);
+		void SetRadius(float radius);
+		void SetAngle(float angle);
+
+		void SetStartScale(float scale);
+		void SetEndScale(float scale);
 
 	private:
+		yunuGI::Vector3 GenerateRandomDirectionInCone(yunuGI::ParticleRenderInfo& particle);
+		yunuGI::Vector2 getRandomPointInCircle(double centerX, double centerY, double radius);
+
+	private:
+		ParticleType particleType = ParticleType::Cone;
+
 		bool isPlay = false;
 
 		double accTime = 0.f;
@@ -51,12 +92,18 @@ namespace yunutyEngine::graphics
 		float rateOverTime = 10.f;
 
 		float lifeTime = 5.f;
-		float scale = 1.f;
 		float speed = 1.f;
+
+		float startScale = 1.f;
+		float curScale = 0.f;
+		float endScale = 1.f;
 
 		unsigned int maxParticle = 500;
 
 		std::deque<yunuGI::ParticleRenderInfo> disableParticles;
 		std::list<yunuGI::ParticleRenderInfo> ableParticles;
+
+		Shape shape;
+		ParticleMode mode = ParticleMode::Default;
 	};
 }

@@ -512,7 +512,7 @@ void InstancingManager::RenderParticle()
 		for (auto& each2 : *tempList)
 		{
 			this->particleBuffer->particleDesc[index].pos = reinterpret_cast<DirectX::SimpleMath::Vector3&>(each2.position);
-			this->particleBuffer->particleDesc[index].scale = each2.scale;
+			this->particleBuffer->particleDesc[index].scale = each2.curScale;
 			index++;
 		}
 
