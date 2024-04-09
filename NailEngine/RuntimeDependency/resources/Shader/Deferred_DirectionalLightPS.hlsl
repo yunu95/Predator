@@ -45,7 +45,9 @@ PS_OUT main(PixelIn input)
     }
     
     //albedo = float4(pow(float3(albedo.xyz), 1.0 / 2.2), 1.0);
+    
     CalculatePBRLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo,arm.r, arm.b, arm.g);
+    
     //CalculateLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);
     
     output.diffuse = color.diffuse + color.ambient;

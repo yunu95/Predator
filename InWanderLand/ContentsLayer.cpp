@@ -239,31 +239,31 @@ void GraphicsTest()
        ////////////	obj->GetTransform()->SetLocalPosition(Vector3d{ 190,0,0 });
        ////////////}
 
+	//{
+	//    auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+ //       obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
+ //       auto particleSystem = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
+ //       particleSystem->Play();
+ //       particleSystem->SetParticleShape(yunutyEngine::graphics::ParticleShape::Circle);
+ //       particleSystem->SetRateOverTime(10.f);
+ //       particleSystem->SetSpeed(5.f);
+ //       particleSystem->SetLoop(true);
+ //       particleSystem->SetRadius(10);
+	//}
+
 	{
-	    auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        auto particleSystem = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
-        //obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
-        particleSystem->Play();
-        particleSystem->SetParticleShape(yunutyEngine::graphics::ParticleShape::Circle);
-        particleSystem->SetRateOverTime(50.f);
-        particleSystem->SetSpeed(5.f);
-        particleSystem->SetLoop(true);
-        particleSystem->SetRadius(10);
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+        obj->GetTransform()->SetLocalScale(Vector3d{50,1,50});
+        renderer->GetGI().SetMesh(mesh);
 	}
 
- //   for(int i = 0 ; i < 23; ++i)
-	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
- //       Vector3d pos{ 0.f,float(i),0.f }; 
- //       obj->GetTransform()->SetLocalPosition(pos);
- //       auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
- //       renderer->GetGI().SetMesh(mesh);
-	//}
-
-	//{
-	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
- //       obj->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
-	//}
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,2.77,0 });
+		renderer->GetGI().SetMesh(mesh);
+	}
 
 	//{
 	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");

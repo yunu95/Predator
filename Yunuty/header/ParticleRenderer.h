@@ -61,6 +61,7 @@ namespace yunutyEngine::graphics
 		virtual void Update() override;
 		virtual void OnTransformUpdate() override;
 
+		void DirectionUpate();
 		void ParticleUpdate();
 
 		void SetParticleShape(ParticleShape particleType);

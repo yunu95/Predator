@@ -1081,6 +1081,7 @@ void ResourceManager::CreateDefaultTexture()
 	CreateTexture(L"Texture/asdDiffuseHDR.dds");
 	CreateTexture(L"Texture/asdSpecularHDR.dds");
 	CreateTexture(L"Texture/particle.png");
+	CreateTexture(L"Texture/LightMap.dds");
 	//CreateTexture(L"Texture/Brick_Albedo.jpg");
 	//CreateTexture(L"Texture/Brick_Normal.jpg");
 

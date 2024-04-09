@@ -5,6 +5,7 @@
 #define MAX_FRAME_COUNT 500
 #define MAX_INSTANCE_MODEL 500
 #define MAX_PARTICLE 500
+#define MAX_STATIC_MODEL 1024
 
 cbuffer MatrixBuffer : register(b0)
 {
@@ -165,6 +166,17 @@ cbuffer ParticleBuffer : register(b11)
     ParticleDesc particleDesc[MAX_PARTICLE];
 };
 
+struct LightMapUV
+{
+    float2 uvOffset;
+    float2 scaling;
+};
+
+struct LightMapUVBuffer
+{
+    LightMapUV lightMapUV[MAX_STATIC_MODEL];
+};
+
 Texture2D AlbedoMap : register(t0);
 Texture2D NormalMap : register(t1);
 Texture2D ARMMap : register(t2);
@@ -190,6 +202,10 @@ TextureCube IrradianceMap : register(t20);
 TextureCube PrefilteredMap : register(t21);
 Texture2D BrdfMap : register(t22);
 TextureCubeArray PointLightShadowMap : register(t23);
+
+
+Texture2D UnityLightMap : register(t24);
+
 
 SamplerState sam : register(s0);
 SamplerComparisonState shadowSam : register(s1);

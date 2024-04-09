@@ -17,6 +17,7 @@ using namespace DirectX::PackedVector;
 #define MAX_INSTANCE_MODEL 500
 #define MAX_POINT_LIGHT 10
 #define MAX_PARTICLE 500
+#define MAX_STATIC_MODEL 1024
 
 struct Vertex
 {
@@ -220,6 +221,17 @@ struct ParticleDesc
 struct ParticleBuffer
 {
 	ParticleDesc particleDesc[MAX_PARTICLE];
+};
+
+struct LightMapUV
+{
+	DirectX::SimpleMath::Vector2 uvOffset;
+	DirectX::SimpleMath::Vector2 scaling;
+};
+
+struct LightMapUVBuffer
+{
+	LightMapUV lightMapUV[MAX_STATIC_MODEL];
 };
 
 

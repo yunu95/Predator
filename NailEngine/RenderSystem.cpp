@@ -162,6 +162,8 @@ void RenderSystem::PushCameraData()
 
 void RenderSystem::Render()
 {
+	ResourceManager::Instance.Get().GetTexture(L"Texture/LightMap.dds")->Bind(24);
+
 	UtilBuffer utilBuffer;
 	utilBuffer.windowWidth = NailEngine::Instance.Get().GetWindowInfo().width;
 	utilBuffer.windowHeight = NailEngine::Instance.Get().GetWindowInfo().height;
