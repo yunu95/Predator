@@ -148,6 +148,7 @@ namespace application
             }
             return true;
         }
+
         bool TemplateDataManager::PreEncoding(json& data) const
         {
             UUID uuid;
