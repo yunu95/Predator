@@ -261,7 +261,7 @@ void GraphicsTest()
 	{
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,2.77,0 });
+		obj->GetTransform()->SetLocalPosition(Vector3d{ -3.35,2.77,0 });
 		renderer->GetGI().SetMesh(mesh);
 	}
 

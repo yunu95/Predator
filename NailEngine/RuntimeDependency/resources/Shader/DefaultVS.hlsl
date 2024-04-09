@@ -34,10 +34,19 @@ VertexOut main(VertexIn input)
     output.posH = mul(output.posH, VP);
     output.posV = mul(float4(input.pos, 1.f), WV);
     output.color = input.color;
-    output.uv = input.uv;
+    
+    float2 tempUV = input.uv;
+    tempUV.x *= lightMapUV[input.instanceID].scaling.x;
+    tempUV.y *= lightMapUV[input.instanceID].scaling.y;
+    
+    tempUV.x += ((lightMapUV[input.instanceID].uvOffset.x + 1.f) / 2.f);
+    tempUV.y += (lightMapUV[input.instanceID].uvOffset.y);
+    
+    output.uv = tempUV;
     output.normalV = normalize(mul(float4(input.normal, 0.f), WV));
     output.tangentV = normalize(mul(float4(input.tangent, 0.f), WV));
     output.biNormalV = normalize(cross(output.tangentV, output.normalV));
+    //output.id = input.instanceID;
     
     return output;
 }

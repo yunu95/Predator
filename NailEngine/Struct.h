@@ -73,6 +73,7 @@ enum class CB_TYPE
 	EXPOSURE,
 	UTIL,
 	PARTICLE,
+	LIGHTMAP_UV,
 };
 
 struct MatrixBuffer

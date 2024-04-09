@@ -62,6 +62,5 @@ private:
 	std::map<InstanceID, std::shared_ptr<InstanceBuffer>> _buffers;
 	std::shared_ptr<InstanceTransitionDesc> instanceTransitionDesc;
 	std::shared_ptr<ParticleBuffer> particleBuffer;
-
-
+	std::shared_ptr<LightMapUVBuffer> lightMapUVBuffer;
 };

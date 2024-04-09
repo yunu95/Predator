@@ -37,11 +37,15 @@ PS_OUT main(PixelIn input)
         }
     }
     
-    if (UseTexture(useAlbedo) == 1)
-    {
-        color = AlbedoMap.Sample(sam, input.uv);
-        color.rgb = pow(color.rgb, 2.2f);
-    }
+    ////////if (UseTexture(useAlbedo) == 1)
+    ////////{
+    ////////    color = AlbedoMap.Sample(sam, input.uv);
+    ////////    color.rgb = pow(color.rgb, 2.2f);
+    ////////}
+
+
+    color = UnityLightMap.Sample(sam, input.uv);
+    color.rgb = pow(color.rgb, 2.2f);
     
     float3 viewNormal = input.normalV;
     if (UseTexture(useNormal) == 1)
@@ -68,13 +72,14 @@ PS_OUT main(PixelIn input)
     {
         output.arm.x = 1.0f;
         output.arm.y = 1.0f;
-        output.arm.z = 0.0f; 
+        output.arm.z = 0.0f;
     }
     
     output.position = input.posV;
     output.normal = float4(viewNormal.xyz, 1.f);
     
-    output.color = color * materialColor;
+    /////output.color = color * materialColor;
+    output.color = color;
     
     if (UseTexture(useEmission))
     {

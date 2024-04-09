@@ -172,7 +172,7 @@ struct LightMapUV
     float2 scaling;
 };
 
-struct LightMapUVBuffer
+cbuffer LightMapUVBuffer : register(b12)
 {
     LightMapUV lightMapUV[MAX_STATIC_MODEL];
 };
