@@ -1175,6 +1175,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Trigger_EnterRegion.h" />
     <ClInclude Include="Trigger_GameStart.h" />
     <ClInclude Include="UIButton.h" />
+    <ClInclude Include="UIImage.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UIPanel.h" />
     <ClInclude Include="UnitData.h" />

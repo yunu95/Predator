@@ -8,6 +8,8 @@
 #include "Dotween.h"
 #include "TacticModeSystem.h"
 #include "IAnimation.h"
+#include "SkillPreviewSystem.h"
+#include "GameManager.h"
 
 void Unit::Start()
 {
@@ -62,7 +64,7 @@ void Unit::Start()
 		{
 			return m_currentTargetUnit == nullptr || 
 				(((GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetUnit->GetTransform()->GetWorldPosition()).Magnitude() > m_atkDistance + 0.4f)
-					&& m_currentTargetUnit != tauntingThisUnit
+					/*&& m_currentTargetUnit != tauntingThisUnit*/
 					|| currentOrder == UnitState::Idle);
 		} });
 
@@ -224,7 +226,7 @@ Unit::UnitSide Unit::GetUnitSide() const
 			TacticModeSystem::SingleInstance().CallQueueFunction(this);
 		}
 
-		if (this->m_unitType == UnitType::Boss)
+		if (this->m_unitSide == UnitSide::Enemy)
 		{
 			GetGameObject()->GetComponent<BossSkillSystem>()->ActivateSkillRandomly();
 		}
@@ -251,6 +253,11 @@ Unit::UnitSide Unit::GetUnitSide() const
 		m_opponentObjectSet.clear();
 
 		ReportUnitDeath();
+
+		if (m_unitSide == UnitSide::Enemy)
+		{
+			GameManager::Instance().AddCombo();
+		}
 
 		StopMove();
 	}
@@ -457,7 +464,7 @@ Unit::UnitState Unit::GetCurrentUnitState() const
 	return currentOrder;
 }
 
-SkillPreviewSystem::SkillPreviewMesh Unit::GetSkillPreviewType(SkillEnum p_currentSkillType) const
+SkillPreviewMesh Unit::GetSkillPreviewType(SkillEnum p_currentSkillType) const
 {
 	switch (p_currentSkillType)
 	{
@@ -495,8 +502,8 @@ int Unit::GetUnitDamage() const
 void Unit::Damaged(Unit* opponentUnit, float opponentDmg)
 {
 	AddToOpponentObjectList(opponentUnit);
-	//DetermineHitDamage(opponentDmg);
-	m_currentHealthPoint -= opponentDmg;
+	DetermineHitDamage(opponentDmg);
+	m_currentHealthPoint -= m_finalHitDamage;
 	// ui로 표시되는, 혹은 최종 남은 체력은 반올림할 것인가 혹은 내림할 것인가는 아래에 구현.
 }
 
@@ -600,6 +607,7 @@ void Unit::ChangeCurrentOpponentUnitForced(Unit* p_unit)
 void Unit::DeleteTauntingUnit()
 {
 	tauntingThisUnit = nullptr;
+	m_currentTargetUnit = nullptr;
 	DetermineCurrentTargetObject();
 }
 
@@ -615,7 +623,7 @@ void Unit::SetUnitStateToSkill()
 
 void Unit::DetermineHitDamage(float p_onceCalculatedDmg)
 {
-	m_finalHitDamage = (m_defensePoint / 10.0f) / (1 - m_criticalDamageDecreaseMultiplier) / (1 - m_dodgeProbability);
+	m_finalHitDamage = p_onceCalculatedDmg - ((m_defensePoint / 10.0f) / (1 - m_criticalDamageDecreaseMultiplier)) / (1 - m_dodgeProbability);
 }
 
 void Unit::RotateUnit(Vector3d endPosition)
@@ -631,7 +639,6 @@ void Unit::RotateUnit(Vector3d endPosition)
 	Vector3d movedPositionPerFrame = GetGameObject()->GetTransform()->GetWorldPosition() + (directionVector * m_speed * Time::GetDeltaTime());
 
 	Vector3d afterDirectionVector = (endPosition - movedPositionPerFrame).Normalized();
-
 
 	double dot = Vector3d::Dot(objectFront, startPosition - endPosition);
 
@@ -784,7 +791,7 @@ void Unit::SetSkillDuration(float p_duration)
 	qSkillAnimationDuration = p_duration;
 }
 
-void Unit::SetSkillPreviewType(SkillPreviewSystem::SkillPreviewMesh p_qskill, SkillPreviewSystem::SkillPreviewMesh p_wskill)
+void Unit::SetSkillPreviewType(SkillPreviewMesh p_qskill, SkillPreviewMesh p_wskill)
 {
 	m_qSkillPreviewType = p_qskill;
 	m_wSkillPreviewType = p_wskill;

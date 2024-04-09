@@ -5,6 +5,7 @@
 #include "Unit.h"
 #include "Dotween.h"
 #include "SkillPreviewSystem.h"
+#include "GameManager.h"
 
 void PlayerController::SetMovingSystemComponent(RTSCam* sys)
 {
@@ -22,60 +23,36 @@ void PlayerController::SetLeftClickMove()
 	if (static_cast<int>(currentSelectedSerialNumber) == InputManager::SelectedSerialNumber::All)
 	{
 		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
-		{
-			for (auto e : playerComponentMap)
 			{
-				e.second->OrderMove(pos);
-			}
-		};
+				for (auto e : playerComponentMap)
+				{
+					e.second->OrderMove(pos);
+				}
+			};
 	}
 	else
 	{
 		Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
 		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
-		{
-			currentSelectedUnit->OrderMove(pos);
-		};
+			{
+				currentSelectedUnit->OrderMove(pos);
+			};
 	}
-
 }
 
 void PlayerController::SetLeftClickAttackMove()
 {
-	if (static_cast<int>(currentSelectedSerialNumber) == InputManager::SelectedSerialNumber::All)
-	{
-		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
-		{
-			for (auto e : playerComponentMap)
-			{
-				e.second->OrderAttackMove(pos);
-			}
-		};
-	}
-	else
-	{
-		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
+	m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
 		{
 			playerComponentMap.find(currentSelectedSerialNumber)->second->OrderAttackMove(pos);
 		};
-	}
 }
 
 void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
 {
 	Unit* currentUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
 
-	if (static_cast<int>(currentSelectedSerialNumber) == InputManager::SelectedSerialNumber::All)
-	{
-		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
-		{
-			for (auto e : playerComponentMap)
-			{
-				e.second->OrderSkill(p_skillNum, pos);
-			}
-		};
-	}
-	else if (currentUnit->GetCurrentUnitState() != Unit::UnitState::Skill)
+	if (currentUnit->GetCurrentUnitState() != Unit::UnitState::Skill)
 	{
 		if (static_cast<int>(currentSelectedSerialNumber) == InputManager::SelectedSerialNumber::One && p_skillNum == Unit::SkillEnum::W)
 		{
@@ -86,8 +63,9 @@ void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
 		else
 		{
 			Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
-			SkillPreviewSystem::Instance().SetCurrentSelectedPlayerGameObject(currentSelectedUnit->GetGameObject());
+			SkillPreviewSystem::Instance().SetCurrentSelectedPlayerUnit(currentSelectedUnit);
 			SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(p_skillNum));
+			SkillPreviewSystem::Instance().SetCurrentSelectedSkillNum(p_skillNum);
 			SkillPreviewSystem::Instance().ActivateSkillPreview(true);
 			m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
 			{
@@ -111,19 +89,9 @@ void PlayerController::SetRightClickEmpty()
 
 void PlayerController::SetCurrentPlayerSerialNumber(Unit::UnitType p_num)
 {
-	if (playerComponentMap.find(p_num) != playerComponentMap.end())
+	if (playerComponentMap.find(p_num) != playerComponentMap.end() || p_num == Unit::UnitType::AllPlayers)
 	{
-		currentSelectedSerialNumber = p_num;
-		Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
-		Vector3d unitPos = currentSelectedUnit->GetTransform()->GetWorldPosition();
-		//m_dotween->DOMove(unitPos + cameraOffset, cameraMoveDuration);
-		//m_dotween->DORotate(Vector3d(60, 0, 0), cameraMoveDuration);
-
-		Vector3d camRotation = m_movingSystemComponent->GetTransform()->GetWorldRotation().Euler();
-		//m_dotween->DOLookAt(unitPos, cameraMoveDuration, true);
-
-		//m_movingSystemComponent->GetTransform()->SetWorldPosition({ unitPos + cameraOffset });
-
+		currentSelectedSerialNumber = p_num;		
 		SetLeftClickMove();
 	}
 }

@@ -38,6 +38,12 @@ void UnitProductor::SetUnitComponentMembers()
 
 	m_unitComponent->SetFbxName(m_unitFbxName);
 
+	m_unitComponent->m_defensePoint = m_defensePoint;
+	m_unitComponent->m_dodgeProbability = m_dodgeProbability;
+	m_unitComponent->m_criticalHitMultiplier = m_criticalHitMultiplier;
+	m_unitComponent->m_criticalDamageDecreaseMultiplier = m_criticalDamageDecreaseMultiplier;
+	m_unitComponent->m_criticalHitProbability = m_criticalHitProbability;
+
 	///// + 플레이어 유닛일 경우 특수 처리
 	//if (m_unitSide == Unit::UnitSide::Player)
 	//	SetPlayerRelatedComponents(m_unitComponent);
@@ -61,13 +67,13 @@ void UnitProductor::AddRangeSystemComponent() const
 void UnitProductor::AddColliderComponent() const 
 {
 	auto unitCollider = m_unitGameObject->AddComponent<physics::SphereCollider>();	// 빈 껍데기에 
-	unitCollider->SetRadius(lengthUnit);
+	unitCollider->SetRadius(UNIT_LENGTH);
 	//m_unitGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
 	auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(unitColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
 	unitColliderDebugObject->SetParent(m_unitGameObject);
-	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(lengthUnit, lengthUnit, lengthUnit));
+	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(UNIT_LENGTH, UNIT_LENGTH, UNIT_LENGTH));
 	m_unitComponent->SetStaticMeshComponent(unitColliderDebugObject->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>());
 }
 
@@ -108,7 +114,6 @@ void UnitProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p
 {
 	//m_unitType = static_cast<Unit::UnitType>(p_podData.unitType);
 	m_healthPoint = p_podData.m_healthPoint;
-	m_manaPoint = p_podData.m_manaPoint;
 	m_autoAttackDamage = p_podData.m_autoAttackDamage;
 	m_criticalHitProbability = p_podData.m_criticalHitProbability;
 	m_criticalHitMultiplier = p_podData.m_criticalHitMultiplier;

@@ -9,12 +9,24 @@ class Dotween;
 /// </summary>
 class PlayerSkillSystem : public SkillSystem
 {
+protected:
+	float m_skillOneRange;
+	float m_skillTwoRange;
+
 public:
 	virtual void ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition);	
 	virtual void RotateProjectile(GameObject* p_projectileObject, Vector3d p_endPosition);
 
 	virtual void ActivateSkillOne(Vector3d skillPos) = 0;
 	virtual void ActivateSkillTwo(Vector3d skillPos) = 0;
+
+	virtual void SetSkillOneRange(float p_rng);
+	virtual void SetSkillTwoRange(float p_rng);
+
+	virtual float GetSkillOneRange() const;
+	virtual float GetSkillTwoRange() const;
+
+	virtual Vector3d CheckSkillRange(Vector3d p_skillPos, Unit::SkillEnum p_num);
 
 	virtual void Start() override;
 

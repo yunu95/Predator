@@ -2,6 +2,70 @@
 #include "RTSCam.h"
 #include "UIManager.h"
 
+void UIManager::LoadUITextures() const
+{
+	auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	rsrcMgr->LoadFile("Texture/Ingame/_0000_Icon_Menu.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0001_Frame_Tactics.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0002_Frame_MpBar.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0003_Bar_MpBar.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0004_BackFrame_MpBar.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0005_Frame_HpBar.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0006_Bar_HpBar.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0007_BackFrame_HpBar.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0008_Icon_Heal.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0009_Icon_Buff.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0010_Icon_Poison.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0011_Icon_Bleeding.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0012_Skill_RobinE.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0013_Skill_UrsulaE.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0014_Skill_UrsulaQ.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0015_Skill_HanselE.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0016_Skill_HanselQ.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0017_Skill_RobinQ.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0018_Portrait_Hansel.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0019_Portrait_Ursula.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0020_Portrait_Robin.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0021_Button_SkillUpgrade_Act.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0022_Button_SkillUpgrade_UnAct.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0023_Quest2_UnCompleted.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0024_Quest2_Complete.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0025_Quest3_Complete.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0026_Window_Quest.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0027_Quest1_Complete.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0028_Quest3_UnComplete.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0029_Quest1_UnComplete.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0030_Font_0.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0031_Font_9.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0032_Font_8.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0033_Font_7.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0034_Font_6.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0035_Font_5.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0036_Font_4.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0037_Font_3.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0038_Font_2.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0039_Font_1.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0040_System_ComboRate.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0041_Icon_SkillUnlocked.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0042_Icon_SkillLocked.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0043_RollOver_RobinSkill1_0.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0044_Button_No.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0045_Button_Yes.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0046_PopUp_UpgradeCheck.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0047_PopUp_Warning_SPT2.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0048_PopUp_Warning_SPT1.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0049_Window_SkillUpgrade.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0050_Button_Close.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0051_Toggle_On.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0052_Toggle_Off.png");
+	rsrcMgr->LoadFile("Texture/Ingame/_0053_Window_AudioSetting.png");
+	rsrcMgr->LoadFile("Texture/Ingame_Menu/Button_HowToPlay.png");
+	rsrcMgr->LoadFile("Texture/Ingame_Menu/Button_Restart.png");
+	rsrcMgr->LoadFile("Texture/Ingame_Menu/Button_Sound.png");
+	rsrcMgr->LoadFile("Texture/Ingame_Menu/PopUp_Guide.png");
+	rsrcMgr->LoadFile("Texture/Ingame_Menu/PopUp_IngameMenu.png");
+}
+
 void UIManager::ReportButtonOnMouse(UIButton* p_btn)
 {
 	// 2. Layer에 따라 현재 상호작용할 버튼을 정합니다.
@@ -60,6 +124,11 @@ void UIManager::ReportMouseExitButton(UIButton* p_btn)
 			isButtonActiviated = true;
 		}
 	}
+}
+
+bool UIManager::IsMouseOnButton()
+{
+	return isButtonActiviated;
 }
 
 void UIManager::Update()

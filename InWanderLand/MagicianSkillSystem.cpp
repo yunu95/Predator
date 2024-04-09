@@ -14,13 +14,16 @@ void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 	QSkillProjectile.colliderObject->GetTransform()->SetWorldRotation(Quaternion(Vector3d::zero));
 	QSkillProjectile.debugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());	
 
-	RotateProjectile(QSkillProjectile.colliderObject, skillPos);
-
 	SetSkillRequirmentsActive(QSkillProjectile, true);
+
+	skillPos = CheckSkillRange(skillPos, Unit::SkillEnum::Q);
+
+	RotateProjectile(QSkillProjectile.colliderObject, skillPos);
 
 	QSkillFieldDamage.colliderObject->GetTransform()->SetWorldPosition(skillPos);			// 오브젝트만 움직여도 collider와 debug는 따라올 것이다.
 
 	float tempDistance = (skillPos - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
+
 	QSkillProjectile.dotweenComponent->DOMove(skillPos, tempDistance / m_QSkillProjectileSpeed).OnComplete([=]()
 		{
 			SetSkillRequirmentsActive(QSkillProjectile, false);
@@ -43,6 +46,7 @@ void MagicianSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 
 	SetSkillRequirmentsActive(WSkillProjectile, true);
 
+	skillPos = CheckSkillRange(skillPos, Unit::SkillEnum::W);
 	WSkillFieldDamage.colliderObject->GetTransform()->SetWorldPosition(skillPos);			// 오브젝트만 움직여도 collider와 debug는 따라올 것이다.
 
 	float tempDistance = (skillPos - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
@@ -107,17 +111,17 @@ void MagicianSkillSystem::Start()
 	SetOtherComponentsAsMember();
 
 	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-	contentsLayer->RegisterToEditorObjectVector(QSkillProjectile.colliderObject);
-	contentsLayer->RegisterToEditorObjectVector(QSkillProjectile.debugObject);
+	contentsLayer->RegisterToEditorObjectContainer(QSkillProjectile.colliderObject);
+	contentsLayer->RegisterToEditorObjectContainer(QSkillProjectile.debugObject);
 
-	contentsLayer->RegisterToEditorObjectVector(QSkillFieldDamage.colliderObject);
-	contentsLayer->RegisterToEditorObjectVector(QSkillFieldDamage.debugObject);
+	contentsLayer->RegisterToEditorObjectContainer(QSkillFieldDamage.colliderObject);
+	contentsLayer->RegisterToEditorObjectContainer(QSkillFieldDamage.debugObject);
 
-	contentsLayer->RegisterToEditorObjectVector(WSkillProjectile.colliderObject);
-	contentsLayer->RegisterToEditorObjectVector(WSkillProjectile.debugObject);
+	contentsLayer->RegisterToEditorObjectContainer(WSkillProjectile.colliderObject);
+	contentsLayer->RegisterToEditorObjectContainer(WSkillProjectile.debugObject);
 
-	contentsLayer->RegisterToEditorObjectVector(WSkillFieldDamage.colliderObject);
-	contentsLayer->RegisterToEditorObjectVector(WSkillFieldDamage.debugObject);
+	contentsLayer->RegisterToEditorObjectContainer(WSkillFieldDamage.colliderObject);
+	contentsLayer->RegisterToEditorObjectContainer(WSkillFieldDamage.debugObject);
 
 	QSkillProjectile.debugObject->SetSelfActive(false);
 	QSkillFieldDamage.debugObject->SetSelfActive(false);

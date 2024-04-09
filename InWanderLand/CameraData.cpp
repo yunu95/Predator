@@ -13,6 +13,7 @@
 #include "SkillPreviewSystem.h"
 #include "PlayerController.h"
 #include "TacticModeSystem.h"
+#include "GameManager.h"
 #include "PlayTimeRegionManager.h"
 
 namespace application
@@ -123,6 +124,7 @@ namespace application
 			auto camComp = camObj->AddComponent<RTSCam>();
 			PlayTimeRegionManager::Instance().SetCameraDotween(camObj->AddComponent<Dotween>());
 			InputManager::Instance().rtscam = camComp;
+			GameManager::Instance().rtscam = camComp;
 			camObj->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
 			camObj->GetTransform()->SetWorldRotation({ pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z });
 			camObj->GetTransform()->SetWorldScale({ pod.scale.x,pod.scale.y,pod.scale.z });
@@ -136,13 +138,13 @@ namespace application
 			camComp->SetCameraMain();
 
 			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-			contentsLayer->RegisterToEditorObjectVector(camObj);
+			contentsLayer->RegisterToEditorObjectContainer(camObj);
 
 			auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 			auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
 			auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-			contentsLayer->RegisterToEditorObjectVector(mouseCursorObject);
+			contentsLayer->RegisterToEditorObjectContainer(mouseCursorObject);
 			auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 			mouseCursorMesh->GetGI().SetMesh(sphereMesh);
 			mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });

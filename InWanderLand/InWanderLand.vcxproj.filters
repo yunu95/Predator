@@ -1103,6 +1103,9 @@
     <ClInclude Include="Trigger_EnterRegion.h">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClInclude>
+    <ClInclude Include="UIImage.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">

@@ -134,7 +134,7 @@ namespace application
 			comp->GetTransform()->SetLocalScale(Vector3d(pod.scale.x, pod.scale.y, pod.scale.z));
 
 			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-			contentsLayer->RegisterToEditorObjectVector(comp);
+			contentsLayer->RegisterToEditorObjectContainer(comp);
 		}
 
 		void LightData::OnLightTypeChange(LightType type)

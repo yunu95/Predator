@@ -3,6 +3,7 @@
 #include "DebugBeacon.h"
 #include "RegionData.h"
 #include "Unit.h"
+#include "UIManager.h"
 using namespace yunutyEngine;
 
 class RTSCam :public yunutyEngine::graphics::Camera
@@ -131,7 +132,7 @@ public:
 			UpdateCameraView();
 		}
 
-		if (!roamingMode)
+		if (!roamingMode && !UIManager::Instance().IsMouseOnButton())
 		{
 			auto front = yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation().Forward();
 			auto distToXZPlane = abs(yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y);

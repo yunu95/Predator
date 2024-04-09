@@ -10,6 +10,7 @@ enum class SpecialEventType
     // None과 End 사이에 필요한 이벤트 타입을 추가하십시오.
     Stage1To2Transition,
     Stage2StartRegion,
+    SpikeTrap,
     End,
 };
 // SpecialEventType들을 문자열 리스트로 변환합니다. 새로운 이벤트 타입을 추가할 때마다 이 함수를 확장하십시오. 이 함수는 에디터에서 이벤트 타입을 표시할 때 사용됩니다.
@@ -20,6 +21,7 @@ constexpr array<std::string, static_cast<size_t>(SpecialEventType::End) + 1> Spe
         "None",
         "Stage1To2Transition",
         "Stage2StartRegion",
+        "SpikeTrap",
         "End",
     };
 };

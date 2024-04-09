@@ -34,8 +34,9 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
 	currentSelectedUnit = playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second;
 	processingUnitMap.insert({ queueOrderIndex, currentSelectedUnit });
 
-	SkillPreviewSystem::Instance().SetCurrentSelectedPlayerGameObject(currentSelectedUnit->GetGameObject());
+	SkillPreviewSystem::Instance().SetCurrentSelectedPlayerUnit(currentSelectedUnit);
 	SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(currentSelectedSkill));
+	SkillPreviewSystem::Instance().SetCurrentSelectedSkillNum(currentSelectedSkill);
 	SkillPreviewSystem::Instance().ActivateSkillPreview(true);
 
 	m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
