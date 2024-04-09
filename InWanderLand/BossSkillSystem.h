@@ -20,10 +20,6 @@ private:
 
 	int m_skillNum;
 
-	Unit* m_warriorUnit;
-	Unit* m_magicianUnit;
-	Unit* m_healerUnit;
-
 	Unit* currentSummonedDoorUnit;
 	Unit* currentDerivedDoorUnit;
 
@@ -32,6 +28,9 @@ private:
 	SkillRequirements m_skillThreeRequirments;
 	SkillRequirements m_skillFourRequirments;
 
+	bool isBossSkill;
+	Unit::SkillEnum selectedSkillNumber;
+
 public:
 	void ActivateSkillRandomly();
 
@@ -39,6 +38,8 @@ public:
 	void SetSkillTwoRequirments(GameObject* p_obj, GameObject* p_debugObj);
 	void SetSkillTwoRange(float p_range);
 	void SetSkillFourRequirments(GameObject* p_obj, physics::SphereCollider* p_projectileCollider, GameObject* p_debugObj);
+
+	void SelectSkill(Unit::SkillEnum p_enum);
 
 	virtual void Start() override;
 	virtual void Update() override;

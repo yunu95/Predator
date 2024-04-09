@@ -3,6 +3,7 @@
 #include "DebugBeacon.h"
 #include "RegionData.h"
 #include "Unit.h"
+#include "UIManager.h"
 using namespace yunutyEngine;
 
 class RTSCam :public yunutyEngine::graphics::Camera

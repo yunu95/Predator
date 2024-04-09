@@ -21,7 +21,6 @@ namespace application
 
 			int unitType;
 			float m_healthPoint;
-			int m_manaPoint;
 
 			float m_autoAttackDamage;
 			int m_criticalHitProbability;				// 치명타 확률
@@ -38,6 +37,7 @@ namespace application
 
 			float m_attackDelay;
 
+			int isEliteMonster;
 
 			TO_JSON(POD_Unit_TemplateData)
 			FROM_JSON(POD_Unit_TemplateData)

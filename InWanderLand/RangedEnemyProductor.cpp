@@ -1,6 +1,9 @@
 #include "RangedEnemyProductor.h"
 #include "SingleNavigationField.h"
 #include "RangedAttackSystem.h"
+#include "DebugMeshes.h"
+#include "Unit_TemplateData.h"
+#include "BossSkillSystem.h"
 
 void RangedEnemyProductor::SetUnitData()
 {
@@ -89,6 +92,34 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 	rangedAttackSystem->SetBulletSpeed(10.0f);
 #pragma endregion
 
+	if (isEliteMonster)
+	{
+#pragma region Boss Skill_2 Object Setting
+		auto skillTwoColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto skillTwoCollider = skillTwoColliderObject->AddComponent<physics::BoxCollider>();
+		float skillTwoColliderRange = 6.0f * UNIT_LENGTH;
+		float skillTwoColliderLength = 2.0f * UNIT_LENGTH;
+		skillTwoCollider->SetHalfExtent({ skillTwoColliderLength * 0.5f,skillTwoColliderLength * 0.5f, skillTwoColliderRange * 0.5f });
+
+		auto skillTwoDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		AttachDebugMesh(skillTwoDebugMesh, DebugMeshType::Cube, yunuGI::Color::red(), true);
+		skillTwoDebugMesh->GetTransform()->SetWorldScale({ skillTwoColliderLength ,skillTwoColliderLength ,skillTwoColliderRange });
+#pragma endregion
+
+		auto eliteSkillSystem = m_unitGameObject->AddComponent<BossSkillSystem>();
+		eliteSkillSystem->SelectSkill(Unit::SkillEnum::BossSkillTwo);
+		skillTwoColliderObject->SetParent(m_unitGameObject);
+		skillTwoDebugMesh->SetParent(m_unitGameObject);
+		eliteSkillSystem->SetSkillTwoRange(skillTwoColliderRange);
+		eliteSkillSystem->SetSkillTwoRequirments(skillTwoColliderObject, skillTwoDebugMesh);
+
+		auto skinnedMeshRenderer = m_unitGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
+		auto material = skinnedMeshRenderer->GetGI().GetMaterial();
+		auto clonedMaterial = graphics::Renderer::SingleInstance().GetResourceManager()->CloneMaterial(L"Red", material);
+		clonedMaterial->SetColor(yunuGI::Color::red());
+		skinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial);
+	}
+
 	UnitProductor::AddRangeSystemComponent();
 	UnitProductor::AddColliderComponent();
 	UnitProductor::AddNavigationComponent();
@@ -96,4 +127,11 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 	UnitProductor::SetUnitComponentMembers();
 
 	return m_unitComponent;
+}
+
+void RangedEnemyProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p_podData)
+{
+	UnitProductor::MappingUnitData(p_podData);
+
+	isEliteMonster = p_podData.isEliteMonster;
 }

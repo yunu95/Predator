@@ -98,12 +98,14 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 
 	/// UnitComponent 추가
 	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
-	//RobinSkillDevelopmentSystem::Instance().SetOwnerUnit(m_unitComponent);
+	RobinSkillDevelopmentSystem::Instance().SetOwnerUnit(m_unitComponent);
 
 #pragma region Auto Attack Setting (Including Passive Logic)
 	auto bleedingSystemObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto bleedingSystem = bleedingSystemObject->AddComponent<BleedingComponent>();
 	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
+
+	RobinSkillDevelopmentSystem::Instance().SetRobinPassiveComponent(bleedingSystem);
 
 	warriorAttackSystem->SetMeleeAttackType(MeleeAttackType::DirectAttack);
 	warriorAttackSystem->SetOwnerUnitObject(m_unitGameObject);
@@ -154,7 +156,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	warriorSkillSystem->SetSkillOneRange(warriorSkillOneRange);
 	warriorSkillSystem->SetSkillTwoRange(0.0f);
 
-	//RobinSkillDevelopmentSystem::Instance().SetSkillSystemComponent(warriorSkillSystem);
+	RobinSkillDevelopmentSystem::Instance().SetSkillSystemComponent(warriorSkillSystem);
 
 	UnitProductor::AddRangeSystemComponent();
 	UnitProductor::AddColliderComponent();

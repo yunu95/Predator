@@ -85,7 +85,7 @@ namespace application
             regionGameObject->GetTransform()->SetWorldRotation(Vector3d(0, pod.angle, 0));
 
 			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-			contentsLayer->RegisterToEditorObjectVector(regionGameObject);
+			contentsLayer->RegisterToEditorObjectContainer(regionGameObject);
         }
 
         bool RegionData::PreSaveCallback()

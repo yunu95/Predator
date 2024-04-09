@@ -199,7 +199,7 @@ namespace application
 
                     currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                     unitComponent = currentSelectedProductor->CreateUnit(startPosition);
-					contentsLayer->RegisterToEditorObjectVector(unitComponent->GetGameObject());
+					contentsLayer->RegisterToEditorObjectContainer(unitComponent->GetGameObject());
                 }
 
 				/*ShortcutSystem::Instance().RegisterTriggerFunction(ShortcutSystem::KeyIndex::, 

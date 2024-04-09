@@ -160,5 +160,11 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
 	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::Q, skillOneRange);
 	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::W, skillTwoRange);
 
+	auto skinnedMeshRenderer = m_unitGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
+	auto material = skinnedMeshRenderer->GetGI().GetMaterial();
+	auto clonedMaterial = graphics::Renderer::SingleInstance().GetResourceManager()->CloneMaterial(L"Blue", material);
+	clonedMaterial->SetColor(yunuGI::Color::blue());
+	skinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial);
+
 	return m_unitComponent;
 }

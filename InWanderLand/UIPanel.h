@@ -24,6 +24,8 @@ private:
 
 	Vector2d m_closeButtonCenterPosition;
 
+	bool isPanelActivated{ false };
+
 public:
 	void SetWindowImage(yunutyEngine::graphics::UIImage* img);
 	void SetUIButtonComponent(UIButton* btn);
@@ -31,6 +33,8 @@ public:
 	void SetCloseButtonActive(bool p_boolen);
 
 	void SetParentPanel(UIPanel* p_parentPanel);
+
+	bool GetPanelActive() const;
 	virtual void Start() override;
 };
 

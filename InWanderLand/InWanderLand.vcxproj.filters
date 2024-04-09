@@ -1040,6 +1040,9 @@
     <ClInclude Include="GameManager.h">
       <Filter>Contents\GameManager</Filter>
     </ClInclude>
+    <ClInclude Include="UIImage.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">

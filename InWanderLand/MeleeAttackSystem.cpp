@@ -80,8 +80,9 @@ void MeleeAttackSystem::Start()
 	}
 	m_unitComponent = ownerUnitObject->GetComponent<Unit>();
 	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-	contentsLayer->RegisterToEditorObjectVector(meleeAttackColliderObject);
-	contentsLayer->RegisterToEditorObjectVector(meleeAttackColliderDebugObject);
+	//contentsLayer->RegisterToEditorComponentVector(this);
+	contentsLayer->RegisterToEditorObjectContainer(meleeAttackColliderObject);
+	contentsLayer->RegisterToEditorObjectContainer(meleeAttackColliderDebugObject);
 }
 
 void MeleeAttackSystem::Update()
