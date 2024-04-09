@@ -408,93 +408,7 @@ void application::contents::ContentsLayer::Initialize()
 
         InputManager::Instance();
         UIManager::Instance();
-        //PlayerController::SingleInstance().SetMovingSystemComponent(camComp);
-        //TacticModeSystem::SingleInstance().SetMovingSystemComponent(camComp);
-
-        // UIButton Test
-        //rsrcMgr->LoadFile("Texture/zoro.jpg");
-        //rsrcMgr->LoadFile("Texture/zoro_highLighted.jpg");
-        //rsrcMgr->LoadFile("Texture/zoro_Clicked.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Menu.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/TacticMode.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Robin_ParentUI.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Ursula_ParentUI.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Gretel_ParentUI.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Robin_Portrait.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Ursula_Portrait.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Gretel_Portrait.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Robin_Skill1_Ikon.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Ursula_Skill1_Ikon.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Gretel_Skill1_Ikon.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Robin_Skill2_Ikon.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Ursula_Skill2_Ikon.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Gretel_Skill2_Ikon.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/CloseButton.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/menu_window.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/GameManual_Button.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/GameManual.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Sound_Window.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Sound_Button.jpg");
-        //rsrcMgr->LoadFile("Texture/UI/InGameUITemp/Restart_Button.jpg");
-        //yunutyEngine::NavigationAgent* agent = nullptr;
-        //{
-        //	agent = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationAgent>();
-        //	agent->GetTransform()->SetLocalPosition(Vector3d{ 0,0,20 });
-        //	agent->SetSpeed(5);
-        //	agent->SetRadius(0.5);
-        //	agent->AssignToNavigationField(&SingleNavigationField::Instance());
-        //	auto staticMesh = agent->GetGameObject()->AddGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-        //	staticMesh->GetGI().SetMesh(graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(L"Capsule"));
-        //	staticMesh->GetGI().GetMaterial()->SetColor({ 0.75,0.75,0.75,1 });
-        //	staticMesh->GetTransform()->SetLocalPosition(Vector3d{ 0,0.5,0 });
-        //}
         bool mapFound = false;
-        /*for (const auto& entry : std::filesystem::directory_iterator("./"))
-        {
-            if (entry.is_regular_file() && entry.path().extension() == ".pmap")
-            {
-                editor::MapFileManager::GetSingletonInstance().LoadMapFile(entry.path().filename().string());
-                mapFound = true;
-                break;
-            }
-        }*/
-        //assert(mapFound && "there is no map to load in current directory!");
-
-        /// 임시
-		//RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
-		//RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
-		//RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
-
-
-//#pragma region UI Region
-//
-//		    /// UIButton Test
-//		    rsrcMgr->LoadFile("Texture/zoro.jpg");
-//
-//		    auto robinPassiveActivateButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-//		    auto robinPassiveActivateImage = robinPassiveActivateButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
-//		    auto robinPassiveActivateButton = robinPassiveActivateButtonObject->AddComponent<UIButton>();
-//		    robinPassiveActivateButton->SetImageComponent(robinPassiveActivateImage);
-//		    robinPassiveActivateButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-//		    robinPassiveActivateButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-//		    robinPassiveActivateButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-//		    robinPassiveActivateButton->SetLayer(10.0);
-//
-//		    RobinSkillDevelopmentSystem::Instance().AddTopLayerButton(robinPassiveActivateButton);
-//		    robinPassiveActivateButtonObject->GetTransform()->SetLocalPosition({ 0, 700, 0 });
-//
-//
-//		    auto robinWSkillUpgradeButtonObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-//		    auto robinWSkillUpgradeImage = robinWSkillUpgradeButtonObject->AddComponent<yunutyEngine::graphics::UIImage>();
-//		    auto robinWSkillUpgradeButton = robinWSkillUpgradeButtonObject->AddComponent<UIButton>();
-//		    robinWSkillUpgradeButton->SetImageComponent(robinWSkillUpgradeImage);
-//		    robinWSkillUpgradeButton->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-//		    robinWSkillUpgradeButton->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-//		    robinWSkillUpgradeButton->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-//		    robinWSkillUpgradeButton->SetLayer(10.0);
-//		    RobinSkillDevelopmentSystem::Instance().AddMiddleLayerButton(robinWSkillUpgradeButton);
-//		    robinWSkillUpgradeButtonObject->GetTransform()->SetLocalPosition({ 100, 700, 0 });
-//#pragma endregion
 
 
         editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
@@ -502,7 +416,14 @@ void application::contents::ContentsLayer::Initialize()
 
     }
 #endif
-#endif // ! EDITOR
+#else
+    // EDITOR
+    /*if (std::filesystem::exists("InWanderLand.pmap"))
+    {
+        editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
+    }*/
+#endif
+
 }
 
 void application::contents::ContentsLayer::Update(float ts)
@@ -650,9 +571,9 @@ void application::contents::ContentsLayer::ClearPlaytimeObject()
 void application::contents::ContentsLayer::ShortcutInit()
 {
     auto& scsys = ShortcutSystem::Instance();
-    scsys.RegisterUniqueTrigger({{ KeyCode::Control, true }, { KeyCode::D, false } },
-        [=]() 
-        { 
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::D, false } },
+        [=]()
+        {
             DebugGraphic::SetDebugGraphicsEnabled(!DebugGraphic::AreDebugGraphicsEnabled());
         });
     scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::NUM_1, false } },

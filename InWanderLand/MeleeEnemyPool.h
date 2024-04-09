@@ -24,7 +24,7 @@ public:
 		p_dummy->m_pairUnit = unitComponent;
 		unitComponent->returnToPoolFunction = [=]()
 			{
-				p_dummy->m_pairUnit->m_navAgentComponent->DetachFromNavigationField();
+				//p_dummy->m_pairUnit->m_navAgentComponent->DetachFromNavigationField();
 				Return(p_dummy);
 			};
 		//unitComponent->GetGameObject()->SetParent(p_dummy->GetGameObject());
@@ -39,10 +39,11 @@ public:
 		//tempNav->DetachFromNavigationField();
 		//tempNav->SetActive(false);
 		//p_dummy->GetGameObject()->SetSelfActive(true);
-		p_dummy->m_pairUnit->GetTransform()->SetWorldPosition(m_unitPosition);
-		p_dummy->m_pairUnit->m_navAgentComponent->AssignToNavigationField(p_dummy->m_pairUnit->GetNavField());
-		//p_dummy->m_pairUnit->m_navAgentComponent->Relocate(m_unitPosition);
-		//p_dummy->m_pairUnit->m_navAgentComponent->SetActive(true);
+		//p_dummy->m_pairUnit->m_navAgentComponent->DetachFromNavigationField();
+		//p_dummy->m_pairUnit->GetTransform()->SetWorldPosition(m_unitPosition);
+		//p_dummy->m_pairUnit->m_navAgentComponent->AssignToNavigationField(p_dummy->m_pairUnit->GetNavField());
+		p_dummy->m_pairUnit->m_navAgentComponent->SetActive(true);
+		p_dummy->m_pairUnit->m_navAgentComponent->Relocate(m_unitPosition);
 	}
 
 	void SetStartPosition(Vector3d p_pos)
