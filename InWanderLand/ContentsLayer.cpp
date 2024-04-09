@@ -819,6 +819,7 @@ void application::contents::ContentsLayer::AssignTestInitializer(std::function<v
 
 void application::contents::ContentsLayer::ClearPlaytimeObject()
 {
+    /// 카메라가 추적하고 있는 
     /// 생성된 모든 게임 플레이 오브젝트 삭제
     for (auto e : objectCreatedByEditorList)
     {
