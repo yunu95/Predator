@@ -10,6 +10,7 @@ private:
 
 	int currentCombo{ 0 };
 
+	bool isComboTimerActivated{ false };
 	float m_comboElapsed;
 	float m_comboResistDuration{6.0f};
 

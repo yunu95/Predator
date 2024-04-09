@@ -16,7 +16,18 @@ void GameManager::Start()
 
 void GameManager::Update()
 {
-
+	if (isComboTimerActivated)
+	{
+		m_comboElapsed += Time::GetDeltaTime();
+		
+		if (m_comboElapsed >= m_comboResistDuration)
+		{
+			isComboTimerActivated = false;
+			m_comboElapsed = 0.0f;
+			currentCombo = 0;
+			/// member로 세팅해놨던 comboNumber UIImage Component에게 현재 콤보 수를 넘겨준다.
+		}
+	}
 }
 
 void GameManager::EngageBattle()
@@ -47,7 +58,10 @@ bool GameManager::IsBattleSystemOperating() const
 
 void GameManager::AddCombo()
 {
+	isComboTimerActivated = true;
+	m_comboElapsed = 0.0f;
 	currentCombo++;
+	/// member로 세팅해놨던 comboNumber UIImage Component에게 현재 콤보 수를 넘겨준다.
 }
 
 void GameManager::ResetCombo()
