@@ -19,7 +19,7 @@ private:
 		comp->m_staticMeshRendererComp = AttachDebugMesh(comp->GetGameObject(), DebugMeshType::Sphere, yunuGI::Color::red(), false);
 		comp->m_staticMeshRendererComp->SetActive(false);
 		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-		contentsLayer->RegisterToEditorObjectVector(comp->GetGameObject());
+		contentsLayer->RegisterToEditorObjectContainer(comp->GetGameObject());
 
 	}
 };

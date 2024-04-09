@@ -66,6 +66,7 @@ void InputManager::Update()
 					PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
 					PlayerController::SingleInstance().SetLeftClickAttackMove();
 				}
+				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 			}
 
 			if (yunutyEngine::Input::isKeyPushed(KeyCode::Q))
@@ -79,7 +80,7 @@ void InputManager::Update()
 				}
 			}
 
-			if (yunutyEngine::Input::isKeyPushed(KeyCode::Alphabet_E))
+			if (yunutyEngine::Input::isKeyPushed(KeyCode::W))
 			{
 				if (tacticMode)
 					TacticModeSystem::SingleInstance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, Unit::SkillEnum::W);

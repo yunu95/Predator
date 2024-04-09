@@ -9,6 +9,7 @@
 #include "TacticModeSystem.h"
 #include "IAnimation.h"
 #include "SkillPreviewSystem.h"
+#include "GameManager.h"
 
 void Unit::Start()
 {
@@ -225,7 +226,7 @@ Unit::UnitSide Unit::GetUnitSide() const
 			TacticModeSystem::SingleInstance().CallQueueFunction(this);
 		}
 
-		if (this->m_unitType == UnitType::Boss)
+		if (this->m_unitSide == UnitSide::Enemy)
 		{
 			GetGameObject()->GetComponent<BossSkillSystem>()->ActivateSkillRandomly();
 		}
@@ -252,6 +253,11 @@ Unit::UnitSide Unit::GetUnitSide() const
 		m_opponentObjectSet.clear();
 
 		ReportUnitDeath();
+
+		if (m_unitSide == UnitSide::Enemy)
+		{
+			GameManager::Instance().AddCombo();
+		}
 
 		StopMove();
 	}

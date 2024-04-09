@@ -28,8 +28,8 @@ public:
 				Return(p_dummy);
 			};
 		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-		contentsLayer->RegisterToEditorObjectVector(p_dummy->GetGameObject());
-		contentsLayer->RegisterToEditorObjectVector(unitComponent->GetGameObject());
+		contentsLayer->RegisterToEditorObjectContainer(p_dummy->GetGameObject());
+		contentsLayer->RegisterToEditorObjectContainer(unitComponent->GetGameObject());
 	}
 
 	virtual void OnBorrow(DummyComponent* p_dummy) override
@@ -40,7 +40,7 @@ public:
 		//p_dummy->GetGameObject()->SetSelfActive(true);
 		p_dummy->m_pairUnit->GetTransform()->SetWorldPosition(m_unitPosition);
 		p_dummy->m_pairUnit->m_navAgentComponent->AssignToNavigationField(p_dummy->m_pairUnit->GetNavField());
-		p_dummy->m_pairUnit->GetGameObject()->SetSelfActive(true);
+		//p_dummy->m_pairUnit->GetGameObject()->SetSelfActive(true);
 		//p_dummy->m_pairUnit->m_navAgentComponent->Relocate(m_unitPosition);
 		//p_dummy->m_pairUnit->m_navAgentComponent->SetActive(true);
 	}

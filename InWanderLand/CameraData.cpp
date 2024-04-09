@@ -138,13 +138,13 @@ namespace application
 			camComp->SetCameraMain();
 
 			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-			contentsLayer->RegisterToEditorObjectVector(camObj);
+			contentsLayer->RegisterToEditorObjectContainer(camObj);
 
 			auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 			auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
 			auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-			contentsLayer->RegisterToEditorObjectVector(mouseCursorObject);
+			contentsLayer->RegisterToEditorObjectContainer(mouseCursorObject);
 			auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 			mouseCursorMesh->GetGI().SetMesh(sphereMesh);
 			mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });

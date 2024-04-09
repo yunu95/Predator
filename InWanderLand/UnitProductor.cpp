@@ -114,7 +114,6 @@ void UnitProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p
 {
 	//m_unitType = static_cast<Unit::UnitType>(p_podData.unitType);
 	m_healthPoint = p_podData.m_healthPoint;
-	m_manaPoint = p_podData.m_manaPoint;
 	m_autoAttackDamage = p_podData.m_autoAttackDamage;
 	m_criticalHitProbability = p_podData.m_criticalHitProbability;
 	m_criticalHitMultiplier = p_podData.m_criticalHitMultiplier;

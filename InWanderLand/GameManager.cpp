@@ -44,3 +44,13 @@ bool GameManager::IsBattleSystemOperating() const
 {
 	return isBattleModeOn;
 }
+
+void GameManager::AddCombo()
+{
+	currentCombo++;
+}
+
+void GameManager::ResetCombo()
+{
+	currentCombo = 0;
+}

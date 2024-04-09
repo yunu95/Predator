@@ -31,7 +31,7 @@ namespace application
             void ResumeContents();
             void StopContents();
 
-			void RegisterToEditorObjectVector(GameObject* p_obj);
+			void RegisterToEditorObjectContainer(GameObject* p_obj);
 			void RegisterToEditorComponentVector(Component* p_obj);
 
             bool isStoppedOnce{ false };
@@ -45,7 +45,7 @@ namespace application
             void ShortcutInit();
 
             // container. Editor의 Stop버튼을 눌렀을 경우 해당 container 내의 Object들을 Destroy 해줍니다.
-			std::vector<GameObject*> objectCreatedByEditorVector;
+			std::vector<GameObject*> objectCreatedByEditorList;
 
 			std::vector<Component*> componentsCreatedByEditorVector;
         };

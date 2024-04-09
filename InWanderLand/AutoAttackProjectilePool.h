@@ -21,6 +21,6 @@ public:
 		projectileComponent->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::green(), false));
 	
 		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-		contentsLayer->RegisterToEditorObjectVector(projectile->GetGameObject());
+		contentsLayer->RegisterToEditorObjectContainer(projectile->GetGameObject());
 	}
 };

@@ -1,6 +1,8 @@
 #include "UIButton.h"
 #include "UIManager.h"
 #include "RTSCam.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
 void UIButton::SetIdleImage(yunuGI::ITexture* p_IdleImage)
 {

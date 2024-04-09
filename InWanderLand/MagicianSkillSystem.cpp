@@ -111,17 +111,17 @@ void MagicianSkillSystem::Start()
 	SetOtherComponentsAsMember();
 
 	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-	contentsLayer->RegisterToEditorObjectVector(QSkillProjectile.colliderObject);
-	contentsLayer->RegisterToEditorObjectVector(QSkillProjectile.debugObject);
+	contentsLayer->RegisterToEditorObjectContainer(QSkillProjectile.colliderObject);
+	contentsLayer->RegisterToEditorObjectContainer(QSkillProjectile.debugObject);
 
-	contentsLayer->RegisterToEditorObjectVector(QSkillFieldDamage.colliderObject);
-	contentsLayer->RegisterToEditorObjectVector(QSkillFieldDamage.debugObject);
+	contentsLayer->RegisterToEditorObjectContainer(QSkillFieldDamage.colliderObject);
+	contentsLayer->RegisterToEditorObjectContainer(QSkillFieldDamage.debugObject);
 
-	contentsLayer->RegisterToEditorObjectVector(WSkillProjectile.colliderObject);
-	contentsLayer->RegisterToEditorObjectVector(WSkillProjectile.debugObject);
+	contentsLayer->RegisterToEditorObjectContainer(WSkillProjectile.colliderObject);
+	contentsLayer->RegisterToEditorObjectContainer(WSkillProjectile.debugObject);
 
-	contentsLayer->RegisterToEditorObjectVector(WSkillFieldDamage.colliderObject);
-	contentsLayer->RegisterToEditorObjectVector(WSkillFieldDamage.debugObject);
+	contentsLayer->RegisterToEditorObjectContainer(WSkillFieldDamage.colliderObject);
+	contentsLayer->RegisterToEditorObjectContainer(WSkillFieldDamage.debugObject);
 
 	QSkillProjectile.debugObject->SetSelfActive(false);
 	QSkillFieldDamage.debugObject->SetSelfActive(false);

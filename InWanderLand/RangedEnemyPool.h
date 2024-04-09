@@ -25,8 +25,8 @@ public:
 				Return(p_dummy);
 			};
 		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-		contentsLayer->RegisterToEditorObjectVector(p_dummy->GetGameObject());
-		contentsLayer->RegisterToEditorObjectVector(unitComponent->GetGameObject());
+		contentsLayer->RegisterToEditorObjectContainer(p_dummy->GetGameObject());
+		contentsLayer->RegisterToEditorObjectContainer(unitComponent->GetGameObject());
 	}
 
 	virtual void OnBorrow(DummyComponent* p_dummy) override

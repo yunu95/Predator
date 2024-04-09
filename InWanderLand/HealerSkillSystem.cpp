@@ -120,8 +120,8 @@ void HealerSkillSystem::Start()
 	//WSkillFieldDamage.debugObject->SetParent(GetGameObject());
 
 	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-	contentsLayer->RegisterToEditorObjectVector(WSkillFieldDamage.colliderObject);
-	contentsLayer->RegisterToEditorObjectVector(WSkillFieldDamage.debugObject);
+	contentsLayer->RegisterToEditorObjectContainer(WSkillFieldDamage.colliderObject);
+	contentsLayer->RegisterToEditorObjectContainer(WSkillFieldDamage.debugObject);
 
 }
 
