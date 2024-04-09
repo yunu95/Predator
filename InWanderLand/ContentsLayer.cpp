@@ -26,6 +26,10 @@
 #include "SingletonInstanceContainer.h"
 #include "ShortcutSystem.h"
 #include "RobinSkillDevelopmentSystem.h"
+#include "ScriptSystem.h"
+#include "TriggerList.h"
+#include "ConditionList.h"
+#include "ActionList.h"
 #include "UIImage.h"
 
 #include <algorithm>
@@ -352,6 +356,7 @@ void application::contents::ContentsLayer::Initialize()
     }
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
     ShortcutInit();
+    ScriptSystem::Instance();
 
     wanderUtils::LoadResourcesRecursively();
 
@@ -526,6 +531,14 @@ void application::contents::ContentsLayer::PlayContents()
     SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
     GameManager::Instance().Reset();
+
+
+#pragma region
+    auto script = ScriptSystem::Instance().CreateScript();
+    script->AddTrigger<Trigger_GameStart>();
+    script->AddAction<TestAction>();
+#pragma endregion ScriptTest
+
     for (auto e : componentsCreatedByEditorVector)
     {
         e->SetActive(true);
@@ -860,6 +873,11 @@ void application::contents::ContentsLayer::PlayContents()
 	RobinSkillDevelopmentSystem::Instance().AddMiddleLayerButton(robinWSkillUpgradeButton);
 	robinWSkillUpgradeButtonObject->GetTransform()->SetLocalPosition({ 300, 700, 0 });
 	RegisterToEditorObjectContainer(robinWSkillUpgradeButtonObject);
+
+
+
+    /// ScriptSystem 을 위한 부분입니다.
+    ScriptSystem::Instance().OnGameStart();
 }
 
 void application::contents::ContentsLayer::PauseContents()
@@ -890,6 +908,9 @@ void application::contents::ContentsLayer::StopContents()
     {
         e->SetActive(false);
     }
+
+    /// ScriptSystem 을 위한 부분입니다.
+    ScriptSystem::Instance().Clear();
 }
 
 #ifdef GEN_TESTS
