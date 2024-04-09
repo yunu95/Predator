@@ -26,6 +26,10 @@
 #include "SingletonInstanceContainer.h"
 #include "ShortcutSystem.h"
 #include "RobinSkillDevelopmentSystem.h"
+#include "ScriptSystem.h"
+#include "TriggerList.h"
+#include "ConditionList.h"
+#include "ActionList.h"
 
 #include <algorithm>
 #include <string>
@@ -351,6 +355,7 @@ void application::contents::ContentsLayer::Initialize()
     }
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
     ShortcutInit();
+    ScriptSystem::Instance();
 
     wanderUtils::LoadResourcesRecursively();
 
@@ -525,6 +530,12 @@ void application::contents::ContentsLayer::PlayContents()
     SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
+#pragma region
+    auto script = ScriptSystem::Instance().CreateScript();
+    script->AddTrigger<Trigger_GameStart>();
+    script->AddAction<TestAction>();
+#pragma endregion ScriptTest
+
     for (auto e : componentsCreatedByEditorVector)
     {
         e->SetActive(true);
@@ -584,6 +595,8 @@ void application::contents::ContentsLayer::PlayContents()
       robinWSkillUpgradeButtonObject->GetTransform()->SetLocalPosition({ 100, 700, 0 });
       RegisterToEditorObjectVector(robinWSkillUpgradeButtonObject);*/
 
+
+    ScriptSystem::Instance().OnGameStart();
 }
 
 void application::contents::ContentsLayer::PauseContents()
@@ -614,6 +627,7 @@ void application::contents::ContentsLayer::StopContents()
     {
         e->SetActive(false);
     }
+    ScriptSystem::Instance().Clear();
 }
 
 #ifdef GEN_TESTS

@@ -409,6 +409,30 @@
     <Filter Include="Contents\GameManager">
       <UniqueIdentifier>{2990a352-2268-45cf-b6d7-394bb104eff6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\ScriptSystem">
+      <UniqueIdentifier>{3d610022-9d6b-45b8-a43d-c79f2579afaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\1_Condition">
+      <UniqueIdentifier>{0440d3b5-1ce7-4267-bb87-c10c0b0387d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action">
+      <UniqueIdentifier>{95997c9d-b49d-4062-9e26-cbcd7ae914f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\0_Trigger">
+      <UniqueIdentifier>{c361d6e3-3c95-4a2f-8c6e-43b48d1a93a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\Coroutine">
+      <UniqueIdentifier>{4aceb686-b4d7-45d9-899a-a522f99e19a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List">
+      <UniqueIdentifier>{689da477-918c-4ce2-b7f4-e51117a516bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\0_Trigger\List">
+      <UniqueIdentifier>{1a4a2b2c-f0fe-4b34-91dc-f0c3b8882d15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\1_Condition\List">
+      <UniqueIdentifier>{0e0f3bef-6052-4f15-b9e9-77fdc9d3ca61}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1040,6 +1064,45 @@
     <ClInclude Include="GameManager.h">
       <Filter>Contents\GameManager</Filter>
     </ClInclude>
+    <ClInclude Include="ScriptSystem.h">
+      <Filter>Editor\ScriptSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Script.h">
+      <Filter>Editor\ScriptSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ITrigger.h">
+      <Filter>Editor\ScriptSystem\0_Trigger</Filter>
+    </ClInclude>
+    <ClInclude Include="ICondition.h">
+      <Filter>Editor\ScriptSystem\1_Condition</Filter>
+    </ClInclude>
+    <ClInclude Include="IAction.h">
+      <Filter>Editor\ScriptSystem\2_Action</Filter>
+    </ClInclude>
+    <ClInclude Include="CoroutineObject.h">
+      <Filter>Editor\ScriptSystem\Coroutine</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_WaitForSeconds.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionList.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
+    <ClInclude Include="ConditionList.h">
+      <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
+    </ClInclude>
+    <ClInclude Include="TriggerList.h">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClInclude>
+    <ClInclude Include="TestAction.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger_GameStart.h">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger_EnterRegion.h">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1603,6 +1666,21 @@
     </ClCompile>
     <ClCompile Include="GameManager.cpp">
       <Filter>Contents\GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptSystem.cpp">
+      <Filter>Editor\ScriptSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Script.cpp">
+      <Filter>Editor\ScriptSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_WaitForSeconds.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger_GameStart.cpp">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger_EnterRegion.cpp">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

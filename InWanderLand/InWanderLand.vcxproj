@@ -983,10 +983,13 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="..\Include\ImGui\imconfig.h" />
     <ClInclude Include="..\Include\ImGui\imgui.h" />
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
+    <ClInclude Include="ActionList.h" />
     <ClInclude Include="AttackSystem.h" />
     <ClInclude Include="AutoAttackProjectilePool.h" />
     <ClInclude Include="BleedingComponent.h" />
     <ClInclude Include="BlindFieldComponent.h" />
+    <ClInclude Include="ConditionList.h" />
+    <ClInclude Include="CoroutineObject.h" />
     <ClInclude Include="CreateInstanceCommand.h" />
     <ClInclude Include="BossProductor.h" />
     <ClInclude Include="BossSkillSystem.h" />
@@ -1003,8 +1006,13 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="EnemySummonGateProductor.h" />
     <ClInclude Include="EnemySummonSkillSystem.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="IAction.h" />
+    <ClInclude Include="ICondition.h" />
+    <ClInclude Include="ITrigger.h" />
     <ClInclude Include="MeleeEnemyPool.h" />
     <ClInclude Include="RangedEnemyPool.h" />
+    <ClInclude Include="Script.h" />
+    <ClInclude Include="ScriptSystem.h" />
     <ClInclude Include="ShortcutSystem.h" />
     <ClInclude Include="DualCastComponent.h" />
     <ClInclude Include="DummyComponent.h" />
@@ -1064,6 +1072,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="SkillPreviewSystem.h" />
     <ClInclude Include="SystemCommands.h" />
     <ClInclude Include="TacticModeSystem.h" />
+    <ClInclude Include="TestAction.h" />
     <ClInclude Include="TestUtilButtonEvent.h" />
     <ClInclude Include="InWanderLand.h" />
     <ClInclude Include="KnockBackComponent.h" />
@@ -1162,6 +1171,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="TestUtilRTSTestCam.h" />
     <ClInclude Include="TestUtils.h" />
     <ClInclude Include="TransformEditCommand.h" />
+    <ClInclude Include="TriggerList.h" />
+    <ClInclude Include="Trigger_EnterRegion.h" />
+    <ClInclude Include="Trigger_GameStart.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UIPanel.h" />
@@ -1170,6 +1182,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="SpecialEffect.h" />
     <ClInclude Include="Unit_TemplateData.h" />
     <ClInclude Include="UrsulaSkillDevelopmentSystem.h" />
+    <ClInclude Include="Action_WaitForSeconds.h" />
     <ClInclude Include="WanderUtils.h" />
     <ClInclude Include="UUID.h" />
     <ClInclude Include="UUIDManager.h" />
@@ -1210,6 +1223,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="EnemySummonGateProductor.cpp" />
     <ClCompile Include="EnemySummonSkillSystem.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Script.cpp" />
+    <ClCompile Include="ScriptSystem.cpp" />
     <ClCompile Include="ShortcutSystem.cpp" />
     <ClCompile Include="DualCastComponent.cpp" />
     <ClCompile Include="EditorCameraManager.cpp" />
@@ -1348,6 +1363,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TestCaseUpdateComponents.cpp" />
     <ClCompile Include="TransformEditCommand.cpp" />
+    <ClCompile Include="Trigger_EnterRegion.cpp" />
+    <ClCompile Include="Trigger_GameStart.cpp" />
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UIPanel.cpp" />
@@ -1370,6 +1387,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="UnitFactory.cpp" />
     <ClCompile Include="UnitProductor.cpp" />
+    <ClCompile Include="Action_WaitForSeconds.cpp" />
     <ClCompile Include="WarriorProductor.cpp" />
     <ClCompile Include="PlayerSkillSystem.cpp" />
     <ClCompile Include="WarriorSkillSystem.cpp" />
