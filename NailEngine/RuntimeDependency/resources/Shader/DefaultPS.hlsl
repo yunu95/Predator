@@ -45,7 +45,7 @@ PS_OUT main(PixelIn input)
 
 
     color = UnityLightMap.Sample(sam, input.uv);
-    color.rgb = pow(color.rgb, 2.2f);
+    color *= 0.7f;
     
     float3 viewNormal = input.normalV;
     if (UseTexture(useNormal) == 1)

@@ -251,6 +251,11 @@ void NailEngine::CreateRenderTargetGroup()
 			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 		);
 
+		rtVec[2].clearColor[0] = 0.7686;
+		rtVec[2].clearColor[1] = 0.8784;
+		rtVec[2].clearColor[2] = 0.9451;
+		rtVec[2].clearColor[3] = 1.f;
+
 		rtVec[3].texture = ResourceManager::Instance.Get().CreateTexture(
 			L"DepthTarget",
 			this->windowInfo.width,

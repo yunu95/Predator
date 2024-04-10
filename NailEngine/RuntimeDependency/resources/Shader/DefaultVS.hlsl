@@ -27,8 +27,8 @@ struct VertexOut
 VertexOut main(VertexIn input)
 {
     VertexOut output;
-    row_major matrix WV = mul(input.world,VTM);
-    row_major matrix VP = mul(VTM,PTM);
+    row_major matrix WV = mul(input.world, VTM);
+    row_major matrix VP = mul(VTM, PTM);
     
     output.posH = mul(float4(input.pos, 1.f), input.world);
     output.posH = mul(output.posH, VP);
@@ -37,10 +37,12 @@ VertexOut main(VertexIn input)
     
     float2 tempUV = input.uv;
     tempUV.x *= lightMapUV[input.instanceID].scaling.x;
-    tempUV.y *= lightMapUV[input.instanceID].scaling.y;
+    tempUV.y = (1 - tempUV.y);
+    tempUV.y *= (lightMapUV[input.instanceID].scaling.y);
+    tempUV.y = (1 - tempUV.y);
     
-    tempUV.x += ((lightMapUV[input.instanceID].uvOffset.x + 1.f) / 2.f);
-    tempUV.y += (lightMapUV[input.instanceID].uvOffset.y);
+    tempUV.x += (lightMapUV[input.instanceID].uvOffset.x);
+    tempUV.y += (-lightMapUV[input.instanceID].uvOffset.y);
     
     output.uv = tempUV;
     output.normalV = normalize(mul(float4(input.normal, 0.f), WV));

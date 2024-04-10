@@ -92,16 +92,12 @@ void InstancingManager::RenderStaticDeferred()
 				AddData(instanceID, data);
 
 
-				if (renderInfo->wtm._11 == 50)
-				{
-					lightMapUVBuffer->lightMapUV[index].scaling = DirectX::SimpleMath::Vector2{ 1.f,1.f };
-					lightMapUVBuffer->lightMapUV[index].uvOffset = DirectX::SimpleMath::Vector2{ -0.125f,0.f };
-				}
-				else
-				{
-					lightMapUVBuffer->lightMapUV[index].scaling = DirectX::SimpleMath::Vector2{ 0.1103516f, 0.1103516f };
-					lightMapUVBuffer->lightMapUV[index].uvOffset = DirectX::SimpleMath::Vector2{ 0.7381592f,0.f };
-				}
+
+				lightMapUVBuffer->lightMapUV[index].scaling = DirectX::SimpleMath::Vector2{ 1.009809f, 1.009809f };
+				lightMapUVBuffer->lightMapUV[index].uvOffset = DirectX::SimpleMath::Vector2{ -0.004904088f, -0.004904148f };
+				//lightMapUVBuffer->lightMapUV[index].scaling = DirectX::SimpleMath::Vector2{ 1, 1};
+				//lightMapUVBuffer->lightMapUV[index].uvOffset = DirectX::SimpleMath::Vector2{ 1, 1};
+
 
 				index++;
 			}
