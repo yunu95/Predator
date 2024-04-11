@@ -1083,6 +1083,7 @@ void ResourceManager::CreateDefaultTexture()
 	CreateTexture(L"Texture/particle.png");
 	CreateTexture(L"Texture/LightMap.dds");
 	CreateTexture(L"Texture/LightMap.png");
+	CreateTexture(L"Texture/LightMap.hdr");
 	CreateTexture(L"Texture/TempTexture.dds");
 	//CreateTexture(L"Texture/Brick_Albedo.jpg");
 	//CreateTexture(L"Texture/Brick_Normal.jpg");

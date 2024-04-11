@@ -10,6 +10,7 @@ struct PixelIn
     float3 normalV : NORMAL;
     float3 tangentV : TANGENT;
     float3 biNormalV : BINORMAL;
+    float2 lightUV : TEXCOORD1;
 };
 
 struct PS_OUT
@@ -27,7 +28,7 @@ PS_OUT main(PixelIn input)
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     PS_OUT output = (PS_OUT) 0;
     
-    float4 color = float4(0.5f, 0.5f, 0.5f, 1.f);
+    float4 color = float4(1.f, 1.f, 1.f, 1.f);
     
     if (UseTexture(useOpacity) == 1)
     {
@@ -37,15 +38,17 @@ PS_OUT main(PixelIn input)
         }
     }
     
-    ////////if (UseTexture(useAlbedo) == 1)
-    ////////{
-    ////////    color = AlbedoMap.Sample(sam, input.uv);
-    ////////    color.rgb = pow(color.rgb, 2.2f);
-    ////////}
+    if (UseTexture(useAlbedo) == 1)
+    {
+        color = AlbedoMap.Sample(sam, input.uv);
+    }
 
-
-    color = UnityLightMap.Sample(sam, input.uv);
-    color *= 0.7f;
+    float4 lightColor = float4(0,0,0, 1.f);
+    lightColor = UnityLightMap.Sample(sam, input.lightUV);
+    lightColor *= 0.6;
+    lightColor.rgb = pow(lightColor.rgb, 1.f / 2.2f);
+    
+    output.color = color * lightColor;
     
     float3 viewNormal = input.normalV;
     if (UseTexture(useNormal) == 1)
@@ -79,7 +82,7 @@ PS_OUT main(PixelIn input)
     output.normal = float4(viewNormal.xyz, 1.f);
     
     /////output.color = color * materialColor;
-    output.color = color;
+   
     
     if (UseTexture(useEmission))
     {

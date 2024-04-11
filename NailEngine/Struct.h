@@ -177,6 +177,10 @@ struct RenderInfo
 	unsigned int materialIndex;
 	DirectX::SimpleMath::Matrix wtm;
 	bool isActive = true;
+
+	unsigned int lightMapIndex;
+	DirectX::SimpleMath::Vector2 uvOffset;
+	DirectX::SimpleMath::Vector2 uvScaling;
 };
 
 class NailAnimator;

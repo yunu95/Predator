@@ -93,10 +93,8 @@ void InstancingManager::RenderStaticDeferred()
 
 
 
-				lightMapUVBuffer->lightMapUV[index].scaling = DirectX::SimpleMath::Vector2{ 1.009809f, 1.009809f };
-				lightMapUVBuffer->lightMapUV[index].uvOffset = DirectX::SimpleMath::Vector2{ -0.004904088f, -0.004904148f };
-				//lightMapUVBuffer->lightMapUV[index].scaling = DirectX::SimpleMath::Vector2{ 1, 1};
-				//lightMapUVBuffer->lightMapUV[index].uvOffset = DirectX::SimpleMath::Vector2{ 1, 1};
+				lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
+				lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
 
 
 				index++;

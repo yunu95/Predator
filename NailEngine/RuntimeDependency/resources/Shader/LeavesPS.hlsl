@@ -10,6 +10,7 @@ struct PixelIn
     float3 normalV : NORMAL;
     float3 tangentV : TANGENT;
     float3 biNormalV : BINORMAL;
+    float2 lightUV : TEXCOORD1;
 };
 
 struct PS_OUT
@@ -32,36 +33,22 @@ PS_OUT main(PixelIn input)
     clip(OpacityMap.Sample(sam, input.uv).w - 1);
     
     color = AlbedoMap.Sample(sam, input.uv);
-    color.rgb = pow(color.rgb, 2.2f);
+    
+    
+    float4 lightColor = float4(0, 0, 0, 1.f);
+    lightColor = UnityLightMap.Sample(sam, input.lightUV);
+    lightColor *= 0.6;
+    lightColor.rgb = pow(lightColor.rgb, 1.f / 2.2f);
+    
+    output.color = color * lightColor;
     
     float3 viewNormal = input.normalV;
-    //if (UseTexture(useNormal) == 1)
-    //{
-    //    // [0, 255] 범위에서 [0, 1]로 변환
-    //    //float3 tangentSpaceNormal = pow(NormalMap.Sample(sam, input.uv).xyz, 1 / 2.2f);
-    //    //float3 tangentSpaceNormal = pow(NormalMap.Sample(sam, input.uv).xyz, 2.2f);
-    //    float3 tangentSpaceNormal = NormalMap.Sample(sam, input.uv).xyz;
-        
-    //    // [0, 1] 범위에서 [-1, 1]로 변환
-    //    tangentSpaceNormal = (tangentSpaceNormal - 0.5f) * 2.f;
-    //    float3x3 matTBN = { input.tangentV, input.biNormalV, input.normalV };
-    //    viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
-    //}
     
     output.arm.xyz = float3(1.f, 1.f, 0.f);
     
     output.position = float4(input.posV.xyz, 1.f);
     output.normal = float4(viewNormal.xyz, 1.f);
-    output.color = color * materialColor;
     
-    //float4 projPos = { 0, 0, 0, 0 };
-    
-    //projPos = mul(input.posV, PTM);
-    
-    //float depth = projPos.z / projPos.w;
-    
-    //output.depth = float4(depth, depth, depth, depth);
-    //output.depth = float4(objectID.x, 0, 0, 0);
     return output;
 }
 

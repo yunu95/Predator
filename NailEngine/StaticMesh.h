@@ -135,6 +135,32 @@ public:
 		}
 	}
 
+	void SetLightMapUVOffset(float x, float y)
+	{
+		DirectX::SimpleMath::Vector2 offset{ x,y };
+		for (auto& i : renderInfoVec)
+		{
+			i->uvOffset = offset;
+		}
+	};
+
+	void SetLightMapUVScaling(float x, float y)
+	{
+		DirectX::SimpleMath::Vector2 scale{ x,y };
+		for (auto& i : renderInfoVec)
+		{
+			i->uvScaling = scale;
+		}
+	};
+
+	void SetLightMapUVIndex(unsigned int index)
+	{
+		for (auto& i : renderInfoVec)
+		{
+			i->lightMapIndex = index;
+		}
+	};
+
 public:
 	std::vector<std::shared_ptr<RenderInfo>> renderInfoVec;
 };

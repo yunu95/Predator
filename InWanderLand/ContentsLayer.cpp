@@ -253,6 +253,50 @@ void GraphicsTest()
 
 	{
 		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Room");
+
+		for (auto& each : obj->GetChildren())
+		{
+			yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
+			renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+			if (renderer)
+			{
+				renderer->GetGI().SetLightMapUVScaling(0.5685104, 0.5685104);
+				renderer->GetGI().SetLightMapUVOffset(-0.002760944, -0.002760978);
+			}
+		}
+	}
+
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+		obj->GetTransform()->SetLocalPosition(Vector3d{ -0.202,-0.746 ,-0.507 });
+		obj->GetTransform()->SetLocalScale(Vector3d{ 0.1,0.1,0.1 });
+		for (auto& each : obj->GetChildren())
+		{
+			yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
+			renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+			if (renderer)
+			{
+				renderer->GetGI().SetLightMapUVScaling(0.00622948, 0.00622948);
+				renderer->GetGI().SetLightMapUVOffset(0.5639337, 0.1786798);
+			}
+		}
+	}
+
+	{
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CupTower");
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 0.211,-1.036 ,0 });
+		obj->GetTransform()->SetLocalScale(Vector3d{ 0.1,0.1,0.1 });
+
+		for (auto& each : obj->GetChildren())
+		{
+			yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
+			renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+			if (renderer)
+			{
+				renderer->GetGI().SetLightMapUVScaling(0.180436, 0.180436);
+				renderer->GetGI().SetLightMapUVOffset(0.561944, -0.001949755);
+			}
+		}
 	}
 
 	//{

@@ -22,6 +22,7 @@ struct VertexOut
     float3 normalV : NORMAL;
     float3 tangentV : TANGENT;
     float3 biNormalV : BINORMAL;
+    float2 lightUV : TEXCOORD1;
 };
 
 VertexOut main(VertexIn input)
@@ -44,7 +45,8 @@ VertexOut main(VertexIn input)
     tempUV.x += (lightMapUV[input.instanceID].uvOffset.x);
     tempUV.y += (-lightMapUV[input.instanceID].uvOffset.y);
     
-    output.uv = tempUV;
+    output.uv = input.uv;
+    output.lightUV = tempUV;
     output.normalV = normalize(mul(float4(input.normal, 0.f), WV));
     output.tangentV = normalize(mul(float4(input.tangent, 0.f), WV));
     output.biNormalV = normalize(cross(output.tangentV, output.normalV));

@@ -23,11 +23,26 @@ struct VertexOut
     float3 normalV : NORMAL;
     float3 tangentV : TANGENT;
     float3 biNormalV : BINORMAL;
+    float2 lightUV : TEXCOORD1;
 };
 
 VertexOut main(VertexIn input)
 {
     VertexOut output = (VertexOut) 0;
+    
+    float2 lightuv = input.uv;
+    lightuv.x *= lightMapUV[input.instanceID].scaling.x;
+    lightuv.y = (1 - lightuv.y);
+    lightuv.y *= (lightMapUV[input.instanceID].scaling.y);
+    lightuv.y = (1 - lightuv.y);
+    
+    lightuv.x += (lightMapUV[input.instanceID].uvOffset.x);
+    lightuv.y += (-lightMapUV[input.instanceID].uvOffset.y);
+    
+    output.lightUV = lightuv;
+    
+    input.uv = input.uv - floor(input.uv);
+   
     
     row_major matrix WV = mul(input.world, VTM);
     row_major matrix VP = mul(VTM, PTM);
@@ -41,7 +56,6 @@ VertexOut main(VertexIn input)
      ///
     float2 tempUV = input.uv;
     tempUV.y = 1 - tempUV.y;
-    
     
     tempUV.x = 1 - tempUV.x;
     
