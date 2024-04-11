@@ -114,6 +114,11 @@ void NailEngine::SetUseIBL(bool useIBL)
 	this->useIBL = useIBL;
 }
 
+void NailEngine::SetUseLightMap(bool useLightMap)
+{
+	this->useLightMap = useLightMap;
+}
+
 std::shared_ptr<ConstantBuffer>& NailEngine::GetConstantBuffer(unsigned int index)
 {
 	return this->constantBuffers[index];
@@ -122,6 +127,11 @@ std::shared_ptr<ConstantBuffer>& NailEngine::GetConstantBuffer(unsigned int inde
 bool NailEngine::GetUseIBL()
 {
 	return this->useIBL;
+}
+
+bool NailEngine::GetUseLightMap()
+{
+	return this->useLightMap;
 }
 
 void NailEngine::CreateConstantBuffer()
@@ -257,7 +267,7 @@ void NailEngine::CreateRenderTargetGroup()
 		rtVec[2].clearColor[3] = 1.f;
 
 		rtVec[3].texture = ResourceManager::Instance.Get().CreateTexture(
-			L"DepthTarget",
+			L"UtilTarget",
 			this->windowInfo.width,
 			this->windowInfo.height,
 			DXGI_FORMAT_R8G8B8A8_UNORM,

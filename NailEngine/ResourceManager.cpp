@@ -934,6 +934,9 @@ void ResourceManager::CreateDefaultMaterial()
 
 		material->SetTexture(yunuGI::Texture_Type::Temp2,
 			GetTexture(L"ShadowDepth").get());
+
+		material->SetTexture(yunuGI::Texture_Type::Temp3,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(UTIL)).get());
 	}
 
 	// PointLight
@@ -949,6 +952,8 @@ void ResourceManager::CreateDefaultMaterial()
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp1,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(NORMAL)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp2,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(UTIL)).get());
 	}
 
 	// Deferred_Final
@@ -1020,7 +1025,7 @@ void ResourceManager::CreateDefaultMaterial()
 			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
 			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
 			material->SetTexture(yunuGI::Texture_Type::Temp0,
-				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(DEPTH)).get());
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(UTIL)).get());
 		}
 
 		{

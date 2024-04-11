@@ -49,7 +49,7 @@ enum
     POSITION,
     NORMAL,
     ALBEDO,
-    DEPTH,
+    UTIL,
     ARM,
     EMISSIVE,
     DIFFUSE = 0,

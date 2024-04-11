@@ -93,6 +93,7 @@ void InstancingManager::RenderStaticDeferred()
 
 
 
+				lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
 				lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
 				lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
 
@@ -219,6 +220,8 @@ void InstancingManager::RenderStaticShadow()
 		{
 			for (auto& i : renderInfoVec)
 			{
+				if (i->lightMapIndex == -1) continue;
+
 				if (i->isActive == false) continue;
 
 				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
@@ -274,6 +277,8 @@ void InstancingManager::RenderStaticPointLightShadow(DirectX::SimpleMath::Matrix
 		{
 			for (auto& i : renderInfoVec)
 			{
+				if (i->lightMapIndex == -1) continue;
+
 				if (i->isActive == false) continue;
 
 				// 만일 포인트라이트의 범위 안에 있는 오브젝트가 아니라면 렌더링되지 않게 컬링

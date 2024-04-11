@@ -153,7 +153,7 @@ public:
 		}
 	};
 
-	void SetLightMapUVIndex(unsigned int index)
+	void SetLightMapUVIndex(int index)
 	{
 		for (auto& i : renderInfoVec)
 		{

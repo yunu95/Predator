@@ -178,7 +178,7 @@ struct RenderInfo
 	DirectX::SimpleMath::Matrix wtm;
 	bool isActive = true;
 
-	unsigned int lightMapIndex;
+	int lightMapIndex = -1;
 	DirectX::SimpleMath::Vector2 uvOffset;
 	DirectX::SimpleMath::Vector2 uvScaling;
 };
@@ -215,6 +215,9 @@ struct UtilBuffer
 	float windowHeight;
 	float deltaTime;
 	int useIBL;
+
+	int useLightMap;
+	DirectX::SimpleMath::Vector3 padding;
 };
 
 struct ParticleDesc
@@ -230,6 +233,8 @@ struct ParticleBuffer
 
 struct LightMapUV
 {
+	int lightMapIndex;
+	DirectX::SimpleMath::Vector3 padding;
 	DirectX::SimpleMath::Vector2 uvOffset;
 	DirectX::SimpleMath::Vector2 scaling;
 };

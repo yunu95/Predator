@@ -102,7 +102,7 @@ namespace yunuGIAdapter
 		{
 			renderable->SetLightMapUVScaling(x, y);
 		};
-		virtual void SetLightMapUVIndex(unsigned int index) override
+		virtual void SetLightMapUVIndex(int index) override
 		{
 			renderable->SetLightMapUVIndex(index);
 		};

@@ -136,7 +136,7 @@ float CalcShadowFactor(SamplerComparisonState samShadow,
     return percentLit /= 9.0f;
 }
 
-void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 diffuse, out float4 ambient, out float4 specular, float3 albedo, float ao, float metalness, float roughness)
+void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 diffuse, out float4 ambient, out float4 specular, float3 albedo, float ao, float metalness, float roughness, float diffuseExposure, float ambientExposure)
 {
     // 나는 별도의 렌더타겟에 View Space에 대한 정보가 담겨 있어 연산은 View Space에서 이루어진다.
     diffuse = float4(0.f, 0.f, 0.f, 0.f);
@@ -188,7 +188,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         ///
         float shadow = 1.f;
         
-        if (length(cosLo))
+        if (length(cosLo) && (useLightMap == 0))
         {
             matrix shadowVP = lightVP;
             
@@ -206,7 +206,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         ///
         
         //float expo = 0.5f;
-        directionalLighting *= DiffuseExposure;
+        directionalLighting *= diffuseExposure;
         float3 x = max(0, directionalLighting.xyz - 0.004);
         directionalLighting.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
         
@@ -227,7 +227,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
             float3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;
             ambientLighting = (diffuseIBL + specularIBL) * ao;
             
-            ambientLighting *= AmbientExposure;
+            ambientLighting *= ambientExposure;
             ambientLighting = ambientLighting / (1 + ambientLighting);
             ambientLighting = pow(ambientLighting, 1 / 2.2);
             
@@ -281,7 +281,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
             float3 pointLighting = (diffuseBRDF + specularBRDF) * (Lradiance * cosLi);
             
             
-            pointLighting *= DiffuseExposure;
+            pointLighting *= diffuseExposure;
             float3 x = max(0, pointLighting.xyz - 0.004);
             pointLighting.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
             diffuse.xyz += pointLighting.xyz * lights[lightIndex].color.diffuse.xyz * distanceRatio * lights[lightIndex].intensity;
@@ -301,7 +301,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
                 float3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;
                 ambientLighting = (diffuseIBL + specularIBL) * ao;
                 
-                ambientLighting *= AmbientExposure;
+                ambientLighting *= ambientExposure;
                 ambientLighting = ambientLighting / (1 + ambientLighting);
                 ambientLighting = pow(ambientLighting, 1 / 2.2);
             
@@ -317,7 +317,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
             float curDepth = CalCulateDepth((worldPos.xyz - lights[lightIndex].position.xyz), lightIndex);
         
             float shadow = 1;
-            if(isShadowCast)
+            if (isShadowCast && (useLightMap == 0))
             {
                 shadow = PointLightShadowMap.Sample(sam, float4(normalize(worldPos.xyz - lights[lightIndex].position.xyz), plIndex)).r;
                 

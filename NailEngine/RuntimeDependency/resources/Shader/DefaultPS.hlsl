@@ -11,6 +11,7 @@ struct PixelIn
     float3 tangentV : TANGENT;
     float3 biNormalV : BINORMAL;
     float2 lightUV : TEXCOORD1;
+    uint id : ID;
 };
 
 struct PS_OUT
@@ -18,7 +19,7 @@ struct PS_OUT
     float4 position : SV_Target0;
     float4 normal : SV_Target1;
     float4 color : SV_Target2;
-    float4 depth : SV_Target3;
+    float4 util : SV_Target3;
     float4 arm : SV_Target4;
     float4 emissive : SV_Target5;
 };
@@ -43,12 +44,21 @@ PS_OUT main(PixelIn input)
         color = AlbedoMap.Sample(sam, input.uv);
     }
 
-    float4 lightColor = float4(0,0,0, 1.f);
-    lightColor = UnityLightMap.Sample(sam, input.lightUV);
-    lightColor *= 0.6;
-    lightColor.rgb = pow(lightColor.rgb, 1.f / 2.2f);
+    if ((lightMapUV[input.id].lightMapIndex != -1)  && useLightMap)
+    {
+        float4 lightColor = float4(0, 0, 0, 1.f);
+        lightColor = UnityLightMap.Sample(sam, input.lightUV);
+        lightColor *= 0.6;
+        lightColor.rgb = pow(lightColor.rgb, 1.f / 2.2f);
     
-    output.color = color * lightColor;
+        output.color = color * lightColor;
+    }
+    else
+    {
+        color = pow(color, 2.2f);
+        output.color = color;
+    }
+    
     
     float3 viewNormal = input.normalV;
     if (UseTexture(useNormal) == 1)
@@ -89,15 +99,7 @@ PS_OUT main(PixelIn input)
         output.emissive = EmissionMap.Sample(sam, input.uv);
     }
     
-    float4 projPos = { 0, 0, 0, 0 };
-    
-    projPos = mul(input.posV, PTM);
-    
-    float depth = projPos.z / projPos.w;
-    
-    output.depth = float4(depth, depth, depth, depth);
-    //output.depth = float4(objectID.x, 0, 0, 0);
-    
+    output.util = float4(lightMapUV[input.id].lightMapIndex, DiffuseExposure, AmbientExposure, 1.f);
 
     return output;
 }

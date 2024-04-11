@@ -153,6 +153,9 @@ cbuffer UtilBuffer : register(b10)
     float windowHeight;
     float deltaTime;
     int useIBL;
+    
+    int useLightMap;
+    float3 padding5;
 }
 
 struct ParticleDesc
@@ -168,6 +171,8 @@ cbuffer ParticleBuffer : register(b11)
 
 struct LightMapUV
 {
+    int lightMapIndex;
+    float3 pad;
     float2 uvOffset;
     float2 scaling;
 };

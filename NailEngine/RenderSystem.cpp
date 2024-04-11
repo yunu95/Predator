@@ -168,6 +168,8 @@ void RenderSystem::Render()
 	utilBuffer.windowWidth = NailEngine::Instance.Get().GetWindowInfo().width;
 	utilBuffer.windowHeight = NailEngine::Instance.Get().GetWindowInfo().height;
 	utilBuffer.useIBL = NailEngine::Instance.Get().GetUseIBL();
+	//utilBuffer.useLightMap = NailEngine::Instance.Get().GetUseLightMap();
+	utilBuffer.useLightMap = true;
 	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::UTIL))->PushGraphicsData(&utilBuffer, sizeof(UtilBuffer), static_cast<int>(CB_TYPE::UTIL));
 
 
@@ -186,7 +188,7 @@ void RenderSystem::Render()
 	RenderSkinned();
 
 	// 그림자 맵 생성
-	//RenderShadow();
+	RenderShadow();
 	RenderPointLightShadow();
 
 	SkyBoxPass::Instance.Get().BindIBLTexture();

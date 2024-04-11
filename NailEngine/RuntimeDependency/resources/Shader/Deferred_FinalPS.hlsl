@@ -17,10 +17,10 @@ float4 main(PixelIn input) : SV_Target
     float4 output = (float4) 0;
     
     float4 lightPower = Temp1Map.Sample(sam, input.uv);
-    ////////////if (lightPower.x == 0.f && lightPower.y == 0.f && lightPower.z == 0.f)
-    ////////////{
-    ////////////    clip(-1);
-    ////////////}
+    if (lightPower.x == 0.f && lightPower.y == 0.f && lightPower.z == 0.f)
+    {
+        clip(-1);
+    }
     
     //float4 color = Temp0Map.Sample(sam, input.uv);
     //color = saturate((color * (a * color + b)) / (color * (c * color + d) + e));
@@ -38,7 +38,7 @@ float4 main(PixelIn input) : SV_Target
     //output = lightPower + emissive + specular;
     //output = float4(x.xyz,1.f) + emissive + specular;
     
-    output = Temp0Map.Sample(sam, input.uv);
+    output = Temp0Map.Sample(sam, input.uv) + lightPower;
     
     return output;
 }

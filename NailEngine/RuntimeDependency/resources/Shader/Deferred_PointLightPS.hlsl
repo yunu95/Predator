@@ -18,6 +18,7 @@ struct PS_OUT
 // ARMMap : Deferred ARM
 // Temp0Map : View Position
 // Temp1Map : View Normal
+// Temp2Map : Util
 // temp_int0 : light index
 // Mesh : Sphere
 
@@ -54,15 +55,22 @@ PS_OUT main(PixelIn input)
         albedo = AlbedoMap.Sample(sam, uv).xyz;
     }
     
-    CalculatePBRLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo, arm.r, arm.b, arm.g);
+    float4 util = Temp2Map.Sample(sam, input.uv);
+    
+    CalculatePBRLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo, arm.r, arm.b, arm.g, util.y, util.z);
     //CalculateLight(lightIndex, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);
     
-    //float3 x = max(0, color.diffuse.xyz - 0.004);
-    //color.diffuse.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
-    //color.diffuse.w = 1;
+    if (util.x != -1 && useLightMap)
+    {
+        output.diffuse = color.ambient;
+    }
+    else
+    {
+        output.diffuse = color.diffuse + color.ambient;
+    }
     
-    output.diffuse = (color.diffuse + color.ambient);
     output.diffuse.w = 1;
+    
     //output.specular = color.specular;
     
     return output;

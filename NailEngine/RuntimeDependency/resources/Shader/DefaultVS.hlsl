@@ -23,6 +23,7 @@ struct VertexOut
     float3 tangentV : TANGENT;
     float3 biNormalV : BINORMAL;
     float2 lightUV : TEXCOORD1;
+    uint id : ID;
 };
 
 VertexOut main(VertexIn input)
@@ -50,7 +51,7 @@ VertexOut main(VertexIn input)
     output.normalV = normalize(mul(float4(input.normal, 0.f), WV));
     output.tangentV = normalize(mul(float4(input.tangent, 0.f), WV));
     output.biNormalV = normalize(cross(output.tangentV, output.normalV));
-    //output.id = input.instanceID;
+    output.id = input.instanceID;
     
     return output;
 }

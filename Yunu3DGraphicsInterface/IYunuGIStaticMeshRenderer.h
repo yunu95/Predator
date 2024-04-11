@@ -16,7 +16,7 @@ namespace yunuGI
 		
 		virtual void SetLightMapUVOffset(float x, float y) = 0;
 		virtual void SetLightMapUVScaling(float x, float y) = 0;
-		virtual void SetLightMapUVIndex(unsigned int index) = 0;
+		virtual void SetLightMapUVIndex(int index) = 0;
 
 	};
 
