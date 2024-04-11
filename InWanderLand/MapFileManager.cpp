@@ -17,6 +17,7 @@
 #include "EditorResourceManager.h"
 #include "EditorCameraManager.h"
 #include "ShortcutSystem.h"
+#include "ScriptSystem.h"
 
 #include <fstream>
 
@@ -25,8 +26,8 @@ namespace application
     namespace editor
     {
         MapFileManager::MapFileManager()
-            : Singleton<MapFileManager>(), globalConstant(GlobalConstant::GetSingletonInstance()), 
-            instanceManager(InstanceManager::GetSingletonInstance()), 
+            : Singleton<MapFileManager>(), globalConstant(GlobalConstant::GetSingletonInstance()),
+            instanceManager(InstanceManager::GetSingletonInstance()),
             templateDataManager(TemplateDataManager::GetSingletonInstance()),
             commandManager(CommandManager::GetSingletonInstance()),
             currentMapPath()
@@ -161,13 +162,15 @@ namespace application
                 // Manager 초기화
                 Clear();
 
-                if (!globalConstant.PreDecoding(mapData) || !instanceManager.PreDecoding(mapData) || !templateDataManager.PreDecoding(mapData))
+                auto& scriptSystem =  ScriptSystem::Instance();
+
+                if (!globalConstant.PreDecoding(mapData) || !scriptSystem.PreDecoding(mapData) || !instanceManager.PreDecoding(mapData) || !templateDataManager.PreDecoding(mapData))
                 {
                     loadFile.close();
                     return false;
                 }
 
-                if (!instanceManager.PostDecoding(mapData) || !templateDataManager.PostDecoding(mapData))
+                if (!scriptSystem.PostDecoding(mapData) || !instanceManager.PostDecoding(mapData) || !templateDataManager.PostDecoding(mapData))
                 {
                     loadFile.close();
                     return false;
@@ -196,19 +199,23 @@ namespace application
         bool MapFileManager::SaveMapFile(const std::string& path)
         {
             json mapData;
+
+            auto& scriptSystem = ScriptSystem::Instance();
+
             // 저장을 더 진행하기 전에 각 데이터들의 내부 데이터를 pod 데이터로 이전하기 위해 실행하는 부분
             if (!instanceManager.PreSave() || !templateDataManager.PreSave())
             {
                 return false;
             }
+
             // Pre
-            if (!globalConstant.PreEncoding(mapData) || !instanceManager.PreEncoding(mapData) || !templateDataManager.PreEncoding(mapData))
+            if (!globalConstant.PreEncoding(mapData) || !scriptSystem.PreEncoding(mapData) || !instanceManager.PreEncoding(mapData) || !templateDataManager.PreEncoding(mapData))
             {
                 return false;
             }
 
             // Post
-            if (!instanceManager.PostEncoding(mapData) || !templateDataManager.PostEncoding(mapData))
+            if (!scriptSystem.PostEncoding(mapData) || !instanceManager.PostEncoding(mapData) || !templateDataManager.PostEncoding(mapData))
             {
                 return false;
             }
@@ -255,13 +262,13 @@ namespace application
             bool returnVal = false;
             if (currentMapPath.empty())
             {
-                returnVal = LoadMapFile("Default.pmap");
+                returnVal = LoadMapFile("InWanderLand.pmap");
                 if (returnVal == false)
                 {
                     Application::GetInstance().OnDataLoad();
                 }
                 currentMapPath.clear();
-            }            
+            }
             return returnVal;
         }
 
@@ -274,6 +281,7 @@ namespace application
             commandManager.Clear();
 #endif
             ShortcutSystem::Instance().Clear();
+            ScriptSystem::Instance().Clear();
             instanceManager.Clear();
             templateDataManager.Clear();
             UUIDManager::GetSingletonInstance().Clear();

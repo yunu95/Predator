@@ -143,8 +143,9 @@ namespace application
 	class Storable
 	{
 	public:
-		// json 형태로 Storable 클래스를 저장합니다.
+		virtual ~Storable() = default;
 
+		// json 형태로 Storable 클래스를 저장합니다.
 		json Encoding() const;
 		// json 형태로부터 Storable 클래스를 초기화합니다.
 		bool Decoding(const json& data);
