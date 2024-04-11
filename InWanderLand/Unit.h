@@ -8,6 +8,7 @@
 #include "DummyComponent.h"
 
 class UnitProductor;
+class GroupMoveRangeSystem;
 enum class SkillPreviewMesh;
 
 /// <summary>
@@ -171,6 +172,7 @@ private:
 	Unit* m_currentTargetUnit;		// Attack이나 Chase 때 사용할 적군  오브젝트
 	Unit* m_previousTargetUnit;		
 	Unit* tauntingThisUnit;				// 현재 this 유닛이 도발당한 주체.
+	Vector3d m_previousMovePosition;						
 	Vector3d m_currentMovePosition;							// 현재 상대의 위치
 
 	Vector3d m_currentSkillPosition;
@@ -302,7 +304,14 @@ public:
 	std::function<void()> returnToPoolFunction{ nullptr };
 	DummyComponent* m_dummyCom;
 	int stageNumber;
+
+	std::vector<std::function<void()>> OnCreated;
+	std::vector<std::function<void()>> OnDeath;
+	bool isJustCreated{ false };
+
+
 	friend RobinSkillDevelopmentSystem;
 	friend UnitProductor;
+	friend GroupMoveRangeSystem;
 };
 

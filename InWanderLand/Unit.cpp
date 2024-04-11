@@ -18,6 +18,10 @@ void Unit::Start()
 	chaseUpdateDelay = 0.1f;
 	m_currentHealthPoint = m_maxHealthPoint;
 
+	for (auto each : OnCreated)
+	{
+		each();
+	}
 	//GetTransform()->SetWorldPosition(startPosition);
 
 	dotween = GetGameObject()->GetComponent<Dotween>();
@@ -152,7 +156,7 @@ Unit::UnitSide Unit::GetUnitSide() const
 }
 
 #pragma region State Engage()
-	void Unit::IdleEngage()
+void Unit::IdleEngage()
 	{
 		currentOrder = UnitState::Idle;
 		idleElapsed = 0.0f;
@@ -323,6 +327,11 @@ Unit::UnitSide Unit::GetUnitSide() const
 		/// 다시 거리가 좁혀지면 StopMove. (Idle로 상태 변경)
 		float distance = (m_followingTargetUnit->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition()).Magnitude();
 
+		Vector3d currentVector = (m_currentMovePosition - m_followingTargetUnit->GetTransform()->GetWorldPosition()).Normalized();
+		Vector3d previousVector = (m_currentMovePosition - m_followingTargetUnit->GetTransform()->GetWorldPosition()).Normalized();
+
+		float tempCheck = Vector3d::Dot(previousVector, currentVector);
+
 		if (distance >= m_followEngageDinstance/* && !isFollowing*/)
 		{
 			m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
@@ -335,10 +344,13 @@ Unit::UnitSide Unit::GetUnitSide() const
 			currentOrder = UnitState::Idle;
 			isFollowing = false;
 		}
-		else if (distance <= m_followEngageDinstance && distance >= m_stopFollowDinstance && isFollowing)
+		else if (distance <= m_followEngageDinstance && distance >= m_stopFollowDinstance && isFollowing && tempCheck < 0)
 		{
-			m_navAgentComponent->MoveTo(m_currentMovePosition);
-			dotween->DOLookAt(m_currentMovePosition, rotateTime, false);
+			StopMove();
+			m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
+
+			//m_navAgentComponent->MoveTo(m_currentMovePosition);
+			//dotween->DOLookAt(m_currentMovePosition, rotateTime, false);
 		}
 	}
 
@@ -436,6 +448,11 @@ Unit::UnitSide Unit::GetUnitSide() const
 
 		if (deathFunctionElapsed >= deathAnimationDelay)
 			{
+				for (auto each : OnDeath)
+				{
+					each();
+				}
+
 				if (returnToPoolFunction != nullptr)
 				{
 					returnToPoolFunction();
@@ -798,6 +815,7 @@ void Unit::SetPlayerSerialNumber(UnitType serialNum)
 
 void Unit::OrderMove(Vector3d position)
 {
+	m_previousMovePosition = m_currentMovePosition;
 	m_currentMovePosition = position;
 
 	if (m_unitType != UnitType::Warrior && !GameManager::Instance().IsBattleSystemOperating())

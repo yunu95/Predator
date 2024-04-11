@@ -71,7 +71,6 @@ void PlaytimeWave::Update()
                 waveData->waveUnitDatasVector[waveDataIndex]->pod.position.z };
 
             UnitProductor* currentSelectedProductor;
-            Unit* unitComponent{ nullptr };
 
             application::editor::POD_Unit_TemplateData templateUnitData = waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod;
             application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
@@ -84,11 +83,11 @@ void PlaytimeWave::Update()
 
                 if (templateUnitData.isEliteMonster == true)
                 {
-                    unitComponent = currentSelectedProductor->CreateUnit(pos);
-                    contentsLayer->RegisterToEditorObjectContainer(unitComponent->GetGameObject());
+                    inGameUit = currentSelectedProductor->CreateUnit(pos);
+                    contentsLayer->RegisterToEditorObjectContainer(inGameUit->GetGameObject());
                 }
                 else
-                    unitComponent = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+                    inGameUit = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
 
             }
             else if (templateUnitData.skinnedFBXName == "SKM_Monster2")
@@ -99,18 +98,18 @@ void PlaytimeWave::Update()
 
                 if (templateUnitData.isEliteMonster == true)
                 {
-                    unitComponent = currentSelectedProductor->CreateUnit(pos);
-                    contentsLayer->RegisterToEditorObjectContainer(unitComponent->GetGameObject());
+                    inGameUit = currentSelectedProductor->CreateUnit(pos);
+                    contentsLayer->RegisterToEditorObjectContainer(inGameUit->GetGameObject());
                 }
                 else
-                    unitComponent = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+                    inGameUit = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
             }
 
-            unitComponent->GetGameObject()->SetSelfActive(true);
+            inGameUit->GetGameObject()->SetSelfActive(true);
 
-            GameObject* unitObject = unitComponent->GetGameObject();
+            //GameObject* unitObject = inGameUit->GetGameObject();
 
-            m_currentWaveUnitVector.push_back(unitComponent);
+            m_currentWaveUnitVector.push_back(inGameUit);
 
             nextSummonUnitIndex++;
             waveDataIndex++;
