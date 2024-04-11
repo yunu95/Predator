@@ -260,7 +260,7 @@ void GraphicsTest()
 			renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 			if (renderer)
 			{
-				renderer->GetGI().SetLightMapUVIndex(0);
+				//renderer->GetGI().SetLightMapUVIndex(0);
 				renderer->GetGI().SetLightMapUVScaling(0.5685104, 0.5685104);
 				renderer->GetGI().SetLightMapUVOffset(-0.002760944, -0.002760978);
 			}
@@ -295,7 +295,7 @@ void GraphicsTest()
 			renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 			if (renderer)
 			{
-				renderer->GetGI().SetLightMapUVIndex(0);
+				//renderer->GetGI().SetLightMapUVIndex(0);
 				renderer->GetGI().SetLightMapUVScaling(0.180436, 0.180436);
 				renderer->GetGI().SetLightMapUVOffset(0.561944, -0.001949755);
 			}

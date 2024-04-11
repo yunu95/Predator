@@ -220,7 +220,7 @@ void InstancingManager::RenderStaticShadow()
 		{
 			for (auto& i : renderInfoVec)
 			{
-				if (i->lightMapIndex == -1) continue;
+				if (i->lightMapIndex != -1) continue;
 
 				if (i->isActive == false) continue;
 
@@ -277,7 +277,7 @@ void InstancingManager::RenderStaticPointLightShadow(DirectX::SimpleMath::Matrix
 		{
 			for (auto& i : renderInfoVec)
 			{
-				if (i->lightMapIndex == -1) continue;
+				if (i->lightMapIndex != -1) continue;
 
 				if (i->isActive == false) continue;
 

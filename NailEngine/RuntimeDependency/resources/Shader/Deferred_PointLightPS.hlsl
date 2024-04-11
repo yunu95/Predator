@@ -57,7 +57,7 @@ PS_OUT main(PixelIn input)
     
     float4 util = Temp2Map.Sample(sam, input.uv);
     
-    CalculatePBRLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo, arm.r, arm.b, arm.g, util.y, util.z);
+    CalculatePBRLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo, arm.r, arm.b, arm.g, util.y, util.z, util.x);
     //CalculateLight(lightIndex, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);
     
     if (util.x != -1 && useLightMap)
