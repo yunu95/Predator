@@ -33,6 +33,9 @@ void GameManager::Update()
 void GameManager::EngageBattle()
 {
 	isBattleModeOn = true;
+
+	/// 플레이어 유닛들을 WaveEngage 상태로 전환 시키는 로직
+	/*PlayerController::*/
 }
 
 void GameManager::EndBattle()

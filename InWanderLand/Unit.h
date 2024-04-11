@@ -27,6 +27,8 @@ public:
 		Skill,
 		Paralysis,
 		Death,
+		OffsetMove,
+		WaveEngage,
 		StateEnd
 	};
 
@@ -116,7 +118,7 @@ private:
 	// 유닛이 바라봐야 하는 회전값을 동경각으로 나타냅니다. 유닛은 회전속도에 따라 회전값을 desiredRotation과 일치하게 바꿉니다.
 	float desiredRotation{270};
 	float rotationSpeed{ 500 };
-	float rotationTime = 0.2f;
+	float rotateTime = 0.2f;
 
 	// 지금 수행중인 명령
 	UnitState currentOrder = UnitState::Idle;
@@ -178,6 +180,10 @@ private:
 	SkillPreviewMesh m_qSkillPreviewType;
 	SkillPreviewMesh m_wSkillPreviewType;
 
+	Unit* m_followingTargetUnit;
+	float m_followEngageDinstance{ 7.0f };			// 이 수치만큼 거리가 벌어지면 따라간다.
+	float m_stopFollowDinstance{ 2.0f };			// 이 수치만큼 거리가 좁혀지면 멈춘다.
+	bool isFollowing{ false };
 private:
 	/// 유닛이 속해있는 field
 	NavigationField* m_unitNavField;
@@ -189,6 +195,7 @@ private:
 private:
 	void IdleEngage();
 	void MoveEngage();
+	void OffsetMoveEngage();
 	void AttackMoveEngage();
 	void AttackEngage();
 	void ChaseEngage();
@@ -198,6 +205,7 @@ private:
 
 	void IdleUpdate();
 	void MoveUpdate();
+	void OffsetMoveUpdate();
 	void AttackMoveUpdate();
 	void ChaseUpdate();
 	void AttackUpdate();

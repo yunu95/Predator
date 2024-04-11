@@ -102,8 +102,21 @@ void Unit::Start()
 		[this]() { return m_currentHealthPoint <= 0; } });
 	}
 
+	unitFSM.transitions[static_cast<UnitState>(UnitState::Idle)].push_back({ UnitState::OffsetMove,
+	[this]() { return currentOrder == UnitState::OffsetMove && m_unitSide == UnitSide::Player && m_unitType != UnitType::Warrior; } });
+
+	unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::Idle,
+	[this]() { return currentOrder == UnitState::Idle; } });
+
+	//unitFSM.transitions[static_cast<UnitState>(UnitState::Move)].push_back({ UnitState::WaveEngage,
+	//[this]() { return ; } });
+
+	//unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::WaveEngage,
+	//[this]() { return ; } });
+
 	unitFSM.engageAction[UnitState::Idle] = [this]() { IdleEngage(); };
 	unitFSM.engageAction[UnitState::Move] = [this]() { MoveEngage(); };
+	unitFSM.engageAction[UnitState::OffsetMove] = [this]() { OffsetMoveEngage(); };
 	unitFSM.engageAction[UnitState::AttackMove] = [this]() { AttackMoveEngage(); };
 	unitFSM.engageAction[UnitState::Chase] = [this]() { ChaseEngage(); };
 	unitFSM.engageAction[UnitState::Attack] = [this]() { AttackEngage(); };
@@ -113,6 +126,7 @@ void Unit::Start()
 
 	unitFSM.updateAction[UnitState::Idle] = [this]() { IdleUpdate(); };
 	unitFSM.updateAction[UnitState::Move] = [this]() { MoveUpdate(); };
+	unitFSM.updateAction[UnitState::OffsetMove] = [this]() { OffsetMoveUpdate(); };
 	unitFSM.updateAction[UnitState::AttackMove] = [this]() { AttackMoveUpdate(); };
 	unitFSM.updateAction[UnitState::Chase] = [this]() { ChaseUpdate(); };
 	unitFSM.updateAction[UnitState::Attack] = [this]() { AttackUpdate(); };
@@ -172,6 +186,17 @@ Unit::UnitSide Unit::GetUnitSide() const
 		m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
 	}
 
+	void Unit::OffsetMoveEngage()
+	{
+		StopMove();
+		isFollowing = false;
+		currentOrder = UnitState::OffsetMove;
+		moveFunctionElapsed = 0.0f;
+		m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::green());
+		m_navAgentComponent->SetSpeed(m_speed);
+		m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
+	}
+
 	void Unit::AttackMoveEngage()
 	{
 		currentOrder = UnitState::AttackMove;
@@ -197,7 +222,7 @@ Unit::UnitSide Unit::GetUnitSide() const
 		attackAnimationFrameCheckNumber = 0;
 		isAttackStarted = false;
 		//RotateUnit(m_currentTargetUnit->GetTransform()->GetWorldPosition());
-		dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotationTime, false);
+		dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
 		CheckCurrentAnimation(unitAnimations.m_idleAnimation);
 
 
@@ -210,7 +235,7 @@ Unit::UnitSide Unit::GetUnitSide() const
 
 		m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::green());
 
-		dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotationTime, false);
+		dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
 
 		m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
 	}
@@ -287,8 +312,33 @@ Unit::UnitSide Unit::GetUnitSide() const
 		{
 			moveFunctionElapsed = 0.0f;
 			//RotateUnit(m_currentMovePosition);
-			dotween->DOLookAt(m_currentMovePosition, rotationTime, false);
+			dotween->DOLookAt(m_currentMovePosition, rotateTime, false);
 			m_navAgentComponent->MoveTo(m_currentMovePosition);
+		}
+	}
+
+	void Unit::OffsetMoveUpdate()
+	{
+		/// m_followingTargetUnit 과의 거리가 일정 수치 이상으로 벌어진다면 이동 함수 호출.
+		/// 다시 거리가 좁혀지면 StopMove. (Idle로 상태 변경)
+		float distance = (m_followingTargetUnit->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition()).Magnitude();
+
+		if (distance >= m_followEngageDinstance/* && !isFollowing*/)
+		{
+			m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
+			dotween->DOLookAt(m_currentMovePosition, rotateTime, false);
+			m_navAgentComponent->MoveTo(m_currentMovePosition);
+			isFollowing = true;
+		}
+		else if (distance <= m_stopFollowDinstance && isFollowing)
+		{
+			currentOrder = UnitState::Idle;
+			isFollowing = false;
+		}
+		else if (distance <= m_followEngageDinstance && distance >= m_stopFollowDinstance && isFollowing)
+		{
+			m_navAgentComponent->MoveTo(m_currentMovePosition);
+			dotween->DOLookAt(m_currentMovePosition, rotateTime, false);
 		}
 	}
 
@@ -325,11 +375,11 @@ Unit::UnitSide Unit::GetUnitSide() const
 				m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 				attackAnimationFrameCheckNumber = 0;
 				isAttackAnimationOperating = false;
-				dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotationTime, false);
+				dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
 			}
 		}
 
-		if (attackFunctionElapsed >= attackFunctionCallDelay || !isAttackStarted)
+		if (attackFunctionElapsed >= attackFunctionCallDelay /*|| !isAttackStarted*/)
 		{
 			isAttackStarted = true;
 			isAttackAnimationOperating = true;
@@ -342,7 +392,7 @@ Unit::UnitSide Unit::GetUnitSide() const
 		}
 		else if (attackFunctionElapsed < attackFunctionCallDelay)
 		{
-			dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotationTime, false);
+			dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
 		}
 	}
 
@@ -372,7 +422,7 @@ Unit::UnitSide Unit::GetUnitSide() const
 
 			DetermineCurrentTargetObject();
 
-			dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotationTime, false);
+			dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
 
 			m_navAgentComponent->MoveTo(m_currentTargetUnit->GetTransform()->GetWorldPosition());
 		}
@@ -749,15 +799,24 @@ void Unit::SetPlayerSerialNumber(UnitType serialNum)
 void Unit::OrderMove(Vector3d position)
 {
 	m_currentMovePosition = position;
-	currentOrder = UnitState::Move;
-	dotween->DOLookAt(position, rotationTime, false);
+
+	if (m_unitType != UnitType::Warrior && !GameManager::Instance().IsBattleSystemOperating())
+	{
+		m_followingTargetUnit = PlayerController::SingleInstance().GetPlayerMap().find(UnitType::Warrior)->second;
+		currentOrder = UnitState::OffsetMove;
+	}
+	else
+	{
+		currentOrder = UnitState::Move;
+		dotween->DOLookAt(position, rotateTime, false);
+	}
 }
 
 void Unit::OrderAttackMove(Vector3d position)
 {
 	m_currentMovePosition = position;
 	currentOrder = UnitState::AttackMove;
-	dotween->DOLookAt(position, rotationTime, false);
+	dotween->DOLookAt(position, rotateTime, false);
 
 	PlayerController::SingleInstance().SetLeftClickMove();
 	// 다음 클릭은 Move로 바꿀 수 있도록 function 재정의.
@@ -770,7 +829,7 @@ void Unit::OrderSkill(SkillEnum p_skillNum, Vector3d position)
 	currentOrder = UnitState::Skill;
 	m_skillPosition = position;
 	m_currentSelectedSkill = p_skillNum;
-	dotween->DOLookAt(position, rotationTime, false);
+	dotween->DOLookAt(position, rotateTime, false);
 
 	PlayerController::SingleInstance().SetLeftClickEmpty();
 
