@@ -8,7 +8,6 @@
 #include "DummyComponent.h"
 
 class UnitProductor;
-class GroupMoveRangeSystem;
 enum class SkillPreviewMesh;
 
 /// <summary>
@@ -183,7 +182,7 @@ private:
 	SkillPreviewMesh m_wSkillPreviewType;
 
 	Unit* m_followingTargetUnit;
-	float m_followEngageDinstance{ 7.0f };			// 이 수치만큼 거리가 벌어지면 따라간다.
+	float m_followEngageDinstance{ 4.0f };			// 이 수치만큼 거리가 벌어지면 따라간다.
 	float m_stopFollowDinstance{ 2.0f };			// 이 수치만큼 거리가 좁혀지면 멈춘다.
 	bool isFollowing{ false };
 private:
@@ -312,6 +311,5 @@ public:
 
 	friend RobinSkillDevelopmentSystem;
 	friend UnitProductor;
-	friend GroupMoveRangeSystem;
 };
 

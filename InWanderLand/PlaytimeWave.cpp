@@ -83,11 +83,11 @@ void PlaytimeWave::Update()
 
                 if (templateUnitData.isEliteMonster == true)
                 {
-                    inGameUit = currentSelectedProductor->CreateUnit(pos);
-                    contentsLayer->RegisterToEditorObjectContainer(inGameUit->GetGameObject());
+                    inGameUnit = currentSelectedProductor->CreateUnit(pos);
+                    contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
                 }
                 else
-                    inGameUit = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+                    inGameUnit = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
 
             }
             else if (templateUnitData.skinnedFBXName == "SKM_Monster2")
@@ -98,18 +98,18 @@ void PlaytimeWave::Update()
 
                 if (templateUnitData.isEliteMonster == true)
                 {
-                    inGameUit = currentSelectedProductor->CreateUnit(pos);
-                    contentsLayer->RegisterToEditorObjectContainer(inGameUit->GetGameObject());
+                    inGameUnit = currentSelectedProductor->CreateUnit(pos);
+                    contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
                 }
                 else
-                    inGameUit = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+                    inGameUnit = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
             }
 
-            inGameUit->GetGameObject()->SetSelfActive(true);
+            inGameUnit->GetGameObject()->SetSelfActive(true);
 
             //GameObject* unitObject = inGameUit->GetGameObject();
 
-            m_currentWaveUnitVector.push_back(inGameUit);
+            m_currentWaveUnitVector.push_back(inGameUnit);
 
             nextSummonUnitIndex++;
             waveDataIndex++;

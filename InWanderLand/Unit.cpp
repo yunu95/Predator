@@ -110,7 +110,7 @@ void Unit::Start()
 	[this]() { return currentOrder == UnitState::OffsetMove && m_unitSide == UnitSide::Player && m_unitType != UnitType::Warrior; } });
 
 	unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::Idle,
-	[this]() { return currentOrder == UnitState::Idle; } });
+	[this]() { return GameManager::Instance().IsBattleSystemOperating(); } });
 
 	//unitFSM.transitions[static_cast<UnitState>(UnitState::Move)].push_back({ UnitState::WaveEngage,
 	//[this]() { return ; } });
@@ -325,32 +325,29 @@ void Unit::IdleEngage()
 	{
 		/// m_followingTargetUnit 과의 거리가 일정 수치 이상으로 벌어진다면 이동 함수 호출.
 		/// 다시 거리가 좁혀지면 StopMove. (Idle로 상태 변경)
-		float distance = (m_followingTargetUnit->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition()).Magnitude();
+		float betweenUnitDistance = (m_followingTargetUnit->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition()).Magnitude();
+		
+		float distance = (m_currentMovePosition - GetTransform()->GetWorldPosition()).Magnitude();
 
-		Vector3d currentVector = (m_currentMovePosition - m_followingTargetUnit->GetTransform()->GetWorldPosition()).Normalized();
-		Vector3d previousVector = (m_currentMovePosition - m_followingTargetUnit->GetTransform()->GetWorldPosition()).Normalized();
-
-		float tempCheck = Vector3d::Dot(previousVector, currentVector);
-
-		if (distance >= m_followEngageDinstance/* && !isFollowing*/)
+		if (betweenUnitDistance >= m_followEngageDinstance)
 		{
 			m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
-			dotween->DOLookAt(m_currentMovePosition, rotateTime, false);
-			m_navAgentComponent->MoveTo(m_currentMovePosition);
+			dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
+			m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
 			isFollowing = true;
 		}
-		else if (distance <= m_stopFollowDinstance && isFollowing)
+		else if (betweenUnitDistance <= m_stopFollowDinstance)
 		{
-			currentOrder = UnitState::Idle;
 			isFollowing = false;
-		}
-		else if (distance <= m_followEngageDinstance && distance >= m_stopFollowDinstance && isFollowing && tempCheck < 0)
-		{
 			StopMove();
 			m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
-
-			//m_navAgentComponent->MoveTo(m_currentMovePosition);
-			//dotween->DOLookAt(m_currentMovePosition, rotateTime, false);
+		}
+		else if (betweenUnitDistance <= m_followEngageDinstance && betweenUnitDistance >= m_stopFollowDinstance && isFollowing)
+		{
+			m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
+			dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
+			m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
+			isFollowing = true;
 		}
 	}
 

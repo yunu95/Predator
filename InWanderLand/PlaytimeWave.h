@@ -33,7 +33,7 @@ private:
 
 public:
 	std::vector<Unit*> m_currentWaveUnitVector;
-	Unit* inGameUit;
+	Unit* inGameUnit;
 	virtual ~PlaytimeWave();
 
 	void ActivateWave();
