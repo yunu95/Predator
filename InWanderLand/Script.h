@@ -13,9 +13,18 @@
 #include "YunutyEngine.h"
 
 #include <type_traits>
+#include <vector>
 #include <unordered_set>
 #include <memory>
 #include <queue>
+
+namespace application
+{
+	namespace editor
+	{
+		class Module_ScriptEditor;
+	}
+}
 
 namespace application
 {
@@ -23,11 +32,15 @@ namespace application
 		: public Identifiable, public Storable, public Component
 	{
 		friend class ScriptSystem;
+		friend class editor::Module_ScriptEditor;
 
 	public:
 		virtual void Update() override;
 
+		std::string name = "NewScript";
+
 		void OnGameStart();
+		void OnGameStop();
 
 		template <typename T, typename... Types> requires std::is_base_of_v<ITrigger, T>
 		std::shared_ptr<ITrigger> AddTrigger(Types... args)
@@ -53,7 +66,9 @@ namespace application
 		std::shared_ptr<IAction> AddAction(Types... args)
 		{
 			auto sptr = std::make_shared<T>(args...);
-			actionList.insert(sptr);
+			actionList.insert({ actionIndex, sptr });
+			actionListForFind.insert({ sptr, actionIndex });
+			actionIndex++;
 			return sptr;
 		}
 
@@ -71,8 +86,11 @@ namespace application
 	private:
 		std::unordered_set<std::shared_ptr<ITrigger>> triggerList;
 		std::unordered_set<std::shared_ptr<ICondition>> conditionList;
-		std::unordered_set<std::shared_ptr<IAction>> actionList;
+		unsigned long long actionIndex = 0;
+		std::map<unsigned long long, std::shared_ptr<IAction>> actionList;
+		std::map<std::shared_ptr<IAction>, unsigned long long> actionListForFind;
 		std::queue<CoroutineObject<void>> coroutineQueue = std::queue<CoroutineObject<void>>();
+		std::vector<CoroutineObject<void>> coroutineInProgress = std::vector<CoroutineObject<void>>();
 	};
 }
 

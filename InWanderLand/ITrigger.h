@@ -7,6 +7,9 @@
 #include "Storable.h"
 #include "Identifiable.h"
 
+#include "imgui.h"
+#include "imgui_Utility.h"
+
 #include <functional>
 
 namespace application
@@ -16,6 +19,7 @@ namespace application
 		None,
 		GameStart,
 		EnterRegion,
+		LeaveRegion,
 	};
 
 	struct ITrigger
@@ -59,5 +63,8 @@ namespace application
 	};
 }
 
+/// ImGui_DrawDataPopup 함수를 작성하여 Editor 에서 데이터 편집 기능을
+/// 제공하여야 합니다.
 #define DEFINE_TRIGGER(Class) \
-virtual TriggerType GetType() const override { return TriggerType::Class; }
+virtual TriggerType GetType() const override { return TriggerType::Class; } \
+static void ImGui_DrawDataPopup(Trigger_##Class* data);

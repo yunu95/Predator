@@ -1010,6 +1010,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="ICondition.h" />
     <ClInclude Include="ITrigger.h" />
     <ClInclude Include="MeleeEnemyPool.h" />
+    <ClInclude Include="Module_ScriptEditor.h" />
     <ClInclude Include="RangedEnemyPool.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="ScriptSystem.h" />
@@ -1072,7 +1073,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="SkillPreviewSystem.h" />
     <ClInclude Include="SystemCommands.h" />
     <ClInclude Include="TacticModeSystem.h" />
-    <ClInclude Include="TestAction.h" />
+    <ClInclude Include="Action_Example.h" />
     <ClInclude Include="TestUtilButtonEvent.h" />
     <ClInclude Include="InWanderLand.h" />
     <ClInclude Include="KnockBackComponent.h" />
@@ -1174,6 +1175,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="TriggerList.h" />
     <ClInclude Include="Trigger_EnterRegion.h" />
     <ClInclude Include="Trigger_GameStart.h" />
+    <ClInclude Include="Trigger_LeaveRegion.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIImage.h" />
     <ClInclude Include="UIManager.h" />
@@ -1224,6 +1226,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="EnemySummonGateProductor.cpp" />
     <ClCompile Include="EnemySummonSkillSystem.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Module_ScriptEditor.cpp" />
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="ScriptSystem.cpp" />
     <ClCompile Include="ShortcutSystem.cpp" />
@@ -1366,6 +1369,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="TransformEditCommand.cpp" />
     <ClCompile Include="Trigger_EnterRegion.cpp" />
     <ClCompile Include="Trigger_GameStart.cpp" />
+    <ClCompile Include="Trigger_LeaveRegion.cpp" />
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UIPanel.cpp" />

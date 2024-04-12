@@ -6,3 +6,4 @@
 
 #include "Module_TemplateDataEditor.h"
 #include "Module_GlobalConstant.h"
+#include "Module_ScriptEditor.h"

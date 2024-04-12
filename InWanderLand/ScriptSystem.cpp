@@ -4,19 +4,33 @@
 
 namespace application
 {
+	std::unordered_map<TriggerType, std::string> ScriptSystem::triggerList = std::unordered_map<TriggerType, std::string>();
+	std::unordered_map<ConditionType, std::string> ScriptSystem::conditionList = std::unordered_map<ConditionType, std::string>();
+	std::unordered_map<ActionType, std::string> ScriptSystem::actionList = std::unordered_map<ActionType, std::string>();
+
 	void ScriptSystem::SingletonInitializer()
 	{
+		/// Trigger
+		triggerList[TriggerType::GameStart] = "GameStart";
+		triggerList[TriggerType::EnterRegion] = "EnterRegion";
+		triggerList[TriggerType::LeaveRegion] = "LeaveRegion";
 
+		/// Condition
+
+		/// Action
+		actionList[ActionType::WaitForSeconds] = "WaitForSeconds";
+		actionList[ActionType::WaitForRealSeconds] = "WaitForRealSeconds";
 	}
 
 	Script* ScriptSystem::CreateScript()
 	{
 		auto sptr = Scene::getCurrentScene()->AddGameObject()->AddComponent<Script>();
 		scriptList[sptr->GetUUID()] = sptr;
+		scriptContainer.insert(sptr);
 		return sptr;
 	}
 
-	bool ScriptSystem::EraseScript(const Script*& script)
+	bool ScriptSystem::EraseScript(Script* script)
 	{
 		auto itr = scriptList.find(script->GetUUID());
 		if (itr == scriptList.end())
@@ -24,9 +38,10 @@ namespace application
 			return false;
 		}
 
-		Scene::getCurrentScene()->DestroyGameObject(const_cast<Script*>(script)->GetGameObject());
+		Scene::getCurrentScene()->DestroyGameObject(script->GetGameObject());
 
 		scriptList.erase(itr);
+		scriptContainer.erase(script);
 
 		return true;
 	}
@@ -39,6 +54,14 @@ namespace application
 		}
 	}
 
+	void ScriptSystem::OnGameStop()
+	{
+		for (auto& each : scriptList)
+		{
+			each.second->OnGameStop();
+		}
+	}
+
 	void ScriptSystem::Clear()
 	{
 		for (auto& each : scriptList)
@@ -46,6 +69,12 @@ namespace application
 			Scene::getCurrentScene()->DestroyGameObject(each.second->GetGameObject());
 		}
 		scriptList.clear();
+		scriptContainer.clear();
+	}
+
+	std::unordered_set<Script*>& ScriptSystem::GetScriptList()
+	{
+		return scriptContainer;
 	}
 
 	bool ScriptSystem::PreEncoding(json& data) const

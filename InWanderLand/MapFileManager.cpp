@@ -18,6 +18,7 @@
 #include "EditorCameraManager.h"
 #include "ShortcutSystem.h"
 #include "ScriptSystem.h"
+#include "Module_ScriptEditor.h"
 
 #include <fstream>
 
@@ -278,6 +279,7 @@ namespace application
             palette::PaletteBrushManager::GetSingletonInstance().Clear();
             palette::PaletteManager::GetSingletonInstance().Clear();
             CameraManager::GetSingletonInstance().Clear();
+            Module_ScriptEditor::GetSingletonInstance().Clear();
             commandManager.Clear();
 #endif
             ShortcutSystem::Instance().Clear();

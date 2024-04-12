@@ -513,7 +513,7 @@ void application::contents::ContentsLayer::Initialize()
 
 void application::contents::ContentsLayer::Update(float ts)
 {
-    std::cout << Time::GetFPS() << std::endl;
+    //std::cout << Time::GetFPS() << std::endl;
 }
 
 void application::contents::ContentsLayer::GUIProgress()
@@ -531,13 +531,6 @@ void application::contents::ContentsLayer::PlayContents()
     SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
     GameManager::Instance().Reset();
-
-
-#pragma region
-    auto script = ScriptSystem::Instance().CreateScript();
-    script->AddTrigger<Trigger_GameStart>();
-    script->AddAction<TestAction>();
-#pragma endregion ScriptTest
 
     for (auto e : componentsCreatedByEditorVector)
     {
@@ -910,7 +903,7 @@ void application::contents::ContentsLayer::StopContents()
     }
 
     /// ScriptSystem 을 위한 부분입니다.
-    ScriptSystem::Instance().Clear();
+    ScriptSystem::Instance().OnGameStop();
 }
 
 #ifdef GEN_TESTS
