@@ -1094,7 +1094,7 @@
     <ClInclude Include="TriggerList.h">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClInclude>
-    <ClInclude Include="TestAction.h">
+    <ClInclude Include="Action_Example.h">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClInclude>
     <ClInclude Include="Trigger_GameStart.h">
@@ -1105,6 +1105,12 @@
     </ClInclude>
     <ClInclude Include="UIImage.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger_LeaveRegion.h">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Module_ScriptEditor.h">
+      <Filter>Editor\Panel\List\Module\List</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1684,6 +1690,12 @@
     </ClCompile>
     <ClCompile Include="Trigger_EnterRegion.cpp">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger_LeaveRegion.cpp">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Module_ScriptEditor.cpp">
+      <Filter>Editor\Panel\List\Module\List</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

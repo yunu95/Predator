@@ -14,14 +14,17 @@ namespace application
 	public:
 		DEFINE_ACTION(WaitForSeconds)
 
+		Action_WaitForSeconds() = default;
+		Action_WaitForSeconds(float time);
+
 		virtual CoroutineObject<void> DoAction() override;
+
+		void SetWaitTime(float time);
 
 		virtual bool PreEncoding(json& data) const override;
 		virtual bool PostEncoding(json& data) const override;
 		virtual bool PreDecoding(const json& data) override;
 		virtual bool PostDecoding(const json& data) override;
-
-		Action_WaitForSeconds(const float& waitTime);
 
 	private:
 		float waitTime = 0;
@@ -33,14 +36,17 @@ namespace application
 	public:
 		DEFINE_ACTION(WaitForRealSeconds)
 
+		Action_WaitForRealSeconds() = default;
+		Action_WaitForRealSeconds(float time);
+
 		virtual CoroutineObject<void> DoAction() override;
+
+		void SetWaitTime(float time);
 
 		virtual bool PreEncoding(json& data) const override;
 		virtual bool PostEncoding(json& data) const override;
 		virtual bool PreDecoding(const json& data) override;
 		virtual bool PostDecoding(const json& data) override;
-
-		Action_WaitForRealSeconds(const float& waitTime);
 
 	private:
 		float waitTime = 0;

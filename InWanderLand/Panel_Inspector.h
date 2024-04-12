@@ -12,6 +12,7 @@
 #include "GCTemplate.h"
 #include "PodStructs.h"
 #include "imgui_Utility.h"
+#include "WanderUtils.h"
 
 #include <nlohmann/json.hpp>
 #include <boost/pfr.hpp>
@@ -157,7 +158,8 @@ namespace application
 				buffer.reserve(64);
 				if (ImGui::InputText(("##" + label).c_str(), &buffer[0], 64))
 				{	
-					const_cast<std::string&>(data).assign(buffer.c_str());
+					wanderUtils::UpdateStringSize(buffer);
+					const_cast<std::string&>(data) = buffer;
 					return true;
 				}
 

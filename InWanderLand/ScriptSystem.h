@@ -9,6 +9,8 @@
 #include "YunutyEngine.h"
 
 #include <unordered_map>
+#include <unordered_set>
+#include <string>
 
 namespace application
 {
@@ -23,9 +25,16 @@ namespace application
 		virtual void SingletonInitializer() override;
 
 		Script* CreateScript();
-		bool EraseScript(const Script*& script);
+		bool EraseScript(Script* script);
 		void OnGameStart();
+		void OnGameStop();
 		void Clear();
+
+		std::unordered_set<Script*>& GetScriptList();
+
+		static std::unordered_map<TriggerType, std::string> triggerList;
+		static std::unordered_map<ConditionType, std::string> conditionList;
+		static std::unordered_map<ActionType, std::string> actionList;
 
 	private:
 		ScriptSystem() = default;
@@ -36,6 +45,7 @@ namespace application
 		virtual bool PostDecoding(const json& data) override;
 
 		std::unordered_map<const UUID, Script*> scriptList;
+		std::unordered_set<Script*> scriptContainer;
 	};
 }
 

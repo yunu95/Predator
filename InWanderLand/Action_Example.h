@@ -8,11 +8,11 @@
 
 namespace application
 {
-	class TestAction
+	class Action_Example
 		: public IAction
 	{
 	public:
-		DEFINE_ACTION(TestAction)
+		DEFINE_ACTION(Example)
 
 		virtual CoroutineObject<void> DoAction() override
 		{
@@ -22,15 +22,15 @@ namespace application
 				co_await std::suspend_always();
 			}
 
-			std::cout << "Hello! Coroutine!! 4sec" << std::endl;
+			std::cout << "Hello! Coroutine!! Scaled 4sec" << std::endl;
 
-			auto coroutine2 = Action_WaitForSeconds(2).DoAction();
+			auto coroutine2 = Action_WaitForRealSeconds(2).DoAction();
 			for (const auto& val : coroutine2)
 			{
 				co_await std::suspend_always();
 			}
 
-			std::cout << "Hello! Coroutine!! 2sec" << std::endl;
+			std::cout << "Hello! Coroutine!! Real 2sec" << std::endl;
 		}
 
 		virtual bool PreEncoding(json& data) const override
@@ -53,6 +53,11 @@ namespace application
 			return true;
 		}
 
-		TestAction() = default;
+		Action_Example() = default;
 	};
+
+	void Action_Example::ImGui_DrawDataPopup(Action_Example* data)
+	{
+		
+	}
 }

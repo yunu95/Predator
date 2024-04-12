@@ -144,6 +144,7 @@ namespace application
                 state = State::None;
                 CleanUpData();
             }
+
             void RegionPalette::CleanUpData()
             {
                 SetAsSelectingDisablingOrnaments(false);
