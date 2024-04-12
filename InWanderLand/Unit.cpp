@@ -222,7 +222,7 @@ void Unit::IdleEngage()
 
 		m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::red());
 
-		//m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
+		m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 
 		attackFunctionElapsed = 0.0f;
 		attackAnimationFrameCheckNumber = 0;
@@ -391,7 +391,7 @@ void Unit::IdleEngage()
 
 			if (attackAnimationFrameCheckNumber >= attackTimingFrame && !isAttacked)
 			{
-				GetGameObject()->GetComponent<AttackSystem>()->Attack(m_currentTargetUnit);
+				GetGameObject()->GetComponent<AttackSystem>()->Attack(m_currentTargetUnit, m_attackOffset);
 				isAttacked = true;
 			}
 		}
@@ -571,6 +571,11 @@ void Unit::SetCurrentOrderMove()
 void Unit::SetCurrentOrderAttackMove()
 {
 	currentOrder = UnitState::AttackMove;
+}
+
+float Unit::GetAttackOffset() const
+{
+	return m_attackOffset;
 }
 
 int Unit::GetUnitDamage() const
@@ -901,6 +906,11 @@ void Unit::SetMaxAggroNumber(int p_num)
 void Unit::SetFbxName(std::string p_string)
 {
 	m_fbxName = p_string;
+}
+
+void Unit::SetAttackOffset(float p_offset)
+{
+	m_attackOffset = p_offset;
 }
 
 /// <summary>

@@ -39,6 +39,8 @@ void UnitProductor::SetUnitComponentMembers()
 
 	m_unitComponent->SetFbxName(m_unitFbxName);
 
+	m_unitComponent->SetAttackOffset(m_attackOffset);
+
 	m_unitComponent->m_defensePoint = m_defensePoint;
 	m_unitComponent->m_dodgeProbability = m_dodgeProbability;
 	m_unitComponent->m_criticalHitMultiplier = m_criticalHitMultiplier;
@@ -126,6 +128,7 @@ void UnitProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p
 	m_unitSpeed = p_podData.m_unitSpeed;
 	m_attackDelay = p_podData.m_attackDelay;
 	m_attackTimingFrame = p_podData.m_attackTimingFrame;
+	m_attackOffset = p_podData.m_attackOffset;
 }
 
 void UnitProductor::Update()

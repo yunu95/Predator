@@ -146,6 +146,8 @@ private:
 	bool isAttackAnimationOperating = false;
 	bool isAttacked = false;
 	bool isAttackStarted = false;
+	float m_attackOffset;
+
 
 	float deathFunctionElapsed;
 	float deathAnimationDelay = 1.5f;
@@ -248,9 +250,12 @@ public:
 	void SetSkillPreviewType(SkillPreviewMesh p_qskill, SkillPreviewMesh p_wskill);
 	void SetMaxAggroNumber(int p_num);
 	void SetFbxName(std::string p_string);
+	void SetAttackOffset(float p_offset);
 
 	void SetCurrentOrderMove();
 	void SetCurrentOrderAttackMove();
+
+	float GetAttackOffset() const;
 
 	void OrderMove(Vector3d position);
 	void OrderAttackMove(Vector3d position);
@@ -287,10 +292,6 @@ public:
 	void SetUnitStateToSkill();
 
 public:
-	/// <summary>
-	/// 유닛의 스탯을 조작하는 함수.
-	/// </summary>
-	/// <returns></returns>
 	int GetUnitDamage() const;
 	void Damaged(Unit* opponentUnit, float opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
 	void Damaged(float dmg);										// 추적받지 않는 데미지

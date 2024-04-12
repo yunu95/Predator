@@ -38,6 +38,8 @@ namespace application
 			float m_attackDelay;
 			int m_attackTimingFrame;
 
+			float m_attackOffset;
+
 			int isEliteMonster;
 
 			TO_JSON(POD_Unit_TemplateData)

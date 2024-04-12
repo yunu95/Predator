@@ -66,6 +66,8 @@ public:
 	float m_attackDelay;
 	int m_attackTimingFrame;
 
+	float m_attackOffset;
+
 	virtual Unit* CreateUnit(Vector3d startPos) = 0;
 
 	void SetUnitComponentMembers();

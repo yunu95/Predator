@@ -20,7 +20,7 @@ protected:
 
 public:
 	void SetOwnerType(Unit::UnitType type);
-	virtual void Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed);
+	virtual void Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed, float offset);
 
 private:
 	void ShootUpdateFunction();

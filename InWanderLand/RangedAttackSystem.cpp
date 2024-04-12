@@ -5,31 +5,28 @@
 #include "HealerAutoAttackProjectilePool.h"
 #include "EnemyAutoAttackProjectilePool.h"
 
-void RangedAttackSystem::Attack(Unit* opponentUnit)
+void RangedAttackSystem::Attack(Unit* opponentUnit, float offset)
 {
 	switch (m_ownerUnit->GetUnitType())
 	{
 		case Unit::UnitType::Magician :
 		{
-			MagicianAutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed);
+			MagicianAutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
 			break;
 		}
 		case Unit::UnitType::Healer:
 		{
-			auto tempHealerBullet = HealerAutoAttackProjectilePool::SingleInstance().Borrow();
-			tempHealerBullet->GetGameObject()->SetSelfActive(false);
-
-			tempHealerBullet->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed);
+			HealerAutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
 			break;
 		}
 		case Unit::UnitType::RangedEnemy:
 		{
-			EnemyAutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed);
+			EnemyAutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
 			break;
 		}
 		default:
 		{
-			AutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed);
+			AutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
 			break;
 		}
 	}
