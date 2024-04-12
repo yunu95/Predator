@@ -92,7 +92,7 @@ void InputManager::Update()
 			}
 		}
 
-		if (yunutyEngine::Input::isKeyPushed(KeyCode::Space))
+		if (yunutyEngine::Input::isKeyPushed(KeyCode::Space) && GameManager::Instance().IsBattleSystemOperating())
 		{
 			tacticMode = !tacticMode;
 			if (tacticMode)

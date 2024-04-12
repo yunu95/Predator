@@ -22,9 +22,11 @@ public:
 		unitComponent->m_dummyCom = p_dummy;
 		unitComponent->stageNumber = m_stageNumber;
 		p_dummy->m_pairUnit = unitComponent;
+		p_dummy->m_pairUnit->isJustCreated = true;
 		unitComponent->returnToPoolFunction = [=]()
 			{
 				p_dummy->m_pairUnit->m_navAgentComponent->SetActive(false);
+				p_dummy->m_pairUnit->isJustCreated = false;
 				Return(p_dummy);
 			};
 		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
@@ -43,6 +45,15 @@ public:
 		p_dummy->m_pairUnit->m_navAgentComponent->MoveTo(m_unitPosition);
 		p_dummy->m_pairUnit->MakeUnitStateIdle();
 		p_dummy->m_pairUnit->StopMove();
+
+		if (!p_dummy->m_pairUnit->isJustCreated)
+		{
+			for (auto each : p_dummy->m_pairUnit->OnCreated)
+			{
+				each();
+			}
+		}
+
 	}
 
 	void SetStartPosition(Vector3d p_pos)

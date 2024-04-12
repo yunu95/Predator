@@ -12,12 +12,12 @@ void AutoAttackProjectile::SetOwnerType(Unit::UnitType type)
 	ownerType = type;
 }
 
-void AutoAttackProjectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed)
+void AutoAttackProjectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed, float offset)
 {
 	m_speed = speed;
 	m_ownerUnit = ownerUnit;
 	m_opponentUnit = opponentUnit;
-	GetGameObject()->GetTransform()->SetWorldPosition(ownerUnit->GetGameObject()->GetTransform()->GetWorldPosition());
+	GetGameObject()->GetTransform()->SetWorldPosition(ownerUnit->GetGameObject()->GetTransform()->GetWorldPosition() + (ownerUnit->GetTransform()->GetWorldRotation().Forward() * -1 * ownerUnit->GetAttackOffset()));
 	GetGameObject()->GetComponent<Dotween>()->DOLookAt(m_opponentUnit->GetGameObject()->GetTransform()->GetWorldPosition(), Time::GetDeltaTime(), false);
 	//RotateBulletPerFrame();
 	GetGameObject()->SetSelfActive(true);

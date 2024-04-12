@@ -8,6 +8,6 @@ private:
 	float m_magicianAttackPowerSpeedIncrease = 1.2f;
 
 public:
-	virtual void Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed) override;
+	virtual void Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed, float offset) override;
 };
 

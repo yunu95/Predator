@@ -27,8 +27,8 @@ namespace application
     namespace editor
     {
         MapFileManager::MapFileManager()
-            : Singleton<MapFileManager>(), globalConstant(GlobalConstant::GetSingletonInstance()), 
-            instanceManager(InstanceManager::GetSingletonInstance()), 
+            : Singleton<MapFileManager>(), globalConstant(GlobalConstant::GetSingletonInstance()),
+            instanceManager(InstanceManager::GetSingletonInstance()),
             templateDataManager(TemplateDataManager::GetSingletonInstance()),
             commandManager(CommandManager::GetSingletonInstance()),
             currentMapPath()
@@ -269,7 +269,7 @@ namespace application
                     Application::GetInstance().OnDataLoad();
                 }
                 currentMapPath.clear();
-            }            
+            }
             return returnVal;
         }
 

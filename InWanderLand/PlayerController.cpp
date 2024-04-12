@@ -20,22 +20,36 @@ void PlayerController::AddPlayerUnit(Unit* p_playerUnit)
 
 void PlayerController::SetLeftClickMove()
 {
-	if (static_cast<int>(currentSelectedSerialNumber) == InputManager::SelectedSerialNumber::All)
+	if (GameManager::Instance().IsBattleSystemOperating())
 	{
+		if (static_cast<int>(currentSelectedSerialNumber) == InputManager::SelectedSerialNumber::All)
+		{
+			m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
+				{
+					for (auto e : playerComponentMap)
+					{
+						e.second->OrderMove(pos);
+					}
+				};
+		}
+		else
+		{
+			Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
+			m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
+				{
+					currentSelectedUnit->OrderMove(pos);
+				};
+		}
+	}
+	else
+	{
+		/// 세 플레이어 유닛이 offset을 갖고 이동할 수 있도록 하기
 		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
 			{
 				for (auto e : playerComponentMap)
 				{
 					e.second->OrderMove(pos);
 				}
-			};
-	}
-	else
-	{
-		Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
-		m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
-			{
-				currentSelectedUnit->OrderMove(pos);
 			};
 	}
 }

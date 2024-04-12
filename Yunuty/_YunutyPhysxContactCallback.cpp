@@ -52,12 +52,12 @@ void yunutyEngine::physics::ContactReportCallback::onTrigger(PxTriggerPair* pair
             };
         }
 
-        if (current.status & PxPairFlag::eNOTIFY_TOUCH_FOUND)
+        /*if (current.status & PxPairFlag::eNOTIFY_TOUCH_FOUND)
             printf("Shape is entering trigger volume\n");
         if (current.status & PxPairFlag::eNOTIFY_TOUCH_PERSISTS)
             printf("Shape is persisting\n");
         if (current.status & PxPairFlag::eNOTIFY_TOUCH_LOST)
-            printf("Shape is leaving trigger volume\n");
+            printf("Shape is leaving trigger volume\n");*/
     }
 }
 

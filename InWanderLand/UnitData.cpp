@@ -149,8 +149,6 @@ namespace application
 
 				UnitProductor* currentSelectedProductor{ nullptr };
 
-				Unit* unitComponent{ nullptr };
-
                 int tempShortCutIndex = 0;
 
                 if (pod.templateData->pod.skinnedFBXName == "SKM_Monster1")
@@ -159,7 +157,7 @@ namespace application
 					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                     MeleeEnemyPool::SingleInstance().SetStageNumber(pod.stage);
                     MeleeEnemyPool::SingleInstance().SetStartPosition(startPosition);
-					unitComponent = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+					inGameUnit = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
 					tempShortCutIndex = 2;
                 }
                 else if (pod.templateData->pod.skinnedFBXName == "SKM_Monster2")
@@ -167,20 +165,12 @@ namespace application
                     currentSelectedProductor = &RangedEnemyProductor::Instance();
 					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
 					RangedEnemyPool::SingleInstance().SetStartPosition(startPosition);
-                    unitComponent = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+                    inGameUnit = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
                     tempShortCutIndex = 2;
                 }
                 else
                 {
 					tempShortCutIndex = 1;
-                    /*for (auto& e : productorSelector)
-                    {
-                        if (e->SelectUnitProductorByFbxName(pod.templateData->pod.skinnedFBXName))
-                        {
-                            currentSelectedProductor = e;
-                            break;
-                        }
-                    }*/
 
                     switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
                     {
@@ -198,12 +188,9 @@ namespace application
                     }
 
                     currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-                    unitComponent = currentSelectedProductor->CreateUnit(startPosition);
-					contentsLayer->RegisterToEditorObjectContainer(unitComponent->GetGameObject());
+                    inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+					contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
                 }
-
-				/*ShortcutSystem::Instance().RegisterTriggerFunction(ShortcutSystem::KeyIndex::, 
-                        [=]() { unitComponent->GetGameObject()->SetSelfActive(!unitComponent->GetGameObject()->GetSelfActive()); });*/
 			}
 		}
 
