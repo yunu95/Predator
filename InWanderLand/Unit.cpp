@@ -107,7 +107,7 @@ void Unit::Start()
 	}
 
 	unitFSM.transitions[static_cast<UnitState>(UnitState::Idle)].push_back({ UnitState::OffsetMove,
-	[this]() { return currentOrder == UnitState::OffsetMove && m_unitSide == UnitSide::Player && m_unitType != UnitType::Warrior; } });
+	[this]() { return !GameManager::Instance().IsBattleSystemOperating() && m_unitSide == UnitSide::Player && m_unitType != UnitType::Warrior; } });
 
 	unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::Idle,
 	[this]() { return GameManager::Instance().IsBattleSystemOperating(); } });
@@ -193,6 +193,8 @@ void Unit::IdleEngage()
 	void Unit::OffsetMoveEngage()
 	{
 		StopMove();
+		currentOrder = UnitState::OffsetMove;
+		m_followingTargetUnit = PlayerController::SingleInstance().GetPlayerMap().find(UnitType::Warrior)->second;
 		isFollowing = false;
 		currentOrder = UnitState::OffsetMove;
 		moveFunctionElapsed = 0.0f;
@@ -815,16 +817,22 @@ void Unit::OrderMove(Vector3d position)
 	m_previousMovePosition = m_currentMovePosition;
 	m_currentMovePosition = position;
 
-	if (m_unitType != UnitType::Warrior && !GameManager::Instance().IsBattleSystemOperating())
-	{
-		m_followingTargetUnit = PlayerController::SingleInstance().GetPlayerMap().find(UnitType::Warrior)->second;
-		currentOrder = UnitState::OffsetMove;
-	}
-	else
+	if (GameManager::Instance().IsBattleSystemOperating() || m_unitType == UnitType::Warrior)
 	{
 		currentOrder = UnitState::Move;
 		dotween->DOLookAt(position, rotateTime, false);
 	}
+
+	//if (m_unitType != UnitType::Warrior && !GameManager::Instance().IsBattleSystemOperating())
+	//{
+	//	m_followingTargetUnit = PlayerController::SingleInstance().GetPlayerMap().find(UnitType::Warrior)->second;
+	//	currentOrder = UnitState::OffsetMove;
+	//}
+	//else
+	//{
+	//	currentOrder = UnitState::Move;
+	//	dotween->DOLookAt(position, rotateTime, false);
+	//}
 }
 
 void Unit::OrderAttackMove(Vector3d position)
