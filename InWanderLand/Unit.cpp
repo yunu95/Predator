@@ -372,7 +372,6 @@ void Unit::IdleEngage()
 		/// AttackState에서는 공격 후 다음 공격까지 남은 시간 동안 idleAnimation을 적용하므로 다른 방식으로 체크하는게 좋겠다.
 		//CheckCurrentAnimation(m_attackAnimation);
 
-		attackFunctionElapsed += Time::GetDeltaTime();
 		//RotateUnit(m_currentTargetUnit->GetTransform()->GetWorldPosition());
 
 		//LookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition());
@@ -386,24 +385,33 @@ void Unit::IdleEngage()
 				m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 				attackAnimationFrameCheckNumber = 0;
 				isAttackAnimationOperating = false;
+				isAttacked = false;
 				dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
 			}
-		}
 
-		if (attackFunctionElapsed >= attackFunctionCallDelay /*|| !isAttackStarted*/)
-		{
-			isAttackStarted = true;
-			isAttackAnimationOperating = true;
-			attackFunctionElapsed = 0.0f;
-			m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_attackAnimation, animationLerpDuration, animationTransitionSpeed);
-			//RotateUnit(m_currentTargetUnit->GetTransform()->GetWorldPosition());
-			GetGameObject()->GetComponent<AttackSystem>()->Attack(m_currentTargetUnit);
-			DetermineCurrentTargetObject();
-			CheckCurrentAnimation(unitAnimations.m_attackAnimation);
+			if (attackAnimationFrameCheckNumber >= attackTimingFrame && !isAttacked)
+			{
+				GetGameObject()->GetComponent<AttackSystem>()->Attack(m_currentTargetUnit);
+				isAttacked = true;
+			}
 		}
-		else if (attackFunctionElapsed < attackFunctionCallDelay)
+		else
 		{
-			dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
+			attackFunctionElapsed += Time::GetDeltaTime();
+
+			if (attackFunctionElapsed >= attackFunctionCallDelay /*|| !isAttackStarted*/)
+			{
+				isAttackStarted = true;
+				isAttackAnimationOperating = true;
+				attackFunctionElapsed = 0.0f;
+				m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_attackAnimation, animationLerpDuration, animationTransitionSpeed);
+				DetermineCurrentTargetObject();
+				CheckCurrentAnimation(unitAnimations.m_attackAnimation);
+			}
+			else if (attackFunctionElapsed < attackFunctionCallDelay)
+			{
+				dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
+			}
 		}
 	}
 
@@ -520,6 +528,11 @@ void Unit::SetAttackDelay(float p_delay)
 	attackFunctionCallDelay = p_delay;
 }
 
+void Unit::SetAttackTimingFrame(int p_frame)
+{
+	attackTimingFrame = p_frame;
+}
+
 Unit::UnitType Unit::GetPlayerSerialNumber() const
 {
 	return playerSerialNumber;
@@ -602,11 +615,12 @@ void Unit::IncreaseAttackSpeed(float p_attackSpeedIncrease)
 	if (m_minAttackDelay < attackFunctionCallDelay / p_attackSpeedIncrease)
 	{
 		attackFunctionCallDelay /= p_attackSpeedIncrease;
+		increasedAttackSpeed *= p_attackSpeedIncrease;
 	}
-
 	else
 	{
 		attackFunctionCallDelay = m_minAttackDelay;
+		increasedAttackSpeed = attackFunctionCallDelay / m_minAttackDelay;
 	}
 }
 

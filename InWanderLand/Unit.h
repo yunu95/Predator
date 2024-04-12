@@ -140,8 +140,11 @@ private:
 	float attackStartDelay = 0.3f;
 	float attackFunctionElapsed;
 	float attackFunctionCallDelay;
+	float increasedAttackSpeed{ 1.0f };
+	int attackTimingFrame;
 	int attackAnimationFrameCheckNumber = 0;
 	bool isAttackAnimationOperating = false;
+	bool isAttacked = false;
 	bool isAttackStarted = false;
 
 	float deathFunctionElapsed;
@@ -239,6 +242,7 @@ public:
 	void SetAtkRadius(float radius);
 	void SetUnitSpeed(float speed);
 	void SetAttackDelay(float p_delay);
+	void SetAttackTimingFrame(int p_frame);
 	void SetPlayerSerialNumber(UnitType serialNum);
 	void SetSkillDuration(float p_duration);
 	void SetSkillPreviewType(SkillPreviewMesh p_qskill, SkillPreviewMesh p_wskill);

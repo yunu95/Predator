@@ -33,6 +33,7 @@ void UnitProductor::SetUnitComponentMembers()
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
 
 	m_unitComponent->SetAttackDelay(m_attackDelay);
+	m_unitComponent->SetAttackTimingFrame(m_attackTimingFrame);
 
 	m_unitComponent->SetMaxAggroNumber(m_maxAggroNumber);
 
@@ -124,6 +125,7 @@ void UnitProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p
 	m_atkRadius = p_podData.m_atkRadius;
 	m_unitSpeed = p_podData.m_unitSpeed;
 	m_attackDelay = p_podData.m_attackDelay;
+	m_attackTimingFrame = p_podData.m_attackTimingFrame;
 }
 
 void UnitProductor::Update()

@@ -36,6 +36,7 @@ namespace application
 			float m_unitSpeed;
 
 			float m_attackDelay;
+			int m_attackTimingFrame;
 
 			int isEliteMonster;
 

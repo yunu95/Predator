@@ -64,6 +64,7 @@ public:
 	float m_groupMoveRadius;
 
 	float m_attackDelay;
+	int m_attackTimingFrame;
 
 	virtual Unit* CreateUnit(Vector3d startPos) = 0;
 
