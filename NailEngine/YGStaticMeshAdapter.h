@@ -124,13 +124,13 @@ namespace yunuGIAdapter
 		};
 		virtual yunuGI::IMaterial* GetMaterial(unsigned int index = 0, bool isInstance = true)override
 		{
-			return this->materialVec[index]->GetVariation(isInstance);
+			//return this->materialVec[index]->GetVariation(isInstance);
+			return this->materialVec[index].get();
 		};
 
 	private:
 		std::shared_ptr<StaticMesh> renderable;
 		std::vector<std::shared_ptr<MaterialWrapper>> materialVec;
-
 		
 	};
 }

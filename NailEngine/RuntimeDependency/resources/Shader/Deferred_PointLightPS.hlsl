@@ -59,7 +59,7 @@ PS_OUT main(PixelIn input)
     float4 util = Temp2Map.Sample(sam, input.uv);
     
     float shadowFactor = 1.f;
-    CalculatePBRLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo,
+    CalculatePointPBR(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo,
     arm.r, arm.b, arm.g, util.y, util.z, util.x, shadowFactor);
     
     //CalculateLight(lightIndex, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);
