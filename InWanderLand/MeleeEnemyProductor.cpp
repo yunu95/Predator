@@ -46,6 +46,9 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
+	/// UnitComponent 추가
+	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
 	auto& animList = rsrcManager->GetAnimationList();
@@ -70,23 +73,27 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_attackAnimation);
 		}
-		else if (each->GetName() == L"Ani_Monster1_BattleIdle")
+		if (each->GetName() == L"Ani_Monster1_Skill")
 		{
 			m_baseUnitAnimations.m_paralysisAnimation = each;
 			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
 		}
-		else if (each->GetName() == L"Ani_Monster1_Skill")
+		if (each->GetName() == L"Ani_Monster1_Skill")
 		{
 			m_baseUnitAnimations.m_deathAnimation = each;
 			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_deathAnimation);
 		}
+		/// Skill Animation
+		if (each->GetName() == L"Ani_Monster1_Skill")
+		{
+			each->SetLoop(false);
+			animator->GetGI().PushAnimation(each);
+			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillOne, each);
+		}
 	}
 #pragma endregion
-
-	/// UnitComponent 추가
-	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
 
 #pragma region Auto Attack Setting
 	float meleeAttackColliderRange = 3.0f;
@@ -114,9 +121,10 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 	//autoAttackDebugMesh->SetParent(m_unitGameObject);
 	autoAttackDebugMesh->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -1 * meleeAttackColliderRange });
 #pragma endregion
+
+#pragma region Elite Skill Object Setting
 	if (isEliteMonster)
 	{
-#pragma region Elite Skill Object Setting
 		auto skillOneColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto skillOneCollider = skillOneColliderObject->AddComponent<physics::SphereCollider>();
 		float skillOneRadius = 5.0f * UNIT_LENGTH;
@@ -125,7 +133,6 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 		auto skillOneDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		AttachDebugMesh(skillOneDebugMesh, DebugMeshType::Sphere, yunuGI::Color::red(), true);
 		skillOneDebugMesh->GetTransform()->SetWorldScale({ skillOneRadius ,skillOneRadius ,skillOneRadius });
-#pragma endregion
 
 		auto eliteSkillSystem = m_unitGameObject->AddComponent<BossSkillSystem>();
 		eliteSkillSystem->SelectSkill(Unit::SkillEnum::BossSkillOne);
@@ -139,6 +146,7 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 		clonedMaterial->SetColor(yunuGI::Color::red());
 		skinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial);
 	}
+#pragma endregion
 
 	UnitProductor::AddRangeSystemComponent();
 	UnitProductor::AddColliderComponent();

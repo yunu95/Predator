@@ -46,6 +46,9 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
+	/// UnitComponent 추가
+	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
 	auto& animList = rsrcManager->GetAnimationList();
@@ -70,22 +73,28 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_attackAnimation);
 		}
-		else if (each->GetName() == L"Ani_Monster2_BattleIdle")
+		else if (each->GetName() == L"Ani_Monster2_Skill")
 		{
 			m_baseUnitAnimations.m_paralysisAnimation = each;
 			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
 		}
-		else if (each->GetName() == L"Ani_Monster2_Skill")
+		if (each->GetName() == L"Ani_Monster2_Skill")
 		{
 			m_baseUnitAnimations.m_deathAnimation = each;
 			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_deathAnimation);
 		}
+		/// Skill Animation
+		if (each->GetName() == L"Ani_Monster2_Skill")
+		{
+			each->SetLoop(false);
+			animator->GetGI().PushAnimation(each);
+			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillOne, each);
+		}
 	}
 #pragma endregion
-	/// UnitComponent 추가
-	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+
 
 #pragma region Auto Attack Setting
 	auto rangedAttackSystem = m_unitGameObject->AddComponent<RangedAttackSystem>();

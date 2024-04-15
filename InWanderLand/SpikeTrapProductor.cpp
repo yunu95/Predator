@@ -1,11 +1,13 @@
-#include "EnemySummonGateProductor.h"
+#include "SpikeTrapProductor.h"
 #include "SingleNavigationField.h"
-#include "EnemySummonSkillSystem.h"
+#include "SpikeSkillSystem.h"
+#include "DebugMeshes.h"
+#include "Dotween.h"
 
-void EnemySummonGateProductor::SetUnitData()
+void SpikeTrapProductor::SetUnitData()
 {
-	m_objectName = "EnemySpawnGate";
-	m_unitType = Unit::UnitType::EnemySpawnGate;
+	m_objectName = "SpikeTrap";
+	m_unitType = Unit::UnitType::SpikeTrap;
 	m_unitSide = Unit::UnitSide::Enemy;
 
 	m_healthPoint = 1;
@@ -29,18 +31,18 @@ void EnemySummonGateProductor::SetUnitData()
 
 	m_navField = &SingleNavigationField::Instance();
 
-	m_unitFbxName = "SKM_Robin";
+	m_unitFbxName = "SKM_Monster1";
 }
 
-void EnemySummonGateProductor::SingletonInitializer()
+void SpikeTrapProductor::SingletonInitializer()
 {
 	SetUnitData();
 }
 
-Unit* EnemySummonGateProductor::CreateUnit(Vector3d startPos)
+Unit* SpikeTrapProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
-	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
 	/// UnitComponent 추가
@@ -51,39 +53,39 @@ Unit* EnemySummonGateProductor::CreateUnit(Vector3d startPos)
 	auto& animList = rsrcManager->GetAnimationList();
 	for (auto each : animList)
 	{
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
+		if (each->GetName() == L"Ani_Monster1_Idle")
 		{
 			m_baseUnitAnimations.m_idleAnimation = each;
 			m_baseUnitAnimations.m_idleAnimation->SetLoop(true);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_idleAnimation);
 			animator->GetGI().Play(m_baseUnitAnimations.m_idleAnimation);
 		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
+		else if (each->GetName() == L"Ani_Monster1_Walk")
 		{
 			m_baseUnitAnimations.m_walkAnimation = each;
 			m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_walkAnimation);
 		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+		else if (each->GetName() == L"Ani_Monster1_Attack")
 		{
 			m_baseUnitAnimations.m_attackAnimation = each;
 			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_attackAnimation);
 		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		if (each->GetName() == L"Ani_Monster1_Skill")
 		{
 			m_baseUnitAnimations.m_paralysisAnimation = each;
 			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
 		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_APose")
+		if (each->GetName() == L"Ani_Monster1_Skill")
 		{
 			m_baseUnitAnimations.m_deathAnimation = each;
 			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_deathAnimation);
 		}
 		/// Skill Animation
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		if (each->GetName() == L"Ani_Monster1_Skill")
 		{
 			each->SetLoop(false);
 			animator->GetGI().PushAnimation(each);
@@ -92,21 +94,31 @@ Unit* EnemySummonGateProductor::CreateUnit(Vector3d startPos)
 	}
 #pragma endregion
 
-	auto gateSkillSystem = m_unitGameObject->AddComponent<EnemySummonSkillSystem>();
+	AddDotweenComponent();
 
-	/// rangeSystem만 제외한다면 Boss와 다름 없는 유닛.
-	/// chase, move, attack 없고, 주기적으로 skill만 사용하는 유닛이다.
+#pragma region Spike Trap Damage System
+	float attackColliderLength = 3.0f * UNIT_LENGTH;
 
-	if (isDamagedUnit)
-	{
-		UnitProductor::AddColliderComponent();
-	}
-	UnitProductor::SetUnitComponentMembers();
+	auto skillOneColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	auto skillOneCollider = skillOneColliderObject->AddComponent<physics::BoxCollider>();
+	skillOneCollider->SetHalfExtent({ attackColliderLength * 0.5f, attackColliderLength * 0.5f, attackColliderLength * 0.5f });
+
+	auto skillOneDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	AttachDebugMesh(skillOneDebugMesh, DebugMeshType::Cube, yunuGI::Color::red(), true);
+	skillOneDebugMesh->GetTransform()->SetWorldScale({ attackColliderLength ,attackColliderLength ,attackColliderLength });
+
+	auto eliteSkillSystem = m_unitGameObject->AddComponent<SpikeSkillSystem>();
+	skillOneColliderObject->SetParent(m_unitGameObject);
+	skillOneDebugMesh->SetParent(m_unitGameObject);
+	eliteSkillSystem->SetSpikeSkillRequirment(skillOneColliderObject, skillOneDebugMesh, m_unitComponent->dotween);
+#pragma endregion
+
+	auto skinnedMeshRenderer = m_unitGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
+	auto material = skinnedMeshRenderer->GetGI().GetMaterial();
+	auto clonedMaterial = graphics::Renderer::SingleInstance().GetResourceManager()->CloneMaterial(L"Green", material);
+	clonedMaterial->SetColor(yunuGI::Color::green());
+	skinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial);
 
 	return m_unitComponent;
 }
 
-void EnemySummonGateProductor::SetUnitCanBeDamaged(bool p_boolen)
-{
-	isDamagedUnit = p_boolen;
-}

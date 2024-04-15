@@ -57,6 +57,10 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
+	/// UnitComponent 추가
+	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+	RobinSkillDevelopmentSystem::Instance().SetOwnerUnit(m_unitComponent);
+
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
 	auto& animList = rsrcManager->GetAnimationList();
@@ -93,12 +97,21 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_deathAnimation);
 		}
+		/// Skill Animation
+		/*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		{
+			each->SetLoop(false);
+			animator->GetGI().PushAnimation(each);
+			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::Q, each);
+		}
+		/*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		{
+			each->SetLoop(false);
+			animator->GetGI().PushAnimation(each);
+			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::W, each);
+		}
 	}
 #pragma endregion
-
-	/// UnitComponent 추가
-	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
-	RobinSkillDevelopmentSystem::Instance().SetOwnerUnit(m_unitComponent);
 
 #pragma region Auto Attack Setting (Including Passive Logic)
 	auto bleedingSystemObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -170,6 +183,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 
 	return m_unitComponent;
 }
+
 
 // 전략 패턴을 설명하기 위한 예시 코드
 // 전략 패턴의 핵심은 객체의 동작을 전략 객체를 통해 바꿀 수 있다는 것.

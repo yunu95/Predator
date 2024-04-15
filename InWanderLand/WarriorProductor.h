@@ -11,6 +11,11 @@ private:
 	float m_QSkillRadius;
 	float m_WSkillRadius;
 
+	float m_skillOneEngageDelay;
+	int m_skillOneTimingFrame;
+	float m_skillTwoEngageDelay;
+	int m_skillTwoTimingFrame;
+
 public:
 	virtual void SetUnitData() override;
 	virtual void SingletonInitializer() override;

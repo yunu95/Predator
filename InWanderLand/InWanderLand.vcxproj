@@ -988,6 +988,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="AutoAttackProjectilePool.h" />
     <ClInclude Include="BleedingComponent.h" />
     <ClInclude Include="BlindFieldComponent.h" />
+    <ClInclude Include="ChessTrapProductor.h" />
     <ClInclude Include="ConditionList.h" />
     <ClInclude Include="CoroutineObject.h" />
     <ClInclude Include="CreateInstanceCommand.h" />
@@ -1050,6 +1051,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="SkillWarningSystem.h" />
     <ClInclude Include="SpecialEffectTrigger.h" />
     <ClInclude Include="SpecialEvent.h" />
+    <ClInclude Include="SpikeSkillSystem.h" />
+    <ClInclude Include="SpikeTrapProductor.h" />
     <ClInclude Include="SpriteAnimation.h" />
     <ClInclude Include="StaticInstanceRegistry.h" />
     <ClInclude Include="LoadStaticOrnamentsCommand.h" />
@@ -1172,6 +1175,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="TestUtils.h" />
     <ClInclude Include="TransformEditCommand.h" />
     <ClInclude Include="TriggerList.h" />
+    <ClInclude Include="TriggerTrapProductor.h" />
     <ClInclude Include="Trigger_EnterRegion.h" />
     <ClInclude Include="Trigger_GameStart.h" />
     <ClInclude Include="UIButton.h" />
@@ -1209,6 +1213,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="AutoAttackProjectilePool.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
     <ClCompile Include="BlindFieldComponent.cpp" />
+    <ClCompile Include="ChessTrapProductor.cpp" />
     <ClCompile Include="CreateInstanceCommand.cpp" />
     <ClCompile Include="BossProductor.cpp" />
     <ClCompile Include="BossSkillSystem.cpp" />
@@ -1273,6 +1278,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="SnippetBillboardSpriteAnim.cpp" />
     <ClCompile Include="SingletonInstanceContainer.cpp" />
     <ClCompile Include="SpecialEffectTrigger.cpp" />
+    <ClCompile Include="SpikeSkillSystem.cpp" />
+    <ClCompile Include="SpikeTrapProductor.cpp" />
     <ClCompile Include="SpriteAnimation.cpp" />
     <ClCompile Include="TauntingComponent.cpp" />
     <ClCompile Include="OrnamentEditorInstance.cpp" />
@@ -1364,6 +1371,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TestCaseUpdateComponents.cpp" />
     <ClCompile Include="TransformEditCommand.cpp" />
+    <ClCompile Include="TriggerTrapProductor.cpp" />
     <ClCompile Include="Trigger_EnterRegion.cpp" />
     <ClCompile Include="Trigger_GameStart.cpp" />
     <ClCompile Include="UIButton.cpp" />

@@ -5,9 +5,8 @@
 #include "EnemySummonSkillSystem.h"
 #include "ShortcutSystem.h"
 
-void BossSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill)
+void BossSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition)
 {
-	/// 스킬 종류에 따라 스킬 사용 위치를 정해주자.
 	switch (p_currentSkill)
 	{
 		case Unit::SkillEnum::BossSkillOne:
@@ -30,20 +29,22 @@ void BossSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill)
 void BossSkillSystem::ActivateSkillOne()
 {
 	SetSkillRequirmentsActive(m_skillOneRequirments, true);
-	m_unitComponent->SetSkillDuration(m_skillOneDuration);
+	m_unitComponent->RegisterSkillDuration(m_skillOneDuration);
 	m_unitDotween->DONothing(m_skillOneDuration).OnComplete([=]()
 		{
 			SetSkillRequirmentsActive(m_skillOneRequirments, false);
+			m_unitComponent->SetUnitStateIdle();
 		});
 }
 
 void BossSkillSystem::ActivateSkillTwo()
 {
 	SetSkillRequirmentsActive(m_skillTwoRequirments, true);
-	m_unitComponent->SetSkillDuration(m_skillTwoDuration);
+	m_unitComponent->RegisterSkillDuration(m_skillTwoDuration);
 	m_unitDotween->DONothing(m_skillTwoDuration).OnComplete([=]()
 		{
 			SetSkillRequirmentsActive(m_skillTwoRequirments, false);
+			m_unitComponent->SetUnitStateIdle();
 		});
 }
 
@@ -94,36 +95,38 @@ void BossSkillSystem::ActivateSkillFour()
 
 	SetSkillRequirmentsActive(m_skillFourRequirments, true);
 
-	m_unitComponent->SetSkillDuration(m_skillFourDuration);
+	m_unitComponent->RegisterSkillDuration(m_skillFourDuration);
 
 	m_unitDotween->DONothing(m_skillFourDuration).OnComplete([=]()
 		{
 			SetSkillRequirmentsActive(m_skillFourRequirments, false);
+			m_unitComponent->SetUnitStateIdle();
 		});
 }
 
 void BossSkillSystem::ActivateSkillRandomly()
 {
-	Unit::SkillEnum tempNum;
-
-	if (!isBossSkill)
-	{
-		m_skillNum = rand() % 4 + 2;
-		tempNum = static_cast<Unit::SkillEnum>(m_skillNum);
-	}
-	else
-	{
-		tempNum = selectedSkillNumber;
-	}
-
-	if (tempNum == Unit::SkillEnum::BossSkillThree && currentSummonedDoorUnit != nullptr && currentSummonedDoorUnit->GetCurrentUnitState() != Unit::UnitState::Death)
+	if (currentSelectedSkillNumber == Unit::SkillEnum::BossSkillThree && currentSummonedDoorUnit != nullptr && currentSummonedDoorUnit->GetCurrentUnitState() != Unit::UnitState::Death)
 	{
 		ActivateSkillRandomly();
 	}
 	else
 	{
 		//m_skillNum = 3;
-		ActivateSkill(tempNum);
+		ActivateSkill(currentSelectedSkillNumber, Vector3d::zero);
+	}
+}
+
+void BossSkillSystem::SelectSkillRandomly()
+{
+	if (!isBossSkill)
+	{
+		m_skillNum = rand() % 4 + 2;
+		currentSelectedSkillNumber = static_cast<Unit::SkillEnum>(m_skillNum);
+	}
+	else
+	{
+		currentSelectedSkillNumber = staticSelectedSkillNumber;
 	}
 }
 
@@ -160,7 +163,7 @@ void BossSkillSystem::SetSkillFourRequirments(GameObject* p_obj, physics::Sphere
 void BossSkillSystem::SelectSkill(Unit::SkillEnum p_enum)
 {
 	isBossSkill = true;
-	selectedSkillNumber = p_enum;
+	staticSelectedSkillNumber = p_enum;
 }
 
 void BossSkillSystem::Start()
@@ -186,5 +189,10 @@ void BossSkillSystem::Update()
 		currentSummonedDoorUnit = nullptr;
 		currentDerivedDoorUnit->GetGameObject()->SetSelfActive(false);
 	}
+}
+
+Unit::SkillEnum BossSkillSystem::GetCurrentSelectedSkillNumber() const
+{
+	return currentSelectedSkillNumber;
 }
 

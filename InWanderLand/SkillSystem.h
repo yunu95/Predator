@@ -26,5 +26,7 @@ protected:
 	};
 
 	virtual void SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen);
+public:
+	virtual void ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition) = 0;
 };
 

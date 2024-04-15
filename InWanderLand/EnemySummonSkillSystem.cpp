@@ -26,6 +26,11 @@ void EnemySummonSkillSystem::Update()
 	}
 }
 
+void EnemySummonSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition)
+{
+
+}
+
 void EnemySummonSkillSystem::ActivateSkillOne()
 {
 	Vector3d summonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * -5.0f;

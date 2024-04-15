@@ -3,6 +3,7 @@
 #include "InputManager.h"
 #include "RTSCam.h"
 #include "PlayerController.h"
+#include "SkillPreviewSystem.h"
 
 TacticModeSystem::TacticModeSystem()
 {

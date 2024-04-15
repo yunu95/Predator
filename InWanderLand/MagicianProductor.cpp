@@ -51,6 +51,9 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
+	/// UnitComponent 추가
+	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
 	auto& animList = rsrcManager->GetAnimationList();
@@ -87,12 +90,22 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_deathAnimation);
 		}
+		/// Skill Animation
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		{
+			each->SetLoop(false);
+			animator->GetGI().PushAnimation(each);
+			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::Q, each);
+		}
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		{
+			each->SetLoop(false);
+			animator->GetGI().PushAnimation(each);
+			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::W, each);
+		}
 	}
 #pragma endregion
 
-	/// UnitComponent 추가
-	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
-	//m_unitComponent->RegisterToWaveVector
 #pragma region Auto Attack Setting (Including Passive Logic)
 	auto magicianAttackSystem = m_unitGameObject->AddComponent<RangedAttackSystem>();
 	magicianAttackSystem->SetBulletSpeed(10.0f);

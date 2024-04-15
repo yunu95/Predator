@@ -65,8 +65,16 @@ public:
 
 	float m_attackDelay;
 	int m_attackTimingFrame;
-
 	float m_attackOffset;
+
+	float	m_skillOneEngageDelay;
+	int		m_skillOneTimingFrame;
+	float	m_skillTwoEngageDelay;
+	int		m_skillTwoTimingFrame;
+	float	m_skillThreeEngageDelay;
+	int		m_skillThreeTimingFrame;
+	float	m_skillFourEngageDelay;
+	int		m_skillFourTimingFrame;
 
 	virtual Unit* CreateUnit(Vector3d startPos) = 0;
 

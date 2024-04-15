@@ -27,7 +27,7 @@ void PlayTimeRegionManager::AddRegionData(application::editor::RegionData* p_reg
 						e.second->GetGameObject()->GetComponent<yunutyEngine::NavigationAgent>()->AssignToNavigationField(&SingleNavigationField::Instance());
 						e.second->GetGameObject()->GetComponent<yunutyEngine::NavigationAgent>()->Relocate(stage2StartPosition);
 						e.second->GetGameObject()->GetComponent<yunutyEngine::NavigationAgent>()->MoveTo(stage2StartPosition);
-						e.second->MakeUnitStateIdle();
+						e.second->SetUnitStateIdle();
 						e.second->StopMove();
 					}
 					//PlayerController::SingleInstance().GetPlayerMap();

@@ -45,6 +45,9 @@ Unit* BossProductor::CreateUnit(Vector3d startPos)
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
+	/// UnitComponent 추가
+	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
 	auto& animList = rsrcManager->GetAnimationList();
@@ -81,10 +84,33 @@ Unit* BossProductor::CreateUnit(Vector3d startPos)
 			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
 			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_deathAnimation);
 		}
+		/// Skill Animation
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		{
+			each->SetLoop(false);
+			animator->GetGI().PushAnimation(each);
+			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillOne, each);
+		}
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		{
+			each->SetLoop(false);
+			animator->GetGI().PushAnimation(each);
+			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillTwo, each);
+		}
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		{
+			each->SetLoop(false);
+			animator->GetGI().PushAnimation(each);
+			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillThree, each);
+		}
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		{
+			each->SetLoop(false);
+			animator->GetGI().PushAnimation(each);
+			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillFour, each);
+		}
 	}
 #pragma endregion
-	/// UnitComponent 추가
-	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
 
 #pragma region Auto Attack Setting (Including Passive Logic)
 	float meleeAttackColliderRange = 3.0f;

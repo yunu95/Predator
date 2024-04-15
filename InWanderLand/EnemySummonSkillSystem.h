@@ -14,6 +14,8 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 
+	virtual void ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition) override;
+
 private:
 	virtual void ActivateSkillOne() override;
 

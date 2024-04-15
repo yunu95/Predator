@@ -13,6 +13,7 @@
 #include "MeleeEnemyProductor.h"
 #include "RangedEnemyProductor.h"
 #include "BossProductor.h"
+#include "SpikeTrapProductor.h"
 #include "RangedEnemyPool.h"
 #include "MeleeEnemyPool.h"
 #include "GameManager.h"
@@ -134,6 +135,7 @@ namespace application
 					productorSelector.push_back(&MagicianProductor::Instance());*/
 					productorSelector.push_back(&MeleeEnemyProductor::Instance());
 					productorSelector.push_back(&RangedEnemyProductor::Instance());
+					productorSelector.push_back(&SpikeTrapProductor::Instance());
 					//productorSelector.push_back(&BossProductor::Instance());
                     isSelectorInitialized = true;
                 }
@@ -153,12 +155,22 @@ namespace application
 
                 if (pod.templateData->pod.skinnedFBXName == "SKM_Monster1")
                 {
-					currentSelectedProductor = &MeleeEnemyProductor::Instance();
-					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-                    MeleeEnemyPool::SingleInstance().SetStageNumber(pod.stage);
-                    MeleeEnemyPool::SingleInstance().SetStartPosition(startPosition);
-					inGameUnit = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
-					tempShortCutIndex = 2;
+                    if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::SpikeTrap)
+                    {
+                        currentSelectedProductor = &SpikeTrapProductor::Instance();
+						currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+						inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+						contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
+                    }
+                    else
+                    {
+						currentSelectedProductor = &MeleeEnemyProductor::Instance();
+						currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+						MeleeEnemyPool::SingleInstance().SetStageNumber(pod.stage);
+						MeleeEnemyPool::SingleInstance().SetStartPosition(startPosition);
+						inGameUnit = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+						tempShortCutIndex = 2;
+                    }
                 }
                 else if (pod.templateData->pod.skinnedFBXName == "SKM_Monster2")
                 {

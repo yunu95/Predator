@@ -433,6 +433,12 @@
     <Filter Include="Editor\ScriptSystem\1_Condition\List">
       <UniqueIdentifier>{0e0f3bef-6052-4f15-b9e9-77fdc9d3ca61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor">
+      <UniqueIdentifier>{88ae07b4-e3a8-4643-9d6c-342c2d3edd2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\SkillSystem\TrapSkillSystem">
+      <UniqueIdentifier>{a8e4d532-a085-4fc3-9e1e-018ef51af826}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1106,6 +1112,18 @@
     <ClInclude Include="UIImage.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="ChessTrapProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="SpikeTrapProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="TriggerTrapProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="SpikeSkillSystem.h">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1684,6 +1702,18 @@
     </ClCompile>
     <ClCompile Include="Trigger_EnterRegion.cpp">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessTrapProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="SpikeTrapProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="TriggerTrapProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="SpikeSkillSystem.cpp">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
