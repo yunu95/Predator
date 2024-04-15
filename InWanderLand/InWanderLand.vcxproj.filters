@@ -433,6 +433,9 @@
     <Filter Include="Editor\ScriptSystem\1_Condition\List">
       <UniqueIdentifier>{0e0f3bef-6052-4f15-b9e9-77fdc9d3ca61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\Cinematic">
+      <UniqueIdentifier>{1be88953-fede-49fa-bcff-d309ee96f946}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1115,6 +1118,9 @@
     <ClInclude Include="Action_Cinematic.h">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClInclude>
+    <ClInclude Include="CinematicManager.h">
+      <Filter>Contents\Cinematic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1702,6 +1708,9 @@
     </ClCompile>
     <ClCompile Include="Action_Cinematic.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
+    <ClCompile Include="CinematicManager.cpp">
+      <Filter>Contents\Cinematic</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
