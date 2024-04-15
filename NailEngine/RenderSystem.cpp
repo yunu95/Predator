@@ -13,6 +13,7 @@
 #include "NailCamera.h"
 #include "IRenderable.h"
 #include "SKinnedMesh.h"
+#include "ParticleSystem.h"
 
 #include "ILight.h"
 #include "LightManager.h"
@@ -161,11 +162,15 @@ void RenderSystem::PushCameraData()
 
 void RenderSystem::Render()
 {
-    UtilBuffer utilBuffer;
-    utilBuffer.windowWidth = NailEngine::Instance.Get().GetWindowInfo().width;
-    utilBuffer.windowHeight = NailEngine::Instance.Get().GetWindowInfo().height;
-    utilBuffer.useIBL = NailEngine::Instance.Get().GetUseIBL();
-    NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::UTIL))->PushGraphicsData(&utilBuffer, sizeof(UtilBuffer), static_cast<int>(CB_TYPE::UTIL));
+	ResourceManager::Instance.Get().GetTexture(L"Texture/LightMap.dds")->Bind(24);
+
+	UtilBuffer utilBuffer;
+	utilBuffer.windowWidth = NailEngine::Instance.Get().GetWindowInfo().width;
+	utilBuffer.windowHeight = NailEngine::Instance.Get().GetWindowInfo().height;
+	utilBuffer.useIBL = NailEngine::Instance.Get().GetUseIBL();
+	//utilBuffer.useLightMap = NailEngine::Instance.Get().GetUseLightMap();
+	utilBuffer.useLightMap = true;
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::UTIL))->PushGraphicsData(&utilBuffer, sizeof(UtilBuffer), static_cast<int>(CB_TYPE::UTIL));
 
 
     FogBuffer fogBuffer;
@@ -193,12 +198,13 @@ void RenderSystem::Render()
 
     BloomPass::Instance.Get().Bloom();
 
-    // Final 출력
-    RenderFinal();
-    RenderForward();
-    RenderBackBuffer();
+	// Final 출력
+	RenderFinal();
+	RenderForward();
+	RenderParticle();
+	RenderBackBuffer();
 
-    SkyBoxPass::Instance.Get().Render();
+	//SkyBoxPass::Instance.Get().Render();
 
     RenderUI();
 
@@ -574,6 +580,11 @@ void RenderSystem::RenderForward()
     //matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
     NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
     InstancingManager::Instance.Get().RenderStaticForward();
+}
+
+void RenderSystem::RenderParticle()
+{
+	InstancingManager::Instance.Get().RenderParticle();
 }
 
 void RenderSystem::DrawDeferredInfo()

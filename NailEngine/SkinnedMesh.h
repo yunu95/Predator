@@ -20,7 +20,8 @@ public:
 
 		this->renderInfoVec.back()->renderInfo.mesh = this->mesh;
 		this->renderInfoVec.back()->renderInfo.materialIndex = 0;
-		this->renderInfoVec.back()->renderInfo.material = reinterpret_cast<Material*>(ResourceManager::Instance.Get().GetMaterial(L"SkinnedDefaultMaterial").get());
+		this->renderInfoVec.back()->renderInfo.material = 
+			reinterpret_cast<Material*>(ResourceManager::Instance.Get().GetMaterial(L"SkinnedDefaultMaterial").get());
 	}
 
 	void SetBone(std::wstring fbxName)

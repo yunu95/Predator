@@ -11,7 +11,7 @@ class MaterialWrapper : public yunuGI::IMaterial, public Resource
 public:
 	MaterialWrapper()
 	{
-		
+
 	}
 	MaterialWrapper(int index)
 	{
@@ -64,6 +64,11 @@ public:
 		GetVariation()->SetInt(index, val);
 	}
 
+	virtual void SetFloat(int index, float val) override
+	{
+		GetVariation()->SetFloat(index, val);
+	}
+
 	virtual void SetColor(const yunuGI::Color& color) override
 	{
 		GetVariation()->SetColor(color);
@@ -106,47 +111,74 @@ public:
 		return usingOriginal;
 	}
 
+	void SetIsOrigin(bool isOrigin)
+	{
+		usingOriginal = isOrigin;
+		if (variation)
+		{
+			variation = nullptr;
+		}
+	}
+
 	void SetRenderable(std::shared_ptr<nail::IRenderable> renderable)
 	{
 		this->renderable = renderable;
 	}
 
-	Material* GetVariation()
+	Material* GetVariation(bool isInstance = true)
 	{
-		if (usingOriginal)
+		if (isInstance)
 		{
-			if (original->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+			if (usingOriginal)
 			{
-				if (renderable->IsStatic())
+				if (original->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
 				{
-					InstancingManager::Instance.Get().PopStaticDeferredData(std::static_pointer_cast<StaticMesh>(renderable)->renderInfoVec[this->index]);
+					if (renderable->IsStatic())
+					{
+						InstancingManager::Instance.Get().PopStaticDeferredData(std::static_pointer_cast<StaticMesh>(renderable)->renderInfoVec[this->index]);
+					}
 				}
-			}
-			else
-			{
-				if (renderable->IsStatic())
+				else
 				{
-					InstancingManager::Instance.Get().PopStaticForwardData(std::static_pointer_cast<StaticMesh>(renderable)->renderInfoVec[this->index]);
+					if (renderable->IsStatic())
+					{
+						InstancingManager::Instance.Get().PopStaticForwardData(std::static_pointer_cast<StaticMesh>(renderable)->renderInfoVec[this->index]);
+					}
 				}
+
+
+				yunuGI::IMaterial* tempMaterial = ResourceManager::Instance.Get().GetInstanceMaterial(original->GetName()).get();
+				if (tempMaterial)
+				{
+					variation = static_cast<Material*>(tempMaterial);
+				}
+				else
+				{
+
+					if (renderable->IsStatic() == false)
+					{
+						InstancingManager::Instance.Get().PopSkinnedData(std::static_pointer_cast<SkinnedMesh>(renderable)->renderInfoVec[this->index]);
+					}
+
+					variation = ResourceManager::Instance.Get().CreateInstanceMaterial(original);
+				}
+
+				renderable->SetMaterial(this->index, variation);
+
+				usingOriginal = false;
 			}
 
-			if (renderable->IsStatic() == false)
-			{
-				InstancingManager::Instance.Get().PopSkinnedData(std::static_pointer_cast<SkinnedMesh>(renderable)->renderInfoVec[this->index]);
-			}
-
-			variation = ResourceManager::Instance.Get().CreateInstanceMaterial(original);
-			renderable->SetMaterial(this->index, variation);
-
-			usingOriginal = false;
+			return variation;
 		}
-
-		return variation;
+		else
+		{
+			return original;
+		}
 	};
 private:
 	bool usingOriginal{ true };
 
-	
+
 
 public:
 	Material* original;

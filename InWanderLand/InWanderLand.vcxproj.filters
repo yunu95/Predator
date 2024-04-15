@@ -433,6 +433,9 @@
     <Filter Include="Editor\ScriptSystem\1_Condition\List">
       <UniqueIdentifier>{0e0f3bef-6052-4f15-b9e9-77fdc9d3ca61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\BurnEffect">
+      <UniqueIdentifier>{0cb52d66-9140-4368-8842-d37ef7df2afb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1112,6 +1115,9 @@
     <ClInclude Include="Module_ScriptEditor.h">
       <Filter>Editor\Panel\List\Module\List</Filter>
     </ClInclude>
+    <ClInclude Include="BurnEffect.h">
+      <Filter>Contents\BurnEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1696,6 +1702,9 @@
     </ClCompile>
     <ClCompile Include="Module_ScriptEditor.cpp">
       <Filter>Editor\Panel\List\Module\List</Filter>
+    </ClCompile>
+    <ClCompile Include="BurnEffect.cpp">
+      <Filter>Contents\BurnEffect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

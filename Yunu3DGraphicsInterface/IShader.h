@@ -7,7 +7,8 @@ namespace yunuGI
 	{
 		Forward,
 		Deferred,
-		Light
+		Light,
+		Particle
 	};
 
 	enum class Rasterizer

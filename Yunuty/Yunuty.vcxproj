@@ -220,6 +220,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="LineCollider2D.cpp" />
     <ClCompile Include="MetaData.cpp" />
     <ClCompile Include="MetafileManager.cpp" />
+    <ClCompile Include="ParticleRenderer.cpp" />
     <ClCompile Include="YunutyBoxCollider.cpp" />
     <ClCompile Include="YunutyCapsuleCollider.cpp" />
     <ClCompile Include="YunutyCollider.cpp" />
@@ -282,6 +283,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="ChunkyTriMesh.h" />
     <ClInclude Include="header\HasVariable.h" />
     <ClInclude Include="header\Animator.h" />
+    <ClInclude Include="header\ParticleRenderer.h" />
     <ClInclude Include="header\YunutyBoxCollider.h" />
     <ClInclude Include="header\DebugCube.h" />
     <ClInclude Include="header\DirectionalLight.h" />

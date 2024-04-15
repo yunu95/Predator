@@ -37,6 +37,7 @@ class Material;
 class yunuGI::IShader;
 class Animation;
 class NailAnimator;
+class ParticleSystem;
 
 class RenderSystem
 {
@@ -63,6 +64,7 @@ public:
 	void RenderUI();
 
 	void RenderForward();
+	void RenderParticle();
 
 	void DrawDeferredInfo();
 

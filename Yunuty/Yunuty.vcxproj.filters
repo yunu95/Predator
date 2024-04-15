@@ -331,6 +331,9 @@
     <Filter Include="yunutyEngine\ClientTemplate\Billboard">
       <UniqueIdentifier>{49677ff5-f16d-4c0f-acc9-9d193ba5ea36}</UniqueIdentifier>
     </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\ParticleRenderer">
+      <UniqueIdentifier>{a6016a93-313c-40d4-b8ba-be72d71cc75e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -530,6 +533,9 @@
     </ClCompile>
     <ClCompile Include="_YunutyNavigationObstacleImpl.cpp">
       <Filter>yunutyEngine\NavigationSystem\NavigationObstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleRenderer.cpp">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\ParticleRenderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -802,6 +808,9 @@
     </ClInclude>
     <ClInclude Include="header\Billboard.h">
       <Filter>yunutyEngine\ClientTemplate\Billboard</Filter>
+    </ClInclude>
+    <ClInclude Include="header\ParticleRenderer.h">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\ParticleRenderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

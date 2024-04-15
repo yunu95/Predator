@@ -65,6 +65,7 @@
 #include "IYunuGIUIImage.h"
 #include "StaticMeshRenderer.h"
 #include "YunutySkinnedMesh.h"
+#include "ParticleRenderer.h"
 #include "DebugCube.h"
 #include "UIImage.h"
 #include "UIText.h"

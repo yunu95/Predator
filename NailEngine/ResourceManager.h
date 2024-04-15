@@ -63,6 +63,7 @@ public:
 
 #pragma region Getter 
 	std::shared_ptr<yunuGI::IMaterial> GetMaterial(const std::wstring& materialName);
+	std::shared_ptr<yunuGI::IMaterial> GetInstanceMaterial(const std::wstring& materialName);
 	std::shared_ptr<yunuGI::IShader> GetShader(const std::wstring& shaderPath);
 	std::shared_ptr<yunuGI::IShader> GetShader(const yunuGI::IShader* shader);
 	std::shared_ptr<yunuGI::IShader> GetDeferredShader(const std::wstring& shaderPath);
@@ -106,7 +107,7 @@ private:
 	//void LoadCubeMesh();
 	//void LoadSphereMesh();
 	void LoadRactangleMesh();
-	//void LoadPointMesh();
+	void LoadPointMesh();
 	void LoadLineMesh();
 	//void LoadCapsuleMesh();
 	//void LoadCylinderMesh();
@@ -114,6 +115,8 @@ private:
 #pragma endregion
 
 	std::wstring String_To_Wstring(const std::string& str);
+
+	void DeleteMaterial(yunuGI::IMaterial* material);
 
 private:
 	// Mesh 관련

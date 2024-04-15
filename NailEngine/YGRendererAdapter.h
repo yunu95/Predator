@@ -42,5 +42,10 @@ namespace yunuGIAdapter
         {
             NailEngine::Instance.Get().SetUseIBL(useIBL);
         }
+
+        virtual void SetUseLightMap(bool useLightMap) override
+        {
+            NailEngine::Instance.Get().SetUseLightMap(useLightMap);
+        };
     };
 }

@@ -5,31 +5,21 @@
 class TestComponent2 : public yunutyEngine::Component
 {
 public:
-	yunutyEngine::graphics::Animator* anim;
-	yunuGI::IAnimation* idleAnimation;
-	yunuGI::IAnimation* battleIdleAnimation;
-	yunuGI::IAnimation* walkAnimation;
-	yunuGI::IAnimation* battleStartAnimation;
-
-	yunutyEngine::graphics::UIText* text;
+	BurnEffect* effect;
 
 	void Update()
 	{
-		std::wstring str = std::to_wstring(Time::GetFPS());
-		text->GetGI().SetText(str);
-
-		//if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::U))
-		//{
-		//	anim->GetGI().ChangeAnimation(idleAnimation, 0.5, 1);
-		//}
-		//if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::I))
-		//{
-		//	anim->GetGI().ChangeAnimation(battleIdleAnimation, 1, 1);
-		//}
-		//if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::O))
-		//{
-		//	anim->GetGI().ChangeAnimation(walkAnimation, 1, 1);
-		//}
+		if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::U))
+		{
+			effect->Appear();
+		}
+		if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::I))
+		{
+			effect->DisAppear();
+		}
+		if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::O))
+		{
+		}
 		//if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::P))
 		//{
 		//	anim->GetGI().ChangeAnimation(battleStartAnimation, 0.5, 1);

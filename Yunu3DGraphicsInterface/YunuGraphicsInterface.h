@@ -11,6 +11,7 @@
 #include "IYunuGIEventHandler.h"
 #include "IYunuGIRenderable.h"
 #include "IYunuGIStaticMeshRenderer.h"
+#include "IYunuGIParticleRenderer.h"
 #include "IYunuGIResourceManager.h"
 #include "IResource.h"
 #include "IMesh.h"
@@ -27,3 +28,4 @@
 #include "YunuVector4.h"
 #include "FBXData.h"
 #include "IAnimator.h"
+#include "ParticleRenderInfo.h"
