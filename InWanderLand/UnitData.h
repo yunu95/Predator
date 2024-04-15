@@ -80,6 +80,8 @@ namespace application
 
             POD_Unit pod;
 
+			Unit* inGameUnit{ nullptr };
+
         protected:
             virtual bool PreEncoding(json& data) const override;
             virtual bool PostEncoding(json& data) const override;

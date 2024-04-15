@@ -29,7 +29,7 @@ private:
 	Unit* m_unitComponent;
 
 public:
-	virtual void Attack(Unit* opponentUnit) override;
+	virtual void Attack(Unit* opponentUnit, float offSet) override;
 	void SetMeleeAttackType(MeleeAttackType p_type);
 	void SetOwnerUnitObject(GameObject* unitobj);
 

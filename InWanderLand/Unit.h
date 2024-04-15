@@ -27,6 +27,8 @@ public:
 		Skill,
 		Paralysis,
 		Death,
+		OffsetMove,
+		WaveEngage,
 		StateEnd
 	};
 
@@ -116,7 +118,7 @@ private:
 	// 유닛이 바라봐야 하는 회전값을 동경각으로 나타냅니다. 유닛은 회전속도에 따라 회전값을 desiredRotation과 일치하게 바꿉니다.
 	float desiredRotation{270};
 	float rotationSpeed{ 500 };
-	float rotationTime = 0.2f;
+	float rotateTime = 0.2f;
 
 	// 지금 수행중인 명령
 	UnitState currentOrder = UnitState::Idle;
@@ -138,9 +140,14 @@ private:
 	float attackStartDelay = 0.3f;
 	float attackFunctionElapsed;
 	float attackFunctionCallDelay;
+	float increasedAttackSpeed{ 1.0f };
+	int attackTimingFrame;
 	int attackAnimationFrameCheckNumber = 0;
 	bool isAttackAnimationOperating = false;
+	bool isAttacked = false;
 	bool isAttackStarted = false;
+	float m_attackOffset;
+
 
 	float deathFunctionElapsed;
 	float deathAnimationDelay = 1.5f;
@@ -169,6 +176,7 @@ private:
 	Unit* m_currentTargetUnit;		// Attack이나 Chase 때 사용할 적군  오브젝트
 	Unit* m_previousTargetUnit;		
 	Unit* tauntingThisUnit;				// 현재 this 유닛이 도발당한 주체.
+	Vector3d m_previousMovePosition;						
 	Vector3d m_currentMovePosition;							// 현재 상대의 위치
 
 	Vector3d m_currentSkillPosition;
@@ -178,6 +186,10 @@ private:
 	SkillPreviewMesh m_qSkillPreviewType;
 	SkillPreviewMesh m_wSkillPreviewType;
 
+	Unit* m_followingTargetUnit;
+	float m_followEngageDinstance{ 4.0f };			// 이 수치만큼 거리가 벌어지면 따라간다.
+	float m_stopFollowDinstance{ 2.0f };			// 이 수치만큼 거리가 좁혀지면 멈춘다.
+	bool isFollowing{ false };
 private:
 	/// 유닛이 속해있는 field
 	NavigationField* m_unitNavField;
@@ -189,6 +201,7 @@ private:
 private:
 	void IdleEngage();
 	void MoveEngage();
+	void OffsetMoveEngage();
 	void AttackMoveEngage();
 	void AttackEngage();
 	void ChaseEngage();
@@ -198,6 +211,7 @@ private:
 
 	void IdleUpdate();
 	void MoveUpdate();
+	void OffsetMoveUpdate();
 	void AttackMoveUpdate();
 	void ChaseUpdate();
 	void AttackUpdate();
@@ -230,14 +244,18 @@ public:
 	void SetAtkRadius(float radius);
 	void SetUnitSpeed(float speed);
 	void SetAttackDelay(float p_delay);
+	void SetAttackTimingFrame(int p_frame);
 	void SetPlayerSerialNumber(UnitType serialNum);
 	void SetSkillDuration(float p_duration);
 	void SetSkillPreviewType(SkillPreviewMesh p_qskill, SkillPreviewMesh p_wskill);
 	void SetMaxAggroNumber(int p_num);
 	void SetFbxName(std::string p_string);
+	void SetAttackOffset(float p_offset);
 
 	void SetCurrentOrderMove();
 	void SetCurrentOrderAttackMove();
+
+	float GetAttackOffset() const;
 
 	void OrderMove(Vector3d position);
 	void OrderAttackMove(Vector3d position);
@@ -274,10 +292,6 @@ public:
 	void SetUnitStateToSkill();
 
 public:
-	/// <summary>
-	/// 유닛의 스탯을 조작하는 함수.
-	/// </summary>
-	/// <returns></returns>
 	int GetUnitDamage() const;
 	void Damaged(Unit* opponentUnit, float opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
 	void Damaged(float dmg);										// 추적받지 않는 데미지
@@ -294,6 +308,12 @@ public:
 	std::function<void()> returnToPoolFunction{ nullptr };
 	DummyComponent* m_dummyCom;
 	int stageNumber;
+
+	std::vector<std::function<void()>> OnCreated;
+	std::vector<std::function<void()>> OnDeath;
+	bool isJustCreated{ false };
+
+
 	friend RobinSkillDevelopmentSystem;
 	friend UnitProductor;
 };

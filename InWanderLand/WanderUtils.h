@@ -2,6 +2,8 @@
 #include "YunutyEngine.h"
 #include "FileSystem.h"
 
+#include <string>
+
 namespace wanderUtils
 {
     void LoadResourcesRecursively()
@@ -45,4 +47,18 @@ namespace wanderUtils
             }
         }
     }
+
+	/// string 주소에 직접 접근하여 수정한 경우, Size 를 갱신하는 함수입니다.
+	void UpdateStringSize(std::string& str)
+	{
+		int strSize = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, nullptr, 0);
+		str.resize(strSize);
+	}
+
+	/// wtring 주소에 직접 접근하여 수정한 경우, Size 를 갱신하는 함수입니다.
+	void UpdateWStringSize(std::wstring& wstr)
+	{
+		int wstrSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
+		wstr.resize(wstrSize);
+	}
 }

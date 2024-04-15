@@ -1,9 +1,9 @@
 #include "HealerAutoAttackProjectile.h"
 #include "PassiveCakePool.h"
 
-void HealerAutoAttackProjectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed)
+void HealerAutoAttackProjectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed, float offset)
 {
-	AutoAttackProjectile::Shoot(ownerUnit, opponentUnit, speed);
+	AutoAttackProjectile::Shoot(ownerUnit, opponentUnit, speed, offset);
 
 	/// 버프 중첩 마다 과자 생성
 	//passiveCake->GetGameObject()->SetSelfActive(false);

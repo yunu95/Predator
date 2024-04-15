@@ -63,7 +63,7 @@ void UIButton::Start()
     initialRectBottom = wndRect.bottom;
 
     Vector3d fixedLeftTopPos = Vector3d(leftTopPos.x / 1920 * wndRect.right, leftTopPos.y / 1080 * wndRect.bottom, 0);
-    GetTransform()->SetWorldPosition(fixedLeftTopPos);
+    //GetTransform()->SetWorldPosition(fixedLeftTopPos);
     m_ImageCenterPostion = Vector2d(fixedLeftTopPos.x + m_Width / 2, fixedLeftTopPos.y + m_Height / 2);
 
     m_onMouseFunction = [=]()

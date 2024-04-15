@@ -4,6 +4,6 @@
 class EnemyAutoAttackProjectile : public AutoAttackProjectile
 {
 public:
-	virtual void Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed) override;
+	virtual void Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed, float offset) override;
 };
 

@@ -14,6 +14,11 @@ namespace application
 		PullTrigger();
 	}
 
+	void Trigger_GameStart::ImGui_DrawDataPopup(Trigger_GameStart* data)
+	{
+
+	}
+
 	bool Trigger_GameStart::PreEncoding(json& data) const
 	{
 		return true;

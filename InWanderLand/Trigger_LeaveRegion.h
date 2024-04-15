@@ -1,6 +1,6 @@
 #pragma once
-/// 2024. 04. 09 김상준
-/// Region 에 들어갈 때 호출되는 Trigger 입니다.
+/// 2024. 04. 11 김상준
+/// Region 에서 벗어날 때 호출되는 Trigger 입니다.
 
 #pragma once
 
@@ -15,11 +15,11 @@ namespace application
 		class RegionData;
 	}
 
-	class Trigger_EnterRegion
+	class Trigger_LeaveRegion
 		: public ITrigger
 	{
 	public:
-		DEFINE_TRIGGER(EnterRegion)
+		DEFINE_TRIGGER(LeaveRegion)
 
 		virtual void LinkCallback() override;
 

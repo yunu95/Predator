@@ -9,6 +9,6 @@
 class AttackSystem : public Component
 {
 public:
-	virtual void Attack(Unit* opponentUnit) = 0;
+	virtual void Attack(Unit* opponentUnit, float offSet) = 0;
 };
 

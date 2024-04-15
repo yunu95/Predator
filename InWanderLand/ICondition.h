@@ -6,6 +6,9 @@
 #include "Storable.h"
 #include "Identifiable.h"
 
+#include "imgui.h"
+#include "imgui_Utility.h"
+
 namespace application
 {
 	enum class ConditionType
@@ -26,5 +29,8 @@ namespace application
 	};
 }
 
+/// ImGui_DrawDataPopup 함수를 작성하여 Editor 에서 데이터 편집 기능을
+/// 제공하여야 합니다.
 #define DEFINE_CONDITION(Class) \
-virtual ConditionType GetType() const override { return ConditionType::Class; }
+virtual ConditionType GetType() const override { return ConditionType::Class; } \
+static void ImGui_DrawDataPopup(Condition_##Class* data);

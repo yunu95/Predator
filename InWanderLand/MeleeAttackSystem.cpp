@@ -5,14 +5,14 @@
 #include "ContentsLayer.h"
 #include "Application.h"
 
-void MeleeAttackSystem::Attack(Unit* opponentUnit)
+void MeleeAttackSystem::Attack(Unit* opponentUnit, float offset)
 {
 	switch (m_meleeAttackType)
 	{
 		case MeleeAttackType::Collider: 
 		{
 			meleeAttackColliderObject->GetTransform()->
-				SetWorldPosition(ownerUnitObject->GetTransform()->GetWorldPosition() + ownerUnitObject->GetTransform()->GetWorldRotation().Forward() *  -3);
+				SetWorldPosition(ownerUnitObject->GetTransform()->GetWorldPosition() + ownerUnitObject->GetTransform()->GetWorldRotation().Forward() *  -1 * m_unitComponent->GetAttackOffset());
 			meleeAttackColliderObject->GetTransform()->SetWorldRotation(ownerUnitObject->GetTransform()->GetWorldRotation());
 
 			meleeAttackColliderObject->SetSelfActive(true);

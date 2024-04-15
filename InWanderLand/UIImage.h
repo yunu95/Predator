@@ -12,4 +12,8 @@ public:
         if (GetGameObject()->GetParentGameObject() == nullptr)
             contentsLayer->RegisterToEditorObjectContainer(GetGameObject());
     }
+    virtual void Update() override
+    {
+        OnTransformUpdate();
+    }
 };
