@@ -5,8 +5,6 @@
 
 namespace application
 {
-	UUIDManager& Identifiable::uuidManager = UUIDManager::GetSingletonInstance();
-
 	std::string UUID_To_String(UUID uuid)
 	{
 		char* id_char;
@@ -33,19 +31,19 @@ namespace application
 
 	Identifiable::~Identifiable()
 	{
-		uuidManager.EraseUUID(id);
+		UUIDManager::GetSingletonInstance().EraseUUID(id);
 	}
 
 	Identifiable::Identifiable()
 	{
 		UuidCreate(&id);
-		uuidManager.RegisterUUIDWithPointer(id, this);
+		UUIDManager::GetSingletonInstance().RegisterUUIDWithPointer(id, this);
 	}
 
 	Identifiable::Identifiable(const UUID& id)
 		: id(id)
 	{
-		uuidManager.RegisterUUIDWithPointer(id, this);
+		UUIDManager::GetSingletonInstance().RegisterUUIDWithPointer(id, this);
 	}
 
 	UUID Identifiable::GetUUID() const
@@ -55,8 +53,8 @@ namespace application
 
 	void Identifiable::SetUUID(const UUID& id)
 	{
-		uuidManager.EraseUUID(this->id);
+		UUIDManager::GetSingletonInstance().EraseUUID(this->id);
 		this->id = id;
-		uuidManager.RegisterUUIDWithPointer(id, this);
+		UUIDManager::GetSingletonInstance().RegisterUUIDWithPointer(id, this);
 	}
 }

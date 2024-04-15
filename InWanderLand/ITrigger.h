@@ -25,6 +25,8 @@ namespace application
 	struct ITrigger
 		: public Identifiable, public Storable
 	{
+		friend class Script;
+
 		virtual ~ITrigger() = default;
 
 		/// dynamic_cast 가 아닌 switch case 로 동작하기 위한 함수입니다.

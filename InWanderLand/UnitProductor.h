@@ -7,7 +7,7 @@ namespace application
 {
 	namespace editor
 	{
-		class POD_Unit_TemplateData;
+		struct POD_Unit_TemplateData;
 	}
 }
 
