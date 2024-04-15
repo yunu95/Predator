@@ -1,6 +1,7 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "YunuGraphicsInterface.h"
+#include "BurnEffect.h"
 
 class TestComponent2 : public yunutyEngine::Component
 {
