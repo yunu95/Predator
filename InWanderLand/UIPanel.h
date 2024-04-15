@@ -7,6 +7,8 @@
 /// 그냥 UIImage나 UIButton 컴포넌트를 갖고 있는 게임 오브젝트를 등록해주면 된다.
 /// </summary>
 
+// 사용하지 않음
+
 class UIButton;
 
 class UIPanel : public Component

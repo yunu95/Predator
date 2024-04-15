@@ -18,6 +18,7 @@ private:
 	yunuGI::ITexture* m_CurrentImage;
 
 	std::function<void()> m_onMouseFunction;
+	std::function<void()> m_onMouseExitFunction;
 	std::function<void()> m_mousePushedFunction;
 	std::function<void()> m_mouseLiftedFunction;
 
@@ -32,7 +33,7 @@ private:
 	Vector2d m_ImageCenterPostion;
 
 	bool isMouseNowOnButton;
-	int m_layer;
+	//int m_layer;
 
 	LONG initialRectRight;
 	LONG initialRectBottom;
@@ -51,6 +52,7 @@ public:
 
 	virtual void Start() override;
 	virtual void Update() override;
+	virtual void OnDisable() override;
 
 	friend class UIManager;
 	friend class UIPanel;
