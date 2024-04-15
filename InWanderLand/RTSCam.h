@@ -55,6 +55,4 @@ private:
     float max_Speed = 2.0;
     float defaultMoveSpeed = 0.03;
     float rotationSpeed = 0.3;
-
 };
-

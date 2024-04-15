@@ -433,6 +433,9 @@
     <Filter Include="Editor\ScriptSystem\1_Condition\List">
       <UniqueIdentifier>{0e0f3bef-6052-4f15-b9e9-77fdc9d3ca61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\UIImporter">
+      <UniqueIdentifier>{7cc37efe-95aa-491b-90a8-3671a7501b20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1106,6 +1109,9 @@
     <ClInclude Include="UIImage.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="UIImporter.h">
+      <Filter>UI\UIImporter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1684,6 +1690,9 @@
     </ClCompile>
     <ClCompile Include="Trigger_EnterRegion.cpp">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClCompile>
+    <ClCompile Include="UIImporter.cpp">
+      <Filter>UI\UIImporter</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

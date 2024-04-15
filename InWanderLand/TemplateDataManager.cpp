@@ -234,7 +234,6 @@ namespace application
                 uuidKeyMap.erase(instance->id);
                 uuidKeyMap[uuid] = templateData["key"];
                 instance->SetUUID(uuid);
-
                 if (!instance->PreDecoding(templateData["0_Pre"]))
                 {
                     Clear();

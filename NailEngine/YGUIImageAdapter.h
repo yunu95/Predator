@@ -12,17 +12,17 @@ namespace yunuGIAdapter
     class UIImageAdapter : public yunuGIAdapter::RenderableAdapter, public yunuGI::IUIImage
     {
     public:
-        UIImageAdapter() :RenderableAdapter() 
+        UIImageAdapter() :RenderableAdapter()
         {
-			renderable = std::make_shared<UIImage>();
+            renderable = std::make_shared<UIImage>();
             RenderSystem::Instance.Get().PushUIObject(renderable);
             RenderSystem::Instance.Get().ReSortUIObject(std::static_pointer_cast<UIImage>(renderable)->layer, renderable);
         }
 
-		~UIImageAdapter()
-		{
+        ~UIImageAdapter()
+        {
             RenderSystem::Instance.Get().PopUIObject(renderable);
-		}
+        }
 
         virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)
         {
@@ -30,14 +30,14 @@ namespace yunuGIAdapter
             renderable->pos.y = worldTM.m42;
         };
 
-        virtual void SetActive(bool isActive) 
+        virtual void SetActive(bool isActive)
         {
             renderable->SetActive(isActive);
         };
-		virtual bool IsActive() override
-		{
+        virtual bool IsActive() override
+        {
             return true;
-		}
+        }
 
         virtual void SetImage(yunuGI::ITexture* texture)
         {
@@ -48,14 +48,14 @@ namespace yunuGIAdapter
         virtual void SetWorldSpace() {}
         virtual void SetPickingMode(bool isPickingModeOn) {}
 
-		virtual void SetLayer(int layer)
-		{
+        virtual void SetLayer(int layer)
+        {
             //renderable->layer = layer;
             RenderSystem::Instance.Get().ReSortUIObject(layer, renderable);
-		};
+        };
 
         virtual float GetWidth() override
-		{
+        {
             return renderable->GetWidth();
         };
         virtual float GetHeight() override

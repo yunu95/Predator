@@ -36,6 +36,7 @@
 #include <string>
 #include <filesystem>
 #include "WanderUtils.h"
+#include "UIImporter.h"
 
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
@@ -482,7 +483,8 @@ void application::contents::ContentsLayer::PlayContents()
     const int menuWindowXpos = 760;
     const int menuWindowYpos = 540 - 350 / 2;
 
-    UIManager::Instance().LoadUITextures();
+    //UIManager::Instance().LoadUITextures();
+    UIManager::Instance().ImportUI("InWanderLand.iwui");
 
     auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
@@ -786,8 +788,6 @@ void application::contents::ContentsLayer::PlayContents()
     RobinSkillDevelopmentSystem::Instance().AddMiddleLayerButton(robinWSkillUpgradeButton);
     robinWSkillUpgradeButtonObject->GetTransform()->SetLocalPosition({ 300, 700, 0 });
     RegisterToEditorObjectContainer(robinWSkillUpgradeButtonObject);
-
-
 
     /// ScriptSystem 을 위한 부분입니다.
     ScriptSystem::Instance().OnGameStart();
