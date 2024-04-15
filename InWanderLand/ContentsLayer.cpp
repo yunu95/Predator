@@ -36,7 +36,6 @@
 #include <string>
 #include <filesystem>
 #include "WanderUtils.h"
-#include "UIImporter.h"
 
 #ifdef GEN_TESTS
 #include "CppUnitTest.h"
@@ -378,47 +377,50 @@ void application::contents::ContentsLayer::Initialize()
 #else
     {
 
-        ShortcutSystem::Instance();
-
-        {
-            auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-            //obj->GetTransform()->SetLocalPosition(Vector3d{ -500,500,1 });
-            obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,100 });
-            auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
-            text->GetGI().SetFontSize(20);
-            auto test = obj->AddComponent<TestComponent2>();
-            test->text = text;
-        }
-
-        auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-
-        auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
-        auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        RegisterToEditorObjectContainer(mouseCursorObject);
-        auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-        mouseCursorMesh->GetGI().SetMesh(sphereMesh);
-        mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
-
-        /*WarriorProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 0.0f));;
-        MagicianProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 2.0f));;
-        HealerProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, -2.0f));*/
-
-        auto skillPreviewCubeMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        AttachDebugMesh(skillPreviewCubeMeshObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
-        SkillPreviewSystem::Instance().SetPathPreviewObject(skillPreviewCubeMeshObject);
-        RegisterToEditorObjectContainer(skillPreviewCubeMeshObject);
-
-        auto skillPreviewSphereMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        AttachDebugMesh(skillPreviewSphereMeshObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
-        SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
-        RegisterToEditorObjectContainer(skillPreviewSphereMeshObject);
-
-        InputManager::Instance();
-        UIManager::Instance();
-        bool mapFound = false;
-
         editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
-        editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
+        ContentsLayer::PlayContents();
+
+        //ShortcutSystem::Instance();
+
+        //{
+        //    auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        //    //obj->GetTransform()->SetLocalPosition(Vector3d{ -500,500,1 });
+        //    obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,100 });
+        //    auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
+        //    text->GetGI().SetFontSize(20);
+        //    auto test = obj->AddComponent<TestComponent2>();
+        //    test->text = text;
+        //}
+
+        //auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+        //auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
+        //auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        //RegisterToEditorObjectContainer(mouseCursorObject);
+        //auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+        //mouseCursorMesh->GetGI().SetMesh(sphereMesh);
+        //mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
+
+        ///*WarriorProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 0.0f));;
+        //MagicianProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 2.0f));;
+        //HealerProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, -2.0f));*/
+
+        //auto skillPreviewCubeMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        //AttachDebugMesh(skillPreviewCubeMeshObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
+        //SkillPreviewSystem::Instance().SetPathPreviewObject(skillPreviewCubeMeshObject);
+        //RegisterToEditorObjectContainer(skillPreviewCubeMeshObject);
+
+        //auto skillPreviewSphereMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        //AttachDebugMesh(skillPreviewSphereMeshObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
+        //SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
+        //RegisterToEditorObjectContainer(skillPreviewSphereMeshObject);
+
+        //InputManager::Instance();
+        //UIManager::Instance();
+        //bool mapFound = false;
+
+        //editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
+        //editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
     }
 #endif
@@ -444,6 +446,7 @@ void application::contents::ContentsLayer::PlayContents()
 {
     SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
+    //UIManager::Instance().ImportUI("InWanderLand.iwui");
     GameManager::Instance().Reset();
 
 
@@ -822,6 +825,7 @@ void application::contents::ContentsLayer::StopContents()
         e->SetActive(false);
     }
 
+    UIManager::Instance().Clear();
     /// ScriptSystem 을 위한 부분입니다.
     ScriptSystem::Instance().Clear();
 }

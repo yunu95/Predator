@@ -62,6 +62,14 @@ namespace yunuGIAdapter
         {
             return renderable->GetHeight();
         };
+        virtual void SetWidth(float width)
+        {
+            renderable->SetWidth(width);
+        };
+        virtual void SetHeight(float height)
+        {
+            renderable->SetHeight(height);
+        };
         virtual int GetLayer() override
         {
             return renderable->GetLayer();

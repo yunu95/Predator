@@ -70,6 +70,7 @@ public:
         // 버튼 위에 마우스 포인터가 올라왔을 때 자식 오브젝트들을 보여줍니다.
         IsIncludingTooltips = 1 << 5,
     };
+    void Clear();
     void LoadUITextures() const;
     void ReportButtonOnMouse(UIButton* p_btn);
     void ReportMouseExitButton(UIButton* p_btn);

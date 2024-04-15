@@ -1176,7 +1176,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Trigger_GameStart.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UIImage.h" />
-    <ClInclude Include="UIImporter.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UIPanel.h" />
     <ClInclude Include="UnitData.h" />
@@ -1368,7 +1367,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Trigger_EnterRegion.cpp" />
     <ClCompile Include="Trigger_GameStart.cpp" />
     <ClCompile Include="UIButton.cpp" />
-    <ClCompile Include="UIImporter.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UIPanel.cpp" />
     <ClCompile Include="UnitBrush.cpp" />
