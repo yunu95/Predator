@@ -12,10 +12,13 @@ using namespace DirectX::PackedVector;
 
 #define MAX_TEXTURE 18
 #define MAX_INT 10
+#define MAX_FLOAT 4
 #define MAX_BONE_COUNT 250
 #define MAX_FRAME_COUNT 500
 #define MAX_INSTANCE_MODEL 500
 #define MAX_POINT_LIGHT 10
+#define MAX_PARTICLE 500
+#define MAX_STATIC_MODEL 1024
 
 struct Vertex
 {
@@ -70,6 +73,8 @@ enum class CB_TYPE
 	POINTLIGHT_INDEX,
 	EXPOSURE,
 	UTIL,
+	PARTICLE,
+	LIGHTMAP_UV,
 };
 
 struct MatrixBuffer
@@ -90,6 +95,7 @@ struct MaterialBuffer
 
 	std::array<unsigned int, MAX_TEXTURE> useTexture;
 	std::array<int, MAX_INT> temp_int;
+	std::array<float, MAX_FLOAT> temp_float;
 };
 
 struct CameraBuffer
@@ -173,6 +179,10 @@ struct RenderInfo
 	unsigned int materialIndex;
 	DirectX::SimpleMath::Matrix wtm;
 	bool isActive = true;
+
+	int lightMapIndex = -1;
+	DirectX::SimpleMath::Vector2 uvOffset;
+	DirectX::SimpleMath::Vector2 uvScaling;
 };
 
 class NailAnimator;
@@ -183,6 +193,16 @@ struct SkinnedRenderInfo
 	std::shared_ptr<NailAnimator> animator;
 	TransitionDesc transitionDesc;
 };
+
+namespace nail
+{
+	struct ParticleRenderInfo
+	{
+		Mesh* mesh;
+		Material* material;
+		bool isActive = true;
+	};
+}
 
 struct ExposureBuffer
 {
@@ -197,7 +217,35 @@ struct UtilBuffer
 	float windowHeight;
 	float deltaTime;
 	int useIBL;
+
+	int useLightMap;
+	DirectX::SimpleMath::Vector3 padding;
 };
+
+struct ParticleDesc
+{
+	DirectX::SimpleMath::Vector3 pos;
+	float scale;
+};
+
+struct ParticleBuffer
+{
+	ParticleDesc particleDesc[MAX_PARTICLE];
+};
+
+struct LightMapUV
+{
+	int lightMapIndex;
+	DirectX::SimpleMath::Vector3 padding;
+	DirectX::SimpleMath::Vector2 uvOffset;
+	DirectX::SimpleMath::Vector2 scaling;
+};
+
+struct LightMapUVBuffer
+{
+	LightMapUV lightMapUV[MAX_STATIC_MODEL];
+};
+
 
 // Deferred Only
 class Texture;

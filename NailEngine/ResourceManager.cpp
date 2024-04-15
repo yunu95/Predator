@@ -93,6 +93,11 @@ void ResourceManager::CreateMesh(const std::wstring& mesh)
 		LoadLineMesh();
 		return;
 	}
+	else if (mesh == L"Point")
+	{
+		LoadPointMesh();
+		return;
+	}
 	//else if (mesh == L"Sphere")
 	//{
 	//	LoadSphereMesh();
@@ -103,11 +108,7 @@ void ResourceManager::CreateMesh(const std::wstring& mesh)
 	//	LoadRactangleMesh();
 	//	return;
 	//}
-	//else if (mesh == L"Point")
-	//{
-	//	LoadPointMesh();
-	//	return;
-	//}
+
 
 	//else if (mesh == L"Capsule")
 	//{
@@ -421,6 +422,19 @@ std::shared_ptr<yunuGI::IMaterial> ResourceManager::GetMaterial(const std::wstri
 	else
 	{
 		return iter->second;
+	}
+}
+
+std::shared_ptr<yunuGI::IMaterial> ResourceManager::GetInstanceMaterial(const std::wstring& materialName)
+{
+	auto iter2 = instanceMaterialMap.find(materialName);
+	if (iter2 == instanceMaterialMap.end())
+	{
+		return nullptr;
+	}
+	else
+	{
+		return iter2->second;
 	}
 }
 
@@ -842,6 +856,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateShader(L"SpecLUTVS.cso");
 	CreateShader(L"PointLightShadowVS.cso");
 	CreateShader(L"Skinned_PointLightShadowVS.cso");
+	CreateShader(L"ParticleVS.cso");
 #pragma endregion
 
 #pragma region PS
@@ -861,11 +876,13 @@ void ResourceManager::CreateDefaultShader()
 	CreateDeferredShader(L"CopyPS.cso");
 	CreateDeferredShader(L"BlurPS.cso");
 	CreateShader(L"PointLightShadowPS.cso");
-
+	CreateShader(L"ParticlePS.cso");
+	CreateShader(L"DissolvePS.cso");
 #pragma endregion
 
 #pragma region GS
 	CreateShader(L"PointLightShadowGS.cso");
+	CreateShader(L"ParticleGS.cso");
 #pragma endregion
 }
 
@@ -878,7 +895,7 @@ void ResourceManager::CreateDefaultMesh()
 	///CreateMesh(L"Cube");
 	///CreateMesh(L"Sphere");
 	CreateMesh(L"Rectangle");
-	///CreateMesh(L"Point");
+	CreateMesh(L"Point");
 	CreateMesh(L"Line");
 	///CreateMesh(L"Capsule");
 	///CreateMesh(L"Cylinder");
@@ -891,6 +908,15 @@ void ResourceManager::CreateDefaultMaterial()
 	{
 		std::wstring name{};
 		CrateMaterial(name);
+	}
+
+	// DissolveMaterial
+	{
+		std::wstring name{ L"SkinnedDissolveMaterial" };
+		auto material = CrateMaterial(name);
+		material->SetTexture(yunuGI::Texture_Type::Temp0, this->GetTexture(L"Texture/Dissolve.jpg").get());
+		material->SetVertexShader(this->GetShader(L"SkinnedVS.cso").get());
+		material->SetPixelShader(this->GetShader(L"DissolvePS.cso").get());
 	}
 
 	// Skinned Default Material
@@ -931,6 +957,9 @@ void ResourceManager::CreateDefaultMaterial()
 
 		material->SetTexture(yunuGI::Texture_Type::Temp2,
 			GetTexture(L"ShadowDepth").get());
+
+		material->SetTexture(yunuGI::Texture_Type::Temp3,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(UTIL)).get());
 	}
 
 	// PointLight
@@ -946,6 +975,8 @@ void ResourceManager::CreateDefaultMaterial()
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp1,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(NORMAL)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp2,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(UTIL)).get());
 	}
 
 	// Deferred_Final
@@ -958,9 +989,13 @@ void ResourceManager::CreateDefaultMaterial()
 		material->SetTexture(yunuGI::Texture_Type::Temp1,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(DIFFUSE)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp2,
-			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR)).get());
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(LIGHT_SHADOW)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp3,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)]->GetRTTexture(static_cast<int>(UP4x4_0)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp4,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(UTIL)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp5,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(AMBIENT)).get());
 	}
 
 	// BackBuffer
@@ -972,6 +1007,14 @@ void ResourceManager::CreateDefaultMaterial()
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->GetRTTexture(static_cast<int>(FINAL)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp1,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
+	}
+
+	// 파티클 전용 머터리얼
+	{
+		yunuGI::IMaterial* material = CrateMaterial(L"ParticleMaterial");
+		material->SetVertexShader(GetShader(L"ParticleVS.cso").get());
+		material->SetPixelShader(GetShader(L"ParticlePS.cso").get());
+		material->SetTexture(yunuGI::Texture_Type::ALBEDO, GetTexture(L"Texture/particle.png").get());
 	}
 
 	/// Deferred Debug Info
@@ -1009,7 +1052,7 @@ void ResourceManager::CreateDefaultMaterial()
 			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
 			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
 			material->SetTexture(yunuGI::Texture_Type::Temp0,
-				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(DEPTH)).get());
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(UTIL)).get());
 		}
 
 		{
@@ -1036,7 +1079,7 @@ void ResourceManager::CreateDefaultMaterial()
 			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
 			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
 			material->SetTexture(yunuGI::Texture_Type::Temp0,
-				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR)).get());
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(LIGHT_SHADOW)).get());
 		}
 
 		{
@@ -1069,9 +1112,14 @@ void ResourceManager::CreateDefaultTexture()
 	CreateTexture(L"Texture/asdBrdf.dds");
 	CreateTexture(L"Texture/asdDiffuseHDR.dds");
 	CreateTexture(L"Texture/asdSpecularHDR.dds");
-	/*CreateTexture(L"Texture/zoro.jpg");
-	CreateTexture(L"Texture/Brick_Albedo.jpg");
-	CreateTexture(L"Texture/Brick_Normal.jpg");*/
+	CreateTexture(L"Texture/particle.png");
+	CreateTexture(L"Texture/LightMap.dds");
+	CreateTexture(L"Texture/LightMap.png");
+	CreateTexture(L"Texture/LightMap.hdr");
+	CreateTexture(L"Texture/TempTexture.dds");
+	CreateTexture(L"Texture/Dissolve.jpg");
+	//CreateTexture(L"Texture/Brick_Albedo.jpg");
+	//CreateTexture(L"Texture/Brick_Normal.jpg");
 
 
 
@@ -1722,10 +1770,29 @@ void ResourceManager::LoadRactangleMesh()
 	CreateMesh(rectangleMesh);
 }
 //
-//void ResourceManager::LoadPointMesh()
-//{
-//
-//}
+void ResourceManager::LoadPointMesh()
+{
+	std::shared_ptr<Mesh> pointMesh = std::make_shared<Mesh>();
+
+	pointMesh->SetName(L"Point");
+
+	std::vector<Vertex> vertices(1);
+	vertices[0] = Vertex{ DirectX::SimpleMath::Vector3{0.0f, 0, 0 },
+						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+						  DirectX::SimpleMath::Vector2{0.f,0.f},
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
+
+	std::vector<unsigned int> indices(1);
+
+	indices[0] = 0;
+
+	DirectX::SimpleMath::Vector3 minPoint = vertices[0].pos;
+	DirectX::SimpleMath::Vector3 maxPoint = vertices[0].pos;
+
+	pointMesh->SetData(vertices, indices, maxPoint, minPoint);
+	CreateMesh(pointMesh);
+}
 //
 void ResourceManager::LoadLineMesh()
 {
@@ -2118,4 +2185,11 @@ void ResourceManager::LoadLineMesh()
 std::wstring ResourceManager::String_To_Wstring(const std::string& str)
 {
 	return std::wstring{ str.begin(), str.end() };
+}
+
+void ResourceManager::DeleteMaterial(yunuGI::IMaterial* material)
+{
+	materialVec;
+	materialMap.erase(material->GetName());
+	instanceMaterialMap;
 }

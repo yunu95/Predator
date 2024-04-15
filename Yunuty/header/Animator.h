@@ -27,6 +27,7 @@ namespace yunutyEngine::graphics
 		void Update();
 		virtual ~Animator() {};
 	private:
+
 	};
 }
 

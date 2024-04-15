@@ -114,6 +114,11 @@ void NailEngine::SetUseIBL(bool useIBL)
 	this->useIBL = useIBL;
 }
 
+void NailEngine::SetUseLightMap(bool useLightMap)
+{
+	this->useLightMap = useLightMap;
+}
+
 std::shared_ptr<ConstantBuffer>& NailEngine::GetConstantBuffer(unsigned int index)
 {
 	return this->constantBuffers[index];
@@ -122,6 +127,11 @@ std::shared_ptr<ConstantBuffer>& NailEngine::GetConstantBuffer(unsigned int inde
 bool NailEngine::GetUseIBL()
 {
 	return this->useIBL;
+}
+
+bool NailEngine::GetUseLightMap()
+{
+	return this->useLightMap;
 }
 
 void NailEngine::CreateConstantBuffer()
@@ -191,6 +201,18 @@ void NailEngine::CreateConstantBuffer()
 		_constantBuffer->CraeteConstantBuffer(sizeof(UtilBuffer));
 		this->constantBuffers.emplace_back(_constantBuffer);
 	}
+
+	{
+		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
+		_constantBuffer->CraeteConstantBuffer(sizeof(ParticleBuffer));
+		this->constantBuffers.emplace_back(_constantBuffer);
+	}
+
+	{
+		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
+		_constantBuffer->CraeteConstantBuffer(sizeof(LightMapUVBuffer));
+		this->constantBuffers.emplace_back(_constantBuffer);
+	}
 }
 
 void NailEngine::CreateRenderTargetGroup()
@@ -239,11 +261,16 @@ void NailEngine::CreateRenderTargetGroup()
 			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 		);
 
+		rtVec[2].clearColor[0] = 0.7686;
+		rtVec[2].clearColor[1] = 0.8784;
+		rtVec[2].clearColor[2] = 0.9451;
+		rtVec[2].clearColor[3] = 1.f;
+
 		rtVec[3].texture = ResourceManager::Instance.Get().CreateTexture(
-			L"DepthTarget",
+			L"UtilTarget",
 			this->windowInfo.width,
 			this->windowInfo.height,
-			DXGI_FORMAT_R8G8B8A8_UNORM,
+			DXGI_FORMAT_R16G16B16A16_FLOAT,
 			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 		);
 
@@ -280,7 +307,15 @@ void NailEngine::CreateRenderTargetGroup()
 		);
 
 		rtVec[1].texture = ResourceManager::Instance.Get().CreateTexture(
-			L"SpecularLightTarget",
+			L"AmbientLightTarget",
+			this->windowInfo.width,
+			this->windowInfo.height,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+		);
+
+		rtVec[2].texture = ResourceManager::Instance.Get().CreateTexture(
+			L"LightShadowTarget",
 			this->windowInfo.width,
 			this->windowInfo.height,
 			DXGI_FORMAT_R8G8B8A8_UNORM,

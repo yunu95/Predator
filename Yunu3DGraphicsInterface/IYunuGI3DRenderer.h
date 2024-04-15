@@ -54,6 +54,7 @@ namespace yunuGI
         //virtual D3D12_GPU_DESCRIPTOR_HANDLE* QueryD3D12RenderOutputGDH() { return nullptr; }
 
         virtual void SetUseIBL(bool useIBL) = 0;
+        virtual void SetUseLightMap(bool useLightMap) = 0;
 
         virtual void Finalize() = 0;
     };

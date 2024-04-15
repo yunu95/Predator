@@ -3,10 +3,13 @@
 #include "EditorLayer.h"
 #include "YunutyEngine.h"
 
+#include "CinematicManager.h"
+
 namespace application
 {
 	CoroutineObject<void> Action_CinematicModeChange::DoAction()
 	{
+		CinematicManager::Instance().SetCinematicMode(cinematicMode);
 		co_return;
 	}
 

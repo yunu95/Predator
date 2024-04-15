@@ -48,6 +48,11 @@ namespace application
 		return true;
 	}
 
+	void ScriptSystem::PreMapLoad()
+	{
+		Clear();
+	}
+
 	void ScriptSystem::OnGameStart()
 	{
 		for (auto& each : scriptList)
@@ -64,6 +69,11 @@ namespace application
 		}
 	}
 
+	std::unordered_set<Script*>& ScriptSystem::GetScriptList()
+	{
+		return scriptContainer;
+	}
+
 	void ScriptSystem::Clear()
 	{
 		for (auto& each : scriptList)
@@ -72,11 +82,6 @@ namespace application
 		}
 		scriptList.clear();
 		scriptContainer.clear();
-	}
-
-	std::unordered_set<Script*>& ScriptSystem::GetScriptList()
-	{
-		return scriptContainer;
 	}
 
 	bool ScriptSystem::PreEncoding(json& data) const

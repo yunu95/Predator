@@ -29,6 +29,8 @@
 #include "ScriptSystem.h"
 #include "Script.h"
 #include "UIImage.h"
+#include "CinematicManager.h"
+#include "PlayableComponent.h"
 
 #include <algorithm>
 #include <string>
@@ -93,15 +95,15 @@ void GraphicsTest()
         }
     }
 
-    {
-        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        //obj->GetTransform()->SetLocalPosition(Vector3d{ -500,500,1 });
-        obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,100 });
-        auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
-        text->GetGI().SetFontSize(20);
-        auto test = obj->AddComponent<TestComponent2>();
-        test->text = text;
-    }
+    //{
+    //    auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    //    //obj->GetTransform()->SetLocalPosition(Vector3d{ -500,500,1 });
+    //    obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,100 });
+    //    auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
+    //    text->GetGI().SetFontSize(20);
+    //    auto test = obj->AddComponent<TestComponent2>();
+    //    test->text = text;
+    //}
 
     /*   {
            auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -355,6 +357,7 @@ void application::contents::ContentsLayer::Initialize()
     yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
     ShortcutInit();
     ScriptSystem::Instance();
+    CinematicManager::Instance();
 
     wanderUtils::LoadResourcesRecursively();
 
@@ -375,47 +378,50 @@ void application::contents::ContentsLayer::Initialize()
 #else
     {
 
-        ShortcutSystem::Instance();
-
-        {
-            auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-            //obj->GetTransform()->SetLocalPosition(Vector3d{ -500,500,1 });
-            obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,100 });
-            auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
-            text->GetGI().SetFontSize(20);
-            auto test = obj->AddComponent<TestComponent2>();
-            test->text = text;
-        }
-
-        auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-
-        auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
-        auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        RegisterToEditorObjectContainer(mouseCursorObject);
-        auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-        mouseCursorMesh->GetGI().SetMesh(sphereMesh);
-        mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
-
-        /*WarriorProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 0.0f));;
-        MagicianProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 2.0f));;
-        HealerProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, -2.0f));*/
-
-        auto skillPreviewCubeMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        AttachDebugMesh(skillPreviewCubeMeshObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
-        SkillPreviewSystem::Instance().SetPathPreviewObject(skillPreviewCubeMeshObject);
-        RegisterToEditorObjectContainer(skillPreviewCubeMeshObject);
-
-        auto skillPreviewSphereMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        AttachDebugMesh(skillPreviewSphereMeshObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
-        SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
-        RegisterToEditorObjectContainer(skillPreviewSphereMeshObject);
-
-        InputManager::Instance();
-        UIManager::Instance();
-        bool mapFound = false;
-
         editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
-        editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
+        ContentsLayer::PlayContents();
+
+        //ShortcutSystem::Instance();
+
+        //{
+        //    auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        //    //obj->GetTransform()->SetLocalPosition(Vector3d{ -500,500,1 });
+        //    obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,100 });
+        //    auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
+        //    text->GetGI().SetFontSize(20);
+        //    auto test = obj->AddComponent<TestComponent2>();
+        //    test->text = text;
+        //}
+
+        //auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+        //auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
+        //auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        //RegisterToEditorObjectContainer(mouseCursorObject);
+        //auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+        //mouseCursorMesh->GetGI().SetMesh(sphereMesh);
+        //mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
+
+        ///*WarriorProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 0.0f));;
+        //MagicianProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, 2.0f));;
+        //HealerProductor::Instance().CreateUnit(Vector3d(0.0f, 0.0f, -2.0f));*/
+
+        //auto skillPreviewCubeMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        //AttachDebugMesh(skillPreviewCubeMeshObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
+        //SkillPreviewSystem::Instance().SetPathPreviewObject(skillPreviewCubeMeshObject);
+        //RegisterToEditorObjectContainer(skillPreviewCubeMeshObject);
+
+        //auto skillPreviewSphereMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+        //AttachDebugMesh(skillPreviewSphereMeshObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
+        //SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
+        //RegisterToEditorObjectContainer(skillPreviewSphereMeshObject);
+
+        //InputManager::Instance();
+        //UIManager::Instance();
+        //bool mapFound = false;
+
+        //editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
+        //editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
     }
 #endif
@@ -441,6 +447,7 @@ void application::contents::ContentsLayer::PlayContents()
 {
     SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
+    //UIManager::Instance().ImportUI("InWanderLand.iwui");
     GameManager::Instance().Reset();
 
     for (auto e : componentsCreatedByEditorVector)
@@ -473,7 +480,8 @@ void application::contents::ContentsLayer::PlayContents()
     const int menuWindowXpos = 760;
     const int menuWindowYpos = 540 - 350 / 2;
 
-    UIManager::Instance().LoadUITextures();
+    //UIManager::Instance().LoadUITextures();
+    UIManager::Instance().ImportUI("InWanderLand.iwui");
 
     auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
@@ -778,10 +786,8 @@ void application::contents::ContentsLayer::PlayContents()
     robinWSkillUpgradeButtonObject->GetTransform()->SetLocalPosition({ 300, 700, 0 });
     RegisterToEditorObjectContainer(robinWSkillUpgradeButtonObject);
 
-
-
-    /// ScriptSystem 을 위한 부분입니다.
-    ScriptSystem::Instance().OnGameStart();
+    /// Playable 동작들을 일괄 처리할 부분입니다.
+    PlayableComponent::OnGameStartAll();
 }
 
 void application::contents::ContentsLayer::PauseContents()
@@ -791,6 +797,9 @@ void application::contents::ContentsLayer::PauseContents()
     {
         e->SetActive(false);
     }
+
+    /// Playable 동작들을 일괄 처리할 부분입니다.
+    PlayableComponent::OnGamePauseAll();
 }
 
 void application::contents::ContentsLayer::ResumeContents()
@@ -800,6 +809,9 @@ void application::contents::ContentsLayer::ResumeContents()
     {
         e->SetActive(true);
     }
+
+    /// Playable 동작들을 일괄 처리할 부분입니다.
+    PlayableComponent::OnGameResumeAll();
 }
 
 void application::contents::ContentsLayer::StopContents()
@@ -813,8 +825,10 @@ void application::contents::ContentsLayer::StopContents()
         e->SetActive(false);
     }
 
-    /// ScriptSystem 을 위한 부분입니다.
-    ScriptSystem::Instance().OnGameStop();
+    UIManager::Instance().Clear();
+
+    /// Playable 동작들을 일괄 처리할 부분입니다.
+    PlayableComponent::OnGameStopAll();
 }
 
 #ifdef GEN_TESTS

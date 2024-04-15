@@ -99,6 +99,10 @@ void PixelShader::CreateShaderType(const std::string& fileContent)
 			{
 				this->shaderInfo.shaderType = yunuGI::ShaderType::Light;
 			}
+			else if (shaderType == "Particle")
+			{
+				this->shaderInfo.shaderType = yunuGI::ShaderType::Particle;
+			}
 			else
 			{
 				// 뒤에 입력이 없었으니 assert

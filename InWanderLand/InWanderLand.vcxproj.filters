@@ -436,6 +436,9 @@
     <Filter Include="Contents\Cinematic">
       <UniqueIdentifier>{1be88953-fede-49fa-bcff-d309ee96f946}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\BurnEffect">
+      <UniqueIdentifier>{0cb52d66-9140-4368-8842-d37ef7df2afb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1121,6 +1124,12 @@
     <ClInclude Include="CinematicManager.h">
       <Filter>Contents\Cinematic</Filter>
     </ClInclude>
+    <ClInclude Include="BurnEffect.h">
+      <Filter>Contents\BurnEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayableComponent.h">
+      <Filter>Contents\GameManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1711,6 +1720,12 @@
     </ClCompile>
     <ClCompile Include="CinematicManager.cpp">
       <Filter>Contents\Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="BurnEffect.cpp">
+      <Filter>Contents\BurnEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayableComponent.cpp">
+      <Filter>Contents\GameManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

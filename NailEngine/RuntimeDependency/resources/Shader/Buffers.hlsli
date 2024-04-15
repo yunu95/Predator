@@ -4,6 +4,8 @@
 #define MAX_BONE_COUNT 250
 #define MAX_FRAME_COUNT 500
 #define MAX_INSTANCE_MODEL 500
+#define MAX_PARTICLE 500
+#define MAX_STATIC_MODEL 1024
 
 cbuffer MatrixBuffer : register(b0)
 {
@@ -49,6 +51,11 @@ cbuffer MaterialBuffer : register(b1)
     int temp_int7;
     int temp_int8;
     int temp_int9;
+    
+    float temp_float0;
+    float temp_float1;
+    float temp_float2;
+    float temp_float3;
 };
 
 // 라이트 관련
@@ -151,7 +158,34 @@ cbuffer UtilBuffer : register(b10)
     float windowHeight;
     float deltaTime;
     int useIBL;
+    
+    int useLightMap;
+    float3 padding5;
 }
+
+struct ParticleDesc
+{
+    float3 pos;
+    float scale;
+};
+
+cbuffer ParticleBuffer : register(b11)
+{
+    ParticleDesc particleDesc[MAX_PARTICLE];
+};
+
+struct LightMapUV
+{
+    int lightMapIndex;
+    float3 pad;
+    float2 uvOffset;
+    float2 scaling;
+};
+
+cbuffer LightMapUVBuffer : register(b12)
+{
+    LightMapUV lightMapUV[MAX_STATIC_MODEL];
+};
 
 Texture2D AlbedoMap : register(t0);
 Texture2D NormalMap : register(t1);
@@ -178,6 +212,10 @@ TextureCube IrradianceMap : register(t20);
 TextureCube PrefilteredMap : register(t21);
 Texture2D BrdfMap : register(t22);
 TextureCubeArray PointLightShadowMap : register(t23);
+
+
+Texture2D UnityLightMap : register(t24);
+
 
 SamplerState sam : register(s0);
 SamplerComparisonState shadowSam : register(s1);

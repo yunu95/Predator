@@ -6,7 +6,7 @@ namespace application
 	{
 		for (int i = 0; i < coroutineQueue.size(); i++)
 		{
-			auto& coroutine = coroutineQueue.front();
+			auto coroutine = coroutineQueue.front();
 			if (coroutine.Done())
 			{
 				coroutineQueue.pop();

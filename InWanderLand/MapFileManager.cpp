@@ -20,6 +20,7 @@
 #include "ScriptSystem.h"
 #include "Script.h"
 #include "Module_ScriptEditor.h"
+#include "PlayableComponent.h"
 
 #include <fstream>
 
@@ -284,7 +285,7 @@ namespace application
             commandManager.Clear();
 #endif
             ShortcutSystem::Instance().Clear();
-            ScriptSystem::Instance().Clear();
+            PlayableComponent::PreMapLoadAll();
             instanceManager.Clear();
             templateDataManager.Clear();
             UUIDManager::GetSingletonInstance().Clear();
