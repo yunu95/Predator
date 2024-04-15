@@ -987,6 +987,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="AutoAttackProjectilePool.h" />
     <ClInclude Include="BleedingComponent.h" />
     <ClInclude Include="BlindFieldComponent.h" />
+    <ClInclude Include="BurnEffect.h" />
     <ClInclude Include="CreateInstanceCommand.h" />
     <ClInclude Include="BossProductor.h" />
     <ClInclude Include="BossSkillSystem.h" />
@@ -1194,6 +1195,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="AutoAttackProjectilePool.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
     <ClCompile Include="BlindFieldComponent.cpp" />
+    <ClCompile Include="BurnEffect.cpp" />
     <ClCompile Include="CreateInstanceCommand.cpp" />
     <ClCompile Include="BossProductor.cpp" />
     <ClCompile Include="BossSkillSystem.cpp" />

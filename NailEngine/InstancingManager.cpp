@@ -461,6 +461,7 @@ void InstancingManager::RenderSkinned()
 
 		{
 			int descIndex = 0;
+			int index = 0;
 			for (auto& i : renderInfoVec)
 			{
 				if (i->renderInfo.isActive == false) continue;
@@ -478,7 +479,17 @@ void InstancingManager::RenderSkinned()
 				data.wtm = renderInfo.wtm;
 				AddData(instanceID, data);
 				this->instanceTransitionDesc->transitionDesc[descIndex++] = i->animator->GetTransitionDesc();
+
+				lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo.lightMapIndex;
+				lightMapUVBuffer->lightMapUV[index].scaling = renderInfo.uvScaling;
+				lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo.uvOffset;
+
+				index++;
 			}
+
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
+				sizeof(LightMapUVBuffer),
+				static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
 
 			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::INST_TRANSITION))->PushGraphicsData(this->instanceTransitionDesc.get(),
 				sizeof(InstanceTransitionDesc), static_cast<int>(CB_TYPE::INST_TRANSITION));

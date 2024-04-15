@@ -50,12 +50,12 @@ namespace yunuGIAdapter
 
 		virtual void SetPickingMode(bool isPickingModeOn) {}
 
-		virtual void SetMaterial(unsigned int index, yunuGI::IMaterial* material) override
+		virtual void SetMaterial(unsigned int index, yunuGI::IMaterial* material, bool isOrigin = false) override
 		{
 		
 		}
 
-		virtual yunuGI::IMaterial* GetMaterial(unsigned int index = 0) override
+		virtual yunuGI::IMaterial* GetMaterial(unsigned int index = 0, bool isInstance = true) override
 		{
 			return particleSystem->GetMaterial();
 		}

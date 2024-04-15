@@ -62,6 +62,11 @@ void Material::SetInt(int index, int val)
 	this->temp_int[index] = val;
 }
 
+void Material::SetFloat(int index, float val)
+{
+	this->temp_float[index] = val;
+}
+
 const yunuGI::IShader* Material::GetPixelShader() const
 {
 	return this->ps.get();
@@ -100,6 +105,7 @@ void Material::PushGraphicsData()
 	materialBuffer.color = reinterpret_cast<DirectX::SimpleMath::Vector4&>(this->color);
 	materialBuffer.useTexture = this->useTextures;
 	materialBuffer.temp_int = this->temp_int;
+	materialBuffer.temp_float = this->temp_float;
 
 	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATERIAL))->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer), static_cast<int>(CB_TYPE::MATERIAL));
 

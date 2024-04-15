@@ -307,7 +307,15 @@ void NailEngine::CreateRenderTargetGroup()
 		);
 
 		rtVec[1].texture = ResourceManager::Instance.Get().CreateTexture(
-			L"SpecularLightTarget",
+			L"AmbientLightTarget",
+			this->windowInfo.width,
+			this->windowInfo.height,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+		);
+
+		rtVec[2].texture = ResourceManager::Instance.Get().CreateTexture(
+			L"LightShadowTarget",
 			this->windowInfo.width,
 			this->windowInfo.height,
 			DXGI_FORMAT_R8G8B8A8_UNORM,

@@ -24,6 +24,10 @@ struct PS_OUT
     float4 emissive : SV_Target5;
 };
 
+// Temp0Map : Dissolve Texture
+// float0 : Amount
+// float1 : Edge Thickness
+
 PS_OUT main(PixelIn input)
 {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,35 +35,33 @@ PS_OUT main(PixelIn input)
     
     float4 color = float4(1.f, 1.f, 1.f, 1.f);
     
+    if (UseTexture(useAlbedo) == 1)
+    {
+        color = AlbedoMap.Sample(sam, input.uv);
+    }
+    
+    color = pow(color, 2.2f);
+    
+    
+    float4 materialTemp = materialColor;
+    
+    half dissolve_value = Temp0Map.Sample(sam, input.uv).r;
+    clip(dissolve_value - temp_float0);
+    //dissolve_value = 1 - dissolve_value;
+    // 음수면 페이즈2 용 이미지 출력
+    color = color + materialTemp * step(dissolve_value - temp_float0, temp_float1);
+    output.color = color;
+    
     if (UseTexture(useOpacity) == 1)
     {
         float tempOpa = OpacityMap.Sample(sam, input.uv).w;
-        if (tempOpa== 0.f)
+        if (tempOpa == 0.f)
         {
             clip(-1);
         }
     }
     
-    if (UseTexture(useAlbedo) == 1)
-    {
-        color = AlbedoMap.Sample(sam, input.uv);
-    }
 
-    if ((lightMapUV[input.id].lightMapIndex != -1)  && useLightMap)
-    {
-        float4 lightColor = float4(0, 0, 0, 1.f);
-        lightColor = UnityLightMap.Sample(sam, input.lightUV);
-        lightColor *= 0.6;
-        lightColor.rgb = pow(lightColor.rgb, 1.f / 2.2f);
-    
-        output.color = color * lightColor;
-    }
-    else
-    {
-        color = pow(color, 2.2f);
-        output.color = color;
-    }
-    
     
     float3 viewNormal = input.normalV;
     if (UseTexture(useNormal) == 1)
@@ -101,7 +103,7 @@ PS_OUT main(PixelIn input)
     }
     
     output.util = float4(lightMapUV[input.id].lightMapIndex, DiffuseExposure, AmbientExposure, 1.f);
-
+    
     return output;
 }
 

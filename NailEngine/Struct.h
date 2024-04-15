@@ -12,6 +12,7 @@ using namespace DirectX::PackedVector;
 
 #define MAX_TEXTURE 18
 #define MAX_INT 10
+#define MAX_FLOAT 4
 #define MAX_BONE_COUNT 250
 #define MAX_FRAME_COUNT 500
 #define MAX_INSTANCE_MODEL 500
@@ -94,6 +95,7 @@ struct MaterialBuffer
 
 	std::array<unsigned int, MAX_TEXTURE> useTexture;
 	std::array<int, MAX_INT> temp_int;
+	std::array<float, MAX_FLOAT> temp_float;
 };
 
 struct CameraBuffer

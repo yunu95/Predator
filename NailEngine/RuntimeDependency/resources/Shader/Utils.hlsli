@@ -136,7 +136,7 @@ float CalcShadowFactor(SamplerComparisonState samShadow,
     return percentLit /= 9.0f;
 }
 
-void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 diffuse, out float4 ambient, out float4 specular, float3 albedo, float ao, float metalness, float roughness, float diffuseExposure, float ambientExposure, int useLightMap)
+void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 diffuse, out float4 ambient, out float4 specular, float3 albedo, float ao, float metalness, float roughness, float diffuseExposure, float ambientExposure, int useLightMap, out float shadowFactor)
 {
     // 나는 별도의 렌더타겟에 View Space에 대한 정보가 담겨 있어 연산은 View Space에서 이루어진다.
     diffuse = float4(0.f, 0.f, 0.f, 0.f);
@@ -186,9 +186,8 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         
        
         ///
-        float shadow = 1.f;
-        
-        if (length(cosLo) && (useLightMap == -1))
+        if (length(cosLo))
+        //if (length(cosLo) && (useLightMap == -1))
         {
             matrix shadowVP = lightVP;
             
@@ -199,7 +198,7 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
             // 현재 Position을 Light Space로
             float4 shadowClipPos = mul(worldPos, shadowVP);
             
-            shadow = CalcShadowFactor(shadowSam, Temp2Map, shadowClipPos);
+            shadowFactor = CalcShadowFactor(shadowSam, Temp2Map, shadowClipPos);
             
             specular = (float4) 0;
         }
@@ -237,8 +236,6 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
         {
             ambient.xyz = lights[lightIndex].color.ambient;
         }
-        
-        diffuse *= shadow;
     }
     else if (lights[lightIndex].lightType == 1)
     {
@@ -316,22 +313,19 @@ void CalculatePBRLight(int lightIndex, float3 normal, float3 pos, out float4 dif
             float4 worldPos = mul(float4(pos.xyz, 1.f), VTMInv);
             float curDepth = CalCulateDepth((worldPos.xyz - lights[lightIndex].position.xyz), lightIndex);
         
-            float shadow = 1;
             if (isShadowCast && (useLightMap == -1))
             {
-                shadow = PointLightShadowMap.Sample(sam, float4(normalize(worldPos.xyz - lights[lightIndex].position.xyz), plIndex)).r;
+                shadowFactor = PointLightShadowMap.Sample(sam, float4(normalize(worldPos.xyz - lights[lightIndex].position.xyz), plIndex)).r;
                 
-                if (shadow < curDepth - 0.0001f)
+                if (shadowFactor < curDepth - 0.0001f)
                 {
-                    shadow = 0.0f;
+                    shadowFactor = 0.0f;
                 }
                 else
                 {
-                    shadow = 1.0f;
+                    shadowFactor = 1.0f;
                 }
             }
-            
-            diffuse *= shadow;
         }
     }
 }

@@ -25,6 +25,7 @@
 #include "SingletonInstanceContainer.h"
 #include "ShortcutSystem.h"
 #include "RobinSkillDevelopmentSystem.h"
+#include "BurnEffect.h"
 
 #include <algorithm>
 #include <string>
@@ -87,16 +88,6 @@ void GraphicsTest()
 		{
 			shader2 = i;
 		}
-	}
-
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		//obj->GetTransform()->SetLocalPosition(Vector3d{ -500,500,1 });
-		obj->GetTransform()->SetLocalScale(Vector3d{ 100,100,100 });
-		auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
-		text->GetGI().SetFontSize(20);
-		auto test = obj->AddComponent<TestComponent2>();
-		test->text = text;
 	}
 
 	/*   {
@@ -252,55 +243,59 @@ void GraphicsTest()
 	//}
 
 	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Room");
-
-		for (auto& each : obj->GetChildren())
-		{
-			yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
-			renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-			if (renderer)
-			{
-				//renderer->GetGI().SetLightMapUVIndex(0);
-				renderer->GetGI().SetLightMapUVScaling(0.5685104, 0.5685104);
-				renderer->GetGI().SetLightMapUVOffset(-0.002760944, -0.002760978);
-			}
-		}
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
+		auto effect = obj->AddComponent<BurnEffect>();
+		effect->SetEdgeColor(yunuGI::Color{ 1,0,0,1 });
+		auto test = obj->AddComponent<TestComponent2>();
+		auto renderer = obj->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
+		test->effect = effect;
 	}
 
 	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
-		obj->GetTransform()->SetLocalPosition(Vector3d{ -0.202,-0.746 ,-0.507 });
-		obj->GetTransform()->SetLocalScale(Vector3d{ 0.1,0.1,0.1 });
-		for (auto& each : obj->GetChildren())
-		{
-			yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
-			renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-			if (renderer)
-			{
-				renderer->GetGI().SetLightMapUVIndex(0);
-				renderer->GetGI().SetLightMapUVScaling(0.00622948, 0.00622948);
-				renderer->GetGI().SetLightMapUVOffset(0.5639337, 0.1786798);
-			}
-		}
+		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 7,0,0 });
+		auto renderer = obj->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
 	}
 
-	{
-		auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CupTower");
-		obj->GetTransform()->SetLocalPosition(Vector3d{ 0.211,-1.036 ,0 });
-		obj->GetTransform()->SetLocalScale(Vector3d{ 0.1,0.1,0.1 });
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 10,0,0 });
+	//}
 
-		for (auto& each : obj->GetChildren())
-		{
-			yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
-			renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-			if (renderer)
-			{
-				//renderer->GetGI().SetLightMapUVIndex(0);
-				renderer->GetGI().SetLightMapUVScaling(0.180436, 0.180436);
-				renderer->GetGI().SetLightMapUVOffset(0.561944, -0.001949755);
-			}
-		}
-	}
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Cube");
+	//	//obj->GetTransform()->SetLocalPosition(Vector3d{ -0.202,-0.746 ,-0.507 });
+	//	obj->GetTransform()->SetLocalScale(Vector3d{ 5,1,5 });
+	//	for (auto& each : obj->GetChildren())
+	//	{
+	//		yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
+	//		renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//		if (renderer)
+	//		{
+	//			renderer->GetGI().SetLightMapUVIndex(0);
+	//			renderer->GetGI().SetLightMapUVScaling(0.4716797, 0.4716797);
+	//			renderer->GetGI().SetLightMapUVOffset(0.474318, 0);
+	//		}
+	//	}
+	//}
+
+	//{
+	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CupTower");
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0.33 ,0});
+	//	obj->GetTransform()->SetLocalScale(Vector3d{ 0.3,0.3,0.3 });
+
+	//	for (auto& each : obj->GetChildren())
+	//	{
+	//		yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
+	//		renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//		if (renderer)
+	//		{
+	//			renderer->GetGI().SetLightMapUVIndex(0);
+	//			renderer->GetGI().SetLightMapUVScaling(0.5423824, 0.5423824);
+	//			renderer->GetGI().SetLightMapUVOffset(-0.006073686, -0.005859978);
+	//		}
+	//	}
+	//}
 
 	//{
 	//	auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");

@@ -51,6 +51,11 @@ cbuffer MaterialBuffer : register(b1)
     int temp_int7;
     int temp_int8;
     int temp_int9;
+    
+    float temp_float0;
+    float temp_float1;
+    float temp_float2;
+    float temp_float3;
 };
 
 // 라이트 관련

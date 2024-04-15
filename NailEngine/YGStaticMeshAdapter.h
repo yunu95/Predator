@@ -56,7 +56,7 @@ namespace yunuGIAdapter
 
 		virtual void SetPickingMode(bool isPickingModeOn) {}
 
-		virtual void SetMaterial(unsigned int index, yunuGI::IMaterial* material) override
+		virtual void SetMaterial(unsigned int index, yunuGI::IMaterial* material, bool isOrigin = false) override
 		{
 			// 새로운 Material이라면
 			if (index + 1 > this->materialVec.size())
@@ -65,24 +65,40 @@ namespace yunuGIAdapter
 				tempMaterial->SetRenderable(this->renderable);
 				this->materialVec.emplace_back(tempMaterial);
 
-				if (this->materialVec.back()->IsOrigin())
+				if (isOrigin)
 				{
 					this->materialVec.back()->original = reinterpret_cast<Material*>(material);
+					this->materialVec.back()->SetIsOrigin(isOrigin);
 				}
 				else
 				{
-					this->materialVec.back()->variation = reinterpret_cast<Material*>(material);
+					if (this->materialVec.back()->IsOrigin())
+					{
+						this->materialVec.back()->original = reinterpret_cast<Material*>(material);
+					}
+					else
+					{
+						this->materialVec.back()->variation = reinterpret_cast<Material*>(material);
+					}
 				}
 			}
 			else
 			{
-				if (this->materialVec[index]->IsOrigin())
+				if (isOrigin)
 				{
 					this->materialVec[index]->original = reinterpret_cast<Material*>(material);
+					this->materialVec[index]->SetIsOrigin(isOrigin);
 				}
 				else
 				{
-					this->materialVec[index]->variation = reinterpret_cast<Material*>(material);
+					if (this->materialVec[index]->IsOrigin())
+					{
+						this->materialVec[index]->original = reinterpret_cast<Material*>(material);
+					}
+					else
+					{
+						this->materialVec[index]->variation = reinterpret_cast<Material*>(material);
+					}
 				}
 			}
 
@@ -106,14 +122,15 @@ namespace yunuGIAdapter
 		{
 			renderable->SetLightMapUVIndex(index);
 		};
+		virtual yunuGI::IMaterial* GetMaterial(unsigned int index = 0, bool isInstance = true)override
+		{
+			return this->materialVec[index]->GetVariation(isInstance);
+		};
 
 	private:
 		std::shared_ptr<StaticMesh> renderable;
 		std::vector<std::shared_ptr<MaterialWrapper>> materialVec;
 
-		virtual yunuGI::IMaterial* GetMaterial(unsigned int index = 0)override
-		{
-			return this->materialVec[index].get();
-		};
+		
 	};
 }

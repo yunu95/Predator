@@ -425,6 +425,19 @@ std::shared_ptr<yunuGI::IMaterial> ResourceManager::GetMaterial(const std::wstri
 	}
 }
 
+std::shared_ptr<yunuGI::IMaterial> ResourceManager::GetInstanceMaterial(const std::wstring& materialName)
+{
+	auto iter2 = instanceMaterialMap.find(materialName);
+	if (iter2 == instanceMaterialMap.end())
+	{
+		return nullptr;
+	}
+	else
+	{
+		return iter2->second;
+	}
+}
+
 std::shared_ptr<yunuGI::IShader> ResourceManager::GetShader(const std::wstring& shaderPath)
 {
 	auto iter = shaderMap.find(shaderPath);
@@ -864,6 +877,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateDeferredShader(L"BlurPS.cso");
 	CreateShader(L"PointLightShadowPS.cso");
 	CreateShader(L"ParticlePS.cso");
+	CreateShader(L"DissolvePS.cso");
 #pragma endregion
 
 #pragma region GS
@@ -894,6 +908,15 @@ void ResourceManager::CreateDefaultMaterial()
 	{
 		std::wstring name{};
 		CrateMaterial(name);
+	}
+
+	// DissolveMaterial
+	{
+		std::wstring name{ L"SkinnedDissolveMaterial" };
+		auto material = CrateMaterial(name);
+		material->SetTexture(yunuGI::Texture_Type::Temp0, this->GetTexture(L"Texture/Dissolve.jpg").get());
+		material->SetVertexShader(this->GetShader(L"SkinnedVS.cso").get());
+		material->SetPixelShader(this->GetShader(L"DissolvePS.cso").get());
 	}
 
 	// Skinned Default Material
@@ -966,9 +989,13 @@ void ResourceManager::CreateDefaultMaterial()
 		material->SetTexture(yunuGI::Texture_Type::Temp1,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(DIFFUSE)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp2,
-			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR)).get());
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(LIGHT_SHADOW)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp3,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)]->GetRTTexture(static_cast<int>(UP4x4_0)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp4,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(UTIL)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp5,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(AMBIENT)).get());
 	}
 
 	// BackBuffer
@@ -1052,7 +1079,7 @@ void ResourceManager::CreateDefaultMaterial()
 			material->SetPixelShader(GetShader(L"TexturePS.cso").get());
 			material->SetVertexShader(GetShader(L"TextureVS.cso").get());
 			material->SetTexture(yunuGI::Texture_Type::Temp0,
-				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR)).get());
+				renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(LIGHT_SHADOW)).get());
 		}
 
 		{
@@ -1090,6 +1117,7 @@ void ResourceManager::CreateDefaultTexture()
 	CreateTexture(L"Texture/LightMap.png");
 	CreateTexture(L"Texture/LightMap.hdr");
 	CreateTexture(L"Texture/TempTexture.dds");
+	CreateTexture(L"Texture/Dissolve.jpg");
 	//CreateTexture(L"Texture/Brick_Albedo.jpg");
 	//CreateTexture(L"Texture/Brick_Normal.jpg");
 
@@ -2157,4 +2185,11 @@ void ResourceManager::LoadLineMesh()
 std::wstring ResourceManager::String_To_Wstring(const std::string& str)
 {
 	return std::wstring{ str.begin(), str.end() };
+}
+
+void ResourceManager::DeleteMaterial(yunuGI::IMaterial* material)
+{
+	materialVec;
+	materialMap.erase(material->GetName());
+	instanceMaterialMap;
 }

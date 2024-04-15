@@ -12,7 +12,7 @@ namespace yunuGI
 	{
 	public:
 		virtual void SetPickingMode(bool isPickingModeOn) = 0;
-		virtual void SetMaterial(unsigned int index, IMaterial* material) {};
+		virtual void SetMaterial(unsigned int index, IMaterial* material, bool isOrigin = false) {};
 
 
 		virtual void SetDuration(float duration) = 0;
