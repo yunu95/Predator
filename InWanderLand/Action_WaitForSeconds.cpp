@@ -66,6 +66,7 @@ namespace application
 
 	bool Action_WaitForSeconds::PreEncoding(json& data) const
 	{
+		data["waitTime"] = waitTime;
 		return true;
 	}
 
@@ -76,6 +77,7 @@ namespace application
 
 	bool Action_WaitForSeconds::PreDecoding(const json& data)
 	{
+		waitTime = data["waitTime"];
 		return true;
 	}
 
@@ -145,6 +147,7 @@ namespace application
 
 	bool Action_WaitForRealSeconds::PreEncoding(json& data) const
 	{
+		data["waitTime"] = waitTime;
 		return true;
 	}
 
@@ -155,6 +158,7 @@ namespace application
 
 	bool Action_WaitForRealSeconds::PreDecoding(const json& data)
 	{
+		waitTime = data["waitTime"];
 		return true;
 	}
 

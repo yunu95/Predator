@@ -25,7 +25,7 @@ namespace application
 		public:
 			virtual ~EditorModule() = default;
 
-			inline bool GetActivation() { return activation; }
+			inline bool GetActivation() const { return activation; }
 			inline void SetActivation(bool activation) { this->activation = activation; }
 
 		protected:

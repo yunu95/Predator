@@ -1,5 +1,6 @@
 #include "ScriptSystem.h"
 
+#include "Script.h"
 #include "YunutyEngine.h"
 
 namespace application
@@ -20,6 +21,7 @@ namespace application
 		/// Action
 		actionList[ActionType::WaitForSeconds] = "WaitForSeconds";
 		actionList[ActionType::WaitForRealSeconds] = "WaitForRealSeconds";
+		actionList[ActionType::CinematicModeChange] = "CinematicModeChange";
 	}
 
 	Script* ScriptSystem::CreateScript()
@@ -84,7 +86,7 @@ namespace application
 		{
 			uuidStr = UUID_To_String(uuid);
 
-			if (!ptr->PreEncoding(data["ScriptList"][uuidStr]["0_Pre"]))
+			if (!ptr->PreEncoding(data["ScriptList"][uuidStr]))
 			{
 				return false;
 			}
@@ -106,7 +108,7 @@ namespace application
 				return false;
 			}
 
-			if (!ptr->PostEncoding(itr.value()["1_Post"]))
+			if (!ptr->PostEncoding(itr.value()))
 			{
 				return false;
 			}
@@ -138,7 +140,7 @@ namespace application
 			script->SetUUID(uuid);
 			scriptList[uuid] = script;
 
-			if (!script->PreDecoding(scriptData["0_Pre"]))
+			if (!script->PreDecoding(scriptData))
 			{
 				Clear();
 				return false;
@@ -157,11 +159,11 @@ namespace application
 		{
 			uuid = String_To_UUID(uuidStr);
 
-			for (auto each : scriptList)
+			for (auto& each : scriptList)
 			{
 				if (each.first == uuid)
 				{
-					if (!each.second->PostDecoding(scriptData["1_Post"]))
+					if (!each.second->PostDecoding(scriptData))
 					{
 						Clear();
 						return false;

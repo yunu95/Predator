@@ -1,9 +1,11 @@
 #include "InWanderLand.h"
 #include "Module_ScriptEditor.h"
-#include "Application.h"
+
 #include "WanderUtils.h"
+#include "Application.h"
 #include "EditorLayer.h"
 #include "EditorInputManager.h"
+#include "Script.h"
 
 namespace application
 {
@@ -407,6 +409,11 @@ namespace application
 								case application::ActionType::WaitForRealSeconds:
 								{
 									selectedScript->AddAction<Action_WaitForRealSeconds>();
+									break;
+								}
+								case application::ActionType::CinematicModeChange:
+								{
+									selectedScript->AddAction<Action_CinematicModeChange>();
 									break;
 								}
 								default:

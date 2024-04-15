@@ -6,11 +6,20 @@
 #include "Singleton.h"
 #include "EditorModule.h"
 
-#include "imgui.h"
 #include "ScriptSystem.h"
+#include "TriggerList.h"
+#include "ConditionList.h"
+#include "ActionList.h"
+
+#include "imgui.h"
 #include "imgui_ModuleData.h"
 
 #include <memory>
+
+namespace application
+{
+	class Script;
+}
 
 namespace application
 {
@@ -123,6 +132,11 @@ namespace application
 						case application::ActionType::WaitForRealSeconds:
 						{
 							Action_WaitForRealSeconds::ImGui_DrawDataPopup(static_cast<Action_WaitForRealSeconds*>(data));
+							break;
+						}
+						case application::ActionType::CinematicModeChange:
+						{
+							Action_CinematicModeChange::ImGui_DrawDataPopup(static_cast<Action_CinematicModeChange*>(data));
 							break;
 						}
 						default:

@@ -19,6 +19,8 @@ namespace application
 	struct ICondition
 		: public Identifiable, public Storable
 	{
+		friend class Script;
+
 		virtual ~ICondition() = default;
 
 		/// dynamic_cast 가 아닌 switch case 로 동작하기 위한 함수입니다.

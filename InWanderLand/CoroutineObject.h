@@ -146,7 +146,6 @@ namespace application
 			handle->primitive_handle();
 		}
 
-	private:
 		class Coroutine_Handler
 		{
 		public:
@@ -167,6 +166,7 @@ namespace application
 			coro_Handle primitive_handle;
 		};
 
+	private:
 		std::shared_ptr<Coroutine_Handler> handle;
 	};
 
@@ -291,7 +291,6 @@ namespace application
 			handle->primitive_handle();
 		}
 
-	private:
 		class Coroutine_Handler
 		{
 		public:
@@ -312,6 +311,7 @@ namespace application
 			coro_Handle primitive_handle;
 		};
 
+	private:
 		std::shared_ptr<Coroutine_Handler> handle;
 	};
 }

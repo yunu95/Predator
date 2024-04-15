@@ -27,9 +27,7 @@
 #include "ShortcutSystem.h"
 #include "RobinSkillDevelopmentSystem.h"
 #include "ScriptSystem.h"
-#include "TriggerList.h"
-#include "ConditionList.h"
-#include "ActionList.h"
+#include "Script.h"
 #include "UIImage.h"
 
 #include <algorithm>

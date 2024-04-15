@@ -3,14 +3,27 @@
 
 #pragma once
 
-#include "Script.h"
 #include "Storable.h"
+
+#include "ITrigger.h"
+#include "ICondition.h"
+#include "IAction.h"
 
 #include "YunutyEngine.h"
 
 #include <unordered_map>
 #include <unordered_set>
 #include <string>
+
+namespace application
+{
+	class Script;
+
+	namespace editor
+	{
+		class MapFileManager;
+	}
+}
 
 namespace application
 {

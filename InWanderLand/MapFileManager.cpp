@@ -18,6 +18,7 @@
 #include "EditorCameraManager.h"
 #include "ShortcutSystem.h"
 #include "ScriptSystem.h"
+#include "Script.h"
 #include "Module_ScriptEditor.h"
 
 #include <fstream>
