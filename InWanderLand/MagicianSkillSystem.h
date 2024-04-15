@@ -35,14 +35,13 @@ private:
 public:
 	virtual void ActivateSkillOne(Vector3d skillPos) override;
 	virtual void ActivateSkillTwo(Vector3d skillPos) override;
+
 public:
 	void SetInterActionComponent(BlindFieldComponent* p_QSkillComponent, ParalysisFieldComponent* p_WSkillComponent);
 	
-	void SetQSkillCollider(physics::SphereCollider* p_projectileCollider, physics::SphereCollider* p_fieldDamageColliderp);
 	void SetQSkillObject(GameObject* p_projectileObj, GameObject* p_fieldDamageObj);
 	void SetQSkillDebugPair(std::pair<GameObject*, float> p_projectileObjectPair, std::pair<GameObject*, float> p_fieldObjectPair);
 
-	void SetWSkillCollider(physics::SphereCollider* p_projectileCollider, physics::SphereCollider* p_fieldDamageCollider);
 	void SetWSkillObject(GameObject* p_projectileTransformObj, GameObject* p_fieldDamageTransformObj);
 	void SetWSkillDebugPair(std::pair<GameObject*, float> p_projectileObjectPair, std::pair<GameObject*, float> p_fieldObjectPair);
 

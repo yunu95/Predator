@@ -3,6 +3,8 @@
 #include "MeleeAttackSystem.h"
 #include "DebugMeshes.h"
 #include "SingleNavigationField.h"
+#include "Unit_TemplateData.h"
+#include "BossSkillSystem.h"
 
 void MeleeEnemyProductor::SetUnitData()
 {
@@ -23,8 +25,8 @@ void MeleeEnemyProductor::SetUnitData()
 
 	m_maxAggroNumber = 10;
 
-	m_idRadius = 4.0f * lengthUnit;
-	m_atkRadius = 1.7f * lengthUnit;
+	m_idRadius = 4.0f * UNIT_LENGTH;
+	m_atkRadius = 1.7f * UNIT_LENGTH;
 	m_unitSpeed = 4.5f;
 
 	m_attackDelay = 1.0f;
@@ -94,11 +96,11 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 	unitAttackColliderObject->setName("UnitAttackCollider");
 
 	auto m_physicsCollider = unitAttackColliderObject->AddComponent<physics::BoxCollider>();
-	m_physicsCollider->SetHalfExtent({ meleeAttackColliderLength * 0.5f * lengthUnit, meleeAttackColliderLength * 0.5f * lengthUnit, meleeAttackColliderRange * 0.5f * lengthUnit });
+	m_physicsCollider->SetHalfExtent({ meleeAttackColliderLength * 0.5f * UNIT_LENGTH, meleeAttackColliderLength * 0.5f * UNIT_LENGTH, meleeAttackColliderRange * 0.5f * UNIT_LENGTH });
 
 	auto autoAttackDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(autoAttackDebugMesh, DebugMeshType::Cube, yunuGI::Color::red(), true);
-	autoAttackDebugMesh->GetTransform()->SetLocalScale({ meleeAttackColliderLength * lengthUnit, meleeAttackColliderLength * lengthUnit, meleeAttackColliderRange * lengthUnit });
+	autoAttackDebugMesh->GetTransform()->SetLocalScale({ meleeAttackColliderLength * UNIT_LENGTH, meleeAttackColliderLength * UNIT_LENGTH, meleeAttackColliderRange * UNIT_LENGTH });
 
 	auto meleeAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
 	meleeAttackSystem->SetMeleeAttackType(MeleeAttackType::Collider);
@@ -112,6 +114,31 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 	//autoAttackDebugMesh->SetParent(m_unitGameObject);
 	autoAttackDebugMesh->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -1 * meleeAttackColliderRange });
 #pragma endregion
+	if (isEliteMonster)
+	{
+#pragma region Elite Skill Object Setting
+		auto skillOneColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		auto skillOneCollider = skillOneColliderObject->AddComponent<physics::SphereCollider>();
+		float skillOneRadius = 5.0f * UNIT_LENGTH;
+		skillOneCollider->SetRadius(skillOneRadius);
+
+		auto skillOneDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+		AttachDebugMesh(skillOneDebugMesh, DebugMeshType::Sphere, yunuGI::Color::red(), true);
+		skillOneDebugMesh->GetTransform()->SetWorldScale({ skillOneRadius ,skillOneRadius ,skillOneRadius });
+#pragma endregion
+
+		auto eliteSkillSystem = m_unitGameObject->AddComponent<BossSkillSystem>();
+		eliteSkillSystem->SelectSkill(Unit::SkillEnum::BossSkillOne);
+		skillOneColliderObject->SetParent(m_unitGameObject);
+		skillOneDebugMesh->SetParent(m_unitGameObject);
+		eliteSkillSystem->SetSkillOneRequirments(skillOneColliderObject, skillOneDebugMesh);
+
+		auto skinnedMeshRenderer = m_unitGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
+		auto material = skinnedMeshRenderer->GetGI().GetMaterial();
+		auto clonedMaterial = graphics::Renderer::SingleInstance().GetResourceManager()->CloneMaterial(L"Red", material);
+		clonedMaterial->SetColor(yunuGI::Color::red());
+		skinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial);
+	}
 
 	UnitProductor::AddRangeSystemComponent();
 	UnitProductor::AddColliderComponent();
@@ -120,4 +147,11 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 	UnitProductor::SetUnitComponentMembers();
 
 	return m_unitComponent;
+}
+
+void MeleeEnemyProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p_podData)
+{
+	UnitProductor::MappingUnitData(p_podData);
+
+	isEliteMonster = p_podData.isEliteMonster;
 }

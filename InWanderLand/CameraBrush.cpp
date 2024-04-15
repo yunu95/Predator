@@ -46,13 +46,16 @@ namespace application
 
             void CameraBrush::ReadyBrush(Camera_TemplateData* data)
             {
-                if (data == nullptr)
+                if (data == nullptr && brush)
                 {
                     brush->SetSelfActive(false);
                     return;
                 }
 
-                brush->SetSelfActive(true);
+                if (brush)
+                {
+                    brush->SetSelfActive(true);
+                }
             }
         }
     }

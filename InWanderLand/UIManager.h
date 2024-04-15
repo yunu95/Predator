@@ -22,9 +22,11 @@ private:
 	bool isButtonActiviated = false;
 
 public:
+	void LoadUITextures() const;
 	void ReportButtonOnMouse(UIButton* p_btn);
 	void ReportMouseExitButton(UIButton* p_btn);
 
+	bool IsMouseOnButton();
 
 	virtual void Update() override;
 };

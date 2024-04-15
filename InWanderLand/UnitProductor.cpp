@@ -6,6 +6,8 @@
 #include "DebugMeshes.h"
 #include "Unit_TemplateData.h"
 #include "SingleNavigationField.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
 void UnitProductor::SetUnitComponentMembers()
 {
@@ -31,10 +33,19 @@ void UnitProductor::SetUnitComponentMembers()
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
 
 	m_unitComponent->SetAttackDelay(m_attackDelay);
+	m_unitComponent->SetAttackTimingFrame(m_attackTimingFrame);
 
 	m_unitComponent->SetMaxAggroNumber(m_maxAggroNumber);
 
 	m_unitComponent->SetFbxName(m_unitFbxName);
+
+	m_unitComponent->SetAttackOffset(m_attackOffset);
+
+	m_unitComponent->m_defensePoint = m_defensePoint;
+	m_unitComponent->m_dodgeProbability = m_dodgeProbability;
+	m_unitComponent->m_criticalHitMultiplier = m_criticalHitMultiplier;
+	m_unitComponent->m_criticalDamageDecreaseMultiplier = m_criticalDamageDecreaseMultiplier;
+	m_unitComponent->m_criticalHitProbability = m_criticalHitProbability;
 
 	///// + 플레이어 유닛일 경우 특수 처리
 	//if (m_unitSide == Unit::UnitSide::Player)
@@ -59,22 +70,22 @@ void UnitProductor::AddRangeSystemComponent() const
 void UnitProductor::AddColliderComponent() const 
 {
 	auto unitCollider = m_unitGameObject->AddComponent<physics::SphereCollider>();	// 빈 껍데기에 
-	unitCollider->SetRadius(lengthUnit);
+	unitCollider->SetRadius(UNIT_LENGTH);
 	//m_unitGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
 	auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(unitColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
 	unitColliderDebugObject->SetParent(m_unitGameObject);
-	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(lengthUnit, lengthUnit, lengthUnit));
+	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(UNIT_LENGTH, UNIT_LENGTH, UNIT_LENGTH));
 	m_unitComponent->SetStaticMeshComponent(unitColliderDebugObject->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>());
 }
 
 void UnitProductor::AddNavigationComponent() 
 {
 	m_navField = &SingleNavigationField::Instance();
-	auto unitNavigationComponent = m_unitGameObject->AddComponent<NavigationAgent>();
-	unitNavigationComponent->AssignToNavigationField(m_navField);
-	unitNavigationComponent->SetRadius(0.3f);
+	m_unitComponent->m_navAgentComponent = m_unitGameObject->AddComponent<NavigationAgent>();
+	m_unitComponent->m_navAgentComponent->AssignToNavigationField(m_navField);
+	m_unitComponent->m_navAgentComponent->SetRadius(0.3f);
 	m_unitComponent->SetNavField(m_navField);
 }
 
@@ -106,7 +117,6 @@ void UnitProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p
 {
 	//m_unitType = static_cast<Unit::UnitType>(p_podData.unitType);
 	m_healthPoint = p_podData.m_healthPoint;
-	m_manaPoint = p_podData.m_manaPoint;
 	m_autoAttackDamage = p_podData.m_autoAttackDamage;
 	m_criticalHitProbability = p_podData.m_criticalHitProbability;
 	m_criticalHitMultiplier = p_podData.m_criticalHitMultiplier;
@@ -117,41 +127,18 @@ void UnitProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p
 	m_atkRadius = p_podData.m_atkRadius;
 	m_unitSpeed = p_podData.m_unitSpeed;
 	m_attackDelay = p_podData.m_attackDelay;
-}
-
-void UnitProductor::PushWaveData(Vector3d startPos, float delay)
-{
-	m_waveDelayQueue.push({ startPos, delay });
-	if (!isWaveUnitCreated)
-	{
-		m_duration = delay;
-		isWaveUnitCreated = true;
-	}
+	m_attackTimingFrame = p_podData.m_attackTimingFrame;
+	m_attackOffset = p_podData.m_attackOffset;
 }
 
 void UnitProductor::Update()
 {
-	if (isWaveTimerStarted && !(m_waveDelayQueue.empty()))
-	{
-		m_elapsed += Time::GetDeltaTime();
 
-		if (m_elapsed >= m_duration)
-		{
-			CreateUnit(m_waveDelayQueue.front().first);
-			m_waveDelayQueue.pop();
-			m_elapsed = 0.0f;
-
-			if (m_waveDelayQueue.empty())
-				isWaveTimerStarted = false;
-			else
-				m_duration = m_waveDelayQueue.front().second;
-		}
-	}
 }
 
 void UnitProductor::Start()
 {
-	/// 원래는 플레이어 유닛이 들어오면 ok지만 우선은 실행 시 wave Trigger On
-	isWaveTimerStarted = true;
+	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+	//contentsLayer->RegisterToEditorComponentVector(this);
 }
 

@@ -3,6 +3,7 @@
 #include "SpecialEvent.h"
 #include "PlayerController.h"
 #include "SingleNavigationField.h"
+#include "GameManager.h"
 
 void PlayTimeRegionManager::AddRegionData(application::editor::RegionData* p_regionData)
 {

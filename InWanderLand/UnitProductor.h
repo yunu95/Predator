@@ -11,14 +11,14 @@ namespace application
 	}
 }
 
+static float constexpr UNIT_LENGTH = 2.0f;
+
 /// <summary>
 /// UnitFactory에서의 유닛 생산을 좀 더 효율적으로 하기 위한 클래스.3
 /// </summary>
 class UnitProductor : public Component
 {
 protected:
-	static float constexpr lengthUnit = 2.0f;
-
 	// 임시. 모델링 파일로 대체해주기
 	GameObject* m_unitGameObject;
 	Unit* m_unitComponent;
@@ -27,16 +27,11 @@ protected:
 
 	NavigationField* m_navField;
 
-	bool isWaveTimerStarted;
-	bool isWaveUnitCreated;
-
 	float m_elapsed;
 	float m_duration;
 
 	int m_currentIndex = 0;
 	float m_previousDelay;
-
-	std::queue<std::pair<Vector3d, float>> m_waveDelayQueue;
 
 	std::string m_unitFbxName;
 
@@ -45,8 +40,8 @@ public:
 	Unit::UnitType m_unitType;
 	Unit::UnitSide m_unitSide;
 
-	SkillPreviewSystem::SkillPreviewMesh qSkillPreviewType;
-	SkillPreviewSystem::SkillPreviewMesh wSkillPreviewType;
+	SkillPreviewMesh qSkillPreviewType;
+	SkillPreviewMesh wSkillPreviewType;
 
 	float m_healthPoint;
 	int m_manaPoint;
@@ -66,10 +61,14 @@ public:
 	float m_atkRadius;
 	float m_unitSpeed;
 
+	float m_groupMoveRadius;
+
 	float m_attackDelay;
+	int m_attackTimingFrame;
+
+	float m_attackOffset;
 
 	virtual Unit* CreateUnit(Vector3d startPos) = 0;
-	virtual void PushWaveData(Vector3d startPos, float delay);
 
 	void SetUnitComponentMembers();
 	void AddRangeSystemComponent() const;

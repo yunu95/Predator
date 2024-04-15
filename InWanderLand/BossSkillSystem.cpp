@@ -1,7 +1,6 @@
 #include "BossSkillSystem.h"
 #include "PlayerController.h"
 #include "Unit.h"
-#include "UnitObjectPool.h"
 #include "EnemySummonGateProductor.h"
 #include "EnemySummonSkillSystem.h"
 #include "ShortcutSystem.h"
@@ -50,27 +49,32 @@ void BossSkillSystem::ActivateSkillTwo()
 
 void BossSkillSystem::ActivateSkillThree()
 {
-	/// 유닛을 생성하는 문 오브젝트를 생성하는 로직
-	Vector3d doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * -5.0f;
-	UnitObjectPool::SingleInstance().ChooseProductor(&EnemySummonGateProductor::Instance());
-	UnitObjectPool::SingleInstance().SetStartPosition(doorSummonPosition);
-	EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(true);
-	currentSummonedDoorUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
+	///// 유닛을 생성하는 문 오브젝트를 생성하는 로직
+	//Vector3d doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * -5.0f;
+	////UnitObjectPool::SingleInstance().ChooseProductor(&EnemySummonGateProductor::Instance());
+	////UnitObjectPool::SingleInstance().SetStartPosition(doorSummonPosition);
+	//EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(true);
+	//currentSummonedDoorUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
+	//application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
+	//	[=]() { currentSummonedDoorUnit->GetGameObject()->SetSelfActive(!currentSummonedDoorUnit->GetGameObject()->GetSelfActive()); });
 
-	if (currentDerivedDoorUnit == nullptr)
-	{
-		doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * 5.0f;
-		UnitObjectPool::SingleInstance().ChooseProductor(&EnemySummonGateProductor::Instance());
-		UnitObjectPool::SingleInstance().SetStartPosition(doorSummonPosition);
-		EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(false);
-		currentDerivedDoorUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
-	}
-	else
-	{
-		doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * 5.0f;
-		currentDerivedDoorUnit->GetTransform()->SetWorldPosition(doorSummonPosition);
-		currentDerivedDoorUnit->GetGameObject()->SetSelfActive(true);
-	}
+
+	//if (currentDerivedDoorUnit == nullptr)
+	//{
+	//	doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * 5.0f;
+	//	UnitObjectPool::SingleInstance().ChooseProductor(&EnemySummonGateProductor::Instance());
+	//	UnitObjectPool::SingleInstance().SetStartPosition(doorSummonPosition);
+	//	EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(false);
+	//	currentDerivedDoorUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
+	//	application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
+	//		[=]() { currentDerivedDoorUnit->GetGameObject()->SetSelfActive(!currentDerivedDoorUnit->GetGameObject()->GetSelfActive()); });
+	//}
+	//else
+	//{
+	//	doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * 5.0f;
+	//	currentDerivedDoorUnit->GetTransform()->SetWorldPosition(doorSummonPosition);
+	//	currentDerivedDoorUnit->GetGameObject()->SetSelfActive(true);
+	//}
 
 }
 
@@ -100,31 +104,45 @@ void BossSkillSystem::ActivateSkillFour()
 
 void BossSkillSystem::ActivateSkillRandomly()
 {
-	m_skillNum = rand() % 4 + 2;
+	Unit::SkillEnum tempNum;
 
-	if (m_skillNum == static_cast<int>(Unit::SkillEnum::BossSkillThree) && currentSummonedDoorUnit != nullptr && currentSummonedDoorUnit->GetCurrentUnitState() != Unit::UnitState::Death)
+	if (!isBossSkill)
+	{
+		m_skillNum = rand() % 4 + 2;
+		tempNum = static_cast<Unit::SkillEnum>(m_skillNum);
+	}
+	else
+	{
+		tempNum = selectedSkillNumber;
+	}
+
+	if (tempNum == Unit::SkillEnum::BossSkillThree && currentSummonedDoorUnit != nullptr && currentSummonedDoorUnit->GetCurrentUnitState() != Unit::UnitState::Death)
 	{
 		ActivateSkillRandomly();
 	}
 	else
 	{
 		//m_skillNum = 3;
-		ActivateSkill(static_cast<Unit::SkillEnum>(m_skillNum));
+		ActivateSkill(tempNum);
 	}
 }
 
-void BossSkillSystem::SetSkillOneRequirments(GameObject* p_obj, physics::SphereCollider* p_projectileCollider, GameObject* p_debugObj)
+void BossSkillSystem::SetSkillOneRequirments(GameObject* p_obj, GameObject* p_debugObj)
 {
 	m_skillOneRequirments.colliderObject = p_obj;
-	m_skillOneRequirments.skillCollider = p_projectileCollider;
 	m_skillOneRequirments.debugObject = p_debugObj;
+	SetSkillRequirmentsActive(m_skillOneRequirments, false);
 }
 
-void BossSkillSystem::SetSkillTwoRequirments(GameObject* p_obj, physics::BoxCollider* p_projectileCollider, GameObject* p_debugObj)
+void BossSkillSystem::SetSkillTwoRequirments(GameObject* p_obj, GameObject* p_debugObj)
 {
 	m_skillTwoRequirments.colliderObject = p_obj;
-	m_skillTwoRequirments.skillCollider = p_projectileCollider;
 	m_skillTwoRequirments.debugObject = p_debugObj;
+
+	m_skillTwoRequirments.colliderObject->GetTransform()->SetLocalPosition({ 0.0f, 0.0f, m_skillTwoColliderRange * -1 * 0.5f });
+	m_skillTwoRequirments.debugObject->GetTransform()->SetLocalPosition({ 0.0f, 0.0f, m_skillTwoColliderRange * -1 * 0.5f });
+
+	SetSkillRequirmentsActive(m_skillTwoRequirments, false);
 }
 
 void BossSkillSystem::SetSkillTwoRange(float p_range)
@@ -135,32 +153,21 @@ void BossSkillSystem::SetSkillTwoRange(float p_range)
 void BossSkillSystem::SetSkillFourRequirments(GameObject* p_obj, physics::SphereCollider* p_projectileCollider, GameObject* p_debugObj)
 {
 	m_skillFourRequirments.colliderObject = p_obj;
-	m_skillFourRequirments.skillCollider = p_projectileCollider;
 	m_skillFourRequirments.debugObject = p_debugObj;
+	SetSkillRequirmentsActive(m_skillFourRequirments, false);
+}
+
+void BossSkillSystem::SelectSkill(Unit::SkillEnum p_enum)
+{
+	isBossSkill = true;
+	selectedSkillNumber = p_enum;
 }
 
 void BossSkillSystem::Start()
 {
 	m_skillUsageDuration = 10.0f;
-	m_warriorUnit = PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Warrior)->second;
+	//m_warriorUnit = PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Warrior)->second;
 	SetOtherComponentsAsMember();
-
-	m_skillOneRequirments.colliderObject->SetParent(GetGameObject());
-	m_skillOneRequirments.debugObject->SetParent(GetGameObject());
-	m_skillTwoRequirments.colliderObject->SetParent(GetGameObject());
-	m_skillTwoRequirments.debugObject->SetParent(GetGameObject());
-	m_skillFourRequirments.colliderObject->SetParent(GetGameObject());
-	m_skillFourRequirments.debugObject->SetParent(GetGameObject());
-
-	m_skillTwoRequirments.colliderObject->GetTransform()->SetLocalPosition({ 0.0f, 0.0f, m_skillTwoColliderRange * -1 });
-	m_skillTwoRequirments.debugObject->GetTransform()->SetLocalPosition({ 0.0f, 0.0f, m_skillTwoColliderRange * -1 });
-
-	SetSkillRequirmentsActive(m_skillOneRequirments, false);
-	SetSkillRequirmentsActive(m_skillTwoRequirments, false);
-	SetSkillRequirmentsActive(m_skillFourRequirments, false);
-
-	//m_magicianUnit = PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Magician)->second;
-	//m_healerUnit = PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Healer)->second;
 }
 
 void BossSkillSystem::Update()

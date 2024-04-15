@@ -54,11 +54,11 @@ namespace application
 			playtimeWave = waveSystemObject->AddComponent<PlaytimeWave>();
 			playtimeWave->waveData = this;
 			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-			contentsLayer->RegisterToEditorObjectVector(waveSystemObject);
+			contentsLayer->RegisterToEditorObjectContainer(waveSystemObject);
 		}
 		void WaveData::PostApplyAsPlaytimeObject()
 		{
-			pod.triggerRegion->playtimeRegion->OnEnter.push_back([=]() {playtimeWave->ActivateWave(); });
+			pod.triggerRegion->playtimeRegion->OnEnter.push_back([=]() { playtimeWave->ActivateWave(); });
 		}
 		void WaveData::InsertUnitData(WaveUnitData waveUnitData)
 		{

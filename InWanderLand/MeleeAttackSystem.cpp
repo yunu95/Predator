@@ -2,15 +2,17 @@
 #include "MeleeAttackSystem.h"
 #include "UnitProductor.h"
 #include "SpecialEffect.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
-void MeleeAttackSystem::Attack(Unit* opponentUnit)
+void MeleeAttackSystem::Attack(Unit* opponentUnit, float offset)
 {
 	switch (m_meleeAttackType)
 	{
 		case MeleeAttackType::Collider: 
 		{
 			meleeAttackColliderObject->GetTransform()->
-				SetWorldPosition(ownerUnitObject->GetTransform()->GetWorldPosition() + ownerUnitObject->GetTransform()->GetWorldRotation().Forward() *  -3);
+				SetWorldPosition(ownerUnitObject->GetTransform()->GetWorldPosition() + ownerUnitObject->GetTransform()->GetWorldRotation().Forward() *  -1 * m_unitComponent->GetAttackOffset());
 			meleeAttackColliderObject->GetTransform()->SetWorldRotation(ownerUnitObject->GetTransform()->GetWorldRotation());
 
 			meleeAttackColliderObject->SetSelfActive(true);
@@ -23,7 +25,7 @@ void MeleeAttackSystem::Attack(Unit* opponentUnit)
 		{
 			/// collider 생성이 아닌, Unit->Damaged 함수를 호출하는 단일 공격로직 적용.
 			/// 그렇다면 Robin의 경우 패시브는 어떻게 적용시킬 것인가?
-			opponentUnit->Damaged(m_unitComponent, m_attackDamage);
+			opponentUnit->Damaged(m_unitComponent, m_unitComponent->DetermineAttackDamage(m_unitComponent->GetUnitDamage()));
 			if (m_specialEffect != nullptr)
 				m_specialEffect->ApplyStatus(m_unitComponent, opponentUnit);
 		}
@@ -77,6 +79,10 @@ void MeleeAttackSystem::Start()
 		meleeAttackColliderDebugObject->SetSelfActive(false);
 	}
 	m_unitComponent = ownerUnitObject->GetComponent<Unit>();
+	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+	//contentsLayer->RegisterToEditorComponentVector(this);
+	contentsLayer->RegisterToEditorObjectContainer(meleeAttackColliderObject);
+	contentsLayer->RegisterToEditorObjectContainer(meleeAttackColliderDebugObject);
 }
 
 void MeleeAttackSystem::Update()

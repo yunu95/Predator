@@ -3,9 +3,9 @@
 #include "YunutyRenderable.h"
 #include "YunuGraphicsInterface.h"
 
-// Ä«¸Ş¶ó´Â È­¸é¿¡ °ÔÀÓ»ó¿¡ Á¸ÀçÇÏ´Â ¸ğµç ±×·¡ÇÈ ¿ä¼ÒµéÀ» Ãâ·ÂÇÏ´Â µ¥¿¡ ¾²ÀÌ´Â °´Ã¼ÀÔ´Ï´Ù. 
-// Ä«¸Ş¶óÀÇ ±¸ÇöÀº ¿£ÁøÀÇ µ¿ÀÛÈ¯°æ,È¤Àº Ä«¸Ş¶óÀÇ Æ¯¼º¿¡ µû¶ó ´Ş¶óÁú ¼ö ÀÖ±â ¶§¹®¿¡,
-// È­¸éÀ» ±×·Á³»±â À§ÇØ ¾²ÀÌ´Â ÇÔ¼ö Render´Â Ãß»ó ¸Ş¼Òµå·Î Á¤ÀÇµË´Ï´Ù.
+// ì¹´ë©”ë¼ëŠ” í™”ë©´ì— ê²Œì„ìƒì— ì¡´ì¬í•˜ëŠ” ëª¨ë“  ê·¸ë˜í”½ ìš”ì†Œë“¤ì„ ì¶œë ¥í•˜ëŠ” ë°ì— ì“°ì´ëŠ” ê°ì²´ì…ë‹ˆë‹¤. 
+// ì¹´ë©”ë¼ì˜ êµ¬í˜„ì€ ì—”ì§„ì˜ ë™ì‘í™˜ê²½,í˜¹ì€ ì¹´ë©”ë¼ì˜ íŠ¹ì„±ì— ë”°ë¼ ë‹¬ë¼ì§ˆ ìˆ˜ ìˆê¸° ë•Œë¬¸ì—,
+// í™”ë©´ì„ ê·¸ë ¤ë‚´ê¸° ìœ„í•´ ì“°ì´ëŠ” í•¨ìˆ˜ RenderëŠ” ì¶”ìƒ ë©”ì†Œë“œë¡œ ì •ì˜ë©ë‹ˆë‹¤.
 #ifdef YUNUTY_EXPORTS
 #define YUNUTY_API __declspec(dllexport)
 #else
@@ -21,7 +21,7 @@ namespace yunutyEngine::graphics
 	protected:
 		virtual void Update() override;
 	public:
-		// GI´Â Graphics Interface¶ó´Â ¶æÀÓ.
+		// GIëŠ” Graphics Interfaceë¼ëŠ” ëœ»ì„.
 		yunuGI::IUIImage& GetGI() { return Renderable<yunuGI::IUIImage>::GetGI(); }
 		UIImage();
 	};

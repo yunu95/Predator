@@ -20,14 +20,11 @@ protected:
 
 	struct SkillRequirements
 	{
-		physics::Collider* skillCollider;
 		GameObject* colliderObject;
 		GameObject* debugObject;
 		Dotween* dotweenComponent;
 	};
 
 	virtual void SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen);
-
-
 };
 

@@ -1,4 +1,6 @@
 #include "HealerSkillSystem.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
 void HealerSkillSystem::CrushDown(int p_times)
 {
@@ -32,11 +34,6 @@ void HealerSkillSystem::CrushDown(int p_times)
 		});
 }
 
-void HealerSkillSystem::SetQSkillCollider(physics::SphereCollider* p_fieldDamageCollider)
-{
-	QSkillFieldDamage.skillCollider = p_fieldDamageCollider;
-}
-
 void HealerSkillSystem::SetQSkillObject(GameObject* p_fieldDamageObj)
 {
 	QSkillFieldDamage.colliderObject = p_fieldDamageObj;
@@ -45,11 +42,6 @@ void HealerSkillSystem::SetQSkillObject(GameObject* p_fieldDamageObj)
 void HealerSkillSystem::SetQSkillDebugInfo(GameObject* p_fieldDebugObject)
 {
 	QSkillFieldDamage.debugObject = p_fieldDebugObject;
-}
-
-void HealerSkillSystem::SetWSkillCollider(physics::BoxCollider* p_fieldDamageCollider)
-{
-	WSkillFieldDamage.skillCollider = p_fieldDamageCollider;
 }
 
 void HealerSkillSystem::SetWSkillObject(GameObject* p_fieldDamageObj)
@@ -65,6 +57,8 @@ void HealerSkillSystem::SetWSkillDebugInfo(GameObject* p_fieldDebugObject)
 void HealerSkillSystem::ActivateSkillOne(Vector3d skillPos)
 {
 	startPosition = GetTransform()->GetWorldPosition();
+
+	skillPos = CheckSkillRange(skillPos, Unit::SkillEnum::Q);
 
 	m_currentSelectedSkillPosition = skillPos;
 
@@ -82,43 +76,57 @@ void HealerSkillSystem::ActivateSkillOne(Vector3d skillPos)
 
 void HealerSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 {
+	float skillWidth = 2.0f * UNIT_LENGTH;
+	float skillHeight = m_skillTwoRange;
 	m_unitComponent->SetSkillDuration(2.0f);
+
+	WSkillFieldDamage.colliderObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+	WSkillFieldDamage.debugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+
+	WSkillFieldDamage.colliderObject->GetTransform()->SetWorldRotation(Vector3d::zero);
+	WSkillFieldDamage.debugObject->GetTransform()->SetWorldRotation(Vector3d::zero);
+
+	RotateProjectile(WSkillFieldDamage.colliderObject, skillPos);
+	RotateProjectile(WSkillFieldDamage.debugObject, skillPos);
+
+	m_wSkillColliderComponent->SetHalfExtent({ skillWidth / 2 , skillWidth / 2 , skillHeight / 2 });
+	WSkillFieldDamage.debugObject->GetTransform()->SetWorldScale({ skillWidth, skillWidth, skillHeight });
+	
+	Vector3d tempSkillPosition = m_unitComponent->GetTransform()->GetWorldPosition() +
+		(skillPos - m_unitComponent->GetTransform()->GetWorldPosition()).Normalized() *
+		WSkillFieldDamage.debugObject->GetTransform()->GetWorldScale().z / 2;
+
+	WSkillFieldDamage.colliderObject->GetTransform()->SetWorldPosition(tempSkillPosition);
+	WSkillFieldDamage.debugObject->GetTransform()->SetWorldPosition(tempSkillPosition);
+
+	Vector3d distanceVector = skillPos - GetTransform()->GetWorldPosition();
+	float distance = distanceVector.Magnitude();
 
 	isWSkillActivating = true;
 	isWSkillColliderActivated = true;
 
 	SetSkillRequirmentsActive(WSkillFieldDamage, true);
-
-
 }
 
 void HealerSkillSystem::Start()
 {
 	SetOtherComponentsAsMember();
-	QSkillFieldDamage.skillCollider->SetActive(false);
+
+	m_wSkillColliderComponent = WSkillFieldDamage.colliderObject->GetComponent<physics::BoxCollider>();
+
+	QSkillFieldDamage.colliderObject->SetParent(GetGameObject());
+	QSkillFieldDamage.debugObject->SetParent(GetGameObject());
+	//WSkillFieldDamage.colliderObject->SetParent(GetGameObject());
+	//WSkillFieldDamage.debugObject->SetParent(GetGameObject());
+
+	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+	contentsLayer->RegisterToEditorObjectContainer(WSkillFieldDamage.colliderObject);
+	contentsLayer->RegisterToEditorObjectContainer(WSkillFieldDamage.debugObject);
+
 }
 
 void HealerSkillSystem::Update()
 {
-	if (isQSkillActivating)
-	{
-		QSkillFieldDamage.debugObject->GetTransform()->SetWorldPosition(QSkillFieldDamage.colliderObject->GetTransform()->GetWorldPosition());
-		//m_unitComponent->LookAt(m_currentSelectedSkillPosition);
-	}
-
-	if (isWSkillActivating)
-	{
-		WSkillFieldDamage.colliderObject->GetTransform()
-			->SetWorldPosition({GetGameObject()->GetTransform()->GetWorldPosition() + GetGameObject()->GetTransform()->GetWorldRotation().Forward() * -3});
-		WSkillFieldDamage.colliderObject->GetTransform()->SetWorldRotation(GetGameObject()->GetTransform()->GetWorldRotation());
-
-		WSkillFieldDamage.debugObject->GetTransform()
-			->SetWorldPosition(WSkillFieldDamage.colliderObject->GetTransform()->GetWorldPosition());
-		WSkillFieldDamage.debugObject->GetTransform()->SetWorldRotation(WSkillFieldDamage.colliderObject->GetTransform()->GetWorldRotation());
-
-		//m_unitComponent->LookAt(m_currentSelectedSkillPosition);
-	}
-
 	if (!isColliderSetActiveFalse)
 	{
 		SetSkillRequirmentsActive(QSkillFieldDamage, false);

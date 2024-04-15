@@ -29,11 +29,11 @@ private:
 
 	float m_elapsed = 0.0f;
 
-	std::vector<Unit*> m_currentWaveUnitVector;
-
 	std::vector<UnitProductor*> productorSelector;
 
 public:
+	std::vector<Unit*> m_currentWaveUnitVector;
+	Unit* inGameUnit;
 	virtual ~PlaytimeWave();
 
 	void ActivateWave();

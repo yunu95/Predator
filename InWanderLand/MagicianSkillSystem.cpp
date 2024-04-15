@@ -1,5 +1,7 @@
 #include "MagicianSkillSystem.h"
 #include "Dotween.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
 void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 {
@@ -12,13 +14,16 @@ void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 	QSkillProjectile.colliderObject->GetTransform()->SetWorldRotation(Quaternion(Vector3d::zero));
 	QSkillProjectile.debugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());	
 
-	RotateProjectile(QSkillProjectile.colliderObject, skillPos);
-
 	SetSkillRequirmentsActive(QSkillProjectile, true);
+
+	skillPos = CheckSkillRange(skillPos, Unit::SkillEnum::Q);
+
+	RotateProjectile(QSkillProjectile.colliderObject, skillPos);
 
 	QSkillFieldDamage.colliderObject->GetTransform()->SetWorldPosition(skillPos);			// 오브젝트만 움직여도 collider와 debug는 따라올 것이다.
 
 	float tempDistance = (skillPos - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
+
 	QSkillProjectile.dotweenComponent->DOMove(skillPos, tempDistance / m_QSkillProjectileSpeed).OnComplete([=]()
 		{
 			SetSkillRequirmentsActive(QSkillProjectile, false);
@@ -41,6 +46,7 @@ void MagicianSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 
 	SetSkillRequirmentsActive(WSkillProjectile, true);
 
+	skillPos = CheckSkillRange(skillPos, Unit::SkillEnum::W);
 	WSkillFieldDamage.colliderObject->GetTransform()->SetWorldPosition(skillPos);			// 오브젝트만 움직여도 collider와 debug는 따라올 것이다.
 
 	float tempDistance = (skillPos - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
@@ -63,12 +69,6 @@ void MagicianSkillSystem::SetInterActionComponent(BlindFieldComponent* p_QSkillC
 	m_WSkillComponent = p_WSkillComponent;
 }
 
-void MagicianSkillSystem::SetQSkillCollider(physics::SphereCollider* p_projectileCollider, physics::SphereCollider* p_fieldDamageCollider)
-{
-	QSkillProjectile.skillCollider = p_projectileCollider;
-	QSkillFieldDamage.skillCollider = p_fieldDamageCollider;
-}
-
 void MagicianSkillSystem::SetQSkillObject(GameObject* p_projectileObj, GameObject* p_fieldDamageObj)
 {
 	QSkillProjectile.colliderObject = p_projectileObj;
@@ -87,11 +87,6 @@ void MagicianSkillSystem::SetQSkillDebugPair(std::pair<GameObject*, float> p_pro
 	m_QSkillFieldRadius = p_fieldObjectPair.second;
 }
 
-void MagicianSkillSystem::SetWSkillCollider(physics::SphereCollider* p_projectileCollider, physics::SphereCollider* p_fieldDamageCollider)
-{
-	WSkillProjectile.skillCollider = p_projectileCollider;
-	WSkillFieldDamage.skillCollider = p_fieldDamageCollider;
-}
 
 void MagicianSkillSystem::SetWSkillObject(GameObject* p_projectileObj, GameObject* p_fieldDamageObj)
 {
@@ -114,6 +109,19 @@ void MagicianSkillSystem::SetWSkillDebugPair(std::pair<GameObject*, float> p_pro
 void MagicianSkillSystem::Start()
 {
 	SetOtherComponentsAsMember();
+
+	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+	contentsLayer->RegisterToEditorObjectContainer(QSkillProjectile.colliderObject);
+	contentsLayer->RegisterToEditorObjectContainer(QSkillProjectile.debugObject);
+
+	contentsLayer->RegisterToEditorObjectContainer(QSkillFieldDamage.colliderObject);
+	contentsLayer->RegisterToEditorObjectContainer(QSkillFieldDamage.debugObject);
+
+	contentsLayer->RegisterToEditorObjectContainer(WSkillProjectile.colliderObject);
+	contentsLayer->RegisterToEditorObjectContainer(WSkillProjectile.debugObject);
+
+	contentsLayer->RegisterToEditorObjectContainer(WSkillFieldDamage.colliderObject);
+	contentsLayer->RegisterToEditorObjectContainer(WSkillFieldDamage.debugObject);
 
 	QSkillProjectile.debugObject->SetSelfActive(false);
 	QSkillFieldDamage.debugObject->SetSelfActive(false);

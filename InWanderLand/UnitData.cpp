@@ -13,9 +13,12 @@
 #include "MeleeEnemyProductor.h"
 #include "RangedEnemyProductor.h"
 #include "BossProductor.h"
-#include "UnitObjectPool.h"
+#include "RangedEnemyPool.h"
+#include "MeleeEnemyPool.h"
+#include "GameManager.h"
 #include "Application.h"
 #include "ContentsLayer.h"
+#include "ShortcutSystem.h"
 
 namespace application
 {
@@ -146,32 +149,48 @@ namespace application
 
 				UnitProductor* currentSelectedProductor{ nullptr };
 
-				Unit* unitComponent{ nullptr };
+                int tempShortCutIndex = 0;
 
                 if (pod.templateData->pod.skinnedFBXName == "SKM_Monster1")
                 {
-                    currentSelectedProductor = &MeleeEnemyProductor::Instance();
+					currentSelectedProductor = &MeleeEnemyProductor::Instance();
+					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+                    MeleeEnemyPool::SingleInstance().SetStageNumber(pod.stage);
+                    MeleeEnemyPool::SingleInstance().SetStartPosition(startPosition);
+					inGameUnit = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+					tempShortCutIndex = 2;
                 }
                 else if (pod.templateData->pod.skinnedFBXName == "SKM_Monster2")
                 {
                     currentSelectedProductor = &RangedEnemyProductor::Instance();
+					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+					RangedEnemyPool::SingleInstance().SetStartPosition(startPosition);
+                    inGameUnit = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+                    tempShortCutIndex = 2;
                 }
                 else
                 {
-                    for (auto& e : productorSelector)
+					tempShortCutIndex = 1;
+
+                    switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
                     {
-                        if (e->SelectUnitProductorByFbxName(pod.templateData->pod.skinnedFBXName))
-                        {
-                            currentSelectedProductor = e;
+                        case Unit::UnitType::Warrior :
+                            currentSelectedProductor = &WarriorProductor::Instance();
                             break;
-                        }
+                        case Unit::UnitType::Magician :
+							currentSelectedProductor = &MagicianProductor::Instance();
+							break;
+						case Unit::UnitType::Healer:
+							currentSelectedProductor = &HealerProductor::Instance();
+							break;
+                        default:
+                            break;
                     }
+
+                    currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+                    inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+					contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
                 }
-                
-                currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-				UnitObjectPool::SingleInstance().ChooseProductor(currentSelectedProductor);
-				UnitObjectPool::SingleInstance().SetStartPosition(startPosition);
-				unitComponent = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
 			}
 		}
 

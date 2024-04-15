@@ -15,7 +15,7 @@ public:
 	virtual void ObjectInitializer(StatusTimer* timer) override
 	{
 		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-		contentsLayer->RegisterToEditorObjectVector(timer->GetGameObject());
+		contentsLayer->RegisterToEditorObjectContainer(timer->GetGameObject());
 	}
 };
 

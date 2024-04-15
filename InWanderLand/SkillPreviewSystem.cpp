@@ -1,8 +1,14 @@
 #include "SkillPreviewSystem.h"
+#include "ContentsLayer.h"
+#include "Application.h"
+//#include "Unit.h"
 
-SkillPreviewSystem::~SkillPreviewSystem()
+void SkillPreviewSystem::Start()
 {
-
+	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+	contentsLayer->RegisterToEditorComponentVector(this);
+	contentsLayer->RegisterToEditorObjectContainer(m_rangePreviewObject);
+	contentsLayer->RegisterToEditorObjectContainer(m_pathPreviewObject);
 }
 
 void SkillPreviewSystem::Update()
@@ -23,12 +29,35 @@ void SkillPreviewSystem::Update()
 
 void SkillPreviewSystem::SetPathPreviewObjectRotation()
 {
+	std::unordered_map<Unit::SkillEnum, float>* currentSelectedMap{ nullptr };
+
+	switch (m_currentSelectedPlayerUnit->GetUnitType())
+	{
+		case Unit::UnitType::Warrior:
+			currentSelectedMap = &warriorSkillRangeInfo;
+			break;
+		case Unit::UnitType::Magician:
+			currentSelectedMap = &magicianSkillRangeInfo;
+			break;
+		case Unit::UnitType::Healer:
+			currentSelectedMap = &healerSkillRangeInfo;
+			break;
+	}
+
+	currentSkillRange = currentSelectedMap->find(currentSkillNum)->second;
+	
+	Vector3d playerPosition = { m_currentSelectedPlayerUnit->GetTransform()->GetWorldPosition() };
+
 	m_pathPreviewObject->GetTransform()->SetWorldRotation(Quaternion({ 0,0,0 }));
 
-	Vector3d playerPosition = { m_currentSelectedPlayerObject->GetTransform()->GetWorldPosition() };
 	Vector3d distanceVector = m_currentMousePosition - playerPosition;
 
 	float pathMeshHeight = distanceVector.Magnitude();
+
+	if (pathMeshHeight > currentSkillRange)
+	{
+		pathMeshHeight = currentSkillRange;
+	}
 
 	Vector3d meshPosition = playerPosition + distanceVector.Normalized() * pathMeshHeight / 2;
 
@@ -52,7 +81,17 @@ void SkillPreviewSystem::SetPathPreviewObjectRotation()
 
 void SkillPreviewSystem::SetRangePreviewObjectPosition()
 {
-	m_rangePreviewObject->GetTransform()->SetWorldPosition(m_currentMousePosition);
+	Vector3d playerPosition = { m_currentSelectedPlayerUnit->GetTransform()->GetWorldPosition() };
+	Vector3d distanceVector = m_currentMousePosition - playerPosition;
+
+	float distanceMagnitude = distanceVector.Magnitude();
+
+	if (distanceMagnitude > currentSkillRange)
+	{
+		distanceMagnitude = currentSkillRange;
+	}
+
+	m_rangePreviewObject->GetTransform()->SetWorldPosition(m_currentSelectedPlayerUnit->GetTransform()->GetWorldPosition() + distanceVector.Normalized() * distanceMagnitude);
 	m_rangePreviewObject->GetTransform()->SetWorldScale({ 2.0f,2.0f,2.0f });
 }
 
@@ -75,9 +114,39 @@ void SkillPreviewSystem::SetCurrentMousPosition(Vector3d pos)
 	m_currentMousePosition = pos;
 }
 
-void SkillPreviewSystem::SetCurrentSelectedPlayerGameObject(GameObject* obj)
+void SkillPreviewSystem::SetCurrentSkillRange(float p_flt)
 {
-	m_currentSelectedPlayerObject = obj;
+	currentSkillRange = p_flt;
+}
+
+void SkillPreviewSystem::SetDefaultSkillRange(Unit* p_unit, Unit::SkillEnum skillEnum, float p_rng)
+{
+	std::unordered_map<Unit::SkillEnum, float>* currentSelectedMap{ nullptr };
+
+	switch (p_unit->GetUnitType())
+	{
+		case Unit::UnitType::Warrior:
+			currentSelectedMap = &warriorSkillRangeInfo;
+			break;
+		case Unit::UnitType::Magician:
+			currentSelectedMap = &magicianSkillRangeInfo;
+			break;
+		case Unit::UnitType::Healer:
+			currentSelectedMap = &healerSkillRangeInfo;
+			break;
+	}
+
+	currentSelectedMap->insert({ skillEnum, p_rng });
+}
+
+void SkillPreviewSystem::SetCurrentSelectedPlayerUnit(Unit* obj)
+{
+	m_currentSelectedPlayerUnit = obj;
+}
+
+void SkillPreviewSystem::SetCurrentSelectedSkillNum(Unit::SkillEnum p_num)
+{
+	currentSkillNum = p_num;
 }
 
 void SkillPreviewSystem::SetCurrentSkillPreviewType(SkillPreviewMesh p_type)
@@ -93,21 +162,21 @@ void SkillPreviewSystem::ActivateSkillPreview(bool p_boolen)
 	{
 		switch (m_currentSkillPreviewType)
 		{
-			case SkillPreviewSystem::SkillPreviewMesh::OnlyPath:
+			case SkillPreviewMesh::OnlyPath:
 				SetPathPreviewObjectRotation();
 				m_pathPreviewObject->SetSelfActive(true);
 				break;
-			case SkillPreviewSystem::SkillPreviewMesh::OnlyRange:
+			case SkillPreviewMesh::OnlyRange:
 				SetRangePreviewObjectPosition();
 				m_rangePreviewObject->SetSelfActive(true);
 				break;
-			case SkillPreviewSystem::SkillPreviewMesh::Both:
+			case SkillPreviewMesh::Both:
 				SetPathPreviewObjectRotation();
 				SetRangePreviewObjectPosition();
 				m_pathPreviewObject->SetSelfActive(true);
 				m_rangePreviewObject->SetSelfActive(true);
 				break;
-			case SkillPreviewSystem::SkillPreviewMesh::None:
+			case SkillPreviewMesh::None:
 				m_pathPreviewObject->SetSelfActive(false);
 				m_rangePreviewObject->SetSelfActive(false);
 				break;

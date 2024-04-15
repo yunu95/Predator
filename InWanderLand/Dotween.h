@@ -38,8 +38,9 @@ public:
 	Dotween();
 	~Dotween();
 
+	virtual void Start() override;
 	void Awake();
-	void Update();
+	virtual void Update() override;
 
 	void StopAllDotweenFunction();
 

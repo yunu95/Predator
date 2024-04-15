@@ -7,12 +7,8 @@ private:
 	SkillRequirements QknockBackSkill;
 	SkillRequirements WTauntSkill;
 
-	bool isQSkillStarted;
-	bool isWSkillStarted;
 	bool isQSkillPreviewOn;
 	bool isColliderSetActiveFalseSet;
-
-
 
 	float m_QSkillRadius;
 	float m_WSkillRadius;

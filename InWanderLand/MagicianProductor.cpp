@@ -5,6 +5,7 @@
 #include "BlindFieldComponent.h"
 #include "DebugMeshes.h"
 #include "SingleNavigationField.h"
+#include "SkillPreviewSystem.h"
 
 void MagicianProductor::SetUnitData()
 {
@@ -25,16 +26,16 @@ void MagicianProductor::SetUnitData()
 
 	m_maxAggroNumber = 1;
 
-	m_idRadius = 10.0f * lengthUnit;
-	m_atkRadius = 3.5f * lengthUnit;
+	m_idRadius = 10.0f * UNIT_LENGTH;
+	m_atkRadius = 3.5f * UNIT_LENGTH;
 	m_unitSpeed = 4.5f;
 
 	m_attackDelay = 5.0f;
 
 	m_navField = &SingleNavigationField::Instance();
 
-	qSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::Both;
-	wSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::Both;
+	qSkillPreviewType = SkillPreviewMesh::Both;
+	wSkillPreviewType = SkillPreviewMesh::Both;
 
 	m_unitFbxName = "SKM_Robin";
 }
@@ -103,7 +104,7 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 	QSkillProjectileObject->AddComponent<Dotween>();
 
 	auto QSkillProjectileCollider = QSkillProjectileObject->AddComponent<physics::SphereCollider>();
-	m_QSkillProjectileRadius = 1.0f * lengthUnit;
+	m_QSkillProjectileRadius = 1.0f * UNIT_LENGTH;
 	QSkillProjectileCollider->SetRadius(m_QSkillProjectileRadius);
 	QSkillProjectileObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
@@ -116,7 +117,7 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 	auto fieldDamageComponent = QSkillFieldObject->AddComponent<BlindFieldComponent>();
 	fieldDamageComponent->SetSkillOwnerUnit(m_unitComponent);
 	auto QSkillFieldCollider = QSkillFieldObject->AddComponent<physics::SphereCollider>();
-	m_QSkillFieldRadius = 2.0f * lengthUnit;
+	m_QSkillFieldRadius = 2.0f * UNIT_LENGTH;
 	QSkillFieldCollider->SetRadius(m_QSkillFieldRadius);
 	QSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	auto QSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -129,7 +130,7 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 	WSkillProjectileObject->AddComponent<Dotween>();
 
 	auto WSkillProjectileCollider = WSkillProjectileObject->AddComponent<physics::SphereCollider>();
-	m_WSkillProjectileRadius = 1.0f * lengthUnit;
+	m_WSkillProjectileRadius = 1.0f * UNIT_LENGTH;
 	WSkillProjectileCollider->SetRadius(m_WSkillProjectileRadius);
 	WSkillProjectileObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
@@ -142,7 +143,7 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 	auto WfieldDamageComponent = WSkillFieldObject->AddComponent<ParalysisFieldComponent>();
 	WfieldDamageComponent->SetSkillOwnerUnit(m_unitComponent);
 	auto WSkillFieldCollider = WSkillFieldObject->AddComponent<physics::SphereCollider>();
-	m_WSkillFieldRadius = 2.0f * lengthUnit;
+	m_WSkillFieldRadius = 2.0f * UNIT_LENGTH;
 	WSkillFieldCollider->SetRadius(m_WSkillFieldRadius);
 	WSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -153,13 +154,17 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 #pragma region SkillSystem Setting
 	auto magicianSkillSystem = m_unitGameObject->AddComponent<MagicianSkillSystem>();
 
-	magicianSkillSystem->SetQSkillCollider(QSkillProjectileCollider, QSkillFieldCollider);
 	magicianSkillSystem->SetQSkillDebugPair({ QSkillProjectileDebugObject, m_QSkillProjectileRadius }, { QSkillFieldDebugObject, m_QSkillFieldRadius });
 	magicianSkillSystem->SetQSkillObject(QSkillProjectileObject, QSkillFieldObject);
 
-	magicianSkillSystem->SetWSkillCollider(WSkillProjectileCollider, WSkillFieldCollider);
 	magicianSkillSystem->SetWSkillDebugPair({ WSkillProjectileDebugObject, m_WSkillProjectileRadius }, { WSkillFieldDebugObject, m_WSkillFieldRadius });
 	magicianSkillSystem->SetWSkillObject(WSkillProjectileObject, WSkillFieldObject);
+
+	float skillOneRange = 6.0f * UNIT_LENGTH;
+	float skillTwoRange = 6.0f * UNIT_LENGTH;
+
+	magicianSkillSystem->SetSkillOneRange(skillOneRange);
+	magicianSkillSystem->SetSkillTwoRange(skillTwoRange);
 #pragma endregion
 
 	UnitProductor::AddRangeSystemComponent();
@@ -168,6 +173,9 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 	UnitProductor::AddDotweenComponent();
 	UnitProductor::SetUnitComponentMembers();
 	UnitProductor::SetPlayerRelatedComponents(m_unitComponent);
+
+	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::Q, skillOneRange);
+	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::W, skillTwoRange);
 
 	auto skinnedMeshRenderer = m_unitGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
 	auto material = skinnedMeshRenderer->GetGI().GetMaterial();

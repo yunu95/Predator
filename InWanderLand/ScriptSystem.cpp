@@ -1,0 +1,177 @@
+#include "ScriptSystem.h"
+
+#include "YunutyEngine.h"
+
+namespace application
+{
+	std::unordered_map<TriggerType, std::string> ScriptSystem::triggerList = std::unordered_map<TriggerType, std::string>();
+	std::unordered_map<ConditionType, std::string> ScriptSystem::conditionList = std::unordered_map<ConditionType, std::string>();
+	std::unordered_map<ActionType, std::string> ScriptSystem::actionList = std::unordered_map<ActionType, std::string>();
+
+	void ScriptSystem::SingletonInitializer()
+	{
+		/// Trigger
+		triggerList[TriggerType::GameStart] = "GameStart";
+		triggerList[TriggerType::EnterRegion] = "EnterRegion";
+		triggerList[TriggerType::LeaveRegion] = "LeaveRegion";
+
+		/// Condition
+
+		/// Action
+		actionList[ActionType::WaitForSeconds] = "WaitForSeconds";
+		actionList[ActionType::WaitForRealSeconds] = "WaitForRealSeconds";
+	}
+
+	Script* ScriptSystem::CreateScript()
+	{
+		auto sptr = Scene::getCurrentScene()->AddGameObject()->AddComponent<Script>();
+		scriptList[sptr->GetUUID()] = sptr;
+		scriptContainer.insert(sptr);
+		return sptr;
+	}
+
+	bool ScriptSystem::EraseScript(Script* script)
+	{
+		auto itr = scriptList.find(script->GetUUID());
+		if (itr == scriptList.end())
+		{
+			return false;
+		}
+
+		Scene::getCurrentScene()->DestroyGameObject(script->GetGameObject());
+
+		scriptList.erase(itr);
+		scriptContainer.erase(script);
+
+		return true;
+	}
+
+	void ScriptSystem::OnGameStart()
+	{
+		for (auto& each : scriptList)
+		{
+			each.second->OnGameStart();
+		}
+	}
+
+	void ScriptSystem::OnGameStop()
+	{
+		for (auto& each : scriptList)
+		{
+			each.second->OnGameStop();
+		}
+	}
+
+	void ScriptSystem::Clear()
+	{
+		for (auto& each : scriptList)
+		{
+			Scene::getCurrentScene()->DestroyGameObject(each.second->GetGameObject());
+		}
+		scriptList.clear();
+		scriptContainer.clear();
+	}
+
+	std::unordered_set<Script*>& ScriptSystem::GetScriptList()
+	{
+		return scriptContainer;
+	}
+
+	bool ScriptSystem::PreEncoding(json& data) const
+	{
+		std::string uuidStr;
+		for (auto& [uuid, ptr] : scriptList)
+		{
+			uuidStr = UUID_To_String(uuid);
+
+			if (!ptr->PreEncoding(data["ScriptList"][uuidStr]["0_Pre"]))
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	bool ScriptSystem::PostEncoding(json& data) const
+	{
+		std::string uuidStr;
+		for (auto& [uuid, ptr] : scriptList)
+		{
+			uuidStr = UUID_To_String(uuid);
+
+			auto itr = data["ScriptList"].find(uuidStr);
+			if (itr == data["ScriptList"].end())
+			{
+				return false;
+			}
+
+			if (!ptr->PostEncoding(itr.value()["1_Post"]))
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	bool ScriptSystem::PreDecoding(const json& data)
+	{
+		if (!data.contains("ScriptList"))
+			return true;
+		UUID uuid;
+		for (auto& [uuidStr, scriptData] : data["ScriptList"].items())
+		{
+			uuid = String_To_UUID(uuidStr);
+
+			auto script = CreateScript();
+
+			if (script == nullptr)
+			{
+				Clear();
+				return false;
+			}
+
+			scriptList.erase(script->GetUUID());
+
+			// UUID
+			script->SetUUID(uuid);
+			scriptList[uuid] = script;
+
+			if (!script->PreDecoding(scriptData["0_Pre"]))
+			{
+				Clear();
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	bool ScriptSystem::PostDecoding(const json& data)
+	{
+		if (!data.contains("ScriptList"))
+			return true;
+		UUID uuid;
+		for (auto& [uuidStr, scriptData] : data["ScriptList"].items())
+		{
+			uuid = String_To_UUID(uuidStr);
+
+			for (auto each : scriptList)
+			{
+				if (each.first == uuid)
+				{
+					if (!each.second->PostDecoding(scriptData["1_Post"]))
+					{
+						Clear();
+						return false;
+					}
+
+					break;
+				}
+			}
+		}
+
+		return true;
+	}
+}

@@ -11,8 +11,7 @@
 #include "SingleNavigationField.h"
 #include "UnitData.h"
 #include "RobinSkillDevelopmentSystem.h"
-#include "ContentsLayer.h"
-#include "Application.h"
+#include "SkillPreviewSystem.h"
 
 void WarriorProductor::SetUnitData()
 {
@@ -33,16 +32,16 @@ void WarriorProductor::SetUnitData()
 
 	m_maxAggroNumber = 2;
 
-	m_idRadius = 4.0f * lengthUnit;
-	m_atkRadius = 1.7f * lengthUnit;
+	m_idRadius = 4.0f * UNIT_LENGTH;
+	m_atkRadius = 1.7f * UNIT_LENGTH;
 	m_unitSpeed = 4.5f;
 
 	m_attackDelay = 1.0f;
 
 	m_navField = &SingleNavigationField::Instance();
 
-	qSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::OnlyPath;
-	wSkillPreviewType = SkillPreviewSystem::SkillPreviewMesh::None;
+	qSkillPreviewType = SkillPreviewMesh::OnlyPath;
+	wSkillPreviewType = SkillPreviewMesh::None;
 
 	m_unitFbxName = "SKM_Robin";
 }
@@ -57,8 +56,6 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 #pragma region Animation Related Member Setting
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
-
-	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
 
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
@@ -101,33 +98,14 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 
 	/// UnitComponent 추가
 	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
-	//RobinSkillDevelopmentSystem::Instance().SetOwnerUnit(m_unitComponent);
+	RobinSkillDevelopmentSystem::Instance().SetOwnerUnit(m_unitComponent);
 
 #pragma region Auto Attack Setting (Including Passive Logic)
-	//auto unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	//unitAttackColliderObject->setName("WarriorAutoAttackCollider");
-	//auto m_physicsCollider = unitAttackColliderObject->AddComponent<physics::BoxCollider>();
-	//m_physicsCollider->SetHalfExtent({ 1.0f * lengthUnit / 2, 1.0f * lengthUnit / 2, 3.0f * lengthUnit / 2 });
-	//unitAttackColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-	////unitAttackColliderObject->SetParent(m_unitGameObject);
-	//unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, 3.0f * lengthUnit });
-
-	// warrior Passive Bleeding System
-	//auto warriorBleedingSystem = unitAttackColliderObject->AddComponent<BleedingComponent>();
-	//warriorBleedingSystem->SetSkillOwnerUnit(m_unitComponent);
-
-	/*auto autoAttackDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	AttachDebugMesh(autoAttackDebugMesh, DebugMeshType::Cube, yunuGI::Color::red(), true);
-	autoAttackDebugMesh->GetTransform()->SetLocalScale({ 1.0f * lengthUnit, 1.0f * lengthUnit, 3.0f * lengthUnit });*/
-
 	auto bleedingSystemObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	contentsLayer->RegisterToEditorObjectVector(bleedingSystemObject);
 	auto bleedingSystem = bleedingSystemObject->AddComponent<BleedingComponent>();
-	//RobinSkillDevelopmentSystem::Instance().SetRobinPassiveComponent(bleedingSystem);
 	auto warriorAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
-	//warriorAttackSystem->SetColliderObject(unitAttackColliderObject);
-	//warriorAttackSystem->SetColliderDebugObject(autoAttackDebugMesh);
-	//warriorAttackSystem->SetColliderRemainTime(0.8f);
+
+	RobinSkillDevelopmentSystem::Instance().SetRobinPassiveComponent(bleedingSystem);
 
 	warriorAttackSystem->SetMeleeAttackType(MeleeAttackType::DirectAttack);
 	warriorAttackSystem->SetOwnerUnitObject(m_unitGameObject);
@@ -136,7 +114,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 #pragma endregion
 
 #pragma region Q Skill Setting
-	m_QSkillRadius = 3.0f * lengthUnit;
+	m_QSkillRadius = 3.0f * UNIT_LENGTH;
 
 	auto qSkillKnockBackObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 
@@ -145,41 +123,28 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	qSkillKnockBackObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
 	auto qSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	contentsLayer->RegisterToEditorObjectVector(qSkillColliderDebugObject);
 	AttachDebugMesh(qSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), true);
 	qSkillColliderDebugObject->GetTransform()->SetLocalScale({ m_QSkillRadius * 2, m_QSkillRadius * 2, m_QSkillRadius * 2 });
 
 	auto knockBackComponent = qSkillKnockBackObject->AddComponent<KnockBackComponent>();
 	knockBackComponent->SetSkillOwnerUnit(m_unitComponent);
-	qSkillKnockBackObject->SetParent(m_unitGameObject);
 #pragma endregion
 
 #pragma region W Skill Setting
-	m_WSkillRadius = 3.0f * lengthUnit;
+	m_WSkillRadius = 3.0f * UNIT_LENGTH;
 
 	auto wSkillColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto wSkillColliderComponent = wSkillColliderObject->AddComponent<physics::SphereCollider>();
 	wSkillColliderComponent->SetRadius(m_WSkillRadius);
 	wSkillColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-	wSkillColliderObject->SetParent(m_unitGameObject);
 	auto wSkillDamageComponent = wSkillColliderObject->AddComponent<TauntingComponent>();
 	wSkillDamageComponent->SetSkillOwnerUnit(m_unitComponent);
 	wSkillDamageComponent->SetSkillDamage(10.0f);
 
 	auto wSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	contentsLayer->RegisterToEditorObjectVector(wSkillColliderDebugObject);
 	AttachDebugMesh(wSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), true);
 	wSkillColliderDebugObject->GetTransform()->SetLocalScale({ m_WSkillRadius * 2, m_WSkillRadius * 2, m_WSkillRadius * 2 });
 #pragma endregion
-
-//#pragma region Skill Area Preview System
-//	auto qSkillPreviewObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-//	AttachDebugMesh(qSkillPreviewObject, DebugMeshType::Cube)
-//		->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::blue(), true));
-//
-//
-//#pragma endregion
-
 	// warrior SkillSystem
 	auto warriorSkillSystem = m_unitGameObject->AddComponent<WarriorSkillSystem>();
 	warriorSkillSystem->SetQSkillKnockBackObject(qSkillKnockBackObject);
@@ -187,7 +152,11 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	warriorSkillSystem->SetKnockBackDebugObject(qSkillColliderDebugObject, m_QSkillRadius);
 	warriorSkillSystem->SetWSkillDebugObject(wSkillColliderDebugObject, m_WSkillRadius);
 
-	//RobinSkillDevelopmentSystem::Instance().SetSkillSystemComponent(warriorSkillSystem);
+	float warriorSkillOneRange = 5.0f * UNIT_LENGTH;
+	warriorSkillSystem->SetSkillOneRange(warriorSkillOneRange);
+	warriorSkillSystem->SetSkillTwoRange(0.0f);
+
+	RobinSkillDevelopmentSystem::Instance().SetSkillSystemComponent(warriorSkillSystem);
 
 	UnitProductor::AddRangeSystemComponent();
 	UnitProductor::AddColliderComponent();
@@ -195,6 +164,9 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	UnitProductor::AddDotweenComponent();
 	UnitProductor::SetUnitComponentMembers();
 	UnitProductor::SetPlayerRelatedComponents(m_unitComponent);
+
+	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::Q, warriorSkillOneRange);
+	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::W, 0.0f);
 
 	return m_unitComponent;
 }

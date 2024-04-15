@@ -18,8 +18,10 @@ public:
 		projectileComponent->GetGI().SetMesh(capsuleMesh);
 		projectileComponent->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 1, 0.25f, 0 });
 
+		projectile->GetGameObject()->AddComponent<Dotween>();
+
 		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-		contentsLayer->RegisterToEditorObjectVector(projectile->GetGameObject());
+		contentsLayer->RegisterToEditorObjectContainer(projectile->GetGameObject());
 	}
 };
 
