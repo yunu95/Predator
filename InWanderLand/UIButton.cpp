@@ -55,6 +55,7 @@ void UIButton::Start()
 
     Vector2d leftTopPos = GetTransform()->GetWorldPosition();
 
+    auto resolution = graphics::Renderer::SingleInstance().GetResolution();
     HWND hWnd = GetForegroundWindow();
     RECT wndRect;
     GetClientRect(hWnd, &wndRect);
@@ -62,7 +63,8 @@ void UIButton::Start()
     initialRectRight = wndRect.right;
     initialRectBottom = wndRect.bottom;
 
-    Vector3d fixedLeftTopPos = Vector3d(leftTopPos.x / 1920 * wndRect.right, leftTopPos.y / 1080 * wndRect.bottom, 0);
+    //Vector3d fixedLeftTopPos = Vector3d(leftTopPos.x / 1920 * wndRect.right, leftTopPos.y / 1080 * wndRect.bottom, 0);
+    Vector3d fixedLeftTopPos = Vector3d(leftTopPos.x / 1920 * resolution.x, leftTopPos.y / 1080 * resolution.y, 0);
     //GetTransform()->SetWorldPosition(fixedLeftTopPos);
     m_ImageCenterPostion = Vector2d(fixedLeftTopPos.x + m_Width / 2, fixedLeftTopPos.y + m_Height / 2);
 
