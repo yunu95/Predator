@@ -881,6 +881,7 @@ void ResourceManager::CreateDefaultShader()
 
 #pragma region PS
 	CreateShader(L"DefaultPS.cso");
+	CreateShader(L"Default_CullFrontPS.cso");
 	CreateShader(L"DebugPS.cso");
 	CreateShader(L"Debug_AlphaPS.cso");
 	CreateDeferredShader(L"Deferred_DirectionalLightPS.cso");

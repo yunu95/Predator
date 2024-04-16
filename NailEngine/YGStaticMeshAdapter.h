@@ -32,6 +32,29 @@ namespace yunuGIAdapter
 		virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)
 		{
 			renderable->SetWorldTM(reinterpret_cast<const DirectX::SimpleMath::Matrix&>(worldTM));
+			int minusCount = 0;
+			if (worldTM.m11 < 0)
+			{
+				minusCount++;
+			}
+			if (worldTM.m22 < 0)
+			{
+				minusCount++;
+			}
+			if (worldTM.m33 < 0)
+			{
+				minusCount++;
+			}
+			
+
+			if (minusCount % 2 == 1)
+			{
+				for (int i = 0; i < this->materialVec.size(); ++i)
+				{
+					auto material = this->GetMaterial(i);
+					material->SetPixelShader(ResourceManager::Instance.Get().GetShader(L"Default_CullFrontPS.cso").get());
+				}
+			}
 		};
 
 		virtual void SetActive(bool isActive)
