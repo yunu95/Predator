@@ -205,6 +205,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="AnimationEventController.cpp" />
     <ClCompile Include="Animator.cpp" />
     <ClCompile Include="BoxCollider2D.cpp" />
     <ClCompile Include="AudioSource.cpp" />
@@ -279,6 +280,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\fastlz\fastlz.h" />
+    <ClInclude Include="header\AnimationEventController.h" />
     <ClInclude Include="header\Billboard.h" />
     <ClInclude Include="ChunkyTriMesh.h" />
     <ClInclude Include="header\HasVariable.h" />
