@@ -114,8 +114,8 @@ namespace application
 		for (auto& [idx, each] : actionList)
 		{
 			uuidStr = UUID_To_String(each->GetUUID());
-			data["ActionList"][uuidStr]["type"] = each->GetType();
-			if (!each->PreEncoding(data["ActionList"][uuidStr]["0_Pre"]))
+			data["ActionList"][idx][uuidStr]["type"] = each->GetType();
+			if (!each->PreEncoding(data["ActionList"][idx][uuidStr]["0_Pre"]))
 			{
 				return false;
 			}
@@ -163,8 +163,8 @@ namespace application
 		{
 			uuidStr = UUID_To_String(each->GetUUID());
 
-			auto itr = data["ActionList"].find(uuidStr);
-			if (itr == data["ActionList"].end())
+			auto itr = data["ActionList"][idx].find(uuidStr);
+			if (itr == data["ActionList"][idx].end())
 			{
 				return false;
 			}
@@ -209,6 +209,16 @@ namespace application
 						trigger = AddTrigger<Trigger_LeaveRegion>();
 						break;
 					}
+					case application::TriggerType::RepeatPeriodically:
+					{
+						trigger = AddTrigger<Trigger_RepeatPeriodically>();
+						break;
+					}
+					case application::TriggerType::RepeatPeriodicallyRealTime:
+					{
+						trigger = AddTrigger<Trigger_RepeatPeriodicallyRealTime>();
+						break;
+					}
 					default:
 						break;
 				}
@@ -240,6 +250,16 @@ namespace application
 
 				switch (type)
 				{
+					case application::ConditionType::CinematicModeOn:
+					{
+						condition = AddCondition<Condition_CinematicModeOn>();
+						break;
+					}
+					case application::ConditionType::CinematicModeOff:
+					{
+						condition = AddCondition<Condition_CinematicModeOff>();
+						break;
+					}
 					default:
 						break;
 				}
@@ -261,41 +281,49 @@ namespace application
 
 		if (data.contains("ActionList"))
 		{
-			for (auto& [uuidStr, actionData] : data["ActionList"].items())
+			for (auto& [idx, uuidData] : data["ActionList"].items())
 			{
-				uuid = String_To_UUID(uuidStr);
-
-				ActionType type = actionData["type"];
-
-				std::shared_ptr<IAction> action = nullptr;
-
-				switch (type)
+				for (auto& [uuidStr, actionData] : uuidData.items())
 				{
-					case application::ActionType::WaitForSeconds:
+					uuid = String_To_UUID(uuidStr);
+
+					ActionType type = actionData["type"];
+
+					std::shared_ptr<IAction> action = nullptr;
+
+					switch (type)
 					{
-						action = AddAction<Action_WaitForSeconds>();
-						break;
+						case application::ActionType::WaitForSeconds:
+						{
+							action = AddAction<Action_WaitForSeconds>();
+							break;
+						}
+						case application::ActionType::WaitForRealSeconds:
+						{
+							action = AddAction<Action_WaitForRealSeconds>();
+							break;
+						}
+						case application::ActionType::CinematicModeChange:
+						{
+							action = AddAction<Action_CinematicModeChange>();
+							break;
+						}
+						default:
+							break;
 					}
-					case application::ActionType::WaitForRealSeconds:
+
+					if (action == nullptr)
 					{
-						action = AddAction<Action_WaitForRealSeconds>();
-						break;
+						return false;
 					}
-					default:
-						break;
-				}
-				
-				if (action == nullptr)
-				{
-					return false;
-				}
 
-				// UUID
-				action->SetUUID(uuid);
+					// UUID
+					action->SetUUID(uuid);
 
-				if (!action->PreDecoding(actionData["0_Pre"]))
-				{
-					return false;
+					if (!action->PreDecoding(actionData["0_Pre"]))
+					{
+						return false;
+					}
 				}
 			}
 		}
@@ -348,19 +376,22 @@ namespace application
 
 		if (data.contains("ActionList"))
 		{
-			for (auto& [uuidStr, actionData] : data["ActionList"].items())
+			for (auto& [idx, uuidData] : data["ActionList"].items())
 			{
-				uuid = String_To_UUID(uuidStr);
-
-				for (auto& [idx, each] : actionList)
+				for (auto& [uuidStr, actionData] : uuidData.items())
 				{
-					if (each->id == uuid)
+					uuid = String_To_UUID(uuidStr);
+
+					for (auto& [idx, each] : actionList)
 					{
-						if (!each->PostDecoding(actionData["1_Post"]))
+						if (each->id == uuid)
 						{
-							return false;
+							if (!each->PostDecoding(actionData["1_Post"]))
+							{
+								return false;
+							}
+							break;
 						}
-						break;
 					}
 				}
 			}

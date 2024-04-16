@@ -3,6 +3,9 @@
 #include "PlaytimeRegion.h"
 
 #include "Application.h"
+#include "EditorLayer.h"
+
+#include "EditorPopupManager.h"
 
 namespace application
 {
@@ -21,7 +24,45 @@ namespace application
 
 	void Trigger_LeaveRegion::ImGui_DrawDataPopup(Trigger_LeaveRegion* data)
 	{
+		if (ImGui::MenuItem("SetLeaveRegion"))
+		{
+			editor::EditorLayer::SetInputControl(false);
+			editor::imgui::ShowMessageBox("SetLeaveRegion", [data]()
+				{
+					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
+					ImGui::Separator();
+
+					ImGui::SetNextItemWidth(-1);
+
+					if (data->enteringRegion)
+					{
+						ImGui::Text(yutility::GetString(data->enteringRegion->pod.name).c_str());
+					}
+					else
+					{
+						ImGui::Text("------");
+					}
+
+					ImGui::Separator();
+
+					if (ImGui::Button("Edit"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetLeaveRegion");
+						editor::EditorLayer::SetInputControl(true);
+						editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Trigger_LeaveRegion>("SetLeaveRegion", data);
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetLeaveRegion");
+						editor::EditorLayer::SetInputControl(true);
+					}
+				}, 300);
+		}
 	}
 
 	bool Trigger_LeaveRegion::PreEncoding(json& data) const
@@ -31,6 +72,7 @@ namespace application
 
 	bool Trigger_LeaveRegion::PostEncoding(json& data) const
 	{
+		data["enteringRegion"] = enteringRegion ? UUID_To_String(enteringRegion->GetUUID()) : "nullptr";
 		return true;
 	}
 
@@ -41,6 +83,7 @@ namespace application
 
 	bool Trigger_LeaveRegion::PostDecoding(const json& data)
 	{
+		enteringRegion = UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::RegionData*>(String_To_UUID(data["enteringRegion"]));
 		return true;
 	}
 }

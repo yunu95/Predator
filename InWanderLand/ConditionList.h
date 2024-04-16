@@ -4,3 +4,5 @@
 #pragma once
 
 #include "ICondition.h"
+
+#include "Condition_CinematicMode.h"

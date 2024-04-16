@@ -92,6 +92,16 @@ namespace application
 							Trigger_LeaveRegion::ImGui_DrawDataPopup(static_cast<Trigger_LeaveRegion*>(data));
 							break;
 						}
+						case application::TriggerType::RepeatPeriodically:
+						{
+							Trigger_RepeatPeriodically::ImGui_DrawDataPopup(static_cast<Trigger_RepeatPeriodically*>(data));
+							break;
+						}
+						case application::TriggerType::RepeatPeriodicallyRealTime:
+						{
+							Trigger_RepeatPeriodicallyRealTime::ImGui_DrawDataPopup(static_cast<Trigger_RepeatPeriodicallyRealTime*>(data));
+							break;
+						}
 						default:
 							break;
 					}
@@ -108,6 +118,16 @@ namespace application
 				{
 					switch (type)
 					{
+						case application::ConditionType::CinematicModeOn:
+						{
+							Condition_CinematicModeOn::ImGui_DrawDataPopup(static_cast<Condition_CinematicModeOn*>(data));
+							break;
+						}
+						case application::ConditionType::CinematicModeOff:
+						{
+							Condition_CinematicModeOff::ImGui_DrawDataPopup(static_cast<Condition_CinematicModeOff*>(data));
+							break;
+						}
 						default:
 							break;
 					}
@@ -150,6 +170,7 @@ namespace application
 			std::shared_ptr<ITrigger> selectedTrigger = nullptr;
 			std::shared_ptr<ICondition> selectedCondition = nullptr;
 			std::shared_ptr<IAction> selectedAction = nullptr;
+			bool isEditingPopup = false;
 		};
 	}
 }
