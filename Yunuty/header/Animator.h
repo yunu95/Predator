@@ -36,8 +36,10 @@ namespace yunutyEngine::graphics
 		void Play(yunuGI::IAnimation* animation);
 		void PushAnimation(yunuGI::IAnimation* animation, unsigned int frame = 0, std::function<void()> func = nullptr);
 		void SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame);
-
+		void ChangeAnimation(yunuGI::IAnimation* animation, float transitionDuration, float transitionSpeed);
+		
 	private:
+		void ClearAnimationEvent(yunuGI::IAnimation* animation);
 
 	private:
 		bool isPlay = false;

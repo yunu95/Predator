@@ -9,6 +9,21 @@ yunutyEngine::graphics::Animator::Animator()
 
 }
 
+void Animator::ClearAnimationEvent(yunuGI::IAnimation* animation)
+{
+	for (auto& each : this->animationEventMap[animation])
+	{
+		each.isFirst = true;
+	}
+}
+
+void Animator::ChangeAnimation(yunuGI::IAnimation* animation, float transitionDuration, float transitionSpeed)
+{
+	auto& gi = this->GetGI();
+
+	gi.ChangeAnimation(animation, transitionDuration, transitionSpeed);
+}
+
 void Animator::SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame)
 {
 	isPlay = false;
@@ -103,19 +118,24 @@ void Animator::Update()
 
 		for (auto& each : this->animationEventMap)
 		{
+			auto curAnimation = gi.GetCurrentAnimation();
+
 			for (auto& each2 : each.second)
 			{
-				if (each2.frame == desc.curr.currFrame)
+				if (curAnimation->GetName() == each.first->GetName())
 				{
-					if (each2.isFirst && (each2.func != nullptr))
+					if (each2.frame == desc.curr.currFrame)
 					{
-						each2.isFirst = false;
-						each2.func();
+						if (each2.isFirst && (each2.func != nullptr))
+						{
+							each2.isFirst = false;
+							each2.func();
+						}
 					}
-				}
-				else
-				{
-					each2.isFirst = true;
+					else
+					{
+						each2.isFirst = true;
+					}
 				}
 			}
 		}
@@ -133,6 +153,9 @@ void Animator::Update()
 			// 애니메이션 교체가 완료된다면
 			if (desc.transitionRatio >= 1.f)
 			{
+				// 애니메이션 교체과 완료된다면 현재 애니메이션을 바꾸기 전에 현재 애니메이션에 등록된 이벤트를 클리어 해준다.
+				ClearAnimationEvent(gi.GetCurrentAnimation());
+
 				desc.curr = desc.next;
 				desc.ClearNextAnimation();
 				gi.SetCurrentAnimation(nextAnimation);
