@@ -398,10 +398,18 @@ void ResourceManager::CreateAnimation(const std::vector<AnimationClip>& animatio
 				animationGroup->GetAnimationVec().emplace_back(std::static_pointer_cast<Animation>(animation));
 				this->animationGroupMap.insert({ fbxName, animationGroup });
 			}
+
+			
 		}
 	}
 
 	this->animationGroupMap[fbxName]->CreateTexture();
+	std::vector<yunuGI::IAnimation*> tempAnimationVec;
+	for (int i = 0; i < this->animationGroupMap[fbxName]->GetAnimationVec().size(); ++i)
+	{
+		tempAnimationVec.push_back(this->animationGroupMap[fbxName]->GetAnimationVec()[i].get());
+	}
+	this->fbxAnimationListMap.insert({ fbxName , tempAnimationVec });
 }
 
 std::shared_ptr<yunuGI::IMaterial> ResourceManager::GetMaterial(const std::wstring& materialName)
@@ -552,6 +560,18 @@ std::vector<std::wstring>& ResourceManager::GetFBXList()
 std::shared_ptr<AnimationGroup> ResourceManager::GetAnimationGroup(const std::wstring& modelName)
 {
 	return this->animationGroupMap.find(modelName)->second;
+}
+
+std::vector<yunuGI::IAnimation*>& ResourceManager::GetFBXAnimationList(std::wstring fbxName)
+{
+	auto iter = this->fbxAnimationListMap.find(fbxName);
+	if (iter == this->fbxAnimationListMap.end())
+	{
+		return this->fbxAnimationListMap[fbxName];
+	}
+
+	std::vector<yunuGI::IAnimation*> tempVec;
+	return tempVec;
 }
 
 void ResourceManager::SaveFBXData(std::filesystem::path path)
