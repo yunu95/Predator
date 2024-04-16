@@ -83,6 +83,7 @@ public:
 	std::vector<std::wstring>& GetFBXList();
 	std::shared_ptr<AnimationGroup> GetAnimationGroup(const std::wstring& modelName);
 	std::unordered_map<std::wstring, yunuGI::FBXData*>& GetFBXDataMap() { return fbxDataMap; }
+	std::vector<yunuGI::IAnimation*>& GetFBXAnimationList(std::wstring fbxName);
 
 	void SaveFBXData(std::filesystem::path path);
 	void SaveFBXChildData(const yunuGI::FBXData* data, nlohmann::json& jsonData);
@@ -154,6 +155,8 @@ private:
 	// 그래픽스 엔진 내부에서 스키닝 애니메이션에 쓸 오프셋 행렬을 가지고 있는 본 정보
 	std::unordered_map<std::wstring, std::map<std::wstring, BoneInfo>> fbxBoneInfoMap;
 	std::unordered_map<std::wstring, FBXNode*> fbxNodeMap;
+	std::map<std::wstring, std::vector<yunuGI::IAnimation*>> fbxAnimationListMap;
+
 
 	//
 	ID3D11ShaderResourceView* renderImageView = nullptr;
