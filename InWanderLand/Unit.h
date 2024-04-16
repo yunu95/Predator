@@ -84,6 +84,7 @@ public:
 	yunutyEngine::graphics::Animator* m_animatorComponent;
 	NavigationAgent* m_navAgentComponent;
 
+	Unit* m_currentTargetUnit;					// Attack이나 Chase 때 사용할 적군  오브젝트
 	//Vector3d startPosition;
 private:
 	FSM<UnitState> unitFSM{UnitState::Idle};
@@ -176,7 +177,6 @@ private:
 	std::set<Unit*> m_attackingThisUnitSet;		// 현재 이 유닛을 공격하고 있는 유닛들
 	int m_maxAggroNumber;
 
-	Unit* m_currentTargetUnit;					// Attack이나 Chase 때 사용할 적군  오브젝트
 	Unit* m_previousTargetUnit;		
 	Unit* tauntingThisUnit;						// 현재 this 유닛이 도발당한 주체.
 	Vector3d m_previousMovePosition;						

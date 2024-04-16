@@ -145,7 +145,7 @@ void Unit::Start()
 	unitFSM.updateAction[UnitState::Skill] = [this]() { SkillUpdate(); };
 	unitFSM.updateAction[UnitState::Death] = [this]() { DeathUpdate(); };
 
-	m_animatorComponent->GetGI().Play(unitAnimations.m_idleAnimation);
+	//m_animatorComponent->Play(unitAnimations.m_idleAnimation);
 }
 
 void Unit::Update()
@@ -235,11 +235,11 @@ void Unit::IdleEngage()
 
 		AttackSystem* atkSys = GetGameObject()->GetComponent<AttackSystem>();
 
-		unitAnimations.m_attackAnimation->SetEventFunc(attackTimingFrame ,[=]()
-			{
-				DetermineCurrentTargetObject();
-				atkSys->Attack(m_currentTargetUnit, m_attackOffset);
-			});
+		//unitAnimations.m_attackAnimation->SetEventFunc(attackTimingFrame ,[=]()
+		//	{
+		//		DetermineCurrentTargetObject();
+		//		atkSys->Attack(m_currentTargetUnit, m_attackOffset);
+		//	});
 
 		attackFunctionElapsed = 0.0f;
 		dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
@@ -283,10 +283,10 @@ void Unit::IdleEngage()
 		m_currentSkillAnimation = m_skillAnimationMap.find(m_currentSelectedSkill)->second;
 		m_selectedSkillTimingFrame = m_skillTimingFrameMap.find(m_currentSelectedSkill)->second;
 
-		m_currentSkillAnimation->SetEventFunc(m_selectedSkillTimingFrame, [=]()
-			{
-				m_skillSystemComponent->ActivateSkill(m_currentSelectedSkill, m_currentSkillPosition);
-			});
+		//m_currentSkillAnimation->SetEventFunc(m_selectedSkillTimingFrame, [=]()
+		//	{
+		//		m_skillSystemComponent->ActivateSkill(m_currentSelectedSkill, m_currentSkillPosition);
+		//	});
 
 		/// 전술모드 동작 여부를 확인한다
 		if (TacticModeSystem::SingleInstance().IsTacticModeActivated(this))

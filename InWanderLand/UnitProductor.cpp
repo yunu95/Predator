@@ -37,8 +37,6 @@ void UnitProductor::SetUnitComponentMembers()
 	m_unitComponent->SetIdRadius(m_idRadius);
 	m_unitComponent->SetUnitSpeed(m_unitSpeed);
 
-	m_unitComponent->unitAnimations = m_baseUnitAnimations;
-
 	m_unitComponent->SetAttackDelay(m_attackDelay);
 	m_unitComponent->SetAttackTimingFrame(m_attackTimingFrame);
 
