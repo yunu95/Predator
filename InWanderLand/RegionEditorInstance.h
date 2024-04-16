@@ -1,7 +1,14 @@
 #pragma once
 #include "PaletteInstance.h"
 #include "YunutyEngine.h"
-#include "RegionData.h"
+
+namespace application
+{
+    namespace editor
+    {
+        class RegionData;
+    }
+}
 
 namespace application
 {
@@ -17,7 +24,7 @@ namespace application
                 virtual void OnHoverLeft();
                 virtual void OnSelected();
                 virtual void OnDeselected();
-                void Apply(const application::editor::RegionData* regionData);
+                void Apply(RegionData* regionData);
 
                 // 지역의 가로세로 절반 길이를 반환합니다.
                 void SetHalfExtent(const Vector2f& halfExtent);

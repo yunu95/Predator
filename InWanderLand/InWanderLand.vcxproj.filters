@@ -433,6 +433,9 @@
     <Filter Include="Editor\ScriptSystem\1_Condition\List">
       <UniqueIdentifier>{0e0f3bef-6052-4f15-b9e9-77fdc9d3ca61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\Cinematic">
+      <UniqueIdentifier>{1be88953-fede-49fa-bcff-d309ee96f946}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Contents\BurnEffect">
       <UniqueIdentifier>{0cb52d66-9140-4368-8842-d37ef7df2afb}</UniqueIdentifier>
     </Filter>
@@ -1124,8 +1127,17 @@
     <ClInclude Include="Module_ScriptEditor.h">
       <Filter>Editor\Panel\List\Module\List</Filter>
     </ClInclude>
+    <ClInclude Include="Action_Cinematic.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
+    <ClInclude Include="CinematicManager.h">
+      <Filter>Contents\Cinematic</Filter>
+    </ClInclude>
     <ClInclude Include="BurnEffect.h">
       <Filter>Contents\BurnEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayableComponent.h">
+      <Filter>Contents\GameManager</Filter>
     </ClInclude>
     <ClInclude Include="SpikeTrapProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
@@ -1739,8 +1751,17 @@
     <ClCompile Include="Module_ScriptEditor.cpp">
       <Filter>Editor\Panel\List\Module\List</Filter>
     </ClCompile>
+    <ClCompile Include="Action_Cinematic.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
+    <ClCompile Include="CinematicManager.cpp">
+      <Filter>Contents\Cinematic</Filter>
+    </ClCompile>
     <ClCompile Include="BurnEffect.cpp">
       <Filter>Contents\BurnEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayableComponent.cpp">
+      <Filter>Contents\GameManager</Filter>
     </ClCompile>
     <ClCompile Include="SpikeTrapProductor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>

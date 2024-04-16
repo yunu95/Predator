@@ -12,6 +12,10 @@ void InputManager::Start()
 {
 	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
 	contentsLayer->RegisterToEditorComponentVector(this);
+
+	warriorUnit = PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Warrior)->second;
+	magicianUnit = PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Magician)->second;
+	healerUnit = PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Healer)->second;
 	//currentSelectedSerialNumber = SelectedSerialNumber::One;
 	//PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Warrior);
 }
@@ -24,7 +28,7 @@ void InputManager::Update()
 		{
 			if (GameManager::Instance().IsBattleSystemOperating())
 			{
-				if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_1))
+				if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_1) && warriorUnit->GetCurrentUnitState() != Unit::UnitState::Death)
 				{
 					PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Warrior);
 					rtscam->SetTarget(PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetGameObject());
@@ -32,7 +36,7 @@ void InputManager::Update()
 					isPlayerSelected = true;
 					SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 				}
-				if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_2))
+				if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_2) && magicianUnit->GetCurrentUnitState() != Unit::UnitState::Death)
 				{
 					PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Magician);
 					rtscam->SetTarget(PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Magician)->second->GetGameObject());
@@ -40,7 +44,7 @@ void InputManager::Update()
 					isPlayerSelected = true;
 					SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 				}
-				if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_3))
+				if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_3) && healerUnit->GetCurrentUnitState() != Unit::UnitState::Death)
 				{
 					PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Healer);
 					rtscam->SetTarget(PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Healer)->second->GetGameObject());

@@ -3,10 +3,6 @@
 
 #pragma once
 
-#include "Storable.h"
-#include "ITemplateData.h"
-#include "TemplateDataList.h"
-
 #include "imgui.h"
 #include "imgui_internal.h"
 

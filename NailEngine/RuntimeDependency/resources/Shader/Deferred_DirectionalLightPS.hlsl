@@ -51,7 +51,7 @@ PS_OUT main(PixelIn input)
     //albedo = float4(pow(float3(albedo.xyz), 1.0 / 2.2), 1.0);
     
     float shadowFactor = 1.f;
-    CalculatePBRLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo, 
+    CalculateDirectionalPBR(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo,
     arm.r, arm.b, arm.g, util.y, util.z, util.x, shadowFactor);
     
     //CalculateLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);

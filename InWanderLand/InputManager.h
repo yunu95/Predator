@@ -19,6 +19,10 @@ public:
 	};
 
 private:
+	Unit* warriorUnit;
+	Unit* magicianUnit;
+	Unit* healerUnit;
+
 	SelectedSerialNumber currentSelectedSerialNumber;
 	bool isPlayerSelected = false;
 	bool tacticMode = false;

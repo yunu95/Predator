@@ -8,7 +8,6 @@
 #include "SimpleMath.h"
 using namespace DirectX::PackedVector;
 
-//#include "ModelData.h"
 
 #include "Resource.h"
 
@@ -61,35 +60,13 @@ public:
 		return this->animationClip.speed;
 	};
 
-	virtual void SetEventFunc(int frame, std::function<void()> func) override
-	{
-		this->eventFuncMap.insert({ frame, {false,func} });
-	};
-
-	virtual std::map<int,std::pair<bool,std::function<void()>>>& GetEventFuncMap() override
-	{
-		return this->eventFuncMap;
-	};
-
-	virtual void ClearEvent() override
-	{
-		for (auto& i : eventFuncMap)
-		{
-			i.second.first = false;
-		}
-	};
-
 	AnimationClip& GetAnimationClip() { return animationClip; }
 
 	void SetAnimationIndex(int idx) { this->animationIndex = idx; }
 	int GetAnimationIndex() {return animationIndex;	}
+
 private:
 	AnimationClip animationClip;
 	int animationIndex = -1;
-
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> SRV;
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D;
-
-	std::map<int, std::pair<bool, std::function<void()>>> eventFuncMap;
 };
 

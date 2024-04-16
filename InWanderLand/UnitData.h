@@ -14,6 +14,7 @@
 #include <memory>
 #include <string>
 
+class Unit;
 class UnitProductor;
 
 namespace application
