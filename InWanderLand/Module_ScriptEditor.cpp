@@ -5,7 +5,9 @@
 #include "Application.h"
 #include "EditorLayer.h"
 #include "EditorInputManager.h"
+#include "EditorPopupManager.h"
 #include "Script.h"
+#include "Panel_Palette.h"
 
 namespace application
 {
@@ -29,7 +31,17 @@ namespace application
 		void Module_ScriptEditor::Update(float ts)
 		{
 			static auto& eim = EditorInputManager::GetSingletonInstance();
-			if (eim.IsKeyboardPressed(KeyCode::Delete))
+			static auto& epm = EditorPopupManager::GetSingletonInstance();
+			if (!epm.GetReturnPopupName().empty())
+			{
+				isEditingPopup = true;
+			}
+			else
+			{
+				isEditingPopup = false;
+			}
+
+			if (!isEditingPopup && eim.IsKeyboardPressed(KeyCode::Delete))
 			{
 				if (selectedAction)
 				{
@@ -58,7 +70,14 @@ namespace application
 		{
 			CheckActivation();
 
-			ImGui::Begin("Script Editor", &activation);
+			ImGuiWindowFlags flag = 0;
+			if (isEditingPopup)
+			{
+				flag |= ImGuiWindowFlags_NoInputs;
+				ImGui::SetNextWindowBgAlpha(0.3f);
+				ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.2f, 0.2f, 0.2f, 0.7f));
+			}
+			ImGui::Begin("Script Editor", &activation, flag);
 
 			/// ImGui 관련 내부 변수 업데이트
 			isMouseOver = ImGui::IsWindowHovered();
@@ -66,6 +85,114 @@ namespace application
 
 			/// 실제 패널에 그리는 영역
 			DrawLayout();
+
+			if (isEditingPopup)
+			{
+				ImGui::PopStyleColor();
+			}
+
+			/// Popup 으로 인해 특별한 처리가 필요한 경우
+			if (isEditingPopup)
+			{
+				static auto& epm = EditorPopupManager::GetSingletonInstance();
+				static auto& pp = PalettePanel::GetSingletonInstance();
+
+				static auto& pm = palette::PaletteManager::GetSingletonInstance();
+				static auto& tp = palette::TerrainPalette::SingleInstance();
+				static auto& up = palette::UnitPalette::SingleInstance();
+				static auto& op = palette::OrnamentPalette::SingleInstance();
+				static auto& rp = palette::RegionPalette::SingleInstance();
+				static auto& wp = palette::WavePalette::SingleInstance();
+				static auto& cp = palette::CameraPalette::SingleInstance();
+				static auto& lp = palette::LightPalette::SingleInstance();
+
+				bool pop = true;
+				ImGuiWindowFlags flag = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar;
+				ImVec2 center = ImGui::GetWindowViewport()->GetCenter();
+				ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+				ImGui::SetNextWindowSize(ImVec2(300, 100));
+
+				/// Trigger
+				{
+					/// EnterRegion
+					if (epm.GetReturnPopupName() == "SetEnterRegion")
+					{
+						ImGui::Begin("Enter Region Popup", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Enter Region");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Enter Region");
+						ImGui::End();
+
+						pp.ChangeTab("Region");
+
+						auto data = epm.GetReturnPopupData<Trigger_EnterRegion>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &rp)
+						{
+							data->isEditing = true;
+							rp.Reset();
+						}
+							
+						if(data->isEditing == true && rp.GetSelections().size() == 1)
+						{
+							data->SetRegion(static_cast<RegionData*>(*rp.GetSelections().begin()));
+							data->isEditing = false;
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
+
+					/// LeaveRegion
+					if (epm.GetReturnPopupName() == "SetLeaveRegion")
+					{
+						ImGui::Begin("Leave Region Popup", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Leave Region");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Leave Region");
+						ImGui::End();
+
+						pp.ChangeTab("Region");
+
+						auto data = epm.GetReturnPopupData<Trigger_LeaveRegion>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &rp)
+						{
+							data->isEditing = true;
+							rp.Reset();
+						}
+
+						if (data->isEditing == true && rp.GetSelections().size() == 1)
+						{
+							data->SetRegion(static_cast<RegionData*>(*rp.GetSelections().begin()));
+							data->isEditing = false;
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
+				}
+
+				/// Condition
+				{
+
+				}
+
+				/// Action
+				{
+
+				}
+			}
 
 			ImGui::End();
 		}
@@ -81,6 +208,7 @@ namespace application
 			selectedTrigger = nullptr;
 			selectedCondition = nullptr;
 			selectedAction = nullptr;
+			isEditingPopup = false;
 		}
 
 		Script* Module_ScriptEditor::GetSelectedScript()
@@ -102,7 +230,12 @@ namespace application
 
 		void Module_ScriptEditor::DrawList(const ImVec2& region)
 		{
-			ImGui::BeginChild("ScriptList", region, true);
+			ImGuiWindowFlags flag = 0;
+			if (isEditingPopup)
+			{
+				flag |= ImGuiWindowFlags_NoInputs;
+			}
+			ImGui::BeginChild("ScriptList", region, true, flag);
 			if (ImGui::Button("Create Script", ImVec2(ImGui::GetContentRegionAvail().x, 20)))
 			{
 				selectedScript = ScriptSystem::Instance().CreateScript();
@@ -140,7 +273,12 @@ namespace application
 
 		void Module_ScriptEditor::DrawScriptPanel(const ImVec2& region)
 		{
-			ImGui::BeginChild("SelectedScript", region, true);
+			ImGuiWindowFlags flag = 0;
+			if (isEditingPopup)
+			{
+				flag |= ImGuiWindowFlags_NoInputs;
+			}
+			ImGui::BeginChild("SelectedScript", region, true, flag);
 
 			auto selectedData = GetSelectedScript();
 
@@ -273,6 +411,16 @@ namespace application
 									selectedScript->AddTrigger<Trigger_LeaveRegion>();
 									break;
 								}
+								case application::TriggerType::RepeatPeriodically:
+								{
+									selectedScript->AddTrigger<Trigger_RepeatPeriodically>();
+									break;
+								}
+								case application::TriggerType::RepeatPeriodicallyRealTime:
+								{
+									selectedScript->AddTrigger<Trigger_RepeatPeriodicallyRealTime>();
+									break;
+								}
 								default:
 									break;
 							}
@@ -337,6 +485,16 @@ namespace application
 						{
 							switch (conditionType)
 							{
+								case application::ConditionType::CinematicModeOn:
+								{
+									selectedScript->AddCondition<Condition_CinematicModeOn>();
+									break;
+								}
+								case application::ConditionType::CinematicModeOff:
+								{
+									selectedScript->AddCondition<Condition_CinematicModeOff>();
+									break;
+								}
 								default:
 									break;
 							}

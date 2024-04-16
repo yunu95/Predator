@@ -14,6 +14,8 @@ namespace application
 	enum class ConditionType
 	{
 		None,
+		CinematicModeOn,
+		CinematicModeOff,
 	};
 
 	struct ICondition

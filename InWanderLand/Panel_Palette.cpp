@@ -162,6 +162,43 @@ namespace application
 			lightGizmo->SetSelfActive(true);
 		}
 
+		void PalettePanel::ChangeTab(const std::string& tabName)
+		{
+			ImGuiContext* g = ImGui::GetCurrentContext();
+			ImGuiWindow* window = ImGui::FindWindowByName("Palette");
+			ImGuiID id = window->GetID("PaletteTabBar");
+			ImGuiTabBar* tab_bar = g->TabBars.GetOrAddByKey(id);
+
+			if (tabName == "Terrain")
+			{
+				ImGui::TabBarQueueFocus(tab_bar, &tab_bar->Tabs[0]);
+			}
+			else if (tabName == "Unit")
+			{
+				ImGui::TabBarQueueFocus(tab_bar, &tab_bar->Tabs[1]);
+			}
+			else if (tabName == "Ornament")
+			{
+				ImGui::TabBarQueueFocus(tab_bar, &tab_bar->Tabs[2]);
+			}
+			else if (tabName == "Region")
+			{
+				ImGui::TabBarQueueFocus(tab_bar, &tab_bar->Tabs[3]);
+			}
+			else if (tabName == "Wave")
+			{
+				ImGui::TabBarQueueFocus(tab_bar, &tab_bar->Tabs[4]);
+			}
+			else if (tabName == "Light")
+			{
+				ImGui::TabBarQueueFocus(tab_bar, &tab_bar->Tabs[5]);
+			}
+			else if (tabName == "Cam")
+			{
+				ImGui::TabBarQueueFocus(tab_bar, &tab_bar->Tabs[6]);
+			}
+		}
+
 		void PalettePanel::ChangeDirectionalLight(LightData* light)
 		{
 			if (directionalLight == light)

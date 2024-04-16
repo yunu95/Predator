@@ -49,7 +49,8 @@ namespace application
             virtual void OnPauseContents() override;
             virtual void OnResumeContents() override;
             virtual void OnStopContents() override;
-
+ 
+            void ChangeTab(const std::string& tabName);
             void ChangeDirectionalLight(LightData* light);
 
         private:

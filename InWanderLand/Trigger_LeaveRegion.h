@@ -1,4 +1,3 @@
-#pragma once
 /// 2024. 04. 11 김상준
 /// Region 에서 벗어날 때 호출되는 Trigger 입니다.
 
@@ -6,18 +5,19 @@
 
 #include "ITrigger.h"
 
-#include "Singleton.h"
-
 namespace application
 {
 	namespace editor
 	{
+		class Module_ScriptEditor;
 		class RegionData;
 	}
 
 	class Trigger_LeaveRegion
 		: public ITrigger
 	{
+		friend class editor::Module_ScriptEditor;
+
 	public:
 		DEFINE_TRIGGER(LeaveRegion)
 
@@ -32,5 +32,6 @@ namespace application
 
 	private:
 		editor::RegionData* enteringRegion;
+		bool isEditing = false;
 	};
 }

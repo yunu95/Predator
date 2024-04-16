@@ -15,8 +15,12 @@ namespace application
 		triggerList[TriggerType::GameStart] = "GameStart";
 		triggerList[TriggerType::EnterRegion] = "EnterRegion";
 		triggerList[TriggerType::LeaveRegion] = "LeaveRegion";
+		triggerList[TriggerType::RepeatPeriodically] = "RepeatPeriodically";
+		triggerList[TriggerType::RepeatPeriodicallyRealTime] = "RepeatPeriodicallyRealTime";
 
 		/// Condition
+		conditionList[ConditionType::CinematicModeOn] = "CinematicModeOn";
+		conditionList[ConditionType::CinematicModeOff] = "CinematicModeOff";
 
 		/// Action
 		actionList[ActionType::WaitForSeconds] = "WaitForSeconds";

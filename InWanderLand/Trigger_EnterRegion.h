@@ -6,18 +6,19 @@
 
 #include "ITrigger.h"
 
-#include "Singleton.h"
-
 namespace application
 {
 	namespace editor
 	{
+		class Module_ScriptEditor;
 		class RegionData;
 	}
 
 	class Trigger_EnterRegion
 		: public ITrigger
 	{
+		friend class editor::Module_ScriptEditor;
+
 	public:
 		DEFINE_TRIGGER(EnterRegion)
 
@@ -31,6 +32,7 @@ namespace application
 		virtual bool PostDecoding(const json& data) override;
 
 	private:
-		editor::RegionData* enteringRegion;
+		editor::RegionData* enteringRegion = nullptr;
+		bool isEditing = false;
 	};
 }
