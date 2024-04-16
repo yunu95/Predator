@@ -3,14 +3,14 @@
 #include "UIManager.h"
 #include "UIImage.h"
 #include "InWanderLand.h"
+#include "PopupOnEnable.h"
+#include "ContentsLayer.h"
+#include "UIElement.h"
 #include <fstream>
 
 void UIManager::Clear()
 {
     m_highestPriorityButton = nullptr;
-}
-void UIManager::LoadUITextures() const
-{
 }
 
 void UIManager::ReportButtonOnMouse(UIButton* p_btn)
@@ -19,7 +19,9 @@ void UIManager::ReportButtonOnMouse(UIButton* p_btn)
     if (m_currentHighestLayer < p_btn->GetLayer())
     {
         if (m_highestPriorityButton != nullptr)				// 이전에 선택됐던 버튼의 이미지를 Idle로 초기화
+        {
             m_highestPriorityButton->m_ImageComponent->GetGI().SetImage(m_highestPriorityButton->m_IdleImage);
+        }
 
         /// highestPriorityButton 재정의
         m_currentHighestLayer = p_btn->GetLayer();
@@ -85,17 +87,23 @@ bool UIManager::IsMouseOnButton()
 {
     return isButtonActiviated;
 }
+UIElement* UIManager::GetUIElementByEnum(UIEnumID uiEnumID)
+{
+    if (uisByEnumID.find(uiEnumID) != uisByEnumID.end())
+        return uisByEnumID[uiEnumID];
+    return nullptr;
+}
 
 void UIManager::Update()
 {
-    if (m_currentSelectedButtonList.empty())
+    /*if (m_currentSelectedButtonList.empty())
     {
         InputManager::Instance().IsMouseOnUI(false);
     }
     else
     {
         InputManager::Instance().IsMouseOnUI(true);
-    }
+    }*/
 
     if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::MouseLeftClick))
     {
@@ -131,10 +139,17 @@ void UIManager::ImportUI(const char* path)
             auto key = each.key();
             JsonUIData uiData;
             application::FieldPreDecoding<boost::pfr::tuple_size_v<JsonUIData>>(uiData, each.value());
+
+            auto uiObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+            auto uiElement = uiObject->AddComponent<UIElement>();
+            uisByEnumID[(UIEnumID)uiData.enumID] = uiElement;
+            uisByName[uiData.uiname] = uiElement;
             uidatasByName[uiData.uiname] = uiData;
-            if (ImportDealWithSpecialCases(uiData) == false)
+
+
+            if (ImportDealWithSpecialCases(uiData, uiElement) == false)
             {
-                ImportDefaultAction(uiData);
+                ImportDefaultAction(uiData, uiElement);
             }
             uiImportingPriority++;
         }
@@ -145,30 +160,28 @@ void UIManager::ImportUI(const char* path)
             JsonUIData uiData;
             application::FieldPreDecoding<boost::pfr::tuple_size_v<JsonUIData>>(uiData, each.value());
             uidatasByName[uiData.uiname] = uiData;
-            if (ImportDealWithSpecialCases_Post(uiData) == false)
+            if (ImportDealWithSpecialCases_Post(uiData, uisByName[uiData.uiname]) == false)
             {
-                ImportDefaultAction_Post(uiData);
+                ImportDefaultAction_Post(uiData, uisByName[uiData.uiname]);
             }
             uiImportingPriority++;
         }
     }
 }
-// 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
-bool UIManager::ImportDealWithSpecialCases(const UIManager::JsonUIData& uiData)
-{
-    return false;
-}
+
 // JsonUIData만으로 UI를 생성합니다.
-void UIManager::ImportDefaultAction(const UIManager::JsonUIData& uiData)
+void UIManager::ImportDefaultAction(const UIManager::JsonUIData& uiData, UIElement* element)
 {
-    auto uiObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    auto uiObject = element->GetGameObject();
     auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
     UIImage* uiImageComponent{ nullptr };
     UIButton* uiButtonComponent{ nullptr };
     yunuGI::ITexture* idleTexture{ nullptr };
+    //uiObject->GetTransform()->SetLocalScale({ 0.5,1,1 });
+    //uiObject->AddComponent<PopupOnEnable>();
     if (uiData.imagePath != "")
     {
-        uiImageComponent = uiObject->AddComponent<UIImage>();
+        uiImageComponent = element->imageComponent = uiObject->AddComponent<UIImage>();
         idleTexture = rsrcMgr->GetTexture(yutility::GetWString(uiData.imagePath).c_str());
         if (idleTexture == nullptr)
         {
@@ -177,48 +190,49 @@ void UIManager::ImportDefaultAction(const UIManager::JsonUIData& uiData)
         uiImageComponent->GetGI().SetImage(idleTexture);
         uiImageComponent->GetGI().SetWidth(uiData.width);
         uiImageComponent->GetGI().SetHeight(uiData.height);
+        // apply pivot
+        uiImageComponent->GetGI().SetXPivot(uiData.pivot[0]);
+        uiImageComponent->GetGI().SetYPivot(1 - uiData.pivot[1]);
         uiImageComponent->GetGI().SetLayer(uiImportingPriority);
-    }
-    // 만약 버튼이라면...
-    if (uiData.customFlags & (int)UIExportFlag::IsButton)
-    {
-        uiButtonComponent = uiObject->AddComponent<UIButton>();
+        uiButtonComponent = element->button = uiObject->AddComponent<UIButton>();
         uiButtonComponent->SetImageComponent(uiImageComponent);
         uiButtonComponent->SetIdleImage(idleTexture);
         uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
     }
-    uisByName[uiData.uiname] = uiObject;
+    // 만약 버튼이라면...
+    if (uiData.customFlags & (int)UIExportFlag::IsButton)
+    {
+        uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+    }
 
-    Vector3d topLeftPos{ 0,0,0 };
+    Vector3d pivotPos{ 0,0,0 };
     // offset by anchor
     Vector3d parentSize{ 1920, 1080, 0 };
+    Vector2d parentPivot{ 0.0,0.0 };
     if (uiData.parentUIName != "")
     {
-        auto parent = uisByName[uiData.parentUIName];
-        parentSize.x = uidatasByName[uiData.parentUIName].width;
-        parentSize.y = uidatasByName[uiData.parentUIName].height;
+        auto parentData = uidatasByName[uiData.parentUIName];
+        auto parent = uisByName[uiData.parentUIName]->GetGameObject();
+        parentSize.x = parentData.width;
+        parentSize.y = parentData.height;
+        parentPivot.x = parentData.pivot[0];
+        parentPivot.y = 1 - parentData.pivot[1];
         uiObject->SetParent(parent);
     };
     // offset by offset
-    topLeftPos.x += uiData.anchoredPosition[0];
-    topLeftPos.y -= uiData.anchoredPosition[1];
+    pivotPos.x += uiData.anchoredPosition[0];
+    pivotPos.y -= uiData.anchoredPosition[1];
 
-    topLeftPos.x += parentSize.x * uiData.anchor[0];
-    topLeftPos.y += parentSize.y * (1 - uiData.anchor[1]);
+    pivotPos.x += parentSize.x * (uiData.anchor[0] - parentPivot.x);
+    pivotPos.y += parentSize.y * (1 - uiData.anchor[1] - parentPivot.y);
 
-    // offset by pivot
-    topLeftPos.x -= uiData.pivot[0] * uiData.width;
-    topLeftPos.y -= (1 - uiData.pivot[1]) * uiData.height;
-    uiObject->GetTransform()->SetLocalPosition({ topLeftPos.x, topLeftPos.y, 0 });
+    //topLeftPos.x -= uiData.pivot[0] * uiData.width;
+    //topLeftPos.y -= (1 - uiData.pivot[1]) * uiData.height;
+    uiObject->GetTransform()->SetLocalPosition({ pivotPos.x, pivotPos.y, 0 });
 }
-// 아래 두 함수들을 응용해 UI들이 다 생성되고 난 후 추가적인 작업을 수행합니다.
-bool UIManager::ImportDealWithSpecialCases_Post(const UIManager::JsonUIData& uiData)
+void UIManager::ImportDefaultAction_Post(const UIManager::JsonUIData& uiData, UIElement* element)
 {
-    return false;
-}
-void UIManager::ImportDefaultAction_Post(const UIManager::JsonUIData& uiData)
-{
-    UIButton* button{ uisByName[uiData.uiname]->GetComponent<UIButton>() };
+    UIButton* button{ element->button };
     // 만약 닫기 버튼이라면...
     if (uiData.customFlags & (int)UIExportFlag::CloseButton)
     {
@@ -237,7 +251,7 @@ void UIManager::ImportDefaultAction_Post(const UIManager::JsonUIData& uiData)
         assert(openTarget);
         button->SetButtonClickFunction([=]()
             {
-                openTarget->SetSelfActive(true);
+                openTarget->GetGameObject()->SetSelfActive(true);
             });
     }
     // 만약 툴팁을 포함하는 UI라면...
@@ -266,4 +280,89 @@ void UIManager::ImportDefaultAction_Post(const UIManager::JsonUIData& uiData)
                 }
             };
     }
+}
+// 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
+bool UIManager::ImportDealWithSpecialCases(const UIManager::JsonUIData& uiData, UIElement* element)
+{
+    switch ((UIEnumID)uiData.enumID)
+    {
+    case UIEnumID::Portrait_Robin:
+        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
+        element->button->SetButtonClickFunction([=]()
+            {
+                InputManager::Instance().SelectPlayer(Unit::UnitType::Warrior);
+            });
+        break;
+    case UIEnumID::Portrait_Ursula:
+        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
+        element->button->SetButtonClickFunction([=]()
+            {
+                InputManager::Instance().SelectPlayer(Unit::UnitType::Magician);
+            });
+        break;
+    case UIEnumID::Portrait_Hansel:
+        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
+        element->button->SetButtonClickFunction([=]()
+            {
+                InputManager::Instance().SelectPlayer(Unit::UnitType::Healer);
+            });
+        break;
+    case UIEnumID::Skill_Use_Q_Robin:
+        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
+        element->button->SetButtonClickFunction([=]()
+            {
+                InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Warrior);
+            });
+        break;
+    case UIEnumID::Skill_Use_W_Robin:
+        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
+        element->button->SetButtonClickFunction([=]()
+            {
+                InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Warrior);
+            });
+        break;
+    case UIEnumID::Skill_Use_Q_Ursula:
+        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
+        element->button->SetButtonClickFunction([=]()
+            {
+                InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Magician);
+            });
+        break;
+    case UIEnumID::Skill_Use_W_Ursula:
+        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
+        element->button->SetButtonClickFunction([=]()
+            {
+                InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Magician);
+            });
+        break;
+    case UIEnumID::Skill_Use_Q_HANSEL:
+        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
+        element->button->SetButtonClickFunction([=]()
+            {
+                InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Healer);
+            });
+        break;
+    case UIEnumID::Skill_Use_W_HANSEL:
+        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
+        element->button->SetButtonClickFunction([=]()
+            {
+                InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Healer);
+            });
+        break;
+    default:
+        return false;
+        break;
+    }
+    return true;
+}
+// 아래 두 함수들을 응용해 UI들이 다 생성되고 난 후 추가적인 작업을 수행합니다.
+bool UIManager::ImportDealWithSpecialCases_Post(const UIManager::JsonUIData& uiData, UIElement* element)
+{
+    switch ((UIEnumID)uiData.enumID)
+    {
+    default:
+        return false;
+        break;
+    }
+    return true;
 }

@@ -70,6 +70,22 @@ namespace yunuGIAdapter
         {
             renderable->SetHeight(height);
         };
+        virtual float GetXPivot()override
+        {
+            return renderable->GetXPivot();
+        }
+        virtual float GetYPivot()override
+        {
+            return renderable->GetYPivot();
+        }
+        virtual void SetXPivot(float xPivot)override
+        {
+            renderable->SetXPivot(xPivot);
+        }
+        virtual void SetYPivot(float yPivot) override
+        {
+            renderable->SetYPivot(yPivot);
+        }
         virtual int GetLayer() override
         {
             return renderable->GetLayer();

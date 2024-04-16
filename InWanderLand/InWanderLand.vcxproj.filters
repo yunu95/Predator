@@ -436,6 +436,15 @@
     <Filter Include="Contents\BurnEffect">
       <UniqueIdentifier>{0cb52d66-9140-4368-8842-d37ef7df2afb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\PopupOnEnable">
+      <UniqueIdentifier>{d3d2c32b-9c90-4981-997e-dd8d148ab9f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\UIEnumID">
+      <UniqueIdentifier>{63686f71-edd8-4c54-8faf-86dd28c299ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\UIElement">
+      <UniqueIdentifier>{12719a96-4004-4cd8-8134-2161e2882a86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1117,6 +1126,15 @@
     </ClInclude>
     <ClInclude Include="BurnEffect.h">
       <Filter>Contents\BurnEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="PopupOnEnable.h">
+      <Filter>UI\PopupOnEnable</Filter>
+    </ClInclude>
+    <ClInclude Include="UIEnumID.h">
+      <Filter>UI\UIEnumID</Filter>
+    </ClInclude>
+    <ClInclude Include="UIElement.h">
+      <Filter>UI\UIElement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

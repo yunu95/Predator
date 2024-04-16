@@ -13,7 +13,7 @@ public:
 
 	float m_elapsed;
 	float m_duration;
-
+	bool isRealtime{ false };
 
 public:
 	virtual void Start() override;
@@ -26,4 +26,5 @@ public:
 
 	void ActivateTimer();
 	void StopTimer();
+	void SetUsingRealtime(bool);
 };

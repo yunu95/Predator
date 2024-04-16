@@ -1012,6 +1012,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="ITrigger.h" />
     <ClInclude Include="MeleeEnemyPool.h" />
     <ClInclude Include="Module_ScriptEditor.h" />
+    <ClInclude Include="PopupOnEnable.h" />
     <ClInclude Include="RangedEnemyPool.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="ScriptSystem.h" />
@@ -1178,6 +1179,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Trigger_GameStart.h" />
     <ClInclude Include="Trigger_LeaveRegion.h" />
     <ClInclude Include="UIButton.h" />
+    <ClInclude Include="UIElement.h" />
+    <ClInclude Include="UIEnumID.h" />
     <ClInclude Include="UIImage.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UIPanel.h" />

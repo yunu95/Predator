@@ -30,6 +30,22 @@ public:
     {
         return height;
     };
+    float GetXPivot()
+    {
+        return xPivot;
+    };
+    float GetYPivot()
+    {
+        return yPivot;
+    };
+    void SetXPivot(float xPivot)
+    {
+        this->xPivot = xPivot;
+    }
+    void SetYPivot(float yPivot)
+    {
+        this->yPivot = yPivot;
+    }
     void SetWidth(float width)
     {
         this->width = width;
@@ -51,10 +67,12 @@ public:
 public:
     DirectX::SimpleMath::Vector2 pos;
     int layer = 0;
-
 private:
     float width{ -1 };
     float height{ -1 };
+    // 0,0은 왼쪽 위
+    float xPivot = 0;
+    float yPivot = 0;
     yunuGI::ITexture* texture;
 };
 

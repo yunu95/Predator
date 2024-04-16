@@ -2,25 +2,28 @@
 #include "YunutyEngine.h"
 #include "UIButton.h"
 #include "Storable.h"
+#include "UIEnumID.h"
 /// <summary>
 /// UIButton 객체들을 관리하는 컴포넌트.
 /// 역할
 /// 1. 모든 UIButton 객체들을 저장 및 관리
 /// 2. button 멤버 UIImage의 Layer를 비교하여 클릭 함수 재정의
 /// 3. 최소 하나의 button에 마우스가 올라가 있는가? 를 항상 판별.
+/// 4. 유니티 에디터에서 만든 UI 레이아웃을 불러와서 생성
 /// </summary>
 
+class UIElement;
 class UIManager : public Component, public SingletonComponent<UIManager>
 {
 private:
     struct JsonUIData;
-    // 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
-    bool ImportDealWithSpecialCases(const JsonUIData& uiData);
     // JsonUIData만으로 UI를 생성합니다.
-    void ImportDefaultAction(const JsonUIData& uiData);
+    void ImportDefaultAction(const JsonUIData& uiData, UIElement* element);
+    void ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* element);
+    // 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
+    bool ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element);
     // 아래 두 함수들을 응용해 UI들이 다 생성되고 난 후 추가적인 작업을 수행합니다.
-    bool ImportDealWithSpecialCases_Post(const JsonUIData& uiData);
-    void ImportDefaultAction_Post(const JsonUIData& uiData);
+    bool ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElement* element);
     int uiImportingPriority{ 0 };
     struct JsonUIData;
     std::list<UIButton*> m_currentSelectedButtonList;
@@ -31,7 +34,8 @@ private:
     UIButton* m_highestPriorityButton;
 
     bool isButtonActiviated = false;
-    std::unordered_map<std::string, GameObject*> uisByName;
+    std::unordered_map<std::string, UIElement*> uisByName;
+    std::unordered_map<UIEnumID, UIElement*> uisByEnumID;
     std::unordered_map<std::string, JsonUIData> uidatasByName;
 
 public:
@@ -52,6 +56,8 @@ public:
         double height;
         // 임의로 사용하게 될 사용자 플래그
         int customFlags;
+        // UI의 고유한 EnumID
+        int enumID;
         FROM_JSON(JsonUIData)
     };
     enum class UIExportFlag
@@ -71,11 +77,11 @@ public:
         IsIncludingTooltips = 1 << 5,
     };
     void Clear();
-    void LoadUITextures() const;
     void ReportButtonOnMouse(UIButton* p_btn);
     void ReportMouseExitButton(UIButton* p_btn);
 
     bool IsMouseOnButton();
+    UIElement* GetUIElementByEnum(UIEnumID uiEnumID);
     void ImportUI(const char* path);
 
     virtual void Update() override;

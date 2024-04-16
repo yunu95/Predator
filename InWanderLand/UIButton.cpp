@@ -54,6 +54,8 @@ void UIButton::Start()
     m_Height = m_ImageComponent->GetGI().GetHeight();
 
     Vector2d leftTopPos = GetTransform()->GetWorldPosition();
+    leftTopPos -= Vector2d::right * m_ImageComponent->GetGI().GetWidth() * m_ImageComponent->GetGI().GetXPivot();
+    leftTopPos -= Vector2d::up * m_ImageComponent->GetGI().GetHeight() * m_ImageComponent->GetGI().GetYPivot();
 
     auto resolution = graphics::Renderer::SingleInstance().GetResolution();
     HWND hWnd = GetForegroundWindow();
