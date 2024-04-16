@@ -40,6 +40,15 @@ namespace application
 		}
 	}
 
+	void Script::OnGameStop()
+	{
+		coroutineInProgress.clear();
+		for (int i = 0; i < coroutineQueue.size(); i++)
+		{
+			coroutineQueue.pop();
+		}
+	}
+
 	bool Script::EraseTrigger(const std::shared_ptr<ITrigger>& ptr)
 	{
 		if (triggerList.find(ptr) == triggerList.end())
@@ -66,12 +75,14 @@ namespace application
 
 	bool Script::EraseAction(const std::shared_ptr<IAction>& ptr)
 	{
-		if (actionList.find(ptr) == actionList.end())
+		auto itr = actionListForFind.find(ptr);
+		if (itr == actionListForFind.end())
 		{
 			return false;
 		}
 
-		actionList.erase(ptr);
+		actionList.erase(itr->second);
+		actionListForFind.erase(ptr);
 
 		return true;
 	}
@@ -103,13 +114,22 @@ namespace application
 
 	CoroutineObject<void> Script::MakeActionCoroutine()
 	{
-		for (auto& each : actionList)
+		for (auto& [key, action] : actionList)
 		{
-			auto coroutine = each->DoAction();
-			while (!coroutine.Done())
+			auto coroutine = action->DoAction();
+			coroutineInProgress.emplace_back(coroutine);
+			if (action->GetType() == ActionType::WaitForSeconds
+				|| action->GetType() == ActionType::WaitForRealSeconds)
 			{
-				coroutine();
-				co_await std::suspend_always();
+				while (!coroutine.Done())
+				{
+					coroutine();
+					co_await std::suspend_always();
+				}
+			}
+			else
+			{
+				coroutineQueue.push(coroutine);
 			}
 		}
 	}

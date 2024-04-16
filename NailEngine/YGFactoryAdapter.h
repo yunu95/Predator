@@ -4,6 +4,7 @@
 #include "YGCameraAdapter.h"
 #include "YGStaticMeshAdapter.h"
 #include "YGSkinnedMeshAdapter.h"
+#include "ParticleRendererAdapter.h"
 #include "YGDebugCubeAdapter.h"
 #include "YGUIImageAdapter.h"
 #include "YGUITextAdapter.h"
@@ -35,6 +36,10 @@ namespace yunuGIAdapter
 		virtual yunuGI::ISkinnedMesh* CreateSkinnedMesh(const yunuGI::ISkinnedMeshDesc& desc)
 		{
 			return new SkinnedMeshAdapter{};
+		}
+		virtual yunuGI::IParticleRenderer* CreateParticleRenderer(const yunuGI::IParticleRendererDesc& desc)
+		{
+			return new ParticleRendererAdapter{};
 		}
 		virtual yunuGI::IDirectionalLight* CreateDirectionalLight(const yunuGI::IDirectionalLightDesc& desc)
 		{

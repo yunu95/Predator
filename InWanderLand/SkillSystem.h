@@ -26,6 +26,8 @@ protected:
 	};
 
 	virtual void SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen);
+	virtual void SetSkillRequirmentsPosition(SkillRequirements p_requirments, Vector3d p_pos);
+	virtual void SetSkillRequirmentsRotation(SkillRequirements p_requirments, Quaternion p_quat);
 public:
 	virtual void ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition) = 0;
 };

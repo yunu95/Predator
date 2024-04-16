@@ -1,6 +1,6 @@
 #pragma once
 /// 2024. 04. 09 김상준
-/// 게임이 시작되었을 때, 발현되는 Trigger 입니다.
+/// Region 에 들어갈 때 호출되는 Trigger 입니다.
 
 #pragma once
 
@@ -22,6 +22,8 @@ namespace application
 		DEFINE_TRIGGER(EnterRegion)
 
 		virtual void LinkCallback() override;
+
+		void SetRegion(editor::RegionData* region);
 
 		virtual bool PreEncoding(json& data) const override;
 		virtual bool PostEncoding(json& data) const override;

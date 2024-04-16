@@ -433,11 +433,17 @@
     <Filter Include="Editor\ScriptSystem\1_Condition\List">
       <UniqueIdentifier>{0e0f3bef-6052-4f15-b9e9-77fdc9d3ca61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\BurnEffect">
+      <UniqueIdentifier>{0cb52d66-9140-4368-8842-d37ef7df2afb}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor">
       <UniqueIdentifier>{88ae07b4-e3a8-4643-9d6c-342c2d3edd2a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contents\SkillSystem\TrapSkillSystem">
       <UniqueIdentifier>{a8e4d532-a085-4fc3-9e1e-018ef51af826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor">
+      <UniqueIdentifier>{14f27d29-54f5-42fe-b645-4fe1335be09d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1100,7 +1106,7 @@
     <ClInclude Include="TriggerList.h">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClInclude>
-    <ClInclude Include="TestAction.h">
+    <ClInclude Include="Action_Example.h">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClInclude>
     <ClInclude Include="Trigger_GameStart.h">
@@ -1112,8 +1118,14 @@
     <ClInclude Include="UIImage.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="ChessTrapProductor.h">
-      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    <ClInclude Include="Trigger_LeaveRegion.h">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Module_ScriptEditor.h">
+      <Filter>Editor\Panel\List\Module\List</Filter>
+    </ClInclude>
+    <ClInclude Include="BurnEffect.h">
+      <Filter>Contents\BurnEffect</Filter>
     </ClInclude>
     <ClInclude Include="SpikeTrapProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
@@ -1123,6 +1135,24 @@
     </ClInclude>
     <ClInclude Include="SpikeSkillSystem.h">
       <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ChessTrapSkillSystem.h">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="TriggeredTrapSkillSystem.h">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="PawnTrapProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="RookTrapProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="BishopTrapProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="TrapTriggerSensor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1703,8 +1733,14 @@
     <ClCompile Include="Trigger_EnterRegion.cpp">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClCompile>
-    <ClCompile Include="ChessTrapProductor.cpp">
-      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    <ClCompile Include="Trigger_LeaveRegion.cpp">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Module_ScriptEditor.cpp">
+      <Filter>Editor\Panel\List\Module\List</Filter>
+    </ClCompile>
+    <ClCompile Include="BurnEffect.cpp">
+      <Filter>Contents\BurnEffect</Filter>
     </ClCompile>
     <ClCompile Include="SpikeTrapProductor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
@@ -1714,6 +1750,24 @@
     </ClCompile>
     <ClCompile Include="SpikeSkillSystem.cpp">
       <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessTrapSkillSystem.cpp">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="TriggeredTrapSkillSystem.cpp">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="PawnTrapProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="RookTrapProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="BishopTrapProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="TrapTriggerSensor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

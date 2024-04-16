@@ -110,7 +110,7 @@ Unit* SpikeTrapProductor::CreateUnit(Vector3d startPos)
 	auto eliteSkillSystem = m_unitGameObject->AddComponent<SpikeSkillSystem>();
 	skillOneColliderObject->SetParent(m_unitGameObject);
 	skillOneDebugMesh->SetParent(m_unitGameObject);
-	eliteSkillSystem->SetSpikeSkillRequirment(skillOneColliderObject, skillOneDebugMesh, m_unitComponent->dotween);
+	eliteSkillSystem->SetSpikeSkillRequirment(skillOneColliderObject, skillOneDebugMesh);
 #pragma endregion
 
 	auto skinnedMeshRenderer = m_unitGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
@@ -118,6 +118,8 @@ Unit* SpikeTrapProductor::CreateUnit(Vector3d startPos)
 	auto clonedMaterial = graphics::Renderer::SingleInstance().GetResourceManager()->CloneMaterial(L"Green", material);
 	clonedMaterial->SetColor(yunuGI::Color::green());
 	skinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial);
+
+	UnitProductor::SetUnitComponentMembers();
 
 	return m_unitComponent;
 }

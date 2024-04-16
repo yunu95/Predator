@@ -19,6 +19,12 @@ void UnitProductor::SetUnitComponentMembers()
 	frontDebugObject->GetTransform()->SetWorldPosition(m_unitGameObject->GetTransform()->GetLocalRotation().Forward() * -1);
 	frontDebugObject->SetParent(m_unitGameObject);
 
+	auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	AttachDebugMesh(unitColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
+	unitColliderDebugObject->SetParent(m_unitGameObject);
+	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(UNIT_LENGTH, UNIT_LENGTH, UNIT_LENGTH));
+	m_unitComponent->SetStaticMeshComponent(unitColliderDebugObject->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>());
+
 	/// Unit Member Setting
 	m_unitComponent->GetGameObject()->setName(m_objectName);
 	m_unitComponent->SetUnitType(m_unitType);
@@ -91,16 +97,16 @@ void UnitProductor::SetUnitComponentMembers()
 			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.bossSkillOneTimingFrame;
 			break;
 		case Unit::UnitType::SpikeTrap:
-			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.bossSkillOneDelay;
-			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.bossSkillOneTimingFrame;
+			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.spikeTrapSkillDelay;
+			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.spikeTrapSkillTimingFrame;
 			break;
 		case Unit::UnitType::ChessTrap:
-			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.bossSkillOneDelay;
-			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.bossSkillOneTimingFrame;
+			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.chessTrapSkillDelay;
+			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.chessTrapSkillTimingFrame;
 			break;
 		case Unit::UnitType::TriggeredTrap:
-			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.bossSkillOneDelay;
-			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.bossSkillOneTimingFrame;
+			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.triggeredTrapSkillDelay;
+			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.triggeredTrapSkillTimingFrame;
 			break;
 		default:
 			break;
@@ -146,12 +152,6 @@ void UnitProductor::AddColliderComponent() const
 	auto unitCollider = m_unitGameObject->AddComponent<physics::SphereCollider>();	// 빈 껍데기에 
 	unitCollider->SetRadius(UNIT_LENGTH);
 	//m_unitGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-
-	auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	AttachDebugMesh(unitColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
-	unitColliderDebugObject->SetParent(m_unitGameObject);
-	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(UNIT_LENGTH, UNIT_LENGTH, UNIT_LENGTH));
-	m_unitComponent->SetStaticMeshComponent(unitColliderDebugObject->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>());
 }
 
 void UnitProductor::AddNavigationComponent() 

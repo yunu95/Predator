@@ -20,8 +20,11 @@ void Unit::Start()
 
 	std::function<bool()> trapClassifingFunction = [=]()
 		{
-			return (m_unitType == UnitType::SpikeTrap || m_unitType == UnitType::ChessTrap || m_unitType == UnitType::TriggeredTrap);
+			return (m_unitType == UnitType::SpikeTrap);
 		};
+
+	//m_currentSkillAnimation->ClearEvent();
+	//unitAnimations.m_attackAnimation->ClearEvent();
 
 	for (auto each : OnCreated)
 	{
@@ -87,12 +90,12 @@ void Unit::Start()
 	}
 
 	unitFSM.transitions[UnitState::Skill].push_back({ UnitState::Idle,
-		[this]() { return currentOrder == UnitState::Idle; } });
+		[=]() { return currentOrder == UnitState::Idle; } });
 
 	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Skill); i++)
 	{
 		unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::Skill,
-		[this]() { return currentOrder == UnitState::Skill || (TacticModeSystem::SingleInstance().IsTacticModeActivated(this)
+		[=]() { return currentOrder == UnitState::Skill || trapClassifingFunction() || (TacticModeSystem::SingleInstance().IsTacticModeActivated(this)
 			&& TacticModeSystem::SingleInstance().isTacticModeStarted); } });
 	}
 
@@ -165,7 +168,8 @@ void Unit::IdleEngage()
 	{
 		currentOrder = UnitState::Idle;
 		idleElapsed = 0.0f;
-		m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
+		if(m_staticMeshRenderer != nullptr)
+			m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
 		m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 
 		DetermineCurrentTargetObject();
@@ -229,9 +233,15 @@ void Unit::IdleEngage()
 
 		m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 
+		AttackSystem* atkSys = GetGameObject()->GetComponent<AttackSystem>();
+
+		unitAnimations.m_attackAnimation->SetEventFunc(attackTimingFrame ,[=]()
+			{
+				DetermineCurrentTargetObject();
+				atkSys->Attack(m_currentTargetUnit, m_attackOffset);
+			});
+
 		attackFunctionElapsed = 0.0f;
-		animationFrameCheckNumber = 0;
-		//RotateUnit(m_currentTargetUnit->GetTransform()->GetWorldPosition());
 		dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
 		CheckCurrentAnimation(unitAnimations.m_idleAnimation);
 
@@ -255,9 +265,6 @@ void Unit::IdleEngage()
 		currentOrder = UnitState::Skill;
 		m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 		skillFunctionStartElapsed = 0.0f;
-		animationFrameCheckNumber = 0;
-		isAttackAnimationOperating = false;
-		isSkillStarted = false;
 
 		dotween->DOLookAt(m_currentSkillPosition, rotateTime, false);
 
@@ -267,10 +274,19 @@ void Unit::IdleEngage()
 			temp->SelectSkillRandomly();
 			m_currentSelectedSkill = temp->GetCurrentSelectedSkillNumber();
 		}
+		else if (m_unitType == UnitType::SpikeTrap)
+		{
+			m_currentSelectedSkill = SkillEnum::BossSkillOne;
+		}
 
 		m_currentSelectedSkillEngageDelay = m_skillDurationMap.find(m_currentSelectedSkill)->second;
 		m_currentSkillAnimation = m_skillAnimationMap.find(m_currentSelectedSkill)->second;
 		m_selectedSkillTimingFrame = m_skillTimingFrameMap.find(m_currentSelectedSkill)->second;
+
+		m_currentSkillAnimation->SetEventFunc(m_selectedSkillTimingFrame, [=]()
+			{
+				m_skillSystemComponent->ActivateSkill(m_currentSelectedSkill, m_currentSkillPosition);
+			});
 
 		/// 전술모드 동작 여부를 확인한다
 		if (TacticModeSystem::SingleInstance().IsTacticModeActivated(this))
@@ -388,36 +404,13 @@ void Unit::IdleEngage()
 
 		//LookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition());
 
-		if (isAttackAnimationOperating)
-		{
-			animationFrameCheckNumber++;
-
-			if (animationFrameCheckNumber >= unitAnimations.m_attackAnimation->GetTotalFrame())
-			{
-				m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
-				animationFrameCheckNumber = 0;
-				isAttackAnimationOperating = false;
-				dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
-			}
-
-			if (animationFrameCheckNumber >= attackTimingFrame && !isAttacked)
-			{
-				GetGameObject()->GetComponent<AttackSystem>()->Attack(m_currentTargetUnit, m_attackOffset);
-				//animationFrameCheckNumber = 0;
-				isAttacked = true;
-			}
-		}
-		else
 		{
 			attackFunctionElapsed += Time::GetDeltaTime();
 
 			if (attackFunctionElapsed >= attackFunctionCallDelay)
 			{
-				isAttackAnimationOperating = true;
-				isAttacked = false;
 				attackFunctionElapsed = 0.0f;
 				m_animatorComponent->GetGI().ChangeAnimation(unitAnimations.m_attackAnimation, animationLerpDuration, animationTransitionSpeed);
-				DetermineCurrentTargetObject();
 				CheckCurrentAnimation(unitAnimations.m_attackAnimation);
 			}
 			else if (attackFunctionElapsed < attackFunctionCallDelay)
@@ -429,34 +422,12 @@ void Unit::IdleEngage()
 
 	void Unit::SkillUpdate()
 	{
-		if (isAttackAnimationOperating)
+		skillFunctionStartElapsed += Time::GetDeltaTime();
+
+		if (skillFunctionStartElapsed >= m_currentSelectedSkillEngageDelay)
 		{
-			animationFrameCheckNumber++;
-
-			/// 스킬 애니메이션이 끝날 때 스킬이 끝날 것인가?
-			//if (animationFrameCheckNumber >= m_currentSkillAnimation->GetTotalFrame())		/// 훗날 스킬 애니메이션으로 교체해주기. Engage에서 find해서 정해주기.
-			//{
-			//	currentOrder = UnitState::Idle;
-			//}
-
-			if (animationFrameCheckNumber >= m_selectedSkillTimingFrame)							/// 마찬가지로 engage에서 정해주기
-			{
-				m_skillSystemComponent->ActivateSkill(m_currentSelectedSkill, m_currentSkillPosition);
-				animationFrameCheckNumber = 0;
-				isAttackAnimationOperating = false;
-			}
-		}
-		else if (!isSkillStarted)
-		{
-			skillFunctionStartElapsed += Time::GetDeltaTime();
-
-			if (skillFunctionStartElapsed >= m_currentSelectedSkillEngageDelay)
-			{
-				isSkillStarted = true;
-				isAttackAnimationOperating = true;
-				skillFunctionStartElapsed = 0.0f;
-				m_animatorComponent->GetGI().ChangeAnimation(m_currentSkillAnimation, animationLerpDuration, animationTransitionSpeed);
-			}
+			skillFunctionStartElapsed = 0.0f;
+			m_animatorComponent->GetGI().ChangeAnimation(m_currentSkillAnimation, animationLerpDuration, animationTransitionSpeed);
 		}
 	}
 

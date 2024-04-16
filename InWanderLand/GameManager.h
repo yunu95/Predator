@@ -21,6 +21,9 @@ public:
 	void EngageBattle();
 	void EndBattle();
 
+	void EngageCinematic();
+	void EndCinematic();
+
 	void Reset();
 
 	bool IsBattleSystemOperating() const;

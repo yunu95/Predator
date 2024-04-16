@@ -2,7 +2,9 @@
 
 void SpikeSkillSystem::Start()
 {
-
+	SetSkillRequirmentsActive(m_spikeDamageRequirement, false);
+	SetOtherComponentsAsMember();
+	//m_unitComponent->m_currentSelectedSkill
 }
 
 void SpikeSkillSystem::Update()
@@ -14,18 +16,17 @@ void SpikeSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_
 {
 	SetSkillRequirmentsActive(m_spikeDamageRequirement, true);
 	
-	m_spikeDamageRequirement.dotweenComponent->DONothing(m_spikeTrapDamageDuration).OnComplete([=]()
+	m_unitDotween->DONothing(m_colliderRemainDuration).OnComplete([=]()
 		{
 			SetSkillRequirmentsActive(m_spikeDamageRequirement, false);
 			m_unitComponent->SetUnitStateIdle();
 		});
 }
 
-void SpikeSkillSystem::SetSpikeSkillRequirment(GameObject* p_colliderObj, GameObject* p_debugObj, Dotween* p_dotween)
+void SpikeSkillSystem::SetSpikeSkillRequirment(GameObject* p_colliderObj, GameObject* p_debugObj)
 {
 	m_spikeDamageRequirement.colliderObject = p_colliderObj;
 	m_spikeDamageRequirement.debugObject = p_debugObj;
-	m_spikeDamageRequirement.dotweenComponent = p_dotween;
 }
 
 void SpikeSkillSystem::ActivateSkillOne()

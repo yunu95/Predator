@@ -14,6 +14,9 @@
 #include "RangedEnemyProductor.h"
 #include "BossProductor.h"
 #include "SpikeTrapProductor.h"
+#include "PawnTrapProductor.h"
+#include "BishopTrapProductor.h"
+#include "RookTrapProductor.h"
 #include "RangedEnemyPool.h"
 #include "MeleeEnemyPool.h"
 #include "GameManager.h"
@@ -158,6 +161,24 @@ namespace application
                     if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::SpikeTrap)
                     {
                         currentSelectedProductor = &SpikeTrapProductor::Instance();
+						currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+						inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+						contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
+                    }
+                    else if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::ChessTrap)
+                    {
+                        if (pod.templateData->pod.chessType == 0)
+                        {
+							currentSelectedProductor = &PawnTrapProductor::Instance();
+                        }
+                        else if (pod.templateData->pod.chessType == 1)
+                        {
+							currentSelectedProductor = &RookTrapProductor::Instance();
+                        }
+                        else
+                        {
+							currentSelectedProductor = &RookTrapProductor::Instance();
+                        }
 						currentSelectedProductor->MappingUnitData(pod.templateData->pod);
 						inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
 						contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());

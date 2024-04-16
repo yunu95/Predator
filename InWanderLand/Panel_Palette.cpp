@@ -422,6 +422,19 @@ namespace application
 
 			int countIdx = 0;
 
+			imgui::ShiftCursorY(5);
+			{
+				imgui::SmartStyleVar textAlign(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5f, 0.5f));
+				if (ImGui::Button("Clear Ornaments", ImVec2(ImGui::GetContentRegionAvail().x, 20)))
+				{
+					for (auto& each : InstanceManager::GetSingletonInstance().GetList<OrnamentData>())
+					{
+						op.Delete(each);
+					}
+				}
+			}
+			imgui::ShiftCursorY(5);
+
 			if (imgui::BeginSection_1Col(countIdx, "Ornament List", ImGui::GetContentRegionAvail().x))
 			{
 				auto oSize = tdm.GetDataList(DataType::OrnamentData).size();
@@ -1028,6 +1041,7 @@ namespace application
 						}
 					}
 
+					ImGui::SetNextItemWidth(-1);
 					if (ImGui::BeginCombo("##fbxUnitCombo", fbxName.c_str()))
 					{
 						for (int i = 0; i < fbxSet.size(); i++)
@@ -1040,7 +1054,9 @@ namespace application
 							}
 
 							if (is_selected)
+							{
 								ImGui::SetItemDefaultFocus();
+							}
 						}
 						ImGui::EndCombo();
 					}

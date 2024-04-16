@@ -24,6 +24,8 @@ struct VertexOut
     float3 normalV : NORMAL;
     float3 tangentV : TANGENT;
     float3 biNormalV : BINORMAL;
+    float2 lightUV : TEXCOORD1;
+    uint id : ID;
 };
 
 row_major matrix GetAnimationMatrix(VertexIn input)
@@ -129,7 +131,7 @@ VertexOut main(VertexIn input)
     output.color = input.color;
     
     output.uv = input.uv;
-    
+    output.id = input.instanceID;
   
     
     return output;

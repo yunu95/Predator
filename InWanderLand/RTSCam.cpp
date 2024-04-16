@@ -213,3 +213,4 @@ void RTSCam::UpdateCameraView()
     pitch += pitchDelta;
     GetTransform()->SetWorldRotation(Quaternion(Vector3d(pitch * yunutyEngine::math::Rad2Deg, yaw * yunutyEngine::math::Rad2Deg, 0.0)));
 }
+

@@ -26,6 +26,7 @@ public:
 	virtual void SetTexture(yunuGI::Texture_Type textureType, const yunuGI::ITexture* texture) override;
 	virtual void SetColor(const yunuGI::Color& color) override;
 	virtual void SetInt(int index, int val) override;
+	virtual void SetFloat(int index, float val) override;
 	virtual const yunuGI::IShader* GetPixelShader() const override;
 	virtual const yunuGI::IShader* GetVertexShader() const override;
 	virtual yunuGI::ITexture* GetTexture(yunuGI::Texture_Type textureType) override;
@@ -43,6 +44,7 @@ private:
 	std::array<std::shared_ptr<Texture>, MAX_TEXTURE> textures;
 	std::array<unsigned int, MAX_TEXTURE> useTextures;
 	std::array<int, MAX_INT> temp_int;
+	std::array<float, MAX_FLOAT> temp_float;
 	int lightIndex;
 
 	MaterialBuffer materialBuffer;

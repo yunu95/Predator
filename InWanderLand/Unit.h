@@ -146,9 +146,6 @@ private:
 	float attackFunctionCallDelay;
 	float increasedAttackSpeed{ 1.0f };
 	int attackTimingFrame;
-	int animationFrameCheckNumber = 0;
-	bool isAttackAnimationOperating = false;
-	bool isAttacked = false;
 	float m_attackOffset;
 
 	float deathFunctionElapsed;
@@ -168,8 +165,6 @@ private:
 
 	float animationLerpDuration = 1.0f;
 	float animationTransitionSpeed = 3.0f;
-
-	bool isSkillStarted;
 
 	bool isAttackMoving;
 

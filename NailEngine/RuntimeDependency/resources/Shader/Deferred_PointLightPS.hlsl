@@ -10,7 +10,8 @@ struct PixelIn
 struct PS_OUT
 {
     float4 diffuse : SV_Target0;
-    float4 specular : SV_Target1;
+    float4 ambient : SV_Target1;
+    float4 lightShadow : SV_Target2;
 };
 
 // Deferred_PointLight
@@ -18,6 +19,7 @@ struct PS_OUT
 // ARMMap : Deferred ARM
 // Temp0Map : View Position
 // Temp1Map : View Normal
+// Temp2Map : Util
 // temp_int0 : light index
 // Mesh : Sphere
 
@@ -54,16 +56,28 @@ PS_OUT main(PixelIn input)
         albedo = AlbedoMap.Sample(sam, uv).xyz;
     }
     
-    CalculatePBRLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo, arm.r, arm.b, arm.g);
+    float4 util = Temp2Map.Sample(sam, input.uv);
+    
+    float shadowFactor = 1.f;
+    CalculatePBRLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo,
+    arm.r, arm.b, arm.g, util.y, util.z, util.x, shadowFactor);
+    
     //CalculateLight(lightIndex, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);
     
-    //float3 x = max(0, color.diffuse.xyz - 0.004);
-    //color.diffuse.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
-    //color.diffuse.w = 1;
+    if (util.x != -1 && useLightMap)
+    {
+        output.ambient = color.ambient;
+    }
+    else
+    {
+        output.diffuse = color.diffuse;
+        output.ambient = color.ambient;
+    }
     
-    output.diffuse = (color.diffuse + color.ambient);
     output.diffuse.w = 1;
-    //output.specular = color.specular;
+    output.ambient.w = 1;
+    
+    output.lightShadow = float4(1 - shadowFactor, 1 - shadowFactor, 1 - shadowFactor, 1.f);
     
     return output;
 }

@@ -38,12 +38,13 @@ namespace yunutyEngine::graphics
         virtual ~Renderable()
         {
             yunuGIWrapperMap.erase(yunuGI);
+
         };
     protected:
         Renderable(yunuGI::IRenderable* yunuGI) : yunuGI(yunuGI)
         {
             yunuGIWrapperMap[yunuGI] = this;
-            yunuGI->SetWorldTM(GetTransform()->GetWorldTM());
+            OnTransformUpdate();
             yunuGI->SetActive(GetGameObject()->GetActive());
         }
         virtual void OnTransformUpdate() override
