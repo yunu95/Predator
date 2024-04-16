@@ -376,7 +376,7 @@ namespace application
             const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
             auto directorList = fileSystem::GetSubdirectories("FBX");
-            for (auto each : directorList)
+            for (auto& each : directorList)
             {
                 resourceManager->LoadFile(("FBX/" + each.string()).c_str());
             }

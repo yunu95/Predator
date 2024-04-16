@@ -20,11 +20,14 @@ namespace application
 		Example,
 		WaitForSeconds,
 		WaitForRealSeconds,
+		CinematicModeChange,
 	};
 
 	struct IAction
 		: public Identifiable, public Storable
 	{
+		friend class Script;
+
 		virtual ~IAction() = default;
 
 		/// dynamic_cast 가 아닌 switch case 로 동작하기 위한 함수입니다.

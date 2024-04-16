@@ -1,5 +1,8 @@
 #include "imgui_Utility.h"
 
+#include "Storable.h"
+#include "ITemplateData.h"
+#include "TemplateDataList.h"
 #include "EditorResourceManager.h"
 
 extern const float DRAG_MOUSE_THRESHOLD_FACTOR;

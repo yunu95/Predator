@@ -27,10 +27,10 @@
 #include "ShortcutSystem.h"
 #include "RobinSkillDevelopmentSystem.h"
 #include "ScriptSystem.h"
-#include "TriggerList.h"
-#include "ConditionList.h"
-#include "ActionList.h"
+#include "Script.h"
 #include "UIImage.h"
+#include "CinematicManager.h"
+#include "PlayableComponent.h"
 
 #include <algorithm>
 #include <string>
@@ -135,6 +135,7 @@ void application::contents::ContentsLayer::Initialize()
 	yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 	ShortcutInit();
 	ScriptSystem::Instance();
+    CinematicManager::Instance();
 
 	wanderUtils::LoadResourcesRecursively();
 
@@ -563,8 +564,8 @@ void application::contents::ContentsLayer::PlayContents()
 	robinWSkillUpgradeButtonObject->GetTransform()->SetLocalPosition({ 300, 700, 0 });
 	RegisterToEditorObjectContainer(robinWSkillUpgradeButtonObject);
 
-	/// ScriptSystem 을 위한 부분입니다.
-	ScriptSystem::Instance().OnGameStart();
+    /// Playable 동작들을 일괄 처리할 부분입니다.
+    PlayableComponent::OnGameStartAll();
 }
 
 void application::contents::ContentsLayer::PauseContents()
@@ -574,6 +575,9 @@ void application::contents::ContentsLayer::PauseContents()
 	{
 		e->SetActive(false);
 	}
+
+    /// Playable 동작들을 일괄 처리할 부분입니다.
+    PlayableComponent::OnGamePauseAll();
 }
 
 void application::contents::ContentsLayer::ResumeContents()
@@ -583,6 +587,9 @@ void application::contents::ContentsLayer::ResumeContents()
 	{
 		e->SetActive(true);
 	}
+
+    /// Playable 동작들을 일괄 처리할 부분입니다.
+    PlayableComponent::OnGameResumeAll();
 }
 
 void application::contents::ContentsLayer::StopContents()
@@ -596,9 +603,10 @@ void application::contents::ContentsLayer::StopContents()
 		e->SetActive(false);
 	}
 
-	UIManager::Instance().Clear();
-	/// ScriptSystem 을 위한 부분입니다.
-	ScriptSystem::Instance().OnGameStop();
+    UIManager::Instance().Clear();
+
+    /// Playable 동작들을 일괄 처리할 부분입니다.
+    PlayableComponent::OnGameStopAll();
 }
 
 #ifdef GEN_TESTS

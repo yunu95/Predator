@@ -1,4 +1,5 @@
 #include "InWanderLand.h"
+#include "RegionData.h"
 #include "RegionEditorInstance.h"
 #include "DebugMeshes.h"
 
@@ -42,7 +43,7 @@ namespace application::editor::palette
             mesh->GetGI().SetMaterial(0, GetColoredDebugMaterialTransparent({ 0,0,1 ,regionTransparency }));
         }
     }
-    void RegionEditorInstance::Apply(const application::editor::RegionData* regionData)
+    void RegionEditorInstance::Apply(RegionData* regionData)
     {
         SetHalfExtent({ regionData->pod.width, regionData->pod.height });
         GetTransform()->SetWorldPosition({ regionData->pod.x, debugMeshYPos, regionData->pod.z });

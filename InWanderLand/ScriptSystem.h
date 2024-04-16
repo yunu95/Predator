@@ -3,10 +3,15 @@
 
 #pragma once
 
-#include "Script.h"
 #include "Storable.h"
 
+#include "ITrigger.h"
+#include "ICondition.h"
+#include "IAction.h"
+
 #include "YunutyEngine.h"
+
+#include "PlayableComponent.h"
 
 #include <unordered_map>
 #include <unordered_set>
@@ -14,8 +19,18 @@
 
 namespace application
 {
+	class Script;
+
+	namespace editor
+	{
+		class MapFileManager;
+	}
+}
+
+namespace application
+{
 	class ScriptSystem
-		: public Storable, public Component, public SingletonComponent<ScriptSystem>
+		: public Storable, public PlayableComponent, public Component, public SingletonComponent<ScriptSystem>
 	{
 		friend class SingletonComponent<ScriptSystem>;
 		friend class GameObject;
@@ -26,9 +41,10 @@ namespace application
 
 		Script* CreateScript();
 		bool EraseScript(Script* script);
-		void OnGameStart();
-		void OnGameStop();
-		void Clear();
+
+		virtual void PreMapLoad() override;
+		virtual void OnGameStart() override;
+		virtual void OnGameStop() override;
 
 		std::unordered_set<Script*>& GetScriptList();
 
@@ -38,6 +54,8 @@ namespace application
 
 	private:
 		ScriptSystem() = default;
+
+		void Clear();
 
 		virtual bool PreEncoding(json& data) const override;
 		virtual bool PostEncoding(json& data) const override;
