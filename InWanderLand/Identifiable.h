@@ -9,11 +9,6 @@
 
 namespace application
 {
-	class UUIDManager;
-}
-
-namespace application
-{
 	std::string UUID_To_String(UUID uuid);
 	UUID String_To_UUID(std::string str);
 
@@ -32,8 +27,5 @@ namespace application
 
 	protected:
 		UUID id;
-
-	private:
-		static UUIDManager& uuidManager;
 	};
 }

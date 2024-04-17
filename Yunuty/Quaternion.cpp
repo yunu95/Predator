@@ -111,12 +111,12 @@ Quaternion Quaternion::MakeWithAxes(const Vector3f& right, const Vector3f& up, c
     Vector3f&& upN = up.Normalized();
     Vector3f&& forwardN = forward.Normalized();
     auto quat = DirectX::XMQuaternionRotationMatrix(
-        math::TO_XMMATRIX(yunuGI::Matrix4x4 {
+        math::TO_XMMATRIX(yunuGI::Matrix4x4{
         .m11 = rightN.x, .m12 = rightN.y, .m13 = rightN.z, .m14 = 0,
             .m21 = upN.x, .m22 = upN.y, .m23 = upN.z, .m24 = 0,
             .m31 = forwardN.x, .m32 = forwardN.y, .m33 = forwardN.z, .m34 = 0,
             .m41 = 0, .m42 = 0, .m43 = 0, .m44 = 1
-    }));
+            }));
     return Quaternion(
         static_cast<double>(quat.m128_f32[3]),
         static_cast<double>(quat.m128_f32[0]),
@@ -136,6 +136,30 @@ Quaternion yunutyEngine::Quaternion::MakeAxisAngleQuaternion(const Vector3d& axi
     double z = nAxis.z * sinHalfAngle;
 
     return Quaternion(w, x, y, z);
+}
+Quaternion Quaternion::Lerp(const Quaternion& a, const Quaternion& b, float t)
+{
+    DirectX::XMFLOAT4 _a, _b;
+    _a.x = static_cast<float>(a.x);
+    _a.y = static_cast<float>(a.y);
+    _a.z = static_cast<float>(a.z);
+    _a.w = static_cast<float>(a.w);
+    _b.x = static_cast<float>(b.x);
+    _b.y = static_cast<float>(b.y);
+    _b.z = static_cast<float>(b.z);
+    _b.w = static_cast<float>(b.w);
+
+    auto ret = DirectX::XMQuaternionSlerp(
+        DirectX::XMLoadFloat4(&_a),
+        DirectX::XMLoadFloat4(&_b),
+        t
+    );
+    return Quaternion(
+        static_cast<double>(ret.m128_f32[3]),
+        static_cast<double>(ret.m128_f32[0]),
+        static_cast<double>(ret.m128_f32[1]),
+        static_cast<double>(ret.m128_f32[2])
+    );
 }
 Quaternion Quaternion::Identity()
 {

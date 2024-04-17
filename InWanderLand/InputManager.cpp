@@ -62,15 +62,7 @@ void InputManager::Update()
 
         if (yunutyEngine::Input::isKeyPushed(KeyCode::Space) && GameManager::Instance().IsBattleSystemOperating())
         {
-            tacticMode = !tacticMode;
-            if (tacticMode)
-            {
-                TacticModeSystem::SingleInstance().EngageTacticMode();
-            }
-            else
-            {
-                TacticModeSystem::SingleInstance().ExitTacticMode();
-            }
+            ToggleTacticMode();
         }
     }
 
@@ -127,5 +119,20 @@ void InputManager::PrepareSkill(Unit::SkillEnum p_skillType)
     {
         PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
         PlayerController::SingleInstance().SetLeftClickSkill(p_skillType);
+    }
+}
+void InputManager::ToggleTacticMode()
+{
+    if (GameManager::Instance().IsBattleSystemOperating())
+    {
+        tacticMode = !tacticMode;
+        if (tacticMode)
+        {
+            TacticModeSystem::SingleInstance().EngageTacticMode();
+        }
+        else
+        {
+            TacticModeSystem::SingleInstance().ExitTacticMode();
+        }
     }
 }

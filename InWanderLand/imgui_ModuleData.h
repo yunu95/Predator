@@ -186,7 +186,7 @@ namespace application
 
 						if (selections.empty())
 						{
-							for (auto each : fbxSet)
+							for (auto& each : fbxSet)
 							{
 								selections.push_back(each);
 							}
@@ -222,7 +222,7 @@ namespace application
 
 						if (selections.empty())
 						{
-							for (auto each : fbxSet)
+							for (auto& each : fbxSet)
 							{
 								selections.push_back(each);
 							}

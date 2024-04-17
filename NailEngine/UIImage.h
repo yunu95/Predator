@@ -65,7 +65,7 @@ public:
     }
 
 public:
-    DirectX::SimpleMath::Vector2 pos;
+    //DirectX::SimpleMath::Vector2 pos;
     int layer = 0;
 private:
     float width{ -1 };

@@ -57,6 +57,16 @@ SoundChannel yunutyEngine::SoundSystem::StopMusic(double fadeLength)
 {
     return SoundSystem::SingleInstance()->mStopMusic(fadeLength);
 }
+void yunutyEngine::SoundSystem::SetMusicVolume(float volume)
+{
+    soundInstance->bgmChannel->setVolume(volume);
+}
+float yunutyEngine::SoundSystem::GetMusicVolume()
+{
+    float volume;
+    soundInstance->bgmChannel->getVolume(&volume);
+    return volume;
+}
 SoundChannel yunutyEngine::SoundSystem::mPlayMusic(string soundPath)
 {
     if (sounds.find(soundPath) == sounds.end())

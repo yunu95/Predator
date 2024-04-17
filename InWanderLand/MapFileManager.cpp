@@ -18,7 +18,9 @@
 #include "EditorCameraManager.h"
 #include "ShortcutSystem.h"
 #include "ScriptSystem.h"
+#include "Script.h"
 #include "Module_ScriptEditor.h"
+#include "PlayableComponent.h"
 
 #include <fstream>
 
@@ -82,6 +84,7 @@ namespace application
                     odt->pod.position.x = -location[0];
                     odt->pod.position.y = location[2];
                     odt->pod.position.z = location[1];
+                    odt->pod.stage = path.find("1Stage") != std::string::npos ? 1 : 2;
 
                     auto pi = odt->ApplyAsPaletteInstance();
                 }
@@ -163,7 +166,7 @@ namespace application
                 // Manager 초기화
                 Clear();
 
-                auto& scriptSystem =  ScriptSystem::Instance();
+                auto& scriptSystem = ScriptSystem::Instance();
 
                 if (!globalConstant.PreDecoding(mapData) || !scriptSystem.PreDecoding(mapData) || !instanceManager.PreDecoding(mapData) || !templateDataManager.PreDecoding(mapData))
                 {
@@ -283,7 +286,7 @@ namespace application
             commandManager.Clear();
 #endif
             ShortcutSystem::Instance().Clear();
-            ScriptSystem::Instance().Clear();
+            PlayableComponent::PreMapLoadAll();
             instanceManager.Clear();
             templateDataManager.Clear();
             UUIDManager::GetSingletonInstance().Clear();

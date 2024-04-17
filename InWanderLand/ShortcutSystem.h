@@ -39,12 +39,12 @@ namespace application
 				}
 			}
 
-			bool IsValid()
+			bool IsValid() const
 			{
 				return keyIndex != MAXLONGLONG;
 			}
 
-			bool IsUnique()
+			bool IsUnique() const
 			{
 				return isUnique;
 			}
@@ -76,7 +76,7 @@ namespace application
 				return this->funcIndex <=> funcIndex.funcIndex;
 			}
 
-			bool IsValid()
+			bool IsValid() const
 			{
 				return ((keyIndex != MAXLONGLONG) && (funcIndex != MAXLONGLONG));
 			}

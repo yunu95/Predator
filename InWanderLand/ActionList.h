@@ -7,3 +7,4 @@
 
 #include "Action_Example.h"
 #include "Action_WaitForSeconds.h"
+#include "Action_Cinematic.h"

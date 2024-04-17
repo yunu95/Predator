@@ -2,13 +2,12 @@
 #include "Palette.h"
 #include "YunutyEngine.h"
 #include "SingletonClass.h"
-#include "UnitData.h"
 
 namespace application
 {
     namespace editor
     {
-        //class UnitData;
+        class UnitData;
         class Unit_TemplateData;
         namespace palette
         {

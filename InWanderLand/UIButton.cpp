@@ -136,5 +136,6 @@ void UIButton::Update()
 }
 void UIButton::OnDisable()
 {
+    isMouseNowOnButton = false;
     UIManager::Instance().ReportMouseExitButton(this);
 }

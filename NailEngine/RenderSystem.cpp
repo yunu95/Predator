@@ -509,10 +509,11 @@ void RenderSystem::RenderUI()
         }
         ;
         RECT drawRect;
-        drawRect.left = uiImage->pos.x - uiImage->GetXPivot() * uiImage->GetWidth();
-        drawRect.right = uiImage->pos.x + (1 - uiImage->GetXPivot()) * uiImage->GetWidth();
-        drawRect.top = uiImage->pos.y - uiImage->GetYPivot() * uiImage->GetHeight();
-        drawRect.bottom = uiImage->pos.y + (1 - uiImage->GetYPivot()) * uiImage->GetHeight();
+        const auto& tm = uiImage->GetWorldTM();
+        drawRect.left = tm._41 - uiImage->GetXPivot() * uiImage->GetWidth() * tm._11;
+        drawRect.right = tm._41 + (1 - uiImage->GetXPivot()) * uiImage->GetWidth() * tm._11;
+        drawRect.top = tm._42 - uiImage->GetYPivot() * uiImage->GetHeight() * tm._22;
+        drawRect.bottom = tm._42 + (1 - uiImage->GetYPivot()) * uiImage->GetHeight() * tm._22;
         auto texture = ((Texture*)(std::static_pointer_cast<UIImage>(i)->GetTexture()));
         this->spriteBatch->Draw(texture->GetSRV().Get(), drawRect);
     }

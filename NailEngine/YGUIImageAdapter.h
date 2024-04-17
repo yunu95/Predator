@@ -26,8 +26,9 @@ namespace yunuGIAdapter
 
         virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)
         {
-            renderable->pos.x = worldTM.m41;
-            renderable->pos.y = worldTM.m42;
+            renderable->SetWorldTM(reinterpret_cast<const DirectX::SimpleMath::Matrix&>(worldTM));
+            //renderable->pos.x = worldTM.m41;
+            //renderable->pos.y = worldTM.m42;
         };
 
         virtual void SetActive(bool isActive)

@@ -1,13 +1,5 @@
 #include "Timer.h"
 
-void Timer::Start()
-{
-    m_isActivated = false;
-    m_isRepeated = false;
-
-    m_elapsed = 0.0f;
-    m_duration = 0.0f;
-}
 
 void Timer::Update()
 {
@@ -42,6 +34,7 @@ void Timer::ActivateTimer()
 {
     m_elapsed = 0.0f;
     m_isActivated = true;
+    onActivation();
 }
 
 void Timer::StopTimer()

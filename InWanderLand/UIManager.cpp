@@ -6,80 +6,51 @@
 #include "PopupOnEnable.h"
 #include "ContentsLayer.h"
 #include "UIElement.h"
+#include "UIOffsetTransition.h"
 #include <fstream>
 
 void UIManager::Clear()
 {
     m_highestPriorityButton = nullptr;
+    m_currentHighestLayer = -1;
+    m_selectedButtons.clear();
 }
 
 void UIManager::ReportButtonOnMouse(UIButton* p_btn)
 {
-    // 2. Layer에 따라 현재 상호작용할 버튼을 정합니다.
-    if (m_currentHighestLayer < p_btn->GetLayer())
-    {
-        if (m_highestPriorityButton != nullptr)				// 이전에 선택됐던 버튼의 이미지를 Idle로 초기화
-        {
-            m_highestPriorityButton->m_ImageComponent->GetGI().SetImage(m_highestPriorityButton->m_IdleImage);
-        }
-
-        /// highestPriorityButton 재정의
-        m_currentHighestLayer = p_btn->GetLayer();
-        m_highestPriorityButton = p_btn;
-    }
-
-    // 3. 멤버 리스트에 버튼을 담아줍니다.
-    m_currentSelectedButtonList.push_back(p_btn);
-
-    /// 4. 현재 상호작용할 버튼의 click함수로 leftClick함수를 재정의합니다.
-    // 마우스를 올렸을 때 호출되는 함수도 호출합니다.
-    if (m_highestPriorityButton != nullptr && m_highestPriorityButton->m_onMouseFunction != nullptr)
-        m_highestPriorityButton->m_onMouseFunction();
-
-    /// 버튼 클릭이 가능하도록 bool값을 켜줍니다.
-    isButtonActiviated = true;
+    m_selectedButtons.insert(p_btn);
+    UpdateHighestPriorityButton();
 }
 
 void UIManager::ReportMouseExitButton(UIButton* p_btn)
 {
-    p_btn->m_ImageComponent->GetGI().SetImage(p_btn->m_IdleImage);
-    m_currentSelectedButtonList.remove(p_btn);
-
-    /// 벗어난 후 마우스가 ui 위에 존재하지 않는다면...
-    if (m_currentSelectedButtonList.empty())
+    m_selectedButtons.erase(p_btn);
+    UpdateHighestPriorityButton();
+}
+void UIManager::UpdateHighestPriorityButton()
+{
+    // 현재 하이라이트된 버튼이 적법한 버튼이라면, 더 이상의 처리는 필요없습니다.
+    if (!m_selectedButtons.empty() && m_highestPriorityButton == *m_selectedButtons.begin())
+        return;
+    // 하이라이트된 버튼이 바뀌어야 한다면, 기존 버튼의 Exit 이벤트부터 처리합니다.
+    if (m_highestPriorityButton)
     {
-        if (m_highestPriorityButton && m_highestPriorityButton->m_onMouseExitFunction)
+        m_highestPriorityButton->m_ImageComponent->GetGI().SetImage(m_highestPriorityButton->m_IdleImage);
+        if (m_highestPriorityButton->m_onMouseExitFunction)
         {
             m_highestPriorityButton->m_onMouseExitFunction();
         }
-        m_highestPriorityButton = nullptr;
-        m_currentHighestLayer = -1;
-        isButtonActiviated = false;
     }
-    /// 만약, 마우스가 벗어난 버튼이 Highest-Priority였다면 leftClick 함수를 재정의합니다.
-    // 그러기 위해선, 다음 우선순위(layer)의 버튼을 재정의 해줘야합니다.
-    else
+    // 혹시 앞 버튼의 Exit 이벤트로 인해 새로 하이라이트된 버튼이 비활성화될수도 있으니, 비활성화된 버튼은 제거합니다. 
+    while (!m_selectedButtons.empty() && (*m_selectedButtons.begin())->GetGameObject()->GetActive() == false)
     {
-        if (p_btn == m_highestPriorityButton)
-        {
-            m_currentHighestLayer = -1;						// 초기화
-            if (m_highestPriorityButton->m_onMouseExitFunction)
-            {
-                m_highestPriorityButton->m_onMouseExitFunction();
-            }
-            for (auto e : m_currentSelectedButtonList)
-            {
-                if (e->GetLayer() > m_currentHighestLayer)
-                {
-                    m_currentHighestLayer = e->GetLayer();
-                    m_highestPriorityButton = e;
-                }
-            }
+        m_selectedButtons.erase(*m_selectedButtons.begin());
+    }
+    m_highestPriorityButton = m_selectedButtons.empty() ? nullptr : *m_selectedButtons.begin();
 
-            m_highestPriorityButton->m_onMouseFunction();
-
-            isButtonActiviated = true;
-        }
+    if (isButtonActiviated = m_highestPriorityButton != nullptr)
+    {
+        m_highestPriorityButton->m_onMouseFunction();
     }
 }
 
@@ -96,15 +67,6 @@ UIElement* UIManager::GetUIElementByEnum(UIEnumID uiEnumID)
 
 void UIManager::Update()
 {
-    /*if (m_currentSelectedButtonList.empty())
-    {
-        InputManager::Instance().IsMouseOnUI(false);
-    }
-    else
-    {
-        InputManager::Instance().IsMouseOnUI(true);
-    }*/
-
     if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::MouseLeftClick))
     {
         if (isButtonActiviated)
@@ -142,10 +104,10 @@ void UIManager::ImportUI(const char* path)
 
             auto uiObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
             auto uiElement = uiObject->AddComponent<UIElement>();
-            uisByEnumID[(UIEnumID)uiData.enumID] = uiElement;
+            if (uiData.enumID != 0)
+                uisByEnumID[(UIEnumID)uiData.enumID] = uiElement;
             uisByName[uiData.uiname] = uiElement;
             uidatasByName[uiData.uiname] = uiData;
-
 
             if (ImportDealWithSpecialCases(uiData, uiElement) == false)
             {
@@ -170,7 +132,7 @@ void UIManager::ImportUI(const char* path)
 }
 
 // JsonUIData만으로 UI를 생성합니다.
-void UIManager::ImportDefaultAction(const UIManager::JsonUIData& uiData, UIElement* element)
+void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element)
 {
     auto uiObject = element->GetGameObject();
     auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
@@ -230,7 +192,7 @@ void UIManager::ImportDefaultAction(const UIManager::JsonUIData& uiData, UIEleme
     //topLeftPos.y -= (1 - uiData.pivot[1]) * uiData.height;
     uiObject->GetTransform()->SetLocalPosition({ pivotPos.x, pivotPos.y, 0 });
 }
-void UIManager::ImportDefaultAction_Post(const UIManager::JsonUIData& uiData, UIElement* element)
+void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* element)
 {
     UIButton* button{ element->button };
     // 만약 닫기 버튼이라면...
@@ -240,7 +202,10 @@ void UIManager::ImportDefaultAction_Post(const UIManager::JsonUIData& uiData, UI
             {
                 if (auto parent = button->GetGameObject()->GetParentGameObject())
                 {
-                    parent->SetSelfActive(false);
+                    if (auto elem = parent->GetComponent<UIElement>())
+                    {
+                        elem->DisableElement();
+                    }
                 }
             });
     }
@@ -249,9 +214,36 @@ void UIManager::ImportDefaultAction_Post(const UIManager::JsonUIData& uiData, UI
     {
         auto openTarget = uisByName[uiData.openTarget];
         assert(openTarget);
+        if (uiData.customFlags & (int)UIExportFlag::IsToggle)
+        {
+            button->SetButtonClickFunction([=]()
+                {
+                    if (!openTarget->GetGameObject()->GetSelfActive())
+                    {
+                        openTarget->EnableElement();
+                    }
+                    else
+                    {
+                        openTarget->DisableElement();
+                    }
+                });
+        }
+        else
+        {
+            button->SetButtonClickFunction([=]()
+                {
+                    openTarget->EnableElement();
+                });
+        }
+    }
+    // 만약 Disabling button이라면...
+    if (uiData.customFlags & (int)UIExportFlag::DiablingButton)
+    {
+        auto disablingTarget = uisByName[uiData.disablingTarget];
+        assert(disablingTarget);
         button->SetButtonClickFunction([=]()
             {
-                openTarget->GetGameObject()->SetSelfActive(true);
+                disablingTarget->DisableElement();
             });
     }
     // 만약 툴팁을 포함하는 UI라면...
@@ -260,15 +252,18 @@ void UIManager::ImportDefaultAction_Post(const UIManager::JsonUIData& uiData, UI
         for (auto each : button->GetGameObject()->GetChildren())
         {
             each->SetSelfActive(false);
+            if (auto img = each->GetComponent<UIImage>())
+            {
+                img->GetGI().SetLayer(UIImage::priority_Tooltip);
+            }
         }
         button->m_OnMouseEventFunction = [=]()
             {
                 for (auto each : button->GetGameObject()->GetChildren())
                 {
-                    each->SetSelfActive(true);
-                    if (auto img = each->GetComponent<UIImage>())
+                    if (auto elem = each->GetComponent<UIElement>())
                     {
-                        img->GetGI().SetLayer(123456789);
+                        elem->EnableElement();
                     }
                 }
             };
@@ -276,13 +271,37 @@ void UIManager::ImportDefaultAction_Post(const UIManager::JsonUIData& uiData, UI
             {
                 for (auto each : button->GetGameObject()->GetChildren())
                 {
-                    each->SetSelfActive(false);
+                    if (auto elem = each->GetComponent<UIElement>())
+                    {
+                        elem->DisableElement();
+                    }
                 }
             };
     }
+    // 만약 등장 애니메이션이 들어갔다면...
+    if (uiData.customFlags & (int)UIExportFlag::IsPoppingUp)
+    {
+        element->scalePopUpTransition = element->GetGameObject()->AddComponent<PopupOnEnable>();
+        element->scalePopUpTransition->Init();
+    }
+    if (uiData.customFlags & (int)UIExportFlag::IsTranslatingOnEnable)
+    {
+        element->enableTransition = element->GetGameObject()->AddComponent<UIOffsetTransition>();
+        element->enableTransition->Init(uiData, true);
+    }
+    if (uiData.customFlags & (int)UIExportFlag::IsTranslatingOnDisable)
+    {
+        element->disableTransition = element->GetGameObject()->AddComponent<UIOffsetTransition>();
+        element->disableTransition->Init(uiData, false);
+    }
+    // 초기 상태가 비활성화 상태라면...
+    if (uiData.customFlags & (int)UIExportFlag::DisableOnStart)
+    {
+        element->GetGameObject()->SetSelfActive(false);
+    }
 }
 // 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
-bool UIManager::ImportDealWithSpecialCases(const UIManager::JsonUIData& uiData, UIElement* element)
+bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element)
 {
     switch ((UIEnumID)uiData.enumID)
     {
@@ -349,6 +368,13 @@ bool UIManager::ImportDealWithSpecialCases(const UIManager::JsonUIData& uiData, 
                 InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Healer);
             });
         break;
+    case UIEnumID::Toggle_TacticMode:
+        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
+        element->button->SetButtonClickFunction([=]()
+            {
+                InputManager::Instance().ToggleTacticMode();
+            });
+        break;
     default:
         return false;
         break;
@@ -356,7 +382,7 @@ bool UIManager::ImportDealWithSpecialCases(const UIManager::JsonUIData& uiData, 
     return true;
 }
 // 아래 두 함수들을 응용해 UI들이 다 생성되고 난 후 추가적인 작업을 수행합니다.
-bool UIManager::ImportDealWithSpecialCases_Post(const UIManager::JsonUIData& uiData, UIElement* element)
+bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElement* element)
 {
     switch ((UIEnumID)uiData.enumID)
     {

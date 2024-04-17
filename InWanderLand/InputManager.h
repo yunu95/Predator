@@ -31,6 +31,7 @@ public:
     void SelectPlayer(Unit::UnitType p_unitType);
     void PrepareSkill(Unit::SkillEnum p_skillType, Unit::UnitType p_unitType);
     void PrepareSkill(Unit::SkillEnum p_skillType);
+    void ToggleTacticMode();
 
     RTSCam* rtscam;
 };
