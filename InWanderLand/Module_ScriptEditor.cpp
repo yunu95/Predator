@@ -41,7 +41,7 @@ namespace application
 				isEditingPopup = false;
 			}
 
-			if (!isEditingPopup && eim.IsKeyboardPressed(KeyCode::Delete))
+			if (isFocused && !isEditingPopup && eim.IsKeyboardPressed(KeyCode::Delete))
 			{
 				if (selectedAction)
 				{
@@ -149,7 +149,7 @@ namespace application
 					}
 
 					/// LeaveRegion
-					if (epm.GetReturnPopupName() == "SetLeaveRegion")
+					else if (epm.GetReturnPopupName() == "SetLeaveRegion")
 					{
 						ImGui::Begin("Leave Region Popup", &pop, flag);
 						auto rect = ImGui::GetContentRegionAvail();
@@ -181,6 +181,74 @@ namespace application
 							epm.Return();
 						}
 					}
+
+					/// UnitAppear
+					else if (epm.GetReturnPopupName() == "SetUnitAppear")
+					{
+						ImGui::Begin("UnitAppear Popup", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Target Unit");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Target Unit");
+						ImGui::End();
+
+						pp.ChangeTab("Unit");
+
+						auto data = epm.GetReturnPopupData<Trigger_UnitAppear>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &up)
+						{
+							data->isEditing = true;
+							up.Reset();
+						}
+
+						if (data->isEditing == true && up.GetSelections().size() == 1)
+						{
+							data->SetUnit(static_cast<UnitData*>(*up.GetSelections().begin()));
+							data->isEditing = false;
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
+
+					/// UnitDie
+					else if (epm.GetReturnPopupName() == "SetUnitDie")
+					{
+						ImGui::Begin("UnitDie Popup", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Target Unit");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Target Unit");
+						ImGui::End();
+
+						pp.ChangeTab("Unit");
+
+						auto data = epm.GetReturnPopupData<Trigger_UnitDie>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &up)
+						{
+							data->isEditing = true;
+							up.Reset();
+						}
+
+						if (data->isEditing == true && up.GetSelections().size() == 1)
+						{
+							data->SetUnit(static_cast<UnitData*>(*up.GetSelections().begin()));
+							data->isEditing = false;
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
 				}
 
 				/// Condition
@@ -190,7 +258,38 @@ namespace application
 
 				/// Action
 				{
+					if (epm.GetReturnPopupName() == "SetTargetCamera")
+					{
+						ImGui::Begin("Camera Change Popup", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Camera");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Camera");
+						ImGui::End();
 
+						pp.ChangeTab("Cam");
+
+						auto data = epm.GetReturnPopupData<Action_CameraChangeView>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &cp)
+						{
+							data->isEditing = true;
+							cp.Reset();
+						}
+
+						if (data->isEditing == true && cp.GetSelections().size() == 1)
+						{
+							data->SetCamera(static_cast<CameraData*>(*cp.GetSelections().begin()));
+							data->isEditing = false;
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
 				}
 			}
 
@@ -435,6 +534,16 @@ namespace application
 									selectedScript->AddTrigger<Trigger_RepeatPeriodicallyRealTime>();
 									break;
 								}
+								case application::TriggerType::UnitAppear:
+								{
+									selectedScript->AddTrigger<Trigger_UnitAppear>();
+									break;
+								}
+								case application::TriggerType::UnitDie:
+								{
+									selectedScript->AddTrigger<Trigger_UnitDie>();
+									break;
+								}
 								default:
 									break;
 							}
@@ -588,6 +697,21 @@ namespace application
 									selectedScript->AddAction<Action_CinematicModeChange>();
 									break;
 								}
+								case application::ActionType::CameraChangeView:
+								{
+									selectedScript->AddAction<Action_CameraChangeView>();
+									break;
+								}
+								case application::ActionType::CameraSaveView:
+								{
+									selectedScript->AddAction<Action_CameraSaveView>();
+									break;
+								}
+								case application::ActionType::CameraLoadView:
+								{
+									selectedScript->AddAction<Action_CameraLoadView>();
+									break;
+								}
 								default:
 									break;
 							}
@@ -614,6 +738,15 @@ namespace application
 
 		void Module_ScriptEditor::DrawTrigger(std::shared_ptr<ITrigger> data)
 		{
+			if (!data->IsValid())
+			{
+				auto pos = ImGui::GetCurrentWindow()->DC.CursorPos;
+				ImGui::RenderFrame(pos, ImVec2(pos.x + ImGui::GetContentRegionAvail().x, pos.y + ImGui::CalcTextSize("Font").y), IM_COL32(255, 20, 20, 255), false, 0.0f);
+				ImGui::PushStyleColor(ImGuiCol_Header, IM_COL32(255, 20, 20, 255));
+				ImGui::PushStyleColor(ImGuiCol_HeaderHovered, IM_COL32(200, 20, 20, 255));
+				ImGui::PushStyleColor(ImGuiCol_HeaderActive, IM_COL32(255, 20, 20, 255));
+			}
+
 			ImGui::PushID(data.get());
 			if (ImGui::Selectable(ScriptSystem::triggerList[data->GetType()].c_str(), data == selectedTrigger))
 			{
@@ -629,6 +762,13 @@ namespace application
 				selectedAction = nullptr;
 			}
 
+			if (!data->IsValid())
+			{
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+			}
+
 			if ((selectedTrigger == data) && ImGui::IsItemClicked(ImGuiMouseButton_Right))
 			{
 				ImGui::OpenPopup(ScriptSystem::triggerList[data->GetType()].c_str());
@@ -641,6 +781,15 @@ namespace application
 
 		void Module_ScriptEditor::DrawCondition(std::shared_ptr<ICondition> data)
 		{
+			if (!data->IsValid())
+			{
+				auto pos = ImGui::GetCurrentWindow()->DC.CursorPos;
+				ImGui::RenderFrame(pos, ImVec2(pos.x + ImGui::GetContentRegionAvail().x, pos.y + ImGui::CalcTextSize("Font").y), IM_COL32(255, 20, 20, 255), false, 0.0f);
+				ImGui::PushStyleColor(ImGuiCol_Header, IM_COL32(255, 20, 20, 255));
+				ImGui::PushStyleColor(ImGuiCol_HeaderHovered, IM_COL32(200, 20, 20, 255));
+				ImGui::PushStyleColor(ImGuiCol_HeaderActive, IM_COL32(255, 20, 20, 255));
+			}
+
 			ImGui::PushID(data.get());
 			if (ImGui::Selectable(ScriptSystem::conditionList[data->GetType()].c_str(), data == selectedCondition))
 			{
@@ -656,6 +805,13 @@ namespace application
 				selectedAction = nullptr;
 			}
 
+			if (!data->IsValid())
+			{
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+			}
+
 			if ((selectedCondition == data) && ImGui::IsItemClicked(ImGuiMouseButton_Right))
 			{
 				ImGui::OpenPopup(ScriptSystem::conditionList[data->GetType()].c_str());
@@ -668,8 +824,16 @@ namespace application
 
 		void Module_ScriptEditor::DrawAction(std::shared_ptr<IAction> data)
 		{
-			ImGui::PushID(data.get());
+			if (!data->IsValid())
+			{
+				auto pos = ImGui::GetCurrentWindow()->DC.CursorPos;
+				ImGui::RenderFrame(pos, ImVec2(pos.x + ImGui::GetContentRegionAvail().x, pos.y + ImGui::CalcTextSize("Font").y), IM_COL32(255, 20, 20, 255), false, 0.0f);
+				ImGui::PushStyleColor(ImGuiCol_Header, IM_COL32(255, 20, 20, 255));
+				ImGui::PushStyleColor(ImGuiCol_HeaderHovered, IM_COL32(200, 20, 20, 255));
+				ImGui::PushStyleColor(ImGuiCol_HeaderActive, IM_COL32(255, 20, 20, 255));
+			}
 
+			ImGui::PushID(data.get());
 			if (ImGui::Selectable(ScriptSystem::actionList[data->GetType()].c_str(), data == selectedAction))
 			{
 				if (selectedAction == data)
@@ -682,6 +846,13 @@ namespace application
 				}
 				selectedTrigger = nullptr;
 				selectedCondition = nullptr;
+			}
+
+			if (!data->IsValid())
+			{
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
 			}
 
 			if ((selectedAction == data) && ImGui::IsItemClicked(ImGuiMouseButton_Right))

@@ -15,6 +15,8 @@ namespace application::editor
             paletteInstance->editableData = nullptr;
             Scene::getCurrentScene()->DestroyGameObject(paletteInstance->GetGameObject());
         }
+
+        DispatchObervationEvent(ObservationEvent::Destroy);
     }
     palette::PaletteInstance* IEditableData::GetPaletteInstance()
     {

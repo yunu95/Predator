@@ -5,6 +5,7 @@
 #pragma once
 #include "IEditableData.h"
 #include "Light_TemplateData.h"
+#include "StaticInstanceRegistry.h"
 
 #include <memory>
 #include <string>
@@ -41,6 +42,7 @@ namespace application
         struct POD_Light
         {
             Light_TemplateData* templateData = nullptr;
+            std::string name = "Light";
             POD_Vector3<float> position = POD_Vector3<float>();
             POD_Quaternion<double> rotation = POD_Quaternion<double>();
             POD_Vector3<float> scale = { 1,1,1 };
@@ -57,7 +59,7 @@ namespace application
         };
 
         class LightData
-            : public IEditableData
+            : public IEditableData, public StaticInstanceRegistry<LightData>
         {
             friend class InstanceManager;
 

@@ -106,8 +106,10 @@ namespace application
 			yunuGI::Vector3 forwardDirection = yunuGI::Vector3();
 			yunuGI::Vector3 rightDirection = yunuGI::Vector3();
 
-			yunuGI::Vector3 focalPos = yunuGI::Vector3();
-			float focalDistance = 0.0f;
+			bool moveFocus = false;
+			yunuGI::Vector3 focalDelta = yunuGI::Vector3();
+			float focalDistance = 10.0f;
+			float focalSpeed = 3.9f;
 
 			yunuGI::Vector2 mousePos = yunuGI::Vector2();
 			yunuGI::Vector2 beforeMousePos = yunuGI::Vector2();
