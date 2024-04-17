@@ -6,6 +6,6 @@
 #include "ITrigger.h"
 
 #include "Trigger_GameStart.h"
-#include "Trigger_EnterRegion.h"
-#include "Trigger_LeaveRegion.h"
+#include "Trigger_Region.h"
 #include "Trigger_RepeatPeriodically.h"
+#include "Trigger_Unit.h"

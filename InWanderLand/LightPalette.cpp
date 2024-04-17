@@ -10,6 +10,16 @@
 
 namespace application::editor::palette
 {
+    LightData* LightPalette::GetSingleSelectedLight()
+    {
+        return selection.empty() ? nullptr : static_cast<LightData*>(const_cast<IEditableData*>(*selection.begin()));
+    }
+
+    void LightPalette::SelectLight(LightData* light)
+    {
+        Palette::OnSelectSingleInstance(light);
+    }
+
     void LightPalette::SelectLightTemplateData(Light_TemplateData* templateData)
     {
         selectedLightTemplateData = templateData;

@@ -10,6 +10,8 @@
 #include "CameraData.h"
 #include "EditorCameraManager.h"
 #include "Application.h"
+#include "PaletteManager.h"
+#include "Palette.h"
 
 #include <DirectXMath.h>
 
@@ -150,12 +152,35 @@ namespace application
 			deltaPos.x = (mousePos.x - beforeMousePos.x) * 0.002f;
 			deltaPos.y = (mousePos.y - beforeMousePos.y) * 0.002f;
 
+			static Vector3d targetPos = Vector3d();
 
 			if (inputUpdate)
 			{
 				if (eim.IsKeyboardUp(KeyCode::C))
 				{
 					SwitchCam();
+				}
+
+				if (cameraTState == application::editor::CameraTypeState::Editor
+					&& cameraPState == application::editor::CameraPerspectiveState::Free
+					&& eim.IsKeyboardUp(KeyCode::F))
+				{
+					targetPos = Vector3d();
+					auto& selections = palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->GetSelections();
+					for(auto& each : selections)
+					{
+						if (each->GetPaletteInstance())
+						{
+							targetPos += each->GetPaletteInstance()->GetTransform()->GetWorldPosition();
+							moveFocus = true;
+						}
+					}
+					
+					if (moveFocus)
+					{
+						targetPos /= selections.size();
+						targetPos -= editorCam->GetTransform()->GetWorldRotation().Forward().Normalized() * focalDistance;
+					}
 				}
 
 				if (eim.IsMouseButtonDown(MouseCode::Right))
@@ -244,12 +269,6 @@ namespace application
 								default:
 									break;
 							}
-
-							const float distance = glm::distance(glm::vec3{ focalPos.x, focalPos.y, -focalPos.z }, glm::vec3{ position.x, position.y, -position.z });
-							focalPos.x = position.x + GetForwardDirection().x * distance;
-							focalPos.y = position.y + GetForwardDirection().y * distance;
-							focalPos.z = position.z + GetForwardDirection().z * distance;
-							focalDistance = distance;
 							break;
 						}
 						case application::editor::CameraTypeState::Game:
@@ -264,6 +283,21 @@ namespace application
 			}
 
 			beforeMousePos = mousePos;
+
+			if (moveFocus)
+			{
+				auto deltaPos2 = targetPos - editorCam->GetTransform()->GetWorldPosition();
+				auto delTime = Time::GetDeltaTimeUnscaled();
+				focalDelta.x += deltaPos2.x * focalSpeed * delTime;
+				focalDelta.y += deltaPos2.y * focalSpeed * delTime;
+				focalDelta.z += deltaPos2.z * focalSpeed * delTime;
+
+				if (deltaPos2.MagnitudeSqr() <= 0.0001)
+				{
+					moveFocus = false;
+					focalDelta = yunuGI::Vector3();
+				}
+			}
 
 			UpdateCameraView();
 		}
@@ -539,8 +573,6 @@ namespace application
 		{
 			glm::vec3 glmPos = glm::vec3(position.x, position.y, -position.z);
 
-			focalDistance = glm::distance(glmPos, glm::vec3{ focalPos.x, focalPos.y, -focalPos.z });
-
 			//damping for smooth camera
 			yawDelta *= 0.6f;
 			pitchDelta *= 0.6f;
@@ -548,9 +580,9 @@ namespace application
 			positionDelta.y *= 0.8f;
 			positionDelta.z *= 0.8f;
 
-			position.x += positionDelta.x;
-			position.y += positionDelta.y;
-			position.z += positionDelta.z;
+			position.x += positionDelta.x + focalDelta.x;
+			position.y += positionDelta.y + focalDelta.y;
+			position.z += positionDelta.z + focalDelta.z;
 			yaw += yawDelta;
 			pitch += pitchDelta;
 
@@ -562,6 +594,8 @@ namespace application
 				forwardDirection = GetForwardDirection();
 				rightDirection = GetRightDirection();
 			}
+
+			focalDelta = yunuGI::Vector3();
 
 			UpdateGizmo();
 		}

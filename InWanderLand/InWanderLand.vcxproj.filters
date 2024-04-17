@@ -1109,14 +1109,11 @@
     <ClInclude Include="Trigger_GameStart.h">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClInclude>
-    <ClInclude Include="Trigger_EnterRegion.h">
+    <ClInclude Include="Trigger_Region.h">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClInclude>
     <ClInclude Include="UIImage.h">
       <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Trigger_LeaveRegion.h">
-      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClInclude>
     <ClInclude Include="Module_ScriptEditor.h">
       <Filter>Editor\Panel\List\Module\List</Filter>
@@ -1144,6 +1141,21 @@
     </ClInclude>
     <ClInclude Include="EditorPopupManager.h">
       <Filter>Editor\PopupManager</Filter>
+    </ClInclude>
+    <ClInclude Include="IObserver.h">
+      <Filter>Editor\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="ObservationTarget.h">
+      <Filter>Editor\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="ObservationEvent.h">
+      <Filter>Editor\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger_Unit.h">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_Camera.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1721,10 +1733,7 @@
     <ClCompile Include="Trigger_GameStart.cpp">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClCompile>
-    <ClCompile Include="Trigger_EnterRegion.cpp">
-      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
-    </ClCompile>
-    <ClCompile Include="Trigger_LeaveRegion.cpp">
+    <ClCompile Include="Trigger_Region.cpp">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClCompile>
     <ClCompile Include="Module_ScriptEditor.cpp">
@@ -1753,6 +1762,15 @@
     </ClCompile>
     <ClCompile Include="EditorPopupManager.cpp">
       <Filter>Editor\PopupManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ObservationTarget.cpp">
+      <Filter>Editor\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger_Unit.cpp">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_Camera.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
