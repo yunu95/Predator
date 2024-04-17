@@ -292,7 +292,7 @@ namespace application
 				focalDelta.y += deltaPos2.y * focalSpeed * delTime;
 				focalDelta.z += deltaPos2.z * focalSpeed * delTime;
 
-				if (deltaPos2.MagnitudeSqr() <= 0.0001)
+				if (deltaPos2.MagnitudeSqr() <= 0.04)
 				{
 					moveFocus = false;
 					focalDelta = yunuGI::Vector3();
