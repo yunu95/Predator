@@ -345,9 +345,23 @@ namespace application
 
 			if (ImGui::CollapsingHeader("Actions"))
 			{
-				for (auto& [key, action] : data->actionList)
+				int finalIdx = -1;
+				int offset = 0;
+				int idx = 0;
+				for (auto& action : data->actionList)
 				{
 					DrawAction(action);
+					offset = ImGui::ItemReorder("ActionReorder", true);
+					if (offset != 0 && idx + offset >= 0)
+					{
+						finalIdx = idx + offset;
+					}
+					idx++;
+				}
+
+				if (finalIdx >= 0)
+				{
+					selectedScript->ReorderAction(selectedAction, finalIdx);
 				}
 			}
 			else
@@ -655,6 +669,7 @@ namespace application
 		void Module_ScriptEditor::DrawAction(std::shared_ptr<IAction> data)
 		{
 			ImGui::PushID(data.get());
+
 			if (ImGui::Selectable(ScriptSystem::actionList[data->GetType()].c_str(), data == selectedAction))
 			{
 				if (selectedAction == data)
