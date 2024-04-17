@@ -1,5 +1,7 @@
 #include "Script.h"
 
+#include "algorithm"
+
 namespace application
 {
 	void Script::Update()
@@ -75,16 +77,39 @@ namespace application
 
 	bool Script::EraseAction(const std::shared_ptr<IAction>& ptr)
 	{
-		auto itr = actionListForFind.find(ptr);
-		if (itr == actionListForFind.end())
+		auto itr = std::find(actionList.begin(), actionList.end(), ptr);
+		if (itr == actionList.end())
 		{
 			return false;
 		}
 
-		actionList.erase(itr->second);
-		actionListForFind.erase(ptr);
+		actionList.erase(itr);
 
 		return true;
+	}
+
+	bool Script::ReorderAction(const std::shared_ptr<IAction>& ptr, unsigned int idx)
+	{
+		int index = 0;
+		for (auto& each : actionList)
+		{
+			if (each == ptr)
+			{
+				if (index == idx)
+				{
+					return false;
+				}
+
+				auto swapPtr = actionList[idx];
+				actionList[index] = swapPtr;
+				actionList[idx] = ptr;
+
+				return true;
+			}
+			index++;
+		}
+
+		return false;
 	}
 
 	bool Script::PreEncoding(json& data) const
@@ -111,14 +136,16 @@ namespace application
 			}
 		}
 
-		for (auto& [idx, each] : actionList)
+		int index = 0;
+		for (auto& each : actionList)
 		{
 			uuidStr = UUID_To_String(each->GetUUID());
-			data["ActionList"][idx][uuidStr]["type"] = each->GetType();
-			if (!each->PreEncoding(data["ActionList"][idx][uuidStr]["0_Pre"]))
+			data["ActionList"][index][uuidStr]["type"] = each->GetType();
+			if (!each->PreEncoding(data["ActionList"][index][uuidStr]["0_Pre"]))
 			{
 				return false;
 			}
+			index++;
 		}
 
 		return true;
@@ -159,12 +186,13 @@ namespace application
 			}
 		}
 
-		for (auto& [idx, each] : actionList)
+		int index = 0;
+		for (auto& each : actionList)
 		{
 			uuidStr = UUID_To_String(each->GetUUID());
 
-			auto itr = data["ActionList"][idx].find(uuidStr);
-			if (itr == data["ActionList"][idx].end())
+			auto itr = data["ActionList"][index].find(uuidStr);
+			if (itr == data["ActionList"][index].end())
 			{
 				return false;
 			}
@@ -173,6 +201,7 @@ namespace application
 			{
 				return false;
 			}
+			index++;
 		}
 
 		return true;
@@ -382,7 +411,7 @@ namespace application
 				{
 					uuid = String_To_UUID(uuidStr);
 
-					for (auto& [idx, each] : actionList)
+					for (auto& each : actionList)
 					{
 						if (each->id == uuid)
 						{
@@ -407,7 +436,7 @@ namespace application
 
 	CoroutineObject<void> Script::MakeActionCoroutine()
 	{
-		for (auto& [key, action] : actionList)
+		for (auto& action : actionList)
 		{
 			auto coroutine = action->DoAction();
 			coroutineInProgress.emplace_back(coroutine);

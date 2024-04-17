@@ -66,13 +66,13 @@ namespace application
 		std::shared_ptr<IAction> AddAction(Types... args)
 		{
 			auto sptr = std::make_shared<T>(args...);
-			actionList.insert({ actionIndex, sptr });
-			actionListForFind.insert({ sptr, actionIndex });
-			actionIndex++;
+			actionList.push_back(sptr);
 			return sptr;
 		}
 
 		bool EraseAction(const std::shared_ptr<IAction>& ptr);
+
+		bool ReorderAction(const std::shared_ptr<IAction>& ptr, unsigned int idx);
 
 	protected:
 		virtual bool PreEncoding(json& data) const override;
@@ -86,9 +86,7 @@ namespace application
 	private:
 		std::unordered_set<std::shared_ptr<ITrigger>> triggerList;
 		std::unordered_set<std::shared_ptr<ICondition>> conditionList;
-		unsigned long long actionIndex = 0;
-		std::map<unsigned long long, std::shared_ptr<IAction>> actionList;
-		std::map<std::shared_ptr<IAction>, unsigned long long> actionListForFind;
+		std::vector<std::shared_ptr<IAction>> actionList;
 		std::queue<CoroutineObject<void>> coroutineQueue = std::queue<CoroutineObject<void>>();
 		std::vector<CoroutineObject<void>> coroutineInProgress = std::vector<CoroutineObject<void>>();
 	};
