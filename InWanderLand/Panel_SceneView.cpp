@@ -554,7 +554,7 @@ namespace application
                         int selected = (int)state - 1;
 
                         static const char* selectionModes[] = { "Free", "Game" };
-                        imgui::Dropdown_2Col("Selection Mode", selectionModes, 2, (int32_t*)&selected);
+                        imgui::Dropdown_2Col("Perspective State", selectionModes, 2, (int32_t*)&selected);
 
                         switch ((CameraPerspectiveState)(selected + 1))
                         {
