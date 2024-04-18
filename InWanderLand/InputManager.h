@@ -1,5 +1,6 @@
 #pragma once
 #include "YunutyEngine.h"
+#include "Unit.h"
 
 class RTSCam;
 
@@ -19,15 +20,11 @@ public:
 	};
 
 private:
-	Unit* warriorUnit;
-	Unit* magicianUnit;
-	Unit* healerUnit;
-
 	SelectedSerialNumber currentSelectedSerialNumber;
 	bool isPlayerSelected = false;
 	bool tacticMode = false;
 	bool isMouseOnUIButton = false;
-	bool isInputManagerActivating{ false };
+	bool isInputManagerActivating{ true };
 public:
 	virtual void Start() override;
 	virtual void Update() override;

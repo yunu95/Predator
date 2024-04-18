@@ -18,6 +18,11 @@ void PlayerController::AddPlayerUnit(Unit* p_playerUnit)
 	playerComponentMap.insert({ p_playerUnit->GetPlayerSerialNumber(), p_playerUnit });
 }
 
+void PlayerController::ErasePlayerUnit(Unit* p_playerUnit)
+{
+	playerComponentMap.erase(p_playerUnit->GetUnitType());
+}
+
 void PlayerController::SetLeftClickMove()
 {
 	if (GameManager::Instance().IsBattleSystemOperating())

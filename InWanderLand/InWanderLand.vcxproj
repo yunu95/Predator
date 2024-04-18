@@ -1025,6 +1025,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     </ClInclude>
     <ClInclude Include="PawnTrapProductor.h" />
     <ClInclude Include="RangedEnemyPool.h" />
+    <ClInclude Include="ResurrectionSystem.h" />
     <ClInclude Include="RookTrapProductor.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="ScriptSystem.h" />
@@ -1060,7 +1061,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="RobinSkillDevelopmentSystem.h" />
     <ClInclude Include="SaveStaticOrnamentsCommnad.h" />
     <ClInclude Include="SingletonInstanceContainer.h" />
-    <ClInclude Include="SingletonUpdate.h" />
     <ClInclude Include="SkillDevelopmentSystem.h" />
     <ClInclude Include="SkillWarningSystem.h" />
     <ClInclude Include="SpecialEffectTrigger.h" />
@@ -1259,6 +1259,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="PawnTrapProductor.cpp" />
+    <ClCompile Include="ResurrectionSystem.cpp" />
     <ClCompile Include="RookTrapProductor.cpp" />
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="ScriptSystem.cpp" />

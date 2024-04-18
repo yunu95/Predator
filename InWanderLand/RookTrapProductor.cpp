@@ -114,23 +114,22 @@ Unit* RookTrapProductor::CreateUnit(Vector3d startPos)
 			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
 			animator->PushAnimation(m_baseUnitAnimations.m_attackAnimation);
 		}
-		if (each->GetName() == L"Ani_Monster1_Skill")
-		{
-			m_baseUnitAnimations.m_paralysisAnimation = each;
-			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
-			animator->PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
-		}
-		if (each->GetName() == L"Ani_Monster1_Skill")
-		{
-			m_baseUnitAnimations.m_deathAnimation = each;
-			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
-			animator->PushAnimation(m_baseUnitAnimations.m_deathAnimation);
-		}
+		//if (each->GetName() == L"Ani_Monster1_Skill")
+		//{
+		//	m_baseUnitAnimations.m_paralysisAnimation = each;
+		//	m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
+		//	animator->PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
+		//}
+		//if (each->GetName() == L"Ani_Monster1_Skill")
+		//{
+		//	m_baseUnitAnimations.m_deathAnimation = each;
+		//	m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
+		//	animator->PushAnimation(m_baseUnitAnimations.m_deathAnimation);
+		//}
 		/// Skill Animation
 		if (each->GetName() == L"Ani_Monster1_Skill")
 		{
 			each->SetLoop(false);
-			animator->PushAnimation(each);
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillOne, each);
 		}
 	}

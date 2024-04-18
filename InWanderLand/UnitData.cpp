@@ -23,6 +23,7 @@
 #include "Application.h"
 #include "ContentsLayer.h"
 #include "ShortcutSystem.h"
+#include "PlaytimeWave.h"
 
 namespace application
 {
@@ -126,109 +127,125 @@ namespace application
             /// 2024.03.20 추가
             // 이제 templateData에서 UnitType에 대한 int값을 가져올 수 있다.
             // 이 값을 통해 타입을 분류해 유닛을 배치해보자.
-			
-            if (pod.waveData == nullptr)
-			{
-				Vector3d startPosition = Vector3d(pod.position.x, pod.position.y, pod.position.z);
+            Vector3d startPosition = Vector3d(pod.position.x, pod.position.y, pod.position.z);
 
-                if (!isSelectorInitialized)
+            if (!isSelectorInitialized)
+            {
+                productorSelector.push_back(&WarriorProductor::Instance());
+                /*productorSelector.push_back(&HealerProductor::Instance());
+                productorSelector.push_back(&MagicianProductor::Instance());*/
+                productorSelector.push_back(&MeleeEnemyProductor::Instance());
+                productorSelector.push_back(&RangedEnemyProductor::Instance());
+                productorSelector.push_back(&SpikeTrapProductor::Instance());
+                //productorSelector.push_back(&BossProductor::Instance());
+                isSelectorInitialized = true;
+            }
+
+            if (contentsLayer->isStoppedOnce && isSelectorInitialized)
+            {
+                for (auto e : productorSelector)
                 {
-					productorSelector.push_back(&WarriorProductor::Instance());
-					/*productorSelector.push_back(&HealerProductor::Instance());
-					productorSelector.push_back(&MagicianProductor::Instance());*/
-					productorSelector.push_back(&MeleeEnemyProductor::Instance());
-					productorSelector.push_back(&RangedEnemyProductor::Instance());
-					productorSelector.push_back(&SpikeTrapProductor::Instance());
-					//productorSelector.push_back(&BossProductor::Instance());
-                    isSelectorInitialized = true;
+                    e->SetUnitData();
                 }
+                contentsLayer->isStoppedOnce = false;
+            }
 
-                if (contentsLayer->isStoppedOnce && isSelectorInitialized)
+            UnitProductor* currentSelectedProductor{ nullptr };
+
+            int tempShortCutIndex = 0;
+
+            if (pod.templateData->pod.skinnedFBXName == "SKM_Monster1")
+            {
+                if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::SpikeTrap)
                 {
-                    for (auto e : productorSelector)
-                    {
-                        e->SetUnitData();
-                    }
-                    contentsLayer->isStoppedOnce = false;
+                    currentSelectedProductor = &SpikeTrapProductor::Instance();
+                    currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+                    inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+                    contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
                 }
-
-				UnitProductor* currentSelectedProductor{ nullptr };
-
-                int tempShortCutIndex = 0;
-
-                if (pod.templateData->pod.skinnedFBXName == "SKM_Monster1")
+                else if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::ChessTrap)
                 {
-                    if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::SpikeTrap)
+                    if (pod.templateData->pod.chessType == 0)
                     {
-                        currentSelectedProductor = &SpikeTrapProductor::Instance();
-						currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-						inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-						contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
+                        currentSelectedProductor = &PawnTrapProductor::Instance();
                     }
-                    else if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::ChessTrap)
+                    else if (pod.templateData->pod.chessType == 1)
                     {
-                        if (pod.templateData->pod.chessType == 0)
-                        {
-							currentSelectedProductor = &PawnTrapProductor::Instance();
-                        }
-                        else if (pod.templateData->pod.chessType == 1)
-                        {
-							currentSelectedProductor = &RookTrapProductor::Instance();
-                        }
-                        else
-                        {
-							currentSelectedProductor = &RookTrapProductor::Instance();
-                        }
-						currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+                        currentSelectedProductor = &RookTrapProductor::Instance();
+                    }
+                    else
+                    {
+                        currentSelectedProductor = &BishopTrapProductor::Instance();
+                    }
+                    currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+                    inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+                    contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
+                }
+                else
+                {
+                    currentSelectedProductor = &MeleeEnemyProductor::Instance();
+                    currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+                    MeleeEnemyPool::SingleInstance().SetStageNumber(pod.stage);
+                    MeleeEnemyPool::SingleInstance().SetStartPosition(startPosition);
+
+                    if (pod.templateData->pod.isEliteMonster == true)
+                    {
 						inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
 						contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
                     }
                     else
-                    {
-						currentSelectedProductor = &MeleeEnemyProductor::Instance();
-						currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-						MeleeEnemyPool::SingleInstance().SetStageNumber(pod.stage);
-						MeleeEnemyPool::SingleInstance().SetStartPosition(startPosition);
 						inGameUnit = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
-						tempShortCutIndex = 2;
-                    }
-                }
-                else if (pod.templateData->pod.skinnedFBXName == "SKM_Monster2")
-                {
-                    currentSelectedProductor = &RangedEnemyProductor::Instance();
-					currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-					RangedEnemyPool::SingleInstance().SetStartPosition(startPosition);
-                    inGameUnit = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+
                     tempShortCutIndex = 2;
                 }
-                else
+            }
+            else if (pod.templateData->pod.skinnedFBXName == "SKM_Monster2")
+            {
+                currentSelectedProductor = &RangedEnemyProductor::Instance();
+                currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+                RangedEnemyPool::SingleInstance().SetStartPosition(startPosition);
+                inGameUnit = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+                tempShortCutIndex = 2;
+            }
+            else
+            {
+                tempShortCutIndex = 1;
+
+                switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
                 {
-					tempShortCutIndex = 1;
-
-                    switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
-                    {
-                        case Unit::UnitType::Warrior :
-                            currentSelectedProductor = &WarriorProductor::Instance();
-                            break;
-                        case Unit::UnitType::Magician :
-							currentSelectedProductor = &MagicianProductor::Instance();
-							break;
-						case Unit::UnitType::Healer:
-							currentSelectedProductor = &HealerProductor::Instance();
-							break;
-                        default:
-                            break;
-                    }
-
-                    currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-                    inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-					contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
+                    case Unit::UnitType::Warrior:
+                        currentSelectedProductor = &WarriorProductor::Instance();
+                        break;
+                    case Unit::UnitType::Magician:
+                        currentSelectedProductor = &MagicianProductor::Instance();
+                        break;
+                    case Unit::UnitType::Healer:
+                        currentSelectedProductor = &HealerProductor::Instance();
+                        break;
+                    default:
+                        break;
                 }
-			}
+
+                currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+                inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+                contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
+            }
 		}
 
 		void UnitData::PostApplyAsPlaytimeObject()
 		{
+			if (pod.waveData != nullptr)
+			{
+				inGameUnit->GetGameObject()->SetSelfActive(false);
+				/// playtimeWave 에 전달해주기
+                if (pod.waveData->playtimeWave->m_createdUnitPerWaveMap.find(inGameUnit->GetUnitType()) == pod.waveData->playtimeWave->m_createdUnitPerWaveMap.end())
+                {
+                    std::stack<GameObject*> tempStack;
+                    pod.waveData->playtimeWave->m_createdUnitPerWaveMap.insert({ inGameUnit->GetUnitType(), tempStack });
+                }
+				pod.waveData->playtimeWave->m_createdUnitPerWaveMap.find(inGameUnit->GetUnitType())->second.push(inGameUnit->GetGameObject());
+			}
+
 		}
 
         bool UnitData::EnterDataFromGlobalConstant()

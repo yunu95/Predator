@@ -33,12 +33,6 @@ public:
 		StateEnd
 	};
 
-	enum class AttackType
-	{
-		Melee,
-		Ranged
-	};
-
 	enum class UnitType
 	{
 		Warrior = 1,
@@ -91,7 +85,6 @@ private:
 	SkillSystem* m_skillSystemComponent;
 	UnitType m_unitType;
 	UnitSide m_unitSide;
-	AttackType m_attackType;
 
 	std::string m_fbxName;
 	float m_maxHealthPoint;
@@ -164,8 +157,7 @@ private:
 	float qSkillAnimationDuration = 5.0f;
 	bool isJustHitByQSkill = false;
 
-	float animationLerpDuration = 1.0f;
-	float animationTransitionSpeed = 3.0f;
+
 
 	bool isAttackMoving;
 
@@ -233,9 +225,14 @@ private:
 	void RotateUnit(Vector3d endPosition);
 public:
 	BaseUnitAnimationStruct unitAnimations;
+	float animationLerpDuration = 1.0f;
+	float animationTransitionSpeed = 3.0f;
+	bool isAttackAnimationOperating{ false };
 
+	virtual void OnEnable() override;
 	virtual void Start() override;
 	virtual void Update() override;
+	virtual void OnDestroy() override;
 
 	void StopMove();
 	UnitType GetUnitType() const;

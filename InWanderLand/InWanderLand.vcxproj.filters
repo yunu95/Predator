@@ -448,6 +448,9 @@
     <Filter Include="Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor">
       <UniqueIdentifier>{14f27d29-54f5-42fe-b645-4fe1335be09d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\ResurrectionSystem">
+      <UniqueIdentifier>{fe0bc7ad-f763-44df-8f11-ddcca5f4188a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -964,7 +967,6 @@
     <ClInclude Include="LightEditorInstance.h">
       <Filter>Editor\Palette\EditorInstance\LightInstance</Filter>
     </ClInclude>
-    <ClInclude Include="SingletonUpdate.h" />
     <ClInclude Include="RangedEnemyProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
     </ClInclude>
@@ -1166,6 +1168,7 @@
     <ClInclude Include="TrapTriggerSensor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
     </ClInclude>
+    <ClInclude Include="ResurrectionSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1790,5 +1793,6 @@
     <ClCompile Include="TrapTriggerSensor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
     </ClCompile>
+    <ClCompile Include="ResurrectionSystem.cpp" />
   </ItemGroup>
 </Project>

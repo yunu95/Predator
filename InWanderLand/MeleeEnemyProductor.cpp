@@ -132,7 +132,6 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 		{
 			m_baseUnitAnimations.m_attackAnimation = each;
 			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
-			animator->PushAnimation(m_baseUnitAnimations.m_attackAnimation);
 		}
 		if (each->GetName() == L"Ani_Monster1_Skill")
 		{

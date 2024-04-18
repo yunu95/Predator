@@ -19,13 +19,12 @@ void HealerSkillSystem::CrushDown(int p_times)
 				m_unitNavComponent->SetActive(true);
 				m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
 				m_unitNavComponent->Relocate(GetTransform()->GetWorldPosition());
-				isSkillEnd = true;
+				m_unitComponent->SetUnitStateIdle();
 			}
 			else
 			{
 				m_unitDotween->DOMove(GetTransform()->GetWorldPosition() + Vector3d(0, yDistance, 0), 0.3f).OnComplete([=]()
 					{
-						m_unitComponent->SetUnitStateIdle();
 						SetSkillRequirmentsActive(QSkillFieldDamage, false);
 						CrushDown(p_times);
 					});
@@ -141,7 +140,7 @@ void HealerSkillSystem::Update()
 			QSkillColliderElapsed = 0.0f;
 			SetSkillRequirmentsActive(QSkillFieldDamage, false);
 			isQSkillColliderActivated = false;
-			m_unitComponent->SetUnitStateIdle();
+			//m_unitComponent->SetUnitStateIdle();
 		}
 	}
 

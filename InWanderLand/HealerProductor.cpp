@@ -152,7 +152,6 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
 		{
 			m_baseUnitAnimations.m_attackAnimation = each;
 			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
-			animator->PushAnimation(m_baseUnitAnimations.m_attackAnimation);
 		}
 		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
 		{

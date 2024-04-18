@@ -12,8 +12,8 @@ void ChessTrapSkillSystem::Start()
 	m_chessSkillRequirementTwo.colliderObject->SetParent(GetGameObject());
 	m_chessSkillRequirementTwo.debugObject->SetParent(GetGameObject());
 
-	SetSkillRequirmentsPosition(m_chessSkillRequirementOne, Vector3d::zero);
-	SetSkillRequirmentsPosition(m_chessSkillRequirementTwo, Vector3d::zero);
+	/*SetSkillRequirmentsPosition(m_chessSkillRequirementOne, Vector3d::zero);
+	SetSkillRequirmentsPosition(m_chessSkillRequirementTwo, Vector3d::zero);*/
 
 	switch (m_chessPieceType)
 	{
