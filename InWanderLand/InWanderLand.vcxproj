@@ -1433,6 +1433,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Trigger_Unit.cpp" />
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UICurveType.cpp" />
+    <ClCompile Include="UIElement.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UIPanel.cpp" />
     <ClCompile Include="UnitBrush.cpp" />

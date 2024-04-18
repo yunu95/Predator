@@ -113,31 +113,7 @@ void RTSCam::Update()
     else
     {
         // targetPos를 적절하게 지정하기만 하면 그 targetPos를 따라 카메라가 스무스하게 따라갑니다.
-        Vector3d targetPos = GetTransform()->GetWorldPosition();
-        // 영웅이 선택되어 있고, 카메라가 선택된 영웅을 따라가는 경우 targetPos는 영웅의 위치로 설정됩니다.
-        if (!targets.empty())
-        {
-            targetPos = Vector3d::zero;
-            for (auto each : targets)
-            {
-                targetPos += each->GetTransform()->GetWorldPosition();
-            }
-            targetPos /= targets.size();
-            if (targets.size() >= 2)
-            {
-                targetPos += distance * mulTargetsDistanceFactor;
-            }
-            else
-            {
-                targetPos += distance;
-            }
-        }
-        // 카메라가 지역 제한에 걸렸을 경우, targetPos를 지역 안으로 정의합니다.
-        if (contrainingRegion)
-        {
-            targetPos.x = clamp(targetPos.x, distance.x + contrainingRegion->pod.x - contrainingRegion->pod.width * 0.5, distance.x + contrainingRegion->pod.x + contrainingRegion->pod.width * 0.5);
-            targetPos.z = clamp(targetPos.z, distance.z + contrainingRegion->pod.z - contrainingRegion->pod.height * 0.5, distance.z + contrainingRegion->pod.z + contrainingRegion->pod.height * 0.5);
-        }
+        Vector3d targetPos{ GetIdealPosition() };
 
         // 카메라를 스무스하게 이동시키는 부분
         auto deltaPos = targetPos - GetTransform()->GetWorldPosition();
@@ -205,6 +181,35 @@ float RTSCam::GetCameraSpeed() const
     }
 
     return clamp(speed, min_Speed, max_Speed);
+}
+Vector3d RTSCam::GetIdealPosition()
+{
+    Vector3d targetPos = GetTransform()->GetWorldPosition();
+    // 영웅이 선택되어 있고, 카메라가 선택된 영웅을 따라가는 경우 targetPos는 영웅의 위치로 설정됩니다.
+    if (!targets.empty())
+    {
+        targetPos = Vector3d::zero;
+        for (auto each : targets)
+        {
+            targetPos += each->GetTransform()->GetWorldPosition();
+        }
+        targetPos /= targets.size();
+        if (targets.size() >= 2)
+        {
+            targetPos += distance * mulTargetsDistanceFactor;
+        }
+        else
+        {
+            targetPos += distance;
+        }
+    }
+    // 카메라가 지역 제한에 걸렸을 경우, targetPos를 지역 안으로 정의합니다.
+    if (contrainingRegion)
+    {
+        targetPos.x = clamp(targetPos.x, distance.x + contrainingRegion->pod.x - contrainingRegion->pod.width * 0.5, distance.x + contrainingRegion->pod.x + contrainingRegion->pod.width * 0.5);
+        targetPos.z = clamp(targetPos.z, distance.z + contrainingRegion->pod.z - contrainingRegion->pod.height * 0.5, distance.z + contrainingRegion->pod.z + contrainingRegion->pod.height * 0.5);
+    }
+    return targetPos;
 }
 void RTSCam::UpdateCameraView()
 {

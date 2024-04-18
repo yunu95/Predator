@@ -3,6 +3,7 @@
 #include "EditorLayer.h"
 #include "YunutyEngine.h"
 #include "UIManager.h"
+#include "UIElement.h"
 
 #include "CinematicManager.h"
 
@@ -78,20 +79,15 @@ namespace application
 		return true;
 	}
 
-	CoroutineObject<void> Action_CinematicFadeIn::DoAction()
-	{
-		/// FadeIn
-		co_return;
-	}
+    CoroutineObject<void> Action_CinematicFadeIn::DoAction()
+    {
+        UIManager::Instance().FadeIn();
+        co_return;
+    }
 
 	void Action_CinematicFadeIn::SetFadeTime(float fadeTime)
 	{
 		this->fadeTime = fadeTime;
-	}
-
-	void Action_CinematicFadeIn::SetFadeDirection(FadeDirection direction)
-	{
-		this->direction = direction;
 	}
 
 	void Action_CinematicFadeIn::ImGui_DrawDataPopup(Action_CinematicFadeIn* data)
@@ -129,109 +125,11 @@ namespace application
 					}
 				}, 300);
 		}
-
-		if (ImGui::MenuItem("SetFadeInDirection"))
-		{
-			editor::EditorLayer::SetInputControl(false);
-			static FadeDirection direction = FadeDirection::RIGHT;
-			direction = data->direction;
-			static std::string dirName = "Right";
-			switch (direction)
-			{
-				case FadeDirection::RIGHT:
-				{
-					dirName = "Right";
-					break;
-				}
-				case FadeDirection::LEFT:
-				{
-					dirName = "Left";
-					break;
-				}
-				case FadeDirection::UP:
-				{
-					dirName = "Up";
-					break;
-				}
-				case FadeDirection::DOWN:
-				{
-					dirName = "Down";
-					break;
-				}
-				default:
-					break;
-			}
-
-			editor::imgui::ShowMessageBox("SetFadeInDirection", [data]()
-				{
-					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
-
-					ImGui::Separator();
-
-					ImGui::SetNextItemWidth(-1);
-
-					static std::vector<std::string> dirList = { "Right", "Left", "Up", "Down" };
-
-					if (ImGui::BeginCombo("##FadeInDirection", dirName.c_str()))
-					{
-						for (auto& str : dirList)
-						{
-							const bool is_selected = (dirName == str);
-							if (ImGui::Selectable(str.c_str(), is_selected))
-							{
-								dirName = str;
-							}
-
-							if (is_selected)
-							{
-								ImGui::SetItemDefaultFocus();
-							}
-						}
-						ImGui::EndCombo();
-					}
-
-					ImGui::Separator();
-
-					if (ImGui::Button("OK"))
-					{
-						if (dirName == "Right")
-						{
-							direction = FadeDirection::RIGHT;
-						}
-						else if (dirName == "Left")
-						{
-							direction = FadeDirection::LEFT;
-						}
-						else if (dirName == "Up")
-						{
-							direction = FadeDirection::UP;
-						}
-						else if (dirName == "Down")
-						{
-							direction = FadeDirection::DOWN;
-						}
-
-						data->SetFadeDirection(direction);
-						ImGui::CloseCurrentPopup();
-						editor::imgui::CloseMessageBox("SetFadeInDirection");
-						editor::EditorLayer::SetInputControl(true);
-					}
-					ImGui::SameLine();
-
-					if (ImGui::Button("Cancel"))
-					{
-						ImGui::CloseCurrentPopup();
-						editor::imgui::CloseMessageBox("SetFadeInDirection");
-						editor::EditorLayer::SetInputControl(true);
-					}
-				}, 300);
-		}
 	}
 
 	bool Action_CinematicFadeIn::PreEncoding(json& data) const
 	{
 		data["fadeTime"] = fadeTime;
-		data["direction"] = direction;
 		return true;
 	}
 
@@ -243,7 +141,6 @@ namespace application
 	bool Action_CinematicFadeIn::PreDecoding(const json& data)
 	{
 		fadeTime = data["fadeTime"];
-		direction = data["direction"];
 		return true;
 	}
 
@@ -255,6 +152,7 @@ namespace application
 	CoroutineObject<void> Action_CinematicFadeOut::DoAction()
 	{
 		/// FadeOut
+		UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft)->EnableElement();
 		co_return;
 	}
 

@@ -43,6 +43,8 @@ enum class UIEnumID
     Ingame_Combo,
     // 어떤 콤보를 달성해야 하는지 설명하는 텍스트
     Ingame_Combo_Description,
-    BlackMask_Horizontal,
-    BlackMask_Vertical,
+    BlackMask_RightToLeft,
+    BlackMask_TopToBottom,
+    BlackMask_LeftToRight,
+    BlackMask_BottomToTop,
 };
