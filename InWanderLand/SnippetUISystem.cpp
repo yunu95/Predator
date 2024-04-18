@@ -105,13 +105,14 @@ void SnippetInitializerUISystem()
 	
 	auto uiImageObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto uiImageComponent = uiImageObject->AddComponent<yunutyEngine::graphics::UIImage>();
-	//uiImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-	//uiImageComponent->GetGI().SetLayer(100);
-	auto uiButtonComponent = uiImageObject->AddComponent<UIButton>();
-	uiButtonComponent->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-	uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro_highLighted.jpg"));
-	uiButtonComponent->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro_Clicked.jpg"));
-	uiButtonComponent->SetImageComponent(uiImageComponent);
+	uiImageComponent->GetGI().SetImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+	uiImageComponent->GetGI().SetLayer(100);
+	uiImageObject->GetTransform()->SetLocalScale({ 0.5,1,1 });
+	//auto uiButtonComponent = uiImageObject->AddComponent<UIButton>();
+	//uiButtonComponent->SetIdleImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+	//uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro_highLighted.jpg"));
+	//uiButtonComponent->SetClickedImage(rsrcMgr->GetTexture(L"Texture/zoro_Clicked.jpg"));
+	//uiButtonComponent->SetImageComponent(uiImageComponent);
 	uiImageObject->GetTransform()->SetLocalPosition({ 0, 255, 0 });
 
 	auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<graphics::DirectionalLight>();

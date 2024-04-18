@@ -11,27 +11,30 @@ class RTSCam;
 class InputManager : public Component, public SingletonComponent<InputManager>
 {
 public:
-	enum SelectedSerialNumber
-	{
-		One = 1,
-		Two,
-		Three,
-		All
-	};
+    enum SelectedSerialNumber
+    {
+        One = 1,
+        Two,
+        Three,
+        All
+    };
 
 private:
-	SelectedSerialNumber currentSelectedSerialNumber;
-	bool isPlayerSelected = false;
-	bool tacticMode = false;
-	bool isMouseOnUIButton = false;
+    SelectedSerialNumber currentSelectedSerialNumber;
+    bool isPlayerSelected = false;
+    bool tacticMode = false;
+    bool isMouseOnUIButton = false;
 	bool isInputManagerActivating{ true };
 public:
-	virtual void Start() override;
-	virtual void Update() override;
+    virtual void Start() override;
+    virtual void Update() override;
 
 	void SetInputManagerActive(bool p_boolen);
-	void IsMouseOnUI(bool p_boolen);
+    void SelectPlayer(Unit::UnitType p_unitType);
+    void PrepareSkill(Unit::SkillEnum p_skillType, Unit::UnitType p_unitType);
+    void PrepareSkill(Unit::SkillEnum p_skillType);
+    void ToggleTacticMode();
 
-	RTSCam* rtscam;
+    RTSCam* rtscam;
 };
 

@@ -162,15 +162,15 @@ void RenderSystem::PushCameraData()
 
 void RenderSystem::Render()
 {
-	ResourceManager::Instance.Get().GetTexture(L"Texture/LightMap.dds")->Bind(24);
+    ResourceManager::Instance.Get().GetTexture(L"Texture/LightMap.dds")->Bind(24);
 
-	UtilBuffer utilBuffer;
-	utilBuffer.windowWidth = NailEngine::Instance.Get().GetWindowInfo().width;
-	utilBuffer.windowHeight = NailEngine::Instance.Get().GetWindowInfo().height;
-	utilBuffer.useIBL = NailEngine::Instance.Get().GetUseIBL();
-	//utilBuffer.useLightMap = NailEngine::Instance.Get().GetUseLightMap();
-	utilBuffer.useLightMap = true;
-	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::UTIL))->PushGraphicsData(&utilBuffer, sizeof(UtilBuffer), static_cast<int>(CB_TYPE::UTIL));
+    UtilBuffer utilBuffer;
+    utilBuffer.windowWidth = NailEngine::Instance.Get().GetWindowInfo().width;
+    utilBuffer.windowHeight = NailEngine::Instance.Get().GetWindowInfo().height;
+    utilBuffer.useIBL = NailEngine::Instance.Get().GetUseIBL();
+    //utilBuffer.useLightMap = NailEngine::Instance.Get().GetUseLightMap();
+    utilBuffer.useLightMap = true;
+    NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::UTIL))->PushGraphicsData(&utilBuffer, sizeof(UtilBuffer), static_cast<int>(CB_TYPE::UTIL));
 
 
     FogBuffer fogBuffer;
@@ -198,13 +198,13 @@ void RenderSystem::Render()
 
     BloomPass::Instance.Get().Bloom();
 
-	// Final 출력
-	RenderFinal();
-	RenderForward();
-	RenderParticle();
-	RenderBackBuffer();
+    // Final 출력
+    RenderFinal();
+    RenderForward();
+    RenderParticle();
+    RenderBackBuffer();
 
-	//SkyBoxPass::Instance.Get().Render();
+    //SkyBoxPass::Instance.Get().Render();
 
     RenderUI();
 
@@ -215,8 +215,6 @@ void RenderSystem::Render()
     std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
     std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"))->UnBindGraphicsData();
     std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"BackBufferMaterial"))->UnBindGraphicsData();
-
-
 }
 
 void RenderSystem::RenderObject()
@@ -510,7 +508,12 @@ void RenderSystem::RenderUI()
             continue;
         }
         ;
-        RECT drawRect{ uiImage->pos.x,uiImage->pos.y,uiImage->pos.x + uiImage->GetWidth() ,uiImage->pos.y + uiImage->GetHeight() };
+        RECT drawRect;
+        const auto& tm = uiImage->GetWorldTM();
+        drawRect.left = tm._41 - uiImage->GetXPivot() * uiImage->GetWidth() * tm._11;
+        drawRect.right = tm._41 + (1 - uiImage->GetXPivot()) * uiImage->GetWidth() * tm._11;
+        drawRect.top = tm._42 - uiImage->GetYPivot() * uiImage->GetHeight() * tm._22;
+        drawRect.bottom = tm._42 + (1 - uiImage->GetYPivot()) * uiImage->GetHeight() * tm._22;
         auto texture = ((Texture*)(std::static_pointer_cast<UIImage>(i)->GetTexture()));
         this->spriteBatch->Draw(texture->GetSRV().Get(), drawRect);
     }
@@ -584,7 +587,7 @@ void RenderSystem::RenderForward()
 
 void RenderSystem::RenderParticle()
 {
-	InstancingManager::Instance.Get().RenderParticle();
+    InstancingManager::Instance.Get().RenderParticle();
 }
 
 void RenderSystem::DrawDeferredInfo()
