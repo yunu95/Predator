@@ -79,57 +79,19 @@ namespace application
 		return true;
 	}
 
-    CoroutineObject<void> Action_CinematicFadeIn::DoAction()
-    {
-        UIManager::Instance().FadeIn();
-        co_return;
-    }
-
-	void Action_CinematicFadeIn::SetFadeTime(float fadeTime)
+	CoroutineObject<void> Action_CinematicFadeIn::DoAction()
 	{
-		this->fadeTime = fadeTime;
+		UIManager::Instance().FadeIn();
+		co_return;
 	}
 
 	void Action_CinematicFadeIn::ImGui_DrawDataPopup(Action_CinematicFadeIn* data)
 	{
-		if (ImGui::MenuItem("SetFadeInTime"))
-		{
-			editor::EditorLayer::SetInputControl(false);
-			static float fadeTime = 0;
-			fadeTime = data->fadeTime;
-			editor::imgui::ShowMessageBox("SetFadeInTime", [data]()
-				{
-					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
-
-					ImGui::Separator();
-
-					ImGui::SetNextItemWidth(-1);
-					ImGui::DragFloat("##FadeInTime", &fadeTime);
-
-					ImGui::Separator();
-
-					if (ImGui::Button("OK"))
-					{
-						data->SetFadeTime(fadeTime);
-						ImGui::CloseCurrentPopup();
-						editor::imgui::CloseMessageBox("SetFadeInTime");
-						editor::EditorLayer::SetInputControl(true);
-					}
-					ImGui::SameLine();
-
-					if (ImGui::Button("Cancel"))
-					{
-						ImGui::CloseCurrentPopup();
-						editor::imgui::CloseMessageBox("SetFadeInTime");
-						editor::EditorLayer::SetInputControl(true);
-					}
-				}, 300);
-		}
+		
 	}
 
 	bool Action_CinematicFadeIn::PreEncoding(json& data) const
 	{
-		data["fadeTime"] = fadeTime;
 		return true;
 	}
 
@@ -140,7 +102,6 @@ namespace application
 
 	bool Action_CinematicFadeIn::PreDecoding(const json& data)
 	{
-		fadeTime = data["fadeTime"];
 		return true;
 	}
 
@@ -151,14 +112,27 @@ namespace application
 
 	CoroutineObject<void> Action_CinematicFadeOut::DoAction()
 	{
+		UIElement* fadingElement{ nullptr };
 		/// FadeOut
-		UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft)->EnableElement();
+		switch (direction)
+		{
+			case application::FadeDirection::RIGHT:
+				fadingElement = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft);
+				break;
+			case application::FadeDirection::LEFT:
+				fadingElement = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight);
+				break;
+			case application::FadeDirection::UP:
+				fadingElement = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_TopToBottom);
+				break;
+			case application::FadeDirection::DOWN:
+				fadingElement = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_BottomToTop);
+				break;
+			default:
+				break;
+		}
+		fadingElement->EnableElement();
 		co_return;
-	}
-
-	void Action_CinematicFadeOut::SetFadeTime(float fadeTime)
-	{
-		this->fadeTime = fadeTime;
 	}
 
 	void Action_CinematicFadeOut::SetFadeDirection(FadeDirection direction)
@@ -168,40 +142,6 @@ namespace application
 
 	void Action_CinematicFadeOut::ImGui_DrawDataPopup(Action_CinematicFadeOut* data)
 	{
-		if (ImGui::MenuItem("SetFadeOutTime"))
-		{
-			editor::EditorLayer::SetInputControl(false);
-			static float fadeTime = 0;
-			fadeTime = data->fadeTime;
-			editor::imgui::ShowMessageBox("SetFadeOutTime", [data]()
-				{
-					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
-
-					ImGui::Separator();
-
-					ImGui::SetNextItemWidth(-1);
-					ImGui::DragFloat("##FadeOutTime", &fadeTime);
-
-					ImGui::Separator();
-
-					if (ImGui::Button("OK"))
-					{
-						data->SetFadeTime(fadeTime);
-						ImGui::CloseCurrentPopup();
-						editor::imgui::CloseMessageBox("SetFadeOutTime");
-						editor::EditorLayer::SetInputControl(true);
-					}
-					ImGui::SameLine();
-
-					if (ImGui::Button("Cancel"))
-					{
-						ImGui::CloseCurrentPopup();
-						editor::imgui::CloseMessageBox("SetFadeOutTime");
-						editor::EditorLayer::SetInputControl(true);
-					}
-				}, 300);
-		}
-
 		if (ImGui::MenuItem("SetFadeOutDirection"))
 		{
 			editor::EditorLayer::SetInputControl(false);
@@ -302,7 +242,6 @@ namespace application
 
 	bool Action_CinematicFadeOut::PreEncoding(json& data) const
 	{
-		data["fadeTime"] = fadeTime;
 		data["direction"] = direction;
 		return true;
 	}
@@ -314,7 +253,6 @@ namespace application
 
 	bool Action_CinematicFadeOut::PreDecoding(const json& data)
 	{
-		fadeTime = data["fadeTime"];
 		direction = data["direction"];
 		return true;
 	}

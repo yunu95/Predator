@@ -11,7 +11,7 @@ class FloatFollower;
 // 임포트된 UI 요소에 대한 정보를 잔뜩 저장하는 클래스
 class UIElement : public Component
 {
-private:
+public:
     virtual void Start() override;
     JsonUIData importedUIData;
     PopupOnEnable* scalePopUpTransition{ nullptr };
@@ -20,7 +20,6 @@ private:
     UIImage* imageComponent{ nullptr };
     graphics::UIText* textComponent{ nullptr };
     UIButton* button{ nullptr };
-public:
     void EnableElement()
     {
         GetGameObject()->SetSelfActive(true);
