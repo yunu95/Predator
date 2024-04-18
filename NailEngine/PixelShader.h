@@ -30,5 +30,6 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
 
 	unsigned int samplerSlot = 0;
+	friend class RenderSystem;
 };
 

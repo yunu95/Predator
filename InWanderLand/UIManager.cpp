@@ -23,22 +23,26 @@ void UIManager::Clear()
 //{
 //    UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft)->EnableElement();
 //}
-void UIManager::FadeIn()
+void UIManager::FadeIn(float duration)
 {
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_TopToBottom); elm->GetGameObject()->GetActive())
     {
+        elm->disableTransition->m_duration = duration;
         elm->DisableElement();
     }
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft); elm->GetGameObject()->GetActive())
     {
+        elm->disableTransition->m_duration = duration;
         elm->DisableElement();
     }
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_BottomToTop); elm->GetGameObject()->GetActive())
     {
+        elm->disableTransition->m_duration = duration;
         elm->DisableElement();
     }
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight); elm->GetGameObject()->GetActive())
     {
+        elm->disableTransition->m_duration = duration;
         elm->DisableElement();
     }
 }
