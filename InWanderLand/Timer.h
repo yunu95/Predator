@@ -6,24 +6,26 @@
 class Timer : public Component
 {
 private:
-	bool m_isActivated;
+    bool m_isActivated{ false };
 
 public:
-	bool m_isRepeated;
+    bool m_isRepeated{ false };
 
-	float m_elapsed;
-	float m_duration;
-
-
-public:
-	virtual void Start() override;
-	virtual void Update() override;
+    float m_elapsed{ 0 };
+    float m_duration{ 0 };
+    bool isRealtime{ false };
 
 public:
-	std::function<void(float normalizedT)> onUpdate = [](float) {};
-	std::function<void()> onCompleteFunction = []() {};
-	std::function<void()> onExpiration = []() {};
 
-	void ActivateTimer();
-	void StopTimer();
+    virtual void Update() override;
+
+public:
+    std::function<void(float normalizedT)> onUpdate = [](float) {};
+    std::function<void()> onActivation = []() {};
+    std::function<void()> onCompleteFunction = []() {};
+    std::function<void()> onExpiration = []() {};
+
+    void ActivateTimer();
+    void StopTimer();
+    void SetUsingRealtime(bool);
 };

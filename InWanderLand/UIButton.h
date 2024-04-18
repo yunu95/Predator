@@ -11,50 +11,52 @@
 class UIButton : public Component
 {
 private:
-	yunuGI::ITexture* m_IdleImage;
-	yunuGI::ITexture* m_MouseOnImage;
-	yunuGI::ITexture* m_ClickedImage;
+    yunuGI::ITexture* m_IdleImage;
+    yunuGI::ITexture* m_MouseOnImage;
+    yunuGI::ITexture* m_ClickedImage;
 
-	yunuGI::ITexture* m_CurrentImage;
+    yunuGI::ITexture* m_CurrentImage;
 
-	std::function<void()> m_onMouseFunction;
-	std::function<void()> m_onMouseExitFunction;
-	std::function<void()> m_mousePushedFunction;
-	std::function<void()> m_mouseLiftedFunction;
+    std::function<void()> m_onMouseFunction;
+    std::function<void()> m_onMouseExitFunction;
+    std::function<void()> m_mousePushedFunction;
+    std::function<void()> m_mouseLiftedFunction;
 
-	std::function<void()> m_OnMouseEventFunction;
-	std::function<void()> m_mouseLiftedEventFunction;
+    std::function<void()> m_OnMouseEventFunction;
+    std::function<void()> m_mouseLiftedEventFunction;
+    std::vector<std::function<void()>> m_mouseLiftedEventFunctions;
 
-	yunutyEngine::graphics::UIImage* m_ImageComponent;
+    yunutyEngine::graphics::UIImage* m_ImageComponent;
 
-	double m_Width;
-	double m_Height;
+    double m_Width;
+    double m_Height;
 
-	Vector2d m_ImageCenterPostion;
+    Vector2d m_ImageCenterPostion;
 
-	bool isMouseNowOnButton;
-	//int m_layer;
+    bool isMouseNowOnButton;
+    //int m_layer;
 
-	LONG initialRectRight;
-	LONG initialRectBottom;
+    LONG initialRectRight;
+    LONG initialRectBottom;
 
 public:
-	void SetIdleImage(yunuGI::ITexture* p_IdleImage);
-	void SetOnMouseImage(yunuGI::ITexture* p_OnMouseImage);
-	void SetClickedImage(yunuGI::ITexture* p_ClickedImage);
+    void SetIdleImage(yunuGI::ITexture* p_IdleImage);
+    void SetOnMouseImage(yunuGI::ITexture* p_OnMouseImage);
+    void SetClickedImage(yunuGI::ITexture* p_ClickedImage);
 
-	void SetButtonClickFunction(std::function<void()> p_func);
+    void SetButtonClickFunction(std::function<void()> p_func);
+    void AddButtonClickFunction(std::function<void()> p_func);
 
-	void SetLayer(int p_layerNum);
-	int GetLayer() const;
+    void SetLayer(int p_layerNum);
+    int GetLayer() const;
 
-	void SetImageComponent(yunutyEngine::graphics::UIImage* p_ImageComponent);
+    void SetImageComponent(yunutyEngine::graphics::UIImage* p_ImageComponent);
 
-	virtual void Start() override;
-	virtual void Update() override;
-	virtual void OnDisable() override;
+    virtual void Start() override;
+    virtual void Update() override;
+    virtual void OnDisable() override;
 
-	friend class UIManager;
-	friend class UIPanel;
+    friend class UIManager;
+    friend class UIPanel;
 };
 

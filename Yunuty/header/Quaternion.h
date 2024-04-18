@@ -34,6 +34,7 @@ namespace yunutyEngine
         static Quaternion MakeWithAxes(const Vector3d& right, const Vector3d& up, const Vector3d& forward);
         static Quaternion MakeWithAxes(const Vector3f& right, const Vector3f& up, const Vector3f& forward);
         static Quaternion MakeAxisAngleQuaternion(const Vector3d& axis, double angle);
+        static Quaternion Lerp(const Quaternion& a, const Quaternion& b, float t);
         static Quaternion Identity();
     };
 }

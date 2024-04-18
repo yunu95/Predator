@@ -24,6 +24,10 @@ void UIButton::SetButtonClickFunction(std::function<void()> p_func)
 {
     m_mouseLiftedEventFunction = p_func;
 }
+void UIButton::AddButtonClickFunction(std::function<void()> p_func)
+{
+    m_mouseLiftedEventFunctions.push_back(p_func);
+}
 
 void UIButton::SetLayer(int p_layerNum)
 {
@@ -54,7 +58,10 @@ void UIButton::Start()
     m_Height = m_ImageComponent->GetGI().GetHeight();
 
     Vector2d leftTopPos = GetTransform()->GetWorldPosition();
+    leftTopPos -= Vector2d::right * m_ImageComponent->GetGI().GetWidth() * m_ImageComponent->GetGI().GetXPivot();
+    leftTopPos -= Vector2d::up * m_ImageComponent->GetGI().GetHeight() * m_ImageComponent->GetGI().GetYPivot();
 
+    auto resolution = graphics::Renderer::SingleInstance().GetResolution();
     HWND hWnd = GetForegroundWindow();
     RECT wndRect;
     GetClientRect(hWnd, &wndRect);
@@ -62,7 +69,8 @@ void UIButton::Start()
     initialRectRight = wndRect.right;
     initialRectBottom = wndRect.bottom;
 
-    Vector3d fixedLeftTopPos = Vector3d(leftTopPos.x / 1920 * wndRect.right, leftTopPos.y / 1080 * wndRect.bottom, 0);
+    //Vector3d fixedLeftTopPos = Vector3d(leftTopPos.x / 1920 * wndRect.right, leftTopPos.y / 1080 * wndRect.bottom, 0);
+    Vector3d fixedLeftTopPos = Vector3d(leftTopPos.x / 1920 * resolution.x, leftTopPos.y / 1080 * resolution.y, 0);
     //GetTransform()->SetWorldPosition(fixedLeftTopPos);
     m_ImageCenterPostion = Vector2d(fixedLeftTopPos.x + m_Width / 2, fixedLeftTopPos.y + m_Height / 2);
 
@@ -95,6 +103,13 @@ void UIButton::Start()
             if (m_mouseLiftedEventFunction != nullptr)
             {
                 m_mouseLiftedEventFunction();
+            }
+            if (!m_mouseLiftedEventFunctions.empty())
+            {
+                for (auto& each : m_mouseLiftedEventFunctions)
+                {
+                    each();
+                }
             }
         };
 
@@ -132,5 +147,6 @@ void UIButton::Update()
 }
 void UIButton::OnDisable()
 {
+    isMouseNowOnButton = false;
     UIManager::Instance().ReportMouseExitButton(this);
 }
