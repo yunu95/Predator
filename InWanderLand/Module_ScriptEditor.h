@@ -92,6 +92,26 @@ namespace application
 							Trigger_LeaveRegion::ImGui_DrawDataPopup(static_cast<Trigger_LeaveRegion*>(data));
 							break;
 						}
+						case application::TriggerType::RepeatPeriodically:
+						{
+							Trigger_RepeatPeriodically::ImGui_DrawDataPopup(static_cast<Trigger_RepeatPeriodically*>(data));
+							break;
+						}
+						case application::TriggerType::RepeatPeriodicallyRealTime:
+						{
+							Trigger_RepeatPeriodicallyRealTime::ImGui_DrawDataPopup(static_cast<Trigger_RepeatPeriodicallyRealTime*>(data));
+							break;
+						}
+						case application::TriggerType::UnitAppear:
+						{
+							Trigger_UnitAppear::ImGui_DrawDataPopup(static_cast<Trigger_UnitAppear*>(data));
+							break;
+						}
+						case application::TriggerType::UnitDie:
+						{
+							Trigger_UnitDie::ImGui_DrawDataPopup(static_cast<Trigger_UnitDie*>(data));
+							break;
+						}
 						default:
 							break;
 					}
@@ -108,6 +128,16 @@ namespace application
 				{
 					switch (type)
 					{
+						case application::ConditionType::CinematicModeOn:
+						{
+							Condition_CinematicModeOn::ImGui_DrawDataPopup(static_cast<Condition_CinematicModeOn*>(data));
+							break;
+						}
+						case application::ConditionType::CinematicModeOff:
+						{
+							Condition_CinematicModeOff::ImGui_DrawDataPopup(static_cast<Condition_CinematicModeOff*>(data));
+							break;
+						}
 						default:
 							break;
 					}
@@ -139,6 +169,21 @@ namespace application
 							Action_CinematicModeChange::ImGui_DrawDataPopup(static_cast<Action_CinematicModeChange*>(data));
 							break;
 						}
+						case application::ActionType::CameraChangeView:
+						{
+							Action_CameraChangeView::ImGui_DrawDataPopup(static_cast<Action_CameraChangeView*>(data));
+							break;
+						}
+						case application::ActionType::CameraSaveView:
+						{
+							Action_CameraSaveView::ImGui_DrawDataPopup(static_cast<Action_CameraSaveView*>(data));
+							break;
+						}
+						case application::ActionType::CameraLoadView:
+						{
+							Action_CameraLoadView::ImGui_DrawDataPopup(static_cast<Action_CameraLoadView*>(data));
+							break;
+						}
 						default:
 							break;
 					}
@@ -150,6 +195,7 @@ namespace application
 			std::shared_ptr<ITrigger> selectedTrigger = nullptr;
 			std::shared_ptr<ICondition> selectedCondition = nullptr;
 			std::shared_ptr<IAction> selectedAction = nullptr;
+			bool isEditingPopup = false;
 		};
 	}
 }

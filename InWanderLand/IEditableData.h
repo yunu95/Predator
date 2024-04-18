@@ -6,9 +6,18 @@
 
 #include "Identifiable.h"
 #include "Storable.h"
+#include "ObservationTarget.h"
 
 #include <memory>
 #include <string>
+
+namespace yunutyEngine
+{
+    template <typename T>
+    class Vector3;
+    using Vector3d = Vector3<double>;
+    class Quaternion;
+}
 
 namespace application
 {
@@ -43,7 +52,7 @@ namespace application
 
         // 이 클래스는 하나의 인스턴스 데이터를 나타냅니다.
         class IEditableData
-            : public Identifiable, public Storable
+            : public Identifiable, public Storable, public ObservationTarget
         {
             friend class InstanceManager;
 
@@ -55,9 +64,9 @@ namespace application
             virtual bool SetTemplateData(const std::string& dataName) = 0;
             virtual IEditableData* Clone() const = 0;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance() = 0;
-            virtual void OnRelocate(const Vector3d& newLoc) {};
-            virtual void OnRerotate(const Quaternion& newRot) {};
-            virtual void OnRescale(const Vector3d& newScale) {};
+            virtual void OnRelocate(const yunutyEngine::Vector3d& newLoc) {};
+            virtual void OnRerotate(const yunutyEngine::Quaternion& newRot) {};
+            virtual void OnRescale(const yunutyEngine::Vector3d& newScale) {};
             virtual void OnDataResourceChange(std::string newName) {};
             palette::PaletteInstance* GetPaletteInstance();
             virtual void ApplyAsPlaytimeObject() {};

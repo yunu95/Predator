@@ -18,6 +18,9 @@ namespace application
             class LightPalette : public Palette, public yunutyEngine::SingletonClass<LightPalette>
             {
             public:
+                LightData* GetSingleSelectedLight();
+                void SelectLight(LightData* light);
+
                 void SelectLightTemplateData(Light_TemplateData*);
                 void UnselectLightTemplateData();
 

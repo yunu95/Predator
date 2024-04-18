@@ -15,13 +15,22 @@ namespace application
 		triggerList[TriggerType::GameStart] = "GameStart";
 		triggerList[TriggerType::EnterRegion] = "EnterRegion";
 		triggerList[TriggerType::LeaveRegion] = "LeaveRegion";
+		triggerList[TriggerType::RepeatPeriodically] = "RepeatPeriodically";
+		triggerList[TriggerType::RepeatPeriodicallyRealTime] = "RepeatPeriodicallyRealTime";
+		triggerList[TriggerType::UnitAppear] = "UnitAppear";
+		triggerList[TriggerType::UnitDie] = "UnitDie";
 
 		/// Condition
+		conditionList[ConditionType::CinematicModeOn] = "CinematicModeOn";
+		conditionList[ConditionType::CinematicModeOff] = "CinematicModeOff";
 
 		/// Action
 		actionList[ActionType::WaitForSeconds] = "WaitForSeconds";
 		actionList[ActionType::WaitForRealSeconds] = "WaitForRealSeconds";
 		actionList[ActionType::CinematicModeChange] = "CinematicModeChange";
+		actionList[ActionType::CameraChangeView] = "CameraChangeView";
+		actionList[ActionType::CameraSaveView] = "CameraSaveView";
+		actionList[ActionType::CameraLoadView] = "CameraLoadView";
 	}
 
 	Script* ScriptSystem::CreateScript()
@@ -50,11 +59,15 @@ namespace application
 
 	void ScriptSystem::PreMapLoad()
 	{
+		Action_CameraSaveView::Clear();
+
 		Clear();
 	}
 
 	void ScriptSystem::OnGameStart()
 	{
+		Action_CameraSaveView::Clear();
+
 		for (auto& each : scriptList)
 		{
 			each.second->OnGameStart();
@@ -63,6 +76,8 @@ namespace application
 
 	void ScriptSystem::OnGameStop()
 	{
+		Action_CameraSaveView::Clear();
+
 		for (auto& each : scriptList)
 		{
 			each.second->OnGameStop();

@@ -8,6 +8,8 @@
 #include "YunutyEngine.h"
 #include "IEditableData.h"
 
+#include "IObserver.h"
+
 #include <vector>
 #include <tuple>
 
@@ -39,7 +41,7 @@ namespace application
 		};
 
 		class TransformEditCommand
-			: public UndoableCommand
+			: public UndoableCommand, public IObserver
 		{
 			/// 원래는 해당 방식으로 처리하면 안되지만,
 			/// 임시로 Delete 에 대해서 직접 접근을 허용하여 처리하도록 함
@@ -48,13 +50,15 @@ namespace application
 		public:
 			COMMAND_SETTING(CommandType::EditTransform)
 
-			virtual ~TransformEditCommand() = default;
+			virtual ~TransformEditCommand();
 
 			/// 첫 번째 TransformData 가 초기 위치, 두 번째 TransformData 가 변경된 위치
 			TransformEditCommand(const std::vector<std::tuple<IEditableData*, TransformData, TransformData>>& list);
 
 			virtual void Execute() override;
 			virtual void Undo() override;
+
+			virtual void ProcessObervationEvent(ObservationTarget* target, ObservationEvent event) override;
 
 		private:
 			std::vector<std::tuple<IEditableData*, TransformData, TransformData>> transformList;

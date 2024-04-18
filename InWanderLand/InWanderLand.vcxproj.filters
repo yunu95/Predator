@@ -439,6 +439,9 @@
     <Filter Include="Contents\BurnEffect">
       <UniqueIdentifier>{0cb52d66-9140-4368-8842-d37ef7df2afb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\PopupManager">
+      <UniqueIdentifier>{841405ab-7b0a-4e0a-814e-78a4f7d59a5a}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor">
       <UniqueIdentifier>{88ae07b4-e3a8-4643-9d6c-342c2d3edd2a}</UniqueIdentifier>
     </Filter>
@@ -1117,14 +1120,11 @@
     <ClInclude Include="Trigger_GameStart.h">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClInclude>
-    <ClInclude Include="Trigger_EnterRegion.h">
+    <ClInclude Include="Trigger_Region.h">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClInclude>
     <ClInclude Include="UIImage.h">
       <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Trigger_LeaveRegion.h">
-      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClInclude>
     <ClInclude Include="Module_ScriptEditor.h">
       <Filter>Editor\Panel\List\Module\List</Filter>
@@ -1140,6 +1140,33 @@
     </ClInclude>
     <ClInclude Include="PlayableComponent.h">
       <Filter>Contents\GameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Condition_CinematicMode.h">
+      <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger_RepeatPeriodically.h">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlayTimer.h">
+      <Filter>Contents\GameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorPopupManager.h">
+      <Filter>Editor\PopupManager</Filter>
+    </ClInclude>
+    <ClInclude Include="IObserver.h">
+      <Filter>Editor\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="ObservationTarget.h">
+      <Filter>Editor\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="ObservationEvent.h">
+      <Filter>Editor\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger_Unit.h">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_Camera.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClInclude>
     <ClInclude Include="SpikeTrapProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
@@ -1745,10 +1772,7 @@
     <ClCompile Include="Trigger_GameStart.cpp">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClCompile>
-    <ClCompile Include="Trigger_EnterRegion.cpp">
-      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
-    </ClCompile>
-    <ClCompile Include="Trigger_LeaveRegion.cpp">
+    <ClCompile Include="Trigger_Region.cpp">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClCompile>
     <ClCompile Include="Module_ScriptEditor.cpp">
@@ -1765,6 +1789,27 @@
     </ClCompile>
     <ClCompile Include="PlayableComponent.cpp">
       <Filter>Contents\GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Condition_CinematicMode.cpp">
+      <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger_RepeatPeriodically.cpp">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePlayTimer.cpp">
+      <Filter>Contents\GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorPopupManager.cpp">
+      <Filter>Editor\PopupManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ObservationTarget.cpp">
+      <Filter>Editor\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger_Unit.cpp">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_Camera.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClCompile>
     <ClCompile Include="SpikeTrapProductor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>

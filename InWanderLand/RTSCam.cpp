@@ -31,6 +31,7 @@ void RTSCam::Start()
 }
 void RTSCam::Update()
 {
+#ifdef EDITOR
     if (Input::isKeyPushed(KeyCode::Tab))
     {
         roamingMode = !roamingMode;
@@ -41,6 +42,7 @@ void RTSCam::Update()
         yawDelta = 0.0;
         positionDelta = Vector3d();
     }
+#endif
 
     if (yunutyEngine::Input::isKeyPushed(KeyCode::Delete))
         deleteButtonCallback();

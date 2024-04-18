@@ -21,6 +21,7 @@
 #include "Script.h"
 #include "Module_ScriptEditor.h"
 #include "PlayableComponent.h"
+#include "EditorPopupManager.h"
 
 #include <fstream>
 
@@ -282,6 +283,7 @@ namespace application
             palette::PaletteManager::GetSingletonInstance().Clear();
             CameraManager::GetSingletonInstance().Clear();
             Module_ScriptEditor::GetSingletonInstance().Clear();
+            EditorPopupManager::GetSingletonInstance().Clear();
             commandManager.Clear();
 #endif
             ShortcutSystem::Instance().Clear();

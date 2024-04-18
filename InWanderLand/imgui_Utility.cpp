@@ -4,6 +4,7 @@
 #include "ITemplateData.h"
 #include "TemplateDataList.h"
 #include "EditorResourceManager.h"
+#include "EditorPopupManager.h"
 
 extern const float DRAG_MOUSE_THRESHOLD_FACTOR;
 
@@ -879,9 +880,15 @@ namespace application
 
 			void CloseMessageBox(std::string title)
 			{
+				auto& pm = EditorPopupManager::GetSingletonInstance();
 				if (s_MessageBoxes.find(title) != s_MessageBoxes.end())
 				{
 					s_MessageBoxes[title].IsOpen = false;
+					if (pm.GetCurrentPopup() == title)
+					{
+						pm.SetCurrentPopup();
+						pm.Return();
+					}
 				}
 			}
 
@@ -902,6 +909,7 @@ namespace application
 					ImGui::OpenPopup(messageBoxData.Title.c_str());
 					messageBoxData.ShouldOpen = false;
 					messageBoxData.IsOpen = true;
+					EditorPopupManager::GetSingletonInstance().SetCurrentPopup(messageBoxData.Title);
 				}
 
 				if (!messageBoxData.IsOpen)
@@ -927,6 +935,7 @@ namespace application
 						{
 							if (ImGui::Button("Ok"))
 							{
+								EditorPopupManager::GetSingletonInstance().SetCurrentPopup();
 								ImGui::CloseCurrentPopup();
 								messageBoxData.IsOpen = false;
 							}
@@ -939,6 +948,7 @@ namespace application
 
 						if (messageBoxData.Flags & MESSAGE_BOX_CANCEL_BUTTON && ImGui::Button("Cancel"))
 						{
+							EditorPopupManager::GetSingletonInstance().SetCurrentPopup();
 							ImGui::CloseCurrentPopup();
 							messageBoxData.IsOpen = false;
 						}
@@ -946,6 +956,12 @@ namespace application
 
 					ImGui::EndPopup();
 				}
+			}
+
+			MessageBoxData& GetMessageBox(std::string title)
+			{
+				assert(s_MessageBoxes.find(title) != s_MessageBoxes.end() && "There is no registered messagebox.");
+				return s_MessageBoxes[title];
 			}
 			
 			namespace draw
