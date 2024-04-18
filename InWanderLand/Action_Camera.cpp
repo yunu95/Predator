@@ -239,7 +239,28 @@ namespace application
 
 	CoroutineObject<void> Action_CameraSaveView::DoAction()
 	{
-		/// 데이터 static 에 저장!
+		RTSCam* mainCam = static_cast<RTSCam*>(yunutyEngine::graphics::Camera::GetMainCamera());
+		auto ts = mainCam->GetTransform();
+		auto pos = ts->GetWorldPosition();
+		savedPosition.x = pos.x;
+		savedPosition.y = pos.y;
+		savedPosition.z = pos.z;
+		auto rot = ts->GetWorldRotation();
+		savedRotation.w = rot.w;
+		savedRotation.x = rot.x;
+		savedRotation.y = rot.y;
+		savedRotation.z = rot.z;
+		auto scale = ts->GetWorldScale();
+		savedScale.x = scale.x;
+		savedScale.y = scale.y;
+		savedScale.z = scale.z;
+		auto& camGI = mainCam->GetGI();
+		savedFov = camGI.GetVerticalFOV();
+		savedCameraNear = camGI.GetNear();
+		savedCameraFar = camGI.GetFar();
+		savedWidth = 0;
+		savedHeight = 0;
+		camGI.GetResolution(&savedWidth, &savedHeight);
 		co_return;
 	}
 
@@ -270,8 +291,66 @@ namespace application
 
 	CoroutineObject<void> Action_CameraLoadView::DoAction()
 	{
-		/// static 녀석으로 Main 변경!
-		co_return;
+		if (Action_CameraSaveView::savedFov == -1)
+		{
+			co_return;
+		}
+
+		RTSCam* mainCam = static_cast<RTSCam*>(yunutyEngine::graphics::Camera::GetMainCamera());
+		mainCam->SetUpdateability(false);
+		auto ts = mainCam->GetTransform();
+		auto startPos = ts->GetWorldPosition();
+		auto startRot = ts->GetWorldRotation();
+		auto startScale = ts->GetWorldScale();
+		auto& camGI = mainCam->GetGI();
+		float startFov = camGI.GetVerticalFOV();
+		float startCameraNear = camGI.GetNear();
+		float startCameraFar = camGI.GetFar();
+		float startWidth = 0;
+		float startHeight = 0;
+		camGI.GetResolution(&startWidth, &startHeight);
+
+		Vector3d endPos = { Action_CameraSaveView::savedPosition.x, Action_CameraSaveView::savedPosition.y, Action_CameraSaveView::savedPosition.z };
+		Quaternion endRot = { Action_CameraSaveView::savedRotation.w, Action_CameraSaveView::savedRotation.x, Action_CameraSaveView::savedRotation.y, Action_CameraSaveView::savedRotation.z };
+		Vector3d endScale = { Action_CameraSaveView::savedScale.x, Action_CameraSaveView::savedScale.y, Action_CameraSaveView::savedScale.z };
+
+		float endFov = Action_CameraSaveView::savedFov;
+		float endCameraNear = Action_CameraSaveView::savedCameraNear;
+		float endCameraFar = Action_CameraSaveView::savedCameraFar;
+		float endWidth = Action_CameraSaveView::savedWidth;
+		float endHeight = Action_CameraSaveView::savedHeight;
+
+		double timer = 0;
+		float factor = 0;
+
+		if (lerpTime == 0)
+		{
+			ts->SetWorldPosition(endPos);
+			ts->SetWorldRotation(endRot);
+			ts->SetWorldScale(endScale);
+			camGI.SetVerticalFOV(endFov);
+			camGI.SetNear(endCameraNear);
+			camGI.SetFar(endCameraFar);
+			camGI.SetResolution(endWidth, endHeight);
+			mainCam->SetUpdateability(true);
+			co_return;
+		}
+
+		for (double timer = 0; timer < lerpTime;)
+		{
+			factor = timer / lerpTime;
+			ts->SetWorldPosition(Vector3d::Lerp(startPos, endPos, factor));
+			ts->SetWorldRotation(Quaternion::Lerp(startRot, endRot, factor));
+			ts->SetWorldScale(Vector3d::Lerp(startScale, endScale, factor));
+			camGI.SetVerticalFOV(math::LerpF(startFov, endFov, factor));
+			camGI.SetNear(math::LerpF(startCameraNear, endCameraNear, factor));
+			camGI.SetFar(math::LerpF(startCameraFar, endCameraFar, factor));
+			camGI.SetResolution(math::LerpF(startWidth, endWidth, factor), math::LerpF(startHeight, endHeight, factor));
+			timer += Time::GetDeltaTimeUnscaled();
+			co_await std::suspend_always();
+		}
+
+		mainCam->SetUpdateability(true);
 	}
 
 	void Action_CameraLoadView::SetLerpTime(float lerpTime)
