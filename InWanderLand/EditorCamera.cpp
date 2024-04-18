@@ -45,7 +45,9 @@ namespace application
 			{
 				gameCam = camData->GetCameraComponent();
 				auto gcts = gameCam->GetTransform();
-				ts->SetWorldPosition(gcts->GetWorldPosition());
+				auto xzForward = gcts->GetWorldRotation().Forward().Normalized();
+				xzForward.y = 0;
+				ts->SetWorldPosition(gcts->GetWorldPosition() + xzForward.Normalized() * 2);
 				ts->SetWorldRotation(gcts->GetWorldRotation());
 				ts->SetWorldScale(gcts->GetWorldScale());
 				cameraPState = CameraPerspectiveState::Game;
