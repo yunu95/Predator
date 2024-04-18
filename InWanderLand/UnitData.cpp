@@ -237,13 +237,6 @@ namespace application
 			if (pod.waveData != nullptr)
 			{
 				inGameUnit->GetGameObject()->SetSelfActive(false);
-				/// playtimeWave 에 전달해주기
-                if (pod.waveData->playtimeWave->m_createdUnitPerWaveMap.find(inGameUnit->GetUnitType()) == pod.waveData->playtimeWave->m_createdUnitPerWaveMap.end())
-                {
-                    std::stack<GameObject*> tempStack;
-                    pod.waveData->playtimeWave->m_createdUnitPerWaveMap.insert({ inGameUnit->GetUnitType(), tempStack });
-                }
-				pod.waveData->playtimeWave->m_createdUnitPerWaveMap.find(inGameUnit->GetUnitType())->second.push(inGameUnit->GetGameObject());
 			}
 
 		}
