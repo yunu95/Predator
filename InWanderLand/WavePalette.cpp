@@ -1,6 +1,7 @@
 #include "WavePalette.h"
 #include "WaveData.h"
 #include "UnitData.h"
+#include "RegionData.h"
 
 namespace application
 {

@@ -4,9 +4,7 @@
 #include "imgui_Utility.h"
 #include "EditorCommonEvents.h"
 #include "Wave_TemplateData.h"
-#include "WaveData.h"
 #include "Region_TemplateData.h"
-#include "RegionData.h"
 #include "SpecialEvent.h"
 #include "WavePalette.h"
 #include "RegionPalette.h"
@@ -17,6 +15,7 @@
 #include "EditorCamera.h"
 #include "CommandManager.h"
 #include "TransformEditCommand.h"
+#include "EditableDataList.h"
 
 #include "YunutyEngine.h"
 #include "WanderUtils.h"

@@ -8,6 +8,7 @@
 #include "EditorPopupManager.h"
 #include "Script.h"
 #include "Panel_Palette.h"
+#include "EditableDataList.h"
 
 namespace application
 {

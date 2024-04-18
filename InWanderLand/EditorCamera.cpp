@@ -441,6 +441,12 @@ namespace application
 				gameCam = CameraManager::GetSingletonInstance().GetMainCam()->GetCameraComponent();
 
 				UpdateGI();
+
+				if (cameraPState == CameraPerspectiveState::Game)
+				{
+					cameraPState = CameraPerspectiveState::Free;
+					SetGamePerspective();
+				}
 			}
 		}
 

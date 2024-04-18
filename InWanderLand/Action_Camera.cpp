@@ -1,9 +1,11 @@
 #include "Action_Camera.h"
 
+#include "InWanderLand.h"
 #include "CameraData.h"
 
 #include "Application.h"
 #include "EditorLayer.h"
+#include "RTSCam.h"
 
 #include "EditorPopupManager.h"
 
@@ -19,6 +21,27 @@ namespace application
 
 	CoroutineObject<void> Action_CameraChangeView::DoAction()
 	{
+		RTSCam* mainCam = static_cast<RTSCam*>(yunutyEngine::graphics::Camera::GetMainCamera());
+		mainCam->SetUpdateability(false);
+		auto ts = mainCam->GetTransform();
+		auto startPos = ts->GetWorldPosition();
+		auto startRotation = ts->GetWorldRotation();
+		auto startScale = ts->GetWorldScale();
+		auto& camGI = mainCam->GetGI();
+		float startFov = camGI.GetVerticalFOV();
+		float startCameraNear = camGI.GetNear();
+		float startCameraFar = camGI.GetFar();
+		float startWidth = 0;
+		float startHeight = 0;
+		camGI.GetResolution(&startWidth, &startHeight);
+		
+		double timer = 0;
+		for (double timer = 0; timer < lerpTime;)
+		{
+			timer;
+		}
+		
+
 		/// 구면 보간!
 		co_return;
 	}

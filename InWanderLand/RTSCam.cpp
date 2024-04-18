@@ -1,5 +1,6 @@
 #include "InWanderLand.h"
 #include "RTSCam.h"
+#include "RegionData.h"
 
 void RTSCam::Start()
 {
@@ -29,8 +30,14 @@ void RTSCam::Start()
         }
     }
 }
+
 void RTSCam::Update()
 {
+    if (!updateability)
+    {
+        return;
+    }
+
 #ifdef EDITOR
     if (Input::isKeyPushed(KeyCode::Tab))
     {
