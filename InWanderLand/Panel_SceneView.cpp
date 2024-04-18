@@ -414,7 +414,7 @@ namespace application
                 }
             }
 
-            if (ec->GetGamePerspective() == CameraPerspectiveState::Free)
+            if (ec->GetCameraPerspectiveState() == CameraPerspectiveState::Free)
             {
                 if (beforeVTM[0][0] != gvtm[0][0] || beforeVTM[0][1] != gvtm[0][1] || beforeVTM[0][2] != gvtm[0][2] || beforeVTM[0][3] != gvtm[0][3] ||
                     beforeVTM[1][0] != gvtm[1][0] || beforeVTM[1][1] != gvtm[1][1] || beforeVTM[1][2] != gvtm[1][2] || beforeVTM[1][3] != gvtm[1][3] ||
@@ -550,7 +550,7 @@ namespace application
                 {
                     if (imgui::BeginSection_2Col(sectionIdx, "EditorCamera", 300.0f))
                     {
-                        CameraPerspectiveState state = ec->GetGamePerspective();
+                        CameraPerspectiveState state = ec->GetCameraPerspectiveState();
                         int selected = (int)state - 1;
 
                         static const char* selectionModes[] = { "Free", "Game" };

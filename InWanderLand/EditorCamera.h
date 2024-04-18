@@ -57,8 +57,11 @@ namespace application
 			// 카메라 움직임 속도 획득
 			float GetCameraSpeed() const;
 
+			// Editor 를 통해 GI 데이터가 변경되었을 때, 갱신하는 함수입니다.
+			void UpdateGI();
+
 			CameraTypeState GetCameraTypeState() { return cameraTState; }
-			CameraPerspectiveState GetGamePerspective() { return cameraPState; }
+			CameraPerspectiveState GetCameraPerspectiveState() { return cameraPState; }
 
 			yunutyEngine::graphics::Camera* GetGameCam() const { return gameCam; }
 			void SetGameCam(yunutyEngine::graphics::Camera* cam) { gameCam = cam; }
@@ -125,6 +128,18 @@ namespace application
 			static float max_Speed;
 			float defaultMoveSpeed = 0.03f;
 			float rotationSpeed = 0.3f;
+
+			float ecFov = 0;
+			float ecNear = 0;
+			float ecFar = 0;
+			float ecWidth = 0;
+			float ecHeight = 0;
+
+			float gcFov = 0;
+			float gcNear = 0;
+			float gcFar = 0;
+			float gcWidth = 0;
+			float gcHeight = 0;
 		};
 	}
 }

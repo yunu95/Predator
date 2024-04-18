@@ -58,6 +58,19 @@ namespace application
 					+ (*reinterpret_cast<Vector3f*>(&right) * offset.x)
 					+ (*reinterpret_cast<Vector3f*>(&up) * offset.y);
 				lightGizmo->GetTransform()->SetWorldPosition(finalPos);
+
+				if (!Application::GetInstance().IsContentsPlaying())
+				{
+					if (ec.GetCameraTypeState() == CameraTypeState::Editor
+						&& ec.GetCameraPerspectiveState() == CameraPerspectiveState::Free)
+					{
+						lightGizmo->SetSelfActive(true);
+					}
+					else
+					{
+						lightGizmo->SetSelfActive(false);
+					}
+				}
 			}
 		}
 
@@ -1132,10 +1145,12 @@ namespace application
 						{
 							CameraManager::GetSingletonInstance().GetMainCam()->pod.isMain = false;
 							CameraManager::GetSingletonInstance().SetMainCam(cam);
-							EditorCamera::GetSingletonInstance().ReloadGameCamera();
 							cam->ApplyAsPaletteInstance();
+							EditorCamera::GetSingletonInstance().ReloadGameCamera();
 						}
 					}
+
+					EditorCamera::GetSingletonInstance().UpdateGI();
 				}
 
 				imgui::EndSection();
