@@ -13,7 +13,10 @@
 
 void Unit::OnEnable()
 {
-	int a = 0;
+	for (auto each : OnCreated)
+	{
+		each();
+	}
 }
 
 void Unit::Start()
@@ -30,11 +33,6 @@ void Unit::Start()
 
 	//m_currentSkillAnimation->ClearEvent();
 	//unitAnimations.m_attackAnimation->ClearEvent();
-
-	for (auto each : OnCreated)
-	{
-		each();
-	}
 	//GetTransform()->SetWorldPosition(startPosition);
 
 	dotween = GetGameObject()->GetComponent<Dotween>();

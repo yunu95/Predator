@@ -32,8 +32,6 @@ private:
 	std::vector<UnitProductor*> productorSelector;
 
 public:
-	std::unordered_map<Unit::UnitType, std::stack<GameObject*>> m_createdUnitPerWaveMap;
-
 	std::vector<Unit*> m_currentWaveUnitVector;
 	Unit* inGameUnit;
 	virtual ~PlaytimeWave();
