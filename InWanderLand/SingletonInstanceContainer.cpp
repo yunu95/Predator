@@ -14,7 +14,6 @@
 
 void SingletonInstanceContainer::ClearSingletonInstances()
 {
-	PlayerController::SingleInstance().ProhibitCreateInstance();
 	RangedEnemyPool::SingleInstance().ProhibitCreateInstance();
 	MeleeEnemyPool::SingleInstance().ProhibitCreateInstance();
 	AutoAttackProjectilePool::SingleInstance().ProhibitCreateInstance();
@@ -35,7 +34,6 @@ void SingletonInstanceContainer::ClearSingletonInstances()
 	//DebuggingMeshPool::SingleInstance().ClearPool();
 	//PassiveCakePool::SingleInstance().ClearPool();
 
-	PlayerController::SingleInstance().InitInstance();
 	RangedEnemyPool::SingleInstance().InitInstance();
 	MeleeEnemyPool::SingleInstance().InitInstance();
 	AutoAttackProjectilePool::SingleInstance().InitInstance();
@@ -50,7 +48,6 @@ void SingletonInstanceContainer::ClearSingletonInstances()
 
 void SingletonInstanceContainer::PermitCreateInstances()
 {
-	PlayerController::SingleInstance().PermitCreateInstance();
 	AutoAttackProjectilePool::SingleInstance().PermitCreateInstance();
 	EnemyAutoAttackProjectilePool::SingleInstance().PermitCreateInstance();
 	HealerAutoAttackProjectilePool::SingleInstance().PermitCreateInstance();

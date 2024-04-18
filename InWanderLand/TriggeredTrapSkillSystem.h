@@ -1,14 +1,10 @@
 #pragma once
 #include "EnemySkillSystem.h"
 
-class EnemySummonSkillSystem : public EnemySkillSystem
+class TriggeredTrapSkillSystem : public EnemySkillSystem
 {
 private:
-	float m_elapsed;
-	float m_enemySpawnDuration;
-	bool isThisUnitSummoned;
-
-	Unit* m_currentSummonedUnit;
+	SkillRequirements m_trapRequirment;
 
 public:
 	virtual void Start() override;
@@ -16,8 +12,8 @@ public:
 
 	virtual void ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition) override;
 
-private:
-	virtual void ActivateSkillOne() override;
+	void SetSkillRequirment(GameObject* p_colliderObj, GameObject* p_debugObj);
 
+	virtual void ActivateSkillOne() override;
 };
 

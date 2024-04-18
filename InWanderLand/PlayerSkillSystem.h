@@ -14,7 +14,7 @@ protected:
 	float m_skillTwoRange;
 
 public:
-	virtual void ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition);	
+	virtual void ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition) override;
 	virtual void RotateProjectile(GameObject* p_projectileObject, Vector3d p_endPosition);
 
 	virtual void ActivateSkillOne(Vector3d skillPos) = 0;

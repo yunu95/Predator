@@ -18,94 +18,101 @@ void InputManager::Start()
 
 void InputManager::Update()
 {
-	if (!isMouseOnUIButton)
+	if (isInputManagerActivating)
 	{
-		if (GameManager::Instance().IsBattleSystemOperating())
+		if (!isMouseOnUIButton)
 		{
-			if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_1))
+			if (GameManager::Instance().IsBattleSystemOperating())
 			{
-				PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Warrior);
-				rtscam->SetTarget(PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetGameObject());
-				currentSelectedSerialNumber = SelectedSerialNumber::One;
-				isPlayerSelected = true;
-				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-			}
-			if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_2))
-			{
-				PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Magician);
-				rtscam->SetTarget(PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Magician)->second->GetGameObject());
-				currentSelectedSerialNumber = SelectedSerialNumber::Two;
-				isPlayerSelected = true;
-				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-			}
-			if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_3))
-			{
-				PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Healer);
-				rtscam->SetTarget(PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Healer)->second->GetGameObject());
-				currentSelectedSerialNumber = SelectedSerialNumber::Three;
-				isPlayerSelected = true;
-				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-			}
-			if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_4))
-			{
-				PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::AllPlayers);
-				currentSelectedSerialNumber = SelectedSerialNumber::All;
-				isPlayerSelected = true;
-				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-			}
-		}
-
-		if (isPlayerSelected && GameManager::Instance().IsBattleSystemOperating() && currentSelectedSerialNumber != All)
-		{
-			if (yunutyEngine::Input::isKeyPushed(KeyCode::A))
-			{
-				if (tacticMode)
-					TacticModeSystem::SingleInstance().SetLeftClickAddQueueForAttackMove(currentSelectedSerialNumber);
-				else
+				if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_1) && PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetCurrentUnitState() != Unit::UnitState::Death)
 				{
-					PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
-					PlayerController::SingleInstance().SetLeftClickAttackMove();
+					PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Warrior);
+					rtscam->SetTarget(PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetGameObject());
+					currentSelectedSerialNumber = SelectedSerialNumber::One;
+					isPlayerSelected = true;
+					SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 				}
-				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-			}
-
-			if (yunutyEngine::Input::isKeyPushed(KeyCode::Q))
-			{
-				if (tacticMode)
-					TacticModeSystem::SingleInstance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, Unit::SkillEnum::Q);
-				else
+				if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_2) && PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Magician)->second->GetCurrentUnitState() != Unit::UnitState::Death)
 				{
-					PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
-					PlayerController::SingleInstance().SetLeftClickSkill(Unit::SkillEnum::Q);
+					PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Magician);
+					rtscam->SetTarget(PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Magician)->second->GetGameObject());
+					currentSelectedSerialNumber = SelectedSerialNumber::Two;
+					isPlayerSelected = true;
+					SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+				}
+				if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_3) && PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Healer)->second->GetCurrentUnitState() != Unit::UnitState::Death)
+				{
+					PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Healer);
+					rtscam->SetTarget(PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Healer)->second->GetGameObject());
+					currentSelectedSerialNumber = SelectedSerialNumber::Three;
+					isPlayerSelected = true;
+					SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+				}
+				if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_4))
+				{
+					PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::AllPlayers);
+					currentSelectedSerialNumber = SelectedSerialNumber::All;
+					isPlayerSelected = true;
+					SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 				}
 			}
 
-			if (yunutyEngine::Input::isKeyPushed(KeyCode::W))
+			if (isPlayerSelected && GameManager::Instance().IsBattleSystemOperating() && currentSelectedSerialNumber != All)
 			{
-				if (tacticMode)
-					TacticModeSystem::SingleInstance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, Unit::SkillEnum::W);
-				else
+				if (yunutyEngine::Input::isKeyPushed(KeyCode::A))
 				{
-					PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
-					PlayerController::SingleInstance().SetLeftClickSkill(Unit::SkillEnum::W);
+					if (tacticMode)
+						TacticModeSystem::SingleInstance().SetLeftClickAddQueueForAttackMove(currentSelectedSerialNumber);
+					else
+					{
+						PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
+						PlayerController::SingleInstance().SetLeftClickAttackMove();
+					}
+					SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+				}
+
+				if (yunutyEngine::Input::isKeyPushed(KeyCode::Q))
+				{
+					if (tacticMode)
+						TacticModeSystem::SingleInstance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, Unit::SkillEnum::Q);
+					else
+					{
+						PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
+						PlayerController::SingleInstance().SetLeftClickSkill(Unit::SkillEnum::Q);
+					}
+				}
+
+				if (yunutyEngine::Input::isKeyPushed(KeyCode::W))
+				{
+					if (tacticMode)
+						TacticModeSystem::SingleInstance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, Unit::SkillEnum::W);
+					else
+					{
+						PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
+						PlayerController::SingleInstance().SetLeftClickSkill(Unit::SkillEnum::W);
+					}
 				}
 			}
-		}
 
-		if (yunutyEngine::Input::isKeyPushed(KeyCode::Space) && GameManager::Instance().IsBattleSystemOperating())
-		{
-			tacticMode = !tacticMode;
-			if (tacticMode)
+			if (yunutyEngine::Input::isKeyPushed(KeyCode::Space) && GameManager::Instance().IsBattleSystemOperating())
 			{
-				TacticModeSystem::SingleInstance().EngageTacticMode();
-			}
-			else
-			{
-				TacticModeSystem::SingleInstance().ExitTacticMode();
+				tacticMode = !tacticMode;
+				if (tacticMode)
+				{
+					TacticModeSystem::SingleInstance().EngageTacticMode();
+				}
+				else
+				{
+					TacticModeSystem::SingleInstance().ExitTacticMode();
+				}
 			}
 		}
 	}
+}
 
+void InputManager::SetInputManagerActive(bool p_boolen)
+{
+	isInputManagerActivating = p_boolen;
 }
 
 void InputManager::IsMouseOnUI(bool p_boolen)

@@ -1,5 +1,6 @@
 #pragma once
 #include "YunutyEngine.h"
+#include "Unit.h"
 
 class RTSCam;
 
@@ -23,11 +24,12 @@ private:
 	bool isPlayerSelected = false;
 	bool tacticMode = false;
 	bool isMouseOnUIButton = false;
-
+	bool isInputManagerActivating{ true };
 public:
 	virtual void Start() override;
 	virtual void Update() override;
 
+	void SetInputManagerActive(bool p_boolen);
 	void IsMouseOnUI(bool p_boolen);
 
 	RTSCam* rtscam;

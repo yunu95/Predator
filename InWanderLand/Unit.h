@@ -8,6 +8,7 @@
 #include "DummyComponent.h"
 
 class UnitProductor;
+class SkillSystem;
 enum class SkillPreviewMesh;
 
 /// <summary>
@@ -32,12 +33,6 @@ public:
 		StateEnd
 	};
 
-	enum class AttackType
-	{
-		Melee,
-		Ranged
-	};
-
 	enum class UnitType
 	{
 		Warrior = 1,
@@ -47,7 +42,10 @@ public:
 		MeleeEnemy,
 		RangedEnemy,
 		Boss,
-		EnemySpawnGate
+		EnemySpawnGate,
+		SpikeTrap,
+		ChessTrap,
+		TriggeredTrap
 	};
 
 	enum class UnitSide
@@ -80,13 +78,13 @@ public:
 	yunutyEngine::graphics::Animator* m_animatorComponent;
 	NavigationAgent* m_navAgentComponent;
 
+	Unit* m_currentTargetUnit;					// Attack이나 Chase 때 사용할 적군  오브젝트
 	//Vector3d startPosition;
 private:
 	FSM<UnitState> unitFSM{UnitState::Idle};
-
+	SkillSystem* m_skillSystemComponent;
 	UnitType m_unitType;
 	UnitSide m_unitSide;
-	AttackType m_attackType;
 
 	std::string m_fbxName;
 	float m_maxHealthPoint;
@@ -142,26 +140,24 @@ private:
 	float attackFunctionCallDelay;
 	float increasedAttackSpeed{ 1.0f };
 	int attackTimingFrame;
-	int attackAnimationFrameCheckNumber = 0;
-	bool isAttackAnimationOperating = false;
-	bool isAttacked = false;
-	bool isAttackStarted = false;
 	float m_attackOffset;
-
 
 	float deathFunctionElapsed;
 	float deathAnimationDelay = 1.5f;
 
-	float qSkillFunctionStartElapsed;
+	float skillFunctionStartElapsed;
+	float m_currentSelectedSkillEngageDelay;
+	int m_selectedSkillTimingFrame;
+	yunuGI::IAnimation* m_currentSkillAnimation;
+	std::unordered_map<SkillEnum, float> m_skillDurationMap;
+	std::unordered_map<SkillEnum, yunuGI::IAnimation*> m_skillAnimationMap;
+	std::unordered_map<SkillEnum, int> m_skillTimingFrameMap;
 	//float qSkillFunctionStartedElapsed;
 	//float qSkillStartDelay = 1.0f;
 	float qSkillAnimationDuration = 5.0f;
 	bool isJustHitByQSkill = false;
 
-	float animationLerpDuration = 1.0f;
-	float animationTransitionSpeed = 3.0f;
 
-	bool isSkillStarted;
 
 	bool isAttackMoving;
 
@@ -173,11 +169,10 @@ private:
 	std::set<Unit*> m_attackingThisUnitSet;		// 현재 이 유닛을 공격하고 있는 유닛들
 	int m_maxAggroNumber;
 
-	Unit* m_currentTargetUnit;		// Attack이나 Chase 때 사용할 적군  오브젝트
 	Unit* m_previousTargetUnit;		
-	Unit* tauntingThisUnit;				// 현재 this 유닛이 도발당한 주체.
+	Unit* tauntingThisUnit;						// 현재 this 유닛이 도발당한 주체.
 	Vector3d m_previousMovePosition;						
-	Vector3d m_currentMovePosition;							// 현재 상대의 위치
+	Vector3d m_currentMovePosition;				// 현재 상대의 위치
 
 	Vector3d m_currentSkillPosition;
 
@@ -190,6 +185,7 @@ private:
 	float m_followEngageDinstance{ 4.0f };			// 이 수치만큼 거리가 벌어지면 따라간다.
 	float m_stopFollowDinstance{ 2.0f };			// 이 수치만큼 거리가 좁혀지면 멈춘다.
 	bool isFollowing{ false };
+
 private:
 	/// 유닛이 속해있는 field
 	NavigationField* m_unitNavField;
@@ -229,9 +225,14 @@ private:
 	void RotateUnit(Vector3d endPosition);
 public:
 	BaseUnitAnimationStruct unitAnimations;
+	float animationLerpDuration = 1.0f;
+	float animationTransitionSpeed = 3.0f;
+	bool isAttackAnimationOperating{ false };
 
+	virtual void OnEnable() override;
 	virtual void Start() override;
 	virtual void Update() override;
+	virtual void OnDestroy() override;
 
 	void StopMove();
 	UnitType GetUnitType() const;
@@ -246,11 +247,14 @@ public:
 	void SetAttackDelay(float p_delay);
 	void SetAttackTimingFrame(int p_frame);
 	void SetPlayerSerialNumber(UnitType serialNum);
-	void SetSkillDuration(float p_duration);
+	void RegisterSkillDuration(float p_duration);
 	void SetSkillPreviewType(SkillPreviewMesh p_qskill, SkillPreviewMesh p_wskill);
 	void SetMaxAggroNumber(int p_num);
 	void SetFbxName(std::string p_string);
 	void SetAttackOffset(float p_offset);
+	void RegisterSkillDuration(SkillEnum p_skillEnum, float p_duration);
+	void RegisterSkillAnimation(SkillEnum p_skillEnum, yunuGI::IAnimation* p_anim);
+	void RegisterSkillTimingFrame(SkillEnum p_skillEnum, int p_frame);
 
 	void SetCurrentOrderMove();
 	void SetCurrentOrderAttackMove();
@@ -271,7 +275,7 @@ public:
 
 	void MakeUnitPushedState(bool p_isCrushed);
 	void MakeUnitParalysisState();
-	void MakeUnitStateIdle();
+	void SetUnitStateIdle();
 
 	bool GetJustCrushedState() const;
 	bool IsUnitDead() const;

@@ -38,6 +38,7 @@ public:
 	//void ApplyCurrentPlayerOrder(int unitSerialNumber, OrderType orderType);
 	void SetMovingSystemComponent(RTSCam* sys);
 	void AddPlayerUnit(Unit* p_playerUnit);
+	void ErasePlayerUnit(Unit* p_playerUnit);
 
 	void SetLeftClickMove();
 	void SetLeftClickAttackMove();
