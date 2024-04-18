@@ -38,14 +38,14 @@ void UIManager::SetIngameUIVisible(bool visible)
 {
     if (visible)
     {
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Buttom_Layout)->EnableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Description)->EnableElement();
     }
     else
     {
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Buttom_Layout)->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Description)->DisableElement();

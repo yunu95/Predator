@@ -1,5 +1,6 @@
 #pragma once
 #include "YunutyEngine.h"
+#include "Unit.h"
 
 class RTSCam;
 

@@ -30,7 +30,7 @@ enum class UIEnumID
     // 음악이 꺼진 상태에서 표시할 UI버튼
     Music_Off,
     // 인게임에서 사용되는 캐릭터 상태창, 전술모드 진입 버튼을 포함하는 하단 레이아웃
-    Ingame_Buttom_Layout,
+    Ingame_Bottom_Layout,
     // 인게임에서 사용되는 메뉴버튼
     Ingame_MenuButton,
     // 콤보를 표시하는 위치, 콤보가 진행중인게 아니라면 표시되지 않을 수도 있음.

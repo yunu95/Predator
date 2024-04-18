@@ -17,7 +17,6 @@ namespace application
     void Action_CinematicModeChange::SetCinematicMode(bool cinematicMode)
     {
         this->cinematicMode = cinematicMode;
-        UIManager::Instance().SetIngameUIVisible(!cinematicMode);
     }
 
     void Action_CinematicModeChange::ImGui_DrawDataPopup(Action_CinematicModeChange* data)
