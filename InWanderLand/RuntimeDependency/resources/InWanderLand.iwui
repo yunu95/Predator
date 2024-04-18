@@ -1215,74 +1215,6 @@
             "enumID": 24
         },
         {
-            "uiname": "ingame_menu_button (1)",
-            "parentUIName": "",
-            "imagePath": "Texture/Ingame/_0000_Icon_Menu.png",
-            "openTarget": "Ingame_Bottom_Layout",
-            "disablingTarget": "",
-            "pivot": [
-                0.0,
-                1.0
-            ],
-            "anchor": [
-                0.0,
-                0.0
-            ],
-            "anchoredPosition": [
-                80.0,
-                187.0
-            ],
-            "enableOffset": [],
-            "disableOffset": [],
-            "enableDelay": 0.0,
-            "disableDelay": 0.0,
-            "enableDuration": 0.0,
-            "disableDuration": 0.0,
-            "enableCurveType": 0,
-            "disableCurveType": 0,
-            "rotation": 0.0,
-            "width": 50.0,
-            "height": 50.0,
-            "fontAsset": "",
-            "fontSize": 0,
-            "customFlags": 261,
-            "enumID": 0
-        },
-        {
-            "uiname": "ingame_menu_button (2)",
-            "parentUIName": "",
-            "imagePath": "Texture/Ingame/_0000_Icon_Menu.png",
-            "openTarget": "BlackMask_Horizontal",
-            "disablingTarget": "",
-            "pivot": [
-                0.0,
-                1.0
-            ],
-            "anchor": [
-                0.0,
-                0.0
-            ],
-            "anchoredPosition": [
-                80.0,
-                289.0
-            ],
-            "enableOffset": [],
-            "disableOffset": [],
-            "enableDelay": 0.0,
-            "disableDelay": 0.0,
-            "enableDuration": 0.0,
-            "disableDuration": 0.0,
-            "enableCurveType": 0,
-            "disableCurveType": 0,
-            "rotation": 0.0,
-            "width": 50.0,
-            "height": 50.0,
-            "fontAsset": "",
-            "fontSize": 0,
-            "customFlags": 261,
-            "enumID": 0
-        },
-        {
             "uiname": "ingame_menu_background",
             "parentUIName": "",
             "imagePath": "Texture/Ingame_Menu/PopUp_IngameMenu.png",
@@ -3357,7 +3289,7 @@
             "enumID": 0
         },
         {
-            "uiname": "BlackMask_Horizontal",
+            "uiname": "BlackMask_RightToLeft",
             "parentUIName": "",
             "imagePath": "Texture/blackMask.png",
             "openTarget": "",
@@ -3397,7 +3329,7 @@
             "enumID": 25
         },
         {
-            "uiname": "BlackMask_Vertical",
+            "uiname": "BlackMask_TopToBottom",
             "parentUIName": "",
             "imagePath": "Texture/blackMask_Vertical.png",
             "openTarget": "",
@@ -3435,6 +3367,86 @@
             "fontSize": 0,
             "customFlags": 1664,
             "enumID": 26
+        },
+        {
+            "uiname": "BlackMask_LeftToRight",
+            "parentUIName": "",
+            "imagePath": "Texture/blackMask.png",
+            "openTarget": "",
+            "disablingTarget": "",
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "anchor": [
+                0.5,
+                0.5
+            ],
+            "anchoredPosition": [
+                0.0,
+                0.0
+            ],
+            "enableOffset": [
+                -2880.0,
+                0.0
+            ],
+            "disableOffset": [
+                2880.0,
+                0.0
+            ],
+            "enableDelay": 0.0,
+            "disableDelay": 0.0,
+            "enableDuration": 1.0,
+            "disableDuration": 1.0,
+            "enableCurveType": 2,
+            "disableCurveType": 4,
+            "rotation": 0.0,
+            "width": 5760.0,
+            "height": 1080.0,
+            "fontAsset": "",
+            "fontSize": 0,
+            "customFlags": 1664,
+            "enumID": 27
+        },
+        {
+            "uiname": "BlackMask_BottomToTop",
+            "parentUIName": "",
+            "imagePath": "Texture/blackMask_Vertical.png",
+            "openTarget": "",
+            "disablingTarget": "",
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "anchor": [
+                0.5,
+                0.5
+            ],
+            "anchoredPosition": [
+                0.0,
+                0.0
+            ],
+            "enableOffset": [
+                0.0,
+                -4860.0
+            ],
+            "disableOffset": [
+                0.0,
+                4860.0
+            ],
+            "enableDelay": 0.0,
+            "disableDelay": 0.0,
+            "enableDuration": 1.0,
+            "disableDuration": 1.0,
+            "enableCurveType": 1,
+            "disableCurveType": 1,
+            "rotation": 0.0,
+            "width": 1920.0,
+            "height": 6480.0,
+            "fontAsset": "",
+            "fontSize": 0,
+            "customFlags": 1664,
+            "enumID": 28
         }
     ]
 }

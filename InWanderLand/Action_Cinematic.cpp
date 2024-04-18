@@ -3,6 +3,7 @@
 #include "EditorLayer.h"
 #include "YunutyEngine.h"
 #include "UIManager.h"
+#include "UIElement.h"
 
 #include "CinematicManager.h"
 
@@ -80,6 +81,7 @@ namespace application
 
     CoroutineObject<void> Action_CinematicFadeIn::DoAction()
     {
+        UIManager::Instance().FadeIn();
         /// FadeIn
         co_return;
     }
@@ -151,6 +153,7 @@ namespace application
     CoroutineObject<void> Action_CinematicFadeOut::DoAction()
     {
         /// FadeOut
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft)->EnableElement();
         co_return;
     }
 

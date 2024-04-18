@@ -12,15 +12,7 @@ class FloatFollower;
 class UIElement : public Component
 {
 private:
-    virtual void Start() override
-    {
-        application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-        // 게임이 끝나면 삭제되도록 설정
-        if (GetGameObject()->GetParentGameObject() == nullptr)
-        {
-            contentsLayer->RegisterToEditorObjectContainer(GetGameObject());
-        }
-    };
+    virtual void Start() override;
     JsonUIData importedUIData;
     PopupOnEnable* scalePopUpTransition{ nullptr };
     UIOffsetTransition* enableTransition{ nullptr };

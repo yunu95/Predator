@@ -16,7 +16,7 @@ void InputManager::Start()
 
 void InputManager::Update()
 {
-    if (isInputManagerActivating)
+    if (isInputManagerActivated)
     {
         if (!isMouseOnUIButton)
         {
@@ -72,7 +72,7 @@ void InputManager::Update()
 
 void InputManager::SetInputManagerActive(bool p_boolen)
 {
-    isInputManagerActivating = p_boolen;
+    isInputManagerActivated = p_boolen;
 }
 
 void InputManager::SelectPlayer(Unit::UnitType p_unitType)

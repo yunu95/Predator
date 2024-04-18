@@ -1896,5 +1896,8 @@
       <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
     </ClCompile>
     <ClCompile Include="ResurrectionSystem.cpp" />
+    <ClCompile Include="UIElement.cpp">
+      <Filter>UI\UIElement</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

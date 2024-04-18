@@ -40,6 +40,8 @@ public:
 
     void SetUpdateability(bool updateability) { this->updateability = updateability; }
     bool GetUpdateability() { return updateability; }
+    Vector3d GetIdealPosition();
+    
 
 private:
     void UpdateCameraView();

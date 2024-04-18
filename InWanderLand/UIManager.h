@@ -47,9 +47,7 @@ private:
 public:
     
     void Clear();
-    void FadeInHorizontal();
-    void FadeInVertical();
-    void FadeOut();
+    void FadeIn();
     void SetIngameUIVisible(bool visible);
     void ReportButtonOnMouse(UIButton* p_btn);
     void ReportMouseExitButton(UIButton* p_btn);

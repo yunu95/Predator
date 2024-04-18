@@ -24,7 +24,7 @@ private:
     bool isPlayerSelected = false;
     bool tacticMode = false;
     bool isMouseOnUIButton = false;
-	bool isInputManagerActivating{ true };
+	bool isInputManagerActivated{ true };
 public:
     virtual void Start() override;
     virtual void Update() override;

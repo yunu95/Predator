@@ -15,21 +15,29 @@ void UIManager::Clear()
     m_currentHighestLayer = -1;
     m_selectedButtons.clear();
 }
-void UIManager::FadeInVertical()
+//void UIManager::FadeInVertical()
+//{
+//    UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_TopToButtom)->EnableElement();
+//}
+//void UIManager::FadeInHorizontal()
+//{
+//    UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft)->EnableElement();
+//}
+void UIManager::FadeIn()
 {
-    UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_Vertical)->EnableElement();
-}
-void UIManager::FadeInHorizontal()
-{
-    UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_Horizontal)->EnableElement();
-}
-void UIManager::FadeOut()
-{
-    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_Vertical); elm->GetGameObject()->GetActive())
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_TopToBottom); elm->GetGameObject()->GetActive())
     {
         elm->DisableElement();
     }
-    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_Horizontal); elm->GetGameObject()->GetActive())
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft); elm->GetGameObject()->GetActive())
+    {
+        elm->DisableElement();
+    }
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_BottomToTop); elm->GetGameObject()->GetActive())
+    {
+        elm->DisableElement();
+    }
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight); elm->GetGameObject()->GetActive())
     {
         elm->DisableElement();
     }
