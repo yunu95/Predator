@@ -1,10 +1,17 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "DebugBeacon.h"
-#include "RegionData.h"
 #include "Unit.h"
 #include "UIManager.h"
 using namespace yunutyEngine;
+
+namespace application
+{
+    namespace editor
+    {
+        class RegionData;
+    }
+}
 
 class RTSCam :public yunutyEngine::graphics::Camera
 {
@@ -30,6 +37,10 @@ public:
     void SetTarget(GameObject* target);
     void SetTargets(const std::vector<GameObject*>& targets);
     float GetCameraSpeed() const;
+
+    void SetUpdateability(bool updateability) { this->updateability = updateability; }
+    bool GetUpdateability() { return updateability; }
+
 private:
     void UpdateCameraView();
     const application::editor::RegionData* contrainingRegion{ nullptr };
@@ -55,4 +66,6 @@ private:
     float max_Speed = 2.0;
     float defaultMoveSpeed = 0.03;
     float rotationSpeed = 0.3;
+
+    bool updateability = true;
 };

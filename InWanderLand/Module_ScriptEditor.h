@@ -184,6 +184,16 @@ namespace application
 							Action_CameraLoadView::ImGui_DrawDataPopup(static_cast<Action_CameraLoadView*>(data));
 							break;
 						}
+						case application::ActionType::CinematicFadeIn:
+						{
+							Action_CinematicFadeIn::ImGui_DrawDataPopup(static_cast<Action_CinematicFadeIn*>(data));
+							break;
+						}
+						case application::ActionType::CinematicFadeOut:
+						{
+							Action_CinematicFadeOut::ImGui_DrawDataPopup(static_cast<Action_CinematicFadeOut*>(data));
+							break;
+						}
 						default:
 							break;
 					}

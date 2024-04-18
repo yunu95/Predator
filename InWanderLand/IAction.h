@@ -26,6 +26,8 @@ namespace application
 		CameraChangeView,
 		CameraSaveView,
 		CameraLoadView,
+		CinematicFadeIn,
+		CinematicFadeOut,
 	};
 
 	struct IAction

@@ -526,8 +526,8 @@ namespace application
 		inputDevice[1].hwndTarget = editorHWND;
 
 		RegisterRawInputDevices(inputDevice, 2, sizeof(RAWINPUTDEVICE));
-		gameWindowFocusCallBackFunction = [&]() { editor::EditorCamera::GetSingletonInstance().SetInputUpdate(true); };
-		gameWindowKillFocusCallBackFunction = [&]() { editor::EditorCamera::GetSingletonInstance().SetInputUpdate(false); };
+		gameWindowFocusCallBackFunction = [&]() { editor::EditorCamera::GetSingletonInstance().SetInputUpdate(false); };
+		gameWindowKillFocusCallBackFunction = [&]() { editor::EditorCamera::GetSingletonInstance().SetInputUpdate(true); };
 		winResizeCallBackFunction = [&]() { Application::DispatchEvent<editor::WindowResizeEvent>(g_EditorResizeWidth, g_EditorResizeHeight); };
 		winKeyboardPressedCallBackFunction = [&](unsigned char keyCode)
 			{
