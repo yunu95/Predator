@@ -481,6 +481,9 @@
     <Filter Include="Contents\ResurrectionSystem">
       <UniqueIdentifier>{fe0bc7ad-f763-44df-8f11-ddcca5f4188a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\Effect\FloatFollower">
+      <UniqueIdentifier>{871212fa-7603-485a-ba2f-f33a36a04abe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1244,6 +1247,9 @@
       <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
     </ClInclude>
     <ClInclude Include="ResurrectionSystem.h" />
+    <ClInclude Include="FloatFollower.h">
+      <Filter>UI\Effect\FloatFollower</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">

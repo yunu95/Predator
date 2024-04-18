@@ -23,4 +23,11 @@ enum class UIExportFlag
     IsTranslatingOnEnable = 1 << 9,
     // UI 이미지가 비활성화될때 트랜슬레이션 오프셋 애니메이션을 재생합니다.
     IsTranslatingOnDisable = 1 << 10,
+    // 텍스트입니다.
+    IsText = 1 << 11,
+    // 체력, 마나와 같은 값을 70 / 100과 같은 형태로 표시하는 텍스트입니다.
+    // Adjuster에 들어가는 실수 값을 분자로 사용하며, 최대값이 갱신되면 분모도 갱신됩니다.
+    IsGuageText = 1 << 12,
+    // 0~1 사이의 값으로 UI 이미지의 세로 크기를 조절할 수 있습니다.
+    CanAdjustHeight = 1 << 13,
 };
