@@ -12,6 +12,7 @@
 #include "Application.h"
 #include "PaletteManager.h"
 #include "Palette.h"
+#include "Panel_Palette.h"
 
 #include <DirectXMath.h>
 
@@ -99,6 +100,22 @@ namespace application
 
 			forwardDirection = GetForwardDirection();
 			rightDirection = GetRightDirection();
+
+			ecFov = editorCam->GetGI().GetVerticalFOV();
+			ecNear = editorCam->GetGI().GetNear();
+			ecFar = editorCam->GetGI().GetFar();
+			editorCam->GetGI().GetResolution(&ecWidth, &ecHeight);
+
+			gcFov = gameCam->GetGI().GetVerticalFOV();
+			gcNear = gameCam->GetGI().GetNear();
+			gcFar = gameCam->GetGI().GetFar();
+			gameCam->GetGI().GetResolution(&gcWidth, &gcHeight);
+
+			if (cameraPState == CameraPerspectiveState::Game)
+			{
+				cameraPState = CameraPerspectiveState::Free;
+				SetGamePerspective();
+			}
 		}
 
 		void EditorCamera::OnEvent(EditorEvents& event)
@@ -335,6 +352,11 @@ namespace application
 					forwardDirection = GetForwardDirection();
 					rightDirection = GetRightDirection();
 
+					editorCam->GetGI().SetVerticalFOV(gcFov);
+					editorCam->GetGI().SetNear(gcNear);
+					editorCam->GetGI().SetFar(gcFar);
+					editorCam->GetGI().SetResolution(gcWidth, gcHeight);
+
 					cameraPState = CameraPerspectiveState::Game;
 				}
 				return;
@@ -349,6 +371,11 @@ namespace application
 			}
 			else
 			{
+				editorCam->GetGI().SetVerticalFOV(ecFov);
+				editorCam->GetGI().SetNear(ecNear);
+				editorCam->GetGI().SetFar(ecFar);
+				editorCam->GetGI().SetResolution(ecWidth, ecHeight);
+
 				cameraPState = CameraPerspectiveState::Free;
 				return;
 			}
@@ -368,6 +395,22 @@ namespace application
 			}
 
 			return glm::clamp(speed, min_Speed, max_Speed);
+		}
+
+		void EditorCamera::UpdateGI()
+		{
+			gcFov = gameCam->GetGI().GetVerticalFOV();
+			gcNear = gameCam->GetGI().GetNear();
+			gcFar = gameCam->GetGI().GetFar();
+			gameCam->GetGI().GetResolution(&gcWidth, &gcHeight);
+
+			if (cameraPState == CameraPerspectiveState::Game)
+			{
+				editorCam->GetGI().SetVerticalFOV(gcFov);
+				editorCam->GetGI().SetNear(gcNear);
+				editorCam->GetGI().SetFar(gcFar);
+				editorCam->GetGI().SetResolution(gcWidth, gcHeight);
+			}
 		}
 
 		void EditorCamera::OnPlayContents()
@@ -396,6 +439,8 @@ namespace application
 			if (CameraManager::GetSingletonInstance().GetMainCam() != nullptr)
 			{
 				gameCam = CameraManager::GetSingletonInstance().GetMainCam()->GetCameraComponent();
+
+				UpdateGI();
 			}
 		}
 
