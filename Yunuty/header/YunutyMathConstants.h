@@ -24,6 +24,5 @@ namespace yunutyEngine
         }
 
         YUNUTY_API float LerpF(float v1, float v2, float t);
- 
     };
 }

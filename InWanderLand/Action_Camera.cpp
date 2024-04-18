@@ -47,6 +47,20 @@ namespace application
 
 		double timer = 0;
 		float factor = 0;
+
+		if (lerpTime == 0)
+		{
+			ts->SetWorldPosition(endPos);
+			ts->SetWorldRotation(endRot);
+			ts->SetWorldScale(endScale);
+			camGI.SetVerticalFOV(endFov);
+			camGI.SetNear(endCameraNear);
+			camGI.SetFar(endCameraFar);
+			camGI.SetResolution(endWidth, endHeight);
+			mainCam->SetUpdateability(true);
+			co_return;
+		}
+
 		for (double timer = 0; timer < lerpTime;)
 		{
 			factor = timer / lerpTime;

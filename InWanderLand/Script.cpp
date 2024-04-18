@@ -362,6 +362,16 @@ namespace application
 							action = AddAction<Action_CameraLoadView>();
 							break;
 						}
+						case application::ActionType::CinematicFadeIn:
+						{
+							action = AddAction<Action_CinematicFadeIn>();
+							break;
+						}
+						case application::ActionType::CinematicFadeOut:
+						{
+							action = AddAction<Action_CinematicFadeOut>();
+							break;
+						}
 						default:
 							break;
 					}

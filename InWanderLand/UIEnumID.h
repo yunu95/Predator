@@ -3,10 +3,16 @@ enum class UIEnumID
 {
     // 아무것도 아님.
     None = 0,
-    // 로빈, 우르술라, 헨젤의 초상화
+    // 로빈, 우르술라, 헨젤의 초상화, 초상화를 가리는 핏빛 오버레이, 체력을 표시하는 텍스트 UI
     Portrait_Robin,
+    Portrait_Blood_Robin,
+    Portrait_HP_Robin,
     Portrait_Ursula,
+    Portrait_Blood_Ursula,
+    Portrait_HP_Ursula,
     Portrait_Hansel,
+    Portrait_Blood_Hansel,
+    Portrait_HP_Hansel,
     // 로빈 스킬시전 Q
     Skill_Use_Q_Robin,
     // 로빈 스킬시전 Q

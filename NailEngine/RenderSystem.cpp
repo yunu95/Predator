@@ -519,7 +519,6 @@ void RenderSystem::RenderUI()
     }
     this->spriteBatch->End();
 
-
     d2dRT->BeginDraw();
     for (auto& i : this->UITextSet)
     {
