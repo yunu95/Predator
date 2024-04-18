@@ -20,7 +20,7 @@ void ParalysisFieldComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 			tempNavComponent->Relocate(GetTransform()->GetWorldPosition());
 
 			opponentUnit->MultipleUnitSpeed(1 / m_slowMultipleScale);
-			opponentUnit->MakeUnitStateIdle();
+			opponentUnit->SetUnitStateIdle();
 		});	
 }
 

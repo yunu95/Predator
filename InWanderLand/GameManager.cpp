@@ -48,6 +48,18 @@ void GameManager::EndBattle()
 	SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 }
 
+void GameManager::EngageCinematic()
+{
+	InputManager::Instance().SetInputManagerActive(false);
+	SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+}
+
+void GameManager::EndCinematic()
+{
+	InputManager::Instance().SetInputManagerActive(true);
+	SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+}
+
 void GameManager::Reset()
 {
 	isBattleModeOn = false;

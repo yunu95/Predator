@@ -991,10 +991,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     </ClInclude>
     <ClInclude Include="AttackSystem.h" />
     <ClInclude Include="AutoAttackProjectilePool.h" />
+    <ClInclude Include="BishopTrapProductor.h" />
     <ClInclude Include="BleedingComponent.h" />
     <ClInclude Include="BlindFieldComponent.h" />
     <ClInclude Include="CinematicManager.h" />
     <ClInclude Include="BurnEffect.h" />
+    <ClInclude Include="ChessTrapSkillSystem.h" />
     <ClInclude Include="ConditionList.h" />
     <ClInclude Include="Condition_CinematicMode.h" />
     <ClInclude Include="CoroutineObject.h" />
@@ -1030,7 +1032,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     </ClInclude>
     <ClInclude Include="PopupOnEnable.h" />
     <ClInclude Include="GamePlayTimer.h" />
+    <ClInclude Include="PawnTrapProductor.h" />
     <ClInclude Include="RangedEnemyPool.h" />
+    <ClInclude Include="ResurrectionSystem.h" />
+    <ClInclude Include="RookTrapProductor.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="ScriptSystem.h" />
     <ClInclude Include="ShortcutSystem.h" />
@@ -1065,11 +1070,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="RobinSkillDevelopmentSystem.h" />
     <ClInclude Include="SaveStaticOrnamentsCommnad.h" />
     <ClInclude Include="SingletonInstanceContainer.h" />
-    <ClInclude Include="SingletonUpdate.h" />
     <ClInclude Include="SkillDevelopmentSystem.h" />
     <ClInclude Include="SkillWarningSystem.h" />
     <ClInclude Include="SpecialEffectTrigger.h" />
     <ClInclude Include="SpecialEvent.h" />
+    <ClInclude Include="SpikeSkillSystem.h" />
+    <ClInclude Include="SpikeTrapProductor.h" />
     <ClInclude Include="SpriteAnimation.h" />
     <ClInclude Include="StaticInstanceRegistry.h" />
     <ClInclude Include="LoadStaticOrnamentsCommand.h" />
@@ -1191,7 +1197,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="TestUtilRTSTestCam.h" />
     <ClInclude Include="TestUtils.h" />
     <ClInclude Include="TransformEditCommand.h" />
+    <ClInclude Include="TrapTriggerSensor.h" />
+    <ClInclude Include="TriggeredTrapSkillSystem.h" />
     <ClInclude Include="TriggerList.h" />
+    <ClInclude Include="TriggerTrapProductor.h" />
     <ClInclude Include="Trigger_Region.h" />
     <ClInclude Include="Trigger_GameStart.h" />
     <ClInclude Include="Trigger_RepeatPeriodically.h" />
@@ -1239,11 +1248,13 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     </ClCompile>
     <ClCompile Include="AttackSystem.cpp" />
     <ClCompile Include="AutoAttackProjectilePool.cpp" />
+    <ClCompile Include="BishopTrapProductor.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
     <ClCompile Include="BlindFieldComponent.cpp" />
     <ClCompile Include="CinematicManager.cpp" />
     <ClCompile Include="BurnEffect.cpp" />
     <ClCompile Include="Condition_CinematicMode.cpp" />
+    <ClCompile Include="ChessTrapSkillSystem.cpp" />
     <ClCompile Include="CreateInstanceCommand.cpp" />
     <ClCompile Include="BossProductor.cpp" />
     <ClCompile Include="BossSkillSystem.cpp" />
@@ -1267,6 +1278,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="GamePlayTimer.cpp" />
+    <ClCompile Include="PawnTrapProductor.cpp" />
+    <ClCompile Include="ResurrectionSystem.cpp" />
+    <ClCompile Include="RookTrapProductor.cpp" />
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="ScriptSystem.cpp" />
     <ClCompile Include="ShortcutSystem.cpp" />
@@ -1316,6 +1330,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="SnippetBillboardSpriteAnim.cpp" />
     <ClCompile Include="SingletonInstanceContainer.cpp" />
     <ClCompile Include="SpecialEffectTrigger.cpp" />
+    <ClCompile Include="SpikeSkillSystem.cpp" />
+    <ClCompile Include="SpikeTrapProductor.cpp" />
     <ClCompile Include="SpriteAnimation.cpp" />
     <ClCompile Include="TauntingComponent.cpp" />
     <ClCompile Include="OrnamentEditorInstance.cpp" />
@@ -1408,6 +1424,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="TestCaseUpdateComponents.cpp" />
     <ClCompile Include="TransformEditCommand.cpp" />
     <ClCompile Include="Trigger_Region.cpp" />
+    <ClCompile Include="TrapTriggerSensor.cpp" />
+    <ClCompile Include="TriggeredTrapSkillSystem.cpp" />
+    <ClCompile Include="TriggerTrapProductor.cpp" />
+
     <ClCompile Include="Trigger_GameStart.cpp" />
     <ClCompile Include="Trigger_RepeatPeriodically.cpp" />
     <ClCompile Include="Trigger_Unit.cpp" />

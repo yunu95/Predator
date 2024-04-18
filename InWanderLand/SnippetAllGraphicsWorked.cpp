@@ -43,15 +43,15 @@ void SnippetAllGraphicsWorkedInit()
 			{
 				i->SetPlaySpeed(2.f);
 				i->SetLoop(true);
-				animator->GetGI().PushAnimation(i);
-				animator->GetGI().Play(i);
+				animator->PushAnimation(i);
+				animator->Play(i);
 			}
 
 			if (i->GetName() == L"root|001-2.Walk")
 			{
 				i->SetPlaySpeed(0.5f);
 				i->SetLoop(true);
-				animator->GetGI().PushAnimation(i);
+				animator->PushAnimation(i);
 			}
 		}
 	}

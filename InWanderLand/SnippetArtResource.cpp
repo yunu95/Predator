@@ -80,8 +80,8 @@ void SnippetInitializerArtResource()
 			}
 		}
 		walkAnim->SetLoop(true);
-		animator->GetGI().PushAnimation(walkAnim);
-		animator->GetGI().Play(walkAnim);
+		animator->PushAnimation(walkAnim);
+		animator->Play(walkAnim);
 	}
 #pragma endregion
 

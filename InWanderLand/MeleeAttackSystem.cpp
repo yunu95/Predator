@@ -43,11 +43,13 @@ void MeleeAttackSystem::SetMeleeAttackType(MeleeAttackType p_type)
 void MeleeAttackSystem::SetColliderObject(GameObject* colliderObj)
 {
 	meleeAttackColliderObject = colliderObj;
+	meleeAttackColliderObject->SetSelfActive(false);
 }
 
 void MeleeAttackSystem::SetColliderDebugObject(GameObject* debugobj)
 {
 	meleeAttackColliderDebugObject = debugobj;
+	meleeAttackColliderDebugObject->SetSelfActive(false);
 }
 
 void MeleeAttackSystem::SetOwnerUnitObject(GameObject* unitobj)
@@ -72,17 +74,17 @@ void MeleeAttackSystem::SetDamage(float p_dmg)
 
 void MeleeAttackSystem::Start()
 {
+	m_unitComponent = ownerUnitObject->GetComponent<Unit>();
+
 	if (m_meleeAttackType == MeleeAttackType::Collider)
 	{
 
 		meleeAttackColliderObject->SetSelfActive(false);
 		meleeAttackColliderDebugObject->SetSelfActive(false);
+		meleeAttackColliderObject->SetParent(m_unitComponent->GetGameObject());
+		meleeAttackColliderDebugObject->SetParent(m_unitComponent->GetGameObject());
 	}
-	m_unitComponent = ownerUnitObject->GetComponent<Unit>();
-	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
 	//contentsLayer->RegisterToEditorComponentVector(this);
-	contentsLayer->RegisterToEditorObjectContainer(meleeAttackColliderObject);
-	contentsLayer->RegisterToEditorObjectContainer(meleeAttackColliderDebugObject);
 }
 
 void MeleeAttackSystem::Update()

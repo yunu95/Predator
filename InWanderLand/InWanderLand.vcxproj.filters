@@ -469,6 +469,18 @@
     <Filter Include="Editor\PopupManager">
       <UniqueIdentifier>{841405ab-7b0a-4e0a-814e-78a4f7d59a5a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor">
+      <UniqueIdentifier>{88ae07b4-e3a8-4643-9d6c-342c2d3edd2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\SkillSystem\TrapSkillSystem">
+      <UniqueIdentifier>{a8e4d532-a085-4fc3-9e1e-018ef51af826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor">
+      <UniqueIdentifier>{14f27d29-54f5-42fe-b645-4fe1335be09d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ResurrectionSystem">
+      <UniqueIdentifier>{fe0bc7ad-f763-44df-8f11-ddcca5f4188a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -985,7 +997,6 @@
     <ClInclude Include="LightEditorInstance.h">
       <Filter>Editor\Palette\EditorInstance\LightInstance</Filter>
     </ClInclude>
-    <ClInclude Include="SingletonUpdate.h" />
     <ClInclude Include="RangedEnemyProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
     </ClInclude>
@@ -1205,6 +1216,34 @@
     <ClInclude Include="Action_Camera.h">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClInclude>
+    <ClInclude Include="SpikeTrapProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="TriggerTrapProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="SpikeSkillSystem.h">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ChessTrapSkillSystem.h">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="TriggeredTrapSkillSystem.h">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="PawnTrapProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="RookTrapProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="BishopTrapProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="TrapTriggerSensor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="ResurrectionSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1823,5 +1862,33 @@
     <ClCompile Include="Action_Camera.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClCompile>
+    <ClCompile Include="SpikeTrapProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="TriggerTrapProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="SpikeSkillSystem.cpp">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessTrapSkillSystem.cpp">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="TriggeredTrapSkillSystem.cpp">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="PawnTrapProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="RookTrapProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="BishopTrapProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="TrapTriggerSensor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="ResurrectionSystem.cpp" />
   </ItemGroup>
 </Project>

@@ -46,46 +46,12 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
-	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
-	auto& animList = rsrcManager->GetAnimationList();
-	for (auto each : animList)
-	{
-		if (each->GetName() == L"Ani_Monster2_Idle")
-		{
-			m_baseUnitAnimations.m_idleAnimation = each;
-			m_baseUnitAnimations.m_idleAnimation->SetLoop(true);
-			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_idleAnimation);
-			animator->GetGI().Play(m_baseUnitAnimations.m_idleAnimation);
-		}
-		else if (each->GetName() == L"Ani_Monster2_Walk")
-		{
-			m_baseUnitAnimations.m_walkAnimation = each;
-			m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
-			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_walkAnimation);
-		}
-		else if (each->GetName() == L"Ani_Monster2_Attack")
-		{
-			m_baseUnitAnimations.m_attackAnimation = each;
-			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
-			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_attackAnimation);
-		}
-		else if (each->GetName() == L"Ani_Monster2_BattleIdle")
-		{
-			m_baseUnitAnimations.m_paralysisAnimation = each;
-			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
-			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
-		}
-		else if (each->GetName() == L"Ani_Monster2_Skill")
-		{
-			m_baseUnitAnimations.m_deathAnimation = each;
-			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
-			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_deathAnimation);
-		}
-	}
-#pragma endregion
 	/// UnitComponent 추가
 	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+	UnitProductor::SetUnitComponentMembers();
+
+#pragma endregion
+
 
 #pragma region Auto Attack Setting
 	auto rangedAttackSystem = m_unitGameObject->AddComponent<RangedAttackSystem>();
@@ -124,7 +90,51 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 	UnitProductor::AddColliderComponent();
 	UnitProductor::AddNavigationComponent();
 	UnitProductor::AddDotweenComponent();
-	UnitProductor::SetUnitComponentMembers();
+
+	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
+	auto& animList = rsrcManager->GetAnimationList();
+	for (auto each : animList)
+	{
+		if (each->GetName() == L"Ani_Monster2_Idle")
+		{
+			m_baseUnitAnimations.m_idleAnimation = each;
+			m_baseUnitAnimations.m_idleAnimation->SetLoop(true);
+			animator->PushAnimation(m_baseUnitAnimations.m_idleAnimation);
+			animator->Play(m_baseUnitAnimations.m_idleAnimation);
+		}
+		else if (each->GetName() == L"Ani_Monster2_Walk")
+		{
+			m_baseUnitAnimations.m_walkAnimation = each;
+			m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
+			animator->PushAnimation(m_baseUnitAnimations.m_walkAnimation);
+		}
+		else if (each->GetName() == L"Ani_Monster2_Attack")
+		{
+			m_baseUnitAnimations.m_attackAnimation = each;
+			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
+		}
+		else if (each->GetName() == L"Ani_Monster2_Skill")
+		{
+			m_baseUnitAnimations.m_paralysisAnimation = each;
+			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
+			animator->PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
+		}
+		if (each->GetName() == L"Ani_Monster2_Skill")
+		{
+			m_baseUnitAnimations.m_deathAnimation = each;
+			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
+			animator->PushAnimation(m_baseUnitAnimations.m_deathAnimation);
+		}
+		/// Skill Animation
+		if (each->GetName() == L"Ani_Monster2_Skill")
+		{
+			each->SetLoop(false);
+			animator->PushAnimation(each);
+			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillOne, each);
+		}
+	}
+	m_unitComponent->unitAnimations = m_baseUnitAnimations;
 
 	return m_unitComponent;
 }

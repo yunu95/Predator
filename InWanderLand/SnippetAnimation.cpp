@@ -31,8 +31,8 @@ void SnippetInitializerAnimation()
         }
     }
     anim->SetLoop(true);
-    animator->GetGI().PushAnimation(anim);
-    animator->GetGI().Play(anim);
+    animator->PushAnimation(anim);
+    animator->Play(anim);
 
     auto colliderComponent = skinnedMesh->AddComponent<physics::BoxCollider>();
     colliderComponent->SetHalfExtent({ 0.5f, 0.5f, 0.5f });
