@@ -334,6 +334,9 @@
     <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\ParticleRenderer">
       <UniqueIdentifier>{a6016a93-313c-40d4-b8ba-be72d71cc75e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\AnimationEventController">
+      <UniqueIdentifier>{0edb1cdf-257b-4963-9137-6d439386b429}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -536,6 +539,9 @@
     </ClCompile>
     <ClCompile Include="ParticleRenderer.cpp">
       <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\ParticleRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationEventController.cpp">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\AnimationEventController</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -811,6 +817,9 @@
     </ClInclude>
     <ClInclude Include="header\ParticleRenderer.h">
       <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\ParticleRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="header\AnimationEventController.h">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\AnimationEventController</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

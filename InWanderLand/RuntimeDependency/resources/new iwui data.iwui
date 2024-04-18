@@ -3,7 +3,7 @@
         {
             "uiname": "title_background",
             "parentUIName": "",
-            "imagePath": "Texture/zoro.jpg",
+            "imagePath": "Texture/Ingame_Menu/background_title.png",
             "openTarget": "",
             "disablingTarget": "",
             "pivot": [
@@ -35,7 +35,7 @@
         {
             "uiname": "title_button_play",
             "parentUIName": "title_background",
-            "imagePath": "Texture/zoro.jpg",
+            "imagePath": "Texture/Ingame_Menu/Button_HowToPlay.png",
             "openTarget": "",
             "disablingTarget": "",
             "pivot": [
@@ -67,7 +67,7 @@
         {
             "uiname": "title_button_settings",
             "parentUIName": "title_background",
-            "imagePath": "Texture/zoro.jpg",
+            "imagePath": "Texture/Ingame_Menu/Button_HowToPlay.png",
             "openTarget": "",
             "disablingTarget": "",
             "pivot": [
@@ -80,7 +80,7 @@
             ],
             "anchoredPosition": [
                 -321.0,
-                70.0
+                100.0
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -99,7 +99,7 @@
         {
             "uiname": "title_button_credit",
             "parentUIName": "title_background",
-            "imagePath": "Texture/zoro.jpg",
+            "imagePath": "Texture/Ingame_Menu/Button_HowToPlay.png",
             "openTarget": "",
             "disablingTarget": "",
             "pivot": [
@@ -112,7 +112,7 @@
             ],
             "anchoredPosition": [
                 -321.0,
-                -41.0
+                37.0
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -131,7 +131,7 @@
         {
             "uiname": "title_button_quit",
             "parentUIName": "title_background",
-            "imagePath": "Texture/zoro.jpg",
+            "imagePath": "Texture/Ingame_Menu/Button_HowToPlay.png",
             "openTarget": "",
             "disablingTarget": "",
             "pivot": [
@@ -144,7 +144,7 @@
             ],
             "anchoredPosition": [
                 -321.0,
-                -144.0
+                -38.0
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -157,102 +157,6 @@
             "rotation": 0.0,
             "width": 200.0,
             "height": 50.0,
-            "customFlags": 0,
-            "enumID": 0
-        },
-        {
-            "uiname": "tutorial_background",
-            "parentUIName": "",
-            "imagePath": "Texture/zoro.jpg",
-            "openTarget": "",
-            "disablingTarget": "",
-            "pivot": [
-                0.5,
-                0.5
-            ],
-            "anchor": [
-                0.5,
-                0.5
-            ],
-            "anchoredPosition": [
-                0.0,
-                0.0
-            ],
-            "enableOffset": [],
-            "disableOffset": [],
-            "enableDelay": 0.0,
-            "disableDelay": 0.0,
-            "enableDuration": 0.0,
-            "disableDuration": 0.0,
-            "enableCurveType": 0,
-            "disableCurveType": 0,
-            "rotation": 0.0,
-            "width": 1300.0,
-            "height": 700.0,
-            "customFlags": 128,
-            "enumID": 0
-        },
-        {
-            "uiname": "tutorial_close",
-            "parentUIName": "tutorial_background",
-            "imagePath": "Texture/zoro.jpg",
-            "openTarget": "",
-            "disablingTarget": "",
-            "pivot": [
-                1.0,
-                1.0
-            ],
-            "anchor": [
-                1.0,
-                1.0
-            ],
-            "anchoredPosition": [
-                -26.0,
-                -43.0
-            ],
-            "enableOffset": [],
-            "disableOffset": [],
-            "enableDelay": 0.0,
-            "disableDelay": 0.0,
-            "enableDuration": 0.0,
-            "disableDuration": 0.0,
-            "enableCurveType": 0,
-            "disableCurveType": 0,
-            "rotation": 0.0,
-            "width": 100.0,
-            "height": 30.0,
-            "customFlags": 3,
-            "enumID": 0
-        },
-        {
-            "uiname": "tutorial_description",
-            "parentUIName": "tutorial_background",
-            "imagePath": "Texture/zoro.jpg",
-            "openTarget": "",
-            "disablingTarget": "",
-            "pivot": [
-                0.5,
-                0.5
-            ],
-            "anchor": [
-                0.5,
-                0.5
-            ],
-            "anchoredPosition": [
-                11.0,
-                165.0
-            ],
-            "enableOffset": [],
-            "disableOffset": [],
-            "enableDelay": 0.0,
-            "disableDelay": 0.0,
-            "enableDuration": 0.0,
-            "disableDuration": 0.0,
-            "enableCurveType": 0,
-            "disableCurveType": 0,
-            "rotation": 0.0,
-            "width": 1000.0,
-            "height": 200.0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -275,17 +179,20 @@
                 100.0
             ],
             "enableOffset": [],
-            "disableOffset": [],
+            "disableOffset": [
+                -200.0,
+                0.0
+            ],
             "enableDelay": 0.0,
-            "disableDelay": 0.0,
+            "disableDelay": 0.30000001192092898,
             "enableDuration": 0.0,
-            "disableDuration": 0.0,
+            "disableDuration": 0.30000001192092898,
             "enableCurveType": 0,
-            "disableCurveType": 0,
+            "disableCurveType": 4,
             "rotation": 0.0,
             "width": 50.0,
             "height": 50.0,
-            "customFlags": 261,
+            "customFlags": 1285,
             "enumID": 0
         },
         {
@@ -308,17 +215,17 @@
             ],
             "enableOffset": [
                 0.0,
-                -292.70001220703127
+                -400.0
             ],
             "disableOffset": [
                 0.0,
-                -292.70001220703127
+                -400.0
             ],
             "enableDelay": 0.0,
             "disableDelay": 0.0,
-            "enableDuration": 0.30000001192092898,
-            "disableDuration": 0.30000001192092898,
-            "enableCurveType": 4,
+            "enableDuration": 1.0,
+            "disableDuration": 1.0,
+            "enableCurveType": 2,
             "disableCurveType": 4,
             "rotation": 0.0,
             "width": 1920.0,
@@ -1063,10 +970,80 @@
             "enumID": 10
         },
         {
-            "uiname": "ingame_combo",
+            "uiname": "Ingame_Combo",
             "parentUIName": "",
             "imagePath": "Texture/Ingame/_0003_Bar_MpBar.png",
             "openTarget": "",
+            "disablingTarget": "",
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "anchor": [
+                1.0,
+                0.5
+            ],
+            "anchoredPosition": [
+                -168.135986328125,
+                81.777587890625
+            ],
+            "enableOffset": [],
+            "disableOffset": [
+                400.0,
+                0.0
+            ],
+            "enableDelay": 0.0,
+            "disableDelay": 0.20000000298023225,
+            "enableDuration": 0.0,
+            "disableDuration": 0.30000001192092898,
+            "enableCurveType": 0,
+            "disableCurveType": 2,
+            "rotation": 0.0,
+            "width": 259.0860595703125,
+            "height": 198.44482421875,
+            "customFlags": 1024,
+            "enumID": 17
+        },
+        {
+            "uiname": "Ingame_Combo_Description",
+            "parentUIName": "",
+            "imagePath": "Texture/Ingame/_0003_Bar_MpBar.png",
+            "openTarget": "",
+            "disablingTarget": "",
+            "pivot": [
+                0.0,
+                1.0
+            ],
+            "anchor": [
+                1.0,
+                0.5
+            ],
+            "anchoredPosition": [
+                -297.678955078125,
+                -48.8514404296875
+            ],
+            "enableOffset": [],
+            "disableOffset": [
+                400.0,
+                0.0
+            ],
+            "enableDelay": 0.0,
+            "disableDelay": 0.10000000149011612,
+            "enableDuration": 0.0,
+            "disableDuration": 0.30000001192092898,
+            "enableCurveType": 0,
+            "disableCurveType": 2,
+            "rotation": 0.0,
+            "width": 259.086181640625,
+            "height": 198.44482421875,
+            "customFlags": 1024,
+            "enumID": 18
+        },
+        {
+            "uiname": "ingame_menu_button (1)",
+            "parentUIName": "",
+            "imagePath": "Texture/Ingame/_0000_Icon_Menu.png",
+            "openTarget": "ingame_Bottom_Layout",
             "disablingTarget": "",
             "pivot": [
                 0.0,
@@ -1077,8 +1054,8 @@
                 0.0
             ],
             "anchoredPosition": [
-                1622.321044921875,
-                721.0
+                80.0,
+                187.0
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -1089,16 +1066,16 @@
             "enableCurveType": 0,
             "disableCurveType": 0,
             "rotation": 0.0,
-            "width": 259.0860900878906,
-            "height": 198.44479370117188,
-            "customFlags": 0,
+            "width": 50.0,
+            "height": 50.0,
+            "customFlags": 261,
             "enumID": 0
         },
         {
-            "uiname": "ingame_combo_desc",
+            "uiname": "ingame_menu_button (2)",
             "parentUIName": "",
-            "imagePath": "Texture/Ingame/_0003_Bar_MpBar.png",
-            "openTarget": "",
+            "imagePath": "Texture/Ingame/_0000_Icon_Menu.png",
+            "openTarget": "BlackMask_Horizontal",
             "disablingTarget": "",
             "pivot": [
                 0.0,
@@ -1109,8 +1086,8 @@
                 0.0
             ],
             "anchoredPosition": [
-                1622.321044921875,
-                491.1485290527344
+                80.0,
+                289.0
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -1121,9 +1098,9 @@
             "enableCurveType": 0,
             "disableCurveType": 0,
             "rotation": 0.0,
-            "width": 259.0860900878906,
-            "height": 198.44479370117188,
-            "customFlags": 0,
+            "width": 50.0,
+            "height": 50.0,
+            "customFlags": 261,
             "enumID": 0
         },
         {
@@ -1144,31 +1121,25 @@
                 0.0,
                 0.0
             ],
-            "enableOffset": [
-                0.0,
-                1000.0
-            ],
-            "disableOffset": [
-                0.0,
-                -1000.0
-            ],
+            "enableOffset": [],
+            "disableOffset": [],
             "enableDelay": 0.0,
             "disableDelay": 0.0,
-            "enableDuration": 0.30000001192092898,
-            "disableDuration": 0.30000001192092898,
-            "enableCurveType": 2,
-            "disableCurveType": 2,
+            "enableDuration": 0.0,
+            "disableDuration": 0.0,
+            "enableCurveType": 0,
+            "disableCurveType": 0,
             "rotation": 0.0,
             "width": 400.0,
             "height": 350.0,
-            "customFlags": 1568,
+            "customFlags": 32,
             "enumID": 0
         },
         {
             "uiname": "ingame_menu_how_to_play",
             "parentUIName": "ingame_menu_background",
             "imagePath": "Texture/Ingame_Menu/Button_HowToPlay.png",
-            "openTarget": "",
+            "openTarget": "tutorial_background",
             "disablingTarget": "",
             "pivot": [
                 0.5,
@@ -1193,7 +1164,7 @@
             "rotation": 0.0,
             "width": 198.11729431152345,
             "height": 51.72740173339844,
-            "customFlags": 0,
+            "customFlags": 5,
             "enumID": 0
         },
         {
@@ -1391,7 +1362,7 @@
         {
             "uiname": "music OffButton",
             "parentUIName": "ingame_menu_sound_settings_background",
-            "imagePath": "Texture/Ingame/_0051_Toggle_On.png",
+            "imagePath": "Texture/Ingame/_0052_Toggle_Off.png",
             "openTarget": "music OnButton",
             "disablingTarget": "music OffButton",
             "pivot": [
@@ -1424,8 +1395,8 @@
             "uiname": "sound OnButton",
             "parentUIName": "ingame_menu_sound_settings_background",
             "imagePath": "Texture/Ingame/_0051_Toggle_On.png",
-            "openTarget": "",
-            "disablingTarget": "",
+            "openTarget": "sound OffButton",
+            "disablingTarget": "sound OnButton",
             "pivot": [
                 0.5,
                 0.5
@@ -1435,8 +1406,8 @@
                 0.5
             ],
             "anchoredPosition": [
-                70.09757995605469,
-                -38.49992752075195
+                70.0975341796875,
+                -42.00016403198242
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -1449,15 +1420,15 @@
             "rotation": 0.0,
             "width": 157.9123992919922,
             "height": 38.4640007019043,
-            "customFlags": 0,
+            "customFlags": 13,
             "enumID": 0
         },
         {
             "uiname": "sound OffButton",
             "parentUIName": "ingame_menu_sound_settings_background",
-            "imagePath": "Texture/Ingame/_0051_Toggle_On.png",
-            "openTarget": "",
-            "disablingTarget": "",
+            "imagePath": "Texture/Ingame/_0052_Toggle_Off.png",
+            "openTarget": "sound OnButton",
+            "disablingTarget": "sound OffButton",
             "pivot": [
                 0.5,
                 0.5
@@ -1467,8 +1438,8 @@
                 0.5
             ],
             "anchoredPosition": [
-                70.09757995605469,
-                -38.49992752075195
+                70.0975341796875,
+                -42.0
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -1481,7 +1452,71 @@
             "rotation": 0.0,
             "width": 157.9123992919922,
             "height": 38.4640007019043,
-            "customFlags": 0,
+            "customFlags": 141,
+            "enumID": 0
+        },
+        {
+            "uiname": "tutorial_background",
+            "parentUIName": "",
+            "imagePath": "Texture/Ingame_Menu/background_HowToPlay.png",
+            "openTarget": "",
+            "disablingTarget": "",
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "anchor": [
+                0.5,
+                0.5
+            ],
+            "anchoredPosition": [
+                0.0,
+                0.0
+            ],
+            "enableOffset": [],
+            "disableOffset": [],
+            "enableDelay": 0.0,
+            "disableDelay": 0.0,
+            "enableDuration": 0.0,
+            "disableDuration": 0.0,
+            "enableCurveType": 0,
+            "disableCurveType": 0,
+            "rotation": 0.0,
+            "width": 1300.0,
+            "height": 700.0,
+            "customFlags": 128,
+            "enumID": 0
+        },
+        {
+            "uiname": "tutorial_close",
+            "parentUIName": "tutorial_background",
+            "imagePath": "Texture/Ingame/_0050_Button_Close.png",
+            "openTarget": "",
+            "disablingTarget": "",
+            "pivot": [
+                1.0,
+                1.0
+            ],
+            "anchor": [
+                1.0,
+                1.0
+            ],
+            "anchoredPosition": [
+                -29.0,
+                -36.0
+            ],
+            "enableOffset": [],
+            "disableOffset": [],
+            "enableDelay": 0.0,
+            "disableDelay": 0.0,
+            "enableDuration": 0.0,
+            "disableDuration": 0.0,
+            "enableCurveType": 0,
+            "disableCurveType": 0,
+            "rotation": 0.0,
+            "width": 34.0,
+            "height": 33.0,
+            "customFlags": 3,
             "enumID": 0
         },
         {
@@ -3019,6 +3054,82 @@
             "height": 200.0,
             "customFlags": 0,
             "enumID": 0
+        },
+        {
+            "uiname": "BlackMask_Horizontal",
+            "parentUIName": "",
+            "imagePath": "Texture/blackMask.png",
+            "openTarget": "",
+            "disablingTarget": "",
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "anchor": [
+                0.5,
+                0.5
+            ],
+            "anchoredPosition": [
+                0.0,
+                0.0
+            ],
+            "enableOffset": [
+                2880.0,
+                0.0
+            ],
+            "disableOffset": [
+                -2880.0,
+                0.0
+            ],
+            "enableDelay": 0.0,
+            "disableDelay": 0.0,
+            "enableDuration": 1.0,
+            "disableDuration": 1.0,
+            "enableCurveType": 2,
+            "disableCurveType": 4,
+            "rotation": 0.0,
+            "width": 5760.0,
+            "height": 1080.0,
+            "customFlags": 1664,
+            "enumID": 19
+        },
+        {
+            "uiname": "BlackMask_Vertical",
+            "parentUIName": "",
+            "imagePath": "Texture/blackMask_Vertical.png",
+            "openTarget": "",
+            "disablingTarget": "",
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "anchor": [
+                0.5,
+                0.5
+            ],
+            "anchoredPosition": [
+                0.0,
+                0.0
+            ],
+            "enableOffset": [
+                0.0,
+                4860.0
+            ],
+            "disableOffset": [
+                0.0,
+                -4860.0
+            ],
+            "enableDelay": 0.0,
+            "disableDelay": 0.0,
+            "enableDuration": 1.0,
+            "disableDuration": 1.0,
+            "enableCurveType": 1,
+            "disableCurveType": 1,
+            "rotation": 0.0,
+            "width": 1920.0,
+            "height": 6480.0,
+            "customFlags": 1664,
+            "enumID": 20
         }
     ]
 }

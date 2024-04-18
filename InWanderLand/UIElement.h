@@ -3,6 +3,7 @@
 #include "JsonUIData.h"
 #include "UIExportFlag.h"
 #include "UIOffsetTransition.h"
+#include "PopupOnEnable.h"
 
 class UIButton;
 class UIImage;
@@ -18,7 +19,7 @@ private:
         {
             contentsLayer->RegisterToEditorObjectContainer(GetGameObject());
         }
-    }
+    };
     JsonUIData importedUIData;
     PopupOnEnable* scalePopUpTransition{ nullptr };
     UIOffsetTransition* enableTransition{ nullptr };

@@ -24,6 +24,10 @@ void UIButton::SetButtonClickFunction(std::function<void()> p_func)
 {
     m_mouseLiftedEventFunction = p_func;
 }
+void UIButton::AddButtonClickFunction(std::function<void()> p_func)
+{
+    m_mouseLiftedEventFunctions.push_back(p_func);
+}
 
 void UIButton::SetLayer(int p_layerNum)
 {
@@ -99,6 +103,13 @@ void UIButton::Start()
             if (m_mouseLiftedEventFunction != nullptr)
             {
                 m_mouseLiftedEventFunction();
+            }
+            if (!m_mouseLiftedEventFunctions.empty())
+            {
+                for (auto& each : m_mouseLiftedEventFunctions)
+                {
+                    each();
+                }
             }
         };
 

@@ -15,6 +15,42 @@ void UIManager::Clear()
     m_currentHighestLayer = -1;
     m_selectedButtons.clear();
 }
+void UIManager::FadeInVertical()
+{
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_Vertical)->EnableElement();
+}
+void UIManager::FadeInHorizontal()
+{
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_Horizontal)->EnableElement();
+}
+void UIManager::FadeOut()
+{
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_Vertical); elm->GetGameObject()->GetActive())
+    {
+        elm->DisableElement();
+    }
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_Horizontal); elm->GetGameObject()->GetActive())
+    {
+        elm->DisableElement();
+    }
+}
+void UIManager::SetIngameUIVisible(bool visible)
+{
+    if (visible)
+    {
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Buttom_Layout)->EnableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->EnableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo)->EnableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Description)->EnableElement();
+    }
+    else
+    {
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Buttom_Layout)->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo)->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Description)->DisableElement();
+    }
+}
 
 void UIManager::ReportButtonOnMouse(UIButton* p_btn)
 {
@@ -198,7 +234,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     // 만약 닫기 버튼이라면...
     if (uiData.customFlags & (int)UIExportFlag::CloseButton)
     {
-        button->SetButtonClickFunction([=]()
+        button->AddButtonClickFunction([=]()
             {
                 if (auto parent = button->GetGameObject()->GetParentGameObject())
                 {
@@ -216,7 +252,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         assert(openTarget);
         if (uiData.customFlags & (int)UIExportFlag::IsToggle)
         {
-            button->SetButtonClickFunction([=]()
+            button->AddButtonClickFunction([=]()
                 {
                     if (!openTarget->GetGameObject()->GetSelfActive())
                     {
@@ -230,7 +266,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         }
         else
         {
-            button->SetButtonClickFunction([=]()
+            button->AddButtonClickFunction([=]()
                 {
                     openTarget->EnableElement();
                 });
@@ -241,7 +277,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     {
         auto disablingTarget = uisByName[uiData.disablingTarget];
         assert(disablingTarget);
-        button->SetButtonClickFunction([=]()
+        button->AddButtonClickFunction([=]()
             {
                 disablingTarget->DisableElement();
             });

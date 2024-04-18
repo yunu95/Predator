@@ -104,6 +104,11 @@ namespace yunuGIAdapter
 			return true;
 		};
 
+		virtual std::vector<yunuGI::IAnimation*>& GetFBXAnimationList(std::wstring fbxName)const override
+		{
+			return ResourceManager::Instance.Get().GetFBXAnimationList(fbxName);
+		};
+
 		virtual void UnloadResources()const override
 		{
 		};

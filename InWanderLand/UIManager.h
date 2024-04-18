@@ -47,6 +47,10 @@ private:
 public:
     
     void Clear();
+    void FadeInHorizontal();
+    void FadeInVertical();
+    void FadeOut();
+    void SetIngameUIVisible(bool visible);
     void ReportButtonOnMouse(UIButton* p_btn);
     void ReportMouseExitButton(UIButton* p_btn);
     // 버튼 중 가장 높은 우선순위를 가진 버튼으로 highestpriorityButton을 재설정합니다.

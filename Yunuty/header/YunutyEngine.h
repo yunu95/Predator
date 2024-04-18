@@ -41,6 +41,7 @@
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "Animator.h"
+#include "AnimationEventController.h"
 #include "SingletonComponent.h"
 
 // 수학 라이브러리들

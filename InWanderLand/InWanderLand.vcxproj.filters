@@ -466,6 +466,9 @@
     <Filter Include="UI\Effect\OffsetTransition">
       <UniqueIdentifier>{21be6adf-6afc-43d1-a20b-f0b5e15914f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\PopupManager">
+      <UniqueIdentifier>{841405ab-7b0a-4e0a-814e-78a4f7d59a5a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1178,6 +1181,18 @@
     <ClInclude Include="UIOffsetTransition.h">
       <Filter>UI\Effect\OffsetTransition</Filter>
     </ClInclude>
+    <ClInclude Include="Condition_CinematicMode.h">
+      <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger_RepeatPeriodically.h">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlayTimer.h">
+      <Filter>Contents\GameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorPopupManager.h">
+      <Filter>Editor\PopupManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1774,6 +1789,21 @@
     </ClCompile>
     <ClCompile Include="PlayableComponent.cpp">
       <Filter>Contents\GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Condition_CinematicMode.cpp">
+      <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger_RepeatPeriodically.cpp">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePlayTimer.cpp">
+      <Filter>Contents\GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorPopupManager.cpp">
+      <Filter>Editor\PopupManager</Filter>
+    </ClCompile>
+    <ClCompile Include="UICurveType.cpp">
+      <Filter>UI\UnityRelated\UICurveType</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

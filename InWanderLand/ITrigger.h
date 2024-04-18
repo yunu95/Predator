@@ -20,6 +20,8 @@ namespace application
 		GameStart,
 		EnterRegion,
 		LeaveRegion,
+		RepeatPeriodically,
+		RepeatPeriodicallyRealTime
 	};
 
 	struct ITrigger

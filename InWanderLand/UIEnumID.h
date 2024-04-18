@@ -33,4 +33,10 @@ enum class UIEnumID
     Ingame_Buttom_Layout,
     // 인게임에서 사용되는 메뉴버튼
     Ingame_MenuButton,
+    // 콤보를 표시하는 위치, 콤보가 진행중인게 아니라면 표시되지 않을 수도 있음.
+    Ingame_Combo,
+    // 어떤 콤보를 달성해야 하는지 설명하는 텍스트
+    Ingame_Combo_Description,
+    BlackMask_Horizontal,
+    BlackMask_Vertical,
 };
