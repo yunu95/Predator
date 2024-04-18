@@ -13,6 +13,8 @@
 #include "PodStructs.h"
 #include "imgui_Utility.h"
 #include "WanderUtils.h"
+#include "EditorLayer.h"
+#include "EditorCamera.h"
 
 #include <nlohmann/json.hpp>
 #include <boost/pfr.hpp>
@@ -161,6 +163,20 @@ namespace application
 					wanderUtils::UpdateStringSize(buffer);
 					const_cast<std::string&>(data) = buffer;
 					return true;
+				}
+
+				static bool beforeFocus = false;
+				if (ImGui::IsItemFocused())
+				{
+					beforeFocus = true;
+					EditorLayer::SetInputControl(false);
+					EditorCamera::GetSingletonInstance().SetInputUpdate(false);
+				}
+				else if (beforeFocus)
+				{
+					beforeFocus = false;
+					EditorLayer::SetInputControl(true);
+					EditorCamera::GetSingletonInstance().SetInputUpdate(true);
 				}
 
 				return false;

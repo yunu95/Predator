@@ -101,18 +101,6 @@ namespace application
             isMouseOver = ImGui::IsWindowHovered();
             isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
-            if (isMouseOver)
-            {
-                ec->SetInputUpdate(true);
-            }
-            else
-            {
-                if (Application::IsFocusGameWindow() == false)
-                {
-                    ec->SetInputUpdate(false);
-                }
-            }
-
             ImGui_UpdateWindowSize();
 
             // Resize 에 대한 처리 부분

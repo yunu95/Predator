@@ -8,6 +8,8 @@
 #include "EditorPopupManager.h"
 #include "Script.h"
 #include "Panel_Palette.h"
+#include "EditableDataList.h"
+#include "EditorCamera.h"
 
 namespace application
 {
@@ -394,6 +396,21 @@ namespace application
 			scriptName.reserve(32);
 			ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x * 0.5);
 			ImGui::InputText("##Script_Name", &scriptName[0], 32);
+
+			static bool beforeFocus = false;
+			if (ImGui::IsItemFocused())
+			{
+				beforeFocus = true;
+				EditorLayer::SetInputControl(false);
+				EditorCamera::GetSingletonInstance().SetInputUpdate(false);
+			}
+			else if (beforeFocus)
+			{
+				beforeFocus = false;
+				EditorLayer::SetInputControl(true);
+				EditorCamera::GetSingletonInstance().SetInputUpdate(true);
+			}
+
 			wanderUtils::UpdateStringSize(scriptName);
 			data->name = scriptName;
 
@@ -710,6 +727,16 @@ namespace application
 								case application::ActionType::CameraLoadView:
 								{
 									selectedScript->AddAction<Action_CameraLoadView>();
+									break;
+								}
+								case application::ActionType::CinematicFadeIn:
+								{
+									selectedScript->AddAction<Action_CinematicFadeIn>();
+									break;
+								}
+								case application::ActionType::CinematicFadeOut:
+								{
+									selectedScript->AddAction<Action_CinematicFadeOut>();
 									break;
 								}
 								default:

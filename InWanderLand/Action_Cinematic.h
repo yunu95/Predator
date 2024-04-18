@@ -23,4 +23,44 @@ namespace application
 	private:
 		bool cinematicMode = false;
 	};
+
+	/// FadeIn 효과입니다.
+	class Action_CinematicFadeIn
+		: public IAction
+	{
+	public:
+		DEFINE_ACTION(CinematicFadeIn)
+
+		virtual CoroutineObject<void> DoAction() override;
+
+		void SetFadeTime(float fadeTime);
+
+		virtual bool PreEncoding(json& data) const override;
+		virtual bool PostEncoding(json& data) const override;
+		virtual bool PreDecoding(const json& data) override;
+		virtual bool PostDecoding(const json& data) override;
+
+	private:
+		float fadeTime = 0;
+	};
+
+	/// FadeOut 효과입니다.
+	class Action_CinematicFadeOut
+		: public IAction
+	{
+	public:
+		DEFINE_ACTION(CinematicFadeOut)
+
+		virtual CoroutineObject<void> DoAction() override;
+
+		void SetFadeTime(float fadeTime);
+
+		virtual bool PreEncoding(json& data) const override;
+		virtual bool PostEncoding(json& data) const override;
+		virtual bool PreDecoding(const json& data) override;
+		virtual bool PostDecoding(const json& data) override;
+
+	private:
+		float fadeTime = 0;
+	};
 }

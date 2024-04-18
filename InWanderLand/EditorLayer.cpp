@@ -15,6 +15,7 @@
 #include "EditorCamera.h"
 #include "EditorInputManager.h"
 #include "EditorPopupManager.h"
+#include "EditableDataList.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"

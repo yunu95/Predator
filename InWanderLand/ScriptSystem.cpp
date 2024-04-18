@@ -28,6 +28,8 @@ namespace application
 		actionList[ActionType::WaitForSeconds] = "WaitForSeconds";
 		actionList[ActionType::WaitForRealSeconds] = "WaitForRealSeconds";
 		actionList[ActionType::CinematicModeChange] = "CinematicModeChange";
+		actionList[ActionType::CinematicFadeIn] = "CinematicFadeIn";
+		actionList[ActionType::CinematicFadeOut] = "CinematicFadeOut";
 		actionList[ActionType::CameraChangeView] = "CameraChangeView";
 		actionList[ActionType::CameraSaveView] = "CameraSaveView";
 		actionList[ActionType::CameraLoadView] = "CameraLoadView";

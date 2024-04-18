@@ -3,6 +3,7 @@
 #include "InWanderLand.h"
 #include "LightData.h"
 #include "EditorResourceManager.h"
+#include "TemplateDataManager.h"
 
 namespace application::editor::palette
 {
