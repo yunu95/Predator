@@ -66,6 +66,7 @@ void PlaytimeWave::Update()
         {
             // 유닛을 소환하고 인덱스를 증가시킨다.
             // 유닛 데이터는 아래 값을 사용하면 됨.
+            waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit;
             Vector3d pos = { waveData->waveUnitDatasVector[waveDataIndex]->pod.position.x,
                 waveData->waveUnitDatasVector[waveDataIndex]->pod.position.y,
                 waveData->waveUnitDatasVector[waveDataIndex]->pod.position.z };
@@ -78,22 +79,10 @@ void PlaytimeWave::Update()
 
             GameObject* waveUnitObject;
 
-            if (templateUnitData.skinnedFBXName == "SKM_Monster1")
-            {
-				waveUnitObject = m_createdUnitPerWaveMap.find(Unit::UnitType::MeleeEnemy)->second.top();
-				m_createdUnitPerWaveMap.find(Unit::UnitType::MeleeEnemy)->second.pop();
-            }
-			else if (templateUnitData.skinnedFBXName == "SKM_Monster2")
-			{
-				waveUnitObject = m_createdUnitPerWaveMap.find(Unit::UnitType::RangedEnemy)->second.top();
-				m_createdUnitPerWaveMap.find(Unit::UnitType::RangedEnemy)->second.pop();
-			}
-			waveUnitObject->GetTransform()->SetWorldPosition(pos);
-			waveUnitObject->SetSelfActive(true);
+			waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit->GetTransform()->SetWorldPosition(pos);
+			waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit->GetGameObject()->SetSelfActive(true);
 
-            //GameObject* unitObject = inGameUit->GetGameObject();
-
-            m_currentWaveUnitVector.push_back(waveUnitObject->GetComponent<Unit>());
+            m_currentWaveUnitVector.push_back(waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit);
 
             nextSummonUnitIndex++;
             waveDataIndex++;
