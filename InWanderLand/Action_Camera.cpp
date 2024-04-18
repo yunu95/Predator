@@ -25,7 +25,7 @@ namespace application
 		mainCam->SetUpdateability(false);
 		auto ts = mainCam->GetTransform();
 		auto startPos = ts->GetWorldPosition();
-		auto startRotation = ts->GetWorldRotation();
+		auto startRot = ts->GetWorldRotation();
 		auto startScale = ts->GetWorldScale();
 		auto& camGI = mainCam->GetGI();
 		float startFov = camGI.GetVerticalFOV();
@@ -35,15 +35,33 @@ namespace application
 		float startHeight = 0;
 		camGI.GetResolution(&startWidth, &startHeight);
 		
+		Vector3d endPos = { targetCam->pod.position.x, targetCam->pod.position.y, targetCam->pod.position.z };
+		Quaternion endRot = { targetCam->pod.rotation.w, targetCam->pod.rotation.x, targetCam->pod.rotation.y, targetCam->pod.rotation.z };
+		Vector3d endScale = { targetCam->pod.scale.x, targetCam->pod.scale.y, targetCam->pod.scale.z };
+
+		float endFov = targetCam->pod.vertical_FOV;
+		float endCameraNear = targetCam->pod.dis_Near;
+		float endCameraFar = targetCam->pod.dis_Far;
+		float endWidth = targetCam->pod.res_Width;
+		float endHeight = targetCam->pod.res_Height;
+
 		double timer = 0;
+		float factor = 0;
 		for (double timer = 0; timer < lerpTime;)
 		{
-			timer;
+			factor = timer / lerpTime;
+			ts->SetWorldPosition(Vector3d::Lerp(startPos, endPos, factor));
+			ts->SetWorldRotation(Quaternion::Lerp(startRot, endRot, factor));
+			ts->SetWorldScale(Vector3d::Lerp(startScale, endScale, factor));
+			camGI.SetVerticalFOV(math::LerpF(startFov, endFov, factor));
+			camGI.SetNear(math::LerpF(startCameraNear, endCameraNear, factor));
+			camGI.SetFar(math::LerpF(startCameraFar, endCameraFar, factor));
+			camGI.SetResolution(math::LerpF(startWidth, endWidth, factor), math::LerpF(startHeight, endHeight, factor));
+			timer += Time::GetDeltaTimeUnscaled();
+			co_await std::suspend_always();
 		}
-		
 
-		/// 구면 보간!
-		co_return;
+		mainCam->SetUpdateability(true);
 	}
 
 	bool Action_CameraChangeView::IsValid()

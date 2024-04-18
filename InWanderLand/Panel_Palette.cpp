@@ -580,6 +580,21 @@ namespace application
 					string charBuffer = yutility::GetString(palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.name);
 					charBuffer.reserve(64);
 					ImGui::InputText("##RegionNameInputText", &charBuffer[0], 64);
+
+					static bool beforeFocus = false;
+					if (ImGui::IsItemFocused())
+					{
+						beforeFocus = true;
+						EditorLayer::SetInputControl(false);
+						ec.SetInputUpdate(false);
+					}
+					else if (beforeFocus)
+					{
+						beforeFocus = false;
+						EditorLayer::SetInputControl(true);
+						ec.SetInputUpdate(true);
+					}
+
 					palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.name = yutility::GetWString(charBuffer);
 					ImGui::TableNextRow();
 					ImGui::TableSetColumnIndex(0);
@@ -706,6 +721,21 @@ namespace application
 					string charBuffer = yutility::GetString(selectedWave->pod.name);
 					charBuffer.reserve(64);
 					ImGui::InputText("##RegionNameInputText", &charBuffer[0], 64);
+
+					static bool beforeFocus = false;
+					if (ImGui::IsItemFocused())
+					{
+						beforeFocus = true;
+						EditorLayer::SetInputControl(false);
+						ec.SetInputUpdate(false);
+					}
+					else if (beforeFocus)
+					{
+						beforeFocus = false;
+						EditorLayer::SetInputControl(true);
+						ec.SetInputUpdate(true);
+					}
+
 					selectedWave->pod.name = yutility::GetWString(charBuffer);
 
 					imgui::EndSection();
@@ -1003,6 +1033,21 @@ namespace application
 						ImGui::TableSetColumnIndex(1);
 						ImGui::SetNextItemWidth(-1);
 						ImGui::InputText("##Light_Name", &plName[0], 32);
+
+						static bool beforeFocus = false;
+						if (ImGui::IsItemFocused())
+						{
+							beforeFocus = true;
+							EditorLayer::SetInputControl(false);
+							ec.SetInputUpdate(false);
+						}
+						else if (beforeFocus)
+						{
+							beforeFocus = false;
+							EditorLayer::SetInputControl(true);
+							ec.SetInputUpdate(true);
+						}
+
 						wanderUtils::UpdateStringSize(plName);
 						pl->pod.name = plName;
 					}
@@ -1119,6 +1164,20 @@ namespace application
 						ImGui::TableSetColumnIndex(1);
 						ImGui::SetNextItemWidth(-1);
 						ImGui::InputText("##Camera_Name", &camName[0], 32);
+
+						static bool beforeFocus = false;
+						if (ImGui::IsItemFocused())
+						{
+							beforeFocus = true;
+							EditorLayer::SetInputControl(false);
+							ec.SetInputUpdate(false);
+						}
+						else if(beforeFocus)
+						{
+							beforeFocus = false;
+							EditorLayer::SetInputControl(true);
+							ec.SetInputUpdate(true);
+						}
 						wanderUtils::UpdateStringSize(camName);
 						cam->pod.name = camName;
 					}
