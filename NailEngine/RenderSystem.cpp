@@ -45,6 +45,7 @@
 #include "BloomPass.h"
 
 #include "StaticMesh.h"
+#include "PixelShader.h"
 
 #include <iostream>
 #include <fstream>
@@ -498,7 +499,11 @@ void RenderSystem::RenderBackBuffer()
 
 void RenderSystem::RenderUI()
 {
-    this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied());
+    this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied(), nullptr, nullptr, nullptr, []()
+        {
+            auto ps = std::static_pointer_cast<PixelShader>(ResourceManager::Instance.Get().GetShader(L"UIImagePS.cso"));
+            ps->Bind();
+        });
     for (auto& i : UIImageSet)
     {
         auto uiImage = std::static_pointer_cast<UIImage>(i);
