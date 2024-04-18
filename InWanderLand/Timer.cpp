@@ -35,6 +35,12 @@ void Timer::ActivateTimer()
     m_elapsed = 0.0f;
     m_isActivated = true;
     onActivation();
+    if (m_duration == 0)
+    {
+        onUpdate(1);
+        onCompleteFunction();
+        m_isActivated = false;
+    }
 }
 
 void Timer::StopTimer()
