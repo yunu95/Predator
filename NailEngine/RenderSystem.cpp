@@ -499,10 +499,10 @@ void RenderSystem::RenderBackBuffer()
 
 void RenderSystem::RenderUI()
 {
-    this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied(), nullptr, nullptr, nullptr, []()
+    this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied(), nullptr, nullptr, nullptr, [=]()
         {
             auto ps = std::static_pointer_cast<PixelShader>(ResourceManager::Instance.Get().GetShader(L"UIImagePS.cso"));
-            ps->Bind();
+            ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShader(ps->ps.Get(), 0, 0);
         });
     for (auto& i : UIImageSet)
     {
