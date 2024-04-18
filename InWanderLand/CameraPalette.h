@@ -18,6 +18,9 @@ namespace application
             class CameraPalette : public Palette, public yunutyEngine::SingletonClass<CameraPalette>
             {
             public:
+                CameraData* GetSingleSelectedCamera();
+                void SelectCamera(CameraData* camera);
+
                 virtual void Initialize();
                 virtual void Reset() override;
                 virtual IEditableData* PlaceInstance(Vector3d worldPosition) override;

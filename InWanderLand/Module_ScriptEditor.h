@@ -102,6 +102,16 @@ namespace application
 							Trigger_RepeatPeriodicallyRealTime::ImGui_DrawDataPopup(static_cast<Trigger_RepeatPeriodicallyRealTime*>(data));
 							break;
 						}
+						case application::TriggerType::UnitAppear:
+						{
+							Trigger_UnitAppear::ImGui_DrawDataPopup(static_cast<Trigger_UnitAppear*>(data));
+							break;
+						}
+						case application::TriggerType::UnitDie:
+						{
+							Trigger_UnitDie::ImGui_DrawDataPopup(static_cast<Trigger_UnitDie*>(data));
+							break;
+						}
 						default:
 							break;
 					}
@@ -157,6 +167,21 @@ namespace application
 						case application::ActionType::CinematicModeChange:
 						{
 							Action_CinematicModeChange::ImGui_DrawDataPopup(static_cast<Action_CinematicModeChange*>(data));
+							break;
+						}
+						case application::ActionType::CameraChangeView:
+						{
+							Action_CameraChangeView::ImGui_DrawDataPopup(static_cast<Action_CameraChangeView*>(data));
+							break;
+						}
+						case application::ActionType::CameraSaveView:
+						{
+							Action_CameraSaveView::ImGui_DrawDataPopup(static_cast<Action_CameraSaveView*>(data));
+							break;
+						}
+						case application::ActionType::CameraLoadView:
+						{
+							Action_CameraLoadView::ImGui_DrawDataPopup(static_cast<Action_CameraLoadView*>(data));
 							break;
 						}
 						default:

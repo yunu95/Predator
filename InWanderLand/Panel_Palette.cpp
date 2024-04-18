@@ -19,6 +19,7 @@
 #include "TransformEditCommand.h"
 
 #include "YunutyEngine.h"
+#include "WanderUtils.h"
 
 #include "imgui.h"
 
@@ -57,6 +58,19 @@ namespace application
 					+ (*reinterpret_cast<Vector3f*>(&right) * offset.x)
 					+ (*reinterpret_cast<Vector3f*>(&up) * offset.y);
 				lightGizmo->GetTransform()->SetWorldPosition(finalPos);
+
+				if (!Application::GetInstance().IsContentsPlaying())
+				{
+					if (ec.GetCameraTypeState() == CameraTypeState::Editor
+						&& ec.GetCameraPerspectiveState() == CameraPerspectiveState::Free)
+					{
+						lightGizmo->SetSelfActive(true);
+					}
+					else
+					{
+						lightGizmo->SetSelfActive(false);
+					}
+				}
 			}
 		}
 
@@ -940,6 +954,37 @@ namespace application
 				imgui::EndSection();
 			}
 
+			if (imgui::BeginSection_1Col(countIdx, "Point Light List", ImGui::GetContentRegionAvail().x))
+			{
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				if (ImGui::BeginListBox("", { ImGui::GetContentRegionAvail().x * 0.8f,400 }))
+				{
+					int idx = 0;
+					for (auto& each : LightData::GetInstances())
+					{
+						if (each->pod.templateData->pod.type == LightType::Directional)
+						{
+							continue;
+						}
+
+						ImGui::PushID(("Light Name" + each->pod.name).c_str() + idx);
+						if (ImGui::Selectable(each->pod.name.c_str(), palette::LightPalette::SingleInstance().GetSingleSelectedLight() == each))
+						{
+							palette::LightPalette::SingleInstance().SelectLight(each);
+						}
+						if (palette::LightPalette::SingleInstance().GetSingleSelectedLight() == each)
+						{
+							ImGui::SetItemDefaultFocus();
+						}
+						ImGui::PopID();
+						idx++;
+					}
+					ImGui::EndListBox();
+				}
+				imgui::EndSection();
+			}
+
 			if (imgui::BeginSection_2Col(countIdx, "Selected Point Light", ImGui::GetContentRegionAvail().x, 0.2f))
 			{
 				const auto& selection = pm.GetCurrentPalette()->GetSelections();
@@ -947,6 +992,22 @@ namespace application
 				if (selection.size() == 1)
 				{
 					auto pl = static_cast<LightData*>(*selection.begin());
+
+					{
+						std::string plName = pl->pod.name;
+						plName.reserve(32);
+						ImGui::TableNextRow();
+						ImGui::TableSetColumnIndex(0);
+						imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
+						ImGui::AlignTextToFramePadding();
+						ImGui::Text("Light Name");
+						ImGui::TableSetColumnIndex(1);
+						ImGui::SetNextItemWidth(-1);
+						ImGui::InputText("##Light_Name", &plName[0], 32);
+						wanderUtils::UpdateStringSize(plName);
+						pl->pod.name = plName;
+					}
+
 					imgui::DragFloat_2Col("Intensity", pl->pod.intensity, true, 0.1f, 0.0f, 100.0f);
 					imgui::DragFloat_2Col("Range", pl->pod.range, true, 0.1f, 0.0f, 100.0f);
 					imgui::Checkbox_2Col("Is Cast", pl->pod.isCast);
@@ -1006,6 +1067,32 @@ namespace application
 				imgui::EndSection();
 			}
 
+			if (imgui::BeginSection_1Col(countIdx, "Camera List", ImGui::GetContentRegionAvail().x))
+			{
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				if (ImGui::BeginListBox("", { ImGui::GetContentRegionAvail().x * 0.8f,400 }))
+				{
+					int idx = 0;
+					for (auto& each : CameraData::GetInstances())
+					{
+						ImGui::PushID(("Camera Name" + each->pod.name).c_str() + idx);
+						if (ImGui::Selectable(each->pod.name.c_str(), palette::CameraPalette::SingleInstance().GetSingleSelectedCamera() == each))
+						{
+							palette::CameraPalette::SingleInstance().SelectCamera(each);
+						}
+						if (palette::CameraPalette::SingleInstance().GetSingleSelectedCamera() == each)
+						{
+							ImGui::SetItemDefaultFocus();
+						}
+						ImGui::PopID();
+						idx++;
+					}
+					ImGui::EndListBox();
+				}
+				imgui::EndSection();
+			}
+
 			if (imgui::BeginSection_2Col(countIdx, "Selected Camera", ImGui::GetContentRegionAvail().x, 0.2f))
 			{
 				const auto& selection = pm.GetCurrentPalette()->GetSelections();
@@ -1022,6 +1109,21 @@ namespace application
 
 				if (cam)
 				{
+					{
+						std::string camName = cam->pod.name;
+						camName.reserve(32);
+						ImGui::TableNextRow();
+						ImGui::TableSetColumnIndex(0);
+						imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
+						ImGui::AlignTextToFramePadding();
+						ImGui::Text("Cam Name");
+						ImGui::TableSetColumnIndex(1);
+						ImGui::SetNextItemWidth(-1);
+						ImGui::InputText("##Camera_Name", &camName[0], 32);
+						wanderUtils::UpdateStringSize(camName);
+						cam->pod.name = camName;
+					}
+
 					imgui::DragFloat_2Col("Vertical FOV", cam->pod.vertical_FOV, true, 0.1f, 0.0f, 100.0f);
 					imgui::DragFloat_2Col("Near", cam->pod.dis_Near, true, 0.01f, 0.01f, 100.0f);
 					imgui::DragFloat_2Col("Far", cam->pod.dis_Far, true, 0.01f, 500.0f, 1500.0f);
@@ -1043,10 +1145,12 @@ namespace application
 						{
 							CameraManager::GetSingletonInstance().GetMainCam()->pod.isMain = false;
 							CameraManager::GetSingletonInstance().SetMainCam(cam);
-							EditorCamera::GetSingletonInstance().ReloadGameCamera();
 							cam->ApplyAsPaletteInstance();
+							EditorCamera::GetSingletonInstance().ReloadGameCamera();
 						}
 					}
+
+					EditorCamera::GetSingletonInstance().UpdateGI();
 				}
 
 				imgui::EndSection();

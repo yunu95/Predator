@@ -6,6 +6,7 @@
 #include "IEditableData.h"
 #include "Camera_TemplateData.h"
 #include "EditorMath.h"
+#include "StaticInstanceRegistry.h"
 #include "CameraEditorInstance.h"
 #include "CameraPalette.h"
 #include "PodStructs.h"
@@ -15,8 +16,6 @@
 
 #include <memory>
 #include <string>
-
-
 
 namespace application
 {
@@ -35,6 +34,7 @@ namespace application
         struct POD_Camera
         {
             Camera_TemplateData* templateData = nullptr;
+            std::string name = "Cam";
             POD_Vector3<float> position = POD_Vector3<float>();
             POD_Quaternion<double> rotation = POD_Quaternion<double>();
             POD_Vector3<float> scale = { 1,1,1 };
@@ -53,7 +53,7 @@ namespace application
         };
 
         class CameraData
-            : public IEditableData
+            : public IEditableData, public StaticInstanceRegistry<CameraData>
         {
             friend class InstanceManager;
 

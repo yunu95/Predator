@@ -248,6 +248,16 @@ namespace application
 						trigger = AddTrigger<Trigger_RepeatPeriodicallyRealTime>();
 						break;
 					}
+					case application::TriggerType::UnitAppear:
+					{
+						trigger = AddTrigger<Trigger_UnitAppear>();
+						break;
+					}
+					case application::TriggerType::UnitDie:
+					{
+						trigger = AddTrigger<Trigger_UnitDie>();
+						break;
+					}
 					default:
 						break;
 				}
@@ -335,6 +345,21 @@ namespace application
 						case application::ActionType::CinematicModeChange:
 						{
 							action = AddAction<Action_CinematicModeChange>();
+							break;
+						}
+						case application::ActionType::CameraChangeView:
+						{
+							action = AddAction<Action_CameraChangeView>();
+							break;
+						}
+						case application::ActionType::CameraSaveView:
+						{
+							action = AddAction<Action_CameraSaveView>();
+							break;
+						}
+						case application::ActionType::CameraLoadView:
+						{
+							action = AddAction<Action_CameraLoadView>();
 							break;
 						}
 						default:
