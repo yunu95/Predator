@@ -136,6 +136,7 @@ void InputManager::ToggleTacticMode()
         if (tacticMode)
         {
             TacticModeSystem::SingleInstance().EngageTacticMode();
+			TacticModeSystem::SingleInstance().SetLeftClickAddQueueForMove(currentSelectedSerialNumber);
         }
         else
         {

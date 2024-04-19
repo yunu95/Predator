@@ -98,8 +98,8 @@ void Unit::Start()
 	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Skill); i++)
 	{
 		unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::Skill,
-		[=]() { return currentOrder == UnitState::Skill || trapClassifingFunction() || (TacticModeSystem::SingleInstance().IsTacticModeActivated(this)
-			&& TacticModeSystem::SingleInstance().isTacticModeStarted); } });
+		[=]() { return currentOrder == UnitState::Skill || trapClassifingFunction() 
+			&& TacticModeSystem::SingleInstance().isTacticModeOperating; } });
 	}
 
 	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Paralysis); i++)
@@ -111,10 +111,19 @@ void Unit::Start()
 	unitFSM.transitions[static_cast<UnitState>(UnitState::Paralysis)].push_back({ UnitState::Idle,
 		[this]() { return currentOrder == UnitState::Idle; } });
 
+	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Resurrect); i++)
+	{
+		unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::Resurrect,
+		[this]() { return m_currentHealthPoint <= 0 && m_resurrectingMaxCount >= m_currentResurrectingCount && !IsAllExtraPlayerUnitDead() && m_unitSide == UnitSide::Player; } });
+	}
+
+	unitFSM.transitions[static_cast<UnitState>(UnitState::Resurrect)].push_back({ UnitState::Idle,
+	[this]() { return currentOrder == UnitState::Idle; } });
+
 	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Death); i++)
 	{
 		unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::Death,
-		[this]() { return m_currentHealthPoint <= 0; } });
+		[this]() { return m_currentHealthPoint <= 0 && m_resurrectingMaxCount < m_currentResurrectingCount; } });
 	}
 
 	unitFSM.transitions[static_cast<UnitState>(UnitState::Idle)].push_back({ UnitState::OffsetMove,
@@ -138,6 +147,7 @@ void Unit::Start()
 	unitFSM.engageAction[UnitState::Skill] = [this]() { SkillEngage(); };
 	unitFSM.engageAction[UnitState::Paralysis] = [this]() { ParalysisEngage(); };
 	unitFSM.engageAction[UnitState::Death] = [this]() { DeathEngage(); };
+	unitFSM.engageAction[UnitState::Resurrect] = [this]() { ResurrectEngage(); };
 
 	unitFSM.updateAction[UnitState::Idle] = [this]() { IdleUpdate(); };
 	unitFSM.updateAction[UnitState::Move] = [this]() { MoveUpdate(); };
@@ -147,6 +157,7 @@ void Unit::Start()
 	unitFSM.updateAction[UnitState::Attack] = [this]() { AttackUpdate(); };
 	unitFSM.updateAction[UnitState::Skill] = [this]() { SkillUpdate(); };
 	unitFSM.updateAction[UnitState::Death] = [this]() { DeathUpdate(); };
+	unitFSM.updateAction[UnitState::Resurrect] = [this]() { ResurrectUpdate(); };
 
 	if (unitAnimations.m_attackAnimation != nullptr)
 	{
@@ -199,6 +210,8 @@ Unit::UnitSide Unit::GetUnitSide() const
 #pragma region State Engage()
 void Unit::IdleEngage()
 	{
+		TacticModeSystem::SingleInstance().isTacticModeOperating = false;
+	
 		currentOrder = UnitState::Idle;
 		idleElapsed = 0.0f;
 		if(m_staticMeshRenderer != nullptr)
@@ -322,11 +335,6 @@ void Unit::IdleEngage()
 		//		m_skillSystemComponent->ActivateSkill(m_currentSelectedSkill, m_currentSkillPosition);
 		//	});
 
-		/// 전술모드 동작 여부를 확인한다
-		if (TacticModeSystem::SingleInstance().IsTacticModeActivated(this))
-		{
-			TacticModeSystem::SingleInstance().CallQueueFunction(this);
-		}
 
 		StopMove();
 	}
@@ -354,6 +362,20 @@ void Unit::IdleEngage()
 
 		StopMove();
 	}
+
+	void Unit::ResurrectEngage()
+	{
+		currentOrder = UnitState::Resurrect;
+		deathFunctionElapsed = 0.0f;
+		m_animatorComponent->ChangeAnimation(unitAnimations.m_deathAnimation, animationLerpDuration, animationTransitionSpeed);
+		m_opponentObjectSet.clear();
+		ReportUnitDeath();
+
+		GetGameObject()->GetComponent<physics::Collider>()->SetActive(false);
+
+		StopMove();
+	}
+
 #pragma endregion
 
 
@@ -361,6 +383,12 @@ void Unit::IdleEngage()
 	void Unit::IdleUpdate()
 	{
 		CheckCurrentAnimation(unitAnimations.m_idleAnimation);
+
+		if (!IsTacticModeQueueEmpty() && TacticModeSystem::SingleInstance().isTacticModeOperating == false)
+		{
+			m_tacticModeQueue.front()();
+			m_tacticModeQueue.pop();
+		}
 
 		idleElapsed += Time::GetDeltaTime();
 
@@ -513,6 +541,19 @@ void Unit::IdleEngage()
 				//GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(1000, 1000, 1000));
 			}
 	}
+
+	void Unit::ResurrectUpdate()
+	{
+		deathFunctionElapsed += Time::GetDeltaTime();
+
+		if (deathFunctionElapsed >= m_resurrectingDuration)
+		{
+			currentOrder = UnitState::Idle;
+			m_currentHealthPoint = m_maxHealthPoint;
+			ChangeUnitStatRandomly();
+		}
+	}
+
 #pragma endregion
 
 void Unit::CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation)
@@ -629,6 +670,8 @@ void Unit::Damaged(Unit* opponentUnit, float opponentDmg)
 	AddToOpponentObjectList(opponentUnit);
 	DetermineHitDamage(opponentDmg);
 	m_currentHealthPoint -= m_finalHitDamage;
+	if (m_currentHealthPoint <= 0)
+		m_currentResurrectingCount++;
 	// ui로 표시되는, 혹은 최종 남은 체력은 반올림할 것인가 혹은 내림할 것인가는 아래에 구현.
 }
 
@@ -637,6 +680,8 @@ void Unit::Damaged(float dmg)
 	//DetermineHitDamage(dmg);
 	//m_healthPoint -= m_finalHitDamage;
 	m_currentHealthPoint -= dmg;
+	if (m_currentHealthPoint <= 0)
+		m_currentResurrectingCount++;
 }
 
 void Unit::Heal(float healingPoint)
@@ -699,6 +744,29 @@ void Unit::ResetUnitMembers()
 	m_attackingThisUnitSet.clear();
 }
 
+bool Unit::IsAllExtraPlayerUnitDead()
+{
+	bool temp = false;
+
+	for (auto each : PlayerController::SingleInstance().GetPlayerMap())
+	{
+		if (each.second == this)
+			continue;
+
+		if (each.second->GetCurrentUnitState() != UnitState::Death)
+		{
+			temp = false;
+			break;
+		}
+		else
+		{
+			temp = true;
+		}
+	}
+
+	return temp;
+}
+
 float Unit::DetermineAttackDamage(float p_damage)
 {
 	m_finalAttackDamage = p_damage;
@@ -745,6 +813,40 @@ void Unit::SetUnitStateToDeath()
 void Unit::SetUnitStateToSkill()
 {
 	currentOrder = UnitState::Skill;
+}
+
+void Unit::PushMoveFunctionToTacticQueue(Vector3d p_pos)
+{
+	m_tacticModeQueue.push([=]()
+		{
+			OrderMove(p_pos);
+		});
+}
+
+void Unit::PushAttackMoveFunctionToTacticQueue(Vector3d p_pos)
+{
+	m_tacticModeQueue.push([=]()
+		{
+			OrderAttackMove(p_pos);
+		});
+}
+
+void Unit::PushSkillFunctionToTacticQueue(SkillEnum p_skillNum, Vector3d p_pos)
+{
+	m_tacticModeQueue.push([=]()
+		{
+			OrderSkill(p_skillNum, p_pos);
+		});
+}
+
+bool Unit::IsTacticModeQueueEmpty() const
+{
+	return m_tacticModeQueue.empty();
+}
+
+void Unit::ChangeUnitStatRandomly()
+{
+
 }
 
 void Unit::DetermineHitDamage(float p_onceCalculatedDmg)

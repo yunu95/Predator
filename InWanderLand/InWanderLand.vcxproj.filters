@@ -1243,7 +1243,9 @@
     <ClInclude Include="TrapTriggerSensor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
     </ClInclude>
-    <ClInclude Include="ResurrectionSystem.h" />
+    <ClInclude Include="ResurrectionSystem.h">
+      <Filter>Contents\ResurrectionSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1889,6 +1891,8 @@
     <ClCompile Include="TrapTriggerSensor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
     </ClCompile>
-    <ClCompile Include="ResurrectionSystem.cpp" />
+    <ClCompile Include="ResurrectionSystem.cpp">
+      <Filter>Contents\ResurrectionSystem</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

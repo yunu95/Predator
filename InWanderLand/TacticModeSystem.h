@@ -30,6 +30,7 @@ public:
 
 	void SetCurrentSelectedPlayerUnit(Unit::UnitType p_type);
 
+	void SetLeftClickAddQueueForMove(InputManager::SelectedSerialNumber currentSelectedNum);
 	void SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum);
 	void SetLeftClickAddQueueForSkill(InputManager::SelectedSerialNumber currentSelectedNum, Unit::SkillEnum currentSelectedSkill);
 
@@ -40,11 +41,12 @@ public:
 
 	void CallQueueFunction(Unit* p_unit);
 
-	bool isTacticModeStarted;
+	bool isTacticModeOperating;
 
 private:
 	int queueOrderIndex = 0;
 	int executingOrderIndex = 0;
+	int tacticModeGauge{ 10 };
 	RTSCam* m_rtsCam;
 
 	Unit::UnitType m_currentSelectedPlayerNumber;
@@ -56,7 +58,7 @@ private:
 	std::multimap<Unit*, Vector3d> processingSkillPosMap;						
 
 	std::queue<std::function<void()>>* currentSelectedQueue;
-	std::unordered_map<std::string, std::queue<std::function<void()>>*> m_queueSelector;
+	std::unordered_map<Unit::UnitType, std::queue<std::function<void()>>*> m_queueSelector;
 
 	std::queue<std::function<void()>> warriorQueue;
 	std::queue<std::function<void()>> magicianQueue;

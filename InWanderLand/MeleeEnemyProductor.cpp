@@ -5,6 +5,7 @@
 #include "SingleNavigationField.h"
 #include "Unit_TemplateData.h"
 #include "BossSkillSystem.h"
+#include "DamageOnlyComponent.h"
 
 void MeleeEnemyProductor::SetUnitData()
 {
@@ -59,8 +60,13 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 	auto unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	unitAttackColliderObject->setName("UnitAttackCollider");
 
+	auto damageComponent = unitAttackColliderObject->AddComponent<DamageOnlyComponent>();
+	damageComponent->SetSkillDamage(m_unitComponent->GetUnitDamage());
+	damageComponent->SetSkillOwnerUnit(m_unitComponent);
+	
 	auto m_physicsCollider = unitAttackColliderObject->AddComponent<physics::BoxCollider>();
 	m_physicsCollider->SetHalfExtent({ meleeAttackColliderLength * 0.5f * UNIT_LENGTH, meleeAttackColliderLength * 0.5f * UNIT_LENGTH, meleeAttackColliderRange * 0.5f * UNIT_LENGTH });
+	unitAttackColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
 	auto autoAttackDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(autoAttackDebugMesh, DebugMeshType::Cube, yunuGI::Color::red(), true);

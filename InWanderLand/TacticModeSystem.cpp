@@ -7,8 +7,9 @@
 
 TacticModeSystem::TacticModeSystem()
 {
-    m_queueSelector.insert({ "SKM_Robin" , &warriorQueue });
-    //m_queueSelector.insert({ "Sphere" , &magicianQueue });
+    m_queueSelector.insert({ Unit::UnitType::Warrior, &warriorQueue });
+    m_queueSelector.insert({ Unit::UnitType::Magician, &magicianQueue });
+    m_queueSelector.insert({ Unit::UnitType::Healer, &healerQueue });
 }
 
 void TacticModeSystem::SetCurrentSelectedPlayerUnit(Unit::UnitType p_type)
@@ -16,17 +17,35 @@ void TacticModeSystem::SetCurrentSelectedPlayerUnit(Unit::UnitType p_type)
     currentSelectedUnit = PlayerController::SingleInstance().FindSelectedUnitByUnitType(p_type);
 }
 
+void TacticModeSystem::SetLeftClickAddQueueForMove(InputManager::SelectedSerialNumber currentSelectedNum)
+{
+	currentSelectedUnit = playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second;
+	if (tacticModeGauge > 0)
+	{
+		m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
+			{
+				currentSelectedUnit->PushMoveFunctionToTacticQueue(pos);
+				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+				m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
+				tacticModeGauge--;
+			};
+	}
+}
+
 void TacticModeSystem::SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum)
 {
     currentSelectedUnit = playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second;
-    SetCurrentSelectedQueue(currentSelectedUnit);
-    m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
-        {
-            currentSelectedQueue->push([=]()
-                {
-                    currentSelectedUnit->OrderAttackMove(pos);
-                });
-        };
+    if (tacticModeGauge > 0)
+    {
+		m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
+			{
+				currentSelectedUnit->PushAttackMoveFunctionToTacticQueue(pos);
+				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+				m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
+                tacticModeGauge--;
+				SetLeftClickAddQueueForMove(currentSelectedNum);
+			};
+    }
 }
 
 void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerialNumber currentSelectedNum, Unit::SkillEnum currentSelectedSkill)
@@ -40,27 +59,18 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
     SkillPreviewSystem::Instance().SetCurrentSelectedSkillNum(currentSelectedSkill);
     SkillPreviewSystem::Instance().ActivateSkillPreview(true);
 
-    m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
-        {
-            processingSkillPosMap.insert({ currentSelectedUnit, pos });
-            queueOrderIndex++;
-
-            SetCurrentSelectedQueue(currentSelectedUnit);
-
-            SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-
-            currentSelectedQueue->push([=]()
-                {
-                    if (auto itr = processingSkillPosMap.find(currentActivatedUnit);
-                        itr != processingSkillPosMap.end())
-                    {
-                        Vector3d currentSkillPos = processingSkillPosMap.find(currentActivatedUnit)->second;
-                        currentActivatedUnit->OrderSkill(currentSelectedSkill, currentSkillPos);
-                        processingSkillPosMap.erase(itr);
-                        executingOrderIndex++;
-                    }
-                });
-        };
+    if (tacticModeGauge > 0)
+    {
+		m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
+			{
+				currentSelectedUnit->PushSkillFunctionToTacticQueue(currentSelectedSkill, pos);
+				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+				m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
+                tacticModeGauge--;
+				SetLeftClickAddQueueForMove(currentSelectedNum);
+            };
+    }
+ 
 }
 
 void TacticModeSystem::EngageTacticMode()
@@ -74,6 +84,7 @@ void TacticModeSystem::EngageTacticMode()
     executingOrderIndex = 0;
     processingUnitMap.clear();
     processingSkillPosMap.clear();
+	isTacticModeOperating = true;
 
     vector<GameObject*> unitGameObjects;
     for (auto each : playerComponentMap)
@@ -81,17 +92,46 @@ void TacticModeSystem::EngageTacticMode()
         unitGameObjects.push_back(each.second->GetGameObject());
     }
     m_rtsCam->SetTargets(unitGameObjects);
+    
 }
 
 void TacticModeSystem::ExitTacticMode()
 {
     Time::SetTimeScale(1.0f);
 
-    // 하나라도 Queue에 등록되어 있다면 전술모드를 실행한다.
-    if (!(warriorQueue.empty() && magicianQueue.empty() && healerQueue.empty()))
+    isTacticModeOperating = false;
+
+    for (auto each : playerComponentMap)
     {
-        isTacticModeStarted = true;
+        if (!each.second->IsTacticModeQueueEmpty())
+            each.second->SetUnitStateIdle();
     }
+
+ //   //// 하나라도 Queue에 등록되어 있다면 전술모드를 실행한다.
+	//if (!(warriorQueue.empty() && magicianQueue.empty() && healerQueue.empty()))
+	//{
+	//	isTacticModeStarted = true;
+	//}
+ //   else
+ //   {
+ //       isTacticModeStarted = false;
+ //   }
+
+ //   if (isTacticModeStarted)
+ //   {
+	//	if (!(warriorQueue.empty()))
+	//	{
+	//		CallQueueFunction(playerComponentMap.find(Unit::UnitType::Warrior)->second);
+	//	}
+	//	if (!(magicianQueue.empty()))
+	//	{
+	//		CallQueueFunction(playerComponentMap.find(Unit::UnitType::Magician)->second);
+	//	}
+	//	if (!(healerQueue.empty()))
+	//	{
+	//		CallQueueFunction(playerComponentMap.find(Unit::UnitType::Healer)->second);
+	//	}
+ //   }
 }
 
 void TacticModeSystem::SetMovingSystemComponent(RTSCam* sys)
@@ -114,9 +154,7 @@ bool TacticModeSystem::IsTacticModeActivated(Unit* p_unit)
 
 void TacticModeSystem::SetCurrentSelectedQueue(Unit* p_currentUnit)
 {
-    std::string unitFbxName = p_currentUnit->GetUnitFbxName();
-
-    currentSelectedQueue = m_queueSelector.find(unitFbxName)->second;
+    currentSelectedQueue = m_queueSelector.find(p_currentUnit->GetUnitType())->second;
 
     currentActivatedUnit = p_currentUnit;
 }
@@ -131,9 +169,6 @@ void TacticModeSystem::CallQueueFunction(Unit* p_unit)
         //currentSelectedQueue->front()();
         tempFunc();
         currentSelectedQueue->pop();
-
-        if (warriorQueue.empty() && magicianQueue.empty() && healerQueue.empty())
-            isTacticModeStarted = false;
     }
 }
 

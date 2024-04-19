@@ -81,8 +81,8 @@ void MeleeAttackSystem::Start()
 
 		meleeAttackColliderObject->SetSelfActive(false);
 		meleeAttackColliderDebugObject->SetSelfActive(false);
-		meleeAttackColliderObject->SetParent(m_unitComponent->GetGameObject());
-		meleeAttackColliderDebugObject->SetParent(m_unitComponent->GetGameObject());
+	/*	meleeAttackColliderObject->SetParent(m_unitComponent->GetGameObject());
+		meleeAttackColliderDebugObject->SetParent(m_unitComponent->GetGameObject());*/
 	}
 	//contentsLayer->RegisterToEditorComponentVector(this);
 }

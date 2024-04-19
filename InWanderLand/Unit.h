@@ -28,6 +28,7 @@ public:
 		Skill,
 		Paralysis,
 		Death,
+		Resurrect,
 		OffsetMove,
 		WaveEngage,
 		StateEnd
@@ -145,6 +146,10 @@ private:
 	float deathFunctionElapsed;
 	float deathAnimationDelay = 1.5f;
 
+	int m_resurrectingMaxCount{ 3 };
+	int m_currentResurrectingCount{ 0 };
+	float m_resurrectingDuration{ 5.0f };
+
 	float skillFunctionStartElapsed;
 	float m_currentSelectedSkillEngageDelay;
 	int m_selectedSkillTimingFrame;
@@ -204,6 +209,7 @@ private:
 	void SkillEngage();
 	void ParalysisEngage();
 	void DeathEngage();
+	void ResurrectEngage();
 
 	void IdleUpdate();
 	void MoveUpdate();
@@ -213,6 +219,7 @@ private:
 	void AttackUpdate();
 	void SkillUpdate();
 	void DeathUpdate();
+	void ResurrectUpdate();
 	
 	void CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation);
 
@@ -223,6 +230,7 @@ private:
 	void DetermineHitDamage(float p_onceCalculatedDmg);					// 피격유닛이 받는 최종 데미지 계산
 
 	void RotateUnit(Vector3d endPosition);
+
 public:
 	BaseUnitAnimationStruct unitAnimations;
 	float animationLerpDuration = 1.0f;
@@ -295,6 +303,13 @@ public:
 	void SetUnitStateToDeath();
 	void SetUnitStateToSkill();
 
+	void PushMoveFunctionToTacticQueue(Vector3d p_pos);
+	void PushAttackMoveFunctionToTacticQueue(Vector3d p_pos);
+	void PushSkillFunctionToTacticQueue(SkillEnum p_skillNum, Vector3d p_pos);
+	bool IsTacticModeQueueEmpty() const;
+
+	void ChangeUnitStatRandomly();
+
 public:
 	int GetUnitDamage() const;
 	void Damaged(Unit* opponentUnit, float opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
@@ -309,6 +324,8 @@ public:
 
 	void ResetUnitMembers();
 
+	bool IsAllExtraPlayerUnitDead();
+
 	std::function<void()> returnToPoolFunction{ nullptr };
 	DummyComponent* m_dummyCom;
 	int stageNumber;
@@ -317,6 +334,7 @@ public:
 	std::vector<std::function<void()>> OnDeath;
 	bool isJustCreated{ false };
 
+	std::queue<std::function<void()>> m_tacticModeQueue;
 
 	friend RobinSkillDevelopmentSystem;
 	friend UnitProductor;
