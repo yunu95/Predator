@@ -45,6 +45,7 @@
 #include "BloomPass.h"
 
 #include "StaticMesh.h"
+#include "PixelShader.h"
 
 #include <iostream>
 #include <fstream>
@@ -498,7 +499,12 @@ void RenderSystem::RenderBackBuffer()
 
 void RenderSystem::RenderUI()
 {
-    this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied());
+    //this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied());
+    this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied(), nullptr, nullptr, nullptr, [=]()
+        {
+            auto ps = std::static_pointer_cast<PixelShader>(ResourceManager::Instance.Get().GetShader(L"UIImagePS.cso"));
+            ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShader(ps->ps.Get(), 0, 0);
+        });
     for (auto& i : UIImageSet)
     {
         auto uiImage = std::static_pointer_cast<UIImage>(i);
@@ -518,7 +524,6 @@ void RenderSystem::RenderUI()
         this->spriteBatch->Draw(texture->GetSRV().Get(), drawRect);
     }
     this->spriteBatch->End();
-
 
     d2dRT->BeginDraw();
     for (auto& i : this->UITextSet)
@@ -695,6 +700,10 @@ void RenderSystem::PopSkinnedRenderableObject(nail::IRenderable* renderable)
 void RenderSystem::PushUIObject(std::shared_ptr<nail::IRenderable> renderable)
 {
     this->UIImageSet.insert(renderable);
+}
+void RenderSystem::PushPreProcessingUIObject(std::weak_ptr<nail::IRenderable> renderable)
+{
+    preProcessingUiImages.insert(renderable);
 }
 
 void RenderSystem::PopUIObject(std::shared_ptr<nail::IRenderable> renderable)

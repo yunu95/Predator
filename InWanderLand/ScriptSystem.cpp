@@ -5,32 +5,36 @@
 
 namespace application
 {
-	std::unordered_map<TriggerType, std::string> ScriptSystem::triggerList = std::unordered_map<TriggerType, std::string>();
-	std::unordered_map<ConditionType, std::string> ScriptSystem::conditionList = std::unordered_map<ConditionType, std::string>();
-	std::unordered_map<ActionType, std::string> ScriptSystem::actionList = std::unordered_map<ActionType, std::string>();
+	std::vector<std::pair<TriggerType, std::string>> ScriptSystem::triggerList = std::vector<std::pair<TriggerType, std::string>>();
+	std::vector<std::pair<ConditionType, std::string>> ScriptSystem::conditionList = std::vector<std::pair<ConditionType, std::string>>();
+	std::vector<std::pair<ActionType, std::string>> ScriptSystem::actionList = std::vector<std::pair<ActionType, std::string>>();
 
 	void ScriptSystem::SingletonInitializer()
 	{
 		/// Trigger
-		triggerList[TriggerType::GameStart] = "GameStart";
-		triggerList[TriggerType::EnterRegion] = "EnterRegion";
-		triggerList[TriggerType::LeaveRegion] = "LeaveRegion";
-		triggerList[TriggerType::RepeatPeriodically] = "RepeatPeriodically";
-		triggerList[TriggerType::RepeatPeriodicallyRealTime] = "RepeatPeriodicallyRealTime";
-		triggerList[TriggerType::UnitAppear] = "UnitAppear";
-		triggerList[TriggerType::UnitDie] = "UnitDie";
+		triggerList.push_back({ TriggerType::GameStart,"GameStart" });
+		triggerList.push_back({ TriggerType::EnterRegion, "EnterRegion" });
+		triggerList.push_back({ TriggerType::LeaveRegion, "LeaveRegion" });
+		triggerList.push_back({ TriggerType::RepeatPeriodically, "RepeatPeriodically" });
+		triggerList.push_back({ TriggerType::RepeatPeriodicallyRealTime, "RepeatPeriodicallyRealTime" });
+		triggerList.push_back({ TriggerType::UnitAppear, "UnitAppear" });
+		triggerList.push_back({ TriggerType::UnitDie, "UnitDie" });
 
 		/// Condition
-		conditionList[ConditionType::CinematicModeOn] = "CinematicModeOn";
-		conditionList[ConditionType::CinematicModeOff] = "CinematicModeOff";
+		conditionList.push_back({ ConditionType::CinematicModeOn, "CinematicModeOn" });
+		conditionList.push_back({ ConditionType::CinematicModeOff, "CinematicModeOff" });
 
 		/// Action
-		actionList[ActionType::WaitForSeconds] = "WaitForSeconds";
-		actionList[ActionType::WaitForRealSeconds] = "WaitForRealSeconds";
-		actionList[ActionType::CinematicModeChange] = "CinematicModeChange";
-		actionList[ActionType::CameraChangeView] = "CameraChangeView";
-		actionList[ActionType::CameraSaveView] = "CameraSaveView";
-		actionList[ActionType::CameraLoadView] = "CameraLoadView";
+		actionList.push_back({ ActionType::WaitPreviousActionEnd, "WaitPreviousActionEnd" });
+		actionList.push_back({ ActionType::WaitForSeconds, "WaitForSeconds" });
+		actionList.push_back({ ActionType::WaitForRealSeconds, "WaitForRealSeconds" });
+		actionList.push_back({ ActionType::CinematicModeChange, "CinematicModeChange" });
+		actionList.push_back({ ActionType::CinematicFadeIn, "CinematicFadeIn" });
+		actionList.push_back({ ActionType::CinematicFadeOut, "CinematicFadeOut" });
+		actionList.push_back({ ActionType::CameraChangeView, "CameraChangeView" });
+		actionList.push_back({ ActionType::CameraRevert, "CameraRevert" });
+		actionList.push_back({ ActionType::CameraSaveView, "CameraSaveView" });
+		actionList.push_back({ ActionType::CameraLoadView, "CameraLoadView" });
 	}
 
 	Script* ScriptSystem::CreateScript()

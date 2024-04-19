@@ -4,6 +4,7 @@
 #include "SingletonClass.h"
 #include "InstanceManager.h"
 #include "WaveData.h"
+#include "RegionData.h"
 
 namespace application
 {

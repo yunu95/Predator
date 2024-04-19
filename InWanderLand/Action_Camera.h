@@ -102,4 +102,26 @@ namespace application
 	private:
 		float lerpTime = 0;
 	};
+
+	/// 초기 상태의 게임 카메라 위치로 되돌립니다.
+	class Action_CameraRevert
+		: public IAction
+	{
+		friend class editor::Module_ScriptEditor;
+
+	public:
+		DEFINE_ACTION(CameraRevert)
+
+		virtual CoroutineObject<void> DoAction() override;
+
+		void SetLerpTime(float lerpTime);
+
+		virtual bool PreEncoding(json& data) const override;
+		virtual bool PostEncoding(json& data) const override;
+		virtual bool PreDecoding(const json& data) override;
+		virtual bool PostDecoding(const json& data) override;
+
+	private:
+		float lerpTime = 0;
+	};
 }

@@ -23,7 +23,6 @@ namespace yunutyEngine
             return a > b ? a : b;
         }
 
-        float LerpF(float v1, float v2, float t);
- 
+        YUNUTY_API float LerpF(float v1, float v2, float t);
     };
 }

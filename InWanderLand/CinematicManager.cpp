@@ -1,5 +1,6 @@
 #include "CinematicManager.h"
 
+#include "GameManager.h"
 #include "GamePlayTimer.h"
 #include "UIManager.h"
 #include "UIElement.h"
@@ -40,27 +41,29 @@ namespace application
         {
             this->isCinematicMode = isCinematicMode;
             GamePlayTimer::Instance().PauseTimer();
-            // UIManager::Hide();
             // InputManager::T();
 
             std::cout << "\n======================\n";
             std::cout << "  CinematicMode [On]";
             std::cout << "\n======================\n";
+
             // 인게임 UI 비활성화
             UIManager::Instance().SetIngameUIVisible(false);
+            GameManager::Instance().EngageCinematic();
         }
         else if (this->isCinematicMode && !isCinematicMode)
         {
             this->isCinematicMode = isCinematicMode;
             GamePlayTimer::Instance().ResumeTimer();
-            // UIManager::Show();
             // InputManager::T();
 
             std::cout << "\n======================\n";
             std::cout << "  CinematicMode [Off]";
             std::cout << "\n======================\n";
+
             // 인게임 UI 활성화
             UIManager::Instance().SetIngameUIVisible(true);
+            GameManager::Instance().EndCinematic();
         }
     }
 }

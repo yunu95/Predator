@@ -15,22 +15,66 @@ void UIManager::Clear()
     m_currentHighestLayer = -1;
     m_selectedButtons.clear();
 }
-void UIManager::FadeInVertical()
+//void UIManager::FadeInVertical()
+//{
+//    UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_TopToButtom)->EnableElement();
+//}
+//void UIManager::FadeInHorizontal()
+//{
+//    UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft)->EnableElement();
+//}
+void UIManager::FadeOutRight(float duration)
 {
-    UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_Vertical)->EnableElement();
-}
-void UIManager::FadeInHorizontal()
-{
-    UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_Horizontal)->EnableElement();
-}
-void UIManager::FadeOut()
-{
-    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_Vertical); elm->GetGameObject()->GetActive())
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight); !elm->GetGameObject()->GetActive())
     {
+        elm->enableTransition->m_duration = duration;
+        elm->EnableElement();
+    }
+}
+void UIManager::FadeOutLeft(float duration)
+{
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft); !elm->GetGameObject()->GetActive())
+    {
+        elm->enableTransition->m_duration = duration;
+        elm->EnableElement();
+    }
+}
+void UIManager::FadeOutBottom(float duration)
+{
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_TopToBottom); !elm->GetGameObject()->GetActive())
+    {
+        elm->enableTransition->m_duration = duration;
+        elm->EnableElement();
+    }
+}
+void UIManager::FadeOutTop(float duration)
+{
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_BottomToTop); !elm->GetGameObject()->GetActive())
+    {
+        elm->enableTransition->m_duration = duration;
+        elm->EnableElement();
+    }
+}
+void UIManager::FadeIn(float duration)
+{
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_TopToBottom); elm->GetGameObject()->GetActive())
+    {
+        elm->disableTransition->m_duration = duration;
         elm->DisableElement();
     }
-    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_Horizontal); elm->GetGameObject()->GetActive())
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft); elm->GetGameObject()->GetActive())
     {
+        elm->disableTransition->m_duration = duration;
+        elm->DisableElement();
+    }
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_BottomToTop); elm->GetGameObject()->GetActive())
+    {
+        elm->disableTransition->m_duration = duration;
+        elm->DisableElement();
+    }
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight); elm->GetGameObject()->GetActive())
+    {
+        elm->disableTransition->m_duration = duration;
         elm->DisableElement();
     }
 }

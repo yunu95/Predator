@@ -29,6 +29,8 @@
             "rotation": 0.0,
             "width": 1920.0,
             "height": 1080.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 128,
             "enumID": 0
         },
@@ -61,6 +63,8 @@
             "rotation": 0.0,
             "width": 200.0,
             "height": 50.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -93,6 +97,8 @@
             "rotation": 0.0,
             "width": 200.0,
             "height": 50.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -125,6 +131,8 @@
             "rotation": 0.0,
             "width": 200.0,
             "height": 50.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -157,11 +165,13 @@
             "rotation": 0.0,
             "width": 200.0,
             "height": 50.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
         {
-            "uiname": "ingame_menu_button",
+            "uiname": "Ingame_MenuButton",
             "parentUIName": "",
             "imagePath": "Texture/Ingame/_0000_Icon_Menu.png",
             "openTarget": "ingame_menu_background",
@@ -178,25 +188,30 @@
                 80.0,
                 100.0
             ],
-            "enableOffset": [],
+            "enableOffset": [
+                -200.0,
+                0.0
+            ],
             "disableOffset": [
                 -200.0,
                 0.0
             ],
             "enableDelay": 0.0,
-            "disableDelay": 0.30000001192092898,
-            "enableDuration": 0.0,
-            "disableDuration": 0.30000001192092898,
-            "enableCurveType": 0,
+            "disableDelay": 0.5,
+            "enableDuration": 2.0,
+            "disableDuration": 1.0,
+            "enableCurveType": 2,
             "disableCurveType": 4,
             "rotation": 0.0,
             "width": 50.0,
             "height": 50.0,
-            "customFlags": 1285,
-            "enumID": 0
+            "fontAsset": "",
+            "fontSize": 0,
+            "customFlags": 1797,
+            "enumID": 22
         },
         {
-            "uiname": "ingame_Bottom_Layout",
+            "uiname": "Ingame_Bottom_Layout",
             "parentUIName": "",
             "imagePath": "",
             "openTarget": "",
@@ -226,16 +241,18 @@
             "enableDuration": 1.0,
             "disableDuration": 1.0,
             "enableCurveType": 2,
-            "disableCurveType": 4,
+            "disableCurveType": 3,
             "rotation": 0.0,
             "width": 1920.0,
             "height": 292.699951171875,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 1536,
-            "enumID": 0
+            "enumID": 21
         },
         {
             "uiname": "ingame_robin",
-            "parentUIName": "ingame_Bottom_Layout",
+            "parentUIName": "Ingame_Bottom_Layout",
             "imagePath": "",
             "openTarget": "",
             "disablingTarget": "",
@@ -262,6 +279,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 150.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -294,6 +313,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 29.125999450683595,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -326,8 +347,44 @@
             "rotation": 0.0,
             "width": 101.10769653320313,
             "height": 114.83679962158203,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 1
+        },
+        {
+            "uiname": "Portrait_Blood_Robin",
+            "parentUIName": "Portrait_Robin",
+            "imagePath": "Texture/Ingame/bloodOverlay.png",
+            "openTarget": "",
+            "disablingTarget": "",
+            "pivot": [
+                0.5,
+                0.0
+            ],
+            "anchor": [
+                0.5,
+                0.0
+            ],
+            "anchoredPosition": [
+                0.00002288818359375,
+                0.0
+            ],
+            "enableOffset": [],
+            "disableOffset": [],
+            "enableDelay": 0.0,
+            "disableDelay": 0.0,
+            "enableDuration": 0.0,
+            "disableDuration": 0.0,
+            "enableCurveType": 0,
+            "disableCurveType": 0,
+            "rotation": 0.0,
+            "width": 101.10769653320313,
+            "height": 114.83679962158203,
+            "fontAsset": "",
+            "fontSize": 0,
+            "customFlags": 0,
+            "enumID": 2
         },
         {
             "uiname": "Skill_Use_Q_Robin",
@@ -358,8 +415,10 @@
             "rotation": 0.0,
             "width": 86.82250213623047,
             "height": 114.83679962158203,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
-            "enumID": 4
+            "enumID": 10
         },
         {
             "uiname": "ingame_robin_skill1 tooltip",
@@ -390,6 +449,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -422,8 +483,10 @@
             "rotation": 0.0,
             "width": 86.82250213623047,
             "height": 114.83679962158203,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
-            "enumID": 5
+            "enumID": 11
         },
         {
             "uiname": "ingame_robin_skill2 tooltip",
@@ -454,12 +517,14 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
         {
             "uiname": "ingame_ursula",
-            "parentUIName": "ingame_Bottom_Layout",
+            "parentUIName": "Ingame_Bottom_Layout",
             "imagePath": "",
             "openTarget": "",
             "disablingTarget": "",
@@ -486,6 +551,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 150.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -518,6 +585,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 29.125999450683595,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -550,8 +619,44 @@
             "rotation": 0.0,
             "width": 101.10769653320313,
             "height": 114.83679962158203,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
-            "enumID": 2
+            "enumID": 4
+        },
+        {
+            "uiname": "Portrait_Blood_Ursula",
+            "parentUIName": "Portrait_Ursula",
+            "imagePath": "Texture/Ingame/bloodOverlay.png",
+            "openTarget": "",
+            "disablingTarget": "",
+            "pivot": [
+                0.5,
+                0.0
+            ],
+            "anchor": [
+                0.5,
+                0.0
+            ],
+            "anchoredPosition": [
+                0.00002288818359375,
+                0.0
+            ],
+            "enableOffset": [],
+            "disableOffset": [],
+            "enableDelay": 0.0,
+            "disableDelay": 0.0,
+            "enableDuration": 0.0,
+            "disableDuration": 0.0,
+            "enableCurveType": 0,
+            "disableCurveType": 0,
+            "rotation": 0.0,
+            "width": 101.10769653320313,
+            "height": 114.83679962158203,
+            "fontAsset": "",
+            "fontSize": 0,
+            "customFlags": 0,
+            "enumID": 5
         },
         {
             "uiname": "Skill_Use_Q_Ursula",
@@ -582,8 +687,10 @@
             "rotation": 0.0,
             "width": 86.82250213623047,
             "height": 114.83679962158203,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
-            "enumID": 6
+            "enumID": 12
         },
         {
             "uiname": "ingame_Ursula_skill1 tooltip",
@@ -614,6 +721,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -646,8 +755,10 @@
             "rotation": 0.0,
             "width": 86.82250213623047,
             "height": 114.83679962158203,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
-            "enumID": 7
+            "enumID": 13
         },
         {
             "uiname": "ingame_Ursula_skill2 tooltip",
@@ -678,12 +789,14 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
         {
             "uiname": "ingame_hansel",
-            "parentUIName": "ingame_Bottom_Layout",
+            "parentUIName": "Ingame_Bottom_Layout",
             "imagePath": "",
             "openTarget": "",
             "disablingTarget": "",
@@ -710,6 +823,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 150.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -742,6 +857,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 29.125999450683595,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -774,8 +891,44 @@
             "rotation": 0.0,
             "width": 101.10769653320313,
             "height": 114.83679962158203,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
-            "enumID": 3
+            "enumID": 7
+        },
+        {
+            "uiname": "Portrait_Blood_Hansel",
+            "parentUIName": "Portrait_Hansel",
+            "imagePath": "Texture/Ingame/bloodOverlay.png",
+            "openTarget": "",
+            "disablingTarget": "",
+            "pivot": [
+                0.5,
+                0.0
+            ],
+            "anchor": [
+                0.5,
+                0.0
+            ],
+            "anchoredPosition": [
+                0.00002288818359375,
+                0.0
+            ],
+            "enableOffset": [],
+            "disableOffset": [],
+            "enableDelay": 0.0,
+            "disableDelay": 0.0,
+            "enableDuration": 0.0,
+            "disableDuration": 0.0,
+            "enableCurveType": 0,
+            "disableCurveType": 0,
+            "rotation": 0.0,
+            "width": 101.10769653320313,
+            "height": 114.83679962158203,
+            "fontAsset": "",
+            "fontSize": 0,
+            "customFlags": 0,
+            "enumID": 8
         },
         {
             "uiname": "Skill_Use_Q_HANSEL",
@@ -806,8 +959,10 @@
             "rotation": 0.0,
             "width": 86.82250213623047,
             "height": 114.83679962158203,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
-            "enumID": 8
+            "enumID": 14
         },
         {
             "uiname": "ingame_Hansel_skill1 tooltip",
@@ -838,6 +993,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -870,8 +1027,10 @@
             "rotation": 0.0,
             "width": 86.82250213623047,
             "height": 114.83679962158203,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
-            "enumID": 9
+            "enumID": 15
         },
         {
             "uiname": "ingame_Hansel_skill2 tooltip",
@@ -902,12 +1061,14 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
         {
             "uiname": "ingame_mana_bar",
-            "parentUIName": "ingame_Bottom_Layout",
+            "parentUIName": "Ingame_Bottom_Layout",
             "imagePath": "Texture/Ingame/_0003_Bar_MpBar.png",
             "openTarget": "",
             "disablingTarget": "",
@@ -934,12 +1095,14 @@
             "rotation": 0.0,
             "width": 948.2100219726563,
             "height": 38.25339889526367,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
         {
             "uiname": "Toggle_TacticMode",
-            "parentUIName": "ingame_Bottom_Layout",
+            "parentUIName": "Ingame_Bottom_Layout",
             "imagePath": "Texture/Ingame/_0001_Frame_Tactics.png",
             "openTarget": "",
             "disablingTarget": "",
@@ -966,8 +1129,10 @@
             "rotation": 0.0,
             "width": 150.0,
             "height": 150.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
-            "enumID": 10
+            "enumID": 16
         },
         {
             "uiname": "Ingame_Combo",
@@ -987,22 +1152,27 @@
                 -168.135986328125,
                 81.777587890625
             ],
-            "enableOffset": [],
+            "enableOffset": [
+                400.0,
+                0.0
+            ],
             "disableOffset": [
                 400.0,
                 0.0
             ],
-            "enableDelay": 0.0,
-            "disableDelay": 0.20000000298023225,
-            "enableDuration": 0.0,
-            "disableDuration": 0.30000001192092898,
-            "enableCurveType": 0,
-            "disableCurveType": 2,
+            "enableDelay": 0.20000000298023225,
+            "disableDelay": 0.4000000059604645,
+            "enableDuration": 1.0,
+            "disableDuration": 1.0,
+            "enableCurveType": 2,
+            "disableCurveType": 3,
             "rotation": 0.0,
             "width": 259.0860595703125,
             "height": 198.44482421875,
-            "customFlags": 1024,
-            "enumID": 17
+            "fontAsset": "",
+            "fontSize": 0,
+            "customFlags": 1536,
+            "enumID": 23
         },
         {
             "uiname": "Ingame_Combo_Description",
@@ -1022,86 +1192,27 @@
                 -297.678955078125,
                 -48.8514404296875
             ],
-            "enableOffset": [],
+            "enableOffset": [
+                400.0,
+                0.0
+            ],
             "disableOffset": [
                 400.0,
                 0.0
             ],
-            "enableDelay": 0.0,
-            "disableDelay": 0.10000000149011612,
-            "enableDuration": 0.0,
-            "disableDuration": 0.30000001192092898,
-            "enableCurveType": 0,
-            "disableCurveType": 2,
+            "enableDelay": 0.4000000059604645,
+            "disableDelay": 0.20000000298023225,
+            "enableDuration": 1.0,
+            "disableDuration": 1.0,
+            "enableCurveType": 2,
+            "disableCurveType": 3,
             "rotation": 0.0,
             "width": 259.086181640625,
             "height": 198.44482421875,
-            "customFlags": 1024,
-            "enumID": 18
-        },
-        {
-            "uiname": "ingame_menu_button (1)",
-            "parentUIName": "",
-            "imagePath": "Texture/Ingame/_0000_Icon_Menu.png",
-            "openTarget": "ingame_Bottom_Layout",
-            "disablingTarget": "",
-            "pivot": [
-                0.0,
-                1.0
-            ],
-            "anchor": [
-                0.0,
-                0.0
-            ],
-            "anchoredPosition": [
-                80.0,
-                187.0
-            ],
-            "enableOffset": [],
-            "disableOffset": [],
-            "enableDelay": 0.0,
-            "disableDelay": 0.0,
-            "enableDuration": 0.0,
-            "disableDuration": 0.0,
-            "enableCurveType": 0,
-            "disableCurveType": 0,
-            "rotation": 0.0,
-            "width": 50.0,
-            "height": 50.0,
-            "customFlags": 261,
-            "enumID": 0
-        },
-        {
-            "uiname": "ingame_menu_button (2)",
-            "parentUIName": "",
-            "imagePath": "Texture/Ingame/_0000_Icon_Menu.png",
-            "openTarget": "BlackMask_Horizontal",
-            "disablingTarget": "",
-            "pivot": [
-                0.0,
-                1.0
-            ],
-            "anchor": [
-                0.0,
-                0.0
-            ],
-            "anchoredPosition": [
-                80.0,
-                289.0
-            ],
-            "enableOffset": [],
-            "disableOffset": [],
-            "enableDelay": 0.0,
-            "disableDelay": 0.0,
-            "enableDuration": 0.0,
-            "disableDuration": 0.0,
-            "enableCurveType": 0,
-            "disableCurveType": 0,
-            "rotation": 0.0,
-            "width": 50.0,
-            "height": 50.0,
-            "customFlags": 261,
-            "enumID": 0
+            "fontAsset": "",
+            "fontSize": 0,
+            "customFlags": 1536,
+            "enumID": 24
         },
         {
             "uiname": "ingame_menu_background",
@@ -1132,7 +1243,9 @@
             "rotation": 0.0,
             "width": 400.0,
             "height": 350.0,
-            "customFlags": 32,
+            "fontAsset": "",
+            "fontSize": 0,
+            "customFlags": 160,
             "enumID": 0
         },
         {
@@ -1164,6 +1277,8 @@
             "rotation": 0.0,
             "width": 198.11729431152345,
             "height": 51.72740173339844,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 5,
             "enumID": 0
         },
@@ -1196,6 +1311,8 @@
             "rotation": 0.0,
             "width": 198.11729431152345,
             "height": 51.72740173339844,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 5,
             "enumID": 0
         },
@@ -1228,6 +1345,8 @@
             "rotation": 0.0,
             "width": 198.11729431152345,
             "height": 51.72740173339844,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -1260,6 +1379,8 @@
             "rotation": 0.0,
             "width": 198.11729431152345,
             "height": 51.72740173339844,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 3,
             "enumID": 0
         },
@@ -1292,7 +1413,9 @@
             "rotation": 0.0,
             "width": 400.0,
             "height": 147.56509399414063,
-            "customFlags": 32,
+            "fontAsset": "",
+            "fontSize": 0,
+            "customFlags": 160,
             "enumID": 0
         },
         {
@@ -1324,6 +1447,8 @@
             "rotation": 0.0,
             "width": 30.0,
             "height": 30.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 3,
             "enumID": 0
         },
@@ -1356,6 +1481,8 @@
             "rotation": 0.0,
             "width": 157.9123992919922,
             "height": 38.4640007019043,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 13,
             "enumID": 0
         },
@@ -1388,6 +1515,8 @@
             "rotation": 0.0,
             "width": 157.9123992919922,
             "height": 38.4640007019043,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 141,
             "enumID": 0
         },
@@ -1420,6 +1549,8 @@
             "rotation": 0.0,
             "width": 157.9123992919922,
             "height": 38.4640007019043,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 13,
             "enumID": 0
         },
@@ -1452,6 +1583,8 @@
             "rotation": 0.0,
             "width": 157.9123992919922,
             "height": 38.4640007019043,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 141,
             "enumID": 0
         },
@@ -1484,6 +1617,8 @@
             "rotation": 0.0,
             "width": 1300.0,
             "height": 700.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 128,
             "enumID": 0
         },
@@ -1516,6 +1651,8 @@
             "rotation": 0.0,
             "width": 34.0,
             "height": 33.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 3,
             "enumID": 0
         },
@@ -1548,7 +1685,9 @@
             "rotation": 0.0,
             "width": 1200.0,
             "height": 552.0,
-            "customFlags": 32,
+            "fontAsset": "",
+            "fontSize": 0,
+            "customFlags": 160,
             "enumID": 0
         },
         {
@@ -1580,6 +1719,8 @@
             "rotation": 0.0,
             "width": 54.67390060424805,
             "height": 51.14899826049805,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 3,
             "enumID": 0
         },
@@ -1612,6 +1753,8 @@
             "rotation": 0.0,
             "width": 432.92999267578127,
             "height": 52.208499908447269,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -1644,6 +1787,8 @@
             "rotation": 0.0,
             "width": 400.0,
             "height": 400.1000061035156,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -1676,6 +1821,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -1708,6 +1855,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -1740,6 +1889,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -1772,6 +1923,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -1804,6 +1957,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -1836,6 +1991,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -1868,6 +2025,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -1900,6 +2059,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -1932,6 +2093,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -1964,6 +2127,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -1996,6 +2161,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -2028,6 +2195,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -2060,6 +2229,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -2092,6 +2263,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -2124,6 +2297,8 @@
             "rotation": 0.0,
             "width": 400.0,
             "height": 400.1000061035156,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -2156,6 +2331,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -2188,6 +2365,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -2220,6 +2399,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -2252,6 +2433,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -2284,6 +2467,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -2316,6 +2501,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -2348,6 +2535,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -2380,6 +2569,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -2412,6 +2603,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -2444,6 +2637,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -2476,6 +2671,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -2508,6 +2705,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -2540,6 +2739,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -2572,6 +2773,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -2604,6 +2807,8 @@
             "rotation": 0.0,
             "width": 400.0,
             "height": 400.1000061035156,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -2636,6 +2841,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -2668,6 +2875,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -2700,6 +2909,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -2732,6 +2943,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -2764,6 +2977,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -2796,6 +3011,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -2828,6 +3045,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -2860,6 +3079,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -2892,6 +3113,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -2924,6 +3147,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -2956,6 +3181,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -2988,6 +3215,8 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
@@ -3020,6 +3249,8 @@
             "rotation": 0.0,
             "width": 67.9840087890625,
             "height": 62.240692138671878,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 65,
             "enumID": 0
         },
@@ -3052,11 +3283,13 @@
             "rotation": 0.0,
             "width": 300.0,
             "height": 200.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 0,
             "enumID": 0
         },
         {
-            "uiname": "BlackMask_Horizontal",
+            "uiname": "BlackMask_RightToLeft",
             "parentUIName": "",
             "imagePath": "Texture/blackMask.png",
             "openTarget": "",
@@ -3090,11 +3323,13 @@
             "rotation": 0.0,
             "width": 5760.0,
             "height": 1080.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 1664,
-            "enumID": 19
+            "enumID": 25
         },
         {
-            "uiname": "BlackMask_Vertical",
+            "uiname": "BlackMask_TopToBottom",
             "parentUIName": "",
             "imagePath": "Texture/blackMask_Vertical.png",
             "openTarget": "",
@@ -3128,8 +3363,90 @@
             "rotation": 0.0,
             "width": 1920.0,
             "height": 6480.0,
+            "fontAsset": "",
+            "fontSize": 0,
             "customFlags": 1664,
-            "enumID": 20
+            "enumID": 26
+        },
+        {
+            "uiname": "BlackMask_LeftToRight",
+            "parentUIName": "",
+            "imagePath": "Texture/blackMask.png",
+            "openTarget": "",
+            "disablingTarget": "",
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "anchor": [
+                0.5,
+                0.5
+            ],
+            "anchoredPosition": [
+                0.0,
+                0.0
+            ],
+            "enableOffset": [
+                -2880.0,
+                0.0
+            ],
+            "disableOffset": [
+                2880.0,
+                0.0
+            ],
+            "enableDelay": 0.0,
+            "disableDelay": 0.0,
+            "enableDuration": 1.0,
+            "disableDuration": 1.0,
+            "enableCurveType": 2,
+            "disableCurveType": 4,
+            "rotation": 0.0,
+            "width": 5760.0,
+            "height": 1080.0,
+            "fontAsset": "",
+            "fontSize": 0,
+            "customFlags": 1664,
+            "enumID": 27
+        },
+        {
+            "uiname": "BlackMask_BottomToTop",
+            "parentUIName": "",
+            "imagePath": "Texture/blackMask_Vertical.png",
+            "openTarget": "",
+            "disablingTarget": "",
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "anchor": [
+                0.5,
+                0.5
+            ],
+            "anchoredPosition": [
+                0.0,
+                0.0
+            ],
+            "enableOffset": [
+                0.0,
+                -4860.0
+            ],
+            "disableOffset": [
+                0.0,
+                4860.0
+            ],
+            "enableDelay": 0.0,
+            "disableDelay": 0.0,
+            "enableDuration": 1.0,
+            "disableDuration": 1.0,
+            "enableCurveType": 1,
+            "disableCurveType": 1,
+            "rotation": 0.0,
+            "width": 1920.0,
+            "height": 6480.0,
+            "fontAsset": "",
+            "fontSize": 0,
+            "customFlags": 1664,
+            "enumID": 28
         }
     ]
 }

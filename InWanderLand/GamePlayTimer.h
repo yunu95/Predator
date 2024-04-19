@@ -33,6 +33,9 @@ namespace application
 		void PauseTimer();
 		void ResumeTimer();
 
+		double GetPlayTime() { return playTime; }
+		double GetPlayTimeUnscaled() { return playRealTime; }
+
 		std::map<double, std::vector<std::function<void()>>> repeatCallback;
 		std::map<double, std::vector<std::function<void()>>> repeatCallbackReal;
 

@@ -25,6 +25,8 @@ struct JsonUIData
     double rotation;
     double width;
     double height;
+    string fontAsset;
+    int fontSize;
     // 임의로 사용하게 될 사용자 플래그
     int customFlags;
     // UI의 고유한 EnumID

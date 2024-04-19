@@ -176,7 +176,7 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
 			animator->PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
 		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
 		{
 			m_baseUnitAnimations.m_deathAnimation = each;
 			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);

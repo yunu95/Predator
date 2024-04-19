@@ -45,7 +45,8 @@ namespace application
 	void Script::OnGameStop()
 	{
 		coroutineInProgress.clear();
-		for (int i = 0; i < coroutineQueue.size(); i++)
+		auto size = coroutineQueue.size();
+		for (int i = 0; i < size; i++)
 		{
 			coroutineQueue.pop();
 		}
@@ -362,6 +363,26 @@ namespace application
 							action = AddAction<Action_CameraLoadView>();
 							break;
 						}
+						case application::ActionType::CinematicFadeIn:
+						{
+							action = AddAction<Action_CinematicFadeIn>();
+							break;
+						}
+						case application::ActionType::CinematicFadeOut:
+						{
+							action = AddAction<Action_CinematicFadeOut>();
+							break;
+						}
+						case application::ActionType::WaitPreviousActionEnd:
+						{
+							action = AddAction<Action_WaitPreviousActionEnd>();
+							break;
+						}
+						case application::ActionType::CameraRevert:
+						{
+							action = AddAction<Action_CameraRevert>();
+							break;
+						}
 						default:
 							break;
 					}
@@ -473,6 +494,17 @@ namespace application
 					coroutine();
 					co_await std::suspend_always();
 				}
+			}
+			else if (action->GetType() == ActionType::WaitPreviousActionEnd)
+			{
+				if (coroutineInProgress.size() >= 2)
+				{
+					while (!coroutineInProgress[coroutineInProgress.size() - 2].Done())
+					{
+						co_await std::suspend_always();
+					}
+				}
+				coroutine();
 			}
 			else
 			{

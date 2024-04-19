@@ -20,7 +20,7 @@ void PlayerController::AddPlayerUnit(Unit* p_playerUnit)
 
 void PlayerController::ErasePlayerUnit(Unit* p_playerUnit)
 {
-	playerComponentMap.erase(p_playerUnit->GetUnitType());
+    playerComponentMap.erase(p_playerUnit->GetUnitType());
 }
 
 void PlayerController::SetLeftClickMove()
@@ -31,7 +31,7 @@ void PlayerController::SetLeftClickMove()
         {
             m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
                 {
-                    if (UIManager::Instance().IsMouseOnButton())
+                    if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
                     {
                         return;
                     }
@@ -46,7 +46,7 @@ void PlayerController::SetLeftClickMove()
             Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
             m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
                 {
-                    if (UIManager::Instance().IsMouseOnButton())
+                    if (!InputManager::Instance().GetInputManagerActive()||UIManager::Instance().IsMouseOnButton())
                     {
                         return;
                     }
@@ -59,7 +59,7 @@ void PlayerController::SetLeftClickMove()
         /// 세 플레이어 유닛이 offset을 갖고 이동할 수 있도록 하기
         m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
             {
-                if (UIManager::Instance().IsMouseOnButton())
+                if (!InputManager::Instance().GetInputManagerActive()||UIManager::Instance().IsMouseOnButton())
                 {
                     return;
                 }
@@ -75,7 +75,7 @@ void PlayerController::SetLeftClickAttackMove()
 {
     m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
         {
-            if (UIManager::Instance().IsMouseOnButton())
+            if (!InputManager::Instance().GetInputManagerActive()||UIManager::Instance().IsMouseOnButton())
             {
                 return;
             }
@@ -103,7 +103,7 @@ void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
             SkillPreviewSystem::Instance().ActivateSkillPreview(true);
             m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
                 {
-                    if (UIManager::Instance().IsMouseOnButton())
+                    if (!InputManager::Instance().GetInputManagerActive()||UIManager::Instance().IsMouseOnButton())
                     {
                         return;
                     }

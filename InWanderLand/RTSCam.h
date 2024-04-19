@@ -1,10 +1,17 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "DebugBeacon.h"
-#include "RegionData.h"
 #include "Unit.h"
 #include "UIManager.h"
 using namespace yunutyEngine;
+
+namespace application
+{
+    namespace editor
+    {
+        class RegionData;
+    }
+}
 
 class RTSCam :public yunutyEngine::graphics::Camera
 {
@@ -30,6 +37,18 @@ public:
     void SetTarget(GameObject* target);
     void SetTargets(const std::vector<GameObject*>& targets);
     float GetCameraSpeed() const;
+
+    void SetUpdateability(bool updateability) { this->updateability = updateability; }
+    bool GetUpdateability() { return updateability; }
+    Vector3d GetIdealPosition();
+    Quaternion GetInitRotation() { return ingameInitRot; }
+    Vector3d GetInitScale() { return ingameInitScale; }
+    float GetInitVerticalFOV() { return initFov; }
+    float GetInitNear() { return initNear; }
+    float GetInitFar() { return initFar; }
+    float GetInitWidth() { return initWidth; }
+    float GetInitHeight() { return initHeight; }
+
 private:
     void UpdateCameraView();
     const application::editor::RegionData* contrainingRegion{ nullptr };
@@ -45,6 +64,14 @@ private:
     Vector2d beforeMousePos = Vector2d();
 
     Quaternion rot;
+    Quaternion ingameInitRot;
+    Vector3d ingameInitScale;
+
+    float initFov;
+    float initNear;
+    float initFar;
+    float initWidth;
+    float initHeight;
 
     float pitch = 0.0;
     float pitchDelta = 0.0;
@@ -55,4 +82,6 @@ private:
     float max_Speed = 2.0;
     float defaultMoveSpeed = 0.03;
     float rotationSpeed = 0.3;
+
+    bool updateability = true;
 };

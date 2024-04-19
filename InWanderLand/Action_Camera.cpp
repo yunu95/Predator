@@ -1,9 +1,11 @@
 #include "Action_Camera.h"
 
+#include "InWanderLand.h"
 #include "CameraData.h"
 
 #include "Application.h"
 #include "EditorLayer.h"
+#include "RTSCam.h"
 
 #include "EditorPopupManager.h"
 
@@ -19,8 +21,61 @@ namespace application
 
 	CoroutineObject<void> Action_CameraChangeView::DoAction()
 	{
-		/// 구면 보간!
-		co_return;
+		RTSCam* mainCam = static_cast<RTSCam*>(yunutyEngine::graphics::Camera::GetMainCamera());
+		mainCam->SetUpdateability(false);
+		auto ts = mainCam->GetTransform();
+		auto startPos = ts->GetWorldPosition();
+		auto startRot = ts->GetWorldRotation();
+		auto startScale = ts->GetWorldScale();
+		auto& camGI = mainCam->GetGI();
+		float startFov = camGI.GetVerticalFOV();
+		float startCameraNear = camGI.GetNear();
+		float startCameraFar = camGI.GetFar();
+		float startWidth = 0;
+		float startHeight = 0;
+		camGI.GetResolution(&startWidth, &startHeight);
+		
+		Vector3d endPos = { targetCam->pod.position.x, targetCam->pod.position.y, targetCam->pod.position.z };
+		Quaternion endRot = { targetCam->pod.rotation.w, targetCam->pod.rotation.x, targetCam->pod.rotation.y, targetCam->pod.rotation.z };
+		Vector3d endScale = { targetCam->pod.scale.x, targetCam->pod.scale.y, targetCam->pod.scale.z };
+
+		float endFov = targetCam->pod.vertical_FOV;
+		float endCameraNear = targetCam->pod.dis_Near;
+		float endCameraFar = targetCam->pod.dis_Far;
+		float endWidth = targetCam->pod.res_Width;
+		float endHeight = targetCam->pod.res_Height;
+
+		double timer = 0;
+		float factor = 0;
+
+		if (lerpTime == 0)
+		{
+			ts->SetWorldPosition(endPos);
+			ts->SetWorldRotation(endRot);
+			ts->SetWorldScale(endScale);
+			camGI.SetVerticalFOV(endFov);
+			camGI.SetNear(endCameraNear);
+			camGI.SetFar(endCameraFar);
+			camGI.SetResolution(endWidth, endHeight);
+			mainCam->SetUpdateability(true);
+			co_return;
+		}
+
+		for (double timer = 0; timer < lerpTime;)
+		{
+			factor = timer / lerpTime;
+			ts->SetWorldPosition(Vector3d::Lerp(startPos, endPos, factor));
+			ts->SetWorldRotation(Quaternion::Lerp(startRot, endRot, factor));
+			ts->SetWorldScale(Vector3d::Lerp(startScale, endScale, factor));
+			camGI.SetVerticalFOV(math::LerpF(startFov, endFov, factor));
+			camGI.SetNear(math::LerpF(startCameraNear, endCameraNear, factor));
+			camGI.SetFar(math::LerpF(startCameraFar, endCameraFar, factor));
+			camGI.SetResolution(math::LerpF(startWidth, endWidth, factor), math::LerpF(startHeight, endHeight, factor));
+			timer += Time::GetDeltaTimeUnscaled();
+			co_await std::suspend_always();
+		}
+
+		mainCam->SetUpdateability(true);
 	}
 
 	bool Action_CameraChangeView::IsValid()
@@ -114,7 +169,7 @@ namespace application
 					ImGui::Separator();
 
 					ImGui::SetNextItemWidth(-1);
-					ImGui::DragFloat("##LerpTime", &lerpTime);
+					ImGui::DragFloat("##LerpTimeChangView", &lerpTime);
 
 					ImGui::Separator();
 
@@ -184,7 +239,28 @@ namespace application
 
 	CoroutineObject<void> Action_CameraSaveView::DoAction()
 	{
-		/// 데이터 static 에 저장!
+		RTSCam* mainCam = static_cast<RTSCam*>(yunutyEngine::graphics::Camera::GetMainCamera());
+		auto ts = mainCam->GetTransform();
+		auto pos = ts->GetWorldPosition();
+		savedPosition.x = pos.x;
+		savedPosition.y = pos.y;
+		savedPosition.z = pos.z;
+		auto rot = ts->GetWorldRotation();
+		savedRotation.w = rot.w;
+		savedRotation.x = rot.x;
+		savedRotation.y = rot.y;
+		savedRotation.z = rot.z;
+		auto scale = ts->GetWorldScale();
+		savedScale.x = scale.x;
+		savedScale.y = scale.y;
+		savedScale.z = scale.z;
+		auto& camGI = mainCam->GetGI();
+		savedFov = camGI.GetVerticalFOV();
+		savedCameraNear = camGI.GetNear();
+		savedCameraFar = camGI.GetFar();
+		savedWidth = 0;
+		savedHeight = 0;
+		camGI.GetResolution(&savedWidth, &savedHeight);
 		co_return;
 	}
 
@@ -215,8 +291,66 @@ namespace application
 
 	CoroutineObject<void> Action_CameraLoadView::DoAction()
 	{
-		/// static 녀석으로 Main 변경!
-		co_return;
+		if (Action_CameraSaveView::savedFov == -1)
+		{
+			co_return;
+		}
+
+		RTSCam* mainCam = static_cast<RTSCam*>(yunutyEngine::graphics::Camera::GetMainCamera());
+		mainCam->SetUpdateability(false);
+		auto ts = mainCam->GetTransform();
+		auto startPos = ts->GetWorldPosition();
+		auto startRot = ts->GetWorldRotation();
+		auto startScale = ts->GetWorldScale();
+		auto& camGI = mainCam->GetGI();
+		float startFov = camGI.GetVerticalFOV();
+		float startCameraNear = camGI.GetNear();
+		float startCameraFar = camGI.GetFar();
+		float startWidth = 0;
+		float startHeight = 0;
+		camGI.GetResolution(&startWidth, &startHeight);
+
+		Vector3d endPos = { Action_CameraSaveView::savedPosition.x, Action_CameraSaveView::savedPosition.y, Action_CameraSaveView::savedPosition.z };
+		Quaternion endRot = { Action_CameraSaveView::savedRotation.w, Action_CameraSaveView::savedRotation.x, Action_CameraSaveView::savedRotation.y, Action_CameraSaveView::savedRotation.z };
+		Vector3d endScale = { Action_CameraSaveView::savedScale.x, Action_CameraSaveView::savedScale.y, Action_CameraSaveView::savedScale.z };
+
+		float endFov = Action_CameraSaveView::savedFov;
+		float endCameraNear = Action_CameraSaveView::savedCameraNear;
+		float endCameraFar = Action_CameraSaveView::savedCameraFar;
+		float endWidth = Action_CameraSaveView::savedWidth;
+		float endHeight = Action_CameraSaveView::savedHeight;
+
+		double timer = 0;
+		float factor = 0;
+
+		if (lerpTime == 0)
+		{
+			ts->SetWorldPosition(endPos);
+			ts->SetWorldRotation(endRot);
+			ts->SetWorldScale(endScale);
+			camGI.SetVerticalFOV(endFov);
+			camGI.SetNear(endCameraNear);
+			camGI.SetFar(endCameraFar);
+			camGI.SetResolution(endWidth, endHeight);
+			mainCam->SetUpdateability(true);
+			co_return;
+		}
+
+		for (double timer = 0; timer < lerpTime;)
+		{
+			factor = timer / lerpTime;
+			ts->SetWorldPosition(Vector3d::Lerp(startPos, endPos, factor));
+			ts->SetWorldRotation(Quaternion::Lerp(startRot, endRot, factor));
+			ts->SetWorldScale(Vector3d::Lerp(startScale, endScale, factor));
+			camGI.SetVerticalFOV(math::LerpF(startFov, endFov, factor));
+			camGI.SetNear(math::LerpF(startCameraNear, endCameraNear, factor));
+			camGI.SetFar(math::LerpF(startCameraFar, endCameraFar, factor));
+			camGI.SetResolution(math::LerpF(startWidth, endWidth, factor), math::LerpF(startHeight, endHeight, factor));
+			timer += Time::GetDeltaTimeUnscaled();
+			co_await std::suspend_always();
+		}
+
+		mainCam->SetUpdateability(true);
 	}
 
 	void Action_CameraLoadView::SetLerpTime(float lerpTime)
@@ -238,7 +372,7 @@ namespace application
 					ImGui::Separator();
 
 					ImGui::SetNextItemWidth(-1);
-					ImGui::DragFloat("##LerpTime", &lerpTime);
+					ImGui::DragFloat("##LerpTimeLoadView", &lerpTime);
 
 					ImGui::Separator();
 
@@ -279,6 +413,130 @@ namespace application
 	}
 
 	bool Action_CameraLoadView::PostDecoding(const json& data)
+	{
+		return true;
+	}
+
+	CoroutineObject<void> Action_CameraRevert::DoAction()
+	{
+		RTSCam* mainCam = static_cast<RTSCam*>(yunutyEngine::graphics::Camera::GetMainCamera());
+		mainCam->SetUpdateability(false);
+		auto ts = mainCam->GetTransform();
+		auto startPos = ts->GetWorldPosition();
+		auto startRot = ts->GetWorldRotation();
+		auto startScale = ts->GetWorldScale();
+		auto& camGI = mainCam->GetGI();
+		float startFov = camGI.GetVerticalFOV();
+		float startCameraNear = camGI.GetNear();
+		float startCameraFar = camGI.GetFar();
+		float startWidth = 0;
+		float startHeight = 0;
+		camGI.GetResolution(&startWidth, &startHeight);
+
+		Vector3d endPos = mainCam->GetIdealPosition();
+		Quaternion endRot = mainCam->GetInitRotation();
+		Vector3d endScale = mainCam->GetInitScale();
+
+		float endFov = mainCam->GetInitVerticalFOV();
+		float endCameraNear = mainCam->GetInitNear();
+		float endCameraFar = mainCam->GetInitFar();
+		float endWidth = mainCam->GetInitWidth();
+		float endHeight = mainCam->GetInitHeight();
+
+		double timer = 0;
+		float factor = 0;
+
+		if (lerpTime == 0)
+		{
+			ts->SetWorldPosition(endPos);
+			ts->SetWorldRotation(endRot);
+			ts->SetWorldScale(endScale);
+			camGI.SetVerticalFOV(endFov);
+			camGI.SetNear(endCameraNear);
+			camGI.SetFar(endCameraFar);
+			camGI.SetResolution(endWidth, endHeight);
+			mainCam->SetUpdateability(true);
+			co_return;
+		}
+
+		for (double timer = 0; timer < lerpTime;)
+		{
+			factor = timer / lerpTime;
+			endPos = mainCam->GetIdealPosition();
+			ts->SetWorldPosition(Vector3d::Lerp(startPos, endPos, factor));
+			ts->SetWorldRotation(Quaternion::Lerp(startRot, endRot, factor));
+			ts->SetWorldScale(Vector3d::Lerp(startScale, endScale, factor));
+			camGI.SetVerticalFOV(math::LerpF(startFov, endFov, factor));
+			camGI.SetNear(math::LerpF(startCameraNear, endCameraNear, factor));
+			camGI.SetFar(math::LerpF(startCameraFar, endCameraFar, factor));
+			camGI.SetResolution(math::LerpF(startWidth, endWidth, factor), math::LerpF(startHeight, endHeight, factor));
+			timer += Time::GetDeltaTimeUnscaled();
+			co_await std::suspend_always();
+		}
+
+		mainCam->SetUpdateability(true);
+	}
+
+	void Action_CameraRevert::SetLerpTime(float lerpTime)
+	{
+		this->lerpTime = lerpTime;
+	}
+
+	void Action_CameraRevert::ImGui_DrawDataPopup(Action_CameraRevert* data)
+	{
+		if (ImGui::MenuItem("SetLerpTime"))
+		{
+			editor::EditorLayer::SetInputControl(false);
+			static float lerpTime = 0;
+			lerpTime = data->lerpTime;
+			editor::imgui::ShowMessageBox("SetLerpTime(Revert)", [data]()
+				{
+					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::Separator();
+
+					ImGui::SetNextItemWidth(-1);
+					ImGui::DragFloat("##LerpTimeRevert", &lerpTime);
+
+					ImGui::Separator();
+
+					if (ImGui::Button("OK"))
+					{
+						data->SetLerpTime(lerpTime);
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetLerpTime(Revert)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetLerpTime(Revert)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+				}, 300);
+		}
+	}
+
+	bool Action_CameraRevert::PreEncoding(json& data) const
+	{
+		data["lerpTime"] = lerpTime;
+		return true;
+	}
+
+	bool Action_CameraRevert::PostEncoding(json& data) const
+	{
+		return true;
+	}
+
+	bool Action_CameraRevert::PreDecoding(const json& data)
+	{
+		lerpTime = data["lerpTime"];
+		return true;
+	}
+
+	bool Action_CameraRevert::PostDecoding(const json& data)
 	{
 		return true;
 	}

@@ -433,9 +433,6 @@
     <Filter Include="Editor\ScriptSystem\1_Condition\List">
       <UniqueIdentifier>{0e0f3bef-6052-4f15-b9e9-77fdc9d3ca61}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\Cinematic">
-      <UniqueIdentifier>{1be88953-fede-49fa-bcff-d309ee96f946}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents\BurnEffect">
       <UniqueIdentifier>{0cb52d66-9140-4368-8842-d37ef7df2afb}</UniqueIdentifier>
     </Filter>
@@ -480,6 +477,21 @@
     </Filter>
     <Filter Include="Contents\ResurrectionSystem">
       <UniqueIdentifier>{fe0bc7ad-f763-44df-8f11-ddcca5f4188a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Effect\FloatFollower">
+      <UniqueIdentifier>{871212fa-7603-485a-ba2f-f33a36a04abe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Playable">
+      <UniqueIdentifier>{1b0aa654-99df-49b0-98e9-deed746b1933}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Playable\GameTimer">
+      <UniqueIdentifier>{26f6fe0e-390d-443c-88b2-ea1d53201ed5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Playable\Tutorial">
+      <UniqueIdentifier>{6a5aaac1-b4ee-4742-b4a5-15b8f6b4882a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Playable\Cinematic">
+      <UniqueIdentifier>{1be88953-fede-49fa-bcff-d309ee96f946}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1160,7 +1172,7 @@
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClInclude>
     <ClInclude Include="CinematicManager.h">
-      <Filter>Contents\Cinematic</Filter>
+      <Filter>Contents\Playable\Cinematic</Filter>
     </ClInclude>
     <ClInclude Include="BurnEffect.h">
       <Filter>Contents\BurnEffect</Filter>
@@ -1173,9 +1185,6 @@
     </ClInclude>
     <ClInclude Include="UIElement.h">
       <Filter>UI\UIElement</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayableComponent.h">
-      <Filter>Contents\GameManager</Filter>
     </ClInclude>
     <ClInclude Include="JsonUIData.h">
       <Filter>UI\UnityRelated\JsonUIData</Filter>
@@ -1194,9 +1203,6 @@
     </ClInclude>
     <ClInclude Include="Trigger_RepeatPeriodically.h">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
-    </ClInclude>
-    <ClInclude Include="GamePlayTimer.h">
-      <Filter>Contents\GameManager</Filter>
     </ClInclude>
     <ClInclude Include="EditorPopupManager.h">
       <Filter>Editor\PopupManager</Filter>
@@ -1245,6 +1251,21 @@
     </ClInclude>
     <ClInclude Include="ResurrectionSystem.h">
       <Filter>Contents\ResurrectionSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="FloatFollower.h">
+      <Filter>UI\Effect\FloatFollower</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_WaitPreviousActionEnd.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayableComponent.h">
+      <Filter>Contents\Playable</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlayTimer.h">
+      <Filter>Contents\Playable\GameTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialManager.h">
+      <Filter>Contents\Playable\Tutorial</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1832,22 +1853,16 @@
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClCompile>
     <ClCompile Include="CinematicManager.cpp">
-      <Filter>Contents\Cinematic</Filter>
+      <Filter>Contents\Playable\Cinematic</Filter>
     </ClCompile>
     <ClCompile Include="BurnEffect.cpp">
       <Filter>Contents\BurnEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayableComponent.cpp">
-      <Filter>Contents\GameManager</Filter>
     </ClCompile>
     <ClCompile Include="Condition_CinematicMode.cpp">
       <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
     </ClCompile>
     <ClCompile Include="Trigger_RepeatPeriodically.cpp">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
-    </ClCompile>
-    <ClCompile Include="GamePlayTimer.cpp">
-      <Filter>Contents\GameManager</Filter>
     </ClCompile>
     <ClCompile Include="EditorPopupManager.cpp">
       <Filter>Editor\PopupManager</Filter>
@@ -1893,6 +1908,21 @@
     </ClCompile>
     <ClCompile Include="ResurrectionSystem.cpp">
       <Filter>Contents\ResurrectionSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="UIElement.cpp">
+      <Filter>UI\UIElement</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_WaitPreviousActionEnd.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayableComponent.cpp">
+      <Filter>Contents\Playable</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePlayTimer.cpp">
+      <Filter>Contents\Playable\GameTimer</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialManager.cpp">
+      <Filter>Contents\Playable\Tutorial</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

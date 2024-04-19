@@ -22,6 +22,7 @@
 #include "Module_ScriptEditor.h"
 #include "PlayableComponent.h"
 #include "EditorPopupManager.h"
+#include "EditableDataList.h"
 
 #include <fstream>
 
