@@ -14,6 +14,8 @@
 #include "imgui.h"
 #include "imgui_Utility.h"
 
+#include <string>
+
 namespace application
 {
 	enum class ActionType
@@ -28,6 +30,8 @@ namespace application
 		CameraLoadView,
 		CinematicFadeIn,
 		CinematicFadeOut,
+		WaitPreviousActionEnd,
+		CameraRevert,
 	};
 
 	struct IAction
@@ -41,6 +45,9 @@ namespace application
 
 		/// dynamic_cast 가 아닌 switch case 로 동작하기 위한 함수입니다.
 		virtual ActionType GetType() const = 0;
+
+		/// Editor 에서 사용하기 위해 Type 을 String 으로 반환하는 함수입니다.
+		virtual std::string GetTypeName() const = 0;
 
 		/// Coroutine 으로 실행할 함수입니다.
 		virtual CoroutineObject<void> DoAction() = 0;
@@ -60,4 +67,5 @@ namespace application
 /// 제공하여야 합니다.
 #define DEFINE_ACTION(Class) \
 virtual ActionType GetType() const override { return ActionType::Class; } \
+virtual std::string GetTypeName() const override { return #Class; } \
 static void ImGui_DrawDataPopup(Action_##Class* data);

@@ -29,6 +29,15 @@ void RTSCam::Start()
             break;
         }
     }
+
+    auto& gi = GetGI();
+
+    ingameInitRot = rot;
+    ingameInitScale = GetTransform()->GetWorldScale();
+    initFov = gi.GetVerticalFOV();
+    initNear = gi.GetNear();
+    initFar = gi.GetFar();
+    gi.GetResolution(&initWidth, &initHeight);
 }
 
 void RTSCam::Update()

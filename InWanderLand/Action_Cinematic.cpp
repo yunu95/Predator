@@ -7,6 +7,8 @@
 
 #include "CinematicManager.h"
 
+#include "Action_WaitForSeconds.h"
+
 namespace application
 {
     CoroutineObject<void> Action_CinematicModeChange::DoAction()
@@ -81,17 +83,60 @@ namespace application
 
     CoroutineObject<void> Action_CinematicFadeIn::DoAction()
     {
-        UIManager::Instance().FadeIn();
+        UIManager::Instance().FadeIn(fadeTime);
+        auto coroutine = Action_WaitForRealSeconds(fadeTime).DoAction();
+        for (const auto& val : coroutine)
+        {
+            co_await std::suspend_always();
+        }
         co_return;
+    }
+
+    void Action_CinematicFadeIn::SetFadeTime(float fadeTime)
+    {
+        this->fadeTime = fadeTime;
     }
 
     void Action_CinematicFadeIn::ImGui_DrawDataPopup(Action_CinematicFadeIn* data)
     {
+        if (ImGui::MenuItem("SetFadeInTime"))
+        {
+            editor::EditorLayer::SetInputControl(false);
+            static float fadeTime = 0;
+            fadeTime = data->fadeTime;
+            editor::imgui::ShowMessageBox("SetFadeInTime", [data]()
+                {
+                    editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
+                    ImGui::Separator();
+
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::DragFloat("##FadeInTime", &fadeTime);
+
+                    ImGui::Separator();
+
+                    if (ImGui::Button("OK"))
+                    {
+                        data->SetFadeTime(fadeTime);
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetFadeInTime");
+                        editor::EditorLayer::SetInputControl(true);
+                    }
+                    ImGui::SameLine();
+
+                    if (ImGui::Button("Cancel"))
+                    {
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetFadeInTime");
+                        editor::EditorLayer::SetInputControl(true);
+                    }
+                }, 300);
+        }
     }
 
     bool Action_CinematicFadeIn::PreEncoding(json& data) const
     {
+        data["fadeTime"] = fadeTime;
         return true;
     }
 
@@ -102,6 +147,7 @@ namespace application
 
     bool Action_CinematicFadeIn::PreDecoding(const json& data)
     {
+        fadeTime = data["fadeTime"];
         return true;
     }
 
@@ -116,19 +162,25 @@ namespace application
         switch (direction)
         {
         case application::FadeDirection::RIGHT:
-            UIManager::Instance().FadeOutRight(5);
+            UIManager::Instance().FadeOutRight(fadeTime);
             break;
         case application::FadeDirection::LEFT:
-            UIManager::Instance().FadeOutLeft(1);
+            UIManager::Instance().FadeOutLeft(fadeTime);
             break;
         case application::FadeDirection::UP:
-            UIManager::Instance().FadeOutTop(1);
+            UIManager::Instance().FadeOutTop(fadeTime);
             break;
         case application::FadeDirection::DOWN:
-            UIManager::Instance().FadeOutBottom(1);
+            UIManager::Instance().FadeOutBottom(fadeTime);
             break;
         default:
             break;
+        }
+
+        auto coroutine = Action_WaitForRealSeconds(fadeTime).DoAction();
+        for (const auto& val : coroutine)
+        {
+            co_await std::suspend_always();
         }
         co_return;
     }
@@ -136,6 +188,11 @@ namespace application
     void Action_CinematicFadeOut::SetFadeDirection(FadeDirection direction)
     {
         this->direction = direction;
+    }
+
+    void Action_CinematicFadeOut::SetFadeTime(float fadeTime)
+    {
+        this->fadeTime = fadeTime;
     }
 
     void Action_CinematicFadeOut::ImGui_DrawDataPopup(Action_CinematicFadeOut* data)
@@ -236,11 +293,46 @@ namespace application
                     }
                 }, 300);
         }
+
+        if (ImGui::MenuItem("SetFadeOutTime"))
+        {
+            editor::EditorLayer::SetInputControl(false);
+            static float fadeTime = 0;
+            fadeTime = data->fadeTime;
+            editor::imgui::ShowMessageBox("SetFadeOutTime", [data]()
+                {
+                    editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+                    ImGui::Separator();
+
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::DragFloat("##FadeOutTime", &fadeTime);
+
+                    ImGui::Separator();
+
+                    if (ImGui::Button("OK"))
+                    {
+                        data->SetFadeTime(fadeTime);
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetFadeOutTime");
+                        editor::EditorLayer::SetInputControl(true);
+                    }
+                    ImGui::SameLine();
+
+                    if (ImGui::Button("Cancel"))
+                    {
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetFadeOutTime");
+                        editor::EditorLayer::SetInputControl(true);
+                    }
+                }, 300);
+        }
     }
 
     bool Action_CinematicFadeOut::PreEncoding(json& data) const
     {
         data["direction"] = direction;
+        data["fadeTime"] = fadeTime;
         return true;
     }
 
@@ -252,6 +344,7 @@ namespace application
     bool Action_CinematicFadeOut::PreDecoding(const json& data)
     {
         direction = data["direction"];
+        fadeTime = data["fadeTime"];
         return true;
     }
 

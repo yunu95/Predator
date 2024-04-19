@@ -41,10 +41,15 @@ namespace application
 
 		virtual CoroutineObject<void> DoAction() override;
 
+		void SetFadeTime(float fadeTime);
+
 		virtual bool PreEncoding(json& data) const override;
 		virtual bool PostEncoding(json& data) const override;
 		virtual bool PreDecoding(const json& data) override;
 		virtual bool PostDecoding(const json& data) override;
+
+	private:
+		float fadeTime = 1;
 	};
 
 	/// FadeOut 효과입니다.
@@ -58,6 +63,8 @@ namespace application
 
 		void SetFadeDirection(FadeDirection direction);
 
+		void SetFadeTime(float fadeTime);
+
 		virtual bool PreEncoding(json& data) const override;
 		virtual bool PostEncoding(json& data) const override;
 		virtual bool PreDecoding(const json& data) override;
@@ -65,5 +72,6 @@ namespace application
 
 	private:
 		FadeDirection direction = FadeDirection::RIGHT;
+		float fadeTime = 1;
 	};
 }

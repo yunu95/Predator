@@ -11,6 +11,8 @@
 #include "imgui.h"
 #include "imgui_Utility.h"
 
+#include <string>
+
 namespace application
 {
 	enum class ConditionType
@@ -32,6 +34,9 @@ namespace application
 		/// dynamic_cast 가 아닌 switch case 로 동작하기 위한 함수입니다.
 		virtual ConditionType GetType() const = 0;
 
+		/// Editor 에서 사용하기 위해 Type 을 String 으로 반환하는 함수입니다.
+		virtual std::string GetTypeName() const = 0;
+
 		/// 특정 조건을 내부에서 설정하고, 해당 조건을 만족했는지에 대한 값을 반환합니다.
 		virtual bool IsConditionMet() = 0;
 
@@ -50,4 +55,5 @@ namespace application
 /// 제공하여야 합니다.
 #define DEFINE_CONDITION(Class) \
 virtual ConditionType GetType() const override { return ConditionType::Class; } \
+virtual std::string GetTypeName() const override { return #Class; } \
 static void ImGui_DrawDataPopup(Condition_##Class* data);
