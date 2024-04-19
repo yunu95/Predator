@@ -29,6 +29,7 @@ public:
     virtual void Start() override;
     virtual void Update() override;
 
+	bool GetInputManagerActive();
 	void SetInputManagerActive(bool p_boolen);
     void SelectPlayer(Unit::UnitType p_unitType);
     void PrepareSkill(Unit::SkillEnum p_skillType, Unit::UnitType p_unitType);

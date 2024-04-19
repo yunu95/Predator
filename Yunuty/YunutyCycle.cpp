@@ -126,74 +126,74 @@ void yunutyEngine::YunutyCycle::ResetUpdateTargetComponents()
 void yunutyEngine::YunutyCycle::ThreadUpdate()
 {
     std::unique_lock lock{ updateMutex };
-    try
+    /*try
+    {*/
+    Time::Update();
+
+    for (auto i = GlobalComponent::globalComponents.begin(); i != GlobalComponent::globalComponents.end(); i++)
+        (*i)->Update();
+
+    assert(Scene::getCurrentScene() != nullptr && "Main Scene을 하나 생성해야 합니다!");
+    // 살생부에 올라온 게임오브젝트들을 파괴합니다.
+    while (!Scene::getCurrentScene()->destroyList.empty())
     {
-        Time::Update();
-
-        for (auto i = GlobalComponent::globalComponents.begin(); i != GlobalComponent::globalComponents.end(); i++)
-            (*i)->Update();
-
-        assert(Scene::getCurrentScene() != nullptr && "Main Scene을 하나 생성해야 합니다!");
-        // 살생부에 올라온 게임오브젝트들을 파괴합니다.
-        while (!Scene::getCurrentScene()->destroyList.empty())
+        static std::set<GameObject*> tempDestroyList;
+        tempDestroyList = Scene::getCurrentScene()->destroyList;
+        for (auto each : tempDestroyList)
         {
-            static std::set<GameObject*> tempDestroyList;
-            tempDestroyList = Scene::getCurrentScene()->destroyList;
-            for (auto each : tempDestroyList)
+            for (auto each : each->GetIndexedComponents())
             {
-                for (auto each : each->GetIndexedComponents())
-                {
-                    each->OnDestroy();
-                }
-                // 컴포넌트를 우측값으로 만들고 이를 다른 값에 할당하지 않으면 자연스레 할당해제된다.
-                each->parent->MoveChild(each);
+                each->OnDestroy();
             }
-            for (auto each : tempDestroyList)
-            {
-                Scene::getCurrentScene()->destroyList.erase(each);
-            }
+            // 컴포넌트를 우측값으로 만들고 이를 다른 값에 할당하지 않으면 자연스레 할당해제된다.
+            each->parent->MoveChild(each);
         }
-
-        ResetUpdateTargetComponents();
-        for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
-            //if (updateTargetComponents[i]->GetGameObject()->GetActive())
-                StartComponent(updateTargetComponents[i]);
-        for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
-            //if (updateTargetComponents[i]->GetGameObject()->GetActive())
-                UpdateComponent(updateTargetComponents[i]);
-
-        auto pxScene = physics::_PhysxGlobal::SingleInstance().RequestPxScene(Scene::currentScene);
-        if (Time::GetDeltaTime() > 0 && pxScene)
+        for (auto each : tempDestroyList)
         {
-            pxScene->simulate(Time::GetDeltaTime());
-            pxScene->fetchResults(true);
-        }
-
-        Collider2D::InvokeCollisionEvents();
-        graphics::Renderer::SingleInstance().Update(Time::GetDeltaTime());
-
-        if (postUpdateAction)
-            postUpdateAction();
-
-        if (autoRendering)
-        {
-            graphics::Renderer::SingleInstance().Render();
-        }
-
-        {
-            std::scoped_lock lock(actionReservationMutex);
-            for (auto each : afterUpdateActions)
-                each();
-            afterUpdateActions.clear();
+            Scene::getCurrentScene()->destroyList.erase(each);
         }
     }
+
+    ResetUpdateTargetComponents();
+    for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
+        //if (updateTargetComponents[i]->GetGameObject()->GetActive())
+        StartComponent(updateTargetComponents[i]);
+    for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
+        //if (updateTargetComponents[i]->GetGameObject()->GetActive())
+        UpdateComponent(updateTargetComponents[i]);
+
+    auto pxScene = physics::_PhysxGlobal::SingleInstance().RequestPxScene(Scene::currentScene);
+    if (Time::GetDeltaTime() > 0 && pxScene)
+    {
+        pxScene->simulate(Time::GetDeltaTime());
+        pxScene->fetchResults(true);
+    }
+
+    Collider2D::InvokeCollisionEvents();
+    graphics::Renderer::SingleInstance().Update(Time::GetDeltaTime());
+
+    if (postUpdateAction)
+        postUpdateAction();
+
+    if (autoRendering)
+    {
+        graphics::Renderer::SingleInstance().Render();
+    }
+
+    {
+        std::scoped_lock lock(actionReservationMutex);
+        for (auto each : afterUpdateActions)
+            each();
+        afterUpdateActions.clear();
+    }
+    /*}
     catch (const std::exception& e)
     {
         if (onExceptionThrown)
             onExceptionThrown(e);
         else
             throw e;
-    }
+    }*/
 }
 
 void yunutyEngine::YunutyCycle::ReserveActionAfterUpdate(std::function<void()> action)

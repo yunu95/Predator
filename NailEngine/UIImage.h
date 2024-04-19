@@ -1,6 +1,6 @@
 #pragma once
+#include "Functors.h"
 #include "IRenderable.h"
-
 #include "Texture.h"
 
 class UIImage : public nail::IRenderable
@@ -76,7 +76,7 @@ private:
     yunuGI::ITexture* texture;
 };
 
-struct CompareSmartPtr
+struct CompareSharedPtr
 {
     bool operator()(const std::shared_ptr<nail::IRenderable>& lhs, const std::shared_ptr<nail::IRenderable>& rhs) const
     {

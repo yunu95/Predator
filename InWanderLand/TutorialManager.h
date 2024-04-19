@@ -15,6 +15,8 @@ namespace application
 	class TutorialManager
 		: public PlayableComponent, public Component, public SingletonComponent<TutorialManager>
 	{
+		/// friend class 전술모드?
+
 	public:
 		virtual void SingletonInitializer() override;
 

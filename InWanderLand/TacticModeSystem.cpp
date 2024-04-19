@@ -22,6 +22,10 @@ void TacticModeSystem::SetLeftClickAddQueueForAttackMove(InputManager::SelectedS
     SetCurrentSelectedQueue(currentSelectedUnit);
     m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
         {
+            if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
+            {
+                return;
+            }
             currentSelectedQueue->push([=]()
                 {
                     currentSelectedUnit->OrderAttackMove(pos);
@@ -42,6 +46,10 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
 
     m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
         {
+            if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
+            {
+                return;
+            }
             processingSkillPosMap.insert({ currentSelectedUnit, pos });
             queueOrderIndex++;
 
