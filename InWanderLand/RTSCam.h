@@ -41,7 +41,13 @@ public:
     void SetUpdateability(bool updateability) { this->updateability = updateability; }
     bool GetUpdateability() { return updateability; }
     Vector3d GetIdealPosition();
-    
+    Quaternion GetInitRotation() { return ingameInitRot; }
+    Vector3d GetInitScale() { return ingameInitScale; }
+    float GetInitVerticalFOV() { return initFov; }
+    float GetInitNear() { return initNear; }
+    float GetInitFar() { return initFar; }
+    float GetInitWidth() { return initWidth; }
+    float GetInitHeight() { return initHeight; }
 
 private:
     void UpdateCameraView();
@@ -58,6 +64,14 @@ private:
     Vector2d beforeMousePos = Vector2d();
 
     Quaternion rot;
+    Quaternion ingameInitRot;
+    Vector3d ingameInitScale;
+
+    float initFov;
+    float initNear;
+    float initFar;
+    float initWidth;
+    float initHeight;
 
     float pitch = 0.0;
     float pitchDelta = 0.0;

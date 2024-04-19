@@ -41,12 +41,12 @@ namespace application
         {
             this->isCinematicMode = isCinematicMode;
             GamePlayTimer::Instance().PauseTimer();
-            // UIManager::Hide();
             // InputManager::T();
 
             std::cout << "\n======================\n";
             std::cout << "  CinematicMode [On]";
             std::cout << "\n======================\n";
+
             // 인게임 UI 비활성화
             UIManager::Instance().SetIngameUIVisible(false);
             GameManager::Instance().EngageCinematic();
@@ -55,15 +55,15 @@ namespace application
         {
             this->isCinematicMode = isCinematicMode;
             GamePlayTimer::Instance().ResumeTimer();
-            GameManager::Instance().EndCinematic();
-            // UIManager::Show();
             // InputManager::T();
 
             std::cout << "\n======================\n";
             std::cout << "  CinematicMode [Off]";
             std::cout << "\n======================\n";
+
             // 인게임 UI 활성화
             UIManager::Instance().SetIngameUIVisible(true);
+            GameManager::Instance().EndCinematic();
         }
     }
 }

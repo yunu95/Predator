@@ -169,7 +169,7 @@ namespace application
 					ImGui::Separator();
 
 					ImGui::SetNextItemWidth(-1);
-					ImGui::DragFloat("##LerpTime", &lerpTime);
+					ImGui::DragFloat("##LerpTimeChangView", &lerpTime);
 
 					ImGui::Separator();
 
@@ -372,7 +372,7 @@ namespace application
 					ImGui::Separator();
 
 					ImGui::SetNextItemWidth(-1);
-					ImGui::DragFloat("##LerpTime", &lerpTime);
+					ImGui::DragFloat("##LerpTimeLoadView", &lerpTime);
 
 					ImGui::Separator();
 
@@ -413,6 +413,130 @@ namespace application
 	}
 
 	bool Action_CameraLoadView::PostDecoding(const json& data)
+	{
+		return true;
+	}
+
+	CoroutineObject<void> Action_CameraRevert::DoAction()
+	{
+		RTSCam* mainCam = static_cast<RTSCam*>(yunutyEngine::graphics::Camera::GetMainCamera());
+		mainCam->SetUpdateability(false);
+		auto ts = mainCam->GetTransform();
+		auto startPos = ts->GetWorldPosition();
+		auto startRot = ts->GetWorldRotation();
+		auto startScale = ts->GetWorldScale();
+		auto& camGI = mainCam->GetGI();
+		float startFov = camGI.GetVerticalFOV();
+		float startCameraNear = camGI.GetNear();
+		float startCameraFar = camGI.GetFar();
+		float startWidth = 0;
+		float startHeight = 0;
+		camGI.GetResolution(&startWidth, &startHeight);
+
+		Vector3d endPos = mainCam->GetIdealPosition();
+		Quaternion endRot = mainCam->GetInitRotation();
+		Vector3d endScale = mainCam->GetInitScale();
+
+		float endFov = mainCam->GetInitVerticalFOV();
+		float endCameraNear = mainCam->GetInitNear();
+		float endCameraFar = mainCam->GetInitFar();
+		float endWidth = mainCam->GetInitWidth();
+		float endHeight = mainCam->GetInitHeight();
+
+		double timer = 0;
+		float factor = 0;
+
+		if (lerpTime == 0)
+		{
+			ts->SetWorldPosition(endPos);
+			ts->SetWorldRotation(endRot);
+			ts->SetWorldScale(endScale);
+			camGI.SetVerticalFOV(endFov);
+			camGI.SetNear(endCameraNear);
+			camGI.SetFar(endCameraFar);
+			camGI.SetResolution(endWidth, endHeight);
+			mainCam->SetUpdateability(true);
+			co_return;
+		}
+
+		for (double timer = 0; timer < lerpTime;)
+		{
+			factor = timer / lerpTime;
+			endPos = mainCam->GetIdealPosition();
+			ts->SetWorldPosition(Vector3d::Lerp(startPos, endPos, factor));
+			ts->SetWorldRotation(Quaternion::Lerp(startRot, endRot, factor));
+			ts->SetWorldScale(Vector3d::Lerp(startScale, endScale, factor));
+			camGI.SetVerticalFOV(math::LerpF(startFov, endFov, factor));
+			camGI.SetNear(math::LerpF(startCameraNear, endCameraNear, factor));
+			camGI.SetFar(math::LerpF(startCameraFar, endCameraFar, factor));
+			camGI.SetResolution(math::LerpF(startWidth, endWidth, factor), math::LerpF(startHeight, endHeight, factor));
+			timer += Time::GetDeltaTimeUnscaled();
+			co_await std::suspend_always();
+		}
+
+		mainCam->SetUpdateability(true);
+	}
+
+	void Action_CameraRevert::SetLerpTime(float lerpTime)
+	{
+		this->lerpTime = lerpTime;
+	}
+
+	void Action_CameraRevert::ImGui_DrawDataPopup(Action_CameraRevert* data)
+	{
+		if (ImGui::MenuItem("SetLerpTime"))
+		{
+			editor::EditorLayer::SetInputControl(false);
+			static float lerpTime = 0;
+			lerpTime = data->lerpTime;
+			editor::imgui::ShowMessageBox("SetLerpTime(Revert)", [data]()
+				{
+					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::Separator();
+
+					ImGui::SetNextItemWidth(-1);
+					ImGui::DragFloat("##LerpTimeRevert", &lerpTime);
+
+					ImGui::Separator();
+
+					if (ImGui::Button("OK"))
+					{
+						data->SetLerpTime(lerpTime);
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetLerpTime(Revert)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetLerpTime(Revert)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+				}, 300);
+		}
+	}
+
+	bool Action_CameraRevert::PreEncoding(json& data) const
+	{
+		data["lerpTime"] = lerpTime;
+		return true;
+	}
+
+	bool Action_CameraRevert::PostEncoding(json& data) const
+	{
+		return true;
+	}
+
+	bool Action_CameraRevert::PreDecoding(const json& data)
+	{
+		lerpTime = data["lerpTime"];
+		return true;
+	}
+
+	bool Action_CameraRevert::PostDecoding(const json& data)
 	{
 		return true;
 	}

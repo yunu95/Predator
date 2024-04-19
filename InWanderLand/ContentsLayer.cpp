@@ -29,8 +29,9 @@
 #include "ScriptSystem.h"
 #include "Script.h"
 #include "UIImage.h"
-#include "CinematicManager.h"
 #include "PlayableComponent.h"
+#include "CinematicManager.h"
+#include "TutorialManager.h"
 
 #include <algorithm>
 #include <string>
@@ -136,6 +137,7 @@ void application::contents::ContentsLayer::Initialize()
 	ShortcutInit();
 	ScriptSystem::Instance();
     CinematicManager::Instance();
+	TutorialManager::Instance();
 
 	wanderUtils::LoadResourcesRecursively();
 

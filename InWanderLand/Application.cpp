@@ -675,6 +675,7 @@ bool CreateSwapChain()
 	dxgiAdapter->Release();
 
 	auto result4 = dxgiFactory->CreateSwapChainForHwnd(g_pD3dDevice, editorHWND, &sd, nullptr, nullptr, &g_EditorpSwapChain);
+
 	dxgiFactory->Release();
 
 	CreateRenderTarget();
@@ -748,7 +749,6 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		case WM_SYSCOMMAND:
 			if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
 				return 0;
-			break;
 		case WM_DESTROY:
 			::PostQuitMessage(0);
 			return 0;
