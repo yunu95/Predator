@@ -43,9 +43,6 @@
     <Filter Include="RenderSystem">
       <UniqueIdentifier>{4d0b3b22-de09-40b2-b2c0-3640c30f2933}</UniqueIdentifier>
     </Filter>
-    <Filter Include="NailCamera">
-      <UniqueIdentifier>{e8370a40-d710-4a8d-8dcb-430aab3bf802}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GraphicsEngine\RenderableManager">
       <UniqueIdentifier>{80244bcb-1889-44fe-b2b5-fb0f02453bd3}</UniqueIdentifier>
     </Filter>
@@ -126,6 +123,9 @@
     </Filter>
     <Filter Include="GraphicsEngine\RenderableManager\ParticleSystem">
       <UniqueIdentifier>{c338a971-d9d2-4886-acf8-8b5ccdc7f019}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Light\NailCamera">
+      <UniqueIdentifier>{e8370a40-d710-4a8d-8dcb-430aab3bf802}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -214,7 +214,7 @@
       <Filter>RenderSystem</Filter>
     </ClInclude>
     <ClInclude Include="NailCamera.h">
-      <Filter>NailCamera</Filter>
+      <Filter>Light\NailCamera</Filter>
     </ClInclude>
     <ClInclude Include="IRenderable.h">
       <Filter>GraphicsEngine\RenderableManager\IRenderable</Filter>
@@ -307,7 +307,7 @@
       <Filter>RenderSystem\SkyBoxPass</Filter>
     </ClInclude>
     <ClInclude Include="CameraManager.h">
-      <Filter>NailCamera</Filter>
+      <Filter>Light\NailCamera</Filter>
     </ClInclude>
     <ClInclude Include="UIText.h">
       <Filter>GraphicsEngine\RenderableManager\IRenderable\UI</Filter>
@@ -326,6 +326,9 @@
     </ClInclude>
     <ClInclude Include="ParticleSystem.h">
       <Filter>GraphicsEngine\RenderableManager\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Functors.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -366,7 +369,7 @@
       <Filter>RenderSystem</Filter>
     </ClCompile>
     <ClCompile Include="NailCamera.cpp">
-      <Filter>NailCamera</Filter>
+      <Filter>Light\NailCamera</Filter>
     </ClCompile>
     <ClCompile Include="IRenderable.cpp">
       <Filter>GraphicsEngine\RenderableManager\IRenderable</Filter>
@@ -441,7 +444,7 @@
       <Filter>GraphicsEngine\Device</Filter>
     </ClCompile>
     <ClCompile Include="CameraManager.cpp">
-      <Filter>NailCamera</Filter>
+      <Filter>Light\NailCamera</Filter>
     </ClCompile>
     <ClCompile Include="UIText.cpp">
       <Filter>GraphicsEngine\RenderableManager\IRenderable\UI</Filter>

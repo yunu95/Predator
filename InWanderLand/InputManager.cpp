@@ -70,6 +70,10 @@ void InputManager::Update()
     }
 }
 
+bool InputManager::GetInputManagerActive()
+{
+    return isInputManagerActivated;
+}
 void InputManager::SetInputManagerActive(bool p_boolen)
 {
     isInputManagerActivated = p_boolen;
