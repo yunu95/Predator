@@ -68,6 +68,74 @@ void GraphicsTest()
 		}
 	}
 
+	//{
+	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("Room");
+
+	//	for (auto& each : obj->GetChildren())
+	//	{
+	//		yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
+
+	//		renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+
+	//		if (renderer)
+	//		{
+	//			renderer->GetGI().SetLightMapUVIndex(0);
+	//			renderer->GetGI().SetLightMapUVScaling(1.009809, 1.009809);
+	//			renderer->GetGI().SetLightMapUVOffset(-0.004904088, -0.004904148);
+	//		}
+	//	}
+	//}
+
+	//{
+	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CupTower");
+	//	obj->GetTransform()->SetLocalPosition(Vector3d{ 0,-1.222,0 });
+	//	obj->GetTransform()->SetLocalScale(Vector3d{ 0.12, 0.12, 0.12 });
+	//	for (auto& each : obj->GetChildren())
+	//	{
+	//		yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
+
+	//		renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+
+	//		if (renderer)
+	//		{
+	//			renderer->GetGI().SetLightMapUVIndex(1);
+	//			renderer->GetGI().SetLightMapUVScaling(0.8676134, 0.8676134);
+	//			renderer->GetGI().SetLightMapUVOffset(-0.009715676, -0.009373822);
+	//		}
+	//	}
+	//}
+	// 
+	// 
+	//{
+	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Arch_Window_14m");
+	//}
+	//{
+	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Arch_Window_14m");
+	//	obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{180,180,0} });
+	//}
+	//{
+	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Hall_Entrance_Floor");
+	//}
+
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Wall_7m");
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 6.65,0,1.81 });
+		obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{ 0, -90, 0} });
+		for (auto& each : obj->GetChildren())
+		{
+			yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
+
+			renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+
+			if (renderer)
+			{
+				renderer->GetGI().SetLightMapUVIndex(1);
+				renderer->GetGI().SetLightMapUVScaling(2199411, 2199411);
+				renderer->GetGI().SetLightMapUVOffset(0.002929688, 1);
+			}
+		}
+	}
+
 }
 
 void application::contents::ContentsLayer::SetInputControl(bool control)
@@ -135,7 +203,7 @@ void application::contents::ContentsLayer::Initialize()
 	yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
 	ShortcutInit();
 	ScriptSystem::Instance();
-    CinematicManager::Instance();
+	CinematicManager::Instance();
 
 	wanderUtils::LoadResourcesRecursively();
 
@@ -144,9 +212,10 @@ void application::contents::ContentsLayer::Initialize()
 	{
 		yunutyEngine::Collider2D::SetIsOnXYPlane(false);
 		auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-		directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
+		directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,180,0} });
 		directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
 		auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+		light->GetGI().SetIsShadowCast(false);
 		auto color = yunuGI::Color{ 1,1,1,1.f };
 		light->GetGI().SetLightDiffuseColor(color);
 
@@ -201,7 +270,7 @@ void application::contents::ContentsLayer::Initialize()
 		//editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
 		//editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
-}
+	}
 #endif
 #endif
 }
@@ -564,8 +633,8 @@ void application::contents::ContentsLayer::PlayContents()
 	robinWSkillUpgradeButtonObject->GetTransform()->SetLocalPosition({ 300, 700, 0 });
 	RegisterToEditorObjectContainer(robinWSkillUpgradeButtonObject);
 
-    /// Playable 동작들을 일괄 처리할 부분입니다.
-    PlayableComponent::OnGameStartAll();
+	/// Playable 동작들을 일괄 처리할 부분입니다.
+	PlayableComponent::OnGameStartAll();
 }
 
 void application::contents::ContentsLayer::PauseContents()
@@ -576,8 +645,8 @@ void application::contents::ContentsLayer::PauseContents()
 		e->SetActive(false);
 	}
 
-    /// Playable 동작들을 일괄 처리할 부분입니다.
-    PlayableComponent::OnGamePauseAll();
+	/// Playable 동작들을 일괄 처리할 부분입니다.
+	PlayableComponent::OnGamePauseAll();
 }
 
 void application::contents::ContentsLayer::ResumeContents()
@@ -588,8 +657,8 @@ void application::contents::ContentsLayer::ResumeContents()
 		e->SetActive(true);
 	}
 
-    /// Playable 동작들을 일괄 처리할 부분입니다.
-    PlayableComponent::OnGameResumeAll();
+	/// Playable 동작들을 일괄 처리할 부분입니다.
+	PlayableComponent::OnGameResumeAll();
 }
 
 void application::contents::ContentsLayer::StopContents()
@@ -603,10 +672,10 @@ void application::contents::ContentsLayer::StopContents()
 		e->SetActive(false);
 	}
 
-    UIManager::Instance().Clear();
+	UIManager::Instance().Clear();
 
-    /// Playable 동작들을 일괄 처리할 부분입니다.
-    PlayableComponent::OnGameStopAll();
+	/// Playable 동작들을 일괄 처리할 부분입니다.
+	PlayableComponent::OnGameStopAll();
 }
 
 #ifdef GEN_TESTS

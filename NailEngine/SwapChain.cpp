@@ -67,6 +67,8 @@ void SwapChain::Init(HWND hWnd, int width, int height)
 		0,
 		nullptr,
 		this->swapChain.GetAddressOf());
+
+	_hr = _dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_ALT_ENTER);
 	assert(_hr == S_OK);
 
 	// RTV 생성
@@ -110,6 +112,14 @@ void SwapChain::Init(HWND hWnd, int width, int height)
 	_dxgiDevice->Release();
 	_dxgiAdapter->Release();
 	_dxgiFactory->Release();
+}
+
+void SwapChain::Release()
+{
+	swapChain->Release();
+	RTV->Release();
+	DSV->Release();
+	DSBuffer->Release();
 }
 
 void SwapChain::SwapBackBufferIndex()

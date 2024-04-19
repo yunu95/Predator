@@ -12,6 +12,7 @@ public:
 	~SwapChain();
 
 	void Init(HWND hWnd, int width, int height);
+	void Release();
 	void SwapBackBufferIndex();
 
 #pragma region Getter

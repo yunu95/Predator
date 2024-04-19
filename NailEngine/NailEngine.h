@@ -33,6 +33,7 @@ public:
 	void SetResolution(unsigned int width, unsigned int height);
 	void SetUseIBL(bool useIBL);
 	void SetUseLightMap(bool useLightMap);
+	void ResizeResolution(unsigned int width, unsigned int height);
 
 	std::shared_ptr<ConstantBuffer>& GetConstantBuffer(unsigned int index);
 	std::vector<std::shared_ptr<RenderTargetGroup>>& GetRenderTargetGroup() { return this->renderTargetGroup; }

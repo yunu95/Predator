@@ -235,7 +235,7 @@ struct ParticleBuffer
 
 struct LightMapUV
 {
-	int lightMapIndex;
+	float lightMapIndex;
 	DirectX::SimpleMath::Vector3 padding;
 	DirectX::SimpleMath::Vector2 uvOffset;
 	DirectX::SimpleMath::Vector2 scaling;

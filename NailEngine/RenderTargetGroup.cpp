@@ -59,6 +59,18 @@ void RenderTargetGroup::Clear()
 	}
 }
 
+void RenderTargetGroup::Release()
+{
+	for (auto& each : RTVVec)
+	{
+		delete each;
+	}
+	RTVVec.clear();
+	rtVec.clear();
+	nullRTV.clear();
+	dsv->Release();
+}
+
 void RenderTargetGroup::SetRenderTargetVec(std::vector<RenderTarget>& rtVec, Microsoft::WRL::ComPtr<ID3D11DepthStencilView> dsv)
 {
 	this->rtVec = rtVec;
