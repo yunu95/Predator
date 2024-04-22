@@ -6,74 +6,50 @@
 class UIImage : public nail::IRenderable
 {
 public:
-    void SetTexture(yunuGI::ITexture* texture)
-    {
-        this->texture = texture;
-        if (width == -1 && height == -1)
-        {
-            SetWidth(texture->GetWidth());
-            SetHeight(texture->GetHeight());
-        }
-    }
-
-    yunuGI::ITexture* GetTexture()
-    {
-        return this->texture;
-    }
-
-    float GetWidth()
-    {
-        return width;
-    };
-
-    float GetHeight()
-    {
-        return height;
-    };
-    float GetXPivot()
-    {
-        return xPivot;
-    };
-    float GetYPivot()
-    {
-        return yPivot;
-    };
-    void SetXPivot(float xPivot)
-    {
-        this->xPivot = xPivot;
-    }
-    void SetYPivot(float yPivot)
-    {
-        this->yPivot = yPivot;
-    }
-    void SetWidth(float width)
-    {
-        this->width = width;
-    }
-    void SetHeight(float height)
-    {
-        this->height = height;
-    };
-    bool operator<(const UIImage& other) const
-    {
-        return layer < other.layer;
-    }
-
-    int GetLayer()
-    {
-        return layer;
-    }
-
-public:
+    void SetTexture(yunuGI::ITexture* texture);
+    yunuGI::ITexture* GetTexture();
+    ID3D11Texture2D* GetProcessedTexture();
+    ID3D11ShaderResourceView* GetProcessedTextureSRV();
+    float GetWidth();
+    float GetHeight();
+    float GetXPivot();
+    float GetYPivot();
+    void SetXPivot(float xPivot);
+    void SetYPivot(float yPivot);
+    void SetWidth(float width);
+    void SetHeight(float height);
+    bool operator<(const UIImage& other) const;
+    bool IsUsingProcessedTexture();
+    int GetLayer();
     //DirectX::SimpleMath::Vector2 pos;
     int layer = 0;
+    DirectX::FXMVECTOR GetColor();
+    void SetColor(const DirectX::FXMVECTOR& color);
+    bool IsRadialFillMode();
+    // 텍스처가 중심에서부터 갉아먹는 형태로 채워지는지 여부를 설정
+    void SetRadialFillMode(bool fill);
+    void SetRadialFillDegree(float degree);
+    void SetRadialFillStartPoint(float x, float y);
+    // 시계방향으로 채우는가?
+    void SetRadialFillDirection(bool isClockwise);
+    void PreProcessTexture();
 private:
+    bool isRadialFillMode{ false };
+    float radialFillDegree{ 360 };
+
+    DirectX::SimpleMath::Vector2 radialFillStartDirection{ 0,1 };
+    bool radialFillIsClockwise{ true };
     float width{ -1 };
     float height{ -1 };
     // 0,0은 왼쪽 위
     float xPivot = 0;
     float yPivot = 0;
+    DirectX::FXMVECTOR color{ 1,1,1,1 };
     yunuGI::ITexture* texture;
+    // UI에 전처리가 적용된 텍스처
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> processedTexture{ nullptr };
+    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> processedTextureRTV{ nullptr };
+    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> processedTextureSRV{ nullptr };
 };
 
 struct CompareSharedPtr

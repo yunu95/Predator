@@ -76,7 +76,7 @@ public:
 
     void PushUIObject(std::shared_ptr<nail::IRenderable> renderable);
     // 전처리를 한번 해줘야 하는 UI 객체를 전처리 큐에 담는다.
-    void PushPreProcessingUIObject(std::weak_ptr<nail::IRenderable> renderable);
+    void PushPreProcessingUIObject(UIImage*);
     void PopUIObject(std::shared_ptr<nail::IRenderable> renderable);
 
     void PushTextObject(std::shared_ptr<nail::IRenderable> renderable);
@@ -113,7 +113,7 @@ private:
     std::map<nail::IRenderable*, std::vector<std::shared_ptr<SkinnedRenderInfo>>> skinnedMeshRenderInfoMap;
 
     // 미리 한번 전처리를 해줘야 하는 UI 이미지들
-    std::unordered_set<std::weak_ptr<nail::IRenderable>, WeakPtrHash<nail::IRenderable>, WeakPtrEqual<nail::IRenderable>> preProcessingUiImages;
+    std::unordered_set<UIImage*> preProcessingUiImages;
     std::multiset<std::shared_ptr<nail::IRenderable>, CompareSharedPtr> UIImageSet;
     std::set<std::shared_ptr<nail::IRenderable>> UITextSet;
 

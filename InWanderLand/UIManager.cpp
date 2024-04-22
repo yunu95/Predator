@@ -237,6 +237,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         uiImageComponent->GetGI().SetXPivot(uiData.pivot[0]);
         uiImageComponent->GetGI().SetYPivot(1 - uiData.pivot[1]);
         uiImageComponent->GetGI().SetLayer(uiImportingPriority);
+
         uiButtonComponent = element->button = uiObject->AddComponent<UIButton>();
         uiButtonComponent->SetImageComponent(uiImageComponent);
         uiButtonComponent->SetIdleImage(idleTexture);
