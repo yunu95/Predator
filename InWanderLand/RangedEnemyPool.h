@@ -5,6 +5,7 @@
 #include "Application.h"
 #include "LazySingletonClass.h"
 #include "RangedEnemyProductor.h"
+#include "BurnEffect.h"
 
 class RangedEnemyPool : public GameObjectPool<DummyComponent>, public GHContents::LazySingletonClass<RangedEnemyPool>
 {
@@ -35,6 +36,7 @@ public:
 	{
 		p_dummy->m_pairUnit->ResetUnitMembers();
 		p_dummy->m_pairUnit->GetTransform()->SetWorldPosition(m_unitPosition);
+		p_dummy->m_pairUnit->GetGameObject()->GetComponent<BurnEffect>()->Appear();
 		p_dummy->m_pairUnit->GetGameObject()->SetSelfActive(true);
 		p_dummy->m_pairUnit->m_navAgentComponent->SetActive(true);
 		p_dummy->m_pairUnit->m_navAgentComponent->AssignToNavigationField(p_dummy->m_pairUnit->GetNavField());

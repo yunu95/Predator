@@ -56,9 +56,9 @@ void InputManager::Update()
                     PrepareSkill(Unit::SkillEnum::Q);
                 }
 
-                if (yunutyEngine::Input::isKeyPushed(KeyCode::W))
+                if (yunutyEngine::Input::isKeyPushed(KeyCode::Alphabet_E))
                 {
-                    PrepareSkill(Unit::SkillEnum::W);
+                    PrepareSkill(Unit::SkillEnum::E);
                 }
             }
 

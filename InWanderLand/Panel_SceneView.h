@@ -5,11 +5,11 @@
 
 #include "Singleton.h"
 #include "EditorPanel.h"
-#include "EditorResourceManager.h"
+//#include "EditorResourceManager.h"
 #include "PaletteManager.h"
-#include "EditorInputManager.h"
+//#include "EditorInputManager.h"
 #include "TransformEditCommand.h"
-#include "YunuGraphicsInterface.h"
+//#include "YunuGraphicsInterface.h"
 
 #include "ImGuizmo/ImGuizmo.h"
 

@@ -54,6 +54,8 @@ void HealerSkillSystem::SetWSkillDebugInfo(GameObject* p_fieldDebugObject)
 
 void HealerSkillSystem::ActivateSkillOne(Vector3d skillPos)
 {
+	isQSkillReady = false;
+
 	startPosition = GetTransform()->GetWorldPosition();
 
 	skillPos = CheckSkillRange(skillPos, Unit::SkillEnum::Q);
@@ -74,6 +76,8 @@ void HealerSkillSystem::ActivateSkillOne(Vector3d skillPos)
 
 void HealerSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 {
+	isESkillReady = false;
+
 	float skillWidth = 2.0f * UNIT_LENGTH;
 	float skillHeight = m_skillTwoRange;
 	m_unitComponent->RegisterSkillDuration(2.0f);

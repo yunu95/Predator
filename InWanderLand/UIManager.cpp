@@ -9,6 +9,7 @@
 #include "UIOffsetTransition.h"
 #include <fstream>
 
+using namespace yunutyEngine::graphics;
 void UIManager::Clear()
 {
     m_highestPriorityButton = nullptr;
@@ -326,6 +327,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
                 disablingTarget->DisableElement();
             });
     }
+    static constexpr int priority_Tooltip = 123456789;
     // 만약 툴팁을 포함하는 UI라면...
     if (uiData.customFlags & (int)UIExportFlag::IsIncludingTooltips)
     {
@@ -334,7 +336,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
             each->SetSelfActive(false);
             if (auto img = each->GetComponent<UIImage>())
             {
-                img->GetGI().SetLayer(UIImage::priority_Tooltip);
+                img->GetGI().SetLayer(priority_Tooltip);
             }
         }
         button->m_OnMouseEventFunction = [=]()
@@ -417,7 +419,7 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         ImportDefaultAction(uiData, uisByName[uiData.uiname]);
         element->button->SetButtonClickFunction([=]()
             {
-                InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Warrior);
+                InputManager::Instance().PrepareSkill(Unit::SkillEnum::E, Unit::UnitType::Warrior);
             });
         break;
     case UIEnumID::Skill_Use_Q_Ursula:
@@ -431,7 +433,7 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         ImportDefaultAction(uiData, uisByName[uiData.uiname]);
         element->button->SetButtonClickFunction([=]()
             {
-                InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Magician);
+                InputManager::Instance().PrepareSkill(Unit::SkillEnum::E, Unit::UnitType::Magician);
             });
         break;
     case UIEnumID::Skill_Use_Q_HANSEL:
@@ -445,7 +447,7 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         ImportDefaultAction(uiData, uisByName[uiData.uiname]);
         element->button->SetButtonClickFunction([=]()
             {
-                InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Healer);
+                InputManager::Instance().PrepareSkill(Unit::SkillEnum::E, Unit::UnitType::Healer);
             });
         break;
     case UIEnumID::Toggle_TacticMode:

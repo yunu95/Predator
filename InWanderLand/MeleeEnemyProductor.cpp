@@ -6,6 +6,7 @@
 #include "Unit_TemplateData.h"
 #include "BossSkillSystem.h"
 #include "DamageOnlyComponent.h"
+#include "BurnEffect.h"
 
 void MeleeEnemyProductor::SetUnitData()
 {
@@ -46,7 +47,6 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 #pragma region Animation Related Member Setting
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
-
 	/// UnitComponent 추가
 	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
 	UnitProductor::SetUnitComponentMembers();

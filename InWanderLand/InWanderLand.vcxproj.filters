@@ -1162,9 +1162,6 @@
     <ClInclude Include="Trigger_Region.h">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClInclude>
-    <ClInclude Include="UIImage.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="Module_ScriptEditor.h">
       <Filter>Editor\Panel\List\Module\List</Filter>
     </ClInclude>

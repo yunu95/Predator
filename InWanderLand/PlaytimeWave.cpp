@@ -23,7 +23,7 @@ void PlaytimeWave::ActivateWave()
 {
     isWaveActivated = true;
     /// 플레이어 유닛 전투상태 돌입
-    GameManager::Instance().EngageBattle();
+    GameManager::Instance().ReportPlayerEnteredWaveRegion(this);
     // 카메라 가동범위 제한
     if (auto rtsCam = dynamic_cast<RTSCam*>(graphics::Camera::GetMainCamera()))
     {
