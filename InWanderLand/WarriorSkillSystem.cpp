@@ -91,4 +91,5 @@ void WarriorSkillSystem::Start()
 
 void WarriorSkillSystem::Update()
 {
+	PlayerSkillSystem::Update();
 }

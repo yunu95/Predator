@@ -136,6 +136,8 @@ void MagicianSkillSystem::Start()
 
 void MagicianSkillSystem::Update()
 {
+	PlayerSkillSystem::Update();
+
 	/// Start 문에서 SetActive(false)를 못알아 먹는다.
 	if (!isColliderSetActiveFalseSet)
 	{

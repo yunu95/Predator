@@ -189,6 +189,11 @@ void Unit::Start()
 			});
 	}
 
+	if (m_unitSide == UnitSide::Player)
+	{
+		m_playerSkillSystem = GetGameObject()->GetComponent<PlayerSkillSystem>();
+	}
+
 	SkillSystem* skillsys = GetGameObject()->GetComponent<SkillSystem>();
 	for (auto e : m_skillAnimationMap)
 	{
@@ -374,6 +379,7 @@ void Unit::IdleEngage()
 		{
 			
 			//StopAnimation();
+			m_animatorComponent->Pause();
 			m_burnEffect->DisAppear();
 			GameManager::Instance().AddCombo();
 			//deathEngageFunction();
@@ -1090,14 +1096,18 @@ void Unit::OrderAttackMove(Vector3d position)
 
 void Unit::OrderSkill(SkillEnum p_skillNum, Vector3d position)
 {
-	currentOrder = UnitState::Skill;
-	m_skillPosition = position;
-	m_currentSelectedSkill = p_skillNum;
-	dotween->DOLookAt(position, rotateTime, false);
-
-	PlayerController::SingleInstance().SetLeftClickEmpty();
-
-	m_currentSkillPosition = position;
+	if (m_unitSide == UnitSide::Player && m_playerSkillSystem && m_playerSkillSystem->IsSkillCoolingDown(p_skillNum))
+	{
+		// Player unit with valid skill system and skill not cooling down
+		ExecuteSkillAction(position, p_skillNum);
+	}
+	else if (m_unitSide == UnitSide::Enemy)
+	{
+		// Non-player unit or player unit with skill cooling down or invalid skill system
+		ExecuteSkillAction(position, p_skillNum);
+	}
+	PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(m_unitType);
+	PlayerController::SingleInstance().SetLeftClickMove();
 }
 
 void Unit::OrderSkill(SkillEnum p_skillNum)
@@ -1107,6 +1117,16 @@ void Unit::OrderSkill(SkillEnum p_skillNum)
 	m_currentSelectedSkill = p_skillNum;
 
 	PlayerController::SingleInstance().SetLeftClickEmpty();
+}
+
+void Unit::ExecuteSkillAction(Vector3d p_pos, SkillEnum p_skillNum)
+{
+	currentOrder = UnitState::Skill;
+	m_skillPosition = p_pos;
+	m_currentSelectedSkill = p_skillNum;
+	dotween->DOLookAt(p_pos, rotateTime, false);
+	PlayerController::SingleInstance().SetLeftClickEmpty();
+	m_currentSkillPosition = p_pos;
 }
 
 void Unit::RegisterSkillDuration(float p_duration)
