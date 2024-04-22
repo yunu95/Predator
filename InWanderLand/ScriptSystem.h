@@ -48,9 +48,9 @@ namespace application
 
 		std::unordered_set<Script*>& GetScriptList();
 
-		static std::unordered_map<TriggerType, std::string> triggerList;
-		static std::unordered_map<ConditionType, std::string> conditionList;
-		static std::unordered_map<ActionType, std::string> actionList;
+		static std::vector<std::pair<TriggerType, std::string>> triggerList;
+		static std::vector<std::pair<ConditionType, std::string>> conditionList;
+		static std::vector<std::pair<ActionType, std::string>> actionList;
 
 	private:
 		ScriptSystem() = default;

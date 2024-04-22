@@ -72,8 +72,7 @@ namespace application
 			void PopUpDataEdit(ITrigger* data)
 			{
 				auto type = data->GetType();
-				auto& str = ScriptSystem::triggerList[type];
-				if (ImGui::BeginPopup(str.c_str()))
+				if (ImGui::BeginPopup(data->GetTypeName().c_str()))
 				{
 					switch (type)
 					{
@@ -123,8 +122,7 @@ namespace application
 			void PopUpDataEdit(ICondition* data)
 			{
 				auto type = data->GetType();
-				auto& str = ScriptSystem::conditionList[type];
-				if (ImGui::BeginPopup(str.c_str()))
+				if (ImGui::BeginPopup(data->GetTypeName().c_str()))
 				{
 					switch (type)
 					{
@@ -149,8 +147,7 @@ namespace application
 			void PopUpDataEdit(IAction* data)
 			{
 				auto type = data->GetType();
-				auto& str = ScriptSystem::actionList[type];
-				if (ImGui::BeginPopup(str.c_str()))
+				if (ImGui::BeginPopup(data->GetTypeName().c_str()))
 				{
 					switch (type)
 					{
@@ -192,6 +189,16 @@ namespace application
 						case application::ActionType::CinematicFadeOut:
 						{
 							Action_CinematicFadeOut::ImGui_DrawDataPopup(static_cast<Action_CinematicFadeOut*>(data));
+							break;
+						}
+						case application::ActionType::WaitPreviousActionEnd:
+						{
+							Action_WaitPreviousActionEnd::ImGui_DrawDataPopup(static_cast<Action_WaitPreviousActionEnd*>(data));
+							break;
+						}
+						case application::ActionType::CameraRevert:
+						{
+							Action_CameraRevert::ImGui_DrawDataPopup(static_cast<Action_CameraRevert*>(data));
 							break;
 						}
 						default:
