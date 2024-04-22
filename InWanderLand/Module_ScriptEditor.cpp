@@ -749,6 +749,11 @@ namespace application
 									selectedScript->AddAction<Action_CameraRevert>();
 									break;
 								}
+								case application::ActionType::TutorialModeChange:
+								{
+									selectedScript->AddAction<Action_TutorialModeChange>();
+									break;
+								}
 								default:
 									break;
 							}
