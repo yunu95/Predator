@@ -1264,6 +1264,9 @@
     <ClInclude Include="TutorialManager.h">
       <Filter>Contents\Playable\Tutorial</Filter>
     </ClInclude>
+    <ClInclude Include="Action_Tutorial.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1920,6 +1923,9 @@
     </ClCompile>
     <ClCompile Include="TutorialManager.cpp">
       <Filter>Contents\Playable\Tutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_Tutorial.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

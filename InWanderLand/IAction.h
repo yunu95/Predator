@@ -32,6 +32,7 @@ namespace application
 		CinematicFadeOut,
 		WaitPreviousActionEnd,
 		CameraRevert,
+		TutorialModeChange,
 	};
 
 	struct IAction

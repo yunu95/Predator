@@ -1,0 +1,768 @@
+#include "YunutyEngine.h"
+
+#include "imgui.h"
+#include "imgui_impl_dx11.h"
+#include "imgui_impl_win32.h"
+#include "ImGuizmo/ImGuizmo.h"
+#include "TestUtilGraphicsTestCam.h"
+#include <d3d11.h>
+#include <stdio.h>
+#include <windows.h>
+#include <windowsx.h>
+#include <tchar.h>
+#include <dxgi1_4.h>
+#include <unordered_map>
+#include <locale>
+#include <codecvt>
+#include <filesystem>
+
+bool g_fbxLoad = false;
+bool g_useIBL = true;
+std::unordered_map<std::wstring, yunuGI::FBXData*> g_fbxMap;
+yunuGI::FBXData* g_selectFBX = nullptr;
+yunuGI::FBXData* g_prevFBX = nullptr;
+yunutyEngine::GameObject* g_selectGameObject = nullptr;
+// Data
+static ID3D11Device* g_pd3dDevice = nullptr;
+static ID3D11DeviceContext* g_pd3dDeviceContext = nullptr;
+static IDXGISwapChain1* g_pSwapChain = nullptr;
+static ID3D11RenderTargetView* g_mainRenderTargetView = nullptr;
+
+bool isParticleEditMode = true;
+
+HWND g_hwnd = nullptr;
+HWND g_Toolhwnd = nullptr;
+
+ImVec2 dockspaceArea = ImVec2();
+ImVec2 dockspaceStartPoint = ImVec2();
+
+// Forward declarations of helper functions
+bool CreateDeviceD3D(HWND hWnd);
+void CleanupDeviceD3D();
+void CreateRenderTarget();
+void CleanupRenderTarget();
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param);
+LRESULT CALLBACK WndProcTool(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param);
+
+void CreateMyWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show);
+void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show);
+
+void ResizeBuffers();
+
+std::string ConvertWideStringToUTF8(const std::wstring& wideString) {
+    int size_needed = WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), -1, nullptr, 0, nullptr, nullptr);
+    std::string utf8String(size_needed, 0);
+    WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), -1, &utf8String[0], size_needed, nullptr, nullptr);
+    return utf8String;
+}
+
+void ShowParticleList();
+void ShowSkinnedFBXList();
+void ShowParticleEditor();
+void ShowSequencerEditor();
+
+void LoadResourcesRecursively();
+
+void ImGuiUpdate();
+void DrawMenuBar();
+
+void InputUpdate();
+
+std::filesystem::path SaveFileDialog(const char* filter = ".\0*.*\0", const char* initialDir = "");
+std::filesystem::path LoadFileDialog(const char* filter = "All\0*.*\0", const char* initialDir = "");
+std::vector<std::filesystem::path> GetSubdirectories(const std::filesystem::path& directoryPath = "");
+
+std::filesystem::path currentPath = "";
+
+bool isRunning = true;
+
+std::mutex loopTodoRegistrationMutex;
+// AddMainLoopTodo로 등록된 휘발성 콜백 함수들입니다.
+// 매 루프가 종료될 때 이 컨테이너에 실행 동작들이 담겨있다면 모두 실행하고 내용을 비웁니다.
+// 이 목록에 담긴 함수들이 실행되는 동안 게임 엔진 스레드는 동작을 정지합니다.
+std::vector<std::function<void()>> loopRegistrations;
+
+int WINAPI main(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show)
+{
+    CreateMyWindow(h_instance, h_prev_instance, lp_cmd_line, n_cmd_show);
+
+    yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [&]()
+    {
+        CreateToolWindow(h_instance, nullptr, lp_cmd_line, n_cmd_show);
+
+        // Setup Platform/Renderer backends
+        g_pd3dDevice = reinterpret_cast<ID3D11Device*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDevice());
+        g_pd3dDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDeviceContext());
+
+        // Initialize Direct3D
+        if (!CreateDeviceD3D(g_Toolhwnd))
+        {
+            CleanupDeviceD3D();
+            return 1;
+        }
+
+        ::ShowWindow(g_Toolhwnd, SW_SHOWDEFAULT);
+        ::UpdateWindow(g_Toolhwnd);
+
+        // Setup Dear ImGui context
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+        //io.ConfigViewportsNoAutoMerge = true;
+        //io.ConfigViewportsNoTaskBarIcon = true;
+        //io.ConfigViewportsNoDefaultParent = true;
+        //io.ConfigDockingAlwaysTabBar = true;
+        //io.ConfigDockingTransparentPayload = true;
+        //io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: Experimental. THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
+        //io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI: Experimental.
+
+        /// Custom 영역
+        // 타이틀 바를 컨트롤 할 때에만 움직임
+        io.ConfigWindowsMoveFromTitleBarOnly = true;
+        ///
+
+        // Setup Dear ImGui style
+        ImGui::StyleColorsDark();
+        //ImGui::StyleColorsLight();
+
+        // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+        ImGuiStyle& style = ImGui::GetStyle();
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            style.WindowRounding = 0.0f;
+            style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+        }
+
+        // Setup Platform/Renderer backends
+        ImGui_ImplWin32_Init(g_Toolhwnd);
+        ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
+
+        // Load Fonts
+        // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+        // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+        // - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+        // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+        // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
+        // - Read 'docs/FONTS.md' for more instructions and details.
+        // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+        //io.Fonts->AddFontDefault();
+        //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
+        //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
+        //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
+        //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
+        //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
+        //IM_ASSERT(font != nullptr);
+    };
+
+    yunutyEngine::YunutyCycle::SingleInstance().postUpdateAction = [&]() { ImGuiUpdate(); };
+    yunutyEngine::YunutyCycle::SingleInstance().postThreadAction = []()
+    {
+    };
+
+    yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
+    yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(1920, 1080);
+    yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(g_hwnd);
+
+    yunutyEngine::Scene::LoadScene(new yunutyEngine::Scene());
+
+    yunutyEngine::Collider2D::SetIsOnXYPlane(false);
+    auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{50,-30,0} });
+    directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
+    auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+    auto color = yunuGI::Color{ 1,1,1,1.f };
+    light->GetGI().SetLightDiffuseColor(color);
+
+    auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    auto cam = camObj->AddComponent<tests::GraphicsTestCam>();
+    camObj->GetTransform()->SetLocalPosition(yunutyEngine::Vector3{ 0,0,-20 });
+    cam->SetCameraMain();
+
+    yunutyEngine::YunutyCycle::SingleInstance().Play();
+    while (isRunning)
+    {
+        MSG msg;
+        while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
+        {
+            ::TranslateMessage(&msg);
+            ::DispatchMessage(&msg);
+            if (msg.message == WM_QUIT)
+            {
+                isRunning = false;
+            }
+        }
+
+        // 게임 엔진을 멈추고 동작을 실행하는 부분
+        {
+            std::scoped_lock lock{ loopTodoRegistrationMutex };
+            if (!loopRegistrations.empty())
+            {
+                //std::unique_lock preupdateLock{YunutyCycle::SingleInstance().preUpdateMutex};
+                //std::unique_lock updateLock{YunutyCycle::SingleInstance().updateMutex};
+
+                for (auto each : loopRegistrations)
+                    each();
+                loopRegistrations.clear();
+            }
+        }
+        if (!YunutyCycle::SingleInstance().IsGameRunning())
+        {
+            YunutyCycle::SingleInstance().Release();
+            isRunning = false;
+        }
+    }
+    if (YunutyCycle::SingleInstance().IsGameRunning())
+        YunutyCycle::SingleInstance().Release();
+
+
+    return 0; // 성공적으로 종료
+}
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param) {
+    switch (message) {
+        case WM_DESTROY:
+            PostQuitMessage(0);
+            break;
+        default:
+            return DefWindowProc(hwnd, message, w_param, l_param);
+    }
+    return 0;
+}
+
+LRESULT CALLBACK WndProcTool(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param)
+{
+    if (ImGui_ImplWin32_WndProcHandler(hwnd, message, w_param, l_param))
+        return true;
+
+    switch (message) {
+        case WM_DESTROY:
+            PostQuitMessage(0);
+            break;
+        case WM_SIZE:
+        {
+            if (w_param == SIZE_MINIMIZED)
+                return 0;
+
+            RECT rect = RECT();
+            GetClientRect(hwnd, &rect);
+            dockspaceArea = ImVec2(rect.right - rect.left, rect.bottom - rect.top);
+
+            POINT windowPos = POINT();
+            ClientToScreen(hwnd, &windowPos);
+            dockspaceStartPoint = ImVec2(windowPos.x, windowPos.y);
+
+            ResizeBuffers();
+
+            return 0;
+        }
+        case WM_MOVE:
+        {
+            POINT windowPos = POINT();
+            ClientToScreen(hwnd, &windowPos);
+            dockspaceStartPoint = ImVec2(windowPos.x, windowPos.y);
+
+            return 0;
+        }
+        default:
+            return DefWindowProc(hwnd, message, w_param, l_param);
+    }
+    return 0;
+}
+
+// Helper functions to use DirectX11
+bool CreateDeviceD3D(HWND hWnd)
+{
+    DXGI_SWAP_CHAIN_DESC1 sd{};
+    sd.BufferCount = 2;
+    sd.Width = 0;
+    sd.Height = 0;
+    sd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    sd.Stereo = FALSE;
+    sd.SampleDesc.Count = 1;
+    sd.SampleDesc.Quality = 0;
+    sd.BufferUsage = DXGI_USAGE_BACK_BUFFER | DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    sd.Scaling = DXGI_SCALING_STRETCH;
+    sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+    sd.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
+    sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+
+    IDXGIDevice2* dxgiDevice;
+    auto result1 = g_pd3dDevice->QueryInterface(IID_PPV_ARGS(&dxgiDevice));
+
+    IDXGIAdapter* dxgiAdapter;
+    auto result2 = dxgiDevice->GetAdapter(&dxgiAdapter);
+
+    IDXGIFactory2* dxgiFactory = nullptr;
+    auto result3 = dxgiAdapter->GetParent(IID_PPV_ARGS(&dxgiFactory));
+    dxgiAdapter->Release();
+
+    auto result4 = dxgiFactory->CreateSwapChainForHwnd(g_pd3dDevice, hWnd, &sd, nullptr, nullptr, &g_pSwapChain);
+    dxgiFactory->Release();
+
+    CreateRenderTarget();
+    return true;
+}
+
+void ResizeBuffers()
+{
+    if (g_mainRenderTargetView && g_pSwapChain)
+    {
+        g_mainRenderTargetView->Release();
+        g_pSwapChain->ResizeBuffers(0, dockspaceArea.x, dockspaceArea.y, DXGI_FORMAT_UNKNOWN, 0);
+        CreateRenderTarget();
+    }
+}
+
+void CleanupDeviceD3D()
+{
+    CleanupRenderTarget();
+    if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = nullptr; }
+    if (g_pd3dDeviceContext) { g_pd3dDeviceContext->Release(); g_pd3dDeviceContext = nullptr; }
+    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = nullptr; }
+}
+
+void CreateRenderTarget()
+{
+    ID3D11Texture2D* pBackBuffer;
+    g_pSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
+    g_pd3dDevice->CreateRenderTargetView(pBackBuffer, nullptr, &g_mainRenderTargetView);
+    pBackBuffer->Release();
+}
+
+void CleanupRenderTarget()
+{
+    if (g_mainRenderTargetView) { g_mainRenderTargetView->Release(); g_mainRenderTargetView = nullptr; }
+}
+
+void CreateMyWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show)
+{
+    // 윈도우 클래스 등록
+    WNDCLASS wc = {};
+    wc.lpfnWndProc = WndProc;
+    wc.hInstance = h_instance;
+    wc.lpszClassName = L"MyWindowClass";
+    RegisterClass(&wc);
+
+    // 윈도우 생성
+    g_hwnd = CreateWindow(
+        L"MyWindowClass",   // 등록한 윈도우 클래스 이름
+        L"My Window",       // 윈도우 제목
+        WS_OVERLAPPEDWINDOW, // 윈도우 스타일
+        100,      // x 좌표
+        100,      // y 좌표
+        1920,                // 너비
+        1080,                // 높이
+        nullptr,            // 부모 윈도우
+        nullptr,            // 메뉴 핸들
+        h_instance,         // 인스턴스 핸들
+        nullptr             // 추가 파라미터
+    );
+
+    // 윈도우를 화면에 표시
+    ShowWindow(g_hwnd, SW_SHOWDEFAULT);
+    UpdateWindow(g_hwnd);
+}
+
+void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show)
+{
+    // 윈도우 클래스 등록
+    WNDCLASSEX wcEditor = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProcTool, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("ResourceTool"), NULL };
+    RegisterClassEx(&wcEditor);
+
+    // 윈도우 생성
+    g_Toolhwnd = ::CreateWindow(wcEditor.lpszClassName, wcEditor.lpszClassName, WS_OVERLAPPEDWINDOW, 2020, 100, 1920, 1080, g_hwnd, NULL, wcEditor.hInstance, NULL);
+}
+
+void ImGuiUpdate()
+{
+    MSG msg;
+    while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
+    {
+        ::TranslateMessage(&msg);
+        ::DispatchMessage(&msg);
+        if (msg.message == WM_QUIT)
+        {
+            isRunning = false;
+        }
+    }
+
+    if (!isRunning)
+    {
+        return;
+    }
+
+    //Start the Dear ImGui frame
+    ImGui_ImplDX11_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
+
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
+    window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
+    window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+    window_flags |= ImGuiWindowFlags_MenuBar;
+    window_flags |= ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+
+    bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+    {
+        ImGui::SetNextWindowSize(dockspaceArea);
+        ImGui::SetNextWindowPos(dockspaceStartPoint);
+
+        InputUpdate();
+
+        ImGui::Begin("ParticleToolDockSpace", nullptr, window_flags);
+
+        // Dockspace
+        ImGui::DockSpace(ImGui::GetID("ParticleToolDockSpace"));
+
+        DrawMenuBar();
+
+        {
+            ImGui::Begin("List##Particle");
+
+            if (isParticleEditMode)
+            {
+                ShowParticleList();
+            }
+            else
+            {
+                ShowSkinnedFBXList();
+            }
+
+            ImGui::End();
+        }
+
+        {
+            ImGui::Begin("Edit Data##Particle");
+
+            if (isParticleEditMode)
+            {
+                ShowParticleEditor();
+            }
+            else
+            {
+                ShowSequencerEditor();
+            }
+
+            ImGui::End();
+        }
+
+        {
+            ImGui::Begin("RenderImage##Particle");
+
+            auto size = ImGui::GetContentRegionAvail();
+
+            // 그려지는 영역에 맞게 화면 비 재구성
+            auto rect = yunutyEngine::graphics::Renderer::SingleInstance().GetResolution();
+            float ratio = (float)rect.y / (float)rect.x;
+            auto winMin = ImGui::GetWindowContentRegionMin();
+            auto winMax = ImGui::GetWindowContentRegionMax();
+            ImVec2 newRegion(winMax.x - winMin.x, winMax.y - winMin.y);
+            float newRegionRatio = newRegion.y / newRegion.x;
+
+            if (newRegionRatio >= ratio)
+            {
+                newRegion.y = newRegion.x * ratio;
+            }
+            else
+            {
+                newRegion.x = newRegion.y / ratio;
+            }
+
+            ImGui::Image(
+                reinterpret_cast<ImTextureID>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetFinalRenderImage()),
+                ImVec2(newRegion.x, newRegion.y)
+            );
+            ImGui::End();
+        }
+
+        ImGui::End();
+    }
+
+    ImGui::Render();
+
+    const float clear_color_with_alpha[4] = { clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w };
+
+    g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
+    g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color_with_alpha);
+    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+    // Update and Render additional Platform Windows
+    if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+    }
+
+    //g_EditorpSwapChain->Present(1, 0); // Present with vsync
+    g_pSwapChain->Present(0, 0); // Present without vsync
+}
+
+void DrawMenuBar()
+{
+    ImGui::BeginMenuBar();
+
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
+
+    if (ImGui::BeginMenu("Mode"))
+    {
+        if (ImGui::MenuItem("Particle Edit Mode", 0, isParticleEditMode))
+        {
+            if (!isParticleEditMode)
+            {
+                isParticleEditMode = true;
+            }
+        }
+
+        if (ImGui::MenuItem("Sequencer Mode", 0, !isParticleEditMode))
+        {
+            if (isParticleEditMode)
+            {
+                isParticleEditMode = false;
+            }
+        }
+
+        ImGui::EndMenu();
+    }
+
+    if (isParticleEditMode)
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            if (ImGui::MenuItem("Load"))
+            {
+
+            }
+            if (ImGui::MenuItem("Save As"))
+            {
+
+            }
+            if (ImGui::MenuItem("Save"))
+            {
+
+            }
+
+            ImGui::EndMenu();
+        }
+    }
+    else
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            if (ImGui::MenuItem("Load"))
+            {
+
+            }
+            if (ImGui::MenuItem("Save As"))
+            {
+
+            }
+            if (ImGui::MenuItem("Save"))
+            {
+
+            }
+
+            ImGui::EndMenu();
+        }
+    }
+
+    ImGui::Text(" | Use IBL : ");
+    if (ImGui::Checkbox("##Use IBL", &g_useIBL))
+    {
+        yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(g_useIBL);
+    }
+
+    if (!currentPath.empty())
+    {
+        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(currentPath.string().c_str()).x - 10);
+        ImGui::Text(currentPath.string().c_str());
+    }
+
+    ImGui::PopStyleColor();
+    ImGui::EndMenuBar();
+}
+
+void ShowParticleList()
+{
+
+}
+
+void ShowSkinnedFBXList()
+{
+
+}
+
+void ShowParticleEditor()
+{
+
+}
+
+void ShowSequencerEditor()
+{
+
+}
+
+std::filesystem::path SaveFileDialog(const char* filter, const char* initialDir)
+{
+    OPENFILENAMEA ofn;       // common dialog box structure
+    CHAR szFile[260] = { 0 };       // if using TCHAR macros
+
+    // Initialize OPENFILENAME
+    ZeroMemory(&ofn, sizeof(OPENFILENAME));
+    ofn.lStructSize = sizeof(OPENFILENAME);
+    ofn.hwndOwner = g_Toolhwnd;
+    ofn.lpstrFile = szFile;
+    ofn.nMaxFile = sizeof(szFile);
+    ofn.lpstrFilter = filter;
+    ofn.nFilterIndex = 1;
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+
+    if (initialDir != "")
+    {
+        ofn.lpstrInitialDir = initialDir;
+    }
+
+    if (GetSaveFileNameA(&ofn) == TRUE)
+    {
+        std::string fp = ofn.lpstrFile;
+        std::replace(fp.begin(), fp.end(), '\\', '/');
+        return std::filesystem::path(fp);
+    }
+
+    return std::filesystem::path();
+}
+
+std::filesystem::path LoadFileDialog(const char* filter, const char* initialDir)
+{
+    OPENFILENAMEA ofn;       // common dialog box structure
+    CHAR szFile[260] = { 0 };       // if using TCHAR macros
+
+    // Initialize OPENFILENAME
+    ZeroMemory(&ofn, sizeof(OPENFILENAME));
+    ofn.lStructSize = sizeof(OPENFILENAME);
+    ofn.hwndOwner = g_Toolhwnd;
+    ofn.lpstrFile = szFile;
+    ofn.nMaxFile = sizeof(szFile);
+    ofn.lpstrFilter = filter;
+    ofn.nFilterIndex = 1;
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+
+    if (initialDir != "")
+    {
+        ofn.lpstrInitialDir = initialDir;
+    }
+
+    if (GetOpenFileNameA(&ofn) == TRUE)
+    {
+        std::string fp = ofn.lpstrFile;
+        std::replace(fp.begin(), fp.end(), '\\', '/');
+        return std::filesystem::path(fp);
+    }
+
+    return std::filesystem::path();
+}
+
+std::vector<std::filesystem::path> GetSubdirectories(const std::filesystem::path& directoryPath)
+{
+    std::vector<std::filesystem::path> subdirectories;
+    WIN32_FIND_DATAA findData;
+    HANDLE hFind = FindFirstFileA((directoryPath.string() + "\\*").c_str(), &findData);
+    if (hFind != INVALID_HANDLE_VALUE)
+    {
+        do
+        {
+            if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+            {
+                if (strcmp(findData.cFileName, ".") != 0 && strcmp(findData.cFileName, "..") != 0)
+                {
+                    subdirectories.push_back(findData.cFileName);
+                }
+            }
+        } while (FindNextFileA(hFind, &findData));
+        FindClose(hFind);
+    }
+
+    return subdirectories;
+}
+
+void InputUpdate()
+{
+    if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
+    {
+        if (ImGui::IsKeyPressed(ImGuiKey_S, false))
+        {
+            if (isParticleEditMode)
+            {
+                if (!currentPath.empty())
+                {
+
+                }
+                else
+                {
+
+                }
+            }
+            else
+            {
+                if (!currentPath.empty())
+                {
+
+                }
+                else
+                {
+
+                }
+            }
+        }
+    }
+}
+
+void LoadResourcesRecursively()
+{
+    {
+        const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+        /// SCRES 우선 로드
+        resourceManager->LoadFile("FBXMaterial.scres");
+
+        // 나머지 기타등등 파일들 로드하기
+        {
+            namespace fs = std::filesystem;
+            std::set<std::string> validExtensions{ ".jpg", ".bmp", ".tga", ".dds", ".cso" ,".png" };
+            fs::path basePath{ "./" };
+            try
+            {
+                if (fs::exists(basePath) && fs::is_directory(basePath))
+                {
+                    for (const auto& entry : fs::recursive_directory_iterator(basePath))
+                    {
+                        if (fs::is_regular_file(entry) && validExtensions.contains(entry.path().extension().string()))
+                        {
+                            auto relativePath = fs::relative(entry.path(), basePath);
+                            resourceManager->LoadFile(relativePath.string().c_str());
+                        }
+                    }
+                }
+            }
+            catch (const fs::filesystem_error& err) {
+                std::cerr << "Error: " << err.what() << std::endl;
+            }
+        }
+
+        // FBX 로드하기
+        {
+            auto directorList = GetSubdirectories("FBX");
+            for (auto each : directorList)
+            {
+                resourceManager->LoadFile(("FBX/" + each.string()).c_str());
+            }
+        }
+    }
+}

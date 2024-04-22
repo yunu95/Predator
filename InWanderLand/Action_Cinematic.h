@@ -1,3 +1,7 @@
+/// 2024. 04. 17 김상준
+/// Cinematic 에 관련된 Action 목록입니다. 
+
+
 #pragma once
 
 #include "IAction.h"

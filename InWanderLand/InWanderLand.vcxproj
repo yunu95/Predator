@@ -984,6 +984,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="..\Include\ImGui\imgui.h" />
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
     <ClInclude Include="ActionList.h" />
+    <ClInclude Include="Action_Tutorial.h" />
     <ClInclude Include="Action_WaitPreviousActionEnd.h" />
     <ClInclude Include="Action_Camera.h" />
     <ClInclude Include="Action_Cinematic.h">
@@ -1243,6 +1244,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\ImGuizmo\ImGuizmo.cpp" />
+    <ClCompile Include="Action_Tutorial.cpp" />
     <ClCompile Include="Action_WaitPreviousActionEnd.cpp" />
     <ClCompile Include="Action_Camera.cpp" />
     <ClCompile Include="Action_Cinematic.cpp">

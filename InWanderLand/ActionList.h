@@ -10,3 +10,4 @@
 #include "Action_Cinematic.h"
 #include "Action_Camera.h"
 #include "Action_WaitPreviousActionEnd.h"
+#include "Action_Tutorial.h"
