@@ -11,22 +11,22 @@ struct JsonUIData
     string openTarget;
     // 만약 플래그에 diablingButton이 있다면 버튼을 눌렀을 때 비활성화시킬 UI 창을 의미한다.
     string disablingTarget;
-    std::vector<double> pivot;
-    std::vector<double> anchor;
-    std::vector<double> anchoredPosition;
-    std::vector<double> enableOffset;
-    std::vector<double> disableOffset;
+    std::vector<float> color;
+    std::vector<float> pivot;
+    std::vector<float> anchor;
+    std::vector<float> anchoredPosition;
+    std::vector<float> enableOffset;
+    std::vector<float> disableOffset;
     double enableDelay;
     double disableDelay;
     double enableDuration;
     double disableDuration;
     int enableCurveType;
     int disableCurveType;
+    double adjustingRate;
     double rotation;
     double width;
     double height;
-    string fontAsset;
-    int fontSize;
     // 임의로 사용하게 될 사용자 플래그
     int customFlags;
     // UI의 고유한 EnumID

@@ -3,7 +3,7 @@ enum class UIEnumID
 {
     // 아무것도 아님.
     None = 0,
-    // 로빈, 우르술라, 헨젤의 초상화, 초상화를 가리는 핏빛 오버레이, 체력을 표시하는 텍스트 UI
+    // 로빈, 우르술라, 헨젤의 초상화, 초상화를 가리는 적색 부상 오버레이, 체력을 표시하는 텍스트 UI
     Portrait_Robin,
     Portrait_Blood_Robin,
     Portrait_HP_Robin,
@@ -15,18 +15,32 @@ enum class UIEnumID
     Portrait_HP_Hansel,
     // 로빈 스킬시전 Q
     Skill_Use_Q_Robin,
-    // 로빈 스킬시전 Q
+    // 로빈 스킬시전 Q 흑백 오버레이
+    Skill_Use_Q_Robin_Overlay,
+    // 로빈 스킬시전 W
     Skill_Use_W_Robin,
-    // 로빈 스킬시전 Q
+    // 로빈 스킬시전 W 흑백 오버레이
+    Skill_Use_W_Robin_Overlay,
+    // 우르술라 스킬시전 Q
     Skill_Use_Q_Ursula,
-    // 로빈 스킬시전 Q
+    // 우르술라 스킬시전 Q 흑백 오버레이
+    Skill_Use_Q_Ursula_Overlay,
+    // 우르술라 스킬시전 W
     Skill_Use_W_Ursula,
-    // 로빈 스킬시전 Q
+    // 우르술라 스킬시전 W 흑백 오버레이 
+    Skill_Use_W_Ursula_Overlay,
+    // 헨젤 스킬시전 Q
     Skill_Use_Q_HANSEL,
-    // 로빈 스킬시전 Q
+    // 헨젤 스킬시전 Q 흑백 오버레이
+    Skill_Use_Q_HANSEL_Overlay,
+    // 헨젤 스킬시전 W
     Skill_Use_W_HANSEL,
+    // 헨젤 스킬시전 W 흑백 오버레이
+    Skill_Use_W_HANSEL_Overlay,
     // 전술모드 토글버튼
     Toggle_TacticMode,
+    // 전술모드 토글버튼 흑백 오버레이
+    Toggle_TacticMode_Overlay,
     // 사운드가 켜진 상태에서 표시할 UI버튼
     Sound_On,
     // 사운드가 꺼진 상태에서 표시할 UI버튼

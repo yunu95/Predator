@@ -22,6 +22,12 @@ public:
     {
         currentFloat = value;
     }
+    void SetFollowingRate(float followingRate)
+    {
+        this->followingRate = followingRate;
+        if (followingRate == 0)
+            justApplyit = true;
+    }
     void SetTargetFloat(float target)
     {
         targetFloat = target;

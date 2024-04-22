@@ -225,6 +225,7 @@ void application::contents::ContentsLayer::Finalize()
 
 void application::contents::ContentsLayer::PlayContents()
 {
+    UIManager::Instance().ImportUI("InWanderLand.iwui");
 	SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
 	editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 	//UIManager::Instance().ImportUI("InWanderLand.iwui");
@@ -255,7 +256,6 @@ void application::contents::ContentsLayer::PlayContents()
 	//RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
 	//RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
 	//RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
-    UIManager::Instance().ImportUI("InWanderLand.iwui");
 
 	auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 

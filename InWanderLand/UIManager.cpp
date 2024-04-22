@@ -7,6 +7,7 @@
 #include "ContentsLayer.h"
 #include "UIElement.h"
 #include "UIOffsetTransition.h"
+#include "FloatFollower.h"
 #include <fstream>
 
 void UIManager::Clear()
@@ -236,6 +237,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         uiImageComponent->GetGI().SetXPivot(uiData.pivot[0]);
         uiImageComponent->GetGI().SetYPivot(1 - uiData.pivot[1]);
         uiImageComponent->GetGI().SetLayer(uiImportingPriority);
+        uiImageComponent->GetGI().SetColor(yunuGI::Color{ uiData.color[0],uiData.color[1],uiData.color[2],uiData.color[3] });
 
         uiButtonComponent = element->button = uiObject->AddComponent<UIButton>();
         uiButtonComponent->SetImageComponent(uiImageComponent);
@@ -245,7 +247,40 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
     // 만약 버튼이라면...
     if (uiData.customFlags & (int)UIExportFlag::IsButton)
     {
-        uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+        //uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+    }
+    if (uiData.customFlags & (int)UIExportFlag::CanAdjustHeight)
+    {
+        assert(!element->adjuster);
+        element->adjuster = uiObject->AddComponent<FloatFollower>();
+        element->adjuster->SetFollowingRate(uiData.adjustingRate);
+        element->adjuster->applier = [=](float val)
+            {
+                uiImageComponent->GetGI().SetHeight(val * uiData.height);
+            };
+    }
+    if (uiData.customFlags & (int)UIExportFlag::CanAdjustWidth)
+    {
+        assert(!element->adjuster);
+        element->adjuster = uiObject->AddComponent<FloatFollower>();
+        element->adjuster->SetFollowingRate(uiData.adjustingRate);
+        element->adjuster->applier = [=](float val)
+            {
+                uiImageComponent->GetGI().SetWidth(val * uiData.width);
+            };
+    }
+    if (uiData.customFlags & (int)UIExportFlag::CanAdjustRadialFill)
+    {
+        assert(!element->adjuster);
+        // 위를 덮어씌우는 이미지
+        element->imageComponent->GetGI().SetRadialFillMode(true);
+        element->imageComponent->GetGI().SetRadialFillDegree(0);
+        element->adjuster = uiObject->AddComponent<FloatFollower>();
+        element->adjuster->SetFollowingRate(uiData.adjustingRate);
+        element->adjuster->applier = [=](float val)
+            {
+                element->imageComponent->GetGI().SetRadialFillDegree(val * 360);
+            };
     }
 
     Vector3d pivotPos{ 0,0,0 };
