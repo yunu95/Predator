@@ -18,6 +18,15 @@ namespace yunuGI
         virtual void SetXPivot(float xPivot) = 0;
         virtual void SetYPivot(float yPivot) = 0;
         virtual int GetLayer() = 0;
+        virtual yunuGI::Color GetColor() = 0;
+        virtual void SetColor(const yunuGI::Color& color) = 0;
+        virtual bool IsRadialFillMode() = 0;
+        // 텍스처가 중심에서부터 갉아먹는 형태로 채워지는지 여부를 설정
+        virtual void SetRadialFillMode(bool fill) = 0;
+        virtual void SetRadialFillDegree(float radian) = 0;
+        virtual void SetRadialFillStartPoint(float x, float y) = 0;
+        // 시계방향으로 채우는지 반시계 방향으로 채우는지 설정
+        virtual void SetRadialFillDirection(bool isClockwise) = 0;
     };
     struct IUIImageDesc
     {

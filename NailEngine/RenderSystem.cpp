@@ -499,12 +499,33 @@ void RenderSystem::RenderBackBuffer()
 
 void RenderSystem::RenderUI()
 {
-    //this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied());
-    this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied(), nullptr, nullptr, nullptr, [=]()
+    //this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied(), nullptr, nullptr, nullptr, [=]()
+    bool preprocessed = !preProcessingUiImages.empty();
+    for (auto each : preProcessingUiImages)
+    {
+        each->PreProcessTexture();
+    }
+    preProcessingUiImages.clear();
+
+    if (preprocessed)
+    {
+        D3D11_VIEWPORT viewport
         {
-            auto ps = std::static_pointer_cast<PixelShader>(ResourceManager::Instance.Get().GetShader(L"UIImagePS.cso"));
-            ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShader(ps->ps.Get(), 0, 0);
-        });
+             .TopLeftX = 0.0f,
+             .TopLeftY = 0.0f,
+             .Width = static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().width),
+             .Height = static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().height),
+             .MinDepth = 0.0f,
+             .MaxDepth = 1.0f,
+        };
+        ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
+        ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1,
+            ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
+            ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
+    }
+    //preProcessingUiImages.clear();
+
+    this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied());
     for (auto& i : UIImageSet)
     {
         auto uiImage = std::static_pointer_cast<UIImage>(i);
@@ -521,7 +542,14 @@ void RenderSystem::RenderUI()
         drawRect.top = tm._42 - uiImage->GetYPivot() * uiImage->GetHeight() * tm._22;
         drawRect.bottom = tm._42 + (1 - uiImage->GetYPivot()) * uiImage->GetHeight() * tm._22;
         auto texture = ((Texture*)(std::static_pointer_cast<UIImage>(i)->GetTexture()));
-        this->spriteBatch->Draw(texture->GetSRV().Get(), drawRect);
+        if (uiImage->IsUsingProcessedTexture())
+        {
+            this->spriteBatch->Draw(std::static_pointer_cast<UIImage>(i)->GetProcessedTextureSRV(), drawRect, uiImage->GetColor());
+        }
+        else
+        {
+            this->spriteBatch->Draw(texture->GetSRV().Get(), drawRect, uiImage->GetColor());
+        }
     }
     this->spriteBatch->End();
 
@@ -701,7 +729,7 @@ void RenderSystem::PushUIObject(std::shared_ptr<nail::IRenderable> renderable)
 {
     this->UIImageSet.insert(renderable);
 }
-void RenderSystem::PushPreProcessingUIObject(std::weak_ptr<nail::IRenderable> renderable)
+void RenderSystem::PushPreProcessingUIObject(UIImage* renderable)
 {
     preProcessingUiImages.insert(renderable);
 }
