@@ -27,7 +27,7 @@ private:
 
 	bool isWaveActivated = false;
 
-	float m_elapsed = 0.0f;
+	float m_elapsed{ 0.0f };
 
 	std::vector<UnitProductor*> productorSelector;
 

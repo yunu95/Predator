@@ -1,6 +1,7 @@
 #include "InWanderLand.h"
 #include "RTSCam.h"
 #include "RegionData.h"
+#include "eKeyCode.h"
 
 void RTSCam::Start()
 {

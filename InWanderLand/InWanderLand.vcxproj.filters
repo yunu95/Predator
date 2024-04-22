@@ -1162,9 +1162,6 @@
     <ClInclude Include="Trigger_Region.h">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClInclude>
-    <ClInclude Include="UIImage.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="Module_ScriptEditor.h">
       <Filter>Editor\Panel\List\Module\List</Filter>
     </ClInclude>
@@ -1249,7 +1246,9 @@
     <ClInclude Include="TrapTriggerSensor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
     </ClInclude>
-    <ClInclude Include="ResurrectionSystem.h" />
+    <ClInclude Include="ResurrectionSystem.h">
+      <Filter>Contents\ResurrectionSystem</Filter>
+    </ClInclude>
     <ClInclude Include="FloatFollower.h">
       <Filter>UI\Effect\FloatFollower</Filter>
     </ClInclude>
@@ -1904,7 +1903,9 @@
     <ClCompile Include="TrapTriggerSensor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
     </ClCompile>
-    <ClCompile Include="ResurrectionSystem.cpp" />
+    <ClCompile Include="ResurrectionSystem.cpp">
+      <Filter>Contents\ResurrectionSystem</Filter>
+    </ClCompile>
     <ClCompile Include="UIElement.cpp">
       <Filter>UI\UIElement</Filter>
     </ClCompile>

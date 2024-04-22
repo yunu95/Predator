@@ -28,39 +28,31 @@ public:
 		WSkill
 	};
 
-	void SetCurrentSelectedPlayerUnit(Unit::UnitType p_type);
-
+	void SetLeftClickAddQueueForMove(InputManager::SelectedSerialNumber currentSelectedNum);
 	void SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum);
 	void SetLeftClickAddQueueForSkill(InputManager::SelectedSerialNumber currentSelectedNum, Unit::SkillEnum currentSelectedSkill);
+	/// Tutorial 관련 멤버
+	void RegisterTutorialQuestAction(Unit::UnitType p_targetUnit, OrderType p_orderType);
 
 	void EngageTacticMode();
 	void ExitTacticMode();
 	void SetMovingSystemComponent(RTSCam* sys);
 	bool IsTacticModeActivated(Unit* p_unit);			/// 전술모드가 끝날 때, parameter의 유닛이 입력된 명령이 있는가를 판별합니다. fsm transition에서 사용. 
 
-	void CallQueueFunction(Unit* p_unit);
-
-	bool isTacticModeStarted;
+	bool isTacticModeOperating;
 
 private:
-	int queueOrderIndex = 0;
-	int executingOrderIndex = 0;
+	int tacticModeGauge{ 10 };
 	RTSCam* m_rtsCam;
 
 	Unit::UnitType m_currentSelectedPlayerNumber;
 	Unit* currentSelectedUnit;
 	Unit* currentActivatedUnit;
 
-	std::unordered_map<Unit::UnitType, Unit*> playerComponentMap;
-	std::unordered_map<int, Unit*> processingUnitMap;						// queue에 쌓인 유닛의 스킬을 순서대로 처리하기 위한 map.
-	std::multimap<Unit*, Vector3d> processingSkillPosMap;						
+	std::unordered_map<Unit::UnitType, Unit*> playerComponentMap;					
 
 	std::queue<std::function<void()>>* currentSelectedQueue;
-	std::unordered_map<std::string, std::queue<std::function<void()>>*> m_queueSelector;
-
-	std::queue<std::function<void()>> warriorQueue;
-	std::queue<std::function<void()>> magicianQueue;
-	std::queue<std::function<void()>> healerQueue;
+	std::unordered_map<Unit::UnitType, std::queue<std::function<void()>>*> m_queueSelector;
 
 	void SetCurrentSelectedQueue(Unit* p_currentUnit);
 };

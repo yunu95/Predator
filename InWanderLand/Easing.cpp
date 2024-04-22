@@ -8,9 +8,9 @@
 #define PI 3.1415926545
 #endif
 
-#ifndef E
-#define E 2.71828
-#endif
+//#ifndef E
+//#define W 2.71828
+//#endif
 
 double easeInSine(double t) {
 	return 1 - cos((t * PI) / 2);

@@ -90,7 +90,7 @@ public:
 
 	virtual void SetUnitData() = 0;
 
-	virtual void SetPlayerRelatedComponents(Unit* playerUnit);
+	virtual void SetPlayerRelatedComponents();
 	virtual void MappingUnitData(application::editor::POD_Unit_TemplateData p_podData);
 
 	virtual void Update() override;

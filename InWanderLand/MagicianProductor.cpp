@@ -136,10 +136,10 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 	UnitProductor::AddColliderComponent();
 	UnitProductor::AddNavigationComponent();
 	UnitProductor::AddDotweenComponent();
-	UnitProductor::SetPlayerRelatedComponents(m_unitComponent);
+	UnitProductor::SetPlayerRelatedComponents();
 
 	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::Q, skillOneRange);
-	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::W, skillTwoRange);
+	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::E, skillTwoRange);
 
 	auto skinnedMeshRenderer = m_unitGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
 	auto material = skinnedMeshRenderer->GetGI().GetMaterial();
@@ -165,7 +165,7 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 			m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
 			animator->PushAnimation(m_baseUnitAnimations.m_walkAnimation);
 		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+		/*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
 		{
 			m_baseUnitAnimations.m_attackAnimation = each;
 			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
@@ -176,7 +176,7 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
 			animator->PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
 		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
 		{
 			m_baseUnitAnimations.m_deathAnimation = each;
 			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
@@ -193,7 +193,12 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 		{
 			each->SetLoop(false);
 			animator->PushAnimation(each);
-			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::W, each);
+			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::E, each);
+		}
+		/*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+		{
+			m_baseUnitAnimations.m_battleEngageAnimation = each;
+			m_baseUnitAnimations.m_battleEngageAnimation->SetLoop(false);
 		}
 	}
 

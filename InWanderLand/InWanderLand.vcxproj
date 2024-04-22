@@ -1213,7 +1213,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UIElement.h" />
     <ClInclude Include="UIEnumID.h" />
     <ClInclude Include="UIExportFlag.h" />
-    <ClInclude Include="UIImage.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UIOffsetTransition.h" />
     <ClInclude Include="UIPanel.h" />

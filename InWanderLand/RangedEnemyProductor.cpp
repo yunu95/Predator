@@ -4,6 +4,7 @@
 #include "DebugMeshes.h"
 #include "Unit_TemplateData.h"
 #include "BossSkillSystem.h"
+#include "BurnEffect.h"
 
 void RangedEnemyProductor::SetUnitData()
 {

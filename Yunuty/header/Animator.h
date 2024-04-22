@@ -33,6 +33,7 @@ namespace yunutyEngine::graphics
 		Animator();
 		void Update();
 		virtual ~Animator() {};
+		void Pause();
 		void Play(yunuGI::IAnimation* animation);
 		void PushAnimation(yunuGI::IAnimation* animation, unsigned int frame = 0, std::function<void()> func = nullptr);
 		void SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame);
