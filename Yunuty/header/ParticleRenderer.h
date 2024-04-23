@@ -60,11 +60,13 @@ namespace yunutyEngine::graphics
 
 		virtual void Update() override;
 		virtual void OnTransformUpdate() override;
+		virtual void OnDisable() override;
 
 		void DirectionUpate();
 		void ParticleUpdate();
 
 		void SetParticleShape(ParticleShape particleType);
+		void SetParticleMode(ParticleMode particleMode);
 		void SetMaxParticle(unsigned int maxParticle);
 		void SetRateOverTime(float rateOverTime);
 		void Play();
@@ -77,6 +79,8 @@ namespace yunutyEngine::graphics
 
 		void SetStartScale(float scale);
 		void SetEndScale(float scale);
+
+		void SetPlayAwake(bool playAwake);
 
 	private:
 		yunuGI::Vector3 GenerateRandomDirectionInCone(yunuGI::ParticleRenderInfo& particle);
@@ -102,10 +106,16 @@ namespace yunutyEngine::graphics
 
 		unsigned int maxParticle = 500;
 
+		float interval = 5.f;
+		int burstsCount = 30;
+		float burstsAngle = 12 * (3.14159265358979323846 / 180.f);
+		bool playAwake = true;
+		bool originPlayAwake = true;
+
 		std::deque<yunuGI::ParticleRenderInfo> disableParticles;
 		std::list<yunuGI::ParticleRenderInfo> ableParticles;
 
 		Shape shape;
-		ParticleMode mode = ParticleMode::Default;
+		ParticleMode particleMode = ParticleMode::Default;
 	};
 }

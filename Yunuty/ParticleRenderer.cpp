@@ -14,6 +14,22 @@ yunutyEngine::graphics::ParticleRenderer::ParticleRenderer() :
 
 }
 
+void ParticleRenderer::SetPlayAwake(bool playAwake)
+{
+	this->playAwake = playAwake;
+	this->originPlayAwake = playAwake;
+}
+
+void ParticleRenderer::OnDisable()
+{
+	this->playAwake = this->originPlayAwake;
+}
+
+void ParticleRenderer::SetParticleMode(ParticleMode particleMode)
+{
+	this->particleMode = particleMode;
+}
+
 void ParticleRenderer::DirectionUpate()
 {
 	for (auto iter = this->ableParticles.begin(); iter != this->ableParticles.end();)
@@ -174,62 +190,113 @@ void ParticleRenderer::Update()
 		curCreationCycle += Time::GetDeltaTime();
 
 		// 만일 입자를 생성할 시기가 되면 설정해둔 입자 생성 갯수만큼 활성
-		if (curCreationCycle >= (1.f / rateOverTime))
+		if (this->particleMode == ParticleMode::Default)
 		{
-			curCreationCycle -= (1.f / rateOverTime);
-
-			// 이제 입자 활성화
-			auto& particle = this->disableParticles.front();
-
-			if (this->particleType == ParticleShape::Cone)
+			if (curCreationCycle >= (1.f / rateOverTime))
 			{
-				if (this->mode == ParticleMode::Default)
+				curCreationCycle -= (1.f / rateOverTime);
+
+				// 이제 입자 활성화
+				if (!disableParticles.empty())
 				{
-					particle.direction = this->GenerateRandomDirectionInCone(particle);
+					auto& particle = this->disableParticles.front();
 
-					auto worldPos = yunuGI::Vector4(particle.position.x, particle.position.y, particle.position.z, 0.f)
-						* GetTransform()->GetWorldTM();
+					if (this->particleType == ParticleShape::Cone)
+					{
 
-					particle.position = yunuGI::Vector3{ worldPos.x,worldPos.y,worldPos.z };
+						particle.direction = this->GenerateRandomDirectionInCone(particle);
+
+						auto worldPos = yunuGI::Vector4(particle.position.x, particle.position.y, particle.position.z, 0.f)
+							* GetTransform()->GetWorldTM();
+
+						particle.position = yunuGI::Vector3{ worldPos.x,worldPos.y,worldPos.z };
 
 
-					auto tempDir = yunuGI::Vector4(particle.direction.x, particle.direction.y, particle.direction.z, 0.f)
-						* GetTransform()->GetWorldTM();
+						auto tempDir = yunuGI::Vector4(particle.direction.x, particle.direction.y, particle.direction.z, 0.f)
+							* GetTransform()->GetWorldTM();
 
-					particle.direction = yunuGI::Vector3{ tempDir.x,tempDir.y, tempDir.z };
+						particle.direction = yunuGI::Vector3{ tempDir.x,tempDir.y, tempDir.z };
+					}
+					else if (this->particleType == ParticleShape::Circle)
+					{
+						auto tempPos = getRandomPointInCircle(0, 0, this->shape.circle.radius);
+
+						particle.position = yunuGI::Vector3{ tempPos.x,0,tempPos.y };
+
+						auto worldPos = yunuGI::Vector4(particle.position.x, particle.position.y, particle.position.z, 0.f)
+							* GetTransform()->GetWorldTM();
+
+						particle.position = yunuGI::Vector3{ worldPos.x,worldPos.y,worldPos.z };
+
+						particle.direction = yunuGI::Vector3{ tempPos.x,0,tempPos.y }.Normalize(yunuGI::Vector3{ tempPos.x,0,tempPos.y });;
+
+						auto tempDir = yunuGI::Vector4(particle.direction.x, particle.direction.y, particle.direction.z, 0.f)
+							* GetTransform()->GetWorldTM();
+						particle.direction = yunuGI::Vector3{ tempDir.x,tempDir.y, tempDir.z };
+					}
+
+					this->disableParticles.pop_front();
+					this->ableParticles.push_back(particle);
+				}
+			}
+		}
+		else
+		{
+			if ((curCreationCycle >= interval) || (this->playAwake))
+			{
+				if (this->playAwake)
+				{
+					this->playAwake = false;
 				}
 				else
 				{
+					curCreationCycle -= interval;
+				}
 
+				if (!disableParticles.empty())
+				{
+					for (int i = 0; i < burstsCount; ++i)
+					{
+						auto& particle = this->disableParticles.front();
+
+						if (this->particleType == ParticleShape::Cone)
+						{
+							particle.direction = this->GenerateRandomDirectionInCone(particle);
+
+							auto worldPos = yunuGI::Vector4(particle.position.x, particle.position.y, particle.position.z, 0.f)
+								* GetTransform()->GetWorldTM();
+
+							particle.position = yunuGI::Vector3{ worldPos.x,worldPos.y,worldPos.z };
+
+
+							auto tempDir = yunuGI::Vector4(particle.direction.x, particle.direction.y, particle.direction.z, 0.f)
+								* GetTransform()->GetWorldTM();
+
+							particle.direction = yunuGI::Vector3{ tempDir.x,tempDir.y, tempDir.z };
+						}
+						else if (this->particleType == ParticleShape::Circle)
+						{
+							auto tempPos = getRandomPointInCircle(0, 0, this->shape.circle.radius);
+
+							particle.position = yunuGI::Vector3{ tempPos.x,0,tempPos.y };
+
+							auto worldPos = yunuGI::Vector4(particle.position.x, particle.position.y, particle.position.z, 0.f)
+								* GetTransform()->GetWorldTM();
+
+							particle.position = yunuGI::Vector3{ worldPos.x,worldPos.y,worldPos.z };
+
+							particle.direction = yunuGI::Vector3{ tempPos.x,0,tempPos.y }.Normalize(yunuGI::Vector3{ tempPos.x,0,tempPos.y });;
+
+							auto tempDir = yunuGI::Vector4(particle.direction.x, particle.direction.y, particle.direction.z, 0.f)
+								* GetTransform()->GetWorldTM();
+							particle.direction = yunuGI::Vector3{ tempDir.x,tempDir.y, tempDir.z };
+						}
+
+						this->disableParticles.pop_front();
+						this->ableParticles.push_back(particle);
+					}
 				}
 			}
-			else if (this->particleType == ParticleShape::Circle)
-			{
-				if (this->mode == ParticleMode::Default)
-				{
-					auto tempPos = getRandomPointInCircle(0, 0, this->shape.circle.radius);
-
-					particle.position = yunuGI::Vector3{ tempPos.x,0,tempPos.y };
-
-					auto worldPos = yunuGI::Vector4(particle.position.x, particle.position.y, particle.position.z, 0.f)
-						* GetTransform()->GetWorldTM();
-
-					particle.position = yunuGI::Vector3{ worldPos.x,worldPos.y,worldPos.z };
-
-					particle.direction = yunuGI::Vector3{ tempPos.x,0,tempPos.y }.Normalize(yunuGI::Vector3{ tempPos.x,0,tempPos.y });;
-
-					auto tempDir = yunuGI::Vector4(particle.direction.x, particle.direction.y, particle.direction.z, 0.f)
-						* GetTransform()->GetWorldTM();
-					particle.direction = yunuGI::Vector3{ tempDir.x,tempDir.y, tempDir.z };
-				}
-				else
-				{
-
-				}
-			}
-
-			this->disableParticles.pop_front();
-			this->ableParticles.push_back(particle);
 		}
 		// 생성된 입자들은 포지션, 스케일 업데이트
 		ParticleUpdate();
