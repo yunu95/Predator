@@ -8,12 +8,14 @@ class RangedAttackSystem : public AttackSystem
 {
 private:
 	float m_bulletSpeed;
+	float m_range;
 	Unit* m_ownerUnit;
 public:
 	virtual void Attack(Unit* opponentUnit, float offset) override;
 
 	void SetOwnerUnit(Unit* p_unit);
 	void SetBulletSpeed(float speed);
+	void SetRange(float p_rng);
 
 public:
 	virtual void Start() override;

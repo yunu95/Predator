@@ -57,6 +57,8 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 #pragma region Auto Attack Setting
 	auto rangedAttackSystem = m_unitGameObject->AddComponent<RangedAttackSystem>();
 	rangedAttackSystem->SetBulletSpeed(10.0f);
+	rangedAttackSystem->SetRange(20.0f);
+	rangedAttackSystem->SetOwnerUnit(m_unitComponent);
 #pragma endregion
 
 	if (isEliteMonster)

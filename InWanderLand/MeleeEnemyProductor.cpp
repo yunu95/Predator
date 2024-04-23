@@ -54,35 +54,13 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 #pragma endregion
 
 #pragma region Auto Attack Setting
-	float meleeAttackColliderRange = 3.0f;
-	float meleeAttackColliderLength = 1.0f;
-
-	auto unitAttackColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	unitAttackColliderObject->setName("UnitAttackCollider");
-
-	auto damageComponent = unitAttackColliderObject->AddComponent<DamageOnlyComponent>();
-	damageComponent->SetSkillDamage(m_unitComponent->GetUnitDamage());
-	damageComponent->SetSkillOwnerUnit(m_unitComponent);
-	
-	auto m_physicsCollider = unitAttackColliderObject->AddComponent<physics::BoxCollider>();
-	m_physicsCollider->SetHalfExtent({ meleeAttackColliderLength * 0.5f * UNIT_LENGTH, meleeAttackColliderLength * 0.5f * UNIT_LENGTH, meleeAttackColliderRange * 0.5f * UNIT_LENGTH });
-	unitAttackColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-
-	auto autoAttackDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	AttachDebugMesh(autoAttackDebugMesh, DebugMeshType::Cube, yunuGI::Color::red(), true);
-	autoAttackDebugMesh->GetTransform()->SetLocalScale({ meleeAttackColliderLength * UNIT_LENGTH, meleeAttackColliderLength * UNIT_LENGTH, meleeAttackColliderRange * UNIT_LENGTH });
-
 	auto meleeAttackSystem = m_unitGameObject->AddComponent<MeleeAttackSystem>();
-	meleeAttackSystem->SetMeleeAttackType(MeleeAttackType::Collider);
-	meleeAttackSystem->SetColliderObject(unitAttackColliderObject);
-	meleeAttackSystem->SetColliderDebugObject(autoAttackDebugMesh);
+	meleeAttackSystem->SetMeleeAttackType(MeleeAttackType::DirectAttack);
+	//meleeAttackSystem->SetColliderObject(unitAttackColliderObject);
+	//meleeAttackSystem->SetColliderDebugObject(autoAttackDebugMesh);
 	meleeAttackSystem->SetOwnerUnitObject(m_unitGameObject);
-	meleeAttackSystem->SetColliderRemainTime(0.3f);
-
-	//unitAttackColliderObject->SetParent(m_unitGameObject);
-	unitAttackColliderObject->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -1 * meleeAttackColliderRange });
-	//autoAttackDebugMesh->SetParent(m_unitGameObject);
-	autoAttackDebugMesh->GetTransform()->SetWorldPosition({ 0.0f, 0.0f, -1 * meleeAttackColliderRange });
+	//meleeAttackSystem->SetColliderRemainTime(0.3f);
+	meleeAttackSystem->SetDamage(m_autoAttackDamage);
 #pragma endregion
 
 #pragma region Elite Skill Object Setting
