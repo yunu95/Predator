@@ -53,6 +53,7 @@ public:
     void SetImageComponent(yunutyEngine::graphics::UIImage* p_ImageComponent);
 
     virtual void Start() override;
+    virtual void OnTransformUpdate() override;
     virtual void Update() override;
     virtual void OnDisable() override;
 

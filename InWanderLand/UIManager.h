@@ -40,12 +40,12 @@ private:
     UIButton* m_highestPriorityButton;
 
     bool isButtonActiviated = false;
-    std::unordered_map<std::string, UIElement*> uisByName;
+    std::unordered_map<int, UIElement*> uisByIndex;
     std::unordered_map<UIEnumID, UIElement*> uisByEnumID;
-    std::unordered_map<std::string, JsonUIData> uidatasByName;
+    std::unordered_map<int, JsonUIData> uidatasByIndex;
 
 public:
-    
+
     void Clear();
     void FadeOutRight(float duration = 1);
     void FadeOutLeft(float duration = 1);

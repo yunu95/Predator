@@ -17,14 +17,6 @@ void UIManager::Clear()
     m_currentHighestLayer = -1;
     m_selectedButtons.clear();
 }
-//void UIManager::FadeInVertical()
-//{
-//    UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_TopToButtom)->EnableElement();
-//}
-//void UIManager::FadeInHorizontal()
-//{
-//    UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft)->EnableElement();
-//}
 void UIManager::FadeOutRight(float duration)
 {
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight); !elm->GetGameObject()->GetActive())
@@ -188,8 +180,8 @@ void UIManager::ImportUI(const char* path)
             auto uiElement = uiObject->AddComponent<UIElement>();
             if (uiData.enumID != 0)
                 uisByEnumID[(UIEnumID)uiData.enumID] = uiElement;
-            uisByName[uiData.uiname] = uiElement;
-            uidatasByName[uiData.uiname] = uiData;
+            uisByIndex[uiData.uiIndex] = uiElement;
+            uidatasByIndex[uiData.uiIndex] = uiData;
 
             if (ImportDealWithSpecialCases(uiData, uiElement) == false)
             {
@@ -203,10 +195,10 @@ void UIManager::ImportUI(const char* path)
             auto key = each.key();
             JsonUIData uiData;
             application::FieldPreDecoding<boost::pfr::tuple_size_v<JsonUIData>>(uiData, each.value());
-            uidatasByName[uiData.uiname] = uiData;
-            if (ImportDealWithSpecialCases_Post(uiData, uisByName[uiData.uiname]) == false)
+            uidatasByIndex[uiData.uiIndex] = uiData;
+            if (ImportDealWithSpecialCases_Post(uiData, uisByIndex[uiData.uiIndex]) == false)
             {
-                ImportDefaultAction_Post(uiData, uisByName[uiData.uiname]);
+                ImportDefaultAction_Post(uiData, uisByIndex[uiData.uiIndex]);
             }
             uiImportingPriority++;
         }
@@ -240,15 +232,17 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         uiImageComponent->GetGI().SetLayer(uiImportingPriority);
         uiImageComponent->GetGI().SetColor(yunuGI::Color{ uiData.color[0],uiData.color[1],uiData.color[2],uiData.color[3] });
 
-        uiButtonComponent = element->button = uiObject->AddComponent<UIButton>();
-        uiButtonComponent->SetImageComponent(uiImageComponent);
-        uiButtonComponent->SetIdleImage(idleTexture);
-        uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-    }
-    // 만약 버튼이라면...
-    if (uiData.customFlags & (int)UIExportFlag::IsButton)
-    {
-        //uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+        if (!(uiData.customFlags & (int)UIExportFlag::NoOverlaying))
+        {
+            uiButtonComponent = element->button = uiObject->AddComponent<UIButton>();
+            uiButtonComponent->SetImageComponent(uiImageComponent);
+            uiButtonComponent->SetIdleImage(idleTexture);
+            //uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+        }
+        else
+        {
+            int a = 3;
+        }
     }
     if (uiData.customFlags & (int)UIExportFlag::CanAdjustHeight)
     {
@@ -288,10 +282,10 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
     // offset by anchor
     Vector3d parentSize{ 1920, 1080, 0 };
     Vector2d parentPivot{ 0.0,0.0 };
-    if (uiData.parentUIName != "")
+    if (uiData.parentUIIndex != -1)
     {
-        auto parentData = uidatasByName[uiData.parentUIName];
-        auto parent = uisByName[uiData.parentUIName]->GetGameObject();
+        auto parentData = uidatasByIndex[uiData.parentUIIndex];
+        auto parent = uisByIndex[uiData.parentUIIndex]->GetGameObject();
         parentSize.x = parentData.width;
         parentSize.y = parentData.height;
         parentPivot.x = parentData.pivot[0];
@@ -329,7 +323,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     // 만약 열기 버튼이라면...
     if (uiData.customFlags & (int)UIExportFlag::OpeningButton)
     {
-        auto openTarget = uisByName[uiData.openTarget];
+        auto openTarget = uisByIndex[uiData.openTarget];
         assert(openTarget);
         if (uiData.customFlags & (int)UIExportFlag::IsToggle)
         {
@@ -356,7 +350,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     // 만약 Disabling button이라면...
     if (uiData.customFlags & (int)UIExportFlag::DiablingButton)
     {
-        auto disablingTarget = uisByName[uiData.disablingTarget];
+        auto disablingTarget = uisByIndex[uiData.disablingTargetIndex];
         assert(disablingTarget);
         button->AddButtonClickFunction([=]()
             {
@@ -424,71 +418,71 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
     switch ((UIEnumID)uiData.enumID)
     {
     case UIEnumID::Portrait_Robin:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().SelectPlayer(Unit::UnitType::Warrior);
             });
         break;
     case UIEnumID::Portrait_Ursula:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().SelectPlayer(Unit::UnitType::Magician);
             });
         break;
     case UIEnumID::Portrait_Hansel:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().SelectPlayer(Unit::UnitType::Healer);
             });
         break;
     case UIEnumID::Skill_Use_Q_Robin:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Warrior);
             });
         break;
     case UIEnumID::Skill_Use_W_Robin:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().PrepareSkill(Unit::SkillEnum::E, Unit::UnitType::Warrior);
             });
         break;
     case UIEnumID::Skill_Use_Q_Ursula:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Magician);
             });
         break;
     case UIEnumID::Skill_Use_W_Ursula:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().PrepareSkill(Unit::SkillEnum::E, Unit::UnitType::Magician);
             });
         break;
     case UIEnumID::Skill_Use_Q_HANSEL:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Healer);
             });
         break;
     case UIEnumID::Skill_Use_W_HANSEL:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().PrepareSkill(Unit::SkillEnum::E, Unit::UnitType::Healer);
             });
         break;
     case UIEnumID::Toggle_TacticMode:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().ToggleTacticMode();
             });

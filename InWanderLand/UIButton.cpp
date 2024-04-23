@@ -49,30 +49,11 @@ void UIButton::SetImageComponent(yunutyEngine::graphics::UIImage* p_ImageCompone
 void UIButton::Start()
 {
     assert(m_IdleImage != nullptr);
+    OnTransformUpdate();
 
     m_ImageComponent->GetGI().SetImage(m_IdleImage);
     //m_CurrentImage = m_IdleImage;
 
-    /// Width와 Height은 변경되지 않는다는 것을 전제로...
-    m_Width = m_ImageComponent->GetGI().GetWidth();
-    m_Height = m_ImageComponent->GetGI().GetHeight();
-
-    Vector2d leftTopPos = GetTransform()->GetWorldPosition();
-    leftTopPos -= Vector2d::right * m_ImageComponent->GetGI().GetWidth() * m_ImageComponent->GetGI().GetXPivot();
-    leftTopPos -= Vector2d::up * m_ImageComponent->GetGI().GetHeight() * m_ImageComponent->GetGI().GetYPivot();
-
-    auto resolution = graphics::Renderer::SingleInstance().GetResolution();
-    HWND hWnd = GetForegroundWindow();
-    RECT wndRect;
-    GetClientRect(hWnd, &wndRect);
-
-    initialRectRight = wndRect.right;
-    initialRectBottom = wndRect.bottom;
-
-    //Vector3d fixedLeftTopPos = Vector3d(leftTopPos.x / 1920 * wndRect.right, leftTopPos.y / 1080 * wndRect.bottom, 0);
-    Vector3d fixedLeftTopPos = Vector3d(leftTopPos.x / 1920 * resolution.x, leftTopPos.y / 1080 * resolution.y, 0);
-    //GetTransform()->SetWorldPosition(fixedLeftTopPos);
-    m_ImageCenterPostion = Vector2d(fixedLeftTopPos.x + m_Width / 2, fixedLeftTopPos.y + m_Height / 2);
 
     m_onMouseFunction = [=]()
         {
@@ -112,9 +93,27 @@ void UIButton::Start()
                 }
             }
         };
+}
+void UIButton::OnTransformUpdate()
+{
+    /// Width와 Height은 변경되지 않는다는 것을 전제로...
+    m_Width = m_ImageComponent->GetGI().GetWidth();
+    m_Height = m_ImageComponent->GetGI().GetHeight();
 
+    Vector2d leftTopPos = GetTransform()->GetWorldPosition();
+    leftTopPos -= Vector2d::right * m_Width * m_ImageComponent->GetGI().GetXPivot();
+    leftTopPos -= Vector2d::up * m_Height * m_ImageComponent->GetGI().GetYPivot();
 
+    auto resolution = graphics::Renderer::SingleInstance().GetResolution();
+    HWND hWnd = GetForegroundWindow();
+    RECT wndRect;
+    GetClientRect(hWnd, &wndRect);
 
+    initialRectRight = wndRect.right;
+    initialRectBottom = wndRect.bottom;
+    Vector3d fixedLeftTopPos = Vector3d(leftTopPos.x / 1920 * resolution.x, leftTopPos.y / 1080 * resolution.y, 0);
+    //GetTransform()->SetWorldPosition(fixedLeftTopPos);
+    m_ImageCenterPostion = Vector2d(fixedLeftTopPos.x + m_Width / 2, fixedLeftTopPos.y + m_Height / 2);
 }
 
 void UIButton::Update()

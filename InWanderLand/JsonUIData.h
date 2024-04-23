@@ -4,13 +4,14 @@ struct JsonUIData
 {
     //public string imageName;
     string uiname;
+    int uiIndex;
     // 부모가 없다면 부모를 1920 * 1080 크기의 스크린 스페이스로 가정하게 된다.
-    string parentUIName;
+    int parentUIIndex;
     string imagePath;
     // 만약 플래그에 openingButton이 있다면 버튼을 눌렀을 때 활성화시킬 UI 창을 의미한다.
-    string openTarget;
+    int openTarget;
     // 만약 플래그에 diablingButton이 있다면 버튼을 눌렀을 때 비활성화시킬 UI 창을 의미한다.
-    string disablingTarget;
+    int disablingTargetIndex;
     std::vector<float> color;
     std::vector<float> pivot;
     std::vector<float> anchor;
