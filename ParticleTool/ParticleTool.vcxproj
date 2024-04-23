@@ -170,7 +170,7 @@
     </ClCompile>
     <ClCompile Include="imgui_widgets.cpp" />
     <ClCompile Include="ImSequencer.cpp" />
-    <ClCompile Include="ParticleData.cpp" />
+    <ClCompile Include="ParticleToolData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui.h" />
@@ -180,7 +180,7 @@
     <ClInclude Include="imgui_internal.h" />
     <ClInclude Include="imgui_Utility.h" />
     <ClInclude Include="ImSequencer.h" />
-    <ClInclude Include="ParticleData.h" />
+    <ClInclude Include="ParticleToolData.h" />
     <ClInclude Include="TestUtilGraphicsTestCam.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -9,3 +9,4 @@
 #include "WavePalette.h"
 #include "CameraPalette.h"
 #include "LightPalette.h"
+#include "ParticlePalette.h"

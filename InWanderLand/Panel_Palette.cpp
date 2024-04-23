@@ -134,6 +134,13 @@ namespace application
 					ImGui::EndTabItem();
 				}
 
+				if (ImGui::BeginTabItem("Particle"))
+				{
+					ChangePalette(&pp);
+					ImGui_BeginParticlePalette();
+					ImGui::EndTabItem();
+				}
+
 				ImGui::EndTabBar();
 			}
 
@@ -209,6 +216,10 @@ namespace application
 			else if (tabName == "Cam")
 			{
 				ImGui::TabBarQueueFocus(tab_bar, &tab_bar->Tabs[6]);
+			}
+			else if (tabName == "Particle")
+			{
+				ImGui::TabBarQueueFocus(tab_bar, &tab_bar->Tabs[7]);
 			}
 		}
 
@@ -1215,6 +1226,95 @@ namespace application
 			}
 		}
 
+		void PalettePanel::ImGui_BeginParticlePalette()
+		{
+			imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
+			imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+
+			imgui::ShiftCursorY(5);
+			if (ImGui::Button("Create World Particle", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+			{
+				ImGui_CreateParticlePopup();
+			}
+
+			int countIdx = 0;
+
+			imgui::ShiftCursorY(5);
+			if (imgui::BeginSection_1Col(countIdx, "World Particle List", ImGui::GetContentRegionAvail().x))
+			{
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				if (ImGui::BeginListBox("", { ImGui::GetContentRegionAvail().x * 0.8f,400 }))
+				{
+					int idx = 0;
+					for (auto& each : ParticleData::GetInstances())
+					{
+						ImGui::PushID(("Particle Name" + each->pod.name).c_str() + idx);
+						if (ImGui::Selectable(each->pod.name.c_str(), palette::ParticlePalette::SingleInstance().GetSingleSelectedParticle() == each))
+						{
+							palette::ParticlePalette::SingleInstance().SelectParticle(each);
+						}
+						if (palette::ParticlePalette::SingleInstance().GetSingleSelectedParticle() == each)
+						{
+							ImGui::SetItemDefaultFocus();
+						}
+						ImGui::PopID();
+						idx++;
+					}
+					ImGui::EndListBox();
+				}
+				imgui::EndSection();
+			}
+
+			if (imgui::BeginSection_2Col(countIdx, "Selected Particle", ImGui::GetContentRegionAvail().x, 0.2f))
+			{
+				const auto& selection = pm.GetCurrentPalette()->GetSelections();
+
+				ParticleData* particle = nullptr;
+
+				if (selection.size() == 1)
+				{
+					particle = static_cast<ParticleData*>(*selection.begin());
+				}
+
+				if (particle)
+				{
+					{
+						std::string particleName = particle->pod.name;
+						particleName.reserve(32);
+						ImGui::TableNextRow();
+						ImGui::TableSetColumnIndex(0);
+						imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
+						ImGui::AlignTextToFramePadding();
+						ImGui::Text("World Particle Name");
+						ImGui::TableSetColumnIndex(1);
+						ImGui::SetNextItemWidth(-1);
+						ImGui::InputText("##Particle_Name", &particleName[0], 32);
+
+						static bool beforeFocus = false;
+						if (ImGui::IsItemFocused())
+						{
+							beforeFocus = true;
+							EditorLayer::SetInputControl(false);
+							ec.SetInputUpdate(false);
+						}
+						else if (beforeFocus)
+						{
+							beforeFocus = false;
+							EditorLayer::SetInputControl(true);
+							ec.SetInputUpdate(true);
+						}
+						wanderUtils::UpdateStringSize(particleName);
+						particle->pod.name = particleName;
+					}
+
+					/// 각종 Editing 요소들
+				}
+
+				imgui::EndSection();
+			}
+		}
+
 		bool PalettePanel::ImGui_CreateUnitPopup()
 		{
 			bool returnVal = false;
@@ -1298,6 +1398,76 @@ namespace application
 						fbxName = "None";
 						ImGui::CloseCurrentPopup();
 						imgui::CloseMessageBox("Create Unit");
+						EditorLayer::SetInputControl(true);
+					}
+				}, 600);
+			return returnVal;
+		}
+
+		bool PalettePanel::ImGui_CreateParticlePopup()
+		{
+			EditorLayer::SetInputControl(false);
+			bool returnVal = false;
+			imgui::ShowMessageBox("Create World Particle", [this, &returnVal]()
+				{
+					imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					/// 등록된 Particle 에서 가져오기
+					static auto& fbxSet = ResourceManager::GetSingletonInstance().GetSkinnedFBXList();
+					static std::vector<std::string> selections = std::vector<std::string>();
+					static std::string particleName = "None";
+					std::string currentParticle = particleName;
+
+					if (selections.empty())
+					{
+						for (auto& each : fbxSet)
+						{
+							selections.push_back(each);
+						}
+					}
+
+					ImGui::SetNextItemWidth(-1);
+					if (ImGui::BeginCombo("##particleCombo", particleName.c_str()))
+					{
+						for (int i = 0; i < fbxSet.size(); i++)
+						{
+							const bool is_selected = (currentParticle == selections[i]);
+							if (ImGui::Selectable(selections[i].c_str(), is_selected))
+							{
+								currentParticle = selections[i];
+								particleName = currentParticle;
+							}
+
+							if (is_selected)
+							{
+								ImGui::SetItemDefaultFocus();
+							}
+						}
+						ImGui::EndCombo();
+					}
+
+					ImGui::Separator();
+
+					if (ImGui::Button("Create"))
+					{
+						if (particleName != "None")
+						{
+							/// 해당 브러시 세팅해주고 Place 모드로?
+
+							particleName = "None";
+							returnVal = true;
+							ImGui::CloseCurrentPopup();
+							imgui::CloseMessageBox("Create World Particle");
+							EditorLayer::SetInputControl(true);
+						}
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						particleName = "None";
+						ImGui::CloseCurrentPopup();
+						imgui::CloseMessageBox("Create World Particle");
 						EditorLayer::SetInputControl(true);
 					}
 				}, 600);
