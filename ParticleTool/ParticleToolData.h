@@ -8,7 +8,7 @@
 
 namespace application
 {
-	class ParticleData
+	class ParticleToolData
 	{
 	public:
 		/// 저장할 데이터들
@@ -20,7 +20,7 @@ namespace application
 
 	};
 
-	class ParticleInstance
+	class ParticleToolInstance
 	{
 	public:
 		/// 저장할 데이터들

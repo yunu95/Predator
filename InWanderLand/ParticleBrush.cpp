@@ -1,4 +1,4 @@
-#include "LightBrush.h"
+#include "ParticleBrush.h"
 
 #include "TemplateDataManager.h"
 
@@ -8,31 +8,31 @@ namespace application
     {
         namespace palette
         {
-            void LightBrush::CreateBrush()
+            void ParticleBrush::CreateBrush()
             {
-                for (auto& each : TemplateDataManager::GetSingletonInstance().GetDataList(DataType::LightData))
+                for (auto& each : TemplateDataManager::GetSingletonInstance().GetDataList(DataType::ParticleData))
                 {
                     CreateBrush(each->GetDataKey());
                 }
             }
 
-            bool LightBrush::CreateBrush(const std::string& dataKey)
+            bool ParticleBrush::CreateBrush(const std::string& dataKey)
             {
                 if (brushList.find(dataKey) != brushList.end())
                     return false;
 
-                auto type = static_cast<Light_TemplateData*>(TemplateDataManager::GetSingletonInstance().GetTemplateData(dataKey))->pod.type;
+                auto type = static_cast<Particle_TemplateData*>(TemplateDataManager::GetSingletonInstance().GetTemplateData(dataKey))->pod.type;
 
                 std::string fbxType;
 
                 switch (type)
                 {
-                    case LightType::Directional:
+                    case ParticleType::Cone:
                     {
-                        fbxType = "Directional";
+                        fbxType = "Cone";
                         break;
                     }
-                    case LightType::Point:
+                    case ParticleType::Sphere:
                     {
                         fbxType = "Sphere";
                         break;
@@ -41,6 +41,7 @@ namespace application
                         break;
                 }
 
+                /// Cone FBX 있는지 체크
                 auto brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxType);
 
                 if (brushObj == nullptr)
@@ -69,12 +70,12 @@ namespace application
                 return true;
             }
 
-            void LightBrush::ReadyBrush(const std::string& dataKey)
+            void ParticleBrush::ReadyBrush(const std::string& dataKey)
             {
-                return ReadyBrush(static_cast<Light_TemplateData*>(TemplateDataManager::GetSingletonInstance().GetTemplateData(dataKey)));
+                return ReadyBrush(static_cast<Particle_TemplateData*>(TemplateDataManager::GetSingletonInstance().GetTemplateData(dataKey)));
             }
 
-            void LightBrush::Update()
+            void ParticleBrush::Update()
             {
                 if (currentBrush != nullptr && !brushList[currentBrush->GetDataKey()]->GetSelfActive())
                 {
@@ -82,7 +83,7 @@ namespace application
                 }
             }
 
-            void LightBrush::ReadyBrush(Light_TemplateData* data)
+            void ParticleBrush::ReadyBrush(Particle_TemplateData* data)
             {
                 if (data == nullptr)
                 {
