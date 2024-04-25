@@ -92,7 +92,6 @@ Unit* RookTrapProductor::CreateUnit(Vector3d startPos)
 	triggerSensorObject->AddComponent<TrapTriggerSensor>()->trapUnit = m_unitComponent;
 	triggerSensorObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
-
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
 	auto& animList = rsrcManager->GetAnimationList();

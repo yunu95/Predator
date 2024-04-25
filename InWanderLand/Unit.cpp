@@ -597,7 +597,7 @@ void Unit::IdleEngage()
 	{
 		deathFunctionElapsed += Time::GetDeltaTime();
 
-		if (m_burnEffect->IsDone() && m_unitSide == UnitSide::Enemy && deathFunctionElapsed >= deathAnimationDelay + 3.0f)
+		if (m_burnEffect->IsDone() && m_unitSide == UnitSide::Enemy)
 		{
 			for (auto each : OnDeath)
 			{
@@ -611,7 +611,7 @@ void Unit::IdleEngage()
 			deathFunctionElapsed = 0.0f;
 			GetGameObject()->SetSelfActive(false);
 		}
-		else
+		else if (m_unitSide == UnitSide::Player)
 		{
 			/// Player일 경우
 			if (deathFunctionElapsed >= deathAnimationDelay)
