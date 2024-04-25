@@ -27,6 +27,8 @@ public:
 
 	void ChangeMainCamera(yunuGI::ICamera* adapter);
 
+	std::map<yunuGI::ICamera*, std::shared_ptr<NailCamera>>& GetCamearaList();
+
 public:
 	void SetWorldTM(yunuGI::ICamera* adapter,DirectX::SimpleMath::Matrix wtm);
 	void SetVerticalFOV(yunuGI::ICamera* adapter, float fov);

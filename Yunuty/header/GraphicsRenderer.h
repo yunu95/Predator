@@ -56,6 +56,7 @@ namespace yunutyEngine
             // 해상도 조정 함수
             Vector2i GetResolution();
             void SetResolution(unsigned int width, unsigned int height);
+            void ResizeResolution(unsigned int width, unsigned int height);
             // 렌더링이 끝난 직후 호출할 콜백함수를 지정합니다.
             void SetAfterRenderAction(const function<void()>& action);
 

@@ -176,7 +176,7 @@ cbuffer ParticleBuffer : register(b11)
 
 struct LightMapUV
 {
-    int lightMapIndex;
+    float lightMapIndex;
     float3 pad;
     float2 uvOffset;
     float2 scaling;
@@ -214,8 +214,8 @@ Texture2D BrdfMap : register(t22);
 TextureCubeArray PointLightShadowMap : register(t23);
 
 
-Texture2D UnityLightMap : register(t24);
-
+Texture2DArray<float4> UnityLightMap : register(t24);
+Texture2D Early_Z : register(t25);
 
 SamplerState sam : register(s0);
 SamplerComparisonState shadowSam : register(s1);

@@ -61,6 +61,7 @@ private:
     std::vector<IndexBuffer> indexBufferVec;
 
 	DirectX::BoundingBox aabb;
+	DirectX::BoundingBox transformedAABB;
 	std::vector<DirectX::BoundingBox> aabbVec;
 	std::vector<std::vector<DirectX::SimpleMath::Vector3>> boundingVertexList;
 	std::vector<std::vector<DirectX::SimpleMath::Vector3>> tempBoundingVertexList;

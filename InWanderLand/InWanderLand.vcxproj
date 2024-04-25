@@ -472,6 +472,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -494,6 +495,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -516,6 +518,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -538,6 +541,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -560,6 +564,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -586,6 +591,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -614,6 +620,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -641,6 +648,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -667,6 +675,7 @@ xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -693,6 +702,7 @@ xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -719,6 +729,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -741,6 +752,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -763,6 +775,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -785,6 +798,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -807,6 +821,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -833,6 +848,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -866,6 +882,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -897,6 +914,7 @@ xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -928,6 +946,7 @@ xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -960,6 +979,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -86,12 +86,15 @@ void InstancingManager::RenderStaticDeferred()
 				//	continue;
 				//}
 
+				//if ((i->mesh->GetName() == L"SM_Bush_001") || (i->mesh->GetName() == L"SM_Bush_002"))
+				//{
+
+				//}
+
 				const std::shared_ptr<RenderInfo>& renderInfo = i;
 				InstancingData data;
 				data.wtm = renderInfo->wtm;
 				AddData(instanceID, data);
-
-
 
 				lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
 				lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
@@ -526,6 +529,11 @@ void InstancingManager::ClearData()
 	{
 		pair.second->ClearData();
 	}
+}
+
+void InstancingManager::PopParticleSystem(ParticleSystem* system)
+{
+	particleRenderInfoMap.erase(system);
 }
 
 void InstancingManager::RenderParticle()

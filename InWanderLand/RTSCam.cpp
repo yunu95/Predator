@@ -60,6 +60,16 @@ void RTSCam::Update()
         positionDelta = Vector3d();
     }
 #endif
+	if (Input::isKeyPushed(KeyCode::Tab))
+	{
+		roamingMode = !roamingMode;
+		GetTransform()->SetWorldRotation(rot);
+		pitch = rot.Euler().x * yunutyEngine::math::Deg2Rad;
+		yaw = rot.Euler().y * yunutyEngine::math::Deg2Rad;
+		pitchDelta = 0.0;
+		yawDelta = 0.0;
+		positionDelta = Vector3d();
+	}
 
     if (yunutyEngine::Input::isKeyPushed(KeyCode::Delete))
         deleteButtonCallback();
