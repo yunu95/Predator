@@ -29,6 +29,7 @@ namespace application
 	{
 	public:
 		static Application& CreateApplication(int argc, char** argv);
+		static Application& CreateApplicationWinMain(int* hInstance);
 		static Application& GetInstance();
 
 		~Application();
@@ -119,6 +120,7 @@ namespace application
 		static std::unique_ptr<Application> instance;
 
 		Application(int argc, char** argv);
+		Application(int* hInstance);
 		Application(const Application& app) = delete;
 		Application& operator=(const Application& app) = delete;
 

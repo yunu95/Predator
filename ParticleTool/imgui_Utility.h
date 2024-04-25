@@ -71,8 +71,6 @@ namespace application
 				~SmartStyleColor() { ImGui::PopStyleColor(); }
 			};
 
-			bool SelectableImageButton(std::string imageKey, std::string filename, bool selected, const ImVec2& size, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), bool useTint = false, const ImVec4& bgColor = ImVec4(0.26f, 0.59f, 0.98f, 0.31f), const ImVec4& selectedColor = ImVec4(0.26f, 0.59f, 0.98f, 1.00f));
-
 #pragma region 1Column
 			bool BeginSection_1Col(int& countIdx, std::string sectionName, float width, ImColor underlineColor = IM_COL32(90, 90, 90, 200));
 #pragma endregion
