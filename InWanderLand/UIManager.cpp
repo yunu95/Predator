@@ -136,6 +136,7 @@ UIElement* UIManager::GetUIElementByEnum(UIEnumID uiEnumID)
 {
     if (uisByEnumID.find(uiEnumID) != uisByEnumID.end())
         return uisByEnumID[uiEnumID];
+    assert(false);
     return nullptr;
 }
 
@@ -241,7 +242,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         }
         else
         {
-            int a = 3;
+            //int a = 3;
         }
     }
     if (uiData.customFlags & (int)UIExportFlag::CanAdjustHeight)

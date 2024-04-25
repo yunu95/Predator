@@ -228,7 +228,7 @@ void application::contents::ContentsLayer::PlayContents()
     UIManager::Instance().ImportUI("InWanderLand.iwui");
 	SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
 	editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
-	//UIManager::Instance().ImportUI("InWanderLand.iwui");
+	InputManager::Instance().SetInputManagerActive(true);
 	GameManager::Instance().Reset();
 
 	for (auto e : componentsCreatedByEditorVector)
