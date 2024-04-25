@@ -14,19 +14,6 @@ yunutyEngine::graphics::ParticleRenderer::ParticleRenderer() :
 
 }
 
-void ParticleRenderer::OnDisable()
-{
-	for (auto iter = this->ableParticles.begin(); iter != this->ableParticles.end();)
-	{
-		auto& each = *iter;
-
-		each.Reset();
-		this->disableParticles.push_back(*iter);
-
-		iter = this->ableParticles.erase(iter);
-	}
-}
-
 void ParticleRenderer::SetPlayAwake(bool playAwake)
 {
 	this->playAwake = playAwake;
@@ -36,6 +23,16 @@ void ParticleRenderer::SetPlayAwake(bool playAwake)
 void ParticleRenderer::OnDisable()
 {
 	this->playAwake = this->originPlayAwake;
+
+	for (auto iter = this->ableParticles.begin(); iter != this->ableParticles.end();)
+	{
+		auto& each = *iter;
+
+		each.Reset();
+		this->disableParticles.push_back(*iter);
+
+		iter = this->ableParticles.erase(iter);
+	}
 }
 
 void ParticleRenderer::SetParticleMode(ParticleMode particleMode)
