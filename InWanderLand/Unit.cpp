@@ -325,15 +325,17 @@ void Unit::IdleEngage()
 		currentOrder = UnitState::Skill;
 		m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 		skillFunctionStartElapsed = 0.0f;
-
-		if (m_unitType != UnitType::SpikeTrap && m_unitType != UnitType::ChessTrap)
-			dotween->DOLookAt(m_currentSkillPosition, rotateTime, false);
+		int tempRand = rand() % 3 + 1;
 
 		if (m_unitType == UnitType::Boss)
 		{
 			auto temp = GetGameObject()->GetComponent<BossSkillSystem>();
 			temp->SelectSkillRandomly();
 			m_currentSelectedSkill = temp->GetCurrentSelectedSkillNumber();
+			if (m_currentTargetUnit != nullptr)
+				m_currentSkillPosition = m_currentTargetUnit->GetTransform()->GetWorldPosition();
+			else
+				m_currentSkillPosition = PlayerController::SingleInstance().GetPlayerMap().find(static_cast<UnitType>(tempRand))->second->GetTransform()->GetWorldPosition();
 		}
 		else if (m_unitType == UnitType::SpikeTrap || m_unitType == UnitType::ChessTrap)
 		{
@@ -342,11 +344,22 @@ void Unit::IdleEngage()
 		else if (m_unitType == UnitType::MeleeEnemy)
 		{
 			m_currentSelectedSkill = SkillEnum::BossSkillOne;
+			if (m_currentTargetUnit != nullptr)
+				m_currentSkillPosition = m_currentTargetUnit->GetTransform()->GetWorldPosition();
+			else
+				m_currentSkillPosition = PlayerController::SingleInstance().GetPlayerMap().find(static_cast<UnitType>(tempRand))->second->GetTransform()->GetWorldPosition();
 		}
 		else if (m_unitType == UnitType::RangedEnemy)
 		{
 			m_currentSelectedSkill = SkillEnum::BossSkillTwo;
+			if (m_currentTargetUnit != nullptr)
+				m_currentSkillPosition = m_currentTargetUnit->GetTransform()->GetWorldPosition();
+			else
+				m_currentSkillPosition = PlayerController::SingleInstance().GetPlayerMap().find(static_cast<UnitType>(tempRand))->second->GetTransform()->GetWorldPosition();
 		}
+
+		if (m_unitType != UnitType::SpikeTrap && m_unitType != UnitType::ChessTrap)
+			dotween->DOLookAt(m_currentSkillPosition, rotateTime, false);
 
 		m_currentSelectedSkillEngageDelay = m_skillDurationMap.find(m_currentSelectedSkill)->second;
 		m_currentSkillAnimation = m_skillAnimationMap.find(m_currentSelectedSkill)->second;
@@ -1028,14 +1041,29 @@ void Unit::RegisterSkillWithAnimation(SkillEnum p_enum)
 {
 	yunuGI::IAnimation* temp{ nullptr };
 
-	if (p_enum == SkillEnum::Q || p_enum == SkillEnum::BossSkillOne)
-		temp = unitAnimations.m_skillOneAnimation;
-	else if (p_enum == SkillEnum::W || p_enum == SkillEnum::BossSkillTwo)
-		temp = unitAnimations.m_skillTwoAnimation;
-	else if (p_enum == SkillEnum::BossSkillThree)
-		temp = unitAnimations.m_skillThreeAnimation;
-	else if (p_enum == SkillEnum::BossSkillFour)
-		temp = unitAnimations.m_skillFourAnimation;
+	switch (p_enum)
+	{
+		case Unit::SkillEnum::Q:
+			temp = unitAnimations.m_skillOneAnimation;
+			break;
+		case Unit::SkillEnum::W:
+			temp = unitAnimations.m_skillTwoAnimation;
+			break;
+		case Unit::SkillEnum::BossSkillOne:
+			temp = unitAnimations.m_skillOneAnimation;
+			break;
+		case Unit::SkillEnum::BossSkillTwo:
+			temp = unitAnimations.m_skillTwoAnimation;
+			break;
+		case Unit::SkillEnum::BossSkillThree:
+			temp = unitAnimations.m_skillThreeAnimation;
+			break;
+		case Unit::SkillEnum::BossSkillFour:
+			temp = unitAnimations.m_skillFourAnimation;
+			break;
+		default:
+			break;
+	}
 
 	if (SkillSystem* skillsys = GetGameObject()->GetComponent<SkillSystem>();
 		skillsys && temp)
@@ -1045,7 +1073,9 @@ void Unit::RegisterSkillWithAnimation(SkillEnum p_enum)
 		m_animatorComponent->PushAnimation(temp, m_skillTimingFrameMap.find(p_enum)->second, [=]()
 			{
 				if (m_currentSelectedSkill == p_enum)
+				{
 					skillsys->ActivateSkill(p_enum, m_currentSkillPosition);
+				}
 			});
 	}
 }

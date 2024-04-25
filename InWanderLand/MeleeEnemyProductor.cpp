@@ -77,7 +77,7 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 
 		auto skillOneDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		AttachDebugMesh(skillOneDebugMesh, DebugMeshType::Sphere, yunuGI::Color::red(), true);
-		skillOneDebugMesh->GetTransform()->SetWorldScale({ skillOneRadius ,skillOneRadius ,skillOneRadius });
+		skillOneDebugMesh->GetTransform()->SetWorldScale({ skillOneRadius * 2 ,skillOneRadius * 2 ,skillOneRadius * 2 });
 
 		auto eliteSkillSystem = m_unitGameObject->AddComponent<BossSkillSystem>();
 		eliteSkillSystem->SelectSkill(Unit::SkillEnum::BossSkillOne);

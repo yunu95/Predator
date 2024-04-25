@@ -87,7 +87,7 @@ Unit* BossProductor::CreateUnit(Vector3d startPos)
 
 	auto skillOneDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(skillOneDebugMesh, DebugMeshType::Sphere, yunuGI::Color::red(), true);
-	skillOneDebugMesh->GetTransform()->SetWorldScale({ skillOneRadius ,skillOneRadius ,skillOneRadius });
+	skillOneDebugMesh->GetTransform()->SetWorldScale({ skillOneRadius * 2, skillOneRadius * 2, skillOneRadius * 2 });
 #pragma endregion
 
 #pragma region Boss Skill_2 Object Setting
@@ -110,7 +110,7 @@ Unit* BossProductor::CreateUnit(Vector3d startPos)
 
 	auto skillFourDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(skillFourDebugMesh, DebugMeshType::Sphere, yunuGI::Color::red(), true);
-	skillFourDebugMesh->GetTransform()->SetWorldScale({ skillFourColliderRadius ,skillFourColliderRadius ,skillFourColliderRadius });
+	skillFourDebugMesh->GetTransform()->SetWorldScale({ skillFourColliderRadius * 2, skillFourColliderRadius * 2, skillFourColliderRadius * 2 });
 #pragma endregion
 
 	auto bossSkillSystem = m_unitGameObject->AddComponent<BossSkillSystem>();
