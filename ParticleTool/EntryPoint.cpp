@@ -83,6 +83,8 @@ void LoadPPIs();
 void SavePPIs();
 void SaveAsPPIs();
 
+void ShowFBXNode(yunutyEngine::GameObject* target);
+
 bool isRunning = true;
 
 const int bufferSize = 255;
@@ -503,7 +505,7 @@ void ImGuiUpdate()
         }
 
         application::editor::imgui::RenderMessageBoxes();
-
+ 
         ImGui::End();
     }
 
@@ -541,6 +543,7 @@ void DrawMenuBar()
             if (!isParticleEditMode)
             {
                 isParticleEditMode = true;
+                pm.SwitchMode();
             }
         }
 
@@ -549,6 +552,7 @@ void DrawMenuBar()
             if (isParticleEditMode)
             {
                 isParticleEditMode = false;
+                pm.SwitchMode();
             }
         }
 
@@ -600,6 +604,12 @@ void DrawMenuBar()
     if (ImGui::Checkbox("##Use IBL", &g_useIBL))
     {
         yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(g_useIBL);
+    }
+
+    if (ImGui::Button("Camera Reset"))
+    {
+        tests::GraphicsTestCam* cts = static_cast<tests::GraphicsTestCam*>(yunutyEngine::graphics::Camera::GetMainCamera());
+        cts->Reset();
     }
 
     if (isParticleEditMode)
@@ -690,7 +700,62 @@ void ShowParticleList()
 
 void ShowSkinnedFBXList()
 {
-    /// 여기 정리하자!!
+    using namespace application::editor::imgui;
+
+    static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+    
+    auto& fbxList = pm.GetSkinnedFBXList();
+    std::vector<std::string> selections = std::vector<std::string>();
+    for (auto& each : fbxList)
+    {
+        selections.push_back(each->getName());
+    }
+
+    for (int i = 0; i < selections.size(); i++)
+    {
+        ShowFBXNode(fbxList[i]);
+    }
+}
+
+void ShowFBXNode(yunutyEngine::GameObject* target)
+{
+    static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+    
+    bool isSelected = (target == pm.GetSelectedFBXData());
+
+    if (isSelected)
+    {
+        ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(1,1,1,1));
+        ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(1, 1, 1, 1));
+    }
+
+    if (ImGui::TreeNode(target->getName().c_str()))
+    {
+        if (!isSelected)
+        {
+            pm.SetSelectedFBXData(target);
+        }
+
+        for (auto& child : target->GetChildren())
+        {
+
+        }
+
+        ImGui::TreePop();
+    }
+    else
+    {
+        if (isSelected)
+        {
+            pm.SetSelectedFBXData(nullptr);
+        }
+    }
+
+    if (isSelected)
+    {
+        ImGui::PopStyleColor();
+        ImGui::PopStyleColor();
+    }
 }
 
 void ShowParticleEditor()

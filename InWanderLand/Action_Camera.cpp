@@ -212,7 +212,7 @@ namespace application
 
 	bool Action_CameraChangeView::PostDecoding(const json& data)
 	{
-		targetCam = UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::CameraData*>(String_To_UUID(data["targetCam"]));
+		SetCamera(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::CameraData*>(String_To_UUID(data["targetCam"])));
 		return true;
 	}
 

@@ -16,6 +16,7 @@ namespace application
 			currentPPPath = "";
 			currentPPIsPath = "";
 
+			SetSelectedFBXData(nullptr);
 			SetSelectedParticleData(std::shared_ptr<ParticleToolData>());
 
 			particleList.clear();
@@ -207,11 +208,8 @@ namespace application
 				particleObjList[selectedParticleData->name]->SetSelfActive(false);
 			}
 
-			if (particleData.lock())
-			{
-				particleObjList[particleData.lock()->name]->SetSelfActive(true);
-				particleObjList[particleData.lock()->name]->GetComponent<graphics::ParticleRenderer>()->Play();
-			}
+			particleObjList[particleData.lock()->name]->SetSelfActive(true);
+			particleObjList[particleData.lock()->name]->GetComponent<graphics::ParticleRenderer>()->Play();
 
 			selectedParticleData = particleData.lock();
 		}
@@ -279,6 +277,7 @@ namespace application
 			else
 			{
 				/// 클리어
+				SetSelectedFBXData(nullptr);
 				// SetSelectedParticleInstanceData();
 				isParticleEditMode = true;
 			}
@@ -359,6 +358,33 @@ namespace application
 			}
 
 			return container;
+		}
+
+		void ParticleTool_Manager::SetSelectedFBXData(yunutyEngine::GameObject* fbxObj)
+		{
+			if (fbxObj == nullptr)
+			{
+				if (selectedFBXObject)
+				{
+					selectedFBXObject->SetSelfActive(false);
+				}
+				selectedFBXObject = nullptr;
+				return;
+			}
+
+			if (selectedFBXObject)
+			{
+				selectedFBXObject->SetSelfActive(false);
+			}
+
+			fbxObj->SetSelfActive(true);
+
+			selectedFBXObject = fbxObj;
+		}
+
+		yunutyEngine::GameObject* ParticleTool_Manager::GetSelectedFBXData()
+		{
+			return selectedFBXObject;
 		}
 
 		void ParticleTool_Manager::ClearChildPIs()

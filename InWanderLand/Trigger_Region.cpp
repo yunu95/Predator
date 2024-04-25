@@ -118,7 +118,7 @@ namespace application
 
 	bool Trigger_EnterRegion::PostDecoding(const json& data)
 	{
-		targetRegion = UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::RegionData*>(String_To_UUID(data["targetRegion"]));
+		SetRegion(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::RegionData*>(String_To_UUID(data["targetRegion"])));
 		return true;
 	}
 
@@ -232,7 +232,7 @@ namespace application
 
 	bool Trigger_LeaveRegion::PostDecoding(const json& data)
 	{
-		targetRegion = UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::RegionData*>(String_To_UUID(data["targetRegion"]));
+		SetRegion(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::RegionData*>(String_To_UUID(data["targetRegion"])));
 		return true;
 	}
 }
