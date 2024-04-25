@@ -18,10 +18,14 @@ SwapChain::SwapChain()
 
 SwapChain::~SwapChain()
 {
-	swapChain->Release();
-	RTV->Release();
-	DSV->Release();
-	DSBuffer->Release();
+	if(swapChain)
+		swapChain.Reset();
+	if(RTV)
+		RTV.Reset();
+	if(DSV)
+		DSV.Reset();
+	if(DSBuffer)
+		DSBuffer.Reset();
 }
 
 void SwapChain::Init(HWND hWnd, int width, int height)
@@ -37,11 +41,14 @@ void SwapChain::Init(HWND hWnd, int width, int height)
 	_sd.SampleDesc.Count = 1;
 	_sd.SampleDesc.Quality = 0;
 	_sd.BufferUsage = DXGI_USAGE_BACK_BUFFER | DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	//_sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	_sd.BufferCount = SWAP_CHAIN_BUFFER_COUNT;
 	_sd.Scaling = DXGI_SCALING_STRETCH;
 	_sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+	//_sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	_sd.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
-	_sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH | DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
+	//_sd.Flags = 0;
+	_sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	IDXGIDevice2* _dxgiDevice;
 	_hr = ResourceBuilder::Instance.Get().device->GetDevice()->QueryInterface(
@@ -67,6 +74,8 @@ void SwapChain::Init(HWND hWnd, int width, int height)
 		0,
 		nullptr,
 		this->swapChain.GetAddressOf());
+
+	_hr = _dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_ALT_ENTER);
 	assert(_hr == S_OK);
 
 	// RTV 생성
@@ -112,7 +121,74 @@ void SwapChain::Init(HWND hWnd, int width, int height)
 	_dxgiFactory->Release();
 }
 
-void SwapChain::SwapBackBufferIndex()
+void SwapChain::Resize(int width, int height)
 {
-	this->backBufferIndex = (this->backBufferIndex + 1) % SWAP_CHAIN_BUFFER_COUNT;
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->ClearState();
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->Flush();
+
+	ID3D11Texture2D* backBuffers[2] = { nullptr };
+	for (int i = 0; i < 2; ++i)
+	{
+		this->swapChain->GetBuffer(i, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBuffers[i]));
+	}
+	for (int i = 0; i < 2; ++i)
+	{
+		if (backBuffers[i] != nullptr)
+		{
+			backBuffers[i]->Release();
+			backBuffers[i] = nullptr;
+		}
+	}
+
+
+	HRESULT _hr = S_FALSE;
+
+	_hr = this->swapChain->ResizeBuffers(2, width, height, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH);
+
+	// RTV 생성
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> backBuffer;
+	this->swapChain.Get()->GetBuffer(0, __uuidof(ID3D11Texture2D), &backBuffer);
+	D3D11_TEXTURE2D_DESC desc;
+	backBuffer->GetDesc(&desc);
+	_hr = ResourceBuilder::Instance.Get().device->GetDevice()->CreateRenderTargetView(backBuffer.Get(), nullptr, this->RTV.GetAddressOf());
+
+	// DSV 생성
+	D3D11_TEXTURE2D_DESC _dsd{};
+	_dsd.Width = width;
+	_dsd.Height = height;
+	_dsd.MipLevels = 1;
+	_dsd.ArraySize = 1;
+	_dsd.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	_dsd.SampleDesc.Count = 1;
+	_dsd.SampleDesc.Quality = 0;
+	_dsd.Usage = D3D11_USAGE_DEFAULT;
+	_dsd.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	_dsd.CPUAccessFlags = 0;
+	_dsd.MiscFlags = 0;
+
+	_hr = ResourceBuilder::Instance.Get().device->GetDevice()->CreateTexture2D(
+		&_dsd,
+		nullptr,
+		this->DSBuffer.GetAddressOf());
+	assert(_hr == S_OK);
+
+	_hr = ResourceBuilder::Instance.Get().device->GetDevice()->CreateDepthStencilView(
+		this->DSBuffer.Get(),
+		0,
+		this->DSV.GetAddressOf()
+	);
+
+	vp.TopLeftX = 0.f;
+	vp.TopLeftY = 0.f;
+	vp.Width = static_cast<float>(width);
+	vp.Height = static_cast<float>(height);
+	vp.MinDepth = 0.f;
+	vp.MaxDepth = 1.f;
+}
+
+void SwapChain::Release()
+{
+	RTV.Reset();
+	DSV.Reset();
+	DSBuffer.Reset();
 }

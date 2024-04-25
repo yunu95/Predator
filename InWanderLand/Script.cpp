@@ -383,6 +383,11 @@ namespace application
 							action = AddAction<Action_CameraRevert>();
 							break;
 						}
+						case application::ActionType::TutorialModeChange:
+						{
+							action = AddAction<Action_TutorialModeChange>();
+							break;
+						}
 						default:
 							break;
 					}

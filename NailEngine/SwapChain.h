@@ -12,7 +12,8 @@ public:
 	~SwapChain();
 
 	void Init(HWND hWnd, int width, int height);
-	void SwapBackBufferIndex();
+	void Resize(int width, int height);
+	void Release();
 
 #pragma region Getter
 	Microsoft::WRL::ComPtr<IDXGISwapChain1>& GetSwapChain() { return swapChain; }

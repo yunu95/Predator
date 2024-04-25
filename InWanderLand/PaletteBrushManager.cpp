@@ -22,8 +22,9 @@ namespace application
                 //brushList[(int)Palette_List::Cam] = &CameraBrush::Instance();
                 brushList[3] = &CameraBrush::Instance();
                 brushList[4] = &LightBrush::Instance();
+                brushList[5] = &ParticleBrush::Instance();
 
-                brushList.resize(5);
+                brushList.resize(6);
 
                 for (auto& each : brushList)
                 {

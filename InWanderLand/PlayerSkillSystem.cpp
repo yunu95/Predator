@@ -125,11 +125,29 @@ void PlayerSkillSystem::Start()
 
 void PlayerSkillSystem::Update()
 {
-
+	if (!isQSkillReady)
+	{
+		qSkillCoolDownElapsed += Time::GetDeltaTime();
+		if (qSkillCoolDownElapsed >= qSkillCoolTime)
+		{
+			qSkillCoolDownElapsed = 0.0f;
+			isQSkillReady = true;
+		}
+	}
+	if (!isESkillReady)
+	{
+		eSkillCoolDownElapsed += Time::GetDeltaTime();
+		if (eSkillCoolDownElapsed >= eSkillCoolTime)
+		{
+			eSkillCoolDownElapsed = 0.0f;
+			isESkillReady = true;
+		}
+	}
 }
 
 bool PlayerSkillSystem::IsSkillCoolingDown(Unit::SkillEnum p_skillnum) const
 {
+
 	switch (p_skillnum)
 	{
 		case Unit::SkillEnum::Q:

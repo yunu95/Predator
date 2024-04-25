@@ -31,7 +31,7 @@ PS_OUT main(PixelIn input)
     
     float4 color = float4(0.5f, 0.5f, 0.5f, 1.f);
 
-    clip(OpacityMap.Sample(sam, input.uv).w - 1);
+   clip(OpacityMap.Sample(sam, input.uv).w - 1);
     
     color = AlbedoMap.Sample(sam, input.uv);
     
@@ -39,7 +39,7 @@ PS_OUT main(PixelIn input)
     if ((lightMapUV[input.id].lightMapIndex != -1) && useLightMap)
     {
         float4 lightColor = float4(0, 0, 0, 1.f);
-        lightColor = UnityLightMap.Sample(sam, input.lightUV);
+        lightColor = UnityLightMap.Sample(sam, float3(input.lightUV, lightMapUV[input.id].lightMapIndex));
         lightColor *= 0.6;
         lightColor.rgb = pow(lightColor.rgb, 1.f / 2.2f);
     
@@ -58,6 +58,7 @@ PS_OUT main(PixelIn input)
     output.position = float4(input.posV.xyz, 1.f);
     output.normal = float4(viewNormal.xyz, 1.f);
     output.util = float4(lightMapUV[input.id].lightMapIndex, DiffuseExposure, AmbientExposure, 1.f);
+    
     return output;
 }
 

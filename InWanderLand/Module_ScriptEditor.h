@@ -201,6 +201,11 @@ namespace application
 							Action_CameraRevert::ImGui_DrawDataPopup(static_cast<Action_CameraRevert*>(data));
 							break;
 						}
+						case application::ActionType::TutorialModeChange:
+						{
+							Action_TutorialModeChange::ImGui_DrawDataPopup(static_cast<Action_TutorialModeChange*>(data));
+							break;
+						}
 						default:
 							break;
 					}

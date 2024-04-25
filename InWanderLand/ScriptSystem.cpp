@@ -35,6 +35,7 @@ namespace application
 		actionList.push_back({ ActionType::CameraRevert, "CameraRevert" });
 		actionList.push_back({ ActionType::CameraSaveView, "CameraSaveView" });
 		actionList.push_back({ ActionType::CameraLoadView, "CameraLoadView" });
+		actionList.push_back({ ActionType::TutorialModeChange, "TutorialModeChange" });
 	}
 
 	Script* ScriptSystem::CreateScript()

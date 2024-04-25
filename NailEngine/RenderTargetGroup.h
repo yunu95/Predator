@@ -14,6 +14,7 @@ public:
 	void OMSetRenderTarget(bool isPBR = false);
 	void UnBind();
 	void Clear();
+	void Release();
 
 #pragma region Setter
 	void SetRenderTargetVec(std::vector<RenderTarget>& rtVec, Microsoft::WRL::ComPtr<ID3D11DepthStencilView> dsv = nullptr);

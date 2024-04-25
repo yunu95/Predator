@@ -47,14 +47,14 @@ namespace yunuGIAdapter
 			}
 			
 
-			if (minusCount % 2 == 1)
-			{
-				for (int i = 0; i < this->materialVec.size(); ++i)
-				{
-					auto material = this->GetMaterial(i);
-					material->SetPixelShader(ResourceManager::Instance.Get().GetShader(L"Default_CullFrontPS.cso").get());
-				}
-			}
+			//if (minusCount % 2 == 1)
+			//{
+			//	for (int i = 0; i < this->materialVec.size(); ++i)
+			//	{
+			//		auto material = this->GetMaterial(i);
+			//		material->SetPixelShader(ResourceManager::Instance.Get().GetShader(L"Default_CullFrontPS.cso").get());
+			//	}
+			//}
 		};
 
 		virtual void SetActive(bool isActive)

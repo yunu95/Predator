@@ -45,6 +45,7 @@ public:
 	void RenderSkinned();
 	void ClearData();
 
+	void PopParticleSystem(ParticleSystem* system);
 	void RenderParticle();
 
 private:

@@ -129,6 +129,8 @@ void HealerSkillSystem::Start()
 
 void HealerSkillSystem::Update()
 {
+	PlayerSkillSystem::Update();
+
 	if (!isColliderSetActiveFalse)
 	{
 		SetSkillRequirmentsActive(QSkillFieldDamage, false);

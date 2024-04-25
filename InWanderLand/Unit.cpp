@@ -189,14 +189,19 @@ void Unit::Start()
             });
     }
 
-    SkillSystem* skillsys = GetGameObject()->GetComponent<SkillSystem>();
-    for (auto e : m_skillAnimationMap)
-    {
-        m_animatorComponent->PushAnimation(e.second, m_skillTimingFrameMap.find(e.first)->second, [=]()
-            {
-                skillsys->ActivateSkill(e.first, m_currentSkillPosition);
-            });
-    }
+	if (m_unitSide == UnitSide::Player)
+	{
+		m_playerSkillSystem = GetGameObject()->GetComponent<PlayerSkillSystem>();
+	}
+
+	SkillSystem* skillsys = GetGameObject()->GetComponent<SkillSystem>();
+	for (auto e : m_skillAnimationMap)
+	{
+		m_animatorComponent->PushAnimation(e.second, m_skillTimingFrameMap.find(e.first)->second, [=]()
+			{
+				skillsys->ActivateSkill(e.first, m_currentSkillPosition);
+			});
+	}
 
     m_animatorComponent->Play(unitAnimations.m_idleAnimation);
 }
@@ -394,7 +399,19 @@ void Unit::DeathEngage()
     //m_animatorComponent->ChangeAnimation(unitAnimations.m_deathAnimation, animationLerpDuration, animationTransitionSpeed);
     m_opponentObjectSet.clear();
 
-    ReportUnitDeath();
+		if (m_unitSide == UnitSide::Enemy)
+		{
+			
+			//StopAnimation();
+			m_animatorComponent->Pause();
+			m_burnEffect->DisAppear();
+			GameManager::Instance().AddCombo();
+			//deathEngageFunction();
+		}
+		else
+		{
+			m_animatorComponent->ChangeAnimation(unitAnimations.m_deathAnimation, animationLerpDuration, animationTransitionSpeed);
+		}
 
     if (m_unitSide == UnitSide::Enemy)
     {
@@ -1116,23 +1133,37 @@ void Unit::OrderAttackMove(Vector3d position)
 
 void Unit::OrderSkill(SkillEnum p_skillNum, Vector3d position)
 {
-    currentOrder = UnitState::Skill;
-    m_skillPosition = position;
-    m_currentSelectedSkill = p_skillNum;
-    dotween->DOLookAt(position, rotateTime, false);
-
-    PlayerController::SingleInstance().SetLeftClickEmpty();
-
-    m_currentSkillPosition = position;
+	if (m_unitSide == UnitSide::Player && m_playerSkillSystem && m_playerSkillSystem->IsSkillCoolingDown(p_skillNum))
+	{
+		// Player unit with valid skill system and skill not cooling down
+		ExecuteSkillAction(position, p_skillNum);
+	}
+	else if (m_unitSide == UnitSide::Enemy)
+	{
+		// Non-player unit or player unit with skill cooling down or invalid skill system
+		ExecuteSkillAction(position, p_skillNum);
+	}
+	PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(m_unitType);
+	PlayerController::SingleInstance().SetLeftClickMove();
 }
 
 void Unit::OrderSkill(SkillEnum p_skillNum)
 {
-    /// warrior 2nd active skill 처럼 캐릭터의 회전이 필요 없는 스킬
-    currentOrder = UnitState::Skill;
-    m_currentSelectedSkill = p_skillNum;
+	/// warrior 2nd active skill 처럼 캐릭터의 회전이 필요 없는 스킬
+	currentOrder = UnitState::Skill;
+	m_currentSelectedSkill = p_skillNum;
 
     PlayerController::SingleInstance().SetLeftClickEmpty();
+}
+
+void Unit::ExecuteSkillAction(Vector3d p_pos, SkillEnum p_skillNum)
+{
+	currentOrder = UnitState::Skill;
+	m_skillPosition = p_pos;
+	m_currentSelectedSkill = p_skillNum;
+	dotween->DOLookAt(p_pos, rotateTime, false);
+    PlayerController::SingleInstance().SetLeftClickEmpty();
+	m_currentSkillPosition = p_pos;
 }
 
 void Unit::RegisterSkillDuration(float p_duration)

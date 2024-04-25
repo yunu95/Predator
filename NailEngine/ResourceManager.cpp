@@ -149,6 +149,14 @@ void ResourceManager::DeleteMesh(yunuGI::IMesh* mesh)
 	meshMap.erase(mesh->GetName());
 }
 
+void ResourceManager::DeleteDeferredTexture()
+{
+	for (auto& each : this->deferredTextureMap)
+	{
+
+	}
+}
+
 yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec)
 {
 	std::shared_ptr<Mesh> tempMesh = std::make_shared<Mesh>();
@@ -306,17 +314,28 @@ void ResourceManager::CreateTexture(const std::wstring& texturePath)
 	}
 }
 
-std::shared_ptr<Texture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag, int arraySize, int sliceCount)
+std::shared_ptr<yunuGI::ITexture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag, int arraySize, int sliceCount)
 {
-	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+	auto iter = this->deferredTextureMap.find(texturePath);
+	if (iter == this->deferredTextureMap.end())
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 
-	texture->CreateTexture(texturePath, width, height, format, bindFlag, arraySize, sliceCount);
-	texture->SetName(texturePath);
+		texture->CreateTexture(texturePath, width, height, format, bindFlag, arraySize, sliceCount);
+		texture->SetName(texturePath);
 
-	this->deferredTextureMap.insert({ texturePath, texture });
-	//this->textureMap.insert({ texturePath, texture });
+		this->deferredTextureMap.insert({ texturePath, texture });
+		//this->textureMap.insert({ texturePath, texture });
 
-	return texture;
+		return this->deferredTextureMap[texturePath];
+	}
+	else
+	{
+		std::static_pointer_cast<Texture>(iter->second)->Release();
+		std::static_pointer_cast<Texture>(iter->second)->CreateTexture(texturePath, width, height, format, bindFlag, arraySize, sliceCount);
+
+		return iter->second;
+	}
 }
 
 std::shared_ptr<Texture>& ResourceManager::CreateTextureFromResource(const std::wstring& texturePath, Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D)
@@ -399,7 +418,7 @@ void ResourceManager::CreateAnimation(const std::vector<AnimationClip>& animatio
 				this->animationGroupMap.insert({ fbxName, animationGroup });
 			}
 
-			
+
 		}
 	}
 
@@ -604,7 +623,12 @@ void ResourceManager::SaveFBXData(std::filesystem::path path)
 	for (auto& each : this->fbxDataMap)
 	{
 		nlohmann::json jsonData;
-		jsonData["FBXName : "] = std::string{ each.first.begin(), each.first.end() };
+		std::string fbxName{ each.first.begin(), each.first.end() };
+		jsonData["FBXName : "] = fbxName;
+		if (fbxName == "SM_Hall_Floor")
+		{
+			int a = 1;
+		}
 		SaveFBXChildData(each.second, jsonData);
 
 		jsonArrData.push_back(jsonData);
@@ -673,7 +697,12 @@ void ResourceManager::SaveFBXChildData(const yunuGI::FBXData* data, nlohmann::js
 		materialJson["temp10Map"] = std::string{ material.temp10Map.begin(), material.temp10Map.end() };
 		materialJson["temp11Map"] = std::string{ material.temp11Map.begin(), material.temp11Map.end() };
 		materialJson["vs"] = std::string{ material.vs.begin(),material.vs.end() };
-		materialJson["ps"] = std::string{ material.ps.begin(), material.ps.end() };
+		auto ps = std::string{ material.ps.begin(), material.ps.end() };
+		if (material.materialName == L"M_Chess_Pattern" && ps != "Stage2FloorPS.cso")
+		{
+			int a = -1;
+		}
+		materialJson["ps"] = ps;
 
 		jsonData["materialVec"].push_back(materialJson);
 	}
@@ -1136,11 +1165,42 @@ void ResourceManager::CreateDefaultTexture()
 	CreateTexture(L"Texture/asdDiffuseHDR.dds");
 	CreateTexture(L"Texture/asdSpecularHDR.dds");
 	CreateTexture(L"Texture/particle.png");
-	CreateTexture(L"Texture/LightMap.dds");
-	CreateTexture(L"Texture/LightMap.png");
-	CreateTexture(L"Texture/LightMap.hdr");
 	CreateTexture(L"Texture/TempTexture.dds");
 	CreateTexture(L"Texture/Dissolve.jpg");
+	CreateTexture(L"Texture/LightMap_0.dds");
+	CreateTexture(L"Texture/LightMap_1.dds");
+
+	CreateTexture(L"Texture/LightMap2_0.dds");
+	CreateTexture(L"Texture/LightMap2_1.dds");
+
+	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+
+	texture->SetName(L"LightMapList");
+	std::vector<yunuGI::ITexture*> tempVec;
+	tempVec.push_back(GetTexture(L"Texture/LightMap_0.dds").get());
+	tempVec.push_back(GetTexture(L"Texture/LightMap_1.dds").get());
+	texture->CreateLightMapArray(tempVec);
+	textureMap.insert({ L"LightMapList", texture });
+	textureVec.push_back(texture.get());
+
+	std::shared_ptr<Texture> texture1 = std::make_shared<Texture>();
+
+	texture1->SetName(L"LightMapList1");
+	std::vector<yunuGI::ITexture*> tempVec1;
+	tempVec1.push_back(GetTexture(L"Texture/LightMap2_0.dds").get());
+	tempVec1.push_back(GetTexture(L"Texture/LightMap2_1.dds").get());
+	texture1->CreateLightMapArray(tempVec1);
+	textureMap.insert({ L"LightMapList1", texture1 });
+	textureVec.push_back(texture1.get());
+
+	//texture->SetName(L"LightMapList");
+	//std::vector<yunuGI::ITexture*> tempVec;
+	//tempVec.push_back(GetTexture(L"Texture/Test0.png").get());
+	//tempVec.push_back(GetTexture(L"Texture/Test1.png").get());
+	//texture->CreateLightMapArray(tempVec);
+	//textureMap.insert({ L"LightMapList", texture });
+	//textureVec.push_back(texture.get());
+
 	//CreateTexture(L"Texture/Brick_Albedo.jpg");
 	//CreateTexture(L"Texture/Brick_Normal.jpg");
 
@@ -1261,23 +1321,6 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 	}
 	else
 	{
-		//fbxData->nodeName = node->nodeName;
-		//fbxData->hasAnimation = node->hasAnimation;
-		//fbxData->child.resize(node->child.size());
-		//fbxData->materialVec.resize(node->meshVec.size());
-
-		//DirectX::SimpleMath::Matrix wtm = (node->worldMatrix);
-		//DirectX::SimpleMath::Vector3 pos;
-		//DirectX::SimpleMath::Vector3 scale;
-		//DirectX::SimpleMath::Quaternion quat;
-		//wtm.Decompose(scale, quat, pos);
-		//quat = DirectX::XMQuaternionNormalize(quat);
-
-		//fbxData->pos = yunuGI::Vector3{ pos.x, pos.y,pos.z };
-		//fbxData->scale = yunuGI::Vector3{ scale.x, scale.y,scale.z };
-		//fbxData->quat = yunuGI::Vector4{ quat.x, quat.y, quat.z, quat.w };
-		//fbxData->quat = yunuGI::Vector4{ quat.w, quat.x, quat.y, quat.z };
-
 		for (int i = 0; i < node->meshVec.size(); ++i)
 		{
 			// 실제 Mesh와 Material을 만들자
@@ -1410,12 +1453,21 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 
 				this->materialMap.insert({ node->meshVec[i].material.materialName , material });
 			}
+			else
+			{
+				fbxData->materialVec[i].materialName = node->meshVec[i].material.materialName;
+				fbxData->materialVec[i].albedoMap = node->meshVec[i].material.albedoMap;
+				fbxData->materialVec[i].armMap = node->meshVec[i].material.armMap;
+				fbxData->materialVec[i].emissionMap = node->meshVec[i].material.emissionMap;
+				fbxData->materialVec[i].normalMap = node->meshVec[i].material.normalMap;
+				fbxData->materialVec[i].opacityMap = node->meshVec[i].material.opacityMap;
+			}
 		}
+	}
 
-		for (int i = 0; i < node->child.size(); ++i)
-		{
-			this->FillFBXData(fbxName, node->child[i], fbxData->child[i], true);
-		}
+	for (int i = 0; i < node->child.size(); ++i)
+	{
+		this->FillFBXData(fbxName, node->child[i], fbxData->child[i], true);
 	}
 }
 
@@ -2208,11 +2260,4 @@ void ResourceManager::LoadLineMesh()
 std::wstring ResourceManager::String_To_Wstring(const std::string& str)
 {
 	return std::wstring{ str.begin(), str.end() };
-}
-
-void ResourceManager::DeleteMaterial(yunuGI::IMaterial* material)
-{
-	materialVec;
-	materialMap.erase(material->GetName());
-	instanceMaterialMap;
 }

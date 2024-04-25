@@ -25,10 +25,13 @@ namespace yunuGIAdapter
         {
             NailEngine::Instance.Get().Render();
         };
-
-        virtual void ResizeResolution(unsigned int width, unsigned int height) 
+        virtual void SetResolution(unsigned int width, unsigned int height)
         {
             NailEngine::Instance.Get().SetResolution(width, height);
+        };
+        virtual void ResizeResolution(unsigned int width, unsigned int height) 
+        {
+            NailEngine::Instance.Get().ResizeResolution(width, height);
         };
 
         virtual void* QuerySharedOutputHandle() { return nullptr; }

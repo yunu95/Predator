@@ -84,7 +84,7 @@
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
     <IncludePath>$(SolutionDir)Yunuty\header\;$(SolutionDir)imgui\backends\;$(SolutionDir)imgui\;$(IncludePath)</IncludePath>
     <ExecutablePath>$(OutDir);$(ExecutablePath)</ExecutablePath>
-    <LibraryPath>D:\KSJ\Project\Final\Predator\x64\Release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(OutDir);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
