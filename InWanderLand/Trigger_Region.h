@@ -52,7 +52,7 @@ namespace application
 	public:
 		DEFINE_TRIGGER(LeaveRegion)
 
-			virtual ~Trigger_LeaveRegion();
+		virtual ~Trigger_LeaveRegion();
 
 		virtual void LinkCallback() override;
 
