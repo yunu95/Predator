@@ -541,6 +541,7 @@ void DrawMenuBar()
             if (!isParticleEditMode)
             {
                 isParticleEditMode = true;
+                pm.SwitchMode();
             }
         }
 
@@ -549,6 +550,7 @@ void DrawMenuBar()
             if (isParticleEditMode)
             {
                 isParticleEditMode = false;
+                pm.SwitchMode();
             }
         }
 
@@ -690,7 +692,31 @@ void ShowParticleList()
 
 void ShowSkinnedFBXList()
 {
-    /// 여기 정리하자!!
+    using namespace application::editor::imgui;
+
+    static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+    
+    auto& fbxList = pm.GetSkinnedFBXList();
+    std::vector<std::string> selections = std::vector<std::string>();
+    for (auto& each : fbxList)
+    {
+        selections.push_back(each->getName());
+    }
+
+    //for (int i = 0; i < selections.size(); i++)
+    //{
+    //    if (ImGui::Selectable(selections[i].c_str(), fbxList[i] == ))
+    //    {
+    //        if (pm.GetSelectedParticleData().lock() == pList[i].lock())
+    //        {
+    //            pm.SetSelectedParticleData(std::shared_ptr<application::particle::ParticleToolData>());
+    //        }
+    //        else
+    //        {
+    //            pm.SetSelectedParticleData(pList[i].lock());
+    //        }
+    //    }
+    //}
 }
 
 void ShowParticleEditor()
