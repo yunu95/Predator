@@ -70,6 +70,10 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 		auto skillOneCollider = skillOneColliderObject->AddComponent<physics::SphereCollider>();
 		float skillOneRadius = 5.0f * UNIT_LENGTH;
 		skillOneCollider->SetRadius(skillOneRadius);
+		skillOneColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+		auto skillDamageComponent = skillOneColliderObject->AddComponent<DamageOnlyComponent>();
+		skillDamageComponent->SetSkillOwnerUnit(m_unitComponent);
+		skillDamageComponent->SetSkillDamage(3.0f);
 
 		auto skillOneDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		AttachDebugMesh(skillOneDebugMesh, DebugMeshType::Sphere, yunuGI::Color::red(), true);
@@ -134,11 +138,12 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 		{
 			each->SetLoop(false);
 			animator->PushAnimation(each);
+			m_baseUnitAnimations.m_skillOneAnimation = each;
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillOne, each);
 		}
 	}
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
-
+	SetUnitAnimationFunction();
 	return m_unitComponent;
 }
 

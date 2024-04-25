@@ -93,10 +93,12 @@ Unit* TriggerTrapProductor::CreateUnit(Vector3d startPos)
 		if (each->GetName() == L"Ani_Monster1_Skill")
 		{
 			each->SetLoop(false);
+			m_baseUnitAnimations.m_skillOneAnimation = each;
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillOne, each);
 		}
 	}
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
+	SetUnitAnimationFunction();
 
 	return m_unitComponent;
 }

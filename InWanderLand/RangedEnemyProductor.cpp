@@ -5,6 +5,7 @@
 #include "Unit_TemplateData.h"
 #include "BossSkillSystem.h"
 #include "BurnEffect.h"
+#include "DamageOnlyComponent.h"
 
 void RangedEnemyProductor::SetUnitData()
 {
@@ -66,6 +67,10 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 #pragma region Boss Skill_2 Object Setting
 		auto skillTwoColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto skillTwoCollider = skillTwoColliderObject->AddComponent<physics::BoxCollider>();
+		skillTwoColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+		auto skillDamageComponent = skillTwoColliderObject->AddComponent<DamageOnlyComponent>();
+		skillDamageComponent->SetSkillOwnerUnit(m_unitComponent);
+		skillDamageComponent->SetSkillDamage(3.0f);
 		float skillTwoColliderRange = 6.0f * UNIT_LENGTH;
 		float skillTwoColliderLength = 2.0f * UNIT_LENGTH;
 		skillTwoCollider->SetHalfExtent({ skillTwoColliderLength * 0.5f,skillTwoColliderLength * 0.5f, skillTwoColliderRange * 0.5f });
@@ -134,17 +139,17 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 		{
 			each->SetLoop(false);
 			animator->PushAnimation(each);
-			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillOne, each);
+			m_baseUnitAnimations.m_skillTwoAnimation = each;
+			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillTwo, each);
 		}
 	}
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
-
+	SetUnitAnimationFunction();
 	return m_unitComponent;
 }
 
 void RangedEnemyProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p_podData)
 {
 	UnitProductor::MappingUnitData(p_podData);
-
 	isEliteMonster = p_podData.isEliteMonster;
 }

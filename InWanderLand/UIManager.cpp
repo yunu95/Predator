@@ -420,7 +420,7 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         ImportDefaultAction(uiData, uisByName[uiData.uiname]);
         element->button->SetButtonClickFunction([=]()
             {
-                InputManager::Instance().PrepareSkill(Unit::SkillEnum::E, Unit::UnitType::Warrior);
+                InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Warrior);
             });
         break;
     case UIEnumID::Skill_Use_Q_Ursula:
@@ -434,7 +434,7 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         ImportDefaultAction(uiData, uisByName[uiData.uiname]);
         element->button->SetButtonClickFunction([=]()
             {
-                InputManager::Instance().PrepareSkill(Unit::SkillEnum::E, Unit::UnitType::Magician);
+                InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Magician);
             });
         break;
     case UIEnumID::Skill_Use_Q_HANSEL:
@@ -448,7 +448,7 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         ImportDefaultAction(uiData, uisByName[uiData.uiname]);
         element->button->SetButtonClickFunction([=]()
             {
-                InputManager::Instance().PrepareSkill(Unit::SkillEnum::E, Unit::UnitType::Healer);
+                InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Healer);
             });
         break;
     case UIEnumID::Toggle_TacticMode:

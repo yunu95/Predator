@@ -1005,6 +1005,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="CreateInstanceCommand.h" />
     <ClInclude Include="BossProductor.h" />
     <ClInclude Include="BossSkillSystem.h" />
+    <ClInclude Include="CursorDetector.h" />
     <ClInclude Include="DamageOnlyComponent.h" />
     <ClInclude Include="BrushList.h" />
     <ClInclude Include="CameraBrush.h" />
@@ -1263,6 +1264,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="CreateInstanceCommand.cpp" />
     <ClCompile Include="BossProductor.cpp" />
     <ClCompile Include="BossSkillSystem.cpp" />
+    <ClCompile Include="CursorDetector.cpp" />
     <ClCompile Include="DamageOnlyComponent.cpp" />
     <ClCompile Include="CameraBrush.cpp" />
     <ClCompile Include="CameraEditorInstance.cpp" />

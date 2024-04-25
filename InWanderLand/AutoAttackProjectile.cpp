@@ -19,11 +19,14 @@ void AutoAttackProjectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, float spee
 	m_ownerUnit = ownerUnit;
 	m_opponentUnit = opponentUnit;
 	GetGameObject()->GetTransform()->SetWorldPosition(ownerUnit->GetGameObject()->GetTransform()->GetWorldPosition() + (ownerUnit->GetTransform()->GetWorldRotation().Forward() * -1 * ownerUnit->GetAttackOffset()));
-	GetGameObject()->GetComponent<Dotween>()->DOLookAt(m_opponentUnit->GetGameObject()->GetTransform()->GetWorldPosition(), Time::GetDeltaTime(), false);
+	GetGameObject()->GetComponent<Dotween>()->
+		DOLookAt(m_opponentUnit->GetGameObject()->GetTransform()->GetWorldPosition(), Time::GetDeltaTime(), false).OnComplete([=]()
+			{
+				GetGameObject()->SetSelfActive(true);
+			});
 	//RotateBulletPerFrame();
 	Vector3d directionVector = (opponentUnit->GetTransform()->GetWorldPosition() - ownerUnit->GetTransform()->GetWorldPosition()).Normalized();
-	GetGameObject()->GetTransform()->SetWorldRotation(directionVector);
-	GetGameObject()->SetSelfActive(true);
+	//GetGameObject()->GetTransform()->SetWorldRotation(directionVector);
 
 	m_ownerUnitFront = m_ownerUnit->GetTransform()->GetWorldRotation().Forward();
 	isShootOperating = true;

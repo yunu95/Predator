@@ -58,7 +58,7 @@ void InputManager::Update()
 
                 if (yunutyEngine::Input::isKeyPushed(KeyCode::Alphabet_E))
                 {
-                    PrepareSkill(Unit::SkillEnum::E);
+                    PrepareSkill(Unit::SkillEnum::W);
                 }
             }
 
@@ -81,7 +81,8 @@ void InputManager::SetInputManagerActive(bool p_boolen)
 
 void InputManager::SelectPlayer(Unit::UnitType p_unitType)
 {
-    if (!GameManager::Instance().IsBattleSystemOperating())
+    if (!GameManager::Instance().IsBattleSystemOperating() || 
+        PlayerController::SingleInstance().FindSelectedUnitByUnitType(p_unitType)->GetCurrentUnitState() == Unit::UnitState::Death)
     {
         return;
     }
@@ -108,6 +109,12 @@ void InputManager::SelectPlayer(Unit::UnitType p_unitType)
         break;
     }
     isPlayerSelected = true;
+    
+    if (tacticMode)
+    {
+		TacticModeSystem::SingleInstance().SetLeftClickAddQueueForMove(currentSelectedSerialNumber);
+    }
+
     SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 }
 
@@ -118,7 +125,8 @@ void InputManager::PrepareSkill(Unit::SkillEnum p_skillType, Unit::UnitType p_un
 }
 void InputManager::PrepareSkill(Unit::SkillEnum p_skillType)
 {
-    if (!GameManager::Instance().IsBattleSystemOperating())
+    if (!GameManager::Instance().IsBattleSystemOperating() ||
+        PlayerController::SingleInstance().FindSelectedUnitByUnitType(static_cast<Unit::UnitType>(currentSelectedSerialNumber))->GetCurrentUnitState() == Unit::UnitState::Death )
     {
         return;
     }

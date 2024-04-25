@@ -10,6 +10,7 @@
 class UnitProductor;
 class SkillSystem;
 class BurnEffect;
+class CursorDetector;
 enum class SkillPreviewMesh;
 
 /// <summary>
@@ -39,16 +40,16 @@ public:
 	enum class UnitType
 	{
 		Warrior = 1,
-		Magician,
-		Healer,
-		AllPlayers,
-		MeleeEnemy,
-		RangedEnemy,
-		Boss,
-		EnemySpawnGate,
-		SpikeTrap,
-		ChessTrap,
-		TriggeredTrap
+		Magician = 2,
+		Healer = 3,
+		AllPlayers = 4,
+		MeleeEnemy = 5,
+		RangedEnemy = 6,
+		Boss = 7,
+		EnemySpawnGate = 8,
+		SpikeTrap = 9,
+		ChessTrap = 10,
+		TriggeredTrap = 11
 	};
 
 	enum class UnitSide
@@ -60,7 +61,7 @@ public:
 	enum class SkillEnum
 	{
 		Q,
-		E,
+		W,
 		BossSkillOne,
 		BossSkillTwo,
 		BossSkillThree,
@@ -75,6 +76,10 @@ public:
 		yunuGI::IAnimation* m_paralysisAnimation;
 		yunuGI::IAnimation* m_deathAnimation;
 		yunuGI::IAnimation* m_battleEngageAnimation;
+		yunuGI::IAnimation* m_skillOneAnimation;
+		yunuGI::IAnimation* m_skillTwoAnimation;
+		yunuGI::IAnimation* m_skillThreeAnimation;
+		yunuGI::IAnimation* m_skillFourAnimation;
 	};
 
 	Timer* knockBackTimer;
@@ -164,7 +169,6 @@ private:
 	std::unordered_map<SkillEnum, int> m_skillTimingFrameMap;
 	//float qSkillFunctionStartedElapsed;
 	//float qSkillStartDelay = 1.0f;
-	float qSkillAnimationDuration = 5.0f;
 	bool isJustHitByQSkill = false;
 
 	float m_battleEngageMotionElapsed{ 0.0f };
@@ -185,8 +189,6 @@ private:
 	Vector3d m_previousMovePosition;						
 	Vector3d m_currentMovePosition;				// 현재 상대의 위치
 	Vector3d m_waveStartPosition;				// 웨이브 시작 위치
-
-	Vector3d m_currentSkillPosition;
 
 	yunutyEngine::graphics::StaticMeshRenderer* m_staticMeshRenderer;
 
@@ -243,7 +245,11 @@ private:
 
 	void StopAnimation();
 
+	void RegisterSkillWithAnimation(SkillEnum p_enum);
+
 public:
+	Vector3d m_currentSkillPosition;
+
 	BaseUnitAnimationStruct unitAnimations;
 	float animationLerpDuration = 1.0f;
 	float animationTransitionSpeed = 3.0f;
@@ -267,7 +273,6 @@ public:
 	void SetAttackDelay(float p_delay);
 	void SetAttackTimingFrame(int p_frame);
 	void SetPlayerSerialNumber(UnitType serialNum);
-	void RegisterSkillDuration(float p_duration);
 	void SetSkillPreviewType(SkillPreviewMesh p_qskill, SkillPreviewMesh p_wskill);
 	void SetMaxAggroNumber(int p_num);
 	void SetFbxName(std::string p_string);
@@ -327,6 +332,8 @@ public:
 
 	void ChangeUnitStatRandomly();
 
+	void SetRessurectMaxCount(int p_cnt);
+
 public:
 	int GetUnitDamage() const;
 	void Damaged(Unit* opponentUnit, float opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
@@ -353,6 +360,9 @@ public:
 	bool isJustCreated{ false };
 
 	std::queue<std::function<void()>> m_tacticModeQueue;
+
+	Vector3d m_currentBelongingWavePosition;
+	CursorDetector* m_cursorDetectorComponent;
 
 	friend RobinSkillDevelopmentSystem;
 	friend UnitProductor;

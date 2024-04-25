@@ -172,28 +172,38 @@ Unit* BossProductor::CreateUnit(Vector3d startPos)
 		{
 			each->SetLoop(false);
 			animator->PushAnimation(each);
+			m_baseUnitAnimations.m_skillOneAnimation = each;
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillOne, each);
 		}
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
 		{
-			each->SetLoop(false);
+			each->SetLoop(true);
 			animator->PushAnimation(each);
+			m_baseUnitAnimations.m_skillTwoAnimation = each;
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillTwo, each);
 		}
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
 		{
 			each->SetLoop(false);
 			animator->PushAnimation(each);
+			m_baseUnitAnimations.m_skillThreeAnimation = each;
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillThree, each);
 		}
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
 		{
-			each->SetLoop(false);
+			each->SetLoop(true);
 			animator->PushAnimation(each);
+			m_baseUnitAnimations.m_skillFourAnimation = each;
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillFour, each);
 		}
 	}
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
-
+	SetUnitAnimationFunction();
 	return m_unitComponent;
 }
+
+void BossProductor::SetCursorComponent(CursorDetector* p_com)
+{
+	//m_unitComponent->m_cursorDetectorComponent = p_com;
+}
+

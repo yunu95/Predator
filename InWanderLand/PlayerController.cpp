@@ -89,7 +89,7 @@ void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
 
     if (currentUnit->GetCurrentUnitState() != Unit::UnitState::Skill)
     {
-        if (static_cast<int>(currentSelectedSerialNumber) == InputManager::SelectedSerialNumber::One && p_skillNum == Unit::SkillEnum::E)
+        if (static_cast<int>(currentSelectedSerialNumber) == InputManager::SelectedSerialNumber::One && p_skillNum == Unit::SkillEnum::W)
         {
             /// Warrior의 W 스킬은 마우스로 클릭하지 않아도 바로 실행되는 스킬이다. 다른 스킬 나온다면 구조적 개선 필요
             playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum);

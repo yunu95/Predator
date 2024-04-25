@@ -19,12 +19,12 @@ void ChessTrapSkillSystem::Start()
 	{
 		case ChessTrapSkillSystem::ChessPieceType::Pawn:
 		{
-			float pawnLength = 3.0f * m_unitLength;
-			m_chessSkillRequirementOne.colliderObject->GetComponent<physics::BoxCollider>()->SetHalfExtent({ pawnLength * 0.5f, pawnLength * 0.5f , pawnLength * 0.5f });
-			m_chessSkillRequirementOne.debugObject->GetTransform()->SetWorldScale({ pawnLength , pawnLength ,pawnLength });
+			float pawnLength = 5.0f * m_unitLength;
+			m_chessSkillRequirementOne.colliderObject->GetComponent<physics::BoxCollider>()->SetHalfExtent({ pawnLength * 0.5f, 0.5f * 0.5f , pawnLength * 0.5f });
+			m_chessSkillRequirementOne.debugObject->GetTransform()->SetWorldScale({ pawnLength , 0.5f ,pawnLength });
 
-			m_chessSkillRequirementOne.colliderObject->GetComponent<physics::BoxCollider>()->SetHalfExtent(Vector3d::zero);
-			m_chessSkillRequirementOne.debugObject->GetTransform()->SetWorldScale(Vector3d::zero);
+			m_chessSkillRequirementTwo.colliderObject->GetComponent<physics::BoxCollider>()->SetHalfExtent(Vector3d::zero);
+			m_chessSkillRequirementTwo.debugObject->GetTransform()->SetWorldScale(Vector3d::zero);
 			break;
 		}
 		case ChessTrapSkillSystem::ChessPieceType::Rook:
