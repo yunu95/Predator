@@ -67,7 +67,6 @@ namespace application
 			: public Singleton<ParticleTool_Manager>
 		{
 			friend class Singleton<ParticleTool_Manager>;
-			friend class ParticleToolData;
 
 		public:
 			void Clear();
@@ -100,6 +99,9 @@ namespace application
 
 			std::vector<yunutyEngine::GameObject*>& GetSkinnedFBXList();
 
+			void SetSelectedFBXData(yunutyEngine::GameObject* fbxObj);
+			yunutyEngine::GameObject* GetSelectedFBXData();
+
 			/// 어떤 파티클에 대해서 할 것인지 세팅하는 구조로 변경 필요
 			std::weak_ptr<ParticleToolInstance> CreateParticleInstance(const std::string& name);
 			bool EraseParticleInstance(const std::string& name);
@@ -121,6 +123,8 @@ namespace application
 			std::shared_ptr<ParticleToolData> selectedParticleData = nullptr;
 			std::map<const std::string, std::vector<std::shared_ptr<ParticleToolInstance>>> particleInstanceList = std::map<const std::string, std::vector<std::shared_ptr<ParticleToolInstance>>>();
 			std::shared_ptr<ParticleToolInstance> selectedParticleInstanceData = nullptr;
+			yunutyEngine::GameObject* selectedFBXObject = nullptr;
+			// Animation
 
 			std::map<const std::string, yunutyEngine::GameObject*> particleObjList = std::map<const std::string, yunutyEngine::GameObject*>();
 			std::map<const std::string, yunutyEngine::GameObject*> skinnedObjList = std::map<const std::string, yunutyEngine::GameObject*>();

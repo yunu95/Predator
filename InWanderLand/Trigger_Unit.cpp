@@ -117,7 +117,7 @@ namespace application
 
 	bool Trigger_UnitAppear::PostDecoding(const json& data)
 	{
-		targetUnit = UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["targetUnit"]));
+		SetUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["targetUnit"])));
 		return true;
 	}
 
@@ -228,7 +228,7 @@ namespace application
 
 	bool Trigger_UnitDie::PostDecoding(const json& data)
 	{
-		targetUnit = UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["targetUnit"]));
+		SetUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["targetUnit"])));
 		return true;
 	}
 }
