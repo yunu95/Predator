@@ -493,6 +493,15 @@
     <Filter Include="Contents\Playable\Cinematic">
       <UniqueIdentifier>{1be88953-fede-49fa-bcff-d309ee96f946}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Palette\List\ParticlePalette">
+      <UniqueIdentifier>{60ae1130-a87e-4479-b7c4-ee7569f6c678}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteBrush\ParticleBrush">
+      <UniqueIdentifier>{d8e287fa-7ddc-4ed7-b340-7a2e7914b3d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\EditorInstance\ParticleInstance">
+      <UniqueIdentifier>{448f4299-89d9-4f1d-b550-ce3b9011c33c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1267,6 +1276,21 @@
     <ClInclude Include="Action_Tutorial.h">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClInclude>
+    <ClInclude Include="Particle_TemplateData.h">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleData.h">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticlePalette.h">
+      <Filter>Editor\Palette\List\ParticlePalette</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleBrush.h">
+      <Filter>Editor\Palette\PaletteBrush\ParticleBrush</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEditorInstance.h">
+      <Filter>Editor\Palette\EditorInstance\ParticleInstance</Filter>
+    </ClInclude>
     <ClInclude Include="CursorDetector.h">
       <Filter>Contents\AttackSystem</Filter>
     </ClInclude>
@@ -1929,6 +1953,21 @@
     </ClCompile>
     <ClCompile Include="Action_Tutorial.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle_TemplateData.cpp">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleData.cpp">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticlePalette.cpp">
+      <Filter>Editor\Palette\List\ParticlePalette</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleBrush.cpp">
+      <Filter>Editor\Palette\PaletteBrush\ParticleBrush</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEditorInstance.cpp">
+      <Filter>Editor\Palette\EditorInstance\ParticleInstance</Filter>
     </ClCompile>
     <ClCompile Include="CursorDetector.cpp">
       <Filter>Contents\AttackSystem</Filter>

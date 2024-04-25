@@ -72,6 +72,15 @@ void Mesh::Render(unsigned int materialIndex, D3D_PRIMITIVE_TOPOLOGY topology, b
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetIndexBuffer(this->indexBufferVec[materialIndex].indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetPrimitiveTopology(topology);
 
+		//if (this->name == L"SM_Bush_001" || this->name == L"SM_Bush_002")
+		//{
+		//	ResourceBuilder::Instance.Get().device->GetDeviceContext()->DrawIndexedInstanced(this->indexBufferVec[materialIndex].indexCount, buffer->GetCount()/3.f, 0, 0, 0);
+		//}
+		//else
+		//{
+		//	ResourceBuilder::Instance.Get().device->GetDeviceContext()->DrawIndexedInstanced(this->indexBufferVec[materialIndex].indexCount, buffer->GetCount(), 0, 0, 0);
+		//}
+
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->DrawIndexedInstanced(this->indexBufferVec[materialIndex].indexCount, buffer->GetCount(), 0, 0, 0);
 	}
 	else if (buffer == nullptr && isInstancing == true)
@@ -99,8 +108,6 @@ void Mesh::Render(unsigned int materialIndex, D3D_PRIMITIVE_TOPOLOGY topology, b
 
 DirectX::BoundingBox Mesh::GetBoundingBox(DirectX::SimpleMath::Matrix wtm, unsigned int materialIndex /*= 0*/)
 {
-	DirectX::BoundingBox transformedAABB;
-
 	XMStoreFloat3(&transformedAABB.Center, DirectX::XMLoadFloat3(&this->aabbVec[materialIndex].Center));
 	XMStoreFloat3(&transformedAABB.Extents, DirectX::XMLoadFloat3(&this->aabbVec[materialIndex].Extents));
 
@@ -165,6 +172,7 @@ void Mesh::CheckBigBoundingBox(DirectX::BoundingBox& aabb)
     if (v1 < v2)
     {
         this->aabb = aabb;
+		this->transformedAABB = aabb;
     }
 }
 

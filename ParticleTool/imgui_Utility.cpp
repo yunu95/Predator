@@ -1,12 +1,6 @@
 #include "imgui_Utility.h"
 
-#include "Storable.h"
-#include "ITemplateData.h"
-#include "TemplateDataList.h"
-#include "EditorResourceManager.h"
-#include "EditorPopupManager.h"
-
-extern const float DRAG_MOUSE_THRESHOLD_FACTOR;
+const float DRAG_MOUSE_THRESHOLD_FACTOR_UTILL = 0.50f;
 
 #define BIT(x) (1u << x)
 
@@ -46,39 +40,6 @@ namespace application
 			{
 				const ImVec2 cursor = ImGui::GetCursorPos();
 				ImGui::SetCursorPos(ImVec2(cursor.x + x, cursor.y + y));
-			}
-
-			bool SelectableImageButton(std::string imageKey, std::string filename, bool selected, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, bool useTint, const ImVec4& bgColor, const ImVec4& selectedColor)
-			{
-				static auto& erm = application::editor::ResourceManager::GetSingletonInstance();
-				auto button = erm.GetTexture2D(filename);
-
-				if (button == nullptr)
-					return false;
-
-				if (useTint)
-				{
-					if (selected)
-					{
-						return ImGui::ImageButton(imageKey.c_str(), (ImTextureID)button->GetID(), size, uv0, uv1, bgColor, selectedColor);
-					}
-					else
-					{
-						return ImGui::ImageButton(imageKey.c_str(), (ImTextureID)button->GetID(), size, uv0, uv1, bgColor);
-					}
-				}
-				else
-				{
-					if (selected)
-					{
-						imgui::SmartStyleColor buttonCol(ImGuiCol_Button, selectedColor);
-						return ImGui::ImageButton(imageKey.c_str(), (ImTextureID)button->GetID(), size, uv0, uv1, bgColor);
-					}
-					else
-					{
-						return ImGui::ImageButton(imageKey.c_str(), (ImTextureID)button->GetID(), size, uv0, uv1, bgColor);
-					}
-				}
 			}
 
 			bool BeginSection_1Col(int& countIdx, std::string sectionName, float width, ImColor underlineColor)
@@ -206,7 +167,7 @@ namespace application
 
 				imgui::SmartStyleColor textColor2(ImGuiCol_Text, IM_COL32_WHITE);
 				bool result = false;
-				if (ImGui::BeginCombo("##Combo", current))
+				if (ImGui::BeginCombo(("##Combo" + valName).c_str(), current))
 				{
 					for (int i = 0; i < optionCount; i++)
 					{
@@ -499,7 +460,7 @@ namespace application
 
 					// (Optional) simple click (without moving) turns Drag into an InputText
 					if (g.IO.ConfigDragClickToInputText && !temp_input_is_active)
-						if (g.ActiveId == id && hovered && g.IO.MouseReleased[0] && !IsMouseDragPastThreshold(0, g.IO.MouseDragThreshold * DRAG_MOUSE_THRESHOLD_FACTOR))
+						if (g.ActiveId == id && hovered && g.IO.MouseReleased[0] && !IsMouseDragPastThreshold(0, g.IO.MouseDragThreshold * DRAG_MOUSE_THRESHOLD_FACTOR_UTILL))
 						{
 							g.NavActivateId = id;
 							g.NavActivateFlags = ImGuiActivateFlags_PreferInput;
@@ -584,7 +545,7 @@ namespace application
 
 					// (Optional) simple click (without moving) turns Drag into an InputText
 					if (g.IO.ConfigDragClickToInputText && !temp_input_is_active)
-						if (g.ActiveId == id && hovered && g.IO.MouseReleased[0] && !IsMouseDragPastThreshold(0, g.IO.MouseDragThreshold * DRAG_MOUSE_THRESHOLD_FACTOR))
+						if (g.ActiveId == id && hovered && g.IO.MouseReleased[0] && !IsMouseDragPastThreshold(0, g.IO.MouseDragThreshold * DRAG_MOUSE_THRESHOLD_FACTOR_UTILL))
 						{
 							g.NavActivateId = id;
 							g.NavActivateFlags = ImGuiActivateFlags_PreferInput;
@@ -880,15 +841,9 @@ namespace application
 
 			void CloseMessageBox(std::string title)
 			{
-				auto& pm = EditorPopupManager::GetSingletonInstance();
 				if (s_MessageBoxes.find(title) != s_MessageBoxes.end())
 				{
 					s_MessageBoxes[title].IsOpen = false;
-					if (pm.GetCurrentPopup() == title)
-					{
-						pm.SetCurrentPopup();
-						pm.Return();
-					}
 				}
 			}
 
@@ -909,7 +864,6 @@ namespace application
 					ImGui::OpenPopup(messageBoxData.Title.c_str());
 					messageBoxData.ShouldOpen = false;
 					messageBoxData.IsOpen = true;
-					EditorPopupManager::GetSingletonInstance().SetCurrentPopup(messageBoxData.Title);
 				}
 
 				if (!messageBoxData.IsOpen)
@@ -935,7 +889,6 @@ namespace application
 						{
 							if (ImGui::Button("Ok"))
 							{
-								EditorPopupManager::GetSingletonInstance().SetCurrentPopup();
 								ImGui::CloseCurrentPopup();
 								messageBoxData.IsOpen = false;
 							}
@@ -948,7 +901,6 @@ namespace application
 
 						if (messageBoxData.Flags & MESSAGE_BOX_CANCEL_BUTTON && ImGui::Button("Cancel"))
 						{
-							EditorPopupManager::GetSingletonInstance().SetCurrentPopup();
 							ImGui::CloseCurrentPopup();
 							messageBoxData.IsOpen = false;
 						}

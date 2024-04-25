@@ -1,5 +1,7 @@
 #include "LightBrush.h"
 
+#include "TemplateDataManager.h"
+
 namespace application
 {
     namespace editor

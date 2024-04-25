@@ -22,6 +22,17 @@ namespace tests
 			inputUpdate = true;
 		}
 
+		void Reset()
+		{
+			pitch = 0.0;
+			pitchDelta = 0.0;
+			yaw = 0.0;
+			yawDelta = 0.0;
+
+			GetTransform()->SetWorldPosition(yunutyEngine::Vector3{ 0,0,-20 });
+			GetTransform()->SetWorldRotation(Quaternion());
+		}
+
 		virtual void Update() override
 		{
 			Camera::Update();

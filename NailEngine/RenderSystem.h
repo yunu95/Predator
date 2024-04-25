@@ -45,6 +45,8 @@ public:
     static LazyObjects<RenderSystem> Instance;
     friend LazyObjects<RenderSystem>;
 
+    void ReleaseD2D();
+
     void Finalize();
 
 public:

@@ -158,6 +158,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="ImGuizmo.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
@@ -165,14 +166,17 @@
     <ClCompile Include="imgui_impl_win32.cpp" />
     <ClCompile Include="imgui_tables.cpp" />
     <ClCompile Include="imgui_Utility.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="imgui_widgets.cpp" />
     <ClCompile Include="ImSequencer.cpp" />
-    <ClCompile Include="ParticleData.cpp" />
+    <ClCompile Include="ParticleTool_Manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FileSystem.h" />
     <ClInclude Include="imgui.h" />
     <ClInclude Include="ImGuizmo.h" />
     <ClInclude Include="imgui_impl_dx11.h" />
@@ -180,7 +184,8 @@
     <ClInclude Include="imgui_internal.h" />
     <ClInclude Include="imgui_Utility.h" />
     <ClInclude Include="ImSequencer.h" />
-    <ClInclude Include="ParticleData.h" />
+    <ClInclude Include="ParticleToolData.h" />
+    <ClInclude Include="ParticleTool_Manager.h" />
     <ClInclude Include="TestUtilGraphicsTestCam.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

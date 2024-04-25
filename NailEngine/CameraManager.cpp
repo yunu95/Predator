@@ -19,6 +19,11 @@ void CameraManager::ChangeMainCamera(yunuGI::ICamera* adapter)
 	this->mainCamera = this->cameraMap[adapter];
 }
 
+std::map<yunuGI::ICamera*, std::shared_ptr<NailCamera>>& CameraManager::GetCamearaList()
+{
+	return cameraMap;
+}
+
 void CameraManager::SetWorldTM(yunuGI::ICamera* adapter, DirectX::SimpleMath::Matrix wtm)
 {
 	this->cameraMap[adapter]->SetWorldTM(wtm);

@@ -48,7 +48,7 @@ PS_OUT main(PixelIn input)
     if ((lightMapUV[input.id].lightMapIndex != -1)  && useLightMap)
     {
         float4 lightColor = float4(0, 0, 0, 1.f);
-        lightColor = UnityLightMap.Sample(sam, input.lightUV);
+        lightColor = UnityLightMap.Sample(sam, float3(input.lightUV, lightMapUV[input.id].lightMapIndex));
         lightColor *= 0.6;
         lightColor.rgb = pow(lightColor.rgb, 1.f / 2.2f);
     

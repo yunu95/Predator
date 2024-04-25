@@ -45,7 +45,10 @@
     <ClCompile Include="imgui_Utility.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleData.cpp">
+    <ClCompile Include="ParticleTool_Manager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,7 +77,13 @@
     <ClInclude Include="imgui_Utility.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleData.h">
+    <ClInclude Include="ParticleToolData.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleTool_Manager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

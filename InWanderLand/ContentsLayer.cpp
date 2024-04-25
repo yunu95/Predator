@@ -49,6 +49,18 @@ std::function<void()> application::contents::ContentsLayer::testInitializer;
 
 bool contentsInputControl = true;
 
+class TestComponent3 : public yunutyEngine::Component
+{
+public:
+	yunutyEngine::graphics::UIText* text;
+	virtual void Update() override
+	{
+		std::wstring temp;
+		temp = std::to_wstring(Time::GetFPS());
+		text->GetGI().SetText(temp);
+	}
+};
+
 /// 그래픽스 테스트용
 void GraphicsTest()
 {
@@ -67,6 +79,15 @@ void GraphicsTest()
 			i->SetLoop(true);
 			animation = i;
 		}
+	}
+
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		auto particle = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
+		particle->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
+		particle->SetPlayAwake(true);
+		particle->SetLoop(true);
+		particle->Play();
 	}
 
 }
@@ -140,6 +161,17 @@ void application::contents::ContentsLayer::Initialize()
 	TutorialManager::Instance();
 
 	wanderUtils::LoadResourcesRecursively();
+
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
+		text->GetGI().SetFontSize(30);
+		obj->GetTransform()->SetLocalScale(Vector3d{ 500,500,0 });
+		//obj->GetTransform()->SetLocalPosition(Vector3d{ 500,500,0 });
+
+		auto test3 = obj->AddComponent<TestComponent3>();
+		test3->text = text;
+	}
 
 #ifndef EDITOR
 #ifdef GRAPHICS_TEST
