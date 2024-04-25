@@ -47,25 +47,26 @@ struct PS_OUT
 PS_OUT main(PixelIn input)
 {
     PS_OUT output = (PS_OUT) 0;
-    
+    float4 worldPos = mul(input.posV, VTMInv);
+    float2 uv = float2(-worldPos.x, worldPos.z);
     // 알베도 블렌딩
-    float4 color = AlbedoMap.Sample(sam, input.uv);
-    float4 blendAlbedo = HeightMap.Sample(sam, input.uv);
+    float4 color = AlbedoMap.Sample(sam, uv);
+    float4 blendAlbedo = HeightMap.Sample(sam, uv);
     color = lerp(color, blendAlbedo, input.color.r);
-    float4 blendAlbedo2 = Temp0Map.Sample(sam, input.uv);
+    float4 blendAlbedo2 = Temp0Map.Sample(sam, uv);
     color = lerp(color, blendAlbedo2, input.color.g);
-    float4 blendAlbedo3 = Temp3Map.Sample(sam, input.uv);
+    float4 blendAlbedo3 = Temp3Map.Sample(sam, uv);
     color = lerp(color, blendAlbedo3, input.color.b);
-    float4 blendAlbedo4 = Temp6Map.Sample(sam, input.uv);
+    float4 blendAlbedo4 = Temp6Map.Sample(sam, uv);
     color = lerp(color, blendAlbedo4, input.color.a);
     
     float3 viewNormal = input.normalV;
     float3 finalTangentSpaceNormal;
-    float3 tangentSpaceNormal = NormalMap.Sample(sam, input.uv).xyz;
-    float3 tangentSpaceNormal2 = EmissionMap.Sample(sam, input.uv).xyz;
-    float3 tangentSpaceNormal3 = Temp1Map.Sample(sam, input.uv).xyz;
-    float3 tangentSpaceNormal4 = Temp4Map.Sample(sam, input.uv).xyz;
-    float3 tangentSpaceNormal5 = Temp7Map.Sample(sam, input.uv).xyz;
+    float3 tangentSpaceNormal = NormalMap.Sample(sam, uv).xyz;
+    float3 tangentSpaceNormal2 = EmissionMap.Sample(sam, uv).xyz;
+    float3 tangentSpaceNormal3 = Temp1Map.Sample(sam, uv).xyz;
+    float3 tangentSpaceNormal4 = Temp4Map.Sample(sam, uv).xyz;
+    float3 tangentSpaceNormal5 = Temp7Map.Sample(sam, uv).xyz;
     finalTangentSpaceNormal = lerp(tangentSpaceNormal, tangentSpaceNormal2, input.color.r);
     finalTangentSpaceNormal = lerp(finalTangentSpaceNormal, tangentSpaceNormal3, input.color.g);
     finalTangentSpaceNormal = lerp(finalTangentSpaceNormal, tangentSpaceNormal4, input.color.b);
@@ -78,7 +79,7 @@ PS_OUT main(PixelIn input)
     
     if (UseTexture(useARM) == 1)
     {
-        float3 arm = ARMMap.Sample(sam, input.uv);
+        float3 arm = ARMMap.Sample(sam, uv);
         output.arm.x = arm.x;
         output.arm.y = arm.y;
         output.arm.z = arm.z;

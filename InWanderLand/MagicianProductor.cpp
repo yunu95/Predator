@@ -51,48 +51,13 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
-	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
-	auto& animList = rsrcManager->GetAnimationList();
-	for (auto each : animList)
-	{
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
-		{
-			m_baseUnitAnimations.m_idleAnimation = each;
-			m_baseUnitAnimations.m_idleAnimation->SetLoop(true);
-			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_idleAnimation);
-			animator->GetGI().Play(m_baseUnitAnimations.m_idleAnimation);
-		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
-		{
-			m_baseUnitAnimations.m_walkAnimation = each;
-			m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
-			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_walkAnimation);
-		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
-		{
-			m_baseUnitAnimations.m_attackAnimation = each;
-			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
-			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_attackAnimation);
-		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
-		{
-			m_baseUnitAnimations.m_paralysisAnimation = each;
-			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
-			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
-		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_APose")
-		{
-			m_baseUnitAnimations.m_deathAnimation = each;
-			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
-			animator->GetGI().PushAnimation(m_baseUnitAnimations.m_deathAnimation);
-		}
-	}
-#pragma endregion
-
 	/// UnitComponent 추가
 	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
-	//m_unitComponent->RegisterToWaveVector
+	UnitProductor::SetUnitComponentMembers();
+
+
+#pragma endregion
+
 #pragma region Auto Attack Setting (Including Passive Logic)
 	auto magicianAttackSystem = m_unitGameObject->AddComponent<RangedAttackSystem>();
 	magicianAttackSystem->SetBulletSpeed(10.0f);
@@ -171,7 +136,6 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 	UnitProductor::AddColliderComponent();
 	UnitProductor::AddNavigationComponent();
 	UnitProductor::AddDotweenComponent();
-	UnitProductor::SetUnitComponentMembers();
 	UnitProductor::SetPlayerRelatedComponents(m_unitComponent);
 
 	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::Q, skillOneRange);
@@ -182,6 +146,58 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 	auto clonedMaterial = graphics::Renderer::SingleInstance().GetResourceManager()->CloneMaterial(L"Red", material);
 	clonedMaterial->SetColor(yunuGI::Color::red());
 	skinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial);
+
+	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
+	auto& animList = rsrcManager->GetAnimationList();
+	for (auto each : animList)
+	{
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
+		{
+			m_baseUnitAnimations.m_idleAnimation = each;
+			m_baseUnitAnimations.m_idleAnimation->SetLoop(true);
+			animator->PushAnimation(m_baseUnitAnimations.m_idleAnimation);
+			animator->Play(m_baseUnitAnimations.m_idleAnimation);
+		}
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
+		{
+			m_baseUnitAnimations.m_walkAnimation = each;
+			m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
+			animator->PushAnimation(m_baseUnitAnimations.m_walkAnimation);
+		}
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+		{
+			m_baseUnitAnimations.m_attackAnimation = each;
+			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
+		}
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		{
+			m_baseUnitAnimations.m_paralysisAnimation = each;
+			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
+			animator->PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
+		}
+		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+		{
+			m_baseUnitAnimations.m_deathAnimation = each;
+			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
+			animator->PushAnimation(m_baseUnitAnimations.m_deathAnimation);
+		}
+		/// Skill Animation
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		{
+			each->SetLoop(false);
+			animator->PushAnimation(each);
+			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::Q, each);
+		}
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		{
+			each->SetLoop(false);
+			animator->PushAnimation(each);
+			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::W, each);
+		}
+	}
+
+	m_unitComponent->unitAnimations = m_baseUnitAnimations;
 
 	return m_unitComponent;
 }

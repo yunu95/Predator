@@ -101,18 +101,6 @@ namespace application
             isMouseOver = ImGui::IsWindowHovered();
             isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
-            if (isMouseOver)
-            {
-                ec->SetInputUpdate(true);
-            }
-            else
-            {
-                if (Application::IsFocusGameWindow() == false)
-                {
-                    ec->SetInputUpdate(false);
-                }
-            }
-
             ImGui_UpdateWindowSize();
 
             // Resize 에 대한 처리 부분
@@ -414,7 +402,7 @@ namespace application
                 }
             }
 
-            if (ec->GetGamePerspective() == CameraPerspectiveState::Free)
+            if (ec->GetCameraPerspectiveState() == CameraPerspectiveState::Free)
             {
                 if (beforeVTM[0][0] != gvtm[0][0] || beforeVTM[0][1] != gvtm[0][1] || beforeVTM[0][2] != gvtm[0][2] || beforeVTM[0][3] != gvtm[0][3] ||
                     beforeVTM[1][0] != gvtm[1][0] || beforeVTM[1][1] != gvtm[1][1] || beforeVTM[1][2] != gvtm[1][2] || beforeVTM[1][3] != gvtm[1][3] ||
@@ -550,11 +538,11 @@ namespace application
                 {
                     if (imgui::BeginSection_2Col(sectionIdx, "EditorCamera", 300.0f))
                     {
-                        CameraPerspectiveState state = ec->GetGamePerspective();
+                        CameraPerspectiveState state = ec->GetCameraPerspectiveState();
                         int selected = (int)state - 1;
 
                         static const char* selectionModes[] = { "Free", "Game" };
-                        imgui::Dropdown_2Col("Selection Mode", selectionModes, 2, (int32_t*)&selected);
+                        imgui::Dropdown_2Col("Perspective State", selectionModes, 2, (int32_t*)&selected);
 
                         switch ((CameraPerspectiveState)(selected + 1))
                         {

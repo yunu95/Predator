@@ -14,6 +14,8 @@
 #include "InstanceManager.h"
 #include "EditorCamera.h"
 #include "EditorInputManager.h"
+#include "EditorPopupManager.h"
+#include "EditableDataList.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -67,6 +69,7 @@ namespace application
             /// 각종 매니저 클래스 메모리 할당
             MapFileManager::GetSingletonInstance();
             palette::PaletteManager::GetSingletonInstance();
+            EditorPopupManager::GetSingletonInstance();
 
             /// 에디터 패널 생성 및 초기화 진행
             editorPanelList.resize((int)Panel_List::Size);
@@ -305,6 +308,7 @@ namespace application
         void EditorLayer::LateInitialize()
         {
             ResourceManager::GetSingletonInstance().LateInitialize();
+            EditorPopupManager::GetSingletonInstance().Initialize();
             palette::PaletteManager::GetSingletonInstance().Initialize();
             palette::PaletteBrushManager::GetSingletonInstance().Initialize();
             mfm.LoadDefaultMap();

@@ -28,6 +28,9 @@
 
 #include "Texture.h"
 
+#include "CameraManager.h"
+#include "NailCamera.h"
+
 
 LazyObjects<NailEngine> NailEngine::Instance;
 
@@ -51,7 +54,7 @@ void NailEngine::Init(UINT64 hWnd)
 
 	InstancingManager::Instance.Get().Init();
 
-	ShadowPass::Instance.Get().Init(ResourceManager::Instance.Get().GetTexture(L"ShadowDepth").get(), 
+	ShadowPass::Instance.Get().Init(ResourceManager::Instance.Get().GetTexture(L"ShadowDepth").get(),
 		reinterpret_cast<VertexShader*>(ResourceManager::Instance.Get().GetShader(L"TestVS.cso").get()),
 		reinterpret_cast<PixelShader*>(ResourceManager::Instance.Get().GetShader(L"TestPS.cso").get()));
 
@@ -68,6 +71,7 @@ void NailEngine::Init(UINT64 hWnd)
 
 void NailEngine::Render()
 {
+
 	// Begin
 	//ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->RSSetViewports(1, &ResourceBuilder::Instance.Get().swapChain->GetViewPort());
 	//float4(0.7686, 0.8784, 0.9451, 1.f)
@@ -81,14 +85,18 @@ void NailEngine::Render()
 	RenderSystem::Instance.Get().Render();
 
 	// End
-	ResourceBuilder::Instance.Get().swapChain->GetSwapChain().Get()->Present(1, 0);
+	ResourceBuilder::Instance.Get().swapChain->GetSwapChain().Get()->Present(0, 0);
+
+
+
+
 
 	for (auto& iter : this->constantBuffers)
 	{
 		iter->Clear();
 	}
 
-	for (int i = 0 ; i < this->renderTargetGroup.size(); ++i)
+	for (int i = 0; i < this->renderTargetGroup.size(); ++i)
 	{
 		this->renderTargetGroup[i]->UnBind();
 
@@ -119,12 +127,27 @@ void NailEngine::SetUseLightMap(bool useLightMap)
 	this->useLightMap = useLightMap;
 }
 
-void NailEngine::Resize(unsigned int width, unsigned int height)
+void NailEngine::ResizeResolution(unsigned int width, unsigned int height)
 {
+	this->windowInfo.width = width;
+	this->windowInfo.height = height;
+
 	// 화면의 해상도가 달라졌으니 해상도와 관련된 부분 다 지우고 다시 만들기
 	// 1. 스왑체인 다시 만들기
+
+	ID3D11RenderTargetView* nullViews[] = { nullptr };
+
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(ARRAYSIZE(nullViews), nullViews, nullptr);
+
+
+	RenderSystem::Instance.Get().ReleaseD2D();
+	ResourceBuilder::Instance.Get().swapChain = nullptr;
 	this->swapChain->Release();
-	this->swapChain->Init(this->windowInfo.hWnd, width, height);
+	this->swapChain->Resize(width, height);
+	ResourceBuilder::Instance.Get().swapChain = this->swapChain;
+	RenderSystem::Instance.Get().CreateD2D();
+
+
 
 	// 2. 렌더타겟들 다시 만들기
 	for (auto& each : renderTargetGroup)
@@ -134,6 +157,12 @@ void NailEngine::Resize(unsigned int width, unsigned int height)
 	}
 
 	this->CreateRenderTargetGroup();
+	
+	auto& cameraList = CameraManager::Instance.Get().GetCamearaList();
+	for (auto& each : cameraList)
+	{
+		each.second->SetResolution(width, height);
+	}
 }
 
 std::shared_ptr<ConstantBuffer>& NailEngine::GetConstantBuffer(unsigned int index)
@@ -386,9 +415,24 @@ void NailEngine::CreateRenderTargetGroup()
 		rtVec[0].clearColor[1] = 0.8784;
 		rtVec[0].clearColor[2] = 0.9451;
 		rtVec[0].clearColor[3] = 1.f;
-		
+
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)] = std::make_shared<RenderTargetGroup>();
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->SetRenderTargetVec(rtVec);
+	}
+
+	// Early_Z
+	{
+		std::vector<RenderTarget> rtVec(EARLY_Z_COUNT);
+		rtVec[0].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
+			L"Early_Z_Target",
+			this->windowInfo.width,
+			this->windowInfo.height,
+			DXGI_FORMAT_R16G16B16A16_FLOAT,
+			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+		));
+
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::EARLY_Z)] = std::make_shared<RenderTargetGroup>();
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::EARLY_Z)]->SetRenderTargetVec(rtVec);
 	}
 
 	// Bloom 전용 렌더타겟
@@ -427,8 +471,8 @@ void NailEngine::CreateRenderTargetGroup()
 			std::vector<RenderTarget> rtVec(DOWN6X6_1_COUNT);
 			rtVec[0].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
 				L"DownSample6x6_1_Target",
-				((this->windowInfo.width / 4) / 6)/6,
-				((this->windowInfo.height / 4) / 6)/6,
+				((this->windowInfo.width / 4) / 6) / 6,
+				((this->windowInfo.height / 4) / 6) / 6,
 				//this->windowInfo.width,
 				//this->windowInfo.height,
 				DXGI_FORMAT_R8G8B8A8_UNORM,

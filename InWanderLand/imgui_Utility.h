@@ -116,6 +116,7 @@ namespace application
 			void CloseMessageBox(std::string title);
 			void RenderMessageBoxes();
 			void RenderMessageBox(std::string title);
+			MessageBoxData& GetMessageBox(std::string title);
 
 			namespace draw
 			{

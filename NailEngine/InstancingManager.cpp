@@ -26,6 +26,68 @@ void InstancingManager::Init()
 	lightMapUVBuffer = std::make_shared<LightMapUVBuffer>();
 }
 
+void InstancingManager::RenderEarly_Z()
+{
+	// 비활성화인 얘들 거르고
+// 프러스텀 밖에 있는 얘들 거르고
+// 삭제된 얘들 거르고
+
+// 인스턴스 버퍼의 데이터를 지움
+	ClearData();
+
+	//std::map<InstanceID, std::vector<std::shared_ptr<RenderInfo>>> cache;
+
+	//for (auto& each : renderInfo)
+	//{
+	//	InstanceID instanceID = std::make_pair((unsigned __int64)each->mesh, (unsigned __int64)each->material);
+
+	//	cache[instanceID].push_back(each);
+	//}
+
+	for (auto& pair : this->staticMeshDeferredCache)
+	{
+		std::set<std::shared_ptr<RenderInfo>>& renderInfoVec = pair.second;
+
+		const InstanceID& instanceID = pair.first;
+
+		{
+			int index = 0;
+			for (auto& i : renderInfoVec)
+			{
+				if (i->mesh == nullptr) continue;
+
+				if (i->isActive == false) continue;
+
+				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+				//auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);
+
+				//if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
+				//{
+				//	continue;
+				//}
+
+				const std::shared_ptr<RenderInfo>& renderInfo = i;
+				InstancingData data;
+				data.wtm = renderInfo->wtm;
+				AddData(instanceID, data);
+			}
+
+			if (renderInfoVec.size() != 0)
+			{
+				auto& buffer = _buffers[instanceID];
+				if (buffer->GetCount() > 0)
+				{
+					(*renderInfoVec.begin())->material->PushGraphicsData();
+					std::static_pointer_cast<PixelShader>(ResourceManager::Instance.Get().GetShader(L"Early_Z_PS.cso"))->Bind();
+					buffer->PushData();
+					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
+
+				}
+			}
+		}
+	}
+}
+
 void InstancingManager::RenderStaticDeferred()
 {
 	// 비활성화인 얘들 거르고
@@ -86,12 +148,15 @@ void InstancingManager::RenderStaticDeferred()
 				//	continue;
 				//}
 
+				//if ((i->mesh->GetName() == L"SM_Bush_001") || (i->mesh->GetName() == L"SM_Bush_002"))
+				//{
+
+				//}
+
 				const std::shared_ptr<RenderInfo>& renderInfo = i;
 				InstancingData data;
 				data.wtm = renderInfo->wtm;
 				AddData(instanceID, data);
-
-
 
 				lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
 				lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;

@@ -16,12 +16,10 @@
 #include <unordered_map>
 #include <unordered_set>
 
-
 namespace application
 {
     namespace editor
     {
-        class TemplateDataManager;
         class ITemplateData;
     }
 }

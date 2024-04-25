@@ -83,8 +83,16 @@ void yunutyEngine::graphics::Renderer::SetResolution(unsigned int width, unsigne
 {
     resolution.x = width;
     resolution.y = height;
+    _YunuGIObjects::SingleInstance().renderer->SetResolution(width, height);
+}
+
+void Renderer::ResizeResolution(unsigned int width, unsigned int height)
+{
+	resolution.x = width;
+	resolution.y = height;
     _YunuGIObjects::SingleInstance().renderer->ResizeResolution(width, height);
 }
+
 void yunutyEngine::graphics::Renderer::SetAfterRenderAction(const function<void()>& action)
 {
     afterRenderAction = action;

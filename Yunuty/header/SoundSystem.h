@@ -25,16 +25,18 @@ namespace yunutyEngine
     {
     public:
         static SoundChannel PlaySoundfile(string soundPath);
-        // MusicÀ» µû·Î Ã¤³Î¿¡¼­ °ü¸®ÇÑ´Ù? ÀÌ°Ç Âğºü°°Àº ¼³°è·Î, º¹ÀâÇÑ °ÔÀÓÀ» ±¸ÇöÇÏ±â À§ÇØ¼­´Â AudioSource °´Ã¼¿¡¼­ Ã¤³Î ÄÁÆ®·ÑÀÌ °¡´ÉÇÏ°Ô ÇØ¾ßÇÑ´Ù.
+        // Musicì„ ë”°ë¡œ ì±„ë„ì—ì„œ ê´€ë¦¬í•œë‹¤? ì´ê±´ ì°ë¹ ê°™ì€ ì„¤ê³„ë¡œ, ë³µì¡í•œ ê²Œì„ì„ êµ¬í˜„í•˜ê¸° ìœ„í•´ì„œëŠ” AudioSource ê°ì²´ì—ì„œ ì±„ë„ ì»¨íŠ¸ë¡¤ì´ ê°€ëŠ¥í•˜ê²Œ í•´ì•¼í•œë‹¤.
         static SoundChannel PlayMusic(string soundPath);
-        static SoundChannel StopMusic(double fadeLength=0);
+        static SoundChannel StopMusic(double fadeLength = 0);
+        static void SetMusicVolume(float volume);
+        static float GetMusicVolume();
     private:
         static SoundSystem* soundInstance;
         static SoundSystem* SingleInstance();
         SoundSystem();
         ~SoundSystem();
         SoundChannel mPlaySound(string soundPath);
-        // MusicÀ» µû·Î Ã¤³Î¿¡¼­ °ü¸®ÇÑ´Ù? ÀÌ°Ç Âğºü°°Àº ¼³°è·Î, º¹ÀâÇÑ °ÔÀÓÀ» ±¸ÇöÇÏ±â À§ÇØ¼­´Â AudioSource °´Ã¼¿¡¼­ Ã¤³Î ÄÁÆ®·ÑÀÌ °¡´ÉÇÏ°Ô ÇØ¾ßÇÑ´Ù.
+        // Musicì„ ë”°ë¡œ ì±„ë„ì—ì„œ ê´€ë¦¬í•œë‹¤? ì´ê±´ ì°ë¹ ê°™ì€ ì„¤ê³„ë¡œ, ë³µì¡í•œ ê²Œì„ì„ êµ¬í˜„í•˜ê¸° ìœ„í•´ì„œëŠ” AudioSource ê°ì²´ì—ì„œ ì±„ë„ ì»¨íŠ¸ë¡¤ì´ ê°€ëŠ¥í•˜ê²Œ í•´ì•¼í•œë‹¤.
         SoundChannel mPlayMusic(string soundPath);
         SoundChannel mStopMusic(double fadeLength);
         // fire and forget channels

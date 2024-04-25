@@ -1,5 +1,6 @@
 #pragma once
 #include "YunutyEngine.h"
+#include "Unit.h"
 #include <string>
 #include <map>
 
@@ -13,7 +14,6 @@ namespace application
 }
 
 class UnitProductor;
-class Unit;
 
 /// <summary>
 /// 플레이타임에서 웨이브 하나에 대응되는 컴포넌트

@@ -47,7 +47,7 @@ public:
 
 	yunuGI::IMesh* CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec);
 	void DeleteMesh(yunuGI::IMesh* mesh);
-
+	void DeleteDeferredTexture();
 private:
 	void CreateMesh(const std::wstring& mesh);
 	void CreateMesh(const std::shared_ptr<Mesh>& mesh);

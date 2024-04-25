@@ -66,50 +66,23 @@ void PlaytimeWave::Update()
         {
             // 유닛을 소환하고 인덱스를 증가시킨다.
             // 유닛 데이터는 아래 값을 사용하면 됨.
+            waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit;
             Vector3d pos = { waveData->waveUnitDatasVector[waveDataIndex]->pod.position.x,
                 waveData->waveUnitDatasVector[waveDataIndex]->pod.position.y,
                 waveData->waveUnitDatasVector[waveDataIndex]->pod.position.z };
 
             UnitProductor* currentSelectedProductor;
 
-            application::editor::POD_Unit_TemplateData templateUnitData = waveData->waveUnitDatasVector[waveDataIndex]->pod.templateData->pod;
+            application::editor::POD_Unit_TemplateData templateUnitData = waveData->waveUnitDatasVector[waveDataIndex]->
+                pod.templateData->pod;
             application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
 
-            if (templateUnitData.skinnedFBXName == "SKM_Monster1")
-            {
-                currentSelectedProductor = &MeleeEnemyProductor::Instance();
-                currentSelectedProductor->MappingUnitData(templateUnitData);
-                MeleeEnemyPool::SingleInstance().SetStartPosition(pos);
+            GameObject* waveUnitObject;
 
-                if (templateUnitData.isEliteMonster == true)
-                {
-                    inGameUnit = currentSelectedProductor->CreateUnit(pos);
-                    contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
-                }
-                else
-                    inGameUnit = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+			waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit->GetTransform()->SetWorldPosition(pos);
+			waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit->GetGameObject()->SetSelfActive(true);
 
-            }
-            else if (templateUnitData.skinnedFBXName == "SKM_Monster2")
-            {
-                currentSelectedProductor = &RangedEnemyProductor::Instance();
-                currentSelectedProductor->MappingUnitData(templateUnitData);
-                RangedEnemyPool::SingleInstance().SetStartPosition(pos);
-
-                if (templateUnitData.isEliteMonster == true)
-                {
-                    inGameUnit = currentSelectedProductor->CreateUnit(pos);
-                    contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
-                }
-                else
-                    inGameUnit = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
-            }
-
-            inGameUnit->GetGameObject()->SetSelfActive(true);
-
-            //GameObject* unitObject = inGameUit->GetGameObject();
-
-            m_currentWaveUnitVector.push_back(inGameUnit);
+            m_currentWaveUnitVector.push_back(waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit);
 
             nextSummonUnitIndex++;
             waveDataIndex++;

@@ -472,6 +472,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -494,6 +495,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -516,6 +518,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -538,6 +541,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -560,6 +564,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -586,6 +591,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -614,6 +620,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -641,6 +648,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -667,6 +675,7 @@ xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -693,6 +702,7 @@ xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -719,6 +729,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -741,6 +752,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -763,6 +775,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -785,6 +798,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -807,6 +821,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>_HAS_STD_BYTE=0;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -833,6 +848,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -866,6 +882,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -897,6 +914,7 @@ xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -928,6 +946,7 @@ xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -960,6 +979,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       <PrecompiledHeaderFile>InWanderLand.h</PrecompiledHeaderFile>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <MaxFilesInUnityFile>0</MaxFilesInUnityFile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -984,17 +1004,21 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="..\Include\ImGui\imgui.h" />
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
     <ClInclude Include="ActionList.h" />
+    <ClInclude Include="Action_Camera.h" />
     <ClInclude Include="Action_Cinematic.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugEditorExe|x64'">
       </ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="AttackSystem.h" />
     <ClInclude Include="AutoAttackProjectilePool.h" />
+    <ClInclude Include="BishopTrapProductor.h" />
     <ClInclude Include="BleedingComponent.h" />
     <ClInclude Include="BlindFieldComponent.h" />
     <ClInclude Include="CinematicManager.h" />
     <ClInclude Include="BurnEffect.h" />
+    <ClInclude Include="ChessTrapSkillSystem.h" />
     <ClInclude Include="ConditionList.h" />
+    <ClInclude Include="Condition_CinematicMode.h" />
     <ClInclude Include="CoroutineObject.h" />
     <ClInclude Include="CreateInstanceCommand.h" />
     <ClInclude Include="BossProductor.h" />
@@ -1008,12 +1032,18 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="CameraData.h" />
     <ClInclude Include="DebuggingMesh.h" />
     <ClInclude Include="DeleteInstanceCommand.h" />
+    <ClInclude Include="EditorPopupManager.h" />
     <ClInclude Include="EnemySkillSystem.h" />
     <ClInclude Include="EnemySummonGateProductor.h" />
     <ClInclude Include="EnemySummonSkillSystem.h" />
+    <ClInclude Include="FloatFollower.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="IAction.h" />
     <ClInclude Include="ICondition.h" />
+    <ClInclude Include="JsonUIData.h" />
+    <ClInclude Include="ObservationTarget.h" />
+    <ClInclude Include="IObserver.h" />
+    <ClInclude Include="ObservationEvent.h" />
     <ClInclude Include="PlayableComponent.h" />
     <ClInclude Include="ITrigger.h" />
     <ClInclude Include="MeleeEnemyPool.h" />
@@ -1021,7 +1051,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugEditorExe|x64'">
       </ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="PopupOnEnable.h" />
+    <ClInclude Include="GamePlayTimer.h" />
+    <ClInclude Include="PawnTrapProductor.h" />
     <ClInclude Include="RangedEnemyPool.h" />
+    <ClInclude Include="ResurrectionSystem.h" />
+    <ClInclude Include="RookTrapProductor.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="ScriptSystem.h" />
     <ClInclude Include="ShortcutSystem.h" />
@@ -1056,11 +1091,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="RobinSkillDevelopmentSystem.h" />
     <ClInclude Include="SaveStaticOrnamentsCommnad.h" />
     <ClInclude Include="SingletonInstanceContainer.h" />
-    <ClInclude Include="SingletonUpdate.h" />
     <ClInclude Include="SkillDevelopmentSystem.h" />
     <ClInclude Include="SkillWarningSystem.h" />
     <ClInclude Include="SpecialEffectTrigger.h" />
     <ClInclude Include="SpecialEvent.h" />
+    <ClInclude Include="SpikeSkillSystem.h" />
+    <ClInclude Include="SpikeTrapProductor.h" />
     <ClInclude Include="SpriteAnimation.h" />
     <ClInclude Include="StaticInstanceRegistry.h" />
     <ClInclude Include="LoadStaticOrnamentsCommand.h" />
@@ -1182,13 +1218,22 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="TestUtilRTSTestCam.h" />
     <ClInclude Include="TestUtils.h" />
     <ClInclude Include="TransformEditCommand.h" />
+    <ClInclude Include="TrapTriggerSensor.h" />
+    <ClInclude Include="TriggeredTrapSkillSystem.h" />
     <ClInclude Include="TriggerList.h" />
-    <ClInclude Include="Trigger_EnterRegion.h" />
+    <ClInclude Include="TriggerTrapProductor.h" />
+    <ClInclude Include="Trigger_Region.h" />
     <ClInclude Include="Trigger_GameStart.h" />
-    <ClInclude Include="Trigger_LeaveRegion.h" />
+    <ClInclude Include="Trigger_RepeatPeriodically.h" />
+    <ClInclude Include="Trigger_Unit.h" />
     <ClInclude Include="UIButton.h" />
+    <ClInclude Include="UICurveType.h" />
+    <ClInclude Include="UIElement.h" />
+    <ClInclude Include="UIEnumID.h" />
+    <ClInclude Include="UIExportFlag.h" />
     <ClInclude Include="UIImage.h" />
     <ClInclude Include="UIManager.h" />
+    <ClInclude Include="UIOffsetTransition.h" />
     <ClInclude Include="UIPanel.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
@@ -1217,16 +1262,20 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\ImGuizmo\ImGuizmo.cpp" />
+    <ClCompile Include="Action_Camera.cpp" />
     <ClCompile Include="Action_Cinematic.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugEditorExe|x64'">
       </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="AttackSystem.cpp" />
     <ClCompile Include="AutoAttackProjectilePool.cpp" />
+    <ClCompile Include="BishopTrapProductor.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
     <ClCompile Include="BlindFieldComponent.cpp" />
     <ClCompile Include="CinematicManager.cpp" />
     <ClCompile Include="BurnEffect.cpp" />
+    <ClCompile Include="Condition_CinematicMode.cpp" />
+    <ClCompile Include="ChessTrapSkillSystem.cpp" />
     <ClCompile Include="CreateInstanceCommand.cpp" />
     <ClCompile Include="BossProductor.cpp" />
     <ClCompile Include="BossSkillSystem.cpp" />
@@ -1238,15 +1287,21 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="CameraData.cpp" />
     <ClCompile Include="DebuggingMesh.cpp" />
     <ClCompile Include="DeleteInstanceCommand.cpp" />
+    <ClCompile Include="EditorPopupManager.cpp" />
     <ClCompile Include="EnemySkillSystem.cpp" />
     <ClCompile Include="EnemySummonGateProductor.cpp" />
     <ClCompile Include="EnemySummonSkillSystem.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="ObservationTarget.cpp" />
     <ClCompile Include="PlayableComponent.cpp" />
     <ClCompile Include="Module_ScriptEditor.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugEditorExe|x64'">
       </ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="GamePlayTimer.cpp" />
+    <ClCompile Include="PawnTrapProductor.cpp" />
+    <ClCompile Include="ResurrectionSystem.cpp" />
+    <ClCompile Include="RookTrapProductor.cpp" />
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="ScriptSystem.cpp" />
     <ClCompile Include="ShortcutSystem.cpp" />
@@ -1296,6 +1351,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="SnippetBillboardSpriteAnim.cpp" />
     <ClCompile Include="SingletonInstanceContainer.cpp" />
     <ClCompile Include="SpecialEffectTrigger.cpp" />
+    <ClCompile Include="SpikeSkillSystem.cpp" />
+    <ClCompile Include="SpikeTrapProductor.cpp" />
     <ClCompile Include="SpriteAnimation.cpp" />
     <ClCompile Include="TauntingComponent.cpp" />
     <ClCompile Include="OrnamentEditorInstance.cpp" />
@@ -1387,10 +1444,16 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TestCaseUpdateComponents.cpp" />
     <ClCompile Include="TransformEditCommand.cpp" />
-    <ClCompile Include="Trigger_EnterRegion.cpp" />
+    <ClCompile Include="Trigger_Region.cpp" />
+    <ClCompile Include="TrapTriggerSensor.cpp" />
+    <ClCompile Include="TriggeredTrapSkillSystem.cpp" />
+    <ClCompile Include="TriggerTrapProductor.cpp" />
     <ClCompile Include="Trigger_GameStart.cpp" />
-    <ClCompile Include="Trigger_LeaveRegion.cpp" />
+    <ClCompile Include="Trigger_RepeatPeriodically.cpp" />
+    <ClCompile Include="Trigger_Unit.cpp" />
     <ClCompile Include="UIButton.cpp" />
+    <ClCompile Include="UICurveType.cpp" />
+    <ClCompile Include="UIElement.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UIPanel.cpp" />
     <ClCompile Include="UnitBrush.cpp" />

@@ -1,5 +1,7 @@
 #include "Script.h"
 
+#include "algorithm"
+
 namespace application
 {
 	void Script::Update()
@@ -75,16 +77,39 @@ namespace application
 
 	bool Script::EraseAction(const std::shared_ptr<IAction>& ptr)
 	{
-		auto itr = actionListForFind.find(ptr);
-		if (itr == actionListForFind.end())
+		auto itr = std::find(actionList.begin(), actionList.end(), ptr);
+		if (itr == actionList.end())
 		{
 			return false;
 		}
 
-		actionList.erase(itr->second);
-		actionListForFind.erase(ptr);
+		actionList.erase(itr);
 
 		return true;
+	}
+
+	bool Script::ReorderAction(const std::shared_ptr<IAction>& ptr, unsigned int idx)
+	{
+		int index = 0;
+		for (auto& each : actionList)
+		{
+			if (each == ptr)
+			{
+				if (index == idx)
+				{
+					return false;
+				}
+
+				auto swapPtr = actionList[idx];
+				actionList[index] = swapPtr;
+				actionList[idx] = ptr;
+
+				return true;
+			}
+			index++;
+		}
+
+		return false;
 	}
 
 	bool Script::PreEncoding(json& data) const
@@ -111,14 +136,16 @@ namespace application
 			}
 		}
 
-		for (auto& [idx, each] : actionList)
+		int index = 0;
+		for (auto& each : actionList)
 		{
 			uuidStr = UUID_To_String(each->GetUUID());
-			data["ActionList"][uuidStr]["type"] = each->GetType();
-			if (!each->PreEncoding(data["ActionList"][uuidStr]["0_Pre"]))
+			data["ActionList"][index][uuidStr]["type"] = each->GetType();
+			if (!each->PreEncoding(data["ActionList"][index][uuidStr]["0_Pre"]))
 			{
 				return false;
 			}
+			index++;
 		}
 
 		return true;
@@ -159,12 +186,13 @@ namespace application
 			}
 		}
 
-		for (auto& [idx, each] : actionList)
+		int index = 0;
+		for (auto& each : actionList)
 		{
 			uuidStr = UUID_To_String(each->GetUUID());
 
-			auto itr = data["ActionList"].find(uuidStr);
-			if (itr == data["ActionList"].end())
+			auto itr = data["ActionList"][index].find(uuidStr);
+			if (itr == data["ActionList"][index].end())
 			{
 				return false;
 			}
@@ -173,6 +201,7 @@ namespace application
 			{
 				return false;
 			}
+			index++;
 		}
 
 		return true;
@@ -209,6 +238,26 @@ namespace application
 						trigger = AddTrigger<Trigger_LeaveRegion>();
 						break;
 					}
+					case application::TriggerType::RepeatPeriodically:
+					{
+						trigger = AddTrigger<Trigger_RepeatPeriodically>();
+						break;
+					}
+					case application::TriggerType::RepeatPeriodicallyRealTime:
+					{
+						trigger = AddTrigger<Trigger_RepeatPeriodicallyRealTime>();
+						break;
+					}
+					case application::TriggerType::UnitAppear:
+					{
+						trigger = AddTrigger<Trigger_UnitAppear>();
+						break;
+					}
+					case application::TriggerType::UnitDie:
+					{
+						trigger = AddTrigger<Trigger_UnitDie>();
+						break;
+					}
 					default:
 						break;
 				}
@@ -240,6 +289,16 @@ namespace application
 
 				switch (type)
 				{
+					case application::ConditionType::CinematicModeOn:
+					{
+						condition = AddCondition<Condition_CinematicModeOn>();
+						break;
+					}
+					case application::ConditionType::CinematicModeOff:
+					{
+						condition = AddCondition<Condition_CinematicModeOff>();
+						break;
+					}
 					default:
 						break;
 				}
@@ -261,41 +320,74 @@ namespace application
 
 		if (data.contains("ActionList"))
 		{
-			for (auto& [uuidStr, actionData] : data["ActionList"].items())
+			for (auto& [idx, uuidData] : data["ActionList"].items())
 			{
-				uuid = String_To_UUID(uuidStr);
-
-				ActionType type = actionData["type"];
-
-				std::shared_ptr<IAction> action = nullptr;
-
-				switch (type)
+				for (auto& [uuidStr, actionData] : uuidData.items())
 				{
-					case application::ActionType::WaitForSeconds:
+					uuid = String_To_UUID(uuidStr);
+
+					ActionType type = actionData["type"];
+
+					std::shared_ptr<IAction> action = nullptr;
+
+					switch (type)
 					{
-						action = AddAction<Action_WaitForSeconds>();
-						break;
+						case application::ActionType::WaitForSeconds:
+						{
+							action = AddAction<Action_WaitForSeconds>();
+							break;
+						}
+						case application::ActionType::WaitForRealSeconds:
+						{
+							action = AddAction<Action_WaitForRealSeconds>();
+							break;
+						}
+						case application::ActionType::CinematicModeChange:
+						{
+							action = AddAction<Action_CinematicModeChange>();
+							break;
+						}
+						case application::ActionType::CameraChangeView:
+						{
+							action = AddAction<Action_CameraChangeView>();
+							break;
+						}
+						case application::ActionType::CameraSaveView:
+						{
+							action = AddAction<Action_CameraSaveView>();
+							break;
+						}
+						case application::ActionType::CameraLoadView:
+						{
+							action = AddAction<Action_CameraLoadView>();
+							break;
+						}
+						case application::ActionType::CinematicFadeIn:
+						{
+							action = AddAction<Action_CinematicFadeIn>();
+							break;
+						}
+						case application::ActionType::CinematicFadeOut:
+						{
+							action = AddAction<Action_CinematicFadeOut>();
+							break;
+						}
+						default:
+							break;
 					}
-					case application::ActionType::WaitForRealSeconds:
+
+					if (action == nullptr)
 					{
-						action = AddAction<Action_WaitForRealSeconds>();
-						break;
+						return false;
 					}
-					default:
-						break;
-				}
-				
-				if (action == nullptr)
-				{
-					return false;
-				}
 
-				// UUID
-				action->SetUUID(uuid);
+					// UUID
+					action->SetUUID(uuid);
 
-				if (!action->PreDecoding(actionData["0_Pre"]))
-				{
-					return false;
+					if (!action->PreDecoding(actionData["0_Pre"]))
+					{
+						return false;
+					}
 				}
 			}
 		}
@@ -348,19 +440,22 @@ namespace application
 
 		if (data.contains("ActionList"))
 		{
-			for (auto& [uuidStr, actionData] : data["ActionList"].items())
+			for (auto& [idx, uuidData] : data["ActionList"].items())
 			{
-				uuid = String_To_UUID(uuidStr);
-
-				for (auto& [idx, each] : actionList)
+				for (auto& [uuidStr, actionData] : uuidData.items())
 				{
-					if (each->id == uuid)
+					uuid = String_To_UUID(uuidStr);
+
+					for (auto& each : actionList)
 					{
-						if (!each->PostDecoding(actionData["1_Post"]))
+						if (each->id == uuid)
 						{
-							return false;
+							if (!each->PostDecoding(actionData["1_Post"]))
+							{
+								return false;
+							}
+							break;
 						}
-						break;
 					}
 				}
 			}
@@ -376,7 +471,7 @@ namespace application
 
 	CoroutineObject<void> Script::MakeActionCoroutine()
 	{
-		for (auto& [key, action] : actionList)
+		for (auto& action : actionList)
 		{
 			auto coroutine = action->DoAction();
 			coroutineInProgress.emplace_back(coroutine);

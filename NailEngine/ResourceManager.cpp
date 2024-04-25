@@ -149,6 +149,14 @@ void ResourceManager::DeleteMesh(yunuGI::IMesh* mesh)
 	meshMap.erase(mesh->GetName());
 }
 
+void ResourceManager::DeleteDeferredTexture()
+{
+	for (auto& each : this->deferredTextureMap)
+	{
+
+	}
+}
+
 yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec)
 {
 	std::shared_ptr<Mesh> tempMesh = std::make_shared<Mesh>();
@@ -321,7 +329,13 @@ std::shared_ptr<yunuGI::ITexture>& ResourceManager::CreateTexture(const std::wst
 
 		return this->deferredTextureMap[texturePath];
 	}
-	return iter->second;
+	else
+	{
+		std::static_pointer_cast<Texture>(iter->second)->Release();
+		std::static_pointer_cast<Texture>(iter->second)->CreateTexture(texturePath, width, height, format, bindFlag, arraySize, sliceCount);
+
+		return iter->second;
+	}
 }
 
 std::shared_ptr<Texture>& ResourceManager::CreateTextureFromResource(const std::wstring& texturePath, Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D)
@@ -914,6 +928,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateShader(L"PointLightShadowPS.cso");
 	CreateShader(L"ParticlePS.cso");
 	CreateShader(L"DissolvePS.cso");
+	CreateShader(L"UIImagePS.cso");
 #pragma endregion
 
 #pragma region GS
@@ -1305,23 +1320,6 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 	}
 	else
 	{
-		//fbxData->nodeName = node->nodeName;
-		//fbxData->hasAnimation = node->hasAnimation;
-		//fbxData->child.resize(node->child.size());
-		//fbxData->materialVec.resize(node->meshVec.size());
-
-		//DirectX::SimpleMath::Matrix wtm = (node->worldMatrix);
-		//DirectX::SimpleMath::Vector3 pos;
-		//DirectX::SimpleMath::Vector3 scale;
-		//DirectX::SimpleMath::Quaternion quat;
-		//wtm.Decompose(scale, quat, pos);
-		//quat = DirectX::XMQuaternionNormalize(quat);
-
-		//fbxData->pos = yunuGI::Vector3{ pos.x, pos.y,pos.z };
-		//fbxData->scale = yunuGI::Vector3{ scale.x, scale.y,scale.z };
-		//fbxData->quat = yunuGI::Vector4{ quat.x, quat.y, quat.z, quat.w };
-		//fbxData->quat = yunuGI::Vector4{ quat.w, quat.x, quat.y, quat.z };
-
 		for (int i = 0; i < node->meshVec.size(); ++i)
 		{
 			// 실제 Mesh와 Material을 만들자

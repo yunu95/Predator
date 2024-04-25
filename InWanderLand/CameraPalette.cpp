@@ -10,6 +10,16 @@
 
 namespace application::editor::palette
 {
+    CameraData* CameraPalette::GetSingleSelectedCamera()
+    {
+        return selection.empty() ? nullptr : static_cast<CameraData*>(const_cast<IEditableData*>(*selection.begin()));
+    }
+
+    void CameraPalette::SelectCamera(CameraData* camera)
+    {
+        Palette::OnSelectSingleInstance(camera);
+    }
+
     void CameraPalette::Initialize()
     {
         TemplateDataManager::GetSingletonInstance().CreateTemplateData("DefaultCamera", DataType::CameraData);

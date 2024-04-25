@@ -42,6 +42,7 @@ namespace yunuGI
         // 창 크기가 변했을 때 처리해야 할 것들
         //virtual void OnResize() = 0;
         // 해상도 변경을 요청하는 함수
+        virtual void SetResolution(unsigned int width, unsigned int height) = 0;
         virtual void ResizeResolution(unsigned int width, unsigned int height) = 0;
 
         // 혹여나 내부 그래픽스 구조를 알아야 할 때

@@ -439,6 +439,51 @@
     <Filter Include="Contents\BurnEffect">
       <UniqueIdentifier>{0cb52d66-9140-4368-8842-d37ef7df2afb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\UIElement">
+      <UniqueIdentifier>{12719a96-4004-4cd8-8134-2161e2882a86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\UnityRelated">
+      <UniqueIdentifier>{a738742d-c5a9-41fe-994f-7e1cf8921f02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\UnityRelated\JsonUIData">
+      <UniqueIdentifier>{5af40562-9208-47a5-a3ac-a2f05691d8fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\UnityRelated\UIEnumID">
+      <UniqueIdentifier>{63686f71-edd8-4c54-8faf-86dd28c299ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\UnityRelated\UIExportFlag">
+      <UniqueIdentifier>{48533105-a3ca-4cc8-86c2-f5a02594f731}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\UnityRelated\UICurveType">
+      <UniqueIdentifier>{928b9946-ac02-427e-a5d1-8ee5cdffd7f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Effect">
+      <UniqueIdentifier>{4c89b928-effc-4f75-9b2b-cbcd2e7ddae6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Effect\PopupOnEnable">
+      <UniqueIdentifier>{d3d2c32b-9c90-4981-997e-dd8d148ab9f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Effect\OffsetTransition">
+      <UniqueIdentifier>{21be6adf-6afc-43d1-a20b-f0b5e15914f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\PopupManager">
+      <UniqueIdentifier>{841405ab-7b0a-4e0a-814e-78a4f7d59a5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor">
+      <UniqueIdentifier>{88ae07b4-e3a8-4643-9d6c-342c2d3edd2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\SkillSystem\TrapSkillSystem">
+      <UniqueIdentifier>{a8e4d532-a085-4fc3-9e1e-018ef51af826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor">
+      <UniqueIdentifier>{14f27d29-54f5-42fe-b645-4fe1335be09d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ResurrectionSystem">
+      <UniqueIdentifier>{fe0bc7ad-f763-44df-8f11-ddcca5f4188a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Effect\FloatFollower">
+      <UniqueIdentifier>{871212fa-7603-485a-ba2f-f33a36a04abe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -955,7 +1000,6 @@
     <ClInclude Include="LightEditorInstance.h">
       <Filter>Editor\Palette\EditorInstance\LightInstance</Filter>
     </ClInclude>
-    <ClInclude Include="SingletonUpdate.h" />
     <ClInclude Include="RangedEnemyProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder\EnemyProductor</Filter>
     </ClInclude>
@@ -1106,14 +1150,11 @@
     <ClInclude Include="Trigger_GameStart.h">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClInclude>
-    <ClInclude Include="Trigger_EnterRegion.h">
+    <ClInclude Include="Trigger_Region.h">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClInclude>
     <ClInclude Include="UIImage.h">
       <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Trigger_LeaveRegion.h">
-      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClInclude>
     <ClInclude Include="Module_ScriptEditor.h">
       <Filter>Editor\Panel\List\Module\List</Filter>
@@ -1127,8 +1168,87 @@
     <ClInclude Include="BurnEffect.h">
       <Filter>Contents\BurnEffect</Filter>
     </ClInclude>
+    <ClInclude Include="PopupOnEnable.h">
+      <Filter>UI\Effect\PopupOnEnable</Filter>
+    </ClInclude>
+    <ClInclude Include="UIEnumID.h">
+      <Filter>UI\UnityRelated\UIEnumID</Filter>
+    </ClInclude>
+    <ClInclude Include="UIElement.h">
+      <Filter>UI\UIElement</Filter>
+    </ClInclude>
     <ClInclude Include="PlayableComponent.h">
       <Filter>Contents\GameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonUIData.h">
+      <Filter>UI\UnityRelated\JsonUIData</Filter>
+    </ClInclude>
+    <ClInclude Include="UIExportFlag.h">
+      <Filter>UI\UnityRelated\UIExportFlag</Filter>
+    </ClInclude>
+    <ClInclude Include="UICurveType.h">
+      <Filter>UI\UnityRelated\UICurveType</Filter>
+    </ClInclude>
+    <ClInclude Include="UIOffsetTransition.h">
+      <Filter>UI\Effect\OffsetTransition</Filter>
+    </ClInclude>
+    <ClInclude Include="Condition_CinematicMode.h">
+      <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger_RepeatPeriodically.h">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlayTimer.h">
+      <Filter>Contents\GameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorPopupManager.h">
+      <Filter>Editor\PopupManager</Filter>
+    </ClInclude>
+    <ClInclude Include="IObserver.h">
+      <Filter>Editor\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="ObservationTarget.h">
+      <Filter>Editor\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="ObservationEvent.h">
+      <Filter>Editor\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger_Unit.h">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_Camera.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
+    <ClInclude Include="SpikeTrapProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="TriggerTrapProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="SpikeSkillSystem.h">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ChessTrapSkillSystem.h">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="TriggeredTrapSkillSystem.h">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="PawnTrapProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="RookTrapProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="BishopTrapProductor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="TrapTriggerSensor.h">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClInclude>
+    <ClInclude Include="ResurrectionSystem.h" />
+    <ClInclude Include="FloatFollower.h">
+      <Filter>UI\Effect\FloatFollower</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1706,10 +1826,7 @@
     <ClCompile Include="Trigger_GameStart.cpp">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClCompile>
-    <ClCompile Include="Trigger_EnterRegion.cpp">
-      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
-    </ClCompile>
-    <ClCompile Include="Trigger_LeaveRegion.cpp">
+    <ClCompile Include="Trigger_Region.cpp">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClCompile>
     <ClCompile Include="Module_ScriptEditor.cpp">
@@ -1726,6 +1843,61 @@
     </ClCompile>
     <ClCompile Include="PlayableComponent.cpp">
       <Filter>Contents\GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Condition_CinematicMode.cpp">
+      <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger_RepeatPeriodically.cpp">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePlayTimer.cpp">
+      <Filter>Contents\GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorPopupManager.cpp">
+      <Filter>Editor\PopupManager</Filter>
+    </ClCompile>
+    <ClCompile Include="UICurveType.cpp">
+      <Filter>UI\UnityRelated\UICurveType</Filter>
+    </ClCompile>
+    <ClCompile Include="ObservationTarget.cpp">
+      <Filter>Editor\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger_Unit.cpp">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_Camera.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
+    <ClCompile Include="SpikeTrapProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="TriggerTrapProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="SpikeSkillSystem.cpp">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessTrapSkillSystem.cpp">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="TriggeredTrapSkillSystem.cpp">
+      <Filter>Contents\SkillSystem\TrapSkillSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="PawnTrapProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="RookTrapProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="BishopTrapProductor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor\ChessTrapProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="TrapTriggerSensor.cpp">
+      <Filter>Contents\UnitFactory\UnitProductionOrder\TrapUnitProductor</Filter>
+    </ClCompile>
+    <ClCompile Include="ResurrectionSystem.cpp" />
+    <ClCompile Include="UIElement.cpp">
+      <Filter>UI\UIElement</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

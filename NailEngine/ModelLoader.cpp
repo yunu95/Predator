@@ -229,8 +229,8 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 		aiString path;
 		if (material->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS)
 		{
-			std::wstring _path = aiStringToWString(path);
-			std::filesystem::path pathName(_path);
+			std::wstring tempPath = aiStringToWString(path);
+			std::filesystem::path pathName(tempPath);
 			std::wstring fileName = pathName.filename().wstring();
 			fileName.erase(fileName.length() - 3);
 			fileName += L"dds";
@@ -251,8 +251,8 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 		aiString path;
 		if (material->GetTexture(aiTextureType_NORMALS, 0, &path) == AI_SUCCESS)
 		{
-			std::wstring _path = aiStringToWString(path);
-			std::filesystem::path pathName(_path);
+			std::wstring tempPath1 = aiStringToWString(path);
+			std::filesystem::path pathName(tempPath1);
 			std::wstring fileName = pathName.filename().wstring();
 			fileName.erase(fileName.length() - 3);
 			fileName += L"dds";
@@ -273,8 +273,8 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 		aiString path;
 		if (material->GetTexture(aiTextureType_METALNESS, 0, &path) == AI_SUCCESS)
 		{
-			std::wstring _path = aiStringToWString(path);
-			std::filesystem::path pathName(_path);
+			std::wstring tempPath2 = aiStringToWString(path);
+			std::filesystem::path pathName(tempPath2);
 			std::wstring fileName = pathName.filename().wstring();
 			fileName.erase(fileName.length() - 3);
 			fileName += L"dds";
@@ -296,8 +296,8 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 		aiString path;
 		if (material->GetTexture(aiTextureType_EMISSIVE, 0, &path) == AI_SUCCESS)
 		{
-			std::wstring _path = aiStringToWString(path);
-			std::filesystem::path pathName(_path);
+			std::wstring tempPath3 = aiStringToWString(path);
+			std::filesystem::path pathName(tempPath3);
 			std::wstring fileName = pathName.filename().wstring();
 			fileName.erase(fileName.length() - 3);
 			fileName += L"dds";
@@ -318,8 +318,8 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 		aiString path;
 		if (material->GetTexture(aiTextureType_OPACITY, 0, &path) == AI_SUCCESS)
 		{
-			std::wstring _path = aiStringToWString(path);
-			std::filesystem::path pathName(_path);
+			std::wstring tempPath3 = aiStringToWString(path);
+			std::filesystem::path pathName{ tempPath3 };
 			std::wstring fileName = pathName.filename().wstring();
 			fileName.erase(fileName.length() - 3);
 			fileName += L"dds";
@@ -482,8 +482,11 @@ void ModelLoader::FillVertexBoneIndexAndWeight(const aiScene* scene, const aiNod
 
 std::wstring ModelLoader::aiStringToWString(const aiString& str)
 {
-	std::string tempStr = str.C_Str();
-	return std::wstring{ tempStr.begin(), tempStr.end() };
+	// Convert std::string to std::wstring using MultiByteToWideChar
+	int wstrSize = MultiByteToWideChar(CP_UTF8, 0, str.C_Str(), -1, nullptr, 0);
+	std::wstring wstr(wstrSize - 1, L'\0');
+	MultiByteToWideChar(CP_UTF8, 0, str.C_Str(), -1, &wstr[0], wstrSize - 1);
+	return wstr;
 }
 
 DirectX::SimpleMath::Matrix ModelLoader::ConvertToCloumnMajor(const aiMatrix4x4& matrix)

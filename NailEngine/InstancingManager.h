@@ -25,6 +25,7 @@ public:
 
 public:
 	void Init();
+	void RenderEarly_Z();
 	void RenderStaticDeferred();
 	void RenderStaticForward();
 

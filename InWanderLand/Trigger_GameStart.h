@@ -5,8 +5,6 @@
 
 #include "ITrigger.h"
 
-#include "Singleton.h"
-
 namespace application
 {
 	class Trigger_GameStart

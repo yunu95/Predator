@@ -14,6 +14,18 @@ void PlayerSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p
 		case Unit::SkillEnum::W:
 			ActivateSkillTwo(p_skillPosition);
 			break;
+		//case Unit::SkillEnum::BossSkillOne:
+		//	ActivateSkillTwo(p_skillPosition);
+		//	break;
+		//case Unit::SkillEnum::BossSkillTwo:
+		//	ActivateSkillTwo(p_skillPosition);
+		//	break;
+		//case Unit::SkillEnum::BossSkillThree:
+		//	ActivateSkillTwo(p_skillPosition);
+		//	break;
+		//case Unit::SkillEnum::BossSkillFour:
+		//	ActivateSkillTwo(p_skillPosition);
+		//	break;
 		default:
 			break;
 	}

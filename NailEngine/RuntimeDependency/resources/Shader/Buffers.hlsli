@@ -215,7 +215,7 @@ TextureCubeArray PointLightShadowMap : register(t23);
 
 
 Texture2DArray<float4> UnityLightMap : register(t24);
-
+Texture2D Early_Z : register(t25);
 
 SamplerState sam : register(s0);
 SamplerComparisonState shadowSam : register(s1);

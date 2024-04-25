@@ -18,7 +18,7 @@ void WarriorSkillSystem::ActivateSkillOne(Vector3d skillPos)
 
 	float tempDistance = (skillPos - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
 
-	m_unitComponent->SetSkillDuration(tempDistance / m_QskillRushSpeed);
+	m_unitComponent->RegisterSkillDuration(tempDistance / m_QskillRushSpeed);
 	// 목표 위치로 돌진
 	m_unitDotween->DOMove(skillPos, tempDistance / m_QskillRushSpeed).OnComplete([=]()
 		{
@@ -29,6 +29,8 @@ void WarriorSkillSystem::ActivateSkillOne(Vector3d skillPos)
 			m_unitNavComponent->SetActive(true);
 			m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
 			m_unitNavComponent->Relocate(skillPos);
+
+			m_unitComponent->SetUnitStateIdle();
 		});
 }
 
@@ -36,11 +38,12 @@ void WarriorSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 {
 	SetSkillRequirmentsActive(WTauntSkill, true);
 
-	m_unitComponent->SetSkillDuration(m_wSkillColliderRemainTime);
+	m_unitComponent->RegisterSkillDuration(m_wSkillColliderRemainTime);
 
 	m_unitDotween->DONothing(m_wSkillColliderRemainTime).OnComplete([=]()
 		{
 			SetSkillRequirmentsActive(WTauntSkill, false);
+			m_unitComponent->SetUnitStateIdle();
 		});
 	m_developedFunctionToWSkill();
 }

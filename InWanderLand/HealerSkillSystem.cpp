@@ -16,13 +16,11 @@ void HealerSkillSystem::CrushDown(int p_times)
 			if (crushedCount == p_times)
 			{
 				crushedCount = 0;
-				//GetTransform()->SetWorldPosition(startPosition);
 				m_unitNavComponent->SetActive(true);
 				m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
 				m_unitNavComponent->Relocate(GetTransform()->GetWorldPosition());
-				isSkillEnd = true;
+				m_unitComponent->SetUnitStateIdle();
 			}
-
 			else
 			{
 				m_unitDotween->DOMove(GetTransform()->GetWorldPosition() + Vector3d(0, yDistance, 0), 0.3f).OnComplete([=]()
@@ -62,7 +60,7 @@ void HealerSkillSystem::ActivateSkillOne(Vector3d skillPos)
 
 	m_currentSelectedSkillPosition = skillPos;
 
-	m_unitComponent->SetSkillDuration(4.0f);
+	m_unitComponent->RegisterSkillDuration(4.0f);
 
 	isQSkillActivating = true;
 
@@ -78,7 +76,7 @@ void HealerSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 {
 	float skillWidth = 2.0f * UNIT_LENGTH;
 	float skillHeight = m_skillTwoRange;
-	m_unitComponent->SetSkillDuration(2.0f);
+	m_unitComponent->RegisterSkillDuration(2.0f);
 
 	WSkillFieldDamage.colliderObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
 	WSkillFieldDamage.debugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
@@ -142,6 +140,7 @@ void HealerSkillSystem::Update()
 			QSkillColliderElapsed = 0.0f;
 			SetSkillRequirmentsActive(QSkillFieldDamage, false);
 			isQSkillColliderActivated = false;
+			//m_unitComponent->SetUnitStateIdle();
 		}
 	}
 
@@ -153,6 +152,7 @@ void HealerSkillSystem::Update()
 			WSkillColliderElapsed = 0.0f;
 			SetSkillRequirmentsActive(WSkillFieldDamage, false);
 			isWSkillColliderActivated = false;
+			m_unitComponent->SetUnitStateIdle();
 		}
 	}
 

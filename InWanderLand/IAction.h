@@ -9,6 +9,8 @@
 #include "Identifiable.h"
 #include "CoroutineObject.h"
 
+#include "IObserver.h"
+
 #include "imgui.h"
 #include "imgui_Utility.h"
 
@@ -21,13 +23,20 @@ namespace application
 		WaitForSeconds,
 		WaitForRealSeconds,
 		CinematicModeChange,
+		CameraChangeView,
+		CameraSaveView,
+		CameraLoadView,
+		CinematicFadeIn,
+		CinematicFadeOut,
 	};
 
 	struct IAction
-		: public Identifiable, public Storable
+		: public Identifiable, public Storable, public IObserver
 	{
 		friend class Script;
 
+		/// Observer 로 사용할 경우, 소멸자에서
+		/// Target 의 Remove 를 호출해야 합니다.
 		virtual ~IAction() = default;
 
 		/// dynamic_cast 가 아닌 switch case 로 동작하기 위한 함수입니다.
@@ -35,6 +44,15 @@ namespace application
 
 		/// Coroutine 으로 실행할 함수입니다.
 		virtual CoroutineObject<void> DoAction() = 0;
+
+		/// pointer 를 내부에서 할당하는 등 특정 데이터를
+		/// 세팅하지 않을 경우에 문제가 된다면 해당 데이터를
+		/// 파악하여 Valid 를 return 하는 함수를 override 해야합니다.
+		virtual bool IsValid() { return true; }
+
+		/// 특별히 관찰할 대상이 있고, 그 대상으로부터 처리할 이벤트가 있을 경우,
+		/// 해당 함수를 작성해야 합니다.
+		virtual void ProcessObervationEvent(ObservationTarget* target, ObservationEvent event) {}
 	};
 }
 

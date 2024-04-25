@@ -7,6 +7,33 @@
 #include "ResourceBuilder.h"
 #include "Device.h"
 
+void Texture::Release()
+{
+	if (this->tex2D)
+	{
+		this->tex2D->Release();
+	}
+	for (auto& each : dsvArray)
+	{
+		if (each)
+		{
+			each->Release();
+		}
+	}
+	if (this->DSV)
+	{
+		this->DSV->Release();
+	}
+	if (this->SRV)
+	{
+		this->SRV->Release();
+	}
+	if (this->RTV)
+	{
+		this->RTV->Release();
+	}
+}
+
 void Texture::LoadTexture(const std::wstring& texturePath)
 {
 	DirectX::ScratchImage image;
@@ -78,6 +105,9 @@ void Texture::CreateFromResource(Microsoft::WRL::ComPtr<ID3D11Texture2D>& tex2D)
 
 void Texture::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag, int arraySize, int sliceCount)
 {
+	this->width = width;
+	this->height = height;
+
 	D3D11_TEXTURE2D_DESC texDesc{};
 	texDesc.Width = width;
 	texDesc.Height = height;

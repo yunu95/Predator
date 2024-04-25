@@ -43,7 +43,7 @@ public:
 		p_dummy->m_pairUnit->m_navAgentComponent->AssignToNavigationField(p_dummy->m_pairUnit->GetNavField());
 		p_dummy->m_pairUnit->m_navAgentComponent->Relocate(m_unitPosition);
 		p_dummy->m_pairUnit->m_navAgentComponent->MoveTo(m_unitPosition);
-		p_dummy->m_pairUnit->MakeUnitStateIdle();
+		p_dummy->m_pairUnit->SetUnitStateIdle();
 		p_dummy->m_pairUnit->StopMove();
 
 		if (!p_dummy->m_pairUnit->isJustCreated)

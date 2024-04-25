@@ -14,6 +14,7 @@
 class Texture : public yunuGI::ITexture, public Resource
 {
 public:
+	void Release();
 	void LoadTexture(const std::wstring& texturePath);
 	void Bind(unsigned int slot);
 	void UnBind(unsigned int slot);

@@ -104,7 +104,7 @@ namespace application
 	{
 		return gameFocus;
 	}
-	
+
 	Application::Application(int argc, char** argv)
 	{
 		// Create application window
@@ -144,92 +144,92 @@ namespace application
 
 		// 게임엔진 스레드에서 에디터 윈도우를 생성하도록 유도
 		yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [&, editorWinPosX, editorWinPosY, this]()
+		{
+			::RegisterClassEx(&wcEditor);
+
+			editorHWND = ::CreateWindow(wcEditor.lpszClassName, wcEditor.lpszClassName, WS_OVERLAPPEDWINDOW, editorWinPosX, editorWinPosY, g_EditorResizeWidth, g_EditorResizeHeight, hWND, NULL, wcEditor.hInstance, NULL);
+
+			GetDeviceAndDeviceContext();
+			erm.Initialize(g_pD3dDevice);
+
+			// Initialize Direct3D
+			if (!CreateSwapChain())
 			{
-				::RegisterClassEx(&wcEditor);
+				CleanupSwapChain();
+				::UnregisterClass(wcEditor.lpszClassName, wcEditor.hInstance);
 
-				editorHWND = ::CreateWindow(wcEditor.lpszClassName, wcEditor.lpszClassName, WS_OVERLAPPEDWINDOW, editorWinPosX, editorWinPosY, g_EditorResizeWidth, g_EditorResizeHeight, hWND, NULL, wcEditor.hInstance, NULL);
+				throw std::runtime_error(std::string("failed to create d3d device!"));
+			}
 
-				GetDeviceAndDeviceContext();
-				erm.Initialize(g_pD3dDevice);
+			// Window 관련 CallBack 구현
+			SetWindowCallBack();
 
-				// Initialize Direct3D
-				if (!CreateSwapChain())
-				{
-					CleanupSwapChain();
-					::UnregisterClass(wcEditor.lpszClassName, wcEditor.hInstance);
+			::ShowWindow(editorHWND, SW_SHOWDEFAULT);
+			::UpdateWindow(editorHWND);
 
-					throw std::runtime_error(std::string("failed to create d3d device!"));
-				}
+			// Setup Dear ImGui context
+			IMGUI_CHECKVERSION();
+			ImGui::CreateContext();
+			ImGuiIO& io = ImGui::GetIO(); (void)io;
+			io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+			io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+			io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+			//io.ConfigViewportsNoAutoMerge = true;
+			//io.ConfigViewportsNoTaskBarIcon = true;
+			//io.ConfigViewportsNoDefaultParent = true;
+			//io.ConfigDockingAlwaysTabBar = true;
+			//io.ConfigDockingTransparentPayload = true;
+			//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: Experimental. THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
+			//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI: Experimental.
 
-				// Window 관련 CallBack 구현
-				SetWindowCallBack();
+			/// Custom 영역
+			// 타이틀 바를 컨트롤 할 때에만 움직임
+			io.ConfigWindowsMoveFromTitleBarOnly = true;
+			///
 
-				::ShowWindow(editorHWND, SW_SHOWDEFAULT);
-				::UpdateWindow(editorHWND);
+			// Setup Dear ImGui style
+			ImGui::StyleColorsDark();
+			//ImGui::StyleColorsLight();
 
-				// Setup Dear ImGui context
-				IMGUI_CHECKVERSION();
-				ImGui::CreateContext();
-				ImGuiIO& io = ImGui::GetIO(); (void)io;
-				io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-				io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-				io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-				io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
-				//io.ConfigViewportsNoAutoMerge = true;
-				//io.ConfigViewportsNoTaskBarIcon = true;
-				//io.ConfigViewportsNoDefaultParent = true;
-				//io.ConfigDockingAlwaysTabBar = true;
-				//io.ConfigDockingTransparentPayload = true;
-				//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: Experimental. THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
-				//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI: Experimental.
+			// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+			ImGuiStyle& style = ImGui::GetStyle();
+			if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+			{
+				style.WindowRounding = 0.0f;
+				style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+			}
 
-				/// Custom 영역
-				// 타이틀 바를 컨트롤 할 때에만 움직임
-				io.ConfigWindowsMoveFromTitleBarOnly = true;
-				///
+			// Setup Platform/Renderer backends
+			ImGui_ImplWin32_Init(editorHWND);
+			ImGui_ImplDX11_Init(g_pD3dDevice, g_pD3dDeviceContext);
 
-				// Setup Dear ImGui style
-				ImGui::StyleColorsDark();
-				//ImGui::StyleColorsLight();
-
-				// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
-				ImGuiStyle& style = ImGui::GetStyle();
-				if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-				{
-					style.WindowRounding = 0.0f;
-					style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-				}
-
-				// Setup Platform/Renderer backends
-				ImGui_ImplWin32_Init(editorHWND);
-				ImGui_ImplDX11_Init(g_pD3dDevice, g_pD3dDeviceContext);
-
-				// Load Fonts
-				// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-				// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-				// - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-				// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-				// - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
-				// - Read 'docs/FONTS.md' for more instructions and details.
-				// - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-				//io.Fonts->AddFontDefault();
-				//io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
-				//io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-				//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-				//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-				//ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
-				//IM_ASSERT(font != nullptr);
-			};
+			// Load Fonts
+			// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+			// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+			// - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+			// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+			// - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
+			// - Read 'docs/FONTS.md' for more instructions and details.
+			// - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+			//io.Fonts->AddFontDefault();
+			//io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
+			//io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
+			//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
+			//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
+			//ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
+			//IM_ASSERT(font != nullptr);
+		};
 		yunutyEngine::YunutyCycle::SingleInstance().postUpdateAction = []() { Application::instance->ImGuiUpdate(); };
 		yunutyEngine::YunutyCycle::SingleInstance().postThreadAction = []()
-			{
-				// Cleanup
-				ImGui_ImplDX11_Shutdown();
-				ImGui_ImplWin32_Shutdown();
-				ImGui::DestroyContext();
-				CleanupSwapChain();
-				::DestroyWindow(editorHWND);
-			};
+		{
+			// Cleanup
+			ImGui_ImplDX11_Shutdown();
+			ImGui_ImplWin32_Shutdown();
+			ImGui::DestroyContext();
+			CleanupSwapChain();
+			::DestroyWindow(editorHWND);
+		};
 #endif
 		yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
 		yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(appSpecification.windowWidth, appSpecification.windowHeight);
@@ -526,71 +526,28 @@ namespace application
 		inputDevice[1].hwndTarget = editorHWND;
 
 		RegisterRawInputDevices(inputDevice, 2, sizeof(RAWINPUTDEVICE));
-		gameWindowFocusCallBackFunction = [&]() { editor::EditorCamera::GetSingletonInstance().SetInputUpdate(true); };
-		gameWindowKillFocusCallBackFunction = [&]() { editor::EditorCamera::GetSingletonInstance().SetInputUpdate(false); };
+		gameWindowFocusCallBackFunction = [&]() { editor::EditorCamera::GetSingletonInstance().SetInputUpdate(false); };
+		gameWindowKillFocusCallBackFunction = [&]() { editor::EditorCamera::GetSingletonInstance().SetInputUpdate(true); };
 		winResizeCallBackFunction = [&]() { Application::DispatchEvent<editor::WindowResizeEvent>(g_EditorResizeWidth, g_EditorResizeHeight); };
 		winKeyboardPressedCallBackFunction = [&](unsigned char keyCode)
+		{
+			if (eim.IsKeyboardDown(static_cast<editor::KeyCode>(keyCode)))
 			{
-				if (eim.IsKeyboardDown(static_cast<editor::KeyCode>(keyCode)))
-				{
-					Application::DispatchEvent<editor::KeyDownEvent>(static_cast<editor::KeyCode>(keyCode));
-				}
-				else
-				{
-					Application::DispatchEvent<editor::KeyPressedEvent>(static_cast<editor::KeyCode>(keyCode));
-				}
-			};
+				Application::DispatchEvent<editor::KeyDownEvent>(static_cast<editor::KeyCode>(keyCode));
+			}
+			else
+			{
+				Application::DispatchEvent<editor::KeyPressedEvent>(static_cast<editor::KeyCode>(keyCode));
+			}
+		};
 		winKeyboardUpCallBackFunction = [&](unsigned char keyCode) { Application::DispatchEvent<editor::KeyReleasedEvent>(static_cast<editor::KeyCode>(keyCode)); };
 		winMouseLeftPressedCallBackFunction = [&]()
+		{
+			Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Left);
+			if (gameFocus)
 			{
-				Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Left);
-				if (gameFocus)
+				if (IsCursorInGameWindow() == true)
 				{
-					if (IsCursorInGameWindow() == true)
-					{
-						auto front = yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation().Forward();
-						auto distToXZPlane = abs(yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y);
-						auto centeredPosition = Input::getMouseScreenPositionNormalized();
-						centeredPosition.x -= 0.5;
-						centeredPosition.y -= 0.5;
-						centeredPosition.y *= -1;
-						auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
-						if (Vector3d::Dot(projectedPos - yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition(), front) > 0)
-						{
-							editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnLeftClick();
-						}
-					}
-				}
-			};
-		winMouseLeftUpCallBackFunction = [&]()
-			{
-				Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Left);
-				if (gameFocus)
-				{
-					if (IsCursorInGameWindow() == true)
-					{
-						editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnLeftClickRelease();
-					}
-				}
-			};
-		winMouseRightPressedCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Right); };
-		winMouseRightUpCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Right); };
-		winMouseMoveCallBackFunction = [&](long posX, long posY)
-			{
-				Application::DispatchEvent<editor::MouseMoveEvent>(posX, posY);
-				if (gameFocus)
-				{
-					static float accumTime = Time::GetTimeElapsedUnscaled();
-					if (Time::GetTimeElapsedUnscaled() - accumTime < 0.000001)
-						return;
-					accumTime = Time::GetTimeElapsedUnscaled();
-
-					if (IsCursorInGameWindow() == false)
-					{
-						editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnLeftClickRelease();
-						return;
-					}
-
 					auto front = yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation().Forward();
 					auto distToXZPlane = abs(yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y);
 					auto centeredPosition = Input::getMouseScreenPositionNormalized();
@@ -598,9 +555,52 @@ namespace application
 					centeredPosition.y -= 0.5;
 					centeredPosition.y *= -1;
 					auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
-					editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnMouseMove(projectedPos, centeredPosition);
+					if (Vector3d::Dot(projectedPos - yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition(), front) > 0)
+					{
+						editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnLeftClick();
+					}
 				}
-			};
+			}
+		};
+		winMouseLeftUpCallBackFunction = [&]()
+		{
+			Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Left);
+			if (gameFocus)
+			{
+				if (IsCursorInGameWindow() == true)
+				{
+					editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnLeftClickRelease();
+				}
+			}
+		};
+		winMouseRightPressedCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonPressedEvent>(editor::MouseCode::Right); };
+		winMouseRightUpCallBackFunction = [&]() { Application::DispatchEvent<editor::MouseButtonUpEvent>(editor::MouseCode::Right); };
+		winMouseMoveCallBackFunction = [&](long posX, long posY)
+		{
+			Application::DispatchEvent<editor::MouseMoveEvent>(posX, posY);
+			if (gameFocus)
+			{
+				static float accumTime = Time::GetTimeElapsedUnscaled();
+				if (Time::GetTimeElapsedUnscaled() - accumTime < 0.000001)
+					return;
+				accumTime = Time::GetTimeElapsedUnscaled();
+
+				if (IsCursorInGameWindow() == false)
+				{
+					editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnLeftClickRelease();
+					return;
+				}
+
+				auto front = yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation().Forward();
+				auto distToXZPlane = abs(yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y);
+				auto centeredPosition = Input::getMouseScreenPositionNormalized();
+				centeredPosition.x -= 0.5;
+				centeredPosition.y -= 0.5;
+				centeredPosition.y *= -1;
+				auto projectedPos = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
+				editor::palette::PaletteManager::GetSingletonInstance().GetCurrentPalette()->OnMouseMove(projectedPos, centeredPosition);
+			}
+		};
 		winMouseWheelCallBackFunction = [&](short wheelDelta) {Application::DispatchEvent<editor::MouseWheelEvent>(wheelDelta); };
 #endif
 	}
@@ -744,7 +744,25 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				return 0;
 			g_ResizeWidth = (UINT)LOWORD(lParam); // Queue resize
 			g_ResizeHeight = (UINT)HIWORD(lParam);
-			return 0;
+
+			if (wParam == SIZE_MAXIMIZED)
+			{
+				YunutyCycle::SingleInstance().ReserveActionAfterUpdate(
+					[=]()
+					{
+						graphics::Renderer::SingleInstance().ResizeResolution(g_ResizeWidth, g_ResizeHeight);
+					}
+				);
+			}
+			break;
+		case WM_EXITSIZEMOVE:
+			YunutyCycle::SingleInstance().ReserveActionAfterUpdate(
+				[=]()
+				{
+					graphics::Renderer::SingleInstance().ResizeResolution(g_ResizeWidth, g_ResizeHeight);
+				}
+			);
+			break;
 		case WM_SYSCOMMAND:
 			if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
 				return 0;
@@ -923,9 +941,9 @@ LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				//printf("WM_DPICHANGED to %d (%.0f%%)\n", dpi, (float)dpi / 96.0f * 100.0f);
 				const RECT* suggested_rect = (RECT*)lParam;
 				::SetWindowPos(hWnd, nullptr, suggested_rect->left, suggested_rect->top, suggested_rect->right - suggested_rect->left, suggested_rect->bottom - suggested_rect->top, SWP_NOZORDER | SWP_NOACTIVATE);
-			}
-			break;
 	}
+			break;
+}
 	return ::DefWindowProcW(hWnd, msg, wParam, lParam);
 }
 #endif

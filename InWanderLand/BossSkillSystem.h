@@ -1,12 +1,12 @@
 #pragma once
-#include "EnemySkillSystem.h"
+#include "SkillSystem.h"
 
 class Unit;
 
 /// <summary>
 /// playerSkillSystem과는 다르게, 내부에서 자체적으로 사용할 스킬 및 위치를 정해주는 방식은 어떨까?
 /// </summary>
-class BossSkillSystem : public EnemySkillSystem
+class BossSkillSystem : public SkillSystem
 {
 private:
 	float m_skillUsageDuration{ 0.0f };
@@ -29,10 +29,13 @@ private:
 	SkillRequirements m_skillFourRequirments;
 
 	bool isBossSkill;
-	Unit::SkillEnum selectedSkillNumber;
+	Unit::SkillEnum staticSelectedSkillNumber;
+	Unit::SkillEnum currentSelectedSkillNumber;
 
 public:
+	virtual void ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition) override;
 	void ActivateSkillRandomly();
+	void SelectSkillRandomly();
 
 	void SetSkillOneRequirments(GameObject* p_obj, GameObject* p_debugObj);
 	void SetSkillTwoRequirments(GameObject* p_obj, GameObject* p_debugObj);
@@ -44,9 +47,10 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 
+	Unit::SkillEnum GetCurrentSelectedSkillNumber() const;
+
 private:
-	void ActivateSkill(Unit::SkillEnum p_currentSkill);
-	virtual void ActivateSkillOne() override;
+	void ActivateSkillOne();
 	void ActivateSkillTwo();
 	void ActivateSkillThree();
 	void ActivateSkillFour();

@@ -4,6 +4,8 @@ void NailCamera::SetWorldTM(const DirectX::SimpleMath::Matrix wtm)
 {
 	this->wtm = wtm;
 	this->vtm = this->wtm.Invert();
+	this->cameraNear = 10.f;
+	this->cameraFar = 100.f;
 	this->ptm = DirectX::XMMatrixPerspectiveFovLH(this->fov, this->width / this->height, this->cameraNear, this->cameraFar);
 	this->vtmOrtho = DirectX::XMMatrixOrthographicLH(this->width * 1.f, this->height * 1.f, this->cameraNear, this->cameraFar);
 
@@ -18,6 +20,9 @@ void NailCamera::SetVerticalFOV(float fov)
 	}
 
 	this->fov = fov;
+	this->ptm = DirectX::XMMatrixPerspectiveFovLH(this->fov, this->width / this->height, this->cameraNear, this->cameraFar);
+	this->vtmOrtho = DirectX::XMMatrixOrthographicLH(this->width * 1.f, this->height * 1.f, this->cameraNear, this->cameraFar);
+
 	CreateFrustum();
 }
 
@@ -29,6 +34,9 @@ void NailCamera::SetNear(float cameraNear)
 	}
 
 	this->cameraNear = cameraNear;
+	this->ptm = DirectX::XMMatrixPerspectiveFovLH(this->fov, this->width / this->height, this->cameraNear, this->cameraFar);
+	this->vtmOrtho = DirectX::XMMatrixOrthographicLH(this->width * 1.f, this->height * 1.f, this->cameraNear, this->cameraFar);
+
 	CreateFrustum();
 }
 
@@ -40,6 +48,9 @@ void NailCamera::SetFar(float cameraFar)
 	}
 
 	this->cameraFar = cameraFar;
+	this->ptm = DirectX::XMMatrixPerspectiveFovLH(this->fov, this->width / this->height, this->cameraNear, this->cameraFar);
+	this->vtmOrtho = DirectX::XMMatrixOrthographicLH(this->width * 1.f, this->height * 1.f, this->cameraNear, this->cameraFar);
+
 	CreateFrustum();
 }
 
@@ -52,6 +63,9 @@ void NailCamera::SetResolution(float width, float height)
 
 	this->width = width;
 	this->height = height;
+	this->ptm = DirectX::XMMatrixPerspectiveFovLH(this->fov, this->width / this->height, this->cameraNear, this->cameraFar);
+	this->vtmOrtho = DirectX::XMMatrixOrthographicLH(this->width * 1.f, this->height * 1.f, this->cameraNear, this->cameraFar);
+
 	CreateFrustum();
 }
 float NailCamera::GetVerticalFOV()

@@ -8,6 +8,7 @@
 #include "SingleNavigationField.h"
 #include "ContentsLayer.h"
 #include "Application.h"
+#include "GlobalConstant.h"
 
 void UnitProductor::SetUnitComponentMembers()
 {
@@ -17,6 +18,12 @@ void UnitProductor::SetUnitComponentMembers()
 	frontDebugObject->GetTransform()->SetLocalScale({ 0.5, 0.5, 0.5 });
 	frontDebugObject->GetTransform()->SetWorldPosition(m_unitGameObject->GetTransform()->GetLocalRotation().Forward() * -1);
 	frontDebugObject->SetParent(m_unitGameObject);
+
+	auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+	AttachDebugMesh(unitColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
+	unitColliderDebugObject->SetParent(m_unitGameObject);
+	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(UNIT_LENGTH, UNIT_LENGTH, UNIT_LENGTH));
+	m_unitComponent->SetStaticMeshComponent(unitColliderDebugObject->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>());
 
 	/// Unit Member Setting
 	m_unitComponent->GetGameObject()->setName(m_objectName);
@@ -29,8 +36,6 @@ void UnitProductor::SetUnitComponentMembers()
 	m_unitComponent->SetAtkRadius(m_atkRadius);
 	m_unitComponent->SetIdRadius(m_idRadius);
 	m_unitComponent->SetUnitSpeed(m_unitSpeed);
-
-	m_unitComponent->unitAnimations = m_baseUnitAnimations;
 
 	m_unitComponent->SetAttackDelay(m_attackDelay);
 	m_unitComponent->SetAttackTimingFrame(m_attackTimingFrame);
@@ -47,9 +52,82 @@ void UnitProductor::SetUnitComponentMembers()
 	m_unitComponent->m_criticalDamageDecreaseMultiplier = m_criticalDamageDecreaseMultiplier;
 	m_unitComponent->m_criticalHitProbability = m_criticalHitProbability;
 
-	///// + 플레이어 유닛일 경우 특수 처리
-	//if (m_unitSide == Unit::UnitSide::Player)
-	//	SetPlayerRelatedComponents(m_unitComponent);
+	switch (m_unitType)
+	{
+		case Unit::UnitType::Warrior:
+			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.playerOneQSkillDelay;
+			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.playerOneQSkillTimingFrame;
+			m_skillTwoEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.playerOneWSkillDelay;
+			m_skillTwoTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.playerOneWSkillTimingFrame;
+			break;
+		case Unit::UnitType::Magician:
+			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.playerTwoQSkillDelay;
+			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.playerTwoQSkillTimingFrame;
+			m_skillTwoEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.playerTwoWSkillDelay;
+			m_skillTwoTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.playerTwoWSkillTimingFrame;
+			break;
+		case Unit::UnitType::Healer:
+			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.playerThreeQSkillDelay;
+			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.playerThreeQSkillTimingFrame;
+			m_skillTwoEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.playerThreeWSkillDelay;
+			m_skillTwoTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.playerThreeWSkillTimingFrame;
+			break;
+		case Unit::UnitType::MeleeEnemy:
+			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.eliteMeleeEnemySkillDelay;
+			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.eliteMeleeEnemySkillTimingFrame;
+			break;
+		case Unit::UnitType::RangedEnemy:
+			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.eliteRangedEnemySkillDelay;
+			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.eliteRangedEnemySkillTimingFrame;
+			break;
+		case Unit::UnitType::Boss:
+			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.bossSkillOneDelay;
+			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.bossSkillOneTimingFrame;
+			m_skillTwoEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.bossSkillTwoDelay;
+			m_skillTwoTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.bossSkillTwoTimingFrame;
+			m_skillThreeEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.bossSkillThreeDelay;
+			m_skillThreeTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.bossSkillThreeTimingFrame;
+			m_skillFourEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.bossSkillFourDelay;
+			m_skillFourTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.bossSkillFourTimingFrame;
+			break;
+		case Unit::UnitType::EnemySpawnGate:
+			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.bossSkillOneDelay;
+			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.bossSkillOneTimingFrame;
+			break;
+		case Unit::UnitType::SpikeTrap:
+			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.spikeTrapSkillDelay;
+			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.spikeTrapSkillTimingFrame;
+			break;
+		case Unit::UnitType::ChessTrap:
+			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.chessTrapSkillDelay;
+			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.chessTrapSkillTimingFrame;
+			break;
+		case Unit::UnitType::TriggeredTrap:
+			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.triggeredTrapSkillDelay;
+			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.triggeredTrapSkillTimingFrame;
+			break;
+		default:
+			break;
+	}
+
+	if (m_unitComponent->GetUnitSide() == Unit::UnitSide::Player)
+	{
+		m_unitComponent->RegisterSkillDuration(Unit::SkillEnum::Q, m_skillOneEngageDelay);
+		m_unitComponent->RegisterSkillDuration(Unit::SkillEnum::W, m_skillTwoEngageDelay);
+		m_unitComponent->RegisterSkillTimingFrame(Unit::SkillEnum::Q, m_skillOneTimingFrame);
+		m_unitComponent->RegisterSkillTimingFrame(Unit::SkillEnum::W, m_skillTwoTimingFrame);
+	}
+	else if (m_unitComponent->GetUnitSide() == Unit::UnitSide::Enemy)
+	{
+		m_unitComponent->RegisterSkillDuration(Unit::SkillEnum::BossSkillOne, m_skillOneEngageDelay);
+		m_unitComponent->RegisterSkillTimingFrame(Unit::SkillEnum::BossSkillOne, m_skillOneTimingFrame);
+		m_unitComponent->RegisterSkillDuration(Unit::SkillEnum::BossSkillTwo, m_skillTwoEngageDelay);
+		m_unitComponent->RegisterSkillTimingFrame(Unit::SkillEnum::BossSkillTwo, m_skillTwoTimingFrame);
+		m_unitComponent->RegisterSkillDuration(Unit::SkillEnum::BossSkillThree, m_skillThreeEngageDelay);
+		m_unitComponent->RegisterSkillTimingFrame(Unit::SkillEnum::BossSkillThree, m_skillThreeTimingFrame);
+		m_unitComponent->RegisterSkillDuration(Unit::SkillEnum::BossSkillFour, m_skillFourEngageDelay);
+		m_unitComponent->RegisterSkillTimingFrame(Unit::SkillEnum::BossSkillFour, m_skillFourTimingFrame);
+	}
 }
 
 void UnitProductor::AddRangeSystemComponent() const
@@ -72,12 +150,6 @@ void UnitProductor::AddColliderComponent() const
 	auto unitCollider = m_unitGameObject->AddComponent<physics::SphereCollider>();	// 빈 껍데기에 
 	unitCollider->SetRadius(UNIT_LENGTH);
 	//m_unitGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-
-	auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	AttachDebugMesh(unitColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
-	unitColliderDebugObject->SetParent(m_unitGameObject);
-	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(UNIT_LENGTH, UNIT_LENGTH, UNIT_LENGTH));
-	m_unitComponent->SetStaticMeshComponent(unitColliderDebugObject->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>());
 }
 
 void UnitProductor::AddNavigationComponent() 
@@ -126,7 +198,7 @@ void UnitProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p
 	m_idRadius = p_podData.m_idRadius;
 	m_atkRadius = p_podData.m_atkRadius;
 	m_unitSpeed = p_podData.m_unitSpeed;
-	m_attackDelay = p_podData.m_attackDelay;
+	m_attackDelay = p_podData.m_attackEngageDelay;
 	m_attackTimingFrame = p_podData.m_attackTimingFrame;
 	m_attackOffset = p_podData.m_attackOffset;
 }

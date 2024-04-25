@@ -45,11 +45,20 @@
 #include "BloomPass.h"
 
 #include "StaticMesh.h"
+#include "PixelShader.h"
 
 #include <iostream>
 #include <fstream>
 
 LazyObjects<RenderSystem> RenderSystem::Instance;
+
+void RenderSystem::ReleaseD2D()
+{
+	d2dFactory->Release();
+	wFactory->Release();
+	surface->Release();
+	d2dRT->Release();
+}
 
 void RenderSystem::Finalize()
 {
@@ -162,13 +171,12 @@ void RenderSystem::PushCameraData()
 
 void RenderSystem::Render()
 {
-	ResourceManager::Instance.Get().GetTexture(L"LightMapList1")->Bind(24);
-
+	ResourceManager::Instance.Get().GetTexture(L"LightMapList")->Bind(24);
 	UtilBuffer utilBuffer;
 	utilBuffer.windowWidth = NailEngine::Instance.Get().GetWindowInfo().width;
 	utilBuffer.windowHeight = NailEngine::Instance.Get().GetWindowInfo().height;
-	//utilBuffer.useIBL = NailEngine::Instance.Get().GetUseIBL();
-	utilBuffer.useIBL = false;
+	utilBuffer.useIBL = NailEngine::Instance.Get().GetUseIBL();
+	//utilBuffer.useIBL = false;
 	//utilBuffer.useLightMap = NailEngine::Instance.Get().GetUseLightMap();
 	utilBuffer.useLightMap = true;
 	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::UTIL))->PushGraphicsData(&utilBuffer, sizeof(UtilBuffer), static_cast<int>(CB_TYPE::UTIL));
@@ -181,6 +189,12 @@ void RenderSystem::Render()
 
 	PushCameraData();
 	PushLightData();
+
+	//Early_Z();
+
+	
+
+	ResourceManager::Instance.Get().GetTexture(L"Early_Z_Target")->Bind(25);
 
 	// 스태틱 오브젝트 렌더
 	RenderObject();
@@ -216,16 +230,29 @@ void RenderSystem::Render()
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"))->UnBindGraphicsData();
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"BackBufferMaterial"))->UnBindGraphicsData();
+	ResourceManager::Instance.Get().GetTexture(L"Early_Z_Target")->UnBind(25);
+}
 
+void RenderSystem::Early_Z()
+{
+	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::EARLY_Z)]->OMSetRenderTarget();
 
+	MatrixBuffer matrixBuffer;
+	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
+	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
+
+	InstancingManager::Instance.Get().RenderEarly_Z();
 }
 
 void RenderSystem::RenderObject()
 {
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
 	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->OMSetRenderTarget();
-
-
 
 	MatrixBuffer matrixBuffer;
 	//matrixBuffer.WTM = e.wtm;
@@ -504,7 +531,12 @@ void RenderSystem::RenderBackBuffer()
 
 void RenderSystem::RenderUI()
 {
-	this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied());
+	//this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied());
+	this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied(), nullptr, nullptr, nullptr, [=]()
+		{
+			auto ps = std::static_pointer_cast<PixelShader>(ResourceManager::Instance.Get().GetShader(L"UIImagePS.cso"));
+			ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShader(ps->ps.Get(), 0, 0);
+		});
 	for (auto& i : UIImageSet)
 	{
 		auto uiImage = std::static_pointer_cast<UIImage>(i);
@@ -514,12 +546,16 @@ void RenderSystem::RenderUI()
 			continue;
 		}
 		;
-		RECT drawRect{ uiImage->pos.x,uiImage->pos.y,uiImage->pos.x + uiImage->GetWidth() ,uiImage->pos.y + uiImage->GetHeight() };
+		RECT drawRect;
+		const auto& tm = uiImage->GetWorldTM();
+		drawRect.left = tm._41 - uiImage->GetXPivot() * uiImage->GetWidth() * tm._11;
+		drawRect.right = tm._41 + (1 - uiImage->GetXPivot()) * uiImage->GetWidth() * tm._11;
+		drawRect.top = tm._42 - uiImage->GetYPivot() * uiImage->GetHeight() * tm._22;
+		drawRect.bottom = tm._42 + (1 - uiImage->GetYPivot()) * uiImage->GetHeight() * tm._22;
 		auto texture = ((Texture*)(std::static_pointer_cast<UIImage>(i)->GetTexture()));
 		this->spriteBatch->Draw(texture->GetSRV().Get(), drawRect);
 	}
 	this->spriteBatch->End();
-
 
 	d2dRT->BeginDraw();
 	for (auto& i : this->UITextSet)
@@ -696,6 +732,10 @@ void RenderSystem::PopSkinnedRenderableObject(nail::IRenderable* renderable)
 void RenderSystem::PushUIObject(std::shared_ptr<nail::IRenderable> renderable)
 {
 	this->UIImageSet.insert(renderable);
+}
+void RenderSystem::PushPreProcessingUIObject(std::weak_ptr<nail::IRenderable> renderable)
+{
+	preProcessingUiImages.insert(renderable);
 }
 
 void RenderSystem::PopUIObject(std::shared_ptr<nail::IRenderable> renderable)

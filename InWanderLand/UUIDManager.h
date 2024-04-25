@@ -23,6 +23,10 @@ namespace application
 		template <typename T> requires std::is_pointer_v<T>
 		T GetPointerFromUUID(const UUID& uuid)
 		{
+			if (uuidMap.find(uuid) == uuidMap.end())
+			{
+				return nullptr;
+			}
 			return static_cast<T>(uuidMap[uuid]);
 		}
 

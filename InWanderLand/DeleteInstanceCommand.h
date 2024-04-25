@@ -1,6 +1,6 @@
 /// 2024. 03. 29 김상준
 /// Instance 를 삭제할 때의 작업을 위한 Command
-/// 연계된 TransformEditCommand 를 삭제할 수 있도록 함
+/// 여기까지 지원하지는 않을 예정
 
 #pragma once
 
