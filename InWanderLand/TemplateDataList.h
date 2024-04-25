@@ -9,3 +9,4 @@
 #include "Wave_TemplateData.h"
 #include "Camera_TemplateData.h"
 #include "Light_TemplateData.h"
+#include "Particle_TemplateData.h"

@@ -14,10 +14,6 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 
-#include "YunutyEngine.h"
-
-#include "DebugMeshes.h"
-
 #include <string>
 #include <d3d11.h>
 
@@ -316,7 +312,7 @@ namespace application
                     operation = ImGuizmo::SCALE;
                 }
             }
-
+            
             ImGuizmo::SetDrawlist();
             float left = ImGui::GetWindowPos().x + imageStartPos.first;
             float top = ImGui::GetWindowPos().y + imageStartPos.second;

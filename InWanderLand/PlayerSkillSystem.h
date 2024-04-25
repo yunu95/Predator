@@ -1,5 +1,6 @@
 #pragma once
 #include "SkillSystem.h"
+#include "Unit.h"
 
 class Dotween;
 
@@ -13,6 +14,15 @@ protected:
 	float m_skillOneRange;
 	float m_skillTwoRange;
 
+	bool isQSkillReady{ true };
+	bool isESkillReady{ true };
+
+	float qSkillCoolDownElapsed{ 0.0f };
+	float eSkillCoolDownElapsed{ 0.0f };
+
+	float qSkillCoolTime;
+	float eSkillCoolTime;
+
 public:
 	virtual void ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition) override;
 	virtual void RotateProjectile(GameObject* p_projectileObject, Vector3d p_endPosition);
@@ -23,12 +33,18 @@ public:
 	virtual void SetSkillOneRange(float p_rng);
 	virtual void SetSkillTwoRange(float p_rng);
 
+	virtual void SetQSkillCoolTime(float p_coolTime);
+	virtual void SetESkillCoolTime(float p_coolTime);
+
 	virtual float GetSkillOneRange() const;
 	virtual float GetSkillTwoRange() const;
 
 	virtual Vector3d CheckSkillRange(Vector3d p_skillPos, Unit::SkillEnum p_num);
 
 	virtual void Start() override;
+	virtual void Update() override;
+
+	virtual bool IsSkillCoolingDown(Unit::SkillEnum p_skillnum) const;
 
 	Vector3d m_currentSelectedSkillPosition;
 

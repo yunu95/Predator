@@ -45,6 +45,7 @@ namespace application
 			WaveData,
 			CameraData,
             LightData,
+            ParticleData,
 		};
 
         template<typename T>

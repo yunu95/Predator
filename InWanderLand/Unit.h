@@ -9,6 +9,7 @@
 
 class UnitProductor;
 class SkillSystem;
+class BurnEffect;
 enum class SkillPreviewMesh;
 
 /// <summary>
@@ -28,8 +29,10 @@ public:
 		Skill,
 		Paralysis,
 		Death,
+		Resurrect,
 		OffsetMove,
-		WaveEngage,
+		WaveStart,
+		WaveMotion,
 		StateEnd
 	};
 
@@ -57,7 +60,7 @@ public:
 	enum class SkillEnum
 	{
 		Q,
-		W,
+		E,
 		BossSkillOne,
 		BossSkillTwo,
 		BossSkillThree,
@@ -71,12 +74,15 @@ public:
 		yunuGI::IAnimation* m_attackAnimation;
 		yunuGI::IAnimation* m_paralysisAnimation;
 		yunuGI::IAnimation* m_deathAnimation;
+		yunuGI::IAnimation* m_battleEngageAnimation;
 	};
 
 	Timer* knockBackTimer;
 	Dotween* dotween;
 	yunutyEngine::graphics::Animator* m_animatorComponent;
 	NavigationAgent* m_navAgentComponent;
+	BurnEffect* m_burnEffect;
+	PlayerSkillSystem* m_playerSkillSystem;
 
 	Unit* m_currentTargetUnit;					// Attack이나 Chase 때 사용할 적군  오브젝트
 	//Vector3d startPosition;
@@ -145,6 +151,10 @@ private:
 	float deathFunctionElapsed;
 	float deathAnimationDelay = 1.5f;
 
+	int m_resurrectingMaxCount{ 0 };
+	int m_currentResurrectingCount{ 0 };
+	float m_resurrectingDuration{ 5.0f };
+
 	float skillFunctionStartElapsed;
 	float m_currentSelectedSkillEngageDelay;
 	int m_selectedSkillTimingFrame;
@@ -157,7 +167,8 @@ private:
 	float qSkillAnimationDuration = 5.0f;
 	bool isJustHitByQSkill = false;
 
-
+	float m_battleEngageMotionElapsed{ 0.0f };
+	float m_battleEngageDuration{ 5.0f };
 
 	bool isAttackMoving;
 
@@ -173,6 +184,7 @@ private:
 	Unit* tauntingThisUnit;						// 현재 this 유닛이 도발당한 주체.
 	Vector3d m_previousMovePosition;						
 	Vector3d m_currentMovePosition;				// 현재 상대의 위치
+	Vector3d m_waveStartPosition;				// 웨이브 시작 위치
 
 	Vector3d m_currentSkillPosition;
 
@@ -204,6 +216,9 @@ private:
 	void SkillEngage();
 	void ParalysisEngage();
 	void DeathEngage();
+	void WaveStartEngage();
+	void WaveMotionEngage();
+	void ResurrectEngage();
 
 	void IdleUpdate();
 	void MoveUpdate();
@@ -213,9 +228,11 @@ private:
 	void AttackUpdate();
 	void SkillUpdate();
 	void DeathUpdate();
+	void WaveStartUpdate();
+	void WaveMotionUpdate();
+	void ResurrectUpdate();
 	
 	void CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation);
-
 	
 	void ReportUnitDeath();												// this 유닛이 죽었다는 정보를 전달
 	void IdentifiedOpponentDeath(Unit* p_unit);		// 상대 유닛이 죽었을 경우 처리할 내용을 담은 함수
@@ -223,6 +240,9 @@ private:
 	void DetermineHitDamage(float p_onceCalculatedDmg);					// 피격유닛이 받는 최종 데미지 계산
 
 	void RotateUnit(Vector3d endPosition);
+
+	void StopAnimation();
+
 public:
 	BaseUnitAnimationStruct unitAnimations;
 	float animationLerpDuration = 1.0f;
@@ -266,6 +286,8 @@ public:
 	void OrderSkill(SkillEnum p_skillNum, Vector3d position);
 	void OrderSkill(SkillEnum p_skillNum);
 
+	void ExecuteSkillAction(Vector3d p_pos, SkillEnum p_skillNum);
+
 	void DetermineCurrentTargetObject();
 	void AddToOpponentObjectList(Unit* p_unit);
 	void DeleteFromOpponentObjectList(Unit* p_unit);
@@ -295,6 +317,16 @@ public:
 	void SetUnitStateToDeath();
 	void SetUnitStateToSkill();
 
+	void SetCurrentMovePosition(Vector3d p_pos);
+	void SetWaveStartPosition(Vector3d p_pos);
+
+	void PushMoveFunctionToTacticQueue(Vector3d p_pos);
+	void PushAttackMoveFunctionToTacticQueue(Vector3d p_pos);
+	void PushSkillFunctionToTacticQueue(SkillEnum p_skillNum, Vector3d p_pos);
+	bool IsTacticModeQueueEmpty() const;
+
+	void ChangeUnitStatRandomly();
+
 public:
 	int GetUnitDamage() const;
 	void Damaged(Unit* opponentUnit, float opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
@@ -309,7 +341,10 @@ public:
 
 	void ResetUnitMembers();
 
+	bool IsAllExtraPlayerUnitDead();
+
 	std::function<void()> returnToPoolFunction{ nullptr };
+	std::function<void()> deathEngageFunction{ nullptr };
 	DummyComponent* m_dummyCom;
 	int stageNumber;
 
@@ -317,6 +352,7 @@ public:
 	std::vector<std::function<void()>> OnDeath;
 	bool isJustCreated{ false };
 
+	std::queue<std::function<void()>> m_tacticModeQueue;
 
 	friend RobinSkillDevelopmentSystem;
 	friend UnitProductor;

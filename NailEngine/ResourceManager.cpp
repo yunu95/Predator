@@ -928,7 +928,8 @@ void ResourceManager::CreateDefaultShader()
 	CreateShader(L"PointLightShadowPS.cso");
 	CreateShader(L"ParticlePS.cso");
 	CreateShader(L"DissolvePS.cso");
-	CreateShader(L"UIImagePS.cso");
+	CreateShader(L"UIRadialFillVS.cso");
+	CreateShader(L"UIRadialFillPS.cso");
 #pragma endregion
 
 #pragma region GS

@@ -9,6 +9,11 @@ yunutyEngine::graphics::Animator::Animator()
 
 }
 
+void Animator::Pause()
+{
+	isPlay = false;
+}
+
 void Animator::ClearAnimationEvent(yunuGI::IAnimation* animation)
 {
 	for (auto& each : this->animationEventMap[animation])

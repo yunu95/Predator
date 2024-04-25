@@ -592,10 +592,13 @@
     <FxCompile Include="RuntimeDependency\resources\Shader\WindowPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="UIImagePS.hlsl">
+    <FxCompile Include="RuntimeDependency\resources\Shader\UIRadialFillPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="RuntimeDependency\resources\Shader\Early_Z_PS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\UIRadialFillVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

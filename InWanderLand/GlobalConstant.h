@@ -52,6 +52,15 @@ namespace application
 		GC<float>	triggeredTrapSkillDelay;
 		GC<int>		triggeredTrapSkillTimingFrame;
 
+		GC<float>	robinQSkillCoolTime;
+		GC<float>	robinESkillCoolTime;
+
+		GC<float>	ursulaQSkillCoolTime;
+		GC<float>	ursulaESkillCoolTime;
+
+		GC<float>	hanselQSkillCoolTime;
+		GC<float>	hanselESkillCoolTime;
+
 		TO_JSON(POD_GlobalConstant)
 		FROM_JSON(POD_GlobalConstant)
 	};

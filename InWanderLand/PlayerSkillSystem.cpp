@@ -11,7 +11,7 @@ void PlayerSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p
 		case Unit::SkillEnum::Q:
 			ActivateSkillOne(p_skillPosition);
 			break;
-		case Unit::SkillEnum::W:
+		case Unit::SkillEnum::E:
 			ActivateSkillTwo(p_skillPosition);
 			break;
 		//case Unit::SkillEnum::BossSkillOne:
@@ -73,6 +73,16 @@ void PlayerSkillSystem::SetSkillTwoRange(float p_rng)
 	m_skillTwoRange = p_rng;
 }
 
+void PlayerSkillSystem::SetQSkillCoolTime(float p_coolTime)
+{
+	qSkillCoolTime = p_coolTime;
+}
+
+void PlayerSkillSystem::SetESkillCoolTime(float p_coolTime)
+{
+	eSkillCoolTime = p_coolTime;
+}
+
 float PlayerSkillSystem::GetSkillOneRange() const
 {
 	return m_skillOneRange;
@@ -92,7 +102,7 @@ Vector3d PlayerSkillSystem::CheckSkillRange(Vector3d p_skillPos, Unit::SkillEnum
 		case Unit::SkillEnum::Q:
 			tempRng = m_skillOneRange;
 			break;
-		case Unit::SkillEnum::W:
+		case Unit::SkillEnum::E:
 			tempRng = m_skillTwoRange;
 			break;
 	}
@@ -111,4 +121,42 @@ Vector3d PlayerSkillSystem::CheckSkillRange(Vector3d p_skillPos, Unit::SkillEnum
 void PlayerSkillSystem::Start()
 {
 
+}
+
+void PlayerSkillSystem::Update()
+{
+	if (!isQSkillReady)
+	{
+		qSkillCoolDownElapsed += Time::GetDeltaTime();
+		if (qSkillCoolDownElapsed >= qSkillCoolTime)
+		{
+			qSkillCoolDownElapsed = 0.0f;
+			isQSkillReady = true;
+		}
+	}
+	if (!isESkillReady)
+	{
+		eSkillCoolDownElapsed += Time::GetDeltaTime();
+		if (eSkillCoolDownElapsed >= eSkillCoolTime)
+		{
+			eSkillCoolDownElapsed = 0.0f;
+			isESkillReady = true;
+		}
+	}
+}
+
+bool PlayerSkillSystem::IsSkillCoolingDown(Unit::SkillEnum p_skillnum) const
+{
+
+	switch (p_skillnum)
+	{
+		case Unit::SkillEnum::Q:
+			return isQSkillReady;
+			break;
+		case Unit::SkillEnum::E:
+			return isESkillReady;
+			break;
+		default:
+			break;
+	}
 }

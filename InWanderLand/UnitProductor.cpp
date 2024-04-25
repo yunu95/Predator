@@ -9,6 +9,8 @@
 #include "ContentsLayer.h"
 #include "Application.h"
 #include "GlobalConstant.h"
+#include "BurnEffect.h"
+#include "PlayerSkillSystem.h"
 
 void UnitProductor::SetUnitComponentMembers()
 {
@@ -24,6 +26,8 @@ void UnitProductor::SetUnitComponentMembers()
 	unitColliderDebugObject->SetParent(m_unitGameObject);
 	unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(UNIT_LENGTH, UNIT_LENGTH, UNIT_LENGTH));
 	m_unitComponent->SetStaticMeshComponent(unitColliderDebugObject->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>());
+
+	auto burnEffect = m_unitGameObject->AddComponent<BurnEffect>();
 
 	/// Unit Member Setting
 	m_unitComponent->GetGameObject()->setName(m_objectName);
@@ -113,9 +117,9 @@ void UnitProductor::SetUnitComponentMembers()
 	if (m_unitComponent->GetUnitSide() == Unit::UnitSide::Player)
 	{
 		m_unitComponent->RegisterSkillDuration(Unit::SkillEnum::Q, m_skillOneEngageDelay);
-		m_unitComponent->RegisterSkillDuration(Unit::SkillEnum::W, m_skillTwoEngageDelay);
+		m_unitComponent->RegisterSkillDuration(Unit::SkillEnum::E, m_skillTwoEngageDelay);
 		m_unitComponent->RegisterSkillTimingFrame(Unit::SkillEnum::Q, m_skillOneTimingFrame);
-		m_unitComponent->RegisterSkillTimingFrame(Unit::SkillEnum::W, m_skillTwoTimingFrame);
+		m_unitComponent->RegisterSkillTimingFrame(Unit::SkillEnum::E, m_skillTwoTimingFrame);
 	}
 	else if (m_unitComponent->GetUnitSide() == Unit::UnitSide::Enemy)
 	{
@@ -178,11 +182,39 @@ bool UnitProductor::SelectUnitProductorByFbxName(std::string p_name)
 	return (m_unitFbxName == p_name);
 }
 
-void UnitProductor::SetPlayerRelatedComponents(Unit* playerUnit)
+void UnitProductor::SetPlayerRelatedComponents()
 {
-	playerUnit->SetPlayerSerialNumber(m_unitType);
-	playerUnit->SetSkillPreviewType(qSkillPreviewType, wSkillPreviewType);
-	PlayerController::SingleInstance().AddPlayerUnit(playerUnit);
+	m_unitComponent->SetPlayerSerialNumber(m_unitType);
+	m_unitComponent->SetSkillPreviewType(qSkillPreviewType, wSkillPreviewType);
+	PlayerController::SingleInstance().AddPlayerUnit(m_unitComponent);
+
+	float qCoolTimeTemp;
+	float eCoolTimeTemp;
+
+	switch (m_unitComponent->GetUnitType())
+	{
+		case Unit::UnitType::Warrior:
+		{
+			qCoolTimeTemp = application::GlobalConstant::GetSingletonInstance().pod.robinQSkillCoolTime;
+			eCoolTimeTemp = application::GlobalConstant::GetSingletonInstance().pod.robinESkillCoolTime;
+		}
+			break;
+		case Unit::UnitType::Magician:
+		{
+			qCoolTimeTemp = application::GlobalConstant::GetSingletonInstance().pod.ursulaQSkillCoolTime;
+			eCoolTimeTemp = application::GlobalConstant::GetSingletonInstance().pod.ursulaESkillCoolTime;
+		}
+			break;
+		case Unit::UnitType::Healer:
+		{
+			qCoolTimeTemp = application::GlobalConstant::GetSingletonInstance().pod.hanselQSkillCoolTime;
+			eCoolTimeTemp = application::GlobalConstant::GetSingletonInstance().pod.hanselESkillCoolTime;
+		}
+			break;
+	}
+
+	m_unitComponent->GetGameObject()->GetComponent<PlayerSkillSystem>()->SetQSkillCoolTime(qCoolTimeTemp);
+	m_unitComponent->GetGameObject()->GetComponent<PlayerSkillSystem>()->SetESkillCoolTime(eCoolTimeTemp);
 }
 
 void UnitProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p_podData)

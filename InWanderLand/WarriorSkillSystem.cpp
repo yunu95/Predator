@@ -10,6 +10,8 @@ void WarriorSkillSystem::ActivateSkillOne(Vector3d skillPos)
 	QknockBackSkill.colliderObject->GetComponent<KnockBackComponent>()->SkillStarted();
 	QknockBackSkill.colliderObject->SetParent(GetGameObject());
 
+	isQSkillReady = false;
+
 	SetSkillRequirmentsActive(QknockBackSkill, true);
 
 	m_unitNavComponent->SetActive(false);
@@ -36,6 +38,8 @@ void WarriorSkillSystem::ActivateSkillOne(Vector3d skillPos)
 
 void WarriorSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 {
+	isESkillReady = false;
+
 	SetSkillRequirmentsActive(WTauntSkill, true);
 
 	m_unitComponent->RegisterSkillDuration(m_wSkillColliderRemainTime);
@@ -87,4 +91,5 @@ void WarriorSkillSystem::Start()
 
 void WarriorSkillSystem::Update()
 {
+	PlayerSkillSystem::Update();
 }

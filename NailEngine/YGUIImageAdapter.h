@@ -91,7 +91,37 @@ namespace yunuGIAdapter
         {
             return renderable->GetLayer();
         }
-
+        virtual yunuGI::Color GetColor()
+        {
+            auto color = renderable->GetColor();
+            return reinterpret_cast<yunuGI::Color&>(color);
+        };
+        virtual void SetColor(const yunuGI::Color& color)
+        {
+            renderable->SetColor(reinterpret_cast<const DirectX::SimpleMath::Color&>(color));
+        }
+        virtual bool IsRadialFillMode()
+        {
+            return renderable->IsRadialFillMode();
+        }
+        // 텍스처가 중심에서부터 갉아먹는 형태로 채워지는지 여부를 설정
+        virtual void SetRadialFillMode(bool fill)
+        {
+            renderable->SetRadialFillMode(fill);
+        }
+        virtual void SetRadialFillDegree(float degree)
+        {
+            renderable->SetRadialFillDegree(degree);
+        }
+        virtual void SetRadialFillStartPoint(float x, float y)
+        {
+            renderable->SetRadialFillStartPoint(x, y);
+        }
+        // 시계방향으로 채우는지 반시계 방향으로 채우는지 설정
+        virtual void SetRadialFillDirection(bool isClockwise)
+        {
+            renderable->SetRadialFillDirection(isClockwise);
+        }
     private:
         std::shared_ptr<UIImage> renderable;
     };

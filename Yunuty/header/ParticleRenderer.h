@@ -58,6 +58,9 @@ namespace yunutyEngine::graphics
 		yunuGI::IParticleRenderer& GetGI() { return Renderable<yunuGI::IParticleRenderer>::GetGI(); }
 		ParticleRenderer();
 
+		virtual void OnDisable() override;
+
+
 		virtual void Update() override;
 		virtual void OnTransformUpdate() override;
 		virtual void OnDisable() override;

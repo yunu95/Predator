@@ -420,21 +420,6 @@ void NailEngine::CreateRenderTargetGroup()
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->SetRenderTargetVec(rtVec);
 	}
 
-	// Early_Z
-	{
-		std::vector<RenderTarget> rtVec(EARLY_Z_COUNT);
-		rtVec[0].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
-			L"Early_Z_Target",
-			this->windowInfo.width,
-			this->windowInfo.height,
-			DXGI_FORMAT_R16G16B16A16_FLOAT,
-			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
-		));
-
-		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::EARLY_Z)] = std::make_shared<RenderTargetGroup>();
-		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::EARLY_Z)]->SetRenderTargetVec(rtVec);
-	}
-
 	// Bloom 전용 렌더타겟
 	{
 		{

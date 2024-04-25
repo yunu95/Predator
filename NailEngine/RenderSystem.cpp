@@ -190,11 +190,7 @@ void RenderSystem::Render()
 	PushCameraData();
 	PushLightData();
 
-	//Early_Z();
-
 	
-
-	ResourceManager::Instance.Get().GetTexture(L"Early_Z_Target")->Bind(25);
 
 	// 스태틱 오브젝트 렌더
 	RenderObject();
@@ -230,23 +226,6 @@ void RenderSystem::Render()
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"))->UnBindGraphicsData();
 	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"BackBufferMaterial"))->UnBindGraphicsData();
-	ResourceManager::Instance.Get().GetTexture(L"Early_Z_Target")->UnBind(25);
-}
-
-void RenderSystem::Early_Z()
-{
-	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
-	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::EARLY_Z)]->OMSetRenderTarget();
-
-	MatrixBuffer matrixBuffer;
-	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
-	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
-	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-	matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
-	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
-
-	InstancingManager::Instance.Get().RenderEarly_Z();
 }
 
 void RenderSystem::RenderObject()
@@ -531,31 +510,59 @@ void RenderSystem::RenderBackBuffer()
 
 void RenderSystem::RenderUI()
 {
-	//this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied());
-	this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied(), nullptr, nullptr, nullptr, [=]()
-		{
-			auto ps = std::static_pointer_cast<PixelShader>(ResourceManager::Instance.Get().GetShader(L"UIImagePS.cso"));
-			ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShader(ps->ps.Get(), 0, 0);
-		});
-	for (auto& i : UIImageSet)
-	{
-		auto uiImage = std::static_pointer_cast<UIImage>(i);
+    //this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied(), nullptr, nullptr, nullptr, [=]()
+    bool preprocessed = !preProcessingUiImages.empty();
+    for (auto each : preProcessingUiImages)
+    {
+        each->PreProcessTexture();
+    }
+    preProcessingUiImages.clear();
 
-		if (uiImage->IsActive() == false)
-		{
-			continue;
-		}
-		;
-		RECT drawRect;
-		const auto& tm = uiImage->GetWorldTM();
-		drawRect.left = tm._41 - uiImage->GetXPivot() * uiImage->GetWidth() * tm._11;
-		drawRect.right = tm._41 + (1 - uiImage->GetXPivot()) * uiImage->GetWidth() * tm._11;
-		drawRect.top = tm._42 - uiImage->GetYPivot() * uiImage->GetHeight() * tm._22;
-		drawRect.bottom = tm._42 + (1 - uiImage->GetYPivot()) * uiImage->GetHeight() * tm._22;
-		auto texture = ((Texture*)(std::static_pointer_cast<UIImage>(i)->GetTexture()));
-		this->spriteBatch->Draw(texture->GetSRV().Get(), drawRect);
-	}
-	this->spriteBatch->End();
+    if (preprocessed)
+    {
+        D3D11_VIEWPORT viewport
+        {
+             .TopLeftX = 0.0f,
+             .TopLeftY = 0.0f,
+             .Width = static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().width),
+             .Height = static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().height),
+             .MinDepth = 0.0f,
+             .MaxDepth = 1.0f,
+        };
+        ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
+        ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1,
+            ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
+            ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
+    }
+    //preProcessingUiImages.clear();
+
+    this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied());
+    for (auto& i : UIImageSet)
+    {
+        auto uiImage = std::static_pointer_cast<UIImage>(i);
+
+        if (uiImage->IsActive() == false)
+        {
+            continue;
+        }
+        ;
+        RECT drawRect;
+        const auto& tm = uiImage->GetWorldTM();
+        drawRect.left = tm._41 - uiImage->GetXPivot() * uiImage->GetWidth() * tm._11;
+        drawRect.right = tm._41 + (1 - uiImage->GetXPivot()) * uiImage->GetWidth() * tm._11;
+        drawRect.top = tm._42 - uiImage->GetYPivot() * uiImage->GetHeight() * tm._22;
+        drawRect.bottom = tm._42 + (1 - uiImage->GetYPivot()) * uiImage->GetHeight() * tm._22;
+        auto texture = ((Texture*)(std::static_pointer_cast<UIImage>(i)->GetTexture()));
+        if (uiImage->IsUsingProcessedTexture())
+        {
+            this->spriteBatch->Draw(std::static_pointer_cast<UIImage>(i)->GetProcessedTextureSRV(), drawRect, uiImage->GetColor());
+        }
+        else
+        {
+            this->spriteBatch->Draw(texture->GetSRV().Get(), drawRect, uiImage->GetColor());
+        }
+    }
+    this->spriteBatch->End();
 
 	d2dRT->BeginDraw();
 	for (auto& i : this->UITextSet)
@@ -733,7 +740,7 @@ void RenderSystem::PushUIObject(std::shared_ptr<nail::IRenderable> renderable)
 {
 	this->UIImageSet.insert(renderable);
 }
-void RenderSystem::PushPreProcessingUIObject(std::weak_ptr<nail::IRenderable> renderable)
+void RenderSystem::PushPreProcessingUIObject(UIImage* renderable)
 {
 	preProcessingUiImages.insert(renderable);
 }

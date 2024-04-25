@@ -126,10 +126,10 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 	UnitProductor::AddColliderComponent();
 	UnitProductor::AddNavigationComponent();
 	UnitProductor::AddDotweenComponent();
-	UnitProductor::SetPlayerRelatedComponents(m_unitComponent);
+	UnitProductor::SetPlayerRelatedComponents();
 
 	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::Q, warriorSkillOneRange);
-	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::W, 0.0f);
+	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::E, 0.0f);
 
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
@@ -149,7 +149,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 			m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
 			animator->PushAnimation(m_baseUnitAnimations.m_walkAnimation);
 		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+		/*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
 		{
 			m_baseUnitAnimations.m_attackAnimation = each;
 			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
@@ -177,7 +177,12 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 		{
 			each->SetLoop(false);
 			animator->PushAnimation(each);
-			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::W, each);
+			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::E, each);
+		}
+		/*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+		{
+			m_baseUnitAnimations.m_battleEngageAnimation = each;
+			m_baseUnitAnimations.m_battleEngageAnimation->SetLoop(false);
 		}
 	}
 

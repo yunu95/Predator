@@ -42,7 +42,6 @@ enum
     UP6x6_0_COUNT = 1,
     UP4x4_0_COUNT = 1,
     FINAL_COUNT = 1,
-    EARLY_Z_COUNT = 1,
 };
 
 enum
@@ -65,7 +64,6 @@ enum
     UP6x6_0 = 0,
     UP4x4_0 = 0,
     FINAL = 0,
-    EARLY_Z = 0,
     GBUFFER_COUNT
 };
 
@@ -83,6 +81,5 @@ enum class RENDER_TARGET_TYPE
     UP6x6_0,
     UP4x4_0,
     FINAL,
-    EARLY_Z,
     END
 };

@@ -739,6 +739,21 @@ namespace application
 									selectedScript->AddAction<Action_CinematicFadeOut>();
 									break;
 								}
+								case application::ActionType::WaitPreviousActionEnd:
+								{
+									selectedScript->AddAction<Action_WaitPreviousActionEnd>();
+									break;
+								}
+								case application::ActionType::CameraRevert:
+								{
+									selectedScript->AddAction<Action_CameraRevert>();
+									break;
+								}
+								case application::ActionType::TutorialModeChange:
+								{
+									selectedScript->AddAction<Action_TutorialModeChange>();
+									break;
+								}
 								default:
 									break;
 							}
@@ -775,7 +790,7 @@ namespace application
 			}
 
 			ImGui::PushID(data.get());
-			if (ImGui::Selectable(ScriptSystem::triggerList[data->GetType()].c_str(), data == selectedTrigger))
+			if (ImGui::Selectable(data->GetTypeName().c_str(), data == selectedTrigger))
 			{
 				if (selectedTrigger == data)
 				{
@@ -798,7 +813,7 @@ namespace application
 
 			if ((selectedTrigger == data) && ImGui::IsItemClicked(ImGuiMouseButton_Right))
 			{
-				ImGui::OpenPopup(ScriptSystem::triggerList[data->GetType()].c_str());
+				ImGui::OpenPopup(data->GetTypeName().c_str());
 			}
 
 			PopUpDataEdit<ITrigger>(data.get());
@@ -818,7 +833,7 @@ namespace application
 			}
 
 			ImGui::PushID(data.get());
-			if (ImGui::Selectable(ScriptSystem::conditionList[data->GetType()].c_str(), data == selectedCondition))
+			if (ImGui::Selectable(data->GetTypeName().c_str(), data == selectedCondition))
 			{
 				if (selectedCondition == data)
 				{
@@ -841,7 +856,7 @@ namespace application
 
 			if ((selectedCondition == data) && ImGui::IsItemClicked(ImGuiMouseButton_Right))
 			{
-				ImGui::OpenPopup(ScriptSystem::conditionList[data->GetType()].c_str());
+				ImGui::OpenPopup(data->GetTypeName().c_str());
 			}
 
 			PopUpDataEdit<ICondition>(data.get());
@@ -861,7 +876,7 @@ namespace application
 			}
 
 			ImGui::PushID(data.get());
-			if (ImGui::Selectable(ScriptSystem::actionList[data->GetType()].c_str(), data == selectedAction))
+			if (ImGui::Selectable(data->GetTypeName().c_str(), data == selectedAction))
 			{
 				if (selectedAction == data)
 				{
@@ -884,7 +899,7 @@ namespace application
 
 			if ((selectedAction == data) && ImGui::IsItemClicked(ImGuiMouseButton_Right))
 			{
-				ImGui::OpenPopup(ScriptSystem::actionList[data->GetType()].c_str());
+				ImGui::OpenPopup(data->GetTypeName().c_str());
 			}
 
 			PopUpDataEdit<IAction>(data.get());

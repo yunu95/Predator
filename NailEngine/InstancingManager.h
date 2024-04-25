@@ -25,7 +25,6 @@ public:
 
 public:
 	void Init();
-	void RenderEarly_Z();
 	void RenderStaticDeferred();
 	void RenderStaticForward();
 
@@ -46,6 +45,7 @@ public:
 	void RenderSkinned();
 	void ClearData();
 
+	void PopParticleSystem(ParticleSystem* system);
 	void RenderParticle();
 
 private:

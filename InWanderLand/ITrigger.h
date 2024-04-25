@@ -13,6 +13,7 @@
 #include "imgui_Utility.h"
 
 #include <functional>
+#include <string>
 
 namespace application
 {
@@ -39,6 +40,9 @@ namespace application
 
 		/// dynamic_cast 가 아닌 switch case 로 동작하기 위한 함수입니다.
 		virtual TriggerType GetType() const = 0;
+
+		/// Editor 에서 사용하기 위해 Type 을 String 으로 반환하는 함수입니다.
+		virtual std::string GetTypeName() const = 0;
 
 		/// 스크립트가 인게임 요소로 활성화될 때 트리거들의 설정에 맞게 인게임 객체들의
 		/// 콜백 functor들과 PullTrigger 함수 호출을 연계합니다.
@@ -86,4 +90,5 @@ namespace application
 /// 제공하여야 합니다.
 #define DEFINE_TRIGGER(Class) \
 virtual TriggerType GetType() const override { return TriggerType::Class; } \
+virtual std::string GetTypeName() const override { return #Class; } \
 static void ImGui_DrawDataPopup(Trigger_##Class* data);

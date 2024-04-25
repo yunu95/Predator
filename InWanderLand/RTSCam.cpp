@@ -1,6 +1,7 @@
 #include "InWanderLand.h"
 #include "RTSCam.h"
 #include "RegionData.h"
+#include "eKeyCode.h"
 
 void RTSCam::Start()
 {
@@ -29,6 +30,15 @@ void RTSCam::Start()
             break;
         }
     }
+
+    auto& gi = GetGI();
+
+    ingameInitRot = rot;
+    ingameInitScale = GetTransform()->GetWorldScale();
+    initFov = gi.GetVerticalFOV();
+    initNear = gi.GetNear();
+    initFar = gi.GetFar();
+    gi.GetResolution(&initWidth, &initHeight);
 }
 
 void RTSCam::Update()

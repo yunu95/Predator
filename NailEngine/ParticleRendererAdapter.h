@@ -21,6 +21,7 @@ namespace yunuGIAdapter
 
 		~ParticleRendererAdapter()
 		{
+			InstancingManager::Instance.Get().PopParticleSystem(particleSystem.get());
 		}
 
 		virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)

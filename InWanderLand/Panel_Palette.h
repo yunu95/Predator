@@ -67,8 +67,10 @@ namespace application
             void ImGui_BeginWavePalette();
             void ImGui_BeginLightPalette();
             void ImGui_BeginCameraPalette();
+            void ImGui_BeginParticlePalette();
 
             bool ImGui_CreateUnitPopup();
+            bool ImGui_CreateParticlePopup();
 
             void LoadCallback();
             void UpdataLightGizmo();
@@ -86,6 +88,7 @@ namespace application
             palette::WavePalette& wp = palette::WavePalette::SingleInstance();
             palette::CameraPalette& cp = palette::CameraPalette::SingleInstance();
             palette::LightPalette& lp = palette::LightPalette::SingleInstance();
+            palette::ParticlePalette& pp = palette::ParticlePalette::SingleInstance();
 
             EditorCamera& ec = EditorCamera::GetSingletonInstance();
             LightData* directionalLight = nullptr;

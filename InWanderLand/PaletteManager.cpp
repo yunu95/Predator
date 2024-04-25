@@ -18,6 +18,7 @@ namespace application
                 paletteList[(int)Palette_List::Wave] = &WavePalette::SingleInstance();
                 paletteList[(int)Palette_List::Cam] = &CameraPalette::SingleInstance();
                 paletteList[(int)Palette_List::Light] = &LightPalette::SingleInstance();
+                paletteList[(int)Palette_List::Particle] = &ParticlePalette::SingleInstance();
 
                 for (auto& each : paletteList)
                 {
@@ -83,6 +84,10 @@ namespace application
                 else if (currentPalette == paletteList[(int)Palette_List::Light])
                 {
                     return Palette_List::Light;
+                }
+                else if (currentPalette == paletteList[(int)Palette_List::Particle])
+                {
+                    return Palette_List::Particle;
                 }
 
                 return Palette_List::None;

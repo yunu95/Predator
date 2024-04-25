@@ -8,6 +8,7 @@
 #include "MeleeEnemyProductor.h"
 #include "SingleNavigationField.h"
 #include "GameManager.h"
+#include "BurnEffect.h"
 
 class MeleeEnemyPool : public GameObjectPool<DummyComponent>, public GHContents::LazySingletonClass<MeleeEnemyPool>
 {
@@ -38,6 +39,7 @@ public:
 	{
 		p_dummy->m_pairUnit->ResetUnitMembers();
 		p_dummy->m_pairUnit->GetTransform()->SetWorldPosition(m_unitPosition);
+		p_dummy->m_pairUnit->GetGameObject()->GetComponent<BurnEffect>()->Appear();
 		p_dummy->m_pairUnit->GetGameObject()->SetSelfActive(true);
 		p_dummy->m_pairUnit->m_navAgentComponent->SetActive(true);
 		p_dummy->m_pairUnit->m_navAgentComponent->AssignToNavigationField(p_dummy->m_pairUnit->GetNavField());

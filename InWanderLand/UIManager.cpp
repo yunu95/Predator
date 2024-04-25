@@ -9,6 +9,7 @@
 #include "UIOffsetTransition.h"
 #include <fstream>
 
+using namespace yunutyEngine::graphics;
 void UIManager::Clear()
 {
     m_highestPriorityButton = nullptr;
@@ -25,7 +26,7 @@ void UIManager::Clear()
 //}
 void UIManager::FadeOutRight(float duration)
 {
-    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft); !elm->GetGameObject()->GetActive())
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight); !elm->GetGameObject()->GetActive())
     {
         elm->enableTransition->m_duration = duration;
         elm->EnableElement();
@@ -33,7 +34,7 @@ void UIManager::FadeOutRight(float duration)
 }
 void UIManager::FadeOutLeft(float duration)
 {
-    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight); !elm->GetGameObject()->GetActive())
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft); !elm->GetGameObject()->GetActive())
     {
         elm->enableTransition->m_duration = duration;
         elm->EnableElement();
@@ -41,7 +42,7 @@ void UIManager::FadeOutLeft(float duration)
 }
 void UIManager::FadeOutBottom(float duration)
 {
-    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_BottomToTop); !elm->GetGameObject()->GetActive())
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_TopToBottom); !elm->GetGameObject()->GetActive())
     {
         elm->enableTransition->m_duration = duration;
         elm->EnableElement();
@@ -49,7 +50,7 @@ void UIManager::FadeOutBottom(float duration)
 }
 void UIManager::FadeOutTop(float duration)
 {
-    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_TopToBottom); !elm->GetGameObject()->GetActive())
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_BottomToTop); !elm->GetGameObject()->GetActive())
     {
         elm->enableTransition->m_duration = duration;
         elm->EnableElement();
@@ -236,6 +237,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         uiImageComponent->GetGI().SetXPivot(uiData.pivot[0]);
         uiImageComponent->GetGI().SetYPivot(1 - uiData.pivot[1]);
         uiImageComponent->GetGI().SetLayer(uiImportingPriority);
+
         uiButtonComponent = element->button = uiObject->AddComponent<UIButton>();
         uiButtonComponent->SetImageComponent(uiImageComponent);
         uiButtonComponent->SetIdleImage(idleTexture);
@@ -326,6 +328,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
                 disablingTarget->DisableElement();
             });
     }
+    static constexpr int priority_Tooltip = 123456789;
     // 만약 툴팁을 포함하는 UI라면...
     if (uiData.customFlags & (int)UIExportFlag::IsIncludingTooltips)
     {
@@ -334,7 +337,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
             each->SetSelfActive(false);
             if (auto img = each->GetComponent<UIImage>())
             {
-                img->GetGI().SetLayer(UIImage::priority_Tooltip);
+                img->GetGI().SetLayer(priority_Tooltip);
             }
         }
         button->m_OnMouseEventFunction = [=]()
@@ -417,7 +420,7 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         ImportDefaultAction(uiData, uisByName[uiData.uiname]);
         element->button->SetButtonClickFunction([=]()
             {
-                InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Warrior);
+                InputManager::Instance().PrepareSkill(Unit::SkillEnum::E, Unit::UnitType::Warrior);
             });
         break;
     case UIEnumID::Skill_Use_Q_Ursula:
@@ -431,7 +434,7 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         ImportDefaultAction(uiData, uisByName[uiData.uiname]);
         element->button->SetButtonClickFunction([=]()
             {
-                InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Magician);
+                InputManager::Instance().PrepareSkill(Unit::SkillEnum::E, Unit::UnitType::Magician);
             });
         break;
     case UIEnumID::Skill_Use_Q_HANSEL:
@@ -445,7 +448,7 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         ImportDefaultAction(uiData, uisByName[uiData.uiname]);
         element->button->SetButtonClickFunction([=]()
             {
-                InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Healer);
+                InputManager::Instance().PrepareSkill(Unit::SkillEnum::E, Unit::UnitType::Healer);
             });
         break;
     case UIEnumID::Toggle_TacticMode:
