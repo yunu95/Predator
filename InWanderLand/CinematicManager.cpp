@@ -22,17 +22,17 @@ namespace application
 
     void CinematicManager::PreMapLoad()
     {
-        isCinematicMode = false;
+        SetCinematicMode(false);
     }
 
     void CinematicManager::OnGameStart()
     {
-        isCinematicMode = false;
+        SetCinematicMode(false);
     }
 
     void CinematicManager::OnGameStop()
     {
-        isCinematicMode = false;
+        SetCinematicMode(false);
     }
 
     void CinematicManager::SetCinematicMode(bool isCinematicMode)

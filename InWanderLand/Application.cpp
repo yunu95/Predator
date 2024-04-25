@@ -88,6 +88,16 @@ namespace application
         return *instance;
     }
 
+    Application& Application::CreateApplicationWinMain(int* hInstance)
+    {
+        if (instance == nullptr)
+        {
+            instance = std::unique_ptr<Application>(new Application(hInstance));
+        }
+
+        return *instance;
+    }
+
     Application& Application::GetInstance()
     {
         assert(instance && "You must first create an application.");
@@ -109,6 +119,138 @@ namespace application
     {
         // Create application window
         //ImGui_ImplWin32_EnableDpiAwareness();
+        ::RegisterClassEx(&wc);
+
+        appSpecification.appName = wc.lpszClassName;
+        appSpecification.windowWidth = 1920;
+        appSpecification.windowHeight = 1080;
+
+        /// 게임 윈도우 생성
+        int winPosX = (GetSystemMetrics(SM_CXSCREEN) - appSpecification.windowWidth) / 2;	// 윈도우 X 좌표
+        int winPosY = (GetSystemMetrics(SM_CYSCREEN) - appSpecification.windowHeight) / 2;	// 윈도우 Y 좌표
+
+        hWND = ::CreateWindow(wc.lpszClassName, wc.lpszClassName, WS_OVERLAPPEDWINDOW, winPosX, winPosY, appSpecification.windowWidth, appSpecification.windowHeight, NULL, NULL, wc.hInstance, NULL);
+
+        RECT wndRect;
+        GetClientRect(hWND, &wndRect);
+
+        int newWidth = 1920 + (1920 - wndRect.right);
+        int newHeight = 1080 + (1080 - wndRect.bottom);
+
+        //float desiredRatio = 1920.0f / 1080.0f;
+
+        SetWindowPos(hWND, NULL, 0, 0, newWidth, newHeight, SWP_NOMOVE | SWP_NOZORDER);
+
+        ::ShowWindow(hWND, SW_SHOWDEFAULT);
+        ::UpdateWindow(hWND);
+
+
+#ifdef EDITOR
+        /// 에디터 윈도우 생성
+        g_EditorResizeWidth = appSpecification.windowWidth;
+        g_EditorResizeHeight = appSpecification.windowHeight;
+        int editorWinPosX = (GetSystemMetrics(SM_CXSCREEN) - g_EditorResizeWidth) / 2 + 1920;
+        int editorWinPosY = (GetSystemMetrics(SM_CYSCREEN) - g_EditorResizeHeight) / 2 + 200;
+
+        // 게임엔진 스레드에서 에디터 윈도우를 생성하도록 유도
+        yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [&, editorWinPosX, editorWinPosY, this]()
+            {
+                ::RegisterClassEx(&wcEditor);
+
+                editorHWND = ::CreateWindow(wcEditor.lpszClassName, wcEditor.lpszClassName, WS_OVERLAPPEDWINDOW, editorWinPosX, editorWinPosY, g_EditorResizeWidth, g_EditorResizeHeight, hWND, NULL, wcEditor.hInstance, NULL);
+
+                GetDeviceAndDeviceContext();
+                erm.Initialize(g_pD3dDevice);
+
+                // Initialize Direct3D
+                if (!CreateSwapChain())
+                {
+                    CleanupSwapChain();
+                    ::UnregisterClass(wcEditor.lpszClassName, wcEditor.hInstance);
+
+                    throw std::runtime_error(std::string("failed to create d3d device!"));
+                }
+
+                // Window 관련 CallBack 구현
+                SetWindowCallBack();
+
+                ::ShowWindow(editorHWND, SW_SHOWDEFAULT);
+                ::UpdateWindow(editorHWND);
+
+                // Setup Dear ImGui context
+                IMGUI_CHECKVERSION();
+                ImGui::CreateContext();
+                ImGuiIO& io = ImGui::GetIO(); (void)io;
+                io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+                io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+                io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+                io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+                //io.ConfigViewportsNoAutoMerge = true;
+                //io.ConfigViewportsNoTaskBarIcon = true;
+                //io.ConfigViewportsNoDefaultParent = true;
+                //io.ConfigDockingAlwaysTabBar = true;
+                //io.ConfigDockingTransparentPayload = true;
+                //io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: Experimental. THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
+                //io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI: Experimental.
+
+                /// Custom 영역
+                // 타이틀 바를 컨트롤 할 때에만 움직임
+                io.ConfigWindowsMoveFromTitleBarOnly = true;
+                ///
+
+                // Setup Dear ImGui style
+                ImGui::StyleColorsDark();
+                //ImGui::StyleColorsLight();
+
+                // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+                ImGuiStyle& style = ImGui::GetStyle();
+                if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+                {
+                    style.WindowRounding = 0.0f;
+                    style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+                }
+
+                // Setup Platform/Renderer backends
+                ImGui_ImplWin32_Init(editorHWND);
+                ImGui_ImplDX11_Init(g_pD3dDevice, g_pD3dDeviceContext);
+
+                // Load Fonts
+                // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+                // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+                // - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+                // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+                // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
+                // - Read 'docs/FONTS.md' for more instructions and details.
+                // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+                //io.Fonts->AddFontDefault();
+                //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
+                //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
+                //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
+                //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
+                //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
+                //IM_ASSERT(font != nullptr);
+            };
+        yunutyEngine::YunutyCycle::SingleInstance().postUpdateAction = []() { Application::instance->ImGuiUpdate(); };
+        yunutyEngine::YunutyCycle::SingleInstance().postThreadAction = []()
+            {
+                // Cleanup
+                ImGui_ImplDX11_Shutdown();
+                ImGui_ImplWin32_Shutdown();
+                ImGui::DestroyContext();
+                CleanupSwapChain();
+                ::DestroyWindow(editorHWND);
+            };
+#endif
+        yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
+        yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(appSpecification.windowWidth, appSpecification.windowHeight);
+        yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(hWND);
+    }
+
+    Application::Application(int* hInstance)
+    {
+        // Create application window
+         //ImGui_ImplWin32_EnableDpiAwareness();
+        wc.hInstance = (HINSTANCE)hInstance;
         ::RegisterClassEx(&wc);
 
         appSpecification.appName = wc.lpszClassName;

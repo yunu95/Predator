@@ -6,7 +6,7 @@
 #include "EditorResourceManager.h"
 #include "EditorPopupManager.h"
 
-extern const float DRAG_MOUSE_THRESHOLD_FACTOR;
+const float DRAG_MOUSE_THRESHOLD_FACTOR_UTILL = 0.50f;
 
 #define BIT(x) (1u << x)
 
@@ -206,7 +206,7 @@ namespace application
 
 				imgui::SmartStyleColor textColor2(ImGuiCol_Text, IM_COL32_WHITE);
 				bool result = false;
-				if (ImGui::BeginCombo("##Combo", current))
+				if (ImGui::BeginCombo(("##Combo" + valName).c_str(), current))
 				{
 					for (int i = 0; i < optionCount; i++)
 					{
@@ -499,7 +499,7 @@ namespace application
 
 					// (Optional) simple click (without moving) turns Drag into an InputText
 					if (g.IO.ConfigDragClickToInputText && !temp_input_is_active)
-						if (g.ActiveId == id && hovered && g.IO.MouseReleased[0] && !IsMouseDragPastThreshold(0, g.IO.MouseDragThreshold * DRAG_MOUSE_THRESHOLD_FACTOR))
+						if (g.ActiveId == id && hovered && g.IO.MouseReleased[0] && !IsMouseDragPastThreshold(0, g.IO.MouseDragThreshold * DRAG_MOUSE_THRESHOLD_FACTOR_UTILL))
 						{
 							g.NavActivateId = id;
 							g.NavActivateFlags = ImGuiActivateFlags_PreferInput;
@@ -584,7 +584,7 @@ namespace application
 
 					// (Optional) simple click (without moving) turns Drag into an InputText
 					if (g.IO.ConfigDragClickToInputText && !temp_input_is_active)
-						if (g.ActiveId == id && hovered && g.IO.MouseReleased[0] && !IsMouseDragPastThreshold(0, g.IO.MouseDragThreshold * DRAG_MOUSE_THRESHOLD_FACTOR))
+						if (g.ActiveId == id && hovered && g.IO.MouseReleased[0] && !IsMouseDragPastThreshold(0, g.IO.MouseDragThreshold * DRAG_MOUSE_THRESHOLD_FACTOR_UTILL))
 						{
 							g.NavActivateId = id;
 							g.NavActivateFlags = ImGuiActivateFlags_PreferInput;

@@ -22,19 +22,19 @@ namespace application
 
 	void TutorialManager::PreMapLoad()
 	{
-		isTutorialMode = false;
+        SetTutorialMode(false);
         tutorialIndex = 0;
 	}
 
 	void TutorialManager::OnGameStart()
 	{
-		isTutorialMode = false;
+        SetTutorialMode(false);
         tutorialIndex = 0;
 	}
 
 	void TutorialManager::OnGameStop()
 	{
-		isTutorialMode = false;
+        SetTutorialMode(false);
         tutorialIndex = 0;
 	}
 
@@ -56,7 +56,7 @@ namespace application
         {
             isTutorialMode = mode;
             AllResume();
-
+            
 
 
             /// Debug

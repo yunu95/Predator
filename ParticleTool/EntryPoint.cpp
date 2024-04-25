@@ -4,7 +4,11 @@
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
 #include "ImGuizmo/ImGuizmo.h"
+#include "imgui_Utility.h"
 #include "TestUtilGraphicsTestCam.h"
+#include "ParticleTool_Manager.h"
+#include "FileSystem.h"
+#include "ParticleToolData.h"
 #include <d3d11.h>
 #include <stdio.h>
 #include <windows.h>
@@ -15,6 +19,8 @@
 #include <locale>
 #include <codecvt>
 #include <filesystem>
+#include <fstream>
+#include <iostream>
 
 bool g_fbxLoad = false;
 bool g_useIBL = true;
@@ -69,13 +75,18 @@ void DrawMenuBar();
 
 void InputUpdate();
 
-std::filesystem::path SaveFileDialog(const char* filter = ".\0*.*\0", const char* initialDir = "");
-std::filesystem::path LoadFileDialog(const char* filter = "All\0*.*\0", const char* initialDir = "");
-std::vector<std::filesystem::path> GetSubdirectories(const std::filesystem::path& directoryPath = "");
+void LoadPP();
+void SavePP();
+void SaveAsPP();
 
-std::filesystem::path currentPath = "";
+void LoadPPIs();
+void SavePPIs();
+void SaveAsPPIs();
 
 bool isRunning = true;
+
+const int bufferSize = 255;
+static char* particleDataNameBuffer = new char[bufferSize];
 
 std::mutex loopTodoRegistrationMutex;
 // AddMainLoopTodo로 등록된 휘발성 콜백 함수들입니다.
@@ -182,6 +193,14 @@ int WINAPI main(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_li
     auto cam = camObj->AddComponent<tests::GraphicsTestCam>();
     camObj->GetTransform()->SetLocalPosition(yunutyEngine::Vector3{ 0,0,-20 });
     cam->SetCameraMain();
+
+    application::fileSystem::SetHWND(g_Toolhwnd);
+
+    /// Contents
+    LoadResourcesRecursively();
+    application::particle::ParticleTool_Manager::GetSingletonInstance().LoadPP("InWanderLand.pp");
+    application::particle::ParticleTool_Manager::GetSingletonInstance().LoadSkinnedFBX();
+    ///
 
     yunutyEngine::YunutyCycle::SingleInstance().Play();
     while (isRunning)
@@ -483,6 +502,8 @@ void ImGuiUpdate()
             ImGui::End();
         }
 
+        application::editor::imgui::RenderMessageBoxes();
+
         ImGui::End();
     }
 
@@ -511,6 +532,8 @@ void DrawMenuBar()
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4());
 
+    static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+
     if (ImGui::BeginMenu("Mode"))
     {
         if (ImGui::MenuItem("Particle Edit Mode", 0, isParticleEditMode))
@@ -538,15 +561,15 @@ void DrawMenuBar()
         {
             if (ImGui::MenuItem("Load"))
             {
-
+                LoadPP();
             }
             if (ImGui::MenuItem("Save As"))
             {
-
+                SaveAsPP();
             }
-            if (ImGui::MenuItem("Save"))
+            if (ImGui::MenuItem("Save", 0, false, !pm.GetCurrentPPPath().empty()))
             {
-
+                SavePP();
             }
 
             ImGui::EndMenu();
@@ -558,15 +581,15 @@ void DrawMenuBar()
         {
             if (ImGui::MenuItem("Load"))
             {
-
+                LoadPPIs();
             }
             if (ImGui::MenuItem("Save As"))
             {
-
+                SaveAsPPIs();
             }
-            if (ImGui::MenuItem("Save"))
+            if (ImGui::MenuItem("Save", 0, false, !pm.GetCurrentPPIsPath().empty()))
             {
-
+                SavePPIs();
             }
 
             ImGui::EndMenu();
@@ -579,10 +602,21 @@ void DrawMenuBar()
         yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(g_useIBL);
     }
 
-    if (!currentPath.empty())
+    if (isParticleEditMode)
     {
-        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(currentPath.string().c_str()).x - 10);
-        ImGui::Text(currentPath.string().c_str());
+        if (!pm.GetCurrentPPPath().empty())
+        {
+            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(pm.GetCurrentPPPath().c_str()).x - 10);
+            ImGui::Text(pm.GetCurrentPPPath().c_str());
+        }
+    }
+    else
+    {
+        if (!pm.GetCurrentPPIsPath().empty())
+        {
+            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(pm.GetCurrentPPIsPath().c_str()).x - 10);
+            ImGui::Text(pm.GetCurrentPPIsPath().c_str());
+        }
     }
 
     ImGui::PopStyleColor();
@@ -591,17 +625,154 @@ void DrawMenuBar()
 
 void ShowParticleList()
 {
+    static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
 
+    if (ImGui::Button("Create Particle", ImVec2(ImGui::GetContentRegionAvail().x, 20)))
+    {
+        memset(particleDataNameBuffer, 0, bufferSize);
+        application::editor::imgui::ShowMessageBox("Create Particle", []()
+            {
+                application::editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+                
+                ImGui::SetNextItemWidth(-1);
+                ImGui::InputTextWithHint("##new_particle_name", "Particle Data Name", particleDataNameBuffer, bufferSize);
+
+                ImGui::Separator();
+
+                if (ImGui::Button("Create"))
+                {
+                    if (*particleDataNameBuffer != '\0')
+                    {
+                        auto particleName = std::string(particleDataNameBuffer);
+                        if (pm.CreateParticle(particleName).lock())
+                        {
+                            memset(particleDataNameBuffer, 0, bufferSize);
+                            ImGui::CloseCurrentPopup();
+                            application::editor::imgui::CloseMessageBox("Create Particle");
+                        }
+                    }
+                }
+                ImGui::SameLine();
+
+                if (ImGui::Button("Cancel"))
+                {
+                    memset(particleDataNameBuffer, 0, bufferSize);
+                    ImGui::CloseCurrentPopup();
+                    application::editor::imgui::CloseMessageBox("Create Particle");
+                }
+            }, 600);
+    }
+
+    auto& pList = pm.GetParticleList();
+    std::vector<std::string> selections = std::vector<std::string>();
+    for (auto& each : pList)
+    {
+        selections.push_back(each.lock()->name);
+    }
+
+    application::editor::imgui::ShiftCursorY(20);
+    application::editor::imgui::draw::Underline();
+    for (int i = 0; i < pList.size(); i++)
+    {
+        if (ImGui::Selectable(selections[i].c_str(), pList[i].lock() == pm.GetSelectedParticleData().lock()))
+        {
+            if (pm.GetSelectedParticleData().lock() == pList[i].lock())
+            {
+                pm.SetSelectedParticleData(std::shared_ptr<application::particle::ParticleToolData>());
+            }
+            else
+            {
+                pm.SetSelectedParticleData(pList[i].lock());
+            }
+        }
+    }
 }
 
 void ShowSkinnedFBXList()
 {
-
+    /// 여기 정리하자!!
 }
 
 void ShowParticleEditor()
 {
+    using namespace application::editor::imgui;
+    
+    static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
 
+    if (!pm.GetSelectedParticleData().expired())
+    {
+        int idx = 0;
+        auto particleData = pm.GetSelectedParticleData().lock();
+        if (BeginSection_2Col(idx, "Particle Data", ImGui::GetContentRegionAvail().x, 0.3))
+        {
+            {
+                std::string particleName = particleData->name;
+                particleName.reserve(32);
+                ImGui::TableNextRow();
+                ImGui::TableSetColumnIndex(0);
+                SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
+                ImGui::AlignTextToFramePadding();
+                ImGui::Text("Name");
+                ImGui::TableSetColumnIndex(1);
+                ImGui::SetNextItemWidth(-1);
+                if (ImGui::InputText("##Particle_Name", &particleName[0], 32))
+                {
+                    int strSize = MultiByteToWideChar(CP_UTF8, 0, particleName.c_str(), -1, nullptr, 0) - 1;
+                    particleName.resize(strSize);
+                    pm.RenameParticleData(particleData, particleName);
+                }
+            }
+
+            static const char* shapeList[2] = { "Cone", "Circle" };
+            int selectedShape = (int)particleData->shape;
+            if (Dropdown_2Col("Shape", shapeList, 2, &selectedShape))
+            {
+                particleData->shape = (application::particle::ParticleShape)selectedShape;
+            }
+
+            static const char* modeList[2] = { "Default", "Bursts" };
+            int selectedMode = (int)particleData->particleMode;
+            if (Dropdown_2Col("Mode", modeList, 2, &selectedMode))
+            {
+                particleData->particleMode = (application::particle::ParticleMode)selectedMode;
+            }
+
+            Checkbox_2Col("Loop", particleData->isLoop);
+            DragFloat_2Col("Life Time", particleData->lifeTime);
+            DragFloat_2Col("Speed", particleData->speed);
+            DragFloat_2Col("Start Scale", particleData->startScale);
+            DragFloat_2Col("End Scale", particleData->endScale);
+
+            int maxParticle = particleData->maxParticle;
+            if (DragInt_2Col("Max Particle", maxParticle, true, 1.f, 1, 500))
+            {
+                particleData->maxParticle = maxParticle;
+            }
+
+            Checkbox_2Col("Play Awake", particleData->playAwake);
+
+            switch (particleData->particleMode)
+            {
+                case application::particle::ParticleMode::Default:
+                {
+                    DragFloat_2Col("Rate OverTime", particleData->rateOverTime);
+                    break;
+                }
+                case application::particle::ParticleMode::Bursts:
+                {
+                    DragInt_2Col("Bursts Count", particleData->burstsCount);
+                    DragFloat_2Col("Interval", particleData->interval);
+                    break;
+                }
+                default:
+                    break;
+            }
+
+            pm.UpdateParticleDataObj(particleData->name);
+
+            EndSection();
+        }
+    }
 }
 
 void ShowSequencerEditor()
@@ -609,119 +780,108 @@ void ShowSequencerEditor()
 
 }
 
-std::filesystem::path SaveFileDialog(const char* filter, const char* initialDir)
-{
-    OPENFILENAMEA ofn;       // common dialog box structure
-    CHAR szFile[260] = { 0 };       // if using TCHAR macros
-
-    // Initialize OPENFILENAME
-    ZeroMemory(&ofn, sizeof(OPENFILENAME));
-    ofn.lStructSize = sizeof(OPENFILENAME);
-    ofn.hwndOwner = g_Toolhwnd;
-    ofn.lpstrFile = szFile;
-    ofn.nMaxFile = sizeof(szFile);
-    ofn.lpstrFilter = filter;
-    ofn.nFilterIndex = 1;
-    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
-
-    if (initialDir != "")
-    {
-        ofn.lpstrInitialDir = initialDir;
-    }
-
-    if (GetSaveFileNameA(&ofn) == TRUE)
-    {
-        std::string fp = ofn.lpstrFile;
-        std::replace(fp.begin(), fp.end(), '\\', '/');
-        return std::filesystem::path(fp);
-    }
-
-    return std::filesystem::path();
-}
-
-std::filesystem::path LoadFileDialog(const char* filter, const char* initialDir)
-{
-    OPENFILENAMEA ofn;       // common dialog box structure
-    CHAR szFile[260] = { 0 };       // if using TCHAR macros
-
-    // Initialize OPENFILENAME
-    ZeroMemory(&ofn, sizeof(OPENFILENAME));
-    ofn.lStructSize = sizeof(OPENFILENAME);
-    ofn.hwndOwner = g_Toolhwnd;
-    ofn.lpstrFile = szFile;
-    ofn.nMaxFile = sizeof(szFile);
-    ofn.lpstrFilter = filter;
-    ofn.nFilterIndex = 1;
-    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
-
-    if (initialDir != "")
-    {
-        ofn.lpstrInitialDir = initialDir;
-    }
-
-    if (GetOpenFileNameA(&ofn) == TRUE)
-    {
-        std::string fp = ofn.lpstrFile;
-        std::replace(fp.begin(), fp.end(), '\\', '/');
-        return std::filesystem::path(fp);
-    }
-
-    return std::filesystem::path();
-}
-
-std::vector<std::filesystem::path> GetSubdirectories(const std::filesystem::path& directoryPath)
-{
-    std::vector<std::filesystem::path> subdirectories;
-    WIN32_FIND_DATAA findData;
-    HANDLE hFind = FindFirstFileA((directoryPath.string() + "\\*").c_str(), &findData);
-    if (hFind != INVALID_HANDLE_VALUE)
-    {
-        do
-        {
-            if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-            {
-                if (strcmp(findData.cFileName, ".") != 0 && strcmp(findData.cFileName, "..") != 0)
-                {
-                    subdirectories.push_back(findData.cFileName);
-                }
-            }
-        } while (FindNextFileA(hFind, &findData));
-        FindClose(hFind);
-    }
-
-    return subdirectories;
-}
-
 void InputUpdate()
 {
+    static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+
     if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
     {
         if (ImGui::IsKeyPressed(ImGuiKey_S, false))
         {
             if (isParticleEditMode)
             {
-                if (!currentPath.empty())
+                if (!pm.GetCurrentPPPath().empty())
                 {
-
+                    SaveAsPP();
                 }
                 else
                 {
-
+                    SavePP();
                 }
             }
             else
             {
-                if (!currentPath.empty())
+                if (!pm.GetCurrentPPIsPath().empty())
                 {
-
+                    SaveAsPPIs();
                 }
                 else
                 {
-
+                    SavePPIs();
                 }
             }
         }
     }
+}
+
+void LoadPP()
+{
+    std::filesystem::path filepath = application::fileSystem::LoadFileDialog("Particle File (*.pp)\0*.pp\0");
+
+    if (filepath.empty())
+        return;
+
+    if (!filepath.has_extension())
+        filepath += ".pp";
+
+    application::particle::ParticleTool_Manager::GetSingletonInstance().LoadPP(filepath.string());
+}
+
+void SavePP()
+{
+    static auto& pm =  application::particle::ParticleTool_Manager::GetSingletonInstance();
+    pm.SavePP(pm.GetCurrentPPPath());
+}
+
+void SaveAsPP()
+{
+    static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+    
+    std::filesystem::path filepath = application::fileSystem::SaveFileDialog("Particle File (*.pp)\0*.pp\0");
+
+    if (filepath.empty())
+        return;
+
+    if (!filepath.has_extension())
+        filepath += ".pp";
+
+    pm.SetCurrentPPPath(filepath.string());
+    pm.SavePP(filepath.string());
+}
+
+void LoadPPIs()
+{
+    std::filesystem::path filepath = application::fileSystem::LoadFileDialog("Particle Instances File (*.ppis)\0*.ppis\0");
+
+    if (filepath.empty())
+        return;
+
+    if (!filepath.has_extension())
+        filepath += ".ppis";
+
+    application::particle::ParticleTool_Manager::GetSingletonInstance().LoadPP(filepath.string());
+}
+
+void SavePPIs()
+{
+    static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+    pm.SavePPIs(pm.GetCurrentPPIsPath());
+}
+
+void SaveAsPPIs()
+{
+    static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+
+    std::filesystem::path filepath = application::fileSystem::SaveFileDialog("Particle Instances File (*.ppis)\0*.ppis\0");
+
+    if (filepath.empty())
+        return;
+
+    if (!filepath.has_extension())
+        filepath += ".ppis";
+
+    pm.SetCurrentPPIsPath(filepath.string());
+    pm.SavePPIs(filepath.string());
 }
 
 void LoadResourcesRecursively()
@@ -758,7 +918,7 @@ void LoadResourcesRecursively()
 
         // FBX 로드하기
         {
-            auto directorList = GetSubdirectories("FBX");
+            auto directorList = application::fileSystem::GetSubdirectories("FBX");
             for (auto each : directorList)
             {
                 resourceManager->LoadFile(("FBX/" + each.string()).c_str());
