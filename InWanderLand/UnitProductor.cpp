@@ -81,8 +81,8 @@ void UnitProductor::SetUnitComponentMembers()
 			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.eliteMeleeEnemySkillTimingFrame;
 			break;
 		case Unit::UnitType::RangedEnemy:
-			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.eliteRangedEnemySkillDelay;
-			m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.eliteRangedEnemySkillTimingFrame;
+			m_skillTwoEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.eliteRangedEnemySkillDelay;
+			m_skillTwoTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.eliteRangedEnemySkillTimingFrame;
 			break;
 		case Unit::UnitType::Boss:
 			m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.bossSkillOneDelay;
@@ -117,9 +117,9 @@ void UnitProductor::SetUnitComponentMembers()
 	if (m_unitComponent->GetUnitSide() == Unit::UnitSide::Player)
 	{
 		m_unitComponent->RegisterSkillDuration(Unit::SkillEnum::Q, m_skillOneEngageDelay);
-		m_unitComponent->RegisterSkillDuration(Unit::SkillEnum::E, m_skillTwoEngageDelay);
+		m_unitComponent->RegisterSkillDuration(Unit::SkillEnum::W, m_skillTwoEngageDelay);
 		m_unitComponent->RegisterSkillTimingFrame(Unit::SkillEnum::Q, m_skillOneTimingFrame);
-		m_unitComponent->RegisterSkillTimingFrame(Unit::SkillEnum::E, m_skillTwoTimingFrame);
+		m_unitComponent->RegisterSkillTimingFrame(Unit::SkillEnum::W, m_skillTwoTimingFrame);
 	}
 	else if (m_unitComponent->GetUnitSide() == Unit::UnitSide::Enemy)
 	{
@@ -152,7 +152,7 @@ void UnitProductor::AddRangeSystemComponent() const
 void UnitProductor::AddColliderComponent() const 
 {
 	auto unitCollider = m_unitGameObject->AddComponent<physics::SphereCollider>();	// 빈 껍데기에 
-	unitCollider->SetRadius(UNIT_LENGTH);
+	unitCollider->SetRadius(UNIT_LENGTH * 0.5f);
 	//m_unitGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 }
 
@@ -170,6 +170,22 @@ void UnitProductor::AddDotweenComponent() const
 	/// 6. Dotween 추가
 	m_unitComponent->dotween = m_unitGameObject->AddComponent<Dotween>();
 	m_unitComponent->knockBackTimer = m_unitGameObject->AddComponent<Timer>();
+}
+
+void UnitProductor::SetUnitAnimationFunction()
+{
+	if (m_unitComponent->GetUnitSide() == Unit::UnitSide::Player)
+	{
+		m_unitComponent->RegisterSkillWithAnimation(Unit::SkillEnum::Q);
+		m_unitComponent->RegisterSkillWithAnimation(Unit::SkillEnum::W);
+	}
+	else if (m_unitComponent->GetUnitSide() == Unit::UnitSide::Enemy)
+	{
+		m_unitComponent->RegisterSkillWithAnimation(Unit::SkillEnum::BossSkillOne);
+		m_unitComponent->RegisterSkillWithAnimation(Unit::SkillEnum::BossSkillTwo);
+		m_unitComponent->RegisterSkillWithAnimation(Unit::SkillEnum::BossSkillThree);
+		m_unitComponent->RegisterSkillWithAnimation(Unit::SkillEnum::BossSkillFour);
+	}
 }
 
 std::string UnitProductor::GetUnitFBXName() const
@@ -190,6 +206,8 @@ void UnitProductor::SetPlayerRelatedComponents()
 
 	float qCoolTimeTemp;
 	float eCoolTimeTemp;
+
+	m_unitComponent->SetRessurectMaxCount(application::GlobalConstant::GetSingletonInstance().pod.maxResurrectCount);
 
 	switch (m_unitComponent->GetUnitType())
 	{

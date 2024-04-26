@@ -21,7 +21,9 @@ void RangedAttackSystem::Attack(Unit* opponentUnit, float offset)
 		}
 		case Unit::UnitType::RangedEnemy:
 		{
-			EnemyAutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
+			EnemyAutoAttackProjectile* projectile = EnemyAutoAttackProjectilePool::SingleInstance().Borrow();
+			projectile->SetStraightBulletRange(m_range);
+			projectile->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
 			break;
 		}
 		default:
@@ -40,6 +42,11 @@ void RangedAttackSystem::SetOwnerUnit(Unit* p_unit)
 void RangedAttackSystem::SetBulletSpeed(float speed)
 {
 	m_bulletSpeed = speed;
+}
+
+void RangedAttackSystem::SetRange(float p_rng)
+{
+	m_range = p_rng;
 }
 
 void RangedAttackSystem::Start()

@@ -15,6 +15,7 @@
 #include "TacticModeSystem.h"
 #include "GameManager.h"
 #include "PlayTimeRegionManager.h"
+#include "CursorDetector.h"
 
 namespace application
 {
@@ -148,6 +149,15 @@ namespace application
 			auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 			mouseCursorMesh->GetGI().SetMesh(sphereMesh);
 			mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
+
+			auto mouseCursorColliderComponent = mouseCursorObject->AddComponent<physics::SphereCollider>();
+			mouseCursorColliderComponent->SetRadius(UNIT_LENGTH * 0.5f);
+			mouseCursorObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+
+			auto cursorDetectorComponent = mouseCursorObject->AddComponent<CursorDetector>();
+
+			PlayerController::SingleInstance().m_cursorDetector = cursorDetectorComponent;
+			TacticModeSystem::SingleInstance().m_cursorDetector = cursorDetectorComponent;
 
 			camComp->groundHoveringClickCallback = [=](Vector3d pos)
 			{

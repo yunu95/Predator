@@ -4,22 +4,34 @@
 #include "RTSCam.h"
 #include "PlayerController.h"
 #include "SkillPreviewSystem.h"
+#include "CursorDetector.h"
 
 TacticModeSystem::TacticModeSystem()
 {
 }
 
-void TacticModeSystem::SetLeftClickAddQueueForMove(InputManager::SelectedSerialNumber currentSelectedNum)
+void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum)
 {
+    if (currentSelectedNum == 0)
+        currentSelectedNum = InputManager::One;
+
 	currentSelectedUnit = playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second;
 	if (tacticModeGauge > 0)
 	{
-		m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
+		m_rtsCam->groundRightClickCallback = [=](Vector3d pos)
 			{
-				currentSelectedUnit->PushMoveFunctionToTacticQueue(pos);
+				if (m_cursorDetector->GetCurrentOnMouseUnit() == nullptr)
+				{
+					currentSelectedUnit->PushMoveFunctionToTacticQueue(pos);
+				}
+				else if (Unit* selectedUnit = m_cursorDetector->GetCurrentOnMouseUnit();
+                    selectedUnit->GetUnitSide() == Unit::UnitSide::Enemy)
+				{
+					currentSelectedUnit->PushAttackMoveFunctionToTacticQueue(pos, selectedUnit);
+				}
 				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-				m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
-				tacticModeGauge--;
+				//m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
+				//tacticModeGauge--;
 			};
 	}
 }
@@ -33,9 +45,9 @@ void TacticModeSystem::SetLeftClickAddQueueForAttackMove(InputManager::SelectedS
 			{
 				currentSelectedUnit->PushAttackMoveFunctionToTacticQueue(pos);
 				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-				m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
-                tacticModeGauge--;
-				SetLeftClickAddQueueForMove(currentSelectedNum);
+				//m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
+                //tacticModeGauge--;
+				SetTacticModeRightClickFunction(currentSelectedNum);
 			};
     }
 }
@@ -46,6 +58,7 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
 
     if (tacticModeGauge > 0)
     {
+        SkillPreviewSystem::Instance().SetCurrentSelectedPlayerUnit(currentSelectedUnit);
 		SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(currentSelectedSkill));
 		SkillPreviewSystem::Instance().SetCurrentSelectedSkillNum(currentSelectedSkill);
 		SkillPreviewSystem::Instance().ActivateSkillPreview(true);
@@ -54,9 +67,9 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
 			{
 				currentSelectedUnit->PushSkillFunctionToTacticQueue(currentSelectedSkill, pos);
 				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-				m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
-                tacticModeGauge--;
-				SetLeftClickAddQueueForMove(currentSelectedNum);
+				//m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
+                //tacticModeGauge--;
+				SetTacticModeRightClickFunction(currentSelectedNum);
             };
     }
 }

@@ -1291,6 +1291,9 @@
     <ClInclude Include="ParticleEditorInstance.h">
       <Filter>Editor\Palette\EditorInstance\ParticleInstance</Filter>
     </ClInclude>
+    <ClInclude Include="CursorDetector.h">
+      <Filter>Contents\AttackSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1965,6 +1968,9 @@
     </ClCompile>
     <ClCompile Include="ParticleEditorInstance.cpp">
       <Filter>Editor\Palette\EditorInstance\ParticleInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="CursorDetector.cpp">
+      <Filter>Contents\AttackSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

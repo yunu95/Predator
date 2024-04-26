@@ -14,6 +14,7 @@
 /// </summary>
 
 class RTSCam;
+class CursorDetector;
 
 class TacticModeSystem : public GHContents::LazySingletonClass<TacticModeSystem>
 {
@@ -28,7 +29,7 @@ public:
 		WSkill
 	};
 
-	void SetLeftClickAddQueueForMove(InputManager::SelectedSerialNumber currentSelectedNum);
+	void SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum);
 	void SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum);
 	void SetLeftClickAddQueueForSkill(InputManager::SelectedSerialNumber currentSelectedNum, Unit::SkillEnum currentSelectedSkill);
 	/// Tutorial 관련 멤버
@@ -41,8 +42,10 @@ public:
 
 	bool isTacticModeOperating;
 
+	CursorDetector* m_cursorDetector;
+
 private:
-	int tacticModeGauge{ 10 };
+	int tacticModeGauge{ 1000 };
 	RTSCam* m_rtsCam;
 
 	Unit::UnitType m_currentSelectedPlayerNumber;

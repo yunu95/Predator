@@ -64,6 +64,9 @@ Unit* BishopTrapProductor::CreateUnit(Vector3d startPos)
 	auto colliderObjectTwo = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	colliderObjectTwo->AddComponent<physics::BoxCollider>();
 
+	colliderObjectOne->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+	colliderObjectTwo->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+
 	auto damageComponentOne = colliderObjectOne->AddComponent<DamageOnlyComponent>();
 	damageComponentOne->SetSkillOwnerUnit(m_unitComponent);
 	damageComponentOne->SetSkillDamage(2.0f);
@@ -130,10 +133,11 @@ Unit* BishopTrapProductor::CreateUnit(Vector3d startPos)
 		{
 			each->SetLoop(false);
 			animator->PushAnimation(each);
+			m_baseUnitAnimations.m_skillOneAnimation = each;
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillOne, each);
 		}
 	}
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
-
+	SetUnitAnimationFunction();
 	return m_unitComponent;
 }

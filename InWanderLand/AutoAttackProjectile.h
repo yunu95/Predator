@@ -16,15 +16,24 @@ protected:
 	Unit* m_opponentUnit;
 	Unit* m_ownerUnit;
 
+	float m_range;
 	bool isShootOperating = false;
+
+	Vector3d m_ownerUnitFront;
+
+	std::vector<Unit*> m_playerUnitVector;
 
 public:
 	void SetOwnerType(Unit::UnitType type);
 	virtual void Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed, float offset);
 
+	void SetStraightBulletRange(float p_rng);
+
 private:
-	void ShootUpdateFunction();
+	void AutoChaseShootingFunction();
+	void StraightShootingFunction();
 	void RotateBulletPerFrame();
+	void ProcessBulletHit(Unit* p_damagedUnit);
 
 public:
 	virtual void Start() override;

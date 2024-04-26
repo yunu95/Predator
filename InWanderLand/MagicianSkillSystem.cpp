@@ -48,7 +48,7 @@ void MagicianSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 
 	SetSkillRequirmentsActive(WSkillProjectile, true);
 
-	skillPos = CheckSkillRange(skillPos, Unit::SkillEnum::E);
+	skillPos = CheckSkillRange(skillPos, Unit::SkillEnum::W);
 	WSkillFieldDamage.colliderObject->GetTransform()->SetWorldPosition(skillPos);			// 오브젝트만 움직여도 collider와 debug는 따라올 것이다.
 
 	float tempDistance = (skillPos - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
