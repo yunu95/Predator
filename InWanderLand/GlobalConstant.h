@@ -16,50 +16,52 @@ namespace application
 		GC<int> gravitySpeed = 10;
 		GC<int> magicPower = 40;
 
-		GC<float>	playerOneQSkillDelay;
-		GC<int>		playerOneQSkillTimingFrame;
-		GC<float>	playerOneWSkillDelay;
-		GC<int>		playerOneWSkillTimingFrame;
+		GC<float>	playerOneQSkillDelay = 2.0f;
+		GC<int>		playerOneQSkillTimingFrame = 21;
+		GC<float>	playerOneWSkillDelay = 2.0f;
+		GC<int>		playerOneWSkillTimingFrame = 21;
 
-		GC<float>	playerTwoQSkillDelay;
-		GC<int>		playerTwoQSkillTimingFrame;
-		GC<float>	playerTwoWSkillDelay;
-		GC<int>		playerTwoWSkillTimingFrame;
+		GC<float>	playerTwoQSkillDelay = 2.0f;
+		GC<int>		playerTwoQSkillTimingFrame = 21;
+		GC<float>	playerTwoWSkillDelay = 2.0f;
+		GC<int>		playerTwoWSkillTimingFrame = 21;
 
-		GC<float>	playerThreeQSkillDelay;
-		GC<int>		playerThreeQSkillTimingFrame;
-		GC<float>	playerThreeWSkillDelay;
-		GC<int>		playerThreeWSkillTimingFrame;
+		GC<float>	playerThreeQSkillDelay = 2.0f;
+		GC<int>		playerThreeQSkillTimingFrame = 21;
+		GC<float>	playerThreeWSkillDelay = 2.0f;
+		GC<int>		playerThreeWSkillTimingFrame = 21;
 
-		GC<float>	eliteMeleeEnemySkillDelay;
-		GC<int>		eliteMeleeEnemySkillTimingFrame;
-		GC<float>	eliteRangedEnemySkillDelay;
-		GC<int>		eliteRangedEnemySkillTimingFrame;
+		GC<float>	eliteMeleeEnemySkillDelay = 1.0f;
+		GC<int>		eliteMeleeEnemySkillTimingFrame = 21;
+		GC<float>	eliteRangedEnemySkillDelay = 1.0f;
+		GC<int>		eliteRangedEnemySkillTimingFrame = 21;
 
-		GC<float>	bossSkillOneDelay;
-		GC<int>		bossSkillOneTimingFrame;
-		GC<float>	bossSkillTwoDelay;
-		GC<int>		bossSkillTwoTimingFrame;
-		GC<float>	bossSkillThreeDelay;
-		GC<int>		bossSkillThreeTimingFrame;
-		GC<float>	bossSkillFourDelay;
-		GC<int>		bossSkillFourTimingFrame;
+		GC<float>	bossSkillOneDelay = 3.0f;
+		GC<int>		bossSkillOneTimingFrame = 15;
+		GC<float>	bossSkillTwoDelay = 3.0f;
+		GC<int>		bossSkillTwoTimingFrame = 15;
+		GC<float>	bossSkillThreeDelay = 3.0f;
+		GC<int>		bossSkillThreeTimingFrame = 15;
+		GC<float>	bossSkillFourDelay = 3.0f;
+		GC<int>		bossSkillFourTimingFrame = 15;
 
-		GC<float>	spikeTrapSkillDelay;
-		GC<int>		spikeTrapSkillTimingFrame;
-		GC<float>	chessTrapSkillDelay;
-		GC<int>		chessTrapSkillTimingFrame;
+		GC<float>	spikeTrapSkillDelay = 3.0f;
+		GC<int>		spikeTrapSkillTimingFrame = 15;
+		GC<float>	chessTrapSkillDelay = 2.0f;
+		GC<int>		chessTrapSkillTimingFrame = 10;
 		GC<float>	triggeredTrapSkillDelay;
 		GC<int>		triggeredTrapSkillTimingFrame;
 
-		GC<float>	robinQSkillCoolTime;
-		GC<float>	robinESkillCoolTime;
+		GC<float>	robinQSkillCoolTime = 2.0f;
+		GC<float>	robinESkillCoolTime = 2.0f;
 
-		GC<float>	ursulaQSkillCoolTime;
-		GC<float>	ursulaESkillCoolTime;
+		GC<float>	ursulaQSkillCoolTime = 2.0f;
+		GC<float>	ursulaESkillCoolTime = 2.0f;
+		
+		GC<float>	hanselQSkillCoolTime = 2.0f;
+		GC<float>	hanselESkillCoolTime = 2.0f;
 
-		GC<float>	hanselQSkillCoolTime;
-		GC<float>	hanselESkillCoolTime;
+		GC<int>	maxResurrectCount;
 
 		TO_JSON(POD_GlobalConstant)
 		FROM_JSON(POD_GlobalConstant)

@@ -4,11 +4,14 @@
 
 void DamageOnlyComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 {
-	opponentUnit->Damaged(ownerUnit, ownerUnit->DetermineAttackDamage(m_skillDamage));
-
-	auto debuggingMesh = DebuggingMeshPool::SingleInstance().Borrow();
-	debuggingMesh->SetUnitObject(opponentUnit);
-	debuggingMesh->PopMeshUP(yunuGI::Color::green(), MaterialNum::Green);
+	if (ownerUnit->GetUnitType() == Unit::UnitType::ChessTrap || ownerUnit->GetUnitType() == Unit::UnitType::SpikeTrap)
+	{
+		opponentUnit->Damaged(m_skillDamage);
+	}
+	else
+	{
+		opponentUnit->Damaged(ownerUnit, ownerUnit->DetermineAttackDamage(m_skillDamage));
+	}
 }
 
 void DamageOnlyComponent::SetSkillDamage(float dmg)

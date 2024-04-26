@@ -4,12 +4,19 @@ void SpikeSkillSystem::Start()
 {
 	SetSkillRequirmentsActive(m_spikeDamageRequirement, false);
 	SetOtherComponentsAsMember();
+	m_skillUsageDuration = 5.0f;
 	//m_unitComponent->m_currentSelectedSkill
 }
 
 void SpikeSkillSystem::Update()
 {
+	m_elapsed += Time::GetDeltaTime();
 
+	if (m_elapsed >= m_skillUsageDuration)
+	{
+		m_unitComponent->SetUnitStateToSkill();
+		m_elapsed = 0.0f;
+	}
 }
 
 void SpikeSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition)

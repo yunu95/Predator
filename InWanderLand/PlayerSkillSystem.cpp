@@ -11,7 +11,7 @@ void PlayerSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p
 		case Unit::SkillEnum::Q:
 			ActivateSkillOne(p_skillPosition);
 			break;
-		case Unit::SkillEnum::E:
+		case Unit::SkillEnum::W:
 			ActivateSkillTwo(p_skillPosition);
 			break;
 		//case Unit::SkillEnum::BossSkillOne:
@@ -102,7 +102,7 @@ Vector3d PlayerSkillSystem::CheckSkillRange(Vector3d p_skillPos, Unit::SkillEnum
 		case Unit::SkillEnum::Q:
 			tempRng = m_skillOneRange;
 			break;
-		case Unit::SkillEnum::E:
+		case Unit::SkillEnum::W:
 			tempRng = m_skillTwoRange;
 			break;
 	}
@@ -153,7 +153,7 @@ bool PlayerSkillSystem::IsSkillCoolingDown(Unit::SkillEnum p_skillnum) const
 		case Unit::SkillEnum::Q:
 			return isQSkillReady;
 			break;
-		case Unit::SkillEnum::E:
+		case Unit::SkillEnum::W:
 			return isESkillReady;
 			break;
 		default:

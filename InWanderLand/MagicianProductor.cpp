@@ -139,7 +139,7 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 	UnitProductor::SetPlayerRelatedComponents();
 
 	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::Q, skillOneRange);
-	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::E, skillTwoRange);
+	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::W, skillTwoRange);
 
 	auto skinnedMeshRenderer = m_unitGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
 	auto material = skinnedMeshRenderer->GetGI().GetMaterial();
@@ -187,13 +187,15 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 		{
 			each->SetLoop(false);
 			animator->PushAnimation(each);
+			m_baseUnitAnimations.m_skillOneAnimation = each;
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::Q, each);
 		}
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
 		{
-			each->SetLoop(false);
+			each->SetLoop(true);
 			animator->PushAnimation(each);
-			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::E, each);
+			m_baseUnitAnimations.m_skillTwoAnimation = each;
+			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::W, each);
 		}
 		/*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
 		{
@@ -201,8 +203,7 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 			m_baseUnitAnimations.m_battleEngageAnimation->SetLoop(false);
 		}
 	}
-
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
-
+	SetUnitAnimationFunction();
 	return m_unitComponent;
 }

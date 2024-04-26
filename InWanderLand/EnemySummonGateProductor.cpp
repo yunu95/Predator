@@ -101,10 +101,12 @@ Unit* EnemySummonGateProductor::CreateUnit(Vector3d startPos)
 		{
 			each->SetLoop(false);
 			animator->PushAnimation(each);
+			m_baseUnitAnimations.m_skillOneAnimation = each;
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillOne, each);
 		}
 	}
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
+	SetUnitAnimationFunction();
 
 	return m_unitComponent;
 }

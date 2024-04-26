@@ -11,6 +11,7 @@ namespace application
 	}
 }
 
+
 static float constexpr UNIT_LENGTH = 2.0f;
 
 /// <summary>
@@ -83,6 +84,7 @@ public:
 	void AddColliderComponent() const;
 	void AddNavigationComponent();
 	void AddDotweenComponent() const;
+	void SetUnitAnimationFunction();
 
 	virtual bool SelectUnitProductorByFbxName(std::string p_name);
 

@@ -42,7 +42,7 @@ public:
 	bool isTacticModeOperating;
 
 private:
-	int tacticModeGauge{ 10 };
+	int tacticModeGauge{ 1000 };
 	RTSCam* m_rtsCam;
 
 	Unit::UnitType m_currentSelectedPlayerNumber;

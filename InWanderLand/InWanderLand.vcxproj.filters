@@ -1300,6 +1300,9 @@
     <ClInclude Include="PulsingUI.h">
       <Filter>UI\Effect\PulsingUI</Filter>
     </ClInclude>
+    <ClInclude Include="CursorDetector.h">
+      <Filter>Contents\AttackSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1986,6 +1989,9 @@
     </ClCompile>
     <ClCompile Include="UIOffsetTransition.cpp">
       <Filter>UI\Effect\OffsetTransition</Filter>
+    </ClCompile>
+    <ClCompile Include="CursorDetector.cpp">
+      <Filter>Contents\AttackSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

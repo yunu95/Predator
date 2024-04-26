@@ -12,6 +12,8 @@
 #include "GameManager.h"
 #include "BurnEffect.h"
 #include "Timer.h"
+#include "CursorDetector.h"
+#include "DebuggingMeshPool.h"
 
 void Unit::OnEnable()
 {
@@ -37,11 +39,10 @@ void Unit::Start()
     //unitAnimations.m_attackAnimation->ClearEvent();
     //GetTransform()->SetWorldPosition(startPosition);
 
-    dotween = GetGameObject()->GetComponent<Dotween>();
-    m_skillSystemComponent = GetGameObject()->GetComponent<SkillSystem>();
-    m_burnEffect = GetGameObject()->GetComponent<BurnEffect>();
-    //m_navAgentComponent = GetGameObject()->GetComponent<NavigationAgent>();
-    m_animatorComponent = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
+	dotween = GetGameObject()->GetComponent<Dotween>();
+	m_skillSystemComponent = GetGameObject()->GetComponent<SkillSystem>();
+	m_burnEffect = GetGameObject()->GetComponent<BurnEffect>();
+	m_animatorComponent = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
 
     //returnToPoolFunction = []() {};
     unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Move,
@@ -179,29 +180,20 @@ void Unit::Start()
     {
         AttackSystem* atkSys = GetGameObject()->GetComponent<AttackSystem>();
 
-        m_animatorComponent->PushAnimation(unitAnimations.m_attackAnimation, attackTimingFrame, [=]()
-            {
-                if (m_currentTargetUnit != nullptr)
-                {
-                    atkSys->Attack(m_currentTargetUnit, m_attackOffset);
-                }
-                isAttackAnimationOperating = false;
-                m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
-            });
-    }
+		m_animatorComponent->PushAnimation(unitAnimations.m_attackAnimation, attackTimingFrame, [=]()
+			{
+				if (m_currentTargetUnit != nullptr && currentOrder == UnitState::Attack)
+				{
+					atkSys->Attack(m_currentTargetUnit, m_attackOffset);
+				}
+				isAttackAnimationOperating = false;
+				m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
+			});
+	}
 
 	if (m_unitSide == UnitSide::Player)
 	{
 		m_playerSkillSystem = GetGameObject()->GetComponent<PlayerSkillSystem>();
-	}
-
-	SkillSystem* skillsys = GetGameObject()->GetComponent<SkillSystem>();
-	for (auto e : m_skillAnimationMap)
-	{
-		m_animatorComponent->PushAnimation(e.second, m_skillTimingFrameMap.find(e.first)->second, [=]()
-			{
-				skillsys->ActivateSkill(e.first, m_currentSkillPosition);
-			});
 	}
 
     m_animatorComponent->Play(unitAnimations.m_idleAnimation);
@@ -352,26 +344,45 @@ void Unit::ChaseEngage()
 
     m_animatorComponent->ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
 }
+		int tempRand = rand() % 3 + 1;
 
-void Unit::SkillEngage()
-{
-    currentOrder = UnitState::Skill;
-    m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
-    skillFunctionStartElapsed = 0.0f;
+		if (m_unitType == UnitType::Boss)
+		{
+			auto temp = GetGameObject()->GetComponent<BossSkillSystem>();
+			temp->SelectSkillRandomly();
+			m_currentSelectedSkill = temp->GetCurrentSelectedSkillNumber();
+			if (m_currentTargetUnit != nullptr)
+				m_currentSkillPosition = m_currentTargetUnit->GetTransform()->GetWorldPosition();
+			else
+				m_currentSkillPosition = PlayerController::SingleInstance().GetPlayerMap().find(static_cast<UnitType>(tempRand))->second->GetTransform()->GetWorldPosition();
+		}
+		else if (m_unitType == UnitType::SpikeTrap || m_unitType == UnitType::ChessTrap)
+		{
+			m_currentSelectedSkill = SkillEnum::BossSkillOne;
+		}
+		else if (m_unitType == UnitType::MeleeEnemy)
+		{
+			m_currentSelectedSkill = SkillEnum::BossSkillOne;
+			if (m_currentTargetUnit != nullptr)
+				m_currentSkillPosition = m_currentTargetUnit->GetTransform()->GetWorldPosition();
+			else
+				m_currentSkillPosition = PlayerController::SingleInstance().GetPlayerMap().find(static_cast<UnitType>(tempRand))->second->GetTransform()->GetWorldPosition();
+		}
+		else if (m_unitType == UnitType::RangedEnemy)
+		{
+			m_currentSelectedSkill = SkillEnum::BossSkillTwo;
+			if (m_currentTargetUnit != nullptr)
+				m_currentSkillPosition = m_currentTargetUnit->GetTransform()->GetWorldPosition();
+			else
+				m_currentSkillPosition = PlayerController::SingleInstance().GetPlayerMap().find(static_cast<UnitType>(tempRand))->second->GetTransform()->GetWorldPosition();
+		}
 
-    if (m_unitType != UnitType::SpikeTrap && m_unitType != UnitType::ChessTrap)
-        dotween->DOLookAt(m_currentSkillPosition, rotateTime, false);
+		if (m_unitType != UnitType::SpikeTrap && m_unitType != UnitType::ChessTrap)
+			dotween->DOLookAt(m_currentSkillPosition, rotateTime, false);
 
-    if (m_unitType == UnitType::Boss)
-    {
-        auto temp = GetGameObject()->GetComponent<BossSkillSystem>();
-        temp->SelectSkillRandomly();
-        m_currentSelectedSkill = temp->GetCurrentSelectedSkillNumber();
-    }
-    else if (m_unitType == UnitType::SpikeTrap || m_unitType == UnitType::ChessTrap)
-    {
-        m_currentSelectedSkill = SkillEnum::BossSkillOne;
-    }
+		m_currentSelectedSkillEngageDelay = m_skillDurationMap.find(m_currentSelectedSkill)->second;
+		m_currentSkillAnimation = m_skillAnimationMap.find(m_currentSelectedSkill)->second;
+		m_selectedSkillTimingFrame = m_skillTimingFrameMap.find(m_currentSelectedSkill)->second;
 
     m_currentSelectedSkillEngageDelay = m_skillDurationMap.find(m_currentSelectedSkill)->second;
     m_currentSkillAnimation = m_skillAnimationMap.find(m_currentSelectedSkill)->second;
@@ -399,6 +410,9 @@ void Unit::DeathEngage()
 
     //m_animatorComponent->ChangeAnimation(unitAnimations.m_deathAnimation, animationLerpDuration, animationTransitionSpeed);
     m_opponentObjectSet.clear();
+
+		//if (m_cursorDetectorComponent)
+		//	m_cursorDetectorComponent->EraseUnitFromContainer(this);
 
 		if (m_unitSide == UnitSide::Enemy)
 		{
@@ -430,14 +444,16 @@ void Unit::DeathEngage()
     StopMove();
 }
 
-void Unit::WaveStartEngage()
-{
-    currentOrder = UnitState::WaveStart;
-    moveFunctionElapsed = 0.0f;
-    m_animatorComponent->ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
+		//dotween->DOLookAt(m_waveStartPosition, rotateTime, false);
 
-    m_navAgentComponent->MoveTo(m_waveStartPosition);
-
+		//m_navAgentComponent->SetActive(false);
+		//dotween->DOMove(m_currentMovePosition, 1.0f).OnComplete([this]()
+		//	{
+		//		m_navAgentComponent->SetActive(true);
+		//		m_navAgentComponent->AssignToNavigationField(m_unitNavField);
+		//		m_navAgentComponent->Relocate(m_currentMovePosition);
+		//		GameManager::Instance().ReportWaveStartStateEnd(this);
+		//	});
     //m_navAgentComponent->SetActive(false);
     //dotween->DOMove(m_currentMovePosition, 1.0f).OnComplete([this]()
     //	{
@@ -447,6 +463,15 @@ void Unit::WaveStartEngage()
     //		GameManager::Instance().ReportWaveStartStateEnd(this);
     //	});
 
+	void Unit::WaveMotionEngage()
+	{
+		currentOrder = UnitState::WaveMotion;
+
+		m_animatorComponent->ChangeAnimation(unitAnimations.m_battleEngageAnimation, animationLerpDuration, animationTransitionSpeed);
+
+		/*	if (m_unitType != UnitType::Warrior)
+				dotween->DOLookAt(m_currentBelongingWavePosition, rotateTime, false);*/
+	}
 
 }
 
@@ -604,22 +629,37 @@ void Unit::ChaseUpdate()
 
         dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
 
-        m_navAgentComponent->MoveTo(m_currentTargetUnit->GetTransform()->GetWorldPosition());
-    }
-}
-
+	void Unit::DeathUpdate()
+	{
 void Unit::DeathUpdate()
 {
     //CheckCurrentAnimation(unitAnimations.m_deathAnimation);
 
     deathFunctionElapsed += Time::GetDeltaTime();
+		if (m_burnEffect->IsDone() && m_unitSide == UnitSide::Enemy)
+		{
+			for (auto each : OnDeath)
+			{
+				each();
+			}
 
-    if (m_burnEffect->IsDone() && m_unitSide == UnitSide::Enemy)
-    {
-        for (auto each : OnDeath)
-        {
-            each();
-        }
+			if (returnToPoolFunction != nullptr)
+			{
+				returnToPoolFunction();
+			}
+			deathFunctionElapsed = 0.0f;
+			GetGameObject()->SetSelfActive(false);
+		}
+		else if (m_unitSide == UnitSide::Player)
+		{
+			/// Player일 경우
+			if (deathFunctionElapsed >= deathAnimationDelay)
+			{
+				m_animatorComponent->ChangeAnimation(unitAnimations.m_deathAnimation, animationLerpDuration, animationTransitionSpeed);
+				GetGameObject()->SetSelfActive(false);
+			}
+		}
+	}
 
         if (returnToPoolFunction != nullptr)
         {
@@ -633,7 +673,6 @@ void Unit::DeathUpdate()
         //GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(1000, 1000, 1000));
     }
 }
-
 void Unit::WaveStartUpdate()
 {
     moveFunctionElapsed += Time::GetDeltaTime();
@@ -647,9 +686,14 @@ void Unit::WaveStartUpdate()
     }
 }
 
-void Unit::WaveMotionUpdate()
-{
-    m_battleEngageMotionElapsed += Time::GetDeltaTime();
+		float temp = unitAnimations.m_battleEngageAnimation->GetDuration();
+		if (m_battleEngageMotionElapsed >= unitAnimations.m_battleEngageAnimation->GetDuration() + rotateTime)
+		{
+			m_battleEngageMotionElapsed = 0.0f;
+			GameManager::Instance().ReportWaveMotionEnd(this);
+			currentOrder = UnitState::Idle;
+		}
+	}
 
     float temp = unitAnimations.m_battleEngageAnimation->GetDuration();
     if (m_battleEngageMotionElapsed >= unitAnimations.m_battleEngageAnimation->GetDuration() + 1.0f)
@@ -660,9 +704,14 @@ void Unit::WaveMotionUpdate()
     }
 }
 
-void Unit::ResurrectUpdate()
-{
-    deathFunctionElapsed += Time::GetDeltaTime();
+		if (deathFunctionElapsed >= m_resurrectingDuration)
+		{
+			currentOrder = UnitState::Idle;
+			GetGameObject()->GetComponent<physics::Collider>()->SetActive(true);
+			m_currentHealthPoint = m_maxHealthPoint;
+			ChangeUnitStatRandomly();
+		}
+	}
 
     if (deathFunctionElapsed >= m_resurrectingDuration)
     {
@@ -745,17 +794,17 @@ Unit::UnitState Unit::GetCurrentUnitState() const
 
 SkillPreviewMesh Unit::GetSkillPreviewType(SkillEnum p_currentSkillType) const
 {
-    switch (p_currentSkillType)
-    {
-    case Unit::SkillEnum::Q:
-        return m_qSkillPreviewType;
-        break;
-    case Unit::SkillEnum::E:
-        return m_wSkillPreviewType;
-        break;
-    default:
-        break;
-    }
+	switch (p_currentSkillType)
+	{
+		case Unit::SkillEnum::Q:
+			return m_qSkillPreviewType;
+			break;
+		case Unit::SkillEnum::W:
+			return m_wSkillPreviewType;
+			break;
+		default:
+			break;
+	}
 }
 
 std::string Unit::GetUnitFbxName() const
@@ -785,13 +834,18 @@ int Unit::GetUnitDamage() const
 
 void Unit::Damaged(Unit* opponentUnit, float opponentDmg)
 {
-    AddToOpponentObjectList(opponentUnit);
-    DetermineHitDamage(opponentDmg);
-    SetCurrentHP(m_currentHealthPoint - m_finalHitDamage);
-    std::cout << this->GetUnitFbxName() << "Is Damaged By " << opponentUnit->GetUnitFbxName() << " Damage : " << m_finalHitDamage << std::endl;
-    if (m_currentHealthPoint <= 0)
-        m_currentResurrectingCount++;
-    // ui로 표시되는, 혹은 최종 남은 체력은 반올림할 것인가 혹은 내림할 것인가는 아래에 구현.
+	AddToOpponentObjectList(opponentUnit);
+	DetermineHitDamage(opponentDmg);
+	m_currentHealthPoint -= m_finalHitDamage;
+	std::cout << this->GetUnitFbxName() << "Is Damaged By " << opponentUnit->GetUnitFbxName() << " Damage : " << m_finalHitDamage << std::endl;
+	if (m_currentHealthPoint <= 0)
+		m_currentResurrectingCount++;
+
+	auto debuggingMesh = DebuggingMeshPool::SingleInstance().Borrow();
+	debuggingMesh->SetUnitObject(this);
+	debuggingMesh->PopMeshUP(yunuGI::Color::green(), MaterialNum::Green);
+
+	// ui로 표시되는, 혹은 최종 남은 체력은 반올림할 것인가 혹은 내림할 것인가는 아래에 구현.
 }
 
 void Unit::Damaged(float dmg)
@@ -801,12 +855,18 @@ void Unit::Damaged(float dmg)
     SetCurrentHP(m_currentHealthPoint - dmg);
     if (m_currentHealthPoint <= 0)
         m_currentResurrectingCount++;
+
+	auto debuggingMesh = DebuggingMeshPool::SingleInstance().Borrow();
+	debuggingMesh->SetUnitObject(this);
+	debuggingMesh->PopMeshUP(yunuGI::Color::green(), MaterialNum::Green);
 }
 
 void Unit::Heal(float healingPoint)
 {
     // 최대 체력이면 x
     SetCurrentHP(m_currentHealthPoint + healingPoint);
+	if (m_currentHealthPoint >= m_maxHealthPoint)
+		m_currentHealthPoint = m_maxHealthPoint;
 }
 
 void Unit::IncreaseAttackPower(float p_attackPowerIncrease)
@@ -978,6 +1038,11 @@ void Unit::ChangeUnitStatRandomly()
 
 }
 
+void Unit::SetRessurectMaxCount(int p_cnt)
+{
+	m_resurrectingMaxCount = p_cnt;
+}
+
 void Unit::DetermineHitDamage(float p_onceCalculatedDmg)
 {
     m_finalHitDamage = p_onceCalculatedDmg - ((m_defensePoint / 10.0f) / (1 - m_criticalDamageDecreaseMultiplier)) / (1 - m_dodgeProbability);
@@ -1031,6 +1096,49 @@ void Unit::StopAnimation()
     unitAnimations.m_paralysisAnimation->SetPlaySpeed(0.0f);
     unitAnimations.m_deathAnimation->SetPlaySpeed(0.0f);
     //unitAnimations.m_battleEngageAnimation->SetPlaySpeed(0.0f);
+}
+
+void Unit::RegisterSkillWithAnimation(SkillEnum p_enum)
+{
+	yunuGI::IAnimation* temp{ nullptr };
+
+	switch (p_enum)
+	{
+		case Unit::SkillEnum::Q:
+			temp = unitAnimations.m_skillOneAnimation;
+			break;
+		case Unit::SkillEnum::W:
+			temp = unitAnimations.m_skillTwoAnimation;
+			break;
+		case Unit::SkillEnum::BossSkillOne:
+			temp = unitAnimations.m_skillOneAnimation;
+			break;
+		case Unit::SkillEnum::BossSkillTwo:
+			temp = unitAnimations.m_skillTwoAnimation;
+			break;
+		case Unit::SkillEnum::BossSkillThree:
+			temp = unitAnimations.m_skillThreeAnimation;
+			break;
+		case Unit::SkillEnum::BossSkillFour:
+			temp = unitAnimations.m_skillFourAnimation;
+			break;
+		default:
+			break;
+	}
+
+	if (SkillSystem* skillsys = GetGameObject()->GetComponent<SkillSystem>();
+		skillsys && temp)
+	{
+		m_animatorComponent = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
+
+		m_animatorComponent->PushAnimation(temp, m_skillTimingFrameMap.find(p_enum)->second, [=]()
+			{
+				if (m_currentSelectedSkill == p_enum)
+				{
+					skillsys->ActivateSkill(p_enum, m_currentSkillPosition);
+				}
+			});
+	}
 }
 
 void Unit::DetermineCurrentTargetObject()
@@ -1113,11 +1221,12 @@ void Unit::OrderMove(Vector3d position)
     m_previousMovePosition = m_currentMovePosition;
     m_currentMovePosition = position;
 
-    if (GameManager::Instance().IsBattleSystemOperating() || m_unitType == UnitType::Warrior)
-    {
-        currentOrder = UnitState::Move;
-        dotween->DOLookAt(position, rotateTime, false);
-    }
+	if ((GameManager::Instance().IsBattleSystemOperating() || m_unitType == UnitType::Warrior) &&
+		!(currentOrder == UnitState::WaveStart || currentOrder == UnitState::WaveMotion))
+	{
+		currentOrder = UnitState::Move;
+		dotween->DOLookAt(position, rotateTime, false);
+	}
 }
 
 void Unit::OrderAttackMove(Vector3d position)
@@ -1165,11 +1274,6 @@ void Unit::ExecuteSkillAction(Vector3d p_pos, SkillEnum p_skillNum)
 	dotween->DOLookAt(p_pos, rotateTime, false);
     PlayerController::SingleInstance().SetLeftClickEmpty();
 	m_currentSkillPosition = p_pos;
-}
-
-void Unit::RegisterSkillDuration(float p_duration)
-{
-    qSkillAnimationDuration = p_duration;
 }
 
 void Unit::RegisterSkillDuration(SkillEnum p_skillEnum, float p_duration)
