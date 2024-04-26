@@ -18,6 +18,13 @@ struct JsonUIData
     std::vector<float> anchoredPosition;
     std::vector<float> enableOffset;
     std::vector<float> disableOffset;
+    float popUpDuration;
+    float popDownDuration;
+    bool popUpX, popUpY, popUpZ;
+    bool popDownX, popDownY, popDownZ;
+    float pulsingMin;
+    float pulsingMax;
+    float pulsingPeriod;
     double enableDelay;
     double disableDelay;
     double enableDuration;

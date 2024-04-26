@@ -8,6 +8,7 @@
 #include "UIElement.h"
 #include "UIOffsetTransition.h"
 #include "FloatFollower.h"
+#include "PulsingUI.h"
 #include <fstream>
 
 using namespace yunutyEngine::graphics;
@@ -395,7 +396,28 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     if (uiData.customFlags & (int)UIExportFlag::IsPoppingUp)
     {
         element->scalePopUpTransition = element->GetGameObject()->AddComponent<PopupOnEnable>();
+        element->scalePopUpTransition->m_duration = uiData.popUpDuration;
+        element->scalePopUpTransition->x = uiData.popUpX;
+        element->scalePopUpTransition->y = uiData.popUpY;
+        element->scalePopUpTransition->z = uiData.popUpZ;
         element->scalePopUpTransition->Init();
+    }
+    if (uiData.customFlags & (int)UIExportFlag::IsPoppingDown)
+    {
+        element->scalePopDownTransition = element->GetGameObject()->AddComponent<PopDownOnDisable>();
+        element->scalePopDownTransition->m_duration = uiData.popDownDuration;
+        element->scalePopDownTransition->x = uiData.popDownX;
+        element->scalePopDownTransition->y = uiData.popDownY;
+        element->scalePopDownTransition->z = uiData.popDownZ;
+        element->scalePopDownTransition->Init();
+    }
+    if (uiData.customFlags & (int)UIExportFlag::IsPulsing)
+    {
+        auto pulsingUI = element->GetGameObject()->AddComponent<PulsingUI>();
+        pulsingUI->m_duration = uiData.pulsingPeriod;
+        pulsingUI->pulsingMin = uiData.pulsingMin;
+        pulsingUI->pulsingMax = uiData.pulsingMax;
+        pulsingUI->Init();
     }
     if (uiData.customFlags & (int)UIExportFlag::IsTranslatingOnEnable)
     {

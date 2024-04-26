@@ -169,7 +169,7 @@ void UnitProductor::AddDotweenComponent() const
 {
 	/// 6. Dotween 추가
 	m_unitComponent->dotween = m_unitGameObject->AddComponent<Dotween>();
-	m_unitComponent->knockBackTimer = m_unitGameObject->AddComponent<Timer>();
+	m_unitComponent->knockBackTimer = m_unitGameObject->AddComponent<TimerComponent>();
 }
 
 std::string UnitProductor::GetUnitFBXName() const

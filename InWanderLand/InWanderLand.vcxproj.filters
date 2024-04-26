@@ -502,6 +502,12 @@
     <Filter Include="Editor\Palette\EditorInstance\ParticleInstance">
       <UniqueIdentifier>{448f4299-89d9-4f1d-b550-ce3b9011c33c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\Effect\PopDownOnDisable">
+      <UniqueIdentifier>{b62d9dc2-160d-41aa-9ccf-367fba43594b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Effect\PulsingUI">
+      <UniqueIdentifier>{0893b206-0157-4a0c-8756-2a56d755c06f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -548,9 +554,6 @@
     </ClInclude>
     <ClInclude Include="PeriodicAction.h">
       <Filter>TestCodes\TestUtils\PeriodicAction</Filter>
-    </ClInclude>
-    <ClInclude Include="ShakyCam.h">
-      <Filter>Contents</Filter>
     </ClInclude>
     <ClInclude Include="EditorLayer.h">
       <Filter>Editor</Filter>
@@ -1291,6 +1294,12 @@
     <ClInclude Include="ParticleEditorInstance.h">
       <Filter>Editor\Palette\EditorInstance\ParticleInstance</Filter>
     </ClInclude>
+    <ClInclude Include="PopDownOnDisable.h">
+      <Filter>UI\Effect\PopDownOnDisable</Filter>
+    </ClInclude>
+    <ClInclude Include="PulsingUI.h">
+      <Filter>UI\Effect\PulsingUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1306,9 +1315,6 @@
       <Filter>RoamingCam</Filter>
     </ClCompile>
     <ClCompile Include="ContentsLayer.cpp">
-      <Filter>Contents</Filter>
-    </ClCompile>
-    <ClCompile Include="ShakyCam.cpp">
       <Filter>Contents</Filter>
     </ClCompile>
     <ClCompile Include="EditorLayer.cpp">
@@ -1965,6 +1971,21 @@
     </ClCompile>
     <ClCompile Include="ParticleEditorInstance.cpp">
       <Filter>Editor\Palette\EditorInstance\ParticleInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="PulsingUI.cpp">
+      <Filter>UI\Effect\PulsingUI</Filter>
+    </ClCompile>
+    <ClCompile Include="PopupOnEnable.cpp">
+      <Filter>UI\Effect\PopupOnEnable</Filter>
+    </ClCompile>
+    <ClCompile Include="PopDownOnDisable.cpp">
+      <Filter>UI\Effect\PopDownOnDisable</Filter>
+    </ClCompile>
+    <ClCompile Include="FloatFollower.cpp">
+      <Filter>UI\Effect\FloatFollower</Filter>
+    </ClCompile>
+    <ClCompile Include="UIOffsetTransition.cpp">
+      <Filter>UI\Effect\OffsetTransition</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,7 +1,6 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "FSM.h"
-#include "Timer.h"
 #include "Dotween.h"
 #include <list>
 #include "RobinSkillDevelopmentSystem.h"
@@ -10,6 +9,7 @@
 class UnitProductor;
 class SkillSystem;
 class BurnEffect;
+class TimerComponent;
 enum class SkillPreviewMesh;
 
 /// <summary>
@@ -77,7 +77,7 @@ public:
 		yunuGI::IAnimation* m_battleEngageAnimation;
 	};
 
-	Timer* knockBackTimer;
+	TimerComponent* knockBackTimer;
 	Dotween* dotween;
 	yunutyEngine::graphics::Animator* m_animatorComponent;
 	NavigationAgent* m_navAgentComponent;

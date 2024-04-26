@@ -69,4 +69,12 @@ enum class UIEnumID
     BlackMask_BottomToTop,
     LetterBox_Top,
     LetterBox_Bottom,
+    InGame_SkiltreeMenu_Active,
+    InGame_SkiltreeMenu_InActive,
+    PopUpMessage_NotEnoughSP,
+    PopUpMessage_RequirementNotMet,
+    PopUpMessage_PermissionForUpgrade,
+    PopUpMessage_PermissionForUpgradeProceedButton,
+    PopUpMessage_WarningForRestart,
+    PopUpMessage_WarningForRestart_ProceedButton,
 };
