@@ -27,7 +27,7 @@ void Unit::Start()
 	m_initialAutoAttackDamage = m_autoAttackDamage;
 	m_bulletSpeed = 5.1f;
 	chaseUpdateDelay = 0.1f;
-	m_currentHealthPoint = m_maxHealthPoint;
+	SetUnitCurrentHp(m_maxHealthPoint);
 
 	std::function<bool()> trapClassifingFunction = [=]()
 		{
@@ -656,7 +656,7 @@ void Unit::IdleEngage()
 		{
 			currentOrder = UnitState::Idle;
 			GetGameObject()->GetComponent<physics::Collider>()->SetActive(true);
-			m_currentHealthPoint = m_maxHealthPoint;
+			SetUnitCurrentHp(m_maxHealthPoint);
 			ChangeUnitStatRandomly();
 		}
 	}
@@ -776,7 +776,7 @@ void Unit::Damaged(Unit* opponentUnit, float opponentDmg)
 {
 	AddToOpponentObjectList(opponentUnit);
 	DetermineHitDamage(opponentDmg);
-	m_currentHealthPoint -= m_finalHitDamage;
+	SetUnitCurrentHp(m_currentHealthPoint -= m_finalHitDamage);
 	std::cout << this->GetUnitFbxName() << "Is Damaged By " << opponentUnit->GetUnitFbxName() << " Damage : " << m_finalHitDamage << std::endl;
 	if (m_currentHealthPoint <= 0)
 		m_currentResurrectingCount++;
@@ -792,7 +792,7 @@ void Unit::Damaged(float dmg)
 {
 	//DetermineHitDamage(dmg);
 	//m_healthPoint -= m_finalHitDamage;
-	m_currentHealthPoint -= dmg;
+	SetUnitCurrentHp(m_currentHealthPoint -= dmg);
 	if (m_currentHealthPoint <= 0)
 		m_currentResurrectingCount++;
 
@@ -804,9 +804,19 @@ void Unit::Damaged(float dmg)
 void Unit::Heal(float healingPoint)
 {
 	// 최대 체력이면 x
-	m_currentHealthPoint += healingPoint;
+	SetUnitCurrentHp(m_currentHealthPoint += healingPoint);
 	if (m_currentHealthPoint >= m_maxHealthPoint)
-		m_currentHealthPoint = m_maxHealthPoint;
+		SetUnitCurrentHp(m_maxHealthPoint);
+}
+
+void Unit::SetUnitCurrentHp(float p_newHp)
+{
+	m_currentHealthPoint = p_newHp;
+}
+
+float Unit::GetUnitCurrentHp() const
+{
+	return m_currentHealthPoint;
 }
 
 void Unit::IncreaseAttackPower(float p_attackPowerIncrease)
@@ -855,7 +865,7 @@ void Unit::MultipleUnitSpeed(float p_mul)
 
 void Unit::ResetUnitMembers()
 {
-	m_currentHealthPoint = m_maxHealthPoint;
+	SetUnitCurrentHp(m_maxHealthPoint);
 	unitFSM.currentState = UnitState::Idle;
 	m_currentTargetUnit = nullptr;
 	m_opponentObjectSet.clear();
