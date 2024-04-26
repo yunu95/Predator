@@ -83,7 +83,7 @@ void Unit::Start()
 	unitFSM.transitions[UnitState::Attack].push_back({ UnitState::Idle,
 		[=]()
 		{
-			return (m_currentTargetUnit == nullptr
+			return (m_currentTargetUnit == nullptr/*m_currentTargetUnit->GetCurrentUnitState() == UnitState::Death*/
 					|| (((GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetUnit->GetTransform()->GetWorldPosition()).Magnitude() > m_atkDistance + 0.4f)
 					|| currentOrder == UnitState::Idle));
 		} });
@@ -249,6 +249,7 @@ void Unit::IdleEngage()
 	{
 		currentOrder = UnitState::Move;
 
+		m_currentTargetUnit = nullptr;
 		moveFunctionElapsed = 0.0f;
 
 		m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::blue());
@@ -951,6 +952,14 @@ void Unit::PushMoveFunctionToTacticQueue(Vector3d p_pos)
 		});
 }
 
+void Unit::PushAttackMoveFunctionToTacticQueue(Vector3d p_pos, Unit* p_selectedUnit)
+{
+	m_tacticModeQueue.push([=]()
+		{
+			OrderAttackMove(p_pos, p_selectedUnit);
+		});
+}
+
 void Unit::PushAttackMoveFunctionToTacticQueue(Vector3d p_pos)
 {
 	m_tacticModeQueue.push([=]()
@@ -1143,6 +1152,11 @@ void Unit::IdentifiedOpponentDeath(Unit* p_unit)
 	{
 		m_currentTargetUnit = nullptr;
 	}
+	if (tauntingThisUnit = p_unit)
+	{
+		tauntingThisUnit = nullptr;
+	}
+
 	m_attackingThisUnitSet.erase(p_unit);
 
 	/// 적군을 담고 있는 list에서 죽은 오브젝트 유닛을 빼준다.
@@ -1159,6 +1173,9 @@ void Unit::OrderMove(Vector3d position)
 {
 	m_previousMovePosition = m_currentMovePosition;
 	m_currentMovePosition = position;
+	tauntingThisUnit = nullptr;
+	//m_currentTargetUnit = nullptr;
+	isAttackMoving = false;
 
 	if ((GameManager::Instance().IsBattleSystemOperating() || m_unitType == UnitType::Warrior) &&
 		!(currentOrder == UnitState::WaveStart || currentOrder == UnitState::WaveMotion))
@@ -1168,13 +1185,22 @@ void Unit::OrderMove(Vector3d position)
 	}
 }
 
+void Unit::OrderAttackMove(Vector3d position, Unit* p_selectedUnit)
+{
+	OrderAttackMove(position);
+
+	tauntingThisUnit = p_selectedUnit;
+	DetermineCurrentTargetObject();
+}
+
 void Unit::OrderAttackMove(Vector3d position)
 {
 	m_currentMovePosition = position;
+
 	currentOrder = UnitState::AttackMove;
 	dotween->DOLookAt(position, rotateTime, false);
 
-	PlayerController::SingleInstance().SetLeftClickMove();
+	//PlayerController::SingleInstance().SetRightClickFunction();
 	// 다음 클릭은 Move로 바꿀 수 있도록 function 재정의.
 
 	isAttackMoving = true;
@@ -1193,7 +1219,7 @@ void Unit::OrderSkill(SkillEnum p_skillNum, Vector3d position)
 		ExecuteSkillAction(position, p_skillNum);
 	}
 	PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(m_unitType);
-	PlayerController::SingleInstance().SetLeftClickMove();
+	PlayerController::SingleInstance().SetRightClickFunction();
 }
 
 void Unit::OrderSkill(SkillEnum p_skillNum)
@@ -1297,7 +1323,7 @@ void Unit::SetUnitStateIdle()
 
 	if (m_unitSide == UnitSide::Player)
 	{
-		PlayerController::SingleInstance().SetLeftClickMove();
+		PlayerController::SingleInstance().SetRightClickFunction();
 	}
 }
 
