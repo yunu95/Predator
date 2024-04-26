@@ -949,6 +949,7 @@ namespace application
 						}
 						case application::editor::DataType::OrnamentData:
 						{
+							DrawRestPOD<POD_Ornament>(static_cast<OrnamentData*>(*selections.begin())->pod);
 							break;
 						}
 						case application::editor::DataType::RegionData:

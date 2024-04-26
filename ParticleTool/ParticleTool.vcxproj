@@ -157,6 +157,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EditorMath.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="imgui.cpp" />
@@ -176,6 +177,7 @@
     <ClCompile Include="ParticleTool_Manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EditorMath.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="imgui.h" />
     <ClInclude Include="ImGuizmo.h" />
