@@ -14,6 +14,7 @@
 /// </summary>
 
 class RTSCam;
+class CursorDetector;
 
 class TacticModeSystem : public GHContents::LazySingletonClass<TacticModeSystem>
 {
@@ -28,7 +29,7 @@ public:
 		WSkill
 	};
 
-	void SetLeftClickAddQueueForMove(InputManager::SelectedSerialNumber currentSelectedNum);
+	void SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum);
 	void SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum);
 	void SetLeftClickAddQueueForSkill(InputManager::SelectedSerialNumber currentSelectedNum, Unit::SkillEnum currentSelectedSkill);
 	/// Tutorial 관련 멤버
@@ -40,6 +41,8 @@ public:
 	bool IsTacticModeActivated(Unit* p_unit);			/// 전술모드가 끝날 때, parameter의 유닛이 입력된 명령이 있는가를 판별합니다. fsm transition에서 사용. 
 
 	bool isTacticModeOperating;
+
+	CursorDetector* m_cursorDetector;
 
 private:
 	int tacticModeGauge{ 1000 };

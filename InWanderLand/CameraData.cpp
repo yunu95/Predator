@@ -156,6 +156,9 @@ namespace application
 
 			auto cursorDetectorComponent = mouseCursorObject->AddComponent<CursorDetector>();
 
+			PlayerController::SingleInstance().m_cursorDetector = cursorDetectorComponent;
+			TacticModeSystem::SingleInstance().m_cursorDetector = cursorDetectorComponent;
+
 			camComp->groundHoveringClickCallback = [=](Vector3d pos)
 			{
 				mouseCursorObject->GetTransform()->SetWorldPosition(pos);

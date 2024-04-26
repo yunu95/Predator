@@ -14,6 +14,8 @@ public:
 
 	void EraseUnitFromContainer(Unit* p_unit);
 
+	Unit* GetCurrentOnMouseUnit() const;
+
 private:
 	Unit* m_currentSelectedUnit{ nullptr };
 	std::set<Unit*> m_onMouseUnits;

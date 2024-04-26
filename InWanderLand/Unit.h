@@ -1,6 +1,7 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "FSM.h"
+#include "Timer.h"
 #include "Dotween.h"
 #include <list>
 #include "RobinSkillDevelopmentSystem.h"
@@ -9,7 +10,6 @@
 class UnitProductor;
 class SkillSystem;
 class BurnEffect;
-class TimerComponent;
 class CursorDetector;
 enum class SkillPreviewMesh;
 
@@ -209,9 +209,7 @@ private:
 	SkillEnum m_currentSelectedSkill;
 
 private:
-    void SetCurrentHP(float m_currentHealthPoint);
 	void IdleEngage();
-    void OnHPUpdate();
 	void MoveEngage();
 	void OffsetMoveEngage();
 	void AttackMoveEngage();

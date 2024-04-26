@@ -4,12 +4,13 @@
 #include "RTSCam.h"
 #include "PlayerController.h"
 #include "SkillPreviewSystem.h"
+#include "CursorDetector.h"
 
 TacticModeSystem::TacticModeSystem()
 {
 }
 
-void TacticModeSystem::SetLeftClickAddQueueForMove(InputManager::SelectedSerialNumber currentSelectedNum)
+void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum)
 {
     if (currentSelectedNum == 0)
         currentSelectedNum = InputManager::One;
@@ -17,9 +18,17 @@ void TacticModeSystem::SetLeftClickAddQueueForMove(InputManager::SelectedSerialN
 	currentSelectedUnit = playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second;
 	if (tacticModeGauge > 0)
 	{
-		m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
+		m_rtsCam->groundRightClickCallback = [=](Vector3d pos)
 			{
-				currentSelectedUnit->PushMoveFunctionToTacticQueue(pos);
+				if (m_cursorDetector->GetCurrentOnMouseUnit() == nullptr)
+				{
+					currentSelectedUnit->PushMoveFunctionToTacticQueue(pos);
+				}
+				else if (Unit* selectedUnit = m_cursorDetector->GetCurrentOnMouseUnit();
+                    selectedUnit->GetUnitSide() == Unit::UnitSide::Enemy)
+				{
+					currentSelectedUnit->PushAttackMoveFunctionToTacticQueue(pos, selectedUnit);
+				}
 				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 				//m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
 				//tacticModeGauge--;
@@ -38,7 +47,7 @@ void TacticModeSystem::SetLeftClickAddQueueForAttackMove(InputManager::SelectedS
 				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 				//m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
                 //tacticModeGauge--;
-				SetLeftClickAddQueueForMove(currentSelectedNum);
+				SetTacticModeRightClickFunction(currentSelectedNum);
 			};
     }
 }
@@ -60,7 +69,7 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
 				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 				//m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
                 //tacticModeGauge--;
-				SetLeftClickAddQueueForMove(currentSelectedNum);
+				SetTacticModeRightClickFunction(currentSelectedNum);
             };
     }
 }
