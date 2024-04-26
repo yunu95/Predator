@@ -118,7 +118,8 @@ namespace application
 			void UpdateParticleInstanceDataObj(const std::weak_ptr<ParticleToolInstance>& instance);
 
 		private:
-			void ClearChildPIs();
+			void ClearPP();
+			void ClearPPIs();
 
 			bool isParticleEditMode = true;
 			unsigned long long particleInstanceCount = 0;
