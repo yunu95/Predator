@@ -361,6 +361,8 @@ namespace application
 
 		void ParticleTool_Manager::SetSelectedFBXData(yunutyEngine::GameObject* fbxObj)
 		{
+			/// 문제가 발생하는 구간입니다.
+
 			if (fbxObj == nullptr)
 			{
 				if (selectedFBXObject)
@@ -369,6 +371,7 @@ namespace application
 					{
 						SetSelectedParticleInstanceData(std::shared_ptr<ParticleToolInstance>());
 					}
+					/// 해당 요소가 if (selectedParticleInstanceData) 보다 상단에 올 경우 문제가 발생합니다.
 					selectedFBXObject->SetSelfActive(false);
 				}
 				selectedFBXObject = nullptr;
@@ -381,6 +384,7 @@ namespace application
 				{
 					SetSelectedParticleInstanceData(std::shared_ptr<ParticleToolInstance>());
 				}
+				/// 해당 요소가 if (selectedParticleInstanceData) 보다 상단에 올 경우 문제가 발생합니다.
 				selectedFBXObject->SetSelfActive(false);
 			}
 
