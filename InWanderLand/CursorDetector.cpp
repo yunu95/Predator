@@ -64,6 +64,11 @@ void CursorDetector::EraseUnitFromContainer(Unit* p_unit)
 	DetermineClosestUnit();
 }
 
+Unit* CursorDetector::GetCurrentOnMouseUnit() const
+{
+	return m_currentSelectedUnit;
+}
+
 void CursorDetector::DetermineClosestUnit()
 {
 	float shortestDistance;

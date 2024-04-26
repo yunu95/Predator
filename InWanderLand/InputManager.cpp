@@ -86,7 +86,9 @@ void InputManager::SelectPlayer(Unit::UnitType p_unitType)
     {
         return;
     }
+
     PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(p_unitType);
+
     if (p_unitType != Unit::UnitType::AllPlayers)
     {
         rtscam->SetTarget(PlayerController::SingleInstance().GetPlayerMap().find(p_unitType)->second->GetGameObject());
@@ -112,7 +114,7 @@ void InputManager::SelectPlayer(Unit::UnitType p_unitType)
     
     if (tacticMode)
     {
-		TacticModeSystem::SingleInstance().SetLeftClickAddQueueForMove(currentSelectedSerialNumber);
+		TacticModeSystem::SingleInstance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
     }
 
     SkillPreviewSystem::Instance().ActivateSkillPreview(false);
@@ -148,7 +150,7 @@ void InputManager::ToggleTacticMode()
         if (tacticMode)
         {
             TacticModeSystem::SingleInstance().EngageTacticMode();
-			TacticModeSystem::SingleInstance().SetLeftClickAddQueueForMove(currentSelectedSerialNumber);
+			TacticModeSystem::SingleInstance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
         }
         else
         {

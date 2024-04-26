@@ -288,6 +288,7 @@ public:
 
 	void OrderMove(Vector3d position);
 	void OrderAttackMove(Vector3d position);
+	void OrderAttackMove(Vector3d position, Unit* p_selectedUnit);
 	void OrderSkill(SkillEnum p_skillNum, Vector3d position);
 	void OrderSkill(SkillEnum p_skillNum);
 
@@ -327,6 +328,7 @@ public:
 
 	void PushMoveFunctionToTacticQueue(Vector3d p_pos);
 	void PushAttackMoveFunctionToTacticQueue(Vector3d p_pos);
+	void PushAttackMoveFunctionToTacticQueue(Vector3d p_pos, Unit* p_selectedUnit);
 	void PushSkillFunctionToTacticQueue(SkillEnum p_skillNum, Vector3d p_pos);
 	bool IsTacticModeQueueEmpty() const;
 

@@ -6,6 +6,7 @@
 #include "Dotween.h"
 #include "SkillPreviewSystem.h"
 #include "GameManager.h"
+#include "CursorDetector.h"
 
 void PlayerController::SetMovingSystemComponent(RTSCam* sys)
 {
@@ -23,41 +24,59 @@ void PlayerController::ErasePlayerUnit(Unit* p_playerUnit)
     playerComponentMap.erase(p_playerUnit->GetUnitType());
 }
 
-void PlayerController::SetLeftClickMove()
+void PlayerController::SetRightClickFunction()
 {
     if (GameManager::Instance().IsBattleSystemOperating())
     {
         if (static_cast<int>(currentSelectedSerialNumber) == InputManager::SelectedSerialNumber::All)
         {
-            m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
+            m_movingSystemComponent->groundRightClickCallback = [=](Vector3d pos)
                 {
-                    if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
+                    //if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
+                    //{
+                    //    return;
+                    //}
+                    if (m_cursorDetector->GetCurrentOnMouseUnit() == nullptr)
                     {
-                        return;
+						for (auto e : playerComponentMap)
+						{
+							e.second->OrderMove(pos);
+						}
                     }
-                    for (auto e : playerComponentMap)
+					else if (Unit* selectedUnit = m_cursorDetector->GetCurrentOnMouseUnit();
+						selectedUnit->GetUnitSide() == Unit::UnitSide::Enemy)
                     {
-                        e.second->OrderMove(pos);
+						for (auto e : playerComponentMap)
+						{
+							e.second->OrderAttackMove(pos, selectedUnit);
+						}
                     }
                 };
         }
         else
         {
             Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
-            m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
+            m_movingSystemComponent->groundRightClickCallback = [=](Vector3d pos)
                 {
-                    if (!InputManager::Instance().GetInputManagerActive()||UIManager::Instance().IsMouseOnButton())
+                    //if (!InputManager::Instance().GetInputManagerActive()||UIManager::Instance().IsMouseOnButton())
+                    //{
+                    //    return;
+                    //}
+                    if (m_cursorDetector->GetCurrentOnMouseUnit() == nullptr)
                     {
-                        return;
+						currentSelectedUnit->OrderMove(pos);
                     }
-                    currentSelectedUnit->OrderMove(pos);
+					else if (m_cursorDetector->GetCurrentOnMouseUnit()->GetUnitSide() == Unit::UnitSide::Enemy)
+					{
+						currentSelectedUnit->OrderAttackMove(pos, m_cursorDetector->GetCurrentOnMouseUnit());
+					}
                 };
         }
     }
     else
     {
         /// 세 플레이어 유닛이 offset을 갖고 이동할 수 있도록 하기
-        m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
+        m_movingSystemComponent->groundRightClickCallback = [=](Vector3d pos)
             {
                 if (!InputManager::Instance().GetInputManagerActive()||UIManager::Instance().IsMouseOnButton())
                 {
@@ -127,10 +146,11 @@ void PlayerController::SetRightClickEmpty()
 
 void PlayerController::SetCurrentPlayerSerialNumber(Unit::UnitType p_num)
 {
-    if (playerComponentMap.find(p_num) != playerComponentMap.end() || p_num == Unit::UnitType::AllPlayers)
+    if (playerComponentMap.find(p_num) != playerComponentMap.end()
+        || p_num == Unit::UnitType::AllPlayers)
     {
         currentSelectedSerialNumber = p_num;
-        SetLeftClickMove();
+        SetRightClickFunction();
     }
 }
 
@@ -141,7 +161,8 @@ std::unordered_map<Unit::UnitType, Unit*> PlayerController::GetPlayerMap() const
 
 Unit* PlayerController::FindSelectedUnitByUnitType(Unit::UnitType p_type)
 {
-    return playerComponentMap.find(p_type)->second;
+    if (p_type != Unit::UnitType::AllPlayers)
+        return playerComponentMap.find(p_type)->second;
 }
 
 
