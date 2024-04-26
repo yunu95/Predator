@@ -80,6 +80,9 @@ namespace yunutyEngine::graphics
 		void SetStartScale(float scale);
 		void SetEndScale(float scale);
 
+		void SetInterval(float interval);
+		void SetBurstsCount(int count);
+
 		void SetPlayAwake(bool playAwake);
 
 	private:

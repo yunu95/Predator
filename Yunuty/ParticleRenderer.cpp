@@ -66,6 +66,16 @@ void ParticleRenderer::SetEndScale(float scale)
 	this->endScale = scale;
 }
 
+void ParticleRenderer::SetInterval(float interval)
+{
+	this->interval = interval;
+}
+
+void ParticleRenderer::SetBurstsCount(int count)
+{
+	burstsCount = count;
+}
+
 void ParticleRenderer::SetStartScale(float scale)
 {
 	this->startScale = scale;

@@ -146,14 +146,13 @@ namespace application
 		struct ParticleToolInstance
         {
         public:
-            /// 저장할 데이터들
-            std::string particleName = "None";
+			ParticleToolData particleData = ParticleToolData();
 
 			// 이거는 데이터 양식 보고
 			std::string targetUnit = "None";
             Vector3d offsetPos = Vector3d();
             Quaternion rotation = Quaternion();
-            Vector3d scale = Vector3d();
+            Vector3d scale = Vector3d(1, 1, 1);
         };
     }
 }
