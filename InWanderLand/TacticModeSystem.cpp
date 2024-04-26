@@ -5,9 +5,45 @@
 #include "PlayerController.h"
 #include "SkillPreviewSystem.h"
 #include "CursorDetector.h"
+#include "ContentsLayer.h"
+#include "Application.h"
 
-TacticModeSystem::TacticModeSystem()
+void TacticModeSystem::OnEnable()
 {
+	SetCurrentGauge(m_maxGauge);
+}
+
+void TacticModeSystem::Start()
+{
+    SetCurrentGauge(m_maxGauge);
+	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+	contentsLayer->RegisterToEditorComponentVector(this);
+}
+
+void TacticModeSystem::Update()
+{
+    if (m_currentGauge < m_maxGauge && !isTacticModeOperating)
+    {
+        m_gaugeIncreaseElapsed += Time::GetDeltaTime();
+        if (m_gaugeIncreaseElapsed >= m_gaugeIncreaseDuration)
+        {
+            SetCurrentGauge(++m_currentGauge);
+            if (m_currentGauge >= m_maxGauge)
+            {
+				SetCurrentGauge(m_maxGauge);
+            }
+            m_gaugeIncreaseElapsed = 0.0f;
+        }
+    }
+    if (isCoolTime)
+    {
+        m_engageCoolTimeElapsed += Time::GetDeltaTime();
+        if (m_engageCoolTimeElapsed >= m_engageCoolTimeDuration)
+        {
+            m_engageCoolTimeElapsed = m_engageCoolTimeDuration;
+            isCoolTime = false;
+        }
+    }
 }
 
 void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum)
@@ -16,7 +52,7 @@ void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSer
         currentSelectedNum = InputManager::One;
 
 	currentSelectedUnit = playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second;
-	if (tacticModeGauge > 0)
+	if (m_currentGauge > 0)
 	{
 		m_rtsCam->groundRightClickCallback = [=](Vector3d pos)
 			{
@@ -31,7 +67,7 @@ void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSer
 				}
 				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 				//m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
-				//tacticModeGauge--;
+                SetCurrentGauge(--m_currentGauge);
 			};
 	}
 }
@@ -39,16 +75,17 @@ void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSer
 void TacticModeSystem::SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum)
 {
     currentSelectedUnit = playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second;
-    if (tacticModeGauge > 0)
+    if (m_currentGauge > 0)
     {
-		m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
+		m_rtsCam->groundRightClickCallback = [=](Vector3d pos)
 			{
 				currentSelectedUnit->PushAttackMoveFunctionToTacticQueue(pos);
 				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 				//m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
                 //tacticModeGauge--;
 				SetTacticModeRightClickFunction(currentSelectedNum);
-			};
+				SetCurrentGauge(--m_currentGauge);
+            };
     }
 }
 
@@ -56,7 +93,7 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
 {
     currentSelectedUnit = playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second;
 
-    if (tacticModeGauge > 0)
+    if (m_currentGauge > 0)
     {
         SkillPreviewSystem::Instance().SetCurrentSelectedPlayerUnit(currentSelectedUnit);
 		SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(currentSelectedSkill));
@@ -70,6 +107,7 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
 				//m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
                 //tacticModeGauge--;
 				SetTacticModeRightClickFunction(currentSelectedNum);
+				SetCurrentGauge(--m_currentGauge);
             };
     }
 }
@@ -87,6 +125,7 @@ void TacticModeSystem::EngageTacticMode()
     Time::SetTimeScale(0.0f);
     playerComponentMap = PlayerController::SingleInstance().GetPlayerMap();
 	isTacticModeOperating = true;
+	m_gaugeIncreaseElapsed = 0.0f;
 
     vector<GameObject*> unitGameObjects;
     for (auto each : playerComponentMap)
@@ -100,8 +139,11 @@ void TacticModeSystem::EngageTacticMode()
 void TacticModeSystem::ExitTacticMode()
 {
     Time::SetTimeScale(1.0f);
-
+    m_gaugeIncreaseElapsed = 0.0f;
     isTacticModeOperating = false;
+
+    m_engageCoolTimeElapsed = 0.0f;
+    isCoolTime = true;
 
     for (auto each : playerComponentMap)
     {
@@ -126,6 +168,24 @@ bool TacticModeSystem::IsTacticModeActivated(Unit* p_unit)
         return false;
     else
         return true;
+}
+
+bool TacticModeSystem::IsTacticModeCoolTime() const
+{
+    return isCoolTime;
+}
+
+float TacticModeSystem::GetLeftCoolTime()
+{
+    if (m_engageCoolTimeElapsed >= m_engageCoolTimeDuration)
+        return 0.0f;
+    else
+		return m_engageCoolTimeDuration - m_engageCoolTimeElapsed;
+}
+
+void TacticModeSystem::SetCurrentGauge(int p_gauge)
+{
+    m_currentGauge = p_gauge;
 }
 
 void TacticModeSystem::SetCurrentSelectedQueue(Unit* p_currentUnit)

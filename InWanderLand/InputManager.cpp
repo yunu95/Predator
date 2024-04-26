@@ -42,7 +42,7 @@ void InputManager::Update()
                 if (yunutyEngine::Input::isKeyPushed(KeyCode::A))
                 {
                     if (tacticMode)
-                        TacticModeSystem::SingleInstance().SetLeftClickAddQueueForAttackMove(currentSelectedSerialNumber);
+                        TacticModeSystem::Instance().SetLeftClickAddQueueForAttackMove(currentSelectedSerialNumber);
                     else
                     {
                         PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
@@ -114,7 +114,7 @@ void InputManager::SelectPlayer(Unit::UnitType p_unitType)
     
     if (tacticMode)
     {
-		TacticModeSystem::SingleInstance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
+		TacticModeSystem::Instance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
     }
 
     SkillPreviewSystem::Instance().ActivateSkillPreview(false);
@@ -134,7 +134,7 @@ void InputManager::PrepareSkill(Unit::SkillEnum p_skillType)
     }
     if (tacticMode)
     {
-        TacticModeSystem::SingleInstance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, p_skillType);
+        TacticModeSystem::Instance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, p_skillType);
     }
     else
     {
@@ -146,15 +146,19 @@ void InputManager::ToggleTacticMode()
 {
     if (GameManager::Instance().IsBattleSystemOperating())
     {
-        tacticMode = !tacticMode;
+        if (tacticMode)
+			tacticMode = !tacticMode;
+        else if (!tacticMode && !TacticModeSystem::Instance().IsTacticModeCoolTime())
+			tacticMode = !tacticMode;
+
         if (tacticMode)
         {
-            TacticModeSystem::SingleInstance().EngageTacticMode();
-			TacticModeSystem::SingleInstance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
+            TacticModeSystem::Instance().EngageTacticMode();
+			TacticModeSystem::Instance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
         }
         else
         {
-            TacticModeSystem::SingleInstance().ExitTacticMode();
+            TacticModeSystem::Instance().ExitTacticMode();
         }
     }
 }

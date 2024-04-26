@@ -104,7 +104,7 @@ void Unit::Start()
 	{
 		unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::Skill,
 		[=]() { return currentOrder == UnitState::Skill || trapClassifingFunction() 
-			&& TacticModeSystem::SingleInstance().isTacticModeOperating; } });
+			&& TacticModeSystem::Instance().isTacticModeOperating; } });
 	}
 
 	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Paralysis); i++)
@@ -224,7 +224,7 @@ Unit::UnitSide Unit::GetUnitSide() const
 #pragma region State Engage()
 void Unit::IdleEngage()
 	{
-		TacticModeSystem::SingleInstance().isTacticModeOperating = false;
+		TacticModeSystem::Instance().isTacticModeOperating = false;
 	
 		currentOrder = UnitState::Idle;
 		idleElapsed = 0.0f;
@@ -462,7 +462,7 @@ void Unit::IdleEngage()
 	{
 		CheckCurrentAnimation(unitAnimations.m_idleAnimation);
 
-		if (!IsTacticModeQueueEmpty() && TacticModeSystem::SingleInstance().isTacticModeOperating == false)
+		if (!IsTacticModeQueueEmpty() && TacticModeSystem::Instance().isTacticModeOperating == false)
 		{
 			m_tacticModeQueue.front()();
 			m_tacticModeQueue.pop();

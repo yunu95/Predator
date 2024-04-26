@@ -23,7 +23,7 @@ void SingletonInstanceContainer::ClearSingletonInstances()
 	StatusTimerPool::SingleInstance().ProhibitCreateInstance();
 	DebuggingMeshPool::SingleInstance().ProhibitCreateInstance();
 	PassiveCakePool::SingleInstance().ProhibitCreateInstance();
-	TacticModeSystem::SingleInstance().ProhibitCreateInstance();
+	//TacticModeSystem::Instance().ProhibitCreateInstance();
 
 	//UnitObjectPool::SingleInstance().ClearPool();
 	//AutoAttackProjectilePool::SingleInstance().ClearPool();
@@ -43,7 +43,7 @@ void SingletonInstanceContainer::ClearSingletonInstances()
 	StatusTimerPool::SingleInstance().InitInstance();
 	DebuggingMeshPool::SingleInstance().InitInstance();
 	PassiveCakePool::SingleInstance().InitInstance();
-	TacticModeSystem::SingleInstance().InitInstance();
+	//TacticModeSystem::Instance().InitInstance();
 }
 
 void SingletonInstanceContainer::PermitCreateInstances()
@@ -54,7 +54,7 @@ void SingletonInstanceContainer::PermitCreateInstances()
 	MagicianAutoAttackProjectilePool::SingleInstance().PermitCreateInstance();
 	StatusTimerPool::SingleInstance().PermitCreateInstance();
 	DebuggingMeshPool::SingleInstance().PermitCreateInstance();
-	TacticModeSystem::SingleInstance().PermitCreateInstance();
+	//TacticModeSystem::Instance().PermitCreateInstance();
 	PassiveCakePool::SingleInstance().PermitCreateInstance();
 	RangedEnemyPool::SingleInstance().PermitCreateInstance();
 	MeleeEnemyPool::SingleInstance().PermitCreateInstance();
