@@ -18,6 +18,7 @@ namespace application
 
 			SetSelectedFBXData(nullptr);
 			SetSelectedParticleData(std::shared_ptr<ParticleToolData>());
+			SetSelectedParticleInstanceData(std::shared_ptr<ParticleToolInstance>());
 
 			particleList.clear();
 			for (auto& [key, val] : particleObjList)
@@ -252,19 +253,19 @@ namespace application
 			auto pObj = particleObjList[name]->GetComponent<graphics::ParticleRenderer>();
 			
 			pObj->SetParticleShape((yunutyEngine::graphics::ParticleShape)particleList[name]->shape);
-			//pObj->SetParticleMode((yunutyEngine::graphics::ParticleMode)particleList[name]->particleMode);
+			pObj->SetParticleMode((yunutyEngine::graphics::ParticleMode)particleList[name]->particleMode);
 			pObj->SetLoop(particleList[name]->isLoop);
 			pObj->SetLifeTime(particleList[name]->lifeTime);
 			pObj->SetSpeed(particleList[name]->speed);
 			pObj->SetStartScale(particleList[name]->startScale);
 			pObj->SetEndScale(particleList[name]->endScale);
 			pObj->SetMaxParticle(particleList[name]->maxParticle);
-			//pObj->SetPlayAwake(particleList[name]->playAwake);
+			pObj->SetPlayAwake(particleList[name]->playAwake);
 
 			pObj->SetRateOverTime(particleList[name]->rateOverTime);
 
-			//pObj->SetBurstsCount(particleList[name]->burstsCount);
-			//pObj->SetInterval(particleList[name]->interval);
+			pObj->SetBurstsCount(particleList[name]->burstsCount);
+			pObj->SetInterval(particleList[name]->interval);
 		}
 
 		void ParticleTool_Manager::SwitchMode()
@@ -276,9 +277,7 @@ namespace application
 			}
 			else
 			{
-				/// 클리어
 				SetSelectedFBXData(nullptr);
-				// SetSelectedParticleInstanceData();
 				isParticleEditMode = true;
 			}
 		}
@@ -362,10 +361,17 @@ namespace application
 
 		void ParticleTool_Manager::SetSelectedFBXData(yunutyEngine::GameObject* fbxObj)
 		{
+			/// 문제가 발생하는 구간입니다.
+
 			if (fbxObj == nullptr)
 			{
 				if (selectedFBXObject)
 				{
+					if (selectedParticleInstanceData)
+					{
+						SetSelectedParticleInstanceData(std::shared_ptr<ParticleToolInstance>());
+					}
+					/// 해당 요소가 if (selectedParticleInstanceData) 보다 상단에 올 경우 문제가 발생합니다.
 					selectedFBXObject->SetSelfActive(false);
 				}
 				selectedFBXObject = nullptr;
@@ -374,6 +380,11 @@ namespace application
 
 			if (selectedFBXObject)
 			{
+				if (selectedParticleInstanceData)
+				{
+					SetSelectedParticleInstanceData(std::shared_ptr<ParticleToolInstance>());
+				}
+				/// 해당 요소가 if (selectedParticleInstanceData) 보다 상단에 올 경우 문제가 발생합니다.
 				selectedFBXObject->SetSelfActive(false);
 			}
 
@@ -387,9 +398,167 @@ namespace application
 			return selectedFBXObject;
 		}
 
+		std::vector<std::weak_ptr<ParticleToolInstance>>& ParticleTool_Manager::GetChildrenParticleInstanceList(const std::string& parentsName)
+		{
+			static std::vector<std::weak_ptr<ParticleToolInstance>> container;
+			container.resize(particleInstanceList[parentsName].size());
+
+			int i = 0;
+			for (auto& each : particleInstanceList[parentsName])
+			{
+				container[i] = each;
+				i++;
+			}
+
+			return container;
+		}
+
+		yunutyEngine::GameObject* ParticleTool_Manager::GetParticleToolInstanceObject(const std::weak_ptr<ParticleToolInstance>& ptr)
+		{
+			if (!particleInstanceIDMap.contains(ptr.lock()))
+			{
+				return nullptr;
+			}
+
+			return particleInstanceIDMap[ptr.lock()];
+		}
+
+		std::weak_ptr<ParticleToolInstance> ParticleTool_Manager::AddParticleInstance(yunutyEngine::GameObject* parents, const std::string& name)
+		{
+			if (!parents)
+			{
+				return std::shared_ptr<ParticleToolInstance>();
+			}
+
+			std::shared_ptr<ParticleToolInstance> ptr = std::make_shared<ParticleToolInstance>();
+			ptr->targetUnit = parents->getName();
+			particleInstanceList[parents->getName()].insert(ptr);
+
+			auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			obj->setName("PI_" + std::to_string(particleInstanceCount));
+			obj->AddComponent<graphics::ParticleRenderer>();
+
+			particleInstanceIDMap[ptr] = obj;
+
+			if (!name.empty() && particleList.contains(name))
+			{
+				ptr->particleData = *particleList[name];
+			}
+
+			UpdateParticleInstanceDataObj(ptr);
+
+			obj->SetSelfActive(false);
+			obj->SetParent(parents);
+
+			particleInstanceCount++;
+
+			return ptr;
+		}
+
+		bool ParticleTool_Manager::EraseParticleInstance(yunutyEngine::GameObject* parents, const std::weak_ptr<ParticleToolInstance>& instance)
+		{
+			if (parents == nullptr || !particleInstanceList.contains(parents->getName()) || instance.expired())
+			{
+				return false;
+			}
+
+			auto sptr = instance.lock();
+
+			if (!particleInstanceList[parents->getName()].contains(sptr))
+			{
+				return false;
+			}
+			
+			if (selectedParticleInstanceData == sptr)
+			{
+				selectedParticleInstanceData = nullptr;
+			}
+
+			yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(particleInstanceIDMap[sptr]);
+
+			particleInstanceIDMap.erase(sptr);
+
+			particleInstanceList[parents->getName()].erase(sptr);
+			return true;
+		}
+
+		void ParticleTool_Manager::SetSelectedParticleInstanceData(const std::weak_ptr<ParticleToolInstance>& particleInstanceData)
+		{
+			if (particleInstanceData.expired())
+			{
+				if (selectedParticleInstanceData)
+				{
+					particleInstanceIDMap[selectedParticleInstanceData]->SetSelfActive(false);
+				}
+				selectedParticleInstanceData = nullptr;
+				return;
+			}
+
+			if (selectedParticleInstanceData)
+			{
+				particleInstanceIDMap[selectedParticleInstanceData]->SetSelfActive(false);
+			}
+
+			particleInstanceIDMap[particleInstanceData.lock()]->SetSelfActive(true);
+			particleInstanceIDMap[particleInstanceData.lock()]->GetComponent<graphics::ParticleRenderer>()->Play();
+
+			selectedParticleInstanceData = particleInstanceData.lock();
+		}
+
+		std::weak_ptr<ParticleToolInstance> ParticleTool_Manager::GetSelectedParticleInstanceData()
+		{
+			return selectedParticleInstanceData;
+		}
+
+		void ParticleTool_Manager::UpdateParticleInstanceDataObj(const std::weak_ptr<ParticleToolInstance>& instance)
+		{
+			if (instance.expired() || !particleInstanceIDMap.contains(instance.lock()))
+			{
+				return;
+			}
+
+			auto sptr = instance.lock();
+
+			auto objTS = particleInstanceIDMap[sptr]->GetTransform();
+			objTS->SetLocalPosition(sptr->offsetPos);
+			objTS->SetLocalRotation(sptr->rotation);
+			objTS->SetLocalScale(sptr->scale);
+			
+			auto pptr = particleInstanceIDMap[sptr]->GetComponent<graphics::ParticleRenderer>();
+
+			pptr->SetParticleShape((yunutyEngine::graphics::ParticleShape)sptr->particleData.shape);
+			pptr->SetParticleMode((yunutyEngine::graphics::ParticleMode)sptr->particleData.particleMode);
+			pptr->SetLoop(sptr->particleData.isLoop);
+			pptr->SetLifeTime(sptr->particleData.lifeTime);
+			pptr->SetSpeed(sptr->particleData.speed);
+			pptr->SetStartScale(sptr->particleData.startScale);
+			pptr->SetEndScale(sptr->particleData.endScale);
+			pptr->SetMaxParticle(sptr->particleData.maxParticle);
+			pptr->SetPlayAwake(sptr->particleData.playAwake);
+			
+			pptr->SetRateOverTime(sptr->particleData.rateOverTime);
+			
+			pptr->SetBurstsCount(sptr->particleData.burstsCount);
+			pptr->SetInterval(sptr->particleData.interval);
+
+		}
+
 		void ParticleTool_Manager::ClearChildPIs()
 		{
-			/// Object 에 붙어있는 instance 들 제거
+			for (auto& [key, val] : particleInstanceList)
+			{
+				for (auto& each : val)
+				{
+					yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(particleInstanceIDMap[each]);
+				}
+			}
+
+			SetSelectedParticleInstanceData(std::shared_ptr<ParticleToolInstance>());
+
+			particleInstanceList.clear();
+			particleInstanceIDMap.clear();
+
+			particleInstanceCount = 0;
 		}
 	}
 }

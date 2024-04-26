@@ -332,7 +332,6 @@ namespace application
 
             ImGuizmo::ViewManipulate(reinterpret_cast<float*>(&gvtm), 10 * sqrt(3), ImVec2(ImGui::GetWindowPos().x + renderImageSize.first - 128, ImGui::GetWindowPos().y + imageStartPos.second), ImVec2(128, 128), 0x10101010);
 
-
             if (pm->GetCurrentPalette()->AreThereAnyObjectSelected())
             {
                 auto& selections = pm->GetCurrentPalette()->GetSelections();

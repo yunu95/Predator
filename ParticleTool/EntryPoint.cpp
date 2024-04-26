@@ -9,6 +9,9 @@
 #include "ParticleTool_Manager.h"
 #include "FileSystem.h"
 #include "ParticleToolData.h"
+#include "EditorMath.h"
+
+#include <DirectXMath.h>
 #include <d3d11.h>
 #include <stdio.h>
 #include <windows.h>
@@ -83,12 +86,21 @@ void LoadPPIs();
 void SavePPIs();
 void SaveAsPPIs();
 
-void ShowFBXNode(yunutyEngine::GameObject* target);
+bool ShowFBXNode(yunutyEngine::GameObject* target);
 
 bool isRunning = true;
 
 const int bufferSize = 255;
 static char* particleDataNameBuffer = new char[bufferSize];
+
+/// Gizmo
+ImGuizmo::OPERATION operation = (ImGuizmo::OPERATION)0;
+ImGuizmo::MODE mode = ImGuizmo::LOCAL;
+
+void ImGui_UpdateEditableDataWTM(const std::weak_ptr<application::particle::ParticleToolInstance>& target, const yunuGI::Matrix4x4& wtm);
+///
+
+void ImGui_DrawTransform(int& idx);
 
 std::mutex loopTodoRegistrationMutex;
 // AddMainLoopTodo로 등록된 휘발성 콜백 함수들입니다.
@@ -432,6 +444,8 @@ void ImGuiUpdate()
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+    static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+
     {
         ImGui::SetNextWindowSize(dockspaceArea);
         ImGui::SetNextWindowPos(dockspaceStartPoint);
@@ -497,10 +511,57 @@ void ImGuiUpdate()
                 newRegion.x = newRegion.y / ratio;
             }
 
+            auto pos = ImGui::GetCursorPos();
+
             ImGui::Image(
                 reinterpret_cast<ImTextureID>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetFinalRenderImage()),
                 ImVec2(newRegion.x, newRegion.y)
             );
+
+            ImGuizmo::SetDrawlist();
+            float left = ImGui::GetWindowPos().x + pos.x;
+            float top = ImGui::GetWindowPos().y + pos.y;
+            float right = left + newRegion.x;
+            float bottom = top + newRegion.y;
+            ImGuizmo::SetRect(left, top, newRegion.x, newRegion.y);
+            ImGui::PushClipRect(ImVec2(left, top), ImVec2(right, bottom), true);
+
+            auto cam = yunutyEngine::graphics::Camera::GetMainCamera();
+
+            auto vtm = application::editor::math::GetInverseMatrix(cam->GetTransform()->GetWorldTM());
+
+            float width;
+            float height;
+            cam->GetGI().GetResolution(&width, &height);
+            DirectX::XMMATRIX prm = DirectX::XMMatrixPerspectiveFovLH(cam->GetGI().GetVerticalFOV(), width / height, cam->GetGI().GetNear(), cam->GetGI().GetFar());
+            auto ptm = *reinterpret_cast<yunuGI::Matrix4x4*>(&prm);
+
+            yunuGI::Matrix4x4 im = yunuGI::Matrix4x4();
+
+            auto gvtm = application::editor::math::ConvertVTM(vtm);
+            auto gptm = application::editor::math::ConvertPTM(ptm);
+
+            auto beforeVTM = gvtm;
+
+            if (!pm.GetSelectedParticleInstanceData().expired())
+            {
+                auto pi = pm.GetSelectedParticleInstanceData();
+                auto pobj = pm.GetParticleToolInstanceObject(pm.GetSelectedParticleInstanceData());
+
+                yunuGI::Matrix4x4 tm = yunuGI::Matrix4x4();
+                Vector3d startPosition = Vector3d();
+
+                tm = pobj->GetTransform()->GetWorldTM();
+
+                auto objgwtm = application::editor::math::ConvertWTM(tm);
+                if (ImGuizmo::Manipulate(reinterpret_cast<float*>(&beforeVTM), reinterpret_cast<float*>(&gptm), operation, mode, reinterpret_cast<float*>(&objgwtm), NULL, NULL, NULL, NULL))
+                {
+                    ImGui_UpdateEditableDataWTM(pi, application::editor::math::ConvertWTM(objgwtm));
+                }
+
+                ImGui::PopClipRect();
+            }
+
             ImGui::End();
         }
 
@@ -600,16 +661,16 @@ void DrawMenuBar()
         }
     }
 
-    ImGui::Text(" | Use IBL : ");
-    if (ImGui::Checkbox("##Use IBL", &g_useIBL))
-    {
-        yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(g_useIBL);
-    }
-
     if (ImGui::Button("Camera Reset"))
     {
         tests::GraphicsTestCam* cts = static_cast<tests::GraphicsTestCam*>(yunutyEngine::graphics::Camera::GetMainCamera());
         cts->Reset();
+    }
+
+    ImGui::Text(" | Use IBL : ");
+    if (ImGui::Checkbox("##Use IBL", &g_useIBL))
+    {
+        yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(g_useIBL);
     }
 
     if (isParticleEditMode)
@@ -711,51 +772,137 @@ void ShowSkinnedFBXList()
         selections.push_back(each->getName());
     }
 
+    bool rightClickPopup = false;
+
     for (int i = 0; i < selections.size(); i++)
     {
-        ShowFBXNode(fbxList[i]);
+        rightClickPopup |= ShowFBXNode(fbxList[i]);
+    }
+
+    if (rightClickPopup)
+    {
+        ImGui::OpenPopup("##FBX_Popup");
+    }
+
+    if (ImGui::BeginPopup("##FBX_Popup"))
+    {
+        if (ImGui::MenuItem("Add Particle From Template"))
+        {
+            application::editor::imgui::ShowMessageBox("From Particle", []()
+                {
+                    application::editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+                    ImGui::Separator();
+
+                    static std::string particleName = "None";
+
+                    ImGui::SetNextItemWidth(-1);
+                    if (ImGui::BeginCombo("##ParticleListCombo", particleName.c_str()))
+                    {
+                        for (auto& each : pm.GetParticleList())
+                        {
+                            const bool is_selected = (particleName == each.lock()->name);
+                            if (ImGui::Selectable(each.lock()->name.c_str(), is_selected))
+                            {
+                                particleName = each.lock()->name;
+                            }
+
+                            if (is_selected)
+                            {
+                                ImGui::SetItemDefaultFocus();
+                            }
+                        }
+                        ImGui::EndCombo();
+                    }
+
+                    ImGui::Separator();
+
+                    if (ImGui::Button("Create"))
+                    {
+                        if (particleName != "None")
+                        {
+                            pm.AddParticleInstance(pm.GetSelectedFBXData(), particleName);
+                            particleName = "None";
+                            ImGui::CloseCurrentPopup();
+                            application::editor::imgui::CloseMessageBox("From Particle");
+                        }
+                    }
+                    ImGui::SameLine();
+
+                    if (ImGui::Button("Cancel"))
+                    {
+                        particleName = "None";
+                        ImGui::CloseCurrentPopup();
+                        application::editor::imgui::CloseMessageBox("From Particle");
+                    }
+                }, 300);
+        }
+
+        if (ImGui::MenuItem("Add New Particle"))
+        {
+            pm.AddParticleInstance(pm.GetSelectedFBXData());
+        }
+
+        ImGui::EndPopup();
     }
 }
 
-void ShowFBXNode(yunutyEngine::GameObject* target)
+bool ShowFBXNode(yunutyEngine::GameObject* target)
 {
     static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
-    
+
+    bool rightClickPopup = false;
+
     bool isSelected = (target == pm.GetSelectedFBXData());
 
     if (isSelected)
     {
-        ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(1,1,1,1));
-        ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(1, 1, 1, 1));
+        auto pos = ImGui::GetCurrentWindow()->DC.CursorPos;
+        ImGui::RenderFrame(pos, ImVec2(pos.x + ImGui::GetContentRegionAvail().x, pos.y + ImGui::CalcTextSize("Font").y), ImGui::GetColorU32(ImGuiCol_HeaderActive), false, 0.0f);
     }
 
     if (ImGui::TreeNode(target->getName().c_str()))
     {
-        if (!isSelected)
+        if (ImGui::IsItemClicked() && isSelected)
         {
-            pm.SetSelectedFBXData(target);
+            pm.SetSelectedFBXData(nullptr);
         }
 
-        for (auto& child : target->GetChildren())
+        if (isSelected && ImGui::IsItemClicked(ImGuiMouseButton_Right))
         {
+            rightClickPopup = true;
+        }
 
+        for (auto& each : pm.GetChildrenParticleInstanceList(target->getName()))
+        {
+            bool selected = (pm.GetSelectedParticleInstanceData().lock() == each.lock());
+            if (ImGui::Selectable(pm.GetParticleToolInstanceObject(each)->getName().c_str(), selected))
+            {
+                if (isSelected)
+                {
+                    if (selected)
+                    {
+                        pm.SetSelectedParticleInstanceData(std::shared_ptr<application::particle::ParticleToolInstance>());
+                    }
+                    else
+                    {
+                        pm.SetSelectedParticleInstanceData(each);
+                    }
+                }
+            }
         }
 
         ImGui::TreePop();
     }
     else
     {
-        if (isSelected)
+        if (ImGui::IsItemClicked())
         {
-            pm.SetSelectedFBXData(nullptr);
+            pm.SetSelectedFBXData(target);
         }
     }
 
-    if (isSelected)
-    {
-        ImGui::PopStyleColor();
-        ImGui::PopStyleColor();
-    }
+    return rightClickPopup;
 }
 
 void ShowParticleEditor()
@@ -842,7 +989,69 @@ void ShowParticleEditor()
 
 void ShowSequencerEditor()
 {
+    using namespace application::editor::imgui;
 
+    static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+
+    if (!pm.GetSelectedParticleInstanceData().expired())
+    {
+        int idx = 0;
+        auto particleDataInstance = pm.GetSelectedParticleInstanceData().lock();
+        auto& particleData = particleDataInstance->particleData;
+        if (BeginSection_2Col(idx, "Particle Data", ImGui::GetContentRegionAvail().x, 0.3))
+        {
+            static const char* shapeList[2] = { "Cone", "Circle" };
+            int selectedShape = (int)particleData.shape;
+            if (Dropdown_2Col("Shape", shapeList, 2, &selectedShape))
+            {
+                particleData.shape = (application::particle::ParticleShape)selectedShape;
+            }
+
+            static const char* modeList[2] = { "Default", "Bursts" };
+            int selectedMode = (int)particleData.particleMode;
+            if (Dropdown_2Col("Mode", modeList, 2, &selectedMode))
+            {
+                particleData.particleMode = (application::particle::ParticleMode)selectedMode;
+            }
+
+            Checkbox_2Col("Loop", particleData.isLoop);
+            DragFloat_2Col("Life Time", particleData.lifeTime);
+            DragFloat_2Col("Speed", particleData.speed);
+            DragFloat_2Col("Start Scale", particleData.startScale);
+            DragFloat_2Col("End Scale", particleData.endScale);
+
+            int maxParticle = particleData.maxParticle;
+            if (DragInt_2Col("Max Particle", maxParticle, true, 1.f, 1, 500))
+            {
+                particleData.maxParticle = maxParticle;
+            }
+
+            Checkbox_2Col("Play Awake", particleData.playAwake);
+
+            switch (particleData.particleMode)
+            {
+                case application::particle::ParticleMode::Default:
+                {
+                    DragFloat_2Col("Rate OverTime", particleData.rateOverTime);
+                    break;
+                }
+                case application::particle::ParticleMode::Bursts:
+                {
+                    DragInt_2Col("Bursts Count", particleData.burstsCount);
+                    DragFloat_2Col("Interval", particleData.interval);
+                    break;
+                }
+                default:
+                    break;
+            }
+
+            pm.UpdateParticleInstanceDataObj(particleDataInstance);
+
+            EndSection();
+        }
+
+        ImGui_DrawTransform(idx);
+    }
 }
 
 void InputUpdate()
@@ -875,6 +1084,26 @@ void InputUpdate()
                     SavePPIs();
                 }
             }
+        }
+    }
+
+    if (!ImGui::IsMouseDown(ImGuiMouseButton_Right))
+    {
+        if (ImGui::IsKeyPressed(ImGuiKey_Q))
+        {
+            operation = (ImGuizmo::OPERATION)0;
+        }
+        else if (ImGui::IsKeyPressed(ImGuiKey_W))
+        {
+            operation = ImGuizmo::OPERATION::TRANSLATE;
+        }
+        else if (ImGui::IsKeyPressed(ImGuiKey_E))
+        {
+            operation = ImGuizmo::OPERATION::ROTATE;
+        }
+        else if (ImGui::IsKeyPressed(ImGuiKey_R))
+        {
+            operation = ImGuizmo::OPERATION::SCALE;
         }
     }
 }
@@ -989,5 +1218,201 @@ void LoadResourcesRecursively()
                 resourceManager->LoadFile(("FBX/" + each.string()).c_str());
             }
         }
+    }
+}
+
+void ImGui_UpdateEditableDataWTM(const std::weak_ptr<application::particle::ParticleToolInstance>& target, const yunuGI::Matrix4x4& wtm)
+{
+    static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+
+    yunuGI::Vector3 scale;
+    yunuGI::Quaternion rotation;
+    yunuGI::Vector3 translation;
+    application::editor::math::DecomposeWTM(wtm, scale, rotation, translation);
+
+    target.lock()->offsetPos = *reinterpret_cast<Vector3f*>(&translation);
+    target.lock()->rotation = *reinterpret_cast<Quaternion*>(&rotation);
+    target.lock()->scale = *reinterpret_cast<Vector3f*>(&scale);
+
+    pm.UpdateParticleInstanceDataObj(target);
+}
+
+void ImGui_DrawTransform(int& idx)
+{
+    static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+
+    auto particleDataInstance = pm.GetSelectedParticleInstanceData().lock();
+    auto& particleData = particleDataInstance->particleData;
+    auto pobj = pm.GetParticleToolInstanceObject(pm.GetSelectedParticleInstanceData());
+
+    static bool isEditing = false;
+
+    if (application::editor::imgui::BeginSection_1Col(idx, "TransForm", ImGui::GetContentRegionAvail().x))
+    {
+        ImGui::TableNextRow();
+        ImGui::TableSetColumnIndex(0);
+
+        Vector3f position = Vector3f();
+        Vector3f rotation = Vector3f();
+        Vector3f scale = Vector3f(1, 1, 1);
+
+        bool reset[9] = { false };
+        bool endEdit = false;
+
+        position = pobj->GetTransform()->GetLocalPosition();
+        rotation = pobj->GetTransform()->GetLocalRotation().Euler();
+        scale = pobj->GetTransform()->GetLocalScale();
+
+        auto resetPosition = application::editor::imgui::Vector3Control("Position", position.x, position.y, position.z);
+        auto resetRotation = application::editor::imgui::Vector3Control("Rotation", rotation.x, rotation.y, rotation.z);
+        auto resetScale = application::editor::imgui::Vector3Control("Scale", scale.x, scale.y, scale.z);
+
+        switch (resetPosition)
+        {
+            case application::editor::imgui::Vector3Flags::ResetX:
+                reset[0] = true;
+                break;
+            case application::editor::imgui::Vector3Flags::ResetY:
+                reset[1] = true;
+                break;
+            case application::editor::imgui::Vector3Flags::ResetZ:
+                reset[2] = true;
+                break;
+            case application::editor::imgui::Vector3Flags::EndEditX:
+                endEdit = true;
+                break;
+            case application::editor::imgui::Vector3Flags::EndEditY:
+                endEdit = true;
+                break;
+            case application::editor::imgui::Vector3Flags::EndEditZ:
+                endEdit = true;
+                break;
+            default:
+                break;
+        }
+
+        switch (resetRotation)
+        {
+            case application::editor::imgui::Vector3Flags::ResetX:
+                reset[3] = true;
+                break;
+            case application::editor::imgui::Vector3Flags::ResetY:
+                reset[4] = true;
+                break;
+            case application::editor::imgui::Vector3Flags::ResetZ:
+                reset[5] = true;
+                break;
+            case application::editor::imgui::Vector3Flags::EndEditX:
+                endEdit = true;
+                break;
+            case application::editor::imgui::Vector3Flags::EndEditY:
+                endEdit = true;
+                break;
+            case application::editor::imgui::Vector3Flags::EndEditZ:
+                endEdit = true;
+                break;
+            default:
+                break;
+        }
+
+        switch (resetScale)
+        {
+            case application::editor::imgui::Vector3Flags::ResetX:
+                reset[6] = true;
+                break;
+            case application::editor::imgui::Vector3Flags::ResetY:
+                reset[7] = true;
+                break;
+            case application::editor::imgui::Vector3Flags::ResetZ:
+                reset[8] = true;
+                break;
+            case application::editor::imgui::Vector3Flags::EndEditX:
+                endEdit = true;
+                break;
+            case application::editor::imgui::Vector3Flags::EndEditY:
+                endEdit = true;
+                break;
+            case application::editor::imgui::Vector3Flags::EndEditZ:
+                endEdit = true;
+                break;
+            default:
+                break;
+        }
+
+        if (reset[0])
+        {
+            position.x = 0;
+        }
+        else if (reset[1])
+        {
+            position.y = 0;
+        }
+        else if (reset[2])
+        {
+            position.z = 0;
+        }
+        else if (reset[3])
+        {
+            rotation.x = 0;
+        }
+        else if (reset[4])
+        {
+            rotation.y = 0;
+        }
+        else if (reset[5])
+        {
+            rotation.z = 0;
+        }
+        else if (reset[6])
+        {
+            scale.x = 1;
+        }
+        else if (reset[7])
+        {
+            scale.y = 1;
+        }
+        else if (reset[8])
+        {
+            scale.z = 1;
+        }
+
+        if (isEditing == false &&
+            (position != Vector3f(pobj->GetTransform()->GetLocalPosition()) ||
+                rotation != Vector3f(pobj->GetTransform()->GetLocalRotation().Euler()) ||
+                scale != Vector3f(pobj->GetTransform()->GetLocalScale())))
+        {
+            isEditing = true;
+        }
+
+        particleDataInstance->offsetPos = position;
+        particleDataInstance->rotation = Quaternion(rotation);
+
+        if (scale.x == 0)
+        {
+            scale.x = 0.000001;
+        }
+        if (scale.y == 0)
+        {
+            scale.y = 0.000001;
+        }
+        if (scale.z == 0)
+        {
+            scale.z = 0.000001;
+        }
+
+        particleDataInstance->scale = scale;
+        pm.UpdateParticleInstanceDataObj(particleDataInstance);
+
+        for (auto each : reset)
+        {
+            endEdit |= each;
+        }
+
+        if (endEdit)
+        {
+            isEditing = false;
+        }
+
+        application::editor::imgui::EndSection();
     }
 }
