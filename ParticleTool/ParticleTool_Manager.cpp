@@ -13,21 +13,8 @@ namespace application
 	{
 		void ParticleTool_Manager::Clear()
 		{
-			currentPPPath = "";
-			currentPPIsPath = "";
-
-			SetSelectedFBXData(nullptr);
-			SetSelectedParticleData(std::shared_ptr<ParticleToolData>());
-			SetSelectedParticleInstanceData(std::shared_ptr<ParticleToolInstance>());
-
-			particleList.clear();
-			for (auto& [key, val] : particleObjList)
-			{
-				yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(val);
-			}
-			particleObjList.clear();
-
-			ClearChildPIs();
+			ClearPP();
+			ClearPPIs();
 		}
 
 		void ParticleTool_Manager::LoadSkinnedFBX()
@@ -70,8 +57,7 @@ namespace application
 				json mapData;
 				loadFile >> mapData;
 
-				// Manager 초기화
-				Clear();
+				ClearPP();
 
 				auto scene = yunutyEngine::Scene::getCurrentScene();
 
@@ -291,35 +277,36 @@ namespace application
 				json mapData;
 				loadFile >> mapData;
 
-				// 대상이 되는 pp 파일이 없을 경우 취소
-				if (mapData.find("pp_path") == mapData.end())
-				{
-					loadFile.close();
-					return false;
-				}
-
-				if (!LoadPP(mapData["pp_path"]))
-				{
-					return false;
-				}
-
-				json instancesList = mapData["ParticleInstanceList"];
+				ClearPPIs();
 
 				auto scene = yunutyEngine::Scene::getCurrentScene();
 
-				auto objSize = instancesList.size();
-				std::string particleName;
-
-				ClearChildPIs();
+				auto objSize = mapData.size();
 
 				for (int i = 0; i < objSize; i++)
 				{
-					// 추가 로직
+					std::string key = mapData[i]["targetUnit"];
+					auto ptr = AddParticleInstance(skinnedObjList[key]);
+					auto sptr = ptr.lock();
+					sptr->particleData = mapData[i]["particleData"];
+					sptr->targetUnit = key;
+					sptr->name = mapData[i]["name"];
+					sptr->offsetPos.x = mapData[i]["offsetPos"]["x"];
+					sptr->offsetPos.y = mapData[i]["offsetPos"]["y"];
+					sptr->offsetPos.z = mapData[i]["offsetPos"]["z"];
+					sptr->rotation.w = mapData[i]["rotation"]["w"];
+					sptr->rotation.x = mapData[i]["rotation"]["x"];
+					sptr->rotation.y = mapData[i]["rotation"]["y"];
+					sptr->rotation.z = mapData[i]["rotation"]["z"];
+					sptr->scale.x = mapData[i]["scale"]["x"];
+					sptr->scale.y = mapData[i]["scale"]["y"];
+					sptr->scale.z = mapData[i]["scale"]["z"];
+					UpdateParticleInstanceDataObj(sptr);
 				}
 
 				loadFile.close();
 
-				currentPPIsPath = path;
+				currentPPPath = path;
 				return true;
 			}
 			else
@@ -328,10 +315,50 @@ namespace application
 			}
 		}
 
-		/// 로직 필요
 		bool ParticleTool_Manager::SavePPIs(const std::string& path)
 		{
-			return false;
+			json finalPP;
+
+			for (auto& [fbxObj, dataList] : particleInstanceList)
+			{
+				for (auto& each : dataList)
+				{
+					json ppData;
+					ppData["particleData"] = each->particleData;
+					ppData["targetUnit"] = each->targetUnit;
+					ppData["name"] = each->name;
+					ppData["offsetPos"]["x"] = each->offsetPos.x;
+					ppData["offsetPos"]["y"] = each->offsetPos.y;
+					ppData["offsetPos"]["z"] = each->offsetPos.z;
+					ppData["rotation"]["w"] = each->rotation.w;
+					ppData["rotation"]["x"] = each->rotation.x;
+					ppData["rotation"]["y"] = each->rotation.y;
+					ppData["rotation"]["z"] = each->rotation.z;
+					ppData["scale"]["x"] = each->scale.x;
+					ppData["scale"]["y"] = each->scale.y;
+					ppData["scale"]["z"] = each->scale.z;
+					finalPP.push_back(ppData);
+				}
+			}
+
+			if (finalPP.is_null())
+			{
+				return false;
+			}
+
+			std::ofstream saveFile{ path };
+
+			if (saveFile.is_open())
+			{
+				saveFile << finalPP.dump(4);
+				saveFile.close();
+
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		std::string ParticleTool_Manager::GetCurrentPPIsPath() const
@@ -361,8 +388,6 @@ namespace application
 
 		void ParticleTool_Manager::SetSelectedFBXData(yunutyEngine::GameObject* fbxObj)
 		{
-			/// 문제가 발생하는 구간입니다.
-
 			if (fbxObj == nullptr)
 			{
 				if (selectedFBXObject)
@@ -371,7 +396,6 @@ namespace application
 					{
 						SetSelectedParticleInstanceData(std::shared_ptr<ParticleToolInstance>());
 					}
-					/// 해당 요소가 if (selectedParticleInstanceData) 보다 상단에 올 경우 문제가 발생합니다.
 					selectedFBXObject->SetSelfActive(false);
 				}
 				selectedFBXObject = nullptr;
@@ -384,7 +408,6 @@ namespace application
 				{
 					SetSelectedParticleInstanceData(std::shared_ptr<ParticleToolInstance>());
 				}
-				/// 해당 요소가 if (selectedParticleInstanceData) 보다 상단에 올 경우 문제가 발생합니다.
 				selectedFBXObject->SetSelfActive(false);
 			}
 
@@ -443,6 +466,7 @@ namespace application
 			if (!name.empty() && particleList.contains(name))
 			{
 				ptr->particleData = *particleList[name];
+				ptr->name = "New PI From " + name;
 			}
 
 			UpdateParticleInstanceDataObj(ptr);
@@ -540,11 +564,27 @@ namespace application
 			
 			pptr->SetBurstsCount(sptr->particleData.burstsCount);
 			pptr->SetInterval(sptr->particleData.interval);
-
 		}
 
-		void ParticleTool_Manager::ClearChildPIs()
+		void ParticleTool_Manager::ClearPP()
 		{
+			currentPPPath = "";
+
+			for (auto& [key, val] : particleObjList)
+			{
+				yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(val);
+			}
+
+			SetSelectedParticleData(std::shared_ptr<ParticleToolData>());
+
+			particleList.clear();
+			particleObjList.clear();
+		}
+
+		void ParticleTool_Manager::ClearPPIs()
+		{
+			currentPPIsPath = "";
+
 			for (auto& [key, val] : particleInstanceList)
 			{
 				for (auto& each : val)
@@ -553,6 +593,7 @@ namespace application
 				}
 			}
 
+			SetSelectedFBXData(nullptr);
 			SetSelectedParticleInstanceData(std::shared_ptr<ParticleToolInstance>());
 
 			particleInstanceList.clear();
