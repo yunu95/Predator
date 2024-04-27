@@ -157,6 +157,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationEventManager.cpp" />
     <ClCompile Include="EditorMath.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="FileSystem.cpp" />
@@ -179,6 +180,8 @@
     <ClCompile Include="ParticleTool_Manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationEventManager.h" />
+    <ClInclude Include="AnimationEvents.h" />
     <ClInclude Include="EditorMath.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="GraphEditor.h" />
