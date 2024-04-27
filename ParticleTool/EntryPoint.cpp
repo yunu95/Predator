@@ -10,6 +10,9 @@
 #include "FileSystem.h"
 #include "ParticleToolData.h"
 #include "EditorMath.h"
+#include "ImCurveEdit.h"
+#include "ImSequencer.h"
+#include "GraphEditor.h"
 
 #include <DirectXMath.h>
 #include <d3d11.h>
@@ -54,8 +57,11 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param);
 LRESULT CALLBACK WndProcTool(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param);
 
-void CreateMyWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show);
-void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show);
+void CreateMyWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPWSTR lp_cmd_line, int n_cmd_show);
+void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPWSTR lp_cmd_line, int n_cmd_show);
+
+WNDCLASS wc;
+WNDCLASSEX wcEditor;
 
 void ResizeBuffers();
 
@@ -69,6 +75,7 @@ std::string ConvertWideStringToUTF8(const std::wstring& wideString) {
 void ShowParticleList();
 void ShowSkinnedFBXList();
 void ShowParticleEditor();
+void ShowParticleInstanceEditor();
 void ShowSequencerEditor();
 
 void LoadResourcesRecursively();
@@ -102,19 +109,387 @@ void ImGui_UpdateEditableDataWTM(const std::weak_ptr<application::particle::Part
 
 void ImGui_DrawTransform(int& idx);
 
+/// Sequencer
+#pragma region
+static const char* SequencerItemTypeNames[] = { "Animation" };
+
+struct RampEdit : public ImCurveEdit::Delegate
+{
+    RampEdit()
+    {
+        mPts[0][0] = ImVec2(-10.f, 0);
+        mPts[0][1] = ImVec2(20.f, 0.6f);
+        mPts[0][2] = ImVec2(25.f, 0.2f);
+        mPts[0][3] = ImVec2(70.f, 0.4f);
+        mPts[0][4] = ImVec2(120.f, 1.f);
+        mPointCount[0] = 5;
+
+        mPts[1][0] = ImVec2(-50.f, 0.2f);
+        mPts[1][1] = ImVec2(33.f, 0.7f);
+        mPts[1][2] = ImVec2(80.f, 0.2f);
+        mPts[1][3] = ImVec2(82.f, 0.8f);
+        mPointCount[1] = 4;
+
+
+        mPts[2][0] = ImVec2(40.f, 0);
+        mPts[2][1] = ImVec2(60.f, 0.1f);
+        mPts[2][2] = ImVec2(90.f, 0.82f);
+        mPts[2][3] = ImVec2(150.f, 0.24f);
+        mPts[2][4] = ImVec2(200.f, 0.34f);
+        mPts[2][5] = ImVec2(250.f, 0.12f);
+        mPointCount[2] = 6;
+        mbVisible[0] = mbVisible[1] = mbVisible[2] = true;
+        mMax = ImVec2(1.f, 1.f);
+        mMin = ImVec2(0.f, 0.f);
+    }
+    size_t GetCurveCount()
+    {
+        return 3;
+    }
+
+    bool IsVisible(size_t curveIndex)
+    {
+        return mbVisible[curveIndex];
+    }
+    size_t GetPointCount(size_t curveIndex)
+    {
+        return mPointCount[curveIndex];
+    }
+
+    uint32_t GetCurveColor(size_t curveIndex)
+    {
+        uint32_t cols[] = { 0xFF0000FF, 0xFF00FF00, 0xFFFF0000 };
+        return cols[curveIndex];
+    }
+    ImVec2* GetPoints(size_t curveIndex)
+    {
+        return mPts[curveIndex];
+    }
+    virtual ImCurveEdit::CurveType GetCurveType(size_t curveIndex) const { return ImCurveEdit::CurveSmooth; }
+    virtual int EditPoint(size_t curveIndex, int pointIndex, ImVec2 value)
+    {
+        mPts[curveIndex][pointIndex] = ImVec2(value.x, value.y);
+        SortValues(curveIndex);
+        for (size_t i = 0; i < GetPointCount(curveIndex); i++)
+        {
+            if (mPts[curveIndex][i].x == value.x)
+                return (int)i;
+        }
+        return pointIndex;
+    }
+    virtual void AddPoint(size_t curveIndex, ImVec2 value)
+    {
+        if (mPointCount[curveIndex] >= 8)
+            return;
+        mPts[curveIndex][mPointCount[curveIndex]++] = value;
+        SortValues(curveIndex);
+    }
+    virtual ImVec2& GetMax() { return mMax; }
+    virtual ImVec2& GetMin() { return mMin; }
+    virtual unsigned int GetBackgroundColor() { return 0; }
+    ImVec2 mPts[3][8];
+    size_t mPointCount[3];
+    bool mbVisible[3];
+    ImVec2 mMin;
+    ImVec2 mMax;
+private:
+    void SortValues(size_t curveIndex)
+    {
+        auto b = std::begin(mPts[curveIndex]);
+        auto e = std::begin(mPts[curveIndex]) + GetPointCount(curveIndex);
+        std::sort(b, e, [](ImVec2 a, ImVec2 b) { return a.x < b.x; });
+
+    }
+};
+
+struct MySequence : public ImSequencer::SequenceInterface
+{
+    // interface with sequencer
+
+    virtual int GetFrameMin() const {
+        return mFrameMin;
+    }
+    virtual int GetFrameMax() const {
+        return mFrameMax;
+    }
+    virtual int GetItemCount() const { return (int)myItems.size(); }
+
+    virtual int GetItemTypeCount() const { return sizeof(SequencerItemTypeNames) / sizeof(char*); }
+    virtual const char* GetItemTypeName(int typeIndex) const { return SequencerItemTypeNames[typeIndex]; }
+    virtual const char* GetItemLabel(int index) const
+    {
+        using namespace application::editor::imgui;
+
+        static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+
+        return pm.GetAnimationNameList(myItems[index].fbxName)[index].c_str();
+    }
+
+    virtual void Get(int index, int** start, int** end, int* type, unsigned int* color)
+    {
+        MySequenceItem& item = myItems[index];
+        if (color)
+            *color = 0xFFAA8080; // same color for everyone, return color based on type
+        if (start)
+            *start = &item.mFrameStart;
+        if (end)
+            *end = &item.mFrameEnd;
+        if (type)
+            *type = item.mType;
+    }
+    virtual void Add(int type) { }
+    virtual void Del(int index) { }
+    virtual void Duplicate(int index) { }
+
+    virtual size_t GetCustomHeight(int index) { return myItems[index].mExpanded ? 300 : 0; }
+
+    // my datas
+    MySequence() : mFrameMin(0), mFrameMax(0) {}
+    int mFrameMin, mFrameMax;
+    struct MySequenceItem
+    {
+        std::string fbxName = "None";
+        int mType;
+        int mFrameStart, mFrameEnd;
+        bool mExpanded;
+    };
+    std::vector<MySequenceItem> myItems;
+
+    /// Curve 관련된 것으로 보임
+    //RampEdit rampEdit;
+
+    virtual void DoubleClick(int index) 
+    {
+        if (myItems[index].mExpanded)
+        {
+            myItems[index].mExpanded = false;
+            return;
+        }
+        for (auto& item : myItems)
+            item.mExpanded = false;
+        myItems[index].mExpanded = !myItems[index].mExpanded;
+    }
+
+    virtual void CustomDraw(int index, ImDrawList* draw_list, const ImRect& rc, const ImRect& legendRect, const ImRect& clippingRect, const ImRect& legendClippingRect)
+    {
+        /*static const char* labels[] = { "Translation", "Rotation" , "Scale" };
+
+        rampEdit.mMax = ImVec2(float(mFrameMax), 1.f);
+        rampEdit.mMin = ImVec2(float(mFrameMin), 0.f);
+        draw_list->PushClipRect(legendClippingRect.Min, legendClippingRect.Max, true);
+        for (int i = 0; i < 3; i++)
+        {
+            ImVec2 pta(legendRect.Min.x + 30, legendRect.Min.y + i * 14.f);
+            ImVec2 ptb(legendRect.Max.x, legendRect.Min.y + (i + 1) * 14.f);
+            draw_list->AddText(pta, rampEdit.mbVisible[i] ? 0xFFFFFFFF : 0x80FFFFFF, labels[i]);
+            if (ImRect(pta, ptb).Contains(ImGui::GetMousePos()) && ImGui::IsMouseClicked(0))
+                rampEdit.mbVisible[i] = !rampEdit.mbVisible[i];
+        }
+        draw_list->PopClipRect();
+
+        ImGui::SetCursorScreenPos(rc.Min);
+        ImCurveEdit::Edit(rampEdit, ImVec2(rc.Max.x - rc.Min.x, rc.Max.y - rc.Min.y), 137 + index, &clippingRect);*/
+    }
+
+    virtual void CustomDrawCompact(int index, ImDrawList* draw_list, const ImRect& rc, const ImRect& clippingRect)
+    {
+        //rampEdit.mMax = ImVec2(float(mFrameMax), 1.f);
+        //rampEdit.mMin = ImVec2(float(mFrameMin), 0.f);
+        //draw_list->PushClipRect(clippingRect.Min, clippingRect.Max, true);
+        //for (int i = 0; i < 3; i++)
+        //{
+        //    for (int j = 0; j < rampEdit.mPointCount[i]; j++)
+        //    {
+        //        float p = rampEdit.mPts[i][j].x;
+        //        if (p < myItems[index].mFrameStart || p > myItems[index].mFrameEnd)
+        //            continue;
+        //        float r = (p - mFrameMin) / float(mFrameMax - mFrameMin);
+        //        float x = ImLerp(rc.Min.x, rc.Max.x, r);
+        //        draw_list->AddLine(ImVec2(x, rc.Min.y + 6), ImVec2(x, rc.Max.y - 4), 0xAA000000, 4.f);
+        //    }
+        //}
+        //draw_list->PopClipRect();
+    }
+};
+
+template <typename T, std::size_t N>
+struct Array
+{
+    T data[N];
+    const size_t size() const { return N; }
+
+    const T operator [] (size_t index) const { return data[index]; }
+    operator T* () {
+        T* p = new T[N];
+        memcpy(p, data, sizeof(data));
+        return p;
+    }
+};
+
+template <typename T, typename ... U> Array(T, U...)->Array<T, 1 + sizeof...(U)>;
+
+struct GraphEditorDelegate : public GraphEditor::Delegate
+{
+    bool AllowedLink(GraphEditor::NodeIndex from, GraphEditor::NodeIndex to) override
+    {
+        return true;
+    }
+
+    void SelectNode(GraphEditor::NodeIndex nodeIndex, bool selected) override
+    {
+        mNodes[nodeIndex].mSelected = selected;
+    }
+
+    void MoveSelectedNodes(const ImVec2 delta) override
+    {
+        for (auto& node : mNodes)
+        {
+            if (!node.mSelected)
+            {
+                continue;
+            }
+            node.x += delta.x;
+            node.y += delta.y;
+        }
+    }
+
+    virtual void RightClick(GraphEditor::NodeIndex nodeIndex, GraphEditor::SlotIndex slotIndexInput, GraphEditor::SlotIndex slotIndexOutput) override
+    {
+    }
+
+    void AddLink(GraphEditor::NodeIndex inputNodeIndex, GraphEditor::SlotIndex inputSlotIndex, GraphEditor::NodeIndex outputNodeIndex, GraphEditor::SlotIndex outputSlotIndex) override
+    {
+        mLinks.push_back({ inputNodeIndex, inputSlotIndex, outputNodeIndex, outputSlotIndex });
+    }
+
+    void DelLink(GraphEditor::LinkIndex linkIndex) override
+    {
+        mLinks.erase(mLinks.begin() + linkIndex);
+    }
+
+    void CustomDraw(ImDrawList* drawList, ImRect rectangle, GraphEditor::NodeIndex nodeIndex) override
+    {
+        drawList->AddLine(rectangle.Min, rectangle.Max, IM_COL32(0, 0, 0, 255));
+        drawList->AddText(rectangle.Min, IM_COL32(255, 128, 64, 255), "Draw");
+    }
+
+    const size_t GetTemplateCount() override
+    {
+        return sizeof(mTemplates) / sizeof(GraphEditor::Template);
+    }
+
+    const GraphEditor::Template GetTemplate(GraphEditor::TemplateIndex index) override
+    {
+        return mTemplates[index];
+    }
+
+    const size_t GetNodeCount() override
+    {
+        return mNodes.size();
+    }
+
+    const GraphEditor::Node GetNode(GraphEditor::NodeIndex index) override
+    {
+        const auto& myNode = mNodes[index];
+        return GraphEditor::Node
+        {
+            myNode.name,
+            myNode.templateIndex,
+            ImRect(ImVec2(myNode.x, myNode.y), ImVec2(myNode.x + 200, myNode.y + 200)),
+            myNode.mSelected
+        };
+    }
+
+    const size_t GetLinkCount() override
+    {
+        return mLinks.size();
+    }
+
+    const GraphEditor::Link GetLink(GraphEditor::LinkIndex index) override
+    {
+        return mLinks[index];
+    }
+
+    // Graph datas
+    static const inline GraphEditor::Template mTemplates[] = {
+        {
+            IM_COL32(160, 160, 180, 255),
+            IM_COL32(100, 100, 140, 255),
+            IM_COL32(110, 110, 150, 255),
+            1,
+            Array{"MyInput"},
+            nullptr,
+            2,
+            Array{"MyOutput0", "MyOuput1"},
+            nullptr
+        },
+
+        {
+            IM_COL32(180, 160, 160, 255),
+            IM_COL32(140, 100, 100, 255),
+            IM_COL32(150, 110, 110, 255),
+            3,
+            nullptr,
+            Array{ IM_COL32(200,100,100,255), IM_COL32(100,200,100,255), IM_COL32(100,100,200,255) },
+            1,
+            Array{"MyOutput0"},
+            Array{ IM_COL32(200,200,200,255)}
+        }
+    };
+
+    struct Node
+    {
+        const char* name;
+        GraphEditor::TemplateIndex templateIndex;
+        float x, y;
+        bool mSelected;
+    };
+
+    std::vector<Node> mNodes = {
+        {
+            "My Node 0",
+            0,
+            0, 0,
+            false
+        },
+
+        {
+            "My Node 1",
+            0,
+            400, 0,
+            false
+        },
+
+        {
+            "My Node 2",
+            1,
+            400, 400,
+            false
+        }
+    };
+
+    std::vector<GraphEditor::Link> mLinks = { {0, 0, 1, 0} };
+};
+
+
+std::map<const std::string, MySequence> mySequenceMap;
+
+#pragma endregion Sequencer
+///
+
 std::mutex loopTodoRegistrationMutex;
 // AddMainLoopTodo로 등록된 휘발성 콜백 함수들입니다.
 // 매 루프가 종료될 때 이 컨테이너에 실행 동작들이 담겨있다면 모두 실행하고 내용을 비웁니다.
 // 이 목록에 담긴 함수들이 실행되는 동안 게임 엔진 스레드는 동작을 정지합니다.
 std::vector<std::function<void()>> loopRegistrations;
 
-int WINAPI main(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show)
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
-    CreateMyWindow(h_instance, h_prev_instance, lp_cmd_line, n_cmd_show);
+    CreateMyWindow(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 
     yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [&]()
     {
-        CreateToolWindow(h_instance, nullptr, lp_cmd_line, n_cmd_show);
+        CreateToolWindow(hInstance, nullptr, lpCmdLine, nCmdShow);
 
         // Setup Platform/Renderer backends
         g_pd3dDevice = reinterpret_cast<ID3D11Device*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDevice());
@@ -212,8 +587,24 @@ int WINAPI main(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_li
 
     /// Contents
     LoadResourcesRecursively();
-    application::particle::ParticleTool_Manager::GetSingletonInstance().LoadPP("InWanderLand.pp");
-    application::particle::ParticleTool_Manager::GetSingletonInstance().LoadSkinnedFBX();
+    auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+    pm.LoadPP("InWanderLand.pp");
+    pm.LoadSkinnedFBX();
+
+    int i = 0;
+    for (auto& each : pm.GetSkinnedFBXList())
+    {
+        auto fbxName = each->getName();
+        mySequenceMap.insert({ fbxName, MySequence() });
+        mySequenceMap[fbxName].mFrameMin = 0;
+        mySequenceMap[fbxName].mFrameMax = 300;
+        for (auto& each : pm.GetAnimationNameList(fbxName))
+        {
+            auto ani = pm.GetMatchingIAnimation(fbxName, each);
+            mySequenceMap[fbxName].myItems.push_back(MySequence::MySequenceItem{ fbxName, 0, 0, (int)ani->GetTotalFrame(), false });
+        }
+        i++;
+    }
     ///
 
     yunutyEngine::YunutyCycle::SingleInstance().Play();
@@ -251,6 +642,14 @@ int WINAPI main(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_li
     }
     if (YunutyCycle::SingleInstance().IsGameRunning())
         YunutyCycle::SingleInstance().Release();
+
+    
+    /// Finalize
+    yunutyEngine::graphics::Renderer::SingleInstance().Finalize();
+    ::DestroyWindow(g_hwnd);
+    ::UnregisterClass(wc.lpszClassName, wc.hInstance);
+    ::DestroyWindow(g_Toolhwnd);
+    ::UnregisterClass(wcEditor.lpszClassName, wcEditor.hInstance);
 
 
     return 0; // 성공적으로 종료
@@ -372,10 +771,10 @@ void CleanupRenderTarget()
     if (g_mainRenderTargetView) { g_mainRenderTargetView->Release(); g_mainRenderTargetView = nullptr; }
 }
 
-void CreateMyWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show)
+void CreateMyWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPWSTR lp_cmd_line, int n_cmd_show)
 {
     // 윈도우 클래스 등록
-    WNDCLASS wc = {};
+    wc = {};
     wc.lpfnWndProc = WndProc;
     wc.hInstance = h_instance;
     wc.lpszClassName = L"MyWindowClass";
@@ -401,10 +800,10 @@ void CreateMyWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cm
     UpdateWindow(g_hwnd);
 }
 
-void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show)
+void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPWSTR lp_cmd_line, int n_cmd_show)
 {
     // 윈도우 클래스 등록
-    WNDCLASSEX wcEditor = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProcTool, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("ResourceTool"), NULL };
+    wcEditor = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProcTool, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("ResourceTool"), NULL };
     RegisterClassEx(&wcEditor);
 
     // 윈도우 생성
@@ -482,6 +881,17 @@ void ImGuiUpdate()
                 ShowParticleEditor();
             }
             else
+            {
+                ShowParticleInstanceEditor();
+            }
+
+            ImGui::End();
+        }
+
+        {
+            ImGui::Begin("Sequencer Editor##Particle");
+
+            if (!isParticleEditMode && pm.GetSelectedFBXData())
             {
                 ShowSequencerEditor();
             }
@@ -987,7 +1397,7 @@ void ShowParticleEditor()
     }
 }
 
-void ShowSequencerEditor()
+void ShowParticleInstanceEditor()
 {
     using namespace application::editor::imgui;
 
@@ -1073,6 +1483,72 @@ void ShowSequencerEditor()
     }
 }
 
+void ShowSequencerEditor()
+{
+    using namespace application::editor::imgui;
+
+    static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+
+    // let's create the sequencer
+    int selectedEntry = -1;
+    static int firstFrame = 0;
+    static bool expanded = true;
+    static int currentFrame = 0;
+
+    ImGui::PushItemWidth(130);
+    //ImGui::InputInt("Frame Min", &mySequence.mFrameMin);
+    //ImGui::SameLine();
+    ImGui::InputInt("Current Frame", &currentFrame);
+    //ImGui::SameLine();
+    //ImGui::InputInt("Frame Max", &mySequence.mFrameMax);
+    ImGui::PopItemWidth();
+
+    auto obj = pm.GetSelectedFBXData();
+    auto fbxName = obj->getName();
+    auto animator = obj->GetComponent<graphics::Animator>();
+
+    int aniIndex = 0;
+    for (auto each : pm.GetAnimationNameList(fbxName))
+    {
+        if (pm.GetMatchingIAnimation(fbxName, each) == pm.GetSelectedAnimation())
+        {
+            selectedEntry = aniIndex;
+            break;
+        }
+        aniIndex++;
+    }
+
+    ImSequencer::Sequencer(&mySequenceMap[fbxName], &currentFrame, &expanded, &selectedEntry, &firstFrame, ImSequencer::SEQUENCER_EDIT_STARTEND | ImSequencer::SEQUENCER_CHANGE_FRAME);
+    // add a UI to edit that particular item
+    if (selectedEntry != -1)
+    {
+        MySequence::MySequenceItem& item = mySequenceMap[fbxName].myItems[selectedEntry];
+        auto ani = pm.GetMatchingIAnimation(fbxName, mySequenceMap[fbxName].GetItemLabel(selectedEntry));
+        item.mFrameStart = 0;
+        item.mFrameEnd = ani->GetTotalFrame();
+        if (pm.GetSelectedAnimation() != ani)
+        {
+            pm.SetSelectedAnimation(ani);
+            currentFrame = 0;
+        }
+
+        if (currentFrame > item.mFrameEnd)
+        {
+            currentFrame = item.mFrameEnd;
+        }
+
+        if (!pm.IsAnimationPlaying())
+        {
+            animator->SetAnimationFrame(ani, currentFrame);
+        }
+
+        if (ImGui::Button("Play Animation"))
+        {
+            pm.PlaySelectedAnimation();
+        }
+    }
+}
+
 void InputUpdate()
 {
     static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
@@ -1085,22 +1561,22 @@ void InputUpdate()
             {
                 if (!pm.GetCurrentPPPath().empty())
                 {
-                    SaveAsPP();
+                    SavePP();
                 }
                 else
                 {
-                    SavePP();
+                    SaveAsPP();
                 }
             }
             else
             {
                 if (!pm.GetCurrentPPIsPath().empty())
                 {
-                    SaveAsPPIs();
+                    SavePPIs();
                 }
                 else
                 {
-                    SavePPIs();
+                    SaveAsPPIs();
                 }
             }
         }
@@ -1123,6 +1599,24 @@ void InputUpdate()
         else if (ImGui::IsKeyPressed(ImGuiKey_R))
         {
             operation = ImGuizmo::OPERATION::SCALE;
+        }
+    }
+
+    if (ImGui::IsKeyPressed(ImGuiKey_Delete))
+    {
+        if (isParticleEditMode)
+        {
+            if (!pm.GetSelectedParticleData().expired())
+            {
+                pm.EraseParticle(pm.GetSelectedParticleData().lock()->name);
+            }
+        }
+        else
+        {
+            if (!pm.GetSelectedParticleInstanceData().expired())
+            {
+                pm.EraseParticleInstance(pm.GetSelectedFBXData(), pm.GetSelectedParticleInstanceData());
+            }
         }
     }
 }

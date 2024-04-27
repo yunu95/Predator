@@ -5,6 +5,7 @@
 #include "TemplateDataList.h"
 #include "EditorResourceManager.h"
 #include "EditorPopupManager.h"
+#include "EditorLayer.h"
 
 const float DRAG_MOUSE_THRESHOLD_FACTOR_UTILL = 0.50f;
 
@@ -955,6 +956,11 @@ namespace application
 					}
 
 					ImGui::EndPopup();
+				}
+
+				if (!messageBoxData.IsOpen)
+				{
+					editor::EditorLayer::SetInputControl(true);
 				}
 			}
 
