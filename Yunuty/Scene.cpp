@@ -159,7 +159,7 @@ yunutyEngine::GameObject* Scene::AddGameObjectFromFBX(string fbxName, yunuGI::Ve
             auto animator = gameObject->AddComponent<yunutyEngine::graphics::Animator>();
             animator->GetGI().SetModel(std::wstring{ fbxName.begin(), fbxName.end() });
 
-            auto eventController = gameObject->AddComponent<yunutyEngine::AnimationEventController>();
+            auto eventController = gameObject->AddComponent<yunutyEngine::graphics::AnimationEventController>();
         }
         bool boundsInit = false;
         for (int i = 0; i < data->child.size(); ++i)

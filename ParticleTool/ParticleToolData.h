@@ -148,9 +148,8 @@ namespace application
         public:
 			ParticleToolData particleData = ParticleToolData();
 
-			// 이거는 데이터 양식 보고
 			std::string targetUnit = "None";
-			std::string name = "New PI";
+			std::string name = "None";
             Vector3d offsetPos = Vector3d();
             Quaternion rotation = Quaternion();
             Vector3d scale = Vector3d(1, 1, 1);

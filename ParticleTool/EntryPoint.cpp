@@ -1411,24 +1411,6 @@ void ShowParticleInstanceEditor()
 
         if (BeginSection_2Col(idx, "Particle Instance Data", ImGui::GetContentRegionAvail().x, 0.3))
         {
-            {
-                std::string particleInstanceName = particleDataInstance->name;
-                particleInstanceName.reserve(32);
-                ImGui::TableNextRow();
-                ImGui::TableSetColumnIndex(0);
-                SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
-                ImGui::AlignTextToFramePadding();
-                ImGui::Text("Name");
-                ImGui::TableSetColumnIndex(1);
-                ImGui::SetNextItemWidth(-1);
-                if (ImGui::InputText("##Particle_Ins_Name", &particleInstanceName[0], 32))
-                {
-                    int strSize = MultiByteToWideChar(CP_UTF8, 0, particleInstanceName.c_str(), -1, nullptr, 0) - 1;
-                    particleInstanceName.resize(strSize);
-                    particleDataInstance->name = particleInstanceName;
-                }
-            }
-
             static const char* shapeList[2] = { "Cone", "Circle" };
             int selectedShape = (int)particleData.shape;
             if (Dropdown_2Col("Shape", shapeList, 2, &selectedShape))
@@ -1503,6 +1485,15 @@ void ShowSequencerEditor()
     //ImGui::InputInt("Frame Max", &mySequence.mFrameMax);
     ImGui::PopItemWidth();
 
+    if (pm.GetSelectedAnimation())
+    {
+        ImGui::SameLine();
+        if (ImGui::Button("Play Animation"))
+        {
+            pm.PlaySelectedAnimation();
+        }
+    }
+
     auto obj = pm.GetSelectedFBXData();
     auto fbxName = obj->getName();
     auto animator = obj->GetComponent<graphics::Animator>();
@@ -1540,11 +1531,6 @@ void ShowSequencerEditor()
         if (!pm.IsAnimationPlaying())
         {
             animator->SetAnimationFrame(ani, currentFrame);
-        }
-
-        if (ImGui::Button("Play Animation"))
-        {
-            pm.PlaySelectedAnimation();
         }
     }
 }
