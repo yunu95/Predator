@@ -39,6 +39,9 @@ namespace yunutyEngine::graphics
 		void SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame);
 		void ChangeAnimation(yunuGI::IAnimation* animation, float transitionDuration, float transitionSpeed);
 		
+		/// Play 중인지 확인할 수 있으면 좋겠어서 추가해 보았습니다.
+		bool IsPlaying() { return isPlay; }
+
 	private:
 		void ClearAnimationEvent(yunuGI::IAnimation* animation);
 
