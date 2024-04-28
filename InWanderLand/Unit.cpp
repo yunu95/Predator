@@ -181,7 +181,7 @@ void Unit::Start()
     {
         AttackSystem* atkSys = GetGameObject()->GetComponent<AttackSystem>();
 
-        m_animatorComponent->PushAnimation(unitAnimations.m_attackAnimation, attackTimingFrame, [=]()
+        m_animatorComponent->PushAnimationWithFunc(unitAnimations.m_attackAnimation, attackTimingFrame, [=]()
             {
                 if (m_currentTargetUnit != nullptr && currentOrder == UnitState::Attack)
                 {
@@ -1112,7 +1112,7 @@ void Unit::RegisterSkillWithAnimation(SkillEnum p_enum)
     {
         m_animatorComponent = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
 
-        m_animatorComponent->PushAnimation(temp, m_skillTimingFrameMap.find(p_enum)->second, [=]()
+        m_animatorComponent->PushAnimationWithFunc(temp, m_skillTimingFrameMap.find(p_enum)->second, [=]()
             {
                 if (m_currentSelectedSkill == p_enum)
                 {
