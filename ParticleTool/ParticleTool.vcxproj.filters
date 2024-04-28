@@ -54,6 +54,15 @@
     <ClCompile Include="EditorMath.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="ImCurveEdit.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphEditor.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationEventManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestUtilGraphicsTestCam.h">
@@ -90,6 +99,18 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="EditorMath.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ImCurveEdit.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphEditor.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationEvents.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationEventManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

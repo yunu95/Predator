@@ -43,8 +43,11 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param);
 LRESULT CALLBACK WndProcTool(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param);
 
-void CreateMyWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show);
-void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show);
+void CreateMyWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPWSTR lp_cmd_line, int n_cmd_show);
+void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPWSTR lp_cmd_line, int n_cmd_show);
+
+WNDCLASS wc;
+WNDCLASSEX wcEditor;
 
 void ResizeBuffers();
 
@@ -96,7 +99,7 @@ std::mutex loopTodoRegistrationMutex;
 // 이 목록에 담긴 함수들이 실행되는 동안 게임 엔진 스레드는 동작을 정지합니다.
 std::vector<std::function<void()>> loopRegistrations;
 
-int WINAPI main(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show)
+int APIENTRY wWinMain(_In_ HINSTANCE h_instance, _In_opt_ HINSTANCE h_prev_instance, _In_ LPWSTR lp_cmd_line, _In_ int n_cmd_show)
 {
 	CreateMyWindow(h_instance, h_prev_instance, lp_cmd_line, n_cmd_show);
 
@@ -232,6 +235,12 @@ int WINAPI main(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_li
 	if (YunutyCycle::SingleInstance().IsGameRunning())
 		YunutyCycle::SingleInstance().Release();
 
+	/// Finalize
+	yunutyEngine::graphics::Renderer::SingleInstance().Finalize();
+	::DestroyWindow(g_hwnd);
+	::UnregisterClass(wc.lpszClassName, wc.hInstance);
+	::DestroyWindow(g_Toolhwnd);
+	::UnregisterClass(wcEditor.lpszClassName, wcEditor.hInstance);
 
 	return 0; // 성공적으로 종료
 }
@@ -352,10 +361,10 @@ void CleanupRenderTarget()
 	if (g_mainRenderTargetView) { g_mainRenderTargetView->Release(); g_mainRenderTargetView = nullptr; }
 }
 
-void CreateMyWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show)
+void CreateMyWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPWSTR lp_cmd_line, int n_cmd_show)
 {
 	// 윈도우 클래스 등록
-	WNDCLASS wc = {};
+	wc = {};
 	wc.lpfnWndProc = WndProc;
 	wc.hInstance = h_instance;
 	wc.lpszClassName = L"MyWindowClass";
@@ -381,10 +390,10 @@ void CreateMyWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cm
 	UpdateWindow(g_hwnd);
 }
 
-void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPSTR lp_cmd_line, int n_cmd_show)
+void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPWSTR lp_cmd_line, int n_cmd_show)
 {
 	// 윈도우 클래스 등록
-	WNDCLASSEX wcEditor = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProcTool, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("ResourceTool"), NULL };
+	wcEditor = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProcTool, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("ResourceTool"), NULL };
 	RegisterClassEx(&wcEditor);
 
 	// 윈도우 생성

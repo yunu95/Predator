@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "AnimationEventManager.h"
+
 #include <memory>
 #include <vector>
 #include <string>
@@ -106,6 +108,11 @@ namespace application
 			yunutyEngine::GameObject* GetSelectedFBXData();
 
 			std::vector<std::weak_ptr<ParticleToolInstance>>& GetChildrenParticleInstanceList(const std::string& parentsName);
+			std::vector<std::string>& GetAnimationNameList(const std::string& fbxName);
+			yunuGI::IAnimation* GetMatchingIAnimation(const std::string& fbxName, const std::string& aniName);
+
+			void SetSelectedAnimation(yunuGI::IAnimation* ani);
+			yunuGI::IAnimation* GetSelectedAnimation();
 
 			yunutyEngine::GameObject* GetParticleToolInstanceObject(const std::weak_ptr<ParticleToolInstance>& ptr);
 
@@ -117,9 +124,20 @@ namespace application
 
 			void UpdateParticleInstanceDataObj(const std::weak_ptr<ParticleToolInstance>& instance);
 
+			void PlaySelectedAnimation();
+			bool IsAnimationPlaying();
+
+			bool AddAnimationEvent(const std::shared_ptr<application::AnimationEvent>& event);
+			bool EraseAnimationEvent(const std::shared_ptr<application::AnimationEvent>& event);
+
+			void SetSelectedAnimationEvent(const std::shared_ptr<application::AnimationEvent>& event);
+			std::weak_ptr<application::AnimationEvent> GetSelectedAnimationEvent();
+
 		private:
 			void ClearPP();
 			void ClearPPIs();
+
+			AnimationEventManager& aniEventManager = AnimationEventManager::GetSingletonInstance();
 
 			bool isParticleEditMode = true;
 			unsigned long long particleInstanceCount = 0;
@@ -131,7 +149,8 @@ namespace application
 			std::map<const std::shared_ptr<ParticleToolInstance>, yunutyEngine::GameObject*> particleInstanceIDMap = std::map<const std::shared_ptr<ParticleToolInstance>, yunutyEngine::GameObject*>();
 			std::shared_ptr<ParticleToolInstance> selectedParticleInstanceData = nullptr;
 			yunutyEngine::GameObject* selectedFBXObject = nullptr;
-			// Animation
+			yunuGI::IAnimation* selectedAnimation = nullptr;
+			std::shared_ptr<application::AnimationEvent> selectedAniEvent = nullptr;
 
 			std::map<const std::string, yunutyEngine::GameObject*> particleObjList = std::map<const std::string, yunutyEngine::GameObject*>();
 			std::map<const std::string, yunutyEngine::GameObject*> skinnedObjList = std::map<const std::string, yunutyEngine::GameObject*>();
