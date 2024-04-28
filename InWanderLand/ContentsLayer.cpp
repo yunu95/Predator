@@ -215,6 +215,7 @@ void application::contents::ContentsLayer::PlayContents()
 {
     UIManager::Instance().ImportUI("InWanderLand.iwui");
     SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
+    SkillUpgradeSystem::SingleInstance().Reset();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
     InputManager::Instance().SetInputManagerActive(true);
     GameManager::Instance().Reset();

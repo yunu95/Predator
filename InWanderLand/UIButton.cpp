@@ -10,11 +10,6 @@ void UIButton::SetIdleImage(yunuGI::ITexture* p_IdleImage)
     m_ImageComponent->GetGI().SetImage(m_IdleImage);
 }
 
-void UIButton::SetOnMouseImage(yunuGI::ITexture* p_OnMouseImage)
-{
-    m_MouseOnImage = p_OnMouseImage;
-}
-
 void UIButton::SetClickedImage(yunuGI::ITexture* p_ClickedImage)
 {
     m_ClickedImage = p_ClickedImage;
@@ -27,6 +22,10 @@ void UIButton::SetButtonClickFunction(std::function<void()> p_func)
 void UIButton::AddButtonClickFunction(std::function<void()> p_func)
 {
     m_mouseLiftedEventFunctions.push_back(p_func);
+}
+void UIButton::AddButtonOnMouseFunction(std::function<void()> p_func)
+{
+    m_OnMouseEventFunctions.push_back(p_func);
 }
 
 void UIButton::SetLayer(int p_layerNum)
@@ -57,13 +56,9 @@ void UIButton::Start()
 
     m_onMouseFunction = [=]()
         {
-            if (m_MouseOnImage != nullptr)
+            for (auto& each : m_OnMouseEventFunctions)
             {
-                m_ImageComponent->GetGI().SetImage(m_MouseOnImage);
-            }
-            if (m_OnMouseEventFunction != nullptr)
-            {
-                m_OnMouseEventFunction();
+                each();
             }
         };
 
@@ -77,10 +72,6 @@ void UIButton::Start()
 
     m_mouseLiftedFunction = [=]()
         {
-            if (m_MouseOnImage != nullptr)
-            {
-                m_ImageComponent->GetGI().SetImage(m_MouseOnImage);
-            }
             if (m_mouseLiftedEventFunction != nullptr)
             {
                 m_mouseLiftedEventFunction();

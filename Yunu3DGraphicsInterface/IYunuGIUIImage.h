@@ -8,6 +8,7 @@ namespace yunuGI
     class IUIImage : public yunuGI::IUIObject
     {
     public:
+        virtual yunuGI::ITexture* GetImage() = 0;
         virtual void SetImage(ITexture* texture) = 0;
         virtual float GetWidth() = 0;
         virtual float GetHeight() = 0;

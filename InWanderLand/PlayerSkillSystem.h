@@ -2,6 +2,7 @@
 #include "SkillSystem.h"
 #include "Unit.h"
 
+class UIElement;
 class Dotween;
 
 /// <summary>
@@ -11,43 +12,48 @@ class Dotween;
 class PlayerSkillSystem : public SkillSystem
 {
 protected:
-	float m_skillOneRange;
-	float m_skillTwoRange;
+    float m_skillOneRange;
+    float m_skillTwoRange;
 
-	bool isQSkillReady{ true };
-	bool isESkillReady{ true };
+    bool isQSkillReady{ true };
+    bool isESkillReady{ true };
 
-	float qSkillCoolDownElapsed{ 0.0f };
-	float eSkillCoolDownElapsed{ 0.0f };
+    float qSkillCoolDownElapsed{ 0.0f };
+    float eSkillCoolDownElapsed{ 0.0f };
 
-	float qSkillCoolTime;
-	float eSkillCoolTime;
+    float qSkillCoolTime;
+    float eSkillCoolTime;
 
 public:
-	virtual void ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition) override;
-	virtual void RotateProjectile(GameObject* p_projectileObject, Vector3d p_endPosition);
+    UIElement* qSkillRadialOverlay{ nullptr };
+    UIElement* qSkillCooltimeNumberUI{ nullptr };
+    UIElement* eSkillRadialOverlay{ nullptr };
+    UIElement* eSkillCooltimeNumberUI{ nullptr };
 
-	virtual void ActivateSkillOne(Vector3d skillPos) = 0;
-	virtual void ActivateSkillTwo(Vector3d skillPos) = 0;
+    virtual void ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition) override;
+    virtual void RotateProjectile(GameObject* p_projectileObject, Vector3d p_endPosition);
 
-	virtual void SetSkillOneRange(float p_rng);
-	virtual void SetSkillTwoRange(float p_rng);
+    virtual void ActivateSkillOne(Vector3d skillPos) = 0;
+    virtual void ActivateSkillTwo(Vector3d skillPos) = 0;
 
-	virtual void SetQSkillCoolTime(float p_coolTime);
-	virtual void SetESkillCoolTime(float p_coolTime);
+    virtual void SetSkillOneRange(float p_rng);
+    virtual void SetSkillTwoRange(float p_rng);
 
-	virtual float GetSkillOneRange() const;
-	virtual float GetSkillTwoRange() const;
+    virtual void SetQSkillCoolTime(float p_coolTime);
+    virtual void SetESkillCoolTime(float p_coolTime);
 
-	virtual Vector3d CheckSkillRange(Vector3d p_skillPos, Unit::SkillEnum p_num);
+    virtual float GetSkillOneRange() const;
+    virtual float GetSkillTwoRange() const;
 
-	virtual void Start() override;
-	virtual void Update() override;
+    virtual Vector3d CheckSkillRange(Vector3d p_skillPos, Unit::SkillEnum p_num);
 
-	virtual bool IsSkillCoolingDown(Unit::SkillEnum p_skillnum) const;
+    virtual void Start() override;
+    virtual void Update() override;
 
-	Vector3d m_currentSelectedSkillPosition;
+    virtual bool IsSkillCoolingDown(Unit::SkillEnum p_skillnum) const;
 
-	bool isSkillEnd = false;
+    Vector3d m_currentSelectedSkillPosition;
+
+    bool isSkillEnd = false;
 };
 

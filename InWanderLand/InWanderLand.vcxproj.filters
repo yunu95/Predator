@@ -508,6 +508,18 @@
     <Filter Include="UI\Effect\PulsingUI">
       <UniqueIdentifier>{0893b206-0157-4a0c-8756-2a56d755c06f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\UIElementController">
+      <UniqueIdentifier>{53a2964c-2e07-465e-9d48-1b78c5e17382}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Effect\SoundPlayingTimer">
+      <UniqueIdentifier>{a70fc475-5aaf-4f9b-8533-f08a2f8c8ef9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\UIElementController\UIPriorityLayout">
+      <UniqueIdentifier>{b8f0c499-e52f-475f-bab8-97e4546baef6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\SkillSystem\SkillUpgradeSystem">
+      <UniqueIdentifier>{817118ef-6fb6-4833-928d-b892cbf0627f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1303,6 +1315,15 @@
     <ClInclude Include="CursorDetector.h">
       <Filter>Contents\AttackSystem</Filter>
     </ClInclude>
+    <ClInclude Include="SoundPlayingTimer.h">
+      <Filter>UI\Effect\SoundPlayingTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="UIPriorityLayout.h">
+      <Filter>UI\UIElementController\UIPriorityLayout</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillUpgradeSystem.h">
+      <Filter>Contents\SkillSystem\SkillUpgradeSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1992,6 +2013,12 @@
     </ClCompile>
     <ClCompile Include="CursorDetector.cpp">
       <Filter>Contents\AttackSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="UIPriorityLayout.cpp">
+      <Filter>UI\UIElementController\UIPriorityLayout</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillUpgradeSystem.cpp">
+      <Filter>Contents\SkillSystem\SkillUpgradeSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

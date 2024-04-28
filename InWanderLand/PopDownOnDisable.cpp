@@ -12,4 +12,8 @@ void PopDownOnDisable::Init()
         {
             GetTransform()->SetLocalScale(Vector3d::one);
         };
+    onCompleteFunction = [this]()
+        {
+            GetGameObject()->SetSelfActive(false);
+        };
 }

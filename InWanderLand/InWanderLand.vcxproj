@@ -1102,7 +1102,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="SaveStaticOrnamentsCommnad.h" />
     <ClInclude Include="SingletonInstanceContainer.h" />
     <ClInclude Include="SkillDevelopmentSystem.h" />
+    <ClInclude Include="SkillUpgradeSystem.h" />
     <ClInclude Include="SkillWarningSystem.h" />
+    <ClInclude Include="SoundPlayingTimer.h" />
     <ClInclude Include="SpecialEffectTrigger.h" />
     <ClInclude Include="SpecialEvent.h" />
     <ClInclude Include="SpikeSkillSystem.h" />
@@ -1244,6 +1246,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UIOffsetTransition.h" />
     <ClInclude Include="UIPanel.h" />
+    <ClInclude Include="UIPriorityLayout.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="SpecialEffect.h" />
@@ -1368,6 +1371,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="RangedEnemyProductor.cpp" />
     <ClCompile Include="RobinSkillDevelopmentSystem.cpp" />
     <ClCompile Include="SkillDevelopmentSystem.cpp" />
+    <ClCompile Include="SkillUpgradeSystem.cpp" />
     <ClCompile Include="SkillWarningSystem.cpp" />
     <ClCompile Include="SnippetBillboardSpriteAnim.cpp" />
     <ClCompile Include="SingletonInstanceContainer.cpp" />
@@ -1478,6 +1482,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UIOffsetTransition.cpp" />
     <ClCompile Include="UIPanel.cpp" />
+    <ClCompile Include="UIPriorityLayout.cpp" />
     <ClCompile Include="UnitBrush.cpp" />
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="UnitEditorInstance.cpp" />

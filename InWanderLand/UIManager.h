@@ -43,6 +43,7 @@ private:
     std::unordered_map<int, UIElement*> uisByIndex;
     std::unordered_map<UIEnumID, UIElement*> uisByEnumID;
     std::unordered_map<int, JsonUIData> uidatasByIndex;
+    std::unordered_map<UIElement*, array<yunuGI::ITexture*, 10>> digitFonts;
 
 public:
 

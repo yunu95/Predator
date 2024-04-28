@@ -4,24 +4,20 @@
 
 #include "Easing.h"
 
-#ifndef PI
-#define PI 3.1415926545
-#endif
-
 //#ifndef E
 //#define W 2.71828
 //#endif
 
 double easeInSine(double t) {
-	return 1 - cos((t * PI) / 2);
+	return 1 - cos((t * yunutyEngine::math::PI) / 2);
 }
 
 double easeOutSine(double t) {
-	return sin((t * PI) / 2);;
+	return sin((t * yunutyEngine::math::PI) / 2);;
 }
 
 double easeInOutSine(double t) {
-	return -1 * (cos(PI * t) - 1) / 2;
+	return -1 * (cos(yunutyEngine::math::PI * t) - 1) / 2;
 }
 
 double easeInQuad(double t) {
@@ -132,7 +128,7 @@ double easeInOutBack(double t) {
 }
 
 double easeInElastic(double t) {
-	const double c4 = (2 * PI) / 3;
+	const double c4 = (2 * yunutyEngine::math::PI) / 3;
 
 	return t == 0
 		? 0
@@ -142,7 +138,7 @@ double easeInElastic(double t) {
 }
 
 double easeOutElastic(double t) {
-	const double c4 = (2 * PI) / 3;
+	const double c4 = (2 * yunutyEngine::math::PI) / 3;
 
 	return t == 0
 		? 0
@@ -152,7 +148,7 @@ double easeOutElastic(double t) {
 }
 
 double easeInOutElastic(double t) {
-	const double c5 = (2 * PI) / 4.5;
+	const double c5 = (2 * yunutyEngine::math::PI) / 4.5;
 
 	return t == 0
 		? 0

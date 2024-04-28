@@ -12,7 +12,6 @@ class UIButton : public Component
 {
 private:
     yunuGI::ITexture* m_IdleImage;
-    yunuGI::ITexture* m_MouseOnImage;
     yunuGI::ITexture* m_ClickedImage;
 
     yunuGI::ITexture* m_CurrentImage;
@@ -22,9 +21,9 @@ private:
     std::function<void()> m_mousePushedFunction;
     std::function<void()> m_mouseLiftedFunction;
 
-    std::function<void()> m_OnMouseEventFunction;
     std::function<void()> m_mouseLiftedEventFunction;
     std::vector<std::function<void()>> m_mouseLiftedEventFunctions;
+    std::vector<std::function<void()>> m_OnMouseEventFunctions;
 
     yunutyEngine::graphics::UIImage* m_ImageComponent;
 
@@ -41,11 +40,11 @@ private:
 
 public:
     void SetIdleImage(yunuGI::ITexture* p_IdleImage);
-    void SetOnMouseImage(yunuGI::ITexture* p_OnMouseImage);
     void SetClickedImage(yunuGI::ITexture* p_ClickedImage);
 
     void SetButtonClickFunction(std::function<void()> p_func);
     void AddButtonClickFunction(std::function<void()> p_func);
+    void AddButtonOnMouseFunction(std::function<void()> p_func);
 
     void SetLayer(int p_layerNum);
     int GetLayer() const;
