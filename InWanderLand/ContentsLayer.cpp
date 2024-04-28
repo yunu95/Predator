@@ -259,6 +259,10 @@ void application::contents::ContentsLayer::PlayContents()
 {
 	SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
 	editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
+
+	// 카메라 기준으로 오브젝트 소팅
+	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
+
 	//UIManager::Instance().ImportUI("InWanderLand.iwui");
 	GameManager::Instance().Reset();
 

@@ -20,6 +20,13 @@ Renderer& yunutyEngine::graphics::Renderer::SingleInstance()
         instance = make_unique<Renderer>();
     return *instance;
 }
+
+void Renderer::SortByCameraDirection()
+{
+    auto renderer = _YunuGIObjects::SingleInstance().renderer.Get();
+    renderer->SortByCameraDirection();
+}
+
 void yunutyEngine::graphics::Renderer::Render()
 {
     auto renderer = _YunuGIObjects::SingleInstance().renderer.Get();

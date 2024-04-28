@@ -16,6 +16,7 @@
 #include "ParticleSystem.h"
 
 #include <cmath>
+#include <algorithm>
 
 LazyObjects<InstancingManager> InstancingManager::Instance;
 
@@ -24,6 +25,66 @@ void InstancingManager::Init()
 	instanceTransitionDesc = std::make_shared<InstanceTransitionDesc>();
 	particleBuffer = std::make_shared<ParticleBuffer>();
 	lightMapUVBuffer = std::make_shared<LightMapUVBuffer>();
+}
+
+void InstancingManager::SortByCameraDirection()
+{
+	for (auto& each : this->staticMeshDeferredMap)
+	{
+		std::vector<std::shared_ptr<RenderInfo>> tempVec;
+
+		for (auto& each2 : each.second)
+		{
+			tempVec.push_back(each2);
+		}
+
+		auto tempPair = std::make_pair(each.first, tempVec);
+		this->staticMeshDeferredRenderVec.push_back(tempPair);
+	}
+
+	// 우선 BoundingRadius 기준으로 정렬
+	std::sort(this->staticMeshDeferredRenderVec.begin(), this->staticMeshDeferredRenderVec.end(),
+		[](const auto& left, const auto& right)
+		{
+			auto lR = left.first.first->GetBoundingRadius();
+			auto rR = right.first.first->GetBoundingRadius();
+
+			return lR > rR;
+		}
+	);
+
+	DirectX::SimpleMath::Matrix cameraWTM = CameraManager::Instance.Get().GetMainCamera()->GetWTM();
+	DirectX::SimpleMath::Vector3 pos;
+	DirectX::SimpleMath::Vector3 scale;
+	DirectX::SimpleMath::Quaternion quat;
+	cameraWTM.Decompose(scale, quat, pos);
+
+	DirectX::SimpleMath::Matrix rot = DirectX::XMMatrixRotationQuaternion(quat);
+
+	DirectX::SimpleMath::Vector4 front{ 0.f,0.f,1.f,0.f };
+	front = DirectX::XMVector3Rotate(front, quat);
+
+
+	DirectX::SimpleMath::Vector3 cameraDirection = DirectX::SimpleMath::Vector3{ front.x,front.y,front.z };
+	cameraDirection.Normalize();
+
+	for (auto& each : this->staticMeshDeferredRenderVec)
+	{
+		std::sort(each.second.begin(), each.second.end(),
+			[=](const auto& left, const auto& right)
+			{
+				auto lPos = DirectX::SimpleMath::Vector3{ left->wtm._41, left->wtm._42, left->wtm._43};
+				auto rPos = DirectX::SimpleMath::Vector3{ right->wtm._41, right->wtm._42, right->wtm._43 };
+
+				float lDot = cameraDirection.Dot(lPos);
+				float rDot = cameraDirection.Dot(rPos);
+
+				return lDot < rDot;
+			}
+		);
+	}
+
+
 }
 
 void InstancingManager::RenderStaticDeferred()
@@ -35,94 +96,156 @@ void InstancingManager::RenderStaticDeferred()
 	// 인스턴스 버퍼의 데이터를 지움
 	ClearData();
 
-	//std::map<InstanceID, std::vector<std::shared_ptr<RenderInfo>>> cache;
-
-	//for (auto& each : renderInfo)
-	//{
-	//	InstanceID instanceID = std::make_pair((unsigned __int64)each->mesh, (unsigned __int64)each->material);
-
-	//	cache[instanceID].push_back(each);
-	//}
-
-	for (auto& pair : this->staticMeshDeferredCache)
+	if (this->staticMeshDeferredRenderVec.empty())
 	{
-		std::set<std::shared_ptr<RenderInfo>>& renderInfoVec = pair.second;
-
-		const InstanceID& instanceID = pair.first;
-
-		//if (renderInfoVec.size() == 1)
-		//{
-		//	MatrixBuffer matrixBuffer;
-		//	matrixBuffer.WTM = renderInfoVec[0].wtm;
-		//	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-		//	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
-		//	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-		//	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-		//	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
-		//
-		//	auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(renderInfoVec[0].mesh->GetName()));
-		//
-		//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(renderInfoVec[0].material->GetName()))->PushGraphicsData();
-		//	for (int i = 0; i < mesh->GetMaterialCount(); ++i)
-		//	{
-		//		renderInfoVec[0].mesh->Render(i);
-		//	}
-		//}
-		//else
+		for (auto& pair : this->staticMeshDeferredCache)
 		{
-			//for (int i = 0; i < renderInfoVec.size(); ++i)
-			int index = 0;
-			for (auto& i : renderInfoVec)
+
+			auto& renderInfoVec = pair.second;
+
+			const InstanceID& instanceID = pair.first;
+
+			//if (renderInfoVec.size() == 1)
+			//{
+			//	MatrixBuffer matrixBuffer;
+			//	matrixBuffer.WTM = renderInfoVec[0].wtm;
+			//	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
+			//	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
+			//	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+			//	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+			//	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
+			//
+			//	auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(renderInfoVec[0].mesh->GetName()));
+			//
+			//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(renderInfoVec[0].material->GetName()))->PushGraphicsData();
+			//	for (int i = 0; i < mesh->GetMaterialCount(); ++i)
+			//	{
+			//		renderInfoVec[0].mesh->Render(i);
+			//	}
+			//}
+			//else
 			{
-				if (i->mesh == nullptr) continue;
-
-				if (i->isActive == false) continue;
-
-				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-				//auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);
-
-				//if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
-				//{
-				//	continue;
-				//}
-
-				//if ((i->mesh->GetName() == L"SM_Bush_001") || (i->mesh->GetName() == L"SM_Bush_002"))
-				//{
-
-				//}
-
-				const std::shared_ptr<RenderInfo>& renderInfo = i;
-				InstancingData data;
-				data.wtm = renderInfo->wtm;
-				AddData(instanceID, data);
-
-				lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
-				lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
-				lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
-
-
-				index++;
-			}
-
-			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
-				sizeof(LightMapUVBuffer),
-				static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
-
-			if (renderInfoVec.size() != 0)
-			{
-				auto& buffer = _buffers[instanceID];
-				if (buffer->GetCount() > 0)
+				//for (int i = 0; i < renderInfoVec.size(); ++i)
+				int index = 0;
+				for (auto& i : renderInfoVec)
 				{
-					ExposureBuffer exposurrBuffer;
-					exposurrBuffer.diffuseExposure = (*renderInfoVec.begin())->mesh->GetDiffuseExposure();
-					exposurrBuffer.ambientExposure = (*renderInfoVec.begin())->mesh->GetAmbientExposure();;
-					NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&exposurrBuffer,
-						sizeof(ExposureBuffer),
-						static_cast<int>(CB_TYPE::EXPOSURE), false);
+					if (i->mesh == nullptr) continue;
 
-					(*renderInfoVec.begin())->material->PushGraphicsData();
-					buffer->PushData();
-					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
+					if (i->isActive == false) continue;
+
+					//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+					//auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);
+
+					//if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
+					//{
+					//	continue;
+					//}
+
+					//if ((i->mesh->GetName() == L"SM_Bush_001") || (i->mesh->GetName() == L"SM_Bush_002"))
+					//{
+
+					//}
+
+					const std::shared_ptr<RenderInfo>& renderInfo = i;
+					InstancingData data;
+					data.wtm = renderInfo->wtm;
+					AddData(instanceID, data);
+
+					lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
+					lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
+					lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
+
+
+					index++;
+				}
+
+				NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
+					sizeof(LightMapUVBuffer),
+					static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
+
+				if (renderInfoVec.size() != 0)
+				{
+					auto& buffer = _buffers[instanceID];
+					if (buffer->GetCount() > 0)
+					{
+						ExposureBuffer exposurrBuffer;
+						exposurrBuffer.diffuseExposure = (*renderInfoVec.begin())->mesh->GetDiffuseExposure();
+						exposurrBuffer.ambientExposure = (*renderInfoVec.begin())->mesh->GetAmbientExposure();;
+						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&exposurrBuffer,
+							sizeof(ExposureBuffer),
+							static_cast<int>(CB_TYPE::EXPOSURE), false);
+
+						(*renderInfoVec.begin())->material->PushGraphicsData();
+						buffer->PushData();
+						(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		for (auto& pair : this->staticMeshDeferredRenderVec)
+		{
+
+			auto& renderInfoVec = pair.second;
+
+			const InstanceID& instanceID = pair.first;
+
+			{
+				int index = 0;
+				for (auto& i : renderInfoVec)
+				{
+					if (i->mesh == nullptr) continue;
+
+					if (i->isActive == false) continue;
+
+					auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+					auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);
+
+					if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
+					{
+						continue;
+					}
+
+					//if ((i->mesh->GetName() == L"SM_Bush_001") || (i->mesh->GetName() == L"SM_Bush_002"))
+					//{
+
+					//}
+
+					const std::shared_ptr<RenderInfo>& renderInfo = i;
+					InstancingData data;
+					data.wtm = renderInfo->wtm;
+					AddData(instanceID, data);
+
+					lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
+					lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
+					lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
+
+
+					index++;
+				}
+
+				NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
+					sizeof(LightMapUVBuffer),
+					static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
+
+				if (renderInfoVec.size() != 0)
+				{
+					auto& buffer = _buffers[instanceID];
+					if (buffer->GetCount() > 0)
+					{
+						ExposureBuffer exposurrBuffer;
+						exposurrBuffer.diffuseExposure = (*renderInfoVec.begin())->mesh->GetDiffuseExposure();
+						exposurrBuffer.ambientExposure = (*renderInfoVec.begin())->mesh->GetAmbientExposure();;
+						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&exposurrBuffer,
+							sizeof(ExposureBuffer),
+							static_cast<int>(CB_TYPE::EXPOSURE), false);
+
+						(*renderInfoVec.begin())->material->PushGraphicsData();
+						buffer->PushData();
+						(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
+					}
 				}
 			}
 		}
@@ -216,7 +339,7 @@ void InstancingManager::RenderStaticShadow()
 
 	for (auto& pair : this->staticMeshDeferredCache)
 	{
-		std::set<std::shared_ptr<RenderInfo>>& renderInfoVec = pair.second;
+		auto& renderInfoVec = pair.second;
 
 		const InstanceID& instanceID = pair.first;
 
@@ -273,7 +396,7 @@ void InstancingManager::RenderStaticPointLightShadow(DirectX::SimpleMath::Matrix
 
 	for (auto& pair : this->staticMeshDeferredCache)
 	{
-		std::set<std::shared_ptr<RenderInfo>>& renderInfoVec = pair.second;
+		auto& renderInfoVec = pair.second;
 
 		const InstanceID& instanceID = pair.first;
 
@@ -368,9 +491,11 @@ void InstancingManager::RenderSkinnedPointLightShadow(DirectX::SimpleMath::Matri
 
 void InstancingManager::RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& renderInfo)
 {
-	InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
+	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
+	InstanceID instanceID = std::make_pair(renderInfo->mesh, renderInfo->material);
 
 	this->staticMeshDeferredCache[instanceID].insert(renderInfo);
+	this->staticMeshDeferredMap[instanceID].insert(renderInfo);
 
 	if (_buffers.find(instanceID) == _buffers.end())
 	{
@@ -380,7 +505,8 @@ void InstancingManager::RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& 
 
 void InstancingManager::RegisterStaticForwardData(std::shared_ptr<RenderInfo>& renderInfo)
 {
-	InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
+	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
+	InstanceID instanceID = std::make_pair(renderInfo->mesh, renderInfo->material);
 
 	this->staticMeshForwardCache[instanceID].insert(renderInfo);
 
@@ -392,7 +518,8 @@ void InstancingManager::RegisterStaticForwardData(std::shared_ptr<RenderInfo>& r
 
 void InstancingManager::RegisterSkinnedData(std::shared_ptr<SkinnedRenderInfo>& renderInfo)
 {
-	InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->renderInfo.mesh, (unsigned __int64)renderInfo->renderInfo.material);
+	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->renderInfo.mesh, (unsigned __int64)renderInfo->renderInfo.material);
+	InstanceID instanceID = std::make_pair(renderInfo->renderInfo.mesh, renderInfo->renderInfo.material);
 
 	this->skinnedMeshCache[instanceID].insert(renderInfo);
 
@@ -404,12 +531,15 @@ void InstancingManager::RegisterSkinnedData(std::shared_ptr<SkinnedRenderInfo>& 
 
 void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& renderInfo)
 {
-	InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
+	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
+	InstanceID instanceID = std::make_pair(renderInfo->mesh, renderInfo->material);
 
 	auto iter = this->staticMeshDeferredCache.find(instanceID);
+
 	if (iter != this->staticMeshDeferredCache.end())
 	{
 		this->staticMeshDeferredCache[instanceID].erase(renderInfo);
+
 		if (this->staticMeshDeferredCache[instanceID].empty())
 		{
 			this->staticMeshDeferredCache.erase(instanceID);
@@ -419,7 +549,8 @@ void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& rende
 
 void InstancingManager::PopStaticForwardData(std::shared_ptr<RenderInfo>& renderInfo)
 {
-	InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
+	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
+	InstanceID instanceID = std::make_pair(renderInfo->mesh, renderInfo->material);
 
 	auto iter = this->staticMeshForwardCache.find(instanceID);
 	if (iter != this->staticMeshForwardCache.end())
@@ -434,7 +565,8 @@ void InstancingManager::PopStaticForwardData(std::shared_ptr<RenderInfo>& render
 
 void InstancingManager::PopSkinnedData(std::shared_ptr<SkinnedRenderInfo>& renderInfo)
 {
-	InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->renderInfo.mesh, (unsigned __int64)renderInfo->renderInfo.material);
+	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->renderInfo.mesh, (unsigned __int64)renderInfo->renderInfo.material);
+	InstanceID instanceID = std::make_pair(renderInfo->renderInfo.mesh, renderInfo->renderInfo.material);
 
 	auto iter = this->skinnedMeshCache.find(instanceID);
 	if (iter != this->skinnedMeshCache.end())
