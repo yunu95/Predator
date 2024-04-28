@@ -41,6 +41,7 @@ void InstancingManager::SortByCameraDirection()
 		auto tempPair = std::make_pair(each.first, tempVec);
 		this->staticMeshDeferredRenderVec.push_back(tempPair);
 	}
+	staticMeshDeferredMap.clear();
 
 	// 우선 BoundingRadius 기준으로 정렬
 	std::sort(this->staticMeshDeferredRenderVec.begin(), this->staticMeshDeferredRenderVec.end(),
@@ -84,7 +85,22 @@ void InstancingManager::SortByCameraDirection()
 		);
 	}
 
+	// 인덱스맵에 맵핑하기
+	unsigned int instanceIDIndex = 0;
+	unsigned int renderInfoIndex = 0;
+	for (auto& each : staticMeshDeferredRenderVec)
+	{
+		staticMeshInstanceIDIndexMap.insert({ each.first,instanceIDIndex });
+		instanceIDIndex++;
 
+		renderInfoIndex = 0;
+
+		for (auto& each2 : each.second)
+		{
+			staticMeshRenderInfoIndexMap.insert({ each2 ,renderInfoIndex });
+			renderInfoIndex++;
+		}
+	}
 }
 
 void InstancingManager::RenderStaticDeferred()
@@ -96,34 +112,13 @@ void InstancingManager::RenderStaticDeferred()
 	// 인스턴스 버퍼의 데이터를 지움
 	ClearData();
 
-	if (this->staticMeshDeferredRenderVec.empty())
 	{
-		for (auto& pair : this->staticMeshDeferredCache)
+		for (auto& pair : this->staticMeshDeferredMap)
 		{
-
 			auto& renderInfoVec = pair.second;
 
 			const InstanceID& instanceID = pair.first;
 
-			//if (renderInfoVec.size() == 1)
-			//{
-			//	MatrixBuffer matrixBuffer;
-			//	matrixBuffer.WTM = renderInfoVec[0].wtm;
-			//	matrixBuffer.VTM = NailCamera::Instance.Get().GetVTM();
-			//	matrixBuffer.PTM = NailCamera::Instance.Get().GetPTM();
-			//	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-			//	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-			//	NailEngine::Instance.Get().GetConstantBuffer(0)->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), 0);
-			//
-			//	auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(renderInfoVec[0].mesh->GetName()));
-			//
-			//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(renderInfoVec[0].material->GetName()))->PushGraphicsData();
-			//	for (int i = 0; i < mesh->GetMaterialCount(); ++i)
-			//	{
-			//		renderInfoVec[0].mesh->Render(i);
-			//	}
-			//}
-			//else
 			{
 				//for (int i = 0; i < renderInfoVec.size(); ++i)
 				int index = 0;
@@ -132,19 +127,6 @@ void InstancingManager::RenderStaticDeferred()
 					if (i->mesh == nullptr) continue;
 
 					if (i->isActive == false) continue;
-
-					//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-					//auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);
-
-					//if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
-					//{
-					//	continue;
-					//}
-
-					//if ((i->mesh->GetName() == L"SM_Bush_001") || (i->mesh->GetName() == L"SM_Bush_002"))
-					//{
-
-					//}
 
 					const std::shared_ptr<RenderInfo>& renderInfo = i;
 					InstancingData data;
@@ -183,11 +165,10 @@ void InstancingManager::RenderStaticDeferred()
 			}
 		}
 	}
-	else
+
 	{
 		for (auto& pair : this->staticMeshDeferredRenderVec)
 		{
-
 			auto& renderInfoVec = pair.second;
 
 			const InstanceID& instanceID = pair.first;
@@ -196,6 +177,8 @@ void InstancingManager::RenderStaticDeferred()
 				int index = 0;
 				for (auto& i : renderInfoVec)
 				{
+					if (i == nullptr) continue;
+
 					if (i->mesh == nullptr) continue;
 
 					if (i->isActive == false) continue;
@@ -337,7 +320,7 @@ void InstancingManager::RenderStaticShadow()
 {
 	ClearData();
 
-	for (auto& pair : this->staticMeshDeferredCache)
+	for (auto& pair : this->staticMeshDeferredMap)
 	{
 		auto& renderInfoVec = pair.second;
 
@@ -394,7 +377,7 @@ void InstancingManager::RenderStaticPointLightShadow(DirectX::SimpleMath::Matrix
 {
 	ClearData();
 
-	for (auto& pair : this->staticMeshDeferredCache)
+	for (auto& pair : this->staticMeshDeferredMap)
 	{
 		auto& renderInfoVec = pair.second;
 
@@ -494,8 +477,26 @@ void InstancingManager::RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& 
 	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
 	InstanceID instanceID = std::make_pair(renderInfo->mesh, renderInfo->material);
 
-	this->staticMeshDeferredCache[instanceID].insert(renderInfo);
-	this->staticMeshDeferredMap[instanceID].insert(renderInfo);
+	auto renderInfoIter = this->staticMeshRenderInfoIndexMap.find(renderInfo);
+	if (renderInfoIter != this->staticMeshRenderInfoIndexMap.end())
+	{
+		auto instanceIter = this->staticMeshInstanceIDIndexMap.find(instanceID);
+		if (instanceIter != this->staticMeshInstanceIDIndexMap.end())
+		{
+			this->staticMeshDeferredRenderVec[instanceIter->second].second.push_back(renderInfo);
+		}
+		else
+		{
+			// 원래 vector안에는 있었지만 새로운 머터리얼이 적용되어 정보가 없는 경우
+			std::vector<std::shared_ptr<RenderInfo>> tempVec;
+			tempVec.push_back(renderInfo);
+			this->staticMeshDeferredRenderVec.push_back(std::make_pair(instanceID, tempVec));
+		}
+	}
+	else
+	{
+		this->staticMeshDeferredMap[instanceID].insert(renderInfo);
+	}
 
 	if (_buffers.find(instanceID) == _buffers.end())
 	{
@@ -534,15 +535,33 @@ void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& rende
 	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
 	InstanceID instanceID = std::make_pair(renderInfo->mesh, renderInfo->material);
 
-	auto iter = this->staticMeshDeferredCache.find(instanceID);
 
-	if (iter != this->staticMeshDeferredCache.end())
+	// 인스턴스 인덱스 맵에 있는지 검사
+	auto instanceIter = this->staticMeshInstanceIDIndexMap.find(instanceID);
+	if (instanceIter != this->staticMeshInstanceIDIndexMap.end())
 	{
-		this->staticMeshDeferredCache[instanceID].erase(renderInfo);
-
-		if (this->staticMeshDeferredCache[instanceID].empty())
+		// 이미 vector에 있다는 뜻
+		auto renderInfoIter = this->staticMeshRenderInfoIndexMap.find(renderInfo);
+		if (renderInfoIter != this->staticMeshRenderInfoIndexMap.end())
 		{
-			this->staticMeshDeferredCache.erase(instanceID);
+			if (!this->staticMeshDeferredRenderVec[instanceIter->second].second.empty())
+			{
+				this->staticMeshDeferredRenderVec[instanceIter->second].second[renderInfoIter->second] = nullptr;
+			}
+		}
+	}
+	else
+	{
+		auto iter = this->staticMeshDeferredMap.find(instanceID);
+
+		if (iter != this->staticMeshDeferredMap.end())
+		{
+			this->staticMeshDeferredMap[instanceID].erase(renderInfo);
+
+			if (this->staticMeshDeferredMap[instanceID].empty())
+			{
+				this->staticMeshDeferredMap.erase(instanceID);
+			}
 		}
 	}
 }

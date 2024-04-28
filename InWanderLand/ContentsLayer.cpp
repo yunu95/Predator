@@ -60,6 +60,19 @@ public:
 		text->GetGI().SetText(temp);
 	}
 };
+class TestComponent4 : public yunutyEngine::Component
+{
+public:
+	yunutyEngine::graphics::StaticMeshRenderer* renderer;
+	yunuGI::IMaterial* material;
+	virtual void Update() override
+	{
+		if (Input::isKeyPushed(KeyCode::DownArrow))
+		{
+			renderer->GetGI().SetMaterial(0, material);
+		}
+	}
+};
 
 /// 그래픽스 테스트용
 void GraphicsTest()
@@ -81,15 +94,24 @@ void GraphicsTest()
 		}
 	}
 
+	//{
+	//	auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_CupTower");
+	//	auto test4 = obj->AddComponent<TestComponent4>();
+	//	test4->renderer = obj->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+	//	test4->material = _resourceManager->GetMaterial(L"DefaultMaterial");
+	//}
+
+	for (int i = 0; i < 11; ++i)
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObject();
-		auto particle = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
-		particle->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
-		particle->SetPlayAwake(true);
-		particle->SetLoop(true);
-		particle->Play();
+		for (int j = 0; j < 11; ++j)
+		{
+			auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+			obj->GetTransform()->SetLocalPosition(Vector3d{ float(i)*0.1, 0, float(j)*0.1 });
+		}
 	}
 
+
+	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 }
 
 void application::contents::ContentsLayer::SetInputControl(bool control)

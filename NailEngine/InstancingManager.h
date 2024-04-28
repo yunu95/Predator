@@ -99,14 +99,12 @@ private:
 
 private:
 	//std::map<InstanceID, std::set<std::shared_ptr<RenderInfo>, CameraDistanceCompare>, BoundingBoxCompare> staticMeshDeferredCache;
-	std::map<InstanceID, std::set<std::shared_ptr<RenderInfo>>> staticMeshDeferredCache;
+	std::map<InstanceID, std::set<std::shared_ptr<RenderInfo>>> staticMeshDeferredMap;
 
 	std::map<InstanceID, unsigned int> staticMeshInstanceIDIndexMap;
 	std::unordered_map<std::shared_ptr<RenderInfo>, unsigned int> staticMeshRenderInfoIndexMap;
-	std::map<InstanceID, std::set<std::shared_ptr<RenderInfo>>> staticMeshDeferredMap;
 	std::vector<std::pair<InstanceID, std::vector<std::shared_ptr<RenderInfo>>>> staticMeshDeferredRenderVec;
 	// 
-
 
 	std::map<InstanceID, std::set<std::shared_ptr<RenderInfo>>> staticMeshForwardCache;
 
