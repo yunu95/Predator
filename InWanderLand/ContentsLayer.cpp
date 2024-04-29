@@ -217,6 +217,9 @@ void application::contents::ContentsLayer::PlayContents()
     SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
     SkillUpgradeSystem::SingleInstance().Reset();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
+
+    yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
+
     InputManager::Instance().SetInputManagerActive(true);
     GameManager::Instance().Reset();
 

@@ -191,6 +191,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="FrustumCullingManager.h" />
     <ClInclude Include="Functors.h" />
     <ClInclude Include="GeometryShader.h" />
     <ClInclude Include="ILight.h" />
@@ -266,6 +267,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="FrustumCullingManager.cpp" />
     <ClCompile Include="GeometryShader.cpp" />
     <ClCompile Include="InstanceBuffer.cpp" />
     <ClCompile Include="InstancingManager.cpp" />
