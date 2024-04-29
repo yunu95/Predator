@@ -4,6 +4,7 @@
 namespace application::editor
 {
 	class RegionData;
+	class OrnamentData;
 }
 class Dotween;
 
@@ -18,9 +19,15 @@ private:
 	
 	Dotween* cameraDotween;
 
+	std::vector<GameObject*> stage1Ornaments;
+	std::vector<GameObject*> stage2Ornaments;
+
 public:
+	virtual void Start() override;
 	void AddRegionData(application::editor::RegionData* p_data);
+	void RegisterOrnament(GameObject* p_obj, int p_stageNum);
 	void SetCameraDotween(Dotween* p_dot);
+
 	friend PlaytimeRegion;
 };
 
