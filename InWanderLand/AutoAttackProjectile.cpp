@@ -4,6 +4,7 @@
 #include "AutoAttackProjectilePool.h"
 #include "Unit.h"
 #include "SpecialEffect.h"
+#include "PlayerController.h"
 #include <float.h>
 #include <cmath>
 
@@ -18,14 +19,25 @@ void AutoAttackProjectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, float spee
 	m_ownerUnit = ownerUnit;
 	m_opponentUnit = opponentUnit;
 	GetGameObject()->GetTransform()->SetWorldPosition(ownerUnit->GetGameObject()->GetTransform()->GetWorldPosition() + (ownerUnit->GetTransform()->GetWorldRotation().Forward() * -1 * ownerUnit->GetAttackOffset()));
-	GetGameObject()->GetComponent<Dotween>()->DOLookAt(m_opponentUnit->GetGameObject()->GetTransform()->GetWorldPosition(), Time::GetDeltaTime(), false);
+	GetGameObject()->GetComponent<Dotween>()->
+		DOLookAt(m_opponentUnit->GetGameObject()->GetTransform()->GetWorldPosition(), Time::GetDeltaTime(), false).OnComplete([=]()
+			{
+				GetGameObject()->SetSelfActive(true);
+			});
 	//RotateBulletPerFrame();
-	GetGameObject()->SetSelfActive(true);
+	Vector3d directionVector = (opponentUnit->GetTransform()->GetWorldPosition() - ownerUnit->GetTransform()->GetWorldPosition()).Normalized();
+	//GetGameObject()->GetTransform()->SetWorldRotation(directionVector);
 
+	m_ownerUnitFront = m_ownerUnit->GetTransform()->GetWorldRotation().Forward();
 	isShootOperating = true;
 }
 
-void AutoAttackProjectile::ShootUpdateFunction()
+void AutoAttackProjectile::SetStraightBulletRange(float p_rng)
+{
+	m_range = p_rng;
+}
+
+void AutoAttackProjectile::AutoChaseShootingFunction()
 {
 	//// 움직이기 전의 투사체 위치
 	Vector3d startPosition = GetGameObject()->GetTransform()->GetWorldPosition();
@@ -51,18 +63,45 @@ void AutoAttackProjectile::ShootUpdateFunction()
 
 	if (angle < 0)
 	{
-		GetGameObject()->SetSelfActive(false);
-
-		AutoAttackProjectilePool::SingleInstance().Return(this);
-
-		/// 충돌 (목적지 도착 시) 호출하고자 하는 로직은 여기에
-		m_opponentUnit->Damaged(m_ownerUnit, m_ownerUnit->DetermineAttackDamage(m_ownerUnit->GetUnitDamage()));
-
-		isShootOperating = false;
+		ProcessBulletHit(m_opponentUnit);
 	}
 
 	//RotateBulletPerFrame();
 	GetGameObject()->GetComponent<Dotween>()->DOLookAt(m_opponentUnit->GetGameObject()->GetTransform()->GetWorldPosition(), Time::GetDeltaTime(), false);
+}
+
+void AutoAttackProjectile::StraightShootingFunction()
+{
+	Vector3d startPosition = GetGameObject()->GetTransform()->GetWorldPosition();
+	Vector3d endPosition = m_ownerUnit->GetGameObject()->GetTransform()->GetWorldPosition()
+		+ m_ownerUnit->GetTransform()->GetWorldRotation().Forward() * -1 * m_range;
+
+	Vector3d movedPositionPerFrame = GetGameObject()->GetTransform()->GetWorldPosition() + m_ownerUnitFront * -1 * Time::GetDeltaTime() * m_speed;
+
+	GetGameObject()->GetTransform()->SetWorldPosition(movedPositionPerFrame);
+
+	if ((GetTransform()->GetWorldPosition() - m_ownerUnit->GetTransform()->GetWorldPosition()).Magnitude() > m_range)
+	{
+		GetGameObject()->SetSelfActive(false);
+
+		AutoAttackProjectilePool::SingleInstance().Return(this);
+
+		isShootOperating = false;
+	}
+
+	else
+	{
+		for (auto each : m_playerUnitVector)
+		{
+			float distance = (each->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition()).Magnitude();
+
+			if (distance < 1.0f)
+			{
+				ProcessBulletHit(each);
+				break;
+			}
+		}
+	}
 }
 
 void AutoAttackProjectile::RotateBulletPerFrame()
@@ -99,15 +138,34 @@ void AutoAttackProjectile::RotateBulletPerFrame()
 
 }
 
+void AutoAttackProjectile::ProcessBulletHit(Unit* p_damagedUnit)
+{
+	GetGameObject()->SetSelfActive(false);
+
+	AutoAttackProjectilePool::SingleInstance().Return(this);
+
+	/// 충돌 (목적지 도착 시) 호출하고자 하는 로직은 여기에
+	p_damagedUnit->Damaged(m_ownerUnit, m_ownerUnit->DetermineAttackDamage(m_ownerUnit->GetUnitDamage()));
+
+	isShootOperating = false;
+}
+
 void AutoAttackProjectile::Start()
 {
+	for (auto each : PlayerController::SingleInstance().GetPlayerMap())
+	{
+		m_playerUnitVector.push_back(each.second);
+	}
 }
 
 void AutoAttackProjectile::Update()
 {
 	if (isShootOperating)
 	{
-		ShootUpdateFunction();
+		if (m_ownerUnit->GetUnitSide() == Unit::UnitSide::Player)
+			AutoChaseShootingFunction();
+		else
+			StraightShootingFunction();
 	}
 }
 

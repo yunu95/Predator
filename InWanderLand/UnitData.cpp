@@ -24,6 +24,7 @@
 #include "ContentsLayer.h"
 #include "ShortcutSystem.h"
 #include "PlaytimeWave.h"
+#include "BurnEffect.h"
 
 namespace application
 {
@@ -136,8 +137,11 @@ namespace application
                 productorSelector.push_back(&MagicianProductor::Instance());*/
                 productorSelector.push_back(&MeleeEnemyProductor::Instance());
                 productorSelector.push_back(&RangedEnemyProductor::Instance());
+                productorSelector.push_back(&PawnTrapProductor::Instance());
+                productorSelector.push_back(&RookTrapProductor::Instance());
+                productorSelector.push_back(&BishopTrapProductor::Instance());
                 productorSelector.push_back(&SpikeTrapProductor::Instance());
-                //productorSelector.push_back(&BossProductor::Instance());
+                productorSelector.push_back(&BossProductor::Instance());
                 isSelectorInitialized = true;
             }
 
@@ -191,6 +195,7 @@ namespace application
                     if (pod.templateData->pod.isEliteMonster == true)
                     {
 						inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+                        inGameUnit->GetGameObject()->GetComponent<BurnEffect>()->Appear();
 						contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
                     }
                     else
@@ -204,7 +209,16 @@ namespace application
                 currentSelectedProductor = &RangedEnemyProductor::Instance();
                 currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                 RangedEnemyPool::SingleInstance().SetStartPosition(startPosition);
-                inGameUnit = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+
+				if (pod.templateData->pod.isEliteMonster == true)
+				{
+					inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+					inGameUnit->GetGameObject()->GetComponent<BurnEffect>()->Appear();
+					contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
+				}
+				else
+					inGameUnit = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+
                 tempShortCutIndex = 2;
             }
             else
@@ -222,6 +236,9 @@ namespace application
                     case Unit::UnitType::Healer:
                         currentSelectedProductor = &HealerProductor::Instance();
                         break;
+					case Unit::UnitType::Boss:
+						currentSelectedProductor = &BossProductor::Instance();
+						break;
                     default:
                         break;
                 }

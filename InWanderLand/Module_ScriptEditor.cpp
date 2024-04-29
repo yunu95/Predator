@@ -62,8 +62,35 @@ namespace application
 				}
 				else if (selectedScript)
 				{
-					ScriptSystem::Instance().EraseScript(selectedScript);
-					selectedScript = nullptr;
+					editor::EditorLayer::SetInputControl(false);
+					editor::imgui::ShowMessageBox("Delete Script", [&]()
+						{
+							editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+							ImGui::Separator();
+
+							ImGui::SetNextItemWidth(-1);
+							ImGui::Text(("Are you sure you want to delete the \"" + selectedScript->name + "\"?").c_str());
+
+							ImGui::Separator();
+
+							if (ImGui::Button("Delete"))
+							{
+								ScriptSystem::Instance().EraseScript(selectedScript);
+								selectedScript = nullptr;
+								ImGui::CloseCurrentPopup();
+								editor::imgui::CloseMessageBox("Delete Script");
+								editor::EditorLayer::SetInputControl(true);
+							}
+							ImGui::SameLine();
+
+							if (ImGui::Button("Cancel"))
+							{
+								ImGui::CloseCurrentPopup();
+								editor::imgui::CloseMessageBox("Delete Script");
+								editor::EditorLayer::SetInputControl(true);
+							}
+						}, 500);
 				}
 			}
 		}

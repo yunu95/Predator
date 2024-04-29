@@ -315,14 +315,6 @@ namespace application
 						currentPalette->OnDeletion();
 					}
 				}
-
-				if (eim.IsKeyboardUp(KeyCode::B))
-				{
-					if (currentPalette == &tp)
-					{
-						tp.ApplyAsPlaytimeObjects();
-					}
-				}
 			}
 		}
 
@@ -1164,6 +1156,33 @@ namespace application
 
 				if (cam)
 				{
+					{
+						ImGui::TableNextRow();
+						ImGui::TableSetColumnIndex(0);
+						imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
+						ImGui::AlignTextToFramePadding();
+						ImGui::Text("Transform");
+						ImGui::TableSetColumnIndex(1);
+						ImGui::SetNextItemWidth(-1);
+						if (ImGui::Button("Edit Here"))
+						{
+							auto& ecam = EditorCamera::GetSingletonInstance();
+							auto pos = ecam.GetPosition();
+							auto rot = ecam.GetOrientation();
+							auto scal = ecam.GetScale();
+							cam->pod.position.x = pos.x;
+							cam->pod.position.y = pos.y;
+							cam->pod.position.z = pos.z;
+							cam->pod.rotation.w = rot.w;
+							cam->pod.rotation.x = rot.x;
+							cam->pod.rotation.y = rot.y;
+							cam->pod.rotation.z = rot.z;
+							cam->pod.scale.x = scal.x;
+							cam->pod.scale.y = scal.y;
+							cam->pod.scale.z = scal.z;
+						}
+					}
+
 					{
 						std::string camName = cam->pod.name;
 						camName.reserve(32);

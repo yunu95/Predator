@@ -87,7 +87,7 @@ Unit* BossProductor::CreateUnit(Vector3d startPos)
 
 	auto skillOneDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(skillOneDebugMesh, DebugMeshType::Sphere, yunuGI::Color::red(), true);
-	skillOneDebugMesh->GetTransform()->SetWorldScale({ skillOneRadius ,skillOneRadius ,skillOneRadius });
+	skillOneDebugMesh->GetTransform()->SetWorldScale({ skillOneRadius * 2, skillOneRadius * 2, skillOneRadius * 2 });
 #pragma endregion
 
 #pragma region Boss Skill_2 Object Setting
@@ -110,7 +110,7 @@ Unit* BossProductor::CreateUnit(Vector3d startPos)
 
 	auto skillFourDebugMesh = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	AttachDebugMesh(skillFourDebugMesh, DebugMeshType::Sphere, yunuGI::Color::red(), true);
-	skillFourDebugMesh->GetTransform()->SetWorldScale({ skillFourColliderRadius ,skillFourColliderRadius ,skillFourColliderRadius });
+	skillFourDebugMesh->GetTransform()->SetWorldScale({ skillFourColliderRadius * 2, skillFourColliderRadius * 2, skillFourColliderRadius * 2 });
 #pragma endregion
 
 	auto bossSkillSystem = m_unitGameObject->AddComponent<BossSkillSystem>();
@@ -172,28 +172,38 @@ Unit* BossProductor::CreateUnit(Vector3d startPos)
 		{
 			each->SetLoop(false);
 			animator->PushAnimation(each);
+			m_baseUnitAnimations.m_skillOneAnimation = each;
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillOne, each);
 		}
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
 		{
-			each->SetLoop(false);
+			each->SetLoop(true);
 			animator->PushAnimation(each);
+			m_baseUnitAnimations.m_skillTwoAnimation = each;
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillTwo, each);
 		}
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
 		{
 			each->SetLoop(false);
 			animator->PushAnimation(each);
+			m_baseUnitAnimations.m_skillThreeAnimation = each;
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillThree, each);
 		}
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
 		{
-			each->SetLoop(false);
+			each->SetLoop(true);
 			animator->PushAnimation(each);
+			m_baseUnitAnimations.m_skillFourAnimation = each;
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillFour, each);
 		}
 	}
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
-
+	SetUnitAnimationFunction();
 	return m_unitComponent;
 }
+
+void BossProductor::SetCursorComponent(CursorDetector* p_com)
+{
+	//m_unitComponent->m_cursorDetectorComponent = p_com;
+}
+

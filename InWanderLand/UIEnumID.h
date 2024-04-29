@@ -3,30 +3,66 @@ enum class UIEnumID
 {
     // 아무것도 아님.
     None = 0,
-    // 로빈, 우르술라, 헨젤의 초상화, 초상화를 가리는 핏빛 오버레이, 체력을 표시하는 텍스트 UI
+    // 로빈, 우르술라, 헨젤의 초상화, 초상화 위의 이름 태그, 초상화를 가리는 적색 부상 오버레이, 체력바, 체력을 표시하는 텍스트 UI
     Portrait_Robin,
+    Portrait_Robin_NameTag,
     Portrait_Blood_Robin,
     Portrait_HP_Robin,
+    Portrait_HP_Robin_Number_Current,
+    Portrait_HP_Robin_Number_Max,
     Portrait_Ursula,
+    Portrait_Ursula_NameTag,
     Portrait_Blood_Ursula,
     Portrait_HP_Ursula,
+    Portrait_HP_Ursula_Number_Current,
+    Portrait_HP_Ursula_Number_Max,
     Portrait_Hansel,
+    Portrait_Hansel_NameTag,
     Portrait_Blood_Hansel,
     Portrait_HP_Hansel,
+    Portrait_HP_Hansel_Number_Current,
+    Portrait_HP_Hansel_Number_Max,
     // 로빈 스킬시전 Q
     Skill_Use_Q_Robin,
-    // 로빈 스킬시전 Q
+    // 로빈 스킬시전 Q 흑백 오버레이
+    Skill_Use_Q_Robin_Overlay,
+    Skill_Use_Q_Robin_Cooltime_Number,
+    // 로빈 스킬시전 W
     Skill_Use_W_Robin,
-    // 로빈 스킬시전 Q
+    // 로빈 스킬시전 W 흑백 오버레이
+    Skill_Use_W_Robin_Overlay,
+    Skill_Use_W_Robin_Cooltime_Number,
+    // 우르술라 스킬시전 Q
     Skill_Use_Q_Ursula,
-    // 로빈 스킬시전 Q
+    // 우르술라 스킬시전 Q 흑백 오버레이
+    Skill_Use_Q_Ursula_Overlay,
+    Skill_Use_Q_Ursula_Cooltime_Number,
+    // 우르술라 스킬시전 W
     Skill_Use_W_Ursula,
-    // 로빈 스킬시전 Q
+    // 우르술라 스킬시전 W 흑백 오버레이 
+    Skill_Use_W_Ursula_Overlay,
+    Skill_Use_W_Ursula_Cooltime_Number,
+    // 헨젤 스킬시전 Q
     Skill_Use_Q_HANSEL,
-    // 로빈 스킬시전 Q
+    // 헨젤 스킬시전 Q 흑백 오버레이
+    Skill_Use_Q_HANSEL_Overlay,
+    Skill_Use_Q_HANSEL_Cooltime_Number,
+    // 헨젤 스킬시전 W
     Skill_Use_W_HANSEL,
+    // 헨젤 스킬시전 W 흑백 오버레이
+    Skill_Use_W_HANSEL_Overlay,
+    Skill_Use_W_HANSEL_Cooltime_Number,
     // 전술모드 토글버튼
     Toggle_TacticMode,
+    // 전술모드 토글버튼 흑백 오버레이
+    Toggle_TacticMode_Overlay,
+    Toggle_TacticMode_Cooltime_Number,
+    // 마나 게이지
+    ManaFill,
+    // 현재 마나량을 나타내는 텍스트
+    Mana_Text_CurrentMP,
+    // 최대 마나량을 나타내는 텍스트
+    Mana_Text_MaxMP,
     // 사운드가 켜진 상태에서 표시할 UI버튼
     Sound_On,
     // 사운드가 꺼진 상태에서 표시할 UI버튼
@@ -39,12 +75,49 @@ enum class UIEnumID
     Ingame_Bottom_Layout,
     // 인게임에서 사용되는 메뉴버튼
     Ingame_MenuButton,
-    // 콤보를 표시하는 위치, 콤보가 진행중인게 아니라면 표시되지 않을 수도 있음.
-    Ingame_Combo,
-    // 어떤 콤보를 달성해야 하는지 설명하는 텍스트
-    Ingame_Combo_Description,
+    // 콤보 횟수를 표시함
+    Ingame_Combo_Number,
+    // "Combo"라는 문자를 표시함
+    Ingame_Combo_Text,
+    // 어떤 콤보를 달성해야 하는지 설명하는 텍스트, 콤보 달성을 표시하는 체크박스의 V자 문양
+    Ingame_Combo_Description1,
+    Ingame_Combo_Check1,
+    Ingame_Combo_Description2,
+    Ingame_Combo_Check2,
+    Ingame_Combo_Description3,
+    Ingame_Combo_Check3,
     BlackMask_RightToLeft,
     BlackMask_TopToBottom,
     BlackMask_LeftToRight,
     BlackMask_BottomToTop,
+    LetterBox_Top,
+    LetterBox_Bottom,
+    // 인게임 하단에서 클릭할 시 스킬트리 메뉴를 여는 메뉴버튼
+    InGame_SkiltreeMenu_Active,
+    InGame_SkiltreeMenu_InActive,
+    SkillPoint_Number,
+    SkillUpgradeButtonRobin00,
+    SkillUpgradeButtonRobin11,
+    SkillUpgradeButtonRobin12,
+    SkillUpgradeButtonRobin21,
+    SkillUpgradeButtonRobin22,
+    SkillUpgradeButtonUrsula00,
+    SkillUpgradeButtonUrsula11,
+    SkillUpgradeButtonUrsula12,
+    SkillUpgradeButtonUrsula21,
+    SkillUpgradeButtonUrsula22,
+    SkillUpgradeButtonHansel00,
+    SkillUpgradeButtonHansel11,
+    SkillUpgradeButtonHansel12,
+    SkillUpgradeButtonHansel21,
+    SkillUpgradeButtonHansel22,
+    PopUpMessage_NotEnoughSP,
+    PopUpMessage_RequirementNotMet,
+    PopUpMessage_PermissionForUpgrade,
+    PopUpMessage_PermissionForUpgradeProceedButton,
+    PopUpMessage_WarningForRestart,
+    PopUpMessage_WarningForRestart_ProceedButton,
+    EnemyStatus_HP_Number_Current,
+    EnemyStatus_HP_Number_Max,
+    EnemyStatus_Buff1,
 };

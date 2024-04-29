@@ -1,4 +1,27 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "nlohmann/json.hpp"
+#include "Application.h"
+#include "ContentsLayer.h"
 #include <d3d11.h>
+#include "UnitBrush.h"
+#include "TemplateDataManager.h"
+
+// UI
+#include "UIElement.h"
+#include "UIManager.h"
+#include "UIEnumID.h"
+#include "UIExportFlag.h"
+#include "PopupOnEnable.h"
+#include "PopDownOnDisable.h"
+#include "UIOffsetTransition.h"
+#include "UIButton.h"
+#include "UIText.h"
+#include "UIImage.h"
+#include "UIPriorityLayout.h"
+#include "SoundPlayingTimer.h"
+#include "JsonUIData.h"
+#include "FloatFollower.h"
+#include "PulsingUI.h"
+#include "SkillSystem.h"
+#include "SkillUpgradeSystem.h"

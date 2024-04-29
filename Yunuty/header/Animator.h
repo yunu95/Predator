@@ -35,17 +35,26 @@ namespace yunutyEngine::graphics
 		virtual ~Animator() {};
 		void Pause();
 		void Play(yunuGI::IAnimation* animation);
-		void PushAnimation(yunuGI::IAnimation* animation, unsigned int frame = 0, std::function<void()> func = nullptr);
+		void PushAnimation(yunuGI::IAnimation* animation);
 		void SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame);
 		void ChangeAnimation(yunuGI::IAnimation* animation, float transitionDuration, float transitionSpeed);
 		
+		/// Play 중인지 확인할 수 있으면 좋겠어서 추가해 보았습니다.
+		bool IsPlaying() { return isCurAnimationPlay; }
+
+		/// AnimationEvent 의 경우, Push 뿐만이 아니라 Erase 에 대한 대처도 필요합니다.
+		/// 일반적인 Push 상황과 별개로 functor 를 등록하는 경우에는 Index 를 리턴받도록 합니다.
+		unsigned long long PushAnimationWithFunc(yunuGI::IAnimation* animation, unsigned int frame, std::function<void()> func);
+		bool EraseAnimationFunc(yunuGI::IAnimation* animation, unsigned long long index);
+
 	private:
 		void ClearAnimationEvent(yunuGI::IAnimation* animation);
 
 	private:
 		bool isPlay = false;
-		std::map<yunuGI::IAnimation*, std::vector<AnimationEvent>> animationEventMap;
-
+		bool isCurAnimationPlay = false;
+		std::map<yunuGI::IAnimation*, std::map<unsigned long long, AnimationEvent>> animationEventMap;
+		unsigned long long functorIndex = 0;
 	};
 }
 

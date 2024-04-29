@@ -1,7 +1,7 @@
 #include "Timer.h"
 
 
-void Timer::Update()
+void TimerComponent::Update()
 {
     if (m_isActivated)
     {
@@ -30,7 +30,7 @@ void Timer::Update()
     }
 }
 
-void Timer::ActivateTimer()
+void TimerComponent::ActivateTimer()
 {
     m_elapsed = 0.0f;
     m_isActivated = true;
@@ -43,12 +43,12 @@ void Timer::ActivateTimer()
     }
 }
 
-void Timer::StopTimer()
+void TimerComponent::StopTimer()
 {
     m_isActivated = false;
     m_elapsed = 0.0f;
 }
-void Timer::SetUsingRealtime(bool isRealtime)
+void TimerComponent::SetUsingRealtime(bool isRealtime)
 {
     this->isRealtime = isRealtime;
 }

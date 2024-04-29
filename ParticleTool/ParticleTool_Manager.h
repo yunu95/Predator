@@ -3,42 +3,16 @@
 
 #pragma once
 
+#include "Singleton.h"
+#include "AnimationEventManager.h"
+
 #include <memory>
 #include <vector>
 #include <string>
 #include <map>
-
-namespace application
-{
-	template <typename T>
-	class Singleton
-	{
-	public:
-		static T& GetSingletonInstance()
-		{
-			static std::unique_ptr<T> instance = nullptr;
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<T>(new T);
-			}
-			return *instance;
-		}
-
-	protected:
-		Singleton()
-		{
-
-		}
-
-		~Singleton()
-		{
-
-		}
-
-		Singleton(const Singleton&) = delete;
-		Singleton& operator=(const Singleton&) = delete;
-	};
-}
+#include <unordered_map>
+#include <set>
+#include <unordered_set>
 
 namespace yunutyEngine
 {
@@ -67,7 +41,6 @@ namespace application
 			: public Singleton<ParticleTool_Manager>
 		{
 			friend class Singleton<ParticleTool_Manager>;
-			friend class ParticleToolData;
 
 		public:
 			void Clear();
@@ -100,27 +73,53 @@ namespace application
 
 			std::vector<yunutyEngine::GameObject*>& GetSkinnedFBXList();
 
-			/// 어떤 파티클에 대해서 할 것인지 세팅하는 구조로 변경 필요
-			std::weak_ptr<ParticleToolInstance> CreateParticleInstance(const std::string& name);
-			bool EraseParticleInstance(const std::string& name);
+			void SetSelectedFBXData(yunutyEngine::GameObject* fbxObj);
+			yunutyEngine::GameObject* GetSelectedFBXData();
+
+			std::vector<std::weak_ptr<ParticleToolInstance>>& GetChildrenParticleInstanceList(const std::string& parentsName);
+			std::vector<std::string>& GetAnimationNameList(const std::string& fbxName);
+			yunuGI::IAnimation* GetMatchingIAnimation(const std::string& fbxName, const std::string& aniName);
+
+			void SetSelectedAnimation(yunuGI::IAnimation* ani);
+			yunuGI::IAnimation* GetSelectedAnimation();
+
+			yunutyEngine::GameObject* GetParticleToolInstanceObject(const std::weak_ptr<ParticleToolInstance>& ptr);
+
+			std::weak_ptr<ParticleToolInstance> AddParticleInstance(yunutyEngine::GameObject* parents, const std::string& name = "");
+			bool EraseParticleInstance(yunutyEngine::GameObject* parents, const std::weak_ptr<ParticleToolInstance>& instance);
 
 			void SetSelectedParticleInstanceData(const std::weak_ptr<ParticleToolInstance>& particleInstanceData);
 			std::weak_ptr<ParticleToolInstance> GetSelectedParticleInstanceData();
 
-			bool RenameParticleInstanceData(const std::weak_ptr<ParticleToolInstance>& particleInstanceData, const std::string& name);
-			void UpdateParticleInstanceDataObj(const std::string& name);
-			///
+			void UpdateParticleInstanceDataObj(const std::weak_ptr<ParticleToolInstance>& instance);
+
+			void PlaySelectedAnimation();
+			bool IsAnimationPlaying();
+
+			bool AddAnimationEvent(const std::shared_ptr<application::AnimationEvent>& event);
+			bool EraseAnimationEvent(const std::shared_ptr<application::AnimationEvent>& event);
+
+			void SetSelectedAnimationEvent(const std::shared_ptr<application::AnimationEvent>& event);
+			std::weak_ptr<application::AnimationEvent> GetSelectedAnimationEvent();
 
 		private:
-			void ClearChildPIs();
+			void ClearPP();
+			void ClearPPIs();
+
+			AnimationEventManager& aniEventManager = AnimationEventManager::GetSingletonInstance();
 
 			bool isParticleEditMode = true;
+			unsigned long long particleInstanceCount = 0;
 			std::string currentPPPath;
 			std::string currentPPIsPath;
 			std::map<const std::string, std::shared_ptr<ParticleToolData>> particleList = std::map<const std::string, std::shared_ptr<ParticleToolData>>();
 			std::shared_ptr<ParticleToolData> selectedParticleData = nullptr;
-			std::map<const std::string, std::vector<std::shared_ptr<ParticleToolInstance>>> particleInstanceList = std::map<const std::string, std::vector<std::shared_ptr<ParticleToolInstance>>>();
+			std::map<const std::string, std::unordered_set<std::shared_ptr<ParticleToolInstance>>> particleInstanceList = std::map<const std::string, std::unordered_set<std::shared_ptr<ParticleToolInstance>>>();
+			std::map<const std::shared_ptr<ParticleToolInstance>, yunutyEngine::GameObject*> particleInstanceIDMap = std::map<const std::shared_ptr<ParticleToolInstance>, yunutyEngine::GameObject*>();
 			std::shared_ptr<ParticleToolInstance> selectedParticleInstanceData = nullptr;
+			yunutyEngine::GameObject* selectedFBXObject = nullptr;
+			yunuGI::IAnimation* selectedAnimation = nullptr;
+			std::shared_ptr<application::AnimationEvent> selectedAniEvent = nullptr;
 
 			std::map<const std::string, yunutyEngine::GameObject*> particleObjList = std::map<const std::string, yunutyEngine::GameObject*>();
 			std::map<const std::string, yunutyEngine::GameObject*> skinnedObjList = std::map<const std::string, yunutyEngine::GameObject*>();

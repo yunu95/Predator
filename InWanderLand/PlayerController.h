@@ -10,6 +10,7 @@
 
 class RTSCam;
 class Unit;
+class CursorDetector;
 
 class PlayerController : public GHContents::LazySingletonClass<PlayerController>
 {
@@ -40,7 +41,7 @@ public:
 	void AddPlayerUnit(Unit* p_playerUnit);
 	void ErasePlayerUnit(Unit* p_playerUnit);
 
-	void SetLeftClickMove();
+	void SetRightClickFunction();
 	void SetLeftClickAttackMove();
 	void SetLeftClickSkill(Unit::SkillEnum p_skillNum);
 
@@ -52,5 +53,6 @@ public:
 	std::unordered_map<Unit::UnitType, Unit*> GetPlayerMap() const;
 	Unit* FindSelectedUnitByUnitType(Unit::UnitType p_type);
 
+	CursorDetector* m_cursorDetector;
 };
 

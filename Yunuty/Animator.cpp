@@ -16,7 +16,7 @@ void Animator::Pause()
 
 void Animator::ClearAnimationEvent(yunuGI::IAnimation* animation)
 {
-	for (auto& each : this->animationEventMap[animation])
+	for (auto& [key, each] : this->animationEventMap[animation])
 	{
 		each.isFirst = true;
 	}
@@ -43,48 +43,78 @@ void Animator::SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int fra
 
 void Animator::Play(yunuGI::IAnimation* animation)
 {
-	isPlay = true;
+	this->isCurAnimationPlay = true;
+
+	this->isPlay = true;
 
 	auto& gi = this->GetGI();
 
 	gi.Play(animation);
 }
 
-void Animator::PushAnimation(yunuGI::IAnimation* animation, unsigned int frame /*= 0*/, std::function<void()> func /*= nullptr*/)
+void Animator::PushAnimation(yunuGI::IAnimation* animation)
+{
+	auto& gi = this->GetGI();
+
+	gi.PushAnimation(animation);
+}
+
+unsigned long long Animator::PushAnimationWithFunc(yunuGI::IAnimation* animation, unsigned int frame, std::function<void()> func)
 {
 	auto& gi = this->GetGI();
 
 	gi.PushAnimation(animation);
 
-	if (func)
+	AnimationEvent animationEvent;
+	animationEvent.frame = frame;
+	animationEvent.func = func;
+	animationEvent.isFirst = true;
+
+	this->animationEventMap[animation][functorIndex] = animationEvent;
+	return functorIndex++;
+
+	//if (func)
+	//{
+	//	AnimationEvent animationEvent;
+	//	animationEvent.frame = frame;
+	//	animationEvent.func = func;
+	//	animationEvent.isFirst = true;
+
+
+	//	auto iter = this->animationEventMap.find(animation);
+
+	//	if (iter == this->animationEventMap.end())
+	//	{
+	//		std::vector<AnimationEvent> tempVec;
+	//		tempVec.emplace_back(animationEvent);
+	//		this->animationEventMap.insert({ animation, tempVec });
+	//	}
+	//	else
+	//	{
+	//		for (auto& each : this->animationEventMap[animation])
+	//		{
+	//          /// frame 값이 같다고 해서 animationEvent 가 등록 안되게 하는지 이유를 잘 모르겠습니다.
+	//          /// 특정 frame 에 여러 이벤트가 발생했을 때에도 대응해야 합니다.
+	//			if (each.frame == frame)
+	//			{
+	//				return;
+	//			}
+	//		}
+
+	//		this->animationEventMap[animation].emplace_back(animationEvent);
+	//	}
+	//}
+}
+
+bool Animator::EraseAnimationFunc(yunuGI::IAnimation* animation, unsigned long long index)
+{
+	if (animationEventMap.contains(animation) && animationEventMap[animation].contains(index))
 	{
-		AnimationEvent animationEvent;
-		animationEvent.frame = frame;
-		animationEvent.func = func;
-		animationEvent.isFirst = true;
-
-
-		auto iter = this->animationEventMap.find(animation);
-
-		if (iter == this->animationEventMap.end())
-		{
-			std::vector<AnimationEvent> tempVec;
-			tempVec.emplace_back(animationEvent);
-			this->animationEventMap.insert({ animation, tempVec });
-		}
-		else
-		{
-			for (auto& each : this->animationEventMap[animation])
-			{
-				if (each.frame == frame)
-				{
-					return;
-				}
-			}
-
-			this->animationEventMap[animation].emplace_back(animationEvent);
-		}
+		animationEventMap[animation].erase(index);
+		return true;
 	}
+
+	return false;
 }
 
 void Animator::Update()
@@ -110,8 +140,11 @@ void Animator::Update()
 			desc.curr.sumTime += (desc.curr.speed * Time::GetDeltaTime());
 			if (desc.curr.sumTime >= currentAnimation->GetDuration())
 			{
+				this->isCurAnimationPlay = false;
+
 				if (currentAnimation->GetLoop())
 				{
+					this->isCurAnimationPlay = true;
 					desc.curr.sumTime = 0.f;
 				}
 			}
@@ -125,7 +158,7 @@ void Animator::Update()
 		{
 			auto curAnimation = gi.GetCurrentAnimation();
 
-			for (auto& each2 : each.second)
+			for (auto& [key, each2] : each.second)
 			{
 				if (curAnimation->GetName() == each.first->GetName())
 				{

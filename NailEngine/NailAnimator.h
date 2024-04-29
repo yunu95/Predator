@@ -22,6 +22,7 @@ public:
 		this->transitionDesc.curr.currFrame = 0;
 		this->transitionDesc.curr.nextFrame = 0;
 		this->transitionDesc.curr.ratio = 0;
+		this->transitionDesc.curr.sumTime = 0;
 	};
 
 	void SetPlaySpeed(float playSpeed)

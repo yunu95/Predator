@@ -62,8 +62,6 @@ void HealerSkillSystem::ActivateSkillOne(Vector3d skillPos)
 
 	m_currentSelectedSkillPosition = skillPos;
 
-	m_unitComponent->RegisterSkillDuration(4.0f);
-
 	isQSkillActivating = true;
 
 	m_unitNavComponent->SetActive(false);
@@ -80,7 +78,6 @@ void HealerSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 
 	float skillWidth = 2.0f * UNIT_LENGTH;
 	float skillHeight = m_skillTwoRange;
-	m_unitComponent->RegisterSkillDuration(2.0f);
 
 	WSkillFieldDamage.colliderObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
 	WSkillFieldDamage.debugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());

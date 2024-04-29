@@ -157,6 +157,10 @@ void GameManager::ReportPlayerEnteredWaveRegion(PlaytimeWave* p_wave)
 	PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->SetWaveStartPosition(warriorTransform->GetWorldPosition());
 	PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Magician)->second->SetWaveStartPosition(leftPosition);
 	PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Healer)->second->SetWaveStartPosition(rightPosition);
+
+	PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->m_currentBelongingWavePosition = p_wave->GetTransform()->GetWorldPosition();
+	PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Magician)->second->m_currentBelongingWavePosition = p_wave->GetTransform()->GetWorldPosition();
+	PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Healer)->second->m_currentBelongingWavePosition = p_wave->GetTransform()->GetWorldPosition();
 }
 
 bool GameManager::IsPlayerJustEnteredWaveRegion() const

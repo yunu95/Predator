@@ -6,7 +6,6 @@
 #include "Application.h"
 #include "RTSCam.h"
 #include "DelayedTestFunctions.h"
-#include "ShakyCam.h"
 #include "DebugTilePlane.h"
 #include "DebugBeacon.h"
 #include "DebugMeshes.h"

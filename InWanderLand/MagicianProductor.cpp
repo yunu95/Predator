@@ -6,203 +6,209 @@
 #include "DebugMeshes.h"
 #include "SingleNavigationField.h"
 #include "SkillPreviewSystem.h"
+#include "UIManager.h"
 
 void MagicianProductor::SetUnitData()
 {
-	m_objectName = "Magician";
-	m_unitType = Unit::UnitType::Magician;
-	m_unitSide = Unit::UnitSide::Player;
+    m_objectName = "Magician";
+    m_unitType = Unit::UnitType::Magician;
+    m_unitSide = Unit::UnitSide::Player;
 
-	m_healthPoint = 150;
-	m_manaPoint = 100;
+    m_healthPoint = 150;
+    m_manaPoint = 100;
 
-	m_autoAttackDamage = 15;
-	m_criticalHitProbability = 0.5f;
-	m_criticalHitMultiplier = 1.5f;
+    m_autoAttackDamage = 15;
+    m_criticalHitProbability = 0.5f;
+    m_criticalHitMultiplier = 1.5f;
 
-	m_defensePoint = 5;
-	m_dodgeProbability = 0.05f;
-	m_criticalDamageDecreaseMultiplier = 0.05f;
+    m_defensePoint = 5;
+    m_dodgeProbability = 0.05f;
+    m_criticalDamageDecreaseMultiplier = 0.05f;
 
-	m_maxAggroNumber = 1;
+    m_maxAggroNumber = 1;
 
-	m_idRadius = 10.0f * UNIT_LENGTH;
-	m_atkRadius = 3.5f * UNIT_LENGTH;
-	m_unitSpeed = 4.5f;
+    m_idRadius = 10.0f * UNIT_LENGTH;
+    m_atkRadius = 3.5f * UNIT_LENGTH;
+    m_unitSpeed = 4.5f;
 
-	m_attackDelay = 5.0f;
+    m_attackDelay = 5.0f;
 
-	m_navField = &SingleNavigationField::Instance();
+    m_navField = &SingleNavigationField::Instance();
 
-	qSkillPreviewType = SkillPreviewMesh::Both;
-	wSkillPreviewType = SkillPreviewMesh::Both;
+    qSkillPreviewType = SkillPreviewMesh::Both;
+    wSkillPreviewType = SkillPreviewMesh::Both;
 
-	m_unitFbxName = "SKM_Robin";
+    m_unitFbxName = "SKM_Robin";
 }
 
 void MagicianProductor::SingletonInitializer()
 {
-	//graphics::Renderer::SingleInstance().GetResourceManager()->LoadFile("FBX/Boss");
-	SetUnitData();
+    //graphics::Renderer::SingleInstance().GetResourceManager()->LoadFile("FBX/Boss");
+    SetUnitData();
 }
 Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
-	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
+    m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+    m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
-	/// UnitComponent 추가
-	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
-	UnitProductor::SetUnitComponentMembers();
+    /// UnitComponent 추가
+    m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+    UnitProductor::SetUnitComponentMembers();
 
 
 #pragma endregion
 
 #pragma region Auto Attack Setting (Including Passive Logic)
-	auto magicianAttackSystem = m_unitGameObject->AddComponent<RangedAttackSystem>();
-	magicianAttackSystem->SetBulletSpeed(10.0f);
+    auto magicianAttackSystem = m_unitGameObject->AddComponent<RangedAttackSystem>();
+    magicianAttackSystem->SetBulletSpeed(10.0f);
 #pragma endregion
 
 #pragma region Q Skill Setting
-	auto QSkillProjectileObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Fork");
+    auto QSkillProjectileObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Fork");
 
-	QSkillProjectileObject->AddComponent<Dotween>();
+    QSkillProjectileObject->AddComponent<Dotween>();
 
-	auto QSkillProjectileCollider = QSkillProjectileObject->AddComponent<physics::SphereCollider>();
-	m_QSkillProjectileRadius = 1.0f * UNIT_LENGTH;
-	QSkillProjectileCollider->SetRadius(m_QSkillProjectileRadius);
-	QSkillProjectileObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+    auto QSkillProjectileCollider = QSkillProjectileObject->AddComponent<physics::SphereCollider>();
+    m_QSkillProjectileRadius = 1.0f * UNIT_LENGTH;
+    QSkillProjectileCollider->SetRadius(m_QSkillProjectileRadius);
+    QSkillProjectileObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
-	auto QSkillProjectileDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	AttachDebugMesh(QSkillProjectileDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), false);
-	QSkillProjectileDebugObject->GetTransform()->SetLocalScale({ m_QSkillProjectileRadius * 2 , m_QSkillProjectileRadius * 2 , m_QSkillProjectileRadius * 2 });
+    auto QSkillProjectileDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    AttachDebugMesh(QSkillProjectileDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), false);
+    QSkillProjectileDebugObject->GetTransform()->SetLocalScale({ m_QSkillProjectileRadius * 2 , m_QSkillProjectileRadius * 2 , m_QSkillProjectileRadius * 2 });
 
-	auto QSkillFieldObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	QSkillFieldObject->AddComponent<Dotween>();
-	auto fieldDamageComponent = QSkillFieldObject->AddComponent<BlindFieldComponent>();
-	fieldDamageComponent->SetSkillOwnerUnit(m_unitComponent);
-	auto QSkillFieldCollider = QSkillFieldObject->AddComponent<physics::SphereCollider>();
-	m_QSkillFieldRadius = 2.0f * UNIT_LENGTH;
-	QSkillFieldCollider->SetRadius(m_QSkillFieldRadius);
-	QSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-	auto QSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	AttachDebugMesh(QSkillFieldDebugObject, DebugMeshType::Sphere, yunuGI::Color::white(), false);
-	QSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_QSkillFieldRadius * 2, m_QSkillFieldRadius * 2 , m_QSkillFieldRadius * 2 });
+    auto QSkillFieldObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    QSkillFieldObject->AddComponent<Dotween>();
+    auto fieldDamageComponent = QSkillFieldObject->AddComponent<BlindFieldComponent>();
+    fieldDamageComponent->SetSkillOwnerUnit(m_unitComponent);
+    auto QSkillFieldCollider = QSkillFieldObject->AddComponent<physics::SphereCollider>();
+    m_QSkillFieldRadius = 2.0f * UNIT_LENGTH;
+    QSkillFieldCollider->SetRadius(m_QSkillFieldRadius);
+    QSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+    auto QSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    AttachDebugMesh(QSkillFieldDebugObject, DebugMeshType::Sphere, yunuGI::Color::white(), false);
+    QSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_QSkillFieldRadius * 2, m_QSkillFieldRadius * 2 , m_QSkillFieldRadius * 2 });
 #pragma endregion
 
 #pragma region W Skill Setting
-	auto WSkillProjectileObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	WSkillProjectileObject->AddComponent<Dotween>();
+    auto WSkillProjectileObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    WSkillProjectileObject->AddComponent<Dotween>();
 
-	auto WSkillProjectileCollider = WSkillProjectileObject->AddComponent<physics::SphereCollider>();
-	m_WSkillProjectileRadius = 1.0f * UNIT_LENGTH;
-	WSkillProjectileCollider->SetRadius(m_WSkillProjectileRadius);
-	WSkillProjectileObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+    auto WSkillProjectileCollider = WSkillProjectileObject->AddComponent<physics::SphereCollider>();
+    m_WSkillProjectileRadius = 1.0f * UNIT_LENGTH;
+    WSkillProjectileCollider->SetRadius(m_WSkillProjectileRadius);
+    WSkillProjectileObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
-	auto WSkillProjectileDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	AttachDebugMesh(WSkillProjectileDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
-	WSkillProjectileDebugObject->GetTransform()->SetLocalScale({ m_WSkillProjectileRadius * 2 , m_WSkillProjectileRadius * 2, m_WSkillProjectileRadius * 2 });
+    auto WSkillProjectileDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    AttachDebugMesh(WSkillProjectileDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
+    WSkillProjectileDebugObject->GetTransform()->SetLocalScale({ m_WSkillProjectileRadius * 2 , m_WSkillProjectileRadius * 2, m_WSkillProjectileRadius * 2 });
 
-	auto WSkillFieldObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	WSkillFieldObject->AddComponent<Dotween>();
-	auto WfieldDamageComponent = WSkillFieldObject->AddComponent<ParalysisFieldComponent>();
-	WfieldDamageComponent->SetSkillOwnerUnit(m_unitComponent);
-	auto WSkillFieldCollider = WSkillFieldObject->AddComponent<physics::SphereCollider>();
-	m_WSkillFieldRadius = 2.0f * UNIT_LENGTH;
-	WSkillFieldCollider->SetRadius(m_WSkillFieldRadius);
-	WSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-	auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-	AttachDebugMesh(WSkillFieldDebugObject, DebugMeshType::Sphere, yunuGI::Color::blue(), true);
-	WSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_WSkillFieldRadius * 2 , m_WSkillFieldRadius * 2 , m_WSkillFieldRadius * 2 });
+    auto WSkillFieldObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    WSkillFieldObject->AddComponent<Dotween>();
+    auto WfieldDamageComponent = WSkillFieldObject->AddComponent<ParalysisFieldComponent>();
+    WfieldDamageComponent->SetSkillOwnerUnit(m_unitComponent);
+    auto WSkillFieldCollider = WSkillFieldObject->AddComponent<physics::SphereCollider>();
+    m_WSkillFieldRadius = 2.0f * UNIT_LENGTH;
+    WSkillFieldCollider->SetRadius(m_WSkillFieldRadius);
+    WSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+    auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    AttachDebugMesh(WSkillFieldDebugObject, DebugMeshType::Sphere, yunuGI::Color::blue(), true);
+    WSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_WSkillFieldRadius * 2 , m_WSkillFieldRadius * 2 , m_WSkillFieldRadius * 2 });
 #pragma endregion
 
 #pragma region SkillSystem Setting
-	auto magicianSkillSystem = m_unitGameObject->AddComponent<MagicianSkillSystem>();
+    auto magicianSkillSystem = m_unitGameObject->AddComponent<MagicianSkillSystem>();
 
-	magicianSkillSystem->SetQSkillDebugPair({ QSkillProjectileDebugObject, m_QSkillProjectileRadius }, { QSkillFieldDebugObject, m_QSkillFieldRadius });
-	magicianSkillSystem->SetQSkillObject(QSkillProjectileObject, QSkillFieldObject);
+    magicianSkillSystem->SetQSkillDebugPair({ QSkillProjectileDebugObject, m_QSkillProjectileRadius }, { QSkillFieldDebugObject, m_QSkillFieldRadius });
+    magicianSkillSystem->SetQSkillObject(QSkillProjectileObject, QSkillFieldObject);
+    magicianSkillSystem->qSkillRadialOverlay = UIManager::Instance().GetUIElementByEnum(UIEnumID::Skill_Use_Q_Ursula_Overlay);
+    magicianSkillSystem->qSkillCooltimeNumberUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::Skill_Use_Q_Ursula_Cooltime_Number);
 
-	magicianSkillSystem->SetWSkillDebugPair({ WSkillProjectileDebugObject, m_WSkillProjectileRadius }, { WSkillFieldDebugObject, m_WSkillFieldRadius });
-	magicianSkillSystem->SetWSkillObject(WSkillProjectileObject, WSkillFieldObject);
+    magicianSkillSystem->SetWSkillDebugPair({ WSkillProjectileDebugObject, m_WSkillProjectileRadius }, { WSkillFieldDebugObject, m_WSkillFieldRadius });
+    magicianSkillSystem->SetWSkillObject(WSkillProjectileObject, WSkillFieldObject);
+    magicianSkillSystem->eSkillRadialOverlay = UIManager::Instance().GetUIElementByEnum(UIEnumID::Skill_Use_W_Ursula_Overlay);
+    magicianSkillSystem->eSkillCooltimeNumberUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::Skill_Use_W_Ursula_Cooltime_Number);
 
-	float skillOneRange = 6.0f * UNIT_LENGTH;
-	float skillTwoRange = 6.0f * UNIT_LENGTH;
+    float skillOneRange = 6.0f * UNIT_LENGTH;
+    float skillTwoRange = 6.0f * UNIT_LENGTH;
 
-	magicianSkillSystem->SetSkillOneRange(skillOneRange);
-	magicianSkillSystem->SetSkillTwoRange(skillTwoRange);
+    magicianSkillSystem->SetSkillOneRange(skillOneRange);
+    magicianSkillSystem->SetSkillTwoRange(skillTwoRange);
 #pragma endregion
 
-	UnitProductor::AddRangeSystemComponent();
-	UnitProductor::AddColliderComponent();
-	UnitProductor::AddNavigationComponent();
-	UnitProductor::AddDotweenComponent();
-	UnitProductor::SetPlayerRelatedComponents();
+    UnitProductor::AddRangeSystemComponent();
+    UnitProductor::AddColliderComponent();
+    UnitProductor::AddNavigationComponent();
+    UnitProductor::AddDotweenComponent();
+    UnitProductor::SetPlayerRelatedComponents();
 
-	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::Q, skillOneRange);
-	SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::E, skillTwoRange);
+    SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::Q, skillOneRange);
+    SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::W, skillTwoRange);
 
-	auto skinnedMeshRenderer = m_unitGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
-	auto material = skinnedMeshRenderer->GetGI().GetMaterial();
-	auto clonedMaterial = graphics::Renderer::SingleInstance().GetResourceManager()->CloneMaterial(L"Red", material);
-	clonedMaterial->SetColor(yunuGI::Color::red());
-	skinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial);
+    auto skinnedMeshRenderer = m_unitGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
+    auto material = skinnedMeshRenderer->GetGI().GetMaterial();
+    auto clonedMaterial = graphics::Renderer::SingleInstance().GetResourceManager()->CloneMaterial(L"Red", material);
+    clonedMaterial->SetColor(yunuGI::Color::red());
+    skinnedMeshRenderer->GetGI().SetMaterial(0, clonedMaterial);
 
-	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
-	auto& animList = rsrcManager->GetAnimationList();
-	for (auto each : animList)
-	{
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
-		{
-			m_baseUnitAnimations.m_idleAnimation = each;
-			m_baseUnitAnimations.m_idleAnimation->SetLoop(true);
-			animator->PushAnimation(m_baseUnitAnimations.m_idleAnimation);
-			animator->Play(m_baseUnitAnimations.m_idleAnimation);
-		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
-		{
-			m_baseUnitAnimations.m_walkAnimation = each;
-			m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
-			animator->PushAnimation(m_baseUnitAnimations.m_walkAnimation);
-		}
-		/*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
-		{
-			m_baseUnitAnimations.m_attackAnimation = each;
-			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
-		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
-		{
-			m_baseUnitAnimations.m_paralysisAnimation = each;
-			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
-			animator->PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
-		}
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
-		{
-			m_baseUnitAnimations.m_deathAnimation = each;
-			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
-			animator->PushAnimation(m_baseUnitAnimations.m_deathAnimation);
-		}
-		/// Skill Animation
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
-		{
-			each->SetLoop(false);
-			animator->PushAnimation(each);
-			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::Q, each);
-		}
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
-		{
-			each->SetLoop(false);
-			animator->PushAnimation(each);
-			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::E, each);
-		}
-		/*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
-		{
-			m_baseUnitAnimations.m_battleEngageAnimation = each;
-			m_baseUnitAnimations.m_battleEngageAnimation->SetLoop(false);
-		}
-	}
-
-	m_unitComponent->unitAnimations = m_baseUnitAnimations;
-
-	return m_unitComponent;
+    auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+    auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
+    auto& animList = rsrcManager->GetAnimationList();
+    for (auto each : animList)
+    {
+        if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
+        {
+            m_baseUnitAnimations.m_idleAnimation = each;
+            m_baseUnitAnimations.m_idleAnimation->SetLoop(true);
+            animator->PushAnimation(m_baseUnitAnimations.m_idleAnimation);
+            animator->Play(m_baseUnitAnimations.m_idleAnimation);
+        }
+        else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
+        {
+            m_baseUnitAnimations.m_walkAnimation = each;
+            m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
+            animator->PushAnimation(m_baseUnitAnimations.m_walkAnimation);
+        }
+        /*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+        {
+            m_baseUnitAnimations.m_attackAnimation = each;
+            m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
+        }
+        else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+        {
+            m_baseUnitAnimations.m_paralysisAnimation = each;
+            m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
+            animator->PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
+        }
+        if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+        {
+            m_baseUnitAnimations.m_deathAnimation = each;
+            m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
+            animator->PushAnimation(m_baseUnitAnimations.m_deathAnimation);
+        }
+        /// Skill Animation
+        if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+        {
+            each->SetLoop(false);
+            animator->PushAnimation(each);
+            m_baseUnitAnimations.m_skillOneAnimation = each;
+            m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::Q, each);
+        }
+        if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
+        {
+            each->SetLoop(true);
+            animator->PushAnimation(each);
+            m_baseUnitAnimations.m_skillTwoAnimation = each;
+            m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::W, each);
+        }
+        /*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+        {
+            m_baseUnitAnimations.m_battleEngageAnimation = each;
+            m_baseUnitAnimations.m_battleEngageAnimation->SetLoop(false);
+        }
+    }
+    m_unitComponent->unitAnimations = m_baseUnitAnimations;
+    SetUnitAnimationFunction();
+    return m_unitComponent;
 }

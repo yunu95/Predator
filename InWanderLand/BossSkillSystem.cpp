@@ -4,9 +4,12 @@
 #include "EnemySummonGateProductor.h"
 #include "EnemySummonSkillSystem.h"
 #include "ShortcutSystem.h"
+#include "MeleeEnemyPool.h"
 
 void BossSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition)
 {
+	m_unitComponent->m_currentSkillPosition = p_skillPosition;
+
 	switch (p_currentSkill)
 	{
 		case Unit::SkillEnum::BossSkillOne:
@@ -29,7 +32,6 @@ void BossSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_s
 void BossSkillSystem::ActivateSkillOne()
 {
 	SetSkillRequirmentsActive(m_skillOneRequirments, true);
-	m_unitComponent->RegisterSkillDuration(m_skillOneDuration);
 	m_unitDotween->DONothing(m_skillOneDuration).OnComplete([=]()
 		{
 			SetSkillRequirmentsActive(m_skillOneRequirments, false);
@@ -40,7 +42,6 @@ void BossSkillSystem::ActivateSkillOne()
 void BossSkillSystem::ActivateSkillTwo()
 {
 	SetSkillRequirmentsActive(m_skillTwoRequirments, true);
-	m_unitComponent->RegisterSkillDuration(m_skillTwoDuration);
 	m_unitDotween->DONothing(m_skillTwoDuration).OnComplete([=]()
 		{
 			SetSkillRequirmentsActive(m_skillTwoRequirments, false);
@@ -50,33 +51,32 @@ void BossSkillSystem::ActivateSkillTwo()
 
 void BossSkillSystem::ActivateSkillThree()
 {
-	///// 유닛을 생성하는 문 오브젝트를 생성하는 로직
-	//Vector3d doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * -5.0f;
-	////UnitObjectPool::SingleInstance().ChooseProductor(&EnemySummonGateProductor::Instance());
-	////UnitObjectPool::SingleInstance().SetStartPosition(doorSummonPosition);
-	//EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(true);
-	//currentSummonedDoorUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
-	//application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
-	//	[=]() { currentSummonedDoorUnit->GetGameObject()->SetSelfActive(!currentSummonedDoorUnit->GetGameObject()->GetSelfActive()); });
+	/// 유닛을 생성하는 문 오브젝트를 생성하는 로직
+	Vector3d doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * -5.0f;
+	//UnitObjectPool::SingleInstance().ChooseProductor(&EnemySummonGateProductor::Instance());
+	//UnitObjectPool::SingleInstance().SetStartPosition(doorSummonPosition);
+	EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(true);
+	currentSummonedDoorUnit = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
 
+	if (currentDerivedDoorUnit == nullptr)
+	{
+		doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * 5.0f;
+		MeleeEnemyPool::SingleInstance().SetStartPosition(doorSummonPosition);
+		EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(false);
+		currentDerivedDoorUnit = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+	}
+	else
+	{
+		doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * 5.0f;
+		currentDerivedDoorUnit->GetTransform()->SetWorldPosition(doorSummonPosition);
+		currentDerivedDoorUnit->GetGameObject()->SetSelfActive(true);
+	}
 
-	//if (currentDerivedDoorUnit == nullptr)
-	//{
-	//	doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * 5.0f;
-	//	UnitObjectPool::SingleInstance().ChooseProductor(&EnemySummonGateProductor::Instance());
-	//	UnitObjectPool::SingleInstance().SetStartPosition(doorSummonPosition);
-	//	EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(false);
-	//	currentDerivedDoorUnit = UnitObjectPool::SingleInstance().Borrow()->m_pairUnit;
-	//	application::ShortcutSystem::Instance().RegisterTriggerFunction(2,
-	//		[=]() { currentDerivedDoorUnit->GetGameObject()->SetSelfActive(!currentDerivedDoorUnit->GetGameObject()->GetSelfActive()); });
-	//}
-	//else
-	//{
-	//	doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * 5.0f;
-	//	currentDerivedDoorUnit->GetTransform()->SetWorldPosition(doorSummonPosition);
-	//	currentDerivedDoorUnit->GetGameObject()->SetSelfActive(true);
-	//}
-
+	m_unitDotween->DONothing(m_skillTwoDuration).OnComplete([=]()
+		{
+			//SetSkillRequirmentsActive(m_skillTwoRequirments, false);
+			m_unitComponent->SetUnitStateIdle();
+		});
 }
 
 void BossSkillSystem::ActivateSkillFour()
@@ -94,8 +94,6 @@ void BossSkillSystem::ActivateSkillFour()
 	m_skillFourRequirments.debugObject->GetTransform()->SetWorldPosition({ selectedXpos, 0.0f, selectedZpos });
 
 	SetSkillRequirmentsActive(m_skillFourRequirments, true);
-
-	m_unitComponent->RegisterSkillDuration(m_skillFourDuration);
 
 	m_unitDotween->DONothing(m_skillFourDuration).OnComplete([=]()
 		{

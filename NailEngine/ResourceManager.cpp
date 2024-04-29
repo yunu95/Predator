@@ -585,7 +585,7 @@ std::shared_ptr<AnimationGroup> ResourceManager::GetAnimationGroup(const std::ws
 std::vector<yunuGI::IAnimation*>& ResourceManager::GetFBXAnimationList(std::wstring fbxName)
 {
 	auto iter = this->fbxAnimationListMap.find(fbxName);
-	if (iter == this->fbxAnimationListMap.end())
+	if (iter != this->fbxAnimationListMap.end())
 	{
 		return this->fbxAnimationListMap[fbxName];
 	}

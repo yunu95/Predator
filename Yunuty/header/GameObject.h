@@ -150,8 +150,8 @@ namespace yunutyEngine
     private:
         void HandleComponentUpdateState(Component* component);
         void PropagateActiveEvent(bool activeBefore, bool activeAfter);
-        Scene* scene = nullptr;
         string name = "";
+        Scene* scene = nullptr;
         bool selfActive = true;
         int childrenNum = 0;
         IGameObjectParent* parent = nullptr;

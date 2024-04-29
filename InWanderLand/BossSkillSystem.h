@@ -20,6 +20,8 @@ private:
 
 	int m_skillNum;
 
+	Vector3d m_currentSkillPosition;
+
 	Unit* currentSummonedDoorUnit;
 	Unit* currentDerivedDoorUnit;
 

@@ -57,6 +57,7 @@ void yunutyEngine::GameObject::SetSelfActive(bool selfActive)
 
     activeAfter = GetActive();
     PropagateActiveEvent(activeBefore, activeAfter);
+
 }
 GameObject* yunutyEngine::GameObject::GetParentGameObject()
 {
@@ -285,8 +286,8 @@ void yunutyEngine::GameObject::PropagateActiveEvent(bool activeBefore, bool acti
                 }
             }
         }
-        parent->HandleChildUpdateState(this);
     }
+    parent->HandleChildUpdateState(this);
 }
 void yunutyEngine::GameObject::SetCacheDirty()
 {

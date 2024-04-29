@@ -65,6 +65,9 @@ Unit* RookTrapProductor::CreateUnit(Vector3d startPos)
 	auto colliderObjectTwo = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	colliderObjectTwo->AddComponent<physics::BoxCollider>();
 
+	colliderObjectOne->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+	colliderObjectTwo->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+
 	auto damageComponentOne = colliderObjectOne->AddComponent<DamageOnlyComponent>();
 	damageComponentOne->SetSkillOwnerUnit(m_unitComponent);
 	damageComponentOne->SetSkillDamage(2.0f);
@@ -88,7 +91,6 @@ Unit* RookTrapProductor::CreateUnit(Vector3d startPos)
 	triggerCollider->SetRadius(trapTriggerRadius);
 	triggerSensorObject->AddComponent<TrapTriggerSensor>()->trapUnit = m_unitComponent;
 	triggerSensorObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-
 
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
@@ -130,10 +132,11 @@ Unit* RookTrapProductor::CreateUnit(Vector3d startPos)
 		if (each->GetName() == L"Ani_Monster1_Skill")
 		{
 			each->SetLoop(false);
+			m_baseUnitAnimations.m_skillOneAnimation = each;
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillOne, each);
 		}
 	}
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
-
+	SetUnitAnimationFunction();
 	return m_unitComponent;
 }

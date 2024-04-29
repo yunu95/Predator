@@ -18,6 +18,9 @@ namespace FMOD
     class Channel;
 }
 
+// audio kinetic : wwise
+// 위 솔루션은 층간 소음을 구현하는데에 도움이 된다.
+// 근데 구독형이라 비싸다고 함.
 namespace yunutyEngine
 {
     class SoundChannel;

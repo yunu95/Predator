@@ -13,19 +13,8 @@ namespace application
 	{
 		void ParticleTool_Manager::Clear()
 		{
-			currentPPPath = "";
-			currentPPIsPath = "";
-
-			SetSelectedParticleData(std::shared_ptr<ParticleToolData>());
-
-			particleList.clear();
-			for (auto& [key, val] : particleObjList)
-			{
-				yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(val);
-			}
-			particleObjList.clear();
-
-			ClearChildPIs();
+			ClearPP();
+			ClearPPIs();
 		}
 
 		void ParticleTool_Manager::LoadSkinnedFBX()
@@ -53,7 +42,7 @@ namespace application
 						aniNameMap[fbxName].push_back(aniName);
 					}
 
-					skinnedObjList.insert({fbxName, obj});
+					skinnedObjList.insert({ fbxName, obj });
 					obj->SetSelfActive(false);
 				}
 			}
@@ -68,8 +57,7 @@ namespace application
 				json mapData;
 				loadFile >> mapData;
 
-				// Manager 초기화
-				Clear();
+				ClearPP();
 
 				auto scene = yunutyEngine::Scene::getCurrentScene();
 
@@ -207,11 +195,8 @@ namespace application
 				particleObjList[selectedParticleData->name]->SetSelfActive(false);
 			}
 
-			if (particleData.lock())
-			{
-				particleObjList[particleData.lock()->name]->SetSelfActive(true);
-				particleObjList[particleData.lock()->name]->GetComponent<graphics::ParticleRenderer>()->Play();
-			}
+			particleObjList[particleData.lock()->name]->SetSelfActive(true);
+			particleObjList[particleData.lock()->name]->GetComponent<graphics::ParticleRenderer>()->Play();
 
 			selectedParticleData = particleData.lock();
 		}
@@ -236,8 +221,8 @@ namespace application
 			particleList.erase(key);
 			particleObjList.erase(key);
 
-			particleList.insert({name, sptr});
-			particleObjList.insert({name, obj});
+			particleList.insert({ name, sptr });
+			particleObjList.insert({ name, obj });
 
 			sptr->name = name;
 
@@ -252,21 +237,21 @@ namespace application
 			}
 
 			auto pObj = particleObjList[name]->GetComponent<graphics::ParticleRenderer>();
-			
+
 			pObj->SetParticleShape((yunutyEngine::graphics::ParticleShape)particleList[name]->shape);
-			//pObj->SetParticleMode((yunutyEngine::graphics::ParticleMode)particleList[name]->particleMode);
+			pObj->SetParticleMode((yunutyEngine::graphics::ParticleMode)particleList[name]->particleMode);
 			pObj->SetLoop(particleList[name]->isLoop);
 			pObj->SetLifeTime(particleList[name]->lifeTime);
 			pObj->SetSpeed(particleList[name]->speed);
 			pObj->SetStartScale(particleList[name]->startScale);
 			pObj->SetEndScale(particleList[name]->endScale);
 			pObj->SetMaxParticle(particleList[name]->maxParticle);
-			//pObj->SetPlayAwake(particleList[name]->playAwake);
+			pObj->SetPlayAwake(particleList[name]->playAwake);
 
 			pObj->SetRateOverTime(particleList[name]->rateOverTime);
 
-			//pObj->SetBurstsCount(particleList[name]->burstsCount);
-			//pObj->SetInterval(particleList[name]->interval);
+			pObj->SetBurstsCount(particleList[name]->burstsCount);
+			pObj->SetInterval(particleList[name]->interval);
 		}
 
 		void ParticleTool_Manager::SwitchMode()
@@ -278,8 +263,7 @@ namespace application
 			}
 			else
 			{
-				/// 클리어
-				// SetSelectedParticleInstanceData();
+				SetSelectedFBXData(nullptr);
 				isParticleEditMode = true;
 			}
 		}
@@ -293,35 +277,42 @@ namespace application
 				json mapData;
 				loadFile >> mapData;
 
-				// 대상이 되는 pp 파일이 없을 경우 취소
-				if (mapData.find("pp_path") == mapData.end())
+				ClearPPIs();
+
+				auto scene = yunutyEngine::Scene::getCurrentScene();
+
+				auto objSize = mapData["InstanceList"].size();
+
+				for (int i = 0; i < objSize; i++)
+				{
+					std::string key = mapData[i]["targetUnit"];
+					auto ptr = AddParticleInstance(skinnedObjList[key]);
+					auto sptr = ptr.lock();
+					sptr->particleData = mapData[i]["particleData"];
+					sptr->targetUnit = key;
+					sptr->name = mapData[i]["name"];
+					sptr->offsetPos.x = mapData[i]["offsetPos"]["x"];
+					sptr->offsetPos.y = mapData[i]["offsetPos"]["y"];
+					sptr->offsetPos.z = mapData[i]["offsetPos"]["z"];
+					sptr->rotation.w = mapData[i]["rotation"]["w"];
+					sptr->rotation.x = mapData[i]["rotation"]["x"];
+					sptr->rotation.y = mapData[i]["rotation"]["y"];
+					sptr->rotation.z = mapData[i]["rotation"]["z"];
+					sptr->scale.x = mapData[i]["scale"]["x"];
+					sptr->scale.y = mapData[i]["scale"]["y"];
+					sptr->scale.z = mapData[i]["scale"]["z"];
+					UpdateParticleInstanceDataObj(sptr);
+				}
+
+				if (!aniEventManager.Load(mapData["AniEvents"]))
 				{
 					loadFile.close();
 					return false;
 				}
 
-				if (!LoadPP(mapData["pp_path"]))
-				{
-					return false;
-				}
-
-				json instancesList = mapData["ParticleInstanceList"];
-
-				auto scene = yunutyEngine::Scene::getCurrentScene();
-
-				auto objSize = instancesList.size();
-				std::string particleName;
-
-				ClearChildPIs();
-
-				for (int i = 0; i < objSize; i++)
-				{
-					// 추가 로직
-				}
-
 				loadFile.close();
 
-				currentPPIsPath = path;
+				currentPPPath = path;
 				return true;
 			}
 			else
@@ -330,10 +321,55 @@ namespace application
 			}
 		}
 
-		/// 로직 필요
 		bool ParticleTool_Manager::SavePPIs(const std::string& path)
 		{
-			return false;
+			json finalPP;
+
+			for (auto& [fbxObj, dataList] : particleInstanceList)
+			{
+				for (auto& each : dataList)
+				{
+					json ppData;
+					ppData["particleData"] = each->particleData;
+					ppData["targetUnit"] = each->targetUnit;
+					ppData["name"] = each->name;
+					ppData["offsetPos"]["x"] = each->offsetPos.x;
+					ppData["offsetPos"]["y"] = each->offsetPos.y;
+					ppData["offsetPos"]["z"] = each->offsetPos.z;
+					ppData["rotation"]["w"] = each->rotation.w;
+					ppData["rotation"]["x"] = each->rotation.x;
+					ppData["rotation"]["y"] = each->rotation.y;
+					ppData["rotation"]["z"] = each->rotation.z;
+					ppData["scale"]["x"] = each->scale.x;
+					ppData["scale"]["y"] = each->scale.y;
+					ppData["scale"]["z"] = each->scale.z;
+					finalPP["InstanceList"].push_back(ppData);
+				}
+			}
+
+			if (!aniEventManager.Save(finalPP["AniEvents"]))
+			{
+				return false;
+			}
+
+			if (finalPP.is_null())
+			{
+				return false;
+			}
+
+			std::ofstream saveFile{ path };
+
+			if (saveFile.is_open())
+			{
+				saveFile << finalPP.dump(4);
+				saveFile.close();
+
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		std::string ParticleTool_Manager::GetCurrentPPIsPath() const
@@ -361,9 +397,298 @@ namespace application
 			return container;
 		}
 
-		void ParticleTool_Manager::ClearChildPIs()
+		void ParticleTool_Manager::SetSelectedFBXData(yunutyEngine::GameObject* fbxObj)
 		{
-			/// Object 에 붙어있는 instance 들 제거
+			if (fbxObj == nullptr)
+			{
+				if (selectedFBXObject)
+				{
+					SetSelectedParticleInstanceData(std::shared_ptr<ParticleToolInstance>());
+					SetSelectedAnimation(nullptr);
+					selectedFBXObject->SetSelfActive(false);
+				}
+				selectedFBXObject = nullptr;
+				return;
+			}
+
+			if (selectedFBXObject)
+			{
+				SetSelectedParticleInstanceData(std::shared_ptr<ParticleToolInstance>());
+				SetSelectedAnimation(nullptr);
+				selectedFBXObject->SetSelfActive(false);
+			}
+
+			fbxObj->SetSelfActive(true);
+
+			selectedFBXObject = fbxObj;
+		}
+
+		yunutyEngine::GameObject* ParticleTool_Manager::GetSelectedFBXData()
+		{
+			return selectedFBXObject;
+		}
+
+		std::vector<std::weak_ptr<ParticleToolInstance>>& ParticleTool_Manager::GetChildrenParticleInstanceList(const std::string& parentsName)
+		{
+			static std::vector<std::weak_ptr<ParticleToolInstance>> container;
+			container.resize(particleInstanceList[parentsName].size());
+
+			int i = 0;
+			for (auto& each : particleInstanceList[parentsName])
+			{
+				container[i] = each;
+				i++;
+			}
+
+			return container;
+		}
+
+		std::vector<std::string>& ParticleTool_Manager::GetAnimationNameList(const std::string& fbxName)
+		{
+			static std::vector<std::string> container;
+			container.resize(aniNameMap[fbxName].size());
+
+			int i = 0;
+			for (auto& each : aniNameMap[fbxName])
+			{
+				container[i] = each;
+				i++;
+			}
+
+			return container;
+		}
+
+		yunuGI::IAnimation* ParticleTool_Manager::GetMatchingIAnimation(const std::string& fbxName, const std::string& aniName)
+		{
+			int i = 0;
+			for (auto& each : aniNameMap[fbxName])
+			{
+				if (each == aniName)
+				{
+					return aniMap[fbxName][i];
+				}
+				i++;
+			}
+
+			return nullptr;
+		}
+
+		void ParticleTool_Manager::SetSelectedAnimation(yunuGI::IAnimation* ani)
+		{
+			selectedAnimation = ani;
+			SetSelectedAnimationEvent(nullptr);
+		}
+
+		yunuGI::IAnimation* ParticleTool_Manager::GetSelectedAnimation()
+		{
+			return selectedAnimation;
+		}
+
+		yunutyEngine::GameObject* ParticleTool_Manager::GetParticleToolInstanceObject(const std::weak_ptr<ParticleToolInstance>& ptr)
+		{
+			if (!particleInstanceIDMap.contains(ptr.lock()))
+			{
+				return nullptr;
+			}
+
+			return particleInstanceIDMap[ptr.lock()];
+		}
+
+		std::weak_ptr<ParticleToolInstance> ParticleTool_Manager::AddParticleInstance(yunutyEngine::GameObject* parents, const std::string& name)
+		{
+			if (!parents)
+			{
+				return std::shared_ptr<ParticleToolInstance>();
+			}
+
+			std::shared_ptr<ParticleToolInstance> ptr = std::make_shared<ParticleToolInstance>();
+			ptr->targetUnit = parents->getName();
+			ptr->name = "PI_" + std::to_string(particleInstanceCount);
+			particleInstanceList[parents->getName()].insert(ptr);
+
+			auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+			obj->setName(ptr->name);
+			obj->AddComponent<graphics::ParticleRenderer>();
+
+			particleInstanceIDMap[ptr] = obj;
+
+			if (!name.empty() && particleList.contains(name))
+			{
+				ptr->particleData = *particleList[name];
+			}
+
+			UpdateParticleInstanceDataObj(ptr);
+
+			obj->SetSelfActive(false);
+			obj->SetParent(parents);
+
+			particleInstanceCount++;
+
+			return ptr;
+		}
+
+		bool ParticleTool_Manager::EraseParticleInstance(yunutyEngine::GameObject* parents, const std::weak_ptr<ParticleToolInstance>& instance)
+		{
+			if (parents == nullptr || !particleInstanceList.contains(parents->getName()) || instance.expired())
+			{
+				return false;
+			}
+
+			auto sptr = instance.lock();
+
+			if (!particleInstanceList[parents->getName()].contains(sptr))
+			{
+				return false;
+			}
+
+			if (selectedParticleInstanceData == sptr)
+			{
+				selectedParticleInstanceData = nullptr;
+			}
+
+			yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(particleInstanceIDMap[sptr]);
+
+			particleInstanceIDMap.erase(sptr);
+
+			particleInstanceList[parents->getName()].erase(sptr);
+			return true;
+		}
+
+		void ParticleTool_Manager::SetSelectedParticleInstanceData(const std::weak_ptr<ParticleToolInstance>& particleInstanceData)
+		{
+			if (particleInstanceData.expired())
+			{
+				if (selectedParticleInstanceData)
+				{
+					particleInstanceIDMap[selectedParticleInstanceData]->SetSelfActive(false);
+				}
+				selectedParticleInstanceData = nullptr;
+				return;
+			}
+
+			if (selectedParticleInstanceData)
+			{
+				particleInstanceIDMap[selectedParticleInstanceData]->SetSelfActive(false);
+			}
+
+			particleInstanceIDMap[particleInstanceData.lock()]->SetSelfActive(true);
+			particleInstanceIDMap[particleInstanceData.lock()]->GetComponent<graphics::ParticleRenderer>()->Play();
+
+			selectedParticleInstanceData = particleInstanceData.lock();
+		}
+
+		std::weak_ptr<ParticleToolInstance> ParticleTool_Manager::GetSelectedParticleInstanceData()
+		{
+			return selectedParticleInstanceData;
+		}
+
+		void ParticleTool_Manager::UpdateParticleInstanceDataObj(const std::weak_ptr<ParticleToolInstance>& instance)
+		{
+			if (instance.expired() || !particleInstanceIDMap.contains(instance.lock()))
+			{
+				return;
+			}
+
+			auto sptr = instance.lock();
+
+			auto objTS = particleInstanceIDMap[sptr]->GetTransform();
+			objTS->SetLocalPosition(sptr->offsetPos);
+			objTS->SetLocalRotation(sptr->rotation);
+			objTS->SetLocalScale(sptr->scale);
+
+			auto pptr = particleInstanceIDMap[sptr]->GetComponent<graphics::ParticleRenderer>();
+
+			pptr->SetParticleShape((yunutyEngine::graphics::ParticleShape)sptr->particleData.shape);
+			pptr->SetParticleMode((yunutyEngine::graphics::ParticleMode)sptr->particleData.particleMode);
+			pptr->SetLoop(sptr->particleData.isLoop);
+			pptr->SetLifeTime(sptr->particleData.lifeTime);
+			pptr->SetSpeed(sptr->particleData.speed);
+			pptr->SetStartScale(sptr->particleData.startScale);
+			pptr->SetEndScale(sptr->particleData.endScale);
+			pptr->SetMaxParticle(sptr->particleData.maxParticle);
+			pptr->SetPlayAwake(sptr->particleData.playAwake);
+
+			pptr->SetRateOverTime(sptr->particleData.rateOverTime);
+
+			pptr->SetBurstsCount(sptr->particleData.burstsCount);
+			pptr->SetInterval(sptr->particleData.interval);
+		}
+
+		void ParticleTool_Manager::PlaySelectedAnimation()
+		{
+			if (!selectedAnimation)
+			{
+				return;
+			}
+
+			auto animator = GetSelectedFBXData()->GetComponent<graphics::Animator>();
+			animator->Play(selectedAnimation);
+		}
+
+		bool ParticleTool_Manager::IsAnimationPlaying()
+		{
+			if (!selectedFBXObject)
+			{
+				return false;
+			}
+
+			auto animator = GetSelectedFBXData()->GetComponent<graphics::Animator>();
+			return animator->IsPlaying();
+		}
+
+		bool ParticleTool_Manager::AddAnimationEvent(const std::shared_ptr<application::AnimationEvent>& event)
+		{
+			return aniEventManager.AddAnimationEvent(event);
+		}
+
+		bool ParticleTool_Manager::EraseAnimationEvent(const std::shared_ptr<application::AnimationEvent>& event)
+		{
+			return aniEventManager.EraseAnimationEvent(event);
+		}
+
+		void ParticleTool_Manager::SetSelectedAnimationEvent(const std::shared_ptr<application::AnimationEvent>& event)
+		{
+			selectedAniEvent = event;
+		}
+
+		std::weak_ptr<application::AnimationEvent> ParticleTool_Manager::GetSelectedAnimationEvent()
+		{
+			return selectedAniEvent;
+		}
+
+		void ParticleTool_Manager::ClearPP()
+		{
+			currentPPPath = "";
+
+			for (auto& [key, val] : particleObjList)
+			{
+				yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(val);
+			}
+
+			SetSelectedParticleData(std::shared_ptr<ParticleToolData>());
+
+			particleList.clear();
+			particleObjList.clear();
+		}
+
+		void ParticleTool_Manager::ClearPPIs()
+		{
+			currentPPIsPath = "";
+
+			for (auto& [key, val] : particleInstanceList)
+			{
+				for (auto& each : val)
+				{
+					yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(particleInstanceIDMap[each]);
+				}
+			}
+
+			SetSelectedFBXData(nullptr);
+
+			particleInstanceList.clear();
+			particleInstanceIDMap.clear();
+
+			particleInstanceCount = 0;
 		}
 	}
 }
