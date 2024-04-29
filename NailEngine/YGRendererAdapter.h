@@ -14,6 +14,11 @@ namespace yunuGIAdapter
             NailEngine::Instance.Release();
         }
 
+        virtual void SortByCameraDirection()
+        {
+            InstancingManager::Instance.Get().SortByCameraDirection();
+        };
+
         virtual void SetOutputWindow(UINT64 hWnd)
         {
             NailEngine::Instance.Get().Init(hWnd);

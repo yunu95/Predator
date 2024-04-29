@@ -19,6 +19,10 @@ public:
 	{
 		this->currentAnimation = animation;
 		this->transitionDesc.curr.animIndex = ((Animation*)animation)->GetAnimationIndex();
+		this->transitionDesc.curr.currFrame = 0;
+		this->transitionDesc.curr.nextFrame = 0;
+		this->transitionDesc.curr.ratio = 0;
+		this->transitionDesc.curr.sumTime = 0;
 	};
 
 	void SetPlaySpeed(float playSpeed)
