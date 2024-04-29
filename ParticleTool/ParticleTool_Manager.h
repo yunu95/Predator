@@ -41,6 +41,7 @@ namespace application
 			: public Singleton<ParticleTool_Manager>
 		{
 			friend class Singleton<ParticleTool_Manager>;
+			friend class AnimationEventManager;
 
 		public:
 			void Clear();
@@ -102,6 +103,8 @@ namespace application
 			void SetSelectedAnimationEvent(const std::shared_ptr<application::AnimationEvent>& event);
 			std::weak_ptr<application::AnimationEvent> GetSelectedAnimationEvent();
 
+			std::vector<std::weak_ptr<AnimationEvent>>& GetAnimationEventList(yunuGI::IAnimation* ani);
+
 		private:
 			void ClearPP();
 			void ClearPPIs();
@@ -110,6 +113,7 @@ namespace application
 
 			bool isParticleEditMode = true;
 			unsigned long long particleInstanceCount = 0;
+			unsigned long long aniEventCount = 0;
 			std::string currentPPPath;
 			std::string currentPPIsPath;
 			std::map<const std::string, std::shared_ptr<ParticleToolData>> particleList = std::map<const std::string, std::shared_ptr<ParticleToolData>>();
@@ -120,6 +124,7 @@ namespace application
 			yunutyEngine::GameObject* selectedFBXObject = nullptr;
 			yunuGI::IAnimation* selectedAnimation = nullptr;
 			std::shared_ptr<application::AnimationEvent> selectedAniEvent = nullptr;
+			std::map<const yunuGI::IAnimation*, std::unordered_set<std::shared_ptr<application::AnimationEvent>>> aniEventMap = std::map<const yunuGI::IAnimation*, std::unordered_set<std::shared_ptr<application::AnimationEvent>>>();
 
 			std::map<const std::string, yunutyEngine::GameObject*> particleObjList = std::map<const std::string, yunutyEngine::GameObject*>();
 			std::map<const std::string, yunutyEngine::GameObject*> skinnedObjList = std::map<const std::string, yunutyEngine::GameObject*>();

@@ -46,6 +46,8 @@ namespace application
 					obj->SetSelfActive(false);
 				}
 			}
+
+			aniEventManager.Init();
 		}
 
 		bool ParticleTool_Manager::LoadPP(const std::string& path)
@@ -241,6 +243,7 @@ namespace application
 			pObj->SetParticleShape((yunutyEngine::graphics::ParticleShape)particleList[name]->shape);
 			pObj->SetParticleMode((yunutyEngine::graphics::ParticleMode)particleList[name]->particleMode);
 			pObj->SetLoop(particleList[name]->isLoop);
+			pObj->SetDuration(particleList[name]->duration);
 			pObj->SetLifeTime(particleList[name]->lifeTime);
 			pObj->SetSpeed(particleList[name]->speed);
 			pObj->SetStartScale(particleList[name]->startScale);
@@ -601,6 +604,7 @@ namespace application
 			pptr->SetParticleShape((yunutyEngine::graphics::ParticleShape)sptr->particleData.shape);
 			pptr->SetParticleMode((yunutyEngine::graphics::ParticleMode)sptr->particleData.particleMode);
 			pptr->SetLoop(sptr->particleData.isLoop);
+			pptr->SetDuration(sptr->particleData.duration);
 			pptr->SetLifeTime(sptr->particleData.lifeTime);
 			pptr->SetSpeed(sptr->particleData.speed);
 			pptr->SetStartScale(sptr->particleData.startScale);
@@ -620,7 +624,10 @@ namespace application
 			{
 				return;
 			}
-
+			if (selectedParticleInstanceData)
+			{
+				particleInstanceIDMap[selectedParticleInstanceData]->SetSelfActive(false);
+			}
 			auto animator = GetSelectedFBXData()->GetComponent<graphics::Animator>();
 			animator->Play(selectedAnimation);
 		}
@@ -638,11 +645,37 @@ namespace application
 
 		bool ParticleTool_Manager::AddAnimationEvent(const std::shared_ptr<application::AnimationEvent>& event)
 		{
+			yunuGI::IAnimation* ani = nullptr;
+			int i = 0;
+			for (auto& each : aniMap[event->fbxName])
+			{
+				if (event->animationName == aniNameMap[event->fbxName][i])
+				{
+					ani = aniMap[event->fbxName][i];
+					break;
+				}
+				i++;
+			}
+
+			aniEventMap[ani].insert(event);
 			return aniEventManager.AddAnimationEvent(event);
 		}
 
 		bool ParticleTool_Manager::EraseAnimationEvent(const std::shared_ptr<application::AnimationEvent>& event)
 		{
+			yunuGI::IAnimation* ani = nullptr;
+			int i = 0;
+			for (auto& each : aniMap[event->fbxName])
+			{
+				if (event->animationName == aniNameMap[event->fbxName][i])
+				{
+					ani = aniMap[event->fbxName][i];
+					break;
+				}
+				i++;
+			}
+
+			aniEventMap[ani].erase(event);
 			return aniEventManager.EraseAnimationEvent(event);
 		}
 
@@ -654,6 +687,21 @@ namespace application
 		std::weak_ptr<application::AnimationEvent> ParticleTool_Manager::GetSelectedAnimationEvent()
 		{
 			return selectedAniEvent;
+		}
+
+		std::vector<std::weak_ptr<AnimationEvent>>& ParticleTool_Manager::GetAnimationEventList(yunuGI::IAnimation* ani)
+		{
+			static std::vector<std::weak_ptr<AnimationEvent>> container;
+			container.resize(aniEventMap[ani].size());
+
+			int i = 0;
+			for (auto& each : aniEventMap[ani])
+			{
+				container[i] = each;
+				i++;
+			}
+
+			return container;
 		}
 
 		void ParticleTool_Manager::ClearPP()
@@ -684,11 +732,14 @@ namespace application
 			}
 
 			SetSelectedFBXData(nullptr);
+			aniEventManager.Clear();
 
 			particleInstanceList.clear();
 			particleInstanceIDMap.clear();
+			aniEventMap.clear();
 
 			particleInstanceCount = 0;
+			aniEventCount = 0;
 		}
 	}
 }

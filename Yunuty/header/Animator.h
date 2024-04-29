@@ -53,7 +53,7 @@ namespace yunutyEngine::graphics
 	private:
 		bool isPlay = false;
 		std::map<yunuGI::IAnimation*, std::map<unsigned long long, AnimationEvent>> animationEventMap;
-		unsigned long long functorIndex = 0;
+		unsigned long long functorIndex = 1;
 	};
 }
 
