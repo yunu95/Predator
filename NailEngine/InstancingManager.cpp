@@ -74,7 +74,7 @@ void InstancingManager::SortByCameraDirection()
 		std::sort(each.second.begin(), each.second.end(),
 			[=](const auto& left, const auto& right)
 			{
-				auto lPos = DirectX::SimpleMath::Vector3{ left->wtm._41, left->wtm._42, left->wtm._43};
+				auto lPos = DirectX::SimpleMath::Vector3{ left->wtm._41, left->wtm._42, left->wtm._43 };
 				auto rPos = DirectX::SimpleMath::Vector3{ right->wtm._41, right->wtm._42, right->wtm._43 };
 
 				float lDot = cameraDirection.Dot(lPos);
@@ -101,6 +101,8 @@ void InstancingManager::SortByCameraDirection()
 			renderInfoIndex++;
 		}
 	}
+
+	int a = 1;
 }
 
 void InstancingManager::RenderStaticDeferred()
@@ -371,6 +373,58 @@ void InstancingManager::RenderStaticShadow()
 			}
 		}
 	}
+
+	for (auto& pair : this->staticMeshDeferredRenderVec)
+	{
+		auto& renderInfoVec = pair.second;
+
+		const InstanceID& instanceID = pair.first;
+
+		{
+			for (auto& i : renderInfoVec)
+			{
+				if (i->lightMapIndex != -1) continue;
+
+				if (i->isActive == false) continue;
+
+				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+				//auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
+
+				//if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
+				//{
+				//	continue;
+				//}
+
+				const std::shared_ptr<RenderInfo>& renderInfo = i;
+				InstancingData data;
+				data.wtm = renderInfo->wtm;
+				AddData(instanceID, data);
+			}
+
+			if (renderInfoVec.size() != 0)
+			{
+				auto& buffer = _buffers[instanceID];
+
+				auto opacityMap = (*renderInfoVec.begin())->material->GetTexture(yunuGI::Texture_Type::OPACITY);
+				if (opacityMap)
+				{
+					static_cast<Texture*>(opacityMap)->Bind(static_cast<unsigned int>(yunuGI::Texture_Type::OPACITY));
+					MaterialBuffer materialBuffer;
+					materialBuffer.useTexture[static_cast<unsigned int>(yunuGI::Texture_Type::OPACITY)] = 1;
+					NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATERIAL))->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer), static_cast<int>(CB_TYPE::MATERIAL));
+				}
+				else
+				{
+					MaterialBuffer materialBuffer;
+					materialBuffer.useTexture[static_cast<unsigned int>(yunuGI::Texture_Type::OPACITY)] = 0;
+					NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATERIAL))->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer), static_cast<int>(CB_TYPE::MATERIAL));
+				}
+
+				buffer->PushData();
+				(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
+			}
+		}
+	}
 }
 
 void InstancingManager::RenderStaticPointLightShadow(DirectX::SimpleMath::Matrix& lightWTM, PointLight* light)
@@ -480,9 +534,13 @@ void InstancingManager::RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& 
 	auto renderInfoIter = this->staticMeshRenderInfoIndexMap.find(renderInfo);
 	if (renderInfoIter != this->staticMeshRenderInfoIndexMap.end())
 	{
+		// 여기부터 크리티컬 섹션
+
+		// 이곳에 들어오면 renderInfo포인터가 vector에 있었다는 뜻
 		auto instanceIter = this->staticMeshInstanceIDIndexMap.find(instanceID);
 		if (instanceIter != this->staticMeshInstanceIDIndexMap.end())
 		{
+			// instancID가 이미 그룹내에 있다면 동일한 그룹에 넣어줌
 			this->staticMeshDeferredRenderVec[instanceIter->second].second.push_back(renderInfo);
 		}
 		else
@@ -491,6 +549,10 @@ void InstancingManager::RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& 
 			std::vector<std::shared_ptr<RenderInfo>> tempVec;
 			tempVec.push_back(renderInfo);
 			this->staticMeshDeferredRenderVec.push_back(std::make_pair(instanceID, tempVec));
+
+			// 인덱스맵도 맵핑하는 코드 추가하기
+			this->staticMeshInstanceIDIndexMap.insert({ instanceID, staticMeshInstanceIDIndexMap.size() });
+			this->staticMeshRenderInfoIndexMap.insert({ renderInfo,tempVec.size() - 1 });
 		}
 	}
 	else
@@ -535,11 +597,12 @@ void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& rende
 	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
 	InstanceID instanceID = std::make_pair(renderInfo->mesh, renderInfo->material);
 
-
 	// 인스턴스 인덱스 맵에 있는지 검사
 	auto instanceIter = this->staticMeshInstanceIDIndexMap.find(instanceID);
 	if (instanceIter != this->staticMeshInstanceIDIndexMap.end())
 	{
+		// 크리티컬 섹션
+
 		// 이미 vector에 있다는 뜻
 		auto renderInfoIter = this->staticMeshRenderInfoIndexMap.find(renderInfo);
 		if (renderInfoIter != this->staticMeshRenderInfoIndexMap.end())
@@ -549,19 +612,22 @@ void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& rende
 				this->staticMeshDeferredRenderVec[instanceIter->second].second[renderInfoIter->second] = nullptr;
 			}
 		}
+
+		// 인덱스맵에도 null을 넣어서 맵핑하는 코드 추가
+		staticMeshRenderInfoIndexMap.erase(renderInfoIter);
+		staticMeshRenderInfoIndexMap.insert({ nullptr, -1 });
 	}
-	else
+
+
+	auto iter = this->staticMeshDeferredMap.find(instanceID);
+
+	if (iter != this->staticMeshDeferredMap.end())
 	{
-		auto iter = this->staticMeshDeferredMap.find(instanceID);
+		this->staticMeshDeferredMap[instanceID].erase(renderInfo);
 
-		if (iter != this->staticMeshDeferredMap.end())
+		if (this->staticMeshDeferredMap[instanceID].empty())
 		{
-			this->staticMeshDeferredMap[instanceID].erase(renderInfo);
-
-			if (this->staticMeshDeferredMap[instanceID].empty())
-			{
-				this->staticMeshDeferredMap.erase(instanceID);
-			}
+			this->staticMeshDeferredMap.erase(instanceID);
 		}
 	}
 }
