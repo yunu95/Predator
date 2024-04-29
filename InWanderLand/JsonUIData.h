@@ -29,8 +29,10 @@ struct JsonUIData
     int numberFontSet;
     // 0~9까지의 숫자 폰트 이미지를 매핑합니다.
     vector<int> numberFontSetImages;
-    // 숫자를 표현할 때, 0~1 사이의 수치를 내림처리하면 0, 올림처리하면 1로 표현합니다.
-    bool numberIsCeilBetween0And1;
+    // 숫자를 표현할 때, 올림처리하면 true, 내림처리하면 false입니다.
+    bool numberCeil;
+    // 0을 표시할지 여부입니다.
+    bool numberShowZero;
     string soundOnClick;
     float soundOnClick_delay;
     string soundOnHover;

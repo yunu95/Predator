@@ -37,7 +37,7 @@ void UIPanel::SetCloseButtonActive(bool p_boolen)
 		closeButtonComponent = m_closeImageObject->AddComponent<UIButton>();
 		m_closeButtonImage = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetTexture(L"Texture/Ingame/_0050_Button_Close.png");
 		closeButtonComponent->SetImageComponent(closeImageComponent);
-		closeButtonComponent->SetIdleImage(m_closeButtonImage);
+		//closeButtonComponent->SetIdleImage(m_closeButtonImage);
 		closeButtonComponent->SetLayer(m_windowImage->GetGI().GetLayer() + 2);
 		closeButtonComponent->m_mouseLiftedEventFunction = [=]()
 		{

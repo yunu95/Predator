@@ -114,7 +114,7 @@ void UIManager::UpdateHighestPriorityButton()
     // 하이라이트된 버튼이 바뀌어야 한다면, 기존 버튼의 Exit 이벤트부터 처리합니다.
     if (m_highestPriorityButton)
     {
-        m_highestPriorityButton->m_ImageComponent->GetGI().SetImage(m_highestPriorityButton->m_IdleImage);
+        //m_highestPriorityButton->m_ImageComponent->GetGI().SetImage(m_highestPriorityButton->m_IdleImage);
         if (m_highestPriorityButton->m_onMouseExitFunction)
         {
             m_highestPriorityButton->m_onMouseExitFunction();
@@ -129,7 +129,8 @@ void UIManager::UpdateHighestPriorityButton()
 
     if (isButtonActiviated = m_highestPriorityButton != nullptr)
     {
-        m_highestPriorityButton->m_onMouseFunction();
+        if (m_highestPriorityButton->m_onMouseFunction)
+            m_highestPriorityButton->m_onMouseFunction();
     }
 }
 
@@ -184,6 +185,7 @@ void UIManager::ImportUI(const char* path)
 
             auto uiObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
             auto uiElement = uiObject->AddComponent<UIElement>();
+            uiElement->importedUIData = uiData;
             if (uiData.enumID != 0)
                 uisByEnumID[(UIEnumID)uiData.enumID] = uiElement;
             uisByIndex[uiData.uiIndex] = uiElement;
@@ -243,7 +245,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         {
             uiButtonComponent = element->button = uiObject->AddComponent<UIButton>();
             uiButtonComponent->SetImageComponent(uiImageComponent);
-            uiButtonComponent->SetIdleImage(idleTexture);
+            //uiButtonComponent->SetIdleImage(idleTexture);
             //uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
         }
         else
@@ -455,6 +457,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
             {
                 element->soundOnClick->ActivateTimer();
             });
+        element->soundOnClick->Init();
     }
     if (uiData.customFlags & (int)UIExportFlag::PlaySoundOnHover)
     {

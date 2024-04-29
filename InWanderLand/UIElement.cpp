@@ -9,9 +9,12 @@ void UIElement::Start()
         contentsLayer->RegisterToEditorObjectContainer(GetGameObject());
     }
     // 만약 숫자 UI라면 먼저 숫자들을 모두 비활성화
-    for (auto each : digits)
+    if (!numberSetBefore)
     {
-        each->GetGameObject()->SetSelfActive(false);
+        for (auto each : digits)
+        {
+            each->GetGameObject()->SetSelfActive(false);
+        }
     }
 };
 void UIElement::EnableElement()
@@ -79,12 +82,19 @@ void UIElement::DisableElement()
         parentPriorityLayout->DisableChildUI(GetGameObject());
     }
 }
-void UIElement::SetNumber(int number)
+void UIElement::SetNumber(float number)
 {
+    numberSetBefore = true;
+    int numberAsInt{ static_cast<int>(number) };
+    if (importedUIData.numberCeil)
+        numberAsInt = ceilf(number);
+    if (numberAsInt < 0)
+        numberAsInt = 0;
+    
     assert(digitFont);
-    int maxDigit = log10(number);
-    assert(digits.size() > log10(number));
-    if (number > 0)
+    int maxDigit = log10(numberAsInt);
+    assert(digits.size() > log10(numberAsInt));
+    if (numberAsInt > 0)
     {
         for (int i = 0; i < digits.size(); i++)
         {
@@ -95,14 +105,22 @@ void UIElement::SetNumber(int number)
             else
             {
                 digits[i]->EnableElement();
-                digits[i]->imageComponent->GetGI().SetImage((*digitFont)[number % 10]);
-                number /= 10;
+                digits[i]->imageComponent->GetGI().SetImage((*digitFont)[numberAsInt % 10]);
+                numberAsInt /= 10;
             }
         }
     }
     else
     {
-        digits[0]->EnableElement();
-        digits[0]->imageComponent->GetGI().SetImage((*digitFont)[0]);
+        if (importedUIData.numberShowZero)
+        {
+            digits[0]->EnableElement();
+            digits[0]->imageComponent->GetGI().SetImage((*digitFont)[0]);
+        }
+        else
+        {
+            digits[0]->DisableElement();
+            digits[0]->imageComponent->GetGI().SetImage((*digitFont)[0]);
+        }
     }
 }
