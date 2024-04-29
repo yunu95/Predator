@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Singleton.h"
 #include "AnimationEvents.h"
 #include "ParticleToolData.h"
 
@@ -13,38 +14,6 @@
 #include <unordered_map>
 #include <set>
 #include <unordered_set>
-
-namespace application
-{
-	template <typename T>
-	class Singleton
-	{
-	public:
-		static T& GetSingletonInstance()
-		{
-			static std::unique_ptr<T> instance = nullptr;
-			if (instance == nullptr)
-			{
-				instance = std::unique_ptr<T>(new T);
-			}
-			return *instance;
-		}
-
-	protected:
-		Singleton()
-		{
-
-		}
-
-		~Singleton()
-		{
-
-		}
-
-		Singleton(const Singleton&) = delete;
-		Singleton& operator=(const Singleton&) = delete;
-	};
-}
 
 namespace yunutyEngine
 {

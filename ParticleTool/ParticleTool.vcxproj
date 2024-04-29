@@ -195,6 +195,7 @@
     <ClInclude Include="ImSequencer.h" />
     <ClInclude Include="ParticleToolData.h" />
     <ClInclude Include="ParticleTool_Manager.h" />
+    <ClInclude Include="Singleton.h" />
     <ClInclude Include="TestUtilGraphicsTestCam.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
