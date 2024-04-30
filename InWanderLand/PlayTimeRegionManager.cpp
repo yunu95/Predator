@@ -1,9 +1,37 @@
 #include "PlayTimeRegionManager.h"
 #include "RegionData.h"
+#include "OrnamentData.h"
 #include "SpecialEvent.h"
 #include "PlayerController.h"
 #include "SingleNavigationField.h"
 #include "GameManager.h"
+
+void PlayTimeRegionManager::Start()
+{
+	for (auto e : stage2Ornaments)
+	{
+		e->SetSelfActive(false);
+	}
+	isSingletonComponent = true;
+}
+
+void PlayTimeRegionManager::PlayFunction()
+{
+	this->SetActive(true);
+	if (isOncePaused)
+	{
+		Start();
+	}
+}
+
+void PlayTimeRegionManager::StopFunction()
+{
+	SetActive(false);
+	stage1ToStage2Function = nullptr;
+	cameraDotween = nullptr;
+	stage1Ornaments.clear();
+	stage2Ornaments.clear();
+}
 
 void PlayTimeRegionManager::AddRegionData(application::editor::RegionData* p_regionData)
 {
@@ -19,7 +47,7 @@ void PlayTimeRegionManager::AddRegionData(application::editor::RegionData* p_reg
 		{
 			stage1ToStage2Function = [=]()
 				{
-					for (auto e : PlayerController::SingleInstance().GetPlayerMap())
+					for (auto e : PlayerController::Instance().GetPlayerMap())
 					{
 						e.second->GetGameObject()->GetComponent<yunutyEngine::NavigationAgent>()->SetActive(false);
 						e.second->GetTransform()->SetWorldPosition({ stage2StartPosition });
@@ -30,14 +58,37 @@ void PlayTimeRegionManager::AddRegionData(application::editor::RegionData* p_reg
 						e.second->SetUnitStateIdle();
 						e.second->StopMove();
 					}
-					//PlayerController::SingleInstance().GetPlayerMap();
+					//PlayerController::Instance().GetPlayerMap();
 					cameraDotween->DOMove(stage2StartPosition + Vector3d(0, 25, -20), 2.0f);
+
+					for (auto e : stage2Ornaments)
+					{
+						e->SetSelfActive(true);
+					}
+
+					for (auto e : stage1Ornaments)
+					{
+						e->SetSelfActive(false);
+					}
+
 				};
 		}
 		break;
 
 		default:
 			break;
+	}
+}
+
+void PlayTimeRegionManager::RegisterOrnament(GameObject* p_obj, int p_stageNum)
+{
+	if (p_stageNum == 1)
+	{
+		stage1Ornaments.push_back(p_obj);
+	}
+	else if (p_stageNum == 2)
+	{
+		stage2Ornaments.push_back(p_obj);
 	}
 }
 

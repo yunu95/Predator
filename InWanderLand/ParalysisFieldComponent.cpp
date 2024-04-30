@@ -27,12 +27,12 @@ void ParalysisFieldComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 void ParalysisFieldComponent::SetFieldSkillMembers()
 {
 	// 기본 장판 초기 설정
-	m_damageTimer = StatusTimerPool::SingleInstance().Borrow();
+	m_damageTimer = StatusTimerPool::Instance().Borrow();
 	m_fieldDamageDelay = 0.3f;
 	m_fieldDamage = 1.0f;
 
 	// 경직 효과 초기 설정
-	m_paralysisTimer = StatusTimerPool::SingleInstance().Borrow();
+	m_paralysisTimer = StatusTimerPool::Instance().Borrow();
 	m_paralysisTime = 3.0f;
 	
 	// 슬로우 배율 설정

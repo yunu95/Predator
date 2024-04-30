@@ -135,6 +135,17 @@ void BurnEffect::Update()
 	}
 }
 
+void BurnEffect::PlayFunction()
+{
+
+}
+
+void BurnEffect::StopFunction()
+{
+	if (GetGameObject()->GetSelfActive())
+		GetGameObject()->SetSelfActive(false);
+}
+
 void BurnEffect::Reset()
 {
 	isDisAppear = false;

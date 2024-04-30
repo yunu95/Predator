@@ -1,8 +1,9 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "YunuGraphicsInterface.h"
+#include "ContentsObservee.h"
 
-class BurnEffect : public yunutyEngine::Component
+class BurnEffect : public yunutyEngine::Component, public ContentsObservee
 {
 public:
 	void SetEdgeColor(yunuGI::Color color);
@@ -15,6 +16,9 @@ public:
 
 	void Start() override;
 	void Update() override;
+
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
 
 private:
 	void Reset();

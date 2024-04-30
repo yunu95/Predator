@@ -6,7 +6,7 @@ void UIElement::Start()
     // 게임이 끝나면 삭제되도록 설정
     if (GetGameObject()->GetParentGameObject() == nullptr)
     {
-        contentsLayer->RegisterToEditorObjectContainer(GetGameObject());
+        //contentsLayer->RegisterToEditorObjectContainer(GetGameObject());
     }
     // 만약 숫자 UI라면 먼저 숫자들을 모두 비활성화
     if (!numberSetBefore)
@@ -117,7 +117,7 @@ void UIElement::SetNumber(float number)
             else
             {
                 digits[i]->EnableElement();
-                digits[i]->imageComponent->GetGI().SetImage((*digitFont)[numberAsInt % 10]);
+                digits[i]->imageComponent.lock()->GetGI().SetImage((*digitFont)[numberAsInt % 10]);
                 numberAsInt /= 10;
             }
         }
@@ -127,12 +127,12 @@ void UIElement::SetNumber(float number)
         if (importedUIData.numberShowZero)
         {
             digits[0]->EnableElement();
-            digits[0]->imageComponent->GetGI().SetImage((*digitFont)[0]);
+            digits[0]->imageComponent.lock()->GetGI().SetImage((*digitFont)[0]);
         }
         else
         {
             digits[0]->DisableElement();
-            digits[0]->imageComponent->GetGI().SetImage((*digitFont)[0]);
+            digits[0]->imageComponent.lock()->GetGI().SetImage((*digitFont)[0]);
         }
     }
 }

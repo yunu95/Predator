@@ -227,7 +227,8 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
     //uiObject->AddComponent<PopupOnEnable>();
     if (uiData.imagePath != "")
     {
-        uiImageComponent = element->imageComponent = uiObject->AddComponent<UIImage>();
+        element->imageComponent = uiObject->AddComponentAsWeakPtr<UIImage>();
+        uiImageComponent = element->imageComponent.lock().get();
         idleTexture = rsrcMgr->GetTexture(yutility::GetWString(uiData.imagePath).c_str());
         if (idleTexture == nullptr)
         {
@@ -278,15 +279,15 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
     {
         assert(!element->adjuster);
         // 위를 덮어씌우는 이미지
-        element->imageComponent->GetGI().SetRadialFillMode(true);
-        element->imageComponent->GetGI().SetRadialFillDegree(0);
-        element->imageComponent->GetGI().SetRadialFillDirection(false);
-        element->imageComponent->GetGI().SetRadialFillStartPoint(0, 1);
+        element->imageComponent.lock()->GetGI().SetRadialFillMode(true);
+        element->imageComponent.lock()->GetGI().SetRadialFillDegree(0);
+        element->imageComponent.lock()->GetGI().SetRadialFillDirection(false);
+        element->imageComponent.lock()->GetGI().SetRadialFillStartPoint(0, 1);
         element->adjuster = uiObject->AddComponent<FloatFollower>();
         element->adjuster->SetFollowingRate(uiData.adjustingRate);
         element->adjuster->applier = [=](float val)
             {
-                element->imageComponent->GetGI().SetRadialFillDegree(val * 360);
+                element->imageComponent.lock()->GetGI().SetRadialFillDegree(val * 360);
             };
     }
     if (uiData.customFlags & (int)UIExportFlag::IsDigitFont)
@@ -397,9 +398,9 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         for (auto each : tooltipTargets)
         {
             each->GetGameObject()->SetSelfActive(false);
-            if (auto img = each->imageComponent)
+            if (auto img = each->imageComponent; img.lock())
             {
-                img->GetGI().SetLayer(priority_Tooltip);
+                img.lock()->GetGI().SetLayer(priority_Tooltip);
             }
         }
         button->AddButtonOnMouseFunction([=]()

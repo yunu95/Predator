@@ -100,12 +100,12 @@ void Unit::Start()
     unitFSM.transitions[UnitState::Skill].push_back({ UnitState::Idle,
         [=]() { return currentOrder == UnitState::Idle; } });
 
-    for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Skill); i++)
-    {
-        unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::Skill,
-        [=]() { return currentOrder == UnitState::Skill || trapClassifingFunction()
-            && TacticModeSystem::SingleInstance().isTacticModeOperating; } });
-    }
+	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Skill); i++)
+	{
+		unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::Skill,
+		[=]() { return currentOrder == UnitState::Skill || trapClassifingFunction() 
+			&& TacticModeSystem::Instance().isTacticModeOperating; } });
+	}
 
     for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Paralysis); i++)
     {
@@ -208,7 +208,18 @@ void Unit::Update()
 void Unit::OnDestroy()
 {
     if (m_unitSide == UnitSide::Player)
-        PlayerController::SingleInstance().ErasePlayerUnit(this);
+        PlayerController::Instance().ErasePlayerUnit(this);
+}
+
+void Unit::PlayFunction()
+{
+
+}
+
+void Unit::StopFunction()
+{
+	if (GetGameObject()->GetSelfActive())
+		GetGameObject()->SetSelfActive(false);
 }
 
 Unit::UnitType Unit::GetUnitType() const
@@ -223,8 +234,14 @@ Unit::UnitSide Unit::GetUnitSide() const
 
 #pragma region State Engage()
 void Unit::IdleEngage()
-{
-    TacticModeSystem::SingleInstance().isTacticModeOperating = false;
+	{
+		TacticModeSystem::Instance().isTacticModeOperating = false;
+	
+		currentOrder = UnitState::Idle;
+		idleElapsed = 0.0f;
+		if(m_staticMeshRenderer != nullptr)
+			m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
+		m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 
     currentOrder = UnitState::Idle;
     idleElapsed = 0.0f;
@@ -264,7 +281,7 @@ void Unit::OffsetMoveEngage()
 {
     StopMove();
     currentOrder = UnitState::OffsetMove;
-    m_followingTargetUnit = PlayerController::SingleInstance().GetPlayerMap().find(UnitType::Warrior)->second;
+    m_followingTargetUnit = PlayerController::Instance().GetPlayerMap().find(UnitType::Warrior)->second;
     isFollowing = false;
     currentOrder = UnitState::OffsetMove;
     moveFunctionElapsed = 0.0f;
@@ -336,7 +353,7 @@ void Unit::SkillEngage()
         if (m_currentTargetUnit != nullptr)
             m_currentSkillPosition = m_currentTargetUnit->GetTransform()->GetWorldPosition();
         else
-            m_currentSkillPosition = PlayerController::SingleInstance().GetPlayerMap().find(static_cast<UnitType>(tempRand))->second->GetTransform()->GetWorldPosition();
+            m_currentSkillPosition = PlayerController::Instance().GetPlayerMap().find(static_cast<UnitType>(tempRand))->second->GetTransform()->GetWorldPosition();
     }
     else if (m_unitType == UnitType::SpikeTrap || m_unitType == UnitType::ChessTrap)
     {
@@ -348,7 +365,7 @@ void Unit::SkillEngage()
         if (m_currentTargetUnit != nullptr)
             m_currentSkillPosition = m_currentTargetUnit->GetTransform()->GetWorldPosition();
         else
-            m_currentSkillPosition = PlayerController::SingleInstance().GetPlayerMap().find(static_cast<UnitType>(tempRand))->second->GetTransform()->GetWorldPosition();
+            m_currentSkillPosition = PlayerController::Instance().GetPlayerMap().find(static_cast<UnitType>(tempRand))->second->GetTransform()->GetWorldPosition();
     }
     else if (m_unitType == UnitType::RangedEnemy)
     {
@@ -356,7 +373,7 @@ void Unit::SkillEngage()
         if (m_currentTargetUnit != nullptr)
             m_currentSkillPosition = m_currentTargetUnit->GetTransform()->GetWorldPosition();
         else
-            m_currentSkillPosition = PlayerController::SingleInstance().GetPlayerMap().find(static_cast<UnitType>(tempRand))->second->GetTransform()->GetWorldPosition();
+            m_currentSkillPosition = PlayerController::Instance().GetPlayerMap().find(static_cast<UnitType>(tempRand))->second->GetTransform()->GetWorldPosition();
     }
 
     if (m_unitType != UnitType::SpikeTrap && m_unitType != UnitType::ChessTrap)
@@ -462,11 +479,11 @@ void Unit::IdleUpdate()
 {
     CheckCurrentAnimation(unitAnimations.m_idleAnimation);
 
-    if (!IsTacticModeQueueEmpty() && TacticModeSystem::SingleInstance().isTacticModeOperating == false)
-    {
-        m_tacticModeQueue.front()();
-        m_tacticModeQueue.pop();
-    }
+		if (!IsTacticModeQueueEmpty() && TacticModeSystem::Instance().isTacticModeOperating == false)
+		{
+			m_tacticModeQueue.front()();
+			m_tacticModeQueue.pop();
+		}
 
     idleElapsed += Time::GetDeltaTime();
 
@@ -781,7 +798,7 @@ void Unit::Damaged(Unit* opponentUnit, float opponentDmg)
     if (m_currentHealthPoint <= 0)
         m_currentResurrectingCount++;
 
-    auto debuggingMesh = DebuggingMeshPool::SingleInstance().Borrow();
+    auto debuggingMesh = DebuggingMeshPool::Instance().Borrow();
     debuggingMesh->SetUnitObject(this);
     debuggingMesh->PopMeshUP(yunuGI::Color::green(), MaterialNum::Green);
 
@@ -796,7 +813,7 @@ void Unit::Damaged(float dmg)
     if (m_currentHealthPoint <= 0)
         m_currentResurrectingCount++;
 
-    auto debuggingMesh = DebuggingMeshPool::SingleInstance().Borrow();
+    auto debuggingMesh = DebuggingMeshPool::Instance().Borrow();
     debuggingMesh->SetUnitObject(this);
     debuggingMesh->PopMeshUP(yunuGI::Color::green(), MaterialNum::Green);
 }
@@ -900,7 +917,7 @@ bool Unit::IsAllExtraPlayerUnitDead()
 {
     bool temp = false;
 
-    for (auto each : PlayerController::SingleInstance().GetPlayerMap())
+    for (auto each : PlayerController::Instance().GetPlayerMap())
     {
         if (each.second == this)
             continue;
@@ -1233,7 +1250,7 @@ void Unit::OrderAttackMove(Vector3d position)
     currentOrder = UnitState::AttackMove;
     dotween->DOLookAt(position, rotateTime, false);
 
-    //PlayerController::SingleInstance().SetRightClickFunction();
+    //PlayerController::Instance().SetRightClickFunction();
     // 다음 클릭은 Move로 바꿀 수 있도록 function 재정의.
 
     isAttackMoving = true;
@@ -1251,8 +1268,8 @@ void Unit::OrderSkill(SkillEnum p_skillNum, Vector3d position)
         // Non-player unit or player unit with skill cooling down or invalid skill system
         ExecuteSkillAction(position, p_skillNum);
     }
-    PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(m_unitType);
-    PlayerController::SingleInstance().SetRightClickFunction();
+    PlayerController::Instance().SetCurrentPlayerSerialNumber(m_unitType);
+    PlayerController::Instance().SetRightClickFunction();
 }
 
 void Unit::OrderSkill(SkillEnum p_skillNum)
@@ -1261,7 +1278,7 @@ void Unit::OrderSkill(SkillEnum p_skillNum)
     currentOrder = UnitState::Skill;
     m_currentSelectedSkill = p_skillNum;
 
-    PlayerController::SingleInstance().SetLeftClickEmpty();
+    PlayerController::Instance().SetLeftClickEmpty();
 }
 
 void Unit::ExecuteSkillAction(Vector3d p_pos, SkillEnum p_skillNum)
@@ -1270,7 +1287,7 @@ void Unit::ExecuteSkillAction(Vector3d p_pos, SkillEnum p_skillNum)
     m_skillPosition = p_pos;
     m_currentSelectedSkill = p_skillNum;
     dotween->DOLookAt(p_pos, rotateTime, false);
-    PlayerController::SingleInstance().SetLeftClickEmpty();
+    PlayerController::Instance().SetLeftClickEmpty();
     m_currentSkillPosition = p_pos;
 }
 
@@ -1356,7 +1373,7 @@ void Unit::SetUnitStateIdle()
 
     if (m_unitSide == UnitSide::Player)
     {
-        PlayerController::SingleInstance().SetRightClickFunction();
+        PlayerController::Instance().SetRightClickFunction();
     }
 }
 

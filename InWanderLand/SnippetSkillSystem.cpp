@@ -116,8 +116,8 @@ void SnippetSkillSystemInit()
 	/// PlayerController SetUp
 	InputManager::Instance();
 	UIManager::Instance();
-	PlayerController::SingleInstance().SetMovingSystemComponent(rtsCam);
-	TacticModeSystem::SingleInstance().SetMovingSystemComponent(rtsCam);
+	PlayerController::Instance().SetMovingSystemComponent(rtsCam);
+	TacticModeSystem::Instance().SetMovingSystemComponent(rtsCam);
 
 	WarriorProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 0.0f));;
 	MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f));;

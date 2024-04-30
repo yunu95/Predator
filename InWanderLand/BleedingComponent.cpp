@@ -39,7 +39,7 @@ void BleedingComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 			opponentUnits.find(opponentUnit)->second->currentBleedingStack = 1;
 			opponentUnits.find(opponentUnit)->second->currentDamagedCount = 0;
 
-			StatusTimer* bleedingTimer = StatusTimerPool::SingleInstance().Borrow();
+			StatusTimer* bleedingTimer = StatusTimerPool::Instance().Borrow();
 			bleedingTimer->m_isRepeated = true;
 			bleedingTimer->m_duration = m_bleedDuration;
 			bleedingTimer->onCompleteFunction = [=]()
@@ -48,7 +48,7 @@ void BleedingComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 					if (opponentUnits.find(opponentUnit)->second->currentDamagedCount == m_maxDamageCount || opponentUnits.find(opponentUnit)->second->bleedingUnit->IsUnitDead())
 					{
 						bleedingTimer->StopTimer();
-						StatusTimerPool::SingleInstance().Return(bleedingTimer);
+						StatusTimerPool::Instance().Return(bleedingTimer);
 						opponentUnits.erase(opponentUnits.find(opponentUnit)->second->bleedingUnit);
 					}
 					else
@@ -56,7 +56,7 @@ void BleedingComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 						opponentUnits.find(opponentUnit)->second->bleedingUnit->Damaged(m_bleedDamage * opponentUnits.find(opponentUnit)->second->currentBleedingStack);
 						opponentUnits.find(opponentUnit)->second->currentDamagedCount++;
 
-						auto debuggingMesh = DebuggingMeshPool::SingleInstance().Borrow();
+						auto debuggingMesh = DebuggingMeshPool::Instance().Borrow();
 						debuggingMesh->SetUnitObject(opponentUnits.find(opponentUnit)->second->bleedingUnit);
 						debuggingMesh->GetGameObject()->SetSelfActive(true);
 						debuggingMesh->PopMeshUP(yunuGI::Color::red(), MaterialNum::Red);

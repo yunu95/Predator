@@ -26,7 +26,7 @@ public:
     SoundPlayingTimer* soundOnHover{ nullptr };
     SoundPlayingTimer* soundOnEnable{ nullptr };
     SoundPlayingTimer* soundOnDisable{ nullptr };
-    graphics::UIImage* imageComponent{ nullptr };
+    std::weak_ptr<graphics::UIImage> imageComponent{};
     graphics::UIText* textComponent{ nullptr };
     UIPriorityLayout* priorityLayout{ nullptr };
     UIPriorityLayout* parentPriorityLayout{ nullptr };

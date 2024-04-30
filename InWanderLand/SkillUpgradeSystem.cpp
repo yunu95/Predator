@@ -13,7 +13,7 @@ void SkillUpgradeSystem::UpgradeSkill()
 {
     SetSkillPoints(skillPointsLeft - 1);
     static constexpr float gray = 0.3f;
-    UIManager::Instance().GetUIElementByEnum(upgradeTarget)->imageComponent->GetGI().SetColor({ gray,gray,gray,1 });
+    UIManager::Instance().GetUIElementByEnum(upgradeTarget)->imageComponent.lock()->GetGI().SetColor({ gray,gray,gray,1 });
     upgradedList.insert(upgradeTarget);
 }
 void SkillUpgradeSystem::SetSkillPoints(int points)

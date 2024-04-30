@@ -1,16 +1,13 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "DummyComponent.h"
-#include "MeleeEnemyProductor.h"
-#include "ContentsLayer.h"
-#include "Application.h"
-#include "LazySingletonClass.h"
+#include "ContentsObservee.h"
 #include "MeleeEnemyProductor.h"
 #include "SingleNavigationField.h"
 #include "GameManager.h"
 #include "BurnEffect.h"
 
-class MeleeEnemyPool : public GameObjectPool<DummyComponent>, public GHContents::LazySingletonClass<MeleeEnemyPool>
+class MeleeEnemyPool : public GameObjectPool<DummyComponent>, public Component, public SingletonComponent<MeleeEnemyPool>, public ContentsObservee
 {
 private:
 	Vector3d m_unitPosition;
@@ -30,9 +27,6 @@ public:
 				p_dummy->m_pairUnit->isJustCreated = false;
 				Return(p_dummy);
 			};
-		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-		contentsLayer->RegisterToEditorObjectContainer(p_dummy->GetGameObject());
-		contentsLayer->RegisterToEditorObjectContainer(unitComponent->GetGameObject());
 	}
 
 	virtual void OnBorrow(DummyComponent* p_dummy) override
@@ -67,4 +61,28 @@ public:
 	{
 		m_stageNumber = p_num;
 	}
+
+	virtual void Start() override;
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
 };
+
+void MeleeEnemyPool::Start()
+{
+	isSingletonComponent = true;
+}
+
+void MeleeEnemyPool::PlayFunction()
+{
+	this->SetActive(true);
+	if (isOncePaused)
+	{
+		Start();
+	}
+}
+
+void MeleeEnemyPool::StopFunction()
+{
+	poolObjects.clear();
+	expendableObjects.clear();
+}

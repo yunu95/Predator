@@ -1,15 +1,12 @@
 #pragma once
 #include "HealerAutoAttackProjectile.h"
 #include "GameObjectPool.h"
-#include "PassiveCakePool.h"
 #include "DebugMeshes.h"
 #include "StaticMeshRenderer.h"
-#include "ContentsLayer.h"
-#include "Application.h"
-#include "LazySingletonClass.h"
+#include "ContentsObservee.h"
 
 class HealerAutoAttackProjectilePool :
-	public GameObjectPool<HealerAutoAttackProjectile>, public GHContents::LazySingletonClass<HealerAutoAttackProjectilePool>
+	public GameObjectPool<HealerAutoAttackProjectile>, public Component, public SingletonComponent<HealerAutoAttackProjectilePool>, public ContentsObservee
 {
 public:
 	virtual void ObjectInitializer(HealerAutoAttackProjectile* projectile) override
@@ -18,9 +15,29 @@ public:
 		bulletGameObject->SetParent(projectile->GetGameObject());
 
 		projectile->GetGameObject()->AddComponent<Dotween>();
-
-		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-		contentsLayer->RegisterToEditorObjectContainer(projectile->GetGameObject());
 	}
+	virtual void Start() override;
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
 };
+
+void HealerAutoAttackProjectilePool::Start()
+{
+	isSingletonComponent = true;
+}
+
+void HealerAutoAttackProjectilePool::PlayFunction()
+{
+	this->SetActive(true);
+	if (isOncePaused)
+	{
+		Start();
+	}
+}
+
+void HealerAutoAttackProjectilePool::StopFunction()
+{
+	poolObjects.clear();
+	expendableObjects.clear();
+}
 

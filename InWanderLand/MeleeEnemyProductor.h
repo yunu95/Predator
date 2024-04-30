@@ -1,6 +1,5 @@
 #pragma once
 #include "UnitProductor.h"
-#include "SingletonComponent.h"
 
 class MeleeEnemyProductor : public UnitProductor, public SingletonComponent<MeleeEnemyProductor>
 {

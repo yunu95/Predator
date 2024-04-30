@@ -1,5 +1,6 @@
 #pragma once
 #include "AttackSystem.h"
+#include "ContentsObservee.h"
 
 enum class MeleeAttackType
 {
@@ -12,7 +13,7 @@ class SpecialEffect;
 /// <summary>
 ///
 /// </summary>
-class MeleeAttackSystem : public AttackSystem
+class MeleeAttackSystem : public AttackSystem, public ContentsObservee
 {
 private:
 	MeleeAttackType m_meleeAttackType;
@@ -32,6 +33,9 @@ public:
 	virtual void Attack(Unit* opponentUnit, float offSet) override;
 	void SetMeleeAttackType(MeleeAttackType p_type);
 	void SetOwnerUnitObject(GameObject* unitobj);
+
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
 
 	// Collider를 띄우고 없애는 식이라면 아래 함수 사용.
 	void SetColliderObject(GameObject* colliderObj);

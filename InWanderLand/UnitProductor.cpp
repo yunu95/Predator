@@ -202,7 +202,7 @@ void UnitProductor::SetPlayerRelatedComponents()
 {
 	m_unitComponent->SetPlayerSerialNumber(m_unitType);
 	m_unitComponent->SetSkillPreviewType(qSkillPreviewType, wSkillPreviewType);
-	PlayerController::SingleInstance().AddPlayerUnit(m_unitComponent);
+	PlayerController::Instance().AddPlayerUnit(m_unitComponent);
 
 	float qCoolTimeTemp;
 	float eCoolTimeTemp;
@@ -260,7 +260,20 @@ void UnitProductor::Update()
 
 void UnitProductor::Start()
 {
-	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-	//contentsLayer->RegisterToEditorComponentVector(this);
+	isSingletonComponent = true;
+}
+
+void UnitProductor::PlayFunction()
+{
+	this->SetActive(true);
+	if (isOncePaused)
+	{
+		Start();
+	}
+}
+
+void UnitProductor::StopFunction()
+{
+
 }
 

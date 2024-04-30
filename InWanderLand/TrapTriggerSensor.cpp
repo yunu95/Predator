@@ -10,4 +10,15 @@ void TrapTriggerSensor::OnTriggerEnter(physics::Collider* collider)
 		trapUnit->SetUnitStateToSkill();
 	}
 }
- 
+
+
+void TrapTriggerSensor::PlayFunction()
+{
+
+}
+
+void TrapTriggerSensor::StopFunction()
+{
+	if (GetGameObject()->GetSelfActive())
+		GetGameObject()->SetSelfActive(false);
+}

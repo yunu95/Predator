@@ -6,6 +6,8 @@
 #include "TemplateDataManager.h"
 #include "EditorResourceManager.h"
 
+#include "PlayTimeRegionManager.h"
+
 namespace application
 {
     namespace editor
@@ -104,6 +106,7 @@ namespace application
             {
                 ApplyAsPaletteInstance();
             }
+            PlayTimeRegionManager::Instance().RegisterOrnament(ornamentInstance->GetGameObject(), pod.stage);
         }
 
 		bool OrnamentData::EnterDataFromGlobalConstant()

@@ -1,12 +1,14 @@
 #pragma once
 #include "YunutyEngine.h"
+#include "ContentsObservee.h"
+
 /// <summary>
 /// GetGameObject->GetComponent<IRangeAction>을 통해 함수호출 할 예정. 
 /// </summary>
 
 class Unit;
 
-class RangeSystem : public Component
+class RangeSystem : public Component, public ContentsObservee
 {
 private:
     Unit* m_unitComponent;
@@ -15,6 +17,9 @@ public:
     void SetOwnerUnitComponent(Unit* unitComponent);
 
 public:
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
+
     virtual void Start() override;
     virtual void OnTriggerEnter(physics::Collider* collider) override;
     virtual void OnTriggerExit(physics::Collider* collider) override;

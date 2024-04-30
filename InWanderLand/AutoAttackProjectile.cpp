@@ -37,6 +37,17 @@ void AutoAttackProjectile::SetStraightBulletRange(float p_rng)
 	m_range = p_rng;
 }
 
+void AutoAttackProjectile::PlayFunction()
+{
+
+}
+
+void AutoAttackProjectile::StopFunction()
+{
+	if (GetGameObject()->GetSelfActive())
+		GetGameObject()->SetSelfActive(false);
+}
+
 void AutoAttackProjectile::AutoChaseShootingFunction()
 {
 	//// 움직이기 전의 투사체 위치
@@ -84,7 +95,7 @@ void AutoAttackProjectile::StraightShootingFunction()
 	{
 		GetGameObject()->SetSelfActive(false);
 
-		AutoAttackProjectilePool::SingleInstance().Return(this);
+		AutoAttackProjectilePool::Instance().Return(this);
 
 		isShootOperating = false;
 	}
@@ -142,7 +153,7 @@ void AutoAttackProjectile::ProcessBulletHit(Unit* p_damagedUnit)
 {
 	GetGameObject()->SetSelfActive(false);
 
-	AutoAttackProjectilePool::SingleInstance().Return(this);
+	AutoAttackProjectilePool::Instance().Return(this);
 
 	/// 충돌 (목적지 도착 시) 호출하고자 하는 로직은 여기에
 	p_damagedUnit->Damaged(m_ownerUnit, m_ownerUnit->DetermineAttackDamage(m_ownerUnit->GetUnitDamage()));
@@ -152,7 +163,7 @@ void AutoAttackProjectile::ProcessBulletHit(Unit* p_damagedUnit)
 
 void AutoAttackProjectile::Start()
 {
-	for (auto each : PlayerController::SingleInstance().GetPlayerMap())
+	for (auto each : PlayerController::Instance().GetPlayerMap())
 	{
 		m_playerUnitVector.push_back(each.second);
 	}

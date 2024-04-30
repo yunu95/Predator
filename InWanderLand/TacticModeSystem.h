@@ -2,7 +2,6 @@
 #include "YunutyEngine.h"
 #include "InputManager.h"
 #include "Unit.h"
-#include "LazySingletonClass.h"
 #include <unordered_map>
 
 /// <summary>
@@ -16,10 +15,12 @@
 class RTSCam;
 class CursorDetector;
 
-class TacticModeSystem : public GHContents::LazySingletonClass<TacticModeSystem>
+class TacticModeSystem : public SingletonComponent<TacticModeSystem>, public Component
 {
 public:
-	TacticModeSystem();
+	virtual void OnEnable() override;
+	virtual void Start() override;
+	virtual void Update() override;
 
 	enum OrderType
 	{
@@ -40,12 +41,25 @@ public:
 	void SetMovingSystemComponent(RTSCam* sys);
 	bool IsTacticModeActivated(Unit* p_unit);			/// 전술모드가 끝날 때, parameter의 유닛이 입력된 명령이 있는가를 판별합니다. fsm transition에서 사용. 
 
+	bool IsTacticModeCoolTime() const;
+	float GetLeftCoolTime();
+
+	void SetCurrentGauge(int p_gauge);
+
 	bool isTacticModeOperating;
 
 	CursorDetector* m_cursorDetector;
 
 private:
-	int tacticModeGauge{ 1000 };
+	int m_maxGauge{ 10 };
+	int m_currentGauge{ 0 };
+	float m_gaugeIncreaseDuration{ 3.0f };
+	float m_gaugeIncreaseElapsed{ 0.0f };
+	
+	bool isCoolTime{ false };
+	float m_engageCoolTimeDuration{ 5.0f };
+	float m_engageCoolTimeElapsed{ 0.0f };
+	
 	RTSCam* m_rtsCam;
 
 	Unit::UnitType m_currentSelectedPlayerNumber;

@@ -3,9 +3,7 @@
 
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
-
-#include "Application.h"
-#include "ContentsLayer.h"
+#include "ObserveeHelper.h"
 
 namespace application
 {
@@ -105,6 +103,8 @@ namespace application
 		void LightData::ApplyAsPlaytimeObject()
 		{
 			auto comp = Scene::getCurrentScene()->AddGameObject();
+			comp->AddComponent<ObserveeHelper>();
+
 			switch (pod.templateData->pod.type)
 			{
 				case LightType::Directional:
@@ -132,9 +132,6 @@ namespace application
 			comp->GetTransform()->SetWorldPosition(Vector3d(pod.position.x, pod.position.y, pod.position.z));
 			comp->GetTransform()->SetWorldRotation(Quaternion(pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z));
 			comp->GetTransform()->SetLocalScale(Vector3d(pod.scale.x, pod.scale.y, pod.scale.z));
-
-			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-			contentsLayer->RegisterToEditorObjectContainer(comp);
 		}
 
 		void LightData::OnLightTypeChange(LightType type)

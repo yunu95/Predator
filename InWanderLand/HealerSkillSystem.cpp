@@ -1,6 +1,4 @@
 #include "HealerSkillSystem.h"
-#include "ContentsLayer.h"
-#include "Application.h"
 
 void HealerSkillSystem::CrushDown(int p_times)
 {
@@ -117,11 +115,6 @@ void HealerSkillSystem::Start()
 	QSkillFieldDamage.debugObject->SetParent(GetGameObject());
 	//WSkillFieldDamage.colliderObject->SetParent(GetGameObject());
 	//WSkillFieldDamage.debugObject->SetParent(GetGameObject());
-
-	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-	contentsLayer->RegisterToEditorObjectContainer(WSkillFieldDamage.colliderObject);
-	contentsLayer->RegisterToEditorObjectContainer(WSkillFieldDamage.debugObject);
-
 }
 
 void HealerSkillSystem::Update()

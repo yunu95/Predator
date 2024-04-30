@@ -1021,6 +1021,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="ChessTrapSkillSystem.h" />
     <ClInclude Include="ConditionList.h" />
     <ClInclude Include="Condition_CinematicMode.h" />
+    <ClInclude Include="ContentsObservee.h" />
+    <ClInclude Include="ContentsObserver.h" />
     <ClInclude Include="CoroutineObject.h" />
     <ClInclude Include="CreateInstanceCommand.h" />
     <ClInclude Include="BossProductor.h" />
@@ -1047,6 +1049,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="ObservationTarget.h" />
     <ClInclude Include="IObserver.h" />
     <ClInclude Include="ObservationEvent.h" />
+    <ClInclude Include="ObserveeHelper.h" />
     <ClInclude Include="ParticleBrush.h" />
     <ClInclude Include="ParticleData.h" />
     <ClInclude Include="ParticleEditorInstance.h" />
@@ -1079,7 +1082,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="GCTemplate.h" />
     <ClInclude Include="GlobalConstant.h" />
     <ClInclude Include="GretelSkillDevelopmentSystem.h" />
-    <ClInclude Include="LazySingletonClass.h" />
     <ClInclude Include="LightBrush.h" />
     <ClInclude Include="LightData.h" />
     <ClInclude Include="LightEditorInstance.h" />
@@ -1100,7 +1102,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="RangedEnemyProductor.h" />
     <ClInclude Include="RobinSkillDevelopmentSystem.h" />
     <ClInclude Include="SaveStaticOrnamentsCommnad.h" />
-    <ClInclude Include="SingletonInstanceContainer.h" />
     <ClInclude Include="SkillDevelopmentSystem.h" />
     <ClInclude Include="SkillUpgradeSystem.h" />
     <ClInclude Include="SkillWarningSystem.h" />
@@ -1258,7 +1259,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UUID.h" />
     <ClInclude Include="UUIDManager.h" />
     <ClInclude Include="Unit.h" />
-    <ClInclude Include="UnitFactory.h" />
     <ClInclude Include="UnitProductor.h" />
     <ClInclude Include="WarriorProductor.h" />
     <ClInclude Include="UnitBrush.h" />
@@ -1283,7 +1283,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="AttackSystem.cpp" />
-    <ClCompile Include="AutoAttackProjectilePool.cpp" />
     <ClCompile Include="BishopTrapProductor.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
     <ClCompile Include="BlindFieldComponent.cpp" />
@@ -1291,6 +1290,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="BurnEffect.cpp" />
     <ClCompile Include="Condition_CinematicMode.cpp" />
     <ClCompile Include="ChessTrapSkillSystem.cpp" />
+    <ClCompile Include="ContentsObservee.cpp" />
+    <ClCompile Include="ContentsObserver.cpp" />
     <ClCompile Include="CreateInstanceCommand.cpp" />
     <ClCompile Include="BossProductor.cpp" />
     <ClCompile Include="BossSkillSystem.cpp" />
@@ -1310,6 +1311,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="FloatFollower.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="ObservationTarget.cpp" />
+    <ClCompile Include="ObserveeHelper.cpp" />
     <ClCompile Include="ParticleBrush.cpp" />
     <ClCompile Include="ParticleData.cpp" />
     <ClCompile Include="ParticleEditorInstance.cpp" />
@@ -1375,7 +1377,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="SkillUpgradeSystem.cpp" />
     <ClCompile Include="SkillWarningSystem.cpp" />
     <ClCompile Include="SnippetBillboardSpriteAnim.cpp" />
-    <ClCompile Include="SingletonInstanceContainer.cpp" />
     <ClCompile Include="SpecialEffectTrigger.cpp" />
     <ClCompile Include="SpikeSkillSystem.cpp" />
     <ClCompile Include="SpikeTrapProductor.cpp" />
@@ -1502,7 +1503,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UUIDManager.cpp" />
     <ClCompile Include="TestUnitAnimation.cpp" />
     <ClCompile Include="Unit.cpp" />
-    <ClCompile Include="UnitFactory.cpp" />
     <ClCompile Include="UnitProductor.cpp" />
     <ClCompile Include="Action_WaitForSeconds.cpp" />
     <ClCompile Include="WarriorProductor.cpp" />

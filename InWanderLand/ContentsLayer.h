@@ -31,9 +31,6 @@ namespace application
             void ResumeContents();
             void StopContents();
 
-			void RegisterToEditorObjectContainer(GameObject* p_obj);
-			void RegisterToEditorComponentVector(Component* p_obj);
-
             bool isStoppedOnce{ false };
             // 테스트 코드에서 임의로 ContentsLayer의 Initialize 코드를 오버라이드 하고 싶을때 쓰이는 함수
             // 이 함수를 호출하면 YunutyCycle에서 발생한 예외를 잡아서 테스트 스레드에서 예외를 던집니다.
@@ -41,13 +38,7 @@ namespace application
             static void AssignTestInitializer(std::function<void()> testInitializer);
 #endif
         private:
-            void ClearPlaytimeObject();
             void ShortcutInit();
-
-            // container. Editor의 Stop버튼을 눌렀을 경우 해당 container 내의 Object들을 Destroy 해줍니다.
-			std::vector<GameObject*> objectCreatedByEditorList;
-
-			std::vector<Component*> componentsCreatedByEditorVector;
         };
     }
 }

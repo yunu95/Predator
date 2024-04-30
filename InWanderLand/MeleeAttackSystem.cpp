@@ -2,8 +2,6 @@
 #include "MeleeAttackSystem.h"
 #include "UnitProductor.h"
 #include "SpecialEffect.h"
-#include "ContentsLayer.h"
-#include "Application.h"
 
 void MeleeAttackSystem::Attack(Unit* opponentUnit, float offset)
 {
@@ -55,6 +53,17 @@ void MeleeAttackSystem::SetColliderDebugObject(GameObject* debugobj)
 void MeleeAttackSystem::SetOwnerUnitObject(GameObject* unitobj)
 {
 	ownerUnitObject = unitobj;
+}
+
+void MeleeAttackSystem::PlayFunction()
+{
+
+}
+
+void MeleeAttackSystem::StopFunction()
+{
+	if (GetGameObject()->GetSelfActive())
+		GetGameObject()->SetSelfActive(false);
 }
 
 void MeleeAttackSystem::SetColliderRemainTime(float time)
