@@ -2,6 +2,8 @@
 #include "ParticleRenderer.h"
 #include "_YunuGIObjects.h"
 
+#include <DirectXMath.h>
+
 #include <random>
 #include <chrono>
 using namespace yunutyEngine::graphics;
@@ -41,27 +43,6 @@ void ParticleRenderer::SetParticleMode(ParticleMode particleMode)
     this->particleMode = particleMode;
 }
 
-void ParticleRenderer::DirectionUpate()
-{
-    for (auto iter = this->ableParticles.begin(); iter != this->ableParticles.end();)
-    {
-        auto& each = *iter;
-
-        auto tempDir = yunuGI::Vector4(each.direction.x, each.direction.y, each.direction.z, 0.f)
-            * GetTransform()->GetWorldTM();
-        each.direction = yunuGI::Vector3{ tempDir.x,tempDir.y, tempDir.z };
-
-        ++iter;
-    }
-}
-
-void ParticleRenderer::OnTransformUpdate()
-{
-    Renderable<yunuGI::IParticleRenderer>::OnTransformUpdate();
-
-    DirectionUpate();
-}
-
 void ParticleRenderer::SetEndScale(float scale)
 {
     this->endScale = scale;
@@ -92,7 +73,7 @@ void ParticleRenderer::SetRadius(float radius)
     this->shape.cone.radius = radius;
 }
 
-yunuGI::Vector2 ParticleRenderer::getRandomPointInCircle(double centerX, double centerY, double radius)
+yunuGI::Vector2 ParticleRenderer::GetRandomPointInCircle(double centerX, double centerY, double radius)
 {
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::mt19937 gen(seed);
@@ -140,22 +121,34 @@ void ParticleRenderer::ParticleUpdate()
             continue;
         }
 
-        each.position += (each.direction * this->speed * Time::GetDeltaTime());
+        auto curWorldTM = GetTransform()->GetWorldTM();
+
+        auto particleDirection = yunuGI::Vector3{ each.offsetTM.m31, each.offsetTM.m32 ,each.offsetTM.m33 } ;
+        auto particlePosition = yunuGI::Vector3{ each.offsetTM.m41, each.offsetTM.m42 ,each.offsetTM.m43 } ;
+
+        particlePosition += (particleDirection * this->speed * Time::GetDeltaTime());
+
+        each.offsetTM.m41 = particlePosition.x;
+        each.offsetTM.m42 = particlePosition.y;
+        each.offsetTM.m43 = particlePosition.z;
+
+        auto resultTM = each.offsetTM * curWorldTM;
+
+        each.position = yunuGI::Vector3{ resultTM.m41,resultTM.m42,resultTM.m43 };
 
         ++iter;
     }
 }
 
-yunuGI::Vector3 ParticleRenderer::GenerateRandomDirectionInCone(yunuGI::ParticleRenderInfo& particle)
+yunuGI::Matrix4x4 ParticleRenderer::GenerateRandomOffsetMatInCone()
 {
-    auto randomPoint = getRandomPointInCircle(0, 0, this->shape.cone.radius);
+    auto randomPoint = GetRandomPointInCircle(0, 0, this->shape.cone.radius);
 
     float height = 4.f;
 
     float theta = this->shape.cone.angle * (3.14159265358979323846 / 180);
 
     yunuGI::Vector3 bottomPos{ randomPoint.x, 0, randomPoint.y };
-    particle.position = bottomPos;
 
     float bottomHeight = this->shape.cone.radius / tan(theta);
 
@@ -166,8 +159,19 @@ yunuGI::Vector3 ParticleRenderer::GenerateRandomDirectionInCone(yunuGI::Particle
         upCircleRadius * bottomPos.z / this->shape.cone.radius
     };
 
-    return yunuGI::Vector3(topPos.x - bottomPos.x, topPos.y - bottomPos.y, topPos.z - bottomPos.z).Normalize(
-        yunuGI::Vector3(topPos.x - bottomPos.x, topPos.y - bottomPos.y, topPos.z - bottomPos.z));
+	auto direction = yunuGI::Vector3(topPos.x - bottomPos.x, topPos.y - bottomPos.y, topPos.z - bottomPos.z).Normalize(
+		yunuGI::Vector3(topPos.x - bottomPos.x, topPos.y - bottomPos.y, topPos.z - bottomPos.z));
+
+    yunuGI::Matrix4x4 offsetMatrix;
+    offsetMatrix.m31 = direction.x;
+    offsetMatrix.m32 = direction.y;
+    offsetMatrix.m33 = direction.z;
+
+    offsetMatrix.m41 = bottomPos.x;
+    offsetMatrix.m42 = bottomPos.y;
+    offsetMatrix.m43 = bottomPos.z;
+    
+    return (offsetMatrix);
 }
 
 void ParticleRenderer::SetSpeed(float speed)
@@ -224,36 +228,22 @@ void ParticleRenderer::Update()
 
                     if (this->particleType == ParticleShape::Cone)
                     {
+                        particle.offsetTM = this->GenerateRandomOffsetMatInCone();
 
-                        particle.direction = this->GenerateRandomDirectionInCone(particle);
-
-                        auto worldPos = yunuGI::Vector4(particle.position.x, particle.position.y, particle.position.z, 0.f)
-                            * GetTransform()->GetWorldTM();
-
-                        particle.position = yunuGI::Vector3{ worldPos.x,worldPos.y,worldPos.z };
-
-
-                        auto tempDir = yunuGI::Vector4(particle.direction.x, particle.direction.y, particle.direction.z, 0.f)
-                            * GetTransform()->GetWorldTM();
-
-                        particle.direction = yunuGI::Vector3{ tempDir.x,tempDir.y, tempDir.z };
                     }
                     else if (this->particleType == ParticleShape::Circle)
                     {
-                        auto tempPos = getRandomPointInCircle(0, 0, this->shape.circle.radius);
+						auto tempPos = GetRandomPointInCircle(0, 0, this->shape.circle.radius);
 
-                        particle.position = yunuGI::Vector3{ tempPos.x,0,tempPos.y };
+                        auto particleDirection = yunuGI::Vector3{ tempPos.x,0,tempPos.y }.Normalize(yunuGI::Vector3{ tempPos.x,0,tempPos.y });
+                        
+                        particle.offsetTM.m41 = tempPos.x;
+                        particle.offsetTM.m42 = 0.f;
+                        particle.offsetTM.m43 = tempPos.y;
 
-                        auto worldPos = yunuGI::Vector4(particle.position.x, particle.position.y, particle.position.z, 0.f)
-                            * GetTransform()->GetWorldTM();
-
-                        particle.position = yunuGI::Vector3{ worldPos.x,worldPos.y,worldPos.z };
-
-                        particle.direction = yunuGI::Vector3{ tempPos.x,0,tempPos.y }.Normalize(yunuGI::Vector3{ tempPos.x,0,tempPos.y });;
-
-                        auto tempDir = yunuGI::Vector4(particle.direction.x, particle.direction.y, particle.direction.z, 0.f)
-                            * GetTransform()->GetWorldTM();
-                        particle.direction = yunuGI::Vector3{ tempDir.x,tempDir.y, tempDir.z };
+						particle.offsetTM.m31 = particleDirection.x;
+						particle.offsetTM.m32 = particleDirection.y;
+						particle.offsetTM.m33 = particleDirection.z;
                     }
 
                     this->disableParticles.pop_front();
@@ -276,42 +266,28 @@ void ParticleRenderer::Update()
 
                 if (!disableParticles.empty())
                 {
-                    for (int i = 0; i < burstsCount; ++i)
-                    {
-                        auto& particle = this->disableParticles.front();
+					for (int i = 0; i < burstsCount; ++i)
+					{
+						auto& particle = this->disableParticles.front();
 
-                        if (this->particleType == ParticleShape::Cone)
-                        {
-                            particle.direction = this->GenerateRandomDirectionInCone(particle);
+						if (this->particleType == ParticleShape::Cone)
+						{
+							particle.offsetTM = this->GenerateRandomOffsetMatInCone();
+						}
+						else if (this->particleType == ParticleShape::Circle)
+						{
+							auto tempPos = GetRandomPointInCircle(0, 0, this->shape.circle.radius);
 
-                            auto worldPos = yunuGI::Vector4(particle.position.x, particle.position.y, particle.position.z, 0.f)
-                                * GetTransform()->GetWorldTM();
+							auto particleDirection = yunuGI::Vector3{ tempPos.x,0,tempPos.y }.Normalize(yunuGI::Vector3{ tempPos.x,0,tempPos.y });
 
-                            particle.position = yunuGI::Vector3{ worldPos.x,worldPos.y,worldPos.z };
+							particle.offsetTM.m41 = tempPos.x;
+							particle.offsetTM.m42 = 0.f;
+							particle.offsetTM.m43 = tempPos.y;
 
-
-                            auto tempDir = yunuGI::Vector4(particle.direction.x, particle.direction.y, particle.direction.z, 0.f)
-                                * GetTransform()->GetWorldTM();
-
-                            particle.direction = yunuGI::Vector3{ tempDir.x,tempDir.y, tempDir.z };
-                        }
-                        else if (this->particleType == ParticleShape::Circle)
-                        {
-                            auto tempPos = getRandomPointInCircle(0, 0, this->shape.circle.radius);
-
-                            particle.position = yunuGI::Vector3{ tempPos.x,0,tempPos.y };
-
-                            auto worldPos = yunuGI::Vector4(particle.position.x, particle.position.y, particle.position.z, 0.f)
-                                * GetTransform()->GetWorldTM();
-
-                            particle.position = yunuGI::Vector3{ worldPos.x,worldPos.y,worldPos.z };
-
-                            particle.direction = yunuGI::Vector3{ tempPos.x,0,tempPos.y }.Normalize(yunuGI::Vector3{ tempPos.x,0,tempPos.y });;
-
-                            auto tempDir = yunuGI::Vector4(particle.direction.x, particle.direction.y, particle.direction.z, 0.f)
-                                * GetTransform()->GetWorldTM();
-                            particle.direction = yunuGI::Vector3{ tempDir.x,tempDir.y, tempDir.z };
-                        }
+							particle.offsetTM.m31 = particleDirection.x;
+							particle.offsetTM.m32 = particleDirection.y;
+							particle.offsetTM.m33 = particleDirection.z;
+						}
 
                         this->disableParticles.pop_front();
                         this->ableParticles.push_back(particle);

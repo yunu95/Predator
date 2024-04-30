@@ -99,12 +99,12 @@ DirectX::SimpleMath::Matrix NailCamera::GetPTM90()
 
 void NailCamera::CreateFrustum()
 {
-	FrustumCullingManager::Instance.Get().SetCameraChange(true);
+//	FrustumCullingManager::Instance.Get().SetCameraChange(true);
 
 	this->frustum.CreateFromMatrix(this->frustum, ptm);
 	this->frustum.Transform(this->frustum, wtm);
 
-	FrustumCullingManager::Instance.Get().Wait();
-	FrustumCullingManager::Instance.Get().SetCameraChange(false);
-	FrustumCullingManager::Instance.Get().Init();
+	//FrustumCullingManager::Instance.Get().Wait();
+	//FrustumCullingManager::Instance.Get().SetCameraChange(false);
+	//FrustumCullingManager::Instance.Get().Init();
 }

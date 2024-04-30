@@ -60,6 +60,38 @@ public:
     }
 };
 
+class TestComponent4 : public yunutyEngine::Component
+{
+public:
+	yunutyEngine::GameObject* obj;
+	virtual void Update() override
+	{
+        if (Input::isKeyPushed(yunutyEngine::KeyCode::B))
+        {
+            auto curPos = obj->GetTransform()->GetLocalPosition();
+            curPos.x = 3;
+            obj->GetTransform()->SetLocalPosition(curPos);
+        }
+
+		if (Input::isKeyDown(yunutyEngine::KeyCode::V))
+		{
+			auto curPos = obj->GetTransform()->GetLocalPosition();
+			curPos.x -= 0.01f;
+			obj->GetTransform()->SetLocalPosition(curPos);
+		}
+
+		if (Input::isKeyDown(yunutyEngine::KeyCode::K))
+		{
+            obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3{90,0,0} });
+		}
+
+		if (Input::isKeyDown(yunutyEngine::KeyCode::O))
+		{
+			obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3{0,0,0} });
+		}
+	}
+};
+
 /// 그래픽스 테스트용
 void GraphicsTest()
 {
@@ -82,9 +114,11 @@ void GraphicsTest()
 
     {
         auto obj = Scene::getCurrentScene()->AddGameObject();
+        auto test4 = obj->AddComponent<TestComponent4>();
+        test4->obj = obj;
         auto particle = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
         particle->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
-        particle->SetPlayAwake(true);
+        particle->SetParticleShape(yunutyEngine::graphics::ParticleShape::Cone);
         particle->SetLoop(true);
         particle->Play();
     }

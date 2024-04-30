@@ -59,10 +59,8 @@ namespace yunutyEngine::graphics
 		ParticleRenderer();
 
 		virtual void Update() override;
-		virtual void OnTransformUpdate() override;
 		virtual void OnDisable() override;
 
-		void DirectionUpate();
 		void ParticleUpdate();
 
 		void SetParticleShape(ParticleShape particleType);
@@ -86,8 +84,8 @@ namespace yunutyEngine::graphics
 		void SetPlayAwake(bool playAwake);
 
 	private:
-		yunuGI::Vector3 GenerateRandomDirectionInCone(yunuGI::ParticleRenderInfo& particle);
-		yunuGI::Vector2 getRandomPointInCircle(double centerX, double centerY, double radius);
+		yunuGI::Matrix4x4 GenerateRandomOffsetMatInCone();
+		yunuGI::Vector2 GetRandomPointInCircle(double centerX, double centerY, double radius);
 
 	private:
 		ParticleShape particleType = ParticleShape::Cone;

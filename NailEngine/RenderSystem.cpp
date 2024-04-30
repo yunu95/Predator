@@ -172,12 +172,12 @@ void RenderSystem::PushCameraData()
 
 void RenderSystem::Render()
 {
-	auto start = std::chrono::steady_clock::now();
+	//auto start = std::chrono::steady_clock::now();
 
-	FrustumCullingManager::Instance.Get().Wait();
+	//FrustumCullingManager::Instance.Get().Wait();
 
-	auto end = std::chrono::steady_clock::now();
-	std::chrono::duration<double, std::milli> duration_ms = end - start;
+	//auto end = std::chrono::steady_clock::now();
+	//std::chrono::duration<double, std::milli> duration_ms = end - start;
 
 	ResourceManager::Instance.Get().GetTexture(L"LightMapList")->Bind(24);
 	UtilBuffer utilBuffer;

@@ -53,6 +53,7 @@ namespace yunuGI
 	public:
 		virtual void PushAnimation(yunuGI::IAnimation* animation) = 0;
 		virtual void Play(yunuGI::IAnimation* animation) = 0;
+		virtual void SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame) = 0;
 		virtual void SetPlaySpeed(float playSpeed) = 0;
 		virtual float GetPlaySpeed() = 0;
 		virtual void SetMesh(yunuGI::IMesh* mesh) = 0;
