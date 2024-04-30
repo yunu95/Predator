@@ -8,7 +8,7 @@
 /// 움직임과 다른 유닛과 충돌 했을 경우의 로직으로 구성된다.
 /// </summary>
 
-class SpecialEffect;
+class StatusEffect;
 
 class AutoAttackProjectile : public Component, public ContentsObservee
 {

@@ -11,6 +11,7 @@ void TauntingComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 
 	/// 도발 기능 추가
 	opponentUnit->ChangeCurrentOpponentUnitForced(ownerUnit);
+	opponentUnit->ReportStatusEffectApplied(StatusEffect::StatusEffectEnum::Taunted);
 
 	m_tauntTimer = StatusTimerPool::Instance().Borrow();
 
@@ -18,6 +19,7 @@ void TauntingComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 	m_tauntTimer->onCompleteFunction = [=]()
 	{
 		opponentUnit->DeleteTauntingUnit();
+		opponentUnit->ReportStatusEffectEnded(StatusEffect::StatusEffectEnum::Taunted);
 	};
 	m_tauntTimer->ActivateTimer();
 }

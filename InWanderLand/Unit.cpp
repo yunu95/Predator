@@ -13,6 +13,7 @@
 #include "BurnEffect.h"
 #include "CursorDetector.h"
 #include "DebuggingMeshPool.h"
+#include "StatusEffect.h"
 
 void Unit::OnEnable()
 {
@@ -1399,6 +1400,16 @@ void Unit::SetUnitStateIdle()
     {
         PlayerController::Instance().SetRightClickFunction();
     }
+}
+
+void Unit::ReportStatusEffectApplied(StatusEffect::StatusEffectEnum p_effectType)
+{
+
+}
+
+void Unit::ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType)
+{
+
 }
 
 void Unit::PermitTacticAction()

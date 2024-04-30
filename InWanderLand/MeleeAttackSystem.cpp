@@ -1,7 +1,7 @@
 #include "InWanderLand.h"
 #include "MeleeAttackSystem.h"
 #include "UnitProductor.h"
-#include "SpecialEffect.h"
+#include "StatusEffect.h"
 
 void MeleeAttackSystem::Attack(Unit* opponentUnit, float offset)
 {
@@ -73,7 +73,7 @@ void MeleeAttackSystem::SetColliderRemainTime(float time)
 	attackColliderRemainTime = time;
 }
 
-void MeleeAttackSystem::SetDirectAttackSpecialEffect(SpecialEffect* p_effect)
+void MeleeAttackSystem::SetDirectAttackSpecialEffect(StatusEffect* p_effect)
 {
 	m_specialEffect = p_effect;
 }

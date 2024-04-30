@@ -1106,7 +1106,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="SkillUpgradeSystem.h" />
     <ClInclude Include="SkillWarningSystem.h" />
     <ClInclude Include="SoundPlayingTimer.h" />
-    <ClInclude Include="SpecialEffectTrigger.h" />
+    <ClInclude Include="StatusEffectTrigger.h" />
     <ClInclude Include="SpecialEvent.h" />
     <ClInclude Include="SpikeSkillSystem.h" />
     <ClInclude Include="SpikeTrapProductor.h" />
@@ -1251,7 +1251,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UIPriorityLayout.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
-    <ClInclude Include="SpecialEffect.h" />
+    <ClInclude Include="StatusEffect.h" />
     <ClInclude Include="Unit_TemplateData.h" />
     <ClInclude Include="UrsulaSkillDevelopmentSystem.h" />
     <ClInclude Include="Action_WaitForSeconds.h" />
@@ -1377,7 +1377,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="SkillUpgradeSystem.cpp" />
     <ClCompile Include="SkillWarningSystem.cpp" />
     <ClCompile Include="SnippetBillboardSpriteAnim.cpp" />
-    <ClCompile Include="SpecialEffectTrigger.cpp" />
+    <ClCompile Include="StatusEffectTrigger.cpp" />
     <ClCompile Include="SpikeSkillSystem.cpp" />
     <ClCompile Include="SpikeTrapProductor.cpp" />
     <ClCompile Include="SpriteAnimation.cpp" />
@@ -1490,7 +1490,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="UnitEditorInstance.cpp" />
     <ClCompile Include="UnitPalette.cpp" />
-    <ClCompile Include="SpecialEffect.cpp" />
+    <ClCompile Include="StatusEffect.cpp" />
     <ClCompile Include="Unit_TemplateData.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObj.cpp" />
     <ClCompile Include="TestCaseD3D11LiveObjImgui.cpp" />

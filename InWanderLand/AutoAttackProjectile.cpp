@@ -3,7 +3,7 @@
 #include "Dotween.h"
 #include "AutoAttackProjectilePool.h"
 #include "Unit.h"
-#include "SpecialEffect.h"
+#include "StatusEffect.h"
 #include "PlayerController.h"
 #include <float.h>
 #include <cmath>

@@ -8,6 +8,7 @@ void ParalysisFieldComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 
 	m_onFieldUnitsMap.insert({ opponentUnit, true });
 
+	opponentUnit->ReportStatusEffectApplied(StatusEffect::StatusEffectEnum::Paralysis);
 	opponentUnit->MakeUnitParalysisState();
 
 	auto tempNavComponent = opponentUnit->GetGameObject()->GetComponent<NavigationAgent>();
@@ -20,6 +21,7 @@ void ParalysisFieldComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 			tempNavComponent->Relocate(GetTransform()->GetWorldPosition());
 
 			opponentUnit->MultipleUnitSpeed(1 / m_slowMultipleScale);
+			opponentUnit->ReportStatusEffectEnded(StatusEffect::StatusEffectEnum::Paralysis);
 			opponentUnit->SetUnitStateIdle();
 		});	
 }

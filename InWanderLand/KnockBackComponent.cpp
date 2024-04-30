@@ -23,6 +23,7 @@ void KnockBackComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
     if (!isAlreadyCrushed)
     {
         crushedUnitList.push_back(opponentUnit);
+        opponentUnit->ReportStatusEffectApplied(StatusEffect::StatusEffectEnum::KnockBack);
         opponentUnit->MakeUnitPushedState(true);
         opponentUnit->Damaged(ownerUnit, ownerUnit->DetermineAttackDamage(m_ap));
         opponentUnit->GetGameObject()->GetComponent<NavigationAgent>()->SetActive(false);
@@ -44,6 +45,7 @@ void KnockBackComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
             };
         opponentUnit->knockBackTimer->onCompleteFunction = [=]()
             {
+				opponentUnit->ReportStatusEffectEnded(StatusEffect::StatusEffectEnum::KnockBack);
                 opponentUnit->MakeUnitPushedState(false);
                 opponentUnit->DetermineCurrentTargetObject();
                 opponentUnit->GetGameObject()->GetComponent<NavigationAgent>()->SetActive(true);

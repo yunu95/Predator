@@ -7,6 +7,7 @@
 #include "RobinSkillDevelopmentSystem.h"
 #include "DummyComponent.h"
 #include "ContentsObservee.h"
+#include "StatusEffect.h"
 
 class UnitProductor;
 class SkillSystem;
@@ -311,6 +312,9 @@ public:
 	void MakeUnitPushedState(bool p_isCrushed);
 	void MakeUnitParalysisState();
 	void SetUnitStateIdle();
+
+	void ReportStatusEffectApplied(StatusEffect::StatusEffectEnum p_effectType);
+	void ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType);
 
 	void PermitTacticAction();
 
