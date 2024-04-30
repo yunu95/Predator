@@ -25,6 +25,7 @@ struct Vertex
     DirectX::SimpleMath::Vector3 pos;
     DirectX::SimpleMath::Vector4 color{ 1,1,1,1 };
     DirectX::SimpleMath::Vector2 uv;
+    DirectX::SimpleMath::Vector2 lightMapUV;
     DirectX::SimpleMath::Vector3 normal;
     DirectX::SimpleMath::Vector3 tangent;
     unsigned int indices[4]{ 0xffffffffu,0xffffffffu ,0xffffffffu ,0xffffffffu };

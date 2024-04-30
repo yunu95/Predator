@@ -43,7 +43,9 @@ void Animator::SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int fra
 
 void Animator::Play(yunuGI::IAnimation* animation)
 {
-	isPlay = true;
+	this->isCurAnimationPlay = true;
+
+	this->isPlay = true;
 
 	auto& gi = this->GetGI();
 
@@ -138,8 +140,11 @@ void Animator::Update()
 			desc.curr.sumTime += (desc.curr.speed * Time::GetDeltaTime());
 			if (desc.curr.sumTime >= currentAnimation->GetDuration())
 			{
+				this->isCurAnimationPlay = false;
+
 				if (currentAnimation->GetLoop())
 				{
+					this->isCurAnimationPlay = true;
 					desc.curr.sumTime = 0.f;
 				}
 			}
