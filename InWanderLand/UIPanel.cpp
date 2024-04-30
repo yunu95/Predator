@@ -1,8 +1,6 @@
 #include "UIPanel.h"
 #include "UIButton.h"
 #include "UIManager.h"
-#include "ContentsLayer.h"
-#include "Application.h"
 
 void UIPanel::SetWindowImage(yunutyEngine::graphics::UIImage* img)
 {
@@ -55,9 +53,6 @@ void UIPanel::SetCloseButtonActive(bool p_boolen)
 		};
 		m_closeImageObject->GetTransform()->SetWorldPosition({ m_windowImage->GetGameObject()->GetTransform()->GetWorldPosition().x + m_windowImage->GetGI().GetWidth() - m_closeButtonImage->GetWidth(),
 			m_windowImage->GetGameObject()->GetTransform()->GetWorldPosition().y, 0 });
-
-		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-		contentsLayer->RegisterToEditorObjectContainer(m_closeImageObject);
 	}
 }
 

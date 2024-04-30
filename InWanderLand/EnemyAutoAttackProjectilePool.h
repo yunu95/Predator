@@ -1,12 +1,10 @@
 #pragma once
 #include "GameObjectPool.h"
 #include "EnemyAutoAttackProjectile.h"
-#include "ContentsLayer.h"
-#include "Application.h"
-#include "LazySingletonClass.h"
+#include "ContentsObservee.h"
 
 class EnemyAutoAttackProjectilePool :
-	public GameObjectPool<EnemyAutoAttackProjectile>, public GHContents::LazySingletonClass<EnemyAutoAttackProjectilePool>
+	public GameObjectPool<EnemyAutoAttackProjectile>, public Component, public SingletonComponent<EnemyAutoAttackProjectilePool>, public ContentsObservee
 {
 public:
 	virtual void ObjectInitializer(EnemyAutoAttackProjectile* projectile) override
@@ -19,9 +17,29 @@ public:
 		projectileComponent->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 1, 0.25f, 0 });
 
 		projectile->GetGameObject()->AddComponent<Dotween>();
-
-		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-		contentsLayer->RegisterToEditorObjectContainer(projectile->GetGameObject());
 	}
+	virtual void Start() override;
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
 };
+
+void EnemyAutoAttackProjectilePool::Start()
+{
+	isSingletonComponent = true;
+}
+
+void EnemyAutoAttackProjectilePool::PlayFunction()
+{
+	this->SetActive(true);
+	if (isOncePaused)
+	{
+		Start();
+	}
+}
+
+void EnemyAutoAttackProjectilePool::StopFunction()
+{
+	poolObjects.clear();
+	expendableObjects.clear();
+}
 

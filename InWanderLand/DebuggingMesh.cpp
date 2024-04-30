@@ -27,6 +27,18 @@ void DebuggingMesh::PopMeshUP(yunuGI::Color p_color, MaterialNum p_matNum)
 	isPopStarted = true;
 }
 
+void DebuggingMesh::PlayFunction()
+{
+	//this->SetActive(true);
+	//Start();
+}
+
+void DebuggingMesh::StopFunction()
+{
+	if (GetGameObject()->GetSelfActive())
+		GetGameObject()->SetSelfActive(false);
+}
+
 void DebuggingMesh::Start()
 {
 	y = GetGameObject()->GetTransform()->GetLocalPosition().y;
@@ -51,7 +63,7 @@ void DebuggingMesh::Update()
 			m_Yincreasement = 0.0f;
 			isPopStarted = false;
 			m_staticMeshRendererComp->SetActive(false);
-			DebuggingMeshPool::SingleInstance().Return(this);
+			DebuggingMeshPool::Instance().Return(this);
 		}
 	}
 }

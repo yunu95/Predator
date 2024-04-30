@@ -1,10 +1,11 @@
 #pragma once
 #include "YunutyEngine.h"
+#include "ContentsObservee.h"
 
 class RTSCam;
 class PlaytimeWave;
 
-class GameManager : public Component, public SingletonComponent<GameManager>
+class GameManager : public Component, public SingletonComponent<GameManager>, public ContentsObservee
 {
 private:
 	bool isBattleModeOn = false;
@@ -28,6 +29,9 @@ private:
 public:
 	virtual void Start() override;
 	virtual void Update() override;
+
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
 
 	void EngageBattle();
 	void EndBattle();

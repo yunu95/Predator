@@ -8,6 +8,11 @@
 #include "GameManager.h"
 #include "CursorDetector.h"
 
+void PlayerController::Start()
+{
+	isSingletonComponent = true;
+}
+
 void PlayerController::SetMovingSystemComponent(RTSCam* sys)
 {
     m_movingSystemComponent = sys;
@@ -22,6 +27,27 @@ void PlayerController::AddPlayerUnit(Unit* p_playerUnit)
 void PlayerController::ErasePlayerUnit(Unit* p_playerUnit)
 {
     playerComponentMap.erase(p_playerUnit->GetUnitType());
+}
+
+void PlayerController::PlayFunction()
+{
+	this->SetActive(true);
+	if (isOncePaused)
+	{
+		Start();
+	}
+}
+
+void PlayerController::StopFunction()
+{
+    SetActive(false);
+    playerComponentMap.clear();
+    m_movingSystemComponent = nullptr;
+    m_dotween = nullptr;
+    m_cursorDetector = nullptr;
+    currentSelectedSerialNumber = Unit::UnitType::Warrior;
+    previousSerialNumber = 0;
+    lookRotationDuration = 0.1f;
 }
 
 void PlayerController::SetRightClickFunction()

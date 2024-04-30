@@ -83,9 +83,6 @@ namespace application
             regionGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
             regionGameObject->GetTransform()->SetWorldPosition(Vector3d(pod.x, 1.0f, pod.z));
             regionGameObject->GetTransform()->SetWorldRotation(Vector3d(0, pod.angle, 0));
-
-			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-			contentsLayer->RegisterToEditorObjectContainer(regionGameObject);
         }
 
         bool RegionData::PreSaveCallback()

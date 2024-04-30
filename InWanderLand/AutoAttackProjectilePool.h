@@ -3,11 +3,9 @@
 #include "GameObjectPool.h"
 #include "DebugMeshes.h"
 #include "StaticMeshRenderer.h"
-#include "ContentsLayer.h"
-#include "Application.h"
-#include "LazySingletonClass.h"
+#include "ContentsObservee.h"
 
-class AutoAttackProjectilePool : public GameObjectPool<AutoAttackProjectile>, public GHContents::LazySingletonClass<AutoAttackProjectilePool>
+class AutoAttackProjectilePool : public GameObjectPool<AutoAttackProjectile>, public Component, public SingletonComponent<AutoAttackProjectilePool>, public ContentsObservee
 {	
 public:
 	virtual void ObjectInitializer(AutoAttackProjectile* projectile) override 
@@ -18,9 +16,29 @@ public:
 
 		auto projectileComponent = projectile->GetGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		projectileComponent->GetGI().SetMesh(capsuleMesh);
-		projectileComponent->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::green(), false));
-	
-		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-		contentsLayer->RegisterToEditorObjectContainer(projectile->GetGameObject());
+		projectileComponent->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::green(), false));	
 	}
+	virtual void Start() override;
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
 };
+
+void AutoAttackProjectilePool::Start()
+{
+	isSingletonComponent = true;
+}
+
+void AutoAttackProjectilePool::PlayFunction()
+{
+	this->SetActive(true);
+	if (isOncePaused)
+	{
+		Start();
+	}
+}
+
+void AutoAttackProjectilePool::StopFunction()
+{
+	poolObjects.clear();
+	expendableObjects.clear();
+}

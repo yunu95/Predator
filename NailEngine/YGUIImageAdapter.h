@@ -40,6 +40,10 @@ namespace yunuGIAdapter
             return true;
         }
 
+        virtual yunuGI::ITexture* GetImage() override
+        {
+            return renderable->GetTexture();
+        }
         virtual void SetImage(yunuGI::ITexture* texture)
         {
             renderable->SetTexture(texture);

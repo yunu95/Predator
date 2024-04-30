@@ -20,8 +20,6 @@
 #include "RangedEnemyPool.h"
 #include "MeleeEnemyPool.h"
 #include "GameManager.h"
-#include "Application.h"
-#include "ContentsLayer.h"
 #include "ShortcutSystem.h"
 #include "PlaytimeWave.h"
 #include "BurnEffect.h"
@@ -124,7 +122,6 @@ namespace application
             // 타입을 확장하여 유닛 생성 로직에서 같이 처리할 수 있게 만들 수 있다.
             //UnitClassifier::SingleInstance().SendPODToClassifier(pod);
             pod.waveData->pod.waveUnitUUIDS;
-			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
             /// 2024.03.20 추가
             // 이제 templateData에서 UnitType에 대한 int값을 가져올 수 있다.
             // 이 값을 통해 타입을 분류해 유닛을 배치해보자.
@@ -145,13 +142,12 @@ namespace application
                 isSelectorInitialized = true;
             }
 
-            if (contentsLayer->isStoppedOnce && isSelectorInitialized)
+            if (isSelectorInitialized)
             {
                 for (auto e : productorSelector)
                 {
                     e->SetUnitData();
                 }
-                contentsLayer->isStoppedOnce = false;
             }
 
             UnitProductor* currentSelectedProductor{ nullptr };
@@ -165,7 +161,6 @@ namespace application
                     currentSelectedProductor = &SpikeTrapProductor::Instance();
                     currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                     inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-                    contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
                 }
                 else if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::ChessTrap)
                 {
@@ -183,23 +178,21 @@ namespace application
                     }
                     currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                     inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-                    contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
                 }
                 else
                 {
                     currentSelectedProductor = &MeleeEnemyProductor::Instance();
                     currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-                    MeleeEnemyPool::SingleInstance().SetStageNumber(pod.stage);
-                    MeleeEnemyPool::SingleInstance().SetStartPosition(startPosition);
+                    MeleeEnemyPool::Instance().SetStageNumber(pod.stage);
+                    MeleeEnemyPool::Instance().SetStartPosition(startPosition);
 
                     if (pod.templateData->pod.isEliteMonster == true)
                     {
 						inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
                         inGameUnit->GetGameObject()->GetComponent<BurnEffect>()->Appear();
-						contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
                     }
                     else
-						inGameUnit = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+						inGameUnit = MeleeEnemyPool::Instance().Borrow()->m_pairUnit;
 
                     tempShortCutIndex = 2;
                 }
@@ -208,16 +201,15 @@ namespace application
             {
                 currentSelectedProductor = &RangedEnemyProductor::Instance();
                 currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-                RangedEnemyPool::SingleInstance().SetStartPosition(startPosition);
+                RangedEnemyPool::Instance().SetStartPosition(startPosition);
 
 				if (pod.templateData->pod.isEliteMonster == true)
 				{
 					inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
 					inGameUnit->GetGameObject()->GetComponent<BurnEffect>()->Appear();
-					contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
 				}
 				else
-					inGameUnit = RangedEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+					inGameUnit = RangedEnemyPool::Instance().Borrow()->m_pairUnit;
 
                 tempShortCutIndex = 2;
             }
@@ -245,7 +237,6 @@ namespace application
 
                 currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                 inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-                contentsLayer->RegisterToEditorObjectContainer(inGameUnit->GetGameObject());
             }
 		}
 

@@ -2,7 +2,6 @@
 #include "YunutyEngine.h"
 #include "InputManager.h"
 #include "Unit.h"
-#include "LazySingletonClass.h"
 #include <unordered_map>
 
 /// <summary>

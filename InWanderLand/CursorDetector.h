@@ -1,9 +1,10 @@
 #pragma once
 #include "YunutyEngine.h"
+#include "ContentsObservee.h"
 
 class Unit;
 
-class CursorDetector : public Component, public SingletonComponent<CursorDetector>
+class CursorDetector : public Component, public ContentsObservee
 {
 public:
 	virtual void OnTriggerEnter(physics::Collider* collider) override;
@@ -11,6 +12,9 @@ public:
 
 	virtual void Start() override;
 	virtual void Update() override;
+
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
 
 	void EraseUnitFromContainer(Unit* p_unit);
 

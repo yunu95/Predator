@@ -7,6 +7,12 @@
 #include "ContentsLayer.h"
 #include "UIElement.h"
 #include "UIOffsetTransition.h"
+#include "FloatFollower.h"
+#include "PulsingUI.h"
+#include "UIPriorityLayout.h"
+#include "SoundPlayingTimer.h"
+#include "InWanderLand.h"
+#include "SkillUpgradeSystem.h"
 #include <fstream>
 
 using namespace yunutyEngine::graphics;
@@ -16,14 +22,6 @@ void UIManager::Clear()
     m_currentHighestLayer = -1;
     m_selectedButtons.clear();
 }
-//void UIManager::FadeInVertical()
-//{
-//    UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_TopToButtom)->EnableElement();
-//}
-//void UIManager::FadeInHorizontal()
-//{
-//    UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft)->EnableElement();
-//}
 void UIManager::FadeOutRight(float duration)
 {
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight); !elm->GetGameObject()->GetActive())
@@ -85,15 +83,15 @@ void UIManager::SetIngameUIVisible(bool visible)
     {
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->EnableElement();
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo)->EnableElement();
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Description)->EnableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Bottom)->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Top)->DisableElement();
     }
     else
     {
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->DisableElement();
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo)->DisableElement();
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Description)->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Bottom)->EnableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Top)->EnableElement();
     }
 }
 
@@ -143,6 +141,7 @@ UIElement* UIManager::GetUIElementByEnum(UIEnumID uiEnumID)
 {
     if (uisByEnumID.find(uiEnumID) != uisByEnumID.end())
         return uisByEnumID[uiEnumID];
+    assert(false);
     return nullptr;
 }
 
@@ -187,8 +186,8 @@ void UIManager::ImportUI(const char* path)
             auto uiElement = uiObject->AddComponent<UIElement>();
             if (uiData.enumID != 0)
                 uisByEnumID[(UIEnumID)uiData.enumID] = uiElement;
-            uisByName[uiData.uiname] = uiElement;
-            uidatasByName[uiData.uiname] = uiData;
+            uisByIndex[uiData.uiIndex] = uiElement;
+            uidatasByIndex[uiData.uiIndex] = uiData;
 
             if (ImportDealWithSpecialCases(uiData, uiElement) == false)
             {
@@ -202,10 +201,10 @@ void UIManager::ImportUI(const char* path)
             auto key = each.key();
             JsonUIData uiData;
             application::FieldPreDecoding<boost::pfr::tuple_size_v<JsonUIData>>(uiData, each.value());
-            uidatasByName[uiData.uiname] = uiData;
-            if (ImportDealWithSpecialCases_Post(uiData, uisByName[uiData.uiname]) == false)
+            uidatasByIndex[uiData.uiIndex] = uiData;
+            if (ImportDealWithSpecialCases_Post(uiData, uisByIndex[uiData.uiIndex]) == false)
             {
-                ImportDefaultAction_Post(uiData, uisByName[uiData.uiname]);
+                ImportDefaultAction_Post(uiData, uisByIndex[uiData.uiIndex]);
             }
             uiImportingPriority++;
         }
@@ -215,6 +214,7 @@ void UIManager::ImportUI(const char* path)
 // JsonUIData만으로 UI를 생성합니다.
 void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element)
 {
+    digitFonts.clear();
     auto uiObject = element->GetGameObject();
     auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
     UIImage* uiImageComponent{ nullptr };
@@ -237,26 +237,68 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         uiImageComponent->GetGI().SetXPivot(uiData.pivot[0]);
         uiImageComponent->GetGI().SetYPivot(1 - uiData.pivot[1]);
         uiImageComponent->GetGI().SetLayer(uiImportingPriority);
+        uiImageComponent->GetGI().SetColor(yunuGI::Color{ uiData.color[0],uiData.color[1],uiData.color[2],uiData.color[3] });
 
-        uiButtonComponent = element->button = uiObject->AddComponent<UIButton>();
-        uiButtonComponent->SetImageComponent(uiImageComponent);
-        uiButtonComponent->SetIdleImage(idleTexture);
-        uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+        if (!(uiData.customFlags & (int)UIExportFlag::NoOverlaying))
+        {
+            uiButtonComponent = element->button = uiObject->AddComponent<UIButton>();
+            uiButtonComponent->SetImageComponent(uiImageComponent);
+            uiButtonComponent->SetIdleImage(idleTexture);
+            //uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+        }
+        else
+        {
+            //int a = 3;
+        }
     }
-    // 만약 버튼이라면...
-    if (uiData.customFlags & (int)UIExportFlag::IsButton)
+    if (uiData.customFlags & (int)UIExportFlag::CanAdjustHeight)
     {
-        uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
+        assert(!element->adjuster);
+        element->adjuster = uiObject->AddComponent<FloatFollower>();
+        element->adjuster->SetFollowingRate(uiData.adjustingRate);
+        element->adjuster->applier = [=](float val)
+            {
+                uiImageComponent->GetGI().SetHeight(val * uiData.height);
+            };
+    }
+    if (uiData.customFlags & (int)UIExportFlag::CanAdjustWidth)
+    {
+        assert(!element->adjuster);
+        element->adjuster = uiObject->AddComponent<FloatFollower>();
+        element->adjuster->SetFollowingRate(uiData.adjustingRate);
+        element->adjuster->applier = [=](float val)
+            {
+                uiImageComponent->GetGI().SetWidth(val * uiData.width);
+            };
+    }
+    if (uiData.customFlags & (int)UIExportFlag::CanAdjustRadialFill)
+    {
+        assert(!element->adjuster);
+        // 위를 덮어씌우는 이미지
+        element->imageComponent->GetGI().SetRadialFillMode(true);
+        element->imageComponent->GetGI().SetRadialFillDegree(0);
+        element->imageComponent->GetGI().SetRadialFillDirection(false);
+        element->imageComponent->GetGI().SetRadialFillStartPoint(0, 1);
+        element->adjuster = uiObject->AddComponent<FloatFollower>();
+        element->adjuster->SetFollowingRate(uiData.adjustingRate);
+        element->adjuster->applier = [=](float val)
+            {
+                element->imageComponent->GetGI().SetRadialFillDegree(val * 360);
+            };
+    }
+    if (uiData.customFlags & (int)UIExportFlag::IsDigitFont)
+    {
+        digitFonts[element] = std::array<yunuGI::ITexture*, 10>{};
     }
 
     Vector3d pivotPos{ 0,0,0 };
     // offset by anchor
     Vector3d parentSize{ 1920, 1080, 0 };
     Vector2d parentPivot{ 0.0,0.0 };
-    if (uiData.parentUIName != "")
+    if (uiData.parentUIIndex != -1)
     {
-        auto parentData = uidatasByName[uiData.parentUIName];
-        auto parent = uisByName[uiData.parentUIName]->GetGameObject();
+        auto parentData = uidatasByIndex[uiData.parentUIIndex];
+        auto parent = uisByIndex[uiData.parentUIIndex]->GetGameObject();
         parentSize.x = parentData.width;
         parentSize.y = parentData.height;
         parentPivot.x = parentData.pivot[0];
@@ -277,87 +319,93 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
 void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* element)
 {
     UIButton* button{ element->button };
+    transform(element->GetGameObject()->GetChildren().begin(), element->GetGameObject()->GetChildren().end(), back_inserter(element->children), [](auto each) {return each->GetComponent<UIElement>(); });
     // 만약 닫기 버튼이라면...
     if (uiData.customFlags & (int)UIExportFlag::CloseButton)
     {
+        vector<UIElement*> closeTargets;
+        std::transform(uiData.closeTargets.begin(), uiData.closeTargets.end(), std::back_inserter(closeTargets), [=](int id) {return uisByIndex[id]; });
         button->AddButtonClickFunction([=]()
             {
-                if (auto parent = button->GetGameObject()->GetParentGameObject())
+                for (auto each : closeTargets)
                 {
-                    if (auto elem = parent->GetComponent<UIElement>())
-                    {
-                        elem->DisableElement();
-                    }
+                    each->DisableElement();
                 }
             });
     }
     // 만약 열기 버튼이라면...
     if (uiData.customFlags & (int)UIExportFlag::OpeningButton)
     {
-        auto openTarget = uisByName[uiData.openTarget];
-        assert(openTarget);
+        vector<UIElement*> openTargets;
+        std::transform(uiData.openTargets.begin(), uiData.openTargets.end(), std::back_inserter(openTargets), [=](int id) {return uisByIndex[id]; });
         if (uiData.customFlags & (int)UIExportFlag::IsToggle)
         {
-            button->AddButtonClickFunction([=]()
+            button->AddButtonClickFunction([targets = std::move(openTargets)]()
                 {
-                    if (!openTarget->GetGameObject()->GetSelfActive())
+                    for (auto openTarget : targets)
                     {
-                        openTarget->EnableElement();
-                    }
-                    else
-                    {
-                        openTarget->DisableElement();
+                        if (!openTarget->GetGameObject()->GetSelfActive())
+                        {
+                            openTarget->EnableElement();
+                        }
+                        else
+                        {
+                            openTarget->DisableElement();
+                        }
                     }
                 });
         }
         else
         {
-            button->AddButtonClickFunction([=]()
+            button->AddButtonClickFunction([targets = std::move(openTargets)]()
                 {
-                    openTarget->EnableElement();
+                    for (auto openTarget : targets)
+                    {
+                        openTarget->EnableElement();
+                    }
                 });
         }
     }
     // 만약 Disabling button이라면...
-    if (uiData.customFlags & (int)UIExportFlag::DiablingButton)
+    if (uiData.customFlags & (int)UIExportFlag::CloseButton)
     {
-        auto disablingTarget = uisByName[uiData.disablingTarget];
-        assert(disablingTarget);
-        button->AddButtonClickFunction([=]()
+        vector<UIElement*> closeTargets;
+        std::transform(uiData.closeTargets.begin(), uiData.closeTargets.end(), std::back_inserter(closeTargets), [=](int id) {return uisByIndex[id]; });
+        button->AddButtonClickFunction([targets = std::move(closeTargets)]()
             {
-                disablingTarget->DisableElement();
+                for (auto closeTarget : targets)
+                {
+                    assert(closeTarget);
+                    closeTarget->DisableElement();
+                }
             });
     }
     static constexpr int priority_Tooltip = 123456789;
     // 만약 툴팁을 포함하는 UI라면...
     if (uiData.customFlags & (int)UIExportFlag::IsIncludingTooltips)
     {
-        for (auto each : button->GetGameObject()->GetChildren())
+        vector<UIElement*> tooltipTargets;
+        std::transform(uiData.hoverEnableTargets.begin(), uiData.hoverEnableTargets.end(), std::back_inserter(tooltipTargets), [&](int idx) {return uisByIndex[idx]; });
+        for (auto each : tooltipTargets)
         {
-            each->SetSelfActive(false);
-            if (auto img = each->GetComponent<UIImage>())
+            each->GetGameObject()->SetSelfActive(false);
+            if (auto img = each->imageComponent)
             {
                 img->GetGI().SetLayer(priority_Tooltip);
             }
         }
-        button->m_OnMouseEventFunction = [=]()
+        button->AddButtonOnMouseFunction([=]()
             {
-                for (auto each : button->GetGameObject()->GetChildren())
+                for (auto each : tooltipTargets)
                 {
-                    if (auto elem = each->GetComponent<UIElement>())
-                    {
-                        elem->EnableElement();
-                    }
+                    each->EnableElement();
                 }
-            };
+            });
         button->m_onMouseExitFunction = [=]()
             {
-                for (auto each : button->GetGameObject()->GetChildren())
+                for (auto each : tooltipTargets)
                 {
-                    if (auto elem = each->GetComponent<UIElement>())
-                    {
-                        elem->DisableElement();
-                    }
+                    each->DisableElement();
                 }
             };
     }
@@ -365,7 +413,28 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     if (uiData.customFlags & (int)UIExportFlag::IsPoppingUp)
     {
         element->scalePopUpTransition = element->GetGameObject()->AddComponent<PopupOnEnable>();
+        element->scalePopUpTransition->m_duration = uiData.popUpDuration;
+        element->scalePopUpTransition->x = uiData.popUpX;
+        element->scalePopUpTransition->y = uiData.popUpY;
+        element->scalePopUpTransition->z = uiData.popUpZ;
         element->scalePopUpTransition->Init();
+    }
+    if (uiData.customFlags & (int)UIExportFlag::IsPoppingDown)
+    {
+        element->scalePopDownTransition = element->GetGameObject()->AddComponent<PopDownOnDisable>();
+        element->scalePopDownTransition->m_duration = uiData.popDownDuration;
+        element->scalePopDownTransition->x = uiData.popDownX;
+        element->scalePopDownTransition->y = uiData.popDownY;
+        element->scalePopDownTransition->z = uiData.popDownZ;
+        element->scalePopDownTransition->Init();
+    }
+    if (uiData.customFlags & (int)UIExportFlag::IsPulsing)
+    {
+        auto pulsingUI = element->GetGameObject()->AddComponent<PulsingUI>();
+        pulsingUI->m_duration = uiData.pulsingPeriod;
+        pulsingUI->pulsingMin = uiData.pulsingMin;
+        pulsingUI->pulsingMax = uiData.pulsingMax;
+        pulsingUI->Init();
     }
     if (uiData.customFlags & (int)UIExportFlag::IsTranslatingOnEnable)
     {
@@ -376,6 +445,103 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     {
         element->disableTransition = element->GetGameObject()->AddComponent<UIOffsetTransition>();
         element->disableTransition->Init(uiData, false);
+    }
+    if (uiData.customFlags & (int)UIExportFlag::PlaySoundOnClick)
+    {
+        element->soundOnClick = element->GetGameObject()->AddComponent<SoundPlayingTimer>();
+        element->soundOnClick->soundPath = uiData.soundOnClick;
+        element->soundOnClick->m_duration = uiData.soundOnClick_delay;
+        element->button->AddButtonClickFunction([=]()
+            {
+                element->soundOnClick->ActivateTimer();
+            });
+    }
+    if (uiData.customFlags & (int)UIExportFlag::PlaySoundOnHover)
+    {
+        element->soundOnHover = element->GetGameObject()->AddComponent<SoundPlayingTimer>();
+        element->soundOnHover->soundPath = uiData.soundOnHover;
+        element->soundOnHover->m_duration = uiData.soundOnHover_delay;
+        element->button->AddButtonOnMouseFunction([=]()
+            {
+                element->soundOnHover->ActivateTimer();
+            });
+        element->soundOnHover->Init();
+    }
+    if (uiData.customFlags & (int)UIExportFlag::PlaySoundOnEnable)
+    {
+        element->soundOnEnable = element->GetGameObject()->AddComponent<SoundPlayingTimer>();
+        element->soundOnEnable->soundPath = uiData.soundOnEnable;
+        element->soundOnEnable->m_duration = uiData.soundOnEnable_delay;
+        element->soundOnEnable->Init();
+    }
+    if (uiData.customFlags & (int)UIExportFlag::PlaySoundOnDisable)
+    {
+        element->soundOnDisable = element->GetGameObject()->AddComponent<SoundPlayingTimer>();
+        element->soundOnDisable->soundPath = uiData.soundOnDisable;
+        element->soundOnDisable->m_duration = uiData.soundOnDisable_delay;
+        element->soundOnDisable->Init();
+    }
+    if (uiData.customFlags & (int)UIExportFlag::PriorityLayout)
+    {
+        element->priorityLayout = element->GetGameObject()->AddComponent<UIPriorityLayout>();
+        for (auto each : element->GetGameObject()->GetChildren())
+        {
+            if (auto child = each->GetComponent<UIElement>())
+            {
+                child->parentPriorityLayout = element->priorityLayout;
+            }
+            element->priorityLayout->positions.push_back(each->GetTransform()->GetLocalPosition());
+        }
+    }
+    if (uiData.customFlags & (int)UIExportFlag::IsNumber)
+    {
+        element->digitFont = &digitFonts[uisByIndex[uiData.numberFontSet]];
+        std::transform(uiData.numberDigits.begin(), uiData.numberDigits.end(), std::back_inserter(element->digits), [=](int id) {return uisByIndex[id]; });
+    }
+    if (uiData.customFlags & (int)UIExportFlag::IsDigitFont)
+    {
+        int number = 0;
+        for (auto each : element->GetGameObject()->GetChildren())
+        {
+            if (auto img = each->GetComponent<UIImage>())
+            {
+                digitFonts[element][number++] = img->GetGI().GetImage();
+            }
+        }
+    }
+    if (uiData.customFlags & (int)UIExportFlag::IsSkillUpgrade)
+    {
+        UIEnumID upgradeID{ static_cast<UIEnumID>(uiData.enumID) };
+        UIEnumID dependentUpgrade{ UIEnumID::None };
+        if (uiData.dependentUpgrade >= 0)
+        {
+            dependentUpgrade = static_cast<UIEnumID>(uidatasByIndex[uiData.dependentUpgrade].enumID);
+        }
+        element->button->AddButtonClickFunction([=]()
+            {
+                if (SkillUpgradeSystem::SingleInstance().IsUpgraded(static_cast<UIEnumID>(uiData.enumID)))
+                {
+                    return;
+                }
+
+                if (SkillUpgradeSystem::SingleInstance().GetSkillPoints() <= 0)
+                {
+                    GetUIElementByEnum(UIEnumID::PopUpMessage_NotEnoughSP)->EnableElement();
+                }
+                else
+                {
+                    // 선행 업그레이드까지 완료된 경우 허락창을 띄운다.
+                    if (dependentUpgrade == UIEnumID::None || SkillUpgradeSystem::SingleInstance().IsUpgraded(dependentUpgrade))
+                    {
+                        SkillUpgradeSystem::SingleInstance().SetUpgradeTarget(upgradeID);
+                        GetUIElementByEnum(UIEnumID::PopUpMessage_PermissionForUpgrade)->EnableElement();
+                    }
+                    else
+                    {
+                        GetUIElementByEnum(UIEnumID::PopUpMessage_RequirementNotMet)->EnableElement();
+                    }
+                }
+            });
     }
     // 초기 상태가 비활성화 상태라면...
     if (uiData.customFlags & (int)UIExportFlag::DisableOnStart)
@@ -389,73 +555,80 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
     switch ((UIEnumID)uiData.enumID)
     {
     case UIEnumID::Portrait_Robin:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().SelectPlayer(Unit::UnitType::Warrior);
             });
         break;
     case UIEnumID::Portrait_Ursula:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().SelectPlayer(Unit::UnitType::Magician);
             });
         break;
     case UIEnumID::Portrait_Hansel:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().SelectPlayer(Unit::UnitType::Healer);
             });
         break;
     case UIEnumID::Skill_Use_Q_Robin:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Warrior);
             });
         break;
     case UIEnumID::Skill_Use_W_Robin:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Warrior);
             });
         break;
     case UIEnumID::Skill_Use_Q_Ursula:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Magician);
             });
         break;
     case UIEnumID::Skill_Use_W_Ursula:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Magician);
             });
         break;
     case UIEnumID::Skill_Use_Q_HANSEL:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Healer);
             });
         break;
     case UIEnumID::Skill_Use_W_HANSEL:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Healer);
             });
         break;
     case UIEnumID::Toggle_TacticMode:
-        ImportDefaultAction(uiData, uisByName[uiData.uiname]);
-        element->button->SetButtonClickFunction([=]()
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
             {
                 InputManager::Instance().ToggleTacticMode();
+            });
+        break;
+    case UIEnumID::PopUpMessage_PermissionForUpgradeProceedButton:
+        ImportDefaultAction(uiData, uisByIndex[uiData.uiIndex]);
+        element->button->AddButtonClickFunction([=]()
+            {
+                SkillUpgradeSystem::SingleInstance().UpgradeSkill();
             });
         break;
     default:

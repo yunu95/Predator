@@ -367,9 +367,6 @@
     <Filter Include="Contents\Containers\GameObjectContainer">
       <UniqueIdentifier>{acd31600-7478-4ec2-825b-24a79ac266e8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\Containers\SingletonInstanceContainer">
-      <UniqueIdentifier>{7f68797a-b5d4-4fc8-a674-f9ce87bc3fc2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="DevelopmentSupportSystem">
       <UniqueIdentifier>{a4b24e4c-87c4-4bd3-8d5d-cdba26aa9f71}</UniqueIdentifier>
     </Filter>
@@ -502,6 +499,27 @@
     <Filter Include="Editor\Palette\EditorInstance\ParticleInstance">
       <UniqueIdentifier>{448f4299-89d9-4f1d-b550-ce3b9011c33c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\Effect\PopDownOnDisable">
+      <UniqueIdentifier>{b62d9dc2-160d-41aa-9ccf-367fba43594b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Effect\PulsingUI">
+      <UniqueIdentifier>{0893b206-0157-4a0c-8756-2a56d755c06f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\UIElementController">
+      <UniqueIdentifier>{53a2964c-2e07-465e-9d48-1b78c5e17382}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Effect\SoundPlayingTimer">
+      <UniqueIdentifier>{a70fc475-5aaf-4f9b-8533-f08a2f8c8ef9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\UIElementController\UIPriorityLayout">
+      <UniqueIdentifier>{b8f0c499-e52f-475f-bab8-97e4546baef6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\SkillSystem\SkillUpgradeSystem">
+      <UniqueIdentifier>{817118ef-6fb6-4833-928d-b892cbf0627f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ContentsObserber">
+      <UniqueIdentifier>{d2484403-98a3-4199-b5bd-4785dca8fb9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -548,9 +566,6 @@
     </ClInclude>
     <ClInclude Include="PeriodicAction.h">
       <Filter>TestCodes\TestUtils\PeriodicAction</Filter>
-    </ClInclude>
-    <ClInclude Include="ShakyCam.h">
-      <Filter>Contents</Filter>
     </ClInclude>
     <ClInclude Include="EditorLayer.h">
       <Filter>Editor</Filter>
@@ -683,9 +698,6 @@
     </ClInclude>
     <ClInclude Include="HealerProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
-    </ClInclude>
-    <ClInclude Include="UnitFactory.h">
-      <Filter>Contents\UnitFactory</Filter>
     </ClInclude>
     <ClInclude Include="RangeSystem.h">
       <Filter>Contents\RangeSystem</Filter>
@@ -1051,14 +1063,8 @@
     <ClInclude Include="PlayTimeRegionManager.h">
       <Filter>Contents\PlaytimeRegion</Filter>
     </ClInclude>
-    <ClInclude Include="LazySingletonClass.h">
-      <Filter>Contents\LazySingleton</Filter>
-    </ClInclude>
     <ClInclude Include="GameObjectContainer.h">
       <Filter>Contents\Containers\GameObjectContainer</Filter>
-    </ClInclude>
-    <ClInclude Include="SingletonInstanceContainer.h">
-      <Filter>Contents\Containers\SingletonInstanceContainer</Filter>
     </ClInclude>
     <ClInclude Include="ShortcutSystem.h">
       <Filter>DevelopmentSupportSystem</Filter>
@@ -1291,8 +1297,32 @@
     <ClInclude Include="ParticleEditorInstance.h">
       <Filter>Editor\Palette\EditorInstance\ParticleInstance</Filter>
     </ClInclude>
+    <ClInclude Include="PopDownOnDisable.h">
+      <Filter>UI\Effect\PopDownOnDisable</Filter>
+    </ClInclude>
+    <ClInclude Include="PulsingUI.h">
+      <Filter>UI\Effect\PulsingUI</Filter>
+    </ClInclude>
     <ClInclude Include="CursorDetector.h">
       <Filter>Contents\AttackSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundPlayingTimer.h">
+      <Filter>UI\Effect\SoundPlayingTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="UIPriorityLayout.h">
+      <Filter>UI\UIElementController\UIPriorityLayout</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillUpgradeSystem.h">
+      <Filter>Contents\SkillSystem\SkillUpgradeSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsObservee.h">
+      <Filter>Contents\ContentsObserber</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsObserver.h">
+      <Filter>Contents\ContentsObserber</Filter>
+    </ClInclude>
+    <ClInclude Include="ObserveeHelper.h">
+      <Filter>Contents\ContentsObserber</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1309,9 +1339,6 @@
       <Filter>RoamingCam</Filter>
     </ClCompile>
     <ClCompile Include="ContentsLayer.cpp">
-      <Filter>Contents</Filter>
-    </ClCompile>
-    <ClCompile Include="ShakyCam.cpp">
       <Filter>Contents</Filter>
     </ClCompile>
     <ClCompile Include="EditorLayer.cpp">
@@ -1427,9 +1454,6 @@
     </ClCompile>
     <ClCompile Include="HealerProductor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
-    </ClCompile>
-    <ClCompile Include="UnitFactory.cpp">
-      <Filter>Contents\UnitFactory</Filter>
     </ClCompile>
     <ClCompile Include="RangeSystem.cpp">
       <Filter>Contents\RangeSystem</Filter>
@@ -1556,9 +1580,6 @@
     </ClCompile>
     <ClCompile Include="MagicianAutoAttackProjectile.cpp">
       <Filter>Contents\ProjectileComponents\Magician\Passive</Filter>
-    </ClCompile>
-    <ClCompile Include="AutoAttackProjectilePool.cpp">
-      <Filter>Contents\ProjectilePools</Filter>
     </ClCompile>
     <ClCompile Include="imgui_widgets.cpp">
       <Filter>Editor\imgui</Filter>
@@ -1795,9 +1816,6 @@
     <ClCompile Include="GameObjectContainer.cpp">
       <Filter>Contents\Containers\GameObjectContainer</Filter>
     </ClCompile>
-    <ClCompile Include="SingletonInstanceContainer.cpp">
-      <Filter>Contents\Containers\SingletonInstanceContainer</Filter>
-    </ClCompile>
     <ClCompile Include="ShortcutSystem.cpp">
       <Filter>DevelopmentSupportSystem</Filter>
     </ClCompile>
@@ -1969,8 +1987,38 @@
     <ClCompile Include="ParticleEditorInstance.cpp">
       <Filter>Editor\Palette\EditorInstance\ParticleInstance</Filter>
     </ClCompile>
+    <ClCompile Include="PulsingUI.cpp">
+      <Filter>UI\Effect\PulsingUI</Filter>
+    </ClCompile>
+    <ClCompile Include="PopupOnEnable.cpp">
+      <Filter>UI\Effect\PopupOnEnable</Filter>
+    </ClCompile>
+    <ClCompile Include="PopDownOnDisable.cpp">
+      <Filter>UI\Effect\PopDownOnDisable</Filter>
+    </ClCompile>
+    <ClCompile Include="FloatFollower.cpp">
+      <Filter>UI\Effect\FloatFollower</Filter>
+    </ClCompile>
+    <ClCompile Include="UIOffsetTransition.cpp">
+      <Filter>UI\Effect\OffsetTransition</Filter>
+    </ClCompile>
     <ClCompile Include="CursorDetector.cpp">
       <Filter>Contents\AttackSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="UIPriorityLayout.cpp">
+      <Filter>UI\UIElementController\UIPriorityLayout</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillUpgradeSystem.cpp">
+      <Filter>Contents\SkillSystem\SkillUpgradeSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsObservee.cpp">
+      <Filter>Contents\ContentsObserber</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsObserver.cpp">
+      <Filter>Contents\ContentsObserber</Filter>
+    </ClCompile>
+    <ClCompile Include="ObserveeHelper.cpp">
+      <Filter>Contents\ContentsObserber</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

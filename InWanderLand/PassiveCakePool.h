@@ -1,13 +1,11 @@
 #pragma once
 #include "PassiveCake.h"
 #include "DebugMeshes.h"
-#include "ContentsLayer.h"
-#include "Application.h"
-#include "LazySingletonClass.h"
 #include "UnitProductor.h"
+#include "ContentsObservee.h"
 
 class PassiveCakePool :
-	public GameObjectPool<PassiveCake>, public GHContents::LazySingletonClass<PassiveCakePool>
+	public GameObjectPool<PassiveCake>, public Component, public SingletonComponent<PassiveCakePool>, public ContentsObservee
 {
 public:
 	virtual void ObjectInitializer(PassiveCake* passiveCake) override
@@ -28,9 +26,29 @@ public:
 
 		passiveCake->GetGameObject()->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 		cakeCollider->SetActive(false);
-
-		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-		contentsLayer->RegisterToEditorObjectContainer(passiveCake->GetGameObject());
-		contentsLayer->RegisterToEditorObjectContainer(cakeMeshObject);
 	}
+
+	virtual void Start() override;
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
 };
+
+void PassiveCakePool::Start()
+{
+	isSingletonComponent = true;
+}
+
+void PassiveCakePool::PlayFunction()
+{
+	this->SetActive(true);
+	if (isOncePaused)
+	{
+		Start();
+	}
+}
+
+void PassiveCakePool::StopFunction()
+{
+	poolObjects.clear();
+	expendableObjects.clear();
+}

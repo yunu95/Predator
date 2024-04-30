@@ -12,7 +12,7 @@ void HealerAutoAttackProjectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, floa
 
 	if (HealerAutoAttackCount::currentPassiveCount >= maxPassiveCount)
 	{
-		auto passiveCake = PassiveCakePool::SingleInstance().Borrow();
+		auto passiveCake = PassiveCakePool::Instance().Borrow();
 		HealerAutoAttackCount::currentPassiveCount = 0;
 		passiveCake->PopCake(ownerUnit->GetTransform()->GetWorldPosition());
 	}

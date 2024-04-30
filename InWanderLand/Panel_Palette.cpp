@@ -315,14 +315,6 @@ namespace application
 						currentPalette->OnDeletion();
 					}
 				}
-
-				if (eim.IsKeyboardUp(KeyCode::B))
-				{
-					if (currentPalette == &tp)
-					{
-						tp.ApplyAsPlaytimeObjects();
-					}
-				}
 			}
 		}
 

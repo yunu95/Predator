@@ -1,6 +1,5 @@
 #pragma once
 #include "UnitProductor.h"
-#include "SingletonComponent.h"
 
 class MagicianProductor : public UnitProductor, public SingletonComponent<MagicianProductor>
 {

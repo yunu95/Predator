@@ -124,7 +124,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x64;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;Yunuty.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -145,7 +145,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Include\;$(SolutionDir)Include\ImGui\;$(SolutionDir)Include\ImGui\backends;$(SolutionDir)Yunuty\header\;$(SolutionDir)Yunu3DGraphicsInterface;$(OutDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -157,8 +157,12 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationEventManager.cpp" />
+    <ClCompile Include="EditorMath.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="FileSystem.cpp" />
+    <ClCompile Include="GraphEditor.cpp" />
+    <ClCompile Include="ImCurveEdit.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="ImGuizmo.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
@@ -176,7 +180,12 @@
     <ClCompile Include="ParticleTool_Manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationEventManager.h" />
+    <ClInclude Include="AnimationEvents.h" />
+    <ClInclude Include="EditorMath.h" />
     <ClInclude Include="FileSystem.h" />
+    <ClInclude Include="GraphEditor.h" />
+    <ClInclude Include="ImCurveEdit.h" />
     <ClInclude Include="imgui.h" />
     <ClInclude Include="ImGuizmo.h" />
     <ClInclude Include="imgui_impl_dx11.h" />
@@ -186,6 +195,7 @@
     <ClInclude Include="ImSequencer.h" />
     <ClInclude Include="ParticleToolData.h" />
     <ClInclude Include="ParticleTool_Manager.h" />
+    <ClInclude Include="Singleton.h" />
     <ClInclude Include="TestUtilGraphicsTestCam.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

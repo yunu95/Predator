@@ -5,8 +5,7 @@
 #include "PlayerController.h"
 #include "SkillPreviewSystem.h"
 #include "CursorDetector.h"
-#include "ContentsLayer.h"
-#include "Application.h"
+
 
 void TacticModeSystem::OnEnable()
 {
@@ -16,8 +15,6 @@ void TacticModeSystem::OnEnable()
 void TacticModeSystem::Start()
 {
     SetCurrentGauge(m_maxGauge);
-	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-	contentsLayer->RegisterToEditorComponentVector(this);
 }
 
 void TacticModeSystem::Update()
@@ -123,7 +120,7 @@ void TacticModeSystem::EngageTacticMode()
     /// 1. TimeScale을 0으로 설정한다.
     /// 2. PlayerController에서 현재 전술모드 적용 가능한 Player Unit의 정보를 가져온다.
     Time::SetTimeScale(0.0f);
-    playerComponentMap = PlayerController::SingleInstance().GetPlayerMap();
+    playerComponentMap = PlayerController::Instance().GetPlayerMap();
 	isTacticModeOperating = true;
 	m_gaugeIncreaseElapsed = 0.0f;
 

@@ -6,7 +6,6 @@
 #include "Application.h"
 #include "RTSCam.h"
 #include "DelayedTestFunctions.h"
-#include "ShakyCam.h"
 #include "DebugTilePlane.h"
 #include "DebugBeacon.h"
 #include "DebugMeshes.h"
@@ -117,7 +116,7 @@ void SnippetSkillSystemInit()
 	/// PlayerController SetUp
 	InputManager::Instance();
 	UIManager::Instance();
-	PlayerController::SingleInstance().SetMovingSystemComponent(rtsCam);
+	PlayerController::Instance().SetMovingSystemComponent(rtsCam);
 	TacticModeSystem::Instance().SetMovingSystemComponent(rtsCam);
 
 	WarriorProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 0.0f));;

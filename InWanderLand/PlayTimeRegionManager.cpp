@@ -12,6 +12,25 @@ void PlayTimeRegionManager::Start()
 	{
 		e->SetSelfActive(false);
 	}
+	isSingletonComponent = true;
+}
+
+void PlayTimeRegionManager::PlayFunction()
+{
+	this->SetActive(true);
+	if (isOncePaused)
+	{
+		Start();
+	}
+}
+
+void PlayTimeRegionManager::StopFunction()
+{
+	SetActive(false);
+	stage1ToStage2Function = nullptr;
+	cameraDotween = nullptr;
+	stage1Ornaments.clear();
+	stage2Ornaments.clear();
 }
 
 void PlayTimeRegionManager::AddRegionData(application::editor::RegionData* p_regionData)
@@ -28,7 +47,7 @@ void PlayTimeRegionManager::AddRegionData(application::editor::RegionData* p_reg
 		{
 			stage1ToStage2Function = [=]()
 				{
-					for (auto e : PlayerController::SingleInstance().GetPlayerMap())
+					for (auto e : PlayerController::Instance().GetPlayerMap())
 					{
 						e.second->GetGameObject()->GetComponent<yunutyEngine::NavigationAgent>()->SetActive(false);
 						e.second->GetTransform()->SetWorldPosition({ stage2StartPosition });
@@ -39,7 +58,7 @@ void PlayTimeRegionManager::AddRegionData(application::editor::RegionData* p_reg
 						e.second->SetUnitStateIdle();
 						e.second->StopMove();
 					}
-					//PlayerController::SingleInstance().GetPlayerMap();
+					//PlayerController::Instance().GetPlayerMap();
 					cameraDotween->DOMove(stage2StartPosition + Vector3d(0, 25, -20), 2.0f);
 
 					for (auto e : stage2Ornaments)

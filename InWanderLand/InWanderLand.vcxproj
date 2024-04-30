@@ -597,7 +597,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;Yunuty.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x64;$(outdir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\Editor\Imgui" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
@@ -626,7 +626,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;Yunuty.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x64;$(outdir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
@@ -654,7 +654,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;Yunuty.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x64;$(outdir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\Editor\Imgui" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
@@ -681,7 +681,7 @@ xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;Yunuty.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x64;$(outdir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
@@ -708,7 +708,7 @@ xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;Yunuty.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x64;$(outdir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
@@ -856,7 +856,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;Yunuty.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x64;$(outdir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\Editor\Imgui" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
@@ -890,7 +890,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;Yunuty.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x64;$(outdir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\Editor\Imgui" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
@@ -922,7 +922,7 @@ xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;Yunuty.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x64;$(outdir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
@@ -954,7 +954,7 @@ xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;Yunuty.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x64;$(outdir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
@@ -987,7 +987,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;Yunuty.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x64;$(outdir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
@@ -1021,6 +1021,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="ChessTrapSkillSystem.h" />
     <ClInclude Include="ConditionList.h" />
     <ClInclude Include="Condition_CinematicMode.h" />
+    <ClInclude Include="ContentsObservee.h" />
+    <ClInclude Include="ContentsObserver.h" />
     <ClInclude Include="CoroutineObject.h" />
     <ClInclude Include="CreateInstanceCommand.h" />
     <ClInclude Include="BossProductor.h" />
@@ -1047,6 +1049,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="ObservationTarget.h" />
     <ClInclude Include="IObserver.h" />
     <ClInclude Include="ObservationEvent.h" />
+    <ClInclude Include="ObserveeHelper.h" />
     <ClInclude Include="ParticleBrush.h" />
     <ClInclude Include="ParticleData.h" />
     <ClInclude Include="ParticleEditorInstance.h" />
@@ -1059,9 +1062,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugEditorExe|x64'">
       </ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="PopDownOnDisable.h" />
     <ClInclude Include="PopupOnEnable.h" />
     <ClInclude Include="GamePlayTimer.h" />
     <ClInclude Include="PawnTrapProductor.h" />
+    <ClInclude Include="PulsingUI.h" />
     <ClInclude Include="RangedEnemyPool.h" />
     <ClInclude Include="ResurrectionSystem.h" />
     <ClInclude Include="RookTrapProductor.h" />
@@ -1077,7 +1082,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="GCTemplate.h" />
     <ClInclude Include="GlobalConstant.h" />
     <ClInclude Include="GretelSkillDevelopmentSystem.h" />
-    <ClInclude Include="LazySingletonClass.h" />
     <ClInclude Include="LightBrush.h" />
     <ClInclude Include="LightData.h" />
     <ClInclude Include="LightEditorInstance.h" />
@@ -1098,9 +1102,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="RangedEnemyProductor.h" />
     <ClInclude Include="RobinSkillDevelopmentSystem.h" />
     <ClInclude Include="SaveStaticOrnamentsCommnad.h" />
-    <ClInclude Include="SingletonInstanceContainer.h" />
     <ClInclude Include="SkillDevelopmentSystem.h" />
+    <ClInclude Include="SkillUpgradeSystem.h" />
     <ClInclude Include="SkillWarningSystem.h" />
+    <ClInclude Include="SoundPlayingTimer.h" />
     <ClInclude Include="SpecialEffectTrigger.h" />
     <ClInclude Include="SpecialEvent.h" />
     <ClInclude Include="SpikeSkillSystem.h" />
@@ -1213,7 +1218,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Panel_SceneView.h" />
     <ClInclude Include="ProgramExitCommand.h" />
     <ClInclude Include="SaveMapCommand.h" />
-    <ClInclude Include="ShakyCam.h" />
     <ClInclude Include="ITemplateData.h" />
     <ClInclude Include="TemplateDataList.h" />
     <ClInclude Include="TemplateDataManager.h" />
@@ -1243,6 +1247,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UIOffsetTransition.h" />
     <ClInclude Include="UIPanel.h" />
+    <ClInclude Include="UIPriorityLayout.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="SpecialEffect.h" />
@@ -1253,7 +1258,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UUID.h" />
     <ClInclude Include="UUIDManager.h" />
     <ClInclude Include="Unit.h" />
-    <ClInclude Include="UnitFactory.h" />
     <ClInclude Include="UnitProductor.h" />
     <ClInclude Include="WarriorProductor.h" />
     <ClInclude Include="UnitBrush.h" />
@@ -1278,7 +1282,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="AttackSystem.cpp" />
-    <ClCompile Include="AutoAttackProjectilePool.cpp" />
     <ClCompile Include="BishopTrapProductor.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
     <ClCompile Include="BlindFieldComponent.cpp" />
@@ -1286,6 +1289,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="BurnEffect.cpp" />
     <ClCompile Include="Condition_CinematicMode.cpp" />
     <ClCompile Include="ChessTrapSkillSystem.cpp" />
+    <ClCompile Include="ContentsObservee.cpp" />
+    <ClCompile Include="ContentsObserver.cpp" />
     <ClCompile Include="CreateInstanceCommand.cpp" />
     <ClCompile Include="BossProductor.cpp" />
     <ClCompile Include="BossSkillSystem.cpp" />
@@ -1302,8 +1307,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="EnemySkillSystem.cpp" />
     <ClCompile Include="EnemySummonGateProductor.cpp" />
     <ClCompile Include="EnemySummonSkillSystem.cpp" />
+    <ClCompile Include="FloatFollower.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="ObservationTarget.cpp" />
+    <ClCompile Include="ObserveeHelper.cpp" />
     <ClCompile Include="ParticleBrush.cpp" />
     <ClCompile Include="ParticleData.cpp" />
     <ClCompile Include="ParticleEditorInstance.cpp" />
@@ -1316,6 +1323,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     </ClCompile>
     <ClCompile Include="GamePlayTimer.cpp" />
     <ClCompile Include="PawnTrapProductor.cpp" />
+    <ClCompile Include="PopDownOnDisable.cpp" />
+    <ClCompile Include="PopupOnEnable.cpp" />
+    <ClCompile Include="PulsingUI.cpp" />
     <ClCompile Include="ResurrectionSystem.cpp" />
     <ClCompile Include="RookTrapProductor.cpp" />
     <ClCompile Include="Script.cpp" />
@@ -1363,9 +1373,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="RangedEnemyProductor.cpp" />
     <ClCompile Include="RobinSkillDevelopmentSystem.cpp" />
     <ClCompile Include="SkillDevelopmentSystem.cpp" />
+    <ClCompile Include="SkillUpgradeSystem.cpp" />
     <ClCompile Include="SkillWarningSystem.cpp" />
     <ClCompile Include="SnippetBillboardSpriteAnim.cpp" />
-    <ClCompile Include="SingletonInstanceContainer.cpp" />
     <ClCompile Include="SpecialEffectTrigger.cpp" />
     <ClCompile Include="SpikeSkillSystem.cpp" />
     <ClCompile Include="SpikeTrapProductor.cpp" />
@@ -1446,7 +1456,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="RoamingCam.cpp" />
     <ClCompile Include="RTSCam.cpp" />
     <ClCompile Include="SaveMapCommand.cpp" />
-    <ClCompile Include="ShakyCam.cpp" />
     <ClCompile Include="TacticModeSystem.cpp" />
     <ClCompile Include="TemplateDataManager.cpp" />
     <ClCompile Include="Storable.cpp" />
@@ -1472,7 +1481,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UICurveType.cpp" />
     <ClCompile Include="UIElement.cpp" />
     <ClCompile Include="UIManager.cpp" />
+    <ClCompile Include="UIOffsetTransition.cpp" />
     <ClCompile Include="UIPanel.cpp" />
+    <ClCompile Include="UIPriorityLayout.cpp" />
     <ClCompile Include="UnitBrush.cpp" />
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="UnitEditorInstance.cpp" />
@@ -1490,7 +1501,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UUIDManager.cpp" />
     <ClCompile Include="TestUnitAnimation.cpp" />
     <ClCompile Include="Unit.cpp" />
-    <ClCompile Include="UnitFactory.cpp" />
     <ClCompile Include="UnitProductor.cpp" />
     <ClCompile Include="Action_WaitForSeconds.cpp" />
     <ClCompile Include="WarriorProductor.cpp" />

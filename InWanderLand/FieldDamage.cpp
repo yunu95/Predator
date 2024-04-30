@@ -11,7 +11,7 @@ void FieldDamage::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 void FieldDamage::Start()
 {
 	SetFieldSkillMembers();
-	//m_damageTimer = StatusTimerPool::SingleInstance().Borrow();
+	//m_damageTimer = StatusTimerPool::Instance().Borrow();
 }
 
 void FieldDamage::Update()
