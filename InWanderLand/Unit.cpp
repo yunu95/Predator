@@ -54,9 +54,10 @@ void Unit::Start()
         [this]() { return currentOrder == UnitState::AttackMove || (unitFSM.previousState == UnitState::Attack && isAttackMoving); } });
 
     unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Chase,
-        [this]() { return  GameManager::Instance().IsWaveEngageMotionEnd() && (m_currentTargetUnit != nullptr &&
+        [this]() { return  (GameManager::Instance().IsWaveEngageMotionEnd() && (m_currentTargetUnit != nullptr &&
                             idleElapsed >= idleToChaseDelay) && m_currentTargetUnit->currentOrder != UnitState::Death &&
-                            m_idDistance > 0.1f && m_atkDistance > 0.1f; } });
+                            m_idDistance > 0.1f && m_atkDistance > 0.1f) &&
+                            !TacticModeSystem::Instance().IsUnitsPerformingCommand(); } });
 
     unitFSM.transitions[UnitState::Move].push_back({ UnitState::Idle,
         [this]() { return currentOrder == UnitState::Idle; } });
@@ -227,10 +228,10 @@ void Unit::PlayFunction()
 
 void Unit::StopFunction()
 {
-	if (GetGameObject()->GetSelfActive())
-		GetGameObject()->SetSelfActive(false);
-
-	yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+    if (!GetGameObject()->GetComponentWeakPtr<Unit>().expired())
+    {
+        yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+    }
 }
 
 Unit::UnitType Unit::GetUnitType() const

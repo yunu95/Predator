@@ -15,8 +15,10 @@ void SpecialEffect::PlayFunction()
 
 void SpecialEffect::StopFunction()
 {
-	if (GetGameObject()->GetSelfActive())
-		GetGameObject()->SetSelfActive(false);
+	if (!GetGameObject()->GetComponentWeakPtr<SpecialEffect>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
 }
 
 void SpecialEffect::SetSkillOwnerUnit(Unit* p_unit)

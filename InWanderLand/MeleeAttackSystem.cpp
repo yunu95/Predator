@@ -62,8 +62,10 @@ void MeleeAttackSystem::PlayFunction()
 
 void MeleeAttackSystem::StopFunction()
 {
-	if (GetGameObject()->GetSelfActive())
-		GetGameObject()->SetSelfActive(false);
+	if (!GetGameObject()->GetComponentWeakPtr<MeleeAttackSystem>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
 }
 
 void MeleeAttackSystem::SetColliderRemainTime(float time)

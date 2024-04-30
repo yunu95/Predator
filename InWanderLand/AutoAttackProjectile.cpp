@@ -44,8 +44,10 @@ void AutoAttackProjectile::PlayFunction()
 
 void AutoAttackProjectile::StopFunction()
 {
-	if (GetGameObject()->GetSelfActive())
-		GetGameObject()->SetSelfActive(false);
+	if (!GetGameObject()->GetComponentWeakPtr<AutoAttackProjectile>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
 }
 
 void AutoAttackProjectile::AutoChaseShootingFunction()

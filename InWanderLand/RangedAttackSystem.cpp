@@ -56,8 +56,10 @@ void RangedAttackSystem::PlayFunction()
 
 void RangedAttackSystem::StopFunction()
 {
-	if (GetGameObject()->GetSelfActive())
-		GetGameObject()->SetSelfActive(false);
+	if (!GetGameObject()->GetComponentWeakPtr<RangedAttackSystem>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
 }
 
 void RangedAttackSystem::Start()

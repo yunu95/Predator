@@ -35,8 +35,10 @@ void DebuggingMesh::PlayFunction()
 
 void DebuggingMesh::StopFunction()
 {
-	if (GetGameObject()->GetSelfActive())
-		GetGameObject()->SetSelfActive(false);
+	if (!GetGameObject()->GetComponentWeakPtr<DebuggingMesh>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
 }
 
 void DebuggingMesh::Start()

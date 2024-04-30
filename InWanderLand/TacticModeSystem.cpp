@@ -153,6 +153,7 @@ void TacticModeSystem::ExitTacticMode()
     if (!sequenceQueue.empty())
     {
         isTacticOrderPerforming = true;
+        m_rtsCam->SetTarget(sequenceQueue.front()->GetGameObject());
 		sequenceQueue.front()->PermitTacticAction();
 		sequenceQueue.pop();
     }
@@ -200,6 +201,7 @@ void TacticModeSystem::ReportTacticActionFinished()
     }
     else
     {
+		m_rtsCam->SetTarget(sequenceQueue.front()->GetGameObject());
 		sequenceQueue.front()->PermitTacticAction();
 		sequenceQueue.pop();
     }

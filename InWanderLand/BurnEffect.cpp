@@ -142,8 +142,10 @@ void BurnEffect::PlayFunction()
 
 void BurnEffect::StopFunction()
 {
-	if (GetGameObject()->GetSelfActive())
-		GetGameObject()->SetSelfActive(false);
+	if (!GetGameObject()->GetComponentWeakPtr<BurnEffect>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
 }
 
 void BurnEffect::Reset()
