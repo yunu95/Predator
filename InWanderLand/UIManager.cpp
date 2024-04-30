@@ -22,6 +22,10 @@ void UIManager::Clear()
     m_highestPriorityButton = nullptr;
     m_currentHighestLayer = -1;
     m_selectedButtons.clear();
+    for (auto each : uisByIndex)
+    {
+        Scene::getCurrentScene()->DestroyGameObject(each.second->GetGameObject());
+    }
 }
 void UIManager::FadeOutRight(float duration)
 {

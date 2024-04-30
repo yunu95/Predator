@@ -4,10 +4,10 @@ void UIElement::Start()
 {
     application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
     // 게임이 끝나면 삭제되도록 설정
-    if (GetGameObject()->GetParentGameObject() == nullptr)
+    /*if (GetGameObject()->GetParentGameObject() == nullptr)
     {
-        //contentsLayer->RegisterToEditorObjectContainer(GetGameObject());
-    }
+        contentsLayer->RegisterToEditorObjectContainer(GetGameObject());
+    }*/
     // 만약 숫자 UI라면 먼저 숫자들을 모두 비활성화
     if (!numberSetBefore)
     {

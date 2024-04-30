@@ -236,10 +236,10 @@ struct ParticleBuffer
 
 struct LightMapUV
 {
-	float lightMapIndex;
-	DirectX::SimpleMath::Vector3 padding;
-	DirectX::SimpleMath::Vector2 uvOffset;
-	DirectX::SimpleMath::Vector2 scaling;
+    float lightMapIndex;
+    DirectX::SimpleMath::Vector3 padding;
+    DirectX::SimpleMath::Vector2 uvOffset;
+    DirectX::SimpleMath::Vector2 scaling;
 };
 
 struct LightMapUVBuffer
@@ -256,10 +256,12 @@ struct RenderTarget
     float clearColor[4] = { 0.f,0.f,0.f,1.f };
 };
 
-struct UIRadialFillVertex
+struct UIPreprocessVertex
 {
     DirectX::SimpleMath::Vector3 pos;
     DirectX::SimpleMath::Vector2 uv;
     DirectX::SimpleMath::Vector2 clippingDirection;
     float clippingThreshold;
+    DirectX::SimpleMath::Vector2 linearClippingDirection;
+    DirectX::SimpleMath::Vector2 linearClippingStart;
 };

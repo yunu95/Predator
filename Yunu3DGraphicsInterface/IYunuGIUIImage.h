@@ -28,6 +28,10 @@ namespace yunuGI
         virtual void SetRadialFillStartPoint(float x, float y) = 0;
         // 시계방향으로 채우는지 반시계 방향으로 채우는지 설정
         virtual void SetRadialFillDirection(bool isClockwise) = 0;
+        virtual bool IsLinearClippingMode() = 0;
+        virtual void SetLinearClipping(bool clip) = 0;
+        virtual void SetLinearClippingStartPoint(float x, float y) = 0;
+        virtual void SetLinearClippingDirection(float x, float y) = 0;
     };
     struct IUIImageDesc
     {

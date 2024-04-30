@@ -14,6 +14,7 @@ void Animator::Pause()
 	isPlay = false;
 }
 
+
 void Animator::ClearAnimationEvent(yunuGI::IAnimation* animation)
 {
 	for (auto& [key, each] : this->animationEventMap[animation])
@@ -43,8 +44,6 @@ void Animator::SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int fra
 
 void Animator::Play(yunuGI::IAnimation* animation)
 {
-	this->isCurAnimationPlay = true;
-
 	this->isPlay = true;
 
 	auto& gi = this->GetGI();
@@ -117,6 +116,14 @@ bool Animator::EraseAnimationFunc(yunuGI::IAnimation* animation, unsigned long l
 	return false;
 }
 
+float yunutyEngine::graphics::Animator::GetCurrentFrame()
+{
+	auto& gi = this->GetGI();
+	auto& desc = gi.GetTransitionDesc();
+
+	return desc.curr.currFrame;
+}
+
 void Animator::Update()
 {
 	auto& gi = this->GetGI();
@@ -140,11 +147,8 @@ void Animator::Update()
 			desc.curr.sumTime += (desc.curr.speed * Time::GetDeltaTime());
 			if (desc.curr.sumTime >= currentAnimation->GetDuration())
 			{
-				this->isCurAnimationPlay = false;
-
 				if (currentAnimation->GetLoop())
 				{
-					this->isCurAnimationPlay = true;
 					desc.curr.sumTime = 0.f;
 				}
 			}
