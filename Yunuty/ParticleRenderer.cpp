@@ -40,6 +40,19 @@ void ParticleRenderer::OnDisable()
 
 void ParticleRenderer::SetParticleMode(ParticleMode particleMode)
 {
+    if (this->particleMode != particleMode)
+    {
+        // 모드가 바뀐다면 지금까지 활성화된 파티클은 모두 reset하고 disable
+        for (auto iter = this->ableParticles.begin(); iter != this->ableParticles.end();)
+        {
+            auto& each = *iter;
+			each.Reset();
+			this->disableParticles.push_back(each);
+
+			iter = this->ableParticles.erase(iter);
+        }
+    }
+
     this->particleMode = particleMode;
 }
 
@@ -196,6 +209,39 @@ void ParticleRenderer::SetLoop(bool isLoop)
 
 void ParticleRenderer::SetMaxParticle(unsigned int maxParticle)
 {
+    if (maxParticle < 1)
+    {
+        maxParticle = 1;
+    }
+
+    // 항상 able + disable 갯수가 max가 되어야함
+    
+    // 현재 활성화 되어 있는 입자보다 max가 작으면 able에서 max만큼만 남기고 다 비활성
+    if (this->ableParticles.size() > maxParticle)
+    {
+		for (auto iter = this->ableParticles.begin(); iter != this->ableParticles.end();)
+		{
+			auto& each = *iter;
+			each.Reset();
+			this->disableParticles.push_back(each);
+
+			iter = this->ableParticles.erase(iter);
+
+			if (this->ableParticles.size() == maxParticle)
+			{
+				break;
+			}
+		}
+
+        this->disableParticles.clear();
+    }
+    else
+    {
+        // 만일 활성화된 입자보다 max가 크다면 disable size만 조정
+        this->disableParticles.resize(maxParticle - this->ableParticles.size());
+    }
+   
+
     this->maxParticle = maxParticle;
 }
 
@@ -268,29 +314,32 @@ void ParticleRenderer::Update()
                 {
 					for (int i = 0; i < burstsCount; ++i)
 					{
-						auto& particle = this->disableParticles.front();
+                        if (!this->disableParticles.empty())
+                        {
+                            auto& particle = this->disableParticles.front();
 
-						if (this->particleType == ParticleShape::Cone)
-						{
-							particle.offsetTM = this->GenerateRandomOffsetMatInCone();
-						}
-						else if (this->particleType == ParticleShape::Circle)
-						{
-							auto tempPos = GetRandomPointInCircle(0, 0, this->shape.circle.radius);
+                            if (this->particleType == ParticleShape::Cone)
+                            {
+                                particle.offsetTM = this->GenerateRandomOffsetMatInCone();
+                            }
+                            else if (this->particleType == ParticleShape::Circle)
+                            {
+                                auto tempPos = GetRandomPointInCircle(0, 0, this->shape.circle.radius);
 
-							auto particleDirection = yunuGI::Vector3{ tempPos.x,0,tempPos.y }.Normalize(yunuGI::Vector3{ tempPos.x,0,tempPos.y });
+                                auto particleDirection = yunuGI::Vector3{ tempPos.x,0,tempPos.y }.Normalize(yunuGI::Vector3{ tempPos.x,0,tempPos.y });
 
-							particle.offsetTM.m41 = tempPos.x;
-							particle.offsetTM.m42 = 0.f;
-							particle.offsetTM.m43 = tempPos.y;
+                                particle.offsetTM.m41 = tempPos.x;
+                                particle.offsetTM.m42 = 0.f;
+                                particle.offsetTM.m43 = tempPos.y;
 
-							particle.offsetTM.m31 = particleDirection.x;
-							particle.offsetTM.m32 = particleDirection.y;
-							particle.offsetTM.m33 = particleDirection.z;
-						}
+                                particle.offsetTM.m31 = particleDirection.x;
+                                particle.offsetTM.m32 = particleDirection.y;
+                                particle.offsetTM.m33 = particleDirection.z;
+                            }
 
-                        this->disableParticles.pop_front();
-                        this->ableParticles.push_back(particle);
+                            this->disableParticles.pop_front();
+                            this->ableParticles.push_back(particle);
+                        }
                     }
                 }
             }
