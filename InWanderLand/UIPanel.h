@@ -1,5 +1,6 @@
 #pragma once
 #include "YunutyEngine.h"
+#include "ContentsObservee.h"
 
 /// <summary>
 /// 하나의 창에 여러가지 버튼이 있을 경우 (ex. 메뉴 창)
@@ -11,7 +12,7 @@
 
 class UIButton;
 
-class UIPanel : public Component
+class UIPanel : public Component, public ContentsObservee
 {
 private:
 	std::vector<GameObject*> m_panelObjects;
@@ -35,6 +36,9 @@ public:
 	void SetCloseButtonActive(bool p_boolen);
 
 	void SetParentPanel(UIPanel* p_parentPanel);
+
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
 
 	bool GetPanelActive() const;
 	virtual void Start() override;

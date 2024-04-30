@@ -1,7 +1,7 @@
-#include "SpecialEffectTrigger.h"
+#include "StatusEffectTrigger.h"
 #include "Unit.h"
 
-void SpecialEffectTrigger::OnTriggerEnter(physics::Collider* collider)
+void StatusEffectTrigger::OnTriggerEnter(physics::Collider* collider)
 {
 	// Request StatusTimer To TimerPool here
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
@@ -9,5 +9,6 @@ void SpecialEffectTrigger::OnTriggerEnter(physics::Collider* collider)
 		colliderUnitComponent->GetUnitSide() != m_ownerUnit->GetUnitSide())
 	{
 		ApplyStatus(m_ownerUnit, colliderUnitComponent);
+		colliderUnitComponent->ReportStatusEffectApplied(m_statusEffectType);
 	}
 }

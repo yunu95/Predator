@@ -1,6 +1,5 @@
 #include "HealerSkillSystem.h"
-#include "ContentsLayer.h"
-#include "Application.h"
+#include "TacticModeSystem.h"
 
 void HealerSkillSystem::CrushDown(int p_times)
 {
@@ -19,6 +18,8 @@ void HealerSkillSystem::CrushDown(int p_times)
 				m_unitNavComponent->SetActive(true);
 				m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
 				m_unitNavComponent->Relocate(GetTransform()->GetWorldPosition());
+				TacticModeSystem::Instance().ReportTacticActionFinished();
+				m_unitComponent->isPermittedToTacticAction = false;
 				m_unitComponent->SetUnitStateIdle();
 			}
 			else
@@ -117,11 +118,6 @@ void HealerSkillSystem::Start()
 	QSkillFieldDamage.debugObject->SetParent(GetGameObject());
 	//WSkillFieldDamage.colliderObject->SetParent(GetGameObject());
 	//WSkillFieldDamage.debugObject->SetParent(GetGameObject());
-
-	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-	contentsLayer->RegisterToEditorObjectContainer(WSkillFieldDamage.colliderObject);
-	contentsLayer->RegisterToEditorObjectContainer(WSkillFieldDamage.debugObject);
-
 }
 
 void HealerSkillSystem::Update()
@@ -155,6 +151,8 @@ void HealerSkillSystem::Update()
 			WSkillColliderElapsed = 0.0f;
 			SetSkillRequirmentsActive(WSkillFieldDamage, false);
 			isWSkillColliderActivated = false;
+			TacticModeSystem::Instance().ReportTacticActionFinished();
+			m_unitComponent->isPermittedToTacticAction = false;
 			m_unitComponent->SetUnitStateIdle();
 		}
 	}

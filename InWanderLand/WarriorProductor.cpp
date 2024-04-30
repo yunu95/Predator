@@ -197,7 +197,6 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
     return m_unitComponent;
 }
 
-
 // 전략 패턴을 설명하기 위한 예시 코드
 // 전략 패턴의 핵심은 객체의 동작을 전략 객체를 통해 바꿀 수 있다는 것.
 // 아래의 경우 UnitProductionOrder가 전략에 해당되며, 이 전략 객체가 바뀜에 따라 MakeSome 동작이 바뀐다.

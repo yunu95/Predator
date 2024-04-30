@@ -1,5 +1,6 @@
 #pragma once
 #include "AttackSystem.h"
+#include "ContentsObservee.h"
 
 enum class MeleeAttackType
 {
@@ -7,12 +8,12 @@ enum class MeleeAttackType
 	DirectAttack
 };
 
-class SpecialEffect;
+class StatusEffect;
 
 /// <summary>
 ///
 /// </summary>
-class MeleeAttackSystem : public AttackSystem
+class MeleeAttackSystem : public AttackSystem, public ContentsObservee
 {
 private:
 	MeleeAttackType m_meleeAttackType;
@@ -24,7 +25,7 @@ private:
 	float colliderRemainElasped = 0.f;
 	bool colliderActivated = false;
 
-	SpecialEffect* m_specialEffect;
+	StatusEffect* m_specialEffect;
 	float m_attackDamage;
 	Unit* m_unitComponent;
 
@@ -33,13 +34,16 @@ public:
 	void SetMeleeAttackType(MeleeAttackType p_type);
 	void SetOwnerUnitObject(GameObject* unitobj);
 
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
+
 	// Collider를 띄우고 없애는 식이라면 아래 함수 사용.
 	void SetColliderObject(GameObject* colliderObj);
 	void SetColliderDebugObject(GameObject* debugobj);
 	void SetColliderRemainTime(float time);
 
 	// 유닛의 Damaged()를 직접 호출하는 식이라면 아래 함수 사용.
-	void SetDirectAttackSpecialEffect(SpecialEffect* p_effect);
+	void SetDirectAttackSpecialEffect(StatusEffect* p_effect);
 	void SetDamage(float p_dmg);
 
 public:

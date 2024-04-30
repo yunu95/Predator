@@ -1,10 +1,10 @@
 #pragma once
-#include "SpecialEffect.h"
+#include "StatusEffect.h"
 #include <unordered_map>
 
 class StatusTimer;
 
-class BleedingComponent : public SpecialEffect
+class BleedingComponent : public StatusEffect
 {
 private:
 	// 피해를 받는 유닛이 갖고 있어야하는 정보

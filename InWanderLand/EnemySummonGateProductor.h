@@ -1,6 +1,5 @@
 #pragma once
 #include "UnitProductor.h"
-#include "SingletonComponent.h"
 /// <summary>
 /// Boss의 세 번째 스킬인 적 유닛을 생산해내는 유닛.
 /// </summary>

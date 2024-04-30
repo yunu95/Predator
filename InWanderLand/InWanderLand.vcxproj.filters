@@ -367,9 +367,6 @@
     <Filter Include="Contents\Containers\GameObjectContainer">
       <UniqueIdentifier>{acd31600-7478-4ec2-825b-24a79ac266e8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\Containers\SingletonInstanceContainer">
-      <UniqueIdentifier>{7f68797a-b5d4-4fc8-a674-f9ce87bc3fc2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="DevelopmentSupportSystem">
       <UniqueIdentifier>{a4b24e4c-87c4-4bd3-8d5d-cdba26aa9f71}</UniqueIdentifier>
     </Filter>
@@ -519,6 +516,12 @@
     </Filter>
     <Filter Include="Contents\SkillSystem\SkillUpgradeSystem">
       <UniqueIdentifier>{817118ef-6fb6-4833-928d-b892cbf0627f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Effect\TimePauseTimer">
+      <UniqueIdentifier>{3fb0e00b-59fb-4666-8075-5ac444045b35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ContentsObserber">
+      <UniqueIdentifier>{d2484403-98a3-4199-b5bd-4785dca8fb9c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -698,9 +701,6 @@
     </ClInclude>
     <ClInclude Include="HealerProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
-    </ClInclude>
-    <ClInclude Include="UnitFactory.h">
-      <Filter>Contents\UnitFactory</Filter>
     </ClInclude>
     <ClInclude Include="RangeSystem.h">
       <Filter>Contents\RangeSystem</Filter>
@@ -1042,10 +1042,10 @@
     <ClInclude Include="EnemyAutoAttackProjectile.h">
       <Filter>Contents\ProjectileComponents\Magician\Passive</Filter>
     </ClInclude>
-    <ClInclude Include="SpecialEffectTrigger.h">
+    <ClInclude Include="StatusEffectTrigger.h">
       <Filter>Contents\UnitStatusComponent</Filter>
     </ClInclude>
-    <ClInclude Include="SpecialEffect.h">
+    <ClInclude Include="StatusEffect.h">
       <Filter>Contents\UnitStatusComponent</Filter>
     </ClInclude>
     <ClInclude Include="EditorCameraManager.h">
@@ -1066,14 +1066,8 @@
     <ClInclude Include="PlayTimeRegionManager.h">
       <Filter>Contents\PlaytimeRegion</Filter>
     </ClInclude>
-    <ClInclude Include="LazySingletonClass.h">
-      <Filter>Contents\LazySingleton</Filter>
-    </ClInclude>
     <ClInclude Include="GameObjectContainer.h">
       <Filter>Contents\Containers\GameObjectContainer</Filter>
-    </ClInclude>
-    <ClInclude Include="SingletonInstanceContainer.h">
-      <Filter>Contents\Containers\SingletonInstanceContainer</Filter>
     </ClInclude>
     <ClInclude Include="ShortcutSystem.h">
       <Filter>DevelopmentSupportSystem</Filter>
@@ -1324,6 +1318,18 @@
     <ClInclude Include="SkillUpgradeSystem.h">
       <Filter>Contents\SkillSystem\SkillUpgradeSystem</Filter>
     </ClInclude>
+    <ClInclude Include="TimePauseTimer.h">
+      <Filter>UI\Effect\TimePauseTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsObservee.h">
+      <Filter>Contents\ContentsObserber</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsObserver.h">
+      <Filter>Contents\ContentsObserber</Filter>
+    </ClInclude>
+    <ClInclude Include="ObserveeHelper.h">
+      <Filter>Contents\ContentsObserber</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -1455,9 +1461,6 @@
     <ClCompile Include="HealerProductor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClCompile>
-    <ClCompile Include="UnitFactory.cpp">
-      <Filter>Contents\UnitFactory</Filter>
-    </ClCompile>
     <ClCompile Include="RangeSystem.cpp">
       <Filter>Contents\RangeSystem</Filter>
     </ClCompile>
@@ -1583,9 +1586,6 @@
     </ClCompile>
     <ClCompile Include="MagicianAutoAttackProjectile.cpp">
       <Filter>Contents\ProjectileComponents\Magician\Passive</Filter>
-    </ClCompile>
-    <ClCompile Include="AutoAttackProjectilePool.cpp">
-      <Filter>Contents\ProjectilePools</Filter>
     </ClCompile>
     <ClCompile Include="imgui_widgets.cpp">
       <Filter>Editor\imgui</Filter>
@@ -1798,10 +1798,10 @@
     <ClCompile Include="EnemyAutoAttackProjectile.cpp">
       <Filter>Contents\ProjectileComponents\Magician\Passive</Filter>
     </ClCompile>
-    <ClCompile Include="SpecialEffect.cpp">
+    <ClCompile Include="StatusEffect.cpp">
       <Filter>Contents\UnitStatusComponent</Filter>
     </ClCompile>
-    <ClCompile Include="SpecialEffectTrigger.cpp">
+    <ClCompile Include="StatusEffectTrigger.cpp">
       <Filter>Contents\UnitStatusComponent</Filter>
     </ClCompile>
     <ClCompile Include="EditorCameraManager.cpp">
@@ -1821,9 +1821,6 @@
     </ClCompile>
     <ClCompile Include="GameObjectContainer.cpp">
       <Filter>Contents\Containers\GameObjectContainer</Filter>
-    </ClCompile>
-    <ClCompile Include="SingletonInstanceContainer.cpp">
-      <Filter>Contents\Containers\SingletonInstanceContainer</Filter>
     </ClCompile>
     <ClCompile Include="ShortcutSystem.cpp">
       <Filter>DevelopmentSupportSystem</Filter>
@@ -2019,6 +2016,18 @@
     </ClCompile>
     <ClCompile Include="SkillUpgradeSystem.cpp">
       <Filter>Contents\SkillSystem\SkillUpgradeSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="TimePauseTimer.cpp">
+      <Filter>UI\Effect\TimePauseTimer</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsObservee.cpp">
+      <Filter>Contents\ContentsObserber</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsObserver.cpp">
+      <Filter>Contents\ContentsObserber</Filter>
+    </ClCompile>
+    <ClCompile Include="ObserveeHelper.cpp">
+      <Filter>Contents\ContentsObserber</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

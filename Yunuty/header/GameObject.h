@@ -17,64 +17,74 @@
 using namespace std;
 namespace yunutyEngine
 {
-	class Scene;
-	class Component;
-	class Transform;
-	class YunutyCycle;
-	/// <summary>
-	/// 게임 오브젝트는 게임 씬에 배치될 수 있는 가장 기본적인 단위의 객체입니다.
-	/// 게임 오브젝트는 기본적으로 Transform 컴포넌트를 갖고 있으며, 다양한 컴포넌트를 추가로 가짐으로서 게임오브젝트로서의 성질이 결정됩니다.
-	/// 게임 오브젝트는 자식 게임 오브젝트와 부모 게임 오브젝트를 가질 수 있는 계층 구조를 갖고 있습니다.
-	/// 자식 게임 오브젝트의 위치와 각도는 부모 게임 오브젝트의 위치와 각도에 종속적입니다.
-	/// </summary>
-	class YUNUTY_API GameObject :
-		public Object, public IGameObjectParent
-	{
-	public:
-		GameObject(GameObject&) = delete;
-		GameObject& operator=(GameObject&) = delete;
-		GameObject() = default;
-		virtual const vector<GameObject*>& GetChildren()const override;
-		~GameObject();
-		Transform* GetTransform();
-		const Transform* GetTransform()const;
-		GameObject* AddGameObject();
+    class Scene;
+    class Component;
+    class Transform;
+    class YunutyCycle;
+    /// <summary>
+    /// 게임 오브젝트는 게임 씬에 배치될 수 있는 가장 기본적인 단위의 객체입니다.
+    /// 게임 오브젝트는 기본적으로 Transform 컴포넌트를 갖고 있으며, 다양한 컴포넌트를 추가로 가짐으로서 게임오브젝트로서의 성질이 결정됩니다.
+    /// 게임 오브젝트는 자식 게임 오브젝트와 부모 게임 오브젝트를 가질 수 있는 계층 구조를 갖고 있습니다.
+    /// 자식 게임 오브젝트의 위치와 각도는 부모 게임 오브젝트의 위치와 각도에 종속적입니다.
+    /// </summary>
+    class YUNUTY_API GameObject :
+        public Object, public IGameObjectParent
+    {
+    public:
+        GameObject(GameObject&) = delete;
+        GameObject& operator=(GameObject&) = delete;
+        GameObject() = default;
+        virtual const vector<GameObject*>& GetChildren()const override;
+        ~GameObject();
+        Transform* GetTransform();
+        const Transform* GetTransform()const;
+        GameObject* AddGameObject();
 
-		template<typename ComponentType>
-		ComponentType* AddComponent()
-		{
-			return AddComponent<ComponentType>(GUID_NULL);
-		}
-		// guid를 사용하는 코드는 사실 public이면 안된다. 게임 클라이언트는 얘를 알 필요가 없고,
-		// 씬의 저장, 불러오기 기능을 구현하는 게임 에디터에만 노출해야 하기 때문.
-		template<typename ComponentType>
-		ComponentType* AddComponent(const char* guid)
-		{
-			UUID uuid;
-			UuidFromStringA(static_cast<RPC_CSTR>(guid), &uuid);
-			return AddComponent<ComponentType>(uuid);
-		}
-		template<typename ComponentType>
-		ComponentType* AddComponent(WCHAR* guid)
-		{
-			UUID uuid;
-			//UuidFromStringW(reinterpret_cast<RPC_WSTR>(guid), &uuid);
-			CLSIDFromString(guid, &uuid);
-			return AddComponent<ComponentType>(uuid);
-		}
-		// 템플릿 매개변수로 주어진 타입의 컴포넌트를 게임 오브젝트에 부착합니다.
-		template<typename ComponentType>
-		ComponentType* AddComponent(GUID guid)
-		{
-			static_assert(std::is_base_of<Component, ComponentType>::value, "only derived classes from component are allowed");
-			Component::addComponentDesc.gameObject = this;
-			Component::addComponentDesc.guid = guid;
+        template<typename ComponentType>
+        ComponentType* AddComponent()
+        {
+            return AddComponent<ComponentType>(GUID_NULL);
+        }
+        template<typename ComponentType>
+        std::weak_ptr<ComponentType> AddComponentAsWeakPtr()
+        {
+            auto comp = AddComponent<ComponentType>(GUID_NULL);
+            return std::weak_ptr<ComponentType>{std::dynamic_pointer_cast<ComponentType>(components[comp])};
+        }
+        // guid를 사용하는 코드는 사실 public이면 안된다. 게임 클라이언트는 얘를 알 필요가 없고,
+        // 씬의 저장, 불러오기 기능을 구현하는 게임 에디터에만 노출해야 하기 때문.
+        template<typename ComponentType>
+        ComponentType* AddComponent(const char* guid)
+        {
+            UUID uuid;
+            UuidFromStringA(static_cast<RPC_CSTR>(guid), &uuid);
+            return AddComponent<ComponentType>(uuid);
+        }
+        template<typename ComponentType>
+        ComponentType* AddComponent(WCHAR* guid)
+        {
+            UUID uuid;
+            //UuidFromStringW(reinterpret_cast<RPC_WSTR>(guid), &uuid);
+            CLSIDFromString(guid, &uuid);
+            return AddComponent<ComponentType>(uuid);
+        }
+        // 템플릿 매개변수로 주어진 타입의 컴포넌트를 게임 오브젝트에 부착합니다.
+        template<typename ComponentType>
+        ComponentType* AddComponent(GUID guid)
+        {
+            static_assert(std::is_base_of<Component, ComponentType>::value, "only derived classes from component are allowed");
+            Component::addComponentDesc.gameObject = this;
+            Component::addComponentDesc.guid = guid;
 #if _DEBUG
-			Component::addComponentDesc.addAvailable = true;
+            Component::addComponentDesc.addAvailable = true;
 #endif
             auto newComponent = new ComponentType();
             newComponent->gameObject = this;
-            components.insert(make_pair(newComponent, unique_ptr<Component>(newComponent)));
+            //std::shared_ptr<ComponentType> sharedPtr{ make_shared<ComponentType>()};
+            //std::shared_ptr<ComponentType> sharedPtr{ newComponent};
+            //components[newComponent] = sharedPtr;
+            components[newComponent] = std::shared_ptr<ComponentType>(newComponent);
+            //components.insert(make_pair(newComponent, shared_ptr<ComponentType>(newComponent)));
             updatingComponents.insert(newComponent);
             indexedComponents.push_back(newComponent);
             HandleComponentUpdateState(newComponent);
@@ -114,6 +124,31 @@ namespace yunutyEngine
             }
             return nullptr;
         }
+        template<typename ComponentType>
+        std::weak_ptr<ComponentType> GetComponentWeakPtr()
+        {
+            //static_assert(std::is_base_of<Component, ComponentType>::value, "only derived classes from component are allowed");
+            for (auto i = components.begin(); i != components.end(); i++)
+            {
+                std::weak_ptr<ComponentType> weakDerivedPtr = std::dynamic_pointer_cast<ComponentType>(i->second);
+                if (weakDerivedPtr.lock())
+                    return weakDerivedPtr;
+            }
+            return std::weak_ptr<ComponentType>{};
+        }
+        // 템플릿 매개변수로 주어진 타입의 컴포넌트가 게임 오브젝트에 존재하는지 확인하고, 최초로 확인된 컴포넌트 객체의 포인터를 반환합니다.
+        template<typename ComponentType>
+        const std::weak_ptr<ComponentType> GetComponentWeakPtr()const
+        {
+            static_assert(std::is_base_of<Component, ComponentType>::value, "only derived classes from component are allowed");
+            for (auto i = components.begin(); i != components.end(); i++)
+            {
+                auto castedPointer = dynamic_cast<const ComponentType*>(i->first);
+                if (castedPointer)
+                    return castedPointer;
+            }
+            return nullptr;
+        }
         // 템플릿 매개변수로 주어진 타입의 컴포넌트들이 게임 오브젝트에 존재하는지 확인하고, 확인된 컴포넌트들의 포인터를 벡터 컨테이너에 담아 반환합니다.
         template<typename ComponentType>
         vector<ComponentType*> GetComponents()
@@ -141,6 +176,8 @@ namespace yunutyEngine
         GameObject* GetParentGameObject();
         const GameObject* GetParentGameObject()const;
         Scene* GetScene();
+        // 부모 게임오브젝트, 조부 게임 오브젝트, 증조부 게임 오브젝트..를 타고 올라가 총 가지고 있는 조상의 갯수를 반환합니다.
+        int GetAncestorNumber()const;
         void SetParent(IGameObjectParent* parent = nullptr);
         int GetChildIndex()const;
         void SetChildIndex(int index);
@@ -154,6 +191,7 @@ namespace yunutyEngine
         Scene* scene = nullptr;
         bool selfActive = true;
         int childrenNum = 0;
+        mutable int ancestorNumberCached{ -1 };
         IGameObjectParent* parent = nullptr;
         GameObject* parentGameObject = nullptr;
         Transform* transform = nullptr;
@@ -166,10 +204,11 @@ namespace yunutyEngine
         mutable cache<int> cachedSceneIndex;
         // 업데이트의 대상이 되는 컴포넌트들의 목록입니다.
         unordered_set<Component*> updatingComponents;
-        unordered_map<Component*, unique_ptr<Component>> components;
+        unordered_map<Component*, shared_ptr<Component>> components;
         vector<Component*> indexedComponents;
         GameObject(IGameObjectParent* parent);
         void DoThingsOnParents(function<void(GameObject*)> todo);
+        void DoThingsOnSelfAndChildrenRecursive(function<void(GameObject*)> todo);
         virtual void SetChildIndex(GameObject* child, int index);
         bool DeservesUpdate();
         // 꼬리재귀를 위한 재귀함수
@@ -185,11 +224,11 @@ namespace yunutyEngine
         friend Component;
         friend YunutyCycle;
 #if _DEBUG
-		friend Component::Component();
+        friend Component::Component();
 
-	private:
-	public:
-		static int messyIndexingCalled;
+    private:
+    public:
+        static int messyIndexingCalled;
 #endif
-	};
+    };
 }

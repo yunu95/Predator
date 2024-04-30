@@ -4,6 +4,7 @@
 #include "Storable.h"
 #include "UIEnumID.h"
 #include "JsonUIData.h"
+#include "ContentsObservee.h"
 /// <summary>
 /// UIButton 객체들을 관리하는 컴포넌트.
 /// 역할
@@ -14,7 +15,7 @@
 /// </summary>
 
 class UIElement;
-class UIManager : public Component, public SingletonComponent<UIManager>
+class UIManager : public Component, public SingletonComponent<UIManager>, public ContentsObservee
 {
 private:
     // JsonUIData만으로 UI를 생성합니다.
@@ -66,5 +67,8 @@ public:
     void ImportUI(const char* path);
 
     virtual void Update() override;
+    virtual void Start() override;
+    virtual void PlayFunction() override;
+    virtual void StopFunction() override;
 };
 

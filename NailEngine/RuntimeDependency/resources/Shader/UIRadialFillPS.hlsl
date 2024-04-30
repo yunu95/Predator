@@ -11,7 +11,7 @@ struct PixelIn
 
 float4 main(PixelIn input) : SV_TARGET
 {
-    clip(dot(normalize(float2(input.uv.x - 0.5, (1 - input.uv.y) - 0.5)), normalize(input.clippingDirection)) - input.clippingThreshold);
+    clip(dot(normalize(float2(input.uv.x - 0.5, (1 - input.uv.y) - 0.5)), normalize(input.clippingDirection)) - input.clippingThreshold - 0.000001);
     // TODO
     return Texture.Sample(TextureSampler, input.uv);
 }

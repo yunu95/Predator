@@ -22,6 +22,14 @@ void yunutyEngine::GameObject::DoThingsOnParents(function<void(GameObject*)> tod
         node = node->parentGameObject;
     }
 }
+void yunutyEngine::GameObject::DoThingsOnSelfAndChildrenRecursive(function<void(GameObject*)> todo)
+{
+    todo(this);
+    for (auto each : childrenIndexed)
+    {
+        each->DoThingsOnSelfAndChildrenRecursive(todo);
+    }
+}
 void yunutyEngine::GameObject::DeleteComponent(Component* component)
 {
     // 벡터에서 컴포넌트를 삭제하는데에 쓰이는 매우 추한 코드, 물론 컴포넌트 갯수가 
@@ -71,6 +79,19 @@ Scene* yunutyEngine::GameObject::GetScene()
 {
     return scene;
 }
+// 부모 게임오브젝트, 조부 게임 오브젝트, 증조부 게임 오브젝트..를 타고 올라가 총 가지고 있는 조상의 갯수를 반환합니다.
+int yunutyEngine::GameObject::GetAncestorNumber() const
+{
+    if (ancestorNumberCached >= 0)
+    {
+        return ancestorNumberCached;
+    }
+    if (parentGameObject)
+    {
+        return ancestorNumberCached = parentGameObject->GetAncestorNumber() + 1;
+    }
+    return ancestorNumberCached = 0;
+}
 void yunutyEngine::GameObject::SetParent(IGameObjectParent* parent)
 {
     bool activeBefore = GetActive();
@@ -85,6 +106,9 @@ void yunutyEngine::GameObject::SetParent(IGameObjectParent* parent)
     bool activeAfter = GetActive();
     PropagateActiveEvent(activeBefore, activeAfter);
     parent->HandleChildUpdateState(this);
+
+    ancestorNumberCached = -1;
+    DoThingsOnSelfAndChildrenRecursive([](GameObject* child) {child->ancestorNumberCached = -1; });
 }
 // 이거 복잡도 n임.
 unique_ptr<yunutyEngine::GameObject> yunutyEngine::GameObject::MoveChild(GameObject* child)
@@ -233,7 +257,7 @@ int yunutyEngine::GameObject::GetSceneIndex(const GameObject* target)
                 objStack.push(brother);
             }
         }
-    }
+}
     return target->cachedSceneIndex;
 }
 string yunutyEngine::GameObject::getName()const

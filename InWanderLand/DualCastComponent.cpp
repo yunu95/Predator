@@ -5,7 +5,7 @@
 
 void DualCastComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 {
-	auto debuggingMesh = DebuggingMeshPool::SingleInstance().Borrow();
+	auto debuggingMesh = DebuggingMeshPool::Instance().Borrow();
 	debuggingMesh->SetUnitObject(opponentUnit);
 
 	if (opponentUnit->GetUnitSide() == Unit::UnitSide::Player)

@@ -9,12 +9,12 @@ namespace yunutyEngine
     class SingletonComponent
     {
     public:
+        SingletonComponent() = default;
+        virtual ~SingletonComponent() = default;
         static T& Instance();
         static bool isAvailable() { return yunutyEngine::Scene::getCurrentScene(); }
         virtual void SingletonInitializer() {};
     protected:
-        SingletonComponent() = default;
-        virtual ~SingletonComponent() = default;
     private:
         static T* instance;
     };

@@ -35,4 +35,16 @@ void RangeSystem::SetOwnerUnitComponent(Unit* unitComponent)
 	m_unitComponent = unitComponent;
 }
 
+void RangeSystem::PlayFunction()
+{
+
+}
+
+void RangeSystem::StopFunction()
+{
+	if (!GetGameObject()->GetComponentWeakPtr<RangeSystem>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
+}
 

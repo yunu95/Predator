@@ -135,6 +135,19 @@ void BurnEffect::Update()
 	}
 }
 
+void BurnEffect::PlayFunction()
+{
+
+}
+
+void BurnEffect::StopFunction()
+{
+	if (!GetGameObject()->GetComponentWeakPtr<BurnEffect>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
+}
+
 void BurnEffect::Reset()
 {
 	isDisAppear = false;

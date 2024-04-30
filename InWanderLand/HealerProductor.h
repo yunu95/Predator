@@ -1,6 +1,6 @@
 #pragma once
 #include "UnitProductor.h"
-#include "SingletonComponent.h"
+#include "ContentsObservee.h"
 
 class HealerProductor : public UnitProductor, public SingletonComponent<HealerProductor>
 {

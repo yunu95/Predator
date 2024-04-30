@@ -11,24 +11,24 @@ void RangedAttackSystem::Attack(Unit* opponentUnit, float offset)
 	{
 		case Unit::UnitType::Magician :
 		{
-			MagicianAutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
+			MagicianAutoAttackProjectilePool::Instance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
 			break;
 		}
 		case Unit::UnitType::Healer:
 		{
-			HealerAutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
+			HealerAutoAttackProjectilePool::Instance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
 			break;
 		}
 		case Unit::UnitType::RangedEnemy:
 		{
-			EnemyAutoAttackProjectile* projectile = EnemyAutoAttackProjectilePool::SingleInstance().Borrow();
+			EnemyAutoAttackProjectile* projectile = EnemyAutoAttackProjectilePool::Instance().Borrow();
 			projectile->SetStraightBulletRange(m_range);
 			projectile->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
 			break;
 		}
 		default:
 		{
-			AutoAttackProjectilePool::SingleInstance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
+			AutoAttackProjectilePool::Instance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
 			break;
 		}
 	}
@@ -47,6 +47,19 @@ void RangedAttackSystem::SetBulletSpeed(float speed)
 void RangedAttackSystem::SetRange(float p_rng)
 {
 	m_range = p_rng;
+}
+
+void RangedAttackSystem::PlayFunction()
+{
+	
+}
+
+void RangedAttackSystem::StopFunction()
+{
+	if (!GetGameObject()->GetComponentWeakPtr<RangedAttackSystem>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
 }
 
 void RangedAttackSystem::Start()

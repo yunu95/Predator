@@ -6,6 +6,8 @@
 #include "TemplateDataManager.h"
 #include "EditorResourceManager.h"
 
+#include "PlayTimeRegionManager.h"
+
 namespace application
 {
     namespace editor
@@ -33,7 +35,7 @@ namespace application
             }
 
             pod.templateData = static_cast<Ornament_TemplateData*>(ptr);
-			OnDataResourceChange(pod.templateData->pod.staticFBXName);
+            OnDataResourceChange(pod.templateData->pod.staticFBXName);
 
             return true;
         }
@@ -73,15 +75,15 @@ namespace application
             pod.scale.z = newScale.z;
         }
 
-		void OrnamentData::OnDataResourceChange(std::string newName)
-		{
-			// TemplateData 를 유지하고 Resource 만 갱신함
-			if (ornamentInstance)
-			{
-				ornamentInstance->ChangeResource(newName);
-				ApplyAsPaletteInstance();
-			}
-		}
+        void OrnamentData::OnDataResourceChange(std::string newName)
+        {
+            // TemplateData 를 유지하고 Resource 만 갱신함
+            if (ornamentInstance)
+            {
+                ornamentInstance->ChangeResource(newName);
+                ApplyAsPaletteInstance();
+            }
+        }
 
         palette::PaletteInstance* OrnamentData::ApplyAsPaletteInstance()
         {
@@ -104,17 +106,18 @@ namespace application
             {
                 ApplyAsPaletteInstance();
             }
+            PlayTimeRegionManager::Instance().RegisterOrnament(ornamentInstance->GetGameObject(), pod.stage);
         }
 
-		bool OrnamentData::EnterDataFromGlobalConstant()
-		{
-			auto& data = GlobalConstant::GetSingletonInstance().pod;
-			return true;
-		}
+        bool OrnamentData::EnterDataFromGlobalConstant()
+        {
+            auto& data = GlobalConstant::GetSingletonInstance().pod;
+            return true;
+        }
 
-		bool OrnamentData::PreEncoding(json& data) const
-		{
-			FieldPreEncoding<boost::pfr::tuple_size_v<POD_Ornament>>(pod, data["POD"]);
+        bool OrnamentData::PreEncoding(json& data) const
+        {
+            FieldPreEncoding<boost::pfr::tuple_size_v<POD_Ornament>>(pod, data["POD"]);
 
             return true;
         }
@@ -136,7 +139,7 @@ namespace application
         bool OrnamentData::PostDecoding(const json& data)
         {
             FieldPostDecoding<boost::pfr::tuple_size_v<POD_Ornament>>(pod, data["POD"]);
-			EnterDataFromGlobalConstant();
+            EnterDataFromGlobalConstant();
 #ifdef EDITOR
             ApplyAsPaletteInstance();
 #endif
@@ -149,13 +152,13 @@ namespace application
 
         }
 
-		OrnamentData::OrnamentData(const std::string& name)
-			: pod()
-		{
-			pod.templateData = static_cast<Ornament_TemplateData*>(templateDataManager.GetTemplateData(name));
-			EnterDataFromTemplate();
-			EnterDataFromGlobalConstant();
-		}
+        OrnamentData::OrnamentData(const std::string& name)
+            : pod()
+        {
+            pod.templateData = static_cast<Ornament_TemplateData*>(templateDataManager.GetTemplateData(name));
+            EnterDataFromTemplate();
+            EnterDataFromGlobalConstant();
+        }
 
         OrnamentData::OrnamentData(const OrnamentData& prototype)
             : pod(prototype.pod)

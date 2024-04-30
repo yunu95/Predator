@@ -25,7 +25,7 @@ void SnippetFloatingDebugSphere()
 	auto periodicComponent = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<PeriodicAction>();
 	periodicComponent->action = [=]()
 	{
-		auto debuggingMesh = DebuggingMeshPool::SingleInstance().Borrow();
+		auto debuggingMesh = DebuggingMeshPool::Instance().Borrow();
 		debuggingMesh->SetUnitObject(unitComponent);
 		debuggingMesh->PopMeshUP(yunuGI::Color::green(), MaterialNum::Green);
 	};

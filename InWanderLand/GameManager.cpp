@@ -10,10 +10,11 @@
 
 void GameManager::Start()
 {
-	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-	contentsLayer->RegisterToEditorComponentVector(this);
+	//application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+	//contentsLayer->RegisterToEditorComponentVector(this);
 
-	EndBattle();
+	//EndBattle();
+	isSingletonComponent = true;
 }
 
 void GameManager::Update()
@@ -28,8 +29,35 @@ void GameManager::Update()
 			m_comboElapsed = 0.0f;
 			currentCombo = 0;
 			/// member로 세팅해놨던 comboNumber UIImage Component에게 현재 콤보 수를 넘겨준다.
+			ReportComboChanged();
 		}
 	}
+}
+
+void GameManager::PlayFunction()
+{
+	this->SetActive(true);
+	if (isOncePaused)
+	{
+		Start();
+	}
+}
+
+void GameManager::StopFunction()
+{
+	m_waveEnterCheckMap.clear();
+	m_waveEnterMotionCheckMap.clear();
+	currentActivatingWave = nullptr;
+	isBattleModeOn = false;
+	currentCombo = 0;
+	isComboTimerActivated = false;
+	m_comboElapsed = 0.0f;
+	m_comboResistDuration = 6.0f;
+	isPlayerEnteredWaveRegion = false;
+	waveEngageMotionActivate = false;
+	waveEngageMotionEnd = false;
+
+	ReportComboChanged();
 }
 
 void GameManager::EngageBattle()
@@ -37,16 +65,16 @@ void GameManager::EngageBattle()
 	isBattleModeOn = true;
 
 	/// 플레이어 유닛들을 WaveEngage 상태로 전환 시키는 로직
-	PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::Warrior);
-	rtscam->SetTarget(PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetGameObject());
+	PlayerController::Instance().SetCurrentPlayerSerialNumber(Unit::UnitType::Warrior);
+	rtscam->SetTarget(PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetGameObject());
 }
 
 void GameManager::EndBattle()
 {
 	isBattleModeOn = false;
 
-	PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::AllPlayers);
-	rtscam->SetTarget(PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetGameObject());
+	PlayerController::Instance().SetCurrentPlayerSerialNumber(Unit::UnitType::AllPlayers);
+	rtscam->SetTarget(PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetGameObject());
 	SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 }
 
@@ -65,8 +93,8 @@ void GameManager::EndCinematic()
 void GameManager::Reset()
 {
 	isBattleModeOn = false;
-	PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(Unit::UnitType::AllPlayers);
-	rtscam->SetTarget(PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetGameObject());
+	PlayerController::Instance().SetCurrentPlayerSerialNumber(Unit::UnitType::AllPlayers);
+	rtscam->SetTarget(PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetGameObject());
 }
 
 bool GameManager::IsBattleSystemOperating() const
@@ -80,11 +108,20 @@ void GameManager::AddCombo()
 	m_comboElapsed = 0.0f;
 	currentCombo++;
 	/// member로 세팅해놨던 comboNumber UIImage Component에게 현재 콤보 수를 넘겨준다.
+	ReportComboChanged();
 }
 
 void GameManager::ResetCombo()
 {
 	currentCombo = 0;
+	ReportComboChanged();
+}
+
+void GameManager::ReportComboChanged() const
+{
+	/// 콤보 수가 변경될 때마다 호출되는 함수입니다.
+	/// 이 함수에서 멤버변수 currentCombo 를 comboNumber UIImage Component 에게 전달하면 됩니다.
+
 }
 
 void GameManager::ReportWaveStartStateEnd(Unit* p_unit)
@@ -149,18 +186,18 @@ void GameManager::ReportPlayerEnteredWaveRegion(PlaytimeWave* p_wave)
 	m_waveEnterCheckMap.insert({ Unit::UnitType::Magician, false});
 	m_waveEnterCheckMap.insert({ Unit::UnitType::Healer, false });
 
-	yunutyEngine::Transform* warriorTransform = PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetTransform();
+	yunutyEngine::Transform* warriorTransform = PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetTransform();
 	Vector3d leftPosition = warriorTransform->GetWorldPosition() + warriorTransform->GetWorldRotation().Right() * -3.0f;
 	Vector3d rightPosition = warriorTransform->GetWorldPosition() + warriorTransform->GetWorldRotation().Right() * 3.0f;
 
 	/// 유닛들을 warrior 기준 양쪽으로 이동시키자
-	PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->SetWaveStartPosition(warriorTransform->GetWorldPosition());
-	PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Magician)->second->SetWaveStartPosition(leftPosition);
-	PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Healer)->second->SetWaveStartPosition(rightPosition);
+	PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->SetWaveStartPosition(warriorTransform->GetWorldPosition());
+	PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Magician)->second->SetWaveStartPosition(leftPosition);
+	PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Healer)->second->SetWaveStartPosition(rightPosition);
 
-	PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->m_currentBelongingWavePosition = p_wave->GetTransform()->GetWorldPosition();
-	PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Magician)->second->m_currentBelongingWavePosition = p_wave->GetTransform()->GetWorldPosition();
-	PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Healer)->second->m_currentBelongingWavePosition = p_wave->GetTransform()->GetWorldPosition();
+	PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->m_currentBelongingWavePosition = p_wave->GetTransform()->GetWorldPosition();
+	PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Magician)->second->m_currentBelongingWavePosition = p_wave->GetTransform()->GetWorldPosition();
+	PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Healer)->second->m_currentBelongingWavePosition = p_wave->GetTransform()->GetWorldPosition();
 }
 
 bool GameManager::IsPlayerJustEnteredWaveRegion() const

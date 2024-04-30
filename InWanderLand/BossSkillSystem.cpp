@@ -55,15 +55,15 @@ void BossSkillSystem::ActivateSkillThree()
 	Vector3d doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * -5.0f;
 	//UnitObjectPool::SingleInstance().ChooseProductor(&EnemySummonGateProductor::Instance());
 	//UnitObjectPool::SingleInstance().SetStartPosition(doorSummonPosition);
-	EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(true);
-	currentSummonedDoorUnit = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+	//EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(true);
+	currentSummonedDoorUnit = MeleeEnemyPool::Instance().Borrow()->m_pairUnit;
 
 	if (currentDerivedDoorUnit == nullptr)
 	{
 		doorSummonPosition = GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * 5.0f;
-		MeleeEnemyPool::SingleInstance().SetStartPosition(doorSummonPosition);
-		EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(false);
-		currentDerivedDoorUnit = MeleeEnemyPool::SingleInstance().Borrow()->m_pairUnit;
+		MeleeEnemyPool::Instance().SetStartPosition(doorSummonPosition);
+		//EnemySummonGateProductor::Instance().SetUnitCanBeDamaged(false);
+		currentDerivedDoorUnit = MeleeEnemyPool::Instance().Borrow()->m_pairUnit;
 	}
 	else
 	{
@@ -167,7 +167,7 @@ void BossSkillSystem::SelectSkill(Unit::SkillEnum p_enum)
 void BossSkillSystem::Start()
 {
 	m_skillUsageDuration = 10.0f;
-	//m_warriorUnit = PlayerController::SingleInstance().GetPlayerMap().find(Unit::UnitType::Warrior)->second;
+	//m_warriorUnit = PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Warrior)->second;
 	SetOtherComponentsAsMember();
 }
 

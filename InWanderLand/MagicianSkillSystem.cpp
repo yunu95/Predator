@@ -1,7 +1,6 @@
 #include "MagicianSkillSystem.h"
 #include "Dotween.h"
-#include "ContentsLayer.h"
-#include "Application.h"
+#include "TacticModeSystem.h"
 
 void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 {
@@ -29,6 +28,8 @@ void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 			SetSkillRequirmentsActive(QSkillProjectile, false);
 			SetSkillRequirmentsActive(QSkillFieldDamage, true);
 
+			TacticModeSystem::Instance().ReportTacticActionFinished();
+			m_unitComponent->isPermittedToTacticAction = false;
 			m_unitComponent->SetUnitStateIdle();
 
 			QSkillFieldDamage.dotweenComponent->DONothing(m_QSkillFieldRemainTime).OnComplete([=]()
@@ -57,6 +58,8 @@ void MagicianSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 			SetSkillRequirmentsActive(WSkillProjectile, false);
 			SetSkillRequirmentsActive(WSkillFieldDamage, true);
 
+			TacticModeSystem::Instance().ReportTacticActionFinished();
+			m_unitComponent->isPermittedToTacticAction = false;
 			m_unitComponent->SetUnitStateIdle();
 
 			WSkillFieldDamage.dotweenComponent->DONothing(m_WSkillFieldRemainTime).OnComplete([=]()
@@ -113,19 +116,6 @@ void MagicianSkillSystem::SetWSkillDebugPair(std::pair<GameObject*, float> p_pro
 void MagicianSkillSystem::Start()
 {
 	SetOtherComponentsAsMember();
-
-	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-	contentsLayer->RegisterToEditorObjectContainer(QSkillProjectile.colliderObject);
-	contentsLayer->RegisterToEditorObjectContainer(QSkillProjectile.debugObject);
-
-	contentsLayer->RegisterToEditorObjectContainer(QSkillFieldDamage.colliderObject);
-	contentsLayer->RegisterToEditorObjectContainer(QSkillFieldDamage.debugObject);
-
-	contentsLayer->RegisterToEditorObjectContainer(WSkillProjectile.colliderObject);
-	contentsLayer->RegisterToEditorObjectContainer(WSkillProjectile.debugObject);
-
-	contentsLayer->RegisterToEditorObjectContainer(WSkillFieldDamage.colliderObject);
-	contentsLayer->RegisterToEditorObjectContainer(WSkillFieldDamage.debugObject);
 
 	QSkillProjectile.debugObject->SetSelfActive(false);
 	QSkillFieldDamage.debugObject->SetSelfActive(false);

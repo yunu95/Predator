@@ -13,6 +13,7 @@
 #include "SoundPlayingTimer.h"
 #include "InWanderLand.h"
 #include "SkillUpgradeSystem.h"
+#include "TimePauseTImer.h"
 #include <fstream>
 
 using namespace yunutyEngine::graphics;
@@ -114,7 +115,7 @@ void UIManager::UpdateHighestPriorityButton()
     // 하이라이트된 버튼이 바뀌어야 한다면, 기존 버튼의 Exit 이벤트부터 처리합니다.
     if (m_highestPriorityButton)
     {
-        m_highestPriorityButton->m_ImageComponent->GetGI().SetImage(m_highestPriorityButton->m_IdleImage);
+        //m_highestPriorityButton->m_ImageComponent->GetGI().SetImage(m_highestPriorityButton->m_IdleImage);
         if (m_highestPriorityButton->m_onMouseExitFunction)
         {
             m_highestPriorityButton->m_onMouseExitFunction();
@@ -129,7 +130,8 @@ void UIManager::UpdateHighestPriorityButton()
 
     if (isButtonActiviated = m_highestPriorityButton != nullptr)
     {
-        m_highestPriorityButton->m_onMouseFunction();
+        if (m_highestPriorityButton->m_onMouseFunction)
+            m_highestPriorityButton->m_onMouseFunction();
     }
 }
 
@@ -166,6 +168,26 @@ void UIManager::Update()
         }
     }
 }
+
+void UIManager::Start()
+{
+    isSingletonComponent = true;
+}
+
+void UIManager::PlayFunction()
+{
+	this->SetActive(true);
+	if (isOncePaused)
+	{
+		Start();
+	}
+}
+
+void UIManager::StopFunction()
+{
+    Clear();
+}
+
 void UIManager::ImportUI(const char* path)
 {
     std::ifstream file{ path };
@@ -184,6 +206,7 @@ void UIManager::ImportUI(const char* path)
 
             auto uiObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
             auto uiElement = uiObject->AddComponent<UIElement>();
+            uiElement->importedUIData = uiData;
             if (uiData.enumID != 0)
                 uisByEnumID[(UIEnumID)uiData.enumID] = uiElement;
             uisByIndex[uiData.uiIndex] = uiElement;
@@ -224,7 +247,8 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
     //uiObject->AddComponent<PopupOnEnable>();
     if (uiData.imagePath != "")
     {
-        uiImageComponent = element->imageComponent = uiObject->AddComponent<UIImage>();
+        element->imageComponent = uiObject->AddComponentAsWeakPtr<UIImage>();
+        uiImageComponent = element->imageComponent.lock().get();
         idleTexture = rsrcMgr->GetTexture(yutility::GetWString(uiData.imagePath).c_str());
         if (idleTexture == nullptr)
         {
@@ -243,7 +267,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         {
             uiButtonComponent = element->button = uiObject->AddComponent<UIButton>();
             uiButtonComponent->SetImageComponent(uiImageComponent);
-            uiButtonComponent->SetIdleImage(idleTexture);
+            //uiButtonComponent->SetIdleImage(idleTexture);
             //uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
         }
         else
@@ -275,21 +299,26 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
     {
         assert(!element->adjuster);
         // 위를 덮어씌우는 이미지
-        element->imageComponent->GetGI().SetRadialFillMode(true);
-        element->imageComponent->GetGI().SetRadialFillDegree(0);
-        element->imageComponent->GetGI().SetRadialFillDirection(false);
-        element->imageComponent->GetGI().SetRadialFillStartPoint(0, 1);
+        element->imageComponent.lock()->GetGI().SetRadialFillMode(true);
+        element->imageComponent.lock()->GetGI().SetRadialFillDegree(0);
+        element->imageComponent.lock()->GetGI().SetRadialFillDirection(false);
+        element->imageComponent.lock()->GetGI().SetRadialFillStartPoint(0, 1);
         element->adjuster = uiObject->AddComponent<FloatFollower>();
         element->adjuster->SetFollowingRate(uiData.adjustingRate);
         element->adjuster->applier = [=](float val)
             {
-                element->imageComponent->GetGI().SetRadialFillDegree(val * 360);
+                element->imageComponent.lock()->GetGI().SetRadialFillDegree(val * 360);
             };
     }
     if (uiData.customFlags & (int)UIExportFlag::IsDigitFont)
     {
         digitFonts[element] = std::array<yunuGI::ITexture*, 10>{};
     }
+    if (uiData.customFlags & (int)UIExportFlag::TimeStopOnEnable)
+    {
+        element->timePauseOnEnable = uiObject->AddComponent<TimePauseTimer>();
+        element->timePauseOnEnable->m_duration = uiData.timeStoppingDuration;
+    };
 
     Vector3d pivotPos{ 0,0,0 };
     // offset by anchor
@@ -389,9 +418,9 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         for (auto each : tooltipTargets)
         {
             each->GetGameObject()->SetSelfActive(false);
-            if (auto img = each->imageComponent)
+            if (auto img = each->imageComponent; img.lock())
             {
-                img->GetGI().SetLayer(priority_Tooltip);
+                img.lock()->GetGI().SetLayer(priority_Tooltip);
             }
         }
         button->AddButtonOnMouseFunction([=]()
@@ -455,6 +484,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
             {
                 element->soundOnClick->ActivateTimer();
             });
+        element->soundOnClick->Init();
     }
     if (uiData.customFlags & (int)UIExportFlag::PlaySoundOnHover)
     {

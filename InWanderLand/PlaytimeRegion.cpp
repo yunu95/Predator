@@ -85,3 +85,20 @@ void PlaytimeRegion::OnTriggerExit(physics::Collider* collider)
         }
     }
 }
+
+void PlaytimeRegion::PlayFunction()
+{
+	this->SetActive(true);
+	if (isOncePaused)
+	{
+		Start();
+	}
+}
+
+void PlaytimeRegion::StopFunction()
+{
+	if (!GetGameObject()->GetComponentWeakPtr<PlaytimeRegion>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
+}

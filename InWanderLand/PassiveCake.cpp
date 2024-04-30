@@ -50,6 +50,19 @@ void PassiveCake::SetDotweenComponent(Dotween* p_dotween)
 	m_dotween = p_dotween;
 }
 
+void PassiveCake::PlayFunction()
+{
+
+}
+
+void PassiveCake::StopFunction()
+{
+	if (!GetGameObject()->GetComponentWeakPtr<PassiveCake>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
+}
+
 void PassiveCake::Start()
 {
 }
@@ -63,7 +76,7 @@ void PassiveCake::Update()
 		if (cakeElapsed >= cakePersistTime)
 		{
 			m_mesh->SetActive(false);
-			PassiveCakePool::SingleInstance().Return(this);
+			PassiveCakePool::Instance().Return(this);
 			cakeElapsed = 0.0f;
 			isDropped = false;
 			isFunctionCalled = false;
@@ -84,8 +97,8 @@ void PassiveCake::OnTriggerEnter(physics::Collider* collider)
 	{
 		m_mesh->SetActive(false);
 		m_collider->SetActive(false);
-		PassiveCakePool::SingleInstance().Return(this);
-		auto debuggingMeshComponent = DebuggingMeshPool::SingleInstance().Borrow();
+		PassiveCakePool::Instance().Return(this);
+		auto debuggingMeshComponent = DebuggingMeshPool::Instance().Borrow();
 		debuggingMeshComponent->SetUnitObject(colliderUnitComponent);
 		debuggingMeshComponent->PopMeshUP(yunuGI::Color::blue(), MaterialNum::Red);
 		colliderUnitComponent->Heal(cakeHealingPoint);

@@ -2,8 +2,6 @@
 #include "Unit.h"
 #include "DebugMeshes.h"
 #include "UnitProductor.h"
-#include "ContentsLayer.h"
-#include "Application.h"
 
 void CursorDetector::OnTriggerEnter(physics::Collider* collider)
 {
@@ -33,9 +31,6 @@ void CursorDetector::Start()
 	m_SelectEffectObject->GetTransform()->SetWorldScale({ UNIT_LENGTH * 1.5f, 0.3f, UNIT_LENGTH * 1.5f });
 	
 	m_SelectEffectObject->SetSelfActive(false);
-	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-	contentsLayer->RegisterToEditorObjectContainer(m_SelectEffectObject);
-
 }
 
 void CursorDetector::Update()
@@ -55,6 +50,20 @@ void CursorDetector::Update()
 		{
 			itr++;
 		}
+	}
+}
+
+void CursorDetector::PlayFunction()
+{
+	//this->SetActive(true);
+	//Start();
+}
+
+void CursorDetector::StopFunction()
+{
+	if (!GetGameObject()->GetComponentWeakPtr<CursorDetector>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
 	}
 }
 

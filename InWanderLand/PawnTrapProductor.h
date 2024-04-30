@@ -1,6 +1,5 @@
 #pragma once
 #include "UnitProductor.h"
-#include "SingletonComponent.h"
 
 class PawnTrapProductor : public UnitProductor, public SingletonComponent<PawnTrapProductor>
 {
