@@ -148,14 +148,12 @@ void ParticleRenderer::ParticleUpdate()
 
 void yunutyEngine::graphics::ParticleRenderer::SetDuration(float duration)
 {
-    static auto& gi = GetGI();
-    gi.SetDuration(duration);
+    GetGI().SetDuration(duration);
 }
 
 float yunutyEngine::graphics::ParticleRenderer::GetDuration()
 {
-    static auto& gi = GetGI();
-    return gi.GetDuration();
+    return GetGI().GetDuration();
 }
 
 yunuGI::Vector3 ParticleRenderer::GenerateRandomDirectionInCone(yunuGI::ParticleRenderInfo& particle)

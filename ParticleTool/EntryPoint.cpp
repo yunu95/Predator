@@ -130,6 +130,10 @@ void ImGui_DrawTransform(int& idx);
 #pragma region
 static const char* SequencerItemTypeNames[] = { "Animation" };
 
+extern bool ppisLoad = false;
+
+void EraseSequenceData(const std::weak_ptr<application::AnimationEvent>& event);
+
 struct RampEdit : public ImCurveEdit::Delegate
 {
 	RampEdit()
@@ -263,13 +267,22 @@ struct MySequence : public ImSequencer::SequenceInterface
 	// my datas
 	MySequence() : mFrameMin(0), mFrameMax(0) {}
 	int mFrameMin, mFrameMax;
+
+	struct CustomComp
+	{
+		bool operator()(const std::weak_ptr<application::AnimationEvent>& lp, const std::weak_ptr<application::AnimationEvent>& rp) const
+		{
+			return &lp > &rp;
+		}
+	};
+
 	struct MySequenceItem
 	{
 		std::string fbxName = "None";
 		int mType;
 		int mFrameStart, mFrameEnd;
 		bool mExpanded;
-		std::unordered_set<std::shared_ptr<application::AnimationEvent>> funcList = std::unordered_set<std::shared_ptr<application::AnimationEvent>>();
+		std::set<std::weak_ptr<application::AnimationEvent>, CustomComp> funcList = std::set<std::weak_ptr<application::AnimationEvent>, CustomComp>();
 	};
 	std::vector<MySequenceItem> myItems;
 
@@ -307,25 +320,44 @@ struct MySequence : public ImSequencer::SequenceInterface
 
 		ImGui::SetCursorScreenPos(rc.Min);
 		ImCurveEdit::Edit(rampEdit, ImVec2(rc.Max.x - rc.Min.x, rc.Max.y - rc.Min.y), 137 + index, &clippingRect);*/
+		static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+
+		ImVec2 mMax = ImVec2(float(mFrameMax), 1.f);
+		ImVec2 mMin = ImVec2(float(mFrameMin), 0.f);
+		
 		draw_list->PushClipRect(legendClippingRect.Min, legendClippingRect.Max, true);
 
 		int i = 0;
-		for (auto& each : myItems[index].funcList)
+		bool showEventEditPopup = false;
+		for (auto& eachWeak : myItems[index].funcList)
 		{
+			if (eachWeak.expired())
+			{
+				continue;
+			}
+
 			ImVec2 pta(legendRect.Min.x + 30, legendRect.Min.y + i * 14.f);
 			ImVec2 ptb(legendRect.Max.x, legendRect.Min.y + (i + 1) * 14.f);
+
+			auto each = eachWeak.lock();
+
 			auto type = each->GetType();
+
+			if (each == pm.GetSelectedAnimationEvent().lock())
+			{
+				draw_list->AddRectFilled(pta, ptb, ImGui::GetColorU32(ImGuiCol_HeaderActive));
+			}
 
 			switch (type)
 			{
 				case application::AnimationEventType::GameObject_ActivateEvent:
 				{
-					draw_list->AddText(pta, 0xFFFFFFFF, "Particle Activate");
+					draw_list->AddText(pta, 0xFFFFFFFF, ("Particle Activate[" + static_cast<application::GameObject_ActivateEvent*>(each.get())->objName + "]").c_str());
 					break;
 				}
 				case application::AnimationEventType::GameObject_DisabledEvent:
 				{
-					draw_list->AddText(pta, 0xFFFFFFFF, "Particle Disabled");
+					draw_list->AddText(pta, 0xFFFFFFFF, ("Particle Disabled[" + static_cast<application::GameObject_DisabledEvent*>(each.get())->objName + "]").c_str());
 					break;
 				}
 				case application::AnimationEventType::Sound_PlayOnceEvent:
@@ -342,17 +374,130 @@ struct MySequence : public ImSequencer::SequenceInterface
 					break;
 			}
 
-			//if (ImRect(pta, ptb).Contains(ImGui::GetMousePos()) && ImGui::IsMouseClicked(0))
-			//{
-			//	rampEdit.mbVisible[i] = !rampEdit.mbVisible[i];
-			//}
+			if (ImRect(pta, ptb).Contains(ImGui::GetMousePos()) && ImGui::IsMouseClicked(0))
+			{
+				if (each == pm.GetSelectedAnimationEvent().lock())
+				{
+					pm.SetSelectedAnimationEvent(nullptr);
+				}
+				else
+				{
+					pm.SetSelectedAnimationEvent(each);
+				}
+			}
+
+			if (each == pm.GetSelectedAnimationEvent().lock() && ImRect(pta, ptb).Contains(ImGui::GetMousePos()) && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+			{
+				showEventEditPopup = true;
+			}
 
 			i++;
 		}
 
 		draw_list->PopClipRect();
 
-		//ImGui::SetCursorScreenPos(rc.Min);
+		draw_list->PushClipRect(clippingRect.Min, clippingRect.Max, true);
+
+		ImU32 boxCol = ImGui::GetColorU32(ImVec4(1, 1, 1, 1));
+		int j = 0;
+		for (auto& eachWeak : myItems[index].funcList)
+		{
+			if (eachWeak.expired())
+			{
+				continue;
+			}
+
+			auto each = eachWeak.lock();
+
+			auto type = each->GetType();
+			switch (type)
+			{
+				case application::AnimationEventType::GameObject_ActivateEvent:
+				{
+					boxCol = ImGui::GetColorU32(ImVec4(1, 1, 1, 1));
+					break;
+				}
+				case application::AnimationEventType::GameObject_DisabledEvent:
+				{
+					boxCol = ImGui::GetColorU32(ImVec4(1, 0, 0, 1));
+					break;
+				}
+				case application::AnimationEventType::Sound_PlayOnceEvent:
+				{
+					boxCol = ImGui::GetColorU32(ImVec4(0, 1, 0, 1));
+					break;
+				}
+				case application::AnimationEventType::Sound_PlayLoopEvent:
+				{
+					boxCol = ImGui::GetColorU32(ImVec4(0, 0, 1, 1));
+					break;
+				}
+				default:
+					break;
+			}
+
+			float r = (each->frame - mFrameMin) / float(mFrameMax - mFrameMin);
+			float x = ImLerp(rc.Min.x, rc.Max.x, r);
+			float posY = clippingRect.Min.y + j * 14.f;
+
+			draw_list->AddLine(ImVec2(x, posY), ImVec2(x, posY + 14.f), boxCol, 4.f);
+
+			j++;
+		}
+
+		draw_list->PopClipRect();
+
+		if (showEventEditPopup)
+		{
+			ImGui::OpenPopup("AniEventEdit");
+		}
+
+		if (ImGui::BeginPopup("AniEventEdit"))
+		{
+			if (ImGui::MenuItem("Edit Frame"))
+			{
+				auto title = "Edit Frame" + std::to_string(i);
+				static float tempFrame = 0;
+				tempFrame = pm.GetSelectedAnimationEvent().lock()->frame;
+				application::editor::imgui::ShowMessageBox(title.c_str(), [=]()
+					{
+						application::editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+						ImGui::Separator();
+
+						ImGui::SetNextItemWidth(-1);
+
+						ImGui::DragFloat("Frame", &tempFrame, 1.0f, myItems[index].mFrameStart, myItems[index].mFrameEnd);
+
+						ImGui::Separator();
+
+						if (ImGui::Button("OK"))
+						{
+							if (tempFrame > myItems[index].mFrameEnd)
+							{
+								tempFrame = myItems[index].mFrameEnd;
+							}
+							else if (tempFrame < myItems[index].mFrameStart)
+							{
+								tempFrame = myItems[index].mFrameStart;
+							}
+
+							pm.EditAnimationEventFrame(pm.GetSelectedAnimationEvent(), tempFrame);
+							ImGui::CloseCurrentPopup();
+							application::editor::imgui::CloseMessageBox(title.c_str());
+						}
+						ImGui::SameLine();
+
+						if (ImGui::Button("Cancel"))
+						{
+							ImGui::CloseCurrentPopup();
+							application::editor::imgui::CloseMessageBox(title.c_str());
+						}
+					}, 300);
+			}
+
+			ImGui::EndPopup();
+		}
 	}
 
 	virtual void CustomDrawCompact(int index, ImDrawList* draw_list, const ImRect& rc, const ImRect& clippingRect)
@@ -380,14 +525,21 @@ struct MySequence : public ImSequencer::SequenceInterface
 		int i = 0;
 		ImVec2 mMax = ImVec2(float(mFrameMax), 1.f);
 		ImVec2 mMin = ImVec2(float(mFrameMin), 0.f);
-		ImU32 boxCol = ImGui::GetColorU32(ImVec4(1,1,1,1));
-		for (auto& each : myItems[index].funcList)
+		ImU32 boxCol = ImGui::GetColorU32(ImVec4(1, 1, 1, 1));
+		for (auto& eachWeak : myItems[index].funcList)
 		{
+			if (eachWeak.expired())
+			{
+				continue;
+			}
+
+			auto each = eachWeak.lock();
 			auto type = each->GetType();
 			switch (type)
 			{
 				case application::AnimationEventType::GameObject_ActivateEvent:
 				{
+					boxCol = ImGui::GetColorU32(ImVec4(1, 1, 1, 1));
 					break;
 				}
 				case application::AnimationEventType::GameObject_DisabledEvent:
@@ -408,7 +560,7 @@ struct MySequence : public ImSequencer::SequenceInterface
 				default:
 					break;
 			}
-			
+
 			float r = (each->frame - mFrameMin) / float(mFrameMax - mFrameMin);
 			float x = ImLerp(rc.Min.x, rc.Max.x, r);
 			draw_list->AddLine(ImVec2(x, rc.Min.y + 6), ImVec2(x, rc.Max.y - 4), boxCol, 4.f);
@@ -578,8 +730,9 @@ struct GraphEditorDelegate : public GraphEditor::Delegate
 	std::vector<GraphEditor::Link> mLinks = { {0, 0, 1, 0} };
 };
 
-
 std::map<const std::string, MySequence> mySequenceMap;
+
+void UpdateSequencer();
 
 #pragma endregion Sequencer
 ///
@@ -1578,7 +1731,7 @@ void ShowSequencerEditor()
 {
 	using namespace application::editor::imgui;
 
-	bool isMousOver = ImGui::IsMouseHoveringRect(ImGui::GetWindowPos() + ImGui::GetWindowContentRegionMin(), ImGui::GetWindowPos() + ImGui::GetWindowContentRegionMax());
+	bool isMousOver = ImGui::IsMouseHoveringRect(ImGui::GetWindowPos() + ImGui::GetWindowContentRegionMin() + ImVec2(350, 0), ImGui::GetWindowPos() + ImGui::GetWindowContentRegionMax());
 
 	static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
 
@@ -1601,7 +1754,14 @@ void ShowSequencerEditor()
 		ImGui::SameLine();
 		if (ImGui::Button("Play Animation"))
 		{
-			pm.PlaySelectedAnimation();
+			if (pm.IsAnimationPlaying())
+			{
+				pm.StopSelectedAnimation();
+			}
+			else
+			{
+				pm.PlaySelectedAnimation();
+			}
 		}
 	}
 
@@ -1620,12 +1780,16 @@ void ShowSequencerEditor()
 		aniIndex++;
 	}
 
+	UpdateSequencer();
+
 	ImSequencer::Sequencer(&mySequenceMap[fbxName], &currentFrame, &expanded, &selectedEntry, &firstFrame, ImSequencer::SEQUENCER_EDIT_STARTEND | ImSequencer::SEQUENCER_CHANGE_FRAME);
 
 	bool aniFuncPopup = false;
 
+	bool updateData = !ImGui::IsPopupOpen("##AniFunc_Popup");
+
 	// add a UI to edit that particular item
-	if (selectedEntry != -1)
+	if (selectedEntry != -1 && updateData)
 	{
 		MySequence::MySequenceItem& item = mySequenceMap[fbxName].myItems[selectedEntry];
 		auto ani = pm.GetMatchingIAnimation(fbxName, mySequenceMap[fbxName].GetItemLabel(selectedEntry));
@@ -1646,6 +1810,16 @@ void ShowSequencerEditor()
 		{
 			animator->SetAnimationFrame(ani, currentFrame);
 		}
+		else
+		{
+			currentFrame = animator->GetCurrentFrame();
+			if (currentFrame + 1 >= item.mFrameEnd)
+			{
+				currentFrame = 0;
+				pm.StopSelectedAnimation();
+				animator->SetAnimationFrame(ani, currentFrame);
+			}
+		}
 
 		if (isMousOver && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
 		{
@@ -1653,9 +1827,11 @@ void ShowSequencerEditor()
 		}
 	}
 
+	static int funcIndex = -1;
 	if (aniFuncPopup)
 	{
 		ImGui::OpenPopup("##AniFunc_Popup");
+		funcIndex = selectedEntry;
 	}
 
 	if (ImGui::BeginPopup("##AniFunc_Popup"))
@@ -1701,7 +1877,7 @@ void ShowSequencerEditor()
 							sptr->frame = currentFrame;
 							sptr->objName = particleName;
 							pm.AddAnimationEvent(sptr);
-							mySequenceMap[fbxName].myItems[selectedEntry].funcList.insert(sptr);
+							mySequenceMap[fbxName].myItems[funcIndex].funcList.insert(sptr);
 
 							particleName = "None";
 							ImGui::CloseCurrentPopup();
@@ -1760,7 +1936,7 @@ void ShowSequencerEditor()
 							sptr->frame = currentFrame;
 							sptr->objName = particleName;
 							pm.AddAnimationEvent(sptr);
-							mySequenceMap[fbxName].myItems[selectedEntry].funcList.insert(sptr);
+							mySequenceMap[fbxName].myItems[funcIndex].funcList.insert(sptr);
 
 							particleName = "None";
 							ImGui::CloseCurrentPopup();
@@ -1846,9 +2022,37 @@ void InputUpdate()
 		}
 		else
 		{
-			if (!pm.GetSelectedParticleInstanceData().expired())
+			if (!pm.GetSelectedAnimationEvent().expired())
 			{
-				pm.EraseParticleInstance(pm.GetSelectedFBXData(), pm.GetSelectedParticleInstanceData());
+				pm.EraseAnimationEvent(pm.GetSelectedAnimationEvent().lock());
+			}
+			else if (!pm.GetSelectedParticleInstanceData().expired())
+			{
+				application::editor::imgui::ShowMessageBox("Delete PI", [&]()
+					{
+						application::editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+						ImGui::Separator();
+
+						ImGui::SetNextItemWidth(-1);
+						ImGui::Text(("Are you sure you want to delete the \"" + pm.GetSelectedParticleInstanceData().lock()->name + "\"?").c_str());
+
+						ImGui::Separator();
+
+						if (ImGui::Button("Delete"))
+						{
+							pm.EraseParticleInstance(pm.GetSelectedFBXData(), pm.GetSelectedParticleInstanceData());
+							ImGui::CloseCurrentPopup();
+							application::editor::imgui::CloseMessageBox("Delete PI");
+						}
+						ImGui::SameLine();
+
+						if (ImGui::Button("Cancel"))
+						{
+							ImGui::CloseCurrentPopup();
+							application::editor::imgui::CloseMessageBox("Delete PI");
+						}
+					}, 500);
 			}
 		}
 	}
@@ -2160,5 +2364,51 @@ void ImGui_DrawTransform(int& idx)
 		}
 
 		application::editor::imgui::EndSection();
+	}
+}
+
+void UpdateSequencer()
+{
+	static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+	
+	if (ppisLoad)
+	{
+		for (auto& eachFbx : pm.GetSkinnedFBXList())
+		{
+			int i = 0;
+			for (auto& eachAni : pm.GetAnimationNameList(eachFbx->getName()))
+			{
+				auto& list = pm.GetAnimationEventList(pm.GetMatchingIAnimation(eachFbx->getName(), eachAni));
+				for (auto itr = list.rbegin(); itr != list.rend(); itr++)
+				{
+					mySequenceMap[eachFbx->getName()].myItems[i].funcList.insert(*itr);
+				}
+				i++;
+			}
+		}
+
+		ppisLoad = false;
+	}
+}
+
+void EraseSequenceData(const std::weak_ptr<application::AnimationEvent>& event)
+{
+	static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
+
+	for (auto& eachFbx : pm.GetSkinnedFBXList())
+	{
+		int i = 0;
+		for (auto& eachAni : pm.GetAnimationNameList(eachFbx->getName()))
+		{
+			for (auto& eachEvent : mySequenceMap[eachFbx->getName()].myItems[i].funcList)
+			{
+				if (eachEvent.lock() == event.lock())
+				{
+					mySequenceMap[eachFbx->getName()].myItems[i].funcList.erase(event);
+					break;
+				}
+			}
+			i++;
+		}
 	}
 }

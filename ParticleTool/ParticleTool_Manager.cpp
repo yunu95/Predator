@@ -79,7 +79,7 @@ namespace application
 
 				loadFile.close();
 
-				currentPPPath = path;
+				SetCurrentPPPath(path);
 				return true;
 			}
 			else
@@ -171,7 +171,7 @@ namespace application
 
 			if (selectedParticleData == particleList[name])
 			{
-				selectedParticleData = nullptr;
+				SetSelectedParticleData(std::shared_ptr<ParticleToolData>());
 			}
 
 			particleList.erase(name);
@@ -288,22 +288,21 @@ namespace application
 
 				for (int i = 0; i < objSize; i++)
 				{
-					std::string key = mapData[i]["targetUnit"];
-					auto ptr = AddParticleInstance(skinnedObjList[key]);
+					std::string key = mapData["InstanceList"][i]["targetUnit"];
+					auto ptr = AddParticleInstance(skinnedObjList[key], "", mapData["InstanceList"][i]["name"]);
 					auto sptr = ptr.lock();
-					sptr->particleData = mapData[i]["particleData"];
+					sptr->particleData = mapData["InstanceList"][i]["particleData"];
 					sptr->targetUnit = key;
-					sptr->name = mapData[i]["name"];
-					sptr->offsetPos.x = mapData[i]["offsetPos"]["x"];
-					sptr->offsetPos.y = mapData[i]["offsetPos"]["y"];
-					sptr->offsetPos.z = mapData[i]["offsetPos"]["z"];
-					sptr->rotation.w = mapData[i]["rotation"]["w"];
-					sptr->rotation.x = mapData[i]["rotation"]["x"];
-					sptr->rotation.y = mapData[i]["rotation"]["y"];
-					sptr->rotation.z = mapData[i]["rotation"]["z"];
-					sptr->scale.x = mapData[i]["scale"]["x"];
-					sptr->scale.y = mapData[i]["scale"]["y"];
-					sptr->scale.z = mapData[i]["scale"]["z"];
+					sptr->offsetPos.x = mapData["InstanceList"][i]["offsetPos"]["x"];
+					sptr->offsetPos.y = mapData["InstanceList"][i]["offsetPos"]["y"];
+					sptr->offsetPos.z = mapData["InstanceList"][i]["offsetPos"]["z"];
+					sptr->rotation.w = mapData["InstanceList"][i]["rotation"]["w"];
+					sptr->rotation.x = mapData["InstanceList"][i]["rotation"]["x"];
+					sptr->rotation.y = mapData["InstanceList"][i]["rotation"]["y"];
+					sptr->rotation.z = mapData["InstanceList"][i]["rotation"]["z"];
+					sptr->scale.x = mapData["InstanceList"][i]["scale"]["x"];
+					sptr->scale.y = mapData["InstanceList"][i]["scale"]["y"];
+					sptr->scale.z = mapData["InstanceList"][i]["scale"]["z"];
 					UpdateParticleInstanceDataObj(sptr);
 				}
 
@@ -315,7 +314,7 @@ namespace application
 
 				loadFile.close();
 
-				currentPPPath = path;
+				SetCurrentPPIsPath(path);
 				return true;
 			}
 			else
@@ -497,7 +496,7 @@ namespace application
 			return particleInstanceIDMap[ptr.lock()];
 		}
 
-		std::weak_ptr<ParticleToolInstance> ParticleTool_Manager::AddParticleInstance(yunutyEngine::GameObject* parents, const std::string& name)
+		std::weak_ptr<ParticleToolInstance> ParticleTool_Manager::AddParticleInstance(yunutyEngine::GameObject* parents, const std::string& templateName, const std::string& instanceName)
 		{
 			if (!parents)
 			{
@@ -506,8 +505,34 @@ namespace application
 
 			std::shared_ptr<ParticleToolInstance> ptr = std::make_shared<ParticleToolInstance>();
 			ptr->targetUnit = parents->getName();
-			ptr->name = "PI_" + std::to_string(particleInstanceCount);
+
+			if (instanceName.empty())
+			{
+				auto tempName = "PI_" + std::to_string(particleInstanceCount);
+				if (instanceCountNameList.contains(tempName))
+				{
+					for (auto itr = instanceCountNameList.find(tempName); itr != instanceCountNameList.end(); itr++)
+					{
+						if (*itr == "PI_" + std::to_string(particleInstanceCount))
+						{
+							particleInstanceCount++;
+						}
+						else
+						{
+							break;
+						}
+					}
+				}
+									
+				ptr->name = "PI_" + std::to_string(particleInstanceCount);
+			}
+			else
+			{
+				ptr->name = instanceName;
+			}
+
 			particleInstanceList[parents->getName()].insert(ptr);
+			instanceCountNameList.insert(ptr->name);
 
 			auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 			obj->setName(ptr->name);
@@ -515,9 +540,9 @@ namespace application
 
 			particleInstanceIDMap[ptr] = obj;
 
-			if (!name.empty() && particleList.contains(name))
+			if (!templateName.empty() && particleList.contains(templateName))
 			{
-				ptr->particleData = *particleList[name];
+				ptr->particleData = *particleList[templateName];
 			}
 
 			UpdateParticleInstanceDataObj(ptr);
@@ -546,13 +571,16 @@ namespace application
 
 			if (selectedParticleInstanceData == sptr)
 			{
-				selectedParticleInstanceData = nullptr;
+				SetSelectedParticleInstanceData(std::shared_ptr<ParticleToolInstance>());
 			}
 
 			yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(particleInstanceIDMap[sptr]);
 
+			EraseLinkedEvent(instance.lock());
+
 			particleInstanceIDMap.erase(sptr);
 
+			instanceCountNameList.erase(sptr->name);
 			particleInstanceList[parents->getName()].erase(sptr);
 			return true;
 		}
@@ -626,10 +654,26 @@ namespace application
 			}
 			if (selectedParticleInstanceData)
 			{
-				particleInstanceIDMap[selectedParticleInstanceData]->SetSelfActive(false);
+				SetSelectedParticleInstanceData(std::shared_ptr<ParticleToolInstance>());
 			}
 			auto animator = GetSelectedFBXData()->GetComponent<graphics::Animator>();
 			animator->Play(selectedAnimation);
+		}
+
+		void ParticleTool_Manager::StopSelectedAnimation()
+		{
+			if (!selectedAnimation)
+			{
+				return;
+			}
+			
+			auto animator = GetSelectedFBXData()->GetComponent<graphics::Animator>();
+			animator->Pause();
+
+			for (auto& each : particleInstanceList[selectedFBXObject->getName()])
+			{
+				particleInstanceIDMap[each]->SetSelfActive(false);
+			}
 		}
 
 		bool ParticleTool_Manager::IsAnimationPlaying()
@@ -640,7 +684,7 @@ namespace application
 			}
 
 			auto animator = GetSelectedFBXData()->GetComponent<graphics::Animator>();
-			return animator->IsPlaying();
+			return (animator->IsPlaying() && animator->GetCurrentFrame() >= 0 && animator->GetCurrentFrame() <= selectedAnimation->GetTotalFrame());
 		}
 
 		bool ParticleTool_Manager::AddAnimationEvent(const std::shared_ptr<application::AnimationEvent>& event)
@@ -675,6 +719,11 @@ namespace application
 				i++;
 			}
 
+			if (selectedAniEvent == event)
+			{
+				SetSelectedAnimationEvent(nullptr);
+			}
+
 			aniEventMap[ani].erase(event);
 			return aniEventManager.EraseAnimationEvent(event);
 		}
@@ -702,6 +751,18 @@ namespace application
 			}
 
 			return container;
+		}
+
+		void ParticleTool_Manager::EditAnimationEventFrame(const std::weak_ptr<AnimationEvent>& event, float frame)
+		{
+			if (event.lock()->frame == frame)
+			{
+				return;
+			}
+
+			aniEventManager.EraseAnimationEvent(event.lock());
+			event.lock()->frame = frame;
+			aniEventManager.AddAnimationEvent(event.lock());
 		}
 
 		void ParticleTool_Manager::ClearPP()
@@ -734,12 +795,64 @@ namespace application
 			SetSelectedFBXData(nullptr);
 			aniEventManager.Clear();
 
+			instanceCountNameList.clear();
 			particleInstanceList.clear();
 			particleInstanceIDMap.clear();
 			aniEventMap.clear();
 
 			particleInstanceCount = 0;
 			aniEventCount = 0;
+		}
+
+		void ParticleTool_Manager::EraseLinkedEvent(const std::shared_ptr<ParticleToolInstance>& instance)
+		{
+			std::vector<std::shared_ptr<application::AnimationEvent>> eraseList;
+			for (auto& [fbx, ani] : aniMap)
+			{
+				if (instance->targetUnit != fbx)
+				{
+					continue;
+				}
+
+				for (auto& each : ani)
+				{
+					if (aniEventMap.contains(each))
+					{
+						for (auto& event : aniEventMap[each])
+						{
+							auto type = event->GetType();
+							switch (type)
+							{
+								case application::AnimationEventType::GameObject_ActivateEvent:
+								{
+									auto ptr = static_cast<GameObject_ActivateEvent*>(event.get());
+									if (ptr->objName == instance->name)
+									{
+										eraseList.push_back(event);
+									}
+									break;
+								}
+								case application::AnimationEventType::GameObject_DisabledEvent:
+								{
+									auto ptr = static_cast<GameObject_DisabledEvent*>(event.get());
+									if (ptr->objName == instance->name)
+									{
+										eraseList.push_back(event);
+									}
+									break;
+								}
+								default:
+									break;
+							}
+						}
+					}
+				}
+
+				for (auto& each : eraseList)
+				{
+					EraseAnimationEvent(each);
+				}
+			}
 		}
 	}
 }

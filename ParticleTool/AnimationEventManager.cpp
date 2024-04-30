@@ -3,6 +3,10 @@
 #include "YunutyEngine.h"
 #include "ParticleTool_Manager.h"
 
+extern bool ppisLoad;
+
+void EraseSequenceData(const std::weak_ptr<application::AnimationEvent>& event);
+
 namespace application
 {
 	void AnimationEventManager::Init()
@@ -39,6 +43,8 @@ namespace application
 			}
 
 			animator->EraseAnimationFunc(ani, eventFuncIndexList[eachEvent]);
+
+			EraseSequenceData(eachEvent);
 		}
 		eventList.clear();
 		eventFuncIndexList.clear();
@@ -46,11 +52,137 @@ namespace application
 
 	bool AnimationEventManager::Load(const json& data)
 	{
+		static auto& pm = particle::ParticleTool_Manager::GetSingletonInstance();
+
+		auto funcSize = data.size();
+
+		std::string fbxName = "";
+		std::string animationName = "";
+		float frame = 0;
+		AnimationEventType type = AnimationEventType::GameObject_ActivateEvent;
+		for (int i = 0; i < funcSize; i++)
+		{
+			type = (AnimationEventType)data[i]["type"];
+			fbxName = data[i]["fbxName"];
+			animationName = data[i]["animationName"];
+			frame = data[i]["frame"];
+			
+			switch (type)
+			{
+				case application::AnimationEventType::GameObject_ActivateEvent:
+				{
+					auto particleName = data[i]["objName"];
+					auto ptr = std::make_shared<GameObject_ActivateEvent>();
+					ptr->fbxName = fbxName;
+					ptr->animationName = animationName;
+					ptr->frame = frame;
+					ptr->objName = particleName;
+					pm.AddAnimationEvent(ptr);
+					break;
+				}
+				case application::AnimationEventType::GameObject_DisabledEvent:
+				{
+					auto particleName = data[i]["objName"];
+					auto ptr = std::make_shared<GameObject_DisabledEvent>();
+					ptr->fbxName = fbxName;
+					ptr->animationName = animationName;
+					ptr->frame = frame;
+					ptr->objName = particleName;
+					pm.AddAnimationEvent(ptr);
+					break;
+				}
+				case application::AnimationEventType::Sound_PlayOnceEvent:
+				{
+					auto rscPath = data[i]["rscPath"];
+					auto ptr = std::make_shared<Sound_PlayOnceEvent>();
+					ptr->fbxName = fbxName;
+					ptr->animationName = animationName;
+					ptr->frame = frame;
+					ptr->rscPath = rscPath;
+					pm.AddAnimationEvent(ptr);
+					break;
+				}
+				case application::AnimationEventType::Sound_PlayLoopEvent:
+				{
+					auto rscPath = data[i]["rscPath"];
+					auto ptr = std::make_shared<Sound_PlayLoopEvent>();
+					ptr->fbxName = fbxName;
+					ptr->animationName = animationName;
+					ptr->frame = frame;
+					ptr->rscPath = rscPath;
+					pm.AddAnimationEvent(ptr);
+					break;
+				}
+				default:
+					break;
+			}
+		}
+
+		ppisLoad = true;
+
 		return true;
 	}
 
 	bool AnimationEventManager::Save(json& data)
 	{
+		for (auto& event : eventList)
+		{
+			auto type = event->GetType();
+
+			switch (type)
+			{
+				case application::AnimationEventType::GameObject_ActivateEvent:
+				{
+					auto ptr = static_cast<GameObject_ActivateEvent*>(event.get());
+					json ptrData;
+					ptrData["type"] = AnimationEventType::GameObject_ActivateEvent;
+					ptrData["fbxName"] = ptr->fbxName;
+					ptrData["animationName"] = ptr->animationName;
+					ptrData["frame"] = ptr->frame;
+					ptrData["objName"] = ptr->objName;
+					data.push_back(ptrData);
+					break;
+				}
+				case application::AnimationEventType::GameObject_DisabledEvent:
+				{
+					auto ptr = static_cast<GameObject_DisabledEvent*>(event.get());
+					json ptrData;
+					ptrData["type"] = AnimationEventType::GameObject_DisabledEvent;
+					ptrData["fbxName"] = ptr->fbxName;
+					ptrData["animationName"] = ptr->animationName;
+					ptrData["frame"] = ptr->frame;
+					ptrData["objName"] = ptr->objName;
+					data.push_back(ptrData);
+					break;
+				}
+				case application::AnimationEventType::Sound_PlayOnceEvent:
+				{
+					auto ptr = static_cast<Sound_PlayOnceEvent*>(event.get());
+					json ptrData;
+					ptrData["type"] = AnimationEventType::Sound_PlayOnceEvent;
+					ptrData["fbxName"] = ptr->fbxName;
+					ptrData["animationName"] = ptr->animationName;
+					ptrData["frame"] = ptr->frame;
+					ptrData["rscPath"] = ptr->rscPath;
+					data.push_back(ptrData);
+					break;
+				}
+				case application::AnimationEventType::Sound_PlayLoopEvent:
+				{
+					auto ptr = static_cast<Sound_PlayLoopEvent*>(event.get());
+					json ptrData;
+					ptrData["type"] = AnimationEventType::Sound_PlayLoopEvent;
+					ptrData["fbxName"] = ptr->fbxName;
+					ptrData["animationName"] = ptr->animationName;
+					ptrData["frame"] = ptr->frame;
+					ptrData["rscPath"] = ptr->rscPath;
+					data.push_back(ptrData);
+					break;
+				}
+				default:
+					break;
+			}
+		}
 		return true;
 	}
 
@@ -184,8 +316,11 @@ namespace application
 
 		animator->EraseAnimationFunc(ani, eventFuncIndexList[event]);
 
+		EraseSequenceData(event);
+
 		eventList.erase(event);
 		eventFuncIndexList.erase(event);
+
 		return true;
 	}
 }

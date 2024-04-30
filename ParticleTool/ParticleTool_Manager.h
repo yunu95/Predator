@@ -5,6 +5,7 @@
 
 #include "Singleton.h"
 #include "AnimationEventManager.h"
+#include "ParticleToolData.h"
 
 #include <memory>
 #include <vector>
@@ -28,8 +29,8 @@ namespace application
 {
 	namespace particle
 	{
-		class ParticleToolData;
-		class ParticleToolInstance;
+		struct ParticleToolData;
+		struct ParticleToolInstance;
 	}
 }
 
@@ -86,7 +87,7 @@ namespace application
 
 			yunutyEngine::GameObject* GetParticleToolInstanceObject(const std::weak_ptr<ParticleToolInstance>& ptr);
 
-			std::weak_ptr<ParticleToolInstance> AddParticleInstance(yunutyEngine::GameObject* parents, const std::string& name = "");
+			std::weak_ptr<ParticleToolInstance> AddParticleInstance(yunutyEngine::GameObject* parents, const std::string& templateName = "", const std::string& instanceName = "");
 			bool EraseParticleInstance(yunutyEngine::GameObject* parents, const std::weak_ptr<ParticleToolInstance>& instance);
 
 			void SetSelectedParticleInstanceData(const std::weak_ptr<ParticleToolInstance>& particleInstanceData);
@@ -95,6 +96,7 @@ namespace application
 			void UpdateParticleInstanceDataObj(const std::weak_ptr<ParticleToolInstance>& instance);
 
 			void PlaySelectedAnimation();
+			void StopSelectedAnimation();
 			bool IsAnimationPlaying();
 
 			bool AddAnimationEvent(const std::shared_ptr<application::AnimationEvent>& event);
@@ -105,14 +107,19 @@ namespace application
 
 			std::vector<std::weak_ptr<AnimationEvent>>& GetAnimationEventList(yunuGI::IAnimation* ani);
 
+			void EditAnimationEventFrame(const std::weak_ptr<AnimationEvent>& event, float frame);
+
 		private:
 			void ClearPP();
 			void ClearPPIs();
+
+			void EraseLinkedEvent(const std::shared_ptr<ParticleToolInstance>& instance);
 
 			AnimationEventManager& aniEventManager = AnimationEventManager::GetSingletonInstance();
 
 			bool isParticleEditMode = true;
 			unsigned long long particleInstanceCount = 0;
+			std::set<std::string> instanceCountNameList = std::set<std::string>();
 			unsigned long long aniEventCount = 0;
 			std::string currentPPPath;
 			std::string currentPPIsPath;
