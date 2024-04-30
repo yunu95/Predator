@@ -17,11 +17,11 @@ class PlaytimeRegion : public Component, public ContentsObservee
 private:
 	application::editor::RegionData* regionData{nullptr};
 	//std::wstring m_regionName;
-	virtual ~PlaytimeRegion();
 
 	bool isOnceActivated{ false };
 
 public:
+	virtual ~PlaytimeRegion();
 	virtual void PlayFunction() override;
 	virtual void StopFunction() override;
 

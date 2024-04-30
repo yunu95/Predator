@@ -54,6 +54,7 @@ public:
     virtual void Start() override;
     virtual void OnTransformUpdate() override;
     virtual void Update() override;
+    virtual void OnEnable() override;
     virtual void OnDisable() override;
 
     friend class UIManager;

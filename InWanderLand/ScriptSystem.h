@@ -37,6 +37,7 @@ namespace application
 		friend class editor::MapFileManager;
 
 	public:
+		ScriptSystem() = default;
 		virtual void SingletonInitializer() override;
 
 		Script* CreateScript();
@@ -53,7 +54,6 @@ namespace application
 		static std::vector<std::pair<ActionType, std::string>> actionList;
 
 	private:
-		ScriptSystem() = default;
 
 		void Clear();
 
