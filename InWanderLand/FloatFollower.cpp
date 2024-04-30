@@ -31,3 +31,13 @@ void FloatFollower::SetTargetFloat(float target)
         }
     }
 }
+
+void FloatFollower::PlayFunction()
+{
+
+}
+
+void FloatFollower::StopFunction()
+{
+	yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+}

@@ -201,6 +201,7 @@ private:
 	float m_stopFollowDinstance{ 2.0f };			// 이 수치만큼 거리가 좁혀지면 멈춘다.
 	bool isFollowing{ false };
 
+public:
 	bool isPermittedToTacticAction{ false };
 
 private:

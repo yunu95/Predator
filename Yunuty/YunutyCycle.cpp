@@ -138,7 +138,7 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
         static std::vector<GameObject*> vector;
         vector.clear();
         vector = std::vector<GameObject*>(Scene::getCurrentScene()->destroyList.begin(), Scene::getCurrentScene()->destroyList.end());
-        std::sort(vector.begin(), vector.end(), [](GameObject* a, GameObject* b) {return a->GetAncestorNumber() < b->GetAncestorNumber(); });
+        std::sort(vector.begin(), vector.end(), [](GameObject* a, GameObject* b) {return a->GetAncestorNumber() > b->GetAncestorNumber(); });
 
         for (auto each : vector)
         {

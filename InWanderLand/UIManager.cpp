@@ -168,6 +168,26 @@ void UIManager::Update()
         }
     }
 }
+
+void UIManager::Start()
+{
+    isSingletonComponent = true;
+}
+
+void UIManager::PlayFunction()
+{
+	this->SetActive(true);
+	if (isOncePaused)
+	{
+		Start();
+	}
+}
+
+void UIManager::StopFunction()
+{
+    Clear();
+}
+
 void UIManager::ImportUI(const char* path)
 {
     std::ifstream file{ path };
