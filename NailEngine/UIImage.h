@@ -33,12 +33,21 @@ public:
     // 시계방향으로 채우는가?
     void SetRadialFillDirection(bool isClockwise);
     void PreProcessTexture();
+    // 텍스처를 임의의 점으로부터 특정 방향으로 선형적으로 잘라냅니다.
+    bool IsLinearClippingMode();
+    void SetLinearClipping(bool clip);
+    void SetLinearClippingStartPoint(float x, float y);
+    void SetLinearClippingDirection(float x, float y);
 private:
     bool isRadialFillMode{ false };
     float radialFillDegree{ 360 };
-
     DirectX::SimpleMath::Vector2 radialFillStartDirection{ 0,1 };
     bool radialFillIsClockwise{ true };
+
+    bool isLinearClippingMode{ false };
+    DirectX::SimpleMath::Vector2 linearClippingStart{ 0, 0.5f };
+    DirectX::SimpleMath::Vector2 linearClippingDirection{ 0, 1 };
+
     float width{ -1 };
     float height{ -1 };
     // 0,0은 왼쪽 위
