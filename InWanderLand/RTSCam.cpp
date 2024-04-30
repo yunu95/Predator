@@ -232,17 +232,6 @@ Vector3d RTSCam::GetIdealPosition()
     return targetPos;
 }
 
-void RTSCam::PlayFunction()
-{
-
-}
-
-void RTSCam::StopFunction()
-{
-	if (GetGameObject()->GetSelfActive())
-		GetGameObject()->SetSelfActive(false);
-}
-
 void RTSCam::UpdateCameraView()
 {
     //damping for smooth camera

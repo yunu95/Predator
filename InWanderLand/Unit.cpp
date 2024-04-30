@@ -47,16 +47,19 @@ void Unit::Start()
 
     //returnToPoolFunction = []() {};
     unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Move,
-        [this]() { return currentOrder == UnitState::Move; } });
+        [this]() { return (currentOrder == UnitState::Move && !TacticModeSystem::Instance().IsUnitsPerformingCommand()) ||
+        (currentOrder == UnitState::Move && TacticModeSystem::Instance().IsUnitsPerformingCommand()); } });
 
     unitFSM.transitions[UnitState::Idle].push_back({ UnitState::AttackMove,
         [this]() { return currentOrder == UnitState::AttackMove || (unitFSM.previousState == UnitState::Attack && isAttackMoving); } });
 
     unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Chase,
-        [this]() { return  GameManager::Instance().IsWaveEngageMotionEnd() && (m_currentTargetUnit != nullptr && idleElapsed >= idleToChaseDelay) && m_currentTargetUnit->currentOrder != UnitState::Death && m_idDistance > 0.1f && m_atkDistance > 0.1f; } });
+        [this]() { return  GameManager::Instance().IsWaveEngageMotionEnd() && (m_currentTargetUnit != nullptr &&
+                            idleElapsed >= idleToChaseDelay) && m_currentTargetUnit->currentOrder != UnitState::Death &&
+                            m_idDistance > 0.1f && m_atkDistance > 0.1f; } });
 
     unitFSM.transitions[UnitState::Move].push_back({ UnitState::Idle,
-        [this]() { return abs(GetGameObject()->GetTransform()->GetWorldPosition().x - m_currentMovePosition.x) < 0.2f && abs(GetGameObject()->GetTransform()->GetWorldPosition().z - m_currentMovePosition.z) < 0.2f; } });
+        [this]() { return currentOrder == UnitState::Idle; } });
 
     unitFSM.transitions[UnitState::Move].push_back({ UnitState::AttackMove,
         [this]() { return currentOrder == UnitState::AttackMove; } });
@@ -104,7 +107,7 @@ void Unit::Start()
 	{
 		unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::Skill,
 		[=]() { return currentOrder == UnitState::Skill || trapClassifingFunction() 
-			&& TacticModeSystem::Instance().isTacticModeOperating; } });
+			&& TacticModeSystem::Instance().IsOrderingTimingNow(); } });
 	}
 
     for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Paralysis); i++)
@@ -186,6 +189,12 @@ void Unit::Start()
                 if (m_currentTargetUnit != nullptr && currentOrder == UnitState::Attack)
                 {
                     atkSys->Attack(m_currentTargetUnit, m_attackOffset);
+					if (isPermittedToTacticAction)
+					{
+						TacticModeSystem::Instance().ReportTacticActionFinished();
+						isPermittedToTacticAction = false;
+                        currentOrder = UnitState::Idle;
+					}
                 }
                 isAttackAnimationOperating = false;
                 m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
@@ -220,6 +229,8 @@ void Unit::StopFunction()
 {
 	if (GetGameObject()->GetSelfActive())
 		GetGameObject()->SetSelfActive(false);
+
+	yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
 }
 
 Unit::UnitType Unit::GetUnitType() const
@@ -234,14 +245,14 @@ Unit::UnitSide Unit::GetUnitSide() const
 
 #pragma region State Engage()
 void Unit::IdleEngage()
-	{
-		TacticModeSystem::Instance().isTacticModeOperating = false;
-	
-		currentOrder = UnitState::Idle;
-		idleElapsed = 0.0f;
-		if(m_staticMeshRenderer != nullptr)
-			m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
-		m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
+{
+	//TacticModeSystem::Instance().isTacticModeOperating = false;
+
+	currentOrder = UnitState::Idle;
+	idleElapsed = 0.0f;
+	if (m_staticMeshRenderer != nullptr)
+		m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
+	m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 
     currentOrder = UnitState::Idle;
     idleElapsed = 0.0f;
@@ -479,11 +490,11 @@ void Unit::IdleUpdate()
 {
     CheckCurrentAnimation(unitAnimations.m_idleAnimation);
 
-		if (!IsTacticModeQueueEmpty() && TacticModeSystem::Instance().isTacticModeOperating == false)
-		{
-			m_tacticModeQueue.front()();
-			m_tacticModeQueue.pop();
-		}
+	if (!IsTacticModeQueueEmpty() && !TacticModeSystem::Instance().IsOrderingTimingNow() && isPermittedToTacticAction)
+	{
+		m_tacticModeQueue.front()();
+		m_tacticModeQueue.pop();
+	}
 
     idleElapsed += Time::GetDeltaTime();
 
@@ -505,6 +516,18 @@ void Unit::MoveUpdate()
         //RotateUnit(m_currentMovePosition);
         dotween->DOLookAt(m_currentMovePosition, rotateTime, false);
         m_navAgentComponent->MoveTo(m_currentMovePosition);
+    }
+
+    ///
+    if (abs(GetGameObject()->GetTransform()->GetWorldPosition().x - m_currentMovePosition.x) < 0.2f &&
+        abs(GetGameObject()->GetTransform()->GetWorldPosition().z - m_currentMovePosition.z) < 0.2f)
+    {
+        currentOrder = UnitState::Idle;
+        if (isPermittedToTacticAction)
+        {
+			TacticModeSystem::Instance().ReportTacticActionFinished();
+			isPermittedToTacticAction = false;
+        }
     }
 }
 
@@ -1375,6 +1398,11 @@ void Unit::SetUnitStateIdle()
     {
         PlayerController::Instance().SetRightClickFunction();
     }
+}
+
+void Unit::PermitTacticAction()
+{
+    isPermittedToTacticAction = true;
 }
 
 bool Unit::GetJustCrushedState() const
