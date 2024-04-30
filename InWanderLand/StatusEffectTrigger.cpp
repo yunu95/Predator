@@ -9,6 +9,5 @@ void StatusEffectTrigger::OnTriggerEnter(physics::Collider* collider)
 		colliderUnitComponent->GetUnitSide() != m_ownerUnit->GetUnitSide())
 	{
 		ApplyStatus(m_ownerUnit, colliderUnitComponent);
-		colliderUnitComponent->ReportStatusEffectApplied(m_statusEffectType);
 	}
 }
