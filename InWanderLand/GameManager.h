@@ -45,6 +45,7 @@ public:
 
 	void AddCombo();
 	void ResetCombo();
+	void ReportComboChanged() const;
 
 	void ReportWaveStartStateEnd(Unit* p_unit);
 	void ReportWaveMotionEnd(Unit* p_unit);

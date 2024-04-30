@@ -29,6 +29,7 @@ void GameManager::Update()
 			m_comboElapsed = 0.0f;
 			currentCombo = 0;
 			/// member로 세팅해놨던 comboNumber UIImage Component에게 현재 콤보 수를 넘겨준다.
+			ReportComboChanged();
 		}
 	}
 }
@@ -55,6 +56,8 @@ void GameManager::StopFunction()
 	isPlayerEnteredWaveRegion = false;
 	waveEngageMotionActivate = false;
 	waveEngageMotionEnd = false;
+
+	ReportComboChanged();
 }
 
 void GameManager::EngageBattle()
@@ -105,11 +108,20 @@ void GameManager::AddCombo()
 	m_comboElapsed = 0.0f;
 	currentCombo++;
 	/// member로 세팅해놨던 comboNumber UIImage Component에게 현재 콤보 수를 넘겨준다.
+	ReportComboChanged();
 }
 
 void GameManager::ResetCombo()
 {
 	currentCombo = 0;
+	ReportComboChanged();
+}
+
+void GameManager::ReportComboChanged() const
+{
+	/// 콤보 수가 변경될 때마다 호출되는 함수입니다.
+	/// 이 함수에서 멤버변수 currentCombo 를 comboNumber UIImage Component 에게 전달하면 됩니다.
+
 }
 
 void GameManager::ReportWaveStartStateEnd(Unit* p_unit)
