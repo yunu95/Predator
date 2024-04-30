@@ -6,6 +6,7 @@ struct VertexIn
     float3 pos : POSITION;
     float4 color : COLOR;
     float2 uv : TEXCOORD;
+    float2 lightUV : TEXCOORD1;
     float3 normal : NORMAL;
     float3 tangent : TANGENT;
     uint4 indices : BLENDINDICES;

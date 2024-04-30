@@ -39,6 +39,8 @@ namespace yunutyEngine
         {
         public:
             static Renderer& SingleInstance();
+            void SortByCameraDirection();
+
             // 그래픽스 엔진 라이브러리의 코드를 가져옵니다. 
             // 대상이 되는 그래픽 엔진은 YunuGraphicsInterface 인터페이스를 구현해야 합니다.
             void LoadGraphicsDll(const wstring& dllFileName);

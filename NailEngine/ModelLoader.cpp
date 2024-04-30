@@ -122,6 +122,7 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 			DirectX::SimpleMath::Vector3 dvertex{ vertexPos.x,vertexPos.y,vertexPos.z };
 
 			aiVector3D uv;
+			aiVector3D lightMapUV;
 			if (mesh->mTextureCoords[0] == nullptr)
 			{
 				uv.x = 0.5f;
@@ -131,7 +132,19 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 			{
 				uv = mesh->mTextureCoords[0][j];
 			}
+
+			if (mesh->mTextureCoords[1] == nullptr)
+			{
+				lightMapUV.x = 0.5f;
+				lightMapUV.y = 0.5f;
+			}
+			else
+			{
+				lightMapUV = mesh->mTextureCoords[1][j];
+			}
+
 			DirectX::SimpleMath::Vector2 duv{ uv.x, uv.y };
+			DirectX::SimpleMath::Vector2 lightUV{ lightMapUV.x, lightMapUV.y };
 
 			aiVector3D normal = mesh->mNormals[j];
 			DirectX::SimpleMath::Vector3 dnormal{ normal.x, normal.y, normal.z };
@@ -143,11 +156,11 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 			{
 				aiColor4D color = mesh->mColors[0][j];
 				
-				vertex = { dvertex, DirectX::SimpleMath::Vector4{color.r,color.g,color.b,color.a}, duv, dnormal, DirectX::SimpleMath::Vector3{tangent.x,tangent.y,tangent.z} };
+				vertex = { dvertex, DirectX::SimpleMath::Vector4{color.r,color.g,color.b,color.a}, duv, lightUV, dnormal, DirectX::SimpleMath::Vector3{tangent.x,tangent.y,tangent.z} };
 			}
 			else
 			{
-				vertex = { dvertex, DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f}, duv, dnormal, DirectX::SimpleMath::Vector3{tangent.x,tangent.y,tangent.z} };
+				vertex = { dvertex, DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f}, duv, lightUV, dnormal, DirectX::SimpleMath::Vector3{tangent.x,tangent.y,tangent.z} };
 			}
 
 			maxX = max(dvertex.x, maxX);

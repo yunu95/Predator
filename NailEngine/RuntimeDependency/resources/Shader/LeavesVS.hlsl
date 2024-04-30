@@ -6,6 +6,7 @@ struct VertexIn
     float3 pos : POSITION;
     float4 color : COLOR;
     float2 uv : TEXCOORD0;
+    float2 lightUV : TEXCOORD1;
     float3 normal : NORMAL;
     float3 tangent : TANGENT;
     
@@ -64,7 +65,7 @@ VertexOut main(VertexIn input)
     //    return output;
     //}
     
-    float2 lightuv = input.uv;
+    float2 lightuv = input.lightUV;
     lightuv.x *= lightMapUV[input.instanceID].scaling.x;
     lightuv.y = (1 - lightuv.y);
     lightuv.y *= (lightMapUV[input.instanceID].scaling.y);

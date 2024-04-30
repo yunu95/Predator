@@ -43,10 +43,12 @@ public:
     std::vector<VertexBuffer>& GetVertex() { return  vertexBufferVec; }
     std::vector<IndexBuffer>& GetIdx() { return indexBufferVec; }
 	DirectX::BoundingBox GetBoundingBox(DirectX::SimpleMath::Matrix wtm, unsigned int materialIndex = 0);
+	DirectX::BoundingBox& GetOriginBoundingBox();
     //virtual void GetBoundingBoxInfo(yunuGI::Vector3* min, yunuGI::Vector3* max);
 	std::vector<DirectX::SimpleMath::Vector3>& GetBoundingVertexList(DirectX::SimpleMath::Matrix& mat, int index);
     float GetDiffuseExposure();
     float GetAmbientExposure();
+    float GetBoundingRadius();
 #pragma endregion
 
 private:
@@ -70,5 +72,7 @@ private:
 
     float diffuseExposure = 1.f;
     float ambientExposure = 1.f;
+
+    float boundingRadius = 0.01f;
 };
 

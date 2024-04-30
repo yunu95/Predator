@@ -24,6 +24,8 @@ namespace yunuGI
         I3DRenderer() {};
         virtual ~I3DRenderer() {}
 
+        virtual void SortByCameraDirection() = 0;
+
         // DX를 초기화한다.
         //virtual bool Initialize() = 0;
 

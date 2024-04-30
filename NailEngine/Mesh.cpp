@@ -31,6 +31,9 @@ void Mesh::SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& in
 	aabb.Extents = DirectX::SimpleMath::Vector3((maxPoint.x - minPoint.x) * 0.5f, (maxPoint.y - minPoint.y) * 0.5f, (maxPoint.z - minPoint.z) * 0.5f);
 	this->aabbVec.emplace_back(aabb);
 
+	float tempRadius = std::sqrt(std::pow(aabb.Extents.x - 0, 2) + std::pow(aabb.Extents.y - 0, 2) + std::pow(aabb.Extents.z - 0, 2));
+	this->boundingRadius = max(this->boundingRadius, tempRadius);
+
 
 	std::vector<DirectX::SimpleMath::Vector3> tempVertexList;
 	tempVertexList.push_back(DirectX::SimpleMath::Vector3{ minPoint.x, minPoint.y, minPoint.z }); // [0]
@@ -115,6 +118,12 @@ DirectX::BoundingBox Mesh::GetBoundingBox(DirectX::SimpleMath::Matrix wtm, unsig
 
 	return transformedAABB;
 }
+
+DirectX::BoundingBox& Mesh::GetOriginBoundingBox()
+{
+	return this->aabb;
+}
+
 void Mesh::GetBoundingBoxInfo(const yunuGI::Matrix4x4& wtm, yunuGI::Vector3* min, yunuGI::Vector3* max)
 {
     auto aabb = GetBoundingBox(reinterpret_cast<const DirectX::SimpleMath::Matrix&>(wtm), 0);
@@ -194,4 +203,9 @@ float Mesh::GetDiffuseExposure()
 float Mesh::GetAmbientExposure()
 {
 	return this->ambientExposure;
+}
+
+float Mesh::GetBoundingRadius()
+{
+	return this->boundingRadius;
 }

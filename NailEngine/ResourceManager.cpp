@@ -171,6 +171,7 @@ yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yu
 		vertices.emplace_back(Vertex{ DirectX::SimpleMath::Vector3{posVec[i].x, posVec[i].y, posVec[i].z},
 						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
 						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
+						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
 						  tempNormal,
 						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } });
 	}
@@ -1814,10 +1815,10 @@ void ResourceManager::LoadRactangleMesh()
 
 	// POS COLOR UV TANGENT
 	// 앞면
-	vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
-	vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
-	vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
-	vec[3] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+	vec[0] = Vertex(DirectX::SimpleMath::Vector3(-w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector2(0.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+	vec[1] = Vertex(DirectX::SimpleMath::Vector3(-w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector2(0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+	vec[2] = Vertex(DirectX::SimpleMath::Vector3(+w2, +h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector2(1.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+	vec[3] = Vertex(DirectX::SimpleMath::Vector3(+w2, -h2, 0), DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.f, 1.f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector2(1.0f, 1.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
 
 	std::vector<unsigned int> idx(6);
 
@@ -1855,6 +1856,7 @@ void ResourceManager::LoadPointMesh()
 	vertices[0] = Vertex{ DirectX::SimpleMath::Vector3{0.0f, 0, 0 },
 						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
 						  DirectX::SimpleMath::Vector2{0.f,0.f},
+						  DirectX::SimpleMath::Vector2{0.f,0.f},
 						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
 						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
 
@@ -1880,17 +1882,20 @@ void ResourceManager::LoadLineMesh()
 	vertices[0] = Vertex{ DirectX::SimpleMath::Vector3{0.0f, 0, 0 },
 						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
 						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
+						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
 						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
 						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
 
 	vertices[1] = Vertex{ DirectX::SimpleMath::Vector3{1.0f, 0, 0 },
 						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
 						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
+						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
 						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
 						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
 
 	vertices[2] = Vertex{ DirectX::SimpleMath::Vector3{1.0f, 0, 0 },
 						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
 						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
 						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f },
 						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } };
