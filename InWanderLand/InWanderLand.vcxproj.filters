@@ -520,6 +520,9 @@
     <Filter Include="Contents\SkillSystem\SkillUpgradeSystem">
       <UniqueIdentifier>{817118ef-6fb6-4833-928d-b892cbf0627f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\Effect\TimePauseTimer">
+      <UniqueIdentifier>{3fb0e00b-59fb-4666-8075-5ac444045b35}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1324,6 +1327,9 @@
     <ClInclude Include="SkillUpgradeSystem.h">
       <Filter>Contents\SkillSystem\SkillUpgradeSystem</Filter>
     </ClInclude>
+    <ClInclude Include="TimePauseTimer.h">
+      <Filter>UI\Effect\TimePauseTimer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2019,6 +2025,9 @@
     </ClCompile>
     <ClCompile Include="SkillUpgradeSystem.cpp">
       <Filter>Contents\SkillSystem\SkillUpgradeSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="TimePauseTimer.cpp">
+      <Filter>UI\Effect\TimePauseTimer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

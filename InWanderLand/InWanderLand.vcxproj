@@ -1224,6 +1224,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="TerrainData.h" />
     <ClInclude Include="Terrain_TemplateData.h" />
     <ClInclude Include="TestUtilGraphicsTestCam.h" />
+    <ClInclude Include="TimePauseTimer.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TestUtilNavAgent.h" />
     <ClInclude Include="TestUtilRTSTestCam.h" />
@@ -1465,6 +1466,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="TestCaseMapFileIO.cpp" />
     <ClCompile Include="SnippetMapListIO.cpp" />
     <ClCompile Include="TestCasePhysxTrigger.cpp" />
+    <ClCompile Include="TimePauseTimer.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TestCaseUpdateComponents.cpp" />
     <ClCompile Include="TransformEditCommand.cpp" />

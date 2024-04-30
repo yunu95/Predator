@@ -54,8 +54,6 @@ struct JsonUIData
     float timeStoppingDuration;
     float opacityFadeInDuration;
     float opacityFadeOutDuration;
-    int enableCurveType;
-    int disableCurveType;
     float adjustingRate;
     float rotation;
     float width;
