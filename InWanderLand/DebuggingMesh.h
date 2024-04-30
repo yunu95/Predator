@@ -1,5 +1,6 @@
 #pragma once
 #include "YunutyEngine.h"
+#include "ContentsObservee.h"
 
 /// <summary>
 /// 피해를 받을 경우, 어떤 피해를 받았는지 알 수 있도록 다른 색의 큐브를 띄워준다.
@@ -13,12 +14,15 @@ enum class MaterialNum
 	Green,
 };
 
-class DebuggingMesh : public Component
+class DebuggingMesh : public Component, public ContentsObservee
 {
 public:
 	void SetUnitObject(Unit* p_unit);
 	void PopMeshUP(yunuGI::Color p_color, MaterialNum p_matNum);
 	
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
+
 private:
 	GameObject* m_ownerObject;
 	yunutyEngine::graphics::StaticMeshRenderer* m_staticMeshRendererComp;

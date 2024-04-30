@@ -2,7 +2,7 @@
 #include "YunutyEngine.h"
 #include <map>
 #include "Unit.h"
-#include "LazySingletonClass.h"
+#include "ContentsObservee.h"
 /// <summary>
 /// UnitFactory에서 Player를 만들 경우, PlayerController에 해당 Player를 등록한다.
 /// 고유 번호를 배분하여 키입력으로 지정할 수 있도록 해보자!
@@ -12,7 +12,7 @@ class RTSCam;
 class Unit;
 class CursorDetector;
 
-class PlayerController : public GHContents::LazySingletonClass<PlayerController>
+class PlayerController : public Component, public SingletonComponent<PlayerController>, public ContentsObservee
 {
 public:
 	enum class OrderType
@@ -36,10 +36,14 @@ public:
 
 	//void SelectFunctionByOrderType(int unitSerialNumber, OrderType p_orderType);
 public:
-	//void ApplyCurrentPlayerOrder(int unitSerialNumber, OrderType orderType);
+	virtual void Start() override;
+
 	void SetMovingSystemComponent(RTSCam* sys);
 	void AddPlayerUnit(Unit* p_playerUnit);
 	void ErasePlayerUnit(Unit* p_playerUnit);
+
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
 
 	void SetRightClickFunction();
 	void SetLeftClickAttackMove();

@@ -231,6 +231,20 @@ Vector3d RTSCam::GetIdealPosition()
     }
     return targetPos;
 }
+
+void RTSCam::PlayFunction()
+{
+
+}
+
+void RTSCam::StopFunction()
+{
+	if (!GetGameObject()->GetComponentWeakPtr<RTSCam>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
+}
+
 void RTSCam::UpdateCameraView()
 {
     //damping for smooth camera

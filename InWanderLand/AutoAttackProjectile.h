@@ -1,14 +1,16 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "Unit.h"
+#include "ContentsObservee.h"
+
 /// <summary>
 /// 실제로 발사체에 붙여줄 컴포넌트.
 /// 움직임과 다른 유닛과 충돌 했을 경우의 로직으로 구성된다.
 /// </summary>
 
-class SpecialEffect;
+class StatusEffect;
 
-class AutoAttackProjectile : public Component
+class AutoAttackProjectile : public Component, public ContentsObservee
 {
 protected:
 	float m_speed;
@@ -29,6 +31,9 @@ public:
 
 	void SetStraightBulletRange(float p_rng);
 
+	virtual void PlayFunction() override final;
+	virtual void StopFunction() override final;
+
 private:
 	void AutoChaseShootingFunction();
 	void StraightShootingFunction();
@@ -36,7 +41,7 @@ private:
 	void ProcessBulletHit(Unit* p_damagedUnit);
 
 public:
-	virtual void Start() override;
+	virtual void Start() override final;
 	virtual void Update() override;
 };
 

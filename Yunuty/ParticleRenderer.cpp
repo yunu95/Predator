@@ -153,6 +153,16 @@ void ParticleRenderer::ParticleUpdate()
     }
 }
 
+void yunutyEngine::graphics::ParticleRenderer::SetDuration(float duration)
+{
+    GetGI().SetDuration(duration);
+}
+
+float yunutyEngine::graphics::ParticleRenderer::GetDuration()
+{
+    return GetGI().GetDuration();
+}
+
 yunuGI::Matrix4x4 ParticleRenderer::GenerateRandomOffsetMatInCone()
 {
     auto randomPoint = GetRandomPointInCircle(0, 0, this->shape.cone.radius);
@@ -360,6 +370,7 @@ void ParticleRenderer::Update()
         else
         {
             ParticleUpdate();
+            accTime = 0.f;
         }
     }
 }

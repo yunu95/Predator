@@ -40,7 +40,7 @@ namespace yunutyEngine
 		const unordered_set<RepresenstativeComponent*>& GetPoolObjects() {
 			return poolObjects;
 		}
-	private:
+	protected:
 		unordered_set<RepresenstativeComponent*> poolObjects;
 		unordered_set<RepresenstativeComponent*> expendableObjects;
 	};

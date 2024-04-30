@@ -5,9 +5,9 @@
 class StatusTimer : public Component
 {
 private:
+public:
 	bool m_isActivated;
 
-public:
 	bool m_isRepeated;
 
 	float m_elapsed;

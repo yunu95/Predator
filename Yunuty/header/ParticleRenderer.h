@@ -63,6 +63,9 @@ namespace yunutyEngine::graphics
 
 		void ParticleUpdate();
 
+		void SetDuration(float duration);
+		float GetDuration();
+
 		void SetParticleShape(ParticleShape particleType);
 		void SetParticleMode(ParticleMode particleMode);
 		void SetMaxParticle(unsigned int maxParticle);

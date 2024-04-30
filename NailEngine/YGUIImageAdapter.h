@@ -126,6 +126,22 @@ namespace yunuGIAdapter
         {
             renderable->SetRadialFillDirection(isClockwise);
         }
+        virtual bool IsLinearClippingMode()
+        {
+            return renderable->IsLinearClippingMode();
+        }
+        virtual void SetLinearClipping(bool clip)
+        {
+            renderable->SetLinearClipping(clip);
+        }
+        virtual void SetLinearClippingStartPoint(float x, float y)
+        {
+            renderable->SetLinearClippingStartPoint(x, y);
+        }
+        virtual void SetLinearClippingDirection(float x, float y)
+        {
+            renderable->SetLinearClippingDirection(x, y);
+        }
     private:
         std::shared_ptr<UIImage> renderable;
     };

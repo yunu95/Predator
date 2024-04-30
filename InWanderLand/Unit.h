@@ -6,6 +6,8 @@
 #include <list>
 #include "RobinSkillDevelopmentSystem.h"
 #include "DummyComponent.h"
+#include "ContentsObservee.h"
+#include "StatusEffect.h"
 
 class UnitProductor;
 class SkillSystem;
@@ -16,7 +18,7 @@ enum class SkillPreviewMesh;
 /// <summary>
 /// 유닛들이 공유하는 멤버.
 /// </summary>
-class Unit : public Component
+class Unit : public Component, public ContentsObservee
 {
 public:
 	// 사용 시 주의점 : 마지막에는 Death와 StateEnd가 순서대로 들어가 있을 것!
@@ -200,6 +202,9 @@ private:
 	float m_stopFollowDinstance{ 2.0f };			// 이 수치만큼 거리가 좁혀지면 멈춘다.
 	bool isFollowing{ false };
 
+public:
+	bool isPermittedToTacticAction{ false };
+
 private:
 	/// 유닛이 속해있는 field
 	NavigationField* m_unitNavField;
@@ -260,6 +265,9 @@ public:
 	virtual void Update() override;
 	virtual void OnDestroy() override;
 
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
+
 	void StopMove();
 	UnitType GetUnitType() const;
 	UnitSide GetUnitSide() const;
@@ -304,6 +312,11 @@ public:
 	void MakeUnitPushedState(bool p_isCrushed);
 	void MakeUnitParalysisState();
 	void SetUnitStateIdle();
+
+	void ReportStatusEffectApplied(StatusEffect::StatusEffectEnum p_effectType);
+	void ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType);
+
+	void PermitTacticAction();
 
 	bool GetJustCrushedState() const;
 	bool IsUnitDead() const;

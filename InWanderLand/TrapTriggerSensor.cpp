@@ -10,4 +10,17 @@ void TrapTriggerSensor::OnTriggerEnter(physics::Collider* collider)
 		trapUnit->SetUnitStateToSkill();
 	}
 }
- 
+
+
+void TrapTriggerSensor::PlayFunction()
+{
+
+}
+
+void TrapTriggerSensor::StopFunction()
+{
+	if (!GetGameObject()->GetComponentWeakPtr<TrapTriggerSensor>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
+}

@@ -2,7 +2,6 @@
 #include "YunutyEngine.h"
 #include "InputManager.h"
 #include "Unit.h"
-#include "LazySingletonClass.h"
 #include <unordered_map>
 
 /// <summary>
@@ -16,10 +15,12 @@
 class RTSCam;
 class CursorDetector;
 
-class TacticModeSystem : public GHContents::LazySingletonClass<TacticModeSystem>
+class TacticModeSystem : public SingletonComponent<TacticModeSystem>, public Component
 {
 public:
-	TacticModeSystem();
+	virtual void OnEnable() override;
+	virtual void Start() override;
+	virtual void Update() override;
 
 	enum OrderType
 	{
@@ -32,31 +33,44 @@ public:
 	void SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum);
 	void SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum);
 	void SetLeftClickAddQueueForSkill(InputManager::SelectedSerialNumber currentSelectedNum, Unit::SkillEnum currentSelectedSkill);
+	
 	/// Tutorial 관련 멤버
 	void RegisterTutorialQuestAction(Unit::UnitType p_targetUnit, OrderType p_orderType);
 
 	void EngageTacticMode();
 	void ExitTacticMode();
 	void SetMovingSystemComponent(RTSCam* sys);
-	bool IsTacticModeActivated(Unit* p_unit);			/// 전술모드가 끝날 때, parameter의 유닛이 입력된 명령이 있는가를 판별합니다. fsm transition에서 사용. 
 
-	bool isTacticModeOperating;
+	bool IsOrderingTimingNow() const;
+	bool IsUnitsPerformingCommand() const;
+	bool IsTacticModeCoolTime() const;
+	float GetLeftCoolTime();
+
+	void SetCurrentGauge(int p_gauge);
+
+	void ReportTacticActionFinished();
 
 	CursorDetector* m_cursorDetector;
 
 private:
-	int tacticModeGauge{ 1000 };
+	int m_maxGauge{ 10 };
+	int m_currentGauge{ 0 };
+	float m_gaugeIncreaseDuration{ 3.0f };
+	float m_gaugeIncreaseElapsed{ 0.0f };
+	
+	bool isCoolTime{ false };
+	float m_engageCoolTimeDuration{ 5.0f };
+	float m_engageCoolTimeElapsed{ 0.0f };
+	
+	bool isTacticModeOperating;					// 명령을 내리는 시간일 때 true.
+	bool isTacticOrderPerforming;				// 내린 명령을 수행하고 있을 때 true.
+
 	RTSCam* m_rtsCam;
 
-	Unit::UnitType m_currentSelectedPlayerNumber;
-	Unit* currentSelectedUnit;
-	Unit* currentActivatedUnit;
+	Unit* currentSelectedUnit{ nullptr };
 
 	std::unordered_map<Unit::UnitType, Unit*> playerComponentMap;					
 
-	std::queue<std::function<void()>>* currentSelectedQueue;
-	std::unordered_map<Unit::UnitType, std::queue<std::function<void()>>*> m_queueSelector;
-
-	void SetCurrentSelectedQueue(Unit* p_currentUnit);
+	std::queue<Unit*> sequenceQueue;
 };
 

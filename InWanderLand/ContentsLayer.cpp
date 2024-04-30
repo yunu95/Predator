@@ -22,7 +22,6 @@
 #include "PlayerController.h"
 #include "TacticModeSystem.h"
 #include "GameManager.h"
-#include "SingletonInstanceContainer.h"
 #include "ShortcutSystem.h"
 #include "RobinSkillDevelopmentSystem.h"
 #include "ScriptSystem.h"
@@ -31,6 +30,7 @@
 #include "PlayableComponent.h"
 #include "CinematicManager.h"
 #include "TutorialManager.h"
+#include "ContentsObserver.h"
 
 #include <algorithm>
 #include <string>
@@ -244,7 +244,6 @@ void application::contents::ContentsLayer::Finalize()
 void application::contents::ContentsLayer::PlayContents()
 {
     UIManager::Instance().ImportUI("InWanderLand.iwui");
-    SingletonInstanceContainer::SingleInstance().PermitCreateInstances();
     SkillUpgradeSystem::SingleInstance().Reset();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
@@ -252,11 +251,6 @@ void application::contents::ContentsLayer::PlayContents()
 
     InputManager::Instance().SetInputManagerActive(true);
     GameManager::Instance().Reset();
-
-    for (auto e : componentsCreatedByEditorVector)
-    {
-        e->SetActive(true);
-    }
 
     //InputManager::Instance();
     //UIManager::Instance();
@@ -283,15 +277,13 @@ void application::contents::ContentsLayer::PlayContents()
 
     /// Playable 동작들을 일괄 처리할 부분입니다.
     PlayableComponent::OnGameStartAll();
+
+	ContentsObserver::Instance().PlayObservee();
 }
 
 void application::contents::ContentsLayer::PauseContents()
 {
     Time::SetTimeScale(FLT_MIN * 1000);
-    for (auto e : componentsCreatedByEditorVector)
-    {
-        e->SetActive(false);
-    }
 
     /// Playable 동작들을 일괄 처리할 부분입니다.
     PlayableComponent::OnGamePauseAll();
@@ -300,10 +292,8 @@ void application::contents::ContentsLayer::PauseContents()
 void application::contents::ContentsLayer::ResumeContents()
 {
     Time::SetTimeScale(1);
-    for (auto e : componentsCreatedByEditorVector)
-    {
-        e->SetActive(true);
-    }
+
+	ContentsObserver::Instance().PlayObservee();
 
     /// Playable 동작들을 일괄 처리할 부분입니다.
     PlayableComponent::OnGameResumeAll();
@@ -313,13 +303,10 @@ void application::contents::ContentsLayer::StopContents()
 {
     Time::SetTimeScale(1);
     isStoppedOnce = true;
-    ClearPlaytimeObject();
     ShortcutSystem::Instance().Clear();
-    for (auto e : componentsCreatedByEditorVector)
-    {
-        e->SetActive(false);
-    }
 
+    ContentsObserver::Instance().StopObservee();
+    ContentsObserver::Instance().ClearObservees();
     UIManager::Instance().Clear();
 
     /// Playable 동작들을 일괄 처리할 부분입니다.
@@ -337,26 +324,6 @@ void application::contents::ContentsLayer::AssignTestInitializer(std::function<v
         };
 }
 #endif
-
-void application::contents::ContentsLayer::ClearPlaytimeObject()
-{
-    /// 카메라가 추적하고 있는 
-    /// 생성된 모든 게임 플레이 오브젝트 삭제
-    for (auto e : objectCreatedByEditorList)
-    {
-        //      if (e->getName() == "")
-              //e->SetSelfActive(false);
-        yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(e);
-    }
-
-    for (auto e : componentsCreatedByEditorVector)
-    {
-        e->SetActive(false);
-    }
-    objectCreatedByEditorList.clear();
-
-    SingletonInstanceContainer::SingleInstance().ClearSingletonInstances();
-}
 
 void application::contents::ContentsLayer::ShortcutInit()
 {
@@ -1116,12 +1083,4 @@ void application::contents::ContentsLayer::ShortcutInit()
 #pragma endregion Ornament Shortcut
 }
 
-void application::contents::ContentsLayer::RegisterToEditorObjectContainer(GameObject* p_obj)
-{
-    objectCreatedByEditorList.push_back(p_obj);
-}
 
-void application::contents::ContentsLayer::RegisterToEditorComponentVector(Component* p_com)
-{
-    componentsCreatedByEditorVector.push_back(p_com);
-}

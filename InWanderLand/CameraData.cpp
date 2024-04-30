@@ -7,8 +7,6 @@
 
 #include "RTSCam.h"
 #include "Dotween.h"
-#include "Application.h"
-#include "ContentsLayer.h"
 
 #include "SkillPreviewSystem.h"
 #include "PlayerController.h"
@@ -138,14 +136,10 @@ namespace application
 			/// Main 으로 등록해야 추후 Editor Camera 로직에서 처리 가능합니다.
 			camComp->SetCameraMain();
 
-			application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-			contentsLayer->RegisterToEditorObjectContainer(camObj);
-
 			auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 			auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
 			auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-			contentsLayer->RegisterToEditorObjectContainer(mouseCursorObject);
 			auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 			mouseCursorMesh->GetGI().SetMesh(sphereMesh);
 			mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
@@ -156,8 +150,8 @@ namespace application
 
 			auto cursorDetectorComponent = mouseCursorObject->AddComponent<CursorDetector>();
 
-			PlayerController::SingleInstance().m_cursorDetector = cursorDetectorComponent;
-			TacticModeSystem::SingleInstance().m_cursorDetector = cursorDetectorComponent;
+			PlayerController::Instance().m_cursorDetector = cursorDetectorComponent;
+			TacticModeSystem::Instance().m_cursorDetector = cursorDetectorComponent;
 
 			camComp->groundHoveringClickCallback = [=](Vector3d pos)
 			{
@@ -165,8 +159,8 @@ namespace application
 				SkillPreviewSystem::Instance().SetCurrentMousPosition(pos);
 			};
 
-			PlayerController::SingleInstance().SetMovingSystemComponent(camComp);
-			TacticModeSystem::SingleInstance().SetMovingSystemComponent(camComp);
+			PlayerController::Instance().SetMovingSystemComponent(camComp);
+			TacticModeSystem::Instance().SetMovingSystemComponent(camComp);
 		}
 
 		yunutyEngine::graphics::Camera* CameraData::GetCameraComponent()

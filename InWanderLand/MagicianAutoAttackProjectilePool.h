@@ -3,13 +3,11 @@
 #include "GameObjectPool.h"
 #include "DebugMeshes.h"
 #include "StaticMeshRenderer.h"
-#include "ContentsLayer.h"
-#include "Application.h"
-#include "LazySingletonClass.h"
 #include "Dotween.h"
+#include "ContentsObservee.h"
 
 class MagicianAutoAttackProjectilePool :
-	public GameObjectPool<MagicianAutoAttackProjectile>, public GHContents::LazySingletonClass<MagicianAutoAttackProjectilePool>
+	public GameObjectPool<MagicianAutoAttackProjectile>, public Component, public SingletonComponent<MagicianAutoAttackProjectilePool>, public ContentsObservee
 {
 public:
 	virtual void ObjectInitializer(MagicianAutoAttackProjectile* projectile) override
@@ -24,11 +22,31 @@ public:
 		bulletGameObject->SetParent(projectile->GetGameObject());
 
 		projectile->GetGameObject()->AddComponent<Dotween>();
-
-		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-		contentsLayer->RegisterToEditorObjectContainer(projectile->GetGameObject());
 		//bulletGameObject->GetTransform()->SetLocalRotation(Quaternion(Vector3d( 90, 0, 0 )));
 		//bulletGameObject->GetTransform()->SetLocalRotation(projectile->GetGameObject()->GetTransform()->GetWorldRotation());
 	}
+	virtual void Start() override;
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
 };
+
+void MagicianAutoAttackProjectilePool::Start()
+{
+	isSingletonComponent = true;
+}
+
+void MagicianAutoAttackProjectilePool::PlayFunction()
+{
+	this->SetActive(true);
+	if (isOncePaused)
+	{
+		Start();
+	}
+}
+
+void MagicianAutoAttackProjectilePool::StopFunction()
+{
+	poolObjects.clear();
+	expendableObjects.clear();
+}
 

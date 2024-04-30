@@ -3,15 +3,12 @@
 #include "PlayerController.h"
 #include "TacticModeSystem.h"
 #include "Unit.h"
-#include "ContentsLayer.h"
-#include "Application.h"
 #include "RTSCam.h"
 #include "GameManager.h"
 
 void InputManager::Start()
 {
-    application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-    contentsLayer->RegisterToEditorComponentVector(this);
+	isSingletonComponent = true;
 }
 
 void InputManager::Update()
@@ -42,11 +39,11 @@ void InputManager::Update()
                 if (yunutyEngine::Input::isKeyPushed(KeyCode::A))
                 {
                     if (tacticMode)
-                        TacticModeSystem::SingleInstance().SetLeftClickAddQueueForAttackMove(currentSelectedSerialNumber);
+                        TacticModeSystem::Instance().SetLeftClickAddQueueForAttackMove(currentSelectedSerialNumber);
                     else
                     {
-                        PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
-                        PlayerController::SingleInstance().SetLeftClickAttackMove();
+                        PlayerController::Instance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
+                        PlayerController::Instance().SetLeftClickAttackMove();
                     }
                     SkillPreviewSystem::Instance().ActivateSkillPreview(false);
                 }
@@ -70,6 +67,28 @@ void InputManager::Update()
     }
 }
 
+void InputManager::PlayFunction()
+{
+	this->SetActive(true);
+	if (isOncePaused)
+	{
+		Start();
+	}
+}
+
+void InputManager::StopFunction()
+{
+	this->SetActive(false);
+
+    rtscam = nullptr;
+
+    currentSelectedSerialNumber = SelectedSerialNumber::One;
+	isPlayerSelected = false;
+	tacticMode = false;
+	isMouseOnUIButton = false;
+    isInputManagerActivated = false;
+}
+
 bool InputManager::GetInputManagerActive()
 {
     return isInputManagerActivated;
@@ -82,16 +101,16 @@ void InputManager::SetInputManagerActive(bool p_boolen)
 void InputManager::SelectPlayer(Unit::UnitType p_unitType)
 {
     if (!GameManager::Instance().IsBattleSystemOperating() || 
-        PlayerController::SingleInstance().FindSelectedUnitByUnitType(p_unitType)->GetCurrentUnitState() == Unit::UnitState::Death)
+        PlayerController::Instance().FindSelectedUnitByUnitType(p_unitType)->GetCurrentUnitState() == Unit::UnitState::Death)
     {
         return;
     }
 
-    PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(p_unitType);
+    PlayerController::Instance().SetCurrentPlayerSerialNumber(p_unitType);
 
     if (p_unitType != Unit::UnitType::AllPlayers)
     {
-        rtscam->SetTarget(PlayerController::SingleInstance().GetPlayerMap().find(p_unitType)->second->GetGameObject());
+        rtscam->SetTarget(PlayerController::Instance().GetPlayerMap().find(p_unitType)->second->GetGameObject());
     }
     switch (p_unitType)
     {
@@ -114,7 +133,7 @@ void InputManager::SelectPlayer(Unit::UnitType p_unitType)
     
     if (tacticMode)
     {
-		TacticModeSystem::SingleInstance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
+		TacticModeSystem::Instance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
     }
 
     SkillPreviewSystem::Instance().ActivateSkillPreview(false);
@@ -128,33 +147,37 @@ void InputManager::PrepareSkill(Unit::SkillEnum p_skillType, Unit::UnitType p_un
 void InputManager::PrepareSkill(Unit::SkillEnum p_skillType)
 {
     if (!GameManager::Instance().IsBattleSystemOperating() ||
-        PlayerController::SingleInstance().FindSelectedUnitByUnitType(static_cast<Unit::UnitType>(currentSelectedSerialNumber))->GetCurrentUnitState() == Unit::UnitState::Death )
+        PlayerController::Instance().FindSelectedUnitByUnitType(static_cast<Unit::UnitType>(currentSelectedSerialNumber))->GetCurrentUnitState() == Unit::UnitState::Death )
     {
         return;
     }
     if (tacticMode)
     {
-        TacticModeSystem::SingleInstance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, p_skillType);
+        TacticModeSystem::Instance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, p_skillType);
     }
     else
     {
-        PlayerController::SingleInstance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
-        PlayerController::SingleInstance().SetLeftClickSkill(p_skillType);
+        PlayerController::Instance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
+        PlayerController::Instance().SetLeftClickSkill(p_skillType);
     }
 }
 void InputManager::ToggleTacticMode()
 {
     if (GameManager::Instance().IsBattleSystemOperating())
     {
-        tacticMode = !tacticMode;
+        if (tacticMode)
+			tacticMode = !tacticMode;
+        else if (!tacticMode && !TacticModeSystem::Instance().IsTacticModeCoolTime())
+			tacticMode = !tacticMode;
+
         if (tacticMode)
         {
-            TacticModeSystem::SingleInstance().EngageTacticMode();
-			TacticModeSystem::SingleInstance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
+            TacticModeSystem::Instance().EngageTacticMode();
+			TacticModeSystem::Instance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
         }
         else
         {
-            TacticModeSystem::SingleInstance().ExitTacticMode();
+            TacticModeSystem::Instance().ExitTacticMode();
         }
     }
 }

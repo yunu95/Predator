@@ -87,7 +87,7 @@ bool UIImage::IsRadialFillMode()
 }
 bool UIImage::IsUsingProcessedTexture()
 {
-    return isRadialFillMode;
+    return isRadialFillMode || isLinearClippingMode;
 }
 int UIImage::GetLayer()
 {
@@ -157,9 +157,61 @@ void UIImage::PreProcessTexture()
         ResourceBuilder::Instance.Get().device->GetDevice()->CreateRenderTargetView(processedTexture.Get(), nullptr, processedTextureRTV.GetAddressOf());
         ResourceBuilder::Instance.Get().device->GetDevice()->CreateShaderResourceView(processedTexture.Get(), &srvDesc, processedTextureSRV.GetAddressOf());
     }
+
+    UIPreprocessVertex vertices[6]
+    {
+        {
+            .pos = DirectX::SimpleMath::Vector3{-1,-1,0},
+            .uv = DirectX::SimpleMath::Vector2{0,1},
+            .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
+            .clippingThreshold = -2,
+            .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
+            .linearClippingStart = DirectX::SimpleMath::Vector2{-1,-1}
+        },
+        {
+            .pos = DirectX::SimpleMath::Vector3{-1,1,0},
+            .uv = DirectX::SimpleMath::Vector2{0,0},
+            .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
+            .clippingThreshold = -2,
+            .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
+            .linearClippingStart = DirectX::SimpleMath::Vector2{-1,-1}
+        },
+        {
+            .pos = DirectX::SimpleMath::Vector3{1,1,0},
+            .uv = DirectX::SimpleMath::Vector2{1,0},
+            .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
+            .clippingThreshold = -2,
+            .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
+            .linearClippingStart = DirectX::SimpleMath::Vector2{-1,-1}
+        },
+        {
+            .pos = DirectX::SimpleMath::Vector3{-1,-1,0},
+            .uv = DirectX::SimpleMath::Vector2{0,1},
+            .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
+            .clippingThreshold = -2,
+            .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
+            .linearClippingStart = DirectX::SimpleMath::Vector2{-1,-1}
+        },
+        {
+            .pos = DirectX::SimpleMath::Vector3{1,1,0},
+            .uv = DirectX::SimpleMath::Vector2{1,0},
+            .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
+            .clippingThreshold = -2,
+            .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
+            .linearClippingStart = DirectX::SimpleMath::Vector2{-1,-1}
+        },
+        {
+            .pos = DirectX::SimpleMath::Vector3{1,-1,0},
+            .uv = DirectX::SimpleMath::Vector2{1,1},
+            .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
+            .clippingThreshold = -2,
+            .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
+            .linearClippingStart = DirectX::SimpleMath::Vector2{-1,-1}
+        }
+    };
+
     if (isRadialFillMode)
     {
-        static Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
         DirectX::SimpleMath::Vector2 clippingDirection{ 1,1 };
         float rotatingDirection = radialFillIsClockwise ? -1 : 1;
         DirectX::SimpleMath::Matrix rotationMatrix = DirectX::SimpleMath::Matrix::CreateRotationZ(rotatingDirection * 0.5 * radialFillDegree * DirectX::XM_PI / 180.0f);
@@ -168,81 +220,82 @@ void UIImage::PreProcessTexture()
         clippingDirection = DirectX::SimpleMath::Vector2::Transform(radialFillStartDirection, rotationMatrix);
         clippingDirection.Normalize();
         float clippingThreshold{ cosf(0.5 * radialFillDegree * DirectX::XM_PI / 180.0f) };
-        UIRadialFillVertex vertices[6]
+        for (auto& eachVertice : vertices)
         {
-            {
-                .pos = DirectX::SimpleMath::Vector3{-1,-1,0},
-                .uv = DirectX::SimpleMath::Vector2{0,1},
-                .clippingDirection = clippingDirection,
-                .clippingThreshold = clippingThreshold
-            },
-            {
-                .pos = DirectX::SimpleMath::Vector3{-1,1,0},
-                .uv = DirectX::SimpleMath::Vector2{0,0},
-                .clippingDirection = clippingDirection,
-                .clippingThreshold = clippingThreshold
-            },
-            {
-                .pos = DirectX::SimpleMath::Vector3{1,1,0},
-                .uv = DirectX::SimpleMath::Vector2{1,0},
-                .clippingDirection = clippingDirection,
-                .clippingThreshold = clippingThreshold
-            },
-            {
-                .pos = DirectX::SimpleMath::Vector3{-1,-1,0},
-                .uv = DirectX::SimpleMath::Vector2{0,1},
-                .clippingDirection = clippingDirection,
-                .clippingThreshold = clippingThreshold
-            },
-            {
-                .pos = DirectX::SimpleMath::Vector3{1,1,0},
-                .uv = DirectX::SimpleMath::Vector2{1,0},
-                .clippingDirection = clippingDirection,
-                .clippingThreshold = clippingThreshold
-            },
-            {
-                .pos = DirectX::SimpleMath::Vector3{1,-1,0},
-                .uv = DirectX::SimpleMath::Vector2{1,1},
-                .clippingDirection = clippingDirection,
-                .clippingThreshold = clippingThreshold
-            }
-        };
-        D3D11_BUFFER_DESC vBufferDesc =
+            eachVertice.clippingDirection = clippingDirection;
+            eachVertice.clippingThreshold = clippingThreshold;
+        }
+    }
+    if (isLinearClippingMode)
+    {
+        for (auto& eachVertice : vertices)
         {
-            .ByteWidth = sizeof(vertices),
-            .Usage = D3D11_USAGE_DEFAULT,
-            .BindFlags = D3D11_BIND_VERTEX_BUFFER,
-            .CPUAccessFlags = 0,
-        };
-        D3D11_SUBRESOURCE_DATA initData = { .pSysMem = vertices };
-        auto hr = ResourceBuilder::Instance.Get().device->GetDevice()->CreateBuffer(&vBufferDesc, &initData, vertexBuffer.GetAddressOf());
-        assert(SUCCEEDED(hr));
+            eachVertice.linearClippingDirection = linearClippingDirection;
+            eachVertice.linearClippingStart = linearClippingStart;
+        }
+    }
+    D3D11_BUFFER_DESC vBufferDesc =
+    {
+        .ByteWidth = sizeof(vertices),
+        .Usage = D3D11_USAGE_DEFAULT,
+        .BindFlags = D3D11_BIND_VERTEX_BUFFER,
+        .CPUAccessFlags = 0,
+    };
+    static Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
+    D3D11_SUBRESOURCE_DATA initData = { .pSysMem = vertices };
+    auto hr = ResourceBuilder::Instance.Get().device->GetDevice()->CreateBuffer(&vBufferDesc, &initData, vertexBuffer.GetAddressOf());
+    assert(SUCCEEDED(hr));
 
-        auto vs = std::static_pointer_cast<VertexShader>(ResourceManager::Instance.Get().GetShader(L"UIRadialFillVS.cso"));
-        auto ps = std::static_pointer_cast<PixelShader>(ResourceManager::Instance.Get().GetShader(L"UIRadialFillPS.cso"));
-        ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1, processedTextureRTV.GetAddressOf(), nullptr);
-        ResourceBuilder::Instance.Get().device->GetDeviceContext()->ClearRenderTargetView(processedTextureRTV.Get(), DirectX::Colors::Transparent);
-        static_cast<Texture*>(texture)->Bind(0);
+    auto vs = std::static_pointer_cast<VertexShader>(ResourceManager::Instance.Get().GetShader(L"UIPreProcessVS.cso"));
+    auto ps = std::static_pointer_cast<PixelShader>(ResourceManager::Instance.Get().GetShader(L"UIPreProcessPS.cso"));
+    ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1, processedTextureRTV.GetAddressOf(), nullptr);
+    ResourceBuilder::Instance.Get().device->GetDeviceContext()->ClearRenderTargetView(processedTextureRTV.Get(), DirectX::Colors::Transparent);
+    static_cast<Texture*>(texture)->Bind(0);
 
-        vs->Bind();
-        ps->Bind();
-        const unsigned int vertexStride = sizeof(UIRadialFillVertex);
-        const unsigned int vertexOffset = 0;
-        D3D11_VIEWPORT viewport
-        {
-             .TopLeftX = 0.0f,
-             .TopLeftY = 0.0f,
-             .Width = texture->GetWidth(),
-             .Height = texture->GetHeight(),
-             .MinDepth = 0.0f,
-             .MaxDepth = 1.0f,
-        };
-        ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
-        ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &vertexStride, &vertexOffset);
-        ResourceBuilder::Instance.Get().device->GetDeviceContext()->Draw(6, 0);
-
-
-
-
+    vs->Bind();
+    ps->Bind();
+    const unsigned int vertexStride = sizeof(UIPreprocessVertex);
+    const unsigned int vertexOffset = 0;
+    D3D11_VIEWPORT viewport
+    {
+         .TopLeftX = 0.0f,
+         .TopLeftY = 0.0f,
+         .Width = texture->GetWidth(),
+         .Height = texture->GetHeight(),
+         .MinDepth = 0.0f,
+         .MaxDepth = 1.0f,
+    };
+    ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
+    ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &vertexStride, &vertexOffset);
+    ResourceBuilder::Instance.Get().device->GetDeviceContext()->Draw(6, 0);
+}
+bool UIImage::IsLinearClippingMode()
+{
+    return isLinearClippingMode;
+}
+void UIImage::SetLinearClipping(bool clip)
+{
+    isLinearClippingMode = clip;
+    if (isLinearClippingMode == true)
+    {
+        RenderSystem::Instance.Get().PushPreProcessingUIObject(this);
+    }
+}
+void UIImage::SetLinearClippingStartPoint(float x, float y)
+{
+    linearClippingStart.x = x;
+    linearClippingStart.y = y;
+    if (isLinearClippingMode == true)
+    {
+        RenderSystem::Instance.Get().PushPreProcessingUIObject(this);
+    }
+}
+void UIImage::SetLinearClippingDirection(float x, float y)
+{
+    linearClippingDirection.x = x;
+    linearClippingDirection.y = y;
+    if (isLinearClippingMode == true)
+    {
+        RenderSystem::Instance.Get().PushPreProcessingUIObject(this);
     }
 }

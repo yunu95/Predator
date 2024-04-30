@@ -4,14 +4,17 @@ void UIElement::Start()
 {
     application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
     // 게임이 끝나면 삭제되도록 설정
-    if (GetGameObject()->GetParentGameObject() == nullptr)
+    /*if (GetGameObject()->GetParentGameObject() == nullptr)
     {
         contentsLayer->RegisterToEditorObjectContainer(GetGameObject());
-    }
+    }*/
     // 만약 숫자 UI라면 먼저 숫자들을 모두 비활성화
-    for (auto each : digits)
+    if (!numberSetBefore)
     {
-        each->GetGameObject()->SetSelfActive(false);
+        for (auto each : digits)
+        {
+            each->GetGameObject()->SetSelfActive(false);
+        }
     }
 };
 void UIElement::EnableElement()
@@ -38,6 +41,10 @@ void UIElement::EnableElement()
     if (parentPriorityLayout)
     {
         parentPriorityLayout->EnableChildUI(GetGameObject());
+    }
+    if (timePauseOnEnable)
+    {
+        timePauseOnEnable->ActivateTimer();
     }
     for (auto each : children)
     {
@@ -74,17 +81,32 @@ void UIElement::DisableElement()
     {
         GetGameObject()->SetSelfActive(false);
     }
+    if (importedUIData.customFlags & (int)UIExportFlag::TimeContinueOnDisable)
+    {
+        if (timePauseOnEnable)
+        {
+            timePauseOnEnable->StopTimer();
+        }
+        Time::SetTimeScale(1);
+    }
     if (parentPriorityLayout)
     {
         parentPriorityLayout->DisableChildUI(GetGameObject());
     }
 }
-void UIElement::SetNumber(int number)
+void UIElement::SetNumber(float number)
 {
+    numberSetBefore = true;
+    int numberAsInt{ static_cast<int>(number) };
+    if (importedUIData.numberCeil)
+        numberAsInt = ceilf(number);
+    if (numberAsInt < 0)
+        numberAsInt = 0;
+
     assert(digitFont);
-    int maxDigit = log10(number);
-    assert(digits.size() > log10(number));
-    if (number > 0)
+    int maxDigit = log10(numberAsInt);
+    assert(digits.size() > log10(numberAsInt));
+    if (numberAsInt > 0)
     {
         for (int i = 0; i < digits.size(); i++)
         {
@@ -95,14 +117,32 @@ void UIElement::SetNumber(int number)
             else
             {
                 digits[i]->EnableElement();
-                digits[i]->imageComponent->GetGI().SetImage((*digitFont)[number % 10]);
-                number /= 10;
+                digits[i]->imageComponent.lock()->GetGI().SetImage((*digitFont)[numberAsInt % 10]);
+                numberAsInt /= 10;
             }
         }
     }
     else
     {
-        digits[0]->EnableElement();
-        digits[0]->imageComponent->GetGI().SetImage((*digitFont)[0]);
+        if (importedUIData.numberShowZero)
+        {
+            digits[0]->EnableElement();
+            digits[0]->imageComponent.lock()->GetGI().SetImage((*digitFont)[0]);
+        }
+        else
+        {
+            digits[0]->DisableElement();
+            digits[0]->imageComponent.lock()->GetGI().SetImage((*digitFont)[0]);
+        }
     }
+}
+
+void UIElement::PlayFunction()
+{
+
+}
+
+void UIElement::StopFunction()
+{
+	yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
 }

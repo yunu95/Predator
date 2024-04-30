@@ -1,7 +1,8 @@
 #pragma once
 #include "YunutyEngine.h"
+#include "ContentsObservee.h"
 
-class FloatFollower : public Component
+class FloatFollower : public Component, public ContentsObservee
 {
 private:
     float targetFloat = 0;
@@ -14,4 +15,7 @@ public:
     void SetCurrentFloat(float value);
     void SetFollowingRate(float followingRate);
     void SetTargetFloat(float target);
+
+    virtual void PlayFunction() override;
+    virtual void StopFunction() override;
 };

@@ -6,8 +6,8 @@
 
 void UIButton::SetIdleImage(yunuGI::ITexture* p_IdleImage)
 {
-    m_IdleImage = p_IdleImage;
-    m_ImageComponent->GetGI().SetImage(m_IdleImage);
+    //m_IdleImage = p_IdleImage;
+    //m_ImageComponent->GetGI().SetImage(m_IdleImage);
 }
 
 void UIButton::SetClickedImage(yunuGI::ITexture* p_ClickedImage)
@@ -47,10 +47,9 @@ void UIButton::SetImageComponent(yunutyEngine::graphics::UIImage* p_ImageCompone
 
 void UIButton::Start()
 {
-    assert(m_IdleImage != nullptr);
     OnTransformUpdate();
 
-    m_ImageComponent->GetGI().SetImage(m_IdleImage);
+    //m_ImageComponent->GetGI().SetImage(m_IdleImage);
     //m_CurrentImage = m_IdleImage;
 
 
@@ -112,31 +111,54 @@ void UIButton::Update()
     auto mousePos = Input::getMouseScreenPositionNormalized();
     mousePos.x *= 1920;
     mousePos.y *= 1080;
-    bool isMouseJustEntered = false;
+    bool isMouseInButton = false;
 
     if (mousePos.x <= m_ImageCenterPostion.x + (m_Width / 2) && mousePos.x >= m_ImageCenterPostion.x - (m_Width / 2) &&
         mousePos.y <= m_ImageCenterPostion.y + (m_Height / 2) && mousePos.y >= m_ImageCenterPostion.y - (m_Height / 2))
     {
-        isMouseJustEntered = true;
+        isMouseInButton = true;
     }
 
-    if (isMouseJustEntered && !isMouseNowOnButton)
+    //UIManager::Instance().ReportButtonOnMouse(this);
+    if (isMouseInButton)
     {
-        isMouseNowOnButton = true;
-        isMouseJustEntered = false;
-
         UIManager::Instance().ReportButtonOnMouse(this);
-        //isButtonOnMouseState = false;
     }
-    else if (!isMouseJustEntered && isMouseNowOnButton)
+    else
     {
-        isMouseNowOnButton = false;
         UIManager::Instance().ReportMouseExitButton(this);
-        m_ImageComponent->GetGI().SetImage(m_IdleImage);
     }
+    //if (isMouseInButton && !isMouseNowOnButton)
+    //{
+    //    isMouseNowOnButton = true;
+    //    isMouseInButton = false;
+
+    //    UIManager::Instance().ReportButtonOnMouse(this);
+    //    //isButtonOnMouseState = false;
+    //}
+    //else if (!isMouseInButton && isMouseNowOnButton)
+    //{
+    //    isMouseNowOnButton = false;
+    //    UIManager::Instance().ReportMouseExitButton(this);
+    //    //m_ImageComponent->GetGI().SetImage(m_IdleImage);
+    //}
+}
+void UIButton::OnEnable()
+{
+    Update();
 }
 void UIButton::OnDisable()
 {
     isMouseNowOnButton = false;
     UIManager::Instance().ReportMouseExitButton(this);
+}
+
+void UIButton::PlayFunction()
+{
+
+}
+
+void UIButton::StopFunction()
+{
+	yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
 }

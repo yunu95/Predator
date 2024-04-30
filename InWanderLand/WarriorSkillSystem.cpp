@@ -4,6 +4,7 @@
 #include "Dotween.h"
 #include "ContentsLayer.h"
 #include "Application.h"
+#include "TacticModeSystem.h"
 
 void WarriorSkillSystem::ActivateSkillOne(Vector3d skillPos)
 {
@@ -31,6 +32,8 @@ void WarriorSkillSystem::ActivateSkillOne(Vector3d skillPos)
 			m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
 			m_unitNavComponent->Relocate(skillPos);
 
+			TacticModeSystem::Instance().ReportTacticActionFinished();
+			m_unitComponent->isPermittedToTacticAction = false;
 			m_unitComponent->SetUnitStateIdle();
 		});
 }
@@ -44,6 +47,8 @@ void WarriorSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 	m_unitDotween->DONothing(m_wSkillColliderRemainTime).OnComplete([=]()
 		{
 			SetSkillRequirmentsActive(WTauntSkill, false);
+			TacticModeSystem::Instance().ReportTacticActionFinished();
+			m_unitComponent->isPermittedToTacticAction = false;
 			m_unitComponent->SetUnitStateIdle();
 		});
 	m_developedFunctionToWSkill();

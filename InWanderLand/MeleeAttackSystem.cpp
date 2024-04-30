@@ -1,9 +1,7 @@
 #include "InWanderLand.h"
 #include "MeleeAttackSystem.h"
 #include "UnitProductor.h"
-#include "SpecialEffect.h"
-#include "ContentsLayer.h"
-#include "Application.h"
+#include "StatusEffect.h"
 
 void MeleeAttackSystem::Attack(Unit* opponentUnit, float offset)
 {
@@ -57,12 +55,25 @@ void MeleeAttackSystem::SetOwnerUnitObject(GameObject* unitobj)
 	ownerUnitObject = unitobj;
 }
 
+void MeleeAttackSystem::PlayFunction()
+{
+
+}
+
+void MeleeAttackSystem::StopFunction()
+{
+	if (!GetGameObject()->GetComponentWeakPtr<MeleeAttackSystem>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
+}
+
 void MeleeAttackSystem::SetColliderRemainTime(float time)
 {
 	attackColliderRemainTime = time;
 }
 
-void MeleeAttackSystem::SetDirectAttackSpecialEffect(SpecialEffect* p_effect)
+void MeleeAttackSystem::SetDirectAttackSpecialEffect(StatusEffect* p_effect)
 {
 	m_specialEffect = p_effect;
 }

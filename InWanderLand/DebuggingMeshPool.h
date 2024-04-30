@@ -4,22 +4,40 @@
 #include "DebugMeshes.h"
 #include "StaticMeshRenderer.h"
 #include "DebuggingMesh.h"
-#include "ContentsLayer.h"
-#include "Application.h"
-#include "LazySingletonClass.h"
+#include "ContentsObservee.h"
 
 /// <summary>
 /// 유닛이 현재 어떤 공격을 받고 있는지, 어떤 상태이상이 적용 중인지를 알려주는 컴포넌트.
 /// </summary>
-class DebuggingMeshPool : public GameObjectPool<DebuggingMesh>, public GHContents::LazySingletonClass<DebuggingMeshPool>
+class DebuggingMeshPool : public GameObjectPool<DebuggingMesh>, public Component, public SingletonComponent<DebuggingMeshPool>, public ContentsObservee
 {
 private:
 	virtual void ObjectInitializer(DebuggingMesh* comp) override
 	{
 		comp->m_staticMeshRendererComp = AttachDebugMesh(comp->GetGameObject(), DebugMeshType::Sphere, yunuGI::Color::red(), false);
 		comp->m_staticMeshRendererComp->SetActive(false);
-		application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-		contentsLayer->RegisterToEditorObjectContainer(comp->GetGameObject());
-
 	}
+	virtual void Start() override;
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
 };
+
+void DebuggingMeshPool::Start()
+{
+	isSingletonComponent = true;
+}
+
+void DebuggingMeshPool::PlayFunction()
+{
+	this->SetActive(true);
+	if (isOncePaused)
+	{
+		Start();
+	}
+}
+
+void DebuggingMeshPool::StopFunction()
+{
+	poolObjects.clear();
+	expendableObjects.clear();
+}

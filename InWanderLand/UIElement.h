@@ -9,9 +9,10 @@ class SoundPlayingTimer;
 class UIPriorityLayout;
 class PopDownOnDisable;
 class PopupOnEnable;
+class TimePauseTimer;
 class UIOffsetTransition;
 // 임포트된 UI 요소에 대한 정보를 잔뜩 저장하는 클래스
-class UIElement : public Component
+class UIElement : public Component, public ContentsObservee
 {
 public:
     virtual void Start() override;
@@ -20,11 +21,12 @@ public:
     PopDownOnDisable* scalePopDownTransition{ nullptr };
     UIOffsetTransition* enableTransition{ nullptr };
     UIOffsetTransition* disableTransition{ nullptr };
+    TimePauseTimer* timePauseOnEnable{ nullptr };
     SoundPlayingTimer* soundOnClick{ nullptr };
     SoundPlayingTimer* soundOnHover{ nullptr };
     SoundPlayingTimer* soundOnEnable{ nullptr };
     SoundPlayingTimer* soundOnDisable{ nullptr };
-    graphics::UIImage* imageComponent{ nullptr };
+    std::weak_ptr<graphics::UIImage> imageComponent{};
     graphics::UIText* textComponent{ nullptr };
     UIPriorityLayout* priorityLayout{ nullptr };
     UIPriorityLayout* parentPriorityLayout{ nullptr };
@@ -32,10 +34,15 @@ public:
     vector<UIElement*> children;
     void EnableElement();
     void DisableElement();
-    void SetNumber(int number);
+    void SetNumber(float number);
     // UI 요소에 영향을 줄 수 있는 실수 값을 조정합니다.
     FloatFollower* adjuster{ nullptr };
+
+    virtual void PlayFunction() override;
+    virtual void StopFunction() override;
+
 private:
+    bool numberSetBefore = false;
     // 0~9까지의 숫자 이미지를 저장하는 배열
     array<yunuGI::ITexture*, 10>* digitFont{ };
     // 10^i 자리에 속하는 숫자의 이미지를 저장하는 배열

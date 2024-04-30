@@ -3,6 +3,8 @@
 #include "DebugBeacon.h"
 #include "Unit.h"
 #include "UIManager.h"
+#include "ContentsObservee.h"
+
 using namespace yunutyEngine;
 
 namespace application
@@ -13,7 +15,7 @@ namespace application
     }
 }
 
-class RTSCam :public yunutyEngine::graphics::Camera
+class RTSCam : public yunutyEngine::graphics::Camera, public ContentsObservee
 {
 public:
     // 카메라가 타겟팅하는 게임 오브젝트가 여러개일 경우 distance에 곱해질 스케일러
@@ -48,6 +50,9 @@ public:
     float GetInitFar() { return initFar; }
     float GetInitWidth() { return initWidth; }
     float GetInitHeight() { return initHeight; }
+
+    virtual void PlayFunction() override;
+    virtual void StopFunction() override;
 
 private:
     void UpdateCameraView();

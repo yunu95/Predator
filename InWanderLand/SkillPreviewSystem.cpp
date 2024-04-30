@@ -1,14 +1,10 @@
 #include "SkillPreviewSystem.h"
-#include "ContentsLayer.h"
-#include "Application.h"
+
 //#include "Unit.h"
 
 void SkillPreviewSystem::Start()
 {
-	application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-	contentsLayer->RegisterToEditorComponentVector(this);
-	contentsLayer->RegisterToEditorObjectContainer(m_rangePreviewObject);
-	contentsLayer->RegisterToEditorObjectContainer(m_pathPreviewObject);
+
 }
 
 void SkillPreviewSystem::Update()
