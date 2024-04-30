@@ -176,6 +176,8 @@ namespace yunutyEngine
         GameObject* GetParentGameObject();
         const GameObject* GetParentGameObject()const;
         Scene* GetScene();
+        // 부모 게임오브젝트, 조부 게임 오브젝트, 증조부 게임 오브젝트..를 타고 올라가 총 가지고 있는 조상의 갯수를 반환합니다.
+        int GetAncestorNumber()const;
         void SetParent(IGameObjectParent* parent = nullptr);
         int GetChildIndex()const;
         void SetChildIndex(int index);
@@ -189,6 +191,7 @@ namespace yunutyEngine
         Scene* scene = nullptr;
         bool selfActive = true;
         int childrenNum = 0;
+        mutable int ancestorNumberCached{ -1 };
         IGameObjectParent* parent = nullptr;
         GameObject* parentGameObject = nullptr;
         Transform* transform = nullptr;
@@ -205,6 +208,7 @@ namespace yunutyEngine
         vector<Component*> indexedComponents;
         GameObject(IGameObjectParent* parent);
         void DoThingsOnParents(function<void(GameObject*)> todo);
+        void DoThingsOnSelfAndChildrenRecursive(function<void(GameObject*)> todo);
         virtual void SetChildIndex(GameObject* child, int index);
         bool DeservesUpdate();
         // 꼬리재귀를 위한 재귀함수
