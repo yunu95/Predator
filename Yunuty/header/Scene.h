@@ -28,7 +28,7 @@ namespace yunutyEngine
         unordered_set<GameObject*> gameObjects;
         unordered_map<GameObject*, unique_ptr<GameObject>> children;
         vector<GameObject*> childrenIndexed;
-        set<GameObject*> destroyList;
+        unordered_set<GameObject*> destroyList;
         unordered_map<const GameObject*, int> childIndexMap;
         static Scene* currentScene;
         virtual void SetChildIndex(GameObject* child, int index);

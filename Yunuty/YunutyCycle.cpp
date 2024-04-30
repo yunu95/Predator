@@ -135,9 +135,12 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
     // 살생부에 올라온 게임오브젝트들을 파괴합니다.
     while (!Scene::getCurrentScene()->destroyList.empty())
     {
-        static std::set<GameObject*> tempDestroyList;
-        tempDestroyList = Scene::getCurrentScene()->destroyList;
-        for (auto each : tempDestroyList)
+        static std::vector<GameObject*> vector;
+        vector.clear();
+        vector = std::vector<GameObject*>(Scene::getCurrentScene()->destroyList.begin(), Scene::getCurrentScene()->destroyList.end());
+        std::sort(vector.begin(), vector.end(), [](GameObject* a, GameObject* b) {return a->GetAncestorNumber() < b->GetAncestorNumber(); });
+
+        for (auto each : vector)
         {
             for (auto each : each->GetIndexedComponents())
             {
@@ -146,7 +149,7 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
             // 컴포넌트를 우측값으로 만들고 이를 다른 값에 할당하지 않으면 자연스레 할당해제된다.
             each->parent->MoveChild(each);
         }
-        for (auto each : tempDestroyList)
+        for (auto each : vector)
         {
             Scene::getCurrentScene()->destroyList.erase(each);
         }
@@ -161,8 +164,18 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
     auto pxScene = physics::_PhysxGlobal::SingleInstance().RequestPxScene(Scene::currentScene);
     if (Time::GetDeltaTime() > 0 && pxScene)
     {
+        // Start timing
+        // 장식물에서 충돌체 다 뺄 경우 0.0005초정도 걸림
+        auto start = std::chrono::high_resolution_clock::now();
         pxScene->simulate(Time::GetDeltaTime());
         pxScene->fetchResults(true);
+        // Stop timing
+        auto stop = std::chrono::high_resolution_clock::now();
+        // Calculate duration
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+        int a = duration.count();
+        // Output the duration in milliseconds
+        //std::cout << "Function took " << a << " milliseconds to execute.\n";
     }
 
     Collider2D::InvokeCollisionEvents();
