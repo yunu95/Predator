@@ -8,7 +8,7 @@ enum class MeleeAttackType
 	DirectAttack
 };
 
-class SpecialEffect;
+class StatusEffect;
 
 /// <summary>
 ///
@@ -25,7 +25,7 @@ private:
 	float colliderRemainElasped = 0.f;
 	bool colliderActivated = false;
 
-	SpecialEffect* m_specialEffect;
+	StatusEffect* m_specialEffect;
 	float m_attackDamage;
 	Unit* m_unitComponent;
 
@@ -43,7 +43,7 @@ public:
 	void SetColliderRemainTime(float time);
 
 	// 유닛의 Damaged()를 직접 호출하는 식이라면 아래 함수 사용.
-	void SetDirectAttackSpecialEffect(SpecialEffect* p_effect);
+	void SetDirectAttackSpecialEffect(StatusEffect* p_effect);
 	void SetDamage(float p_dmg);
 
 public:

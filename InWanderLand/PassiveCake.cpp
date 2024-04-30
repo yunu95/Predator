@@ -57,8 +57,10 @@ void PassiveCake::PlayFunction()
 
 void PassiveCake::StopFunction()
 {
-	if (GetGameObject()->GetSelfActive())
-		GetGameObject()->SetSelfActive(false);
+	if (!GetGameObject()->GetComponentWeakPtr<PassiveCake>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
 }
 
 void PassiveCake::Start()

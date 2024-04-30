@@ -61,8 +61,10 @@ void CursorDetector::PlayFunction()
 
 void CursorDetector::StopFunction()
 {
-	if (!GetGameObject()->GetActive())
-		GetGameObject()->SetSelfActive(false);
+	if (!GetGameObject()->GetComponentWeakPtr<CursorDetector>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
 }
 
 void CursorDetector::EraseUnitFromContainer(Unit* p_unit)

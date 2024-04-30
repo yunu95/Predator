@@ -1,5 +1,6 @@
 #include "MagicianSkillSystem.h"
 #include "Dotween.h"
+#include "TacticModeSystem.h"
 
 void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 {
@@ -27,6 +28,8 @@ void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 			SetSkillRequirmentsActive(QSkillProjectile, false);
 			SetSkillRequirmentsActive(QSkillFieldDamage, true);
 
+			TacticModeSystem::Instance().ReportTacticActionFinished();
+			m_unitComponent->isPermittedToTacticAction = false;
 			m_unitComponent->SetUnitStateIdle();
 
 			QSkillFieldDamage.dotweenComponent->DONothing(m_QSkillFieldRemainTime).OnComplete([=]()
@@ -55,6 +58,8 @@ void MagicianSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 			SetSkillRequirmentsActive(WSkillProjectile, false);
 			SetSkillRequirmentsActive(WSkillFieldDamage, true);
 
+			TacticModeSystem::Instance().ReportTacticActionFinished();
+			m_unitComponent->isPermittedToTacticAction = false;
 			m_unitComponent->SetUnitStateIdle();
 
 			WSkillFieldDamage.dotweenComponent->DONothing(m_WSkillFieldRemainTime).OnComplete([=]()

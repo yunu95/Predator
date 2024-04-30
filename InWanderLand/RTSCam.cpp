@@ -239,8 +239,10 @@ void RTSCam::PlayFunction()
 
 void RTSCam::StopFunction()
 {
-	if (GetGameObject()->GetSelfActive())
-		GetGameObject()->SetSelfActive(false);
+	if (!GetGameObject()->GetComponentWeakPtr<RTSCam>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
 }
 
 void RTSCam::UpdateCameraView()

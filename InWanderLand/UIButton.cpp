@@ -152,3 +152,13 @@ void UIButton::OnDisable()
     isMouseNowOnButton = false;
     UIManager::Instance().ReportMouseExitButton(this);
 }
+
+void UIButton::PlayFunction()
+{
+
+}
+
+void UIButton::StopFunction()
+{
+	yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+}

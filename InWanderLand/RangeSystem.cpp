@@ -42,7 +42,9 @@ void RangeSystem::PlayFunction()
 
 void RangeSystem::StopFunction()
 {
-	if (GetGameObject()->GetSelfActive())
-		GetGameObject()->SetSelfActive(false);
+	if (!GetGameObject()->GetComponentWeakPtr<RangeSystem>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
 }
 

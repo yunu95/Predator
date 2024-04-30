@@ -30,6 +30,16 @@ void TimerComponent::Update()
     }
 }
 
+void TimerComponent::PlayFunction()
+{
+
+}
+
+void TimerComponent::StopFunction()
+{
+	yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+}
+
 void TimerComponent::ActivateTimer()
 {
     m_elapsed = 0.0f;

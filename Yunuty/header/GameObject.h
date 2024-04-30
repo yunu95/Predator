@@ -131,7 +131,7 @@ namespace yunutyEngine
             for (auto i = components.begin(); i != components.end(); i++)
             {
                 std::weak_ptr<ComponentType> weakDerivedPtr = std::dynamic_pointer_cast<ComponentType>(i->second);
-                if (weakDerivedPtr->lock())
+                if (weakDerivedPtr.lock())
                     return weakDerivedPtr;
             }
             return std::weak_ptr<ComponentType>{};

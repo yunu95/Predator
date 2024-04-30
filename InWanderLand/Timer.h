@@ -1,9 +1,10 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "Easing.h"
+#include "ContentsObservee.h"
 
 
-class TimerComponent : public Component
+class TimerComponent : public Component, public ContentsObservee
 {
 private:
     bool m_isActivated{ false };
@@ -18,6 +19,9 @@ public:
 public:
 
     virtual void Update() override;
+    virtual void PlayFunction() override;
+    virtual void StopFunction() override;
+
 
 public:
     std::function<void(float normalizedT)> onUpdate = [](float) {};

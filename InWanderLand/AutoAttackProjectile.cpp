@@ -3,7 +3,7 @@
 #include "Dotween.h"
 #include "AutoAttackProjectilePool.h"
 #include "Unit.h"
-#include "SpecialEffect.h"
+#include "StatusEffect.h"
 #include "PlayerController.h"
 #include <float.h>
 #include <cmath>
@@ -44,8 +44,10 @@ void AutoAttackProjectile::PlayFunction()
 
 void AutoAttackProjectile::StopFunction()
 {
-	if (GetGameObject()->GetSelfActive())
-		GetGameObject()->SetSelfActive(false);
+	if (!GetGameObject()->GetComponentWeakPtr<AutoAttackProjectile>().expired())
+	{
+		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+	}
 }
 
 void AutoAttackProjectile::AutoChaseShootingFunction()

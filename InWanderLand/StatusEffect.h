@@ -8,8 +8,18 @@
 
 class Unit;
 
-class SpecialEffect : public Component, public ContentsObservee
+class StatusEffect : public Component, public ContentsObservee
 {
+public:
+	enum class StatusEffectEnum
+	{
+		Bleeding,
+		Blinding,
+		Paralysis,
+		KnockBack,
+		Taunted
+	};
+
 protected:
 	Unit* m_ownerUnit;
 

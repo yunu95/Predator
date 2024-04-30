@@ -7,6 +7,7 @@
 #include "RobinSkillDevelopmentSystem.h"
 #include "DummyComponent.h"
 #include "ContentsObservee.h"
+#include "StatusEffect.h"
 
 class UnitProductor;
 class SkillSystem;
@@ -201,6 +202,9 @@ private:
 	float m_stopFollowDinstance{ 2.0f };			// 이 수치만큼 거리가 좁혀지면 멈춘다.
 	bool isFollowing{ false };
 
+public:
+	bool isPermittedToTacticAction{ false };
+
 private:
 	/// 유닛이 속해있는 field
 	NavigationField* m_unitNavField;
@@ -308,6 +312,11 @@ public:
 	void MakeUnitPushedState(bool p_isCrushed);
 	void MakeUnitParalysisState();
 	void SetUnitStateIdle();
+
+	void ReportStatusEffectApplied(StatusEffect::StatusEffectEnum p_effectType);
+	void ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType);
+
+	void PermitTacticAction();
 
 	bool GetJustCrushedState() const;
 	bool IsUnitDead() const;

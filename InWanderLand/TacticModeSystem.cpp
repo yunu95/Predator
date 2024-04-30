@@ -62,8 +62,8 @@ void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSer
 				{
 					currentSelectedUnit->PushAttackMoveFunctionToTacticQueue(pos, selectedUnit);
 				}
+                sequenceQueue.push(currentSelectedUnit);
 				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-				//m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
                 SetCurrentGauge(--m_currentGauge);
 			};
 	}
@@ -77,6 +77,7 @@ void TacticModeSystem::SetLeftClickAddQueueForAttackMove(InputManager::SelectedS
 		m_rtsCam->groundRightClickCallback = [=](Vector3d pos)
 			{
 				currentSelectedUnit->PushAttackMoveFunctionToTacticQueue(pos);
+				sequenceQueue.push(currentSelectedUnit);
 				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 				//m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
                 //tacticModeGauge--;
@@ -100,6 +101,7 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
 		m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
 			{
 				currentSelectedUnit->PushSkillFunctionToTacticQueue(currentSelectedSkill, pos);
+				sequenceQueue.push(currentSelectedUnit);
 				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 				//m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
                 //tacticModeGauge--;
@@ -147,6 +149,14 @@ void TacticModeSystem::ExitTacticMode()
         if (!each.second->IsTacticModeQueueEmpty())
             each.second->SetUnitStateIdle();
     }
+
+    if (!sequenceQueue.empty())
+    {
+        isTacticOrderPerforming = true;
+        m_rtsCam->SetTarget(sequenceQueue.front()->GetGameObject());
+		sequenceQueue.front()->PermitTacticAction();
+		sequenceQueue.pop();
+    }
 }
 
 void TacticModeSystem::SetMovingSystemComponent(RTSCam* sys)
@@ -154,17 +164,14 @@ void TacticModeSystem::SetMovingSystemComponent(RTSCam* sys)
     m_rtsCam = sys;
 }
 
-bool TacticModeSystem::IsTacticModeActivated(Unit* p_unit)
+bool TacticModeSystem::IsOrderingTimingNow() const
 {
-    if (p_unit->GetUnitSide() != Unit::UnitSide::Player)
-        return false;
+    return isTacticModeOperating;
+}
 
-    SetCurrentSelectedQueue(p_unit);
-
-    if (currentSelectedQueue->empty())
-        return false;
-    else
-        return true;
+bool TacticModeSystem::IsUnitsPerformingCommand() const
+{
+    return isTacticOrderPerforming;
 }
 
 bool TacticModeSystem::IsTacticModeCoolTime() const
@@ -185,10 +192,19 @@ void TacticModeSystem::SetCurrentGauge(int p_gauge)
     m_currentGauge = p_gauge;
 }
 
-void TacticModeSystem::SetCurrentSelectedQueue(Unit* p_currentUnit)
+void TacticModeSystem::ReportTacticActionFinished()
 {
-    currentSelectedQueue = m_queueSelector.find(p_currentUnit->GetUnitType())->second;
-
-    currentActivatedUnit = p_currentUnit;
+    /// 전술모드의 수행을 완료한 유닛이 해당 함수를 호출합니다.
+    if (sequenceQueue.empty())
+    {
+        isTacticOrderPerforming = false;
+    }
+    else
+    {
+		m_rtsCam->SetTarget(sequenceQueue.front()->GetGameObject());
+		sequenceQueue.front()->PermitTacticAction();
+		sequenceQueue.pop();
+    }
 }
+
 

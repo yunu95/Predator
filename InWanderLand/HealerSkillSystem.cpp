@@ -1,4 +1,5 @@
 #include "HealerSkillSystem.h"
+#include "TacticModeSystem.h"
 
 void HealerSkillSystem::CrushDown(int p_times)
 {
@@ -17,6 +18,8 @@ void HealerSkillSystem::CrushDown(int p_times)
 				m_unitNavComponent->SetActive(true);
 				m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
 				m_unitNavComponent->Relocate(GetTransform()->GetWorldPosition());
+				TacticModeSystem::Instance().ReportTacticActionFinished();
+				m_unitComponent->isPermittedToTacticAction = false;
 				m_unitComponent->SetUnitStateIdle();
 			}
 			else
@@ -148,6 +151,8 @@ void HealerSkillSystem::Update()
 			WSkillColliderElapsed = 0.0f;
 			SetSkillRequirmentsActive(WSkillFieldDamage, false);
 			isWSkillColliderActivated = false;
+			TacticModeSystem::Instance().ReportTacticActionFinished();
+			m_unitComponent->isPermittedToTacticAction = false;
 			m_unitComponent->SetUnitStateIdle();
 		}
 	}

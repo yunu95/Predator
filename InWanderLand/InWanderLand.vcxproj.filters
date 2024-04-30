@@ -1042,10 +1042,10 @@
     <ClInclude Include="EnemyAutoAttackProjectile.h">
       <Filter>Contents\ProjectileComponents\Magician\Passive</Filter>
     </ClInclude>
-    <ClInclude Include="SpecialEffectTrigger.h">
+    <ClInclude Include="StatusEffectTrigger.h">
       <Filter>Contents\UnitStatusComponent</Filter>
     </ClInclude>
-    <ClInclude Include="SpecialEffect.h">
+    <ClInclude Include="StatusEffect.h">
       <Filter>Contents\UnitStatusComponent</Filter>
     </ClInclude>
     <ClInclude Include="EditorCameraManager.h">
@@ -1798,10 +1798,10 @@
     <ClCompile Include="EnemyAutoAttackProjectile.cpp">
       <Filter>Contents\ProjectileComponents\Magician\Passive</Filter>
     </ClCompile>
-    <ClCompile Include="SpecialEffect.cpp">
+    <ClCompile Include="StatusEffect.cpp">
       <Filter>Contents\UnitStatusComponent</Filter>
     </ClCompile>
-    <ClCompile Include="SpecialEffectTrigger.cpp">
+    <ClCompile Include="StatusEffectTrigger.cpp">
       <Filter>Contents\UnitStatusComponent</Filter>
     </ClCompile>
     <ClCompile Include="EditorCameraManager.cpp">

@@ -1,5 +1,5 @@
 #pragma once
-#include "SpecialEffectTrigger.h"
+#include "StatusEffectTrigger.h"
 /// <summary>
 /// 장판 스킬의 부모 클래스.
 /// 기본적인 틱 데미지를 주는 기능을 제공하며, 추가적인 요소 (ex.실명 및 끌어당김)은
@@ -8,7 +8,7 @@
 
 class StatusTimer;
 
-class FieldDamage : public SpecialEffectTrigger
+class FieldDamage : public StatusEffectTrigger
 {
 protected:
 	StatusTimer* m_damageTimer;			// 기본적인 장판 틱 데미지 타이머, 추가로 사용하고자 할 땐 자식 클래스에서 다른 타이머를 새로 만들어주기.

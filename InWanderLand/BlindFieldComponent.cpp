@@ -8,12 +8,14 @@ void BlindFieldComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 	
 	/// 실명 부여 로직
 	opponentUnit->SetUnitDamageToZero(true);
+	opponentUnit->ReportStatusEffectApplied(StatusEffect::StatusEffectEnum::Blinding);
 
 	m_blindTimer->m_isRepeated = false;
 	m_blindTimer->m_duration = m_blindPersistTime;
 	m_blindTimer->onCompleteFunction = [=]()
 	{
 		/// 실명 해제 로직
+		opponentUnit->ReportStatusEffectEnded(StatusEffect::StatusEffectEnum::Blinding);
 		opponentUnit->SetUnitDamageToZero(false);
 	};
 }
