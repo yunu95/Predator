@@ -26,7 +26,7 @@ namespace application
 	{
 		virtual ~AnimationEvent() = default;
 		virtual AnimationEventType GetType() = 0;
-
+	
 		std::string fbxName;
 		std::string animationName;
 		float frame;
@@ -56,7 +56,7 @@ namespace application
 	{
 		GET_TYPE(Sound_PlayOnceEvent)
 
-
+		std::string rscPath;
 	};
 
 	struct Sound_PlayLoopEvent
@@ -64,6 +64,6 @@ namespace application
 	{
 		GET_TYPE(Sound_PlayLoopEvent)
 
-
+		std::string rscPath;
 	};
 }

@@ -125,6 +125,7 @@ namespace application
             ParticleShape shape = ParticleShape::Cone;
             ParticleMode particleMode = ParticleMode::Default;
             bool isLoop = false;
+			float duration = 5.0;
             float lifeTime = 5.f;
             float speed = 1.f;
             float startScale = 1.f;

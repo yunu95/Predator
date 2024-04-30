@@ -47,6 +47,7 @@ namespace application
 		friend class Singleton<AnimationEventManager>;
 
 	public:
+		void Init();
 		void Clear();
 
 		bool Load(const json& data);
@@ -55,7 +56,14 @@ namespace application
 		bool AddAnimationEvent(const std::shared_ptr<AnimationEvent>& event);
 		bool EraseAnimationEvent(const std::shared_ptr<AnimationEvent>& event);
 		
-	private:
+	private:			
+		std::map<const std::string, yunutyEngine::GameObject*>* skinnedObjList = nullptr;
+		std::map<const std::string, std::unordered_set<std::shared_ptr<particle::ParticleToolInstance>>>* particleInstanceList = nullptr;
+		std::map<const std::shared_ptr<particle::ParticleToolInstance>, yunutyEngine::GameObject*>* particleInstanceIDMap = nullptr;
+		std::map<const std::string, std::vector<yunuGI::IAnimation*>>* aniMap = nullptr;
+		std::map<const std::string, std::vector<std::string>>* aniNameMap = nullptr;
+
 		std::unordered_set<std::shared_ptr<AnimationEvent>> eventList = std::unordered_set<std::shared_ptr<AnimationEvent>>();
+		std::unordered_map<std::shared_ptr<AnimationEvent>, unsigned long long> eventFuncIndexList = std::unordered_map<std::shared_ptr<AnimationEvent>, unsigned long long>();
 	};
 }
