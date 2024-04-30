@@ -42,6 +42,10 @@ void UIElement::EnableElement()
     {
         parentPriorityLayout->EnableChildUI(GetGameObject());
     }
+    if (timePauseOnEnable)
+    {
+        timePauseOnEnable->ActivateTimer();
+    }
     for (auto each : children)
     {
         if (each->GetGameObject()->GetSelfActive())
@@ -77,6 +81,14 @@ void UIElement::DisableElement()
     {
         GetGameObject()->SetSelfActive(false);
     }
+    if (importedUIData.customFlags & (int)UIExportFlag::TimeContinueOnDisable)
+    {
+        if (timePauseOnEnable)
+        {
+            timePauseOnEnable->StopTimer();
+        }
+        Time::SetTimeScale(1);
+    }
     if (parentPriorityLayout)
     {
         parentPriorityLayout->DisableChildUI(GetGameObject());
@@ -90,7 +102,7 @@ void UIElement::SetNumber(float number)
         numberAsInt = ceilf(number);
     if (numberAsInt < 0)
         numberAsInt = 0;
-    
+
     assert(digitFont);
     int maxDigit = log10(numberAsInt);
     assert(digits.size() > log10(numberAsInt));

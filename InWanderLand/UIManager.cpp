@@ -13,6 +13,7 @@
 #include "SoundPlayingTimer.h"
 #include "InWanderLand.h"
 #include "SkillUpgradeSystem.h"
+#include "TimePauseTImer.h"
 #include <fstream>
 
 using namespace yunutyEngine::graphics;
@@ -292,6 +293,11 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
     {
         digitFonts[element] = std::array<yunuGI::ITexture*, 10>{};
     }
+    if (uiData.customFlags & (int)UIExportFlag::TimeStopOnEnable)
+    {
+        element->timePauseOnEnable = uiObject->AddComponent<TimePauseTimer>();
+        element->timePauseOnEnable->m_duration = uiData.timeStoppingDuration;
+    };
 
     Vector3d pivotPos{ 0,0,0 };
     // offset by anchor

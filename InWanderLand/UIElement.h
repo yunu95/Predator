@@ -9,6 +9,7 @@ class SoundPlayingTimer;
 class UIPriorityLayout;
 class PopDownOnDisable;
 class PopupOnEnable;
+class TimePauseTimer;
 class UIOffsetTransition;
 // 임포트된 UI 요소에 대한 정보를 잔뜩 저장하는 클래스
 class UIElement : public Component
@@ -20,6 +21,7 @@ public:
     PopDownOnDisable* scalePopDownTransition{ nullptr };
     UIOffsetTransition* enableTransition{ nullptr };
     UIOffsetTransition* disableTransition{ nullptr };
+    TimePauseTimer* timePauseOnEnable{ nullptr };
     SoundPlayingTimer* soundOnClick{ nullptr };
     SoundPlayingTimer* soundOnHover{ nullptr };
     SoundPlayingTimer* soundOnEnable{ nullptr };

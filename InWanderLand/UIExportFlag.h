@@ -55,4 +55,19 @@ enum class UIExportFlag
     IsDigitFont = 1 << 25,
     // 스킬 업그레이드에 쓰이는 버튼입니다. 선행 업그레이드를 가질 수 있습니다.
     IsSkillUpgrade = 1 << 26,
+    // UI의 크기가 화면의 해상도에 따라 달라집니다.
+    // 1920, 1080 해상도에서 만들어진 UI 이미지를 1280, 720 해상도에서 사용할 때, 이미지의 크기를 0.6667배로 조정합니다.
+    ScaledByResolution = 1 << 27,
+    // UI가 활성화될때 시간을 멈춥니다.
+    TimeStopOnEnable = 1 << 28,
+    // UI가 비활성화될때 시간정지를 해제합니다.
+    TimeContinueOnDisable = 1 << 29,
+    // UI가 활성화될때 투명도 애니메이션을 재생합니다.
+    OpacityFadeIn = 1 << 30,
+    // UI가 비활성화될때 투명도 애니메이션을 재생합니다.
+    OpacityFadeOut = 1 << 31,
+};
+enum class UIExportFlag2
+{
+
 };
