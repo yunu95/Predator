@@ -61,8 +61,25 @@ struct JsonUIData
     float height;
     // 업그레이드 버튼의 경우, 활성화하기 위해 필요한 다른 버튼의 인덱스를 의미합니다.
     int dependentUpgrade;
+    vector<float> linearClipOnEnableStart;
+    vector<float> linearClipOnEnableDir;
+    float linearClipOnEnableDuration;
+    int linearClipOnEnableCurveType;
+    vector<float> linearClipOnDisableStart;
+    vector<float> linearClipOnDisableDir;
+    float linearClipOnDisableDuration;
+    int linearClipOnDisableCurveType;
+    vector<float> colorTintOnEnableStart;
+    vector<float> colorTintOnEnableEnd;
+    float colorTintOnEnableDuration;
+    int colorTintOnEnableCurveType;
+    vector<float> colorTintOnDisableStart;
+    vector<float> colorTintOnDisableEnd;
+    float colorTintOnDisableDuration;
+    int colorTintOnDisableCurveType;
     // 임의로 사용하게 될 사용자 플래그
     int customFlags;
+    int customFlags2;
     // UI의 고유한 EnumID
     int enumID;
     FROM_JSON(JsonUIData);

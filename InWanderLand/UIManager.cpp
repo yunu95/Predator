@@ -111,6 +111,20 @@ void UIManager::ReportMouseExitButton(UIButton* p_btn)
     m_selectedButtons.erase(p_btn);
     UpdateHighestPriorityButton();
 }
+void UIManager::ShowComboObjectives()
+{
+    uisByEnumID[UIEnumID::Ingame_Combo_DescriptionTitleImg]->EnableElement();
+    uisByEnumID[UIEnumID::Ingame_Combo_Description1]->EnableElement();
+    uisByEnumID[UIEnumID::Ingame_Combo_Description2]->EnableElement();
+    uisByEnumID[UIEnumID::Ingame_Combo_Description3]->EnableElement();
+}
+void UIManager::HideComboObjectvies()
+{
+    uisByEnumID[UIEnumID::Ingame_Combo_DescriptionTitleImg]->DisableElement();
+    uisByEnumID[UIEnumID::Ingame_Combo_Description1]->DisableElement();
+    uisByEnumID[UIEnumID::Ingame_Combo_Description2]->DisableElement();
+    uisByEnumID[UIEnumID::Ingame_Combo_Description3]->DisableElement();
+}
 void UIManager::UpdateHighestPriorityButton()
 {
     // 현재 하이라이트된 버튼이 적법한 버튼이라면, 더 이상의 처리는 필요없습니다.
@@ -180,11 +194,11 @@ void UIManager::Start()
 
 void UIManager::PlayFunction()
 {
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
+    this->SetActive(true);
+    if (isOncePaused)
+    {
+        Start();
+    }
 }
 
 void UIManager::StopFunction()
@@ -322,6 +336,52 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
     {
         element->timePauseOnEnable = uiObject->AddComponent<TimePauseTimer>();
         element->timePauseOnEnable->m_duration = uiData.timeStoppingDuration;
+    };
+    if (uiData.customFlags & (int)UIExportFlag::ColorTintOnEnable)
+    {
+        element->colorTintOnEnable = uiObject->AddComponent<ColorTintTimer>();
+        element->colorTintOnEnable->uiImage = element->imageComponent.lock().get();
+        element->colorTintOnEnable->startColor = yunuGI::Color{ uiData.colorTintOnEnableStart[0],uiData.colorTintOnEnableStart[1],uiData.colorTintOnEnableStart[2],uiData.colorTintOnEnableStart[3] };
+        element->colorTintOnEnable->endColor = yunuGI::Color{ uiData.colorTintOnEnableEnd[0],uiData.colorTintOnEnableEnd[1],uiData.colorTintOnEnableEnd[2],uiData.colorTintOnEnableEnd[3] };
+        element->colorTintOnEnable->m_duration = uiData.colorTintOnEnableDuration;
+        element->colorTintOnEnable->uiCurveType = uiData.colorTintOnEnableCurveType;
+        element->colorTintOnEnable->disableOnEnd = false;
+        element->colorTintOnEnable->Init();
+    };
+    if (uiData.customFlags & (int)UIExportFlag::ColorTintOnDisable)
+    {
+        element->colorTintOnDisable = uiObject->AddComponent<ColorTintTimer>();
+        element->colorTintOnDisable->uiImage = element->imageComponent.lock().get();
+        element->colorTintOnDisable->startColor = yunuGI::Color{ uiData.colorTintOnDisableStart[0],uiData.colorTintOnDisableStart[1],uiData.colorTintOnDisableStart[2],uiData.colorTintOnDisableStart[3] };
+        element->colorTintOnDisable->endColor = yunuGI::Color{ uiData.colorTintOnDisableStart[0],uiData.colorTintOnDisableStart[1],uiData.colorTintOnDisableStart[2],uiData.colorTintOnDisableStart[3] };
+        element->colorTintOnDisable->m_duration = uiData.colorTintOnDisableDuration;
+        element->colorTintOnDisable->uiCurveType = uiData.colorTintOnDisableCurveType;
+        element->colorTintOnDisable->disableOnEnd = false;
+        element->colorTintOnEnable->Init();
+    };
+    if (uiData.customFlags2 & (int)UIExportFlag2::LinearClipOnEnable)
+    {
+        element->linearClippingTimerOnEnable = uiObject->AddComponent<LinearClippingTimer>();
+        element->linearClippingTimerOnEnable->uiImage = element->imageComponent.lock().get();
+        element->linearClippingTimerOnEnable->clipDirection = { uiData.linearClipOnEnableDir[0], uiData.linearClipOnEnableDir[1] };
+        element->linearClippingTimerOnEnable->disableOnEnd = false;
+        element->linearClippingTimerOnEnable->m_duration = uiData.linearClipOnEnableDuration;
+        element->linearClippingTimerOnEnable->startPos = { uiData.linearClipOnEnableStart[0], uiData.linearClipOnEnableStart[1] };
+        element->linearClippingTimerOnEnable->uiCurveType = uiData.linearClipOnEnableCurveType;
+        element->linearClippingTimerOnEnable->reverseOffset = false;
+        element->linearClippingTimerOnEnable->Init();
+    };
+    if (uiData.customFlags2 & (int)UIExportFlag2::LinearClipOnDisable)
+    {
+        element->linearClippingTimerOnDisable = uiObject->AddComponent<LinearClippingTimer>();
+        element->linearClippingTimerOnDisable->uiImage = element->imageComponent.lock().get();
+        element->linearClippingTimerOnDisable->clipDirection = { uiData.linearClipOnDisableDir[0], uiData.linearClipOnDisableDir[1] };
+        element->linearClippingTimerOnDisable->disableOnEnd = true;
+        element->linearClippingTimerOnDisable->m_duration = uiData.linearClipOnDisableDuration;
+        element->linearClippingTimerOnDisable->startPos = { uiData.linearClipOnDisableStart[0], uiData.linearClipOnDisableStart[1] };
+        element->linearClippingTimerOnDisable->uiCurveType = uiData.linearClipOnDisableCurveType;
+        element->linearClippingTimerOnDisable->reverseOffset = true;
+        element->linearClippingTimerOnDisable->Init();
     };
 
     Vector3d pivotPos{ 0,0,0 };

@@ -65,7 +65,7 @@ void yunutyEngine::GameObject::SetSelfActive(bool selfActive)
 
     activeAfter = GetActive();
     PropagateActiveEvent(activeBefore, activeAfter);
-
+    parent->HandleChildUpdateState(this);
 }
 GameObject* yunutyEngine::GameObject::GetParentGameObject()
 {
@@ -257,7 +257,7 @@ int yunutyEngine::GameObject::GetSceneIndex(const GameObject* target)
                 objStack.push(brother);
             }
         }
-}
+    }
     return target->cachedSceneIndex;
 }
 string yunutyEngine::GameObject::getName()const

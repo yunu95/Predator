@@ -1019,6 +1019,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="CinematicManager.h" />
     <ClInclude Include="BurnEffect.h" />
     <ClInclude Include="ChessTrapSkillSystem.h" />
+    <ClInclude Include="ColorTintTImer.h" />
     <ClInclude Include="ConditionList.h" />
     <ClInclude Include="Condition_CinematicMode.h" />
     <ClInclude Include="ContentsObservee.h" />
@@ -1046,6 +1047,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="IAction.h" />
     <ClInclude Include="ICondition.h" />
     <ClInclude Include="JsonUIData.h" />
+    <ClInclude Include="LinearClippingTimer.h" />
     <ClInclude Include="ObservationTarget.h" />
     <ClInclude Include="IObserver.h" />
     <ClInclude Include="ObservationEvent.h" />
@@ -1288,6 +1290,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="BlindFieldComponent.cpp" />
     <ClCompile Include="CinematicManager.cpp" />
     <ClCompile Include="BurnEffect.cpp" />
+    <ClCompile Include="ColorTIntTimer.cpp" />
     <ClCompile Include="Condition_CinematicMode.cpp" />
     <ClCompile Include="ChessTrapSkillSystem.cpp" />
     <ClCompile Include="ContentsObservee.cpp" />
@@ -1310,6 +1313,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="EnemySummonSkillSystem.cpp" />
     <ClCompile Include="FloatFollower.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="LinearClippingTimer.cpp" />
     <ClCompile Include="ObservationTarget.cpp" />
     <ClCompile Include="ObserveeHelper.cpp" />
     <ClCompile Include="ParticleBrush.cpp" />

@@ -3,6 +3,7 @@
 #include "JsonUIData.h"
 #include "UIImage.h"
 
+class LinearClippingTimer;
 class UIButton;
 class FloatFollower;
 class SoundPlayingTimer;
@@ -11,6 +12,7 @@ class PopDownOnDisable;
 class PopupOnEnable;
 class TimePauseTimer;
 class UIOffsetTransition;
+class ColorTintTimer;
 // 임포트된 UI 요소에 대한 정보를 잔뜩 저장하는 클래스
 class UIElement : public Component, public ContentsObservee
 {
@@ -21,6 +23,8 @@ public:
     PopDownOnDisable* scalePopDownTransition{ nullptr };
     UIOffsetTransition* enableTransition{ nullptr };
     UIOffsetTransition* disableTransition{ nullptr };
+    ColorTintTimer* colorTintOnEnable{ nullptr };
+    ColorTintTimer* colorTintOnDisable{ nullptr };
     TimePauseTimer* timePauseOnEnable{ nullptr };
     SoundPlayingTimer* soundOnClick{ nullptr };
     SoundPlayingTimer* soundOnHover{ nullptr };
@@ -31,6 +35,8 @@ public:
     UIPriorityLayout* priorityLayout{ nullptr };
     UIPriorityLayout* parentPriorityLayout{ nullptr };
     UIButton* button{ nullptr };
+    LinearClippingTimer* linearClippingTimerOnEnable{ nullptr };
+    LinearClippingTimer* linearClippingTimerOnDisable{ nullptr };
     vector<UIElement*> children;
     void EnableElement();
     void DisableElement();
