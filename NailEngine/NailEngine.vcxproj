@@ -214,6 +214,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="PixelShader.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="PointLightShadowPass.h" />
+    <ClInclude Include="QuadTree.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="RenderTargetGroup.h" />
     <ClInclude Include="Resource.h" />
@@ -284,6 +285,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="PointLightShadowPass.cpp" />
+    <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="RenderTargetGroup.cpp" />
     <ClCompile Include="Resource.cpp" />

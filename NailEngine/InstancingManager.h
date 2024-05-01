@@ -3,6 +3,7 @@
 
 #include "InstanceBuffer.h"
 #include "RenderSystem.h"
+#include "QuadTree.h"
 
 #include <map>
 #include <set>
@@ -121,4 +122,5 @@ private:
 	std::shared_ptr<ParticleBuffer> particleBuffer;
 	std::shared_ptr<LightMapUVBuffer> lightMapUVBuffer;
 
+	QuadTree<std::shared_ptr<RenderInfo>> quadTree;
 };
