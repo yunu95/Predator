@@ -37,6 +37,11 @@ namespace yunuGIAdapter
 		{
 			animator->Play(animation);
 		};
+
+		virtual void SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame) override
+		{
+			animator->SetAnimationFrame(animation, frame);
+		};
 		virtual void SetPlaySpeed(float playSpeed) override
 		{
 			animator->SetPlaySpeed(playSpeed);

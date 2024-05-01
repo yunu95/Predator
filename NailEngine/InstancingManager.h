@@ -94,6 +94,8 @@ public:
 	void PopParticleSystem(ParticleSystem* system);
 	void RenderParticle();
 
+	std::vector<std::pair<InstanceID, std::vector<std::shared_ptr<RenderInfo>>>>& GetStaticRenderInfoVec() { return staticMeshDeferredRenderVec; }
+
 private:
 	void AddData(const InstanceID& id, InstancingData& instancingData);
 

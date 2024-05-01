@@ -14,6 +14,7 @@
 #include "GeometryShader.h"
 #include "PointLight.h"
 #include "ParticleSystem.h"
+#include "FrustumCullingManager.h"
 
 #include <cmath>
 #include <algorithm>
@@ -102,7 +103,12 @@ void InstancingManager::SortByCameraDirection()
 		}
 	}
 
-	int a = 1;
+	for (auto& each : this->staticMeshRenderInfoIndexMap)
+	{
+		FrustumCullingManager::Instance.Get().RegisterRenderInfo(each.first);
+	}
+
+	//FrustumCullingManager::Instance.Get().Init();
 }
 
 void InstancingManager::RenderStaticDeferred()
@@ -184,6 +190,8 @@ void InstancingManager::RenderStaticDeferred()
 					if (i->mesh == nullptr) continue;
 
 					if (i->isActive == false) continue;
+
+					if(i->isCulled == true) continue;
 
 					auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
 					auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);

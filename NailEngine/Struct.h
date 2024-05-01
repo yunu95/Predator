@@ -180,6 +180,7 @@ struct RenderInfo
     unsigned int materialIndex;
     DirectX::SimpleMath::Matrix wtm;
     bool isActive = true;
+    bool isCulled = false;
 
     int lightMapIndex = -1;
     DirectX::SimpleMath::Vector2 uvOffset;

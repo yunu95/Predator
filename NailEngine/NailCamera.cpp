@@ -1,11 +1,12 @@
 #include "NailCamera.h"
+#include "FrustumCullingManager.h"
 
 void NailCamera::SetWorldTM(const DirectX::SimpleMath::Matrix wtm)
 {
 	this->wtm = wtm;
 	this->vtm = this->wtm.Invert();
 	this->cameraNear = 10.f;
-	this->cameraFar = 100.f;
+	this->cameraFar = 80.f;
 	this->ptm = DirectX::XMMatrixPerspectiveFovLH(this->fov, this->width / this->height, this->cameraNear, this->cameraFar);
 	this->vtmOrtho = DirectX::XMMatrixOrthographicLH(this->width * 1.f, this->height * 1.f, this->cameraNear, this->cameraFar);
 
@@ -98,6 +99,12 @@ DirectX::SimpleMath::Matrix NailCamera::GetPTM90()
 
 void NailCamera::CreateFrustum()
 {
+//	FrustumCullingManager::Instance.Get().SetCameraChange(true);
+
 	this->frustum.CreateFromMatrix(this->frustum, ptm);
 	this->frustum.Transform(this->frustum, wtm);
+
+	//FrustumCullingManager::Instance.Get().Wait();
+	//FrustumCullingManager::Instance.Get().SetCameraChange(false);
+	//FrustumCullingManager::Instance.Get().Init();
 }

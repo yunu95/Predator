@@ -4,6 +4,7 @@
 
 #include "ResourceManager.h"
 #include "InstancingManager.h"
+#include "FrustumCullingManager.h"
 
 #include <vector>
 #include <memory>
@@ -31,7 +32,17 @@ public:
 		this->wtm = wtm;
 		for (auto& i : renderInfoVec)
 		{
-			i->wtm = wtm;
+			auto mutex = FrustumCullingManager::Instance.Get().GetRenderInfoMutex(i);
+			if (mutex)
+			{
+				//std::scoped_lock<std::mutex> lock(*mutex.get());
+				i->wtm = wtm;
+				//mutex->unlock();
+			}
+			else
+			{
+				i->wtm = wtm;
+			}
 		}
 	};
 	virtual void SetMesh(Mesh* mesh) override

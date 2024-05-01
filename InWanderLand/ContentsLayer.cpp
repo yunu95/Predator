@@ -60,6 +60,35 @@ public:
     }
 };
 
+class TestComponent4 : public yunutyEngine::Component
+{
+public:
+	yunutyEngine::graphics::ParticleRenderer* renderer;
+	virtual void Update() override
+	{
+        if (Input::isKeyPushed(yunutyEngine::KeyCode::B))
+        {
+            renderer->SetMaxParticle(1);
+        }
+		if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
+		{
+            renderer->SetMaxParticle(200);
+		}
+		if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
+		{
+			renderer->SetMaxParticle(249);
+		}
+		if (Input::isKeyPushed(yunutyEngine::KeyCode::O))
+		{
+			renderer->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
+		}
+		if (Input::isKeyPushed(yunutyEngine::KeyCode::K))
+		{
+			renderer->SetParticleMode(yunutyEngine::graphics::ParticleMode::Default);
+		}
+	}
+};
+
 /// 그래픽스 테스트용
 void GraphicsTest()
 {
@@ -82,11 +111,12 @@ void GraphicsTest()
 
     {
         auto obj = Scene::getCurrentScene()->AddGameObject();
+        auto test4 = obj->AddComponent<TestComponent4>();
         auto particle = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
-        particle->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
-        particle->SetPlayAwake(true);
+        particle->SetParticleShape(yunutyEngine::graphics::ParticleShape::Cone);
         particle->SetLoop(true);
         particle->Play();
+        test4->renderer = particle;
     }
 
 }
@@ -216,6 +246,9 @@ void application::contents::ContentsLayer::PlayContents()
     UIManager::Instance().ImportUI("InWanderLand.iwui");
     SkillUpgradeSystem::SingleInstance().Reset();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
+
+    yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
+
     InputManager::Instance().SetInputManagerActive(true);
     GameManager::Instance().Reset();
 

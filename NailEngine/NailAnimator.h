@@ -25,6 +25,13 @@ public:
 		this->transitionDesc.curr.sumTime = 0;
 	};
 
+	void SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame)
+	{
+		this->currentAnimation = animation;
+		this->transitionDesc.curr.animIndex = ((Animation*)animation)->GetAnimationIndex();
+		this->transitionDesc.curr.currFrame = frame;
+	}
+
 	void SetPlaySpeed(float playSpeed)
 	{
 		this->transitionDesc.curr.speed = playSpeed;
