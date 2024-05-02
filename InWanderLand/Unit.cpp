@@ -25,6 +25,7 @@ void Unit::OnEnable()
 
 void Unit::Start()
 {
+    //UIManager::Instance().DuplicateUIElement(UIEnumID::EnemyStatus);
     m_initialAutoAttackDamage = m_autoAttackDamage;
     m_bulletSpeed = 5.1f;
     chaseUpdateDelay = 0.1f;

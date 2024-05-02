@@ -34,10 +34,12 @@ namespace application
             POD_Vector3<float> position = POD_Vector3<float>();
             POD_Quaternion<double> rotation = POD_Quaternion<double>();
             POD_Vector3<float> scale = { 1,1,1 };
+            int LightMapIndex;
+            std::vector<float> LightMapScaleOffset;
             int stage = 1;
 
             TO_JSON(POD_Ornament)
-            FROM_JSON(POD_Ornament)
+                FROM_JSON(POD_Ornament)
         };
 
         class OrnamentData

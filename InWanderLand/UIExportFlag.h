@@ -73,4 +73,5 @@ enum class UIExportFlag2
     None = 0,
     LinearClipOnEnable = 1 << 0,
     LinearClipOnDisable = 1 << 1,
+    Duplicatable = 1 << 2,
 };

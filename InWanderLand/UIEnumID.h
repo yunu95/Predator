@@ -145,6 +145,7 @@ enum class UIEnumID
     PopUpMessage_PermissionForUpgradeProceedButton,
     PopUpMessage_WarningForRestart,
     PopUpMessage_WarningForRestart_ProceedButton,
+    EnemyStatus,
     EnemyStatus_HP_Number_Current,
     EnemyStatus_HP_Number_Max,
     EnemyStatus_Buff_Bleeding,

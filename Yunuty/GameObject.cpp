@@ -131,6 +131,21 @@ const vector<GameObject*>& yunutyEngine::GameObject::GetChildren()const
 {
     return childrenIndexed;
 }
+vector<GameObject*> yunutyEngine::GameObject::GetChildrenRecursively()
+{
+    vector<GameObject*> ret;
+    stack<GameObject*> objStack;
+    objStack.push(this);
+    while (!objStack.empty())
+    {
+        auto obj = objStack.top();
+        objStack.pop();
+        for (auto itr = obj->childrenIndexed.rbegin(); itr != obj->childrenIndexed.rend(); itr++)
+            objStack.push(*itr);
+        ret.push_back(obj);
+    }
+    return ret;
+}
 void yunutyEngine::GameObject::ReceiveChild(remove_reference<unique_ptr<GameObject>>::type&& child)
 {
     auto ptr = child.get();

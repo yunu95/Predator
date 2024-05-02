@@ -26,6 +26,8 @@ private:
     // 아래 두 함수들을 응용해 UI들이 다 생성되고 난 후 추가적인 작업을 수행합니다.
     bool ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElement* element);
     void SetUIElementWithEnum(UIEnumID uiEnumID, UIElement* ui);
+    void SetUIElementWithIndex(int index, UIElement* ui);
+    void SetUIDataWithIndex(int index, const JsonUIData& uiData);
     int uiImportingPriority{ 0 };
     struct ButtonCompare
     {
@@ -94,6 +96,9 @@ public:
     void UpdateHighestPriorityButton();
 
     bool IsMouseOnButton();
+    weak_ptr<UIElement> DuplicateUIElement(UIElement* ui);
+    UIElement* GetUIElementWithIndex(int index);
+    JsonUIData GetUIDataWithIndex(int index);
     UIElement* GetUIElementByEnum(UIEnumID uiEnumID);
     UIElement* GetBuffIcon(Unit* owningUnit, StatusEffect::StatusEffectEnum uiEnumID);
     void ImportUI(const char* path);
