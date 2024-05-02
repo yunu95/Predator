@@ -164,6 +164,53 @@ UIElement* UIManager::GetUIElementByEnum(UIEnumID uiEnumID)
     assert(false);
     return nullptr;
 }
+void UIManager::SetUIElementWithEnum(UIEnumID uiEnumID, UIElement* ui)
+{
+    uisByEnumID[uiEnumID] = ui;
+}
+UIElement* UIManager::GetBuffIcon(Unit* owningUnit, StatusEffect::StatusEffectEnum uiEnumID)
+{
+    switch (owningUnit->GetUnitType())
+    {
+    case Unit::UnitType::Warrior:
+    {
+        switch (uiEnumID)
+        {
+        case StatusEffect::StatusEffectEnum::Bleeding: return GetUIElementByEnum(UIEnumID::Portrait_Robin_Buff_Bleeding);
+        case StatusEffect::StatusEffectEnum::Blinding: return GetUIElementByEnum(UIEnumID::Portrait_Robin_Buff_Blinding);
+        case StatusEffect::StatusEffectEnum::Paralysis: return GetUIElementByEnum(UIEnumID::Portrait_Robin_Buff_Paralysis);
+        case StatusEffect::StatusEffectEnum::KnockBack: return GetUIElementByEnum(UIEnumID::Portrait_Robin_Buff_KnockBack);
+        case StatusEffect::StatusEffectEnum::Taunted: return GetUIElementByEnum(UIEnumID::Portrait_Robin_Buff_Taunted);
+        default: assert(false);
+        }
+    }
+    case Unit::UnitType::Magician:
+    {
+        switch (uiEnumID)
+        {
+        case StatusEffect::StatusEffectEnum::Bleeding: return GetUIElementByEnum(UIEnumID::Portrait_Ursula_Buff_Bleeding);
+        case StatusEffect::StatusEffectEnum::Blinding: return GetUIElementByEnum(UIEnumID::Portrait_Ursula_Buff_Blinding);
+        case StatusEffect::StatusEffectEnum::Paralysis: return GetUIElementByEnum(UIEnumID::Portrait_Ursula_Buff_Paralysis);
+        case StatusEffect::StatusEffectEnum::KnockBack: return GetUIElementByEnum(UIEnumID::Portrait_Ursula_Buff_KnockBack);
+        case StatusEffect::StatusEffectEnum::Taunted: return GetUIElementByEnum(UIEnumID::Portrait_Ursula_Buff_Taunted);
+        default: assert(false);
+        }
+    }
+    case Unit::UnitType::Healer:
+    {
+        switch (uiEnumID)
+        {
+        case StatusEffect::StatusEffectEnum::Bleeding: return GetUIElementByEnum(UIEnumID::Portrait_Hansel_Buff_Bleeding);
+        case StatusEffect::StatusEffectEnum::Blinding: return GetUIElementByEnum(UIEnumID::Portrait_Hansel_Buff_Blinding);
+        case StatusEffect::StatusEffectEnum::Paralysis: return GetUIElementByEnum(UIEnumID::Portrait_Hansel_Buff_Paralysis);
+        case StatusEffect::StatusEffectEnum::KnockBack: return GetUIElementByEnum(UIEnumID::Portrait_Hansel_Buff_KnockBack);
+        case StatusEffect::StatusEffectEnum::Taunted: return GetUIElementByEnum(UIEnumID::Portrait_Hansel_Buff_Taunted);
+        default: assert(false);
+        }
+    }
+    }
+    return nullptr;
+}
 
 void UIManager::Update()
 {
@@ -226,7 +273,7 @@ void UIManager::ImportUI(const char* path)
             auto uiElement = uiObject->AddComponent<UIElement>();
             uiElement->importedUIData = uiData;
             if (uiData.enumID != 0)
-                uisByEnumID[(UIEnumID)uiData.enumID] = uiElement;
+                SetUIElementWithEnum((UIEnumID)uiData.enumID, uiElement);
             uisByIndex[uiData.uiIndex] = uiElement;
             uidatasByIndex[uiData.uiIndex] = uiData;
 
@@ -336,6 +383,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
     {
         element->timePauseOnEnable = uiObject->AddComponent<TimePauseTimer>();
         element->timePauseOnEnable->m_duration = uiData.timeStoppingDuration;
+        element->timePauseOnEnable->Init();
     };
     if (uiData.customFlags & (int)UIExportFlag::ColorTintOnEnable)
     {

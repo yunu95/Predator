@@ -25,6 +25,7 @@ private:
     bool ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element);
     // 아래 두 함수들을 응용해 UI들이 다 생성되고 난 후 추가적인 작업을 수행합니다.
     bool ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElement* element);
+    void SetUIElementWithEnum(UIEnumID uiEnumID, UIElement* ui);
     int uiImportingPriority{ 0 };
     struct ButtonCompare
     {
@@ -39,6 +40,7 @@ private:
 
     int m_currentHighestLayer = 0;
     UIButton* m_highestPriorityButton;
+    UIElement* localContext{ nullptr };
 
     bool isButtonActiviated = false;
     std::unordered_map<int, UIElement*> uisByIndex;
@@ -93,6 +95,7 @@ public:
 
     bool IsMouseOnButton();
     UIElement* GetUIElementByEnum(UIEnumID uiEnumID);
+    UIElement* GetBuffIcon(Unit* owningUnit, StatusEffect::StatusEffectEnum uiEnumID);
     void ImportUI(const char* path);
 
     virtual void Update() override;

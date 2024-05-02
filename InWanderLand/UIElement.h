@@ -2,6 +2,7 @@
 #include "YunutyEngine.h"
 #include "JsonUIData.h"
 #include "UIImage.h"
+#include "UIEnumID.h"
 
 class LinearClippingTimer;
 class UIButton;
@@ -48,6 +49,10 @@ public:
     virtual void StopFunction() override;
 
 private:
+    // 복제된 UIElement의 하위 요소들에 대한 정보
+    std::unordered_map<int, UIElement*> localUIsByIndex;
+    std::unordered_map<UIEnumID, UIElement*> localUIsByEnumID;
+    std::unordered_map<int, JsonUIData> localUIdatasByIndex;
     bool numberSetBefore = false;
     // 0~9까지의 숫자 이미지를 저장하는 배열
     array<yunuGI::ITexture*, 10>* digitFont{ };

@@ -166,7 +166,7 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{-1,-1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
         },
         {
             .pos = DirectX::SimpleMath::Vector3{-1,1,0},
@@ -174,7 +174,7 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{-1,-1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
         },
         {
             .pos = DirectX::SimpleMath::Vector3{1,1,0},
@@ -182,7 +182,7 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{-1,-1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
         },
         {
             .pos = DirectX::SimpleMath::Vector3{-1,-1,0},
@@ -190,7 +190,7 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{-1,-1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
         },
         {
             .pos = DirectX::SimpleMath::Vector3{1,1,0},
@@ -198,7 +198,7 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{-1,-1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
         },
         {
             .pos = DirectX::SimpleMath::Vector3{1,-1,0},
@@ -206,7 +206,7 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{-1,-1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
         }
     };
 
