@@ -265,7 +265,6 @@ void InstancingManager::RenderStaticDeferred()
 
 					index++;
 
-
 					i->isInArea = false;
 				}
 
@@ -441,17 +440,11 @@ void InstancingManager::RenderStaticShadow()
 		{
 			for (auto& i : renderInfoVec)
 			{
+				if (i == nullptr) continue;
+
 				if (i->lightMapIndex != -1) continue;
 
 				if (i->isActive == false) continue;
-
-				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-				//auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
-
-				//if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
-				//{
-				//	continue;
-				//}
 
 				const std::shared_ptr<RenderInfo>& renderInfo = i;
 				InstancingData data;
@@ -461,6 +454,8 @@ void InstancingManager::RenderStaticShadow()
 
 			if (renderInfoVec.size() != 0)
 			{
+				if(renderInfoVec[0] == nullptr) continue;
+
 				auto& buffer = _buffers[instanceID];
 
 				auto opacityMap = (*renderInfoVec.begin())->material->GetTexture(yunuGI::Texture_Type::OPACITY);
