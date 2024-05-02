@@ -122,5 +122,5 @@ private:
 	std::shared_ptr<ParticleBuffer> particleBuffer;
 	std::shared_ptr<LightMapUVBuffer> lightMapUVBuffer;
 
-	QuadTree<std::shared_ptr<RenderInfo>> quadTree;
+	QuadTree<RenderInfo> quadTree{ DirectX::SimpleMath::Vector2{ 10000,10000 }, DirectX::SimpleMath::Vector2{ 10,10} };
 };

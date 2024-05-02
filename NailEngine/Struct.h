@@ -181,6 +181,7 @@ struct RenderInfo
     DirectX::SimpleMath::Matrix wtm;
     bool isActive = true;
     bool isCulled = false;
+    bool isInArea = false;
 
     int lightMapIndex = -1;
     DirectX::SimpleMath::Vector2 uvOffset;

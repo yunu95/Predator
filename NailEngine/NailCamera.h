@@ -8,6 +8,7 @@ using namespace DirectX::PackedVector;
 class NailCamera
 {
 public:
+    void GetCameraAreaXZ(DirectX::SimpleMath::Vector2& minPoint, DirectX::SimpleMath::Vector2& maxPoint);
     void SetWorldTM(const DirectX::SimpleMath::Matrix wtm);
     void SetVerticalFOV(float fov);
     void SetNear(float cameraNear);

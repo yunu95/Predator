@@ -1,6 +1,42 @@
 #include "NailCamera.h"
 #include "FrustumCullingManager.h"
 
+#include <algorithm>
+
+void NailCamera::GetCameraAreaXZ(DirectX::SimpleMath::Vector2& minPoint, DirectX::SimpleMath::Vector2& maxPoint)
+{
+	// XZ 평면에 대하여 카메라가 지금 비추고 있는 영역의 minPoint와 maxPoint를 반환해줌.
+	DirectX::SimpleMath::Matrix matInv = ptm.Invert() * vtm.Invert();
+
+	std::vector<DirectX::SimpleMath::Vector3> worldPos =
+	{
+		DirectX::XMVector3TransformCoord(DirectX::SimpleMath::Vector3(-1.f,1.f,0.f), matInv),
+		DirectX::XMVector3TransformCoord(DirectX::SimpleMath::Vector3(1.f,1.f,0.f), matInv),
+		DirectX::XMVector3TransformCoord(DirectX::SimpleMath::Vector3(1.f,-1.f,0.f), matInv),
+		DirectX::XMVector3TransformCoord(DirectX::SimpleMath::Vector3(-1.f,-1.f,0.f), matInv),
+
+		DirectX::XMVector3TransformCoord(DirectX::SimpleMath::Vector3(-1.f,1.f,1.f), matInv),
+		DirectX::XMVector3TransformCoord(DirectX::SimpleMath::Vector3(1.f,1.f,1.f), matInv),
+		DirectX::XMVector3TransformCoord(DirectX::SimpleMath::Vector3(1.f,-1.f,1.f), matInv),
+		DirectX::XMVector3TransformCoord(DirectX::SimpleMath::Vector3(-1.f,-1.f,1.f), matInv),
+	};
+
+	minPoint.x = worldPos[0].x;
+	minPoint.y = worldPos[0].z;
+
+	maxPoint.x = worldPos[0].x;
+	maxPoint.y = worldPos[0].z;
+
+	for (auto& each : worldPos)
+	{
+		minPoint.x = std::min(minPoint.x, each.x);
+		minPoint.y = std::min(minPoint.y, each.z);
+
+		maxPoint.x = max(maxPoint.x, each.x);
+		maxPoint.y = max(maxPoint.y, each.z);
+	}
+}
+
 void NailCamera::SetWorldTM(const DirectX::SimpleMath::Matrix wtm)
 {
 	this->wtm = wtm;

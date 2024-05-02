@@ -80,6 +80,7 @@ public:
 		{
 			if (node->dataVec[i].dataPtr == dataPtr)
 			{
+				// 노드에 들어가 있는 특정 데이터를 지움
 				node->dataVec.erase(node->dataVec.begin() + i);
 				assert(nodeTable.count(dataPtr) != 0);
 				nodeTable.erase(dataPtr);
@@ -409,7 +410,7 @@ private:
 			}
 		}
 
-		// 자식노드가 없다면 데이터가 삭제된 리프노드이므로 제거한다. 제거 후 그 부모 오브젝트도 확인해야 한다.
+		// 자식노드가 없다면 데이터가 삭제된 노드는 리프노드이므로 제거한다. 제거 후 그 부모 오브젝트도 확인해야 한다.
 		if (childCount == 0)
 		{
 			Node* parent = node->parent;

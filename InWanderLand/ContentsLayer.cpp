@@ -109,15 +109,15 @@ void GraphicsTest()
         }
     }
 
-    {
-        auto obj = Scene::getCurrentScene()->AddGameObject();
-        auto test4 = obj->AddComponent<TestComponent4>();
-        auto particle = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
-        particle->SetParticleShape(yunutyEngine::graphics::ParticleShape::Cone);
-        particle->SetLoop(true);
-        particle->Play();
-        test4->renderer = particle;
-    }
+    //{
+    //    auto obj = Scene::getCurrentScene()->AddGameObject();
+    //    auto test4 = obj->AddComponent<TestComponent4>();
+    //    auto particle = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
+    //    particle->SetParticleShape(yunutyEngine::graphics::ParticleShape::Cone);
+    //    particle->SetLoop(true);
+    //    particle->Play();
+    //    test4->renderer = particle;
+    //}
 
 }
 
