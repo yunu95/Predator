@@ -26,13 +26,16 @@ void PlaytimeWave::PlayFunction()
 
 void PlaytimeWave::StopFunction()
 {
-	if (GetGameObject()->GetSelfActive())
-		GetGameObject()->SetSelfActive(false);
+    if (GetGameObject()->GetSelfActive())
+        GetGameObject()->SetSelfActive(false);
 }
 
 void PlaytimeWave::ActivateWave()
 {
     isWaveActivated = true;
+    array<int, 3> comboObjectives = { waveData->pod.comboObjective1, waveData->pod.comboObjective2, waveData->pod.comboObjective3 };
+    GameManager::Instance().SetComboObjectives(comboObjectives);
+    UIManager::Instance().ShowComboObjectives();
     /// 플레이어 유닛 전투상태 돌입
     GameManager::Instance().ReportPlayerEnteredWaveRegion(this);
     // 카메라 가동범위 제한
@@ -45,6 +48,7 @@ void PlaytimeWave::DeActivateWave()
 {
     waveDataIndex = 0;
     GameManager::Instance().EndBattle();
+    UIManager::Instance().HideComboObjectvies();
     this->SetActive(false);
     // 카메라 가동범위 제한
     if (auto rtsCam = dynamic_cast<RTSCam*>(graphics::Camera::GetMainCamera()))
@@ -90,8 +94,8 @@ void PlaytimeWave::Update()
 
             GameObject* waveUnitObject;
 
-			waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit->GetTransform()->SetWorldPosition(pos);
-			waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit->GetGameObject()->SetSelfActive(true);
+            waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit->GetTransform()->SetWorldPosition(pos);
+            waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit->GetGameObject()->SetSelfActive(true);
 
             m_currentWaveUnitVector.push_back(waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit);
 

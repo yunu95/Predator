@@ -51,42 +51,57 @@ bool contentsInputControl = true;
 class TestComponent3 : public yunutyEngine::Component
 {
 public:
-    yunutyEngine::graphics::UIText* text;
+    yunutyEngine::graphics::UIText* text_FPS;
+    yunutyEngine::graphics::UIText* text_update;
+    yunutyEngine::graphics::UIText* text_physx;
+    yunutyEngine::graphics::UIText* text_Render;
     virtual void Update() override
     {
         std::wstring temp;
         temp = std::to_wstring(Time::GetFPS());
-        text->GetGI().SetText(temp);
+        text_FPS->GetGI().SetText(L"fps : " + temp);
+        /*temp = std::to_wstring(Time::GetTimeUsedForUpdate());
+        text_update->GetGI().SetText(L"time used for update : " + temp);
+        temp = std::to_wstring(Time::GetTimeUsedForPhysx());
+        text_physx->GetGI().SetText(L"time used for physx : " + temp);
+        temp = std::to_wstring(Time::GetTimeUsedForRender());
+        text_Render->GetGI().SetText(L"time used for render : " + temp);*/
+        temp = std::to_wstring(100 * Time::GetTimeUsedForUpdate() / Time::GetDeltaTimeUnscaled());
+        text_update->GetGI().SetText(L"time used for update : " + temp + L"%");
+        temp = std::to_wstring(100 * Time::GetTimeUsedForPhysx() / Time::GetDeltaTimeUnscaled());
+        text_physx->GetGI().SetText(L"time used for physx : " + temp + L"%");
+        temp = std::to_wstring(100 * Time::GetTimeUsedForRender() / Time::GetDeltaTimeUnscaled());
+        text_Render->GetGI().SetText(L"time used for render : " + temp + L"%");
     }
 };
 
 class TestComponent4 : public yunutyEngine::Component
 {
 public:
-	yunutyEngine::graphics::ParticleRenderer* renderer;
-	virtual void Update() override
-	{
+    yunutyEngine::graphics::ParticleRenderer* renderer;
+    virtual void Update() override
+    {
         if (Input::isKeyPushed(yunutyEngine::KeyCode::B))
         {
             renderer->SetMaxParticle(1);
         }
-		if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
-		{
+        if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
+        {
             renderer->SetMaxParticle(200);
-		}
-		if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
-		{
-			renderer->SetMaxParticle(249);
-		}
-		if (Input::isKeyPushed(yunutyEngine::KeyCode::O))
-		{
-			renderer->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
-		}
-		if (Input::isKeyPushed(yunutyEngine::KeyCode::K))
-		{
-			renderer->SetParticleMode(yunutyEngine::graphics::ParticleMode::Default);
-		}
-	}
+        }
+        if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
+        {
+            renderer->SetMaxParticle(249);
+        }
+        if (Input::isKeyPushed(yunutyEngine::KeyCode::O))
+        {
+            renderer->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
+        }
+        if (Input::isKeyPushed(yunutyEngine::KeyCode::K))
+        {
+            renderer->SetParticleMode(yunutyEngine::graphics::ParticleMode::Default);
+        }
+    }
 };
 
 /// 그래픽스 테스트용
@@ -193,13 +208,40 @@ void application::contents::ContentsLayer::Initialize()
 
     {
         auto obj = Scene::getCurrentScene()->AddGameObject();
-        auto text = obj->AddComponent<yunutyEngine::graphics::UIText>();
-        text->GetGI().SetFontSize(30);
-        obj->GetTransform()->SetLocalScale(Vector3d{ 500,500,0 });
-        //obj->GetTransform()->SetLocalPosition(Vector3d{ 500,500,0 });
-
         auto test3 = obj->AddComponent<TestComponent3>();
-        test3->text = text;
+        {
+            auto textObj = obj->AddGameObject();
+            auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
+            text->GetGI().SetFontSize(30);
+            textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
+            textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,-0,0 });
+            test3->text_FPS = text;
+        }
+        {
+            auto textObj = obj->AddGameObject();
+            auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
+            text->GetGI().SetFontSize(30);
+            textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
+            textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,30,0 });
+            test3->text_update = text;
+        }
+        {
+            auto textObj = obj->AddGameObject();
+            auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
+            text->GetGI().SetFontSize(30);
+            textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
+            textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,60,0 });
+            test3->text_physx = text;
+        }
+        {
+            auto textObj = obj->AddGameObject();
+            auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
+            text->GetGI().SetFontSize(30);
+            textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
+            textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,90,0 });
+            test3->text_Render = text;
+        }
+
     }
 
 #ifndef EDITOR
@@ -278,7 +320,7 @@ void application::contents::ContentsLayer::PlayContents()
     /// Playable 동작들을 일괄 처리할 부분입니다.
     PlayableComponent::OnGameStartAll();
 
-	ContentsObserver::Instance().PlayObservee();
+    ContentsObserver::Instance().PlayObservee();
 }
 
 void application::contents::ContentsLayer::PauseContents()
@@ -293,7 +335,7 @@ void application::contents::ContentsLayer::ResumeContents()
 {
     Time::SetTimeScale(1);
 
-	ContentsObserver::Instance().PlayObservee();
+    ContentsObserver::Instance().PlayObservee();
 
     /// Playable 동작들을 일괄 처리할 부분입니다.
     PlayableComponent::OnGameResumeAll();

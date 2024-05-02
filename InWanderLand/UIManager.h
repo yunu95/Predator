@@ -25,6 +25,9 @@ private:
     bool ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element);
     // 아래 두 함수들을 응용해 UI들이 다 생성되고 난 후 추가적인 작업을 수행합니다.
     bool ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElement* element);
+    void SetUIElementWithEnum(UIEnumID uiEnumID, UIElement* ui);
+    void SetUIElementWithIndex(int index, UIElement* ui);
+    void SetUIDataWithIndex(int index, const JsonUIData& uiData);
     int uiImportingPriority{ 0 };
     struct ButtonCompare
     {
@@ -39,6 +42,7 @@ private:
 
     int m_currentHighestLayer = 0;
     UIButton* m_highestPriorityButton;
+    UIElement* localContext{ nullptr };
 
     bool isButtonActiviated = false;
     std::unordered_map<int, UIElement*> uisByIndex;
@@ -47,6 +51,33 @@ private:
     std::unordered_map<UIElement*, array<yunuGI::ITexture*, 10>> digitFonts;
 
 public:
+    static constexpr UIEnumID comboNumbers[6]
+    {
+        UIEnumID::Ingame_Combo_TargetNumFinished1,
+        UIEnumID::Ingame_Combo_TargetNumFinished2,
+        UIEnumID::Ingame_Combo_TargetNumFinished3,
+        UIEnumID::Ingame_Combo_TargetNumUnfinished1,
+        UIEnumID::Ingame_Combo_TargetNumUnfinished2,
+        UIEnumID::Ingame_Combo_TargetNumUnfinished3,
+    };
+    static constexpr UIEnumID comboFinishedImgs[3]
+    {
+        UIEnumID::Ingame_Combo_DescriptionImageFinished1,
+        UIEnumID::Ingame_Combo_DescriptionImageFinished2,
+        UIEnumID::Ingame_Combo_DescriptionImageFinished3
+    };
+    static constexpr UIEnumID comboUnFinishedImgs[3]
+    {
+        UIEnumID::Ingame_Combo_DescriptionImageUnfinished1,
+        UIEnumID::Ingame_Combo_DescriptionImageUnFinished2,
+        UIEnumID::Ingame_Combo_DescriptionImageUnFinished3
+    };
+    static constexpr UIEnumID comboCheckImgs[3]
+    {
+        UIEnumID::Ingame_Combo_Check1,
+        UIEnumID::Ingame_Combo_Check2,
+        UIEnumID::Ingame_Combo_Check3
+    };
 
     void Clear();
     void FadeOutRight(float duration = 1);
@@ -57,13 +88,19 @@ public:
     void SetIngameUIVisible(bool visible);
     void ReportButtonOnMouse(UIButton* p_btn);
     void ReportMouseExitButton(UIButton* p_btn);
+    void ShowComboObjectives();
+    void HideComboObjectvies();
     // 버튼 중 가장 높은 우선순위를 가진 버튼으로 highestpriorityButton을 재설정합니다.
     // 현재의 highestprirorityButton은 Exit 이벤트 함수가 호출되며, 새로운 highestpriorityButton은 Enter 이벤트 함수가 호출됩니다.
     // 만약 현재의 highestPirorityButton이 여전히 가장 높은 우선순위를 가지고 있다면, 아무 일도 벌어지지 않습니다.
     void UpdateHighestPriorityButton();
 
     bool IsMouseOnButton();
+    weak_ptr<UIElement> DuplicateUIElement(UIElement* ui);
+    UIElement* GetUIElementWithIndex(int index);
+    JsonUIData GetUIDataWithIndex(int index);
     UIElement* GetUIElementByEnum(UIEnumID uiEnumID);
+    UIElement* GetBuffIcon(Unit* owningUnit, StatusEffect::StatusEffectEnum uiEnumID);
     void ImportUI(const char* path);
 
     virtual void Update() override;

@@ -523,6 +523,12 @@
     <Filter Include="Contents\ContentsObserber">
       <UniqueIdentifier>{d2484403-98a3-4199-b5bd-4785dca8fb9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\Effect\LinearClippingTimer">
+      <UniqueIdentifier>{25045bcc-9854-42fe-a3a8-1eeb8d1939a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Effect\ColorTintTimer">
+      <UniqueIdentifier>{b6ea9408-9370-48b1-ba57-05edd2398a32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1330,6 +1336,12 @@
     <ClInclude Include="ObserveeHelper.h">
       <Filter>Contents\ContentsObserber</Filter>
     </ClInclude>
+    <ClInclude Include="LinearClippingTimer.h">
+      <Filter>UI\Effect\LinearClippingTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorTintTImer.h">
+      <Filter>UI\Effect\ColorTintTimer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2028,6 +2040,12 @@
     </ClCompile>
     <ClCompile Include="ObserveeHelper.cpp">
       <Filter>Contents\ContentsObserber</Filter>
+    </ClCompile>
+    <ClCompile Include="LinearClippingTimer.cpp">
+      <Filter>UI\Effect\LinearClippingTimer</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorTIntTimer.cpp">
+      <Filter>UI\Effect\ColorTintTimer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -63,11 +63,15 @@ enum class UIExportFlag
     // UI가 비활성화될때 시간정지를 해제합니다.
     TimeContinueOnDisable = 1 << 29,
     // UI가 활성화될때 투명도 애니메이션을 재생합니다.
-    OpacityFadeIn = 1 << 30,
+    ColorTintOnEnable = 1 << 30,
     // UI가 비활성화될때 투명도 애니메이션을 재생합니다.
-    OpacityFadeOut = 1 << 31,
+    ColorTintOnDisable = 1 << 31,
+
 };
 enum class UIExportFlag2
 {
-
+    None = 0,
+    LinearClipOnEnable = 1 << 0,
+    LinearClipOnDisable = 1 << 1,
+    Duplicatable = 1 << 2,
 };

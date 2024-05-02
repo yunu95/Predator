@@ -25,6 +25,7 @@ void Unit::OnEnable()
 
 void Unit::Start()
 {
+    //UIManager::Instance().DuplicateUIElement(UIEnumID::EnemyStatus);
     m_initialAutoAttackDamage = m_autoAttackDamage;
     m_bulletSpeed = 5.1f;
     chaseUpdateDelay = 0.1f;
@@ -105,12 +106,12 @@ void Unit::Start()
     unitFSM.transitions[UnitState::Skill].push_back({ UnitState::Idle,
         [=]() { return currentOrder == UnitState::Idle; } });
 
-	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Skill); i++)
-	{
-		unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::Skill,
-		[=]() { return currentOrder == UnitState::Skill || trapClassifingFunction() 
-			&& TacticModeSystem::Instance().IsOrderingTimingNow(); } });
-	}
+    for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Skill); i++)
+    {
+        unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::Skill,
+        [=]() { return currentOrder == UnitState::Skill || trapClassifingFunction()
+            && TacticModeSystem::Instance().IsOrderingTimingNow(); } });
+    }
 
     for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Paralysis); i++)
     {
@@ -191,12 +192,12 @@ void Unit::Start()
                 if (m_currentTargetUnit != nullptr && currentOrder == UnitState::Attack)
                 {
                     atkSys->Attack(m_currentTargetUnit, m_attackOffset);
-					if (isPermittedToTacticAction)
-					{
-						TacticModeSystem::Instance().ReportTacticActionFinished();
-						isPermittedToTacticAction = false;
+                    if (isPermittedToTacticAction)
+                    {
+                        TacticModeSystem::Instance().ReportTacticActionFinished();
+                        isPermittedToTacticAction = false;
                         currentOrder = UnitState::Idle;
-					}
+                    }
                 }
                 isAttackAnimationOperating = false;
                 m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
@@ -248,13 +249,13 @@ Unit::UnitSide Unit::GetUnitSide() const
 #pragma region State Engage()
 void Unit::IdleEngage()
 {
-	//TacticModeSystem::Instance().isTacticModeOperating = false;
+    //TacticModeSystem::Instance().isTacticModeOperating = false;
 
-	currentOrder = UnitState::Idle;
-	idleElapsed = 0.0f;
-	if (m_staticMeshRenderer != nullptr)
-		m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
-	m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
+    currentOrder = UnitState::Idle;
+    idleElapsed = 0.0f;
+    if (m_staticMeshRenderer != nullptr)
+        m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
+    m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
 
     currentOrder = UnitState::Idle;
     idleElapsed = 0.0f;
@@ -492,11 +493,11 @@ void Unit::IdleUpdate()
 {
     CheckCurrentAnimation(unitAnimations.m_idleAnimation);
 
-	if (!IsTacticModeQueueEmpty() && !TacticModeSystem::Instance().IsOrderingTimingNow() && isPermittedToTacticAction)
-	{
-		m_tacticModeQueue.front()();
-		m_tacticModeQueue.pop();
-	}
+    if (!IsTacticModeQueueEmpty() && !TacticModeSystem::Instance().IsOrderingTimingNow() && isPermittedToTacticAction)
+    {
+        m_tacticModeQueue.front()();
+        m_tacticModeQueue.pop();
+    }
 
     idleElapsed += Time::GetDeltaTime();
 
@@ -527,8 +528,8 @@ void Unit::MoveUpdate()
         currentOrder = UnitState::Idle;
         if (isPermittedToTacticAction)
         {
-			TacticModeSystem::Instance().ReportTacticActionFinished();
-			isPermittedToTacticAction = false;
+            TacticModeSystem::Instance().ReportTacticActionFinished();
+            isPermittedToTacticAction = false;
         }
     }
 }
@@ -1404,12 +1405,18 @@ void Unit::SetUnitStateIdle()
 
 void Unit::ReportStatusEffectApplied(StatusEffect::StatusEffectEnum p_effectType)
 {
-
+    if (auto ui = UIManager::Instance().GetBuffIcon(this, p_effectType); ui)
+    {
+        ui->EnableElement();
+    }
 }
 
 void Unit::ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType)
 {
-
+    if (auto ui = UIManager::Instance().GetBuffIcon(this, p_effectType); ui)
+    {
+        ui->DisableElement();
+    }
 }
 
 void Unit::PermitTacticAction()

@@ -8,6 +8,7 @@
 #include "InputManager.h"
 #include "PlayTimeWave.h"
 #include "UIElement.h"
+#include "InWanderLand.h"
 
 void GameManager::Start()
 {
@@ -118,7 +119,7 @@ void GameManager::ResetCombo()
     ReportComboChanged();
 }
 
-void GameManager::ReportComboChanged() const
+void GameManager::ReportComboChanged()
 {
     /// 콤보 수가 변경될 때마다 호출되는 함수입니다.
     /// 이 함수에서 멤버변수 currentCombo 를 comboNumber UIImage Component 에게 전달하면 됩니다.
@@ -133,7 +134,17 @@ void GameManager::ReportComboChanged() const
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Text)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->SetNumber(currentCombo);
-
+    }
+    for (auto i = 0; i < 3; i++)
+    {
+        if (!comboAchieved[i] && comboObjective[i] > 0 && currentCombo >= comboObjective[i])
+        {
+            comboAchieved[i] = true;
+            SkillUpgradeSystem::SingleInstance().IncrementSkillPoint();
+            UIManager::Instance().GetUIElementByEnum(UIManager::comboCheckImgs[i])->EnableElement();
+            UIManager::Instance().GetUIElementByEnum(UIManager::comboFinishedImgs[i])->EnableElement();
+            UIManager::Instance().GetUIElementByEnum(UIManager::comboUnFinishedImgs[i])->DisableElement();
+        }
     }
 }
 
@@ -226,4 +237,17 @@ bool GameManager::IsReadyToWaveEngageMotion() const
 bool GameManager::IsWaveEngageMotionEnd() const
 {
     return waveEngageMotionEnd;
+}
+void GameManager::SetComboObjectives(const array<int, 3>& comboObjectives)
+{
+    for (int i = 0; i < 3; i++)
+    {
+        comboAchieved[i] = false;
+        comboObjective[i] = comboObjectives[i];
+        UIManager::Instance().GetUIElementByEnum(UIManager::comboNumbers[i])->SetNumber(comboObjectives[i]);
+        UIManager::Instance().GetUIElementByEnum(UIManager::comboNumbers[i + 3])->SetNumber(comboObjectives[i]);
+        UIManager::Instance().GetUIElementByEnum(UIManager::comboFinishedImgs[i])->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIManager::comboUnFinishedImgs[i])->EnableElement();
+        UIManager::Instance().GetUIElementByEnum(UIManager::comboCheckImgs[i])->DisableElement();
+    }
 }

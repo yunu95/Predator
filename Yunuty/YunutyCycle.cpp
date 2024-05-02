@@ -155,11 +155,19 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
         }
     }
 
-    ResetUpdateTargetComponents();
-    for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
-        StartComponent(updateTargetComponents[i]);
-    for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
-        UpdateComponent(updateTargetComponents[i]);
+    {
+        auto start = std::chrono::high_resolution_clock::now();
+
+        ResetUpdateTargetComponents();
+        for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
+            StartComponent(updateTargetComponents[i]);
+        for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
+            UpdateComponent(updateTargetComponents[i]);
+
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+        Time::timeUsedForUpdate = duration.count() / 1000000000.0;
+    }
 
     auto pxScene = physics::_PhysxGlobal::SingleInstance().RequestPxScene(Scene::currentScene);
     if (Time::GetDeltaTime() > 0 && pxScene)
@@ -167,13 +175,13 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
         // Start timing
         // 장식물에서 충돌체 다 뺄 경우 0.0005초정도 걸림
         auto start = std::chrono::high_resolution_clock::now();
+
         pxScene->simulate(Time::GetDeltaTime());
         pxScene->fetchResults(true);
-        // Stop timing
+
         auto stop = std::chrono::high_resolution_clock::now();
-        // Calculate duration
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-        int a = duration.count();
+        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+        Time::timeUsedForPhysx = duration.count() / 1000000000.0;
         // Output the duration in milliseconds
         //std::cout << "Function took " << a << " milliseconds to execute.\n";
     }
@@ -186,7 +194,13 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 
     if (autoRendering)
     {
+        auto start = std::chrono::high_resolution_clock::now();
+
         graphics::Renderer::SingleInstance().Render();
+
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+        Time::timeUsedForRender = duration.count() / 1000000000.0;
     }
 
     {

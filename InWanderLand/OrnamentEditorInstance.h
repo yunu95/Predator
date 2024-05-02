@@ -38,6 +38,7 @@ namespace application
 
             private:
                 std::string currentFBX = "";
+                const application::editor::OrnamentData* ornamentData{};
                 const application::editor::Ornament_TemplateData* ornamentTemplateData;
             };
         }

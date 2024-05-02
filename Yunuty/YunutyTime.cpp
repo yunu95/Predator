@@ -7,6 +7,9 @@ chrono::system_clock::time_point yunutyEngine::Time::lastFrameTime = (chrono::sy
 double yunutyEngine::Time::deltaTimeUnscaled = 0;
 double yunutyEngine::Time::timeElapsed = 0;
 double yunutyEngine::Time::timeElapsedUnscaled = 0;
+double yunutyEngine::Time::timeUsedForUpdate = 0;
+double yunutyEngine::Time::timeUsedForPhysx = 0;
+double yunutyEngine::Time::timeUsedForRender = 0;
 queue<double> yunutyEngine::Time::fpsQueue;
 
 
@@ -74,4 +77,16 @@ double yunutyEngine::Time::GetTimeElapsedUnscaled()
 int yunutyEngine::Time::GetFPS()
 {
     return (int)fpsQueue.size();
+}
+double yunutyEngine::Time::GetTimeUsedForUpdate()
+{
+    return timeUsedForUpdate;
+}
+double yunutyEngine::Time::GetTimeUsedForPhysx()
+{
+    return timeUsedForPhysx;
+}
+double yunutyEngine::Time::GetTimeUsedForRender()
+{
+    return timeUsedForRender;
 }

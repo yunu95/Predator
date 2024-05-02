@@ -35,6 +35,8 @@ namespace yunutyEngine
         GameObject& operator=(GameObject&) = delete;
         GameObject() = default;
         virtual const vector<GameObject*>& GetChildren()const override;
+        // 자식, 손녀, 손자 게임오브젝트들을 재귀적으로 모두 삭삭 긁어 반환합니다.
+        vector<GameObject*> GetChildrenRecursively();
         ~GameObject();
         Transform* GetTransform();
         const Transform* GetTransform()const;
