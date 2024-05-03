@@ -5,6 +5,8 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 
+#include <cmath>
+
 extern bool ppisLoad;
 
 void EraseSequenceData(const std::weak_ptr<application::AnimationEvent>& event);
@@ -53,12 +55,11 @@ namespace application
 			}
 			else
 			{
-				std::shared_ptr<GameObject_TransformEditEvent> sptr(static_cast<GameObject_TransformEditEvent*>(eachEvent.get()));
-				for (auto& each : animationEditFuncList[sptr])
+				for (auto& each : animationEditFuncList[eachEvent])
 				{
 					animator->EraseAnimationFunc(ani, each);
 				}
-				animationEditFuncList.erase(sptr);
+				animationEditFuncList.erase(eachEvent);
 			}
 
 			EraseSequenceData(eachEvent);
@@ -115,6 +116,7 @@ namespace application
 					ptr->animationName = animationName;
 					ptr->frame = frame;
 					ptr->objName = particleName;
+					ptr->editData = data[i]["editData"];
 					pm.AddAnimationEvent(ptr);
 					break;
 				}
@@ -186,11 +188,12 @@ namespace application
 				{
 					auto ptr = static_cast<GameObject_TransformEditEvent*>(event.get());
 					json ptrData;
-					ptrData["type"] = AnimationEventType::GameObject_DisabledEvent;
+					ptrData["type"] = AnimationEventType::GameObject_TransformEditEvent;
 					ptrData["fbxName"] = ptr->fbxName;
 					ptrData["animationName"] = ptr->animationName;
 					ptrData["frame"] = ptr->frame;
 					ptrData["objName"] = ptr->objName;
+					ptrData["editData"] = ptr->editData;
 					data.push_back(ptrData);
 					break;
 				}
@@ -335,11 +338,6 @@ namespace application
 
 	bool AnimationEventManager::EraseAnimationEvent(const std::shared_ptr<AnimationEvent>& event)
 	{
-		if (!eventFuncIndexList.contains(event))
-		{
-			return false;
-		}
-
 		auto obj = (*skinnedObjList)[event->fbxName];
 		auto animator = obj->GetComponent<graphics::Animator>();
 		int index = 0;
@@ -365,12 +363,11 @@ namespace application
 		}
 		else
 		{
-			std::shared_ptr<GameObject_TransformEditEvent> sptr(static_cast<GameObject_TransformEditEvent*>(event.get()));
-			for (auto& each : animationEditFuncList[sptr])
+			for (auto& each : animationEditFuncList[event])
 			{
 				animator->EraseAnimationFunc(ani, each);
 			}
-			animationEditFuncList.erase(sptr);
+			animationEditFuncList.erase(event);
 		}
 
 		EraseSequenceData(event);
@@ -382,6 +379,11 @@ namespace application
 
 	void AnimationEventManager::UpdateTransformEditEvent(const std::shared_ptr<AnimationEvent>& event)
 	{
+		if (event->GetType() != AnimationEventType::GameObject_TransformEditEvent)
+		{
+			return;
+		}
+
 		auto obj = (*skinnedObjList)[event->fbxName];
 		auto animator = obj->GetComponent<graphics::Animator>();
 		int index = 0;
@@ -419,29 +421,24 @@ namespace application
 			}
 		}
 
-		int i = 0;
-		for (auto& pointList : tsEvent->editData.mPts)
+		for (int i = 0; i < ani->GetTotalFrame(); i++)
 		{
-			for (int j = 0; j < ani->GetTotalFrame(); j++)
-			{
-				unsigned long long funcIndex = animator->PushAnimationWithFunc(ani, j, [=]()
-					{
-						auto target = GetLerpPoint(tsEvent->editData, j);
-						particle->GetTransform()->SetLocalPosition(target->GetLocalPosition());
-						particle->GetTransform()->SetLocalRotation(target->GetLocalRotation());
-						particle->GetTransform()->SetLocalScale(target->GetLocalScale());
-					});
+			unsigned long long funcIndex = animator->PushAnimationWithFunc(ani, i, [=]()
+				{
+					auto target = GetLerpPoint(tsEvent->editData, i);
+					particle->GetTransform()->SetLocalPosition(target->GetLocalPosition());
+					particle->GetTransform()->SetLocalRotation(target->GetLocalRotation());
+					particle->GetTransform()->SetLocalScale(target->GetLocalScale());
+				});
 
-				if (funcIndex == 0)
-				{
-					return;
-				}
-				else
-				{
-					animationEditFuncList[event].push_back(funcIndex);
-				}
+			if (funcIndex == 0)
+			{
+				return;
 			}
-			i++;
+			else
+			{
+				animationEditFuncList[event].push_back(funcIndex);
+			}
 		}
 
 		return;
@@ -459,7 +456,6 @@ namespace application
 		ImVec2 min = ImVec2(0.0f, 0.0f);
 		ImVec2 range = ImVec2(2.0f, 1.0f);
 
-		auto pointToRange = [&](ImVec2 pt) { return ImVec2((pt.x - min.x) / range.x, (pt.y - min.y) / range.y); };
 		int subStepCount = 20;
 		float step = 1.f / float(subStepCount - 1);
 
@@ -471,8 +467,8 @@ namespace application
 		{
 			for (int j = 0; j < data.mPointCount[i] - 1; j++)
 			{
-				const ImVec2 p1 = pointToRange(data.mPts[i][j]);
-				const ImVec2 p2 = pointToRange(data.mPts[i][j + 1]);
+				const ImVec2 p1 = data.mPts[i][j];
+				const ImVec2 p2 = data.mPts[i][j + 1];
 
 				if (frame < p1.x || frame > p2.x)
 				{
@@ -492,55 +488,60 @@ namespace application
 					const ImVec2 pos1 = ImVec2(sp1.x, ImLerp(p1.y, p2.y, rt1));
 					const ImVec2 pos2 = ImVec2(sp2.x, ImLerp(p1.y, p2.y, rt2));
 
-					float rate = pos2.y - pos1.y / pos2.x - pos1.x;
+					float rate = (pos2.y - pos1.y) / (pos2.x - pos1.x);
 
+					/// TransformEditEvent 의 경우, ImVec2.y 0.5 값을 기준으로 설정하며,
+					/// 해당 Object 의 현재 Transform 은 반영하지 않습니다.
+					/// Position 은 30 / 0 / -30,
+					/// Rotation 은 +360 / 0 / -360,
+					/// Scale 은 100 / 1 / 0.01 값을 offset 으로 정합니다.
 					if (frame >= pos1.x && frame <= pos2.x)
 					{
 						switch (i)
 						{
 							case 0:
 							{
-								pos.x = ((frame - pos1.x) * rate + pos1.y) * 360;
+								pos.x = ((frame - pos1.x) * rate + pos1.y) * 60 - 30;
 								break;
 							}
 							case 1:
 							{
-								pos.y = ((frame - pos1.x) * rate + pos1.y) * 360;
+								pos.y = ((frame - pos1.x) * rate + pos1.y) * 60 - 30;
 								break;
 							}
 							case 2:
 							{
-								pos.z = ((frame - pos1.x) * rate + pos1.y) * 360;
+								pos.z = ((frame - pos1.x) * rate + pos1.y) * 60 - 30;
 								break;
 							}
 							case 3:
 							{
-								rot.x = ((frame - pos1.x) * rate + pos1.y) * 360;
+								rot.x = ((frame - pos1.x) * rate + pos1.y) * 720 - 360;
 								break;
 							}
 							case 4:
 							{
-								rot.y = ((frame - pos1.x) * rate + pos1.y) * 360;
+								rot.y = ((frame - pos1.x) * rate + pos1.y) * 720 - 360;
 								break;
 							}
 							case 5:
 							{
-								rot.z = ((frame - pos1.x) * rate + pos1.y) * 360;
+								rot.z = ((frame - pos1.x) * rate + pos1.y) * 720 - 360;
 								break;
 							}
 							case 6:
 							{
-								scal.x = ((frame - pos1.x) * rate + pos1.y) * 360;
+								scal.x = pow(10, 4 * ((frame - pos1.x) * rate + pos1.y) - 2);
 								break;
 							}
 							case 7:
 							{
-								scal.y = ((frame - pos1.x) * rate + pos1.y) * 360;
+								scal.y = pow(10, 4 * ((frame - pos1.x) * rate + pos1.y) - 2);
 								break;
 							}
 							case 8:
 							{
-								scal.z = ((frame - pos1.x) * rate + pos1.y) * 360;
+								scal.z = pow(10, 4 * ((frame - pos1.x) * rate + pos1.y) - 2);
 								break;
 							}
 							default:

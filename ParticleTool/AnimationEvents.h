@@ -7,6 +7,8 @@
 #include "YunutyEngine.h"
 #include "ImCurveEdit.h"
 
+#include <nlohmann/json.hpp>
+
 #define GET_TYPE(Class) \
 virtual AnimationEventType GetType() override \
 { \
@@ -47,11 +49,9 @@ struct RampEdit
 		mbVisible[(int)Transform::Rotation_X] = true;
 		mbVisible[(int)Transform::Rotation_Y] = true;
 		mbVisible[(int)Transform::Rotation_Z] = true;
-		mbVisible[(int)Transform::Scale_X] = true;
-		mbVisible[(int)Transform::Scale_Y] = true;
-		mbVisible[(int)Transform::Scale_Z] = true;
-		mMax = ImVec2(1.f, 1.f);
-		mMin = ImVec2(0.f, 0.f);
+		mbVisible[(int)Transform::Scale_X] = false;
+		mbVisible[(int)Transform::Scale_Y] = false;
+		mbVisible[(int)Transform::Scale_Z] = false;
 	}
 
 	size_t GetCurveCount()
@@ -96,6 +96,17 @@ struct RampEdit
 
 	virtual void AddPoint(size_t curveIndex, ImVec2 value)
 	{
+		int index = 0;
+		for (auto& each : mPts[curveIndex])
+		{
+			if (each.x == value.x)
+			{
+				ErasePoint(curveIndex, index);
+				break;
+			}
+			index++;
+		}
+
 		mPts[curveIndex].push_back(value);
 		mPointCount[curveIndex]++;
 		SortValues(curveIndex);
@@ -118,8 +129,44 @@ struct RampEdit
 	std::vector<ImVec2> mPts[9];
 	size_t mPointCount[9];
 	bool mbVisible[9];
-	ImVec2 mMin;
-	ImVec2 mMax;
+	ImVec2 mMin = ImVec2(0.f, 0.f);
+	ImVec2 mMax = ImVec2(1.f, 1.f);
+
+	operator nlohmann::json() const
+	{
+		nlohmann::json finalData;
+
+		for (int i = 0; i < 9; i++)
+		{
+			nlohmann::json data;
+			for (int j = 0; j < mPointCount[i]; j++)
+			{
+				data["mPts"][j]["x"] = mPts[i][j].x;
+				data["mPts"][j]["y"] = mPts[i][j].y;
+			}
+
+			finalData[i] = data;
+		}
+		
+		return finalData;
+	}
+
+	RampEdit& operator=(const nlohmann::json& data)
+	{
+		for (int i = 0; i < 9; i++)
+		{
+			for (int j = 0; j < data[i]["mPts"].size(); j++)
+			{
+				ImVec2 points;
+				points.x = data[i]["mPts"][j]["x"];
+				points.y = data[i]["mPts"][j]["y"];
+
+				AddPoint(i, points);
+			}
+		}
+
+		return *this;
+	}
 
 private:
 	void SortValues(size_t curveIndex)
