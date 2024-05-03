@@ -74,4 +74,8 @@ enum class UIExportFlag2
     LinearClipOnEnable = 1 << 0,
     LinearClipOnDisable = 1 << 1,
     Duplicatable = 1 << 2,
+    // 체력바, 마나 바 등 연속적인 데이터의 수치를 추정하기 위해 게이지의 일정단위마다 셀을 끊어 표시하고 싶을때 사용됩니다.
+    IsBarCells = 1 << 3,
+    // 0일때 하나도 클립 안함, 1일때 완전히 클립함
+    AdjustLinearClip = 1 << 4,
 };

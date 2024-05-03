@@ -95,6 +95,7 @@ public:
     // 만약 현재의 highestPirorityButton이 여전히 가장 높은 우선순위를 가지고 있다면, 아무 일도 벌어지지 않습니다.
     void UpdateHighestPriorityButton();
 
+    Vector3d GetUIPosFromWorld(Vector3d worldPosition);
     bool IsMouseOnButton();
     weak_ptr<UIElement> DuplicateUIElement(UIElement* ui);
     UIElement* GetUIElementWithIndex(int index);

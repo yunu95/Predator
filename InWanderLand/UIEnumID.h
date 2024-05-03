@@ -148,6 +148,8 @@ enum class UIEnumID
     EnemyStatus,
     EnemyStatus_HP_Number_Current,
     EnemyStatus_HP_Number_Max,
+    EnemyStatus_HP_Cells,
+    EnemyStatus_HP_Fill,
     EnemyStatus_Buff_Bleeding,
     EnemyStatus_Buff_Blinding,
     EnemyStatus_Buff_Paralysis,

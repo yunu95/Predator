@@ -153,6 +153,14 @@ void UIManager::UpdateHighestPriorityButton()
     }
 }
 
+Vector3d UIManager::GetUIPosFromWorld(Vector3d worldPosition)
+{
+    yunuGI::Vector2 screenPos = graphics::Camera::GetMainCamera()->GetGI().GetScreenPos(worldPosition);
+    auto resolution = graphics::Renderer::SingleInstance().GetResolution();
+    screenPos.x = (screenPos.x + 1) * 0.5 * resolution.x;
+    screenPos.y = (1 - (screenPos.y + 1) * 0.5) * resolution.y;
+    return Vector3d{ screenPos.x, screenPos.y, 0 };
+}
 bool UIManager::IsMouseOnButton()
 {
     return isButtonActiviated;
@@ -161,27 +169,44 @@ weak_ptr<UIElement> UIManager::DuplicateUIElement(UIElement* ui)
 {
     auto retVal = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UIElement>();
     localContext = retVal.lock().get();
-    ImportDefaultAction(ui->importedUIData, retVal.lock().get());
+    //if (!ImportDealWithSpecialCases(retVal.lock().get()->importedUIData, retVal.lock().get()))
+    //{
+    //    ImportDefaultAction(ui->importedUIData, retVal.lock().get());
+    //}
+
+    bool isFirstElement = true;
+    uiImportingPriority = ui->uiPriority;
     for (auto& eachData : ui->localUIdatasByIndex)
     {
-        auto uiObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        auto uiElement = uiObject->AddComponent<UIElement>();
-        ImportDefaultAction(eachData.second, uiElement);
+        UIElement* uiElement;
+        if (isFirstElement)
+        {
+            isFirstElement = false;
+            uiElement = localContext;
+        }
+        else
+        {
+            uiElement = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<UIElement>();
+        }
+
+        if (!ImportDealWithSpecialCases(eachData.second, uiElement))
+        {
+            ImportDefaultAction(eachData.second, uiElement);
+        }
+        uiImportingPriority++;
     }
-    ImportDealWithSpecialCases(retVal.lock().get()->importedUIData, retVal.lock().get());
+    /*if (!ImportDealWithSpecialCases_Post(retVal.lock().get()->importedUIData, retVal.lock().get()))
+    {
+        ImportDefaultAction_Post(ui->importedUIData, retVal.lock().get());
+    }*/
+    uiImportingPriority = ui->uiPriority;
     for (auto& eachUI : retVal.lock().get()->localUIsByIndex)
     {
-        ImportDealWithSpecialCases(eachUI.second->importedUIData, retVal.lock().get());
-    }
-    ImportDefaultAction_Post(ui->importedUIData, retVal.lock().get());
-    for (auto& eachUI : retVal.lock().get()->localUIsByIndex)
-    {
-        ImportDefaultAction_Post(eachUI.second->importedUIData, eachUI.second);
-    }
-    ImportDealWithSpecialCases_Post(retVal.lock().get()->importedUIData, retVal.lock().get());
-    for (auto& eachUI : retVal.lock().get()->localUIsByIndex)
-    {
-        ImportDealWithSpecialCases_Post(eachUI.second->importedUIData, eachUI.second);
+        if (!ImportDealWithSpecialCases_Post(eachUI.second->importedUIData, eachUI.second))
+        {
+            ImportDefaultAction_Post(eachUI.second->importedUIData, eachUI.second);
+        }
+        uiImportingPriority++;
     }
     localContext = nullptr;
 
@@ -397,6 +422,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
     yunuGI::ITexture* idleTexture{ nullptr };
     //uiObject->GetTransform()->SetLocalScale({ 0.5,1,1 });
     //uiObject->AddComponent<PopupOnEnable>();
+    element->importedUIData = uiData;
     if (uiData.enumID != 0)
         SetUIElementWithEnum((UIEnumID)uiData.enumID, element);
     SetUIDataWithIndex(uiData.uiIndex, uiData);
@@ -522,6 +548,33 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         element->linearClippingTimerOnDisable->reverseOffset = true;
         element->linearClippingTimerOnDisable->Init();
     };
+    if (uiData.customFlags2 & (int)UIExportFlag2::IsBarCells)
+    {
+        element->adjuster = uiObject->AddComponent<FloatFollower>();
+        element->adjuster->justApplyit = true;
+        element->adjuster->applier = [=](float gaugeValue)
+            {
+                float cellCount = gaugeValue / uiData.barCells_GaugePerCell;
+                float widthFactor = uiData.barCells_CellNumber / cellCount;
+                element->imageComponent.lock()->GetGI().SetWidth(uiData.barCells_BarWidth * widthFactor);
+                element->imageComponent.lock()->GetGI().SetLinearClipping(true);
+                element->imageComponent.lock()->GetGI().SetLinearClippingDirection(1, 0);
+                element->imageComponent.lock()->GetGI().SetLinearClippingStartPoint(1 / widthFactor, 0);
+            };
+    }
+    if (uiData.customFlags2 & (int)UIExportFlag2::AdjustLinearClip)
+    {
+        element->adjuster = uiObject->AddComponent<FloatFollower>();
+        element->adjuster->SetFollowingRate(uiData.adjustLinearClipAdjustingRate);
+        element->imageComponent.lock()->GetGI().SetLinearClipping(true);
+        element->imageComponent.lock()->GetGI().SetLinearClippingStartPoint(uiData.adjustLinearClipStartX, uiData.adjustLinearClipStartY);
+        element->imageComponent.lock()->GetGI().SetLinearClippingDirection(uiData.adjustLinearClipDirectionX, uiData.adjustLinearClipDirectionY);
+        element->adjuster->applier = [=](float t)
+            {
+                yunuGI::Vector2 newStartPoint{ uiData.adjustLinearClipStartX - uiData.adjustLinearClipDirectionX * t, uiData.adjustLinearClipStartY - uiData.adjustLinearClipDirectionY * t };
+                element->imageComponent.lock()->GetGI().SetLinearClippingStartPoint(newStartPoint.x, newStartPoint.y);
+            };
+    }
 
     Vector3d pivotPos{ 0,0,0 };
     // offset by anchor
@@ -783,7 +836,8 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     }
     if (uiData.customFlags2 & (int)UIExportFlag2::Duplicatable)
     {
-        element->localUIdatasByIndex[uiData.uiIndex] = uiData;
+        //element->localUIdatasByIndex[uiData.uiIndex] = uiData;
+        element->uiPriority = uiImportingPriority;
         for (auto child : element->GetGameObject()->GetChildrenRecursively())
         {
             if (auto childElement = child->GetComponent<UIElement>())
@@ -796,6 +850,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
 // 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
 bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element)
 {
+    element->importedUIData = uiData;
     if (uiData.enumID != 0)
         SetUIElementWithEnum((UIEnumID)uiData.enumID, element);
     SetUIDataWithIndex(uiData.uiIndex, uiData);
