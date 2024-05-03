@@ -27,6 +27,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <cmath>
 
 static inline ImVec2  operator*(const ImVec2& lhs, const float rhs) { return ImVec2(lhs.x * rhs, lhs.y * rhs); }
 static inline ImVec2  operator/(const ImVec2& lhs, const float rhs) { return ImVec2(lhs.x / rhs, lhs.y / rhs); }
@@ -213,9 +214,11 @@ struct MySequence : public ImSequencer::SequenceInterface
 		myItems[index].mExpanded = !myItems[index].mExpanded;
 	}
 
-	/// TransformEditEvent 의 경우, 처음과 끝 frame 을 기존의 object Transform 으로 설정하고,
-	/// 해당 Transform 의 ImVec2.y 를 0.5 로 설정합니다.
-	/// 그리고, Rotation 을 기준으로 삼아 1 / 0 값을 +360 / -360 offset 으로 산출합니다.
+	/// TransformEditEvent 의 경우, ImVec2.y 0.5 값을 기준으로 설정하며,
+	/// 해당 Object 의 현재 Transform 은 반영하지 않습니다.
+	/// Position 은 30 / 0 / -30,
+	/// Rotation 은 +360 / 0 / -360,
+	/// Scale 은 100 / 1 / 0.01 값을 offset 으로 정합니다.
 	virtual void CustomDraw(int index, ImDrawList* draw_list, const ImRect& rc, const ImRect& legendRect, const ImRect& clippingRect, const ImRect& legendClippingRect)
 	{
 		static auto& pm = application::particle::ParticleTool_Manager::GetSingletonInstance();
@@ -248,7 +251,7 @@ struct MySequence : public ImSequencer::SequenceInterface
 							ImVec2 pta(legendRect.Min.x + 30, legendRect.Min.y + i * 14.f);
 							ImVec2 ptb(legendRect.Max.x, legendRect.Min.y + (i + 1) * 14.f);
 							draw_list->AddText(pta, ptr->editData.mbVisible[i] ? 0xFFFFFFFF : 0x80FFFFFF, labels[i]);
-							if (ImRect(pta, ptb).Contains(ImGui::GetMousePos()) && ImGui::IsMouseClicked(0))
+							if (legendClippingRect.Contains(ImGui::GetMousePos()) && ImRect(pta, ptb).Contains(ImGui::GetMousePos()) && ImGui::IsMouseClicked(0))
 							{
 								ptr->editData.mbVisible[i] = !ptr->editData.mbVisible[i];
 							}
@@ -263,7 +266,7 @@ struct MySequence : public ImSequencer::SequenceInterface
 							{
 								ptr->editData.mPts[points.curveIndex][points.pointIndex].x = myItems[index].mFrameStart;
 							}
-							else if (points.pointIndex == ptr->editData.mPointCount[points.curveIndex])
+							else if (points.pointIndex == ptr->editData.mPointCount[points.curveIndex] - 1)
 							{
 								ptr->editData.mPts[points.curveIndex][points.pointIndex].x = myItems[index].mFrameEnd;
 							}
@@ -357,7 +360,7 @@ struct MySequence : public ImSequencer::SequenceInterface
 						break;
 				}
 
-				if (ImRect(pta, ptb).Contains(ImGui::GetMousePos()) && ImGui::IsMouseClicked(0))
+				if (legendClippingRect.Contains(ImGui::GetMousePos()) && ImRect(pta, ptb).Contains(ImGui::GetMousePos()) && ImGui::IsMouseClicked(0))
 				{
 					if (each == pm.GetSelectedAnimationEvent().lock())
 					{
@@ -382,7 +385,8 @@ struct MySequence : public ImSequencer::SequenceInterface
 
 			draw_list->PopClipRect();
 
-			draw_list->PushClipRect(clippingRect.Min, clippingRect.Max, true);
+			ImGui::SetCursorScreenPos(rc.Min);
+			draw_list->PushClipRect(legendClippingRect.Min, clippingRect.Max, true);
 
 			ImU32 boxCol = ImGui::GetColorU32(ImVec4(1, 1, 1, 1));
 			int j = 0;
@@ -639,7 +643,7 @@ struct Array
 	}
 };
 
-template <typename T, typename ... U> Array(T, U...) -> Array<T, 1 + sizeof...(U)>;
+template <typename T, typename ... U> Array(T, U...)->Array<T, 1 + sizeof...(U)>;
 
 struct GraphEditorDelegate : public GraphEditor::Delegate
 {
@@ -802,81 +806,81 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	CreateMyWindow(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 
 	yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [&]()
+	{
+		CreateToolWindow(hInstance, nullptr, lpCmdLine, nCmdShow);
+
+		// Setup Platform/Renderer backends
+		g_pd3dDevice = reinterpret_cast<ID3D11Device*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDevice());
+		g_pd3dDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDeviceContext());
+
+		// Initialize Direct3D
+		if (!CreateDeviceD3D(g_Toolhwnd))
 		{
-			CreateToolWindow(hInstance, nullptr, lpCmdLine, nCmdShow);
+			CleanupDeviceD3D();
+			return 1;
+		}
 
-			// Setup Platform/Renderer backends
-			g_pd3dDevice = reinterpret_cast<ID3D11Device*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDevice());
-			g_pd3dDeviceContext = reinterpret_cast<ID3D11DeviceContext*>(yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager()->GetDeviceContext());
+		::ShowWindow(g_Toolhwnd, SW_SHOWDEFAULT);
+		::UpdateWindow(g_Toolhwnd);
 
-			// Initialize Direct3D
-			if (!CreateDeviceD3D(g_Toolhwnd))
-			{
-				CleanupDeviceD3D();
-				return 1;
-			}
+		// Setup Dear ImGui context
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+		//io.ConfigViewportsNoAutoMerge = true;
+		//io.ConfigViewportsNoTaskBarIcon = true;
+		//io.ConfigViewportsNoDefaultParent = true;
+		//io.ConfigDockingAlwaysTabBar = true;
+		//io.ConfigDockingTransparentPayload = true;
+		//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: Experimental. THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
+		//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI: Experimental.
 
-			::ShowWindow(g_Toolhwnd, SW_SHOWDEFAULT);
-			::UpdateWindow(g_Toolhwnd);
+		/// Custom 영역
+		// 타이틀 바를 컨트롤 할 때에만 움직임
+		io.ConfigWindowsMoveFromTitleBarOnly = true;
+		///
 
-			// Setup Dear ImGui context
-			IMGUI_CHECKVERSION();
-			ImGui::CreateContext();
-			ImGuiIO& io = ImGui::GetIO(); (void)io;
-			io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-			io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-			io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
-			//io.ConfigViewportsNoAutoMerge = true;
-			//io.ConfigViewportsNoTaskBarIcon = true;
-			//io.ConfigViewportsNoDefaultParent = true;
-			//io.ConfigDockingAlwaysTabBar = true;
-			//io.ConfigDockingTransparentPayload = true;
-			//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: Experimental. THIS CURRENTLY DOESN'T WORK AS EXPECTED. DON'T USE IN USER APP!
-			//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; // FIXME-DPI: Experimental.
+		// Setup Dear ImGui style
+		ImGui::StyleColorsDark();
+		//ImGui::StyleColorsLight();
 
-			/// Custom 영역
-			// 타이틀 바를 컨트롤 할 때에만 움직임
-			io.ConfigWindowsMoveFromTitleBarOnly = true;
-			///
+		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+		ImGuiStyle& style = ImGui::GetStyle();
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			style.WindowRounding = 0.0f;
+			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+		}
 
-			// Setup Dear ImGui style
-			ImGui::StyleColorsDark();
-			//ImGui::StyleColorsLight();
+		// Setup Platform/Renderer backends
+		ImGui_ImplWin32_Init(g_Toolhwnd);
+		ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 
-			// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
-			ImGuiStyle& style = ImGui::GetStyle();
-			if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-			{
-				style.WindowRounding = 0.0f;
-				style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-			}
-
-			// Setup Platform/Renderer backends
-			ImGui_ImplWin32_Init(g_Toolhwnd);
-			ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
-
-			// Load Fonts
-			// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-			// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-			// - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-			// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-			// - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
-			// - Read 'docs/FONTS.md' for more instructions and details.
-			// - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-			//io.Fonts->AddFontDefault();
-			//io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
-			//io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-			//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-			//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-			//ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
-			//IM_ASSERT(font != nullptr);
-		};
+		// Load Fonts
+		// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+		// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+		// - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+		// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+		// - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
+		// - Read 'docs/FONTS.md' for more instructions and details.
+		// - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+		//io.Fonts->AddFontDefault();
+		//io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
+		//io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
+		//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
+		//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
+		//ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
+		//IM_ASSERT(font != nullptr);
+	};
 
 	yunutyEngine::YunutyCycle::SingleInstance().postUpdateAction = [&]() { ImGuiUpdate(); };
 	yunutyEngine::YunutyCycle::SingleInstance().postThreadAction = []()
-		{
-		};
+	{
+	};
 
 	yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
 	yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(1920, 1080);
@@ -2066,7 +2070,7 @@ void ShowSequencerEditor()
 							bool newEditEvent = true;
 							for (auto& func : mySequenceMap[fbxName].myItems[funcIndex].funcList)
 							{
-								if (func.lock()->GetType() == application::AnimationEventType::GameObject_TransformEditEvent 
+								if (func.lock()->GetType() == application::AnimationEventType::GameObject_TransformEditEvent
 									&& static_cast<application::GameObject_TransformEditEvent*>(func.lock().get())->objName == particleName)
 								{
 									newEditEvent = false;
@@ -2242,7 +2246,89 @@ void ShowTransformAnimationEditor()
 	{
 		if (ImGui::MenuItem("Add Transform Key form Current"))
 		{
+			bool stop = false;
+			for (auto& each : mySequenceMap[fbxName].myItems[funcIndex].funcList)
+			{
+				if (!each.expired() && each.lock() == pm.GetSelectedAnimationEvent().lock())
+				{
+					auto ptr = static_cast<application::GameObject_TransformEditEvent*>(each.lock().get());
 
+					for (auto& pInstance : pm.GetChildrenParticleInstanceList(ptr->fbxName))
+					{
+						auto sptr = pInstance.lock();
+						if (sptr->name == ptr->objName)
+						{
+							/// TransformEditEvent 의 경우, ImVec2.y 0.5 값을 기준으로 설정하며,
+							/// 해당 Object 의 현재 Transform 은 반영하지 않습니다.
+							/// Position 은 30 / 0 / -30,
+							/// Rotation 은 +360 / 0 / -360,
+							/// Scale 은 100 / 1 / 0.01 값을 offset 으로 정합니다.
+
+							auto funcPos = [=](float x) 
+							{
+								if (x > 30)
+								{
+									x = 30;
+								}
+								else if (x < -30)
+								{
+									x = -30;
+								}
+
+								return x / 60 + 0.5;
+							};
+
+							auto funcRot = [=](float x)
+							{
+								if (x > 360)
+								{
+									x = 360;
+								}
+								else if (x < -360)
+								{
+									x = -360;
+								}
+
+								return x / 720 + 0.5;
+							};
+
+							auto funcScal = [=](float x)
+							{
+								if (x > 100)
+								{
+									x = 100;
+								}
+								else if (x < 0.01)
+								{
+									x = 0.01;
+								}
+
+								return (log10f(x) + 2) / 4;
+							};
+
+							auto vec3 = sptr->rotation.Euler();
+
+							ptr->editData.AddPoint(0, ImVec2(currentFrame, funcPos(sptr->offsetPos.x)));
+							ptr->editData.AddPoint(1, ImVec2(currentFrame, funcPos(sptr->offsetPos.y)));
+							ptr->editData.AddPoint(2, ImVec2(currentFrame, funcPos(sptr->offsetPos.z)));
+							ptr->editData.AddPoint(3, ImVec2(currentFrame, funcRot(vec3.x)));
+							ptr->editData.AddPoint(4, ImVec2(currentFrame, funcRot(vec3.y)));
+							ptr->editData.AddPoint(5, ImVec2(currentFrame, funcRot(vec3.z)));
+							ptr->editData.AddPoint(6, ImVec2(currentFrame, funcScal(sptr->scale.x)));
+							ptr->editData.AddPoint(7, ImVec2(currentFrame, funcScal(sptr->scale.y)));
+							ptr->editData.AddPoint(8, ImVec2(currentFrame, funcScal(sptr->scale.z)));
+
+							stop = true;
+							break;
+						}
+					}
+
+					if (stop)
+					{
+						break;
+					}
+				}
+			}
 		}
 
 		ImGui::EndPopup();
@@ -2700,12 +2786,12 @@ void EraseSequenceData(const std::weak_ptr<application::AnimationEvent>& event)
 		int i = 0;
 		for (auto& eachAni : pm.GetAnimationNameList(eachFbx->getName()))
 		{
-			for (auto& eachEvent : mySequenceMap[eachFbx->getName()].myItems[i].funcList)
+			for (auto itr = mySequenceMap[eachFbx->getName()].myItems[i].funcList.begin(); itr != mySequenceMap[eachFbx->getName()].myItems[i].funcList.end(); itr++)
 			{
-				if (eachEvent.lock() == event.lock())
+				if (itr->lock() == event.lock())
 				{
-					mySequenceMap[eachFbx->getName()].myItems[i].funcList.erase(event);
-					break;
+					mySequenceMap[eachFbx->getName()].myItems[i].funcList.erase(itr);
+					return;
 				}
 			}
 			i++;
