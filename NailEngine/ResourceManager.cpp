@@ -1168,8 +1168,8 @@ void ResourceManager::CreateDefaultTexture()
 	CreateTexture(L"Texture/particle.png");
 	CreateTexture(L"Texture/TempTexture.dds");
 	CreateTexture(L"Texture/Dissolve.jpg");
-	CreateTexture(L"Texture/LightMap01.dds");
-	CreateTexture(L"Texture/LightMap02.dds");
+	CreateTexture(L"Texture/LightMap_0.dds");
+	CreateTexture(L"Texture/LightMap_1.dds");
 
 	CreateTexture(L"Texture/LightMap2_0.dds");
 	CreateTexture(L"Texture/LightMap2_1.dds");
@@ -1178,8 +1178,8 @@ void ResourceManager::CreateDefaultTexture()
 
 	texture->SetName(L"LightMapList");
 	std::vector<yunuGI::ITexture*> tempVec;
-	tempVec.push_back(GetTexture(L"Texture/LightMap01.dds").get());
-	tempVec.push_back(GetTexture(L"Texture/LightMap02.dds").get());
+	tempVec.push_back(GetTexture(L"Texture/LightMap_0.dds").get());
+	tempVec.push_back(GetTexture(L"Texture/LightMap_1.dds").get());
 	texture->CreateLightMapArray(tempVec);
 	textureMap.insert({ L"LightMapList", texture });
 	textureVec.push_back(texture.get());

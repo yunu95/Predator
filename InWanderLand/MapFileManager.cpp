@@ -72,8 +72,18 @@ namespace application
                     location[0] = (float)(mapData[i]["Location"][0]) / 100.f;
                     location[1] = (float)(mapData[i]["Location"][1]) / 100.f;
                     location[2] = (float)(mapData[i]["Location"][2]) / 100.f;
+                    int lightMapIndex = (int)(mapData[i]["LightMapIndex"]);
+                    float LightMapScaleOffset[4];
+                    LightMapScaleOffset[0] = (float)(mapData[i]["LightMapScaleOffset"][0]);
+                    LightMapScaleOffset[1] = (float)(mapData[i]["LightMapScaleOffset"][1]);
+                    LightMapScaleOffset[2] = (float)(mapData[i]["LightMapScaleOffset"][2]);
+                    LightMapScaleOffset[3] = (float)(mapData[i]["LightMapScaleOffset"][3]);
 
                     auto odt = instanceManager.CreateInstance<OrnamentData>(fbxName);
+                    if (fbxName == "SM_Temple_Welcome")
+                    {
+                        int a = 0;
+                    }
 
                     /// 좌표계 고려 변환
                     odt->pod.scale.x = scale[0];
@@ -86,6 +96,12 @@ namespace application
                     odt->pod.position.x = -location[0];
                     odt->pod.position.y = location[2];
                     odt->pod.position.z = location[1];
+                    odt->pod.LightMapIndex = lightMapIndex;
+                    odt->pod.LightMapScaleOffset[0] = LightMapScaleOffset[0];
+                    odt->pod.LightMapScaleOffset[1] = LightMapScaleOffset[1];
+                    odt->pod.LightMapScaleOffset[2] = LightMapScaleOffset[2];
+                    odt->pod.LightMapScaleOffset[3] = LightMapScaleOffset[3];
+
                     odt->pod.stage = path.find("1Stage") != std::string::npos ? 1 : 2;
 
                     auto pi = odt->ApplyAsPaletteInstance();

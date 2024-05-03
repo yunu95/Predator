@@ -30,6 +30,20 @@ void InstancingManager::Init()
 
 void InstancingManager::SortByCameraDirection()
 {
+	if (!this->staticMeshDeferredRenderVec.empty())
+	{
+		for (auto& each : this->staticMeshDeferredRenderVec)
+		{
+			for (auto& each2 : each.second)
+			{
+				if (each2 == nullptr) continue;
+
+				this->quadTree.Remove(each2.get());
+			}
+		}
+	}
+
+
 	for (auto& each : this->staticMeshDeferredMap)
 	{
 		std::vector<std::shared_ptr<RenderInfo>> tempVec;
@@ -108,6 +122,8 @@ void InstancingManager::SortByCameraDirection()
 	{
 		for (auto& each2 : each.second)
 		{
+			if (each2 == nullptr) continue;
+
 			DirectX::SimpleMath::Vector3 tempScale;
 			DirectX::SimpleMath::Vector3 tempPos;
 			DirectX::SimpleMath::Quaternion tempQuat;
@@ -118,7 +134,7 @@ void InstancingManager::SortByCameraDirection()
 			this->quadTree.PushData(each2.get(), DirectX::SimpleMath::Vector2{ tempPos.x, tempPos.z }, radius);
 		}
 	}
-
+	int a = 1;
 	//for (auto& each : this->staticMeshRenderInfoIndexMap)
 	//{
 	//	FrustumCullingManager::Instance.Get().RegisterRenderInfo(each.first);
@@ -229,6 +245,11 @@ void InstancingManager::RenderStaticDeferred()
 						continue;
 					}
 
+					if(i->isActive)
+					{
+						int a = 1;
+					}
+
 					if (i->isActive == false) continue;
 
 					if (i->isCulled == true)
@@ -264,7 +285,6 @@ void InstancingManager::RenderStaticDeferred()
 					lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
 
 					index++;
-
 
 					i->isInArea = false;
 				}
@@ -441,17 +461,11 @@ void InstancingManager::RenderStaticShadow()
 		{
 			for (auto& i : renderInfoVec)
 			{
+				if (i == nullptr) continue;
+
 				if (i->lightMapIndex != -1) continue;
 
 				if (i->isActive == false) continue;
-
-				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-				//auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
-
-				//if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
-				//{
-				//	continue;
-				//}
 
 				const std::shared_ptr<RenderInfo>& renderInfo = i;
 				InstancingData data;
@@ -461,6 +475,8 @@ void InstancingManager::RenderStaticShadow()
 
 			if (renderInfoVec.size() != 0)
 			{
+				if(renderInfoVec[0] == nullptr) continue;
+
 				auto& buffer = _buffers[instanceID];
 
 				auto opacityMap = (*renderInfoVec.begin())->material->GetTexture(yunuGI::Texture_Type::OPACITY);
