@@ -363,8 +363,8 @@ namespace ImCurveEdit
       }
 
       // move curve
-
-      if (movingCurve != -1)
+      /// move curve 를 지원하지 않습니다.
+      /*if (movingCurve != -1)
       {
          const size_t ptCount = delegate.GetPointCount(movingCurve);
          const ImVec2* pts = delegate.GetPoints(movingCurve);
@@ -397,7 +397,7 @@ namespace ImCurveEdit
       {
          movingCurve = overCurve;
          delegate.BeginEdit(overCurve);
-      }
+      }*/
 
       // quad selection
       if (selectingQuad)

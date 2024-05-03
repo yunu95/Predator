@@ -656,6 +656,15 @@ namespace application
 			{
 				SetSelectedParticleInstanceData(std::shared_ptr<ParticleToolInstance>());
 			}
+
+			for (auto& each : GetAnimationEventList(selectedAnimation))
+			{
+				if (each.lock()->GetType() == application::AnimationEventType::GameObject_TransformEditEvent)
+				{
+					aniEventManager.UpdateTransformEditEvent(each.lock());
+				}
+			}
+
 			auto animator = GetSelectedFBXData()->GetComponent<graphics::Animator>();
 			animator->Play(selectedAnimation);
 		}
@@ -835,6 +844,15 @@ namespace application
 								case application::AnimationEventType::GameObject_DisabledEvent:
 								{
 									auto ptr = static_cast<GameObject_DisabledEvent*>(event.get());
+									if (ptr->objName == instance->name)
+									{
+										eraseList.push_back(event);
+									}
+									break;
+								}
+								case application::AnimationEventType::GameObject_TransformEditEvent:
+								{
+									auto ptr = static_cast<GameObject_TransformEditEvent*>(event.get());
 									if (ptr->objName == instance->name)
 									{
 										eraseList.push_back(event);
