@@ -30,6 +30,20 @@ void InstancingManager::Init()
 
 void InstancingManager::SortByCameraDirection()
 {
+	if (!this->staticMeshDeferredRenderVec.empty())
+	{
+		for (auto& each : this->staticMeshDeferredRenderVec)
+		{
+			for (auto& each2 : each.second)
+			{
+				if (each2 == nullptr) continue;
+
+				this->quadTree.Remove(each2.get());
+			}
+		}
+	}
+
+
 	for (auto& each : this->staticMeshDeferredMap)
 	{
 		std::vector<std::shared_ptr<RenderInfo>> tempVec;
@@ -108,6 +122,8 @@ void InstancingManager::SortByCameraDirection()
 	{
 		for (auto& each2 : each.second)
 		{
+			if (each2 == nullptr) continue;
+
 			DirectX::SimpleMath::Vector3 tempScale;
 			DirectX::SimpleMath::Vector3 tempPos;
 			DirectX::SimpleMath::Quaternion tempQuat;
@@ -118,7 +134,7 @@ void InstancingManager::SortByCameraDirection()
 			this->quadTree.PushData(each2.get(), DirectX::SimpleMath::Vector2{ tempPos.x, tempPos.z }, radius);
 		}
 	}
-
+	int a = 1;
 	//for (auto& each : this->staticMeshRenderInfoIndexMap)
 	//{
 	//	FrustumCullingManager::Instance.Get().RegisterRenderInfo(each.first);
@@ -227,6 +243,11 @@ void InstancingManager::RenderStaticDeferred()
 					if (i->isInArea == false)
 					{
 						continue;
+					}
+
+					if(i->isActive)
+					{
+						int a = 1;
 					}
 
 					if (i->isActive == false) continue;
