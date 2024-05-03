@@ -77,6 +77,16 @@ struct JsonUIData
     vector<float> colorTintOnDisableEnd;
     float colorTintOnDisableDuration;
     int colorTintOnDisableCurveType;
+    // 전체 셀의 갯수
+    int barCells_CellNumber;
+    // 셀 하나당 차지하는 수치량
+    float barCells_GaugePerCell;
+    // 셀이 덮어씌울 게이지의 가로, 세로 크기
+    float barCells_BarWidth;
+    float barCells_BarHeight;
+    float adjustLinearClipAdjustingRate;
+    float adjustLinearClipDirectionX, adjustLinearClipDirectionY;
+    float adjustLinearClipStartX, adjustLinearClipStartY;
     // 임의로 사용하게 될 사용자 플래그
     int customFlags;
     int customFlags2;

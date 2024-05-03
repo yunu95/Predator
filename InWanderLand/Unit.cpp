@@ -29,6 +29,9 @@ void Unit::Start()
     unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
     unitStatusUI.lock()->EnableElement();
 
+    unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Cells)->adjuster->SetTargetFloat(m_maxHealthPoint);
+    unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Number_Max)->SetNumber(m_maxHealthPoint);
+
     m_initialAutoAttackDamage = m_autoAttackDamage;
     m_bulletSpeed = 5.1f;
     chaseUpdateDelay = 0.1f;
@@ -862,6 +865,11 @@ void Unit::Heal(float healingPoint)
 void Unit::SetUnitCurrentHp(float p_newHp)
 {
     m_currentHealthPoint = p_newHp;
+    if (!unitStatusUI.expired())
+    {
+        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Fill)->adjuster->SetTargetFloat(1 - m_currentHealthPoint / m_maxHealthPoint);
+        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Number_Current)->SetNumber(m_currentHealthPoint);
+    }
     switch (m_unitType)
     {
     case UnitType::Warrior:

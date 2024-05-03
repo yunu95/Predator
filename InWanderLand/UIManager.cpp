@@ -548,6 +548,33 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         element->linearClippingTimerOnDisable->reverseOffset = true;
         element->linearClippingTimerOnDisable->Init();
     };
+    if (uiData.customFlags2 & (int)UIExportFlag2::IsBarCells)
+    {
+        element->adjuster = uiObject->AddComponent<FloatFollower>();
+        element->adjuster->justApplyit = true;
+        element->adjuster->applier = [=](float gaugeValue)
+            {
+                float cellCount = gaugeValue / uiData.barCells_GaugePerCell;
+                float widthFactor = uiData.barCells_CellNumber / cellCount;
+                element->imageComponent.lock()->GetGI().SetWidth(uiData.barCells_BarWidth * widthFactor);
+                element->imageComponent.lock()->GetGI().SetLinearClipping(true);
+                element->imageComponent.lock()->GetGI().SetLinearClippingDirection(1, 0);
+                element->imageComponent.lock()->GetGI().SetLinearClippingStartPoint(1 / widthFactor, 0);
+            };
+    }
+    if (uiData.customFlags2 & (int)UIExportFlag2::AdjustLinearClip)
+    {
+        element->adjuster = uiObject->AddComponent<FloatFollower>();
+        element->adjuster->SetFollowingRate(uiData.adjustLinearClipAdjustingRate);
+        element->imageComponent.lock()->GetGI().SetLinearClipping(true);
+        element->imageComponent.lock()->GetGI().SetLinearClippingStartPoint(uiData.adjustLinearClipStartX, uiData.adjustLinearClipStartY);
+        element->imageComponent.lock()->GetGI().SetLinearClippingDirection(uiData.adjustLinearClipDirectionX, uiData.adjustLinearClipDirectionY);
+        element->adjuster->applier = [=](float t)
+            {
+                yunuGI::Vector2 newStartPoint{ uiData.adjustLinearClipStartX - uiData.adjustLinearClipDirectionX * t, uiData.adjustLinearClipStartY - uiData.adjustLinearClipDirectionY * t };
+                element->imageComponent.lock()->GetGI().SetLinearClippingStartPoint(newStartPoint.x, newStartPoint.y);
+            };
+    }
 
     Vector3d pivotPos{ 0,0,0 };
     // offset by anchor

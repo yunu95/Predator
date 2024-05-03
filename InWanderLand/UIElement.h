@@ -48,6 +48,9 @@ public:
     void EnableElement();
     void DisableElement();
     void SetNumber(float number);
+    const std::unordered_map<int, UIElement*>& GetLocalUIsByIndex() { return localUIsByIndex; };
+    const std::unordered_map<UIEnumID, UIElement*>& GetLocalUIsByEnumID(){ return localUIsByEnumID; };
+    const std::unordered_map<int, JsonUIData>& GetLocalUIdatasByIndex(){ return localUIdatasByIndex; };
     // UI 요소에 영향을 줄 수 있는 실수 값을 조정합니다.
     FloatFollower* adjuster{ nullptr };
 
