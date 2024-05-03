@@ -60,7 +60,7 @@ struct JsonUIData
     float width;
     float height;
     // 업그레이드 버튼의 경우, 활성화하기 위해 필요한 다른 버튼의 인덱스를 의미합니다.
-    int dependentUpgrade;
+    int dependentUpgrade{ -1 };
     vector<float> linearClipOnEnableStart;
     vector<float> linearClipOnEnableDir;
     float linearClipOnEnableDuration;

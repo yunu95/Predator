@@ -17,6 +17,12 @@ class ColorTintTimer;
 // 임포트된 UI 요소에 대한 정보를 잔뜩 저장하는 클래스
 class UIElement : public Component, public ContentsObservee
 {
+private:
+    // 복제된 UIElement의 하위 요소들에 대한 정보
+    int uiPriority{ 0 };
+    std::unordered_map<int, UIElement*> localUIsByIndex;
+    std::unordered_map<UIEnumID, UIElement*> localUIsByEnumID;
+    std::unordered_map<int, JsonUIData> localUIdatasByIndex;
 public:
     virtual void Start() override;
     JsonUIData importedUIData;
@@ -49,10 +55,6 @@ public:
     virtual void StopFunction() override;
 
 private:
-    // 복제된 UIElement의 하위 요소들에 대한 정보
-    std::unordered_map<int, UIElement*> localUIsByIndex;
-    std::unordered_map<UIEnumID, UIElement*> localUIsByEnumID;
-    std::unordered_map<int, JsonUIData> localUIdatasByIndex;
     bool numberSetBefore = false;
     // 0~9까지의 숫자 이미지를 저장하는 배열
     array<yunuGI::ITexture*, 10>* digitFont{ };

@@ -25,7 +25,10 @@ void Unit::OnEnable()
 
 void Unit::Start()
 {
-    //UIManager::Instance().DuplicateUIElement(UIEnumID::EnemyStatus);
+    unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::EnemyStatus));
+    unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
+    unitStatusUI.lock()->EnableElement();
+
     m_initialAutoAttackDamage = m_autoAttackDamage;
     m_bulletSpeed = 5.1f;
     chaseUpdateDelay = 0.1f;
@@ -215,6 +218,10 @@ void Unit::Start()
 void Unit::Update()
 {
     unitFSM.UpdateState();
+    unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
+    auto camTrsform = graphics::Camera::GetMainCamera()->GetTransform();
+    auto shouldBeScreenZero = camTrsform->GetWorldPosition() + camTrsform->GetWorldRotation().Forward() * 10.0f + camTrsform->GetWorldRotation().Right() * 9.6f;
+    //unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(shouldBeScreenZero));
 }
 
 void Unit::OnDestroy()
