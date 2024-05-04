@@ -442,7 +442,14 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         // apply pivot
         uiImageComponent->GetGI().SetXPivot(uiData.pivot[0]);
         uiImageComponent->GetGI().SetYPivot(1 - uiData.pivot[1]);
-        uiImageComponent->GetGI().SetLayer(uiImportingPriority);
+        if (uiData.imagePriority >= 0)
+        {
+            uiImageComponent->GetGI().SetLayer(uiData.imagePriority);
+        }
+        else
+        {
+            uiImageComponent->GetGI().SetLayer(uiImportingPriority);
+        }
         uiImageComponent->GetGI().SetColor(yunuGI::Color{ uiData.color[0],uiData.color[1],uiData.color[2],uiData.color[3] });
 
         if (!(uiData.customFlags & (int)UIExportFlag::NoOverlaying))

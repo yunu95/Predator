@@ -13,6 +13,8 @@ void ColorTintTimer::Init()
         };
     onActivation = [=]()
         {
+            if (disableOnEnd)
+                startColor = uiImage->GetGI().GetColor();
             uiImage->GetGI().SetColor(startColor);
         };
     if (disableOnEnd)
