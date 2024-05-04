@@ -15,6 +15,8 @@
 #include "GlobalConstant.h"
 #include "ShortcutSystem.h"
 
+#include "ParticleToolData.h"
+
 namespace application
 {
     namespace editor
@@ -33,6 +35,7 @@ namespace application
         {
             Particle_TemplateData* templateData = nullptr;
             std::string name = "World Particle";
+            particle::ParticleToolData particleData = particle::ParticleToolData();
             POD_Vector3<float> position = POD_Vector3<float>();
             POD_Quaternion<double> rotation = POD_Quaternion<double>();
             POD_Vector3<float> scale = { 1,1,1 };

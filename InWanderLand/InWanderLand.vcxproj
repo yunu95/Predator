@@ -1011,6 +1011,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugEditorExe|x64'">
       </ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="AnimationEventManager.h" />
+    <ClInclude Include="AnimationEvents.h" />
     <ClInclude Include="AttackSystem.h" />
     <ClInclude Include="AutoAttackProjectilePool.h" />
     <ClInclude Include="BishopTrapProductor.h" />
@@ -1056,6 +1058,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="ParticleData.h" />
     <ClInclude Include="ParticleEditorInstance.h" />
     <ClInclude Include="ParticlePalette.h" />
+    <ClInclude Include="ParticleToolData.h" />
+    <ClInclude Include="ParticleTool_Manager.h" />
     <ClInclude Include="Particle_TemplateData.h" />
     <ClInclude Include="PlayableComponent.h" />
     <ClInclude Include="ITrigger.h" />
@@ -1284,6 +1288,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugEditorExe|x64'">
       </ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="AnimationEventManager.cpp" />
     <ClCompile Include="AttackSystem.cpp" />
     <ClCompile Include="BishopTrapProductor.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
@@ -1320,6 +1325,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="ParticleData.cpp" />
     <ClCompile Include="ParticleEditorInstance.cpp" />
     <ClCompile Include="ParticlePalette.cpp" />
+    <ClCompile Include="ParticleTool_Manager.cpp" />
     <ClCompile Include="Particle_TemplateData.cpp" />
     <ClCompile Include="PlayableComponent.cpp" />
     <ClCompile Include="Module_ScriptEditor.cpp">

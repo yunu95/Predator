@@ -17,22 +17,8 @@ namespace application
 	{
 		class Particle_TemplateData;
 
-		enum class ParticleType
-		{
-			None = 0,
-			Cone,
-			Sphere,
-		};
-
 		struct POD_Particle_TemplateData
 		{
-			/// Particle 관련 데이터들
-			ParticleType type = ParticleType::None;
-
-			/// GlobalConstant
-
-
-
 			TO_JSON(POD_Particle_TemplateData)
 			FROM_JSON(POD_Particle_TemplateData)
 		};
