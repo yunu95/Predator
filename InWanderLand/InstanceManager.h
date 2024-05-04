@@ -105,6 +105,11 @@ namespace application
                         instance = new LightData(dataName);
                         break;
                     }
+                    case DataType::ParticleData:
+                    {
+                        instance = new ParticleData(dataName);
+                        break;
+                    }
                     default:
                         break;
                 }
