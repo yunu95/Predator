@@ -15,7 +15,7 @@
 /// </summary>
 
 class UIElement;
-class UIManager : public Component, public SingletonComponent<UIManager>, public ContentsObservee
+class UIManager : public Component, public SingletonComponent<UIManager>
 {
 private:
     // JsonUIData만으로 UI를 생성합니다.
@@ -45,6 +45,7 @@ private:
     UIElement* localContext{ nullptr };
 
     bool isButtonActiviated = false;
+    std::vector<UIElement*> rootUIs;
     std::unordered_map<int, UIElement*> uisByIndex;
     std::unordered_map<UIEnumID, UIElement*> uisByEnumID;
     std::unordered_map<int, JsonUIData> uidatasByIndex;
@@ -105,8 +106,8 @@ public:
     void ImportUI(const char* path);
 
     virtual void Update() override;
-    virtual void Start() override;
+    /*virtual void Start() override;
     virtual void PlayFunction() override;
-    virtual void StopFunction() override;
+    virtual void StopFunction() override;*/
 };
 

@@ -89,6 +89,8 @@ struct JsonUIData
     float adjustLinearClipDirectionX, adjustLinearClipDirectionY;
     float adjustLinearClipStartX, adjustLinearClipStartY;
     // 임의로 사용하게 될 사용자 플래그
+    bool disableOnStartEdtior;
+    bool disableOnStartExe;
     int customFlags;
     int customFlags2;
     // UI의 고유한 EnumID

@@ -159,12 +159,12 @@ void UIElement::SetNumber(float number)
     }
 }
 
-void UIElement::PlayFunction()
-{
-
-}
-
-void UIElement::StopFunction()
-{
-    yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-}
+//void UIElement::PlayFunction()
+//{
+//
+//}
+//
+//void UIElement::StopFunction()
+//{
+//    yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+//}

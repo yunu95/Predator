@@ -14,6 +14,7 @@
 #include "InWanderLand.h"
 #include "SkillUpgradeSystem.h"
 #include "TimePauseTImer.h"
+#include "Unit.h"
 #include <fstream>
 
 using namespace yunutyEngine::graphics;
@@ -175,7 +176,7 @@ weak_ptr<UIElement> UIManager::DuplicateUIElement(UIElement* ui)
     //}
 
     bool isFirstElement = true;
-    uiImportingPriority = ui->uiPriority;
+    uiImportingPriority = ui->uiPriority + ui->duplicatePriorityOffset;
     for (auto& eachData : ui->localUIdatasByIndex)
     {
         UIElement* uiElement;
@@ -199,7 +200,7 @@ weak_ptr<UIElement> UIManager::DuplicateUIElement(UIElement* ui)
     {
         ImportDefaultAction_Post(ui->importedUIData, retVal.lock().get());
     }*/
-    uiImportingPriority = ui->uiPriority;
+    uiImportingPriority = ui->uiPriority + ui->duplicatePriorityOffset;
     for (auto& eachUI : retVal.lock().get()->localUIsByIndex)
     {
         if (!ImportDealWithSpecialCases_Post(eachUI.second->importedUIData, eachUI.second))
@@ -210,6 +211,7 @@ weak_ptr<UIElement> UIManager::DuplicateUIElement(UIElement* ui)
     }
     localContext = nullptr;
 
+    ui->duplicatePriorityOffset += ui->localUIdatasByIndex.size();
     return retVal;
 }
 UIElement* UIManager::GetUIElementWithIndex(int index)
@@ -288,6 +290,17 @@ void UIManager::SetUIDataWithIndex(int index, const JsonUIData& uiData)
 }
 UIElement* UIManager::GetBuffIcon(Unit* owningUnit, StatusEffect::StatusEffectEnum uiEnumID)
 {
+    if (!owningUnit->unitStatusUI.expired())
+    {
+        switch (uiEnumID)
+        {
+        case StatusEffect::StatusEffectEnum::Bleeding: return owningUnit->unitStatusUI.lock()->localUIsByEnumID.at(UIEnumID::EnemyStatus_Buff_Bleeding);
+        case StatusEffect::StatusEffectEnum::Blinding: return owningUnit->unitStatusUI.lock()->localUIsByEnumID.at(UIEnumID::EnemyStatus_Buff_Blinding);
+        case StatusEffect::StatusEffectEnum::Paralysis: return owningUnit->unitStatusUI.lock()->localUIsByEnumID.at(UIEnumID::EnemyStatus_Buff_Paralysis);
+        case StatusEffect::StatusEffectEnum::KnockBack: return owningUnit->unitStatusUI.lock()->localUIsByEnumID.at(UIEnumID::EnemyStatus_Buff_KnockBack);
+        case StatusEffect::StatusEffectEnum::Taunted: return owningUnit->unitStatusUI.lock()->localUIsByEnumID.at(UIEnumID::EnemyStatus_Buff_Taunted);
+        }
+    }
     switch (owningUnit->GetUnitType())
     {
     case Unit::UnitType::Warrior:
@@ -352,24 +365,24 @@ void UIManager::Update()
     }
 }
 
-void UIManager::Start()
-{
-    isSingletonComponent = true;
-}
+//void UIManager::Start()
+//{
+//    isSingletonComponent = true;
+//}
+//
+//void UIManager::PlayFunction()
+//{
+//    this->SetActive(true);
+//    if (isOncePaused)
+//    {
+//        Start();
+//    }
+//}
 
-void UIManager::PlayFunction()
-{
-    this->SetActive(true);
-    if (isOncePaused)
-    {
-        Start();
-    }
-}
-
-void UIManager::StopFunction()
-{
-    Clear();
-}
+//void UIManager::StopFunction()
+//{
+//    Clear();
+//}
 
 void UIManager::ImportUI(const char* path)
 {
@@ -390,6 +403,7 @@ void UIManager::ImportUI(const char* path)
             auto uiObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
             auto uiElement = uiObject->AddComponent<UIElement>();
             uiElement->importedUIData = uiData;
+            uiObject->setName(uiData.uiName);
 
             if (ImportDealWithSpecialCases(uiData, uiElement) == false)
             {
@@ -458,10 +472,6 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
             uiButtonComponent->SetImageComponent(uiImageComponent);
             //uiButtonComponent->SetIdleImage(idleTexture);
             //uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-        }
-        else
-        {
-            //int a = 3;
         }
     }
     if (uiData.customFlags & (int)UIExportFlag::CanAdjustHeight)
@@ -596,7 +606,11 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         parentPivot.x = parentData.pivot[0];
         parentPivot.y = 1 - parentData.pivot[1];
         uiObject->SetParent(parent);
-    };
+    }
+    else
+    {
+        rootUIs.push_back(element);
+    }
     // offset by offset
     pivotPos.x += uiData.anchoredPosition[0];
     pivotPos.y -= uiData.anchoredPosition[1];
@@ -681,10 +695,6 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         for (auto each : tooltipTargets)
         {
             each->GetGameObject()->SetSelfActive(false);
-            if (auto img = each->imageComponent; img.lock())
-            {
-                img.lock()->GetGI().SetLayer(priority_Tooltip);
-            }
         }
         button->AddButtonOnMouseFunction([=]()
             {
@@ -839,7 +849,17 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     // 초기 상태가 비활성화 상태라면...
     if (uiData.customFlags & (int)UIExportFlag::DisableOnStart)
     {
-        element->GetGameObject()->SetSelfActive(false);
+#ifdef EDITOR
+        if (uiData.disableOnStartEdtior)
+        {
+            element->GetGameObject()->SetSelfActive(false);
+        }
+#else
+        if (uiData.disableOnStartExe)
+        {
+            element->GetGameObject()->SetSelfActive(false);
+        }
+#endif
     }
     if (uiData.customFlags2 & (int)UIExportFlag2::Duplicatable)
     {
@@ -940,6 +960,31 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
             {
                 SkillUpgradeSystem::SingleInstance().UpgradeSkill();
             });
+        break;
+    case UIEnumID::BlackMask_GameLoad:
+        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
+        element->colorTintOnEnable->onCompleteFunction = [=]()
+            {
+                auto cl = static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+                cl->PlayContents(ContentsPlayFlag::None);
+                GetUIElementByEnum(UIEnumID::TitleRoot)->DisableElement();
+                element->DisableElement();
+            };
+        break;
+    case UIEnumID::BlackMask_GameEnd:
+        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
+        element->colorTintOnEnable->onCompleteFunction = [=]()
+            {
+                auto cl = static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+                //cl->StopContents(ContentsStopFlag::None);
+                cl->StopContents();
+                //for (auto each : rootUIs)
+                //{
+                //    each->DisableElement();
+                //}
+                //GetUIElementByEnum(UIEnumID::TitleRoot)->EnableElement();
+                //element->DisableElement();
+            };
         break;
     default:
         return false;

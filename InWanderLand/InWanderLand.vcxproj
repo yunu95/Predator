@@ -1024,6 +1024,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Condition_CinematicMode.h" />
     <ClInclude Include="ContentsObservee.h" />
     <ClInclude Include="ContentsObserver.h" />
+    <ClInclude Include="ContentsPlayFlag.h" />
+    <ClInclude Include="ContentsStopFlag.h" />
     <ClInclude Include="CoroutineObject.h" />
     <ClInclude Include="CreateInstanceCommand.h" />
     <ClInclude Include="BossProductor.h" />

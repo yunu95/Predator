@@ -57,6 +57,7 @@ public:
     virtual void Update() override;
     virtual void OnEnable() override;
     virtual void OnDisable() override;
+    virtual void InvokeButtonClickEvent();
 
     virtual void PlayFunction() override;
     virtual void StopFunction() override;

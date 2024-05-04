@@ -283,9 +283,12 @@ void application::contents::ContentsLayer::Finalize()
 
 }
 
-void application::contents::ContentsLayer::PlayContents()
+void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFlag)
 {
-    UIManager::Instance().ImportUI("InWanderLand.iwui");
+    if (bool(playFlag & ContentsPlayFlag::ImportUI))
+    {
+        UIManager::Instance().ImportUI("InWanderLand.iwui");
+    }
     SkillUpgradeSystem::SingleInstance().Reset();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
@@ -341,7 +344,7 @@ void application::contents::ContentsLayer::ResumeContents()
     PlayableComponent::OnGameResumeAll();
 }
 
-void application::contents::ContentsLayer::StopContents()
+void application::contents::ContentsLayer::StopContents(ContentsStopFlag stopFlag)
 {
     Time::SetTimeScale(1);
     isStoppedOnce = true;
@@ -349,7 +352,9 @@ void application::contents::ContentsLayer::StopContents()
 
     ContentsObserver::Instance().StopObservee();
     ContentsObserver::Instance().ClearObservees();
-    UIManager::Instance().Clear();
+
+    if (bool(stopFlag & ContentsStopFlag::ClearUI))
+        UIManager::Instance().Clear();
 
     /// Playable 동작들을 일괄 처리할 부분입니다.
     PlayableComponent::OnGameStopAll();
@@ -363,7 +368,7 @@ void application::contents::ContentsLayer::AssignTestInitializer(std::function<v
         application::Application::GetInstance().AddMainLoopTodo([=]() {
             Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
             });
-        };
+};
 }
 #endif
 

@@ -10,6 +10,7 @@
 #include "StatusEffect.h"
 #include "UIElement.h"
 
+class UIManager;
 class UnitProductor;
 class SkillSystem;
 class BurnEffect;
@@ -386,5 +387,6 @@ public:
 
     friend RobinSkillDevelopmentSystem;
     friend UnitProductor;
+    friend UIManager;
 };
 

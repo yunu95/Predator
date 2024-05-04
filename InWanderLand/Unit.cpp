@@ -27,7 +27,6 @@ void Unit::Start()
 {
     unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::EnemyStatus));
     unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
-    unitStatusUI.lock()->EnableElement();
 
     unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Cells)->adjuster->SetTargetFloat(m_maxHealthPoint);
     unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Number_Max)->SetNumber(m_maxHealthPoint);
@@ -423,6 +422,7 @@ void Unit::ParalysisEngage()
 
 void Unit::DeathEngage()
 {
+    unitStatusUI.lock()->DisableElement();
     currentOrder = UnitState::Death;
 
     deathFunctionElapsed = 0.0f;
@@ -454,6 +454,7 @@ void Unit::DeathEngage()
 
 void Unit::WaveStartEngage()
 {
+    unitStatusUI.lock()->EnableElement();
     currentOrder = UnitState::WaveStart;
     moveFunctionElapsed = 0.0f;
     m_animatorComponent->ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
