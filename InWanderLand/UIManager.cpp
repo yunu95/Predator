@@ -15,6 +15,8 @@
 #include "SkillUpgradeSystem.h"
 #include "TimePauseTImer.h"
 #include "Unit.h"
+#include "Command.h"
+#include "ProgramExitCommand.h"
 #include <fstream>
 
 using namespace yunutyEngine::graphics;
@@ -23,6 +25,11 @@ void UIManager::Clear()
     m_highestPriorityButton = nullptr;
     m_currentHighestLayer = -1;
     m_selectedButtons.clear();
+    rootUIs.clear();
+    uisByEnumID.clear();
+    uisByIndex.clear();
+    uidatasByIndex.clear();
+    digitFonts.clear();
     for (auto each : uisByIndex)
     {
         Scene::getCurrentScene()->DestroyGameObject(each.second->GetGameObject());
@@ -345,6 +352,25 @@ UIElement* UIManager::GetBuffIcon(Unit* owningUnit, StatusEffect::StatusEffectEn
 
 void UIManager::Update()
 {
+    // 마우스 커서 조작
+    if (auto cursorUI = uisByEnumID.at(UIEnumID::MouseCursor))
+    {
+        auto resolution = graphics::Renderer::SingleInstance().GetResolution();
+        cursorUI->GetTransform()->SetWorldPosition({ yunutyEngine::Input::getMouseScreenPositionNormalized().x * resolution.x, yunutyEngine::Input::getMouseScreenPositionNormalized().y * resolution.y, 0 });
+        UIElement* properCursor = uisByEnumID.at(UIEnumID::MouseCursor_Free);
+        if (IsMouseOnButton())
+        {
+            if (m_highestPriorityButton->m_mouseLiftedEventFunctions.empty() == false)
+                properCursor = uisByEnumID.at(UIEnumID::MouseCursor_OnButton);
+        }
+        else
+        {
+            properCursor = uisByEnumID.at(UIEnumID::MouseCursor_Free);
+        }
+        uisByEnumID.at(UIEnumID::MouseCursor_OnButton)->DisableElement();
+        uisByEnumID.at(UIEnumID::MouseCursor_Free)->DisableElement();
+        properCursor->EnableElement();
+    }
     if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::MouseLeftClick))
     {
         if (isButtonActiviated)
@@ -387,6 +413,7 @@ void UIManager::Update()
 void UIManager::ImportUI(const char* path)
 {
     std::ifstream file{ path };
+    static constexpr int uiPriorityStride = 10000;
     if (file.is_open())
     {
         json data;
@@ -409,7 +436,7 @@ void UIManager::ImportUI(const char* path)
             {
                 ImportDefaultAction(uiData, uiElement);
             }
-            uiImportingPriority++;
+            uiImportingPriority += uiPriorityStride;
         }
         uiImportingPriority = 0;
         for (auto& each : data["dataList"].items())
@@ -421,7 +448,7 @@ void UIManager::ImportUI(const char* path)
             {
                 ImportDefaultAction_Post(uiData, uisByIndex[uiData.uiIndex]);
             }
-            uiImportingPriority++;
+            uiImportingPriority += uiPriorityStride;
         }
     }
 }
@@ -535,11 +562,11 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         element->colorTintOnDisable = uiObject->AddComponent<ColorTintTimer>();
         element->colorTintOnDisable->uiImage = element->imageComponent.lock().get();
         element->colorTintOnDisable->startColor = yunuGI::Color{ uiData.colorTintOnDisableStart[0],uiData.colorTintOnDisableStart[1],uiData.colorTintOnDisableStart[2],uiData.colorTintOnDisableStart[3] };
-        element->colorTintOnDisable->endColor = yunuGI::Color{ uiData.colorTintOnDisableStart[0],uiData.colorTintOnDisableStart[1],uiData.colorTintOnDisableStart[2],uiData.colorTintOnDisableStart[3] };
+        element->colorTintOnDisable->endColor = yunuGI::Color{ uiData.colorTintOnDisableEnd[0],uiData.colorTintOnDisableEnd[1],uiData.colorTintOnDisableEnd[2],uiData.colorTintOnDisableEnd[3] };
         element->colorTintOnDisable->m_duration = uiData.colorTintOnDisableDuration;
         element->colorTintOnDisable->uiCurveType = uiData.colorTintOnDisableCurveType;
-        element->colorTintOnDisable->disableOnEnd = false;
-        element->colorTintOnEnable->Init();
+        element->colorTintOnDisable->disableOnEnd = true;
+        element->colorTintOnDisable->Init();
     };
     if (uiData.customFlags2 & (int)UIExportFlag2::LinearClipOnEnable)
     {
@@ -609,7 +636,10 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
     }
     else
     {
-        rootUIs.push_back(element);
+        if (!localContext)
+        {
+            rootUIs.push_back(element);
+        }
     }
     // offset by offset
     pivotPos.x += uiData.anchoredPosition[0];
@@ -695,6 +725,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         for (auto each : tooltipTargets)
         {
             each->GetGameObject()->SetSelfActive(false);
+            each->enabled = false;
         }
         button->AddButtonOnMouseFunction([=]()
             {
@@ -853,11 +884,13 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         if (uiData.disableOnStartEdtior)
         {
             element->GetGameObject()->SetSelfActive(false);
+            element->enabled = false;
         }
 #else
         if (uiData.disableOnStartExe)
         {
             element->GetGameObject()->SetSelfActive(false);
+            element->enabled = false;
         }
 #endif
     }
@@ -961,6 +994,13 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
                 SkillUpgradeSystem::SingleInstance().UpgradeSkill();
             });
         break;
+    case UIEnumID::Quit_Proceed:
+        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
+        element->button->AddButtonClickFunction([=]()
+            {
+                application::editor::CommandManager::GetSingletonInstance().AddQueue(std::make_shared<application::editor::ProgramExitCommand>());
+            });
+        break;
     case UIEnumID::BlackMask_GameLoad:
         ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
         element->colorTintOnEnable->onCompleteFunction = [=]()
@@ -968,6 +1008,11 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
                 auto cl = static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
                 cl->PlayContents(ContentsPlayFlag::None);
                 GetUIElementByEnum(UIEnumID::TitleRoot)->DisableElement();
+                SetIngameUIVisible(true);
+                /*for (auto each : uisByIndex)
+                {
+                    ImportDefaultAction_Post(each.second->importedUIData, each.second);
+                }*/
                 element->DisableElement();
             };
         break;
@@ -976,14 +1021,15 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         element->colorTintOnEnable->onCompleteFunction = [=]()
             {
                 auto cl = static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-                //cl->StopContents(ContentsStopFlag::None);
-                cl->StopContents();
-                //for (auto each : rootUIs)
-                //{
-                //    each->DisableElement();
-                //}
-                //GetUIElementByEnum(UIEnumID::TitleRoot)->EnableElement();
-                //element->DisableElement();
+                auto cam = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<graphics::Camera>();
+                cam.lock()->SetCameraMain();
+                cl->StopContents(ContentsStopFlag::None);
+                for (auto each : rootUIs)
+                {
+                    each->DisableElement();
+                }
+                GetUIElementByEnum(UIEnumID::TitleRoot)->EnableElement();
+                element->DisableElement();
             };
         break;
     default:

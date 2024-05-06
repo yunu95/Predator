@@ -12,7 +12,7 @@
 
 class UIButton;
 
-class UIPanel : public Component, public ContentsObservee
+class UIPanel : public Component
 {
 private:
 	std::vector<GameObject*> m_panelObjects;
@@ -37,8 +37,8 @@ public:
 
 	void SetParentPanel(UIPanel* p_parentPanel);
 
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+	//virtual void PlayFunction() override;
+	//virtual void StopFunction() override;
 
 	bool GetPanelActive() const;
 	virtual void Start() override;

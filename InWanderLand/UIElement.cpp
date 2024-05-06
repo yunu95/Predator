@@ -19,6 +19,11 @@ void UIElement::Start()
 };
 void UIElement::EnableElement()
 {
+    if (enabled)
+    {
+        return;
+    }
+    enabled = true;
     GetGameObject()->SetSelfActive(true);
     if (colorTintOnDisable)
         colorTintOnDisable->StopTimer();
@@ -59,8 +64,9 @@ void UIElement::EnableElement()
     }
     for (auto each : children)
     {
-        if (each->GetGameObject()->GetSelfActive())
+        if (each->enabled)
         {
+            each->enabled = false;
             each->EnableElement();
         }
     }
@@ -68,6 +74,12 @@ void UIElement::EnableElement()
 void UIElement::DisableElement()
 {
     bool disablingHandled = false;
+    if (!enabled)
+    {
+        return;
+    }
+    enabled = false;
+
     if (colorTintOnEnable)
         colorTintOnEnable->StopTimer();
     if (scalePopUpTransition)
@@ -79,7 +91,10 @@ void UIElement::DisableElement()
     if (linearClippingTimerOnEnable)
         linearClippingTimerOnEnable->StopTimer();
     if (colorTintOnDisable)
+    {
+        disablingHandled = true;
         colorTintOnDisable->ActivateTimer();
+    }
     if (scalePopDownTransition != nullptr)
     {
         disablingHandled = true;

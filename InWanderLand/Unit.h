@@ -353,6 +353,7 @@ public:
     void SetRessurectMaxCount(int p_cnt);
 
 public:
+    ~Unit();
     int GetUnitDamage() const;
     void Damaged(Unit* opponentUnit, float opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
     void Damaged(float dmg);										// 추적받지 않는 데미지

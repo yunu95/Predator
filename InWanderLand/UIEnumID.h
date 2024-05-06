@@ -159,4 +159,8 @@ enum class UIEnumID
     EnemyStatus_Buff_KnockBack,
     EnemyStatus_Buff_Taunted,
     TitleRoot,
+    Quit_Proceed,
+    MouseCursor,
+    MouseCursor_Free,
+    MouseCursor_OnButton,
 };

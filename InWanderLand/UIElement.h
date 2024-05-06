@@ -23,6 +23,7 @@ private:
     std::unordered_map<int, UIElement*> localUIsByIndex;
     std::unordered_map<UIEnumID, UIElement*> localUIsByEnumID;
     std::unordered_map<int, JsonUIData> localUIdatasByIndex;
+    bool enabled = true;
 public:
     virtual void Start() override;
     int duplicatePriorityOffset = 0;

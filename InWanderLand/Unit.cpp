@@ -821,6 +821,13 @@ float Unit::GetAttackOffset() const
     return m_attackOffset;
 }
 
+Unit::~Unit()
+{
+    if (!unitStatusUI.expired())
+    {
+        Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
+    }
+}
 int Unit::GetUnitDamage() const
 {
     return m_autoAttackDamage;
