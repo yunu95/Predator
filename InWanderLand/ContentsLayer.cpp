@@ -136,10 +136,15 @@ void GraphicsTest()
     //}
 	{
         auto obj2 = Scene::getCurrentScene()->AddGameObject();
-        auto test = obj2->AddComponent<TestComponent4>();
-
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stage1_Floor");
-        test->obj = obj;
+        auto particle = obj2->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
+        particle->SetLoop(true);
+        particle->Play();
+	}
+	{
+		auto obj2 = Scene::getCurrentScene()->AddGameObject();
+        obj2->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-7 });
+        auto renderer = obj2->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+        renderer->GetGI().SetMesh(_resourceManager->GetMesh(L"Cube"));
 	}
 
 	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
