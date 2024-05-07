@@ -5,7 +5,7 @@
 #pragma once
 
 #include "YunutyEngine.h"
-#include "ImCurveEdit.h"
+#include "ImGuizmo/ImCurveEdit.h"
 
 #include <nlohmann/json.hpp>
 

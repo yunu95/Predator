@@ -590,7 +590,7 @@ std::vector<yunuGI::IAnimation*>& ResourceManager::GetFBXAnimationList(std::wstr
 		return this->fbxAnimationListMap[fbxName];
 	}
 
-	std::vector<yunuGI::IAnimation*> tempVec;
+	static std::vector<yunuGI::IAnimation*> tempVec;
 	return tempVec;
 }
 

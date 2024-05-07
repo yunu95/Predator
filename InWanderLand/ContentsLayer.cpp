@@ -31,6 +31,7 @@
 #include "CinematicManager.h"
 #include "TutorialManager.h"
 #include "ContentsObserver.h"
+#include "ParticleTool_Manager.h"
 
 #include <algorithm>
 #include <string>
@@ -214,6 +215,13 @@ void application::contents::ContentsLayer::Initialize()
 
     wanderUtils::LoadResourcesRecursively();
 
+    /// Particle 및 AnimationEvent
+    auto& particleManager = particle::ParticleTool_Manager::GetSingletonInstance();
+    particleManager.LoadSkinnedFBX();
+    particleManager.LoadPP("InWanderLand.pp");
+    particleManager.LoadPPIs("InWanderLand.ppis");
+    ///
+
     {
         auto obj = Scene::getCurrentScene()->AddGameObject();
         auto test3 = obj->AddComponent<TestComponent3>();
@@ -295,9 +303,12 @@ void application::contents::ContentsLayer::Finalize()
 
 }
 
-void application::contents::ContentsLayer::PlayContents()
+void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFlag)
 {
-    UIManager::Instance().ImportUI("InWanderLand.iwui");
+    if (bool(playFlag & ContentsPlayFlag::ImportUI))
+    {
+        UIManager::Instance().ImportUI("InWanderLand.iwui");
+    }
     SkillUpgradeSystem::SingleInstance().Reset();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
@@ -353,7 +364,7 @@ void application::contents::ContentsLayer::ResumeContents()
     PlayableComponent::OnGameResumeAll();
 }
 
-void application::contents::ContentsLayer::StopContents()
+void application::contents::ContentsLayer::StopContents(ContentsStopFlag stopFlag)
 {
     Time::SetTimeScale(1);
     isStoppedOnce = true;
@@ -361,7 +372,9 @@ void application::contents::ContentsLayer::StopContents()
 
     ContentsObserver::Instance().StopObservee();
     ContentsObserver::Instance().ClearObservees();
-    UIManager::Instance().Clear();
+
+    if (bool(stopFlag & ContentsStopFlag::ClearUI))
+        UIManager::Instance().Clear();
 
     /// Playable 동작들을 일괄 처리할 부분입니다.
     PlayableComponent::OnGameStopAll();
@@ -375,7 +388,7 @@ void application::contents::ContentsLayer::AssignTestInitializer(std::function<v
         application::Application::GetInstance().AddMainLoopTodo([=]() {
             Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
             });
-        };
+};
 }
 #endif
 

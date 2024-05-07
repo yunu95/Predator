@@ -15,11 +15,13 @@
 /// </summary>
 
 class UIElement;
-class UIManager : public Component, public SingletonComponent<UIManager>, public ContentsObservee
+class UIManager : public Component, public SingletonComponent<UIManager>
 {
 private:
     // JsonUIData만으로 UI를 생성합니다.
     void ImportDefaultAction(const JsonUIData& uiData, UIElement* element);
+    // 이 함수는 ImportDealwithSpecialCases_Post 함수와 더불어 같은 element에 대해 여러번 호출될 수 있다.
+    // 고로 그 특성을 감안하고 작성해야됨.
     void ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* element);
     // 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
     bool ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element);
@@ -45,6 +47,7 @@ private:
     UIElement* localContext{ nullptr };
 
     bool isButtonActiviated = false;
+    std::vector<UIElement*> rootUIs;
     std::unordered_map<int, UIElement*> uisByIndex;
     std::unordered_map<UIEnumID, UIElement*> uisByEnumID;
     std::unordered_map<int, JsonUIData> uidatasByIndex;
@@ -95,6 +98,7 @@ public:
     // 만약 현재의 highestPirorityButton이 여전히 가장 높은 우선순위를 가지고 있다면, 아무 일도 벌어지지 않습니다.
     void UpdateHighestPriorityButton();
 
+    Vector3d GetUIPosFromWorld(Vector3d worldPosition);
     bool IsMouseOnButton();
     weak_ptr<UIElement> DuplicateUIElement(UIElement* ui);
     UIElement* GetUIElementWithIndex(int index);
@@ -104,8 +108,8 @@ public:
     void ImportUI(const char* path);
 
     virtual void Update() override;
-    virtual void Start() override;
+    /*virtual void Start() override;
     virtual void PlayFunction() override;
-    virtual void StopFunction() override;
+    virtual void StopFunction() override;*/
 };
 

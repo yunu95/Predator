@@ -18,59 +18,61 @@ class CursorDetector;
 class TacticModeSystem : public SingletonComponent<TacticModeSystem>, public Component
 {
 public:
-	virtual void OnEnable() override;
-	virtual void Start() override;
-	virtual void Update() override;
+    virtual void OnEnable() override;
+    virtual void Start() override;
+    virtual void Update() override;
 
-	enum OrderType
-	{
-		Move,
-		AttackMove,
-		QSkill,
-		WSkill
-	};
+    enum OrderType
+    {
+        Move,
+        AttackMove,
+        QSkill,
+        WSkill
+    };
 
-	void SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum);
-	void SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum);
-	void SetLeftClickAddQueueForSkill(InputManager::SelectedSerialNumber currentSelectedNum, Unit::SkillEnum currentSelectedSkill);
-	
-	/// Tutorial 관련 멤버
-	void RegisterTutorialQuestAction(Unit::UnitType p_targetUnit, OrderType p_orderType);
+    void SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum);
+    void SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum);
+    void SetLeftClickAddQueueForSkill(InputManager::SelectedSerialNumber currentSelectedNum, Unit::SkillEnum currentSelectedSkill);
 
-	void EngageTacticMode();
-	void ExitTacticMode();
-	void SetMovingSystemComponent(RTSCam* sys);
+    /// Tutorial 관련 멤버
+    void RegisterTutorialQuestAction(Unit::UnitType p_targetUnit, OrderType p_orderType);
 
-	bool IsOrderingTimingNow() const;
-	bool IsUnitsPerformingCommand() const;
-	bool IsTacticModeCoolTime() const;
-	float GetLeftCoolTime();
+    void EngageTacticMode();
+    void ExitTacticMode();
+    void SetMovingSystemComponent(RTSCam* sys);
 
-	void SetCurrentGauge(int p_gauge);
+    bool IsOrderingTimingNow() const;
+    bool IsUnitsPerformingCommand() const;
+    bool IsTacticModeCoolTime() const;
 
-	void ReportTacticActionFinished();
+    void SetCurrentCoolTimeElapsed(float p_duration);
+    float GetLeftCoolTime();
 
-	CursorDetector* m_cursorDetector;
+    void SetCurrentGauge(int p_gauge);
+
+    void ReportTacticActionFinished();
+
+    CursorDetector* m_cursorDetector;
 
 private:
-	int m_maxGauge{ 10 };
-	int m_currentGauge{ 0 };
-	float m_gaugeIncreaseDuration{ 3.0f };
-	float m_gaugeIncreaseElapsed{ 0.0f };
-	
-	bool isCoolTime{ false };
-	float m_engageCoolTimeDuration{ 5.0f };
-	float m_engageCoolTimeElapsed{ 0.0f };
-	
-	bool isTacticModeOperating;					// 명령을 내리는 시간일 때 true.
-	bool isTacticOrderPerforming;				// 내린 명령을 수행하고 있을 때 true.
+    int m_maxGauge{ 10 };
+    int m_currentGauge{ 0 };
+    float m_gaugeIncreaseDuration{ 3.0f };
+    float m_gaugeIncreaseElapsed{ 0.0f };
 
-	RTSCam* m_rtsCam;
+    bool isCoolTime{ false };
+    float m_engageCoolTimeDuration{ 5.0f };
+    float m_engageCoolTimeElapsed{ 0.0f };
 
-	Unit* currentSelectedUnit{ nullptr };
+    bool isTacticModeOperating;					// 명령을 내리는 시간일 때 true.
+    bool isTacticOrderPerforming;				// 내린 명령을 수행하고 있을 때 true.
 
-	std::unordered_map<Unit::UnitType, Unit*> playerComponentMap;					
+    RTSCam* m_rtsCam;
 
-	std::queue<Unit*> sequenceQueue;
+    Unit* currentSelectedUnit{ nullptr };
+
+    std::unordered_map<Unit::UnitType, Unit*> playerComponentMap;
+
+    std::queue<Unit*> sequenceQueue;
 };
 

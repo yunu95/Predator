@@ -33,7 +33,6 @@ namespace application
             }
 
             pod.templateData = static_cast<Particle_TemplateData*>(ptr);
-            OnDataResourceChange(pod.templateData->GetDataKey());
 
             return true;
         }
@@ -142,7 +141,6 @@ namespace application
         ParticleData::ParticleData(const std::string& name)
             : pod()
         {
-            pod.templateData = static_cast<Particle_TemplateData*>(templateDataManager.GetTemplateData(name));
             EnterDataFromTemplate();
             EnterDataFromGlobalConstant();
         }

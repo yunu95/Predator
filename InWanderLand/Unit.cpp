@@ -25,7 +25,12 @@ void Unit::OnEnable()
 
 void Unit::Start()
 {
-    //UIManager::Instance().DuplicateUIElement(UIEnumID::EnemyStatus);
+    unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::EnemyStatus));
+    unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
+
+    unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Cells)->adjuster->SetTargetFloat(m_maxHealthPoint);
+    unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Number_Max)->SetNumber(m_maxHealthPoint);
+
     m_initialAutoAttackDamage = m_autoAttackDamage;
     m_bulletSpeed = 5.1f;
     chaseUpdateDelay = 0.1f;
@@ -215,6 +220,10 @@ void Unit::Start()
 void Unit::Update()
 {
     unitFSM.UpdateState();
+    unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
+    auto camTrsform = graphics::Camera::GetMainCamera()->GetTransform();
+    auto shouldBeScreenZero = camTrsform->GetWorldPosition() + camTrsform->GetWorldRotation().Forward() * 10.0f + camTrsform->GetWorldRotation().Right() * 9.6f;
+    //unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(shouldBeScreenZero));
 }
 
 void Unit::OnDestroy()
@@ -413,6 +422,7 @@ void Unit::ParalysisEngage()
 
 void Unit::DeathEngage()
 {
+    unitStatusUI.lock()->DisableElement();
     currentOrder = UnitState::Death;
 
     deathFunctionElapsed = 0.0f;
@@ -444,6 +454,7 @@ void Unit::DeathEngage()
 
 void Unit::WaveStartEngage()
 {
+    unitStatusUI.lock()->EnableElement();
     currentOrder = UnitState::WaveStart;
     moveFunctionElapsed = 0.0f;
     m_animatorComponent->ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
@@ -810,6 +821,13 @@ float Unit::GetAttackOffset() const
     return m_attackOffset;
 }
 
+Unit::~Unit()
+{
+    if (!unitStatusUI.expired())
+    {
+        Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
+    }
+}
 int Unit::GetUnitDamage() const
 {
     return m_autoAttackDamage;
@@ -855,6 +873,11 @@ void Unit::Heal(float healingPoint)
 void Unit::SetUnitCurrentHp(float p_newHp)
 {
     m_currentHealthPoint = p_newHp;
+    if (!unitStatusUI.expired())
+    {
+        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Fill)->adjuster->SetTargetFloat(1 - m_currentHealthPoint / m_maxHealthPoint);
+        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Number_Current)->SetNumber(m_currentHealthPoint);
+    }
     switch (m_unitType)
     {
     case UnitType::Warrior:

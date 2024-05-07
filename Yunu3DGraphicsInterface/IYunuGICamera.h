@@ -1,6 +1,8 @@
 #pragma once
 #include "YunuGIMatrix4x4.h"
 #include "IUnknown.h"
+#include "YunuVector2.h"
+#include "YunuVector3.h"
 
 namespace yunuGI
 {
@@ -23,6 +25,9 @@ namespace yunuGI
         virtual void GetResolution(float* width, float* height) = 0;
         // 카메라를 메인 카메라로 만든다.
         virtual void SetAsMain() = 0;
+        // 월드 위치를 받아 스크린 좌표계로 변환한다.
+        // x,y는 -1~ 1 사이의 값이며, y축은 화면 위쪽, x축은 화면 오른쪽을 향한다.
+        virtual yunuGI::Vector2 GetScreenPos(const yunuGI::Vector3& worldPos) = 0;
     };
     struct ICameraDesc
     {

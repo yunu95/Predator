@@ -209,6 +209,8 @@ namespace application
                 return CreateTemplateData<Camera_TemplateData>(name);
             case DataType::LightData:
                 return CreateTemplateData<Light_TemplateData>(name);
+            case DataType::ParticleData:
+                return CreateTemplateData<Particle_TemplateData>(name);
             default:
                 return nullptr;
                 break;

@@ -8,7 +8,7 @@ class PlaytimeWave;
 class GameManager : public Component, public SingletonComponent<GameManager>, public ContentsObservee
 {
 private:
-    
+
     bool isBattleModeOn = false;
 
     int currentCombo{ 0 };

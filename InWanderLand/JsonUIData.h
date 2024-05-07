@@ -9,6 +9,7 @@ struct JsonUIData
     // 부모가 없다면 부모를 1920 * 1080 크기의 스크린 스페이스로 가정하게 된다.
     int parentUIIndex = -1;
     std::string imagePath;
+    int imagePriority;
     // 만약 플래그에 openingButton이 있다면 버튼을 눌렀을 때 활성화시킬 UI 창을 의미한다.
     std::vector<int> openTargets;
     // 만약 플래그에 diablingButton이 있다면 버튼을 눌렀을 때 비활성화시킬 UI 창을 의미한다.
@@ -60,7 +61,7 @@ struct JsonUIData
     float width;
     float height;
     // 업그레이드 버튼의 경우, 활성화하기 위해 필요한 다른 버튼의 인덱스를 의미합니다.
-    int dependentUpgrade;
+    int dependentUpgrade{ -1 };
     vector<float> linearClipOnEnableStart;
     vector<float> linearClipOnEnableDir;
     float linearClipOnEnableDuration;
@@ -77,7 +78,19 @@ struct JsonUIData
     vector<float> colorTintOnDisableEnd;
     float colorTintOnDisableDuration;
     int colorTintOnDisableCurveType;
+    // 전체 셀의 갯수
+    int barCells_CellNumber;
+    // 셀 하나당 차지하는 수치량
+    float barCells_GaugePerCell;
+    // 셀이 덮어씌울 게이지의 가로, 세로 크기
+    float barCells_BarWidth;
+    float barCells_BarHeight;
+    float adjustLinearClipAdjustingRate;
+    float adjustLinearClipDirectionX, adjustLinearClipDirectionY;
+    float adjustLinearClipStartX, adjustLinearClipStartY;
     // 임의로 사용하게 될 사용자 플래그
+    bool disableOnStartEdtior;
+    bool disableOnStartExe;
     int customFlags;
     int customFlags2;
     // UI의 고유한 EnumID

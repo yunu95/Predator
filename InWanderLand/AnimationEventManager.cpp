@@ -7,10 +7,6 @@
 
 #include <cmath>
 
-extern bool ppisLoad;
-
-void EraseSequenceData(const std::weak_ptr<application::AnimationEvent>& event);
-
 namespace application
 {
 	void AnimationEventManager::Init()
@@ -61,8 +57,6 @@ namespace application
 				}
 				animationEditFuncList.erase(eachEvent);
 			}
-
-			EraseSequenceData(eachEvent);
 		}
 		eventList.clear();
 	}
@@ -146,8 +140,6 @@ namespace application
 					break;
 			}
 		}
-
-		ppisLoad = true;
 
 		return true;
 	}
@@ -369,8 +361,6 @@ namespace application
 			}
 			animationEditFuncList.erase(event);
 		}
-
-		EraseSequenceData(event);
 
 		eventList.erase(event);
 
