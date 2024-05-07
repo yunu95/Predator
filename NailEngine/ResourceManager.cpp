@@ -900,6 +900,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateDeferredShader(L"Deferred_FinalVS.cso");
 	CreateShader(L"TextureVS.cso");
 	CreateShader(L"TestVS.cso");
+	CreateShader(L"SkinnedShadowVS.cso");
 	CreateShader(L"SkyBoxVS.cso");
 	CreateShader(L"IrradianceVS.cso");
 	CreateShader(L"PreFilteredVS.cso");

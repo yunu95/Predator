@@ -8,12 +8,13 @@
 
 namespace yunuGI
 {
+	class ITexture;
 	class IParticleRenderer : public yunuGI::IMeshRenderer
 	{
 	public:
 		virtual void SetPickingMode(bool isPickingModeOn) = 0;
 		virtual void SetMaterial(unsigned int index, IMaterial* material, bool isOrigin = false) {};
-
+		virtual void SetTexture(yunuGI::ITexture* texture) = 0;
 
 		virtual void SetDuration(float duration) = 0;
 		virtual float GetDuration() = 0;

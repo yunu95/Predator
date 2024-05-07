@@ -172,13 +172,6 @@ void RenderSystem::PushCameraData()
 
 void RenderSystem::Render()
 {
-	//auto start = std::chrono::steady_clock::now();
-
-	//FrustumCullingManager::Instance.Get().Wait();
-
-	//auto end = std::chrono::steady_clock::now();
-	//std::chrono::duration<double, std::milli> duration_ms = end - start;
-
 	ResourceManager::Instance.Get().GetTexture(L"LightMapList")->Bind(24);
 	UtilBuffer utilBuffer;
 	utilBuffer.windowWidth = NailEngine::Instance.Get().GetWindowInfo().width;
@@ -220,8 +213,8 @@ void RenderSystem::Render()
 	// Final 출력
 	RenderFinal();
 	RenderForward();
-	RenderParticle();
 	RenderBackBuffer();
+	RenderParticle();
 
 	//SkyBoxPass::Instance.Get().Render();
 
@@ -241,6 +234,9 @@ void RenderSystem::RenderObject()
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
 	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->OMSetRenderTarget();
 
+	
+
+
 	MatrixBuffer matrixBuffer;
 	//matrixBuffer.WTM = e.wtm;
 	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
@@ -252,19 +248,6 @@ void RenderSystem::RenderObject()
 	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
 	InstancingManager::Instance.Get().RenderStaticDeferred();
-
-	//for (auto& e : this->deferredVec)
-	//{
-	//	
-
-	//	/*auto mesh = std::static_pointer_cast<Mesh>(ResourceManager::Instance.Get().GetMesh(e.mesh->GetName()));
-
-	//	std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(e.material->GetName()))->PushGraphicsData();
-	//	mesh->Render(e.materialIndex);*/
-	//	
-	//}
-
-	//renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->UnBind();
 }
 
 void RenderSystem::RenderSkinned()
@@ -306,7 +289,13 @@ void RenderSystem::RenderShadow()
 				matrixBuffer.VTM = wtm.Invert();
 				matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(163.84 * 1.f, 163.84 * 1.f, 1.f, 300);
 				NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
+
+
 				InstancingManager::Instance.Get().RenderStaticShadow();
+
+
+				ShadowPass::Instance.Get().SkinnedBind();
+				InstancingManager::Instance.Get().RenderSkinnedShadow();
 			}
 		}
 	}

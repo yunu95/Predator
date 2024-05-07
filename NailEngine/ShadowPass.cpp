@@ -9,10 +9,11 @@
 
 LazyObjects<ShadowPass> ShadowPass::Instance;
 
-void ShadowPass::Init(Texture* dsTexture, VertexShader* vs, PixelShader* ps)
+void ShadowPass::Init(Texture* dsTexture, VertexShader* vs, PixelShader* ps, VertexShader* skinnedVS)
 {
 	this->dsTexture = dsTexture;
 	this->vs = vs;
+	this->skinnedVS = skinnedVS;
 	this->ps = ps;
 }
 
@@ -34,4 +35,10 @@ void ShadowPass::Bind()
 	// 깊이 스텐실 뷰 설정
 	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(0, nullptr , this->dsTexture->GetDSV().Get());
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1, ResourceManager::Instance.Get().GetTexture(L"TempRTV")->GetRTV().GetAddressOf(), this->dsTexture->GetDSV().Get());
+}
+
+void ShadowPass::SkinnedBind()
+{
+	this->skinnedVS->Bind();
+	this->ps->Bind();
 }

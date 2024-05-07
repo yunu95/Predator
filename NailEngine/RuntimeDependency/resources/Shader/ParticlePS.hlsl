@@ -7,7 +7,6 @@ struct GS_OUT
     uint id : SV_InstanceID;
 };
 
-
 float4 main(GS_OUT input) : SV_TARGET
 {
     return AlbedoMap.Sample(sam, input.uv);
@@ -17,6 +16,6 @@ float4 main(GS_OUT input) : SV_TARGET
 // ShaderType : Particle
 // RasterType : Solid
 // CullType : CullBack
-// DepthType : NoDepthTest
+// DepthType : LessNoWrite
 // BlendType : AlphaBlend
 // Sampler : Default

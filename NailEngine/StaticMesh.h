@@ -27,21 +27,53 @@ public:
 	{
 
 	}
+
+	void UpdateQuadTree(DirectX::SimpleMath::Vector3 pos, DirectX::SimpleMath::Vector3 scale, DirectX::SimpleMath::Quaternion quat)
+	{
+
+	}
+
 	virtual void SetWorldTM(const DirectX::SimpleMath::Matrix& wtm) override
 	{
+		DirectX::SimpleMath::Vector3 pos;
+		DirectX::SimpleMath::Quaternion quat;
+		DirectX::SimpleMath::Vector3 scale;
+
+		auto& quadTree = InstancingManager::Instance.Get().GetQuadTree();
 		this->wtm = wtm;
 		for (auto& i : renderInfoVec)
 		{
-			auto mutex = FrustumCullingManager::Instance.Get().GetRenderInfoMutex(i);
-			if (mutex)
+			i->wtm.Decompose(scale, quat, pos);
+
+			//auto mutex = FrustumCullingManager::Instance.Get().GetRenderInfoMutex(i);
+			//if (mutex)
+			//{
+			//	//std::scoped_lock<std::mutex> lock(*mutex.get());
+			//	i->wtm = wtm;
+			//	//mutex->unlock();
+			//}
+			//else
+			//{
+			//	i->wtm = wtm;
+			//}
+
+			i->wtm = wtm;
+
+			if ((i->mesh));
 			{
-				//std::scoped_lock<std::mutex> lock(*mutex.get());
-				i->wtm = wtm;
-				//mutex->unlock();
-			}
-			else
-			{
-				i->wtm = wtm;
+				if ((quadTree.GetDataSize() > 0))
+				{
+
+					if ((InstancingManager::Instance.Get().IsInTree(i)))
+					{
+						auto radius = i->mesh->GetBoundingRadius();
+
+						float maxValue = max(scale.x, scale.y, scale.z);
+						radius *= maxValue;
+
+						quadTree.UpdatePosition(DirectX::SimpleMath::Vector2{ pos.x, pos.z }, radius, i.get());
+					}
+				}
 			}
 		}
 	};
@@ -139,7 +171,7 @@ public:
 	virtual void SetActive(bool isActive) override
 	{
 		this->isActive = isActive;
-		
+
 		for (auto& i : this->renderInfoVec)
 		{
 			i->isActive = isActive;

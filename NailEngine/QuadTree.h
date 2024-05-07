@@ -141,7 +141,7 @@ public:
 		QueryRecursive(minPoint, maxPoint, root, result);
 		return result;
 	}
-
+	unsigned int GetDataSize() { return this->nodeTable.size(); }
 private:
 
 	// 재귀적으로 dataVec에 값을 넣어줌
