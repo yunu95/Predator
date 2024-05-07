@@ -56,9 +56,14 @@ namespace yunuGIAdapter
 		
 		}
 
+		virtual void SetTexture(yunuGI::ITexture* texture) override 
+		{
+			particleSystem->SetTexture(texture);
+		};
+
 		virtual yunuGI::IMaterial* GetMaterial(unsigned int index = 0, bool isInstance = true) override
 		{
-			return particleSystem->GetMaterial();
+			return nullptr;
 		}
 
 		virtual int GetMaterialCount() override

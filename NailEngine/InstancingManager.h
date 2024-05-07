@@ -70,12 +70,15 @@ public:
 public:
 	void Init();
 
+	bool IsInTree(std::shared_ptr<RenderInfo>& renderInfo);
+
 	void SortByCameraDirection();
 
 	void RenderStaticDeferred();
 	void RenderStaticForward();
 
 	void RenderStaticShadow();
+	void RenderSkinnedShadow();
 	void RenderStaticPointLightShadow(DirectX::SimpleMath::Matrix& lightWTM, PointLight* light);
 	void RenderSkinnedPointLightShadow(DirectX::SimpleMath::Matrix& lightWTM, PointLight* light);
 
@@ -96,6 +99,8 @@ public:
 	void RenderParticle();
 
 	std::vector<std::pair<InstanceID, std::vector<std::shared_ptr<RenderInfo>>>>& GetStaticRenderInfoVec() { return staticMeshDeferredRenderVec; }
+
+	QuadTree<RenderInfo>& GetQuadTree() { return this->quadTree; }
 
 private:
 	void AddData(const InstanceID& id, InstancingData& instancingData);

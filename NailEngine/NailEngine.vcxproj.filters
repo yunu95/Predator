@@ -619,6 +619,9 @@
     <FxCompile Include="RuntimeDependency\resources\Shader\UIPreProcessVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\SkinnedShadowVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">

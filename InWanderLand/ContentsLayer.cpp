@@ -78,29 +78,29 @@ public:
 class TestComponent4 : public yunutyEngine::Component
 {
 public:
-    yunutyEngine::graphics::ParticleRenderer* renderer;
+    yunutyEngine::GameObject* obj;
     virtual void Update() override
     {
         if (Input::isKeyPushed(yunutyEngine::KeyCode::B))
         {
-            renderer->SetMaxParticle(1);
+            Scene::getCurrentScene()->DestroyGameObject(obj);
         }
-        if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
-        {
-            renderer->SetMaxParticle(200);
-        }
-        if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
-        {
-            renderer->SetMaxParticle(249);
-        }
-        if (Input::isKeyPushed(yunutyEngine::KeyCode::O))
-        {
-            renderer->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
-        }
-        if (Input::isKeyPushed(yunutyEngine::KeyCode::K))
-        {
-            renderer->SetParticleMode(yunutyEngine::graphics::ParticleMode::Default);
-        }
+		if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
+		{
+            obj->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
+		}
+		//if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
+		//{
+		//	renderer->SetMaxParticle(249);
+		//}
+		//if (Input::isKeyPushed(yunutyEngine::KeyCode::O))
+		//{
+		//	renderer->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
+		//}
+		//if (Input::isKeyPushed(yunutyEngine::KeyCode::K))
+		//{
+		//	renderer->SetParticleMode(yunutyEngine::graphics::ParticleMode::Default);
+		//}
     }
 };
 
@@ -133,7 +133,15 @@ void GraphicsTest()
     //    particle->Play();
     //    test4->renderer = particle;
     //}
+	{
+        auto obj2 = Scene::getCurrentScene()->AddGameObject();
+        auto test = obj2->AddComponent<TestComponent4>();
 
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stage1_Floor");
+        test->obj = obj;
+	}
+
+	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 }
 
 void application::contents::ContentsLayer::SetInputControl(bool control)
@@ -213,6 +221,7 @@ void application::contents::ContentsLayer::Initialize()
             auto textObj = obj->AddGameObject();
             auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
             text->GetGI().SetFontSize(30);
+            text->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
             textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
             textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,-0,0 });
             test3->text_FPS = text;
@@ -221,6 +230,7 @@ void application::contents::ContentsLayer::Initialize()
             auto textObj = obj->AddGameObject();
             auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
             text->GetGI().SetFontSize(30);
+            text->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
             textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
             textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,30,0 });
             test3->text_update = text;
@@ -229,6 +239,7 @@ void application::contents::ContentsLayer::Initialize()
             auto textObj = obj->AddGameObject();
             auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
             text->GetGI().SetFontSize(30);
+            text->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
             textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
             textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,60,0 });
             test3->text_physx = text;
@@ -237,11 +248,12 @@ void application::contents::ContentsLayer::Initialize()
             auto textObj = obj->AddGameObject();
             auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
             text->GetGI().SetFontSize(30);
+            text->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
             textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
             textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,90,0 });
             test3->text_Render = text;
         }
-
+       
     }
 
 #ifndef EDITOR

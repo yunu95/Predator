@@ -32,29 +32,34 @@ namespace yunuGIAdapter
 		virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)
 		{
 			renderable->SetWorldTM(reinterpret_cast<const DirectX::SimpleMath::Matrix&>(worldTM));
+			auto tempWTM = reinterpret_cast<const DirectX::SimpleMath::Matrix&>(worldTM);
+			DirectX::SimpleMath::Vector3 pos;
+			DirectX::SimpleMath::Vector3 scale;
+			DirectX::SimpleMath::Quaternion quat;
+			tempWTM.Decompose(scale, quat, pos);
 			int minusCount = 0;
-			if (worldTM.m11 < 0)
+			if (scale.x < 0)
 			{
 				minusCount++;
 			}
-			if (worldTM.m22 < 0)
+			if (scale.y < 0)
 			{
 				minusCount++;
 			}
-			if (worldTM.m33 < 0)
+			if (scale.z < 0)
 			{
 				minusCount++;
 			}
 			
 
-			//if (minusCount % 2 == 1)
-			//{
-			//	for (int i = 0; i < this->materialVec.size(); ++i)
-			//	{
-			//		auto material = this->GetMaterial(i);
-			//		material->SetPixelShader(ResourceManager::Instance.Get().GetShader(L"Default_CullFrontPS.cso").get());
-			//	}
-			//}
+			if (minusCount % 2 == 1)
+			{
+				for (int i = 0; i < this->materialVec.size(); ++i)
+				{
+					auto material = this->GetMaterial(i);
+					material->SetPixelShader(ResourceManager::Instance.Get().GetShader(L"Default_CullFrontPS.cso").get());
+				}
+			}
 		};
 
 		virtual void SetActive(bool isActive)
@@ -150,10 +155,12 @@ namespace yunuGIAdapter
 			//return this->materialVec[index]->GetVariation(isInstance);
 			return this->materialVec[index].get();
 		};
+		
 
 	private:
 		std::shared_ptr<StaticMesh> renderable;
 		std::vector<std::shared_ptr<MaterialWrapper>> materialVec;
 		
 	};
+
 }

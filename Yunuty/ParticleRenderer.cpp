@@ -163,6 +163,11 @@ float yunutyEngine::graphics::ParticleRenderer::GetDuration()
     return GetGI().GetDuration();
 }
 
+void ParticleRenderer::SetTexture(yunuGI::ITexture* texture)
+{
+    GetGI().SetTexture(texture);
+}
+
 yunuGI::Matrix4x4 ParticleRenderer::GenerateRandomOffsetMatInCone()
 {
     auto randomPoint = GetRandomPointInCircle(0, 0, this->shape.cone.radius);
