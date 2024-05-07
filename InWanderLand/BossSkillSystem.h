@@ -1,16 +1,17 @@
 #pragma once
 #include "SkillSystem.h"
+#include "LocalTimeEntity.h"
 
 class Unit;
 
 /// <summary>
 /// playerSkillSystem과는 다르게, 내부에서 자체적으로 사용할 스킬 및 위치를 정해주는 방식은 어떨까?
 /// </summary>
-class BossSkillSystem : public SkillSystem
+class BossSkillSystem : public SkillSystem, public LocalTimeEntity
 {
 private:
-	float m_skillUsageDuration{ 0.0f };
 	float m_elapsed{ 0.0f };
+	float m_skillActivateDuration = 5.0f;
 
 	float m_skillOneDuration = 3.0f;
 	float m_skillTwoDuration = 3.0f;
@@ -25,12 +26,15 @@ private:
 	Unit* currentSummonedDoorUnit;
 	Unit* currentDerivedDoorUnit;
 
+	SkillRequirements m_currentSkillRequirments{ nullptr };
+
 	SkillRequirements m_skillOneRequirments;
 	SkillRequirements m_skillTwoRequirments;
 	SkillRequirements m_skillThreeRequirments;
 	SkillRequirements m_skillFourRequirments;
 
 	bool isBossSkill;
+	bool isBossSkillActivating{ false };
 	Unit::SkillEnum staticSelectedSkillNumber;
 	Unit::SkillEnum currentSelectedSkillNumber;
 

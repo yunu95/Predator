@@ -1046,6 +1046,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="IAction.h" />
     <ClInclude Include="ICondition.h" />
     <ClInclude Include="JsonUIData.h" />
+    <ClInclude Include="LocalTimeEntity.h" />
+    <ClInclude Include="LocalTimeEntityManager.h" />
     <ClInclude Include="ObservationTarget.h" />
     <ClInclude Include="IObserver.h" />
     <ClInclude Include="ObservationEvent.h" />
@@ -1310,6 +1312,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="EnemySummonSkillSystem.cpp" />
     <ClCompile Include="FloatFollower.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="LocalTimeEntity.cpp" />
+    <ClCompile Include="LocalTimeEntityManager.cpp" />
     <ClCompile Include="ObservationTarget.cpp" />
     <ClCompile Include="ObserveeHelper.cpp" />
     <ClCompile Include="ParticleBrush.cpp" />

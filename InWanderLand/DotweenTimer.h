@@ -2,6 +2,7 @@
 #include <iostream>
 #include <functional>
 #include "Easing.h"
+#include "LocalTimeEntity.h"
 
 /// <summary>
 /// Dotween의 반복호출을 막기위한 클래스.
@@ -49,6 +50,8 @@ public:
 	bool isActive;
 	bool isRepeat;
 	bool isDone;			// 타이머 Vector에서 빼도 되는지에 대한 메시지 전달용
+
+	float m_localTimeScale{ 1.0f };
 
 	easing_functions m_ease;
 

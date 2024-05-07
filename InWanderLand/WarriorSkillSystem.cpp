@@ -76,6 +76,14 @@ void WarriorSkillSystem::SetWSkillDebugObject(GameObject* obj, float radius)
 	m_WSkillRadius = radius;
 }
 
+void WarriorSkillSystem::SetSkillRequirmentLocalTimeScale(float p_scale)
+{
+	if (QknockBackSkill.dotweenComponent)
+		LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(QknockBackSkill.dotweenComponent, p_scale);
+	if (WTauntSkill.dotweenComponent)
+		LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(WTauntSkill.dotweenComponent, p_scale);
+}
+
 void WarriorSkillSystem::Start()
 {
 	SetOtherComponentsAsMember();

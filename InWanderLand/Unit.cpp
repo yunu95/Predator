@@ -57,8 +57,7 @@ void Unit::Start()
     unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Chase,
         [this]() { return  (GameManager::Instance().IsWaveEngageMotionEnd() && (m_currentTargetUnit != nullptr &&
                             idleElapsed >= idleToChaseDelay) && m_currentTargetUnit->currentOrder != UnitState::Death &&
-                            m_idDistance > 0.1f && m_atkDistance > 0.1f) &&
-                            !TacticModeSystem::Instance().IsUnitsPerformingCommand(); } });
+                            m_idDistance > 0.1f && m_atkDistance > 0.1f) && !TacticModeSystem::Instance().IsUnitsPerformingCommand(); } });
 
     unitFSM.transitions[UnitState::Move].push_back({ UnitState::Idle,
         [this]() { return currentOrder == UnitState::Idle; } });
@@ -191,7 +190,8 @@ void Unit::Start()
                 if (m_currentTargetUnit != nullptr && currentOrder == UnitState::Attack)
                 {
                     atkSys->Attack(m_currentTargetUnit, m_attackOffset);
-					if (isPermittedToTacticAction)
+					
+                    if (isPermittedToTacticAction)
 					{
 						TacticModeSystem::Instance().ReportTacticActionFinished();
 						isPermittedToTacticAction = false;
@@ -199,7 +199,7 @@ void Unit::Start()
 					}
                 }
                 isAttackAnimationOperating = false;
-                m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
+                ChangeAnimation(unitAnimations.m_idleAnimation);
             });
     }
 
@@ -209,11 +209,24 @@ void Unit::Start()
     }
 
     m_animatorComponent->Play(unitAnimations.m_idleAnimation);
+    m_currentAnimation = unitAnimations.m_idleAnimation;
 }
 
 void Unit::Update()
 {
-    unitFSM.UpdateState();
+    if (m_unitSide == UnitSide::Player)
+		unitFSM.UpdateState();
+
+    else
+    {
+        if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
+        {
+            if (!TacticModeSystem::Instance().IsOrderingTimingNow())
+            {
+				unitFSM.UpdateState();
+            }
+        }
+    }
 }
 
 void Unit::OnDestroy()
@@ -250,19 +263,13 @@ void Unit::IdleEngage()
 {
 	//TacticModeSystem::Instance().isTacticModeOperating = false;
 
-	currentOrder = UnitState::Idle;
+ 	currentOrder = UnitState::Idle;
 	idleElapsed = 0.0f;
 	if (m_staticMeshRenderer != nullptr)
 		m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
-	m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
-
-    currentOrder = UnitState::Idle;
-    idleElapsed = 0.0f;
-    if (m_staticMeshRenderer != nullptr)
-        m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
-    m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
-
-    DetermineCurrentTargetObject();
+	ChangeAnimation(unitAnimations.m_idleAnimation);
+    if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
+        DetermineCurrentTargetObject();
 
     idleToChaseDelay = 0.0f;
 
@@ -287,7 +294,7 @@ void Unit::MoveEngage()
     m_navAgentComponent->SetSpeed(m_speed);
     m_navAgentComponent->MoveTo(m_currentMovePosition);
 
-    m_animatorComponent->ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
+	ChangeAnimation(unitAnimations.m_walkAnimation);
 }
 
 void Unit::OffsetMoveEngage()
@@ -300,7 +307,7 @@ void Unit::OffsetMoveEngage()
     moveFunctionElapsed = 0.0f;
     m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::green());
     m_navAgentComponent->SetSpeed(m_speed);
-    m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
+	ChangeAnimation(unitAnimations.m_idleAnimation);
 }
 
 void Unit::AttackMoveEngage()
@@ -313,7 +320,7 @@ void Unit::AttackMoveEngage()
 
     m_navAgentComponent->SetSpeed(m_speed);
 
-    m_animatorComponent->ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
+	ChangeAnimation(unitAnimations.m_walkAnimation);
 }
 
 void Unit::AttackEngage()
@@ -322,7 +329,7 @@ void Unit::AttackEngage()
 
     m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::red());
 
-    m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
+	ChangeAnimation(unitAnimations.m_idleAnimation);
 
     AttackSystem* atkSys = GetGameObject()->GetComponent<AttackSystem>();
     isAttackAnimationOperating = false;
@@ -348,13 +355,13 @@ void Unit::ChaseEngage()
 
     dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
 
-    m_animatorComponent->ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
+	ChangeAnimation(unitAnimations.m_walkAnimation);
 }
 
 void Unit::SkillEngage()
 {
     currentOrder = UnitState::Skill;
-    m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
+	ChangeAnimation(unitAnimations.m_idleAnimation);
     skillFunctionStartElapsed = 0.0f;
     int tempRand = rand() % 3 + 1;
 
@@ -407,7 +414,7 @@ void Unit::SkillEngage()
 
 void Unit::ParalysisEngage()
 {
-    m_animatorComponent->ChangeAnimation(unitAnimations.m_paralysisAnimation, animationLerpDuration, animationTransitionSpeed);
+	ChangeAnimation(unitAnimations.m_paralysisAnimation);
 }
 
 void Unit::DeathEngage()
@@ -435,7 +442,7 @@ void Unit::DeathEngage()
     }
     else
     {
-        m_animatorComponent->ChangeAnimation(unitAnimations.m_deathAnimation, animationLerpDuration, animationTransitionSpeed);
+		ChangeAnimation(unitAnimations.m_deathAnimation);
     }
 
     StopMove();
@@ -445,7 +452,7 @@ void Unit::WaveStartEngage()
 {
     currentOrder = UnitState::WaveStart;
     moveFunctionElapsed = 0.0f;
-    m_animatorComponent->ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
+	ChangeAnimation(unitAnimations.m_walkAnimation);
 
     m_navAgentComponent->MoveTo(m_waveStartPosition);
 
@@ -465,7 +472,7 @@ void Unit::WaveMotionEngage()
 {
     currentOrder = UnitState::WaveMotion;
 
-    m_animatorComponent->ChangeAnimation(unitAnimations.m_battleEngageAnimation, animationLerpDuration, animationTransitionSpeed);
+	ChangeAnimation(unitAnimations.m_battleEngageAnimation);
 
     /*	if (m_unitType != UnitType::Warrior)
             dotween->DOLookAt(m_currentBelongingWavePosition, rotateTime, false);*/
@@ -475,7 +482,7 @@ void Unit::ResurrectEngage()
 {
     currentOrder = UnitState::Resurrect;
     deathFunctionElapsed = 0.0f;
-    m_animatorComponent->ChangeAnimation(unitAnimations.m_deathAnimation, animationLerpDuration, animationTransitionSpeed);
+	ChangeAnimation(unitAnimations.m_deathAnimation);
     m_opponentObjectSet.clear();
     ReportUnitDeath();
 
@@ -498,11 +505,13 @@ void Unit::IdleUpdate()
 		m_tacticModeQueue.pop();
 	}
 
-    idleElapsed += Time::GetDeltaTime();
+    idleElapsed += Time::GetDeltaTime() * m_localTimeScale;
 
     if (idleElapsed >= 3.0f)
-        DetermineCurrentTargetObject();
-
+    {
+		if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
+			DetermineCurrentTargetObject();
+    }
     // 데미지를 입으면 공격한 상대의 정보를 list에 등록하고 쫓아가기
 }
 
@@ -510,7 +519,7 @@ void Unit::MoveUpdate()
 {
     CheckCurrentAnimation(unitAnimations.m_walkAnimation);
 
-    moveFunctionElapsed += Time::GetDeltaTime();
+    moveFunctionElapsed += Time::GetDeltaTime() * m_localTimeScale;
 
     if (moveFunctionElapsed >= moveFunctionCallDelay)
     {
@@ -543,7 +552,8 @@ void Unit::OffsetMoveUpdate()
 
     if (betweenUnitDistance >= m_followEngageDinstance)
     {
-        m_animatorComponent->ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
+		ChangeAnimation(unitAnimations.m_walkAnimation);
+
         dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
         m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
         isFollowing = true;
@@ -552,11 +562,12 @@ void Unit::OffsetMoveUpdate()
     {
         isFollowing = false;
         StopMove();
-        m_animatorComponent->ChangeAnimation(unitAnimations.m_idleAnimation, animationLerpDuration, animationTransitionSpeed);
+		ChangeAnimation(unitAnimations.m_idleAnimation);
     }
     else if (betweenUnitDistance <= m_followEngageDinstance && betweenUnitDistance >= m_stopFollowDinstance && isFollowing)
     {
-        m_animatorComponent->ChangeAnimation(unitAnimations.m_walkAnimation, animationLerpDuration, animationTransitionSpeed);
+		ChangeAnimation(unitAnimations.m_walkAnimation);
+
         dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
         m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
         isFollowing = true;
@@ -567,7 +578,7 @@ void Unit::AttackMoveUpdate()
 {
     CheckCurrentAnimation(unitAnimations.m_walkAnimation);
 
-    moveFunctionElapsed += Time::GetDeltaTime();
+    moveFunctionElapsed += Time::GetDeltaTime() * m_localTimeScale;
 
     if (moveFunctionElapsed >= moveFunctionCallDelay)
     {
@@ -587,14 +598,14 @@ void Unit::AttackUpdate()
 
     if (!isAttackAnimationOperating)
     {
-        attackFunctionElapsed += Time::GetDeltaTime();
+        attackFunctionElapsed += Time::GetDeltaTime() * m_localTimeScale;
 
         if (attackFunctionElapsed >= attackFunctionCallDelay)
         {
             DetermineCurrentTargetObject();
             attackFunctionElapsed = 0.0f;
             isAttackAnimationOperating = true;
-            m_animatorComponent->ChangeAnimation(unitAnimations.m_attackAnimation, animationLerpDuration, animationTransitionSpeed);
+			ChangeAnimation(unitAnimations.m_attackAnimation);
             CheckCurrentAnimation(unitAnimations.m_attackAnimation);
         }
         else if (attackFunctionElapsed < attackFunctionCallDelay)
@@ -607,12 +618,12 @@ void Unit::AttackUpdate()
 
 void Unit::SkillUpdate()
 {
-    skillFunctionStartElapsed += Time::GetDeltaTime();
+    skillFunctionStartElapsed += Time::GetDeltaTime() * m_localTimeScale;
 
     if (skillFunctionStartElapsed >= m_currentSelectedSkillEngageDelay)
     {
         skillFunctionStartElapsed = 0.0f;
-        m_animatorComponent->ChangeAnimation(m_currentSkillAnimation, animationLerpDuration, animationTransitionSpeed);
+		ChangeAnimation(m_currentSkillAnimation);
     }
 }
 
@@ -620,7 +631,7 @@ void Unit::ChaseUpdate()
 {
     CheckCurrentAnimation(unitAnimations.m_walkAnimation);
 
-    chaseFunctionElapsed += Time::GetDeltaTime();
+    chaseFunctionElapsed += Time::GetDeltaTime() * m_localTimeScale;
 
     //LookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition());
 
@@ -638,7 +649,7 @@ void Unit::ChaseUpdate()
 
 void Unit::DeathUpdate()
 {
-    deathFunctionElapsed += Time::GetDeltaTime();
+    deathFunctionElapsed += Time::GetDeltaTime() * m_localTimeScale;
 
     if (m_burnEffect->IsDone() && m_unitSide == UnitSide::Enemy)
     {
@@ -659,7 +670,7 @@ void Unit::DeathUpdate()
         /// Player일 경우
         if (deathFunctionElapsed >= deathAnimationDelay)
         {
-            m_animatorComponent->ChangeAnimation(unitAnimations.m_deathAnimation, animationLerpDuration, animationTransitionSpeed);
+			ChangeAnimation(unitAnimations.m_deathAnimation);
             GetGameObject()->SetSelfActive(false);
         }
     }
@@ -667,7 +678,7 @@ void Unit::DeathUpdate()
 
 void Unit::WaveStartUpdate()
 {
-    moveFunctionElapsed += Time::GetDeltaTime();
+    moveFunctionElapsed += Time::GetDeltaTime() * m_localTimeScale;
     float distance = (m_waveStartPosition - GetTransform()->GetWorldPosition()).Magnitude();
 
     if (abs(GetGameObject()->GetTransform()->GetWorldPosition().x - m_waveStartPosition.x) < 0.2f && abs(GetGameObject()->GetTransform()->GetWorldPosition().z - m_waveStartPosition.z) < 0.2f)
@@ -679,7 +690,7 @@ void Unit::WaveStartUpdate()
 
 void Unit::WaveMotionUpdate()
 {
-    m_battleEngageMotionElapsed += Time::GetDeltaTime();
+    m_battleEngageMotionElapsed += Time::GetDeltaTime() * m_localTimeScale;
 
     float temp = unitAnimations.m_battleEngageAnimation->GetDuration();
     if (m_battleEngageMotionElapsed >= unitAnimations.m_battleEngageAnimation->GetDuration() + rotateTime)
@@ -692,7 +703,7 @@ void Unit::WaveMotionUpdate()
 
 void Unit::ResurrectUpdate()
 {
-    deathFunctionElapsed += Time::GetDeltaTime();
+    deathFunctionElapsed += Time::GetDeltaTime() * m_localTimeScale;
 
     if (deathFunctionElapsed >= m_resurrectingDuration)
     {
@@ -703,13 +714,19 @@ void Unit::ResurrectUpdate()
     }
 }
 
+void Unit::ChangeAnimation(yunuGI::IAnimation* p_anim)
+{
+	m_animatorComponent->ChangeAnimation(p_anim, animationLerpDuration, animationTransitionSpeed);
+    m_currentAnimation = p_anim;
+}
+
 #pragma endregion
 
 void Unit::CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation)
 {
     if (m_animatorComponent->GetGI().GetCurrentAnimation() != currentStateAnimation)
     {
-        m_animatorComponent->ChangeAnimation(currentStateAnimation, animationLerpDuration, animationTransitionSpeed);
+		ChangeAnimation(currentStateAnimation);
     }
 }
 
@@ -938,6 +955,30 @@ void Unit::ResetUnitMembers()
     m_attackingThisUnitSet.clear();
 }
 
+void Unit::SetUnitLocalTimeScale(float p_scale)
+{
+    m_localTimeScale = p_scale;
+}
+
+void Unit::EnemyActionOnTacticModeEngaged()
+{
+    //unitAnimations.m_deathAnimation->Se
+    //m_animatorComponent->GetGI().GetCurrentAnimation()->SetPlaySpeed(0.0f);
+	SetCurrentAnimationSpeed(0.0f);
+    StopMove();
+}
+
+void Unit::EnemyActionOnTacticModeEnded()
+{
+    SetCurrentAnimationSpeed(1.0f);
+}
+
+void Unit::SetCurrentAnimationSpeed(float p_speed)
+{
+    if (m_currentAnimation)
+        m_currentAnimation->SetPlaySpeed(p_speed);
+}
+
 bool Unit::IsAllExtraPlayerUnitDead()
 {
     bool temp = false;
@@ -959,6 +1000,11 @@ bool Unit::IsAllExtraPlayerUnitDead()
     }
 
     return temp;
+}
+
+bool Unit::CheckEnemyStoppedByTacticMode() const
+{
+    return (!TacticModeSystem::Instance().IsUnitsPerformingCommand() || !TacticModeSystem::Instance().IsOrderingTimingNow());
 }
 
 float Unit::DetermineAttackDamage(float p_damage)
@@ -1051,6 +1097,17 @@ void Unit::PushSkillFunctionToTacticQueue(SkillEnum p_skillNum, Vector3d p_pos)
         });
 }
 
+void Unit::ReportTacticModeEngaged()
+{
+    /// 전술모드 진입 시 유닛의 행동 로직입니다.
+    /// 이 때는 실제 Timescale을 멈춰도 되지만... 어차피 현재 선택된 플레이어는 시간이 흘러야 합니다...
+    /// fsm transition 은 TacticModeSystem->IsOrderingTimingNow 로 막아주고,
+    /// 여기선 현재 애니메이션의 Stop, unit이 갖고 있는 다른 컴포넌트에 대한 처리를 해줍니다.
+    
+
+
+}
+
 bool Unit::IsTacticModeQueueEmpty() const
 {
     return m_tacticModeQueue.empty();
@@ -1081,7 +1138,7 @@ void Unit::RotateUnit(Vector3d endPosition)
 
     Vector3d directionVector = distanceVec.Normalized();
 
-    Vector3d movedPositionPerFrame = GetGameObject()->GetTransform()->GetWorldPosition() + (directionVector * m_speed * Time::GetDeltaTime());
+    Vector3d movedPositionPerFrame = GetGameObject()->GetTransform()->GetWorldPosition() + (directionVector * m_speed * Time::GetDeltaTime() * m_localTimeScale);
 
     Vector3d afterDirectionVector = (endPosition - movedPositionPerFrame).Normalized();
 

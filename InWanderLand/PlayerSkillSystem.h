@@ -1,6 +1,7 @@
 #pragma once
 #include "SkillSystem.h"
 #include "Unit.h"
+#include "LocalTimeEntity.h"
 
 class UIElement;
 class Dotween;
@@ -9,7 +10,7 @@ class Dotween;
 /// 스킬을 사용할 때, 미리 collider를 멤버로 Set해주고
 /// 유닛의 상태를 제어하고 collider를 언제, 어디서 활성화/비활성화 할지 정해주는 컴포넌트.
 /// </summary>
-class PlayerSkillSystem : public SkillSystem
+class PlayerSkillSystem : public SkillSystem, public LocalTimeEntity
 {
 protected:
     float m_skillOneRange;
@@ -51,6 +52,8 @@ public:
     virtual void Update() override;
 
     virtual bool IsSkillCoolingDown(Unit::SkillEnum p_skillnum) const;
+
+    virtual void SetSkillRequirmentLocalTimeScale(float p_scale) = 0;
 
     Vector3d m_currentSelectedSkillPosition;
 

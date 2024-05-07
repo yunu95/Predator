@@ -32,6 +32,8 @@ private:
 
 	std::vector<UnitProductor*> productorSelector;
 
+	bool isStoppedByTacticMode{ false };
+
 public:
 	std::vector<Unit*> m_currentWaveUnitVector;
 	Unit* inGameUnit;
@@ -46,4 +48,7 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	application::editor::WaveData* waveData{ nullptr };
+
+	void StopWaveElapsedTime();
+	void ResumeWaveElapsedTime();
 };

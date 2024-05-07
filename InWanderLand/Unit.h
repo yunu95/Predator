@@ -8,6 +8,7 @@
 #include "DummyComponent.h"
 #include "ContentsObservee.h"
 #include "StatusEffect.h"
+#include "LocalTimeEntity.h"
 
 class UnitProductor;
 class SkillSystem;
@@ -18,7 +19,7 @@ enum class SkillPreviewMesh;
 /// <summary>
 /// 유닛들이 공유하는 멤버.
 /// </summary>
-class Unit : public Component, public ContentsObservee
+class Unit : public Component, public ContentsObservee, public LocalTimeEntity
 {
 public:
 	// 사용 시 주의점 : 마지막에는 Death와 StateEnd가 순서대로 들어가 있을 것!
@@ -86,6 +87,7 @@ public:
 
 	TimerComponent* knockBackTimer;
 	Dotween* dotween;
+	yunuGI::IAnimation* m_currentAnimation{ nullptr };
 	yunutyEngine::graphics::Animator* m_animatorComponent;
 	NavigationAgent* m_navAgentComponent;
 	BurnEffect* m_burnEffect;
@@ -202,6 +204,7 @@ private:
 	float m_stopFollowDinstance{ 2.0f };			// 이 수치만큼 거리가 좁혀지면 멈춘다.
 	bool isFollowing{ false };
 
+
 public:
 	bool isPermittedToTacticAction{ false };
 
@@ -239,6 +242,7 @@ private:
 	void WaveMotionUpdate();
 	void ResurrectUpdate();
 	
+	void ChangeAnimation(yunuGI::IAnimation* p_anim);
 	void CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation);
 	
 	void ReportUnitDeath();												// this 유닛이 죽었다는 정보를 전달
@@ -343,6 +347,8 @@ public:
 	void PushAttackMoveFunctionToTacticQueue(Vector3d p_pos);
 	void PushAttackMoveFunctionToTacticQueue(Vector3d p_pos, Unit* p_selectedUnit);
 	void PushSkillFunctionToTacticQueue(SkillEnum p_skillNum, Vector3d p_pos);
+	void ReportTacticModeEngaged();
+	
 	bool IsTacticModeQueueEmpty() const;
 
 	void ChangeUnitStatRandomly();
@@ -366,7 +372,16 @@ public:
 
 	void ResetUnitMembers();
 
+	void SetUnitLocalTimeScale(float p_scale);
+	
+	void EnemyActionOnTacticModeEngaged();
+	void EnemyActionOnTacticModeEnded();
+
+	void SetCurrentAnimationSpeed(float p_speed);
+
 	bool IsAllExtraPlayerUnitDead();
+	bool CheckEnemyStoppedByTacticMode() const;
+
 
 	std::function<void()> returnToPoolFunction{ nullptr };
 	std::function<void()> deathEngageFunction{ nullptr };

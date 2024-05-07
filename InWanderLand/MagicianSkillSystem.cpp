@@ -13,12 +13,10 @@ void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 	QSkillProjectile.colliderObject->GetTransform()->SetWorldRotation(Quaternion(Vector3d::zero));
 	QSkillProjectile.debugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());	
 
+	RotateProjectile(QSkillProjectile.colliderObject, skillPos);
 	SetSkillRequirmentsActive(QSkillProjectile, true);
 
 	skillPos = CheckSkillRange(skillPos, Unit::SkillEnum::Q);
-
-	RotateProjectile(QSkillProjectile.colliderObject, skillPos);
-
 	QSkillFieldDamage.colliderObject->GetTransform()->SetWorldPosition(skillPos);			// 오브젝트만 움직여도 collider와 debug는 따라올 것이다.
 
 	float tempDistance = (skillPos - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
@@ -68,6 +66,18 @@ void MagicianSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 					isWSkillActivating = false;
 				});
 		});
+}
+
+void MagicianSkillSystem::SetSkillRequirmentLocalTimeScale(float p_scale)
+{
+	if (QSkillProjectile.dotweenComponent)
+		LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(QSkillProjectile.dotweenComponent, p_scale);
+	if (QSkillFieldDamage.dotweenComponent)
+		LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(QSkillFieldDamage.dotweenComponent, p_scale);
+	if (WSkillProjectile.dotweenComponent)
+		LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(WSkillProjectile.dotweenComponent, p_scale);
+	if (WSkillFieldDamage.dotweenComponent)
+		LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(WSkillFieldDamage.dotweenComponent, p_scale);
 }
 
 void MagicianSkillSystem::SetInterActionComponent(BlindFieldComponent* p_QSkillComponent, ParalysisFieldComponent* p_WSkillComponent)
@@ -127,16 +137,6 @@ void MagicianSkillSystem::Start()
 void MagicianSkillSystem::Update()
 {
 	PlayerSkillSystem::Update();
-
-	/// Start 문에서 SetActive(false)를 못알아 먹는다.
-	if (!isColliderSetActiveFalseSet)
-	{
-		SetSkillRequirmentsActive(QSkillProjectile, false);
-		SetSkillRequirmentsActive(QSkillFieldDamage, false);
-		SetSkillRequirmentsActive(WSkillProjectile, false);
-		SetSkillRequirmentsActive(WSkillFieldDamage, false);
-		isColliderSetActiveFalseSet = true;
-	}
 
 	if (isQSkillActivating)
 	{

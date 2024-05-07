@@ -1330,6 +1330,12 @@
     <ClInclude Include="ObserveeHelper.h">
       <Filter>Contents\ContentsObserber</Filter>
     </ClInclude>
+    <ClInclude Include="LocalTimeEntityManager.h">
+      <Filter>Contents\ContentsObserber</Filter>
+    </ClInclude>
+    <ClInclude Include="LocalTimeEntity.h">
+      <Filter>Contents\ContentsObserber</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2027,6 +2033,12 @@
       <Filter>Contents\ContentsObserber</Filter>
     </ClCompile>
     <ClCompile Include="ObserveeHelper.cpp">
+      <Filter>Contents\ContentsObserber</Filter>
+    </ClCompile>
+    <ClCompile Include="LocalTimeEntityManager.cpp">
+      <Filter>Contents\ContentsObserber</Filter>
+    </ClCompile>
+    <ClCompile Include="LocalTimeEntity.cpp">
       <Filter>Contents\ContentsObserber</Filter>
     </ClCompile>
   </ItemGroup>

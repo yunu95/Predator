@@ -14,13 +14,17 @@
 
 class RTSCam;
 class CursorDetector;
+class PlaytimeWave;
 
-class TacticModeSystem : public SingletonComponent<TacticModeSystem>, public Component
+class TacticModeSystem : public SingletonComponent<TacticModeSystem>, public Component, public ContentsObservee
 {
 public:
 	virtual void OnEnable() override;
 	virtual void Start() override;
 	virtual void Update() override;
+
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
 
 	enum OrderType
 	{
@@ -50,6 +54,8 @@ public:
 
 	void ReportTacticActionFinished();
 
+	void RegisterCurrentWave(PlaytimeWave* p_wave);
+
 	CursorDetector* m_cursorDetector;
 
 private:
@@ -65,6 +71,8 @@ private:
 	bool isTacticModeOperating;					// 명령을 내리는 시간일 때 true.
 	bool isTacticOrderPerforming;				// 내린 명령을 수행하고 있을 때 true.
 
+	std::vector<Unit*> m_currentWaveUnits;
+
 	RTSCam* m_rtsCam;
 
 	Unit* currentSelectedUnit{ nullptr };
@@ -72,5 +80,7 @@ private:
 	std::unordered_map<Unit::UnitType, Unit*> playerComponentMap;					
 
 	std::queue<Unit*> sequenceQueue;
+
+	PlaytimeWave* m_currentOperatingWave;
 };
 

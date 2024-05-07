@@ -127,7 +127,7 @@ void PlayerSkillSystem::Update()
 {
     if (!isQSkillReady)
     {
-        qSkillCoolDownElapsed += Time::GetDeltaTime();
+        qSkillCoolDownElapsed += Time::GetDeltaTime() * m_localTimeScale;
         qSkillRadialOverlay->adjuster->SetTargetFloat(1 - qSkillCoolDownElapsed / qSkillCoolTime);
         qSkillCooltimeNumberUI->SetNumber(qSkillCoolTime - qSkillCoolDownElapsed);
         UIElement* eSkillRadialOverlay{ nullptr };
@@ -140,7 +140,7 @@ void PlayerSkillSystem::Update()
     }
     if (!isESkillReady)
     {
-        eSkillCoolDownElapsed += Time::GetDeltaTime();
+        eSkillCoolDownElapsed += Time::GetDeltaTime() * m_localTimeScale;
         eSkillRadialOverlay->adjuster->SetTargetFloat(1 - eSkillCoolDownElapsed / eSkillCoolTime);
         eSkillCooltimeNumberUI->SetNumber(eSkillCoolTime - eSkillCoolDownElapsed);
         if (eSkillCoolDownElapsed >= eSkillCoolTime)

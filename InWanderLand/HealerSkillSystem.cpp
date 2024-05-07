@@ -19,6 +19,7 @@ void HealerSkillSystem::CrushDown(int p_times)
 				m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
 				m_unitNavComponent->Relocate(GetTransform()->GetWorldPosition());
 				TacticModeSystem::Instance().ReportTacticActionFinished();
+				SetSkillRequirmentsActive(QSkillFieldDamage, false);
 				m_unitComponent->isPermittedToTacticAction = false;
 				m_unitComponent->SetUnitStateIdle();
 			}
@@ -108,6 +109,14 @@ void HealerSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 	SetSkillRequirmentsActive(WSkillFieldDamage, true);
 }
 
+void HealerSkillSystem::SetSkillRequirmentLocalTimeScale(float p_scale)
+{
+	if (QSkillFieldDamage.dotweenComponent)
+		LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(QSkillFieldDamage.dotweenComponent, p_scale);
+	if (WSkillFieldDamage.dotweenComponent)
+		LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(WSkillFieldDamage.dotweenComponent, p_scale);
+}
+
 void HealerSkillSystem::Start()
 {
 	SetOtherComponentsAsMember();
@@ -116,6 +125,10 @@ void HealerSkillSystem::Start()
 
 	QSkillFieldDamage.colliderObject->SetParent(GetGameObject());
 	QSkillFieldDamage.debugObject->SetParent(GetGameObject());
+
+	SetSkillRequirmentsActive(QSkillFieldDamage, false);
+	SetSkillRequirmentsActive(WSkillFieldDamage, false);
+
 	//WSkillFieldDamage.colliderObject->SetParent(GetGameObject());
 	//WSkillFieldDamage.debugObject->SetParent(GetGameObject());
 }
@@ -124,38 +137,36 @@ void HealerSkillSystem::Update()
 {
 	PlayerSkillSystem::Update();
 
-	if (!isColliderSetActiveFalse)
-	{
-		SetSkillRequirmentsActive(QSkillFieldDamage, false);
-		SetSkillRequirmentsActive(WSkillFieldDamage, false);
-		isColliderSetActiveFalse = true;
-	}
+	//if (!isColliderSetActiveFalse)
+	//{
+	//	SetSkillRequirmentsActive(QSkillFieldDamage, false);
+	//	SetSkillRequirmentsActive(WSkillFieldDamage, false);
+	//	isColliderSetActiveFalse = true;
+	//}
 
-	if (isQSkillColliderActivated)
-	{
-		QSkillColliderElapsed += Time::GetDeltaTime();
-		if (QSkillColliderElapsed >= QSkillColliderRemainTime)
-		{
-			QSkillColliderElapsed = 0.0f;
-			SetSkillRequirmentsActive(QSkillFieldDamage, false);
-			isQSkillColliderActivated = false;
-			//m_unitComponent->SetUnitStateIdle();
-		}
-	}
+	//if (isQSkillColliderActivated)
+	//{
+	//	QSkillColliderElapsed += Time::GetDeltaTime() * m_localTimeScale;
+	//	if (QSkillColliderElapsed >= QSkillColliderRemainTime)
+	//	{
+	//		QSkillColliderElapsed = 0.0f;
+	//		SetSkillRequirmentsActive(QSkillFieldDamage, false);
+	//		isQSkillColliderActivated = false;
+	//		m_unitComponent->SetUnitStateIdle();
+	//	}
+	//}
 
-	if (isWSkillColliderActivated)
-	{
-		WSkillColliderElapsed += Time::GetDeltaTime();
-		if (WSkillColliderElapsed >= WSkillColliderRemainTime)
-		{
-			WSkillColliderElapsed = 0.0f;
-			SetSkillRequirmentsActive(WSkillFieldDamage, false);
-			isWSkillColliderActivated = false;
-			TacticModeSystem::Instance().ReportTacticActionFinished();
-			m_unitComponent->isPermittedToTacticAction = false;
-			m_unitComponent->SetUnitStateIdle();
-		}
-	}
-
-
+	//if (isWSkillColliderActivated)
+	//{
+	//	WSkillColliderElapsed += Time::GetDeltaTime() * m_localTimeScale;
+	//	if (WSkillColliderElapsed >= WSkillColliderRemainTime)
+	//	{
+	//		WSkillColliderElapsed = 0.0f;
+	//		SetSkillRequirmentsActive(WSkillFieldDamage, false);
+	//		isWSkillColliderActivated = false;
+	//		TacticModeSystem::Instance().ReportTacticActionFinished();
+	//		m_unitComponent->isPermittedToTacticAction = false;
+	//		m_unitComponent->SetUnitStateIdle();
+	//	}
+	//}
 }

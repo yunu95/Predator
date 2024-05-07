@@ -14,6 +14,8 @@
 #include <string>
 
 class PlaytimeWave;
+class TacticModeSystem;
+
 namespace application
 {
 	namespace editor
@@ -111,6 +113,7 @@ namespace application
 			std::wstring MakeUpName();
 			WaveData& operator=(const WaveData& prototype);
 			friend PlaytimeWave;
+			friend TacticModeSystem;
 		};
 	}
 }
