@@ -16,6 +16,8 @@ protected:
     float m_skillOneRange;
     float m_skillTwoRange;
 
+    bool isOncedActivated;
+
     bool isQSkillReady{ true };
     bool isESkillReady{ true };
 

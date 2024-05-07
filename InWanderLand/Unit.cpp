@@ -1237,10 +1237,7 @@ void Unit::RegisterSkillWithAnimation(SkillEnum p_enum)
 
         m_animatorComponent->PushAnimationWithFunc(temp, m_skillTimingFrameMap.find(p_enum)->second, [=]()
             {
-                if (m_currentSelectedSkill == p_enum)
-                {
-                    skillsys->ActivateSkill(p_enum, m_currentSkillPosition);
-                }
+				skillsys->ActivateSkill(p_enum, m_currentSkillPosition);
             });
     }
 }

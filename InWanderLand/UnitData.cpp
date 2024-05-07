@@ -215,7 +215,32 @@ namespace application
 
                 tempShortCutIndex = 2;
             }
-            else
+			else
+			{
+				tempShortCutIndex = 1;
+
+				switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
+				{
+					case Unit::UnitType::Warrior:
+						currentSelectedProductor = &WarriorProductor::Instance();
+						break;
+					case Unit::UnitType::Magician:
+						currentSelectedProductor = &MagicianProductor::Instance();
+						break;
+					case Unit::UnitType::Healer:
+						currentSelectedProductor = &HealerProductor::Instance();
+						break;
+					case Unit::UnitType::Boss:
+						currentSelectedProductor = &BossProductor::Instance();
+						break;
+					default:
+						break;
+				}
+
+				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+				inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+			}
+ /*           else
             {
                 tempShortCutIndex = 1;
 
@@ -241,7 +266,7 @@ namespace application
                 }
                 currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                 inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-            }
+            }*/
 
             if (inGameUnit)
             {

@@ -24,6 +24,8 @@ void WarriorSkillSystem::ActivateSkillOne(Vector3d skillPos)
 	// 목표 위치로 돌진
 	m_unitDotween->DOMove(skillPos, tempDistance / m_QskillRushSpeed).OnComplete([=]()
 		{
+			isOncedActivated = false;
+
 			SetSkillRequirmentsActive(QknockBackSkill, false);
 
 			QknockBackSkill.colliderObject->GetComponent<KnockBackComponent>()->ClearCrushedUnitList();
@@ -46,6 +48,7 @@ void WarriorSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 
 	m_unitDotween->DONothing(m_wSkillColliderRemainTime).OnComplete([=]()
 		{
+			isOncedActivated = false;
 			SetSkillRequirmentsActive(WTauntSkill, false);
 			TacticModeSystem::Instance().ReportTacticActionFinished();
 			m_unitComponent->isPermittedToTacticAction = false;

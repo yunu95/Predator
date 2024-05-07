@@ -14,6 +14,7 @@ void HealerSkillSystem::CrushDown(int p_times)
 
 			if (crushedCount == p_times)
 			{
+				isOncedActivated = false;
 				crushedCount = 0;
 				m_unitNavComponent->SetActive(true);
 				m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
@@ -156,17 +157,18 @@ void HealerSkillSystem::Update()
 	//	}
 	//}
 
-	//if (isWSkillColliderActivated)
-	//{
-	//	WSkillColliderElapsed += Time::GetDeltaTime() * m_localTimeScale;
-	//	if (WSkillColliderElapsed >= WSkillColliderRemainTime)
-	//	{
-	//		WSkillColliderElapsed = 0.0f;
-	//		SetSkillRequirmentsActive(WSkillFieldDamage, false);
-	//		isWSkillColliderActivated = false;
-	//		TacticModeSystem::Instance().ReportTacticActionFinished();
-	//		m_unitComponent->isPermittedToTacticAction = false;
-	//		m_unitComponent->SetUnitStateIdle();
-	//	}
-	//}
+	if (isWSkillColliderActivated)
+	{
+		WSkillColliderElapsed += Time::GetDeltaTime() * m_localTimeScale;
+		if (WSkillColliderElapsed >= WSkillColliderRemainTime)
+		{
+			isOncedActivated = false;
+			WSkillColliderElapsed = 0.0f;
+			SetSkillRequirmentsActive(WSkillFieldDamage, false);
+			isWSkillColliderActivated = false;
+			TacticModeSystem::Instance().ReportTacticActionFinished();
+			m_unitComponent->isPermittedToTacticAction = false;
+			m_unitComponent->SetUnitStateIdle();
+		}
+	}
 }

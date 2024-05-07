@@ -23,6 +23,8 @@ void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 
 	QSkillProjectile.dotweenComponent->DOMove(skillPos, tempDistance / m_QSkillProjectileSpeed).OnComplete([=]()
 		{
+			isOncedActivated = false;
+
 			SetSkillRequirmentsActive(QSkillProjectile, false);
 			SetSkillRequirmentsActive(QSkillFieldDamage, true);
 
@@ -53,6 +55,8 @@ void MagicianSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 	float tempDistance = (skillPos - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
 	WSkillProjectile.dotweenComponent->DOMove(skillPos, tempDistance / m_WSkillProjectileSpeed).OnComplete([=]()
 		{
+			isOncedActivated = false;
+
 			SetSkillRequirmentsActive(WSkillProjectile, false);
 			SetSkillRequirmentsActive(WSkillFieldDamage, true);
 

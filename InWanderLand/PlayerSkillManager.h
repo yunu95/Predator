@@ -2,11 +2,11 @@
 #include "YunutyEngine.h"
 #include "ContentsObservee.h"
 #include "Unit.h"
-#include <unordered_map>
 
 /// <summary>
 /// 플레이어 스킬 사용 시 소모되는 게이지에 대한 정보를 공유합니다.
 /// </summary>
+
 
 namespace std {
 	template <>
@@ -53,4 +53,3 @@ public:
 	void AddSkillGauge(int p_addedGauge);
 
 };
-

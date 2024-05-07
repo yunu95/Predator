@@ -173,7 +173,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
         /// Skill Animation
         else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Skill1")
         {
-            each->SetLoop(false);
+            each->SetLoop(true);
             animator->PushAnimation(each);
             m_baseUnitAnimations.m_skillOneAnimation = each;
             m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::Q, each);
