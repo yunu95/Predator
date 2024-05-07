@@ -136,14 +136,7 @@ void GraphicsTest()
     //    test4->renderer = particle;
     //}
 	{
-        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stage1_Floor");
-	}
-	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObject();
-        obj2->GetTransform()->SetLocalScale(Vector3d{ 634,634,634 });
-        auto renderer = obj2->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-        renderer->GetGI().SetMesh(_resourceManager->GetMesh(L"Sphere"));
-        renderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"DebugPS.cso"));
+        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
 	}
 
 	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();

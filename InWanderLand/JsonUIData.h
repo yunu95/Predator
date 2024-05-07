@@ -91,6 +91,13 @@ struct JsonUIData
     // 임의로 사용하게 될 사용자 플래그
     bool disableOnStartEdtior;
     bool disableOnStartExe;
+    string musicPlayOnEnable_musicClip;
+    float musicPlayOnEnable_fadeOut;
+    float musicPlayOnEnable_fadeIn;
+    string musicPlayOnDisable_musicClip;
+    float musicPlayOnDisable_fadeOut;
+    float musicPlayOnDisable_fadeIn;
+    float musicMultiplyVolumeOnEnableDisable_enableFactor;
     int customFlags;
     int customFlags2;
     // UI의 고유한 EnumID

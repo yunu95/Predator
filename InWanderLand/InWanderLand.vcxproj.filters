@@ -541,6 +541,9 @@
     <Filter Include="Particle\AnimationEvent">
       <UniqueIdentifier>{0f133439-c7b8-44b5-b72d-f02ab370b618}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\Effect\PlayMusicTimer">
+      <UniqueIdentifier>{224a689c-3f8e-4c92-81a4-6c2845252e50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1381,6 +1384,9 @@
     <ClInclude Include="PlayerSkillManager.h">
       <Filter>Contents\SkillSystem\PlayerSkillSystems</Filter>
     </ClInclude>
+    <ClInclude Include="PlayMusicTimer.h">
+      <Filter>UI\Effect\PlayMusicTimer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2100,6 +2106,9 @@
     </ClCompile>
     <ClCompile Include="PlayerSkillManager.cpp">
       <Filter>Contents\SkillSystem\PlayerSkillSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayMusicTimer.cpp">
+      <Filter>UI\Effect\PlayMusicTimer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

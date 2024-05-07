@@ -298,6 +298,7 @@ void InstancingManager::RenderStaticDeferred()
 					index++;
 
 					i->isInArea = false;
+					i->isCulled = false;
 				}
 
 				NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),

@@ -1073,6 +1073,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       </ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="PlayerSkillManager.h" />
+    <ClInclude Include="PlayMusicTimer.h" />
     <ClInclude Include="PopDownOnDisable.h" />
     <ClInclude Include="PopupOnEnable.h" />
     <ClInclude Include="GamePlayTimer.h" />
@@ -1342,6 +1343,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="GamePlayTimer.cpp" />
     <ClCompile Include="PawnTrapProductor.cpp" />
     <ClCompile Include="PlayerSkillManager.cpp" />
+    <ClCompile Include="PlayMusicTimer.cpp" />
     <ClCompile Include="PopDownOnDisable.cpp" />
     <ClCompile Include="PopupOnEnable.cpp" />
     <ClCompile Include="PulsingUI.cpp" />

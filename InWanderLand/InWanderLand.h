@@ -27,5 +27,6 @@
 #include "SkillUpgradeSystem.h"
 #include "LinearClippingTimer.h"
 #include "ColorTintTimer.h"
+#include "PlayMusicTimer.h"
 
 #include "SkillSystem.h"
