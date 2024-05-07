@@ -4304,7 +4304,7 @@
                         "temp7Map": "",
                         "temp8Map": "",
                         "temp9Map": "",
-                        "vs": "SkinnedVS.cso"
+                        "vs": "DefaultVS.cso"
                     }
                 ],
                 "meshName": "SKM_HeartQueen",
@@ -6630,7 +6630,7 @@
                         "temp7Map": "",
                         "temp8Map": "",
                         "temp9Map": "",
-                        "vs": "SkinnedVS.cso"
+                        "vs": "DefaultVS.cso"
                     },
                     {
                         "albedoMap": "FBX/SKM_Monster1/SKM_Monster1.fbm/T_Monster1_Eyes_D.dds",
@@ -6653,7 +6653,7 @@
                         "temp7Map": "",
                         "temp8Map": "",
                         "temp9Map": "",
-                        "vs": "SkinnedVS.cso"
+                        "vs": "DefaultVS.cso"
                     }
                 ],
                 "meshName": "SKM_Monster1",
@@ -8052,7 +8052,7 @@
                         "temp7Map": "",
                         "temp8Map": "",
                         "temp9Map": "",
-                        "vs": "SkinnedVS.cso"
+                        "vs": "DefaultVS.cso"
                     },
                     {
                         "albedoMap": "FBX/SKM_Monster2/SKM_Monster2.fbm/T_Monster2_Eyes_D.dds",
@@ -8075,7 +8075,7 @@
                         "temp7Map": "",
                         "temp8Map": "",
                         "temp9Map": "",
-                        "vs": "SkinnedVS.cso"
+                        "vs": "DefaultVS.cso"
                     },
                     {
                         "albedoMap": "FBX/SKM_Monster2/SKM_Monster2.fbm/T_Spear_D.dds",
@@ -8098,7 +8098,7 @@
                         "temp7Map": "",
                         "temp8Map": "",
                         "temp9Map": "",
-                        "vs": "SkinnedVS.cso"
+                        "vs": "DefaultVS.cso"
                     }
                 ],
                 "meshName": "SKM_Monster2",
@@ -9591,7 +9591,7 @@
                         "temp7Map": "",
                         "temp8Map": "",
                         "temp9Map": "",
-                        "vs": "SkinnedVS.cso"
+                        "vs": "DefaultVS.cso"
                     },
                     {
                         "albedoMap": "FBX/SKM_Robin/SKM_Robin.fbm/T_Robin_A_D.dds",
@@ -9614,7 +9614,7 @@
                         "temp7Map": "",
                         "temp8Map": "",
                         "temp9Map": "",
-                        "vs": "SkinnedVS.cso"
+                        "vs": "DefaultVS.cso"
                     }
                 ],
                 "meshName": "SKM_Robin",
@@ -19860,24 +19860,24 @@
                 "hasAnimation": false,
                 "materialVec": [
                     {
-                        "albedoMap": "",
-                        "armMap": "",
-                        "emissionMap": "",
-                        "heightMap": "",
+                        "albedoMap": "Texture\\VertexColor\\T_Dirt_BaseColor.dds",
+                        "armMap": "Texture\\VertexColor\\T_Dirt_ARM.dds",
+                        "emissionMap": "Texture\\VertexColor\\T_Grass_Normal.dds",
+                        "heightMap": "Texture\\VertexColor\\T_Grass_BaseColor.dds",
                         "materialName": "M_Stage1_Floor",
-                        "normalMap": "",
+                        "normalMap": "Texture\\VertexColor\\T_Dirt_Normal.dds",
                         "opacityMap": "",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
+                        "ps": "Stage_1_FloorPS.cso",
+                        "temp0Map": "Texture\\VertexColor\\T_Grass_BaseColor.dds",
                         "temp10Map": "",
                         "temp11Map": "",
-                        "temp1Map": "",
+                        "temp1Map": "Texture\\VertexColor\\T_GrassBlend_Normal.dds",
                         "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
+                        "temp3Map": "Texture\\VertexColor\\T_Tile_BaseColor.dds",
+                        "temp4Map": "Texture\\VertexColor\\T_Tile_Normal.dds",
                         "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
+                        "temp6Map": "Texture\\VertexColor\\T_TileBlend_BaseColor.dds",
+                        "temp7Map": "Texture\\VertexColor\\T_TileBlend_Normal.dds",
                         "temp8Map": "",
                         "temp9Map": "",
                         "vs": "DefaultVS.cso"
