@@ -50,6 +50,15 @@ void UIElement::EnableElement()
     {
         soundOnEnable->ActivateTimer();
     }
+    if (importedUIData.customFlags2 & (int)UIExportFlag2::PlayMusicOnEnable)
+    {
+        auto musicPlayTimer = Scene::getCurrentScene()->AddGameObject()->AddComponent<PlayMusicTimer>();
+        musicPlayTimer->fadeInTime = importedUIData.musicPlayOnEnable_fadeIn;
+        musicPlayTimer->fadeOutTime = importedUIData.musicPlayOnEnable_fadeOut;
+        musicPlayTimer->musicPath = importedUIData.musicPlayOnEnable_musicClip;
+        musicPlayTimer->Init();
+        musicPlayTimer->ActivateTimer();
+    }
     if (linearClippingTimerOnEnable != nullptr)
     {
         linearClippingTimerOnEnable->ActivateTimer();
@@ -61,6 +70,14 @@ void UIElement::EnableElement()
     if (timePauseOnEnable)
     {
         timePauseOnEnable->ActivateTimer();
+    }
+    if (importedUIData.customFlags2 & (int)UIExportFlag2::PauseMusicOnEnable)
+    {
+        SoundSystem::PauseMusic();
+    }
+    if (importedUIData.customFlags2 & (int)UIExportFlag2::MultiplyMusicVolumeOnEnableDisable)
+    {
+        SoundSystem::SetMusicVolume(SoundSystem::GetMusicVolume() * importedUIData.musicMultiplyVolumeOnEnableDisable_enableFactor);
     }
     for (auto each : children)
     {
@@ -114,6 +131,15 @@ void UIElement::DisableElement()
     {
         soundOnDisable->ActivateTimer();
     }
+    if (importedUIData.customFlags2 & (int)UIExportFlag2::PlayMusicOnDisable)
+    {
+        auto musicPlayTimer = Scene::getCurrentScene()->AddGameObject()->AddComponent<PlayMusicTimer>();
+        musicPlayTimer->fadeInTime = importedUIData.musicPlayOnDisable_fadeIn;
+        musicPlayTimer->fadeOutTime = importedUIData.musicPlayOnDisable_fadeOut;
+        musicPlayTimer->musicPath = importedUIData.musicPlayOnDisable_musicClip;
+        musicPlayTimer->Init();
+        musicPlayTimer->ActivateTimer();
+    }
     if (disablingHandled == false)
     {
         GetGameObject()->SetSelfActive(false);
@@ -125,6 +151,21 @@ void UIElement::DisableElement()
             timePauseOnEnable->StopTimer();
         }
         Time::SetTimeScale(1);
+    }
+    if (importedUIData.customFlags2 & (int)UIExportFlag2::UnPauseMusicOnDisable)
+    {
+        SoundSystem::UnpauseMusic();
+    }
+    if (importedUIData.customFlags2 & (int)UIExportFlag2::MultiplyMusicVolumeOnEnableDisable)
+    {
+        if (importedUIData.musicMultiplyVolumeOnEnableDisable_enableFactor == 0)
+        {
+            SoundSystem::SetMusicVolume(1);
+        }
+        else
+        {
+            SoundSystem::SetMusicVolume(SoundSystem::GetMusicVolume() * 1 / importedUIData.musicMultiplyVolumeOnEnableDisable_enableFactor);
+        }
     }
     if (parentPriorityLayout)
     {

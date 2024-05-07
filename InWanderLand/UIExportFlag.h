@@ -78,4 +78,9 @@ enum class UIExportFlag2
     IsBarCells = 1 << 3,
     // 0일때 하나도 클립 안함, 1일때 완전히 클립함
     AdjustLinearClip = 1 << 4,
+    PlayMusicOnEnable = 1 << 5,
+    PlayMusicOnDisable = 1 << 6,
+    PauseMusicOnEnable = 1 << 7,
+    UnPauseMusicOnDisable = 1 << 8,
+    MultiplyMusicVolumeOnEnableDisable = 1 << 9,
 };

@@ -65,13 +65,21 @@ const unordered_set<string>& yunutyEngine::SoundSystem::mGetLoadedSoundsList()
 {
     return loadedSounds;
 }
-SoundChannel yunutyEngine::SoundSystem::PlayMusic(string soundPath)
+void yunutyEngine::SoundSystem::PlayMusic(string soundPath)
 {
     return SoundSystem::SingleInstance()->mPlayMusic(soundPath);
 }
-SoundChannel yunutyEngine::SoundSystem::StopMusic(double fadeLength)
+void yunutyEngine::SoundSystem::PauseMusic()
 {
-    return SoundSystem::SingleInstance()->mStopMusic(fadeLength);
+    return SoundSystem::SingleInstance()->mPauseMusic();
+}
+void yunutyEngine::SoundSystem::UnpauseMusic()
+{
+    return SoundSystem::SingleInstance()->mContinueMusic();
+}
+void yunutyEngine::SoundSystem::StopMusic(double fadeLength)
+{
+    SoundSystem::SingleInstance()->mStopMusic(fadeLength);
 }
 bool yunutyEngine::SoundSystem::LoadSound(string soundPath)
 {
@@ -87,30 +95,47 @@ const unordered_set<string>& yunutyEngine::SoundSystem::GetLoadedSoundsList()
 }
 void yunutyEngine::SoundSystem::SetMusicVolume(float volume)
 {
-    soundInstance->bgmChannel->setVolume(volume);
+    SingleInstance()->musicVolume = volume;
+    if (soundInstance->bgmChannel)
+    {
+        soundInstance->bgmChannel->setVolume(volume);
+    }
 }
 float yunutyEngine::SoundSystem::GetMusicVolume()
 {
-    float volume;
-    soundInstance->bgmChannel->getVolume(&volume);
-    return volume;
+    return SingleInstance()->musicVolume;
 }
-SoundChannel yunutyEngine::SoundSystem::mPlayMusic(string soundPath)
+void yunutyEngine::SoundSystem::mPlayMusic(string soundPath)
 {
     if (sounds.find(soundPath) == sounds.end())
     {
         sounds[soundPath] = nullptr;
         fmodSystem->createSound(soundPath.c_str(), FMOD_LOOP_NORMAL, 0, &sounds[soundPath]);
     }
-    bool isPlaying;
-    bgmChannel->isPlaying(&isPlaying);
-    if (!isPlaying)
-        fmodSystem->playSound(sounds[soundPath], 0, false, &bgmChannel);
+    bool isPlaying = false;
 
-    return SoundChannel(bgmChannel);
+    if (bgmChannel)
+    {
+        bgmChannel->isPlaying(&isPlaying);
+    }
+    if (!isPlaying)
+    {
+        fmodSystem->playSound(sounds[soundPath], 0, false, &bgmChannel);
+        SetMusicVolume(musicVolume);
+    }
 }
-SoundChannel yunutyEngine::SoundSystem::mStopMusic(double fadeLength)
+void yunutyEngine::SoundSystem::mPauseMusic()
 {
-    bgmChannel->stop();
-    return SoundChannel(bgmChannel);
+    if (bgmChannel)
+        bgmChannel->setPaused(true);
+}
+void yunutyEngine::SoundSystem::mContinueMusic()
+{
+    if (bgmChannel)
+        bgmChannel->setPaused(false);
+}
+void yunutyEngine::SoundSystem::mStopMusic(double fadeLength)
+{
+    if (bgmChannel)
+        bgmChannel->stop();
 }

@@ -1070,6 +1070,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugEditorExe|x64'">
       </ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="PlayMusicTimer.h" />
     <ClInclude Include="PopDownOnDisable.h" />
     <ClInclude Include="PopupOnEnable.h" />
     <ClInclude Include="GamePlayTimer.h" />
@@ -1336,6 +1337,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     </ClCompile>
     <ClCompile Include="GamePlayTimer.cpp" />
     <ClCompile Include="PawnTrapProductor.cpp" />
+    <ClCompile Include="PlayMusicTimer.cpp" />
     <ClCompile Include="PopDownOnDisable.cpp" />
     <ClCompile Include="PopupOnEnable.cpp" />
     <ClCompile Include="PulsingUI.cpp" />
