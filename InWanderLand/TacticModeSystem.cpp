@@ -243,6 +243,7 @@ bool TacticModeSystem::IsTacticModeCoolTime() const
 {
     return isCoolTime;
 }
+
 void TacticModeSystem::SetCurrentCoolTimeElapsed(float elapsed)
 {
     m_engageCoolTimeElapsed = elapsed;
