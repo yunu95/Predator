@@ -31,6 +31,7 @@
 #include "CinematicManager.h"
 #include "TutorialManager.h"
 #include "ContentsObserver.h"
+#include "ParticleTool_Manager.h"
 
 #include <algorithm>
 #include <string>
@@ -205,6 +206,13 @@ void application::contents::ContentsLayer::Initialize()
     TutorialManager::Instance();
 
     wanderUtils::LoadResourcesRecursively();
+
+    /// Particle 및 AnimationEvent
+    auto& particleManager = particle::ParticleTool_Manager::GetSingletonInstance();
+    particleManager.LoadSkinnedFBX();
+    particleManager.LoadPP("InWanderLand.pp");
+    particleManager.LoadPPIs("InWanderLand.ppis");
+    ///
 
     {
         auto obj = Scene::getCurrentScene()->AddGameObject();

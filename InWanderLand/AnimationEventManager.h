@@ -49,8 +49,8 @@ namespace application
 		
 		void UpdateTransformEditEvent(const std::shared_ptr<AnimationEvent>& event);
 
-	private:
 		Transform* GetLerpPoint(const RampEdit& data, float frame);
+	private:
 		GameObject* container = nullptr;
 
 		std::map<const std::string, yunutyEngine::GameObject*>* skinnedObjList = nullptr;

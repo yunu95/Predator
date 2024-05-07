@@ -40,7 +40,7 @@ namespace application::editor::palette
 
     void ParticlePalette::Initialize()
     {
-
+        TemplateDataManager::GetSingletonInstance().CreateTemplateData("DefaultParticle", DataType::ParticleData);
     }
 
     void ParticlePalette::Reset()
@@ -54,7 +54,7 @@ namespace application::editor::palette
         if (selectedParticleTemplateData == nullptr)
             return nullptr;
 
-        auto instance = InstanceManager::GetSingletonInstance().CreateInstance<ParticleData>(selectedParticleTemplateData->GetDataKey());
+        auto instance = InstanceManager::GetSingletonInstance().CreateInstance<ParticleData>("DefaultParticle");
         instance->pod.position.x = worldPosition.x;
         instance->pod.position.y = worldPosition.y;
         instance->pod.position.z = worldPosition.z;

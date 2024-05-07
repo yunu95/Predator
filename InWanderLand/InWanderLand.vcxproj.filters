@@ -535,6 +535,12 @@
     <Filter Include="Contents\ContentsStopFlag">
       <UniqueIdentifier>{53b22dd4-79bf-4f80-a973-51592ab718a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Particle">
+      <UniqueIdentifier>{29068aaa-7d00-4fb9-a2bb-8590175a4d6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Particle\AnimationEvent">
+      <UniqueIdentifier>{0f133439-c7b8-44b5-b72d-f02ab370b618}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1297,9 +1303,6 @@
     <ClInclude Include="Action_Tutorial.h">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClInclude>
-    <ClInclude Include="Particle_TemplateData.h">
-      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
-    </ClInclude>
     <ClInclude Include="ParticleData.h">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClInclude>
@@ -1353,6 +1356,21 @@
     </ClInclude>
     <ClInclude Include="ContentsStopFlag.h">
       <Filter>Contents\ContentsStopFlag</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleTool_Manager.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationEventManager.h">
+      <Filter>Particle\AnimationEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationEvents.h">
+      <Filter>Particle\AnimationEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleToolData.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle_TemplateData.h">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2002,9 +2020,6 @@
     <ClCompile Include="Action_Tutorial.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClCompile>
-    <ClCompile Include="Particle_TemplateData.cpp">
-      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
-    </ClCompile>
     <ClCompile Include="ParticleData.cpp">
       <Filter>Editor\DataSystem\EditableData\DataType</Filter>
     </ClCompile>
@@ -2058,6 +2073,15 @@
     </ClCompile>
     <ClCompile Include="ColorTIntTimer.cpp">
       <Filter>UI\Effect\ColorTintTimer</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleTool_Manager.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationEventManager.cpp">
+      <Filter>Particle\AnimationEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle_TemplateData.cpp">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
