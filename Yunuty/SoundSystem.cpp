@@ -12,6 +12,10 @@ SoundChannel yunutyEngine::SoundSystem::PlaySoundfile(string soundPath)
 {
     return SingleInstance()->mPlaySound(soundPath);
 }
+//SoundChannel yunutyEngine::SoundSystem::PlaySoundfile3D(string soundPath, Vector3d viewSpacePosition)
+//{
+//
+//}
 SoundSystem* yunutyEngine::SoundSystem::SingleInstance()
 {
     if (!soundInstance)
@@ -47,6 +51,15 @@ SoundChannel yunutyEngine::SoundSystem::mPlaySound(string soundPath)
         }
     }
     return SoundChannel(channels[lastChannelIndex]);
+}
+bool yunutyEngine::SoundSystem::mLoad3DSound(string soundPath)
+{
+    if (sounds3D.find(soundPath) == sounds3D.end())
+    {
+        fmodSystem->createSound(soundPath.c_str(), FMOD_3D, 0, &sounds3D[soundPath]);
+        loadedSounds3D.insert(soundPath);
+    }
+    return true;
 }
 bool yunutyEngine::SoundSystem::mLoadSound(string soundPath)
 {
