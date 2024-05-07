@@ -4,16 +4,29 @@
 void UIPriorityLayout::EnableChildUI(GameObject* ui)
 {
     enabledUIs.insert(ui);
-    StartTransition();
+    StartTransition(ui);
 }
 void UIPriorityLayout::DisableChildUI(GameObject* ui)
 {
     enabledUIs.erase(ui);
-    StartTransition();
+    StartTransition(nullptr);
 }
-void UIPriorityLayout::StartTransition()
+void UIPriorityLayout::StartTransition(GameObject* newlyEnabledElement)
 {
     std::transform(enabledUIs.begin(), enabledUIs.end(), std::back_inserter(startPositions), [](GameObject* ui) { return ui->GetTransform()->GetLocalPosition(); });
+    if (newlyEnabledElement)
+    {
+        int posIdx = 0;
+        for (auto ui : enabledUIs)
+        {
+            if (ui == newlyEnabledElement)
+            {
+                ui->GetTransform()->SetLocalPosition(positions[posIdx]);
+            }
+            posIdx++;
+        }
+        enabledUIs.insert(newlyEnabledElement);
+    }
     onUpdate = [this](float t)
         {
             int posIdx = 0;

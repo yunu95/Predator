@@ -65,7 +65,7 @@ void yunutyEngine::GameObject::SetSelfActive(bool selfActive)
 
     activeAfter = GetActive();
     PropagateActiveEvent(activeBefore, activeAfter);
-
+    parent->HandleChildUpdateState(this);
 }
 GameObject* yunutyEngine::GameObject::GetParentGameObject()
 {
@@ -130,6 +130,21 @@ unique_ptr<yunutyEngine::GameObject> yunutyEngine::GameObject::MoveChild(GameObj
 const vector<GameObject*>& yunutyEngine::GameObject::GetChildren()const
 {
     return childrenIndexed;
+}
+vector<GameObject*> yunutyEngine::GameObject::GetChildrenRecursively()
+{
+    vector<GameObject*> ret;
+    stack<GameObject*> objStack;
+    objStack.push(this);
+    while (!objStack.empty())
+    {
+        auto obj = objStack.top();
+        objStack.pop();
+        for (auto itr = obj->childrenIndexed.rbegin(); itr != obj->childrenIndexed.rend(); itr++)
+            objStack.push(*itr);
+        ret.push_back(obj);
+    }
+    return ret;
 }
 void yunutyEngine::GameObject::ReceiveChild(remove_reference<unique_ptr<GameObject>>::type&& child)
 {
@@ -257,7 +272,7 @@ int yunutyEngine::GameObject::GetSceneIndex(const GameObject* target)
                 objStack.push(brother);
             }
         }
-}
+    }
     return target->cachedSceneIndex;
 }
 string yunutyEngine::GameObject::getName()const

@@ -49,6 +49,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <chrono>
 
 LazyObjects<RenderSystem> RenderSystem::Instance;
 
@@ -171,6 +172,13 @@ void RenderSystem::PushCameraData()
 
 void RenderSystem::Render()
 {
+	//auto start = std::chrono::steady_clock::now();
+
+	//FrustumCullingManager::Instance.Get().Wait();
+
+	//auto end = std::chrono::steady_clock::now();
+	//std::chrono::duration<double, std::milli> duration_ms = end - start;
+
 	ResourceManager::Instance.Get().GetTexture(L"LightMapList")->Bind(24);
 	UtilBuffer utilBuffer;
 	utilBuffer.windowWidth = NailEngine::Instance.Get().GetWindowInfo().width;

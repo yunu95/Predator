@@ -3,6 +3,7 @@
 
 #include "InstanceBuffer.h"
 #include "RenderSystem.h"
+#include "QuadTree.h"
 
 #include <map>
 #include <set>
@@ -94,6 +95,8 @@ public:
 	void PopParticleSystem(ParticleSystem* system);
 	void RenderParticle();
 
+	std::vector<std::pair<InstanceID, std::vector<std::shared_ptr<RenderInfo>>>>& GetStaticRenderInfoVec() { return staticMeshDeferredRenderVec; }
+
 private:
 	void AddData(const InstanceID& id, InstancingData& instancingData);
 
@@ -119,4 +122,5 @@ private:
 	std::shared_ptr<ParticleBuffer> particleBuffer;
 	std::shared_ptr<LightMapUVBuffer> lightMapUVBuffer;
 
+	QuadTree<RenderInfo> quadTree{ DirectX::SimpleMath::Vector2{ 10000,10000 }, DirectX::SimpleMath::Vector2{ 10,10} };
 };

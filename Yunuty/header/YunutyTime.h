@@ -22,6 +22,10 @@ namespace yunutyEngine
         static double deltaTimeUnscaled;
         static double timeElapsed;
         static double timeElapsedUnscaled;
+        // 디버그용으로 사용할 업데이트 절차당 걸린 시간에 대한 정보
+        static double timeUsedForUpdate;
+        static double timeUsedForPhysx;
+        static double timeUsedForRender;
         static void Update();
         static queue<double> fpsQueue;
     public:
@@ -32,5 +36,8 @@ namespace yunutyEngine
         static double GetTimeElapsed();
         static double GetTimeElapsedUnscaled();
         static int GetFPS();
+        static double GetTimeUsedForUpdate();
+        static double GetTimeUsedForPhysx();
+        static double GetTimeUsedForRender();
     };
 }

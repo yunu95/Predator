@@ -23,6 +23,8 @@
 #include "ShortcutSystem.h"
 #include "PlaytimeWave.h"
 #include "BurnEffect.h"
+#include "ParticleTool_Manager.h"
+#include "AnimationEventManager.h"
 
 namespace application
 {
@@ -217,26 +219,164 @@ namespace application
             {
                 tempShortCutIndex = 1;
 
-                switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
+                if (pod.templateData->pod.skinnedFBXName == "SKM_Robin")
                 {
-                    case Unit::UnitType::Warrior:
-                        currentSelectedProductor = &WarriorProductor::Instance();
-                        break;
-                    case Unit::UnitType::Magician:
-                        currentSelectedProductor = &MagicianProductor::Instance();
-                        break;
-                    case Unit::UnitType::Healer:
-                        currentSelectedProductor = &HealerProductor::Instance();
-                        break;
-					case Unit::UnitType::Boss:
+                    /// 임시 - 보스
+                    if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::Boss)
+                    {
 						currentSelectedProductor = &BossProductor::Instance();
-						break;
-                    default:
-                        break;
+                    }
+                    else
+                    {
+						currentSelectedProductor = &WarriorProductor::Instance();
+                    }
                 }
-
+                else if (pod.templateData->pod.skinnedFBXName == "SKM_Ursula")
+                {
+					currentSelectedProductor = &MagicianProductor::Instance();
+                }
+                else if (pod.templateData->pod.skinnedFBXName == "SKM_Hansel")
+                {
+                    currentSelectedProductor = &HealerProductor::Instance();;
+                }
                 currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                 inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+            }
+
+            if (inGameUnit)
+            {
+                auto& ptm = particle::ParticleTool_Manager::GetSingletonInstance();
+                const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+                auto obj = inGameUnit->GetGameObject();
+                auto animator = obj->GetComponent<graphics::Animator>();
+                std::wstring fbxNameW;
+                fbxNameW.assign(pod.templateData->pod.skinnedFBXName.begin(), pod.templateData->pod.skinnedFBXName.end());
+
+                /// Particle Setting
+                for (auto& eachPI : ptm.GetChildrenParticleInstanceList(pod.templateData->pod.skinnedFBXName))
+                {
+                    auto pObj = obj->AddGameObject();
+                    auto sptr = eachPI.lock();
+                    pObj->GetTransform()->SetLocalPosition(sptr->offsetPos);
+                    pObj->GetTransform()->SetLocalRotation(sptr->rotation);
+                    pObj->GetTransform()->SetLocalScale(sptr->scale);
+                    pObj->setName(sptr->name);
+                    auto pr = pObj->AddComponent<graphics::ParticleRenderer>();
+                    pr->SetParticleShape((yunutyEngine::graphics::ParticleShape)sptr->particleData.shape);
+                    pr->SetParticleMode((yunutyEngine::graphics::ParticleMode)sptr->particleData.particleMode);
+                    pr->SetLoop(sptr->particleData.isLoop);
+                    pr->SetDuration(sptr->particleData.duration);
+                    pr->SetLifeTime(sptr->particleData.lifeTime);
+                    pr->SetSpeed(sptr->particleData.speed);
+                    pr->SetStartScale(sptr->particleData.startScale);
+                    pr->SetEndScale(sptr->particleData.endScale);
+                    pr->SetMaxParticle(sptr->particleData.maxParticle);
+                    pr->SetPlayAwake(sptr->particleData.playAwake);
+                    
+                    pr->SetRateOverTime(sptr->particleData.rateOverTime);
+                    
+                    pr->SetBurstsCount(sptr->particleData.burstsCount);
+                    pr->SetInterval(sptr->particleData.interval);
+                    pObj->SetSelfActive(false);
+                }
+
+                /// Animation Event Setting
+                auto& list = resourceManager->GetFBXAnimationList(fbxNameW);
+                for (auto& each : list)
+                {
+                    std::string aniName;
+                    aniName.assign(each->GetName().begin(), each->GetName().end());
+
+                    for (auto& eventWeak : ptm.GetAnimationEventList(ptm.GetMatchingIAnimation(pod.templateData->pod.skinnedFBXName, aniName)))
+                    {
+                        auto event = eventWeak.lock();
+                        auto type = event->GetType();
+                        switch (type)
+                        {
+                            case application::AnimationEventType::GameObject_ActivateEvent:
+                            {
+                                auto ptr = static_cast<GameObject_ActivateEvent*>(event.get());
+                                GameObject* particle = nullptr;
+                                for (auto& child : obj->GetChildren())
+                                {
+                                    if (child->getName() == ptr->objName)
+                                    {
+                                        particle = child;
+                                        break;
+                                    }
+                                }
+
+                                animator->PushAnimationWithFunc(each, event->frame, [=]()
+                                    {
+                                        particle->SetSelfActive(true);
+                                        auto ptr = particle->GetComponent<graphics::ParticleRenderer>();
+                                        ptr->Play();
+                                    });
+
+                                break;
+                            }
+                            case application::AnimationEventType::GameObject_DisabledEvent:
+                            {
+                                auto ptr = static_cast<GameObject_DisabledEvent*>(event.get());
+                                GameObject* particle = nullptr;
+                                for (auto& child : obj->GetChildren())
+                                {
+                                    if (child->getName() == ptr->objName)
+                                    {
+                                        particle = child;
+                                        break;
+                                    }
+                                }
+
+                                animator->PushAnimationWithFunc(each, event->frame, [=]()
+                                    {
+                                        particle->SetSelfActive(false);
+                                    });
+
+                                break;
+                            }
+                            case application::AnimationEventType::GameObject_TransformEditEvent:
+                            {
+                                auto ptr = static_cast<GameObject_TransformEditEvent*>(event.get());
+                                GameObject* particle = nullptr;
+                                for (auto& child : obj->GetChildren())
+                                {
+                                    if (child->getName() == ptr->objName)
+                                    {
+                                        particle = child;
+                                        break;
+                                    }
+                                }
+
+                                for (int i = 0; i < each->GetTotalFrame(); i++)
+                                {
+                                    animator->PushAnimationWithFunc(each, i, [=]()
+                                        {
+                                            auto& aem = AnimationEventManager::GetSingletonInstance();
+                                            auto target = aem.GetLerpPoint(ptr->editData, i);
+                                            particle->GetTransform()->SetLocalPosition(target->GetLocalPosition());
+                                            particle->GetTransform()->SetLocalRotation(target->GetLocalRotation());
+                                            particle->GetTransform()->SetLocalScale(target->GetLocalScale());
+                                        });
+                                }
+
+                                break;
+                            }
+                            case application::AnimationEventType::Sound_PlayOnceEvent:
+                            {
+                                auto ptr = static_cast<Sound_PlayOnceEvent*>(event.get());
+                                break;
+                            }
+                            case application::AnimationEventType::Sound_PlayLoopEvent:
+                            {
+                                auto ptr = static_cast<Sound_PlayLoopEvent*>(event.get());
+                                break;
+                            }
+                            default:
+                                break;
+                        }
+                    }
+                }
             }
 		}
 

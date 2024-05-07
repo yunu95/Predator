@@ -18,5 +18,5 @@ public:
     void EnableChildUI(GameObject* ui);
     void DisableChildUI(GameObject* ui);
 private:
-    void StartTransition();
+    void StartTransition(GameObject* newlyEnabledElement);
 };

@@ -61,15 +61,15 @@ void UIPanel::SetParentPanel(UIPanel* p_parentPanel)
 	m_parentPanel = p_parentPanel;
 }
 
-void UIPanel::PlayFunction()
-{
-
-}
-
-void UIPanel::StopFunction()
-{
-	yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-}
+//void UIPanel::PlayFunction()
+//{
+//
+//}
+//
+//void UIPanel::StopFunction()
+//{
+//	yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+//}
 
 bool UIPanel::GetPanelActive() const
 {

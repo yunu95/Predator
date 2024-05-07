@@ -25,6 +25,12 @@ void Unit::OnEnable()
 
 void Unit::Start()
 {
+    unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::EnemyStatus));
+    unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
+
+    unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Cells)->adjuster->SetTargetFloat(m_maxHealthPoint);
+    unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Number_Max)->SetNumber(m_maxHealthPoint);
+
     m_initialAutoAttackDamage = m_autoAttackDamage;
     m_bulletSpeed = 5.1f;
     chaseUpdateDelay = 0.1f;
@@ -104,12 +110,12 @@ void Unit::Start()
     unitFSM.transitions[UnitState::Skill].push_back({ UnitState::Idle,
         [=]() { return currentOrder == UnitState::Idle; } });
 
-	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Skill); i++)
-	{
-		unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::Skill,
-		[=]() { return currentOrder == UnitState::Skill || trapClassifingFunction() 
-			&& TacticModeSystem::Instance().IsOrderingTimingNow(); } });
-	}
+    for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Skill); i++)
+    {
+        unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::Skill,
+        [=]() { return currentOrder == UnitState::Skill || trapClassifingFunction()
+            && TacticModeSystem::Instance().IsOrderingTimingNow(); } });
+    }
 
     for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Paralysis); i++)
     {
@@ -196,7 +202,7 @@ void Unit::Start()
 						TacticModeSystem::Instance().ReportTacticActionFinished();
 						isPermittedToTacticAction = false;
                         currentOrder = UnitState::Idle;
-					}
+                    }
                 }
                 isAttackAnimationOperating = false;
                 ChangeAnimation(unitAnimations.m_idleAnimation);
@@ -227,6 +233,10 @@ void Unit::Update()
             }
         }
     }
+    unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
+    auto camTrsform = graphics::Camera::GetMainCamera()->GetTransform();
+    auto shouldBeScreenZero = camTrsform->GetWorldPosition() + camTrsform->GetWorldRotation().Forward() * 10.0f + camTrsform->GetWorldRotation().Right() * 9.6f;
+    //unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(shouldBeScreenZero));
 }
 
 void Unit::OnDestroy()
@@ -261,7 +271,7 @@ Unit::UnitSide Unit::GetUnitSide() const
 #pragma region State Engage()
 void Unit::IdleEngage()
 {
-	//TacticModeSystem::Instance().isTacticModeOperating = false;
+    //TacticModeSystem::Instance().isTacticModeOperating = false;
 
  	currentOrder = UnitState::Idle;
 	idleElapsed = 0.0f;
@@ -419,6 +429,7 @@ void Unit::ParalysisEngage()
 
 void Unit::DeathEngage()
 {
+    unitStatusUI.lock()->DisableElement();
     currentOrder = UnitState::Death;
 
     deathFunctionElapsed = 0.0f;
@@ -450,6 +461,7 @@ void Unit::DeathEngage()
 
 void Unit::WaveStartEngage()
 {
+    unitStatusUI.lock()->EnableElement();
     currentOrder = UnitState::WaveStart;
     moveFunctionElapsed = 0.0f;
 	ChangeAnimation(unitAnimations.m_walkAnimation);
@@ -499,11 +511,11 @@ void Unit::IdleUpdate()
 {
     CheckCurrentAnimation(unitAnimations.m_idleAnimation);
 
-	if (!IsTacticModeQueueEmpty() && !TacticModeSystem::Instance().IsOrderingTimingNow() && isPermittedToTacticAction)
-	{
-		m_tacticModeQueue.front()();
-		m_tacticModeQueue.pop();
-	}
+    if (!IsTacticModeQueueEmpty() && !TacticModeSystem::Instance().IsOrderingTimingNow() && isPermittedToTacticAction)
+    {
+        m_tacticModeQueue.front()();
+        m_tacticModeQueue.pop();
+    }
 
     idleElapsed += Time::GetDeltaTime() * m_localTimeScale;
 
@@ -536,8 +548,8 @@ void Unit::MoveUpdate()
         currentOrder = UnitState::Idle;
         if (isPermittedToTacticAction)
         {
-			TacticModeSystem::Instance().ReportTacticActionFinished();
-			isPermittedToTacticAction = false;
+            TacticModeSystem::Instance().ReportTacticActionFinished();
+            isPermittedToTacticAction = false;
         }
     }
 }
@@ -826,6 +838,13 @@ float Unit::GetAttackOffset() const
     return m_attackOffset;
 }
 
+Unit::~Unit()
+{
+    if (!unitStatusUI.expired())
+    {
+        Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
+    }
+}
 int Unit::GetUnitDamage() const
 {
     return m_autoAttackDamage;
@@ -871,6 +890,11 @@ void Unit::Heal(float healingPoint)
 void Unit::SetUnitCurrentHp(float p_newHp)
 {
     m_currentHealthPoint = p_newHp;
+    if (!unitStatusUI.expired())
+    {
+        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Fill)->adjuster->SetTargetFloat(1 - m_currentHealthPoint / m_maxHealthPoint);
+        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Number_Current)->SetNumber(m_currentHealthPoint);
+    }
     switch (m_unitType)
     {
     case UnitType::Warrior:
@@ -1461,12 +1485,18 @@ void Unit::SetUnitStateIdle()
 
 void Unit::ReportStatusEffectApplied(StatusEffect::StatusEffectEnum p_effectType)
 {
-
+    if (auto ui = UIManager::Instance().GetBuffIcon(this, p_effectType); ui)
+    {
+        ui->EnableElement();
+    }
 }
 
 void Unit::ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType)
 {
-
+    if (auto ui = UIManager::Instance().GetBuffIcon(this, p_effectType); ui)
+    {
+        ui->DisableElement();
+    }
 }
 
 void Unit::PermitTacticAction()

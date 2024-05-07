@@ -127,6 +127,12 @@
     <Filter Include="Light\NailCamera">
       <UniqueIdentifier>{e8370a40-d710-4a8d-8dcb-430aab3bf802}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FrustumCullingManager">
+      <UniqueIdentifier>{60f3eec6-2c16-428e-8d6e-95a6c1a4e65a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="QuadTree">
+      <UniqueIdentifier>{072a4281-775a-49f4-af6a-3f5f116072f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -330,6 +336,12 @@
     <ClInclude Include="Functors.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="FrustumCullingManager.h">
+      <Filter>FrustumCullingManager</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTree.h">
+      <Filter>QuadTree</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -460,6 +472,12 @@
     </ClCompile>
     <ClCompile Include="ParticleSystem.cpp">
       <Filter>GraphicsEngine\RenderableManager\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="FrustumCullingManager.cpp">
+      <Filter>FrustumCullingManager</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadTree.cpp">
+      <Filter>QuadTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

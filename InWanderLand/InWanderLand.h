@@ -25,5 +25,7 @@
 #include "PulsingUI.h"
 #include "TimePauseTimer.h"
 #include "SkillUpgradeSystem.h"
+#include "LinearClippingTimer.h"
+#include "ColorTintTimer.h"
 
 #include "SkillSystem.h"

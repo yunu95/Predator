@@ -32,15 +32,6 @@ namespace yunuGI
 
 namespace application
 {
-	namespace particle
-	{
-		class ParticleToolData;
-		class ParticleToolInstance;
-	}
-}
-
-namespace application
-{
 	class AnimationEventManager
 		: public Singleton<AnimationEventManager>
 	{
@@ -56,7 +47,12 @@ namespace application
 		bool AddAnimationEvent(const std::shared_ptr<AnimationEvent>& event);
 		bool EraseAnimationEvent(const std::shared_ptr<AnimationEvent>& event);
 		
-	private:			
+		void UpdateTransformEditEvent(const std::shared_ptr<AnimationEvent>& event);
+
+	private:
+		Transform* GetLerpPoint(const RampEdit& data, float frame);
+		GameObject* container = nullptr;
+
 		std::map<const std::string, yunutyEngine::GameObject*>* skinnedObjList = nullptr;
 		std::map<const std::string, std::unordered_set<std::shared_ptr<particle::ParticleToolInstance>>>* particleInstanceList = nullptr;
 		std::map<const std::shared_ptr<particle::ParticleToolInstance>, yunutyEngine::GameObject*>* particleInstanceIDMap = nullptr;
@@ -65,5 +61,6 @@ namespace application
 
 		std::unordered_set<std::shared_ptr<AnimationEvent>> eventList = std::unordered_set<std::shared_ptr<AnimationEvent>>();
 		std::unordered_map<std::shared_ptr<AnimationEvent>, unsigned long long> eventFuncIndexList = std::unordered_map<std::shared_ptr<AnimationEvent>, unsigned long long>();
+		std::unordered_map<std::shared_ptr<AnimationEvent>, std::vector<unsigned long long>> animationEditFuncList = std::unordered_map<std::shared_ptr<AnimationEvent>, std::vector<unsigned long long>>();
 	};
 }

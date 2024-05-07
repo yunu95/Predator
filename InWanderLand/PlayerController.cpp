@@ -10,7 +10,7 @@
 
 void PlayerController::Start()
 {
-	isSingletonComponent = true;
+    isSingletonComponent = true;
 }
 
 void PlayerController::SetMovingSystemComponent(RTSCam* sys)
@@ -31,11 +31,11 @@ void PlayerController::ErasePlayerUnit(Unit* p_playerUnit)
 
 void PlayerController::PlayFunction()
 {
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
+    this->SetActive(true);
+    if (isOncePaused)
+    {
+        Start();
+    }
 }
 
 void PlayerController::StopFunction()
@@ -64,18 +64,18 @@ void PlayerController::SetRightClickFunction()
                     //}
                     if (m_cursorDetector->GetCurrentOnMouseUnit() == nullptr)
                     {
-						for (auto e : playerComponentMap)
-						{
-							e.second->OrderMove(pos);
-						}
+                        for (auto e : playerComponentMap)
+                        {
+                            e.second->OrderMove(pos);
+                        }
                     }
-					else if (Unit* selectedUnit = m_cursorDetector->GetCurrentOnMouseUnit();
-						selectedUnit->GetUnitSide() == Unit::UnitSide::Enemy)
+                    else if (Unit* selectedUnit = m_cursorDetector->GetCurrentOnMouseUnit();
+                        selectedUnit->GetUnitSide() == Unit::UnitSide::Enemy)
                     {
-						for (auto e : playerComponentMap)
-						{
-							e.second->OrderAttackMove(pos, selectedUnit);
-						}
+                        for (auto e : playerComponentMap)
+                        {
+                            e.second->OrderAttackMove(pos, selectedUnit);
+                        }
                     }
                 };
         }
@@ -90,12 +90,12 @@ void PlayerController::SetRightClickFunction()
                     //}
                     if (m_cursorDetector->GetCurrentOnMouseUnit() == nullptr)
                     {
-						currentSelectedUnit->OrderMove(pos);
+                        currentSelectedUnit->OrderMove(pos);
                     }
-					else if (m_cursorDetector->GetCurrentOnMouseUnit()->GetUnitSide() == Unit::UnitSide::Enemy)
-					{
-						currentSelectedUnit->OrderAttackMove(pos, m_cursorDetector->GetCurrentOnMouseUnit());
-					}
+                    else if (m_cursorDetector->GetCurrentOnMouseUnit()->GetUnitSide() == Unit::UnitSide::Enemy)
+                    {
+                        currentSelectedUnit->OrderAttackMove(pos, m_cursorDetector->GetCurrentOnMouseUnit());
+                    }
                 };
         }
     }
@@ -104,7 +104,7 @@ void PlayerController::SetRightClickFunction()
         /// 세 플레이어 유닛이 offset을 갖고 이동할 수 있도록 하기
         m_movingSystemComponent->groundRightClickCallback = [=](Vector3d pos)
             {
-                if (!InputManager::Instance().GetInputManagerActive()||UIManager::Instance().IsMouseOnButton())
+                if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
                 {
                     return;
                 }
@@ -120,7 +120,7 @@ void PlayerController::SetLeftClickAttackMove()
 {
     m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
         {
-            if (!InputManager::Instance().GetInputManagerActive()||UIManager::Instance().IsMouseOnButton())
+            if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
             {
                 return;
             }
@@ -148,12 +148,15 @@ void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
             SkillPreviewSystem::Instance().ActivateSkillPreview(true);
             m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
                 {
-                    if (!InputManager::Instance().GetInputManagerActive()||UIManager::Instance().IsMouseOnButton())
+                    if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
                     {
                         return;
                     }
                     SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-                    playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum, pos);
+                    if (auto playerComp = playerComponentMap.find(currentSelectedSerialNumber); playerComp != playerComponentMap.end())
+                    {
+                        playerComp->second->OrderSkill(p_skillNum, pos);
+                    }
                 };
         }
     }

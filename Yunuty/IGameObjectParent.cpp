@@ -14,8 +14,8 @@ namespace yunutyEngine
         else
             updatingChildren.erase(gameObj);
         if (gameObj->parentGameObject != nullptr &&
-            gameObj->parentGameObject->parent != nullptr &&
-            gameObj->DeservesUpdate() != gameObj->parentGameObject->DeservesUpdate())
+            gameObj->parentGameObject->parent != nullptr
+            /*gameObj->DeservesUpdate() != gameObj->parentGameObject->DeservesUpdate()*/)
             gameObj->parentGameObject->parent->HandleChildUpdateState(gameObj->parentGameObject);
     }
 }

@@ -5,6 +5,9 @@
 #pragma once
 
 #include "YunutyEngine.h"
+#include "ImCurveEdit.h"
+
+#include <nlohmann/json.hpp>
 
 #define GET_TYPE(Class) \
 virtual AnimationEventType GetType() override \
@@ -12,12 +15,175 @@ virtual AnimationEventType GetType() override \
 	return AnimationEventType::##Class; \
 }
 
+struct RampEdit 
+	: public ImCurveEdit::Delegate
+{
+	enum class Transform
+	{
+		Position_X,
+		Position_Y,
+		Position_Z,
+		Rotation_X,
+		Rotation_Y,
+		Rotation_Z,
+		Scale_X,
+		Scale_Y,
+		Scale_Z,
+	};
+
+	RampEdit()
+	{
+		mPointCount[(int)Transform::Position_X] = 0;
+		mPointCount[(int)Transform::Position_Y] = 0;
+		mPointCount[(int)Transform::Position_Z] = 0;
+		mPointCount[(int)Transform::Rotation_X] = 0;
+		mPointCount[(int)Transform::Rotation_Y] = 0;
+		mPointCount[(int)Transform::Rotation_Z] = 0;
+		mPointCount[(int)Transform::Scale_X] = 0;
+		mPointCount[(int)Transform::Scale_Y] = 0;
+		mPointCount[(int)Transform::Scale_Z] = 0;
+
+		mbVisible[(int)Transform::Position_X] = true;
+		mbVisible[(int)Transform::Position_Y] = true;
+		mbVisible[(int)Transform::Position_Z] = true;
+		mbVisible[(int)Transform::Rotation_X] = true;
+		mbVisible[(int)Transform::Rotation_Y] = true;
+		mbVisible[(int)Transform::Rotation_Z] = true;
+		mbVisible[(int)Transform::Scale_X] = false;
+		mbVisible[(int)Transform::Scale_Y] = false;
+		mbVisible[(int)Transform::Scale_Z] = false;
+	}
+
+	size_t GetCurveCount()
+	{
+		return 9;
+	}
+
+	bool IsVisible(size_t curveIndex)
+	{
+		return mbVisible[curveIndex];
+	}
+
+	size_t GetPointCount(size_t curveIndex)
+	{
+		return mPointCount[curveIndex];
+	}
+
+	uint32_t GetCurveColor(size_t curveIndex)
+	{
+		uint32_t cols[] = { 0xFF0000FF, 0xFF00FF00, 0xFFFF0000, 0xFF0000FF, 0xFF00FF00, 0xFFFF0000, 0xFF0000FF, 0xFF00FF00, 0xFFFF0000 };
+		return cols[curveIndex];
+	}
+
+	ImVec2* GetPoints(size_t curveIndex)
+	{
+		return &(*mPts[curveIndex].begin());
+	}
+
+	virtual ImCurveEdit::CurveType GetCurveType(size_t curveIndex) const { return ImCurveEdit::CurveSmooth; }
+	
+	virtual int EditPoint(size_t curveIndex, int pointIndex, ImVec2 value)
+	{
+		mPts[curveIndex][pointIndex] = ImVec2(value.x, value.y);
+		SortValues(curveIndex);
+		for (size_t i = 0; i < GetPointCount(curveIndex); i++)
+		{
+			if (mPts[curveIndex][i].x == value.x)
+				return (int)i;
+		}
+		return pointIndex;
+	}
+
+	virtual void AddPoint(size_t curveIndex, ImVec2 value)
+	{
+		int index = 0;
+		for (auto& each : mPts[curveIndex])
+		{
+			if (each.x == value.x)
+			{
+				ErasePoint(curveIndex, index);
+				break;
+			}
+			index++;
+		}
+
+		mPts[curveIndex].push_back(value);
+		mPointCount[curveIndex]++;
+		SortValues(curveIndex);
+	}
+
+	void ErasePoint(size_t curveIndex, unsigned int index)
+	{
+		if (index > mPointCount[curveIndex])
+		{
+			return;
+		}
+		mPts[curveIndex].erase(mPts[curveIndex].begin() + index);
+		mPointCount[curveIndex]--;
+		SortValues(curveIndex);
+	}
+
+	virtual ImVec2& GetMax() { return mMax; }
+	virtual ImVec2& GetMin() { return mMin; }
+	virtual unsigned int GetBackgroundColor() { return 0; }
+	std::vector<ImVec2> mPts[9];
+	size_t mPointCount[9];
+	bool mbVisible[9];
+	ImVec2 mMin = ImVec2(0.f, 0.f);
+	ImVec2 mMax = ImVec2(1.f, 1.f);
+
+	operator nlohmann::json() const
+	{
+		nlohmann::json finalData;
+
+		for (int i = 0; i < 9; i++)
+		{
+			nlohmann::json data;
+			for (int j = 0; j < mPointCount[i]; j++)
+			{
+				data["mPts"][j]["x"] = mPts[i][j].x;
+				data["mPts"][j]["y"] = mPts[i][j].y;
+			}
+
+			finalData[i] = data;
+		}
+		
+		return finalData;
+	}
+
+	RampEdit& operator=(const nlohmann::json& data)
+	{
+		for (int i = 0; i < 9; i++)
+		{
+			for (int j = 0; j < data[i]["mPts"].size(); j++)
+			{
+				ImVec2 points;
+				points.x = data[i]["mPts"][j]["x"];
+				points.y = data[i]["mPts"][j]["y"];
+
+				AddPoint(i, points);
+			}
+		}
+
+		return *this;
+	}
+
+private:
+	void SortValues(size_t curveIndex)
+	{
+		auto b = std::begin(mPts[curveIndex]);
+		auto e = std::begin(mPts[curveIndex]) + GetPointCount(curveIndex);
+		std::sort(b, e, [](ImVec2 a, ImVec2 b) { return a.x < b.x; });
+	}
+};
+
 namespace application
 {
 	enum class AnimationEventType
 	{
 		GameObject_ActivateEvent,
 		GameObject_DisabledEvent,
+		GameObject_TransformEditEvent,
 		Sound_PlayOnceEvent,
 		Sound_PlayLoopEvent
 	};
@@ -32,8 +198,6 @@ namespace application
 		float frame;
 	};
 
-	/// Object 의 GUID 를 통해 Binding 하면 좋을 것 같으나,
-	/// 해당 내용이 Engine 에는 현재 반영되지 않은 것으로 보여
 	/// 우선은 Object Name 으로 관리하도록 합니다.
 	struct GameObject_ActivateEvent
 		: public AnimationEvent
@@ -49,6 +213,15 @@ namespace application
 		GET_TYPE(GameObject_DisabledEvent)
 
 		std::string objName;
+	};
+
+	struct GameObject_TransformEditEvent
+		: public AnimationEvent
+	{
+		GET_TYPE(GameObject_TransformEditEvent)
+
+		std::string objName;
+		RampEdit editData;
 	};
 
 	struct Sound_PlayOnceEvent

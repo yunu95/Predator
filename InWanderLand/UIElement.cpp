@@ -19,13 +19,25 @@ void UIElement::Start()
 };
 void UIElement::EnableElement()
 {
+    if (enabled)
+    {
+        return;
+    }
+    enabled = true;
     GetGameObject()->SetSelfActive(true);
+    if (colorTintOnDisable)
+        colorTintOnDisable->StopTimer();
     if (scalePopDownTransition)
         scalePopDownTransition->StopTimer();
     if (soundOnDisable)
         soundOnDisable->StopTimer();
     if (disableTransition)
         disableTransition->StopTimer();
+    if (linearClippingTimerOnDisable)
+        linearClippingTimerOnDisable->StopTimer();
+
+    if (colorTintOnEnable)
+        colorTintOnEnable->ActivateTimer();
     if (scalePopUpTransition != nullptr)
     {
         scalePopUpTransition->ActivateTimer();
@@ -38,6 +50,10 @@ void UIElement::EnableElement()
     {
         soundOnEnable->ActivateTimer();
     }
+    if (linearClippingTimerOnEnable != nullptr)
+    {
+        linearClippingTimerOnEnable->ActivateTimer();
+    }
     if (parentPriorityLayout)
     {
         parentPriorityLayout->EnableChildUI(GetGameObject());
@@ -48,8 +64,9 @@ void UIElement::EnableElement()
     }
     for (auto each : children)
     {
-        if (each->GetGameObject()->GetSelfActive())
+        if (each->enabled)
         {
+            each->enabled = false;
             each->EnableElement();
         }
     }
@@ -57,12 +74,27 @@ void UIElement::EnableElement()
 void UIElement::DisableElement()
 {
     bool disablingHandled = false;
+    if (!enabled)
+    {
+        return;
+    }
+    enabled = false;
+
+    if (colorTintOnEnable)
+        colorTintOnEnable->StopTimer();
     if (scalePopUpTransition)
         scalePopUpTransition->StopTimer();
     if (enableTransition)
         enableTransition->StopTimer();
     if (soundOnEnable)
         soundOnEnable->StopTimer();
+    if (linearClippingTimerOnEnable)
+        linearClippingTimerOnEnable->StopTimer();
+    if (colorTintOnDisable)
+    {
+        disablingHandled = true;
+        colorTintOnDisable->ActivateTimer();
+    }
     if (scalePopDownTransition != nullptr)
     {
         disablingHandled = true;
@@ -72,6 +104,11 @@ void UIElement::DisableElement()
     {
         disablingHandled = true;
         disableTransition->ActivateTimer();
+    }
+    if (linearClippingTimerOnDisable != nullptr)
+    {
+        disablingHandled = true;
+        linearClippingTimerOnDisable->ActivateTimer();
     }
     if (soundOnDisable != nullptr)
     {
@@ -137,12 +174,12 @@ void UIElement::SetNumber(float number)
     }
 }
 
-void UIElement::PlayFunction()
-{
-
-}
-
-void UIElement::StopFunction()
-{
-	yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-}
+//void UIElement::PlayFunction()
+//{
+//
+//}
+//
+//void UIElement::StopFunction()
+//{
+//    yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+//}

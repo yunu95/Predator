@@ -11,27 +11,28 @@ class Unit;
 class StatusEffect : public Component, public ContentsObservee
 {
 public:
-	enum class StatusEffectEnum
-	{
-		Bleeding,
-		Blinding,
-		Paralysis,
-		KnockBack,
-		Taunted
-	};
+    enum class StatusEffectEnum
+    {
+        Bleeding,
+        Blinding,
+        Paralysis,
+        KnockBack,
+        Taunted
+    };
 
 protected:
-	Unit* m_ownerUnit;
+    Unit* m_ownerUnit;
+    StatusEffectEnum m_statusEffectType;
 
-	friend class DualCastComponent;
+    friend class DualCastComponent;
 
 public:
-	virtual void Start() override;
+    virtual void Start() override;
 
-	virtual void PlayFunction() override final;
-	virtual void StopFunction() override final;
+    virtual void PlayFunction() override final;
+    virtual void StopFunction() override final;
 
-	virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) = 0;
-	virtual void SetSkillOwnerUnit(Unit* p_unit);
+    virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) = 0;
+    virtual void SetSkillOwnerUnit(Unit* p_unit);
 };
 

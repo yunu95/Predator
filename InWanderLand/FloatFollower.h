@@ -2,7 +2,7 @@
 #include "YunutyEngine.h"
 #include "ContentsObservee.h"
 
-class FloatFollower : public Component, public ContentsObservee
+class FloatFollower : public Component
 {
 private:
     float targetFloat = 0;
@@ -16,6 +16,6 @@ public:
     void SetFollowingRate(float followingRate);
     void SetTargetFloat(float target);
 
-    virtual void PlayFunction() override;
-    virtual void StopFunction() override;
+    //virtual void PlayFunction() override;
+    //virtual void StopFunction() override;
 };

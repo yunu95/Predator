@@ -9,11 +9,12 @@
 #include "WaveData.h"
 #include "LocalTimeEntityManager.h"
 #include "PlayerSkillSystem.h"
+#include "InWanderLand.h"
 
 
 void TacticModeSystem::OnEnable()
 {
-	SetCurrentGauge(m_maxGauge);
+    SetCurrentGauge(m_maxGauge);
 }
 
 void TacticModeSystem::Start()
@@ -32,17 +33,17 @@ void TacticModeSystem::Update()
             SetCurrentGauge(++m_currentGauge);
             if (m_currentGauge >= m_maxGauge)
             {
-				SetCurrentGauge(m_maxGauge);
+                SetCurrentGauge(m_maxGauge);
             }
             m_gaugeIncreaseElapsed = 0.0f;
         }
     }
     if (isCoolTime)
     {
-        m_engageCoolTimeElapsed += Time::GetDeltaTime();
+        SetCurrentCoolTimeElapsed(m_engageCoolTimeElapsed + Time::GetDeltaTime());
         if (m_engageCoolTimeElapsed >= m_engageCoolTimeDuration)
         {
-            m_engageCoolTimeElapsed = m_engageCoolTimeDuration;
+            SetCurrentCoolTimeElapsed(m_engageCoolTimeDuration);
             isCoolTime = false;
         }
     }
@@ -89,25 +90,25 @@ void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSer
     if (currentSelectedNum == 0)
         currentSelectedNum = InputManager::One;
 
-	currentSelectedUnit = playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second;
-	if (m_currentGauge > 0)
-	{
-		m_rtsCam->groundRightClickCallback = [=](Vector3d pos)
-			{
-				if (m_cursorDetector->GetCurrentOnMouseUnit() == nullptr)
-				{
-					currentSelectedUnit->PushMoveFunctionToTacticQueue(pos);
-				}
-				else if (Unit* selectedUnit = m_cursorDetector->GetCurrentOnMouseUnit();
+    currentSelectedUnit = playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second;
+    if (m_currentGauge > 0)
+    {
+        m_rtsCam->groundRightClickCallback = [=](Vector3d pos)
+            {
+                if (m_cursorDetector->GetCurrentOnMouseUnit() == nullptr)
+                {
+                    currentSelectedUnit->PushMoveFunctionToTacticQueue(pos);
+                }
+                else if (Unit* selectedUnit = m_cursorDetector->GetCurrentOnMouseUnit();
                     selectedUnit->GetUnitSide() == Unit::UnitSide::Enemy)
-				{
-					currentSelectedUnit->PushAttackMoveFunctionToTacticQueue(pos, selectedUnit);
-				}
+                {
+                    currentSelectedUnit->PushAttackMoveFunctionToTacticQueue(pos, selectedUnit);
+                }
                 sequenceQueue.push(currentSelectedUnit);
-				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+                SkillPreviewSystem::Instance().ActivateSkillPreview(false);
                 SetCurrentGauge(--m_currentGauge);
-			};
-	}
+            };
+    }
 }
 
 void TacticModeSystem::SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum)
@@ -115,15 +116,15 @@ void TacticModeSystem::SetLeftClickAddQueueForAttackMove(InputManager::SelectedS
     currentSelectedUnit = playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second;
     if (m_currentGauge > 0)
     {
-		m_rtsCam->groundRightClickCallback = [=](Vector3d pos)
-			{
-				currentSelectedUnit->PushAttackMoveFunctionToTacticQueue(pos);
-				sequenceQueue.push(currentSelectedUnit);
-				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-				//m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
+        m_rtsCam->groundRightClickCallback = [=](Vector3d pos)
+            {
+                currentSelectedUnit->PushAttackMoveFunctionToTacticQueue(pos);
+                sequenceQueue.push(currentSelectedUnit);
+                SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+                //m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
                 //tacticModeGauge--;
-				SetTacticModeRightClickFunction(currentSelectedNum);
-				SetCurrentGauge(--m_currentGauge);
+                SetTacticModeRightClickFunction(currentSelectedNum);
+                SetCurrentGauge(--m_currentGauge);
             };
     }
 }
@@ -135,19 +136,19 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
     if (m_currentGauge > 0)
     {
         SkillPreviewSystem::Instance().SetCurrentSelectedPlayerUnit(currentSelectedUnit);
-		SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(currentSelectedSkill));
-		SkillPreviewSystem::Instance().SetCurrentSelectedSkillNum(currentSelectedSkill);
-		SkillPreviewSystem::Instance().ActivateSkillPreview(true);
+        SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(currentSelectedSkill));
+        SkillPreviewSystem::Instance().SetCurrentSelectedSkillNum(currentSelectedSkill);
+        SkillPreviewSystem::Instance().ActivateSkillPreview(true);
 
-		m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
-			{
-				currentSelectedUnit->PushSkillFunctionToTacticQueue(currentSelectedSkill, pos);
-				sequenceQueue.push(currentSelectedUnit);
-				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-				//m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
+        m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
+            {
+                currentSelectedUnit->PushSkillFunctionToTacticQueue(currentSelectedSkill, pos);
+                sequenceQueue.push(currentSelectedUnit);
+                SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+                //m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
                 //tacticModeGauge--;
-				SetTacticModeRightClickFunction(currentSelectedNum);
-				SetCurrentGauge(--m_currentGauge);
+                SetTacticModeRightClickFunction(currentSelectedNum);
+                SetCurrentGauge(--m_currentGauge);
             };
     }
 }
@@ -165,8 +166,8 @@ void TacticModeSystem::EngageTacticMode()
     //Time::SetTimeScale(0.0f);
     m_currentOperatingWave->StopWaveElapsedTime();
     playerComponentMap = PlayerController::Instance().GetPlayerMap();
-	isTacticModeOperating = true;
-	m_gaugeIncreaseElapsed = 0.0f;
+    isTacticModeOperating = true;
+    m_gaugeIncreaseElapsed = 0.0f;
 
     LocalTimeEntityManager::Instance().ReportTacticModeEngaged();
 
@@ -182,7 +183,7 @@ void TacticModeSystem::EngageTacticMode()
         unitGameObjects.push_back(each.second->GetGameObject());
     }
     m_rtsCam->SetTargets(unitGameObjects);
-    
+
 }
 
 void TacticModeSystem::ExitTacticMode()
@@ -204,7 +205,7 @@ void TacticModeSystem::ExitTacticMode()
     m_gaugeIncreaseElapsed = 0.0f;
     isTacticModeOperating = false;
 
-    m_engageCoolTimeElapsed = 0.0f;
+    SetCurrentCoolTimeElapsed(0.0f);
     isCoolTime = true;
 
     for (auto each : playerComponentMap)
@@ -218,8 +219,8 @@ void TacticModeSystem::ExitTacticMode()
         isTacticOrderPerforming = true;
 		m_currentOperatingWave->ResumeWaveElapsedTime();
         m_rtsCam->SetTarget(sequenceQueue.front()->GetGameObject());
-		sequenceQueue.front()->PermitTacticAction();
-		sequenceQueue.pop();
+        sequenceQueue.front()->PermitTacticAction();
+        sequenceQueue.pop();
     }
 }
 
@@ -242,13 +243,19 @@ bool TacticModeSystem::IsTacticModeCoolTime() const
 {
     return isCoolTime;
 }
+void TacticModeSystem::SetCurrentCoolTimeElapsed(float elapsed)
+{
+    m_engageCoolTimeElapsed = elapsed;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Overlay)->adjuster->SetTargetFloat(elapsed / m_engageCoolTimeDuration);
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Cooltime_Number)->SetNumber(m_engageCoolTimeDuration - elapsed);
+}
 
 float TacticModeSystem::GetLeftCoolTime()
 {
     if (m_engageCoolTimeElapsed >= m_engageCoolTimeDuration)
         return 0.0f;
     else
-		return m_engageCoolTimeDuration - m_engageCoolTimeElapsed;
+        return m_engageCoolTimeDuration - m_engageCoolTimeElapsed;
 }
 
 void TacticModeSystem::SetCurrentGauge(int p_gauge)
@@ -270,9 +277,9 @@ void TacticModeSystem::ReportTacticActionFinished()
     }
     else
     {
-		m_rtsCam->SetTarget(sequenceQueue.front()->GetGameObject());
-		sequenceQueue.front()->PermitTacticAction();
-		sequenceQueue.pop();
+        m_rtsCam->SetTarget(sequenceQueue.front()->GetGameObject());
+        sequenceQueue.front()->PermitTacticAction();
+        sequenceQueue.pop();
     }
 }
 

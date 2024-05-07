@@ -35,11 +35,8 @@ void Animator::SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int fra
 	isPlay = false;
 
 	auto& gi = this->GetGI();
-	auto& desc = gi.GetTransitionDesc();
 
-	desc.curr.currFrame = frame;
-
-	gi.Play(animation);
+	gi.SetAnimationFrame(animation,frame);
 }
 
 void Animator::Play(yunuGI::IAnimation* animation)

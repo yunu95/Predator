@@ -5,6 +5,8 @@
 
 #include "Layer.h"
 #include "UnitProductor.h"
+#include "ContentsStopFlag.h"
+#include "ContentsPlayFlag.h"
 #include <functional>
 
 namespace application
@@ -17,7 +19,7 @@ namespace application
         private:
             static std::function<void()> testInitializer;
         public:
-            static void SetInputControl(bool control); 
+            static void SetInputControl(bool control);
             static bool GetInputControl();
 
             virtual void Initialize() override;
@@ -26,10 +28,10 @@ namespace application
             virtual void GUIProgress() override;
             virtual void Finalize() override;
 
-            void PlayContents();
+            void PlayContents(ContentsPlayFlag playFlag = ContentsPlayFlag::ImportUI);
             void PauseContents();
             void ResumeContents();
-            void StopContents();
+            void StopContents(ContentsStopFlag playFlag = ContentsStopFlag::ClearUI);
 
             bool isStoppedOnce{ false };
             // 테스트 코드에서 임의로 ContentsLayer의 Initialize 코드를 오버라이드 하고 싶을때 쓰이는 함수

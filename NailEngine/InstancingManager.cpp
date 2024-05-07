@@ -14,6 +14,7 @@
 #include "GeometryShader.h"
 #include "PointLight.h"
 #include "ParticleSystem.h"
+#include "FrustumCullingManager.h"
 
 #include <cmath>
 #include <algorithm>
@@ -29,6 +30,20 @@ void InstancingManager::Init()
 
 void InstancingManager::SortByCameraDirection()
 {
+	if (!this->staticMeshDeferredRenderVec.empty())
+	{
+		for (auto& each : this->staticMeshDeferredRenderVec)
+		{
+			for (auto& each2 : each.second)
+			{
+				if (each2 == nullptr) continue;
+
+				this->quadTree.Remove(each2.get());
+			}
+		}
+	}
+
+
 	for (auto& each : this->staticMeshDeferredMap)
 	{
 		std::vector<std::shared_ptr<RenderInfo>> tempVec;
@@ -102,7 +117,30 @@ void InstancingManager::SortByCameraDirection()
 		}
 	}
 
+	// 쿼드트리에 RenderInfo 등록
+	for (auto& each : this->staticMeshDeferredRenderVec)
+	{
+		for (auto& each2 : each.second)
+		{
+			if (each2 == nullptr) continue;
+
+			DirectX::SimpleMath::Vector3 tempScale;
+			DirectX::SimpleMath::Vector3 tempPos;
+			DirectX::SimpleMath::Quaternion tempQuat;
+			each2->wtm.Decompose(tempScale, tempQuat, tempPos);
+			// 바운딩 볼륨 반지름 조정
+			auto radius = each.first.first->GetBoundingRadius();
+			radius = radius * max(tempScale.x, tempScale.y, tempScale.z);
+			this->quadTree.PushData(each2.get(), DirectX::SimpleMath::Vector2{ tempPos.x, tempPos.z }, radius);
+		}
+	}
 	int a = 1;
+	//for (auto& each : this->staticMeshRenderInfoIndexMap)
+	//{
+	//	FrustumCullingManager::Instance.Get().RegisterRenderInfo(each.first);
+	//}
+
+	//FrustumCullingManager::Instance.Get().Init();
 }
 
 void InstancingManager::RenderStaticDeferred()
@@ -113,6 +151,26 @@ void InstancingManager::RenderStaticDeferred()
 
 	// 인스턴스 버퍼의 데이터를 지움
 	ClearData();
+
+	// 컬링과 Render하기 전에 쿼드트리로부터 쿼리를 함
+	DirectX::SimpleMath::Vector2 minPoint;
+	DirectX::SimpleMath::Vector2 maxPoint;
+	auto camera = CameraManager::Instance.Get().GetMainCamera();
+	camera->GetCameraAreaXZ(minPoint, maxPoint);
+	auto queryVec = this->quadTree.QueryData(minPoint, maxPoint);
+
+	auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+	for (auto& each : queryVec)
+	{
+		each->isInArea = true;
+
+		auto aabb = each->mesh->GetBoundingBox(each->wtm, each->materialIndex);
+
+		if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
+		{
+			each->isCulled = true;
+		}
+	}
 
 	{
 		for (auto& pair : this->staticMeshDeferredMap)
@@ -138,7 +196,6 @@ void InstancingManager::RenderStaticDeferred()
 					lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
 					lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
 					lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
-
 
 					index++;
 				}
@@ -183,15 +240,35 @@ void InstancingManager::RenderStaticDeferred()
 
 					if (i->mesh == nullptr) continue;
 
-					if (i->isActive == false) continue;
-
-					auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-					auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);
-
-					if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
+					if (i->isInArea == false)
 					{
 						continue;
 					}
+
+					if(i->isActive)
+					{
+						int a = 1;
+					}
+
+					if (i->isActive == false) continue;
+
+					if (i->isCulled == true)
+					{
+						i->isCulled = false;
+						continue;
+					}
+
+
+					//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+					//i->isInArea = true;
+
+					//auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);
+
+					//if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
+					//{
+					//	continue;
+					//}
+
 
 					//if ((i->mesh->GetName() == L"SM_Bush_001") || (i->mesh->GetName() == L"SM_Bush_002"))
 					//{
@@ -207,8 +284,9 @@ void InstancingManager::RenderStaticDeferred()
 					lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
 					lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
 
-
 					index++;
+
+					i->isInArea = false;
 				}
 
 				NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
@@ -383,17 +461,11 @@ void InstancingManager::RenderStaticShadow()
 		{
 			for (auto& i : renderInfoVec)
 			{
+				if (i == nullptr) continue;
+
 				if (i->lightMapIndex != -1) continue;
 
 				if (i->isActive == false) continue;
-
-				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-				//auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
-
-				//if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
-				//{
-				//	continue;
-				//}
 
 				const std::shared_ptr<RenderInfo>& renderInfo = i;
 				InstancingData data;
@@ -403,6 +475,8 @@ void InstancingManager::RenderStaticShadow()
 
 			if (renderInfoVec.size() != 0)
 			{
+				if(renderInfoVec[0] == nullptr) continue;
+
 				auto& buffer = _buffers[instanceID];
 
 				auto opacityMap = (*renderInfoVec.begin())->material->GetTexture(yunuGI::Texture_Type::OPACITY);

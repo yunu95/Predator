@@ -60,16 +60,16 @@ void RTSCam::Update()
         positionDelta = Vector3d();
     }
 #endif
-	if (Input::isKeyPushed(KeyCode::Tab))
-	{
-		roamingMode = !roamingMode;
-		GetTransform()->SetWorldRotation(rot);
-		pitch = rot.Euler().x * yunutyEngine::math::Deg2Rad;
-		yaw = rot.Euler().y * yunutyEngine::math::Deg2Rad;
-		pitchDelta = 0.0;
-		yawDelta = 0.0;
-		positionDelta = Vector3d();
-	}
+    if (Input::isKeyPushed(KeyCode::Tab))
+    {
+        roamingMode = !roamingMode;
+        GetTransform()->SetWorldRotation(rot);
+        pitch = rot.Euler().x * yunutyEngine::math::Deg2Rad;
+        yaw = rot.Euler().y * yunutyEngine::math::Deg2Rad;
+        pitchDelta = 0.0;
+        yawDelta = 0.0;
+        positionDelta = Vector3d();
+    }
 
     if (yunutyEngine::Input::isKeyPushed(KeyCode::Delete))
         deleteButtonCallback();
@@ -239,10 +239,10 @@ void RTSCam::PlayFunction()
 
 void RTSCam::StopFunction()
 {
-	if (!GetGameObject()->GetComponentWeakPtr<RTSCam>().expired())
-	{
-		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-	}
+    if (!GetGameObject()->GetComponentWeakPtr<RTSCam>().expired())
+    {
+        yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+    }
 }
 
 void RTSCam::UpdateCameraView()

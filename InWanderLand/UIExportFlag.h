@@ -63,11 +63,19 @@ enum class UIExportFlag
     // UI가 비활성화될때 시간정지를 해제합니다.
     TimeContinueOnDisable = 1 << 29,
     // UI가 활성화될때 투명도 애니메이션을 재생합니다.
-    OpacityFadeIn = 1 << 30,
+    ColorTintOnEnable = 1 << 30,
     // UI가 비활성화될때 투명도 애니메이션을 재생합니다.
-    OpacityFadeOut = 1 << 31,
+    ColorTintOnDisable = 1 << 31,
+
 };
 enum class UIExportFlag2
 {
-
+    None = 0,
+    LinearClipOnEnable = 1 << 0,
+    LinearClipOnDisable = 1 << 1,
+    Duplicatable = 1 << 2,
+    // 체력바, 마나 바 등 연속적인 데이터의 수치를 추정하기 위해 게이지의 일정단위마다 셀을 끊어 표시하고 싶을때 사용됩니다.
+    IsBarCells = 1 << 3,
+    // 0일때 하나도 클립 안함, 1일때 완전히 클립함
+    AdjustLinearClip = 1 << 4,
 };

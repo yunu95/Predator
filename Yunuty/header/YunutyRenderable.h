@@ -53,7 +53,7 @@ namespace yunutyEngine::graphics
         };
         virtual void OnEnable()
         {
-            yunuGI->SetWorldTM(GetTransform()->GetWorldTM());
+            //yunuGI->SetWorldTM(GetTransform()->GetWorldTM());
             yunuGI->SetActive(true);
         }
         virtual void OnDisable()

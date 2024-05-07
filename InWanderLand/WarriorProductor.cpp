@@ -153,7 +153,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
             m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
             animator->PushAnimation(m_baseUnitAnimations.m_walkAnimation);
         }
-        /*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+        /*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Attack")
         {
             m_baseUnitAnimations.m_attackAnimation = each;
             m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
@@ -164,21 +164,21 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
             m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
             animator->PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
         }
-        else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_APose")
+        else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Death")
         {
             m_baseUnitAnimations.m_deathAnimation = each;
             m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
             animator->PushAnimation(m_baseUnitAnimations.m_deathAnimation);
         }
         /// Skill Animation
-        /*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+        else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Skill1")
         {
             each->SetLoop(false);
             animator->PushAnimation(each);
             m_baseUnitAnimations.m_skillOneAnimation = each;
             m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::Q, each);
         }
-        /*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
+        /*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Skill2")
         {
             each->SetLoop(true);
             animator->PushAnimation(each);

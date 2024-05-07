@@ -30,15 +30,15 @@ void TimerComponent::Update()
     }
 }
 
-void TimerComponent::PlayFunction()
-{
-
-}
-
-void TimerComponent::StopFunction()
-{
-	yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-}
+//void TimerComponent::PlayFunction()
+//{
+//
+//}
+//
+//void TimerComponent::StopFunction()
+//{
+//	yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+//}
 
 void TimerComponent::ActivateTimer()
 {

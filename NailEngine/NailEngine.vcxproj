@@ -191,6 +191,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="FrustumCullingManager.h" />
     <ClInclude Include="Functors.h" />
     <ClInclude Include="GeometryShader.h" />
     <ClInclude Include="ILight.h" />
@@ -213,6 +214,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="PixelShader.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="PointLightShadowPass.h" />
+    <ClInclude Include="QuadTree.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="RenderTargetGroup.h" />
     <ClInclude Include="Resource.h" />
@@ -266,6 +268,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="FrustumCullingManager.cpp" />
     <ClCompile Include="GeometryShader.cpp" />
     <ClCompile Include="InstanceBuffer.cpp" />
     <ClCompile Include="InstancingManager.cpp" />
@@ -282,6 +285,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="PointLightShadowPass.cpp" />
+    <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="RenderTargetGroup.cpp" />
     <ClCompile Include="Resource.cpp" />

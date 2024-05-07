@@ -31,10 +31,9 @@ SoundChannel yunutyEngine::SoundSystem::mPlaySound(string soundPath)
 {
     static int lastChannelIndex = 0;
 
-    if (sounds.find(soundPath) == sounds.end())
+    if (!mIsSoundLoaded(soundPath))
     {
-        sounds[soundPath] = nullptr;
-        fmodSystem->createSound(soundPath.c_str(), FMOD_LOOP_OFF, 0, &sounds[soundPath]);
+        mLoadSound(soundPath);
     }
     for (int i = 0; i < 64; i++)
     {
@@ -49,6 +48,23 @@ SoundChannel yunutyEngine::SoundSystem::mPlaySound(string soundPath)
     }
     return SoundChannel(channels[lastChannelIndex]);
 }
+bool yunutyEngine::SoundSystem::mLoadSound(string soundPath)
+{
+    if (sounds.find(soundPath) == sounds.end())
+    {
+        fmodSystem->createSound(soundPath.c_str(), FMOD_LOOP_OFF, 0, &sounds[soundPath]);
+        loadedSounds.insert(soundPath);
+    }
+    return true;
+}
+bool yunutyEngine::SoundSystem::mIsSoundLoaded(string soundPath)
+{
+    return loadedSounds.find(soundPath) != loadedSounds.end();
+}
+const unordered_set<string>& yunutyEngine::SoundSystem::mGetLoadedSoundsList()
+{
+    return loadedSounds;
+}
 SoundChannel yunutyEngine::SoundSystem::PlayMusic(string soundPath)
 {
     return SoundSystem::SingleInstance()->mPlayMusic(soundPath);
@@ -56,6 +72,18 @@ SoundChannel yunutyEngine::SoundSystem::PlayMusic(string soundPath)
 SoundChannel yunutyEngine::SoundSystem::StopMusic(double fadeLength)
 {
     return SoundSystem::SingleInstance()->mStopMusic(fadeLength);
+}
+bool yunutyEngine::SoundSystem::LoadSound(string soundPath)
+{
+    return SingleInstance()->mLoadSound(soundPath);
+}
+bool yunutyEngine::SoundSystem::IsSoundLoaded(string soundPath)
+{
+    return SingleInstance()->mIsSoundLoaded(soundPath);
+}
+const unordered_set<string>& yunutyEngine::SoundSystem::GetLoadedSoundsList()
+{
+    return SingleInstance()->mGetLoadedSoundsList();
 }
 void yunutyEngine::SoundSystem::SetMusicVolume(float volume)
 {
