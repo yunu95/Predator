@@ -23,7 +23,7 @@ class PlayerSkillManager : public Component, public SingletonComponent<PlayerSki
 {
 private:
 	int m_maxSkillUsageGauge;
-	int m_currentSkillUsageGauge;
+	int m_currentSkillUsageGauge{ 0 };
 
 
 	int warriorSkillOneCost;
