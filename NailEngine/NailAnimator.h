@@ -95,7 +95,7 @@ public:
 	void ChangeAnimation(yunuGI::IAnimation* animation, float transitionDuration, float transitionSpeed)
 	{
 		if (currentAnimation == animation) return;
-
+		
 		nextAnimation = animation;
 		transitionDesc.next.animIndex = ((Animation*)(animation))->GetAnimationIndex();
 		//transitionDesc.next.speed = transitionSpeed;

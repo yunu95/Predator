@@ -356,6 +356,11 @@ struct MySequence : public ImSequencer::SequenceInterface
 						draw_list->AddText(pta, 0xFFFFFFFF, "Sound_PlayLoop");
 						break;
 					}
+					case application::AnimationEventType::GameObject_AwakeEvent:
+					{
+						draw_list->AddText(pta, 0xFFFFFFFF, ("Particle Awake[" + static_cast<application::GameObject_AwakeEvent*>(each.get())->objName + "]").c_str());
+						break;
+					}
 					default:
 						break;
 				}
@@ -425,6 +430,11 @@ struct MySequence : public ImSequencer::SequenceInterface
 					case application::AnimationEventType::Sound_PlayLoopEvent:
 					{
 						boxCol = ImGui::GetColorU32(ImVec4(0, 0, 1, 1));
+						break;
+					}
+					case application::AnimationEventType::GameObject_AwakeEvent:
+					{
+						boxCol = ImGui::GetColorU32(ImVec4(1, 0, 1, 1));
 						break;
 					}
 					default:
@@ -612,6 +622,11 @@ struct MySequence : public ImSequencer::SequenceInterface
 					case application::AnimationEventType::Sound_PlayLoopEvent:
 					{
 						boxCol = ImGui::GetColorU32(ImVec4(0, 0, 1, 1));
+						break;
+					}
+					case application::AnimationEventType::GameObject_AwakeEvent:
+					{
+						boxCol = ImGui::GetColorU32(ImVec4(1, 0, 1, 1));
 						break;
 					}
 					default:
@@ -2137,7 +2152,7 @@ void ShowSequencerEditor()
 					{
 						if (particleName != "None")
 						{
-							auto sptr = std::make_shared<application::GameObject_ActivateEvent>();
+							auto sptr = std::make_shared<application::GameObject_AwakeEvent>();
 							sptr->fbxName = fbxName;
 							sptr->animationName = pm.GetAnimationNameList(fbxName)[aniIndex];
 							sptr->frame = currentFrame;
@@ -2249,6 +2264,83 @@ void ShowSequencerEditor()
 						particleName = "None";
 						ImGui::CloseCurrentPopup();
 						application::editor::imgui::CloseMessageBox("Select Particle(TSAni)");
+					}
+				}, 300);
+		}
+
+		if (ImGui::MenuItem("Sound Play Current Frame"))
+		{
+			application::editor::imgui::ShowMessageBox("Sound Play", [=]()
+				{
+					application::editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::Separator();
+
+					static std::string rscName = "None";
+					static bool loop = false;
+
+					ImGui::SetNextItemWidth(-1);
+					if (ImGui::BeginCombo("##SelectedSoundListCombo", rscName.c_str()))
+					{
+						for (auto& each : yunutyEngine::SoundSystem::GetLoadedSoundsList())
+						{
+							const bool is_selected = (rscName == each);
+							if (ImGui::Selectable(each.c_str(), is_selected))
+							{
+								rscName = each;
+							}
+
+							if (is_selected)
+							{
+								ImGui::SetItemDefaultFocus();
+							}
+						}
+						ImGui::EndCombo();
+					}
+
+					ImGui::Checkbox("Loop", &loop);
+
+					ImGui::Separator();
+
+					if (ImGui::Button("OK"))
+					{
+						if (rscName != "None")
+						{
+							if (loop)
+							{
+								auto sptr = std::make_shared<application::Sound_PlayLoopEvent>();
+								sptr->fbxName = fbxName;
+								sptr->animationName = pm.GetAnimationNameList(fbxName)[aniIndex];
+								sptr->frame = currentFrame;
+								sptr->rscPath = rscName;
+								pm.AddAnimationEvent(sptr);
+								mySequenceMap[fbxName].myItems[funcIndex].funcList.insert(sptr);
+							}
+							else
+							{
+								auto sptr = std::make_shared<application::Sound_PlayOnceEvent>();
+								sptr->fbxName = fbxName;
+								sptr->animationName = pm.GetAnimationNameList(fbxName)[aniIndex];
+								sptr->frame = currentFrame;
+								sptr->rscPath = rscName;
+								pm.AddAnimationEvent(sptr);
+								mySequenceMap[fbxName].myItems[funcIndex].funcList.insert(sptr);
+							}	
+							
+							rscName = "None";
+							loop = false;
+							ImGui::CloseCurrentPopup();
+							application::editor::imgui::CloseMessageBox("Sound Play");
+						}
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						rscName = "None";
+						loop = false;
+						ImGui::CloseCurrentPopup();
+						application::editor::imgui::CloseMessageBox("Sound Play");
 					}
 				}, 300);
 		}
@@ -2656,9 +2748,9 @@ void LoadResourcesRecursively()
 					{
 						if (fs::is_regular_file(entry) && validExtensions.contains(entry.path().extension().string()))
 						{
-							auto relativePath = fs::relative(entry.path(), basePath);
+							auto relativePath = fs::relative(entry.path(), basePath).string();
 							std::replace(relativePath.begin(), relativePath.end(), '\\', '/');
-							resourceManager->LoadFile(relativePath.string().c_str());
+							resourceManager->LoadFile(relativePath.c_str());
 						}
 						else if (fs::is_regular_file(entry) && soundExtensions.contains(entry.path().extension().string()))
 						{
