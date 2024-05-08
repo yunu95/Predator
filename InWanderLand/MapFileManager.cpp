@@ -80,9 +80,9 @@ namespace application
                     LightMapScaleOffset[3] = (float)(mapData[i]["LightMapScaleOffset"][3]);
 
                     auto odt = instanceManager.CreateInstance<OrnamentData>(fbxName);
-                    if (fbxName == "SM_Temple_Welcome")
+                    if (odt == nullptr)
                     {
-                        int a = 0;
+                        continue;
                     }
 
                     /// 좌표계 고려 변환

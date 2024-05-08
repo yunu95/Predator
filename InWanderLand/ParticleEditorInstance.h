@@ -34,8 +34,8 @@ namespace application
                 virtual void Start() override;
                 void Init(const application::editor::ParticleData* particleData);
                 void Init(const application::editor::Particle_TemplateData* particleTemplateData);
-                void ChangeTemplateData(const application::editor::ParticleData* particleData);
-                void ChangeTemplateData(const application::editor::Particle_TemplateData* particleTemplateData);
+                void ChangeTemplateData(const application::editor::ParticleData* particleData) {}
+                void ChangeTemplateData(const application::editor::Particle_TemplateData* particlTemplateData) {}
 
                 // 실제 Particle Component 에 ParticleData 의 내용을 반영합니다.
                 void ApplyParticleComponent(ParticleData* data);
