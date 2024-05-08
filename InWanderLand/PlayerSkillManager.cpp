@@ -1,5 +1,6 @@
 #include "PlayerSkillManager.h"
 #include "Unit.h"
+#include "GlobalConstant.h"
 
 void PlayerSkillManager::Start()
 {
@@ -8,14 +9,16 @@ void PlayerSkillManager::Start()
 	AddSkillGauge(100);
 	//m_currentSkillUsageGauge = 100;
 
-	warriorSkillOneCost = 20;
-	warriorSkillTwoCost = 20;
+	warriorSkillOneCost = application::GlobalConstant::GetSingletonInstance().pod.robinQSkillCost;
+	warriorSkillTwoCost = application::GlobalConstant::GetSingletonInstance().pod.robinESkillCost;
 
-	magicianSkillOneCost = 20;
-	magicianSkillTwoCost = 20;
+	magicianSkillOneCost = application::GlobalConstant::GetSingletonInstance().pod.ursulaQSkillCost;
+	magicianSkillTwoCost = application::GlobalConstant::GetSingletonInstance().pod.ursulaESkillCost;
 
-	healerSkillOneCost = 20;
-	healerSkillTwoCost = 20;
+	healerSkillOneCost = application::GlobalConstant::GetSingletonInstance().pod.hanselQSkillCost;
+	healerSkillTwoCost = application::GlobalConstant::GetSingletonInstance().pod.hanselESkillCost;
+
+	m_skillGaugeRecoveryPerSecond = application::GlobalConstant::GetSingletonInstance().pod.skillGaugeRecoveryPerSecond;
 
 	costPerSkillMap[std::make_pair(Unit::UnitType::Warrior, Unit::SkillEnum::Q)] = warriorSkillOneCost;
 	costPerSkillMap[std::make_pair(Unit::UnitType::Warrior, Unit::SkillEnum::W)] = warriorSkillTwoCost;
@@ -28,19 +31,12 @@ void PlayerSkillManager::Start()
 
 	isSingletonComponent = true;
 
-	m_skillGaugeRefillDuration = 3.0f;
-	m_skillGaugeRefillElapsed = 0.0f;
+	m_skillGaugeRecoveryElapsed = 0.0f;
 }
 
 void PlayerSkillManager::Update()
 {
-	m_skillGaugeRefillElapsed += Time::GetDeltaTime();
-
-	if (m_skillGaugeRefillElapsed >= m_skillGaugeRefillDuration)
-	{
-		AddSkillGauge(1);
-		m_skillGaugeRefillElapsed = 0.0f;
-	}
+	AddSkillGauge(m_skillGaugeRecoveryPerSecond * Time::GetDeltaTime());
 }
 
 void PlayerSkillManager::PlayFunction()
