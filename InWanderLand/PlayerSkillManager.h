@@ -22,21 +22,21 @@ namespace std {
 class PlayerSkillManager : public Component, public SingletonComponent<PlayerSkillManager>, public ContentsObservee
 {
 private:
-	int m_maxSkillUsageGauge;
-	int m_currentSkillUsageGauge{ 0 };
+	float m_maxSkillUsageGauge;
+	float m_currentSkillUsageGauge{ 0 };
 
 
-	int warriorSkillOneCost;
-	int warriorSkillTwoCost;
-	int magicianSkillOneCost;
-	int magicianSkillTwoCost;
-	int healerSkillOneCost;
-	int healerSkillTwoCost;
+	float warriorSkillOneCost;
+	float warriorSkillTwoCost;
+	float magicianSkillOneCost;
+	float magicianSkillTwoCost;
+	float healerSkillOneCost;
+	float healerSkillTwoCost;
 
 	std::unordered_map<std::pair<Unit::UnitType, Unit::SkillEnum>, int> costPerSkillMap;
 
-	float m_skillGaugeRefillDuration;
-	float m_skillGaugeRefillElapsed;
+	float m_skillGaugeRecoveryElapsed;
+	float m_skillGaugeRecoveryPerSecond;
 
 	void ReportSkillGaugeChanged();
 
