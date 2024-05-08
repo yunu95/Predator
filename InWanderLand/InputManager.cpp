@@ -20,15 +20,18 @@ void InputManager::Update()
         {
             if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_1))
             {
-                UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_Robin)->button->InvokeButtonClickEvent();
+                UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->
+                    GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeButtonClickEvent();
             }
             if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_2))
             {
-                UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_Ursula)->button->InvokeButtonClickEvent();
+                UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->
+                    GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeButtonClickEvent();
             }
             if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_3))
             {
-                UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_Hansel)->button->InvokeButtonClickEvent();
+                UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->
+                    GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeButtonClickEvent();
             }
             if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_4))
             {
