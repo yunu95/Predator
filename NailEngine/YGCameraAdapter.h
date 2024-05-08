@@ -71,6 +71,12 @@ namespace yunuGIAdapter
         {
             CameraManager::Instance.Get().ChangeMainCamera(this);
         };
+        virtual yunuGI::Vector3 GetViewPos(const yunuGI::Vector3& worldPos) override
+        {
+            auto viewPos = CameraManager::Instance.Get().GetScreenPos(this, reinterpret_cast<const DirectX::SimpleMath::Vector3&>(worldPos));
+            yunuGI::Vector3 retVal = reinterpret_cast<const yunuGI::Vector3&>(viewPos);
+            return retVal;
+        }
         virtual yunuGI::Vector2 GetScreenPos(const yunuGI::Vector3& worldPos) override
         {
             auto screenPos = CameraManager::Instance.Get().GetScreenPos(this, reinterpret_cast<const DirectX::SimpleMath::Vector3&>(worldPos));

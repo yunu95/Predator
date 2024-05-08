@@ -171,7 +171,7 @@ namespace application
 							return false;
 						}
 
-						list[uuid] = std::unique_ptr<IEditableData>(each);
+						list[uuid] = std::shared_ptr<IEditableData>(each);
 						tdMap[uuid] = each->GetTemplateData();
 						break;
 					}

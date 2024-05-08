@@ -132,6 +132,12 @@ DirectX::SimpleMath::Matrix NailCamera::GetPTM90()
 {
     return DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PI / 2.f, this->width / this->height, this->cameraNear, this->cameraFar);
 }
+DirectX::SimpleMath::Vector3 NailCamera::GetViewPos(const DirectX::SimpleMath::Vector3& worldPos)
+{
+    return DirectX::XMVector3TransformCoord(worldPos, this->vtm);
+    //DirectX::SimpleMath::Vector3 screenPos = DirectX::XMVector3TransformCoord(worldPos, this->vtm);
+    //return screenPos;
+}
 DirectX::SimpleMath::Vector2 NailCamera::GetScreenPos(const DirectX::SimpleMath::Vector3& worldPos)
 {
     //DirectX::SimpleMath::Vector3 screenPos = DirectX::XMVector3TransformCoord(worldPos, this->ptm * this->vtm);
