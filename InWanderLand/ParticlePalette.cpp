@@ -18,24 +18,18 @@ namespace application::editor::palette
     void ParticlePalette::SelectParticle(ParticleData* particle)
     {
         Palette::OnSelectSingleInstance(particle);
+        ParticleBrush::Instance().ReadyBrush("");
     }
 
-    void ParticlePalette::SelectParticleTemplateData(Particle_TemplateData* templateData)
+    void ParticlePalette::SetParticleData(const particle::ParticleToolData& data)
     {
-        selectedParticleTemplateData = templateData;
-        if (selectedParticleTemplateData == nullptr)
-        {
-            ParticleBrush::Instance().ReadyBrush("");
-        }
-        else
-        {
-            ParticleBrush::Instance().ReadyBrush(selectedParticleTemplateData->GetDataKey());
-        }
+        mold = data;
     }
 
-    void ParticlePalette::UnselectParticleTemplateData()
+    void ParticlePalette::InitParticleData()
     {
-        SelectParticleTemplateData(nullptr);
+        mold = particle::ParticleToolData();
+        ParticleBrush::Instance().ReadyBrush("");
     }
 
     void ParticlePalette::Initialize()
@@ -46,18 +40,20 @@ namespace application::editor::palette
     void ParticlePalette::Reset()
     {
         Palette::Reset();
-        UnselectParticleTemplateData();
+        InitParticleData();
     }
 
     IEditableData* ParticlePalette::PlaceInstance(Vector3d worldPosition)
     {
-        if (selectedParticleTemplateData == nullptr)
-            return nullptr;
-
         auto instance = InstanceManager::GetSingletonInstance().CreateInstance<ParticleData>("DefaultParticle");
         instance->pod.position.x = worldPosition.x;
         instance->pod.position.y = worldPosition.y;
         instance->pod.position.z = worldPosition.z;
+
+        if (mold.name != "None")
+        {
+            instance->pod.particleData = mold;
+        }
 
         instance->ApplyAsPaletteInstance();
         return instance;
@@ -81,7 +77,7 @@ namespace application::editor::palette
         }
         else
         {
-            SelectParticleTemplateData(selectedParticleTemplateData);
+            ParticleBrush::Instance().ReadyBrush("DefaultParticle");
         }
     }
 

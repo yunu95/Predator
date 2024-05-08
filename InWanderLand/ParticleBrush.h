@@ -19,19 +19,17 @@ namespace application
             public:
                 virtual void Initialize() {}
                 virtual void CreateBrush() override;
-                virtual bool CreateBrush(const std::string& dataKey) override;
+                virtual bool CreateBrush(const std::string& dataKey) override { return false; }
                 virtual bool ChangeBrushResource(const std::string& dataKey, const std::string& fbxName) override { return false; }
                 virtual void ReadyBrush(const std::string& dataKey) override;
                 virtual void Clear() override {}
-                virtual void Update() override;
 
             private:
                 virtual bool DestroyBrush(const std::string& dataKey) override { return false; };
 
                 void ReadyBrush(Particle_TemplateData* data);
 
-                std::unordered_map<std::string, GameObject*> brushList = std::unordered_map<std::string, GameObject*>();
-                Particle_TemplateData* currentBrush = nullptr;
+                GameObject* brush = nullptr;
             };
         }
     }

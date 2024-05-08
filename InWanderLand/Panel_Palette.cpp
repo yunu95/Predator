@@ -16,6 +16,7 @@
 #include "CommandManager.h"
 #include "TransformEditCommand.h"
 #include "EditableDataList.h"
+#include "ParticleTool_Manager.h"
 
 #include "YunutyEngine.h"
 #include "WanderUtils.h"
@@ -305,6 +306,15 @@ namespace application
                             ornamentCurrentButton = -1;
                             op.SelectOrnamentTemplateData(nullptr);
                         }
+                        else if (currentPalette == &lp)
+                        {
+                            lightCurrentButton = -1;
+                            lp.SelectLightTemplateData(nullptr);
+                        }
+                        else if (currentPalette == &pp)
+                        {
+                            pp.InitParticleData();
+                        }
                     }
                 }
 
@@ -313,6 +323,65 @@ namespace application
                     if (currentPalette && currentPalette->IsSelectMode())
                     {
                         currentPalette->OnDeletion();
+                    }
+                    else if (currentPalette == &up && up.GetSelections().empty() && unitCurrentButton != -1)
+                    {
+                        editor::EditorLayer::SetInputControl(false);
+                        editor::imgui::ShowMessageBox("Delete Unit Template", [&]()
+                            {
+                                editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+                                ImGui::Separator();
+
+                                ImGui::SetNextItemWidth(-1);
+                                ImGui::Text(("Are you sure you want to delete the \"" + tdm.GetDataList(DataType::UnitData)[unitCurrentButton]->GetDataKey() + "\"?").c_str());
+
+                                ImGui::Separator();
+
+                                if (ImGui::Button("Delete"))
+                                {
+                                    auto tKey = tdm.GetDataList(DataType::UnitData)[unitCurrentButton]->GetDataKey();
+                                    for (auto& unitData : InstanceManager::GetSingletonInstance().GetList<UnitData>())
+                                    {
+                                        if (unitData->pod.templateData->GetDataKey() == tKey)
+                                        {
+                                            for (auto& waveData : InstanceManager::GetSingletonInstance().GetList<WaveData>())
+                                            {
+                                                /// 해당 Wave 에서 unitData 를 가지고 있었을 경우에 삭제하는 로직이 필요합니다.
+                                                //for (auto& [unit, wave] : waveData->GetWaveUnitDataMap())
+                                                //{
+                                                //    
+                                                //}
+                                            }
+
+                                            auto editorInstance = unitData->ApplyAsPaletteInstance();
+                                            if (editorInstance)
+                                            {
+                                                Scene::getCurrentScene()->DestroyGameObject(editorInstance->GetGameObject());
+                                            }
+
+                                            InstanceManager::GetSingletonInstance().DeleteInstance(unitData->GetUUID());
+                                        }
+                                    }
+
+                                    up.SetAsSelectMode(true);
+                                    tdm.DeleteTemplateData(tKey);
+                                    unitCurrentButton = -1;
+                                    up.SelectUnitTemplateData(nullptr);
+
+                                    ImGui::CloseCurrentPopup();
+                                    editor::imgui::CloseMessageBox("Delete Unit Template");
+                                    editor::EditorLayer::SetInputControl(true);
+                                }
+                                ImGui::SameLine();
+
+                                if (ImGui::Button("Cancel"))
+                                {
+                                    ImGui::CloseCurrentPopup();
+                                    editor::imgui::CloseMessageBox("Delete Unit Template");
+                                    editor::EditorLayer::SetInputControl(true);
+                                }
+                            }, 500);
                     }
                 }
             }
@@ -1321,7 +1390,7 @@ namespace application
                         ImGui::TableSetColumnIndex(0);
                         imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
                         ImGui::AlignTextToFramePadding();
-                        ImGui::Text("World Particle Name");
+                        ImGui::Text("Name");
                         ImGui::TableSetColumnIndex(1);
                         ImGui::SetNextItemWidth(-1);
                         ImGui::InputText("##Particle_Name", &particleName[0], 32);
@@ -1343,7 +1412,98 @@ namespace application
                         particle->pod.name = particleName;
                     }
 
-                    /// 각종 Editing 요소들
+                    /// Particle 의 원형을 바꿀 경우(TemplateData 대체)
+                    {
+                        static auto& ptm = particle::ParticleTool_Manager::GetSingletonInstance();
+                        static std::vector<const char*> selections = std::vector<const char*>();
+
+                        selections.resize(0);
+                        selections.push_back("Default");
+                        for (auto& each : ptm.GetParticleList())
+                        {
+                            selections.push_back(each.lock()->name.c_str());
+                        }
+
+                        int selectedParticle = 0;
+                        for (auto& each : selections)
+                        {
+                            if (each == particle->pod.particleData.name)
+                            {
+                                break;
+                            }
+                            selectedParticle++;
+                        }
+
+                        if (selectedParticle == selections.size())
+                        {
+                            selectedParticle = 0;
+                        }
+
+                        if (imgui::Dropdown_2Col("Mold", &selections[0], selections.size(), &selectedParticle))
+                        {
+                            if (selectedParticle == 0)
+                            {
+                                particle->pod.particleData = particle::ParticleToolData();
+                            }
+                            else
+                            {
+                                for (auto& ptr : ptm.GetParticleList())
+                                {
+                                    if (selections[selectedParticle] == ptr.lock()->name)
+                                    {
+                                        particle->pod.particleData = *ptr.lock();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    static const char* shapeList[2] = { "Cone", "Circle" };
+                    int selectedShape = (int)particle->pod.particleData.shape;
+                    if (imgui::Dropdown_2Col("Shape", shapeList, 2, &selectedShape))
+                    {
+                        particle->pod.particleData.shape = (application::particle::ParticleShape)selectedShape;
+                    }
+
+                    static const char* modeList[2] = { "Default", "Bursts" };
+                    int selectedMode = (int)particle->pod.particleData.particleMode;
+                    if (imgui::Dropdown_2Col("Mode", modeList, 2, &selectedMode))
+                    {
+                        particle->pod.particleData.particleMode = (application::particle::ParticleMode)selectedMode;
+                    }
+
+                    imgui::Checkbox_2Col("Loop", particle->pod.particleData.isLoop);
+                    imgui::DragFloat_2Col("Duration", particle->pod.particleData.duration);
+                    imgui::DragFloat_2Col("Life Time", particle->pod.particleData.lifeTime);
+                    imgui::DragFloat_2Col("Speed", particle->pod.particleData.speed);
+                    imgui::DragFloat_2Col("Start Scale", particle->pod.particleData.startScale);
+                    imgui::DragFloat_2Col("End Scale", particle->pod.particleData.endScale);
+
+                    int maxParticle = particle->pod.particleData.maxParticle;
+                    if (imgui::DragInt_2Col("Max Particle", maxParticle, true, 1.f, 1, 500))
+                    {
+                        particle->pod.particleData.maxParticle = maxParticle;
+                    }
+
+                    imgui::Checkbox_2Col("Play Awake", particle->pod.particleData.playAwake);
+
+                    switch (particle->pod.particleData.particleMode)
+                    {
+                        case application::particle::ParticleMode::Default:
+                        {
+                            imgui::DragFloat_2Col("Rate OverTime", particle->pod.particleData.rateOverTime);
+                            break;
+                        }
+                        case application::particle::ParticleMode::Bursts:
+                        {
+                            imgui::DragInt_2Col("Bursts Count", particle->pod.particleData.burstsCount);
+                            imgui::DragFloat_2Col("Interval", particle->pod.particleData.interval);
+                            break;
+                        }
+                        default:
+                            break;
+                    }
                 }
 
                 imgui::EndSection();
@@ -1448,23 +1608,21 @@ namespace application
                     imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
                     /// 등록된 Particle 에서 가져오기
-                    static auto& fbxSet = ResourceManager::GetSingletonInstance().GetSkinnedFBXList();
+                    static auto& ptm = particle::ParticleTool_Manager::GetSingletonInstance();
                     static std::vector<std::string> selections = std::vector<std::string>();
-                    static std::string particleName = "None";
+                    static std::string particleName = "Default";
                     std::string currentParticle = particleName;
 
-                    if (selections.empty())
+                    selections.resize(0);
+                    for (auto& each : ptm.GetParticleList())
                     {
-                        for (auto& each : fbxSet)
-                        {
-                            selections.push_back(each);
-                        }
+                        selections.push_back(each.lock()->name);
                     }
 
                     ImGui::SetNextItemWidth(-1);
                     if (ImGui::BeginCombo("##particleCombo", particleName.c_str()))
                     {
-                        for (int i = 0; i < fbxSet.size(); i++)
+                        for (int i = 0; i < selections.size(); i++)
                         {
                             const bool is_selected = (currentParticle == selections[i]);
                             if (ImGui::Selectable(selections[i].c_str(), is_selected))
@@ -1485,22 +1643,34 @@ namespace application
 
                     if (ImGui::Button("Create"))
                     {
-                        if (particleName != "None")
+                        if (particleName == "Default")
                         {
-                            /// 해당 브러시 세팅해주고 Place 모드로?
-
-                            particleName = "None";
-                            returnVal = true;
-                            ImGui::CloseCurrentPopup();
-                            imgui::CloseMessageBox("Create World Particle");
-                            EditorLayer::SetInputControl(true);
+                            pp.InitParticleData();
                         }
+                        else
+                        {
+                            for (auto& pi : ptm.GetParticleList())
+                            {
+                                if (particleName == pi.lock()->name)
+                                {
+                                    pp.SetParticleData(*pi.lock());
+                                    break;
+                                }
+                            }
+                        }
+                        pp.SetAsSelectMode(false);
+
+                        returnVal = true;
+                        particleName = "Default";
+                        ImGui::CloseCurrentPopup();
+                        imgui::CloseMessageBox("Create World Particle");
+                        EditorLayer::SetInputControl(true);
                     }
                     ImGui::SameLine();
 
                     if (ImGui::Button("Cancel"))
                     {
-                        particleName = "None";
+                        particleName = "Default";
                         ImGui::CloseCurrentPopup();
                         imgui::CloseMessageBox("Create World Particle");
                         EditorLayer::SetInputControl(true);
@@ -1522,6 +1692,7 @@ namespace application
             wp.SetAsSelectMode(true);
             cp.SetAsSelectMode(true);
             lp.SetAsSelectMode(true);
+            pp.SetAsSelectMode(true);
         }
 
         void PalettePanel::UpdataLightGizmo()

@@ -18,6 +18,7 @@ namespace application::editor::palette
     void LightPalette::SelectLight(LightData* light)
     {
         Palette::OnSelectSingleInstance(light);
+        LightBrush::Instance().ReadyBrush("");
     }
 
     void LightPalette::SelectLightTemplateData(Light_TemplateData* templateData)
