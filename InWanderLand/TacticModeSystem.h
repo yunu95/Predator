@@ -14,21 +14,25 @@
 
 class RTSCam;
 class CursorDetector;
+class PlaytimeWave;
 
-class TacticModeSystem : public SingletonComponent<TacticModeSystem>, public Component
+class TacticModeSystem : public SingletonComponent<TacticModeSystem>, public Component, public ContentsObservee
 {
 public:
     virtual void OnEnable() override;
     virtual void Start() override;
     virtual void Update() override;
 
-    enum OrderType
-    {
-        Move,
-        AttackMove,
-        QSkill,
-        WSkill
-    };
+	virtual void PlayFunction() override;
+	virtual void StopFunction() override;
+
+	enum OrderType
+	{
+		Move,
+		AttackMove,
+		QSkill,
+		WSkill
+	};
 
     void SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum);
     void SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum);
@@ -50,9 +54,11 @@ public:
 
     void SetCurrentGauge(int p_gauge);
 
-    void ReportTacticActionFinished();
+	void RegisterCurrentWave(PlaytimeWave* p_wave);
 
-    CursorDetector* m_cursorDetector;
+	CursorDetector* m_cursorDetector;
+
+    void ReportTacticActionFinished();
 
 private:
     int m_maxGauge{ 10 };
@@ -60,6 +66,9 @@ private:
     float m_gaugeIncreaseDuration{ 3.0f };
     float m_gaugeIncreaseElapsed{ 0.0f };
 
+	std::vector<Unit*> m_currentWaveUnits;
+
+	RTSCam* m_rtsCam;
     bool isCoolTime{ false };
     float m_engageCoolTimeDuration{ 5.0f };
     float m_engageCoolTimeElapsed{ 0.0f };
@@ -67,12 +76,12 @@ private:
     bool isTacticModeOperating;					// 명령을 내리는 시간일 때 true.
     bool isTacticOrderPerforming;				// 내린 명령을 수행하고 있을 때 true.
 
-    RTSCam* m_rtsCam;
-
     Unit* currentSelectedUnit{ nullptr };
 
     std::unordered_map<Unit::UnitType, Unit*> playerComponentMap;
 
     std::queue<Unit*> sequenceQueue;
+
+	PlaytimeWave* m_currentOperatingWave;
 };
 

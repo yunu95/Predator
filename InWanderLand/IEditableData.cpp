@@ -1,9 +1,5 @@
 #include "IEditableData.h"
-#include "Terrain_TemplateData.h"
-#include "Unit_TemplateData.h"
-#include "Ornament_TemplateData.h"
-#include "Region_TemplateData.h"
-#include "Wave_TemplateData.h"
+#include "TemplateDataList.h"
 #include "PaletteInstance.h"
 
 namespace application::editor
@@ -40,4 +36,6 @@ namespace application::editor
     DataType GetDataTypeEnum<Camera_TemplateData>() { return DataType::CameraData; }
     template<>
     DataType GetDataTypeEnum<Light_TemplateData>() { return DataType::LightData; }
+    template<>
+    DataType GetDataTypeEnum<Particle_TemplateData>() { return DataType::ParticleData; }
 }

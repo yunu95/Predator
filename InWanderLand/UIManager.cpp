@@ -22,18 +22,19 @@
 using namespace yunutyEngine::graphics;
 void UIManager::Clear()
 {
+    SoundSystem::StopMusic();
     m_highestPriorityButton = nullptr;
     m_currentHighestLayer = -1;
     m_selectedButtons.clear();
+    for (auto each : uisByIndex)
+    {
+        Scene::getCurrentScene()->DestroyGameObject(each.second->GetGameObject());
+    }
     rootUIs.clear();
     uisByEnumID.clear();
     uisByIndex.clear();
     uidatasByIndex.clear();
     digitFonts.clear();
-    for (auto each : uisByIndex)
-    {
-        Scene::getCurrentScene()->DestroyGameObject(each.second->GetGameObject());
-    }
 }
 void UIManager::FadeOutRight(float duration)
 {
@@ -353,10 +354,10 @@ UIElement* UIManager::GetBuffIcon(Unit* owningUnit, StatusEffect::StatusEffectEn
 void UIManager::Update()
 {
     // 마우스 커서 조작
-    if (auto cursorUI = uisByEnumID.at(UIEnumID::MouseCursor))
+    if (auto cursorUI = uisByEnumID.find(UIEnumID::MouseCursor); cursorUI != uisByEnumID.end())
     {
         auto resolution = graphics::Renderer::SingleInstance().GetResolution();
-        cursorUI->GetTransform()->SetWorldPosition({ yunutyEngine::Input::getMouseScreenPositionNormalized().x * resolution.x, yunutyEngine::Input::getMouseScreenPositionNormalized().y * resolution.y, 0 });
+        cursorUI->second->GetTransform()->SetWorldPosition({ yunutyEngine::Input::getMouseScreenPositionNormalized().x * resolution.x, yunutyEngine::Input::getMouseScreenPositionNormalized().y * resolution.y, 0 });
         UIElement* properCursor = uisByEnumID.at(UIEnumID::MouseCursor_Free);
         if (IsMouseOnButton())
         {
@@ -815,6 +816,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         element->soundOnDisable->m_duration = uiData.soundOnDisable_delay;
         element->soundOnDisable->Init();
     }
+
     if (uiData.customFlags & (int)UIExportFlag::PriorityLayout)
     {
         element->priorityLayout = element->GetGameObject()->AddComponent<UIPriorityLayout>();
@@ -1026,7 +1028,7 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
                 cl->StopContents(ContentsStopFlag::None);
                 for (auto each : rootUIs)
                 {
-                    each->DisableElement();
+                    //each->DisableElement();
                 }
                 GetUIElementByEnum(UIEnumID::TitleRoot)->EnableElement();
                 element->DisableElement();

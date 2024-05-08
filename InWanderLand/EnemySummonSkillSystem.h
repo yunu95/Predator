@@ -1,7 +1,8 @@
 #pragma once
 #include "EnemySkillSystem.h"
+#include "LocalTimeEntity.h"
 
-class EnemySummonSkillSystem : public EnemySkillSystem
+class EnemySummonSkillSystem : public EnemySkillSystem, public LocalTimeEntity
 {
 private:
 	float m_elapsed;

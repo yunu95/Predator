@@ -22,6 +22,7 @@ protected:
 	bool isShootOperating = false;
 
 	Vector3d m_ownerUnitFront;
+	float localTimeScale{ 1 };
 
 	std::vector<Unit*> m_playerUnitVector;
 

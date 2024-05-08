@@ -55,9 +55,9 @@ void DotweenTimer::Start()
 
 void DotweenTimer::Update()
 {
-	if (isActive)
+	if (isActive && m_localTimeScale > 0.001f)
 	{
-		elapsed += Time::GetDeltaTime();
+		elapsed += Time::GetDeltaTime() * m_localTimeScale;
 
 		if (elapsed > duration)
 			elapsed = duration;

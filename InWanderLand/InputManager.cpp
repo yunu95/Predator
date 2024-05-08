@@ -5,6 +5,7 @@
 #include "Unit.h"
 #include "RTSCam.h"
 #include "GameManager.h"
+#include "PlayerSkillManager.h"
 
 void InputManager::Start()
 {
@@ -149,6 +150,11 @@ void InputManager::PrepareSkill(Unit::SkillEnum p_skillType)
     if (!GameManager::Instance().IsBattleSystemOperating() ||
         PlayerController::Instance().FindSelectedUnitByUnitType(static_cast<Unit::UnitType>(currentSelectedSerialNumber))->GetCurrentUnitState() == Unit::UnitState::Death)
     {
+        return;
+    }
+    if (!PlayerSkillManager::Instance().IsSkillGaugeEnoughToBeUsed(static_cast<Unit::UnitType>(currentSelectedSerialNumber), p_skillType))
+    {
+        /// 마나가 부족해 스킬을 사용하지 못하는 경우입니다.
         return;
     }
     if (tacticMode)

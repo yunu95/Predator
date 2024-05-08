@@ -22,6 +22,7 @@
 #include "PlayerController.h"
 #include "TacticModeSystem.h"
 #include "GameManager.h"
+#include "PlayerSkillManager.h"
 #include "ShortcutSystem.h"
 #include "RobinSkillDevelopmentSystem.h"
 #include "ScriptSystem.h"
@@ -354,6 +355,7 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
     yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 
     InputManager::Instance().SetInputManagerActive(true);
+    PlayerSkillManager::Instance();
     GameManager::Instance().Reset();
 
     //InputManager::Instance();

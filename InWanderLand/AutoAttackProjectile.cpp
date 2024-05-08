@@ -20,7 +20,7 @@ void AutoAttackProjectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, float spee
 	m_opponentUnit = opponentUnit;
 	GetGameObject()->GetTransform()->SetWorldPosition(ownerUnit->GetGameObject()->GetTransform()->GetWorldPosition() + (ownerUnit->GetTransform()->GetWorldRotation().Forward() * -1 * ownerUnit->GetAttackOffset()));
 	GetGameObject()->GetComponent<Dotween>()->
-		DOLookAt(m_opponentUnit->GetGameObject()->GetTransform()->GetWorldPosition(), Time::GetDeltaTime(), false).OnComplete([=]()
+		DOLookAt(m_opponentUnit->GetGameObject()->GetTransform()->GetWorldPosition(), localTimeScale * Time::GetDeltaTime(), false).OnComplete([=]()
 			{
 				GetGameObject()->SetSelfActive(true);
 			});
@@ -62,8 +62,8 @@ void AutoAttackProjectile::AutoChaseShootingFunction()
 	Vector3d directionVector = (endPosition - startPosition).Normalized();
 
 	// 움직이고 나서의 투사체 위치.
-	Vector3d movedPositionPerFrame = GetGameObject()->GetTransform()->GetWorldPosition() + (directionVector * m_speed * Time::GetDeltaTime());
-	
+	Vector3d movedPositionPerFrame = GetGameObject()->GetTransform()->GetWorldPosition() + (directionVector * m_speed * localTimeScale * Time::GetDeltaTime());
+
 	// 움직이고 나서의 투사체 -> 목표물 방향 벡터
 	Vector3d afterDirectionVector = (endPosition - movedPositionPerFrame).Normalized();
 
@@ -80,7 +80,7 @@ void AutoAttackProjectile::AutoChaseShootingFunction()
 	}
 
 	//RotateBulletPerFrame();
-	GetGameObject()->GetComponent<Dotween>()->DOLookAt(m_opponentUnit->GetGameObject()->GetTransform()->GetWorldPosition(), Time::GetDeltaTime(), false);
+	GetGameObject()->GetComponent<Dotween>()->DOLookAt(m_opponentUnit->GetGameObject()->GetTransform()->GetWorldPosition(), localTimeScale * Time::GetDeltaTime(), false);
 }
 
 void AutoAttackProjectile::StraightShootingFunction()
@@ -89,7 +89,7 @@ void AutoAttackProjectile::StraightShootingFunction()
 	Vector3d endPosition = m_ownerUnit->GetGameObject()->GetTransform()->GetWorldPosition()
 		+ m_ownerUnit->GetTransform()->GetWorldRotation().Forward() * -1 * m_range;
 
-	Vector3d movedPositionPerFrame = GetGameObject()->GetTransform()->GetWorldPosition() + m_ownerUnitFront * -1 * Time::GetDeltaTime() * m_speed;
+	Vector3d movedPositionPerFrame = GetGameObject()->GetTransform()->GetWorldPosition() + m_ownerUnitFront * -1 * localTimeScale * Time::GetDeltaTime() * m_speed;
 
 	GetGameObject()->GetTransform()->SetWorldPosition(movedPositionPerFrame);
 

@@ -42,6 +42,8 @@ namespace application
 			int isEliteMonster;
 			int chessType;
 
+			float unit_scale{ 1.0f };
+
 			TO_JSON(POD_Unit_TemplateData)
 			FROM_JSON(POD_Unit_TemplateData)
 		};

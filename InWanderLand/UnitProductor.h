@@ -45,6 +45,7 @@ public:
 	SkillPreviewMesh qSkillPreviewType;
 	SkillPreviewMesh wSkillPreviewType;
 
+	float m_unitScaleMultipler;
 	float m_healthPoint;
 	int m_manaPoint;
 

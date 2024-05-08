@@ -100,6 +100,8 @@ namespace application
 
 			void EditAnimationEventFrame(const std::weak_ptr<AnimationEvent>& event, float frame);
 
+			std::vector<std::string>& GetTexturePathList() { return texturePathList; }
+
 		private:
 			void ClearPP();
 			void ClearPPIs();
@@ -128,6 +130,7 @@ namespace application
 			std::map<const std::string, yunutyEngine::GameObject*> skinnedObjList = std::map<const std::string, yunutyEngine::GameObject*>();
 			std::map<const std::string, std::vector<yunuGI::IAnimation*>> aniMap = std::map<const std::string, std::vector<yunuGI::IAnimation*>>();
 			std::map<const std::string, std::vector<std::string>> aniNameMap = std::map<const std::string, std::vector<std::string>>();
+			std::vector<std::string> texturePathList = std::vector<std::string>();
 		};
 	}
 }

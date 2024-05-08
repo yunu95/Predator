@@ -839,6 +839,11 @@ namespace application
 						templateList = tdm.GetDataList(DataType::LightData);
 						break;
 					}
+					case application::editor::palette::Palette_List::Particle:
+					{
+						templateList = tdm.GetDataList(DataType::ParticleData);
+						break;
+					}
 					default:
 						break;
 				}
@@ -965,6 +970,10 @@ namespace application
 							break;
 						}
 						case application::editor::DataType::LightData:
+						{
+							break;
+						}
+						case application::editor::DataType::ParticleData:
 						{
 							break;
 						}

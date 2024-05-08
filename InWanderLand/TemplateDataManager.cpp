@@ -227,8 +227,7 @@ namespace application
 
                 if (instance == nullptr)
                 {
-                    Clear();
-                    return false;
+                    continue;
                 }
 
                 // Change UUID
@@ -252,6 +251,11 @@ namespace application
                 return true;
             for (auto& [uuidStr, templateData] : data["TemplateList"].items())
             {
+                if (!list.contains(templateData["key"]))
+                {
+                    continue;
+                }
+
                 if (!list[templateData["key"]]->PostDecoding(templateData["1_Post"]))
                 {
                     Clear();

@@ -3,31 +3,44 @@
 #include "Unit.h"
 #include "ContentsLayer.h"
 #include "Application.h"
+#include "PlayerSkillManager.h"
+#include "TacticModeSystem.h"
 
 void PlayerSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition)
 {
-    switch (p_currentSkill)
+    if (!isOncedActivated)
     {
-    case Unit::SkillEnum::Q:
-        ActivateSkillOne(p_skillPosition);
-        break;
-    case Unit::SkillEnum::W:
-        ActivateSkillTwo(p_skillPosition);
-        break;
-        //case Unit::SkillEnum::BossSkillOne:
-        //	ActivateSkillTwo(p_skillPosition);
-        //	break;
-        //case Unit::SkillEnum::BossSkillTwo:
-        //	ActivateSkillTwo(p_skillPosition);
-        //	break;
-        //case Unit::SkillEnum::BossSkillThree:
-        //	ActivateSkillTwo(p_skillPosition);
-        //	break;
-        //case Unit::SkillEnum::BossSkillFour:
-        //	ActivateSkillTwo(p_skillPosition);
-        //	break;
-    default:
-        break;
+		switch (p_currentSkill)
+		{
+			case Unit::SkillEnum::Q:
+				ActivateSkillOne(p_skillPosition);
+				break;
+			case Unit::SkillEnum::W:
+				ActivateSkillTwo(p_skillPosition);
+				break;
+				//case Unit::SkillEnum::BossSkillOne:
+				//	ActivateSkillTwo(p_skillPosition);
+				//	break;
+				//case Unit::SkillEnum::BossSkillTwo:
+				//	ActivateSkillTwo(p_skillPosition);
+				//	break;
+				//case Unit::SkillEnum::BossSkillThree:
+				//	ActivateSkillTwo(p_skillPosition);
+				//	break;
+				//case Unit::SkillEnum::BossSkillFour:
+				//	ActivateSkillTwo(p_skillPosition);
+				//	break;
+			default:
+				break;
+		}
+
+		/// 전술모드가 아닌 경우엔 스킬 게이지를 소모해야 합니다.
+		if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
+		{
+			PlayerSkillManager::Instance().ReportSkillUsed(m_unitComponent->GetUnitType(), p_currentSkill);
+		}
+
+		isOncedActivated = true;
     }
 }
 
@@ -127,7 +140,7 @@ void PlayerSkillSystem::Update()
 {
     if (!isQSkillReady)
     {
-        qSkillCoolDownElapsed += Time::GetDeltaTime();
+        qSkillCoolDownElapsed += Time::GetDeltaTime() * m_localTimeScale;
         qSkillRadialOverlay->adjuster->SetTargetFloat(1 - qSkillCoolDownElapsed / qSkillCoolTime);
         qSkillCooltimeNumberUI->SetNumber(qSkillCoolTime - qSkillCoolDownElapsed);
         UIElement* eSkillRadialOverlay{ nullptr };
@@ -140,7 +153,7 @@ void PlayerSkillSystem::Update()
     }
     if (!isESkillReady)
     {
-        eSkillCoolDownElapsed += Time::GetDeltaTime();
+        eSkillCoolDownElapsed += Time::GetDeltaTime() * m_localTimeScale;
         eSkillRadialOverlay->adjuster->SetTargetFloat(1 - eSkillCoolDownElapsed / eSkillCoolTime);
         eSkillCooltimeNumberUI->SetNumber(eSkillCoolTime - eSkillCoolDownElapsed);
         if (eSkillCoolDownElapsed >= eSkillCoolTime)

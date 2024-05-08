@@ -30,11 +30,10 @@ private:
 	float m_WSkillProjectileRadius;
 	float m_WSkillFieldRadius;
 
-	bool isColliderSetActiveFalseSet = false;
-
 public:
 	virtual void ActivateSkillOne(Vector3d skillPos) override;
 	virtual void ActivateSkillTwo(Vector3d skillPos) override;
+	virtual void SetSkillRequirmentLocalTimeScale(float p_scale) override;
 
 public:
 	void SetInterActionComponent(BlindFieldComponent* p_QSkillComponent, ParalysisFieldComponent* p_WSkillComponent);
