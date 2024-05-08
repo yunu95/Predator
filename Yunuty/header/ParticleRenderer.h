@@ -61,6 +61,8 @@ namespace yunutyEngine::graphics
 		virtual void Update() override;
 		virtual void OnDisable() override;
 
+		void Reset();
+
 		void ParticleUpdate();
 
 		void SetDuration(float duration);

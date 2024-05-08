@@ -41,8 +41,8 @@ void NailCamera::SetWorldTM(const DirectX::SimpleMath::Matrix wtm)
 {
     this->wtm = wtm;
     this->vtm = this->wtm.Invert();
-    this->cameraNear = 10.f;
-    this->cameraFar = 80.f;
+    //this->cameraNear = 10.f;
+    //this->cameraFar = 80.f;
     this->ptm = DirectX::XMMatrixPerspectiveFovLH(this->fov, this->width / this->height, this->cameraNear, this->cameraFar);
     this->vtmOrtho = DirectX::XMMatrixOrthographicLH(this->width * 1.f, this->height * 1.f, this->cameraNear, this->cameraFar);
 

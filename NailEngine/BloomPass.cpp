@@ -26,36 +26,25 @@ void BloomPass::Init()
 
 void BloomPass::Bloom()
 {
-	DownSampling4x4_0();
-	DownSampling6x6_0();
-
+	DownSampling2x2_0();
+	DownSampling2x2_1();
+	DownSampling2x2_2();
 	Blur();
-
-	UpSampling6x6_0();
-	UpSampling4x4_0();
-
-	//DownSampling6x6_1();
-
-	//UpSampling6x6();
-	//UpSampling6x6();
-
-	//emissiveTexture->UnBind(static_cast<int>(yunuGI::Texture_Type::Temp0));
+	UpSampling2x2_0();
+	UpSampling2x2_1();
+	UpSampling2x2_2();
 }
 
-void BloomPass::DownSampling4x4_0()
+void BloomPass::DownSampling2x2_0()
 {
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
-	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN4X4_0)]->OMSetRenderTarget(true);
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN2X2_0)]->OMSetRenderTarget(true);
 
-	D3D11_VIEWPORT viewport = { 0.0f, 0.0f, 
-		static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().width / 4),
-		static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().height /4),
+	D3D11_VIEWPORT viewport = { 0.0f, 0.0f,
+		static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().width / 2),
+		static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().height / 2),
 		0.0f, 1.0f };
 
-	//D3D11_VIEWPORT viewport = { 0.0f, 0.0f,
-	//static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().width),
-	//static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().height),
-	//0.0f, 1.0f };
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
 
 	emissiveTexture->Bind(static_cast<int>(yunuGI::Texture_Type::Temp0));
@@ -66,23 +55,19 @@ void BloomPass::DownSampling4x4_0()
 	quadMesh->Render();
 }
 
-void BloomPass::DownSampling6x6_0()
+void BloomPass::DownSampling2x2_1()
 {
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
-	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN6X6_0)]->OMSetRenderTarget(true);
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN2X2_1)]->OMSetRenderTarget(true);
 
-	D3D11_VIEWPORT viewport = { 0.0f, 0.0f, 
-		static_cast<float>((NailEngine::Instance.Get().GetWindowInfo().width / 4)/6),
-		static_cast<float>((NailEngine::Instance.Get().GetWindowInfo().height / 4)/6),
+	D3D11_VIEWPORT viewport = { 0.0f, 0.0f,
+		static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().width / 2) / 2,
+		static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().height / 2) / 2,
 		0.0f, 1.0f };
 
-//	D3D11_VIEWPORT viewport = { 0.0f, 0.0f,
-//static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().width),
-//static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().height),
-//0.0f, 1.0f };
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
 
-	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN4X4_0)]->GetRTTexture(DOWN4X4_0)->Bind(static_cast<int>(yunuGI::Texture_Type::Temp0));
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN2X2_0)]->GetRTTexture(DOWN2X2_0)->Bind(static_cast<int>(yunuGI::Texture_Type::Temp0));
 
 	vs->Bind();
 	copyPS->Bind();
@@ -90,24 +75,19 @@ void BloomPass::DownSampling6x6_0()
 	quadMesh->Render();
 }
 
-void BloomPass::DownSampling6x6_1()
+void BloomPass::DownSampling2x2_2()
 {
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
-	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN6X6_1)]->OMSetRenderTarget(true);
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN2X2_2)]->OMSetRenderTarget(true);
 
 	D3D11_VIEWPORT viewport = { 0.0f, 0.0f,
-		static_cast<float>(((NailEngine::Instance.Get().GetWindowInfo().width / 4) / 6) / 6),
-		static_cast<float>(((NailEngine::Instance.Get().GetWindowInfo().height / 4) / 6) / 6),
+		static_cast<float>(((NailEngine::Instance.Get().GetWindowInfo().width / 2) / 2) / 2),
+		static_cast<float>(((NailEngine::Instance.Get().GetWindowInfo().height / 2) / 2) / 2),
 		0.0f, 1.0f };
 
-
-//	D3D11_VIEWPORT viewport = { 0.0f, 0.0f,
-//static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().width),
-//static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().height),
-//0.0f, 1.0f };
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
 
-	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN6X6_0)]->GetRTTexture(DOWN6X6_0)->Bind(static_cast<int>(yunuGI::Texture_Type::Temp0));
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN2X2_1)]->GetRTTexture(DOWN2X2_1)->Bind(static_cast<int>(yunuGI::Texture_Type::Temp0));
 
 	vs->Bind();
 	copyPS->Bind();
@@ -115,21 +95,16 @@ void BloomPass::DownSampling6x6_1()
 	quadMesh->Render();
 }
 
-void BloomPass::UpSampling6x6_0()
+void BloomPass::UpSampling2x2_0()
 {
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
-	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP6x6_0)]->OMSetRenderTarget(true);
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP2X2_0)]->OMSetRenderTarget(true);
 
 	D3D11_VIEWPORT viewport = { 0.0f, 0.0f,
-		static_cast<float>(((NailEngine::Instance.Get().GetWindowInfo().width / 4))),
-		static_cast<float>(((NailEngine::Instance.Get().GetWindowInfo().height / 4))),
+		static_cast<float>(((NailEngine::Instance.Get().GetWindowInfo().width / 2) / 2)),
+		static_cast<float>(((NailEngine::Instance.Get().GetWindowInfo().height / 2) / 2)),
 		0.0f, 1.0f };
 
-
-//	D3D11_VIEWPORT viewport = { 0.0f, 0.0f,
-//static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().width),
-//static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().height),
-//0.0f, 1.0f };
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
 
 	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::BLUR)]->GetRTTexture(BLUR)->Bind(static_cast<int>(yunuGI::Texture_Type::Temp0));
@@ -140,23 +115,39 @@ void BloomPass::UpSampling6x6_0()
 	quadMesh->Render();
 }
 
-void BloomPass::UpSampling4x4_0()
+void BloomPass::UpSampling2x2_1()
 {
 	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
-	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)]->OMSetRenderTarget(true);
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP2X2_1)]->OMSetRenderTarget(true);
+
+	D3D11_VIEWPORT viewport = { 0.0f, 0.0f,
+		static_cast<float>(((NailEngine::Instance.Get().GetWindowInfo().width / 2))),
+		static_cast<float>(((NailEngine::Instance.Get().GetWindowInfo().height / 2))),
+		0.0f, 1.0f };
+
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
+
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP2X2_0)]->GetRTTexture(UP2X2_0)->Bind(static_cast<int>(yunuGI::Texture_Type::Temp0));
+
+	vs->Bind();
+	copyPS->Bind();
+
+	quadMesh->Render();
+}
+
+void BloomPass::UpSampling2x2_2()
+{
+	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP2X2_2)]->OMSetRenderTarget(true);
 
 	D3D11_VIEWPORT viewport = { 0.0f, 0.0f,
 		static_cast<float>(((NailEngine::Instance.Get().GetWindowInfo().width))),
 		static_cast<float>(((NailEngine::Instance.Get().GetWindowInfo().height))),
 		0.0f, 1.0f };
 
-//	D3D11_VIEWPORT viewport = { 0.0f, 0.0f,
-//static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().width),
-//static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().height),
-//0.0f, 1.0f };
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
 
-	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP6x6_0)]->GetRTTexture(UP6x6_0)->Bind(static_cast<int>(yunuGI::Texture_Type::Temp0));
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP2X2_1)]->GetRTTexture(UP2X2_1)->Bind(static_cast<int>(yunuGI::Texture_Type::Temp0));
 
 	vs->Bind();
 	copyPS->Bind();
@@ -170,17 +161,13 @@ void BloomPass::Blur()
 	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::BLUR)]->OMSetRenderTarget(true);
 
 	D3D11_VIEWPORT viewport = { 0.0f, 0.0f,
-		static_cast<float>(((NailEngine::Instance.Get().GetWindowInfo().width / 4) / 6)),
-		static_cast<float>(((NailEngine::Instance.Get().GetWindowInfo().height / 4) / 6)),
+		static_cast<float>((((NailEngine::Instance.Get().GetWindowInfo().width / 2) / 2) / 2)),
+		static_cast<float>((((NailEngine::Instance.Get().GetWindowInfo().height / 2) / 2) / 2)),
 		0.0f, 1.0f };
 
-//	D3D11_VIEWPORT viewport = { 0.0f, 0.0f,
-//static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().width),
-//static_cast<float>(NailEngine::Instance.Get().GetWindowInfo().height),
-//0.0f, 1.0f };
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
 
-	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN6X6_0)]->GetRTTexture(DOWN6X6_0)->Bind(static_cast<int>(yunuGI::Texture_Type::Temp0));
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN2X2_2)]->GetRTTexture(DOWN2X2_2)->Bind(static_cast<int>(yunuGI::Texture_Type::Temp0));
 
 	vs->Bind();
 	std::static_pointer_cast<PixelShader>(ResourceManager::Instance.Get().GetDeferredShader(L"BlurPS.cso"))->Bind();

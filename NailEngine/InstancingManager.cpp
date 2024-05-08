@@ -256,11 +256,6 @@ void InstancingManager::RenderStaticDeferred()
 						continue;
 					}
 
-					if(i->isActive)
-					{
-						int a = 1;
-					}
-
 					if (i->isActive == false) continue;
 
 					if (i->isCulled == true)

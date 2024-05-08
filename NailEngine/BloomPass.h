@@ -27,11 +27,14 @@ public:
 	void Bloom();
 
 private:
-	void DownSampling4x4_0();
-	void DownSampling6x6_0();
-	void DownSampling6x6_1();
-	void UpSampling6x6_0();
-	void UpSampling4x4_0();
+	void DownSampling2x2_0();
+	void DownSampling2x2_1();
+	void DownSampling2x2_2();
+	void UpSampling2x2_0();
+	void UpSampling2x2_1();
+	void UpSampling2x2_2();
+
+
 
 	void Blur();
 
