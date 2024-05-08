@@ -1375,9 +1375,6 @@
     <ClInclude Include="AnimationEvents.h">
       <Filter>Particle\AnimationEvent</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleToolData.h">
-      <Filter>Particle</Filter>
-    </ClInclude>
     <ClInclude Include="Particle_TemplateData.h">
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClInclude>
@@ -1386,6 +1383,9 @@
     </ClInclude>
     <ClInclude Include="PlayMusicTimer.h">
       <Filter>UI\Effect\PlayMusicTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleToolData.h">
+      <Filter>Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -122,6 +122,7 @@ namespace application
         public:
             /// 저장할 데이터들
             std::string name = "None";
+			std::string texturePath = "Texture\\Particle\\default.dds";
             ParticleShape shape = ParticleShape::Cone;
             ParticleMode particleMode = ParticleMode::Default;
             bool isLoop = false;
@@ -132,6 +133,10 @@ namespace application
             float endScale = 1.f;
             unsigned int maxParticle = 500;
             bool playAwake = true;
+
+			/// Cone
+			float radius = 1.f;
+			float angle = 25.f;
 
             /// Default
             float rateOverTime = 10.f;
