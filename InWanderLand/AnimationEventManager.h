@@ -47,6 +47,8 @@ namespace application
 		bool AddAnimationEvent(const std::shared_ptr<AnimationEvent>& event);
 		bool EraseAnimationEvent(const std::shared_ptr<AnimationEvent>& event);
 		
+		bool EditAnimationEventFrame(const std::shared_ptr<AnimationEvent>& event);
+
 		void UpdateTransformEditEvent(const std::shared_ptr<AnimationEvent>& event);
 
 		Transform* GetLerpPoint(const RampEdit& data, float frame);

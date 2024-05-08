@@ -136,6 +136,17 @@ namespace application
 					pm.AddAnimationEvent(ptr);
 					break;
 				}
+				case application::AnimationEventType::GameObject_AwakeEvent:
+				{
+					auto particleName = data[i]["objName"];
+					auto ptr = std::make_shared<GameObject_AwakeEvent>();
+					ptr->fbxName = fbxName;
+					ptr->animationName = animationName;
+					ptr->frame = frame;
+					ptr->objName = particleName;
+					pm.AddAnimationEvent(ptr);
+					break;
+				}
 				default:
 					break;
 			}
@@ -210,6 +221,18 @@ namespace application
 					ptrData["animationName"] = ptr->animationName;
 					ptrData["frame"] = ptr->frame;
 					ptrData["rscPath"] = ptr->rscPath;
+					data.push_back(ptrData);
+					break;
+				}
+				case application::AnimationEventType::GameObject_AwakeEvent:
+				{
+					auto ptr = static_cast<GameObject_AwakeEvent*>(event.get());
+					json ptrData;
+					ptrData["type"] = AnimationEventType::GameObject_AwakeEvent;
+					ptrData["fbxName"] = ptr->fbxName;
+					ptrData["animationName"] = ptr->animationName;
+					ptrData["frame"] = ptr->frame;
+					ptrData["objName"] = ptr->objName;
 					data.push_back(ptrData);
 					break;
 				}
@@ -312,11 +335,66 @@ namespace application
 			case application::AnimationEventType::Sound_PlayOnceEvent:
 			{
 				auto ptr = static_cast<Sound_PlayOnceEvent*>(event.get());
+				funcIndex = animator->PushAnimationWithFunc(ani, event->frame, [=]()
+					{
+						yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
+					});
+
+				if (funcIndex == 0)
+				{
+					return false;
+				}
+				else
+				{
+					eventFuncIndexList[event] = funcIndex;
+				}
 				break;
 			}
 			case application::AnimationEventType::Sound_PlayLoopEvent:
 			{
 				auto ptr = static_cast<Sound_PlayLoopEvent*>(event.get());
+				funcIndex = animator->PushAnimationWithFunc(ani, event->frame, [=]()
+					{
+						yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
+					});
+
+				if (funcIndex == 0)
+				{
+					return false;
+				}
+				else
+				{
+					eventFuncIndexList[event] = funcIndex;
+				}
+				break;
+			}
+			case application::AnimationEventType::GameObject_AwakeEvent:
+			{
+				auto ptr = static_cast<GameObject_AwakeEvent*>(event.get());
+				GameObject* particle = nullptr;
+				for (auto& each : (*particleInstanceList)[event->fbxName])
+				{
+					if (each->name == ptr->objName)
+					{
+						particle = (*particleInstanceIDMap)[each];
+						break;
+					}
+				}
+
+				funcIndex = animator->PushAnimationWithFunc(ani, event->frame, [=]()
+					{
+						auto ptr = particle->GetComponent<graphics::ParticleRenderer>();
+						ptr->Reset();
+					});
+
+				if (funcIndex == 0)
+				{
+					return false;
+				}
+				else
+				{
+					eventFuncIndexList[event] = funcIndex;
+				}
 				break;
 			}
 			default:
@@ -363,6 +441,169 @@ namespace application
 		}
 
 		eventList.erase(event);
+
+		return true;
+	}
+
+	bool AnimationEventManager::EditAnimationEventFrame(const std::shared_ptr<AnimationEvent>& event)
+	{
+		auto obj = (*skinnedObjList)[event->fbxName];
+		auto animator = obj->GetComponent<graphics::Animator>();
+		int index = 0;
+		for (auto& each : (*aniNameMap)[event->fbxName])
+		{
+			if (each == event->animationName)
+			{
+				break;
+			}
+			index++;
+		}
+		auto ani = (*aniMap)[event->fbxName][index];
+
+		if (!animator || !ani)
+		{
+			return false;
+		}
+
+		animator->EraseAnimationFunc(ani, eventFuncIndexList[event]);
+		eventFuncIndexList.erase(event);
+
+		auto type = event->GetType();
+		unsigned long long funcIndex = 0;
+		switch (type)
+		{
+			case application::AnimationEventType::GameObject_ActivateEvent:
+			{
+				auto ptr = static_cast<GameObject_ActivateEvent*>(event.get());
+				GameObject* particle = nullptr;
+				for (auto& each : (*particleInstanceList)[event->fbxName])
+				{
+					if (each->name == ptr->objName)
+					{
+						particle = (*particleInstanceIDMap)[each];
+						break;
+					}
+				}
+
+				funcIndex = animator->PushAnimationWithFunc(ani, event->frame, [=]()
+					{
+						particle->SetSelfActive(true);
+						auto ptr = particle->GetComponent<graphics::ParticleRenderer>();
+						ptr->Play();
+					});
+
+				if (funcIndex == 0)
+				{
+					return false;
+				}
+				else
+				{
+					eventFuncIndexList[event] = funcIndex;
+				}
+
+				break;
+			}
+			case application::AnimationEventType::GameObject_DisabledEvent:
+			{
+				auto ptr = static_cast<GameObject_DisabledEvent*>(event.get());
+				GameObject* particle = nullptr;
+				for (auto& each : (*particleInstanceList)[event->fbxName])
+				{
+					if (each->name == ptr->objName)
+					{
+						particle = (*particleInstanceIDMap)[each];
+						break;
+					}
+				}
+
+				funcIndex = animator->PushAnimationWithFunc(ani, event->frame, [=]()
+					{
+						particle->SetSelfActive(false);
+					});
+
+				if (funcIndex == 0)
+				{
+					return false;
+				}
+				else
+				{
+					eventFuncIndexList[event] = funcIndex;
+				}
+
+				break;
+			}
+			case application::AnimationEventType::GameObject_TransformEditEvent:
+			{
+				return false;
+			}
+			case application::AnimationEventType::Sound_PlayOnceEvent:
+			{
+				auto ptr = static_cast<Sound_PlayOnceEvent*>(event.get());
+				funcIndex = animator->PushAnimationWithFunc(ani, event->frame, [=]()
+					{
+						yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
+					});
+
+				if (funcIndex == 0)
+				{
+					return false;
+				}
+				else
+				{
+					eventFuncIndexList[event] = funcIndex;
+				}
+				break;
+			}
+			case application::AnimationEventType::Sound_PlayLoopEvent:
+			{
+				auto ptr = static_cast<Sound_PlayLoopEvent*>(event.get());
+				funcIndex = animator->PushAnimationWithFunc(ani, event->frame, [=]()
+					{
+						yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
+					});
+
+				if (funcIndex == 0)
+				{
+					return false;
+				}
+				else
+				{
+					eventFuncIndexList[event] = funcIndex;
+				}
+				break;
+			}
+			case application::AnimationEventType::GameObject_AwakeEvent:
+			{
+				auto ptr = static_cast<GameObject_AwakeEvent*>(event.get());
+				GameObject* particle = nullptr;
+				for (auto& each : (*particleInstanceList)[event->fbxName])
+				{
+					if (each->name == ptr->objName)
+					{
+						particle = (*particleInstanceIDMap)[each];
+						break;
+					}
+				}
+
+				funcIndex = animator->PushAnimationWithFunc(ani, event->frame, [=]()
+					{
+						auto ptr = particle->GetComponent<graphics::ParticleRenderer>();
+						ptr->Reset();
+					});
+
+				if (funcIndex == 0)
+				{
+					return false;
+				}
+				else
+				{
+					eventFuncIndexList[event] = funcIndex;
+				}
+				break;
+			}
+			default:
+				break;
+		}
 
 		return true;
 	}

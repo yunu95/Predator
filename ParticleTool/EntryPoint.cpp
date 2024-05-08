@@ -356,6 +356,11 @@ struct MySequence : public ImSequencer::SequenceInterface
 						draw_list->AddText(pta, 0xFFFFFFFF, "Sound_PlayLoop");
 						break;
 					}
+					case application::AnimationEventType::GameObject_AwakeEvent:
+					{
+						draw_list->AddText(pta, 0xFFFFFFFF, ("Particle Awake[" + static_cast<application::GameObject_AwakeEvent*>(each.get())->objName + "]").c_str());
+						break;
+					}
 					default:
 						break;
 				}
@@ -425,6 +430,11 @@ struct MySequence : public ImSequencer::SequenceInterface
 					case application::AnimationEventType::Sound_PlayLoopEvent:
 					{
 						boxCol = ImGui::GetColorU32(ImVec4(0, 0, 1, 1));
+						break;
+					}
+					case application::AnimationEventType::GameObject_AwakeEvent:
+					{
+						boxCol = ImGui::GetColorU32(ImVec4(1, 0, 1, 1));
 						break;
 					}
 					default:
@@ -612,6 +622,11 @@ struct MySequence : public ImSequencer::SequenceInterface
 					case application::AnimationEventType::Sound_PlayLoopEvent:
 					{
 						boxCol = ImGui::GetColorU32(ImVec4(0, 0, 1, 1));
+						break;
+					}
+					case application::AnimationEventType::GameObject_AwakeEvent:
+					{
+						boxCol = ImGui::GetColorU32(ImVec4(1, 0, 1, 1));
 						break;
 					}
 					default:
@@ -2102,6 +2117,65 @@ void ShowSequencerEditor()
 				}, 300);
 		}
 
+		if (ImGui::MenuItem("Awake Particle Current Frame"))
+		{
+			application::editor::imgui::ShowMessageBox("Select Particle(Awake)", [=]()
+				{
+					application::editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::Separator();
+
+					static std::string particleName = "None";
+
+					ImGui::SetNextItemWidth(-1);
+					if (ImGui::BeginCombo("##SelectedParticleListCombo", particleName.c_str()))
+					{
+						for (auto& each : pm.GetChildrenParticleInstanceList(pm.GetSelectedFBXData()->getName()))
+						{
+							const bool is_selected = (particleName == each.lock()->name);
+							if (ImGui::Selectable(each.lock()->name.c_str(), is_selected))
+							{
+								particleName = each.lock()->name;
+							}
+
+							if (is_selected)
+							{
+								ImGui::SetItemDefaultFocus();
+							}
+						}
+						ImGui::EndCombo();
+					}
+
+					ImGui::Separator();
+
+					if (ImGui::Button("OK"))
+					{
+						if (particleName != "None")
+						{
+							auto sptr = std::make_shared<application::GameObject_AwakeEvent>();
+							sptr->fbxName = fbxName;
+							sptr->animationName = pm.GetAnimationNameList(fbxName)[aniIndex];
+							sptr->frame = currentFrame;
+							sptr->objName = particleName;
+							pm.AddAnimationEvent(sptr);
+							mySequenceMap[fbxName].myItems[funcIndex].funcList.insert(sptr);
+
+							particleName = "None";
+							ImGui::CloseCurrentPopup();
+							application::editor::imgui::CloseMessageBox("Select Particle(Awake)");
+						}
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						particleName = "None";
+						ImGui::CloseCurrentPopup();
+						application::editor::imgui::CloseMessageBox("Select Particle(Awake)");
+					}
+				}, 300);
+		}
+
 		if (ImGui::MenuItem("Add Particle Transform Animation"))
 		{
 			application::editor::imgui::ShowMessageBox("Select Particle(TSAni)", [=]()
@@ -2190,6 +2264,83 @@ void ShowSequencerEditor()
 						particleName = "None";
 						ImGui::CloseCurrentPopup();
 						application::editor::imgui::CloseMessageBox("Select Particle(TSAni)");
+					}
+				}, 300);
+		}
+
+		if (ImGui::MenuItem("Sound Play Current Frame"))
+		{
+			application::editor::imgui::ShowMessageBox("Sound Play", [=]()
+				{
+					application::editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::Separator();
+
+					static std::string rscName = "None";
+					static bool loop = false;
+
+					ImGui::SetNextItemWidth(-1);
+					if (ImGui::BeginCombo("##SelectedSoundListCombo", rscName.c_str()))
+					{
+						for (auto& each : yunutyEngine::SoundSystem::GetLoadedSoundsList())
+						{
+							const bool is_selected = (rscName == each);
+							if (ImGui::Selectable(each.c_str(), is_selected))
+							{
+								rscName = each;
+							}
+
+							if (is_selected)
+							{
+								ImGui::SetItemDefaultFocus();
+							}
+						}
+						ImGui::EndCombo();
+					}
+
+					ImGui::Checkbox("Loop", &loop);
+
+					ImGui::Separator();
+
+					if (ImGui::Button("OK"))
+					{
+						if (rscName != "None")
+						{
+							if (loop)
+							{
+								auto sptr = std::make_shared<application::Sound_PlayLoopEvent>();
+								sptr->fbxName = fbxName;
+								sptr->animationName = pm.GetAnimationNameList(fbxName)[aniIndex];
+								sptr->frame = currentFrame;
+								sptr->rscPath = rscName;
+								pm.AddAnimationEvent(sptr);
+								mySequenceMap[fbxName].myItems[funcIndex].funcList.insert(sptr);
+							}
+							else
+							{
+								auto sptr = std::make_shared<application::Sound_PlayOnceEvent>();
+								sptr->fbxName = fbxName;
+								sptr->animationName = pm.GetAnimationNameList(fbxName)[aniIndex];
+								sptr->frame = currentFrame;
+								sptr->rscPath = rscName;
+								pm.AddAnimationEvent(sptr);
+								mySequenceMap[fbxName].myItems[funcIndex].funcList.insert(sptr);
+							}	
+							
+							rscName = "None";
+							loop = false;
+							ImGui::CloseCurrentPopup();
+							application::editor::imgui::CloseMessageBox("Sound Play");
+						}
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						rscName = "None";
+						loop = false;
+						ImGui::CloseCurrentPopup();
+						application::editor::imgui::CloseMessageBox("Sound Play");
 					}
 				}, 300);
 		}
@@ -2587,6 +2738,7 @@ void LoadResourcesRecursively()
 		{
 			namespace fs = std::filesystem;
 			std::set<std::string> validExtensions{ ".jpg", ".bmp", ".tga", ".dds", ".cso" ,".png" };
+            std::set<std::string> soundExtensions{ ".wav", ".mp3", ".wma", ".ogg" };
 			fs::path basePath{ "./" };
 			try
 			{
@@ -2596,8 +2748,15 @@ void LoadResourcesRecursively()
 					{
 						if (fs::is_regular_file(entry) && validExtensions.contains(entry.path().extension().string()))
 						{
-							auto relativePath = fs::relative(entry.path(), basePath);
-							resourceManager->LoadFile(relativePath.string().c_str());
+							auto relativePath = fs::relative(entry.path(), basePath).string();
+							std::replace(relativePath.begin(), relativePath.end(), '\\', '/');
+							resourceManager->LoadFile(relativePath.c_str());
+						}
+						else if (fs::is_regular_file(entry) && soundExtensions.contains(entry.path().extension().string()))
+						{
+							auto relativePath = fs::relative(entry.path(), basePath).string();
+							std::replace(relativePath.begin(), relativePath.end(), '\\', '/');
+							yunutyEngine::SoundSystem::LoadSound(relativePath);
 						}
 					}
 				}
