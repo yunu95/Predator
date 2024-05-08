@@ -6,7 +6,28 @@ struct PixelIn
     float2 uv : TEXCOORD;
 };
 
-// Temp0Map : DownSample Tecture
+// Temp0Map : DownSample Texture
+
+float GetBloomCurve(float x, float threshold)
+{
+    float result = x;
+    x *= 2.0f;
+    
+    result = x * 0.05 + max(0, x - threshold) * 0.5; // default threshold = 1.26
+    
+//#ifdef BLOOMCURVE_METHOD_2
+//    result = x*x/3.2;
+//#endif
+    
+//#ifdef BLOOMCURVE_METHOD_3
+//    result = max(0,x-threshold); // default threshold = 1.0
+//    result *= result;
+//#endif 
+    
+    return result * 0.5f;
+}
+
+
 
 float4 main(PixelIn input) : SV_TARGET
 {
@@ -30,7 +51,12 @@ float4 main(PixelIn input) : SV_TARGET
 
     // 가중치의 정규화
     color /= 9.0;
+    
+    //float x = (color.r + color.g + color.b) / 3.f;
+    //x = GetBloomCurve(x, 1.26);
 
+    //color *= x;
+    
     return color;
 }
 

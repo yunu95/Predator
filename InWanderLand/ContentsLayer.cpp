@@ -135,7 +135,7 @@ void GraphicsTest()
 		}
     }
 
-	{
+	/*{
 		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
         obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,10 });
 		auto test4 = obj->AddComponent<TestComponent4>();
@@ -162,11 +162,11 @@ void GraphicsTest()
         
         test4->animation = animation;
         test4->animation2 = animation2;
-	}
+	}*/
 
-    //{
-    //    auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_GuideBook");
-    //}
+    {
+        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_GuideBook");
+    }
 
 	//{
 	//	auto obj2 = Scene::getCurrentScene()->AddGameObject();
