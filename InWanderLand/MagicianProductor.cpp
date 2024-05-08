@@ -122,13 +122,18 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 
     magicianSkillSystem->SetQSkillDebugPair({ QSkillProjectileDebugObject, m_QSkillProjectileRadius }, { QSkillFieldDebugObject, m_QSkillFieldRadius });
     magicianSkillSystem->SetQSkillObject(QSkillProjectileObject, QSkillFieldObject);
-    magicianSkillSystem->qSkillRadialOverlay = UIManager::Instance().GetUIElementByEnum(UIEnumID::Skill_Use_Q_Ursula_Overlay);
-    magicianSkillSystem->qSkillCooltimeNumberUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::Skill_Use_Q_Ursula_Cooltime_Number);
 
     magicianSkillSystem->SetWSkillDebugPair({ WSkillProjectileDebugObject, m_WSkillProjectileRadius }, { WSkillFieldDebugObject, m_WSkillFieldRadius });
     magicianSkillSystem->SetWSkillObject(WSkillProjectileObject, WSkillFieldObject);
-    magicianSkillSystem->eSkillRadialOverlay = UIManager::Instance().GetUIElementByEnum(UIEnumID::Skill_Use_W_Ursula_Overlay);
-    magicianSkillSystem->eSkillCooltimeNumberUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::Skill_Use_W_Ursula_Cooltime_Number);
+
+    magicianSkillSystem->qSkillRadialOverlay = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)
+        ->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
+    magicianSkillSystem->qSkillCooltimeNumberUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)
+        ->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
+    magicianSkillSystem->eSkillRadialOverlay = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)
+        ->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
+    magicianSkillSystem->eSkillCooltimeNumberUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)
+        ->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
 
     float skillOneRange = 6.0f * UNIT_LENGTH;
     float skillTwoRange = 6.0f * UNIT_LENGTH;
@@ -208,59 +213,59 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
     //        m_baseUnitAnimations.m_battleEngageAnimation->SetLoop(false);
     //    }
     //}
-	for (auto each : animList)
-	{
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
-		{
-			m_baseUnitAnimations.m_idleAnimation = each;
-			m_baseUnitAnimations.m_idleAnimation->SetLoop(true);
-			animator->PushAnimation(m_baseUnitAnimations.m_idleAnimation);
-			animator->Play(m_baseUnitAnimations.m_idleAnimation);
-		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
-		{
-			m_baseUnitAnimations.m_walkAnimation = each;
-			m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
-			animator->PushAnimation(m_baseUnitAnimations.m_walkAnimation);
-		}
-		/*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Attack")
-		{
-			m_baseUnitAnimations.m_attackAnimation = each;
-			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
-		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
-		{
-			m_baseUnitAnimations.m_paralysisAnimation = each;
-			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
-			animator->PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
-		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Death")
-		{
-			m_baseUnitAnimations.m_deathAnimation = each;
-			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
-			animator->PushAnimation(m_baseUnitAnimations.m_deathAnimation);
-		}
-		/// Skill Animation
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Skill1")
-		{
-			each->SetLoop(true);
-			animator->PushAnimation(each);
-			m_baseUnitAnimations.m_skillOneAnimation = each;
-			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::Q, each);
-		}
-		/*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Skill2")
-		{
-			each->SetLoop(true);
-			animator->PushAnimation(each);
-			m_baseUnitAnimations.m_skillTwoAnimation = each;
-			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::W, each);
-		}
-		/*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
-		{
-			m_baseUnitAnimations.m_battleEngageAnimation = each;
-			m_baseUnitAnimations.m_battleEngageAnimation->SetLoop(false);
-		}
-	}
+    for (auto each : animList)
+    {
+        if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
+        {
+            m_baseUnitAnimations.m_idleAnimation = each;
+            m_baseUnitAnimations.m_idleAnimation->SetLoop(true);
+            animator->PushAnimation(m_baseUnitAnimations.m_idleAnimation);
+            animator->Play(m_baseUnitAnimations.m_idleAnimation);
+        }
+        else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
+        {
+            m_baseUnitAnimations.m_walkAnimation = each;
+            m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
+            animator->PushAnimation(m_baseUnitAnimations.m_walkAnimation);
+        }
+        /*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Attack")
+        {
+            m_baseUnitAnimations.m_attackAnimation = each;
+            m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
+        }
+        else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+        {
+            m_baseUnitAnimations.m_paralysisAnimation = each;
+            m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
+            animator->PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
+        }
+        else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Death")
+        {
+            m_baseUnitAnimations.m_deathAnimation = each;
+            m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
+            animator->PushAnimation(m_baseUnitAnimations.m_deathAnimation);
+        }
+        /// Skill Animation
+        else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Skill1")
+        {
+            each->SetLoop(true);
+            animator->PushAnimation(each);
+            m_baseUnitAnimations.m_skillOneAnimation = each;
+            m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::Q, each);
+        }
+        /*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Skill2")
+        {
+            each->SetLoop(true);
+            animator->PushAnimation(each);
+            m_baseUnitAnimations.m_skillTwoAnimation = each;
+            m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::W, each);
+        }
+        /*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+        {
+            m_baseUnitAnimations.m_battleEngageAnimation = each;
+            m_baseUnitAnimations.m_battleEngageAnimation->SetLoop(false);
+        }
+    }
     m_unitComponent->unitAnimations = m_baseUnitAnimations;
     SetUnitAnimationFunction();
     return m_unitComponent;

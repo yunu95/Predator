@@ -115,10 +115,14 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
     warriorSkillSystem->SetWSkillObject(wSkillColliderObject);
     warriorSkillSystem->SetKnockBackDebugObject(qSkillColliderDebugObject, m_QSkillRadius);
     warriorSkillSystem->SetWSkillDebugObject(wSkillColliderDebugObject, m_WSkillRadius);
-    warriorSkillSystem->qSkillRadialOverlay = UIManager::Instance().GetUIElementByEnum(UIEnumID::Skill_Use_Q_Robin_Overlay);
-    warriorSkillSystem->qSkillCooltimeNumberUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::Skill_Use_Q_Robin_Cooltime_Number);
-    warriorSkillSystem->eSkillRadialOverlay = UIManager::Instance().GetUIElementByEnum(UIEnumID::Skill_Use_W_Robin_Overlay);
-    warriorSkillSystem->eSkillCooltimeNumberUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::Skill_Use_W_Robin_Cooltime_Number);
+    warriorSkillSystem->qSkillRadialOverlay = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)
+        ->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
+    warriorSkillSystem->qSkillCooltimeNumberUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)
+        ->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
+    warriorSkillSystem->eSkillRadialOverlay = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)
+        ->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
+    warriorSkillSystem->eSkillCooltimeNumberUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)
+        ->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
 
     float warriorSkillOneRange = 5.0f * UNIT_LENGTH;
     warriorSkillSystem->SetSkillOneRange(warriorSkillOneRange);
