@@ -36,16 +36,21 @@ namespace application
         public:
             /// 저장할 데이터들
             std::string name = "None";
+            std::string texturePath = "Texture\\Particle\\default.dds";
             ParticleShape shape = ParticleShape::Cone;
             ParticleMode particleMode = ParticleMode::Default;
             bool isLoop = false;
-			float duration = 5.0;
+            float duration = 5.0;
             float lifeTime = 5.f;
             float speed = 1.f;
             float startScale = 1.f;
             float endScale = 1.f;
             unsigned int maxParticle = 500;
             bool playAwake = true;
+
+            /// Cone
+            float radius = 1.f;
+            float angle = 25.f;
 
             /// Default
             float rateOverTime = 10.f;
@@ -54,8 +59,8 @@ namespace application
             int burstsCount = 30;
             float interval = 5.f;
 
-			TO_JSON(ParticleToolData)
-			FROM_JSON(ParticleToolData)
+            TO_JSON(ParticleToolData)
+            FROM_JSON(ParticleToolData)
         };
 
 		struct ParticleToolInstance

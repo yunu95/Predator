@@ -84,6 +84,7 @@ namespace application
             particleInstance->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
             particleInstance->GetTransform()->SetWorldRotation({ pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z });
             particleInstance->GetTransform()->SetLocalScale({ pod.scale.x,pod.scale.y,pod.scale.z });
+            particleInstance->ApplyParticleComponent(this);
             return particleInstance;
         }
 
@@ -141,6 +142,7 @@ namespace application
         ParticleData::ParticleData(const std::string& name)
             : pod()
         {
+            pod.templateData = static_cast<Particle_TemplateData*>(templateDataManager.GetTemplateData(name));
             EnterDataFromTemplate();
             EnterDataFromGlobalConstant();
         }

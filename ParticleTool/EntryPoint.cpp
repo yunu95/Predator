@@ -1672,6 +1672,29 @@ void ShowParticleEditor()
 				}
 			}
 
+			static std::vector<const char*> textures = std::vector<const char*>();
+
+			textures.resize(0);
+			for (auto& each : pm.GetTexturePathList())
+			{
+				textures.push_back(each.c_str());
+			}
+
+			int selectedTexture = 0;
+			for (auto& each : textures)
+			{
+				if (each == particleData->texturePath)
+				{
+					break;
+				}
+				selectedTexture++;
+			}
+
+			if (Dropdown_2Col("Texture", &textures[0], textures.size(), &selectedTexture))
+			{
+				particleData->texturePath = textures[selectedTexture];
+			}
+
 			static const char* shapeList[2] = { "Cone", "Circle" };
 			int selectedShape = (int)particleData->shape;
 			if (Dropdown_2Col("Shape", shapeList, 2, &selectedShape))
@@ -1700,6 +1723,18 @@ void ShowParticleEditor()
 			}
 
 			Checkbox_2Col("Play Awake", particleData->playAwake);
+
+			switch (particleData->shape)
+			{
+				case application::particle::ParticleShape::Cone:
+				{
+					DragFloat_2Col("Radius", particleData->radius);
+					DragFloat_2Col("Angle", particleData->angle);
+					break;
+				}
+				default:
+					break;
+			}
 
 			switch (particleData->particleMode)
 			{
@@ -1739,6 +1774,29 @@ void ShowParticleInstanceEditor()
 
 		if (BeginSection_2Col(idx, "Particle Instance Data", ImGui::GetContentRegionAvail().x, 0.3))
 		{
+			static std::vector<const char*> textures = std::vector<const char*>();
+
+			textures.resize(0);
+			for (auto& each : pm.GetTexturePathList())
+			{
+				textures.push_back(each.c_str());
+			}
+
+			int selectedTexture = 0;
+			for (auto& each : textures)
+			{
+				if (each == particleData.texturePath)
+				{
+					break;
+				}
+				selectedTexture++;
+			}
+
+			if (Dropdown_2Col("Texture", &textures[0], textures.size(), &selectedTexture))
+			{
+				particleData.texturePath = textures[selectedTexture];
+			}
+
 			static const char* shapeList[2] = { "Cone", "Circle" };
 			int selectedShape = (int)particleData.shape;
 			if (Dropdown_2Col("Shape", shapeList, 2, &selectedShape))
@@ -1767,6 +1825,18 @@ void ShowParticleInstanceEditor()
 			}
 
 			Checkbox_2Col("Play Awake", particleData.playAwake);
+
+			switch (particleData.shape)
+			{
+				case application::particle::ParticleShape::Cone:
+				{
+					DragFloat_2Col("Radius", particleData.radius);
+					DragFloat_2Col("Angle", particleData.angle);
+					break;
+				}
+				default:
+					break;
+			}
 
 			switch (particleData.particleMode)
 			{

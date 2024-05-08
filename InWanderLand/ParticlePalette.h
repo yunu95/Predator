@@ -21,8 +21,8 @@ namespace application
                 ParticleData* GetSingleSelectedParticle();
                 void SelectParticle(ParticleData* particle);
 
-                void SelectParticleTemplateData(Particle_TemplateData*);
-                void UnselectParticleTemplateData();
+                void SetParticleData(const particle::ParticleToolData& data);
+                void InitParticleData();
 
                 virtual void Initialize();
                 virtual void Reset() override;
@@ -35,7 +35,7 @@ namespace application
 
             private:
                 unordered_set<ParticleEditorInstance*> particleInstances;
-                Particle_TemplateData* selectedParticleTemplateData{ nullptr };
+                particle::ParticleToolData mold = particle::ParticleToolData();
             };
         }
     }

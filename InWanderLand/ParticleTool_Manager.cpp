@@ -47,6 +47,15 @@ namespace application
 				}
 			}
 
+			/// 그냥 Texture 도 여기서 해버림
+			for (auto& textures : resourceManager->GetTextureList())
+			{
+				if (textures->GetName().find(L"Particle") != std::wstring::npos && textures->GetName().find(L"dds") != std::wstring::npos)
+				{
+					texturePathList.push_back(std::string(textures->GetName().begin(), textures->GetName().end()));
+				}
+			}
+
 			aniEventManager.Init();
 		}
 
@@ -250,11 +259,23 @@ namespace application
 			pObj->SetEndScale(particleList[name]->endScale);
 			pObj->SetMaxParticle(particleList[name]->maxParticle);
 			pObj->SetPlayAwake(particleList[name]->playAwake);
+			pObj->SetRadius(particleList[name]->radius);
+			pObj->SetAngle(particleList[name]->angle);
 
 			pObj->SetRateOverTime(particleList[name]->rateOverTime);
 
 			pObj->SetBurstsCount(particleList[name]->burstsCount);
 			pObj->SetInterval(particleList[name]->interval);
+
+			static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+			std::wstring texturePath;
+			texturePath.assign(particleList[name]->texturePath.begin(), particleList[name]->texturePath.end());
+			auto texturePtr = resourceManager->GetTexture(texturePath);
+			if (texturePtr)
+			{
+				pObj->SetTexture(texturePtr);
+			}
 		}
 
 		void ParticleTool_Manager::SwitchMode()
@@ -639,11 +660,23 @@ namespace application
 			pptr->SetEndScale(sptr->particleData.endScale);
 			pptr->SetMaxParticle(sptr->particleData.maxParticle);
 			pptr->SetPlayAwake(sptr->particleData.playAwake);
+			pptr->SetRadius(sptr->particleData.radius);
+			pptr->SetAngle(sptr->particleData.angle);
 
 			pptr->SetRateOverTime(sptr->particleData.rateOverTime);
 
 			pptr->SetBurstsCount(sptr->particleData.burstsCount);
 			pptr->SetInterval(sptr->particleData.interval);
+
+			static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+			std::wstring texturePath;
+			texturePath.assign(sptr->particleData.texturePath.begin(), sptr->particleData.texturePath.end());
+			auto texturePtr = resourceManager->GetTexture(texturePath);
+			if (texturePtr)
+			{
+				pptr->SetTexture(texturePtr);
+			}
 		}
 
 		void ParticleTool_Manager::PlaySelectedAnimation()
