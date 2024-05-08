@@ -158,7 +158,7 @@ void NailEngine::ResizeResolution(unsigned int width, unsigned int height)
 	}
 
 	this->CreateRenderTargetGroup();
-	
+
 	auto& cameraList = CameraManager::Instance.Get().GetCamearaList();
 	for (auto& each : cameraList)
 	{
@@ -424,56 +424,50 @@ void NailEngine::CreateRenderTargetGroup()
 	// Bloom 전용 렌더타겟
 	{
 		{
-			std::vector<RenderTarget> rtVec(DOWN4X4_0_COUNT);
+			std::vector<RenderTarget> rtVec(DOWN2X2_0_COUNT);
 			rtVec[0].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
-				L"DownSample4x4_0_Target",
-				this->windowInfo.width / 4,
-				this->windowInfo.height / 4,
-				//this->windowInfo.width,
-				//this->windowInfo.height,
+				L"DownSample2x2_0_Target",
+				this->windowInfo.width / 2,
+				this->windowInfo.height / 2,
 				DXGI_FORMAT_R8G8B8A8_UNORM,
 				static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 			));
-			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN4X4_0)] = std::make_shared<RenderTargetGroup>();
-			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN4X4_0)]->SetRenderTargetVec(rtVec);
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN2X2_0)] = std::make_shared<RenderTargetGroup>();
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN2X2_0)]->SetRenderTargetVec(rtVec);
 		}
 
 		{
-			std::vector<RenderTarget> rtVec(DOWN6X6_0_COUNT);
+			std::vector<RenderTarget> rtVec(DOWN2X2_1_COUNT);
 			rtVec[0].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
-				L"DownSample6x6_0_Target",
-				(this->windowInfo.width / 4) / 6,
-				(this->windowInfo.height / 4) / 6,
-				//this->windowInfo.width,
-				//this->windowInfo.height,
+				L"DownSample2x2_1_Target",
+				(this->windowInfo.width / 2) / 2,
+				(this->windowInfo.height / 2) / 2,
 				DXGI_FORMAT_R8G8B8A8_UNORM,
 				static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 			));
-			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN6X6_0)] = std::make_shared<RenderTargetGroup>();
-			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN6X6_0)]->SetRenderTargetVec(rtVec);
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN2X2_1)] = std::make_shared<RenderTargetGroup>();
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN2X2_1)]->SetRenderTargetVec(rtVec);
 		}
 
 		{
-			std::vector<RenderTarget> rtVec(DOWN6X6_1_COUNT);
+			std::vector<RenderTarget> rtVec(DOWN2X2_2_COUNT);
 			rtVec[0].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
-				L"DownSample6x6_1_Target",
-				((this->windowInfo.width / 4) / 6) / 6,
-				((this->windowInfo.height / 4) / 6) / 6,
-				//this->windowInfo.width,
-				//this->windowInfo.height,
+				L"DownSample2x2_2_Target",
+				((this->windowInfo.width / 2) / 2) / 2,
+				((this->windowInfo.height / 2) / 2) / 2,
 				DXGI_FORMAT_R8G8B8A8_UNORM,
 				static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 			));
-			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN6X6_1)] = std::make_shared<RenderTargetGroup>();
-			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN6X6_1)]->SetRenderTargetVec(rtVec);
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN2X2_2)] = std::make_shared<RenderTargetGroup>();
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DOWN2X2_2)]->SetRenderTargetVec(rtVec);
 		}
 
 		{
 			std::vector<RenderTarget> rtVec(BLUR_COUNT);
 			rtVec[0].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
 				L"Blur_Target",
-				((this->windowInfo.width / 4) / 6),
-				((this->windowInfo.height / 4) / 6),
+				((this->windowInfo.width / 2) / 2) / 2,
+				((this->windowInfo.height / 2) / 2) / 2,
 				//this->windowInfo.width,
 				//this->windowInfo.height,
 				DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -484,35 +478,45 @@ void NailEngine::CreateRenderTargetGroup()
 		}
 
 		{
-			std::vector<RenderTarget> rtVec(UP6x6_0_COUNT);
+			std::vector<RenderTarget> rtVec(UP2X2_0_COUNT);
 			rtVec[0].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
-				L"Up6x6_0_Target",
-				((this->windowInfo.width / 4)),
-				((this->windowInfo.height / 4)),
-				//this->windowInfo.width,
-				//this->windowInfo.height,
+				L"Up2x2_0_Target",
+				((this->windowInfo.width / 2)/2),
+				((this->windowInfo.height / 2)/2),
 				DXGI_FORMAT_R8G8B8A8_UNORM,
 				static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 			));
-			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP6x6_0)] = std::make_shared<RenderTargetGroup>();
-			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP6x6_0)]->SetRenderTargetVec(rtVec);
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP2X2_0)] = std::make_shared<RenderTargetGroup>();
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP2X2_0)]->SetRenderTargetVec(rtVec);
 		}
 
 		{
-			std::vector<RenderTarget> rtVec(UP4x4_0_COUNT);
+			std::vector<RenderTarget> rtVec(UP2X2_1_COUNT);
 			rtVec[0].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
-				L"Up4x4_0_Target",
-				((this->windowInfo.width)),
-				((this->windowInfo.height)),
-				//this->windowInfo.width,
-				//this->windowInfo.height,
+				L"Up2x2_1_Target",
+				((this->windowInfo.width / 2)),
+				((this->windowInfo.height / 2)),
 				DXGI_FORMAT_R8G8B8A8_UNORM,
 				static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 			));
-			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)] = std::make_shared<RenderTargetGroup>();
-			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)]->SetRenderTargetVec(rtVec);
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP2X2_1)] = std::make_shared<RenderTargetGroup>();
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP2X2_1)]->SetRenderTargetVec(rtVec);
+		}
+
+		{
+			std::vector<RenderTarget> rtVec(UP2X2_2_COUNT);
+			rtVec[0].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
+				L"Up2x2_2_Target",
+				((this->windowInfo.width)),
+				((this->windowInfo.height)),
+				DXGI_FORMAT_R8G8B8A8_UNORM,
+				static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+			));
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP2X2_2)] = std::make_shared<RenderTargetGroup>();
+			this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP2X2_2)]->SetRenderTargetVec(rtVec);
 		}
 	}
+
 	{
 		std::vector<RenderTarget> rtVec(1);
 		rtVec[0].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
