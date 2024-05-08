@@ -44,15 +44,15 @@ namespace application
                 {
                     return nullptr;
                 }
-                T* instance = new T(dataName);
+                std::shared_ptr<T> instance = std::shared_ptr<T>(new T(dataName));
 
                 if (instance != nullptr)
                 {
-                    list[instance->id] = std::unique_ptr<IEditableData>(instance);
+                    list[instance->id] = instance;
                     tdMap[instance->id] = tdptr;
                 }
 
-                return instance;
+                return instance.get();
             }
 
             template<>
@@ -68,55 +68,55 @@ namespace application
 
                 switch (templateDataManager.GetDataType(dataName))
                 {
-                    case DataType::TerrainData:
-                    {
-                        instance = new TerrainData(dataName);
-                        break;
-                    }
+                case DataType::TerrainData:
+                {
+                    instance = new TerrainData(dataName);
+                    break;
+                }
 
-                    case DataType::UnitData:
-                    {
-                        instance = new UnitData(dataName);
-                        break;
-                    }
+                case DataType::UnitData:
+                {
+                    instance = new UnitData(dataName);
+                    break;
+                }
 
-                    case DataType::OrnamentData:
-                    {
-                        instance = new OrnamentData(dataName);
-                        break;
-                    }
-                    case DataType::RegionData:
-                    {
-                        instance = new RegionData(dataName);
-                        break;
-                    }
-                    case DataType::WaveData:
-                    {
-                        instance = new WaveData(dataName);
-                        break;
-                    }
-                    case DataType::CameraData:
-                    {
-                        instance = new CameraData(dataName);
-                        break;
-                    }
-                    case DataType::LightData:
-                    {
-                        instance = new LightData(dataName);
-                        break;
-                    }
-                    case DataType::ParticleData:
-                    {
-                        instance = new ParticleData(dataName);
-                        break;
-                    }
-                    default:
-                        break;
+                case DataType::OrnamentData:
+                {
+                    instance = new OrnamentData(dataName);
+                    break;
+                }
+                case DataType::RegionData:
+                {
+                    instance = new RegionData(dataName);
+                    break;
+                }
+                case DataType::WaveData:
+                {
+                    instance = new WaveData(dataName);
+                    break;
+                }
+                case DataType::CameraData:
+                {
+                    instance = new CameraData(dataName);
+                    break;
+                }
+                case DataType::LightData:
+                {
+                    instance = new LightData(dataName);
+                    break;
+                }
+                case DataType::ParticleData:
+                {
+                    instance = new ParticleData(dataName);
+                    break;
+                }
+                default:
+                    break;
                 }
 
                 if (instance != nullptr)
                 {
-                    list[instance->id] = std::unique_ptr<IEditableData>(instance);
+                    list[instance->id] = std::shared_ptr<IEditableData>(instance);
                     tdMap[instance->id] = tdptr;
                 }
 
@@ -130,7 +130,14 @@ namespace application
                     return dynamic_cast<T*>(itr->second.get());
 
                 return nullptr;
+            }
+            template<typename T = IEditableData> requires std::derived_from<T, IEditableData>
+            std::weak_ptr<T> GetInstanceAsWeakPtr(const UUID& uuid) const
+            {
+                if (auto itr = list.find(uuid); itr != list.end())
+                    return std::weak_ptr<T>(std::dynamic_pointer_cast<T>(itr->second));
 
+                return std::weak_ptr<T>{};
             }
             bool DeleteInstance(const UUID& uuid);
             void Clear();
@@ -168,7 +175,7 @@ namespace application
             IEditableData* CreateEmptyInstance(const DataType& type);
 
             TemplateDataManager& templateDataManager;
-            std::unordered_map<const UUID, std::unique_ptr<IEditableData>> list;
+            std::unordered_map<const UUID, std::shared_ptr<IEditableData>> list;
             std::unordered_map<const UUID, ITemplateData*> tdMap;
             // CreateEmptyInstance Only
             std::unordered_set<IEditableData*> listBeforeMatching;

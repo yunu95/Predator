@@ -26,6 +26,7 @@ public:
     DirectX::SimpleMath::Matrix& GetWTM() { return this->wtm; }
 
     DirectX::SimpleMath::Matrix GetPTM90();
+    DirectX::SimpleMath::Vector3 GetViewPos(const DirectX::SimpleMath::Vector3& worldPos);
     DirectX::SimpleMath::Vector2 GetScreenPos(const DirectX::SimpleMath::Vector3& worldPos);
 
         DirectX::BoundingFrustum& GetFrustum()

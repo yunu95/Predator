@@ -12,10 +12,10 @@ SoundChannel yunutyEngine::SoundSystem::PlaySoundfile(string soundPath)
 {
     return SingleInstance()->mPlaySound(soundPath);
 }
-//SoundChannel yunutyEngine::SoundSystem::PlaySoundfile3D(string soundPath, Vector3d viewSpacePosition)
-//{
-//
-//}
+SoundChannel yunutyEngine::SoundSystem::PlaySoundfile3D(string soundPath, Vector3d worldPosition)
+{
+    return SingleInstance()->mPlaySound3D(soundPath, worldPosition);
+}
 SoundSystem* yunutyEngine::SoundSystem::SingleInstance()
 {
     if (!soundInstance)
@@ -33,8 +33,6 @@ SoundSystem::~SoundSystem()
 }
 SoundChannel yunutyEngine::SoundSystem::mPlaySound(string soundPath)
 {
-    static int lastChannelIndex = 0;
-
     if (!mIsSoundLoaded(soundPath))
     {
         mLoadSound(soundPath);
@@ -47,6 +45,33 @@ SoundChannel yunutyEngine::SoundSystem::mPlaySound(string soundPath)
         if (!isPlaying)
         {
             fmodSystem->playSound(sounds[soundPath], 0, false, &channels[lastChannelIndex]);
+            break;
+        }
+    }
+    return SoundChannel(channels[lastChannelIndex]);
+}
+SoundChannel yunutyEngine::SoundSystem::mPlaySound3D(string soundPath, Vector3d worldPosition)
+{
+    // 월드포지션을 뷰 포지션으로 바꾸는 코드
+    auto viewPos = graphics::Camera::GetMainCamera()->GetGI().GetViewPos(worldPosition);
+    if (!mIs3DSoundLoaded(soundPath))
+    {
+        mLoad3DSound(soundPath);
+    }
+    for (int i = 0; i < 64; i++)
+    {
+        bool isPlaying;
+        lastChannelIndex = (lastChannelIndex + 1) % 64;
+        channels[lastChannelIndex]->isPlaying(&isPlaying);
+
+        if (!isPlaying)
+        {
+            FMOD_VECTOR position = { viewPos.x, viewPos.y, viewPos.z };
+            FMOD_VECTOR velocity = { 0,0,0 };
+            channels[lastChannelIndex]->set3DAttributes(&position, &velocity);
+            channels[lastChannelIndex]->set3DMinMaxDistance(0, 50);
+
+            fmodSystem->playSound(sounds3D[soundPath], 0, false, &channels[lastChannelIndex]);
             break;
         }
     }
@@ -73,6 +98,10 @@ bool yunutyEngine::SoundSystem::mLoadSound(string soundPath)
 bool yunutyEngine::SoundSystem::mIsSoundLoaded(string soundPath)
 {
     return loadedSounds.find(soundPath) != loadedSounds.end();
+}
+bool yunutyEngine::SoundSystem::mIs3DSoundLoaded(string soundPath)
+{
+    return loadedSounds3D.find(soundPath) != loadedSounds3D.end();
 }
 const unordered_set<string>& yunutyEngine::SoundSystem::mGetLoadedSoundsList()
 {
