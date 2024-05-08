@@ -126,6 +126,11 @@ void UIManager::ShowComboObjectives()
     uisByEnumID[UIEnumID::Ingame_Combo_Description1]->EnableElement();
     uisByEnumID[UIEnumID::Ingame_Combo_Description2]->EnableElement();
     uisByEnumID[UIEnumID::Ingame_Combo_Description3]->EnableElement();
+    for (auto i = 0; i < 3; i++)
+    {
+        uisByEnumID[comboUnFinishedImgs[i]]->EnableElement();
+        uisByEnumID[comboFinishedImgs[i]]->DisableElement();
+    }
 }
 void UIManager::HideComboObjectvies()
 {

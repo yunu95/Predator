@@ -53,13 +53,21 @@ namespace application
 		GC<int>		triggeredTrapSkillTimingFrame;
 
 		GC<float>	robinQSkillCoolTime = 2.0f;
+		GC<float>	robinQSkillCost = 10.0f;
 		GC<float>	robinESkillCoolTime = 2.0f;
+		GC<float>	robinESkillCost = 10.0f;
 
 		GC<float>	ursulaQSkillCoolTime = 2.0f;
+		GC<float>	ursulaQSkillCost = 10.0f;
 		GC<float>	ursulaESkillCoolTime = 2.0f;
+		GC<float>	ursulaESkillCost = 10.0f;
 		
 		GC<float>	hanselQSkillCoolTime = 2.0f;
+		GC<float>	hanselQSkillCost = 10.0f;
 		GC<float>	hanselESkillCoolTime = 2.0f;
+		GC<float>	hanselESkillCost = 10.0f;
+
+		GC<float>	skillGaugeRecoveryPerSecond = 2.0f;
 
 		GC<int>	maxResurrectCount;
 
