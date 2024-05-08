@@ -18,6 +18,7 @@ namespace application::editor::palette
     void CameraPalette::SelectCamera(CameraData* camera)
     {
         Palette::OnSelectSingleInstance(camera);
+        CameraBrush::Instance().ReadyBrush("");
     }
 
     void CameraPalette::Initialize()

@@ -10,22 +10,14 @@ namespace application
         {
             void ParticleBrush::CreateBrush()
             {
-                for (auto& each : TemplateDataManager::GetSingletonInstance().GetDataList(DataType::ParticleData))
-                {
-                    CreateBrush(each->GetDataKey());
-                }
-            }
+                if (brush != nullptr)
+                    return;
 
-            bool ParticleBrush::CreateBrush(const std::string& dataKey)
-            {
-                if (brushList.find(dataKey) != brushList.end())
-                    return false;
-
-                /// Cone FBX 있는지 체크
                 auto brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Cylinder");
 
                 if (brushObj == nullptr)
-                    return false;
+                    return;
+
 
                 for (auto each : brushObj->GetChildren())
                 {
@@ -44,9 +36,9 @@ namespace application
                 brushObj->SetSelfActive(false);
                 brushObj->SetParent(GetGameObject());
 
-                brushList[dataKey] = brushObj;
+                brush = brushObj;
 
-                return true;
+                return;
             }
 
             void ParticleBrush::ReadyBrush(const std::string& dataKey)
@@ -54,33 +46,18 @@ namespace application
                 return ReadyBrush(static_cast<Particle_TemplateData*>(TemplateDataManager::GetSingletonInstance().GetTemplateData(dataKey)));
             }
 
-            void ParticleBrush::Update()
-            {
-                if (currentBrush != nullptr && !brushList[currentBrush->GetDataKey()]->GetSelfActive())
-                {
-                    brushList[currentBrush->GetDataKey()]->SetSelfActive(true);
-                }
-            }
-
             void ParticleBrush::ReadyBrush(Particle_TemplateData* data)
             {
-                if (data == nullptr)
+                if (data == nullptr && brush)
                 {
-                    if (currentBrush != nullptr)
-                    {
-                        brushList[currentBrush->GetDataKey()]->SetSelfActive(false);
-                        currentBrush = nullptr;
-                    }
+                    brush->SetSelfActive(false);
                     return;
                 }
 
-                if (currentBrush != nullptr)
+                if (brush)
                 {
-                    brushList[currentBrush->GetDataKey()]->SetSelfActive(false);
+                    brush->SetSelfActive(true);
                 }
-
-                currentBrush = data;
-                brushList[currentBrush->GetDataKey()]->SetSelfActive(true);
             }
         }
     }
