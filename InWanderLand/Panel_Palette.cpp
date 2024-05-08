@@ -1413,8 +1413,8 @@ namespace application
                     }
 
                     /// Particle 의 원형을 바꿀 경우(TemplateData 대체)
+                    static auto& ptm = particle::ParticleTool_Manager::GetSingletonInstance();
                     {
-                        static auto& ptm = particle::ParticleTool_Manager::GetSingletonInstance();
                         static std::vector<const char*> selections = std::vector<const char*>();
 
                         selections.resize(0);
@@ -1459,6 +1459,29 @@ namespace application
                         }
                     }
 
+                    static std::vector<const char*> textures = std::vector<const char*>();
+
+                    textures.resize(0);
+                    for (auto& each : ptm.GetTexturePathList())
+                    {
+                        textures.push_back(each.c_str());
+                    }
+
+                    int selectedTexture = 0;
+                    for (auto& each : textures)
+                    {
+                        if (each == particle->pod.particleData.texturePath)
+                        {
+                            break;
+                        }
+                        selectedTexture++;
+                    }
+
+                    if (imgui::Dropdown_2Col("Texture", &textures[0], textures.size(), &selectedTexture))
+                    {
+                        particle->pod.particleData.texturePath = textures[selectedTexture];
+                    }
+
                     static const char* shapeList[2] = { "Cone", "Circle" };
                     int selectedShape = (int)particle->pod.particleData.shape;
                     if (imgui::Dropdown_2Col("Shape", shapeList, 2, &selectedShape))
@@ -1487,6 +1510,18 @@ namespace application
                     }
 
                     imgui::Checkbox_2Col("Play Awake", particle->pod.particleData.playAwake);
+
+                    switch (particle->pod.particleData.shape)
+                    {
+                        case application::particle::ParticleShape::Cone:
+                        {
+                            imgui::DragFloat_2Col("Radius", particle->pod.particleData.radius);
+                            imgui::DragFloat_2Col("Angle", particle->pod.particleData.angle);
+                            break;
+                        }
+                        default:
+                            break;
+                    }
 
                     switch (particle->pod.particleData.particleMode)
                     {

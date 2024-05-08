@@ -122,7 +122,7 @@ namespace application
         public:
             /// 저장할 데이터들
             std::string name = "None";
-			std::string texturePath = "Texture\\Particle\\default.dds";
+			std::string texturePath = "Texture/Particle/default.dds";
             ParticleShape shape = ParticleShape::Cone;
             ParticleMode particleMode = ParticleMode::Default;
             bool isLoop = false;

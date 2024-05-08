@@ -136,6 +136,17 @@ namespace application
 					pm.AddAnimationEvent(ptr);
 					break;
 				}
+				case application::AnimationEventType::GameObject_AwakeEvent:
+				{
+					auto particleName = data[i]["objName"];
+					auto ptr = std::make_shared<GameObject_AwakeEvent>();
+					ptr->fbxName = fbxName;
+					ptr->animationName = animationName;
+					ptr->frame = frame;
+					ptr->objName = particleName;
+					pm.AddAnimationEvent(ptr);
+					break;
+				}
 				default:
 					break;
 			}
@@ -210,6 +221,18 @@ namespace application
 					ptrData["animationName"] = ptr->animationName;
 					ptrData["frame"] = ptr->frame;
 					ptrData["rscPath"] = ptr->rscPath;
+					data.push_back(ptrData);
+					break;
+				}
+				case application::AnimationEventType::GameObject_AwakeEvent:
+				{
+					auto ptr = static_cast<GameObject_AwakeEvent*>(event.get());
+					json ptrData;
+					ptrData["type"] = AnimationEventType::GameObject_AwakeEvent;
+					ptrData["fbxName"] = ptr->fbxName;
+					ptrData["animationName"] = ptr->animationName;
+					ptrData["frame"] = ptr->frame;
+					ptrData["objName"] = ptr->objName;
 					data.push_back(ptrData);
 					break;
 				}
@@ -317,6 +340,35 @@ namespace application
 			case application::AnimationEventType::Sound_PlayLoopEvent:
 			{
 				auto ptr = static_cast<Sound_PlayLoopEvent*>(event.get());
+				break;
+			}
+			case application::AnimationEventType::GameObject_AwakeEvent:
+			{
+				auto ptr = static_cast<GameObject_AwakeEvent*>(event.get());
+				GameObject* particle = nullptr;
+				for (auto& each : (*particleInstanceList)[event->fbxName])
+				{
+					if (each->name == ptr->objName)
+					{
+						particle = (*particleInstanceIDMap)[each];
+						break;
+					}
+				}
+
+				funcIndex = animator->PushAnimationWithFunc(ani, event->frame, [=]()
+					{
+						auto ptr = particle->GetComponent<graphics::ParticleRenderer>();
+						//ptr->Reset();
+					});
+
+				if (funcIndex == 0)
+				{
+					return false;
+				}
+				else
+				{
+					eventFuncIndexList[event] = funcIndex;
+				}
 				break;
 			}
 			default:

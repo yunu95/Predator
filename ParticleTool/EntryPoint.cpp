@@ -2102,6 +2102,65 @@ void ShowSequencerEditor()
 				}, 300);
 		}
 
+		if (ImGui::MenuItem("Awake Particle Current Frame"))
+		{
+			application::editor::imgui::ShowMessageBox("Select Particle(Awake)", [=]()
+				{
+					application::editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::Separator();
+
+					static std::string particleName = "None";
+
+					ImGui::SetNextItemWidth(-1);
+					if (ImGui::BeginCombo("##SelectedParticleListCombo", particleName.c_str()))
+					{
+						for (auto& each : pm.GetChildrenParticleInstanceList(pm.GetSelectedFBXData()->getName()))
+						{
+							const bool is_selected = (particleName == each.lock()->name);
+							if (ImGui::Selectable(each.lock()->name.c_str(), is_selected))
+							{
+								particleName = each.lock()->name;
+							}
+
+							if (is_selected)
+							{
+								ImGui::SetItemDefaultFocus();
+							}
+						}
+						ImGui::EndCombo();
+					}
+
+					ImGui::Separator();
+
+					if (ImGui::Button("OK"))
+					{
+						if (particleName != "None")
+						{
+							auto sptr = std::make_shared<application::GameObject_ActivateEvent>();
+							sptr->fbxName = fbxName;
+							sptr->animationName = pm.GetAnimationNameList(fbxName)[aniIndex];
+							sptr->frame = currentFrame;
+							sptr->objName = particleName;
+							pm.AddAnimationEvent(sptr);
+							mySequenceMap[fbxName].myItems[funcIndex].funcList.insert(sptr);
+
+							particleName = "None";
+							ImGui::CloseCurrentPopup();
+							application::editor::imgui::CloseMessageBox("Select Particle(Awake)");
+						}
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						particleName = "None";
+						ImGui::CloseCurrentPopup();
+						application::editor::imgui::CloseMessageBox("Select Particle(Awake)");
+					}
+				}, 300);
+		}
+
 		if (ImGui::MenuItem("Add Particle Transform Animation"))
 		{
 			application::editor::imgui::ShowMessageBox("Select Particle(TSAni)", [=]()
@@ -2587,6 +2646,7 @@ void LoadResourcesRecursively()
 		{
 			namespace fs = std::filesystem;
 			std::set<std::string> validExtensions{ ".jpg", ".bmp", ".tga", ".dds", ".cso" ,".png" };
+            std::set<std::string> soundExtensions{ ".wav", ".mp3", ".wma", ".ogg" };
 			fs::path basePath{ "./" };
 			try
 			{
@@ -2597,7 +2657,14 @@ void LoadResourcesRecursively()
 						if (fs::is_regular_file(entry) && validExtensions.contains(entry.path().extension().string()))
 						{
 							auto relativePath = fs::relative(entry.path(), basePath);
+							std::replace(relativePath.begin(), relativePath.end(), '\\', '/');
 							resourceManager->LoadFile(relativePath.string().c_str());
+						}
+						else if (fs::is_regular_file(entry) && soundExtensions.contains(entry.path().extension().string()))
+						{
+							auto relativePath = fs::relative(entry.path(), basePath).string();
+							std::replace(relativePath.begin(), relativePath.end(), '\\', '/');
+							yunutyEngine::SoundSystem::LoadSound(relativePath);
 						}
 					}
 				}
