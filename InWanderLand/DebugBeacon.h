@@ -14,6 +14,7 @@ public:
     const math::Curve popCurve{[](double t) {return 1 - 4 * (0.5 - t) * (0.5 - t); }};
     static DebugBeacon* PlaceBeacon(Vector3d position, yunuGI::Color color = yunuGI::Color::red(), Vector3d scale = Vector3d::one, float duration = 0.3)
     {
+        return nullptr;
         auto gameObject = Scene::getCurrentScene()->AddGameObject();
         auto debugBeacon = gameObject->AddComponent<DebugBeacon>();
         auto staticMesh = gameObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
