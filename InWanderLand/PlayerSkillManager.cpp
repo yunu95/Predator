@@ -4,7 +4,9 @@
 void PlayerSkillManager::Start()
 {
 	m_maxSkillUsageGauge = 100;
-	m_currentSkillUsageGauge = 100;
+
+	AddSkillGauge(100);
+	//m_currentSkillUsageGauge = 100;
 
 	warriorSkillOneCost = 20;
 	warriorSkillTwoCost = 20;

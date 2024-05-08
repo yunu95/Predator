@@ -30,6 +30,7 @@ void UnitProductor::SetUnitComponentMembers()
 	auto burnEffect = m_unitGameObject->AddComponent<BurnEffect>();
 
 	/// Unit Member Setting
+	m_unitGameObject->GetTransform()->SetWorldScale(m_unitGameObject->GetTransform()->GetWorldScale() * m_unitScaleMultipler);
 	m_unitComponent->GetGameObject()->setName(m_objectName);
 	m_unitComponent->SetUnitType(m_unitType);
 	m_unitComponent->SetUnitSide(m_unitSide);
@@ -238,6 +239,7 @@ void UnitProductor::SetPlayerRelatedComponents()
 void UnitProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p_podData)
 {
 	//m_unitType = static_cast<Unit::UnitType>(p_podData.unitType);
+	m_unitScaleMultipler = p_podData.unit_scale;
 	m_healthPoint = p_podData.m_healthPoint;
 	m_autoAttackDamage = p_podData.m_autoAttackDamage;
 	m_criticalHitProbability = p_podData.m_criticalHitProbability;
