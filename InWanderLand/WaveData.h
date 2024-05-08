@@ -14,6 +14,8 @@
 #include <string>
 
 class PlaytimeWave;
+class TacticModeSystem;
+
 namespace application
 {
     namespace editor
@@ -108,13 +110,14 @@ namespace application
             unordered_map<UnitData*, WaveUnitData> waveUnitDataMap;
             vector<UnitData*> waveUnitDatasVector;
 
-            WaveData();
-            WaveData(const std::string& name);
-            WaveData(const WaveData& prototype);
-            std::wstring MakeUpName();
-            WaveData& operator=(const WaveData& prototype);
-            friend PlaytimeWave;
-        };
-    }
+			WaveData();
+			WaveData(const std::string& name);
+			WaveData(const WaveData& prototype);
+			std::wstring MakeUpName();
+			WaveData& operator=(const WaveData& prototype);
+			friend PlaytimeWave;
+			friend TacticModeSystem;
+		};
+	}
 }
 

@@ -43,6 +43,7 @@ public:
 public:
 	virtual void ActivateSkillOne(Vector3d skillPos) override;
 	virtual void ActivateSkillTwo(Vector3d skillPos) override;
+	virtual void SetSkillRequirmentLocalTimeScale(float p_scale) override;
 
 public:
 	virtual void Start() override;

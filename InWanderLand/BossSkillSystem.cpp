@@ -31,9 +31,11 @@ void BossSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_s
 
 void BossSkillSystem::ActivateSkillOne()
 {
+	m_currentSkillRequirments = m_skillOneRequirments;
 	SetSkillRequirmentsActive(m_skillOneRequirments, true);
 	m_unitDotween->DONothing(m_skillOneDuration).OnComplete([=]()
 		{
+			isBossSkillActivating = false;
 			SetSkillRequirmentsActive(m_skillOneRequirments, false);
 			m_unitComponent->SetUnitStateIdle();
 		});
@@ -41,9 +43,11 @@ void BossSkillSystem::ActivateSkillOne()
 
 void BossSkillSystem::ActivateSkillTwo()
 {
+	m_currentSkillRequirments = m_skillTwoRequirments;
 	SetSkillRequirmentsActive(m_skillTwoRequirments, true);
 	m_unitDotween->DONothing(m_skillTwoDuration).OnComplete([=]()
 		{
+			isBossSkillActivating = false;
 			SetSkillRequirmentsActive(m_skillTwoRequirments, false);
 			m_unitComponent->SetUnitStateIdle();
 		});
@@ -75,12 +79,15 @@ void BossSkillSystem::ActivateSkillThree()
 	m_unitDotween->DONothing(m_skillTwoDuration).OnComplete([=]()
 		{
 			//SetSkillRequirmentsActive(m_skillTwoRequirments, false);
+			isBossSkillActivating = false;
 			m_unitComponent->SetUnitStateIdle();
 		});
 }
 
 void BossSkillSystem::ActivateSkillFour()
 {
+	m_currentSkillRequirments = m_skillFourRequirments;
+
 	int maxXZpos = 20;
 	int minXZpos = 5;
 
@@ -97,6 +104,7 @@ void BossSkillSystem::ActivateSkillFour()
 
 	m_unitDotween->DONothing(m_skillFourDuration).OnComplete([=]()
 		{
+			isBossSkillActivating = false;
 			SetSkillRequirmentsActive(m_skillFourRequirments, false);
 			m_unitComponent->SetUnitStateIdle();
 		});
@@ -117,7 +125,7 @@ void BossSkillSystem::ActivateSkillRandomly()
 
 void BossSkillSystem::SelectSkillRandomly()
 {
-	if (!isBossSkill)
+	if (isBossSkill)
 	{
 		m_skillNum = rand() % 4 + 2;
 		currentSelectedSkillNumber = static_cast<Unit::SkillEnum>(m_skillNum);
@@ -160,33 +168,44 @@ void BossSkillSystem::SetSkillFourRequirments(GameObject* p_obj, physics::Sphere
 
 void BossSkillSystem::SelectSkill(Unit::SkillEnum p_enum)
 {
-	isBossSkill = true;
+	isBossSkill = false;
 	staticSelectedSkillNumber = p_enum;
 }
 
 void BossSkillSystem::Start()
 {
-	m_skillUsageDuration = 10.0f;
-	//m_warriorUnit = PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Warrior)->second;
 	SetOtherComponentsAsMember();
+	//m_warriorUnit = PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Warrior)->second;
+	if (m_unitComponent->GetUnitType() == Unit::UnitType::Boss)
+	{
+		isBossSkill = true;
+	}
+	else
+	{
+		isBossSkill = false;
+	}
 }
 
 void BossSkillSystem::Update()
 {
-	m_elapsed += Time::GetDeltaTime();
-
-	if (m_elapsed >= m_skillUsageDuration)
+	if (!isBossSkillActivating)
 	{
-		m_unitComponent->SetUnitStateToSkill();
-		m_elapsed = 0.0f;
+		m_elapsed += Time::GetDeltaTime() * m_localTimeScale;
+
+		if (m_elapsed >= m_skillActivateDuration)
+		{
+			m_unitComponent->SetUnitStateToSkill();
+			isBossSkillActivating = true;
+			m_elapsed = 0.0f;
+
+		}
 	}
 
-
-	if (currentSummonedDoorUnit != nullptr && currentSummonedDoorUnit->GetCurrentUnitState() == Unit::UnitState::Death)
-	{
-		currentSummonedDoorUnit = nullptr;
-		currentDerivedDoorUnit->GetGameObject()->SetSelfActive(false);
-	}
+	//if (currentSummonedDoorUnit != nullptr && currentSummonedDoorUnit->GetCurrentUnitState() == Unit::UnitState::Death)
+	//{
+	//	currentSummonedDoorUnit = nullptr;
+	//	currentDerivedDoorUnit->GetGameObject()->SetSelfActive(false);
+	//}
 }
 
 Unit::SkillEnum BossSkillSystem::GetCurrentSelectedSkillNumber() const

@@ -14,11 +14,15 @@
 #include "InWanderLand.h"
 #include "SkillUpgradeSystem.h"
 #include "TimePauseTImer.h"
+#include "Unit.h"
+#include "Command.h"
+#include "ProgramExitCommand.h"
 #include <fstream>
 
 using namespace yunutyEngine::graphics;
 void UIManager::Clear()
 {
+    SoundSystem::StopMusic();
     m_highestPriorityButton = nullptr;
     m_currentHighestLayer = -1;
     m_selectedButtons.clear();
@@ -26,6 +30,11 @@ void UIManager::Clear()
     {
         Scene::getCurrentScene()->DestroyGameObject(each.second->GetGameObject());
     }
+    rootUIs.clear();
+    uisByEnumID.clear();
+    uisByIndex.clear();
+    uidatasByIndex.clear();
+    digitFonts.clear();
 }
 void UIManager::FadeOutRight(float duration)
 {
@@ -175,7 +184,7 @@ weak_ptr<UIElement> UIManager::DuplicateUIElement(UIElement* ui)
     //}
 
     bool isFirstElement = true;
-    uiImportingPriority = ui->uiPriority;
+    uiImportingPriority = ui->uiPriority + ui->duplicatePriorityOffset;
     for (auto& eachData : ui->localUIdatasByIndex)
     {
         UIElement* uiElement;
@@ -199,7 +208,7 @@ weak_ptr<UIElement> UIManager::DuplicateUIElement(UIElement* ui)
     {
         ImportDefaultAction_Post(ui->importedUIData, retVal.lock().get());
     }*/
-    uiImportingPriority = ui->uiPriority;
+    uiImportingPriority = ui->uiPriority + ui->duplicatePriorityOffset;
     for (auto& eachUI : retVal.lock().get()->localUIsByIndex)
     {
         if (!ImportDealWithSpecialCases_Post(eachUI.second->importedUIData, eachUI.second))
@@ -210,6 +219,7 @@ weak_ptr<UIElement> UIManager::DuplicateUIElement(UIElement* ui)
     }
     localContext = nullptr;
 
+    ui->duplicatePriorityOffset += ui->localUIdatasByIndex.size();
     return retVal;
 }
 UIElement* UIManager::GetUIElementWithIndex(int index)
@@ -288,6 +298,17 @@ void UIManager::SetUIDataWithIndex(int index, const JsonUIData& uiData)
 }
 UIElement* UIManager::GetBuffIcon(Unit* owningUnit, StatusEffect::StatusEffectEnum uiEnumID)
 {
+    if (!owningUnit->unitStatusUI.expired())
+    {
+        switch (uiEnumID)
+        {
+        case StatusEffect::StatusEffectEnum::Bleeding: return owningUnit->unitStatusUI.lock()->localUIsByEnumID.at(UIEnumID::EnemyStatus_Buff_Bleeding);
+        case StatusEffect::StatusEffectEnum::Blinding: return owningUnit->unitStatusUI.lock()->localUIsByEnumID.at(UIEnumID::EnemyStatus_Buff_Blinding);
+        case StatusEffect::StatusEffectEnum::Paralysis: return owningUnit->unitStatusUI.lock()->localUIsByEnumID.at(UIEnumID::EnemyStatus_Buff_Paralysis);
+        case StatusEffect::StatusEffectEnum::KnockBack: return owningUnit->unitStatusUI.lock()->localUIsByEnumID.at(UIEnumID::EnemyStatus_Buff_KnockBack);
+        case StatusEffect::StatusEffectEnum::Taunted: return owningUnit->unitStatusUI.lock()->localUIsByEnumID.at(UIEnumID::EnemyStatus_Buff_Taunted);
+        }
+    }
     switch (owningUnit->GetUnitType())
     {
     case Unit::UnitType::Warrior:
@@ -332,6 +353,25 @@ UIElement* UIManager::GetBuffIcon(Unit* owningUnit, StatusEffect::StatusEffectEn
 
 void UIManager::Update()
 {
+    // 마우스 커서 조작
+    if (auto cursorUI = uisByEnumID.find(UIEnumID::MouseCursor); cursorUI != uisByEnumID.end())
+    {
+        auto resolution = graphics::Renderer::SingleInstance().GetResolution();
+        cursorUI->second->GetTransform()->SetWorldPosition({ yunutyEngine::Input::getMouseScreenPositionNormalized().x * resolution.x, yunutyEngine::Input::getMouseScreenPositionNormalized().y * resolution.y, 0 });
+        UIElement* properCursor = uisByEnumID.at(UIEnumID::MouseCursor_Free);
+        if (IsMouseOnButton())
+        {
+            if (m_highestPriorityButton->m_mouseLiftedEventFunctions.empty() == false)
+                properCursor = uisByEnumID.at(UIEnumID::MouseCursor_OnButton);
+        }
+        else
+        {
+            properCursor = uisByEnumID.at(UIEnumID::MouseCursor_Free);
+        }
+        uisByEnumID.at(UIEnumID::MouseCursor_OnButton)->DisableElement();
+        uisByEnumID.at(UIEnumID::MouseCursor_Free)->DisableElement();
+        properCursor->EnableElement();
+    }
     if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::MouseLeftClick))
     {
         if (isButtonActiviated)
@@ -352,28 +392,29 @@ void UIManager::Update()
     }
 }
 
-void UIManager::Start()
-{
-    isSingletonComponent = true;
-}
+//void UIManager::Start()
+//{
+//    isSingletonComponent = true;
+//}
+//
+//void UIManager::PlayFunction()
+//{
+//    this->SetActive(true);
+//    if (isOncePaused)
+//    {
+//        Start();
+//    }
+//}
 
-void UIManager::PlayFunction()
-{
-    this->SetActive(true);
-    if (isOncePaused)
-    {
-        Start();
-    }
-}
-
-void UIManager::StopFunction()
-{
-    Clear();
-}
+//void UIManager::StopFunction()
+//{
+//    Clear();
+//}
 
 void UIManager::ImportUI(const char* path)
 {
     std::ifstream file{ path };
+    static constexpr int uiPriorityStride = 10000;
     if (file.is_open())
     {
         json data;
@@ -390,12 +431,13 @@ void UIManager::ImportUI(const char* path)
             auto uiObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
             auto uiElement = uiObject->AddComponent<UIElement>();
             uiElement->importedUIData = uiData;
+            uiObject->setName(uiData.uiName);
 
             if (ImportDealWithSpecialCases(uiData, uiElement) == false)
             {
                 ImportDefaultAction(uiData, uiElement);
             }
-            uiImportingPriority++;
+            uiImportingPriority += uiPriorityStride;
         }
         uiImportingPriority = 0;
         for (auto& each : data["dataList"].items())
@@ -407,7 +449,7 @@ void UIManager::ImportUI(const char* path)
             {
                 ImportDefaultAction_Post(uiData, uisByIndex[uiData.uiIndex]);
             }
-            uiImportingPriority++;
+            uiImportingPriority += uiPriorityStride;
         }
     }
 }
@@ -458,10 +500,6 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
             uiButtonComponent->SetImageComponent(uiImageComponent);
             //uiButtonComponent->SetIdleImage(idleTexture);
             //uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
-        }
-        else
-        {
-            //int a = 3;
         }
     }
     if (uiData.customFlags & (int)UIExportFlag::CanAdjustHeight)
@@ -525,11 +563,11 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         element->colorTintOnDisable = uiObject->AddComponent<ColorTintTimer>();
         element->colorTintOnDisable->uiImage = element->imageComponent.lock().get();
         element->colorTintOnDisable->startColor = yunuGI::Color{ uiData.colorTintOnDisableStart[0],uiData.colorTintOnDisableStart[1],uiData.colorTintOnDisableStart[2],uiData.colorTintOnDisableStart[3] };
-        element->colorTintOnDisable->endColor = yunuGI::Color{ uiData.colorTintOnDisableStart[0],uiData.colorTintOnDisableStart[1],uiData.colorTintOnDisableStart[2],uiData.colorTintOnDisableStart[3] };
+        element->colorTintOnDisable->endColor = yunuGI::Color{ uiData.colorTintOnDisableEnd[0],uiData.colorTintOnDisableEnd[1],uiData.colorTintOnDisableEnd[2],uiData.colorTintOnDisableEnd[3] };
         element->colorTintOnDisable->m_duration = uiData.colorTintOnDisableDuration;
         element->colorTintOnDisable->uiCurveType = uiData.colorTintOnDisableCurveType;
-        element->colorTintOnDisable->disableOnEnd = false;
-        element->colorTintOnEnable->Init();
+        element->colorTintOnDisable->disableOnEnd = true;
+        element->colorTintOnDisable->Init();
     };
     if (uiData.customFlags2 & (int)UIExportFlag2::LinearClipOnEnable)
     {
@@ -596,7 +634,14 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         parentPivot.x = parentData.pivot[0];
         parentPivot.y = 1 - parentData.pivot[1];
         uiObject->SetParent(parent);
-    };
+    }
+    else
+    {
+        if (!localContext)
+        {
+            rootUIs.push_back(element);
+        }
+    }
     // offset by offset
     pivotPos.x += uiData.anchoredPosition[0];
     pivotPos.y -= uiData.anchoredPosition[1];
@@ -681,10 +726,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         for (auto each : tooltipTargets)
         {
             each->GetGameObject()->SetSelfActive(false);
-            if (auto img = each->imageComponent; img.lock())
-            {
-                img.lock()->GetGI().SetLayer(priority_Tooltip);
-            }
+            each->enabled = false;
         }
         button->AddButtonOnMouseFunction([=]()
             {
@@ -774,6 +816,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         element->soundOnDisable->m_duration = uiData.soundOnDisable_delay;
         element->soundOnDisable->Init();
     }
+
     if (uiData.customFlags & (int)UIExportFlag::PriorityLayout)
     {
         element->priorityLayout = element->GetGameObject()->AddComponent<UIPriorityLayout>();
@@ -839,7 +882,19 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     // 초기 상태가 비활성화 상태라면...
     if (uiData.customFlags & (int)UIExportFlag::DisableOnStart)
     {
-        element->GetGameObject()->SetSelfActive(false);
+#ifdef EDITOR
+        if (uiData.disableOnStartEdtior)
+        {
+            element->GetGameObject()->SetSelfActive(false);
+            element->enabled = false;
+        }
+#else
+        if (uiData.disableOnStartExe)
+        {
+            element->GetGameObject()->SetSelfActive(false);
+            element->enabled = false;
+        }
+#endif
     }
     if (uiData.customFlags2 & (int)UIExportFlag2::Duplicatable)
     {
@@ -940,6 +995,44 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
             {
                 SkillUpgradeSystem::SingleInstance().UpgradeSkill();
             });
+        break;
+    case UIEnumID::Quit_Proceed:
+        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
+        element->button->AddButtonClickFunction([=]()
+            {
+                application::editor::CommandManager::GetSingletonInstance().AddQueue(std::make_shared<application::editor::ProgramExitCommand>());
+            });
+        break;
+    case UIEnumID::BlackMask_GameLoad:
+        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
+        element->colorTintOnEnable->onCompleteFunction = [=]()
+            {
+                auto cl = static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+                cl->PlayContents(ContentsPlayFlag::None);
+                GetUIElementByEnum(UIEnumID::TitleRoot)->DisableElement();
+                SetIngameUIVisible(true);
+                /*for (auto each : uisByIndex)
+                {
+                    ImportDefaultAction_Post(each.second->importedUIData, each.second);
+                }*/
+                element->DisableElement();
+            };
+        break;
+    case UIEnumID::BlackMask_GameEnd:
+        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
+        element->colorTintOnEnable->onCompleteFunction = [=]()
+            {
+                auto cl = static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+                auto cam = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<graphics::Camera>();
+                cam.lock()->SetCameraMain();
+                cl->StopContents(ContentsStopFlag::None);
+                for (auto each : rootUIs)
+                {
+                    //each->DisableElement();
+                }
+                GetUIElementByEnum(UIEnumID::TitleRoot)->EnableElement();
+                element->DisableElement();
+            };
         break;
     default:
         return false;

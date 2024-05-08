@@ -4,7 +4,7 @@
 #include "ContentsObservee.h"
 
 
-class TimerComponent : public Component, public ContentsObservee
+class TimerComponent : public Component
 {
 private:
     bool m_isActivated{ false };
@@ -19,8 +19,8 @@ public:
 public:
 
     virtual void Update() override;
-    virtual void PlayFunction() override;
-    virtual void StopFunction() override;
+    //virtual void PlayFunction() override;
+    //virtual void StopFunction() override;
 
 
 public:

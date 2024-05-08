@@ -14,6 +14,7 @@
 #include <map>
 #include "Easing.h"
 #include "YunutyEngine.h"
+#include "LocalTimeEntity.h"
 
 using namespace yunutyEngine;
 
@@ -32,7 +33,7 @@ enum TimerIndex
 	End
 };
 
-class Dotween : public Component
+class Dotween : public Component, public LocalTimeEntity
 {
 public:
 	Dotween();

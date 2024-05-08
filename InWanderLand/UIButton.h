@@ -9,7 +9,7 @@
 /// 클릭 시 호출되는 함수(m_ClickedEventFunction)를 정의할 경우 버튼이 됩니다.
 /// SetCloseButton() 함수로 닫는 창을 활성화 시킬 수 있습니다.
 /// </summary>
-class UIButton : public Component, public ContentsObservee
+class UIButton : public Component
 {
 private:
     yunuGI::ITexture* m_IdleImage;
@@ -57,9 +57,10 @@ public:
     virtual void Update() override;
     virtual void OnEnable() override;
     virtual void OnDisable() override;
+    virtual void InvokeButtonClickEvent();
 
-    virtual void PlayFunction() override;
-    virtual void StopFunction() override;
+    //virtual void PlayFunction() override;
+    //virtual void StopFunction() override;
 
     friend class UIManager;
     friend class UIPanel;

@@ -215,31 +215,58 @@ namespace application
 
                 tempShortCutIndex = 2;
             }
-            else
-            {
-                tempShortCutIndex = 1;
+			else
+			{
+				tempShortCutIndex = 1;
 
-                switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
-                {
-                    case Unit::UnitType::Warrior:
-                        currentSelectedProductor = &WarriorProductor::Instance();
-                        break;
-                    case Unit::UnitType::Magician:
-                        currentSelectedProductor = &MagicianProductor::Instance();
-                        break;
-                    case Unit::UnitType::Healer:
-                        currentSelectedProductor = &HealerProductor::Instance();
-                        break;
+				switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
+				{
+					case Unit::UnitType::Warrior:
+						currentSelectedProductor = &WarriorProductor::Instance();
+						break;
+					case Unit::UnitType::Magician:
+						currentSelectedProductor = &MagicianProductor::Instance();
+						break;
+					case Unit::UnitType::Healer:
+						currentSelectedProductor = &HealerProductor::Instance();
+						break;
 					case Unit::UnitType::Boss:
 						currentSelectedProductor = &BossProductor::Instance();
 						break;
-                    default:
-                        break;
-                }
+					default:
+						break;
+				}
 
+				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+				inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+			}
+ /*           else
+            {
+                tempShortCutIndex = 1;
+
+                if (pod.templateData->pod.skinnedFBXName == "SKM_Robin")
+                {
+                    /// 임시 - 보스
+                    if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::Boss)
+                    {
+						currentSelectedProductor = &BossProductor::Instance();
+                    }
+                    else
+                    {
+						currentSelectedProductor = &WarriorProductor::Instance();
+                    }
+                }
+                else if (pod.templateData->pod.skinnedFBXName == "SKM_Ursula")
+                {
+					currentSelectedProductor = &MagicianProductor::Instance();
+                }
+                else if (pod.templateData->pod.skinnedFBXName == "SKM_Hansel")
+                {
+                    currentSelectedProductor = &HealerProductor::Instance();;
+                }
                 currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                 inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-            }
+            }*/
 
             if (inGameUnit)
             {

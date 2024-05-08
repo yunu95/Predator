@@ -16,7 +16,7 @@ void EnemySummonSkillSystem::Update()
 {
 	if (isThisUnitSummoned)
 	{
-		m_elapsed += Time::GetDeltaTime();
+		m_elapsed += Time::GetDeltaTime() * m_localTimeScale;
 		
 		if (m_elapsed >= m_enemySpawnDuration)
 		{

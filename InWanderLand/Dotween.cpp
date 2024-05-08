@@ -36,6 +36,8 @@ void Dotween::Update()
 	{
 		if (dotweenTimerArray[i] != nullptr)
 		{
+			dotweenTimerArray[i]->m_localTimeScale = m_localTimeScale;
+
 			if (dotweenTimerArray[i]->isDone == true)
 			{
 				DotweenTimerPool::GetInstance()->ReturnDotweenTimer(dotweenTimerArray[i]);
@@ -112,6 +114,7 @@ Dotween& Dotween::DOMove(Vector3d endPosition, double p_duration)
 	currentTimerIndex = TimerIndex::MoveTimer;
 	tempTimer = m_doMovetweenTimer;
 	dotweenTimerArray[TimerIndex::MoveTimer] = tempTimer;
+
 
 	/// 자기 자신을 반환해준다...뒤에 SetDelay, SetEase 등을 위해
 	return *this;

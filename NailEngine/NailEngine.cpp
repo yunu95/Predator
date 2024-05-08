@@ -56,7 +56,8 @@ void NailEngine::Init(UINT64 hWnd)
 
 	ShadowPass::Instance.Get().Init(ResourceManager::Instance.Get().GetTexture(L"ShadowDepth").get(),
 		reinterpret_cast<VertexShader*>(ResourceManager::Instance.Get().GetShader(L"TestVS.cso").get()),
-		reinterpret_cast<PixelShader*>(ResourceManager::Instance.Get().GetShader(L"TestPS.cso").get()));
+		reinterpret_cast<PixelShader*>(ResourceManager::Instance.Get().GetShader(L"TestPS.cso").get()),
+		reinterpret_cast<VertexShader*>(ResourceManager::Instance.Get().GetShader(L"SkinnedShadowVS.cso").get()));
 
 	SkyBoxPass::Instance.Get().Init(
 		ResourceManager::Instance.Get().GetTexture(L"Texture/asdEnvHDR.dds").get(),

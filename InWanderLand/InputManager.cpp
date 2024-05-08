@@ -5,10 +5,11 @@
 #include "Unit.h"
 #include "RTSCam.h"
 #include "GameManager.h"
+#include "PlayerSkillManager.h"
 
 void InputManager::Start()
 {
-	isSingletonComponent = true;
+    isSingletonComponent = true;
 }
 
 void InputManager::Update()
@@ -19,15 +20,15 @@ void InputManager::Update()
         {
             if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_1))
             {
-                SelectPlayer(Unit::UnitType::Warrior);
+                UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_Robin)->button->InvokeButtonClickEvent();
             }
             if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_2))
             {
-                SelectPlayer(Unit::UnitType::Magician);
+                UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_Ursula)->button->InvokeButtonClickEvent();
             }
             if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_3))
             {
-                SelectPlayer(Unit::UnitType::Healer);
+                UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_Hansel)->button->InvokeButtonClickEvent();
             }
             if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_4))
             {
@@ -69,23 +70,23 @@ void InputManager::Update()
 
 void InputManager::PlayFunction()
 {
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
+    this->SetActive(true);
+    if (isOncePaused)
+    {
+        Start();
+    }
 }
 
 void InputManager::StopFunction()
 {
-	this->SetActive(false);
+    this->SetActive(false);
 
     rtscam = nullptr;
 
     currentSelectedSerialNumber = SelectedSerialNumber::One;
-	isPlayerSelected = false;
-	tacticMode = false;
-	isMouseOnUIButton = false;
+    isPlayerSelected = false;
+    tacticMode = false;
+    isMouseOnUIButton = false;
     isInputManagerActivated = false;
 }
 
@@ -100,7 +101,7 @@ void InputManager::SetInputManagerActive(bool p_boolen)
 
 void InputManager::SelectPlayer(Unit::UnitType p_unitType)
 {
-    if (!GameManager::Instance().IsBattleSystemOperating() || 
+    if (!GameManager::Instance().IsBattleSystemOperating() ||
         PlayerController::Instance().FindSelectedUnitByUnitType(p_unitType)->GetCurrentUnitState() == Unit::UnitState::Death)
     {
         return;
@@ -130,10 +131,10 @@ void InputManager::SelectPlayer(Unit::UnitType p_unitType)
         break;
     }
     isPlayerSelected = true;
-    
+
     if (tacticMode)
     {
-		TacticModeSystem::Instance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
+        TacticModeSystem::Instance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
     }
 
     SkillPreviewSystem::Instance().ActivateSkillPreview(false);
@@ -147,8 +148,13 @@ void InputManager::PrepareSkill(Unit::SkillEnum p_skillType, Unit::UnitType p_un
 void InputManager::PrepareSkill(Unit::SkillEnum p_skillType)
 {
     if (!GameManager::Instance().IsBattleSystemOperating() ||
-        PlayerController::Instance().FindSelectedUnitByUnitType(static_cast<Unit::UnitType>(currentSelectedSerialNumber))->GetCurrentUnitState() == Unit::UnitState::Death )
+        PlayerController::Instance().FindSelectedUnitByUnitType(static_cast<Unit::UnitType>(currentSelectedSerialNumber))->GetCurrentUnitState() == Unit::UnitState::Death)
     {
+        return;
+    }
+    if (!PlayerSkillManager::Instance().IsSkillGaugeEnoughToBeUsed(static_cast<Unit::UnitType>(currentSelectedSerialNumber), p_skillType))
+    {
+        /// 마나가 부족해 스킬을 사용하지 못하는 경우입니다.
         return;
     }
     if (tacticMode)
@@ -166,14 +172,14 @@ void InputManager::ToggleTacticMode()
     if (GameManager::Instance().IsBattleSystemOperating())
     {
         if (tacticMode)
-			tacticMode = !tacticMode;
+            tacticMode = !tacticMode;
         else if (!tacticMode && !TacticModeSystem::Instance().IsTacticModeCoolTime())
-			tacticMode = !tacticMode;
+            tacticMode = !tacticMode;
 
         if (tacticMode)
         {
             TacticModeSystem::Instance().EngageTacticMode();
-			TacticModeSystem::Instance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
+            TacticModeSystem::Instance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
         }
         else
         {

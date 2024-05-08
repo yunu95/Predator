@@ -17,12 +17,14 @@ public:
 	friend LazyObjects<ShadowPass>;
 
 public:
-	void Init(Texture* dsTexture, VertexShader* vs, PixelShader* ps);
+	void Init(Texture* dsTexture, VertexShader* vs, PixelShader* ps, VertexShader* skinnedVS);
 	void Bind();
+	void SkinnedBind();
 
 private:
 	Texture* dsTexture;
 	VertexShader* vs;
+	VertexShader* skinnedVS;
 	PixelShader* ps;
 };
 

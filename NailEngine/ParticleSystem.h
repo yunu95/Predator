@@ -7,7 +7,7 @@
 #include <list>
 
 class yunuGI::IMaterial;
-
+class Texture;
 struct ParticleInfo
 {
 	DirectX::SimpleMath::Vector3 position;
@@ -23,14 +23,16 @@ public:
 	void SetMaxParticle(unsigned int maxParticle);
 	void SetDuration(float duration);
 	float GetDuration();
-
-	yunuGI::IMaterial* GetMaterial() { return material; }
+	void SetTexture(yunuGI::ITexture* texture)
+	{
+		this->texture = static_cast<Texture*>(texture);
+	}
+	Texture* GetTexture() { return texture; }
 
 private:
 	unsigned int maxParticle = 500;
 	float duration = 5.f;
 
-
-	yunuGI::IMaterial* material;
+	Texture* texture;
 };
 

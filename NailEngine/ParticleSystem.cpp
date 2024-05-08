@@ -6,7 +6,7 @@
 
 ParticleSystem::ParticleSystem()
 {
-	material = ResourceManager::Instance.Get().GetMaterial(L"ParticleMaterial").get();
+	texture = ResourceManager::Instance.Get().GetTexture(L"Texture/particle.png").get();
 }
 
 void ParticleSystem::SetMaxParticle(unsigned int maxParticle)

@@ -118,6 +118,9 @@ enum class UIEnumID
     BlackMask_TopToBottom,
     BlackMask_LeftToRight,
     BlackMask_BottomToTop,
+    // 게임을 시작할 때, 메인화면으로 돌아갈 때에 사용되는 블랙마스크, 단순 연출용이 아니라 실제 게임로드, 종료를 위한 기능이 있다.
+    BlackMask_GameLoad,
+    BlackMask_GameEnd,
     LetterBox_Top,
     LetterBox_Bottom,
     // 인게임 하단에서 클릭할 시 스킬트리 메뉴를 여는 메뉴버튼
@@ -155,4 +158,9 @@ enum class UIEnumID
     EnemyStatus_Buff_Paralysis,
     EnemyStatus_Buff_KnockBack,
     EnemyStatus_Buff_Taunted,
+    TitleRoot,
+    Quit_Proceed,
+    MouseCursor,
+    MouseCursor_Free,
+    MouseCursor_OnButton,
 };

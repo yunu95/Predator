@@ -28,6 +28,17 @@ void InstancingManager::Init()
 	lightMapUVBuffer = std::make_shared<LightMapUVBuffer>();
 }
 
+bool InstancingManager::IsInTree(std::shared_ptr<RenderInfo>& renderInfo)
+{
+	auto iter = this->staticMeshRenderInfoIndexMap.find(renderInfo);
+	if (iter != this->staticMeshRenderInfoIndexMap.end())
+	{
+		return true;
+	}
+
+	return false;
+}
+
 void InstancingManager::SortByCameraDirection()
 {
 	if (!this->staticMeshDeferredRenderVec.empty())
@@ -287,6 +298,7 @@ void InstancingManager::RenderStaticDeferred()
 					index++;
 
 					i->isInArea = false;
+					i->isCulled = false;
 				}
 
 				NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
@@ -501,6 +513,93 @@ void InstancingManager::RenderStaticShadow()
 	}
 }
 
+void InstancingManager::RenderSkinnedShadow()
+{
+	ClearData();
+
+	for (auto& pair : this->skinnedMeshCache)
+	{
+		const std::set<std::shared_ptr<SkinnedRenderInfo>>& renderInfoVec = pair.second;
+
+		const InstanceID instanceID = pair.first;
+
+		{
+			int descIndex = 0;
+			int index = 0;
+			for (auto& i : renderInfoVec)
+			{
+				if (i->renderInfo.isActive == false) continue;
+
+				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+				auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm, i->renderInfo.materialIndex);
+
+				if (frustum.Intersects(aabb) == false)
+				{
+					continue;
+				}
+
+				const RenderInfo& renderInfo = i->renderInfo;
+				InstancingData data;
+				data.wtm = renderInfo.wtm;
+				AddData(instanceID, data);
+				this->instanceTransitionDesc->transitionDesc[descIndex++] = i->animator->GetTransitionDesc();
+
+				lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo.lightMapIndex;
+				lightMapUVBuffer->lightMapUV[index].scaling = renderInfo.uvScaling;
+				lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo.uvOffset;
+
+				index++;
+			}
+
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
+				sizeof(LightMapUVBuffer),
+				static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
+
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::INST_TRANSITION))->PushGraphicsData(this->instanceTransitionDesc.get(),
+				sizeof(InstanceTransitionDesc), static_cast<int>(CB_TYPE::INST_TRANSITION));
+
+			auto animationGroup = ResourceManager::Instance.Get().GetAnimationGroup((*renderInfoVec.begin())->modelName);
+			animationGroup->Bind();
+
+			if (renderInfoVec.size() != 0)
+			{
+				if ((*renderInfoVec.begin())->renderInfo.mesh == nullptr) continue;
+
+				//ExposureBuffer exposurrBuffer;
+				//exposurrBuffer.diffuseExposure = (*renderInfoVec.begin())->renderInfo.mesh->GetDiffuseExposure();
+				//exposurrBuffer.ambientExposure = (*renderInfoVec.begin())->renderInfo.mesh->GetAmbientExposure();;
+				//NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&exposurrBuffer,
+				//	sizeof(ExposureBuffer),
+				//	static_cast<int>(CB_TYPE::EXPOSURE), false);
+
+				auto& buffer = _buffers[instanceID];
+
+				if (buffer->GetCount() > 0)
+				{
+					auto opacityMap = (*renderInfoVec.begin())->renderInfo.material->GetTexture(yunuGI::Texture_Type::OPACITY);
+					if (opacityMap)
+					{
+						static_cast<Texture*>(opacityMap)->Bind(static_cast<unsigned int>(yunuGI::Texture_Type::OPACITY));
+						MaterialBuffer materialBuffer;
+						materialBuffer.useTexture[static_cast<unsigned int>(yunuGI::Texture_Type::OPACITY)] = 1;
+						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATERIAL))->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer), static_cast<int>(CB_TYPE::MATERIAL));
+					}
+					else
+					{
+						MaterialBuffer materialBuffer;
+						materialBuffer.useTexture[static_cast<unsigned int>(yunuGI::Texture_Type::OPACITY)] = 0;
+						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATERIAL))->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer), static_cast<int>(CB_TYPE::MATERIAL));
+					}
+
+					buffer->PushData();
+					(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
+				}
+			}
+		}
+	}
+
+}
+
 void InstancingManager::RenderStaticPointLightShadow(DirectX::SimpleMath::Matrix& lightWTM, PointLight* light)
 {
 	ClearData();
@@ -628,6 +727,18 @@ void InstancingManager::RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& 
 			this->staticMeshInstanceIDIndexMap.insert({ instanceID, staticMeshInstanceIDIndexMap.size() });
 			this->staticMeshRenderInfoIndexMap.insert({ renderInfo,tempVec.size() - 1 });
 		}
+
+		DirectX::SimpleMath::Vector3 pos;
+		DirectX::SimpleMath::Vector3 scale;
+		DirectX::SimpleMath::Quaternion quat;
+		renderInfo->wtm.Decompose(scale, quat, pos);
+
+		float radius = max(scale.x, scale.y, scale.z);
+		radius *= renderInfo->mesh->GetBoundingRadius();
+
+		// 나중에는 RenderInfo에 radius를 추가해서 Decompose하는것을 빼자.
+		this->quadTree.PushData(renderInfo.get(), DirectX::SimpleMath::Vector2{ renderInfo->wtm._41,renderInfo->wtm._43 },
+			radius);
 	}
 	else
 	{
@@ -690,6 +801,9 @@ void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& rende
 		// 인덱스맵에도 null을 넣어서 맵핑하는 코드 추가
 		staticMeshRenderInfoIndexMap.erase(renderInfoIter);
 		staticMeshRenderInfoIndexMap.insert({ nullptr, -1 });
+
+		// 쿼드트리에서 데이터 삭제
+		this->quadTree.Remove(renderInfo.get());
 	}
 
 
@@ -847,8 +961,11 @@ void InstancingManager::RenderParticle()
 
 		if (index != 0)
 		{
-			static_cast<Material*>(each.first->GetMaterial())->PushGraphicsData();
+			each.first->GetTexture()->Bind(0);
+
+			static_cast<VertexShader*>(ResourceManager::Instance.Get().GetShader(L"ParticleVS.cso").get())->Bind();
 			static_cast<GeometryShader*>(ResourceManager::Instance.Get().GetShader(L"ParticleGS.cso").get())->Bind();
+			static_cast<PixelShader*>(ResourceManager::Instance.Get().GetShader(L"ParticlePS.cso").get())->Bind();
 
 			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::PARTICLE))->PushGraphicsData(this->particleBuffer.get(),
 				sizeof(ParticleBuffer),
@@ -861,7 +978,9 @@ void InstancingManager::RenderParticle()
 		}
 	}
 
+	static_cast<VertexShader*>(ResourceManager::Instance.Get().GetShader(L"ParticleVS.cso").get())->UnBind();
 	static_cast<GeometryShader*>(ResourceManager::Instance.Get().GetShader(L"ParticleGS.cso").get())->UnBind();
+	static_cast<PixelShader*>(ResourceManager::Instance.Get().GetShader(L"ParticlePS.cso").get())->UnBind();
 }
 
 void InstancingManager::AddData(const InstanceID& id, InstancingData& instancingData)

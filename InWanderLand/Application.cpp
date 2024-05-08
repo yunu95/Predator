@@ -862,6 +862,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_KILLFOCUS:
     {
         gameFocus = false;
+        ShowCursor(true);
 #ifdef EDITOR
         if (gameWindowKillFocusCallBackFunction)
         {
@@ -873,6 +874,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_SETFOCUS:
     {
         gameFocus = true;
+        ShowCursor(false);
 #ifdef EDITOR
         if (gameWindowFocusCallBackFunction)
         {

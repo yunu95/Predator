@@ -10,7 +10,7 @@ struct PixelIn
 
 float4 main(PixelIn input) :SV_Target0
 {
-    if(UseTexture(useOpacity))
+    if (UseTexture(useOpacity))
     {
         clip(OpacityMap.Sample(sam, input.uv).a - 1);
     }

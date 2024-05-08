@@ -14,6 +14,31 @@
 
 void Mesh::SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& indexVec, DirectX::SimpleMath::Vector3& maxPoint, DirectX::SimpleMath::Vector3& minPoint)
 {
+	if (this->GetName() == L"SM_Stage1_Floor")
+	{
+		int a = 1;
+	}
+
+
+	//std::vector<DirectX::SimpleMath::Vector3> tempVec;
+	//for (auto& each : vertexVec)
+	//{
+	//	tempVec.push_back(each.pos);
+	//}
+
+	//DirectX::BoundingSphere sphere;
+	//DirectX::BoundingSphere::CreateFromPoints(sphere, vertexVec.size(), tempVec.data(), sizeof(DirectX::SimpleMath::Vector3));
+
+
+	//float tempRadius = sphere.Radius;
+	//float tempRadius1 = std::sqrt(std::pow(aabb.Extents.x - 0, 2) + std::pow(aabb.Extents.y - 0, 2) + std::pow(aabb.Extents.z - 0, 2));
+	float tempRadius = std::sqrt(std::pow(maxPoint.x - 0, 2) + std::pow(maxPoint.y - 0, 2) + std::pow(maxPoint.z - 0, 2));
+	float tempRadius2 = std::sqrt(std::pow(minPoint.x - 0, 2) + std::pow(minPoint.y - 0, 2) + std::pow(minPoint.z - 0, 2));
+	float bigRadius = max(tempRadius, tempRadius2);
+	this->boundingRadius = max(this->boundingRadius, bigRadius);
+
+
+
 	VertexBuffer vertexBuffer;
 	vertexBuffer.vertexCount = vertexVec.size();
 	vertexBuffer.vertexVec = std::move(vertexVec);
@@ -31,8 +56,8 @@ void Mesh::SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& in
 	aabb.Extents = DirectX::SimpleMath::Vector3((maxPoint.x - minPoint.x) * 0.5f, (maxPoint.y - minPoint.y) * 0.5f, (maxPoint.z - minPoint.z) * 0.5f);
 	this->aabbVec.emplace_back(aabb);
 
-	float tempRadius = std::sqrt(std::pow(aabb.Extents.x - 0, 2) + std::pow(aabb.Extents.y - 0, 2) + std::pow(aabb.Extents.z - 0, 2));
-	this->boundingRadius = max(this->boundingRadius, tempRadius);
+
+
 
 
 	std::vector<DirectX::SimpleMath::Vector3> tempVertexList;
@@ -47,9 +72,9 @@ void Mesh::SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& in
 	this->boundingVertexList.push_back(tempVertexList);
 	this->tempBoundingVertexList = this->boundingVertexList;
 
-    CheckBigBoundingBox(aabb);
+	CheckBigBoundingBox(aabb);
 
-    this->materialCount = this->indexBufferVec.size();
+	this->materialCount = this->indexBufferVec.size();
 }
 
 
@@ -64,7 +89,7 @@ void Mesh::SetAmbientExposure(float exposure)
 	this->ambientExposure = exposure;
 }
 
-void Mesh::Render(unsigned int materialIndex, D3D_PRIMITIVE_TOPOLOGY topology, bool isInstancing , int instanceCount,std::shared_ptr<InstanceBuffer> buffer)
+void Mesh::Render(unsigned int materialIndex, D3D_PRIMITIVE_TOPOLOGY topology, bool isInstancing, int instanceCount, std::shared_ptr<InstanceBuffer> buffer)
 {
 	if (buffer != nullptr && isInstancing)
 	{
@@ -114,7 +139,7 @@ DirectX::BoundingBox Mesh::GetBoundingBox(DirectX::SimpleMath::Matrix wtm, unsig
 	XMStoreFloat3(&transformedAABB.Center, DirectX::XMLoadFloat3(&this->aabbVec[materialIndex].Center));
 	XMStoreFloat3(&transformedAABB.Extents, DirectX::XMLoadFloat3(&this->aabbVec[materialIndex].Extents));
 
-    transformedAABB.Transform(transformedAABB, wtm);
+	transformedAABB.Transform(transformedAABB, wtm);
 
 	return transformedAABB;
 }
@@ -126,15 +151,15 @@ DirectX::BoundingBox& Mesh::GetOriginBoundingBox()
 
 void Mesh::GetBoundingBoxInfo(const yunuGI::Matrix4x4& wtm, yunuGI::Vector3* min, yunuGI::Vector3* max)
 {
-    auto aabb = GetBoundingBox(reinterpret_cast<const DirectX::SimpleMath::Matrix&>(wtm), 0);
-    if (min)
-    {
-        *min = yunuGI::Vector3(aabb.Center.x - aabb.Extents.x, aabb.Center.y - aabb.Extents.y, aabb.Center.z - aabb.Extents.z);
-    }
-    if (max)
-    {
-        *max = yunuGI::Vector3(aabb.Center.x + aabb.Extents.x, aabb.Center.y + aabb.Extents.y, aabb.Center.z + aabb.Extents.z);
-    }
+	auto aabb = GetBoundingBox(reinterpret_cast<const DirectX::SimpleMath::Matrix&>(wtm), 0);
+	if (min)
+	{
+		*min = yunuGI::Vector3(aabb.Center.x - aabb.Extents.x, aabb.Center.y - aabb.Extents.y, aabb.Center.z - aabb.Extents.z);
+	}
+	if (max)
+	{
+		*max = yunuGI::Vector3(aabb.Center.x + aabb.Extents.x, aabb.Center.y + aabb.Extents.y, aabb.Center.z + aabb.Extents.z);
+	}
 }
 
 void Mesh::CreateVertexBuffer(unsigned int vertexCount, VertexBuffer& vertexBuffer)
@@ -175,14 +200,14 @@ void Mesh::CreateIndexBuffer(unsigned int indexCount, IndexBuffer& indexBuffer)
 
 void Mesh::CheckBigBoundingBox(DirectX::BoundingBox& aabb)
 {
-    float v1 = this->aabb.Extents.x * this->aabb.Extents.y * this->aabb.Extents.z;
-    float v2 = aabb.Extents.x * aabb.Extents.y * aabb.Extents.z;
+	float v1 = this->aabb.Extents.x * this->aabb.Extents.y * this->aabb.Extents.z;
+	float v2 = aabb.Extents.x * aabb.Extents.y * aabb.Extents.z;
 
-    if (v1 < v2)
-    {
-        this->aabb = aabb;
+	if (v1 < v2)
+	{
+		this->aabb = aabb;
 		this->transformedAABB = aabb;
-    }
+	}
 }
 
 std::vector<DirectX::SimpleMath::Vector3>& Mesh::GetBoundingVertexList(DirectX::SimpleMath::Matrix& mat, int index)

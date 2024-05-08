@@ -102,6 +102,7 @@ VertexOut main(VertexIn input)
     tempVec = mul(tempVec, VTMInv);
     tempVec = normalize(tempVec);
     tempVec *= (scale.y * 1.5);
+    //tempVec *= (1.5 * 1.5);
     
     //float3 tempNormal = mul(float4(input.normal, 0), input.world);
     //tempNormal *= 0.5f;

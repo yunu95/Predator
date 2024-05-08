@@ -86,6 +86,8 @@ namespace yunutyEngine::graphics
 
 		void SetPlayAwake(bool playAwake);
 
+		void SetTexture(yunuGI::ITexture* texture);
+
 	private:
 		yunuGI::Matrix4x4 GenerateRandomOffsetMatInCone();
 		yunuGI::Vector2 GetRandomPointInCircle(double centerX, double centerY, double radius);

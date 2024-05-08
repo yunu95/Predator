@@ -13,6 +13,7 @@
 #include "ShortcutSystem.h"
 #include "GameManager.h"
 #include "RTSCam.h"
+#include "TacticModeSystem.h"
 
 PlaytimeWave::~PlaytimeWave()
 {
@@ -38,6 +39,8 @@ void PlaytimeWave::ActivateWave()
     UIManager::Instance().ShowComboObjectives();
     /// 플레이어 유닛 전투상태 돌입
     GameManager::Instance().ReportPlayerEnteredWaveRegion(this);
+    TacticModeSystem::Instance().RegisterCurrentWave(this);
+
     // 카메라 가동범위 제한
     if (auto rtsCam = dynamic_cast<RTSCam*>(graphics::Camera::GetMainCamera()))
     {
@@ -65,7 +68,7 @@ void PlaytimeWave::Start()
 
 void PlaytimeWave::Update()
 {
-    if (isWaveActivated)
+    if (isWaveActivated && !isStoppedByTacticMode)
     {
         m_elapsed += Time::GetDeltaTime();
     }
@@ -133,4 +136,14 @@ void PlaytimeWave::Update()
 
         }
     }
+}
+
+void PlaytimeWave::StopWaveElapsedTime()
+{
+    isStoppedByTacticMode = true;
+}
+
+void PlaytimeWave::ResumeWaveElapsedTime()
+{
+	isStoppedByTacticMode = false;
 }

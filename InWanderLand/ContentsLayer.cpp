@@ -22,6 +22,7 @@
 #include "PlayerController.h"
 #include "TacticModeSystem.h"
 #include "GameManager.h"
+#include "PlayerSkillManager.h"
 #include "ShortcutSystem.h"
 #include "RobinSkillDevelopmentSystem.h"
 #include "ScriptSystem.h"
@@ -79,29 +80,29 @@ public:
 class TestComponent4 : public yunutyEngine::Component
 {
 public:
-    yunutyEngine::graphics::ParticleRenderer* renderer;
+    yunutyEngine::GameObject* obj;
     virtual void Update() override
     {
         if (Input::isKeyPushed(yunutyEngine::KeyCode::B))
         {
-            renderer->SetMaxParticle(1);
+            Scene::getCurrentScene()->DestroyGameObject(obj);
         }
-        if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
-        {
-            renderer->SetMaxParticle(200);
-        }
-        if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
-        {
-            renderer->SetMaxParticle(249);
-        }
-        if (Input::isKeyPushed(yunutyEngine::KeyCode::O))
-        {
-            renderer->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
-        }
-        if (Input::isKeyPushed(yunutyEngine::KeyCode::K))
-        {
-            renderer->SetParticleMode(yunutyEngine::graphics::ParticleMode::Default);
-        }
+		if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
+		{
+            obj->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
+		}
+		//if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
+		//{
+		//	renderer->SetMaxParticle(249);
+		//}
+		//if (Input::isKeyPushed(yunutyEngine::KeyCode::O))
+		//{
+		//	renderer->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
+		//}
+		//if (Input::isKeyPushed(yunutyEngine::KeyCode::K))
+		//{
+		//	renderer->SetParticleMode(yunutyEngine::graphics::ParticleMode::Default);
+		//}
     }
 };
 
@@ -134,7 +135,11 @@ void GraphicsTest()
     //    particle->Play();
     //    test4->renderer = particle;
     //}
+	{
+        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+	}
 
+	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 }
 
 void application::contents::ContentsLayer::SetInputControl(bool control)
@@ -221,6 +226,7 @@ void application::contents::ContentsLayer::Initialize()
             auto textObj = obj->AddGameObject();
             auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
             text->GetGI().SetFontSize(30);
+            text->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
             textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
             textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,-0,0 });
             test3->text_FPS = text;
@@ -229,6 +235,7 @@ void application::contents::ContentsLayer::Initialize()
             auto textObj = obj->AddGameObject();
             auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
             text->GetGI().SetFontSize(30);
+            text->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
             textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
             textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,30,0 });
             test3->text_update = text;
@@ -237,6 +244,7 @@ void application::contents::ContentsLayer::Initialize()
             auto textObj = obj->AddGameObject();
             auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
             text->GetGI().SetFontSize(30);
+            text->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
             textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
             textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,60,0 });
             test3->text_physx = text;
@@ -245,11 +253,12 @@ void application::contents::ContentsLayer::Initialize()
             auto textObj = obj->AddGameObject();
             auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
             text->GetGI().SetFontSize(30);
+            text->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
             textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
             textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,90,0 });
             test3->text_Render = text;
         }
-
+       
     }
 
 #ifndef EDITOR
@@ -291,15 +300,19 @@ void application::contents::ContentsLayer::Finalize()
 
 }
 
-void application::contents::ContentsLayer::PlayContents()
+void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFlag)
 {
-    UIManager::Instance().ImportUI("InWanderLand.iwui");
+    if (bool(playFlag & ContentsPlayFlag::ImportUI))
+    {
+        UIManager::Instance().ImportUI("InWanderLand.iwui");
+    }
     SkillUpgradeSystem::SingleInstance().Reset();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
     yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 
     InputManager::Instance().SetInputManagerActive(true);
+    PlayerSkillManager::Instance();
     GameManager::Instance().Reset();
 
     //InputManager::Instance();
@@ -349,7 +362,7 @@ void application::contents::ContentsLayer::ResumeContents()
     PlayableComponent::OnGameResumeAll();
 }
 
-void application::contents::ContentsLayer::StopContents()
+void application::contents::ContentsLayer::StopContents(ContentsStopFlag stopFlag)
 {
     Time::SetTimeScale(1);
     isStoppedOnce = true;
@@ -357,7 +370,9 @@ void application::contents::ContentsLayer::StopContents()
 
     ContentsObserver::Instance().StopObservee();
     ContentsObserver::Instance().ClearObservees();
-    UIManager::Instance().Clear();
+
+    if (bool(stopFlag & ContentsStopFlag::ClearUI))
+        UIManager::Instance().Clear();
 
     /// Playable 동작들을 일괄 처리할 부분입니다.
     PlayableComponent::OnGameStopAll();
@@ -371,7 +386,7 @@ void application::contents::ContentsLayer::AssignTestInitializer(std::function<v
         application::Application::GetInstance().AddMainLoopTodo([=]() {
             Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
             });
-        };
+};
 }
 #endif
 
