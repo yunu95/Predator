@@ -9,6 +9,7 @@
 class ObserveeHelper : public Component, public ContentsObservee
 {
 public:
+	virtual void Start() override;
 	virtual void PlayFunction() override;
 	virtual void StopFunction() override;
 };

@@ -1,11 +1,11 @@
 #pragma once
 #include "YunutyEngine.h"
-#include "ContentsObservee.h"
+#include "PermanentObservee.h"
 
 class RTSCam;
 class PlaytimeWave;
 
-class GameManager : public Component, public SingletonComponent<GameManager>, public ContentsObservee
+class GameManager : public Component, public SingletonComponent<GameManager>, public PermanentObservee
 {
 private:
 

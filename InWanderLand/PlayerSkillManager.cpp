@@ -29,8 +29,6 @@ void PlayerSkillManager::Start()
 	costPerSkillMap[std::make_pair(Unit::UnitType::Healer, Unit::SkillEnum::Q)] = healerSkillOneCost;
 	costPerSkillMap[std::make_pair(Unit::UnitType::Healer, Unit::SkillEnum::W)] = healerSkillTwoCost;
 
-	isSingletonComponent = true;
-
 	m_skillGaugeRecoveryElapsed = 0.0f;
 }
 

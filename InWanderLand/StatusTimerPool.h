@@ -2,12 +2,12 @@
 #include <stack>
 #include "GameObjectPool.h"
 #include "StatusTimer.h"
-#include "ContentsObservee.h"
+#include "PermanentObservee.h"
 
 class Unit;
 class StatusTimer;
 
-class StatusTimerPool : public GameObjectPool<StatusTimer>, public Component, public SingletonComponent<StatusTimerPool>, public ContentsObservee
+class StatusTimerPool : public GameObjectPool<StatusTimer>, public Component, public SingletonComponent<StatusTimerPool>, public PermanentObservee
 {
 public:
 	virtual void ObjectInitializer(StatusTimer* timer) override
@@ -21,7 +21,6 @@ public:
 
 void StatusTimerPool::Start()
 {
-	isSingletonComponent = true;
 }
 
 void StatusTimerPool::PlayFunction()

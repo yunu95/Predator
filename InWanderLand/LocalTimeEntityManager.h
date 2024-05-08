@@ -1,10 +1,10 @@
 #pragma once
 #include "YunutyEngine.h"
-#include "ContentsObservee.h"
+#include "PermanentObservee.h"
 
 class LocalTimeEntity;
 
-class LocalTimeEntityManager : public Component, public SingletonComponent<LocalTimeEntityManager>, public ContentsObservee
+class LocalTimeEntityManager : public Component, public SingletonComponent<LocalTimeEntityManager>, public PermanentObservee
 {
 private:
 	std::vector<LocalTimeEntity*> m_entityVector;

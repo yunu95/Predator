@@ -3,9 +3,9 @@
 #include "GameObjectPool.h"
 #include "DebugMeshes.h"
 #include "StaticMeshRenderer.h"
-#include "ContentsObservee.h"
+#include "PermanentObservee.h"
 
-class AutoAttackProjectilePool : public GameObjectPool<AutoAttackProjectile>, public Component, public SingletonComponent<AutoAttackProjectilePool>, public ContentsObservee
+class AutoAttackProjectilePool : public GameObjectPool<AutoAttackProjectile>, public Component, public SingletonComponent<AutoAttackProjectilePool>, public PermanentObservee
 {	
 public:
 	virtual void ObjectInitializer(AutoAttackProjectile* projectile) override 
@@ -25,7 +25,6 @@ public:
 
 void AutoAttackProjectilePool::Start()
 {
-	isSingletonComponent = true;
 }
 
 void AutoAttackProjectilePool::PlayFunction()

@@ -96,6 +96,7 @@ void MeleeAttackSystem::Start()
 		meleeAttackColliderDebugObject->SetParent(m_unitComponent->GetGameObject());*/
 	}
 	//contentsLayer->RegisterToEditorComponentVector(this);
+
 }
 
 void MeleeAttackSystem::Update()

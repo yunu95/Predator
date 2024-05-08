@@ -1,10 +1,10 @@
 #pragma once
 #include "GameObjectPool.h"
 #include "EnemyAutoAttackProjectile.h"
-#include "ContentsObservee.h"
+#include "PermanentObservee.h"
 
 class EnemyAutoAttackProjectilePool :
-	public GameObjectPool<EnemyAutoAttackProjectile>, public Component, public SingletonComponent<EnemyAutoAttackProjectilePool>, public ContentsObservee
+	public GameObjectPool<EnemyAutoAttackProjectile>, public Component, public SingletonComponent<EnemyAutoAttackProjectilePool>, public PermanentObservee
 {
 public:
 	virtual void ObjectInitializer(EnemyAutoAttackProjectile* projectile) override
@@ -25,7 +25,6 @@ public:
 
 void EnemyAutoAttackProjectilePool::Start()
 {
-	isSingletonComponent = true;
 }
 
 void EnemyAutoAttackProjectilePool::PlayFunction()

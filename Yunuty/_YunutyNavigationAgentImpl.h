@@ -33,7 +33,7 @@ namespace yunutyEngine
         dtCrowdAgentParams agentParams
         {
             .radius = 0.5,
-            .height = 0.3,
+            .height = 0.01,
             .maxAcceleration = std::numeric_limits<float>::max(),
             .maxSpeed = 5,
             .collisionQueryRange = 12,

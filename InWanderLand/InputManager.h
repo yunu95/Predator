@@ -1,6 +1,6 @@
 #pragma once
 #include "YunutyEngine.h"
-#include "ContentsObservee.h"
+#include "PermanentObservee.h"
 #include "Unit.h"
 
 class RTSCam;
@@ -9,7 +9,7 @@ class RTSCam;
 /// 키와 마우스의 입력을 받으면 해당 입력에 따라 다른 클래스의 함수를 호출해주는 함수.
 ///	입력과 전달의 역할만 갖는다.
 /// </summary>
-class InputManager : public Component, public SingletonComponent<InputManager>, public ContentsObservee
+class InputManager : public Component, public SingletonComponent<InputManager>, public PermanentObservee
 {
 public:
     enum SelectedSerialNumber

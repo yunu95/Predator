@@ -2,10 +2,10 @@
 #include "PassiveCake.h"
 #include "DebugMeshes.h"
 #include "UnitProductor.h"
-#include "ContentsObservee.h"
+#include "PermanentObservee.h"
 
 class PassiveCakePool :
-	public GameObjectPool<PassiveCake>, public Component, public SingletonComponent<PassiveCakePool>, public ContentsObservee
+	public GameObjectPool<PassiveCake>, public Component, public SingletonComponent<PassiveCakePool>, public PermanentObservee
 {
 public:
 	virtual void ObjectInitializer(PassiveCake* passiveCake) override
@@ -35,7 +35,6 @@ public:
 
 void PassiveCakePool::Start()
 {
-	isSingletonComponent = true;
 }
 
 void PassiveCakePool::PlayFunction()

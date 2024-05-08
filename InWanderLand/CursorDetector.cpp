@@ -31,6 +31,7 @@ void CursorDetector::Start()
 	m_SelectEffectObject->GetTransform()->SetWorldScale({ UNIT_LENGTH * 1.5f, 0.3f, UNIT_LENGTH * 1.5f });
 	
 	m_SelectEffectObject->SetSelfActive(false);
+
 }
 
 void CursorDetector::Update()

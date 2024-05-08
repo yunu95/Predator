@@ -1,13 +1,13 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "DummyComponent.h"
-#include "ContentsObservee.h"
+#include "PermanentObservee.h"
 #include "MeleeEnemyProductor.h"
 #include "SingleNavigationField.h"
 #include "GameManager.h"
 #include "BurnEffect.h"
 
-class MeleeEnemyPool : public GameObjectPool<DummyComponent>, public Component, public SingletonComponent<MeleeEnemyPool>, public ContentsObservee
+class MeleeEnemyPool : public GameObjectPool<DummyComponent>, public Component, public SingletonComponent<MeleeEnemyPool>, public PermanentObservee
 {
 private:
 	Vector3d m_unitPosition;
@@ -69,7 +69,6 @@ public:
 
 void MeleeEnemyPool::Start()
 {
-	isSingletonComponent = true;
 }
 
 void MeleeEnemyPool::PlayFunction()

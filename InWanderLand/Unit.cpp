@@ -204,6 +204,10 @@ void Unit::Start()
                         currentOrder = UnitState::Idle;
                     }
                 }
+            });
+
+        m_animatorComponent->PushAnimationWithFunc(unitAnimations.m_attackAnimation, unitAnimations.m_attackAnimation->GetTotalFrame() - 1, [=]()
+            {
                 isAttackAnimationOperating = false;
                 ChangeAnimation(unitAnimations.m_idleAnimation);
             });
@@ -343,16 +347,10 @@ void Unit::AttackEngage()
 
     AttackSystem* atkSys = GetGameObject()->GetComponent<AttackSystem>();
     isAttackAnimationOperating = false;
-    //unitAnimations.m_attackAnimation->SetEventFunc(attackTimingFrame ,[=]()
-    //	{
-    //		DetermineCurrentTargetObject();
-    //		atkSys->Attack(m_currentTargetUnit, m_attackOffset);
-    //	});
 
     attackFunctionElapsed = 0.0f;
     dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
     CheckCurrentAnimation(unitAnimations.m_idleAnimation);
-
 
     StopMove();
 }

@@ -520,9 +520,6 @@
     <Filter Include="UI\Effect\TimePauseTimer">
       <UniqueIdentifier>{3fb0e00b-59fb-4666-8075-5ac444045b35}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\ContentsObserber">
-      <UniqueIdentifier>{d2484403-98a3-4199-b5bd-4785dca8fb9c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UI\Effect\LinearClippingTimer">
       <UniqueIdentifier>{25045bcc-9854-42fe-a3a8-1eeb8d1939a8}</UniqueIdentifier>
     </Filter>
@@ -543,6 +540,12 @@
     </Filter>
     <Filter Include="UI\Effect\PlayMusicTimer">
       <UniqueIdentifier>{224a689c-3f8e-4c92-81a4-6c2845252e50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ContentsObserver">
+      <UniqueIdentifier>{d2484403-98a3-4199-b5bd-4785dca8fb9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ContentsObserver\Observee">
+      <UniqueIdentifier>{6be041a3-b108-49d6-9631-62275bd6bb8c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1339,20 +1342,17 @@
     <ClInclude Include="TimePauseTimer.h">
       <Filter>UI\Effect\TimePauseTimer</Filter>
     </ClInclude>
-    <ClInclude Include="ContentsObservee.h">
-      <Filter>Contents\ContentsObserber</Filter>
-    </ClInclude>
     <ClInclude Include="ContentsObserver.h">
-      <Filter>Contents\ContentsObserber</Filter>
+      <Filter>Contents\ContentsObserver</Filter>
     </ClInclude>
     <ClInclude Include="ObserveeHelper.h">
-      <Filter>Contents\ContentsObserber</Filter>
+      <Filter>Contents\ContentsObserver</Filter>
     </ClInclude>
     <ClInclude Include="LocalTimeEntityManager.h">
-      <Filter>Contents\ContentsObserber</Filter>
+      <Filter>Contents\ContentsObserver</Filter>
     </ClInclude>
     <ClInclude Include="LocalTimeEntity.h">
-      <Filter>Contents\ContentsObserber</Filter>
+      <Filter>Contents\ContentsObserver</Filter>
     </ClInclude>
     <ClInclude Include="LinearClippingTimer.h">
       <Filter>UI\Effect\LinearClippingTimer</Filter>
@@ -1386,6 +1386,12 @@
     </ClInclude>
     <ClInclude Include="ParticleToolData.h">
       <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsObservee.h">
+      <Filter>Contents\ContentsObserver\Observee</Filter>
+    </ClInclude>
+    <ClInclude Include="PermanentObservee.h">
+      <Filter>Contents\ContentsObserver\Observee</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2074,20 +2080,17 @@
     <ClCompile Include="TimePauseTimer.cpp">
       <Filter>UI\Effect\TimePauseTimer</Filter>
     </ClCompile>
-    <ClCompile Include="ContentsObservee.cpp">
-      <Filter>Contents\ContentsObserber</Filter>
-    </ClCompile>
     <ClCompile Include="ContentsObserver.cpp">
-      <Filter>Contents\ContentsObserber</Filter>
+      <Filter>Contents\ContentsObserver</Filter>
     </ClCompile>
     <ClCompile Include="ObserveeHelper.cpp">
-      <Filter>Contents\ContentsObserber</Filter>
+      <Filter>Contents\ContentsObserver</Filter>
     </ClCompile>
     <ClCompile Include="LocalTimeEntityManager.cpp">
-      <Filter>Contents\ContentsObserber</Filter>
+      <Filter>Contents\ContentsObserver</Filter>
     </ClCompile>
     <ClCompile Include="LocalTimeEntity.cpp">
-      <Filter>Contents\ContentsObserber</Filter>
+      <Filter>Contents\ContentsObserver</Filter>
     </ClCompile>
     <ClCompile Include="LinearClippingTimer.cpp">
       <Filter>UI\Effect\LinearClippingTimer</Filter>
@@ -2109,6 +2112,12 @@
     </ClCompile>
     <ClCompile Include="PlayMusicTimer.cpp">
       <Filter>UI\Effect\PlayMusicTimer</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsObservee.cpp">
+      <Filter>Contents\ContentsObserver\Observee</Filter>
+    </ClCompile>
+    <ClCompile Include="PermanentObservee.cpp">
+      <Filter>Contents\ContentsObserver\Observee</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

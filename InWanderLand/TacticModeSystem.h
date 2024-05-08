@@ -2,6 +2,7 @@
 #include "YunutyEngine.h"
 #include "InputManager.h"
 #include "Unit.h"
+#include "PermanentObservee.h"
 #include <unordered_map>
 
 /// <summary>
@@ -16,7 +17,7 @@ class RTSCam;
 class CursorDetector;
 class PlaytimeWave;
 
-class TacticModeSystem : public SingletonComponent<TacticModeSystem>, public Component, public ContentsObservee
+class TacticModeSystem : public SingletonComponent<TacticModeSystem>, public Component, public PermanentObservee
 {
 public:
     virtual void OnEnable() override;
@@ -33,6 +34,8 @@ public:
 		QSkill,
 		WSkill
 	};
+
+    void ToggleRequested(InputManager::SelectedSerialNumber currentSelectedNum);
 
     void SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum);
     void SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum);

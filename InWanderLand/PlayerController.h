@@ -2,7 +2,7 @@
 #include "YunutyEngine.h"
 #include <map>
 #include "Unit.h"
-#include "ContentsObservee.h"
+#include "PermanentObservee.h"
 /// <summary>
 /// UnitFactory에서 Player를 만들 경우, PlayerController에 해당 Player를 등록한다.
 /// 고유 번호를 배분하여 키입력으로 지정할 수 있도록 해보자!
@@ -12,7 +12,7 @@ class RTSCam;
 class Unit;
 class CursorDetector;
 
-class PlayerController : public Component, public SingletonComponent<PlayerController>, public ContentsObservee
+class PlayerController : public Component, public SingletonComponent<PlayerController>, public PermanentObservee
 {
 public:
 	enum class OrderType

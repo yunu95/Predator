@@ -1,8 +1,8 @@
 #pragma once
 #include "YunutyEngine.h"
-#include "ContentsObservee.h"
+#include "PermanentObservee.h"
 
-class ResurrectionSystem : public Component, public SingletonComponent<ResurrectionSystem>, public ContentsObservee
+class ResurrectionSystem : public Component, public SingletonComponent<ResurrectionSystem>, public PermanentObservee
 {
 public:
 	virtual void Start() override;

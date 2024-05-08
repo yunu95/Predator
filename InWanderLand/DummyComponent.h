@@ -9,7 +9,12 @@ public:
 	Unit* m_pairUnit;
 	virtual void PlayFunction() override;
 	virtual void StopFunction() override;
+	virtual void Start() override;
 };
+
+void DummyComponent::Start()
+{
+}
 
 void DummyComponent::PlayFunction()
 {

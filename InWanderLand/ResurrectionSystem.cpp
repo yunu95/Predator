@@ -2,7 +2,6 @@
 
 void ResurrectionSystem::Start()
 {
-	isSingletonComponent = true;
 }
 
 void ResurrectionSystem::PlayFunction()

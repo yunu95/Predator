@@ -9,7 +9,6 @@
 
 void InputManager::Start()
 {
-    isSingletonComponent = true;
 }
 
 void InputManager::Update()
@@ -171,10 +170,10 @@ void InputManager::ToggleTacticMode()
 {
     if (GameManager::Instance().IsBattleSystemOperating())
     {
-        if (tacticMode)
-            tacticMode = !tacticMode;
-        else if (!tacticMode && !TacticModeSystem::Instance().IsTacticModeCoolTime())
-            tacticMode = !tacticMode;
+        TacticModeSystem::Instance().ToggleRequested(currentSelectedSerialNumber);
+
+ /*       if (tacticMode == false && !TacticModeSystem::Instance().IsTacticModeCoolTime())
+            tacticMode = true;
 
         if (tacticMode)
         {
@@ -184,6 +183,7 @@ void InputManager::ToggleTacticMode()
         else
         {
             TacticModeSystem::Instance().ExitTacticMode();
-        }
+            tacticMode = false;
+        }*/
     }
 }

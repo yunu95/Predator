@@ -10,7 +10,6 @@
 
 void PlayerController::Start()
 {
-    isSingletonComponent = true;
 }
 
 void PlayerController::SetMovingSystemComponent(RTSCam* sys)

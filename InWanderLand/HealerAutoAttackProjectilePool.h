@@ -3,10 +3,10 @@
 #include "GameObjectPool.h"
 #include "DebugMeshes.h"
 #include "StaticMeshRenderer.h"
-#include "ContentsObservee.h"
+#include "PermanentObservee.h"
 
 class HealerAutoAttackProjectilePool :
-	public GameObjectPool<HealerAutoAttackProjectile>, public Component, public SingletonComponent<HealerAutoAttackProjectilePool>, public ContentsObservee
+	public GameObjectPool<HealerAutoAttackProjectile>, public Component, public SingletonComponent<HealerAutoAttackProjectilePool>, public PermanentObservee
 {
 public:
 	virtual void ObjectInitializer(HealerAutoAttackProjectile* projectile) override
@@ -23,7 +23,6 @@ public:
 
 void HealerAutoAttackProjectilePool::Start()
 {
-	isSingletonComponent = true;
 }
 
 void HealerAutoAttackProjectilePool::PlayFunction()

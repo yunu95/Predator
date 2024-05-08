@@ -1,6 +1,6 @@
 #pragma once
 #include "YunutyEngine.h"
-#include "ContentsObservee.h"
+#include "PermanentObservee.h"
 #include "Unit.h"
 
 /// <summary>
@@ -19,7 +19,7 @@ namespace std {
 	};
 }
 
-class PlayerSkillManager : public Component, public SingletonComponent<PlayerSkillManager>, public ContentsObservee
+class PlayerSkillManager : public Component, public SingletonComponent<PlayerSkillManager>, public PermanentObservee
 {
 private:
 	float m_maxSkillUsageGauge;

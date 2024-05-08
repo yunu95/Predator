@@ -1,5 +1,9 @@
 #include "ObserveeHelper.h"
 
+void ObserveeHelper::Start()
+{
+}
+
 void ObserveeHelper::PlayFunction()
 {
 

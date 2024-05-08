@@ -4,10 +4,10 @@
 #include "DebugMeshes.h"
 #include "StaticMeshRenderer.h"
 #include "Dotween.h"
-#include "ContentsObservee.h"
+#include "PermanentObservee.h"
 
 class MagicianAutoAttackProjectilePool :
-	public GameObjectPool<MagicianAutoAttackProjectile>, public Component, public SingletonComponent<MagicianAutoAttackProjectilePool>, public ContentsObservee
+	public GameObjectPool<MagicianAutoAttackProjectile>, public Component, public SingletonComponent<MagicianAutoAttackProjectilePool>, public PermanentObservee
 {
 public:
 	virtual void ObjectInitializer(MagicianAutoAttackProjectile* projectile) override
@@ -32,7 +32,6 @@ public:
 
 void MagicianAutoAttackProjectilePool::Start()
 {
-	isSingletonComponent = true;
 }
 
 void MagicianAutoAttackProjectilePool::PlayFunction()

@@ -1,6 +1,6 @@
 #pragma once
 #include "YunutyEngine.h"
-#include "ContentsObservee.h"
+#include "PermanentObservee.h"
 
 namespace application::editor
 {
@@ -12,7 +12,7 @@ class Dotween;
 /// <summary>
 /// region간의 상관관계를 성립시켜주는 클래스.
 /// </summary>
-class PlayTimeRegionManager : public Component, public SingletonComponent<PlayTimeRegionManager>, public ContentsObservee
+class PlayTimeRegionManager : public Component, public SingletonComponent<PlayTimeRegionManager>, public PermanentObservee
 {
 private:
 	Vector3d stage2StartPosition;

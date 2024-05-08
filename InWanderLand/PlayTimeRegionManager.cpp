@@ -12,7 +12,6 @@ void PlayTimeRegionManager::Start()
 	{
 		e->SetSelfActive(false);
 	}
-	isSingletonComponent = true;
 }
 
 void PlayTimeRegionManager::PlayFunction()

@@ -169,6 +169,8 @@ void AutoAttackProjectile::Start()
 	{
 		m_playerUnitVector.push_back(each.second);
 	}
+
+	GetGameObject()->SetSelfActive(false);
 }
 
 void AutoAttackProjectile::Update()

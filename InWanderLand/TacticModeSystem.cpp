@@ -19,7 +19,6 @@ void TacticModeSystem::OnEnable()
 
 void TacticModeSystem::Start()
 {
-    isSingletonComponent = true;
     SetCurrentGauge(m_maxGauge);
 }
 
@@ -83,6 +82,20 @@ void TacticModeSystem::StopFunction()
     m_currentOperatingWave = nullptr;
 
     this->SetActive(false);
+}
+
+void TacticModeSystem::ToggleRequested(InputManager::SelectedSerialNumber currentSelectedNum)
+{
+    if ( (isTacticModeOperating && isTacticOrderPerforming) == false && !isCoolTime)
+    {
+        /// 전술모드 진입
+        EngageTacticMode();
+        SetTacticModeRightClickFunction(currentSelectedNum);
+    }
+    else
+    {
+        ExitTacticMode();
+    }
 }
 
 void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum)
@@ -205,9 +218,6 @@ void TacticModeSystem::ExitTacticMode()
     m_gaugeIncreaseElapsed = 0.0f;
     isTacticModeOperating = false;
 
-    SetCurrentCoolTimeElapsed(0.0f);
-    isCoolTime = true;
-
     for (auto each : playerComponentMap)
     {
         if (!each.second->IsTacticModeQueueEmpty())
@@ -221,6 +231,11 @@ void TacticModeSystem::ExitTacticMode()
         m_rtsCam->SetTarget(sequenceQueue.front()->GetGameObject());
         sequenceQueue.front()->PermitTacticAction();
         sequenceQueue.pop();
+    }
+    else
+    {
+		SetCurrentCoolTimeElapsed(0.0f);
+		isCoolTime = true;
     }
 }
 
@@ -269,6 +284,8 @@ void TacticModeSystem::ReportTacticActionFinished()
     /// 전술모드의 수행을 완료한 유닛이 해당 함수를 호출합니다.
     if (sequenceQueue.empty())
     {
+		SetCurrentCoolTimeElapsed(0.0f);
+		isCoolTime = true;
         isTacticOrderPerforming = false;
 		LocalTimeEntityManager::Instance().ReportTacticModeEnded();
 		for (auto each : m_currentWaveUnits)

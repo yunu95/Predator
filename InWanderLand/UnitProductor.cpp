@@ -262,7 +262,6 @@ void UnitProductor::Update()
 
 void UnitProductor::Start()
 {
-	isSingletonComponent = true;
 }
 
 void UnitProductor::PlayFunction()

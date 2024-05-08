@@ -3,9 +3,9 @@
 #include "DummyComponent.h"
 #include "RangedEnemyProductor.h"
 #include "BurnEffect.h"
-#include "ContentsObservee.h"
+#include "PermanentObservee.h"
 
-class RangedEnemyPool : public GameObjectPool<DummyComponent>, public Component, public SingletonComponent<RangedEnemyPool>, public ContentsObservee
+class RangedEnemyPool : public GameObjectPool<DummyComponent>, public Component, public SingletonComponent<RangedEnemyPool>, public PermanentObservee
 {
 private:
 	Vector3d m_unitPosition;
@@ -66,7 +66,6 @@ public:
 
 void RangedEnemyPool::Start()
 {
-	isSingletonComponent = true;
 }
 
 void RangedEnemyPool::PlayFunction()

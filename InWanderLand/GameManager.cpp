@@ -16,7 +16,6 @@ void GameManager::Start()
     //contentsLayer->RegisterToEditorComponentVector(this);
 
     //EndBattle();
-    isSingletonComponent = true;
 }
 
 void GameManager::Update()

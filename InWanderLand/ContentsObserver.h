@@ -6,7 +6,8 @@ class ContentsObservee;
 class ContentsObserver : public Component, public SingletonComponent<ContentsObserver>
 {
 private:
-	std::vector<ContentsObservee*> m_observeeContainer;
+	std::vector<ContentsObservee*> m_initializingContainer;
+	std::vector<ContentsObservee*> m_destroyingContainer;
 
 public:
 	void RegisterObservee(ContentsObservee* p_observee);

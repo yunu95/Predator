@@ -131,11 +131,11 @@ void MagicianSkillSystem::Start()
 {
 	SetOtherComponentsAsMember();
 
-	QSkillProjectile.debugObject->SetSelfActive(false);
-	QSkillFieldDamage.debugObject->SetSelfActive(false);
-	
-	WSkillProjectile.debugObject->SetSelfActive(false);
-	WSkillFieldDamage.debugObject->SetSelfActive(false);
+	SetSkillRequirmentsActive(QSkillProjectile, false);
+	SetSkillRequirmentsActive(QSkillFieldDamage, false);
+
+	SetSkillRequirmentsActive(WSkillProjectile, false);
+	SetSkillRequirmentsActive(WSkillFieldDamage, false);
 }
 
 void MagicianSkillSystem::Update()

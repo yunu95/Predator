@@ -3,7 +3,6 @@
 
 void LocalTimeEntityManager::Start()
 {
-	isSingletonComponent = true;
 }
 
 void LocalTimeEntityManager::PlayFunction()
