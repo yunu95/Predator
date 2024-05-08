@@ -122,7 +122,7 @@ void GraphicsTest()
 
     for (auto& i : animationList)
     {
-        if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
+        if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Attack")
         {
             i->SetLoop(true);
             animation = i;
@@ -135,7 +135,7 @@ void GraphicsTest()
 		}
     }
 
-	/*{
+	{
 		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
         obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,10 });
 		auto test4 = obj->AddComponent<TestComponent4>();
@@ -153,20 +153,22 @@ void GraphicsTest()
 		particle->Play();
 
         auto anim = obj->GetComponent<yunutyEngine::graphics::Animator>();
-        anim->PushAnimationWithFunc(animation, 0, [=]() 
-            {
-                child->SetSelfActive(true);
-                particle->Reset();
-            });
+        anim->PushAnimation(animation);
+        anim->Play(animation);
+        //anim->PushAnimationWithFunc(animation, 0, [=]() 
+        //    {
+        //        child->SetSelfActive(true);
+        //        particle->Reset();
+        //    });
         test4->anim = anim;
         
         test4->animation = animation;
         test4->animation2 = animation2;
-	}*/
+	}
 
-    {
-        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_GuideBook");
-    }
+    //{
+    //    auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_GuideBook");
+    //}
 
 	//{
 	//	auto obj2 = Scene::getCurrentScene()->AddGameObject();

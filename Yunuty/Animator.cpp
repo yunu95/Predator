@@ -153,6 +153,8 @@ void Animator::Update()
 			desc.curr.currFrame = min(static_cast<int>(desc.curr.currFrame), totalFrame - 1);
 			desc.curr.nextFrame = min(static_cast<int>(desc.curr.currFrame + 1), totalFrame - 1);
 			desc.curr.ratio = static_cast<float>(desc.curr.sumTime - static_cast<float>(desc.curr.currFrame) / ratio);
+
+			std::cout << desc.curr.currFrame;
 		}
 
 		for (auto& each : this->animationEventMap)
