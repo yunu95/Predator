@@ -10,7 +10,9 @@ struct PixelIn
 
 float4 main(PixelIn input) : SV_TARGET
 {
-    float2 texelSize = 1.0 / float2(80.f, 45.f);
+    float width = windowWidth / 8.f;
+    float height = windowHeight / 8.f;
+    float2 texelSize = 1.0 / float2(width, height);
 
     // 가중치를 적용하여 픽셀 값을 계산
     float4 color = 0.0;
