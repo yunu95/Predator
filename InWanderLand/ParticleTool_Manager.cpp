@@ -802,9 +802,8 @@ namespace application
 				return;
 			}
 
-			aniEventManager.EraseAnimationEvent(event.lock());
 			event.lock()->frame = frame;
-			aniEventManager.AddAnimationEvent(event.lock());
+			aniEventManager.EditAnimationEventFrame(event.lock());
 		}
 
 		void ParticleTool_Manager::ClearPP()
@@ -886,6 +885,15 @@ namespace application
 								case application::AnimationEventType::GameObject_TransformEditEvent:
 								{
 									auto ptr = static_cast<GameObject_TransformEditEvent*>(event.get());
+									if (ptr->objName == instance->name)
+									{
+										eraseList.push_back(event);
+									}
+									break;
+								}
+								case application::AnimationEventType::GameObject_AwakeEvent:
+								{
+									auto ptr = static_cast<GameObject_AwakeEvent*>(event.get());
 									if (ptr->objName == instance->name)
 									{
 										eraseList.push_back(event);

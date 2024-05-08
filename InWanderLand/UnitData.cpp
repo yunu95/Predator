@@ -297,11 +297,22 @@ namespace application
                     pr->SetEndScale(sptr->particleData.endScale);
                     pr->SetMaxParticle(sptr->particleData.maxParticle);
                     pr->SetPlayAwake(sptr->particleData.playAwake);
-                    
+                    pr->SetRadius(sptr->particleData.radius);
+                    pr->SetAngle(sptr->particleData.angle);
+
                     pr->SetRateOverTime(sptr->particleData.rateOverTime);
                     
                     pr->SetBurstsCount(sptr->particleData.burstsCount);
                     pr->SetInterval(sptr->particleData.interval);
+
+                    std::wstring texturePath;
+                    texturePath.assign(sptr->particleData.texturePath.begin(), sptr->particleData.texturePath.end());
+                    auto texturePtr = resourceManager->GetTexture(texturePath);
+                    if (texturePtr)
+                    {
+                        pr->SetTexture(texturePtr);
+                    }
+
                     pObj->SetSelfActive(false);
                 }
 
@@ -390,11 +401,40 @@ namespace application
                             case application::AnimationEventType::Sound_PlayOnceEvent:
                             {
                                 auto ptr = static_cast<Sound_PlayOnceEvent*>(event.get());
+                                animator->PushAnimationWithFunc(each, event->frame, [=]()
+                                    {
+                                        yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
+                                    });
                                 break;
                             }
                             case application::AnimationEventType::Sound_PlayLoopEvent:
                             {
                                 auto ptr = static_cast<Sound_PlayLoopEvent*>(event.get());
+                                animator->PushAnimationWithFunc(each, event->frame, [=]()
+                                    {
+                                        yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
+                                    });
+                                break;
+                            }
+                            case application::AnimationEventType::GameObject_AwakeEvent:
+                            {
+                                auto ptr = static_cast<GameObject_AwakeEvent*>(event.get());
+                                GameObject* particle = nullptr;
+                                for (auto& child : obj->GetChildren())
+                                {
+                                    if (child->getName() == ptr->objName)
+                                    {
+                                        particle = child;
+                                        break;
+                                    }
+                                }
+
+                                animator->PushAnimationWithFunc(each, event->frame, [=]()
+                                    {
+                                        auto ptr = particle->GetComponent<graphics::ParticleRenderer>();
+						                ptr->Reset();
+                                    });
+
                                 break;
                             }
                             default:
