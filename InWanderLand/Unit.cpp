@@ -31,6 +31,21 @@ void Unit::Start()
     unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Cells)->adjuster->SetTargetFloat(m_maxHealthPoint);
     unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Number_Max)->SetNumber(m_maxHealthPoint);
 
+    switch (m_unitType)
+    {
+    case Unit::UnitType::Warrior:
+        unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin);
+        break;
+    case Unit::UnitType::Magician:
+        unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula);
+        break;
+    case Unit::UnitType::Healer:
+        unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel);
+        break;
+    default:
+        break;
+    }
+
     m_initialAutoAttackDamage = m_autoAttackDamage;
     m_bulletSpeed = 5.1f;
     chaseUpdateDelay = 0.1f;
@@ -895,28 +910,12 @@ void Unit::SetUnitCurrentHp(float p_newHp)
         unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Fill)->adjuster->SetTargetFloat(1 - m_currentHealthPoint / m_maxHealthPoint);
         unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Number_Current)->SetNumber(m_currentHealthPoint);
     }
-    switch (m_unitType)
+    if (unitStatusPortraitUI)
     {
-    case UnitType::Warrior:
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Robin)->adjuster->SetTargetFloat(m_currentHealthPoint / m_maxHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_Blood_Robin)->adjuster->SetTargetFloat(1 - m_currentHealthPoint / m_maxHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Robin_Number_Current)->SetNumber(m_currentHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Robin_Number_Max)->SetNumber(m_maxHealthPoint);
-        break;
-    case UnitType::Magician:
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Ursula)->adjuster->SetTargetFloat(m_currentHealthPoint / m_maxHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_Blood_Ursula)->adjuster->SetTargetFloat(1 - m_currentHealthPoint / m_maxHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Ursula_Number_Current)->SetNumber(m_currentHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Ursula_Number_Max)->SetNumber(m_maxHealthPoint);
-        break;
-    case UnitType::Healer:
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Hansel)->adjuster->SetTargetFloat(m_currentHealthPoint / m_maxHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_Blood_Hansel)->adjuster->SetTargetFloat(1 - m_currentHealthPoint / m_maxHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Hansel_Number_Current)->SetNumber(m_currentHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Hansel_Number_Max)->SetNumber(m_maxHealthPoint);
-        break;
-    default:
-        break;
+        unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Fill)->adjuster->SetTargetFloat(m_currentHealthPoint / m_maxHealthPoint);
+        unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_PortraitBloodOverlay)->adjuster->SetTargetFloat(1 - m_currentHealthPoint / m_maxHealthPoint);
+        unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Number_Current)->SetNumber(m_currentHealthPoint);
+        unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Number_Max)->SetNumber(m_maxHealthPoint);
     }
 }
 
@@ -1479,10 +1478,52 @@ void Unit::SetUnitStateIdle()
         PlayerController::Instance().SetRightClickFunction();
     }
 }
+UIElement* Unit::GetBarBuffIcon(StatusEffect::StatusEffectEnum uiEnumID)
+{
+    if (unitStatusUI.expired())
+    {
+        return nullptr;
+    }
+    else
+    {
+        switch (uiEnumID)
+        {
+        case StatusEffect::StatusEffectEnum::Bleeding: return unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_Bleeding);
+        case StatusEffect::StatusEffectEnum::Blinding: return unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_Blinding);
+        case StatusEffect::StatusEffectEnum::Paralysis: return unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_Paralysis);
+        case StatusEffect::StatusEffectEnum::KnockBack: return unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_KnockBack);
+        case StatusEffect::StatusEffectEnum::Taunted: return unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_Taunted);
+        default: return nullptr;
+        }
+    }
+}
+UIElement* Unit::GetPortraitBuffIcon(StatusEffect::StatusEffectEnum uiEnumID)
+{
+    if (!unitStatusPortraitUI)
+    {
+        return nullptr;
+    }
+    else
+    {
+        switch (uiEnumID)
+        {
+        case StatusEffect::StatusEffectEnum::Bleeding: return unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_Bleeding);
+        case StatusEffect::StatusEffectEnum::Blinding: return unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_Blinding);
+        case StatusEffect::StatusEffectEnum::Paralysis: return unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_Paralysis);
+        case StatusEffect::StatusEffectEnum::KnockBack: return unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_KnockBack);
+        case StatusEffect::StatusEffectEnum::Taunted: return unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_Taunted);
+        default: return nullptr;
+        }
+    }
+}
 
 void Unit::ReportStatusEffectApplied(StatusEffect::StatusEffectEnum p_effectType)
 {
-    if (auto ui = UIManager::Instance().GetBuffIcon(this, p_effectType); ui)
+    if (auto ui = GetBarBuffIcon(p_effectType))
+    {
+        ui->EnableElement();
+    }
+    if (auto ui = GetPortraitBuffIcon(p_effectType))
     {
         ui->EnableElement();
     }
@@ -1490,10 +1531,15 @@ void Unit::ReportStatusEffectApplied(StatusEffect::StatusEffectEnum p_effectType
 
 void Unit::ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType)
 {
-    if (auto ui = UIManager::Instance().GetBuffIcon(this, p_effectType); ui)
+    if (auto ui = GetBarBuffIcon(p_effectType))
     {
         ui->DisableElement();
     }
+    if (auto ui = GetPortraitBuffIcon(p_effectType))
+    {
+        ui->DisableElement();
+    }
+
 }
 
 void Unit::PermitTacticAction()

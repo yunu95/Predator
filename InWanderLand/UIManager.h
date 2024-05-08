@@ -104,7 +104,6 @@ public:
     UIElement* GetUIElementWithIndex(int index);
     JsonUIData GetUIDataWithIndex(int index);
     UIElement* GetUIElementByEnum(UIEnumID uiEnumID);
-    UIElement* GetBuffIcon(Unit* owningUnit, StatusEffect::StatusEffectEnum uiEnumID);
     void ImportUI(const char* path);
 
     virtual void Update() override;

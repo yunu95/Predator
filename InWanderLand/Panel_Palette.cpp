@@ -348,10 +348,8 @@ namespace application
                                             for (auto& waveData : InstanceManager::GetSingletonInstance().GetList<WaveData>())
                                             {
                                                 /// 해당 Wave 에서 unitData 를 가지고 있었을 경우에 삭제하는 로직이 필요합니다.
-                                                //for (auto& [unit, wave] : waveData->GetWaveUnitDataMap())
-                                                //{
-                                                //    
-                                                //}
+                                                std::erase_if(waveData->GetWaveUnitDataMap(), [=](const auto& each) {return each.first == unitData; });
+                                                waveData->ApplyMapAsPod();
                                             }
 
                                             auto editorInstance = unitData->ApplyAsPaletteInstance();
@@ -1525,19 +1523,19 @@ namespace application
 
                     switch (particle->pod.particleData.particleMode)
                     {
-                        case application::particle::ParticleMode::Default:
-                        {
-                            imgui::DragFloat_2Col("Rate OverTime", particle->pod.particleData.rateOverTime);
-                            break;
-                        }
-                        case application::particle::ParticleMode::Bursts:
-                        {
-                            imgui::DragInt_2Col("Bursts Count", particle->pod.particleData.burstsCount);
-                            imgui::DragFloat_2Col("Interval", particle->pod.particleData.interval);
-                            break;
-                        }
-                        default:
-                            break;
+                    case application::particle::ParticleMode::Default:
+                    {
+                        imgui::DragFloat_2Col("Rate OverTime", particle->pod.particleData.rateOverTime);
+                        break;
+                    }
+                    case application::particle::ParticleMode::Bursts:
+                    {
+                        imgui::DragInt_2Col("Bursts Count", particle->pod.particleData.burstsCount);
+                        imgui::DragFloat_2Col("Interval", particle->pod.particleData.interval);
+                        break;
+                    }
+                    default:
+                        break;
                     }
                 }
 

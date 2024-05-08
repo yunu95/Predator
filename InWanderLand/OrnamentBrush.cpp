@@ -41,7 +41,6 @@ namespace application
                         }
                     }
                 }
-
                 brushObj->setName(dataKey);
                 brushObj->SetParent(GetGameObject());
                 brushObj->SetSelfActive(false);

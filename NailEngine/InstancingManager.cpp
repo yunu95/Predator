@@ -791,14 +791,15 @@ void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& rende
 			{
 				this->staticMeshDeferredRenderVec[instanceIter->second].second[renderInfoIter->second] = nullptr;
 			}
+
+
+			// 인덱스맵에도 null을 넣어서 맵핑하는 코드 추가
+			staticMeshRenderInfoIndexMap.erase(renderInfoIter);
+			staticMeshRenderInfoIndexMap.insert({ nullptr, -1 });
+
+			// 쿼드트리에서 데이터 삭제
+			this->quadTree.Remove(renderInfo.get());
 		}
-
-		// 인덱스맵에도 null을 넣어서 맵핑하는 코드 추가
-		staticMeshRenderInfoIndexMap.erase(renderInfoIter);
-		staticMeshRenderInfoIndexMap.insert({ nullptr, -1 });
-
-		// 쿼드트리에서 데이터 삭제
-		this->quadTree.Remove(renderInfo.get());
 	}
 
 
