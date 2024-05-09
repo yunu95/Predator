@@ -19,7 +19,7 @@ void UIElement::Start()
 };
 void UIElement::EnableElement()
 {
-    if (enabled)
+    if (enabled && !(importedUIData.customFlags2 & (int)UIExportFlag2::RedundantEnable))
     {
         return;
     }
@@ -36,8 +36,14 @@ void UIElement::EnableElement()
     if (linearClippingTimerOnDisable)
         linearClippingTimerOnDisable->StopTimer();
 
+    if (disableAfterEnable)
+    {
+        disableAfterEnable->ActivateTimer();
+    }
     if (colorTintOnEnable)
+    {
         colorTintOnEnable->ActivateTimer();
+    }
     if (scalePopUpTransition != nullptr)
     {
         scalePopUpTransition->ActivateTimer();
@@ -107,6 +113,9 @@ void UIElement::DisableElement()
         soundOnEnable->StopTimer();
     if (linearClippingTimerOnEnable)
         linearClippingTimerOnEnable->StopTimer();
+    if (disableAfterEnable)
+        disableAfterEnable->StopTimer();
+
     if (colorTintOnDisable)
     {
         disablingHandled = true;

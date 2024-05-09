@@ -25,11 +25,23 @@ void Unit::OnEnable()
 
 void Unit::Start()
 {
-    unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::EnemyStatus));
-    unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
-
-    unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Cells)->adjuster->SetTargetFloat(m_maxHealthPoint);
-    unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Number_Max)->SetNumber(m_maxHealthPoint);
+    switch (m_unitType)
+    {
+    case Unit::UnitType::Warrior:
+    case Unit::UnitType::Magician:
+    case Unit::UnitType::Healer:
+        unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Heroes));
+        break;
+    case UnitType::MeleeEnemy:
+        unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_MeleeEnemy));
+        break;
+    }
+    if (!unitStatusUI.expired())
+    {
+        unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
+        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Cells)->adjuster->SetTargetFloat(m_maxHealthPoint);
+        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Number_Max)->SetNumber(m_maxHealthPoint);
+    }
 
     switch (m_unitType)
     {
@@ -251,7 +263,8 @@ void Unit::Update()
             }
         }
     }
-    unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
+    if (!unitStatusUI.expired())
+        unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
     auto camTrsform = graphics::Camera::GetMainCamera()->GetTransform();
     auto shouldBeScreenZero = camTrsform->GetWorldPosition() + camTrsform->GetWorldRotation().Forward() * 10.0f + camTrsform->GetWorldRotation().Right() * 9.6f;
     //unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(shouldBeScreenZero));
@@ -442,7 +455,8 @@ void Unit::ParalysisEngage()
 
 void Unit::DeathEngage()
 {
-    unitStatusUI.lock()->DisableElement();
+    if (!unitStatusUI.expired())
+        unitStatusUI.lock()->DisableElement();
     currentOrder = UnitState::Death;
 
     deathFunctionElapsed = 0.0f;
@@ -474,7 +488,8 @@ void Unit::DeathEngage()
 
 void Unit::WaveStartEngage()
 {
-    unitStatusUI.lock()->EnableElement();
+    if (!unitStatusUI.expired())
+        unitStatusUI.lock()->EnableElement();
     currentOrder = UnitState::WaveStart;
     moveFunctionElapsed = 0.0f;
     ChangeAnimation(unitAnimations.m_walkAnimation);
@@ -912,8 +927,8 @@ void Unit::SetUnitCurrentHp(float p_newHp)
     m_currentHealthPoint = p_newHp;
     if (!unitStatusUI.expired())
     {
-        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Fill)->adjuster->SetTargetFloat(1 - m_currentHealthPoint / m_maxHealthPoint);
-        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Number_Current)->SetNumber(m_currentHealthPoint);
+        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Fill)->adjuster->SetTargetFloat(1 - m_currentHealthPoint / m_maxHealthPoint);
+        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Number_Current)->SetNumber(m_currentHealthPoint);
     }
     if (unitStatusPortraitUI)
     {

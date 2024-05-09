@@ -40,6 +40,7 @@ public:
     SoundPlayingTimer* soundOnHover{ nullptr };
     SoundPlayingTimer* soundOnEnable{ nullptr };
     SoundPlayingTimer* soundOnDisable{ nullptr };
+    TimerComponent* disableAfterEnable{ nullptr };
     std::weak_ptr<graphics::UIImage> imageComponent{};
     graphics::UIText* textComponent{ nullptr };
     UIPriorityLayout* priorityLayout{ nullptr };
@@ -48,6 +49,7 @@ public:
     LinearClippingTimer* linearClippingTimerOnEnable{ nullptr };
     LinearClippingTimer* linearClippingTimerOnDisable{ nullptr };
     vector<UIElement*> children;
+    vector<UIElement*> exclusiveEnableGroup;
     void EnableElement();
     void DisableElement();
     void SetNumber(float number);

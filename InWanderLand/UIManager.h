@@ -18,6 +18,7 @@ class UIElement;
 class UIManager : public Component, public SingletonComponent<UIManager>
 {
 private:
+    void ClearDialogueInfos();
     // JsonUIData만으로 UI를 생성합니다.
     void ImportDefaultAction(const JsonUIData& uiData, UIElement* element);
     // 이 함수는 ImportDealwithSpecialCases_Post 함수와 더불어 같은 element에 대해 여러번 호출될 수 있다.
@@ -27,6 +28,9 @@ private:
     bool ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element);
     // 아래 두 함수들을 응용해 UI들이 다 생성되고 난 후 추가적인 작업을 수행합니다.
     bool ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElement* element);
+
+    const std::vector<std::string>& GetDialogueTimed_KeyStrings();
+    const std::vector<std::string>& GetDialogueManual_KeyStrings();
     void SetUIElementWithEnum(UIEnumID uiEnumID, UIElement* ui);
     void SetUIElementWithIndex(int index, UIElement* ui);
     void SetUIDataWithIndex(int index, const JsonUIData& uiData);
@@ -53,6 +57,10 @@ private:
     std::unordered_map<int, JsonUIData> uidatasByIndex;
     std::unordered_map<UIElement*, array<yunuGI::ITexture*, 10>> digitFonts;
 
+    std::unordered_map<std::string, UIElement*> dialogueTimed;
+    std::vector<std::string> dialogueTimed_KeyStrings;
+    std::unordered_map<std::string, UIElement*> dialogueManual;
+    std::vector<std::string> dialogueManual_KeyStrings;
 public:
     static constexpr UIEnumID comboNumbers[6]
     {

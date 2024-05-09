@@ -350,12 +350,7 @@ struct MySequence : public ImSequencer::SequenceInterface
 					{
 						draw_list->AddText(pta, 0xFFFFFFFF, "Sound_PlayOnce");
 						break;
-					}
-					case application::AnimationEventType::Sound_PlayLoopEvent:
-					{
-						draw_list->AddText(pta, 0xFFFFFFFF, "Sound_PlayLoop");
-						break;
-					}
+					}	
 					case application::AnimationEventType::GameObject_AwakeEvent:
 					{
 						draw_list->AddText(pta, 0xFFFFFFFF, ("Particle Awake[" + static_cast<application::GameObject_AwakeEvent*>(each.get())->objName + "]").c_str());
@@ -425,11 +420,6 @@ struct MySequence : public ImSequencer::SequenceInterface
 					case application::AnimationEventType::Sound_PlayOnceEvent:
 					{
 						boxCol = ImGui::GetColorU32(ImVec4(0, 1, 0, 1));
-						break;
-					}
-					case application::AnimationEventType::Sound_PlayLoopEvent:
-					{
-						boxCol = ImGui::GetColorU32(ImVec4(0, 0, 1, 1));
 						break;
 					}
 					case application::AnimationEventType::GameObject_AwakeEvent:
@@ -617,11 +607,6 @@ struct MySequence : public ImSequencer::SequenceInterface
 					case application::AnimationEventType::Sound_PlayOnceEvent:
 					{
 						boxCol = ImGui::GetColorU32(ImVec4(0, 1, 0, 1));
-						break;
-					}
-					case application::AnimationEventType::Sound_PlayLoopEvent:
-					{
-						boxCol = ImGui::GetColorU32(ImVec4(0, 0, 1, 1));
 						break;
 					}
 					case application::AnimationEventType::GameObject_AwakeEvent:
@@ -2277,7 +2262,6 @@ void ShowSequencerEditor()
 					ImGui::Separator();
 
 					static std::string rscName = "None";
-					static bool loop = false;
 
 					ImGui::SetNextItemWidth(-1);
 					if (ImGui::BeginCombo("##SelectedSoundListCombo", rscName.c_str()))
@@ -2298,37 +2282,21 @@ void ShowSequencerEditor()
 						ImGui::EndCombo();
 					}
 
-					ImGui::Checkbox("Loop", &loop);
-
 					ImGui::Separator();
 
 					if (ImGui::Button("OK"))
 					{
 						if (rscName != "None")
 						{
-							if (loop)
-							{
-								auto sptr = std::make_shared<application::Sound_PlayLoopEvent>();
-								sptr->fbxName = fbxName;
-								sptr->animationName = pm.GetAnimationNameList(fbxName)[aniIndex];
-								sptr->frame = currentFrame;
-								sptr->rscPath = rscName;
-								pm.AddAnimationEvent(sptr);
-								mySequenceMap[fbxName].myItems[funcIndex].funcList.insert(sptr);
-							}
-							else
-							{
-								auto sptr = std::make_shared<application::Sound_PlayOnceEvent>();
-								sptr->fbxName = fbxName;
-								sptr->animationName = pm.GetAnimationNameList(fbxName)[aniIndex];
-								sptr->frame = currentFrame;
-								sptr->rscPath = rscName;
-								pm.AddAnimationEvent(sptr);
-								mySequenceMap[fbxName].myItems[funcIndex].funcList.insert(sptr);
-							}	
+							auto sptr = std::make_shared<application::Sound_PlayOnceEvent>();
+							sptr->fbxName = fbxName;
+							sptr->animationName = pm.GetAnimationNameList(fbxName)[aniIndex];
+							sptr->frame = currentFrame;
+							sptr->rscPath = rscName;
+							pm.AddAnimationEvent(sptr);
+							mySequenceMap[fbxName].myItems[funcIndex].funcList.insert(sptr);
 							
 							rscName = "None";
-							loop = false;
 							ImGui::CloseCurrentPopup();
 							application::editor::imgui::CloseMessageBox("Sound Play");
 						}
@@ -2338,7 +2306,6 @@ void ShowSequencerEditor()
 					if (ImGui::Button("Cancel"))
 					{
 						rscName = "None";
-						loop = false;
 						ImGui::CloseCurrentPopup();
 						application::editor::imgui::CloseMessageBox("Sound Play");
 					}
