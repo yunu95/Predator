@@ -180,21 +180,18 @@ namespace application
 					if (label == "staticFBXName")
 					{
 						bool returnVal = false;
-						static auto& fbxSet = ResourceManager::GetSingletonInstance().GetStaticFBXList();
 						static std::vector<std::string> selections = std::vector<std::string>();
 						std::string current = data;
 
-						if (selections.empty())
+						selections.resize(0);
+						for (auto& each : ResourceManager::GetSingletonInstance().GetStaticFBXList())
 						{
-							for (auto& each : fbxSet)
-							{
-								selections.push_back(each);
-							}
+							selections.push_back(each);
 						}
 
 						if (ImGui::BeginCombo("##staticFBXCombo", data.c_str()))
 						{
-							for (int i = 0; i < fbxSet.size(); i++)
+							for (int i = 0; i < selections.size(); i++)
 							{
 								const bool is_selected = (current == selections[i]);
 								if (ImGui::Selectable(selections[i].c_str(), is_selected))
