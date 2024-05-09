@@ -300,6 +300,16 @@ namespace application
 						condition = AddCondition<Condition_CinematicModeOff>();
 						break;
 					}
+					case application::ConditionType::TutorialModeOn:
+					{
+						condition = AddCondition<Condition_TutorialModeOn>();
+						break;
+					}
+					case application::ConditionType::TutorialModeOff:
+					{
+						condition = AddCondition<Condition_TutorialModeOff>();
+						break;
+					}
 					default:
 						break;
 				}

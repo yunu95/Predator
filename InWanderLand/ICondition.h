@@ -20,6 +20,8 @@ namespace application
 		None,
 		CinematicModeOn,
 		CinematicModeOff,
+		TutorialModeOn,
+		TutorialModeOff
 	};
 
 	struct ICondition

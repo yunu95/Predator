@@ -1393,6 +1393,9 @@
     <ClInclude Include="PermanentObservee.h">
       <Filter>Contents\ContentsObserver\Observee</Filter>
     </ClInclude>
+    <ClInclude Include="Condition_TutorialMode.h">
+      <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2118,6 +2121,9 @@
     </ClCompile>
     <ClCompile Include="PermanentObservee.cpp">
       <Filter>Contents\ContentsObserver\Observee</Filter>
+    </ClCompile>
+    <ClCompile Include="Condition_TutorialMode.cpp">
+      <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

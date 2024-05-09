@@ -82,6 +82,9 @@ void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPWSTR lp
 WNDCLASS wc;
 WNDCLASSEX wcEditor;
 
+int monitorX;
+int monitorY;
+
 void ResizeBuffers();
 
 std::string ConvertWideStringToUTF8(const std::wstring& wideString) {
@@ -803,6 +806,9 @@ std::vector<std::function<void()>> loopRegistrations;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
+	monitorX = GetSystemMetrics(SM_CXSCREEN);
+	monitorY = GetSystemMetrics(SM_CYSCREEN);
+
 	CreateMyWindow(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 
 	yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [&]()
@@ -1103,8 +1109,8 @@ void CreateMyWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPWSTR lp_c
 		L"MyWindowClass",   // 등록한 윈도우 클래스 이름
 		L"My Window",       // 윈도우 제목
 		WS_OVERLAPPEDWINDOW, // 윈도우 스타일
-		100,      // x 좌표
-		100,      // y 좌표
+		(monitorX - 1920) / 2,    // x 좌표
+		(monitorY - 1080) / 2,    // y 좌표
 		1920,                // 너비
 		1080,                // 높이
 		nullptr,            // 부모 윈도우
@@ -1125,7 +1131,7 @@ void CreateToolWindow(HINSTANCE h_instance, HINSTANCE h_prev_instance, LPWSTR lp
 	RegisterClassEx(&wcEditor);
 
 	// 윈도우 생성
-	g_Toolhwnd = ::CreateWindow(wcEditor.lpszClassName, wcEditor.lpszClassName, WS_OVERLAPPEDWINDOW, 2020, 100, 1920, 1080, g_hwnd, NULL, wcEditor.hInstance, NULL);
+	g_Toolhwnd = ::CreateWindow(wcEditor.lpszClassName, wcEditor.lpszClassName, WS_OVERLAPPEDWINDOW, monitorX - (1920 / 2), (monitorY - 1080) / 2 + 100, 1920, 1080, g_hwnd, NULL, wcEditor.hInstance, NULL);
 }
 
 void ImGuiUpdate()

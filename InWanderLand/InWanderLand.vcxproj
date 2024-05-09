@@ -1024,6 +1024,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="ColorTintTImer.h" />
     <ClInclude Include="ConditionList.h" />
     <ClInclude Include="Condition_CinematicMode.h" />
+    <ClInclude Include="Condition_TutorialMode.h" />
     <ClInclude Include="ContentsObservee.h" />
     <ClInclude Include="ContentsObserver.h" />
     <ClInclude Include="ContentsPlayFlag.h" />
@@ -1305,6 +1306,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="ColorTIntTimer.cpp" />
     <ClCompile Include="Condition_CinematicMode.cpp" />
     <ClCompile Include="ChessTrapSkillSystem.cpp" />
+    <ClCompile Include="Condition_TutorialMode.cpp" />
     <ClCompile Include="ContentsObservee.cpp" />
     <ClCompile Include="ContentsObserver.cpp" />
     <ClCompile Include="CreateInstanceCommand.cpp" />
