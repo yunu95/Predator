@@ -1393,6 +1393,12 @@
     <ClInclude Include="PermanentObservee.h">
       <Filter>Contents\ContentsObserver\Observee</Filter>
     </ClInclude>
+    <ClInclude Include="Action_PlayManualDialogue.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_PlayTimedDialogue.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2118,6 +2124,12 @@
     </ClCompile>
     <ClCompile Include="PermanentObservee.cpp">
       <Filter>Contents\ContentsObserver\Observee</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_PlayManualDialogue.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_PlayTimedDialogue.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

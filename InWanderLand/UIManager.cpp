@@ -278,6 +278,16 @@ const std::vector<std::string>& UIManager::GetDialogueManual_KeyStrings()
 {
     return dialogueManual_KeyStrings;
 }
+UIElement* UIManager::GetDialogueTimed(const std::string& keyString)
+{
+    assert(dialogueTimed.contains(keyString));
+    return dialogueTimed.at(keyString);
+}
+UIElement* UIManager::GetDialogueManual(const std::string& keyString)
+{
+    assert(dialogueManual.contains(keyString));
+    return dialogueManual.at(keyString);
+}
 void UIManager::SetUIElementWithEnum(UIEnumID uiEnumID, UIElement* ui)
 {
     if (localContext)
@@ -900,7 +910,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
             }
         }
     }
-        }
+}
 // 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
 bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element)
 {
