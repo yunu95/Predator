@@ -213,10 +213,9 @@ void RenderSystem::Render()
 	// Final 출력
 	RenderFinal();
 	RenderForward();
-	RenderBackBuffer();
 	RenderParticle();
+	RenderBackBuffer();
 
-	//SkyBoxPass::Instance.Get().Render();
 
 	RenderUI();
 
@@ -487,6 +486,8 @@ void RenderSystem::RenderBackBuffer()
 {
 	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
 
+	
+
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1,
 		ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
 		ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
@@ -509,6 +510,12 @@ void RenderSystem::RenderUI()
 {
     //this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied(), nullptr, nullptr, nullptr, [=]()
     bool preprocessed = !preProcessingUiImages.empty();
+
+	if (preprocessed)
+	{
+		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	}
+
     for (auto each : preProcessingUiImages)
     {
         each->PreProcessTexture();
