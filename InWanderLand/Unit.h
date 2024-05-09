@@ -268,7 +268,7 @@ public:
     float animationLerpDuration = 0.1f;
     float animationTransitionSpeed = 1.0f;
     bool isAttackAnimationOperating{ false };
-    bool isAnimationChangedToIdleAnimationOnAttackState{ false };
+    bool isAnimationChangedAttackToIdle{ false };
 
     virtual void OnEnable() override;
     virtual void Start() override;
