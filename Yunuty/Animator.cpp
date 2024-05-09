@@ -28,6 +28,7 @@ void Animator::ChangeAnimation(yunuGI::IAnimation* animation, float transitionDu
 	auto& gi = this->GetGI();
 
 	gi.ChangeAnimation(animation, transitionDuration, transitionSpeed);
+	isChange = true;
 }
 
 void Animator::SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame)
@@ -158,6 +159,8 @@ void Animator::Update()
 			desc.curr.currFrame = min(static_cast<int>(desc.curr.currFrame), totalFrame - 1);
 			desc.curr.nextFrame = min(static_cast<int>(desc.curr.currFrame + 1), totalFrame - 1);
 			desc.curr.ratio = static_cast<float>(desc.curr.sumTime - static_cast<float>(desc.curr.currFrame) / ratio);
+
+			std::cout << desc.curr.currFrame;
 		}
 
 		for (auto& each : this->animationEventMap)
@@ -228,6 +231,7 @@ void Animator::Update()
 				ClearAnimationEvent(gi.GetCurrentAnimation());
 
 				desc.curr = desc.next;
+				desc.curr.sumTime = 0.f;
 				desc.ClearNextAnimation();
 				gi.SetCurrentAnimation(nextAnimation);
 				gi.SetNextAnimation(nullptr);
@@ -240,9 +244,11 @@ void Animator::Update()
 				{
 					desc.next.sumTime = 0;
 				}
-				desc.next.currFrame = static_cast<__int32>(desc.next.sumTime * ratio);
-				desc.next.currFrame = min(static_cast<int>(desc.next.currFrame), totalFrame - 1);
-				desc.next.nextFrame = min(static_cast<int>(desc.next.currFrame + 1), totalFrame - 1);
+				desc.next.currFrame = 0;
+				desc.next.nextFrame = 1;
+				//desc.next.currFrame = static_cast<__int32>(desc.next.sumTime * ratio);
+				//desc.next.currFrame = min(static_cast<int>(desc.next.currFrame), totalFrame - 1);
+				//desc.next.nextFrame = min(static_cast<int>(desc.next.currFrame + 1), totalFrame - 1);
 				desc.next.ratio = static_cast<float>(desc.next.sumTime - static_cast<float>(desc.next.currFrame) / ratio);
 			}
 		}

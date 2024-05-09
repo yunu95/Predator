@@ -1166,6 +1166,7 @@ void ResourceManager::CreateDefaultTexture()
 	CreateTexture(L"Texture/asdBrdf.dds");
 	CreateTexture(L"Texture/asdDiffuseHDR.dds");
 	CreateTexture(L"Texture/asdSpecularHDR.dds");
+
 	CreateTexture(L"Texture/Particle/default.dds");
 	CreateTexture(L"Texture/TempTexture.dds");
 	CreateTexture(L"Texture/Dissolve.jpg");
