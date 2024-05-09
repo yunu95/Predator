@@ -23,6 +23,8 @@ namespace application
 		/// Condition
 		conditionList.push_back({ ConditionType::CinematicModeOn, "CinematicModeOn" });
 		conditionList.push_back({ ConditionType::CinematicModeOff, "CinematicModeOff" });
+		conditionList.push_back({ ConditionType::TutorialModeOn, "TutorialModeOn" });
+		conditionList.push_back({ ConditionType::TutorialModeOff, "TutorialModeOff" });
 
 		/// Action
 		actionList.push_back({ ActionType::WaitPreviousActionEnd, "WaitPreviousActionEnd" });

@@ -1,6 +1,6 @@
-#include "InWanderLand.h"
+#include "InteractableBrush.h"
 
-#include "UnitBrush.h"
+#include "TemplateDataManager.h"
 
 namespace application
 {
@@ -8,26 +8,25 @@ namespace application
     {
         namespace palette
         {
-            void UnitBrush::CreateBrush()
+            void InteractableBrush::CreateBrush()
             {
-                for (auto& each : TemplateDataManager::GetSingletonInstance().GetDataList(DataType::UnitData))
+                for (auto& each : TemplateDataManager::GetSingletonInstance().GetDataList(DataType::InteractableData))
                 {
                     CreateBrush(each->GetDataKey());
                 }
             }
 
-            bool UnitBrush::CreateBrush(const std::string& dataKey)
+            bool InteractableBrush::CreateBrush(const std::string& dataKey)
             {
                 if (brushList.find(dataKey) != brushList.end())
                     return false;
 
-                auto name = static_cast<Unit_TemplateData*>(TemplateDataManager::GetSingletonInstance().GetTemplateData(dataKey))->pod.skinnedFBXName;
+                auto name = static_cast<Interactable_TemplateData*>(TemplateDataManager::GetSingletonInstance().GetTemplateData(dataKey))->pod.fBXName;
 
                 auto brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(name);
 
                 if (brushObj == nullptr)
                     return false;
-
 
                 for (auto each : brushObj->GetChildren())
                 {
@@ -52,7 +51,7 @@ namespace application
                 return true;
             }
 
-            bool UnitBrush::ChangeBrushResource(const std::string& dataKey, const std::string& fbxName)
+            bool InteractableBrush::ChangeBrushResource(const std::string& dataKey, const std::string& fbxName)
             {
                 if (brushList.find(dataKey) == brushList.end())
                     return false;
@@ -88,12 +87,12 @@ namespace application
                 return true;
             }
 
-            void UnitBrush::ReadyBrush(const std::string& dataKey)
+            void InteractableBrush::ReadyBrush(const std::string& dataKey)
             {
-                return ReadyBrush(static_cast<Unit_TemplateData*>(TemplateDataManager::GetSingletonInstance().GetTemplateData(dataKey)));
+                return ReadyBrush(static_cast<Interactable_TemplateData*>(TemplateDataManager::GetSingletonInstance().GetTemplateData(dataKey)));
             }
 
-            void UnitBrush::Clear()
+            void InteractableBrush::Clear()
             {
                 std::vector<std::string> list;
                 list.reserve(brushList.size());
@@ -111,7 +110,7 @@ namespace application
                 currentBrush = nullptr;
             }
 
-            void UnitBrush::Update()
+            void InteractableBrush::Update()
             {
                 if (currentBrush != nullptr && !brushList[currentBrush->GetDataKey()]->GetSelfActive())
                 {
@@ -119,7 +118,7 @@ namespace application
                 }
             }
 
-            bool UnitBrush::DestroyBrush(const std::string& dataKey)
+            bool InteractableBrush::DestroyBrush(const std::string& dataKey)
             {
                 auto itr = brushList.find(dataKey);
                 if (itr != brushList.end())
@@ -131,7 +130,7 @@ namespace application
                 return false;
             }
 
-            void UnitBrush::ReadyBrush(Unit_TemplateData* data)
+            void InteractableBrush::ReadyBrush(Interactable_TemplateData* data)
             {
                 if (data == nullptr)
                 {

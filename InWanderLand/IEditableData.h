@@ -46,6 +46,7 @@ namespace application
 			CameraData,
             LightData,
             ParticleData,
+            InteractableData
 		};
 
         template<typename T>

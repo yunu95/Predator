@@ -136,6 +136,16 @@ namespace application
 							Condition_CinematicModeOff::ImGui_DrawDataPopup(static_cast<Condition_CinematicModeOff*>(data));
 							break;
 						}
+						case application::ConditionType::TutorialModeOn:
+						{
+							Condition_TutorialModeOn::ImGui_DrawDataPopup(static_cast<Condition_TutorialModeOn*>(data));
+							break;
+						}
+						case application::ConditionType::TutorialModeOff:
+						{
+							Condition_TutorialModeOff::ImGui_DrawDataPopup(static_cast<Condition_TutorialModeOff*>(data));
+							break;
+						}
 						default:
 							break;
 					}

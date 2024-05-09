@@ -6,3 +6,4 @@
 #include "ICondition.h"
 
 #include "Condition_CinematicMode.h"
+#include "Condition_TutorialMode.h"

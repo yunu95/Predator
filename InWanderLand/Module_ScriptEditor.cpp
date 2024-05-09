@@ -662,6 +662,16 @@ namespace application
 									selectedScript->AddCondition<Condition_CinematicModeOff>();
 									break;
 								}
+								case application::ConditionType::TutorialModeOn:
+								{
+									selectedScript->AddCondition<Condition_TutorialModeOn>();
+									break;
+								}
+								case application::ConditionType::TutorialModeOff:
+								{
+									selectedScript->AddCondition<Condition_TutorialModeOff>();
+									break;
+								}
 								default:
 									break;
 							}
