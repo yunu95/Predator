@@ -69,6 +69,13 @@ namespace application
 
 		GC<float>	skillGaugeRecoveryPerSecond = 2.0f;
 
+
+		GC<float>	tacticSkillCost = 10.0f;
+		GC<float>	tacticMoveCost = 10.0f;
+		GC<float>	tacticAttackCost = 10.0f;
+
+		GC<float>	tacticGaugeRecoveryPerSecond = 2.0f;
+
 		GC<int>	maxResurrectCount;
 
 		TO_JSON(POD_GlobalConstant)
