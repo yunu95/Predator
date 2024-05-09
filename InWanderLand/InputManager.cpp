@@ -41,7 +41,7 @@ void InputManager::Update()
             {
                 if (yunutyEngine::Input::isKeyPushed(KeyCode::A))
                 {
-                    if (tacticMode)
+                    if (TacticModeSystem::Instance().IsOrderingTimingNow())
                         TacticModeSystem::Instance().SetLeftClickAddQueueForAttackMove(currentSelectedSerialNumber);
                     else
                     {
@@ -87,7 +87,7 @@ void InputManager::StopFunction()
 
     currentSelectedSerialNumber = SelectedSerialNumber::One;
     isPlayerSelected = false;
-    tacticMode = false;
+    //tacticMode = false;
     isMouseOnUIButton = false;
     isInputManagerActivated = false;
 }
@@ -134,7 +134,7 @@ void InputManager::SelectPlayer(Unit::UnitType p_unitType)
     }
     isPlayerSelected = true;
 
-    if (tacticMode)
+    if (TacticModeSystem::Instance().IsOrderingTimingNow())
     {
         TacticModeSystem::Instance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
     }
@@ -159,7 +159,7 @@ void InputManager::PrepareSkill(Unit::SkillEnum p_skillType)
         /// 마나가 부족해 스킬을 사용하지 못하는 경우입니다.
         return;
     }
-    if (tacticMode)
+    if (TacticModeSystem::Instance().IsOrderingTimingNow())
     {
         TacticModeSystem::Instance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, p_skillType);
     }

@@ -89,16 +89,19 @@ void TacticModeSystem::StopFunction()
 
 void TacticModeSystem::ToggleRequested(InputManager::SelectedSerialNumber currentSelectedNum)
 {
-    if (!isTacticOrderPerforming)       /// 1. 명령 실행 중이 아니고,
+    if (!isTacticOrderPerforming)           /// 1. 명령 실행 중이 아니고,
     {
-        if (!isTacticModeOperating)     /// 2. 명령 입력 중이 아니면 진입.
+        if (!isCoolTime)
         {
-			EngageTacticMode();
-			SetTacticModeRightClickFunction(currentSelectedNum);
-        }
-        else                            /// 3. 명령 입력 중이라면 나가기.
-        {
-			ExitTacticMode();
+			if (!isTacticModeOperating)     /// 2. 명령 입력 중이 아니면 진입.
+			{
+				EngageTacticMode();
+				SetTacticModeRightClickFunction(currentSelectedNum);
+			}
+			else                            /// 3. 명령 입력 중이라면 나가기.
+			{
+				ExitTacticMode();
+			}
         }
     }
 }
@@ -195,6 +198,11 @@ void TacticModeSystem::EngageTacticMode()
         each->EnemyActionOnTacticModeEngaged();
     }
 
+	for (auto each : playerComponentMap)
+	{
+		each.second->EnemyActionOnTacticModeEngaged();
+	}
+
     vector<GameObject*> unitGameObjects;
     for (auto each : playerComponentMap)
     {
@@ -235,10 +243,20 @@ void TacticModeSystem::ExitTacticMode()
     }
     else
     {
-		isTacticOrderPerforming = false;
-		m_currentOperatingWave->ResumeWaveElapsedTime();
-        SetCurrentCoolTimeElapsed(0.0f);
+		SetCurrentCoolTimeElapsed(0.0f);
 		isCoolTime = true;
+		isTacticOrderPerforming = false;
+		LocalTimeEntityManager::Instance().ReportTacticModeEnded();
+		m_currentOperatingWave->ResumeWaveElapsedTime();
+
+		for (auto each : m_currentWaveUnits)
+		{
+			each->EnemyActionOnTacticModeEnded();
+		}
+		for (auto each : playerComponentMap)
+		{
+			each.second->EnemyActionOnTacticModeEnded();
+		}
     }
 }
 
@@ -299,10 +317,16 @@ void TacticModeSystem::ReportTacticActionFinished()
 		isCoolTime = true;
         isTacticOrderPerforming = false;
         LocalTimeEntityManager::Instance().ReportTacticModeEnded();
+		m_currentOperatingWave->ResumeWaveElapsedTime();
+        
         for (auto each : m_currentWaveUnits)
         {
             each->EnemyActionOnTacticModeEnded();
         }
+		for (auto each : playerComponentMap)
+		{
+			each.second->EnemyActionOnTacticModeEnded();
+		}
     }
     else
     {

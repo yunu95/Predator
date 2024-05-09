@@ -224,7 +224,6 @@ void Unit::Start()
         m_animatorComponent->PushAnimationWithFunc(unitAnimations.m_attackAnimation, unitAnimations.m_attackAnimation->GetTotalFrame() - 1, [=]()
             {
                 isAttackAnimationOperating = false;
-                ChangeAnimation(unitAnimations.m_idleAnimation);
             });
     }
 
@@ -362,6 +361,7 @@ void Unit::AttackEngage()
 
     AttackSystem* atkSys = GetGameObject()->GetComponent<AttackSystem>();
     isAttackAnimationOperating = false;
+    isAnimationChangedToIdleAnimationOnAttackState = false;
 
     attackFunctionElapsed = 0.0f;
     dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
@@ -623,6 +623,12 @@ void Unit::AttackUpdate()
 
     if (!isAttackAnimationOperating)
     {
+        if (!isAnimationChangedToIdleAnimationOnAttackState)
+        {
+			ChangeAnimation(unitAnimations.m_idleAnimation);
+            isAnimationChangedToIdleAnimationOnAttackState = true;
+        }
+
         attackFunctionElapsed += Time::GetDeltaTime() * m_localTimeScale;
 
         if (attackFunctionElapsed >= attackFunctionCallDelay)
@@ -630,6 +636,7 @@ void Unit::AttackUpdate()
             DetermineCurrentTargetObject();
             attackFunctionElapsed = 0.0f;
             isAttackAnimationOperating = true;
+            isAnimationChangedToIdleAnimationOnAttackState = false;
             ChangeAnimation(unitAnimations.m_attackAnimation);
             CheckCurrentAnimation(unitAnimations.m_attackAnimation);
         }

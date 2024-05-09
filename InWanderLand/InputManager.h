@@ -23,7 +23,7 @@ public:
 private:
     SelectedSerialNumber currentSelectedSerialNumber;
     bool isPlayerSelected = false;
-    bool tacticMode = false;
+    //bool tacticMode = false;
     bool isMouseOnUIButton = false;
 	bool isInputManagerActivated{ true };
 public:
