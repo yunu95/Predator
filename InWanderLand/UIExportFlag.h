@@ -83,4 +83,9 @@ enum class UIExportFlag2
     PauseMusicOnEnable = 1 << 7,
     UnPauseMusicOnDisable = 1 << 8,
     MultiplyMusicVolumeOnEnableDisable = 1 << 9,
+    ExclusiveEnable = 1 << 10,
+    DisableAfterEnable = 1 << 11,
+    Dialogue_Manual = 1 << 12,
+    Dialogue_Timed = 1 << 13,
+    RedundantEnable = 1 << 14,
 };

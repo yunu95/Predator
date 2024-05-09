@@ -162,6 +162,8 @@ void yunutyEngine::SoundSystem::mPlayMusic(string soundPath)
     }
     if (!isPlaying)
     {
+        sounds[soundPath]->setMode(FMOD_LOOP_NORMAL);
+        sounds[soundPath]->setLoopCount(-1);
         fmodSystem->playSound(sounds[soundPath], 0, false, &bgmChannel);
         SetMusicVolume(musicVolume);
     }
