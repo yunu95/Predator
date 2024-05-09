@@ -1068,7 +1068,7 @@ void ResourceManager::CreateDefaultMaterial()
 		yunuGI::IMaterial* material = CrateMaterial(L"ParticleMaterial");
 		material->SetVertexShader(GetShader(L"ParticleVS.cso").get());
 		material->SetPixelShader(GetShader(L"ParticlePS.cso").get());
-		material->SetTexture(yunuGI::Texture_Type::ALBEDO, GetTexture(L"Texture/particle.png").get());
+		material->SetTexture(yunuGI::Texture_Type::ALBEDO, GetTexture(L"Texture/Particle/default.dds").get());
 	}
 
 	/// Deferred Debug Info
