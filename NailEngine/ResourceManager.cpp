@@ -1068,7 +1068,7 @@ void ResourceManager::CreateDefaultMaterial()
 		yunuGI::IMaterial* material = CrateMaterial(L"ParticleMaterial");
 		material->SetVertexShader(GetShader(L"ParticleVS.cso").get());
 		material->SetPixelShader(GetShader(L"ParticlePS.cso").get());
-		material->SetTexture(yunuGI::Texture_Type::ALBEDO, GetTexture(L"Texture/Particle/default.png").get());
+		material->SetTexture(yunuGI::Texture_Type::ALBEDO, GetTexture(L"Texture/Particle/default.dds").get());
 	}
 
 	/// Deferred Debug Info
@@ -1166,7 +1166,8 @@ void ResourceManager::CreateDefaultTexture()
 	CreateTexture(L"Texture/asdBrdf.dds");
 	CreateTexture(L"Texture/asdDiffuseHDR.dds");
 	CreateTexture(L"Texture/asdSpecularHDR.dds");
-	CreateTexture(L"Texture/Particle/default.png");
+
+	CreateTexture(L"Texture/Particle/default.dds");
 	CreateTexture(L"Texture/TempTexture.dds");
 	CreateTexture(L"Texture/Dissolve.jpg");
 	CreateTexture(L"Texture/LightMap_0.dds");
