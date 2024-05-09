@@ -239,6 +239,11 @@ namespace application
 					instance = new ParticleData();
 					break;
 				}
+				case DataType::InteractableData:
+				{
+					instance = new InteractableData();
+					break;
+				}
 				default:
 					break;
 			}

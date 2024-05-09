@@ -68,9 +68,11 @@ namespace application
             void ImGui_BeginLightPalette();
             void ImGui_BeginCameraPalette();
             void ImGui_BeginParticlePalette();
+            void ImGui_BeginInteractablePalette();
 
             bool ImGui_CreateUnitPopup();
             bool ImGui_CreateParticlePopup();
+            bool ImGui_CreateInteractablePopup();
 
             void LoadCallback();
             void UpdataLightGizmo();
@@ -89,6 +91,7 @@ namespace application
             palette::CameraPalette& cp = palette::CameraPalette::SingleInstance();
             palette::LightPalette& lp = palette::LightPalette::SingleInstance();
             palette::ParticlePalette& pp = palette::ParticlePalette::SingleInstance();
+            palette::InteractablePalette& ip = palette::InteractablePalette::SingleInstance();
 
             EditorCamera& ec = EditorCamera::GetSingletonInstance();
             LightData* directionalLight = nullptr;
@@ -97,6 +100,7 @@ namespace application
             int unitCurrentButton = -1;
             int ornamentCurrentButton = -1;
             int lightCurrentButton = -1;
+            int interactableCurrentButton = -1;
         };
     }
 }

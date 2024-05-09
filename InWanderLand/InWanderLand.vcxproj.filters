@@ -547,6 +547,15 @@
     <Filter Include="Contents\ContentsObserver\Observee">
       <UniqueIdentifier>{6be041a3-b108-49d6-9631-62275bd6bb8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Palette\EditorInstance\InteractableInstance">
+      <UniqueIdentifier>{0afaa9be-4e69-4dfd-8858-cdffa6aa3f8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\PaletteBrush\InteractableBrush">
+      <UniqueIdentifier>{409a5934-e63b-400e-b552-e5166348c10a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Palette\List\InteractablePalette">
+      <UniqueIdentifier>{1cd18188-5b83-48c6-aeff-7a45b2733fc0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1396,6 +1405,21 @@
     <ClInclude Include="Condition_TutorialMode.h">
       <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
     </ClInclude>
+    <ClInclude Include="Interactable_TemplateData.h">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="InteractableData.h">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="InteractableEditorInstance.h">
+      <Filter>Editor\Palette\EditorInstance\InteractableInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="InteractableBrush.h">
+      <Filter>Editor\Palette\PaletteBrush\InteractableBrush</Filter>
+    </ClInclude>
+    <ClInclude Include="InteractablePalette.h">
+      <Filter>Editor\Palette\List\InteractablePalette</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2124,6 +2148,21 @@
     </ClCompile>
     <ClCompile Include="Condition_TutorialMode.cpp">
       <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_TemplateData.cpp">
+      <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="InteractableData.cpp">
+      <Filter>Editor\DataSystem\EditableData\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="InteractableEditorInstance.cpp">
+      <Filter>Editor\Palette\EditorInstance\InteractableInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="InteractableBrush.cpp">
+      <Filter>Editor\Palette\PaletteBrush\InteractableBrush</Filter>
+    </ClCompile>
+    <ClCompile Include="InteractablePalette.cpp">
+      <Filter>Editor\Palette\List\InteractablePalette</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

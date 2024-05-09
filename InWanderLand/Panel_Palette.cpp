@@ -9,7 +9,6 @@
 #include "WavePalette.h"
 #include "RegionPalette.h"
 #include "EditorLayer.h"
-#include "UnitBrush.h"
 #include "InstanceManager.h"
 #include "EditorCameraManager.h"
 #include "EditorCamera.h"
@@ -17,6 +16,7 @@
 #include "TransformEditCommand.h"
 #include "EditableDataList.h"
 #include "ParticleTool_Manager.h"
+#include "BrushList.h"
 
 #include "YunutyEngine.h"
 #include "WanderUtils.h"
@@ -25,6 +25,7 @@
 
 const int bufferSize = 255;
 static char* unitNameBuffer = new char[bufferSize];
+static char* interatableNameBuffer = new char[bufferSize];
 
 namespace application
 {
@@ -38,6 +39,7 @@ namespace application
 		void PalettePanel::Initialize()
 		{
 			memset(unitNameBuffer, 0, bufferSize);
+			memset(interatableNameBuffer, 0, bufferSize);
 
 			currentPalette = pm.GetCurrentPalette();
 
@@ -142,6 +144,13 @@ namespace application
 					ImGui::EndTabItem();
 				}
 
+				if (ImGui::BeginTabItem("Interactable"))
+				{
+					ChangePalette(&ip);
+					ImGui_BeginInteractablePalette();
+					ImGui::EndTabItem();
+				}
+
 				ImGui::EndTabBar();
 			}
 
@@ -222,6 +231,10 @@ namespace application
 			{
 				ImGui::TabBarQueueFocus(tab_bar, &tab_bar->Tabs[7]);
 			}
+			else if (tabName == "Interactable")
+			{
+				ImGui::TabBarQueueFocus(tab_bar, &tab_bar->Tabs[8]);
+			}
 		}
 
 		void PalettePanel::ChangeDirectionalLight(LightData* light)
@@ -293,12 +306,8 @@ namespace application
 						currentPalette->SetAsSelectMode(true);
 
 						if (currentPalette == &up)
-						{
-							if (unitCurrentButton != -1)
-							{
-								unitCurrentButton = -1;
-							}
-
+						{	
+							unitCurrentButton = -1;
 							up.SelectUnitTemplateData(nullptr);
 						}
 						else if (currentPalette == &op)
@@ -314,6 +323,11 @@ namespace application
 						else if (currentPalette == &pp)
 						{
 							pp.InitParticleData();
+						}
+						else if (currentPalette == &ip)
+						{
+							interactableCurrentButton = -1;
+							ip.SelectInteractableTemplateData(nullptr);
 						}
 					}
 				}
@@ -377,6 +391,56 @@ namespace application
 								{
 									ImGui::CloseCurrentPopup();
 									editor::imgui::CloseMessageBox("Delete Unit Template");
+									editor::EditorLayer::SetInputControl(true);
+								}
+							}, 500);
+					}
+					else if (currentPalette == &ip && ip.GetSelections().empty() && interactableCurrentButton != -1)
+					{
+						editor::EditorLayer::SetInputControl(false);
+						editor::imgui::ShowMessageBox("Delete Interactalbe Template", [&]()
+							{
+								editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+								ImGui::Separator();
+
+								ImGui::SetNextItemWidth(-1);
+								ImGui::Text(("Are you sure you want to delete the \"" + tdm.GetDataList(DataType::InteractableData)[interactableCurrentButton]->GetDataKey() + "\"?").c_str());
+
+								ImGui::Separator();
+
+								if (ImGui::Button("Delete"))
+								{
+									auto tKey = tdm.GetDataList(DataType::InteractableData)[interactableCurrentButton]->GetDataKey();
+									for (auto& interactable : InstanceManager::GetSingletonInstance().GetList<InteractableData>())
+									{
+										if (interactable->pod.templateData->GetDataKey() == tKey)
+										{
+											auto editorInstance = interactable->ApplyAsPaletteInstance();
+											if (editorInstance)
+											{
+												Scene::getCurrentScene()->DestroyGameObject(editorInstance->GetGameObject());
+											}
+
+											InstanceManager::GetSingletonInstance().DeleteInstance(interactable->GetUUID());
+										}
+									}
+
+									ip.SetAsSelectMode(true);
+									tdm.DeleteTemplateData(tKey);
+									interactableCurrentButton = -1;
+									ip.SelectInteractableTemplateData(nullptr);
+
+									ImGui::CloseCurrentPopup();
+									editor::imgui::CloseMessageBox("Delete Interactalbe Template");
+									editor::EditorLayer::SetInputControl(true);
+								}
+								ImGui::SameLine();
+
+								if (ImGui::Button("Cancel"))
+								{
+									ImGui::CloseCurrentPopup();
+									editor::imgui::CloseMessageBox("Delete Interactalbe Template");
 									editor::EditorLayer::SetInputControl(true);
 								}
 							}, 500);
@@ -1263,6 +1327,7 @@ namespace application
 							cam->pod.scale.x = scal.x;
 							cam->pod.scale.y = scal.y;
 							cam->pod.scale.z = scal.z;
+							cam->ApplyAsPaletteInstance();
 						}
 					}
 
@@ -1543,6 +1608,69 @@ namespace application
 			}
 		}
 
+		void PalettePanel::ImGui_BeginInteractablePalette()
+		{
+			imgui::SmartStyleVar spacing(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f));
+			imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+
+			int countIdx = 0;
+
+			if (imgui::BeginSection_1Col(countIdx, "Interactable List", ImGui::GetContentRegionAvail().x))
+			{
+				auto uSize = tdm.GetDataList(DataType::InteractableData).size();
+
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+
+				for (int i = 0; i < uSize + 1; i++)
+				{
+					imgui::SmartStyleVar textAlign(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f, 0.5f));
+					if (i == uSize)
+					{
+						if (ImGui::Selectable("+", false))
+						{
+							if (interactableCurrentButton != -1)
+							{
+								interactableCurrentButton = -1;
+								ip.SelectInteractableTemplateData(nullptr);
+								ip.SetAsSelectMode(true);
+							}
+							ImGui_CreateInteractablePopup();
+							EditorLayer::SetInputControl(false);
+						}
+					}
+					else
+					{
+						if (ImGui::Selectable(static_cast<Interactable_TemplateData*>(tdm.GetDataList(DataType::InteractableData)[i])->GetDataKey().c_str(), interactableCurrentButton == i))
+						{
+							if (interactableCurrentButton != -1)
+							{
+								if (interactableCurrentButton == i)
+								{
+									interactableCurrentButton = -1;
+									ip.SelectInteractableTemplateData(nullptr);
+									ip.SetAsSelectMode(true);
+								}
+								else
+								{
+									interactableCurrentButton = i;
+									ip.SelectInteractableTemplateData(static_cast<Interactable_TemplateData*>(tdm.GetDataList(DataType::InteractableData)[i]));
+									ip.SetAsSelectMode(false);
+								}
+							}
+							else
+							{
+								interactableCurrentButton = i;
+								ip.SelectInteractableTemplateData(static_cast<Interactable_TemplateData*>(tdm.GetDataList(DataType::InteractableData)[i]));
+								ip.SetAsSelectMode(false);
+							}
+						}
+					}
+				}
+				imgui::EndSection();
+			}
+		}
+
 		bool PalettePanel::ImGui_CreateUnitPopup()
 		{
 			bool returnVal = false;
@@ -1709,11 +1837,104 @@ namespace application
 			return returnVal;
 		}
 
+		bool PalettePanel::ImGui_CreateInteractablePopup()
+		{
+			bool returnVal = false;
+			imgui::ShowMessageBox("Create Interactable", [this, &returnVal]()
+				{
+					imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::SetNextItemWidth(-1);
+					ImGui::InputTextWithHint("##new_interactable_name", "Interactable Name", interatableNameBuffer, bufferSize);
+
+					ImGui::Separator();
+
+					static std::vector<std::string> selections = std::vector<std::string>();
+					static std::string fbxName = "None";
+					std::string currentFBX = fbxName;
+
+					selections.resize(0);
+					for (auto& each : ResourceManager::GetSingletonInstance().GetStaticFBXList())
+					{
+						selections.push_back(each);
+					}
+					for (auto& each : ResourceManager::GetSingletonInstance().GetSkinnedFBXList())
+					{
+						selections.push_back(each);
+					}
+
+					std::sort(selections.begin(), selections.end());
+
+					ImGui::SetNextItemWidth(-1);
+					if (ImGui::BeginCombo("##fbxInteractableCombo", fbxName.c_str()))
+					{
+						for (int i = 0; i < selections.size(); i++)
+						{
+							const bool is_selected = (currentFBX == selections[i]);
+							if (ImGui::Selectable(selections[i].c_str(), is_selected))
+							{
+								currentFBX = selections[i];
+								fbxName = currentFBX;
+							}
+
+							if (is_selected)
+							{
+								ImGui::SetItemDefaultFocus();
+							}
+						}
+						ImGui::EndCombo();
+					}
+
+					ImGui::Separator();
+
+					if (ImGui::Button("Create"))
+					{
+						if (*interatableNameBuffer != '\0' && fbxName != "None")
+						{
+							auto keyName = std::string(interatableNameBuffer);
+							if (tdm.CreateTemplateData<Interactable_TemplateData>(keyName) != nullptr)
+							{
+								auto tid = tdm.GetTemplateData(keyName);
+								tid->SetDataResourceName(fbxName);
+								palette::InteractableBrush::Instance().CreateBrush(keyName);
+
+								interactableCurrentButton = tdm.GetDataList(DataType::InteractableData).size() - 1;
+								ip.SelectInteractableTemplateData(static_cast<Interactable_TemplateData*>(tid));
+								ip.SetAsSelectMode(false);
+
+								memset(interatableNameBuffer, 0, bufferSize);
+								fbxName = "None";
+								returnVal = true;
+								ImGui::CloseCurrentPopup();
+								imgui::CloseMessageBox("Create Interactable");
+								EditorLayer::SetInputControl(true);
+							}
+							else
+							{
+								memset(interatableNameBuffer, 0, bufferSize);
+							}
+						}
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						memset(interatableNameBuffer, 0, bufferSize);
+						fbxName = "None";
+						ImGui::CloseCurrentPopup();
+						imgui::CloseMessageBox("Create Interactable");
+						EditorLayer::SetInputControl(true);
+					}
+				}, 600);
+			return returnVal;
+		}
+
 		void PalettePanel::LoadCallback()
 		{
 			unitCurrentButton = -1;
 			ornamentCurrentButton = -1;
 			lightCurrentButton = -1;
+			interactableCurrentButton = -1;
 
 			tp.SetAsSelectMode(true);
 			up.SetAsSelectMode(true);
@@ -1723,6 +1944,7 @@ namespace application
 			cp.SetAsSelectMode(true);
 			lp.SetAsSelectMode(true);
 			pp.SetAsSelectMode(true);
+			ip.SetAsSelectMode(true);
 		}
 
 		void PalettePanel::UpdataLightGizmo()
