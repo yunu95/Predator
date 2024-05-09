@@ -216,10 +216,7 @@ void RenderSystem::Render()
 	RenderParticle();
 	RenderBackBuffer();
 
-	//SkyBoxPass::Instance.Get().Render();
-	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShader(nullptr, nullptr, 0);
-	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->GSSetShader(nullptr, nullptr, 0);
-	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->VSSetShader(nullptr, nullptr, 0);
+
 	RenderUI();
 
 	// 디퍼드 정보 출력
@@ -489,6 +486,8 @@ void RenderSystem::RenderBackBuffer()
 {
 	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
 
+	
+
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1,
 		ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
 		ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
@@ -511,6 +510,12 @@ void RenderSystem::RenderUI()
 {
     //this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied(), nullptr, nullptr, nullptr, [=]()
     bool preprocessed = !preProcessingUiImages.empty();
+
+	if (preprocessed)
+	{
+		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	}
+
     for (auto each : preProcessingUiImages)
     {
         each->PreProcessTexture();
