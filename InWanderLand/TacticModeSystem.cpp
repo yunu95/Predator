@@ -20,6 +20,9 @@ void TacticModeSystem::OnEnable()
 void TacticModeSystem::Start()
 {
     SetCurrentGauge(m_maxGauge);
+
+    isCoolTime = false;
+    SetCurrentCoolTimeElapsed(0.0f);
 }
 
 void TacticModeSystem::Update()
@@ -50,17 +53,17 @@ void TacticModeSystem::Update()
 
 void TacticModeSystem::PlayFunction()
 {
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
+    this->SetActive(true);
+    if (isOncePaused)
+    {
+        Start();
+    }
 }
 
 void TacticModeSystem::StopFunction()
 {
-	m_currentWaveUnits.clear();
-	playerComponentMap.clear();
+    m_currentWaveUnits.clear();
+    playerComponentMap.clear();
 
     for (int i = 0; i < sequenceQueue.size(); i++)
     {
@@ -75,7 +78,7 @@ void TacticModeSystem::StopFunction()
     isCoolTime = false;
     m_engageCoolTimeDuration = 5.0f;
     m_engageCoolTimeElapsed = 0.0f;
-    
+
     isTacticModeOperating = false;
     isTacticOrderPerforming = false;
     currentSelectedUnit = nullptr;
@@ -86,22 +89,24 @@ void TacticModeSystem::StopFunction()
 
 void TacticModeSystem::ToggleRequested(InputManager::SelectedSerialNumber currentSelectedNum)
 {
-    if ( (isTacticModeOperating && isTacticOrderPerforming) == false && !isCoolTime)
+    if (!isTacticOrderPerforming)       /// 1. 명령 실행 중이 아니고,
     {
-        /// 전술모드 진입
-        EngageTacticMode();
-        SetTacticModeRightClickFunction(currentSelectedNum);
-    }
-    else
-    {
-        ExitTacticMode();
+        if (!isTacticModeOperating)     /// 2. 명령 입력 중이 아니면 진입.
+        {
+			EngageTacticMode();
+			SetTacticModeRightClickFunction(currentSelectedNum);
+        }
+        else                            /// 3. 명령 입력 중이라면 나가기.
+        {
+			ExitTacticMode();
+        }
     }
 }
 
 void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum)
 {
     if (currentSelectedNum == 0)
-        currentSelectedNum = InputManager::One;
+        currentSelectedNum = InputManager::SelectedSerialNumber::One;
 
     currentSelectedUnit = playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second;
     if (m_currentGauge > 0)
@@ -205,11 +210,8 @@ void TacticModeSystem::ExitTacticMode()
 
     /// 플레이어 및 적군의 시간을 Resume합니다. 
     /// 이 때 플레이어는 입력된 명령을 실제로 실행하고, 적군 유닛은 시간이 멈춘 듯이 설정해줍니다.
-	for (auto each : playerComponentMap)
-	{
-		//each.second->SetUnitLocalTimeScale(1.0f);
-  //      each.second->GetGameObject()->GetComponent<Dotween>()->AdjustDotweenTimeDierectly(1.0f);
-
+    for (auto each : playerComponentMap)
+    {
         LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(each.second, 1.0f);
         LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(each.second->GetGameObject()->GetComponent<Dotween>(), 1.0f);
         each.second->GetGameObject()->GetComponent<PlayerSkillSystem>()->SetSkillRequirmentLocalTimeScale(1.0f);
@@ -227,14 +229,15 @@ void TacticModeSystem::ExitTacticMode()
     if (!sequenceQueue.empty())
     {
         isTacticOrderPerforming = true;
-		m_currentOperatingWave->ResumeWaveElapsedTime();
         m_rtsCam->SetTarget(sequenceQueue.front()->GetGameObject());
         sequenceQueue.front()->PermitTacticAction();
         sequenceQueue.pop();
     }
     else
     {
-		SetCurrentCoolTimeElapsed(0.0f);
+		isTacticOrderPerforming = false;
+		m_currentOperatingWave->ResumeWaveElapsedTime();
+        SetCurrentCoolTimeElapsed(0.0f);
 		isCoolTime = true;
     }
 }
@@ -262,8 +265,16 @@ bool TacticModeSystem::IsTacticModeCoolTime() const
 void TacticModeSystem::SetCurrentCoolTimeElapsed(float elapsed)
 {
     m_engageCoolTimeElapsed = elapsed;
-    UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Overlay)->adjuster->SetTargetFloat(elapsed / m_engageCoolTimeDuration);
-    UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Cooltime_Number)->SetNumber(m_engageCoolTimeDuration - elapsed);
+    if (isCoolTime)
+    {
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Overlay)->adjuster->SetTargetFloat(elapsed / m_engageCoolTimeDuration);
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Cooltime_Number)->SetNumber(m_engageCoolTimeDuration - elapsed);
+    }
+    else
+    {
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Overlay)->adjuster->SetTargetFloat(1);
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Cooltime_Number)->DisableElement();
+    }
 }
 
 float TacticModeSystem::GetLeftCoolTime()
@@ -287,11 +298,11 @@ void TacticModeSystem::ReportTacticActionFinished()
 		SetCurrentCoolTimeElapsed(0.0f);
 		isCoolTime = true;
         isTacticOrderPerforming = false;
-		LocalTimeEntityManager::Instance().ReportTacticModeEnded();
-		for (auto each : m_currentWaveUnits)
-		{
-			each->EnemyActionOnTacticModeEnded();
-		}
+        LocalTimeEntityManager::Instance().ReportTacticModeEnded();
+        for (auto each : m_currentWaveUnits)
+        {
+            each->EnemyActionOnTacticModeEnded();
+        }
     }
     else
     {

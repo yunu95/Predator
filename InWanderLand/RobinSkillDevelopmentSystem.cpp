@@ -7,9 +7,9 @@
 
 void RobinSkillDevelopmentSystem::Start()
 {
-	m_passiveComponent->isActivated = false;
+	m_passiveComponent->isActivated = true;
 	WarriorSkillSystem* warriorSkillSys = static_cast<WarriorSkillSystem*>(m_ownerSkillSystem);
-
+	
 	///// 등록된 버튼들을 설정해주자
 	//// 1. 패시브 활성화
 	//m_topNodeSkillButton[0]->SetButtonClickFunction([=]()

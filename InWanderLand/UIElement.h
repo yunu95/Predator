@@ -61,6 +61,7 @@ public:
     //virtual void StopFunction() override;
 
 private:
+    UIEnumID duplicateParentEnumID{ UIEnumID::None };
     bool numberSetBefore = false;
     // 0~9까지의 숫자 이미지를 저장하는 배열
     array<yunuGI::ITexture*, 10>* digitFont{ };

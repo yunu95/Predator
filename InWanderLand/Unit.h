@@ -87,13 +87,13 @@ public:
         yunuGI::IAnimation* m_skillFourAnimation;
     };
 
-	TimerComponent* knockBackTimer;
-	Dotween* dotween;
-	yunuGI::IAnimation* m_currentAnimation{ nullptr };
-	yunutyEngine::graphics::Animator* m_animatorComponent;
-	NavigationAgent* m_navAgentComponent;
-	BurnEffect* m_burnEffect;
-	PlayerSkillSystem* m_playerSkillSystem;
+    TimerComponent* knockBackTimer;
+    Dotween* dotween;
+    yunuGI::IAnimation* m_currentAnimation{ nullptr };
+    yunutyEngine::graphics::Animator* m_animatorComponent;
+    NavigationAgent* m_navAgentComponent;
+    BurnEffect* m_burnEffect;
+    PlayerSkillSystem* m_playerSkillSystem;
 
     Unit* m_currentTargetUnit;					// Attack이나 Chase 때 사용할 적군  오브젝트
     //Vector3d startPosition;
@@ -210,7 +210,10 @@ public:
     bool isPermittedToTacticAction{ false };
 
 private:
+    // 주로 개별 유닛의 상태를 나타내는 UI
     weak_ptr<UIElement> unitStatusUI;
+    // 초상화까지 있는 플레이어측 캐릭터 UI
+    UIElement* unitStatusPortraitUI{ nullptr };
     /// 유닛이 속해있는 field
     NavigationField* m_unitNavField;
 
@@ -232,23 +235,23 @@ private:
     void WaveMotionEngage();
     void ResurrectEngage();
 
-	void IdleUpdate();
-	void MoveUpdate();
-	void OffsetMoveUpdate();
-	void AttackMoveUpdate();
-	void ChaseUpdate();
-	void AttackUpdate();
-	void SkillUpdate();
-	void DeathUpdate();
-	void WaveStartUpdate();
-	void WaveMotionUpdate();
-	void ResurrectUpdate();
-	
-	void ChangeAnimation(yunuGI::IAnimation* p_anim);
-	void CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation);
-	
-	void ReportUnitDeath();												// this 유닛이 죽었다는 정보를 전달
-	void IdentifiedOpponentDeath(Unit* p_unit);		// 상대 유닛이 죽었을 경우 처리할 내용을 담은 함수
+    void IdleUpdate();
+    void MoveUpdate();
+    void OffsetMoveUpdate();
+    void AttackMoveUpdate();
+    void ChaseUpdate();
+    void AttackUpdate();
+    void SkillUpdate();
+    void DeathUpdate();
+    void WaveStartUpdate();
+    void WaveMotionUpdate();
+    void ResurrectUpdate();
+
+    void ChangeAnimation(yunuGI::IAnimation* p_anim);
+    void CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation);
+
+    void ReportUnitDeath();												// this 유닛이 죽었다는 정보를 전달
+    void IdentifiedOpponentDeath(Unit* p_unit);		// 상대 유닛이 죽었을 경우 처리할 내용을 담은 함수
 
     void DetermineHitDamage(float p_onceCalculatedDmg);					// 피격유닛이 받는 최종 데미지 계산
 
@@ -262,8 +265,8 @@ public:
     Vector3d m_currentSkillPosition;
 
     BaseUnitAnimationStruct unitAnimations;
-    float animationLerpDuration = 1.0f;
-    float animationTransitionSpeed = 3.0f;
+    float animationLerpDuration = 0.1f;
+    float animationTransitionSpeed = 1.0f;
     bool isAttackAnimationOperating{ false };
 
     virtual void OnEnable() override;
@@ -319,6 +322,8 @@ public:
     void MakeUnitParalysisState();
     void SetUnitStateIdle();
 
+    UIElement* GetBarBuffIcon(StatusEffect::StatusEffectEnum uiEnumID);
+    UIElement* GetPortraitBuffIcon(StatusEffect::StatusEffectEnum uiEnumID);
     void ReportStatusEffectApplied(StatusEffect::StatusEffectEnum p_effectType);
     void ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType);
 
@@ -345,13 +350,13 @@ public:
     void SetCurrentMovePosition(Vector3d p_pos);
     void SetWaveStartPosition(Vector3d p_pos);
 
-	void PushMoveFunctionToTacticQueue(Vector3d p_pos);
-	void PushAttackMoveFunctionToTacticQueue(Vector3d p_pos);
-	void PushAttackMoveFunctionToTacticQueue(Vector3d p_pos, Unit* p_selectedUnit);
-	void PushSkillFunctionToTacticQueue(SkillEnum p_skillNum, Vector3d p_pos);
-	void ReportTacticModeEngaged();
-	
-	bool IsTacticModeQueueEmpty() const;
+    void PushMoveFunctionToTacticQueue(Vector3d p_pos);
+    void PushAttackMoveFunctionToTacticQueue(Vector3d p_pos);
+    void PushAttackMoveFunctionToTacticQueue(Vector3d p_pos, Unit* p_selectedUnit);
+    void PushSkillFunctionToTacticQueue(SkillEnum p_skillNum, Vector3d p_pos);
+    void ReportTacticModeEngaged();
+
+    bool IsTacticModeQueueEmpty() const;
 
     void ChangeUnitStatRandomly();
 
@@ -375,21 +380,21 @@ public:
 
     void ResetUnitMembers();
 
-	void SetUnitLocalTimeScale(float p_scale);
-	
-	void EnemyActionOnTacticModeEngaged();
-	void EnemyActionOnTacticModeEnded();
+    void SetUnitLocalTimeScale(float p_scale);
 
-	void SetCurrentAnimationSpeed(float p_speed);
+    void EnemyActionOnTacticModeEngaged();
+    void EnemyActionOnTacticModeEnded();
 
-	bool IsAllExtraPlayerUnitDead();
-	bool CheckEnemyStoppedByTacticMode() const;
+    void SetCurrentAnimationSpeed(float p_speed);
+
+    bool IsAllExtraPlayerUnitDead();
+    bool CheckEnemyStoppedByTacticMode() const;
 
 
-	std::function<void()> returnToPoolFunction{ nullptr };
-	std::function<void()> deathEngageFunction{ nullptr };
-	DummyComponent* m_dummyCom;
-	int stageNumber;
+    std::function<void()> returnToPoolFunction{ nullptr };
+    std::function<void()> deathEngageFunction{ nullptr };
+    DummyComponent* m_dummyCom;
+    int stageNumber;
 
     std::vector<std::function<void()>> OnCreated;
     std::vector<std::function<void()>> OnDeath;

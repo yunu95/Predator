@@ -126,6 +126,11 @@ void UIManager::ShowComboObjectives()
     uisByEnumID[UIEnumID::Ingame_Combo_Description1]->EnableElement();
     uisByEnumID[UIEnumID::Ingame_Combo_Description2]->EnableElement();
     uisByEnumID[UIEnumID::Ingame_Combo_Description3]->EnableElement();
+    for (auto i = 0; i < 3; i++)
+    {
+        uisByEnumID[comboUnFinishedImgs[i]]->EnableElement();
+        uisByEnumID[comboFinishedImgs[i]]->DisableElement();
+    }
 }
 void UIManager::HideComboObjectvies()
 {
@@ -196,6 +201,8 @@ weak_ptr<UIElement> UIManager::DuplicateUIElement(UIElement* ui)
         else
         {
             uiElement = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<UIElement>();
+
+            uiElement->duplicateParentEnumID = (UIEnumID)ui->importedUIData.enumID;
         }
 
         if (!ImportDealWithSpecialCases(eachData.second, uiElement))
@@ -296,61 +303,6 @@ void UIManager::SetUIDataWithIndex(int index, const JsonUIData& uiData)
         uidatasByIndex[index] = uiData;
     }
 }
-UIElement* UIManager::GetBuffIcon(Unit* owningUnit, StatusEffect::StatusEffectEnum uiEnumID)
-{
-    if (!owningUnit->unitStatusUI.expired())
-    {
-        switch (uiEnumID)
-        {
-        case StatusEffect::StatusEffectEnum::Bleeding: return owningUnit->unitStatusUI.lock()->localUIsByEnumID.at(UIEnumID::EnemyStatus_Buff_Bleeding);
-        case StatusEffect::StatusEffectEnum::Blinding: return owningUnit->unitStatusUI.lock()->localUIsByEnumID.at(UIEnumID::EnemyStatus_Buff_Blinding);
-        case StatusEffect::StatusEffectEnum::Paralysis: return owningUnit->unitStatusUI.lock()->localUIsByEnumID.at(UIEnumID::EnemyStatus_Buff_Paralysis);
-        case StatusEffect::StatusEffectEnum::KnockBack: return owningUnit->unitStatusUI.lock()->localUIsByEnumID.at(UIEnumID::EnemyStatus_Buff_KnockBack);
-        case StatusEffect::StatusEffectEnum::Taunted: return owningUnit->unitStatusUI.lock()->localUIsByEnumID.at(UIEnumID::EnemyStatus_Buff_Taunted);
-        }
-    }
-    switch (owningUnit->GetUnitType())
-    {
-    case Unit::UnitType::Warrior:
-    {
-        switch (uiEnumID)
-        {
-        case StatusEffect::StatusEffectEnum::Bleeding: return GetUIElementByEnum(UIEnumID::Portrait_Robin_Buff_Bleeding);
-        case StatusEffect::StatusEffectEnum::Blinding: return GetUIElementByEnum(UIEnumID::Portrait_Robin_Buff_Blinding);
-        case StatusEffect::StatusEffectEnum::Paralysis: return GetUIElementByEnum(UIEnumID::Portrait_Robin_Buff_Paralysis);
-        case StatusEffect::StatusEffectEnum::KnockBack: return GetUIElementByEnum(UIEnumID::Portrait_Robin_Buff_KnockBack);
-        case StatusEffect::StatusEffectEnum::Taunted: return GetUIElementByEnum(UIEnumID::Portrait_Robin_Buff_Taunted);
-        default: assert(false);
-        }
-    }
-    case Unit::UnitType::Magician:
-    {
-        switch (uiEnumID)
-        {
-        case StatusEffect::StatusEffectEnum::Bleeding: return GetUIElementByEnum(UIEnumID::Portrait_Ursula_Buff_Bleeding);
-        case StatusEffect::StatusEffectEnum::Blinding: return GetUIElementByEnum(UIEnumID::Portrait_Ursula_Buff_Blinding);
-        case StatusEffect::StatusEffectEnum::Paralysis: return GetUIElementByEnum(UIEnumID::Portrait_Ursula_Buff_Paralysis);
-        case StatusEffect::StatusEffectEnum::KnockBack: return GetUIElementByEnum(UIEnumID::Portrait_Ursula_Buff_KnockBack);
-        case StatusEffect::StatusEffectEnum::Taunted: return GetUIElementByEnum(UIEnumID::Portrait_Ursula_Buff_Taunted);
-        default: assert(false);
-        }
-    }
-    case Unit::UnitType::Healer:
-    {
-        switch (uiEnumID)
-        {
-        case StatusEffect::StatusEffectEnum::Bleeding: return GetUIElementByEnum(UIEnumID::Portrait_Hansel_Buff_Bleeding);
-        case StatusEffect::StatusEffectEnum::Blinding: return GetUIElementByEnum(UIEnumID::Portrait_Hansel_Buff_Blinding);
-        case StatusEffect::StatusEffectEnum::Paralysis: return GetUIElementByEnum(UIEnumID::Portrait_Hansel_Buff_Paralysis);
-        case StatusEffect::StatusEffectEnum::KnockBack: return GetUIElementByEnum(UIEnumID::Portrait_Hansel_Buff_KnockBack);
-        case StatusEffect::StatusEffectEnum::Taunted: return GetUIElementByEnum(UIEnumID::Portrait_Hansel_Buff_Taunted);
-        default: assert(false);
-        }
-    }
-    }
-    return nullptr;
-}
-
 void UIManager::Update()
 {
     // 마우스 커서 조작
@@ -904,7 +856,10 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         {
             if (auto childElement = child->GetComponent<UIElement>())
             {
+                element->localUIsByEnumID[(UIEnumID)childElement->importedUIData.enumID] = childElement;
+                element->localUIsByIndex[childElement->importedUIData.uiIndex] = childElement;
                 element->localUIdatasByIndex[childElement->importedUIData.uiIndex] = childElement->importedUIData;
+                childElement->duplicateParentEnumID = (UIEnumID)uiData.enumID;
             }
         }
     }
@@ -919,69 +874,6 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
     SetUIElementWithIndex(uiData.uiIndex, element);
     switch ((UIEnumID)uiData.enumID)
     {
-    case UIEnumID::Portrait_Robin:
-        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
-        element->button->AddButtonClickFunction([=]()
-            {
-                InputManager::Instance().SelectPlayer(Unit::UnitType::Warrior);
-            });
-        break;
-    case UIEnumID::Portrait_Ursula:
-        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
-        element->button->AddButtonClickFunction([=]()
-            {
-                InputManager::Instance().SelectPlayer(Unit::UnitType::Magician);
-            });
-        break;
-    case UIEnumID::Portrait_Hansel:
-        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
-        element->button->AddButtonClickFunction([=]()
-            {
-                InputManager::Instance().SelectPlayer(Unit::UnitType::Healer);
-            });
-        break;
-    case UIEnumID::Skill_Use_Q_Robin:
-        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
-        element->button->AddButtonClickFunction([=]()
-            {
-                InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Warrior);
-            });
-        break;
-    case UIEnumID::Skill_Use_W_Robin:
-        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
-        element->button->AddButtonClickFunction([=]()
-            {
-                InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Warrior);
-            });
-        break;
-    case UIEnumID::Skill_Use_Q_Ursula:
-        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
-        element->button->AddButtonClickFunction([=]()
-            {
-                InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Magician);
-            });
-        break;
-    case UIEnumID::Skill_Use_W_Ursula:
-        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
-        element->button->AddButtonClickFunction([=]()
-            {
-                InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Magician);
-            });
-        break;
-    case UIEnumID::Skill_Use_Q_HANSEL:
-        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
-        element->button->AddButtonClickFunction([=]()
-            {
-                InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Healer);
-            });
-        break;
-    case UIEnumID::Skill_Use_W_HANSEL:
-        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
-        element->button->AddButtonClickFunction([=]()
-            {
-                InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Healer);
-            });
-        break;
     case UIEnumID::Toggle_TacticMode:
         ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
         element->button->AddButtonClickFunction([=]()
@@ -1045,6 +937,78 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
 {
     switch ((UIEnumID)uiData.enumID)
     {
+    case UIEnumID::CharInfo_Portrait:
+        ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
+        switch (element->duplicateParentEnumID)
+        {
+        case UIEnumID::CharInfo_Robin:
+            element->button->AddButtonClickFunction([=]()
+                {
+                    InputManager::Instance().SelectPlayer(Unit::UnitType::Warrior);
+                });
+            break;
+        case UIEnumID::CharInfo_Ursula:
+            element->button->AddButtonClickFunction([=]()
+                {
+                    InputManager::Instance().SelectPlayer(Unit::UnitType::Magician);
+                });
+            break;
+        case UIEnumID::CharInfo_Hansel:
+            element->button->AddButtonClickFunction([=]()
+                {
+                    InputManager::Instance().SelectPlayer(Unit::UnitType::Healer);
+                });
+            break;
+        }
+        break;
+    case UIEnumID::CharInfo_Skill_Use_Q:
+        ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
+        switch (element->duplicateParentEnumID)
+        {
+        case UIEnumID::CharInfo_Robin:
+            element->button->AddButtonClickFunction([=]()
+                {
+                    InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Warrior);
+                });
+            break;
+        case UIEnumID::CharInfo_Ursula:
+            element->button->AddButtonClickFunction([=]()
+                {
+                    InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Magician);
+                });
+            break;
+        case UIEnumID::CharInfo_Hansel:
+            element->button->AddButtonClickFunction([=]()
+                {
+                    InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Healer);
+                });
+            break;
+        }
+        break;
+    case UIEnumID::CharInfo_Skill_Use_W:
+        ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
+        switch (element->duplicateParentEnumID)
+        {
+        case UIEnumID::CharInfo_Robin:
+            element->button->AddButtonClickFunction([=]()
+                {
+                    InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Warrior);
+                });
+            break;
+        case UIEnumID::CharInfo_Ursula:
+            element->button->AddButtonClickFunction([=]()
+                {
+                    InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Magician);
+                });
+            break;
+        case UIEnumID::CharInfo_Hansel:
+            element->button->AddButtonClickFunction([=]()
+                {
+                    InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Healer);
+                });
+            break;
+        }
+        break;
     default:
         return false;
         break;

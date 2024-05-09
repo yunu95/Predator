@@ -159,19 +159,25 @@ namespace application
 				{
 					if (each->id == uuid)
 					{
+						if (instanceData["1_Post"]["POD"].contains("templateData") && !UUIDManager::GetSingletonInstance().GetPointerFromUUID<void*>(String_To_UUID(instanceData["1_Post"]["POD"]["templateData"])))
+						{
+							delete each;
+							continue;
+						}
+
 						if (!each->PostDecoding(instanceData["1_Post"]))
 						{
 							Clear();
 							return false;
 						}
 
-						list[uuid] = std::unique_ptr<IEditableData>(each);
+						list[uuid] = std::shared_ptr<IEditableData>(each);
 						tdMap[uuid] = each->GetTemplateData();
-						listBeforeMatching.erase(each);
 						break;
 					}
 				}
 			}
+			listBeforeMatching.clear();
 
 			return true;
 		}

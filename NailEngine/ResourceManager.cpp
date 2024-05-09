@@ -1045,7 +1045,7 @@ void ResourceManager::CreateDefaultMaterial()
 		material->SetTexture(yunuGI::Texture_Type::Temp2,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(LIGHT_SHADOW)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp3,
-			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)]->GetRTTexture(static_cast<int>(UP4x4_0)).get());
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::UP2X2_2)]->GetRTTexture(static_cast<int>(UP2X2_2)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp4,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(UTIL)).get());
 		material->SetTexture(yunuGI::Texture_Type::Temp5,

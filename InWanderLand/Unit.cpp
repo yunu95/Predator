@@ -31,6 +31,21 @@ void Unit::Start()
     unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Cells)->adjuster->SetTargetFloat(m_maxHealthPoint);
     unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Number_Max)->SetNumber(m_maxHealthPoint);
 
+    switch (m_unitType)
+    {
+    case Unit::UnitType::Warrior:
+        unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin);
+        break;
+    case Unit::UnitType::Magician:
+        unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula);
+        break;
+    case Unit::UnitType::Healer:
+        unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel);
+        break;
+    default:
+        break;
+    }
+
     m_initialAutoAttackDamage = m_autoAttackDamage;
     m_bulletSpeed = 5.1f;
     chaseUpdateDelay = 0.1f;
@@ -196,11 +211,11 @@ void Unit::Start()
                 if (m_currentTargetUnit != nullptr && currentOrder == UnitState::Attack)
                 {
                     atkSys->Attack(m_currentTargetUnit, m_attackOffset);
-					
+
                     if (isPermittedToTacticAction)
-					{
-						TacticModeSystem::Instance().ReportTacticActionFinished();
-						isPermittedToTacticAction = false;
+                    {
+                        TacticModeSystem::Instance().ReportTacticActionFinished();
+                        isPermittedToTacticAction = false;
                         currentOrder = UnitState::Idle;
                     }
                 }
@@ -225,7 +240,7 @@ void Unit::Start()
 void Unit::Update()
 {
     if (m_unitSide == UnitSide::Player)
-		unitFSM.UpdateState();
+        unitFSM.UpdateState();
 
     else
     {
@@ -233,7 +248,7 @@ void Unit::Update()
         {
             if (!TacticModeSystem::Instance().IsOrderingTimingNow())
             {
-				unitFSM.UpdateState();
+                unitFSM.UpdateState();
             }
         }
     }
@@ -277,11 +292,11 @@ void Unit::IdleEngage()
 {
     //TacticModeSystem::Instance().isTacticModeOperating = false;
 
- 	currentOrder = UnitState::Idle;
-	idleElapsed = 0.0f;
-	if (m_staticMeshRenderer != nullptr)
-		m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
-	ChangeAnimation(unitAnimations.m_idleAnimation);
+    currentOrder = UnitState::Idle;
+    idleElapsed = 0.0f;
+    if (m_staticMeshRenderer != nullptr)
+        m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
+    ChangeAnimation(unitAnimations.m_idleAnimation);
     if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
         DetermineCurrentTargetObject();
 
@@ -308,7 +323,7 @@ void Unit::MoveEngage()
     m_navAgentComponent->SetSpeed(m_speed);
     m_navAgentComponent->MoveTo(m_currentMovePosition);
 
-	ChangeAnimation(unitAnimations.m_walkAnimation);
+    ChangeAnimation(unitAnimations.m_walkAnimation);
 }
 
 void Unit::OffsetMoveEngage()
@@ -321,7 +336,7 @@ void Unit::OffsetMoveEngage()
     moveFunctionElapsed = 0.0f;
     m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::green());
     m_navAgentComponent->SetSpeed(m_speed);
-	ChangeAnimation(unitAnimations.m_idleAnimation);
+    ChangeAnimation(unitAnimations.m_idleAnimation);
 }
 
 void Unit::AttackMoveEngage()
@@ -334,7 +349,7 @@ void Unit::AttackMoveEngage()
 
     m_navAgentComponent->SetSpeed(m_speed);
 
-	ChangeAnimation(unitAnimations.m_walkAnimation);
+    ChangeAnimation(unitAnimations.m_walkAnimation);
 }
 
 void Unit::AttackEngage()
@@ -343,7 +358,7 @@ void Unit::AttackEngage()
 
     m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::red());
 
-	ChangeAnimation(unitAnimations.m_idleAnimation);
+    ChangeAnimation(unitAnimations.m_idleAnimation);
 
     AttackSystem* atkSys = GetGameObject()->GetComponent<AttackSystem>();
     isAttackAnimationOperating = false;
@@ -363,13 +378,13 @@ void Unit::ChaseEngage()
 
     dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
 
-	ChangeAnimation(unitAnimations.m_walkAnimation);
+    ChangeAnimation(unitAnimations.m_walkAnimation);
 }
 
 void Unit::SkillEngage()
 {
     currentOrder = UnitState::Skill;
-	ChangeAnimation(unitAnimations.m_idleAnimation);
+    ChangeAnimation(unitAnimations.m_idleAnimation);
     skillFunctionStartElapsed = 0.0f;
     int tempRand = rand() % 3 + 1;
 
@@ -422,7 +437,7 @@ void Unit::SkillEngage()
 
 void Unit::ParalysisEngage()
 {
-	ChangeAnimation(unitAnimations.m_paralysisAnimation);
+    ChangeAnimation(unitAnimations.m_paralysisAnimation);
 }
 
 void Unit::DeathEngage()
@@ -451,7 +466,7 @@ void Unit::DeathEngage()
     }
     else
     {
-		ChangeAnimation(unitAnimations.m_deathAnimation);
+        ChangeAnimation(unitAnimations.m_deathAnimation);
     }
 
     StopMove();
@@ -462,7 +477,7 @@ void Unit::WaveStartEngage()
     unitStatusUI.lock()->EnableElement();
     currentOrder = UnitState::WaveStart;
     moveFunctionElapsed = 0.0f;
-	ChangeAnimation(unitAnimations.m_walkAnimation);
+    ChangeAnimation(unitAnimations.m_walkAnimation);
 
     m_navAgentComponent->MoveTo(m_waveStartPosition);
 
@@ -482,7 +497,7 @@ void Unit::WaveMotionEngage()
 {
     currentOrder = UnitState::WaveMotion;
 
-	ChangeAnimation(unitAnimations.m_battleEngageAnimation);
+    ChangeAnimation(unitAnimations.m_battleEngageAnimation);
 
     /*	if (m_unitType != UnitType::Warrior)
             dotween->DOLookAt(m_currentBelongingWavePosition, rotateTime, false);*/
@@ -492,7 +507,7 @@ void Unit::ResurrectEngage()
 {
     currentOrder = UnitState::Resurrect;
     deathFunctionElapsed = 0.0f;
-	ChangeAnimation(unitAnimations.m_deathAnimation);
+    ChangeAnimation(unitAnimations.m_deathAnimation);
     m_opponentObjectSet.clear();
     ReportUnitDeath();
 
@@ -519,8 +534,8 @@ void Unit::IdleUpdate()
 
     if (idleElapsed >= 3.0f)
     {
-		if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
-			DetermineCurrentTargetObject();
+        if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
+            DetermineCurrentTargetObject();
     }
     // 데미지를 입으면 공격한 상대의 정보를 list에 등록하고 쫓아가기
 }
@@ -562,7 +577,7 @@ void Unit::OffsetMoveUpdate()
 
     if (betweenUnitDistance >= m_followEngageDinstance)
     {
-		ChangeAnimation(unitAnimations.m_walkAnimation);
+        ChangeAnimation(unitAnimations.m_walkAnimation);
 
         dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
         m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
@@ -572,11 +587,11 @@ void Unit::OffsetMoveUpdate()
     {
         isFollowing = false;
         StopMove();
-		ChangeAnimation(unitAnimations.m_idleAnimation);
+        ChangeAnimation(unitAnimations.m_idleAnimation);
     }
     else if (betweenUnitDistance <= m_followEngageDinstance && betweenUnitDistance >= m_stopFollowDinstance && isFollowing)
     {
-		ChangeAnimation(unitAnimations.m_walkAnimation);
+        ChangeAnimation(unitAnimations.m_walkAnimation);
 
         dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
         m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
@@ -615,7 +630,7 @@ void Unit::AttackUpdate()
             DetermineCurrentTargetObject();
             attackFunctionElapsed = 0.0f;
             isAttackAnimationOperating = true;
-			ChangeAnimation(unitAnimations.m_attackAnimation);
+            ChangeAnimation(unitAnimations.m_attackAnimation);
             CheckCurrentAnimation(unitAnimations.m_attackAnimation);
         }
         else if (attackFunctionElapsed < attackFunctionCallDelay)
@@ -633,7 +648,7 @@ void Unit::SkillUpdate()
     if (skillFunctionStartElapsed >= m_currentSelectedSkillEngageDelay)
     {
         skillFunctionStartElapsed = 0.0f;
-		ChangeAnimation(m_currentSkillAnimation);
+        ChangeAnimation(m_currentSkillAnimation);
     }
 }
 
@@ -680,7 +695,7 @@ void Unit::DeathUpdate()
         /// Player일 경우
         if (deathFunctionElapsed >= deathAnimationDelay)
         {
-			ChangeAnimation(unitAnimations.m_deathAnimation);
+            ChangeAnimation(unitAnimations.m_deathAnimation);
             GetGameObject()->SetSelfActive(false);
         }
     }
@@ -726,7 +741,7 @@ void Unit::ResurrectUpdate()
 
 void Unit::ChangeAnimation(yunuGI::IAnimation* p_anim)
 {
-	m_animatorComponent->ChangeAnimation(p_anim, animationLerpDuration, animationTransitionSpeed);
+    m_animatorComponent->ChangeAnimation(p_anim, animationLerpDuration, animationTransitionSpeed);
     m_currentAnimation = p_anim;
 }
 
@@ -736,7 +751,7 @@ void Unit::CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation)
 {
     if (m_animatorComponent->GetGI().GetCurrentAnimation() != currentStateAnimation)
     {
-		ChangeAnimation(currentStateAnimation);
+        ChangeAnimation(currentStateAnimation);
     }
 }
 
@@ -893,28 +908,12 @@ void Unit::SetUnitCurrentHp(float p_newHp)
         unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Fill)->adjuster->SetTargetFloat(1 - m_currentHealthPoint / m_maxHealthPoint);
         unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::EnemyStatus_HP_Number_Current)->SetNumber(m_currentHealthPoint);
     }
-    switch (m_unitType)
+    if (unitStatusPortraitUI)
     {
-    case UnitType::Warrior:
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Robin)->adjuster->SetTargetFloat(m_currentHealthPoint / m_maxHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_Blood_Robin)->adjuster->SetTargetFloat(1 - m_currentHealthPoint / m_maxHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Robin_Number_Current)->SetNumber(m_currentHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Robin_Number_Max)->SetNumber(m_maxHealthPoint);
-        break;
-    case UnitType::Magician:
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Ursula)->adjuster->SetTargetFloat(m_currentHealthPoint / m_maxHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_Blood_Ursula)->adjuster->SetTargetFloat(1 - m_currentHealthPoint / m_maxHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Ursula_Number_Current)->SetNumber(m_currentHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Ursula_Number_Max)->SetNumber(m_maxHealthPoint);
-        break;
-    case UnitType::Healer:
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Hansel)->adjuster->SetTargetFloat(m_currentHealthPoint / m_maxHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_Blood_Hansel)->adjuster->SetTargetFloat(1 - m_currentHealthPoint / m_maxHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Hansel_Number_Current)->SetNumber(m_currentHealthPoint);
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Portrait_HP_Hansel_Number_Max)->SetNumber(m_maxHealthPoint);
-        break;
-    default:
-        break;
+        unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Fill)->adjuster->SetTargetFloat(m_currentHealthPoint / m_maxHealthPoint);
+        unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_PortraitBloodOverlay)->adjuster->SetTargetFloat(1 - m_currentHealthPoint / m_maxHealthPoint);
+        unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Number_Current)->SetNumber(m_currentHealthPoint);
+        unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Number_Max)->SetNumber(m_maxHealthPoint);
     }
 }
 
@@ -986,7 +985,7 @@ void Unit::EnemyActionOnTacticModeEngaged()
 {
     //unitAnimations.m_deathAnimation->Se
     //m_animatorComponent->GetGI().GetCurrentAnimation()->SetPlaySpeed(0.0f);
-	SetCurrentAnimationSpeed(0.0f);
+    SetCurrentAnimationSpeed(0.0f);
     StopMove();
 }
 
@@ -1125,7 +1124,7 @@ void Unit::ReportTacticModeEngaged()
     /// 이 때는 실제 Timescale을 멈춰도 되지만... 어차피 현재 선택된 플레이어는 시간이 흘러야 합니다...
     /// fsm transition 은 TacticModeSystem->IsOrderingTimingNow 로 막아주고,
     /// 여기선 현재 애니메이션의 Stop, unit이 갖고 있는 다른 컴포넌트에 대한 처리를 해줍니다.
-    
+
 
 
 }
@@ -1235,7 +1234,7 @@ void Unit::RegisterSkillWithAnimation(SkillEnum p_enum)
 
         m_animatorComponent->PushAnimationWithFunc(temp, m_skillTimingFrameMap.find(p_enum)->second, [=]()
             {
-				skillsys->ActivateSkill(p_enum, m_currentSkillPosition);
+                skillsys->ActivateSkill(p_enum, m_currentSkillPosition);
             });
     }
 }
@@ -1477,10 +1476,52 @@ void Unit::SetUnitStateIdle()
         PlayerController::Instance().SetRightClickFunction();
     }
 }
+UIElement* Unit::GetBarBuffIcon(StatusEffect::StatusEffectEnum uiEnumID)
+{
+    if (unitStatusUI.expired())
+    {
+        return nullptr;
+    }
+    else
+    {
+        switch (uiEnumID)
+        {
+        case StatusEffect::StatusEffectEnum::Bleeding: return unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_Bleeding);
+        case StatusEffect::StatusEffectEnum::Blinding: return unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_Blinding);
+        case StatusEffect::StatusEffectEnum::Paralysis: return unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_Paralysis);
+        case StatusEffect::StatusEffectEnum::KnockBack: return unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_KnockBack);
+        case StatusEffect::StatusEffectEnum::Taunted: return unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_Taunted);
+        default: return nullptr;
+        }
+    }
+}
+UIElement* Unit::GetPortraitBuffIcon(StatusEffect::StatusEffectEnum uiEnumID)
+{
+    if (!unitStatusPortraitUI)
+    {
+        return nullptr;
+    }
+    else
+    {
+        switch (uiEnumID)
+        {
+        case StatusEffect::StatusEffectEnum::Bleeding: return unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_Bleeding);
+        case StatusEffect::StatusEffectEnum::Blinding: return unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_Blinding);
+        case StatusEffect::StatusEffectEnum::Paralysis: return unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_Paralysis);
+        case StatusEffect::StatusEffectEnum::KnockBack: return unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_KnockBack);
+        case StatusEffect::StatusEffectEnum::Taunted: return unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Buff_Taunted);
+        default: return nullptr;
+        }
+    }
+}
 
 void Unit::ReportStatusEffectApplied(StatusEffect::StatusEffectEnum p_effectType)
 {
-    if (auto ui = UIManager::Instance().GetBuffIcon(this, p_effectType); ui)
+    if (auto ui = GetBarBuffIcon(p_effectType))
+    {
+        ui->EnableElement();
+    }
+    if (auto ui = GetPortraitBuffIcon(p_effectType))
     {
         ui->EnableElement();
     }
@@ -1488,10 +1529,15 @@ void Unit::ReportStatusEffectApplied(StatusEffect::StatusEffectEnum p_effectType
 
 void Unit::ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType)
 {
-    if (auto ui = UIManager::Instance().GetBuffIcon(this, p_effectType); ui)
+    if (auto ui = GetBarBuffIcon(p_effectType))
     {
         ui->DisableElement();
     }
+    if (auto ui = GetPortraitBuffIcon(p_effectType))
+    {
+        ui->DisableElement();
+    }
+
 }
 
 void Unit::PermitTacticAction()

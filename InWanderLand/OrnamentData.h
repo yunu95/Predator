@@ -48,6 +48,7 @@ namespace application
             friend class InstanceManager;
 
         public:
+            virtual ~OrnamentData();
             virtual bool EnterDataFromTemplate() override;
             virtual ITemplateData* GetTemplateData() override;
             virtual bool SetTemplateData(const std::string& dataName) override;
@@ -76,7 +77,6 @@ namespace application
             OrnamentData(const std::string& name);
             OrnamentData(const OrnamentData& prototype);
             OrnamentData& operator=(const OrnamentData& prototype);
-            virtual ~OrnamentData();
         };
     }
 }

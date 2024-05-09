@@ -41,8 +41,8 @@ void NailCamera::SetWorldTM(const DirectX::SimpleMath::Matrix wtm)
 {
     this->wtm = wtm;
     this->vtm = this->wtm.Invert();
-    this->cameraNear = 10.f;
-    this->cameraFar = 80.f;
+    //this->cameraNear = 10.f;
+    //this->cameraFar = 80.f;
     this->ptm = DirectX::XMMatrixPerspectiveFovLH(this->fov, this->width / this->height, this->cameraNear, this->cameraFar);
     this->vtmOrtho = DirectX::XMMatrixOrthographicLH(this->width * 1.f, this->height * 1.f, this->cameraNear, this->cameraFar);
 
@@ -131,6 +131,12 @@ void NailCamera::SetAsMain()
 DirectX::SimpleMath::Matrix NailCamera::GetPTM90()
 {
     return DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PI / 2.f, this->width / this->height, this->cameraNear, this->cameraFar);
+}
+DirectX::SimpleMath::Vector3 NailCamera::GetViewPos(const DirectX::SimpleMath::Vector3& worldPos)
+{
+    return DirectX::XMVector3TransformCoord(worldPos, this->vtm);
+    //DirectX::SimpleMath::Vector3 screenPos = DirectX::XMVector3TransformCoord(worldPos, this->vtm);
+    //return screenPos;
 }
 DirectX::SimpleMath::Vector2 NailCamera::GetScreenPos(const DirectX::SimpleMath::Vector3& worldPos)
 {

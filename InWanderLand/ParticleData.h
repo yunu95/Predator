@@ -41,7 +41,7 @@ namespace application
             POD_Vector3<float> scale = { 1,1,1 };
 
             TO_JSON(POD_Particle)
-            FROM_JSON(POD_Particle)
+                FROM_JSON(POD_Particle)
         };
 
         class ParticleData
@@ -50,6 +50,7 @@ namespace application
             friend class InstanceManager;
 
         public:
+            virtual ~ParticleData();
             virtual bool EnterDataFromTemplate() override;
             virtual ITemplateData* GetTemplateData() override;
             virtual bool SetTemplateData(const std::string& dataName) override;
@@ -77,7 +78,6 @@ namespace application
             ParticleData(const std::string& name);
             ParticleData(const ParticleData& prototype);
             ParticleData& operator=(const ParticleData& prototype);
-            virtual ~ParticleData();
         };
     }
 }
