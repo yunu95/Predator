@@ -185,7 +185,6 @@ namespace application
 		GameObject_DisabledEvent,
 		GameObject_TransformEditEvent,
 		Sound_PlayOnceEvent,
-		Sound_PlayLoopEvent,
 		GameObject_AwakeEvent
 	};
 
@@ -233,19 +232,11 @@ namespace application
 		std::string rscPath;
 	};
 
-	struct Sound_PlayLoopEvent
-		: public AnimationEvent
-	{
-		GET_TYPE(Sound_PlayLoopEvent)
-
-		std::string rscPath;
-	};
-
 	struct GameObject_AwakeEvent
 		: public AnimationEvent
 	{
 		GET_TYPE(GameObject_AwakeEvent)
 
-			std::string objName;
+		std::string objName;
 	};
 }
