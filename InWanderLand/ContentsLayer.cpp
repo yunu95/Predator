@@ -85,10 +85,6 @@ public:
     yunuGI::IAnimation* animation2;
     virtual void Update() override
     {
-        if (Input::isKeyPushed(yunutyEngine::KeyCode::B))
-        {
-            anim->Play(animation);
-        }
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
 		{
             anim->ChangeAnimation(animation2, 1.f, 1.f);
@@ -122,7 +118,7 @@ void GraphicsTest()
 
     for (auto& i : animationList)
     {
-        if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Attack")
+        if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
         {
             i->SetLoop(true);
             animation = i;
@@ -135,36 +131,19 @@ void GraphicsTest()
 		}
     }
 
-	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-        obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,10 });
-		auto test4 = obj->AddComponent<TestComponent4>();
+    {
+        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+        auto test = obj2->AddComponent<TestComponent4>();
+        auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
 
-        auto child = Scene::getCurrentScene()->AddGameObject();
-        child->SetParent(obj);
-        child->SetSelfActive(false);
-		auto particle = child->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
-		particle->SetParticleShape(yunutyEngine::graphics::ParticleShape::Cone);
-		particle->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
-        particle->SetDuration(1.f);
-        particle->SetLifeTime(1.f);
-        particle->SetPlayAwake(true);
-		particle->SetLoop(false);
-		particle->Play();
+        test->anim = anim;
+        test->animation = animation;
+        test->animation2 = animation2;
 
-        auto anim = obj->GetComponent<yunutyEngine::graphics::Animator>();
         anim->PushAnimation(animation);
+        anim->PushAnimation(animation2);
         anim->Play(animation);
-        //anim->PushAnimationWithFunc(animation, 0, [=]() 
-        //    {
-        //        child->SetSelfActive(true);
-        //        particle->Reset();
-        //    });
-        test4->anim = anim;
-        
-        test4->animation = animation;
-        test4->animation2 = animation2;
-	}
+    }
 
     //{
     //    auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_GuideBook");
