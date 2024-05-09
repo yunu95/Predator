@@ -17,6 +17,7 @@ namespace wanderUtils
         {
             namespace fs = std::filesystem;
             std::set<std::string> validExtensions{ ".jpg", ".bmp", ".tga", ".dds", ".cso",".png" };
+            std::set<std::string> soundExtensions{ ".wav", ".mp3", ".wma", ".ogg" };
             fs::path basePath{ "./" };
             try
             {
@@ -29,6 +30,12 @@ namespace wanderUtils
                             auto relativePath = fs::relative(entry.path(), basePath).string();
                             std::replace(relativePath.begin(), relativePath.end(), '\\', '/');
                             resourceManager->LoadFile(relativePath.c_str());
+                        }
+                        else if (fs::is_regular_file(entry) && soundExtensions.contains(entry.path().extension().string()))
+                        {
+                            auto relativePath = fs::relative(entry.path(), basePath).string();
+                            std::replace(relativePath.begin(), relativePath.end(), '\\', '/');
+                            yunutyEngine::SoundSystem::LoadSound(relativePath);
                         }
                     }
                 }

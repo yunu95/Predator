@@ -28,6 +28,7 @@ void Animator::ChangeAnimation(yunuGI::IAnimation* animation, float transitionDu
 	auto& gi = this->GetGI();
 
 	gi.ChangeAnimation(animation, transitionDuration, transitionSpeed);
+	isChange = true;
 }
 
 void Animator::SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame)
@@ -141,41 +142,75 @@ void Animator::Update()
 			desc.curr.speed = currentAnimation->GetPlaySpeed();
 			__int32 ratio = static_cast<__int32>(totalFrame / duration);
 
+			prevSumtime = desc.curr.sumTime;
+
 			desc.curr.sumTime += (desc.curr.speed * Time::GetDeltaTime());
 			if (desc.curr.sumTime >= currentAnimation->GetDuration())
 			{
 				if (currentAnimation->GetLoop())
 				{
-					desc.curr.sumTime = 0.f;
+					desc.curr.sumTime -= currentAnimation->GetDuration();
+					prevSumtime = desc.curr.sumTime;
+					prevFrame = 0;
 				}
 			}
+
 			desc.curr.currFrame = static_cast<__int32>(desc.curr.sumTime * ratio);
 			desc.curr.currFrame = min(static_cast<int>(desc.curr.currFrame), totalFrame - 1);
 			desc.curr.nextFrame = min(static_cast<int>(desc.curr.currFrame + 1), totalFrame - 1);
 			desc.curr.ratio = static_cast<float>(desc.curr.sumTime - static_cast<float>(desc.curr.currFrame) / ratio);
+
+			std::cout << desc.curr.currFrame;
 		}
 
 		for (auto& each : this->animationEventMap)
 		{
 			auto curAnimation = gi.GetCurrentAnimation();
+			float dur = curAnimation->GetDuration();
+			int totalF = curAnimation->GetTotalFrame();
+			__int32 rat = static_cast<__int32>(totalF / dur);
 
 			for (auto& [key, each2] : each.second)
 			{
 				if (curAnimation->GetName() == each.first->GetName())
 				{
-					if (each2.frame == desc.curr.currFrame)
+					auto elapsedFrame = (desc.curr.sumTime - prevSumtime) * rat;
+					if (elapsedFrame >= 1)
 					{
-						if (each2.isFirst && (each2.func != nullptr))
+						if ((each2.frame > prevFrame) && (each2.frame <= prevFrame + elapsedFrame))
 						{
-							each2.isFirst = false;
-							each2.func();
+							if (each2.func != nullptr)
+							{
+								each2.func();
+							}
 						}
+						prevFrame += elapsedFrame;
 					}
 					else
 					{
-						each2.isFirst = true;
+						if (each2.frame == desc.curr.currFrame)
+						{
+							if (each2.isFirst && (each2.func != nullptr))
+							{
+								each2.isFirst = false;
+								each2.func();
+							}
+						}
+						else
+						{
+							each2.isFirst = true;
+						}
+						prevFrame += 1;
 					}
+					prevFrame %= totalF;
 				}
+			}
+
+			if (curAnimation->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Attack")
+			{
+				std::cout << "Elapsed F : " << (desc.curr.sumTime - prevSumtime) * rat << '\n';
+				std::cout << "Prev F : " << prevFrame << '\n';
+				std::cout << "Curr F : " << desc.curr.currFrame << '\n';
 			}
 		}
 
@@ -196,6 +231,7 @@ void Animator::Update()
 				ClearAnimationEvent(gi.GetCurrentAnimation());
 
 				desc.curr = desc.next;
+				desc.curr.sumTime = 0.f;
 				desc.ClearNextAnimation();
 				gi.SetCurrentAnimation(nextAnimation);
 				gi.SetNextAnimation(nullptr);
@@ -208,9 +244,11 @@ void Animator::Update()
 				{
 					desc.next.sumTime = 0;
 				}
-				desc.next.currFrame = static_cast<__int32>(desc.next.sumTime * ratio);
-				desc.next.currFrame = min(static_cast<int>(desc.next.currFrame), totalFrame - 1);
-				desc.next.nextFrame = min(static_cast<int>(desc.next.currFrame + 1), totalFrame - 1);
+				desc.next.currFrame = 0;
+				desc.next.nextFrame = 1;
+				//desc.next.currFrame = static_cast<__int32>(desc.next.sumTime * ratio);
+				//desc.next.currFrame = min(static_cast<int>(desc.next.currFrame), totalFrame - 1);
+				//desc.next.nextFrame = min(static_cast<int>(desc.next.currFrame + 1), totalFrame - 1);
 				desc.next.ratio = static_cast<float>(desc.next.sumTime - static_cast<float>(desc.next.currFrame) / ratio);
 			}
 		}

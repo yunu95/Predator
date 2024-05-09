@@ -77,11 +77,23 @@ namespace application::editor::palette
 				pComp->SetEndScale(data->pod.particleData.endScale);
 				pComp->SetMaxParticle(data->pod.particleData.maxParticle);
 				pComp->SetPlayAwake(data->pod.particleData.playAwake);
+				pComp->SetRadius(data->pod.particleData.radius);
+				pComp->SetAngle(data->pod.particleData.angle);
 
 				pComp->SetRateOverTime(data->pod.particleData.rateOverTime);
 
 				pComp->SetBurstsCount(data->pod.particleData.burstsCount);
 				pComp->SetInterval(data->pod.particleData.interval);
+
+				static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+				std::wstring texturePath;
+				texturePath.assign(data->pod.particleData.texturePath.begin(), data->pod.particleData.texturePath.end());
+				auto texturePtr = resourceManager->GetTexture(texturePath);
+				if (texturePtr)
+				{
+					pComp->SetTexture(texturePtr);
+				}
 			}
 		}
 	}
