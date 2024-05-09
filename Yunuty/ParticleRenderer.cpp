@@ -83,6 +83,7 @@ void ParticleRenderer::SetAngle(float angle)
 
 void ParticleRenderer::SetRadius(float radius)
 {
+	radius = std::abs(radius);
 	this->shape.cone.radius = radius;
 }
 
