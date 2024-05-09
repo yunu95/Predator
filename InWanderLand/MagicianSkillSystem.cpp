@@ -27,10 +27,13 @@ void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 
 			SetSkillRequirmentsActive(QSkillProjectile, false);
 			SetSkillRequirmentsActive(QSkillFieldDamage, true);
-
-			TacticModeSystem::Instance().ReportTacticActionFinished();
-			m_unitComponent->isPermittedToTacticAction = false;
 			m_unitComponent->SetUnitStateIdle();
+
+			if (m_unitComponent->isPermittedToTacticAction)
+			{
+				m_unitComponent->isPermittedToTacticAction = false;
+				TacticModeSystem::Instance().ReportTacticActionFinished();
+			}
 
 			QSkillFieldDamage.dotweenComponent->DONothing(m_QSkillFieldRemainTime).OnComplete([=]()
 				{
@@ -60,9 +63,13 @@ void MagicianSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 			SetSkillRequirmentsActive(WSkillProjectile, false);
 			SetSkillRequirmentsActive(WSkillFieldDamage, true);
 
-			TacticModeSystem::Instance().ReportTacticActionFinished();
-			m_unitComponent->isPermittedToTacticAction = false;
 			m_unitComponent->SetUnitStateIdle();
+
+			if (m_unitComponent->isPermittedToTacticAction)
+			{
+				m_unitComponent->isPermittedToTacticAction = false;
+				TacticModeSystem::Instance().ReportTacticActionFinished();
+			}
 
 			WSkillFieldDamage.dotweenComponent->DONothing(m_WSkillFieldRemainTime).OnComplete([=]()
 				{

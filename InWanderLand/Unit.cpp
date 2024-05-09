@@ -226,8 +226,8 @@ void Unit::Start()
 
                     if (isPermittedToTacticAction)
                     {
+						isPermittedToTacticAction = false;
                         TacticModeSystem::Instance().ReportTacticActionFinished();
-                        isPermittedToTacticAction = false;
                         currentOrder = UnitState::Idle;
                     }
                 }
@@ -576,8 +576,8 @@ void Unit::MoveUpdate()
         currentOrder = UnitState::Idle;
         if (isPermittedToTacticAction)
         {
+			isPermittedToTacticAction = false;
             TacticModeSystem::Instance().ReportTacticActionFinished();
-            isPermittedToTacticAction = false;
         }
     }
 }
