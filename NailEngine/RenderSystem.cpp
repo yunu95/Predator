@@ -213,11 +213,13 @@ void RenderSystem::Render()
 	// Final 출력
 	RenderFinal();
 	RenderForward();
-	RenderBackBuffer();
 	RenderParticle();
+	RenderBackBuffer();
 
 	//SkyBoxPass::Instance.Get().Render();
-
+	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShader(nullptr, nullptr, 0);
+	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->GSSetShader(nullptr, nullptr, 0);
+	//ResourceBuilder::Instance.Get().device->GetDeviceContext()->VSSetShader(nullptr, nullptr, 0);
 	RenderUI();
 
 	// 디퍼드 정보 출력
