@@ -158,6 +158,7 @@ void InputManager::PrepareSkill(Unit::SkillEnum p_skillType)
     if (!PlayerSkillManager::Instance().IsSkillGaugeEnoughToBeUsed(static_cast<Unit::UnitType>(currentSelectedSerialNumber), p_skillType))
     {
         /// 마나가 부족해 스킬을 사용하지 못하는 경우입니다.
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::ErrorPopup_NoMana)->EnableElement();
         return;
     }
     if (tacticMode)

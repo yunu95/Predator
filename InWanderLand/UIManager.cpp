@@ -270,6 +270,14 @@ UIElement* UIManager::GetUIElementByEnum(UIEnumID uiEnumID)
     assert(false);
     return nullptr;
 }
+const std::vector<std::string>& UIManager::GetDialogueTimed_KeyStrings()
+{
+    return dialogueTimed_KeyStrings;
+}
+const std::vector<std::string>& UIManager::GetDialogueManual_KeyStrings()
+{
+    return dialogueManual_KeyStrings;
+}
 void UIManager::SetUIElementWithEnum(UIEnumID uiEnumID, UIElement* ui)
 {
     if (localContext)
@@ -367,6 +375,7 @@ void UIManager::ImportUI(const char* path)
 {
     std::ifstream file{ path };
     static constexpr int uiPriorityStride = 10000;
+    ClearDialogueInfos();
     if (file.is_open())
     {
         json data;
@@ -406,6 +415,13 @@ void UIManager::ImportUI(const char* path)
     }
 }
 
+void UIManager::ClearDialogueInfos()
+{
+    dialogueTimed.clear();
+    dialogueTimed_KeyStrings.clear();
+    dialogueManual.clear();
+    dialogueManual_KeyStrings.clear();
+}
 // JsonUIData만으로 UI를 생성합니다.
 void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element)
 {
@@ -571,6 +587,27 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
                 yunuGI::Vector2 newStartPoint{ uiData.adjustLinearClipStartX - uiData.adjustLinearClipDirectionX * t, uiData.adjustLinearClipStartY - uiData.adjustLinearClipDirectionY * t };
                 element->imageComponent.lock()->GetGI().SetLinearClippingStartPoint(newStartPoint.x, newStartPoint.y);
             };
+    }
+    if (uiData.customFlags2 & (int)UIExportFlag2::ExclusiveEnable)
+    {
+        std::transform(uiData.exclusiveEnableGroup.begin(), uiData.exclusiveEnableGroup.end(), std::back_inserter(element->exclusiveEnableGroup), [&](int idx) {return GetUIElementWithIndex(idx); });
+    }
+    if (uiData.customFlags2 & (int)UIExportFlag2::DisableAfterEnable)
+    {
+        element->disableAfterEnable = element->GetGameObject()->AddComponent<TimerComponent>();
+        element->disableAfterEnable->isRealtime = true;
+        element->disableAfterEnable->m_duration = uiData.disableAfterEnable_delayUntilDisable;
+        element->disableAfterEnable->onCompleteFunction = [=]() {element->DisableElement(); };
+    }
+    if (uiData.customFlags2 & (int)UIExportFlag2::Dialogue_Manual)
+    {
+        dialogueManual_KeyStrings.push_back(uiData.uiName);
+        dialogueManual[uiData.uiName] = element;
+    }
+    if (uiData.customFlags2 & (int)UIExportFlag2::Dialogue_Timed)
+    {
+        dialogueTimed_KeyStrings.push_back(uiData.uiName);
+        dialogueTimed[uiData.uiName] = element;
     }
 
     Vector3d pivotPos{ 0,0,0 };
@@ -863,7 +900,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
             }
         }
     }
-}
+        }
 // 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
 bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element)
 {

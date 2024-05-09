@@ -125,17 +125,6 @@ namespace application
 					pm.AddAnimationEvent(ptr);
 					break;
 				}
-				case application::AnimationEventType::Sound_PlayLoopEvent:
-				{
-					auto rscPath = data[i]["rscPath"];
-					auto ptr = std::make_shared<Sound_PlayLoopEvent>();
-					ptr->fbxName = fbxName;
-					ptr->animationName = animationName;
-					ptr->frame = frame;
-					ptr->rscPath = rscPath;
-					pm.AddAnimationEvent(ptr);
-					break;
-				}
 				case application::AnimationEventType::GameObject_AwakeEvent:
 				{
 					auto particleName = data[i]["objName"];
@@ -205,18 +194,6 @@ namespace application
 					auto ptr = static_cast<Sound_PlayOnceEvent*>(event.get());
 					json ptrData;
 					ptrData["type"] = AnimationEventType::Sound_PlayOnceEvent;
-					ptrData["fbxName"] = ptr->fbxName;
-					ptrData["animationName"] = ptr->animationName;
-					ptrData["frame"] = ptr->frame;
-					ptrData["rscPath"] = ptr->rscPath;
-					data.push_back(ptrData);
-					break;
-				}
-				case application::AnimationEventType::Sound_PlayLoopEvent:
-				{
-					auto ptr = static_cast<Sound_PlayLoopEvent*>(event.get());
-					json ptrData;
-					ptrData["type"] = AnimationEventType::Sound_PlayLoopEvent;
 					ptrData["fbxName"] = ptr->fbxName;
 					ptrData["animationName"] = ptr->animationName;
 					ptrData["frame"] = ptr->frame;
@@ -335,24 +312,6 @@ namespace application
 			case application::AnimationEventType::Sound_PlayOnceEvent:
 			{
 				auto ptr = static_cast<Sound_PlayOnceEvent*>(event.get());
-				funcIndex = animator->PushAnimationWithFunc(ani, event->frame, [=]()
-					{
-						yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
-					});
-
-				if (funcIndex == 0)
-				{
-					return false;
-				}
-				else
-				{
-					eventFuncIndexList[event] = funcIndex;
-				}
-				break;
-			}
-			case application::AnimationEventType::Sound_PlayLoopEvent:
-			{
-				auto ptr = static_cast<Sound_PlayLoopEvent*>(event.get());
 				funcIndex = animator->PushAnimationWithFunc(ani, event->frame, [=]()
 					{
 						yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
@@ -539,24 +498,6 @@ namespace application
 			case application::AnimationEventType::Sound_PlayOnceEvent:
 			{
 				auto ptr = static_cast<Sound_PlayOnceEvent*>(event.get());
-				funcIndex = animator->PushAnimationWithFunc(ani, event->frame, [=]()
-					{
-						yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
-					});
-
-				if (funcIndex == 0)
-				{
-					return false;
-				}
-				else
-				{
-					eventFuncIndexList[event] = funcIndex;
-				}
-				break;
-			}
-			case application::AnimationEventType::Sound_PlayLoopEvent:
-			{
-				auto ptr = static_cast<Sound_PlayLoopEvent*>(event.get());
 				funcIndex = animator->PushAnimationWithFunc(ani, event->frame, [=]()
 					{
 						yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());

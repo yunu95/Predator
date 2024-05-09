@@ -98,6 +98,10 @@ struct JsonUIData
     float musicPlayOnDisable_fadeOut;
     float musicPlayOnDisable_fadeIn;
     float musicMultiplyVolumeOnEnableDisable_enableFactor;
+    float disableAfterEnable_delayUntilDisable;
+    std::vector<int> exclusiveEnableGroup;
+    bool duplicate_poolable;
+
     int customFlags;
     int customFlags2;
     // UI의 고유한 EnumID

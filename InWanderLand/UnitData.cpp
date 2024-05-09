@@ -406,16 +406,7 @@ namespace application
                                         yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
                                     });
                                 break;
-                            }
-                            case application::AnimationEventType::Sound_PlayLoopEvent:
-                            {
-                                auto ptr = static_cast<Sound_PlayLoopEvent*>(event.get());
-                                animator->PushAnimationWithFunc(each, event->frame, [=]()
-                                    {
-                                        yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
-                                    });
-                                break;
-                            }
+                            } 
                             case application::AnimationEventType::GameObject_AwakeEvent:
                             {
                                 auto ptr = static_cast<GameObject_AwakeEvent*>(event.get());

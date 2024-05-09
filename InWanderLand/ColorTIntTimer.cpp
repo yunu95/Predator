@@ -21,6 +21,7 @@ void ColorTintTimer::Init()
     {
         onCompleteFunction = [=]()
             {
+                uiImage->GetGI().SetColor(startColor);
                 uiImage->GetGameObject()->SetSelfActive(false);
             };
     }
