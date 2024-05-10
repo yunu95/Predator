@@ -547,6 +547,9 @@
     <Filter Include="Contents\ContentsObserver\Observee">
       <UniqueIdentifier>{6be041a3-b108-49d6-9631-62275bd6bb8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\Effect\UISpriteAnimation">
+      <UniqueIdentifier>{2f068f2c-2e4f-4b41-9925-dfe33ce45295}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1399,6 +1402,9 @@
     <ClInclude Include="Action_PlayTimedDialogue.h">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClInclude>
+    <ClInclude Include="UISpriteAnimation.h">
+      <Filter>UI\Effect\UISpriteAnimation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2130,6 +2136,9 @@
     </ClCompile>
     <ClCompile Include="Action_PlayTimedDialogue.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
+    <ClCompile Include="UISpriteAnimation.cpp">
+      <Filter>UI\Effect\UISpriteAnimation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

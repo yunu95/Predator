@@ -100,6 +100,8 @@ struct JsonUIData
     float musicMultiplyVolumeOnEnableDisable_enableFactor;
     float disableAfterEnable_delayUntilDisable;
     std::vector<int> exclusiveEnableGroup;
+    string animatedSpriteFolderPath;
+    bool animatedSpriteIsRepeat;
     bool duplicate_poolable;
 
     int customFlags;

@@ -619,6 +619,15 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         dialogueTimed_KeyStrings.push_back(uiData.uiName);
         dialogueTimed[uiData.uiName] = element;
     }
+    if (uiData.customFlags2 & (int)UIExportFlag2::AnimatedSprite)
+    {
+        element->spriteAnimationOnEnable = element->GetGameObject()->AddComponent<UISpriteAnimation>();
+        element->spriteAnimationOnEnable->SetSprites(yutility::GetWString(uiData.animatedSpriteFolderPath).c_str());
+        element->spriteAnimationOnEnable->m_isRepeated = uiData.animatedSpriteIsRepeat;
+        element->spriteAnimationOnEnable->uiElement = element;
+        element->spriteAnimationOnEnable->Init();
+        element->spriteAnimationOnEnable->ActivateTimer();
+    }
 
     Vector3d pivotPos{ 0,0,0 };
     // offset by anchor

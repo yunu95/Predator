@@ -1264,6 +1264,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UIOffsetTransition.h" />
     <ClInclude Include="UIPanel.h" />
     <ClInclude Include="UIPriorityLayout.h" />
+    <ClInclude Include="UISpriteAnimation.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="StatusEffect.h" />
@@ -1512,6 +1513,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UIOffsetTransition.cpp" />
     <ClCompile Include="UIPanel.cpp" />
     <ClCompile Include="UIPriorityLayout.cpp" />
+    <ClCompile Include="UISpriteAnimation.cpp" />
     <ClCompile Include="UnitBrush.cpp" />
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="UnitEditorInstance.cpp" />

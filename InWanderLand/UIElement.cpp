@@ -56,6 +56,10 @@ void UIElement::EnableElement()
     {
         soundOnEnable->ActivateTimer();
     }
+    if (spriteAnimationOnEnable != nullptr)
+    {
+        spriteAnimationOnEnable->ActivateTimer();
+    }
     if (importedUIData.customFlags2 & (int)UIExportFlag2::PlayMusicOnEnable)
     {
         auto musicPlayTimer = Scene::getCurrentScene()->AddGameObject()->AddComponent<PlayMusicTimer>();

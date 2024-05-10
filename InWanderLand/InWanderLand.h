@@ -28,5 +28,6 @@
 #include "LinearClippingTimer.h"
 #include "ColorTintTimer.h"
 #include "PlayMusicTimer.h"
+#include "UISpriteAnimation.h"
 
 #include "SkillSystem.h"

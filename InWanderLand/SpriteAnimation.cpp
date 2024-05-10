@@ -2,12 +2,13 @@
 #include <regex>
 
 std::unordered_map<std::wstring, std::vector<SpriteAnimation::Sprite>> SpriteAnimation::spritesMap{};
-void SpriteAnimation::SetSprites(const wchar_t* spritesRootPath)
+
+const std::vector<SpriteAnimation::Sprite>* SpriteAnimation::GetSprites(const wchar_t* spritesRootPath)
 {
+    const std::vector<SpriteAnimation::Sprite>* spriteSheet = nullptr;
     if (auto itr = spritesMap.find(spritesRootPath); itr != spritesMap.end())
     {
-        spriteSheet = &itr->second;
-        return;
+        return &itr->second;
     }
     spritesMap[spritesRootPath] = std::vector<Sprite>();
     spriteSheet = &spritesMap[spritesRootPath];
@@ -25,6 +26,7 @@ void SpriteAnimation::SetSprites(const wchar_t* spritesRootPath)
                 if (fs::is_regular_file(entry))
                 {
                     wstring relativePath = fs::relative(entry.path(), basePath);
+                    std::replace(relativePath.begin(), relativePath.end(), '\\', '/');
                     wstring matName = L"spritesAnim/" + relativePath;
                     auto newMat = rsrcMgr->CreateMaterial(matName);
                     auto texture = rsrcMgr->GetTexture(relativePath);
@@ -42,11 +44,17 @@ void SpriteAnimation::SetSprites(const wchar_t* spritesRootPath)
                     timeOffset += interval;
                 }
             }
+            std::sort(spritesMap[spritesRootPath].begin(), spritesMap[spritesRootPath].end(), [](Sprite& a, Sprite& b) {return a.material->GetName() < b.material->GetName(); });
         }
     }
     catch (const fs::filesystem_error& err) {
         std::cerr << "Error: " << err.what() << std::endl;
     }
+    return spriteSheet;
+}
+void SpriteAnimation::SetSprites(const wchar_t* spritesRootPath)
+{
+    spriteSheet = GetSprites(spritesRootPath);
 }
 void SpriteAnimation::Start()
 {
