@@ -86,7 +86,7 @@ void yunutyEngine::YunutyCycle::ThreadFunction()
     while (isGameRunning)
     {
         {
-            { std::unique_lock lock{ preUpdateMutex }; }
+            //std::unique_lock lock{ preUpdateMutex };
             isUpdating = true;
             ThreadUpdate();
             isUpdating = false;
@@ -125,7 +125,7 @@ void yunutyEngine::YunutyCycle::ResetUpdateTargetComponents()
 // Update components and render camera
 void yunutyEngine::YunutyCycle::ThreadUpdate()
 {
-    std::unique_lock lock{ updateMutex };
+    std::scoped_lock lock{ updateMutex };
     Time::Update();
 
     for (auto i = GlobalComponent::globalComponents.begin(); i != GlobalComponent::globalComponents.end(); i++)
