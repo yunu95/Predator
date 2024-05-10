@@ -319,6 +319,39 @@ namespace application
 							epm.Return();
 						}
 					}
+
+					if (epm.GetReturnPopupName() == "SetDestination(Unit)")
+					{
+						ImGui::Begin("Unit Move Popup", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Destination");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Destination");
+						ImGui::End();
+
+						pp.ChangeTab("Unit");
+
+						auto data = epm.GetReturnPopupData<Action_UnitMove>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &up)
+						{
+							data->isEditing = true;
+							up.Reset();
+						}
+
+						if (data->isEditing == true && up.GetSelections().size() == 1)
+						{
+							data->SetDestinationUnit(static_cast<UnitData*>(*up.GetSelections().begin()));
+							data->isEditing = false;
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
 				}
 			}
 
@@ -789,6 +822,21 @@ namespace application
 								case application::ActionType::TutorialModeChange:
 								{
 									selectedScript->AddAction<Action_TutorialModeChange>();
+									break;
+								}
+								case application::ActionType::PlayManualDialogue:
+								{
+									selectedScript->AddAction<Action_PlayManualDialogue>();
+									break;
+								}
+								case application::ActionType::PlayTimedDialogue:
+								{
+									selectedScript->AddAction<Action_PlayTimedDialogue>();
+									break;
+								}
+								case application::ActionType::UnitMove:
+								{
+									selectedScript->AddAction<Action_UnitMove>();
 									break;
 								}
 								default:

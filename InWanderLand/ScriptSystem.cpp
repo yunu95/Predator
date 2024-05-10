@@ -38,6 +38,9 @@ namespace application
 		actionList.push_back({ ActionType::CameraSaveView, "CameraSaveView" });
 		actionList.push_back({ ActionType::CameraLoadView, "CameraLoadView" });
 		actionList.push_back({ ActionType::TutorialModeChange, "TutorialModeChange" });
+		actionList.push_back({ ActionType::PlayManualDialogue, "PlayManualDialogue" });
+		actionList.push_back({ ActionType::PlayTimedDialogue, "PlayTimedDialogue" });
+		actionList.push_back({ ActionType::UnitMove, "UnitMove" });
 	}
 
 	Script* ScriptSystem::CreateScript()

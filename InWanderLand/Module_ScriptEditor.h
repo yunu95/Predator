@@ -216,6 +216,21 @@ namespace application
 							Action_TutorialModeChange::ImGui_DrawDataPopup(static_cast<Action_TutorialModeChange*>(data));
 							break;
 						}
+						case application::ActionType::PlayManualDialogue:
+						{
+							Action_PlayManualDialogue::ImGui_DrawDataPopup(static_cast<Action_PlayManualDialogue*>(data));
+							break;
+						}
+						case application::ActionType::PlayTimedDialogue:
+						{
+							Action_PlayTimedDialogue::ImGui_DrawDataPopup(static_cast<Action_PlayTimedDialogue*>(data));
+							break;
+						}
+						case application::ActionType::UnitMove:
+						{
+							Action_UnitMove::ImGui_DrawDataPopup(static_cast<Action_UnitMove*>(data));
+							break;
+						}
 						default:
 							break;
 					}
