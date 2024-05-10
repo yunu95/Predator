@@ -252,7 +252,6 @@ void Unit::Update()
 {
     if (m_unitSide == UnitSide::Player)
         unitFSM.UpdateState();
-
     else
     {
         if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
@@ -302,13 +301,14 @@ Unit::UnitSide Unit::GetUnitSide() const
 #pragma region State Engage()
 void Unit::IdleEngage()
 {
-    //TacticModeSystem::Instance().isTacticModeOperating = false;
-
     currentOrder = UnitState::Idle;
+    m_currentTargetUnit = nullptr;
     idleElapsed = 0.0f;
     if (m_staticMeshRenderer != nullptr)
         m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
+
     ChangeAnimation(unitAnimations.m_idleAnimation);
+
     if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
         DetermineCurrentTargetObject();
 
@@ -374,7 +374,7 @@ void Unit::AttackEngage()
 
     AttackSystem* atkSys = GetGameObject()->GetComponent<AttackSystem>();
     isAttackAnimationOperating = false;
-    isAnimationChangedToIdleAnimationOnAttackState = false;
+    isAnimationChangedAttackToIdle = false;
 
     attackFunctionElapsed = 0.0f;
     dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
@@ -550,7 +550,9 @@ void Unit::IdleUpdate()
     if (idleElapsed >= 3.0f)
     {
         if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
-            DetermineCurrentTargetObject();
+        {
+			DetermineCurrentTargetObject();
+        }
     }
     // 데미지를 입으면 공격한 상대의 정보를 list에 등록하고 쫓아가기
 }
@@ -638,10 +640,10 @@ void Unit::AttackUpdate()
 
     if (!isAttackAnimationOperating)
     {
-        if (!isAnimationChangedToIdleAnimationOnAttackState)
+        if (!isAnimationChangedAttackToIdle)
         {
 			ChangeAnimation(unitAnimations.m_idleAnimation);
-            isAnimationChangedToIdleAnimationOnAttackState = true;
+            isAnimationChangedAttackToIdle = true;
         }
 
         attackFunctionElapsed += Time::GetDeltaTime() * m_localTimeScale;
@@ -651,7 +653,7 @@ void Unit::AttackUpdate()
             DetermineCurrentTargetObject();
             attackFunctionElapsed = 0.0f;
             isAttackAnimationOperating = true;
-            isAnimationChangedToIdleAnimationOnAttackState = false;
+            isAnimationChangedAttackToIdle = false;
             ChangeAnimation(unitAnimations.m_attackAnimation);
             CheckCurrentAnimation(unitAnimations.m_attackAnimation);
         }
