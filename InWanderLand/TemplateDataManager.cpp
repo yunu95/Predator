@@ -211,6 +211,8 @@ namespace application
                 return CreateTemplateData<Light_TemplateData>(name);
             case DataType::ParticleData:
                 return CreateTemplateData<Particle_TemplateData>(name);
+            case DataType::InteractableData:
+                return CreateTemplateData<Interactable_TemplateData>(name);
             default:
                 return nullptr;
                 break;

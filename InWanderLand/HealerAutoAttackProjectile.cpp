@@ -1,4 +1,5 @@
 #include "HealerAutoAttackProjectile.h"
+#include "HealerAutoAttackProjectilePool.h"
 #include "PassiveCakePool.h"
 
 void HealerAutoAttackProjectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed, float offset)
@@ -17,6 +18,11 @@ void HealerAutoAttackProjectile::Shoot(Unit* ownerUnit, Unit* opponentUnit, floa
 		passiveCake->PopCake(ownerUnit->GetTransform()->GetWorldPosition());
 	}
 
+}
+
+void HealerAutoAttackProjectile::ReturnToPool()
+{
+	HealerAutoAttackProjectilePool::Instance().Return(this);
 }
 
 void HealerAutoAttackProjectile::PlusHealerPassiveStack()

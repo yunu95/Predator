@@ -18,6 +18,12 @@
 
 namespace application
 {
+	struct MonitorResolution
+	{
+		unsigned int width;
+		unsigned int height;
+	};
+
 	struct ApplicationSpecification
 	{
 		std::wstring appName;
@@ -57,6 +63,7 @@ namespace application
 		// AddMainLoopTodo 함수의 매개변수로 등록된 동작 todo는 실행될 때 게임 엔진 루프에 뮤텍스 락을 겁니다.
 		void AddMainLoopTodo(std::function<void()> todo);
 
+		const MonitorResolution& GetMonitorResolution() const;
 		const ApplicationSpecification& GetApplicationSpecification() const;
 
 		// 게임 엔진의 그래픽스 엔진으로부터 최종 렌더 결과를 받아내는 함수
@@ -110,7 +117,6 @@ namespace application
 		// 이 목록에 담긴 함수들이 실행되는 동안 게임 엔진 스레드는 동작을 정지합니다.
 		std::vector<std::function<void()>> loopRegistrations;
 
-
 		enum class LayerList
 		{
 			ContentsLayer = 0,
@@ -124,6 +130,7 @@ namespace application
 		Application(const Application& app) = delete;
 		Application& operator=(const Application& app) = delete;
 
+		MonitorResolution monitorResolution;
 		ApplicationSpecification appSpecification;
 		bool isRunning = false;
 		std::vector<Layer*> layers;

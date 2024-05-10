@@ -844,6 +844,11 @@ namespace application
 						templateList = tdm.GetDataList(DataType::ParticleData);
 						break;
 					}
+					case application::editor::palette::Palette_List::Interactable:
+					{
+						templateList = tdm.GetDataList(DataType::InteractableData);
+						break;
+					}
 					default:
 						break;
 				}
@@ -974,6 +979,10 @@ namespace application
 							break;
 						}
 						case application::editor::DataType::ParticleData:
+						{
+							break;
+						}
+						case application::editor::DataType::InteractableData:
 						{
 							break;
 						}

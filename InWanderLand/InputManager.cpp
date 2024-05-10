@@ -41,9 +41,9 @@ void InputManager::Update()
             {
                 if (yunutyEngine::Input::isKeyPushed(KeyCode::A))
                 {
-                    if (TacticModeSystem::Instance().IsOrderingTimingNow())
+                    /*if (TacticModeSystem::Instance().IsOrderingTimingNow())
                         TacticModeSystem::Instance().SetLeftClickAddQueueForAttackMove(currentSelectedSerialNumber);
-                    else
+                    else*/
                     {
                         PlayerController::Instance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
                         PlayerController::Instance().SetLeftClickAttackMove();

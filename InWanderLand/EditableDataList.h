@@ -10,3 +10,4 @@
 #include "CameraData.h"
 #include "LightData.h"
 #include "ParticleData.h"
+#include "InteractableData.h"

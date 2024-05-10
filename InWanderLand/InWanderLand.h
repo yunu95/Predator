@@ -4,7 +4,6 @@
 #include "Application.h"
 #include "ContentsLayer.h"
 #include <d3d11.h>
-#include "UnitBrush.h"
 #include "TemplateDataManager.h"
 
 // UI

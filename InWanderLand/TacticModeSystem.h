@@ -55,7 +55,7 @@ public:
     void SetCurrentCoolTimeElapsed(float p_duration);
     float GetLeftCoolTime();
 
-    void SetCurrentGauge(int p_gauge);
+    void AddGauge(int p_gauge);
 
 	void RegisterCurrentWave(PlaytimeWave* p_wave);
 
@@ -64,10 +64,16 @@ public:
     void ReportTacticActionFinished();
 
 private:
-    int m_maxGauge{ 10 };
-    int m_currentGauge{ 0 };
-    float m_gaugeIncreaseDuration{ 3.0f };
-    float m_gaugeIncreaseElapsed{ 0.0f };
+    float m_maxGauge{ 100 };
+    float m_currentGauge{ 0 };
+
+    float skillCost{ 0.0f };
+    float moveCost{ 0.0f };
+    float attackCost{ 0.0f };
+
+    float gaugeRecoveryPerSecond{ 0.0f };
+
+    InputManager::SelectedSerialNumber m_latestSelectedUnitNum;
 
 	std::vector<Unit*> m_currentWaveUnits;
 

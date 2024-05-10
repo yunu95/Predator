@@ -33,10 +33,12 @@ void WarriorSkillSystem::ActivateSkillOne(Vector3d skillPos)
 			m_unitNavComponent->SetActive(true);
 			m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
 			m_unitNavComponent->Relocate(skillPos);
-
-			TacticModeSystem::Instance().ReportTacticActionFinished();
-			m_unitComponent->isPermittedToTacticAction = false;
 			m_unitComponent->SetUnitStateIdle();
+			if (m_unitComponent->isPermittedToTacticAction)
+			{
+				m_unitComponent->isPermittedToTacticAction = false;
+				TacticModeSystem::Instance().ReportTacticActionFinished();
+			}
 		});
 }
 
@@ -51,8 +53,12 @@ void WarriorSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 			isOncedActivated = false;
 			SetSkillRequirmentsActive(WTauntSkill, false);
 			TacticModeSystem::Instance().ReportTacticActionFinished();
-			m_unitComponent->isPermittedToTacticAction = false;
 			m_unitComponent->SetUnitStateIdle();
+			if (m_unitComponent->isPermittedToTacticAction)
+			{
+				m_unitComponent->isPermittedToTacticAction = false;
+				TacticModeSystem::Instance().ReportTacticActionFinished();
+			}
 		});
 	m_developedFunctionToWSkill();
 }

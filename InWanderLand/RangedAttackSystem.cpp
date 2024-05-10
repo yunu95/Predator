@@ -28,7 +28,7 @@ void RangedAttackSystem::Attack(Unit* opponentUnit, float offset)
 		}
 		default:
 		{
-			AutoAttackProjectilePool::Instance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
+			//AutoAttackProjectilePool::Instance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
 			break;
 		}
 	}
