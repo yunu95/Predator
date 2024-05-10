@@ -1007,6 +1007,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Action_PlayManualDialogue.h" />
     <ClInclude Include="Action_PlayTimedDialogue.h" />
     <ClInclude Include="Action_Tutorial.h" />
+    <ClInclude Include="Action_Unit.h" />
     <ClInclude Include="Action_WaitPreviousActionEnd.h" />
     <ClInclude Include="Action_Camera.h" />
     <ClInclude Include="Action_Cinematic.h">
@@ -1300,6 +1301,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Action_PlayManualDialogue.cpp" />
     <ClCompile Include="Action_PlayTimedDialogue.cpp" />
     <ClCompile Include="Action_Tutorial.cpp" />
+    <ClCompile Include="Action_Unit.cpp" />
     <ClCompile Include="Action_WaitPreviousActionEnd.cpp" />
     <ClCompile Include="Action_Camera.cpp" />
     <ClCompile Include="Action_Cinematic.cpp">

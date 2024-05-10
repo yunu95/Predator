@@ -1432,6 +1432,9 @@
     <ClInclude Include="InteractablePalette.h">
       <Filter>Editor\Palette\List\InteractablePalette</Filter>
     </ClInclude>
+    <ClInclude Include="Action_Unit.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2184,6 +2187,9 @@
     </ClCompile>
     <ClCompile Include="InteractablePalette.cpp">
       <Filter>Editor\Palette\List\InteractablePalette</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_Unit.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
