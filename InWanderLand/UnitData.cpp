@@ -120,6 +120,11 @@ namespace application
 
         void UnitData::ApplyAsPlaytimeObject()
         {
+            if (pod.isGuide)
+            {
+                return;
+            }
+
             // 함정과 같은 특수 기믹 객체들도 유닛과 유사하게 위치를 지정해주면 되기 때문에 UnitType에 Bomb, Trap, Bbang/th같은
             // 타입을 확장하여 유닛 생성 로직에서 같이 처리할 수 있게 만들 수 있다.
             //UnitClassifier::SingleInstance().SendPODToClassifier(pod);

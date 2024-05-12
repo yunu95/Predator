@@ -37,9 +37,8 @@ namespace application
 
 		virtual bool IsValid() override;
 
-		void SetUnit(editor::UnitData* unit);
+		void SetTargetUnit(editor::UnitData* unit);
 		void SetDestinationUnit(editor::UnitData* unit);
-		void SetLerpTime(float lerpTime);
 
 		virtual void ProcessObervationEvent(ObservationTarget* target, ObservationEvent event) override;
 
@@ -49,20 +48,8 @@ namespace application
 		virtual bool PostDecoding(const json& data) override;
 
 	private:
-		void UpdateDestinationFromContainer();
-		void UpdatePosition(const yunuGI::Vector3& pos);
-		void UpdateRotation(const yunuGI::Quaternion& rot);
-		void UpdateScale(const yunuGI::Vector3& scal);
-
 		editor::UnitData* targetUnit = nullptr;
-		yunuGI::Vector3 position = yunuGI::Vector3();
-		yunuGI::Quaternion rotation = yunuGI::Quaternion();
-		yunuGI::Vector3 scale = yunuGI::Vector3(1, 1, 1);
-		bool destinationSetting = false;
-		yunuGI::Vector3 container_pos = yunuGI::Vector3();
-		yunuGI::Vector3 container_rot = yunuGI::Vector3();
-		yunuGI::Vector3 container_scal = yunuGI::Vector3(1, 1, 1);
+		editor::UnitData* destinationUnit = nullptr;
 		bool isEditing = false;
-		float lerpTime = 0;
 	};
 }
