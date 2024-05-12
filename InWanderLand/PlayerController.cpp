@@ -76,6 +76,7 @@ void PlayerController::SetRightClickFunction()
                             e.second->OrderAttackMove(pos, selectedUnit);
                         }
                     }
+                    UIManager::Instance().SummonMoveToFeedback(pos);
                 };
         }
         else
@@ -95,6 +96,7 @@ void PlayerController::SetRightClickFunction()
                     {
                         currentSelectedUnit->OrderAttackMove(pos, m_cursorDetector->GetCurrentOnMouseUnit());
                     }
+                    UIManager::Instance().SummonMoveToFeedback(pos);
                 };
         }
     }
@@ -111,6 +113,7 @@ void PlayerController::SetRightClickFunction()
                 {
                     e.second->OrderMove(pos);
                 }
+                UIManager::Instance().SummonMoveToFeedback(pos);
             };
     }
 }

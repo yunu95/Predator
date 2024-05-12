@@ -166,6 +166,12 @@ void UIManager::UpdateHighestPriorityButton()
             m_highestPriorityButton->m_onMouseFunction();
     }
 }
+void UIManager::SummonMoveToFeedback(const Vector3d& worldPos)
+{
+    auto feedback = GetUIElementByEnum(UIEnumID::MoveTargetFeedbackAnimSprites);
+    feedback->GetTransform()->SetWorldPosition(GetUIPosFromWorld(worldPos));
+    feedback->EnableElement();
+}
 
 Vector3d UIManager::GetUIPosFromWorld(Vector3d worldPosition)
 {
