@@ -80,6 +80,36 @@ void InstancingManager::SortByCameraDirection()
 		}
 	);
 
+	std::vector<std::pair<InstanceID, std::vector<std::shared_ptr<RenderInfo>>>> noBlend;
+	std::vector<std::pair<InstanceID, std::vector<std::shared_ptr<RenderInfo>>>> blend;
+
+	//for(auto iter =  this->staticMeshDeferredRenderVec.begin(); iter != this->staticMeshDeferredRenderVec.end();)
+	for(auto& each : this->staticMeshDeferredRenderVec)
+	{
+		D3D11_BLEND_DESC desc;
+		((PixelShader*)(each.first.second->GetPixelShader()))->GetBlendState()->GetDesc(&desc);
+
+		if (desc.RenderTarget[0].BlendEnable)
+		{
+			blend.push_back(each);
+		}
+		else
+		{
+			noBlend.push_back(each);
+		}
+	}
+	this->staticMeshDeferredRenderVec.clear();
+	for (auto& each : noBlend)
+	{
+		this->staticMeshDeferredRenderVec.push_back(each);
+	}
+
+	for (auto& each : blend)
+	{
+		this->staticMeshDeferredRenderVec.push_back(each);
+	}
+
+
 	DirectX::SimpleMath::Matrix cameraWTM = CameraManager::Instance.Get().GetMainCamera()->GetWTM();
 	DirectX::SimpleMath::Vector3 pos;
 	DirectX::SimpleMath::Vector3 scale;
@@ -340,7 +370,6 @@ void InstancingManager::RenderStaticForward()
 
 	//	cache[instanceID].push_back(each);
 	//}
-
 	for (auto& pair : this->staticMeshForwardCache)
 	{
 		std::set<std::shared_ptr<RenderInfo>>& renderInfoVec = pair.second;

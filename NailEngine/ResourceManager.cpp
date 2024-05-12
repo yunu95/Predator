@@ -908,6 +908,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateShader(L"PointLightShadowVS.cso");
 	CreateShader(L"Skinned_PointLightShadowVS.cso");
 	CreateShader(L"ParticleVS.cso");
+	CreateShader(L"TextureAnimVS.cso");
 #pragma endregion
 
 #pragma region PS
@@ -932,6 +933,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateShader(L"DissolvePS.cso");
 	CreateShader(L"UIPreProcessVS.cso");
 	CreateShader(L"UIPreProcessPS.cso");
+	CreateShader(L"TextureAnimPS.cso");
 #pragma endregion
 
 #pragma region GS

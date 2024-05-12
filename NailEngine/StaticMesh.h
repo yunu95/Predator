@@ -89,7 +89,7 @@ public:
 			}
 			else
 			{
-				for (auto& each : this->materialVec)
+				/*for (auto& each : this->materialVec)
 				{
 					if (each->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
 					{
@@ -108,7 +108,7 @@ public:
 					{
 						InstancingManager::Instance.Get().RegisterStaticForwardData(i);
 					}
-				}
+				}*/
 			}
 		}
 	}

@@ -33,6 +33,7 @@
 #include "TutorialManager.h"
 #include "ContentsObserver.h"
 #include "ParticleTool_Manager.h"
+#include "UVAnimator.h"
 
 #include <algorithm>
 #include <string>
@@ -80,18 +81,21 @@ public:
 class TestComponent4 : public yunutyEngine::Component
 {
 public:
-    yunutyEngine::graphics::Animator* anim;
-    yunuGI::IAnimation* animation;
-    yunuGI::IAnimation* animation2;
+    yunutyEngine::GameObject* obj;
     virtual void Update() override
     {
+        obj = GetGameObject();
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
 		{
-            anim->ChangeAnimation(animation2, 1.f, 1.f);
+            auto curScale = obj->GetTransform()->GetLocalScale();
+            curScale.x += 0.1f;
+            obj->GetTransform()->SetLocalScale(curScale);
 		}
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
 		{
-            anim->ChangeAnimation(animation, 1.f, 1.f); 
+			auto curScale = obj->GetTransform()->GetLocalScale();
+			curScale.x -= 0.1f;
+			obj->GetTransform()->SetLocalScale(curScale);
 		}
 		//if (Input::isKeyPushed(yunutyEngine::KeyCode::O))
 		//{
@@ -131,7 +135,7 @@ void GraphicsTest()
 		}
     }
 
-    {
+ /*   {
         auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
         auto test = obj2->AddComponent<TestComponent4>();
         auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
@@ -143,6 +147,19 @@ void GraphicsTest()
         anim->PushAnimation(animation);
         anim->PushAnimation(animation2);
         anim->Play(animation);
+    }*/
+
+    {
+        auto obj2 = Scene::getCurrentScene()->AddGameObject();
+        obj2->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
+        obj2->AddComponent<TestComponent4>();
+
+        obj2->GetTransform()->SetLocalPosition(Vector3d{ 0,0,14 });
+        auto renderer = obj2->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+        auto uv = obj2->AddComponent<UVAnimator>();
+        uv->SetSpeed(0.5);
+        uv->SetStaticMeshRenderer(renderer);
+        uv->SetTexture(_resourceManager->GetTexture(L"Texture/GuideLine/GuideLine.dds"));
     }
 
     //{
@@ -163,7 +180,7 @@ void GraphicsTest()
  //       animator->Play(animation);
 	//}
 
-	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
+	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 }
 
 void application::contents::ContentsLayer::SetInputControl(bool control)

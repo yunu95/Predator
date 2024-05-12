@@ -35,7 +35,7 @@ PS_OUT main(PixelIn input)
     
     if (UseTexture(useOpacity) == 1)
     {
-        opacity = OpacityMap.Sample(sam, input.uv).w;
+        opacity = OpacityMap.Sample(sam, input.uv).r;
     }
     
     if (UseTexture(useAlbedo) == 1)
@@ -56,7 +56,8 @@ PS_OUT main(PixelIn input)
     {
         color = pow(color, 2.2f);
     }
-    color.w = opacity;
+    color.w = 0.9;
+    //color.w = 1;
     output.color = color;
     
     float3 viewNormal = input.normalV;
@@ -90,8 +91,6 @@ PS_OUT main(PixelIn input)
     output.position = input.posV;
     output.normal = float4(viewNormal.xyz, 1.f);
     
-    /////output.color = color * materialColor;
-    
     output.util = float4(lightMapUV[input.id].lightMapIndex, DiffuseExposure, AmbientExposure, 1.f);
 
     return output;
@@ -101,6 +100,6 @@ PS_OUT main(PixelIn input)
 // ShaderType : Deferred
 // RasterType : Solid
 // CullType : CullBack
-// DepthType : Less
+// DepthType : LessNoWrite
 // BlendType : AlphaBlend
 // Sampler : Default

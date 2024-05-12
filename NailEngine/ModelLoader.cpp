@@ -233,7 +233,10 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 
 	// Material Name
 	fbxMeshData.material.materialName = aiStringToWString(material->GetName());
-
+	if (fbxMeshData.material.materialName == L"M_Wood")
+	{
+		int a = 1;
+	}
 	auto materialPtr = ResourceManager::Instance.Get().GetMaterial(fbxMeshData.material.materialName);
 
 	// Albedo Texture
