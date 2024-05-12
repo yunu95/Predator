@@ -226,7 +226,7 @@ void Unit::Start()
 
                     if (isPermittedToTacticAction)
                     {
-						isPermittedToTacticAction = false;
+                        isPermittedToTacticAction = false;
                         isTacticAttackMovePermitted = false;
 						EnemyActionOnTacticModeEngaged();
                         TacticModeSystem::Instance().ReportTacticActionFinished();
@@ -560,7 +560,7 @@ void Unit::IdleUpdate()
     {
         if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
         {
-			DetermineCurrentTargetObject();
+            DetermineCurrentTargetObject();
         }
     }
     // 데미지를 입으면 공격한 상대의 정보를 list에 등록하고 쫓아가기
@@ -587,7 +587,7 @@ void Unit::MoveUpdate()
         currentOrder = UnitState::Idle;
         if (isPermittedToTacticAction)
         {
-			isPermittedToTacticAction = false;
+            isPermittedToTacticAction = false;
             TacticModeSystem::Instance().ReportTacticActionFinished();
         }
     }
@@ -651,7 +651,7 @@ void Unit::AttackUpdate()
     {
         if (!isAnimationChangedAttackToIdle)
         {
-			ChangeAnimation(unitAnimations.m_idleAnimation);
+            ChangeAnimation(unitAnimations.m_idleAnimation);
             isAnimationChangedAttackToIdle = true;
         }
 

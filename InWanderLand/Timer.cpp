@@ -8,7 +8,6 @@ void TimerComponent::Update()
         m_elapsed += isRealtime ? Time::GetDeltaTimeUnscaled() : Time::GetDeltaTime();
         if (m_elapsed >= m_duration)
         {
-            onCompleteFunction();
 
             if (m_isRepeated == false)
             {
@@ -22,6 +21,7 @@ void TimerComponent::Update()
             {
                 m_elapsed = 0.0f;
             }
+            onCompleteFunction();
         }
         else
         {

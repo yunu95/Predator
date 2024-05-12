@@ -29,8 +29,6 @@ private:
     // 아래 두 함수들을 응용해 UI들이 다 생성되고 난 후 추가적인 작업을 수행합니다.
     bool ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElement* element);
 
-    const std::vector<std::string>& GetDialogueTimed_KeyStrings();
-    const std::vector<std::string>& GetDialogueManual_KeyStrings();
     void SetUIElementWithEnum(UIEnumID uiEnumID, UIElement* ui);
     void SetUIElementWithIndex(int index, UIElement* ui);
     void SetUIDataWithIndex(int index, const JsonUIData& uiData);
@@ -62,6 +60,10 @@ private:
     std::unordered_map<std::string, UIElement*> dialogueManual;
     std::vector<std::string> dialogueManual_KeyStrings;
 public:
+    const std::vector<std::string>& GetDialogueTimed_KeyStrings();
+    const std::vector<std::string>& GetDialogueManual_KeyStrings();
+    UIElement* GetDialogueTimed(const std::string& keyString);
+    UIElement* GetDialogueManual(const std::string& keyString);
     static constexpr UIEnumID comboNumbers[6]
     {
         UIEnumID::Ingame_Combo_TargetNumFinished1,
@@ -106,6 +108,7 @@ public:
     // 만약 현재의 highestPirorityButton이 여전히 가장 높은 우선순위를 가지고 있다면, 아무 일도 벌어지지 않습니다.
     void UpdateHighestPriorityButton();
 
+    void SummonMoveToFeedback(const Vector3d& worldPos);
     Vector3d GetUIPosFromWorld(Vector3d worldPosition);
     bool IsMouseOnButton();
     weak_ptr<UIElement> DuplicateUIElement(UIElement* ui);

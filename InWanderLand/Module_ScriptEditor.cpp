@@ -102,7 +102,7 @@ namespace application
 			ImGuiWindowFlags flag = 0;
 			if (isEditingPopup)
 			{
-				flag |= ImGuiWindowFlags_NoInputs;
+				flag |= ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoBringToFrontOnFocus;
 				ImGui::SetNextWindowBgAlpha(0.3f);
 				ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.2f, 0.2f, 0.2f, 0.7f));
 			}
@@ -153,6 +153,7 @@ namespace application
 						imgui::ShiftCursorY((rect.y - size.y) / 2);
 						ImGui::Text("Please Setting Enter Region");
 						ImGui::End();
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
 
 						pp.ChangeTab("Region");
 
@@ -162,8 +163,8 @@ namespace application
 							data->isEditing = true;
 							rp.Reset();
 						}
-							
-						if(data->isEditing == true && rp.GetSelections().size() == 1)
+
+						if (data->isEditing == true && rp.GetSelections().size() == 1)
 						{
 							data->SetRegion(static_cast<RegionData*>(*rp.GetSelections().begin()));
 							data->isEditing = false;
@@ -187,6 +188,7 @@ namespace application
 						imgui::ShiftCursorY((rect.y - size.y) / 2);
 						ImGui::Text("Please Setting Leave Region");
 						ImGui::End();
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
 
 						pp.ChangeTab("Region");
 
@@ -221,6 +223,7 @@ namespace application
 						imgui::ShiftCursorY((rect.y - size.y) / 2);
 						ImGui::Text("Please Setting Target Unit");
 						ImGui::End();
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
 
 						pp.ChangeTab("Unit");
 
@@ -255,6 +258,7 @@ namespace application
 						imgui::ShiftCursorY((rect.y - size.y) / 2);
 						ImGui::Text("Please Setting Target Unit");
 						ImGui::End();
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
 
 						pp.ChangeTab("Unit");
 
@@ -296,6 +300,7 @@ namespace application
 						imgui::ShiftCursorY((rect.y - size.y) / 2);
 						ImGui::Text("Please Setting Camera");
 						ImGui::End();
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
 
 						pp.ChangeTab("Cam");
 
@@ -319,9 +324,119 @@ namespace application
 							epm.Return();
 						}
 					}
+
+					if (epm.GetReturnPopupName() == "SetTargetUnit(Move)")
+					{
+						ImGui::Begin("Unit Move Popup(SetTarget)", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Target Unit");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Target Unit");
+						ImGui::End();
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+
+						pp.ChangeTab("Unit");
+
+						auto data = epm.GetReturnPopupData<Action_UnitMove>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &up)
+						{
+							data->isEditing = true;
+							up.Reset();
+						}
+
+						if (data->isEditing == true && up.GetSelections().size() == 1)
+						{
+							data->SetTargetUnit(static_cast<UnitData*>(*up.GetSelections().begin()));
+							data->isEditing = false;
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
+
+					if (epm.GetReturnPopupName() == "EditDestinationUnit(Move)")
+					{
+						ImGui::Begin("Unit Move Popup(EditDestination)", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						imgui::ShiftCursorY((rect.y - 20) / 2);
+						bool endFlag = false;
+						if (ImGui::Button("End Edit", ImVec2(ImGui::GetContentRegionAvail().x, 20)))
+						{
+							endFlag = true;
+						}
+						ImGui::End();
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+
+						pp.ChangeTab("Unit");
+
+						auto data = epm.GetReturnPopupData<Action_UnitMove>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &up)
+						{
+							data->isEditing = true;
+							up.Reset();
+							up.SelectUnitInstance(data->destinationUnit);
+						}
+
+						if (data->isEditing == true && endFlag)
+						{
+							data->isEditing = false;
+							data->destinationUnit->GetPaletteInstance()->GetGameObject()->SetSelfActive(false);
+							up.Reset();
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							data->destinationUnit->GetPaletteInstance()->GetGameObject()->SetSelfActive(false);
+							up.Reset();
+							epm.Return();
+						}
+					}
+
+					if (epm.GetReturnPopupName() == "SetDestinationUnit(Move)")
+					{
+						ImGui::Begin("Unit Move Popup(SetDestination)", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Destination Unit");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Destination Unit");
+						ImGui::End();
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+
+						pp.ChangeTab("Unit");
+
+						auto data = epm.GetReturnPopupData<Action_UnitMove>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &up)
+						{
+							data->isEditing = true;
+							up.Reset();
+						}
+
+						if (data->isEditing == true && up.GetSelections().size() == 1)
+						{
+							if (data->targetUnit->pod.templateData->pod.skinnedFBXName == static_cast<UnitData*>(*up.GetSelections().begin())->pod.templateData->pod.skinnedFBXName)
+							{
+								data->SetDestinationUnit(static_cast<UnitData*>(*up.GetSelections().begin()));
+								data->isEditing = false;
+								epm.Return();
+							}
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
 				}
 			}
-
 			ImGui::End();
 		}
 
@@ -789,6 +904,21 @@ namespace application
 								case application::ActionType::TutorialModeChange:
 								{
 									selectedScript->AddAction<Action_TutorialModeChange>();
+									break;
+								}
+								case application::ActionType::PlayManualDialogue:
+								{
+									selectedScript->AddAction<Action_PlayManualDialogue>();
+									break;
+								}
+								case application::ActionType::PlayTimedDialogue:
+								{
+									selectedScript->AddAction<Action_PlayTimedDialogue>();
+									break;
+								}
+								case application::ActionType::UnitMove:
+								{
+									selectedScript->AddAction<Action_UnitMove>();
 									break;
 								}
 								default:

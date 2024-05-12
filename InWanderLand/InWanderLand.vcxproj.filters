@@ -541,6 +541,9 @@
     <Filter Include="Contents\ContentsObserver\Observee">
       <UniqueIdentifier>{6be041a3-b108-49d6-9631-62275bd6bb8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\Effect\UISpriteAnimation">
+      <UniqueIdentifier>{2f068f2c-2e4f-4b41-9925-dfe33ce45295}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Editor\Palette\EditorInstance\InteractableInstance">
       <UniqueIdentifier>{0afaa9be-4e69-4dfd-8858-cdffa6aa3f8d}</UniqueIdentifier>
     </Filter>
@@ -1396,6 +1399,15 @@
     <ClInclude Include="PermanentObservee.h">
       <Filter>Contents\ContentsObserver\Observee</Filter>
     </ClInclude>
+    <ClInclude Include="Action_PlayManualDialogue.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_PlayTimedDialogue.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
+    <ClInclude Include="UISpriteAnimation.h">
+      <Filter>UI\Effect\UISpriteAnimation</Filter>
+    </ClInclude>
     <ClInclude Include="Condition_TutorialMode.h">
       <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
     </ClInclude>
@@ -1413,6 +1425,9 @@
     </ClInclude>
     <ClInclude Include="InteractablePalette.h">
       <Filter>Editor\Palette\List\InteractablePalette</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_Unit.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2140,6 +2155,15 @@
     <ClCompile Include="PermanentObservee.cpp">
       <Filter>Contents\ContentsObserver\Observee</Filter>
     </ClCompile>
+    <ClCompile Include="Action_PlayManualDialogue.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_PlayTimedDialogue.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
+    <ClCompile Include="UISpriteAnimation.cpp">
+      <Filter>UI\Effect\UISpriteAnimation</Filter>
+    </ClCompile>
     <ClCompile Include="Condition_TutorialMode.cpp">
       <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
     </ClCompile>
@@ -2157,6 +2181,9 @@
     </ClCompile>
     <ClCompile Include="InteractablePalette.cpp">
       <Filter>Editor\Palette\List\InteractablePalette</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_Unit.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

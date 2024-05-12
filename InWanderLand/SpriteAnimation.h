@@ -12,6 +12,7 @@ public:
         double timeOffset;
     };
     void SetSprites(const wchar_t* spritesRootPath);
+    static const std::vector<Sprite>* GetSprites(const wchar_t* spritesRootPath);
 private:
     virtual void Start() override;
     virtual void Update() override;

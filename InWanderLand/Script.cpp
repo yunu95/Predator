@@ -398,6 +398,21 @@ namespace application
 							action = AddAction<Action_TutorialModeChange>();
 							break;
 						}
+						case application::ActionType::PlayManualDialogue:
+						{
+							action = AddAction<Action_PlayManualDialogue>();
+							break;
+						}
+						case application::ActionType::PlayTimedDialogue:
+						{
+							action = AddAction<Action_PlayTimedDialogue>();
+							break;
+						}
+						case application::ActionType::UnitMove:
+						{
+							action = AddAction<Action_UnitMove>();
+							break;
+						}	
 						default:
 							break;
 					}

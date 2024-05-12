@@ -166,6 +166,12 @@ void UIManager::UpdateHighestPriorityButton()
             m_highestPriorityButton->m_onMouseFunction();
     }
 }
+void UIManager::SummonMoveToFeedback(const Vector3d& worldPos)
+{
+    auto feedback = GetUIElementByEnum(UIEnumID::MoveTargetFeedbackAnimSprites);
+    feedback->GetTransform()->SetWorldPosition(GetUIPosFromWorld(worldPos));
+    feedback->EnableElement();
+}
 
 Vector3d UIManager::GetUIPosFromWorld(Vector3d worldPosition)
 {
@@ -277,6 +283,16 @@ const std::vector<std::string>& UIManager::GetDialogueTimed_KeyStrings()
 const std::vector<std::string>& UIManager::GetDialogueManual_KeyStrings()
 {
     return dialogueManual_KeyStrings;
+}
+UIElement* UIManager::GetDialogueTimed(const std::string& keyString)
+{
+    assert(dialogueTimed.contains(keyString));
+    return dialogueTimed.at(keyString);
+}
+UIElement* UIManager::GetDialogueManual(const std::string& keyString)
+{
+    assert(dialogueManual.contains(keyString));
+    return dialogueManual.at(keyString);
 }
 void UIManager::SetUIElementWithEnum(UIEnumID uiEnumID, UIElement* ui)
 {
@@ -609,6 +625,15 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         dialogueTimed_KeyStrings.push_back(uiData.uiName);
         dialogueTimed[uiData.uiName] = element;
     }
+    if (uiData.customFlags2 & (int)UIExportFlag2::AnimatedSprite)
+    {
+        element->spriteAnimationOnEnable = element->GetGameObject()->AddComponent<UISpriteAnimation>();
+        element->spriteAnimationOnEnable->SetSprites(yutility::GetWString(uiData.animatedSpriteFolderPath).c_str());
+        element->spriteAnimationOnEnable->m_isRepeated = uiData.animatedSpriteIsRepeat;
+        element->spriteAnimationOnEnable->uiElement = element;
+        element->spriteAnimationOnEnable->Init();
+        element->spriteAnimationOnEnable->ActivateTimer();
+    }
 
     Vector3d pivotPos{ 0,0,0 };
     // offset by anchor
@@ -900,7 +925,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
             }
         }
     }
-        }
+}
 // 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
 bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element)
 {

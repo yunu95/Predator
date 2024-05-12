@@ -91,7 +91,10 @@ namespace application
 		}
 
 		targetCam = cam;
-		cam->RegisterObserver(this);
+		if (cam)
+		{
+			cam->RegisterObserver(this);
+		}
 	}
 
 	void Action_CameraChangeView::SetLerpTime(float lerpTime)
