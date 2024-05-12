@@ -7,6 +7,7 @@
 #include "ParticleData.h"
 #include "TemplateDataManager.h"
 #include "ParticleBrush.h"
+#include "ParticleData.h"
 
 namespace application::editor::palette
 {

@@ -28,6 +28,16 @@ namespace application::editor::palette
         SelectUnitTemplateData(nullptr);
     }
 
+    UnitData* UnitPalette::GetSingleSelectedUnitInstance()
+    {
+        return (selection.size() != 1) ? nullptr : static_cast<UnitData*>(const_cast<IEditableData*>(*selection.begin()));
+    }
+
+    void UnitPalette::SelectUnitInstance(UnitData* unit)
+    {
+        Palette::OnSelectSingleInstance(unit);
+    }
+
     void UnitPalette::Reset()
     {
         Palette::Reset();
