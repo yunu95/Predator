@@ -343,6 +343,7 @@ void Unit::MoveEngage()
 
     m_navAgentComponent->SetSpeed(m_speed);
     m_navAgentComponent->MoveTo(m_currentMovePosition);
+	dotween->DOLookAt(m_currentMovePosition, rotateTime, false);
 
     ChangeAnimation(unitAnimations.m_walkAnimation);
 }
@@ -1371,8 +1372,11 @@ void Unit::OrderMove(Vector3d position)
     if ((GameManager::Instance().IsBattleSystemOperating() || m_unitType == UnitType::Warrior) &&
         !(currentOrder == UnitState::WaveStart || currentOrder == UnitState::WaveMotion))
     {
-        currentOrder = UnitState::Move;
-        dotween->DOLookAt(position, rotateTime, false);
+        if (currentOrder != UnitState::Skill)
+        {
+			currentOrder = UnitState::Move;
+			//dotween->DOLookAt(position, rotateTime, false);
+        }
     }
 }
 
