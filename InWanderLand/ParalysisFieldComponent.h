@@ -11,21 +11,22 @@ class StatusTimer;
 class ParalysisFieldComponent : public FieldDamage
 {
 public:
-	virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) override;
+    physics::SphereCollider* m_collider{ nullptr };
+    virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) override;
 
 private:
-	StatusTimer* m_paralysisTimer;
+    StatusTimer* m_paralysisTimer;
 
-	std::unordered_map<Unit*, bool> m_onFieldUnitsMap;
+    std::unordered_map<Unit*, bool> m_onFieldUnitsMap;
 
-	float m_paralysisTime;
-	float m_slowMultipleScale;
-	float m_pullingPower;
-	float m_pullingTime;
+    float m_paralysisTime;
+    float m_slowMultipleScale;
+    float m_pullingPower;
+    float m_pullingTime;
 
-	virtual void SetFieldSkillMembers() override;
+    virtual void SetFieldSkillMembers() override;
 
 public:
-	virtual void OnTriggerExit(physics::Collider* collider) override;
+    virtual void OnTriggerExit(physics::Collider* collider) override;
 };
 

@@ -1,4 +1,5 @@
 #include "UIManager.h"
+#include "SpriteAnimation.h"
 #include "RTSCam.h"
 #include "UIManager.h"
 #include "UIImage.h"
@@ -168,9 +169,19 @@ void UIManager::UpdateHighestPriorityButton()
 }
 void UIManager::SummonMoveToFeedback(const Vector3d& worldPos)
 {
-    auto feedback = GetUIElementByEnum(UIEnumID::MoveTargetFeedbackAnimSprites);
-    feedback->GetTransform()->SetWorldPosition(GetUIPosFromWorld(worldPos));
-    feedback->EnableElement();
+    if (!moveToSpriteAnim)
+    {
+        static constexpr float spriteSize{ 3.0f };
+        moveToSpriteAnim = Scene::getCurrentScene()->AddGameObject()->AddComponent<SpriteAnimation>();
+        moveToSpriteAnim->SetSprites(L"Texture/SpriteAnimations/MoveClickAnim");
+        moveToSpriteAnim->GetTransform()->SetLocalScale(Vector3d::one * spriteSize);
+        moveToSpriteAnim->GetTransform()->SetLocalRotation(Vector3d{ 90,0,0 });
+        moveToSpriteAnim->isRepeating = false;
+        moveToSpriteAnim->realTime = true;
+    }
+    moveToSpriteAnim->GetGameObject()->SetSelfActive(true);
+    moveToSpriteAnim->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * 0.1);
+    moveToSpriteAnim->Play();
 }
 
 Vector3d UIManager::GetUIPosFromWorld(Vector3d worldPosition)

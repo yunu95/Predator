@@ -54,6 +54,7 @@ namespace application
 
         GC<float>	robinQSkillCoolTime = 2.0f;
         GC<float>	robinQSkillCost = 10.0f;
+        GC<float>	robinQSkillRushSpeed = 20.0f;
         GC<float>	robinESkillCoolTime = 2.0f;
         GC<float>	robinESkillCost = 10.0f;
 

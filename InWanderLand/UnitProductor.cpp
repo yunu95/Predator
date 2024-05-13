@@ -177,6 +177,7 @@ void UnitProductor::AddDotweenComponent() const
     /// 6. Dotween 추가
     m_unitComponent->dotween = m_unitGameObject->AddComponent<Dotween>();
     // 마비 타이머 추가
+    m_unitComponent->paralysisTimer = m_unitGameObject->AddComponent<TimerComponent>();
     m_unitComponent->paralysisTimer->m_duration = 1;
     m_unitComponent->paralysisTimer->onCompleteFunction = [m_unitComponent = m_unitComponent]()
         {

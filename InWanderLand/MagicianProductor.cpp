@@ -110,6 +110,7 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
     auto WfieldDamageComponent = WSkillFieldObject->AddComponent<ParalysisFieldComponent>();
     WfieldDamageComponent->SetSkillOwnerUnit(m_unitComponent);
     auto WSkillFieldCollider = WSkillFieldObject->AddComponent<physics::SphereCollider>();
+    WfieldDamageComponent->m_collider = WSkillFieldCollider;
 
     m_WSkillFieldRadius = application::GlobalConstant::GetSingletonInstance().pod.ursulaESkillRadius;
     WSkillFieldCollider->SetRadius(m_WSkillFieldRadius);
