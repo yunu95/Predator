@@ -10,7 +10,7 @@
 
 void PlayerController::Start()
 {
-	currentSelectedSerialNumber = Unit::UnitType::Warrior;
+    currentSelectedSerialNumber = Unit::UnitType::Warrior;
 }
 
 void PlayerController::SetMovingSystemComponent(RTSCam* sys)
@@ -103,7 +103,11 @@ void PlayerController::SetRightClickFunction()
     }
     else
     {
-		Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
+        if (!playerComponentMap.contains(currentSelectedSerialNumber))
+        {
+            return;
+        }
+        Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
         m_movingSystemComponent->groundRightClickCallback = [=](Vector3d pos)
             {
                 if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())

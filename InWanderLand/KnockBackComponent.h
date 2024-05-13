@@ -10,7 +10,7 @@ class StatusTimer;
 class KnockBackComponent : public StatusEffectTrigger
 {
 private:
-	float m_pushPower = 6.5f;
+	float m_pushPower = 8.5f;
 	float m_duration = 0.5f;
 	static constexpr float maxKnockHeight = 4;
 

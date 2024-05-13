@@ -17,12 +17,27 @@ namespace yunutyEngine
     }
     void NavigationObstacle::OnTransformUpdate()
     {
-        ApplyObstacleState();
+        if (GetActive())
+            ApplyObstacleState();
     }
     void NavigationObstacle::SetHalfExtents(const Vector3f& halfExtents)
     {
         impl->halfExtents = halfExtents;
         ApplyObstacleState();
+    }
+    void NavigationObstacle::SetRadiusAndHeight(float radius, float height)
+    {
+        impl->radius = radius;
+        impl->height = height;
+        ApplyObstacleState();
+    }
+    void NavigationObstacle::SetObstacleType(ObstacleType obstacleType)
+    {
+        this->obstacleType = obstacleType;
+    }
+    NavigationObstacle::ObstacleType NavigationObstacle::GetObstacleType()
+    {
+        return obstacleType;
     }
     void NavigationObstacle::ApplyObstacleState()
     {
@@ -31,7 +46,30 @@ namespace yunutyEngine
             float yRadians = GetTransform()->GetWorldRotation().y * math::Deg2Rad;
             if (impl->obstacleRef != 0)
                 navField->impl->DeleteObstacle(impl->obstacleRef);
-            impl->obstacleRef = navField->impl->AddBoxObstacle(GetTransform()->GetWorldPosition(), impl->halfExtents, yRadians);
+            switch (obstacleType)
+            {
+            case ObstacleType::Box:
+                impl->obstacleRef = navField->impl->AddBoxObstacle(GetTransform()->GetWorldPosition(), impl->halfExtents, yRadians);
+                break;
+            case ObstacleType::Cylinder:
+                impl->obstacleRef = navField->impl->AddCylinderObstacle(GetTransform()->GetWorldPosition(), impl->radius, impl->height);
+                break;
+            default:
+                assert(false);
+                break;
+            }
+        }
+    }
+    void NavigationObstacle::OnEnable()
+    {
+        ApplyObstacleState();
+    }
+    void NavigationObstacle::OnDisable()
+    {
+        if (navField && impl->obstacleRef != 0)
+        {
+            navField->impl->DeleteObstacle(impl->obstacleRef);
+            impl->obstacleRef = 0;
         }
     }
     void NavigationObstacle::AssignToNavigationField(NavigationField* navField)

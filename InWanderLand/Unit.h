@@ -87,11 +87,15 @@ public:
         yunuGI::IAnimation* m_skillFourAnimation;
     };
 
+    TimerComponent* paralysisTimer;
     TimerComponent* knockBackTimer;
+    Vector3d knockBackStartPoint;
     Dotween* dotween;
     //yunuGI::IAnimation* m_currentAnimation{ nullptr };
     yunutyEngine::graphics::Animator* m_animatorComponent;
     NavigationAgent* m_navAgentComponent;
+    // 유닛들이 가만히 있을 때 장애물로 인식하게 만들기 위함.
+    NavigationObstacle* m_navObstacle;
     BurnEffect* m_burnEffect;
     PlayerSkillSystem* m_playerSkillSystem;
 
@@ -275,11 +279,14 @@ public:
     float animationTransitionSpeed = 1.0f;
     bool isAttackAnimationOperating{ false };
     bool isAnimationChangedAttackToIdle{ false };
+    bool isFollowingNavAgent{ true };
 
     virtual void OnEnable() override;
+    virtual void OnDisable() override;
     virtual void Start() override;
     virtual void Update() override;
     virtual void OnDestroy() override;
+    virtual void OnTransformUpdate() override;
 
     virtual void PlayFunction() override;
     virtual void StopFunction() override;
@@ -396,6 +403,7 @@ public:
 
     bool IsAllExtraPlayerUnitDead();
     bool CheckEnemyStoppedByTacticMode() const;
+    void KnockBackUnit(Vector3d targetPosition, float knockBackDuration);
 
 
     std::function<void()> returnToPoolFunction{ nullptr };

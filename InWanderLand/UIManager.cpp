@@ -273,7 +273,7 @@ UIElement* UIManager::GetUIElementByEnum(UIEnumID uiEnumID)
         if (auto itr = uisByEnumID.find(uiEnumID); itr != uisByEnumID.end())
             return itr->second;
     }
-    assert(false);
+    assert("찾으려는 ui 요소가 존재하지 않습니다! .iwui 파일이 최신 파일이 아닌지 확인해보십시오." && false);
     return nullptr;
 }
 const std::vector<std::string>& UIManager::GetDialogueTimed_KeyStrings()
@@ -286,12 +286,12 @@ const std::vector<std::string>& UIManager::GetDialogueManual_KeyStrings()
 }
 UIElement* UIManager::GetDialogueTimed(const std::string& keyString)
 {
-    assert(dialogueTimed.contains(keyString));
+    assert("해당 keyString과 일치하는 대사창 ui가 없습니다. ui 창의 이름이 바뀌지는 않았는지 확인해보십시오." && dialogueTimed.contains(keyString));
     return dialogueTimed.at(keyString);
 }
 UIElement* UIManager::GetDialogueManual(const std::string& keyString)
 {
-    assert(dialogueManual.contains(keyString));
+    assert("해당 keyString과 일치하는 대사창 ui가 없습니다. ui 창의 이름이 바뀌지는 않았는지 확인해보십시오." && dialogueManual.contains(keyString));
     return dialogueManual.at(keyString);
 }
 void UIManager::SetUIElementWithEnum(UIEnumID uiEnumID, UIElement* ui)
