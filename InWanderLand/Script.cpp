@@ -6,7 +6,8 @@ namespace application
 {
 	void Script::Update()
 	{
-		for (int i = 0; i < coroutineQueue.size(); i++)
+		auto queueSize = coroutineQueue.size();
+		for (int i = 0; i < queueSize; i++)
 		{
 			auto coroutine = coroutineQueue.front();
 			if (coroutine.Done())

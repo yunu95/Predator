@@ -429,6 +429,40 @@ namespace application
 				}, 300);
 		}
 
+		if (ImGui::MenuItem("SetAngle"))
+		{
+			editor::EditorLayer::SetInputControl(false);
+			static float angle = 0;
+			angle = data->angle;
+			editor::imgui::ShowMessageBox("SetAngle(UnitRotate)", [data]()
+				{
+					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::Separator();
+
+					ImGui::SetNextItemWidth(-1);
+					ImGui::DragFloat("##AngleUnitRotate", &angle);
+
+					ImGui::Separator();
+
+					if (ImGui::Button("OK"))
+					{
+						data->SetRotation(angle);
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetAngle(UnitRotate)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetAngle(UnitRotate)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+				}, 300);
+		}
+
 		if (ImGui::MenuItem("SetLerpTime"))
 		{
 			editor::EditorLayer::SetInputControl(false);
@@ -467,6 +501,7 @@ namespace application
 	bool Action_UnitRotate::PreEncoding(json& data) const
 	{
 		data["relative"] = isRelative;
+		data["angle"] = angle;
 		data["lerpTime"] = lerpTime;
 		return true;
 	}
@@ -480,6 +515,7 @@ namespace application
 	bool Action_UnitRotate::PreDecoding(const json& data)
 	{
 		isRelative = data["relative"];
+		angle = data["angle"];
 		lerpTime = data["lerpTime"];
 		return true;
 	}
