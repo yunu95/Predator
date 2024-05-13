@@ -6,8 +6,8 @@
 
 
 /// <summary>
-/// FSMÀ» »ç¿ëÇÒ ÄÄÆ÷³ÍÆ®¿¡ ¸â¹öº¯¼ö·Î ³Ö¾îÁØ´Ù.
-/// EnumÀ» µû·Î Á¤ÀÇÇØÁÖ°í »ç¿ëÇÒ °Í. 
+/// FSMì„ ì‚¬ìš©í•  ì»´í¬ë„ŒíŠ¸ì— ë©¤ë²„ë³€ìˆ˜ë¡œ ë„£ì–´ì¤€ë‹¤.
+/// Enumì„ ë”°ë¡œ ì •ì˜í•´ì£¼ê³  ì‚¬ìš©í•  ê²ƒ. 
 /// </summary>
 /// <typeparam name="StateEnum"></typeparam>
 template <typename StateEnum>
@@ -18,24 +18,24 @@ public:
 	typedef std::function<void()> Action;
 	typedef std::vector<std::pair<StateEnum, Condition>> TransitionList;
 
-	// »óÅÂ ÀüÈ¯
+	// ìƒíƒœ ì „í™˜
 	std::unordered_map<StateEnum, TransitionList> transitions;
-	// »óÅÂ ÁøÀÔ
+	// ìƒíƒœ ì§„ì…
 	std::unordered_map<StateEnum, Action> engageAction;
-	// »óÅÂ À¯Áö
+	// ìƒíƒœ ìœ ì§€
 	std::unordered_map<StateEnum, Action> updateAction;
 
-	// ÇöÀç»óÅÂ enum
+	// í˜„ì¬ìƒíƒœ enum
 	StateEnum currentState;
-	// ÀÌÀü»óÅÂ enum
+	// ì´ì „ìƒíƒœ enum
 	StateEnum previousState;
 
-	// »ı¼ºÀÚ
-	// ¸Å°³º¯¼ö·Î ÃÖÃÊ »óÅÂ¸¦ ¹Ş¾Æ ÃÊ±âÈ­ÇØµĞ´Ù.
+	// ìƒì„±ì
+	// ë§¤ê°œë³€ìˆ˜ë¡œ ìµœì´ˆ ìƒíƒœë¥¼ ë°›ì•„ ì´ˆê¸°í™”í•´ë‘”ë‹¤.
 	FSM(StateEnum initialState)
 		: currentState(initialState), previousState(initialState)
 	{
-		// typenameÀ¸·Î ¹ŞÀº StateEnum ¾ÈÀÇ ¸ğµç enumÀÇ ¾×¼ÇÀ» ÃÊ±âÈ­ÇØÁØ´Ù.
+		// typenameìœ¼ë¡œ ë°›ì€ StateEnum ì•ˆì˜ ëª¨ë“  enumì˜ ì•¡ì…˜ì„ ì´ˆê¸°í™”í•´ì¤€ë‹¤.
 		for (unsigned int state = 0; state < static_cast<unsigned int>(StateEnum::StateEnd); state++)
 		{
 			transitions[static_cast<StateEnum>(state)] = TransitionList();
@@ -44,8 +44,10 @@ public:
 		}
 	}
 
-	// update()¿¡ ³Ö¾î¼­ ÁÖ±âÀûÀ¸·Î °è¼Ó ¾÷µ¥ÀÌÆ® ÇØÁØ´Ù.
+	// update()ì— ë„£ì–´ì„œ ì£¼ê¸°ì ìœ¼ë¡œ ê³„ì† ì—…ë°ì´íŠ¸ í•´ì¤€ë‹¤.
 	void UpdateState();
+
+	void SetUnitStateDirectly(StateEnum p_state);
 };
 
 template <typename StateEnum>
@@ -56,7 +58,7 @@ void FSM<StateEnum>::UpdateState()
 
 	for (auto eachTransition : transitionList)
 	{
-		// TransitionListÀÇ pair¿¡¼­ µÎ¹øÂ° boolÇÔ¼ö°¡ trueÀÏ °æ¿ì »óÅÂ¸¦ ¹Ù²Û´Ù.
+		// TransitionListì˜ pairì—ì„œ ë‘ë²ˆì§¸ boolí•¨ìˆ˜ê°€ trueì¼ ê²½ìš° ìƒíƒœë¥¼ ë°”ê¾¼ë‹¤.
 		if (eachTransition.second())
 		{
 			previousState = currentState;
@@ -66,13 +68,24 @@ void FSM<StateEnum>::UpdateState()
 		}
 	}
 
-	// ¹Ù²Û»óÅÂ·Î ÁøÀÔÇÒ ¶§
+	// ë°”ê¾¼ìƒíƒœë¡œ ì§„ì…í•  ë•Œ
 	if (engaged == true)
 	{
 		engageAction[currentState]();
 	}
 
-	// »óÅÂ°¡ À¯ÁöµÉ ¶§
+	// ìƒíƒœê°€ ìœ ì§€ë  ë•Œ
 	updateAction[currentState]();
+}
+
+template <typename StateEnum>
+void FSM<StateEnum>::SetUnitStateDirectly(StateEnum p_enum)
+{
+	if (previousState == p_enum)
+		return;
+	previousState = currentState;
+	currentState = p_enum;
+
+	engageAction[currentState]();
 }
 
