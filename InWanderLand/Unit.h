@@ -88,6 +88,7 @@ public:
     };
 
     TimerComponent* knockBackTimer;
+    Vector3d knockBackStartPoint;
     Dotween* dotween;
     yunuGI::IAnimation* m_currentAnimation{ nullptr };
     yunutyEngine::graphics::Animator* m_animatorComponent;
@@ -269,11 +270,14 @@ public:
     float animationTransitionSpeed = 1.0f;
     bool isAttackAnimationOperating{ false };
     bool isAnimationChangedAttackToIdle{ false };
+    bool isFollowingNavAgent{ true };
 
     virtual void OnEnable() override;
+    virtual void OnDisable() override;
     virtual void Start() override;
     virtual void Update() override;
     virtual void OnDestroy() override;
+    virtual void OnTransformUpdate() override;
 
     virtual void PlayFunction() override;
     virtual void StopFunction() override;
@@ -390,6 +394,7 @@ public:
 
     bool IsAllExtraPlayerUnitDead();
     bool CheckEnemyStoppedByTacticMode() const;
+    void KnockBackUnit(Vector3d targetPosition, float knockBackDuration);
 
 
     std::function<void()> returnToPoolFunction{ nullptr };

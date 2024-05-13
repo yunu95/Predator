@@ -98,6 +98,7 @@ void PlaytimeWave::Update()
             GameObject* waveUnitObject;
 
             waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit->GetTransform()->SetWorldPosition(pos);
+            waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit->m_navAgentComponent->GetTransform()->SetWorldPosition(pos);
             waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit->GetGameObject()->SetSelfActive(true);
 
             m_currentWaveUnitVector.push_back(waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit);
@@ -145,5 +146,5 @@ void PlaytimeWave::StopWaveElapsedTime()
 
 void PlaytimeWave::ResumeWaveElapsedTime()
 {
-	isStoppedByTacticMode = false;
+    isStoppedByTacticMode = false;
 }

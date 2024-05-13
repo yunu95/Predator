@@ -74,8 +74,6 @@ namespace application
 			timer += Time::GetDeltaTimeUnscaled();
 			co_await std::suspend_always();
 		}
-
-		mainCam->SetUpdateability(true);
 	}
 
 	bool Action_CameraChangeView::IsValid()

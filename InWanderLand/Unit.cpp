@@ -21,6 +21,17 @@ void Unit::OnEnable()
     {
         each();
     }
+    if (m_navAgentComponent)
+    {
+        m_navAgentComponent->GetGameObject()->SetSelfActive(true);
+    }
+}
+void Unit::OnDisable()
+{
+    if (m_navAgentComponent)
+    {
+        m_navAgentComponent->GetGameObject()->SetSelfActive(false);
+    }
 }
 
 void Unit::Start()
@@ -77,9 +88,6 @@ void Unit::Start()
     m_burnEffect = GetGameObject()->GetComponent<BurnEffect>();
     m_animatorComponent = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
 
-    //m_navAgentComponent = GetGameObject()->GetComponent<NavigationAgent>();
-
-    //returnToPoolFunction = []() {};
     unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Move,
         [this]() { return (currentOrder == UnitState::Move && !TacticModeSystem::Instance().IsUnitsPerformingCommand()) ||
         (currentOrder == UnitState::Move && TacticModeSystem::Instance().IsUnitsPerformingCommand()); } });
@@ -226,7 +234,7 @@ void Unit::Start()
 
                     if (isPermittedToTacticAction)
                     {
-						isPermittedToTacticAction = false;
+                        isPermittedToTacticAction = false;
                         TacticModeSystem::Instance().ReportTacticActionFinished();
                         currentOrder = UnitState::Idle;
                     }
@@ -250,6 +258,8 @@ void Unit::Start()
 
 void Unit::Update()
 {
+    if (m_navAgentComponent && isFollowingNavAgent)
+        GetTransform()->SetWorldPosition(m_navAgentComponent->GetTransform()->GetWorldPosition());
     if (m_unitSide == UnitSide::Player)
         unitFSM.UpdateState();
     else
@@ -273,7 +283,13 @@ void Unit::OnDestroy()
 {
     if (m_unitSide == UnitSide::Player)
         PlayerController::Instance().ErasePlayerUnit(this);
+    Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
+    Scene::getCurrentScene()->DestroyGameObject(m_navAgentComponent->GetGameObject());
 }
+void Unit::OnTransformUpdate()
+{
+}
+
 
 void Unit::PlayFunction()
 {
@@ -551,7 +567,7 @@ void Unit::IdleUpdate()
     {
         if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
         {
-			DetermineCurrentTargetObject();
+            DetermineCurrentTargetObject();
         }
     }
     // 데미지를 입으면 공격한 상대의 정보를 list에 등록하고 쫓아가기
@@ -578,7 +594,7 @@ void Unit::MoveUpdate()
         currentOrder = UnitState::Idle;
         if (isPermittedToTacticAction)
         {
-			isPermittedToTacticAction = false;
+            isPermittedToTacticAction = false;
             TacticModeSystem::Instance().ReportTacticActionFinished();
         }
     }
@@ -642,7 +658,7 @@ void Unit::AttackUpdate()
     {
         if (!isAnimationChangedAttackToIdle)
         {
-			ChangeAnimation(unitAnimations.m_idleAnimation);
+            ChangeAnimation(unitAnimations.m_idleAnimation);
             isAnimationChangedAttackToIdle = true;
         }
 
@@ -1050,6 +1066,15 @@ bool Unit::IsAllExtraPlayerUnitDead()
 bool Unit::CheckEnemyStoppedByTacticMode() const
 {
     return (!TacticModeSystem::Instance().IsUnitsPerformingCommand() || !TacticModeSystem::Instance().IsOrderingTimingNow());
+}
+void Unit::KnockBackUnit(Vector3d targetPosition, float knockBackDuration)
+{
+    knockBackStartPoint = GetGameObject()->GetTransform()->GetWorldPosition();
+    m_navAgentComponent->Relocate(targetPosition);
+    isFollowingNavAgent = false;
+    MakeUnitPushedState(true);
+    knockBackTimer->m_duration = knockBackDuration;
+    knockBackTimer->ActivateTimer();
 }
 
 float Unit::DetermineAttackDamage(float p_damage)
