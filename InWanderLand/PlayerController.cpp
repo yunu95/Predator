@@ -103,20 +103,34 @@ void PlayerController::SetRightClickFunction()
     }
     else
     {
-		Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
-        m_movingSystemComponent->groundRightClickCallback = [=](Vector3d pos)
-            {
-                if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
+        if (static_cast<int>(currentSelectedSerialNumber) == InputManager::SelectedSerialNumber::All)
+        {
+            m_movingSystemComponent->groundRightClickCallback = [=](Vector3d pos)
                 {
-                    return;
-                }
-                /*for (auto e : playerComponentMap)
+                    for (auto e : playerComponentMap)
+                    {
+                        e.second->OrderMove(pos);
+                    }
+                };
+
+        }
+        else
+        {
+            Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
+            m_movingSystemComponent->groundRightClickCallback = [=](Vector3d pos)
                 {
-                    e.second->OrderMove(pos);
-                }*/
-                currentSelectedUnit->OrderMove(pos);
-                UIManager::Instance().SummonMoveToFeedback(pos);
-            };
+                    if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
+                    {
+                        return;
+                    }
+                    /*for (auto e : playerComponentMap)
+                    {
+                        e.second->OrderMove(pos);
+                    }*/
+                    currentSelectedUnit->OrderMove(pos);
+                    UIManager::Instance().SummonMoveToFeedback(pos);
+                };
+        }
     }
 }
 

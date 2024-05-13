@@ -220,32 +220,28 @@ namespace application
 
                 tempShortCutIndex = 2;
             }
-			else
+ /*           else if (pod.templateData->pod.skinnedFBXName == "SKM_Ursula")
+            {
+				tempShortCutIndex = 1;
+                currentSelectedProductor = &MagicianProductor::Instance();
+				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+				inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+            }
+			else if (pod.templateData->pod.skinnedFBXName == "SKM_Hansel")
 			{
 				tempShortCutIndex = 1;
-
-				switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
-				{
-					case Unit::UnitType::Warrior:
-						currentSelectedProductor = &WarriorProductor::Instance();
-						break;
-					case Unit::UnitType::Magician:
-						currentSelectedProductor = &MagicianProductor::Instance();
-						break;
-					case Unit::UnitType::Healer:
-						currentSelectedProductor = &HealerProductor::Instance();
-						break;
-					case Unit::UnitType::Boss:
-						currentSelectedProductor = &BossProductor::Instance();
-						break;
-					default:
-						break;
-				}
-
+				currentSelectedProductor = &HealerProductor::Instance();
 				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
 				inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
 			}
- /*           else
+			else if (pod.templateData->pod.skinnedFBXName == "SKM_Robin")
+			{
+				tempShortCutIndex = 1;
+				currentSelectedProductor = &WarriorProductor::Instance();
+				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+				inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+			}*/
+            else
             {
                 tempShortCutIndex = 1;
 
@@ -271,7 +267,7 @@ namespace application
                 }
                 currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                 inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-            }*/
+            }
 
             if (inGameUnit)
             {

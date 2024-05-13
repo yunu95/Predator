@@ -224,7 +224,9 @@ void Unit::Start()
 
         m_animatorComponent->PushAnimationWithFunc(unitAnimations.m_attackAnimation, attackTimingFrame, [=]()
             {
-                if (m_currentTargetUnit != nullptr && currentOrder == UnitState::Attack)
+                currentOrder = UnitState::Attack;
+
+                if (m_currentTargetUnit != nullptr)
                 {
                     atkSys->Attack(m_currentTargetUnit, m_attackOffset);
 
