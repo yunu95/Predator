@@ -382,7 +382,7 @@ namespace application
 							up.SelectUnitInstance(data->destinationUnit);
 						}
 
-						if (data->isEditing == true && endFlag)
+						if (data->isEditing == true && (endFlag || ImGui::IsKeyPressed(ImGuiKey_Escape, false)))
 						{
 							data->isEditing = false;
 							data->destinationUnit->GetPaletteInstance()->GetGameObject()->SetSelfActive(false);
