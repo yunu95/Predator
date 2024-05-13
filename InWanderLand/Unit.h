@@ -208,7 +208,7 @@ private:
 
     bool isTacticAttackMovePermitted{ false };
 
-    bool isMoveOrderCalledByMouse{ true };
+    bool isUnitCinematicEnded{ false };
 
 public:
     bool isPermittedToTacticAction{ false };
@@ -311,7 +311,6 @@ public:
     float GetAttackOffset() const;
 
     void OrderMove(Vector3d position);
-    void OrderMoveByEvent(Vector3d position);
     void OrderAttackMove(Vector3d position);
     void OrderAttackMove(Vector3d position, Unit* p_selectedUnit);
     void OrderSkill(SkillEnum p_skillNum, Vector3d position);
@@ -334,6 +333,8 @@ public:
     UIElement* GetPortraitBuffIcon(StatusEffect::StatusEffectEnum uiEnumID);
     void ReportStatusEffectApplied(StatusEffect::StatusEffectEnum p_effectType);
     void ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType);
+
+    void ReportUnitCinematicEnded();
 
     void PermitTacticAction();
 

@@ -169,13 +169,14 @@ void Unit::Start()
     }
 
     unitFSM.transitions[static_cast<UnitState>(UnitState::Idle)].push_back({ UnitState::OffsetMove,
-    [this]() { return !GameManager::Instance().IsBattleSystemOperating() && m_unitSide == UnitSide::Player && m_unitType != UnitType::Warrior; } });
+    [this]() { return (!GameManager::Instance().IsBattleSystemOperating() && m_unitSide == UnitSide::Player && m_unitType != UnitType::Warrior)
+        || isUnitCinematicEnded; } });
 
     unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::WaveStart,
     [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
 
 	unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::Move,
-    [this]() { return currentOrder == UnitState::Move && !isMoveOrderCalledByMouse; } });
+    [this]() { return currentOrder == UnitState::Move; } });
 
     unitFSM.transitions[UnitState::Move].push_back({ UnitState::WaveStart,
     [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
@@ -357,6 +358,7 @@ void Unit::OffsetMoveEngage()
     currentOrder = UnitState::OffsetMove;
     m_followingTargetUnit = PlayerController::Instance().GetPlayerMap().find(UnitType::Warrior)->second;
     isFollowing = false;
+    isUnitCinematicEnded = false;
     currentOrder = UnitState::OffsetMove;
     moveFunctionElapsed = 0.0f;
     m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::green());
@@ -1371,7 +1373,6 @@ void Unit::OrderMove(Vector3d position)
     tauntingThisUnit = nullptr;
     //m_currentTargetUnit = nullptr;
     isAttackMoving = false;
-    isMoveOrderCalledByMouse = true;
 
     if ((GameManager::Instance().IsBattleSystemOperating() || m_unitType == UnitType::Warrior) &&
         !(currentOrder == UnitState::WaveStart || currentOrder == UnitState::WaveMotion))
@@ -1382,17 +1383,6 @@ void Unit::OrderMove(Vector3d position)
 			//dotween->DOLookAt(position, rotateTime, false);
         }
     }
-}
-
-
-/// <summary>
-/// Mouse 클릭이 아닌 직접 호출할 때 OrderMove() 대신 사용되는 함수입니다. 
-/// </summary>
-/// <param name="position"></param>
-void Unit::OrderMoveByEvent(Vector3d position)
-{
-    OrderMove(position);
-    isMoveOrderCalledByMouse = false;
 }
 
 // 유닛을 직접 마우스 우클릭했을 경우 
@@ -1599,6 +1589,12 @@ void Unit::ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType)
         ui->DisableElement();
     }
 
+}
+
+void Unit::ReportUnitCinematicEnded()
+{
+    if (m_unitType != UnitType::Warrior)
+        isUnitCinematicEnded = true;
 }
 
 void Unit::PermitTacticAction()

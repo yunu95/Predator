@@ -43,7 +43,7 @@ private:
 	void ProcessBulletHit(Unit* p_damagedUnit);
 
 public:
-	virtual void Start() override final;
+	virtual void Start() override;
 	virtual void Update() override;
 };
 
