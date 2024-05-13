@@ -413,6 +413,16 @@ namespace application
 							action = AddAction<Action_UnitMove>();
 							break;
 						}	
+						case application::ActionType::UnitRotate:
+						{
+							action = AddAction<Action_UnitRotate>();
+							break;
+						}
+						case application::ActionType::UnitRescale:
+						{
+							action = AddAction<Action_UnitRescale>();
+							break;
+						}
 						default:
 							break;
 					}

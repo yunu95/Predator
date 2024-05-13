@@ -41,6 +41,8 @@ namespace application
 		actionList.push_back({ ActionType::PlayManualDialogue, "PlayManualDialogue" });
 		actionList.push_back({ ActionType::PlayTimedDialogue, "PlayTimedDialogue" });
 		actionList.push_back({ ActionType::UnitMove, "UnitMove" });
+		actionList.push_back({ ActionType::UnitRotate, "UnitRotate" });
+		actionList.push_back({ ActionType::UnitRescale, "UnitRescale" });
 	}
 
 	Script* ScriptSystem::CreateScript()
