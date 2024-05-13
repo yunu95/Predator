@@ -94,7 +94,7 @@ void GameManager::EndCinematic()
 void GameManager::Reset()
 {
     isBattleModeOn = false;
-    PlayerController::Instance().SetCurrentPlayerSerialNumber(Unit::UnitType::AllPlayers);
+    PlayerController::Instance().SetCurrentPlayerSerialNumber(Unit::UnitType::Warrior);
     rtscam->SetTarget(PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetGameObject());
 }
 
