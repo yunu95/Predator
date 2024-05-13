@@ -27,6 +27,7 @@ protected:
 	std::vector<Unit*> m_playerUnitVector;
 
 public:
+	void Init();
 	void SetOwnerType(Unit::UnitType type);
 	virtual void Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed, float offset);
 	virtual void ReturnToPool() = 0;
