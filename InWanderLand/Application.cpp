@@ -479,9 +479,9 @@ namespace application
         }
         else
         {
+            isContentsPlaying = true;
             cl->PlayContents();
             el->OnPlayContents();
-            isContentsPlaying = true;
         }
     }
 
@@ -493,10 +493,9 @@ namespace application
 
     void Application::StopContents()
     {
+        isContentsPlaying = false;
         static_cast<contents::ContentsLayer*>(layers[(int)LayerList::ContentsLayer])->StopContents();
         static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer])->OnStopContents();
-
-        isContentsPlaying = false;
     }
 
     void Application::TurnOff()
