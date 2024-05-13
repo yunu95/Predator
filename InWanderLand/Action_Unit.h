@@ -121,4 +121,38 @@ namespace application
 		float lerpTime = 0;
 		bool isEditing = false;
 	};
+
+	/// 특정 위치로 Unit 의 Position 을 이동한 뒤,
+	/// Rotate 와 Rescale 을 수행하는 Action 입니다.
+	class Action_UnitMoveWithRotateAndRescale
+		: public IAction
+	{
+		friend class editor::Module_ScriptEditor;
+
+	public:
+		DEFINE_ACTION(UnitMoveWithRotateAndRescale)
+
+		virtual ~Action_UnitMoveWithRotateAndRescale();
+
+		virtual CoroutineObject<void> DoAction() override;
+
+		virtual bool IsValid() override;
+
+		void SetTargetUnit(editor::UnitData* unit);
+		void SetDestinationUnit(editor::UnitData* unit);
+		void SetLerpTime(float lerpTime);
+
+		virtual void ProcessObervationEvent(ObservationTarget* target, ObservationEvent event) override;
+
+		virtual bool PreEncoding(json& data) const override;
+		virtual bool PostEncoding(json& data) const override;
+		virtual bool PreDecoding(const json& data) override;
+		virtual bool PostDecoding(const json& data) override;
+
+	private:
+		editor::UnitData* targetUnit = nullptr;
+		editor::UnitData* destinationUnit = nullptr;
+		float lerpTime = 0;
+		bool isEditing = false;
+	};
 }

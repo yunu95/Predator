@@ -89,6 +89,26 @@ void GameManager::EndCinematic()
 {
     InputManager::Instance().SetInputManagerActive(true);
     SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+    
+    /// PlayerController 에서
+    
+    /// [1] Battle 일 경우, 
+    /// Leader 가 아닌 녀석들만 Idle 상태로 바꿔주는 로직
+    
+    /// [2] Battle 아닐 경우,
+    /// 살아있는 녀석 중 빠른 녀석 혹은 선택된 녀석 Leader 로 세팅하고
+    /// 나머지 녀석들은 OffsetMove 로 변경
+    
+    if (isBattleModeOn)
+    {
+        PlayerController::Instance().FindSelectedUnitByUnitType(Unit::UnitType::Magician)->SetUnitStateDirectly(Unit::UnitState::Idle);
+        PlayerController::Instance().FindSelectedUnitByUnitType(Unit::UnitType::Healer)->SetUnitStateDirectly(Unit::UnitState::Idle);
+    }
+    else
+    {
+        PlayerController::Instance().FindSelectedUnitByUnitType(Unit::UnitType::Magician)->SetUnitStateDirectly(Unit::UnitState::OffsetMove);
+        PlayerController::Instance().FindSelectedUnitByUnitType(Unit::UnitType::Healer)->SetUnitStateDirectly(Unit::UnitState::OffsetMove);
+    }
 }
 
 void GameManager::Reset()

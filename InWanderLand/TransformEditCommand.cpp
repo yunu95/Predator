@@ -10,7 +10,10 @@ namespace application
 		{
 			for (auto& [key, start, end] : transformList)
 			{
-				key->RemoveObserver(this);
+				if (key)
+				{
+					key->RemoveObserver(this);
+				}
 			}
 		}
 
@@ -20,7 +23,10 @@ namespace application
 
 			for (auto& [key, start, end] : transformList)
 			{
-				key->RegisterObserver(this);
+				if (key)
+				{
+					key->RegisterObserver(this);
+				}
 			}
 		}
 
