@@ -208,7 +208,7 @@ private:
 
     bool isTacticAttackMovePermitted{ false };
 
-    bool isUnitCinematicEnded{ false };
+    bool isUnitCinematicEnded{ true };
 
 public:
     bool isPermittedToTacticAction{ false };
@@ -334,7 +334,7 @@ public:
     void ReportStatusEffectApplied(StatusEffect::StatusEffectEnum p_effectType);
     void ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType);
 
-    void ReportUnitCinematicEnded();
+    void SetUnitStateDirectly(Unit::UnitState p_unitState);
 
     void PermitTacticAction();
 

@@ -170,7 +170,7 @@ void Unit::Start()
 
     unitFSM.transitions[static_cast<UnitState>(UnitState::Idle)].push_back({ UnitState::OffsetMove,
     [this]() { return (!GameManager::Instance().IsBattleSystemOperating() && m_unitSide == UnitSide::Player && m_unitType != UnitType::Warrior)
-        || isUnitCinematicEnded; } });
+        && isUnitCinematicEnded; } });
 
     unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::WaveStart,
     [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
@@ -1374,7 +1374,7 @@ void Unit::OrderMove(Vector3d position)
     //m_currentTargetUnit = nullptr;
     isAttackMoving = false;
 
-    if ((GameManager::Instance().IsBattleSystemOperating() || m_unitType == UnitType::Warrior) &&
+    if (/*(GameManager::Instance().IsBattleSystemOperating() || m_unitType == UnitType::Warrior) &&*/
         !(currentOrder == UnitState::WaveStart || currentOrder == UnitState::WaveMotion))
     {
         if (currentOrder != UnitState::Skill)
@@ -1591,7 +1591,7 @@ void Unit::ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType)
 
 }
 
-void Unit::ReportUnitCinematicEnded()
+void Unit::SetUnitStateDirectly(Unit::UnitState p_unitState)
 {
     if (m_unitType != UnitType::Warrior)
         isUnitCinematicEnded = true;
