@@ -199,6 +199,40 @@ namespace application
 				return false;
 			}
 
+
+			/// 이 Data 는 특별히 Debug 를 위해 작성한 template 코드로,
+			/// 실제 값에 대한 변경은 불가능하도록 처리하였습니다.
+			template <>
+			bool DrawPOD(std::string label, const std::vector<float>& data)
+			{
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
+				ImGui::AlignTextToFramePadding();
+				ImGui::Text(label.c_str());
+
+				imgui::SmartStyleColor textColor2(ImGuiCol_Text, IM_COL32(180, 0, 0, 255));
+
+				std::vector<float> container;
+				container = data;
+
+				int i = 0;
+				bool returnVal = false;
+				for (auto& each : container)
+				{
+					ImGui::TableSetColumnIndex(1);
+					ImGui::PushItemWidth(-1);
+					returnVal |= ImGui::DragFloat((label + std::to_string(i)).c_str(), &each, 0.0000001f, 0, 0, "%.8f");
+					i++;
+					if (i != data.size())
+					{
+						ImGui::TableNextRow();
+					}
+				}
+
+				return returnVal;
+			}
+
 			template <typename T, int N = 0>
 			void DrawRestPOD(const T& data)
 			{
