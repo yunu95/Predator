@@ -160,11 +160,15 @@ void UnitProductor::AddColliderComponent() const
 void UnitProductor::AddNavigationComponent()
 {
     m_navField = &SingleNavigationField::Instance();
-    m_unitComponent->m_navAgentComponent = Scene::getCurrentScene()->AddGameObject()->AddComponent<NavigationAgent>();
+    auto navObject = Scene::getCurrentScene()->AddGameObject();
+    m_unitComponent->m_navAgentComponent = navObject->AddComponent<NavigationAgent>();
+    m_unitComponent->m_navObstacle = navObject->AddComponent<NavigationObstacle>();
+    m_unitComponent->m_navObstacle->SetRadiusAndHeight(m_collisionSize, 5);
+    m_unitComponent->m_navObstacle->SetActive(false);
     auto pos = m_unitComponent->GetTransform()->GetWorldPosition();
     m_unitComponent->m_navAgentComponent->GetTransform()->SetWorldPosition(pos);
     m_unitComponent->m_navAgentComponent->AssignToNavigationField(m_navField);
-    m_unitComponent->m_navAgentComponent->SetRadius(0.3f);
+    m_unitComponent->m_navAgentComponent->SetRadius(m_collisionSize);
     m_unitComponent->SetNavField(m_navField);
 }
 
@@ -172,6 +176,13 @@ void UnitProductor::AddDotweenComponent() const
 {
     /// 6. Dotween 추가
     m_unitComponent->dotween = m_unitGameObject->AddComponent<Dotween>();
+    // 마비 타이머 추가
+    m_unitComponent->paralysisTimer->m_duration = 1;
+    m_unitComponent->paralysisTimer->onCompleteFunction = [m_unitComponent = m_unitComponent]()
+        {
+            m_unitComponent->ReportStatusEffectEnded(StatusEffect::StatusEffectEnum::Paralysis);
+            m_unitComponent->SetUnitStateIdle();
+        };
     /// 넉백 타이머 추가
     m_unitComponent->knockBackTimer = m_unitGameObject->AddComponent<TimerComponent>();
 
@@ -268,6 +279,7 @@ void UnitProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p
     m_defensePoint = p_podData.m_defensePoint;
     m_dodgeProbability = p_podData.m_dodgeProbability;
     m_criticalDamageDecreaseMultiplier = p_podData.m_criticalDamageDecreaseMultiplier;
+    m_collisionSize = p_podData.collisionSize;
     m_idRadius = p_podData.m_idRadius;
     m_atkRadius = p_podData.m_atkRadius;
     m_unitSpeed = p_podData.m_unitSpeed;

@@ -73,9 +73,6 @@
     <Filter Include="Contents\UnitFactory">
       <UniqueIdentifier>{acd2f4f0-ac5f-47d4-9337-b5d6450ce773}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\InitialFactors">
-      <UniqueIdentifier>{5e4af819-8eb5-4acc-a261-2bee0658b7bf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="TestCodes">
       <UniqueIdentifier>{8339e451-67eb-4692-ba45-88e6ad08ee10}</UniqueIdentifier>
     </Filter>
@@ -357,9 +354,6 @@
     </Filter>
     <Filter Include="TestCodes\TestUtils\DebugTilePlane">
       <UniqueIdentifier>{028fb8ff-0f7e-465c-894d-222249262cc3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\LazySingleton">
-      <UniqueIdentifier>{f4a8b620-e203-472c-b65f-46a1f508be8c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contents\Containers">
       <UniqueIdentifier>{b9ce9a4b-15f0-44e2-ad5c-3de09c8231ea}</UniqueIdentifier>

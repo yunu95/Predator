@@ -33,7 +33,7 @@ void KnockBackComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
         Vector3d maxHeightPosition = startPosition + (directionVector * m_pushPower / 2) + Vector3d(0, maxKnockHeight, 0);
         endPosition = opponentUnit->GetNavField()->GetClosestPointOnField(endPosition);
 
-        opponentUnit->KnockBackUnit(endPosition, 1.0f);
+        opponentUnit->KnockBackUnit(endPosition, 0.5f);
     }
 }
 

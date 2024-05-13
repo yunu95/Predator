@@ -87,12 +87,15 @@ public:
         yunuGI::IAnimation* m_skillFourAnimation;
     };
 
+    TimerComponent* paralysisTimer;
     TimerComponent* knockBackTimer;
     Vector3d knockBackStartPoint;
     Dotween* dotween;
-    yunuGI::IAnimation* m_currentAnimation{ nullptr };
+    //yunuGI::IAnimation* m_currentAnimation{ nullptr };
     yunutyEngine::graphics::Animator* m_animatorComponent;
     NavigationAgent* m_navAgentComponent;
+    // 유닛들이 가만히 있을 때 장애물로 인식하게 만들기 위함.
+    NavigationObstacle* m_navObstacle;
     BurnEffect* m_burnEffect;
     PlayerSkillSystem* m_playerSkillSystem;
 
@@ -207,6 +210,10 @@ private:
     float m_stopFollowDinstance{ 2.0f };			// 이 수치만큼 거리가 좁혀지면 멈춘다.
     bool isFollowing{ false };
 
+    bool isTacticAttackMovePermitted{ false };
+
+    bool isUnitCinematicEnded{ true };
+
 public:
     bool isPermittedToTacticAction{ false };
 
@@ -250,6 +257,7 @@ private:
 
     void ChangeAnimation(yunuGI::IAnimation* p_anim);
     void CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation);
+	void SetCurrentAnimationSpeed(yunuGI::IAnimation* p_anim, float p_speed);
 
     void ReportUnitDeath();												// this 유닛이 죽었다는 정보를 전달
     void IdentifiedOpponentDeath(Unit* p_unit);		// 상대 유닛이 죽었을 경우 처리할 내용을 담은 함수
@@ -258,6 +266,7 @@ private:
 
     void RotateUnit(Vector3d endPosition);
 
+    void ResumeAnimation();
     void StopAnimation();
 
     void RegisterSkillWithAnimation(SkillEnum p_enum);
@@ -332,6 +341,8 @@ public:
     void ReportStatusEffectApplied(StatusEffect::StatusEffectEnum p_effectType);
     void ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType);
 
+    void SetUnitStateDirectly(Unit::UnitState p_unitState);
+
     void PermitTacticAction();
 
     bool GetJustCrushedState() const;
@@ -389,8 +400,6 @@ public:
 
     void EnemyActionOnTacticModeEngaged();
     void EnemyActionOnTacticModeEnded();
-
-    void SetCurrentAnimationSpeed(float p_speed);
 
     bool IsAllExtraPlayerUnitDead();
     bool CheckEnemyStoppedByTacticMode() const;

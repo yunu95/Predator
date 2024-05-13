@@ -163,15 +163,17 @@ void AutoAttackProjectile::ProcessBulletHit(Unit* p_damagedUnit)
 
 	isShootOperating = false;
 }
-
-void AutoAttackProjectile::Start()
+void AutoAttackProjectile::Init()
 {
 	for (auto each : PlayerController::Instance().GetPlayerMap())
 	{
 		m_playerUnitVector.push_back(each.second);
 	}
-
-	GetGameObject()->SetSelfActive(false);
+}
+void AutoAttackProjectile::Start()
+{
+	if (!isShootOperating)
+		GetGameObject()->SetSelfActive(false);
 }
 
 void AutoAttackProjectile::Update()

@@ -111,7 +111,7 @@ namespace application
 
 			bool moveFocus = false;
 			yunuGI::Vector3 focalDelta = yunuGI::Vector3();
-			float focalDistance = 10.0f;
+			float focalDistance = 20.0f;
 			float focalSpeed = 3.9f;
 
 			yunuGI::Vector2 mousePos = yunuGI::Vector2();

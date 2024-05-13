@@ -9,6 +9,7 @@
 
 void InputManager::Start()
 {
+    currentSelectedSerialNumber = SelectedSerialNumber::One;
 }
 
 void InputManager::Update()
