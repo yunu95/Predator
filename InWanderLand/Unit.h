@@ -208,6 +208,8 @@ private:
 
     bool isTacticAttackMovePermitted{ false };
 
+    bool isMoveOrderCalledByMouse{ true };
+
 public:
     bool isPermittedToTacticAction{ false };
 
@@ -309,6 +311,7 @@ public:
     float GetAttackOffset() const;
 
     void OrderMove(Vector3d position);
+    void OrderMoveByEvent(Vector3d position);
     void OrderAttackMove(Vector3d position);
     void OrderAttackMove(Vector3d position, Unit* p_selectedUnit);
     void OrderSkill(SkillEnum p_skillNum, Vector3d position);

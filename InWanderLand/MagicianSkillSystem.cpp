@@ -56,6 +56,7 @@ void MagicianSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 	WSkillFieldDamage.colliderObject->GetTransform()->SetWorldPosition(skillPos);			// 오브젝트만 움직여도 collider와 debug는 따라올 것이다.
 
 	float tempDistance = (skillPos - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
+
 	WSkillProjectile.dotweenComponent->DOMove(skillPos, tempDistance / m_WSkillProjectileSpeed).OnComplete([=]()
 		{
 			isOncedActivated = false;
