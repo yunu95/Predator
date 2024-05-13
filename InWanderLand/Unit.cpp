@@ -1593,8 +1593,40 @@ void Unit::ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType)
 
 void Unit::SetUnitStateDirectly(Unit::UnitState p_unitState)
 {
-    if (m_unitType != UnitType::Warrior)
-        isUnitCinematicEnded = true;
+    switch (p_unitState)
+    {
+    case Unit::UnitState::Idle:
+        break;
+    case Unit::UnitState::Move:
+        break;
+    case Unit::UnitState::Chase:
+        break;
+    case Unit::UnitState::Attack:
+        break;
+    case Unit::UnitState::AttackMove:
+        break;
+    case Unit::UnitState::Skill:
+        break;
+    case Unit::UnitState::Paralysis:
+        break;
+    case Unit::UnitState::Death:
+        break;
+    case Unit::UnitState::Resurrect:
+        break;
+    case Unit::UnitState::OffsetMove:
+    {
+		unitFSM.SetUnitStateDirectly(p_unitState);
+        break;
+    }
+    case Unit::UnitState::WaveStart:
+        break;
+    case Unit::UnitState::WaveMotion:
+        break;
+    case Unit::UnitState::StateEnd:
+        break;
+    default:
+        break;
+    }
 }
 
 void Unit::PermitTacticAction()
