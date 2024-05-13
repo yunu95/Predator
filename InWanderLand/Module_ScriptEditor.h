@@ -241,6 +241,11 @@ namespace application
 							Action_UnitRescale::ImGui_DrawDataPopup(static_cast<Action_UnitRescale*>(data));
 							break;
 						}
+						case application::ActionType::UnitMoveWithRotateAndRescale:
+						{
+							Action_UnitMoveWithRotateAndRescale::ImGui_DrawDataPopup(static_cast<Action_UnitMoveWithRotateAndRescale*>(data));
+							break;
+						}
 						default:
 							break;
 					}

@@ -38,6 +38,7 @@ namespace application
 		UnitMove,
         UnitRotate,
         UnitRescale,
+        UnitMoveWithRotateAndRescale,
     };
 
     struct IAction
