@@ -105,7 +105,7 @@ void Unit::Start()
         [this]() { return currentOrder == UnitState::Move; } });
 
     unitFSM.transitions[UnitState::AttackMove].push_back({ UnitState::Chase,
-        [this]() { return m_currentTargetUnit != nullptr && isTacticAttackMovePermitted; } });
+        [this]() { return m_currentTargetUnit != nullptr || (TacticModeSystem::Instance().IsUnitsPerformingCommand() && isTacticAttackMovePermitted); } });
 
     unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Idle,
         [this]() { return m_currentTargetUnit == nullptr; } });
