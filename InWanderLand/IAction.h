@@ -35,7 +35,9 @@ namespace application
         TutorialModeChange,
         PlayManualDialogue,
         PlayTimedDialogue,
-		UnitMove
+		UnitMove,
+        UnitRotate,
+        UnitRescale,
     };
 
     struct IAction

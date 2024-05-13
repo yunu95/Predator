@@ -152,8 +152,8 @@ namespace application
 						imgui::ShiftCursorX((rect.x - size.x) / 2);
 						imgui::ShiftCursorY((rect.y - size.y) / 2);
 						ImGui::Text("Please Setting Enter Region");
-						ImGui::End();
 						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
 
 						pp.ChangeTab("Region");
 
@@ -187,8 +187,8 @@ namespace application
 						imgui::ShiftCursorX((rect.x - size.x) / 2);
 						imgui::ShiftCursorY((rect.y - size.y) / 2);
 						ImGui::Text("Please Setting Leave Region");
-						ImGui::End();
 						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
 
 						pp.ChangeTab("Region");
 
@@ -222,8 +222,8 @@ namespace application
 						imgui::ShiftCursorX((rect.x - size.x) / 2);
 						imgui::ShiftCursorY((rect.y - size.y) / 2);
 						ImGui::Text("Please Setting Target Unit");
-						ImGui::End();
 						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
 
 						pp.ChangeTab("Unit");
 
@@ -257,8 +257,8 @@ namespace application
 						imgui::ShiftCursorX((rect.x - size.x) / 2);
 						imgui::ShiftCursorY((rect.y - size.y) / 2);
 						ImGui::Text("Please Setting Target Unit");
-						ImGui::End();
 						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
 
 						pp.ChangeTab("Unit");
 
@@ -299,8 +299,8 @@ namespace application
 						imgui::ShiftCursorX((rect.x - size.x) / 2);
 						imgui::ShiftCursorY((rect.y - size.y) / 2);
 						ImGui::Text("Please Setting Camera");
-						ImGui::End();
 						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
 
 						pp.ChangeTab("Cam");
 
@@ -333,8 +333,8 @@ namespace application
 						imgui::ShiftCursorX((rect.x - size.x) / 2);
 						imgui::ShiftCursorY((rect.y - size.y) / 2);
 						ImGui::Text("Please Setting Target Unit");
-						ImGui::End();
 						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
 
 						pp.ChangeTab("Unit");
 
@@ -407,8 +407,8 @@ namespace application
 						imgui::ShiftCursorX((rect.x - size.x) / 2);
 						imgui::ShiftCursorY((rect.y - size.y) / 2);
 						ImGui::Text("Please Setting Destination Unit");
-						ImGui::End();
 						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
 
 						pp.ChangeTab("Unit");
 
@@ -427,6 +427,74 @@ namespace application
 								data->isEditing = false;
 								epm.Return();
 							}
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
+
+					if (epm.GetReturnPopupName() == "SetTargetUnit(Rotate)")
+					{
+						ImGui::Begin("Unit Rotate Popup(SetTarget)", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Target Unit");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Target Unit");
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
+
+						pp.ChangeTab("Unit");
+
+						auto data = epm.GetReturnPopupData<Action_UnitRotate>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &up)
+						{
+							data->isEditing = true;
+							up.Reset();
+						}
+
+						if (data->isEditing == true && up.GetSelections().size() == 1)
+						{
+							data->SetTargetUnit(static_cast<UnitData*>(*up.GetSelections().begin()));
+							data->isEditing = false;
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
+
+					if (epm.GetReturnPopupName() == "SetTargetUnit(Rescale)")
+					{
+						ImGui::Begin("Unit Rescale Popup(SetTarget)", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Target Unit");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Target Unit");
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
+
+						pp.ChangeTab("Unit");
+
+						auto data = epm.GetReturnPopupData<Action_UnitRescale>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &up)
+						{
+							data->isEditing = true;
+							up.Reset();
+						}
+
+						if (data->isEditing == true && up.GetSelections().size() == 1)
+						{
+							data->SetTargetUnit(static_cast<UnitData*>(*up.GetSelections().begin()));
+							data->isEditing = false;
+							epm.Return();
 						}
 
 						if (!pop)
@@ -919,6 +987,16 @@ namespace application
 								case application::ActionType::UnitMove:
 								{
 									selectedScript->AddAction<Action_UnitMove>();
+									break;
+								}
+								case application::ActionType::UnitRotate:
+								{
+									selectedScript->AddAction<Action_UnitRotate>();
+									break;
+								}
+								case application::ActionType::UnitRescale:
+								{
+									selectedScript->AddAction<Action_UnitRescale>();
 									break;
 								}
 								default:

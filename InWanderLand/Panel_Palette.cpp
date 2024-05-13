@@ -17,6 +17,7 @@
 #include "EditableDataList.h"
 #include "ParticleTool_Manager.h"
 #include "BrushList.h"
+#include "Module_ScriptEditor.h"
 
 #include "YunutyEngine.h"
 #include "WanderUtils.h"
@@ -332,7 +333,9 @@ namespace application
 					}
 				}
 
-				if (eim.IsKeyboardUp(KeyCode::Delete))
+				static auto& mse = Module_ScriptEditor::GetSingletonInstance();
+
+				if (eim.IsKeyboardUp(KeyCode::Delete) && mse.GetSelectedScript() == nullptr)
 				{
 					if (currentPalette && currentPalette->IsSelectMode())
 					{
@@ -615,6 +618,7 @@ namespace application
 					{
 						op.Delete(each);
 					}
+					op.Reset();
 				}
 			}
 			imgui::ShiftCursorY(5);
