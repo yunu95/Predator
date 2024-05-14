@@ -32,8 +32,8 @@ void NailCamera::GetCameraAreaXZ(DirectX::SimpleMath::Vector2& minPoint, DirectX
         minPoint.x = std::min(minPoint.x, each.x);
         minPoint.y = std::min(minPoint.y, each.z);
 
-        maxPoint.x = max(maxPoint.x, each.x);
-        maxPoint.y = max(maxPoint.y, each.z);
+        maxPoint.x = std::max(maxPoint.x, each.x);
+        maxPoint.y = std::max(maxPoint.y, each.z);
     }
 }
 

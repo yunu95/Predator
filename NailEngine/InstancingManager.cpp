@@ -84,7 +84,7 @@ void InstancingManager::SortByCameraDirection()
 	std::vector<std::pair<InstanceID, std::vector<std::shared_ptr<RenderInfo>>>> blend;
 
 	//for(auto iter =  this->staticMeshDeferredRenderVec.begin(); iter != this->staticMeshDeferredRenderVec.end();)
-	for(auto& each : this->staticMeshDeferredRenderVec)
+	for (auto& each : this->staticMeshDeferredRenderVec)
 	{
 		D3D11_BLEND_DESC desc;
 		((PixelShader*)(each.first.second->GetPixelShader()))->GetBlendState()->GetDesc(&desc);
@@ -171,7 +171,7 @@ void InstancingManager::SortByCameraDirection()
 			each2->wtm.Decompose(tempScale, tempQuat, tempPos);
 			// 바운딩 볼륨 반지름 조정
 			auto radius = each.first.first->GetBoundingRadius();
-			radius = radius * max(tempScale.x, tempScale.y, tempScale.z);
+			radius = radius * std::max(std::max(tempScale.x, tempScale.y), tempScale.z);
 			this->quadTree.PushData(each2.get(), DirectX::SimpleMath::Vector2{ tempPos.x, tempPos.z }, radius);
 		}
 	}
@@ -466,8 +466,8 @@ void InstancingManager::RenderStaticShadow()
 			if (renderInfoVec.size() != 0)
 			{
 				auto& buffer = _buffers[instanceID];
-				//if (buffer->GetCount() > 0)
-				//{
+				if (buffer->GetCount() > 0)
+				{
 					auto opacityMap = (*renderInfoVec.begin())->material->GetTexture(yunuGI::Texture_Type::OPACITY);
 					if (opacityMap)
 					{
@@ -485,7 +485,7 @@ void InstancingManager::RenderStaticShadow()
 
 					buffer->PushData();
 					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
-				//}
+				}
 			}
 		}
 	}
@@ -516,8 +516,8 @@ void InstancingManager::RenderStaticShadow()
 				if (renderInfoVec[0] == nullptr) continue;
 
 				auto& buffer = _buffers[instanceID];
-				//if (buffer->GetCount() > 0)
-				//{
+				if (buffer->GetCount() > 0)
+				{
 					auto opacityMap = (*renderInfoVec.begin())->material->GetTexture(yunuGI::Texture_Type::OPACITY);
 					if (opacityMap)
 					{
@@ -535,7 +535,7 @@ void InstancingManager::RenderStaticShadow()
 
 					buffer->PushData();
 					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
-				//}
+				}
 			}
 		}
 	}
@@ -761,7 +761,8 @@ void InstancingManager::RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& 
 		DirectX::SimpleMath::Quaternion quat;
 		renderInfo->wtm.Decompose(scale, quat, pos);
 
-		float radius = max(scale.x, scale.y, scale.z);
+		float radius = std::max(std::max(scale.x, scale.y), scale.z);
+
 		radius *= renderInfo->mesh->GetBoundingRadius();
 
 		// 나중에는 RenderInfo에 radius를 추가해서 Decompose하는것을 빼자.

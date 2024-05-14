@@ -172,7 +172,8 @@ void RenderSystem::PushCameraData()
 
 void RenderSystem::Render()
 {
-	ResourceManager::Instance.Get().GetTexture(L"LightMapList")->Bind(24);
+	NailEngine::Instance.Get().GetLightMap()->Bind(24);
+
 	UtilBuffer utilBuffer;
 	utilBuffer.windowWidth = NailEngine::Instance.Get().GetWindowInfo().width;
 	utilBuffer.windowHeight = NailEngine::Instance.Get().GetWindowInfo().height;
@@ -200,7 +201,7 @@ void RenderSystem::Render()
 	RenderSkinned();
 
 	// 그림자 맵 생성
-	//RenderShadow();
+	RenderShadow();
 	RenderPointLightShadow();
 
 	SkyBoxPass::Instance.Get().BindIBLTexture();

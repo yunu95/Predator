@@ -130,8 +130,8 @@ namespace application
                         if (eim.IsMouseButtonUp(MouseCode::Left))
                         {
                             if (isGuizmoControl)
-                            {
-                                int idx = 0;
+							{
+								int idx = 0;
                                 std::vector<std::tuple<IEditableData*, TransformData, TransformData>> vecList;
                                 for (auto& each : pm->GetCurrentPalette()->GetSelections())
                                 {

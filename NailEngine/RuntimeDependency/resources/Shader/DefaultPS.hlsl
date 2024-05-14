@@ -49,8 +49,8 @@ PS_OUT main(PixelIn input)
     {
         float4 lightColor = float4(0, 0, 0, 1.f);
         lightColor = UnityLightMap.Sample(sam, float3(input.lightUV, lightMapUV[input.id].lightMapIndex));
-        lightColor *= 0.6;
-        lightColor.rgb = pow(lightColor.rgb, 1.f / 2.2f);
+        float3 x = max(0, lightColor.xyz - 0.004);
+        lightColor.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
     
         output.color = color * lightColor;
     }

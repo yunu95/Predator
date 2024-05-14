@@ -148,23 +148,16 @@ void GraphicsTest()
         anim->PushAnimation(animation2);
         anim->Play(animation);
     }*/
+    //{
+    //    auto obj2 = Scene::getCurrentScene()->AddGameObject();
+    //    auto renderer = obj2->AddComponent<graphics::StaticMeshRenderer>();
+    //    renderer->GetGI().SetMesh(_resourceManager->GetMesh(L"Sphere"));
+    //    renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, _resourceManager->GetTexture(L"Texture/Lightmap-0_comp_light.exr"));
+    //}
 
     {
-        auto obj2 = Scene::getCurrentScene()->AddGameObject();
-        obj2->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
-        obj2->AddComponent<TestComponent4>();
-
-        obj2->GetTransform()->SetLocalPosition(Vector3d{ 0,0,14 });
-        auto renderer = obj2->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-        auto uv = obj2->AddComponent<UVAnimator>();
-        uv->SetSpeed(0.5);
-        uv->SetStaticMeshRenderer(renderer);
-        uv->SetTexture(_resourceManager->GetTexture(L"Texture/GuideLine/GuideLine.dds"));
+        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
     }
-
-    //{
-    //    auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_GuideBook");
-    //}
 
 	//{
 	//	auto obj2 = Scene::getCurrentScene()->AddGameObject();

@@ -25,6 +25,8 @@ namespace yunuGI
         virtual ~I3DRenderer() {}
 
         virtual void SortByCameraDirection() = 0;
+        virtual void SetUseIBL(bool useIBL) = 0;
+        virtual void SetLightMap(const std::wstring& lightMapName) = 0;
 
         // DX를 초기화한다.
         //virtual bool Initialize() = 0;
@@ -56,7 +58,6 @@ namespace yunuGI
         // imgui에 렌더 출력물을 전달해주기 위한 쿼리
         //virtual D3D12_GPU_DESCRIPTOR_HANDLE* QueryD3D12RenderOutputGDH() { return nullptr; }
 
-        virtual void SetUseIBL(bool useIBL) = 0;
         virtual void SetUseLightMap(bool useLightMap) = 0;
 
         virtual void Finalize() = 0;
