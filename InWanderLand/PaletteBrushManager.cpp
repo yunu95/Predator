@@ -23,8 +23,9 @@ namespace application
                 brushList[3] = &CameraBrush::Instance();
                 brushList[4] = &LightBrush::Instance();
                 brushList[5] = &ParticleBrush::Instance();
+                brushList[6] = &InteractableBrush::Instance();
 
-                brushList.resize(6);
+                brushList.resize(7);
 
                 for (auto& each : brushList)
                 {

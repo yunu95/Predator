@@ -125,9 +125,12 @@ namespace application
         appSpecification.windowWidth = 1920;
         appSpecification.windowHeight = 1080;
 
+        monitorResolution.width = GetSystemMetrics(SM_CXSCREEN);
+        monitorResolution.height = GetSystemMetrics(SM_CYSCREEN);
+
         /// 게임 윈도우 생성
-        int winPosX = (GetSystemMetrics(SM_CXSCREEN) - appSpecification.windowWidth) / 2;	// 윈도우 X 좌표
-        int winPosY = (GetSystemMetrics(SM_CYSCREEN) - appSpecification.windowHeight) / 2;	// 윈도우 Y 좌표
+        int winPosX = (monitorResolution.width - appSpecification.windowWidth) / 2;	// 윈도우 X 좌표
+        int winPosY = (monitorResolution.height - appSpecification.windowHeight) / 2;	// 윈도우 Y 좌표
 
         hWND = ::CreateWindow(wc.lpszClassName, wc.lpszClassName, WS_OVERLAPPEDWINDOW, winPosX, winPosY, appSpecification.windowWidth, appSpecification.windowHeight, NULL, NULL, wc.hInstance, NULL);
 
@@ -144,13 +147,12 @@ namespace application
         ::ShowWindow(hWND, SW_SHOWDEFAULT);
         ::UpdateWindow(hWND);
 
-
 #ifdef EDITOR
         /// 에디터 윈도우 생성
         g_EditorResizeWidth = appSpecification.windowWidth;
         g_EditorResizeHeight = appSpecification.windowHeight;
-        int editorWinPosX = (GetSystemMetrics(SM_CXSCREEN) - g_EditorResizeWidth) / 2 + 1920;
-        int editorWinPosY = (GetSystemMetrics(SM_CYSCREEN) - g_EditorResizeHeight) / 2 + 200;
+        int editorWinPosX = monitorResolution.width - (g_EditorResizeWidth / 2);
+        int editorWinPosY = (monitorResolution.height - g_EditorResizeHeight) / 2 + 100;
 
         // 게임엔진 스레드에서 에디터 윈도우를 생성하도록 유도
         yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [&, editorWinPosX, editorWinPosY, this]()
@@ -257,9 +259,12 @@ namespace application
         appSpecification.windowWidth = 1920;
         appSpecification.windowHeight = 1080;
 
+        monitorResolution.width = GetSystemMetrics(SM_CXSCREEN);
+        monitorResolution.height = GetSystemMetrics(SM_CYSCREEN);
+
         /// 게임 윈도우 생성
-        int winPosX = (GetSystemMetrics(SM_CXSCREEN) - appSpecification.windowWidth) / 2;	// 윈도우 X 좌표
-        int winPosY = (GetSystemMetrics(SM_CYSCREEN) - appSpecification.windowHeight) / 2;	// 윈도우 Y 좌표
+        int winPosX = (monitorResolution.width - appSpecification.windowWidth) / 2;	// 윈도우 X 좌표
+        int winPosY = (monitorResolution.height - appSpecification.windowHeight) / 2;	// 윈도우 Y 좌표
 
         hWND = ::CreateWindow(wc.lpszClassName, wc.lpszClassName, WS_OVERLAPPEDWINDOW, winPosX, winPosY, appSpecification.windowWidth, appSpecification.windowHeight, NULL, NULL, wc.hInstance, NULL);
 
@@ -276,13 +281,12 @@ namespace application
         ::ShowWindow(hWND, SW_SHOWDEFAULT);
         ::UpdateWindow(hWND);
 
-
 #ifdef EDITOR
         /// 에디터 윈도우 생성
         g_EditorResizeWidth = appSpecification.windowWidth;
         g_EditorResizeHeight = appSpecification.windowHeight;
-        int editorWinPosX = (GetSystemMetrics(SM_CXSCREEN) - g_EditorResizeWidth) / 2 + 1920;
-        int editorWinPosY = (GetSystemMetrics(SM_CYSCREEN) - g_EditorResizeHeight) / 2 + 200;
+        int editorWinPosX = monitorResolution.width - (g_EditorResizeWidth / 2);
+        int editorWinPosY = (monitorResolution.height - g_EditorResizeHeight) / 2 + 100;
 
         // 게임엔진 스레드에서 에디터 윈도우를 생성하도록 유도
         yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [&, editorWinPosX, editorWinPosY, this]()
@@ -475,9 +479,9 @@ namespace application
         }
         else
         {
+            isContentsPlaying = true;
             cl->PlayContents();
             el->OnPlayContents();
-            isContentsPlaying = true;
         }
     }
 
@@ -489,10 +493,9 @@ namespace application
 
     void Application::StopContents()
     {
+        isContentsPlaying = false;
         static_cast<contents::ContentsLayer*>(layers[(int)LayerList::ContentsLayer])->StopContents();
         static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer])->OnStopContents();
-
-        isContentsPlaying = false;
     }
 
     void Application::TurnOff()
@@ -507,6 +510,11 @@ namespace application
     {
         scoped_lock lock{ loopTodoRegistrationMutex };
         loopRegistrations.push_back(todo);
+    }
+
+    const MonitorResolution& Application::GetMonitorResolution() const
+    {
+        return monitorResolution;
     }
 
     const ApplicationSpecification& Application::GetApplicationSpecification() const

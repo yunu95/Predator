@@ -22,6 +22,10 @@ namespace application
                 void ChangeTemplateData(const application::editor::Unit_TemplateData* unitTemplateData);
                 void ChangeResource(const std::string& fbxName);
 
+                void ChangeGuideInstance();
+
+                virtual void ShowEditorInstance() override;
+
             protected:
                 virtual void OnHover()
                 {
@@ -32,6 +36,7 @@ namespace application
                     PaletteInstance::OnHoverLeft();
                 }
             private:
+                bool isGuide = false;
                 std::string currentFBX = "";
                 const application::editor::Unit_TemplateData* unitTemplateData;
             };

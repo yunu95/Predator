@@ -11,83 +11,111 @@
 
 namespace application
 {
-	struct POD_GlobalConstant
-	{
-		GC<int> gravitySpeed = 10;
-		GC<int> magicPower = 40;
+    struct POD_GlobalConstant
+    {
+        GC<int> gravitySpeed = 10;
+        GC<int> magicPower = 40;
 
-		GC<float>	playerOneQSkillDelay = 0.0f;
-		GC<int>		playerOneQSkillTimingFrame = 10;
-		GC<float>	playerOneWSkillDelay = 0.0f;
-		GC<int>		playerOneWSkillTimingFrame = 10;
+        GC<float>	playerOneQSkillDelay = 0.0f;
+        GC<int>		playerOneQSkillTimingFrame = 10;
+        GC<float>	playerOneWSkillDelay = 0.0f;
+        GC<int>		playerOneWSkillTimingFrame = 10;
 
-		GC<float>	playerTwoQSkillDelay = 0.0f;
-		GC<int>		playerTwoQSkillTimingFrame = 10;
-		GC<float>	playerTwoWSkillDelay = 0.0f;
-		GC<int>		playerTwoWSkillTimingFrame = 10;
+        GC<float>	playerTwoQSkillDelay = 0.0f;
+        GC<int>		playerTwoQSkillTimingFrame = 10;
+        GC<float>	playerTwoWSkillDelay = 0.0f;
+        GC<int>		playerTwoWSkillTimingFrame = 10;
 
-		GC<float>	playerThreeQSkillDelay = 0.0f;
-		GC<int>		playerThreeQSkillTimingFrame = 10;
-		GC<float>	playerThreeWSkillDelay = 0.0f;
-		GC<int>		playerThreeWSkillTimingFrame = 10;
-		
-		GC<float>	eliteMeleeEnemySkillDelay = 0.0f;
-		GC<int>		eliteMeleeEnemySkillTimingFrame = 0;
-		GC<float>	eliteRangedEnemySkillDelay = 0.0f;
-		GC<int>		eliteRangedEnemySkillTimingFrame = 0;
+        GC<float>	playerThreeQSkillDelay = 0.0f;
+        GC<int>		playerThreeQSkillTimingFrame = 10;
+        GC<float>	playerThreeWSkillDelay = 0.0f;
+        GC<int>		playerThreeWSkillTimingFrame = 10;
 
-		GC<float>	bossSkillOneDelay = 0.0f;
-		GC<int>		bossSkillOneTimingFrame = 15;
-		GC<float>	bossSkillTwoDelay = 0.0f;
-		GC<int>		bossSkillTwoTimingFrame = 15;
-		GC<float>	bossSkillThreeDelay = 0.0f;
-		GC<int>		bossSkillThreeTimingFrame = 15;
-		GC<float>	bossSkillFourDelay = 0.0f;
-		GC<int>		bossSkillFourTimingFrame = 15;
+        GC<float>	eliteMeleeEnemySkillDelay = 0.0f;
+        GC<int>		eliteMeleeEnemySkillTimingFrame = 0;
+        GC<float>	eliteRangedEnemySkillDelay = 0.0f;
+        GC<int>		eliteRangedEnemySkillTimingFrame = 0;
 
-		GC<float>	spikeTrapSkillDelay = 3.0f;
-		GC<int>		spikeTrapSkillTimingFrame = 15;
-		GC<float>	chessTrapSkillDelay = 2.0f;
-		GC<int>		chessTrapSkillTimingFrame = 10;
-		GC<float>	triggeredTrapSkillDelay;
-		GC<int>		triggeredTrapSkillTimingFrame;
+        GC<float>	bossSkillOneDelay = 0.0f;
+        GC<int>		bossSkillOneTimingFrame = 15;
+        GC<float>	bossSkillTwoDelay = 0.0f;
+        GC<int>		bossSkillTwoTimingFrame = 15;
+        GC<float>	bossSkillThreeDelay = 0.0f;
+        GC<int>		bossSkillThreeTimingFrame = 15;
+        GC<float>	bossSkillFourDelay = 0.0f;
+        GC<int>		bossSkillFourTimingFrame = 15;
 
-		GC<float>	robinQSkillCoolTime = 2.0f;
-		GC<float>	robinQSkillCost = 10.0f;
-		GC<float>	robinESkillCoolTime = 2.0f;
-		GC<float>	robinESkillCost = 10.0f;
+        GC<float>	spikeTrapSkillDelay = 3.0f;
+        GC<int>		spikeTrapSkillTimingFrame = 15;
+        GC<float>	chessTrapSkillDelay = 2.0f;
+        GC<int>		chessTrapSkillTimingFrame = 10;
+        GC<float>	triggeredTrapSkillDelay;
+        GC<int>		triggeredTrapSkillTimingFrame;
 
-		GC<float>	ursulaQSkillCoolTime = 2.0f;
-		GC<float>	ursulaQSkillCost = 10.0f;
-		GC<float>	ursulaESkillCoolTime = 2.0f;
-		GC<float>	ursulaESkillCost = 10.0f;
-		
-		GC<float>	hanselQSkillCoolTime = 2.0f;
-		GC<float>	hanselQSkillCost = 10.0f;
-		GC<float>	hanselESkillCoolTime = 2.0f;
-		GC<float>	hanselESkillCost = 10.0f;
+        GC<float>	robinQSkillCoolTime = 2.0f;
+        GC<float>	robinQSkillCost = 10.0f;
+        GC<float>	robinQSkillRushSpeed = 20.0f;
+        GC<float>	robinQSkillDamageRush = 20.0f;
+        GC<float>	robinQSkillDamageImpact = 80.0f;
+        GC<float>	robinQSkillRushKnockbackDistance = 3.0f;
+        GC<float>	robinQSkillImpactKnockbackDistance = 8.0f;
+        GC<float>	robinQSkillRushKnockbackDuration = 0.5f;
+        GC<float>	robinQSkillImpactKnockbackDuration = 1.0f;
+        GC<float>	robinQSkillRushKnockbackRadius = 1.0f;
+        GC<float>	robinQSkillImpactKnockbackRadius = 5.0f;
+        GC<float>	robinESkillCoolTime = 2.0f;
+        GC<float>	robinESkillCost = 10.0f;
+        GC<float>	robinESkillRadius = 6.0f;
 
-		GC<float>	skillGaugeRecoveryPerSecond = 2.0f;
+        GC<float>	ursulaQSkillCoolTime = 2.0f;
+        GC<float>	ursulaQSkillCost = 10.0f;
+        GC<float>	ursulaQSkillRadius = 3;
+        GC<float>	ursulaQSkillProjectileSpeed = 15;
+        GC<float>	ursulaQSkillBlindDuration = 3.0f;
+        GC<float>	ursulaQSkillFieldDuration = 3.0f;
+        GC<float>	ursulaQSkillFieldDamagePerTick = 1.0f;
+        GC<float>	ursulaQSkillFieldDamageInterval = 0.3f;
+        GC<float>	ursulaESkillCoolTime = 2.0f;
+        GC<float>	ursulaESkillCost = 10.0f;
+        GC<float>	ursulaESkillDamageInterval = 0.3f;
+        GC<float>	ursulaESkillDamagePerTick = 1.0f;
+        GC<float>	ursulaESkillStunDuration = 1.0f;
+        GC<float>	ursulaESkillPullingDuration = 0.5f;
+        GC<float>	ursulaESkillRadius = 4;
 
-		GC<int>	maxResurrectCount;
+        GC<float>	hanselQSkillCoolTime = 2.0f;
+        GC<float>	hanselQSkillCost = 10.0f;
+        GC<float>	hanselESkillCoolTime = 2.0f;
+        GC<float>	hanselESkillCost = 10.0f;
 
-		TO_JSON(POD_GlobalConstant)
-		FROM_JSON(POD_GlobalConstant)
-	};
+        GC<float>	skillGaugeRecoveryPerSecond = 2.0f;
 
-	class GlobalConstant
-		: public Singleton<GlobalConstant>
-	{
-		friend class Singleton<GlobalConstant>;
-	public:
-		POD_GlobalConstant pod;
 
-		bool PreEncoding(json& data) const;
-		bool PreDecoding(const json& data);
+        GC<float>	tacticSkillCost = 10.0f;
+        GC<float>	tacticMoveCost = 10.0f;
+        GC<float>	tacticAttackCost = 10.0f;
 
-	private:
-		GlobalConstant() = default;
-	};
+        GC<float>	tacticGaugeRecoveryPerSecond = 2.0f;
+
+        GC<int>	maxResurrectCount;
+
+        TO_JSON(POD_GlobalConstant)
+            FROM_JSON(POD_GlobalConstant)
+    };
+
+    class GlobalConstant
+        : public Singleton<GlobalConstant>
+    {
+        friend class Singleton<GlobalConstant>;
+    public:
+        POD_GlobalConstant pod;
+
+        bool PreEncoding(json& data) const;
+        bool PreDecoding(const json& data);
+
+    private:
+        GlobalConstant() = default;
+    };
 }
 
 

@@ -90,3 +90,13 @@ void yunutyEngine::Component::SetIsUpdating(bool isUpdating)
         gameObject->HandleComponentUpdateState(this);
     }
 };
+std::weak_ptr<yunutyEngine::Component::Coroutine> yunutyEngine::Component::StartCoroutine(Coroutine&& coroutine)
+{
+    auto coroutinePtr = std::make_shared<Coroutine>(std::move(coroutine));
+    coroutines.insert(coroutinePtr);
+    return coroutinePtr;
+}
+void yunutyEngine::Component::DeleteCoroutine(const std::weak_ptr<Coroutine>& coroutine)
+{
+    coroutines.erase(coroutine.lock());
+}

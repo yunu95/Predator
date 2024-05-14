@@ -97,8 +97,8 @@ void AutoAttackProjectile::StraightShootingFunction()
 	{
 		GetGameObject()->SetSelfActive(false);
 
-		AutoAttackProjectilePool::Instance().Return(this);
-
+		//AutoAttackProjectilePool::Instance().Return(this);
+		ReturnToPool();
 		isShootOperating = false;
 	}
 
@@ -155,22 +155,25 @@ void AutoAttackProjectile::ProcessBulletHit(Unit* p_damagedUnit)
 {
 	GetGameObject()->SetSelfActive(false);
 
-	AutoAttackProjectilePool::Instance().Return(this);
+	//AutoAttackProjectilePool::Instance().Return(this);
+	ReturnToPool();
 
 	/// 충돌 (목적지 도착 시) 호출하고자 하는 로직은 여기에
 	p_damagedUnit->Damaged(m_ownerUnit, m_ownerUnit->DetermineAttackDamage(m_ownerUnit->GetUnitDamage()));
 
 	isShootOperating = false;
 }
-
-void AutoAttackProjectile::Start()
+void AutoAttackProjectile::Init()
 {
 	for (auto each : PlayerController::Instance().GetPlayerMap())
 	{
 		m_playerUnitVector.push_back(each.second);
 	}
-
-	GetGameObject()->SetSelfActive(false);
+}
+void AutoAttackProjectile::Start()
+{
+	/*if (!isShootOperating)
+		GetGameObject()->SetSelfActive(false);*/
 }
 
 void AutoAttackProjectile::Update()

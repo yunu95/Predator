@@ -74,8 +74,6 @@ namespace application
 			timer += Time::GetDeltaTimeUnscaled();
 			co_await std::suspend_always();
 		}
-
-		mainCam->SetUpdateability(true);
 	}
 
 	bool Action_CameraChangeView::IsValid()
@@ -91,7 +89,10 @@ namespace application
 		}
 
 		targetCam = cam;
-		cam->RegisterObserver(this);
+		if (cam)
+		{
+			cam->RegisterObserver(this);
+		}
 	}
 
 	void Action_CameraChangeView::SetLerpTime(float lerpTime)
@@ -349,8 +350,6 @@ namespace application
 			timer += Time::GetDeltaTimeUnscaled();
 			co_await std::suspend_always();
 		}
-
-		mainCam->SetUpdateability(true);
 	}
 
 	void Action_CameraLoadView::SetLerpTime(float lerpTime)

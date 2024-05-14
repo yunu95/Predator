@@ -6,14 +6,13 @@ void TimerComponent::Update()
     if (m_isActivated)
     {
         m_elapsed += isRealtime ? Time::GetDeltaTimeUnscaled() : Time::GetDeltaTime();
-        if (m_elapsed >= m_duration)
+        if (m_elapsed >= pushDuration)
         {
-            onCompleteFunction();
 
             if (m_isRepeated == false)
             {
-                m_elapsed = m_duration;
-                onUpdate(m_elapsed / m_duration);
+                m_elapsed = pushDuration;
+                onUpdate(m_elapsed / pushDuration);
                 onExpiration();
                 m_isActivated = false;
                 m_elapsed = 0.0f;
@@ -22,10 +21,11 @@ void TimerComponent::Update()
             {
                 m_elapsed = 0.0f;
             }
+            onCompleteFunction();
         }
         else
         {
-            onUpdate(m_elapsed / m_duration);
+            onUpdate(m_elapsed / pushDuration);
         }
     }
 }
@@ -45,7 +45,7 @@ void TimerComponent::ActivateTimer()
     m_elapsed = 0.0f;
     m_isActivated = true;
     onActivation();
-    if (m_duration == 0)
+    if (pushDuration == 0)
     {
         onUpdate(1);
         onCompleteFunction();

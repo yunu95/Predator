@@ -157,7 +157,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
             m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
             animator->PushAnimation(m_baseUnitAnimations.m_walkAnimation);
         }
-        /*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Attack")
+        else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Attack")
         {
             m_baseUnitAnimations.m_attackAnimation = each;
             m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
@@ -182,14 +182,14 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
             m_baseUnitAnimations.m_skillOneAnimation = each;
             m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::Q, each);
         }
-        /*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Skill2")
+        else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Skill2")
         {
             each->SetLoop(true);
             animator->PushAnimation(each);
             m_baseUnitAnimations.m_skillTwoAnimation = each;
             m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::W, each);
         }
-        /*else */if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+        else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
         {
             m_baseUnitAnimations.m_battleEngageAnimation = each;
             m_baseUnitAnimations.m_battleEngageAnimation->SetLoop(false);

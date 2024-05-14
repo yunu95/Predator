@@ -38,4 +38,6 @@ namespace application::editor
     DataType GetDataTypeEnum<Light_TemplateData>() { return DataType::LightData; }
     template<>
     DataType GetDataTypeEnum<Particle_TemplateData>() { return DataType::ParticleData; }
+    template<>
+    DataType GetDataTypeEnum<Interactable_TemplateData>() { return DataType::InteractableData; }
 }

@@ -21,6 +21,17 @@ void Unit::OnEnable()
     {
         each();
     }
+    if (m_navAgentComponent)
+    {
+        m_navAgentComponent->GetGameObject()->SetSelfActive(true);
+    }
+}
+void Unit::OnDisable()
+{
+    if (m_navAgentComponent)
+    {
+        m_navAgentComponent->GetGameObject()->SetSelfActive(false);
+    }
 }
 
 void Unit::Start()
@@ -77,9 +88,6 @@ void Unit::Start()
     m_burnEffect = GetGameObject()->GetComponent<BurnEffect>();
     m_animatorComponent = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
 
-    //m_navAgentComponent = GetGameObject()->GetComponent<NavigationAgent>();
-
-    //returnToPoolFunction = []() {};
     unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Move,
         [this]() { return (currentOrder == UnitState::Move && !TacticModeSystem::Instance().IsUnitsPerformingCommand()) ||
         (currentOrder == UnitState::Move && TacticModeSystem::Instance().IsUnitsPerformingCommand()); } });
@@ -105,7 +113,7 @@ void Unit::Start()
         [this]() { return currentOrder == UnitState::Move; } });
 
     unitFSM.transitions[UnitState::AttackMove].push_back({ UnitState::Chase,
-        [this]() { return m_currentTargetUnit != nullptr; } });
+        [this]() { return m_currentTargetUnit != nullptr || (TacticModeSystem::Instance().IsUnitsPerformingCommand() && isTacticAttackMovePermitted); } });
 
     unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Idle,
         [this]() { return m_currentTargetUnit == nullptr; } });
@@ -168,11 +176,14 @@ void Unit::Start()
         [this]() { return m_currentHealthPoint <= 0 && m_resurrectingMaxCount < m_currentResurrectingCount; } });
     }
 
-    unitFSM.transitions[static_cast<UnitState>(UnitState::Idle)].push_back({ UnitState::OffsetMove,
-    [this]() { return !GameManager::Instance().IsBattleSystemOperating() && m_unitSide == UnitSide::Player && m_unitType != UnitType::Warrior; } });
+    //unitFSM.transitions[static_cast<UnitState>(UnitState::Idle)].push_back({ UnitState::OffsetMove,
+    //[this]() { return (!GameManager::Instance().IsBattleSystemOperating() && m_unitSide == UnitSide::Player && m_unitType != m_initialLeaderUnitType); } });
 
     unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::WaveStart,
     [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
+
+	//unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::Move,
+ //   [this]() { return currentOrder == UnitState::Move; } });
 
     unitFSM.transitions[UnitState::Move].push_back({ UnitState::WaveStart,
     [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
@@ -220,15 +231,27 @@ void Unit::Start()
 
         m_animatorComponent->PushAnimationWithFunc(unitAnimations.m_attackAnimation, attackTimingFrame, [=]()
             {
-                if (m_currentTargetUnit != nullptr && currentOrder == UnitState::Attack)
+                currentOrder = UnitState::Attack;
+
+                if (m_currentTargetUnit != nullptr)
                 {
                     atkSys->Attack(m_currentTargetUnit, m_attackOffset);
 
                     if (isPermittedToTacticAction)
                     {
-                        TacticModeSystem::Instance().ReportTacticActionFinished();
                         isPermittedToTacticAction = false;
+                        isTacticAttackMovePermitted = false;
+                        //EnemyActionOnTacticModeEngaged();
+                        TacticModeSystem::Instance().ReportTacticActionFinished();
                         currentOrder = UnitState::Idle;
+                        /// 현재 공격타겟에 대한 처리를 해야 가만히 있을 듯.
+                        m_currentTargetUnit = nullptr;
+                        tauntingThisUnit = nullptr;
+
+                        /// 임시 - 애니메이션을 공유하고 있어서 공격 애니메이션 스피드를 1로 돌려줘야 함 ㅠ
+                        ResumeAnimation();
+                        //unitAnimations.m_attackAnimation->SetPlaySpeed(1.0f);
+                        //unitAnimations.m_walkAnimation->SetPlaySpeed(1.0f);
                     }
                 }
             });
@@ -245,14 +268,14 @@ void Unit::Start()
     }
 
     m_animatorComponent->Play(unitAnimations.m_idleAnimation);
-    m_currentAnimation = unitAnimations.m_idleAnimation;
 }
 
 void Unit::Update()
 {
+    if (m_navAgentComponent && isFollowingNavAgent)
+        GetTransform()->SetWorldPosition(m_navAgentComponent->GetTransform()->GetWorldPosition());
     if (m_unitSide == UnitSide::Player)
         unitFSM.UpdateState();
-
     else
     {
         if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
@@ -274,7 +297,15 @@ void Unit::OnDestroy()
 {
     if (m_unitSide == UnitSide::Player)
         PlayerController::Instance().ErasePlayerUnit(this);
+    if (!unitStatusUI.expired())
+        Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
+    if (m_navAgentComponent)
+        Scene::getCurrentScene()->DestroyGameObject(m_navAgentComponent->GetGameObject());
 }
+void Unit::OnTransformUpdate()
+{
+}
+
 
 void Unit::PlayFunction()
 {
@@ -302,13 +333,14 @@ Unit::UnitSide Unit::GetUnitSide() const
 #pragma region State Engage()
 void Unit::IdleEngage()
 {
-    //TacticModeSystem::Instance().isTacticModeOperating = false;
-
     currentOrder = UnitState::Idle;
+    m_currentTargetUnit = nullptr;
     idleElapsed = 0.0f;
     if (m_staticMeshRenderer != nullptr)
         m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::white());
+
     ChangeAnimation(unitAnimations.m_idleAnimation);
+
     if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
         DetermineCurrentTargetObject();
 
@@ -334,6 +366,7 @@ void Unit::MoveEngage()
 
     m_navAgentComponent->SetSpeed(m_speed);
     m_navAgentComponent->MoveTo(m_currentMovePosition);
+    dotween->DOLookAt(m_currentMovePosition, rotateTime, false);
 
     ChangeAnimation(unitAnimations.m_walkAnimation);
 }
@@ -342,8 +375,9 @@ void Unit::OffsetMoveEngage()
 {
     StopMove();
     currentOrder = UnitState::OffsetMove;
-    m_followingTargetUnit = PlayerController::Instance().GetPlayerMap().find(UnitType::Warrior)->second;
+    //m_followingTargetUnit = PlayerController::Instance().GetPlayerMap().find(UnitType::Warrior)->second;
     isFollowing = false;
+    //isUnitCinematicEnded = false;
     currentOrder = UnitState::OffsetMove;
     moveFunctionElapsed = 0.0f;
     m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::green());
@@ -374,7 +408,7 @@ void Unit::AttackEngage()
 
     AttackSystem* atkSys = GetGameObject()->GetComponent<AttackSystem>();
     isAttackAnimationOperating = false;
-    isAnimationChangedToIdleAnimationOnAttackState = false;
+    isAnimationChangedAttackToIdle = false;
 
     attackFunctionElapsed = 0.0f;
     dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
@@ -543,6 +577,7 @@ void Unit::IdleUpdate()
     {
         m_tacticModeQueue.front()();
         m_tacticModeQueue.pop();
+        ResumeAnimation();
     }
 
     idleElapsed += Time::GetDeltaTime() * m_localTimeScale;
@@ -550,7 +585,9 @@ void Unit::IdleUpdate()
     if (idleElapsed >= 3.0f)
     {
         if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
+        {
             DetermineCurrentTargetObject();
+        }
     }
     // 데미지를 입으면 공격한 상대의 정보를 list에 등록하고 쫓아가기
 }
@@ -576,8 +613,8 @@ void Unit::MoveUpdate()
         currentOrder = UnitState::Idle;
         if (isPermittedToTacticAction)
         {
-            TacticModeSystem::Instance().ReportTacticActionFinished();
             isPermittedToTacticAction = false;
+            TacticModeSystem::Instance().ReportTacticActionFinished();
         }
     }
 }
@@ -586,32 +623,35 @@ void Unit::OffsetMoveUpdate()
 {
     /// m_followingTargetUnit 과의 거리가 일정 수치 이상으로 벌어진다면 이동 함수 호출.
     /// 다시 거리가 좁혀지면 StopMove. (Idle로 상태 변경)
-    float betweenUnitDistance = (m_followingTargetUnit->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition()).Magnitude();
-
-    float distance = (m_currentMovePosition - GetTransform()->GetWorldPosition()).Magnitude();
-
-    if (betweenUnitDistance >= m_followEngageDinstance)
+	if (m_followingTargetUnit)
     {
-        ChangeAnimation(unitAnimations.m_walkAnimation);
+		float betweenUnitDistance = (m_followingTargetUnit->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition()).Magnitude();
 
-        dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
-        m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
-        isFollowing = true;
-    }
-    else if (betweenUnitDistance <= m_stopFollowDinstance)
-    {
-        isFollowing = false;
-        StopMove();
-        ChangeAnimation(unitAnimations.m_idleAnimation);
-    }
-    else if (betweenUnitDistance <= m_followEngageDinstance && betweenUnitDistance >= m_stopFollowDinstance && isFollowing)
-    {
-        ChangeAnimation(unitAnimations.m_walkAnimation);
+		float distance = (m_currentMovePosition - GetTransform()->GetWorldPosition()).Magnitude();
 
-        dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
-        m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
-        isFollowing = true;
-    }
+		if (betweenUnitDistance >= m_followEngageDinstance)
+		{
+			ChangeAnimation(unitAnimations.m_walkAnimation);
+
+			dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
+			m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
+			isFollowing = true;
+		}
+		else if (betweenUnitDistance <= m_stopFollowDinstance)
+		{
+			isFollowing = false;
+			StopMove();
+			ChangeAnimation(unitAnimations.m_idleAnimation);
+		}
+		else if (betweenUnitDistance <= m_followEngageDinstance && betweenUnitDistance >= m_stopFollowDinstance && isFollowing)
+		{
+			ChangeAnimation(unitAnimations.m_walkAnimation);
+
+			dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
+			m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
+			isFollowing = true;
+		}
+	}
 }
 
 void Unit::AttackMoveUpdate()
@@ -638,10 +678,10 @@ void Unit::AttackUpdate()
 
     if (!isAttackAnimationOperating)
     {
-        if (!isAnimationChangedToIdleAnimationOnAttackState)
+        if (!isAnimationChangedAttackToIdle)
         {
-			ChangeAnimation(unitAnimations.m_idleAnimation);
-            isAnimationChangedToIdleAnimationOnAttackState = true;
+            ChangeAnimation(unitAnimations.m_idleAnimation);
+            isAnimationChangedAttackToIdle = true;
         }
 
         attackFunctionElapsed += Time::GetDeltaTime() * m_localTimeScale;
@@ -651,7 +691,7 @@ void Unit::AttackUpdate()
             DetermineCurrentTargetObject();
             attackFunctionElapsed = 0.0f;
             isAttackAnimationOperating = true;
-            isAnimationChangedToIdleAnimationOnAttackState = false;
+            isAnimationChangedAttackToIdle = false;
             ChangeAnimation(unitAnimations.m_attackAnimation);
             CheckCurrentAnimation(unitAnimations.m_attackAnimation);
         }
@@ -763,8 +803,13 @@ void Unit::ResurrectUpdate()
 
 void Unit::ChangeAnimation(yunuGI::IAnimation* p_anim)
 {
+
+    if (m_latestChangedAnimation == p_anim)
+        return;
+
     m_animatorComponent->ChangeAnimation(p_anim, animationLerpDuration, animationTransitionSpeed);
-    m_currentAnimation = p_anim;
+
+    m_latestChangedAnimation = p_anim;
 }
 
 #pragma endregion
@@ -1007,19 +1052,19 @@ void Unit::EnemyActionOnTacticModeEngaged()
 {
     //unitAnimations.m_deathAnimation->Se
     //m_animatorComponent->GetGI().GetCurrentAnimation()->SetPlaySpeed(0.0f);
-    SetCurrentAnimationSpeed(0.0f);
+    StopAnimation();
     StopMove();
 }
 
 void Unit::EnemyActionOnTacticModeEnded()
 {
-    SetCurrentAnimationSpeed(1.0f);
+    ResumeAnimation();
 }
 
-void Unit::SetCurrentAnimationSpeed(float p_speed)
+void Unit::SetCurrentAnimationSpeed(yunuGI::IAnimation* p_anim, float p_speed)
 {
-    if (m_currentAnimation)
-        m_currentAnimation->SetPlaySpeed(p_speed);
+    if (p_anim)
+        p_anim->SetPlaySpeed(p_speed);
 }
 
 bool Unit::IsAllExtraPlayerUnitDead()
@@ -1048,6 +1093,29 @@ bool Unit::IsAllExtraPlayerUnitDead()
 bool Unit::CheckEnemyStoppedByTacticMode() const
 {
     return (!TacticModeSystem::Instance().IsUnitsPerformingCommand() || !TacticModeSystem::Instance().IsOrderingTimingNow());
+}
+void Unit::KnockBackUnit(Vector3d targetPosition, float knockBackDuration)
+{
+    knockBackStartPoint = GetGameObject()->GetTransform()->GetWorldPosition();
+    m_navAgentComponent->Relocate(targetPosition);
+    isFollowingNavAgent = false;
+    MakeUnitPushedState(true);
+    knockBackTimer->pushDuration = knockBackDuration;
+    knockBackTimer->ActivateTimer();
+}
+
+void Unit::ReportLeaderUnitChanged(UnitType p_type)
+{
+    if (m_unitType == p_type)
+    {
+        SetUnitStateDirectly(UnitState::Idle);
+        m_followingTargetUnit = nullptr;
+    }
+    else
+    {
+        m_followingTargetUnit = PlayerController::Instance().GetPlayerMap().find(p_type)->second;
+        SetUnitStateDirectly(UnitState::OffsetMove);
+    }
 }
 
 float Unit::DetermineAttackDamage(float p_damage)
@@ -1121,6 +1189,7 @@ void Unit::PushAttackMoveFunctionToTacticQueue(Vector3d p_pos, Unit* p_selectedU
     m_tacticModeQueue.push([=]()
         {
             OrderAttackMove(p_pos, p_selectedUnit);
+            isTacticAttackMovePermitted = true;
         });
 }
 
@@ -1211,14 +1280,22 @@ void Unit::RotateUnit(Vector3d endPosition)
         GetGameObject()->GetTransform()->SetWorldRotation(Quaternion({ 0.0f, finalDegree, 0.0f }));
 }
 
+void Unit::ResumeAnimation()
+{
+    SetCurrentAnimationSpeed(unitAnimations.m_idleAnimation, 1.0f);
+    SetCurrentAnimationSpeed(unitAnimations.m_walkAnimation, 1.0f);
+    SetCurrentAnimationSpeed(unitAnimations.m_attackAnimation, 1.0f);
+    SetCurrentAnimationSpeed(unitAnimations.m_paralysisAnimation, 1.0f);
+    SetCurrentAnimationSpeed(unitAnimations.m_deathAnimation, 1.0f);
+}
+
 void Unit::StopAnimation()
 {
-    unitAnimations.m_idleAnimation->SetPlaySpeed(0.0f);
-    unitAnimations.m_walkAnimation->SetPlaySpeed(0.0f);
-    unitAnimations.m_attackAnimation->SetPlaySpeed(0.0f);
-    unitAnimations.m_paralysisAnimation->SetPlaySpeed(0.0f);
-    unitAnimations.m_deathAnimation->SetPlaySpeed(0.0f);
-    //unitAnimations.m_battleEngageAnimation->SetPlaySpeed(0.0f);
+    SetCurrentAnimationSpeed(unitAnimations.m_idleAnimation, 0.0f);
+    SetCurrentAnimationSpeed(unitAnimations.m_walkAnimation, 0.0f);
+    SetCurrentAnimationSpeed(unitAnimations.m_attackAnimation, 0.0f);
+    SetCurrentAnimationSpeed(unitAnimations.m_paralysisAnimation, 0.0f);
+    SetCurrentAnimationSpeed(unitAnimations.m_deathAnimation, 0.0f);
 }
 
 void Unit::RegisterSkillWithAnimation(SkillEnum p_enum)
@@ -1349,18 +1426,22 @@ void Unit::OrderMove(Vector3d position)
     //m_currentTargetUnit = nullptr;
     isAttackMoving = false;
 
-    if ((GameManager::Instance().IsBattleSystemOperating() || m_unitType == UnitType::Warrior) &&
+    if (/*(GameManager::Instance().IsBattleSystemOperating() || m_unitType == UnitType::Warrior) &&*/
         !(currentOrder == UnitState::WaveStart || currentOrder == UnitState::WaveMotion))
     {
-        currentOrder = UnitState::Move;
-        dotween->DOLookAt(position, rotateTime, false);
+        if (currentOrder != UnitState::Skill)
+        {
+            currentOrder = UnitState::Move;
+            //dotween->DOLookAt(position, rotateTime, false);
+        }
     }
 }
 
+// 유닛을 직접 마우스 우클릭했을 경우 
 void Unit::OrderAttackMove(Vector3d position, Unit* p_selectedUnit)
 {
     OrderAttackMove(position);
-
+    isAttackMoving = false;
     tauntingThisUnit = p_selectedUnit;
     DetermineCurrentTargetObject();
 }
@@ -1560,6 +1641,48 @@ void Unit::ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType)
         ui->DisableElement();
     }
 
+}
+
+void Unit::SetUnitStateDirectly(Unit::UnitState p_unitState)
+{
+    switch (p_unitState)
+    {
+    case Unit::UnitState::Idle:
+	{
+		unitFSM.SetUnitStateDirectly(p_unitState);
+		break;
+	}
+        break;
+    case Unit::UnitState::Move:
+        break;
+    case Unit::UnitState::Chase:
+        break;
+    case Unit::UnitState::Attack:
+        break;
+    case Unit::UnitState::AttackMove:
+        break;
+    case Unit::UnitState::Skill:
+        break;
+    case Unit::UnitState::Paralysis:
+        break;
+    case Unit::UnitState::Death:
+        break;
+    case Unit::UnitState::Resurrect:
+        break;
+    case Unit::UnitState::OffsetMove:
+    {
+		unitFSM.SetUnitStateDirectly(p_unitState);
+        break;
+    }
+    case Unit::UnitState::WaveStart:
+        break;
+    case Unit::UnitState::WaveMotion:
+        break;
+    case Unit::UnitState::StateEnd:
+        break;
+    default:
+        break;
+    }
 }
 
 void Unit::PermitTacticAction()

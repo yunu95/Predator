@@ -101,6 +101,31 @@ namespace application
 				}
 			}
 
+			if (ImGui::CollapsingHeader("Interactable"))
+			{
+				for (auto each : tdManager.GetDataList(DataType::InteractableData))
+				{
+					if (ImGui::Selectable(static_cast<Interactable_TemplateData*>(each)->GetDataKey().c_str(), selectedData == each))
+					{
+						if (selectedData == each)
+						{
+							tdManager.SetSelectedTemplateData(nullptr);
+						}
+						else
+						{
+							tdManager.SetSelectedTemplateData(each);
+						}
+					}
+				}
+			}
+			else
+			{
+				if (selectedData != nullptr && tdManager.GetDataType(selectedData) == DataType::InteractableData)
+				{
+					tdManager.SetSelectedTemplateData(nullptr);
+				}
+			}
+
 			if (ImGui::CollapsingHeader("Ornaments"))
 			{
 				for (auto each : tdManager.GetDataList(DataType::OrnamentData))
@@ -145,6 +170,11 @@ namespace application
 					case DataType::OrnamentData:
 					{
 						DrawTemplateDataPOD<Ornament_TemplateData>(selectedData);
+						break;
+					}
+					case DataType::InteractableData:
+					{
+						DrawTemplateDataPOD<Interactable_TemplateData>(selectedData);
 						break;
 					}
 					default:

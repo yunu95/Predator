@@ -6,7 +6,8 @@ namespace application
 {
 	void Script::Update()
 	{
-		for (int i = 0; i < coroutineQueue.size(); i++)
+		auto queueSize = coroutineQueue.size();
+		for (int i = 0; i < queueSize; i++)
 		{
 			auto coroutine = coroutineQueue.front();
 			if (coroutine.Done())
@@ -300,6 +301,16 @@ namespace application
 						condition = AddCondition<Condition_CinematicModeOff>();
 						break;
 					}
+					case application::ConditionType::TutorialModeOn:
+					{
+						condition = AddCondition<Condition_TutorialModeOn>();
+						break;
+					}
+					case application::ConditionType::TutorialModeOff:
+					{
+						condition = AddCondition<Condition_TutorialModeOff>();
+						break;
+					}
 					default:
 						break;
 				}
@@ -386,6 +397,36 @@ namespace application
 						case application::ActionType::TutorialModeChange:
 						{
 							action = AddAction<Action_TutorialModeChange>();
+							break;
+						}
+						case application::ActionType::PlayManualDialogue:
+						{
+							action = AddAction<Action_PlayManualDialogue>();
+							break;
+						}
+						case application::ActionType::PlayTimedDialogue:
+						{
+							action = AddAction<Action_PlayTimedDialogue>();
+							break;
+						}
+						case application::ActionType::UnitMove:
+						{
+							action = AddAction<Action_UnitMove>();
+							break;
+						}	
+						case application::ActionType::UnitRotate:
+						{
+							action = AddAction<Action_UnitRotate>();
+							break;
+						}
+						case application::ActionType::UnitRescale:
+						{
+							action = AddAction<Action_UnitRescale>();
+							break;
+						}
+						case application::ActionType::UnitMoveWithRotateAndRescale:
+						{
+							action = AddAction<Action_UnitMoveWithRotateAndRescale>();
 							break;
 						}
 						default:

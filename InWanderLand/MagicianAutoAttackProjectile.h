@@ -9,5 +9,6 @@ private:
 
 public:
 	virtual void Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed, float offset) override;
+	virtual void ReturnToPool() override;
 };
 

@@ -27,8 +27,10 @@ protected:
 	std::vector<Unit*> m_playerUnitVector;
 
 public:
+	void Init();
 	void SetOwnerType(Unit::UnitType type);
 	virtual void Shoot(Unit* ownerUnit, Unit* opponentUnit, float speed, float offset);
+	virtual void ReturnToPool() = 0;
 
 	void SetStraightBulletRange(float p_rng);
 
@@ -42,7 +44,7 @@ private:
 	void ProcessBulletHit(Unit* p_damagedUnit);
 
 public:
-	virtual void Start() override final;
+	virtual void Start() override;
 	virtual void Update() override;
 };
 

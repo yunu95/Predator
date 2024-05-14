@@ -1,5 +1,6 @@
 #include "InWanderLand.h"
 
+#include "UnitBrush.h"
 
 namespace application
 {

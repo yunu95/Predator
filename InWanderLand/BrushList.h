@@ -8,3 +8,4 @@
 #include "CameraBrush.h"
 #include "LightBrush.h"
 #include "ParticleBrush.h"
+#include "InteractableBrush.h"

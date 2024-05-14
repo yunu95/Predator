@@ -88,4 +88,5 @@ enum class UIExportFlag2
     Dialogue_Manual = 1 << 12,
     Dialogue_Timed = 1 << 13,
     RedundantEnable = 1 << 14,
+    AnimatedSprite = 1 << 15,
 };

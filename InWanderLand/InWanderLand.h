@@ -4,7 +4,6 @@
 #include "Application.h"
 #include "ContentsLayer.h"
 #include <d3d11.h>
-#include "UnitBrush.h"
 #include "TemplateDataManager.h"
 
 // UI
@@ -28,5 +27,8 @@
 #include "LinearClippingTimer.h"
 #include "ColorTintTimer.h"
 #include "PlayMusicTimer.h"
+#include "UISpriteAnimation.h"
 
 #include "SkillSystem.h"
+#include "GlobalConstant.h"
+#include "StatusTimer.h"

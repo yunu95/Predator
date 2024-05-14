@@ -25,51 +25,15 @@ void KnockBackComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
         crushedUnitList.push_back(opponentUnit);
         opponentUnit->ReportStatusEffectApplied(StatusEffect::StatusEffectEnum::KnockBack);
         opponentUnit->MakeUnitPushedState(true);
-        opponentUnit->Damaged(ownerUnit, ownerUnit->DetermineAttackDamage(m_ap));
-        opponentUnit->GetGameObject()->GetComponent<NavigationAgent>()->SetActive(false);
+        opponentUnit->Damaged(ownerUnit, ownerUnit->DetermineAttackDamage(m_damage));
         Vector3d startPosition = opponentUnit->GetGameObject()->GetTransform()->GetWorldPosition();
 
         Vector3d directionVector = (startPosition - GetGameObject()->GetTransform()->GetWorldPosition()).Normalized();
-        Vector3d endPosition = startPosition + (directionVector * m_pushPower);
-        Vector3d maxHeightPosition = startPosition + (directionVector * m_pushPower / 2) + Vector3d(0, maxKnockHeight, 0);
+        Vector3d endPosition = startPosition + (directionVector * pushDistance);
+        Vector3d maxHeightPosition = startPosition + (directionVector * pushDistance / 2) + Vector3d(0, maxKnockHeight, 0);
         endPosition = opponentUnit->GetNavField()->GetClosestPointOnField(endPosition);
 
-        opponentUnit->knockBackTimer->m_duration = m_duration;
-        Vector3d unitCurrentPos = opponentUnit->GetTransform()->GetWorldPosition();
-        opponentUnit->knockBackTimer->onUpdate = [=](float normT)
-            {
-                Vector3d finalPos =
-                    Vector3d::Lerp(unitCurrentPos, endPosition, getEasingFunction(easing_functions::EaseOutQuad)(normT))
-                    + Vector3d::up * maxKnockHeight * EasingBackFunction(easing_functions::EaseOutCubic, easing_functions::EaseOutCubic, normT);
-                opponentUnit->GetTransform()->SetWorldPosition(finalPos);
-            };
-        opponentUnit->knockBackTimer->onCompleteFunction = [=]()
-            {
-				opponentUnit->ReportStatusEffectEnded(StatusEffect::StatusEffectEnum::KnockBack);
-                opponentUnit->MakeUnitPushedState(false);
-                opponentUnit->DetermineCurrentTargetObject();
-                opponentUnit->GetGameObject()->GetComponent<NavigationAgent>()->SetActive(true);
-                opponentUnit->GetGameObject()->GetComponent<NavigationAgent>()->AssignToNavigationField(opponentUnit->GetNavField());
-                opponentUnit->GetGameObject()->GetComponent<NavigationAgent>()->Relocate(endPosition);
-            };
-        opponentUnit->knockBackTimer->ActivateTimer();
-        //opponentUnit->knockBackDotween->DOMove(endPosition, m_duration).SetEase(EaseOutQuart).OnComplete([=]()
-        //	{
-
-        //	});
-
-        //opponentUnit->GetGameObject()->GetComponent<Dotween>()->DOMove(maxHeightPosition, m_duration / 2).SetEase(EaseOutCubic).OnComplete([=]()
-        //	{
-        //		opponentUnit->GetGameObject()->GetComponent<Dotween>()->DOMove(endPosition, m_duration / 2).SetEase(EaseOutBounce).OnComplete([=]()
-        //			{
-        //				opponentUnit->MakeUnitPushedState(false);
-        //				opponentUnit->DetermineCurrentTargetObject();
-        //				opponentUnit->GetGameObject()->GetComponent<NavigationAgent>()->SetActive(true);
-        //				opponentUnit->GetGameObject()->GetComponent<NavigationAgent>()->AssignToNavigationField(opponentUnit->GetNavField());
-        //				opponentUnit->GetGameObject()->GetComponent<NavigationAgent>()->Relocate(endPosition);
-        //			});
-        //	});
-
+        opponentUnit->KnockBackUnit(endPosition, 0.5f);
     }
 }
 
@@ -80,7 +44,7 @@ void KnockBackComponent::Update()
 
 void KnockBackComponent::SetAP(float p_ap)
 {
-    m_ap = p_ap;
+    m_damage = p_ap;
 }
 
 void KnockBackComponent::SkillStarted()

@@ -11,3 +11,6 @@
 #include "Action_Camera.h"
 #include "Action_WaitPreviousActionEnd.h"
 #include "Action_Tutorial.h"
+#include "Action_PlayManualDialogue.h"
+#include "Action_PlayTimedDialogue.h"
+#include "Action_Unit.h"

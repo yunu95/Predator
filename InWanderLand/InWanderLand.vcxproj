@@ -1004,7 +1004,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="..\Include\ImGui\imgui.h" />
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
     <ClInclude Include="ActionList.h" />
+    <ClInclude Include="Action_PlayManualDialogue.h" />
+    <ClInclude Include="Action_PlayTimedDialogue.h" />
     <ClInclude Include="Action_Tutorial.h" />
+    <ClInclude Include="Action_Unit.h" />
     <ClInclude Include="Action_WaitPreviousActionEnd.h" />
     <ClInclude Include="Action_Camera.h" />
     <ClInclude Include="Action_Cinematic.h">
@@ -1024,6 +1027,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="ColorTintTImer.h" />
     <ClInclude Include="ConditionList.h" />
     <ClInclude Include="Condition_CinematicMode.h" />
+    <ClInclude Include="Condition_TutorialMode.h" />
     <ClInclude Include="ContentsObservee.h" />
     <ClInclude Include="ContentsObserver.h" />
     <ClInclude Include="ContentsPlayFlag.h" />
@@ -1050,6 +1054,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="IAction.h" />
     <ClInclude Include="ICondition.h" />
+    <ClInclude Include="InteractableBrush.h" />
+    <ClInclude Include="InteractableData.h" />
+    <ClInclude Include="InteractableEditorInstance.h" />
+    <ClInclude Include="InteractablePalette.h" />
+    <ClInclude Include="Interactable_TemplateData.h" />
     <ClInclude Include="JsonUIData.h" />
     <ClInclude Include="LocalTimeEntity.h" />
     <ClInclude Include="LocalTimeEntityManager.h" />
@@ -1262,6 +1271,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UIOffsetTransition.h" />
     <ClInclude Include="UIPanel.h" />
     <ClInclude Include="UIPriorityLayout.h" />
+    <ClInclude Include="UISpriteAnimation.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="StatusEffect.h" />
@@ -1289,7 +1299,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\ImGuizmo\ImGuizmo.cpp" />
+    <ClCompile Include="Action_PlayManualDialogue.cpp" />
+    <ClCompile Include="Action_PlayTimedDialogue.cpp" />
     <ClCompile Include="Action_Tutorial.cpp" />
+    <ClCompile Include="Action_Unit.cpp" />
     <ClCompile Include="Action_WaitPreviousActionEnd.cpp" />
     <ClCompile Include="Action_Camera.cpp" />
     <ClCompile Include="Action_Cinematic.cpp">
@@ -1306,6 +1319,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="ColorTIntTimer.cpp" />
     <ClCompile Include="Condition_CinematicMode.cpp" />
     <ClCompile Include="ChessTrapSkillSystem.cpp" />
+    <ClCompile Include="Condition_TutorialMode.cpp" />
     <ClCompile Include="ContentsObservee.cpp" />
     <ClCompile Include="ContentsObserver.cpp" />
     <ClCompile Include="CreateInstanceCommand.cpp" />
@@ -1326,6 +1340,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="EnemySummonSkillSystem.cpp" />
     <ClCompile Include="FloatFollower.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="InteractableBrush.cpp" />
+    <ClCompile Include="InteractableData.cpp" />
+    <ClCompile Include="InteractableEditorInstance.cpp" />
+    <ClCompile Include="InteractablePalette.cpp" />
+    <ClCompile Include="Interactable_TemplateData.cpp" />
     <ClCompile Include="LocalTimeEntity.cpp" />
     <ClCompile Include="LocalTimeEntityManager.cpp" />
     <ClCompile Include="LinearClippingTimer.cpp" />
@@ -1509,6 +1528,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UIOffsetTransition.cpp" />
     <ClCompile Include="UIPanel.cpp" />
     <ClCompile Include="UIPriorityLayout.cpp" />
+    <ClCompile Include="UISpriteAnimation.cpp" />
     <ClCompile Include="UnitBrush.cpp" />
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="UnitEditorInstance.cpp" />

@@ -12,7 +12,12 @@ public:
         double timeOffset;
     };
     void SetSprites(const wchar_t* spritesRootPath);
+    static const std::vector<Sprite>* GetSprites(const wchar_t* spritesRootPath);
+    void Play();
+    bool isRepeating{ true };
+    bool realTime{ false };
 private:
+    bool isPlaying{ true };
     virtual void Start() override;
     virtual void Update() override;
     int currentIdx{ 0 };

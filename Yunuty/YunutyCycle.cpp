@@ -15,7 +15,6 @@
 #include <mutex>
 #include <cassert>
 
-
 using namespace yunutyEngine;
 
 yunutyEngine::YunutyCycle* yunutyEngine::YunutyCycle::_instance = nullptr;
@@ -86,7 +85,7 @@ void yunutyEngine::YunutyCycle::ThreadFunction()
     while (isGameRunning)
     {
         {
-            { std::unique_lock lock{ preUpdateMutex }; }
+            //std::unique_lock lock{ preUpdateMutex };
             isUpdating = true;
             ThreadUpdate();
             isUpdating = false;
@@ -125,7 +124,7 @@ void yunutyEngine::YunutyCycle::ResetUpdateTargetComponents()
 // Update components and render camera
 void yunutyEngine::YunutyCycle::ThreadUpdate()
 {
-    std::unique_lock lock{ updateMutex };
+    std::scoped_lock lock{ updateMutex };
     Time::Update();
 
     for (auto i = GlobalComponent::globalComponents.begin(); i != GlobalComponent::globalComponents.end(); i++)
@@ -162,7 +161,15 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
         for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
             StartComponent(updateTargetComponents[i]);
         for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
+        {
             UpdateComponent(updateTargetComponents[i]);
+            for (auto coroutine : updateTargetComponents[i]->coroutines)
+            {
+                if (!coroutine->handle.done())
+                    coroutine->resume();
+            }
+            std::erase_if(updateTargetComponents[i]->coroutines, [](std::shared_ptr<yunutyEngine::Component::Coroutine> coroutine) {return coroutine->handle.done(); });
+        }
 
         auto stop = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);

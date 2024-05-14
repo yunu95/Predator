@@ -116,6 +116,7 @@ enum class UIEnumID
     MouseCursor,
     MouseCursor_Free,
     MouseCursor_OnButton,
+    MoveTargetFeedbackAnimSprites,
     ErrorPopup_NoMana,
     ErrorPopup_Cooltime,
 };

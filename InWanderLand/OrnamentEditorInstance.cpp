@@ -26,9 +26,13 @@ namespace application::editor::palette
             auto staticMeshRenderer = child->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
             if (staticMeshRenderer == nullptr)
                 continue;
-            staticMeshRenderer->GetGI().SetLightMapUVIndex(this->ornamentData->pod.LightMapIndex);
-            staticMeshRenderer->GetGI().SetLightMapUVOffset(this->ornamentData->pod.LightMapScaleOffset[2], this->ornamentData->pod.LightMapScaleOffset[3]);
-            staticMeshRenderer->GetGI().SetLightMapUVScaling(this->ornamentData->pod.LightMapScaleOffset[0], this->ornamentData->pod.LightMapScaleOffset[1]);
+
+            if (this->ornamentData->pod.LightMapIndex != -1)
+            {
+                staticMeshRenderer->GetGI().SetLightMapUVIndex(this->ornamentData->pod.LightMapIndex);
+                staticMeshRenderer->GetGI().SetLightMapUVOffset(this->ornamentData->pod.LightMapScaleOffset[2], this->ornamentData->pod.LightMapScaleOffset[3]);
+                staticMeshRenderer->GetGI().SetLightMapUVScaling(this->ornamentData->pod.LightMapScaleOffset[0], this->ornamentData->pod.LightMapScaleOffset[1]);
+            }
         }
         AdjustPickingCollider(reinterpret_cast<const Vector3f&>(boundingMin), reinterpret_cast<const Vector3f&>(boundingMax));
         currentFBX = ornamentTemplateData->pod.staticFBXName;

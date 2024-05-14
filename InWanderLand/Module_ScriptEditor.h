@@ -136,6 +136,16 @@ namespace application
 							Condition_CinematicModeOff::ImGui_DrawDataPopup(static_cast<Condition_CinematicModeOff*>(data));
 							break;
 						}
+						case application::ConditionType::TutorialModeOn:
+						{
+							Condition_TutorialModeOn::ImGui_DrawDataPopup(static_cast<Condition_TutorialModeOn*>(data));
+							break;
+						}
+						case application::ConditionType::TutorialModeOff:
+						{
+							Condition_TutorialModeOff::ImGui_DrawDataPopup(static_cast<Condition_TutorialModeOff*>(data));
+							break;
+						}
 						default:
 							break;
 					}
@@ -204,6 +214,36 @@ namespace application
 						case application::ActionType::TutorialModeChange:
 						{
 							Action_TutorialModeChange::ImGui_DrawDataPopup(static_cast<Action_TutorialModeChange*>(data));
+							break;
+						}
+						case application::ActionType::PlayManualDialogue:
+						{
+							Action_PlayManualDialogue::ImGui_DrawDataPopup(static_cast<Action_PlayManualDialogue*>(data));
+							break;
+						}
+						case application::ActionType::PlayTimedDialogue:
+						{
+							Action_PlayTimedDialogue::ImGui_DrawDataPopup(static_cast<Action_PlayTimedDialogue*>(data));
+							break;
+						}
+						case application::ActionType::UnitMove:
+						{
+							Action_UnitMove::ImGui_DrawDataPopup(static_cast<Action_UnitMove*>(data));
+							break;
+						}
+						case application::ActionType::UnitRotate:
+						{
+							Action_UnitRotate::ImGui_DrawDataPopup(static_cast<Action_UnitRotate*>(data));
+							break;
+						}
+						case application::ActionType::UnitRescale:
+						{
+							Action_UnitRescale::ImGui_DrawDataPopup(static_cast<Action_UnitRescale*>(data));
+							break;
+						}
+						case application::ActionType::UnitMoveWithRotateAndRescale:
+						{
+							Action_UnitMoveWithRotateAndRescale::ImGui_DrawDataPopup(static_cast<Action_UnitMoveWithRotateAndRescale*>(data));
 							break;
 						}
 						default:

@@ -11,7 +11,7 @@ public:
 	bool m_isRepeated;
 
 	float m_elapsed;
-	float m_duration;
+	float pushDuration;
 
 
 public:

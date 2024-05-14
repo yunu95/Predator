@@ -10,3 +10,4 @@
 #include "Camera_TemplateData.h"
 #include "Light_TemplateData.h"
 #include "Particle_TemplateData.h"
+#include "Interactable_TemplateData.h"

@@ -489,6 +489,14 @@ namespace yunutyEngine
         m_tileCache->addBoxObstacle(reinterpret_cast<float*>(&center), reinterpret_cast<float*>(&halfExtents), yRadians, &result);
         return result;
     }
+    dtObstacleRef NavigationField::Impl::AddCylinderObstacle(Vector3f center, float radius, const float height)
+    {
+        if (!m_tileCache)
+            return 0;
+        dtObstacleRef result;
+        m_tileCache->addObstacle(reinterpret_cast<float*>(&center), radius, height, &result);
+        return result;
+    }
     void NavigationField::Impl::DeleteObstacle(dtObstacleRef obstacleRef)
     {
         if (!m_tileCache)

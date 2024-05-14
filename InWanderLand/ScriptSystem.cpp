@@ -23,6 +23,8 @@ namespace application
 		/// Condition
 		conditionList.push_back({ ConditionType::CinematicModeOn, "CinematicModeOn" });
 		conditionList.push_back({ ConditionType::CinematicModeOff, "CinematicModeOff" });
+		conditionList.push_back({ ConditionType::TutorialModeOn, "TutorialModeOn" });
+		conditionList.push_back({ ConditionType::TutorialModeOff, "TutorialModeOff" });
 
 		/// Action
 		actionList.push_back({ ActionType::WaitPreviousActionEnd, "WaitPreviousActionEnd" });
@@ -36,6 +38,12 @@ namespace application
 		actionList.push_back({ ActionType::CameraSaveView, "CameraSaveView" });
 		actionList.push_back({ ActionType::CameraLoadView, "CameraLoadView" });
 		actionList.push_back({ ActionType::TutorialModeChange, "TutorialModeChange" });
+		actionList.push_back({ ActionType::PlayManualDialogue, "PlayManualDialogue" });
+		actionList.push_back({ ActionType::PlayTimedDialogue, "PlayTimedDialogue" });
+		actionList.push_back({ ActionType::UnitMoveWithRotateAndRescale, "UnitMoveWithRotateAndRescale" });
+		actionList.push_back({ ActionType::UnitMove, "UnitMove" });
+		actionList.push_back({ ActionType::UnitRotate, "UnitRotate" });
+		actionList.push_back({ ActionType::UnitRescale, "UnitRescale" });
 	}
 
 	Script* ScriptSystem::CreateScript()

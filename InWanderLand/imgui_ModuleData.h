@@ -180,21 +180,20 @@ namespace application
 					if (label == "staticFBXName")
 					{
 						bool returnVal = false;
-						static auto& fbxSet = ResourceManager::GetSingletonInstance().GetStaticFBXList();
 						static std::vector<std::string> selections = std::vector<std::string>();
 						std::string current = data;
 
-						if (selections.empty())
+						selections.resize(0);
+						for (auto& each : ResourceManager::GetSingletonInstance().GetStaticFBXList())
 						{
-							for (auto& each : fbxSet)
-							{
-								selections.push_back(each);
-							}
+							selections.push_back(each);
 						}
+
+						std::sort(selections.begin(), selections.end());
 
 						if (ImGui::BeginCombo("##staticFBXCombo", data.c_str()))
 						{
-							for (int i = 0; i < fbxSet.size(); i++)
+							for (int i = 0; i < selections.size(); i++)
 							{
 								const bool is_selected = (current == selections[i]);
 								if (ImGui::Selectable(selections[i].c_str(), is_selected))
@@ -216,21 +215,20 @@ namespace application
 					else if (label == "skinnedFBXName")
 					{
 						bool returnVal = false;
-						static auto& fbxSet = ResourceManager::GetSingletonInstance().GetSkinnedFBXList();
 						static std::vector<std::string> selections = std::vector<std::string>();
 						std::string current = data;
 
-						if (selections.empty())
+						selections.resize(0);
+						for (auto& each : ResourceManager::GetSingletonInstance().GetSkinnedFBXList())
 						{
-							for (auto& each : fbxSet)
-							{
-								selections.push_back(each);
-							}
+							selections.push_back(each);
 						}
+
+						std::sort(selections.begin(), selections.end());
 
 						if (ImGui::BeginCombo("##skinnedFBXCombo", data.c_str()))
 						{
-							for (int i = 0; i < fbxSet.size(); i++)
+							for (int i = 0; i < selections.size(); i++)
 							{
 								const bool is_selected = (current == selections[i]);
 								if (ImGui::Selectable(selections[i].c_str(), is_selected))
@@ -249,6 +247,45 @@ namespace application
 						ImGui::PopItemWidth();
 						return returnVal;
 
+					}
+					else if (label == "fBXName")
+					{
+						bool returnVal = false;
+						static std::vector<std::string> selections = std::vector<std::string>();
+						std::string current = data;
+
+						selections.resize(0);
+						for (auto& each : ResourceManager::GetSingletonInstance().GetStaticFBXList())
+						{
+							selections.push_back(each);
+						}
+						for (auto& each : ResourceManager::GetSingletonInstance().GetSkinnedFBXList())
+						{
+							selections.push_back(each);
+						}
+
+						std::sort(selections.begin(), selections.end());
+
+						if (ImGui::BeginCombo("##fBXCombo", data.c_str()))
+						{
+							for (int i = 0; i < selections.size(); i++)
+							{
+								const bool is_selected = (current == selections[i]);
+								if (ImGui::Selectable(selections[i].c_str(), is_selected))
+								{
+									current = selections[i];
+									TemplateDataManager::GetSingletonInstance().GetSelectedTemplateData()->SetDataResourceName(current);
+									const_cast<std::string&>(data) = current;
+									returnVal = true;
+								}
+
+								if (is_selected)
+									ImGui::SetItemDefaultFocus();
+							}
+							ImGui::EndCombo();
+						}
+						ImGui::PopItemWidth();
+						return returnVal;
 					}
 					else
 					{

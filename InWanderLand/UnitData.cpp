@@ -120,6 +120,11 @@ namespace application
 
         void UnitData::ApplyAsPlaytimeObject()
         {
+            if (pod.isGuide)
+            {
+                return;
+            }
+
             // 함정과 같은 특수 기믹 객체들도 유닛과 유사하게 위치를 지정해주면 되기 때문에 UnitType에 Bomb, Trap, Bbang/th같은
             // 타입을 확장하여 유닛 생성 로직에서 같이 처리할 수 있게 만들 수 있다.
             //UnitClassifier::SingleInstance().SendPODToClassifier(pod);
@@ -215,46 +220,43 @@ namespace application
 
                 tempShortCutIndex = 2;
             }
-			else
+ /*           else if (pod.templateData->pod.skinnedFBXName == "SKM_Ursula")
+            {
+				tempShortCutIndex = 1;
+                currentSelectedProductor = &MagicianProductor::Instance();
+				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+				inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+            }
+			else if (pod.templateData->pod.skinnedFBXName == "SKM_Hansel")
 			{
 				tempShortCutIndex = 1;
-
-				switch (static_cast<Unit::UnitType>(pod.templateData->pod.unitType))
-				{
-					case Unit::UnitType::Warrior:
-						currentSelectedProductor = &WarriorProductor::Instance();
-						break;
-					case Unit::UnitType::Magician:
-						currentSelectedProductor = &MagicianProductor::Instance();
-						break;
-					case Unit::UnitType::Healer:
-						currentSelectedProductor = &HealerProductor::Instance();
-						break;
-					case Unit::UnitType::Boss:
-						currentSelectedProductor = &BossProductor::Instance();
-						break;
-					default:
-						break;
-				}
-
+				currentSelectedProductor = &HealerProductor::Instance();
 				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
 				inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
 			}
- /*           else
+			else if (pod.templateData->pod.skinnedFBXName == "SKM_Robin")
+			{
+				tempShortCutIndex = 1;
+				currentSelectedProductor = &WarriorProductor::Instance();
+				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+				inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+			}*/
+            else
             {
                 tempShortCutIndex = 1;
 
                 if (pod.templateData->pod.skinnedFBXName == "SKM_Robin")
                 {
-                    /// 임시 - 보스
-                    if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::Boss)
-                    {
-						currentSelectedProductor = &BossProductor::Instance();
-                    }
-                    else
-                    {
-						currentSelectedProductor = &WarriorProductor::Instance();
-                    }
+                   /// 임시 - 보스
+                   if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::Boss)
+                   {
+					   currentSelectedProductor = &BossProductor::Instance();
+                   }
+                   else
+                   {
+					   currentSelectedProductor = &WarriorProductor::Instance();
+                   }
+					//currentSelectedProductor = &WarriorProductor::Instance();
                 }
                 else if (pod.templateData->pod.skinnedFBXName == "SKM_Ursula")
                 {
@@ -266,7 +268,7 @@ namespace application
                 }
                 currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                 inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-            }*/
+            }
 
             if (inGameUnit)
             {
