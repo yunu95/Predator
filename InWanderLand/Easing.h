@@ -2,6 +2,7 @@
 
 enum easing_functions
 {
+	Linear,
 	EaseInSine,
 	EaseOutSine,
 	EaseInOutSine,
