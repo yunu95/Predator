@@ -3,6 +3,7 @@
 
 class BlindFieldComponent;
 class ParalysisFieldComponent;
+class MagicianProductor;
 
 class MagicianSkillSystem : public PlayerSkillSystem
 {
@@ -49,5 +50,6 @@ public:
 public:
     virtual void Start() override;
     virtual void Update() override;
+    friend MagicianProductor;
 };
 

@@ -61,7 +61,7 @@ void WarriorSkillSystem::ActivateSkillOne(Vector3d skillPos)
             m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
             m_unitNavComponent->Relocate(skillPos);
             m_unitComponent->SetUnitStateIdle();
-            GetKnockBackComponent()->GetGameObject()->SetParent(nullptr);
+            GetKnockBackComponent()->GetGameObject()->SetParent(Scene::getCurrentScene());
             GetKnockBackComponent()->GetTransform()->SetWorldPosition(skillPos);
             StartCoroutine(ImpactOnTheEnd());
         });
