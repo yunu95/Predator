@@ -10,6 +10,7 @@
 
 void PlayerController::Start()
 {
+    currentSelectedSerialNumber = Unit::UnitType::Warrior;
 }
 
 void PlayerController::SetMovingSystemComponent(RTSCam* sys)
@@ -102,17 +103,22 @@ void PlayerController::SetRightClickFunction()
     }
     else
     {
-        /// 세 플레이어 유닛이 offset을 갖고 이동할 수 있도록 하기
+        if (!playerComponentMap.contains(currentSelectedSerialNumber))
+        {
+            return;
+        }
+        Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
         m_movingSystemComponent->groundRightClickCallback = [=](Vector3d pos)
             {
                 if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
                 {
                     return;
                 }
-                for (auto e : playerComponentMap)
+                /*for (auto e : playerComponentMap)
                 {
                     e.second->OrderMove(pos);
-                }
+                }*/
+                currentSelectedUnit->OrderMove(pos);
                 UIManager::Instance().SummonMoveToFeedback(pos);
             };
     }

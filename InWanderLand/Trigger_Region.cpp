@@ -33,7 +33,10 @@ namespace application
 		}
 
 		targetRegion = region;
-		region->RegisterObserver(this);
+		if (region)
+		{
+			region->RegisterObserver(this);
+		}
 	}
 
 	bool Trigger_EnterRegion::IsValid()
@@ -146,7 +149,10 @@ namespace application
 		}
 
 		targetRegion = region;
-		region->RegisterObserver(this);
+		if (region)
+		{
+			region->RegisterObserver(this);
+		}
 	}
 
 	bool Trigger_LeaveRegion::IsValid()

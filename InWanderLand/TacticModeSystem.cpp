@@ -85,6 +85,8 @@ void TacticModeSystem::StopFunction()
 void TacticModeSystem::ToggleRequested(InputManager::SelectedSerialNumber currentSelectedNum)
 {
     m_latestSelectedUnitNum = currentSelectedNum;
+    if (m_latestSelectedUnitNum == 0)
+        m_latestSelectedUnitNum = InputManager::One;
 
     if (!isTacticOrderPerforming)           /// 1. 명령 실행 중이 아니고,
     {
@@ -264,6 +266,7 @@ void TacticModeSystem::ExitTacticMode()
     {
 		isTacticOrderPerforming = true;
 		m_rtsCam->SetTarget(sequenceQueue.front()->GetGameObject());
+        sequenceQueue.front()->EnemyActionOnTacticModeEnded();
 		sequenceQueue.front()->PermitTacticAction();
 		sequenceQueue.pop();
     }

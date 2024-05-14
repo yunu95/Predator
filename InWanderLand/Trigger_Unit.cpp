@@ -32,7 +32,10 @@ namespace application
 		}
 
 		targetUnit = unit;
-		unit->RegisterObserver(this);
+		if (unit)
+		{
+			unit->RegisterObserver(this);
+		}
 	}
 
 	bool Trigger_UnitAppear::IsValid()
@@ -143,7 +146,10 @@ namespace application
 		}
 
 		targetUnit = unit;
-		unit->RegisterObserver(this);
+		if (unit)
+		{
+			unit->RegisterObserver(this);
+		}
 	}
 
 	bool Trigger_UnitDie::IsValid()

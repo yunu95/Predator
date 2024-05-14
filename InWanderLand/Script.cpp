@@ -6,7 +6,8 @@ namespace application
 {
 	void Script::Update()
 	{
-		for (int i = 0; i < coroutineQueue.size(); i++)
+		auto queueSize = coroutineQueue.size();
+		for (int i = 0; i < queueSize; i++)
 		{
 			auto coroutine = coroutineQueue.front();
 			if (coroutine.Done())
@@ -413,6 +414,21 @@ namespace application
 							action = AddAction<Action_UnitMove>();
 							break;
 						}	
+						case application::ActionType::UnitRotate:
+						{
+							action = AddAction<Action_UnitRotate>();
+							break;
+						}
+						case application::ActionType::UnitRescale:
+						{
+							action = AddAction<Action_UnitRescale>();
+							break;
+						}
+						case application::ActionType::UnitMoveWithRotateAndRescale:
+						{
+							action = AddAction<Action_UnitMoveWithRotateAndRescale>();
+							break;
+						}
 						default:
 							break;
 					}

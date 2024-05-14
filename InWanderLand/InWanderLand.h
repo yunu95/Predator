@@ -30,3 +30,4 @@
 #include "UISpriteAnimation.h"
 
 #include "SkillSystem.h"
+#include "GlobalConstant.h"

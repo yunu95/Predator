@@ -5,7 +5,15 @@
 #include "Palette.h"
 #include "YunutyEngine.h"
 #include "SingletonClass.h"
-#include "ParticleData.h"
+#include "ParticleToolData.h"
+
+namespace application
+{
+    namespace editor
+    {
+        class ParticleData;
+    }
+}
 
 namespace application
 {

@@ -18,6 +18,9 @@ namespace application
                 void SelectUnitTemplateData(Unit_TemplateData*);
                 void UnselectUnitTemplateData();
 
+                UnitData* GetSingleSelectedUnitInstance();
+                void SelectUnitInstance(UnitData* unit);
+
                 virtual void Reset() override;
                 virtual IEditableData* PlaceInstance(Vector3d worldPosition) override;
                 virtual void OnMouseMove(Vector3d projectedWorldPos, Vector2d normalizedScreenPos) override;

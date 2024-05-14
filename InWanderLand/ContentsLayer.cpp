@@ -395,11 +395,11 @@ void application::contents::ContentsLayer::StopContents(ContentsStopFlag stopFla
     ContentsObserver::Instance().StopObservee();
     ContentsObserver::Instance().ClearObservees();
 
-    if (bool(stopFlag & ContentsStopFlag::ClearUI))
-        UIManager::Instance().Clear();
-
     /// Playable 동작들을 일괄 처리할 부분입니다.
     PlayableComponent::OnGameStopAll();
+
+    if (bool(stopFlag & ContentsStopFlag::ClearUI))
+        UIManager::Instance().Clear();
 }
 
 #ifdef GEN_TESTS

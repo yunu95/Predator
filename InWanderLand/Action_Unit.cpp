@@ -2,11 +2,14 @@
 
 #include "InWanderLand.h"
 #include "UnitData.h"
+#include "UnitEditorInstance.h"
+#include "Unit.h"
 
 #include "Application.h"
 #include "EditorLayer.h"
 
 #include "EditorPopupManager.h"
+#include "InstanceManager.h"
 
 #include "YunutyEngine.h"
 
@@ -18,47 +21,43 @@ namespace application
 		{
 			targetUnit->RemoveObserver(this);
 		}
+
+		if (destinationUnit)
+		{
+			destinationUnit->RemoveObserver(this);
+			editor::InstanceManager::GetSingletonInstance().DeleteInstance(destinationUnit->GetUUID());
+		}
 	}
 
 	CoroutineObject<void> Action_UnitMove::DoAction()
 	{
 		auto ts = targetUnit->inGameUnit->GetTransform();
 		auto startPos = ts->GetWorldPosition();
-		auto startRot = ts->GetWorldRotation();
-		auto startScale = ts->GetWorldScale();
 
-		Vector3d endPos = { position.x, position.y, position.z };
-		Quaternion endRot = { rotation.w, rotation.x, rotation.y, rotation.z };
-		Vector3d endScale = { scale.x, scale.y, scale.z };
+		Vector3d endPos = { destinationUnit->pod.position.x, destinationUnit->pod.position.y, destinationUnit->pod.position.z };
 
-		double timer = 0;
-		float factor = 0;
+		endPos.y = 0;
 
-		if (lerpTime == 0)
+		targetUnit->inGameUnit->OrderMove(endPos);
+		while(true)
 		{
-			ts->SetWorldPosition(endPos);
-			ts->SetWorldRotation(endRot);
-			ts->SetWorldScale(endScale);
-			co_return;
-		}
-
-		for (double timer = 0; timer < lerpTime;)
-		{
-			factor = timer / lerpTime;
-			ts->SetWorldPosition(Vector3d::Lerp(startPos, endPos, factor));
-			ts->SetWorldRotation(Quaternion::Lerp(startRot, endRot, factor));
-			ts->SetWorldScale(Vector3d::Lerp(startScale, endScale, factor));
-			timer += Time::GetDeltaTimeUnscaled();
+			auto curPos = ts->GetWorldPosition();
+			if ((endPos - curPos).MagnitudeSqr() <= 0.04)
+			{
+				break;
+			}
 			co_await std::suspend_always();
 		}
+
+		co_return;
 	}
 
 	bool Action_UnitMove::IsValid()
 	{
-		return (targetUnit == nullptr) ? false : destinationSetting;
+		return (targetUnit == nullptr) ? false : (destinationUnit == nullptr) ? false : true;
 	}
 
-	void Action_UnitMove::SetUnit(editor::UnitData* unit)
+	void Action_UnitMove::SetTargetUnit(editor::UnitData* unit)
 	{
 		if (targetUnit)
 		{
@@ -66,27 +65,34 @@ namespace application
 		}
 
 		targetUnit = unit;
-		unit->RegisterObserver(this);
-		destinationSetting = false;
+		if (unit)
+		{
+			unit->RegisterObserver(this);
+		}
+
+		if (destinationUnit)
+		{
+			editor::InstanceManager::GetSingletonInstance().DeleteInstance(destinationUnit->GetUUID());
+		}
 	}
 
 	void Action_UnitMove::SetDestinationUnit(editor::UnitData* unit)
 	{
-		container_pos = unit->pod.position;
-		yunutyEngine::Quaternion quat;
-		quat.x = unit->pod.rotation.x;
-		quat.y = unit->pod.rotation.y;
-		quat.z = unit->pod.rotation.z;
-		quat.w = unit->pod.rotation.w;
-		container_rot.x = quat.Euler().x;
-		container_rot.y = quat.Euler().y;
-		container_rot.z = quat.Euler().z;
-		container_scal = unit->pod.scale;
-	}
+		if (destinationUnit)
+		{
+			destinationUnit->RemoveObserver(this);
+		}
 
-	void Action_UnitMove::SetLerpTime(float lerpTime)
-	{
-		this->lerpTime = lerpTime;
+		destinationUnit = unit;
+		if (unit)
+		{
+			unit->RegisterObserver(this);
+			if (destinationUnit->GetPaletteInstance())
+			{
+				unit->pod.isGuide = true;
+				static_cast<editor::palette::UnitEditorInstance*>(destinationUnit->GetPaletteInstance())->ChangeGuideInstance();
+			}
+		}
 	}
 
 	void Action_UnitMove::ProcessObervationEvent(ObservationTarget* target, ObservationEvent event)
@@ -99,6 +105,10 @@ namespace application
 				{
 					targetUnit = nullptr;
 				}
+				if (destinationUnit == static_cast<editor::UnitData*>(target))
+				{
+					destinationUnit = nullptr;
+				}
 				break;
 			}
 			default:
@@ -108,10 +118,10 @@ namespace application
 
 	void Action_UnitMove::ImGui_DrawDataPopup(Action_UnitMove* data)
 	{
-		if (ImGui::MenuItem("SetTargetUnit"))
+		if (ImGui::MenuItem("SetTargetUnit(Move)"))
 		{
 			editor::EditorLayer::SetInputControl(false);
-			editor::imgui::ShowMessageBox("SetTargetUnit", [data]()
+			editor::imgui::ShowMessageBox("SetTargetUnit(Move)", [data]()
 				{
 					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
@@ -132,153 +142,281 @@ namespace application
 					if (ImGui::Button("Edit"))
 					{
 						ImGui::CloseCurrentPopup();
-						editor::imgui::CloseMessageBox("SetTargetUnit");
+						editor::imgui::CloseMessageBox("SetTargetUnit(Move)");
 						editor::EditorLayer::SetInputControl(true);
-						editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Action_UnitMove>("SetTargetUnit", data);
+						editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Action_UnitMove>("SetTargetUnit(Move)", data);
 					}
 					ImGui::SameLine();
 
 					if (ImGui::Button("Cancel"))
 					{
 						ImGui::CloseCurrentPopup();
-						editor::imgui::CloseMessageBox("SetTargetUnit");
+						editor::imgui::CloseMessageBox("SetTargetUnit(Move)");
 						editor::EditorLayer::SetInputControl(true);
 					}
 				}, 300);
 		}
 
-		if (ImGui::MenuItem("SetDestination(Unit)"))
+		if (data->destinationUnit)
+		{
+			if (ImGui::MenuItem("EditDestinationUnit(Move)"))
+			{
+				editor::EditorLayer::SetInputControl(false);
+				editor::imgui::ShowMessageBox("EditDestinationUnit(Move)", [data]()
+					{
+						editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+						ImGui::Separator();
+
+						ImGui::SetNextItemWidth(-1);
+
+						ImGui::Text(data->destinationUnit->pod.templateData->pod.skinnedFBXName.c_str());
+
+						ImGui::Separator();
+
+						if (ImGui::Button("Edit"))
+						{
+							data->destinationUnit->GetPaletteInstance()->GetGameObject()->SetSelfActive(true);
+							ImGui::CloseCurrentPopup();
+							editor::imgui::CloseMessageBox("EditDestinationUnit(Move)");
+							editor::EditorLayer::SetInputControl(true);
+							editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Action_UnitMove>("EditDestinationUnit(Move)", data);
+						}
+						ImGui::SameLine();
+
+						if (ImGui::Button("Cancel"))
+						{
+							ImGui::CloseCurrentPopup();
+							editor::imgui::CloseMessageBox("EditDestinationUnit(Move)");
+							editor::EditorLayer::SetInputControl(true);
+						}
+					}, 300);
+			}
+		}
+		else
+		{
+			if (data->targetUnit && ImGui::MenuItem("SetDestinationUnit(Move)"))
+			{
+				editor::EditorLayer::SetInputControl(false);
+				editor::imgui::ShowMessageBox("SetDestinationUnit(Move)", [data]()
+					{
+						if (data->destinationUnit)
+						{
+							ImGui::CloseCurrentPopup();
+							editor::imgui::CloseMessageBox("SetDestinationUnit(Move)");
+							editor::EditorLayer::SetInputControl(true);
+							return;
+						}
+
+						editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+						ImGui::Separator();
+
+						ImGui::SetNextItemWidth(-1);
+
+						ImGui::Text("------");
+
+						ImGui::Separator();
+
+						if (ImGui::Button("Edit"))
+						{
+							ImGui::CloseCurrentPopup();
+							editor::imgui::CloseMessageBox("SetDestinationUnit(Move)");
+							editor::EditorLayer::SetInputControl(true);
+							editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Action_UnitMove>("SetDestinationUnit(Move)", data);
+						}
+						ImGui::SameLine();
+
+						if (ImGui::Button("Cancel"))
+						{
+							ImGui::CloseCurrentPopup();
+							editor::imgui::CloseMessageBox("SetDestinationUnit(Move)");
+							editor::EditorLayer::SetInputControl(true);
+						}
+					}, 300);
+			}
+		}
+	}
+
+	bool Action_UnitMove::PreEncoding(json& data) const
+	{
+		return true;
+	}
+
+	bool Action_UnitMove::PostEncoding(json& data) const
+	{
+		data["targetUnit"] = targetUnit ? UUID_To_String(targetUnit->GetUUID()) : "nullptr";
+		data["destinationUnit"] = destinationUnit ? UUID_To_String(destinationUnit->GetUUID()) : "nullptr";
+		return true;
+	}
+
+	bool Action_UnitMove::PreDecoding(const json& data)
+	{
+		return true;
+	}
+
+	bool Action_UnitMove::PostDecoding(const json& data)
+	{
+		SetTargetUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["targetUnit"])));
+		SetDestinationUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["destinationUnit"])));
+		return true;
+	}
+
+	Action_UnitRotate::~Action_UnitRotate()
+	{
+		if (targetUnit)
+		{
+			targetUnit->RemoveObserver(this);
+		}
+	}
+
+	CoroutineObject<void> Action_UnitRotate::DoAction()
+	{
+		auto ts = targetUnit->inGameUnit->GetTransform();
+		auto startRot = ts->GetWorldRotation();
+
+		Quaternion endRot;
+		
+		if (isRelative)
+		{
+			endRot = startRot * Quaternion(Vector3d(0, angle, 0));
+		}
+		else
+		{
+			endRot = Quaternion(Vector3d(0, angle, 0));
+		}
+
+		double timer = 0;
+		float factor = 0;
+
+		if (lerpTime == 0)
+		{
+			ts->SetWorldRotation(endRot);
+			co_return;
+		}
+
+		for (double timer = 0; timer < lerpTime;)
+		{
+			factor = timer / lerpTime;
+			ts->SetWorldRotation(Quaternion::Lerp(startRot, endRot, factor));
+			timer += Time::GetDeltaTimeUnscaled();
+			co_await std::suspend_always();
+		}
+	}
+
+	bool Action_UnitRotate::IsValid()
+	{
+		return (targetUnit == nullptr) ? false : true;
+	}
+
+	void Action_UnitRotate::SetTargetUnit(editor::UnitData* unit)
+	{
+		if (targetUnit)
+		{
+			targetUnit->RemoveObserver(this);
+		}
+
+		targetUnit = unit;
+		if (unit)
+		{
+			unit->RegisterObserver(this);
+		}
+	}
+
+	void Action_UnitRotate::SetRelative(bool isRelative)
+	{
+		this->isRelative = isRelative;
+	}
+
+	void Action_UnitRotate::SetRotation(float angle)
+	{
+		this->angle = angle;
+	}
+
+	void Action_UnitRotate::SetLerpTime(float lerpTime)
+	{
+		this->lerpTime = lerpTime;
+	}
+
+	void Action_UnitRotate::ProcessObervationEvent(ObservationTarget* target, ObservationEvent event)
+	{
+		switch (event)
+		{
+			case application::ObservationEvent::Destroy:
+			{
+				if (targetUnit == static_cast<editor::UnitData*>(target))
+				{
+					targetUnit = nullptr;
+				}
+				break;
+			}
+			default:
+				break;
+		}
+	}
+
+	void Action_UnitRotate::ImGui_DrawDataPopup(Action_UnitRotate* data)
+	{
+		if (ImGui::MenuItem("SetTargetUnit(Rotate)"))
 		{
 			editor::EditorLayer::SetInputControl(false);
-			data->container_pos = data->position;
-			yunutyEngine::Quaternion quat;
-			quat.x = data->rotation.x;
-			quat.y = data->rotation.y;
-			quat.z = data->rotation.z;
-			quat.w = data->rotation.w;
-			data->container_rot.x = quat.Euler().x;
-			data->container_rot.y = quat.Euler().y;
-			data->container_rot.z = quat.Euler().z;
-			data->container_scal = data->scale;
-			editor::imgui::ShowMessageBox("SetDestination(Unit)", [data]()
+			editor::imgui::ShowMessageBox("SetTargetUnit(Rotate)", [data]()
 				{
 					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
 					ImGui::Separator();
 
-					int idx = 0;
-
-					if (editor::imgui::BeginSection_1Col(idx, "TransForm", ImGui::GetContentRegionAvail().x))
+					ImGui::SetNextItemWidth(-1);
+					if (data->targetUnit)
 					{
-						ImGui::TableNextRow();
-						ImGui::TableSetColumnIndex(0);
-
-						bool reset[9] = { false };
-
-						auto resetPosition = editor::imgui::Vector3Control("Position", data->container_pos.x, data->container_pos.y, data->container_pos.z);
-						auto resetRotation = editor::imgui::Vector3Control("Rotation", data->container_rot.x, data->container_rot.y, data->container_rot.z);
-						auto resetScale = editor::imgui::Vector3Control("Scale", data->container_scal.x, data->container_scal.y, data->container_scal.z);
-
-						switch (resetPosition)
-						{
-							case application::editor::imgui::Vector3Flags::ResetX:
-								reset[0] = true;
-								break;
-							case application::editor::imgui::Vector3Flags::ResetY:
-								reset[1] = true;
-								break;
-							case application::editor::imgui::Vector3Flags::ResetZ:
-								reset[2] = true;
-								break;
-							default:
-								break;
-						}
-
-						switch (resetRotation)
-						{
-							case application::editor::imgui::Vector3Flags::ResetX:
-								reset[3] = true;
-								break;
-							case application::editor::imgui::Vector3Flags::ResetY:
-								reset[4] = true;
-								break;
-							case application::editor::imgui::Vector3Flags::ResetZ:
-								reset[5] = true;
-								break;
-							default:
-								break;
-						}
-
-						switch (resetScale)
-						{
-							case application::editor::imgui::Vector3Flags::ResetX:
-								reset[6] = true;
-								break;
-							case application::editor::imgui::Vector3Flags::ResetY:
-								reset[7] = true;
-								break;
-							case application::editor::imgui::Vector3Flags::ResetZ:
-								reset[8] = true;
-								break;
-							default:
-								break;
-						}
-
-						if (reset[0])
-						{
-							data->container_pos.x = 0;
-						}
-						else if (reset[1])
-						{
-							data->container_pos.y = 0;
-						}
-						else if (reset[2])
-						{
-							data->container_pos.z = 0;
-						}
-						else if (reset[3])
-						{
-							data->container_rot.x = 0;
-						}
-						else if (reset[4])
-						{
-							data->container_rot.y = 0;
-						}
-						else if (reset[5])
-						{
-							data->container_rot.z = 0;
-						}
-						else if (reset[6])
-						{
-							data->container_scal.x = 1;
-						}
-						else if (reset[7])
-						{
-							data->container_scal.y = 1;
-						}
-						else if (reset[8])
-						{
-							data->container_scal.z = 1;
-						}
+						ImGui::Text(data->targetUnit->pod.templateData->pod.skinnedFBXName.c_str());
+					}
+					else
+					{
+						ImGui::Text("------");
 					}
 
-					ImGui::SetNextItemWidth(-1);
+					ImGui::Separator();
 
-					if (ImGui::Button("SetFromUnit"))
+					if (ImGui::Button("Edit"))
 					{
 						ImGui::CloseCurrentPopup();
-						editor::imgui::CloseMessageBox("SetDestination(Unit)");
+						editor::imgui::CloseMessageBox("SetTargetUnit(Rotate)");
 						editor::EditorLayer::SetInputControl(true);
-						editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Action_UnitMove>("SetDestination(Unit)", data);
+						editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Action_UnitRotate>("SetTargetUnit(Rotate)", data);
 					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetTargetUnit(Rotate)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+				}, 300);
+		}
+
+		if (ImGui::MenuItem("SetRelative"))
+		{
+			editor::EditorLayer::SetInputControl(false);
+			static bool relative = false;
+			relative = data->isRelative;
+			editor::imgui::ShowMessageBox("SetRelative(UnitRotate)", [data]()
+				{
+					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::Separator();
+
+					ImGui::SetNextItemWidth(-1);
+					ImGui::Checkbox("Relative", &relative);
 
 					ImGui::Separator();
 
 					if (ImGui::Button("OK"))
 					{
-						data->UpdateDestinationFromContainer();
+						data->SetRelative(relative);
 						ImGui::CloseCurrentPopup();
-						editor::imgui::CloseMessageBox("SetDestination(Unit)");
+						editor::imgui::CloseMessageBox("SetRelative(UnitRotate)");
 						editor::EditorLayer::SetInputControl(true);
 					}
 					ImGui::SameLine();
@@ -286,7 +424,41 @@ namespace application
 					if (ImGui::Button("Cancel"))
 					{
 						ImGui::CloseCurrentPopup();
-						editor::imgui::CloseMessageBox("SetDestination(Unit)");
+						editor::imgui::CloseMessageBox("SetRelative(UnitRotate)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+				}, 300);
+		}
+
+		if (ImGui::MenuItem("SetAngle"))
+		{
+			editor::EditorLayer::SetInputControl(false);
+			static float angle = 0;
+			angle = data->angle;
+			editor::imgui::ShowMessageBox("SetAngle(UnitRotate)", [data]()
+				{
+					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::Separator();
+
+					ImGui::SetNextItemWidth(-1);
+					ImGui::DragFloat("##AngleUnitRotate", &angle);
+
+					ImGui::Separator();
+
+					if (ImGui::Button("OK"))
+					{
+						data->SetRotation(angle);
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetAngle(UnitRotate)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetAngle(UnitRotate)");
 						editor::EditorLayer::SetInputControl(true);
 					}
 				}, 300);
@@ -297,14 +469,14 @@ namespace application
 			editor::EditorLayer::SetInputControl(false);
 			static float lerpTime = 0;
 			lerpTime = data->lerpTime;
-			editor::imgui::ShowMessageBox("SetLerpTime(UnitMove)", [data]()
+			editor::imgui::ShowMessageBox("SetLerpTime(UnitRotate)", [data]()
 				{
 					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
 					ImGui::Separator();
 
 					ImGui::SetNextItemWidth(-1);
-					ImGui::DragFloat("##LerpTimeUnitMove", &lerpTime);
+					ImGui::DragFloat("##LerpTimeUnitRotate", &lerpTime);
 
 					ImGui::Separator();
 
@@ -312,7 +484,7 @@ namespace application
 					{
 						data->SetLerpTime(lerpTime);
 						ImGui::CloseCurrentPopup();
-						editor::imgui::CloseMessageBox("SetLerpTime(UnitMove)");
+						editor::imgui::CloseMessageBox("SetLerpTime(UnitRotate)");
 						editor::EditorLayer::SetInputControl(true);
 					}
 					ImGui::SameLine();
@@ -320,91 +492,595 @@ namespace application
 					if (ImGui::Button("Cancel"))
 					{
 						ImGui::CloseCurrentPopup();
-						editor::imgui::CloseMessageBox("SetLerpTime(UnitMove)");
+						editor::imgui::CloseMessageBox("SetLerpTime(UnitRotate)");
 						editor::EditorLayer::SetInputControl(true);
 					}
 				}, 300);
 		}
 	}
 
-	bool Action_UnitMove::PreEncoding(json& data) const
+	bool Action_UnitRotate::PreEncoding(json& data) const
 	{
+		data["relative"] = isRelative;
+		data["angle"] = angle;
 		data["lerpTime"] = lerpTime;
-		data["position"]["x"] = position.x;
-		data["position"]["y"] = position.y;
-		data["position"]["z"] = position.z;
-		data["rotation"]["x"] = rotation.x;
-		data["rotation"]["y"] = rotation.y;
-		data["rotation"]["z"] = rotation.z;
-		data["rotation"]["w"] = rotation.w;
-		data["scale"]["x"] = scale.x;
-		data["scale"]["y"] = scale.y;
-		data["scale"]["z"] = scale.z;
 		return true;
 	}
 
-	bool Action_UnitMove::PostEncoding(json& data) const
+	bool Action_UnitRotate::PostEncoding(json& data) const
 	{
 		data["targetUnit"] = targetUnit ? UUID_To_String(targetUnit->GetUUID()) : "nullptr";
 		return true;
 	}
 
-	bool Action_UnitMove::PreDecoding(const json& data)
+	bool Action_UnitRotate::PreDecoding(const json& data)
 	{
+		isRelative = data["relative"];
+		angle = data["angle"];
 		lerpTime = data["lerpTime"];
-		position.x = data["position"]["x"];
-		position.y = data["position"]["y"];
-		position.z = data["position"]["z"];
-		rotation.x = data["rotation"]["x"];
-		rotation.y = data["rotation"]["y"];
-		rotation.z = data["rotation"]["z"];
-		rotation.w = data["rotation"]["w"];
+		return true;
+	}
+
+	bool Action_UnitRotate::PostDecoding(const json& data)
+	{
+		SetTargetUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["targetUnit"])));
+		return true;
+	}
+
+	Action_UnitRescale::~Action_UnitRescale()
+	{
+		if (targetUnit)
+		{
+			targetUnit->RemoveObserver(this);
+		}
+	}
+
+	CoroutineObject<void> Action_UnitRescale::DoAction()
+	{
+		auto ts = targetUnit->inGameUnit->GetTransform();
+		auto startScale = ts->GetWorldScale();
+
+		Vector3d endScale = { scale.x, scale.y, scale.z };
+
+		double timer = 0;
+		float factor = 0;
+
+		if (lerpTime == 0)
+		{
+			ts->SetWorldScale(endScale);
+			co_return;
+		}
+
+		for (double timer = 0; timer < lerpTime;)
+		{
+			factor = timer / lerpTime;
+			ts->SetWorldScale(Vector3d::Lerp(startScale, endScale, factor));
+			timer += Time::GetDeltaTimeUnscaled();
+			co_await std::suspend_always();
+		}
+	}
+
+	bool Action_UnitRescale::IsValid()
+	{
+		return (targetUnit == nullptr) ? false : true;
+	}
+
+	void Action_UnitRescale::SetTargetUnit(editor::UnitData* unit)
+	{
+		if (targetUnit)
+		{
+			targetUnit->RemoveObserver(this);
+		}
+
+		targetUnit = unit;
+		if (unit)
+		{
+			unit->RegisterObserver(this);
+		}
+	}
+
+	void Action_UnitRescale::SetFinalScale(const yunuGI::Vector3& scale)
+	{
+		this->scale = scale;
+	}
+
+	void Action_UnitRescale::SetLerpTime(float lerpTime)
+	{
+		this->lerpTime = lerpTime;
+	}
+
+	void Action_UnitRescale::ProcessObervationEvent(ObservationTarget* target, ObservationEvent event)
+	{
+		switch (event)
+		{
+			case application::ObservationEvent::Destroy:
+			{
+				if (targetUnit == static_cast<editor::UnitData*>(target))
+				{
+					targetUnit = nullptr;
+				}
+				break;
+			}
+			default:
+				break;
+		}
+	}
+
+	void Action_UnitRescale::ImGui_DrawDataPopup(Action_UnitRescale* data)
+	{
+		if (ImGui::MenuItem("SetTargetUnit(Rescale)"))
+		{
+			editor::EditorLayer::SetInputControl(false);
+			editor::imgui::ShowMessageBox("SetTargetUnit(Rescale)", [data]()
+				{
+					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::Separator();
+
+					ImGui::SetNextItemWidth(-1);
+					if (data->targetUnit)
+					{
+						ImGui::Text(data->targetUnit->pod.templateData->pod.skinnedFBXName.c_str());
+					}
+					else
+					{
+						ImGui::Text("------");
+					}
+
+					ImGui::Separator();
+
+					if (ImGui::Button("Edit"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetTargetUnit(Rescale)");
+						editor::EditorLayer::SetInputControl(true);
+						editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Action_UnitRescale>("SetTargetUnit(Rescale)", data);
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetTargetUnit(Rescale)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+				}, 300);
+		}
+
+		if (ImGui::MenuItem("SetFinalScale"))
+		{
+			editor::EditorLayer::SetInputControl(false);
+			static yunuGI::Vector3 fScale = yunuGI::Vector3();
+			fScale = data->scale;
+			editor::imgui::ShowMessageBox("SetRelative(UnitRescale)", [data]()
+				{
+					ImGui::Separator();
+
+					ImGui::SetNextItemWidth(-1);
+
+					auto resetScale = editor::imgui::Vector3Control("Scale", fScale.x, fScale.y, fScale.z);
+
+					switch (resetScale)
+					{
+						case application::editor::imgui::Vector3Flags::ResetX:
+							fScale.x = 1;
+							break;
+						case application::editor::imgui::Vector3Flags::ResetY:
+							fScale.y = 1;
+							break;
+						case application::editor::imgui::Vector3Flags::ResetZ:
+							fScale.z = 1;
+							break;
+						default:
+							break;
+					}
+
+					if (fScale.x == 0)
+					{
+						fScale.x = 0.000001;
+					}
+					if (fScale.y == 0)
+					{
+						fScale.y = 0.000001;
+					}
+					if (fScale.z == 0)
+					{
+						fScale.z = 0.000001;
+					}
+
+					ImGui::Separator();
+
+					if (ImGui::Button("OK"))
+					{
+						data->SetFinalScale(fScale);
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetRelative(UnitRescale)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetRelative(UnitRescale)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+				}, 300);
+		}
+
+		if (ImGui::MenuItem("SetLerpTime"))
+		{
+			editor::EditorLayer::SetInputControl(false);
+			static float lerpTime = 0;
+			lerpTime = data->lerpTime;
+			editor::imgui::ShowMessageBox("SetLerpTime(UnitRescale)", [data]()
+				{
+					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::Separator();
+
+					ImGui::SetNextItemWidth(-1);
+					ImGui::DragFloat("##LerpTimeUnitRescale", &lerpTime);
+
+					ImGui::Separator();
+
+					if (ImGui::Button("OK"))
+					{
+						data->SetLerpTime(lerpTime);
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetLerpTime(UnitRescale)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetLerpTime(UnitRescale)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+				}, 300);
+		}
+	}
+
+	bool Action_UnitRescale::PreEncoding(json& data) const
+	{
+		data["scale"]["x"] = scale.x;
+		data["scale"]["y"] = scale.y;
+		data["scale"]["z"] = scale.z;
+		data["lerpTime"] = lerpTime;
+		return true;
+	}
+
+	bool Action_UnitRescale::PostEncoding(json& data) const
+	{
+		data["targetUnit"] = targetUnit ? UUID_To_String(targetUnit->GetUUID()) : "nullptr";
+		return true;
+	}
+
+	bool Action_UnitRescale::PreDecoding(const json& data)
+	{
 		scale.x = data["scale"]["x"];
 		scale.y = data["scale"]["y"];
 		scale.z = data["scale"]["z"];
+		lerpTime = data["lerpTime"];
 		return true;
 	}
 
-	bool Action_UnitMove::PostDecoding(const json& data)
+	bool Action_UnitRescale::PostDecoding(const json& data)
 	{
-		SetUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["targetUnit"])));
-		destinationSetting = true;
+		SetTargetUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["targetUnit"])));
 		return true;
 	}
 
-	void Action_UnitMove::UpdateDestinationFromContainer()
+	Action_UnitMoveWithRotateAndRescale::~Action_UnitMoveWithRotateAndRescale()
 	{
-		UpdatePosition(container_pos);
-		yunutyEngine::Quaternion quat = Vector3d(container_rot.x, container_rot.y, container_rot.z);
-		yunuGI::Quaternion gi_quat;
-		gi_quat.x = quat.x;
-		gi_quat.y = quat.y;
-		gi_quat.z = quat.z;
-		gi_quat.w = quat.w;
-		UpdateRotation(gi_quat);
-		UpdateScale(container_scal);
-		destinationSetting = true;
+		if (targetUnit)
+		{
+			targetUnit->RemoveObserver(this);
+		}
+
+		if (destinationUnit)
+		{
+			destinationUnit->RemoveObserver(this);
+			editor::InstanceManager::GetSingletonInstance().DeleteInstance(destinationUnit->GetUUID());
+		}
 	}
 
-	void Action_UnitMove::UpdatePosition(const yunuGI::Vector3& pos)
+	CoroutineObject<void> Action_UnitMoveWithRotateAndRescale::DoAction()
 	{
-		position.x = pos.x;
-		position.y = pos.y;
-		position.z = pos.z;
+		auto ts = targetUnit->inGameUnit->GetTransform();
+		auto startPos = ts->GetWorldPosition();
+		auto startRot = ts->GetWorldRotation();
+		auto startScale = ts->GetWorldScale();
+
+		Vector3d endPos = { destinationUnit->pod.position.x, destinationUnit->pod.position.y, destinationUnit->pod.position.z };
+		Quaternion endRot = { destinationUnit->pod.rotation.w, destinationUnit->pod.rotation.x, destinationUnit->pod.rotation.y, destinationUnit->pod.rotation.z };
+		Vector3d endScale = { destinationUnit->pod.scale.x, destinationUnit->pod.scale.y, destinationUnit->pod.scale.z };
+
+		endPos.y = 0;
+
+		targetUnit->inGameUnit->OrderMove(endPos);
+		while (true)
+		{
+			auto curPos = ts->GetWorldPosition();
+			if ((endPos - curPos).MagnitudeSqr() <= 0.04)
+			{
+				break;
+			}
+			co_await std::suspend_always();
+		}
+
+		double timer = 0;
+		float factor = 0;
+
+		if (lerpTime == 0)
+		{
+			ts->SetWorldRotation(endRot);
+			ts->SetWorldScale(endScale);
+			co_return;
+		}
+
+		for (double timer = 0; timer < lerpTime;)
+		{
+			factor = timer / lerpTime;
+			ts->SetWorldRotation(Quaternion::Lerp(startRot, endRot, factor));
+			ts->SetWorldScale(Vector3d::Lerp(startScale, endScale, factor));
+			timer += Time::GetDeltaTimeUnscaled();
+			co_await std::suspend_always();
+		}
+
+		co_return;
 	}
 
-	void Action_UnitMove::UpdateRotation(const yunuGI::Quaternion& rot)
+	bool Action_UnitMoveWithRotateAndRescale::IsValid()
 	{
-		rotation.x = rot.x;
-		rotation.y = rot.y;
-		rotation.z = rot.z;
-		rotation.w = rot.w;
+		return (targetUnit == nullptr) ? false : (destinationUnit == nullptr) ? false : true;
 	}
 
-	void Action_UnitMove::UpdateScale(const yunuGI::Vector3& scal)
+	void Action_UnitMoveWithRotateAndRescale::SetTargetUnit(editor::UnitData* unit)
 	{
-		scale.x = scal.x;
-		scale.y = scal.y;
-		scale.z = scal.z;
+		if (targetUnit)
+		{
+			targetUnit->RemoveObserver(this);
+		}
+
+		targetUnit = unit;
+		if (unit)
+		{
+			unit->RegisterObserver(this);
+		}
+
+		if (destinationUnit)
+		{
+			editor::InstanceManager::GetSingletonInstance().DeleteInstance(destinationUnit->GetUUID());
+		}
+	}
+
+	void Action_UnitMoveWithRotateAndRescale::SetDestinationUnit(editor::UnitData* unit)
+	{
+		if (destinationUnit)
+		{
+			destinationUnit->RemoveObserver(this);
+		}
+
+		destinationUnit = unit;
+		if (unit)
+		{
+			unit->RegisterObserver(this);
+			if (destinationUnit->GetPaletteInstance())
+			{
+				unit->pod.isGuide = true;
+				static_cast<editor::palette::UnitEditorInstance*>(destinationUnit->GetPaletteInstance())->ChangeGuideInstance();
+			}
+		}
+	}
+
+	void Action_UnitMoveWithRotateAndRescale::SetLerpTime(float lerpTime)
+	{
+		this->lerpTime = lerpTime;
+	}
+
+	void Action_UnitMoveWithRotateAndRescale::ProcessObervationEvent(ObservationTarget* target, ObservationEvent event)
+	{
+		switch (event)
+		{
+			case application::ObservationEvent::Destroy:
+			{
+				if (targetUnit == static_cast<editor::UnitData*>(target))
+				{
+					targetUnit = nullptr;
+				}
+				if (destinationUnit == static_cast<editor::UnitData*>(target))
+				{
+					destinationUnit = nullptr;
+				}
+				break;
+			}
+			default:
+				break;
+		}
+	}
+
+	void Action_UnitMoveWithRotateAndRescale::ImGui_DrawDataPopup(Action_UnitMoveWithRotateAndRescale* data)
+	{
+		if (ImGui::MenuItem("SetTargetUnit(MoveWithRotateAndRescale)"))
+		{
+			editor::EditorLayer::SetInputControl(false);
+			editor::imgui::ShowMessageBox("SetTargetUnit(MoveWithRotateAndRescale)", [data]()
+				{
+					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::Separator();
+
+					ImGui::SetNextItemWidth(-1);
+					if (data->targetUnit)
+					{
+						ImGui::Text(data->targetUnit->pod.templateData->pod.skinnedFBXName.c_str());
+					}
+					else
+					{
+						ImGui::Text("------");
+					}
+
+					ImGui::Separator();
+
+					if (ImGui::Button("Edit"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetTargetUnit(MoveWithRotateAndRescale)");
+						editor::EditorLayer::SetInputControl(true);
+						editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Action_UnitMoveWithRotateAndRescale>("SetTargetUnit(MoveWithRotateAndRescale)", data);
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetTargetUnit(MoveWithRotateAndRescale)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+				}, 300);
+		}
+
+		if (data->destinationUnit)
+		{
+			if (ImGui::MenuItem("EditDestinationUnit(MoveWithRotateAndRescale)"))
+			{
+				editor::EditorLayer::SetInputControl(false);
+				editor::imgui::ShowMessageBox("EditDestinationUnit(MoveWithRotateAndRescale)", [data]()
+					{
+						editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+						ImGui::Separator();
+
+						ImGui::SetNextItemWidth(-1);
+
+						ImGui::Text(data->destinationUnit->pod.templateData->pod.skinnedFBXName.c_str());
+
+						ImGui::Separator();
+
+						if (ImGui::Button("Edit"))
+						{
+							data->destinationUnit->GetPaletteInstance()->GetGameObject()->SetSelfActive(true);
+							ImGui::CloseCurrentPopup();
+							editor::imgui::CloseMessageBox("EditDestinationUnit(MoveWithRotateAndRescale)");
+							editor::EditorLayer::SetInputControl(true);
+							editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Action_UnitMoveWithRotateAndRescale>("EditDestinationUnit(MoveWithRotateAndRescale)", data);
+						}
+						ImGui::SameLine();
+
+						if (ImGui::Button("Cancel"))
+						{
+							ImGui::CloseCurrentPopup();
+							editor::imgui::CloseMessageBox("EditDestinationUnit(MoveWithRotateAndRescale)");
+							editor::EditorLayer::SetInputControl(true);
+						}
+					}, 300);
+			}
+		}
+		else
+		{
+			if (data->targetUnit && ImGui::MenuItem("SetDestinationUnit(MoveWithRotateAndRescale)"))
+			{
+				editor::EditorLayer::SetInputControl(false);
+				editor::imgui::ShowMessageBox("SetDestinationUnit(MoveWithRotateAndRescale)", [data]()
+					{
+						if (data->destinationUnit)
+						{
+							ImGui::CloseCurrentPopup();
+							editor::imgui::CloseMessageBox("SetDestinationUnit(MoveWithRotateAndRescale)");
+							editor::EditorLayer::SetInputControl(true);
+							return;
+						}
+
+						editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+						ImGui::Separator();
+
+						ImGui::SetNextItemWidth(-1);
+
+						ImGui::Text("------");
+
+						ImGui::Separator();
+
+						if (ImGui::Button("Edit"))
+						{
+							ImGui::CloseCurrentPopup();
+							editor::imgui::CloseMessageBox("SetDestinationUnit(MoveWithRotateAndRescale)");
+							editor::EditorLayer::SetInputControl(true);
+							editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Action_UnitMoveWithRotateAndRescale>("SetDestinationUnit(MoveWithRotateAndRescale)", data);
+						}
+						ImGui::SameLine();
+
+						if (ImGui::Button("Cancel"))
+						{
+							ImGui::CloseCurrentPopup();
+							editor::imgui::CloseMessageBox("SetDestinationUnit(MoveWithRotateAndRescale)");
+							editor::EditorLayer::SetInputControl(true);
+						}
+					}, 300);
+			}
+		}
+
+		if (ImGui::MenuItem("SetLerpTime"))
+		{
+			editor::EditorLayer::SetInputControl(false);
+			static float lerpTime = 0;
+			lerpTime = data->lerpTime;
+			editor::imgui::ShowMessageBox("SetLerpTime(UnitMoveWithRotateAndRescale)", [data]()
+				{
+					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::Separator();
+
+					ImGui::SetNextItemWidth(-1);
+					ImGui::DragFloat("##LerpTimeUnitMoveWithRotateAndRescale", &lerpTime);
+
+					ImGui::Separator();
+
+					if (ImGui::Button("OK"))
+					{
+						data->SetLerpTime(lerpTime);
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetLerpTime(UnitMoveWithRotateAndRescale)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetLerpTime(UnitMoveWithRotateAndRescale)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+				}, 300);
+		}
+	}
+
+	bool Action_UnitMoveWithRotateAndRescale::PreEncoding(json& data) const
+	{
+		data["lerpTime"] = lerpTime;
+		return true;
+	}
+
+	bool Action_UnitMoveWithRotateAndRescale::PostEncoding(json& data) const
+	{
+		data["targetUnit"] = targetUnit ? UUID_To_String(targetUnit->GetUUID()) : "nullptr";
+		data["destinationUnit"] = destinationUnit ? UUID_To_String(destinationUnit->GetUUID()) : "nullptr";
+		return true;
+	}
+
+	bool Action_UnitMoveWithRotateAndRescale::PreDecoding(const json& data)
+	{
+		lerpTime = data["lerpTime"];
+		return true;
+	}
+
+	bool Action_UnitMoveWithRotateAndRescale::PostDecoding(const json& data)
+	{
+		SetTargetUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["targetUnit"])));
+		SetDestinationUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["destinationUnit"])));
+		return true;
 	}
 }

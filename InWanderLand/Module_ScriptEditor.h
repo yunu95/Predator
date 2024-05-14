@@ -231,6 +231,21 @@ namespace application
 							Action_UnitMove::ImGui_DrawDataPopup(static_cast<Action_UnitMove*>(data));
 							break;
 						}
+						case application::ActionType::UnitRotate:
+						{
+							Action_UnitRotate::ImGui_DrawDataPopup(static_cast<Action_UnitRotate*>(data));
+							break;
+						}
+						case application::ActionType::UnitRescale:
+						{
+							Action_UnitRescale::ImGui_DrawDataPopup(static_cast<Action_UnitRescale*>(data));
+							break;
+						}
+						case application::ActionType::UnitMoveWithRotateAndRescale:
+						{
+							Action_UnitMoveWithRotateAndRescale::ImGui_DrawDataPopup(static_cast<Action_UnitMoveWithRotateAndRescale*>(data));
+							break;
+						}
 						default:
 							break;
 					}
