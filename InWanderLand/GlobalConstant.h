@@ -55,11 +55,26 @@ namespace application
         GC<float>	robinQSkillCoolTime = 2.0f;
         GC<float>	robinQSkillCost = 10.0f;
         GC<float>	robinQSkillRushSpeed = 20.0f;
+        GC<float>	robinQSkillDamageRush = 20.0f;
+        GC<float>	robinQSkillDamageImpact = 80.0f;
+        GC<float>	robinQSkillRushKnockbackDistance = 3.0f;
+        GC<float>	robinQSkillImpactKnockbackDistance = 8.0f;
+        GC<float>	robinQSkillRushKnockbackDuration = 0.5f;
+        GC<float>	robinQSkillImpactKnockbackDuration = 1.0f;
+        GC<float>	robinQSkillRushKnockbackRadius = 1.0f;
+        GC<float>	robinQSkillImpactKnockbackRadius = 5.0f;
         GC<float>	robinESkillCoolTime = 2.0f;
         GC<float>	robinESkillCost = 10.0f;
+        GC<float>	robinESkillRadius = 6.0f;
 
         GC<float>	ursulaQSkillCoolTime = 2.0f;
         GC<float>	ursulaQSkillCost = 10.0f;
+        GC<float>	ursulaQSkillRadius = 3;
+        GC<float>	ursulaQSkillProjectileSpeed = 15;
+        GC<float>	ursulaQSkillBlindDuration = 3.0f;
+        GC<float>	ursulaQSkillFieldDuration = 3.0f;
+        GC<float>	ursulaQSkillFieldDamagePerTick = 1.0f;
+        GC<float>	ursulaQSkillFieldDamageInterval = 0.3f;
         GC<float>	ursulaESkillCoolTime = 2.0f;
         GC<float>	ursulaESkillCost = 10.0f;
         GC<float>	ursulaESkillDamageInterval = 0.3f;

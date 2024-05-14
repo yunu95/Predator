@@ -13,7 +13,7 @@ void UIElement::Start()
     {
         for (auto each : digits)
         {
-            each->GetGameObject()->SetSelfActive(false);
+            each->DisableElementInstant();
         }
     }
 };
@@ -226,6 +226,11 @@ void UIElement::SetNumber(float number)
             digits[0]->imageComponent.lock()->GetGI().SetImage((*digitFont)[0]);
         }
     }
+}
+void UIElement::DisableElementInstant()
+{
+    GetGameObject()->SetSelfActive(false);
+    enabled = false;
 }
 
 //void UIElement::PlayFunction()

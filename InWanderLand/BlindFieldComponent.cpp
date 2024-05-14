@@ -11,7 +11,7 @@ void BlindFieldComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 	opponentUnit->ReportStatusEffectApplied(StatusEffect::StatusEffectEnum::Blinding);
 
 	m_blindTimer->m_isRepeated = false;
-	m_blindTimer->m_duration = m_blindPersistTime;
+	m_blindTimer->pushDuration = m_blindPersistTime;
 	m_blindTimer->onCompleteFunction = [=]()
 	{
 		/// 실명 해제 로직

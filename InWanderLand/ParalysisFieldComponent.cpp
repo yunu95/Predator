@@ -12,8 +12,8 @@ void ParalysisFieldComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
     opponentUnit->ReportStatusEffectApplied(StatusEffect::StatusEffectEnum::Paralysis);
     opponentUnit->MakeUnitParalysisState();
     opponentUnit->KnockBackUnit(GetTransform()->GetWorldPosition(), 0.5f);
-    opponentUnit->paralysisTimer->m_duration = application::GlobalConstant::GetSingletonInstance().pod.ursulaESkillStunDuration;
-    opponentUnit->paralysisTimer->m_duration = application::GlobalConstant::GetSingletonInstance().pod.ursulaESkillPullingDuration;
+    opponentUnit->paralysisTimer->pushDuration = application::GlobalConstant::GetSingletonInstance().pod.ursulaESkillStunDuration;
+    opponentUnit->paralysisTimer->pushDuration = application::GlobalConstant::GetSingletonInstance().pod.ursulaESkillPullingDuration;
     opponentUnit->paralysisTimer->ActivateTimer();
     /*opponentUnit->GetGameObject()->GetComponent<Dotween>()->DOMove(GetTransform()->GetWorldPosition(), m_pullingTime).SetEase(EaseOutCubic).OnComplete([=]()
         {
