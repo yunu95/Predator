@@ -172,8 +172,8 @@ void AutoAttackProjectile::Init()
 }
 void AutoAttackProjectile::Start()
 {
-	if (!isShootOperating)
-		GetGameObject()->SetSelfActive(false);
+	/*if (!isShootOperating)
+		GetGameObject()->SetSelfActive(false);*/
 }
 
 void AutoAttackProjectile::Update()
