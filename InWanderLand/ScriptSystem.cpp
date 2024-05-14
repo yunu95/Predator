@@ -40,6 +40,7 @@ namespace application
 		actionList.push_back({ ActionType::TutorialModeChange, "TutorialModeChange" });
 		actionList.push_back({ ActionType::PlayManualDialogue, "PlayManualDialogue" });
 		actionList.push_back({ ActionType::PlayTimedDialogue, "PlayTimedDialogue" });
+		actionList.push_back({ ActionType::UnitMoveWithRotateAndRescale, "UnitMoveWithRotateAndRescale" });
 		actionList.push_back({ ActionType::UnitMove, "UnitMove" });
 		actionList.push_back({ ActionType::UnitRotate, "UnitRotate" });
 		actionList.push_back({ ActionType::UnitRescale, "UnitRescale" });

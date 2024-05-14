@@ -10,7 +10,7 @@
 
 void PlayerController::Start()
 {
-	currentSelectedSerialNumber = Unit::UnitType::Warrior;
+    currentSelectedSerialNumber = Unit::UnitType::Warrior;
 }
 
 void PlayerController::SetMovingSystemComponent(RTSCam* sys)
@@ -103,34 +103,24 @@ void PlayerController::SetRightClickFunction()
     }
     else
     {
-        if (static_cast<int>(currentSelectedSerialNumber) == InputManager::SelectedSerialNumber::All)
+        if (!playerComponentMap.contains(currentSelectedSerialNumber))
         {
-            m_movingSystemComponent->groundRightClickCallback = [=](Vector3d pos)
-                {
-                    for (auto e : playerComponentMap)
-                    {
-                        e.second->OrderMove(pos);
-                    }
-                };
-
+            return;
         }
-        else
-        {
-            Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
-            m_movingSystemComponent->groundRightClickCallback = [=](Vector3d pos)
+        Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
+        m_movingSystemComponent->groundRightClickCallback = [=](Vector3d pos)
+            {
+                if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
                 {
-                    if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
-                    {
-                        return;
-                    }
-                    /*for (auto e : playerComponentMap)
-                    {
-                        e.second->OrderMove(pos);
-                    }*/
-                    currentSelectedUnit->OrderMove(pos);
-                    UIManager::Instance().SummonMoveToFeedback(pos);
-                };
-        }
+                    return;
+                }
+                /*for (auto e : playerComponentMap)
+                {
+                    e.second->OrderMove(pos);
+                }*/
+                currentSelectedUnit->OrderMove(pos);
+                UIManager::Instance().SummonMoveToFeedback(pos);
+            };
     }
 }
 

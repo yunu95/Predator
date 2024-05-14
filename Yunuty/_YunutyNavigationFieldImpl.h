@@ -75,6 +75,7 @@ namespace yunutyEngine
         int rasterizeTileLayers(const float* worldVertices, size_t verticesNum, const int* faces, size_t facesNum, const int tx, const int ty, const rcConfig& cfg, struct TileCacheData* tiles, const int maxTiles);
         int calcLayerBufferSize(const int gridWidth, const int gridHeight);
         dtObstacleRef AddBoxObstacle(Vector3f center, Vector3f halfExtents, const float yRadians);
+        dtObstacleRef AddCylinderObstacle(Vector3f center, float radius, const float height);
         void DeleteObstacle(dtObstacleRef obstacleRef);
 
         NavigationField* navFieldComponent;

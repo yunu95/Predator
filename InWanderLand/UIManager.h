@@ -13,7 +13,7 @@
 /// 3. 최소 하나의 button에 마우스가 올라가 있는가? 를 항상 판별.
 /// 4. 유니티 에디터에서 만든 UI 레이아웃을 불러와서 생성
 /// </summary>
-
+class SpriteAnimation;
 class UIElement;
 class UIManager : public Component, public SingletonComponent<UIManager>
 {
@@ -32,6 +32,7 @@ private:
     void SetUIElementWithEnum(UIEnumID uiEnumID, UIElement* ui);
     void SetUIElementWithIndex(int index, UIElement* ui);
     void SetUIDataWithIndex(int index, const JsonUIData& uiData);
+    SpriteAnimation* moveToSpriteAnim{ nullptr };
     int uiImportingPriority{ 0 };
     struct ButtonCompare
     {

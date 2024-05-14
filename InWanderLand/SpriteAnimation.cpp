@@ -62,11 +62,15 @@ void SpriteAnimation::Start()
     auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
     GetGI().SetMesh(rsrcManager->GetMesh(L"Rectangle"));
 }
+void SpriteAnimation::Play()
+{
+    isPlaying = true;
+}
 void SpriteAnimation::Update()
 {
-    if (spriteSheet)
+    if (isPlaying && spriteSheet)
     {
-        elapsed += yunutyEngine::Time::GetDeltaTime();
+        elapsed += realTime ? yunutyEngine::Time::GetDeltaTimeUnscaled() : yunutyEngine::Time::GetDeltaTime();
         if (elapsed > spriteSheet->at(currentIdx).timeOffset)
         {
             GetGI().SetMaterial(0, spriteSheet->at(currentIdx).material);
@@ -75,6 +79,10 @@ void SpriteAnimation::Update()
             {
                 currentIdx = 0;
                 elapsed -= spriteSheet->rbegin()->timeOffset;
+                if (!isRepeating)
+                {
+                    isPlaying = false;
+                }
             }
         }
     }

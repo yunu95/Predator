@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "MagicianProductor.h"
 #include "RangedAttackSystem.h"
 #include "MagicianSkillSystem.h"
@@ -109,7 +110,9 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
     auto WfieldDamageComponent = WSkillFieldObject->AddComponent<ParalysisFieldComponent>();
     WfieldDamageComponent->SetSkillOwnerUnit(m_unitComponent);
     auto WSkillFieldCollider = WSkillFieldObject->AddComponent<physics::SphereCollider>();
-    m_WSkillFieldRadius = 2.0f * UNIT_LENGTH;
+    WfieldDamageComponent->m_collider = WSkillFieldCollider;
+
+    m_WSkillFieldRadius = application::GlobalConstant::GetSingletonInstance().pod.ursulaESkillRadius;
     WSkillFieldCollider->SetRadius(m_WSkillFieldRadius);
     WSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
     auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -268,5 +271,6 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
     //}
     m_unitComponent->unitAnimations = m_baseUnitAnimations;
     SetUnitAnimationFunction();
+
     return m_unitComponent;
 }

@@ -16,5 +16,7 @@ namespace yunutyEngine
         NavigationObstacle* owner;
         dtObstacleRef obstacleRef;
         Vector3f halfExtents;
+        float radius;
+        float height;
     };
 }

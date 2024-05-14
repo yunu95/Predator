@@ -21,6 +21,17 @@ void Unit::OnEnable()
     {
         each();
     }
+    if (m_navAgentComponent)
+    {
+        m_navAgentComponent->GetGameObject()->SetSelfActive(true);
+    }
+}
+void Unit::OnDisable()
+{
+    if (m_navAgentComponent)
+    {
+        m_navAgentComponent->GetGameObject()->SetSelfActive(false);
+    }
 }
 
 void Unit::Start()
@@ -77,9 +88,6 @@ void Unit::Start()
     m_burnEffect = GetGameObject()->GetComponent<BurnEffect>();
     m_animatorComponent = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
 
-    //m_navAgentComponent = GetGameObject()->GetComponent<NavigationAgent>();
-
-    //returnToPoolFunction = []() {};
     unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Move,
         [this]() { return (currentOrder == UnitState::Move && !TacticModeSystem::Instance().IsUnitsPerformingCommand()) ||
         (currentOrder == UnitState::Move && TacticModeSystem::Instance().IsUnitsPerformingCommand()); } });
@@ -175,7 +183,7 @@ void Unit::Start()
     unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::WaveStart,
     [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
 
-	unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::Move,
+    unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::Move,
     [this]() { return currentOrder == UnitState::Move; } });
 
     unitFSM.transitions[UnitState::Move].push_back({ UnitState::WaveStart,
@@ -234,7 +242,7 @@ void Unit::Start()
                     {
                         isPermittedToTacticAction = false;
                         isTacticAttackMovePermitted = false;
-						EnemyActionOnTacticModeEngaged();
+                        EnemyActionOnTacticModeEngaged();
                         TacticModeSystem::Instance().ReportTacticActionFinished();
                         currentOrder = UnitState::Idle;
                         /// 현재 공격타겟에 대한 처리를 해야 가만히 있을 듯.
@@ -244,7 +252,7 @@ void Unit::Start()
                         /// 임시 - 애니메이션을 공유하고 있어서 공격 애니메이션 스피드를 1로 돌려줘야 함 ㅠ
                         ResumeAnimation();
                         //unitAnimations.m_attackAnimation->SetPlaySpeed(1.0f);
-						//unitAnimations.m_walkAnimation->SetPlaySpeed(1.0f);
+                        //unitAnimations.m_walkAnimation->SetPlaySpeed(1.0f);
                     }
                 }
             });
@@ -265,6 +273,8 @@ void Unit::Start()
 
 void Unit::Update()
 {
+    if (m_navAgentComponent && isFollowingNavAgent)
+        GetTransform()->SetWorldPosition(m_navAgentComponent->GetTransform()->GetWorldPosition());
     if (m_unitSide == UnitSide::Player)
         unitFSM.UpdateState();
     else
@@ -288,7 +298,15 @@ void Unit::OnDestroy()
 {
     if (m_unitSide == UnitSide::Player)
         PlayerController::Instance().ErasePlayerUnit(this);
+    if (!unitStatusUI.expired())
+        Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
+    if (m_navAgentComponent)
+        Scene::getCurrentScene()->DestroyGameObject(m_navAgentComponent->GetGameObject());
 }
+void Unit::OnTransformUpdate()
+{
+}
+
 
 void Unit::PlayFunction()
 {
@@ -349,7 +367,7 @@ void Unit::MoveEngage()
 
     m_navAgentComponent->SetSpeed(m_speed);
     m_navAgentComponent->MoveTo(m_currentMovePosition);
-	dotween->DOLookAt(m_currentMovePosition, rotateTime, false);
+    dotween->DOLookAt(m_currentMovePosition, rotateTime, false);
 
     ChangeAnimation(unitAnimations.m_walkAnimation);
 }
@@ -1025,7 +1043,7 @@ void Unit::EnemyActionOnTacticModeEngaged()
 {
     //unitAnimations.m_deathAnimation->Se
     //m_animatorComponent->GetGI().GetCurrentAnimation()->SetPlaySpeed(0.0f);
-	StopAnimation();
+    StopAnimation();
     StopMove();
 }
 
@@ -1066,6 +1084,15 @@ bool Unit::IsAllExtraPlayerUnitDead()
 bool Unit::CheckEnemyStoppedByTacticMode() const
 {
     return (!TacticModeSystem::Instance().IsUnitsPerformingCommand() || !TacticModeSystem::Instance().IsOrderingTimingNow());
+}
+void Unit::KnockBackUnit(Vector3d targetPosition, float knockBackDuration)
+{
+    knockBackStartPoint = GetGameObject()->GetTransform()->GetWorldPosition();
+    m_navAgentComponent->Relocate(targetPosition);
+    isFollowingNavAgent = false;
+    MakeUnitPushedState(true);
+    knockBackTimer->m_duration = knockBackDuration;
+    knockBackTimer->ActivateTimer();
 }
 
 float Unit::DetermineAttackDamage(float p_damage)
@@ -1241,11 +1268,11 @@ void Unit::ResumeAnimation()
 
 void Unit::StopAnimation()
 {
-	SetCurrentAnimationSpeed(unitAnimations.m_idleAnimation, 0.0f);
-	SetCurrentAnimationSpeed(unitAnimations.m_walkAnimation, 0.0f);
-	SetCurrentAnimationSpeed(unitAnimations.m_attackAnimation, 0.0f);
-	SetCurrentAnimationSpeed(unitAnimations.m_paralysisAnimation, 0.0f);
-	SetCurrentAnimationSpeed(unitAnimations.m_deathAnimation, 0.0f);
+    SetCurrentAnimationSpeed(unitAnimations.m_idleAnimation, 0.0f);
+    SetCurrentAnimationSpeed(unitAnimations.m_walkAnimation, 0.0f);
+    SetCurrentAnimationSpeed(unitAnimations.m_attackAnimation, 0.0f);
+    SetCurrentAnimationSpeed(unitAnimations.m_paralysisAnimation, 0.0f);
+    SetCurrentAnimationSpeed(unitAnimations.m_deathAnimation, 0.0f);
 }
 
 void Unit::RegisterSkillWithAnimation(SkillEnum p_enum)
@@ -1381,8 +1408,8 @@ void Unit::OrderMove(Vector3d position)
     {
         if (currentOrder != UnitState::Skill)
         {
-			currentOrder = UnitState::Move;
-			//dotween->DOLookAt(position, rotateTime, false);
+            currentOrder = UnitState::Move;
+            //dotween->DOLookAt(position, rotateTime, false);
         }
     }
 }
@@ -1391,7 +1418,7 @@ void Unit::OrderMove(Vector3d position)
 void Unit::OrderAttackMove(Vector3d position, Unit* p_selectedUnit)
 {
     OrderAttackMove(position);
-	isAttackMoving = false;
+    isAttackMoving = false;
     tauntingThisUnit = p_selectedUnit;
     DetermineCurrentTargetObject();
 }
