@@ -750,8 +750,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         std::transform(uiData.hoverEnableTargets.begin(), uiData.hoverEnableTargets.end(), std::back_inserter(tooltipTargets), [&](int idx) {return GetUIElementWithIndex(idx); });
         for (auto each : tooltipTargets)
         {
-            each->GetGameObject()->SetSelfActive(false);
-            each->enabled = false;
+            each->DisableElementInstant();
         }
         button->AddButtonOnMouseFunction([=]()
             {
@@ -910,14 +909,12 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
 #ifdef EDITOR
         if (uiData.disableOnStartEdtior)
         {
-            element->GetGameObject()->SetSelfActive(false);
-            element->enabled = false;
+            element->DisableElementInstant();
         }
 #else
         if (uiData.disableOnStartExe)
         {
-            element->GetGameObject()->SetSelfActive(false);
-            element->enabled = false;
+            element->DisableElementInstant();
         }
 #endif
     }

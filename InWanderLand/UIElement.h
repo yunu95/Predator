@@ -54,6 +54,7 @@ public:
     vector<UIElement*> exclusiveEnableGroup;
     void EnableElement();
     void DisableElement();
+    void DisableElementInstant();
     void SetNumber(float number);
     const std::unordered_map<int, UIElement*>& GetLocalUIsByIndex() { return localUIsByIndex; };
     const std::unordered_map<UIEnumID, UIElement*>& GetLocalUIsByEnumID() { return localUIsByEnumID; };

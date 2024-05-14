@@ -48,8 +48,14 @@ void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 void MagicianSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 {
     isWSkillActivating = true;
-
-    m_WSkillComponent->m_collider->SetRadius(application::GlobalConstant::GetSingletonInstance().pod.ursulaESkillRadius);
+    if (m_ERadiusCollider.expired())
+    {
+        m_ERadiusCollider = WSkillFieldDamage.colliderObject->GetComponentWeakPtr<physics::SphereCollider>();
+    }
+    if (!m_ERadiusCollider.expired())
+    {
+        m_ERadiusCollider.lock()->SetRadius(application::GlobalConstant::GetSingletonInstance().pod.ursulaESkillRadius);
+    }
     WSkillProjectile.colliderObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
     WSkillProjectile.debugObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
 
