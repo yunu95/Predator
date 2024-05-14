@@ -133,6 +133,11 @@ const yunuGI::IResourceManager* yunutyEngine::graphics::Renderer::GetResourceMan
     return _YunuGIObjects::SingleInstance().resourceManager.Get();
 }
 
+void Renderer::SetLightMap(const std::wstring& lightMapName)
+{
+    _YunuGIObjects::SingleInstance().renderer->SetLightMap(lightMapName);
+}
+
 void Renderer::SetUseIBL(bool useIBL)
 {
     _YunuGIObjects::SingleInstance().renderer->SetUseIBL(useIBL);
