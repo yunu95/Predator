@@ -74,7 +74,7 @@ void GameManager::EndBattle()
 {
 	isBattleModeOn = false;
 
-	PlayerController::Instance().SetCurrentPlayerSerialNumber(Unit::UnitType::AllPlayers);
+	PlayerController::Instance().ReportBattleEnded();
 	rtscam->SetTarget(PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetGameObject());
 	SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 }
@@ -105,13 +105,18 @@ void GameManager::EndCinematic()
 	/// 나머지 녀석들은 OffsetMove 로 변경
 	if (isBattleModeOn)
 	{
-		PlayerController::Instance().FindSelectedUnitByUnitType(Unit::UnitType::Magician)->SetUnitStateDirectly(Unit::UnitState::Idle);
-		PlayerController::Instance().FindSelectedUnitByUnitType(Unit::UnitType::Healer)->SetUnitStateDirectly(Unit::UnitState::Idle);
+		Unit* tempLeaderUnit = PlayerController::Instance().GetCurrentSelectedPlayerUnit();
+		
+		for (auto e : PlayerController::Instance().GetPlayerMap())
+		{
+			if (e.second == tempLeaderUnit)
+				continue;
+			e.second->SetUnitStateDirectly(Unit::UnitState::Idle);
+		}
 	}
 	else
 	{
-		PlayerController::Instance().FindSelectedUnitByUnitType(Unit::UnitType::Magician)->SetUnitStateDirectly(Unit::UnitState::OffsetMove);
-		PlayerController::Instance().FindSelectedUnitByUnitType(Unit::UnitType::Healer)->SetUnitStateDirectly(Unit::UnitState::OffsetMove);
+		PlayerController::Instance().ReportBattleEnded();
 	}
 }
 
@@ -249,6 +254,7 @@ void GameManager::ReportPlayerEnteredWaveRegion(PlaytimeWave* p_wave)
 	{
 		if (e.second == currentLeaderUnit)
 			continue;
+
 		if (temp > 0)
 		{
 			e.second->SetWaveStartPosition(leftPosition);

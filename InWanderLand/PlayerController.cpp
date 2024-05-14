@@ -196,6 +196,22 @@ void PlayerController::SetCurrentPlayerSerialNumber(Unit::UnitType p_num)
     }
 }
 
+void PlayerController::ReportBattleEnded()
+{
+    Unit::UnitType tempLeaderType;
+
+	for (auto e : playerComponentMap)
+	{
+        if (e.second->GetActive())
+        {
+            tempLeaderType = e.first;
+            break;
+        }
+	}
+
+    ChangeLeaderPlayerUnit(tempLeaderType);
+}
+
 void PlayerController::ChangeLeaderPlayerUnit(Unit::UnitType p_num)
 {
     for (auto e : playerComponentMap)

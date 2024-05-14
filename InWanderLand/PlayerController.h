@@ -56,6 +56,7 @@ public:
 	void SetRightClickEmpty();
 
 	void SetCurrentPlayerSerialNumber(Unit::UnitType p_num);
+	void ReportBattleEnded();
 
 	std::unordered_map<Unit::UnitType, Unit*> GetPlayerMap() const;
 	Unit* FindSelectedUnitByUnitType(Unit::UnitType p_type);
