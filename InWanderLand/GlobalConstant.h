@@ -85,6 +85,9 @@ namespace application
 
         GC<float>	hanselQSkillCoolTime = 2.0f;
         GC<float>	hanselQSkillCost = 10.0f;
+        GC<int>	    hanselQSkillStompRepeat = 4;
+        GC<float>   hanselQSkillStompDamage = 10.0f;
+        GC<float>   hanselQSkillStompRadius = 10.0f;
         GC<float>	hanselESkillCoolTime = 2.0f;
         GC<float>	hanselESkillCost = 10.0f;
 

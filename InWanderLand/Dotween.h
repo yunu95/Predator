@@ -76,13 +76,12 @@ public:
 
 	//void clearDotweenTimerMap();
 
+	DotweenTimer* tempTimer;
 private:
 	Vector3d randPos;
 	Vector3d randRange;
 
 	TimerIndex currentTimerIndex;
-
-	DotweenTimer* tempTimer;
 
 	DotweenTimer* dotweenTimerArray[TimerIndex::End] = { nullptr, };
 

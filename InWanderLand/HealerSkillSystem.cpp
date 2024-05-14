@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "HealerSkillSystem.h"
 #include "TacticModeSystem.h"
 
@@ -74,7 +75,7 @@ void HealerSkillSystem::ActivateSkillOne(Vector3d skillPos)
 
 	m_unitDotween->DOMove(skillPos + Vector3d({ 0, QSkillJumpYdistance , 0 }), reachTopTime).OnComplete([=]()
 		{
-			CrushDown(3);
+			CrushDown(application::GlobalConstant::GetSingletonInstance().pod.hanselQSkillStompRepeat);
 		});
 }
 
