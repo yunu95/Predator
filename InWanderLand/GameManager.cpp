@@ -74,7 +74,7 @@ void GameManager::EndBattle()
 {
 	isBattleModeOn = false;
 
-	PlayerController::Instance().SetCurrentPlayerSerialNumber(Unit::UnitType::AllPlayers);
+	PlayerController::Instance().ReportBattleEnded();
 	rtscam->SetTarget(PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetGameObject());
 	SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 }
@@ -249,6 +249,7 @@ void GameManager::ReportPlayerEnteredWaveRegion(PlaytimeWave* p_wave)
 	{
 		if (e.second == currentLeaderUnit)
 			continue;
+
 		if (temp > 0)
 		{
 			e.second->SetWaveStartPosition(leftPosition);
