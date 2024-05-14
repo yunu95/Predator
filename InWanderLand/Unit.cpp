@@ -176,9 +176,8 @@ void Unit::Start()
         [this]() { return m_currentHealthPoint <= 0 && m_resurrectingMaxCount < m_currentResurrectingCount; } });
     }
 
-    unitFSM.transitions[static_cast<UnitState>(UnitState::Idle)].push_back({ UnitState::OffsetMove,
-    [this]() { return (!GameManager::Instance().IsBattleSystemOperating() && m_unitSide == UnitSide::Player && m_unitType != m_initialLeaderUnitType)
-        && isUnitCinematicEnded; } });
+    //unitFSM.transitions[static_cast<UnitState>(UnitState::Idle)].push_back({ UnitState::OffsetMove,
+    //[this]() { return (!GameManager::Instance().IsBattleSystemOperating() && m_unitSide == UnitSide::Player && m_unitType != m_initialLeaderUnitType); } });
 
     unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::WaveStart,
     [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
@@ -242,7 +241,7 @@ void Unit::Start()
                     {
                         isPermittedToTacticAction = false;
                         isTacticAttackMovePermitted = false;
-                        EnemyActionOnTacticModeEngaged();
+                        //EnemyActionOnTacticModeEngaged();
                         TacticModeSystem::Instance().ReportTacticActionFinished();
                         currentOrder = UnitState::Idle;
                         /// 현재 공격타겟에 대한 처리를 해야 가만히 있을 듯.
@@ -378,7 +377,7 @@ void Unit::OffsetMoveEngage()
     currentOrder = UnitState::OffsetMove;
     //m_followingTargetUnit = PlayerController::Instance().GetPlayerMap().find(UnitType::Warrior)->second;
     isFollowing = false;
-    isUnitCinematicEnded = false;
+    //isUnitCinematicEnded = false;
     currentOrder = UnitState::OffsetMove;
     moveFunctionElapsed = 0.0f;
     m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::green());
@@ -578,6 +577,7 @@ void Unit::IdleUpdate()
     {
         m_tacticModeQueue.front()();
         m_tacticModeQueue.pop();
+        ResumeAnimation();
     }
 
     idleElapsed += Time::GetDeltaTime() * m_localTimeScale;

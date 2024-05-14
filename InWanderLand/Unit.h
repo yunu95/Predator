@@ -215,7 +215,7 @@ private:
 
     bool isTacticAttackMovePermitted{ false };
 
-    bool isUnitCinematicEnded{ true };
+   bool isUnitCinematicEnded{ true };
 
 public:
     bool isPermittedToTacticAction{ false };

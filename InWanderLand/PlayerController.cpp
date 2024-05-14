@@ -11,6 +11,8 @@
 void PlayerController::Start()
 {
     currentSelectedSerialNumber = Unit::UnitType::Warrior;
+
+    ChangeLeaderPlayerUnit(Unit::UnitType::Warrior);
 }
 
 void PlayerController::SetMovingSystemComponent(RTSCam* sys)
