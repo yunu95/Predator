@@ -183,8 +183,8 @@ void Unit::Start()
     unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::WaveStart,
     [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
 
-	unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::Move,
-    [this]() { return currentOrder == UnitState::Move; } });
+	//unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::Move,
+ //   [this]() { return currentOrder == UnitState::Move; } });
 
     unitFSM.transitions[UnitState::Move].push_back({ UnitState::WaveStart,
     [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
