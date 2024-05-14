@@ -50,14 +50,12 @@ void MagicianProductor::SingletonInitializer()
 Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
-    m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+    m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Ursula");
     m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
     /// UnitComponent 추가
     m_unitComponent = m_unitGameObject->AddComponent<Unit>();
     UnitProductor::SetUnitComponentMembers();
-
-
 #pragma endregion
 
 #pragma region Auto Attack Setting (Including Passive Logic)

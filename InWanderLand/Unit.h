@@ -105,7 +105,10 @@ private:
     FSM<UnitState> unitFSM{ UnitState::Idle };
     SkillSystem* m_skillSystemComponent;
     UnitType m_unitType;
+    UnitType m_initialLeaderUnitType{ UnitType::Warrior };
     UnitSide m_unitSide;
+
+    yunuGI::IAnimation* m_latestChangedAnimation;
 
     std::string m_fbxName;
     float m_maxHealthPoint;
@@ -405,6 +408,7 @@ public:
     bool CheckEnemyStoppedByTacticMode() const;
     void KnockBackUnit(Vector3d targetPosition, float knockBackDuration);
 
+    void ReportLeaderUnitChanged(UnitType p_type);
 
     std::function<void()> returnToPoolFunction{ nullptr };
     std::function<void()> deathEngageFunction{ nullptr };

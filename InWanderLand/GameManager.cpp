@@ -233,18 +233,33 @@ void GameManager::ReportPlayerEnteredWaveRegion(PlaytimeWave* p_wave)
 	m_waveEnterCheckMap.insert({ Unit::UnitType::Magician, false });
 	m_waveEnterCheckMap.insert({ Unit::UnitType::Healer, false });
 
-	yunutyEngine::Transform* warriorTransform = PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetTransform();
-	Vector3d leftPosition = warriorTransform->GetWorldPosition() + warriorTransform->GetWorldRotation().Right() * -3.0f;
-	Vector3d rightPosition = warriorTransform->GetWorldPosition() + warriorTransform->GetWorldRotation().Right() * 3.0f;
+	Unit* currentLeaderUnit = PlayerController::Instance().GetCurrentSelectedPlayerUnit();
+
+	yunutyEngine::Transform* leaderUnitTransform = currentLeaderUnit->GetTransform();
+	Vector3d leftPosition = leaderUnitTransform->GetWorldPosition() + leaderUnitTransform->GetWorldRotation().Right() * -3.0f;
+	Vector3d rightPosition = leaderUnitTransform->GetWorldPosition() + leaderUnitTransform->GetWorldRotation().Right() * 3.0f;
+
+	currentLeaderUnit->SetWaveStartPosition(leaderUnitTransform->GetWorldPosition());
+	currentLeaderUnit->m_currentBelongingWavePosition = p_wave->GetTransform()->GetWorldPosition();
 
 	/// 유닛들을 warrior 기준 양쪽으로 이동시키자
-	PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->SetWaveStartPosition(warriorTransform->GetWorldPosition());
-	PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Magician)->second->SetWaveStartPosition(leftPosition);
-	PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Healer)->second->SetWaveStartPosition(rightPosition);
+	int temp = 1;
 
-	PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->m_currentBelongingWavePosition = p_wave->GetTransform()->GetWorldPosition();
-	PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Magician)->second->m_currentBelongingWavePosition = p_wave->GetTransform()->GetWorldPosition();
-	PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Healer)->second->m_currentBelongingWavePosition = p_wave->GetTransform()->GetWorldPosition();
+	for (auto e : PlayerController::Instance().GetPlayerMap())
+	{
+		if (e.second == currentLeaderUnit)
+			continue;
+		if (temp > 0)
+		{
+			e.second->SetWaveStartPosition(leftPosition);
+			temp *= -1;
+		}
+		else
+		{
+			e.second->SetWaveStartPosition(rightPosition);
+		}
+		e.second->m_currentBelongingWavePosition = p_wave->GetTransform()->GetWorldPosition();
+	}
 }
 
 bool GameManager::IsPlayerJustEnteredWaveRegion() const

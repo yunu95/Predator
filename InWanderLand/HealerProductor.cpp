@@ -50,7 +50,7 @@ void HealerProductor::SingletonInitializer()
 Unit* HealerProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
-    m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+    m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Hansel");
     m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
     /// UnitComponent 추가

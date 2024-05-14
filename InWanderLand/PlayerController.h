@@ -31,6 +31,9 @@ private:
 
 	Vector3d cameraOffset = { 0, 20, -15 };
 	float cameraMoveDuration{ 0.3f };
+
+	void ChangeLeaderPlayerUnit(Unit::UnitType p_num);
+
 public:
 	float lookRotationDuration = 0.1f;
 
@@ -56,7 +59,7 @@ public:
 
 	std::unordered_map<Unit::UnitType, Unit*> GetPlayerMap() const;
 	Unit* FindSelectedUnitByUnitType(Unit::UnitType p_type);
-
+	Unit* GetCurrentSelectedPlayerUnit() const;
 	CursorDetector* m_cursorDetector;
 };
 

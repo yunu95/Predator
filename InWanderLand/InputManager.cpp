@@ -104,8 +104,7 @@ void InputManager::SetInputManagerActive(bool p_boolen)
 
 void InputManager::SelectPlayer(Unit::UnitType p_unitType)
 {
-    if (!GameManager::Instance().IsBattleSystemOperating() ||
-        PlayerController::Instance().FindSelectedUnitByUnitType(p_unitType)->GetCurrentUnitState() == Unit::UnitState::Death)
+    if (PlayerController::Instance().FindSelectedUnitByUnitType(p_unitType)->GetCurrentUnitState() == Unit::UnitState::Death)
     {
         return;
     }
@@ -176,19 +175,5 @@ void InputManager::ToggleTacticMode()
     if (GameManager::Instance().IsBattleSystemOperating())
     {
         TacticModeSystem::Instance().ToggleRequested(currentSelectedSerialNumber);
-
- /*       if (tacticMode == false && !TacticModeSystem::Instance().IsTacticModeCoolTime())
-            tacticMode = true;
-
-        if (tacticMode)
-        {
-            TacticModeSystem::Instance().EngageTacticMode();
-            TacticModeSystem::Instance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
-        }
-        else
-        {
-            TacticModeSystem::Instance().ExitTacticMode();
-            tacticMode = false;
-        }*/
     }
 }

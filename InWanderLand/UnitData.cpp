@@ -247,16 +247,16 @@ namespace application
 
                 if (pod.templateData->pod.skinnedFBXName == "SKM_Robin")
                 {
-      //              /// 임시 - 보스
-      //              if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::Boss)
-      //              {
-						//currentSelectedProductor = &BossProductor::Instance();
-      //              }
-      //              else
-      //              {
-						//currentSelectedProductor = &WarriorProductor::Instance();
-      //              }
-					currentSelectedProductor = &WarriorProductor::Instance();
+                   /// 임시 - 보스
+                   if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::Boss)
+                   {
+					   currentSelectedProductor = &BossProductor::Instance();
+                   }
+                   else
+                   {
+					   currentSelectedProductor = &WarriorProductor::Instance();
+                   }
+					//currentSelectedProductor = &WarriorProductor::Instance();
                 }
                 else if (pod.templateData->pod.skinnedFBXName == "SKM_Ursula")
                 {
