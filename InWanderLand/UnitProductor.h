@@ -30,7 +30,7 @@ protected:
     NavigationField* m_navField;
 
     float m_elapsed;
-    float m_duration;
+    float pushDuration;
 
     int m_currentIndex = 0;
     float m_previousDelay;

@@ -13,7 +13,7 @@ public:
     bool m_isRepeated{ false };
 
     float m_elapsed{ 0 };
-    float m_duration{ 0 };
+    float pushDuration{ 0 };
     bool isRealtime{ false };
 
 public:

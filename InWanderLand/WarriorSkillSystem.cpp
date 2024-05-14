@@ -6,10 +6,38 @@
 #include "Application.h"
 #include "TacticModeSystem.h"
 
+Component::Coroutine WarriorSkillSystem::ImpactOnTheEnd()
+{
+    GetKnockBackComponent()->ClearCrushedUnitList();
+    GetKnockBackComponent()->GetTriggerCollider().lock()->SetRadius(application::GlobalConstant::GetSingletonInstance().pod.robinQSkillImpactKnockbackRadius);
+    GetKnockBackComponent()->m_damage = application::GlobalConstant::GetSingletonInstance().pod.robinQSkillDamageImpact;
+    GetKnockBackComponent()->pushDistance = application::GlobalConstant::GetSingletonInstance().pod.robinQSkillImpactKnockbackDistance;
+    GetKnockBackComponent()->pushDuration = application::GlobalConstant::GetSingletonInstance().pod.robinQSkillImpactKnockbackDuration;
+    co_await std::suspend_always{};
+    SetSkillRequirmentsActive(QknockBackSkill, false);
+    if (m_unitComponent->isPermittedToTacticAction)
+    {
+        m_unitComponent->isPermittedToTacticAction = false;
+        TacticModeSystem::Instance().ReportTacticActionFinished();
+    }
+}
+KnockBackComponent* WarriorSkillSystem::GetKnockBackComponent()
+{
+    if (!m_QSkillKncokBackComponent)
+    {
+        m_QSkillKncokBackComponent = QknockBackSkill.colliderObject->GetComponent<KnockBackComponent>();
+    }
+    return m_QSkillKncokBackComponent;
+}
 void WarriorSkillSystem::ActivateSkillOne(Vector3d skillPos)
 {
-    QknockBackSkill.colliderObject->GetComponent<KnockBackComponent>()->SkillStarted();
+    GetKnockBackComponent()->SkillStarted();
+    GetKnockBackComponent()->GetTriggerCollider().lock()->SetRadius(application::GlobalConstant::GetSingletonInstance().pod.robinQSkillRushKnockbackRadius);
+    GetKnockBackComponent()->m_damage = application::GlobalConstant::GetSingletonInstance().pod.robinQSkillDamageRush;
+    GetKnockBackComponent()->pushDistance = application::GlobalConstant::GetSingletonInstance().pod.robinQSkillRushKnockbackDistance;
+    GetKnockBackComponent()->pushDuration = application::GlobalConstant::GetSingletonInstance().pod.robinQSkillRushKnockbackDuration;
     QknockBackSkill.colliderObject->SetParent(GetGameObject());
+    QknockBackSkill.colliderObject->GetTransform()->SetLocalPosition(Vector3d::zero);
 
     isQSkillReady = false;
 
@@ -27,19 +55,15 @@ void WarriorSkillSystem::ActivateSkillOne(Vector3d skillPos)
         {
             isOncedActivated = false;
 
-            SetSkillRequirmentsActive(QknockBackSkill, false);
-
-            QknockBackSkill.colliderObject->GetComponent<KnockBackComponent>()->ClearCrushedUnitList();
+            GetKnockBackComponent()->ClearCrushedUnitList();
 
             m_unitNavComponent->SetActive(true);
             m_unitNavComponent->AssignToNavigationField(m_unitComponent->GetNavField());
             m_unitNavComponent->Relocate(skillPos);
             m_unitComponent->SetUnitStateIdle();
-            if (m_unitComponent->isPermittedToTacticAction)
-            {
-                m_unitComponent->isPermittedToTacticAction = false;
-                TacticModeSystem::Instance().ReportTacticActionFinished();
-            }
+            GetKnockBackComponent()->GetGameObject()->SetParent(nullptr);
+            GetKnockBackComponent()->GetTransform()->SetWorldPosition(skillPos);
+            StartCoroutine(ImpactOnTheEnd());
         });
 }
 

@@ -3,12 +3,26 @@
 #include "ParalysisFieldComponent.h"
 #include "Dotween.h"
 #include "TacticModeSystem.h"
+#include "BlindFieldComponent.h"
 
 void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 {
+    m_QSkillComponent->m_blindPersistTime = application::GlobalConstant::GetSingletonInstance().pod.ursulaQSkillBlindDuration;
+    m_QSkillComponent->m_damageTimer->pushDuration = application::GlobalConstant::GetSingletonInstance().pod.ursulaQSkillFieldDuration;
+    m_QSkillComponent->m_fieldDamageDelay = application::GlobalConstant::GetSingletonInstance().pod.ursulaQSkillFieldDamageInterval;
+    m_QSkillComponent->m_fieldDamage = application::GlobalConstant::GetSingletonInstance().pod.ursulaQSkillFieldDamagePerTick;
+    m_QSkillComponent->m_blindPersistTime = application::GlobalConstant::GetSingletonInstance().pod.ursulaQSkillBlindDuration;
+
     /// 장판의 타이머를 Activate하는 함수가 필요...
     //m_QSkillComponent->ActivateFieldTimer();
-
+    if (m_QRadiusCollider.expired())
+    {
+        m_QRadiusCollider = QSkillFieldDamage.colliderObject->GetComponentWeakPtr<physics::SphereCollider>();
+    }
+    if (!m_QRadiusCollider.expired())
+    {
+        m_QRadiusCollider.lock()->SetRadius(application::GlobalConstant::GetSingletonInstance().pod.ursulaQSkillRadius);
+    }
     isQSkillActivating = true;
 
     QSkillProjectile.colliderObject->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
@@ -23,7 +37,7 @@ void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 
     float tempDistance = (skillPos - GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude();
 
-    QSkillProjectile.dotweenComponent->DOMove(skillPos, tempDistance / m_QSkillProjectileSpeed).OnComplete([=]()
+    QSkillProjectile.dotweenComponent->DOMove(skillPos, tempDistance / application::GlobalConstant::GetSingletonInstance().pod.ursulaQSkillProjectileSpeed).OnComplete([=]()
         {
             isOncedActivated = false;
 

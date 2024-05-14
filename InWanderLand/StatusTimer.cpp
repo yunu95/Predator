@@ -14,7 +14,7 @@ void StatusTimer::Update()
 
 		m_elapsed += Time::GetDeltaTime();
 
-		if (m_elapsed >= m_duration)
+		if (m_elapsed >= pushDuration)
 		{
 			onCompleteFunction();
 

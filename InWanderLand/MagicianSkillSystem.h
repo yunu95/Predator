@@ -15,6 +15,7 @@ private:
 
     BlindFieldComponent* m_QSkillComponent;
     ParalysisFieldComponent* m_WSkillComponent;
+    std::weak_ptr<physics::SphereCollider> m_QRadiusCollider;
     std::weak_ptr<physics::SphereCollider> m_ERadiusCollider;
 
     float m_QSkillProjectileSpeed = 10.0f;

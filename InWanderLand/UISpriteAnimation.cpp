@@ -11,7 +11,7 @@ void UISpriteAnimation::SetSprites(const wchar_t* spritesRootPath)
 void UISpriteAnimation::Init()
 {
     isRealtime = true;
-    m_duration = spriteSheet->back().timeOffset;
+    pushDuration = spriteSheet->back().timeOffset;
     onActivation = [this]()
         {
             this->currentIdx = 0;

@@ -10,6 +10,8 @@ class Unit;
 
 class StatusEffect : public Component, public ContentsObservee
 {
+private:
+    std::weak_ptr<physics::SphereCollider> triggerCollider;
 public:
     enum class StatusEffectEnum
     {
@@ -27,6 +29,7 @@ protected:
     friend class DualCastComponent;
 
 public:
+    std::weak_ptr<physics::SphereCollider> GetTriggerCollider();
     virtual void Start() override;
 
     virtual void PlayFunction() override final;

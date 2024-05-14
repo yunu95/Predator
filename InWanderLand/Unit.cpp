@@ -1089,7 +1089,7 @@ void Unit::KnockBackUnit(Vector3d targetPosition, float knockBackDuration)
     m_navAgentComponent->Relocate(targetPosition);
     isFollowingNavAgent = false;
     MakeUnitPushedState(true);
-    knockBackTimer->m_duration = knockBackDuration;
+    knockBackTimer->pushDuration = knockBackDuration;
     knockBackTimer->ActivateTimer();
 }
 
