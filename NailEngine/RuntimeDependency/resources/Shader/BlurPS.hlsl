@@ -38,7 +38,12 @@ float4 main(PixelIn input) : SV_TARGET
     // 가중치를 적용하여 픽셀 값을 계산
     float4 color = 0.0;
     float weights[9] = { 1, 2, 1, 2, 4, 2, 1, 2, 1 };
-
+    float4 tempColor = Temp0Map.Sample(sam, input.uv);
+    if (tempColor.x == 0.f && tempColor.y == 0.f && tempColor.z == 0.f)
+    {
+        clip(-1);
+    }
+    
     [unroll]
     for (int i = -1; i <= 1; ++i)
     {

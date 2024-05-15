@@ -681,7 +681,7 @@ xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;Yunuty.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x64;$(outdir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\resources" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
@@ -1278,6 +1278,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Unit_TemplateData.h" />
     <ClInclude Include="UrsulaSkillDevelopmentSystem.h" />
     <ClInclude Include="Action_WaitForSeconds.h" />
+    <ClInclude Include="UVAnimator.h" />
     <ClInclude Include="WanderUtils.h" />
     <ClInclude Include="UUID.h" />
     <ClInclude Include="UUIDManager.h" />
@@ -1547,6 +1548,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="UnitProductor.cpp" />
     <ClCompile Include="Action_WaitForSeconds.cpp" />
+    <ClCompile Include="UVAnimator.cpp" />
     <ClCompile Include="WarriorProductor.cpp" />
     <ClCompile Include="PlayerSkillSystem.cpp" />
     <ClCompile Include="WarriorSkillSystem.cpp" />

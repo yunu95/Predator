@@ -33,6 +33,7 @@
 #include "TutorialManager.h"
 #include "ContentsObserver.h"
 #include "ParticleTool_Manager.h"
+#include "UVAnimator.h"
 
 #include <algorithm>
 #include <string>
@@ -80,18 +81,21 @@ public:
 class TestComponent4 : public yunutyEngine::Component
 {
 public:
-    yunutyEngine::graphics::Animator* anim;
-    yunuGI::IAnimation* animation;
-    yunuGI::IAnimation* animation2;
+    yunutyEngine::GameObject* obj;
     virtual void Update() override
     {
+        obj = GetGameObject();
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
 		{
-            anim->ChangeAnimation(animation2, 1.f, 1.f);
+            auto curScale = obj->GetTransform()->GetLocalScale();
+            curScale.x += 0.1f;
+            obj->GetTransform()->SetLocalScale(curScale);
 		}
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
 		{
-            anim->ChangeAnimation(animation, 1.f, 1.f); 
+			auto curScale = obj->GetTransform()->GetLocalScale();
+			curScale.x -= 0.1f;
+			obj->GetTransform()->SetLocalScale(curScale);
 		}
 		//if (Input::isKeyPushed(yunutyEngine::KeyCode::O))
 		//{
@@ -131,7 +135,7 @@ void GraphicsTest()
 		}
     }
 
-    {
+ /*   {
         auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
         auto test = obj2->AddComponent<TestComponent4>();
         auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
@@ -143,11 +147,17 @@ void GraphicsTest()
         anim->PushAnimation(animation);
         anim->PushAnimation(animation2);
         anim->Play(animation);
-    }
-
+    }*/
     //{
-    //    auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_GuideBook");
+    //    auto obj2 = Scene::getCurrentScene()->AddGameObject();
+    //    auto renderer = obj2->AddComponent<graphics::StaticMeshRenderer>();
+    //    renderer->GetGI().SetMesh(_resourceManager->GetMesh(L"Sphere"));
+    //    renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, _resourceManager->GetTexture(L"Texture/Lightmap-0_comp_light.exr"));
     //}
+
+    {
+        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+    }
 
 	//{
 	//	auto obj2 = Scene::getCurrentScene()->AddGameObject();
@@ -163,7 +173,7 @@ void GraphicsTest()
  //       animator->Play(animation);
 	//}
 
-	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
+	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 }
 
 void application::contents::ContentsLayer::SetInputControl(bool control)

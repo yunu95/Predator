@@ -176,15 +176,14 @@ void Unit::Start()
         [this]() { return m_currentHealthPoint <= 0 && m_resurrectingMaxCount < m_currentResurrectingCount; } });
     }
 
-    unitFSM.transitions[static_cast<UnitState>(UnitState::Idle)].push_back({ UnitState::OffsetMove,
-    [this]() { return (!GameManager::Instance().IsBattleSystemOperating() && m_unitSide == UnitSide::Player && m_unitType != UnitType::Warrior)
-        && isUnitCinematicEnded; } });
+    //unitFSM.transitions[static_cast<UnitState>(UnitState::Idle)].push_back({ UnitState::OffsetMove,
+    //[this]() { return (!GameManager::Instance().IsBattleSystemOperating() && m_unitSide == UnitSide::Player && m_unitType != m_initialLeaderUnitType); } });
 
     unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::WaveStart,
     [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
 
-    unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::Move,
-    [this]() { return currentOrder == UnitState::Move; } });
+	//unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::Move,
+ //   [this]() { return currentOrder == UnitState::Move; } });
 
     unitFSM.transitions[UnitState::Move].push_back({ UnitState::WaveStart,
     [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
@@ -232,7 +231,9 @@ void Unit::Start()
 
         m_animatorComponent->PushAnimationWithFunc(unitAnimations.m_attackAnimation, attackTimingFrame, [=]()
             {
-                if (m_currentTargetUnit != nullptr && currentOrder == UnitState::Attack)
+                currentOrder = UnitState::Attack;
+
+                if (m_currentTargetUnit != nullptr)
                 {
                     atkSys->Attack(m_currentTargetUnit, m_attackOffset);
 
@@ -240,7 +241,7 @@ void Unit::Start()
                     {
                         isPermittedToTacticAction = false;
                         isTacticAttackMovePermitted = false;
-                        EnemyActionOnTacticModeEngaged();
+                        //EnemyActionOnTacticModeEngaged();
                         TacticModeSystem::Instance().ReportTacticActionFinished();
                         currentOrder = UnitState::Idle;
                         /// 현재 공격타겟에 대한 처리를 해야 가만히 있을 듯.
@@ -374,9 +375,9 @@ void Unit::OffsetMoveEngage()
 {
     StopMove();
     currentOrder = UnitState::OffsetMove;
-    m_followingTargetUnit = PlayerController::Instance().GetPlayerMap().find(UnitType::Warrior)->second;
+    //m_followingTargetUnit = PlayerController::Instance().GetPlayerMap().find(UnitType::Warrior)->second;
     isFollowing = false;
-    isUnitCinematicEnded = false;
+    //isUnitCinematicEnded = false;
     currentOrder = UnitState::OffsetMove;
     moveFunctionElapsed = 0.0f;
     m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::green());
@@ -576,6 +577,7 @@ void Unit::IdleUpdate()
     {
         m_tacticModeQueue.front()();
         m_tacticModeQueue.pop();
+        ResumeAnimation();
     }
 
     idleElapsed += Time::GetDeltaTime() * m_localTimeScale;
@@ -621,32 +623,35 @@ void Unit::OffsetMoveUpdate()
 {
     /// m_followingTargetUnit 과의 거리가 일정 수치 이상으로 벌어진다면 이동 함수 호출.
     /// 다시 거리가 좁혀지면 StopMove. (Idle로 상태 변경)
-    float betweenUnitDistance = (m_followingTargetUnit->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition()).Magnitude();
-
-    float distance = (m_currentMovePosition - GetTransform()->GetWorldPosition()).Magnitude();
-
-    if (betweenUnitDistance >= m_followEngageDinstance)
+	if (m_followingTargetUnit)
     {
-        ChangeAnimation(unitAnimations.m_walkAnimation);
+		float betweenUnitDistance = (m_followingTargetUnit->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition()).Magnitude();
 
-        dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
-        m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
-        isFollowing = true;
-    }
-    else if (betweenUnitDistance <= m_stopFollowDinstance)
-    {
-        isFollowing = false;
-        StopMove();
-        ChangeAnimation(unitAnimations.m_idleAnimation);
-    }
-    else if (betweenUnitDistance <= m_followEngageDinstance && betweenUnitDistance >= m_stopFollowDinstance && isFollowing)
-    {
-        ChangeAnimation(unitAnimations.m_walkAnimation);
+		float distance = (m_currentMovePosition - GetTransform()->GetWorldPosition()).Magnitude();
 
-        dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
-        m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
-        isFollowing = true;
-    }
+		if (betweenUnitDistance >= m_followEngageDinstance)
+		{
+			ChangeAnimation(unitAnimations.m_walkAnimation);
+
+			dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
+			m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
+			isFollowing = true;
+		}
+		else if (betweenUnitDistance <= m_stopFollowDinstance)
+		{
+			isFollowing = false;
+			StopMove();
+			ChangeAnimation(unitAnimations.m_idleAnimation);
+		}
+		else if (betweenUnitDistance <= m_followEngageDinstance && betweenUnitDistance >= m_stopFollowDinstance && isFollowing)
+		{
+			ChangeAnimation(unitAnimations.m_walkAnimation);
+
+			dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
+			m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
+			isFollowing = true;
+		}
+	}
 }
 
 void Unit::AttackMoveUpdate()
@@ -798,7 +803,13 @@ void Unit::ResurrectUpdate()
 
 void Unit::ChangeAnimation(yunuGI::IAnimation* p_anim)
 {
+
+    if (m_latestChangedAnimation == p_anim)
+        return;
+
     m_animatorComponent->ChangeAnimation(p_anim, animationLerpDuration, animationTransitionSpeed);
+
+    m_latestChangedAnimation = p_anim;
 }
 
 #pragma endregion
@@ -1089,8 +1100,22 @@ void Unit::KnockBackUnit(Vector3d targetPosition, float knockBackDuration)
     m_navAgentComponent->Relocate(targetPosition);
     isFollowingNavAgent = false;
     MakeUnitPushedState(true);
-    knockBackTimer->m_duration = knockBackDuration;
+    knockBackTimer->pushDuration = knockBackDuration;
     knockBackTimer->ActivateTimer();
+}
+
+void Unit::ReportLeaderUnitChanged(UnitType p_type)
+{
+    if (m_unitType == p_type)
+    {
+        SetUnitStateDirectly(UnitState::Idle);
+        m_followingTargetUnit = nullptr;
+    }
+    else
+    {
+        m_followingTargetUnit = PlayerController::Instance().GetPlayerMap().find(p_type)->second;
+        SetUnitStateDirectly(UnitState::OffsetMove);
+    }
 }
 
 float Unit::DetermineAttackDamage(float p_damage)
@@ -1623,6 +1648,10 @@ void Unit::SetUnitStateDirectly(Unit::UnitState p_unitState)
     switch (p_unitState)
     {
     case Unit::UnitState::Idle:
+	{
+		unitFSM.SetUnitStateDirectly(p_unitState);
+		break;
+	}
         break;
     case Unit::UnitState::Move:
         break;

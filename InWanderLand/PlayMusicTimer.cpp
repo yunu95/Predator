@@ -6,14 +6,14 @@
 void PlayMusicTimer::Init()
 {
     isRealtime = true;
-    m_duration = fadeOutTime + fadeInTime;
+    pushDuration = fadeOutTime + fadeInTime;
     onActivation = [=]()
         {
             fadingOut = true;
         };
     onUpdate = [=](float t)
         {
-            if (fadingOut && (fadeOutTime == 0 || t >= fadeOutTime / m_duration))
+            if (fadingOut && (fadeOutTime == 0 || t >= fadeOutTime / pushDuration))
             {
                 fadingOut = false;
                 SoundSystem::StopMusic();
@@ -21,7 +21,7 @@ void PlayMusicTimer::Init()
             }
             if (fadingOut)
             {
-                t = t / (fadeOutTime / m_duration);
+                t = t / (fadeOutTime / pushDuration);
                 SoundSystem::SetMusicVolume(1 - t);
             }
             else
@@ -31,7 +31,7 @@ void PlayMusicTimer::Init()
                     SoundSystem::SetMusicVolume(1);
                     return;
                 }
-                t = (t - fadeOutTime / m_duration) / (fadeInTime / m_duration);
+                t = (t - fadeOutTime / pushDuration) / (fadeInTime / pushDuration);
                 SoundSystem::SetMusicVolume(t);
             }
         };

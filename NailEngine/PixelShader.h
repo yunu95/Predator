@@ -11,6 +11,8 @@ public:
 	virtual void Bind() override;
 	virtual void UnBind() override;
 
+	Microsoft::WRL::ComPtr<ID3D11BlendState> GetBlendState() {return blendState; }
+
 private:
 	//void CreateRasterizerState();
 	void CreateShaderState(const std::wstring& shaderPath);

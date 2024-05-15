@@ -323,24 +323,24 @@ void PixelShader::CreateBlendState(const std::string& fileContent)
 				//blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
 				//blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
 
-				blendDesc.AlphaToCoverageEnable = FALSE;
+				//////////////blendDesc.AlphaToCoverageEnable = FALSE;
+				//////////////blendDesc.RenderTarget[0].BlendEnable = TRUE;
+				//////////////blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+				//////////////blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+				//////////////blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+				//////////////blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+				//////////////blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+				//////////////blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+				//////////////blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
 				blendDesc.RenderTarget[0].BlendEnable = TRUE;
-				blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+				blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
 				blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
 				blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 				blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-				blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+				blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
 				blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 				blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-				//blendDesc.RenderTarget[0].BlendEnable = true;
-				//blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-				//blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-				//blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-				//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-				//blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-				//blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-				//blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 			}
 			else if (shaderType == "AlphaBlend")
 			{
@@ -348,6 +348,17 @@ void PixelShader::CreateBlendState(const std::string& fileContent)
 				blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA; // 소스 색상의 알파 값 사용
 				blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA; // 대상 색상의 알파 값 사용
 				blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD; // 블렌딩 연산: 소스 색상 * 소스 알파 + (1 - 소스 알파) * 대상 색상
+				blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+				blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+				blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+				blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+			}
+			else if (shaderType == "Floor")
+			{
+				blendDesc.RenderTarget[0].BlendEnable = TRUE;
+				blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+				blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+				blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 				blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
 				blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
 				blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
@@ -365,7 +376,6 @@ void PixelShader::CreateBlendState(const std::string& fileContent)
 			assert(FALSE);
 		}
 	}
-
 	ResourceBuilder::Instance.Get().device->GetDevice()->CreateBlendState(&blendDesc, this->blendState.GetAddressOf());
 }
 

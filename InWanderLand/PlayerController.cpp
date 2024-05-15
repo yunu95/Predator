@@ -11,6 +11,8 @@
 void PlayerController::Start()
 {
     currentSelectedSerialNumber = Unit::UnitType::Warrior;
+
+    ChangeLeaderPlayerUnit(Unit::UnitType::Warrior);
 }
 
 void PlayerController::SetMovingSystemComponent(RTSCam* sys)
@@ -187,7 +189,36 @@ void PlayerController::SetCurrentPlayerSerialNumber(Unit::UnitType p_num)
         || p_num == Unit::UnitType::AllPlayers)
     {
         currentSelectedSerialNumber = p_num;
-        SetRightClickFunction();
+
+        /// 비전투 상황일 때는 우클릭 함수 정의 이전에 Leader Unit으로 전환해주는 로직이 필요합니다.
+        if (!GameManager::Instance().IsBattleSystemOperating())
+            ChangeLeaderPlayerUnit(p_num);
+
+		SetRightClickFunction();
+    }
+}
+
+void PlayerController::ReportBattleEnded()
+{
+    Unit::UnitType tempLeaderType;
+
+	for (auto e : playerComponentMap)
+	{
+        if (e.second->GetActive())
+        {
+            tempLeaderType = e.first;
+            break;
+        }
+	}
+
+    ChangeLeaderPlayerUnit(tempLeaderType);
+}
+
+void PlayerController::ChangeLeaderPlayerUnit(Unit::UnitType p_num)
+{
+    for (auto e : playerComponentMap)
+    {
+        e.second->ReportLeaderUnitChanged(p_num);
     }
 }
 
@@ -200,6 +231,11 @@ Unit* PlayerController::FindSelectedUnitByUnitType(Unit::UnitType p_type)
 {
     if (p_type != Unit::UnitType::AllPlayers)
         return playerComponentMap.find(p_type)->second;
+}
+
+Unit* PlayerController::GetCurrentSelectedPlayerUnit() const 
+{
+    return playerComponentMap.find(currentSelectedSerialNumber)->second;
 }
 
 

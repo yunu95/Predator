@@ -28,287 +28,292 @@
 
 namespace application
 {
-    namespace editor
-    {
-        MapFileManager::MapFileManager()
-            : Singleton<MapFileManager>(), globalConstant(GlobalConstant::GetSingletonInstance()),
-            instanceManager(InstanceManager::GetSingletonInstance()),
-            templateDataManager(TemplateDataManager::GetSingletonInstance()),
-            commandManager(CommandManager::GetSingletonInstance()),
-            currentMapPath()
-        {
+	namespace editor
+	{
+		MapFileManager::MapFileManager()
+			: Singleton<MapFileManager>(), globalConstant(GlobalConstant::GetSingletonInstance()),
+			instanceManager(InstanceManager::GetSingletonInstance()),
+			templateDataManager(TemplateDataManager::GetSingletonInstance()),
+			commandManager(CommandManager::GetSingletonInstance()),
+			currentMapPath()
+		{
 
-        }
+		}
 
-        bool MapFileManager::LoadStaticOrnaments(const std::string& path)
-        {
-            std::ifstream loadFile{ path };
+		bool MapFileManager::LoadStaticOrnaments(const std::string& path)
+		{
+			std::ifstream loadFile{ path };
 
-            if (loadFile.is_open())
-            {
-                json mapData;
-                loadFile >> mapData;
+			if (loadFile.is_open())
+			{
+				json mapData;
+				loadFile >> mapData;
 
-                auto scene = yunutyEngine::Scene::getCurrentScene();
-                const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+				auto scene = yunutyEngine::Scene::getCurrentScene();
+				const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-                auto objSize = mapData.size();
+				auto objSize = mapData.size();
 
-                std::string fbxName;
-                std::vector<float> scale(3);
-                std::vector<double> rotation(4);
-                std::vector<float> location(3);
+				std::string fbxName;
+				std::vector<float> scale(3);
+				std::vector<double> rotation(4);
+				std::vector<float> location(3);
 
-                for (int i = 0; i < objSize; i++)
-                {
-                    fbxName = mapData[i]["ResourceName"];
-                    scale[0] = mapData[i]["Scale"][0];
-                    scale[1] = mapData[i]["Scale"][1];
-                    scale[2] = mapData[i]["Scale"][2];
-                    rotation[0] = mapData[i]["Rotation"][0];
-                    rotation[1] = mapData[i]["Rotation"][1];
-                    rotation[2] = mapData[i]["Rotation"][2];
-                    rotation[3] = mapData[i]["Rotation"][3];
-                    location[0] = (float)(mapData[i]["Location"][0]) / 100.f;
-                    location[1] = (float)(mapData[i]["Location"][1]) / 100.f;
-                    location[2] = (float)(mapData[i]["Location"][2]) / 100.f;
-                    int lightMapIndex = (int)(mapData[i]["LightMapIndex"]);
-                    float LightMapScaleOffset[4];
-                    LightMapScaleOffset[0] = (float)(mapData[i]["LightMapScaleOffset"][0]);
-                    LightMapScaleOffset[1] = (float)(mapData[i]["LightMapScaleOffset"][1]);
-                    LightMapScaleOffset[2] = (float)(mapData[i]["LightMapScaleOffset"][2]);
-                    LightMapScaleOffset[3] = (float)(mapData[i]["LightMapScaleOffset"][3]);
+				for (int i = 0; i < objSize; i++)
+				{
+					fbxName = mapData[i]["ResourceName"];
+					scale[0] = mapData[i]["Scale"][0];
+					scale[1] = mapData[i]["Scale"][1];
+					scale[2] = mapData[i]["Scale"][2];
+					rotation[0] = mapData[i]["Rotation"][0];
+					rotation[1] = mapData[i]["Rotation"][1];
+					rotation[2] = mapData[i]["Rotation"][2];
+					rotation[3] = mapData[i]["Rotation"][3];
+					location[0] = (float)(mapData[i]["Location"][0]) / 100.f;
+					location[1] = (float)(mapData[i]["Location"][1]) / 100.f;
+					location[2] = (float)(mapData[i]["Location"][2]) / 100.f;
+					int lightMapIndex = -1;
+					if (mapData[i].contains("LightMapIndex"))
+						lightMapIndex = (int)(mapData[i]["LightMapIndex"]);
+					float LightMapScaleOffset[4];
+					if (mapData[i].contains("LightMapScaleOffset"))
+					{
+						LightMapScaleOffset[0] = (float)(mapData[i]["LightMapScaleOffset"][0]);
+						LightMapScaleOffset[1] = (float)(mapData[i]["LightMapScaleOffset"][1]);
+						LightMapScaleOffset[2] = (float)(mapData[i]["LightMapScaleOffset"][2]);
+						LightMapScaleOffset[3] = (float)(mapData[i]["LightMapScaleOffset"][3]);
+					}
 
-                    auto odt = instanceManager.CreateInstance<OrnamentData>(fbxName);
-                    if (odt == nullptr)
-                    {
-                        continue;
-                    }
+					auto odt = instanceManager.CreateInstance<OrnamentData>(fbxName);
+					if (odt == nullptr)
+					{
+						continue;
+					}
 
-                    /// 좌표계 고려 변환
-                    odt->pod.scale.x = scale[0];
-                    odt->pod.scale.y = scale[2];
-                    odt->pod.scale.z = scale[1];
-                    odt->pod.rotation.x = -rotation[1];
-                    odt->pod.rotation.y = rotation[3];
-                    odt->pod.rotation.z = rotation[2];
-                    odt->pod.rotation.w = rotation[0];
-                    odt->pod.position.x = -location[0];
-                    odt->pod.position.y = location[2];
-                    odt->pod.position.z = location[1];
-                    odt->pod.LightMapIndex = lightMapIndex;
-                    odt->pod.LightMapScaleOffset[0] = LightMapScaleOffset[0];
-                    odt->pod.LightMapScaleOffset[1] = LightMapScaleOffset[1];
-                    odt->pod.LightMapScaleOffset[2] = LightMapScaleOffset[2];
-                    odt->pod.LightMapScaleOffset[3] = LightMapScaleOffset[3];
+					/// 좌표계 고려 변환
+					odt->pod.scale.x = scale[0];
+					odt->pod.scale.y = scale[2];
+					odt->pod.scale.z = scale[1];
+					odt->pod.rotation.x = -rotation[1];
+					odt->pod.rotation.y = rotation[3];
+					odt->pod.rotation.z = rotation[2];
+					odt->pod.rotation.w = rotation[0];
+					odt->pod.position.x = -location[0];
+					odt->pod.position.y = location[2];
+					odt->pod.position.z = location[1];
+					odt->pod.LightMapIndex = lightMapIndex;
+					odt->pod.LightMapScaleOffset[0] = LightMapScaleOffset[0];
+					odt->pod.LightMapScaleOffset[1] = LightMapScaleOffset[1];
+					odt->pod.LightMapScaleOffset[2] = LightMapScaleOffset[2];
+					odt->pod.LightMapScaleOffset[3] = LightMapScaleOffset[3];
 
-                    odt->pod.stage = path.find("1Stage") != std::string::npos ? 1 : 2;
+					odt->pod.stage = path.find("1Stage") != std::string::npos ? 1 : 2;
 
-                    auto pi = odt->ApplyAsPaletteInstance();
-                }
-
-#ifdef EDITOR
-                Application::DispatchEvent<LoadEvent>();
-#endif
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        bool MapFileManager::SaveStaticOrnaments(const std::string& path)
-        {
-            json punrealData;
-            json ornamentData;
-
-            for (auto& each : instanceManager.list)
-            {
-                auto ptr = dynamic_cast<OrnamentData*>(each.second.get());
-                if (ptr)
-                {
-                    ornamentData["ResourceName"] = ptr->pod.templateData->pod.staticFBXName;
-                    ornamentData["Location"].push_back(-ptr->pod.position.x * 100);
-                    ornamentData["Location"].push_back(ptr->pod.position.z * 100);
-                    ornamentData["Location"].push_back(ptr->pod.position.y * 100);
-                    ornamentData["Rotation"].push_back(ptr->pod.rotation.w);
-                    ornamentData["Rotation"].push_back(-ptr->pod.rotation.x);
-                    ornamentData["Rotation"].push_back(ptr->pod.rotation.z);
-                    ornamentData["Rotation"].push_back(ptr->pod.rotation.y);
-                    ornamentData["Scale"].push_back(ptr->pod.scale.x);
-                    ornamentData["Scale"].push_back(ptr->pod.scale.z);
-                    ornamentData["Scale"].push_back(ptr->pod.scale.y);
-
-                    punrealData.push_back(ornamentData);
-                    ornamentData.clear();
-                }
-            }
-
-            if (punrealData.is_null())
-            {
-                return false;
-            }
-
-            std::ofstream saveFile{ path };
-
-            if (saveFile.is_open())
-            {
-                saveFile << punrealData.dump(4);
-                saveFile.close();
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        bool MapFileManager::LoadMapFile(const std::string& path)
-        {
-            std::ifstream loadFile{ path };
-
-            if (loadFile.is_open())
-            {
-                json mapData;
-                loadFile >> mapData;
-
-                // 제대로 된 Map 파일이 아닐 경우 취소
-                if (mapData.find("InWanderLand") == mapData.end())
-                {
-                    loadFile.close();
-                    return false;
-                }
-
-                // Manager 초기화
-                Clear();
-
-                auto& scriptSystem = ScriptSystem::Instance();
-
-                if (!globalConstant.PreDecoding(mapData) || !scriptSystem.PreDecoding(mapData) || !instanceManager.PreDecoding(mapData) || !templateDataManager.PreDecoding(mapData))
-                {
-                    loadFile.close();
-                    return false;
-                }
-
-                if (!scriptSystem.PostDecoding(mapData) || !instanceManager.PostDecoding(mapData) || !templateDataManager.PostDecoding(mapData))
-                {
-                    loadFile.close();
-                    return false;
-                }
-
-                if (!instanceManager.PostLoad())
-                {
-                    return false;
-                }
-
-                loadFile.close();
+					auto pi = odt->ApplyAsPaletteInstance();
+				}
 
 #ifdef EDITOR
-                Application::DispatchEvent<LoadEvent>();
-                Application::GetInstance().OnDataLoad();
+				Application::DispatchEvent<LoadEvent>();
 #endif
-                currentMapPath = path;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 
-        bool MapFileManager::SaveMapFile(const std::string& path)
-        {
-            json mapData;
+		bool MapFileManager::SaveStaticOrnaments(const std::string& path)
+		{
+			json punrealData;
+			json ornamentData;
 
-            auto& scriptSystem = ScriptSystem::Instance();
+			for (auto& each : instanceManager.list)
+			{
+				auto ptr = dynamic_cast<OrnamentData*>(each.second.get());
+				if (ptr)
+				{
+					ornamentData["ResourceName"] = ptr->pod.templateData->pod.staticFBXName;
+					ornamentData["Location"].push_back(-ptr->pod.position.x * 100);
+					ornamentData["Location"].push_back(ptr->pod.position.z * 100);
+					ornamentData["Location"].push_back(ptr->pod.position.y * 100);
+					ornamentData["Rotation"].push_back(ptr->pod.rotation.w);
+					ornamentData["Rotation"].push_back(-ptr->pod.rotation.x);
+					ornamentData["Rotation"].push_back(ptr->pod.rotation.z);
+					ornamentData["Rotation"].push_back(ptr->pod.rotation.y);
+					ornamentData["Scale"].push_back(ptr->pod.scale.x);
+					ornamentData["Scale"].push_back(ptr->pod.scale.z);
+					ornamentData["Scale"].push_back(ptr->pod.scale.y);
 
-            // 저장을 더 진행하기 전에 각 데이터들의 내부 데이터를 pod 데이터로 이전하기 위해 실행하는 부분
-            if (!instanceManager.PreSave() || !templateDataManager.PreSave())
-            {
-                return false;
-            }
+					punrealData.push_back(ornamentData);
+					ornamentData.clear();
+				}
+			}
 
-            // Pre
-            if (!globalConstant.PreEncoding(mapData) || !scriptSystem.PreEncoding(mapData) || !instanceManager.PreEncoding(mapData) || !templateDataManager.PreEncoding(mapData))
-            {
-                return false;
-            }
+			if (punrealData.is_null())
+			{
+				return false;
+			}
 
-            // Post
-            if (!scriptSystem.PostEncoding(mapData) || !instanceManager.PostEncoding(mapData) || !templateDataManager.PostEncoding(mapData))
-            {
-                return false;
-            }
+			std::ofstream saveFile{ path };
 
-            if (mapData.is_null())
-            {
-                // mapdData 가 만들어진 것이 없다면 취소
-                return false;
-            }
+			if (saveFile.is_open())
+			{
+				saveFile << punrealData.dump(4);
+				saveFile.close();
 
-            mapData["InWanderLand"] = "Map";
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 
-            std::ofstream saveFile{ path };
+		bool MapFileManager::LoadMapFile(const std::string& path)
+		{
+			std::ifstream loadFile{ path };
 
-            if (saveFile.is_open())
-            {
-                saveFile << mapData.dump(4);
-                saveFile.close();
+			if (loadFile.is_open())
+			{
+				json mapData;
+				loadFile >> mapData;
+
+				// 제대로 된 Map 파일이 아닐 경우 취소
+				if (mapData.find("InWanderLand") == mapData.end())
+				{
+					loadFile.close();
+					return false;
+				}
+
+				// Manager 초기화
+				Clear();
+
+				auto& scriptSystem = ScriptSystem::Instance();
+
+				if (!globalConstant.PreDecoding(mapData) || !scriptSystem.PreDecoding(mapData) || !instanceManager.PreDecoding(mapData) || !templateDataManager.PreDecoding(mapData))
+				{
+					loadFile.close();
+					return false;
+				}
+
+				if (!scriptSystem.PostDecoding(mapData) || !instanceManager.PostDecoding(mapData) || !templateDataManager.PostDecoding(mapData))
+				{
+					loadFile.close();
+					return false;
+				}
+
+				if (!instanceManager.PostLoad())
+				{
+					return false;
+				}
+
+				loadFile.close();
 
 #ifdef EDITOR
-                Application::DispatchEvent<SaveEvent>();
+				Application::DispatchEvent<LoadEvent>();
+				Application::GetInstance().OnDataLoad();
 #endif
+				currentMapPath = path;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+		bool MapFileManager::SaveMapFile(const std::string& path)
+		{
+			json mapData;
 
-        std::string MapFileManager::GetCurrentMapPath() const
-        {
-            return currentMapPath;
-        }
+			auto& scriptSystem = ScriptSystem::Instance();
 
-        void MapFileManager::SetCurrentMapPath(const std::string& path)
-        {
-            currentMapPath = path;
-        }
+			// 저장을 더 진행하기 전에 각 데이터들의 내부 데이터를 pod 데이터로 이전하기 위해 실행하는 부분
+			if (!instanceManager.PreSave() || !templateDataManager.PreSave())
+			{
+				return false;
+			}
 
-        bool MapFileManager::LoadDefaultMap()
-        {
-            bool returnVal = false;
-            if (currentMapPath.empty())
-            {
-                returnVal = LoadMapFile("InWanderLand.pmap");
-                if (returnVal == false)
-                {
-                    Application::GetInstance().OnDataLoad();
-                }
-                currentMapPath.clear();
-            }
-            return returnVal;
-        }
+			// Pre
+			if (!globalConstant.PreEncoding(mapData) || !scriptSystem.PreEncoding(mapData) || !instanceManager.PreEncoding(mapData) || !templateDataManager.PreEncoding(mapData))
+			{
+				return false;
+			}
 
-        void MapFileManager::Clear()
-        {
+			// Post
+			if (!scriptSystem.PostEncoding(mapData) || !instanceManager.PostEncoding(mapData) || !templateDataManager.PostEncoding(mapData))
+			{
+				return false;
+			}
+
+			if (mapData.is_null())
+			{
+				// mapdData 가 만들어진 것이 없다면 취소
+				return false;
+			}
+
+			mapData["InWanderLand"] = "Map";
+
+			std::ofstream saveFile{ path };
+
+			if (saveFile.is_open())
+			{
+				saveFile << mapData.dump(4);
+				saveFile.close();
+
 #ifdef EDITOR
-            palette::PaletteBrushManager::GetSingletonInstance().Clear();
-            palette::PaletteManager::GetSingletonInstance().Clear();
-            CameraManager::GetSingletonInstance().Clear();
-            Module_ScriptEditor::GetSingletonInstance().Clear();
-            EditorPopupManager::GetSingletonInstance().Clear();
-            commandManager.Clear();
+				Application::DispatchEvent<SaveEvent>();
 #endif
-            ShortcutSystem::Instance().Clear();
-            PlayableComponent::PreMapLoadAll();
-            instanceManager.Clear();
-            templateDataManager.Clear();
-            UUIDManager::GetSingletonInstance().Clear();
-        }
-    }
+
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		std::string MapFileManager::GetCurrentMapPath() const
+		{
+			return currentMapPath;
+		}
+
+		void MapFileManager::SetCurrentMapPath(const std::string& path)
+		{
+			currentMapPath = path;
+		}
+
+		bool MapFileManager::LoadDefaultMap()
+		{
+			bool returnVal = false;
+			if (currentMapPath.empty())
+			{
+				returnVal = LoadMapFile("InWanderLand.pmap");
+				if (returnVal == false)
+				{
+					Application::GetInstance().OnDataLoad();
+				}
+				currentMapPath.clear();
+			}
+			return returnVal;
+		}
+
+		void MapFileManager::Clear()
+		{
+#ifdef EDITOR
+			palette::PaletteBrushManager::GetSingletonInstance().Clear();
+			palette::PaletteManager::GetSingletonInstance().Clear();
+			CameraManager::GetSingletonInstance().Clear();
+			Module_ScriptEditor::GetSingletonInstance().Clear();
+			EditorPopupManager::GetSingletonInstance().Clear();
+			commandManager.Clear();
+#endif
+			ShortcutSystem::Instance().Clear();
+			PlayableComponent::PreMapLoadAll();
+			instanceManager.Clear();
+			templateDataManager.Clear();
+			UUIDManager::GetSingletonInstance().Clear();
+		}
+	}
 }

@@ -178,7 +178,7 @@ void UnitProductor::AddDotweenComponent() const
     m_unitComponent->dotween = m_unitGameObject->AddComponent<Dotween>();
     // 마비 타이머 추가
     m_unitComponent->paralysisTimer = m_unitGameObject->AddComponent<TimerComponent>();
-    m_unitComponent->paralysisTimer->m_duration = 1;
+    m_unitComponent->paralysisTimer->pushDuration = 1;
     m_unitComponent->paralysisTimer->onCompleteFunction = [m_unitComponent = m_unitComponent]()
         {
             m_unitComponent->ReportStatusEffectEnded(StatusEffect::StatusEffectEnum::Paralysis);
@@ -187,7 +187,7 @@ void UnitProductor::AddDotweenComponent() const
     /// 넉백 타이머 추가
     m_unitComponent->knockBackTimer = m_unitGameObject->AddComponent<TimerComponent>();
 
-    m_unitComponent->knockBackTimer->m_duration = 0.5f;
+    m_unitComponent->knockBackTimer->pushDuration = 0.5f;
     m_unitComponent->knockBackStartPoint = m_unitComponent->GetTransform()->GetWorldPosition();
     m_unitComponent->knockBackTimer->onUpdate = [m_unitComponent = m_unitComponent](float normT)
         {

@@ -5,45 +5,45 @@
 
 void FieldDamage::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 {
-	m_currentOnFieldUnits.insert(opponentUnit);
+    m_currentOnFieldUnits.insert(opponentUnit);
 }
 
 void FieldDamage::Start()
 {
-	SetFieldSkillMembers();
-	//m_damageTimer = StatusTimerPool::Instance().Borrow();
+    SetFieldSkillMembers();
+    //m_damageTimer = StatusTimerPool::Instance().Borrow();
 }
 
 void FieldDamage::Update()
 {
-	m_fieldDamageElapsed += Time::GetDeltaTime();
+    m_fieldDamageElapsed += Time::GetDeltaTime();
 
-	if (m_fieldDamageElapsed >= m_fieldDamageDelay)
-	{
-		if (!m_currentOnFieldUnits.empty())
-		{
-			for (auto e : m_currentOnFieldUnits)
-			{
-				e->Damaged(m_fieldDamage);
-			}
-		}
+    if (m_fieldDamageElapsed >= m_fieldDamageDelay)
+    {
+        if (!m_currentOnFieldUnits.empty())
+        {
+            for (auto e : m_currentOnFieldUnits)
+            {
+                e->Damaged(m_fieldDamage);
+            }
+        }
 
-		m_fieldDamageElapsed = 0.0f;
-	}
+        m_fieldDamageElapsed -= m_fieldDamageDelay;
+    }
 }
 
 void FieldDamage::OnTriggerExit(physics::Collider* collider)
 {
-	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
-		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Enemy)
-	{
-		m_currentOnFieldUnits.erase(colliderUnitComponent);
-	}
+    if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+        colliderUnitComponent != nullptr &&
+        colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Enemy)
+    {
+        m_currentOnFieldUnits.erase(colliderUnitComponent);
+    }
 }
 
 void FieldDamage::ActivateFieldTimer()
 {
-	m_damageTimer->ActivateTimer();
+    m_damageTimer->ActivateTimer();
 }
 

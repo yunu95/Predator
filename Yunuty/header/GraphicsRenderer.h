@@ -89,6 +89,7 @@ namespace yunutyEngine
             //{ clickEventCallback = callback; };
 
             void SetUseIBL(bool useIBL);
+            void SetLightMap(const std::wstring& lightMapName);
         private:
             //static void CallClickEventCallback(yunuGI::IRenderable* arg) { instance->clickEventCallback(arg); }
             void Render();

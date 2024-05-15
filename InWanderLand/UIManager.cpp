@@ -41,7 +41,7 @@ void UIManager::FadeOutRight(float duration)
 {
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight); !elm->GetGameObject()->GetActive())
     {
-        elm->enableTransition->m_duration = duration;
+        elm->enableTransition->pushDuration = duration;
         elm->EnableElement();
     }
 }
@@ -49,7 +49,7 @@ void UIManager::FadeOutLeft(float duration)
 {
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft); !elm->GetGameObject()->GetActive())
     {
-        elm->enableTransition->m_duration = duration;
+        elm->enableTransition->pushDuration = duration;
         elm->EnableElement();
     }
 }
@@ -57,7 +57,7 @@ void UIManager::FadeOutBottom(float duration)
 {
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_TopToBottom); !elm->GetGameObject()->GetActive())
     {
-        elm->enableTransition->m_duration = duration;
+        elm->enableTransition->pushDuration = duration;
         elm->EnableElement();
     }
 }
@@ -65,7 +65,7 @@ void UIManager::FadeOutTop(float duration)
 {
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_BottomToTop); !elm->GetGameObject()->GetActive())
     {
-        elm->enableTransition->m_duration = duration;
+        elm->enableTransition->pushDuration = duration;
         elm->EnableElement();
     }
 }
@@ -73,22 +73,22 @@ void UIManager::FadeIn(float duration)
 {
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_TopToBottom); elm->GetGameObject()->GetActive())
     {
-        elm->disableTransition->m_duration = duration;
+        elm->disableTransition->pushDuration = duration;
         elm->DisableElement();
     }
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft); elm->GetGameObject()->GetActive())
     {
-        elm->disableTransition->m_duration = duration;
+        elm->disableTransition->pushDuration = duration;
         elm->DisableElement();
     }
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_BottomToTop); elm->GetGameObject()->GetActive())
     {
-        elm->disableTransition->m_duration = duration;
+        elm->disableTransition->pushDuration = duration;
         elm->DisableElement();
     }
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight); elm->GetGameObject()->GetActive())
     {
-        elm->disableTransition->m_duration = duration;
+        elm->disableTransition->pushDuration = duration;
         elm->DisableElement();
     }
 }
@@ -539,7 +539,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
     if (uiData.customFlags & (int)UIExportFlag::TimeStopOnEnable)
     {
         element->timePauseOnEnable = uiObject->AddComponent<TimePauseTimer>();
-        element->timePauseOnEnable->m_duration = uiData.timeStoppingDuration;
+        element->timePauseOnEnable->pushDuration = uiData.timeStoppingDuration;
         element->timePauseOnEnable->Init();
     };
     if (uiData.customFlags & (int)UIExportFlag::ColorTintOnEnable)
@@ -548,7 +548,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         element->colorTintOnEnable->uiImage = element->imageComponent.lock().get();
         element->colorTintOnEnable->startColor = yunuGI::Color{ uiData.colorTintOnEnableStart[0],uiData.colorTintOnEnableStart[1],uiData.colorTintOnEnableStart[2],uiData.colorTintOnEnableStart[3] };
         element->colorTintOnEnable->endColor = yunuGI::Color{ uiData.colorTintOnEnableEnd[0],uiData.colorTintOnEnableEnd[1],uiData.colorTintOnEnableEnd[2],uiData.colorTintOnEnableEnd[3] };
-        element->colorTintOnEnable->m_duration = uiData.colorTintOnEnableDuration;
+        element->colorTintOnEnable->pushDuration = uiData.colorTintOnEnableDuration;
         element->colorTintOnEnable->uiCurveType = uiData.colorTintOnEnableCurveType;
         element->colorTintOnEnable->disableOnEnd = false;
         element->colorTintOnEnable->Init();
@@ -559,7 +559,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         element->colorTintOnDisable->uiImage = element->imageComponent.lock().get();
         element->colorTintOnDisable->startColor = yunuGI::Color{ uiData.colorTintOnDisableStart[0],uiData.colorTintOnDisableStart[1],uiData.colorTintOnDisableStart[2],uiData.colorTintOnDisableStart[3] };
         element->colorTintOnDisable->endColor = yunuGI::Color{ uiData.colorTintOnDisableEnd[0],uiData.colorTintOnDisableEnd[1],uiData.colorTintOnDisableEnd[2],uiData.colorTintOnDisableEnd[3] };
-        element->colorTintOnDisable->m_duration = uiData.colorTintOnDisableDuration;
+        element->colorTintOnDisable->pushDuration = uiData.colorTintOnDisableDuration;
         element->colorTintOnDisable->uiCurveType = uiData.colorTintOnDisableCurveType;
         element->colorTintOnDisable->disableOnEnd = true;
         element->colorTintOnDisable->Init();
@@ -570,7 +570,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         element->linearClippingTimerOnEnable->uiImage = element->imageComponent.lock().get();
         element->linearClippingTimerOnEnable->clipDirection = { uiData.linearClipOnEnableDir[0], uiData.linearClipOnEnableDir[1] };
         element->linearClippingTimerOnEnable->disableOnEnd = false;
-        element->linearClippingTimerOnEnable->m_duration = uiData.linearClipOnEnableDuration;
+        element->linearClippingTimerOnEnable->pushDuration = uiData.linearClipOnEnableDuration;
         element->linearClippingTimerOnEnable->startPos = { uiData.linearClipOnEnableStart[0], uiData.linearClipOnEnableStart[1] };
         element->linearClippingTimerOnEnable->uiCurveType = uiData.linearClipOnEnableCurveType;
         element->linearClippingTimerOnEnable->reverseOffset = false;
@@ -582,7 +582,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         element->linearClippingTimerOnDisable->uiImage = element->imageComponent.lock().get();
         element->linearClippingTimerOnDisable->clipDirection = { uiData.linearClipOnDisableDir[0], uiData.linearClipOnDisableDir[1] };
         element->linearClippingTimerOnDisable->disableOnEnd = true;
-        element->linearClippingTimerOnDisable->m_duration = uiData.linearClipOnDisableDuration;
+        element->linearClippingTimerOnDisable->pushDuration = uiData.linearClipOnDisableDuration;
         element->linearClippingTimerOnDisable->startPos = { uiData.linearClipOnDisableStart[0], uiData.linearClipOnDisableStart[1] };
         element->linearClippingTimerOnDisable->uiCurveType = uiData.linearClipOnDisableCurveType;
         element->linearClippingTimerOnDisable->reverseOffset = true;
@@ -623,7 +623,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
     {
         element->disableAfterEnable = element->GetGameObject()->AddComponent<TimerComponent>();
         element->disableAfterEnable->isRealtime = true;
-        element->disableAfterEnable->m_duration = uiData.disableAfterEnable_delayUntilDisable;
+        element->disableAfterEnable->pushDuration = uiData.disableAfterEnable_delayUntilDisable;
         element->disableAfterEnable->onCompleteFunction = [=]() {element->DisableElement(); };
     }
     if (uiData.customFlags2 & (int)UIExportFlag2::Dialogue_Manual)
@@ -750,8 +750,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         std::transform(uiData.hoverEnableTargets.begin(), uiData.hoverEnableTargets.end(), std::back_inserter(tooltipTargets), [&](int idx) {return GetUIElementWithIndex(idx); });
         for (auto each : tooltipTargets)
         {
-            each->GetGameObject()->SetSelfActive(false);
-            each->enabled = false;
+            each->DisableElementInstant();
         }
         button->AddButtonOnMouseFunction([=]()
             {
@@ -772,7 +771,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     if (uiData.customFlags & (int)UIExportFlag::IsPoppingUp)
     {
         element->scalePopUpTransition = element->GetGameObject()->AddComponent<PopupOnEnable>();
-        element->scalePopUpTransition->m_duration = uiData.popUpDuration;
+        element->scalePopUpTransition->pushDuration = uiData.popUpDuration;
         element->scalePopUpTransition->x = uiData.popUpX;
         element->scalePopUpTransition->y = uiData.popUpY;
         element->scalePopUpTransition->z = uiData.popUpZ;
@@ -781,7 +780,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     if (uiData.customFlags & (int)UIExportFlag::IsPoppingDown)
     {
         element->scalePopDownTransition = element->GetGameObject()->AddComponent<PopDownOnDisable>();
-        element->scalePopDownTransition->m_duration = uiData.popDownDuration;
+        element->scalePopDownTransition->pushDuration = uiData.popDownDuration;
         element->scalePopDownTransition->x = uiData.popDownX;
         element->scalePopDownTransition->y = uiData.popDownY;
         element->scalePopDownTransition->z = uiData.popDownZ;
@@ -790,7 +789,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     if (uiData.customFlags & (int)UIExportFlag::IsPulsing)
     {
         auto pulsingUI = element->GetGameObject()->AddComponent<PulsingUI>();
-        pulsingUI->m_duration = uiData.pulsingPeriod;
+        pulsingUI->pushDuration = uiData.pulsingPeriod;
         pulsingUI->pulsingMin = uiData.pulsingMin;
         pulsingUI->pulsingMax = uiData.pulsingMax;
         pulsingUI->Init();
@@ -809,7 +808,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     {
         element->soundOnClick = element->GetGameObject()->AddComponent<SoundPlayingTimer>();
         element->soundOnClick->soundPath = uiData.soundOnClick;
-        element->soundOnClick->m_duration = uiData.soundOnClick_delay;
+        element->soundOnClick->pushDuration = uiData.soundOnClick_delay;
         element->button->AddButtonClickFunction([=]()
             {
                 element->soundOnClick->ActivateTimer();
@@ -820,7 +819,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     {
         element->soundOnHover = element->GetGameObject()->AddComponent<SoundPlayingTimer>();
         element->soundOnHover->soundPath = uiData.soundOnHover;
-        element->soundOnHover->m_duration = uiData.soundOnHover_delay;
+        element->soundOnHover->pushDuration = uiData.soundOnHover_delay;
         element->button->AddButtonOnMouseFunction([=]()
             {
                 element->soundOnHover->ActivateTimer();
@@ -831,14 +830,14 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     {
         element->soundOnEnable = element->GetGameObject()->AddComponent<SoundPlayingTimer>();
         element->soundOnEnable->soundPath = uiData.soundOnEnable;
-        element->soundOnEnable->m_duration = uiData.soundOnEnable_delay;
+        element->soundOnEnable->pushDuration = uiData.soundOnEnable_delay;
         element->soundOnEnable->Init();
     }
     if (uiData.customFlags & (int)UIExportFlag::PlaySoundOnDisable)
     {
         element->soundOnDisable = element->GetGameObject()->AddComponent<SoundPlayingTimer>();
         element->soundOnDisable->soundPath = uiData.soundOnDisable;
-        element->soundOnDisable->m_duration = uiData.soundOnDisable_delay;
+        element->soundOnDisable->pushDuration = uiData.soundOnDisable_delay;
         element->soundOnDisable->Init();
     }
 
@@ -910,14 +909,12 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
 #ifdef EDITOR
         if (uiData.disableOnStartEdtior)
         {
-            element->GetGameObject()->SetSelfActive(false);
-            element->enabled = false;
+            element->DisableElementInstant();
         }
 #else
         if (uiData.disableOnStartExe)
         {
-            element->GetGameObject()->SetSelfActive(false);
-            element->enabled = false;
+            element->DisableElementInstant();
         }
 #endif
     }

@@ -10,14 +10,12 @@ class StatusTimer;
 class BlindFieldComponent : public FieldDamage
 {
 public:
-	virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) override;
-
+    virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) override;
+    float m_blindPersistTime{ 0 };
 private:
-	StatusTimer* m_blindTimer;
+    StatusTimer* m_blindTimer;
 
-	float m_blindPersistTime;
-
-	virtual void SetFieldSkillMembers() override;
+    virtual void SetFieldSkillMembers() override;
 
 };
 

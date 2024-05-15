@@ -48,7 +48,7 @@ void BleedingComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 
 			StatusTimer* bleedingTimer = StatusTimerPool::Instance().Borrow();
 			bleedingTimer->m_isRepeated = true;
-			bleedingTimer->m_duration = m_bleedDuration;
+			bleedingTimer->pushDuration = m_bleedDuration;
 			bleedingTimer->onCompleteFunction = [=]()
 				{
 					/// 출혈의 지속시간이 종료되거나 유닛이 사망하면 erase해준다.

@@ -19,6 +19,16 @@ namespace yunuGIAdapter
             InstancingManager::Instance.Get().SortByCameraDirection();
         };
 
+		virtual void SetUseIBL(bool useIBL) override
+        {
+            NailEngine::Instance.Get().SetUseIBL(useIBL);
+        }
+
+		virtual void SetLightMap(const std::wstring& lightMapName) override
+        {
+            NailEngine::Instance.Get().SetLightMap(lightMapName);
+        }
+
         virtual void SetOutputWindow(UINT64 hWnd)
         {
             NailEngine::Instance.Get().Init(hWnd);
@@ -45,11 +55,6 @@ namespace yunuGIAdapter
         {
             NailEngine::Instance.Get().Finalize();
         };
-
-        virtual void SetUseIBL(bool useIBL)
-        {
-            NailEngine::Instance.Get().SetUseIBL(useIBL);
-        }
 
         virtual void SetUseLightMap(bool useLightMap) override
         {

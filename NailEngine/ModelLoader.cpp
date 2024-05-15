@@ -163,9 +163,9 @@ void ModelLoader::ParseNode(const aiNode* node, const aiScene* scene, FBXNode* f
 				vertex = { dvertex, DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f}, duv, lightUV, dnormal, DirectX::SimpleMath::Vector3{tangent.x,tangent.y,tangent.z} };
 			}
 
-			maxX = max(dvertex.x, maxX);
-			maxY = max(dvertex.y, maxY);
-			maxZ = max(dvertex.z, maxZ);
+			maxX = std::max(dvertex.x, maxX);
+			maxY = std::max(dvertex.y, maxY);
+			maxZ = std::max(dvertex.z, maxZ);
 
 			minX = std::min(dvertex.x, minX);
 			minY = std::min(dvertex.y, minY);
@@ -233,7 +233,10 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 
 	// Material Name
 	fbxMeshData.material.materialName = aiStringToWString(material->GetName());
-
+	if (fbxMeshData.material.materialName == L"M_Wood")
+	{
+		int a = 1;
+	}
 	auto materialPtr = ResourceManager::Instance.Get().GetMaterial(fbxMeshData.material.materialName);
 
 	// Albedo Texture

@@ -34,6 +34,15 @@ namespace yunuGIAdapter
         virtual void SetActive(bool isActive)
         {
             renderable->SetActive(isActive);
+            /*if (isActive)
+            {
+                RenderSystem::Instance.Get().PushUIObject(renderable);
+                RenderSystem::Instance.Get().ReSortUIObject(std::static_pointer_cast<UIImage>(renderable)->layer, renderable);
+            }
+            else
+            {
+                RenderSystem::Instance.Get().PopUIObject(renderable);
+            }*/
         };
         virtual bool IsActive() override
         {

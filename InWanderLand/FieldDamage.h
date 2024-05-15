@@ -11,26 +11,24 @@ class StatusTimer;
 class FieldDamage : public StatusEffectTrigger
 {
 protected:
-	StatusTimer* m_damageTimer;			// 기본적인 장판 틱 데미지 타이머, 추가로 사용하고자 할 땐 자식 클래스에서 다른 타이머를 새로 만들어주기.
-	
-	std::set<Unit*> m_currentOnFieldUnits;
+    std::set<Unit*> m_currentOnFieldUnits;
 
-	float m_fieldDamageElapsed = 0.0f;
+    float m_fieldDamageElapsed = 0.0f;
 
-	float m_fieldDamage;
-	float m_fieldDamageDelay;
-
-	virtual void SetFieldSkillMembers() = 0;
+    virtual void SetFieldSkillMembers() = 0;
 
 public:
-	virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) override;
-	virtual void Start() override;
-	virtual void Update() override;
+    virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) override;
+    virtual void Start() override;
+    virtual void Update() override;
+
+    StatusTimer* m_damageTimer;			// 기본적인 장판 틱 데미지 타이머, 추가로 사용하고자 할 땐 자식 클래스에서 다른 타이머를 새로 만들어주기.
+    float m_fieldDamage;
+    float m_fieldDamageDelay;
+public:
+    virtual void OnTriggerExit(physics::Collider* collider) override;
 
 public:
-	virtual void OnTriggerExit(physics::Collider* collider) override;
-
-public:
-	virtual void ActivateFieldTimer();
+    virtual void ActivateFieldTimer();
 };
 
