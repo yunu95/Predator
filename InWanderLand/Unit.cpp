@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include "PlayerSkillSystem.h"
 #include "ChessTrapSkillSystem.h"
+#include "SpikeSkillSystem.h"
 #include "BossSkillSystem.h"
 #include "Dotween.h"
 #include "TacticModeSystem.h"
@@ -721,19 +722,18 @@ void Unit::AttackUpdate()
 
 void Unit::SkillUpdate()
 {
-    skillFunctionStartElapsed += Time::GetDeltaTime() * m_localTimeScale;
-
-    if (skillFunctionStartElapsed >= m_currentSelectedSkillEngageDelay && !isSkillUsed)
+    if (!isSkillUsed)
     {
-        isSkillUsed = true;
-        skillFunctionStartElapsed = 0.0f;
-        ChangeAnimation(m_currentSkillAnimation);
+		skillFunctionStartElapsed += Time::GetDeltaTime() * m_localTimeScale;
 
-        if (m_unitType == UnitType::ChessTrap || m_unitType == UnitType::SpikeTrap)
-        {
-            GetGameObject()->GetComponent<ChessTrapSkillSystem>()->ActivateSkill(SkillEnum::BossSkillOne, Vector3d::zero);
-        }
+		if (skillFunctionStartElapsed >= m_currentSelectedSkillEngageDelay)
+		{
+			isSkillUsed = true;
+			skillFunctionStartElapsed = 0.0f;
+			ChangeAnimation(m_currentSkillAnimation);
+		}
     }
+ 
 }
 
 void Unit::ChaseUpdate()
@@ -1185,7 +1185,7 @@ void Unit::SetUnitStateToDeath()
 }
 
 void Unit::SetUnitStateToSkill()
-{
+{ 
     currentOrder = UnitState::Skill;
 }
 

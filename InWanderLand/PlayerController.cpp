@@ -220,6 +220,9 @@ void PlayerController::ChangeLeaderPlayerUnit(Unit::UnitType p_num)
     {
         e.second->ReportLeaderUnitChanged(p_num);
     }
+
+    currentSelectedSerialNumber = p_num;
+    SetRightClickFunction();
 }
 
 std::unordered_map<Unit::UnitType, Unit*> PlayerController::GetPlayerMap() const

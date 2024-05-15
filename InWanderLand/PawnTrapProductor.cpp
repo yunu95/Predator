@@ -89,7 +89,7 @@ Unit* PawnTrapProductor::CreateUnit(Vector3d startPos)
 	triggerSensorObject->SetParent(m_unitGameObject);
 	auto triggerCollider = triggerSensorObject->AddComponent<physics::SphereCollider>();
 	triggerCollider->SetRadius(trapTriggerRadius);
-	triggerSensorObject->AddComponent<TrapTriggerSensor>()->trapUnit = m_unitComponent;
+	triggerSensorObject->AddComponent<TrapTriggerSensor>()->trapChessSkillSystem = chessSkillSystem;
 	triggerSensorObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
 	return m_unitComponent;

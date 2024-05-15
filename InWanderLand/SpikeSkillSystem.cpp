@@ -2,31 +2,40 @@
 
 void SpikeSkillSystem::Start()
 {
-	SetSkillRequirmentsActive(m_spikeDamageRequirement, false);
 	SetOtherComponentsAsMember();
-	m_skillUsageDuration = 5.0f;
+	m_skillUsageDuration = 2.0f;
+
+	m_spikeReachPosition = GetTransform()->GetWorldPosition();
+	m_spikeStartPosition = GetTransform()->GetWorldPosition() - Vector3d(0, 5.0f, 0);
+	GetTransform()->SetWorldPosition(m_spikeStartPosition);
+
+	SetSkillRequirmentsActive(m_spikeDamageRequirement, false);
+	//SetSkillRequirmentsPosition(m_spikeDamageRequirement, m_spikeStartPosition);
 	//m_unitComponent->m_currentSelectedSkill
 }
 
 void SpikeSkillSystem::Update()
 {
-	m_elapsed += Time::GetDeltaTime();
-
-	if (m_elapsed >= m_skillUsageDuration)
+	if (!isSkillOperating)
 	{
 		m_unitComponent->SetUnitStateToSkill();
-		m_elapsed = 0.0f;
+		isSkillOperating = true;
+		ActivateSkill(Unit::SkillEnum::BossSkillOne, Vector3d::zero);
 	}
+
 }
 
 void SpikeSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition)
 {
 	SetSkillRequirmentsActive(m_spikeDamageRequirement, true);
 	
-	m_unitDotween->DONothing(m_colliderRemainDuration).OnComplete([=]()
+	m_unitDotween->DOMove(m_spikeReachPosition, 1.0f).OnComplete([=]()
 		{
-			SetSkillRequirmentsActive(m_spikeDamageRequirement, false);
-			m_unitComponent->SetUnitStateIdle();
+			m_unitDotween->DOMove(m_spikeStartPosition, 2.0f).SetDelay(2.0f).OnComplete([=]()
+				{
+					SetSkillRequirmentsActive(m_spikeDamageRequirement, false);
+					isSkillOperating = false;
+				});
 		});
 }
 

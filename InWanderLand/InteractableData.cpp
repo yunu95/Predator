@@ -125,7 +125,7 @@ namespace application
 #pragma region
             /// SM 인데 Unit 으로 처리되는 애들이면 unitList 에 추가해!
             static std::set<std::string> unitList = { "SKM_Hansel", "SKM_HeartQueen", "SKM_Monster1", "SKM_Monster2", "SKM_Robin", "SKM_Ursula"
-                , "SM_Chess_Bishop", "SM_Chess_Pawn", "SM_Chess_Rook"}; // 여기!
+                , "SM_Chess_Bishop", "SM_Chess_Pawn", "SM_Chess_Rook", "SM_Spike01"}; // 여기!
 
 			Vector3d startPosition = Vector3d(pod.position.x, 0, pod.position.z);
 
@@ -153,6 +153,10 @@ namespace application
 				{
 					currentSelectedProductor = &RookTrapProductor::Instance();
 				}
+                else if (pod.templateData->pod.fBXName == "SM_Spike01")
+                {
+					currentSelectedProductor = &SpikeTrapProductor::Instance();
+                }
 				inGameInteractable = currentSelectedProductor->CreateUnit(startPosition)->GetGameObject();
 
                 /// Unit 이면 inGameUnit 을
