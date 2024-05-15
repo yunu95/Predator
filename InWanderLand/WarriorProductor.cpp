@@ -19,7 +19,7 @@ void WarriorProductor::SetUnitData()
     m_unitType = Unit::UnitType::Warrior;
     m_unitSide = Unit::UnitSide::Player;
 
-    m_healthPoint = 250;
+    m_maxHealth = 250;
     m_manaPoint = 100;
 
     m_autoAttackDamage = 10;

@@ -4,6 +4,7 @@
 #include "AttackSystem.h"
 #include "InputManager.h"
 #include "PlayerSkillSystem.h"
+#include "ChessTrapSkillSystem.h"
 #include "BossSkillSystem.h"
 #include "Dotween.h"
 #include "TacticModeSystem.h"
@@ -267,11 +268,22 @@ void Unit::Start()
         m_playerSkillSystem = GetGameObject()->GetComponent<PlayerSkillSystem>();
     }
 
-    m_animatorComponent->Play(unitAnimations.m_idleAnimation);
+    if (m_animatorComponent)
+        m_animatorComponent->Play(unitAnimations.m_idleAnimation);
+
+    if (m_unitType == UnitType::ChessTrap)
+    {
+        int a = 0;
+    }
 }
 
 void Unit::Update()
 {
+
+	if (m_unitType == UnitType::ChessTrap)
+	{
+		int a = 0;
+	}
     if (m_navAgentComponent && isFollowingNavAgent)
         GetTransform()->SetWorldPosition(m_navAgentComponent->GetTransform()->GetWorldPosition());
     if (m_unitSide == UnitSide::Player)
@@ -432,6 +444,7 @@ void Unit::SkillEngage()
 {
     currentOrder = UnitState::Skill;
     ChangeAnimation(unitAnimations.m_idleAnimation);
+    isSkillUsed = false;
     skillFunctionStartElapsed = 0.0f;
     int tempRand = rand() % 3 + 1;
 
@@ -469,15 +482,18 @@ void Unit::SkillEngage()
     if (m_unitType != UnitType::SpikeTrap && m_unitType != UnitType::ChessTrap)
         dotween->DOLookAt(m_currentSkillPosition, rotateTime, false);
 
-    m_currentSelectedSkillEngageDelay = m_skillDurationMap.find(m_currentSelectedSkill)->second;
-    m_currentSkillAnimation = m_skillAnimationMap.find(m_currentSelectedSkill)->second;
-    m_selectedSkillTimingFrame = m_skillTimingFrameMap.find(m_currentSelectedSkill)->second;
-
-    //m_currentSkillAnimation->SetEventFunc(m_selectedSkillTimingFrame, [=]()
-    //	{
-    //		m_skillSystemComponent->ActivateSkill(m_currentSelectedSkill, m_currentSkillPosition);
-    //	});
-
+    if (!m_skillDurationMap.empty())
+    {
+		m_currentSelectedSkillEngageDelay = m_skillDurationMap.find(m_currentSelectedSkill)->second;
+    }
+    if (!m_skillAnimationMap.empty())
+    {
+		m_currentSkillAnimation = m_skillAnimationMap.find(m_currentSelectedSkill)->second;
+    }
+    if (!m_selectedSkillTimingFrame)
+    {
+		m_selectedSkillTimingFrame = m_skillTimingFrameMap.find(m_currentSelectedSkill)->second;
+    }
 
     StopMove();
 }
@@ -707,10 +723,16 @@ void Unit::SkillUpdate()
 {
     skillFunctionStartElapsed += Time::GetDeltaTime() * m_localTimeScale;
 
-    if (skillFunctionStartElapsed >= m_currentSelectedSkillEngageDelay)
+    if (skillFunctionStartElapsed >= m_currentSelectedSkillEngageDelay && !isSkillUsed)
     {
+        isSkillUsed = true;
         skillFunctionStartElapsed = 0.0f;
         ChangeAnimation(m_currentSkillAnimation);
+
+        if (m_unitType == UnitType::ChessTrap || m_unitType == UnitType::SpikeTrap)
+        {
+            GetGameObject()->GetComponent<ChessTrapSkillSystem>()->ActivateSkill(SkillEnum::BossSkillOne, Vector3d::zero);
+        }
     }
 }
 
@@ -807,7 +829,8 @@ void Unit::ChangeAnimation(yunuGI::IAnimation* p_anim)
     if (m_latestChangedAnimation == p_anim)
         return;
 
-    m_animatorComponent->ChangeAnimation(p_anim, animationLerpDuration, animationTransitionSpeed);
+    if (p_anim)
+        m_animatorComponent->ChangeAnimation(p_anim, animationLerpDuration, animationTransitionSpeed);
 
     m_latestChangedAnimation = p_anim;
 }
@@ -816,7 +839,7 @@ void Unit::ChangeAnimation(yunuGI::IAnimation* p_anim)
 
 void Unit::CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation)
 {
-    if (m_animatorComponent->GetGI().GetCurrentAnimation() != currentStateAnimation)
+    if (m_animatorComponent && m_animatorComponent->GetGI().GetCurrentAnimation() != currentStateAnimation)
     {
         ChangeAnimation(currentStateAnimation);
     }

@@ -10,7 +10,7 @@ void SpikeTrapProductor::SetUnitData()
 	m_unitType = Unit::UnitType::SpikeTrap;
 	m_unitSide = Unit::UnitSide::Enemy;
 
-	m_healthPoint = 1;
+	m_maxHealth = 1;
 	m_manaPoint = 100;
 
 	m_autoAttackDamage = 15;

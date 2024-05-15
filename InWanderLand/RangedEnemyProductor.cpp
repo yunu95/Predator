@@ -13,7 +13,7 @@ void RangedEnemyProductor::SetUnitData()
 	m_unitType = Unit::UnitType::RangedEnemy;
 	m_unitSide = Unit::UnitSide::Enemy;
 
-	m_healthPoint = 10;
+	m_maxHealth = 10;
 	m_manaPoint = 100;
 
 	m_autoAttackDamage = 10;

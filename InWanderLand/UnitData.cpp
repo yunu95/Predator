@@ -14,9 +14,6 @@
 #include "RangedEnemyProductor.h"
 #include "BossProductor.h"
 #include "SpikeTrapProductor.h"
-#include "PawnTrapProductor.h"
-#include "BishopTrapProductor.h"
-#include "RookTrapProductor.h"
 #include "RangedEnemyPool.h"
 #include "MeleeEnemyPool.h"
 #include "GameManager.h"
@@ -137,13 +134,10 @@ namespace application
             if (!isSelectorInitialized)
             {
                 productorSelector.push_back(&WarriorProductor::Instance());
-                /*productorSelector.push_back(&HealerProductor::Instance());
-                productorSelector.push_back(&MagicianProductor::Instance());*/
+                productorSelector.push_back(&HealerProductor::Instance());
+                productorSelector.push_back(&MagicianProductor::Instance());
                 productorSelector.push_back(&MeleeEnemyProductor::Instance());
                 productorSelector.push_back(&RangedEnemyProductor::Instance());
-                productorSelector.push_back(&PawnTrapProductor::Instance());
-                productorSelector.push_back(&RookTrapProductor::Instance());
-                productorSelector.push_back(&BishopTrapProductor::Instance());
                 productorSelector.push_back(&SpikeTrapProductor::Instance());
                 productorSelector.push_back(&BossProductor::Instance());
                 isSelectorInitialized = true;
@@ -166,23 +160,6 @@ namespace application
                 if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::SpikeTrap)
                 {
                     currentSelectedProductor = &SpikeTrapProductor::Instance();
-                    currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-                    inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-                }
-                else if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::ChessTrap)
-                {
-                    if (pod.templateData->pod.chessType == 0)
-                    {
-                        currentSelectedProductor = &PawnTrapProductor::Instance();
-                    }
-                    else if (pod.templateData->pod.chessType == 1)
-                    {
-                        currentSelectedProductor = &RookTrapProductor::Instance();
-                    }
-                    else
-                    {
-                        currentSelectedProductor = &BishopTrapProductor::Instance();
-                    }
                     currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                     inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
                 }
@@ -220,42 +197,20 @@ namespace application
 
                 tempShortCutIndex = 2;
             }
- /*           else if (pod.templateData->pod.skinnedFBXName == "SKM_Ursula")
+            else if (pod.templateData->pod.skinnedFBXName == "SKM_HeartQueen")
             {
-				tempShortCutIndex = 1;
-                currentSelectedProductor = &MagicianProductor::Instance();
+				currentSelectedProductor = &BossProductor::Instance();
 				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
 				inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+				tempShortCutIndex = 2;
             }
-			else if (pod.templateData->pod.skinnedFBXName == "SKM_Hansel")
-			{
-				tempShortCutIndex = 1;
-				currentSelectedProductor = &HealerProductor::Instance();
-				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-				inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-			}
-			else if (pod.templateData->pod.skinnedFBXName == "SKM_Robin")
-			{
-				tempShortCutIndex = 1;
-				currentSelectedProductor = &WarriorProductor::Instance();
-				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-				inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-			}*/
             else
             {
                 tempShortCutIndex = 1;
 
                 if (pod.templateData->pod.skinnedFBXName == "SKM_Robin")
                 {
-                   /// 임시 - 보스
-                   if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::Boss)
-                   {
-					   currentSelectedProductor = &BossProductor::Instance();
-                   }
-                   else
-                   {
-					   currentSelectedProductor = &WarriorProductor::Instance();
-                   }
+					currentSelectedProductor = &WarriorProductor::Instance();
 					//currentSelectedProductor = &WarriorProductor::Instance();
                 }
                 else if (pod.templateData->pod.skinnedFBXName == "SKM_Ursula")

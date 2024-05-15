@@ -20,7 +20,7 @@ namespace application
             std::string skinnedFBXName = std::string();
 
             int unitType;
-            float m_healthPoint;
+            float max_Health;
 
             float m_autoAttackDamage;
             int m_criticalHitProbability;				// 치명타 확률

@@ -12,7 +12,7 @@ void PawnTrapProductor::SetUnitData()
 	m_unitType = Unit::UnitType::ChessTrap;
 	m_unitSide = Unit::UnitSide::Enemy;
 
-	m_healthPoint = 1;
+	m_maxHealth = 1;
 	m_manaPoint = 100;
 
 	m_autoAttackDamage = 15;
@@ -44,7 +44,7 @@ void PawnTrapProductor::SingletonInitializer()
 Unit* PawnTrapProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
-	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
+	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Chess_Pawn");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
 	/// UnitComponent 추가
@@ -92,52 +92,5 @@ Unit* PawnTrapProductor::CreateUnit(Vector3d startPos)
 	triggerSensorObject->AddComponent<TrapTriggerSensor>()->trapUnit = m_unitComponent;
 	triggerSensorObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
-	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-	auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
-	auto& animList = rsrcManager->GetAnimationList();
-	for (auto each : animList)
-	{
-		if (each->GetName() == L"Ani_Monster1_Idle")
-		{
-			m_baseUnitAnimations.m_idleAnimation = each;
-			m_baseUnitAnimations.m_idleAnimation->SetLoop(true);
-			animator->PushAnimation(m_baseUnitAnimations.m_idleAnimation);
-			animator->Play(m_baseUnitAnimations.m_idleAnimation);
-		}
-		else if (each->GetName() == L"Ani_Monster1_Walk")
-		{
-			m_baseUnitAnimations.m_walkAnimation = each;
-			m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
-			animator->PushAnimation(m_baseUnitAnimations.m_walkAnimation);
-		}
-		else if (each->GetName() == L"Ani_Monster1_Attack")
-		{
-			m_baseUnitAnimations.m_attackAnimation = each;
-			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
-			animator->PushAnimation(m_baseUnitAnimations.m_attackAnimation);
-		}
-		if (each->GetName() == L"Ani_Monster1_Skill")
-		{
-			m_baseUnitAnimations.m_paralysisAnimation = each;
-			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
-			animator->PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
-		}
-		if (each->GetName() == L"Ani_Monster1_Skill")
-		{
-			m_baseUnitAnimations.m_deathAnimation = each;
-			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
-			animator->PushAnimation(m_baseUnitAnimations.m_deathAnimation);
-		}
-		/// Skill Animation
-		if (each->GetName() == L"Ani_Monster1_Skill")
-		{
-			each->SetLoop(false);
-			animator->PushAnimation(each);
-			m_baseUnitAnimations.m_skillOneAnimation = each;
-			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillOne, each);
-		}
-	}
-	m_unitComponent->unitAnimations = m_baseUnitAnimations;
-	SetUnitAnimationFunction();
 	return m_unitComponent;
 }

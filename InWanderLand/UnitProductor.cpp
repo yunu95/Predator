@@ -35,7 +35,7 @@ void UnitProductor::SetUnitComponentMembers()
     m_unitComponent->SetUnitType(m_unitType);
     m_unitComponent->SetUnitSide(m_unitSide);
 
-    m_unitComponent->SetUnitMaxHp(m_healthPoint);
+    m_unitComponent->SetUnitMaxHp(m_maxHealth);
     m_unitComponent->SetUnitAp(m_autoAttackDamage);
 
     m_unitComponent->SetAtkRadius(m_atkRadius);
@@ -101,11 +101,9 @@ void UnitProductor::SetUnitComponentMembers()
         break;
     case Unit::UnitType::SpikeTrap:
         m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.spikeTrapSkillDelay;
-        m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.spikeTrapSkillTimingFrame;
         break;
     case Unit::UnitType::ChessTrap:
         m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.chessTrapSkillDelay;
-        m_skillOneTimingFrame = application::GlobalConstant::GetSingletonInstance().pod.chessTrapSkillTimingFrame;
         break;
     case Unit::UnitType::TriggeredTrap:
         m_skillOneEngageDelay = application::GlobalConstant::GetSingletonInstance().pod.triggeredTrapSkillDelay;
@@ -273,7 +271,7 @@ void UnitProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p
 {
     //m_unitType = static_cast<Unit::UnitType>(p_podData.unitType);
     m_unitScaleMultipler = p_podData.unit_scale;
-    m_healthPoint = p_podData.m_healthPoint;
+    m_maxHealth = p_podData.max_Health;
     m_autoAttackDamage = p_podData.m_autoAttackDamage;
     m_criticalHitProbability = p_podData.m_criticalHitProbability;
     m_criticalHitMultiplier = p_podData.m_criticalHitMultiplier;
