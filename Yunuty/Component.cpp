@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "GameObject.h"
 #include "Transform.h"
+#include "YunutyCoroutine.h"
 
 using namespace yunutyEngine;
 
@@ -90,13 +91,13 @@ void yunutyEngine::Component::SetIsUpdating(bool isUpdating)
         gameObject->HandleComponentUpdateState(this);
     }
 };
-std::weak_ptr<yunutyEngine::Component::Coroutine> yunutyEngine::Component::StartCoroutine(Coroutine&& coroutine)
+std::weak_ptr<yunutyEngine::coroutine::Coroutine> yunutyEngine::Component::StartCoroutine(coroutine::Coroutine&& coroutine)
 {
-    auto coroutinePtr = std::make_shared<Coroutine>(std::move(coroutine));
+    auto coroutinePtr = std::make_shared<coroutine::Coroutine>(std::move(coroutine));
     coroutines.insert(coroutinePtr);
     return coroutinePtr;
 }
-void yunutyEngine::Component::DeleteCoroutine(const std::weak_ptr<Coroutine>& coroutine)
+void yunutyEngine::Component::DeleteCoroutine(const std::weak_ptr<coroutine::Coroutine>& coroutine)
 {
     coroutines.erase(coroutine.lock());
 }

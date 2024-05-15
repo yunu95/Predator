@@ -337,6 +337,15 @@
     <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\AnimationEventController">
       <UniqueIdentifier>{0edb1cdf-257b-4963-9137-6d439386b429}</UniqueIdentifier>
     </Filter>
+    <Filter Include="yunutyEngine\Coroutine">
+      <UniqueIdentifier>{cbcf0ea7-4bc4-4823-a282-36b7fa3ff1f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\Coroutine\YieldInstruction">
+      <UniqueIdentifier>{22944f5e-230e-48bf-845b-3d452d992b7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\Coroutine\YieldInstruction\WaitForSeconds">
+      <UniqueIdentifier>{9b4dd16b-de26-4d93-b47d-e63393b24eb5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -542,6 +551,9 @@
     </ClCompile>
     <ClCompile Include="AnimationEventController.cpp">
       <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\AnimationEventController</Filter>
+    </ClCompile>
+    <ClCompile Include="YunutyWaitForSeconds.cpp">
+      <Filter>yunutyEngine\Coroutine\YieldInstruction\WaitForSeconds</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -820,6 +832,15 @@
     </ClInclude>
     <ClInclude Include="header\AnimationEventController.h">
       <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\AnimationEventController</Filter>
+    </ClInclude>
+    <ClInclude Include="header\YunutyCoroutine.h">
+      <Filter>yunutyEngine\Coroutine</Filter>
+    </ClInclude>
+    <ClInclude Include="header\YunutyYieldInstruction.h">
+      <Filter>yunutyEngine\Coroutine\YieldInstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="header\YunutyWaitForSeconds.h">
+      <Filter>yunutyEngine\Coroutine\YieldInstruction\WaitForSeconds</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
