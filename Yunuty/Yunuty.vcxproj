@@ -248,6 +248,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="YunutyMathConstants.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="YunutyNavigationObstacle.cpp" />
+    <ClCompile Include="YunutyWaitForSeconds.cpp" />
     <ClCompile Include="_YunutyNavigationFieldImpl.cpp" />
     <ClCompile Include="_YunutyNavigationObstacleImpl.cpp" />
     <ClCompile Include="_YunutyPhysxContactCallback.cpp" />
@@ -312,6 +313,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="header\YunutySphereCollider.h" />
     <ClInclude Include="header\YunutyPhysicsMaterialInfo.h" />
     <ClInclude Include="header\YunutyNavigationObstacle.h" />
+    <ClInclude Include="header\YunutyCoroutine.h" />
+    <ClInclude Include="header\YunutyWaitForSeconds.h" />
+    <ClInclude Include="header\YunutyYieldInstruction.h" />
     <ClInclude Include="_YunutyBoxColliderImpl.h" />
     <ClInclude Include="_YunutyCapsuleColliderImpl.h" />
     <ClInclude Include="_YunutyColliderImpl.h" />

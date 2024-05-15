@@ -165,10 +165,21 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
             UpdateComponent(updateTargetComponents[i]);
             for (auto coroutine : updateTargetComponents[i]->coroutines)
             {
-                if (!coroutine->handle.done())
+                if (auto yield = coroutine->GetLastYield(); yield)
+                {
+                    yield->Update();
+                    if (yield->ShouldResume())
+                    {
+                        coroutine->handle.promise().yield = nullptr;
+                        coroutine->resume();
+                    }
+                }
+                else
+                {
                     coroutine->resume();
+                }
             }
-            std::erase_if(updateTargetComponents[i]->coroutines, [](std::shared_ptr<yunutyEngine::Component::Coroutine> coroutine) {return coroutine->handle.done(); });
+            std::erase_if(updateTargetComponents[i]->coroutines, [](std::shared_ptr<yunutyEngine::coroutine::Coroutine> coroutine) {return coroutine->handle.done(); });
         }
 
         auto stop = std::chrono::high_resolution_clock::now();

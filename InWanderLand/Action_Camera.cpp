@@ -57,7 +57,6 @@ namespace application
 			camGI.SetNear(endCameraNear);
 			camGI.SetFar(endCameraFar);
 			camGI.SetResolution(endWidth, endHeight);
-			mainCam->SetUpdateability(true);
 			co_return;
 		}
 
@@ -333,7 +332,6 @@ namespace application
 			camGI.SetNear(endCameraNear);
 			camGI.SetFar(endCameraFar);
 			camGI.SetResolution(endWidth, endHeight);
-			mainCam->SetUpdateability(true);
 			co_return;
 		}
 
