@@ -80,6 +80,8 @@ void PlayTimeRegionManager::AddRegionData(application::editor::RegionData* p_reg
 						e->SetSelfActive(false);
 					}
 
+					yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(false);
+					yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage2LightMap");
 				};
 		}
 		break;
