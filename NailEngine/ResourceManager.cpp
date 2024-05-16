@@ -626,10 +626,13 @@ void ResourceManager::SaveFBXData(std::filesystem::path path)
 		nlohmann::json jsonData;
 		std::string fbxName{ each.first.begin(), each.first.end() };
 		jsonData["FBXName : "] = fbxName;
-		if (fbxName == "SM_Hall_Floor")
+
+		std::string fbxKind = fbxName.substr(0, 3);
+		if (fbxKind == "SKM")
 		{
-			int a = 1;
+			continue;
 		}
+
 		SaveFBXChildData(each.second, jsonData);
 
 		jsonArrData.push_back(jsonData);
@@ -770,11 +773,17 @@ void ResourceManager::LoadFBXData(std::filesystem::path path)
 
 	for (const auto& fbxJson : jsonData)
 	{
+		auto str = String_To_Wstring(fbxJson["FBXName : "]);
+		auto fbxKind = str.substr(0, 3);
+		if (fbxKind == L"SKM")
+		{
+			continue;
+		}
+
 		yunuGI::FBXData* fbxData = new yunuGI::FBXData;
 
 		LoadFBXData(fbxJson, fbxData);
 
-		auto str = String_To_Wstring(fbxJson["FBXName : "]);
 
 		auto iter = fbxDataMap.find(String_To_Wstring(fbxJson["FBXName : "]));
 		if (iter == fbxDataMap.end())

@@ -122,10 +122,11 @@ void GraphicsTest()
     auto& animationList = _resourceManager->GetAnimationList();
     yunuGI::IAnimation* animation = nullptr;
     yunuGI::IAnimation* animation2 = nullptr;
+    yunuGI::IAnimation* animation3 = nullptr;
 
     for (auto& i : animationList)
     {
-        if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
+        if (i->GetName() == L"Ani_Ursula_Attack")
         {
             i->SetLoop(true);
             animation = i;
@@ -135,6 +136,12 @@ void GraphicsTest()
 		{
 			i->SetLoop(true);
             animation2 = i;
+		}
+
+		if (i->GetName() == L"Ani_Monster2_Skill")
+		{
+			i->SetLoop(true);
+			animation3 = i;
 		}
     }
 
@@ -151,45 +158,30 @@ void GraphicsTest()
         anim->PushAnimation(animation2);
         anim->Play(animation);
     }*/
-    //{
-    //    auto obj2 = Scene::getCurrentScene()->AddGameObject();
-    //    auto renderer = obj2->AddComponent<graphics::StaticMeshRenderer>();
-    //    renderer->GetGI().SetMesh(_resourceManager->GetMesh(L"Sphere"));
-    //    renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, _resourceManager->GetTexture(L"Texture/Lightmap-0_comp_light.exr"));
-    //}
+    {
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+		auto animator = obj2->GetComponent<yunutyEngine::graphics::Animator>();
+		animator->PushAnimation(animation2);
+		animator->Play(animation2);
+    }
 
     //{
     //    auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
     //}
 
-
-    //Ani_Monster1_Idle
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Ursula");
 		auto animator = obj2->GetComponent<yunutyEngine::graphics::Animator>();
 		animator->PushAnimation(animation);
 		animator->Play(animation);
 
-		auto child = obj2->GetChildren();
-		yunutyEngine::graphics::SkinnedMesh* renderer = nullptr;
-		for (auto& each : child)
-		{
-			renderer = each->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
-			if (renderer)
-			{
-				for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
-				{
-					renderer->GetGI().GetMaterial(i)->SetPixelShader(_resourceManager->GetShader(L"RimForwardPS.cso"));
-				}
-			}
-		}
 	}
+
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-        obj2->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
 		auto animator = obj2->GetComponent<yunutyEngine::graphics::Animator>();
-		animator->PushAnimation(animation);
-		animator->Play(animation);
+		animator->PushAnimation(animation3);
+		animator->Play(animation3);
 
 	}
     yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
