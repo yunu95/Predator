@@ -87,10 +87,12 @@ void GameManager::EngageCinematic()
 
 void GameManager::EndCinematic()
 {
+#ifdef EDITOR
 	if (!application::Application::GetInstance().IsContentsPlaying())
 	{
 		return;
 	}
+#endif
 
 	InputManager::Instance().SetInputManagerActive(true);
 	//SkillPreviewSystem::Instance().ActivateSkillPreview(false);
