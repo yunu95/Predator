@@ -1707,7 +1707,7 @@ void Unit::SetUnitStateDirectly(Unit::UnitState p_unitState)
         break;
     case Unit::UnitState::OffsetMove:
 	{
-		if (p_unitState == UnitState::Move)
+		if (unitFSM.currentState == UnitState::Move || unitFSM.currentState == UnitState::Idle)
 		{
 			unitFSM.SetUnitStateDirectly(p_unitState);
 		}
