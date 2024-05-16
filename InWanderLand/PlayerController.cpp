@@ -222,6 +222,7 @@ void PlayerController::ChangeLeaderPlayerUnit(Unit::UnitType p_num)
     }
 
     currentSelectedSerialNumber = p_num;
+    m_movingSystemComponent->SetTarget(playerComponentMap.find(p_num)->second->GetGameObject());
     SetRightClickFunction();
 }
 

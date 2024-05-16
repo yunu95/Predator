@@ -112,7 +112,7 @@ void BossSkillSystem::ActivateSkillFour()
 
 void BossSkillSystem::ActivateSkillRandomly()
 {
-	if (currentSelectedSkillNumber == Unit::SkillEnum::BossSkillThree && currentSummonedDoorUnit != nullptr && currentSummonedDoorUnit->GetCurrentUnitState() != Unit::UnitState::Death)
+	if (currentSelectedSkillNumber == Unit::SkillEnum::BossSkillFour && currentSummonedDoorUnit != nullptr && currentSummonedDoorUnit->GetCurrentUnitState() != Unit::UnitState::Death)
 	{
 		ActivateSkillRandomly();
 	}

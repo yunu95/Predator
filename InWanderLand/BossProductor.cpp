@@ -114,6 +114,7 @@ Unit* BossProductor::CreateUnit(Vector3d startPos)
 #pragma endregion
 
 	auto bossSkillSystem = m_unitGameObject->AddComponent<BossSkillSystem>();
+
 	skillOneColliderObject->SetParent(m_unitGameObject);
 	skillOneDebugMesh->SetParent(m_unitGameObject);
 	skillTwoColliderObject->SetParent(m_unitGameObject);

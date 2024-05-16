@@ -206,13 +206,13 @@ void TacticModeSystem::EngageTacticMode()
     /// 적군 유닛들의 현재 애니메이션도 꺼주자.
     for (auto each : m_currentWaveUnits)
     {
-        each->EnemyActionOnTacticModeEngaged();
+        each->UnitActionOnTacticModeEngaged();
     }
 
-	//for (auto each : playerComponentMap)
-	//{
-	//	each.second->EnemyActionOnTacticModeEngaged();
-	//}
+	for (auto each : playerComponentMap)
+	{
+		each.second->UnitActionOnTacticModeEngaged();
+	}
 
     vector<GameObject*> unitGameObjects;
     for (auto each : playerComponentMap)
@@ -254,7 +254,7 @@ void TacticModeSystem::ExitTacticMode()
 
 		for (auto each : m_currentWaveUnits)
 		{
-			each->EnemyActionOnTacticModeEnded();
+			each->UnitActionOnTacticModeEnded();
 		}
 		//for (auto each : playerComponentMap)
 		//{
@@ -266,7 +266,7 @@ void TacticModeSystem::ExitTacticMode()
     {
 		isTacticOrderPerforming = true;
 		m_rtsCam->SetTarget(sequenceQueue.front()->GetGameObject());
-        sequenceQueue.front()->EnemyActionOnTacticModeEnded();
+        sequenceQueue.front()->UnitActionOnTacticModeEnded();
 		sequenceQueue.front()->PermitTacticAction();
 		sequenceQueue.pop();
     }
@@ -342,11 +342,11 @@ void TacticModeSystem::ReportTacticActionFinished()
         
         for (auto each : m_currentWaveUnits)
         {
-            each->EnemyActionOnTacticModeEnded();
+            each->UnitActionOnTacticModeEnded();
         }
 		for (auto each : playerComponentMap)
 		{
-			each.second->EnemyActionOnTacticModeEnded();
+			each.second->UnitActionOnTacticModeEnded();
 		}
     }
     else
