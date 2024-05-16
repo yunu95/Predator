@@ -16,7 +16,6 @@ class UnitProductor;
 class SkillSystem;
 class BurnEffect;
 class CursorDetector;
-enum class SkillPreviewMesh;
 
 /// <summary>
 /// 유닛들이 공유하는 멤버.
@@ -206,8 +205,8 @@ private:
 
     yunutyEngine::graphics::StaticMeshRenderer* m_staticMeshRenderer;
 
-    SkillPreviewMesh m_qSkillPreviewType;
-    SkillPreviewMesh m_wSkillPreviewType;
+ /*   SkillPreviewMesh m_qSkillPreviewType;
+    SkillPreviewMesh m_wSkillPreviewType;*/
 
     Unit* m_followingTargetUnit;
     float m_followEngageDinstance{ 4.0f };			// 이 수치만큼 거리가 벌어지면 따라간다.
@@ -309,7 +308,6 @@ public:
     void SetAttackDelay(float p_delay);
     void SetAttackTimingFrame(int p_frame);
     void SetPlayerSerialNumber(UnitType serialNum);
-    void SetSkillPreviewType(SkillPreviewMesh p_qskill, SkillPreviewMesh p_wskill);
     void SetMaxAggroNumber(int p_num);
     void SetFbxName(std::string p_string);
     void SetAttackOffset(float p_offset);
@@ -347,7 +345,6 @@ public:
     void ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType);
 
     void SetUnitStateDirectly(Unit::UnitState p_unitState);
-    void ChangeUnitStateToMoveDirectly(Vector3d p_targetPos);
 
     void PermitTacticAction();
 
@@ -356,7 +353,6 @@ public:
 
     UnitType GetPlayerSerialNumber() const;
     UnitState GetCurrentUnitState() const;
-    SkillPreviewMesh GetSkillPreviewType(Unit::SkillEnum p_currentSkillType) const;
     std::string GetUnitFbxName() const;
 
     float DetermineAttackDamage(float p_damage);			// 공격유닛이 피격유닛에게 전달하는 데미지 계산.

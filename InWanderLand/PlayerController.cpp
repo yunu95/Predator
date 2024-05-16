@@ -166,17 +166,17 @@ void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
             callbackVectors.clear();
 
             Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
-            SkillPreviewSystem::Instance().SetCurrentSelectedPlayerUnit(currentSelectedUnit);
-            SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(p_skillNum));
-            SkillPreviewSystem::Instance().SetCurrentSelectedSkillNum(p_skillNum);
-            SkillPreviewSystem::Instance().ActivateSkillPreview(true);
+            //SkillPreviewSystem::Instance().SetCurrentSelectedPlayerUnit(currentSelectedUnit);
+            //SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(p_skillNum));
+            //SkillPreviewSystem::Instance().SetCurrentSelectedSkillNum(p_skillNum);
+            //SkillPreviewSystem::Instance().ActivateSkillPreview(true);
             m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
                 {
                     if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
                     {
                         return;
                     }
-                    SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+                    //SkillPreviewSystem::Instance().ActivateSkillPreview(false);
                     if (auto playerComp = playerComponentMap.find(currentSelectedSerialNumber); playerComp != playerComponentMap.end())
                     {
                         auto& callbackVectors = skillActivationCallback[currentSelectedSerialNumber][p_skillNum];
@@ -218,18 +218,20 @@ void PlayerController::SetCurrentPlayerSerialNumber(Unit::UnitType p_num)
 
 void PlayerController::ReportBattleEnded()
 {
-    Unit::UnitType tempLeaderType;
-
-    for (auto e : playerComponentMap)
+    if (!playerComponentMap[currentSelectedSerialNumber]->GetActive())
     {
-        if (e.second->GetActive())
+        for (auto e : playerComponentMap)
         {
-            tempLeaderType = e.first;
-            break;
+            if (e.second->GetActive())
+            {
+                currentSelectedSerialNumber = e.first;
+                InputManager::Instance().SelectPlayer(currentSelectedSerialNumber);
+                break;
+            }
         }
     }
 
-    ChangeLeaderPlayerUnit(tempLeaderType);
+    ChangeLeaderPlayerUnit(currentSelectedSerialNumber);
 }
 
 void PlayerController::ChangeLeaderPlayerUnit(Unit::UnitType p_num)

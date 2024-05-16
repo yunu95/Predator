@@ -158,7 +158,20 @@ void UIButton::InvokeButtonClickEvent()
     {
         return;
     }
-    m_mouseLiftedFunction();
+    if (m_mouseLiftedFunction)
+    {
+        m_mouseLiftedFunction();
+    }
+    else
+    {
+        if (!m_mouseLiftedEventFunctions.empty())
+        {
+            for (auto& each : m_mouseLiftedEventFunctions)
+            {
+                each();
+            }
+        }
+    }
 }
 
 //void UIButton::PlayFunction()

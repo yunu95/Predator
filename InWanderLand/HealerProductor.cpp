@@ -35,8 +35,8 @@ void HealerProductor::SetUnitData()
 
     m_navField = &SingleNavigationField::Instance();
 
-    qSkillPreviewType = SkillPreviewMesh::OnlyPath;
-    wSkillPreviewType = SkillPreviewMesh::OnlyPath;
+    //qSkillPreviewType = SkillPreviewMesh::OnlyPath;
+    //wSkillPreviewType = SkillPreviewMesh::OnlyPath;
 
     m_unitFbxName = "SKM_Hansel";
 }
@@ -131,8 +131,8 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
     UnitProductor::AddDotweenComponent();
     UnitProductor::SetPlayerRelatedComponents();
 
-    SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::Q, skillOneRange);
-    SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::W, skillTwoRange);
+ /*   SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::Q, skillOneRange);
+    SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::W, skillTwoRange);*/
 
     auto skinnedMeshRenderer = m_unitGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
     auto material = skinnedMeshRenderer->GetGI().GetMaterial();

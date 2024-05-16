@@ -41,12 +41,12 @@ namespace application
         {
             bool before = InputManager::Instance().canPrepareSkill[unitType][skillType];
 
-            InputManager::Instance().canPrepareSkill[Unit::UnitType::Warrior][Unit::SkillEnum::Q] = blocking;
-            InputManager::Instance().canPrepareSkill[Unit::UnitType::Warrior][Unit::SkillEnum::W] = blocking;
-            InputManager::Instance().canPrepareSkill[Unit::UnitType::Magician][Unit::SkillEnum::Q] = blocking;
-            InputManager::Instance().canPrepareSkill[Unit::UnitType::Magician][Unit::SkillEnum::W] = blocking;
-            InputManager::Instance().canPrepareSkill[Unit::UnitType::Healer][Unit::SkillEnum::Q] = blocking;
-            InputManager::Instance().canPrepareSkill[Unit::UnitType::Healer][Unit::SkillEnum::W] = blocking;
+            InputManager::Instance().canPrepareSkill[Unit::UnitType::Warrior][Unit::SkillEnum::Q] = !blocking;
+            InputManager::Instance().canPrepareSkill[Unit::UnitType::Warrior][Unit::SkillEnum::W] = !blocking;
+            InputManager::Instance().canPrepareSkill[Unit::UnitType::Magician][Unit::SkillEnum::Q] = !blocking;
+            InputManager::Instance().canPrepareSkill[Unit::UnitType::Magician][Unit::SkillEnum::W] = !blocking;
+            InputManager::Instance().canPrepareSkill[Unit::UnitType::Healer][Unit::SkillEnum::Q] = !blocking;
+            InputManager::Instance().canPrepareSkill[Unit::UnitType::Healer][Unit::SkillEnum::W] = !blocking;
 
             InputManager::Instance().canPrepareSkill[unitType][skillType] = before;
         }
@@ -81,9 +81,9 @@ namespace application
                     ImGui::Separator();
 
                     ImGui::SetNextItemWidth(-1);
-                    ImGui::Checkbox("##ApplyExceptTarget", &applyExceptTarget);
-                    ImGui::InputInt("##BlockSkillSelectionIndex", &index);
-                    ImGui::Checkbox("##Blocking", &blocking);
+                    ImGui::Checkbox("ApplyExceptTargetSkill##ApplyExceptTarget", &applyExceptTarget);
+                    ImGui::InputInt("SkillIndex##BlockSkillSelectionIndex", &index);
+                    ImGui::Checkbox("Blocking##Blocking", &blocking);
 
                     ImGui::Separator();
                     index = clamp(index, 1, 6);

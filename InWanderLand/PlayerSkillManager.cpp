@@ -1,4 +1,6 @@
 #include "PlayerSkillManager.h"
+#include "PlayerController.h"
+#include "PlayerSkillSystem.h"
 #include "Unit.h"
 #include "InWanderLand.h"
 #include "GlobalConstant.h"
@@ -59,7 +61,10 @@ bool PlayerSkillManager::IsSkillGaugeEnoughToBeUsed(Unit::UnitType p_unitType, U
 
 bool PlayerSkillManager::IsSkillCoolingDown(Unit::UnitType p_unitType, Unit::SkillEnum p_skillEnum)
 {
-	return (m_currentSkillUsageGauge - costPerSkillMap.find({ p_unitType, p_skillEnum })->second >= 0);
+    Unit* currentUnit = PlayerController::Instance().GetPlayerMap().find(p_unitType)->second;
+    PlayerSkillSystem* skillsys = currentUnit->GetGameObject()->GetComponent<PlayerSkillSystem>();
+
+    return skillsys->IsSkillCoolingDown(p_skillEnum);
 }
 
 void PlayerSkillManager::ReportSkillUsed(Unit::UnitType p_unitType, Unit::SkillEnum p_skillEnum)

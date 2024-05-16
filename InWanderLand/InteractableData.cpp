@@ -138,8 +138,7 @@ namespace application
             /// isUnit 변수에 Unit 인지 아닌지 설정해주고,
             if (unitList.contains(pod.templateData->pod.fBXName))
             {
-                //isUnit = true;
-				isUnit = false;
+				isUnit = true;
 
 				if (pod.templateData->pod.fBXName == "SM_Chess_Bishop")
 				{
@@ -157,7 +156,7 @@ namespace application
                 {
 					currentSelectedProductor = &SpikeTrapProductor::Instance();
                 }
-				inGameInteractable = currentSelectedProductor->CreateUnit(startPosition)->GetGameObject();
+                inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
 
                 /// Unit 이면 inGameUnit 을
                 //inGameUnit;

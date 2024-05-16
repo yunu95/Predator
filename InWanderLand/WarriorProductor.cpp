@@ -40,9 +40,6 @@ void WarriorProductor::SetUnitData()
 
     m_navField = &SingleNavigationField::Instance();
 
-    qSkillPreviewType = SkillPreviewMesh::OnlyPath;
-    wSkillPreviewType = SkillPreviewMesh::None;
-
     m_unitFbxName = "SKM_Robin";
 }
 
@@ -136,8 +133,8 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
     UnitProductor::AddDotweenComponent();
     UnitProductor::SetPlayerRelatedComponents();
 
-    SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::Q, warriorSkillOneRange);
-    SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::W, 0.0f);
+    //SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::Q, warriorSkillOneRange);
+    //SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::W, 0.0f);
 
     auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
     auto animator = m_unitGameObject->GetComponent<yunutyEngine::graphics::Animator>();
