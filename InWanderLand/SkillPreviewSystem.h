@@ -10,8 +10,8 @@
 //	None
 //};
 //
-//class SkillPreviewSystem : public Component, public SingletonComponent<SkillPreviewSystem>
-//{
+class SkillPreviewSystem : public Component, public SingletonComponent<SkillPreviewSystem>
+{
 //public:
 //
 //
@@ -58,5 +58,24 @@
 //
 //	void SetCurrentSkillRange(float p_flt);
 //	void SetDefaultSkillRange(Unit* p_unit, Unit::SkillEnum skillEnum, float p_rng);
-//};
+
+
+public:
+	virtual void Update() override;
+
+public:
+	void Init();
+	void ShowRobinQSkill();
+
+
+public:
+	yunutyEngine::GameObject* camObj;
+
+
+private:
+	yunutyEngine::GameObject* robinQSkillPreviewObj;
+
+
+
+};
 

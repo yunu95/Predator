@@ -114,10 +114,12 @@ void GraphicsTest()
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     camObj->AddComponent<tests::GraphicsTestCam>();
 
-    const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+    auto skillPreviewSystem = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    auto systemComponent = skillPreviewSystem->AddComponent<SkillPreviewSystem>();
+    systemComponent->Init();
+    systemComponent->camObj = camObj;
 
-    yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(false);
-    yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage2LightMap");
+    const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
     auto& animationList = _resourceManager->GetAnimationList();
     yunuGI::IAnimation* animation = nullptr;
@@ -164,12 +166,13 @@ void GraphicsTest()
     //}
 
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("Guideline");
-        auto renderer = obj2->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-        renderer->GetGI().GetMaterial()->SetVertexShader(_resourceManager->GetShader(L"TextureVS.cso"));
-        renderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"TexturePS.cso"));
-        renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, _resourceManager->GetTexture(L"Texture/quad.png"));
-        obj2->GetTransform()->SetLocalScale(Vector3d{ 3,1,1 });
+		//auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("Guideline");
+  //      auto renderer = obj2->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+  //      renderer->GetGI().GetMaterial()->SetVertexShader(_resourceManager->GetShader(L"TextureVS.cso"));
+  //      renderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"TexturePS.cso"));
+  //      renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, _resourceManager->GetTexture(L"Texture/quad.png"));
+  //      obj2->GetTransform()->SetLocalScale(Vector3d{ 3,1,1 });
+  //      obj2->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{ 0,90,0} });
 	}
 	{
 		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("Cube");

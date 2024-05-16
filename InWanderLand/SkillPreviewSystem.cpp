@@ -1,4 +1,59 @@
-//#include "SkillPreviewSystem.h"
+#include "SkillPreviewSystem.h"
+
+void SkillPreviewSystem::Update()
+{
+	auto distToXZPlane = abs(camObj->GetTransform()->GetWorldPosition().y);
+	auto centeredPosition = Input::getMouseScreenPositionNormalizedZeroCenter();
+
+	Vector3d mouseWorldPos = camObj->GetComponent<yunutyEngine::graphics::Camera>()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
+	auto normalizedPos = mouseWorldPos.Normalize(mouseWorldPos);
+
+	auto basicAxis = Vector3d{ -1,0,0 };
+
+	float dotValue = Vector3d::Dot(basicAxis, normalizedPos);
+
+	float angle = acos(dotValue);
+	angle = angle * (180 / yunutyEngine::math::PI);
+
+	if (mouseWorldPos.z < 0)
+	{
+		angle = 360.0f - angle;
+	}
+
+	this->robinQSkillPreviewObj->GetTransform()->SetLocalRotation(Quaternion{ Vector3f{0.f,angle,0.f} });
+}
+
+void SkillPreviewSystem::Init()
+{
+	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+	yunuGI::IShader* vs = _resourceManager->GetShader(L"TextureVS.cso");
+	yunuGI::IShader* ps = _resourceManager->GetShader(L"TexturePS.cso");
+	yunuGI::ITexture* quad = _resourceManager->GetTexture(L"Texture/quad.png");
+	yunuGI::ITexture* triangle = _resourceManager->GetTexture(L"Texture/triangle.png");
+	yunuGI::ITexture* circle = _resourceManager->GetTexture(L"Texture/circle.png");
+
+	this->robinQSkillPreviewObj = Scene::getCurrentScene()->AddGameObject();
+
+#pragma region RobinQSkillPreview
+	{
+		auto arrowPreviewObj = Scene::getCurrentScene()->AddGameObjectFromFBX("Guideline");
+		arrowPreviewObj->SetParent(this->robinQSkillPreviewObj);
+		auto arrowRenderer = arrowPreviewObj->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		arrowRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
+		arrowRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
+		arrowRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0,triangle);
+
+		auto arrowBody = Scene::getCurrentScene()->AddGameObjectFromFBX("Guideline");
+		arrowBody->SetParent(this->robinQSkillPreviewObj);
+		auto bodyRenderer = arrowBody->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		bodyRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
+		bodyRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
+		bodyRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, quad);
+	}
+
+#pragma endregion 
+}
+
 //
 ////#include "Unit.h"
 //
@@ -188,3 +243,8 @@
 //		previousDegree = 0.0f;
 //	}
 //}
+
+void SkillPreviewSystem::ShowRobinQSkill()
+{
+
+}
