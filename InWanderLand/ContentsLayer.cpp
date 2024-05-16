@@ -158,31 +158,21 @@ void GraphicsTest()
         anim->PushAnimation(animation2);
         anim->Play(animation);
     }*/
-    {
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-		auto animator = obj2->GetComponent<yunutyEngine::graphics::Animator>();
-		animator->PushAnimation(animation2);
-		animator->Play(animation2);
-    }
 
     //{
     //    auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
     //}
 
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Ursula");
-		auto animator = obj2->GetComponent<yunutyEngine::graphics::Animator>();
-		animator->PushAnimation(animation);
-		animator->Play(animation);
-
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("Guideline");
+        auto renderer = obj2->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+        renderer->GetGI().GetMaterial()->SetVertexShader(_resourceManager->GetShader(L"TextureVS.cso"));
+        renderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"TexturePS.cso"));
+        renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, _resourceManager->GetTexture(L"Texture/quad.png"));
+        obj2->GetTransform()->SetLocalScale(Vector3d{ 3,1,1 });
 	}
-
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
-		auto animator = obj2->GetComponent<yunutyEngine::graphics::Animator>();
-		animator->PushAnimation(animation3);
-		animator->Play(animation3);
-
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("Cube");
 	}
     yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
 	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
