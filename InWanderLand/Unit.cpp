@@ -170,9 +170,7 @@ void Unit::Start()
 	unitFSM.transitions[UnitState::OffsetMove].push_back({ UnitState::WaveStart,
 	    [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
 
-	/// OffsetMove
-	unitFSM.transitions[UnitState::OffsetMove].push_back({ UnitState::Move,
-		[this]() { return application::CinematicManager::Instance().IsCinematicMode(); } });
+    
 
     /// WaveStart
 	unitFSM.transitions[UnitState::WaveStart].push_back({ UnitState::WaveMotion,
@@ -1709,7 +1707,7 @@ void Unit::SetUnitStateDirectly(Unit::UnitState p_unitState)
         break;
     case Unit::UnitState::OffsetMove:
 	{
-		if (p_unitState == UnitState::Move)
+		if (unitFSM.currentState == UnitState::Move || unitFSM.currentState == UnitState::Idle)
 		{
 			unitFSM.SetUnitStateDirectly(p_unitState);
 		}
