@@ -68,6 +68,8 @@ void NailEngine::Init(UINT64 hWnd)
 	BloomPass::Instance.Get().Init();
 
 	PointLightShadowPass::Instance.Get().Init();
+
+	this->lightMap = ResourceManager::Instance.Get().GetTexture(L"Stage1LightMap").get();
 }
 
 void NailEngine::Render()
@@ -110,6 +112,16 @@ void NailEngine::Render()
 void NailEngine::Finalize()
 {
 	RenderSystem::Instance.Get().Finalize();
+}
+
+void NailEngine::SetLightMap(const std::wstring& lightMapName)
+{
+	this->lightMap = ResourceManager::Instance.Get().GetTexture(lightMapName).get();
+}
+
+Texture* NailEngine::GetLightMap()
+{
+	return this->lightMap;
 }
 
 void NailEngine::SetResolution(unsigned int width, unsigned int height)

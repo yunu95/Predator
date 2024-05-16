@@ -70,6 +70,7 @@
 #include "DebugCube.h"
 #include "UIImage.h"
 #include "UIText.h"
+#include "yunutyCoroutine.h"
 
 // 네비게이션
 #include "YunutyNavigationField.h"

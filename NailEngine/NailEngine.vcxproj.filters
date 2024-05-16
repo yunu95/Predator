@@ -342,6 +342,9 @@
     <ClInclude Include="QuadTree.h">
       <Filter>QuadTree</Filter>
     </ClInclude>
+    <ClInclude Include="DirectXTexEXR.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -478,6 +481,9 @@
     </ClCompile>
     <ClCompile Include="QuadTree.cpp">
       <Filter>QuadTree</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectXTexEXR.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -620,6 +626,12 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="RuntimeDependency\resources\Shader\SkinnedShadowVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\TextureAnimVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\TextureAnimPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

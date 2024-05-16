@@ -4,6 +4,8 @@
 #include "AttackSystem.h"
 #include "InputManager.h"
 #include "PlayerSkillSystem.h"
+#include "ChessTrapSkillSystem.h"
+#include "SpikeSkillSystem.h"
 #include "BossSkillSystem.h"
 #include "Dotween.h"
 #include "TacticModeSystem.h"
@@ -176,15 +178,14 @@ void Unit::Start()
         [this]() { return m_currentHealthPoint <= 0 && m_resurrectingMaxCount < m_currentResurrectingCount; } });
     }
 
-    unitFSM.transitions[static_cast<UnitState>(UnitState::Idle)].push_back({ UnitState::OffsetMove,
-    [this]() { return (!GameManager::Instance().IsBattleSystemOperating() && m_unitSide == UnitSide::Player && m_unitType != m_initialLeaderUnitType)
-        && isUnitCinematicEnded; } });
+    //unitFSM.transitions[static_cast<UnitState>(UnitState::Idle)].push_back({ UnitState::OffsetMove,
+    //[this]() { return (!GameManager::Instance().IsBattleSystemOperating() && m_unitSide == UnitSide::Player && m_unitType != m_initialLeaderUnitType); } });
 
     unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::WaveStart,
     [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
 
-	unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::Move,
-    [this]() { return currentOrder == UnitState::Move; } });
+	//unitFSM.transitions[static_cast<UnitState>(UnitState::OffsetMove)].push_back({ UnitState::Move,
+ //   [this]() { return currentOrder == UnitState::Move; } });
 
     unitFSM.transitions[UnitState::Move].push_back({ UnitState::WaveStart,
     [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
@@ -242,7 +243,7 @@ void Unit::Start()
                     {
                         isPermittedToTacticAction = false;
                         isTacticAttackMovePermitted = false;
-                        EnemyActionOnTacticModeEngaged();
+                        //EnemyActionOnTacticModeEngaged();
                         TacticModeSystem::Instance().ReportTacticActionFinished();
                         currentOrder = UnitState::Idle;
                         /// 현재 공격타겟에 대한 처리를 해야 가만히 있을 듯.
@@ -268,11 +269,22 @@ void Unit::Start()
         m_playerSkillSystem = GetGameObject()->GetComponent<PlayerSkillSystem>();
     }
 
-    m_animatorComponent->Play(unitAnimations.m_idleAnimation);
+    if (m_animatorComponent)
+        m_animatorComponent->Play(unitAnimations.m_idleAnimation);
+
+    if (m_unitType == UnitType::ChessTrap)
+    {
+        int a = 0;
+    }
 }
 
 void Unit::Update()
 {
+
+	if (m_unitType == UnitType::ChessTrap)
+	{
+		int a = 0;
+	}
     if (m_navAgentComponent && isFollowingNavAgent)
         GetTransform()->SetWorldPosition(m_navAgentComponent->GetTransform()->GetWorldPosition());
     if (m_unitSide == UnitSide::Player)
@@ -378,7 +390,7 @@ void Unit::OffsetMoveEngage()
     currentOrder = UnitState::OffsetMove;
     //m_followingTargetUnit = PlayerController::Instance().GetPlayerMap().find(UnitType::Warrior)->second;
     isFollowing = false;
-    isUnitCinematicEnded = false;
+    //isUnitCinematicEnded = false;
     currentOrder = UnitState::OffsetMove;
     moveFunctionElapsed = 0.0f;
     m_staticMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color::green());
@@ -433,6 +445,7 @@ void Unit::SkillEngage()
 {
     currentOrder = UnitState::Skill;
     ChangeAnimation(unitAnimations.m_idleAnimation);
+    isSkillUsed = false;
     skillFunctionStartElapsed = 0.0f;
     int tempRand = rand() % 3 + 1;
 
@@ -470,15 +483,18 @@ void Unit::SkillEngage()
     if (m_unitType != UnitType::SpikeTrap && m_unitType != UnitType::ChessTrap)
         dotween->DOLookAt(m_currentSkillPosition, rotateTime, false);
 
-    m_currentSelectedSkillEngageDelay = m_skillDurationMap.find(m_currentSelectedSkill)->second;
-    m_currentSkillAnimation = m_skillAnimationMap.find(m_currentSelectedSkill)->second;
-    m_selectedSkillTimingFrame = m_skillTimingFrameMap.find(m_currentSelectedSkill)->second;
-
-    //m_currentSkillAnimation->SetEventFunc(m_selectedSkillTimingFrame, [=]()
-    //	{
-    //		m_skillSystemComponent->ActivateSkill(m_currentSelectedSkill, m_currentSkillPosition);
-    //	});
-
+    if (!m_skillDurationMap.empty())
+    {
+		m_currentSelectedSkillEngageDelay = m_skillDurationMap.find(m_currentSelectedSkill)->second;
+    }
+    if (!m_skillAnimationMap.empty())
+    {
+		m_currentSkillAnimation = m_skillAnimationMap.find(m_currentSelectedSkill)->second;
+    }
+    if (!m_selectedSkillTimingFrame)
+    {
+		m_selectedSkillTimingFrame = m_skillTimingFrameMap.find(m_currentSelectedSkill)->second;
+    }
 
     StopMove();
 }
@@ -578,6 +594,7 @@ void Unit::IdleUpdate()
     {
         m_tacticModeQueue.front()();
         m_tacticModeQueue.pop();
+        ResumeAnimation();
     }
 
     idleElapsed += Time::GetDeltaTime() * m_localTimeScale;
@@ -705,13 +722,18 @@ void Unit::AttackUpdate()
 
 void Unit::SkillUpdate()
 {
-    skillFunctionStartElapsed += Time::GetDeltaTime() * m_localTimeScale;
-
-    if (skillFunctionStartElapsed >= m_currentSelectedSkillEngageDelay)
+    if (!isSkillUsed)
     {
-        skillFunctionStartElapsed = 0.0f;
-        ChangeAnimation(m_currentSkillAnimation);
+		skillFunctionStartElapsed += Time::GetDeltaTime() * m_localTimeScale;
+
+		if (skillFunctionStartElapsed >= m_currentSelectedSkillEngageDelay)
+		{
+			isSkillUsed = true;
+			skillFunctionStartElapsed = 0.0f;
+			ChangeAnimation(m_currentSkillAnimation);
+		}
     }
+ 
 }
 
 void Unit::ChaseUpdate()
@@ -807,7 +829,8 @@ void Unit::ChangeAnimation(yunuGI::IAnimation* p_anim)
     if (m_latestChangedAnimation == p_anim)
         return;
 
-    m_animatorComponent->ChangeAnimation(p_anim, animationLerpDuration, animationTransitionSpeed);
+    if (p_anim)
+        m_animatorComponent->ChangeAnimation(p_anim, animationLerpDuration, animationTransitionSpeed);
 
     m_latestChangedAnimation = p_anim;
 }
@@ -816,7 +839,7 @@ void Unit::ChangeAnimation(yunuGI::IAnimation* p_anim)
 
 void Unit::CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation)
 {
-    if (m_animatorComponent->GetGI().GetCurrentAnimation() != currentStateAnimation)
+    if (m_animatorComponent && m_animatorComponent->GetGI().GetCurrentAnimation() != currentStateAnimation)
     {
         ChangeAnimation(currentStateAnimation);
     }
@@ -1162,7 +1185,7 @@ void Unit::SetUnitStateToDeath()
 }
 
 void Unit::SetUnitStateToSkill()
-{
+{ 
     currentOrder = UnitState::Skill;
 }
 

@@ -128,7 +128,10 @@ void BossSkillSystem::SelectSkillRandomly()
 	if (isBossSkill)
 	{
 		m_skillNum = rand() % 4 + 2;
-		currentSelectedSkillNumber = static_cast<Unit::SkillEnum>(m_skillNum);
+		if (currentSelectedSkillNumber == Unit::SkillEnum::BossSkillFour)
+			SelectSkillRandomly();
+		else
+			currentSelectedSkillNumber = static_cast<Unit::SkillEnum>(m_skillNum);
 	}
 	else
 	{

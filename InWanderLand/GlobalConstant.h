@@ -46,9 +46,7 @@ namespace application
         GC<int>		bossSkillFourTimingFrame = 15;
 
         GC<float>	spikeTrapSkillDelay = 3.0f;
-        GC<int>		spikeTrapSkillTimingFrame = 15;
         GC<float>	chessTrapSkillDelay = 2.0f;
-        GC<int>		chessTrapSkillTimingFrame = 10;
         GC<float>	triggeredTrapSkillDelay;
         GC<int>		triggeredTrapSkillTimingFrame;
 

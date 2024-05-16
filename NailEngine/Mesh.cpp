@@ -34,8 +34,8 @@ void Mesh::SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& in
 	//float tempRadius1 = std::sqrt(std::pow(aabb.Extents.x - 0, 2) + std::pow(aabb.Extents.y - 0, 2) + std::pow(aabb.Extents.z - 0, 2));
 	float tempRadius = std::sqrt(std::pow(maxPoint.x - 0, 2) + std::pow(maxPoint.y - 0, 2) + std::pow(maxPoint.z - 0, 2));
 	float tempRadius2 = std::sqrt(std::pow(minPoint.x - 0, 2) + std::pow(minPoint.y - 0, 2) + std::pow(minPoint.z - 0, 2));
-	float bigRadius = max(tempRadius, tempRadius2);
-	this->boundingRadius = max(this->boundingRadius, bigRadius);
+	float bigRadius = std::max(tempRadius, tempRadius2);
+	this->boundingRadius = std::max(this->boundingRadius, bigRadius);
 
 
 

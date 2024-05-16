@@ -68,7 +68,7 @@ public:
 					{
 						auto radius = i->mesh->GetBoundingRadius();
 
-						float maxValue = max(scale.x, scale.y, scale.z);
+						float maxValue = std::max(std::max(scale.x, scale.y), scale.z);
 						radius *= maxValue;
 
 						quadTree.UpdatePosition(DirectX::SimpleMath::Vector2{ pos.x, pos.z }, radius, i.get());
@@ -89,7 +89,7 @@ public:
 			}
 			else
 			{
-				for (auto& each : this->materialVec)
+				/*for (auto& each : this->materialVec)
 				{
 					if (each->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
 					{
@@ -108,7 +108,7 @@ public:
 					{
 						InstancingManager::Instance.Get().RegisterStaticForwardData(i);
 					}
-				}
+				}*/
 			}
 		}
 	}

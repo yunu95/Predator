@@ -14,7 +14,7 @@ void HealerProductor::SetUnitData()
     m_unitType = Unit::UnitType::Healer;
     m_unitSide = Unit::UnitSide::Player;
 
-    m_healthPoint = 120;
+    m_maxHealth = 120;
     m_manaPoint = 100;
 
     m_autoAttackDamage = 8;

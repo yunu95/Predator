@@ -187,9 +187,9 @@ yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yu
 		minPoint.z = std::min(minPoint.z, vertex.pos.z);
 
 		// maxPoint 업데이트
-		maxPoint.x = max(maxPoint.x, vertex.pos.x);
-		maxPoint.y = max(maxPoint.y, vertex.pos.y);
-		maxPoint.z = max(maxPoint.z, vertex.pos.z);
+		maxPoint.x = std::max(maxPoint.x, vertex.pos.x);
+		maxPoint.y = std::max(maxPoint.y, vertex.pos.y);
+		maxPoint.z = std::max(maxPoint.z, vertex.pos.z);
 	}
 
 	tempMesh->SetData(vertices, idxVec, maxPoint, minPoint);
@@ -908,6 +908,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateShader(L"PointLightShadowVS.cso");
 	CreateShader(L"Skinned_PointLightShadowVS.cso");
 	CreateShader(L"ParticleVS.cso");
+	CreateShader(L"TextureAnimVS.cso");
 #pragma endregion
 
 #pragma region PS
@@ -932,6 +933,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateShader(L"DissolvePS.cso");
 	CreateShader(L"UIPreProcessVS.cso");
 	CreateShader(L"UIPreProcessPS.cso");
+	CreateShader(L"TextureAnimPS.cso");
 #pragma endregion
 
 #pragma region GS
@@ -1170,30 +1172,35 @@ void ResourceManager::CreateDefaultTexture()
 	CreateTexture(L"Texture/Particle/default.dds");
 	CreateTexture(L"Texture/TempTexture.dds");
 	CreateTexture(L"Texture/Dissolve.jpg");
-	CreateTexture(L"Texture/LightMap_0.dds");
-	CreateTexture(L"Texture/LightMap_1.dds");
+	CreateTexture(L"Texture/Stage1LightMap_0.exr");
+	CreateTexture(L"Texture/Stage1LightMap_1.exr");
 
-	CreateTexture(L"Texture/LightMap2_0.dds");
-	CreateTexture(L"Texture/LightMap2_1.dds");
+	
+	CreateTexture(L"Texture/Stage2LightMap_0.exr");
+	CreateTexture(L"Texture/Stage2LightMap_1.exr");
+	CreateTexture(L"Texture/Stage2LightMap_2.exr");
+	CreateTexture(L"Texture/Stage2LightMap_3.exr");
 
 	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 
-	texture->SetName(L"LightMapList");
+	texture->SetName(L"Stage1LightMap");
 	std::vector<yunuGI::ITexture*> tempVec;
-	tempVec.push_back(GetTexture(L"Texture/LightMap_0.dds").get());
-	tempVec.push_back(GetTexture(L"Texture/LightMap_1.dds").get());
+	tempVec.push_back(GetTexture(L"Texture/Stage1LightMap_0.exr").get());
+	tempVec.push_back(GetTexture(L"Texture/Stage1LightMap_1.exr").get());
 	texture->CreateLightMapArray(tempVec);
-	textureMap.insert({ L"LightMapList", texture });
+	textureMap.insert({ L"Stage1LightMap", texture });
 	textureVec.push_back(texture.get());
 
 	std::shared_ptr<Texture> texture1 = std::make_shared<Texture>();
 
-	texture1->SetName(L"LightMapList1");
+	texture1->SetName(L"Stage2LightMap");
 	std::vector<yunuGI::ITexture*> tempVec1;
-	tempVec1.push_back(GetTexture(L"Texture/LightMap2_0.dds").get());
-	tempVec1.push_back(GetTexture(L"Texture/LightMap2_1.dds").get());
+	tempVec1.push_back(GetTexture(L"Texture/Stage2LightMap_0.exr").get());
+	tempVec1.push_back(GetTexture(L"Texture/Stage2LightMap_1.exr").get());
+	tempVec1.push_back(GetTexture(L"Texture/Stage2LightMap_2.exr").get());
+	tempVec1.push_back(GetTexture(L"Texture/Stage2LightMap_3.exr").get());
 	texture1->CreateLightMapArray(tempVec1);
-	textureMap.insert({ L"LightMapList1", texture1 });
+	textureMap.insert({ L"Stage2LightMap", texture1 });
 	textureVec.push_back(texture1.get());
 
 	//texture->SetName(L"LightMapList");
@@ -1838,9 +1845,9 @@ void ResourceManager::LoadRactangleMesh()
 		minPoint.z = std::min(minPoint.z, vertex.pos.z);
 
 		// maxPoint 업데이트
-		maxPoint.x = max(maxPoint.x, vertex.pos.x);
-		maxPoint.y = max(maxPoint.y, vertex.pos.y);
-		maxPoint.z = max(maxPoint.z, vertex.pos.z);
+		maxPoint.x = std::max(maxPoint.x, vertex.pos.x);
+		maxPoint.y = std::max(maxPoint.y, vertex.pos.y);
+		maxPoint.z = std::max(maxPoint.z, vertex.pos.z);
 	}
 
 
@@ -1919,9 +1926,9 @@ void ResourceManager::LoadLineMesh()
 		minPoint.z = std::min(minPoint.z, vertex.pos.z);
 
 		// maxPoint 업데이트
-		maxPoint.x = max(maxPoint.x, vertex.pos.x);
-		maxPoint.y = max(maxPoint.y, vertex.pos.y);
-		maxPoint.z = max(maxPoint.z, vertex.pos.z);
+		maxPoint.x = std::max(maxPoint.x, vertex.pos.x);
+		maxPoint.y = std::max(maxPoint.y, vertex.pos.y);
+		maxPoint.z = std::max(maxPoint.z, vertex.pos.z);
 	}
 
 

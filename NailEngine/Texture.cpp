@@ -3,6 +3,7 @@
 #include <filesystem>
 
 #include "DirectXTex.h"
+#include "DirectXTexEXR.h"
 
 #include "ResourceBuilder.h"
 #include "Device.h"
@@ -52,6 +53,10 @@ void Texture::LoadTexture(const std::wstring& texturePath)
 	{
 		DirectX::LoadFromHDRFile(texturePath.c_str(), nullptr, image);
 	}
+	else if (ext == L".exr" || ext == L".EXR")
+	{
+		DirectX::LoadFromEXRFile(texturePath.c_str(), nullptr, image);
+	}
 	else // png, jpg, jpeg, bmp
 	{
 		DirectX::LoadFromWICFile(texturePath.c_str(), DirectX::WIC_FLAGS_NONE, nullptr, image);
@@ -73,14 +78,15 @@ void Texture::LoadTexture(const std::wstring& texturePath)
 	ResourceBuilder::Instance.Get().device->GetDevice()->CreateTexture2D(&texDesc, nullptr, this->tex2D.GetAddressOf());
 
 
-	CreateShaderResourceView(ResourceBuilder::Instance.Get().device->GetDevice().Get(), image.GetImages(),
+	HRESULT hr = CreateShaderResourceView(ResourceBuilder::Instance.Get().device->GetDevice().Get(), image.GetImages(),
 		image.GetImageCount(), image.GetMetadata(), SRV.GetAddressOf());
 
+	
 
 	Microsoft::WRL::ComPtr<ID3D11Resource> resource;
 	SRV->GetResource(resource.GetAddressOf());
 
-	resource.As(&this->tex2D);
+	hr = resource.As(&this->tex2D);
 
 
 	width = static_cast<float>(image.GetMetadata().width);
@@ -206,7 +212,8 @@ void Texture::CreateLightMapArray(std::vector<yunuGI::ITexture*> textureVec)
 	texDesc.MipLevels = 1;
 	texDesc.SampleDesc.Count = 1;
 	texDesc.SampleDesc.Quality = 0;
-	texDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	//texDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	texDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
 	texDesc.Usage = D3D11_USAGE_DEFAULT;
 	texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 	texDesc.CPUAccessFlags = 0;
@@ -234,7 +241,8 @@ void Texture::CreateLightMapArray(std::vector<yunuGI::ITexture*> textureVec)
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 	ZeroMemory(&srvDesc, sizeof(srvDesc));
-	srvDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	//srvDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	srvDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
 	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
 	srvDesc.Texture2DArray.MostDetailedMip = 0;
 	srvDesc.Texture2DArray.MipLevels = 1;

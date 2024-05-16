@@ -125,15 +125,42 @@ namespace application
 #pragma region
             /// SM 인데 Unit 으로 처리되는 애들이면 unitList 에 추가해!
             static std::set<std::string> unitList = { "SKM_Hansel", "SKM_HeartQueen", "SKM_Monster1", "SKM_Monster2", "SKM_Robin", "SKM_Ursula"
-                , "SM_Chess_Bishop", "SM_Chess_Pawn", "SM_Chess_Rook"}; // 여기!
+                , "SM_Chess_Bishop", "SM_Chess_Pawn", "SM_Chess_Rook", "SM_Spike01"}; // 여기!
+
+			Vector3d startPosition = Vector3d(pod.position.x, 0, pod.position.z);
+
+			UnitProductor* currentSelectedProductor{ nullptr };
+
+            PawnTrapProductor::Instance().SetUnitData();
+            RookTrapProductor::Instance().SetUnitData();
+            BishopTrapProductor::Instance().SetUnitData();
 
             /// isUnit 변수에 Unit 인지 아닌지 설정해주고,
             if (unitList.contains(pod.templateData->pod.fBXName))
             {
-                isUnit = true;
+                //isUnit = true;
+				isUnit = false;
+
+				if (pod.templateData->pod.fBXName == "SM_Chess_Bishop")
+				{
+					currentSelectedProductor = &BishopTrapProductor::Instance();
+				}
+				else if (pod.templateData->pod.fBXName == "SM_Chess_Pawn")
+				{
+					currentSelectedProductor = &PawnTrapProductor::Instance();
+				}
+				else if (pod.templateData->pod.fBXName == "SM_Chess_Rook")
+				{
+					currentSelectedProductor = &RookTrapProductor::Instance();
+				}
+                else if (pod.templateData->pod.fBXName == "SM_Spike01")
+                {
+					currentSelectedProductor = &SpikeTrapProductor::Instance();
+                }
+				inGameInteractable = currentSelectedProductor->CreateUnit(startPosition)->GetGameObject();
 
                 /// Unit 이면 inGameUnit 을
-                inGameUnit;
+                //inGameUnit;
 
                 /// Unit 에 필요한 멤버 변수는 다 있을 거야
             }

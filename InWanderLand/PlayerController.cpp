@@ -11,6 +11,8 @@
 void PlayerController::Start()
 {
     currentSelectedSerialNumber = Unit::UnitType::Warrior;
+
+    ChangeLeaderPlayerUnit(Unit::UnitType::Warrior);
 }
 
 void PlayerController::SetMovingSystemComponent(RTSCam* sys)
@@ -218,6 +220,9 @@ void PlayerController::ChangeLeaderPlayerUnit(Unit::UnitType p_num)
     {
         e.second->ReportLeaderUnitChanged(p_num);
     }
+
+    currentSelectedSerialNumber = p_num;
+    SetRightClickFunction();
 }
 
 std::unordered_map<Unit::UnitType, Unit*> PlayerController::GetPlayerMap() const

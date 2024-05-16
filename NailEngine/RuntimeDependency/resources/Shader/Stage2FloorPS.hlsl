@@ -35,7 +35,7 @@ PS_OUT main(PixelIn input)
     
     if (UseTexture(useOpacity) == 1)
     {
-        opacity = OpacityMap.Sample(sam, input.uv).w;
+        opacity = OpacityMap.Sample(sam, input.uv).r;
     }
     
     if (UseTexture(useAlbedo) == 1)
@@ -47,16 +47,22 @@ PS_OUT main(PixelIn input)
     {
         float4 lightColor = float4(0, 0, 0, 1.f);
         lightColor = UnityLightMap.Sample(sam, float3(input.lightUV, lightMapUV[input.id].lightMapIndex));
-        lightColor *= 0.6;
-        lightColor.rgb = pow(lightColor.rgb, 1.f / 2.2f);
+        //lightColor *= 0.18;
+        //lightColor *= 0.6;
+        //lightColor.rgb = pow(lightColor.rgb, 1.f / 2.2f);
+        //lightColor.rgb = pow(lightColor.rgb,  2.2f);
+        float3 x = max(0, lightColor.xyz - 0.004);
+        lightColor.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
     
         color = color * lightColor;
+        //color = color + lightColor;
     }
     else
     {
         color = pow(color, 2.2f);
     }
-    color.w = opacity;
+    color.w = 0.8;
+    //color.w = 1;
     output.color = color;
     
     float3 viewNormal = input.normalV;
@@ -71,7 +77,6 @@ PS_OUT main(PixelIn input)
         float3x3 matTBN = { input.tangentV, input.biNormalV, input.normalV };
         viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
     }
-    
     if (UseTexture(useARM) == 1)
     {
         float3 arm = ARMMap.Sample(sam, input.uv).xyz;
@@ -79,18 +84,20 @@ PS_OUT main(PixelIn input)
         output.arm.x = arm.x;
         output.arm.y = arm.y;
         output.arm.z = arm.z;
+        output.arm.w = 1.f;
+
     }
     else
     {
-        output.arm.x = 1.0f;
-        output.arm.y = 1.0f;
-        output.arm.z = 0.0f;
+        output.arm.x = 0.5f;
+        output.arm.y = 0.5f;
+        output.arm.z = 0.5f;
+        output.arm.w = 1.f;
     }
     
     output.position = input.posV;
-    output.normal = float4(viewNormal.xyz, 1.f);
-    
-    /////output.color = color * materialColor;
+    float4 tempNormal = float4(viewNormal.xyz, 1.f);
+    output.normal = tempNormal;
     
     output.util = float4(lightMapUV[input.id].lightMapIndex, DiffuseExposure, AmbientExposure, 1.f);
 
@@ -101,6 +108,6 @@ PS_OUT main(PixelIn input)
 // ShaderType : Deferred
 // RasterType : Solid
 // CullType : CullBack
-// DepthType : Less
+// DepthType : LessNoWrite
 // BlendType : AlphaBlend
 // Sampler : Default

@@ -11,6 +11,7 @@ class Device;
 class SwapChain;
 class ConstantBuffer;
 class RenderTargetGroup;
+class Texture;
 
 struct WindowInfo
 {
@@ -30,6 +31,9 @@ public:
 	void Render();
 	void Finalize();
 public:
+	void SetLightMap(const std::wstring& lightMapName);
+	Texture* GetLightMap();
+
 	void SetResolution(unsigned int width, unsigned int height);
 	void SetUseIBL(bool useIBL);
 	void SetUseLightMap(bool useLightMap);
@@ -57,5 +61,6 @@ private:
 	
 	bool useIBL = true;
 	bool useLightMap = false;
+	Texture* lightMap;
 };
 

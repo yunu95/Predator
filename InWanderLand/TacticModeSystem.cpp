@@ -209,10 +209,10 @@ void TacticModeSystem::EngageTacticMode()
         each->EnemyActionOnTacticModeEngaged();
     }
 
-	for (auto each : playerComponentMap)
-	{
-		each.second->EnemyActionOnTacticModeEngaged();
-	}
+	//for (auto each : playerComponentMap)
+	//{
+	//	each.second->EnemyActionOnTacticModeEngaged();
+	//}
 
     vector<GameObject*> unitGameObjects;
     for (auto each : playerComponentMap)
@@ -256,10 +256,10 @@ void TacticModeSystem::ExitTacticMode()
 		{
 			each->EnemyActionOnTacticModeEnded();
 		}
-		for (auto each : playerComponentMap)
-		{
-			each.second->EnemyActionOnTacticModeEnded();
-		}
+		//for (auto each : playerComponentMap)
+		//{
+		//	each.second->EnemyActionOnTacticModeEnded();
+		//}
 		m_rtsCam->SetTarget(PlayerController::Instance().GetPlayerMap().find(static_cast<Unit::UnitType>(m_latestSelectedUnitNum))->second->GetGameObject());
     }
     else

@@ -41,8 +41,7 @@ namespace application
 		targetUnit->inGameUnit->OrderMove(endPos);
 		while(true)
 		{
-			auto curPos = ts->GetWorldPosition();
-			if ((endPos - curPos).MagnitudeSqr() <= 0.04)
+			if (targetUnit->inGameUnit->GetCurrentUnitState() != Unit::UnitState::Move)
 			{
 				break;
 			}
@@ -803,8 +802,7 @@ namespace application
 		targetUnit->inGameUnit->OrderMove(endPos);
 		while (true)
 		{
-			auto curPos = ts->GetWorldPosition();
-			if ((endPos - curPos).MagnitudeSqr() <= 0.04)
+			if (targetUnit->inGameUnit->GetCurrentUnitState() != Unit::UnitState::Move)
 			{
 				break;
 			}

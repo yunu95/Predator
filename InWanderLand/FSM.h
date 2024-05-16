@@ -81,7 +81,7 @@ void FSM<StateEnum>::UpdateState()
 template <typename StateEnum>
 void FSM<StateEnum>::SetUnitStateDirectly(StateEnum p_enum)
 {
-	if (previousState == p_enum)
+	if (currentState == p_enum)
 		return;
 	previousState = currentState;
 	currentState = p_enum;

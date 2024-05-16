@@ -14,7 +14,7 @@ void MeleeEnemyProductor::SetUnitData()
 	m_unitType = Unit::UnitType::MeleeEnemy;
 	m_unitSide = Unit::UnitSide::Enemy;
 
-	m_healthPoint = 50;
+	m_maxHealth = 50;
 	m_manaPoint = 100;
 
 	m_autoAttackDamage = 10;

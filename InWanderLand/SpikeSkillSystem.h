@@ -10,6 +10,11 @@ private:
 	float m_skillUsageDuration{ 0.0f };
 	float m_colliderRemainDuration{ 3.0f };
 
+	bool isSkillOperating{ false };
+
+	Vector3d m_spikeReachPosition;
+	Vector3d m_spikeStartPosition;
+
 	SkillRequirements m_spikeDamageRequirement;
 
 public:

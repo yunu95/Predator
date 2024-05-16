@@ -834,6 +834,133 @@
     {
         "AmbientExposure": 1.0,
         "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Green_Wall_3m",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 1.5000017881393433,
+                        "y": 0.14393502473831177,
+                        "z": 24.31439971923828
+                    },
+                    "minPoint": {
+                        "x": -1.5000065565109253,
+                        "y": 0.14393240213394165,
+                        "z": 4.265471458435059
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Wood",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Green_Arch_Window_14m/SM_Green_Arch_Window_14m.fbm/T_Wall_BaseColor01.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Green_SquarePattern_wall",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Green_Wall_3m",
+                "nodeName": "SM_Green_Wall_3m",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Frame_001",
         "aabb": {
             "maxPoint": {
@@ -1007,15 +1134,15 @@
                     "z": -0.0
                 },
                 "quat": {
-                    "w": -0.7071068286895752,
-                    "x": 0.7071068286895752,
+                    "w": 0.7071067094802856,
+                    "x": 0.70710688829422,
                     "y": 0.0,
                     "z": 0.0
                 },
                 "scale": {
-                    "x": 1.0,
-                    "y": 1.0,
-                    "z": 1.0
+                    "x": 100.0,
+                    "y": 100.0,
+                    "z": 100.0
                 }
             }
         ],
@@ -6572,6 +6699,260 @@
     {
         "AmbientExposure": 1.0,
         "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Corrider_Floor07",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 8.500003814697266,
+                        "y": 17.5,
+                        "z": 1.7050758742698235e-06
+                    },
+                    "minPoint": {
+                        "x": -8.500003814697266,
+                        "y": -17.500001907348633,
+                        "z": -1.4649998547611176e-06
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_BaseColor.dds",
+                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Chess_Pattern",
+                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
+                        "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
+                        "ps": "Stage2FloorPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_BaseColor.dds",
+                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Black_Marble",
+                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Corrider_Floor07",
+                "nodeName": "SM_Corrider_Floor07",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Hall_Floor",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 33.000003814697266,
+                        "y": 36.500003814697266,
+                        "z": 4.4299999899521936e-06
+                    },
+                    "minPoint": {
+                        "x": -33.000003814697266,
+                        "y": -36.500003814697266,
+                        "z": -4.4299999899521936e-06
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_BaseColor.dds",
+                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Chess_Pattern",
+                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
+                        "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
+                        "ps": "Stage2FloorPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_BaseColor.dds",
+                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Black_Marble",
+                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Hall_Floor",
+                "nodeName": "SM_Hall_Floor",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
         "FBXName : ": "SKM_Monster1",
         "aabb": {
             "maxPoint": {
@@ -7635,7 +8016,7 @@
                         "materialName": "M_Glass",
                         "normalMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Glass_Normal.dds",
                         "opacityMap": "",
-                        "ps": "DefaultPS.cso",
+                        "ps": "WindowPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
                         "temp11Map": "",
@@ -7699,260 +8080,6 @@
                 ],
                 "meshName": "SM_Arch_Window_7m",
                 "nodeName": "SM_Arch_Window_7m",
-                "pos": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": -0.0
-                },
-                "quat": {
-                    "w": -0.7071068286895752,
-                    "x": 0.7071068286895752,
-                    "y": 0.0,
-                    "z": 0.0
-                },
-                "scale": {
-                    "x": 1.0,
-                    "y": 1.0,
-                    "z": 1.0
-                }
-            }
-        ],
-        "hasAnimation": false,
-        "meshName": "",
-        "nodeName": "RootNode",
-        "pos": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        },
-        "quat": {
-            "w": -0.5,
-            "x": -0.5,
-            "y": -0.5,
-            "z": -0.5
-        },
-        "scale": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        }
-    },
-    {
-        "AmbientExposure": 1.0,
-        "DiffuseExposure": 1.0,
-        "FBXName : ": "SM_Hall_Floor",
-        "aabb": {
-            "maxPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            },
-            "minPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            }
-        },
-        "boneInfo": {
-            "index": -1
-        },
-        "child": [
-            {
-                "AmbientExposure": 1.0,
-                "DiffuseExposure": 1.0,
-                "aabb": {
-                    "maxPoint": {
-                        "x": 33.000003814697266,
-                        "y": 36.500003814697266,
-                        "z": 4.4299999899521936e-06
-                    },
-                    "minPoint": {
-                        "x": -33.000003814697266,
-                        "y": -36.500003814697266,
-                        "z": -4.4299999899521936e-06
-                    }
-                },
-                "boneInfo": {
-                    "index": -1
-                },
-                "hasAnimation": false,
-                "materialVec": [
-                    {
-                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_BaseColor.dds",
-                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_ARM.dds",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "M_Chess_Pattern",
-                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
-                        "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    },
-                    {
-                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_BaseColor.dds",
-                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_ARM.dds",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "M_Black_Marble",
-                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_Normal.dds",
-                        "opacityMap": "",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    }
-                ],
-                "meshName": "SM_Hall_Floor",
-                "nodeName": "SM_Hall_Floor",
-                "pos": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": -0.0
-                },
-                "quat": {
-                    "w": -0.7071068286895752,
-                    "x": 0.7071068286895752,
-                    "y": 0.0,
-                    "z": 0.0
-                },
-                "scale": {
-                    "x": 1.0,
-                    "y": 1.0,
-                    "z": 1.0
-                }
-            }
-        ],
-        "hasAnimation": false,
-        "meshName": "",
-        "nodeName": "RootNode",
-        "pos": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        },
-        "quat": {
-            "w": -0.5,
-            "x": -0.5,
-            "y": -0.5,
-            "z": -0.5
-        },
-        "scale": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        }
-    },
-    {
-        "AmbientExposure": 1.0,
-        "DiffuseExposure": 1.0,
-        "FBXName : ": "SM_Corrider_Floor07",
-        "aabb": {
-            "maxPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            },
-            "minPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            }
-        },
-        "boneInfo": {
-            "index": -1
-        },
-        "child": [
-            {
-                "AmbientExposure": 1.0,
-                "DiffuseExposure": 1.0,
-                "aabb": {
-                    "maxPoint": {
-                        "x": 8.500003814697266,
-                        "y": 17.5,
-                        "z": 1.7050758742698235e-06
-                    },
-                    "minPoint": {
-                        "x": -8.500003814697266,
-                        "y": -17.500001907348633,
-                        "z": -1.4649998547611176e-06
-                    }
-                },
-                "boneInfo": {
-                    "index": -1
-                },
-                "hasAnimation": false,
-                "materialVec": [
-                    {
-                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_BaseColor.dds",
-                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_ARM.dds",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "M_Chess_Pattern",
-                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
-                        "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    },
-                    {
-                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_BaseColor.dds",
-                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_ARM.dds",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "M_Black_Marble",
-                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_Normal.dds",
-                        "opacityMap": "",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    }
-                ],
-                "meshName": "SM_Corrider_Floor07",
-                "nodeName": "SM_Corrider_Floor07",
                 "pos": {
                     "x": 0.0,
                     "y": 0.0,
@@ -9451,7 +9578,7 @@
                         "materialName": "M_Chess_Pattern",
                         "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
                         "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
-                        "ps": "DefaultPS.cso",
+                        "ps": "Stage2FloorPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
                         "temp11Map": "",
@@ -11927,7 +12054,7 @@
                         "materialName": "M_Chess_Pattern",
                         "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
                         "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
-                        "ps": "DefaultPS.cso",
+                        "ps": "Stage2FloorPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
                         "temp11Map": "",
@@ -12009,7 +12136,7 @@
     {
         "AmbientExposure": 1.0,
         "DiffuseExposure": 1.0,
-        "FBXName : ": "SM_Gimmick",
+        "FBXName : ": "SM_Green_Wall_7m",
         "aabb": {
             "maxPoint": {
                 "x": -431602080.0,
@@ -12031,14 +12158,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 1.750000238418579,
-                        "y": 1.750000238418579,
-                        "z": 0.22168377041816711
+                        "x": 3.5,
+                        "y": 0.14393486082553864,
+                        "z": 24.31439971923828
                     },
                     "minPoint": {
-                        "x": -1.750000238418579,
-                        "y": -1.750000238418579,
-                        "z": -2.2989708270415576e-07
+                        "x": -3.4999992847442627,
+                        "y": 0.1439324915409088,
+                        "z": 4.265471458435059
                     }
                 },
                 "boneInfo": {
@@ -12047,11 +12174,34 @@
                 "hasAnimation": false,
                 "materialVec": [
                     {
-                        "albedoMap": "FBX/SM_Gimmick/SM_Gimmick.fbm/T_Gimmick_BaseColor.dds",
-                        "armMap": "FBX/SM_Gimmick/SM_Gimmick.fbm/T_Gimmick_ARM.dds",
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "M_Gimmick",
+                        "materialName": "M_Wood",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Green_Arch_Window_14m/SM_Green_Arch_Window_14m.fbm/T_Wall_BaseColor01.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Green_SquarePattern_wall",
                         "normalMap": "",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
@@ -12070,8 +12220,8 @@
                         "vs": "DefaultVS.cso"
                     }
                 ],
-                "meshName": "SM_Gimmick",
-                "nodeName": "SM_Gimmick",
+                "meshName": "SM_Green_Wall_7m",
+                "nodeName": "SM_Green_Wall_7m",
                 "pos": {
                     "x": 0.0,
                     "y": 0.0,
@@ -14946,7 +15096,7 @@
                         "materialName": "M_Glass",
                         "normalMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Glass_Normal.dds",
                         "opacityMap": "",
-                        "ps": "DefaultPS.cso",
+                        "ps": "WindowPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
                         "temp11Map": "",
@@ -14967,7 +15117,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Wood",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -15744,7 +15894,7 @@
     {
         "AmbientExposure": 1.0,
         "DiffuseExposure": 1.0,
-        "FBXName : ": "SM_Hall_door_Right",
+        "FBXName : ": "SM_Purple_Arch_Window_7m",
         "aabb": {
             "maxPoint": {
                 "x": -431602080.0,
@@ -15766,14 +15916,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 4.655475616455078,
-                        "y": 0.5457627773284912,
-                        "z": 8.633950233459473
+                        "x": 3.490729331970215,
+                        "y": 0.1553441286087036,
+                        "z": 24.31439971923828
                     },
                     "minPoint": {
-                        "x": 1.1021575829772701e-07,
-                        "y": -0.5457642078399658,
-                        "z": -0.01164097897708416
+                        "x": -3.5092692375183105,
+                        "y": 0.14392590522766113,
+                        "z": 4.265470027923584
                     }
                 },
                 "boneInfo": {
@@ -15782,11 +15932,80 @@
                 "hasAnimation": false,
                 "materialVec": [
                     {
-                        "albedoMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_BaseColor.dds",
-                        "armMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_ARM.dds",
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Window_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Window_ARM.dds",
+                        "emissionMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Window_Emissive.dds",
+                        "heightMap": "",
+                        "materialName": "M_Window",
+                        "normalMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Window_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Glass_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Glass_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "M_Door",
+                        "materialName": "M_Glass",
+                        "normalMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Glass_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "WindowPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Wood",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Purple_Arch_Window_14m/SM_Purple_Arch_Window_14m.fbm/T_Wall_BaseColor02.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Purple_SquarePattern_wall",
                         "normalMap": "",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
@@ -15805,8 +16024,8 @@
                         "vs": "DefaultVS.cso"
                     }
                 ],
-                "meshName": "SM_Hall_door_Right",
-                "nodeName": "SM_Hall_door_Right",
+                "meshName": "SM_Purple_Arch_Window_7m",
+                "nodeName": "SM_Purple_Arch_Window_7m",
                 "pos": {
                     "x": 0.0,
                     "y": 0.0,
@@ -16459,7 +16678,7 @@
                         "materialName": "M_Chess_Pattern",
                         "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
                         "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
-                        "ps": "DefaultPS.cso",
+                        "ps": "Stage2FloorPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
                         "temp11Map": "",
@@ -17002,7 +17221,7 @@
                         "materialName": "M_Chess_Pattern",
                         "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
                         "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
-                        "ps": "DefaultPS.cso",
+                        "ps": "Stage2FloorPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
                         "temp11Map": "",
@@ -17129,7 +17348,7 @@
                         "materialName": "M_Chess_Pattern",
                         "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
                         "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
-                        "ps": "DefaultPS.cso",
+                        "ps": "Stage2FloorPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
                         "temp11Map": "",
@@ -17401,6 +17620,133 @@
                 ],
                 "meshName": "SM_Fence",
                 "nodeName": "SM_Fence",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Green_Wall_21m",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 10.500001907348633,
+                        "y": 0.14394819736480713,
+                        "z": 24.314401626586914
+                    },
+                    "minPoint": {
+                        "x": -10.499998092651367,
+                        "y": 0.14393669366836548,
+                        "z": 4.265469074249268
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Wood",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Green_Arch_Window_14m/SM_Green_Arch_Window_14m.fbm/T_Wall_BaseColor01.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Green_SquarePattern_wall",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Green_Wall_21m",
+                "nodeName": "SM_Green_Wall_21m",
                 "pos": {
                     "x": 0.0,
                     "y": 0.0,
@@ -17754,6 +18100,422 @@
     {
         "AmbientExposure": 1.0,
         "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Stone_002",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 2.194591760635376,
+                        "y": 2.6371896266937256,
+                        "z": 3.9791083335876465
+                    },
+                    "minPoint": {
+                        "x": -1.8552141189575195,
+                        "y": -1.5834652185440063,
+                        "z": -2.426426887512207
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Stone_002/SM_Stone_002.fbm/T_Stone_002_BaseColor.dds",
+                        "armMap": "FBX/SM_Stone_002/SM_Stone_002.fbm/T_Stone_002_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Stone_002",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Stone_002",
+                "nodeName": "SM_Stone_002",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Gimmick01",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 1.75,
+                        "y": 1.75,
+                        "z": 0.22168371081352234
+                    },
+                    "minPoint": {
+                        "x": -1.75,
+                        "y": -1.75,
+                        "z": -1.0499724822921053e-07
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Gimmick01/SM_Gimmick01.fbm/T_Gimmick_BaseColor.dds",
+                        "armMap": "FBX/SM_Gimmick01/SM_Gimmick01.fbm/T_Gimmick_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Gimmick",
+                        "normalMap": "FBX/SM_Gimmick01/SM_Gimmick01.fbm/T_Gimmick_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Gimmick01",
+                "nodeName": "SM_Gimmick01",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Stone_001",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 1.9675216674804688,
+                        "y": 1.7858113050460815,
+                        "z": 1.7859184741973877
+                    },
+                    "minPoint": {
+                        "x": -2.076474905014038,
+                        "y": -1.720373272895813,
+                        "z": -1.0129406452178955
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Stone_001/SM_Stone_001.fbm/T_Stone_001_BaseColor.dds",
+                        "armMap": "FBX/SM_Stone_001/SM_Stone_001.fbm/T_Stone_001_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Stone_001",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Stone_001",
+                "nodeName": "SM_Stone_001",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Gimmick02",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 1.4973100423812866,
+                        "y": 3.4970788955688477,
+                        "z": 25.36818504333496
+                    },
+                    "minPoint": {
+                        "x": -0.7165952324867249,
+                        "y": -3.4970788955688477,
+                        "z": -5.6193826480921416e-08
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Gimmick02/SM_Gimmick02.fbm/T_Gimmick02_BaseColor.dds",
+                        "armMap": "FBX/SM_Gimmick02/SM_Gimmick02.fbm/T_Gimmick02_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Gimmick02",
+                        "normalMap": "FBX/SM_Gimmick02/SM_Gimmick02.fbm/T_Gimmick02_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Gimmick02",
+                "nodeName": "SM_Gimmick02",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Grass_001",
         "aabb": {
             "maxPoint": {
@@ -17962,6 +18724,352 @@
     {
         "AmbientExposure": 1.0,
         "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Green_Arch_Window_14m",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 7.000000953674316,
+                        "y": 0.15534420311450958,
+                        "z": 24.31439971923828
+                    },
+                    "minPoint": {
+                        "x": -6.999999046325684,
+                        "y": 0.1439252495765686,
+                        "z": 4.2654709815979
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Window_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Window_ARM.dds",
+                        "emissionMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Window_Emissive.dds",
+                        "heightMap": "",
+                        "materialName": "M_Window",
+                        "normalMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Window_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Glass_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Glass_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Glass",
+                        "normalMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Glass_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "WindowPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Wood",
+                        "normalMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Green_Arch_Window_14m/SM_Green_Arch_Window_14m.fbm/T_Wall_BaseColor01.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Green_SquarePattern_wall",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Green_Arch_Window_14m",
+                "nodeName": "SM_Green_Arch_Window_14m",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Green_Arch_Window_7m",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 3.490729331970215,
+                        "y": 0.1553441286087036,
+                        "z": 24.31439971923828
+                    },
+                    "minPoint": {
+                        "x": -3.5092692375183105,
+                        "y": 0.14392590522766113,
+                        "z": 4.265470027923584
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Window_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Window_ARM.dds",
+                        "emissionMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Window_Emissive.dds",
+                        "heightMap": "",
+                        "materialName": "M_Window",
+                        "normalMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Window_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Glass_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Glass_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Glass",
+                        "normalMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Glass_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "WindowPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Wood",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Green_Arch_Window_14m/SM_Green_Arch_Window_14m.fbm/T_Wall_BaseColor01.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Green_SquarePattern_wall",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Green_Arch_Window_7m",
+                "nodeName": "SM_Green_Arch_Window_7m",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
         "FBXName : ": "SM_GuideBook",
         "aabb": {
             "maxPoint": {
@@ -18088,14 +19196,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 5.5333571434021,
-                        "y": 0.46341851353645325,
-                        "z": 12.346185684204102
+                        "x": 12.000006675720215,
+                        "y": 0.08289267867803574,
+                        "z": 24.314401626586914
                     },
                     "minPoint": {
-                        "x": -5.533357620239258,
-                        "y": -0.49283096194267273,
-                        "z": -4.5632009459950496e-07
+                        "x": -11.99999713897705,
+                        "y": -0.16035494208335876,
+                        "z": 4.265469074249268
                     }
                 },
                 "boneInfo": {
@@ -18109,6 +19217,52 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Door",
+                        "normalMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Wood",
+                        "normalMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wall_BaseColor.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_SquarePattern_wall",
                         "normalMap": "",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
@@ -18213,7 +19367,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Door",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -18233,6 +19387,110 @@
                 ],
                 "meshName": "SM_Hall_door_Left",
                 "nodeName": "SM_Hall_door_Left",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Hall_door_Right",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 4.655475616455078,
+                        "y": 0.5457627773284912,
+                        "z": 8.633950233459473
+                    },
+                    "minPoint": {
+                        "x": 1.1021575829772701e-07,
+                        "y": -0.5457642078399658,
+                        "z": -0.01164097897708416
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_BaseColor.dds",
+                        "armMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Door",
+                        "normalMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Hall_door_Right",
+                "nodeName": "SM_Hall_door_Right",
                 "pos": {
                     "x": 0.0,
                     "y": 0.0,
@@ -18319,7 +19577,7 @@
                         "materialName": "M_Chess_Pattern",
                         "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
                         "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
-                        "ps": "DefaultPS.cso",
+                        "ps": "Stage2FloorPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
                         "temp11Map": "",
@@ -18781,7 +20039,7 @@
                         "materialName": "M_Chess_Pattern",
                         "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
                         "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
-                        "ps": "DefaultPS.cso",
+                        "ps": "Stage2FloorPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
                         "temp11Map": "",
@@ -19360,6 +20618,560 @@
     {
         "AmbientExposure": 1.0,
         "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Purple_Arch_Window_14m",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 7.000000953674316,
+                        "y": 0.15534420311450958,
+                        "z": 24.31439971923828
+                    },
+                    "minPoint": {
+                        "x": -6.999999046325684,
+                        "y": 0.1439252495765686,
+                        "z": 4.2654709815979
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Window_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Window_ARM.dds",
+                        "emissionMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Window_Emissive.dds",
+                        "heightMap": "",
+                        "materialName": "M_Window",
+                        "normalMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Window_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Glass_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Glass_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Glass",
+                        "normalMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Glass_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "WindowPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Wood",
+                        "normalMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Purple_Arch_Window_14m/SM_Purple_Arch_Window_14m.fbm/T_Wall_BaseColor02.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Purple_SquarePattern_wall",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Purple_Arch_Window_14m",
+                "nodeName": "SM_Purple_Arch_Window_14m",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Purple_Wall_21m",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 10.500001907348633,
+                        "y": 0.14394819736480713,
+                        "z": 24.314401626586914
+                    },
+                    "minPoint": {
+                        "x": -10.499998092651367,
+                        "y": 0.14393669366836548,
+                        "z": 4.265469074249268
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Wood",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Purple_Arch_Window_14m/SM_Purple_Arch_Window_14m.fbm/T_Wall_BaseColor02.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Purple_SquarePattern_wall",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Purple_Wall_21m",
+                "nodeName": "SM_Purple_Wall_21m",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Purple_Wall_3m",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 1.5000017881393433,
+                        "y": 0.14393502473831177,
+                        "z": 24.31439971923828
+                    },
+                    "minPoint": {
+                        "x": -1.5000065565109253,
+                        "y": 0.14393240213394165,
+                        "z": 4.265471458435059
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Wood",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Purple_Arch_Window_14m/SM_Purple_Arch_Window_14m.fbm/T_Wall_BaseColor02.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Purple_SquarePattern_wall",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Purple_Wall_3m",
+                "nodeName": "SM_Purple_Wall_3m",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Purple_Wall_7m",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 3.5,
+                        "y": 0.14393486082553864,
+                        "z": 24.31439971923828
+                    },
+                    "minPoint": {
+                        "x": -3.4999992847442627,
+                        "y": 0.1439324915409088,
+                        "z": 4.265471458435059
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_BaseColor.dds",
+                        "armMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Wood",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Purple_Arch_Window_14m/SM_Purple_Arch_Window_14m.fbm/T_Wall_BaseColor02.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Purple_SquarePattern_wall",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Purple_Wall_7m",
+                "nodeName": "SM_Purple_Wall_7m",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Room_Floor01",
         "aabb": {
             "maxPoint": {
@@ -19405,7 +21217,7 @@
                         "materialName": "M_Chess_Pattern",
                         "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
                         "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
-                        "ps": "DefaultPS.cso",
+                        "ps": "Stage2FloorPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
                         "temp11Map": "",
@@ -19532,7 +21344,7 @@
                         "materialName": "M_Chess_Pattern",
                         "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
                         "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
-                        "ps": "DefaultPS.cso",
+                        "ps": "Stage2FloorPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
                         "temp11Map": "",
@@ -19718,7 +21530,7 @@
     {
         "AmbientExposure": 1.0,
         "DiffuseExposure": 1.0,
-        "FBXName : ": "SM_Spear",
+        "FBXName : ": "SM_Spike01",
         "aabb": {
             "maxPoint": {
                 "x": -431602080.0,
@@ -19740,14 +21552,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 1.076762318611145,
-                        "y": 1.3152737617492676,
-                        "z": 2.456528663635254
+                        "x": 1.170340895652771,
+                        "y": 1.177545428276062,
+                        "z": 1.9875497817993164
                     },
                     "minPoint": {
-                        "x": -1.076762080192566,
-                        "y": -1.3152738809585571,
-                        "z": -1.3346054572593857e-07
+                        "x": -1.170340895652771,
+                        "y": -1.177545428276062,
+                        "z": -1.455481140055781e-07
                     }
                 },
                 "boneInfo": {
@@ -19756,12 +21568,12 @@
                 "hasAnimation": false,
                 "materialVec": [
                     {
-                        "albedoMap": "FBX/SM_Gimmick/SM_Gimmick.fbm/T_Gimmick_BaseColor.dds",
-                        "armMap": "FBX/SM_Gimmick/SM_Gimmick.fbm/T_Gimmick_ARM.dds",
+                        "albedoMap": "FBX/SM_Gimmick01/SM_Gimmick01.fbm/T_Gimmick_BaseColor.dds",
+                        "armMap": "FBX/SM_Gimmick01/SM_Gimmick01.fbm/T_Gimmick_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Gimmick",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_Gimmick01/SM_Gimmick01.fbm/T_Gimmick_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -19779,8 +21591,216 @@
                         "vs": "DefaultVS.cso"
                     }
                 ],
-                "meshName": "SM_Spear",
-                "nodeName": "SM_Spear",
+                "meshName": "SM_Spike01",
+                "nodeName": "SM_Spike01",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Spike02",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 0.06966302543878555,
+                        "y": 0.2792853116989136,
+                        "z": 2.3558409214019775
+                    },
+                    "minPoint": {
+                        "x": -0.07166000455617905,
+                        "y": -0.2792853116989136,
+                        "z": 0.004253147169947624
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Gimmick01/SM_Gimmick01.fbm/T_Gimmick_BaseColor.dds",
+                        "armMap": "FBX/SM_Gimmick01/SM_Gimmick01.fbm/T_Gimmick_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Gimmick",
+                        "normalMap": "FBX/SM_Gimmick01/SM_Gimmick01.fbm/T_Gimmick_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Spike02",
+                "nodeName": "SM_Spike02",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Spike03",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 0.07066171616315842,
+                        "y": 0.2792852222919464,
+                        "z": 2.3515877723693848
+                    },
+                    "minPoint": {
+                        "x": -0.07066137343645096,
+                        "y": -0.27928540110588074,
+                        "z": -9.099042630467125e-10
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Gimmick01/SM_Gimmick01.fbm/T_Gimmick_BaseColor.dds",
+                        "armMap": "FBX/SM_Gimmick01/SM_Gimmick01.fbm/T_Gimmick_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Gimmick",
+                        "normalMap": "FBX/SM_Gimmick01/SM_Gimmick01.fbm/T_Gimmick_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Spike03",
+                "nodeName": "SM_Spike03",
                 "pos": {
                     "x": 0.0,
                     "y": 0.0,
@@ -19868,7 +21888,7 @@
                         "normalMap": "Texture\\VertexColor\\T_Dirt_Normal.dds",
                         "opacityMap": "",
                         "ps": "Stage_1_FloorPS.cso",
-                        "temp0Map": "Texture\\VertexColor\\T_Grass_BaseColor.dds",
+                        "temp0Map": "Texture\\VertexColor\\T_GrassBlend_BaseColor.dds",
                         "temp10Map": "",
                         "temp11Map": "",
                         "temp1Map": "Texture\\VertexColor\\T_GrassBlend_Normal.dds",
@@ -19885,214 +21905,6 @@
                 ],
                 "meshName": "SM_Stage1_Floor",
                 "nodeName": "SM_Stage1_Floor",
-                "pos": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": -0.0
-                },
-                "quat": {
-                    "w": -0.7071068286895752,
-                    "x": 0.7071068286895752,
-                    "y": 0.0,
-                    "z": 0.0
-                },
-                "scale": {
-                    "x": 1.0,
-                    "y": 1.0,
-                    "z": 1.0
-                }
-            }
-        ],
-        "hasAnimation": false,
-        "meshName": "",
-        "nodeName": "RootNode",
-        "pos": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        },
-        "quat": {
-            "w": -0.5,
-            "x": -0.5,
-            "y": -0.5,
-            "z": -0.5
-        },
-        "scale": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        }
-    },
-    {
-        "AmbientExposure": 1.0,
-        "DiffuseExposure": 1.0,
-        "FBXName : ": "SM_Stone_001",
-        "aabb": {
-            "maxPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            },
-            "minPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            }
-        },
-        "boneInfo": {
-            "index": -1
-        },
-        "child": [
-            {
-                "AmbientExposure": 1.0,
-                "DiffuseExposure": 1.0,
-                "aabb": {
-                    "maxPoint": {
-                        "x": 1.9675216674804688,
-                        "y": 1.7858113050460815,
-                        "z": 1.7859184741973877
-                    },
-                    "minPoint": {
-                        "x": -2.076474905014038,
-                        "y": -1.720373272895813,
-                        "z": -1.0129406452178955
-                    }
-                },
-                "boneInfo": {
-                    "index": -1
-                },
-                "hasAnimation": false,
-                "materialVec": [
-                    {
-                        "albedoMap": "FBX/SM_Stone_001/SM_Stone_001.fbm/T_Stone_001_BaseColor.dds",
-                        "armMap": "FBX/SM_Stone_001/SM_Stone_001.fbm/T_Stone_001_ARM.dds",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "M_Stone_001",
-                        "normalMap": "",
-                        "opacityMap": "",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    }
-                ],
-                "meshName": "SM_Stone_001",
-                "nodeName": "SM_Stone_001",
-                "pos": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": -0.0
-                },
-                "quat": {
-                    "w": -0.7071068286895752,
-                    "x": 0.7071068286895752,
-                    "y": 0.0,
-                    "z": 0.0
-                },
-                "scale": {
-                    "x": 1.0,
-                    "y": 1.0,
-                    "z": 1.0
-                }
-            }
-        ],
-        "hasAnimation": false,
-        "meshName": "",
-        "nodeName": "RootNode",
-        "pos": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        },
-        "quat": {
-            "w": -0.5,
-            "x": -0.5,
-            "y": -0.5,
-            "z": -0.5
-        },
-        "scale": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        }
-    },
-    {
-        "AmbientExposure": 1.0,
-        "DiffuseExposure": 1.0,
-        "FBXName : ": "SM_Stone_002",
-        "aabb": {
-            "maxPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            },
-            "minPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            }
-        },
-        "boneInfo": {
-            "index": -1
-        },
-        "child": [
-            {
-                "AmbientExposure": 1.0,
-                "DiffuseExposure": 1.0,
-                "aabb": {
-                    "maxPoint": {
-                        "x": 2.194591760635376,
-                        "y": 2.6371896266937256,
-                        "z": 3.9791083335876465
-                    },
-                    "minPoint": {
-                        "x": -1.8552141189575195,
-                        "y": -1.5834652185440063,
-                        "z": -2.426426887512207
-                    }
-                },
-                "boneInfo": {
-                    "index": -1
-                },
-                "hasAnimation": false,
-                "materialVec": [
-                    {
-                        "albedoMap": "FBX/SM_Stone_002/SM_Stone_002.fbm/T_Stone_002_BaseColor.dds",
-                        "armMap": "FBX/SM_Stone_002/SM_Stone_002.fbm/T_Stone_002_ARM.dds",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "M_Stone_002",
-                        "normalMap": "",
-                        "opacityMap": "",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    }
-                ],
-                "meshName": "SM_Stone_002",
-                "nodeName": "SM_Stone_002",
                 "pos": {
                     "x": 0.0,
                     "y": 0.0,
