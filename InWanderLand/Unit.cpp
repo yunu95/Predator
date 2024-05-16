@@ -170,9 +170,7 @@ void Unit::Start()
 	unitFSM.transitions[UnitState::OffsetMove].push_back({ UnitState::WaveStart,
 	    [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
 
-	/// OffsetMove
-	unitFSM.transitions[UnitState::OffsetMove].push_back({ UnitState::Move,
-		[this]() { return application::CinematicManager::Instance().IsCinematicMode(); } });
+    
 
     /// WaveStart
 	unitFSM.transitions[UnitState::WaveStart].push_back({ UnitState::WaveMotion,
