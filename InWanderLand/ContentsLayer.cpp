@@ -417,6 +417,10 @@ void application::contents::ContentsLayer::StopContents(ContentsStopFlag stopFla
     ContentsObserver::Instance().StopObservee();
     ContentsObserver::Instance().ClearObservees();
 
+	yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
+	yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage1LightMap");
+
+
     /// Playable 동작들을 일괄 처리할 부분입니다.
     PlayableComponent::OnGameStopAll();
 

@@ -641,6 +641,7 @@ void Unit::MoveUpdate()
         abs(GetGameObject()->GetTransform()->GetWorldPosition().z - m_currentMovePosition.z) < 0.2f)
     {
         currentOrder = UnitState::Idle;
+        dotween->StopAllDotweenFunction();
         if (isPermittedToTacticAction)
         {
             isPermittedToTacticAction = false;
@@ -1707,10 +1708,7 @@ void Unit::SetUnitStateDirectly(Unit::UnitState p_unitState)
         break;
     case Unit::UnitState::OffsetMove:
 	{
-		if (unitFSM.currentState == UnitState::Move || unitFSM.currentState == UnitState::Idle)
-		{
-			unitFSM.SetUnitStateDirectly(p_unitState);
-		}
+        unitFSM.SetUnitStateDirectly(p_unitState);
         break;
     }
     case Unit::UnitState::WaveStart:

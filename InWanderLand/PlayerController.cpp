@@ -200,18 +200,20 @@ void PlayerController::SetCurrentPlayerSerialNumber(Unit::UnitType p_num)
 
 void PlayerController::ReportBattleEnded()
 {
-    Unit::UnitType tempLeaderType;
-
-	for (auto e : playerComponentMap)
-	{
-        if (e.second->GetActive())
+    if (!playerComponentMap[currentSelectedSerialNumber]->GetActive())
+    {
+        for (auto e : playerComponentMap)
         {
-            tempLeaderType = e.first;
-            break;
+            if (e.second->GetActive())
+            {
+                currentSelectedSerialNumber = e.first;
+                InputManager::Instance().SelectPlayer(currentSelectedSerialNumber);
+                break;
+            }
         }
-	}
+    }
 
-    ChangeLeaderPlayerUnit(tempLeaderType);
+    ChangeLeaderPlayerUnit(currentSelectedSerialNumber);
 }
 
 void PlayerController::ChangeLeaderPlayerUnit(Unit::UnitType p_num)
