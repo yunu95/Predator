@@ -8,6 +8,7 @@ class MagicianProductor;
 class MagicianSkillSystem : public PlayerSkillSystem
 {
 private:
+    Coroutine Throw3BallsSequentially();
     SkillRequirements QSkillProjectile;
     SkillRequirements QSkillFieldDamage;
 
