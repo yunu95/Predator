@@ -11,6 +11,8 @@
 #include "YunutyGenericHash.h"
 #include "YunutyGenericEqual.h"
 #include "YunutyStringConversion.h"
+#include "yunutyCoroutine.h"
+#include "YunutyYieldInstruction.h"
 //#include "GameObject.h"
 
 #ifdef YUNUTY_EXPORTS
@@ -39,30 +41,6 @@ namespace yunutyEngine
         public Object
     {
     public:
-        struct Coroutine
-        {
-            struct promise_type {
-                Coroutine get_return_object() {
-                    return Coroutine{ std::coroutine_handle<promise_type>::from_promise(*this) };
-                }
-                std::suspend_always initial_suspend() { return std::suspend_always{}; }
-                std::suspend_always final_suspend() noexcept { return std::suspend_always{}; }
-                void return_void() {}
-                std::suspend_always yield_value(std::suspend_always) { return {}; }
-                void unhandled_exception() {  }
-            };
-            std::coroutine_handle<promise_type> handle;
-            explicit Coroutine(std::coroutine_handle<promise_type> h) : handle(h) {}
-            ~Coroutine() { if (handle) handle.destroy(); }
-            Coroutine(Coroutine const&) = delete;
-            Coroutine(Coroutine&& other) noexcept
-            {
-                handle = std::move(other.handle);
-                other.handle = nullptr;
-            };
-            Coroutine& operator=(Coroutine const&) = delete;
-            void resume() { handle.resume(); }
-        };
         template<typename ComponentType>
         static ComponentType* LoadReferenceByGUID(const char* guid)
         {
@@ -147,8 +125,8 @@ namespace yunutyEngine
         void SetActive(bool active);
         // Update함수를 부를지 말지 결정합니다. isUpdate가 false면 게임 사이클에서 업데이트 함수가 불릴때 제외됩니다.
         void SetIsUpdating(bool isUpdating);
-        std::weak_ptr<Coroutine> StartCoroutine(Coroutine&& coroutine);
-        void DeleteCoroutine(const std::weak_ptr<Coroutine>& coroutine);
+        std::weak_ptr<yunutyEngine::coroutine::Coroutine> StartCoroutine(coroutine::Coroutine&& coroutine);
+        void DeleteCoroutine(const std::weak_ptr<coroutine::Coroutine>& coroutine);
 
         Component(const Component&) = delete;
         Component& operator=(const Component&) = delete;
@@ -170,7 +148,7 @@ namespace yunutyEngine
         };
         static Component::AddComponentDesc addComponentDesc;
         static std::unordered_map<GUID, Component*, yutility::GenericHash<GUID>, yutility::GenericEqual<GUID>> guidPtrMap;
-        std::unordered_set<std::shared_ptr<Coroutine>> coroutines;
+        std::unordered_set<std::shared_ptr<coroutine::Coroutine>> coroutines;
         GameObject* gameObject = nullptr;
         bool StartCalled = false;
         bool isActive{ true };

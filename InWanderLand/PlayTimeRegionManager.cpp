@@ -48,12 +48,22 @@ void PlayTimeRegionManager::AddRegionData(application::editor::RegionData* p_reg
 				{
 					for (auto e : PlayerController::Instance().GetPlayerMap())
 					{
-						e.second->GetGameObject()->GetComponent<yunutyEngine::NavigationAgent>()->SetActive(false);
+						e.second->m_navAgentComponent->SetActive(false);
 						e.second->GetTransform()->SetWorldPosition({ stage2StartPosition });
-						e.second->GetGameObject()->GetComponent<yunutyEngine::NavigationAgent>()->SetActive(true);
-						e.second->GetGameObject()->GetComponent<yunutyEngine::NavigationAgent>()->AssignToNavigationField(&SingleNavigationField::Instance());
-						e.second->GetGameObject()->GetComponent<yunutyEngine::NavigationAgent>()->Relocate(stage2StartPosition);
-						e.second->GetGameObject()->GetComponent<yunutyEngine::NavigationAgent>()->MoveTo(stage2StartPosition);
+						e.second->m_navAgentComponent->SetActive(true);
+						e.second->m_navAgentComponent->AssignToNavigationField(&SingleNavigationField::Instance());
+						e.second->m_navAgentComponent->Relocate(stage2StartPosition);
+						e.second->m_navAgentComponent->MoveTo(stage2StartPosition);
+						e.second->SetUnitStateIdle();
+						e.second->StopMove();
+
+
+						e.second->m_navAgentComponent->SetActive(false);
+						e.second->GetTransform()->SetWorldPosition({ stage2StartPosition });
+						e.second->m_navAgentComponent->SetActive(true);
+						e.second->m_navAgentComponent->AssignToNavigationField(&SingleNavigationField::Instance());
+						e.second->m_navAgentComponent->Relocate(stage2StartPosition);
+						e.second->m_navAgentComponent->MoveTo(stage2StartPosition);
 						e.second->SetUnitStateIdle();
 						e.second->StopMove();
 					}
@@ -70,6 +80,8 @@ void PlayTimeRegionManager::AddRegionData(application::editor::RegionData* p_reg
 						e->SetSelfActive(false);
 					}
 
+					yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(false);
+					yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage2LightMap");
 				};
 		}
 		break;

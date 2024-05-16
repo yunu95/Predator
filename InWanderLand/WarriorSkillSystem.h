@@ -5,7 +5,7 @@ class KnockBackComponent;
 class WarriorSkillSystem : public PlayerSkillSystem
 {
 private:
-    Coroutine ImpactOnTheEnd();
+    yunutyEngine::coroutine::Coroutine ImpactOnTheEnd();
     KnockBackComponent* GetKnockBackComponent();
     SkillRequirements QknockBackSkill;
     SkillRequirements WTauntSkill;

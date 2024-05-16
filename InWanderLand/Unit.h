@@ -176,6 +176,7 @@ private:
     float skillFunctionStartElapsed;
     float m_currentSelectedSkillEngageDelay;
     int m_selectedSkillTimingFrame;
+
     yunuGI::IAnimation* m_currentSkillAnimation;
     std::unordered_map<SkillEnum, float> m_skillDurationMap;
     std::unordered_map<SkillEnum, yunuGI::IAnimation*> m_skillAnimationMap;
@@ -215,9 +216,10 @@ private:
 
     bool isTacticAttackMovePermitted{ false };
 
-   bool isUnitCinematicEnded{ true };
+    bool isUnitCinematicEnded{ true };
 
 public:
+	bool isSkillUsed{ false };
     bool isPermittedToTacticAction{ false };
 
 private:
@@ -399,10 +401,8 @@ public:
 
     void ResetUnitMembers();
 
-    void SetUnitLocalTimeScale(float p_scale);
-
-    void EnemyActionOnTacticModeEngaged();
-    void EnemyActionOnTacticModeEnded();
+    void UnitActionOnTacticModeEngaged();
+    void UnitActionOnTacticModeEnded();
 
     bool IsAllExtraPlayerUnitDead();
     bool CheckEnemyStoppedByTacticMode() const;

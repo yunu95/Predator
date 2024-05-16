@@ -7,7 +7,7 @@ void TrapTriggerSensor::OnTriggerEnter(physics::Collider* collider)
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
 	{
-		trapUnit->SetUnitStateToSkill();
+		trapChessSkillSystem->ActivateSkill(Unit::SkillEnum::BossSkillOne, Vector3d::zero);
 	}
 }
 

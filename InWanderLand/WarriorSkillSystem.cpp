@@ -6,7 +6,7 @@
 #include "Application.h"
 #include "TacticModeSystem.h"
 
-Component::Coroutine WarriorSkillSystem::ImpactOnTheEnd()
+yunutyEngine::coroutine::Coroutine WarriorSkillSystem::ImpactOnTheEnd()
 {
     GetKnockBackComponent()->ClearCrushedUnitList();
     GetKnockBackComponent()->GetTriggerCollider().lock()->SetRadius(application::GlobalConstant::GetSingletonInstance().pod.robinQSkillImpactKnockbackRadius);

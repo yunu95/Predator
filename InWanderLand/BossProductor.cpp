@@ -10,7 +10,7 @@ void BossProductor::SetUnitData()
 	m_unitType = Unit::UnitType::Boss;
 	m_unitSide = Unit::UnitSide::Enemy;
 
-	m_healthPoint = 100000;
+	m_maxHealth = 100000;
 	m_manaPoint = 100;
 
 	m_autoAttackDamage = 10;
@@ -42,7 +42,7 @@ void BossProductor::SingletonInitializer()
 Unit* BossProductor::CreateUnit(Vector3d startPos)
 {
 #pragma region Animation Related Member Setting
-	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_HeartQueen");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
 	/// UnitComponent 추가
@@ -114,6 +114,7 @@ Unit* BossProductor::CreateUnit(Vector3d startPos)
 #pragma endregion
 
 	auto bossSkillSystem = m_unitGameObject->AddComponent<BossSkillSystem>();
+
 	skillOneColliderObject->SetParent(m_unitGameObject);
 	skillOneDebugMesh->SetParent(m_unitGameObject);
 	skillTwoColliderObject->SetParent(m_unitGameObject);
@@ -136,66 +137,66 @@ Unit* BossProductor::CreateUnit(Vector3d startPos)
 	auto& animList = rsrcManager->GetAnimationList();
 	for (auto each : animList)
 	{
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
+		if (each->GetName() == L"Rig_Robin|Ani_HeartQueen_Idle")
 		{
 			m_baseUnitAnimations.m_idleAnimation = each;
 			m_baseUnitAnimations.m_idleAnimation->SetLoop(true);
 			animator->PushAnimation(m_baseUnitAnimations.m_idleAnimation);
 			animator->Play(m_baseUnitAnimations.m_idleAnimation);
 		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
+		else if (each->GetName() == L"Rig_Robin|Ani_HeartQueen_Walk")
 		{
 			m_baseUnitAnimations.m_walkAnimation = each;
 			m_baseUnitAnimations.m_walkAnimation->SetLoop(true);
 			animator->PushAnimation(m_baseUnitAnimations.m_walkAnimation);
 		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+		else if (each->GetName() == L"Rig_Robin|Ani_HeartQueen_Attack")
 		{
 			m_baseUnitAnimations.m_attackAnimation = each;
 			m_baseUnitAnimations.m_attackAnimation->SetLoop(false);
 			animator->PushAnimation(m_baseUnitAnimations.m_attackAnimation);
 		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		else if (each->GetName() == L"Rig_Robin|Ani_HeartQueen_APose")
 		{
 			m_baseUnitAnimations.m_paralysisAnimation = each;
 			m_baseUnitAnimations.m_paralysisAnimation->SetLoop(false);
 			animator->PushAnimation(m_baseUnitAnimations.m_paralysisAnimation);
 		}
-		else if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_APose")
+		else if (each->GetName() == L"Rig_Robin|Ani_HeartQueen_Death")
 		{
 			m_baseUnitAnimations.m_deathAnimation = each;
 			m_baseUnitAnimations.m_deathAnimation->SetLoop(false);
 			animator->PushAnimation(m_baseUnitAnimations.m_deathAnimation);
 		}
 		/// Skill Animation
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleMode")
+		if (each->GetName() == L"Rig_Robin|Ani_HeartQueen_Skill1")
 		{
-			each->SetLoop(false);
+			each->SetLoop(true);
 			animator->PushAnimation(each);
 			m_baseUnitAnimations.m_skillOneAnimation = each;
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillOne, each);
 		}
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
+		if (each->GetName() == L"Rig_Robin|Ani_HeartQueen_Skill2")
 		{
-			each->SetLoop(true);
+			each->SetLoop(false);
 			animator->PushAnimation(each);
 			m_baseUnitAnimations.m_skillTwoAnimation = each;
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillTwo, each);
 		}
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleStart")
+		if (each->GetName() == L"Rig_Robin|Ani_HeartQueen_Skill3")
 		{
 			each->SetLoop(false);
 			animator->PushAnimation(each);
 			m_baseUnitAnimations.m_skillThreeAnimation = each;
 			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillThree, each);
 		}
-		if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
-		{
-			each->SetLoop(true);
-			animator->PushAnimation(each);
-			m_baseUnitAnimations.m_skillFourAnimation = each;
-			m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillFour, each);
-		}
+		//if (each->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
+		//{
+		//	each->SetLoop(true);
+		//	animator->PushAnimation(each);
+		//	m_baseUnitAnimations.m_skillFourAnimation = each;
+		//	m_unitComponent->RegisterSkillAnimation(Unit::SkillEnum::BossSkillFour, each);
+		//}
 	}
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
 	SetUnitAnimationFunction();

@@ -15,7 +15,7 @@ void MagicianProductor::SetUnitData()
     m_unitType = Unit::UnitType::Magician;
     m_unitSide = Unit::UnitSide::Player;
 
-    m_healthPoint = 150;
+    m_maxHealth = 150;
     m_manaPoint = 100;
 
     m_autoAttackDamage = 15;
