@@ -102,6 +102,8 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
 #pragma region SkillSystem Setting
     auto healerSkillSystem = m_unitGameObject->AddComponent<HealerSkillSystem>();
 
+    healerSkillSystem->qDamageComponent = fieldDamageComponent;
+    healerSkillSystem->qDamageCollider = QSkillFieldCollider;
     healerSkillSystem->SetQSkillObject(QSkillFieldObject);
     healerSkillSystem->SetQSkillDebugInfo(QSkillFieldDebugObject);
 

@@ -33,10 +33,6 @@ void InputManager::Update()
                 UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->
                     GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeButtonClickEvent();
             }
-            if (yunutyEngine::Input::isKeyPushed(KeyCode::NUM_4))
-            {
-                SelectPlayer(Unit::UnitType::AllPlayers);
-            }
 
             if (isPlayerSelected && GameManager::Instance().IsBattleSystemOperating() && currentSelectedSerialNumber != All)
             {

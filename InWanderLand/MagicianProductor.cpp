@@ -141,6 +141,7 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 
     magicianSkillSystem->SetSkillOneRange(skillOneRange);
     magicianSkillSystem->SetSkillTwoRange(skillTwoRange);
+    magicianSkillSystem->m_QSkillComponent = fieldDamageComponent;
 #pragma endregion
 
     UnitProductor::AddRangeSystemComponent();
