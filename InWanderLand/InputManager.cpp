@@ -156,7 +156,11 @@ void InputManager::PrepareSkill(Unit::SkillEnum p_skillType)
         UIManager::Instance().GetUIElementByEnum(UIEnumID::ErrorPopup_NoMana)->EnableElement();
         return;
     }
-    //if ()
+    if (!PlayerSkillManager::Instance().IsSkillCoolingDown(static_cast<Unit::UnitType>(currentSelectedSerialNumber), p_skillType))
+    {
+        /// 스킬이 아직 쿨타임이라 스킬을 못하는 경우.
+        return;
+    }
     if (TacticModeSystem::Instance().IsOrderingTimingNow())
     {
         TacticModeSystem::Instance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, p_skillType);

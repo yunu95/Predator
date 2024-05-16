@@ -1124,6 +1124,7 @@ bool Unit::CheckEnemyStoppedByTacticMode() const
 {
     return (!TacticModeSystem::Instance().IsUnitsPerformingCommand() || !TacticModeSystem::Instance().IsOrderingTimingNow());
 }
+
 void Unit::KnockBackUnit(Vector3d targetPosition, float knockBackDuration)
 {
     knockBackStartPoint = GetGameObject()->GetTransform()->GetWorldPosition();
@@ -1139,7 +1140,6 @@ void Unit::ReportLeaderUnitChanged(UnitType p_type)
     if (m_unitType == p_type)
     {
         SetUnitStateDirectly(UnitState::Idle);
-        
         m_followingTargetUnit = nullptr;
     }
     else
