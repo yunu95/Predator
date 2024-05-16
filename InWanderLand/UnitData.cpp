@@ -130,6 +130,7 @@ namespace application
             // 이제 templateData에서 UnitType에 대한 int값을 가져올 수 있다.
             // 이 값을 통해 타입을 분류해 유닛을 배치해보자.
             Vector3d startPosition = Vector3d(pod.position.x, 0, pod.position.z);
+            Quaternion startRotation = Quaternion(pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z);
 
             if (!isSelectorInitialized)
             {
@@ -157,29 +158,20 @@ namespace application
 
             if (pod.templateData->pod.skinnedFBXName == "SKM_Monster1")
             {
-                if (static_cast<Unit::UnitType>(pod.templateData->pod.unitType) == Unit::UnitType::SpikeTrap)
-                {
-                    currentSelectedProductor = &SpikeTrapProductor::Instance();
-                    currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-                    inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-                }
-                else
-                {
-                    currentSelectedProductor = &MeleeEnemyProductor::Instance();
-                    currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-                    MeleeEnemyPool::Instance().SetStageNumber(pod.stage);
-                    MeleeEnemyPool::Instance().SetStartPosition(startPosition);
+				currentSelectedProductor = &MeleeEnemyProductor::Instance();
+				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
+				MeleeEnemyPool::Instance().SetStageNumber(pod.stage);
+				MeleeEnemyPool::Instance().SetStartPosition(startPosition);
 
-                    if (pod.templateData->pod.isEliteMonster == true)
-                    {
-						inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-                        inGameUnit->GetGameObject()->GetComponent<BurnEffect>()->Appear();
-                    }
-                    else
-						inGameUnit = MeleeEnemyPool::Instance().Borrow()->m_pairUnit;
+				if (pod.templateData->pod.isEliteMonster == true)
+				{
+					inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
+					inGameUnit->GetGameObject()->GetComponent<BurnEffect>()->Appear();
+				}
+				else
+					inGameUnit = MeleeEnemyPool::Instance().Borrow()->m_pairUnit;
 
-                    tempShortCutIndex = 2;
-                }
+				tempShortCutIndex = 2;
             }
             else if (pod.templateData->pod.skinnedFBXName == "SKM_Monster2")
             {
@@ -211,7 +203,6 @@ namespace application
                 if (pod.templateData->pod.skinnedFBXName == "SKM_Robin")
                 {
 					currentSelectedProductor = &WarriorProductor::Instance();
-					//currentSelectedProductor = &WarriorProductor::Instance();
                 }
                 else if (pod.templateData->pod.skinnedFBXName == "SKM_Ursula")
                 {
@@ -224,6 +215,8 @@ namespace application
                 currentSelectedProductor->MappingUnitData(pod.templateData->pod);
                 inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
             }
+
+            inGameUnit->GetTransform()->SetWorldRotation(startRotation);
 
             if (inGameUnit)
             {

@@ -90,6 +90,9 @@ void Unit::Start()
     m_burnEffect = GetGameObject()->GetComponent<BurnEffect>();
     m_animatorComponent = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
 
+    if (m_navAgentComponent)
+		m_navAgentComponent->SetSpeed(m_speed);
+
     unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Move,
         [this]() { return (currentOrder == UnitState::Move && !TacticModeSystem::Instance().IsUnitsPerformingCommand()) ||
         (currentOrder == UnitState::Move && TacticModeSystem::Instance().IsUnitsPerformingCommand()); } });
@@ -733,7 +736,6 @@ void Unit::SkillUpdate()
 			ChangeAnimation(m_currentSkillAnimation);
 		}
     }
- 
 }
 
 void Unit::ChaseUpdate()
@@ -1445,13 +1447,11 @@ void Unit::OrderMove(Vector3d position)
     //m_currentTargetUnit = nullptr;
     isAttackMoving = false;
 
-    if (/*(GameManager::Instance().IsBattleSystemOperating() || m_unitType == UnitType::Warrior) &&*/
-        !(currentOrder == UnitState::WaveStart || currentOrder == UnitState::WaveMotion))
+    if (!(currentOrder == UnitState::WaveStart || currentOrder == UnitState::WaveMotion))
     {
         if (currentOrder != UnitState::Skill)
         {
             currentOrder = UnitState::Move;
-            //dotween->DOLookAt(position, rotateTime, false);
         }
     }
 }
@@ -1702,6 +1702,15 @@ void Unit::SetUnitStateDirectly(Unit::UnitState p_unitState)
     default:
         break;
     }
+}
+
+void Unit::ChangeUnitStateToMoveDirectly(Vector3d p_targetPos)
+{
+	m_previousMovePosition = m_currentMovePosition;
+	m_currentMovePosition = p_targetPos;
+	tauntingThisUnit = nullptr;
+	isAttackMoving = false;
+	unitFSM.SetUnitStateDirectly(UnitState::Move);
 }
 
 void Unit::PermitTacticAction()

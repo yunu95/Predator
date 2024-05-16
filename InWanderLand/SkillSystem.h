@@ -11,24 +11,24 @@ class Dotween;
 class SkillSystem : public Component
 {
 protected:
-	Unit* m_unitComponent;
-	Dotween* m_unitDotween;
-	NavigationAgent* m_unitNavComponent;
+    Unit* m_unitComponent;
+    Dotween* m_unitDotween;
+    NavigationAgent* m_unitNavComponent;
 
 protected:
-	virtual void SetOtherComponentsAsMember();
+    virtual void SetOtherComponentsAsMember();
 
-	struct SkillRequirements
-	{
-		GameObject* colliderObject;
-		GameObject* debugObject;
-		Dotween* dotweenComponent;
-	};
+    struct SkillRequirements
+    {
+        GameObject* colliderObject{ nullptr };
+        GameObject* debugObject{ nullptr };
+        Dotween* dotweenComponent{ nullptr };
+    };
 
-	virtual void SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen);
-	virtual void SetSkillRequirmentsPosition(SkillRequirements p_requirments, Vector3d p_pos);
-	virtual void SetSkillRequirmentsRotation(SkillRequirements p_requirments, Quaternion p_quat);
+    virtual void SetSkillRequirmentsActive(SkillRequirements p_requirments, bool p_boolen);
+    virtual void SetSkillRequirmentsPosition(SkillRequirements p_requirments, Vector3d p_pos);
+    virtual void SetSkillRequirmentsRotation(SkillRequirements p_requirments, Quaternion p_quat);
 public:
-	virtual void ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition) = 0;
+    virtual void ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition) = 0;
 };
 

@@ -8,11 +8,9 @@
 void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 {
     m_QSkillComponent->m_blindPersistTime = application::GlobalConstant::GetSingletonInstance().pod.ursulaQSkillBlindDuration;
-    m_QSkillComponent->m_damageTimer->pushDuration = application::GlobalConstant::GetSingletonInstance().pod.ursulaQSkillFieldDuration;
     m_QSkillComponent->m_fieldDamageDelay = application::GlobalConstant::GetSingletonInstance().pod.ursulaQSkillFieldDamageInterval;
     m_QSkillComponent->m_fieldDamage = application::GlobalConstant::GetSingletonInstance().pod.ursulaQSkillFieldDamagePerTick;
     m_QSkillComponent->m_blindPersistTime = application::GlobalConstant::GetSingletonInstance().pod.ursulaQSkillBlindDuration;
-
     /// 장판의 타이머를 Activate하는 함수가 필요...
     //m_QSkillComponent->ActivateFieldTimer();
     if (m_QRadiusCollider.expired())
@@ -51,7 +49,7 @@ void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
                 TacticModeSystem::Instance().ReportTacticActionFinished();
             }
 
-            QSkillFieldDamage.dotweenComponent->DONothing(m_QSkillFieldRemainTime).OnComplete([=]()
+            QSkillFieldDamage.dotweenComponent->DONothing(application::GlobalConstant::GetSingletonInstance().pod.ursulaQSkillFieldDuration).OnComplete([=]()
                 {
                     SetSkillRequirmentsActive(QSkillFieldDamage, false);
                     isQSkillActivating = false;

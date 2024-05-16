@@ -32,3 +32,7 @@
 #include "SkillSystem.h"
 #include "GlobalConstant.h"
 #include "StatusTimer.h"
+#include "DotweenTimer.h"
+#include "YunutyCoroutine.h"
+#include "YunutyYieldInstruction.h"
+#include "YunutyWaitForSeconds.h"

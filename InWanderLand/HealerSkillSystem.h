@@ -2,51 +2,56 @@
 #include "PlayerSkillSystem.h"
 
 class Dotween;
+class HealerProductor;
+class DamageOnlyComponent;
 
 class HealerSkillSystem : public PlayerSkillSystem
 {
 private:
-	SkillRequirements QSkillFieldDamage;
-	SkillRequirements WSkillFieldDamage;
+    SkillRequirements QSkillFieldDamage;
+    SkillRequirements WSkillFieldDamage;
 
-	bool isQSkillActivating;
-	bool isColliderSetActiveFalse;
-	bool isQSkillColliderActivated;
+    bool isQSkillActivating;
+    bool isColliderSetActiveFalse;
+    bool isQSkillColliderActivated;
 
-	float QSkillJumpXdistance = 3.0f;
-	float QSkillJumpYdistance = 2.0f;
-	float reachTopTime = 1.5f;
-	
-	float QSkillColliderRemainTime = 1.0f;
-	float QSkillColliderElapsed = 0.0f;
+    float QSkillJumpXdistance = 3.0f;
+    float QSkillJumpYdistance = 2.0f;
+    float reachTopTime = 1.5f;
 
-	bool isWSkillActivating;
-	bool isWSkillColliderActivated;
+    float QSkillColliderRemainTime = 1.0f;
+    float QSkillColliderElapsed = 0.0f;
 
-	float WSkillColliderRemainTime = 1.0f;
-	float WSkillColliderElapsed = 0.0f;
+    bool isWSkillActivating;
+    bool isWSkillColliderActivated;
 
-	Vector3d startPosition;
+    float WSkillColliderRemainTime = 1.0f;
+    float WSkillColliderElapsed = 0.0f;
 
-	physics::BoxCollider* m_wSkillColliderComponent;
+    Vector3d startPosition;
+
+    physics::BoxCollider* m_wSkillColliderComponent;
+    DamageOnlyComponent* qDamageComponent{ nullptr };
+    physics::SphereCollider* qDamageCollider{ nullptr };
 
 private:
-	void CrushDown(int p_times);
+    void CrushDown(int p_times);
 
 public:
-	void SetQSkillObject(GameObject* p_fieldDamageObj);
-	void SetQSkillDebugInfo(GameObject* p_fieldDebugObject);
+    void SetQSkillObject(GameObject* p_fieldDamageObj);
+    void SetQSkillDebugInfo(GameObject* p_fieldDebugObject);
 
-	void SetWSkillObject(GameObject* p_fieldDamageObj);
-	void SetWSkillDebugInfo(GameObject* p_fieldDebugObject);
-
-public:
-	virtual void ActivateSkillOne(Vector3d skillPos) override;
-	virtual void ActivateSkillTwo(Vector3d skillPos) override;
-	virtual void SetSkillRequirmentLocalTimeScale(float p_scale) override;
+    void SetWSkillObject(GameObject* p_fieldDamageObj);
+    void SetWSkillDebugInfo(GameObject* p_fieldDebugObject);
 
 public:
-	virtual void Start() override;
-	virtual void Update() override;
+    virtual void ActivateSkillOne(Vector3d skillPos) override;
+    virtual void ActivateSkillTwo(Vector3d skillPos) override;
+    virtual void SetSkillRequirmentLocalTimeScale(float p_scale) override;
+
+public:
+    virtual void Start() override;
+    virtual void Update() override;
+    friend HealerProductor;
 };
 

@@ -48,6 +48,8 @@ public:
 
 	bool IsSkillGaugeEnoughToBeUsed(Unit::UnitType p_unitType, Unit::SkillEnum p_skillEnum);
 
+	bool IsSkillCoolingDown(Unit::UnitType p_unitType, Unit::SkillEnum p_skillEnum);
+
 	void ReportSkillUsed(Unit::UnitType p_unitType, Unit::SkillEnum p_skillEnum);
 
 	void AddSkillGauge(int p_addedGauge);

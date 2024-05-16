@@ -8,7 +8,6 @@ void PlayerSkillManager::Start()
     m_maxSkillUsageGauge = 100;
 
     AddSkillGauge(100);
-    //m_currentSkillUsageGauge = 100;
 
 	warriorSkillOneCost = application::GlobalConstant::GetSingletonInstance().pod.robinQSkillCost;
 	warriorSkillTwoCost = application::GlobalConstant::GetSingletonInstance().pod.robinESkillCost;
@@ -56,6 +55,11 @@ void PlayerSkillManager::StopFunction()
 bool PlayerSkillManager::IsSkillGaugeEnoughToBeUsed(Unit::UnitType p_unitType, Unit::SkillEnum p_skillEnum)
 {
     return (m_currentSkillUsageGauge - costPerSkillMap.find({ p_unitType, p_skillEnum })->second >= 0);
+}
+
+bool PlayerSkillManager::IsSkillCoolingDown(Unit::UnitType p_unitType, Unit::SkillEnum p_skillEnum)
+{
+	return (m_currentSkillUsageGauge - costPerSkillMap.find({ p_unitType, p_skillEnum })->second >= 0);
 }
 
 void PlayerSkillManager::ReportSkillUsed(Unit::UnitType p_unitType, Unit::SkillEnum p_skillEnum)
