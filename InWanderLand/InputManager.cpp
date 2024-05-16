@@ -47,7 +47,7 @@ void InputManager::Update()
 						PlayerController::Instance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedSerialNumber));
 						PlayerController::Instance().SetLeftClickAttackMove();
 					}
-					SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+					//SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 				}
 
 				if (yunutyEngine::Input::isKeyPushed(KeyCode::Q))
@@ -137,7 +137,7 @@ void InputManager::SelectPlayer(Unit::UnitType p_unitType)
 		TacticModeSystem::Instance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
 	}
 
-	SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+	//SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 }
 
 void InputManager::PrepareSkill(Unit::SkillEnum p_skillType, Unit::UnitType p_unitType)
