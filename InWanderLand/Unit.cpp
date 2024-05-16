@@ -919,21 +919,6 @@ Unit::UnitState Unit::GetCurrentUnitState() const
     return currentOrder;
 }
 
-SkillPreviewMesh Unit::GetSkillPreviewType(SkillEnum p_currentSkillType) const
-{
-    switch (p_currentSkillType)
-    {
-    case Unit::SkillEnum::Q:
-        return m_qSkillPreviewType;
-        break;
-    case Unit::SkillEnum::W:
-        return m_wSkillPreviewType;
-        break;
-    default:
-        break;
-    }
-}
-
 std::string Unit::GetUnitFbxName() const
 {
     return m_fbxName;
@@ -1542,12 +1527,6 @@ void Unit::RegisterSkillAnimation(SkillEnum p_skillEnum, yunuGI::IAnimation* p_a
 void Unit::RegisterSkillTimingFrame(SkillEnum p_skillEnum, int p_frame)
 {
     m_skillTimingFrameMap.insert({ p_skillEnum, p_frame });
-}
-
-void Unit::SetSkillPreviewType(SkillPreviewMesh p_qskill, SkillPreviewMesh p_wskill)
-{
-    m_qSkillPreviewType = p_qskill;
-    m_wSkillPreviewType = p_wskill;
 }
 
 void Unit::SetMaxAggroNumber(int p_num)

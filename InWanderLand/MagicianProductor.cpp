@@ -6,7 +6,6 @@
 #include "BlindFieldComponent.h"
 #include "DebugMeshes.h"
 #include "SingleNavigationField.h"
-#include "SkillPreviewSystem.h"
 #include "UIManager.h"
 
 void MagicianProductor::SetUnitData()
@@ -35,9 +34,6 @@ void MagicianProductor::SetUnitData()
     m_attackDelay = 5.0f;
 
     m_navField = &SingleNavigationField::Instance();
-
-    /*qSkillPreviewType = SkillPreviewMesh::Both;
-    wSkillPreviewType = SkillPreviewMesh::Both;*/
 
     m_unitFbxName = "SKM_Ursula";
 }
@@ -149,9 +145,6 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
     UnitProductor::AddNavigationComponent();
     UnitProductor::AddDotweenComponent();
     UnitProductor::SetPlayerRelatedComponents();
-
-   //SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::Q, skillOneRange);
-   //SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::W, skillTwoRange);
 
     auto skinnedMeshRenderer = m_unitGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
     auto material = skinnedMeshRenderer->GetGI().GetMaterial();

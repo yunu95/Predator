@@ -233,7 +233,7 @@ bool UnitProductor::SelectUnitProductorByFbxName(std::string p_name)
 void UnitProductor::SetPlayerRelatedComponents()
 {
     m_unitComponent->SetPlayerSerialNumber(m_unitType);
-    m_unitComponent->SetSkillPreviewType(qSkillPreviewType, wSkillPreviewType);
+    //m_unitComponent->SetSkillPreviewType(qSkillPreviewType, wSkillPreviewType);
     PlayerController::Instance().AddPlayerUnit(m_unitComponent);
 
     float qCoolTimeTemp;

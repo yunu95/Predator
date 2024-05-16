@@ -136,8 +136,6 @@ void InputManager::SelectPlayer(Unit::UnitType p_unitType)
 	{
 		TacticModeSystem::Instance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
 	}
-
-	//SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 }
 
 void InputManager::PrepareSkill(Unit::SkillEnum p_skillType, Unit::UnitType p_unitType)
