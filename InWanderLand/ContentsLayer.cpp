@@ -116,6 +116,9 @@ void GraphicsTest()
 
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
+    yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(false);
+    yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage2LightMap");
+
     auto& animationList = _resourceManager->GetAnimationList();
     yunuGI::IAnimation* animation = nullptr;
     yunuGI::IAnimation* animation2 = nullptr;
@@ -155,24 +158,41 @@ void GraphicsTest()
     //    renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, _resourceManager->GetTexture(L"Texture/Lightmap-0_comp_light.exr"));
     //}
 
-    {
-        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
-    }
+    //{
+    //    auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+    //}
 
-	//{
-	//	auto obj2 = Scene::getCurrentScene()->AddGameObject();
- //       auto renderer = obj2->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
- //       renderer->GetGI().SetMesh(_resourceManager->GetMesh(L"Cube"));
-	//}
- //   //Ani_Monster1_Idle
-	//{
-	//	auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
- //       obj2->GetTransform()->SetLocalScale(Vector3d{ 0.1,0.1,0.1 });
- //       auto animator = obj2->GetComponent<yunutyEngine::graphics::Animator>();
- //       animator->PushAnimation(animation);
- //       animator->Play(animation);
-	//}
 
+    //Ani_Monster1_Idle
+	{
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+		auto animator = obj2->GetComponent<yunutyEngine::graphics::Animator>();
+		animator->PushAnimation(animation);
+		animator->Play(animation);
+
+		auto child = obj2->GetChildren();
+		yunutyEngine::graphics::SkinnedMesh* renderer = nullptr;
+		for (auto& each : child)
+		{
+			renderer = each->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
+			if (renderer)
+			{
+				for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
+				{
+					renderer->GetGI().GetMaterial(i)->SetPixelShader(_resourceManager->GetShader(L"RimForwardPS.cso"));
+				}
+			}
+		}
+	}
+	{
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+        obj2->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
+		auto animator = obj2->GetComponent<yunutyEngine::graphics::Animator>();
+		animator->PushAnimation(animation);
+		animator->Play(animation);
+
+	}
+    yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
 	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 }
 

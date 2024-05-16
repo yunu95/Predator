@@ -61,11 +61,23 @@ void InstancingManager::SortByCameraDirection()
 
 		for (auto& each2 : each.second)
 		{
+			InstanceID instanceID = std::make_pair(each2->mesh, each2->material);
+
+			auto instanceIter = this->staticMeshInstanceIDIndexMap.find(instanceID);
+			if (instanceIter != this->staticMeshInstanceIDIndexMap.end())
+			{
+				this->staticMeshDeferredRenderVec[instanceIter->second].second.push_back(each2);
+				continue;
+			}
+
 			tempVec.push_back(each2);
 		}
 
-		auto tempPair = std::make_pair(each.first, tempVec);
-		this->staticMeshDeferredRenderVec.push_back(tempPair);
+		if (!tempVec.empty())
+		{
+			auto tempPair = std::make_pair(each.first, tempVec);
+			this->staticMeshDeferredRenderVec.push_back(tempPair);
+		}
 	}
 	staticMeshDeferredMap.clear();
 
@@ -83,7 +95,6 @@ void InstancingManager::SortByCameraDirection()
 	std::vector<std::pair<InstanceID, std::vector<std::shared_ptr<RenderInfo>>>> noBlend;
 	std::vector<std::pair<InstanceID, std::vector<std::shared_ptr<RenderInfo>>>> blend;
 
-	//for(auto iter =  this->staticMeshDeferredRenderVec.begin(); iter != this->staticMeshDeferredRenderVec.end();)
 	for (auto& each : this->staticMeshDeferredRenderVec)
 	{
 		D3D11_BLEND_DESC desc;
@@ -130,6 +141,9 @@ void InstancingManager::SortByCameraDirection()
 		std::sort(each.second.begin(), each.second.end(),
 			[=](const auto& left, const auto& right)
 			{
+				if (right == nullptr || left == nullptr)
+					return false;
+
 				auto lPos = DirectX::SimpleMath::Vector3{ left->wtm._41, left->wtm._42, left->wtm._43 };
 				auto rPos = DirectX::SimpleMath::Vector3{ right->wtm._41, right->wtm._42, right->wtm._43 };
 
@@ -294,23 +308,6 @@ void InstancingManager::RenderStaticDeferred()
 						continue;
 					}
 
-
-					//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-					//i->isInArea = true;
-
-					//auto aabb = i->mesh->GetBoundingBox(i->wtm, i->materialIndex);
-
-					//if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
-					//{
-					//	continue;
-					//}
-
-
-					//if ((i->mesh->GetName() == L"SM_Bush_001") || (i->mesh->GetName() == L"SM_Bush_002"))
-					//{
-
-					//}
-
 					const std::shared_ptr<RenderInfo>& renderInfo = i;
 					InstancingData data;
 					data.wtm = renderInfo->wtm;
@@ -335,16 +332,26 @@ void InstancingManager::RenderStaticDeferred()
 					auto& buffer = _buffers[instanceID];
 					if (buffer->GetCount() > 0)
 					{
+						std::shared_ptr<RenderInfo> renderInfo = nullptr;
+						for (auto& each : renderInfoVec)
+						{
+							if (each)
+							{
+								renderInfo = each;
+							}
+						}
+
+
 						ExposureBuffer exposurrBuffer;
-						exposurrBuffer.diffuseExposure = (*renderInfoVec.begin())->mesh->GetDiffuseExposure();
-						exposurrBuffer.ambientExposure = (*renderInfoVec.begin())->mesh->GetAmbientExposure();;
+						exposurrBuffer.diffuseExposure = renderInfo->mesh->GetDiffuseExposure();
+						exposurrBuffer.ambientExposure = renderInfo->mesh->GetAmbientExposure();
 						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&exposurrBuffer,
 							sizeof(ExposureBuffer),
 							static_cast<int>(CB_TYPE::EXPOSURE), false);
 
-						(*renderInfoVec.begin())->material->PushGraphicsData();
+						renderInfo->material->PushGraphicsData();
 						buffer->PushData();
-						(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
+						renderInfo->mesh->Render(renderInfo->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
 					}
 				}
 			}
@@ -828,7 +835,7 @@ void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& rende
 
 
 			// 인덱스맵에도 null을 넣어서 맵핑하는 코드 추가
-			staticMeshRenderInfoIndexMap.erase(renderInfoIter);
+			staticMeshRenderInfoIndexMap.erase(renderInfo);
 			staticMeshRenderInfoIndexMap.insert({ nullptr, -1 });
 
 			// 쿼드트리에서 데이터 삭제

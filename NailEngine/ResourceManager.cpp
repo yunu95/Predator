@@ -934,6 +934,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateShader(L"UIPreProcessVS.cso");
 	CreateShader(L"UIPreProcessPS.cso");
 	CreateShader(L"TextureAnimPS.cso");
+	CreateShader(L"RimForwardPS.cso");
 #pragma endregion
 
 #pragma region GS
