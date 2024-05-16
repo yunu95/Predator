@@ -401,10 +401,8 @@ public:
 
     void ResetUnitMembers();
 
-    void SetUnitLocalTimeScale(float p_scale);
-
-    void EnemyActionOnTacticModeEngaged();
-    void EnemyActionOnTacticModeEnded();
+    void UnitActionOnTacticModeEngaged();
+    void UnitActionOnTacticModeEnded();
 
     bool IsAllExtraPlayerUnitDead();
     bool CheckEnemyStoppedByTacticMode() const;

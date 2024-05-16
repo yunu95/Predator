@@ -1066,12 +1066,7 @@ void Unit::ResetUnitMembers()
     m_attackingThisUnitSet.clear();
 }
 
-void Unit::SetUnitLocalTimeScale(float p_scale)
-{
-    m_localTimeScale = p_scale;
-}
-
-void Unit::EnemyActionOnTacticModeEngaged()
+void Unit::UnitActionOnTacticModeEngaged()
 {
     //unitAnimations.m_deathAnimation->Se
     //m_animatorComponent->GetGI().GetCurrentAnimation()->SetPlaySpeed(0.0f);
@@ -1079,7 +1074,7 @@ void Unit::EnemyActionOnTacticModeEngaged()
     StopMove();
 }
 
-void Unit::EnemyActionOnTacticModeEnded()
+void Unit::UnitActionOnTacticModeEnded()
 {
     ResumeAnimation();
 }
@@ -1132,6 +1127,7 @@ void Unit::ReportLeaderUnitChanged(UnitType p_type)
     if (m_unitType == p_type)
     {
         SetUnitStateDirectly(UnitState::Idle);
+        
         m_followingTargetUnit = nullptr;
     }
     else
