@@ -36,3 +36,10 @@
 #include "YunutyCoroutine.h"
 #include "YunutyYieldInstruction.h"
 #include "YunutyWaitForSeconds.h"
+
+#include "InstanceManager.h"
+#include "EditorLayer.h"
+#include "EditorPopupManager.h"
+#include "UnitData.h"
+#include "PlayerController.h"
+#include "PlaytimeWave.h"

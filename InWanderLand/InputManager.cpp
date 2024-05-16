@@ -7,6 +7,15 @@
 #include "GameManager.h"
 #include "PlayerSkillManager.h"
 
+InputManager::InputManager()
+{
+    canPrepareSkill[Unit::UnitType::Warrior][Unit::SkillEnum::Q] = true;
+    canPrepareSkill[Unit::UnitType::Warrior][Unit::SkillEnum::W] = true;
+    canPrepareSkill[Unit::UnitType::Magician][Unit::SkillEnum::Q] = true;
+    canPrepareSkill[Unit::UnitType::Magician][Unit::SkillEnum::W] = true;
+    canPrepareSkill[Unit::UnitType::Healer][Unit::SkillEnum::Q] = true;
+    canPrepareSkill[Unit::UnitType::Healer][Unit::SkillEnum::W] = true;
+}
 void InputManager::Start()
 {
 	currentSelectedSerialNumber = SelectedSerialNumber::One;
@@ -140,11 +149,19 @@ void InputManager::SelectPlayer(Unit::UnitType p_unitType)
 
 void InputManager::PrepareSkill(Unit::SkillEnum p_skillType, Unit::UnitType p_unitType)
 {
-	SelectPlayer(p_unitType);
-	PrepareSkill(p_skillType);
+    if (!canPrepareSkill[p_unitType][p_skillType])
+    {
+        return;
+    }
+    SelectPlayer(p_unitType);
+    PrepareSkill(p_skillType);
 }
 void InputManager::PrepareSkill(Unit::SkillEnum p_skillType)
 {
+    if (!canPrepareSkill[PlayerController::Instance().GetCurrentSelectedPlayerUnit()->GetUnitType()][p_skillType])
+    {
+        return;
+    }
     if (!GameManager::Instance().IsBattleSystemOperating() ||
         PlayerController::Instance().FindSelectedUnitByUnitType(static_cast<Unit::UnitType>(currentSelectedSerialNumber))->GetCurrentUnitState() == Unit::UnitState::Death)
     {

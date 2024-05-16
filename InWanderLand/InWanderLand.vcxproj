@@ -1004,8 +1004,19 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="..\Include\ImGui\imgui.h" />
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
     <ClInclude Include="ActionList.h" />
+    <ClInclude Include="Action_AwaitSkillActivation.h" />
+    <ClInclude Include="Action_AwaitSkillSelection.h" />
+    <ClInclude Include="Action_BlockPlayerSwitch.h" />
+    <ClInclude Include="Action_BlockSkillCancel.h" />
+    <ClInclude Include="Action_BlockSkillSelection.h" />
+    <ClInclude Include="Action_PauseWaves.h" />
+    <ClInclude Include="Action_PlayerSelect.h" />
+    <ClInclude Include="Action_UnitPauseAll.h" />
     <ClInclude Include="Action_PlayManualDialogue.h" />
     <ClInclude Include="Action_PlayTimedDialogue.h" />
+    <ClInclude Include="Action_UnitRelocate.h" />
+    <ClInclude Include="Action_OrnamentsSetVisibleByStage.h" />
+    <ClInclude Include="Action_SetTimeScale.h" />
     <ClInclude Include="Action_Tutorial.h" />
     <ClInclude Include="Action_Unit.h" />
     <ClInclude Include="Action_WaitPreviousActionEnd.h" />
@@ -1094,6 +1105,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="RookTrapProductor.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="ScriptSystem.h" />
+    <ClInclude Include="Action_EngageStage.h" />
     <ClInclude Include="ShortcutSystem.h" />
     <ClInclude Include="DualCastComponent.h" />
     <ClInclude Include="DummyComponent.h" />
@@ -1299,8 +1311,20 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\ImGuizmo\ImGuizmo.cpp" />
+    <ClCompile Include="Action_AwaitSkillActivation.cpp" />
+    <ClCompile Include="Action_AwaitSkillSelection.cpp" />
+    <ClCompile Include="Action_BlockPlayerSwitch.cpp" />
+    <ClCompile Include="Action_BlockSkillCancel.cpp" />
+    <ClCompile Include="Action_BlockSkillSelection.cpp" />
+    <ClCompile Include="Action_PauseWaves.cpp" />
+    <ClCompile Include="Action_PlayerSelect.cpp" />
+    <ClCompile Include="Action_EngageStage.cpp" />
+    <ClCompile Include="Action_UnitPauseAll.cpp" />
     <ClCompile Include="Action_PlayManualDialogue.cpp" />
     <ClCompile Include="Action_PlayTimedDialogue.cpp" />
+    <ClCompile Include="Action_UnitRelocate.cpp" />
+    <ClCompile Include="Action_OrnamentsSetVisibleByStage.cpp" />
+    <ClCompile Include="Action_SetTimeScale.cpp" />
     <ClCompile Include="Action_Tutorial.cpp" />
     <ClCompile Include="Action_Unit.cpp" />
     <ClCompile Include="Action_WaitPreviousActionEnd.cpp" />

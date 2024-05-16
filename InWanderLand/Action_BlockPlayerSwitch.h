@@ -1,28 +1,32 @@
-/// 2024. 05. 09 이윤우
-/// 대화창을 넘기기 위해서 유저가 매번 클릭을 해야 하는 대화창을 출력하기 위한 액션입니다.
+/// 2024. 05. 16 이윤우
+// 플레이어 선택을 바꾸는 것을 막는다.
+// usecase : 튜토리얼에서 함부로 플레이어들을 바꾸지 못하게 하기 위해 쓰임.
+
 #pragma once
 
-#include <string>
 #include "IAction.h"
 
 namespace application
 {
-    /// CinematicMode 전환 Action 입니다.
-    class Action_PlayManualDialogue
+    class Action_BlockPlayerSwitch
         : public IAction
     {
     public:
-        DEFINE_ACTION(PlayManualDialogue)
+        DEFINE_ACTION(BlockPlayerSwitch)
+
+            Action_BlockPlayerSwitch() = default;
+        Action_BlockPlayerSwitch(bool block);
 
         virtual CoroutineObject<void> DoAction() override;
+
+        void SetBlock(bool block);
 
         virtual bool PreEncoding(json& data) const override;
         virtual bool PostEncoding(json& data) const override;
         virtual bool PreDecoding(const json& data) override;
         virtual bool PostDecoding(const json& data) override;
 
-        std::string dialogueKeyID;
     private:
-        //bool cinematicMode = false;
+        bool block{ true };
     };
 }

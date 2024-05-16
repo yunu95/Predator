@@ -6,9 +6,9 @@ template<typename T>
 class StaticInstanceRegistry
 {
 public:
-    static std::unordered_set<T*>& GetInstances() { return instances; }
+    static const std::unordered_set<T*>& GetInstances() { return instances; }
 protected:
-    StaticInstanceRegistry() 
+    StaticInstanceRegistry()
     {
         instances.insert(static_cast<T*>(this));
     };
@@ -18,7 +18,8 @@ protected:
     }
 private:
     static std::unordered_set<T*> instances;
-    //T* instance;
 };
 template<typename T>
 std::unordered_set<T*> StaticInstanceRegistry<T>::instances;
+//template<typename T>
+//const std::unordered_set<T*>& StaticInstanceRegistry<T>::GetInstances() { return instances; }

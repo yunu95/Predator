@@ -295,9 +295,6 @@
     <Filter Include="Editor\Palette\List\WavePalette">
       <UniqueIdentifier>{376cdf4e-06ac-4e10-8c0f-0734bc537788}</UniqueIdentifier>
     </Filter>
-    <Filter Include="InstanceStaticRegistry">
-      <UniqueIdentifier>{661e11c8-f855-4df1-8f51-ecf2f7d59b3b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UI">
       <UniqueIdentifier>{e3d49ab0-3158-48b4-8541-e69475369d59}</UniqueIdentifier>
     </Filter>
@@ -561,6 +558,45 @@
     </Filter>
     <Filter Include="Editor\Palette\List\InteractablePalette">
       <UniqueIdentifier>{1cd18188-5b83-48c6-aeff-7a45b2733fc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_AwaitSkillSelection">
+      <UniqueIdentifier>{b8faf2a2-d6d3-4395-90dd-45353f820758}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_AwaitSkillAcitvation">
+      <UniqueIdentifier>{12c0d62a-3400-44c6-a9ef-0c9f1d1d3d45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_BlockPlayerSwitch">
+      <UniqueIdentifier>{1802ae6c-0eb7-4a31-90a3-7fa5439ff3e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_BlockSkillCancel">
+      <UniqueIdentifier>{173b7a66-6a52-4339-b019-1fcc24945fb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_BlockSkillSelection">
+      <UniqueIdentifier>{6081fac9-ebd3-4d1b-b154-29e8ccad2454}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_SetTimeScale">
+      <UniqueIdentifier>{d924d29e-de61-4363-9b5f-4d2930b2873a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_UnitRelocate">
+      <UniqueIdentifier>{8d95c3fa-d03f-41e0-9d41-d5ef14d54179}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_OrnamentsSetVisibleByStage">
+      <UniqueIdentifier>{bd394f05-d683-4f22-8c36-c78e1b860c88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_UnitPauseAll">
+      <UniqueIdentifier>{713c7d1f-4aaf-4d37-8179-d6dd3b6971fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_PlayerSelect">
+      <UniqueIdentifier>{91810471-dec1-4fb0-a035-97740189e416}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StaticInstanceRegistry">
+      <UniqueIdentifier>{661e11c8-f855-4df1-8f51-ecf2f7d59b3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_PauseWaves">
+      <UniqueIdentifier>{5d5f104f-eefc-4be0-8abb-5dcdd2d16c5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_EngageStage">
+      <UniqueIdentifier>{fe902389-f10e-44ba-a039-398ac0634757}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -986,7 +1022,7 @@
       <Filter>Editor\Palette\List\WavePalette</Filter>
     </ClInclude>
     <ClInclude Include="StaticInstanceRegistry.h">
-      <Filter>InstanceStaticRegistry</Filter>
+      <Filter>StaticInstanceRegistry</Filter>
     </ClInclude>
     <ClInclude Include="Wave_TemplateData.h">
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
@@ -1440,6 +1476,42 @@
     </ClInclude>
     <ClInclude Include="Action_Unit.h">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_UnitRelocate.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_UnitRelocate</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_OrnamentsSetVisibleByStage.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_OrnamentsSetVisibleByStage</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_AwaitSkillSelection.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_AwaitSkillSelection</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_AwaitSkillActivation.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_AwaitSkillAcitvation</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_BlockPlayerSwitch.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_BlockPlayerSwitch</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_BlockSkillCancel.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_BlockSkillCancel</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_BlockSkillSelection.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_BlockSkillSelection</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_SetTimeScale.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SetTimeScale</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_UnitPauseAll.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_UnitPauseAll</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_PlayerSelect.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_PlayerSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_PauseWaves.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_PauseWaves</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_EngageStage.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_EngageStage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2199,6 +2271,42 @@
     </ClCompile>
     <ClCompile Include="Action_Unit.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_UnitRelocate.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_UnitRelocate</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_OrnamentsSetVisibleByStage.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_OrnamentsSetVisibleByStage</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_AwaitSkillSelection.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_AwaitSkillSelection</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_AwaitSkillActivation.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_AwaitSkillAcitvation</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_BlockPlayerSwitch.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_BlockPlayerSwitch</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_BlockSkillCancel.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_BlockSkillCancel</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_BlockSkillSelection.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_BlockSkillSelection</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_SetTimeScale.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SetTimeScale</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_UnitPauseAll.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_UnitPauseAll</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_PlayerSelect.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_PlayerSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_PauseWaves.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_PauseWaves</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_EngageStage.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_EngageStage</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

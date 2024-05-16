@@ -140,6 +140,15 @@ void UIManager::HideComboObjectvies()
     uisByEnumID[UIEnumID::Ingame_Combo_Description2]->DisableElement();
     uisByEnumID[UIEnumID::Ingame_Combo_Description3]->DisableElement();
 }
+void UIManager::SetPortraitsClickable(bool clickable)
+{
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->
+        GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->clickable = clickable;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->
+        GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->clickable = clickable;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->
+        GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->clickable = clickable;
+}
 void UIManager::UpdateHighestPriorityButton()
 {
     // 현재 하이라이트된 버튼이 적법한 버튼이라면, 더 이상의 처리는 필요없습니다.
@@ -374,7 +383,7 @@ void UIManager::Update()
     {
         if (m_highestPriorityButton != nullptr)
         {
-            m_highestPriorityButton->m_mouseLiftedFunction();
+            m_highestPriorityButton->InvokeButtonClickEvent();
         }
     }
 }
