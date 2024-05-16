@@ -59,6 +59,7 @@ void Dotween::StopAllDotweenFunction()
 		{
 			/// isDone을 true로 바꿔주어 강제로 타이머 종료.
 			dotweenTimerArray[i]->isDone = true;
+			dotweenTimerArray[i]->isActive = false;
 		}
 	}
 }
@@ -323,10 +324,10 @@ Dotween& Dotween::DOLookAt(Vector3d lookTransform, double p_duration, bool isYax
 	m_doLookTweenTimer->onUpdate = [=]()
 	{
 		double degreePerFrame = finalDegree / (m_doLookTweenTimer->duration);
-		currentRotation += degreePerFrame * Time::GetDeltaTime();
+		currentRotation = degreePerFrame * Time::GetDeltaTime();
 		//assert(!isnan(currentRotation));
 		if(!isnan(currentRotation))
-			GetGameObject()->GetTransform()->SetLocalRotation( Quaternion({ 0.0f, currentRotation, 0.0f }));
+			GetGameObject()->GetTransform()->SetWorldRotation(GetGameObject()->GetTransform()->GetWorldRotation() * Quaternion({ 0.0f, currentRotation, 0.0f }));
 	};
 
 	currentTimerIndex = TimerIndex::RotateTimer;

@@ -641,6 +641,7 @@ void Unit::MoveUpdate()
         abs(GetGameObject()->GetTransform()->GetWorldPosition().z - m_currentMovePosition.z) < 0.2f)
     {
         currentOrder = UnitState::Idle;
+        dotween->StopAllDotweenFunction();
         if (isPermittedToTacticAction)
         {
             isPermittedToTacticAction = false;

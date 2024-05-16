@@ -271,6 +271,15 @@ namespace application
 
 	CoroutineObject<void> Action_UnitRotate::DoAction()
 	{
+		while (true)
+		{
+			if (targetUnit->inGameUnit->GetCurrentUnitState() != Unit::UnitState::Move)
+			{
+				break;
+			}
+			co_await std::suspend_always();
+		}
+
 		auto ts = targetUnit->inGameUnit->GetTransform();
 		auto startRot = ts->GetWorldRotation();
 
@@ -790,8 +799,6 @@ namespace application
 	{
 		auto ts = targetUnit->inGameUnit->GetTransform();
 		auto startPos = ts->GetWorldPosition();
-		auto startRot = ts->GetWorldRotation();
-		auto startScale = ts->GetWorldScale();
 
 		Vector3d endPos = { destinationUnit->pod.position.x, destinationUnit->pod.position.y, destinationUnit->pod.position.z };
 		Quaternion endRot = { destinationUnit->pod.rotation.w, destinationUnit->pod.rotation.x, destinationUnit->pod.rotation.y, destinationUnit->pod.rotation.z };
@@ -811,6 +818,9 @@ namespace application
 
 		double timer = 0;
 		float factor = 0;
+
+		auto startRot = ts->GetWorldRotation();
+		auto startScale = ts->GetWorldScale();
 
 		if (lerpTime == 0)
 		{
