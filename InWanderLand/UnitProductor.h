@@ -42,9 +42,6 @@ public:
     Unit::UnitType m_unitType;
     Unit::UnitSide m_unitSide;
 
-    SkillPreviewMesh qSkillPreviewType;
-    SkillPreviewMesh wSkillPreviewType;
-
     float m_unitScaleMultipler{ 1.0f };
     float m_maxHealth;
     int m_manaPoint;

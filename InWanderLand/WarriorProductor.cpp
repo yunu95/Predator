@@ -40,9 +40,6 @@ void WarriorProductor::SetUnitData()
 
     m_navField = &SingleNavigationField::Instance();
 
-    qSkillPreviewType = SkillPreviewMesh::OnlyPath;
-    wSkillPreviewType = SkillPreviewMesh::None;
-
     m_unitFbxName = "SKM_Robin";
 }
 
