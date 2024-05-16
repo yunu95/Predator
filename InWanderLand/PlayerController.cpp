@@ -152,17 +152,17 @@ void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
         else
         {
             Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
-            SkillPreviewSystem::Instance().SetCurrentSelectedPlayerUnit(currentSelectedUnit);
-            SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(p_skillNum));
-            SkillPreviewSystem::Instance().SetCurrentSelectedSkillNum(p_skillNum);
-            SkillPreviewSystem::Instance().ActivateSkillPreview(true);
+            //SkillPreviewSystem::Instance().SetCurrentSelectedPlayerUnit(currentSelectedUnit);
+            //SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(p_skillNum));
+            //SkillPreviewSystem::Instance().SetCurrentSelectedSkillNum(p_skillNum);
+            //SkillPreviewSystem::Instance().ActivateSkillPreview(true);
             m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
                 {
                     if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
                     {
                         return;
                     }
-                    SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+                    //SkillPreviewSystem::Instance().ActivateSkillPreview(false);
                     if (auto playerComp = playerComponentMap.find(currentSelectedSerialNumber); playerComp != playerComponentMap.end())
                     {
                         playerComp->second->OrderSkill(p_skillNum, pos);

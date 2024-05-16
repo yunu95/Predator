@@ -135,7 +135,7 @@ void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSer
                             sequenceQueue.push(currentSelectedUnit);
                         }
 					}
-                    SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+                    //SkillPreviewSystem::Instance().ActivateSkillPreview(false);
             };
 }
 
@@ -149,7 +149,7 @@ void TacticModeSystem::SetLeftClickAddQueueForAttackMove(InputManager::SelectedS
                 {
 					currentSelectedUnit->PushAttackMoveFunctionToTacticQueue(pos);
 					sequenceQueue.push(currentSelectedUnit);
-					SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+					//SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 					//m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
 					//tacticModeGauge--;
 					//SetTacticModeRightClickFunction(currentSelectedNum);
@@ -162,10 +162,10 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
 {
     currentSelectedUnit = playerComponentMap.find(static_cast<Unit::UnitType>(currentSelectedNum))->second;
 
-    SkillPreviewSystem::Instance().SetCurrentSelectedPlayerUnit(currentSelectedUnit);
-    SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(currentSelectedSkill));
-    SkillPreviewSystem::Instance().SetCurrentSelectedSkillNum(currentSelectedSkill);
-    SkillPreviewSystem::Instance().ActivateSkillPreview(true);
+    //SkillPreviewSystem::Instance().SetCurrentSelectedPlayerUnit(currentSelectedUnit);
+    //SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(currentSelectedSkill));
+    //SkillPreviewSystem::Instance().SetCurrentSelectedSkillNum(currentSelectedSkill);
+    //SkillPreviewSystem::Instance().ActivateSkillPreview(true);
 
     m_rtsCam->groundLeftClickCallback = [=](Vector3d pos)
         {
@@ -173,7 +173,7 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
             {
 				currentSelectedUnit->PushSkillFunctionToTacticQueue(currentSelectedSkill, pos);
 				sequenceQueue.push(currentSelectedUnit);
-				SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+				//SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 				SetTacticModeRightClickFunction(currentSelectedNum);
 				AddGauge(-1 * skillCost);
             }

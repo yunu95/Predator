@@ -36,8 +36,8 @@ void MagicianProductor::SetUnitData()
 
     m_navField = &SingleNavigationField::Instance();
 
-    qSkillPreviewType = SkillPreviewMesh::Both;
-    wSkillPreviewType = SkillPreviewMesh::Both;
+    /*qSkillPreviewType = SkillPreviewMesh::Both;
+    wSkillPreviewType = SkillPreviewMesh::Both;*/
 
     m_unitFbxName = "SKM_Ursula";
 }
@@ -150,8 +150,8 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
     UnitProductor::AddDotweenComponent();
     UnitProductor::SetPlayerRelatedComponents();
 
-    SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::Q, skillOneRange);
-    SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::W, skillTwoRange);
+   //SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::Q, skillOneRange);
+   //SkillPreviewSystem::Instance().SetDefaultSkillRange(m_unitComponent, Unit::SkillEnum::W, skillTwoRange);
 
     auto skinnedMeshRenderer = m_unitGameObject->GetChildren()[0]->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
     auto material = skinnedMeshRenderer->GetGI().GetMaterial();

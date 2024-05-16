@@ -156,7 +156,7 @@ namespace application
 			camComp->groundHoveringClickCallback = [=](Vector3d pos)
 			{
 				mouseCursorObject->GetTransform()->SetWorldPosition(pos);
-				SkillPreviewSystem::Instance().SetCurrentMousPosition(pos);
+				//SkillPreviewSystem::Instance().SetCurrentMousPosition(pos);
 			};
 
 			PlayerController::Instance().SetMovingSystemComponent(camComp);

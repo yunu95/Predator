@@ -76,13 +76,13 @@ void GameManager::EndBattle()
 
 	PlayerController::Instance().ReportBattleEnded();
 	rtscam->SetTarget(PlayerController::Instance().GetPlayerMap().find(Unit::UnitType::Warrior)->second->GetGameObject());
-	SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+	//SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 }
 
 void GameManager::EngageCinematic()
 {
 	InputManager::Instance().SetInputManagerActive(false);
-	SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+	//SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 }
 
 void GameManager::EndCinematic()
@@ -93,7 +93,7 @@ void GameManager::EndCinematic()
 	}
 
 	InputManager::Instance().SetInputManagerActive(true);
-	SkillPreviewSystem::Instance().ActivateSkillPreview(false);
+	//SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 
 	/// PlayerController 에서
 
