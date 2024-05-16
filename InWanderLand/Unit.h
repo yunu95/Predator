@@ -347,7 +347,6 @@ public:
     void ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType);
 
     void SetUnitStateDirectly(Unit::UnitState p_unitState);
-    void ChangeUnitStateToMoveDirectly(Vector3d p_targetPos);
 
     void PermitTacticAction();
 
