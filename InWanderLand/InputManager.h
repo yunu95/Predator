@@ -25,21 +25,24 @@ private:
     bool isPlayerSelected = false;
     //bool tacticMode = false;
     bool isMouseOnUIButton = false;
-	bool isInputManagerActivated{ true };
+    bool isInputManagerActivated{ true };
 public:
+    InputManager();
     virtual void Start() override;
     virtual void Update() override;
 
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+    virtual void PlayFunction() override;
+    virtual void StopFunction() override;
 
-	bool GetInputManagerActive();
-	void SetInputManagerActive(bool p_boolen);
+    bool GetInputManagerActive();
+    void SetInputManagerActive(bool p_boolen);
     void SelectPlayer(Unit::UnitType p_unitType);
     void PrepareSkill(Unit::SkillEnum p_skillType, Unit::UnitType p_unitType);
     void PrepareSkill(Unit::SkillEnum p_skillType);
     void ToggleTacticMode();
 
+    // Skill을 Prepare할수 있는지의 여부
+    unordered_map<Unit::UnitType, unordered_map<Unit::SkillEnum, bool>> canPrepareSkill;
     RTSCam* rtscam;
 };
 

@@ -6,6 +6,7 @@
 #include "PaletteInstance.h"
 
 #include "YunuGraphicsInterface.h"
+#include "StaticInstanceRegistry.h"
 #include <string>
 
 namespace application::editor
@@ -21,7 +22,7 @@ namespace application
         namespace palette
         {
             class OrnamentEditorInstance
-                : public PaletteInstance
+                : public PaletteInstance, public StaticInstanceRegistry<OrnamentEditorInstance>
             {
             public:
                 virtual void Start() override;
@@ -31,6 +32,7 @@ namespace application
                 void ChangeTemplateData(const application::editor::Ornament_TemplateData* ornamentTemplateData);
                 void ChangeResource(const std::string& fbxName);
                 virtual void HideEditorInstance() override {}
+                const application::editor::OrnamentData* GetOrnamentData();
 
             protected:
                 virtual void OnHover() { PaletteInstance::OnHover(); }

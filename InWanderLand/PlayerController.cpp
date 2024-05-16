@@ -148,9 +148,23 @@ void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
         {
             /// Warrior의 W 스킬은 마우스로 클릭하지 않아도 바로 실행되는 스킬이다. 다른 스킬 나온다면 구조적 개선 필요
             playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum);
+            auto& callbackVectors = skillSelectionCallback[currentSelectedSerialNumber][p_skillNum];
+            auto& callbackVectors2 = skillActivationCallback[currentSelectedSerialNumber][p_skillNum];
+            for (auto& each : callbackVectors)
+                each();
+            for (auto& each : callbackVectors2)
+                each();
+            callbackVectors.clear();
+            callbackVectors2.clear();
         }
         else
         {
+            playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum);
+            auto& callbackVectors = skillSelectionCallback[currentSelectedSerialNumber][p_skillNum];
+            for (auto& each : callbackVectors)
+                each();
+            callbackVectors.clear();
+
             Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
             SkillPreviewSystem::Instance().SetCurrentSelectedPlayerUnit(currentSelectedUnit);
             SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(p_skillNum));
@@ -165,6 +179,10 @@ void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
                     SkillPreviewSystem::Instance().ActivateSkillPreview(false);
                     if (auto playerComp = playerComponentMap.find(currentSelectedSerialNumber); playerComp != playerComponentMap.end())
                     {
+                        auto& callbackVectors = skillActivationCallback[currentSelectedSerialNumber][p_skillNum];
+                        for (auto& each : callbackVectors)
+                            each();
+                        callbackVectors.clear();
                         playerComp->second->OrderSkill(p_skillNum, pos);
                     }
                 };
@@ -194,7 +212,7 @@ void PlayerController::SetCurrentPlayerSerialNumber(Unit::UnitType p_num)
         if (!GameManager::Instance().IsBattleSystemOperating())
             ChangeLeaderPlayerUnit(p_num);
 
-		SetRightClickFunction();
+        SetRightClickFunction();
     }
 }
 
@@ -202,14 +220,14 @@ void PlayerController::ReportBattleEnded()
 {
     Unit::UnitType tempLeaderType;
 
-	for (auto e : playerComponentMap)
-	{
+    for (auto e : playerComponentMap)
+    {
         if (e.second->GetActive())
         {
             tempLeaderType = e.first;
             break;
         }
-	}
+    }
 
     ChangeLeaderPlayerUnit(tempLeaderType);
 }
@@ -237,7 +255,7 @@ Unit* PlayerController::FindSelectedUnitByUnitType(Unit::UnitType p_type)
         return playerComponentMap.find(p_type)->second;
 }
 
-Unit* PlayerController::GetCurrentSelectedPlayerUnit() const 
+Unit* PlayerController::GetCurrentSelectedPlayerUnit() const
 {
     return playerComponentMap.find(currentSelectedSerialNumber)->second;
 }

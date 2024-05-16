@@ -35,10 +35,21 @@ namespace application
         TutorialModeChange,
         PlayManualDialogue,
         PlayTimedDialogue,
-		UnitMove,
+        UnitMove,
         UnitRotate,
         UnitRescale,
         UnitMoveWithRotateAndRescale,
+        UnitRelocate,
+        UnitPauseAll,
+        PlayerSelect,
+        BlockPlayerSwitch,
+        BlockSkillCancel,
+        BlockSkillSelection,
+        AwaitSkillSelection,
+        AwaitSkillActivation,
+        SetTimeScale,
+        PauseWaves,
+        EngageStage,
     };
 
     struct IAction

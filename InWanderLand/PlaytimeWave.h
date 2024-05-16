@@ -4,14 +4,15 @@
 #include <string>
 #include <map>
 #include "ContentsObservee.h"
+#include "StaticInstanceRegistry.h"
 
 namespace application
 {
-	namespace editor
-	{
-		class POD_Unit;
-		class WaveData;
-	}
+    namespace editor
+    {
+        class POD_Unit;
+        class WaveData;
+    }
 }
 
 class UnitProductor;
@@ -19,36 +20,36 @@ class UnitProductor;
 /// <summary>
 /// 플레이타임에서 웨이브 하나에 대응되는 컴포넌트
 /// </summary>
-class PlaytimeWave : public Component, public ContentsObservee
+class PlaytimeWave : public Component, public ContentsObservee, public StaticInstanceRegistry<PlaytimeWave>
 {
 private:
-	int currentSequenceIndex{ 0 };
-	int nextSummonUnitIndex{ 0 };
-	int waveDataIndex{ 0 };
+    int currentSequenceIndex{ 0 };
+    int nextSummonUnitIndex{ 0 };
+    int waveDataIndex{ 0 };
 
-	bool isWaveActivated = false;
+    bool isWaveActivated = false;
 
-	float m_elapsed{ 0.0f };
+    float m_elapsed{ 0.0f };
 
-	std::vector<UnitProductor*> productorSelector;
+    std::vector<UnitProductor*> productorSelector;
 
-	bool isStoppedByTacticMode{ false };
+    bool isStoppedByTacticMode{ false };
 
 public:
-	std::vector<Unit*> m_currentWaveUnitVector;
-	Unit* inGameUnit;
-	virtual ~PlaytimeWave();
+    std::vector<Unit*> m_currentWaveUnitVector;
+    Unit* inGameUnit;
+    virtual ~PlaytimeWave();
 
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+    virtual void PlayFunction() override;
+    virtual void StopFunction() override;
 
-	void ActivateWave();
-	void DeActivateWave();
+    void ActivateWave();
+    void DeActivateWave();
 
-	virtual void Start() override;
-	virtual void Update() override;
-	application::editor::WaveData* waveData{ nullptr };
+    virtual void Start() override;
+    virtual void Update() override;
+    application::editor::WaveData* waveData{ nullptr };
 
-	void StopWaveElapsedTime();
-	void ResumeWaveElapsedTime();
+    void StopWaveElapsedTime();
+    void ResumeWaveElapsedTime();
 };

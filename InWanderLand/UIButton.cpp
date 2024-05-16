@@ -154,6 +154,10 @@ void UIButton::OnDisable()
 }
 void UIButton::InvokeButtonClickEvent()
 {
+    if (!clickable)
+    {
+        return;
+    }
     m_mouseLiftedFunction();
 }
 

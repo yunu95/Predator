@@ -1,28 +1,32 @@
-/// 2024. 05. 09 이윤우
-/// 대화창을 넘기기 위해서 유저가 매번 클릭을 해야 하는 대화창을 출력하기 위한 액션입니다.
+#pragma once
+/// 2024. 05. 16 이윤우
+/// 게임의 진행속도, 즉 TimeScale을 변경하는 액션입니다.
+
 #pragma once
 
-#include <string>
 #include "IAction.h"
 
 namespace application
 {
-    /// CinematicMode 전환 Action 입니다.
-    class Action_PlayManualDialogue
+    class Action_SetTimeScale
         : public IAction
     {
     public:
-        DEFINE_ACTION(PlayManualDialogue)
+        DEFINE_ACTION(SetTimeScale)
+
+            Action_SetTimeScale() = default;
+        Action_SetTimeScale(float time);
 
         virtual CoroutineObject<void> DoAction() override;
+
+        void SetTimeScale(float scale);
 
         virtual bool PreEncoding(json& data) const override;
         virtual bool PostEncoding(json& data) const override;
         virtual bool PreDecoding(const json& data) override;
         virtual bool PostDecoding(const json& data) override;
 
-        std::string dialogueKeyID;
     private:
-        //bool cinematicMode = false;
+        float timeScale = 1;
     };
 }

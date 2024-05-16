@@ -104,6 +104,7 @@ public:
     void ReportMouseExitButton(UIButton* p_btn);
     void ShowComboObjectives();
     void HideComboObjectvies();
+    void SetPortraitsClickable(bool clickable);
     // 버튼 중 가장 높은 우선순위를 가진 버튼으로 highestpriorityButton을 재설정합니다.
     // 현재의 highestprirorityButton은 Exit 이벤트 함수가 호출되며, 새로운 highestpriorityButton은 Enter 이벤트 함수가 호출됩니다.
     // 만약 현재의 highestPirorityButton이 여전히 가장 높은 우선순위를 가지고 있다면, 아무 일도 벌어지지 않습니다.

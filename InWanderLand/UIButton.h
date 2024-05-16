@@ -64,5 +64,6 @@ public:
 
     friend class UIManager;
     friend class UIPanel;
+    bool clickable = true;
 };
 

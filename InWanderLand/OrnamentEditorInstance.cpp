@@ -74,5 +74,9 @@ namespace application::editor::palette
 
         return;
     }
+    const application::editor::OrnamentData* OrnamentEditorInstance::GetOrnamentData()
+    {
+        return ornamentData;
+    }
 }
 
