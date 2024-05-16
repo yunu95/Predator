@@ -160,6 +160,7 @@ void InputManager::PrepareSkill(Unit::SkillEnum p_skillType)
         UIManager::Instance().GetUIElementByEnum(UIEnumID::ErrorPopup_NoMana)->EnableElement();
         return;
     }
+    //if ()
     if (TacticModeSystem::Instance().IsOrderingTimingNow())
     {
         TacticModeSystem::Instance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, p_skillType);
