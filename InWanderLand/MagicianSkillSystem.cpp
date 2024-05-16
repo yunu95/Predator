@@ -5,10 +5,6 @@
 #include "TacticModeSystem.h"
 #include "BlindFieldComponent.h"
 
-Component::Coroutine MagicianSkillSystem::Throw3BallsSequentially()
-{
-    std::suspend_always
-}
 void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
 {
     m_QSkillComponent->m_blindPersistTime = application::GlobalConstant::GetSingletonInstance().pod.ursulaQSkillBlindDuration;

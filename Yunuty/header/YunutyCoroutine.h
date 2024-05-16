@@ -20,9 +20,12 @@ namespace yunutyEngine
                 }
                 std::suspend_always initial_suspend() { return std::suspend_always{}; }
                 std::suspend_always final_suspend() noexcept { return std::suspend_always{}; }
-                void return_value(YieldInstruction& yield) { this->yield = &yield; }
-                void return_value(YieldInstruction&& yield) { this->yield = &yield; }
+                void return_void() {}
+                /*void return_value(YieldInstruction& yield) { this->yield = &yield; }
+                void return_value(YieldInstruction&& yield) { this->yield = &yield; }*/
                 std::suspend_always yield_value(std::suspend_always) { return {}; }
+                std::suspend_always yield_value(YieldInstruction& yield) { this->yield = &yield; return {}; }
+                std::suspend_always yield_value(YieldInstruction&& yield) { this->yield = &yield; return {}; }
                 void unhandled_exception() {  }
             };
             std::coroutine_handle<promise_type> handle;

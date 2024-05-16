@@ -275,7 +275,6 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 			if (materialPtr)
 			{
 				fbxMeshData.material.normalMap = std::static_pointer_cast<Material>(materialPtr)->GetTexture(yunuGI::Texture_Type::NORMAL)->GetName();
-
 			}
 			else
 			{

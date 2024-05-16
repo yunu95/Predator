@@ -14,6 +14,7 @@ yunutyEngine::coroutine::Coroutine WarriorSkillSystem::ImpactOnTheEnd()
     GetKnockBackComponent()->pushDistance = application::GlobalConstant::GetSingletonInstance().pod.robinQSkillImpactKnockbackDistance;
     GetKnockBackComponent()->pushDuration = application::GlobalConstant::GetSingletonInstance().pod.robinQSkillImpactKnockbackDuration;
     co_await std::suspend_always{};
+    co_yield coroutine::WaitForSeconds{ 3 };
     SetSkillRequirmentsActive(QknockBackSkill, false);
     if (m_unitComponent->isPermittedToTacticAction)
     {
