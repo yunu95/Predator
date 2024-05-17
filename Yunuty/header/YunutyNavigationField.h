@@ -46,6 +46,7 @@ namespace yunutyEngine
         virtual ~NavigationField();
         virtual void Update();
         Vector3d GetClosestPointOnField(const Vector3d& worldPosition) const;
+        std::vector<Vector3d> GetSmoothPath(const Vector3d& start, const Vector3d& end);
         void BuildField(const float* worldVertices, size_t verticesNum, const int* faces, size_t facesNum, const NavigationField::BuildSettings& buildSettings = BuildSettings{});
         bool IsInitialized();
         // faces는 3개의 정수로 이루어진 삼각형 인덱스 배열이다.

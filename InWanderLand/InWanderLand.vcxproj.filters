@@ -598,6 +598,18 @@
     <Filter Include="Editor\ScriptSystem\2_Action\List\Action_EngageStage">
       <UniqueIdentifier>{fe902389-f10e-44ba-a039-398ac0634757}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_SoundPlay">
+      <UniqueIdentifier>{03bbf0a4-b726-4e02-bb7b-524efcefb6a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_SoundPlayMusic">
+      <UniqueIdentifier>{ebf2f996-9a3c-461e-99a0-78becfd35c17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_SoundSetMusicVolume">
+      <UniqueIdentifier>{4303a27c-885d-4ed1-85be-06e86aaf661a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_UISetActive">
+      <UniqueIdentifier>{fed1d65e-f4f7-4b7a-bb1d-eeb9599b62a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1513,6 +1525,18 @@
     <ClInclude Include="Action_EngageStage.h">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_EngageStage</Filter>
     </ClInclude>
+    <ClInclude Include="Action_SoundPlay.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SoundPlay</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_SoundPlayMusic.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SoundPlayMusic</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_SoundSetMusicVolume.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SoundSetMusicVolume</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_UISetActive.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_UISetActive</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2062,9 +2086,6 @@
     <ClCompile Include="SkillWarningSystem.cpp">
       <Filter>Contents\SkillSystem\SkillWarningSystem</Filter>
     </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>Contents\GameManager</Filter>
-    </ClCompile>
     <ClCompile Include="ScriptSystem.cpp">
       <Filter>Editor\ScriptSystem</Filter>
     </ClCompile>
@@ -2307,6 +2328,21 @@
     </ClCompile>
     <ClCompile Include="Action_EngageStage.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_EngageStage</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Contents\Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_SoundPlay.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SoundPlay</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_SoundPlayMusic.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SoundPlayMusic</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_SoundSetMusicVolume.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SoundSetMusicVolume</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_UISetActive.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_UISetActive</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -43,3 +43,5 @@
 #include "UnitData.h"
 #include "PlayerController.h"
 #include "PlaytimeWave.h"
+#include "SingleNavigationField.h"
+#include "DebugBeacon.h"

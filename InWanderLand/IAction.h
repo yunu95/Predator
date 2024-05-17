@@ -50,6 +50,10 @@ namespace application
         SetTimeScale,
         PauseWaves,
         EngageStage,
+        SoundPlay,
+        SoundPlayMusic,
+        SoundSetMusicVolume,
+        UISetActive,
     };
 
     struct IAction

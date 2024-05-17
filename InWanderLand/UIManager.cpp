@@ -304,6 +304,10 @@ const std::vector<std::string>& UIManager::GetDialogueManual_KeyStrings()
 {
     return dialogueManual_KeyStrings;
 }
+const std::vector<std::string>& UIManager::GetScriptUI_KeyStrings()
+{
+    return scriptUI_KeyStrings;
+}
 UIElement* UIManager::GetDialogueTimed(const std::string& keyString)
 {
     assert("해당 keyString과 일치하는 대사창 ui가 없습니다. ui 창의 이름이 바뀌지는 않았는지 확인해보십시오." && dialogueTimed.contains(keyString));
@@ -313,6 +317,11 @@ UIElement* UIManager::GetDialogueManual(const std::string& keyString)
 {
     assert("해당 keyString과 일치하는 대사창 ui가 없습니다. ui 창의 이름이 바뀌지는 않았는지 확인해보십시오." && dialogueManual.contains(keyString));
     return dialogueManual.at(keyString);
+}
+UIElement* UIManager::GetScriptUI(const std::string& keyString)
+{
+    assert("해당 keyString과 일치하는 ui가 없습니다. ui 창의 이름이 바뀌지는 않았는지 확인해보십시오." && scriptUI.contains(keyString));
+    return scriptUI.at(keyString);
 }
 void UIManager::SetUIElementWithEnum(UIEnumID uiEnumID, UIElement* ui)
 {
@@ -450,13 +459,14 @@ void UIManager::ImportUI(const char* path)
         }
     }
 }
-
 void UIManager::ClearDialogueInfos()
 {
     dialogueTimed.clear();
     dialogueTimed_KeyStrings.clear();
     dialogueManual.clear();
     dialogueManual_KeyStrings.clear();
+    scriptUI.clear();
+    scriptUI_KeyStrings.clear();
 }
 // JsonUIData만으로 UI를 생성합니다.
 void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element)
@@ -644,6 +654,11 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
     {
         dialogueTimed_KeyStrings.push_back(uiData.uiName);
         dialogueTimed[uiData.uiName] = element;
+    }
+    if (uiData.customFlags2 & (int)UIExportFlag2::ScriptUI)
+    {
+        scriptUI[uiData.uiName] = element;
+        scriptUI_KeyStrings.push_back(uiData.uiName);
     }
     if (uiData.customFlags2 & (int)UIExportFlag2::AnimatedSprite)
     {
