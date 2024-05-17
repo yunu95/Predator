@@ -8,7 +8,7 @@
 
 class Dotween;
 
-class PassiveCake : public ContentsObservee
+class PassiveCake : public Component, public ContentsObservee
 {
 private:
 	yunutyEngine::graphics::StaticMeshRenderer* m_mesh;
@@ -36,5 +36,6 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual void OnTriggerEnter(physics::Collider* collider) override;
+	virtual Component* GetComponent() override { return this; }
 };
 

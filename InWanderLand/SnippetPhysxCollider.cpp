@@ -9,7 +9,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-class TestDebugCollider : virtual public yunutyEngine::Component
+class TestDebugCollider : public yunutyEngine::Component
 {
 public:
     float t;

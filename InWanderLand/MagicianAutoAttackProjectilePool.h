@@ -7,7 +7,7 @@
 #include "PermanentObservee.h"
 
 class MagicianAutoAttackProjectilePool :
-	public GameObjectPool<MagicianAutoAttackProjectile>, public SingletonComponent<MagicianAutoAttackProjectilePool>, public PermanentObservee
+	public GameObjectPool<MagicianAutoAttackProjectile>, public SingletonComponent<MagicianAutoAttackProjectilePool>, public Component, public PermanentObservee
 {
 public:
 	virtual void ObjectInitializer(MagicianAutoAttackProjectile* projectile) override
@@ -19,6 +19,7 @@ public:
 	}
 	virtual void Start() override;
 	virtual void OnContentsStop() override;
+	virtual Component* GetComponent() override { return this; }
 };
 
 void MagicianAutoAttackProjectilePool::Start()

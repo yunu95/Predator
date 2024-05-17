@@ -28,7 +28,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-class StalkingUI : virtual public Component
+class StalkingUI : public Component
 {
 	GameObject* soundWindowObject;
 	virtual void Start() override

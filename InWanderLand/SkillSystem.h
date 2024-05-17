@@ -8,7 +8,7 @@
 
 class Dotween;
 
-class SkillSystem : virtual public Component
+class SkillSystem : public Component
 {
 protected:
     Unit* m_unitComponent;

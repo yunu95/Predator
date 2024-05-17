@@ -7,7 +7,7 @@ namespace application
     {
         namespace palette
         {
-            class SelectionBoxPerInstance : virtual public yunutyEngine::Component
+            class SelectionBoxPerInstance : public yunutyEngine::Component
             {
             public:
                 virtual void Start() override

@@ -4,7 +4,7 @@
 
 class Unit;
 
-class CursorDetector : public ContentsObservee
+class CursorDetector : public Component, public ContentsObservee
 {
 public:
 	virtual void OnTriggerEnter(physics::Collider* collider) override;
@@ -16,6 +16,7 @@ public:
 	void EraseUnitFromContainer(Unit* p_unit);
 
 	Unit* GetCurrentOnMouseUnit() const;
+	virtual Component* GetComponent() override { return this; }
 
 private:
 	Unit* m_currentSelectedUnit{ nullptr };

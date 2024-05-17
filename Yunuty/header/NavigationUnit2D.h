@@ -11,7 +11,7 @@
 namespace yunutyEngine
 {
     class NavigationField2D;
-    class YUNUTY_API NavigationUnit2D : virtual public Component
+    class YUNUTY_API NavigationUnit2D : public Component
     {
     public:
         void ReportStatus();

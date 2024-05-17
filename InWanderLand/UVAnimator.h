@@ -2,7 +2,7 @@
 #include "YunutyEngine.h"
 #include "YunuGraphicsInterface.h"
 
-class UVAnimator : virtual public yunutyEngine::Component
+class UVAnimator : public yunutyEngine::Component
 {
 public:
 	void SetStaticMeshRenderer(yunutyEngine::graphics::StaticMeshRenderer* renderer);

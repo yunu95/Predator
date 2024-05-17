@@ -8,7 +8,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-class ObjectPatrolMove : virtual public Component
+class ObjectPatrolMove : public Component
 {
 public:
 	float t;

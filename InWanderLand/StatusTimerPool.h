@@ -7,7 +7,7 @@
 class Unit;
 class StatusTimer;
 
-class StatusTimerPool : public GameObjectPool<StatusTimer>, public SingletonComponent<StatusTimerPool>, public PermanentObservee
+class StatusTimerPool : public GameObjectPool<StatusTimer>, public SingletonComponent<StatusTimerPool>, public Component, public PermanentObservee
 {
 public:
 	virtual void ObjectInitializer(StatusTimer* timer) override
@@ -16,6 +16,7 @@ public:
 	}
 	virtual void Start() override;
 	virtual void OnContentsStop() override;
+	virtual Component* GetComponent() override { return this; }
 };
 
 void StatusTimerPool::Start()

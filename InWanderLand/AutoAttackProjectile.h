@@ -10,7 +10,7 @@
 
 class StatusEffect;
 
-class AutoAttackProjectile : public ContentsObservee
+class AutoAttackProjectile : public Component, public ContentsObservee
 {
 protected:
 	float m_speed;
@@ -43,5 +43,6 @@ private:
 public:
 	virtual void Start() override;
 	virtual void Update() override;
+	virtual Component* GetComponent() override { return this; }
 };
 

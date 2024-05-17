@@ -14,7 +14,7 @@ namespace yunutyEngine
 {
 	class GameObject;
 	class YUNUTY_API Transform :
-		virtual public Component
+		public Component
 	{
 	public:
 		// 이 아래로 position, rotation, scale 이 셋은 계층구조 캐싱을 위해 Setter에 의해 감싸져야 합니다.

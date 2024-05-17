@@ -8,7 +8,7 @@
 #include "DebugMeshes.h"
 #include "YunutyEngine.h"
 
-class TriggerVolumeTest : virtual public Component
+class TriggerVolumeTest : public Component
 {
     // PhysX Visual Debugger라는 프로그램을 실행하고 테스트 코드를 실행하면 어떤 현상이 일어나는지 더욱 자세히 관찰할 수 있습니다.
     virtual void OnTriggerEnter(physics::Collider* other) override

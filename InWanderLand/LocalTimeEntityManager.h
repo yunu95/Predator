@@ -4,7 +4,7 @@
 
 class LocalTimeEntity;
 
-class LocalTimeEntityManager : public SingletonComponent<LocalTimeEntityManager>, public PermanentObservee
+class LocalTimeEntityManager : public SingletonComponent<LocalTimeEntityManager>, public Component, public PermanentObservee
 {
 private:
 	std::vector<LocalTimeEntity*> m_entityVector;
@@ -12,6 +12,7 @@ private:
 public:
 	virtual void Start() override;
 	virtual void OnContentsStop() override;
+	virtual Component* GetComponent() override { return this; }
 
 	void RegisterLocalTimeEntity(LocalTimeEntity* p_entity);
 	void ReportTacticModeEngaged();

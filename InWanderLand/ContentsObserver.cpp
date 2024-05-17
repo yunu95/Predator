@@ -31,7 +31,7 @@ void ContentsObserver::OnStopContents()
 
 	for (auto each : contentsObservees)
 	{
-		scene->DestroyGameObject(each->GetGameObject());
+		scene->DestroyGameObject(each->GetComponent()->GetGameObject());
 	}
 
 	contentsObservees.clear();

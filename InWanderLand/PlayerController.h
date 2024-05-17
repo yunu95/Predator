@@ -12,7 +12,7 @@ class RTSCam;
 class Unit;
 class CursorDetector;
 
-class PlayerController : public SingletonComponent<PlayerController>, public PermanentObservee
+class PlayerController : public SingletonComponent<PlayerController>, public Component, public PermanentObservee
 {
 public:
     enum class OrderType
@@ -38,7 +38,8 @@ public:
     float lookRotationDuration = 0.1f;
 
     //void SelectFunctionByOrderType(int unitSerialNumber, OrderType p_orderType);
-public:
+public:	
+    virtual Component* GetComponent() override { return this; }
     virtual void Start() override;
 
     void SetMovingSystemComponent(RTSCam* sys);

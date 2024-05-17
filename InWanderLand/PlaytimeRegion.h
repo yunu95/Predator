@@ -12,7 +12,7 @@ namespace application::editor
 {
 	class RegionData;
 }
-class PlaytimeRegion : public ContentsObservee
+class PlaytimeRegion : public Component, public ContentsObservee
 {
 private:
 	application::editor::RegionData* regionData{nullptr};
@@ -31,6 +31,7 @@ public:
 	virtual void Start() override;
 	virtual void OnTriggerEnter(physics::Collider* collider) override;
 	virtual void OnTriggerExit(physics::Collider* collider) override;
+	virtual Component* GetComponent() override { return this; }
 	friend application::editor::RegionData;
 };
 

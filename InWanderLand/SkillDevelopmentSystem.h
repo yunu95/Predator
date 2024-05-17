@@ -10,7 +10,7 @@ class UIButton;
 class Unit;
 class PlayerSkillSystem;
 
-class SkillDevelopmentSystem : virtual public Component
+class SkillDevelopmentSystem : public Component
 {
 protected:
 	Unit* m_targetUnit;

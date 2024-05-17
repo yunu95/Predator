@@ -14,7 +14,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-class UIImageCollider : virtual public Component
+class UIImageCollider : public Component
 {
 private:
 	float imageWidth;			

@@ -8,7 +8,7 @@
 
 class Unit;
 
-class RangeSystem : public ContentsObservee
+class RangeSystem : public Component, public ContentsObservee
 {
 private:
     Unit* m_unitComponent;
@@ -19,6 +19,7 @@ public:
 public:
     virtual void Start() override;
     virtual void OnTriggerEnter(physics::Collider* collider) override;
-    virtual void OnTriggerExit(physics::Collider* collider) override;
+    virtual void OnTriggerExit(physics::Collider* collider) override;    
+    virtual Component* GetComponent() override { return this; }
 };
 

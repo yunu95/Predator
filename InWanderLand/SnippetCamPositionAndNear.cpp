@@ -17,7 +17,7 @@ namespace snippets
     {
         static void SnippetInitializerCamPosAndNear()
         {
-            class EpsilonVibration : virtual public yunutyEngine::Component
+            class EpsilonVibration : public yunutyEngine::Component
             {
             protected:
                 double epsilon = 0.001;

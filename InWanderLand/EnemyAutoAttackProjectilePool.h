@@ -4,7 +4,7 @@
 #include "PermanentObservee.h"
 
 class EnemyAutoAttackProjectilePool :
-	public GameObjectPool<EnemyAutoAttackProjectile>, public SingletonComponent<EnemyAutoAttackProjectilePool>, public PermanentObservee
+	public GameObjectPool<EnemyAutoAttackProjectile>, public SingletonComponent<EnemyAutoAttackProjectilePool>, public Component, public PermanentObservee
 {
 public:
 	virtual void ObjectInitializer(EnemyAutoAttackProjectile* projectile) override
@@ -16,6 +16,7 @@ public:
 	}
 	virtual void Start() override;
 	virtual void OnContentsStop() override;
+	virtual Component* GetComponent() override { return this; }
 };
 
 void EnemyAutoAttackProjectilePool::Start()

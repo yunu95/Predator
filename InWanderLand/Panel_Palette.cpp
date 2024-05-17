@@ -1858,11 +1858,7 @@ namespace application
                     std::string currentFBX = fbxName;
 
                     selections.resize(0);
-                    for (auto& each : ResourceManager::GetSingletonInstance().GetStaticFBXList())
-                    {
-                        selections.push_back(each);
-                    }
-                    for (auto& each : ResourceManager::GetSingletonInstance().GetSkinnedFBXList())
+                    for (auto& each : Interactable_TemplateData::GetInteractableFBXNameList())
                     {
                         selections.push_back(each);
                     }

@@ -5,7 +5,7 @@
 #include "StaticMeshRenderer.h"
 #include "PermanentObservee.h"
 
-class AutoAttackProjectilePool : public GameObjectPool<AutoAttackProjectile>, public SingletonComponent<AutoAttackProjectilePool>, public PermanentObservee
+class AutoAttackProjectilePool : public GameObjectPool<AutoAttackProjectile>, public SingletonComponent<AutoAttackProjectilePool>, public Component, public PermanentObservee
 {	
 public:
 	virtual void ObjectInitializer(AutoAttackProjectile* projectile) override 
@@ -20,6 +20,7 @@ public:
 	}
 	virtual void Start() override;
 	virtual void OnContentsStop() override;
+	virtual Component* GetComponent() override { return this; }
 };
 
 void AutoAttackProjectilePool::Start()

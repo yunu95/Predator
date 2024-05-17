@@ -22,7 +22,7 @@ namespace yunutyEngine
     namespace physics
     {
         class Collider;
-        class YUNUTY_API RigidBody : virtual public Component
+        class YUNUTY_API RigidBody : public Component
         {
         public:
             RigidBody();

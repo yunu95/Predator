@@ -7,7 +7,7 @@
 #include "GameManager.h"
 #include "BurnEffect.h"
 
-class MeleeEnemyPool : public GameObjectPool<DummyComponent>, public SingletonComponent<MeleeEnemyPool>, public PermanentObservee
+class MeleeEnemyPool : public GameObjectPool<DummyComponent>, public SingletonComponent<MeleeEnemyPool>, public Component, public PermanentObservee
 {
 private:
 	Vector3d m_unitPosition;
@@ -64,6 +64,7 @@ public:
 
 	virtual void Start() override;
 	virtual void OnContentsStop() override;
+	virtual Component* GetComponent() override { return this; }
 };
 
 void MeleeEnemyPool::Start()

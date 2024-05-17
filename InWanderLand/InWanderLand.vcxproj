@@ -1044,6 +1044,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Condition_CinematicMode.h" />
     <ClInclude Include="Condition_TutorialMode.h" />
     <ClInclude Include="ContentsObservee.h" />
+    <ClInclude Include="ContentsObserveeComponent.h" />
     <ClInclude Include="ContentsObserver.h" />
     <ClInclude Include="ContentsPlayFlag.h" />
     <ClInclude Include="ContentsStopFlag.h" />
@@ -1073,7 +1074,12 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="InteractableBrush.h" />
     <ClInclude Include="InteractableData.h" />
     <ClInclude Include="InteractableEditorInstance.h" />
+    <ClInclude Include="InteractableList.h" />
     <ClInclude Include="InteractablePalette.h" />
+    <ClInclude Include="Interactable_ChessBishop.h" />
+    <ClInclude Include="Interactable_ChessPawn.h" />
+    <ClInclude Include="Interactable_ChessRook.h" />
+    <ClInclude Include="Interactable_SpikeTrap.h" />
     <ClInclude Include="Interactable_TemplateData.h" />
     <ClInclude Include="JsonUIData.h" />
     <ClInclude Include="LocalTimeEntity.h" />

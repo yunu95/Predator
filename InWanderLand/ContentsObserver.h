@@ -6,7 +6,7 @@ class PermanentObservee;
 
 #include <vector>
 
-class ContentsObserver : virtual public Component, public SingletonComponent<ContentsObserver>
+class ContentsObserver : public Component, public SingletonComponent<ContentsObserver>
 {
 public:
 	void RegisterObservee(PermanentObservee* permanentObservee);

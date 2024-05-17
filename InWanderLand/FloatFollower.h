@@ -2,7 +2,7 @@
 #include "YunutyEngine.h"
 #include "ContentsObservee.h"
 
-class FloatFollower : virtual public Component
+class FloatFollower : public Component
 {
 private:
     float targetFloat = 0;
