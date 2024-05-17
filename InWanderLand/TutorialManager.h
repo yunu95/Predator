@@ -13,7 +13,7 @@
 namespace application
 {
 	class TutorialManager
-		: public PlayableComponent, public Component, public SingletonComponent<TutorialManager>
+		: public PlayableComponent, virtual public Component, public SingletonComponent<TutorialManager>
 	{
 		/// friend class 전술모드?
 

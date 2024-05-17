@@ -1,14 +1,12 @@
 #pragma once
 
+#include "YunutyEngine.h"
+
 class ContentsObservee
+	: virtual public yunutyEngine::Component
 {
 public:
-	ContentsObservee();				/// Observer에 등록
-	virtual void PlayFunction() = 0;
-	virtual void StopFunction() = 0;
-	bool isSingletonComponent{ false };
-	bool isOncePaused{ false };
-
-private:
+	virtual ~ContentsObservee() = default;
+	ContentsObservee();
 };
 

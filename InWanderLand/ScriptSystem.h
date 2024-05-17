@@ -30,7 +30,7 @@ namespace application
 namespace application
 {
 	class ScriptSystem
-		: public Storable, public PlayableComponent, public Component, public SingletonComponent<ScriptSystem>
+		: public Storable, public PlayableComponent, virtual public Component, public SingletonComponent<ScriptSystem>
 	{
 		friend class SingletonComponent<ScriptSystem>;
 		friend class GameObject;

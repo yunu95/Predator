@@ -4,7 +4,7 @@
 
 class Unit;
 
-class CursorDetector : public Component, public ContentsObservee
+class CursorDetector : public ContentsObservee
 {
 public:
 	virtual void OnTriggerEnter(physics::Collider* collider) override;
@@ -12,9 +12,6 @@ public:
 
 	virtual void Start() override;
 	virtual void Update() override;
-
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
 
 	void EraseUnitFromContainer(Unit* p_unit);
 

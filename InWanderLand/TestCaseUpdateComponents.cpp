@@ -12,7 +12,7 @@ namespace tests
 {
     TEST_CLASS(TestCaseUpdateComponentsClass)
     {
-        class UpdateComponent : public yunutyEngine::Component
+        class UpdateComponent : virtual public yunutyEngine::Component
         {
         public:
             static int mustNotBeZero;

@@ -14,18 +14,9 @@ void PlayTimeRegionManager::Start()
 	}
 }
 
-void PlayTimeRegionManager::PlayFunction()
+void PlayTimeRegionManager::OnContentsStop()
 {
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
-}
-
-void PlayTimeRegionManager::StopFunction()
-{
-	SetActive(false);
+	this->SetActive(false);
 	stage1ToStage2Function = nullptr;
 	cameraDotween = nullptr;
 	stage1Ornaments.clear();
@@ -36,7 +27,7 @@ void PlayTimeRegionManager::AddRegionData(application::editor::RegionData* p_reg
 {
 	switch (static_cast<SpecialEventType>(p_regionData->pod.specialEvent))
 	{
-		case SpecialEventType::Stage2StartRegion :
+		case SpecialEventType::Stage2StartRegion:
 		{
 			stage2StartPosition = Vector3d(p_regionData->pod.x, 0, p_regionData->pod.z);
 		}

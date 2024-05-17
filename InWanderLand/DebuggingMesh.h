@@ -14,14 +14,11 @@ enum class MaterialNum
 	Green,
 };
 
-class DebuggingMesh : public Component, public ContentsObservee
+class DebuggingMesh : public ContentsObservee
 {
 public:
 	void SetUnitObject(Unit* p_unit);
 	void PopMeshUP(yunuGI::Color p_color, MaterialNum p_matNum);
-	
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
 
 private:
 	GameObject* m_ownerObject;

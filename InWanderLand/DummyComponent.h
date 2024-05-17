@@ -3,28 +3,13 @@
 #include "Unit.h"
 #include "ContentsObservee.h"
 
-class DummyComponent : public Component, public ContentsObservee
+class DummyComponent : public ContentsObservee
 {
 public:
 	Unit* m_pairUnit;
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
 	virtual void Start() override;
 };
 
 void DummyComponent::Start()
 {
-}
-
-void DummyComponent::PlayFunction()
-{
-
-}
-
-void DummyComponent::StopFunction()
-{
-	if (!GetGameObject()->GetComponentWeakPtr<DummyComponent>().expired())
-	{
-		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-	}
 }

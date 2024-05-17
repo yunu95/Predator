@@ -12,7 +12,7 @@ namespace application::editor
 {
 	class RegionData;
 }
-class PlaytimeRegion : public Component, public ContentsObservee
+class PlaytimeRegion : public ContentsObservee
 {
 private:
 	application::editor::RegionData* regionData{nullptr};
@@ -22,8 +22,6 @@ private:
 
 public:
 	virtual ~PlaytimeRegion();
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
 
 	// 주인공 일행이 하나라도 지역에 입장할 시에 추가로 호출되는 콜백
 	std::vector<std::function<void()>> OnEnter;

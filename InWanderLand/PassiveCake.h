@@ -8,7 +8,7 @@
 
 class Dotween;
 
-class PassiveCake : public Component, public ContentsObservee
+class PassiveCake : public ContentsObservee
 {
 private:
 	yunutyEngine::graphics::StaticMeshRenderer* m_mesh;
@@ -32,9 +32,6 @@ public:
 	void SetMesh(yunutyEngine::graphics::StaticMeshRenderer* p_mesh);
 	void SetCollider(physics::BoxCollider* p_collider);
 	void SetDotweenComponent(Dotween* p_dotween);
-
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
 
 	virtual void Start() override;
 	virtual void Update() override;

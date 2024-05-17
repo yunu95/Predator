@@ -17,7 +17,7 @@ class ColorTintTimer;
 class PlayMusicTimer;
 class UISpriteAnimation;
 // 임포트된 UI 요소에 대한 정보를 잔뜩 저장하는 클래스
-class UIElement : public Component
+class UIElement : virtual public Component
 {
 private:
     // 복제된 UIElement의 하위 요소들에 대한 정보

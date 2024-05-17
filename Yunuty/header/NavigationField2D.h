@@ -15,7 +15,7 @@ namespace yunutyEngine
     /// </summary>
 
     class NavigationUnit2DReport;
-    class YUNUTY_API NavigationField2D : public Component
+    class YUNUTY_API NavigationField2D : virtual public Component
     {
     protected:
         static constexpr int dx[8] = { 0,0,1,-1,1,1,-1,-1 };

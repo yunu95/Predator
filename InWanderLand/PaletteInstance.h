@@ -22,7 +22,7 @@ namespace application
 			/// 에디터가 비활성화된 상태에서는 RigidBody나 디버그 메시에 들어가는 자원을 사용하지 않아야 합니다.
 			/// </attention>
 			/// </summary>
-			class PaletteInstance : public yunutyEngine::Component
+			class PaletteInstance : virtual public yunutyEngine::Component
 			{
 			public:
 				virtual void Start() override;

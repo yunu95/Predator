@@ -294,19 +294,5 @@ void UnitProductor::Update()
 
 void UnitProductor::Start()
 {
-}
-
-void UnitProductor::PlayFunction()
-{
-    this->SetActive(true);
-    if (isOncePaused)
-    {
-        Start();
-    }
-}
-
-void UnitProductor::StopFunction()
-{
 
 }
-

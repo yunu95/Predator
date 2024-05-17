@@ -11,7 +11,7 @@
 namespace application
 {
 	class CinematicManager
-		: public PlayableComponent, public Component, public SingletonComponent<CinematicManager>
+		: public PlayableComponent, virtual public Component, public SingletonComponent<CinematicManager>
 	{
 	public:
 		virtual void SingletonInitializer() override;

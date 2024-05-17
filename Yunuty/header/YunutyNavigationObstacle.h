@@ -11,7 +11,7 @@
 namespace yunutyEngine
 {
     class NavigationField;
-    class YUNUTY_API NavigationObstacle : public Component
+    class YUNUTY_API NavigationObstacle : virtual public Component
     {
     public:
         enum class ObstacleType

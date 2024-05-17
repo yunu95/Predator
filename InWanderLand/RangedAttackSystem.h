@@ -18,9 +18,6 @@ public:
 	void SetBulletSpeed(float speed);
 	void SetRange(float p_rng);
 
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
-
 public:
 	virtual void Start() override;
 };

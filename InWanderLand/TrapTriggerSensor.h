@@ -3,13 +3,10 @@
 #include "ContentsObservee.h"
 #include "ChessTrapSkillSystem.h"
 
-class TrapTriggerSensor : public Component, public ContentsObservee
+class TrapTriggerSensor : public ContentsObservee
 {
 public:
 	ChessTrapSkillSystem* trapChessSkillSystem;
 	virtual void OnTriggerEnter(physics::Collider* collider) override;
-
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
 };
 

@@ -329,20 +329,7 @@ void Unit::OnDestroy()
 }
 void Unit::OnTransformUpdate()
 {
-}
 
-
-void Unit::PlayFunction()
-{
-
-}
-
-void Unit::StopFunction()
-{
-    if (!GetGameObject()->GetComponentWeakPtr<Unit>().expired())
-    {
-        yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-    }
 }
 
 Unit::UnitType Unit::GetUnitType() const

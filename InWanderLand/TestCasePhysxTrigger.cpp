@@ -12,7 +12,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 // 이 함수는 게임의 기본 초기화 함수를 오버라이드합니다.
 void SnippetInitializerPhysxTrigger()
 {
-    class TestDebugCollider : public yunutyEngine::Component
+    class TestDebugCollider : virtual public yunutyEngine::Component
     {
     public:
         float t;

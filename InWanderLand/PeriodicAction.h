@@ -2,7 +2,7 @@
 #include "YunutyEngine.h"
 using namespace yunutyEngine;
 
-class PeriodicAction : public yunutyEngine::Component
+class PeriodicAction : virtual public yunutyEngine::Component
 {
 public:
     std::function<void()> action{ []() {} };

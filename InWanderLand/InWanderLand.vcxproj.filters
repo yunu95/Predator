@@ -610,6 +610,12 @@
     <Filter Include="Editor\ScriptSystem\2_Action\List\Action_UISetActive">
       <UniqueIdentifier>{fed1d65e-f4f7-4b7a-bb1d-eeb9599b62a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\InteractableComponent">
+      <UniqueIdentifier>{fac159cc-7c2b-4eb1-b641-7c4c1965ff8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\InteractableComponent\InteractableList">
+      <UniqueIdentifier>{1d80d79b-e59c-4e84-b07c-672c34a43438}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1408,9 +1414,6 @@
     <ClInclude Include="ContentsObserver.h">
       <Filter>Contents\ContentsObserver</Filter>
     </ClInclude>
-    <ClInclude Include="ObserveeHelper.h">
-      <Filter>Contents\ContentsObserver</Filter>
-    </ClInclude>
     <ClInclude Include="LocalTimeEntityManager.h">
       <Filter>Contents\ContentsObserver</Filter>
     </ClInclude>
@@ -1536,6 +1539,9 @@
     </ClInclude>
     <ClInclude Include="Action_UISetActive.h">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_UISetActive</Filter>
+    </ClInclude>
+    <ClInclude Include="IInteractableComponent.h">
+      <Filter>Contents\InteractableComponent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2222,9 +2228,6 @@
       <Filter>UI\Effect\TimePauseTimer</Filter>
     </ClCompile>
     <ClCompile Include="ContentsObserver.cpp">
-      <Filter>Contents\ContentsObserver</Filter>
-    </ClCompile>
-    <ClCompile Include="ObserveeHelper.cpp">
       <Filter>Contents\ContentsObserver</Filter>
     </ClCompile>
     <ClCompile Include="LocalTimeEntityManager.cpp">

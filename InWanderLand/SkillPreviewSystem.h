@@ -10,7 +10,7 @@
 //	None
 //};
 //
-//class SkillPreviewSystem : public Component, public SingletonComponent<SkillPreviewSystem>
+//class SkillPreviewSystem : virtual public Component, public SingletonComponent<SkillPreviewSystem>
 //{
 //public:
 //

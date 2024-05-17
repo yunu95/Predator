@@ -15,7 +15,7 @@
 /// </summary>
 class SpriteAnimation;
 class UIElement;
-class UIManager : public Component, public SingletonComponent<UIManager>
+class UIManager : virtual public Component, public SingletonComponent<UIManager>
 {
 private:
     void ClearDialogueInfos();

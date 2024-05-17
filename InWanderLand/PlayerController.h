@@ -12,7 +12,7 @@ class RTSCam;
 class Unit;
 class CursorDetector;
 
-class PlayerController : public Component, public SingletonComponent<PlayerController>, public PermanentObservee
+class PlayerController : public SingletonComponent<PlayerController>, public PermanentObservee
 {
 public:
     enum class OrderType
@@ -45,8 +45,7 @@ public:
     void AddPlayerUnit(Unit* p_playerUnit);
     void ErasePlayerUnit(Unit* p_playerUnit);
 
-    virtual void PlayFunction() override;
-    virtual void StopFunction() override;
+    virtual void OnContentsStop() override;
 
     void SetRightClickFunction();
     void SetLeftClickAttackMove();

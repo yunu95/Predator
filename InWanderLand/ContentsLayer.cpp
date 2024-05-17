@@ -51,7 +51,7 @@ std::function<void()> application::contents::ContentsLayer::testInitializer;
 
 bool contentsInputControl = true;
 
-class TestComponent3 : public yunutyEngine::Component
+class TestComponent3 : virtual public yunutyEngine::Component
 {
 public:
     yunutyEngine::graphics::UIText* text_FPS;
@@ -78,7 +78,7 @@ public:
     }
 };
 
-class TestComponent4 : public yunutyEngine::Component
+class TestComponent4 : virtual public yunutyEngine::Component
 {
 public:
     yunutyEngine::GameObject* obj;
@@ -387,7 +387,7 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
     /// Playable 동작들을 일괄 처리할 부분입니다.
     PlayableComponent::OnGameStartAll();
 
-    ContentsObserver::Instance().PlayObservee();
+    ContentsObserver::Instance().OnPlayContents();
 }
 
 void application::contents::ContentsLayer::PauseContents()
@@ -402,8 +402,6 @@ void application::contents::ContentsLayer::ResumeContents()
 {
     Time::SetTimeScale(1);
 
-    ContentsObserver::Instance().PlayObservee();
-
     /// Playable 동작들을 일괄 처리할 부분입니다.
     PlayableComponent::OnGameResumeAll();
 }
@@ -414,15 +412,14 @@ void application::contents::ContentsLayer::StopContents(ContentsStopFlag stopFla
     isStoppedOnce = true;
     ShortcutSystem::Instance().Clear();
 
-    ContentsObserver::Instance().StopObservee();
-    ContentsObserver::Instance().ClearObservees();
-
 	yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
 	yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage1LightMap");
 
 
     /// Playable 동작들을 일괄 처리할 부분입니다.
     PlayableComponent::OnGameStopAll();
+
+    ContentsObserver::Instance().OnStopContents();
 
     if (bool(stopFlag & ContentsStopFlag::ClearUI))
         UIManager::Instance().Clear();

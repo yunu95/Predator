@@ -31,18 +31,9 @@ void PlayerController::ErasePlayerUnit(Unit* p_playerUnit)
     playerComponentMap.erase(p_playerUnit->GetUnitType());
 }
 
-void PlayerController::PlayFunction()
+void PlayerController::OnContentsStop()
 {
-    this->SetActive(true);
-    if (isOncePaused)
-    {
-        Start();
-    }
-}
-
-void PlayerController::StopFunction()
-{
-    SetActive(false);
+    this->SetActive(false);
     playerComponentMap.clear();
     m_movingSystemComponent = nullptr;
     m_dotween = nullptr;

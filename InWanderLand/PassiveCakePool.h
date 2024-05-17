@@ -5,7 +5,7 @@
 #include "PermanentObservee.h"
 
 class PassiveCakePool :
-	public GameObjectPool<PassiveCake>, public Component, public SingletonComponent<PassiveCakePool>, public PermanentObservee
+	public GameObjectPool<PassiveCake>, public SingletonComponent<PassiveCakePool>, public PermanentObservee
 {
 public:
 	virtual void ObjectInitializer(PassiveCake* passiveCake) override
@@ -29,25 +29,16 @@ public:
 	}
 
 	virtual void Start() override;
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+	virtual void OnContentsStop() override;
 };
 
 void PassiveCakePool::Start()
 {
 }
 
-void PassiveCakePool::PlayFunction()
+void PassiveCakePool::OnContentsStop()
 {
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
-}
-
-void PassiveCakePool::StopFunction()
-{
+	this->SetActive(false);
 	poolObjects.clear();
 	expendableObjects.clear();
 }
