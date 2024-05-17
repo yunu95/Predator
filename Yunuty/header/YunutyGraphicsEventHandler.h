@@ -26,7 +26,7 @@ namespace yunutyEngine::graphics
     class Renderer;
     class Rendererable;
     class YunutyCycle;
-    class YUNUTY_API EventHandler : virtual public Component
+    class YUNUTY_API EventHandler : public Component
     {
     public:
         EventHandler()

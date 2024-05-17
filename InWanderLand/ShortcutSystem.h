@@ -14,7 +14,7 @@
 namespace application
 {
     class ShortcutSystem
-        : virtual public Component, public SingletonComponent<ShortcutSystem>
+        : public Component, public SingletonComponent<ShortcutSystem>
     {
         friend class SingletonComponent<ShortcutSystem>;
         friend class GameObject;

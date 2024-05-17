@@ -3,7 +3,7 @@
 
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
-#include "ContentsObservee.h"
+#include "ContentsObserveeComponent.h"
 
 namespace application
 {
@@ -102,7 +102,7 @@ namespace application
 		void LightData::ApplyAsPlaytimeObject()
 		{
 			auto comp = Scene::getCurrentScene()->AddGameObject();
-			comp->AddComponent<ContentsObservee>();
+			comp->AddComponent<ContentsObserveeComponent>();
 
 			switch (pod.templateData->pod.type)
 			{

@@ -17,7 +17,7 @@ class RTSCam;
 class CursorDetector;
 class PlaytimeWave;
 
-class TacticModeSystem : public SingletonComponent<TacticModeSystem>, public PermanentObservee
+class TacticModeSystem : public SingletonComponent<TacticModeSystem>, public Component, public PermanentObservee
 {
 public:
     virtual void OnEnable() override;
@@ -25,6 +25,7 @@ public:
     virtual void Update() override;
 
 	virtual void OnContentsStop() override;
+    virtual Component* GetComponent() override { return this; }
 
 	enum OrderType
 	{

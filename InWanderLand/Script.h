@@ -29,7 +29,7 @@ namespace application
 namespace application
 {
 	class Script
-		: public Identifiable, public Storable, virtual public Component
+		: public Identifiable, public Storable, public Component
 	{
 		friend class ScriptSystem;
 		friend class editor::Module_ScriptEditor;

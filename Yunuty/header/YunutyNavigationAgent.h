@@ -11,7 +11,7 @@
 namespace yunutyEngine
 {
     class NavigationField;
-    class YUNUTY_API NavigationAgent : virtual public Component
+    class YUNUTY_API NavigationAgent : public Component
     {
     public:
         class Impl;

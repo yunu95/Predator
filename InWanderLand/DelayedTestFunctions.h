@@ -2,7 +2,7 @@
 #include "YunutyEngine.h"
 #include <algorithm>
 
-class DelayedTestFunctions : virtual public yunutyEngine::Component
+class DelayedTestFunctions : public yunutyEngine::Component
 {
 public:
     struct Todo

@@ -14,7 +14,7 @@ enum class MaterialNum
 	Green,
 };
 
-class DebuggingMesh : public ContentsObservee
+class DebuggingMesh : public Component, public ContentsObservee
 {
 public:
 	void SetUnitObject(Unit* p_unit);
@@ -36,5 +36,6 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	friend class DebuggingMeshPool;
+	virtual Component* GetComponent() override { return this; }
 };
 

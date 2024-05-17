@@ -4,7 +4,7 @@
 #include "ContentsObservee.h"
 
 
-class TimerComponent : virtual public Component
+class TimerComponent : public Component
 {
 private:
     bool m_isActivated{ false };

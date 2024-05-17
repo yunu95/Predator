@@ -51,7 +51,7 @@ std::function<void()> application::contents::ContentsLayer::testInitializer;
 
 bool contentsInputControl = true;
 
-class TestComponent3 : virtual public yunutyEngine::Component
+class TestComponent3 : public yunutyEngine::Component
 {
 public:
     yunutyEngine::graphics::UIText* text_FPS;
@@ -78,7 +78,7 @@ public:
     }
 };
 
-class TestComponent4 : virtual public yunutyEngine::Component
+class TestComponent4 : public yunutyEngine::Component
 {
 public:
     yunutyEngine::GameObject* obj;

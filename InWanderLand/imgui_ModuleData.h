@@ -13,6 +13,7 @@
 #include "PaletteBrushManager.h"
 #include "GCTemplate.h"
 #include "WanderUtils.h"
+#include "Interactable_TemplateData.h"
 
 namespace application
 {
@@ -255,15 +256,10 @@ namespace application
 						std::string current = data;
 
 						selections.resize(0);
-						for (auto& each : ResourceManager::GetSingletonInstance().GetStaticFBXList())
+						for (auto& each : Interactable_TemplateData::GetInteractableFBXNameList())
 						{
 							selections.push_back(each);
 						}
-						for (auto& each : ResourceManager::GetSingletonInstance().GetSkinnedFBXList())
-						{
-							selections.push_back(each);
-						}
-
 						std::sort(selections.begin(), selections.end());
 
 						if (ImGui::BeginCombo("##fBXCombo", data.c_str()))

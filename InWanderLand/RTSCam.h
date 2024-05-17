@@ -50,6 +50,7 @@ public:
     float GetInitFar() { return initFar; }
     float GetInitWidth() { return initWidth; }
     float GetInitHeight() { return initHeight; }
+    virtual Component* GetComponent() override { return this; }
 
 private:
     void UpdateCameraView();

@@ -20,7 +20,7 @@ class CursorDetector;
 /// <summary>
 /// 유닛들이 공유하는 멤버.
 /// </summary>
-class Unit : public ContentsObservee, public LocalTimeEntity
+class Unit : public Component, public ContentsObservee, public LocalTimeEntity
 {
 public:
     // 사용 시 주의점 : 마지막에는 Death와 StateEnd가 순서대로 들어가 있을 것!
@@ -378,7 +378,8 @@ public:
     void SetRessurectMaxCount(int p_cnt);
 
 public:
-    ~Unit();
+    virtual Component* GetComponent() override { return this; }
+    virtual ~Unit();
     int GetUnitDamage() const;
     void Damaged(Unit* opponentUnit, float opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
     void Damaged(float dmg);										// 추적받지 않는 데미지

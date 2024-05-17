@@ -16,7 +16,7 @@ using namespace std;
 namespace yunutyEngine
 {
     class Collision2D;
-    class YUNUTY_API RigidBody2D : virtual public Component
+    class YUNUTY_API RigidBody2D : public Component
     {
     private:
         Vector2d cachedVelocity;

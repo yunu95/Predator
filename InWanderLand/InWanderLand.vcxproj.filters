@@ -1519,6 +1519,24 @@
     <ClInclude Include="IInteractableComponent.h">
       <Filter>Contents\InteractableComponent</Filter>
     </ClInclude>
+    <ClInclude Include="Interactable_ChessBishop.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_ChessPawn.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_ChessRook.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_SpikeTrap.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="InteractableList.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsObserveeComponent.h">
+      <Filter>Contents\ContentsObserver\Observee</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">

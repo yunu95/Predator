@@ -6,7 +6,7 @@
 #include "PermanentObservee.h"
 
 class HealerAutoAttackProjectilePool :
-	public GameObjectPool<HealerAutoAttackProjectile>, public SingletonComponent<HealerAutoAttackProjectilePool>, public PermanentObservee
+	public GameObjectPool<HealerAutoAttackProjectile>, public SingletonComponent<HealerAutoAttackProjectilePool>, public Component, public PermanentObservee
 {
 public:
 	virtual void ObjectInitializer(HealerAutoAttackProjectile* projectile) override
@@ -18,6 +18,7 @@ public:
 	}
 	virtual void Start() override;
 	virtual void OnContentsStop() override;
+	virtual Component* GetComponent() override { return this; }
 };
 
 void HealerAutoAttackProjectilePool::Start()

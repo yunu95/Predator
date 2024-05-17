@@ -16,7 +16,7 @@
 namespace  yunutyEngine
 {
     class YunutyCycle;
-    class YUNUTY_API AudioSource : virtual public Component
+    class YUNUTY_API AudioSource : public Component
     {
     private:
         SoundChannel soundChannel;

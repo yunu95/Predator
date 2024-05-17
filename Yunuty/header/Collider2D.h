@@ -23,7 +23,7 @@ namespace yunutyEngine
     class CircleCollider2D;
     class LineCollider2D;
     class RigidBody2D;
-    class YUNUTY_API Collider2D abstract : virtual public Component
+    class YUNUTY_API Collider2D abstract : public Component
     {
         // 쿼드트리 최적화 나중에 구현하기
     public:

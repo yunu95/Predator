@@ -8,7 +8,7 @@
 
 class Unit;
 
-class StatusEffect : public ContentsObservee
+class StatusEffect : public Component, public ContentsObservee
 {
 private:
     std::weak_ptr<physics::SphereCollider> triggerCollider;
@@ -34,5 +34,6 @@ public:
 
     virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) = 0;
     virtual void SetSkillOwnerUnit(Unit* p_unit);
+    virtual Component* GetComponent() override { return this; }
 };
 

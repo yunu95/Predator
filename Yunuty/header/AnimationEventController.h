@@ -17,7 +17,7 @@ namespace yunutyEngine::graphics
 
 	/// Animator 에 연동되는 AnimationEvent 를 생성하는 Controller 입니다.
 	/// EventBinding 함수가 호출될 때, 동작할 callBack 함수를 등록하여 사용합니다.
-	class YUNUTY_API AnimationEventController : virtual public Component
+	class YUNUTY_API AnimationEventController : public Component
 	{
 	public:
 		AnimationEventController() = default;

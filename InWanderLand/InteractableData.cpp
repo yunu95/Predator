@@ -25,6 +25,7 @@
 #include "BurnEffect.h"
 #include "ParticleTool_Manager.h"
 #include "AnimationEventManager.h"
+#include "InteractableList.h"
 
 #include <algorithm>
 
@@ -122,71 +123,51 @@ namespace application
 
         void InteractableData::ApplyAsPlaytimeObject()
         {
-#pragma region
-            /// SM 인데 Unit 으로 처리되는 애들이면 unitList 에 추가해!
-            static std::set<std::string> unitList = { "SKM_Hansel", "SKM_HeartQueen", "SKM_Monster1", "SKM_Monster2", "SKM_Robin", "SKM_Ursula"
-                , "SM_Chess_Bishop", "SM_Chess_Pawn", "SM_Chess_Rook", "SM_Spike01"}; // 여기!
-
 			Vector3d startPosition = Vector3d(pod.position.x, 0, pod.position.z);
+            Quaternion startQuat = Quaternion(pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z);
+            Vector3d startScale = Vector3d(pod.scale.x, pod.scale.y, pod.scale.z);
 
-			UnitProductor* currentSelectedProductor{ nullptr };
+            yunuGI::FBXData* data = nullptr;
 
-            PawnTrapProductor::Instance().SetUnitData();
-            RookTrapProductor::Instance().SetUnitData();
-            BishopTrapProductor::Instance().SetUnitData();
-
-            /// isUnit 변수에 Unit 인지 아닌지 설정해주고,
-            if (unitList.contains(pod.templateData->pod.fBXName))
+            if (graphics::Renderer::SingleInstance().GetResourceManager()->GetFBXData(pod.templateData->pod.fBXName, data))
             {
-				isUnit = true;
-
-				if (pod.templateData->pod.fBXName == "SM_Chess_Bishop")
-				{
-					currentSelectedProductor = &BishopTrapProductor::Instance();
-				}
-				else if (pod.templateData->pod.fBXName == "SM_Chess_Pawn")
-				{
-					currentSelectedProductor = &PawnTrapProductor::Instance();
-				}
-				else if (pod.templateData->pod.fBXName == "SM_Chess_Rook")
-				{
-					currentSelectedProductor = &RookTrapProductor::Instance();
-				}
-                else if (pod.templateData->pod.fBXName == "SM_Spike01")
+                if (data->hasAnimation)
                 {
-					currentSelectedProductor = &SpikeTrapProductor::Instance();
+                    hasAnimation = true;
                 }
-                inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-
-                /// Unit 이면 inGameUnit 을
-                //inGameUnit;
-
-                /// Unit 에 필요한 멤버 변수는 다 있을 거야
             }
-            else
+            
+            auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(pod.templateData->pod.fBXName);
+    
+            if (pod.templateData->pod.fBXName == "SM_Chess_Bishop")
             {
-                isUnit = false;
-
-                /// 아니면 inGameInteractable 에 바인딩을 해야할 것 같음
-                inGameInteractable;
+                obj->AddComponent<Interactable_ChessBishop>();
             }
-#pragma endregion 가보자 규현아
+            else if (pod.templateData->pod.fBXName == "SM_Chess_Pawn")
+            {
+                obj->AddComponent<Interactable_ChessPawn>();
+            }
+            else if (pod.templateData->pod.fBXName == "SM_Chess_Rook")
+            {
+                obj->AddComponent<Interactable_ChessRook>();
+            }
+            else if (pod.templateData->pod.fBXName == "SM_Spike01")
+            {
+                obj->AddComponent<Interactable_SpikeTrap>();
+            }
 
-            /// Unit 일 경우에만 Animation 이 있을 거니까!
-            /// Event Binding 하는 구간이니까 신경 쓰지 말도록!
-            if (inGameUnit)
+            if (hasAnimation)
             {
                 auto& ptm = particle::ParticleTool_Manager::GetSingletonInstance();
                 const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-                auto obj = inGameUnit->GetGameObject();
-                auto animator = obj->GetComponent<graphics::Animator>();
+                auto animator = inGameInteractable->GetComponent<graphics::Animator>();
                 std::wstring fbxNameW;
                 fbxNameW.assign(pod.templateData->pod.fBXName.begin(), pod.templateData->pod.fBXName.end());
 
                 /// Particle Setting
                 for (auto& eachPI : ptm.GetChildrenParticleInstanceList(pod.templateData->pod.fBXName))
                 {
-                    auto pObj = obj->AddGameObject();
+                    auto pObj = inGameInteractable->AddGameObject();
                     auto sptr = eachPI.lock();
                     pObj->GetTransform()->SetLocalPosition(sptr->offsetPos);
                     pObj->GetTransform()->SetLocalRotation(sptr->rotation);
@@ -239,7 +220,7 @@ namespace application
                             {
                                 auto ptr = static_cast<GameObject_ActivateEvent*>(event.get());
                                 GameObject* particle = nullptr;
-                                for (auto& child : obj->GetChildren())
+                                for (auto& child : inGameInteractable->GetChildren())
                                 {
                                     if (child->getName() == ptr->objName)
                                     {
@@ -261,7 +242,7 @@ namespace application
                             {
                                 auto ptr = static_cast<GameObject_DisabledEvent*>(event.get());
                                 GameObject* particle = nullptr;
-                                for (auto& child : obj->GetChildren())
+                                for (auto& child : inGameInteractable->GetChildren())
                                 {
                                     if (child->getName() == ptr->objName)
                                     {
@@ -281,7 +262,7 @@ namespace application
                             {
                                 auto ptr = static_cast<GameObject_TransformEditEvent*>(event.get());
                                 GameObject* particle = nullptr;
-                                for (auto& child : obj->GetChildren())
+                                for (auto& child : inGameInteractable->GetChildren())
                                 {
                                     if (child->getName() == ptr->objName)
                                     {
@@ -317,7 +298,7 @@ namespace application
                             {
                                 auto ptr = static_cast<GameObject_AwakeEvent*>(event.get());
                                 GameObject* particle = nullptr;
-                                for (auto& child : obj->GetChildren())
+                                for (auto& child : inGameInteractable->GetChildren())
                                 {
                                     if (child->getName() == ptr->objName)
                                     {

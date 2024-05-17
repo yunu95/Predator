@@ -2,7 +2,7 @@
 #include "YunutyEngine.h"
 #include "YunuGraphicsInterface.h"
 
-class TestComponent2 : virtual public yunutyEngine::Component
+class TestComponent2 : public yunutyEngine::Component
 {
 public:
 	yunutyEngine::GameObject* obj;

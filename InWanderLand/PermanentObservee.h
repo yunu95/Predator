@@ -16,11 +16,11 @@ public:
 	/// 기본적으로는 해당 Component 의 Active 를 활성화 한 뒤,
 	/// Start 함수를 한 번 호출하게 됩니다.
 	/// Show 등의 특별한 동작을 위해서는 override 하여 재정의 합니다.
-	virtual void OnContentsPlay() { this->SetActive(true); this->Start(); }
+	virtual void OnContentsPlay() { GetComponent()->SetActive(true); GetComponent()->Start(); }
 
 	/// Editor 상에서 Contents 가 Stop 될 때, 호출하는 함수입니다.
 	/// 기본적으로는 해당 Component 의 Active 에만 관여하며,
 	/// Hide 등의 특별한 동작을 위해서는 override 하여 재정의 합니다.
-	virtual void OnContentsStop() { this->SetActive(false); }
+	virtual void OnContentsStop() { GetComponent()->SetActive(false); }
 };
 
