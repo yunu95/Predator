@@ -1,50 +1,38 @@
 #include "ContentsObserver.h"
 #include "ContentsObservee.h"
+#include "PermanentObservee.h"
+
+void ContentsObserver::RegisterObservee(PermanentObservee* permanentObservee)
+{
+	permanentObservees.push_back(permanentObservee);
+}
 
 void ContentsObserver::RegisterObservee(ContentsObservee* p_observee)
 {
-	if (p_observee->isSingletonComponent)
-		m_initializingContainer.push_back(p_observee);
-	else
-		m_destroyingContainer.push_back(p_observee);
-
+	contentsObservees.push_back(p_observee);
 }
 
-void ContentsObserver::PlayObservee() const
+void ContentsObserver::OnPlayContents()
 {
-	for (auto itr = m_destroyingContainer.begin(); itr != m_destroyingContainer.end(); itr++)
+	for (auto each : permanentObservees)
 	{
-		(*itr)->PlayFunction();
-	}
-
-	for (auto itr = m_initializingContainer.begin(); itr != m_initializingContainer.end(); itr++)
-	{
-		(*itr)->PlayFunction();
+		each->OnContentsPlay();
 	}
 }
 
-void ContentsObserver::StopObservee() const
+void ContentsObserver::OnStopContents()
 {
-	for (auto each : m_initializingContainer)
+	for (auto each : permanentObservees)
 	{
-		each->StopFunction();
+		each->OnContentsStop();
 	}
 
-	for (auto each : m_destroyingContainer)
-	{
-		each->StopFunction();
-	}
-}
+	auto scene = yunutyEngine::Scene::getCurrentScene();
 
-void ContentsObserver::ClearObservees()
-{
-	for (auto itr = m_destroyingContainer.begin(); itr != m_destroyingContainer.end();)
+	for (auto each : contentsObservees)
 	{
-		itr = m_destroyingContainer.erase(itr);
+		scene->DestroyGameObject(each->GetGameObject());
 	}
 
-	for (auto each : m_initializingContainer)
-	{
-		each->isOncePaused = true;
-	}
+	contentsObservees.clear();
 }

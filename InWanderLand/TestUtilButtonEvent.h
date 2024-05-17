@@ -3,7 +3,7 @@
 
 namespace tests
 {
-    class ButtonEvent : public yunutyEngine::Component
+    class ButtonEvent : virtual public yunutyEngine::Component
     {
     public:
         std::unordered_map<yunutyEngine::KeyCode, std::function<void()>> keyPushEvents;

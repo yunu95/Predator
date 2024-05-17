@@ -10,17 +10,3 @@ void TrapTriggerSensor::OnTriggerEnter(physics::Collider* collider)
 		trapChessSkillSystem->ActivateSkill(Unit::SkillEnum::BossSkillOne, Vector3d::zero);
 	}
 }
-
-
-void TrapTriggerSensor::PlayFunction()
-{
-
-}
-
-void TrapTriggerSensor::StopFunction()
-{
-	if (!GetGameObject()->GetComponentWeakPtr<TrapTriggerSensor>().expired())
-	{
-		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-	}
-}

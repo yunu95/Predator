@@ -39,19 +39,10 @@ void PlayerSkillManager::Update()
 	AddSkillGauge(m_skillGaugeRecoveryPerSecond * Time::GetDeltaTime());
 }
 
-void PlayerSkillManager::PlayFunction()
+void PlayerSkillManager::OnContentsStop()
 {
-    this->SetActive(true);
-    if (isOncePaused)
-    {
-        Start();
-    }
-}
-
-void PlayerSkillManager::StopFunction()
-{
-    costPerSkillMap.clear();
     this->SetActive(false);
+    costPerSkillMap.clear();
 }
 
 bool PlayerSkillManager::IsSkillGaugeEnoughToBeUsed(Unit::UnitType p_unitType, Unit::SkillEnum p_skillEnum)

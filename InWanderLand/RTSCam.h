@@ -51,9 +51,6 @@ public:
     float GetInitWidth() { return initWidth; }
     float GetInitHeight() { return initHeight; }
 
-    virtual void PlayFunction() override;
-    virtual void StopFunction() override;
-
 private:
     void UpdateCameraView();
     const application::editor::RegionData* contrainingRegion{ nullptr };

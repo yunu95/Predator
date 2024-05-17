@@ -4,7 +4,7 @@
 
 using namespace yunutyEngine;
 // 임시로 타일 평면을 사방으로 배치할 수 있는 모듈
-class DebugTilePlane : public yunutyEngine::Component
+class DebugTilePlane : virtual public yunutyEngine::Component
 {
 public:
     int width{ 5 };

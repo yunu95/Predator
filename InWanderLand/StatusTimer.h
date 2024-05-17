@@ -2,7 +2,7 @@
 #include "YunutyEngine.h"
 
 
-class StatusTimer : public Component
+class StatusTimer : virtual public Component
 {
 private:
 public:

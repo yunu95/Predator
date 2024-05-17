@@ -7,7 +7,7 @@
 class Unit;
 class StatusTimer;
 
-class StatusTimerPool : public GameObjectPool<StatusTimer>, public Component, public SingletonComponent<StatusTimerPool>, public PermanentObservee
+class StatusTimerPool : public GameObjectPool<StatusTimer>, public SingletonComponent<StatusTimerPool>, public PermanentObservee
 {
 public:
 	virtual void ObjectInitializer(StatusTimer* timer) override
@@ -15,25 +15,16 @@ public:
 
 	}
 	virtual void Start() override;
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+	virtual void OnContentsStop() override;
 };
 
 void StatusTimerPool::Start()
 {
 }
 
-void StatusTimerPool::PlayFunction()
+void StatusTimerPool::OnContentsStop()
 {
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
-}
-
-void StatusTimerPool::StopFunction()
-{
+	this->SetActive(false);
 	poolObjects.clear();
 	expendableObjects.clear();
 }

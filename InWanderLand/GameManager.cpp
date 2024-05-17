@@ -35,17 +35,9 @@ void GameManager::Update()
 	}
 }
 
-void GameManager::PlayFunction()
+void GameManager::OnContentsStop()
 {
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
-}
-
-void GameManager::StopFunction()
-{
+	this->SetActive(false);
 	m_waveEnterCheckMap.clear();
 	m_waveEnterMotionCheckMap.clear();
 	currentActivatingWave = nullptr;

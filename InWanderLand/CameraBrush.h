@@ -14,7 +14,7 @@ namespace application
     {
         namespace palette
         {
-            class CameraBrush : public PaletteBrush, public yunutyEngine::Component, public yunutyEngine::SingletonComponent<CameraBrush>
+            class CameraBrush : public PaletteBrush, virtual public yunutyEngine::Component, public yunutyEngine::SingletonComponent<CameraBrush>
             {
             public:
                 virtual void Initialize() {}
