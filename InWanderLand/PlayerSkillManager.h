@@ -19,7 +19,7 @@ namespace std {
 	};
 }
 
-class PlayerSkillManager : public Component, public SingletonComponent<PlayerSkillManager>, public PermanentObservee
+class PlayerSkillManager : public SingletonComponent<PlayerSkillManager>, public PermanentObservee
 {
 private:
 	float m_maxSkillUsageGauge;
@@ -43,8 +43,7 @@ private:
 public:
 	virtual void Start() override;
 	virtual void Update() override;
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+	virtual void OnContentsStop() override;
 
 	bool IsSkillGaugeEnoughToBeUsed(Unit::UnitType p_unitType, Unit::SkillEnum p_skillEnum);
 

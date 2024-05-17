@@ -20,7 +20,7 @@ class UnitProductor;
 /// <summary>
 /// 플레이타임에서 웨이브 하나에 대응되는 컴포넌트
 /// </summary>
-class PlaytimeWave : public Component, public ContentsObservee, public StaticInstanceRegistry<PlaytimeWave>
+class PlaytimeWave : public ContentsObservee, public StaticInstanceRegistry<PlaytimeWave>
 {
 private:
     int currentSequenceIndex{ 0 };
@@ -39,9 +39,6 @@ public:
     std::vector<Unit*> m_currentWaveUnitVector;
     Unit* inGameUnit;
     virtual ~PlaytimeWave();
-
-    virtual void PlayFunction() override;
-    virtual void StopFunction() override;
 
     void ActivateWave();
     void DeActivateWave();

@@ -17,7 +17,7 @@
 namespace yunutyEngine::graphics
 {
     class YunutyCycle;
-    class YUNUTY_API Camera : public Component
+    class YUNUTY_API Camera : virtual public Component
     {
     private:
         yunuGI::GIPtr<yunuGI::ICamera> yunuGICamera;

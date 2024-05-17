@@ -2,7 +2,7 @@
 #include "ContentsObserver.h"
 
 PermanentObservee::PermanentObservee()
+	: ContentsObservee()
 {
-	isSingletonComponent = true;
 	ContentsObserver::Instance().RegisterObservee(this);
 }

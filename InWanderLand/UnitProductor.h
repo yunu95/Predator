@@ -18,7 +18,7 @@ static float constexpr UNIT_LENGTH = 2.0f;
 /// <summary>
 /// UnitFactory에서의 유닛 생산을 좀 더 효율적으로 하기 위한 클래스.3
 /// </summary>
-class UnitProductor : public Component, public PermanentObservee
+class UnitProductor : public PermanentObservee
 {
 protected:
     // 임시. 모델링 파일로 대체해주기
@@ -97,8 +97,5 @@ public:
 
     virtual void Update() override;
     virtual void Start() override;
-
-    virtual void PlayFunction() override final;
-    virtual void StopFunction() override final;
 };
 

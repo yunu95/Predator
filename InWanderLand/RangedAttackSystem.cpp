@@ -49,19 +49,6 @@ void RangedAttackSystem::SetRange(float p_rng)
 	m_range = p_rng;
 }
 
-void RangedAttackSystem::PlayFunction()
-{
-	
-}
-
-void RangedAttackSystem::StopFunction()
-{
-	if (!GetGameObject()->GetComponentWeakPtr<RangedAttackSystem>().expired())
-	{
-		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-	}
-}
-
 void RangedAttackSystem::Start()
 {
 	m_ownerUnit = GetGameObject()->GetComponent<Unit>();

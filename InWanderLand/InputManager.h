@@ -9,7 +9,7 @@ class RTSCam;
 /// 키와 마우스의 입력을 받으면 해당 입력에 따라 다른 클래스의 함수를 호출해주는 함수.
 ///	입력과 전달의 역할만 갖는다.
 /// </summary>
-class InputManager : public Component, public SingletonComponent<InputManager>, public PermanentObservee
+class InputManager : public SingletonComponent<InputManager>, public PermanentObservee
 {
 public:
     enum SelectedSerialNumber
@@ -31,8 +31,7 @@ public:
     virtual void Start() override;
     virtual void Update() override;
 
-    virtual void PlayFunction() override;
-    virtual void StopFunction() override;
+    virtual void OnContentsStop() override;
 
     bool GetInputManagerActive();
     void SetInputManagerActive(bool p_boolen);

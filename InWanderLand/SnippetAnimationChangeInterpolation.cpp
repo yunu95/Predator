@@ -13,7 +13,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 // 이 함수는 게임의 기본 초기화 함수를 오버라이드합니다.
 void SnippetAnimationChangeInterpolationInit()
 {
-    class TestComponent2 : public yunutyEngine::Component
+    class TestComponent2 : virtual public yunutyEngine::Component
     {
     public:
         graphics::Animator* anim;

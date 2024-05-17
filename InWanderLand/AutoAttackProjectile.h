@@ -10,7 +10,7 @@
 
 class StatusEffect;
 
-class AutoAttackProjectile : public Component, public ContentsObservee
+class AutoAttackProjectile : public ContentsObservee
 {
 protected:
 	float m_speed;
@@ -33,9 +33,6 @@ public:
 	virtual void ReturnToPool() = 0;
 
 	void SetStraightBulletRange(float p_rng);
-
-	virtual void PlayFunction() override final;
-	virtual void StopFunction() override final;
 
 private:
 	void AutoChaseShootingFunction();

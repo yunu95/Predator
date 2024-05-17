@@ -13,7 +13,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 void SnippetInitializerGIEnableDisable()
 {
-    class DebuggingMesh : public yunutyEngine::Component
+    class DebuggingMesh : virtual public yunutyEngine::Component
     {
     public:
         float t{0};

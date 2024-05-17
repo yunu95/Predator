@@ -17,15 +17,14 @@ class RTSCam;
 class CursorDetector;
 class PlaytimeWave;
 
-class TacticModeSystem : public SingletonComponent<TacticModeSystem>, public Component, public PermanentObservee
+class TacticModeSystem : public SingletonComponent<TacticModeSystem>, public PermanentObservee
 {
 public:
     virtual void OnEnable() override;
     virtual void Start() override;
     virtual void Update() override;
 
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+	virtual void OnContentsStop() override;
 
 	enum OrderType
 	{

@@ -1065,6 +1065,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="IAction.h" />
     <ClInclude Include="ICondition.h" />
+    <ClInclude Include="IInteractableComponent.h" />
     <ClInclude Include="InteractableBrush.h" />
     <ClInclude Include="InteractableData.h" />
     <ClInclude Include="InteractableEditorInstance.h" />
@@ -1077,7 +1078,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="ObservationTarget.h" />
     <ClInclude Include="IObserver.h" />
     <ClInclude Include="ObservationEvent.h" />
-    <ClInclude Include="ObserveeHelper.h" />
     <ClInclude Include="ParticleBrush.h" />
     <ClInclude Include="ParticleData.h" />
     <ClInclude Include="ParticleEditorInstance.h" />
@@ -1373,7 +1373,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="LocalTimeEntityManager.cpp" />
     <ClCompile Include="LinearClippingTimer.cpp" />
     <ClCompile Include="ObservationTarget.cpp" />
-    <ClCompile Include="ObserveeHelper.cpp" />
     <ClCompile Include="ParticleBrush.cpp" />
     <ClCompile Include="ParticleData.cpp" />
     <ClCompile Include="ParticleEditorInstance.cpp" />

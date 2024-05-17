@@ -5,17 +5,9 @@ void LocalTimeEntityManager::Start()
 {
 }
 
-void LocalTimeEntityManager::PlayFunction()
+void LocalTimeEntityManager::OnContentsStop()
 {
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
-}
-
-void LocalTimeEntityManager::StopFunction()
-{
+	this->SetActive(false);
 	m_entityVector.clear();
 }
 

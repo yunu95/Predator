@@ -20,7 +20,7 @@ class CursorDetector;
 /// <summary>
 /// 유닛들이 공유하는 멤버.
 /// </summary>
-class Unit : public Component, public ContentsObservee, public LocalTimeEntity
+class Unit : public ContentsObservee, public LocalTimeEntity
 {
 public:
     // 사용 시 주의점 : 마지막에는 Death와 StateEnd가 순서대로 들어가 있을 것!
@@ -291,9 +291,6 @@ public:
     virtual void Update() override;
     virtual void OnDestroy() override;
     virtual void OnTransformUpdate() override;
-
-    virtual void PlayFunction() override;
-    virtual void StopFunction() override;
 
     void StopMove();
     UnitType GetUnitType() const;

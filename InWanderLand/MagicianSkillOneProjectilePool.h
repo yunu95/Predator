@@ -7,7 +7,7 @@
 
 
 class MagicianSkillOneProjectilePool :
-	public GameObjectPool<MagicianAutoAttackProjectile>, public Component, public SingletonComponent<MagicianSkillOneProjectilePool>, public PermanentObservee
+	public GameObjectPool<MagicianAutoAttackProjectile>, virtual public Component, public SingletonComponent<MagicianSkillOneProjectilePool>, public PermanentObservee
 {
 public:
 	virtual void ObjectInitializer(MagicianAutoAttackProjectile* projectile) override

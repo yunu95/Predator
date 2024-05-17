@@ -3,14 +3,13 @@
 
 #include "InstanceManager.h"
 #include "TemplateDataManager.h"
-#include "ObserveeHelper.h"
+#include "ContentsObservee.h"
 
 namespace application
 {
 	namespace editor
 	{
 		TemplateDataManager& LightData::templateDataManager = TemplateDataManager::GetSingletonInstance();
-
 
 		bool LightData::EnterDataFromTemplate()
 		{
@@ -103,7 +102,7 @@ namespace application
 		void LightData::ApplyAsPlaytimeObject()
 		{
 			auto comp = Scene::getCurrentScene()->AddGameObject();
-			comp->AddComponent<ObserveeHelper>();
+			comp->AddComponent<ContentsObservee>();
 
 			switch (pod.templateData->pod.type)
 			{

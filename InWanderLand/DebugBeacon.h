@@ -5,7 +5,7 @@
 
 using namespace yunutyEngine;
 // 임시로 특정 지점에 커졌다 작아지는 이펙트를 생성하는 모듈
-class DebugBeacon : public yunutyEngine::Component
+class DebugBeacon : virtual public yunutyEngine::Component
 {
 public:
     Vector3d maxScale;

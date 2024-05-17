@@ -12,7 +12,7 @@
 
 class UIButton;
 
-class UIPanel : public Component
+class UIPanel : virtual public Component
 {
 private:
 	std::vector<GameObject*> m_panelObjects;

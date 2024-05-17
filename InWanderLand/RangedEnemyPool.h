@@ -5,7 +5,7 @@
 #include "BurnEffect.h"
 #include "PermanentObservee.h"
 
-class RangedEnemyPool : public GameObjectPool<DummyComponent>, public Component, public SingletonComponent<RangedEnemyPool>, public PermanentObservee
+class RangedEnemyPool : public GameObjectPool<DummyComponent>, public SingletonComponent<RangedEnemyPool>, public PermanentObservee
 {
 private:
 	Vector3d m_unitPosition;
@@ -60,25 +60,16 @@ public:
 	}
 
 	virtual void Start() override;
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+	virtual void OnContentsStop() override;
 };
 
 void RangedEnemyPool::Start()
 {
 }
 
-void RangedEnemyPool::PlayFunction()
+void RangedEnemyPool::OnContentsStop()
 {
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
-}
-
-void RangedEnemyPool::StopFunction()
-{
+	this->SetActive(false);
 	poolObjects.clear();
 	expendableObjects.clear();
 }

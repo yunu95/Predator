@@ -23,9 +23,9 @@ namespace yunutyEngine
     class CircleCollider2D;
     class LineCollider2D;
     class RigidBody2D;
-    class YUNUTY_API Collider2D abstract : public Component
+    class YUNUTY_API Collider2D abstract : virtual public Component
     {
-        // ÄõµåÆ®¸® ÃÖÀûÈ­ ³ªÁß¿¡ ±¸ÇöÇÏ±â
+        // ì¿¼ë“œíŠ¸ë¦¬ ìµœì í™” ë‚˜ì¤‘ì— êµ¬í˜„í•˜ê¸°
     public:
         struct YUNUTY_API QuadTreeNode
         {
@@ -50,7 +50,7 @@ namespace yunutyEngine
     private:
         // called by yunuty cycle
         static void InvokeCollisionEvents();
-        // onXYPlaneÀÌ ÂüÀÌ¸é ¸ğµç Äİ¶óÀÌ´õµéÀº XYÆò¸é¿¡ Á¸ÀçÇÏ´Â °ÍÀÌ°í, °ÅÁşÀÌ¸é XZ Æò¸é¿¡ Á¸ÀçÇÏ´Â °ÍÀÌ´Ù.
+        // onXYPlaneì´ ì°¸ì´ë©´ ëª¨ë“  ì½œë¼ì´ë”ë“¤ì€ XYí‰ë©´ì— ì¡´ì¬í•˜ëŠ” ê²ƒì´ê³ , ê±°ì§“ì´ë©´ XZ í‰ë©´ì— ì¡´ì¬í•˜ëŠ” ê²ƒì´ë‹¤.
         static bool isOnXYPlane;
     protected:
         static unordered_set<Collider2D*> colliders2D;

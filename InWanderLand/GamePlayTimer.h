@@ -17,7 +17,7 @@
 namespace application
 {
 	class GamePlayTimer
-		: public PlayableComponent, public Component, public SingletonComponent<GamePlayTimer>
+		: public PlayableComponent, virtual public Component, public SingletonComponent<GamePlayTimer>
 	{
 	public:
 		virtual void SingletonInitializer() override;

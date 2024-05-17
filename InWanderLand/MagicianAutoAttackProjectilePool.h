@@ -7,7 +7,7 @@
 #include "PermanentObservee.h"
 
 class MagicianAutoAttackProjectilePool :
-	public GameObjectPool<MagicianAutoAttackProjectile>, public Component, public SingletonComponent<MagicianAutoAttackProjectilePool>, public PermanentObservee
+	public GameObjectPool<MagicianAutoAttackProjectile>, public SingletonComponent<MagicianAutoAttackProjectilePool>, public PermanentObservee
 {
 public:
 	virtual void ObjectInitializer(MagicianAutoAttackProjectile* projectile) override
@@ -18,25 +18,16 @@ public:
 		projectile->GetGameObject()->AddComponent<Dotween>();
 	}
 	virtual void Start() override;
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+	virtual void OnContentsStop() override;
 };
 
 void MagicianAutoAttackProjectilePool::Start()
 {
 }
 
-void MagicianAutoAttackProjectilePool::PlayFunction()
+void MagicianAutoAttackProjectilePool::OnContentsStop()
 {
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
-}
-
-void MagicianAutoAttackProjectilePool::StopFunction()
-{
+	this->SetActive(false);
 	poolObjects.clear();
 	expendableObjects.clear();
 }

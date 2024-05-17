@@ -32,7 +32,7 @@ namespace yunutyEngine::graphics
     // 모체가 되는 Renderable
     // IRenderable 객체를 게임 컴포넌트와 대응시키는 맵을 정적 멤버로 들고 있다.
     template <>
-    class YUNUTY_API Renderable<yunuGI::IRenderable> : public Component
+    class YUNUTY_API Renderable<yunuGI::IRenderable> : virtual public Component
     {
     public:
         virtual ~Renderable()

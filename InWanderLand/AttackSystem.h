@@ -6,7 +6,7 @@
 /// </summary>
 
 
-class AttackSystem : public Component
+class AttackSystem : virtual public Component
 {
 public:
 	virtual void Attack(Unit* opponentUnit, float offSet) = 0;

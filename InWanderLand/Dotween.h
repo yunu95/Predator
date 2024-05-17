@@ -33,7 +33,7 @@ enum TimerIndex
 	End
 };
 
-class Dotween : public Component, public LocalTimeEntity
+class Dotween : virtual public Component, public LocalTimeEntity
 {
 public:
 	Dotween();
