@@ -1011,6 +1011,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Action_BlockSkillSelection.h" />
     <ClInclude Include="Action_PauseWaves.h" />
     <ClInclude Include="Action_PlayerSelect.h" />
+    <ClInclude Include="Action_SoundPlay.h" />
+    <ClInclude Include="Action_SoundPlayMusic.h" />
+    <ClInclude Include="Action_SoundSetMusicVolume.h" />
+    <ClInclude Include="Action_UISetActive.h" />
     <ClInclude Include="Action_UnitPauseAll.h" />
     <ClInclude Include="Action_PlayManualDialogue.h" />
     <ClInclude Include="Action_PlayTimedDialogue.h" />
@@ -1325,6 +1329,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Action_PauseWaves.cpp" />
     <ClCompile Include="Action_PlayerSelect.cpp" />
     <ClCompile Include="Action_EngageStage.cpp" />
+    <ClCompile Include="Action_SoundPlay.cpp" />
+    <ClCompile Include="Action_SoundPlayMusic.cpp" />
+    <ClCompile Include="Action_SoundSetMusicVolume.cpp" />
+    <ClCompile Include="Action_UISetActive.cpp" />
     <ClCompile Include="Action_UnitPauseAll.cpp" />
     <ClCompile Include="Action_PlayManualDialogue.cpp" />
     <ClCompile Include="Action_PlayTimedDialogue.cpp" />

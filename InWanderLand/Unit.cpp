@@ -92,96 +92,96 @@ void Unit::Start()
     m_animatorComponent = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
 
     if (m_navAgentComponent)
-		m_navAgentComponent->SetSpeed(m_speed);
+        m_navAgentComponent->SetSpeed(m_speed);
 
     /// Idle
-	unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Move,
-		[this]() { return (currentOrder == UnitState::Move && !TacticModeSystem::Instance().IsUnitsPerformingCommand()) ||
-		(currentOrder == UnitState::Move && TacticModeSystem::Instance().IsUnitsPerformingCommand()); } });
+    unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Move,
+        [this]() { return (currentOrder == UnitState::Move && !TacticModeSystem::Instance().IsUnitsPerformingCommand()) ||
+        (currentOrder == UnitState::Move && TacticModeSystem::Instance().IsUnitsPerformingCommand()); } });
 
-	unitFSM.transitions[UnitState::Idle].push_back({ UnitState::AttackMove,
-		[this]() { return currentOrder == UnitState::AttackMove || (unitFSM.previousState == UnitState::Attack && isAttackMoving); } });
+    unitFSM.transitions[UnitState::Idle].push_back({ UnitState::AttackMove,
+        [this]() { return currentOrder == UnitState::AttackMove || (unitFSM.previousState == UnitState::Attack && isAttackMoving); } });
 
-	unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Chase,
-		[this]() { return  (GameManager::Instance().IsWaveEngageMotionEnd() && (m_currentTargetUnit != nullptr &&
-							idleElapsed >= idleToChaseDelay) && m_currentTargetUnit->currentOrder != UnitState::Death &&
-							m_idDistance > 0.1f && m_atkDistance > 0.1f) && !TacticModeSystem::Instance().IsUnitsPerformingCommand(); } });
+    unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Chase,
+        [this]() { return  (GameManager::Instance().IsWaveEngageMotionEnd() && (m_currentTargetUnit != nullptr &&
+                            idleElapsed >= idleToChaseDelay) && m_currentTargetUnit->currentOrder != UnitState::Death &&
+                            m_idDistance > 0.1f && m_atkDistance > 0.1f) && !TacticModeSystem::Instance().IsUnitsPerformingCommand(); } });
 
     /// Move
-	unitFSM.transitions[UnitState::Move].push_back({ UnitState::Idle,
-		[this]() { return currentOrder == UnitState::Idle; } });
+    unitFSM.transitions[UnitState::Move].push_back({ UnitState::Idle,
+        [this]() { return currentOrder == UnitState::Idle; } });
 
-	unitFSM.transitions[UnitState::Move].push_back({ UnitState::AttackMove,
-		[this]() { return currentOrder == UnitState::AttackMove; } });
+    unitFSM.transitions[UnitState::Move].push_back({ UnitState::AttackMove,
+        [this]() { return currentOrder == UnitState::AttackMove; } });
 
-	unitFSM.transitions[UnitState::Move].push_back({ UnitState::WaveStart,
+    unitFSM.transitions[UnitState::Move].push_back({ UnitState::WaveStart,
         [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
 
     /// Chase
-	unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Idle,
-	[this]() { return m_currentTargetUnit == nullptr; } });
+    unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Idle,
+    [this]() { return m_currentTargetUnit == nullptr; } });
 
-	unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Move,
-		[this]() { return currentOrder == UnitState::Move; } });
+    unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Move,
+        [this]() { return currentOrder == UnitState::Move; } });
 
-	unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Attack,
-		[this]() { return (GetGameObject()->GetTransform()->GetWorldPosition()
-			- m_currentTargetUnit->GetTransform()->GetWorldPosition()).Magnitude() <= m_atkDistance + 0.4f; } });
+    unitFSM.transitions[UnitState::Chase].push_back({ UnitState::Attack,
+        [this]() { return (GetGameObject()->GetTransform()->GetWorldPosition()
+            - m_currentTargetUnit->GetTransform()->GetWorldPosition()).Magnitude() <= m_atkDistance + 0.4f; } });
 
     /// Attack
-	unitFSM.transitions[UnitState::Attack].push_back({ UnitState::Idle,
-		[=]()
-		{
-			return (m_currentTargetUnit == nullptr/*m_currentTargetUnit->GetCurrentUnitState() == UnitState::Death*/
-					|| (((GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetUnit->GetTransform()->GetWorldPosition()).Magnitude() > m_atkDistance + 0.4f)
-					|| currentOrder == UnitState::Idle));
-		} });
+    unitFSM.transitions[UnitState::Attack].push_back({ UnitState::Idle,
+        [=]()
+        {
+            return (m_currentTargetUnit == nullptr/*m_currentTargetUnit->GetCurrentUnitState() == UnitState::Death*/
+                    || (((GetGameObject()->GetTransform()->GetWorldPosition() - m_currentTargetUnit->GetTransform()->GetWorldPosition()).Magnitude() > m_atkDistance + 0.4f)
+                    || currentOrder == UnitState::Idle));
+        } });
 
-	unitFSM.transitions[UnitState::Attack].push_back({ UnitState::Move,
-		[this]() { return currentOrder == UnitState::Move; } });
+    unitFSM.transitions[UnitState::Attack].push_back({ UnitState::Move,
+        [this]() { return currentOrder == UnitState::Move; } });
 
     /// AttackMove
-	unitFSM.transitions[UnitState::AttackMove].push_back({ UnitState::Idle,
-		[this]() { return abs(GetGameObject()->GetTransform()->GetWorldPosition().x - m_currentMovePosition.x) < 0.2f && abs(GetGameObject()->GetTransform()->GetWorldPosition().z - m_currentMovePosition.z) < 0.2f; } });
+    unitFSM.transitions[UnitState::AttackMove].push_back({ UnitState::Idle,
+        [this]() { return abs(GetGameObject()->GetTransform()->GetWorldPosition().x - m_currentMovePosition.x) < 0.2f && abs(GetGameObject()->GetTransform()->GetWorldPosition().z - m_currentMovePosition.z) < 0.2f; } });
 
-	unitFSM.transitions[UnitState::AttackMove].push_back({ UnitState::Move,
-		[this]() { return currentOrder == UnitState::Move; } });
+    unitFSM.transitions[UnitState::AttackMove].push_back({ UnitState::Move,
+        [this]() { return currentOrder == UnitState::Move; } });
 
-	unitFSM.transitions[UnitState::AttackMove].push_back({ UnitState::Chase,
-		[this]() { return m_currentTargetUnit != nullptr || (TacticModeSystem::Instance().IsUnitsPerformingCommand() && isTacticAttackMovePermitted); } });
+    unitFSM.transitions[UnitState::AttackMove].push_back({ UnitState::Chase,
+        [this]() { return m_currentTargetUnit != nullptr || (TacticModeSystem::Instance().IsUnitsPerformingCommand() && isTacticAttackMovePermitted); } });
 
 
     /// Skill
-	unitFSM.transitions[UnitState::Skill].push_back({ UnitState::Idle,
-		[=]() { return currentOrder == UnitState::Idle; } });
+    unitFSM.transitions[UnitState::Skill].push_back({ UnitState::Idle,
+        [=]() { return currentOrder == UnitState::Idle; } });
 
     /// Paralysis
-	unitFSM.transitions[UnitState::Paralysis].push_back({ UnitState::Idle,
-		[this]() { return currentOrder == UnitState::Idle; } });
+    unitFSM.transitions[UnitState::Paralysis].push_back({ UnitState::Idle,
+        [this]() { return currentOrder == UnitState::Idle; } });
 
     /// Death
 
 
     /// Resurrect
-	unitFSM.transitions[UnitState::Resurrect].push_back({ UnitState::Idle,
+    unitFSM.transitions[UnitState::Resurrect].push_back({ UnitState::Idle,
         [this]() { return currentOrder == UnitState::Idle; } });
 
     /// OffsetMove
-	unitFSM.transitions[UnitState::OffsetMove].push_back({ UnitState::WaveStart,
-	    [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
+    unitFSM.transitions[UnitState::OffsetMove].push_back({ UnitState::WaveStart,
+        [this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
 
-    
+
 
     /// WaveStart
-	unitFSM.transitions[UnitState::WaveStart].push_back({ UnitState::WaveMotion,
+    unitFSM.transitions[UnitState::WaveStart].push_back({ UnitState::WaveMotion,
         [this]() { return GameManager::Instance().IsReadyToWaveEngageMotion(); } });
 
     /// WaveMotion
-	unitFSM.transitions[UnitState::WaveMotion].push_back({ UnitState::Idle,
-	    [this]() { return currentOrder == UnitState::Idle; } });
+    unitFSM.transitions[UnitState::WaveMotion].push_back({ UnitState::Idle,
+        [this]() { return currentOrder == UnitState::Idle; } });
 
 
-	
+
 
     for (int i = static_cast<int>(UnitState::Move); i < static_cast<int>(UnitState::Death); i++)
     {
@@ -293,11 +293,10 @@ void Unit::Start()
 
 void Unit::Update()
 {
-
-	if (m_unitType == UnitType::ChessTrap)
-	{
-		int a = 0;
-	}
+    if (m_unitType == UnitType::ChessTrap)
+    {
+        int a = 0;
+    }
     if (m_navAgentComponent && isFollowingNavAgent)
         GetTransform()->SetWorldPosition(m_navAgentComponent->GetTransform()->GetWorldPosition());
     if (m_unitSide == UnitSide::Player)
@@ -485,15 +484,15 @@ void Unit::SkillEngage()
 
     if (!m_skillDurationMap.empty())
     {
-		m_currentSelectedSkillEngageDelay = m_skillDurationMap.find(m_currentSelectedSkill)->second;
+        m_currentSelectedSkillEngageDelay = m_skillDurationMap.find(m_currentSelectedSkill)->second;
     }
     if (!m_skillAnimationMap.empty())
     {
-		m_currentSkillAnimation = m_skillAnimationMap.find(m_currentSelectedSkill)->second;
+        m_currentSkillAnimation = m_skillAnimationMap.find(m_currentSelectedSkill)->second;
     }
     if (!m_selectedSkillTimingFrame)
     {
-		m_selectedSkillTimingFrame = m_skillTimingFrameMap.find(m_currentSelectedSkill)->second;
+        m_selectedSkillTimingFrame = m_skillTimingFrameMap.find(m_currentSelectedSkill)->second;
     }
 
     StopMove();
@@ -641,35 +640,35 @@ void Unit::OffsetMoveUpdate()
 {
     /// m_followingTargetUnit 과의 거리가 일정 수치 이상으로 벌어진다면 이동 함수 호출.
     /// 다시 거리가 좁혀지면 StopMove. (Idle로 상태 변경)
-	if (m_followingTargetUnit)
+    if (m_followingTargetUnit)
     {
-		float betweenUnitDistance = (m_followingTargetUnit->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition()).Magnitude();
+        float betweenUnitDistance = (m_followingTargetUnit->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition()).Magnitude();
 
-		float distance = (m_currentMovePosition - GetTransform()->GetWorldPosition()).Magnitude();
+        float distance = (m_currentMovePosition - GetTransform()->GetWorldPosition()).Magnitude();
 
-		if (betweenUnitDistance >= m_followEngageDinstance)
-		{
-			ChangeAnimation(unitAnimations.m_walkAnimation);
+        if (betweenUnitDistance >= m_followEngageDinstance)
+        {
+            ChangeAnimation(unitAnimations.m_walkAnimation);
 
-			dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
-			m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
-			isFollowing = true;
-		}
-		else if (betweenUnitDistance <= m_stopFollowDinstance)
-		{
-			isFollowing = false;
-			StopMove();
-			ChangeAnimation(unitAnimations.m_idleAnimation);
-		}
-		else if (betweenUnitDistance <= m_followEngageDinstance && betweenUnitDistance >= m_stopFollowDinstance && isFollowing)
-		{
-			ChangeAnimation(unitAnimations.m_walkAnimation);
+            dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
+            m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
+            isFollowing = true;
+        }
+        else if (betweenUnitDistance <= m_stopFollowDinstance)
+        {
+            isFollowing = false;
+            StopMove();
+            ChangeAnimation(unitAnimations.m_idleAnimation);
+        }
+        else if (betweenUnitDistance <= m_followEngageDinstance && betweenUnitDistance >= m_stopFollowDinstance && isFollowing)
+        {
+            ChangeAnimation(unitAnimations.m_walkAnimation);
 
-			dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
-			m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
-			isFollowing = true;
-		}
-	}
+            dotween->DOLookAt(m_followingTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
+            m_navAgentComponent->MoveTo(m_followingTargetUnit->GetTransform()->GetWorldPosition());
+            isFollowing = true;
+        }
+    }
 }
 
 void Unit::AttackMoveUpdate()
@@ -725,14 +724,14 @@ void Unit::SkillUpdate()
 {
     if (!isSkillUsed)
     {
-		skillFunctionStartElapsed += Time::GetDeltaTime() * m_localTimeScale;
+        skillFunctionStartElapsed += Time::GetDeltaTime() * m_localTimeScale;
 
-		if (skillFunctionStartElapsed >= m_currentSelectedSkillEngageDelay)
-		{
-			isSkillUsed = true;
-			skillFunctionStartElapsed = 0.0f;
-			ChangeAnimation(m_currentSkillAnimation);
-		}
+        if (skillFunctionStartElapsed >= m_currentSelectedSkillEngageDelay)
+        {
+            isSkillUsed = true;
+            skillFunctionStartElapsed = 0.0f;
+            ChangeAnimation(m_currentSkillAnimation);
+        }
     }
 }
 
@@ -1166,7 +1165,7 @@ void Unit::SetUnitStateToDeath()
 }
 
 void Unit::SetUnitStateToSkill()
-{ 
+{
     currentOrder = UnitState::Skill;
 }
 
@@ -1422,8 +1421,17 @@ void Unit::SetPlayerSerialNumber(UnitType serialNum)
     playerSerialNumber = serialNum;
 }
 
+coroutine::Coroutine ShowPath(const std::vector<Vector3d> paths)
+{
+    for (int i = 0; i < paths.size(); i++)
+    {
+        DebugBeacon::PlaceBeacon(paths[i], yunuGI::Color::green(), Vector3d::one * 0.5, 0.5);
+    }
+    co_return;
+}
 void Unit::OrderMove(Vector3d position)
 {
+    StartCoroutine(ShowPath(m_unitNavField->GetSmoothPath(GetTransform()->GetWorldPosition(), position)));
     m_previousMovePosition = m_currentMovePosition;
     m_currentMovePosition = position;
     tauntingThisUnit = nullptr;
@@ -1649,14 +1657,14 @@ void Unit::SetUnitStateDirectly(Unit::UnitState p_unitState)
     switch (p_unitState)
     {
     case Unit::UnitState::Idle:
-	{
-		unitFSM.SetUnitStateDirectly(p_unitState);
-		break;
-	}
+    {
+        unitFSM.SetUnitStateDirectly(p_unitState);
+        break;
+    }
     case Unit::UnitState::Move:
     {
-		unitFSM.SetUnitStateDirectly(p_unitState);
-		break;
+        unitFSM.SetUnitStateDirectly(p_unitState);
+        break;
     }
     case Unit::UnitState::Chase:
         break;
@@ -1673,7 +1681,7 @@ void Unit::SetUnitStateDirectly(Unit::UnitState p_unitState)
     case Unit::UnitState::Resurrect:
         break;
     case Unit::UnitState::OffsetMove:
-	{
+    {
         unitFSM.SetUnitStateDirectly(p_unitState);
         break;
     }

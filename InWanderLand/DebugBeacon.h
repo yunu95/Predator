@@ -11,10 +11,12 @@ public:
     Vector3d maxScale;
     float elapsed{ 0 };
     float duration{ 1 };
-    const math::Curve popCurve{[](double t) {return 1 - 4 * (0.5 - t) * (0.5 - t); }};
+    const math::Curve popCurve{ [](double t) {return 1 - 4 * (0.5 - t) * (0.5 - t); } };
     static DebugBeacon* PlaceBeacon(Vector3d position, yunuGI::Color color = yunuGI::Color::red(), Vector3d scale = Vector3d::one, float duration = 0.3)
     {
+#ifndef EDITOR
         return nullptr;
+#endif
         auto gameObject = Scene::getCurrentScene()->AddGameObject();
         auto debugBeacon = gameObject->AddComponent<DebugBeacon>();
         auto staticMesh = gameObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
@@ -39,8 +41,8 @@ public:
         //staticMesh->GetGI().SetColor(0, color);
         //staticMesh->GetGI().SetShader(0, L"Forward");
         //staticMesh->GetGI().SetMaterialName(0, L"Forward");
-        gameObject->GetTransform()->SetLocalScale( Vector3d(0, 0, 0));
-        gameObject->GetTransform()->SetLocalPosition( position);
+        gameObject->GetTransform()->SetLocalScale(Vector3d(0, 0, 0));
+        gameObject->GetTransform()->SetLocalPosition(position);
         staticMesh->Update();
         return debugBeacon;
     }
@@ -50,7 +52,7 @@ public:
         if (elapsed > duration)
             elapsed = duration;
 
-        GetTransform()->SetLocalScale( maxScale * popCurve.Evaluate(elapsed / duration));
+        GetTransform()->SetLocalScale(maxScale * popCurve.Evaluate(elapsed / duration));
         if (elapsed >= duration)
             Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
     }

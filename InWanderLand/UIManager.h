@@ -60,11 +60,15 @@ private:
     std::vector<std::string> dialogueTimed_KeyStrings;
     std::unordered_map<std::string, UIElement*> dialogueManual;
     std::vector<std::string> dialogueManual_KeyStrings;
+    std::unordered_map<std::string, UIElement*> scriptUI;
+    std::vector<std::string> scriptUI_KeyStrings;
 public:
     const std::vector<std::string>& GetDialogueTimed_KeyStrings();
     const std::vector<std::string>& GetDialogueManual_KeyStrings();
+    const std::vector<std::string>& GetScriptUI_KeyStrings();
     UIElement* GetDialogueTimed(const std::string& keyString);
     UIElement* GetDialogueManual(const std::string& keyString);
+    UIElement* GetScriptUI(const std::string& keyString);
     static constexpr UIEnumID comboNumbers[6]
     {
         UIEnumID::Ingame_Combo_TargetNumFinished1,
@@ -120,8 +124,5 @@ public:
     void ImportUI(const char* path);
 
     virtual void Update() override;
-    /*virtual void Start() override;
-    virtual void PlayFunction() override;
-    virtual void StopFunction() override;*/
 };
 

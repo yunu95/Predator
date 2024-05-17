@@ -97,6 +97,7 @@ namespace yunutyEngine
         struct MeshProcess* m_tmproc;
 
         class dtTileCache* m_tileCache;
+        dtPolyRef lastRef = 0;
 
         float m_cacheBuildTimeMs;
         int m_cacheCompressedSize;
