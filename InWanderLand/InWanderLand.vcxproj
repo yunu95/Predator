@@ -1082,6 +1082,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Interactable_SpikeTrap.h" />
     <ClInclude Include="Interactable_TemplateData.h" />
     <ClInclude Include="JsonUIData.h" />
+    <ClInclude Include="InitialLoadingScreen.h" />
     <ClInclude Include="LocalTimeEntity.h" />
     <ClInclude Include="LocalTimeEntityManager.h" />
     <ClInclude Include="LinearClippingTimer.h" />
@@ -1378,6 +1379,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="EnemySummonSkillSystem.cpp" />
     <ClCompile Include="FloatFollower.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="InitialLoadingScreen.cpp" />
     <ClCompile Include="InteractableBrush.cpp" />
     <ClCompile Include="InteractableData.cpp" />
     <ClCompile Include="InteractableEditorInstance.cpp" />
@@ -1586,6 +1588,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UnitProductor.cpp" />
     <ClCompile Include="Action_WaitForSeconds.cpp" />
     <ClCompile Include="UVAnimator.cpp" />
+    <ClCompile Include="WanderUtils.cpp" />
     <ClCompile Include="WarriorProductor.cpp" />
     <ClCompile Include="PlayerSkillSystem.cpp" />
     <ClCompile Include="WarriorSkillSystem.cpp" />

@@ -616,6 +616,12 @@
     <Filter Include="Contents\InteractableComponent\InteractableList">
       <UniqueIdentifier>{1d80d79b-e59c-4e84-b07c-672c34a43438}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\ContentsLayerInitializer">
+      <UniqueIdentifier>{8ff44db1-26ce-476a-b37c-b46b522a6b05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\InitialLoadingScreen">
+      <UniqueIdentifier>{afddc9a5-d6c1-4483-888a-1af2eae577e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1561,6 +1567,9 @@
     <ClInclude Include="ContentsObserveeComponent.h">
       <Filter>Contents\ContentsObserver\Observee</Filter>
     </ClInclude>
+    <ClInclude Include="InitialLoadingScreen.h">
+      <Filter>Contents\InitialLoadingScreen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2364,6 +2373,12 @@
     </ClCompile>
     <ClCompile Include="Action_UISetActive.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_UISetActive</Filter>
+    </ClCompile>
+    <ClCompile Include="WanderUtils.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="InitialLoadingScreen.cpp">
+      <Filter>Contents\InitialLoadingScreen</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

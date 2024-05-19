@@ -169,6 +169,7 @@
     <ClInclude Include="IResource.h" />
     <ClInclude Include="IShader.h" />
     <ClInclude Include="ITexture.h" />
+    <ClInclude Include="IVideo.h" />
     <ClInclude Include="IYunuGIDebugCube.h" />
     <ClInclude Include="IYunuGIDebugObject.h" />
     <ClInclude Include="IYunuGIDebugSphere.h" />

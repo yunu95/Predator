@@ -29,9 +29,21 @@ ID3D11Texture2D* UIImage::GetProcessedTexture()
 {
     return processedTexture.Get();
 }
-ID3D11ShaderResourceView* UIImage::GetProcessedTextureSRV()
+ID3D11ShaderResourceView* UIImage::GetSRV()
 {
-    return processedTextureSRV.Get();
+    if (IsVideoPlayMode())
+    {
+        if (auto videoTexture = video.lock()->videoTexture)
+        {
+            return videoTexture->GetSRV().Get();
+        }
+        return nullptr;
+    }
+    if (IsUsingProcessedTexture())
+    {
+        return processedTextureSRV.Get();
+    }
+    return static_cast<Texture*>(GetTexture())->GetSRV().Get();
 }
 
 float UIImage::GetWidth()
@@ -84,6 +96,14 @@ void UIImage::SetColor(const DirectX::FXMVECTOR& color)
 bool UIImage::IsRadialFillMode()
 {
     return isRadialFillMode;
+}
+bool UIImage::IsVideoPlayMode()
+{
+    return !video.expired();
+}
+void UIImage::SetVideo(const std::wstring& resourcePath)
+{
+    video = std::static_pointer_cast<Video>(ResourceManager::Instance.Get().GetVideoData(resourcePath).lock());
 }
 bool UIImage::IsUsingProcessedTexture()
 {

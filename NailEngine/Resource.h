@@ -16,13 +16,10 @@ protected:
 	unsigned int id;
 
 public:
-	// IResourceÀ»(¸¦) ÅëÇØ »ó¼ÓµÊ
+	// IResourceì„(ë¥¼) í†µí•´ ìƒì†ë¨
 	virtual const std::wstring& GetName() const override;
 
 	virtual void SetName(const std::wstring& name) override;
 
 	virtual unsigned int GetID() override;
-
 };
-
-

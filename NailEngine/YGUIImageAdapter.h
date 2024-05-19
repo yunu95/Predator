@@ -117,6 +117,10 @@ namespace yunuGIAdapter
         {
             return renderable->IsRadialFillMode();
         }
+        virtual void SetVideo(const std::wstring& resourcePath) override
+        {
+            renderable->SetVideo(resourcePath);
+        }
         // 텍스처가 중심에서부터 갉아먹는 형태로 채워지는지 여부를 설정
         virtual void SetRadialFillMode(bool fill)
         {

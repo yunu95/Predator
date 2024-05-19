@@ -22,6 +22,7 @@ namespace yunuGI
         virtual yunuGI::Color GetColor() = 0;
         virtual void SetColor(const yunuGI::Color& color) = 0;
         virtual bool IsRadialFillMode() = 0;
+        virtual void SetVideo(const std::wstring& resourcePath) = 0;
         // 텍스처가 중심에서부터 갉아먹는 형태로 채워지는지 여부를 설정
         virtual void SetRadialFillMode(bool fill) = 0;
         virtual void SetRadialFillDegree(float radian) = 0;
