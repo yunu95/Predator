@@ -5,7 +5,7 @@ void TimerComponent::Update()
 {
     if (m_isActivated)
     {
-        m_elapsed += isRealtime ? Time::GetDeltaTimeUnscaled() : Time::GetDeltaTime();
+        m_elapsed += (isRealtime ? Time::GetDeltaTimeUnscaled() : Time::GetDeltaTime()) * m_localTimeScale;
         if (m_elapsed >= pushDuration)
         {
 

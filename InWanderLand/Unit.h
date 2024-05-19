@@ -24,7 +24,7 @@ class Unit : public Component, public ContentsObservee, public LocalTimeEntity
 {
 public:
     // 사용 시 주의점 : 마지막에는 Death와 StateEnd가 순서대로 들어가 있을 것!
-    enum class UnitState
+    enum UnitState
     {
         Idle,
         Move,
@@ -100,7 +100,7 @@ public:
 
     Unit* m_currentTargetUnit;					// Attack이나 Chase 때 사용할 적군  오브젝트
     //Vector3d startPosition;
-private:
+protected:
     FSM<UnitState> unitFSM{ UnitState::Idle };
     SkillSystem* m_skillSystemComponent;
     UnitType m_unitType;
@@ -147,19 +147,18 @@ private:
     float m_idDistance;
     float m_atkDistance;
 
+    std::vector<TimerComponent*> m_stateTimerVector;
+
     float idleToChaseDelay = 1.5f;
     float idleElapsed;
 
-    float moveFunctionElapsed;
     float moveFunctionCallDelay = 0.1f;
 
-    float chaseFunctionElapsed;
     float chaseFunctionCallDelay = 0.1f;
 
     float attackStartElapsed = 0.0f;
 
     float attackStartDelay = 0.3f;
-    float attackFunctionElapsed;
     float attackFunctionCallDelay;
     float increasedAttackSpeed{ 1.0f };
     int attackTimingFrame;
@@ -170,7 +169,6 @@ private:
 
     int m_resurrectingMaxCount{ 0 };
     int m_currentResurrectingCount{ 0 };
-    float m_resurrectingDuration{ 5.0f };
 
     float skillFunctionStartElapsed;
     float m_currentSelectedSkillEngageDelay;
@@ -184,7 +182,6 @@ private:
     //float qSkillStartDelay = 1.0f;
     bool isJustHitByQSkill = false;
 
-    float m_battleEngageMotionElapsed{ 0.0f };
     float m_battleEngageDuration{ 5.0f };
 
     bool isAttackMoving;
@@ -208,20 +205,14 @@ private:
  /*   SkillPreviewMesh m_qSkillPreviewType;
     SkillPreviewMesh m_wSkillPreviewType;*/
 
-    Unit* m_followingTargetUnit;
-    float m_followEngageDinstance{ 4.0f };			// 이 수치만큼 거리가 벌어지면 따라간다.
-    float m_stopFollowDinstance{ 2.0f };			// 이 수치만큼 거리가 좁혀지면 멈춘다.
-    bool isFollowing{ false };
-
     bool isTacticAttackMovePermitted{ false };
 
     bool isUnitCinematicEnded{ true };
 
 public:
-	bool isSkillUsed{ false };
     bool isPermittedToTacticAction{ false };
 
-private:
+protected:
     // 주로 개별 유닛의 상태를 나타내는 UI
     weak_ptr<UIElement> unitStatusUI;
     // 초상화까지 있는 플레이어측 캐릭터 UI
@@ -233,31 +224,23 @@ private:
     Vector3d m_skillPosition;
     SkillEnum m_currentSelectedSkill;
 
-private:
+protected:
     void IdleEngage();
     void MoveEngage();
-    void OffsetMoveEngage();
     void AttackMoveEngage();
     void AttackEngage();
     void ChaseEngage();
-    void SkillEngage();
     void ParalysisEngage();
     void DeathEngage();
-    void WaveStartEngage();
-    void WaveMotionEngage();
-    void ResurrectEngage();
 
     void IdleUpdate();
     void MoveUpdate();
-    void OffsetMoveUpdate();
     void AttackMoveUpdate();
     void ChaseUpdate();
     void AttackUpdate();
-    void SkillUpdate();
     void DeathUpdate();
-    void WaveStartUpdate();
-    void WaveMotionUpdate();
-    void ResurrectUpdate();
+
+    void StopAllStateTimer();
 
     void ChangeAnimation(yunuGI::IAnimation* p_anim);
     void CheckCurrentAnimation(yunuGI::IAnimation* currentStateAnimation);
@@ -272,8 +255,6 @@ private:
 
     void ResumeAnimation();
     void StopAnimation();
-
-    void RegisterSkillWithAnimation(SkillEnum p_enum);
 
 public:
     Vector3d m_currentSkillPosition;
@@ -403,7 +384,6 @@ public:
     bool CheckEnemyStoppedByTacticMode() const;
     void KnockBackUnit(Vector3d targetPosition, float knockBackDuration);
 
-    void ReportLeaderUnitChanged(UnitType p_type);
 
     std::function<void()> returnToPoolFunction{ nullptr };
     std::function<void()> deathEngageFunction{ nullptr };

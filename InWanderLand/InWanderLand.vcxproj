@@ -1104,6 +1104,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       </ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="PlayerSkillManager.h" />
+    <ClInclude Include="PlayerUnit.h" />
     <ClInclude Include="PlayMusicTimer.h" />
     <ClInclude Include="PopDownOnDisable.h" />
     <ClInclude Include="PopupOnEnable.h" />
@@ -1147,6 +1148,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="RobinSkillDevelopmentSystem.h" />
     <ClInclude Include="SaveStaticOrnamentsCommnad.h" />
     <ClInclude Include="SkillDevelopmentSystem.h" />
+    <ClInclude Include="SkillUnit.h" />
     <ClInclude Include="SkillUpgradeSystem.h" />
     <ClInclude Include="SkillWarningSystem.h" />
     <ClInclude Include="SoundPlayingTimer.h" />
@@ -1402,6 +1404,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="GamePlayTimer.cpp" />
     <ClCompile Include="PawnTrapProductor.cpp" />
     <ClCompile Include="PlayerSkillManager.cpp" />
+    <ClCompile Include="PlayerUnit.cpp" />
     <ClCompile Include="PlayMusicTimer.cpp" />
     <ClCompile Include="PopDownOnDisable.cpp" />
     <ClCompile Include="PopupOnEnable.cpp" />
@@ -1453,6 +1456,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="RangedEnemyProductor.cpp" />
     <ClCompile Include="RobinSkillDevelopmentSystem.cpp" />
     <ClCompile Include="SkillDevelopmentSystem.cpp" />
+    <ClCompile Include="SkillUnit.cpp" />
     <ClCompile Include="SkillUpgradeSystem.cpp" />
     <ClCompile Include="SkillWarningSystem.cpp" />
     <ClCompile Include="SnippetBillboardSpriteAnim.cpp" />

@@ -7,6 +7,7 @@
 #include "BossSkillSystem.h"
 #include "DamageOnlyComponent.h"
 #include "BurnEffect.h"
+#include "SkillUnit.h"
 
 void MeleeEnemyProductor::SetUnitData()
 {
@@ -48,7 +49,11 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 	m_unitGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster1");
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 	/// UnitComponent 추가
-	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+	if (isEliteMonster)
+		m_unitComponent = m_unitGameObject->AddComponent<SkillUnit>();
+	else
+		m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+
 	UnitProductor::SetUnitComponentMembers();
 
 #pragma endregion
@@ -143,7 +148,9 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 		}
 	}
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
-	SetUnitAnimationFunction();
+	if (isEliteMonster)
+		SetUnitSkillFunctionToAnimation();
+		
 	return m_unitComponent;
 }
 

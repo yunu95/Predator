@@ -3,6 +3,7 @@
 #include "SingleNavigationField.h"
 #include "MeleeAttackSystem.h"
 #include "BossSkillSystem.h"
+#include "SkillUnit.h"
 
 void BossProductor::SetUnitData()
 {
@@ -46,7 +47,7 @@ Unit* BossProductor::CreateUnit(Vector3d startPos)
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
 	/// UnitComponent 추가
-	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+	m_unitComponent = m_unitGameObject->AddComponent<SkillUnit>();
 	UnitProductor::SetUnitComponentMembers();
 
 
@@ -199,7 +200,7 @@ Unit* BossProductor::CreateUnit(Vector3d startPos)
 		//}
 	}
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
-	SetUnitAnimationFunction();
+	SetUnitSkillFunctionToAnimation();
 	return m_unitComponent;
 }
 

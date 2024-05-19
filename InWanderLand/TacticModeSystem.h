@@ -2,6 +2,7 @@
 #include "YunutyEngine.h"
 #include "InputManager.h"
 #include "Unit.h"
+#include "PlayerUnit.h"
 #include "PermanentObservee.h"
 #include <unordered_map>
 
@@ -87,7 +88,7 @@ private:
 
     Unit* currentSelectedUnit{ nullptr };
 
-    std::unordered_map<Unit::UnitType, Unit*> playerComponentMap;
+    std::unordered_map<Unit::UnitType, PlayerUnit*> playerComponentMap;
 
     std::queue<Unit*> sequenceQueue;
 

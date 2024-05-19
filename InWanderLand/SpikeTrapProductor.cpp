@@ -78,7 +78,7 @@ Unit* SpikeTrapProductor::CreateUnit(Vector3d startPos)
 #pragma endregion
 
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
-	SetUnitAnimationFunction();
+	SetUnitSkillFunctionToAnimation();
 	return m_unitComponent;
 }
 
