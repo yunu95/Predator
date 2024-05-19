@@ -489,6 +489,10 @@ float Video::GetHeight()
 {
     return height;
 }
+bool Video::IsDonePlaying()
+{
+    return finished;
+}
 //float Video::GetDuration()
 //{
 //

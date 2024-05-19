@@ -11,5 +11,6 @@ namespace yunuGI
         //virtual float GetDuration() = 0;
         virtual void update(float deltaTime) = 0;
         virtual void SetRepeat(bool repeat) = 0;
+        virtual bool IsDonePlaying() = 0;
     };
 }

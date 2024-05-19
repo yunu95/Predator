@@ -45,3 +45,4 @@
 #include "PlaytimeWave.h"
 #include "SingleNavigationField.h"
 #include "DebugBeacon.h"
+#include "WanderUtils.h"

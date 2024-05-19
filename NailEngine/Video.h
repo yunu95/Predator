@@ -94,6 +94,7 @@ public:
     bool open(const wchar_t* filename);
     virtual float GetWidth() override;
     virtual float GetHeight() override;
+    virtual bool IsDonePlaying();
     //virtual float GetDuration() override;
     virtual void update(float deltaTime)override;
     virtual void SetRepeat(bool repeat) override;

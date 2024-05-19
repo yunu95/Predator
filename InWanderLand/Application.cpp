@@ -545,10 +545,6 @@ namespace application
     void Application::ImGuiUpdate()
     {
 #ifdef EDITOR
-        if (wanderUtils::ResourceRecursiveLoader::IsLoadingResources())
-        {
-            return;
-        }
         MSG msg;
         while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
         {
@@ -565,6 +561,10 @@ namespace application
             return;
         }
 
+        if (wanderUtils::ResourceRecursiveLoader::IsLoadingResources())
+        {
+            return;
+        }
         //Start the Dear ImGui frame
         ImGui_ImplDX11_NewFrame();
         ImGui_ImplWin32_NewFrame();
