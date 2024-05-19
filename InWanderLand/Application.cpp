@@ -561,10 +561,6 @@ namespace application
             return;
         }
 
-        if (wanderUtils::ResourceRecursiveLoader::IsLoadingResources())
-        {
-            return;
-        }
         //Start the Dear ImGui frame
         ImGui_ImplDX11_NewFrame();
         ImGui_ImplWin32_NewFrame();
@@ -916,11 +912,15 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         return 0;
     }
     return ::DefWindowProcW(hWnd, msg, wParam, lParam);
-    }
+}
 
 #ifdef EDITOR
 LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    if (wanderUtils::ResourceRecursiveLoader::IsLoadingResources())
+    {
+        return true;
+    }
     if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
     {
         return true;

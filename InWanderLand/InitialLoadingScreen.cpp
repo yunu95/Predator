@@ -32,6 +32,7 @@ coroutine::Coroutine InitialLoadingScreen::ShowLoadingScreen()
         }
         co_await std::suspend_always{};
     }
+    co_await std::suspend_always{};
     uiImage->GetGI().SetVideo(videoNailEngine.lock()->GetName());
     videoPlayer->SetVideo(videoNailEngine);
     float t = 0;
