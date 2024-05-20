@@ -480,6 +480,26 @@ namespace application
                         action = AddAction<Action_EngageStage>();
                         break;
                     }
+                    case application::ActionType::SoundPlay:
+                    {
+                        action = AddAction<Action_SoundPlay>();
+                        break;
+                    }
+                    case application::ActionType::SoundPlayMusic:
+                    {
+                        action = AddAction<Action_SoundPlayMusic>();
+                        break;
+                    }
+                    case application::ActionType::SoundSetMusicVolume:
+                    {
+                        action = AddAction<Action_SoundSetMusicVolume>();
+                        break;
+                    }
+                    case application::ActionType::UISetActive:
+                    {
+                        action = AddAction<Action_UISetActive>();
+                        break;
+                    }
                     default:
                         break;
                     }
