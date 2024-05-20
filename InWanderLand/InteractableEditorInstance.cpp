@@ -129,8 +129,9 @@ namespace application::editor::palette
         }
         else
         {
-         obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName, &boundingMin, &boundingMax);
+            obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName, &boundingMin, &boundingMax);
         }
+
 
         auto& hasAniList = ResourceManager::GetSingletonInstance().GetSkinnedFBXList();
         if (std::find(hasAniList.begin(), hasAniList.end(), interactableTemplateData->pod.fBXName) == hasAniList.end())

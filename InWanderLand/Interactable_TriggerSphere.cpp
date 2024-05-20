@@ -6,7 +6,8 @@
 void Interactable_TriggerSphere::Start()
 {
 	AttachDebugMesh(GetGameObject(), DebugMeshType::Sphere, yunuGI::Color::green());
-	GetGameObject()->AddComponent<physics::SphereCollider>();
+	auto col = GetGameObject()->AddComponent<physics::SphereCollider>();
+	col->SetRadius(0.5);
 
 	auto ts = GetGameObject()->GetTransform();
 	ts->SetWorldPosition(initPos);

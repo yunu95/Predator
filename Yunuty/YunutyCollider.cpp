@@ -91,6 +91,11 @@ namespace yunutyEngine
                 }
             }
         }
+        void Collider::OnTransformUpdate()
+        {
+            cachedScale = GetTransform()->GetWorldScale();
+            ApplyScale(cachedScale);
+        }
         void Collider::OnEnable()
         {
             if (!WasPxActorInitialized())
