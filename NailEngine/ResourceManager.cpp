@@ -157,7 +157,7 @@ void ResourceManager::DeleteDeferredTexture()
 	}
 }
 
-yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec)
+yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec, const std::vector<yunuGI::Vector2>& uvVec)
 {
 	std::shared_ptr<Mesh> tempMesh = std::make_shared<Mesh>();
 
@@ -170,7 +170,7 @@ yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yu
 		DirectX::SimpleMath::Vector3 tempNormal = normalVec.size() == 0 ? DirectX::SimpleMath::Vector3{ 0.f, 0.f, 0.f } : DirectX::SimpleMath::Vector3{ normalVec[i].x,normalVec[i].y ,normalVec[i].z };
 		vertices.emplace_back(Vertex{ DirectX::SimpleMath::Vector3{posVec[i].x, posVec[i].y, posVec[i].z},
 						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
-						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
+						  uvVec.empty() ? DirectX::SimpleMath::Vector2{0.5f,0.5f} : DirectX::SimpleMath::Vector2{uvVec[i].x,uvVec[i].y},
 						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
 						  tempNormal,
 						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } });
@@ -944,6 +944,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateShader(L"UIPreProcessPS.cso");
 	CreateShader(L"TextureAnimPS.cso");
 	CreateShader(L"RimForwardPS.cso");
+	CreateShader(L"GuideLinePS.cso");
 #pragma endregion
 
 #pragma region GS
@@ -1185,7 +1186,7 @@ void ResourceManager::CreateDefaultTexture()
 	CreateTexture(L"Texture/Stage1LightMap_0.exr");
 	CreateTexture(L"Texture/Stage1LightMap_1.exr");
 
-	
+
 	CreateTexture(L"Texture/Stage2LightMap_0.exr");
 	CreateTexture(L"Texture/Stage2LightMap_1.exr");
 	CreateTexture(L"Texture/Stage2LightMap_2.exr");
