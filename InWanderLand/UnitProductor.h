@@ -84,7 +84,7 @@ public:
     void AddColliderComponent() const;
     void AddNavigationComponent();
     void AddDotweenComponent() const;
-    void SetUnitAnimationFunction();
+    void SetUnitSkillFunctionToAnimation();
 
     virtual bool SelectUnitProductorByFbxName(std::string p_name);
 

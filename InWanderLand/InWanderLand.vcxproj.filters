@@ -1567,6 +1567,12 @@
     <ClInclude Include="ContentsObserveeComponent.h">
       <Filter>Contents\ContentsObserver\Observee</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerUnit.h">
+      <Filter>Contents\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillUnit.h">
+      <Filter>Contents\Units</Filter>
+    </ClInclude>
     <ClInclude Include="InitialLoadingScreen.h">
       <Filter>Contents\InitialLoadingScreen</Filter>
     </ClInclude>
@@ -2379,6 +2385,12 @@
     </ClCompile>
     <ClCompile Include="Action_UISetActive.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_UISetActive</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerUnit.cpp">
+      <Filter>Contents\Units</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillUnit.cpp">
+      <Filter>Contents\Units</Filter>
     </ClCompile>
     <ClCompile Include="WanderUtils.cpp">
       <Filter>utility</Filter>

@@ -106,7 +106,7 @@ Unit* EnemySummonGateProductor::CreateUnit(Vector3d startPos)
 		}
 	}
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
-	SetUnitAnimationFunction();
+	SetUnitSkillFunctionToAnimation();
 
 	return m_unitComponent;
 }

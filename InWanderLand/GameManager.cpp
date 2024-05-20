@@ -2,6 +2,7 @@
 #include "PlayerController.h"
 #include "SkillPreviewSystem.h"
 #include "Unit.h"
+#include "PlayerUnit.h"
 #include "RTSCam.h"
 #include "ContentsLayer.h"
 #include "Application.h"
@@ -99,7 +100,7 @@ void GameManager::EndCinematic()
 	/// 나머지 녀석들은 OffsetMove 로 변경
 	if (isBattleModeOn)
 	{
-		Unit* tempLeaderUnit = PlayerController::Instance().GetCurrentSelectedPlayerUnit();
+		PlayerUnit* tempLeaderUnit = PlayerController::Instance().GetCurrentSelectedPlayerUnit();
 		
 		for (auto e : PlayerController::Instance().GetPlayerMap())
 		{
