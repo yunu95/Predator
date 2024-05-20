@@ -5,14 +5,13 @@
 
 void Interactable_TriggerBox::Start()
 {
+	AttachDebugMesh(GetGameObject(), DebugMeshType::Cube, yunuGI::Color::green());
+	GetGameObject()->AddComponent<physics::BoxCollider>();
+
 	auto ts = GetGameObject()->GetTransform();
 	ts->SetWorldPosition(initPos);
 	ts->SetWorldRotation(initRotation);
 	ts->SetWorldScale(initScale);
-
-	AttachDebugMesh(GetGameObject(), DebugMeshType::Cube, yunuGI::Color::green());
-
-	GetGameObject()->AddComponent<physics::BoxCollider>();
 }
 
 void Interactable_TriggerBox::Update()
@@ -30,8 +29,8 @@ void Interactable_TriggerBox::SetDataFromEditorData(const application::editor::I
 	initRotation.y = data.pod.rotation.y;
 	initRotation.z = data.pod.rotation.z;
 	initScale.x = data.pod.scale.x;
-	initScale.x = data.pod.scale.y;
-	initScale.x = data.pod.scale.z;
+	initScale.y = data.pod.scale.y;
+	initScale.z = data.pod.scale.z;
 }
 
 yunutyEngine::coroutine::Coroutine Interactable_TriggerBox::DoInteraction()

@@ -23,10 +23,21 @@ namespace application
 
                 auto name = static_cast<Interactable_TemplateData*>(TemplateDataManager::GetSingletonInstance().GetTemplateData(dataKey))->pod.fBXName;
 
-                auto brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(name);
+                GameObject* brushObj = nullptr;
 
-                if (brushObj == nullptr)
-                    return false;
+                if (name == "Trigger_Cube")
+                {
+                    brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Cube");
+                    
+                }
+                else if (name == "Trigger_Sphere")
+                {
+                    brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sphere");
+                }
+                else
+                {
+                    brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(name);
+                }
 
                 for (auto each : brushObj->GetChildren())
                 {
@@ -58,11 +69,21 @@ namespace application
 
                 DestroyBrush(dataKey);
 
-                auto brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName);
+                GameObject* brushObj = nullptr;
 
-                if (brushObj == nullptr)
-                    return false;
+                if (fbxName == "Trigger_Cube")
+                {
+                    brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Cube");
 
+                }
+                else if (fbxName == "Trigger_Sphere")
+                {
+                    brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sphere");
+                }
+                else
+                {
+                    brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName);
+                }
 
                 for (auto each : brushObj->GetChildren())
                 {
