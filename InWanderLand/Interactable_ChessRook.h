@@ -8,6 +8,9 @@
 class Interactable_ChessRook
 	: public IInteractableComponent
 {
+public:
+	virtual void Update() override;
 
+	virtual yunutyEngine::coroutine::Coroutine DoInteraction() override;
 };
 

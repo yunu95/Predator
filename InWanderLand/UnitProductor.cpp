@@ -152,7 +152,7 @@ void UnitProductor::AddColliderComponent() const
 {
     auto unitCollider = m_unitGameObject->AddComponent<physics::SphereCollider>();	// 빈 껍데기에 
     unitCollider->SetRadius(UNIT_LENGTH * 0.5f);
-    //m_unitGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+    m_unitGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 }
 
 void UnitProductor::AddNavigationComponent()
