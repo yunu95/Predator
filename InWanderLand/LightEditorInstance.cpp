@@ -58,6 +58,7 @@ namespace application::editor::palette
 		yunuGI::Vector3 boundingMin, boundingMax;
 		fbxObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxType, &boundingMin, &boundingMax);
 		AdjustPickingCollider(reinterpret_cast<const Vector3f&>(boundingMin), reinterpret_cast<const Vector3f&>(boundingMax));
+		fbxObj->setName("LightFBX");
 		fbxObj->SetParent(GetGameObject());
 
 		auto& erm = ResourceManager::GetSingletonInstance();
