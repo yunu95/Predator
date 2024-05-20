@@ -1019,7 +1019,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Action_PlayManualDialogue.h" />
     <ClInclude Include="Action_PlayTimedDialogue.h" />
     <ClInclude Include="Action_UnitRelocate.h" />
-    <ClInclude Include="Action_OrnamentsSetVisibleByStage.h" />
     <ClInclude Include="Action_SetTimeScale.h" />
     <ClInclude Include="Action_Tutorial.h" />
     <ClInclude Include="Action_Unit.h" />
@@ -1338,7 +1337,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Action_PlayManualDialogue.cpp" />
     <ClCompile Include="Action_PlayTimedDialogue.cpp" />
     <ClCompile Include="Action_UnitRelocate.cpp" />
-    <ClCompile Include="Action_OrnamentsSetVisibleByStage.cpp" />
     <ClCompile Include="Action_SetTimeScale.cpp" />
     <ClCompile Include="Action_Tutorial.cpp" />
     <ClCompile Include="Action_Unit.cpp" />

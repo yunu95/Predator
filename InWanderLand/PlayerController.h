@@ -38,7 +38,7 @@ public:
     float lookRotationDuration = 0.1f;
 
     //void SelectFunctionByOrderType(int unitSerialNumber, OrderType p_orderType);
-public:	
+public:
     virtual Component* GetComponent() override { return this; }
     virtual void Start() override;
 

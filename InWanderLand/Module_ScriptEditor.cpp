@@ -1172,6 +1172,26 @@ namespace application
                                 selectedScript->AddAction<Action_EngageStage>();
                                 break;
                             }
+                            case application::ActionType::SoundPlay:
+                            {
+                                selectedScript->AddAction<Action_SoundPlay>();
+                                break;
+                            }
+                            case application::ActionType::SoundPlayMusic:
+                            {
+                                selectedScript->AddAction<Action_SoundPlayMusic>();
+                                break;
+                            }
+                            case application::ActionType::SoundSetMusicVolume:
+                            {
+                                selectedScript->AddAction<Action_SoundSetMusicVolume>();
+                                break;
+                            }
+                            case application::ActionType::UISetActive:
+                            {
+                                selectedScript->AddAction<Action_UISetActive>();
+                                break;
+                            }
                             default:
                                 break;
                             }

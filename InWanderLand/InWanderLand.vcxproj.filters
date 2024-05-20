@@ -580,9 +580,6 @@
     <Filter Include="Editor\ScriptSystem\2_Action\List\Action_UnitRelocate">
       <UniqueIdentifier>{8d95c3fa-d03f-41e0-9d41-d5ef14d54179}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_OrnamentsSetVisibleByStage">
-      <UniqueIdentifier>{bd394f05-d683-4f22-8c36-c78e1b860c88}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Editor\ScriptSystem\2_Action\List\Action_UnitPauseAll">
       <UniqueIdentifier>{713c7d1f-4aaf-4d37-8179-d6dd3b6971fb}</UniqueIdentifier>
     </Filter>
@@ -1501,9 +1498,6 @@
     <ClInclude Include="Action_UnitRelocate.h">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_UnitRelocate</Filter>
     </ClInclude>
-    <ClInclude Include="Action_OrnamentsSetVisibleByStage.h">
-      <Filter>Editor\ScriptSystem\2_Action\List\Action_OrnamentsSetVisibleByStage</Filter>
-    </ClInclude>
     <ClInclude Include="Action_AwaitSkillSelection.h">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_AwaitSkillSelection</Filter>
     </ClInclude>
@@ -2325,9 +2319,6 @@
     </ClCompile>
     <ClCompile Include="Action_UnitRelocate.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_UnitRelocate</Filter>
-    </ClCompile>
-    <ClCompile Include="Action_OrnamentsSetVisibleByStage.cpp">
-      <Filter>Editor\ScriptSystem\2_Action\List\Action_OrnamentsSetVisibleByStage</Filter>
     </ClCompile>
     <ClCompile Include="Action_AwaitSkillSelection.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_AwaitSkillSelection</Filter>
