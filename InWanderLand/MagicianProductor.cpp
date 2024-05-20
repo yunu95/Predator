@@ -4,6 +4,7 @@
 #include "MagicianSkillSystem.h"
 #include "ParalysisFieldComponent.h"
 #include "BlindFieldComponent.h"
+#include "PlayerUnit.h"
 #include "DebugMeshes.h"
 #include "SingleNavigationField.h"
 #include "UIManager.h"
@@ -50,7 +51,7 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
     m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
     /// UnitComponent 추가
-    m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+    m_unitComponent = m_unitGameObject->AddComponent<PlayerUnit>();
     UnitProductor::SetUnitComponentMembers();
 #pragma endregion
 
@@ -262,7 +263,7 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
     //    }
     //}
     m_unitComponent->unitAnimations = m_baseUnitAnimations;
-    SetUnitAnimationFunction();
+    SetUnitSkillFunctionToAnimation();
 
     return m_unitComponent;
 }

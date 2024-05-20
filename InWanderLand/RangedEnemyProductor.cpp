@@ -6,6 +6,7 @@
 #include "BossSkillSystem.h"
 #include "BurnEffect.h"
 #include "DamageOnlyComponent.h"
+#include "SkillUnit.h"
 
 void RangedEnemyProductor::SetUnitData()
 {
@@ -49,9 +50,12 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
 	/// UnitComponent 추가
-	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
-	UnitProductor::SetUnitComponentMembers();
+	if (isEliteMonster)
+		m_unitComponent = m_unitGameObject->AddComponent<SkillUnit>();
+	else
+		m_unitComponent = m_unitGameObject->AddComponent<Unit>();
 
+	UnitProductor::SetUnitComponentMembers();
 #pragma endregion
 
 
@@ -138,7 +142,9 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 		}
 	}
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
-	SetUnitAnimationFunction();
+
+	if (isEliteMonster)
+		SetUnitSkillFunctionToAnimation();
 	return m_unitComponent;
 }
 

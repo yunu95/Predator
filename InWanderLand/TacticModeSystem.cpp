@@ -222,6 +222,11 @@ void TacticModeSystem::ExitTacticMode()
 	/// 이 때 플레이어는 입력된 명령을 실제로 실행하고, 적군 유닛은 시간이 멈춘 듯이 설정해줍니다.
 	for (auto each : playerComponentMap)
 	{
+		for (auto e : each.second->m_stateTimerVector)
+		{
+			LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(e, 1.0f);
+		}
+
 		LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(each.second, 1.0f);
 		LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(each.second->GetGameObject()->GetComponent<Dotween>(), 1.0f);
 		each.second->GetGameObject()->GetComponent<PlayerSkillSystem>()->SetSkillRequirmentLocalTimeScale(1.0f);

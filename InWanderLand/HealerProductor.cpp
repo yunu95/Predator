@@ -5,6 +5,7 @@
 #include "DebugMeshes.h"
 #include "HealerSkillSystem.h"
 #include "DualCastComponent.h"
+#include "PlayerUnit.h"
 #include "SingleNavigationField.h"
 #include "SkillPreviewSystem.h"
 
@@ -54,10 +55,8 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
     m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
     /// UnitComponent 추가
-    m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+    m_unitComponent = m_unitGameObject->AddComponent<PlayerUnit>();
     UnitProductor::SetUnitComponentMembers();
-
-
 #pragma endregion
 
 #pragma region Auto Attack Setting (Including Passive Logic)
@@ -250,7 +249,7 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
     //    }
     //}
     m_unitComponent->unitAnimations = m_baseUnitAnimations;
-    SetUnitAnimationFunction();
+    SetUnitSkillFunctionToAnimation();
 
     return m_unitComponent;
 }

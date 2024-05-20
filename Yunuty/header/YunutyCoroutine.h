@@ -40,6 +40,7 @@ namespace yunutyEngine
             Coroutine& operator=(Coroutine const&) = delete;
             void resume() { handle.resume(); }
             YieldInstruction* GetLastYield() { return handle.promise().yield; };
+            bool Done() { return handle.done(); }
         };
     }
 }
