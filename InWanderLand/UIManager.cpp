@@ -665,6 +665,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         element->spriteAnimationOnEnable = element->GetGameObject()->AddComponent<UISpriteAnimation>();
         element->spriteAnimationOnEnable->SetSprites(yutility::GetWString(uiData.animatedSpriteFolderPath).c_str());
         element->spriteAnimationOnEnable->m_isRepeated = uiData.animatedSpriteIsRepeat;
+        element->spriteAnimationOnEnable->imageComponent = element->imageComponent;
         element->spriteAnimationOnEnable->uiElement = element;
         element->spriteAnimationOnEnable->Init();
         element->spriteAnimationOnEnable->ActivateTimer();

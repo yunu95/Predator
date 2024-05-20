@@ -133,6 +133,9 @@
     <Filter Include="QuadTree">
       <UniqueIdentifier>{072a4281-775a-49f4-af6a-3f5f116072f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource\Video">
+      <UniqueIdentifier>{5125eeb9-0a65-4d57-b6e2-9318cafefb42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils.h">
@@ -345,6 +348,9 @@
     <ClInclude Include="DirectXTexEXR.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Video.h">
+      <Filter>Resource\Video</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="YGExports.cpp">
@@ -484,6 +490,9 @@
     </ClCompile>
     <ClCompile Include="DirectXTexEXR.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Video.cpp">
+      <Filter>Resource\Video</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -635,6 +644,12 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="RuntimeDependency\resources\Shader\RimForwardPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\VideoVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\VideoPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

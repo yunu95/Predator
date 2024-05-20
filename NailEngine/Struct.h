@@ -267,3 +267,9 @@ struct UIPreprocessVertex
     DirectX::SimpleMath::Vector2 linearClippingDirection;
     DirectX::SimpleMath::Vector2 linearClippingStart;
 };
+struct VideoYUVtoRGBVertex
+{
+    DirectX::SimpleMath::Vector4 pos;
+    DirectX::SimpleMath::Vector2 uv;
+    DirectX::SimpleMath::Vector4 color;
+};

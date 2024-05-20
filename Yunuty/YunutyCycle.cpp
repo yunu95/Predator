@@ -179,7 +179,14 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
                     coroutine->resume();
                 }
             }
-            std::erase_if(updateTargetComponents[i]->coroutines, [](std::shared_ptr<yunutyEngine::coroutine::Coroutine> coroutine) {return coroutine->handle.done(); });
+            if (!updateTargetComponents[i]->coroutines.empty())
+            {
+                std::erase_if(updateTargetComponents[i]->coroutines, [](std::shared_ptr<yunutyEngine::coroutine::Coroutine> coroutine) {return coroutine->handle.done(); });
+                if (!updateTargetComponents[i]->coroutines.empty())
+                {
+                    updateTargetComponents[i]->GetGameObject()->HandleComponentUpdateState(updateTargetComponents[i]);
+                }
+            }
         }
 
         auto stop = std::chrono::high_resolution_clock::now();

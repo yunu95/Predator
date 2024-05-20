@@ -222,6 +222,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="MetaData.cpp" />
     <ClCompile Include="MetafileManager.cpp" />
     <ClCompile Include="ParticleRenderer.cpp" />
+    <ClCompile Include="VideoPlayer.cpp" />
     <ClCompile Include="YunutyBoxCollider.cpp" />
     <ClCompile Include="YunutyCapsuleCollider.cpp" />
     <ClCompile Include="YunutyCollider.cpp" />
@@ -316,6 +317,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="header\YunutyCoroutine.h" />
     <ClInclude Include="header\YunutyWaitForSeconds.h" />
     <ClInclude Include="header\YunutyYieldInstruction.h" />
+    <ClInclude Include="header\VideoPlayer.h" />
     <ClInclude Include="_YunutyBoxColliderImpl.h" />
     <ClInclude Include="_YunutyCapsuleColliderImpl.h" />
     <ClInclude Include="_YunutyColliderImpl.h" />
