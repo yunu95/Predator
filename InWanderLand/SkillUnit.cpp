@@ -15,7 +15,7 @@ void SkillUnit::Start()
 	for (int i = static_cast<int>(UnitState::Idle); i < static_cast<int>(UnitState::Skill); i++)
 	{
 		unitFSM.transitions[static_cast<UnitState>(i)].push_back({ UnitState::Skill,
-		[=]() { return currentOrder == UnitState::Skill && TacticModeSystem::Instance().IsOrderingTimingNow(); } });
+		[=]() { return currentOrder == UnitState::Skill /*&& TacticModeSystem::Instance().IsOrderingTimingNow()*/; } });
 	}
 
 	unitFSM.engageAction[UnitState::Skill] = [this]() { SkillEngage(); };

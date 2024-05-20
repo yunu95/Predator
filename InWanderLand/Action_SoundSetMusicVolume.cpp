@@ -14,10 +14,13 @@ namespace application
     CoroutineObject<void> Action_SoundSetMusicVolume::DoAction()
     {
         float startVolume = SoundSystem::GetMusicVolume();
-        for (float normalizedT = yunutyEngine::Time::GetDeltaTimeUnscaled(); normalizedT < 1; normalizedT += yunutyEngine::Time::GetDeltaTimeUnscaled() / fadeTime)
+        if (fadeTime != 0)
         {
-            SoundSystem::SetMusicVolume(math::LerpF(startVolume, volume, normalizedT));
-            co_await std::suspend_always();
+            for (float normalizedT = yunutyEngine::Time::GetDeltaTimeUnscaled(); normalizedT < 1; normalizedT += yunutyEngine::Time::GetDeltaTimeUnscaled() / fadeTime)
+            {
+                SoundSystem::SetMusicVolume(math::LerpF(startVolume, volume, normalizedT));
+                co_await std::suspend_always();
+            }
         }
         SoundSystem::SetMusicVolume(volume);
 

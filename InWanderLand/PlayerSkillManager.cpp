@@ -55,7 +55,7 @@ bool PlayerSkillManager::IsSkillCoolingDown(Unit::UnitType p_unitType, Unit::Ski
     Unit* currentUnit = PlayerController::Instance().GetPlayerMap().find(p_unitType)->second;
     PlayerSkillSystem* skillsys = currentUnit->GetGameObject()->GetComponent<PlayerSkillSystem>();
 
-    return skillsys->IsSkillCoolingDown(p_skillEnum);
+    return skillsys->isCoolDownReady(p_skillEnum);
 }
 
 void PlayerSkillManager::ReportSkillUsed(Unit::UnitType p_unitType, Unit::SkillEnum p_skillEnum)

@@ -53,7 +53,7 @@ public:
     virtual void Start() override;
     virtual void Update() override;
 
-    virtual bool IsSkillCoolingDown(Unit::SkillEnum p_skillnum) const;
+    virtual bool isCoolDownReady(Unit::SkillEnum p_skillnum) const;
 
     virtual void SetSkillRequirmentLocalTimeScale(float p_scale) = 0;
 

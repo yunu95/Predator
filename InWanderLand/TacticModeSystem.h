@@ -86,11 +86,11 @@ private:
     bool isTacticModeOperating;					// 명령을 내리는 시간일 때 true.
     bool isTacticOrderPerforming;				// 내린 명령을 수행하고 있을 때 true.
 
-    Unit* currentSelectedUnit{ nullptr };
+    PlayerUnit* currentSelectedUnit{ nullptr };
 
     std::unordered_map<Unit::UnitType, PlayerUnit*> playerComponentMap;
 
-    std::queue<Unit*> sequenceQueue;
+    std::queue<PlayerUnit*> sequenceQueue;
 
 	PlaytimeWave* m_currentOperatingWave;
 };

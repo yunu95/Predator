@@ -434,15 +434,14 @@ namespace application
                         action = AddAction<Action_UnitRelocate>();
                         break;
                     }
-                    case application::ActionType::AwaitSkillSelection:
+                    case application::ActionType::UnitPauseAll:
                     {
-                        action = AddAction<Action_AwaitSkillSelection>();
+                        action = AddAction<Action_UnitPauseAll>();
                         break;
                     }
-
-                    case application::ActionType::AwaitSkillActivation:
+                    case application::ActionType::PlayerSelect:
                     {
-                        action = AddAction<Action_AwaitSkillActivation>();
+                        action = AddAction<Action_PlayerSelect>();
                         break;
                     }
                     case application::ActionType::BlockPlayerSwitch:
@@ -455,19 +454,24 @@ namespace application
                         action = AddAction<Action_BlockSkillCancel>();
                         break;
                     }
+                    case application::ActionType::BlockSkillSelection:
+                    {
+                        action = AddAction<Action_BlockSkillSelection>();
+                        break;
+                    }
+                    case application::ActionType::AwaitSkillSelection:
+                    {
+                        action = AddAction<Action_AwaitSkillSelection>();
+                        break;
+                    }
+                    case application::ActionType::AwaitSkillActivation:
+                    {
+                        action = AddAction<Action_AwaitSkillActivation>();
+                        break;
+                    }
                     case application::ActionType::SetTimeScale:
                     {
                         action = AddAction<Action_SetTimeScale>();
-                        break;
-                    }
-                    case application::ActionType::UnitPauseAll:
-                    {
-                        action = AddAction<Action_UnitPauseAll>();
-                        break;
-                    }
-                    case application::ActionType::PlayerSelect:
-                    {
-                        action = AddAction<Action_PlayerSelect>();
                         break;
                     }
                     case application::ActionType::PauseWaves:
@@ -478,6 +482,26 @@ namespace application
                     case application::ActionType::EngageStage:
                     {
                         action = AddAction<Action_EngageStage>();
+                        break;
+                    }
+                    case application::ActionType::SoundPlay:
+                    {
+                        action = AddAction<Action_SoundPlay>();
+                        break;
+                    }
+                    case application::ActionType::SoundPlayMusic:
+                    {
+                        action = AddAction<Action_SoundPlayMusic>();
+                        break;
+                    }
+                    case application::ActionType::SoundSetMusicVolume:
+                    {
+                        action = AddAction<Action_SoundSetMusicVolume>();
+                        break;
+                    }
+                    case application::ActionType::UISetActive:
+                    {
+                        action = AddAction<Action_UISetActive>();
                         break;
                     }
                     default:

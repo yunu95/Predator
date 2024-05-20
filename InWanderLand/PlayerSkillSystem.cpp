@@ -166,7 +166,7 @@ void PlayerSkillSystem::Update()
     }
 }
 
-bool PlayerSkillSystem::IsSkillCoolingDown(Unit::SkillEnum p_skillnum) const
+bool PlayerSkillSystem::isCoolDownReady(Unit::SkillEnum p_skillnum) const
 {
 
     switch (p_skillnum)

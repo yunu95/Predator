@@ -4,7 +4,7 @@
 
 void PlayerUnit::Start()
 {
-	Unit::Start();
+	SkillUnit::Start();
 	
 	/// Player에게만 적용되는 fsm 로직을 추가합니다.
 

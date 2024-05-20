@@ -549,6 +549,7 @@ void NailEngine::CreateRenderTargetGroup()
             DXGI_FORMAT_R8G8B8A8_UNORM,
             static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
         ));
+        ShadowPass::Instance.Get().SetTempRTV(rtVec[0].texture.get());
         //this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)] = std::make_shared<RenderTargetGroup>();
         //this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)]->SetRenderTargetVec(rtVec);
     }

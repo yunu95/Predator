@@ -35,7 +35,7 @@ void PlayerController::ErasePlayerUnit(PlayerUnit* p_playerUnit)
 void PlayerController::OnContentsStop()
 {
     this->SetActive(false);
-    playerComponentMap.clear();
+	playerComponentMap.clear();
     m_movingSystemComponent = nullptr;
     m_dotween = nullptr;
     m_cursorDetector = nullptr;
@@ -151,7 +151,7 @@ void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
         }
         else
         {
-            playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum);
+            //playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum);
             auto& callbackVectors = skillSelectionCallback[currentSelectedSerialNumber][p_skillNum];
             for (auto& each : callbackVectors)
                 each();
@@ -253,6 +253,5 @@ PlayerUnit* PlayerController::GetCurrentSelectedPlayerUnit() const
 {
     return playerComponentMap.find(currentSelectedSerialNumber)->second;
 }
-
 
 

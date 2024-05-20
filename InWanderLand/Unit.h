@@ -99,7 +99,9 @@ public:
     PlayerSkillSystem* m_playerSkillSystem;
 
     Unit* m_currentTargetUnit;					// Attack이나 Chase 때 사용할 적군  오브젝트
-    //Vector3d startPosition;
+
+	std::vector<TimerComponent*> m_stateTimerVector;
+
 protected:
     FSM<UnitState> unitFSM{ UnitState::Idle };
     SkillSystem* m_skillSystemComponent;
@@ -146,8 +148,6 @@ protected:
 
     float m_idDistance;
     float m_atkDistance;
-
-    std::vector<TimerComponent*> m_stateTimerVector;
 
     float idleToChaseDelay = 1.5f;
     float idleElapsed;
