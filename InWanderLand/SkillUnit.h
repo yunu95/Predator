@@ -14,7 +14,7 @@ public:
 protected:
 	void SkillEngage();
 	void SkillUpdate();
-
+	
 public:
 	bool isSkillUsed{ false };
 

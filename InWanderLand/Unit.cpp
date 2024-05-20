@@ -279,8 +279,8 @@ void Unit::Update()
 
 void Unit::OnDestroy()
 {
-    if (m_unitSide == UnitSide::Player)
-        PlayerController::Instance().ErasePlayerUnit(dynamic_cast<PlayerUnit*>(this));
+    //if (m_unitSide == UnitSide::Player)
+    //    PlayerController::Instance().ErasePlayerUnit(dynamic_cast<PlayerUnit*>(this));
     if (!unitStatusUI.expired())
         Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
     if (m_navAgentComponent)
@@ -304,6 +304,7 @@ Unit::UnitSide Unit::GetUnitSide() const
 #pragma region State Engage()
 void Unit::IdleEngage()
 {
+	StopAllStateTimer();
     currentOrder = UnitState::Idle;
     m_currentTargetUnit = nullptr;
     idleElapsed = 0.0f;
@@ -440,6 +441,7 @@ void Unit::ChaseEngage()
 
 void Unit::ParalysisEngage()
 {
+	StopAllStateTimer();
     ChangeAnimation(unitAnimations.m_paralysisAnimation);
 }
 
@@ -447,6 +449,8 @@ void Unit::DeathEngage()
 {
     if (!unitStatusUI.expired())
         unitStatusUI.lock()->DisableElement();
+
+	StopAllStateTimer();
     currentOrder = UnitState::Death;
 
     deathFunctionElapsed = 0.0f;
