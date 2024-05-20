@@ -5,14 +5,14 @@
 
 void Interactable_TriggerSphere::Start()
 {
+	AttachDebugMesh(GetGameObject(), DebugMeshType::Sphere, yunuGI::Color::green());
+	auto col = GetGameObject()->AddComponent<physics::SphereCollider>();
+	col->SetRadius(0.5);
+
 	auto ts = GetGameObject()->GetTransform();
 	ts->SetWorldPosition(initPos);
 	ts->SetWorldRotation(initRotation);
 	ts->SetWorldScale(initScale);
-
-	AttachDebugMesh(GetGameObject(), DebugMeshType::Sphere, yunuGI::Color::green());
-
-	GetGameObject()->AddComponent<physics::SphereCollider>();
 }
 
 void Interactable_TriggerSphere::Update()
@@ -30,8 +30,8 @@ void Interactable_TriggerSphere::SetDataFromEditorData(const application::editor
 	initRotation.y = data.pod.rotation.y;
 	initRotation.z = data.pod.rotation.z;
 	initScale.x = data.pod.scale.x;
-	initScale.x = data.pod.scale.y;
-	initScale.x = data.pod.scale.z;
+	initScale.y = data.pod.scale.y;
+	initScale.z = data.pod.scale.z;
 }
 
 yunutyEngine::coroutine::Coroutine Interactable_TriggerSphere::DoInteraction()

@@ -6,8 +6,6 @@
 
 #include "IInteractableComponent.h"
 
-#include <iostream>
-
 namespace application
 {
 	namespace editor
@@ -29,16 +27,24 @@ public:
 			colliderUnitComponent != nullptr &&
 			colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
 		{
-			OnInteractableTriggerEnter(); std::cout << "Sphere In\n";
+			triggerStay.insert(collider);
+			OnInteractableTriggerEnter();
+			std::cout << "TriggerEnter : Sphere\n";
 		}
 	}
+
 	virtual void OnTriggerExit(physics::Collider* collider) override
-	{ 
+	{
 		if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
 			colliderUnitComponent != nullptr &&
 			colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
 		{
-			OnInteractableTriggerExit(); std::cout << "Sphere Out\n";
+			if (triggerStay.size() == 1)
+			{
+				OnInteractableTriggerExit();
+				std::cout << "TriggerExit : Sphere\n";
+			}
+			triggerStay.erase(collider);
 		}
 	}
 
@@ -47,6 +53,7 @@ public:
 	virtual yunutyEngine::coroutine::Coroutine DoInteraction() override;
 
 private:
+	std::unordered_set<physics::Collider*> triggerStay = std::unordered_set<physics::Collider*>();
 	Vector3d initPos = Vector3d(0, 0, 0);
 	Quaternion initRotation = Quaternion();
 	Vector3d initScale = Vector3d(1, 1, 1);

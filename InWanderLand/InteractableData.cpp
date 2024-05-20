@@ -127,33 +127,32 @@ namespace application
             Quaternion startQuat = Quaternion(pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z);
             Vector3d startScale = Vector3d(pod.scale.x, pod.scale.y, pod.scale.z);
 
-            yunuGI::FBXData* data = nullptr;
-
-            if (graphics::Renderer::SingleInstance().GetResourceManager()->GetFBXData(pod.templateData->pod.fBXName, data))
-            {
-                if (data->hasAnimation)
-                {
-                    hasAnimation = true;
-                }
-            }
-            
             GameObject* obj = nullptr;
 
-            if (pod.templateData->pod.fBXName == "Cube" || pod.templateData->pod.fBXName == "Sphere")
+            if (pod.templateData->pod.fBXName == "Trigger_Cube" || pod.templateData->pod.fBXName == "Trigger_Sphere")
             {
                 obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
             }
             else
             {
                 obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(pod.templateData->pod.fBXName);
+
+                yunuGI::FBXData* data = nullptr;
+                if (graphics::Renderer::SingleInstance().GetResourceManager()->GetFBXData(pod.templateData->pod.fBXName, data))
+                {
+                    if (data->hasAnimation)
+                    {
+                        hasAnimation = true;
+                    }
+                }
             }
     
-            if (pod.templateData->pod.fBXName == "Cube")
+            if (pod.templateData->pod.fBXName == "Trigger_Cube")
             {
                 auto comp = obj->AddComponent<Interactable_TriggerBox>();
                 comp->SetDataFromEditorData(*this);
             }
-            else if (pod.templateData->pod.fBXName == "Sphere")
+            else if (pod.templateData->pod.fBXName == "Trigger_Sphere")
             {
                 auto comp = obj->AddComponent<Interactable_TriggerSphere>();
                 comp->SetDataFromEditorData(*this);

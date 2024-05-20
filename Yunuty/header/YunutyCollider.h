@@ -35,6 +35,7 @@ namespace yunutyEngine
 		protected:
 			virtual void Start()override;
 			virtual void Update()override;
+			virtual void OnTransformUpdate() override;
 			// 피직스 객체의 월드스케일이 달라졌을 때 이를 어떻게 반영할지 결정합니다.
 			virtual void ApplyScale(const Vector3d& worldScale) = 0;
 			virtual void OnEnable()override;

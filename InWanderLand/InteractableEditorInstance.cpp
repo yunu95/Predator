@@ -3,6 +3,7 @@
 #include "InteractableEditorInstance.h"
 #include "InteractableData.h"
 #include "EditorResourceManager.h"
+#include "DebugMeshes.h"
 
 namespace application::editor::palette
 {
@@ -20,7 +21,41 @@ namespace application::editor::palette
     {
         this->interactableTemplateData = interactableTemplateData;
         yunuGI::Vector3 boundingMin, boundingMax;
-        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(interactableTemplateData->pod.fBXName, &boundingMin, &boundingMax);
+
+        GameObject* obj = nullptr;
+
+        if (interactableTemplateData->pod.fBXName == "Trigger_Cube")
+        {
+            obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Cube", &boundingMin, &boundingMax);
+            for (auto each : obj->GetChildren())
+            {
+                auto comp = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+                if (comp)
+                {
+                    yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(each);
+                    break;
+                }
+            }
+            AttachDebugMesh(obj, DebugMeshType::Cube, yunuGI::Color::green());
+        }
+        else if (interactableTemplateData->pod.fBXName == "Trigger_Sphere")
+        {
+            obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sphere", &boundingMin, &boundingMax);
+            for (auto each : obj->GetChildren())
+            {
+                auto comp = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+                if (comp)
+                {
+                    yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(each);
+                    break;
+                }
+            }
+            AttachDebugMesh(obj, DebugMeshType::Sphere, yunuGI::Color::green());
+        }
+        else
+        {
+            obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(interactableTemplateData->pod.fBXName, &boundingMin, &boundingMax);
+        }
 
         auto& hasAniList = ResourceManager::GetSingletonInstance().GetSkinnedFBXList();
         if (std::find(hasAniList.begin(), hasAniList.end(), interactableTemplateData->pod.fBXName) == hasAniList.end())
@@ -61,7 +96,42 @@ namespace application::editor::palette
         }
 
         yunuGI::Vector3 boundingMin, boundingMax;
-        auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName, &boundingMin, &boundingMax);
+
+        GameObject* obj = nullptr;
+
+        if (interactableTemplateData->pod.fBXName == "Trigger_Cube")
+        {
+            obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Cube", &boundingMin, &boundingMax);
+            for (auto each : obj->GetChildren())
+            {
+                auto comp = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+                if (comp)
+                {
+                    yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(each);
+                    break;
+                }
+            }
+            AttachDebugMesh(obj, DebugMeshType::Cube, yunuGI::Color::green());
+        }
+        else if (interactableTemplateData->pod.fBXName == "Trigger_Sphere")
+        {
+            obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sphere", &boundingMin, &boundingMax);
+            for (auto each : obj->GetChildren())
+            {
+                auto comp = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+                if (comp)
+                {
+                    yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(each);
+                    break;
+                }
+            }
+            AttachDebugMesh(obj, DebugMeshType::Sphere, yunuGI::Color::green());
+        }
+        else
+        {
+            obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName, &boundingMin, &boundingMax);
+        }
+
 
         auto& hasAniList = ResourceManager::GetSingletonInstance().GetSkinnedFBXList();
         if (std::find(hasAniList.begin(), hasAniList.end(), interactableTemplateData->pod.fBXName) == hasAniList.end())
