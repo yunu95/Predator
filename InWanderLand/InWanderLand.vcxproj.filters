@@ -619,6 +619,9 @@
     <Filter Include="Contents\InitialLoadingScreen">
       <UniqueIdentifier>{afddc9a5-d6c1-4483-888a-1af2eae577e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\UnityRelated\SoundEnumID">
+      <UniqueIdentifier>{a4480087-8435-4e87-be4d-7238d18061dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1575,6 +1578,9 @@
     </ClInclude>
     <ClInclude Include="Interactable_TriggerSphere.h">
       <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEnumID.h">
+      <Filter>UI\UnityRelated\SoundEnumID</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

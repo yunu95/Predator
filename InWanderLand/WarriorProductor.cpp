@@ -82,7 +82,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 
     auto qSkillColliderComponent = qSkillKnockBackObject->AddComponent<physics::SphereCollider>();
     qSkillColliderComponent->SetRadius(m_QSkillRadius);
-    qSkillKnockBackObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+    //qSkillKnockBackObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
     auto qSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     AttachDebugMesh(qSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), true);
@@ -98,7 +98,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
     auto wSkillColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     auto wSkillColliderComponent = wSkillColliderObject->AddComponent<physics::SphereCollider>();
     wSkillColliderComponent->SetRadius(m_WSkillRadius);
-    wSkillColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+    //wSkillColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
     auto wSkillDamageComponent = wSkillColliderObject->AddComponent<TauntingComponent>();
     wSkillDamageComponent->SetSkillOwnerUnit(m_unitComponent);
     wSkillDamageComponent->SetSkillDamage(10.0f);

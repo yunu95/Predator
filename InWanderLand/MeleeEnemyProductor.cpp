@@ -75,7 +75,7 @@ Unit* MeleeEnemyProductor::CreateUnit(Vector3d startPos)
 		auto skillOneCollider = skillOneColliderObject->AddComponent<physics::SphereCollider>();
 		float skillOneRadius = 5.0f * UNIT_LENGTH;
 		skillOneCollider->SetRadius(skillOneRadius);
-		skillOneColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+		//skillOneColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 		auto skillDamageComponent = skillOneColliderObject->AddComponent<DamageOnlyComponent>();
 		skillDamageComponent->SetSkillOwnerUnit(m_unitComponent);
 		skillDamageComponent->SetSkillDamage(3.0f);

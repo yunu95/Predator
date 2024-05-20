@@ -24,7 +24,7 @@ public:
 		cakeCollider->SetHalfExtent({ UNIT_LENGTH * 0.5f, UNIT_LENGTH * 0.5f, UNIT_LENGTH * 0.5f });
 		passiveCake->SetCollider(cakeCollider);
 
-		passiveCake->GetGameObject()->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+		//passiveCake->GetGameObject()->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 		cakeCollider->SetActive(false);
 	}
 

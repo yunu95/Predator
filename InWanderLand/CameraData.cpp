@@ -146,7 +146,7 @@ namespace application
 
 			auto mouseCursorColliderComponent = mouseCursorObject->AddComponent<physics::SphereCollider>();
 			mouseCursorColliderComponent->SetRadius(UNIT_LENGTH * 0.5f);
-			mouseCursorObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+			//mouseCursorObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
 			auto cursorDetectorComponent = mouseCursorObject->AddComponent<CursorDetector>();
 

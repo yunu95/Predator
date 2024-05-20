@@ -146,7 +146,7 @@ void UnitProductor::AddRangeSystemComponent() const
     // 2-2. RangeSystem Collider
     auto rangesystemCollider = unitRangeSystemObject->AddComponent<physics::SphereCollider>();
     rangesystemCollider->SetRadius(m_idRadius);
-    unitRangeSystemObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+    //unitRangeSystemObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
     unitRangeSystemObject->SetParent(m_unitGameObject);
 }
 

@@ -65,8 +65,8 @@ Unit* RookTrapProductor::CreateUnit(Vector3d startPos)
 	auto colliderObjectTwo = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	colliderObjectTwo->AddComponent<physics::BoxCollider>();
 
-	colliderObjectOne->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-	colliderObjectTwo->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+	//colliderObjectOne->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+	//colliderObjectTwo->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
 	auto damageComponentOne = colliderObjectOne->AddComponent<DamageOnlyComponent>();
 	damageComponentOne->SetSkillOwnerUnit(m_unitComponent);
