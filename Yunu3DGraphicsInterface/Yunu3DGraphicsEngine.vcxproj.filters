@@ -75,6 +75,9 @@
     <Filter Include="Particle">
       <UniqueIdentifier>{6a6dfff4-0df6-449e-8aa5-8d810ac4a314}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\IResource\IVideo">
+      <UniqueIdentifier>{6ea50eb1-0272-48da-97d4-ef4b3b43c9a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IYunuGI3DRenderer.h">
@@ -250,6 +253,9 @@
     </ClInclude>
     <ClInclude Include="ParticleRenderInfo.h">
       <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="IVideo.h">
+      <Filter>Header Files\IResource\IVideo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

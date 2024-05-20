@@ -2,6 +2,7 @@
 #include "Functors.h"
 #include "IRenderable.h"
 #include "Texture.h"
+#include "Video.h"
 
 class UIImage : public nail::IRenderable
 {
@@ -9,7 +10,7 @@ public:
     void SetTexture(yunuGI::ITexture* texture);
     yunuGI::ITexture* GetTexture();
     ID3D11Texture2D* GetProcessedTexture();
-    ID3D11ShaderResourceView* GetProcessedTextureSRV();
+    ID3D11ShaderResourceView* GetSRV();
     float GetWidth();
     float GetHeight();
     float GetXPivot();
@@ -26,6 +27,8 @@ public:
     DirectX::FXMVECTOR GetColor();
     void SetColor(const DirectX::FXMVECTOR& color);
     bool IsRadialFillMode();
+    bool IsVideoPlayMode();
+    void SetVideo(const std::wstring& resourcePath);
     // 텍스처가 중심에서부터 갉아먹는 형태로 채워지는지 여부를 설정
     void SetRadialFillMode(bool fill);
     void SetRadialFillDegree(float degree);
@@ -39,6 +42,7 @@ public:
     void SetLinearClippingStartPoint(float x, float y);
     void SetLinearClippingDirection(float x, float y);
 private:
+    std::weak_ptr<Video> video;
     bool isRadialFillMode{ false };
     float radialFillDegree{ 360 };
     DirectX::SimpleMath::Vector2 radialFillStartDirection{ 0,1 };

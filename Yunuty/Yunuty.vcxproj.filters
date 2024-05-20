@@ -346,6 +346,9 @@
     <Filter Include="yunutyEngine\Coroutine\YieldInstruction\WaitForSeconds">
       <UniqueIdentifier>{9b4dd16b-de26-4d93-b47d-e63393b24eb5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\VideoPlayer">
+      <UniqueIdentifier>{991a6bfd-4dde-4b1f-b592-e0c6f77a8d4d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -554,6 +557,9 @@
     </ClCompile>
     <ClCompile Include="YunutyWaitForSeconds.cpp">
       <Filter>yunutyEngine\Coroutine\YieldInstruction\WaitForSeconds</Filter>
+    </ClCompile>
+    <ClCompile Include="VideoPlayer.cpp">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\VideoPlayer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -841,6 +847,9 @@
     </ClInclude>
     <ClInclude Include="header\YunutyWaitForSeconds.h">
       <Filter>yunutyEngine\Coroutine\YieldInstruction\WaitForSeconds</Filter>
+    </ClInclude>
+    <ClInclude Include="header\VideoPlayer.h">
+      <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\VideoPlayer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

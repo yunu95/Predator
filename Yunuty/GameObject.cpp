@@ -288,7 +288,7 @@ void yunutyEngine::GameObject::HandleComponentUpdateState(Component* component)
     bool deservesUpdateBefore = DeservesUpdate();
     //assert(components.find(component) != components.end());
 
-    if (component->isActive && component->isUpdating)
+    if (component->isActive && (component->isUpdating || !component->coroutines.empty()))
         updatingComponents.insert(component);
     else
         updatingComponents.erase(component);
