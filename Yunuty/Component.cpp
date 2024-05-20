@@ -95,9 +95,11 @@ std::weak_ptr<yunutyEngine::coroutine::Coroutine> yunutyEngine::Component::Start
 {
     auto coroutinePtr = std::make_shared<coroutine::Coroutine>(std::move(coroutine));
     coroutines.insert(coroutinePtr);
+    gameObject->HandleComponentUpdateState(this);
     return coroutinePtr;
 }
 void yunutyEngine::Component::DeleteCoroutine(const std::weak_ptr<coroutine::Coroutine>& coroutine)
 {
     coroutines.erase(coroutine.lock());
+    gameObject->HandleComponentUpdateState(this);
 }

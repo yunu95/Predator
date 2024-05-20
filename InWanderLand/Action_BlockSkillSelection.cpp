@@ -52,7 +52,7 @@ namespace application
         }
         else
         {
-            InputManager::Instance().canPrepareSkill[unitType][skillType] = blocking;
+            InputManager::Instance().canPrepareSkill[unitType][skillType] = !blocking;
         }
         co_return;
     }

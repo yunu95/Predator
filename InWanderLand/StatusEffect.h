@@ -32,10 +32,8 @@ public:
     std::weak_ptr<physics::SphereCollider> GetTriggerCollider();
     virtual void Start() override;
 
-    virtual void PlayFunction() override final;
-    virtual void StopFunction() override final;
-
     virtual void ApplyStatus(Unit* ownerUnit, Unit* opponentUnit) = 0;
     virtual void SetSkillOwnerUnit(Unit* p_unit);
+    virtual Component* GetComponent() override { return this; }
 };
 

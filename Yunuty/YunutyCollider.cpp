@@ -84,6 +84,11 @@ namespace yunutyEngine
             {
                 GetTransform()->SetWorldPosition(impl->GetActorPosition());
                 GetTransform()->SetWorldRotation(impl->GetActorRotation());
+                if (auto scl = GetTransform()->GetWorldScale(); cachedScale != scl)
+                {
+                    cachedScale = scl;
+                    ApplyScale(cachedScale);
+                }
             }
         }
         void Collider::OnEnable()

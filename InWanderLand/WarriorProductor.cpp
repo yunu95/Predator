@@ -10,6 +10,7 @@
 #include "MagicianProductor.h"
 #include "SingleNavigationField.h"
 #include "UnitData.h"
+#include "PlayerUnit.h"
 #include "RobinSkillDevelopmentSystem.h"
 #include "SkillPreviewSystem.h"
 
@@ -55,7 +56,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
     m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
     /// UnitComponent 추가
-    m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+    m_unitComponent = m_unitGameObject->AddComponent<PlayerUnit>();
     RobinSkillDevelopmentSystem::Instance().SetOwnerUnit(m_unitComponent);
 
     UnitProductor::SetUnitComponentMembers();
@@ -193,7 +194,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
         }
     }
     m_unitComponent->unitAnimations = m_baseUnitAnimations;
-    SetUnitAnimationFunction();
+    SetUnitSkillFunctionToAnimation();
 
     return m_unitComponent;
 }

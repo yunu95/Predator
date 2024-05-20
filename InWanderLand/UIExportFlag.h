@@ -89,4 +89,6 @@ enum class UIExportFlag2
     Dialogue_Timed = 1 << 13,
     RedundantEnable = 1 << 14,
     AnimatedSprite = 1 << 15,
+    ScriptUI = 1 << 16,
+    EnumSound = 1 << 17,
 };

@@ -34,6 +34,7 @@
 #include "ContentsObserver.h"
 #include "ParticleTool_Manager.h"
 #include "UVAnimator.h"
+#include "InitialLoadingScreen.h"
 
 #include <algorithm>
 #include <string>
@@ -190,17 +191,17 @@ void GraphicsTest()
             animation = i;
         }
 
-		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
-		{
-			i->SetLoop(true);
+        if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
+        {
+            i->SetLoop(true);
             animation2 = i;
-		}
+        }
 
-		if (i->GetName() == L"Ani_Monster2_Skill")
-		{
-			i->SetLoop(true);
-			animation3 = i;
-		}
+        if (i->GetName() == L"Ani_Monster2_Skill")
+        {
+            i->SetLoop(true);
+            animation3 = i;
+        }
     }
 
 
@@ -214,13 +215,13 @@ void GraphicsTest()
         test->obj = obj2;
         test->system = systemComponent;
         test->camObj = camObj;
-	}
+    }
 
     {
         
     }
     yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
-	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
+    //yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 }
 
 void application::contents::ContentsLayer::SetInputControl(bool control)
@@ -232,52 +233,106 @@ bool application::contents::ContentsLayer::GetInputControl()
 {
     return contentsInputControl;
 }
+class ContentsInitializer : public yunutyEngine::Component
+{
+    coroutine::Coroutine Initialize()
+    {
+        chrono::steady_clock::time_point base = chrono::high_resolution_clock::now();
+        wanderUtils::ResourceRecursiveLoader::Load("./", {".cso"});
+        wanderUtils::ResourceRecursiveLoader::Load("Texture/LoadingScreen/");
+        wanderUtils::ResourceRecursiveLoader::Load("sounds/LoadingScreen/");
+        auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(chrono::high_resolution_clock::now() - base);
+        float timeTookForLoadingLoadingScreen = dur.count() / 1000.0f;
 
-//void CreateNavPlane(Vector3f botleft, Vector3f topright, std::vector<Vector3f>& worldVertices, std::vector<int>& worldFaces)
-//{
-//    int startingIdx = worldVertices.size();
-//    worldVertices.push_back({ botleft.x,0,topright.z });
-//    worldVertices.push_back({ botleft.x,0,botleft.z });
-//    worldVertices.push_back({ topright.x,0,botleft.z });
-//    worldVertices.push_back({ topright.x,0,topright.z });
-//
-//    worldFaces.push_back(startingIdx + 2);
-//    worldFaces.push_back(startingIdx + 1);
-//    worldFaces.push_back(startingIdx + 0);
-//    worldFaces.push_back(startingIdx + 3);
-//    worldFaces.push_back(startingIdx + 2);
-//    worldFaces.push_back(startingIdx + 0);
-//
-//    auto tilePlane = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<DebugTilePlane>();
-//    auto size = topright - botleft;
-//    tilePlane->GetTransform()->SetWorldPosition((botleft + topright) / 2.0);
-//    tilePlane->width = size.x;
-//    tilePlane->height = size.z;
-//    tilePlane->SetTiles();
-//}
-//
-//NavigationAgent* CreateAgent(NavigationField* navField)
-//{
-//    auto agent = yunutyEngine::Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::NavigationAgent>();
-//    agent->SetSpeed(2);
-//    agent->SetRadius(0.5);
-//    agent->AssignToNavigationField(navField);
-//    auto staticMesh = agent->GetGameObject()->AddGameObject()->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-//
-//    const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-//    auto& meshList = _resourceManager->GetMeshList();
-//    for (auto& e : meshList)
-//    {
-//        if (e->GetName() == L"Capsule")
-//        {
-//            staticMesh->GetGI().SetMesh(e);
-//        }
-//    }
-//
-//    staticMesh->GetGI().GetMaterial()->SetColor({ 0.75,0.75,0.75,0 });
-//    staticMesh->GetTransform()->position = Vector3d{ 0,0.5,0 };
-//    return agent;
-//}
+        auto tempCam = Scene::getCurrentScene()->AddGameObject()->AddComponent<graphics::Camera>();
+        auto logoObj = Scene::getCurrentScene()->AddGameObject()->AddComponent<InitialLoadingScreen>();
+        tempCam->SetCameraMain();
+
+        auto loadingCoroutine = StartCoroutine(wanderUtils::ResourceRecursiveLoader::LoadByCoroutine());
+        while (!loadingCoroutine.expired())
+        {
+            co_await std::suspend_always{};
+        }
+
+        /// Particle 및 AnimationEvent
+        auto& particleManager = application::particle::ParticleTool_Manager::GetSingletonInstance();
+        particleManager.LoadSkinnedFBX();
+        particleManager.LoadPP("InWanderLand.pp");
+        particleManager.LoadPPIs("InWanderLand.ppis");
+        {
+            auto obj = Scene::getCurrentScene()->AddGameObject();
+            auto test3 = obj->AddComponent<TestComponent3>();
+            {
+                auto textObj = obj->AddGameObject();
+                auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
+                text->GetGI().SetFontSize(30);
+                text->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
+                textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
+                textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,-0,0 });
+                test3->text_FPS = text;
+            }
+            {
+                auto textObj = obj->AddGameObject();
+                auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
+                text->GetGI().SetFontSize(30);
+                text->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
+                textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
+                textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,30,0 });
+                test3->text_update = text;
+            }
+            {
+                auto textObj = obj->AddGameObject();
+                auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
+                text->GetGI().SetFontSize(30);
+                text->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
+                textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
+                textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,60,0 });
+                test3->text_physx = text;
+            }
+            {
+                auto textObj = obj->AddGameObject();
+                auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
+                text->GetGI().SetFontSize(30);
+                text->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
+                textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
+                textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,90,0 });
+                test3->text_Render = text;
+            }
+        }
+#ifndef EDITOR
+#ifdef GRAPHICS_TEST
+        {
+            yunutyEngine::Collider2D::SetIsOnXYPlane(false);
+            auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+            directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
+            directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
+            auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
+            auto color = yunuGI::Color{ 1,1,1,1.f };
+            light->GetGI().SetLightDiffuseColor(color);
+        }
+        GraphicsTest();
+#else
+        {
+            application::editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
+            static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().layers[(int)application::Application::LayerList::ContentsLayer])->PlayContents();
+        }
+#endif
+#endif
+        Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+#ifdef EDITOR
+        application::Application::GetInstance().CheckContentsLayerInit();
+
+        application::Application::GetInstance().layers[(int)application::Application::LayerList::EditorLayer]->Initialize();
+
+        static_cast<application::editor::EditorLayer*>(application::Application::GetInstance().layers[(int)application::Application::LayerList::EditorLayer])->LateInitialize();
+#endif
+        co_return;
+    }
+    virtual void Start() override
+    {
+        StartCoroutine(Initialize());
+    }
+};
 void application::contents::ContentsLayer::Initialize()
 {
     if (ContentsLayer::testInitializer)
@@ -290,85 +345,12 @@ void application::contents::ContentsLayer::Initialize()
     ScriptSystem::Instance();
     CinematicManager::Instance();
     TutorialManager::Instance();
-
-    wanderUtils::LoadResourcesRecursively();
-
-    /// Particle 및 AnimationEvent
-    auto& particleManager = particle::ParticleTool_Manager::GetSingletonInstance();
-    particleManager.LoadSkinnedFBX();
-    particleManager.LoadPP("InWanderLand.pp");
-    particleManager.LoadPPIs("InWanderLand.ppis");
-    ///
-
-    {
-        auto obj = Scene::getCurrentScene()->AddGameObject();
-        auto test3 = obj->AddComponent<TestComponent3>();
-        {
-            auto textObj = obj->AddGameObject();
-            auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
-            text->GetGI().SetFontSize(30);
-            text->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
-            textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
-            textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,-0,0 });
-            test3->text_FPS = text;
-        }
-        {
-            auto textObj = obj->AddGameObject();
-            auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
-            text->GetGI().SetFontSize(30);
-            text->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
-            textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
-            textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,30,0 });
-            test3->text_update = text;
-        }
-        {
-            auto textObj = obj->AddGameObject();
-            auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
-            text->GetGI().SetFontSize(30);
-            text->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
-            textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
-            textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,60,0 });
-            test3->text_physx = text;
-        }
-        {
-            auto textObj = obj->AddGameObject();
-            auto text = textObj->AddComponent<yunutyEngine::graphics::UIText>();
-            text->GetGI().SetFontSize(30);
-            text->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
-            textObj->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
-            textObj->GetTransform()->SetLocalPosition(Vector3d{ 0,90,0 });
-            test3->text_Render = text;
-        }
-       
-    }
-
-#ifndef EDITOR
-#ifdef GRAPHICS_TEST
-    {
-        yunutyEngine::Collider2D::SetIsOnXYPlane(false);
-        auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-        directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
-        directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
-        auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
-        auto color = yunuGI::Color{ 1,1,1,1.f };
-        light->GetGI().SetLightDiffuseColor(color);
-
-        //editor::MapFileManager::GetSingletonInstance().LoadStaticOrnaments("TestOrnaments.punreal");
-    }
-    GraphicsTest();
-#else
-    {
-
-        editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
-        ContentsLayer::PlayContents();
-    }
-#endif
-#endif
+    Scene::getCurrentScene()->AddGameObject()->AddComponent<ContentsInitializer>();
 }
 
 void application::contents::ContentsLayer::Update(float ts)
 {
-    std::cout << Time::GetFPS() << std::endl;
+    //std::cout << Time::GetFPS() << std::endl;
 }
 
 void application::contents::ContentsLayer::GUIProgress()
@@ -422,7 +404,7 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
     /// Playable 동작들을 일괄 처리할 부분입니다.
     PlayableComponent::OnGameStartAll();
 
-    ContentsObserver::Instance().PlayObservee();
+    ContentsObserver::Instance().OnPlayContents();
 }
 
 void application::contents::ContentsLayer::PauseContents()
@@ -437,8 +419,6 @@ void application::contents::ContentsLayer::ResumeContents()
 {
     Time::SetTimeScale(1);
 
-    ContentsObserver::Instance().PlayObservee();
-
     /// Playable 동작들을 일괄 처리할 부분입니다.
     PlayableComponent::OnGameResumeAll();
 }
@@ -449,15 +429,14 @@ void application::contents::ContentsLayer::StopContents(ContentsStopFlag stopFla
     isStoppedOnce = true;
     ShortcutSystem::Instance().Clear();
 
-    ContentsObserver::Instance().StopObservee();
-    ContentsObserver::Instance().ClearObservees();
-
-	yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
-	yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage1LightMap");
+    yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
+    yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage1LightMap");
 
 
     /// Playable 동작들을 일괄 처리할 부분입니다.
     PlayableComponent::OnGameStopAll();
+
+    ContentsObserver::Instance().OnStopContents();
 
     if (bool(stopFlag & ContentsStopFlag::ClearUI))
         UIManager::Instance().Clear();
@@ -471,7 +450,7 @@ void application::contents::ContentsLayer::AssignTestInitializer(std::function<v
         application::Application::GetInstance().AddMainLoopTodo([=]() {
             Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
             });
-};
+        };
 }
 #endif
 

@@ -34,9 +34,6 @@ public:
 	void SetMeleeAttackType(MeleeAttackType p_type);
 	void SetOwnerUnitObject(GameObject* unitobj);
 
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
-
 	// Collider를 띄우고 없애는 식이라면 아래 함수 사용.
 	void SetColliderObject(GameObject* colliderObj);
 	void SetColliderDebugObject(GameObject* debugobj);
@@ -49,5 +46,6 @@ public:
 public:
 	virtual void Start() override;
 	virtual void Update() override;
+	virtual Component* GetComponent() override { return this; }
 };  
 

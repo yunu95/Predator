@@ -55,6 +55,10 @@ namespace application
         actionList.push_back({ ActionType::SetTimeScale,"SetTimeScale" });
         actionList.push_back({ ActionType::PauseWaves,"PauseWaves" });
         actionList.push_back({ ActionType::EngageStage,"EngageStage" });
+        actionList.push_back({ ActionType::SoundPlay,"SoundPlay" });
+        actionList.push_back({ ActionType::SoundPlayMusic,"SoundPlayMusic" });
+        actionList.push_back({ ActionType::SoundSetMusicVolume,"SoundSetMusicVolume" });
+        actionList.push_back({ ActionType::UISetActive,"UISetActive" });
     }
 
     Script* ScriptSystem::CreateScript()

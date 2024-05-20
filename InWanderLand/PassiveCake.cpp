@@ -50,19 +50,6 @@ void PassiveCake::SetDotweenComponent(Dotween* p_dotween)
 	m_dotween = p_dotween;
 }
 
-void PassiveCake::PlayFunction()
-{
-
-}
-
-void PassiveCake::StopFunction()
-{
-	if (!GetGameObject()->GetComponentWeakPtr<PassiveCake>().expired())
-	{
-		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-	}
-}
-
 void PassiveCake::Start()
 {
 }

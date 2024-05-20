@@ -5,7 +5,7 @@
 class RTSCam;
 class PlaytimeWave;
 
-class GameManager : public Component, public SingletonComponent<GameManager>, public PermanentObservee
+class GameManager : public SingletonComponent<GameManager>, public Component, public PermanentObservee
 {
 private:
 
@@ -30,11 +30,12 @@ private:
     bool waveEngageMotionEnd{ false };
 
 public:
+    virtual Component* GetComponent() override { return this; }
+
     virtual void Start() override;
     virtual void Update() override;
 
-    virtual void PlayFunction() override;
-    virtual void StopFunction() override;
+    virtual void OnContentsStop() override;
 
     void EngageBattle();
     void EndBattle();

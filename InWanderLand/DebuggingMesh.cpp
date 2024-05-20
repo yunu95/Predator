@@ -27,20 +27,6 @@ void DebuggingMesh::PopMeshUP(yunuGI::Color p_color, MaterialNum p_matNum)
 	isPopStarted = true;
 }
 
-void DebuggingMesh::PlayFunction()
-{
-	//this->SetActive(true);
-	//Start();
-}
-
-void DebuggingMesh::StopFunction()
-{
-	if (!GetGameObject()->GetComponentWeakPtr<DebuggingMesh>().expired())
-	{
-		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-	}
-}
-
 void DebuggingMesh::Start()
 {
 	y = GetGameObject()->GetTransform()->GetLocalPosition().y;

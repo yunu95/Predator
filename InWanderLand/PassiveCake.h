@@ -33,11 +33,9 @@ public:
 	void SetCollider(physics::BoxCollider* p_collider);
 	void SetDotweenComponent(Dotween* p_dotween);
 
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
-
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual void OnTriggerEnter(physics::Collider* collider) override;
+	virtual Component* GetComponent() override { return this; }
 };
 

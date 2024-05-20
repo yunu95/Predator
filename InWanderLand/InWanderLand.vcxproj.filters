@@ -580,9 +580,6 @@
     <Filter Include="Editor\ScriptSystem\2_Action\List\Action_UnitRelocate">
       <UniqueIdentifier>{8d95c3fa-d03f-41e0-9d41-d5ef14d54179}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_OrnamentsSetVisibleByStage">
-      <UniqueIdentifier>{bd394f05-d683-4f22-8c36-c78e1b860c88}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Editor\ScriptSystem\2_Action\List\Action_UnitPauseAll">
       <UniqueIdentifier>{713c7d1f-4aaf-4d37-8179-d6dd3b6971fb}</UniqueIdentifier>
     </Filter>
@@ -597,6 +594,30 @@
     </Filter>
     <Filter Include="Editor\ScriptSystem\2_Action\List\Action_EngageStage">
       <UniqueIdentifier>{fe902389-f10e-44ba-a039-398ac0634757}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_SoundPlay">
+      <UniqueIdentifier>{03bbf0a4-b726-4e02-bb7b-524efcefb6a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_SoundPlayMusic">
+      <UniqueIdentifier>{ebf2f996-9a3c-461e-99a0-78becfd35c17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_SoundSetMusicVolume">
+      <UniqueIdentifier>{4303a27c-885d-4ed1-85be-06e86aaf661a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_UISetActive">
+      <UniqueIdentifier>{fed1d65e-f4f7-4b7a-bb1d-eeb9599b62a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\InteractableComponent">
+      <UniqueIdentifier>{fac159cc-7c2b-4eb1-b641-7c4c1965ff8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\InteractableComponent\InteractableList">
+      <UniqueIdentifier>{1d80d79b-e59c-4e84-b07c-672c34a43438}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\ContentsLayerInitializer">
+      <UniqueIdentifier>{8ff44db1-26ce-476a-b37c-b46b522a6b05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\InitialLoadingScreen">
+      <UniqueIdentifier>{afddc9a5-d6c1-4483-888a-1af2eae577e3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1396,9 +1417,6 @@
     <ClInclude Include="ContentsObserver.h">
       <Filter>Contents\ContentsObserver</Filter>
     </ClInclude>
-    <ClInclude Include="ObserveeHelper.h">
-      <Filter>Contents\ContentsObserver</Filter>
-    </ClInclude>
     <ClInclude Include="LocalTimeEntityManager.h">
       <Filter>Contents\ContentsObserver</Filter>
     </ClInclude>
@@ -1480,9 +1498,6 @@
     <ClInclude Include="Action_UnitRelocate.h">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_UnitRelocate</Filter>
     </ClInclude>
-    <ClInclude Include="Action_OrnamentsSetVisibleByStage.h">
-      <Filter>Editor\ScriptSystem\2_Action\List\Action_OrnamentsSetVisibleByStage</Filter>
-    </ClInclude>
     <ClInclude Include="Action_AwaitSkillSelection.h">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_AwaitSkillSelection</Filter>
     </ClInclude>
@@ -1512,6 +1527,54 @@
     </ClInclude>
     <ClInclude Include="Action_EngageStage.h">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_EngageStage</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_SoundPlay.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SoundPlay</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_SoundPlayMusic.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SoundPlayMusic</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_SoundSetMusicVolume.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SoundSetMusicVolume</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_UISetActive.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_UISetActive</Filter>
+    </ClInclude>
+    <ClInclude Include="IInteractableComponent.h">
+      <Filter>Contents\InteractableComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_ChessBishop.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_ChessPawn.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_ChessRook.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_SpikeTrap.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="InteractableList.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsObserveeComponent.h">
+      <Filter>Contents\ContentsObserver\Observee</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerUnit.h">
+      <Filter>Contents\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillUnit.h">
+      <Filter>Contents\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="InitialLoadingScreen.h">
+      <Filter>Contents\InitialLoadingScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_TriggerBox.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_TriggerSphere.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2062,9 +2125,6 @@
     <ClCompile Include="SkillWarningSystem.cpp">
       <Filter>Contents\SkillSystem\SkillWarningSystem</Filter>
     </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>Contents\GameManager</Filter>
-    </ClCompile>
     <ClCompile Include="ScriptSystem.cpp">
       <Filter>Editor\ScriptSystem</Filter>
     </ClCompile>
@@ -2203,9 +2263,6 @@
     <ClCompile Include="ContentsObserver.cpp">
       <Filter>Contents\ContentsObserver</Filter>
     </ClCompile>
-    <ClCompile Include="ObserveeHelper.cpp">
-      <Filter>Contents\ContentsObserver</Filter>
-    </ClCompile>
     <ClCompile Include="LocalTimeEntityManager.cpp">
       <Filter>Contents\ContentsObserver</Filter>
     </ClCompile>
@@ -2275,9 +2332,6 @@
     <ClCompile Include="Action_UnitRelocate.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_UnitRelocate</Filter>
     </ClCompile>
-    <ClCompile Include="Action_OrnamentsSetVisibleByStage.cpp">
-      <Filter>Editor\ScriptSystem\2_Action\List\Action_OrnamentsSetVisibleByStage</Filter>
-    </ClCompile>
     <ClCompile Include="Action_AwaitSkillSelection.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_AwaitSkillSelection</Filter>
     </ClCompile>
@@ -2307,6 +2361,51 @@
     </ClCompile>
     <ClCompile Include="Action_EngageStage.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_EngageStage</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Contents\Dotween</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_SoundPlay.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SoundPlay</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_SoundPlayMusic.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SoundPlayMusic</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_SoundSetMusicVolume.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SoundSetMusicVolume</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_UISetActive.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_UISetActive</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerUnit.cpp">
+      <Filter>Contents\Units</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillUnit.cpp">
+      <Filter>Contents\Units</Filter>
+    </ClCompile>
+    <ClCompile Include="WanderUtils.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="InitialLoadingScreen.cpp">
+      <Filter>Contents\InitialLoadingScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_SpikeTrap.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_ChessBishop.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_ChessPawn.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_ChessRook.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_TriggerSphere.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_TriggerBox.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

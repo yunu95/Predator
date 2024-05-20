@@ -20,17 +20,6 @@ PlaytimeWave::~PlaytimeWave()
     waveData->playtimeWave = nullptr;
 }
 
-void PlaytimeWave::PlayFunction()
-{
-
-}
-
-void PlaytimeWave::StopFunction()
-{
-    if (GetGameObject()->GetSelfActive())
-        GetGameObject()->SetSelfActive(false);
-}
-
 void PlaytimeWave::ActivateWave()
 {
     isWaveActivated = true;

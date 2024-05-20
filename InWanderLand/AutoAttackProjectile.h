@@ -34,9 +34,6 @@ public:
 
 	void SetStraightBulletRange(float p_rng);
 
-	virtual void PlayFunction() override final;
-	virtual void StopFunction() override final;
-
 private:
 	void AutoChaseShootingFunction();
 	void StraightShootingFunction();
@@ -46,5 +43,6 @@ private:
 public:
 	virtual void Start() override;
 	virtual void Update() override;
+	virtual Component* GetComponent() override { return this; }
 };
 

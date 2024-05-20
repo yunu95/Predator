@@ -12,7 +12,7 @@ class Dotween;
 /// <summary>
 /// region간의 상관관계를 성립시켜주는 클래스.
 /// </summary>
-class PlayTimeRegionManager : public Component, public SingletonComponent<PlayTimeRegionManager>, public PermanentObservee
+class PlayTimeRegionManager : public SingletonComponent<PlayTimeRegionManager>, public Component, public PermanentObservee
 {
 private:
 	Vector3d stage2StartPosition;
@@ -25,8 +25,8 @@ private:
 
 public:
 	virtual void Start() override;
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+	virtual void OnContentsStop() override;
+	virtual Component* GetComponent() override { return this; }
 
 	void AddRegionData(application::editor::RegionData* p_data);
 	void RegisterOrnament(GameObject* p_obj, int p_stageNum);

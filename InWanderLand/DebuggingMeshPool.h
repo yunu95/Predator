@@ -9,7 +9,7 @@
 /// <summary>
 /// 유닛이 현재 어떤 공격을 받고 있는지, 어떤 상태이상이 적용 중인지를 알려주는 컴포넌트.
 /// </summary>
-class DebuggingMeshPool : public GameObjectPool<DebuggingMesh>, public Component, public SingletonComponent<DebuggingMeshPool>, public PermanentObservee
+class DebuggingMeshPool : public GameObjectPool<DebuggingMesh>, public SingletonComponent<DebuggingMeshPool>, public Component, public PermanentObservee
 {
 private:
 	virtual void ObjectInitializer(DebuggingMesh* comp) override
@@ -18,25 +18,18 @@ private:
 		comp->m_staticMeshRendererComp->SetActive(false);
 	}
 	virtual void Start() override;
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+	virtual void OnContentsStop() override;
+	virtual Component* GetComponent() override { return this; }
 };
 
 void DebuggingMeshPool::Start()
 {
+
 }
 
-void DebuggingMeshPool::PlayFunction()
+void DebuggingMeshPool::OnContentsStop()
 {
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
-}
-
-void DebuggingMeshPool::StopFunction()
-{
+	this->SetActive(false);
 	poolObjects.clear();
 	expendableObjects.clear();
 }

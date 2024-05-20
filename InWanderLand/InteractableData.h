@@ -40,6 +40,7 @@ namespace application
         struct POD_Interactable
         {
             Interactable_TemplateData* templateData = nullptr;
+            std::vector<std::string> targetInteractables = std::vector<std::string>();
             POD_Vector3<float> position = POD_Vector3<float>();
             POD_Quaternion<float> rotation = POD_Quaternion<float>();
             POD_Vector3<float> scale = { 1,1,1 };
@@ -72,7 +73,6 @@ namespace application
             POD_Interactable pod;
 
             GameObject* inGameInteractable{ nullptr };
-            Unit* inGameUnit{ nullptr };
 
         protected:
             virtual bool PreEncoding(json& data) const override;
@@ -84,9 +84,7 @@ namespace application
             static TemplateDataManager& templateDataManager;
             palette::InteractableEditorInstance* interactableInstance{ nullptr };
 
-            bool isUnit = false;
-            std::vector<UnitProductor*> productorSelector;
-            bool isSelectorInitialized{ false };
+            bool hasAnimation = false;
 
             InteractableData();
             InteractableData(const std::string& name);

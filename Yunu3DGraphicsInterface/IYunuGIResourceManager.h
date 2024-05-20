@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include "IUnknown.h"
+#include "IVideo.h"
 
 #include "IMaterial.h"
 
@@ -26,9 +27,10 @@ namespace yunuGI
         virtual void DeleteMesh(yunuGI::IMesh* mesh)const = 0;
         virtual yunuGI::IMaterial* GetMaterial(const std::wstring& materialName)const = 0;
         virtual yunuGI::IMesh* GetMesh(const std::wstring& meshName)const = 0;
-		virtual yunuGI::ITexture* GetTexture(const std::wstring& textureName)const = 0;
-		virtual yunuGI::IShader* GetShader(const std::wstring& shaderName)const = 0;
-		virtual bool GetFBXData(const std::string& fbxName, yunuGI::FBXData*& fbxData)const = 0;
+        virtual yunuGI::ITexture* GetTexture(const std::wstring& textureName)const = 0;
+        virtual yunuGI::IShader* GetShader(const std::wstring& shaderName)const = 0;
+        virtual std::weak_ptr<yunuGI::IVideo> GetVideoData(const std::wstring& videoPath) const = 0;
+        virtual bool GetFBXData(const std::string& fbxName, yunuGI::FBXData*& fbxData)const = 0;
         virtual bool GetFBXBoneData(const std::string& fbxName, yunuGI::BoneInfo& boneInfo)const = 0;
         virtual std::vector<yunuGI::IAnimation*>& GetFBXAnimationList(std::wstring fbxName)const = 0;
         virtual void UnloadResources()const = 0;
@@ -45,8 +47,8 @@ namespace yunuGI
         virtual std::vector<std::wstring>& GetFBXList()const = 0;
         virtual std::unordered_map<std::wstring, yunuGI::FBXData*>& GetFBXDataMap()const = 0;
 
-        virtual void SaveFBXData(std::filesystem::path path)const =0;
-        virtual void LoadFBXData(std::filesystem::path path)const =0;
+        virtual void SaveFBXData(std::filesystem::path path)const = 0;
+        virtual void LoadFBXData(std::filesystem::path path)const = 0;
     };
 }
 

@@ -6,7 +6,7 @@
 #include "PermanentObservee.h"
 
 class HealerAutoAttackProjectilePool :
-	public GameObjectPool<HealerAutoAttackProjectile>, public Component, public SingletonComponent<HealerAutoAttackProjectilePool>, public PermanentObservee
+	public GameObjectPool<HealerAutoAttackProjectile>, public SingletonComponent<HealerAutoAttackProjectilePool>, public Component, public PermanentObservee
 {
 public:
 	virtual void ObjectInitializer(HealerAutoAttackProjectile* projectile) override
@@ -17,25 +17,18 @@ public:
 		projectile->GetGameObject()->AddComponent<Dotween>();
 	}
 	virtual void Start() override;
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+	virtual void OnContentsStop() override;
+	virtual Component* GetComponent() override { return this; }
 };
 
 void HealerAutoAttackProjectilePool::Start()
 {
+
 }
 
-void HealerAutoAttackProjectilePool::PlayFunction()
+void HealerAutoAttackProjectilePool::OnContentsStop()
 {
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
-}
-
-void HealerAutoAttackProjectilePool::StopFunction()
-{
+	this->SetActive(false);
 	poolObjects.clear();
 	expendableObjects.clear();
 }

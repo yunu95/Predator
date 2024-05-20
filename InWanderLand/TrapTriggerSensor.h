@@ -8,8 +8,6 @@ class TrapTriggerSensor : public Component, public ContentsObservee
 public:
 	ChessTrapSkillSystem* trapChessSkillSystem;
 	virtual void OnTriggerEnter(physics::Collider* collider) override;
-
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+	virtual Component* GetComponent() override { return this; }
 };
 

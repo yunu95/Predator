@@ -1,10 +1,11 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "Easing.h"
+#include "LocalTimeEntity.h"
 #include "ContentsObservee.h"
 
 
-class TimerComponent : public Component
+class TimerComponent : public Component, public LocalTimeEntity
 {
 private:
     bool m_isActivated{ false };

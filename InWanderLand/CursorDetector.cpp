@@ -54,20 +54,6 @@ void CursorDetector::Update()
 	}
 }
 
-void CursorDetector::PlayFunction()
-{
-	//this->SetActive(true);
-	//Start();
-}
-
-void CursorDetector::StopFunction()
-{
-	if (!GetGameObject()->GetComponentWeakPtr<CursorDetector>().expired())
-	{
-		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-	}
-}
-
 void CursorDetector::EraseUnitFromContainer(Unit* p_unit)
 {
 	m_onMouseUnits.erase(p_unit);

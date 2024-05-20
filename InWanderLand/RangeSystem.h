@@ -17,11 +17,9 @@ public:
     void SetOwnerUnitComponent(Unit* unitComponent);
 
 public:
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
-
     virtual void Start() override;
     virtual void OnTriggerEnter(physics::Collider* collider) override;
-    virtual void OnTriggerExit(physics::Collider* collider) override;
+    virtual void OnTriggerExit(physics::Collider* collider) override;    
+    virtual Component* GetComponent() override { return this; }
 };
 

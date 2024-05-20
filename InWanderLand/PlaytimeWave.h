@@ -40,9 +40,6 @@ public:
     Unit* inGameUnit;
     virtual ~PlaytimeWave();
 
-    virtual void PlayFunction() override;
-    virtual void StopFunction() override;
-
     void ActivateWave();
     void DeActivateWave();
 
@@ -52,4 +49,5 @@ public:
 
     void StopWaveElapsedTime();
     void ResumeWaveElapsedTime();
+    virtual Component* GetComponent() override { return this; }
 };

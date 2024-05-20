@@ -13,12 +13,10 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
-
 	void EraseUnitFromContainer(Unit* p_unit);
 
 	Unit* GetCurrentOnMouseUnit() const;
+	virtual Component* GetComponent() override { return this; }
 
 private:
 	Unit* m_currentSelectedUnit{ nullptr };

@@ -22,8 +22,6 @@ private:
 
 public:
 	virtual ~PlaytimeRegion();
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
 
 	// 주인공 일행이 하나라도 지역에 입장할 시에 추가로 호출되는 콜백
 	std::vector<std::function<void()>> OnEnter;
@@ -33,6 +31,7 @@ public:
 	virtual void Start() override;
 	virtual void OnTriggerEnter(physics::Collider* collider) override;
 	virtual void OnTriggerExit(physics::Collider* collider) override;
+	virtual Component* GetComponent() override { return this; }
 	friend application::editor::RegionData;
 };
 

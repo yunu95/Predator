@@ -43,6 +43,8 @@ namespace application
 
 			POD_Interactable_TemplateData pod;
 
+			static std::vector<std::string>& GetInteractableFBXNameList() { return interactableFBXNameList; }
+
 		protected:
 			virtual bool PreEncoding(json& data) const override;
 			virtual bool PostEncoding(json& data) const override;
@@ -50,6 +52,8 @@ namespace application
 			virtual bool PostDecoding(const json& data) override;
 
 		private:
+			static std::vector<std::string> interactableFBXNameList;
+
 			Interactable_TemplateData();
 			Interactable_TemplateData(const Interactable_TemplateData& prototype);
 			Interactable_TemplateData& operator=(const Interactable_TemplateData& prototype);

@@ -55,19 +55,6 @@ void MeleeAttackSystem::SetOwnerUnitObject(GameObject* unitobj)
 	ownerUnitObject = unitobj;
 }
 
-void MeleeAttackSystem::PlayFunction()
-{
-
-}
-
-void MeleeAttackSystem::StopFunction()
-{
-	if (!GetGameObject()->GetComponentWeakPtr<MeleeAttackSystem>().expired())
-	{
-		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-	}
-}
-
 void MeleeAttackSystem::SetColliderRemainTime(float time)
 {
 	attackColliderRemainTime = time;

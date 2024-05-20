@@ -7,7 +7,7 @@
 
 
 class MagicianSkillOneProjectilePool :
-	public GameObjectPool<MagicianAutoAttackProjectile>, public Component, public SingletonComponent<MagicianSkillOneProjectilePool>, public PermanentObservee
+	public GameObjectPool<MagicianAutoAttackProjectile>, public SingletonComponent<MagicianSkillOneProjectilePool>, public Component, public PermanentObservee
 {
 public:
 	virtual void ObjectInitializer(MagicianAutoAttackProjectile* projectile) override
@@ -20,25 +20,18 @@ public:
 		projectileComponent->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1, 0, 0, 0 });
 	}
 	virtual void Start() override;
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+	virtual void OnContentsStop() override;
+	virtual Component* GetComponent() override { return this; }
 };
 
 void MagicianSkillOneProjectilePool::Start()
 {
+
 }
 
-void MagicianSkillOneProjectilePool::PlayFunction()
+void MagicianSkillOneProjectilePool::OnContentsStop()
 {
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
-}
-
-void MagicianSkillOneProjectilePool::StopFunction()
-{
+	this->SetActive(false);
 	poolObjects.clear();
 	expendableObjects.clear();
 }

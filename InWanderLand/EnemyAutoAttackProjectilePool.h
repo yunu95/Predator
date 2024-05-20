@@ -4,7 +4,7 @@
 #include "PermanentObservee.h"
 
 class EnemyAutoAttackProjectilePool :
-	public GameObjectPool<EnemyAutoAttackProjectile>, public Component, public SingletonComponent<EnemyAutoAttackProjectilePool>, public PermanentObservee
+	public GameObjectPool<EnemyAutoAttackProjectile>, public SingletonComponent<EnemyAutoAttackProjectilePool>, public Component, public PermanentObservee
 {
 public:
 	virtual void ObjectInitializer(EnemyAutoAttackProjectile* projectile) override
@@ -15,25 +15,18 @@ public:
 		projectile->GetGameObject()->AddComponent<Dotween>();
 	}
 	virtual void Start() override;
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+	virtual void OnContentsStop() override;
+	virtual Component* GetComponent() override { return this; }
 };
 
 void EnemyAutoAttackProjectilePool::Start()
 {
+
 }
 
-void EnemyAutoAttackProjectilePool::PlayFunction()
+void EnemyAutoAttackProjectilePool::OnContentsStop()
 {
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
-}
-
-void EnemyAutoAttackProjectilePool::StopFunction()
-{
+	this->SetActive(false);
 	poolObjects.clear();
 	expendableObjects.clear();
 }

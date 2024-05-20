@@ -29,3 +29,4 @@
 #include "FBXData.h"
 #include "IAnimator.h"
 #include "ParticleRenderInfo.h"
+#include "IVideo.h"

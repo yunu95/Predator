@@ -2,20 +2,25 @@
 #include "YunutyEngine.h"
 
 class ContentsObservee;
+class PermanentObservee;
+
+#include <vector>
 
 class ContentsObserver : public Component, public SingletonComponent<ContentsObserver>
 {
-private:
-	std::vector<ContentsObservee*> m_initializingContainer;
-	std::vector<ContentsObservee*> m_destroyingContainer;
-
 public:
-	void RegisterObservee(ContentsObservee* p_observee);
+	void RegisterObservee(PermanentObservee* permanentObservee);
+	void RegisterObservee(ContentsObservee* contentsObservee);
 
-	void PlayObservee() const;
+	/// PermanentObservee 의 경우에만 시작할 때 처리하는 OnContentsPlay 함수를 호출합니다.
+	void OnPlayContents();
 
-	void StopObservee() const;
+	/// ContentsObserver 에 등록된 Observee 들 중 PermanentObservee 를 제외한 Observee 들은
+	/// Destory 되고, PermanentObservee 는 OnContentsStop 이 호출됩니다.
+	void OnStopContents();
 
-	void ClearObservees();
+private:
+	std::vector<PermanentObservee*> permanentObservees = std::vector<PermanentObservee*>();
+	std::vector<ContentsObservee*> contentsObservees = std::vector<ContentsObservee*>();
 };
 

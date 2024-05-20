@@ -78,16 +78,7 @@ void InputManager::Update()
 	}
 }
 
-void InputManager::PlayFunction()
-{
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
-}
-
-void InputManager::StopFunction()
+void InputManager::OnContentsStop()
 {
 	this->SetActive(false);
 

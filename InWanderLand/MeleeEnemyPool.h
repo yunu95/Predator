@@ -7,7 +7,7 @@
 #include "GameManager.h"
 #include "BurnEffect.h"
 
-class MeleeEnemyPool : public GameObjectPool<DummyComponent>, public Component, public SingletonComponent<MeleeEnemyPool>, public PermanentObservee
+class MeleeEnemyPool : public GameObjectPool<DummyComponent>, public SingletonComponent<MeleeEnemyPool>, public Component, public PermanentObservee
 {
 private:
 	Vector3d m_unitPosition;
@@ -63,25 +63,17 @@ public:
 	}
 
 	virtual void Start() override;
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+	virtual void OnContentsStop() override;
+	virtual Component* GetComponent() override { return this; }
 };
 
 void MeleeEnemyPool::Start()
 {
 }
 
-void MeleeEnemyPool::PlayFunction()
+void MeleeEnemyPool::OnContentsStop()
 {
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
-}
-
-void MeleeEnemyPool::StopFunction()
-{
+	this->SetActive(false);
 	poolObjects.clear();
 	expendableObjects.clear();
 }

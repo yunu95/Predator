@@ -5,7 +5,7 @@
 #include "StaticMeshRenderer.h"
 #include "PermanentObservee.h"
 
-class AutoAttackProjectilePool : public GameObjectPool<AutoAttackProjectile>, public Component, public SingletonComponent<AutoAttackProjectilePool>, public PermanentObservee
+class AutoAttackProjectilePool : public GameObjectPool<AutoAttackProjectile>, public SingletonComponent<AutoAttackProjectilePool>, public Component, public PermanentObservee
 {	
 public:
 	virtual void ObjectInitializer(AutoAttackProjectile* projectile) override 
@@ -19,25 +19,18 @@ public:
 		projectileComponent->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::green(), false));	
 	}
 	virtual void Start() override;
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+	virtual void OnContentsStop() override;
+	virtual Component* GetComponent() override { return this; }
 };
 
 void AutoAttackProjectilePool::Start()
 {
+
 }
 
-void AutoAttackProjectilePool::PlayFunction()
+void AutoAttackProjectilePool::OnContentsStop()
 {
-	this->SetActive(true);
-	if (isOncePaused)
-	{
-		Start();
-	}
-}
-
-void AutoAttackProjectilePool::StopFunction()
-{
+	this->SetActive(false);
 	poolObjects.clear();
 	expendableObjects.clear();
 }

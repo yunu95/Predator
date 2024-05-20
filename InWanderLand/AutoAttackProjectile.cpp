@@ -37,19 +37,6 @@ void AutoAttackProjectile::SetStraightBulletRange(float p_rng)
 	m_range = p_rng;
 }
 
-void AutoAttackProjectile::PlayFunction()
-{
-
-}
-
-void AutoAttackProjectile::StopFunction()
-{
-	if (!GetGameObject()->GetComponentWeakPtr<AutoAttackProjectile>().expired())
-	{
-		yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-	}
-}
-
 void AutoAttackProjectile::AutoChaseShootingFunction()
 {
 	//// 움직이기 전의 투사체 위치

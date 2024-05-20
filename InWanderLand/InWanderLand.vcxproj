@@ -890,7 +890,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;Yunuty.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x64;$(outdir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\Editor\Imgui" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
@@ -1011,11 +1011,14 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Action_BlockSkillSelection.h" />
     <ClInclude Include="Action_PauseWaves.h" />
     <ClInclude Include="Action_PlayerSelect.h" />
+    <ClInclude Include="Action_SoundPlay.h" />
+    <ClInclude Include="Action_SoundPlayMusic.h" />
+    <ClInclude Include="Action_SoundSetMusicVolume.h" />
+    <ClInclude Include="Action_UISetActive.h" />
     <ClInclude Include="Action_UnitPauseAll.h" />
     <ClInclude Include="Action_PlayManualDialogue.h" />
     <ClInclude Include="Action_PlayTimedDialogue.h" />
     <ClInclude Include="Action_UnitRelocate.h" />
-    <ClInclude Include="Action_OrnamentsSetVisibleByStage.h" />
     <ClInclude Include="Action_SetTimeScale.h" />
     <ClInclude Include="Action_Tutorial.h" />
     <ClInclude Include="Action_Unit.h" />
@@ -1040,6 +1043,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Condition_CinematicMode.h" />
     <ClInclude Include="Condition_TutorialMode.h" />
     <ClInclude Include="ContentsObservee.h" />
+    <ClInclude Include="ContentsObserveeComponent.h" />
     <ClInclude Include="ContentsObserver.h" />
     <ClInclude Include="ContentsPlayFlag.h" />
     <ClInclude Include="ContentsStopFlag.h" />
@@ -1065,19 +1069,27 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="IAction.h" />
     <ClInclude Include="ICondition.h" />
+    <ClInclude Include="IInteractableComponent.h" />
     <ClInclude Include="InteractableBrush.h" />
     <ClInclude Include="InteractableData.h" />
     <ClInclude Include="InteractableEditorInstance.h" />
+    <ClInclude Include="InteractableList.h" />
     <ClInclude Include="InteractablePalette.h" />
+    <ClInclude Include="Interactable_ChessBishop.h" />
+    <ClInclude Include="Interactable_ChessPawn.h" />
+    <ClInclude Include="Interactable_ChessRook.h" />
+    <ClInclude Include="Interactable_SpikeTrap.h" />
     <ClInclude Include="Interactable_TemplateData.h" />
+    <ClInclude Include="Interactable_TriggerBox.h" />
+    <ClInclude Include="Interactable_TriggerSphere.h" />
     <ClInclude Include="JsonUIData.h" />
+    <ClInclude Include="InitialLoadingScreen.h" />
     <ClInclude Include="LocalTimeEntity.h" />
     <ClInclude Include="LocalTimeEntityManager.h" />
     <ClInclude Include="LinearClippingTimer.h" />
     <ClInclude Include="ObservationTarget.h" />
     <ClInclude Include="IObserver.h" />
     <ClInclude Include="ObservationEvent.h" />
-    <ClInclude Include="ObserveeHelper.h" />
     <ClInclude Include="ParticleBrush.h" />
     <ClInclude Include="ParticleData.h" />
     <ClInclude Include="ParticleEditorInstance.h" />
@@ -1094,6 +1106,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       </ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="PlayerSkillManager.h" />
+    <ClInclude Include="PlayerUnit.h" />
     <ClInclude Include="PlayMusicTimer.h" />
     <ClInclude Include="PopDownOnDisable.h" />
     <ClInclude Include="PopupOnEnable.h" />
@@ -1137,6 +1150,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="RobinSkillDevelopmentSystem.h" />
     <ClInclude Include="SaveStaticOrnamentsCommnad.h" />
     <ClInclude Include="SkillDevelopmentSystem.h" />
+    <ClInclude Include="SkillUnit.h" />
     <ClInclude Include="SkillUpgradeSystem.h" />
     <ClInclude Include="SkillWarningSystem.h" />
     <ClInclude Include="SoundPlayingTimer.h" />
@@ -1319,11 +1333,14 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Action_PauseWaves.cpp" />
     <ClCompile Include="Action_PlayerSelect.cpp" />
     <ClCompile Include="Action_EngageStage.cpp" />
+    <ClCompile Include="Action_SoundPlay.cpp" />
+    <ClCompile Include="Action_SoundPlayMusic.cpp" />
+    <ClCompile Include="Action_SoundSetMusicVolume.cpp" />
+    <ClCompile Include="Action_UISetActive.cpp" />
     <ClCompile Include="Action_UnitPauseAll.cpp" />
     <ClCompile Include="Action_PlayManualDialogue.cpp" />
     <ClCompile Include="Action_PlayTimedDialogue.cpp" />
     <ClCompile Include="Action_UnitRelocate.cpp" />
-    <ClCompile Include="Action_OrnamentsSetVisibleByStage.cpp" />
     <ClCompile Include="Action_SetTimeScale.cpp" />
     <ClCompile Include="Action_Tutorial.cpp" />
     <ClCompile Include="Action_Unit.cpp" />
@@ -1364,16 +1381,22 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="EnemySummonSkillSystem.cpp" />
     <ClCompile Include="FloatFollower.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="InitialLoadingScreen.cpp" />
     <ClCompile Include="InteractableBrush.cpp" />
     <ClCompile Include="InteractableData.cpp" />
     <ClCompile Include="InteractableEditorInstance.cpp" />
     <ClCompile Include="InteractablePalette.cpp" />
+    <ClCompile Include="Interactable_ChessBishop.cpp" />
+    <ClCompile Include="Interactable_ChessPawn.cpp" />
+    <ClCompile Include="Interactable_ChessRook.cpp" />
+    <ClCompile Include="Interactable_SpikeTrap.cpp" />
     <ClCompile Include="Interactable_TemplateData.cpp" />
+    <ClCompile Include="Interactable_TriggerBox.cpp" />
+    <ClCompile Include="Interactable_TriggerSphere.cpp" />
     <ClCompile Include="LocalTimeEntity.cpp" />
     <ClCompile Include="LocalTimeEntityManager.cpp" />
     <ClCompile Include="LinearClippingTimer.cpp" />
     <ClCompile Include="ObservationTarget.cpp" />
-    <ClCompile Include="ObserveeHelper.cpp" />
     <ClCompile Include="ParticleBrush.cpp" />
     <ClCompile Include="ParticleData.cpp" />
     <ClCompile Include="ParticleEditorInstance.cpp" />
@@ -1389,6 +1412,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="GamePlayTimer.cpp" />
     <ClCompile Include="PawnTrapProductor.cpp" />
     <ClCompile Include="PlayerSkillManager.cpp" />
+    <ClCompile Include="PlayerUnit.cpp" />
     <ClCompile Include="PlayMusicTimer.cpp" />
     <ClCompile Include="PopDownOnDisable.cpp" />
     <ClCompile Include="PopupOnEnable.cpp" />
@@ -1440,6 +1464,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="RangedEnemyProductor.cpp" />
     <ClCompile Include="RobinSkillDevelopmentSystem.cpp" />
     <ClCompile Include="SkillDevelopmentSystem.cpp" />
+    <ClCompile Include="SkillUnit.cpp" />
     <ClCompile Include="SkillUpgradeSystem.cpp" />
     <ClCompile Include="SkillWarningSystem.cpp" />
     <ClCompile Include="SnippetBillboardSpriteAnim.cpp" />
@@ -1573,6 +1598,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UnitProductor.cpp" />
     <ClCompile Include="Action_WaitForSeconds.cpp" />
     <ClCompile Include="UVAnimator.cpp" />
+    <ClCompile Include="WanderUtils.cpp" />
     <ClCompile Include="WarriorProductor.cpp" />
     <ClCompile Include="PlayerSkillSystem.cpp" />
     <ClCompile Include="WarriorSkillSystem.cpp" />

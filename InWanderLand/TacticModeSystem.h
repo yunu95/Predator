@@ -2,6 +2,7 @@
 #include "YunutyEngine.h"
 #include "InputManager.h"
 #include "Unit.h"
+#include "PlayerUnit.h"
 #include "PermanentObservee.h"
 #include <unordered_map>
 
@@ -24,8 +25,8 @@ public:
     virtual void Start() override;
     virtual void Update() override;
 
-	virtual void PlayFunction() override;
-	virtual void StopFunction() override;
+	virtual void OnContentsStop() override;
+    virtual Component* GetComponent() override { return this; }
 
 	enum OrderType
 	{
@@ -87,7 +88,7 @@ private:
 
     Unit* currentSelectedUnit{ nullptr };
 
-    std::unordered_map<Unit::UnitType, Unit*> playerComponentMap;
+    std::unordered_map<Unit::UnitType, PlayerUnit*> playerComponentMap;
 
     std::queue<Unit*> sequenceQueue;
 

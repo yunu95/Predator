@@ -20,6 +20,7 @@ namespace yunutyEngine
         virtual void Update();
         void DetachFromNavigationField();
         void AssignToNavigationField(NavigationField* navField);
+        NavigationField* GetAssignedNavigationField();
         void SetSpeed(float speed);
         void SetAcceleration(float accel);
         void SetRadius(float radius);
@@ -34,8 +35,8 @@ namespace yunutyEngine
         virtual void OnEnable() override;
         virtual void OnDisable() override;
     private:
-        Impl* impl{nullptr};
-        NavigationField* navField{nullptr};
+        Impl* impl{ nullptr };
+        NavigationField* navField{ nullptr };
         friend NavigationField;
     };
 }

@@ -22,6 +22,7 @@
 #include "EditorCameraManager.h"
 #include "EditorCamera.h"
 #include "PlayableComponent.h"
+#include "WanderUtils.h"
 
 #include <d3d11.h>
 #include <dxgi1_4.h>
@@ -394,12 +395,8 @@ namespace application
 
         layers[(int)LayerList::ContentsLayer]->Initialize();
 
-#ifdef EDITOR
-        CheckContentsLayerInit();
-        layers[(int)LayerList::EditorLayer]->Initialize();
-
-        static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer])->LateInitialize();
-#endif
+        // EdtiorLayer::Initialize에 대한 호출은 의존성 문제로
+        // ContentsLayer의 내부 코루틴 함수가 부르는 것으로 변경되었습니다.
     }
 
     void Application::Run()
@@ -920,6 +917,10 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 #ifdef EDITOR
 LRESULT WINAPI WndEditorProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    if (wanderUtils::ResourceRecursiveLoader::IsLoadingResources())
+    {
+        return true;
+    }
     if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
     {
         return true;
