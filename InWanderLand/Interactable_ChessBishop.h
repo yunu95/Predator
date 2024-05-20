@@ -8,6 +8,9 @@
 class Interactable_ChessBishop
 	: public IInteractableComponent
 {
+public:
+	virtual void Update() override;
 
+	virtual yunutyEngine::coroutine::Coroutine DoInteraction() override;
 };
 

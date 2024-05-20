@@ -1576,6 +1576,12 @@
     <ClInclude Include="InitialLoadingScreen.h">
       <Filter>Contents\InitialLoadingScreen</Filter>
     </ClInclude>
+    <ClInclude Include="Interactable_TriggerBox.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_TriggerSphere.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2391,6 +2397,24 @@
     </ClCompile>
     <ClCompile Include="InitialLoadingScreen.cpp">
       <Filter>Contents\InitialLoadingScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_SpikeTrap.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_ChessBishop.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_ChessPawn.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_ChessRook.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_TriggerSphere.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_TriggerBox.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

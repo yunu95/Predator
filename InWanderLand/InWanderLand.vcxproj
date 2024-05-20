@@ -890,7 +890,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Debug" "$(targetdir)" /D /E /
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;Yunuty.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)/Lib/x64;$(outdir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(projectdir)RuntimeDependency\Editor\Imgui" "$(targetdir)" /D /E /C /Q /H /R /Y /K /I /S || exit 0
@@ -1081,6 +1081,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Interactable_ChessRook.h" />
     <ClInclude Include="Interactable_SpikeTrap.h" />
     <ClInclude Include="Interactable_TemplateData.h" />
+    <ClInclude Include="Interactable_TriggerBox.h" />
+    <ClInclude Include="Interactable_TriggerSphere.h" />
     <ClInclude Include="JsonUIData.h" />
     <ClInclude Include="InitialLoadingScreen.h" />
     <ClInclude Include="LocalTimeEntity.h" />
@@ -1386,7 +1388,13 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="InteractableData.cpp" />
     <ClCompile Include="InteractableEditorInstance.cpp" />
     <ClCompile Include="InteractablePalette.cpp" />
+    <ClCompile Include="Interactable_ChessBishop.cpp" />
+    <ClCompile Include="Interactable_ChessPawn.cpp" />
+    <ClCompile Include="Interactable_ChessRook.cpp" />
+    <ClCompile Include="Interactable_SpikeTrap.cpp" />
     <ClCompile Include="Interactable_TemplateData.cpp" />
+    <ClCompile Include="Interactable_TriggerBox.cpp" />
+    <ClCompile Include="Interactable_TriggerSphere.cpp" />
     <ClCompile Include="LocalTimeEntity.cpp" />
     <ClCompile Include="LocalTimeEntityManager.cpp" />
     <ClCompile Include="LinearClippingTimer.cpp" />

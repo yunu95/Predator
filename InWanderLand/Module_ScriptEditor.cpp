@@ -616,6 +616,118 @@ namespace application
                             epm.Return();
                         }
                     }
+
+                    if (epm.GetReturnPopupName() == "SetTargetUnit(Relocate)")
+                    {
+                        ImGui::Begin("Unit Relocate Popup(SetTarget)", &pop, flag);
+                        auto rect = ImGui::GetContentRegionAvail();
+                        auto size = ImGui::CalcTextSize("Please Setting Target Unit");
+                        imgui::ShiftCursorX((rect.x - size.x) / 2);
+                        imgui::ShiftCursorY((rect.y - size.y) / 2);
+                        ImGui::Text("Please Setting Target Unit");
+                        ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+                        ImGui::End();
+
+                        pp.ChangeTab("Unit");
+
+                        auto data = epm.GetReturnPopupData<Action_UnitRelocate>();
+                        if (data->isEditing == false && pm.GetCurrentPalette() == &up)
+                        {
+                            data->isEditing = true;
+                            up.Reset();
+                        }
+
+                        if (data->isEditing == true && up.GetSelections().size() == 1)
+                        {
+                            data->SetTargetUnit(static_cast<UnitData*>(*up.GetSelections().begin()));
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+
+                        if (!pop)
+                        {
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+                    }
+
+                    if (epm.GetReturnPopupName() == "EditDestinationUnit(Relocate)")
+                    {
+                        ImGui::Begin("Unit Relocate Popup(EditDestination)", &pop, flag);
+                        auto rect = ImGui::GetContentRegionAvail();
+                        imgui::ShiftCursorY((rect.y - 20) / 2);
+                        bool endFlag = false;
+                        if (ImGui::Button("End Edit", ImVec2(ImGui::GetContentRegionAvail().x, 20)))
+                        {
+                            endFlag = true;
+                        }
+                        ImGui::End();
+                        ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+
+                        pp.ChangeTab("Unit");
+
+                        auto data = epm.GetReturnPopupData<Action_UnitRelocate>();
+                        if (data->isEditing == false && pm.GetCurrentPalette() == &up)
+                        {
+                            data->isEditing = true;
+                            up.Reset();
+                            up.SelectUnitInstance(data->destinationUnit);
+                        }
+
+                        if (data->isEditing == true && (endFlag || ImGui::IsKeyPressed(ImGuiKey_Escape, false)))
+                        {
+                            data->isEditing = false;
+                            data->destinationUnit->GetPaletteInstance()->GetGameObject()->SetSelfActive(false);
+                            up.Reset();
+                            epm.Return();
+                        }
+
+                        if (!pop)
+                        {
+                            data->isEditing = false;
+                            data->destinationUnit->GetPaletteInstance()->GetGameObject()->SetSelfActive(false);
+                            up.Reset();
+                            epm.Return();
+                        }
+                    }
+
+                    if (epm.GetReturnPopupName() == "SetDestinationUnit(Relocate)")
+                    {
+                        ImGui::Begin("Unit Relocate Popup(SetDestination)", &pop, flag);
+                        auto rect = ImGui::GetContentRegionAvail();
+                        auto size = ImGui::CalcTextSize("Please Setting Destination Unit");
+                        imgui::ShiftCursorX((rect.x - size.x) / 2);
+                        imgui::ShiftCursorY((rect.y - size.y) / 2);
+                        ImGui::Text("Please Setting Destination Unit");
+                        ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+                        ImGui::End();
+
+                        pp.ChangeTab("Unit");
+
+                        auto data = epm.GetReturnPopupData<Action_UnitRelocate>();
+                        if (data->isEditing == false && pm.GetCurrentPalette() == &up)
+                        {
+                            data->isEditing = true;
+                            up.Reset();
+                        }
+
+                        if (data->isEditing == true && up.GetSelections().size() == 1)
+                        {
+                            if (data->targetUnit->pod.templateData->pod.skinnedFBXName == static_cast<UnitData*>(*up.GetSelections().begin())->pod.templateData->pod.skinnedFBXName)
+                            {
+                                data->SetDestinationUnit(static_cast<UnitData*>(*up.GetSelections().begin()));
+                                data->isEditing = false;
+                                up.Reset();
+                                epm.Return();
+                            }
+                        }
+
+                        if (!pop)
+                        {
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+                    }
                 }
             }
             ImGui::End();

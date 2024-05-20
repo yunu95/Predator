@@ -137,9 +137,28 @@ namespace application
                 }
             }
             
-            auto obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(pod.templateData->pod.fBXName);
+            GameObject* obj = nullptr;
+
+            if (pod.templateData->pod.fBXName == "Cube" || pod.templateData->pod.fBXName == "Sphere")
+            {
+                obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+            }
+            else
+            {
+                obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(pod.templateData->pod.fBXName);
+            }
     
-            if (pod.templateData->pod.fBXName == "SM_Chess_Bishop")
+            if (pod.templateData->pod.fBXName == "Cube")
+            {
+                auto comp = obj->AddComponent<Interactable_TriggerBox>();
+                comp->SetDataFromEditorData(*this);
+            }
+            else if (pod.templateData->pod.fBXName == "Sphere")
+            {
+                auto comp = obj->AddComponent<Interactable_TriggerSphere>();
+                comp->SetDataFromEditorData(*this);
+            }
+            else if (pod.templateData->pod.fBXName == "SM_Chess_Bishop")
             {
                 obj->AddComponent<Interactable_ChessBishop>();
             }
