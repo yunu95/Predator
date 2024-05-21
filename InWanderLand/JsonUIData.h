@@ -108,5 +108,7 @@ struct JsonUIData
     int customFlags2;
     // UI의 고유한 EnumID
     int enumID;
+    // 사운드 매핑을 위한 ID
+    int soundEnumID;
     FROM_JSON(JsonUIData);
 };

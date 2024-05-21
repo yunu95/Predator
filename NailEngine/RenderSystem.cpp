@@ -224,9 +224,12 @@ void RenderSystem::Render()
     ///DrawDeferredInfo();
 
     // 디퍼드용 SRV UnBind
-    std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
-    std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"))->UnBindGraphicsData();
-    std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"BackBufferMaterial"))->UnBindGraphicsData();
+    static auto Deferred_DirectionalLight = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"));
+    static auto Deferred_Final = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"));
+    static auto BackBufferMaterial = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"BackBufferMaterial"));
+    Deferred_DirectionalLight->UnBindGraphicsData();
+    Deferred_Final->UnBindGraphicsData();
+    BackBufferMaterial->UnBindGraphicsData();
 }
 
 void RenderSystem::RenderObject()
@@ -479,7 +482,7 @@ void RenderSystem::RenderFinal()
     auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
     renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->OMSetRenderTarget();
 
-    auto deferredFinal = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"));
+    static auto deferredFinal = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"));
     deferredFinal->PushGraphicsData();
     ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();
 }

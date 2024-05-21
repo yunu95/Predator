@@ -15,7 +15,7 @@ public:
 		auto bulletGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Fork");
 		projectile->Init();
 		bulletGameObject->SetParent(projectile->GetGameObject());
-		projectile->GetGameObject()->AddComponent<Dotween>();
+		projectile->GetGameObject()->AddComponent<Dotween>()->Start();
 	}
 	virtual void Start() override;
 	virtual void OnContentsStop() override;

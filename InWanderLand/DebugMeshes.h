@@ -10,6 +10,7 @@ enum class DebugMeshType
     Line,
     Cube,
     Sphere,
+    Capsule,
     Rectangle,
 };
 

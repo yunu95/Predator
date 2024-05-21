@@ -128,6 +128,7 @@ namespace application
             Vector3d startScale = Vector3d(pod.scale.x, pod.scale.y, pod.scale.z);
 
             GameObject* obj = nullptr;
+            IInteractableComponent* comp = nullptr;
 
             if (pod.templateData->pod.fBXName == "Trigger_Cube" || pod.templateData->pod.fBXName == "Trigger_Sphere")
             {
@@ -149,43 +150,44 @@ namespace application
     
             if (pod.templateData->pod.fBXName == "Trigger_Cube")
             {
-                auto comp = obj->AddComponent<Interactable_TriggerBox>();
-                comp->SetDataFromEditorData(*this);
+                comp = obj->AddComponent<Interactable_TriggerBox>();
             }
             else if (pod.templateData->pod.fBXName == "Trigger_Sphere")
             {
-                auto comp = obj->AddComponent<Interactable_TriggerSphere>();
-                comp->SetDataFromEditorData(*this);
+                comp = obj->AddComponent<Interactable_TriggerSphere>();
             }
             else if (pod.templateData->pod.fBXName == "SM_Chess_Bishop")
             {
-                obj->AddComponent<Interactable_ChessBishop>();
+                comp = obj->AddComponent<Interactable_ChessBishop>();
             }
             else if (pod.templateData->pod.fBXName == "SM_Chess_Pawn")
             {
-                obj->AddComponent<Interactable_ChessPawn>();
+                comp = obj->AddComponent<Interactable_ChessPawn>();
             }
             else if (pod.templateData->pod.fBXName == "SM_Chess_Rook")
             {
-                obj->AddComponent<Interactable_ChessRook>();
+                comp = obj->AddComponent<Interactable_ChessRook>();
             }
             else if (pod.templateData->pod.fBXName == "SM_Spike01")
             {
-                obj->AddComponent<Interactable_SpikeTrap>();
+                comp = obj->AddComponent<Interactable_SpikeTrap>();
             }
+
+            inGameInteractable = comp;
+            comp->SetDataFromEditorData(*this);
 
             if (hasAnimation)
             {
                 auto& ptm = particle::ParticleTool_Manager::GetSingletonInstance();
                 const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-                auto animator = inGameInteractable->GetComponent<graphics::Animator>();
+                auto animator = inGameInteractable->GetGameObject()->GetComponent<graphics::Animator>();
                 std::wstring fbxNameW;
                 fbxNameW.assign(pod.templateData->pod.fBXName.begin(), pod.templateData->pod.fBXName.end());
 
                 /// Particle Setting
                 for (auto& eachPI : ptm.GetChildrenParticleInstanceList(pod.templateData->pod.fBXName))
                 {
-                    auto pObj = inGameInteractable->AddGameObject();
+                    auto pObj = inGameInteractable->GetGameObject()->AddGameObject();
                     auto sptr = eachPI.lock();
                     pObj->GetTransform()->SetLocalPosition(sptr->offsetPos);
                     pObj->GetTransform()->SetLocalRotation(sptr->rotation);
@@ -238,7 +240,7 @@ namespace application
                             {
                                 auto ptr = static_cast<GameObject_ActivateEvent*>(event.get());
                                 GameObject* particle = nullptr;
-                                for (auto& child : inGameInteractable->GetChildren())
+                                for (auto& child : inGameInteractable->GetGameObject()->GetChildren())
                                 {
                                     if (child->getName() == ptr->objName)
                                     {
@@ -260,7 +262,7 @@ namespace application
                             {
                                 auto ptr = static_cast<GameObject_DisabledEvent*>(event.get());
                                 GameObject* particle = nullptr;
-                                for (auto& child : inGameInteractable->GetChildren())
+                                for (auto& child : inGameInteractable->GetGameObject()->GetChildren())
                                 {
                                     if (child->getName() == ptr->objName)
                                     {
@@ -280,7 +282,7 @@ namespace application
                             {
                                 auto ptr = static_cast<GameObject_TransformEditEvent*>(event.get());
                                 GameObject* particle = nullptr;
-                                for (auto& child : inGameInteractable->GetChildren())
+                                for (auto& child : inGameInteractable->GetGameObject()->GetChildren())
                                 {
                                     if (child->getName() == ptr->objName)
                                     {
@@ -316,7 +318,7 @@ namespace application
                             {
                                 auto ptr = static_cast<GameObject_AwakeEvent*>(event.get());
                                 GameObject* particle = nullptr;
-                                for (auto& child : inGameInteractable->GetChildren())
+                                for (auto& child : inGameInteractable->GetGameObject()->GetChildren())
                                 {
                                     if (child->getName() == ptr->objName)
                                     {
@@ -341,10 +343,57 @@ namespace application
             }
         }
 
+        void InteractableData::PostApplyAsPlaytimeObject()
+        {
+            static auto& im = InstanceManager::GetSingletonInstance();
+            for (auto each : pod.targetInteractables)
+            {
+                inGameInteractable->InsertInteractableTarget(static_cast<InteractableData*>(im.GetInstance(String_To_UUID(each)))->inGameInteractable);
+            }
+        }
+
         bool InteractableData::EnterDataFromGlobalConstant()
         {
             auto& data = GlobalConstant::GetSingletonInstance().pod;
             return true;
+        }
+
+        bool InteractableData::AddTargetInteractables(InteractableData* target)
+        {
+            if (!target || this == target)
+            {
+                return false;
+            }
+
+            pod.targetInteractables.insert(UUID_To_String(target->GetUUID()));
+            target->RegisterObserver(this);
+            return true;
+        }
+
+        bool InteractableData::EraseTargetInteractables(InteractableData* target)
+        {
+            if (!target)
+            {
+                return false;
+            }
+
+            pod.targetInteractables.erase(UUID_To_String(target->GetUUID()));
+            target->RemoveObserver(this);
+            return true;
+        }
+
+        void InteractableData::ProcessObervationEvent(ObservationTarget* target, ObservationEvent event)
+        {
+            switch (event)
+            {
+                case application::ObservationEvent::Destroy:
+                {
+                    pod.targetInteractables.erase(UUID_To_String(static_cast<InteractableData*>(target)->GetUUID()));
+                    break;
+                }
+                default:
+                    break;
+            }
         }
 
         bool InteractableData::PreEncoding(json& data) const

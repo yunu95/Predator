@@ -158,7 +158,7 @@ void ResourceManager::DeleteDeferredTexture()
     }
 }
 
-yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec)
+yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec, const std::vector<yunuGI::Vector2>& uvVec)
 {
     std::shared_ptr<Mesh> tempMesh = std::make_shared<Mesh>();
 
@@ -166,16 +166,16 @@ yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yu
 
     std::vector<Vertex> vertices;
 
-    for (int i = 0; i < posVec.size(); ++i)
-    {
-        DirectX::SimpleMath::Vector3 tempNormal = normalVec.size() == 0 ? DirectX::SimpleMath::Vector3{ 0.f, 0.f, 0.f } : DirectX::SimpleMath::Vector3{ normalVec[i].x,normalVec[i].y ,normalVec[i].z };
-        vertices.emplace_back(Vertex{ DirectX::SimpleMath::Vector3{posVec[i].x, posVec[i].y, posVec[i].z},
-                          DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
-                          DirectX::SimpleMath::Vector2{0.5f,0.5f},
-                          DirectX::SimpleMath::Vector2{0.5f,0.5f},
-                          tempNormal,
-                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } });
-    }
+	for (int i = 0; i < posVec.size(); ++i)
+	{
+		DirectX::SimpleMath::Vector3 tempNormal = normalVec.size() == 0 ? DirectX::SimpleMath::Vector3{ 0.f, 0.f, 0.f } : DirectX::SimpleMath::Vector3{ normalVec[i].x,normalVec[i].y ,normalVec[i].z };
+		vertices.emplace_back(Vertex{ DirectX::SimpleMath::Vector3{posVec[i].x, posVec[i].y, posVec[i].z},
+						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+						  uvVec.empty() ? DirectX::SimpleMath::Vector2{0.5f,0.5f} : DirectX::SimpleMath::Vector2{uvVec[i].x,uvVec[i].y},
+						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
+						  tempNormal,
+						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } });
+	}
 
 
     DirectX::SimpleMath::Vector3 minPoint = vertices[0].pos;
@@ -971,6 +971,8 @@ void ResourceManager::CreateDefaultShader()
     CreateShader(L"UIPreProcessPS.cso");
     CreateShader(L"TextureAnimPS.cso");
     CreateShader(L"RimForwardPS.cso");
+	CreateShader(L"GuideLinePS.cso");
+	CreateShader(L"Stage1FloorNoBlendPS.cso");
 #pragma endregion
 
 #pragma region GS
@@ -1239,27 +1241,6 @@ void ResourceManager::CreateDefaultTexture()
     texture1->CreateLightMapArray(tempVec1);
     textureMap.insert({ L"Stage2LightMap", texture1 });
     textureVec.push_back(texture1.get());
-
-    //texture->SetName(L"LightMapList");
-    //std::vector<yunuGI::ITexture*> tempVec;
-    //tempVec.push_back(GetTexture(L"Texture/Test0.png").get());
-    //tempVec.push_back(GetTexture(L"Texture/Test1.png").get());
-    //texture->CreateLightMapArray(tempVec);
-    //textureMap.insert({ L"LightMapList", texture });
-    //textureVec.push_back(texture.get());
-
-    //CreateTexture(L"Texture/Brick_Albedo.jpg");
-    //CreateTexture(L"Texture/Brick_Normal.jpg");
-
-
-
-    //	auto dsTexture = ResourceManager::Instance.Get().CreateTexture(
-//		L"ShadowTargetDepth",
-//		SM_SIZE,
-//		SM_SIZE,
-//		DXGI_FORMAT_D24_UNORM_S8_UINT,
-//		static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL)
-//	);
 
     CreateTexture(L"ShadowDepth", SM_SIZE, SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE));
 

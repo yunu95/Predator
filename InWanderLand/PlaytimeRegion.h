@@ -10,28 +10,29 @@ class Unit;
 
 namespace application::editor
 {
-	class RegionData;
+    class RegionData;
 }
 class PlaytimeRegion : public Component, public ContentsObservee
 {
 private:
-	application::editor::RegionData* regionData{nullptr};
-	//std::wstring m_regionName;
+    application::editor::RegionData* regionData{ nullptr };
+    //std::wstring m_regionName;
 
-	bool isOnceActivated{ false };
+    bool isOnceActivated{ false };
+    std::unordered_set<physics::Collider*> enteredPlayerColliders;
 
 public:
-	virtual ~PlaytimeRegion();
+    virtual ~PlaytimeRegion();
 
-	// 주인공 일행이 하나라도 지역에 입장할 시에 추가로 호출되는 콜백
-	std::vector<std::function<void()>> OnEnter;
-	// 주인공 일행이 모두 지역에서 퇴장할 시에 추가로 호출되는 콜백
-	std::vector<std::function<void()>> OnLeave;
-	//void SetRegionName(std::wstring p_name);
-	virtual void Start() override;
-	virtual void OnTriggerEnter(physics::Collider* collider) override;
-	virtual void OnTriggerExit(physics::Collider* collider) override;
-	virtual Component* GetComponent() override { return this; }
-	friend application::editor::RegionData;
+    // 주인공 일행이 하나라도 지역에 입장할 시에 추가로 호출되는 콜백
+    std::vector<std::function<void()>> OnEnter;
+    // 주인공 일행이 모두 지역에서 퇴장할 시에 추가로 호출되는 콜백
+    std::vector<std::function<void()>> OnLeave;
+    //void SetRegionName(std::wstring p_name);
+    virtual void Start() override;
+    virtual void OnTriggerEnter(physics::Collider* collider) override;
+    virtual void OnTriggerExit(physics::Collider* collider) override;
+    virtual Component* GetComponent() override { return this; }
+    friend application::editor::RegionData;
 };
 

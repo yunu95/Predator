@@ -13,6 +13,7 @@ coroutine::Coroutine InitialLoadingScreen::ShowLoadingScreen()
     auto uiImage = videoObj->AddComponent<graphics::UIImage>();
     auto videoPlayer = videoObj->AddComponent<graphics::VideoPlayer>();
     auto resol = graphics::Renderer::SingleInstance().GetResolution();
+    uiImage->GetGI().SetLayer(1234567891);
     uiImage->GetGI().SetWidth(resol.x);
     uiImage->GetGI().SetHeight(resol.y);
     auto videoNailEngine = graphics::Renderer::SingleInstance().GetResourceManager()->GetVideoData(L"Texture/LoadingScreen/NailEngine.mp4");
@@ -56,6 +57,11 @@ coroutine::Coroutine InitialLoadingScreen::ShowLoadingScreen()
     {
         co_await std::suspend_always{};
     }
+    co_await std::suspend_always{};
+#ifndef  EDITOR
+    UIManager::Instance().FadeOutRight(0);
+    UIManager::Instance().FadeIn(2);
+#endif 
     Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
     Scene::getCurrentScene()->DestroyGameObject(videoObj);
     co_return;

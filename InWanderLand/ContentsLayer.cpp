@@ -13,6 +13,7 @@
 #include "SingleNavigationField.h"
 #include "TestUtilRTSTestCam.h"
 #include "WarriorProductor.h"
+#include "HealerAutoAttackProjectilePool.h"
 #include "MagicianProductor.h"
 #include "HealerProductor.h"
 #include "BossProductor.h"
@@ -35,6 +36,8 @@
 #include "ParticleTool_Manager.h"
 #include "UVAnimator.h"
 #include "InitialLoadingScreen.h"
+#include "InstanceManager.h"
+
 
 #include <algorithm>
 #include <string>
@@ -82,30 +85,21 @@ public:
 class TestComponent4 : public yunutyEngine::Component
 {
 public:
+    SkillPreviewSystem* system;
     yunutyEngine::GameObject* obj;
+    yunutyEngine::GameObject* camObj;
+    bool isShow = false;
     virtual void Update() override
     {
-        obj = GetGameObject();
-        if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
+        if (yunutyEngine::Input::isKeyPushed(KeyCode::Z))
         {
-            auto curScale = obj->GetTransform()->GetLocalScale();
-            curScale.x += 0.1f;
-            obj->GetTransform()->SetLocalScale(curScale);
+            //auto obj = Scene::getCurrentScene()->AddGameObject();
+            //auto tween = obj->AddComponent<Dotween>();
+            //tween->SetActive(false);
+
+            HealerAutoAttackProjectilePool::Instance().Borrow();
         }
-        if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
-        {
-            auto curScale = obj->GetTransform()->GetLocalScale();
-            curScale.x -= 0.1f;
-            obj->GetTransform()->SetLocalScale(curScale);
-        }
-        //if (Input::isKeyPushed(yunutyEngine::KeyCode::O))
-        //{
-        //	renderer->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
-        //}
-        //if (Input::isKeyPushed(yunutyEngine::KeyCode::K))
-        //{
-        //	renderer->SetParticleMode(yunutyEngine::graphics::ParticleMode::Default);
-        //}
+
     }
 };
 
@@ -115,10 +109,12 @@ void GraphicsTest()
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     camObj->AddComponent<tests::GraphicsTestCam>();
 
-    const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+    auto skillPreviewSystem = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    auto systemComponent = skillPreviewSystem->AddComponent<SkillPreviewSystem>();
+    systemComponent->Init();
+    systemComponent->camObj = camObj;
 
-    yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(false);
-    yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage2LightMap");
+    const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
     auto& animationList = _resourceManager->GetAnimationList();
     yunuGI::IAnimation* animation = nullptr;
@@ -146,44 +142,21 @@ void GraphicsTest()
         }
     }
 
-    /*   {
-           auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-           auto test = obj2->AddComponent<TestComponent4>();
-           auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
 
-           test->anim = anim;
-           test->animation = animation;
-           test->animation2 = animation2;
+	{
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("Cube");
+        obj2->GetTransform()->SetLocalScale(Vector3d{ 0.01,0.01,0.01 });
 
-           anim->PushAnimation(animation);
-           anim->PushAnimation(animation2);
-           anim->Play(animation);
-       }*/
-    {
-        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-        auto animator = obj2->GetComponent<yunutyEngine::graphics::Animator>();
-        animator->PushAnimation(animation2);
-        animator->Play(animation2);
-    }
 
-    //{
-    //    auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
-    //}
-
-    {
-        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Ursula");
-        auto animator = obj2->GetComponent<yunutyEngine::graphics::Animator>();
-        animator->PushAnimation(animation);
-        animator->Play(animation);
-
+		auto obj3 = Scene::getCurrentScene()->AddGameObject();
+		auto test = obj3->AddComponent<TestComponent4>();
+        test->obj = obj2;
+        test->system = systemComponent;
+        test->camObj = camObj;
     }
 
     {
-        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
-        auto animator = obj2->GetComponent<yunutyEngine::graphics::Animator>();
-        animator->PushAnimation(animation3);
-        animator->Play(animation3);
-
+        
     }
     yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
     //yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
@@ -203,7 +176,7 @@ class ContentsInitializer : public yunutyEngine::Component
     coroutine::Coroutine Initialize()
     {
         chrono::steady_clock::time_point base = chrono::high_resolution_clock::now();
-        wanderUtils::ResourceRecursiveLoader::Load("./", {".cso"});
+        wanderUtils::ResourceRecursiveLoader::Load("./", { ".cso" });
         wanderUtils::ResourceRecursiveLoader::Load("Texture/LoadingScreen/");
         wanderUtils::ResourceRecursiveLoader::Load("sounds/LoadingScreen/");
         auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(chrono::high_resolution_clock::now() - base);
@@ -264,6 +237,7 @@ class ContentsInitializer : public yunutyEngine::Component
                 test3->text_Render = text;
             }
         }
+
 #ifndef EDITOR
 #ifdef GRAPHICS_TEST
         {
@@ -278,26 +252,23 @@ class ContentsInitializer : public yunutyEngine::Component
         GraphicsTest();
 #else
         {
-            application::editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
-            static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().layers[(int)application::Application::LayerList::ContentsLayer])->PlayContents();
+            UIManager::Instance().ImportUI("InWanderLand.iwui");
+            UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight)->EnableElement();
+            UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight)->DisableElement();
+            //static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().layers[(int)application::Application::LayerList::ContentsLayer])->PlayContents();
         }
 #endif
 #endif
         Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-#ifdef EDITOR
-        application::Application::GetInstance().CheckContentsLayerInit();
-
-        application::Application::GetInstance().layers[(int)application::Application::LayerList::EditorLayer]->Initialize();
-
-        static_cast<application::editor::EditorLayer*>(application::Application::GetInstance().layers[(int)application::Application::LayerList::EditorLayer])->LateInitialize();
-#endif
         co_return;
     }
+
     virtual void Start() override
     {
         StartCoroutine(Initialize());
     }
 };
+
 void application::contents::ContentsLayer::Initialize()
 {
     if (ContentsLayer::testInitializer)
@@ -342,27 +313,6 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
     InputManager::Instance().SetInputManagerActive(true);
     PlayerSkillManager::Instance();
     GameManager::Instance().Reset();
-
-    //InputManager::Instance();
-    //UIManager::Instance();
-
-    /// Editor 에서 수정하여 Map Data 에 저장할 부분
-
-    /// 카메라의 경우 CameraData 의 ApplyInstancesAsPlaytimeObjects 에서 처리함
-
-    //auto skillPreviewCubeMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //AttachDebugMesh(skillPreviewCubeMeshObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
-    //SkillPreviewSystem::Instance().SetPathPreviewObject(skillPreviewCubeMeshObject);
-
-    //auto skillPreviewSphereMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //AttachDebugMesh(skillPreviewSphereMeshObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
-    //SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
-
-    /// 임시
-    //RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
-    //RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
-    //RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
-    //RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
 
     auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 

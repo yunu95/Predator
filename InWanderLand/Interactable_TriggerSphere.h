@@ -6,14 +6,6 @@
 
 #include "IInteractableComponent.h"
 
-namespace application
-{
-	namespace editor
-	{
-		class InteractableData;
-	}
-}
-
 class Interactable_TriggerSphere
 	: public IInteractableComponent
 {
@@ -29,7 +21,6 @@ public:
 		{
 			triggerStay.insert(collider);
 			OnInteractableTriggerEnter();
-			std::cout << "TriggerEnter : Sphere\n";
 		}
 	}
 
@@ -42,13 +33,12 @@ public:
 			if (triggerStay.size() == 1)
 			{
 				OnInteractableTriggerExit();
-				std::cout << "TriggerExit : Sphere\n";
 			}
 			triggerStay.erase(collider);
 		}
 	}
 
-	void SetDataFromEditorData(const application::editor::InteractableData& data);
+	virtual void SetDataFromEditorData(const application::editor::InteractableData& data) override;
 
 	virtual yunutyEngine::coroutine::Coroutine DoInteraction() override;
 

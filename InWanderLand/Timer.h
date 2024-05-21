@@ -4,7 +4,6 @@
 #include "LocalTimeEntity.h"
 #include "ContentsObservee.h"
 
-
 class TimerComponent : public Component, public LocalTimeEntity
 {
 private:
@@ -22,7 +21,6 @@ public:
     virtual void Update() override;
     //virtual void PlayFunction() override;
     //virtual void StopFunction() override;
-
 
 public:
     std::function<void(float normalizedT)> onUpdate = [](float) {};

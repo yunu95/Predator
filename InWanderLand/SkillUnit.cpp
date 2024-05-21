@@ -22,13 +22,14 @@ void SkillUnit::Start()
 	unitFSM.updateAction[UnitState::Skill] = [this]() { SkillUpdate(); };
 }
 
-
 void SkillUnit::SkillEngage()
 {
 	currentOrder = UnitState::Skill;
+	StopAllStateTimer();
 	ChangeAnimation(unitAnimations.m_idleAnimation);
 	isSkillUsed = false;
 	skillFunctionStartElapsed = 0.0f;
+
 	int tempRand = rand() % 3 + 1;
 
 	if (m_unitType == UnitType::Boss)
