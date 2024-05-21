@@ -7,7 +7,7 @@ class LocalTimeEntity;
 class LocalTimeEntityManager : public SingletonComponent<LocalTimeEntityManager>, public Component, public PermanentObservee
 {
 private:
-	std::vector<LocalTimeEntity*> m_entityVector;
+	std::unordered_set<LocalTimeEntity*> m_entitySet;
 
 public:
 	~LocalTimeEntityManager();
@@ -20,5 +20,6 @@ public:
 	void ReportTacticModeEnded();
 
 	void SetLocalTimeScaleDirectly(LocalTimeEntity* p_entity, float p_scale);
+	friend LocalTimeEntity;
 };
 

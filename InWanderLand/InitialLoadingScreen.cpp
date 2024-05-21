@@ -57,6 +57,9 @@ coroutine::Coroutine InitialLoadingScreen::ShowLoadingScreen()
     {
         co_await std::suspend_always{};
     }
+    co_await std::suspend_always{};
+    UIManager::Instance().FadeOutRight(0);
+    UIManager::Instance().FadeIn(2);
     Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
     Scene::getCurrentScene()->DestroyGameObject(videoObj);
     co_return;
