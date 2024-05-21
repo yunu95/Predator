@@ -151,12 +151,10 @@ namespace application
             if (pod.templateData->pod.fBXName == "Trigger_Cube")
             {
                 comp = obj->AddComponent<Interactable_TriggerBox>();
-                static_cast<Interactable_TriggerBox*>(comp)->SetDataFromEditorData(*this);
             }
             else if (pod.templateData->pod.fBXName == "Trigger_Sphere")
             {
                 comp = obj->AddComponent<Interactable_TriggerSphere>();
-                static_cast<Interactable_TriggerBox*>(comp)->SetDataFromEditorData(*this);
             }
             else if (pod.templateData->pod.fBXName == "SM_Chess_Bishop")
             {
@@ -176,6 +174,7 @@ namespace application
             }
 
             inGameInteractable = comp;
+            comp->SetDataFromEditorData(*this);
 
             if (hasAnimation)
             {
