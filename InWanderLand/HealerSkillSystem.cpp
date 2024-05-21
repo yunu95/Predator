@@ -120,9 +120,9 @@ void HealerSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 void HealerSkillSystem::SetSkillRequirmentLocalTimeScale(float p_scale)
 {
     if (QSkillFieldDamage.dotweenComponent)
-        LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(QSkillFieldDamage.dotweenComponent, p_scale);
+        QSkillFieldDamage.dotweenComponent->SetLocalTimeScaleDirectly(p_scale);
     if (WSkillFieldDamage.dotweenComponent)
-        LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(WSkillFieldDamage.dotweenComponent, p_scale);
+        WSkillFieldDamage.dotweenComponent->SetLocalTimeScaleDirectly(p_scale);
 }
 
 void HealerSkillSystem::Start()

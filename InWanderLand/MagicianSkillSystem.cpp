@@ -103,13 +103,13 @@ void MagicianSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 void MagicianSkillSystem::SetSkillRequirmentLocalTimeScale(float p_scale)
 {
     if (QSkillProjectile.dotweenComponent)
-        LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(QSkillProjectile.dotweenComponent, p_scale);
+        QSkillProjectile.dotweenComponent->SetLocalTimeScaleDirectly(p_scale);
     if (QSkillFieldDamage.dotweenComponent)
-        LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(QSkillFieldDamage.dotweenComponent, p_scale);
+        QSkillFieldDamage.dotweenComponent->SetLocalTimeScaleDirectly(p_scale);
     if (WSkillProjectile.dotweenComponent)
-        LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(WSkillProjectile.dotweenComponent, p_scale);
+        WSkillProjectile.dotweenComponent->SetLocalTimeScaleDirectly(p_scale);
     if (WSkillFieldDamage.dotweenComponent)
-        LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(WSkillFieldDamage.dotweenComponent, p_scale);
+        WSkillFieldDamage.dotweenComponent->SetLocalTimeScaleDirectly(p_scale);
 }
 
 void MagicianSkillSystem::SetInterActionComponent(BlindFieldComponent* p_QSkillComponent, ParalysisFieldComponent* p_WSkillComponent)
