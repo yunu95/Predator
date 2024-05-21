@@ -7,31 +7,7 @@
 
 void RangedAttackSystem::Attack(Unit* opponentUnit, float offset)
 {
-	switch (m_ownerUnit->GetUnitType())
-	{
-		case Unit::UnitType::Magician :
-		{
-			MagicianAutoAttackProjectilePool::Instance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
-			break;
-		}
-		case Unit::UnitType::Healer:
-		{
-			HealerAutoAttackProjectilePool::Instance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
-			break;
-		}
-		case Unit::UnitType::RangedEnemy:
-		{
-			EnemyAutoAttackProjectile* projectile = EnemyAutoAttackProjectilePool::Instance().Borrow();
-			projectile->SetStraightBulletRange(m_range);
-			projectile->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
-			break;
-		}
-		default:
-		{
-			//AutoAttackProjectilePool::Instance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
-			break;
-		}
-	}
+	m_currentReloadedProjectile->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
 }
 
 void RangedAttackSystem::SetOwnerUnit(Unit* p_unit)
@@ -52,4 +28,32 @@ void RangedAttackSystem::SetRange(float p_rng)
 void RangedAttackSystem::Start()
 {
 	m_ownerUnit = GetGameObject()->GetComponent<Unit>();
+}
+
+void RangedAttackSystem::ReloadProjectile()
+{
+	switch (m_ownerUnit->GetUnitType())
+	{
+	case Unit::UnitType::Magician:
+	{
+		m_currentReloadedProjectile = MagicianAutoAttackProjectilePool::Instance().Borrow();
+		break;
+	}
+	case Unit::UnitType::Healer:
+	{
+		m_currentReloadedProjectile = HealerAutoAttackProjectilePool::Instance().Borrow();
+		break;
+	}
+	case Unit::UnitType::RangedEnemy:
+	{
+		m_currentReloadedProjectile = HealerAutoAttackProjectilePool::Instance().Borrow();
+		m_currentReloadedProjectile->SetStraightBulletRange(m_range);
+		break;
+	}
+	default:
+	{
+		//AutoAttackProjectilePool::Instance().Borrow()->Shoot(m_ownerUnit, opponentUnit, m_bulletSpeed, offset);
+		break;
+	}
+	}
 }

@@ -33,14 +33,10 @@ enum TimerIndex
 	End
 };
 
-class Dotween : public Component, public LocalTimeEntity
+class Dotween : public Component
 {
 public:
-	Dotween();
-	~Dotween();
-
 	virtual void Start() override;
-	void Awake();
 	virtual void Update() override;
 
 	void StopAllDotweenFunction();
@@ -76,14 +72,16 @@ public:
 
 	//void clearDotweenTimerMap();
 
-	DotweenTimer* tempTimer;
+	void SetLocalTimeScaleDirectly(float p_timeScale);
+
 private:
 	Vector3d randPos;
 	Vector3d randRange;
 
-	TimerIndex currentTimerIndex;
+	std::vector<DotweenTimer*> dotweenTimerArray;
 
-	DotweenTimer* dotweenTimerArray[TimerIndex::End] = { nullptr, };
+	DotweenTimer* currentSelectedTimer{ nullptr };
+	TimerIndex currentTimerIndex;
 
 	double previousAngle;
 

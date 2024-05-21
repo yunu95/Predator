@@ -9,6 +9,7 @@
 /// </summary>
 
 class StatusEffect;
+class PlayerUnit;
 
 class AutoAttackProjectile : public Component, public ContentsObservee
 {
@@ -24,7 +25,7 @@ protected:
 	Vector3d m_ownerUnitFront;
 	float localTimeScale{ 1 };
 
-	std::vector<Unit*> m_playerUnitVector;
+	std::vector<PlayerUnit*> m_playerUnitVector;
 
 public:
 	void Init();

@@ -11,6 +11,7 @@ public:
 	virtual void ObjectInitializer(PassiveCake* passiveCake) override
 	{
 		auto dotween = passiveCake->GetGameObject()->AddComponent<Dotween>();
+		dotween->Start();
 		passiveCake->SetDotweenComponent(dotween);
 
 		auto cakeMeshObject = Scene::getCurrentScene()->AddGameObject();
