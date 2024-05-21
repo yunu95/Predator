@@ -22,7 +22,6 @@ void SpikeSkillSystem::Update()
 		isSkillOperating = true;
 		ActivateSkill(Unit::SkillEnum::BossSkillOne, Vector3d::zero);
 	}
-
 }
 
 void SpikeSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition)

@@ -29,6 +29,8 @@ namespace application
             virtual void Finalize() override;
 
             void PlayContents(ContentsPlayFlag playFlag = ContentsPlayFlag::ImportUI);
+            // 네비게이션 빌드에 겁나 많은 시간이 들어가므로 네비게이션 빌드만 따로 스레드로 빼고 싶을때 사용
+            //coroutine::Coroutine BuildNavFieldCoroutine(ContentsPlayFlag playFlag = ContentsPlayFlag::ImportUI);
             void PauseContents();
             void ResumeContents();
             void StopContents(ContentsStopFlag playFlag = ContentsStopFlag::ClearUI);

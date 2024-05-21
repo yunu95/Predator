@@ -155,6 +155,8 @@ void UnitProductor::AddColliderComponent() const
     unitCollider->SetHalfHeight(UNIT_LENGTH * 0.5f);
     unitCollider->SetRadius(UNIT_LENGTH * 0.5f);
     m_unitGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+
+    //AttachDebugMesh(m_unitGameObject, DebugMeshType::Capsule, yunuGI::Color::green(), false);
 }
 
 void UnitProductor::AddNavigationComponent()

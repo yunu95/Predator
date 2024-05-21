@@ -113,7 +113,9 @@ namespace application
 #ifdef _DEBUG
             ApplyDebugMesh();
 #endif
+            SingleNavigationField::Instance().SetActive(false);
             SingleNavigationField::Instance().BuildField(vertexList2, indexList2);
+            SingleNavigationField::Instance().SetActive(true);
             isTerrainfoCached = true;
         }
 

@@ -7,6 +7,14 @@ void UVAnimator::SetStaticMeshRenderer(yunutyEngine::graphics::StaticMeshRendere
 	this->renderer = renderer;
 }
 
+void UVAnimator::SetMesh(yunuGI::IMesh* mesh)
+{
+	if (this->renderer)
+	{
+		this->renderer->GetGI().SetMesh(mesh);
+	}
+}
+
 void UVAnimator::SetTexture(yunuGI::ITexture* texture)
 {
 	if (this->renderer)

@@ -646,10 +646,16 @@
     <FxCompile Include="RuntimeDependency\resources\Shader\RimForwardPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\GuideLinePS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
     <FxCompile Include="RuntimeDependency\resources\Shader\VideoVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="RuntimeDependency\resources\Shader\VideoPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\Stage1FloorNoBlendPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
