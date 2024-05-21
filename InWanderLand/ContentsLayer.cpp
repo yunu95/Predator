@@ -250,9 +250,6 @@ class ContentsInitializer : public yunutyEngine::Component
         auto logoObj = Scene::getCurrentScene()->AddGameObject()->AddComponent<InitialLoadingScreen>();
         tempCam->SetCameraMain();
 
-#ifndef GRAPHICS_TEST
-        application::editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
-#endif
         auto loadingCoroutine = StartCoroutine(wanderUtils::ResourceRecursiveLoader::LoadByCoroutine());
         while (!loadingCoroutine.expired())
         {

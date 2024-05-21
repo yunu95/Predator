@@ -168,6 +168,9 @@ namespace wanderUtils
 #endif
             }
 
+#ifndef GRAPHICS_TEST
+            application::editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
+#endif
             editor::TerrainData* terrainData = nullptr;
             for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::TerrainData>())
             {
