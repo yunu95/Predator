@@ -168,6 +168,17 @@ namespace wanderUtils
 #endif
             }
 
+#ifdef EDITOR
+            application::Application::GetInstance().CheckContentsLayerInit();
+
+            application::Application::GetInstance().layers[(int)application::Application::LayerList::EditorLayer]->Initialize();
+
+            static_cast<application::editor::EditorLayer*>(application::Application::GetInstance().layers[(int)application::Application::LayerList::EditorLayer])->LateInitialize();
+#endif
+
+#ifndef GRAPHICS_TEST
+            application::editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
+#endif
             editor::TerrainData* terrainData = nullptr;
             for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::TerrainData>())
             {

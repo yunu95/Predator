@@ -29,7 +29,6 @@ public:
 		{
 			triggerStay.insert(collider);
 			OnInteractableTriggerEnter(); 
-			std::cout << "TriggerEnter : Box\n";
 		}
 	}
 
@@ -42,7 +41,6 @@ public:
 			if (triggerStay.size() == 1)
 			{
 				OnInteractableTriggerExit();
-				std::cout << "TriggerExit : Box\n";
 			}
 			triggerStay.erase(collider);
 		}
