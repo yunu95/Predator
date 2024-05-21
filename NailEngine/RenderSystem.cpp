@@ -224,9 +224,12 @@ void RenderSystem::Render()
     ///DrawDeferredInfo();
 
     // 디퍼드용 SRV UnBind
-    std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"))->UnBindGraphicsData();
-    std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"))->UnBindGraphicsData();
-    std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"BackBufferMaterial"))->UnBindGraphicsData();
+    static auto Deferred_DirectionalLight = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"));
+    static auto Deferred_Final = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"));
+    static auto BackBufferMaterial = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"BackBufferMaterial"));
+    Deferred_DirectionalLight->UnBindGraphicsData();
+    Deferred_Final->UnBindGraphicsData();
+    BackBufferMaterial->UnBindGraphicsData();
 }
 
 void RenderSystem::RenderObject()

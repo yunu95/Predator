@@ -27,6 +27,7 @@ private:
     std::unordered_map<int, JsonUIData> localUIdatasByIndex;
     bool enabled = true;
 public:
+    bool GetUIEnabled() { return enabled; }
     virtual void Start() override;
     int duplicatePriorityOffset = 0;
     JsonUIData importedUIData;

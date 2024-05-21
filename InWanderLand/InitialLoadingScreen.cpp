@@ -13,6 +13,7 @@ coroutine::Coroutine InitialLoadingScreen::ShowLoadingScreen()
     auto uiImage = videoObj->AddComponent<graphics::UIImage>();
     auto videoPlayer = videoObj->AddComponent<graphics::VideoPlayer>();
     auto resol = graphics::Renderer::SingleInstance().GetResolution();
+    uiImage->GetGI().SetLayer(1234567891);
     uiImage->GetGI().SetWidth(resol.x);
     uiImage->GetGI().SetHeight(resol.y);
     auto videoNailEngine = graphics::Renderer::SingleInstance().GetResourceManager()->GetVideoData(L"Texture/LoadingScreen/NailEngine.mp4");
