@@ -324,13 +324,6 @@ class ContentsInitializer : public yunutyEngine::Component
 #endif
 #endif
         Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-#ifdef EDITOR
-        application::Application::GetInstance().CheckContentsLayerInit();
-
-        application::Application::GetInstance().layers[(int)application::Application::LayerList::EditorLayer]->Initialize();
-
-        static_cast<application::editor::EditorLayer*>(application::Application::GetInstance().layers[(int)application::Application::LayerList::EditorLayer])->LateInitialize();
-#endif
         co_return;
     }
     virtual void Start() override

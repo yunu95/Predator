@@ -16,6 +16,10 @@
 #include <type_traits>
 #include <mutex>
 
+namespace wanderUtils
+{
+    class ResourceRecursiveLoader;
+}
 class ContentsInitializer;
 namespace application
 {
@@ -143,5 +147,6 @@ namespace application
         editor::EventManager em = editor::EventManager();
         editor::EditorInputManager& eim = editor::EditorInputManager::GetSingletonInstance();
         friend ContentsInitializer;
+        friend wanderUtils::ResourceRecursiveLoader;
     };
 }
