@@ -987,7 +987,12 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
         element->button->AddButtonClickFunction([=]()
             {
-                application::editor::CommandManager::GetSingletonInstance().AddQueue(std::make_shared<application::editor::ProgramExitCommand>());
+                StartCoroutine([=]() ->coroutine::Coroutine {
+                    FadeOutTop(2);
+                    co_yield coroutine::WaitForSeconds(3.2f);
+                    Application::GetInstance().TurnOff();
+                    co_return;
+                    }());
             });
         break;
     case UIEnumID::BlackMask_GameLoad:
