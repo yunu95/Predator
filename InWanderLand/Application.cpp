@@ -146,7 +146,7 @@ namespace application
         SetWindowPos(hWND, NULL, 0, 0, newWidth, newHeight, SWP_NOMOVE | SWP_NOZORDER);
 #ifndef EDITOR
         LONG_PTR style = GetWindowLongPtr(hWND, GWL_STYLE);
-        style &= ~WS_CAPTION;
+        style &= ~(WS_CAPTION | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU);
         SetWindowLongPtr(hWND, GWL_STYLE, style);
 #endif
 
@@ -247,12 +247,12 @@ namespace application
                 ImGui::DestroyContext();
                 CleanupSwapChain();
                 ::DestroyWindow(editorHWND);
-    };
+            };
 #endif
         yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
         yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(appSpecification.windowWidth, appSpecification.windowHeight);
         yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(hWND);
-}
+    }
 
     Application::Application(int* hInstance)
     {
@@ -385,12 +385,12 @@ namespace application
                 ImGui::DestroyContext();
                 CleanupSwapChain();
                 ::DestroyWindow(editorHWND);
-    };
+            };
 #endif
         yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
         yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(appSpecification.windowWidth, appSpecification.windowHeight);
         yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(hWND);
-}
+    }
 
     void Application::Initialize()
     {
@@ -881,7 +881,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if (gameWindowKillFocusCallBackFunction)
         {
             gameWindowKillFocusCallBackFunction();
-    }
+        }
 #endif
         break;
     }
@@ -895,10 +895,10 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if (gameWindowFocusCallBackFunction)
         {
             gameWindowFocusCallBackFunction();
-    }
+        }
 #endif
         break;
-}
+    }
     case WM_SIZE:
         if (wParam == SIZE_MINIMIZED)
             return 0;
