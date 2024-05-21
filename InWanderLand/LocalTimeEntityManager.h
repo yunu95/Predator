@@ -10,6 +10,7 @@ private:
 	std::vector<LocalTimeEntity*> m_entityVector;
 
 public:
+	~LocalTimeEntityManager();
 	virtual void Start() override;
 	virtual void OnContentsStop() override;
 	virtual Component* GetComponent() override { return this; }

@@ -1,6 +1,7 @@
 #pragma once
 #include "LocalTimeEntityManager.h"
 
+
 class LocalTimeEntity
 {
 public:
