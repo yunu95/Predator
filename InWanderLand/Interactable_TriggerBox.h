@@ -6,14 +6,6 @@
 
 #include "IInteractableComponent.h"
 
-namespace application
-{
-	namespace editor
-	{
-		class InteractableData;
-	}
-}
-
 class Interactable_TriggerBox
 	: public IInteractableComponent
 {
@@ -46,7 +38,7 @@ public:
 		}
 	}
 
-	void SetDataFromEditorData(const application::editor::InteractableData& data);
+	virtual void SetDataFromEditorData(const application::editor::InteractableData& data) override;
 
 	virtual yunutyEngine::coroutine::Coroutine DoInteraction() override;
 
