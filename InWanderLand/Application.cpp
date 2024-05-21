@@ -888,7 +888,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_SETFOCUS:
     {
         gameFocus = true;
-#ifdef GRAPHICS_TEST
+#ifndef GRAPHICS_TEST
         ShowCursor(false);
 #endif
 #ifdef EDITOR

@@ -17,5 +17,13 @@ namespace yunuGI
 			this->x = 0;
 			this->y = 0;
 		}
+
+		Vector2 operator + (float val)
+		{
+			Vector2 temp = *this;
+			temp.x += val;
+			temp.y += val;
+			return temp;
+		}
 	};
 }

@@ -47,9 +47,9 @@ public:
     void LoadFBX(const char* filePath);
     void CreateAnimation(const std::vector<AnimationClip>& animationClip, const std::wstring& fbxName);
 
-    yunuGI::IMesh* CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec);
-    void DeleteMesh(yunuGI::IMesh* mesh);
-    void DeleteDeferredTexture();
+	yunuGI::IMesh* CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec, const std::vector<yunuGI::Vector2>& uvVec);
+	void DeleteMesh(yunuGI::IMesh* mesh);
+	void DeleteDeferredTexture();
 private:
     void CreateMesh(const std::wstring& mesh);
     void CreateMesh(const std::shared_ptr<Mesh>& mesh);

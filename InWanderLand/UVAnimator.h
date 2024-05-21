@@ -6,6 +6,7 @@ class UVAnimator : public yunutyEngine::Component
 {
 public:
 	void SetStaticMeshRenderer(yunutyEngine::graphics::StaticMeshRenderer* renderer);
+	void SetMesh(yunuGI::IMesh* mesh);
 	void SetTexture(yunuGI::ITexture* texture);
 	void SetDirection(yunutyEngine::Vector2d direction);
 	void SetSpeed(float speed);
