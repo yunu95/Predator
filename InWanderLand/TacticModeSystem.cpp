@@ -118,11 +118,11 @@ void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSer
 
 
 					// 오브젝트의 현재 포지션에서 이동할 위치까지의 경로 메쉬를 만들고 보여줌
-					auto agent = currentSelectedUnit->GetGameObject()->GetComponent<yunutyEngine::NavigationAgent>();
-					auto pathVertexList = agent->GetAssignedNavigationField()->GetSmoothPath(
+					auto field = currentSelectedUnit->GetNavField();
+					auto pathVertexList = field->GetSmoothPath(
 						currentSelectedUnit->GetGameObject()->GetTransform()->GetWorldPosition(),
-						pos
-					);
+						pos);
+
 					TacticPreview tacticPreview;
 					tacticPreview.finalPos = pos;
 					tacticPreview.mesh = SkillPreviewSystem::Instance().ShowRoute(

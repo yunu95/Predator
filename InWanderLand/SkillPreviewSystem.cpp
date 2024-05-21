@@ -572,17 +572,17 @@ yunuGI::IMesh* SkillPreviewSystem::ShowRoute(UnitType unitType, const std::vecto
 	{
 		case SkillPreviewSystem::UnitType::Robin:
 		{
-			renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,1 });
+			renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,0.3 });
 		}
 		break;
 		case SkillPreviewSystem::UnitType::Ursula:
 		{
-			renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,1 });
+			renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,0.3 });
 		}
 		break;
 		case SkillPreviewSystem::UnitType::Hansel:
 		{
-			renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,1 });
+			renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,0.3 });
 		}
 		break;
 		default:
@@ -752,5 +752,9 @@ yunuGI::IMesh* SkillPreviewSystem::CreateRouteMesh(const std::vector<Vector3d>& 
 		}
 	}
 
-	return _resourceManager->CreateMesh(L"RouteMesh", posVec, idxVec, normalVec, uvVec);
+	std::wstring meshName = L"RouteMesh_";
+	meshName += std::to_wstring(routeMeshID);
+	auto tempMesh = _resourceManager->CreateMesh(meshName, posVec, idxVec, normalVec, uvVec);
+	routeMeshID++;
+	return tempMesh;
 }

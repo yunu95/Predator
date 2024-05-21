@@ -107,5 +107,6 @@ private:
 
 	// 생성된 메쉬랑 맵핑된 renderer를 보관하는 컨테이너
 	std::map<yunuGI::IMesh*, graphics::StaticMeshRenderer*> rendererMap;
+	unsigned int routeMeshID = 0;
 };
 
