@@ -111,6 +111,8 @@ namespace application
 
     bool Action_BlockSkillSelection::PreEncoding(json& data) const
     {
+        data["blocking"] = blocking;
+        data["applyExceptTarget"] = applyExceptTarget;
         data["index"] = index;
         return true;
     }
@@ -123,6 +125,8 @@ namespace application
     bool Action_BlockSkillSelection::PreDecoding(const json& data)
     {
         index = data["index"];
+        blocking = data["blocking"];
+        applyExceptTarget = data["applyExceptTarget"];
         return true;
     }
 

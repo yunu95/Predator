@@ -203,7 +203,7 @@ class ContentsInitializer : public yunutyEngine::Component
     coroutine::Coroutine Initialize()
     {
         chrono::steady_clock::time_point base = chrono::high_resolution_clock::now();
-        wanderUtils::ResourceRecursiveLoader::Load("./", {".cso"});
+        wanderUtils::ResourceRecursiveLoader::Load("./", { ".cso" });
         wanderUtils::ResourceRecursiveLoader::Load("Texture/LoadingScreen/");
         wanderUtils::ResourceRecursiveLoader::Load("sounds/LoadingScreen/");
         auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(chrono::high_resolution_clock::now() - base);
@@ -279,7 +279,8 @@ class ContentsInitializer : public yunutyEngine::Component
 #else
         {
             application::editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
-            static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().layers[(int)application::Application::LayerList::ContentsLayer])->PlayContents();
+            UIManager::Instance().ImportUI("InWanderLand.iwui");
+            //static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().layers[(int)application::Application::LayerList::ContentsLayer])->PlayContents();
         }
 #endif
 #endif
