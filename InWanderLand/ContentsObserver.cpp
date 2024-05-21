@@ -5,6 +5,7 @@
 void ContentsObserver::RegisterObservee(PermanentObservee* permanentObservee)
 {
 	permanentObservees.push_back(permanentObservee);
+	contentsObservees.resize(contentsObservees.size() - 1);
 }
 
 void ContentsObserver::RegisterObservee(ContentsObservee* p_observee)

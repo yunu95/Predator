@@ -1,6 +1,11 @@
 #include "LocalTimeEntityManager.h"
 #include "LocalTimeEntity.h"
 
+LocalTimeEntityManager::~LocalTimeEntityManager()
+{
+	int a = 0;
+}
+
 void LocalTimeEntityManager::Start()
 {
 }
