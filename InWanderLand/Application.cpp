@@ -144,6 +144,11 @@ namespace application
         //float desiredRatio = 1920.0f / 1080.0f;
 
         SetWindowPos(hWND, NULL, 0, 0, newWidth, newHeight, SWP_NOMOVE | SWP_NOZORDER);
+#ifndef EDITOR
+        LONG_PTR style = GetWindowLongPtr(hWND, GWL_STYLE);
+        style &= ~(WS_CAPTION | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU);
+        SetWindowLongPtr(hWND, GWL_STYLE, style);
+#endif
 
         ::ShowWindow(hWND, SW_SHOWDEFAULT);
         ::UpdateWindow(hWND);
@@ -278,7 +283,11 @@ namespace application
         //float desiredRatio = 1920.0f / 1080.0f;
 
         SetWindowPos(hWND, NULL, 0, 0, newWidth, newHeight, SWP_NOMOVE | SWP_NOZORDER);
-
+#ifndef EDITOR
+        LONG_PTR style = GetWindowLongPtr(hWND, GWL_STYLE);
+        style &= ~(WS_CAPTION | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU);
+        SetWindowLongPtr(hWND, GWL_STYLE, style);
+#endif
         ::ShowWindow(hWND, SW_SHOWDEFAULT);
         ::UpdateWindow(hWND);
 

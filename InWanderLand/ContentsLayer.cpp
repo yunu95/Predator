@@ -36,6 +36,8 @@
 #include "ParticleTool_Manager.h"
 #include "UVAnimator.h"
 #include "InitialLoadingScreen.h"
+#include "InstanceManager.h"
+
 
 #include <algorithm>
 #include <string>
@@ -235,6 +237,7 @@ class ContentsInitializer : public yunutyEngine::Component
                 test3->text_Render = text;
             }
         }
+
 #ifndef EDITOR
 #ifdef GRAPHICS_TEST
         {
@@ -249,7 +252,6 @@ class ContentsInitializer : public yunutyEngine::Component
         GraphicsTest();
 #else
         {
-            application::editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
             UIManager::Instance().ImportUI("InWanderLand.iwui");
             UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight)->EnableElement();
             UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight)->DisableElement();
@@ -258,13 +260,6 @@ class ContentsInitializer : public yunutyEngine::Component
 #endif
 #endif
         Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-#ifdef EDITOR
-        application::Application::GetInstance().CheckContentsLayerInit();
-
-        application::Application::GetInstance().layers[(int)application::Application::LayerList::EditorLayer]->Initialize();
-
-        static_cast<application::editor::EditorLayer*>(application::Application::GetInstance().layers[(int)application::Application::LayerList::EditorLayer])->LateInitialize();
-#endif
         co_return;
     }
     virtual void Start() override
@@ -316,27 +311,6 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
     InputManager::Instance().SetInputManagerActive(true);
     PlayerSkillManager::Instance();
     GameManager::Instance().Reset();
-
-    //InputManager::Instance();
-    //UIManager::Instance();
-
-    /// Editor 에서 수정하여 Map Data 에 저장할 부분
-
-    /// 카메라의 경우 CameraData 의 ApplyInstancesAsPlaytimeObjects 에서 처리함
-
-    //auto skillPreviewCubeMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //AttachDebugMesh(skillPreviewCubeMeshObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
-    //SkillPreviewSystem::Instance().SetPathPreviewObject(skillPreviewCubeMeshObject);
-
-    //auto skillPreviewSphereMeshObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-    //AttachDebugMesh(skillPreviewSphereMeshObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::red(), false));
-    //SkillPreviewSystem::Instance().SetRangePreviewObject(skillPreviewSphereMeshObject);
-
-    /// 임시
-    //RegisterToEditorObjectVector(MagicianProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, -7.0f))->GetGameObject());
-    //RegisterToEditorObjectVector(HealerProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
-    //RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
-    //RegisterToEditorObjectVector(BossProductor::Instance().CreateUnit(Vector3d(-7.0f, 0.0f, 7.0f))->GetGameObject());
 
     auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 

@@ -987,7 +987,12 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
         element->button->AddButtonClickFunction([=]()
             {
-                application::editor::CommandManager::GetSingletonInstance().AddQueue(std::make_shared<application::editor::ProgramExitCommand>());
+                StartCoroutine([=]() ->coroutine::Coroutine {
+                    FadeOutTop(2);
+                    co_yield coroutine::WaitForSeconds(3.2f);
+                    Application::GetInstance().TurnOff();
+                    co_return;
+                    }());
             });
         break;
     case UIEnumID::BlackMask_GameLoad:
@@ -995,6 +1000,7 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         element->colorTintOnEnable->onCompleteFunction = [=]()
             {
                 auto cl = static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+
                 cl->PlayContents(ContentsPlayFlag::None);
                 GetUIElementByEnum(UIEnumID::TitleRoot)->DisableElement();
                 SetIngameUIVisible(true);

@@ -1,4 +1,5 @@
 #pragma once
+#include "InWanderLand.h"
 #include "YunutyEngine.h"
 #include "FileSystem.h"
 
@@ -6,6 +7,7 @@
 #include <future>
 #include <thread>
 
+using namespace application;
 namespace wanderUtils
 {
     class ResourceRecursiveLoader
@@ -165,6 +167,36 @@ namespace wanderUtils
                 timeTookToLoadResources["fbx"] += std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime).count() / 1000.0f;
 #endif
             }
+
+#ifdef EDITOR
+            application::Application::GetInstance().CheckContentsLayerInit();
+
+            application::Application::GetInstance().layers[(int)application::Application::LayerList::EditorLayer]->Initialize();
+
+            static_cast<application::editor::EditorLayer*>(application::Application::GetInstance().layers[(int)application::Application::LayerList::EditorLayer])->LateInitialize();
+#endif
+
+#ifndef GRAPHICS_TEST
+            application::editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
+#endif
+            editor::TerrainData* terrainData = nullptr;
+            for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::TerrainData>())
+            {
+                terrainData = each;
+            }
+
+            if (terrainData != nullptr)
+            {
+                std::future<void> navBuildFuture = std::async(std::launch::async, [=]()
+                    {
+                        terrainData->ApplyAsPlaytimeObject();
+                    });
+                while (!navBuildFuture._Is_ready())
+                {
+                    co_await std::suspend_always{};
+                }
+            }
+
             isLoadingResources = false;
         }
     private:

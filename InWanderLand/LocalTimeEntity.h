@@ -6,6 +6,7 @@ class LocalTimeEntity
 {
 public:
 	LocalTimeEntity();
+	virtual ~LocalTimeEntity();
 
 protected:
 	float m_localTimeScale{ 1.0f };			/// DeltaTIme 에 곱해줄 Local Time Scale
