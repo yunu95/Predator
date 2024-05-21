@@ -151,7 +151,7 @@ void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
         }
         else
         {
-            playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum);
+            //playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum);
             auto& callbackVectors = skillSelectionCallback[currentSelectedSerialNumber][p_skillNum];
             for (auto& each : callbackVectors)
                 each();

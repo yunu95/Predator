@@ -280,6 +280,8 @@ class ContentsInitializer : public yunutyEngine::Component
         {
             application::editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
             UIManager::Instance().ImportUI("InWanderLand.iwui");
+            UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight)->EnableElement();
+            UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight)->DisableElement();
             //static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().layers[(int)application::Application::LayerList::ContentsLayer])->PlayContents();
         }
 #endif
