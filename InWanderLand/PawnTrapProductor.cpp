@@ -65,9 +65,6 @@ Unit* PawnTrapProductor::CreateUnit(Vector3d startPos)
 	auto colliderObjectTwo = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	colliderObjectTwo->AddComponent<physics::BoxCollider>();
 
-	colliderObjectOne->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-	colliderObjectTwo->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
-
 	auto damageComponentOne = colliderObjectOne->AddComponent<DamageOnlyComponent>();
 	damageComponentOne->SetSkillOwnerUnit(m_unitComponent);
 	damageComponentOne->SetSkillDamage(2.0f);
@@ -90,7 +87,6 @@ Unit* PawnTrapProductor::CreateUnit(Vector3d startPos)
 	auto triggerCollider = triggerSensorObject->AddComponent<physics::SphereCollider>();
 	triggerCollider->SetRadius(trapTriggerRadius);
 	triggerSensorObject->AddComponent<TrapTriggerSensor>()->trapChessSkillSystem = chessSkillSystem;
-	triggerSensorObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
 	return m_unitComponent;
 }

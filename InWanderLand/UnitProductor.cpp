@@ -146,13 +146,13 @@ void UnitProductor::AddRangeSystemComponent() const
     // 2-2. RangeSystem Collider
     auto rangesystemCollider = unitRangeSystemObject->AddComponent<physics::SphereCollider>();
     rangesystemCollider->SetRadius(m_idRadius);
-    unitRangeSystemObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
     unitRangeSystemObject->SetParent(m_unitGameObject);
 }
 
 void UnitProductor::AddColliderComponent() const
 {
-    auto unitCollider = m_unitGameObject->AddComponent<physics::SphereCollider>();	// 빈 껍데기에 
+    auto unitCollider = m_unitGameObject->AddComponent<physics::CapsuleCollider>();	// 빈 껍데기에 
+    unitCollider->SetHalfHeight(UNIT_LENGTH * 0.5f);
     unitCollider->SetRadius(UNIT_LENGTH * 0.5f);
     m_unitGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 }

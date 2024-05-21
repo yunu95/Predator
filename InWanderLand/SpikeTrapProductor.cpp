@@ -60,7 +60,6 @@ Unit* SpikeTrapProductor::CreateUnit(Vector3d startPos)
 
 	auto skillOneColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto skillOneCollider = skillOneColliderObject->AddComponent<physics::BoxCollider>();
-	skillOneColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 	skillOneCollider->SetHalfExtent({ attackColliderLength * 0.5f, attackColliderLength * 0.5f, attackColliderLength * 0.5f });
 
 	auto damageComponent = skillOneColliderObject->AddComponent<DamageOnlyComponent>();

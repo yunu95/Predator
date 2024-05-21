@@ -68,7 +68,6 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
     auto QSkillProjectileCollider = QSkillProjectileObject->AddComponent<physics::SphereCollider>();
     m_QSkillProjectileRadius = 1.0f * UNIT_LENGTH;
     QSkillProjectileCollider->SetRadius(m_QSkillProjectileRadius);
-    QSkillProjectileObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
     auto QSkillProjectileDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     AttachDebugMesh(QSkillProjectileDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), false);
@@ -81,7 +80,6 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
     auto QSkillFieldCollider = QSkillFieldObject->AddComponent<physics::SphereCollider>();
     m_QSkillFieldRadius = 2.0f * UNIT_LENGTH;
     QSkillFieldCollider->SetRadius(m_QSkillFieldRadius);
-    QSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
     auto QSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     AttachDebugMesh(QSkillFieldDebugObject, DebugMeshType::Sphere, yunuGI::Color::white(), false);
     QSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_QSkillFieldRadius * 2, m_QSkillFieldRadius * 2 , m_QSkillFieldRadius * 2 });
@@ -94,7 +92,6 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
     auto WSkillProjectileCollider = WSkillProjectileObject->AddComponent<physics::SphereCollider>();
     m_WSkillProjectileRadius = 1.0f * UNIT_LENGTH;
     WSkillProjectileCollider->SetRadius(m_WSkillProjectileRadius);
-    WSkillProjectileObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
     auto WSkillProjectileDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     AttachDebugMesh(WSkillProjectileDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
@@ -109,7 +106,6 @@ Unit* MagicianProductor::CreateUnit(Vector3d startPos)
 
     m_WSkillFieldRadius = application::GlobalConstant::GetSingletonInstance().pod.ursulaESkillRadius;
     WSkillFieldCollider->SetRadius(m_WSkillFieldRadius);
-    WSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
     auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     AttachDebugMesh(WSkillFieldDebugObject, DebugMeshType::Sphere, yunuGI::Color::blue(), true);
     WSkillFieldDebugObject->GetTransform()->SetLocalScale({ m_WSkillFieldRadius * 2 , m_WSkillFieldRadius * 2 , m_WSkillFieldRadius * 2 });
