@@ -26,7 +26,7 @@ void UnitProductor::SetUnitComponentMembers()
     auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     AttachDebugMesh(unitColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
     unitColliderDebugObject->SetParent(m_unitGameObject);
-    unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(UNIT_LENGTH, UNIT_LENGTH, UNIT_LENGTH));
+    unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(UNIT_LENGTH, 0.2f, UNIT_LENGTH));
     m_unitComponent->SetStaticMeshComponent(unitColliderDebugObject->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>());
 
     auto burnEffect = m_unitGameObject->AddComponent<BurnEffect>();
@@ -156,7 +156,7 @@ void UnitProductor::AddColliderComponent() const
     unitCollider->SetRadius(UNIT_LENGTH * 0.5f);
     m_unitGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
-    //AttachDebugMesh(m_unitGameObject, DebugMeshType::Capsule, yunuGI::Color::green(), false);
+    AttachDebugMesh(m_unitGameObject, DebugMeshType::Capsule, yunuGI::Color::green(), true);
 }
 
 void UnitProductor::AddNavigationComponent()
