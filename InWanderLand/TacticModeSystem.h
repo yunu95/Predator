@@ -36,6 +36,12 @@ public:
 		WSkill
 	};
 
+    struct TacticPreview
+    {
+        Vector3d finalPos;
+        yunuGI::IMesh* mesh;
+    };
+
     void ToggleRequested(InputManager::SelectedSerialNumber currentSelectedNum);
 
     void SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum);
@@ -91,6 +97,8 @@ private:
     std::unordered_map<Unit::UnitType, PlayerUnit*> playerComponentMap;
 
     std::queue<Unit*> sequenceQueue;
+    std::queue<TacticPreview> previewQueue;
+    
 
 	PlaytimeWave* m_currentOperatingWave;
 };

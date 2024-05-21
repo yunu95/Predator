@@ -79,7 +79,7 @@ public:
 	// 매 프레임 불리는 함수 마우스를 따라다니며 임시 경로를 보여줍니다.
 	void ShowTemporaryRoute(UnitType unitType , const std::vector<Vector3d>& vertexList);
 	// 이동 할 경로가 확정되면 불러 줄 함수 삭제 요청이 들어오기 전까지 화면에 보여집니다.
-	void ShowRoute(UnitType unitType, const std::vector<Vector3d>& vertexList);
+	yunuGI::IMesh* ShowRoute(UnitType unitType, const std::vector<Vector3d>& vertexList);
 	// 생성된 경로 메쉬를 삭제해줄 함수
 	void DeleteRouteMesh(yunuGI::IMesh* mesh);
 #pragma endregion

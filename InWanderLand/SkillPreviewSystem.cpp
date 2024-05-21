@@ -560,7 +560,7 @@ void SkillPreviewSystem::ShowTemporaryRoute(UnitType unitType, const std::vector
 	
 }
 
-void SkillPreviewSystem::ShowRoute(UnitType unitType, const std::vector<Vector3d>& vertexList)
+yunuGI::IMesh* SkillPreviewSystem::ShowRoute(UnitType unitType, const std::vector<Vector3d>& vertexList)
 {
 	auto mesh = CreateRouteMesh(vertexList);
 	auto renderer = this->Borrow();
@@ -589,6 +589,8 @@ void SkillPreviewSystem::ShowRoute(UnitType unitType, const std::vector<Vector3d
 		{}
 		break;
 	}
+
+	return mesh;
 }
 
 void SkillPreviewSystem::DeleteRouteMesh(yunuGI::IMesh* mesh)

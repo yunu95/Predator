@@ -56,6 +56,7 @@ void TacticModeSystem::OnContentsStop()
 	for (int i = 0; i < sequenceQueue.size(); i++)
 	{
 		sequenceQueue.pop();
+		previewQueue.pop();
 	}
 
 	m_maxGauge = 10;
@@ -114,6 +115,21 @@ void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSer
 					currentSelectedUnit->PushMoveFunctionToTacticQueue(pos);
 					AddGauge(-1 * moveCost);
 					sequenceQueue.push(currentSelectedUnit);
+
+
+					// 오브젝트의 현재 포지션에서 이동할 위치까지의 경로 메쉬를 만들고 보여줌
+					auto agent = currentSelectedUnit->GetGameObject()->GetComponent<yunutyEngine::NavigationAgent>();
+					auto pathVertexList = agent->GetAssignedNavigationField()->GetSmoothPath(
+						currentSelectedUnit->GetGameObject()->GetTransform()->GetWorldPosition(),
+						pos
+					);
+					TacticPreview tacticPreview;
+					tacticPreview.finalPos = pos;
+					tacticPreview.mesh = SkillPreviewSystem::Instance().ShowRoute(
+						static_cast<SkillPreviewSystem::UnitType>(currentSelectedNum - 1),
+						pathVertexList);
+
+					this->previewQueue.push(tacticPreview);
 				}
 			}
 			else if (Unit* selectedUnit = m_cursorDetector->GetCurrentOnMouseUnit();
