@@ -71,7 +71,6 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 #pragma region Boss Skill_2 Object Setting
 		auto skillTwoColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto skillTwoCollider = skillTwoColliderObject->AddComponent<physics::BoxCollider>();
-		skillTwoColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 		auto skillDamageComponent = skillTwoColliderObject->AddComponent<DamageOnlyComponent>();
 		skillDamageComponent->SetSkillOwnerUnit(m_unitComponent);
 		skillDamageComponent->SetSkillDamage(3.0f);
