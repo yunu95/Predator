@@ -995,6 +995,7 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         element->colorTintOnEnable->onCompleteFunction = [=]()
             {
                 auto cl = static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+
                 cl->PlayContents(ContentsPlayFlag::None);
                 GetUIElementByEnum(UIEnumID::TitleRoot)->DisableElement();
                 SetIngameUIVisible(true);
