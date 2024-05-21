@@ -1242,27 +1242,6 @@ void ResourceManager::CreateDefaultTexture()
     textureMap.insert({ L"Stage2LightMap", texture1 });
     textureVec.push_back(texture1.get());
 
-    //texture->SetName(L"LightMapList");
-    //std::vector<yunuGI::ITexture*> tempVec;
-    //tempVec.push_back(GetTexture(L"Texture/Test0.png").get());
-    //tempVec.push_back(GetTexture(L"Texture/Test1.png").get());
-    //texture->CreateLightMapArray(tempVec);
-    //textureMap.insert({ L"LightMapList", texture });
-    //textureVec.push_back(texture.get());
-
-    //CreateTexture(L"Texture/Brick_Albedo.jpg");
-    //CreateTexture(L"Texture/Brick_Normal.jpg");
-
-
-
-    //	auto dsTexture = ResourceManager::Instance.Get().CreateTexture(
-//		L"ShadowTargetDepth",
-//		SM_SIZE,
-//		SM_SIZE,
-//		DXGI_FORMAT_D24_UNORM_S8_UINT,
-//		static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL)
-//	);
-
     CreateTexture(L"ShadowDepth", SM_SIZE, SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE));
 
     CreateTexture(L"PointLightShadowDepth", PL_SM_SIZE, PL_SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE), 6, MAX_POINT_LIGHT);
