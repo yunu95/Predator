@@ -33,7 +33,7 @@ enum TimerIndex
 	End
 };
 
-class Dotween : public Component, public LocalTimeEntity
+class Dotween : public Component, public LocalTimeEntity, public ContentsObservee
 {
 public:
 	Dotween();
@@ -42,6 +42,7 @@ public:
 	virtual void Start() override;
 	void Awake();
 	virtual void Update() override;
+	virtual void OnDestroy() override;
 
 	void StopAllDotweenFunction();
 
@@ -53,7 +54,7 @@ public:
 
 	// DOLookAtForBoss은 Y축을 고려하지 않고 만든 것. (위아래 고려 X), DOLookAt은 Y축까지 돌린다.
 	Dotween& DOLookAt(Vector3d lookTransform, double duration, bool isYaxisInclude);
-	
+
 	// 아래의 함수들은 기존 Dotween엔 없는 함수들...
 	Dotween& DOCustom(double p_duration);
 	Dotween& DONothing(double p_duration);
@@ -77,13 +78,16 @@ public:
 	//void clearDotweenTimerMap();
 
 	DotweenTimer* tempTimer;
+
+	virtual Component* GetComponent() { return this; }
+
 private:
 	Vector3d randPos;
 	Vector3d randRange;
 
 	TimerIndex currentTimerIndex;
 
-	DotweenTimer* dotweenTimerArray[TimerIndex::End] = { nullptr, };
+	std::vector<DotweenTimer*> dotweenTimerVector;
 
 	double previousAngle;
 

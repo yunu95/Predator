@@ -8,6 +8,14 @@
 
 #include <unordered_set>
 
+namespace application
+{
+	namespace editor
+	{
+		class InteractableData;
+	}
+}
+
 class IInteractableComponent
 	: public Component, public ContentsObservee
 {
@@ -21,6 +29,9 @@ public:
 
 	/// Interaction 시에 수행하게 될 동작입니다.
 	virtual yunutyEngine::coroutine::Coroutine DoInteraction() = 0;
+
+	/// InteractableData 로부터 Component 의 데이터를 초기화하는 함수입니다.
+	virtual void SetDataFromEditorData(const application::editor::InteractableData& data) {};
 
 	/// Interactable 에서 다른 Interactable 로의 전파를 하게 될 경우,
 	/// 전파 대상을 등록하는 함수입니다.
