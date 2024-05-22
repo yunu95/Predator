@@ -3,6 +3,8 @@
 #include "InteractableData.h"
 #include "DebugMeshes.h"
 
+#include "Unit.h"
+
 void Interactable_TriggerBox::Start()
 {
 	AttachDebugMesh(GetGameObject(), DebugMeshType::Cube, yunuGI::Color::green());
@@ -17,6 +19,31 @@ void Interactable_TriggerBox::Start()
 void Interactable_TriggerBox::Update()
 {
 
+}
+
+void Interactable_TriggerBox::OnTriggerEnter(physics::Collider* collider)
+{
+	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+		colliderUnitComponent != nullptr &&
+		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+	{
+		triggerStay.insert(collider);
+		OnInteractableTriggerEnter();
+	}
+}
+
+void Interactable_TriggerBox::OnTriggerExit(physics::Collider* collider)
+{
+	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+		colliderUnitComponent != nullptr &&
+		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+	{
+		if (triggerStay.size() == 1)
+		{
+			OnInteractableTriggerExit();
+		}
+		triggerStay.erase(collider);
+	}
 }
 
 void Interactable_TriggerBox::SetDataFromEditorData(const application::editor::InteractableData& data)

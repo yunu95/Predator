@@ -51,7 +51,7 @@ namespace application
 				ts->SetWorldPosition(gcts->GetWorldPosition() + xzForward.Normalized() * 2);
 				ts->SetWorldRotation(gcts->GetWorldRotation());
 				ts->SetWorldScale(gcts->GetWorldScale());
-				cameraPState = CameraPerspectiveState::Game;
+				cameraPState = CameraPerspectiveState::Free;
 			}
 			else
 			{
