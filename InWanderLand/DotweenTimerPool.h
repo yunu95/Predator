@@ -12,23 +12,23 @@
 
 class DotweenTimer;
 
-class DotweenTimerPool : public GameObjectPool<DotweenTimer>, public SingletonComponent<DotweenTimerPool>, public Component, public PermanentObservee
+class DotweenTimerPool
 {
 private:
 
 public:
-	virtual void ObjectInitializer(DotweenTimer* timer) override
-	{
-		timer->Init();
-	}
+	//virtual void ObjectInitializer(DotweenTimer* timer) override
+	//{
+	//	timer->Init();
+	//}
 
-	virtual Component* GetComponent() override { return this; }
+	//virtual Component* GetComponent() override { return this; }
 
-	virtual void OnContentsStop() override
-	{
-		this->SetActive(false);
-		poolObjects.clear();
-		expendableObjects.clear();
-	};
+	//virtual void OnContentsStop() override
+	//{
+	//	this->SetActive(false);
+	//	poolObjects.clear();
+	//	expendableObjects.clear();
+	//};
 };
 

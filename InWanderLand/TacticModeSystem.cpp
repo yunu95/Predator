@@ -228,7 +228,7 @@ void TacticModeSystem::ExitTacticMode()
 		}
 
 		LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(each.second, 1.0f);
-		each.second->GetGameObject()->GetComponent<Dotween>()->SetLocalTimeScaleDirectly(1.0f);
+		LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(each.second->GetGameObject()->GetComponent<Dotween>(), 1.0f);
 		each.second->GetGameObject()->GetComponent<PlayerSkillSystem>()->SetSkillRequirmentLocalTimeScale(1.0f);
 	}
 

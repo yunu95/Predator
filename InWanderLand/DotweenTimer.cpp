@@ -1,7 +1,13 @@
 #include "InWanderLand.h"
 #include "DotweenTimer.h"
 #include "YunutyEngine.h"
-#include "DotweenTimerPool.h"
+
+DotweenTimer::DotweenTimer()
+	: m_ease(EaseBasic), elapsed(0), isActive(false), isRepeat(false), duration(0), delay(0), easeTime(0),
+	m_xValue(0), m_yValue(0), m_zValue(0), accumulated(0), movingDistanceX(0), isDone(false)
+{
+
+}
 
 void DotweenTimer::Init()
 {
@@ -43,7 +49,8 @@ void DotweenTimer::Init()
 // Start를 부르면 타이머 on
 void DotweenTimer::Start()
 {
-	//Init();
+	elapsed = 0;
+	isActive = true;
 }
 
 void DotweenTimer::Update()
@@ -69,7 +76,6 @@ void DotweenTimer::Update()
 				isActive = false;
 				elapsed = 0;
 				isDone = true;
-				//DotweenTimerPool::Instance().Return(this);
 			}
 			else
 			{
