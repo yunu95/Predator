@@ -74,6 +74,20 @@ void InputManager::Update()
 			{
 				ToggleTacticMode();
 			}
+
+			if (yunutyEngine::Input::isKeyDown(KeyCode::Control) 
+				&& yunutyEngine::Input::isKeyPushed(KeyCode::Z)
+				&& GameManager::Instance().IsBattleSystemOperating())
+			{
+				TacticModeSystem::Instance().PopCommand();
+			}
+
+			if (yunutyEngine::Input::isKeyDown(KeyCode::Control)
+				&& yunutyEngine::Input::isKeyPushed(KeyCode::X)
+				&& GameManager::Instance().IsBattleSystemOperating())
+			{
+				TacticModeSystem::Instance().ClearCommand();
+			}
 		}
 	}
 }

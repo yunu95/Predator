@@ -26,7 +26,7 @@ void HealerSkillSystem::CrushDown(int p_times)
                 if (m_unitComponent->isPermittedToTacticAction)
                 {
                     m_unitComponent->isPermittedToTacticAction = false;
-                    TacticModeSystem::Instance().ReportTacticActionFinished();
+                    m_unitComponent->ReportTacticActionFinished();
                 }
             }
             else
@@ -177,7 +177,7 @@ void HealerSkillSystem::Update()
             if (m_unitComponent->isPermittedToTacticAction)
             {
                 m_unitComponent->isPermittedToTacticAction = false;
-                TacticModeSystem::Instance().ReportTacticActionFinished();
+                m_unitComponent->ReportTacticActionFinished();
             }
         }
     }

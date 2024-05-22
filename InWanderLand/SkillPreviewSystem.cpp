@@ -5,7 +5,7 @@
 #define OFFSET 1.414
 #define AXIS Vector3d{-1,0,0}
 #define Y_OFFSET 0.1
-#define VERTEX_OFFSET 0.5
+#define VERTEX_OFFSET 0.1
 
 
 void SkillPreviewSystem::ObjectInitializer(graphics::StaticMeshRenderer* comp)
@@ -519,7 +519,7 @@ void SkillPreviewSystem::HideHanselWSkill()
 	}
 }
 
-void SkillPreviewSystem::ShowTemporaryRoute(UnitType unitType, const std::vector<Vector3d>& vertexList)
+void SkillPreviewSystem::ShowTemporaryRoute(UnitType unitType, std::vector<Vector3d>& vertexList)
 {
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	// 버텍스가 1개만 들어오는 일은 없을 것으로 예상 혹시모르니 return
@@ -560,7 +560,7 @@ void SkillPreviewSystem::ShowTemporaryRoute(UnitType unitType, const std::vector
 	
 }
 
-yunuGI::IMesh* SkillPreviewSystem::ShowRoute(UnitType unitType, const std::vector<Vector3d>& vertexList)
+yunuGI::IMesh* SkillPreviewSystem::ShowRoute(UnitType unitType, std::vector<Vector3d>& vertexList)
 {
 	auto mesh = CreateRouteMesh(vertexList);
 	auto renderer = this->Borrow();
@@ -606,7 +606,7 @@ void SkillPreviewSystem::DeleteRouteMesh(yunuGI::IMesh* mesh)
 	_resourceManager->DeleteMesh(mesh);
 }
 
-yunuGI::IMesh* SkillPreviewSystem::CreateRouteMesh(const std::vector<Vector3d>& vertexList)
+yunuGI::IMesh* SkillPreviewSystem::CreateRouteMesh(std::vector<Vector3d>& vertexList)
 {
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
@@ -619,6 +619,7 @@ yunuGI::IMesh* SkillPreviewSystem::CreateRouteMesh(const std::vector<Vector3d>& 
 	std::vector<unsigned int> idxVec;
 	std::vector<yunuGI::Vector2> uvVec;
 	std::vector<yunuGI::Vector3> normalVec;
+
 
 	for (int i = 0; i < vertexCount - 1; i++)
 	{
@@ -750,6 +751,11 @@ yunuGI::IMesh* SkillPreviewSystem::CreateRouteMesh(const std::vector<Vector3d>& 
 			uvVec[(i * 2) + 1] = uvVec[(i * 2) - 1] + inDistance;
 			uvVec[(i * 2) + 1].y = 1;
 		}
+	}
+
+	for (auto& each : posVec)
+	{
+		each.y = Y_OFFSET;
 	}
 
 	std::wstring meshName = L"RouteMesh_";

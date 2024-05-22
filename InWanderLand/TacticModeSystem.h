@@ -68,7 +68,12 @@ public:
 
 	CursorDetector* m_cursorDetector;
 
+    void PopCommand();
+    void ClearCommand();
     void ReportTacticActionFinished();
+
+private:
+    void ShowUnitSkillPreview(Unit* unit, Unit::SkillEnum skillKind);
 
 private:
     float m_maxGauge{ 100 };
@@ -96,8 +101,7 @@ private:
 
     std::unordered_map<Unit::UnitType, PlayerUnit*> playerComponentMap;
 
-    std::queue<Unit*> sequenceQueue;
-    std::queue<TacticPreview> previewQueue;
+    std::deque<Unit*> sequenceQueue;
     
 
 	PlaytimeWave* m_currentOperatingWave;
