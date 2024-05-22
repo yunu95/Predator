@@ -72,12 +72,19 @@ public:
         text_physx->GetGI().SetText(L"time used for physx : " + temp);
         temp = std::to_wstring(Time::GetTimeUsedForRender());
         text_Render->GetGI().SetText(L"time used for render : " + temp);*/
-        temp = std::to_wstring(100 * Time::GetTimeUsedForUpdate() / Time::GetDeltaTimeUnscaled());
-        text_update->GetGI().SetText(L"time used for update : " + temp + L"%");
-        temp = std::to_wstring(100 * Time::GetTimeUsedForPhysx() / Time::GetDeltaTimeUnscaled());
-        text_physx->GetGI().SetText(L"time used for physx : " + temp + L"%");
-        temp = std::to_wstring(100 * Time::GetTimeUsedForRender() / Time::GetDeltaTimeUnscaled());
-        text_Render->GetGI().SetText(L"time used for render : " + temp + L"%");
+        if (DebugGraphic::AreDebugGraphicsEnabled())
+        {
+            temp = std::to_wstring(100 * Time::GetTimeUsedForUpdate() / Time::GetDeltaTimeUnscaled());
+            text_update->GetGI().SetText(L"time used for update : " + temp + L"%");
+            temp = std::to_wstring(100 * Time::GetTimeUsedForPhysx() / Time::GetDeltaTimeUnscaled());
+            text_physx->GetGI().SetText(L"time used for physx : " + temp + L"%");
+            temp = std::to_wstring(100 * Time::GetTimeUsedForRender() / Time::GetDeltaTimeUnscaled());
+            text_Render->GetGI().SetText(L"time used for render : " + temp + L"%");
+        }
+        text_FPS->SetActive(DebugGraphic::AreDebugGraphicsEnabled());
+        text_update->SetActive(DebugGraphic::AreDebugGraphicsEnabled());
+        text_physx->SetActive(DebugGraphic::AreDebugGraphicsEnabled());
+        text_Render->SetActive(DebugGraphic::AreDebugGraphicsEnabled());
     }
 };
 
@@ -93,54 +100,54 @@ public:
         if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
         {
             isShow = true;
-           
+
         }
-		if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
-		{
+        if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
+        {
             isShow = false;
-		}
+        }
         auto curPos = obj->GetTransform()->GetLocalPosition();
         auto curRot = obj->GetTransform()->GetLocalRotation();
         // 이동
-		if (Input::isKeyDown(yunutyEngine::KeyCode::I))
-		{
+        if (Input::isKeyDown(yunutyEngine::KeyCode::I))
+        {
             curPos.z = curPos.z + (2 * Time::GetDeltaTime());
             obj->GetTransform()->SetLocalPosition(curPos);
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::K))
-		{
-			curPos.z = curPos.z - (2 * Time::GetDeltaTime());
-			obj->GetTransform()->SetLocalPosition(curPos);
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::J))
-		{
-			curPos.x = curPos.x - (2 * Time::GetDeltaTime());
-			obj->GetTransform()->SetLocalPosition(curPos);
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::L))
-		{
-			curPos.x = curPos.x + (2 * Time::GetDeltaTime());
-			obj->GetTransform()->SetLocalPosition(curPos);
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::U))
-		{
+        }
+        if (Input::isKeyDown(yunutyEngine::KeyCode::K))
+        {
+            curPos.z = curPos.z - (2 * Time::GetDeltaTime());
+            obj->GetTransform()->SetLocalPosition(curPos);
+        }
+        if (Input::isKeyDown(yunutyEngine::KeyCode::J))
+        {
+            curPos.x = curPos.x - (2 * Time::GetDeltaTime());
+            obj->GetTransform()->SetLocalPosition(curPos);
+        }
+        if (Input::isKeyDown(yunutyEngine::KeyCode::L))
+        {
+            curPos.x = curPos.x + (2 * Time::GetDeltaTime());
+            obj->GetTransform()->SetLocalPosition(curPos);
+        }
+        if (Input::isKeyDown(yunutyEngine::KeyCode::U))
+        {
             auto curE = curRot.Euler();
             curE.y = curE.y + (10 * Time::GetDeltaTime());
-            obj->GetTransform()->SetLocalRotation(Quaternion{curE});
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::O))
-		{
-			auto curE = curRot.Euler();
-			curE.y = curE.y - (10 * Time::GetDeltaTime());
-			obj->GetTransform()->SetLocalRotation(Quaternion{ curE });
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::Y))
-		{
-            obj->GetTransform()->SetLocalPosition(Vector3d{0,0,0});
-		}
+            obj->GetTransform()->SetLocalRotation(Quaternion{ curE });
+        }
+        if (Input::isKeyDown(yunutyEngine::KeyCode::O))
+        {
+            auto curE = curRot.Euler();
+            curE.y = curE.y - (10 * Time::GetDeltaTime());
+            obj->GetTransform()->SetLocalRotation(Quaternion{ curE });
+        }
+        if (Input::isKeyDown(yunutyEngine::KeyCode::Y))
+        {
+            obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
+        }
 
-		if (Input::isKeyPushed(yunutyEngine::KeyCode::T))
-		{
+        if (Input::isKeyPushed(yunutyEngine::KeyCode::T))
+        {
             std::vector<Vector3d> a;
             a.push_back(Vector3d{ 0,0,0 });
             a.push_back(Vector3d{ 0,0,1 });
@@ -155,10 +162,10 @@ public:
             renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, _resourceManager->GetTexture(L"Texture/move.png"));
             renderer->GetGI().GetMaterial()->SetVertexShader(_resourceManager->GetShader(L"TextureVS.cso"));
             renderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"GuideLinePS.cso"));
-		}
+        }
         if (isShow)
         {
-            system->ShowHanselWSkill(obj->GetTransform()->GetLocalPosition(),14);
+            system->ShowHanselWSkill(obj->GetTransform()->GetLocalPosition(), 14);
         }
         else
         {
@@ -207,20 +214,20 @@ void GraphicsTest()
     }
 
 
-	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("Cube");
+    {
+        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("Cube");
         obj2->GetTransform()->SetLocalScale(Vector3d{ 0.01,0.01,0.01 });
 
 
-		auto obj3 = Scene::getCurrentScene()->AddGameObject();
-		auto test = obj3->AddComponent<TestComponent4>();
+        auto obj3 = Scene::getCurrentScene()->AddGameObject();
+        auto test = obj3->AddComponent<TestComponent4>();
         test->obj = obj2;
         test->system = systemComponent;
         test->camObj = camObj;
     }
 
     {
-        
+
     }
     yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
     //yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
