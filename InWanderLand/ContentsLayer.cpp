@@ -389,6 +389,8 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
     PlayableComponent::OnGameStartAll();
 
     ContentsObserver::Instance().OnPlayContents();
+	SkillPreviewSystem::Instance().Init();
+	SkillPreviewSystem::Instance().camObj = GameManager::Instance().rtscam->GetGameObject();
 }
 
 void application::contents::ContentsLayer::PauseContents()

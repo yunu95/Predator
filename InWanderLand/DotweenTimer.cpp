@@ -71,11 +71,11 @@ void DotweenTimer::Update()
 		{
 			if (isRepeat == false)
 			{
-				onCompleteFunction();
 				onExpiration();
 				isActive = false;
 				elapsed = 0;
 				isDone = true;
+				onCompleteFunction();
 			}
 			else
 			{
