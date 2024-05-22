@@ -20,6 +20,9 @@ void PlayerUnit::Start()
 	unitFSM.updateAction[UnitState::Resurrect] = [this]() { ResurrectUpdate(); };
 
 	/// OffsetMove
+	//unitFSM.transitions[UnitState::Idle].push_back({ UnitState::OffsetMove,
+	//[this]() { return } });
+
 	unitFSM.transitions[UnitState::OffsetMove].push_back({ UnitState::WaveStart,
 		[this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
 

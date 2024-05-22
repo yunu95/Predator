@@ -77,8 +77,6 @@ public:
 
 	//void clearDotweenTimerMap();
 
-	DotweenTimer* tempTimer;
-
 	virtual Component* GetComponent() { return this; }
 
 private:
