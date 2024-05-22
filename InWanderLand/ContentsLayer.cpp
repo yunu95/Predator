@@ -286,7 +286,7 @@ void application::contents::ContentsLayer::Initialize()
 
 void application::contents::ContentsLayer::Update(float ts)
 {
-    //std::cout << Time::GetFPS() << std::endl;
+    // std::cout << Time::GetFPS() << std::endl;
 }
 
 void application::contents::ContentsLayer::GUIProgress()
@@ -320,6 +320,8 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
     PlayableComponent::OnGameStartAll();
 
     ContentsObserver::Instance().OnPlayContents();
+	SkillPreviewSystem::Instance().Init();
+	SkillPreviewSystem::Instance().camObj = GameManager::Instance().rtscam->GetGameObject();
 }
 
 void application::contents::ContentsLayer::PauseContents()

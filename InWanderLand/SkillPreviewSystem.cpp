@@ -5,7 +5,7 @@
 #define OFFSET 1.414
 #define AXIS Vector3d{-1,0,0}
 #define Y_OFFSET 0.1
-#define VERTEX_OFFSET 0.5
+#define VERTEX_OFFSET 0.1
 
 
 void SkillPreviewSystem::ObjectInitializer(graphics::StaticMeshRenderer* comp)
@@ -519,7 +519,7 @@ void SkillPreviewSystem::HideHanselWSkill()
 	}
 }
 
-void SkillPreviewSystem::ShowTemporaryRoute(UnitType unitType, const std::vector<Vector3d>& vertexList)
+void SkillPreviewSystem::ShowTemporaryRoute(UnitType unitType, std::vector<Vector3d>& vertexList)
 {
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	// 버텍스가 1개만 들어오는 일은 없을 것으로 예상 혹시모르니 return
@@ -560,7 +560,7 @@ void SkillPreviewSystem::ShowTemporaryRoute(UnitType unitType, const std::vector
 	
 }
 
-void SkillPreviewSystem::ShowRoute(UnitType unitType, const std::vector<Vector3d>& vertexList)
+yunuGI::IMesh* SkillPreviewSystem::ShowRoute(UnitType unitType, std::vector<Vector3d>& vertexList)
 {
 	auto mesh = CreateRouteMesh(vertexList);
 	auto renderer = this->Borrow();
@@ -572,23 +572,25 @@ void SkillPreviewSystem::ShowRoute(UnitType unitType, const std::vector<Vector3d
 	{
 		case SkillPreviewSystem::UnitType::Robin:
 		{
-			renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,1 });
+			renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,0.3 });
 		}
 		break;
 		case SkillPreviewSystem::UnitType::Ursula:
 		{
-			renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,1 });
+			renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,0.3 });
 		}
 		break;
 		case SkillPreviewSystem::UnitType::Hansel:
 		{
-			renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,1 });
+			renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,0.3 });
 		}
 		break;
 		default:
 		{}
 		break;
 	}
+
+	return mesh;
 }
 
 void SkillPreviewSystem::DeleteRouteMesh(yunuGI::IMesh* mesh)
@@ -604,7 +606,7 @@ void SkillPreviewSystem::DeleteRouteMesh(yunuGI::IMesh* mesh)
 	_resourceManager->DeleteMesh(mesh);
 }
 
-yunuGI::IMesh* SkillPreviewSystem::CreateRouteMesh(const std::vector<Vector3d>& vertexList)
+yunuGI::IMesh* SkillPreviewSystem::CreateRouteMesh(std::vector<Vector3d>& vertexList)
 {
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
@@ -617,6 +619,7 @@ yunuGI::IMesh* SkillPreviewSystem::CreateRouteMesh(const std::vector<Vector3d>& 
 	std::vector<unsigned int> idxVec;
 	std::vector<yunuGI::Vector2> uvVec;
 	std::vector<yunuGI::Vector3> normalVec;
+
 
 	for (int i = 0; i < vertexCount - 1; i++)
 	{
@@ -750,5 +753,14 @@ yunuGI::IMesh* SkillPreviewSystem::CreateRouteMesh(const std::vector<Vector3d>& 
 		}
 	}
 
-	return _resourceManager->CreateMesh(L"RouteMesh", posVec, idxVec, normalVec, uvVec);
+	for (auto& each : posVec)
+	{
+		each.y = Y_OFFSET;
+	}
+
+	std::wstring meshName = L"RouteMesh_";
+	meshName += std::to_wstring(routeMeshID);
+	auto tempMesh = _resourceManager->CreateMesh(meshName, posVec, idxVec, normalVec, uvVec);
+	routeMeshID++;
+	return tempMesh;
 }

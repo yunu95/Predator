@@ -13,30 +13,8 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 
-	virtual void OnTriggerEnter(physics::Collider* collider) override
-	{
-		if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
-			colliderUnitComponent != nullptr &&
-			colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
-		{
-			triggerStay.insert(collider);
-			OnInteractableTriggerEnter(); 
-		}
-	}
-
-	virtual void OnTriggerExit(physics::Collider* collider) override
-	{
-		if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
-			colliderUnitComponent != nullptr &&
-			colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
-		{
-			if (triggerStay.size() == 1)
-			{
-				OnInteractableTriggerExit();
-			}
-			triggerStay.erase(collider);
-		}
-	}
+	virtual void OnTriggerEnter(physics::Collider* collider) override;
+	virtual void OnTriggerExit(physics::Collider* collider) override;
 
 	virtual void SetDataFromEditorData(const application::editor::InteractableData& data) override;
 

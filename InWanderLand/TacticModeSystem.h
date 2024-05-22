@@ -36,6 +36,12 @@ public:
 		WSkill
 	};
 
+    struct TacticPreview
+    {
+        Vector3d finalPos;
+        yunuGI::IMesh* mesh;
+    };
+
     void ToggleRequested(InputManager::SelectedSerialNumber currentSelectedNum);
 
     void SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum);
@@ -62,7 +68,12 @@ public:
 
 	CursorDetector* m_cursorDetector;
 
+    void PopCommand();
+    void ClearCommand();
     void ReportTacticActionFinished();
+
+private:
+    void ShowUnitSkillPreview(Unit* unit, Unit::SkillEnum skillKind);
 
 private:
     float m_maxGauge{ 100 };
@@ -90,7 +101,8 @@ private:
 
     std::unordered_map<Unit::UnitType, PlayerUnit*> playerComponentMap;
 
-    std::queue<Unit*> sequenceQueue;
+    std::deque<Unit*> sequenceQueue;
+    
 
 	PlaytimeWave* m_currentOperatingWave;
 };

@@ -19,6 +19,8 @@ void TacticModeSystem::OnEnable()
 
 void TacticModeSystem::Start()
 {
+
+
 	AddGauge(m_maxGauge);
 
 	isCoolTime = false;
@@ -55,7 +57,7 @@ void TacticModeSystem::OnContentsStop()
 
 	for (int i = 0; i < sequenceQueue.size(); i++)
 	{
-		sequenceQueue.pop();
+		sequenceQueue.pop_front();
 	}
 
 	m_maxGauge = 10;
@@ -111,9 +113,27 @@ void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSer
 			{
 				if (m_currentGauge - moveCost > 0)
 				{
-					currentSelectedUnit->PushMoveFunctionToTacticQueue(pos);
+					// 오브젝트의 현재 포지션에서 이동할 위치까지의 경로 메쉬를 만들고 보여줌
+					const auto& previewQueue = currentSelectedUnit->GetTacticPreview();
+					auto field = currentSelectedUnit->GetNavField();
+					TacticPreview preview;
+					std::vector<Vector3d> pathVertexList;
+					if (previewQueue.empty())
+					{
+						pathVertexList = field->GetSmoothPath(currentSelectedUnit->GetGameObject()->GetTransform()->GetWorldPosition(), pos);
+					}
+					else
+					{
+						auto preview = previewQueue.back();
+						pathVertexList = field->GetSmoothPath(preview.finalPos, pos);
+					}
+
+					auto pathMesh = SkillPreviewSystem::Instance().ShowRoute(static_cast<SkillPreviewSystem::UnitType>(currentSelectedNum-1), pathVertexList);
+
+					currentSelectedUnit->PushMoveFunctionToTacticQueue(pos, pathMesh);
 					AddGauge(-1 * moveCost);
-					sequenceQueue.push(currentSelectedUnit);
+					//sequenceQueue.push(currentSelectedUnit);
+					sequenceQueue.push_back(currentSelectedUnit);
 				}
 			}
 			else if (Unit* selectedUnit = m_cursorDetector->GetCurrentOnMouseUnit();
@@ -121,9 +141,47 @@ void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSer
 			{
 				if (m_currentGauge - attackCost > 0)
 				{
-					currentSelectedUnit->PushAttackMoveFunctionToTacticQueue(pos, selectedUnit);
+					// 평타에 대한 커맨드
+					// 거리가 멀다면 걸어가서 때리기 때문에 이동경로 표시를 해줘야함.
+					// 공격 사거리만큼 vertex 삭제하기
+					const auto& previewQueue = currentSelectedUnit->GetTacticPreview();
+					auto field = currentSelectedUnit->GetNavField();
+					TacticPreview preview;
+					std::vector<Vector3d> pathVertexList;
+
+					if (previewQueue.empty())
+					{
+						pathVertexList = field->GetSmoothPath(currentSelectedUnit->GetGameObject()->GetTransform()->GetWorldPosition(), pos);
+					}
+					else
+					{
+						auto preview = previewQueue.back();
+						pathVertexList = field->GetSmoothPath(preview.finalPos, pos);
+					}
+
+					for (auto it = pathVertexList.rbegin(); it != pathVertexList.rend();) 
+					{
+						auto atkDistance = currentSelectedUnit->GetAtkDistance();
+						if (atkDistance >= ((*it) - selectedUnit->GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude() + 0.0001f) 
+						{
+							it = std::reverse_iterator(pathVertexList.erase((it + 1).base()));
+						}
+						else
+						{
+							++it;
+						}
+					}
+
+					preview.finalPos = pathVertexList.back();
+					
+
+					auto pathMesh = SkillPreviewSystem::Instance().ShowRoute(static_cast<SkillPreviewSystem::UnitType>(currentSelectedNum - 1), pathVertexList);
+
+
+					currentSelectedUnit->PushAttackMoveFunctionToTacticQueue(preview.finalPos, selectedUnit, pathMesh);
 					AddGauge(-1 * attackCost);
-					sequenceQueue.push(currentSelectedUnit);
+					//sequenceQueue.push(currentSelectedUnit);
+					sequenceQueue.push_back(currentSelectedUnit);
 				}
 			}
 			//SkillPreviewSystem::Instance().ActivateSkillPreview(false);
@@ -139,7 +197,8 @@ void TacticModeSystem::SetLeftClickAddQueueForAttackMove(InputManager::SelectedS
 			if (m_currentGauge > 0)
 			{
 				currentSelectedUnit->PushAttackMoveFunctionToTacticQueue(pos);
-				sequenceQueue.push(currentSelectedUnit);
+				///sequenceQueue.push(currentSelectedUnit);
+				sequenceQueue.push_back(currentSelectedUnit);
 				//SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 				//m_rtsCam->groundLeftClickCallback = [](Vector3d pos) {};
 				//tacticModeGauge--;
@@ -162,8 +221,66 @@ void TacticModeSystem::SetLeftClickAddQueueForSkill(InputManager::SelectedSerial
 		{
 			if (m_currentGauge - skillCost > 0)
 			{
-				currentSelectedUnit->PushSkillFunctionToTacticQueue(currentSelectedSkill, pos);
-				sequenceQueue.push(currentSelectedUnit);
+				// 현재 유닛이 누구인지 어떤 스킬인지에 따라 달라질 것임
+				auto preview = currentSelectedUnit->GetTacticPreview();
+				Vector3d objPos;
+				switch (currentSelectedUnit->GetUnitType())
+				{
+					case Unit::UnitType::Warrior:
+					{
+						if (currentSelectedSkill == Unit::SkillEnum::Q)
+						{
+							// 로빈 Q스킬은 돌진을 함 즉, pos가 나의 위치가 될 것임
+							if (preview.empty())
+							{
+								SkillPreviewSystem::Instance().ShowRobinQSkill(currentSelectedUnit->GetGameObject()->GetTransform()->GetWorldPosition(),
+									currentSelectedUnit->m_playerSkillSystem->GetSkillOneRange());
+								objPos = currentSelectedUnit->GetGameObject()->GetTransform()->GetWorldPosition();
+							}
+							else
+							{
+								SkillPreviewSystem::Instance().ShowRobinQSkill(preview.back().finalPos, currentSelectedUnit->m_playerSkillSystem->GetSkillOneRange());
+								objPos = pos;
+							}
+						}
+						else if (currentSelectedSkill == Unit::SkillEnum::W)
+						{
+							//SkillPreviewSystem::ShowRobin();
+						}
+					}
+					break;
+					//case Unit::UnitType::Magician:
+					//{
+					//	if (currentSelectedSkill == Unit::SkillEnum::Q)
+					//	{
+					//		SkillPreviewSystem::ShowUrsulaQSkill();
+					//	}
+					//	else if (currentSelectedSkill == Unit::SkillEnum::W)
+					//	{
+					//		SkillPreviewSystem::ShowUrsulaWSkill();
+					//	}
+					//}
+					//break;
+					//case Unit::UnitType::Healer:
+					//{
+					//	if (currentSelectedSkill == Unit::SkillEnum::Q)
+					//	{
+					//		SkillPreviewSystem::ShowHanselQSkill();
+					//	}
+					//	else if (currentSelectedSkill == Unit::SkillEnum::W)
+					//	{
+					//		SkillPreviewSystem::ShowHanselWSkill();
+					//	}
+					//}
+					//break;
+					default:
+						break;
+				}
+
+
+				currentSelectedUnit->PushSkillFunctionToTacticQueue(currentSelectedSkill, pos, objPos, currentSelectedSkill);
+				///sequenceQueue.push(currentSelectedUnit);
+				sequenceQueue.push_back(currentSelectedUnit);
 				//SkillPreviewSystem::Instance().ActivateSkillPreview(false);
 				SetTacticModeRightClickFunction(currentSelectedNum);
 				AddGauge(-1 * skillCost);
@@ -185,7 +302,7 @@ void TacticModeSystem::EngageTacticMode()
 
 	for (int i = 0; i < sequenceQueue.size(); i++)
 	{
-		sequenceQueue.pop();
+		sequenceQueue.pop_front();
 	}
 
 	m_currentOperatingWave->StopWaveElapsedTime();
@@ -264,7 +381,7 @@ void TacticModeSystem::ExitTacticMode()
 		m_rtsCam->SetTarget(sequenceQueue.front()->GetGameObject());
 		sequenceQueue.front()->UnitActionOnTacticModeEnded();
 		sequenceQueue.front()->PermitTacticAction();
-		sequenceQueue.pop();
+		sequenceQueue.pop_front();
 	}
 }
 
@@ -349,8 +466,13 @@ void TacticModeSystem::ReportTacticActionFinished()
 	{
 		m_rtsCam->SetTarget(sequenceQueue.front()->GetGameObject());
 		sequenceQueue.front()->PermitTacticAction();
-		sequenceQueue.pop();
+		sequenceQueue.pop_front();
 	}
+}
+
+void TacticModeSystem::ShowUnitSkillPreview(Unit* unit, Unit::SkillEnum skillKind)
+{
+	
 }
 
 void TacticModeSystem::RegisterCurrentWave(PlaytimeWave* p_wave)
@@ -359,6 +481,21 @@ void TacticModeSystem::RegisterCurrentWave(PlaytimeWave* p_wave)
 	for (auto each : p_wave->waveData->waveUnitDatasVector)
 	{
 		m_currentWaveUnits.push_back(each->inGameUnit);
+	}
+}
+
+void TacticModeSystem::PopCommand()
+{
+	sequenceQueue.back()->PopCommand();
+	sequenceQueue.pop_back();
+}
+
+void TacticModeSystem::ClearCommand()
+{
+	while(!sequenceQueue.empty())
+	{
+		sequenceQueue.back()->PopCommand();
+		sequenceQueue.pop_back();
 	}
 }
 
