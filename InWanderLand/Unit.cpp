@@ -2,6 +2,7 @@
 #include "Unit.h"
 #include "PlayerController.h"
 #include "AttackSystem.h"
+#include "RangedAttackSystem.h"
 #include "InputManager.h"
 #include "PlayerSkillSystem.h"
 #include "ChessTrapSkillSystem.h"
@@ -386,6 +387,11 @@ void Unit::AttackEngage()
     AttackSystem* atkSys = GetGameObject()->GetComponent<AttackSystem>();
     isAttackAnimationOperating = false;
     isAnimationChangedAttackToIdle = false;
+
+    RangedAttackSystem* rangeAtkSys = GetGameObject()->GetComponent<RangedAttackSystem>();
+
+    if (rangeAtkSys)
+        rangeAtkSys->ReloadProjectile();
 
     dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
     CheckCurrentAnimation(unitAnimations.m_idleAnimation);

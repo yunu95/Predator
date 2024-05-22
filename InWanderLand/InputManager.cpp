@@ -25,6 +25,8 @@ void InputManager::Start()
 
 void InputManager::Update()
 {
+
+
 	if (isInputManagerActivated)
 	{
 		if (!isMouseOnUIButton)

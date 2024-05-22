@@ -6,14 +6,6 @@
 
 #include "IInteractableComponent.h"
 
-namespace application
-{
-	namespace editor
-	{
-		class InteractableData;
-	}
-}
-
 class Interactable_TriggerSphere
 	: public IInteractableComponent
 {
@@ -21,32 +13,10 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	
-	virtual void OnTriggerEnter(physics::Collider* collider) override
-	{
-		if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
-			colliderUnitComponent != nullptr &&
-			colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
-		{
-			triggerStay.insert(collider);
-			OnInteractableTriggerEnter();
-		}
-	}
+	virtual void OnTriggerEnter(physics::Collider* collider) override;
+	virtual void OnTriggerExit(physics::Collider* collider) override;
 
-	virtual void OnTriggerExit(physics::Collider* collider) override
-	{
-		if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
-			colliderUnitComponent != nullptr &&
-			colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
-		{
-			if (triggerStay.size() == 1)
-			{
-				OnInteractableTriggerExit();
-			}
-			triggerStay.erase(collider);
-		}
-	}
-
-	void SetDataFromEditorData(const application::editor::InteractableData& data);
+	virtual void SetDataFromEditorData(const application::editor::InteractableData& data) override;
 
 	virtual yunutyEngine::coroutine::Coroutine DoInteraction() override;
 

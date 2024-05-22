@@ -13,6 +13,7 @@
 #include "SingleNavigationField.h"
 #include "TestUtilRTSTestCam.h"
 #include "WarriorProductor.h"
+#include "HealerAutoAttackProjectilePool.h"
 #include "MagicianProductor.h"
 #include "HealerProductor.h"
 #include "BossProductor.h"
@@ -90,80 +91,15 @@ public:
     bool isShow = false;
     virtual void Update() override
     {
-        if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
+        if (yunutyEngine::Input::isKeyPushed(KeyCode::Z))
         {
-            isShow = true;
-           
-        }
-		if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
-		{
-            isShow = false;
-		}
-        auto curPos = obj->GetTransform()->GetLocalPosition();
-        auto curRot = obj->GetTransform()->GetLocalRotation();
-        // 이동
-		if (Input::isKeyDown(yunutyEngine::KeyCode::I))
-		{
-            curPos.z = curPos.z + (2 * Time::GetDeltaTime());
-            obj->GetTransform()->SetLocalPosition(curPos);
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::K))
-		{
-			curPos.z = curPos.z - (2 * Time::GetDeltaTime());
-			obj->GetTransform()->SetLocalPosition(curPos);
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::J))
-		{
-			curPos.x = curPos.x - (2 * Time::GetDeltaTime());
-			obj->GetTransform()->SetLocalPosition(curPos);
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::L))
-		{
-			curPos.x = curPos.x + (2 * Time::GetDeltaTime());
-			obj->GetTransform()->SetLocalPosition(curPos);
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::U))
-		{
-            auto curE = curRot.Euler();
-            curE.y = curE.y + (10 * Time::GetDeltaTime());
-            obj->GetTransform()->SetLocalRotation(Quaternion{curE});
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::O))
-		{
-			auto curE = curRot.Euler();
-			curE.y = curE.y - (10 * Time::GetDeltaTime());
-			obj->GetTransform()->SetLocalRotation(Quaternion{ curE });
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::Y))
-		{
-            obj->GetTransform()->SetLocalPosition(Vector3d{0,0,0});
-		}
+            //auto obj = Scene::getCurrentScene()->AddGameObject();
+            //auto tween = obj->AddComponent<Dotween>();
+            //tween->SetActive(false);
 
-		if (Input::isKeyPushed(yunutyEngine::KeyCode::T))
-		{
-            std::vector<Vector3d> a;
-            a.push_back(Vector3d{ 0,0,0 });
-            a.push_back(Vector3d{ 0,0,1 });
-            a.push_back(Vector3d{ 1,0,1 });
-            //system->ShowRoute(a);
+            HealerAutoAttackProjectilePool::Instance().Borrow();
+        }
 
-            const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-            auto gobj = Scene::getCurrentScene()->AddGameObject();
-            gobj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{-90,0,0} });
-            auto renderer = gobj->AddComponent<graphics::StaticMeshRenderer>();
-            renderer->GetGI().SetMesh(_resourceManager->GetMesh(L"RouteMesh"));
-            renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, _resourceManager->GetTexture(L"Texture/move.png"));
-            renderer->GetGI().GetMaterial()->SetVertexShader(_resourceManager->GetShader(L"TextureVS.cso"));
-            renderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"GuideLinePS.cso"));
-		}
-        if (isShow)
-        {
-            system->ShowHanselWSkill(obj->GetTransform()->GetLocalPosition(),14);
-        }
-        else
-        {
-            system->HideHanselWSkill();
-        }
     }
 };
 
@@ -326,11 +262,13 @@ class ContentsInitializer : public yunutyEngine::Component
         Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
         co_return;
     }
+
     virtual void Start() override
     {
         StartCoroutine(Initialize());
     }
 };
+
 void application::contents::ContentsLayer::Initialize()
 {
     if (ContentsLayer::testInitializer)
@@ -348,7 +286,7 @@ void application::contents::ContentsLayer::Initialize()
 
 void application::contents::ContentsLayer::Update(float ts)
 {
-    //std::cout << Time::GetFPS() << std::endl;
+    // std::cout << Time::GetFPS() << std::endl;
 }
 
 void application::contents::ContentsLayer::GUIProgress()
