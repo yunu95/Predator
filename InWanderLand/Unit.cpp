@@ -388,11 +388,6 @@ void Unit::AttackEngage()
     isAttackAnimationOperating = false;
     isAnimationChangedAttackToIdle = false;
 
-    RangedAttackSystem* rangeAtkSys = GetGameObject()->GetComponent<RangedAttackSystem>();
-
-    if (rangeAtkSys)
-        rangeAtkSys->ReloadProjectile();
-
     dotween->DOLookAt(m_currentTargetUnit->GetTransform()->GetWorldPosition(), rotateTime, false);
     CheckCurrentAnimation(unitAnimations.m_idleAnimation);
 
@@ -419,6 +414,9 @@ void Unit::AttackEngage()
 			isAttackAnimationOperating = true;
 			isAnimationChangedAttackToIdle = false;
 			ChangeAnimation(unitAnimations.m_attackAnimation);
+            RangedAttackSystem* rangeAtkSys = GetGameObject()->GetComponent<RangedAttackSystem>();
+            if (rangeAtkSys)
+                rangeAtkSys->ReloadProjectile();
 			CheckCurrentAnimation(unitAnimations.m_attackAnimation);
 		};
 	m_stateTimerVector[UnitState::Attack]->ActivateTimer();
@@ -1550,7 +1548,8 @@ void Unit::SetUnitStateDirectly(Unit::UnitState p_unitState)
     {
     case Unit::UnitState::Idle:
     {
-        unitFSM.SetUnitStateDirectly(p_unitState);
+        if (unitFSM.currentState != UnitState::Skill)
+            unitFSM.SetUnitStateDirectly(p_unitState);
         break;
     }
     case Unit::UnitState::Move:
