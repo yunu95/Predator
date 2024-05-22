@@ -572,8 +572,6 @@ void Unit::MoveUpdate()
         {
             isPermittedToTacticAction = false;
             this->ReportTacticActionFinished();
-
-            
         }
     }
 }
