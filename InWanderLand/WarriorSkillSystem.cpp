@@ -18,7 +18,7 @@ yunutyEngine::coroutine::Coroutine WarriorSkillSystem::ImpactOnTheEnd()
     if (m_unitComponent->isPermittedToTacticAction)
     {
         m_unitComponent->isPermittedToTacticAction = false;
-        TacticModeSystem::Instance().ReportTacticActionFinished();
+        m_unitComponent->ReportTacticActionFinished();
     }
 }
 KnockBackComponent* WarriorSkillSystem::GetKnockBackComponent()
@@ -77,12 +77,12 @@ void WarriorSkillSystem::ActivateSkillTwo(Vector3d skillPos)
         {
             isOncedActivated = false;
             SetSkillRequirmentsActive(WTauntSkill, false);
-            TacticModeSystem::Instance().ReportTacticActionFinished();
+            m_unitComponent->ReportTacticActionFinished();
             m_unitComponent->SetUnitStateIdle();
             if (m_unitComponent->isPermittedToTacticAction)
             {
                 m_unitComponent->isPermittedToTacticAction = false;
-                TacticModeSystem::Instance().ReportTacticActionFinished();
+                m_unitComponent->ReportTacticActionFinished();
             }
         });
     m_developedFunctionToWSkill();

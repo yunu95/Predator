@@ -20,6 +20,12 @@ void PlayerUnit::Start()
 	unitFSM.updateAction[UnitState::Resurrect] = [this]() { ResurrectUpdate(); };
 
 	/// OffsetMove
+	unitFSM.transitions[UnitState::Idle].push_back({ UnitState::OffsetMove,
+	[this]() { return isOffSetMoveRequested == true && !GameManager::Instance().IsBattleSystemOperating(); } });
+
+	unitFSM.transitions[UnitState::Move].push_back({ UnitState::OffsetMove,
+	[this]() { return isOffSetMoveRequested == true && !GameManager::Instance().IsBattleSystemOperating(); } });
+
 	unitFSM.transitions[UnitState::OffsetMove].push_back({ UnitState::WaveStart,
 		[this]() { return GameManager::Instance().IsPlayerJustEnteredWaveRegion(); } });
 
@@ -41,6 +47,7 @@ void PlayerUnit::OffsetMoveEngage()
 	StopMove();
 	StopAllStateTimer();
 	currentOrder = UnitState::OffsetMove;
+	isOffSetMoveRequested = false;
 	isFollowing = false;
 	m_navAgentComponent->SetSpeed(m_speed);
 	ChangeAnimation(unitAnimations.m_idleAnimation);
@@ -162,6 +169,7 @@ void PlayerUnit::ReportLeaderUnitChanged(UnitType p_type)
 	else
 	{
 		m_followingTargetUnit = PlayerController::Instance().GetPlayerMap().find(p_type)->second;
-		SetUnitStateDirectly(UnitState::OffsetMove);
+		isOffSetMoveRequested = true;
+		//SetUnitStateDirectly(UnitState::OffsetMove);
 	}
 }
