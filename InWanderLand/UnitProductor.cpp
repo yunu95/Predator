@@ -151,12 +151,13 @@ void UnitProductor::AddRangeSystemComponent() const
 
 void UnitProductor::AddColliderComponent() const
 {
-    auto unitCollider = m_unitGameObject->AddComponent<physics::CapsuleCollider>();	// 빈 껍데기에 
-    unitCollider->SetHalfHeight(UNIT_LENGTH * 0.5f);
-    unitCollider->SetRadius(UNIT_LENGTH * 0.5f);
+    auto unitCollider = m_unitGameObject->AddComponent<physics::SphereCollider>();	// 빈 껍데기에 
+    unitCollider->SetRadius(m_collisionSize);
     m_unitGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
-    AttachDebugMesh(m_unitGameObject, DebugMeshType::Capsule, yunuGI::Color::green(), true);
+    auto rendererObj = m_unitGameObject->AddGameObject();
+    rendererObj->GetTransform()->SetLocalScale(m_collisionSize / 0.5 * Vector3d(1, 1, 1));
+    AttachDebugMesh(rendererObj, DebugMeshType::Sphere, yunuGI::Color::green(), true);
 }
 
 void UnitProductor::AddNavigationComponent()
