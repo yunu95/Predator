@@ -41,6 +41,7 @@ bool InstancingManager::IsInTree(std::shared_ptr<RenderInfo>& renderInfo)
 
 void InstancingManager::SortByCameraDirection()
 {
+	// 쿼드트리에 중복으로 데이터가 들어가지 않게 쿼드트리에서 데이터를 빼준다.
 	if (!this->staticMeshDeferredRenderVec.empty())
 	{
 		for (auto& each : this->staticMeshDeferredRenderVec)
@@ -189,13 +190,6 @@ void InstancingManager::SortByCameraDirection()
 			this->quadTree.PushData(each2.get(), DirectX::SimpleMath::Vector2{ tempPos.x, tempPos.z }, radius);
 		}
 	}
-	int a = 1;
-	//for (auto& each : this->staticMeshRenderInfoIndexMap)
-	//{
-	//	FrustumCullingManager::Instance.Get().RegisterRenderInfo(each.first);
-	//}
-
-	//FrustumCullingManager::Instance.Get().Init();
 }
 
 void InstancingManager::RenderStaticDeferred()
@@ -739,11 +733,14 @@ void InstancingManager::RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& 
 	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
 	InstanceID instanceID = std::make_pair(renderInfo->mesh, renderInfo->material);
 
+	if (renderInfo->mesh != nullptr && renderInfo->mesh->GetName() == L"SM_Green_Wall_7m")
+	{
+		int a = 1;
+	}
+
 	auto renderInfoIter = this->staticMeshRenderInfoIndexMap.find(renderInfo);
 	if (renderInfoIter != this->staticMeshRenderInfoIndexMap.end())
 	{
-		// 여기부터 크리티컬 섹션
-
 		// 이곳에 들어오면 renderInfo포인터가 vector에 있었다는 뜻
 		auto instanceIter = this->staticMeshInstanceIDIndexMap.find(instanceID);
 		if (instanceIter != this->staticMeshInstanceIDIndexMap.end())

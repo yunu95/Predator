@@ -14,9 +14,9 @@ void Interactable_SpikeTrap::Start()
 
 	auto rendererObj = GetGameObject()->AddGameObject();
 	AttachDebugMesh(rendererObj, DebugMeshType::Cube, yunuGI::Color::green());
-	rendererObj->GetTransform()->SetLocalScale(Vector3d(3, 3, 3));
+	rendererObj->GetTransform()->SetLocalScale(Vector3d(2.5, 2.5, 2.5));
 	auto boxCollider = GetGameObject()->AddComponent<physics::BoxCollider>();
-	boxCollider->SetHalfExtent(Vector3d(1.5, 1.5, 1.5));
+	boxCollider->SetHalfExtent(Vector3d(1.25, 1.25, 1.25));
 
 	for (auto each : GetGameObject()->GetChildren())
 	{
