@@ -19,8 +19,6 @@ void TacticModeSystem::OnEnable()
 
 void TacticModeSystem::Start()
 {
-
-
 	AddGauge(m_maxGauge);
 
 	isCoolTime = false;
@@ -70,7 +68,7 @@ void TacticModeSystem::OnContentsStop()
 	isTacticModeOperating = false;
 	isTacticOrderPerforming = false;
 	currentSelectedUnit = nullptr;
-	m_currentOperatingWave = nullptr;
+	//m_currentOperatingWave = nullptr;
 
 	this->SetActive(false);
 }
@@ -92,6 +90,14 @@ void TacticModeSystem::ToggleRequested(InputManager::SelectedSerialNumber curren
 			}
 			else                            /// 3. 명령 입력 중이라면 나가기.
 			{
+				//StartCoroutine([](TacticModeSystem* tac)->coroutine::Coroutine 
+				//	{
+				//	tac->isReady = false;
+				//	co_yield coroutine::WaitForSeconds{ 3 };
+				//	tac->isReady = true;
+				//	co_return;
+				//	}(this));
+
 				ExitTacticMode();
 				PlayerController::Instance().SetCurrentPlayerSerialNumber(static_cast<Unit::UnitType>(currentSelectedNum));
 				PlayerController::Instance().SetRightClickFunction();
@@ -128,7 +134,7 @@ void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSer
 						pathVertexList = field->GetSmoothPath(preview.finalPos, pos);
 					}
 
-					auto pathMesh = SkillPreviewSystem::Instance().ShowRoute(static_cast<SkillPreviewSystem::UnitType>(currentSelectedNum-1), pathVertexList);
+					auto pathMesh = SkillPreviewSystem::Instance().ShowRoute(static_cast<SkillPreviewSystem::UnitType>(currentSelectedNum - 1), pathVertexList);
 
 					currentSelectedUnit->PushMoveFunctionToTacticQueue(pos, pathMesh);
 					AddGauge(-1 * moveCost);
@@ -159,10 +165,10 @@ void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSer
 						pathVertexList = field->GetSmoothPath(preview.finalPos, pos);
 					}
 
-					for (auto it = pathVertexList.rbegin(); it != pathVertexList.rend();) 
+					for (auto it = pathVertexList.rbegin(); it != pathVertexList.rend();)
 					{
 						auto atkDistance = currentSelectedUnit->GetAtkDistance();
-						if (atkDistance >= ((*it) - selectedUnit->GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude() + 0.0001f) 
+						if (atkDistance >= ((*it) - selectedUnit->GetGameObject()->GetTransform()->GetWorldPosition()).Magnitude() + 0.0001f)
 						{
 							it = std::reverse_iterator(pathVertexList.erase((it + 1).base()));
 						}
@@ -173,7 +179,7 @@ void TacticModeSystem::SetTacticModeRightClickFunction(InputManager::SelectedSer
 					}
 
 					preview.finalPos = pathVertexList.back();
-					
+
 
 					auto pathMesh = SkillPreviewSystem::Instance().ShowRoute(static_cast<SkillPreviewSystem::UnitType>(currentSelectedNum - 1), pathVertexList);
 
@@ -305,7 +311,7 @@ void TacticModeSystem::EngageTacticMode()
 		sequenceQueue.pop_front();
 	}
 
-	m_currentOperatingWave->StopWaveElapsedTime();
+	//m_currentOperatingWave->StopWaveElapsedTime();
 	playerComponentMap = PlayerController::Instance().GetPlayerMap();
 	isTacticModeOperating = true;
 
@@ -363,7 +369,7 @@ void TacticModeSystem::ExitTacticMode()
 		isCoolTime = true;
 		isTacticOrderPerforming = false;
 		LocalTimeEntityManager::Instance().ReportTacticModeEnded();
-		m_currentOperatingWave->ResumeWaveElapsedTime();
+		//m_currentOperatingWave->ResumeWaveElapsedTime();
 
 		for (auto each : m_currentWaveUnits)
 		{
@@ -451,7 +457,7 @@ void TacticModeSystem::ReportTacticActionFinished()
 		isCoolTime = true;
 		isTacticOrderPerforming = false;
 		LocalTimeEntityManager::Instance().ReportTacticModeEnded();
-		m_currentOperatingWave->ResumeWaveElapsedTime();
+		//m_currentOperatingWave->ResumeWaveElapsedTime();
 
 		for (auto each : m_currentWaveUnits)
 		{
@@ -472,12 +478,12 @@ void TacticModeSystem::ReportTacticActionFinished()
 
 void TacticModeSystem::ShowUnitSkillPreview(Unit* unit, Unit::SkillEnum skillKind)
 {
-	
+
 }
 
 void TacticModeSystem::RegisterCurrentWave(PlaytimeWave* p_wave)
 {
-	m_currentOperatingWave = p_wave;
+	//m_currentOperatingWave = p_wave;
 	for (auto each : p_wave->waveData->waveUnitDatasVector)
 	{
 		m_currentWaveUnits.push_back(each->inGameUnit);
@@ -492,7 +498,7 @@ void TacticModeSystem::PopCommand()
 
 void TacticModeSystem::ClearCommand()
 {
-	while(!sequenceQueue.empty())
+	while (!sequenceQueue.empty())
 	{
 		sequenceQueue.back()->PopCommand();
 		sequenceQueue.pop_back();
