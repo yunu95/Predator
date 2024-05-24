@@ -36,7 +36,9 @@ private:
     bool isStoppedByTacticMode{ false };
 
 public:
-    std::vector<Unit*> m_currentWaveUnitVector;
+    static std::weak_ptr<PlaytimeWave> GetCurrentOperatingWave();
+	static std::weak_ptr<PlaytimeWave> currentOperativeWave;
+	std::vector<Unit*> m_currentWaveUnitVector;
     Unit* inGameUnit;
     virtual ~PlaytimeWave();
 

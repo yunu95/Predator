@@ -76,6 +76,7 @@ private:
     void ShowUnitSkillPreview(Unit* unit, Unit::SkillEnum skillKind);
 
 private:
+    bool isReady=false;
     float m_maxGauge{ 100 };
     float m_currentGauge{ 0 };
 
@@ -102,8 +103,5 @@ private:
     std::unordered_map<Unit::UnitType, PlayerUnit*> playerComponentMap;
 
     std::deque<Unit*> sequenceQueue;
-    
-
-	PlaytimeWave* m_currentOperatingWave;
 };
 
