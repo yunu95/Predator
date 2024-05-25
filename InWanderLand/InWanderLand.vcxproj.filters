@@ -622,6 +622,9 @@
     <Filter Include="UI\UnityRelated\SoundEnumID">
       <UniqueIdentifier>{a4480087-8435-4e87-be4d-7238d18061dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\UnitCommand">
+      <UniqueIdentifier>{4c2b6b5b-0929-4018-b780-46d8ce5812aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1582,6 +1585,9 @@
     <ClInclude Include="SoundEnumID.h">
       <Filter>UI\UnityRelated\SoundEnumID</Filter>
     </ClInclude>
+    <ClInclude Include="UnitCommand.h">
+      <Filter>Contents\UnitCommand</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2412,6 +2418,9 @@
     </ClCompile>
     <ClCompile Include="Interactable_TriggerBox.cpp">
       <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitCommand.cpp">
+      <Filter>Contents\UnitCommand</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -150,7 +150,7 @@ namespace application
 			auto cursorDetectorComponent = mouseCursorObject->AddComponent<CursorDetector>();
 
 			PlayerController::Instance().m_cursorDetector = cursorDetectorComponent;
-			TacticModeSystem::Instance().m_cursorDetector = cursorDetectorComponent;
+			//TacticModeSystem::Instance().m_cursorDetector = cursorDetectorComponent;
 
 			camComp->groundHoveringClickCallback = [=](Vector3d pos)
 			{
@@ -159,7 +159,7 @@ namespace application
 			};
 
 			PlayerController::Instance().SetMovingSystemComponent(camComp);
-			TacticModeSystem::Instance().SetMovingSystemComponent(camComp);
+			//TacticModeSystem::Instance().SetMovingSystemComponent(camComp);
 		}
 
 		yunutyEngine::graphics::Camera* CameraData::GetCameraComponent()

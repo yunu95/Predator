@@ -72,24 +72,24 @@ void InputManager::Update()
 				}
 			}
 
-			if (yunutyEngine::Input::isKeyPushed(KeyCode::Space) && GameManager::Instance().IsBattleSystemOperating())
-			{
-				ToggleTacticMode();
-			}
+			//if (yunutyEngine::Input::isKeyPushed(KeyCode::Space) && GameManager::Instance().IsBattleSystemOperating())
+			//{
+			//	ToggleTacticMode();
+			//}
 
-			if (yunutyEngine::Input::isKeyDown(KeyCode::Control) 
-				&& yunutyEngine::Input::isKeyPushed(KeyCode::Z)
-				&& GameManager::Instance().IsBattleSystemOperating())
-			{
-				TacticModeSystem::Instance().PopCommand();
-			}
+			//if (yunutyEngine::Input::isKeyDown(KeyCode::Control) 
+			//	&& yunutyEngine::Input::isKeyPushed(KeyCode::Z)
+			//	&& GameManager::Instance().IsBattleSystemOperating())
+			//{
+			//	TacticModeSystem::Instance().PopCommand();
+			//}
 
-			if (yunutyEngine::Input::isKeyDown(KeyCode::Control)
-				&& yunutyEngine::Input::isKeyPushed(KeyCode::X)
-				&& GameManager::Instance().IsBattleSystemOperating())
-			{
-				TacticModeSystem::Instance().ClearCommand();
-			}
+			//if (yunutyEngine::Input::isKeyDown(KeyCode::Control)
+			//	&& yunutyEngine::Input::isKeyPushed(KeyCode::X)
+			//	&& GameManager::Instance().IsBattleSystemOperating())
+			//{
+			//	TacticModeSystem::Instance().ClearCommand();
+			//}
 		}
 	}
 }
@@ -148,10 +148,10 @@ void InputManager::SelectPlayer(Unit::UnitType p_unitType)
 	}
 	isPlayerSelected = true;
 
-	if (TacticModeSystem::Instance().IsOrderingTimingNow())
-	{
-		TacticModeSystem::Instance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
-	}
+	//if (TacticModeSystem::Instance().IsOrderingTimingNow())
+	//{
+	//	TacticModeSystem::Instance().SetTacticModeRightClickFunction(currentSelectedSerialNumber);
+	//}
 }
 
 void InputManager::PrepareSkill(Unit::SkillEnum p_skillType, Unit::UnitType p_unitType)
@@ -185,9 +185,9 @@ void InputManager::PrepareSkill(Unit::SkillEnum p_skillType)
         /// 스킬이 아직 쿨타임이라 스킬을 못하는 경우.
         return;
     }
-    if (TacticModeSystem::Instance().IsOrderingTimingNow())
+    if (/*TacticModeSystem::Instance().IsOrderingTimingNow()*/false)
     {
-        TacticModeSystem::Instance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, p_skillType);
+        //TacticModeSystem::Instance().SetLeftClickAddQueueForSkill(currentSelectedSerialNumber, p_skillType);
     }
     else
     {
@@ -199,6 +199,6 @@ void InputManager::ToggleTacticMode()
 {
 	if (GameManager::Instance().IsBattleSystemOperating())
 	{
-		TacticModeSystem::Instance().ToggleRequested(currentSelectedSerialNumber);
+		//TacticModeSystem::Instance().ToggleRequested(currentSelectedSerialNumber);
 	}
 }

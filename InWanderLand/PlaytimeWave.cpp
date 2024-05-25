@@ -33,7 +33,7 @@ void PlaytimeWave::ActivateWave()
 	UIManager::Instance().ShowComboObjectives();
 	/// 플레이어 유닛 전투상태 돌입
 	GameManager::Instance().ReportPlayerEnteredWaveRegion(this);
-	TacticModeSystem::Instance().RegisterCurrentWave(this);
+	//TacticModeSystem::Instance().RegisterCurrentWave(this);
 
 	// 카메라 가동범위 제한
 	if (auto rtsCam = dynamic_cast<RTSCam*>(graphics::Camera::GetMainCamera()))

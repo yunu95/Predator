@@ -97,8 +97,8 @@ void Unit::Start()
 
     /// Idle
     unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Move,
-        [this]() { return (currentOrder == UnitState::Move && !TacticModeSystem::Instance().IsUnitsPerformingCommand()) ||
-        (currentOrder == UnitState::Move && TacticModeSystem::Instance().IsUnitsPerformingCommand()); } });
+        [this]() { return (currentOrder == UnitState::Move /*&& !TacticModeSystem::Instance().IsUnitsPerformingCommand()*/) ||
+        (currentOrder == UnitState::Move /*&& TacticModeSystem::Instance().IsUnitsPerformingCommand()*/); } });
 
     unitFSM.transitions[UnitState::Idle].push_back({ UnitState::AttackMove,
         [this]() { return currentOrder == UnitState::AttackMove || (unitFSM.previousState == UnitState::Attack && isAttackMoving); } });
@@ -106,7 +106,7 @@ void Unit::Start()
     unitFSM.transitions[UnitState::Idle].push_back({ UnitState::Chase,
         [this]() { return  (GameManager::Instance().IsWaveEngageMotionEnd() && (m_currentTargetUnit != nullptr &&
                             idleElapsed >= idleToChaseDelay) && m_currentTargetUnit->currentOrder != UnitState::Death &&
-                            m_idDistance > 0.1f && m_atkDistance > 0.1f) && !TacticModeSystem::Instance().IsUnitsPerformingCommand(); } });
+                            m_idDistance > 0.1f && m_atkDistance > 0.1f) /*&& !TacticModeSystem::Instance().IsUnitsPerformingCommand()*/; } });
 
     /// Move
     unitFSM.transitions[UnitState::Move].push_back({ UnitState::Idle,
@@ -149,7 +149,7 @@ void Unit::Start()
         [this]() { return currentOrder == UnitState::Move; } });
 
     unitFSM.transitions[UnitState::AttackMove].push_back({ UnitState::Chase,
-        [this]() { return m_currentTargetUnit != nullptr || (TacticModeSystem::Instance().IsUnitsPerformingCommand() && isTacticAttackMovePermitted); } });
+        [this]() { return m_currentTargetUnit != nullptr /*|| (TacticModeSystem::Instance().IsUnitsPerformingCommand() && isTacticAttackMovePermitted)*/; } });
 
     /// Paralysis
     unitFSM.transitions[UnitState::Paralysis].push_back({ UnitState::Idle,
@@ -266,13 +266,13 @@ void Unit::Update()
         unitFSM.UpdateState();
     else
     {
-        if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
-        {
-            if (!TacticModeSystem::Instance().IsOrderingTimingNow())
-            {
-                unitFSM.UpdateState();
-            }
-        }
+        //if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
+        //{
+        //    if (!TacticModeSystem::Instance().IsOrderingTimingNow())
+        //    {
+        //        unitFSM.UpdateState();
+        //    }
+        //}
     }
     if (!unitStatusUI.expired())
         unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
@@ -317,8 +317,8 @@ void Unit::IdleEngage()
 
     ChangeAnimation(unitAnimations.m_idleAnimation);
 
-    if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
-        DetermineCurrentTargetObject();
+    //if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
+    //    DetermineCurrentTargetObject();
 
     idleToChaseDelay = 0.0f;
 
@@ -540,21 +540,21 @@ void Unit::IdleUpdate()
 {
     CheckCurrentAnimation(unitAnimations.m_idleAnimation);
 
-    if (!IsTacticModeQueueEmpty() && !TacticModeSystem::Instance().IsOrderingTimingNow() && isPermittedToTacticAction)
-    {
-        m_tacticModeQueue.front()();
-        m_tacticModeQueue.pop_front();
-        ResumeAnimation();
-    }
+    //if (!IsTacticModeQueueEmpty() && !TacticModeSystem::Instance().IsOrderingTimingNow() && isPermittedToTacticAction)
+    //{
+    //    m_tacticModeQueue.front()();
+    //    m_tacticModeQueue.pop_front();
+    //    ResumeAnimation();
+    //}
 
     idleElapsed += Time::GetDeltaTime() * m_localTimeScale;
 
     if (idleElapsed >= 3.0f)
     {
-        if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
-        {
-            DetermineCurrentTargetObject();
-        }
+        //if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
+        //{
+        //    DetermineCurrentTargetObject();
+        //}
     }
     // 데미지를 입으면 공격한 상대의 정보를 list에 등록하고 쫓아가기
 }
@@ -905,7 +905,8 @@ bool Unit::IsAllExtraPlayerUnitDead()
 
 bool Unit::CheckEnemyStoppedByTacticMode() const
 {
-    return (!TacticModeSystem::Instance().IsUnitsPerformingCommand() || !TacticModeSystem::Instance().IsOrderingTimingNow());
+    return true;
+    //return (!TacticModeSystem::Instance().IsUnitsPerformingCommand() || !TacticModeSystem::Instance().IsOrderingTimingNow());
 }
 
 void Unit::KnockBackUnit(Vector3d targetPosition, float knockBackDuration)
@@ -920,7 +921,7 @@ void Unit::KnockBackUnit(Vector3d targetPosition, float knockBackDuration)
 
 void Unit::ReportTacticActionFinished()
 {
-    TacticModeSystem::Instance().ReportTacticActionFinished();
+    //TacticModeSystem::Instance().ReportTacticActionFinished();
 
 	if (this->m_tacticPreview.front().mesh != nullptr)
 	{
