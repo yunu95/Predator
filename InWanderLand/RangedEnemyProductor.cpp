@@ -6,6 +6,7 @@
 #include "BossSkillSystem.h"
 #include "BurnEffect.h"
 #include "DamageOnlyComponent.h"
+#include "SkillUnit.h"
 
 void RangedEnemyProductor::SetUnitData()
 {
@@ -49,9 +50,12 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 	m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
 	/// UnitComponent 추가
-	m_unitComponent = m_unitGameObject->AddComponent<Unit>();
-	UnitProductor::SetUnitComponentMembers();
+	if (isEliteMonster)
+		m_unitComponent = m_unitGameObject->AddComponent<SkillUnit>();
+	else
+		m_unitComponent = m_unitGameObject->AddComponent<Unit>();
 
+	UnitProductor::SetUnitComponentMembers();
 #pragma endregion
 
 
@@ -67,7 +71,6 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 #pragma region Boss Skill_2 Object Setting
 		auto skillTwoColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 		auto skillTwoCollider = skillTwoColliderObject->AddComponent<physics::BoxCollider>();
-		skillTwoColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 		auto skillDamageComponent = skillTwoColliderObject->AddComponent<DamageOnlyComponent>();
 		skillDamageComponent->SetSkillOwnerUnit(m_unitComponent);
 		skillDamageComponent->SetSkillDamage(3.0f);
@@ -138,7 +141,9 @@ Unit* RangedEnemyProductor::CreateUnit(Vector3d startPos)
 		}
 	}
 	m_unitComponent->unitAnimations = m_baseUnitAnimations;
-	SetUnitAnimationFunction();
+
+	if (isEliteMonster)
+		SetUnitSkillFunctionToAnimation();
 	return m_unitComponent;
 }
 

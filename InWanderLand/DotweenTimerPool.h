@@ -1,11 +1,13 @@
 #pragma once
 #include <stack>
 #include "YunutyEngine.h"
+#include "PermanentObservee.h"
+#include "DotweenTimer.h"
 
 /// <summary>
-/// DOÇÔ¼ö¸¦ ¾µ ¶§ ¸¶´Ù new ÇØÁÖ°í,
-/// ´Ù ¾²°í ³ª¼­ delete ÇØÁÖ´Â °ÍÀº È¿À²ÀûÀÌÁö ¾Ê´Ù.
-/// ¹Ì¸® DotweenTimer¸¦ 50°³ Á¤µµ »ı¼ºÇØÁÖ°í °¡Á®´Ù ½áº¸ÀÚ.
+/// DOí•¨ìˆ˜ë¥¼ ì“¸ ë•Œ ë§ˆë‹¤ new í•´ì£¼ê³ ,
+/// ë‹¤ ì“°ê³  ë‚˜ì„œ delete í•´ì£¼ëŠ” ê²ƒì€ íš¨ìœ¨ì ì´ì§€ ì•Šë‹¤.
+/// ë¯¸ë¦¬ DotweenTimerë¥¼ 50ê°œ ì •ë„ ìƒì„±í•´ì£¼ê³  ê°€ì ¸ë‹¤ ì¨ë³´ì.
 /// </summary>
 
 class DotweenTimer;
@@ -13,20 +15,20 @@ class DotweenTimer;
 class DotweenTimerPool
 {
 private:
-	std::stack<DotweenTimer*> dotweenTimerStack;
-	int maxSize;
-	static DotweenTimerPool* dotweenTimerPool;
-
-	DotweenTimerPool();
-	~DotweenTimerPool();
-	DotweenTimerPool(const DotweenTimerPool& ref) {}
-	DotweenTimerPool& operator=(const DotweenTimerPool& ref) {}
 
 public:
-	static DotweenTimerPool* GetInstance();
+	//virtual void ObjectInitializer(DotweenTimer* timer) override
+	//{
+	//	timer->Init();
+	//}
 
-	DotweenTimer* GetDotweenTimer();
-	void Expand();
-	void ReturnDotweenTimer(DotweenTimer* usedTimer);
+	//virtual Component* GetComponent() override { return this; }
+
+	//virtual void OnContentsStop() override
+	//{
+	//	this->SetActive(false);
+	//	poolObjects.clear();
+	//	expendableObjects.clear();
+	//};
 };
 

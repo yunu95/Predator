@@ -686,10 +686,13 @@ namespace application
             {
                 ImGui::TableNextRow();
                 ImGui::TableSetColumnIndex(0);
-                if (ImGui::BeginListBox("", { ImGui::GetContentRegionAvail().x * 0.8f,400 }))
+                if (ImGui::BeginListBox("", { ImGui::GetContentRegionAvail().x * 0.8f, 400 }))
                 {
                     int countIdx = 0;
-                    for (auto each : RegionData::GetInstances())
+                    std::vector<RegionData*> sortedRegions;
+                    std::transform(RegionData::GetInstances().begin(), RegionData::GetInstances().end(), std::back_inserter(sortedRegions), [](const auto& each) {return each; });
+                    std::sort(sortedRegions.begin(), sortedRegions.end(), [](const auto& a, const auto& b) {return a->pod.name < b->pod.name; });
+                    for (auto each : sortedRegions)
                     {
                         stringstream ss;
                         ss << yutility::GetString(each->pod.name).c_str() << " ##RegionSelectable" << countIdx;
@@ -1673,6 +1676,83 @@ namespace application
                 }
                 imgui::EndSection();
             }
+
+            imgui::ShiftCursorY(5);
+
+            if (imgui::BeginSection_1Col(countIdx, "Selected Interactable", ImGui::GetContentRegionAvail().x))
+            {
+                if (ip.IsMatchingMode())
+                {
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
+                    if (ImGui::BeginListBox("", { ImGui::GetContentRegionAvail().x * 0.8f,400 }))
+                    {
+                        for (auto each : ip.GetSubjectData()->GetTargetInteractables())
+                        {
+                            bool selected = ip.GetSingleSelectedInteractable() == nullptr ? false : String_To_UUID(each) == ip.GetSingleSelectedInteractable()->GetUUID();
+                            if (ImGui::Selectable(each.c_str(), selected))
+                            {
+                                ip.SelectInteractable(String_To_UUID(each));
+                            }
+                        }
+                        ImGui::EndListBox();
+                    }
+
+                    if (ip.GetSingleSelectedInteractable())
+                    {
+                        if (ip.GetSubjectData()->GetTargetInteractables().find(UUID_To_String(ip.GetSingleSelectedInteractable()->GetUUID())) == ip.GetSubjectData()->GetTargetInteractables().end())
+                        {
+                            ImGui::TableNextRow();
+                            ImGui::TableSetColumnIndex(0);
+                            if (ImGui::Button("Add Target"))
+                            {
+                                ip.GetSubjectData()->AddTargetInteractables(ip.GetSingleSelectedInteractable());
+                            }
+                        }
+                        else
+                        {
+                            ImGui::TableNextRow();
+                            ImGui::TableSetColumnIndex(0);
+                            if (ImGui::Button("Remove Target"))
+                            {
+                                ip.GetSubjectData()->EraseTargetInteractables(ip.GetSingleSelectedInteractable());
+                            }
+                        }
+                    }
+
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
+                    if (ImGui::Button("End Edit Targets"))
+                    {
+                        ip.SetMatchingMode(false);
+                    }
+                }
+                else
+                {
+                    const auto& selection = pm.GetCurrentPalette()->GetSelections();
+
+                    InteractableData* interactable = nullptr;
+
+                    if (selection.size() == 1)
+                    {
+                        interactable = static_cast<InteractableData*>(*selection.begin());
+                    }
+
+                    if (interactable)
+                    {
+                        ImGui::TableNextRow();
+                        ImGui::TableSetColumnIndex(0);
+                        ImGui::Text("Target Counts : ");
+                        ImGui::SameLine();
+                        ImGui::Text(std::to_string(interactable->GetTargetInteractables().size()).c_str());
+                        if (ImGui::Button("Edit Target Interactables"))
+                        {
+                            ip.SetMatchingMode(true);
+                        }
+                    }
+                }
+                imgui::EndSection();
+            }
         }
 
         bool PalettePanel::ImGui_CreateUnitPopup()
@@ -1684,6 +1764,20 @@ namespace application
 
                     ImGui::SetNextItemWidth(-1);
                     ImGui::InputTextWithHint("##new_unit_name", "Unit Name", unitNameBuffer, bufferSize);
+
+                    static bool beforeFocus = false;
+                    if (ImGui::IsItemFocused())
+                    {
+                        beforeFocus = true;
+                        EditorLayer::SetInputControl(false);
+                        ec.SetInputUpdate(false);
+                    }
+                    else if (beforeFocus)
+                    {
+                        beforeFocus = false;
+                        EditorLayer::SetInputControl(true);
+                        ec.SetInputUpdate(true);
+                    }
 
                     ImGui::Separator();
 
@@ -1850,6 +1944,20 @@ namespace application
 
                     ImGui::SetNextItemWidth(-1);
                     ImGui::InputTextWithHint("##new_interactable_name", "Interactable Name", interatableNameBuffer, bufferSize);
+
+                    static bool beforeFocus = false;
+                    if (ImGui::IsItemFocused())
+                    {
+                        beforeFocus = true;
+                        EditorLayer::SetInputControl(false);
+                        ec.SetInputUpdate(false);
+                    }
+                    else if (beforeFocus)
+                    {
+                        beforeFocus = false;
+                        EditorLayer::SetInputControl(true);
+                        ec.SetInputUpdate(true);
+                    }
 
                     ImGui::Separator();
 

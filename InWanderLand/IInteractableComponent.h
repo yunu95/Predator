@@ -8,6 +8,14 @@
 
 #include <unordered_set>
 
+namespace application
+{
+	namespace editor
+	{
+		class InteractableData;
+	}
+}
+
 class IInteractableComponent
 	: public Component, public ContentsObservee
 {
@@ -15,35 +23,59 @@ public:
 	virtual ~IInteractableComponent() = default;
 	virtual Component* GetComponent() override { return this; }
 
-	virtual void Update() override
-	{
-		//if (IsTriggerOn())
-		//{
-		//	DoInteraction();
-		//}
-	}
+	/// triggerOn / isInteracting 등의 변수를 잘 활용하여
+	/// 적절한 Update 문을 작성합니다.
+	virtual void Update() = 0;
 
-	//virtual bool IsTriggerOn() = 0;
+	/// Interaction 시에 수행하게 될 동작입니다.
+	virtual yunutyEngine::coroutine::Coroutine DoInteraction() = 0;
 
-	/// IsTriggerOn 이 true 일 경우나, 
-	/// 반드시 isInteracting 에 대한 조작을 내부에서 수행해야 합니다.
-	//virtual void DoInteraction() = 0;
+	/// InteractableData 로부터 Component 의 데이터를 초기화하는 함수입니다.
+	virtual void SetDataFromEditorData(const application::editor::InteractableData& data) {};
 
 	/// Interactable 에서 다른 Interactable 로의 전파를 하게 될 경우,
 	/// 전파 대상을 등록하는 함수입니다.
-	/// 해당 container 를 통해서 다른 Interactable 의 DoInteraction 을 수행하도록 설계할 수 있습니다.
 	void InsertInteractableTarget(IInteractableComponent* target)
 	{
 		targetInteractables.insert(target);
 	}
 
+	bool IsTriggerOn() { return triggerOn; }
 	bool IsInteracting() { return isInteracting; }
 
 protected:
+
+	/// triggerOn 을 true 로 변환합니다.
+	/// targetInteractables 가 있는 경우, 해당 targetInteractables 의 OnInteractableTriggerEnter 를 호출합니다.
+	void OnInteractableTriggerEnter()
+	{
+		triggerOn = true;
+		for (auto each : targetInteractables)
+		{
+			if (each->GetGameObject()->GetActive())
+			{
+				each->OnInteractableTriggerEnter();
+			}
+		}
+	}
+
+	/// triggerOn 을 false 로 변환합니다.
+	/// targetInteractables 가 있는 경우, 해당 targetInteractables 의 OnInteractableTriggerExit 를 호출합니다.
+	void OnInteractableTriggerExit()
+	{
+		triggerOn = false;
+		for (auto each : targetInteractables)
+		{
+			if (each->GetGameObject()->GetActive())
+			{
+				each->OnInteractableTriggerExit();
+			}
+		}
+	}
+
 	std::unordered_set<IInteractableComponent*> targetInteractables = std::unordered_set<IInteractableComponent*>();
 
-	/// DoInteraction 을 수행할 경우에, 반드시 해당 flag 를 true 로 변경하고,
-	/// 특정한 동작을 마칠 경우에 다시 false 로 처리할 수 있도록 합니다.
-	/// DoInteraction 에서 IsInteractive 를 통해
+	bool triggerOn = false;
 	bool isInteracting = false;
+	std::weak_ptr<yunutyEngine::coroutine::Coroutine> lastCoroutine = std::weak_ptr<yunutyEngine::coroutine::Coroutine>();
 };

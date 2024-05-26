@@ -3,6 +3,7 @@
 #include "InputManager.h"
 #include "RTSCam.h"
 #include "Unit.h"
+#include "PlayerUnit.h"
 #include "Dotween.h"
 #include "SkillPreviewSystem.h"
 #include "GameManager.h"
@@ -21,12 +22,12 @@ void PlayerController::SetMovingSystemComponent(RTSCam* sys)
     m_dotween = sys->GetGameObject()->GetComponent<Dotween>();
 }
 
-void PlayerController::AddPlayerUnit(Unit* p_playerUnit)
+void PlayerController::AddPlayerUnit(PlayerUnit* p_playerUnit)
 {
     playerComponentMap.insert({ p_playerUnit->GetPlayerSerialNumber(), p_playerUnit });
 }
 
-void PlayerController::ErasePlayerUnit(Unit* p_playerUnit)
+void PlayerController::ErasePlayerUnit(PlayerUnit* p_playerUnit)
 {
     playerComponentMap.erase(p_playerUnit->GetUnitType());
 }
@@ -34,7 +35,7 @@ void PlayerController::ErasePlayerUnit(Unit* p_playerUnit)
 void PlayerController::OnContentsStop()
 {
     this->SetActive(false);
-    playerComponentMap.clear();
+	playerComponentMap.clear();
     m_movingSystemComponent = nullptr;
     m_dotween = nullptr;
     m_cursorDetector = nullptr;
@@ -150,7 +151,7 @@ void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
         }
         else
         {
-            playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum);
+            //playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum);
             auto& callbackVectors = skillSelectionCallback[currentSelectedSerialNumber][p_skillNum];
             for (auto& each : callbackVectors)
                 each();
@@ -237,7 +238,7 @@ void PlayerController::ChangeLeaderPlayerUnit(Unit::UnitType p_num)
     SetRightClickFunction();
 }
 
-std::unordered_map<Unit::UnitType, Unit*> PlayerController::GetPlayerMap() const
+std::unordered_map<Unit::UnitType, PlayerUnit*> PlayerController::GetPlayerMap() const
 {
     return playerComponentMap;
 }
@@ -248,10 +249,9 @@ Unit* PlayerController::FindSelectedUnitByUnitType(Unit::UnitType p_type)
         return playerComponentMap.find(p_type)->second;
 }
 
-Unit* PlayerController::GetCurrentSelectedPlayerUnit() const
+PlayerUnit* PlayerController::GetCurrentSelectedPlayerUnit() const
 {
     return playerComponentMap.find(currentSelectedSerialNumber)->second;
 }
-
 
 

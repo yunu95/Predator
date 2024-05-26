@@ -10,12 +10,14 @@
 #include "InteractableEditorInstance.h"
 #include "InteractablePalette.h"
 #include "GlobalConstant.h"
+#include "IObserver.h"
 
 #include <memory>
 #include <string>
 
 class Unit;
 class UnitProductor;
+class IInteractableComponent;
 
 namespace application
 {
@@ -26,7 +28,7 @@ namespace application
     }
 }
 
-namespace yunutyEnigne
+namespace yunutyEngine
 {
     class GameObject;
 }
@@ -40,7 +42,8 @@ namespace application
         struct POD_Interactable
         {
             Interactable_TemplateData* templateData = nullptr;
-            std::vector<std::string> targetInteractables = std::vector<std::string>();
+            /// UUID string
+            std::unordered_set<std::string> targetInteractables = std::unordered_set<std::string>();
             POD_Vector3<float> position = POD_Vector3<float>();
             POD_Quaternion<float> rotation = POD_Quaternion<float>();
             POD_Vector3<float> scale = { 1,1,1 };
@@ -53,7 +56,7 @@ namespace application
         };
 
         class InteractableData
-            : public IEditableData
+            : public IEditableData, public IObserver
         {
             friend class InstanceManager;
 
@@ -68,11 +71,17 @@ namespace application
             virtual void OnDataResourceChange(std::string newName) override;
             virtual palette::PaletteInstance* ApplyAsPaletteInstance()override;
             virtual void ApplyAsPlaytimeObject() override;
+            virtual void PostApplyAsPlaytimeObject() override;
             virtual bool EnterDataFromGlobalConstant() override;
+            const std::unordered_set<std::string>& GetTargetInteractables() { return pod.targetInteractables; }
+            bool AddTargetInteractables(InteractableData* target);
+            bool EraseTargetInteractables(InteractableData* target);
+
+            virtual void ProcessObervationEvent(ObservationTarget* target, ObservationEvent event) override;
 
             POD_Interactable pod;
 
-            GameObject* inGameInteractable{ nullptr };
+            IInteractableComponent* inGameInteractable{ nullptr };
 
         protected:
             virtual bool PreEncoding(json& data) const override;

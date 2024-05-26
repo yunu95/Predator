@@ -10,6 +10,7 @@
 #include "MagicianProductor.h"
 #include "SingleNavigationField.h"
 #include "UnitData.h"
+#include "PlayerUnit.h"
 #include "RobinSkillDevelopmentSystem.h"
 #include "SkillPreviewSystem.h"
 
@@ -55,7 +56,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
     m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
     /// UnitComponent 추가
-    m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+    m_unitComponent = m_unitGameObject->AddComponent<PlayerUnit>();
     RobinSkillDevelopmentSystem::Instance().SetOwnerUnit(m_unitComponent);
 
     UnitProductor::SetUnitComponentMembers();
@@ -81,7 +82,6 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
 
     auto qSkillColliderComponent = qSkillKnockBackObject->AddComponent<physics::SphereCollider>();
     qSkillColliderComponent->SetRadius(m_QSkillRadius);
-    qSkillKnockBackObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
     auto qSkillColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     AttachDebugMesh(qSkillColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::red(), true);
@@ -97,7 +97,6 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
     auto wSkillColliderObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     auto wSkillColliderComponent = wSkillColliderObject->AddComponent<physics::SphereCollider>();
     wSkillColliderComponent->SetRadius(m_WSkillRadius);
-    wSkillColliderObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
     auto wSkillDamageComponent = wSkillColliderObject->AddComponent<TauntingComponent>();
     wSkillDamageComponent->SetSkillOwnerUnit(m_unitComponent);
     wSkillDamageComponent->SetSkillDamage(10.0f);
@@ -193,7 +192,7 @@ Unit* WarriorProductor::CreateUnit(Vector3d startPos)
         }
     }
     m_unitComponent->unitAnimations = m_baseUnitAnimations;
-    SetUnitAnimationFunction();
+    SetUnitSkillFunctionToAnimation();
 
     return m_unitComponent;
 }

@@ -21,7 +21,7 @@ namespace application
 	void Trigger_UnitAppear::LinkCallback()
 	{
 		assert(targetUnit && targetUnit->inGameUnit);
-		targetUnit->inGameUnit->OnCreated.push_back([=]() { PullTrigger(); });
+		targetUnit->inGameUnit->onCreated.push_back([=]() { PullTrigger(); });
 	}
 
 	void Trigger_UnitAppear::SetUnit(editor::UnitData* unit)
@@ -135,7 +135,7 @@ namespace application
 	void Trigger_UnitDie::LinkCallback()
 	{
 		assert(targetUnit && targetUnit->inGameUnit);
-		targetUnit->inGameUnit->OnDeath.push_back([=]() { PullTrigger(); });
+		targetUnit->inGameUnit->onDeath.push_back([=]() { PullTrigger(); });
 	}
 
 	void Trigger_UnitDie::SetUnit(editor::UnitData* unit)

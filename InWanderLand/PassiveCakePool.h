@@ -11,6 +11,7 @@ public:
 	virtual void ObjectInitializer(PassiveCake* passiveCake) override
 	{
 		auto dotween = passiveCake->GetGameObject()->AddComponent<Dotween>();
+		dotween->Start();
 		passiveCake->SetDotweenComponent(dotween);
 
 		auto cakeMeshObject = Scene::getCurrentScene()->AddGameObject();
@@ -24,7 +25,6 @@ public:
 		cakeCollider->SetHalfExtent({ UNIT_LENGTH * 0.5f, UNIT_LENGTH * 0.5f, UNIT_LENGTH * 0.5f });
 		passiveCake->SetCollider(cakeCollider);
 
-		passiveCake->GetGameObject()->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 		cakeCollider->SetActive(false);
 	}
 

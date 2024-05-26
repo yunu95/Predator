@@ -22,6 +22,10 @@ namespace application
         {
             elem->DisableElement();
         }
+        while (elem->GetUIEnabled())
+        {
+            co_await std::suspend_always{};
+        }
         co_return;
     }
 
@@ -62,7 +66,7 @@ namespace application
                         }
                         ImGui::EndCombo();
                     }
-                    ImGui::Checkbox("Active&&set ui active", &active);
+                    ImGui::Checkbox("Active##setUiActive", &active);
 
                     ImGui::Separator();
 

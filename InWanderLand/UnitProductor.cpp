@@ -1,4 +1,5 @@
 #include "InWanderLand.h"
+#include "PlayerUnit.h"
 #include "UnitProductor.h"
 #include "RangeSystem.h"
 #include "PlayerController.h"
@@ -11,6 +12,7 @@
 #include "GlobalConstant.h"
 #include "BurnEffect.h"
 #include "PlayerSkillSystem.h"
+#include "SkillUnit.h"
 
 void UnitProductor::SetUnitComponentMembers()
 {
@@ -24,7 +26,7 @@ void UnitProductor::SetUnitComponentMembers()
     auto unitColliderDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     AttachDebugMesh(unitColliderDebugObject, DebugMeshType::Sphere, yunuGI::Color::green(), false);
     unitColliderDebugObject->SetParent(m_unitGameObject);
-    unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(UNIT_LENGTH, UNIT_LENGTH, UNIT_LENGTH));
+    unitColliderDebugObject->GetTransform()->SetWorldScale(Vector3d(UNIT_LENGTH, 0.2f, UNIT_LENGTH));
     m_unitComponent->SetStaticMeshComponent(unitColliderDebugObject->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>());
 
     auto burnEffect = m_unitGameObject->AddComponent<BurnEffect>();
@@ -144,15 +146,18 @@ void UnitProductor::AddRangeSystemComponent() const
     // 2-2. RangeSystem Collider
     auto rangesystemCollider = unitRangeSystemObject->AddComponent<physics::SphereCollider>();
     rangesystemCollider->SetRadius(m_idRadius);
-    unitRangeSystemObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
     unitRangeSystemObject->SetParent(m_unitGameObject);
 }
 
 void UnitProductor::AddColliderComponent() const
 {
     auto unitCollider = m_unitGameObject->AddComponent<physics::SphereCollider>();	// 빈 껍데기에 
-    unitCollider->SetRadius(UNIT_LENGTH * 0.5f);
-    //m_unitGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+    unitCollider->SetRadius(m_collisionSize);
+    m_unitGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
+
+    auto rendererObj = m_unitGameObject->AddGameObject();
+    rendererObj->GetTransform()->SetLocalScale(m_collisionSize / 0.5 * Vector3d(1, 1, 1));
+    AttachDebugMesh(rendererObj, DebugMeshType::Sphere, yunuGI::Color::green(), true);
 }
 
 void UnitProductor::AddNavigationComponent()
@@ -204,19 +209,21 @@ void UnitProductor::AddDotweenComponent() const
         };
 }
 
-void UnitProductor::SetUnitAnimationFunction()
+void UnitProductor::SetUnitSkillFunctionToAnimation()
 {
-    if (m_unitComponent->GetUnitSide() == Unit::UnitSide::Player)
+    SkillUnit* tempDynamicCastedUnit = dynamic_cast<SkillUnit*>(m_unitComponent);
+
+    if (tempDynamicCastedUnit->GetUnitSide() == Unit::UnitSide::Player)
     {
-        m_unitComponent->RegisterSkillWithAnimation(Unit::SkillEnum::Q);
-        m_unitComponent->RegisterSkillWithAnimation(Unit::SkillEnum::W);
+        tempDynamicCastedUnit->RegisterSkillWithAnimation(Unit::SkillEnum::Q);
+        tempDynamicCastedUnit->RegisterSkillWithAnimation(Unit::SkillEnum::W);
     }
-    else if (m_unitComponent->GetUnitSide() == Unit::UnitSide::Enemy)
+    else if (tempDynamicCastedUnit->GetUnitSide() == Unit::UnitSide::Enemy)
     {
-        m_unitComponent->RegisterSkillWithAnimation(Unit::SkillEnum::BossSkillOne);
-        m_unitComponent->RegisterSkillWithAnimation(Unit::SkillEnum::BossSkillTwo);
-        m_unitComponent->RegisterSkillWithAnimation(Unit::SkillEnum::BossSkillThree);
-        m_unitComponent->RegisterSkillWithAnimation(Unit::SkillEnum::BossSkillFour);
+        tempDynamicCastedUnit->RegisterSkillWithAnimation(Unit::SkillEnum::BossSkillOne);
+        tempDynamicCastedUnit->RegisterSkillWithAnimation(Unit::SkillEnum::BossSkillTwo);
+        tempDynamicCastedUnit->RegisterSkillWithAnimation(Unit::SkillEnum::BossSkillThree);
+        tempDynamicCastedUnit->RegisterSkillWithAnimation(Unit::SkillEnum::BossSkillFour);
     }
 }
 
@@ -232,16 +239,18 @@ bool UnitProductor::SelectUnitProductorByFbxName(std::string p_name)
 
 void UnitProductor::SetPlayerRelatedComponents()
 {
-    m_unitComponent->SetPlayerSerialNumber(m_unitType);
+    PlayerUnit* dynamicCastedPlayerUnit = dynamic_cast<PlayerUnit*>(m_unitComponent);
+
+    dynamicCastedPlayerUnit->SetPlayerSerialNumber(m_unitType);
     //m_unitComponent->SetSkillPreviewType(qSkillPreviewType, wSkillPreviewType);
-    PlayerController::Instance().AddPlayerUnit(m_unitComponent);
+    PlayerController::Instance().AddPlayerUnit(dynamicCastedPlayerUnit);
 
     float qCoolTimeTemp;
     float eCoolTimeTemp;
 
-    m_unitComponent->SetRessurectMaxCount(application::GlobalConstant::GetSingletonInstance().pod.maxResurrectCount);
+    dynamicCastedPlayerUnit->SetRessurectMaxCount(application::GlobalConstant::GetSingletonInstance().pod.maxResurrectCount);
 
-    switch (m_unitComponent->GetUnitType())
+    switch (dynamicCastedPlayerUnit->GetUnitType())
     {
     case Unit::UnitType::Warrior:
     {
@@ -263,8 +272,8 @@ void UnitProductor::SetPlayerRelatedComponents()
     break;
     }
 
-    m_unitComponent->GetGameObject()->GetComponent<PlayerSkillSystem>()->SetQSkillCoolTime(qCoolTimeTemp);
-    m_unitComponent->GetGameObject()->GetComponent<PlayerSkillSystem>()->SetESkillCoolTime(eCoolTimeTemp);
+    dynamicCastedPlayerUnit->GetGameObject()->GetComponent<PlayerSkillSystem>()->SetQSkillCoolTime(qCoolTimeTemp);
+    dynamicCastedPlayerUnit->GetGameObject()->GetComponent<PlayerSkillSystem>()->SetESkillCoolTime(eCoolTimeTemp);
 }
 
 void UnitProductor::MappingUnitData(application::editor::POD_Unit_TemplateData p_podData)

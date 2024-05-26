@@ -80,7 +80,6 @@ namespace application
             pod.name;
             pod.isObstacle;
             regionGameObject->AddComponent<physics::BoxCollider>()->SetHalfExtent({ pod.width/2.0f, 1.0f, pod.height/2.0f });
-            regionGameObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
             regionGameObject->GetTransform()->SetWorldPosition(Vector3d(pod.x, 1.0f, pod.z));
             regionGameObject->GetTransform()->SetWorldRotation(Vector3d(0, pod.angle, 0));
         }

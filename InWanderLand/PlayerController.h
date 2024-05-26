@@ -1,69 +1,35 @@
 #pragma once
 #include "YunutyEngine.h"
 #include <map>
-#include "Unit.h"
 #include "PermanentObservee.h"
-/// <summary>
-/// UnitFactory에서 Player를 만들 경우, PlayerController에 해당 Player를 등록한다.
-/// 고유 번호를 배분하여 키입력으로 지정할 수 있도록 해보자!
-/// </summary>
 
+// 플레이어 유닛들의 행동을 관리하는 클래스
+// 짬통 중의 짬통이다.
 class RTSCam;
-class Unit;
+class PlayerUnit;
 class CursorDetector;
 
 class PlayerController : public SingletonComponent<PlayerController>, public Component, public PermanentObservee
 {
-public:
-    enum class OrderType
-    {
-        Move,
-        AttackMove,
-        QSkill,
-    };
-
-private:
-    RTSCam* m_movingSystemComponent;
-    Dotween* m_dotween;
-    std::unordered_map<Unit::UnitType, Unit*> playerComponentMap;
-    Unit::UnitType currentSelectedSerialNumber = Unit::UnitType::Warrior;
-    int previousSerialNumber = 0;
-
+    enum CharacterType { ROBIN, URSULA, HANSEL, CHARACTER_NUM };
     Vector3d cameraOffset = { 0, 20, -15 };
     float cameraMoveDuration{ 0.3f };
-
-    void ChangeLeaderPlayerUnit(Unit::UnitType p_num);
-
+    void Select(CharacterType charType);
 public:
-    float lookRotationDuration = 0.1f;
-
-    //void SelectFunctionByOrderType(int unitSerialNumber, OrderType p_orderType);
-public:	
     virtual Component* GetComponent() override { return this; }
-    virtual void Start() override;
-
-    void SetMovingSystemComponent(RTSCam* sys);
-    void AddPlayerUnit(Unit* p_playerUnit);
-    void ErasePlayerUnit(Unit* p_playerUnit);
-
     virtual void OnContentsStop() override;
-
-    void SetRightClickFunction();
-    void SetLeftClickAttackMove();
-    void SetLeftClickSkill(Unit::SkillEnum p_skillNum);
-
-    void SetLeftClickEmpty();
-    void SetRightClickEmpty();
-
-    void SetCurrentPlayerSerialNumber(Unit::UnitType p_num);
-    void ReportBattleEnded();
-
-    std::unordered_map<Unit::UnitType, Unit*> GetPlayerMap() const;
-    Unit* FindSelectedUnitByUnitType(Unit::UnitType p_type);
-    Unit* GetCurrentSelectedPlayerUnit() const;
     CursorDetector* m_cursorDetector;
     // 아래 둘은 한번 호출한 후 내용을 다 지워버리는 휘발성 콜백들
-    unordered_map<Unit::UnitType, unordered_map<Unit::SkillEnum, std::vector<std::function<void()>>>>  skillSelectionCallback;
-    unordered_map<Unit::UnitType, unordered_map<Unit::SkillEnum, std::vector<std::function<void()>>>>  skillActivationCallback;
+    VolatileCallbacks onRobinQSelect;
+    VolatileCallbacks onRobinQActivate;
+    void UsePrimarySkill(const Vector3d& pos);
+    void UseSecondarySkill(const Vector3d& pos);
+private:
+    template<CharacterType character>
+    Skill& PrimarySkill(const Vector3d& pos);
+    template<CharacterType character>
+    Skill& SecondarySkill(const Vector3d& pos);
+    std::weak_ptr<Unit> characters[CHARACTER_NUM];
+    //std::weak_ptr<const Unit> characters[CHARACTER_NUM] robin, ursula, hansel;
+    int a = ROBIN;
 };
-

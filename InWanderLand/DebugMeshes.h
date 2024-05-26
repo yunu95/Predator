@@ -10,7 +10,9 @@ enum class DebugMeshType
     Line,
     Cube,
     Sphere,
+    Capsule,
     Rectangle,
+    Cylinder
 };
 
 yunuGI::IMaterial* GetColoredDebugMaterial(yunuGI::Color color, bool isWireFrame);

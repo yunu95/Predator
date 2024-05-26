@@ -2,6 +2,7 @@
 #include "YunutyEngine.h"
 #include "InputManager.h"
 #include "Unit.h"
+#include "PlayerUnit.h"
 #include "PermanentObservee.h"
 #include <unordered_map>
 
@@ -27,70 +28,80 @@ public:
 	virtual void OnContentsStop() override;
     virtual Component* GetComponent() override { return this; }
 
-	enum OrderType
-	{
-		Move,
-		AttackMove,
-		QSkill,
-		WSkill
-	};
-
-    void ToggleRequested(InputManager::SelectedSerialNumber currentSelectedNum);
-
-    void SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum);
-    void SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum);
-    void SetLeftClickAddQueueForSkill(InputManager::SelectedSerialNumber currentSelectedNum, Unit::SkillEnum currentSelectedSkill);
-
-    /// Tutorial 관련 멤버
-    void RegisterTutorialQuestAction(Unit::UnitType p_targetUnit, OrderType p_orderType);
-
-    void EngageTacticMode();
-    void ExitTacticMode();
-    void SetMovingSystemComponent(RTSCam* sys);
-
-    bool IsOrderingTimingNow() const;
-    bool IsUnitsPerformingCommand() const;
-    bool IsTacticModeCoolTime() const;
-
-    void SetCurrentCoolTimeElapsed(float p_duration);
-    float GetLeftCoolTime();
-
-    void AddGauge(int p_gauge);
-
-	void RegisterCurrentWave(PlaytimeWave* p_wave);
-
-	CursorDetector* m_cursorDetector;
-
-    void ReportTacticActionFinished();
-
-private:
-    float m_maxGauge{ 100 };
-    float m_currentGauge{ 0 };
-
-    float skillCost{ 0.0f };
-    float moveCost{ 0.0f };
-    float attackCost{ 0.0f };
-
-    float gaugeRecoveryPerSecond{ 0.0f };
-
-    InputManager::SelectedSerialNumber m_latestSelectedUnitNum;
-
-	std::vector<Unit*> m_currentWaveUnits;
-
-	RTSCam* m_rtsCam;
-    bool isCoolTime{ false };
-    float m_engageCoolTimeDuration{ 5.0f };
-    float m_engageCoolTimeElapsed{ 0.0f };
-
-    bool isTacticModeOperating;					// 명령을 내리는 시간일 때 true.
-    bool isTacticOrderPerforming;				// 내린 명령을 수행하고 있을 때 true.
-
-    Unit* currentSelectedUnit{ nullptr };
-
-    std::unordered_map<Unit::UnitType, Unit*> playerComponentMap;
-
-    std::queue<Unit*> sequenceQueue;
-
-	PlaytimeWave* m_currentOperatingWave;
+//	enum OrderType
+//	{
+//		Move,
+//		AttackMove,
+//		QSkill,
+//		WSkill
+//	};
+//
+//    struct TacticPreview
+//    {
+//        Vector3d finalPos;
+//        yunuGI::IMesh* mesh;
+//    };
+//
+//    void ToggleRequested(InputManager::SelectedSerialNumber currentSelectedNum);
+//
+//    void SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum);
+//    void SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum);
+//    void SetLeftClickAddQueueForSkill(InputManager::SelectedSerialNumber currentSelectedNum, Unit::SkillEnum currentSelectedSkill);
+//
+//    /// Tutorial 관련 멤버
+//    void RegisterTutorialQuestAction(Unit::UnitType p_targetUnit, OrderType p_orderType);
+//
+//    void EngageTacticMode();
+//    void ExitTacticMode();
+//    void SetMovingSystemComponent(RTSCam* sys);
+//
+//    bool IsOrderingTimingNow() const;
+//    bool IsUnitsPerformingCommand() const;
+//    bool IsTacticModeCoolTime() const;
+//
+//    void SetCurrentCoolTimeElapsed(float p_duration);
+//    float GetLeftCoolTime();
+//
+//    void AddGauge(int p_gauge);
+//
+//	void RegisterCurrentWave(PlaytimeWave* p_wave);
+//
+//	CursorDetector* m_cursorDetector;
+//
+//    void PopCommand();
+//    void ClearCommand();
+//    void ReportTacticActionFinished();
+//
+//private:
+//    void ShowUnitSkillPreview(Unit* unit, Unit::SkillEnum skillKind);
+//
+//private:
+//    bool isReady=false;
+//    float m_maxGauge{ 100 };
+//    float m_currentGauge{ 0 };
+//
+//    float skillCost{ 0.0f };
+//    float moveCost{ 0.0f };
+//    float attackCost{ 0.0f };
+//
+//    float gaugeRecoveryPerSecond{ 0.0f };
+//
+//    InputManager::SelectedSerialNumber m_latestSelectedUnitNum;
+//
+//	std::vector<Unit*> m_currentWaveUnits;
+//
+//	RTSCam* m_rtsCam;
+//    bool isCoolTime{ false };
+//    float m_engageCoolTimeDuration{ 5.0f };
+//    float m_engageCoolTimeElapsed{ 0.0f };
+//
+//    bool isTacticModeOperating;					// 명령을 내리는 시간일 때 true.
+//    bool isTacticOrderPerforming;				// 내린 명령을 수행하고 있을 때 true.
+//
+//    Unit* currentSelectedUnit{ nullptr };
+//
+//    std::unordered_map<Unit::UnitType, PlayerUnit*> playerComponentMap;
+//
+//    std::deque<Unit*> sequenceQueue;
 };
 

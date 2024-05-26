@@ -5,6 +5,7 @@
 #include "DebugMeshes.h"
 #include "HealerSkillSystem.h"
 #include "DualCastComponent.h"
+#include "PlayerUnit.h"
 #include "SingleNavigationField.h"
 #include "SkillPreviewSystem.h"
 
@@ -54,10 +55,8 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
     m_unitGameObject->GetTransform()->SetWorldPosition(startPos);
 
     /// UnitComponent 추가
-    m_unitComponent = m_unitGameObject->AddComponent<Unit>();
+    m_unitComponent = m_unitGameObject->AddComponent<PlayerUnit>();
     UnitProductor::SetUnitComponentMembers();
-
-
 #pragma endregion
 
 #pragma region Auto Attack Setting (Including Passive Logic)
@@ -73,7 +72,6 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
     auto QSkillFieldCollider = QSkillFieldObject->AddComponent<physics::SphereCollider>();
     m_QSkillFieldRadius = 2.0f * UNIT_LENGTH;
     QSkillFieldCollider->SetRadius(m_QSkillFieldRadius);
-    QSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
     auto QSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     AttachDebugMesh(QSkillFieldDebugObject, DebugMeshType::Sphere)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::white(), true));
@@ -91,7 +89,6 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
     m_WSkillFieldHeight = 4.0f * UNIT_LENGTH / 2;
 
     WSkillFieldCollider->SetHalfExtent({ m_WSkillFieldWidth / 2.0f, 0.1, m_WSkillFieldHeight / 2.0f });
-    WSkillFieldObject->AddComponent<physics::RigidBody>()->SetAsKinematic(true);
 
     auto WSkillFieldDebugObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     AttachDebugMesh(WSkillFieldDebugObject, DebugMeshType::Cube)->GetGI().SetMaterial(0, GetColoredDebugMaterial(yunuGI::Color::blue(), true));
@@ -250,7 +247,7 @@ Unit* HealerProductor::CreateUnit(Vector3d startPos)
     //    }
     //}
     m_unitComponent->unitAnimations = m_baseUnitAnimations;
-    SetUnitAnimationFunction();
+    SetUnitSkillFunctionToAnimation();
 
     return m_unitComponent;
 }

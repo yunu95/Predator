@@ -75,7 +75,10 @@ inline yunutyEngine::graphics::StaticMeshRenderer* AttachDebugMesh(GameObject* t
 		case DebugMeshType::Rectangle:
 			meshName = L"Rectangle";
 			break;
-	}
+        case DebugMeshType::Capsule:
+            meshName = L"Capsule";
+            break;	
+    }
 	auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	staticMesh->GetGI().SetMesh(rsrcManager->GetMesh(meshName));
 	staticMesh->GetGI().SetMaterial(0, GetColoredDebugMaterial(color, isWireFrame));

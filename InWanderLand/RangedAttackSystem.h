@@ -11,12 +11,16 @@ private:
 	float m_bulletSpeed;
 	float m_range;
 	Unit* m_ownerUnit;
+	AutoAttackProjectile* m_currentReloadedProjectile;
+
 public:
 	virtual void Attack(Unit* opponentUnit, float offset) override;
 
 	void SetOwnerUnit(Unit* p_unit);
 	void SetBulletSpeed(float speed);
 	void SetRange(float p_rng);
+
+	void ReloadProjectile();
 
 public:
 	virtual void Start() override;

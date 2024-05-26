@@ -27,6 +27,6 @@ namespace application
         virtual bool PostDecoding(const json& data) override;
 
     private:
-        int index{ 0 };
+        int index{ 1 };
     };
 }

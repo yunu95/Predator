@@ -301,6 +301,26 @@ namespace application
                         Action_EngageStage::ImGui_DrawDataPopup(static_cast<Action_EngageStage*>(data));
                         break;
                     }
+                    case application::ActionType::SoundPlay:
+                    {
+                        Action_SoundPlay::ImGui_DrawDataPopup(static_cast<Action_SoundPlay*>(data));
+                        break;
+                    }
+                    case application::ActionType::SoundPlayMusic:
+                    {
+                        Action_SoundPlayMusic::ImGui_DrawDataPopup(static_cast<Action_SoundPlayMusic*>(data));
+                        break;
+                    }
+                    case application::ActionType::SoundSetMusicVolume:
+                    {
+                        Action_SoundSetMusicVolume::ImGui_DrawDataPopup(static_cast<Action_SoundSetMusicVolume*>(data));
+                        break;
+                    }
+                    case application::ActionType::UISetActive:
+                    {
+                        Action_UISetActive::ImGui_DrawDataPopup(static_cast<Action_UISetActive*>(data));
+                        break;
+                    }
                     default:
                         break;
                     }

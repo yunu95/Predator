@@ -55,7 +55,7 @@ public:
 
 	easing_functions m_ease;
 
-	std::function<void()> onUpdate = []() {};			
+	std::function<void()> onUpdate = []() {};
 	std::function<void()> onCompleteFunction = []() {};		// duration 도달했을 때 실행시킬 함수.
 	std::function<void()> onExpiration = []() {};			// dotween 내부에서 설정해줄 수 있는 실행 완료 시 호출 함수
 

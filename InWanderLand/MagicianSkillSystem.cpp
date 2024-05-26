@@ -46,7 +46,7 @@ void MagicianSkillSystem::ActivateSkillOne(Vector3d skillPos)
             if (m_unitComponent->isPermittedToTacticAction)
             {
                 m_unitComponent->isPermittedToTacticAction = false;
-                TacticModeSystem::Instance().ReportTacticActionFinished();
+                m_unitComponent->ReportTacticActionFinished();
             }
 
             QSkillFieldDamage.dotweenComponent->DONothing(application::GlobalConstant::GetSingletonInstance().pod.ursulaQSkillFieldDuration).OnComplete([=]()
@@ -89,7 +89,7 @@ void MagicianSkillSystem::ActivateSkillTwo(Vector3d skillPos)
             if (m_unitComponent->isPermittedToTacticAction)
             {
                 m_unitComponent->isPermittedToTacticAction = false;
-                TacticModeSystem::Instance().ReportTacticActionFinished();
+                m_unitComponent->ReportTacticActionFinished();
             }
 
             WSkillFieldDamage.dotweenComponent->DONothing(m_WSkillFieldRemainTime).OnComplete([=]()

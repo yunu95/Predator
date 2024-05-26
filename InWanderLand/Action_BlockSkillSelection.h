@@ -13,7 +13,7 @@ namespace application
     public:
         DEFINE_ACTION(BlockSkillSelection)
 
-            Action_BlockSkillSelection() = default;
+        Action_BlockSkillSelection() = default;
         Action_BlockSkillSelection(int skillIndex);
 
         virtual CoroutineObject<void> DoAction() override;

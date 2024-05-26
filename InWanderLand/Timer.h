@@ -1,10 +1,10 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "Easing.h"
+#include "LocalTimeEntity.h"
 #include "ContentsObservee.h"
 
-
-class TimerComponent : public Component
+class TimerComponent : public Component, public LocalTimeEntity
 {
 private:
     bool m_isActivated{ false };
@@ -21,7 +21,6 @@ public:
     virtual void Update() override;
     //virtual void PlayFunction() override;
     //virtual void StopFunction() override;
-
 
 public:
     std::function<void(float normalizedT)> onUpdate = [](float) {};

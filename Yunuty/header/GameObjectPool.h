@@ -26,32 +26,32 @@ namespace yunutyEngine
 	public:
 		// 빌려줄 오브젝트가 단 하나도 없을 경우, 활성화된 씬에서 게임 오브젝트를 생성한 뒤 RepresentativeComponent를 붙여줍니다.
 		// 이 작업 이후 추가적으로 실행할 초기화 함수를 정의합니다.
-		virtual void ObjectInitializer(RepresenstativeComponent* comp) = 0;
+		virtual void ObjectInitializer(std::weak_ptr<RepresenstativeComponent> comp) = 0;
 		// 오브젝트를 하나 빌렸을 때 실행될 함수를 정의합니다. 굳이 정의 안해도 됩니다.
-		virtual void OnBorrow(RepresenstativeComponent* comp) {};
+		virtual void OnBorrow(std::weak_ptr<RepresenstativeComponent> comp) {};
 		// 게임 오브젝트 풀에 저장된 게임 오브젝트를 활성화합니다.
-		RepresenstativeComponent* Borrow();
+		std::weak_ptr<RepresenstativeComponent> Borrow();
 		// 게임 오브젝트 풀에서 관리하는 게임 오브젝트를 되돌려 줍니다.
-		void Return(RepresenstativeComponent*);
+		void Return(std::weak_ptr<RepresenstativeComponent>);
 		int poolObjectsSize() { return poolObjects.size(); };
 		int expendableObjectsSize() { return expendableObjects.size(); };
 
 	protected:
-		const unordered_set<RepresenstativeComponent*>& GetPoolObjects() {
+		const unordered_set<std::weak_ptr<RepresenstativeComponent>>& GetPoolObjects() {
 			return poolObjects;
 		}
 	protected:
-		unordered_set<RepresenstativeComponent*> poolObjects;
-		unordered_set<RepresenstativeComponent*> expendableObjects;
+		unordered_set<std::weak_ptr<RepresenstativeComponent>> poolObjects;
+		unordered_set<std::weak_ptr<RepresenstativeComponent>> expendableObjects;
 	};
 }
 template<typename RepresenstativeComponent>
-RepresenstativeComponent* GameObjectPool<RepresenstativeComponent>::Borrow()
+std::weak_ptr<RepresenstativeComponent> GameObjectPool<RepresenstativeComponent>::Borrow()
 {
 	if (expendableObjects.empty())
 	{
 		auto gameObject = Scene::getCurrentScene()->AddGameObject();
-		auto component = gameObject->AddComponent<RepresenstativeComponent>();
+		auto component = gameObject->AddComponentAsWeakPtr<RepresenstativeComponent>();
 		ObjectInitializer(component);
 		poolObjects.insert(component);
 		expendableObjects.insert(component);
@@ -63,11 +63,11 @@ RepresenstativeComponent* GameObjectPool<RepresenstativeComponent>::Borrow()
 	return target;
 }
 template<typename RepresenstativeComponent>
-void GameObjectPool<RepresenstativeComponent>::Return(RepresenstativeComponent* obj)
+void GameObjectPool<RepresenstativeComponent>::Return(std::weak_ptr<RepresenstativeComponent> obj)
 {
 	if (poolObjects.find(obj) != poolObjects.end())
 	{
 		expendableObjects.insert(obj);
-		obj->GetGameObject()->SetSelfActive(false);
+		obj->lock()->GetGameObject()->SetSelfActive(false);
 	}
 }
