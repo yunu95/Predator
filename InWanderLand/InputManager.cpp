@@ -90,6 +90,17 @@ void InputManager::Update()
 			//{
 			//	TacticModeSystem::Instance().ClearCommand();
 			//}
+
+
+			if (yunutyEngine::Input::isKeyPushed(KeyCode::Space) && !TacticModeSystem::Instance().IsCoolTime() && !TacticModeSystem::Instance().IsOperation())
+			{
+				TacticModeSystem::Instance().OperateTacticSystem();
+			}
+
+			if (yunutyEngine::Input::isKeyPushed(KeyCode::Space) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
+			{
+				TacticModeSystem::Instance().Execute();
+			}
 		}
 	}
 }
