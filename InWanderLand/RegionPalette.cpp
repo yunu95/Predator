@@ -14,7 +14,7 @@ namespace application
 
             void RegionPalette::SelectRegion(RegionData* region)
             {
-                Palette::OnSelectSingleInstance(region);
+                OnSelectSingleInstance(region);
             }
 
             void RegionPalette::SetAsSelectingDisablingOrnaments(bool ornamentMode)
@@ -76,6 +76,7 @@ namespace application
 
             void RegionPalette::OnSelectSingleInstance(IEditableData* data)
             {
+                Palette::OnSelectSingleInstance(data);
                 if (dynamic_cast<RegionData*>(data))
                 {
                     SetAsSelectingDisablingOrnaments(false);
