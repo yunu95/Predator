@@ -45,7 +45,7 @@ namespace application::editor::palette
     }
     void RegionEditorInstance::Apply(RegionData* regionData)
     {
-        SetHalfExtent({ regionData->pod.width, regionData->pod.height });
+        SetHalfExtent({ regionData->pod.width / 2.0f, regionData->pod.height / 2.0f });
         GetTransform()->SetWorldPosition({ regionData->pod.x, debugMeshYPos, regionData->pod.z });
         GetTransform()->SetWorldRotation(Vector3d{ 0,regionData->pod.angle ,0 });
     }

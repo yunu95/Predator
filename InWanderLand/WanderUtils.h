@@ -80,9 +80,16 @@ namespace wanderUtils
             //    }
             //}
         }
+        struct boolGuard
+        {
+            boolGuard(bool& b) : b(b) {}
+            ~boolGuard() { b = !b; }
+            bool& b;
+        };
         // 이 로드 함수는 파일을 부를떄 중간중간마다 리턴을 해준다.
         static coroutine::Coroutine LoadByCoroutine(string rootFolder = "./")
         {
+            boolGuard guard(isLoadingResources);
             isLoadingResources = true;
             const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
             auto enterTime = std::chrono::high_resolution_clock::now();
@@ -196,8 +203,6 @@ namespace wanderUtils
                     co_await std::suspend_always{};
                 }
             }
-
-            isLoadingResources = false;
         }
     private:
         static bool isLoadingResources;
