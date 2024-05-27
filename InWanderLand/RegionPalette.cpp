@@ -76,7 +76,6 @@ namespace application
 
             void RegionPalette::OnSelectSingleInstance(IEditableData* data)
             {
-                Palette::OnSelectSingleInstance(data);
                 if (dynamic_cast<RegionData*>(data))
                 {
                     SetAsSelectingDisablingOrnaments(false);
