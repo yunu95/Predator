@@ -5,6 +5,8 @@
 #include "PlayerUnit.h"
 #include "PermanentObservee.h"
 #include <unordered_map>
+#include <memory>
+#include <queue>
 
 /// <summary>
 /// 전술모드 시스템.
@@ -17,6 +19,7 @@
 class RTSCam;
 class CursorDetector;
 class PlaytimeWave;
+class UnitCommand;
 
 class TacticModeSystem : public SingletonComponent<TacticModeSystem>, public Component, public PermanentObservee
 {
@@ -26,7 +29,44 @@ public:
     virtual void Update() override;
 
 	virtual void OnContentsStop() override;
+    virtual void OnContentsPlay() override; 
     virtual Component* GetComponent() override { return this; }
+
+public:
+    bool IsCoolTime() { return this->isCoolTime; }
+    bool IsOperation() { return this->isOperating; }
+    bool IsExecuting() { return this->isExecuting; }
+
+    // 전술모드를 활성화하는 함수입니다.
+    void OperateTacticSystem();
+
+    // 유닛의 행동을 큐에 등록할 수 있게 해주는 함수 입니다.
+    void Enqueue(std::shared_ptr<UnitCommand> command);
+
+    // 전술 모드가 풀리면 실행될 함수 입니다.
+    void Execute();
+
+    // 맨 마지막 명령 하나를 지우는 함수입니다.
+    void PopCommand();
+
+    // 모든 명령을 지우는 함수입니다.
+    void ClearCommand();
+
+private:
+    // 전술모드 내부에서 등록된 명령들을 실행해주는 함수입니다.
+    coroutine::Coroutine ExecuteInternal();
+
+private:
+    std::deque<std::shared_ptr<UnitCommand>> commandQueue;
+    std::shared_ptr<UnitCommand> robinLastCommand;
+    std::shared_ptr<UnitCommand> ursulaLastCommand;
+    std::shared_ptr<UnitCommand> hanselLastCommand;
+
+    bool isOperating = false;
+    bool isCoolTime = false;
+    bool isExecuting = false;
+    float coolTime;
+    float elapsedTime;
 
 //	enum OrderType
 //	{

@@ -159,6 +159,8 @@ void InstancingManager::SortByCameraDirection()
 	// 인덱스맵에 맵핑하기
 	unsigned int instanceIDIndex = 0;
 	unsigned int renderInfoIndex = 0;
+	staticMeshInstanceIDIndexMap.clear();
+	staticMeshRenderInfoIndexMap.clear();
 	for (auto& each : staticMeshDeferredRenderVec)
 	{
 		staticMeshInstanceIDIndexMap.insert({ each.first,instanceIDIndex });
@@ -287,6 +289,16 @@ void InstancingManager::RenderStaticDeferred()
 				{
 					if (i == nullptr) continue;
 
+					if (i.get() == nullptr)
+					{
+						continue;
+					}
+
+					if (i.use_count() == 0)
+					{
+						continue;
+					}
+
 					if (i->mesh == nullptr) continue;
 
 					if (i->isInArea == false)
@@ -329,12 +341,16 @@ void InstancingManager::RenderStaticDeferred()
 						std::shared_ptr<RenderInfo> renderInfo = nullptr;
 						for (auto& each : renderInfoVec)
 						{
-							if (each)
+							if (each.get())
 							{
 								renderInfo = each;
 							}
 						}
 
+						if (renderInfo == nullptr)
+						{
+							return;
+						}
 
 						ExposureBuffer exposurrBuffer;
 						exposurrBuffer.diffuseExposure = renderInfo->mesh->GetDiffuseExposure();
@@ -732,11 +748,6 @@ void InstancingManager::RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& 
 {
 	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
 	InstanceID instanceID = std::make_pair(renderInfo->mesh, renderInfo->material);
-
-	if (renderInfo->mesh != nullptr && renderInfo->mesh->GetName() == L"SM_Green_Wall_7m")
-	{
-		int a = 1;
-	}
 
 	auto renderInfoIter = this->staticMeshRenderInfoIndexMap.find(renderInfo);
 	if (renderInfoIter != this->staticMeshRenderInfoIndexMap.end())
