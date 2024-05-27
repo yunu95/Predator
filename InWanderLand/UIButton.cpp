@@ -23,6 +23,10 @@ void UIButton::AddButtonClickFunction(std::function<void()> p_func)
 {
     m_mouseLiftedEventFunctions.push_back(p_func);
 }
+void UIButton::AddExternalButtonClickFunction(std::function<void()> p_func)
+{
+    m_mouseLiftedEventFunctionsExternal.push_back(p_func);
+}
 void UIButton::AddButtonOnMouseFunction(std::function<void()> p_func)
 {
     m_OnMouseEventFunctions.push_back(p_func);
@@ -154,6 +158,24 @@ void UIButton::OnDisable()
 }
 void UIButton::InvokeButtonClickEvent()
 {
+    InvokeInternalButtonClickEvent();
+    if (!clickable)
+    {
+        return;
+    }
+    else
+    {
+        if (!m_mouseLiftedEventFunctionsExternal.empty())
+        {
+            for (auto& each : m_mouseLiftedEventFunctionsExternal)
+            {
+                each();
+            }
+        }
+    }
+}
+void UIButton::InvokeInternalButtonClickEvent()
+{
     if (!clickable)
     {
         return;
@@ -173,13 +195,3 @@ void UIButton::InvokeButtonClickEvent()
         }
     }
 }
-
-//void UIButton::PlayFunction()
-//{
-//
-//}
-//
-//void UIButton::StopFunction()
-//{
-//    yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-//}

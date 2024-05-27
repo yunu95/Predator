@@ -1043,19 +1043,19 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         switch (element->duplicateParentEnumID)
         {
         case UIEnumID::CharInfo_Robin:
-            element->button->AddButtonClickFunction([=]()
+            element->button->AddExternalButtonClickFunction([=]()
                 {
                     InputManager::Instance().SelectPlayer(Unit::UnitType::Warrior);
                 });
             break;
         case UIEnumID::CharInfo_Ursula:
-            element->button->AddButtonClickFunction([=]()
+            element->button->AddExternalButtonClickFunction([=]()
                 {
                     InputManager::Instance().SelectPlayer(Unit::UnitType::Magician);
                 });
             break;
         case UIEnumID::CharInfo_Hansel:
-            element->button->AddButtonClickFunction([=]()
+            element->button->AddExternalButtonClickFunction([=]()
                 {
                     InputManager::Instance().SelectPlayer(Unit::UnitType::Healer);
                 });
@@ -1067,19 +1067,19 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         switch (element->duplicateParentEnumID)
         {
         case UIEnumID::CharInfo_Robin:
-            element->button->AddButtonClickFunction([=]()
+            element->button->AddExternalButtonClickFunction([=]()
                 {
                     InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Warrior);
                 });
             break;
         case UIEnumID::CharInfo_Ursula:
-            element->button->AddButtonClickFunction([=]()
+            element->button->AddExternalButtonClickFunction([=]()
                 {
                     InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Magician);
                 });
             break;
         case UIEnumID::CharInfo_Hansel:
-            element->button->AddButtonClickFunction([=]()
+            element->button->AddExternalButtonClickFunction([=]()
                 {
                     InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Healer);
                 });
@@ -1091,19 +1091,19 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         switch (element->duplicateParentEnumID)
         {
         case UIEnumID::CharInfo_Robin:
-            element->button->AddButtonClickFunction([=]()
+            element->button->AddExternalButtonClickFunction([=]()
                 {
                     InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Warrior);
                 });
             break;
         case UIEnumID::CharInfo_Ursula:
-            element->button->AddButtonClickFunction([=]()
+            element->button->AddExternalButtonClickFunction([=]()
                 {
                     InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Magician);
                 });
             break;
         case UIEnumID::CharInfo_Hansel:
-            element->button->AddButtonClickFunction([=]()
+            element->button->AddExternalButtonClickFunction([=]()
                 {
                     InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Healer);
                 });

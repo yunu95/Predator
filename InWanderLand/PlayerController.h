@@ -23,6 +23,8 @@ public:
     VolatileCallbacks onSkillSelect[(int)SkillType::SKILL_NUM];
     VolatileCallbacks onSkillActivate[(int)SkillType::SKILL_NUM];
 private:
+    SkillType selectedSkill = SkillType::NONE;
+    CharacterType selectedCharacter = CharacterType::NONE;
     virtual Component* GetComponent() override { return this; }
     virtual void Start() override;
     virtual void OnContentsPlay() override;
@@ -38,14 +40,9 @@ private:
     void OrderMove(Vector3d position);
     void OrderAttack(std::weak_ptr<Unit> unit);
     void OrderInteraction(std::weak_ptr<IInteractableComponent> unit);
-    template<SkillType skillType>
-    void ActivateSkill(const Vector3d& pos);
-    template<SkillType skillType>
-    void SelectSkill(const Vector3d& pos);
-    template<SkillType skillType>
-    void UnSelectSkills();
-    template<SkillType character>
-    Skill& Skill();
+    void ActivateSkill(SkillType skillType);
+    void SelectSkill(SkillType skillType);
+    void UnSelectSkill(SkillType skillType);
     Vector3d GetWorldCursorPosition();
     std::weak_ptr<UnitAcquisitionSphereCollider> cursorUnitDetector;
     std::weak_ptr<Unit> characters[CHARACTER_NUM];
