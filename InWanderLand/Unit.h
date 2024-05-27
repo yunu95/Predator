@@ -44,14 +44,14 @@ public:
     void StopMove();
     void OrderMove(Vector3d position);
     void OrderAttackMove(Vector3d position);
-    void OrderAttackMove(Vector3d position, Unit* p_selectedUnit);
+    void OrderAttackMove(Vector3d position, Unit* opponent);
     void ApplySkill(const Skill& skill);
     void ApplyKnockback();
     void ApplyParalysis();
     void ReportStatusEffectApplied(StatusEffect::StatusEffectEnum p_effectType);
     void ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType);
     virtual ~Unit();
-    void Damaged(Unit* opponentUnit, float opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
+    void Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
     void Damaged(float dmg);                            // 추적받지 않는 데미지
     void Heal(float healingPoint);
     void SetUnitCurrentHp(float p_newHp);

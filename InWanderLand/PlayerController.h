@@ -2,34 +2,52 @@
 #include "YunutyEngine.h"
 #include <map>
 #include "PermanentObservee.h"
+#include "UnitController.h"
+#include "UIManager.h"
 
-// 플레이어 유닛들의 행동을 관리하는 클래스
+// 사용자 입력을 받고 플레이어 유닛들의 행동을 관리하는 클래스
 // 짬통 중의 짬통이다.
 class RTSCam;
 class PlayerUnit;
 class CursorDetector;
+class IInteractableComponent;
+class UnitAcquisitionSphereCollider;
 
-class PlayerController : public SingletonComponent<PlayerController>, public Component, public PermanentObservee
+class PlayerController : public SingletonComponent<PlayerController>, public UnitController, public PermanentObservee
 {
-    enum CharacterType { ROBIN, URSULA, HANSEL, CHARACTER_NUM };
-    Vector3d cameraOffset = { 0, 20, -15 };
-    float cameraMoveDuration{ 0.3f };
-    void Select(CharacterType charType);
 public:
-    virtual Component* GetComponent() override { return this; }
-    virtual void OnContentsStop() override;
-    CursorDetector* m_cursorDetector;
-    // 아래 둘은 한번 호출한 후 내용을 다 지워버리는 휘발성 콜백들
-    VolatileCallbacks onRobinQSelect;
-    VolatileCallbacks onRobinQActivate;
-    void UsePrimarySkill(const Vector3d& pos);
-    void UseSecondarySkill(const Vector3d& pos);
+    static constexpr int playerTeamIndex = 1;
+    enum CharacterType { NONE = -1, ROBIN, URSULA, HANSEL, CHARACTER_NUM };
+    enum class SkillType { NONE = -1, ROBIN_Q, ROBIN_W, URSULA_Q, URSULA_W, HANSEL_Q, HANSEL_W, SKILL_NUM };
+    // 한번 호출한 후 내용을 다 지워버리는 휘발성 콜백들
+    VolatileCallbacks onSkillSelect[(int)SkillType::SKILL_NUM];
+    VolatileCallbacks onSkillActivate[(int)SkillType::SKILL_NUM];
 private:
-    template<CharacterType character>
-    Skill& PrimarySkill(const Vector3d& pos);
-    template<CharacterType character>
-    Skill& SecondarySkill(const Vector3d& pos);
+    virtual Component* GetComponent() override { return this; }
+    virtual void Start() override;
+    virtual void OnContentsPlay() override;
+    virtual void OnContentsStop() override;
+    virtual void Update() override;
+    // 사용자 입력을 받기 위해 매 프레임 불린다.
+    void HandleInput();
+    void SelectPlayerUnit(CharacterType charType);
+    // character가 NONE일 경우 알아서 현재 선택된 스킬로 귀결된다.
+    void OnLeftClick();
+    void OnRightClick();
+    void SelectUnit(std::weak_ptr<Unit> unit);
+    void OrderMove(Vector3d position);
+    void OrderAttack(std::weak_ptr<Unit> unit);
+    void OrderInteraction(std::weak_ptr<IInteractableComponent> unit);
+    template<SkillType skillType>
+    void ActivateSkill(const Vector3d& pos);
+    template<SkillType skillType>
+    void SelectSkill(const Vector3d& pos);
+    template<SkillType skillType>
+    void UnSelectSkills();
+    template<SkillType character>
+    Skill& Skill();
+    Vector3d GetWorldCursorPosition();
+    std::weak_ptr<UnitAcquisitionSphereCollider> cursorUnitDetector;
     std::weak_ptr<Unit> characters[CHARACTER_NUM];
-    //std::weak_ptr<const Unit> characters[CHARACTER_NUM] robin, ursula, hansel;
-    int a = ROBIN;
+    std::weak_ptr<Unit> selectedCharacter;
 };

@@ -8,40 +8,71 @@
 #include "SkillPreviewSystem.h"
 #include "GameManager.h"
 #include "CursorDetector.h"
+#include "UIManager.h"
 
 void PlayerController::Start()
 {
-    currentSelectedSerialNumber = Unit::UnitType::Warrior;
-
-    ChangeLeaderPlayerUnit(Unit::UnitType::Warrior);
+    SelectPlayerUnit(CharacterType::ROBIN);
 }
-
-void PlayerController::SetMovingSystemComponent(RTSCam* sys)
+void PlayerController::OnContentsPlay()
 {
-    m_movingSystemComponent = sys;
-    m_dotween = sys->GetGameObject()->GetComponent<Dotween>();
+    SetActive(true);
+    cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionSphereCollider>();
 }
-
-void PlayerController::AddPlayerUnit(PlayerUnit* p_playerUnit)
-{
-    playerComponentMap.insert({ p_playerUnit->GetPlayerSerialNumber(), p_playerUnit });
-}
-
-void PlayerController::ErasePlayerUnit(PlayerUnit* p_playerUnit)
-{
-    playerComponentMap.erase(p_playerUnit->GetUnitType());
-}
-
 void PlayerController::OnContentsStop()
 {
-    this->SetActive(false);
-	playerComponentMap.clear();
-    m_movingSystemComponent = nullptr;
-    m_dotween = nullptr;
-    m_cursorDetector = nullptr;
-    currentSelectedSerialNumber = Unit::UnitType::Warrior;
-    previousSerialNumber = 0;
-    lookRotationDuration = 0.1f;
+    int a;
+    int b;
+    switch ( a)
+    {
+    case b:
+        break;
+    }
+    SetActive(false);
+    Scene::getCurrentScene()->DestroyGameObject(cursorUnitDetector.lock()->GetGameObject());
+}
+
+void PlayerController::Update()
+{
+    cursorUnitDetector.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetWorldCursorPosition());
+    HandleInput();
+}
+
+void PlayerController::HandleInput()
+{
+    if (Input::isKeyPushed(KeyCode::Q))
+    {
+        LoadPrimarySkill();
+    }
+    if (Input::isKeyPushed(KeyCode::W))
+    {
+        LoadPrimarySkill();
+    }
+}
+
+void PlayerController::SelectPlayerUnit(CharacterType charType)
+{
+}
+
+void PlayerController::OnLeftClick()
+{
+}
+
+void PlayerController::OnLeftClick(std::weak_ptr<Unit> unit)
+{
+}
+
+void PlayerController::OnRightClick(Vector3d position)
+{
+}
+
+void PlayerController::OnRightClick(std::weak_ptr<Unit> unit)
+{
+}
+
+Vector3d PlayerController::GetWorldCursorPosition()
+{
+    return Vector3d();
 }
 
 void PlayerController::SetRightClickFunction()

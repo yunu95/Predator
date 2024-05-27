@@ -176,6 +176,7 @@ namespace application
         void PalettePanel::OnPlayContents()
         {
             lightGizmo->SetSelfActive(false);
+            palette::RegionPalette::SingleInstance().SetAsSelectingDisablingOrnaments(false);
         }
 
         void PalettePanel::OnPauseContents()
@@ -672,7 +673,7 @@ namespace application
             if (ImGui::Button("Make new region"))
             {
                 auto newInstance = InstanceManager::GetSingletonInstance().CreateInstance<RegionData>(Region_TemplateData::GetInstance().GetDataKey());
-                auto createPoint = graphics::Camera::GetMainCamera()->GetProjectedPoint({ 0.0,0.0 }, graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().Magnitude(), { 0,1,0 });
+                auto createPoint = graphics::Camera::GetMainCamera()->GetProjectedPoint({ 0.0,0.0 }, graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y, { 0,1,0 });
                 newInstance->pod.angle = 0;
                 newInstance->pod.width = 5;
                 newInstance->pod.height = 5;

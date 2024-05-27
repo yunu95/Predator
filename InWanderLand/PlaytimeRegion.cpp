@@ -52,11 +52,12 @@ void PlaytimeRegion::OnTriggerEnter(physics::Collider* collider)
             }
         }
         // 가려야 하는 장식물들을 가리는 부분
-        for (auto each : regionData->GetDisablingOrnaments())
+        if (disablingReferences.empty())
         {
-            if (auto instance = each->GetPaletteInstance())
+            for (auto each : regionData->GetDisablingOrnaments())
             {
-                instance->GetGameObject()->SetSelfActive(false);
+                std::transform(regionData->GetDisablingOrnaments().begin(), regionData->GetDisablingOrnaments().end(),
+                    std::back_inserter(disablingReferences), [each](auto each) { return each->AcquireDisablingReference(); });
             }
         }
 
@@ -70,20 +71,13 @@ void PlaytimeRegion::OnTriggerExit(physics::Collider* collider)
         colliderUnitComponent != nullptr && colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
     {
         enteredPlayerColliders.erase(collider);
-        for (auto& each : OnLeave)
-        {
-            each();
-        }
         if (enteredPlayerColliders.empty())
         {
-            // 가려져 있던 장식물들을 다시 보이게 하는 부분
-            for (auto each : regionData->GetDisablingOrnaments())
+            for (auto& each : OnLeave)
             {
-                if (auto instance = each->GetPaletteInstance())
-                {
-                    instance->GetGameObject()->SetSelfActive(true);
-                }
+                each();
             }
+            disablingReferences.clear();
         }
     }
 }

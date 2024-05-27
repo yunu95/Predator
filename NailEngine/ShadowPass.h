@@ -9,22 +9,27 @@
 class Texture;
 class VertexShader;
 class PixelShader;
+class NailEngine;
 
 class ShadowPass
 {
 public:
-	static LazyObjects<ShadowPass> Instance;
-	friend LazyObjects<ShadowPass>;
+    static LazyObjects<ShadowPass> Instance;
+    friend LazyObjects<ShadowPass>;
 
 public:
-	void Init(Texture* dsTexture, VertexShader* vs, PixelShader* ps, VertexShader* skinnedVS);
-	void Bind();
-	void SkinnedBind();
+    void Init(Texture* dsTexture, VertexShader* vs, PixelShader* ps, VertexShader* skinnedVS);
+    void Bind();
+    void SkinnedBind();
 
 private:
-	Texture* dsTexture;
-	VertexShader* vs;
-	VertexShader* skinnedVS;
-	PixelShader* ps;
+    void SetTempRTV(Texture* texture);
+    Texture* dsTexture;
+    VertexShader* vs;
+    VertexShader* skinnedVS;
+    PixelShader* ps;
+    Texture* tempRTV;
+
+    friend NailEngine;
 };
 

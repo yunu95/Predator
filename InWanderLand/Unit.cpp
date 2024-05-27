@@ -758,7 +758,7 @@ int Unit::GetUnitDamage() const
     return m_autoAttackDamage;
 }
 
-void Unit::Damaged(Unit* opponentUnit, float opponentDmg)
+void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg)
 {
     AddToOpponentObjectList(opponentUnit);
     DetermineHitDamage(opponentDmg);
