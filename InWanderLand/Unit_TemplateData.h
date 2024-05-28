@@ -6,6 +6,8 @@
 
 #include "ITemplateData.h"
 #include "GlobalConstant.h"
+#include "UnitStatusBarType.h"
+#include "PlayerCharacterType.h"
 
 #include <string>
 
@@ -18,6 +20,19 @@ namespace application
         struct POD_Unit_TemplateData
         {
             std::string skinnedFBXName = std::string();
+            // 플레이어 유닛인지의 여부와 종류를 나타내는 열거형
+            POD_Enum<PlayerCharacterType> playerUnitType{ PlayerCharacterType::None };
+            // 화면에 뜨는 체력창의 타입
+            POD_Enum<UnitStatusBarType> unitStatusBar{ UnitStatusBarType::ENEMY };
+            // 체력창을 유닛의 위치로부터 얼마나 멀리 띄울 것인가?
+            POD_Vector2<float> statusBarOffset;
+            // 발사체가 생성되는 위치
+            POD_Vector3<float> projectileOffset;
+            float projectileSpeed{ 5 };
+            // 생성될때 걸리는 시간, 생성시 번아웃 효과 연출 시간과 같다.
+            float spawnTime{ 0.5 };
+            // 사망할 때 번아웃 효과가 연출되는 시간
+            float deathBurnTime{ 0.5 };
 
             int unitType;
             float max_Health;

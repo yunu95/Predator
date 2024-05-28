@@ -36,7 +36,7 @@ namespace application
             return true;
         }
 
-        ITemplateData* UnitData::GetTemplateData()
+        Unit_TemplateData* UnitData::GetTemplateData()
         {
             return pod.templateData;
         }

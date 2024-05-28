@@ -36,6 +36,10 @@
 #include "YunutyCoroutine.h"
 #include "YunutyYieldInstruction.h"
 #include "YunutyWaitForSeconds.h"
+#include "IInteractableComponent.h"
+#include "RobinChargeSkill.h"
+#include "UnitStatusBarType.h"
+#include "PlayerCharacterType.h"
 
 #include "InstanceManager.h"
 #include "EditorLayer.h"

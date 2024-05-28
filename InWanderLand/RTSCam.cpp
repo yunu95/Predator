@@ -21,16 +21,6 @@ void RTSCam::Start()
     pitch = rot.Euler().x * yunutyEngine::math::Deg2Rad;
     yaw = rot.Euler().y * yunutyEngine::math::Deg2Rad;
 
-    for (auto& each : Scene::getCurrentScene()->GetChildren())
-    {
-        auto unit = each->GetComponent<Unit>();
-        if (unit && unit->GetUnitSide() == Unit::UnitSide::Player)
-        {
-            SetTarget(each);
-            break;
-        }
-    }
-
     auto& gi = GetGI();
 
     ingameInitRot = rot;

@@ -23,5 +23,5 @@ private:
         virtual void ObjectInitializer(std::weak_ptr<Unit> unit) override;
         virtual void OnBorrow(std::weak_ptr<Unit> unit) override;
     };
-    std::unordered_map<application::editor::Unit_TemplateData*, std::weak_ptr<PoolByTemplate>> poolsByTemplate;
+    std::unordered_map<const application::editor::Unit_TemplateData*, std::shared_ptr<PoolByTemplate>> poolsByTemplate;
 };

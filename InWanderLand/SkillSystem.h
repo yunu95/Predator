@@ -31,4 +31,3 @@ protected:
 public:
     virtual void ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p_skillPosition) = 0;
 };
-

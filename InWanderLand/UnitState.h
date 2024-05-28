@@ -14,7 +14,7 @@ enum class UnitState
     // 사망한 상태
     Death,
     // 정지상태. 경직, 넉백, 트리거상 정지가 모두 이 상태에 속한다. 디폴트로 Idle 애니메이션을 재생함.
-    Paused,
+    //Paused,
     // enum class의 끝을 알리는 상태
     End
 };
