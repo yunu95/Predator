@@ -15,7 +15,7 @@ struct PixelIn
 float4 main(PixelIn input) : SV_TARGET
 {
     float2 offset = float2(-temp_float0, temp_float1);
-    float4 color = Temp0Map.Sample(sam, input.uv + offset);
+    float4 color = Temp0Map.Sample(sam, input.uv + offset) * materialColor;
     return color;
 }
 
@@ -23,6 +23,6 @@ float4 main(PixelIn input) : SV_TARGET
 // ShaderType : Forward
 // RasterType : Solid
 // CullType : CullBack
-// DepthType : NoDepthTestNoWrite
+// DepthType : LessNoWrite
 // BlendType : AlphaBlend
 // Sampler : Default
