@@ -14,13 +14,6 @@ namespace application::editor
 }
 class PlaytimeRegion : public Component, public ContentsObservee
 {
-private:
-    application::editor::RegionData* regionData{ nullptr };
-    //std::wstring m_regionName;
-
-    bool isOnceActivated{ false };
-    std::unordered_set<physics::Collider*> enteredPlayerColliders;
-
 public:
     virtual ~PlaytimeRegion();
 
@@ -34,5 +27,11 @@ public:
     virtual void OnTriggerExit(physics::Collider* collider) override;
     virtual Component* GetComponent() override { return this; }
     friend application::editor::RegionData;
-};
+private:
+    application::editor::RegionData* regionData{ nullptr };
+    //std::wstring m_regionName;
 
+    bool isOnceActivated{ false };
+    std::unordered_set<physics::Collider*> enteredPlayerColliders;
+    std::vector<std::shared_ptr<application::editor::OrnamentData::DisablingReference>> disablingReferences;
+};

@@ -58,9 +58,11 @@ coroutine::Coroutine InitialLoadingScreen::ShowLoadingScreen()
         co_await std::suspend_always{};
     }
     co_await std::suspend_always{};
-#ifndef  EDITOR
+#ifndef EDITOR
+#ifndef GRAPHICS_TEST
     UIManager::Instance().FadeOutRight(0);
     UIManager::Instance().FadeIn(2);
+#endif
 #endif 
     Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
     Scene::getCurrentScene()->DestroyGameObject(videoObj);

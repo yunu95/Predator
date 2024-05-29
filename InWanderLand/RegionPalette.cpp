@@ -14,7 +14,7 @@ namespace application
 
             void RegionPalette::SelectRegion(RegionData* region)
             {
-                Palette::OnSelectSingleInstance(region);
+                OnSelectSingleInstance(region);
             }
 
             void RegionPalette::SetAsSelectingDisablingOrnaments(bool ornamentMode)
