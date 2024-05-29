@@ -15,7 +15,7 @@ struct PixelIn
 float4 main(PixelIn input) : SV_TARGET
 {
     float4 color = Temp0Map.Sample(sam, input.uv);
-    color.xyz *= materialColor.xyz;
+    color.xyzw *= materialColor.xyzw;
     return color;
 }
 

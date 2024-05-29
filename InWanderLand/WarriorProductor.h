@@ -19,5 +19,9 @@ public:
 	virtual void SetUnitData() override;
 	virtual void SingletonInitializer() override;
 	virtual Unit* CreateUnit(Vector3d startPos) override;
+
+public:
+	float GetQSkillRange() { return m_QSkillRadius; }
+	float GetWSkillRange() { return m_WSkillRadius; }
 };
 

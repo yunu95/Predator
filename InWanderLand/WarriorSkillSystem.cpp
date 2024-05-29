@@ -18,7 +18,7 @@ yunutyEngine::coroutine::Coroutine WarriorSkillSystem::ImpactOnTheEnd()
     if (m_unitComponent->isPermittedToTacticAction)
     {
         m_unitComponent->isPermittedToTacticAction = false;
-        TacticModeSystem::Instance().ReportTacticActionFinished();
+        m_unitComponent->ReportTacticActionFinished();
     }
 }
 KnockBackComponent* WarriorSkillSystem::GetKnockBackComponent()
@@ -77,12 +77,12 @@ void WarriorSkillSystem::ActivateSkillTwo(Vector3d skillPos)
         {
             isOncedActivated = false;
             SetSkillRequirmentsActive(WTauntSkill, false);
-            TacticModeSystem::Instance().ReportTacticActionFinished();
+            m_unitComponent->ReportTacticActionFinished();
             m_unitComponent->SetUnitStateIdle();
             if (m_unitComponent->isPermittedToTacticAction)
             {
                 m_unitComponent->isPermittedToTacticAction = false;
-                TacticModeSystem::Instance().ReportTacticActionFinished();
+                m_unitComponent->ReportTacticActionFinished();
             }
         });
     m_developedFunctionToWSkill();
@@ -113,9 +113,9 @@ void WarriorSkillSystem::SetWSkillDebugObject(GameObject* obj, float radius)
 void WarriorSkillSystem::SetSkillRequirmentLocalTimeScale(float p_scale)
 {
     if (QknockBackSkill.dotweenComponent)
-        QknockBackSkill.dotweenComponent->SetLocalTimeScaleDirectly(p_scale);
+        LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(QknockBackSkill.dotweenComponent, p_scale);
     if (WTauntSkill.dotweenComponent)
-        WTauntSkill.dotweenComponent->SetLocalTimeScaleDirectly(p_scale);
+        LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(WTauntSkill.dotweenComponent, p_scale);
 }
 
 void WarriorSkillSystem::Start()

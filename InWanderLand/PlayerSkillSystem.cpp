@@ -35,10 +35,10 @@ void PlayerSkillSystem::ActivateSkill(Unit::SkillEnum p_currentSkill, Vector3d p
 		}
 
 		/// 전술모드가 아닌 경우엔 스킬 게이지를 소모해야 합니다.
-		if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
-		{
-			PlayerSkillManager::Instance().ReportSkillUsed(m_unitComponent->GetUnitType(), p_currentSkill);
-		}
+		//if (!TacticModeSystem::Instance().IsUnitsPerformingCommand())
+		//{
+		//	PlayerSkillManager::Instance().ReportSkillUsed(m_unitComponent->GetUnitType(), p_currentSkill);
+		//}
 
 		isOncedActivated = true;
     }

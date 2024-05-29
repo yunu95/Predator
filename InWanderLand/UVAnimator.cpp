@@ -40,7 +40,7 @@ void UVAnimator::Start()
 		auto resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 		this->renderer->GetGI().GetMaterial()->SetVertexShader(resourceManager->GetShader(L"TextureAnimVS.cso"));
 		this->renderer->GetGI().GetMaterial()->SetPixelShader(resourceManager->GetShader(L"TextureAnimPS.cso"));
-		this->renderer->GetGI().SetMesh(resourceManager->GetMesh(L"Rectangle"));
+		//this->renderer->GetGI().SetMesh(resourceManager->GetMesh(L"Rectangle"));
 	}
 }
 

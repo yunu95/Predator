@@ -3,6 +3,8 @@
 #include "InteractableData.h"
 #include "DebugMeshes.h"
 
+#include "Unit.h"
+
 void Interactable_TriggerSphere::Start()
 {
 	AttachDebugMesh(GetGameObject(), DebugMeshType::Sphere, yunuGI::Color::green());
@@ -18,6 +20,31 @@ void Interactable_TriggerSphere::Start()
 void Interactable_TriggerSphere::Update()
 {
 	
+}
+
+void Interactable_TriggerSphere::OnTriggerEnter(physics::Collider* collider)
+{
+	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+		colliderUnitComponent != nullptr &&
+		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+	{
+		triggerStay.insert(collider);
+		OnInteractableTriggerEnter();
+	}
+}
+
+void Interactable_TriggerSphere::OnTriggerExit(physics::Collider* collider)
+{
+	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+		colliderUnitComponent != nullptr &&
+		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+	{
+		if (triggerStay.size() == 1)
+		{
+			OnInteractableTriggerExit();
+		}
+		triggerStay.erase(collider);
+	}
 }
 
 void Interactable_TriggerSphere::SetDataFromEditorData(const application::editor::InteractableData& data)

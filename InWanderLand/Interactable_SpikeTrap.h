@@ -12,11 +12,15 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 
+	virtual void OnTriggerEnter(physics::Collider* collider) override;
+	virtual void OnTriggerExit(physics::Collider* collider) override;
+
 	virtual yunutyEngine::coroutine::Coroutine DoInteraction() override;
 
 	virtual void SetDataFromEditorData(const application::editor::InteractableData& data) override;
 
 private:
+	std::unordered_set<physics::Collider*> triggerStay = std::unordered_set<physics::Collider*>();
 	Vector3d initPos = Vector3d(0, 0, 0);
 	Quaternion initRotation = Quaternion();
 	Vector3d initScale = Vector3d(1, 1, 1);

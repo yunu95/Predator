@@ -26,7 +26,7 @@ void HealerSkillSystem::CrushDown(int p_times)
                 if (m_unitComponent->isPermittedToTacticAction)
                 {
                     m_unitComponent->isPermittedToTacticAction = false;
-                    TacticModeSystem::Instance().ReportTacticActionFinished();
+                    m_unitComponent->ReportTacticActionFinished();
                 }
             }
             else
@@ -120,9 +120,9 @@ void HealerSkillSystem::ActivateSkillTwo(Vector3d skillPos)
 void HealerSkillSystem::SetSkillRequirmentLocalTimeScale(float p_scale)
 {
     if (QSkillFieldDamage.dotweenComponent)
-        QSkillFieldDamage.dotweenComponent->SetLocalTimeScaleDirectly(p_scale);
+        LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(QSkillFieldDamage.dotweenComponent, p_scale);
     if (WSkillFieldDamage.dotweenComponent)
-        WSkillFieldDamage.dotweenComponent->SetLocalTimeScaleDirectly(p_scale);
+        LocalTimeEntityManager::Instance().SetLocalTimeScaleDirectly(WSkillFieldDamage.dotweenComponent, p_scale);
 }
 
 void HealerSkillSystem::Start()
@@ -177,7 +177,7 @@ void HealerSkillSystem::Update()
             if (m_unitComponent->isPermittedToTacticAction)
             {
                 m_unitComponent->isPermittedToTacticAction = false;
-                TacticModeSystem::Instance().ReportTacticActionFinished();
+                m_unitComponent->ReportTacticActionFinished();
             }
         }
     }

@@ -22,6 +22,7 @@ public:
 
 #pragma region Getter
 	std::shared_ptr<Texture>& GetRTTexture(int index);
+	RenderTarget& GetRT(int index);
 #pragma endregion 
 
 

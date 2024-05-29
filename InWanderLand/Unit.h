@@ -17,6 +17,8 @@ class SkillSystem;
 class BurnEffect;
 class CursorDetector;
 
+
+
 /// <summary>
 /// 유닛들이 공유하는 멤버.
 /// </summary>
@@ -71,6 +73,13 @@ public:
         BossSkillThree,
         BossSkillFour
     };
+
+	struct TacticPreview
+	{
+		Vector3d finalPos;
+		yunuGI::IMesh* mesh = nullptr;
+        SkillEnum skillKind;
+	};
 
     struct BaseUnitAnimationStruct
     {
@@ -273,6 +282,7 @@ public:
     virtual void OnDestroy() override;
     virtual void OnTransformUpdate() override;
 
+    float GetAtkDistance() { return m_atkDistance; }
     void StopMove();
     UnitType GetUnitType() const;
     UnitSide GetUnitSide() const;
@@ -346,10 +356,10 @@ public:
     void SetCurrentMovePosition(Vector3d p_pos);
     void SetWaveStartPosition(Vector3d p_pos);
 
-    void PushMoveFunctionToTacticQueue(Vector3d p_pos);
+    void PushMoveFunctionToTacticQueue(Vector3d p_pos, yunuGI::IMesh* routeMesh);
     void PushAttackMoveFunctionToTacticQueue(Vector3d p_pos);
-    void PushAttackMoveFunctionToTacticQueue(Vector3d p_pos, Unit* p_selectedUnit);
-    void PushSkillFunctionToTacticQueue(SkillEnum p_skillNum, Vector3d p_pos);
+    void PushAttackMoveFunctionToTacticQueue(Vector3d p_pos, Unit* p_selectedUnit, yunuGI::IMesh* routeMesh);
+    void PushSkillFunctionToTacticQueue(SkillEnum p_skillNum, Vector3d p_pos, Vector3d p_objPos, Unit::SkillEnum skillKind);
     void ReportTacticModeEngaged();
 
     bool IsTacticModeQueueEmpty() const;
@@ -384,6 +394,10 @@ public:
     bool CheckEnemyStoppedByTacticMode() const;
     void KnockBackUnit(Vector3d targetPosition, float knockBackDuration);
 
+    void ReportTacticActionFinished();
+    void PopCommand();
+    const std::deque<Unit::TacticPreview>& GetTacticPreview();
+
 
     std::function<void()> returnToPoolFunction{ nullptr };
     std::function<void()> deathEngageFunction{ nullptr };
@@ -394,7 +408,8 @@ public:
     std::vector<std::function<void()>> OnDeath;
     bool isJustCreated{ false };
 
-    std::queue<std::function<void()>> m_tacticModeQueue;
+    std::deque<std::function<void()>> m_tacticModeQueue;
+    std::deque<TacticPreview> m_tacticPreview;
 
     Vector3d m_currentBelongingWavePosition;
     CursorDetector* m_cursorDetectorComponent;

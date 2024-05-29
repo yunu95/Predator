@@ -41,6 +41,7 @@ bool InstancingManager::IsInTree(std::shared_ptr<RenderInfo>& renderInfo)
 
 void InstancingManager::SortByCameraDirection()
 {
+	// 쿼드트리에 중복으로 데이터가 들어가지 않게 쿼드트리에서 데이터를 빼준다.
 	if (!this->staticMeshDeferredRenderVec.empty())
 	{
 		for (auto& each : this->staticMeshDeferredRenderVec)
@@ -158,6 +159,8 @@ void InstancingManager::SortByCameraDirection()
 	// 인덱스맵에 맵핑하기
 	unsigned int instanceIDIndex = 0;
 	unsigned int renderInfoIndex = 0;
+	staticMeshInstanceIDIndexMap.clear();
+	staticMeshRenderInfoIndexMap.clear();
 	for (auto& each : staticMeshDeferredRenderVec)
 	{
 		staticMeshInstanceIDIndexMap.insert({ each.first,instanceIDIndex });
@@ -189,13 +192,6 @@ void InstancingManager::SortByCameraDirection()
 			this->quadTree.PushData(each2.get(), DirectX::SimpleMath::Vector2{ tempPos.x, tempPos.z }, radius);
 		}
 	}
-	int a = 1;
-	//for (auto& each : this->staticMeshRenderInfoIndexMap)
-	//{
-	//	FrustumCullingManager::Instance.Get().RegisterRenderInfo(each.first);
-	//}
-
-	//FrustumCullingManager::Instance.Get().Init();
 }
 
 void InstancingManager::RenderStaticDeferred()
@@ -293,6 +289,16 @@ void InstancingManager::RenderStaticDeferred()
 				{
 					if (i == nullptr) continue;
 
+					if (i.get() == nullptr)
+					{
+						continue;
+					}
+
+					if (i.use_count() == 0)
+					{
+						continue;
+					}
+
 					if (i->mesh == nullptr) continue;
 
 					if (i->isInArea == false)
@@ -335,12 +341,16 @@ void InstancingManager::RenderStaticDeferred()
 						std::shared_ptr<RenderInfo> renderInfo = nullptr;
 						for (auto& each : renderInfoVec)
 						{
-							if (each)
+							if (each.get())
 							{
 								renderInfo = each;
 							}
 						}
 
+						if (renderInfo == nullptr)
+						{
+							return;
+						}
 
 						ExposureBuffer exposurrBuffer;
 						exposurrBuffer.diffuseExposure = renderInfo->mesh->GetDiffuseExposure();
@@ -742,8 +752,6 @@ void InstancingManager::RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& 
 	auto renderInfoIter = this->staticMeshRenderInfoIndexMap.find(renderInfo);
 	if (renderInfoIter != this->staticMeshRenderInfoIndexMap.end())
 	{
-		// 여기부터 크리티컬 섹션
-
 		// 이곳에 들어오면 renderInfo포인터가 vector에 있었다는 뜻
 		auto instanceIter = this->staticMeshInstanceIDIndexMap.find(instanceID);
 		if (instanceIter != this->staticMeshInstanceIDIndexMap.end())

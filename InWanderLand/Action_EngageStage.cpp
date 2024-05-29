@@ -20,7 +20,6 @@ namespace application
                 each->GetGameObject()->SetSelfActive(true);
             else
                 each->GetGameObject()->SetSelfActive(false);
-
         }
         if (index == 1)
         {

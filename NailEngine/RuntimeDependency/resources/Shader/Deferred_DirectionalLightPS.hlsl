@@ -54,8 +54,6 @@ PS_OUT main(PixelIn input)
     CalculateDirectionalPBR(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo,
     arm.r, arm.b, arm.g, util.y, util.z, util.x, shadowFactor);
     
-    //CalculateLight(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);
-    
     if (util.x != -1 && useLightMap)
     {
         output.ambient = color.ambient;
@@ -65,7 +63,8 @@ PS_OUT main(PixelIn input)
         output.diffuse = color.diffuse;
         output.ambient = color.ambient;
     }
-    
+    output.diffuse = color.diffuse;
+    output.ambient = color.ambient;
     output.diffuse.w = 1;
     output.ambient.w = 1;
     output.lightShadow = float4(1 - shadowFactor, 1 - shadowFactor, 1 - shadowFactor, 1.f);

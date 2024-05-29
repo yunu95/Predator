@@ -3,7 +3,6 @@
 #include <functional>
 #include "Easing.h"
 #include "LocalTimeEntity.h"
-#include "ContentsObservee.h"
 
 /// <summary>
 /// Dotween의 반복호출을 막기위한 클래스.
@@ -11,7 +10,7 @@
 /// Dotween 객체가 가지고 있으면 딱인 것 같다...
 /// </summary>
 
-class DotweenTimer : public Component, public ContentsObservee
+class DotweenTimer
 {
 private:
 
@@ -56,14 +55,13 @@ public:
 
 	easing_functions m_ease;
 
-	std::function<void()> onUpdate = []() {};			
+	std::function<void()> onUpdate = []() {};
 	std::function<void()> onCompleteFunction = []() {};		// duration 도달했을 때 실행시킬 함수.
 	std::function<void()> onExpiration = []() {};			// dotween 내부에서 설정해줄 수 있는 실행 완료 시 호출 함수
 
-	virtual void Start() override;
-	virtual void Update() override;
-
-	virtual Component* GetComponent() override { return this; }
+	DotweenTimer();
+	void Start();
+	void Update();
 
 	void Init();
 };
