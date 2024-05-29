@@ -1,3 +1,4 @@
+#pragma once
 #include "UnitBuff.h"
 
 class UnitBuffBleeding : public UnitBuff
@@ -11,6 +12,6 @@ public:
     virtual UIEnumID GetUIEnumID() { return UIEnumID::CharInfo_Buff_Bleeding; };
     UnitBuffBleeding(std::weak_ptr<Unit> Inflictor)
     {
-        UnitBuff::duration = duration;
+        UnitBuff::durationLeft = 1;
     }
 };

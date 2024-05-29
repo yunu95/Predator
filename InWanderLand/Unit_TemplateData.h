@@ -50,6 +50,7 @@ namespace application
             float m_idRadius;
             float m_atkRadius;
             float m_unitSpeed;
+            float rotationSpeed;
 
             float m_attackEngageDelay;
             int m_attackTimingFrame;

@@ -1,6 +1,8 @@
 #include "Projectile.h"
 #include "ProjectilePool.h"
 
+// Borrow 함수는 먼저 해당 fbx 이름에 맞는 풀이 존재하는지 확인하고, 없으면 새로 만든다.
+// 해당 풀이 있다면 
 std::weak_ptr<Projectile> ProjectilePool::Borrow(string fbxname)
 {
     if (!poolsByFBX.contains(fbxname))

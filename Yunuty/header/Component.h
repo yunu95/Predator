@@ -116,7 +116,7 @@ namespace yunutyEngine
         void SetActive(bool active);
         // Update함수를 부를지 말지 결정합니다. isUpdate가 false면 게임 사이클에서 업데이트 함수가 불릴때 제외됩니다.
         template<typename T>
-        std::weak_ptr<T> GetWeakPtr() { return std::dynamic_pointer_cast<T>(gameObject->components.at(this)); };
+        std::weak_ptr<T> GetWeakPtr() { return std::dynamic_pointer_cast<T>(GetWeakPtrFromGameObject()); };
         void SetIsUpdating(bool isUpdating);
         std::weak_ptr<yunutyEngine::coroutine::Coroutine> StartCoroutine(coroutine::Coroutine&& coroutine);
         void DeleteCoroutine(const std::weak_ptr<coroutine::Coroutine>& coroutine);
@@ -139,6 +139,7 @@ namespace yunutyEngine
             GameObject* gameObject;
             GUID guid;
         };
+        std::weak_ptr<Component> GetWeakPtrFromGameObject();
         static Component::AddComponentDesc addComponentDesc;
         static std::unordered_map<GUID, Component*, yutility::GenericHash<GUID>, yutility::GenericEqual<GUID>> guidPtrMap;
         std::unordered_set<std::shared_ptr<coroutine::Coroutine>> coroutines;

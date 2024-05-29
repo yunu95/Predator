@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Storable.h"
+#include "imgui.h"
 #include "imgui_Utility.h"
 #include "EditorMath.h"
 #include <type_traits>
@@ -107,9 +108,6 @@ namespace application
         operator EnumType() const {
             return static_cast<EnumType>(enumValue);
         }
-        operator int() const {
-            return enumValue;
-        }
         POD_Enum& operator=(const EnumType& value) {
             enumValue = static_cast<int>(value);
             enumName = GetEnumNameMap().at(value);
@@ -140,13 +138,13 @@ namespace application
             {
                 ImGui::TableNextRow();
                 ImGui::TableSetColumnIndex(0);
-                imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
+                //imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
                 ImGui::AlignTextToFramePadding();
                 ImGui::Text(label.c_str());
                 ImGui::TableSetColumnIndex(1);
                 ImGui::PushItemWidth(-1);
 
-                imgui::SmartStyleColor textColor2(ImGuiCol_Text, IM_COL32_WHITE);
+                //imgui::SmartStyleColor textColor2(ImGuiCol_Text, IM_COL32_WHITE);
 
                 bool returnVal = false;
                 static std::vector<std::string> selections = std::vector<std::string>();
@@ -165,7 +163,7 @@ namespace application
                         {
                             current = selections[i];
                             TemplateDataManager::GetSingletonInstance().GetSelectedTemplateData()->SetDataResourceName(current);
-                            const_cast<EditableEnumBase&>(data).Set(data.GetNameEnumMap().at(current));
+                            data.Set(data.GetNameEnumMap().at(current));
                             returnVal = true;
                         }
 

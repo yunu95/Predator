@@ -40,6 +40,7 @@
 #include "RobinChargeSkill.h"
 #include "UnitStatusBarType.h"
 #include "PlayerCharacterType.h"
+#include "BurnEffect.h"
 
 #include "InstanceManager.h"
 #include "EditorLayer.h"

@@ -33,6 +33,10 @@ Component::Component()
     guidPtrMap[guid] = this;
 
 }
+std::weak_ptr<Component> yunutyEngine::Component::GetWeakPtrFromGameObject()
+{
+    return gameObject->components[this];
+}
 Component::~Component()
 {
     guidPtrMap.erase(guid);

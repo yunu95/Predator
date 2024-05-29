@@ -15,8 +15,8 @@ namespace application
     CoroutineObject<void> Action_AwaitSkillActivation::DoAction()
     {
         bool skillSelected = false;
-        Unit::UnitType unitType = Unit::UnitType::Warrior;
-        Unit::SkillEnum skillType;
+        UnitType unitType = Unit::UnitType::Warrior;
+        SkillEnum skillType;
         switch (index)
         {
         case 1: case 2:

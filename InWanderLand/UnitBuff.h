@@ -1,3 +1,4 @@
+#pragma once
 #include "YunutyEngine.h"
 #include "UIEnumID.h"
 
