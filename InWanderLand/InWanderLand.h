@@ -45,6 +45,8 @@
 #include "EditorLayer.h"
 #include "EditorPopupManager.h"
 #include "UnitData.h"
+#include "Unit.h"
+#include "UnitBuff.h"
 #include "PlayerController.h"
 #include "PlaytimeWave.h"
 #include "SingleNavigationField.h"

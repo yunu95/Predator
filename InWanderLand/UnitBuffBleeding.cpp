@@ -1,12 +1,9 @@
 #include "UnitBuffBleeding.h"
+#include "YunutyEngine.h"
+#include "Unit.h"
 
-coroutine::Coroutine UnitBuffBleeding::operator()()
+void UnitBuffBleeding::OnUpdate()
 {
-    auto period = coroutine::ForSeconds{ duration };
-    while (period.Tick())
-    {
-        //owner->damage(inflictor,damag*dt);
-        co_await std::suspend_always{};
-    }
-    co_return;
+    float globalconstant = 3;
+    owner.lock()->Damaged(Inflictor, globalconstant * yunutyEngine::Time::GetDeltaTime());
 }

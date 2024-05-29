@@ -14,7 +14,6 @@
 #include "GCTemplate.h"
 #include "WanderUtils.h"
 #include "Interactable_TemplateData.h"
-#include "EditableEnum.h"
 
 namespace application
 {

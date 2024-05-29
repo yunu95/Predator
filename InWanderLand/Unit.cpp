@@ -18,14 +18,22 @@
 #include "DebuggingMeshPool.h"
 #include "StatusEffect.h"
 #include "CinematicManager.h"
+#include "UnitBuff.h"
 
 void Unit::Update()
 {
     if (stopFollowingNavAgentReference.expired())
-        GetTransform()->SetWorldPosition(m_navAgentComponent.lock()->GetTransform()->GetWorldPosition());
+        GetTransform()->SetWorldPosition(navAgentComponent.lock()->GetTransform()->GetWorldPosition());
     if (!unitStatusUI.expired())
         unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
     // 버프 적용
+    for (auto& [buffID, buff] : buffs)
+    {
+        buff.get()->OnUpdate();
+        buff.get()->durationLeft -= Time::GetDeltaTime();
+    }
+    std::erase_if(buffs, [](auto& buff) { return buff.durationLeft < 0; });
+    // behaviour tree에 맞게 동작
     unitBehaviourTree.Update();
 }
 
@@ -33,8 +41,8 @@ void Unit::OnDestroy()
 {
     if (!unitStatusUI.expired())
         Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
-    if (!m_navAgentComponent.expired())
-        Scene::getCurrentScene()->DestroyGameObject(m_navAgentComponent.lock()->GetGameObject());
+    if (!navAgentComponent.expired())
+        Scene::getCurrentScene()->DestroyGameObject(navAgentComponent.lock()->GetGameObject());
 }
 
 void Unit::OnTransformUpdate()
@@ -94,8 +102,8 @@ void Unit::OnStateEngage<UnitBehaviourTree::Attack>()
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Move>()
 {
-    m_navAgentComponent.lock()->SetSpeed(unitTemplateData->pod.m_unitSpeed);
-    m_navAgentComponent.lock()->MoveTo(currentMoveDestination);
+    navAgentComponent.lock()->SetSpeed(unitTemplateData->pod.unitSpeed);
+    navAgentComponent.lock()->MoveTo(currentMoveDestination);
     desiredRotation = GetTransform()->GetWorldPosition().GetAngleTo(currentMoveDestination);
     RotateUnit(currentMoveDestination);
     PlayAnimation(UnitAnimType::Move, true);
@@ -107,17 +115,17 @@ void Unit::OnStateEngage<UnitBehaviourTree::AttackMove>()
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Stop>()
 {
-    m_navAgentComponent.lock()->SetSpeed(0.0f);
-    m_navAgentComponent.lock()->MoveTo(GetTransform()->GetWorldPosition());
-    m_navAgentComponent.lock()->SetActive(false);
-    m_navObstacle.lock()->SetActive(true);
+    navAgentComponent.lock()->SetSpeed(0.0f);
+    navAgentComponent.lock()->MoveTo(GetTransform()->GetWorldPosition());
+    navAgentComponent.lock()->SetActive(false);
+    navObstacle.lock()->SetActive(true);
     PlayAnimation(UnitAnimType::Idle, true);
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Stop>()
 {
-    m_navAgentComponent.lock()->SetActive(true);
-    m_navObstacle.lock()->SetActive(false);
+    navAgentComponent.lock()->SetActive(true);
+    navObstacle.lock()->SetActive(false);
 }
 
 Unit::~Unit()
@@ -126,9 +134,9 @@ Unit::~Unit()
     {
         Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
     }
-    if (!m_navAgentComponent.expired())
+    if (!navAgentComponent.expired())
     {
-        Scene::getCurrentScene()->DestroyGameObject(m_navAgentComponent.lock()->GetGameObject());
+        Scene::getCurrentScene()->DestroyGameObject(navAgentComponent.lock()->GetGameObject());
     }
 }
 void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg)
@@ -139,37 +147,37 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg)
 
 void Unit::Damaged(float dmg)
 {
-    SetUnitCurrentHp(m_currentHitPoint -= dmg);
+    SetUnitCurrentHp(currentHitPoint -= dmg);
 }
 
 void Unit::Heal(float healingPoint)
 {
     // 최대 체력이면 x
-    SetUnitCurrentHp(m_currentHitPoint += healingPoint);
-    if (m_currentHitPoint >= unitTemplateData->pod.max_Health)
+    SetUnitCurrentHp(currentHitPoint += healingPoint);
+    if (currentHitPoint >= unitTemplateData->pod.max_Health)
         SetUnitCurrentHp(unitTemplateData->pod.max_Health);
 }
 
 void Unit::SetUnitCurrentHp(float p_newHp)
 {
-    m_currentHitPoint = p_newHp;
+    currentHitPoint = p_newHp;
     if (!unitStatusUI.expired())
     {
-        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Fill)->adjuster->SetTargetFloat(1 - m_currentHitPoint / m_maxHealthPoint);
-        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Number_Current)->SetNumber(m_currentHitPoint);
+        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Fill)->adjuster->SetTargetFloat(1 - currentHitPoint / maxHealthPoint);
+        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Number_Current)->SetNumber(currentHitPoint);
     }
     if (unitStatusPortraitUI)
     {
-        unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Fill)->adjuster->SetTargetFloat(m_currentHitPoint / m_maxHealthPoint);
-        unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_PortraitBloodOverlay)->adjuster->SetTargetFloat(1 - m_currentHitPoint / m_maxHealthPoint);
-        unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Number_Current)->SetNumber(m_currentHitPoint);
-        unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Number_Max)->SetNumber(m_maxHealthPoint);
+        unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Fill)->adjuster->SetTargetFloat(currentHitPoint / maxHealthPoint);
+        unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_PortraitBloodOverlay)->adjuster->SetTargetFloat(1 - currentHitPoint / maxHealthPoint);
+        unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Number_Current)->SetNumber(currentHitPoint);
+        unitStatusPortraitUI->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Number_Max)->SetNumber(maxHealthPoint);
     }
 }
 
 float Unit::GetUnitCurrentHp() const
 {
-    return m_currentHitPoint;
+    return currentHitPoint;
 }
 
 std::shared_ptr<Unit::Reference> Unit::AcquirePauseReference()
@@ -198,30 +206,30 @@ std::shared_ptr<float> Unit::AcquireCritFactor(float val)
 }
 void Unit::Reset()
 {
-    SetUnitCurrentHp(m_maxHealthPoint);
+    SetUnitCurrentHp(maxHealthPoint);
     unitFSM.currentState = UnitState::Idle;
-    m_currentTargetUnit = nullptr;
-    m_opponentObjectSet.clear();
-    m_recognizedThisSet.clear();
-    m_attackingThisUnitSet.clear();
+    currentTargetUnit = nullptr;
+    opponentObjectSet.clear();
+    recognizedThisSet.clear();
+    attackingThisUnitSet.clear();
 }
 void Unit::KnockBackUnit(Vector3d targetPosition, float knockBackDuration)
 {
     knockBackStartPoint = GetGameObject()->GetTransform()->GetWorldPosition();
-    m_navAgentComponent.lock()->Relocate(targetPosition);
+    navAgentComponent.lock()->Relocate(targetPosition);
     isFollowingNavAgent = false;
     knockBackTimer->pushDuration = knockBackDuration;
     knockBackTimer->ActivateTimer();
 }
 void Unit::PlayAnimation(UnitAnimType animType, bool repeat)
 {
-    //if (m_latestChangedAnimation == p_anim)
+    //if (latestChangedAnimation == p_anim)
         //return;
 
     //if (p_anim)
-        //m_animatorComponent->ChangeAnimation(p_anim, animationLerpDuration, animationTransitionSpeed);
+        //animatorComponent->ChangeAnimation(p_anim, animationLerpDuration, animationTransitionSpeed);
 
-    //m_latestChangedAnimation = p_anim;
+    //latestChangedAnimation = p_anim;
 }
 
 void Unit::RotateUnit(Vector3d endPosition)
@@ -234,7 +242,7 @@ void Unit::RotateUnit(Vector3d endPosition)
 
     Vector3d directionVector = distanceVec.Normalized();
 
-    Vector3d movedPositionPerFrame = GetGameObject()->GetTransform()->GetWorldPosition() + (directionVector * m_speed * Time::GetDeltaTime() * m_localTimeScale);
+    Vector3d movedPositionPerFrame = GetGameObject()->GetTransform()->GetWorldPosition() + (directionVector * speed * Time::GetDeltaTime() * localTimeScale);
 
     Vector3d afterDirectionVector = (endPosition - movedPositionPerFrame).Normalized();
 
@@ -263,17 +271,25 @@ void Unit::RotateUnit(Vector3d endPosition)
     if (!isnan(finalDegree))
         GetGameObject()->GetTransform()->SetWorldRotation(Quaternion({ 0.0f, finalDegree, 0.0f }));
 }
+void Unit::SetDesiredRotation(const Vector3d& facingDirection)
+{
+}
 void Unit::UpdateRotation()
 {
 }
 
+const UnitBehaviourTree& Unit::GetBehaviourTree() const
+{
+    // TODO: insert return statement here
+}
+
 void Unit::OnEnable()
 {
-    m_navAgentComponent.lock()->GetGameObject()->SetSelfActive(true);
+    navAgentComponent.lock()->GetGameObject()->SetSelfActive(true);
 }
 void Unit::OnDisable()
 {
-    m_navAgentComponent.lock()->GetGameObject()->SetSelfActive(true);
+    navAgentComponent.lock()->GetGameObject()->SetSelfActive(true);
 }
 void Unit::Start()
 {
@@ -288,12 +304,24 @@ coroutine::Coroutine ShowPath(const std::vector<Vector3d> paths)
 }
 void Unit::OrderMove(Vector3d position)
 {
-    StartCoroutine(ShowPath(m_unitNavField->GetSmoothPath(GetTransform()->GetWorldPosition(), position)));
+    StartCoroutine(ShowPath(SingleNavigationField::Instance().GetSmoothPath(GetTransform()->GetWorldPosition(), position)));
 }
 void Unit::ApplySkill(const Skill& skill)
 {
 }
 void Unit::OrderAttackMove(Vector3d position)
+{
+}
+void Unit::OrderAttack(std::weak_ptr<Unit> opponent)
+{
+}
+void Unit::OrderHold()
+{
+}
+void Unit::OrderSkill(const Skill& skill)
+{
+}
+void Unit::ApplyBuff(const UnitBuff& skill)
 {
 }
 void Unit::Init(const editor::Unit_TemplateData* templateData)
@@ -321,19 +349,19 @@ void Unit::Init(const editor::Unit_TemplateData* templateData)
         unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_MeleeEnemy));
         break;
     }
-    SetUnitCurrentHp(m_maxHealthPoint);
+    SetUnitCurrentHp(maxHealthPoint);
     if (!unitStatusUI.expired())
     {
         unitStatusUI.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
-        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Cells)->adjuster->SetTargetFloat(m_maxHealthPoint);
-        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Number_Max)->SetNumber(m_maxHealthPoint);
+        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Cells)->adjuster->SetTargetFloat(maxHealthPoint);
+        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Number_Max)->SetNumber(maxHealthPoint);
     }
-    m_burnEffect = GetGameObject()->GetComponent<BurnEffect>();
-    m_animatorComponent = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
-    if (m_navAgentComponent)
-        m_navAgentComponent.lock()->SetSpeed(m_speed);
-    if (m_animatorComponent)
-        m_animatorComponent->Play(unitAnimations.m_idleAnimation);
+    burnEffect = GetGameObject()->GetComponent<BurnEffect>();
+    animatorComponent = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
+    if (navAgentComponent)
+        navAgentComponent.lock()->SetSpeed(speed);
+    if (animatorComponent)
+        animatorComponent->Play(unitAnimations.idleAnimation);
 }
 void Unit::InitBehaviorTree()
 {
@@ -417,5 +445,5 @@ void Unit::ReportStatusEffectEnded(StatusEffect::StatusEffectEnum p_effectType)
 }
 bool Unit::IsUnitDead() const
 {
-    return (m_currentHitPoint <= 0);
+    return (currentHitPoint <= 0);
 }
