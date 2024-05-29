@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include "IUnknown.h"
+#include "YunuGIColor.h"
 
 struct ID3D11Device;
 struct ID3D11DeviceContext;
@@ -59,6 +60,8 @@ namespace yunuGI
         //virtual D3D12_GPU_DESCRIPTOR_HANDLE* QueryD3D12RenderOutputGDH() { return nullptr; }
 
         virtual void SetUseLightMap(bool useLightMap) = 0;
+
+        virtual void SetClearColor(yunuGI::Color color) = 0;
 
         virtual void Finalize() = 0;
     };

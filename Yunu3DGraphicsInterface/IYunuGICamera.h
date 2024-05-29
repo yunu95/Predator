@@ -3,6 +3,7 @@
 #include "IUnknown.h"
 #include "YunuVector2.h"
 #include "YunuVector3.h"
+#include "YunuGIColor.h"
 
 namespace yunuGI
 {
@@ -29,6 +30,7 @@ namespace yunuGI
         // x,y는 -1~ 1 사이의 값이며, y축은 화면 위쪽, x축은 화면 오른쪽을 향한다.
         virtual yunuGI::Vector2 GetScreenPos(const yunuGI::Vector3& worldPos) = 0;
         virtual yunuGI::Vector3 GetViewPos(const yunuGI::Vector3& worldPos) = 0;
+
     };
     struct ICameraDesc
     {

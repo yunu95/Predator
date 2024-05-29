@@ -83,6 +83,5 @@ namespace yunuGIAdapter
             yunuGI::Vector2 retVal = reinterpret_cast<const yunuGI::Vector2&>(screenPos);
             return retVal;
         }
-
     };
 }
