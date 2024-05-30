@@ -1743,6 +1743,15 @@ namespace application
                     {
                         ImGui::TableNextRow();
                         ImGui::TableSetColumnIndex(0);
+                        if (interactable->pod.templateData->pod.activeInteractable)
+                        {
+                            ImGui::Text("UI_Offset X");
+                            ImGui::SameLine();
+                            ImGui::DragFloat("##UI_Offset X", &interactable->pod.uiOffset.x);
+                            ImGui::Text("UI_Offset Y");
+                            ImGui::SameLine();
+                            ImGui::DragFloat("##UI_Offset Y", &interactable->pod.uiOffset.y);
+                        }
                         ImGui::Text("Target Counts : ");
                         ImGui::SameLine();
                         ImGui::Text(std::to_string(interactable->GetTargetInteractables().size()).c_str());
@@ -1750,6 +1759,7 @@ namespace application
                         {
                             ip.SetMatchingMode(true);
                         }
+                        interactable->ApplyAsPaletteInstance();
                     }
                 }
                 imgui::EndSection();

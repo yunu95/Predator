@@ -1077,11 +1077,13 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="InteractablePalette.h" />
     <ClInclude Include="Interactable_ChessBishop.h" />
     <ClInclude Include="Interactable_ChessPawn.h" />
+    <ClInclude Include="Interactable_ChessPool.h" />
     <ClInclude Include="Interactable_ChessRook.h" />
     <ClInclude Include="Interactable_SpikeTrap.h" />
     <ClInclude Include="Interactable_TemplateData.h" />
     <ClInclude Include="Interactable_TriggerBox.h" />
     <ClInclude Include="Interactable_TriggerSphere.h" />
+    <ClInclude Include="Interactable_UI.h" />
     <ClInclude Include="JsonUIData.h" />
     <ClInclude Include="InitialLoadingScreen.h" />
     <ClInclude Include="LocalTimeEntity.h" />
@@ -1284,6 +1286,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="TriggeredTrapSkillSystem.h" />
     <ClInclude Include="TriggerList.h" />
     <ClInclude Include="TriggerTrapProductor.h" />
+    <ClInclude Include="Trigger_Interactable.h" />
     <ClInclude Include="Trigger_Region.h" />
     <ClInclude Include="Trigger_GameStart.h" />
     <ClInclude Include="Trigger_RepeatPeriodically.h" />
@@ -1324,6 +1327,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Wave_TemplateData.h" />
     <ClInclude Include="WindowEvents.h" />
     <ClInclude Include="WarriorSkillSystem.h" />
+    <ClInclude Include="ChessBombComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\ImGuizmo\ImGuizmo.cpp" />
@@ -1357,6 +1361,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="BishopTrapProductor.cpp" />
     <ClCompile Include="BleedingComponent.cpp" />
     <ClCompile Include="BlindFieldComponent.cpp" />
+    <ClCompile Include="ChessBombComponent.cpp" />
     <ClCompile Include="CinematicManager.cpp" />
     <ClCompile Include="BurnEffect.cpp" />
     <ClCompile Include="ColorTIntTimer.cpp" />
@@ -1375,6 +1380,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="CameraPalette.cpp" />
     <ClCompile Include="Camera_TemplateData.cpp" />
     <ClCompile Include="CameraData.cpp" />
+    <ClCompile Include="Interactable_ChessPool.cpp" />
     <ClCompile Include="DebuggingMesh.cpp" />
     <ClCompile Include="DeleteInstanceCommand.cpp" />
     <ClCompile Include="EditorPopupManager.cpp" />
@@ -1564,6 +1570,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TestCaseUpdateComponents.cpp" />
     <ClCompile Include="TransformEditCommand.cpp" />
+    <ClCompile Include="Trigger_Interactable.cpp" />
     <ClCompile Include="Trigger_Region.cpp" />
     <ClCompile Include="TrapTriggerSensor.cpp" />
     <ClCompile Include="TriggeredTrapSkillSystem.cpp" />

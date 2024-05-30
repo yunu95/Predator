@@ -4,6 +4,7 @@
 #include "DebugMeshes.h"
 
 #include "Unit.h"
+#include "GameManager.h"
 
 void Interactable_SpikeTrap::Start()
 {
@@ -24,28 +25,7 @@ void Interactable_SpikeTrap::Start()
 		if (renderer)
 		{
 			mesh = each;
-			mesh->SetSelfActive(false);
 			break;
-		}
-	}
-}
-
-void Interactable_SpikeTrap::Update()
-{
-	if (triggerOn)
-	{
-		if (!isInteracting)
-		{
-			lastCoroutine = StartCoroutine(DoInteraction());
-		}
-	}
-	else
-	{
-		if (isInteracting)
-		{
-			mesh->SetSelfActive(false);
-			DeleteCoroutine(lastCoroutine);
-			isInteracting = false;
 		}
 	}
 }
@@ -53,17 +33,26 @@ void Interactable_SpikeTrap::Update()
 void Interactable_SpikeTrap::OnTriggerEnter(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+		GameManager::Instance().IsBattleSystemOperating() &&
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
 	{
 		triggerStay.insert(collider);
 		OnInteractableTriggerEnter();
+
+		/// colliderUnitComponent 를 통해 Unit 경직 만드는 로직 추가
+		colliderUnitComponent;
+
+		/// 대미지도 주려면 주기
+		colliderUnitComponent->Damaged(damage);
+		yunutyEngine::SoundSystem::PlaySoundfile("sounds/trap/Damage_Zone.wav");
 	}
 }
 
 void Interactable_SpikeTrap::OnTriggerExit(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+		GameManager::Instance().IsBattleSystemOperating() &&
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
 	{
@@ -73,19 +62,6 @@ void Interactable_SpikeTrap::OnTriggerExit(physics::Collider* collider)
 		}
 		triggerStay.erase(collider);
 	}
-}
-
-yunutyEngine::coroutine::Coroutine Interactable_SpikeTrap::DoInteraction()
-{
-	isInteracting = true;
-	mesh->SetSelfActive(true);
-
-	while(triggerOn)
-	{
-		co_await std::suspend_always();
-	}
-
-	co_return;
 }
 
 void Interactable_SpikeTrap::SetDataFromEditorData(const application::editor::InteractableData& data)
@@ -100,4 +76,5 @@ void Interactable_SpikeTrap::SetDataFromEditorData(const application::editor::In
 	initScale.x = data.pod.scale.x;
 	initScale.y = data.pod.scale.y;
 	initScale.z = data.pod.scale.z;
+	damage = data.pod.templateData->pod.damage;
 }

@@ -260,6 +260,16 @@ namespace application
                     trigger = AddTrigger<Trigger_UnitDie>();
                     break;
                 }
+                case application::TriggerType::InteractableTriggerEnter:
+                {
+                    trigger = AddTrigger<Trigger_InteractableTriggerEnter>();
+                    break;
+                }
+                case application::TriggerType::InteractableTriggerExit:
+                {
+                    trigger = AddTrigger<Trigger_InteractableTriggerExit>();
+                    break;
+                }
                 default:
                     break;
                 }

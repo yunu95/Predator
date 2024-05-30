@@ -47,6 +47,7 @@ namespace application
             POD_Vector3<float> position = POD_Vector3<float>();
             POD_Quaternion<float> rotation = POD_Quaternion<float>();
             POD_Vector3<float> scale = { 1,1,1 };
+            POD_Vector2<float> uiOffset = POD_Vector2<float>();
             int stage = 1;
 
             /// Global Constant

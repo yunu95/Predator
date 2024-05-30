@@ -25,5 +25,9 @@ private:
 	Vector3d initPos = Vector3d(0, 0, 0);
 	Quaternion initRotation = Quaternion();
 	Vector3d initScale = Vector3d(1, 1, 1);
+	bool activeInteractable = false;
+	bool repetition = false;
+	Vector2d uiOffset = Vector2d();
+	GameObject* uiImage = nullptr;
 };
 

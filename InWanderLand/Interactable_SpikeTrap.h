@@ -10,12 +10,12 @@ class Interactable_SpikeTrap
 {
 public:
 	virtual void Start() override;
-	virtual void Update() override;
+	virtual void Update() override {}
 
 	virtual void OnTriggerEnter(physics::Collider* collider) override;
 	virtual void OnTriggerExit(physics::Collider* collider) override;
 
-	virtual yunutyEngine::coroutine::Coroutine DoInteraction() override;
+	virtual yunutyEngine::coroutine::Coroutine DoInteraction() override { co_return; }
 
 	virtual void SetDataFromEditorData(const application::editor::InteractableData& data) override;
 
@@ -24,6 +24,7 @@ private:
 	Vector3d initPos = Vector3d(0, 0, 0);
 	Quaternion initRotation = Quaternion();
 	Vector3d initScale = Vector3d(1, 1, 1);
+	float damage = 0;
 	GameObject* mesh = nullptr;
 };
 

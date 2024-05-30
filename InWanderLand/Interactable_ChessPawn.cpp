@@ -2,19 +2,154 @@
 
 #include "InteractableData.h"
 #include "DebugMeshes.h"
+#include "Unit.h"
+#include "TacticModeSystem.h"
+#include "ChessBombComponent.h"
+#include "YunutyWaitForSeconds.h"
 
 void Interactable_ChessPawn::Start()
 {
+	auto ts = GetGameObject()->GetTransform();
+	ts->SetWorldPosition(initPos);
+	ts->SetWorldRotation(initRotation);
+	ts->SetWorldScale(initScale);
 
+	auto rendererObj = GetGameObject()->AddGameObject();
+	AttachDebugMesh(rendererObj, DebugMeshType::Cube, yunuGI::Color::green());
+	rendererObj->GetTransform()->SetLocalScale(chessBlockUnitLength * Vector3d::one);
+	auto boxCollider = GetGameObject()->AddComponent<physics::BoxCollider>();
+	boxCollider->SetHalfExtent(chessBlockUnitLength * 0.5 * Vector3d::one);
+
+	for (auto each : GetGameObject()->GetChildren())
+	{
+		auto renderer = each->GetComponent<graphics::StaticMeshRenderer>();
+		if (renderer)
+		{
+			mesh = each;
+			break;
+		}
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			auto bombObj = GetGameObject()->AddGameObject();
+			bombObj->AddComponent<ChessBombComponent>()->SetBombTime(delayTime);
+			bombObj->GetTransform()->SetWorldScale(chessBlockUnitLength * Vector3d::one);
+			Vector3d combVector = (i - 1) * chessBlockUnitLength * GetGameObject()->GetTransform()->GetWorldRotation().Forward().Normalized() + (j - 1) * chessBlockUnitLength * GetGameObject()->GetTransform()->GetWorldRotation().Right().Normalized();
+			bombObj->GetTransform()->SetLocalPosition(combVector + Vector3d((j - 1) * chessBlockUnitOffset, guideUp_Y, (i - 1) * chessBlockUnitOffset));
+			bombObjList.push_back(bombObj);
+			bombObj->SetSelfActive(false);
+		}
+	}
 }
 
 void Interactable_ChessPawn::Update()
 {
+	if (triggerOn)
+	{
+		if (!isInteracting)
+		{
+			lastCoroutine = StartCoroutine(DoInteraction());
+			isInteracting = true;
+		}
+		else if (lastCoroutine.expired() || lastCoroutine.lock()->Done())
+		{
+			isInteracting = false;
+			GetGameObject()->SetSelfActive(false);
+			OnInteractableTriggerExit();
+		}
+	}
+	else if (isSummoned)
+	{
+		if (chessSummonedExplosionDelay == 0)
+		{
+			OnInteractableTriggerEnter();
+		}
+		else
+		{
+			localSummonedTime += yunutyEngine::Time::GetDeltaTime();
+			float ratio = localSummonedTime / chessSummonedExplosionDelay;
+			if (ratio >= 1)
+			{
+				OnInteractableTriggerEnter();
+			}
+		}
+	}
+}
+
+void Interactable_ChessPawn::OnTriggerEnter(physics::Collider* collider)
+{
+	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+		colliderUnitComponent != nullptr &&
+		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+	{
+		OnInteractableTriggerEnter();
+	}
 }
 
 yunutyEngine::coroutine::Coroutine Interactable_ChessPawn::DoInteraction()
 {
-	co_return;
+	float localTimer = 0; 
+	assert(delayTime > 0 && "delayTime must be greater than 0");
+	float ratio = localTimer / delayTime;
+
+	for (auto each : bombObjList)
+	{
+		each->SetSelfActive(true);
+	}
+
+	while (ratio < 1)
+	{
+		localTimer += yunutyEngine::Time::GetDeltaTime();
+		ratio = localTimer / delayTime;
+
+		if (!TacticModeSystem::Instance().IsOperation())
+		{
+			auto beforePos = mesh->GetTransform()->GetLocalPosition();
+			if (beforePos.x >= 0)
+			{
+				beforePos.x = -vibeMaxOffset * ratio;
+			}
+			else
+			{
+				beforePos.x = vibeMaxOffset * ratio;
+			}
+			mesh->GetTransform()->SetLocalPosition(beforePos);
+		}
+		co_await std::suspend_always();
+	}
+
+	mesh->SetSelfActive(false);
+
+	std::unordered_set<Unit*> target = std::unordered_set<Unit*>();
+
+	for (auto each : bombObjList)
+	{
+		auto comp = each->GetComponent<ChessBombComponent>();
+		for (auto unit : comp->GetUnitsInTrigger())
+		{
+			target.insert(unit);
+		}
+
+		if (target.size() == 3)
+		{
+			break;
+		}
+	}
+
+	for (auto each : target)
+	{
+		each->Damaged(damage);
+	}
+
+	if (particleEffectTime == 0)
+	{
+		co_return;
+	}
+
+	co_yield yunutyEngine::coroutine::WaitForSeconds(particleEffectTime, false);
 }
 
 void Interactable_ChessPawn::SetDataFromEditorData(const application::editor::InteractableData& data)
@@ -29,4 +164,11 @@ void Interactable_ChessPawn::SetDataFromEditorData(const application::editor::In
 	initScale.x = data.pod.scale.x;
 	initScale.y = data.pod.scale.y;
 	initScale.z = data.pod.scale.z;
+	chessSummonedExplosionDelay = application::GlobalConstant::GetSingletonInstance().pod.chessSummonedExplosionDelay;
+	chessBlockUnitLength = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitLength;
+	chessBlockUnitOffset = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitOffset;
+	vibeMaxOffset = application::GlobalConstant::GetSingletonInstance().pod.vibeMaxOffset;
+	damage = data.pod.templateData->pod.damage;
+	delayTime = data.pod.templateData->pod.delayTime;
+	particleEffectTime = data.pod.templateData->pod.particleEffectTime;
 }

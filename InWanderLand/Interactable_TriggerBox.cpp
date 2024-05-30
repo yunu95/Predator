@@ -2,6 +2,7 @@
 
 #include "InteractableData.h"
 #include "DebugMeshes.h"
+#include "UIManager.h"
 
 #include "Unit.h"
 
@@ -14,11 +15,41 @@ void Interactable_TriggerBox::Start()
 	ts->SetWorldPosition(initPos);
 	ts->SetWorldRotation(initRotation);
 	ts->SetWorldScale(initScale);
+
+	if (activeInteractable)
+	{
+		uiImage = GetGameObject()->AddGameObject();
+		uiImage->AddComponent<Interactable_UI>();
+	}
 }
 
 void Interactable_TriggerBox::Update()
 {
+	/// 개선 필요
+	if (uiImage)
+	{
+		auto scale = GetGameObject()->GetTransform()->GetWorldScale();
+		uiImage->GetTransform()->SetLocalScale(Vector3d(1 / scale.x, 1 / scale.y, 1 / scale.z));
+		auto pos = UIManager::Instance().GetUIPosFromWorld(GetGameObject()->GetTransform()->GetWorldPosition());
+		uiImage->GetTransform()->SetWorldPosition(Vector3d((pos.x + uiOffset.x) / scale.x, (pos.y + uiOffset.y) / scale.y, 0));
+	}
 
+	if (activeInteractable && yunutyEngine::Input::isKeyPushed(KeyCode::Space) && uiImage->GetSelfActive())
+	{
+		if (repetition)
+		{
+			OnInteractableTriggerEnter();
+		}
+		else
+		{
+			if (!isInteracting)
+			{
+				OnInteractableTriggerEnter();
+				uiImage->SetSelfActive(false);
+				isInteracting = true;
+			}
+		}
+	}
 }
 
 void Interactable_TriggerBox::OnTriggerEnter(physics::Collider* collider)
@@ -28,7 +59,24 @@ void Interactable_TriggerBox::OnTriggerEnter(physics::Collider* collider)
 		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
 	{
 		triggerStay.insert(collider);
-		OnInteractableTriggerEnter();
+		if (activeInteractable)
+		{
+			if (repetition)
+			{
+				uiImage->SetSelfActive(true);
+			}
+			else
+			{
+				if (!isInteracting)
+				{
+					uiImage->SetSelfActive(true);
+				}
+			}
+		}
+		else
+		{
+			OnInteractableTriggerEnter();
+		}
 	}
 }
 
@@ -40,7 +88,22 @@ void Interactable_TriggerBox::OnTriggerExit(physics::Collider* collider)
 	{
 		if (triggerStay.size() == 1)
 		{
-			OnInteractableTriggerExit();
+			if (activeInteractable)
+			{
+				uiImage->SetSelfActive(false);
+				if (triggerOn)
+				{
+					OnInteractableTriggerExit();
+					if (!repetition)
+					{
+						GetGameObject()->SetSelfActive(false);
+					}
+				}
+			}
+			else
+			{
+				OnInteractableTriggerExit();
+			}
 		}
 		triggerStay.erase(collider);
 	}
@@ -58,6 +121,10 @@ void Interactable_TriggerBox::SetDataFromEditorData(const application::editor::I
 	initScale.x = data.pod.scale.x;
 	initScale.y = data.pod.scale.y;
 	initScale.z = data.pod.scale.z;
+	activeInteractable = data.pod.templateData->pod.activeInteractable;
+	repetition = data.pod.templateData->pod.repetition;
+	uiOffset.x = data.pod.uiOffset.x;
+	uiOffset.y = data.pod.uiOffset.y;
 }
 
 yunutyEngine::coroutine::Coroutine Interactable_TriggerBox::DoInteraction()

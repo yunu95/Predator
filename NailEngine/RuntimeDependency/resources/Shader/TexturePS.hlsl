@@ -16,6 +16,7 @@ float4 main(PixelIn input) : SV_TARGET
 {
     float4 color = Temp0Map.Sample(sam, input.uv);
     //clip(color.w - 1);
+    color *= materialColor;
     return color;
 }
 

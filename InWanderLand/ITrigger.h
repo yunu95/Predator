@@ -27,6 +27,8 @@ namespace application
 		RepeatPeriodicallyRealTime,
 		UnitAppear,
 		UnitDie,
+		InteractableTriggerEnter,
+		InteractableTriggerExit
 	};
 
 	struct ITrigger

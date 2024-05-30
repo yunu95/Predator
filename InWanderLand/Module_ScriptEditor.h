@@ -111,6 +111,16 @@ namespace application
                         Trigger_UnitDie::ImGui_DrawDataPopup(static_cast<Trigger_UnitDie*>(data));
                         break;
                     }
+                    case application::TriggerType::InteractableTriggerEnter:
+                    {
+                        Trigger_InteractableTriggerEnter::ImGui_DrawDataPopup(static_cast<Trigger_InteractableTriggerEnter*>(data));
+                        break;
+                    }
+                    case application::TriggerType::InteractableTriggerExit:
+                    {
+                        Trigger_InteractableTriggerExit::ImGui_DrawDataPopup(static_cast<Trigger_InteractableTriggerExit*>(data));
+                        break;
+                    }
                     default:
                         break;
                     }
