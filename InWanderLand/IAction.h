@@ -54,6 +54,10 @@ namespace application
         SoundPlayMusic,
         SoundSetMusicVolume,
         UISetActive,
+        OrnamentMoveWithRotateAndRescale,
+        OrnamentShow,
+        OrnamentHide,
+        OrnamentFloating,
     };
 
     struct IAction

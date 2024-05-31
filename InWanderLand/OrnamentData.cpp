@@ -114,9 +114,10 @@ namespace application
 
         void OrnamentData::ApplyAsPlaytimeObject()
         {
-            if (ornamentInstance == nullptr)
+            ApplyAsPaletteInstance();
+            if (!pod.isGuide)
             {
-                ApplyAsPaletteInstance();
+                ornamentInstance->GetGameObject()->SetSelfActive(true);
             }
             PlayTimeRegionManager::Instance().RegisterOrnament(ornamentInstance->GetGameObject(), pod.stage);
         }

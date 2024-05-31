@@ -846,8 +846,16 @@ namespace application
 					}
 					case application::editor::palette::Palette_List::Interactable:
 					{
-						templateList = tdm.GetDataList(DataType::InteractableData);
-						break;
+						if (selections.size() == 1)
+						{
+							ImGui::Text((*selections.begin())->GetTemplateData()->GetDataKey().c_str());
+						}
+						else
+						{
+							ImGui::Text("-------------");
+						}
+						imgui::EndSection();
+						return;
 					}
 					default:
 						break;

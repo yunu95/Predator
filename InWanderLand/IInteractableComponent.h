@@ -6,7 +6,11 @@
 #include "YunutyEngine.h"
 #include "ContentsObservee.h"
 
+#include "Interactable_UI.h"
+
 #include <unordered_set>
+#include <vector>
+#include <functional>
 
 namespace application
 {
@@ -43,6 +47,12 @@ public:
 	bool IsTriggerOn() { return triggerOn; }
 	bool IsInteracting() { return isInteracting; }
 
+	/// OnInteractableTriggerEnter 시에 호출할 CallBack 함수입니다.
+	std::vector<std::function<void()>> OnEnterCallBack = std::vector<std::function<void()>>();
+
+	/// OnInteractableTriggerExit 시에 호출할 CallBack 함수입니다.
+	std::vector<std::function<void()>> OnExitCallBack = std::vector<std::function<void()>>();
+
 protected:
 
 	/// triggerOn 을 true 로 변환합니다.
@@ -57,6 +67,11 @@ protected:
 				each->OnInteractableTriggerEnter();
 			}
 		}
+
+		for (auto& each : OnEnterCallBack)
+		{
+			each();
+		}
 	}
 
 	/// triggerOn 을 false 로 변환합니다.
@@ -70,6 +85,11 @@ protected:
 			{
 				each->OnInteractableTriggerExit();
 			}
+		}
+
+		for (auto& each : OnExitCallBack)
+		{
+			each();
 		}
 	}
 

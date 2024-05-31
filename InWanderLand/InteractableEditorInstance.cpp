@@ -4,12 +4,50 @@
 #include "InteractableData.h"
 #include "EditorResourceManager.h"
 #include "DebugMeshes.h"
+#include "Interactable_UI.h"
+#include "UIManager.h"
 
 namespace application::editor::palette
 {
     void InteractableEditorInstance::Start()
     {
         PaletteInstance::Start();
+        uiObject = GetGameObject()->AddGameObject();
+        uiObject->AddComponent<Interactable_UI>();
+        uiObject->SetSelfActive(false);
+    }
+
+    void InteractableEditorInstance::Update()
+    {
+        auto data = static_cast<InteractableData*>(GetEditableData());
+        if (data == nullptr)
+        {
+            return;
+        }
+
+        /// UI 시스템 개선과 함께 개선이 필요한 영역
+        if (uiObject)
+        {
+            if (data->pod.templateData->pod.activeInteractable)
+            {
+                uiObject->SetSelfActive(true);
+            }
+            else
+            {
+                uiObject->SetSelfActive(false);
+            }
+
+            auto uiComp = uiObject->GetComponent<Interactable_UI>();
+            uiComp->SetUI(data->pod.guideUI);
+            uiComp->SetUIWidth(data->pod.ui_Width);
+            uiComp->SetUIHeight(data->pod.ui_Height);
+            uiComp->UpdateUI();
+
+            auto scale = GetGameObject()->GetTransform()->GetWorldScale();
+            auto pos = UIManager::Instance().GetUIPosFromWorld(GetGameObject()->GetTransform()->GetWorldPosition());
+            uiObject->GetTransform()->SetLocalScale(Vector3d(1 / scale.x, 1 / scale.y, 1 / scale.z));
+            uiObject->GetTransform()->SetWorldPosition(Vector3d((pos.x + data->pod.uiOffset.x) / scale.x, (pos.y + data->pod.uiOffset.y) / scale.y, 0));
+        }
     }
 
     void InteractableEditorInstance::Init(const application::editor::InteractableData* interactableData)
