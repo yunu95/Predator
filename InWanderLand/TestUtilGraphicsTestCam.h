@@ -28,6 +28,8 @@ namespace tests
 			Camera::Update();
 			mousePos = Input::getMouseScreenPosition();
 
+			auto temp = GetGameObject()->GetTransform()->GetWorldPosition();
+
 			Vector2d deltaPos = (mousePos - beforeMousePos) * 0.002;
 
 			if (inputUpdate)

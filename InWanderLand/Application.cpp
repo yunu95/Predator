@@ -485,9 +485,9 @@ namespace application
         }
         else
         {
-            isContentsPlaying = true;
-            cl->PlayContents();
-            el->OnPlayContents();
+			isContentsPlaying = true;
+			cl->PlayContents();
+			el->OnPlayContents();
         }
     }
 

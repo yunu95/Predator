@@ -64,16 +64,18 @@ PS_OUT main(PixelIn input)
     
     //CalculateLight(lightIndex, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);
     
-    if (util.x != -1 && useLightMap)
-    {
-        output.ambient = color.ambient;
-    }
-    else
-    {
-        output.diffuse = color.diffuse;
-        output.ambient = color.ambient;
-    }
-    
+    //if (util.x != -1 && useLightMap)
+    //{
+    //    output.ambient = color.ambient;
+    //}
+    //else
+    //{
+    //    output.diffuse = color.diffuse;
+    //    output.ambient = color.ambient;
+    //}
+    output.diffuse = color.diffuse;
+    output.ambient = color.ambient;
+
     output.diffuse.w = 1;
     output.ambient.w = 1;
     

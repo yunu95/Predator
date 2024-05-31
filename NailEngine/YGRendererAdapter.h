@@ -60,5 +60,10 @@ namespace yunuGIAdapter
         {
             NailEngine::Instance.Get().SetUseLightMap(useLightMap);
         };
+
+        virtual void SetClearColor(yunuGI::Color color) override
+        {
+            NailEngine::Instance.Get().SetClearColor(color);
+        };
     };
 }
