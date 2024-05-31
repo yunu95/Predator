@@ -403,7 +403,6 @@ void CalculateDirectionalPBR(int lightIndex, float3 normal, float3 pos, out floa
     directionalLighting.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
         
     diffuse.xyz += directionalLighting.xyz * lights[lightIndex].color.diffuse.xyz * lights[lightIndex].intensity;
-        //diffuse.xyz += directionalLighting.xyz * lights[lightIndex].color.diffuse.xyz;
     diffuse.w = 1.f;
         
         
@@ -429,6 +428,8 @@ void CalculateDirectionalPBR(int lightIndex, float3 normal, float3 pos, out floa
     {
         ambient.xyz = lights[lightIndex].color.ambient;
     }
+    
+    
 }
 
 void CalculatePointPBR(int lightIndex, float3 normal, float3 pos, out float4 diffuse, out float4 ambient, out float4 specular, float3 albedo, float ao, float metalness, float roughness, float diffuseExposure, float ambientExposure, int useLightMap, out float shadowFactor)
@@ -526,12 +527,13 @@ void CalculatePointPBR(int lightIndex, float3 normal, float3 pos, out float4 dif
         float4 worldPos = mul(float4(pos.xyz, 1.f), VTMInv);
         float curDepth = CalCulateDepth((worldPos.xyz - lights[lightIndex].position.xyz), lightIndex);
         
-        if (isShadowCast && (useLightMap == -1))
+        if (isShadowCast)
         {
             shadowFactor = PointLightShadowMap.Sample(sam, float4(normalize(worldPos.xyz - lights[lightIndex].position.xyz), plIndex)).r;
                 
             if (shadowFactor < curDepth - 0.0001f)
             {
+                // 그림자가 지는 곳
                 shadowFactor = 0.0f;
             }
             else

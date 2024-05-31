@@ -91,3 +91,8 @@ std::shared_ptr<Texture>& RenderTargetGroup::GetRTTexture(int index)
 {
 	return this->rtVec[index].texture;
 }
+
+RenderTarget& RenderTargetGroup::GetRT(int index)
+{
+	return this->rtVec[index];
+}

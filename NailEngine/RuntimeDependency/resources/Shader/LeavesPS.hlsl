@@ -34,21 +34,22 @@ PS_OUT main(PixelIn input)
     clip(OpacityMap.Sample(sam, input.uv).w - 1);
     
     color = AlbedoMap.Sample(sam, input.uv);
-    
+    color = pow(color, 2.2f);
     
     if ((lightMapUV[input.id].lightMapIndex != -1) && useLightMap)
     {
         float4 lightColor = float4(0, 0, 0, 1.f);
         lightColor = UnityLightMap.Sample(sam, float3(input.lightUV, lightMapUV[input.id].lightMapIndex));
-
+        lightColor *= color;
         float3 x = max(0, lightColor.xyz - 0.004);
         lightColor.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
     
-        output.color = color * lightColor;
+        //output.color = color * lightColor;
+        output.color = lightColor;
     }
     else
     {
-        color = pow(color, 2.2f);
+        //color = pow(color, 2.2f);
         output.color = color;
     }
     

@@ -93,7 +93,6 @@ class TestComponent4 : public yunutyEngine::Component
 public:
     SkillPreviewSystem* system;
     yunutyEngine::GameObject* obj;
-    yunutyEngine::GameObject* camObj;
     bool isShow = false;
     virtual void Update() override
     {
@@ -150,18 +149,17 @@ public:
         {
             std::vector<Vector3d> a;
             a.push_back(Vector3d{ 0,0,0 });
+            a.push_back(Vector3d{ 0,0,0.5 });
             a.push_back(Vector3d{ 0,0,1 });
-            a.push_back(Vector3d{ 1,0,1 });
+            a.push_back(Vector3d{ 0,0,1.5 });
+            a.push_back(Vector3d{ 0,0,2 });
+            a.push_back(Vector3d{ 0,0,2.5 });
+            a.push_back(Vector3d{ 0,0,3 });
+            a.push_back(Vector3d{ 0,0,3.5 });
+            a.push_back(Vector3d{ 0,0,4 });
+            a.push_back(Vector3d{ 0,0,4.5 });
+            system->ShowRoute(SkillPreviewSystem::UnitType::Robin,a);
             //system->ShowRoute(a);
-
-            const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-            auto gobj = Scene::getCurrentScene()->AddGameObject();
-            gobj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{-90,0,0} });
-            auto renderer = gobj->AddComponent<graphics::StaticMeshRenderer>();
-            renderer->GetGI().SetMesh(_resourceManager->GetMesh(L"RouteMesh"));
-            renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, _resourceManager->GetTexture(L"Texture/move.png"));
-            renderer->GetGI().GetMaterial()->SetVertexShader(_resourceManager->GetShader(L"TextureVS.cso"));
-            renderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"GuideLinePS.cso"));
         }
         if (isShow)
         {
@@ -179,6 +177,10 @@ void GraphicsTest()
 {
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     camObj->AddComponent<tests::GraphicsTestCam>();
+    camObj->GetComponent<tests::GraphicsTestCam>()->GetGI().SetAsMain();
+
+    camObj->GetTransform()->SetLocalPosition(Vector3d{0,0,-10});
+    //camObj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{ 90,0,0 } });
 
     auto skillPreviewSystem = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     auto systemComponent = skillPreviewSystem->AddComponent<SkillPreviewSystem>();
@@ -220,14 +222,10 @@ void GraphicsTest()
 
 
         auto obj3 = Scene::getCurrentScene()->AddGameObject();
+        auto renderer = obj3->AddComponent<graphics::StaticMeshRenderer>();
         auto test = obj3->AddComponent<TestComponent4>();
         test->obj = obj2;
         test->system = systemComponent;
-        test->camObj = camObj;
-    }
-
-    {
-
     }
     yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
     //yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();

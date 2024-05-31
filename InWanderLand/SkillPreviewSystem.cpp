@@ -1,6 +1,7 @@
 #include "SkillPreviewSystem.h"
 
 #include "DirectXMath.h"
+#include "UVAnimator.h"
 
 #define OFFSET 1.414
 #define AXIS Vector3d{-1,0,0}
@@ -11,12 +12,16 @@
 void SkillPreviewSystem::ObjectInitializer(graphics::StaticMeshRenderer* comp)
 {
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-	yunuGI::IShader* vs = _resourceManager->GetShader(L"TextureVS.cso");
-	yunuGI::IShader* ps = _resourceManager->GetShader(L"GuideLinePS.cso");
+	yunuGI::IShader* vs = _resourceManager->GetShader(L"TextureAnimVS.cso");
+	yunuGI::IShader* ps = _resourceManager->GetShader(L"TextureAnimPS.cso");
 	yunuGI::ITexture* move = _resourceManager->GetTexture(L"Texture/move.png");
 	comp->GetGI().GetMaterial()->SetVertexShader(vs);
 	comp->GetGI().GetMaterial()->SetPixelShader(ps);
 	comp->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, move);
+
+	auto anim = comp->GetGameObject()->AddComponent<UVAnimator>();
+	anim->SetStaticMeshRenderer(comp);
+	anim->SetDirection(Vector2d{1,0});
 }
 
 void SkillPreviewSystem::Init()
@@ -30,10 +35,10 @@ void SkillPreviewSystem::Init()
 	yunuGI::ITexture* move = _resourceManager->GetTexture(L"Texture/move.png");
 	yunuGI::IMesh* quadMesh = _resourceManager->GetMesh(L"Rectangle");
 
-	for (int i = 0; i < 10; ++i)
-	{
-		this->Borrow();
-	}
+	//for (int i = 0; i < 10; ++i)
+	//{
+	//	this->Borrow();
+	//}
 
 #pragma region TemporaryRouteMeshRenderer
 	{
@@ -67,7 +72,6 @@ void SkillPreviewSystem::Init()
 		this->robinQSkillPreviewObj->SetSelfActive(false);
 	}
 #pragma endregion 
-
 
 #pragma region UrsulaQSkillPreview
 	{
@@ -538,26 +542,26 @@ void SkillPreviewSystem::ShowTemporaryRoute(UnitType unitType, std::vector<Vecto
 	this->temporaryRouteMeshRenderer->GetGI().SetMesh(temporaryRouteMesh);
 	switch (unitType)
 	{
-		case SkillPreviewSystem::UnitType::Robin:
-		{
-			this->temporaryRouteMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{1,0,0,1});
-		}
-			break;
-		case SkillPreviewSystem::UnitType::Ursula:
-		{
-			this->temporaryRouteMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,1 });
-		}
-			break;
-		case SkillPreviewSystem::UnitType::Hansel:
-		{
-			this->temporaryRouteMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,1 });
-		}
-			break;
-		default: 
-			{}
-			break;
+	case SkillPreviewSystem::UnitType::Robin:
+	{
+		this->temporaryRouteMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,1 });
 	}
-	
+	break;
+	case SkillPreviewSystem::UnitType::Ursula:
+	{
+		this->temporaryRouteMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,1 });
+	}
+	break;
+	case SkillPreviewSystem::UnitType::Hansel:
+	{
+		this->temporaryRouteMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,1 });
+	}
+	break;
+	default:
+	{}
+	break;
+	}
+
 }
 
 yunuGI::IMesh* SkillPreviewSystem::ShowRoute(UnitType unitType, std::vector<Vector3d>& vertexList)
@@ -570,24 +574,24 @@ yunuGI::IMesh* SkillPreviewSystem::ShowRoute(UnitType unitType, std::vector<Vect
 
 	switch (unitType)
 	{
-		case SkillPreviewSystem::UnitType::Robin:
-		{
-			renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,0.3 });
-		}
-		break;
-		case SkillPreviewSystem::UnitType::Ursula:
-		{
-			renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,0.3 });
-		}
-		break;
-		case SkillPreviewSystem::UnitType::Hansel:
-		{
-			renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,0.3 });
-		}
-		break;
-		default:
-		{}
-		break;
+	case SkillPreviewSystem::UnitType::Robin:
+	{
+		renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,0.3 });
+	}
+	break;
+	case SkillPreviewSystem::UnitType::Ursula:
+	{
+		renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,0.3 });
+	}
+	break;
+	case SkillPreviewSystem::UnitType::Hansel:
+	{
+		renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,0.3 });
+	}
+	break;
+	default:
+	{}
+	break;
 	}
 
 	return mesh;
@@ -729,11 +733,13 @@ yunuGI::IMesh* SkillPreviewSystem::CreateRouteMesh(std::vector<Vector3d>& vertex
 
 	uvVec.resize(posVec.size());
 
-	for (int i = 0; i < vertexList.size(); i += 2)
+	float outDistance = 0.f;
+	float inDistance = 0.f;
+	for (int i = 0; i < (vertexList.size() * 2) - 2; i += 2)
 	{
 		// uv setting용 반복문
-		float outDistance = sqrt(pow(posVec[i].x - posVec[i + 2].x, 2) + pow(posVec[i].z - posVec[i + 2].z, 2));
-		float inDistance = sqrt(pow(posVec[i + 1].x - posVec[i + 3].x, 2) + pow(posVec[i + 1].z - posVec[i + 3].z, 2));
+		outDistance += sqrt(pow(posVec[i].x - posVec[i + 2].x, 2) + pow(posVec[i].z - posVec[i + 2].z, 2));
+		inDistance += sqrt(pow(posVec[i + 1].x - posVec[i + 3].x, 2) + pow(posVec[i + 1].z - posVec[i + 3].z, 2));
 
 		if (i == 0)
 		{
@@ -745,11 +751,11 @@ yunuGI::IMesh* SkillPreviewSystem::CreateRouteMesh(std::vector<Vector3d>& vertex
 		}
 		else
 		{
-			uvVec[i * 2] = uvVec[(i * 2) - 2] + outDistance;
-			uvVec[i * 2].y = 0;
+			uvVec[i + 2].x = outDistance;
+			uvVec[i + 2].y = 0;
 
-			uvVec[(i * 2) + 1] = uvVec[(i * 2) - 1] + inDistance;
-			uvVec[(i * 2) + 1].y = 1;
+			uvVec[(i + 2) + 1].x = inDistance;
+			uvVec[(i + 2) + 1].y = 1;
 		}
 	}
 
