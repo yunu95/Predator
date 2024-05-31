@@ -8,12 +8,15 @@ std::weak_ptr<Unit> UnitPool::Borrow(application::editor::UnitData* data)
     {
         poolsByTemplate[data->GetTemplateData()] = std::make_shared<PoolByTemplate>();
     }
-    return poolsByTemplate[data->GetTemplateData()]->Borrow();
+    auto unit = poolsByTemplate[data->GetTemplateData()]->Borrow();
+    unit.lock()->Summon(data);
+    return unit;
 }
 
 void UnitPool::Return(std::weak_ptr<Unit> unit)
 {
-    poolsByTemplate[unit.lock()->GetUnitTemplateData()]->Return(unit);
+    unit.lock()->unitData->inGameUnit = std::weak_ptr<Unit>();
+    poolsByTemplate[&unit.lock()->GetUnitTemplateData()]->Return(unit);
 }
 
 void UnitPool::PoolByTemplate::ObjectInitializer(std::weak_ptr<Unit> unit)

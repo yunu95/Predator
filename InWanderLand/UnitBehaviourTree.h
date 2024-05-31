@@ -5,7 +5,7 @@ class UnitBehaviourTree : public BehaviourTree
 public:
     enum Keywords
     {
-        Death,
+        Death = 0,
         Paralysis,
         Knockback,
         Stun,
@@ -17,5 +17,6 @@ public:
         Stop,
         Skill,
         Hold,
+        KeywordNum,
     };
 };

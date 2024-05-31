@@ -134,46 +134,9 @@ namespace application
         namespace data
         {
             template <typename EnumType>
-            bool DrawData(std::string label, const POD_Enum<EnumType>& data)
+            bool DrawData(std::string label, POD_Enum<EnumType>& data)
             {
-                ImGui::TableNextRow();
-                ImGui::TableSetColumnIndex(0);
-                //imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
-                ImGui::AlignTextToFramePadding();
-                ImGui::Text(label.c_str());
-                ImGui::TableSetColumnIndex(1);
-                ImGui::PushItemWidth(-1);
-
-                //imgui::SmartStyleColor textColor2(ImGuiCol_Text, IM_COL32_WHITE);
-
-                bool returnVal = false;
-                static std::vector<std::string> selections = std::vector<std::string>();
-                std::string current = data.GetEnumNameMap().at(data.Get());
-
-                selections.resize(0);
-                std::transform(data.GetEnumNameMap().begin(), data.GetEnumNameMap().end(), std::back_inserter(selections)
-                    , [](const std::pair<int, std::string>& each) { return each.second; });
-
-                if (ImGui::BeginCombo(("##editableEnum : " + label).c_str(), current.c_str()))
-                {
-                    for (int i = 0; i < selections.size(); i++)
-                    {
-                        const bool is_selected = (current == selections[i]);
-                        if (ImGui::Selectable(selections[i].c_str(), is_selected))
-                        {
-                            current = selections[i];
-                            TemplateDataManager::GetSingletonInstance().GetSelectedTemplateData()->SetDataResourceName(current);
-                            data.Set(data.GetNameEnumMap().at(current));
-                            returnVal = true;
-                        }
-
-                        if (is_selected)
-                            ImGui::SetItemDefaultFocus();
-                    }
-                    ImGui::EndCombo();
-                }
-                ImGui::PopItemWidth();
-                return returnVal;
+                return DropdownEnum_2Col(label, data);
             }
             template <typename T>
             bool DrawData(std::string label, const POD_Vector2<T>& data)

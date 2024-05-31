@@ -14,9 +14,9 @@ void Projectile::Update()
         }
     }
 }
-void Projectile::OnHostileEnter(std::weak_ptr<Unit> unit)
+void Projectile::OnHostileEnter(Unit* unit)
 {
-    unit.lock()->Damaged(owner, damage);
+    unit->Damaged(owner, damage);
     ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
 }
 void Projectile::SetSpeed(Vector3d speed)

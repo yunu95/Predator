@@ -12,7 +12,7 @@
 
 void PlayerController::RegisterPlayer(std::weak_ptr<Unit> unit)
 {
-    characters[unit.lock()->GetUnitTemplateData()->pod.playerUnitType] = unit;
+    characters[(int)(PlayerCharacterType)unit.lock()->GetUnitTemplateData().pod.playerUnitType] = unit;
 }
 
 void PlayerController::Start()
@@ -37,7 +37,7 @@ void PlayerController::Update()
 
 void PlayerController::HandleInput()
 {
-    GameManager::Instance().IsBattleSystemOperating();
+    if (state == State::Cinematic) return;
     if (Input::isKeyPushed(KeyCode::Q))
     {
         switch (selectedCharacterType)
@@ -112,7 +112,7 @@ void PlayerController::OnLeftClick()
 {
     if (selectedSkill == SkillType::NONE)
     {
-        SelectUnit(*cursorUnitDetector.lock()->GetUnits().begin());
+        SelectUnit((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
     }
     else
     {
@@ -134,7 +134,7 @@ void PlayerController::OnRightClick()
 
 void PlayerController::SelectUnit(std::weak_ptr<Unit> unit)
 {
-    SelectPlayerUnit(unit.lock()->GetUnitTemplateData()->pod.playerUnitType);
+    SelectPlayerUnit(unit.lock()->GetUnitTemplateData().pod.playerUnitType);
 }
 
 void PlayerController::OrderMove(Vector3d position)
@@ -151,7 +151,7 @@ void PlayerController::OrderAttackMove(Vector3d position)
 
 void PlayerController::OrderAttack(std::weak_ptr<Unit> unit)
 {
-    selectedCharacter.lock()->OrderAttackMove(unit.lock());
+    selectedCharacter.lock()->OrderAttack(unit);
 }
 
 void PlayerController::OrderInteraction(std::weak_ptr<IInteractableComponent> interactable)
@@ -161,22 +161,22 @@ void PlayerController::OrderInteraction(std::weak_ptr<IInteractableComponent> in
 
 void PlayerController::ActivateSkill(SkillType skillType, Vector3d pos)
 {
-    if (!GameManager::Instance().IsBattleSystemOperating()) return;
+    if (state == State::Cinematic) return;
     onSkillActivate[(int)skillType]();
     switch (skillType)
     {
-    case SkillType::ROBIN_Q: selectedCharacter.lock()->ApplySkill(RobinChargeSkill{ pos }); break;
-    case SkillType::ROBIN_W: selectedCharacter.lock()->ApplySkill(RobinChargeSkill{ pos }); break;
-    case SkillType::URSULA_Q: selectedCharacter.lock()->ApplySkill(RobinChargeSkill{ pos }); break;
-    case SkillType::URSULA_W: selectedCharacter.lock()->ApplySkill(RobinChargeSkill{ pos }); break;
-    case SkillType::HANSEL_Q: selectedCharacter.lock()->ApplySkill(RobinChargeSkill{ pos }); break;
-    case SkillType::HANSEL_W: selectedCharacter.lock()->ApplySkill(RobinChargeSkill{ pos }); break;
+    case SkillType::ROBIN_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
+    case SkillType::ROBIN_W: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
+    case SkillType::URSULA_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
+    case SkillType::URSULA_W: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
+    case SkillType::HANSEL_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
+    case SkillType::HANSEL_W: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
     }
 }
 
 void PlayerController::SelectSkill(SkillType skillType)
 {
-    if (!GameManager::Instance().IsBattleSystemOperating()) return;
+    //if (!GameManager::Instance().IsBattleSystemOperating()) return;
     UnSelectSkill();
     onSkillSelect[(int)skillType]();
     switch (skillType)
@@ -194,6 +194,66 @@ void PlayerController::SelectSkill(SkillType skillType)
         selectedSkill = skillType;
         break;
     }
+}
+void PlayerController::SetState(State newState)
+{
+    state = newState;
+    switch (state)
+    {
+    case State::Peace:
+    case State::Cinematic:
+        UnSelectSkill();
+        break;
+    }
+}
+// 필요한 것들을 다 초기화한다.
+void PlayerController::Reset()
+{
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->DisableElement();
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Text)->DisableElement();
+    for (auto& each : onSkillActivate) each.Clear();
+    for (auto& each : onSkillSelect) each.Clear();
+    for (auto& each : blockSkillSelection) each = false;
+    if (cursorUnitDetector.expired())
+        cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionSphereCollider>();
+}
+
+void PlayerController::SetComboObjectives(const std::array<int, 3>& targetCombos)
+{
+    comboObjective = targetCombos;
+    comboAchieved.fill(false);
+    for (int i = 0; i < 3; i++)
+    {
+        comboAchieved[i] = false;
+        UIManager::Instance().GetUIElementByEnum(UIManager::comboNumbers[i])->SetNumber(comboObjective[i]);
+        UIManager::Instance().GetUIElementByEnum(UIManager::comboNumbers[i + 3])->SetNumber(comboObjective[i]);
+        UIManager::Instance().GetUIElementByEnum(UIManager::comboFinishedImgs[i])->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIManager::comboUnFinishedImgs[i])->EnableElement();
+        UIManager::Instance().GetUIElementByEnum(UIManager::comboCheckImgs[i])->DisableElement();
+    }
+}
+
+void PlayerController::AddCombo()
+{
+    currentCombo++;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->EnableElement();
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Text)->EnableElement();
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->SetNumber(currentCombo);
+    for (auto i = 0; i < 3; i++)
+    {
+        if (!comboAchieved[i] && comboObjective[i] > 0 && currentCombo >= comboObjective[i])
+        {
+            comboAchieved[i] = true;
+            SkillUpgradeSystem::SingleInstance().IncrementSkillPoint();
+            UIManager::Instance().GetUIElementByEnum(UIManager::comboCheckImgs[i])->EnableElement();
+            UIManager::Instance().GetUIElementByEnum(UIManager::comboFinishedImgs[i])->EnableElement();
+            UIManager::Instance().GetUIElementByEnum(UIManager::comboUnFinishedImgs[i])->DisableElement();
+        }
+    }
+}
+
+void PlayerController::OnWaveStart(std::weak_ptr<PlaytimeWave> p_wave)
+{
 }
 
 void PlayerController::UnSelectSkill()
@@ -220,4 +280,8 @@ Vector3d PlayerController::GetWorldCursorPosition()
     auto distToXZPlane = abs(mainCam->GetTransform()->GetWorldPosition().y);
     auto projectedPoint = mainCam->GetProjectedPoint(Input::getMouseScreenPositionNormalizedZeroCenter(), distToXZPlane, Vector3d(0, 1, 0));
     return projectedPoint;
+}
+
+void PlayerController::ResetCombo()
+{
 }

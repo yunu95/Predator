@@ -49,7 +49,7 @@ namespace application
 
             // 인게임 UI 비활성화
             UIManager::Instance().SetIngameUIVisible(false);
-            GameManager::Instance().EngageCinematic();
+            //GameManager::Instance().EngageCinematic();
         }
         else if (this->isCinematicMode && !isCinematicMode)
         {
@@ -63,7 +63,7 @@ namespace application
 
             // 인게임 UI 활성화
             UIManager::Instance().SetIngameUIVisible(true);
-            GameManager::Instance().EndCinematic();
+            //GameManager::Instance().EndCinematic();
         }
     }
 }

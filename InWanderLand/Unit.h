@@ -10,7 +10,7 @@
 #include "StatusEffect.h"
 #include "LocalTimeEntity.h"
 #include "UIElement.h"
-#include "Delegate.h"
+#include "DelegateCallback.h"   
 #include "TemplateDataList.h"
 #include "UnitState.h"
 #include "UnitAnimationType.h"
@@ -29,6 +29,7 @@ class Skill;
 class UnitBuff;
 class UnitBehaviourTree;
 class UnitAcquisitionSphereCollider;
+class UnitPool;
 namespace application
 {
     namespace editor
@@ -48,6 +49,7 @@ public:
     void Reset();
     const application::editor::Unit_TemplateData& GetUnitTemplateData()const;
     int GetTeamIndex() const;
+    void Relocate(const Vector3d& pos);
     void OrderMove(Vector3d position);
     void OrderAttackMove(Vector3d position);
     void OrderAttack(std::weak_ptr<Unit> opponent);
@@ -66,10 +68,13 @@ public:
     yunutyEngine::coroutine::Coroutine StunCoroutine(float stunDuration);
     void PlayAnimation(UnitAnimType animType, bool repeat = false);
     void SetDesiredRotation(const Vector3d& facingDirection);
-    void UpdateRotation();
+    std::weak_ptr<coroutine::Coroutine> SetRotation(const Vector3d& facingDirection, float rotatingTime);
+    std::weak_ptr<coroutine::Coroutine> SetRotation(float facingAngle, float rotatingTime);
+    coroutine::Coroutine SettingRotation(float facingAngle, float rotatingTime);
     const UnitBehaviourTree& GetBehaviourTree() const { return unitBehaviourTree; };
     float GetUnitCurrentHp() const;
     std::shared_ptr<Reference> AcquirePauseReference();
+    std::shared_ptr<Reference> AcquireBlockRotationReference();
     // AcquireFactor는 수치에 곱연산이 적용될 부분이며, AcquireDelta는 수치에 덧셈 연산이 적용될 부분이다.
     factor::Multiplier<float>& GetDamageMultiplier() { return multiplierDamage; };
     factor::Adder<float>& GetDamageAdder() { return adderDamage; };
@@ -82,27 +87,40 @@ public:
     virtual void OnDestroy() override;
     virtual Component* GetComponent() override { return this; }
     virtual ~Unit();
-    bool IsInvincible() const;
+    bool IsPlayerUnit() const;
+    bool IsInvulenerable() const;
+    bool IsAlive()const;
+    // 유닛의 행동 트리 상태가 전환될 때
+    std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateEngageCallback() { return onStateEngage; };
+    std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateExitCallback() { return onStateExit; };
     // 내가 공격할 때
-    Delegate onAttack;
+    DelegateCallback<void()> onAttack;
     // 내가 때린 공격이 적에게 맞았을 때, 근거리 공격인 경우라면 onAttack과 호출시점이 같겠으나 원거리 공격인 경우에는 시간차가 있을 수 있다. 
-    Delegate onAttackHit;
+    DelegateCallback<void()> onAttackHit;
     // 내가 피해를 입었을 때
-    Delegate onDamaged;
+    DelegateCallback<void()> onDamaged;
     // 유닛이 새로 생성될 때
-    Delegate onCreated;
-    // 유닛이 사망할 때
-    Delegate onDeath;
+    DelegateCallback<void()> onCreated;
+    // 유닛이 회전을 끝냈을 때
+    DelegateCallback<void()> onRotationFinish;
 private:
+    void SetNavObstacleActive(bool active);
+    void UpdateRotation();
     void InitBehaviorTree();
     template<std::weak_ptr<Reference> Unit::* referenceWeakptr>
     std::shared_ptr<Reference> AcquireReference();
     template<UnitBehaviourTree::Keywords state>
-    void OnStateEngage() {};
+    void OnStateEngage()
+    {
+        onStateEngage[UnitBehaviourTree::state]();
+    }
     template<UnitBehaviourTree::Keywords state>
     void OnStateUpdate() {};
     template<UnitBehaviourTree::Keywords state>
-    void OnStateExit() {};
+    void OnStateExit()
+    {
+        onStateExit[UnitBehaviourTree::state]();
+    };
     std::weak_ptr<Unit> GetClosestEnemy();
     void Attack(std::weak_ptr<Unit> opponent);
     template<UnitOrderType orderType>
@@ -111,6 +129,8 @@ private:
     Vector3d GetAttackPosition(std::weak_ptr<Unit> opponent);
     yunutyEngine::coroutine::Coroutine AttackCoroutine(std::weak_ptr<Unit> opponent);
     UnitBehaviourTree unitBehaviourTree;
+    std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateEngage;
+    std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateExit;
     // 공격범위와 적 포착범위
     std::weak_ptr<UnitAcquisitionSphereCollider> attackRange;
     std::weak_ptr<UnitAcquisitionSphereCollider> acquisitionRange;
@@ -125,7 +145,10 @@ private:
     UnitOrderType currentOrderType{ UnitOrderType::Hold };
     UnitOrderType pendingOrderType{ UnitOrderType::Hold };
     const application::editor::Unit_TemplateData* unitTemplateData{ nullptr };
+    const application::editor::UnitData* unitData{ nullptr };
     int teamIndex{ 0 };
+    // 유닛의 회전속도는 외부에서 조절할 수 있다. 평소에는 template 데이터의 회전속도와 같다.
+    float currentRotationSpeed;
     Vector3d moveDestination;
     Vector3d attackMoveDestination;
     Vector3d lastPosition;
@@ -157,6 +180,7 @@ private:
     std::weak_ptr<Reference> invincibleReference;
     yunuGI::IAnimation* defaultAnimation;
     friend UnitBuff;
+    friend UnitPool;
 };
 template<UnitOrderType orderType>
 bool Unit::CanProceedOrder()

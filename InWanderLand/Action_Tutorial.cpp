@@ -9,7 +9,7 @@ namespace application
 {
     CoroutineObject<void> Action_TutorialModeChange::DoAction()
     {
-        TutorialManager::Instance().SetTutorialMode(tutorialMode);
+        //TutorialManager::Instance().SetTutorialMode(tutorialMode);
         co_return;
     }
 

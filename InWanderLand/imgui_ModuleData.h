@@ -164,30 +164,6 @@ namespace application
                         return Checkbox_2Col(label, copyData);
                     }
                 }
-                template <>
-                bool DrawData(std::string label, const GC<bool>& data, bool global)
-                {
-                    if (global)
-                    {
-                        if (Checkbox_2Col(label, const_cast<bool&>(data.data)))
-                        {
-                            TemplateDataManager::GetSingletonInstance().EnterDataFromGlobalConstant();
-                            InstanceManager::GetSingletonInstance().EnterDataFromGlobalConstant();
-                            return true;
-                        }
-                        else
-                            return false;
-                    }
-                    else
-                    {
-                        imgui::SmartStyleColor bgColor1(ImGuiCol_FrameBg, IM_COL32(255, 20, 20, 255));
-                        imgui::SmartStyleColor bgColor2(ImGuiCol_FrameBgHovered, IM_COL32(200, 20, 20, 255));
-                        imgui::SmartStyleColor bgColor3(ImGuiCol_FrameBgActive, IM_COL32(255, 20, 20, 255));
-                        bool copyData = data.data;
-                        return Checkbox_2Col(label, copyData);
-                    }
-                }
-
 
                 template <typename T, int N = 0>
                 void DrawDataField(const T& data, bool global = false)

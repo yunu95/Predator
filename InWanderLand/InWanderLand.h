@@ -5,6 +5,8 @@
 #include "ContentsLayer.h"
 #include <d3d11.h>
 #include "TemplateDataManager.h"
+#include "DelegateCallback.h"
+#include "SkillPreviewSystem.h"
 
 // UI
 #include "UIElement.h"
@@ -47,6 +49,12 @@
 #include "EditorPopupManager.h"
 #include "UnitData.h"
 #include "Unit.h"
+#include "UnitPool.h"
+#include "UnitBuff.h"
+#include "UnitBuffBleeding.h"
+#include "UnitAnimationType.h"
+#include "UnitAcquisitionSphereCollider.h"
+#include "UnitAcquisitionSphereColliderPool.h"
 #include "UnitBuff.h"
 #include "PlayerController.h"
 #include "PlaytimeWave.h"

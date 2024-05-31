@@ -4,6 +4,7 @@
 #include "Unit.h"
 #include "UIManager.h"
 #include "ContentsObservee.h"
+#include "SingletonComponent.h"
 
 using namespace yunutyEngine;
 
@@ -15,7 +16,7 @@ namespace application
     }
 }
 
-class RTSCam : public yunutyEngine::graphics::Camera, public ContentsObservee
+class RTSCam : public yunutyEngine::graphics::Camera, public SingletonComponent<RTSCam>, public ContentsObservee
 {
 public:
     // 카메라가 타겟팅하는 게임 오브젝트가 여러개일 경우 distance에 곱해질 스케일러

@@ -16,6 +16,7 @@ class UIOffsetTransition;
 class ColorTintTimer;
 class PlayMusicTimer;
 class UISpriteAnimation;
+class TimerComponent;
 // 임포트된 UI 요소에 대한 정보를 잔뜩 저장하는 클래스
 class UIElement : public Component
 {

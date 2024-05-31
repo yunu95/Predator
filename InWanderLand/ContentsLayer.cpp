@@ -158,7 +158,7 @@ public:
             a.push_back(Vector3d{ 0,0,3.5 });
             a.push_back(Vector3d{ 0,0,4 });
             a.push_back(Vector3d{ 0,0,4.5 });
-            system->ShowRoute(SkillPreviewSystem::UnitType::Robin,a);
+            system->ShowRoute(SkillPreviewSystem::UnitType::Robin, a);
             //system->ShowRoute(a);
         }
         if (isShow)
@@ -179,7 +179,7 @@ void GraphicsTest()
     camObj->AddComponent<tests::GraphicsTestCam>();
     camObj->GetComponent<tests::GraphicsTestCam>()->GetGI().SetAsMain();
 
-    camObj->GetTransform()->SetLocalPosition(Vector3d{0,0,-10});
+    camObj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
     //camObj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{ 90,0,0 } });
 
     auto skillPreviewSystem = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
@@ -347,7 +347,7 @@ void application::contents::ContentsLayer::Initialize()
     ShortcutInit();
     ScriptSystem::Instance();
     CinematicManager::Instance();
-    TutorialManager::Instance();
+    //TutorialManager::Instance();
     Scene::getCurrentScene()->AddGameObject()->AddComponent<ContentsInitializer>();
 }
 
@@ -377,9 +377,7 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
 
     yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 
-    InputManager::Instance().SetInputManagerActive(true);
-    PlayerSkillManager::Instance();
-    GameManager::Instance().Reset();
+    PlayerController::Instance().Reset();
 
     auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
@@ -387,8 +385,8 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
     PlayableComponent::OnGameStartAll();
 
     ContentsObserver::Instance().OnPlayContents();
-	SkillPreviewSystem::Instance().Init();
-	SkillPreviewSystem::Instance().camObj = GameManager::Instance().rtscam->GetGameObject();
+    SkillPreviewSystem::Instance().Init();
+    SkillPreviewSystem::Instance().camObj = RTSCam::Instance().GetGameObject();
 }
 
 void application::contents::ContentsLayer::PauseContents()
@@ -457,7 +455,7 @@ void application::contents::ContentsLayer::ShortcutInit()
                     continue;
                 }
 
-                if (comp->GetUnitSide() == Unit::UnitSide::Player)
+                if (!comp->IsPlayerUnit())
                 {
                     auto& scsysIns = ShortcutSystem::Instance();
                     comp->GetGameObject()->SetSelfActive(scsysIns.GetTriggerSwitch(scsysIns.GetKeyIndex({ { KeyCode::Control, true }, { KeyCode::NUM_1, false } })));
@@ -475,7 +473,7 @@ void application::contents::ContentsLayer::ShortcutInit()
                     continue;
                 }
 
-                if (comp->GetUnitSide() == Unit::UnitSide::Enemy)
+                if (!comp->IsPlayerUnit())
                 {
                     auto& scsysIns = ShortcutSystem::Instance();
                     comp->GetGameObject()->SetSelfActive(scsysIns.GetTriggerSwitch(scsysIns.GetKeyIndex({ { KeyCode::Control, true }, { KeyCode::NUM_2, false } })));

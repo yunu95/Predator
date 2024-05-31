@@ -86,3 +86,6 @@
 #include "YunutyCapsuleCollider.h"
 #include "YunutySphereCollider.h"
 #include "YunutyRigidBody.h"
+
+#include "YunutyGenericEqual.h"
+#include "YunutyGenericHash.h"

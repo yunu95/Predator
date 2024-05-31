@@ -20,6 +20,11 @@
 #include "CinematicManager.h"
 #include "UnitBuff.h"
 
+float getDeltaAngle(float difference) {
+    while (difference < -180) difference += 360;
+    while (difference > 180) difference -= 360;
+    return difference;
+}
 template<std::weak_ptr<Reference> Unit::* referenceWeakptr>
 std::shared_ptr<Reference> Unit::AcquireReference()
 {
@@ -34,7 +39,7 @@ std::weak_ptr<Unit> Unit::GetClosestEnemy()
                 (GetTransform()->GetWorldPosition() - b.lock()->GetTransform()->GetWorldPosition()).MagnitudeSqr();
         });
     if (minIt != attackRange.lock()->GetFoes().end())
-        return *minIt;
+        return (*minIt)->GetWeakPtr<Unit>();
 
     minIt = std::min_element(acquisitionRange.lock()->GetFoes().begin(), acquisitionRange.lock()->GetFoes().end(), [this](const std::weak_ptr<Unit>& a, const std::weak_ptr<Unit>& b)
         {
@@ -42,7 +47,7 @@ std::weak_ptr<Unit> Unit::GetClosestEnemy()
                 (GetTransform()->GetWorldPosition() - b.lock()->GetTransform()->GetWorldPosition()).MagnitudeSqr();
         });
     if (minIt != acquisitionRange.lock()->GetFoes().end())
-        return *minIt;
+        return (*minIt)->GetWeakPtr<Unit>();
 
     return std::weak_ptr<Unit>();
 }
@@ -79,46 +84,53 @@ void Unit::OnDestroy()
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Death>()
 {
-    onDeath();
+    onStateEngage[UnitBehaviourTree::Death]();
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Paralysis>()
 {
+    onStateEngage[UnitBehaviourTree::Paralysis]();
     PlayAnimation(UnitAnimType::Paralysis, true);
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Paralysis>()
 {
+    onStateExit[UnitBehaviourTree::Paralysis]();
     PlayAnimation(UnitAnimType::Paralysis, true);
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Pause>()
 {
+    onStateEngage[UnitBehaviourTree::Pause]();
     PlayAnimation(UnitAnimType::Idle, true);
-    OnStateEngage<UnitBehaviourTree::Stop>();
+    SetNavObstacleActive(true);
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Pause>()
 {
+    onStateExit[UnitBehaviourTree::Pause]();
     PlayAnimation(UnitAnimType::Idle, true);
-    OnStateExit<UnitBehaviourTree::Stop>();
+    SetNavObstacleActive(false);
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Attack>()
 {
+    onStateEngage[UnitBehaviourTree::Attack]();
     // Stop의 NavObstacle을 활성화하는 효과를 이용하여 공격을 할 때 장애물로 인식하게 만듭니다.
-    OnStateEngage<UnitBehaviourTree::Stop>();
+    SetNavObstacleActive(true);
     Attack(GetClosestEnemy());
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Attack>()
 {
+    onStateExit[UnitBehaviourTree::Attack]();
     // Stop의 NavObstacle을 활성화하는 효과를 이용하여 공격을 할 때 장애물로 인식하게 만듭니다.
-    OnStateExit<UnitBehaviourTree::Stop>();
+    SetNavObstacleActive(false);
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Move>()
 {
+    onStateEngage[UnitBehaviourTree::Move]();
     navAgentComponent.lock()->SetSpeed(unitTemplateData->pod.m_unitSpeed);
     PlayAnimation(UnitAnimType::Move, true);
 }
@@ -131,17 +143,15 @@ void Unit::OnStateUpdate<UnitBehaviourTree::Move>()
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Stop>()
 {
-    navAgentComponent.lock()->SetSpeed(0.0f);
-    navAgentComponent.lock()->MoveTo(GetTransform()->GetWorldPosition());
-    navAgentComponent.lock()->SetActive(false);
-    navObstacle.lock()->SetActive(true);
+    onStateEngage[UnitBehaviourTree::Stop]();
     PlayAnimation(UnitAnimType::Idle, true);
+    SetNavObstacleActive(true);
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Stop>()
 {
-    navAgentComponent.lock()->SetActive(true);
-    navObstacle.lock()->SetActive(false);
+    onStateExit[UnitBehaviourTree::Stop]();
+    SetNavObstacleActive(false);
 }
 
 Unit::~Unit()
@@ -155,9 +165,17 @@ Unit::~Unit()
         Scene::getCurrentScene()->DestroyGameObject(navAgentComponent.lock()->GetGameObject());
     }
 }
-bool Unit::IsInvincible() const
+bool Unit::IsPlayerUnit() const
+{
+    return unitTemplateData->pod.playerUnitType != PlayerCharacterType::None;
+}
+bool Unit::IsInvulenerable() const
 {
     return !invincibleReference.expired();
+}
+bool Unit::IsAlive() const
+{
+    return isAlive;
 }
 void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg)
 {
@@ -204,6 +222,10 @@ std::shared_ptr<Reference> Unit::AcquirePauseReference()
 {
     return AcquireReference<&Unit::pauseReference>();
 }
+std::shared_ptr<Reference> Unit::AcquireBlockRotationReference()
+{
+    return AcquireReference<&Unit::blockRotationReference>();
+}
 void Unit::KnockBack(Vector3d targetPosition, float knockBackDuration)
 {
     coroutineKnockBack = StartCoroutine(KnockBackCoroutine(targetPosition, knockBackDuration));
@@ -243,14 +265,51 @@ void Unit::SetDesiredRotation(const Vector3d& facingDirection)
         return;
     desiredRotation = std::atan2(facingDirection.z, facingDirection.x) * math::Rad2Deg;
 }
+std::weak_ptr<coroutine::Coroutine> Unit::SetRotation(const Vector3d& facingDirection, float rotatingTime)
+{
+    desiredRotation = std::atan2(facingDirection.z, facingDirection.x) * math::Rad2Deg;
+    return SetRotation(desiredRotation, rotatingTime);
+}
+std::weak_ptr<coroutine::Coroutine> Unit::SetRotation(float facingAngle, float rotatingTime)
+{
+    return StartCoroutine(SettingRotation(facingAngle, rotatingTime));
+}
+coroutine::Coroutine Unit::SettingRotation(float facingAngle, float rotatingTime)
+{
+    auto pauseRef = AcquireReference<&Unit::pauseReference>();
+    desiredRotation = facingAngle;
+    if (rotatingTime != 0)
+    {
+        currentRotationSpeed = std::fabs(getDeltaAngle(desiredRotation - currentRotation)) / rotatingTime;
+    }
+    else
+    {
+        currentRotationSpeed = 1000000000;
+    }
+    co_yield coroutine::WaitForSeconds(rotatingTime);
+    currentRotationSpeed = unitTemplateData->pod.rotationSpeed;
+}
+void Unit::SetNavObstacleActive(bool active)
+{
+    if (active)
+    {
+        navAgentComponent.lock()->SetSpeed(0.0f);
+        navAgentComponent.lock()->MoveTo(GetTransform()->GetWorldPosition());
+        navAgentComponent.lock()->SetActive(false);
+        navObstacle.lock()->SetActive(true);
+    }
+    else
+    {
+        navAgentComponent.lock()->SetActive(true);
+        navObstacle.lock()->SetActive(false);
+    }
+}
 void Unit::UpdateRotation()
 {
     currentRotation = normalizeAngle(currentRotation);
     desiredRotation = normalizeAngle(desiredRotation);
     float difference = desiredRotation - currentRotation;
-    while (difference < -180) difference += 360;
-    while (difference > 180) difference -= 360;
-
+    difference = getDeltaAngle(difference);
 
     if (difference > 0) {
         currentRotation = normalizeAngle(currentRotation + unitTemplateData->pod.rotationSpeed * Time::GetDeltaTime());
@@ -260,12 +319,6 @@ void Unit::UpdateRotation()
     }
     GetTransform()->SetWorldRotation(Vector3d(0, currentRotation, 0));
 }
-
-const UnitBehaviourTree& Unit::GetBehaviourTree() const
-{
-    // TODO: insert return statement here
-}
-
 void Unit::OnEnable()
 {
     navAgentComponent.lock()->GetGameObject()->SetSelfActive(true);
@@ -285,6 +338,11 @@ coroutine::Coroutine ShowPath(const std::vector<Vector3d> paths)
     }
     co_return;
 }
+void Unit::Relocate(const Vector3d& pos)
+{
+    navAgentComponent.lock()->Relocate(pos);
+    OrderHold();
+}
 void Unit::OrderMove(Vector3d position)
 {
     StartCoroutine(ShowPath(SingleNavigationField::Instance().GetSmoothPath(GetTransform()->GetWorldPosition(), position)));
@@ -302,16 +360,20 @@ void Unit::OrderHold()
 void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
 {
     this->unitTemplateData = unitTemplateData;
+    currentRotationSpeed = unitTemplateData->pod.rotationSpeed;
     switch (unitTemplateData->pod.playerUnitType)
     {
     case PlayerCharacterType::Robin:
         unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetWeakPtr<UIElement>();
+        PlayerController::Instance().RegisterPlayer(GetWeakPtr<Unit>());
         break;
     case PlayerCharacterType::Ursula:
         unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetWeakPtr<UIElement>();
+        PlayerController::Instance().RegisterPlayer(GetWeakPtr<Unit>());
         break;
     case PlayerCharacterType::Hansel:
         unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetWeakPtr<UIElement>();
+        PlayerController::Instance().RegisterPlayer(GetWeakPtr<Unit>());
         break;
     default:
         break;
@@ -335,12 +397,26 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
 }
 void Unit::Summon(const application::editor::UnitData* unitData)
 {
+    onAttack = unitData->onAttack;
+    // 내가 때린 공격이 적에게 맞았을 때, 근거리 공격인 경우라면 onAttack과 호출시점이 같겠으나 원거리 공격인 경우에는 시간차가 있을 수 있다. 
+    onAttackHit = unitData->onAttackHit;
+    // 내가 피해를 입었을 때
+    onDamaged = unitData->onDamaged;
+    // 유닛이 새로 생성될 때
+    onCreated = unitData->onCreated;
+    // 유닛이 회전을 끝냈을 때
+    onRotationFinish = unitData->onRotationFinish;
+    onStateEngage = unitData->onStateEngage;
+    onStateExit = unitData->onStateExit;
+
     navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
     navAgentComponent.lock()->Relocate(Vector3d{ unitData->pod.position });
     Reset();
+    onCreated();
 }
 void Unit::Reset()
 {
+    isAlive = true;
     SetUnitCurrentHp(unitTemplateData->pod.max_Health);
     DeleteCoroutine(coroutineKnockBack);
     DeleteCoroutine(coroutineStun);
@@ -404,13 +480,6 @@ Vector3d Unit::GetAttackPosition(std::weak_ptr<Unit> opponent)
 yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opponent)
 {
     co_return;
-}
-// 유닛의 상태를 멀쩡한 상태로 원상복구
-// 유닛의 동작에 필요한 인스턴스 중 dangling인 애들은 다시 생성 및 초기화,
-void Unit::Reset()
-{
-    isAlive = true;
-    SetUnitCurrentHp(unitTemplateData->pod.max_Health);
 }
 const editor::Unit_TemplateData& Unit::GetUnitTemplateData()const
 {

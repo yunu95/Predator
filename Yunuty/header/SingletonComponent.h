@@ -10,7 +10,7 @@ namespace yunutyEngine
     {
     public:
         SingletonComponent() = default;
-        virtual ~SingletonComponent() = default;
+        virtual ~SingletonComponent();
         static T& Instance();
         static bool isAvailable() { return yunutyEngine::Scene::getCurrentScene(); }
         virtual void SingletonInitializer() {};
@@ -18,6 +18,14 @@ namespace yunutyEngine
     private:
         static T* instance;
     };
+}
+template<typename T>
+SingletonComponent<T>::~SingletonComponent()
+{
+    if (instance == this)
+    {
+        instance = nullptr;
+    }
 }
 template<typename T>
 T& yunutyEngine::SingletonComponent<T>::Instance()

@@ -3,11 +3,11 @@
 
 void UnitAcquisitionSphereCollider::OnTriggerEnter(physics::Collider* other)
 {
-    if (auto unit = other->GetGameObject()->GetComponentWeakPtr<Unit>(); !unit.expired())
+    if (auto unit = other->GetGameObject()->GetComponent<Unit>(); unit)
     {
         units.insert(unit);
         OnUnitEnter(unit);
-        if (unit.lock()->GetTeamIndex() != owner.lock()->GetTeamIndex())
+        if (unit->GetTeamIndex() != GetTeamIndex())
         {
             foes.insert(unit);
             OnHostileEnter(unit);
@@ -22,11 +22,11 @@ void UnitAcquisitionSphereCollider::OnTriggerEnter(physics::Collider* other)
 
 void UnitAcquisitionSphereCollider::OnTriggerExit(physics::Collider* other)
 {
-    if (auto unit = other->GetGameObject()->GetComponentWeakPtr<Unit>(); !unit.expired())
+    if (auto unit = other->GetGameObject()->GetComponent<Unit>(); unit)
     {
         units.erase(unit);
         OnUnitExit(unit);
-        if (unit.lock()->GetTeamIndex() != owner.lock()->GetTeamIndex())
+        if (unit->GetTeamIndex() != GetTeamIndex())
         {
             foes.erase(unit);
             OnHostileExit(unit);
@@ -45,21 +45,27 @@ void UnitAcquisitionSphereCollider::Update()
     static std::vector<std::weak_ptr<Unit>> foesToErase;
     static std::vector<std::weak_ptr<Unit>> alliesToErase;
     static std::vector<std::weak_ptr<Unit>> unitsToErase;
-
     foesToErase.clear();
     alliesToErase.clear();
     unitsToErase.clear();
-    std::copy_if(foes.begin(), foes.end(), std::back_inserter(foesToErase), ShouldErase);
+    auto ShouldErase = [this](const Unit*& unit) {
+        return (!includeDeadUnits && unit->IsAlive()) || (!includeInvulnerableUnits && unit->IsInvulenerable());
+        };
+    std::copy_if(units.begin(), units.end(), std::back_inserter(unitsToErase), ShouldErase);
     std::copy_if(allies.begin(), allies.end(), std::back_inserter(alliesToErase), ShouldErase);
-    std::copy_if(units.begin(), allies.end(), std::back_inserter(unitsToErase), ShouldErase);
+    std::copy_if(foes.begin(), foes.end(), std::back_inserter(foesToErase), ShouldErase);
     std::erase_if(foes, ShouldErase);
     std::erase_if(allies, ShouldErase);
     std::erase_if(units, ShouldErase);
-    std::for_each(foesToErase.begin(), foesToErase.end(), [this](std::weak_ptr<Unit>& each) { OnHostileExit(each); });
-    std::for_each(alliesToErase.begin(), alliesToErase.end(), [this](std::weak_ptr<Unit>& each) { OnAllyExit(each); });
-    std::for_each(unitsToErase.begin(), unitsToErase.end(), [this](std::weak_ptr<Unit>& each) { OnUnitExit(each); });
+    std::for_each(foesToErase.begin(), foesToErase.end(), [this](Unit*& each) { OnHostileExit(each); });
+    std::for_each(alliesToErase.begin(), alliesToErase.end(), [this](Unit*& each) { OnAllyExit(each); });
+    std::for_each(unitsToErase.begin(), unitsToErase.end(), [this](Unit*& each) { OnUnitExit(each); });
 }
-bool UnitAcquisitionSphereCollider::ShouldErase(std::weak_ptr<Unit>& unit)
+
+int UnitAcquisitionSphereCollider::GetTeamIndex()
 {
-    return unit.expired() || (!includeDeadUnits && unit.lock()->GetCurrentUnitState() == UnitState::Death);
+    if (owner.expired())
+        return teamIndex;
+    else
+        owner.lock()->GetTeamIndex();
 }

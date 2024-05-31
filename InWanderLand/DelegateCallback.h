@@ -3,14 +3,15 @@
 #include <functional>
 
 // 델리게이트는 콜백을 모은 후 한번에 실행한다.
-class Delegate
+template <typename T>
+class DelegateCallback
 {
 public:
-    void AddCallback(std::function<void()> callback)
+    void AddCallback(std::function<T> callback)
     {
         callbacks.push_back(callback);
     }
-    void AddVolatileCallback(std::function<void()> callback)
+    void AddVolatileCallback(std::function<T> callback) 
     {
         volatileCallbacks.push_back(callback);
     }
@@ -22,7 +23,12 @@ public:
             callback();
         volatileCallbacks.clear();
     }
+    void Clear()
+    {
+        callbacks.clear();
+        volatileCallbacks.clear();
+    }
 private:
-    std::vector<std::function<void()>> callbacks;
-    std::vector<std::function<void()>> volatileCallbacks;
+    std::vector<std::function<T>> callbacks;
+    std::vector<std::function<T>> volatileCallbacks;
 };

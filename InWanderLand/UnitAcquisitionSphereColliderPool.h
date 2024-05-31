@@ -1,3 +1,4 @@
+#pragma once
 #include "UnitAcquisitionSphereCollider.h"
 #include "GameObjectPool.h"
 

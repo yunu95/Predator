@@ -5,6 +5,7 @@
 // 스킬 인덱스는 1부터 시작하며, 1은 로빈 Q, 2는 로빈 E, 3은 우르술라 Q, 4는 우르술라 E, 5는 헨젤 Q, 6은 헨젤 E입니다.
 
 #include "IAction.h"
+#include "SkillType.h"
 
 namespace application
 {
@@ -15,11 +16,9 @@ namespace application
         DEFINE_ACTION(AwaitSkillSelection)
 
             Action_AwaitSkillSelection() = default;
-        Action_AwaitSkillSelection(int skillIndex);
+        Action_AwaitSkillSelection(SkillType skillType);
 
         virtual CoroutineObject<void> DoAction() override;
-
-        void SetSkillIndex(int index);
 
         virtual bool PreEncoding(json& data) const override;
         virtual bool PostEncoding(json& data) const override;
@@ -27,6 +26,6 @@ namespace application
         virtual bool PostDecoding(const json& data) override;
 
     private:
-        int index{ 1 };
+        POD_Enum<SkillType> skillType;
     };
-}
+};

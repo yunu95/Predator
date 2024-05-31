@@ -973,7 +973,7 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
         element->button->AddButtonClickFunction([=]()
             {
-                InputManager::Instance().ToggleTacticMode();
+                //InputManager::Instance().ToggleTacticMode();
             });
         break;
     case UIEnumID::PopUpMessage_PermissionForUpgradeProceedButton:
@@ -1019,10 +1019,6 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
                 auto cam = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<graphics::Camera>();
                 cam.lock()->SetCameraMain();
                 cl->StopContents(ContentsStopFlag::None);
-                for (auto each : rootUIs)
-                {
-                    //each->DisableElement();
-                }
                 GetUIElementByEnum(UIEnumID::TitleRoot)->EnableElement();
                 element->DisableElement();
             };
@@ -1045,19 +1041,19 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         case UIEnumID::CharInfo_Robin:
             element->button->AddExternalButtonClickFunction([=]()
                 {
-                    InputManager::Instance().SelectPlayer(Unit::UnitType::Warrior);
+                    PlayerController::Instance().SelectPlayerUnit(PlayerCharacterType::Robin);
                 });
             break;
         case UIEnumID::CharInfo_Ursula:
             element->button->AddExternalButtonClickFunction([=]()
                 {
-                    InputManager::Instance().SelectPlayer(Unit::UnitType::Magician);
+                    PlayerController::Instance().SelectPlayerUnit(PlayerCharacterType::Ursula);
                 });
             break;
         case UIEnumID::CharInfo_Hansel:
             element->button->AddExternalButtonClickFunction([=]()
                 {
-                    InputManager::Instance().SelectPlayer(Unit::UnitType::Healer);
+                    PlayerController::Instance().SelectPlayerUnit(PlayerCharacterType::Hansel);
                 });
             break;
         }
@@ -1069,19 +1065,19 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         case UIEnumID::CharInfo_Robin:
             element->button->AddExternalButtonClickFunction([=]()
                 {
-                    InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Warrior);
+                    PlayerController::Instance().SelectSkill(SkillType::ROBIN_Q);
                 });
             break;
         case UIEnumID::CharInfo_Ursula:
             element->button->AddExternalButtonClickFunction([=]()
                 {
-                    InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Magician);
+                    PlayerController::Instance().SelectSkill(SkillType::URSULA_Q);
                 });
             break;
         case UIEnumID::CharInfo_Hansel:
             element->button->AddExternalButtonClickFunction([=]()
                 {
-                    InputManager::Instance().PrepareSkill(Unit::SkillEnum::Q, Unit::UnitType::Healer);
+                    PlayerController::Instance().SelectSkill(SkillType::HANSEL_Q);
                 });
             break;
         }
@@ -1093,19 +1089,19 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         case UIEnumID::CharInfo_Robin:
             element->button->AddExternalButtonClickFunction([=]()
                 {
-                    InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Warrior);
+                    PlayerController::Instance().SelectSkill(SkillType::ROBIN_W);
                 });
             break;
         case UIEnumID::CharInfo_Ursula:
             element->button->AddExternalButtonClickFunction([=]()
                 {
-                    InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Magician);
+                    PlayerController::Instance().SelectSkill(SkillType::URSULA_W);
                 });
             break;
         case UIEnumID::CharInfo_Hansel:
             element->button->AddExternalButtonClickFunction([=]()
                 {
-                    InputManager::Instance().PrepareSkill(Unit::SkillEnum::W, Unit::UnitType::Healer);
+                    PlayerController::Instance().SelectSkill(SkillType::HANSEL_W);
                 });
             break;
         }

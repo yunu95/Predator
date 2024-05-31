@@ -4,5 +4,5 @@
 coroutine::Coroutine RobinChargeSkill::operator()()
 {
     GlobalConstant::GetSingletonInstance().pod.robinQSkillDamageRush;
-    return coroutine::Coroutine();
+    co_return;
 }
