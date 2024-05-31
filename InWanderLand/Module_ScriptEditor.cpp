@@ -799,6 +799,220 @@ namespace application
 							epm.Return();
 						}
 					}
+
+					if (epm.GetReturnPopupName() == "SetTargetOrnament(MoveWithRotateAndRescale)")
+					{
+						ImGui::Begin("Ornament Move With Rotate And Rescale Popup(SetTarget)", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Target Ornament");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Target Ornament");
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
+
+						pp.ChangeTab("Ornament");
+
+						auto data = epm.GetReturnPopupData<Action_OrnamentMoveWithRotateAndRescale>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &op)
+						{
+							data->isEditing = true;
+							op.Reset();
+						}
+
+						if (data->isEditing == true && op.GetSelections().size() == 1)
+						{
+							data->SetTargetOrnament(static_cast<OrnamentData*>(*op.GetSelections().begin()));
+							data->isEditing = false;
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
+
+					if (epm.GetReturnPopupName() == "EditDestinationOrnament(MoveWithRotateAndRescale)")
+					{
+						ImGui::Begin("Ornament Move With Rotate And Rescale Popup(EditDestination)", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						imgui::ShiftCursorY((rect.y - 20) / 2);
+						bool endFlag = false;
+						if (ImGui::Button("End Edit", ImVec2(ImGui::GetContentRegionAvail().x, 20)))
+						{
+							endFlag = true;
+						}
+						ImGui::End();
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+
+						pp.ChangeTab("Ornament");
+
+						auto data = epm.GetReturnPopupData<Action_OrnamentMoveWithRotateAndRescale>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &op)
+						{
+							data->isEditing = true;
+							op.Reset();
+							op.SelectOrnamentInstance(data->destinationOrnament);
+						}
+
+						if (data->isEditing == true && (endFlag || ImGui::IsKeyPressed(ImGuiKey_Escape, false)))
+						{
+							data->isEditing = false;
+							data->destinationOrnament->GetPaletteInstance()->GetGameObject()->SetSelfActive(false);
+							op.Reset();
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							data->destinationOrnament->GetPaletteInstance()->GetGameObject()->SetSelfActive(false);
+							op.Reset();
+							epm.Return();
+						}
+					}
+
+					if (epm.GetReturnPopupName() == "SetDestinationOrnament(MoveWithRotateAndRescale)")
+					{
+						ImGui::Begin("Ornament Move With Rotate And Rescale Popup(SetDestination)", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Destination Ornament");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Destination Ornament");
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
+
+						pp.ChangeTab("Ornament");
+
+						auto data = epm.GetReturnPopupData<Action_OrnamentMoveWithRotateAndRescale>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &op)
+						{
+							data->isEditing = true;
+							op.Reset();
+						}
+
+						if (data->isEditing == true && op.GetSelections().size() == 1)
+						{
+							if (data->targetOrnament->pod.templateData->pod.staticFBXName == static_cast<OrnamentData*>(*op.GetSelections().begin())->pod.templateData->pod.staticFBXName)
+							{
+								data->SetDestinationOrnament(static_cast<OrnamentData*>(*op.GetSelections().begin()));
+								data->isEditing = false;
+								op.Reset();
+								epm.Return();
+							}
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
+
+					if (epm.GetReturnPopupName() == "SetTargetOrnament(Show)")
+					{
+						ImGui::Begin("Ornament Show Popup(SetTarget)", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Target Ornament");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Target Ornament");
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
+
+						pp.ChangeTab("Ornament");
+
+						auto data = epm.GetReturnPopupData<Action_OrnamentShow>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &op)
+						{
+							data->isEditing = true;
+							op.Reset();
+						}
+
+						if (data->isEditing == true && op.GetSelections().size() == 1)
+						{
+							data->SetTargetOrnament(static_cast<OrnamentData*>(*op.GetSelections().begin()));
+							data->isEditing = false;
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
+
+					if (epm.GetReturnPopupName() == "SetTargetOrnament(Hide)")
+					{
+						ImGui::Begin("Ornament Hide Popup(SetTarget)", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Target Ornament");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Target Ornament");
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
+
+						pp.ChangeTab("Ornament");
+
+						auto data = epm.GetReturnPopupData<Action_OrnamentHide>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &op)
+						{
+							data->isEditing = true;
+							op.Reset();
+						}
+
+						if (data->isEditing == true && op.GetSelections().size() == 1)
+						{
+							data->SetTargetOrnament(static_cast<OrnamentData*>(*op.GetSelections().begin()));
+							data->isEditing = false;
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
+
+					if (epm.GetReturnPopupName() == "SetTargetOrnament(Floating)")
+					{
+						ImGui::Begin("Ornament Floating Popup(SetTarget)", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Target Ornament");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Target Ornament");
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
+
+						pp.ChangeTab("Ornament");
+
+						auto data = epm.GetReturnPopupData<Action_OrnamentFloating>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &op)
+						{
+							data->isEditing = true;
+							op.Reset();
+						}
+
+						if (data->isEditing == true && op.GetSelections().size() == 1)
+						{
+							data->SetTargetOrnament(static_cast<OrnamentData*>(*op.GetSelections().begin()));
+							data->isEditing = false;
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
 				}
 			}
 			ImGui::End();
@@ -1383,6 +1597,26 @@ namespace application
 								case application::ActionType::UISetActive:
 								{
 									selectedScript->AddAction<Action_UISetActive>();
+									break;
+								}
+								case application::ActionType::OrnamentMoveWithRotateAndRescale:
+								{
+									selectedScript->AddAction<Action_OrnamentMoveWithRotateAndRescale>();
+									break;
+								}
+								case application::ActionType::OrnamentShow:
+								{
+									selectedScript->AddAction<Action_OrnamentShow>();
+									break;
+								}
+								case application::ActionType::OrnamentHide:
+								{
+									selectedScript->AddAction<Action_OrnamentHide>();
+									break;
+								}
+								case application::ActionType::OrnamentFloating:
+								{
+									selectedScript->AddAction<Action_OrnamentFloating>();
 									break;
 								}
 								default:

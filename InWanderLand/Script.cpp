@@ -514,6 +514,26 @@ namespace application
                         action = AddAction<Action_UISetActive>();
                         break;
                     }
+                    case application::ActionType::OrnamentMoveWithRotateAndRescale:
+                    {
+                        action = AddAction<Action_OrnamentMoveWithRotateAndRescale>();
+                        break;
+                    }
+                    case application::ActionType::OrnamentShow:
+                    {
+                        action = AddAction<Action_OrnamentShow>();
+                        break;
+                    }
+                    case application::ActionType::OrnamentHide:
+                    {
+                        action = AddAction<Action_OrnamentHide>();
+                        break;
+                    }
+                    case application::ActionType::OrnamentFloating:
+                    {
+                        action = AddAction<Action_OrnamentFloating>();
+                        break;
+                    }
                     default:
                         break;
                     }

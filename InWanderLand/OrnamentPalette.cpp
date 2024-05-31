@@ -31,6 +31,16 @@ namespace application
                 SelectOrnamentTemplateData(nullptr);
             }
 
+            OrnamentData* OrnamentPalette::GetSingleSelectedOrnamentInstance()
+            {
+                return (selection.size() != 1) ? nullptr : static_cast<OrnamentData*>(const_cast<IEditableData*>(*selection.begin()));
+            }
+
+            void OrnamentPalette::SelectOrnamentInstance(OrnamentData* ornament)
+            {
+                Palette::OnSelectSingleInstance(ornament);
+            }
+
             void OrnamentPalette::Reset()
             {
                 Palette::Reset();

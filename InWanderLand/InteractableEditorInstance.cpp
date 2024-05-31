@@ -37,6 +37,12 @@ namespace application::editor::palette
                 uiObject->SetSelfActive(false);
             }
 
+            auto uiComp = uiObject->GetComponent<Interactable_UI>();
+            uiComp->SetUI(data->pod.guideUI);
+            uiComp->SetUIWidth(data->pod.ui_Width);
+            uiComp->SetUIHeight(data->pod.ui_Height);
+            uiComp->UpdateUI();
+
             auto scale = GetGameObject()->GetTransform()->GetWorldScale();
             auto pos = UIManager::Instance().GetUIPosFromWorld(GetGameObject()->GetTransform()->GetWorldPosition());
             uiObject->GetTransform()->SetLocalScale(Vector3d(1 / scale.x, 1 / scale.y, 1 / scale.z));

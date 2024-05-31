@@ -10,9 +10,12 @@
 void Interactable_ChessRook::Start()
 {
 	auto ts = GetGameObject()->GetTransform();
-	ts->SetWorldPosition(initPos);
-	ts->SetWorldRotation(initRotation);
-	ts->SetWorldScale(initScale);
+	if (!isSummoned)
+	{
+		ts->SetWorldPosition(initPos);
+		ts->SetWorldRotation(initRotation);
+		ts->SetWorldScale(initScale);
+	}
 
 	auto rendererObj = GetGameObject()->AddGameObject();
 	AttachDebugMesh(rendererObj, DebugMeshType::Cube, yunuGI::Color::green());
@@ -26,6 +29,9 @@ void Interactable_ChessRook::Start()
 		if (renderer)
 		{
 			mesh = each;
+			const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+			orginTexture = resourceManager->GetTexture(L"FBX/SM_Chess_Rook/SM_Chess_Rook.fbm/T_Chess_Rook_BaseColor.dds");
+			flashTexture = resourceManager->GetTexture(L"Texture/Interactable/BombFlash.png");
 			break;
 		}
 	}
@@ -122,6 +128,11 @@ yunutyEngine::coroutine::Coroutine Interactable_ChessRook::DoInteraction()
 		localTimer += yunutyEngine::Time::GetDeltaTime();
 		ratio = localTimer / delayTime;
 
+		if (ratio > 1)
+		{
+			ratio = 1;
+		}
+
 		if (!TacticModeSystem::Instance().IsOperation())
 		{
 			auto beforePos = mesh->GetTransform()->GetLocalPosition();
@@ -135,6 +146,17 @@ yunutyEngine::coroutine::Coroutine Interactable_ChessRook::DoInteraction()
 			}
 			mesh->GetTransform()->SetLocalPosition(beforePos);
 		}
+
+		auto renderer = mesh->GetComponent<graphics::StaticMeshRenderer>();
+		if ((int)(ratio * 10) % 2 != 0)
+		{
+			renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, flashTexture);
+		}
+		else
+		{
+			renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, orginTexture);
+		}
+
 		co_await std::suspend_always();
 	}
 
@@ -160,6 +182,8 @@ yunutyEngine::coroutine::Coroutine Interactable_ChessRook::DoInteraction()
 	{
 		each->Damaged(damage);
 	}
+
+	yunutyEngine::SoundSystem::PlaySoundfile3D("sounds/trap/EXPLOSION_gimmik.mp3", GetTransform()->GetWorldPosition());
 
 	if (particleEffectTime == 0)
 	{

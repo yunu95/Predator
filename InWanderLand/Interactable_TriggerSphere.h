@@ -28,6 +28,9 @@ private:
 	bool activeInteractable = false;
 	bool repetition = false;
 	Vector2d uiOffset = Vector2d();
+	std::string guideUI = "Texture/Interactable/UI_Interaction.png";
+	float ui_Width = -1;
+	float ui_Height = -1;
 	GameObject* uiImage = nullptr;
 };
 

@@ -8,6 +8,8 @@
 class Interactable_ChessPawn
 	: public IInteractableComponent
 {
+	friend class Interactable_ChessPawnPool;
+
 public:
 	virtual void Start() override;
 	virtual void Update() override;
@@ -31,6 +33,8 @@ private:
 	float particleEffectTime = 0;
 	float vibeMaxOffset = 0;
 	GameObject* mesh = nullptr;
+	yunuGI::ITexture* orginTexture = nullptr;
+	yunuGI::ITexture* flashTexture = nullptr;
 	std::vector<GameObject*> bombObjList = std::vector<GameObject*>();
 	float guideUp_Y = 0.01;
 	float localSummonedTime = 0;

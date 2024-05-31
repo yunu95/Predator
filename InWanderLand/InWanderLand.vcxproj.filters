@@ -1606,6 +1606,15 @@
     <ClInclude Include="ChessBombComponent.h">
       <Filter>Contents\InteractableComponent\InteractableList\ChessUtil</Filter>
     </ClInclude>
+    <ClInclude Include="Interactable_TrapSwitch.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_TrapArms.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_Ornament.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2448,6 +2457,15 @@
     </ClCompile>
     <ClCompile Include="ChessBombComponent.cpp">
       <Filter>Contents\InteractableComponent\InteractableList\ChessUtil</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_TrapSwitch.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_TrapArms.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_Ornament.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

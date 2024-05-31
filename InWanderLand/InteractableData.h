@@ -48,6 +48,9 @@ namespace application
             POD_Quaternion<float> rotation = POD_Quaternion<float>();
             POD_Vector3<float> scale = { 1,1,1 };
             POD_Vector2<float> uiOffset = POD_Vector2<float>();
+            std::string guideUI = "Texture/Interactable/UI_Interaction.png";
+            float ui_Width = -1;
+            float ui_Height = -1;
             int stage = 1;
 
             /// Global Constant

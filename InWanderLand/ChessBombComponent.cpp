@@ -3,6 +3,7 @@
 #include "DebugMeshes.h"
 #include "GlobalConstant.h"
 #include "Unit.h"
+#include "ParticleTool_Manager.h"
 
 void ChessBombComponent::Start()
 {
@@ -26,10 +27,46 @@ void ChessBombComponent::Start()
 	guideObj->GetTransform()->SetLocalRotation(Vector3d(90, 0, 0));
 
 	particleObj = GetGameObject()->AddGameObject();
-	/// 폭탄 파티클 만들어서 붙이기
-	particleObj->SetSelfActive(false);
+	auto pScale = GetGameObject()->GetTransform()->GetWorldScale();
+	assert(pScale.x != 0 && pScale.y != 0 && pScale.z != 0);
+	particleObj->GetTransform()->SetLocalScale(Vector3d(1 / pScale.x, 1 / pScale.y, 1 / pScale.z));
+	auto pComp = particleObj->AddComponent<graphics::ParticleRenderer>();
+	for (auto each : application::particle::ParticleTool_Manager::GetSingletonInstance().GetParticleList())
+	{
+		if (each.lock()->name == "ChessBombParticle")
+		{
+			auto data = each.lock();
+			pComp->SetParticleShape((yunutyEngine::graphics::ParticleShape)data->shape);
+			pComp->SetParticleMode((yunutyEngine::graphics::ParticleMode)data->particleMode);
+			pComp->SetLoop(data->isLoop);
+			pComp->SetDuration(data->duration);
+			pComp->SetLifeTime(data->lifeTime);
+			pComp->SetSpeed(data->speed);
+			pComp->SetStartScale(data->startScale);
+			pComp->SetEndScale(data->endScale);
+			pComp->SetMaxParticle(data->maxParticle);
+			pComp->SetPlayAwake(data->playAwake);
+			pComp->SetRadius(data->radius);
+			pComp->SetAngle(data->angle);
 
-	GetGameObject()->GetTransform()->SetLocalScale(GetGameObject()->GetTransform()->GetLocalScale());
+			pComp->SetRateOverTime(data->rateOverTime);
+
+			pComp->SetBurstsCount(data->burstsCount);
+			pComp->SetInterval(data->interval);
+
+			static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+
+			std::wstring texturePath;
+			texturePath.assign(data->texturePath.begin(), data->texturePath.end());
+			auto texturePtr = resourceManager->GetTexture(texturePath);
+			if (texturePtr)
+			{
+				pComp->SetTexture(texturePtr);
+			}
+			break;
+		}
+	}
+	particleObj->SetSelfActive(false);
 }
 
 void ChessBombComponent::Update()
@@ -72,11 +109,16 @@ yunutyEngine::coroutine::Coroutine ChessBombComponent::AwakeBomb()
 		localTimer += yunutyEngine::Time::GetDeltaTime();
 		ratio = localTimer / bombTime;
 		auto renderer = guideObj->GetComponent<graphics::StaticMeshRenderer>();
+		if (ratio > 1)
+		{
+			ratio = 1;
+		}
 		renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color(1, 1, 1, ratio));
 		co_await std::suspend_always();
 	}
 
 	guideObj->SetSelfActive(false);
 	particleObj->SetSelfActive(true);
+	particleObj->GetComponent<graphics::ParticleRenderer>()->Play();
 	co_return;
 }

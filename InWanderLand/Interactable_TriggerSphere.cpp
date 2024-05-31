@@ -20,7 +20,10 @@ void Interactable_TriggerSphere::Start()
 	if (activeInteractable)
 	{
 		uiImage = GetGameObject()->AddGameObject();
-		uiImage->AddComponent<Interactable_UI>();
+		auto uiComp = uiImage->AddComponent<Interactable_UI>();
+		uiComp->SetUI(guideUI);
+		uiComp->SetUIWidth(ui_Width);
+		uiComp->SetUIHeight(ui_Height);
 	}
 }
 
@@ -126,6 +129,9 @@ void Interactable_TriggerSphere::SetDataFromEditorData(const application::editor
 	repetition = data.pod.templateData->pod.repetition;
 	uiOffset.x = data.pod.uiOffset.x;
 	uiOffset.y = data.pod.uiOffset.y;
+	guideUI = data.pod.guideUI;
+	ui_Width = data.pod.ui_Width;
+	ui_Height = data.pod.ui_Height;
 }
 
 yunutyEngine::coroutine::Coroutine Interactable_TriggerSphere::DoInteraction()

@@ -331,6 +331,26 @@ namespace application
                         Action_UISetActive::ImGui_DrawDataPopup(static_cast<Action_UISetActive*>(data));
                         break;
                     }
+                    case application::ActionType::OrnamentMoveWithRotateAndRescale:
+                    {
+                        Action_OrnamentMoveWithRotateAndRescale::ImGui_DrawDataPopup(static_cast<Action_OrnamentMoveWithRotateAndRescale*>(data));
+                        break;
+                    }
+                    case application::ActionType::OrnamentShow:
+                    {
+                        Action_OrnamentShow::ImGui_DrawDataPopup(static_cast<Action_OrnamentShow*>(data));
+                        break;
+                    }
+                    case application::ActionType::OrnamentHide:
+                    {
+                        Action_OrnamentHide::ImGui_DrawDataPopup(static_cast<Action_OrnamentHide*>(data));
+                        break;
+                    }
+                    case application::ActionType::OrnamentFloating:
+                    {
+                        Action_OrnamentFloating::ImGui_DrawDataPopup(static_cast<Action_OrnamentFloating*>(data));
+                        break;
+                    }
                     default:
                         break;
                     }

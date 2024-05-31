@@ -1,12 +1,11 @@
-/// 2024. 05. 20 김상준
-/// Interactable 의 trigger 용 InteractableComponent
-/// Box
+/// 2024. 05. 31 김상준
+/// TrapSwitch 가 발동될 때 나오게 될 InteractableComponent
 
 #pragma once
 
 #include "IInteractableComponent.h"
 
-class Interactable_TriggerBox
+class Interactable_TrapArms
 	: public IInteractableComponent
 {
 public:
@@ -16,21 +15,19 @@ public:
 	virtual void OnTriggerEnter(physics::Collider* collider) override;
 	virtual void OnTriggerExit(physics::Collider* collider) override;
 
-	virtual void SetDataFromEditorData(const application::editor::InteractableData& data) override;
-
 	virtual yunutyEngine::coroutine::Coroutine DoInteraction() override;
+
+	virtual void SetDataFromEditorData(const application::editor::InteractableData& data) override;
 
 private:
 	std::unordered_set<physics::Collider*> triggerStay = std::unordered_set<physics::Collider*>();
 	Vector3d initPos = Vector3d(0, 0, 0);
 	Quaternion initRotation = Quaternion();
 	Vector3d initScale = Vector3d(1, 1, 1);
-	bool activeInteractable = false;
-	bool repetition = false;
-	Vector2d uiOffset = Vector2d();
-	std::string guideUI = "Texture/Interactable/UI_Interaction.png";
-	float ui_Width = -1;
-	float ui_Height = -1;
-	GameObject* uiImage = nullptr;
+	float delayTime = 0;
+	float damage = 0;
+	float offset_Y = 14;
+	GameObject* mesh = nullptr;
+	GameObject* particleObj = nullptr;
 };
 
