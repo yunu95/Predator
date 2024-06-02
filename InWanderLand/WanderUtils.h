@@ -104,7 +104,7 @@ namespace wanderUtils
                 {
                     namespace fs = std::filesystem;
                     resourceManager->LoadFile("FBXMaterial.scres");
-                    std::set<std::string> validExtensions{ ".jpg", ".bmp", ".tga", ".dds", ".cso",".png" ,".mp4" };
+                    std::set<std::string> validExtensions{ ".jpg", ".bmp", ".tga", ".dds", ".cso",".png" ,".mp4" ,".vfx"};
                     std::set<std::string> soundExtensions{ ".wav", ".mp3", ".wma", ".ogg" };
                     fs::path basePath{ rootFolder };
                     try

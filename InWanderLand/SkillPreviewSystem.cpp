@@ -1,5 +1,7 @@
 #include "SkillPreviewSystem.h"
 
+#include "GameManager.h"
+#include "RTSCam.h"
 #include "DirectXMath.h"
 #include "UVAnimator.h"
 
@@ -8,6 +10,10 @@
 #define Y_OFFSET 0.1
 #define VERTEX_OFFSET 0.1
 
+void SkillPreviewSystem::Start()
+{
+	//this->camObj = GameManager::Instance().rtscam->GetGameObject();
+}
 
 void SkillPreviewSystem::ObjectInitializer(graphics::StaticMeshRenderer* comp)
 {

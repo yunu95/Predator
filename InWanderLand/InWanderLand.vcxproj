@@ -1307,6 +1307,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UrsulaSkillDevelopmentSystem.h" />
     <ClInclude Include="Action_WaitForSeconds.h" />
     <ClInclude Include="UVAnimator.h" />
+    <ClInclude Include="VFXAnimator.h" />
     <ClInclude Include="WanderUtils.h" />
     <ClInclude Include="UUID.h" />
     <ClInclude Include="UUIDManager.h" />
@@ -1601,6 +1602,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UnitProductor.cpp" />
     <ClCompile Include="Action_WaitForSeconds.cpp" />
     <ClCompile Include="UVAnimator.cpp" />
+    <ClCompile Include="VFXAnimator.cpp" />
     <ClCompile Include="WanderUtils.cpp" />
     <ClCompile Include="WarriorProductor.cpp" />
     <ClCompile Include="PlayerSkillSystem.cpp" />

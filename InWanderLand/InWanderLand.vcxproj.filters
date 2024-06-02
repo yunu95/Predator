@@ -625,6 +625,9 @@
     <Filter Include="Contents\UnitCommand">
       <UniqueIdentifier>{4c2b6b5b-0929-4018-b780-46d8ce5812aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="VFX">
+      <UniqueIdentifier>{327458f4-5bdd-4125-a01e-6651c65ad310}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1588,6 +1591,9 @@
     <ClInclude Include="UnitCommand.h">
       <Filter>Contents\UnitCommand</Filter>
     </ClInclude>
+    <ClInclude Include="VFXAnimator.h">
+      <Filter>VFX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2421,6 +2427,9 @@
     </ClCompile>
     <ClCompile Include="UnitCommand.cpp">
       <Filter>Contents\UnitCommand</Filter>
+    </ClCompile>
+    <ClCompile Include="VFXAnimator.cpp">
+      <Filter>VFX</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
