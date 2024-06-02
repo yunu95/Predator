@@ -318,7 +318,7 @@ namespace application
                                 auto ptr = static_cast<Sound_PlayOnceEvent*>(event.get());
                                 animator->PushAnimationWithFunc(each, event->frame, [=]()
                                     {
-                                        yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
+                                        SFXManager::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
                                     });
                                 break;
                             }

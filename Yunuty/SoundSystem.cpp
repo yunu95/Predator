@@ -45,6 +45,7 @@ SoundChannel yunutyEngine::SoundSystem::mPlaySound(string soundPath)
         if (!isPlaying)
         {
             fmodSystem->playSound(sounds[soundPath], 0, false, &channels[lastChannelIndex]);
+            SetSFXVolume(sfxVolume);
             break;
         }
     }
@@ -72,6 +73,7 @@ SoundChannel yunutyEngine::SoundSystem::mPlaySound3D(string soundPath, Vector3d 
             channels[lastChannelIndex]->set3DMinMaxDistance(0, 50);
 
             fmodSystem->playSound(sounds3D[soundPath], 0, false, &channels[lastChannelIndex]);
+            SetSFXVolume(sfxVolume);
             break;
         }
     }
@@ -146,6 +148,21 @@ void yunutyEngine::SoundSystem::SetMusicVolume(float volume)
 float yunutyEngine::SoundSystem::GetMusicVolume()
 {
     return SingleInstance()->musicVolume;
+}
+void yunutyEngine::SoundSystem::SetSFXVolume(float volume)
+{
+    SingleInstance()->sfxVolume = volume;
+    for (int i = 0; i < 64; i++)
+    {
+        if (soundInstance->channels[i])
+        {
+            soundInstance->channels[i]->setVolume(volume);
+        }
+    }
+}
+float yunutyEngine::SoundSystem::GetSFXVolume()
+{
+    return SingleInstance()->sfxVolume;
 }
 void yunutyEngine::SoundSystem::mPlayMusic(string soundPath)
 {

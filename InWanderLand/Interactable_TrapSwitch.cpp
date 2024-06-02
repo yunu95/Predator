@@ -5,6 +5,7 @@
 
 #include "Unit.h"
 #include "GameManager.h"
+#include "SFXManager.h"
 
 void Interactable_TrapSwitch::Start()
 {
@@ -66,7 +67,7 @@ void Interactable_TrapSwitch::OnTriggerEnter(physics::Collider* collider)
 		{
 			OnInteractableTriggerEnter();
 			isInteracting = true;
-			yunutyEngine::SoundSystem::PlaySoundfile3D("sounds/trap/Trigger_Active.wav", GetGameObject()->GetTransform()->GetWorldPosition());
+			SFXManager::PlaySoundfile3D("sounds/trap/Trigger_Active.wav", GetGameObject()->GetTransform()->GetWorldPosition());
 		}
 	}
 }

@@ -350,6 +350,8 @@ namespace application
 
 		if (renderer)
 		{
+			targetOrnament->tookAction = true;
+
 			float localTimer = 0;
 			float ratio = 0;
 			while (ratio < 1)
@@ -364,15 +366,13 @@ namespace application
 
 				for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
 				{
-					/// 셰이더를 바꾸는 등 부가적인 동작이 필요할 수 있으므로
-					/// Graphics 팀장님과 협의가 필요
+					/// 추후 셰이더 교체까지 해줘야 함
 					renderer->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,1,1, ratio });
-
-					/// 특히, Action 으로 변경된 Resource 에 대해서 다시 복구하는 과정을 어떻게 넣을지 구상이 필요함
 				}
 				co_await std::suspend_always();
 			}
 		}
+
 		co_return;
 	}
 
@@ -549,6 +549,8 @@ namespace application
 
 		if (renderer)
 		{
+			targetOrnament->tookAction = true;
+
 			float localTimer = 0;
 			float ratio = 0;
 			while (ratio < 1)
@@ -563,15 +565,13 @@ namespace application
 
 				for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
 				{
-					/// 셰이더를 바꾸는 등 부가적인 동작이 필요할 수 있으므로
-					/// Graphics 팀장님과 협의가 필요
+					/// 추후 셰이더 교체까지 해줘야 함
 					renderer->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,1,1, 1 - ratio });
-
-					/// 특히, Action 으로 변경된 Resource 에 대해서 다시 복구하는 과정을 어떻게 넣을지 구상이 필요함
 				}
 				co_await std::suspend_always();
 			}
 		}
+
 		co_return;
 	}
 

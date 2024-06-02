@@ -1124,6 +1124,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Script.h" />
     <ClInclude Include="ScriptSystem.h" />
     <ClInclude Include="Action_EngageStage.h" />
+    <ClInclude Include="SFXManager.h" />
     <ClInclude Include="ShortcutSystem.h" />
     <ClInclude Include="DualCastComponent.h" />
     <ClInclude Include="DummyComponent.h" />
@@ -1434,6 +1435,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="RookTrapProductor.cpp" />
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="ScriptSystem.cpp" />
+    <ClCompile Include="SFXManager.cpp" />
     <ClCompile Include="ShortcutSystem.cpp" />
     <ClCompile Include="DualCastComponent.cpp" />
     <ClCompile Include="EditorCameraManager.cpp" />
