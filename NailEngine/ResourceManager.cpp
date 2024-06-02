@@ -7,6 +7,8 @@
 #include <limits>  
 #include <locale>  
 #include <sstream> 
+#include <thread>
+#include <future>
 
 #include "SimpleMath.h"
 using namespace DirectX::PackedVector;
@@ -166,16 +168,16 @@ yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yu
 
     std::vector<Vertex> vertices;
 
-	for (int i = 0; i < posVec.size(); ++i)
-	{
-		DirectX::SimpleMath::Vector3 tempNormal = normalVec.size() == 0 ? DirectX::SimpleMath::Vector3{ 0.f, 0.f, 0.f } : DirectX::SimpleMath::Vector3{ normalVec[i].x,normalVec[i].y ,normalVec[i].z };
-		vertices.emplace_back(Vertex{ DirectX::SimpleMath::Vector3{posVec[i].x, posVec[i].y, posVec[i].z},
-						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
-						  uvVec.empty() ? DirectX::SimpleMath::Vector2{0.5f,0.5f} : DirectX::SimpleMath::Vector2{uvVec[i].x,uvVec[i].y},
-						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
-						  tempNormal,
-						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } });
-	}
+    for (int i = 0; i < posVec.size(); ++i)
+    {
+        DirectX::SimpleMath::Vector3 tempNormal = normalVec.size() == 0 ? DirectX::SimpleMath::Vector3{ 0.f, 0.f, 0.f } : DirectX::SimpleMath::Vector3{ normalVec[i].x,normalVec[i].y ,normalVec[i].z };
+        vertices.emplace_back(Vertex{ DirectX::SimpleMath::Vector3{posVec[i].x, posVec[i].y, posVec[i].z},
+                          DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+                          uvVec.empty() ? DirectX::SimpleMath::Vector2{0.5f,0.5f} : DirectX::SimpleMath::Vector2{uvVec[i].x,uvVec[i].y},
+                          DirectX::SimpleMath::Vector2{0.5f,0.5f},
+                          tempNormal,
+                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } });
+    }
 
 
     DirectX::SimpleMath::Vector3 minPoint = vertices[0].pos;
@@ -313,6 +315,63 @@ void ResourceManager::CreateTexture(const std::wstring& texturePath)
 
         textureMap.insert({ texturePath, texture });
         textureVec.push_back(texture.get());
+    }
+}
+// 비동기적으로 텍스처를 생성
+void ResourceManager::CreateTextures(const std::vector<std::wstring>& texturePaths)
+{
+    static constexpr int textureCountPerThread = 10000;
+    std::vector<std::future<std::vector<std::shared_ptr<Texture>>>> textures;
+    for (int i = 0; i < texturePaths.size(); i += textureCountPerThread)
+    {
+        std::vector<std::wstring> tempTexturePaths;
+        for (int j = 0; j < textureCountPerThread; ++j)
+        {
+            if (i + j >= texturePaths.size())
+                break;
+            tempTexturePaths.push_back(texturePaths[i + j]);
+        }
+        textures.push_back(std::async(std::launch::async, [tempTexturePaths]() {
+            std::vector<std::shared_ptr<Texture>> textureChunk;
+            for (int i = 0; i < tempTexturePaths.size(); ++i)
+            {
+                std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+                texture->LoadTexture(tempTexturePaths[i]);
+                texture->SetName(tempTexturePaths[i]);
+                textureChunk.push_back(texture);
+            }
+            return textureChunk;
+            }));
+    }
+    /*for (auto& each : texturePaths)
+    {
+        auto iter = textureMap.find(each);
+        if (iter == textureMap.end())
+        {
+            textures.push_back(std::async(std::launch::async, [each]() {
+                try
+                {
+
+                    std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+                    texture->LoadTexture(each);
+                    texture->SetName(each);
+                    return texture;
+                }
+                catch (const std::exception& e)
+                {
+                    return std::shared_ptr<Texture>();
+                }
+                }));
+        }
+    }*/
+    for (auto& each : textures)
+    {
+        auto eachChunk = each.get();
+        for (auto& texture : eachChunk)
+        {
+            textureMap.insert({ texture->GetName(), texture });
+            textureVec.push_back(texture.get());
+        }
     }
 }
 
@@ -971,8 +1030,8 @@ void ResourceManager::CreateDefaultShader()
     CreateShader(L"UIPreProcessPS.cso");
     CreateShader(L"TextureAnimPS.cso");
     CreateShader(L"RimForwardPS.cso");
-	CreateShader(L"GuideLinePS.cso");
-	CreateShader(L"Stage1FloorNoBlendPS.cso");
+    CreateShader(L"GuideLinePS.cso");
+    CreateShader(L"Stage1FloorNoBlendPS.cso");
 #pragma endregion
 
 #pragma region GS

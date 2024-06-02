@@ -1,20 +1,23 @@
 #pragma once
 #include "PodStructs.h"
 
-enum class SkillType
+struct SkillType
 {
-    NONE = -1,
-    ROBIN_Q,
-    ROBIN_W,
-    URSULA_Q,
-    URSULA_W,
-    HANSEL_Q,
-    HANSEL_W,
-    SKILL_NUM
+    enum Enum
+    {
+        NONE = -1,
+        ROBIN_Q,
+        ROBIN_W,
+        URSULA_Q,
+        URSULA_W,
+        HANSEL_Q,
+        HANSEL_W,
+        SKILL_NUM
+    };
 };
 
 template<>
-const std::unordered_map<int, std::string>& application::POD_Enum<SkillType>::GetEnumNameMap() const
+const std::unordered_map<int, std::string>& application::POD_Enum<SkillType::Enum>::GetEnumNameMap()
 {
     static std::unordered_map<int, std::string> enumNameMap
     {

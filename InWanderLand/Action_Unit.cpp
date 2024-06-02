@@ -274,9 +274,9 @@ namespace application
             co_return;
         }
         // 유닛을 정지시키고
-        auto pauseRef{ targetUnit->inGameUnit.lock()->AcquirePauseReference() };
+        auto pause{ targetUnit->inGameUnit.lock()->referencePause.Acquire() };
         // 유닛의 자체적인 회전을 막는다.
-        auto blockRotationRef{ targetUnit->inGameUnit.lock()->AcquireBlockRotationReference() };
+        auto blockRotation{ targetUnit->inGameUnit.lock()->referenceBlockRotation.Acquire() };
         auto ts = targetUnit->inGameUnit.lock()->GetTransform();
         auto startRot = ts->GetWorldRotation();
 
@@ -815,9 +815,9 @@ namespace application
 
         {
             // 유닛을 정지시키고
-            auto pauseRef{ targetUnit->inGameUnit.lock()->AcquirePauseReference() };
+            auto pause{ targetUnit->inGameUnit.lock()->referencePause.Acquire() };
             // 유닛의 자체적인 회전을 막는다.
-            auto blockRotationRef{ targetUnit->inGameUnit.lock()->AcquireBlockRotationReference() };
+            auto blockRotation{ targetUnit->inGameUnit.lock()->referencePause.Acquire() };
             double timer = 0;
             float factor = 0;
 

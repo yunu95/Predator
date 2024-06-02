@@ -52,6 +52,7 @@ namespace application
 
         GC<float>	robinQSkillCoolTime = 2.0f;
         GC<float>	robinQSkillCost = 10.0f;
+        GC<float>	robinQSkillMaxDistance = 8.0f;
         GC<float>	robinQSkillRushSpeed = 20.0f;
         GC<float>	robinQSkillDamageRush = 20.0f;
         GC<float>	robinQSkillDamageImpact = 80.0f;
@@ -59,6 +60,7 @@ namespace application
         GC<float>	robinQSkillImpactKnockbackDistance = 8.0f;
         GC<float>	robinQSkillRushKnockbackDuration = 0.5f;
         GC<float>	robinQSkillImpactKnockbackDuration = 1.0f;
+        GC<float>	robinQSkillImpactStunDuration = 2.0f;
         GC<float>	robinQSkillRushKnockbackRadius = 1.0f;
         GC<float>	robinQSkillImpactKnockbackRadius = 5.0f;
         GC<float>	robinESkillCoolTime = 2.0f;
@@ -99,6 +101,10 @@ namespace application
         GC<float>	tacticGaugeRecoveryPerSecond = 2.0f;
 
         GC<int>	maxResurrectCount;
+        GC<float> chessBlockUnitLength = 3.4f;
+        GC<float> chessBlockUnitOffset = 0.1f;
+        GC<float> chessSummonedExplosionDelay = 1.5f;
+        GC<float> vibeMaxOffset = 0.12f;
 
         TO_JSON(POD_GlobalConstant)
             FROM_JSON(POD_GlobalConstant)

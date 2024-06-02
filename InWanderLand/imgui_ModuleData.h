@@ -14,6 +14,7 @@
 #include "GCTemplate.h"
 #include "WanderUtils.h"
 #include "Interactable_TemplateData.h"
+#include "PodStructs.h"
 
 namespace application
 {
@@ -163,6 +164,128 @@ namespace application
                         bool copyData = data.data;
                         return Checkbox_2Col(label, copyData);
                     }
+                }
+
+                template <>
+                bool DrawData(std::string label, const std::string& data, bool global)
+                {
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
+                    imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32(180, 180, 180, 255));
+                    ImGui::AlignTextToFramePadding();
+                    ImGui::Text(label.c_str());
+                    ImGui::TableSetColumnIndex(1);
+                    ImGui::PushItemWidth(-1);
+
+                    imgui::SmartStyleColor textColor2(ImGuiCol_Text, IM_COL32_WHITE);
+
+                    if (label.find("staticFBXName") != std::string::npos)
+                    {
+                        bool returnVal = false;
+                        static std::vector<std::string> selections = std::vector<std::string>();
+                        std::string current = data;
+
+                        selections.resize(0);
+                        for (auto& each : ResourceManager::GetSingletonInstance().GetStaticFBXList())
+                        {
+                            selections.push_back(each);
+                        }
+
+                        std::sort(selections.begin(), selections.end());
+
+                        if (ImGui::BeginCombo("##staticFBXCombo", data.c_str()))
+                        {
+                            for (int i = 0; i < selections.size(); i++)
+                            {
+                                const bool is_selected = (current == selections[i]);
+                                if (ImGui::Selectable(selections[i].c_str(), is_selected))
+                                {
+                                    current = selections[i];
+                                    TemplateDataManager::GetSingletonInstance().GetSelectedTemplateData()->SetDataResourceName(current);
+                                    const_cast<std::string&>(data) = current;
+                                    returnVal = true;
+                                }
+
+                                if (is_selected)
+                                    ImGui::SetItemDefaultFocus();
+                            }
+                            ImGui::EndCombo();
+                        }
+                        ImGui::PopItemWidth();
+                        return returnVal;
+                    }
+                    else if (label.find("skinnedFBXName") != std::string::npos)
+                    {
+                        bool returnVal = false;
+                        static std::vector<std::string> selections = std::vector<std::string>();
+                        std::string current = data;
+
+                        selections.resize(0);
+                        for (auto& each : ResourceManager::GetSingletonInstance().GetSkinnedFBXList())
+                        {
+                            selections.push_back(each);
+                        }
+
+                        std::sort(selections.begin(), selections.end());
+
+                        if (ImGui::BeginCombo("##skinnedFBXCombo", data.c_str()))
+                        {
+                            for (int i = 0; i < selections.size(); i++)
+                            {
+                                const bool is_selected = (current == selections[i]);
+                                if (ImGui::Selectable(selections[i].c_str(), is_selected))
+                                {
+                                    current = selections[i];
+                                    TemplateDataManager::GetSingletonInstance().GetSelectedTemplateData()->SetDataResourceName(current);
+                                    const_cast<std::string&>(data) = current;
+                                    returnVal = true;
+                                }
+
+                                if (is_selected)
+                                    ImGui::SetItemDefaultFocus();
+                            }
+                            ImGui::EndCombo();
+                        }
+                        ImGui::PopItemWidth();
+                        return returnVal;
+
+                    }
+                    else if (label == "fBXName")
+                    {
+                        ImGui::Text(data.c_str());
+                        return false;
+                    }
+                    else
+                    {
+                        std::string buffer = data;
+                        buffer.reserve(64);
+                        if (ImGui::InputText(("##" + label).c_str(), &buffer[0], 64))
+                        {
+                            wanderUtils::UpdateStringSize(buffer);
+                            const_cast<std::string&>(data) = buffer;
+                            ImGui::PopItemWidth();
+                            return true;
+                        }
+                        ImGui::PopItemWidth();
+                        return false;
+                    }
+                }
+                template <typename real>
+                bool DrawData(std::string label, const POD_Vector2<real>& data, bool global)
+                {
+                    POD_Vector2<real>& vector2 = const_cast<POD_Vector2<real>&>(data);
+                    return application::editor::imgui::Vector2_2Col(label, vector2.x, vector2.y);
+                }
+                template <typename real>
+                bool DrawData(std::string label, const POD_Vector3<real>& data, bool global)
+                {
+                    POD_Vector3<real>& vector3 = const_cast<POD_Vector3<real>&>(data);
+                    return application::editor::imgui::Vector3_2Col(label, vector3.x, vector3.y, vector3.z);
+                }
+                template <typename EnumType>
+                bool DrawData(std::string label, const POD_Enum<EnumType>& data, bool global)
+                {
+                    return application::editor::imgui::DropdownEnum_2Col(label, const_cast<POD_Enum<EnumType>&>(data));
                 }
 
                 template <typename T, int N = 0>

@@ -59,14 +59,14 @@ namespace application
         }
     }
 
-    void Trigger_UnitAppear::ImGui_DrawDataPopup(Trigger_UnitAppear* data)
-    {
-        if (ImGui::MenuItem("SetUnitAppear"))
-        {
-            editor::EditorLayer::SetInputControl(false);
-            editor::imgui::ShowMessageBox("SetUnitAppear", [data]()
-                {
-                    editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+	void Trigger_UnitAppear::ImGui_DrawDataPopup(Trigger_UnitAppear* data)
+	{
+		if (ImGui::MenuItem("SetTargetUnit(UnitAppear)"))
+		{
+			editor::EditorLayer::SetInputControl(false);
+			editor::imgui::ShowMessageBox("SetTargetUnit(UnitAppear)", [data]()
+				{
+					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
                     ImGui::Separator();
 
@@ -82,24 +82,24 @@ namespace application
 
                     ImGui::Separator();
 
-                    if (ImGui::Button("Edit"))
-                    {
-                        ImGui::CloseCurrentPopup();
-                        editor::imgui::CloseMessageBox("SetUnitAppear");
-                        editor::EditorLayer::SetInputControl(true);
-                        editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Trigger_UnitAppear>("SetUnitAppear", data);
-                    }
-                    ImGui::SameLine();
+					if (ImGui::Button("Edit"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetTargetUnit(UnitAppear)");
+						editor::EditorLayer::SetInputControl(true);
+						editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Trigger_UnitAppear>("SetTargetUnit(UnitAppear)", data);
+					}
+					ImGui::SameLine();
 
-                    if (ImGui::Button("Cancel"))
-                    {
-                        ImGui::CloseCurrentPopup();
-                        editor::imgui::CloseMessageBox("SetUnitAppear");
-                        editor::EditorLayer::SetInputControl(true);
-                    }
-                }, 300);
-        }
-    }
+					if (ImGui::Button("Cancel"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetTargetUnit(UnitAppear)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+				}, 300);
+		}
+	}
 
     bool Trigger_UnitAppear::PreEncoding(json& data) const
     {
@@ -172,14 +172,14 @@ namespace application
         }
     }
 
-    void Trigger_UnitDie::ImGui_DrawDataPopup(Trigger_UnitDie* data)
-    {
-        if (ImGui::MenuItem("SetUnitDie"))
-        {
-            editor::EditorLayer::SetInputControl(false);
-            editor::imgui::ShowMessageBox("SetUnitDie", [data]()
-                {
-                    editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+	void Trigger_UnitDie::ImGui_DrawDataPopup(Trigger_UnitDie* data)
+	{
+		if (ImGui::MenuItem("SetTargetUnit(UnitDie)"))
+		{
+			editor::EditorLayer::SetInputControl(false);
+			editor::imgui::ShowMessageBox("SetTargetUnit(UnitDie)", [data]()
+				{
+					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
                     ImGui::Separator();
 
@@ -195,24 +195,24 @@ namespace application
 
                     ImGui::Separator();
 
-                    if (ImGui::Button("Edit"))
-                    {
-                        ImGui::CloseCurrentPopup();
-                        editor::imgui::CloseMessageBox("SetUnitDie");
-                        editor::EditorLayer::SetInputControl(true);
-                        editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Trigger_UnitDie>("SetUnitDie", data);
-                    }
-                    ImGui::SameLine();
+					if (ImGui::Button("Edit"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetTargetUnit(UnitDie)");
+						editor::EditorLayer::SetInputControl(true);
+						editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Trigger_UnitDie>("SetTargetUnit(UnitDie)", data);
+					}
+					ImGui::SameLine();
 
-                    if (ImGui::Button("Cancel"))
-                    {
-                        ImGui::CloseCurrentPopup();
-                        editor::imgui::CloseMessageBox("SetUnitDie");
-                        editor::EditorLayer::SetInputControl(true);
-                    }
-                }, 300);
-        }
-    }
+					if (ImGui::Button("Cancel"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetTargetUnit(UnitDie)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+				}, 300);
+		}
+	}
 
     bool Trigger_UnitDie::PreEncoding(json& data) const
     {

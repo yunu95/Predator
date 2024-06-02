@@ -271,9 +271,6 @@
     <Filter Include="Editor\Palette\PaletteBrush\OrnamentBrush">
       <UniqueIdentifier>{8045da07-686d-4fea-a63c-27e4e233378c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\SkillSystem\SkillPreviewSystem">
-      <UniqueIdentifier>{c466da0b-6643-46f9-a7e8-e26c17fcc883}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Editor\Palette\List\WavePalette">
       <UniqueIdentifier>{376cdf4e-06ac-4e10-8c0f-0734bc537788}</UniqueIdentifier>
     </Filter>
@@ -586,9 +583,6 @@
     <Filter Include="Contents_Refactored\Skill\RobinChargeSkill">
       <UniqueIdentifier>{0ffa0272-1cd4-4c2a-ae94-f7e9f3c508fd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents_Refactored\Unit\UnitState">
-      <UniqueIdentifier>{5643780a-695f-4d4d-a10d-d55b8a293eab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents_Refactored\Projectile">
       <UniqueIdentifier>{b4c54747-02b8-4112-8689-258612d883a2}</UniqueIdentifier>
     </Filter>
@@ -693,6 +687,21 @@
     </Filter>
     <Filter Include="Contents_Refactored\DelegateCallback">
       <UniqueIdentifier>{aaf1e6d5-3b76-4c12-8e84-94ddede45168}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitStatusBarType">
+      <UniqueIdentifier>{7bdf91c3-a4dc-49a5-9a0c-b1ddb772fbd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\SkillPreviewSystem">
+      <UniqueIdentifier>{c466da0b-6643-46f9-a7e8-e26c17fcc883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\SkillUpgradeType">
+      <UniqueIdentifier>{d7e5ac54-4088-44ac-9dd4-96d6f75d60ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitAttackType">
+      <UniqueIdentifier>{4a695864-234f-4b40-ae81-17641d1c8285}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Reference">
+      <UniqueIdentifier>{db595c79-ba0f-49ef-9361-0e68f82a8f2d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1118,7 +1127,7 @@
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClInclude>
     <ClInclude Include="SkillPreviewSystem.h">
-      <Filter>Contents\SkillSystem\SkillPreviewSystem</Filter>
+      <Filter>Contents_Refactored\SkillPreviewSystem</Filter>
     </ClInclude>
     <ClInclude Include="UIButton.h">
       <Filter>UI</Filter>
@@ -1648,6 +1657,12 @@
     <ClInclude Include="UnitCommand.h">
       <Filter>Contents_Refactored\UnitCommand</Filter>
     </ClInclude>
+    <ClInclude Include="Trigger_Interactable.h">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_Ornament.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
     <ClInclude Include="Unit.h">
       <Filter>Contents_Refactored\Unit</Filter>
     </ClInclude>
@@ -1671,9 +1686,6 @@
     </ClInclude>
     <ClInclude Include="UnitAnimationType.h">
       <Filter>Contents_Refactored\Unit\UnitAnimationType</Filter>
-    </ClInclude>
-    <ClInclude Include="UnitState.h">
-      <Filter>Contents_Refactored\Unit\UnitState</Filter>
     </ClInclude>
     <ClInclude Include="UnitBuff.h">
       <Filter>Contents_Refactored\Unit\UnitBuff</Filter>
@@ -1707,6 +1719,23 @@
     </ClInclude>
     <ClInclude Include="DelegateCallback.h">
       <Filter>Contents_Refactored\DelegateCallback</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_TrapSwitch.h" />
+    <ClInclude Include="Interactable_TrapArms.h" />
+    <ClInclude Include="Interactable_UI.h" />
+    <ClInclude Include="ChessBombComponent.h" />
+    <ClInclude Include="UnitStatusBarType.h">
+      <Filter>Contents_Refactored\Unit\UnitStatusBarType</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillUpgradeType.h">
+      <Filter>Contents_Refactored\Skill\SkillUpgradeType</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_ChessPool.h" />
+    <ClInclude Include="UnitAttackType.h">
+      <Filter>Contents_Refactored\Unit\UnitAttackType</Filter>
+    </ClInclude>
+    <ClInclude Include="Reference.h">
+      <Filter>Contents_Refactored\Reference</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2096,7 +2125,7 @@
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
     <ClCompile Include="SkillPreviewSystem.cpp">
-      <Filter>Contents\SkillSystem\SkillPreviewSystem</Filter>
+      <Filter>Contents_Refactored\SkillPreviewSystem</Filter>
     </ClCompile>
     <ClCompile Include="UIButton.cpp">
       <Filter>UI</Filter>
@@ -2530,6 +2559,12 @@
     <ClCompile Include="UnitCommand.cpp">
       <Filter>Contents_Refactored\UnitCommand</Filter>
     </ClCompile>
+    <ClCompile Include="Trigger_Interactable.cpp">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_Ornament.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
     <ClCompile Include="Unit.cpp">
       <Filter>Contents_Refactored\Unit</Filter>
     </ClCompile>
@@ -2575,5 +2610,9 @@
     <ClCompile Include="UnitBuff.cpp">
       <Filter>Contents_Refactored\Unit\UnitBuff</Filter>
     </ClCompile>
+    <ClCompile Include="ChessBombComponent.cpp" />
+    <ClCompile Include="Interactable_TrapSwitch.cpp" />
+    <ClCompile Include="Interactable_TrapArms.cpp" />
+    <ClCompile Include="Interactable_ChessPool.cpp" />
   </ItemGroup>
 </Project>

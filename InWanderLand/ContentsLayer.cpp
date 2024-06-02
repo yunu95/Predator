@@ -372,7 +372,6 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
     {
         UIManager::Instance().ImportUI("InWanderLand.iwui");
     }
-    SkillUpgradeSystem::SingleInstance().Reset();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
     yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();

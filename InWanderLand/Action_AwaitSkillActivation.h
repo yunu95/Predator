@@ -16,7 +16,7 @@ namespace application
         DEFINE_ACTION(AwaitSkillActivation)
 
             Action_AwaitSkillActivation() = default;
-        Action_AwaitSkillActivation(SkillType skillType);
+        Action_AwaitSkillActivation(SkillType::Enum skillType);
 
         virtual CoroutineObject<void> DoAction() override;
 
@@ -26,6 +26,6 @@ namespace application
         virtual bool PostDecoding(const json& data) override;
 
     private:
-        POD_Enum<SkillType> skillType;
+        POD_Enum<SkillType::Enum> skillType;
     };
 };

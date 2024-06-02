@@ -99,21 +99,8 @@ namespace application
     {
         int enumValue;
         std::string enumName;
-        POD_Enum() = default;
-        POD_Enum(EnumType enumValue) { operator=(enumValue); };
-        POD_Enum(const POD_Enum<EnumType>&) = default;
-        POD_Enum& operator=(const POD_Enum<EnumType>&) = default;
-        ~POD_Enum() = default;
-
-        operator EnumType() const {
-            return static_cast<EnumType>(enumValue);
-        }
-        POD_Enum& operator=(const EnumType& value) {
-            enumValue = static_cast<int>(value);
-            enumName = GetEnumNameMap().at(value);
-        }
-        const std::unordered_map<int, std::string>& GetEnumNameMap() const;
-        const std::unordered_map<std::string, int>& GetNameEnumMap()
+        static const std::unordered_map<int, std::string>& GetEnumNameMap();
+        static const std::unordered_map<std::string, int>& GetNameEnumMap()
         {
             static std::unordered_map<std::string, int> nameEnumMap;
             if (nameEnumMap.empty())
@@ -136,7 +123,7 @@ namespace application
             template <typename EnumType>
             bool DrawData(std::string label, POD_Enum<EnumType>& data)
             {
-                return DropdownEnum_2Col(label, data);
+                return application::editor::imgui::DropdownEnum_2Col(label, data);
             }
             template <typename T>
             bool DrawData(std::string label, const POD_Vector2<T>& data)

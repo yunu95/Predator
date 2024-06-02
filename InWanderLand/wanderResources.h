@@ -4,5 +4,6 @@
 
 namespace wanderResources
 {
-    yunuGI::IAnimation* GetAnimation(const char* fbx, UnitAnimType animType);
+    yunuGI::IAnimation* GetAnimation(const std::string& fbx, UnitAnimType animType);
+    void PushAnimations(graphics::Animator* animator, const std::string& fbx);
 }

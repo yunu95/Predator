@@ -4,15 +4,78 @@
 #include "RTSCam.h"
 #include "Unit.h"
 #include "PlayerUnit.h"
-#include "Dotween.h"
 #include "SkillPreviewSystem.h"
 #include "GameManager.h"
-#include "CursorDetector.h"
 #include "UIManager.h"
 
+const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> PlayerController::skillByUI
+{
+    {UIEnumID::SkillUpgradeButtonRobin00,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonRobin11,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonRobin12,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonRobin21,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonRobin22,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonUrsula00,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonUrsula11,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonUrsula12,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonUrsula21,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonUrsula22,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonHansel00,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonHansel11,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonHansel12,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonHansel21,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonHansel22,SkillUpgradeType::NONE},
+};
 void PlayerController::RegisterPlayer(std::weak_ptr<Unit> unit)
 {
-    characters[(int)(PlayerCharacterType)unit.lock()->GetUnitTemplateData().pod.playerUnitType] = unit;
+    if (unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue == PlayerCharacterType::None)
+        return;
+
+    characters[unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue] = unit;
+    if (unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue == PlayerCharacterType::Robin)
+    {
+        SetCameraOffset();
+        selectedCharacter = unit;
+    }
+}
+
+
+void PlayerController::SetSkillUpgradeTarget(UIEnumID skillUpgradeUITarget)
+{
+    this->skillUpgradeUITarget = skillUpgradeUITarget;
+}
+bool PlayerController::IsSkillUpgraded(SkillUpgradeType::Enum id)
+{
+    return skillUpgraded[id];
+}
+bool PlayerController::IsSkillUpgraded(UIEnumID skillUpgradeUITarget)
+{
+    return skillUpgraded.at(skillByUI.at(skillUpgradeUITarget));
+}
+void PlayerController::UpgradeSkill()
+{
+    SetSkillPoints(skillPointsLeft - 1);
+    static constexpr float gray = 0.3f;
+    UIManager::Instance().GetUIElementByEnum(skillUpgradeUITarget)->imageComponent.lock()->GetGI().SetColor({ gray,gray,gray,1 });
+    skillUpgraded[skillByUI.at(skillUpgradeUITarget)] = true;
+}
+void PlayerController::SetSkillPoints(int points)
+{
+    skillPointsLeft = points;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::SkillPoint_Number)->SetNumber(skillPointsLeft);
+}
+int PlayerController::GetSkillPoints()
+{
+    return skillPointsLeft;
+}
+void PlayerController::IncrementSkillPoint()
+{
+    SetSkillPoints(skillPointsLeft + 1);
+}
+
+void PlayerController::LockCamInRegion(const application::editor::RegionData* camLockRegion)
+{
+    this->camLockRegion = camLockRegion;
 }
 
 void PlayerController::Start()
@@ -33,6 +96,31 @@ void PlayerController::Update()
 {
     cursorUnitDetector.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetWorldCursorPosition());
     HandleInput();
+    HandleCamera();
+#ifdef EDITOR
+    static yunutyEngine::graphics::UIText* text_State{ nullptr };
+    if (text_State == nullptr)
+    {
+        text_State = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::UIText>();
+        text_State->GetGI().SetFontSize(30);
+        text_State->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
+        text_State->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
+        text_State->GetTransform()->SetLocalPosition(Vector3d{ 0,260,0 });
+    }
+    if (!selectedDebugCharacter.expired())
+    {
+        wstringstream wsstream;
+        wsstream << L"unitState : ";
+        auto& activeStates = selectedDebugCharacter.lock()->GetBehaviourTree().GetActiveNodes();
+        for (const auto& each : activeStates)
+        {
+            wsstream << wstring(L"[") + yutility::GetWString(POD_Enum<UnitBehaviourTree::Keywords>::GetEnumNameMap().at(each->GetNodeKey())) + wstring(L"]");
+        }
+        wsstream << selectedDebugCharacter.lock()->acquisitionRange.lock()->GetUnits().size();
+
+        text_State->GetGI().SetText(wsstream.str());
+    }
+#endif
 }
 
 void PlayerController::HandleInput()
@@ -68,29 +156,49 @@ void PlayerController::HandleInput()
     {
         SelectPlayerUnit(PlayerCharacterType::Hansel);
     }
+    if (Input::isKeyPushed(KeyCode::A))
+    {
+        OrderAttackMove(GetWorldCursorPosition());
+    }
     if (Input::isKeyPushed(KeyCode::MouseLeftClick) && !UIManager::Instance().IsMouseOnButton())
     {
         OnLeftClick();
     }
-    if (Input::isKeyPushed(KeyCode::MouseRightClick) && !UIManager::Instance().IsMouseOnButton())
+    if (Input::isKeyPushed(KeyCode::MouseRightClick))
     {
         OnRightClick();
     }
 }
 
-void PlayerController::SelectPlayerUnit(PlayerCharacterType charType)
+void PlayerController::HandleCamera()
 {
-    if (charType == selectedCharacterType)
+    static constexpr float tacticZoomoutDistanceFactor = 1.2f;
+    // 영웅이 선택되어 있고, 카메라가 선택된 영웅을 따라가는 경우 targetPos는 영웅의 위치로 설정됩니다.
+    Vector3d targetPos;
+    if (!selectedCharacter.expired())
+    {
+        Vector3d selectedCharPos = selectedCharacter.lock()->GetTransform()->GetWorldPosition();
+        targetPos = selectedCharPos + camOffset;
+    }
+    // 카메라가 지역 제한에 걸렸을 경우, targetPos를 지역 안으로 정의합니다.
+    if (camLockRegion)
+    {
+        targetPos.x = std::clamp(targetPos.x, camLockRegion->pod.x - camLockRegion->pod.width * 0.5, camLockRegion->pod.x + camLockRegion->pod.width * 0.5);
+        targetPos.z = std::clamp(targetPos.z, camLockRegion->pod.z - camLockRegion->pod.height * 0.5, camLockRegion->pod.z + camLockRegion->pod.height * 0.5);
+    }
+    RTSCam::Instance().SetIdealPosition(targetPos);
+    RTSCam::Instance().SetIdealRotation(camRotation);
+}
+
+void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
+{
+    if (charType == selectedCharacterType || charType == PlayerCharacterType::None)
     {
         return;
     }
     selectedCharacterType = charType;
-    selectedCharacter = characters[(int)charType];
-    RTSCam* mainCam = static_cast<RTSCam*>(yunutyEngine::graphics::Camera::GetMainCamera());
-    if (mainCam)
-    {
-        mainCam->SetTarget(selectedCharacter.lock()->GetGameObject());
-    }
+    selectedCharacter = characters[charType];
+    selectedDebugCharacter = characters[charType];
     switch (selectedCharacterType)
     {
     case PlayerCharacterType::Robin:
@@ -104,6 +212,7 @@ void PlayerController::SelectPlayerUnit(PlayerCharacterType charType)
     case PlayerCharacterType::Hansel:
         UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->
             GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
+    default:
         break;
     }
 }
@@ -112,7 +221,10 @@ void PlayerController::OnLeftClick()
 {
     if (selectedSkill == SkillType::NONE)
     {
-        SelectUnit((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
+        if (!cursorUnitDetector.lock()->GetUnits().empty())
+        {
+            SelectUnit((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
+        }
     }
     else
     {
@@ -134,7 +246,8 @@ void PlayerController::OnRightClick()
 
 void PlayerController::SelectUnit(std::weak_ptr<Unit> unit)
 {
-    SelectPlayerUnit(unit.lock()->GetUnitTemplateData().pod.playerUnitType);
+    SelectPlayerUnit(static_cast<PlayerCharacterType::Enum>(unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue));
+    selectedDebugCharacter = unit;
 }
 
 void PlayerController::OrderMove(Vector3d position)
@@ -159,7 +272,7 @@ void PlayerController::OrderInteraction(std::weak_ptr<IInteractableComponent> in
     selectedCharacter.lock()->OrderMove(interactable.lock()->GetTransform()->GetWorldPosition());
 }
 
-void PlayerController::ActivateSkill(SkillType skillType, Vector3d pos)
+void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 {
     if (state == State::Cinematic) return;
     onSkillActivate[(int)skillType]();
@@ -174,11 +287,11 @@ void PlayerController::ActivateSkill(SkillType skillType, Vector3d pos)
     }
 }
 
-void PlayerController::SelectSkill(SkillType skillType)
+void PlayerController::SelectSkill(SkillType::Enum skillType)
 {
     //if (!GameManager::Instance().IsBattleSystemOperating()) return;
     UnSelectSkill();
-    onSkillSelect[(int)skillType]();
+    onSkillSelect[skillType]();
     switch (skillType)
     {
     case SkillType::ROBIN_Q: case SkillType::ROBIN_W: SelectPlayerUnit(PlayerCharacterType::Robin); break;
@@ -195,7 +308,7 @@ void PlayerController::SelectSkill(SkillType skillType)
         break;
     }
 }
-void PlayerController::SetState(State newState)
+void PlayerController::SetState(State::Enum newState)
 {
     state = newState;
     switch (state)
@@ -216,6 +329,20 @@ void PlayerController::Reset()
     for (auto& each : blockSkillSelection) each = false;
     if (cursorUnitDetector.expired())
         cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionSphereCollider>();
+    std::for_each(skillByUI.begin(), skillByUI.end(), [&](auto& pair) {
+        auto& [ui, upgrade] = pair;
+        UIManager::Instance().GetUIElementByEnum(ui)->imageComponent.lock()->GetGI().SetColor({ 1,1,1,1 });
+        skillUpgraded[upgrade] = false;
+        });
+    skillPointsLeft = 0;
+}
+
+// 현재 카메라의 위치에 따라 카메라의 플레이어 기준 오프셋 위치와 회전각을 결정합니다.
+void PlayerController::SetCameraOffset()
+{
+    auto camPos = graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition();
+    camOffset = camPos - characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition();
+    camRotation = graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation();
 }
 
 void PlayerController::SetComboObjectives(const std::array<int, 3>& targetCombos)
@@ -244,7 +371,7 @@ void PlayerController::AddCombo()
         if (!comboAchieved[i] && comboObjective[i] > 0 && currentCombo >= comboObjective[i])
         {
             comboAchieved[i] = true;
-            SkillUpgradeSystem::SingleInstance().IncrementSkillPoint();
+            IncrementSkillPoint();
             UIManager::Instance().GetUIElementByEnum(UIManager::comboCheckImgs[i])->EnableElement();
             UIManager::Instance().GetUIElementByEnum(UIManager::comboFinishedImgs[i])->EnableElement();
             UIManager::Instance().GetUIElementByEnum(UIManager::comboUnFinishedImgs[i])->DisableElement();
@@ -253,6 +380,10 @@ void PlayerController::AddCombo()
 }
 
 void PlayerController::OnWaveStart(std::weak_ptr<PlaytimeWave> p_wave)
+{
+}
+
+void PlayerController::OnWaveEnd(std::weak_ptr<PlaytimeWave> p_wave)
 {
 }
 

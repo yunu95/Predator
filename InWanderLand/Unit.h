@@ -2,7 +2,6 @@
 #include "YunutyEngine.h"
 #include "UnitBehaviourTree.h"
 #include "Timer.h"
-#include "Dotween.h"
 #include <list>
 #include "RobinSkillDevelopmentSystem.h"
 #include "DummyComponent.h"
@@ -12,7 +11,6 @@
 #include "UIElement.h"
 #include "DelegateCallback.h"   
 #include "TemplateDataList.h"
-#include "UnitState.h"
 #include "UnitAnimationType.h"
 #include "Unit_TemplateData.h"
 #include "UnitOrderType.h"
@@ -30,6 +28,7 @@ class UnitBuff;
 class UnitBehaviourTree;
 class UnitAcquisitionSphereCollider;
 class UnitPool;
+class PlayerController;
 namespace application
 {
     namespace editor
@@ -38,7 +37,7 @@ namespace application
         class Unit_TemplateData;
     }
 }
-class Unit : public Component, public ContentsObservee, public LocalTimeEntity
+class Unit : public Component, public PermanentObservee
 {
 public:
     // 유닛에게 필요한 모든 필수 구성요소들을 생성해주며 유닛의 초기화를 진행한다. Init은 유닛당 한번만 호출된다.
@@ -63,9 +62,8 @@ public:
     void Heal(float healingPoint);
     void SetUnitCurrentHp(float p_newHp);
     void KnockBack(Vector3d targetPosition, float knockBackDuration);
+    void Paralyze(float paralyzeDuration);
     yunutyEngine::coroutine::Coroutine KnockBackCoroutine(Vector3d targetPosition, float knockBackDuration);
-    void Stun(float stunDuration);
-    yunutyEngine::coroutine::Coroutine StunCoroutine(float stunDuration);
     void PlayAnimation(UnitAnimType animType, bool repeat = false);
     void SetDesiredRotation(const Vector3d& facingDirection);
     std::weak_ptr<coroutine::Coroutine> SetRotation(const Vector3d& facingDirection, float rotatingTime);
@@ -73,19 +71,19 @@ public:
     coroutine::Coroutine SettingRotation(float facingAngle, float rotatingTime);
     const UnitBehaviourTree& GetBehaviourTree() const { return unitBehaviourTree; };
     float GetUnitCurrentHp() const;
-    std::shared_ptr<Reference> AcquirePauseReference();
-    std::shared_ptr<Reference> AcquireBlockRotationReference();
     // AcquireFactor는 수치에 곱연산이 적용될 부분이며, AcquireDelta는 수치에 덧셈 연산이 적용될 부분이다.
     factor::Multiplier<float>& GetDamageMultiplier() { return multiplierDamage; };
     factor::Adder<float>& GetDamageAdder() { return adderDamage; };
     factor::Multiplier<float>& GetAttackSpeedMultiplier() { return multiplierAttackSpeed; };
-    factor::Adder<float>& GetCritAdder() { return AdderCrit; };
+    factor::Adder<float>& GetCritAdder() { return adderCrit; };
+    virtual void OnContentsPlay() override { }
+    virtual void OnContentsStop() override;
+    virtual Component* GetComponent() override { return this; }
     virtual void OnEnable() override;
     virtual void OnDisable() override;
     virtual void Start() override;
     virtual void Update() override;
     virtual void OnDestroy() override;
-    virtual Component* GetComponent() override { return this; }
     virtual ~Unit();
     bool IsPlayerUnit() const;
     bool IsInvulenerable() const;
@@ -93,6 +91,7 @@ public:
     // 유닛의 행동 트리 상태가 전환될 때
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateEngageCallback() { return onStateEngage; };
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateExitCallback() { return onStateExit; };
+    string name;
     // 내가 공격할 때
     DelegateCallback<void()> onAttack;
     // 내가 때린 공격이 적에게 맞았을 때, 근거리 공격인 경우라면 onAttack과 호출시점이 같겠으나 원거리 공격인 경우에는 시간차가 있을 수 있다. 
@@ -103,26 +102,31 @@ public:
     DelegateCallback<void()> onCreated;
     // 유닛이 회전을 끝냈을 때
     DelegateCallback<void()> onRotationFinish;
+    Reference referencePause;
+    Reference referenceBlockFollowingNavAgent;
+    Reference referenceParalysis;
+    Reference referenceBlockPendingOrder;
+    Reference referenceBlockRotation;
+    Reference referenceInvulnerable;
+    Reference referenceBlockAttack;
+    Reference referenceDisableNavAgent;
 private:
     void SetNavObstacleActive(bool active);
     void UpdateRotation();
     void InitBehaviorTree();
-    template<std::weak_ptr<Reference> Unit::* referenceWeakptr>
-    std::shared_ptr<Reference> AcquireReference();
     template<UnitBehaviourTree::Keywords state>
     void OnStateEngage()
     {
-        onStateEngage[UnitBehaviourTree::state]();
+        onStateEngage[state]();
     }
     template<UnitBehaviourTree::Keywords state>
     void OnStateUpdate() {};
     template<UnitBehaviourTree::Keywords state>
     void OnStateExit()
     {
-        onStateExit[UnitBehaviourTree::state]();
+        onStateExit[state]();
     };
     std::weak_ptr<Unit> GetClosestEnemy();
-    void Attack(std::weak_ptr<Unit> opponent);
     template<UnitOrderType orderType>
     bool CanProceedOrder();
     // 상대 유닛에 대해 다가가서 때리기 좋은 위치를 반환합니다.
@@ -131,6 +135,9 @@ private:
     UnitBehaviourTree unitBehaviourTree;
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateEngage;
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateExit;
+    Reference referenceEnableNavObstacle;
+    std::shared_ptr<Reference::Guard> enableNavObstacle;
+    std::shared_ptr<Reference::Guard> disableNavAgent;
     // 공격범위와 적 포착범위
     std::weak_ptr<UnitAcquisitionSphereCollider> attackRange;
     std::weak_ptr<UnitAcquisitionSphereCollider> acquisitionRange;
@@ -138,14 +145,17 @@ private:
     std::weak_ptr<yunutyEngine::NavigationAgent> navAgentComponent;
     // 유닛들이 가만히 있을 때 장애물로 인식하게 만들기 위함.
     std::weak_ptr<yunutyEngine::NavigationObstacle> navObstacle;
+    std::weak_ptr<yunutyEngine::physics::SphereCollider> unitCollider;
     std::unordered_map<UnitBuff::Type, std::shared_ptr<UnitBuff>> buffs;
     std::shared_ptr<Skill> onGoingSkill;
     std::weak_ptr<BurnEffect> burnEffect;
     std::weak_ptr<Unit> currentTargetUnit;					// Attack이나 Chase 때 사용할 적군  오브젝트
+    std::weak_ptr<Unit> pendingTargetUnit;					// Attack이나 Chase 때 사용할 적군  오브젝트
     UnitOrderType currentOrderType{ UnitOrderType::Hold };
     UnitOrderType pendingOrderType{ UnitOrderType::Hold };
     const application::editor::Unit_TemplateData* unitTemplateData{ nullptr };
     const application::editor::UnitData* unitData{ nullptr };
+    GameObject* skinnedMeshGameObject{ nullptr };
     int teamIndex{ 0 };
     // 유닛의 회전속도는 외부에서 조절할 수 있다. 평소에는 template 데이터의 회전속도와 같다.
     float currentRotationSpeed;
@@ -166,39 +176,32 @@ private:
     factor::Multiplier<float> multiplierDamageReceive;
     factor::Adder<float> adderDamage;
     factor::Multiplier<float> multiplierAttackSpeed;
-    factor::Adder<float> AdderCrit;
+    factor::Adder<float> adderCrit;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineKnockBack;
-    std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineStun;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineAttack;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineSkill;
-    std::weak_ptr<Reference> pauseReference;
-    std::weak_ptr<Reference> stopFollowingNavAgentReference;
-    std::weak_ptr<Reference> paralysisReference;
-    std::weak_ptr<Reference> blockCommandSwitchReference;
-    std::weak_ptr<Reference> blockPendingOrderReference;
-    std::weak_ptr<Reference> blockRotationReference;
-    std::weak_ptr<Reference> invincibleReference;
     yunuGI::IAnimation* defaultAnimation;
     friend UnitBuff;
     friend UnitPool;
+    friend PlayerController;
 };
 template<UnitOrderType orderType>
 bool Unit::CanProceedOrder()
 {
     {
         return (currentOrderType == orderType && pendingOrderType == currentOrderType) ||
-            (blockCommandSwitchReference.expired() && pendingOrderType == orderType);
+            (!referenceBlockPendingOrder.BeingReferenced() && pendingOrderType == orderType);
     };
 }
 template<typename SkillType>
 void Unit::OrderSkill(const SkillType& skill)
 {
     static_assert(std::is_base_of<Skill, SkillType>::value, "SkillType must be derived from Skill");
-    std::shared_ptr<SkillType> skillInstance = std::make_shared<SkillType>();
+    std::shared_ptr<SkillType> skillInstance = std::make_shared<SkillType>(skill);
     skillInstance = std::make_shared<SkillType>(skill);
-    skillInstance->get()->Init(GetWeakPtr<Unit>());
+    static_cast<Skill*>(skillInstance.get())->owner = GetWeakPtr<Unit>();
     onGoingSkill = skillInstance;
-    coroutineSkill = StartCoroutine(skillInstance->get()->operator()());
+    coroutineSkill = StartCoroutine(skillInstance.get()->operator()());
 }
 template<typename BuffType>
 void Unit::ApplyBuff(const BuffType& buff)

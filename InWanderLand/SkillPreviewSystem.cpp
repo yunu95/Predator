@@ -568,25 +568,25 @@ yunuGI::IMesh* SkillPreviewSystem::ShowRoute(UnitType unitType, std::vector<Vect
 {
     auto mesh = CreateRouteMesh(vertexList);
     auto renderer = this->Borrow();
-    renderer->GetGI().SetMesh(mesh);
+    renderer.lock()->GetGI().SetMesh(mesh);
 
-    this->rendererMap.insert({ mesh, renderer });
+    this->rendererMap.insert({ mesh, renderer.lock().get() });
 
     switch (unitType)
     {
     case SkillPreviewSystem::UnitType::Robin:
     {
-        renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,0.3 });
+        renderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,0.3 });
     }
     break;
     case SkillPreviewSystem::UnitType::Ursula:
     {
-        renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,0.3 });
+        renderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,0.3 });
     }
     break;
     case SkillPreviewSystem::UnitType::Hansel:
     {
-        renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,0.3 });
+        renderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,0.3 });
     }
     break;
     default:
@@ -596,13 +596,12 @@ yunuGI::IMesh* SkillPreviewSystem::ShowRoute(UnitType unitType, std::vector<Vect
 
     return mesh;
 }
-
 void SkillPreviewSystem::DeleteRouteMesh(yunuGI::IMesh* mesh)
 {
     // 생성된 메쉬를 지우며 renderer가 붙은 게임 오브젝트를 Pool에 반납
     auto iter = this->rendererMap.find(mesh);
     iter->second->GetGI().SetMesh(nullptr);
-    this->Return(iter->second);
+    this->Return(iter->second->GetWeakPtr<graphics::StaticMeshRenderer>());
 
     this->rendererMap.erase(iter);
 

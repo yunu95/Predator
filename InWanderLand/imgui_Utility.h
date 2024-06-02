@@ -145,7 +145,7 @@ bool application::editor::imgui::DropdownEnum_2Col(std::string label, POD_Enum<E
 
     bool returnVal = false;
     static std::vector<std::string> selections = std::vector<std::string>();
-    std::string current = data.GetEnumNameMap().at(data.Get());
+    std::string current = data.enumName;
 
     selections.resize(0);
     std::transform(data.GetEnumNameMap().begin(), data.GetEnumNameMap().end(), std::back_inserter(selections)
@@ -159,7 +159,8 @@ bool application::editor::imgui::DropdownEnum_2Col(std::string label, POD_Enum<E
             if (ImGui::Selectable(selections[i].c_str(), is_selected))
             {
                 current = selections[i];
-                data.Set(data.GetNameEnumMap().at(current));
+                data.enumName = selections[i];
+                data.enumValue = POD_Enum<EnumType>::GetNameEnumMap().at(selections[i]);
                 returnVal = true;
             }
 

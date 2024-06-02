@@ -74,6 +74,7 @@
 #include "yunutyCoroutine.h"
 #include "YunutyYieldInstruction.h"
 #include "YunutyForSeconds.h"
+#include "YunutyWaitForSeconds.h"
 
 // 네비게이션
 #include "YunutyNavigationField.h"

@@ -1,17 +1,19 @@
 #pragma once
 #include "PodStructs.h"
 
-enum class PlayerCharacterType
+struct PlayerCharacterType
 {
-    None,
-    Robin,
-    Ursula,
-    Hansel,
-    End,
+    enum Enum {
+        None,
+        Robin,
+        Ursula,
+        Hansel,
+        End,
+    };
 };
 
 template<>
-const std::unordered_map<int, std::string>& application::POD_Enum<PlayerCharacterType>::GetEnumNameMap() const
+const std::unordered_map<int, std::string>& application::POD_Enum<PlayerCharacterType::Enum>::GetEnumNameMap()
 {
     static std::unordered_map<int, std::string> enumNameMap
     {

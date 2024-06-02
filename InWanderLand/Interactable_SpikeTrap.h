@@ -21,9 +21,12 @@ public:
 
 private:
 	std::unordered_set<physics::Collider*> triggerStay = std::unordered_set<physics::Collider*>();
+	std::unordered_set<physics::Collider*> interactingList = std::unordered_set<physics::Collider*>();
 	Vector3d initPos = Vector3d(0, 0, 0);
 	Quaternion initRotation = Quaternion();
 	Vector3d initScale = Vector3d(1, 1, 1);
+	float delayTime = 0;
+	float damage = 0;
 	GameObject* mesh = nullptr;
 };
 

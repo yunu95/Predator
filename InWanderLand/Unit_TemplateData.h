@@ -8,6 +8,7 @@
 #include "GlobalConstant.h"
 #include "UnitStatusBarType.h"
 #include "PlayerCharacterType.h"
+#include "UnitAttackType.h"
 
 #include <string>
 
@@ -21,9 +22,9 @@ namespace application
         {
             std::string skinnedFBXName = std::string();
             // 플레이어 유닛인지의 여부와 종류를 나타내는 열거형
-            POD_Enum<PlayerCharacterType> playerUnitType{ PlayerCharacterType::None };
+            POD_Enum<PlayerCharacterType::Enum> playerUnitType;
             // 화면에 뜨는 체력창의 타입
-            POD_Enum<UnitStatusBarType> unitStatusBar{ UnitStatusBarType::ENEMY };
+            POD_Enum<UnitStatusBarType::Enum> unitStatusBar;
             // 체력창을 유닛의 위치로부터 얼마나 멀리 띄울 것인가?
             POD_Vector2<float> statusBarOffset;
             // 발사체가 생성되는 위치
@@ -49,12 +50,15 @@ namespace application
             float collisionSize = 0.5f;
             float m_idRadius;
             float m_atkRadius;
+            float m_atkCooltime = 2.1f;
             float m_unitSpeed;
-            float rotationSpeed;
+            float rotationSpeed = 180.0f;
 
-            float m_attackEngageDelay;
-            int m_attackTimingFrame;
-            float m_attackOffset;
+            // 유닛의 공격방식, 근거리 혹은 원거리
+            POD_Enum<UnitAttackType::Enum> attackType;
+            std::string projectile_staticFBXName;
+            float m_attackPreDelay = 0.5f;
+            float m_attackPostDelay = 0.5f;
 
             int isEliteMonster;
             int chessType;

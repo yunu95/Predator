@@ -7,7 +7,7 @@ class Projectile;
 class ProjectilePool : public SingletonClass<ProjectilePool>
 {
 public:
-    std::weak_ptr<Projectile> Borrow(string fbxname);
+    std::weak_ptr<Projectile> Borrow(std::weak_ptr<Unit> owner, Vector3d destination);
     void Return(std::weak_ptr<Projectile>);
 private:
     class PoolByMesh : public GameObjectPool<Projectile>
@@ -17,5 +17,5 @@ private:
         virtual void ObjectInitializer(std::weak_ptr<Projectile> unit) override;
     };
     std::unordered_map<string, std::shared_ptr<PoolByMesh>> poolsByFBX;
-    std::unordered_map<std::weak_ptr<Projectile>, std::weak_ptr<PoolByMesh>> poolsByProjectile;
+    std::unordered_map<Projectile*, std::weak_ptr<PoolByMesh>> poolsByProjectile;
 };

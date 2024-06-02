@@ -116,7 +116,7 @@ namespace yunutyEngine
         void SetActive(bool active);
         // 컴포넌트의 WeakPtr를 가져옵니다.
         template<typename T>
-        std::weak_ptr<T> GetWeakPtr() const { return std::dynamic_pointer_cast<T>(GetWeakPtrFromGameObject()); };
+        std::weak_ptr<T> GetWeakPtr() const { return std::dynamic_pointer_cast<T>(GetWeakPtrFromGameObject().lock()); };
         // Update함수를 부를지 말지 결정합니다. isUpdate가 false면 게임 사이클에서 업데이트 함수가 불릴때 제외됩니다.
         void SetIsUpdating(bool isUpdating);
         std::weak_ptr<yunutyEngine::coroutine::Coroutine> StartCoroutine(coroutine::Coroutine&& coroutine);

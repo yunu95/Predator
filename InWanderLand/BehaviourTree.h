@@ -6,13 +6,14 @@
 class BehaviourTree
 {
 public:
-    struct Node;
     struct Node
     {
     private:
+        int nodeKey;
         std::unordered_map<int, Node> children;
         std::vector<Node*> childrenInOrder;
     public:
+        int GetNodeKey() const { return nodeKey; };
         std::function<void()> onEnter = []() {};
         std::function<void()> onExit = []() {};
         std::function<void()> onUpdate = []() {};
@@ -22,42 +23,47 @@ public:
             if (!children.contains(key))
             {
                 children[key] = Node{};
+                children[key].nodeKey = key;
                 childrenInOrder.push_back(&children[key]);
             }
             return children[key];
         }
         friend BehaviourTree;
     };
-    std::unordered_map<int, Node> rootChildren;
-    std::vector<Node*> rootChildrenInOrder;
-    std::queue<const Node*> activeOnLastUpdate;
-    std::queue<const Node*> activeOnCurrentUpdate;
+    const std::vector<const Node*>& GetActiveNodes()const { return activeOnCurrentUpdate; };
     void Update()
     {
-        activeOnCurrentUpdate = std::queue<const Node*>{};
+        activeOnCurrentUpdate.clear();
         const auto* nodeChildren = &rootChildrenInOrder;
-        while (!nodeChildren && !nodeChildren->empty())
+        while (nodeChildren && !nodeChildren->empty())
         {
+            auto nodeChildrenBefore = nodeChildren;
             for (const auto& node : *nodeChildren)
             {
                 if (node->enteringCondtion())
                 {
-                    if (activeOnLastUpdate.empty())
-                    {
-                        node->onEnter();
-                    }
-                    else if (auto last = activeOnLastUpdate.front(); last != node)
-                    {
-                        last->onExit();
-                        node->onEnter();
-                        activeOnLastUpdate.pop();
-                    }
-                    node->onUpdate();
-                    activeOnCurrentUpdate.push(node);
+                    activeOnCurrentUpdate.push_back(node);
                     nodeChildren = &node->childrenInOrder;
                     break;
                 }
             }
+            assert(nodeChildrenBefore != nodeChildren, "behaviour node can't reach the leaf node.");
+        }
+        // 먼저 Exit를 순차적으로 부르고 다음 Enter들을 부른다.
+        for (int i = activeOnLastUpdate.size() - 1; i >= 0; i--)
+        {
+            if (activeOnCurrentUpdate.size() - 1 < i || activeOnLastUpdate[i] != activeOnCurrentUpdate[i])
+            {
+                activeOnLastUpdate[i]->onExit();
+            }
+        }
+        for (int i = 0; i < activeOnCurrentUpdate.size(); i++)
+        {
+            if (((int)activeOnLastUpdate.size() - 1 < i) || (activeOnLastUpdate[i] != activeOnCurrentUpdate[i]))
+            {
+                activeOnCurrentUpdate[i]->onEnter();
+            }
+            activeOnCurrentUpdate[i]->onUpdate();
         }
         activeOnLastUpdate = activeOnCurrentUpdate;
     }
@@ -66,8 +72,14 @@ public:
         if (!rootChildren.contains(key))
         {
             rootChildren[key] = Node{};
+            rootChildren[key].nodeKey = key;
             rootChildrenInOrder.push_back(&rootChildren[key]);
         }
         return rootChildren[key];
     }
+private:
+    std::vector<const Node*> activeOnLastUpdate;
+    std::vector<const Node*> activeOnCurrentUpdate;
+    std::unordered_map<int, Node> rootChildren;
+    std::vector<Node*> rootChildrenInOrder;
 };

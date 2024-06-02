@@ -6,14 +6,12 @@
 #include "EditorCameraManager.h"
 
 #include "RTSCam.h"
-#include "Dotween.h"
 
 #include "SkillPreviewSystem.h"
 #include "PlayerController.h"
 #include "TacticModeSystem.h"
 #include "GameManager.h"
 #include "PlayTimeRegionManager.h"
-#include "CursorDetector.h"
 
 namespace application
 {
@@ -121,7 +119,6 @@ namespace application
 
             auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
             auto camComp = &RTSCam::Instance();
-            PlayTimeRegionManager::Instance().SetCameraDotween(camObj->AddComponent<Dotween>());
             camObj->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
             camObj->GetTransform()->SetWorldRotation({ pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z });
             camObj->GetTransform()->SetWorldScale({ pod.scale.x,pod.scale.y,pod.scale.z });
@@ -136,24 +133,18 @@ namespace application
 
             auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-            auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
-            auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-            auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-            mouseCursorMesh->GetGI().SetMesh(sphereMesh);
-            mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
+            //auto sphereMesh = rsrcMgr->GetMesh(L"Sphere");
+            //auto mouseCursorObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+            //auto mouseCursorMesh = mouseCursorObject->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+            //mouseCursorMesh->GetGI().SetMesh(sphereMesh);
+            //mouseCursorMesh->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0, 0, 0, 1 });
 
-            auto mouseCursorColliderComponent = mouseCursorObject->AddComponent<physics::SphereCollider>();
-            mouseCursorColliderComponent->SetRadius(0.5f);
+            //auto mouseCursorColliderComponent = mouseCursorObject->AddComponent<physics::SphereCollider>();
+            //mouseCursorColliderComponent->SetRadius(0.5f);
 
-            auto cursorDetectorComponent = mouseCursorObject->AddComponent<CursorDetector>();
+            //auto cursorDetectorComponent = mouseCursorObject->AddComponent<CursorDetector>();
 
             //TacticModeSystem::Instance().m_cursorDetector = cursorDetectorComponent;
-
-            camComp->groundHoveringClickCallback = [=](Vector3d pos)
-                {
-                    mouseCursorObject->GetTransform()->SetWorldPosition(pos);
-                    //SkillPreviewSystem::Instance().SetCurrentMousPosition(pos);
-                };
 
             //TacticModeSystem::Instance().SetMovingSystemComponent(camComp);
         }

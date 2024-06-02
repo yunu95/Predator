@@ -9,22 +9,23 @@
 
 namespace application
 {
-    Action_BlockSkillSelection::Action_BlockSkillSelection(SkillType skillType)
+    Action_BlockSkillSelection::Action_BlockSkillSelection(SkillType::Enum skillType)
     {
-        this->skillType = skillType;
+        this->skillType.enumValue = skillType;
+        this->skillType.enumName = POD_Enum<SkillType::Enum>::GetEnumNameMap().at(skillType);
     };
 
     CoroutineObject<void> Action_BlockSkillSelection::DoAction()
     {
         if (!applyExceptTarget)
         {
-            PlayerController::Instance().blockSkillSelection[(int)(SkillType)skillType] = blocking;
+            PlayerController::Instance().blockSkillSelection[skillType.enumValue] = blocking;
         }
         else
         {
-            for (auto i = (int)SkillType::NONE; i < (int)SkillType::SKILL_NUM; i++)
+            for (auto i = (int)SkillType::NONE; i < SkillType::SKILL_NUM; i++)
             {
-                if (i == (int)(SkillType)skillType)
+                if (i == skillType.enumValue)
                 {
                     continue;
                 }
@@ -39,7 +40,7 @@ namespace application
         if (ImGui::MenuItem("SetSkillType"))
         {
             editor::EditorLayer::SetInputControl(false);
-            static POD_Enum<SkillType> skillType;
+            static POD_Enum<SkillType::Enum> skillType;
             static bool block;
             static bool applyExceptTarget;
             skillType = data->skillType;
@@ -81,7 +82,7 @@ namespace application
 
     bool Action_BlockSkillSelection::PreEncoding(json& data) const
     {
-        data["skillType"] = (int)(SkillType)skillType;
+        data["skillType"] = skillType.enumName;
         data["blocking"] = blocking;
         data["applyExceptTarget"] = applyExceptTarget;
         return true;
@@ -96,11 +97,13 @@ namespace application
     {
         if (data.contains("index"))
         {
-            skillType = (SkillType)data["index"].get<int>();
+            skillType.enumValue = data["index"].get<int>();
+            skillType.enumName = POD_Enum<SkillType::Enum>::GetEnumNameMap().at(skillType.enumValue);
         }
         else
         {
-            skillType = (SkillType)data["skillType"].get<int>();
+            skillType.enumName = data["skillType"];
+            skillType.enumValue = POD_Enum<SkillType::Enum>::GetNameEnumMap().at(skillType.enumName);
         }
         blocking = data["blocking"];
         applyExceptTarget = applyExceptTarget["applyExceptTarget"];

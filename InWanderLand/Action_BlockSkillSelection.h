@@ -17,7 +17,7 @@ namespace application
         DEFINE_ACTION(BlockSkillSelection)
 
             Action_BlockSkillSelection() = default;
-        Action_BlockSkillSelection(SkillType skillType);
+        Action_BlockSkillSelection(SkillType::Enum skillType);
 
         virtual CoroutineObject<void> DoAction() override;
 
@@ -27,7 +27,7 @@ namespace application
         virtual bool PostDecoding(const json& data) override;
 
     private:
-        POD_Enum<SkillType> skillType;
+        POD_Enum<SkillType::Enum> skillType;
         bool blocking;
         bool applyExceptTarget;
     };

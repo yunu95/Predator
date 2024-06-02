@@ -1,17 +1,19 @@
 #pragma once
 #include "PodStructs.h"
 
-enum class UnitStatusBarType
+struct UnitStatusBarType
 {
-    NONE,
-    PLAYER,
-    ENEMY,
-    ELITE,
-    BOSS,
+    enum Enum {
+        NONE,
+        PLAYER,
+        ENEMY,
+        ELITE,
+        BOSS,
+    };
 };
 
 template<>
-const std::unordered_map<int, std::string>& application::POD_Enum<UnitStatusBarType>::GetEnumNameMap() const
+const std::unordered_map<int, std::string>& application::POD_Enum<UnitStatusBarType::Enum>::GetEnumNameMap()
 {
     static std::unordered_map<int, std::string> enumNameMap
     {

@@ -1,4 +1,5 @@
 #pragma once
+#include "YunutyEngine.h"
 #include <memory>
 
 class Reference
@@ -14,6 +15,12 @@ public:
             return shared;
         }
         return impl.lock();
+    }
+    coroutine::Coroutine AcquireForSecondsCoroutine(float seconds)
+    {
+        auto shared = Acquire();
+        co_yield coroutine::WaitForSeconds(seconds);
+        co_return;
     }
 
     bool BeingReferenced() const

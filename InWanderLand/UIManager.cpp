@@ -904,21 +904,21 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         }
         element->button->AddButtonClickFunction([=]()
             {
-                if (SkillUpgradeSystem::SingleInstance().IsUpgraded(static_cast<UIEnumID>(uiData.enumID)))
+                if (PlayerController::Instance().IsSkillUpgraded(static_cast<UIEnumID>(uiData.enumID)))
                 {
                     return;
                 }
 
-                if (SkillUpgradeSystem::SingleInstance().GetSkillPoints() <= 0)
+                if (PlayerController::Instance().GetSkillPoints() <= 0)
                 {
                     GetUIElementByEnum(UIEnumID::PopUpMessage_NotEnoughSP)->EnableElement();
                 }
                 else
                 {
                     // 선행 업그레이드까지 완료된 경우 허락창을 띄운다.
-                    if (dependentUpgrade == UIEnumID::None || SkillUpgradeSystem::SingleInstance().IsUpgraded(dependentUpgrade))
+                    if (dependentUpgrade == UIEnumID::None || PlayerController::Instance().IsSkillUpgraded(dependentUpgrade))
                     {
-                        SkillUpgradeSystem::SingleInstance().SetUpgradeTarget(upgradeID);
+                        PlayerController::Instance().SetSkillUpgradeTarget(upgradeID);
                         GetUIElementByEnum(UIEnumID::PopUpMessage_PermissionForUpgrade)->EnableElement();
                     }
                     else
@@ -980,7 +980,7 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
         element->button->AddButtonClickFunction([=]()
             {
-                SkillUpgradeSystem::SingleInstance().UpgradeSkill();
+                PlayerController::Instance().UpgradeSkill();
             });
         break;
     case UIEnumID::Quit_Proceed:

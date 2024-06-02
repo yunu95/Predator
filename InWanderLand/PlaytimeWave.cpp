@@ -39,7 +39,8 @@ void PlaytimeWave::ActivateWave()
     // 카메라 가동범위 제한
     if (auto rtsCam = dynamic_cast<RTSCam*>(graphics::Camera::GetMainCamera()))
     {
-        rtsCam->ConstrainByRegion(waveData->pod.contraintRegion);
+        PlayerController::Instance().LockCamInRegion(waveData->pod.contraintRegion);
+        //rtsCam->ConstrainByRegion(waveData->pod.contraintRegion);
     }
 }
 void PlaytimeWave::DeActivateWave()
@@ -51,7 +52,8 @@ void PlaytimeWave::DeActivateWave()
     // 카메라 가동범위 제한
     if (auto rtsCam = dynamic_cast<RTSCam*>(graphics::Camera::GetMainCamera()))
     {
-        rtsCam->UnConstrainRegion();
+        PlayerController::Instance().LockCamInRegion(nullptr);
+        //rtsCam->UnConstrainRegion();
     }
 }
 

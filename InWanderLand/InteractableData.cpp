@@ -168,9 +168,17 @@ namespace application
             {
                 comp = obj->AddComponent<Interactable_ChessRook>();
             }
-            else if (pod.templateData->pod.fBXName == "SM_Spike01")
+            else if (pod.templateData->pod.fBXName == "SM_Spike01" || pod.templateData->pod.fBXName == "SM_Spike02" || pod.templateData->pod.fBXName == "SM_Spike03")
             {
                 comp = obj->AddComponent<Interactable_SpikeTrap>();
+            }
+            else if (pod.templateData->pod.fBXName == "SM_Gimmick01")
+            {
+                comp = obj->AddComponent<Interactable_TrapSwitch>();
+            }
+            else if (pod.templateData->pod.fBXName == "SM_Gimmick02")
+            {
+                comp = obj->AddComponent<Interactable_TrapArms>();
             }
 
             inGameInteractable = comp;

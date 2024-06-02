@@ -29,3 +29,5 @@
 #include "Action_SoundPlay.h"
 #include "Action_SoundSetMusicVolume.h"
 #include "Action_UISetActive.h"
+#include "Action_Ornament.h"
+

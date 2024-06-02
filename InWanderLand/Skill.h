@@ -5,10 +5,10 @@
 class Unit;
 class Skill
 {
-private:
+protected:
     std::weak_ptr<Unit> owner;
 public:
     virtual coroutine::Coroutine operator()() = 0;
-    virtual SkillType GetSkillType() { return SkillType::NONE; };
+    virtual SkillType::Enum GetSkillType() { return SkillType::NONE; };
     friend Unit;
 };

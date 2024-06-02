@@ -9,20 +9,21 @@
 
 namespace application
 {
-    Action_AwaitSkillActivation::Action_AwaitSkillActivation(SkillType skillType)
+    Action_AwaitSkillActivation::Action_AwaitSkillActivation(SkillType::Enum skillType)
     {
-        this->skillType = skillType;
+        this->skillType.enumValue = skillType;
+        this->skillType.enumName = POD_Enum<SkillType::Enum>::GetEnumNameMap().at(skillType);
     };
 
     CoroutineObject<void> Action_AwaitSkillActivation::DoAction()
     {
         bool skillSelected = false;
-        switch (skillType)
+        switch (skillType.enumValue)
         {
         case SkillType::ROBIN_Q: case SkillType::ROBIN_W:
         case SkillType::URSULA_Q: case SkillType::URSULA_W:
         case SkillType::HANSEL_Q: case SkillType::HANSEL_W:
-            PlayerController::Instance().onSkillActivate[(int)(SkillType)skillType].AddVolatileCallback([&skillSelected]() {skillSelected = true; });
+            PlayerController::Instance().onSkillActivate[skillType.enumValue].AddVolatileCallback([&skillSelected]() {skillSelected = true; });
             break;
         };
         while (!skillSelected)
@@ -37,7 +38,7 @@ namespace application
         if (ImGui::MenuItem("SetSkillType"))
         {
             editor::EditorLayer::SetInputControl(false);
-            static POD_Enum<SkillType> skillType = SkillType::NONE;
+            static POD_Enum<SkillType::Enum> skillType;
             editor::imgui::ShowMessageBox("SetSkillType", [data]()
                 {
                     editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
@@ -70,7 +71,7 @@ namespace application
 
     bool Action_AwaitSkillActivation::PreEncoding(json& data) const
     {
-        data["skillType"] = (int)(SkillType)skillType;
+        data["skillType"] = skillType.enumName;
         return true;
     }
 
@@ -83,11 +84,13 @@ namespace application
     {
         if (data.contains("index"))
         {
-            skillType = (SkillType)data["index"].get<int>();
+            skillType.enumValue = data["index"].get<int>();
+            skillType.enumName = POD_Enum<SkillType::Enum>::GetEnumNameMap().at(skillType.enumValue);
         }
         else
         {
-            skillType = (SkillType)data["skillType"].get<int>();
+            skillType.enumName = data["skillType"];
+            skillType.enumValue = POD_Enum<SkillType::Enum>::GetNameEnumMap().at(skillType.enumName);
         }
         return true;
     }

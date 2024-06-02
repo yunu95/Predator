@@ -115,7 +115,7 @@
 //        break;
 //    }
 //
-//    if (m_unitComponent->GetUnitSide() == Unit::UnitSide::Player)
+//    if (m_unitComponent->IsPlayerUnit())
 //    {
 //        m_unitComponent->RegisterSkillDuration(Unit::SkillEnum::Q, m_skillOneEngageDelay);
 //        m_unitComponent->RegisterSkillDuration(Unit::SkillEnum::W, m_skillTwoEngageDelay);
@@ -213,7 +213,7 @@
 //{
 //    SkillUnit* tempDynamicCastedUnit = dynamic_cast<SkillUnit*>(m_unitComponent);
 //
-//    if (tempDynamicCastedUnit->GetUnitSide() == Unit::UnitSide::Player)
+//    if (tempDynamicCastedUnit->IsPlayerUnit())
 //    {
 //        tempDynamicCastedUnit->RegisterSkillWithAnimation(Unit::SkillEnum::Q);
 //        tempDynamicCastedUnit->RegisterSkillWithAnimation(Unit::SkillEnum::W);
