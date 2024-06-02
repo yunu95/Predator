@@ -211,7 +211,7 @@ void GraphicsTest()
 
 
     {
-        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Wave");
+        //auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Wave");
         //obj2->AddComponent<VFXAnimator>();
         /*auto obj3 = Scene::getCurrentScene()->AddGameObject();
         auto renderer = obj3->AddComponent<graphics::StaticMeshRenderer>();
