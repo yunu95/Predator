@@ -99,6 +99,10 @@ namespace application
         GC<float>	tacticGaugeRecoveryPerSecond = 2.0f;
 
         GC<int>	maxResurrectCount;
+        GC<float> chessBlockUnitLength = 3.4f;
+        GC<float> chessBlockUnitOffset = 0.1f;
+        GC<float> chessSummonedExplosionDelay = 1.5f;
+        GC<float> vibeMaxOffset = 0.12f;
 
         TO_JSON(POD_GlobalConstant)
             FROM_JSON(POD_GlobalConstant)

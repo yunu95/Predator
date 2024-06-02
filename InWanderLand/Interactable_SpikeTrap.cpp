@@ -4,6 +4,9 @@
 #include "DebugMeshes.h"
 
 #include "Unit.h"
+#include "GameManager.h"
+
+#include "YunutyWaitForSeconds.h"
 
 void Interactable_SpikeTrap::Start()
 {
@@ -24,7 +27,6 @@ void Interactable_SpikeTrap::Start()
 		if (renderer)
 		{
 			mesh = each;
-			mesh->SetSelfActive(false);
 			break;
 		}
 	}
@@ -32,20 +34,12 @@ void Interactable_SpikeTrap::Start()
 
 void Interactable_SpikeTrap::Update()
 {
-	if (triggerOn)
+	for (auto each : triggerStay)
 	{
-		if (!isInteracting)
+		if (!interactingList.contains(each))
 		{
+			OnInteractableTriggerEnter();
 			lastCoroutine = StartCoroutine(DoInteraction());
-		}
-	}
-	else
-	{
-		if (isInteracting)
-		{
-			mesh->SetSelfActive(false);
-			DeleteCoroutine(lastCoroutine);
-			isInteracting = false;
 		}
 	}
 }
@@ -53,21 +47,22 @@ void Interactable_SpikeTrap::Update()
 void Interactable_SpikeTrap::OnTriggerEnter(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+		//GameManager::Instance().IsBattleSystemOperating() &&
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
 	{
 		triggerStay.insert(collider);
-		OnInteractableTriggerEnter();
 	}
 }
 
 void Interactable_SpikeTrap::OnTriggerExit(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+		//GameManager::Instance().IsBattleSystemOperating() &&
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
 	{
-		if (triggerStay.size() == 1)
+		if (triggerStay.size() == 1 && triggerOn)
 		{
 			OnInteractableTriggerExit();
 		}
@@ -77,12 +72,30 @@ void Interactable_SpikeTrap::OnTriggerExit(physics::Collider* collider)
 
 yunutyEngine::coroutine::Coroutine Interactable_SpikeTrap::DoInteraction()
 {
-	isInteracting = true;
-	mesh->SetSelfActive(true);
-
-	while(triggerOn)
+	std::unordered_set<Unit*> units = std::unordered_set<Unit*>();
+	for (auto each : triggerStay)
 	{
-		co_await std::suspend_always();
+		if (!interactingList.contains(each))
+		{
+			interactingList.insert(each);
+			units.insert(each->GetGameObject()->GetComponent<Unit>());
+		}
+	}
+
+	for (auto each : units)
+	{
+		/// 경직
+
+		/// 대미지도 주려면 주기
+		each->Damaged(damage);
+		yunutyEngine::SoundSystem::PlaySoundfile3D("sounds/trap/Damage_Zone.wav", each->GetTransform()->GetWorldPosition());
+	}	
+
+	co_yield yunutyEngine::coroutine::WaitForSeconds(delayTime, false);
+
+	for (auto each : units)
+	{
+		interactingList.erase(each->GetGameObject()->GetComponent<physics::Collider>());
 	}
 
 	co_return;
@@ -100,4 +113,6 @@ void Interactable_SpikeTrap::SetDataFromEditorData(const application::editor::In
 	initScale.x = data.pod.scale.x;
 	initScale.y = data.pod.scale.y;
 	initScale.z = data.pod.scale.z;
+	delayTime = data.pod.templateData->pod.delayTime;
+	damage = data.pod.templateData->pod.damage;
 }

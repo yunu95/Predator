@@ -1,11 +1,17 @@
 #pragma once
 #include "PaletteInstance.h"
 
+namespace yunutyEngine
+{
+    class GameObject;
+}
+
 namespace application::editor
 {
     class InteractableData;
     class Interactable_TemplateData;
 }
+
 namespace application
 {
     namespace editor
@@ -16,6 +22,7 @@ namespace application
             {
             public:
                 virtual void Start() override;
+                virtual void Update() override;
                 void Init(const application::editor::InteractableData* interactableData);
                 void Init(const application::editor::Interactable_TemplateData* interactableTemplateData);
                 void ChangeTemplateData(const application::editor::InteractableData* interactableData);
@@ -34,6 +41,7 @@ namespace application
             private:
                 std::string currentFBX = "";
                 const application::editor::Interactable_TemplateData* interactableTemplateData;
+                yunutyEngine::GameObject* uiObject = nullptr;
             };
         }
     }

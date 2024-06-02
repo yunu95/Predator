@@ -1,0 +1,40 @@
+[
+    {
+        "angle": 80.0,
+        "burstsCount": 8,
+        "duration": 1.0,
+        "endScale": 0.0,
+        "interval": 5.0,
+        "isLoop": false,
+        "lifeTime": 0.3,
+        "maxParticle": 3,
+        "name": "ChessBombParticle",
+        "particleMode": 1,
+        "playAwake": true,
+        "radius": 1.0,
+        "rateOverTime": 10.0,
+        "shape": 0,
+        "speed": 2.0,
+        "startScale": 2.4,
+        "texturePath": "Texture/Particle/BombParticle.dds"
+    },
+    {
+        "angle": 80.0,
+        "burstsCount": 8,
+        "duration": 1.0,
+        "endScale": 0.0,
+        "interval": 5.0,
+        "isLoop": false,
+        "lifeTime": 0.4,
+        "maxParticle": 30,
+        "name": "DustParticle",
+        "particleMode": 1,
+        "playAwake": true,
+        "radius": 3.0,
+        "rateOverTime": 10.0,
+        "shape": 0,
+        "speed": 5.0,
+        "startScale": 5.0,
+        "texturePath": "Texture/Particle/Interactable_Dust.dds"
+    }
+]
