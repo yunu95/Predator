@@ -73,6 +73,8 @@ namespace application
 
             POD_Ornament pod;
 
+            bool tookAction = false;
+
         protected:
             virtual bool PreEncoding(json& data) const override;
             virtual bool PostEncoding(json& data) const override;

@@ -2,7 +2,8 @@
 #include "YunutyEngine.h"
 #include "Unit.h"
 
-class SkillPreviewSystem : public Component, public SingletonComponent<SkillPreviewSystem>, public GameObjectPool<graphics::StaticMeshRenderer>
+class SkillPreviewSystem : public Component, public SingletonComponent<SkillPreviewSystem>, public GameObjectPool<graphics::StaticMeshRenderer>,
+	public PermanentObservee
 {
 private:
 	enum class RobinQSkillInfo
@@ -40,9 +41,13 @@ public:
 		Ursula,
 		Hansel
 	};
+
+public:
+	virtual void Start() override;
+	virtual Component* GetComponent() override { return this; };
 public:
 	virtual void ObjectInitializer(std::weak_ptr<graphics::StaticMeshRenderer> comp) override;
-
+	
 	void Init();
 #pragma region RobinQSkill
 	// objectPos는 사거리 표시의 시작위치, maxDistance는 스킬 최대 사거리 입니다.
@@ -89,7 +94,6 @@ private:
 
 public:
 	yunutyEngine::GameObject* camObj;
-
 
 private:
 	yunutyEngine::GameObject* robinQSkillPreviewObj;

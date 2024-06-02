@@ -62,3 +62,5 @@
 #include "SingleNavigationField.h"
 #include "DebugBeacon.h"
 #include "WanderUtils.h"
+#include "ParticleToolData.h"
+#include "ParticleTool_Manager.h"

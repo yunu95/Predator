@@ -25,6 +25,7 @@
 #include "UIButton.h"
 #include "UIManager.h"
 #include "UIPanel.h"
+#include "SFXManager.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -174,8 +175,8 @@ void SnippetSkillSystemInit()
 	menuUIButtonComponent->SetButtonClickFunction([=]()
 		{
 			menuPanel->SetPanelActive(true);
-			SoundSystem::PlaySoundfile("Texture/UI/InGameUITemp/TestClick2.wav");
-			SoundSystem::PlaySoundfile("Texture/UI/InGameUITemp/TestClick.wav");
+			SFXManager::PlaySoundfile("Texture/UI/InGameUITemp/TestClick2.wav");
+			SFXManager::PlaySoundfile("Texture/UI/InGameUITemp/TestClick.wav");
 		});
 	menuUIObject->GetTransform()->SetLocalPosition({ 0, 1000, 0 });
 #pragma endregion

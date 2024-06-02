@@ -19,6 +19,7 @@ namespace yunutyEngine
     {
     public:
         void StopSound();
+        void SetVolume(float volume);
     private:
         SoundChannel(FMOD::Channel* channel);
         FMOD::Channel* channel;

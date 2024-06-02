@@ -257,6 +257,9 @@
     <ClInclude Include="IVideo.h">
       <Filter>Header Files\IResource\IVideo</Filter>
     </ClInclude>
+    <ClInclude Include="VFXInfo.h">
+      <Filter>Header Files\FBX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Yunu3DGraphicsEngine.rc">

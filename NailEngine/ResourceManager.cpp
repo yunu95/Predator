@@ -160,6 +160,10 @@ void ResourceManager::DeleteDeferredTexture()
     }
 }
 
+void ResourceManager::DeleteMaterial(yunuGI::IMaterial* mat)
+{
+}
+
 yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec, const std::vector<yunuGI::Vector2>& uvVec)
 {
     std::shared_ptr<Mesh> tempMesh = std::make_shared<Mesh>();
@@ -411,6 +415,44 @@ std::shared_ptr<Texture>& ResourceManager::CreateTextureFromResource(const std::
     return texture;
 }
 
+void ResourceManager::LoadVFXFrameInfo(const std::wstring& vfxPath)
+{
+	std::ifstream file(vfxPath);
+
+	if (!file.is_open())
+	{
+		return;
+	}
+
+
+	nlohmann::json jsonData;
+	file >> jsonData;
+
+	file.close();
+
+	for (const auto& frameJson : jsonData)
+	{
+        std::string MaterialName = frameJson.at("material_name").get<std::string>();;
+        std::wstring wMaterialName = this->String_To_Wstring(MaterialName);
+        float frameRate = frameJson.at("frame_rate").get<float>();;
+        
+        std::vector<yunuGI::VFXInfo> locationVec;
+        float frame;
+        for (const auto& loc : frameJson.at("location_data"))
+        {
+            yunuGI::VFXInfo info;
+            info.frame = loc.at("frame").get<int>();
+            const auto& locationJson = loc.at("location");
+            info.location.x = locationJson[0].get<float>();
+            info.location.y = locationJson[1].get<float>();
+            locationVec.push_back(info);
+        }
+
+        this->vfxFrameInfoMap.insert({ wMaterialName,{frameRate, locationVec} });
+        locationVec.clear();
+	}
+}
+
 void ResourceManager::LoadFBX(const char* filePath)
 {
     FBXNode* node = ModelLoader::Instance.Get().LoadModel(filePath);
@@ -646,6 +688,12 @@ FBXNode* ResourceManager::GetFBXNode(const std::wstring& fbxName)
 {
     return this->fbxNodeMap.find(fbxName)->second;
 }
+
+std::pair<float, std::vector<yunuGI::VFXInfo>>& ResourceManager::GetVFXInfo(const std::wstring& materialName) 
+{
+    return this->vfxFrameInfoMap[materialName];
+}
+
 std::vector<yunuGI::IMesh*>& ResourceManager::GetMeshList() { return this->meshVec; };
 std::vector<yunuGI::ITexture*>& ResourceManager::GetTextureList()
 {

@@ -8,6 +8,7 @@
 
 #include "YunutyWaitForSeconds.h"
 #include "ParticleTool_Manager.h"
+#include "SFXManager.h"
 
 void Interactable_TrapArms::Start()
 {
@@ -152,7 +153,7 @@ yunutyEngine::coroutine::Coroutine Interactable_TrapArms::DoInteraction()
 
 	particleObj->SetSelfActive(true);
 	particleObj->GetComponent<graphics::ParticleRenderer>()->Play();
-	yunutyEngine::SoundSystem::PlaySoundfile3D("sounds/trap/Trigger_Impact.wav", GetGameObject()->GetTransform()->GetWorldPosition());
+	SFXManager::PlaySoundfile3D("sounds/trap/Trigger_Impact.wav", GetGameObject()->GetTransform()->GetWorldPosition());
 
 	for (auto each : triggerStay)
 	{

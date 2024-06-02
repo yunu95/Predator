@@ -17,6 +17,11 @@ namespace application
         co_return;
     }
 
+    bool Action_SoundPlayMusic::IsValid()
+    {
+        return !soundPath.empty();
+    }
+
     void Action_SoundPlayMusic::ImGui_DrawDataPopup(Action_SoundPlayMusic* data)
     {
         if (ImGui::MenuItem("SetMusicPath"))

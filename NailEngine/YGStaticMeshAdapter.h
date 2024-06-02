@@ -155,7 +155,7 @@ namespace yunuGIAdapter
 			//return this->materialVec[index]->GetVariation(isInstance);
 			return this->materialVec[index].get();
 		};
-		
+
 
 	private:
 		std::shared_ptr<StaticMesh> renderable;

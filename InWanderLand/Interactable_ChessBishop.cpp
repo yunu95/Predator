@@ -6,6 +6,7 @@
 #include "TacticModeSystem.h"
 #include "ChessBombComponent.h"
 #include "YunutyWaitForSeconds.h"
+#include "SFXManager.h"
 
 void Interactable_ChessBishop::Start()
 {
@@ -183,7 +184,7 @@ yunutyEngine::coroutine::Coroutine Interactable_ChessBishop::DoInteraction()
 		each->Damaged(damage);
 	}
 
-	yunutyEngine::SoundSystem::PlaySoundfile3D("sounds/trap/EXPLOSION_gimmik.mp3", GetTransform()->GetWorldPosition());
+	SFXManager::PlaySoundfile3D("sounds/trap/EXPLOSION_gimmik.mp3", GetTransform()->GetWorldPosition());
 
 	if (particleEffectTime == 0)
 	{

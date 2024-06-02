@@ -731,6 +731,10 @@ void RenderSystem::PopStaticRenderableObject(nail::IRenderable* renderable)
         {
             InstancingManager::Instance.Get().PopStaticForwardData(static_cast<StaticMesh*>(renderable)->renderInfoVec[i]);
         }
+
+
+        // 나중에 메모리가 너무 커지면 채우자
+        ///ResourceManager::Instance.Get().DeleteMaterial(static_cast<StaticMesh*>(renderable)->renderInfoVec[i]->material);
     }
 
     this->staticMeshRenderInfoMap.erase(renderable);

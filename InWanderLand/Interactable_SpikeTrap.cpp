@@ -5,6 +5,7 @@
 
 #include "Unit.h"
 #include "GameManager.h"
+#include "SFXManager.h"
 
 #include "YunutyWaitForSeconds.h"
 
@@ -88,7 +89,7 @@ yunutyEngine::coroutine::Coroutine Interactable_SpikeTrap::DoInteraction()
 
 		/// 대미지도 주려면 주기
 		each->Damaged(damage);
-		yunutyEngine::SoundSystem::PlaySoundfile3D("sounds/trap/Damage_Zone.wav", each->GetTransform()->GetWorldPosition());
+		SFXManager::PlaySoundfile3D("sounds/trap/Damage_Zone.wav", each->GetTransform()->GetWorldPosition());
 	}	
 
 	co_yield yunutyEngine::coroutine::WaitForSeconds(delayTime, false);

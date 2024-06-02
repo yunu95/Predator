@@ -1314,6 +1314,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Script.h" />
     <ClInclude Include="ScriptSystem.h" />
     <ClInclude Include="Action_EngageStage.h" />
+    <ClInclude Include="SFXManager.h" />
     <ClInclude Include="ShortcutSystem.h" />
     <ClInclude Include="DualCastComponent.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGraphicsExe|x64'">true</ExcludedFromBuild>
@@ -1962,6 +1963,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Action_WaitForSeconds.h" />
     <ClInclude Include="UVAnimator.h" />
     <ClInclude Include="wanderResources.h" />
+    <ClInclude Include="VFXAnimator.h" />
     <ClInclude Include="WanderUtils.h" />
     <ClInclude Include="UUID.h" />
     <ClInclude Include="UUIDManager.h" />
@@ -2319,6 +2321,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     </ClCompile>
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="ScriptSystem.cpp" />
+    <ClCompile Include="SFXManager.cpp" />
     <ClCompile Include="ShortcutSystem.cpp" />
     <ClCompile Include="DualCastComponent.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGraphicsExe|x64'">true</ExcludedFromBuild>
@@ -2955,6 +2958,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Action_WaitForSeconds.cpp" />
     <ClCompile Include="UVAnimator.cpp" />
     <ClCompile Include="wanderResources.cpp" />
+    <ClCompile Include="VFXAnimator.cpp" />
     <ClCompile Include="WanderUtils.cpp" />
     <ClCompile Include="WarriorProductor.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGraphicsExe|x64'">true</ExcludedFromBuild>

@@ -22,6 +22,7 @@
 #include "BurnEffect.h"
 #include "ParticleTool_Manager.h"
 #include "AnimationEventManager.h"
+#include "SFXManager.h"
 
 namespace application
 {

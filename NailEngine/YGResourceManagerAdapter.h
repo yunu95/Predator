@@ -50,6 +50,10 @@ namespace yunuGIAdapter
             {
                 ResourceManager::Instance.Get().CreateTexture(wFilePath);
             }
+            else if (ext == L".vfx")
+            {
+                ResourceManager::Instance.Get().LoadVFXFrameInfo(wFilePath);
+            }
         };
         virtual void CreateTextures(const std::vector<std::wstring>& texturePaths) const override
         {
@@ -186,6 +190,11 @@ namespace yunuGIAdapter
         virtual void LoadFBXData(std::filesystem::path path)const override
         {
             ResourceManager::Instance.Get().LoadFBXData(path);
+        };
+
+        virtual std::pair<float, std::vector<yunuGI::VFXInfo>>& GetVFXInfo(const std::wstring& materialName)const override
+        {
+            return ResourceManager::Instance.Get().GetVFXInfo(materialName);
         };
     };
 }

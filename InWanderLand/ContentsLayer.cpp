@@ -34,6 +34,7 @@
 #include "ContentsObserver.h"
 #include "ParticleTool_Manager.h"
 #include "UVAnimator.h"
+#include "VFXAnimator.h"
 #include "InitialLoadingScreen.h"
 #include "InstanceManager.h"
 
@@ -150,14 +151,7 @@ public:
             std::vector<Vector3d> a;
             a.push_back(Vector3d{ 0,0,0 });
             a.push_back(Vector3d{ 0,0,0.5 });
-            a.push_back(Vector3d{ 0,0,1 });
-            a.push_back(Vector3d{ 0,0,1.5 });
-            a.push_back(Vector3d{ 0,0,2 });
-            a.push_back(Vector3d{ 0,0,2.5 });
-            a.push_back(Vector3d{ 0,0,3 });
-            a.push_back(Vector3d{ 0,0,3.5 });
-            a.push_back(Vector3d{ 0,0,4 });
-            a.push_back(Vector3d{ 0,0,4.5 });
+            a.push_back(Vector3d{ 1,0,1 });
             system->ShowRoute(SkillPreviewSystem::UnitType::Robin, a);
             //system->ShowRoute(a);
         }
@@ -188,7 +182,7 @@ void GraphicsTest()
     systemComponent->camObj = camObj;
 
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-
+    //_resourceManager->LoadFile("FBX/VFX");
     auto& animationList = _resourceManager->GetAnimationList();
     yunuGI::IAnimation* animation = nullptr;
     yunuGI::IAnimation* animation2 = nullptr;
@@ -217,15 +211,13 @@ void GraphicsTest()
 
 
     {
-        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("Cube");
-        obj2->GetTransform()->SetLocalScale(Vector3d{ 0.01,0.01,0.01 });
-
-
-        auto obj3 = Scene::getCurrentScene()->AddGameObject();
+        //auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Wave");
+        //obj2->AddComponent<VFXAnimator>();
+        /*auto obj3 = Scene::getCurrentScene()->AddGameObject();
         auto renderer = obj3->AddComponent<graphics::StaticMeshRenderer>();
         auto test = obj3->AddComponent<TestComponent4>();
         test->obj = obj2;
-        test->system = systemComponent;
+        test->system = systemComponent;*/
     }
     yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
     //yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
@@ -349,6 +341,7 @@ void application::contents::ContentsLayer::Initialize()
     CinematicManager::Instance();
     //TutorialManager::Instance();
     Scene::getCurrentScene()->AddGameObject()->AddComponent<ContentsInitializer>();
+    //SkillPreviewSystem::Instance().Init();
 }
 
 void application::contents::ContentsLayer::Update(float ts)
