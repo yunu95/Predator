@@ -631,6 +631,9 @@
     <Filter Include="Contents\InteractableComponent\InteractableList\ChessUtil\ChessPool">
       <UniqueIdentifier>{9d15b521-33f5-4413-b37e-975bbc65b89f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\GameManager\SFX">
+      <UniqueIdentifier>{07744a7a-8ce4-453a-9e6b-0abf7d344981}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1615,6 +1618,9 @@
     <ClInclude Include="Action_Ornament.h">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClInclude>
+    <ClInclude Include="SFXManager.h">
+      <Filter>Contents\GameManager\SFX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2466,6 +2472,9 @@
     </ClCompile>
     <ClCompile Include="Action_Ornament.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
+    <ClCompile Include="SFXManager.cpp">
+      <Filter>Contents\GameManager\SFX</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

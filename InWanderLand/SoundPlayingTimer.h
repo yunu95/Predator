@@ -1,5 +1,6 @@
 #pragma once
 #include "Timer.h"
+#include "SFXManager.h"
 
 class SoundPlayingTimer : public TimerComponent
 {
@@ -11,7 +12,7 @@ public:
         onCompleteFunction = [this]()
             {
                 // 사운드를 재생합니다.
-                yunutyEngine::SoundSystem::PlaySoundfile(soundPath);
+                SFXManager::PlaySoundfile(soundPath);
             };
     }
 };
