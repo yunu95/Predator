@@ -6,3 +6,5 @@
 #include "Interactable_ChessPawn.h"
 #include "Interactable_ChessRook.h"
 #include "Interactable_SpikeTrap.h"
+#include "Interactable_TrapSwitch.h"
+#include "Interactable_TrapArms.h"

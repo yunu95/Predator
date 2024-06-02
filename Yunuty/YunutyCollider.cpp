@@ -39,6 +39,7 @@ namespace yunutyEngine
                 impl->InitializePhysXActor();
                 cachedScale = GetTransform()->GetWorldScale();
             }
+            OnTransformUpdate();
 #ifdef _DEBUG
             if (impl->isStaticShape())
             {
@@ -70,8 +71,6 @@ namespace yunutyEngine
 
                 GameObject* tempGameObj = GetGameObject();
 
-                //assert(GetTransform()->GetWorldScale().x == 1.0f && GetTransform()->GetWorldScale().y == 1.0f && GetTransform()->GetWorldScale().z == 1.0f,
-                //    "scale must be 1.");
                 impl->SetActorWorldTransform(GetTransform());
 
                 if (auto scl = GetTransform()->GetWorldScale(); cachedScale != scl)
@@ -93,6 +92,10 @@ namespace yunutyEngine
         }
         void Collider::OnTransformUpdate()
         {
+            if (WasPxActorInitialized() && impl->isKinematic)
+            {
+                impl->SetActorWorldTransform(GetTransform());
+            }
             cachedScale = GetTransform()->GetWorldScale();
             ApplyScale(cachedScale);
         }

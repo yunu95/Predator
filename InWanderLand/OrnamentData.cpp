@@ -114,9 +114,38 @@ namespace application
 
         void OrnamentData::ApplyAsPlaytimeObject()
         {
-            if (ornamentInstance == nullptr)
+            ApplyAsPaletteInstance();
+            if (!pod.isGuide)
             {
-                ApplyAsPaletteInstance();
+                ornamentInstance->GetGameObject()->SetSelfActive(true);
+
+                if (tookAction)
+                {
+                    GameObject* targetObj = nullptr;
+
+                    for (auto each : GetPaletteInstance()->GetGameObject()->GetChildren())
+                    {
+                        if (each->getName() != pod.templateData->pod.staticFBXName)
+                        {
+                            continue;
+                        }
+
+                        targetObj = each;
+                    }
+
+                    auto renderer = targetObj->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+
+                    if (renderer)
+                    {
+                        for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
+                        {
+                            static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+                            renderer->GetGI().SetMaterial(i, resourceManager->GetMaterial(renderer->GetGI().GetMaterial(i)->GetName()));
+                        }
+                    }
+
+                    tookAction = false;
+                }
             }
             PlayTimeRegionManager::Instance().RegisterOrnament(ornamentInstance->GetGameObject(), pod.stage);
         }

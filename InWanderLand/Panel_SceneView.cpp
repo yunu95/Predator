@@ -586,30 +586,36 @@ namespace application
             }
 
             // Palette Type
-            imgui::ShiftCursorX(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Ornament").x - ImGui::CalcTextSize(" | Select Mode").x - 10);
+            imgui::ShiftCursorX(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Interactable").x - ImGui::CalcTextSize(" | Select Mode").x - 10);
 
             switch (pm->GetCurrentPaletteType())
             {
             case palette::Palette_List::Terrain:
-                ImGui::BeginMenu(" Terrain", false);
+                ImGui::BeginMenu("     Terrain", false);
                 break;
             case palette::Palette_List::Unit:
-                ImGui::BeginMenu("    Unit", false);
+                ImGui::BeginMenu("        Unit", false);
                 break;
             case palette::Palette_List::Ornament:
-                ImGui::BeginMenu("Ornament", false);
+                ImGui::BeginMenu("    Ornament", false);
                 break;
             case palette::Palette_List::Region:
-                ImGui::BeginMenu("  Region", false);
+                ImGui::BeginMenu("      Region", false);
                 break;
             case palette::Palette_List::Wave:
-                ImGui::BeginMenu("    Wave", false);
+                ImGui::BeginMenu("        Wave", false);
                 break;
             case palette::Palette_List::Cam:
-                ImGui::BeginMenu("     Cam", false);
+                ImGui::BeginMenu("         Cam", false);
                 break;
             case palette::Palette_List::Light:
-                ImGui::BeginMenu("   Light", false);
+                ImGui::BeginMenu("       Light", false);
+                break;
+            case palette::Palette_List::Particle:
+                ImGui::BeginMenu("    Particle", false);
+                break;
+            case palette::Palette_List::Interactable:
+                ImGui::BeginMenu("Interactable", false);
                 break;
             default:
                 break;

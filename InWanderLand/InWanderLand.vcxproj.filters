@@ -628,6 +628,15 @@
     <Filter Include="VFX">
       <UniqueIdentifier>{327458f4-5bdd-4125-a01e-6651c65ad310}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\InteractableComponent\InteractableList\ChessUtil">
+      <UniqueIdentifier>{df324316-e5ab-418b-bee1-b9b625d862ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\InteractableComponent\InteractableList\ChessUtil\ChessPool">
+      <UniqueIdentifier>{9d15b521-33f5-4413-b37e-975bbc65b89f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\GameManager\SFX">
+      <UniqueIdentifier>{07744a7a-8ce4-453a-9e6b-0abf7d344981}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1591,6 +1600,30 @@
     <ClInclude Include="UnitCommand.h">
       <Filter>Contents\UnitCommand</Filter>
     </ClInclude>
+    <ClInclude Include="Trigger_Interactable.h">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_UI.h">
+      <Filter>Contents\InteractableComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_ChessPool.h">
+      <Filter>Contents\InteractableComponent\InteractableList\ChessUtil\ChessPool</Filter>
+    </ClInclude>
+    <ClInclude Include="ChessBombComponent.h">
+      <Filter>Contents\InteractableComponent\InteractableList\ChessUtil</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_TrapSwitch.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_TrapArms.h">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_Ornament.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
+    <ClInclude Include="SFXManager.h">
+      <Filter>Contents\GameManager\SFX</Filter>
+    </ClInclude>
     <ClInclude Include="VFXAnimator.h">
       <Filter>VFX</Filter>
     </ClInclude>
@@ -2427,6 +2460,27 @@
     </ClCompile>
     <ClCompile Include="UnitCommand.cpp">
       <Filter>Contents\UnitCommand</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger_Interactable.cpp">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_ChessPool.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList\ChessUtil\ChessPool</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessBombComponent.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList\ChessUtil</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_TrapSwitch.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_TrapArms.cpp">
+      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_Ornament.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
+    <ClCompile Include="SFXManager.cpp">
+      <Filter>Contents\GameManager\SFX</Filter>
     </ClCompile>
     <ClCompile Include="VFXAnimator.cpp">
       <Filter>VFX</Filter>

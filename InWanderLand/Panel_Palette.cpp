@@ -1743,6 +1743,52 @@ namespace application
                     {
                         ImGui::TableNextRow();
                         ImGui::TableSetColumnIndex(0);
+                        if (interactable->pod.templateData->pod.activeInteractable)
+                        {
+                            ImGui::Text("Texture");
+                            ImGui::SameLine();
+                            if (ImGui::BeginCombo("##UI_Texture_Path_Combo", interactable->pod.guideUI.c_str()))
+                            {
+                                static std::vector<std::string> selections = std::vector<std::string>();
+
+                                static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+                                
+                                if (selections.size() == 0)
+                                {
+                                    for (auto each : resourceManager->GetTextureList())
+                                    {
+                                        selections.push_back(std::string(each->GetName().begin(), each->GetName().end()));
+                                    }
+                                }
+                                
+                                for (int i = 0; i < selections.size(); i++)
+                                {
+                                    const bool is_selected = (interactable->pod.guideUI == selections[i]);
+                                    if (ImGui::Selectable(selections[i].c_str(), is_selected))
+                                    {
+                                        interactable->pod.guideUI = selections[i];
+                                    }
+
+                                    if (is_selected)
+                                    {
+                                        ImGui::SetItemDefaultFocus();
+                                    }
+                                }
+                                ImGui::EndCombo();
+                            }
+                            ImGui::Text("UI_Width");
+                            ImGui::SameLine();
+                            ImGui::DragFloat("##UI_Width", &interactable->pod.ui_Width);
+                            ImGui::Text("UI_Height");
+                            ImGui::SameLine();
+                            ImGui::DragFloat("##UI_Height", &interactable->pod.ui_Height);
+                            ImGui::Text("UI_Offset X");
+                            ImGui::SameLine();
+                            ImGui::DragFloat("##UI_Offset X", &interactable->pod.uiOffset.x);
+                            ImGui::Text("UI_Offset Y");
+                            ImGui::SameLine();
+                            ImGui::DragFloat("##UI_Offset Y", &interactable->pod.uiOffset.y);
+                        }
                         ImGui::Text("Target Counts : ");
                         ImGui::SameLine();
                         ImGui::Text(std::to_string(interactable->GetTargetInteractables().size()).c_str());
@@ -1750,6 +1796,7 @@ namespace application
                         {
                             ip.SetMatchingMode(true);
                         }
+                        interactable->ApplyAsPaletteInstance();
                     }
                 }
                 imgui::EndSection();

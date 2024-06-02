@@ -18,6 +18,9 @@ namespace application
                 void SelectOrnamentTemplateData(Ornament_TemplateData*);
                 void UnselectOrnamentTemplateData();
 
+                OrnamentData* GetSingleSelectedOrnamentInstance();
+                void SelectOrnamentInstance(OrnamentData* ornament);
+
                 virtual void Reset() override;
                 virtual IEditableData* PlaceInstance(Vector3d worldPosition) override;
                 virtual void OnMouseMove(Vector3d projectedWorldPos, Vector2d normalizedScreenPos) override;

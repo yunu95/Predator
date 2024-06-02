@@ -15,6 +15,8 @@ namespace application
     public:
         DEFINE_ACTION(SoundPlayMusic)
 
+        virtual bool IsValid() override;
+
         virtual CoroutineObject<void> DoAction() override;
 
         virtual bool PreEncoding(json& data) const override;
@@ -23,6 +25,6 @@ namespace application
         virtual bool PostDecoding(const json& data) override;
 
     private:
-        std::string soundPath;
+        std::string soundPath = std::string();
     };
 }

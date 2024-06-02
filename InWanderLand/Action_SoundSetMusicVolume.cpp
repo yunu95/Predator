@@ -5,19 +5,21 @@
 
 namespace application
 {
-    Action_SoundSetMusicVolume::Action_SoundSetMusicVolume(float fadeTime, float volume)
-        : fadeTime(fadeTime), volume(volume)
-    {
-
-    }
-
     CoroutineObject<void> Action_SoundSetMusicVolume::DoAction()
     {
         float startVolume = SoundSystem::GetMusicVolume();
         if (fadeTime != 0)
         {
-            for (float normalizedT = yunutyEngine::Time::GetDeltaTimeUnscaled(); normalizedT < 1; normalizedT += yunutyEngine::Time::GetDeltaTimeUnscaled() / fadeTime)
+            float normalizedT = 0;
+            float localTimer = 0;
+            while (normalizedT < 1)
             {
+                localTimer += yunutyEngine::Time::GetDeltaTimeUnscaled();
+                normalizedT = localTimer / fadeTime;
+                if (normalizedT > 1)
+                {
+                    normalizedT = 1;
+                }
                 SoundSystem::SetMusicVolume(math::LerpF(startVolume, volume, normalizedT));
                 co_await std::suspend_always();
             }
@@ -26,6 +28,17 @@ namespace application
 
         co_return;
     }
+
+    void Action_SoundSetMusicVolume::SetFadeTime(float fadeTime)
+    {
+        this->fadeTime = fadeTime;
+    }
+
+    void Action_SoundSetMusicVolume::SetVolume(float volume)
+    {
+        this->volume = volume;
+    }
+
     void Action_SoundSetMusicVolume::ImGui_DrawDataPopup(Action_SoundSetMusicVolume* data)
     {
         if (ImGui::MenuItem("Set Music Volume"))
@@ -41,16 +54,15 @@ namespace application
 
                     ImGui::Separator();
 
-                    ImGui::SetNextItemWidth(-1);
-                    ImGui::DragFloat("Fade time##FadeTime", &fadeTime);
-                    ImGui::DragFloat("volume##volume", &volume);
+                    ImGui::DragFloat("Music Fade Time", &fadeTime);
+                    ImGui::DragFloat("Music Volume", &volume);
 
                     ImGui::Separator();
 
                     if (ImGui::Button("OK"))
                     {
-                        data->fadeTime = fadeTime;
-                        data->volume = volume;
+                        data->SetFadeTime(fadeTime);
+                        data->SetVolume(volume);
                         ImGui::CloseCurrentPopup();
                         editor::imgui::CloseMessageBox("Set Music Volume");
                         editor::EditorLayer::SetInputControl(true);

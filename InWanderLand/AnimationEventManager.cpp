@@ -4,6 +4,7 @@
 #include "ParticleTool_Manager.h"
 #include "imgui.h"
 #include "imgui_internal.h"
+#include "SFXManager.h"
 
 #include <cmath>
 
@@ -314,7 +315,7 @@ namespace application
 				auto ptr = static_cast<Sound_PlayOnceEvent*>(event.get());
 				funcIndex = animator->PushAnimationWithFunc(ani, event->frame, [=]()
 					{
-						yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
+						SFXManager::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
 					});
 
 				if (funcIndex == 0)
@@ -500,7 +501,7 @@ namespace application
 				auto ptr = static_cast<Sound_PlayOnceEvent*>(event.get());
 				funcIndex = animator->PushAnimationWithFunc(ani, event->frame, [=]()
 					{
-						yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
+						SFXManager::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
 					});
 
 				if (funcIndex == 0)

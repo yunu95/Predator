@@ -260,6 +260,16 @@ namespace application
                     trigger = AddTrigger<Trigger_UnitDie>();
                     break;
                 }
+                case application::TriggerType::InteractableTriggerEnter:
+                {
+                    trigger = AddTrigger<Trigger_InteractableTriggerEnter>();
+                    break;
+                }
+                case application::TriggerType::InteractableTriggerExit:
+                {
+                    trigger = AddTrigger<Trigger_InteractableTriggerExit>();
+                    break;
+                }
                 default:
                     break;
                 }
@@ -502,6 +512,26 @@ namespace application
                     case application::ActionType::UISetActive:
                     {
                         action = AddAction<Action_UISetActive>();
+                        break;
+                    }
+                    case application::ActionType::OrnamentMoveWithRotateAndRescale:
+                    {
+                        action = AddAction<Action_OrnamentMoveWithRotateAndRescale>();
+                        break;
+                    }
+                    case application::ActionType::OrnamentShow:
+                    {
+                        action = AddAction<Action_OrnamentShow>();
+                        break;
+                    }
+                    case application::ActionType::OrnamentHide:
+                    {
+                        action = AddAction<Action_OrnamentHide>();
+                        break;
+                    }
+                    case application::ActionType::OrnamentFloating:
+                    {
+                        action = AddAction<Action_OrnamentFloating>();
                         break;
                     }
                     default:
