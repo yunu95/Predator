@@ -658,6 +658,9 @@
     <FxCompile Include="RuntimeDependency\resources\Shader\Stage1FloorNoBlendPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\VFX_PS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">

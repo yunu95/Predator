@@ -100,11 +100,12 @@ public:
         if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
         {
             isShow = true;
-
+            obj->SetSelfActive(true);
         }
         if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
         {
             isShow = false;
+            obj->SetSelfActive(false);
         }
         auto curPos = obj->GetTransform()->GetLocalPosition();
         auto curRot = obj->GetTransform()->GetLocalRotation();
@@ -155,14 +156,6 @@ public:
             system->ShowRoute(SkillPreviewSystem::UnitType::Robin,a);
             //system->ShowRoute(a);
         }
-        if (isShow)
-        {
-            system->ShowHanselWSkill(obj->GetTransform()->GetLocalPosition(), 14);
-        }
-        else
-        {
-            system->HideHanselWSkill();
-        }
     }
 };
 
@@ -211,13 +204,21 @@ void GraphicsTest()
 
 
     {
-        //auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Wave");
-        //obj2->AddComponent<VFXAnimator>();
+
+        
+
+        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Wave");
+        obj2->SetSelfActive(false);
+        obj2->AddComponent<VFXAnimator>();
         /*auto obj3 = Scene::getCurrentScene()->AddGameObject();
         auto renderer = obj3->AddComponent<graphics::StaticMeshRenderer>();
         auto test = obj3->AddComponent<TestComponent4>();
         test->obj = obj2;
         test->system = systemComponent;*/
+
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		auto test = obj->AddComponent<TestComponent4>();
+        test->obj = obj2;
     }
     yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
     //yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();

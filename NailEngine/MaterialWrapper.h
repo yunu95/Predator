@@ -146,7 +146,6 @@ public:
 					}
 				}
 
-
 				yunuGI::IMaterial* tempMaterial = ResourceManager::Instance.Get().GetInstanceMaterial(original->GetName()).get();
 				if (tempMaterial)
 				{
