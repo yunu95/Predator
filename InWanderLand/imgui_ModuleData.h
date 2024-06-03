@@ -193,7 +193,7 @@ namespace application
 
                         std::sort(selections.begin(), selections.end());
 
-                        if (ImGui::BeginCombo("##staticFBXCombo", data.c_str()))
+                        if (ImGui::BeginCombo(("##staticFBXCombo" + label).c_str(), data.c_str()))
                         {
                             for (int i = 0; i < selections.size(); i++)
                             {
@@ -201,7 +201,10 @@ namespace application
                                 if (ImGui::Selectable(selections[i].c_str(), is_selected))
                                 {
                                     current = selections[i];
-                                    TemplateDataManager::GetSingletonInstance().GetSelectedTemplateData()->SetDataResourceName(current);
+                                    if (label == "staticFBXName")
+                                    {
+                                        TemplateDataManager::GetSingletonInstance().GetSelectedTemplateData()->SetDataResourceName(current);
+                                    }
                                     const_cast<std::string&>(data) = current;
                                     returnVal = true;
                                 }
@@ -228,7 +231,7 @@ namespace application
 
                         std::sort(selections.begin(), selections.end());
 
-                        if (ImGui::BeginCombo("##skinnedFBXCombo", data.c_str()))
+                        if (ImGui::BeginCombo(("##skinnedFBXCombo" + label).c_str(), data.c_str()))
                         {
                             for (int i = 0; i < selections.size(); i++)
                             {
@@ -236,7 +239,10 @@ namespace application
                                 if (ImGui::Selectable(selections[i].c_str(), is_selected))
                                 {
                                     current = selections[i];
-                                    TemplateDataManager::GetSingletonInstance().GetSelectedTemplateData()->SetDataResourceName(current);
+                                    if (label == "skinnedFBXName")
+                                    {
+                                        TemplateDataManager::GetSingletonInstance().GetSelectedTemplateData()->SetDataResourceName(current);
+                                    }
                                     const_cast<std::string&>(data) = current;
                                     returnVal = true;
                                 }
@@ -269,6 +275,7 @@ namespace application
                         ImGui::PopItemWidth();
                         return false;
                     }
+                    
                 }
                 template <typename real>
                 bool DrawData(std::string label, const POD_Vector2<real>& data, bool global)
