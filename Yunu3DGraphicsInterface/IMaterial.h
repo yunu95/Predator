@@ -44,6 +44,8 @@ namespace yunuGI
 		virtual const yunuGI::IShader* GetPixelShader() const = 0;
 		virtual const yunuGI::IShader* GetVertexShader() const = 0;
 
+		virtual IMaterial* GetMaterial() = 0;
+
 	private:
 
 	};

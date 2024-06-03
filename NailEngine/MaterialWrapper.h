@@ -121,7 +121,7 @@ public:
 	{
 		return nullptr;
 	};
-	Material* GetMaterial()
+	virtual yunuGI::IMaterial* GetMaterial() override
 	{
 		if (usingOriginal)
 			return original;

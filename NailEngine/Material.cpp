@@ -81,6 +81,12 @@ yunuGI::ITexture* Material::GetTexture(yunuGI::Texture_Type textureType)
 	return textures[static_cast<int>(textureType)].get();
 }
 
+
+yunuGI::IMaterial* Material::GetMaterial()
+{
+	return this;
+}
+
 Material::~Material()
 {
 }

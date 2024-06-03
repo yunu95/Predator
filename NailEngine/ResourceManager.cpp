@@ -31,6 +31,7 @@ using namespace DirectX::PackedVector;
 
 #include "ModelLoader.h"
 #include "Video.h"
+#include "MaterialWrapper.h"
 
 
 
@@ -291,6 +292,7 @@ Material* ResourceManager::CreateInstanceMaterial(const Material* material)
 
 yunuGI::IMaterial* ResourceManager::CloneMaterial(std::wstring materialName, yunuGI::IMaterial* material)
 {
+    material = (material)->GetMaterial();
     if (this->materialMap.find(materialName) != this->materialMap.end())
     {
         return this->materialMap[materialName].get();
