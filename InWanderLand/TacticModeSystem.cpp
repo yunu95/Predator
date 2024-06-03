@@ -553,15 +553,6 @@ void TacticModeSystem::Update()
 	}
 }
 
-void TacticModeSystem::OnContentsStop()
-{
-
-}
-
-void TacticModeSystem::OnContentsPlay()
-{
-}
-
 void TacticModeSystem::OperateTacticSystem()
 {
 	this->isOperating = true;

@@ -12,6 +12,9 @@
 
 #include "YunutyEngine.h"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 namespace application
 {
 	Action_OrnamentMoveWithRotateAndRescale::~Action_OrnamentMoveWithRotateAndRescale()
@@ -733,10 +736,8 @@ namespace application
 
 		auto ts = targetOrnament->GetPaletteInstance()->GetTransform();
 		auto startPos = ts->GetWorldPosition();
-		auto endPos = startPos + Vector3d(0, distance, 0);
 		float localTimer = 0;
 		float ratio = 0;
-		bool upDir = true;
 		while (true)
 		{
 			localTimer += yunutyEngine::Time::GetDeltaTime();
@@ -745,17 +746,9 @@ namespace application
 			{
 				localTimer = 0;
 				ratio = 0;
-				upDir = !upDir;
 			}
 
-			if (upDir)
-			{
-				ts->SetWorldPosition(Vector3d::Lerp(startPos, endPos, ratio));
-			}
-			else
-			{
-				ts->SetWorldPosition(Vector3d::Lerp(endPos, startPos, ratio));
-			}
+			ts->SetWorldPosition(Vector3d(startPos.x, startPos.y + distance * ((-std::cos(ratio * 2 * M_PI) + 1) * 0.5), startPos.z));
 			co_await std::suspend_always();
 		}
 	}
