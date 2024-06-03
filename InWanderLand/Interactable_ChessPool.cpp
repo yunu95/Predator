@@ -11,19 +11,19 @@ class Interactable_ChessPawnPool :
 	public GameObjectPool<Interactable_ChessPawn>, public SingletonComponent<Interactable_ChessPawnPool>, public Component, public PermanentObservee
 {
 public:
-	virtual void ObjectInitializer(Interactable_ChessPawn* comp) override
+	virtual void ObjectInitializer(std::weak_ptr<Interactable_ChessPawn> comp) override
 	{
-		comp->isSummoned = true;
+		comp.lock()->isSummoned = true;
 
-		comp->chessSummonedExplosionDelay = application::GlobalConstant::GetSingletonInstance().pod.chessSummonedExplosionDelay;
-		comp->chessBlockUnitLength = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitLength;
-		comp->chessBlockUnitOffset = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitOffset;
-		comp->vibeMaxOffset = application::GlobalConstant::GetSingletonInstance().pod.vibeMaxOffset;
+		comp.lock()->chessSummonedExplosionDelay = application::GlobalConstant::GetSingletonInstance().pod.chessSummonedExplosionDelay;
+		comp.lock()->chessBlockUnitLength = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitLength;
+		comp.lock()->chessBlockUnitOffset = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitOffset;
+		comp.lock()->vibeMaxOffset = application::GlobalConstant::GetSingletonInstance().pod.vibeMaxOffset;
 
 		assert(templateData && "templateData must already be matched.");
-		comp->damage = templateData->pod.damage;
-		comp->delayTime = templateData->pod.delayTime;
-		comp->particleEffectTime = templateData->pod.particleEffectTime;
+		comp.lock()->damage = templateData->pod.damage;
+		comp.lock()->delayTime = templateData->pod.delayTime;
+		comp.lock()->particleEffectTime = templateData->pod.particleEffectTime;
 	}
 
 	virtual void OnContentsPlay() override
@@ -62,19 +62,19 @@ class Interactable_ChessRookPool :
 	public GameObjectPool<Interactable_ChessRook>, public SingletonComponent<Interactable_ChessRookPool>, public Component, public PermanentObservee
 {
 public:
-	virtual void ObjectInitializer(Interactable_ChessRook* comp) override
+	virtual void ObjectInitializer(std::weak_ptr<Interactable_ChessRook> comp) override
 	{
-		comp->isSummoned = true;
+		comp.lock()->isSummoned = true;
 
-		comp->chessSummonedExplosionDelay = application::GlobalConstant::GetSingletonInstance().pod.chessSummonedExplosionDelay;
-		comp->chessBlockUnitLength = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitLength;
-		comp->chessBlockUnitOffset = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitOffset;
-		comp->vibeMaxOffset = application::GlobalConstant::GetSingletonInstance().pod.vibeMaxOffset;
+		comp.lock()->chessSummonedExplosionDelay = application::GlobalConstant::GetSingletonInstance().pod.chessSummonedExplosionDelay;
+		comp.lock()->chessBlockUnitLength = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitLength;
+		comp.lock()->chessBlockUnitOffset = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitOffset;
+		comp.lock()->vibeMaxOffset = application::GlobalConstant::GetSingletonInstance().pod.vibeMaxOffset;
 
 		assert(templateData && "templateData must already be matched.");
-		comp->damage = templateData->pod.damage;
-		comp->delayTime = templateData->pod.delayTime;
-		comp->particleEffectTime = templateData->pod.particleEffectTime;
+		comp.lock()->damage = templateData->pod.damage;
+		comp.lock()->delayTime = templateData->pod.delayTime;
+		comp.lock()->particleEffectTime = templateData->pod.particleEffectTime;
 	}
 
 	virtual void OnContentsStop() override
@@ -107,19 +107,19 @@ class Interactable_ChessBishopPool :
 	public GameObjectPool<Interactable_ChessBishop>, public SingletonComponent<Interactable_ChessBishopPool>, public Component, public PermanentObservee
 {
 public:
-	virtual void ObjectInitializer(Interactable_ChessBishop* comp) override
+	virtual void ObjectInitializer(std::weak_ptr<Interactable_ChessBishop> comp) override
 	{
-		comp->isSummoned = true;
+		comp.lock()->isSummoned = true;
 
-		comp->chessSummonedExplosionDelay = application::GlobalConstant::GetSingletonInstance().pod.chessSummonedExplosionDelay;
-		comp->chessBlockUnitLength = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitLength;
-		comp->chessBlockUnitOffset = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitOffset;
-		comp->vibeMaxOffset = application::GlobalConstant::GetSingletonInstance().pod.vibeMaxOffset;
+		comp.lock()->chessSummonedExplosionDelay = application::GlobalConstant::GetSingletonInstance().pod.chessSummonedExplosionDelay;
+		comp.lock()->chessBlockUnitLength = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitLength;
+		comp.lock()->chessBlockUnitOffset = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitOffset;
+		comp.lock()->vibeMaxOffset = application::GlobalConstant::GetSingletonInstance().pod.vibeMaxOffset;
 
 		assert(templateData && "templateData must already be matched.");
-		comp->damage = templateData->pod.damage;
-		comp->delayTime = templateData->pod.delayTime;
-		comp->particleEffectTime = templateData->pod.particleEffectTime;
+		comp.lock()->damage = templateData->pod.damage;
+		comp.lock()->delayTime = templateData->pod.delayTime;
+		comp.lock()->particleEffectTime = templateData->pod.particleEffectTime;
 	}
 
 	virtual void OnContentsStop() override
@@ -154,9 +154,9 @@ void Interactable_ChessPool::Start()
 	Interactable_ChessRookPool::Instance().MatchTemplateData();
 	Interactable_ChessBishopPool::Instance().MatchTemplateData();
 
-	std::vector<Interactable_ChessPawn*> pawnContainer = std::vector<Interactable_ChessPawn*>();
-	std::vector<Interactable_ChessRook*> rookContainer = std::vector<Interactable_ChessRook*>();
-	std::vector<Interactable_ChessBishop*> bishopContainer = std::vector<Interactable_ChessBishop*>();
+	std::vector<std::weak_ptr<Interactable_ChessPawn>> pawnContainer = std::vector<std::weak_ptr<Interactable_ChessPawn>>();
+	std::vector<std::weak_ptr<Interactable_ChessRook>> rookContainer = std::vector<std::weak_ptr<Interactable_ChessRook>>();
+	std::vector<std::weak_ptr<Interactable_ChessBishop>> bishopContainer = std::vector<std::weak_ptr<Interactable_ChessBishop>>();
 	for (int i = 0; i < initContainerSize; i++)
 	{
 		pawnContainer.push_back(Interactable_ChessPawnPool::Instance().Borrow());
@@ -171,32 +171,32 @@ void Interactable_ChessPool::Start()
 	}
 }
 
-Interactable_ChessPawn* Interactable_ChessPool::BorrowPawn()
+std::weak_ptr<Interactable_ChessPawn> Interactable_ChessPool::BorrowPawn()
 {
 	return Interactable_ChessPawnPool::Instance().Borrow();
 }
 
-Interactable_ChessRook* Interactable_ChessPool::BorrowRook()
+std::weak_ptr<Interactable_ChessRook> Interactable_ChessPool::BorrowRook()
 {
 	return Interactable_ChessRookPool::Instance().Borrow();
 }
 
-Interactable_ChessBishop* Interactable_ChessPool::BorrowBishop()
+std::weak_ptr<Interactable_ChessBishop> Interactable_ChessPool::BorrowBishop()
 {
 	return Interactable_ChessBishopPool::Instance().Borrow();
 }
 
-void Interactable_ChessPool::Return(Interactable_ChessPawn* chess)
+void Interactable_ChessPool::Return(std::weak_ptr<Interactable_ChessPawn> chess)
 {
 	Interactable_ChessPawnPool::Instance().Return(chess);
 }
 
-void Interactable_ChessPool::Return(Interactable_ChessRook* chess)
+void Interactable_ChessPool::Return(std::weak_ptr<Interactable_ChessRook> chess)
 {
 	Interactable_ChessRookPool::Instance().Return(chess);
 }
 
-void Interactable_ChessPool::Return(Interactable_ChessBishop* chess)
+void Interactable_ChessPool::Return(std::weak_ptr<Interactable_ChessBishop> chess)
 {
 	Interactable_ChessBishopPool::Instance().Return(chess);
 }

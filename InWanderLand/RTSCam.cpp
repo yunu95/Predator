@@ -21,16 +21,6 @@ void RTSCam::Start()
     pitch = rot.Euler().x * yunutyEngine::math::Deg2Rad;
     yaw = rot.Euler().y * yunutyEngine::math::Deg2Rad;
 
-    for (auto& each : Scene::getCurrentScene()->GetChildren())
-    {
-        auto unit = each->GetComponent<Unit>();
-        if (unit && unit->GetUnitSide() == Unit::UnitSide::Player)
-        {
-            SetTarget(each);
-            break;
-        }
-    }
-
     auto& gi = GetGI();
 
     ingameInitRot = rot;
@@ -139,53 +129,8 @@ void RTSCam::Update()
         auto deltaPos = targetPos - GetTransform()->GetWorldPosition();
         static constexpr float followRate = 3.9;
         GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition() + deltaPos * followRate * Time::GetDeltaTimeUnscaled());
-
-        auto front = yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation().Forward();
-        auto distToXZPlane = abs(yunutyEngine::graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition().y);
-        auto centeredPosition = Input::getMouseScreenPositionNormalized();
-        centeredPosition.x -= 0.5;
-        centeredPosition.y -= 0.5;
-        centeredPosition.y *= -1;
-        auto projectedPoint = yunutyEngine::graphics::Camera::GetMainCamera()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
-
-        if (Input::isKeyPushed(KeyCode::MouseLeftClick) || Input::isKeyPushed(KeyCode::MouseRightClick))
-            DebugBeacon::PlaceBeacon(projectedPoint, Input::isKeyPushed(KeyCode::MouseLeftClick) ?
-                yunuGI::Color::red() : yunuGI::Color::blue(), { 0.2,0.2,0.2 });
-        if (Input::isKeyPushed(KeyCode::MouseLeftClick))
-        {
-            if (groundLeftClickCallback) groundLeftClickCallback(projectedPoint);
-        }
-        else if (Input::isKeyLifted(KeyCode::MouseLeftClick))
-        {
-            if (groundLeftClickReleaseCallback) groundLeftClickReleaseCallback(projectedPoint);
-        }
-        if (Input::isKeyPushed(KeyCode::MouseRightClick))
-        {
-            if (groundRightClickCallback) groundRightClickCallback(projectedPoint);
-        }
-        else if (Input::isKeyLifted(KeyCode::MouseRightClick))
-        {
-            if (groundRightClickReleaseCallback) groundRightClickReleaseCallback(projectedPoint);
-        }
-
-        groundHoveringClickCallback(projectedPoint);
+        GetTransform()->SetWorldRotation(Quaternion::Lerp(GetTransform()->GetWorldRotation(), GetIdealRotation(), followRate * Time::GetDeltaTimeUnscaled()));
     }
-}
-void RTSCam::UnConstrainRegion()
-{
-    ConstrainByRegion(nullptr);
-}
-void RTSCam::ConstrainByRegion(const application::editor::RegionData* region)
-{
-    contrainingRegion = region;
-};
-void RTSCam::SetTarget(GameObject* target)
-{
-    SetTargets({ target });
-}
-void RTSCam::SetTargets(const std::vector<GameObject*>& targets)
-{
-    this->targets = targets;
 }
 float RTSCam::GetCameraSpeed() const
 {
@@ -202,34 +147,21 @@ float RTSCam::GetCameraSpeed() const
 
     return clamp(speed, min_Speed, max_Speed);
 }
+void RTSCam::SetIdealPosition(const Vector3d& position)
+{
+    idealPosition = position;
+}
+void RTSCam::SetIdealRotation(const Quaternion& rotation)
+{
+    idealRotation = rotation;
+}
 Vector3d RTSCam::GetIdealPosition()
 {
-    Vector3d targetPos = GetTransform()->GetWorldPosition();
-    // 영웅이 선택되어 있고, 카메라가 선택된 영웅을 따라가는 경우 targetPos는 영웅의 위치로 설정됩니다.
-    if (!targets.empty())
-    {
-        targetPos = Vector3d::zero;
-        for (auto each : targets)
-        {
-            targetPos += each->GetTransform()->GetWorldPosition();
-        }
-        targetPos /= targets.size();
-        if (targets.size() >= 2)
-        {
-            targetPos += distance * mulTargetsDistanceFactor;
-        }
-        else
-        {
-            targetPos += distance;
-        }
-    }
-    // 카메라가 지역 제한에 걸렸을 경우, targetPos를 지역 안으로 정의합니다.
-    if (contrainingRegion)
-    {
-        targetPos.x = clamp(targetPos.x, distance.x + contrainingRegion->pod.x - contrainingRegion->pod.width * 0.5, distance.x + contrainingRegion->pod.x + contrainingRegion->pod.width * 0.5);
-        targetPos.z = clamp(targetPos.z, distance.z + contrainingRegion->pod.z - contrainingRegion->pod.height * 0.5, distance.z + contrainingRegion->pod.z + contrainingRegion->pod.height * 0.5);
-    }
-    return targetPos;
+    return idealPosition;
+}
+Quaternion RTSCam::GetIdealRotation()
+{
+    return idealRotation;
 }
 
 void RTSCam::UpdateCameraView()

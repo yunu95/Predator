@@ -4,7 +4,6 @@
 #include "RTSCam.h"
 #include "PlayerController.h"
 #include "SkillPreviewSystem.h"
-#include "CursorDetector.h"
 #include "PlaytimeWave.h"
 #include "WaveData.h"
 #include "LocalTimeEntityManager.h"

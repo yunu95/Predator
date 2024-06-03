@@ -25,7 +25,7 @@ struct GC
 		this->data = input;
 		return *this;
 	}
-	operator T()
+	operator T() const
 	{
 		return data;
 	}

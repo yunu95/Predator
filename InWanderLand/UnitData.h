@@ -58,7 +58,7 @@ namespace application
 
 
             TO_JSON(POD_Unit)
-            FROM_JSON(POD_Unit)
+                FROM_JSON(POD_Unit)
         };
 
         class UnitData
@@ -68,7 +68,7 @@ namespace application
 
         public:
             virtual bool EnterDataFromTemplate() override;
-            virtual ITemplateData* GetTemplateData() override;
+            virtual Unit_TemplateData* GetTemplateData() override;
             virtual bool SetTemplateData(const std::string& dataName) override;
             virtual IEditableData* Clone() const override;
             virtual void OnRelocate(const Vector3d& newLoc) override;
@@ -82,7 +82,19 @@ namespace application
 
             POD_Unit pod;
 
-			Unit* inGameUnit{ nullptr };
+            // 내가 공격할 때
+            DelegateCallback<void()> onAttack;
+            // 내가 때린 공격이 적에게 맞았을 때, 근거리 공격인 경우라면 onAttack과 호출시점이 같겠으나 원거리 공격인 경우에는 시간차가 있을 수 있다. 
+            DelegateCallback<void()> onAttackHit;
+            // 내가 피해를 입었을 때
+            DelegateCallback<void()> onDamaged;
+            // 유닛이 새로 생성될 때
+            DelegateCallback<void()> onCreated;
+            // 유닛이 회전을 끝냈을 때
+            DelegateCallback<void()> onRotationFinish;
+            std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateEngage;
+            std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateExit;
+            mutable std::weak_ptr<Unit> inGameUnit;
 
         protected:
             virtual bool PreEncoding(json& data) const override;
@@ -95,7 +107,7 @@ namespace application
             palette::UnitEditorInstance* unitInstance{ nullptr };
 
             std::vector<UnitProductor*> productorSelector;
-			bool isSelectorInitialized{ false };
+            bool isSelectorInitialized{ false };
 
             UnitData();
             UnitData(const std::string& name);

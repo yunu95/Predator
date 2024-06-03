@@ -52,17 +52,8 @@ namespace yunutyEngine
         template<typename ComponentType>
         static ComponentType* LoadReferenceByGUID(const WCHAR* guid)
         {
-            //return LoadReferenceByGUID<ComponentType>(yutility::GetString(guid).c_str());
             UUID uuid;
             CLSIDFromString(guid, &uuid);
-            /*RPC_WSTR rpcStr = nullptr;
-            rpcStr = (RPC_WSTR)RpcSsAllocate((wcslen(guid) + 1) * sizeof(WCHAR));
-            if (rpcStr)
-                wcscpy_s(reinterpret_cast<WCHAR*>(rpcStr), wcslen(guid) + 1, guid);
-             */   //wcscpy_s((WCHAR*)rpcStr, wcslen(guid) + 1, guid);
-
-             //UuidFromStringW((RPC_WSTR)(guid), &uuid);
-             //RpcSsFree(rpcStr);
             return LoadReferenceByGUID<ComponentType>(uuid);
         }
         template<typename ComponentType>
@@ -123,6 +114,9 @@ namespace yunutyEngine
         bool GetActive();
         // 컴포넌트를 비활성화합니다. OnEnable, OnDisable 콜백 함수가 호출됩니다.
         void SetActive(bool active);
+        // 컴포넌트의 WeakPtr를 가져옵니다.
+        template<typename T>
+        std::weak_ptr<T> GetWeakPtr() const { return std::dynamic_pointer_cast<T>(GetWeakPtrFromGameObject().lock()); };
         // Update함수를 부를지 말지 결정합니다. isUpdate가 false면 게임 사이클에서 업데이트 함수가 불릴때 제외됩니다.
         void SetIsUpdating(bool isUpdating);
         std::weak_ptr<yunutyEngine::coroutine::Coroutine> StartCoroutine(coroutine::Coroutine&& coroutine);
@@ -146,6 +140,7 @@ namespace yunutyEngine
             GameObject* gameObject;
             GUID guid;
         };
+        std::weak_ptr<Component> GetWeakPtrFromGameObject()const;
         static Component::AddComponentDesc addComponentDesc;
         static std::unordered_map<GUID, Component*, yutility::GenericHash<GUID>, yutility::GenericEqual<GUID>> guidPtrMap;
         std::unordered_set<std::shared_ptr<coroutine::Coroutine>> coroutines;

@@ -19,14 +19,18 @@ namespace application
 
     CoroutineObject<void> Action_UnitRelocate::DoAction()
     {
-        auto ts = targetUnit->inGameUnit->GetTransform();
+        if (targetUnit->inGameUnit.expired())
+        {
+            co_return;
+        }
+        auto ts = targetUnit->inGameUnit.lock()->GetTransform();
         auto startPos = ts->GetWorldPosition();
 
         Vector3d endPos = { destinationUnit->pod.position.x, destinationUnit->pod.position.y, destinationUnit->pod.position.z };
 
         endPos.y = 0;
 
-        targetUnit->inGameUnit->m_navAgentComponent->Relocate(endPos);
+        targetUnit->inGameUnit.lock()->Relocate(endPos);
         co_return;
     }
 

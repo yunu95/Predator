@@ -168,7 +168,7 @@ void AutoAttackProjectile::Update()
 {
 	if (isShootOperating)
 	{
-		if (m_ownerUnit->GetUnitSide() == Unit::UnitSide::Player)
+		if (m_ownerUnit->IsPlayerUnit())
 			AutoChaseShootingFunction();
 		else
 			StraightShootingFunction();
