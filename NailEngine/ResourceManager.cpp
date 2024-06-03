@@ -653,6 +653,13 @@ FBXNode* ResourceManager::GetFBXNode(const std::wstring& fbxName)
 
 std::pair<float, std::vector<yunuGI::VFXInfo>>& ResourceManager::GetVFXInfo(const std::wstring& materialName) 
 {
+    size_t pos = materialName.find(L"_instance");
+    if (pos != std::wstring::npos)
+    {
+        std::wstring result = materialName.substr(0, pos);
+        return this->vfxFrameInfoMap[result];
+    }
+
     return this->vfxFrameInfoMap[materialName];
 }
 
@@ -1014,6 +1021,7 @@ void ResourceManager::CreateDefaultShader()
     CreateShader(L"Skinned_PointLightShadowVS.cso");
     CreateShader(L"ParticleVS.cso");
     CreateShader(L"TextureAnimVS.cso");
+    CreateShader(L"SkinnedVFX_VS.cso");
 #pragma endregion
 
 #pragma region PS

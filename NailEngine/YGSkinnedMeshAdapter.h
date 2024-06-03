@@ -27,7 +27,18 @@ namespace yunuGIAdapter
 
         ~SkinnedMeshAdapter()
         {
-            RenderSystem::Instance.Get().PopSkinnedRenderableObject(renderable.get());
+
+			for (int i = 0; i < static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec.size(); ++i)
+			{
+                if (static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[i]->renderInfo.material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+                {
+                    InstancingManager::Instance.Get().PopSkinnedDeferredData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[i]);
+                }
+                else
+                {
+                    InstancingManager::Instance.Get().PopSkinnedForwardData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[i]);
+                }
+			}
         }
 
         virtual void SetBone(std::wstring fbxName) override
@@ -116,7 +127,8 @@ namespace yunuGIAdapter
 
 		virtual yunuGI::IMaterial* GetMaterial(unsigned int index = 0, bool isInstance = true)override
 		{
-			return this->materialVec[index]->GetVariation(isInstance);
+			//return this->materialVec[index]->GetVariation(isInstance);
+            return this->materialVec[index].get();
 		};
 
 		virtual int GetMaterialCount() override

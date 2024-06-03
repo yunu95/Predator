@@ -207,7 +207,8 @@ void GraphicsTest()
 
         
 
-        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Wave");
+        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SVFX_Wave");
+        obj2->GetTransform()->SetLocalScale(Vector3d{ 0.01,0.01,0.01 });
         obj2->SetSelfActive(false);
         obj2->AddComponent<VFXAnimator>();
         /*auto obj3 = Scene::getCurrentScene()->AddGameObject();

@@ -661,6 +661,9 @@
     <FxCompile Include="RuntimeDependency\resources\Shader\VFX_PS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\SkinnedVFX_VS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">

@@ -6,12 +6,11 @@ void VFXAnimator::Start()
 	auto child = GetGameObject()->GetChildren();
 	for (auto& each : child)
 	{
-		renderer;
 		if (auto staticMesh = each->GetComponent<graphics::StaticMeshRenderer>(); staticMesh)
 		{
 			renderer = &staticMesh->GetGI();
 		}
-		else 
+		else if(auto skinnedMesh = each->GetComponent<graphics::SkinnedMesh>(); skinnedMesh)
 		{
 			renderer = &each->GetComponent<graphics::SkinnedMesh>()->GetGI();
 		}
@@ -26,13 +25,23 @@ void VFXAnimator::Start()
 				this->frameRate = temp.first;
 				this->frameInfoVec.push_back(temp.second);
 
-				renderer->GetMaterial(i)->SetVertexShader(_resourceManager->GetShader(L"TextureAnimVS.cso"));
+
+
+				if (auto staticMesh = each->GetComponent<graphics::StaticMeshRenderer>(); staticMesh)
+				{
+					renderer->GetMaterial(i)->SetVertexShader(_resourceManager->GetShader(L"TextureAnimVS.cso"));
+				}
+				else if (auto skinnedMesh = each->GetComponent<graphics::SkinnedMesh>(); skinnedMesh)
+				{
+					renderer->GetMaterial(i)->SetVertexShader(_resourceManager->GetShader(L"SkinnedVFX_VS.cso"));
+				}
+				
 				renderer->GetMaterial(i)->SetPixelShader(_resourceManager->GetShader(L"VFX_PS.cso"));
 			}
 		}
+		this->curFrameVec.resize(this->frameInfoVec.size());
+		break;
 	}
-
-	this->curFrameVec.resize(this->frameInfoVec.size());
 }
 
 void VFXAnimator::Update()

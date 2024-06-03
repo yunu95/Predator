@@ -68,7 +68,7 @@ public:
 		for (auto& i : renderInfoVec)
 		{
 			i->renderInfo.mesh = mesh;
-			InstancingManager::Instance.Get().RegisterSkinnedData(i);
+			InstancingManager::Instance.Get().RegisterSkinnedDeferredData(i);
 		}
 	}
 
@@ -89,13 +89,20 @@ public:
 			this->materialVec.emplace_back(reinterpret_cast<Material*>(material));
 
 			RenderSystem::Instance.Get().RegisterSkinnedRenderInfo(this, this->renderInfoVec.back());
-			InstancingManager::Instance.Get().RegisterSkinnedData(this->renderInfoVec.back());
+			InstancingManager::Instance.Get().RegisterSkinnedDeferredData(this->renderInfoVec.back());
 		}
 		else
 		{
 			if (this->materialVec[index] != reinterpret_cast<Material*>(material))
 			{
-				InstancingManager::Instance.Get().PopSkinnedData(renderInfoVec[index]);
+				if (this->materialVec[index]->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+				{
+					InstancingManager::Instance.Get().PopSkinnedDeferredData(renderInfoVec[index]);
+				}
+				else
+				{
+					InstancingManager::Instance.Get().PopSkinnedForwardData(renderInfoVec[index]);
+				}
 
 				renderInfoVec[index]->renderInfo.mesh = this->mesh;
 				renderInfoVec[index]->renderInfo.material = reinterpret_cast<Material*>(material);
@@ -103,7 +110,14 @@ public:
 
 				this->materialVec[index] = reinterpret_cast<Material*>(material);
 
-				InstancingManager::Instance.Get().RegisterSkinnedData(renderInfoVec[index]);
+				if (reinterpret_cast<Material*>(material)->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+				{
+					InstancingManager::Instance.Get().RegisterSkinnedDeferredData(renderInfoVec[index]);
+				}
+				else
+				{
+					InstancingManager::Instance.Get().RegisterSkinnedForwardData(renderInfoVec[index]);
+				}
 			}
 		}
 	}
