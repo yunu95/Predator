@@ -30,3 +30,4 @@
 #include "IAnimator.h"
 #include "ParticleRenderInfo.h"
 #include "IVideo.h"
+#include "VFXInfo.h"

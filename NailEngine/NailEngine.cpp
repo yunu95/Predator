@@ -187,6 +187,15 @@ void NailEngine::ResizeResolution(unsigned int width, unsigned int height)
     }
 }
 
+void NailEngine::SetClearColor(yunuGI::Color color)
+{
+    auto& rt = this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->GetRT(0);
+    rt.clearColor[0] = color.r;
+    rt.clearColor[1] = color.g;
+    rt.clearColor[2] = color.b;
+    rt.clearColor[3] = color.a;
+}
+
 std::shared_ptr<ConstantBuffer>& NailEngine::GetConstantBuffer(unsigned int index)
 {
     return this->constantBuffers[index];
@@ -286,20 +295,6 @@ void NailEngine::CreateConstantBuffer()
 void NailEngine::CreateRenderTargetGroup()
 {
     this->renderTargetGroup.resize(static_cast<int>(RENDER_TARGET_TYPE::END));
-    //// SwapChain
-    //{
-    //	std::vector<RenderTarget> rtVec(SWAP_CHAIN_BUFFER_COUNT);
-    //	for (int i = 0; i < SWAP_CHAIN_BUFFER_COUNT; i++)
-    //	{
-    //		std::wstring name = L"SwapChainTarget_" + std::to_wstring(i);
-
-    //		Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D;
-    //		this->swapChain->GetSwapChain()->GetBuffer(i, __uuidof(ID3D11Texture2D), &tex2D);
-    //		rtVec[i].texture = ResourceManager::Instance.Get().CreateTextureFromResource(name, tex2D);
-    //	}
-    //	this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SWAP_CHAIN)] = std::make_shared<RenderTargetGroup>();
-    //	this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SWAP_CHAIN)]->SetRenderTargetVec(rtVec);
-    //}
 
     // G_BUFFER
     {
@@ -328,11 +323,6 @@ void NailEngine::CreateRenderTargetGroup()
             DXGI_FORMAT_R32G32B32A32_FLOAT,
             static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
         ));
-
-        //rtVec[2].clearColor[0] = 0.7686;
-        //rtVec[2].clearColor[1] = 0.8784;
-        //rtVec[2].clearColor[2] = 0.9451;
-        //rtVec[2].clearColor[3] = 1.f;
 
         rtVec[3].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
             L"UtilTarget",
@@ -433,10 +423,10 @@ void NailEngine::CreateRenderTargetGroup()
             static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
         ));
 
-        rtVec[0].clearColor[0] = 0.7686;
-        rtVec[0].clearColor[1] = 0.8784;
-        rtVec[0].clearColor[2] = 0.9451;
-        rtVec[0].clearColor[3] = 1.f;
+		rtVec[0].clearColor[0] = 0.7686;
+		rtVec[0].clearColor[1] = 0.8784;
+		rtVec[0].clearColor[2] = 0.9451;
+		rtVec[0].clearColor[3] = 1.f;
 
         this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)] = std::make_shared<RenderTargetGroup>();
         this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->SetRenderTargetVec(rtVec);
@@ -550,31 +540,5 @@ void NailEngine::CreateRenderTargetGroup()
             static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
         ));
         ShadowPass::Instance.Get().SetTempRTV(rtVec[0].texture.get());
-        //this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)] = std::make_shared<RenderTargetGroup>();
-        //this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::UP4x4_0)]->SetRenderTargetVec(rtVec);
     }
-
-    //// SHADOW
-    //{
-    //	std::vector<RenderTarget> rtVec(SHADOW_MEMBER_COUNT);
-
-    //	rtVec[0].texture = ResourceManager::Instance.Get().CreateTexture(
-    //		L"ShadowTarget",
-    //		SM_SIZE,
-    //		SM_SIZE,
-    //		DXGI_FORMAT_R32G32B32A32_FLOAT,
-    //		static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
-    //	);
-
-    //	auto dsTexture = ResourceManager::Instance.Get().CreateTexture(
-    //		L"ShadowTargetDepth",
-    //		SM_SIZE,
-    //		SM_SIZE,
-    //		DXGI_FORMAT_D24_UNORM_S8_UINT,
-    //		static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL)
-    //	);
-
-    //	this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SHADOW)] = std::make_shared<RenderTargetGroup>();
-    //	this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SHADOW)]->SetRenderTargetVec(rtVec, dsTexture->GetDSV());
-    //}
 }

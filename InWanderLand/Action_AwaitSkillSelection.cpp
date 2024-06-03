@@ -1,5 +1,8 @@
 #include "Action_AwaitSkillSelection.h"
 #include "LocalTimeEntityManager.h"
+#include "Skill.h"
+#include "SkillType.h"
+#include "DelegateCallback.h"
 
 #include "EditorLayer.h"
 #include "YunutyEngine.h"
@@ -7,74 +10,52 @@
 
 namespace application
 {
-    Action_AwaitSkillSelection::Action_AwaitSkillSelection(int skillIndex)
+    Action_AwaitSkillSelection::Action_AwaitSkillSelection(SkillType::Enum skillType)
     {
-        this->index = skillIndex;
-    }
+        this->skillType.enumValue = skillType;
+        this->skillType.enumName = POD_Enum<SkillType::Enum>::GetEnumNameMap().at(skillType);
+    };
 
     CoroutineObject<void> Action_AwaitSkillSelection::DoAction()
     {
         bool skillSelected = false;
-        Unit::UnitType unitType = Unit::UnitType::Warrior;
-        Unit::SkillEnum skillType;
-        switch (index)
+        switch (skillType.enumValue)
         {
-        case 1: case 2:
-            unitType = Unit::UnitType::Warrior;
-            break;
-        case 3: case 4:
-            unitType = Unit::UnitType::Magician;
-            break;
-        case 5: case 6:
-            unitType = Unit::UnitType::Healer;
+        case SkillType::ROBIN_Q: case SkillType::ROBIN_W:
+        case SkillType::URSULA_Q: case SkillType::URSULA_W:
+        case SkillType::HANSEL_Q: case SkillType::HANSEL_W:
+            PlayerController::Instance().onSkillSelect[skillType.enumValue].AddVolatileCallback([&skillSelected]() {skillSelected = true; });
             break;
         };
-        switch (index)
-        {
-        case 1: case 3:case 5:
-            skillType = Unit::SkillEnum::Q;
-            break;
-        case 2:case 4: case 6:
-            skillType = Unit::SkillEnum::W;
-            break;
-        };
-        PlayerController::Instance().skillSelectionCallback[unitType][skillType].push_back([&skillSelected]() { skillSelected = true; });
         while (!skillSelected)
         {
             co_await std::suspend_always{};
         }
         co_return;
-    }
-
-    void Action_AwaitSkillSelection::SetSkillIndex(int index)
-    {
-        this->index = index;
-    }
+    };
 
     void Action_AwaitSkillSelection::ImGui_DrawDataPopup(Action_AwaitSkillSelection* data)
     {
-        if (ImGui::MenuItem("SetSkillIndex - 1:RobinQ 2:RobinW 3:UruslaQ 4:UruslaW 5:HanselQ 6::HanselW"))
+        if (ImGui::MenuItem("SetSkillType"))
         {
             editor::EditorLayer::SetInputControl(false);
-            static int index = 0;
-            index = data->index;
-            editor::imgui::ShowMessageBox("SetSkillIndex - 1:RobinQ 2:RobinW 3:UruslaQ 4:UruslaW 5:HanselQ 6::HanselW", [data]()
+            static POD_Enum<SkillType::Enum> skillType;
+            editor::imgui::ShowMessageBox("SetSkillType", [data]()
                 {
                     editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
                     ImGui::Separator();
 
                     ImGui::SetNextItemWidth(-1);
-                    ImGui::InputInt("##AwaitSkillSelectionIndex", &index);
+                    imgui::data::DrawData("SkillType", skillType);
 
                     ImGui::Separator();
-                    index = clamp(index, 1, 6);
 
                     if (ImGui::Button("OK"))
                     {
-                        data->SetSkillIndex(index);
+                        data->skillType = skillType;;
                         ImGui::CloseCurrentPopup();
-                        editor::imgui::CloseMessageBox("SetSkillIndex - 1:RobinQ 2:RobinW 3:UruslaQ 4:UruslaW 5:HanselQ 6::HanselW");
+                        editor::imgui::CloseMessageBox("SetSkillType");
                         editor::EditorLayer::SetInputControl(true);
                     }
                     ImGui::SameLine();
@@ -82,7 +63,7 @@ namespace application
                     if (ImGui::Button("Cancel"))
                     {
                         ImGui::CloseCurrentPopup();
-                        editor::imgui::CloseMessageBox("SetSkillIndex - 1:RobinQ 2:RobinW 3:UruslaQ 4:UruslaW 5:HanselQ 6::HanselW");
+                        editor::imgui::CloseMessageBox("SetSkillType");
                         editor::EditorLayer::SetInputControl(true);
                     }
                 }, 300);
@@ -91,7 +72,7 @@ namespace application
 
     bool Action_AwaitSkillSelection::PreEncoding(json& data) const
     {
-        data["index"] = index;
+        data["skillType"] = skillType.enumName;
         return true;
     }
 
@@ -102,7 +83,16 @@ namespace application
 
     bool Action_AwaitSkillSelection::PreDecoding(const json& data)
     {
-        index = data["index"];
+        if (data.contains("index"))
+        {
+            skillType.enumValue = data["index"].get<int>();
+            skillType.enumName = POD_Enum<SkillType::Enum>::GetEnumNameMap().at(skillType.enumValue);
+        }
+        else
+        {
+            skillType.enumName = data["skillType"];
+            skillType.enumValue = POD_Enum<SkillType::Enum>::GetNameEnumMap().at(skillType.enumName);
+        }
         return true;
     }
 

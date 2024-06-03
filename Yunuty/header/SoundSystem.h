@@ -39,6 +39,8 @@ namespace yunutyEngine
         static const unordered_set<string>& GetLoadedSoundsList();
         static void SetMusicVolume(float volume);
         static float GetMusicVolume();
+        static void SetSFXVolume(float volume);
+        static float GetSFXVolume();
     private:
         static SoundSystem* soundInstance;
         static SoundSystem* SingleInstance();
@@ -62,6 +64,7 @@ namespace yunutyEngine
         FMOD::System* fmodSystem = nullptr;
         int lastChannelIndex{ 0 };
         float musicVolume = 1.0f;
+        float sfxVolume = 1.0f;
         void* extradriverdata = 0;
         unordered_set<string> loadedSounds;
         unordered_set<string> loadedSounds3D;

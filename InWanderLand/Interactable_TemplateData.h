@@ -20,6 +20,11 @@ namespace application
 		struct POD_Interactable_TemplateData
 		{
 			std::string fBXName = std::string();
+			bool activeInteractable = false;
+			bool repetition = false;
+			float delayTime = 1.5;
+			float particleEffectTime = 2;
+			float damage = 0;
 
 			/// GlobalConstant
 

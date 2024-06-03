@@ -14,45 +14,51 @@
 #include "GameManager.h"
 #include "RTSCam.h"
 #include "TacticModeSystem.h"
+#include "InWanderLand.h"
 
 PlaytimeWave::~PlaytimeWave()
 {
     waveData->playtimeWave = nullptr;
 }
-
+std::weak_ptr<PlaytimeWave> PlaytimeWave::GetCurrentOperatingWave()
+{
+    return currentOperativeWave;
+}
+std::weak_ptr<PlaytimeWave> PlaytimeWave::currentOperativeWave;
 void PlaytimeWave::ActivateWave()
 {
     isWaveActivated = true;
+    currentOperativeWave = GetGameObject()->GetComponentWeakPtr<PlaytimeWave>();
     array<int, 3> comboObjectives = { waveData->pod.comboObjective1, waveData->pod.comboObjective2, waveData->pod.comboObjective3 };
-    GameManager::Instance().SetComboObjectives(comboObjectives);
+    PlayerController::Instance().SetComboObjectives(comboObjectives);
     UIManager::Instance().ShowComboObjectives();
     /// 플레이어 유닛 전투상태 돌입
-    GameManager::Instance().ReportPlayerEnteredWaveRegion(this);
-    TacticModeSystem::Instance().RegisterCurrentWave(this);
+    PlayerController::Instance().OnWaveStart(GetWeakPtr<PlaytimeWave>());
+    //TacticModeSystem::Instance().RegisterCurrentWave(this);
 
     // 카메라 가동범위 제한
     if (auto rtsCam = dynamic_cast<RTSCam*>(graphics::Camera::GetMainCamera()))
     {
-        rtsCam->ConstrainByRegion(waveData->pod.contraintRegion);
+        PlayerController::Instance().LockCamInRegion(waveData->pod.contraintRegion);
+        //rtsCam->ConstrainByRegion(waveData->pod.contraintRegion);
     }
 }
 void PlaytimeWave::DeActivateWave()
 {
     waveDataIndex = 0;
-    GameManager::Instance().EndBattle();
+    PlayerController::Instance().OnWaveEnd(GetWeakPtr<PlaytimeWave>());
     UIManager::Instance().HideComboObjectvies();
     this->SetActive(false);
     // 카메라 가동범위 제한
     if (auto rtsCam = dynamic_cast<RTSCam*>(graphics::Camera::GetMainCamera()))
     {
-        rtsCam->UnConstrainRegion();
+        PlayerController::Instance().LockCamInRegion(nullptr);
+        //rtsCam->UnConstrainRegion();
     }
 }
 
 void PlaytimeWave::Start()
 {
-    productorSelector.push_back(&MeleeEnemyProductor::Instance());
-    productorSelector.push_back(&RangedEnemyProductor::Instance());
 }
 
 void PlaytimeWave::Update()
@@ -73,24 +79,8 @@ void PlaytimeWave::Update()
         {
             // 유닛을 소환하고 인덱스를 증가시킨다.
             // 유닛 데이터는 아래 값을 사용하면 됨.
-            waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit;
-            Vector3d pos = { waveData->waveUnitDatasVector[waveDataIndex]->pod.position.x,
-                waveData->waveUnitDatasVector[waveDataIndex]->pod.position.y,
-                waveData->waveUnitDatasVector[waveDataIndex]->pod.position.z };
-
-            UnitProductor* currentSelectedProductor;
-
-            application::editor::POD_Unit_TemplateData templateUnitData = waveData->waveUnitDatasVector[waveDataIndex]->
-                pod.templateData->pod;
-            application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-
-            GameObject* waveUnitObject;
-
-            waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit->GetTransform()->SetWorldPosition(pos);
-            waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit->m_navAgentComponent->GetTransform()->SetWorldPosition(pos);
-            waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit->GetGameObject()->SetSelfActive(true);
-
-            m_currentWaveUnitVector.push_back(waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit);
+            auto unitData = waveData->waveUnitDatasVector[waveDataIndex];
+            unitData->inGameUnit = UnitPool::SingleInstance().Borrow(unitData);
 
             nextSummonUnitIndex++;
             waveDataIndex++;
@@ -104,7 +94,7 @@ void PlaytimeWave::Update()
         for (auto& e : m_currentWaveUnitVector)
         {
             // 한 유닛이라도 살아 있다면 bool값을 false로
-            if (!(e->IsUnitDead()))
+            if (e->IsAlive())
             {
                 isAllUnitTerminated = false;
                 break;

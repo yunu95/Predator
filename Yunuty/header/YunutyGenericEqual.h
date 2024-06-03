@@ -4,7 +4,7 @@
 
 namespace yunutyEngine
 {
-    // yunutyUtility¿¡´Â ÇÔ¼ö Á¤ÀÇ, È¤Àº functor¸¸ µé¾î°£´Ù.
+    // yunutyUtilityì—ëŠ” í•¨ìˆ˜ ì •ì˜, í˜¹ì€ functorë§Œ ë“¤ì–´ê°„ë‹¤.
     namespace yutility
     {
         template<typename T>
@@ -12,6 +12,14 @@ namespace yunutyEngine
             bool operator()(const T& lhs, const T& rhs) const {
                 // Compare Ts for equality
                 return (!memcmp(&(lhs), &(rhs), sizeof(T)));
+            }
+        };
+        template<typename T>
+        struct WeakPtrEqual
+        {
+            bool operator()(const std::weak_ptr<T>& lhs, const std::weak_ptr<T>& rhs) const
+            {
+                return lhs.lock().get() == rhs.lock().get();
             }
         };
     }

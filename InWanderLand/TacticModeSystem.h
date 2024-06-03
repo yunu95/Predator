@@ -5,6 +5,8 @@
 #include "PlayerUnit.h"
 #include "PermanentObservee.h"
 #include <unordered_map>
+#include <memory>
+#include <queue>
 
 /// <summary>
 /// 전술모드 시스템.
@@ -17,6 +19,7 @@
 class RTSCam;
 class CursorDetector;
 class PlaytimeWave;
+class UnitCommand;
 
 class TacticModeSystem : public SingletonComponent<TacticModeSystem>, public Component, public PermanentObservee
 {
@@ -26,84 +29,119 @@ public:
     virtual void Update() override;
 
 	virtual void OnContentsStop() override;
+    virtual void OnContentsPlay() override; 
     virtual Component* GetComponent() override { return this; }
 
-	enum OrderType
-	{
-		Move,
-		AttackMove,
-		QSkill,
-		WSkill
-	};
+public:
+    bool IsCoolTime() { return this->isCoolTime; }
+    bool IsOperation() { return this->isOperating; }
+    bool IsExecuting() { return this->isExecuting; }
 
-    struct TacticPreview
-    {
-        Vector3d finalPos;
-        yunuGI::IMesh* mesh;
-    };
+    // 전술모드를 활성화하는 함수입니다.
+    void OperateTacticSystem();
 
-    void ToggleRequested(InputManager::SelectedSerialNumber currentSelectedNum);
+    // 유닛의 행동을 큐에 등록할 수 있게 해주는 함수 입니다.
+    void Enqueue(std::shared_ptr<UnitCommand> command);
 
-    void SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum);
-    void SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum);
-    void SetLeftClickAddQueueForSkill(InputManager::SelectedSerialNumber currentSelectedNum, Unit::SkillEnum currentSelectedSkill);
+    // 전술 모드가 풀리면 실행될 함수 입니다.
+    void Execute();
 
-    /// Tutorial 관련 멤버
-    void RegisterTutorialQuestAction(Unit::UnitType p_targetUnit, OrderType p_orderType);
-
-    void EngageTacticMode();
-    void ExitTacticMode();
-    void SetMovingSystemComponent(RTSCam* sys);
-
-    bool IsOrderingTimingNow() const;
-    bool IsUnitsPerformingCommand() const;
-    bool IsTacticModeCoolTime() const;
-
-    void SetCurrentCoolTimeElapsed(float p_duration);
-    float GetLeftCoolTime();
-
-    void AddGauge(int p_gauge);
-
-	void RegisterCurrentWave(PlaytimeWave* p_wave);
-
-	CursorDetector* m_cursorDetector;
-
+    // 맨 마지막 명령 하나를 지우는 함수입니다.
     void PopCommand();
+
+    // 모든 명령을 지우는 함수입니다.
     void ClearCommand();
-    void ReportTacticActionFinished();
 
 private:
-    void ShowUnitSkillPreview(Unit* unit, Unit::SkillEnum skillKind);
+    // 전술모드 내부에서 등록된 명령들을 실행해주는 함수입니다.
+    coroutine::Coroutine ExecuteInternal();
 
 private:
-    float m_maxGauge{ 100 };
-    float m_currentGauge{ 0 };
+    std::deque<std::shared_ptr<UnitCommand>> commandQueue;
+    std::shared_ptr<UnitCommand> robinLastCommand;
+    std::shared_ptr<UnitCommand> ursulaLastCommand;
+    std::shared_ptr<UnitCommand> hanselLastCommand;
 
-    float skillCost{ 0.0f };
-    float moveCost{ 0.0f };
-    float attackCost{ 0.0f };
+    bool isOperating = false;
+    bool isCoolTime = false;
+    bool isExecuting = false;
+    float coolTime;
+    float elapsedTime;
 
-    float gaugeRecoveryPerSecond{ 0.0f };
-
-    InputManager::SelectedSerialNumber m_latestSelectedUnitNum;
-
-	std::vector<Unit*> m_currentWaveUnits;
-
-	RTSCam* m_rtsCam;
-    bool isCoolTime{ false };
-    float m_engageCoolTimeDuration{ 5.0f };
-    float m_engageCoolTimeElapsed{ 0.0f };
-
-    bool isTacticModeOperating;					// 명령을 내리는 시간일 때 true.
-    bool isTacticOrderPerforming;				// 내린 명령을 수행하고 있을 때 true.
-
-    Unit* currentSelectedUnit{ nullptr };
-
-    std::unordered_map<Unit::UnitType, PlayerUnit*> playerComponentMap;
-
-    std::deque<Unit*> sequenceQueue;
-    
-
-	PlaytimeWave* m_currentOperatingWave;
+//	enum OrderType
+//	{
+//		Move,
+//		AttackMove,
+//		QSkill,
+//		WSkill
+//	};
+//
+//    struct TacticPreview
+//    {
+//        Vector3d finalPos;
+//        yunuGI::IMesh* mesh;
+//    };
+//
+//    void ToggleRequested(InputManager::SelectedSerialNumber currentSelectedNum);
+//
+//    void SetTacticModeRightClickFunction(InputManager::SelectedSerialNumber currentSelectedNum);
+//    void SetLeftClickAddQueueForAttackMove(InputManager::SelectedSerialNumber currentSelectedNum);
+//    void SetLeftClickAddQueueForSkill(InputManager::SelectedSerialNumber currentSelectedNum, Unit::SkillEnum currentSelectedSkill);
+//
+//    /// Tutorial 관련 멤버
+//    void RegisterTutorialQuestAction(Unit::UnitType p_targetUnit, OrderType p_orderType);
+//
+//    void EngageTacticMode();
+//    void ExitTacticMode();
+//    void SetMovingSystemComponent(RTSCam* sys);
+//
+//    bool IsOrderingTimingNow() const;
+//    bool IsUnitsPerformingCommand() const;
+//    bool IsTacticModeCoolTime() const;
+//
+//    void SetCurrentCoolTimeElapsed(float p_duration);
+//    float GetLeftCoolTime();
+//
+//    void AddGauge(int p_gauge);
+//
+//	void RegisterCurrentWave(PlaytimeWave* p_wave);
+//
+//	CursorDetector* m_cursorDetector;
+//
+//    void PopCommand();
+//    void ClearCommand();
+//    void ReportTacticActionFinished();
+//
+//private:
+//    void ShowUnitSkillPreview(Unit* unit, Unit::SkillEnum skillKind);
+//
+//private:
+//    bool isReady=false;
+//    float m_maxGauge{ 100 };
+//    float m_currentGauge{ 0 };
+//
+//    float skillCost{ 0.0f };
+//    float moveCost{ 0.0f };
+//    float attackCost{ 0.0f };
+//
+//    float gaugeRecoveryPerSecond{ 0.0f };
+//
+//    InputManager::SelectedSerialNumber m_latestSelectedUnitNum;
+//
+//	std::vector<Unit*> m_currentWaveUnits;
+//
+//	RTSCam* m_rtsCam;
+//    bool isCoolTime{ false };
+//    float m_engageCoolTimeDuration{ 5.0f };
+//    float m_engageCoolTimeElapsed{ 0.0f };
+//
+//    bool isTacticModeOperating;					// 명령을 내리는 시간일 때 true.
+//    bool isTacticOrderPerforming;				// 내린 명령을 수행하고 있을 때 true.
+//
+//    Unit* currentSelectedUnit{ nullptr };
+//
+//    std::unordered_map<Unit::UnitType, PlayerUnit*> playerComponentMap;
+//
+//    std::deque<Unit*> sequenceQueue;
 };
 

@@ -1,29 +1,25 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "ContentsObservee.h"
+#include "UnitAcquisitionSphereCollider.h"
 
 class Unit;
 
-class CursorDetector : public Component, public ContentsObservee
+class CursorDetector : public UnitAcquisitionSphereCollider, public ContentsObservee
 {
 public:
-	virtual void OnTriggerEnter(physics::Collider* collider) override;
-	virtual void OnTriggerExit(physics::Collider* collider) override;
+    virtual void OnUnitEnter(Unit* hostile) override;
+    virtual void OnUnitExit(Unit* hostile) override;
+    virtual void OnAllyEnter(Unit* hostile) override;
+    virtual void OnAllyExit(Unit* hostile) override;
+    virtual void OnHostileEnter(Unit* hostile) override;
+    virtual void OnHostileExit(Unit* hostile) override;
 
-	virtual void Start() override;
-	virtual void Update() override;
+    virtual void Start() override;
+    virtual void Update() override;
 
-	void EraseUnitFromContainer(Unit* p_unit);
-
-	Unit* GetCurrentOnMouseUnit() const;
-	virtual Component* GetComponent() override { return this; }
-
+    std::weak_ptr<Unit> GetCurrentOnMouseUnit() const;
+    virtual Component* GetComponent() override { return this; }
 private:
-	Unit* m_currentSelectedUnit{ nullptr };
-	std::set<Unit*> m_onMouseUnits;
-
-	GameObject* m_SelectEffectObject;
-
-	void DetermineClosestUnit();
+    GameObject* m_SelectEffectObject;
 };
-

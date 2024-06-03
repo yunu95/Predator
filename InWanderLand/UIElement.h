@@ -16,8 +16,9 @@ class UIOffsetTransition;
 class ColorTintTimer;
 class PlayMusicTimer;
 class UISpriteAnimation;
+class TimerComponent;
 // 임포트된 UI 요소에 대한 정보를 잔뜩 저장하는 클래스
-class UIElement : public Component
+class UIElement : public Component, public ContentsObservee
 {
 private:
     // 복제된 UIElement의 하위 요소들에 대한 정보
@@ -26,6 +27,7 @@ private:
     std::unordered_map<UIEnumID, UIElement*> localUIsByEnumID;
     std::unordered_map<int, JsonUIData> localUIdatasByIndex;
     bool enabled = true;
+    virtual Component* GetComponent() override { return this; }
 public:
     bool GetUIEnabled() { return enabled; }
     virtual void Start() override;

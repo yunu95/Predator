@@ -67,9 +67,6 @@
     <Filter Include="Contents\RangeSystem">
       <UniqueIdentifier>{8f88b8f0-05a0-458e-8199-c421742d4d60}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\FSM">
-      <UniqueIdentifier>{32381cc4-5559-4056-a930-6663da504c19}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents\UnitFactory">
       <UniqueIdentifier>{acd2f4f0-ac5f-47d4-9337-b5d6450ce773}</UniqueIdentifier>
     </Filter>
@@ -78,9 +75,6 @@
     </Filter>
     <Filter Include="TestCodes">
       <UniqueIdentifier>{8339e451-67eb-4692-ba45-88e6ad08ee10}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\InputManager">
-      <UniqueIdentifier>{f1dccdf0-9ecd-4b27-aefe-392012154399}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contents\SkillSystem">
       <UniqueIdentifier>{4e094e6e-1794-44d8-b6ae-21411ec09e19}</UniqueIdentifier>
@@ -151,9 +145,6 @@
     <Filter Include="Editor\IO\KeyInput">
       <UniqueIdentifier>{ba70a303-f04f-429e-a442-3276da507949}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\Timer">
-      <UniqueIdentifier>{e6ac6c6a-8749-4b81-8b38-f053b8e345ba}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents\UnitStatusComponent\FieldDamage">
       <UniqueIdentifier>{ea62f4c6-e57e-4246-87d0-8a35f4c29d5f}</UniqueIdentifier>
     </Filter>
@@ -199,12 +190,6 @@
     <Filter Include="TestCodes\TestUtils">
       <UniqueIdentifier>{79e1c81f-2b86-45d4-8d80-6134d13375c4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\SingleNavigationField">
-      <UniqueIdentifier>{955952c8-9aa3-451c-9298-ee3adedb93d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\DebuggingSystem">
-      <UniqueIdentifier>{e8d5df45-576d-4ade-b26c-fbdf57f67781}</UniqueIdentifier>
-    </Filter>
     <Filter Include="DebugGraphics">
       <UniqueIdentifier>{b5515b9d-1970-46e2-ae29-ab814e1b2787}</UniqueIdentifier>
     </Filter>
@@ -216,9 +201,6 @@
     </Filter>
     <Filter Include="TestCodes\TestUtils\PeriodicAction">
       <UniqueIdentifier>{d31814ce-faa7-415f-8b5a-672e90071988}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\RTSCam">
-      <UniqueIdentifier>{4d58ffff-525b-4e6d-a64c-bf1f311430a2}</UniqueIdentifier>
     </Filter>
     <Filter Include="InGame">
       <UniqueIdentifier>{307110bf-f12d-41ce-a751-777f138d1143}</UniqueIdentifier>
@@ -289,17 +271,11 @@
     <Filter Include="Editor\Palette\PaletteBrush\OrnamentBrush">
       <UniqueIdentifier>{8045da07-686d-4fea-a63c-27e4e233378c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\SkillSystem\SkillPreviewSystem">
-      <UniqueIdentifier>{c466da0b-6643-46f9-a7e8-e26c17fcc883}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Editor\Palette\List\WavePalette">
       <UniqueIdentifier>{376cdf4e-06ac-4e10-8c0f-0734bc537788}</UniqueIdentifier>
     </Filter>
     <Filter Include="UI">
       <UniqueIdentifier>{e3d49ab0-3158-48b4-8541-e69475369d59}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\SingletonClasses">
-      <UniqueIdentifier>{81870322-b82c-41fd-af33-5af3b432941d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contents\SpecialEvent">
       <UniqueIdentifier>{38f84781-e01b-4784-b9e1-01f98814ffd8}</UniqueIdentifier>
@@ -318,12 +294,6 @@
     </Filter>
     <Filter Include="Contents\UnitStatusComponent\DamageOnly">
       <UniqueIdentifier>{c4c2a6e9-7965-47be-99cc-eacaa4137c96}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\PlaytimeRegion">
-      <UniqueIdentifier>{3b6c6cf5-6538-42da-8965-70c32e92500b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\PlaytimeWave">
-      <UniqueIdentifier>{81ecb30c-9650-4846-af27-cc4619631d26}</UniqueIdentifier>
     </Filter>
     <Filter Include="Editor\Palette\PaletteBrush\CameraBrush">
       <UniqueIdentifier>{28e9af65-8004-4ddf-b3ee-42d21d8afc46}</UniqueIdentifier>
@@ -345,9 +315,6 @@
     </Filter>
     <Filter Include="Contents\ProjectilePools\RangedEnemy">
       <UniqueIdentifier>{1ef27289-47ec-4e7d-a7a5-6d0258af3b98}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\GlobalConstant">
-      <UniqueIdentifier>{99c7c714-606b-4989-b2cc-02aeec3f546a}</UniqueIdentifier>
     </Filter>
     <Filter Include="SpriteAnimation">
       <UniqueIdentifier>{b947e4e7-accc-44c7-b318-9804fcfa30f2}</UniqueIdentifier>
@@ -400,9 +367,6 @@
     <Filter Include="Contents\SkillSystem\SkillWarningSystem">
       <UniqueIdentifier>{da296b97-f2d7-479a-bba9-0c0198bb86f5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\GameManager">
-      <UniqueIdentifier>{2990a352-2268-45cf-b6d7-394bb104eff6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Editor\ScriptSystem">
       <UniqueIdentifier>{3d610022-9d6b-45b8-a43d-c79f2579afaa}</UniqueIdentifier>
     </Filter>
@@ -426,9 +390,6 @@
     </Filter>
     <Filter Include="Editor\ScriptSystem\1_Condition\List">
       <UniqueIdentifier>{0e0f3bef-6052-4f15-b9e9-77fdc9d3ca61}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\BurnEffect">
-      <UniqueIdentifier>{0cb52d66-9140-4368-8842-d37ef7df2afb}</UniqueIdentifier>
     </Filter>
     <Filter Include="UI\UIElement">
       <UniqueIdentifier>{12719a96-4004-4cd8-8134-2161e2882a86}</UniqueIdentifier>
@@ -475,18 +436,6 @@
     <Filter Include="UI\Effect\FloatFollower">
       <UniqueIdentifier>{871212fa-7603-485a-ba2f-f33a36a04abe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\Playable">
-      <UniqueIdentifier>{1b0aa654-99df-49b0-98e9-deed746b1933}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\Playable\GameTimer">
-      <UniqueIdentifier>{26f6fe0e-390d-443c-88b2-ea1d53201ed5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\Playable\Tutorial">
-      <UniqueIdentifier>{6a5aaac1-b4ee-4742-b4a5-15b8f6b4882a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\Playable\Cinematic">
-      <UniqueIdentifier>{1be88953-fede-49fa-bcff-d309ee96f946}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Editor\Palette\List\ParticlePalette">
       <UniqueIdentifier>{60ae1130-a87e-4479-b7c4-ee7569f6c678}</UniqueIdentifier>
     </Filter>
@@ -523,12 +472,6 @@
     <Filter Include="UI\Effect\ColorTintTimer">
       <UniqueIdentifier>{b6ea9408-9370-48b1-ba57-05edd2398a32}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\ContentsPlayFlag">
-      <UniqueIdentifier>{c173edb8-d45f-4ab9-943a-eb98176547dd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\ContentsStopFlag">
-      <UniqueIdentifier>{53b22dd4-79bf-4f80-a973-51592ab718a6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Particle">
       <UniqueIdentifier>{29068aaa-7d00-4fb9-a2bb-8590175a4d6d}</UniqueIdentifier>
     </Filter>
@@ -537,12 +480,6 @@
     </Filter>
     <Filter Include="UI\Effect\PlayMusicTimer">
       <UniqueIdentifier>{224a689c-3f8e-4c92-81a4-6c2845252e50}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\ContentsObserver">
-      <UniqueIdentifier>{d2484403-98a3-4199-b5bd-4785dca8fb9c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\ContentsObserver\Observee">
-      <UniqueIdentifier>{6be041a3-b108-49d6-9631-62275bd6bb8c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contents\UVAnimator">
       <UniqueIdentifier>{0fa2695c-9604-4b19-80a7-6aa7bd9d1a07}</UniqueIdentifier>
@@ -607,20 +544,173 @@
     <Filter Include="Editor\ScriptSystem\2_Action\List\Action_UISetActive">
       <UniqueIdentifier>{fed1d65e-f4f7-4b7a-bb1d-eeb9599b62a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\InteractableComponent">
-      <UniqueIdentifier>{fac159cc-7c2b-4eb1-b641-7c4c1965ff8a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\InteractableComponent\InteractableList">
-      <UniqueIdentifier>{1d80d79b-e59c-4e84-b07c-672c34a43438}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents\ContentsLayerInitializer">
       <UniqueIdentifier>{8ff44db1-26ce-476a-b37c-b46b522a6b05}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\InitialLoadingScreen">
-      <UniqueIdentifier>{afddc9a5-d6c1-4483-888a-1af2eae577e3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UI\UnityRelated\SoundEnumID">
       <UniqueIdentifier>{a4480087-8435-4e87-be4d-7238d18061dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored">
+      <UniqueIdentifier>{dae5e22f-5f7e-4307-8b0e-eb03286c3279}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit">
+      <UniqueIdentifier>{116c1496-32a5-4ed9-9f9b-881d7772bc02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\FSM">
+      <UniqueIdentifier>{32381cc4-5559-4056-a930-6663da504c19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\UnitController">
+      <UniqueIdentifier>{fd0db70a-0f11-4c71-beed-8445fc68befb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\InputManager">
+      <UniqueIdentifier>{f1dccdf0-9ecd-4b27-aefe-392012154399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\UnitController\PlayerController">
+      <UniqueIdentifier>{e38b554b-48ad-47f3-9339-359425c3455a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\UnitController\AttackMoveController">
+      <UniqueIdentifier>{c2503de5-8ae4-45c4-9cd3-791e8ea5bada}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\PlayerStatusManager">
+      <UniqueIdentifier>{424d61c0-5c28-4669-b8f1-8d22299f7e82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\wanderResources">
+      <UniqueIdentifier>{945f1a80-43b5-4b29-a109-da4c0c846cce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill">
+      <UniqueIdentifier>{101a2a8a-50c0-47ee-8e7b-aba12af85880}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\RobinChargeSkill">
+      <UniqueIdentifier>{0ffa0272-1cd4-4c2a-ae94-f7e9f3c508fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Projectile">
+      <UniqueIdentifier>{b4c54747-02b8-4112-8689-258612d883a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitAcquisitionSphereCollider">
+      <UniqueIdentifier>{31a09584-6a93-430e-9d48-1301fd29b65e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitAnimationType">
+      <UniqueIdentifier>{fa5977b3-5e7d-453b-bdb0-117238e21f7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitBuff">
+      <UniqueIdentifier>{bf34b3c4-3501-460d-a096-0ac0d56bff8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitPool">
+      <UniqueIdentifier>{1a0bad55-1fe6-4717-8a20-bc8006fd970c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitAcquisitionSphereCollider\UnitAcquisitionSphereColliderPool">
+      <UniqueIdentifier>{31376ee3-bb5e-4230-8fac-aaf6d572d579}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffBleeding">
+      <UniqueIdentifier>{20b5062c-32f2-4381-bb1b-beb4474f2625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Projectile\ProjectilePool">
+      <UniqueIdentifier>{03a6ed51-f765-425a-9780-2b8ea2c99f13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\PassiveSkill">
+      <UniqueIdentifier>{207cd603-75b1-4608-b20b-ab86691d9ffa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\PassiveSkill\PassiveRobinBleed">
+      <UniqueIdentifier>{760634b1-a4e5-4048-ad60-bf766f083f61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\PassiveSkill\PassiveUrsulaBleed">
+      <UniqueIdentifier>{8d7611b4-6699-4000-bc5c-acd24db7d01b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\PassiveSkill\PassiveHanselBleed">
+      <UniqueIdentifier>{1f8de78f-6574-4e21-a6f6-854000ebd0c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Timer">
+      <UniqueIdentifier>{e6ac6c6a-8749-4b81-8b38-f053b8e345ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\BurnEffect">
+      <UniqueIdentifier>{0cb52d66-9140-4368-8842-d37ef7df2afb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\ContentsObserver">
+      <UniqueIdentifier>{d2484403-98a3-4199-b5bd-4785dca8fb9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\ContentsObserver\Observee">
+      <UniqueIdentifier>{6be041a3-b108-49d6-9631-62275bd6bb8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\ContentsPlayFlag">
+      <UniqueIdentifier>{c173edb8-d45f-4ab9-943a-eb98176547dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\ContentsStopFlag">
+      <UniqueIdentifier>{53b22dd4-79bf-4f80-a973-51592ab718a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\DebuggingSystem">
+      <UniqueIdentifier>{e8d5df45-576d-4ade-b26c-fbdf57f67781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\GameManager">
+      <UniqueIdentifier>{2990a352-2268-45cf-b6d7-394bb104eff6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\GlobalConstant">
+      <UniqueIdentifier>{99c7c714-606b-4989-b2cc-02aeec3f546a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\InitialLoadingScreen">
+      <UniqueIdentifier>{afddc9a5-d6c1-4483-888a-1af2eae577e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\InteractableComponent">
+      <UniqueIdentifier>{fac159cc-7c2b-4eb1-b641-7c4c1965ff8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\InteractableComponent\InteractableList">
+      <UniqueIdentifier>{1d80d79b-e59c-4e84-b07c-672c34a43438}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\PlaytimeRegion">
+      <UniqueIdentifier>{3b6c6cf5-6538-42da-8965-70c32e92500b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\PlaytimeWave">
+      <UniqueIdentifier>{81ecb30c-9650-4846-af27-cc4619631d26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Playable">
+      <UniqueIdentifier>{1b0aa654-99df-49b0-98e9-deed746b1933}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Playable\GameTimer">
+      <UniqueIdentifier>{26f6fe0e-390d-443c-88b2-ea1d53201ed5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Playable\Tutorial">
+      <UniqueIdentifier>{6a5aaac1-b4ee-4742-b4a5-15b8f6b4882a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Playable\Cinematic">
+      <UniqueIdentifier>{1be88953-fede-49fa-bcff-d309ee96f946}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\RTSCam">
+      <UniqueIdentifier>{4d58ffff-525b-4e6d-a64c-bf1f311430a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\SingleNavigationField">
+      <UniqueIdentifier>{955952c8-9aa3-451c-9298-ee3adedb93d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\UnitCommand">
+      <UniqueIdentifier>{4c2b6b5b-0929-4018-b780-46d8ce5812aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\SkillType">
+      <UniqueIdentifier>{2b32c65d-406b-451a-9ac9-5043410ee9ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VFX">
+      <UniqueIdentifier>{327458f4-5bdd-4125-a01e-6651c65ad310}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\InteractableComponent\InteractableList\ChessUtil">
+      <UniqueIdentifier>{df324316-e5ab-418b-bee1-b9b625d862ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\DelegateCallback">
+      <UniqueIdentifier>{aaf1e6d5-3b76-4c12-8e84-94ddede45168}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitStatusBarType">
+      <UniqueIdentifier>{7bdf91c3-a4dc-49a5-9a0c-b1ddb772fbd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\SkillPreviewSystem">
+      <UniqueIdentifier>{c466da0b-6643-46f9-a7e8-e26c17fcc883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\SkillUpgradeType">
+      <UniqueIdentifier>{d7e5ac54-4088-44ac-9dd4-96d6f75d60ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitAttackType">
+      <UniqueIdentifier>{4a695864-234f-4b40-ae81-17641d1c8285}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Reference">
+      <UniqueIdentifier>{db595c79-ba0f-49ef-9361-0e68f82a8f2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\GameManager\SFX">
+      <UniqueIdentifier>{07744a7a-8ce4-453a-9e6b-0abf7d344981}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -652,7 +742,7 @@
       <Filter>Contents</Filter>
     </ClInclude>
     <ClInclude Include="RTSCam.h">
-      <Filter>Contents\RTSCam</Filter>
+      <Filter>Contents_Refactored\RTSCam</Filter>
     </ClInclude>
     <ClInclude Include="RoamingCam.h">
       <Filter>RoamingCam</Filter>
@@ -786,9 +876,6 @@
     <ClInclude Include="DotweenTimerPool.h">
       <Filter>Contents\Dotween</Filter>
     </ClInclude>
-    <ClInclude Include="Unit.h">
-      <Filter>Contents\Units</Filter>
-    </ClInclude>
     <ClInclude Include="WarriorProductor.h">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClInclude>
@@ -805,16 +892,13 @@
       <Filter>Contents\RangeSystem</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
-      <Filter>Contents\InputManager</Filter>
+      <Filter>Contents_Refactored\InputManager</Filter>
     </ClInclude>
     <ClInclude Include="FSM.h">
-      <Filter>Contents\FSM</Filter>
+      <Filter>Contents_Refactored\FSM</Filter>
     </ClInclude>
     <ClInclude Include="Easing.h">
       <Filter>Contents\Dotween</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerController.h">
-      <Filter>Contents\InputManager</Filter>
     </ClInclude>
     <ClInclude Include="PaletteInstance.h">
       <Filter>Editor\Palette\EditorInstance</Filter>
@@ -922,7 +1006,7 @@
       <Filter>Editor\IO\KeyInput</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
-      <Filter>Contents\Timer</Filter>
+      <Filter>Contents_Refactored\Timer</Filter>
     </ClInclude>
     <ClInclude Include="FieldDamage.h">
       <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
@@ -950,7 +1034,7 @@
       <Filter>TestCodes\TestUtils</Filter>
     </ClInclude>
     <ClInclude Include="SingleNavigationField.h">
-      <Filter>Contents\SingleNavigationField</Filter>
+      <Filter>Contents_Refactored\SingleNavigationField</Filter>
     </ClInclude>
     <ClInclude Include="TestUtilNavAgent.h">
       <Filter>TestCodes\TestUtils</Filter>
@@ -971,10 +1055,10 @@
       <Filter>Contents\ProjectilePools\Supporter</Filter>
     </ClInclude>
     <ClInclude Include="DebuggingMeshPool.h">
-      <Filter>Contents\DebuggingSystem</Filter>
+      <Filter>Contents_Refactored\DebuggingSystem</Filter>
     </ClInclude>
     <ClInclude Include="DebuggingMesh.h">
-      <Filter>Contents\DebuggingSystem</Filter>
+      <Filter>Contents_Refactored\DebuggingSystem</Filter>
     </ClInclude>
     <ClInclude Include="PaletteManager.h">
       <Filter>Editor\Palette</Filter>
@@ -1052,7 +1136,7 @@
       <Filter>Editor\DataSystem\EditableData\TemplateData\DataType</Filter>
     </ClInclude>
     <ClInclude Include="SkillPreviewSystem.h">
-      <Filter>Contents\SkillSystem\SkillPreviewSystem</Filter>
+      <Filter>Contents_Refactored\SkillPreviewSystem</Filter>
     </ClInclude>
     <ClInclude Include="UIButton.h">
       <Filter>UI</Filter>
@@ -1079,10 +1163,10 @@
       <Filter>Contents\UnitStatusComponent\DamageOnly</Filter>
     </ClInclude>
     <ClInclude Include="PlaytimeRegion.h">
-      <Filter>Contents\PlaytimeRegion</Filter>
+      <Filter>Contents_Refactored\PlaytimeRegion</Filter>
     </ClInclude>
     <ClInclude Include="PlaytimeWave.h">
-      <Filter>Contents\PlaytimeWave</Filter>
+      <Filter>Contents_Refactored\PlaytimeWave</Filter>
     </ClInclude>
     <ClInclude Include="SaveStaticOrnamentsCommnad.h">
       <Filter>Editor\Commands\MenubarCommands\File</Filter>
@@ -1151,10 +1235,10 @@
       <Filter>Editor\Camera</Filter>
     </ClInclude>
     <ClInclude Include="GCTemplate.h">
-      <Filter>Contents\GlobalConstant</Filter>
+      <Filter>Contents_Refactored\GlobalConstant</Filter>
     </ClInclude>
     <ClInclude Include="GlobalConstant.h">
-      <Filter>Contents\GlobalConstant</Filter>
+      <Filter>Contents_Refactored\GlobalConstant</Filter>
     </ClInclude>
     <ClInclude Include="WanderUtils.h">
       <Filter>utility</Filter>
@@ -1163,10 +1247,7 @@
       <Filter>SpriteAnimation</Filter>
     </ClInclude>
     <ClInclude Include="PlayTimeRegionManager.h">
-      <Filter>Contents\PlaytimeRegion</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjectContainer.h">
-      <Filter>Contents\Containers\GameObjectContainer</Filter>
+      <Filter>Contents_Refactored\PlaytimeRegion</Filter>
     </ClInclude>
     <ClInclude Include="ShortcutSystem.h">
       <Filter>DevelopmentSupportSystem</Filter>
@@ -1238,7 +1319,7 @@
       <Filter>Contents\UnitFactory\UnitPool</Filter>
     </ClInclude>
     <ClInclude Include="GameManager.h">
-      <Filter>Contents\GameManager</Filter>
+      <Filter>Contents_Refactored\GameManager</Filter>
     </ClInclude>
     <ClInclude Include="ScriptSystem.h">
       <Filter>Editor\ScriptSystem</Filter>
@@ -1286,10 +1367,10 @@
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClInclude>
     <ClInclude Include="CinematicManager.h">
-      <Filter>Contents\Playable\Cinematic</Filter>
+      <Filter>Contents_Refactored\Playable\Cinematic</Filter>
     </ClInclude>
     <ClInclude Include="BurnEffect.h">
-      <Filter>Contents\BurnEffect</Filter>
+      <Filter>Contents_Refactored\BurnEffect</Filter>
     </ClInclude>
     <ClInclude Include="PopupOnEnable.h">
       <Filter>UI\Effect\PopupOnEnable</Filter>
@@ -1373,13 +1454,13 @@
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClInclude>
     <ClInclude Include="PlayableComponent.h">
-      <Filter>Contents\Playable</Filter>
+      <Filter>Contents_Refactored\Playable</Filter>
     </ClInclude>
     <ClInclude Include="GamePlayTimer.h">
-      <Filter>Contents\Playable\GameTimer</Filter>
+      <Filter>Contents_Refactored\Playable\GameTimer</Filter>
     </ClInclude>
     <ClInclude Include="TutorialManager.h">
-      <Filter>Contents\Playable\Tutorial</Filter>
+      <Filter>Contents_Refactored\Playable\Tutorial</Filter>
     </ClInclude>
     <ClInclude Include="Action_Tutorial.h">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
@@ -1418,13 +1499,13 @@
       <Filter>UI\Effect\TimePauseTimer</Filter>
     </ClInclude>
     <ClInclude Include="ContentsObserver.h">
-      <Filter>Contents\ContentsObserver</Filter>
+      <Filter>Contents_Refactored\ContentsObserver</Filter>
     </ClInclude>
     <ClInclude Include="LocalTimeEntityManager.h">
-      <Filter>Contents\ContentsObserver</Filter>
+      <Filter>Contents_Refactored\ContentsObserver</Filter>
     </ClInclude>
     <ClInclude Include="LocalTimeEntity.h">
-      <Filter>Contents\ContentsObserver</Filter>
+      <Filter>Contents_Refactored\ContentsObserver</Filter>
     </ClInclude>
     <ClInclude Include="LinearClippingTimer.h">
       <Filter>UI\Effect\LinearClippingTimer</Filter>
@@ -1433,10 +1514,10 @@
       <Filter>UI\Effect\ColorTintTimer</Filter>
     </ClInclude>
     <ClInclude Include="ContentsPlayFlag.h">
-      <Filter>Contents\ContentsPlayFlag</Filter>
+      <Filter>Contents_Refactored\ContentsPlayFlag</Filter>
     </ClInclude>
     <ClInclude Include="ContentsStopFlag.h">
-      <Filter>Contents\ContentsStopFlag</Filter>
+      <Filter>Contents_Refactored\ContentsStopFlag</Filter>
     </ClInclude>
     <ClInclude Include="ParticleTool_Manager.h">
       <Filter>Particle</Filter>
@@ -1460,10 +1541,10 @@
       <Filter>Particle</Filter>
     </ClInclude>
     <ClInclude Include="ContentsObservee.h">
-      <Filter>Contents\ContentsObserver\Observee</Filter>
+      <Filter>Contents_Refactored\ContentsObserver\Observee</Filter>
     </ClInclude>
     <ClInclude Include="PermanentObservee.h">
-      <Filter>Contents\ContentsObserver\Observee</Filter>
+      <Filter>Contents_Refactored\ContentsObserver\Observee</Filter>
     </ClInclude>
     <ClInclude Include="UVAnimator.h">
       <Filter>Contents\UVAnimator</Filter>
@@ -1544,25 +1625,25 @@
       <Filter>Editor\ScriptSystem\2_Action\List\Action_UISetActive</Filter>
     </ClInclude>
     <ClInclude Include="IInteractableComponent.h">
-      <Filter>Contents\InteractableComponent</Filter>
+      <Filter>Contents_Refactored\InteractableComponent</Filter>
     </ClInclude>
     <ClInclude Include="Interactable_ChessBishop.h">
-      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
     </ClInclude>
     <ClInclude Include="Interactable_ChessPawn.h">
-      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
     </ClInclude>
     <ClInclude Include="Interactable_ChessRook.h">
-      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
     </ClInclude>
     <ClInclude Include="Interactable_SpikeTrap.h">
-      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
     </ClInclude>
     <ClInclude Include="InteractableList.h">
-      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
     </ClInclude>
     <ClInclude Include="ContentsObserveeComponent.h">
-      <Filter>Contents\ContentsObserver\Observee</Filter>
+      <Filter>Contents_Refactored\ContentsObserver\Observee</Filter>
     </ClInclude>
     <ClInclude Include="PlayerUnit.h">
       <Filter>Contents\Units</Filter>
@@ -1571,16 +1652,105 @@
       <Filter>Contents\Units</Filter>
     </ClInclude>
     <ClInclude Include="InitialLoadingScreen.h">
-      <Filter>Contents\InitialLoadingScreen</Filter>
+      <Filter>Contents_Refactored\InitialLoadingScreen</Filter>
     </ClInclude>
     <ClInclude Include="Interactable_TriggerBox.h">
-      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
     </ClInclude>
     <ClInclude Include="Interactable_TriggerSphere.h">
-      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
     </ClInclude>
     <ClInclude Include="SoundEnumID.h">
       <Filter>UI\UnityRelated\SoundEnumID</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitCommand.h">
+      <Filter>Contents_Refactored\UnitCommand</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger_Interactable.h">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_Ornament.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>Contents_Refactored\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="wanderResources.h">
+      <Filter>Contents_Refactored\wanderResources</Filter>
+    </ClInclude>
+    <ClInclude Include="Skill.h">
+      <Filter>Contents_Refactored\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="RobinChargeSkill.h">
+      <Filter>Contents_Refactored\Skill\RobinChargeSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Contents_Refactored\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStatusManager.h">
+      <Filter>Contents_Refactored\PlayerStatusManager</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitAcquisitionSphereCollider.h">
+      <Filter>Contents_Refactored\Unit\UnitAcquisitionSphereCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitAnimationType.h">
+      <Filter>Contents_Refactored\Unit\UnitAnimationType</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitBuff.h">
+      <Filter>Contents_Refactored\Unit\UnitBuff</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackMoveController.h">
+      <Filter>Contents_Refactored\UnitController\AttackMoveController</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitController.h">
+      <Filter>Contents_Refactored\UnitController</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitAcquisitionSphereColliderPool.h">
+      <Filter>Contents_Refactored\Unit\UnitAcquisitionSphereCollider\UnitAcquisitionSphereColliderPool</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitBuffBleeding.h">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffBleeding</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitPool.h">
+      <Filter>Contents_Refactored\Unit\UnitPool</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectilePool.h">
+      <Filter>Contents_Refactored\Projectile\ProjectilePool</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerController.h">
+      <Filter>Contents_Refactored\UnitController\PlayerController</Filter>
+    </ClInclude>
+    <ClInclude Include="Adder.h" />
+    <ClInclude Include="Factor.h" />
+    <ClInclude Include="Multiplier.h" />
+    <ClInclude Include="SkillType.h">
+      <Filter>Contents_Refactored\Skill\SkillType</Filter>
+    </ClInclude>
+    <ClInclude Include="DelegateCallback.h">
+      <Filter>Contents_Refactored\DelegateCallback</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_TrapSwitch.h" />
+    <ClInclude Include="Interactable_TrapArms.h" />
+    <ClInclude Include="Interactable_UI.h" />
+    <ClInclude Include="ChessBombComponent.h" />
+    <ClInclude Include="UnitStatusBarType.h">
+      <Filter>Contents_Refactored\Unit\UnitStatusBarType</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillUpgradeType.h">
+      <Filter>Contents_Refactored\Skill\SkillUpgradeType</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_ChessPool.h" />
+    <ClInclude Include="UnitAttackType.h">
+      <Filter>Contents_Refactored\Unit\UnitAttackType</Filter>
+    </ClInclude>
+    <ClInclude Include="Reference.h">
+      <Filter>Contents_Refactored\Reference</Filter>
+    </ClInclude>
+    <ClInclude Include="SFXManager.h">
+      <Filter>Contents\GameManager\SFX</Filter>
+    </ClInclude>
+    <ClInclude Include="VFXAnimator.h">
+      <Filter>VFX</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1591,7 +1761,7 @@
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="RTSCam.cpp">
-      <Filter>Contents\RTSCam</Filter>
+      <Filter>Contents_Refactored\RTSCam</Filter>
     </ClCompile>
     <ClCompile Include="RoamingCam.cpp">
       <Filter>RoamingCam</Filter>
@@ -1698,9 +1868,6 @@
     <ClCompile Include="DotweenTimer.cpp">
       <Filter>Contents\Dotween</Filter>
     </ClCompile>
-    <ClCompile Include="Unit.cpp">
-      <Filter>Contents\Units</Filter>
-    </ClCompile>
     <ClCompile Include="UnitProductor.cpp">
       <Filter>Contents\UnitFactory\UnitProductionOrder</Filter>
     </ClCompile>
@@ -1717,7 +1884,7 @@
       <Filter>Contents\RangeSystem</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
-      <Filter>Contents\InputManager</Filter>
+      <Filter>Contents_Refactored\InputManager</Filter>
     </ClCompile>
     <ClCompile Include="Easing.cpp">
       <Filter>Contents\Dotween</Filter>
@@ -1727,9 +1894,6 @@
     </ClCompile>
     <ClCompile Include="TestCaseGroupControl.cpp">
       <Filter>TestCodes</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerController.cpp">
-      <Filter>Contents\InputManager</Filter>
     </ClCompile>
     <ClCompile Include="BleedingComponent.cpp">
       <Filter>Contents\UnitStatusComponent\Bleeding</Filter>
@@ -1828,7 +1992,7 @@
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
-      <Filter>Contents\Timer</Filter>
+      <Filter>Contents_Refactored\Timer</Filter>
     </ClCompile>
     <ClCompile Include="FieldDamage.cpp">
       <Filter>Contents\UnitStatusComponent\FieldDamage</Filter>
@@ -1876,7 +2040,7 @@
       <Filter>Contents\ProjectileComponents\Magician\Passive</Filter>
     </ClCompile>
     <ClCompile Include="DebuggingMesh.cpp">
-      <Filter>Contents\DebuggingSystem</Filter>
+      <Filter>Contents_Refactored\DebuggingSystem</Filter>
     </ClCompile>
     <ClCompile Include="SnippetFloatingDebugSphere.cpp">
       <Filter>TestCodes\snippets</Filter>
@@ -1976,7 +2140,7 @@
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
     <ClCompile Include="SkillPreviewSystem.cpp">
-      <Filter>Contents\SkillSystem\SkillPreviewSystem</Filter>
+      <Filter>Contents_Refactored\SkillPreviewSystem</Filter>
     </ClCompile>
     <ClCompile Include="UIButton.cpp">
       <Filter>UI</Filter>
@@ -1997,10 +2161,10 @@
       <Filter>Contents\UnitStatusComponent\DamageOnly</Filter>
     </ClCompile>
     <ClCompile Include="PlaytimeRegion.cpp">
-      <Filter>Contents\PlaytimeRegion</Filter>
+      <Filter>Contents_Refactored\PlaytimeRegion</Filter>
     </ClCompile>
     <ClCompile Include="PlaytimeWave.cpp">
-      <Filter>Contents\PlaytimeWave</Filter>
+      <Filter>Contents_Refactored\PlaytimeWave</Filter>
     </ClCompile>
     <ClCompile Include="SaveStaticOrnamentsCommnad.cpp">
       <Filter>Editor\Commands\MenubarCommands\File</Filter>
@@ -2060,7 +2224,7 @@
       <Filter>Editor\Camera</Filter>
     </ClCompile>
     <ClCompile Include="GlobalConstant.cpp">
-      <Filter>Contents\GlobalConstant</Filter>
+      <Filter>Contents_Refactored\GlobalConstant</Filter>
     </ClCompile>
     <ClCompile Include="SpriteAnimation.cpp">
       <Filter>SpriteAnimation</Filter>
@@ -2069,10 +2233,7 @@
       <Filter>TestCodes\snippets</Filter>
     </ClCompile>
     <ClCompile Include="PlayTimeRegionManager.cpp">
-      <Filter>Contents\PlaytimeRegion</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjectContainer.cpp">
-      <Filter>Contents\Containers\GameObjectContainer</Filter>
+      <Filter>Contents_Refactored\PlaytimeRegion</Filter>
     </ClCompile>
     <ClCompile Include="ShortcutSystem.cpp">
       <Filter>DevelopmentSupportSystem</Filter>
@@ -2153,10 +2314,10 @@
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClCompile>
     <ClCompile Include="CinematicManager.cpp">
-      <Filter>Contents\Playable\Cinematic</Filter>
+      <Filter>Contents_Refactored\Playable\Cinematic</Filter>
     </ClCompile>
     <ClCompile Include="BurnEffect.cpp">
-      <Filter>Contents\BurnEffect</Filter>
+      <Filter>Contents_Refactored\BurnEffect</Filter>
     </ClCompile>
     <ClCompile Include="Condition_CinematicMode.cpp">
       <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
@@ -2216,13 +2377,13 @@
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClCompile>
     <ClCompile Include="PlayableComponent.cpp">
-      <Filter>Contents\Playable</Filter>
+      <Filter>Contents_Refactored\Playable</Filter>
     </ClCompile>
     <ClCompile Include="GamePlayTimer.cpp">
-      <Filter>Contents\Playable\GameTimer</Filter>
+      <Filter>Contents_Refactored\Playable\GameTimer</Filter>
     </ClCompile>
     <ClCompile Include="TutorialManager.cpp">
-      <Filter>Contents\Playable\Tutorial</Filter>
+      <Filter>Contents_Refactored\Playable\Tutorial</Filter>
     </ClCompile>
     <ClCompile Include="Action_Tutorial.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
@@ -2267,13 +2428,13 @@
       <Filter>UI\Effect\TimePauseTimer</Filter>
     </ClCompile>
     <ClCompile Include="ContentsObserver.cpp">
-      <Filter>Contents\ContentsObserver</Filter>
+      <Filter>Contents_Refactored\ContentsObserver</Filter>
     </ClCompile>
     <ClCompile Include="LocalTimeEntityManager.cpp">
-      <Filter>Contents\ContentsObserver</Filter>
+      <Filter>Contents_Refactored\ContentsObserver</Filter>
     </ClCompile>
     <ClCompile Include="LocalTimeEntity.cpp">
-      <Filter>Contents\ContentsObserver</Filter>
+      <Filter>Contents_Refactored\ContentsObserver</Filter>
     </ClCompile>
     <ClCompile Include="LinearClippingTimer.cpp">
       <Filter>UI\Effect\LinearClippingTimer</Filter>
@@ -2297,10 +2458,10 @@
       <Filter>UI\Effect\PlayMusicTimer</Filter>
     </ClCompile>
     <ClCompile Include="ContentsObservee.cpp">
-      <Filter>Contents\ContentsObserver\Observee</Filter>
+      <Filter>Contents_Refactored\ContentsObserver\Observee</Filter>
     </ClCompile>
     <ClCompile Include="PermanentObservee.cpp">
-      <Filter>Contents\ContentsObserver\Observee</Filter>
+      <Filter>Contents_Refactored\ContentsObserver\Observee</Filter>
     </ClCompile>
     <ClCompile Include="UVAnimator.cpp">
       <Filter>Contents\UVAnimator</Filter>
@@ -2368,9 +2529,6 @@
     <ClCompile Include="Action_EngageStage.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_EngageStage</Filter>
     </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>Contents\Dotween</Filter>
-    </ClCompile>
     <ClCompile Include="Action_SoundPlay.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_SoundPlay</Filter>
     </ClCompile>
@@ -2393,25 +2551,89 @@
       <Filter>utility</Filter>
     </ClCompile>
     <ClCompile Include="InitialLoadingScreen.cpp">
-      <Filter>Contents\InitialLoadingScreen</Filter>
+      <Filter>Contents_Refactored\InitialLoadingScreen</Filter>
     </ClCompile>
     <ClCompile Include="Interactable_SpikeTrap.cpp">
-      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
     </ClCompile>
     <ClCompile Include="Interactable_ChessBishop.cpp">
-      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
     </ClCompile>
     <ClCompile Include="Interactable_ChessPawn.cpp">
-      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
     </ClCompile>
     <ClCompile Include="Interactable_ChessRook.cpp">
-      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
     </ClCompile>
     <ClCompile Include="Interactable_TriggerSphere.cpp">
-      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
     </ClCompile>
     <ClCompile Include="Interactable_TriggerBox.cpp">
-      <Filter>Contents\InteractableComponent\InteractableList</Filter>
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitCommand.cpp">
+      <Filter>Contents_Refactored\UnitCommand</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger_Interactable.cpp">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_Ornament.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>Contents_Refactored\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="RobinChargeSkill.cpp">
+      <Filter>Contents_Refactored\Skill\RobinChargeSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="wanderResources.cpp">
+      <Filter>Contents_Refactored\wanderResources</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Contents_Refactored\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStatusManager.cpp">
+      <Filter>Contents_Refactored\PlayerStatusManager</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitAcquisitionSphereCollider.cpp">
+      <Filter>Contents_Refactored\Unit\UnitAcquisitionSphereCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackMoveController.cpp">
+      <Filter>Contents_Refactored\UnitController\AttackMoveController</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitController.cpp">
+      <Filter>Contents_Refactored\UnitController</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitAcquisitionSphereColliderPool.cpp">
+      <Filter>Contents_Refactored\Unit\UnitAcquisitionSphereCollider\UnitAcquisitionSphereColliderPool</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitBuffBleeding.cpp">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffBleeding</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitPool.cpp">
+      <Filter>Contents_Refactored\Unit\UnitPool</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectilePool.cpp">
+      <Filter>Contents_Refactored\Projectile\ProjectilePool</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerController.cpp">
+      <Filter>Contents_Refactored\UnitController\PlayerController</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Contents_Refactored\GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitBuff.cpp">
+      <Filter>Contents_Refactored\Unit\UnitBuff</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessBombComponent.cpp" />
+    <ClCompile Include="Interactable_TrapSwitch.cpp" />
+    <ClCompile Include="Interactable_TrapArms.cpp" />
+    <ClCompile Include="Interactable_ChessPool.cpp" />
+    <ClCompile Include="SFXManager.cpp">
+      <Filter>Contents\GameManager\SFX</Filter>
+    </ClCompile>
+    <ClCompile Include="VFXAnimator.cpp">
+      <Filter>VFX</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

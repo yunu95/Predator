@@ -9,11 +9,13 @@
 
 #include "Action_WaitForSeconds.h"
 
+#include "SFXManager.h"
+
 namespace application
 {
     CoroutineObject<void> Action_SoundPlay::DoAction()
     {
-        SoundSystem::PlaySoundfile(soundPath);
+        SFXManager::PlaySoundfile(soundPath);
         co_return;
     }
 

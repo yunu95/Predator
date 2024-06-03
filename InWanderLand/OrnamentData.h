@@ -37,9 +37,10 @@ namespace application
             int LightMapIndex{ -1 };
             std::vector<float> LightMapScaleOffset{ 0,0,0,0 };
             int stage = 1;
+            bool isGuide = false;
 
             TO_JSON(POD_Ornament)
-            FROM_JSON(POD_Ornament)
+                FROM_JSON(POD_Ornament)
         };
 
         class OrnamentData
@@ -48,6 +49,14 @@ namespace application
             friend class InstanceManager;
 
         public:
+            class DisablingReference
+            {
+            private:
+                std::weak_ptr<Transform> ornamentTransform;
+            public:
+                DisablingReference(application::editor::OrnamentData*);
+                ~DisablingReference();
+            };
             virtual ~OrnamentData();
             virtual bool EnterDataFromTemplate() override;
             virtual ITemplateData* GetTemplateData() override;
@@ -60,8 +69,11 @@ namespace application
             virtual palette::PaletteInstance* ApplyAsPaletteInstance() override;
             virtual void ApplyAsPlaytimeObject() override;
             virtual bool EnterDataFromGlobalConstant() override;
+            std::shared_ptr<DisablingReference> AcquireDisablingReference();
 
             POD_Ornament pod;
+
+            bool tookAction = false;
 
         protected:
             virtual bool PreEncoding(json& data) const override;
@@ -70,6 +82,7 @@ namespace application
             virtual bool PostDecoding(const json& data) override;
 
         private:
+            std::weak_ptr<DisablingReference> disablingReference;
             static TemplateDataManager& templateDataManager;
             palette::OrnamentEditorInstance* ornamentInstance{ nullptr };
 

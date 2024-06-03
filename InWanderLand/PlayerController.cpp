@@ -4,254 +4,415 @@
 #include "RTSCam.h"
 #include "Unit.h"
 #include "PlayerUnit.h"
-#include "Dotween.h"
 #include "SkillPreviewSystem.h"
 #include "GameManager.h"
-#include "CursorDetector.h"
+#include "UIManager.h"
+
+const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> PlayerController::skillByUI
+{
+    {UIEnumID::SkillUpgradeButtonRobin00,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonRobin11,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonRobin12,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonRobin21,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonRobin22,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonUrsula00,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonUrsula11,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonUrsula12,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonUrsula21,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonUrsula22,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonHansel00,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonHansel11,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonHansel12,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonHansel21,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonHansel22,SkillUpgradeType::NONE},
+};
+void PlayerController::RegisterPlayer(std::weak_ptr<Unit> unit)
+{
+    if (unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue == PlayerCharacterType::None)
+        return;
+
+    characters[unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue] = unit;
+    if (unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue == PlayerCharacterType::Robin)
+    {
+        SetCameraOffset();
+        selectedCharacter = unit;
+    }
+}
+
+
+void PlayerController::SetSkillUpgradeTarget(UIEnumID skillUpgradeUITarget)
+{
+    this->skillUpgradeUITarget = skillUpgradeUITarget;
+}
+bool PlayerController::IsSkillUpgraded(SkillUpgradeType::Enum id)
+{
+    return skillUpgraded[id];
+}
+bool PlayerController::IsSkillUpgraded(UIEnumID skillUpgradeUITarget)
+{
+    return skillUpgraded.at(skillByUI.at(skillUpgradeUITarget));
+}
+void PlayerController::UpgradeSkill()
+{
+    SetSkillPoints(skillPointsLeft - 1);
+    static constexpr float gray = 0.3f;
+    UIManager::Instance().GetUIElementByEnum(skillUpgradeUITarget)->imageComponent.lock()->GetGI().SetColor({ gray,gray,gray,1 });
+    skillUpgraded[skillByUI.at(skillUpgradeUITarget)] = true;
+}
+void PlayerController::SetSkillPoints(int points)
+{
+    skillPointsLeft = points;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::SkillPoint_Number)->SetNumber(skillPointsLeft);
+}
+int PlayerController::GetSkillPoints()
+{
+    return skillPointsLeft;
+}
+void PlayerController::IncrementSkillPoint()
+{
+    SetSkillPoints(skillPointsLeft + 1);
+}
+
+void PlayerController::LockCamInRegion(const application::editor::RegionData* camLockRegion)
+{
+    this->camLockRegion = camLockRegion;
+}
 
 void PlayerController::Start()
 {
-    currentSelectedSerialNumber = Unit::UnitType::Warrior;
-
-    ChangeLeaderPlayerUnit(Unit::UnitType::Warrior);
 }
-
-void PlayerController::SetMovingSystemComponent(RTSCam* sys)
+void PlayerController::OnContentsPlay()
 {
-    m_movingSystemComponent = sys;
-    m_dotween = sys->GetGameObject()->GetComponent<Dotween>();
+    SetActive(true);
+    cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionSphereCollider>();
 }
-
-void PlayerController::AddPlayerUnit(PlayerUnit* p_playerUnit)
-{
-    playerComponentMap.insert({ p_playerUnit->GetPlayerSerialNumber(), p_playerUnit });
-}
-
-void PlayerController::ErasePlayerUnit(PlayerUnit* p_playerUnit)
-{
-    playerComponentMap.erase(p_playerUnit->GetUnitType());
-}
-
 void PlayerController::OnContentsStop()
 {
-    this->SetActive(false);
-	playerComponentMap.clear();
-    m_movingSystemComponent = nullptr;
-    m_dotween = nullptr;
-    m_cursorDetector = nullptr;
-    currentSelectedSerialNumber = Unit::UnitType::Warrior;
-    previousSerialNumber = 0;
-    lookRotationDuration = 0.1f;
+    SetActive(false);
+    Scene::getCurrentScene()->DestroyGameObject(cursorUnitDetector.lock()->GetGameObject());
 }
 
-void PlayerController::SetRightClickFunction()
+void PlayerController::Update()
 {
-    if (GameManager::Instance().IsBattleSystemOperating())
+    cursorUnitDetector.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetWorldCursorPosition());
+    HandleInput();
+    HandleCamera();
+#ifdef EDITOR
+    static yunutyEngine::graphics::UIText* text_State{ nullptr };
+    if (text_State == nullptr)
     {
-        if (static_cast<int>(currentSelectedSerialNumber) == InputManager::SelectedSerialNumber::All)
+        text_State = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::UIText>();
+        text_State->GetGI().SetFontSize(30);
+        text_State->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
+        text_State->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
+        text_State->GetTransform()->SetLocalPosition(Vector3d{ 0,260,0 });
+    }
+    if (!selectedDebugCharacter.expired())
+    {
+        wstringstream wsstream;
+        wsstream << L"unitState : ";
+        auto& activeStates = selectedDebugCharacter.lock()->GetBehaviourTree().GetActiveNodes();
+        for (const auto& each : activeStates)
         {
-            m_movingSystemComponent->groundRightClickCallback = [=](Vector3d pos)
-                {
-                    //if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
-                    //{
-                    //    return;
-                    //}
-                    if (m_cursorDetector->GetCurrentOnMouseUnit() == nullptr)
-                    {
-                        for (auto e : playerComponentMap)
-                        {
-                            e.second->OrderMove(pos);
-                        }
-                    }
-                    else if (Unit* selectedUnit = m_cursorDetector->GetCurrentOnMouseUnit();
-                        selectedUnit->GetUnitSide() == Unit::UnitSide::Enemy)
-                    {
-                        for (auto e : playerComponentMap)
-                        {
-                            e.second->OrderAttackMove(pos, selectedUnit);
-                        }
-                    }
-                    UIManager::Instance().SummonMoveToFeedback(pos);
-                };
+            wsstream << wstring(L"[") + yutility::GetWString(POD_Enum<UnitBehaviourTree::Keywords>::GetEnumNameMap().at(each->GetNodeKey())) + wstring(L"]");
         }
-        else
+        wsstream << selectedDebugCharacter.lock()->acquisitionRange.lock()->GetUnits().size();
+
+        text_State->GetGI().SetText(wsstream.str());
+    }
+#endif
+}
+
+void PlayerController::HandleInput()
+{
+    if (state == State::Cinematic) return;
+    if (Input::isKeyPushed(KeyCode::Q))
+    {
+        switch (selectedCharacterType)
         {
-            Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
-            m_movingSystemComponent->groundRightClickCallback = [=](Vector3d pos)
-                {
-                    //if (!InputManager::Instance().GetInputManagerActive()||UIManager::Instance().IsMouseOnButton())
-                    //{
-                    //    return;
-                    //}
-                    if (m_cursorDetector->GetCurrentOnMouseUnit() == nullptr)
-                    {
-                        currentSelectedUnit->OrderMove(pos);
-                    }
-                    else if (m_cursorDetector->GetCurrentOnMouseUnit()->GetUnitSide() == Unit::UnitSide::Enemy)
-                    {
-                        currentSelectedUnit->OrderAttackMove(pos, m_cursorDetector->GetCurrentOnMouseUnit());
-                    }
-                    UIManager::Instance().SummonMoveToFeedback(pos);
-                };
+        case PlayerCharacterType::Robin: SelectSkill(SkillType::ROBIN_Q); break;
+        case PlayerCharacterType::Ursula: SelectSkill(SkillType::URSULA_Q); break;
+        case PlayerCharacterType::Hansel: SelectSkill(SkillType::HANSEL_Q); break;
+        }
+    }
+    if (Input::isKeyPushed(KeyCode::W))
+    {
+        switch (selectedCharacterType)
+        {
+        case PlayerCharacterType::Robin: SelectSkill(SkillType::ROBIN_W); break;
+        case PlayerCharacterType::Ursula: SelectSkill(SkillType::URSULA_W); break;
+        case PlayerCharacterType::Hansel: SelectSkill(SkillType::HANSEL_W); break;
+        }
+    }
+    if (Input::isKeyPushed(KeyCode::NUM_1))
+    {
+        SelectPlayerUnit(PlayerCharacterType::Robin);
+    }
+    if (Input::isKeyPushed(KeyCode::NUM_2))
+    {
+        SelectPlayerUnit(PlayerCharacterType::Ursula);
+    }
+    if (Input::isKeyPushed(KeyCode::NUM_3))
+    {
+        SelectPlayerUnit(PlayerCharacterType::Hansel);
+    }
+    if (Input::isKeyPushed(KeyCode::A))
+    {
+        OrderAttackMove(GetWorldCursorPosition());
+    }
+    if (Input::isKeyPushed(KeyCode::MouseLeftClick) && !UIManager::Instance().IsMouseOnButton())
+    {
+        OnLeftClick();
+    }
+    if (Input::isKeyPushed(KeyCode::MouseRightClick))
+    {
+        OnRightClick();
+    }
+}
+
+void PlayerController::HandleCamera()
+{
+    static constexpr float tacticZoomoutDistanceFactor = 1.2f;
+    // 영웅이 선택되어 있고, 카메라가 선택된 영웅을 따라가는 경우 targetPos는 영웅의 위치로 설정됩니다.
+    Vector3d targetPos;
+    if (!selectedCharacter.expired())
+    {
+        Vector3d selectedCharPos = selectedCharacter.lock()->GetTransform()->GetWorldPosition();
+        targetPos = selectedCharPos + camOffset;
+    }
+    // 카메라가 지역 제한에 걸렸을 경우, targetPos를 지역 안으로 정의합니다.
+    if (camLockRegion)
+    {
+        targetPos.x = std::clamp(targetPos.x, camLockRegion->pod.x - camLockRegion->pod.width * 0.5, camLockRegion->pod.x + camLockRegion->pod.width * 0.5);
+        targetPos.z = std::clamp(targetPos.z, camLockRegion->pod.z - camLockRegion->pod.height * 0.5, camLockRegion->pod.z + camLockRegion->pod.height * 0.5);
+    }
+    RTSCam::Instance().SetIdealPosition(targetPos);
+    RTSCam::Instance().SetIdealRotation(camRotation);
+}
+
+void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
+{
+    if (charType == selectedCharacterType || charType == PlayerCharacterType::None)
+    {
+        return;
+    }
+    selectedCharacterType = charType;
+    selectedCharacter = characters[charType];
+    selectedDebugCharacter = characters[charType];
+    switch (selectedCharacterType)
+    {
+    case PlayerCharacterType::Robin:
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->
+            GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
+        break;
+    case PlayerCharacterType::Ursula:
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->
+            GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
+        break;
+    case PlayerCharacterType::Hansel:
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->
+            GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
+    default:
+        break;
+    }
+}
+
+void PlayerController::OnLeftClick()
+{
+    if (selectedSkill == SkillType::NONE)
+    {
+        if (!cursorUnitDetector.lock()->GetUnits().empty())
+        {
+            SelectUnit((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
         }
     }
     else
     {
-        if (!playerComponentMap.contains(currentSelectedSerialNumber))
-        {
-            return;
-        }
-        Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
-        m_movingSystemComponent->groundRightClickCallback = [=](Vector3d pos)
-            {
-                if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
-                {
-                    return;
-                }
-                /*for (auto e : playerComponentMap)
-                {
-                    e.second->OrderMove(pos);
-                }*/
-                currentSelectedUnit->OrderMove(pos);
-                UIManager::Instance().SummonMoveToFeedback(pos);
-            };
+        ActivateSkill(selectedSkill, GetWorldCursorPosition());
     }
 }
 
-void PlayerController::SetLeftClickAttackMove()
+void PlayerController::OnRightClick()
 {
-    m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
-        {
-            if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
-            {
-                return;
-            }
-            playerComponentMap.find(currentSelectedSerialNumber)->second->OrderAttackMove(pos);
-        };
-}
-
-void PlayerController::SetLeftClickSkill(Unit::SkillEnum p_skillNum)
-{
-    Unit* currentUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
-
-    if (currentUnit->GetCurrentUnitState() != Unit::UnitState::Skill)
+    if (selectedSkill == SkillType::NONE)
     {
-        if (static_cast<int>(currentSelectedSerialNumber) == InputManager::SelectedSerialNumber::One && p_skillNum == Unit::SkillEnum::W)
-        {
-            /// Warrior의 W 스킬은 마우스로 클릭하지 않아도 바로 실행되는 스킬이다. 다른 스킬 나온다면 구조적 개선 필요
-            playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum);
-            auto& callbackVectors = skillSelectionCallback[currentSelectedSerialNumber][p_skillNum];
-            auto& callbackVectors2 = skillActivationCallback[currentSelectedSerialNumber][p_skillNum];
-            for (auto& each : callbackVectors)
-                each();
-            for (auto& each : callbackVectors2)
-                each();
-            callbackVectors.clear();
-            callbackVectors2.clear();
-        }
-        else
-        {
-            //playerComponentMap.find(currentSelectedSerialNumber)->second->OrderSkill(p_skillNum);
-            auto& callbackVectors = skillSelectionCallback[currentSelectedSerialNumber][p_skillNum];
-            for (auto& each : callbackVectors)
-                each();
-            callbackVectors.clear();
-
-            Unit* currentSelectedUnit = playerComponentMap.find(currentSelectedSerialNumber)->second;
-            //SkillPreviewSystem::Instance().SetCurrentSelectedPlayerUnit(currentSelectedUnit);
-            //SkillPreviewSystem::Instance().SetCurrentSkillPreviewType(currentSelectedUnit->GetSkillPreviewType(p_skillNum));
-            //SkillPreviewSystem::Instance().SetCurrentSelectedSkillNum(p_skillNum);
-            //SkillPreviewSystem::Instance().ActivateSkillPreview(true);
-            m_movingSystemComponent->groundLeftClickCallback = [=](Vector3d pos)
-                {
-                    if (!InputManager::Instance().GetInputManagerActive() || UIManager::Instance().IsMouseOnButton())
-                    {
-                        return;
-                    }
-                    //SkillPreviewSystem::Instance().ActivateSkillPreview(false);
-                    if (auto playerComp = playerComponentMap.find(currentSelectedSerialNumber); playerComp != playerComponentMap.end())
-                    {
-                        auto& callbackVectors = skillActivationCallback[currentSelectedSerialNumber][p_skillNum];
-                        for (auto& each : callbackVectors)
-                            each();
-                        callbackVectors.clear();
-                        playerComp->second->OrderSkill(p_skillNum, pos);
-                    }
-                };
-        }
+        OrderMove(GetWorldCursorPosition());
     }
-}
-
-void PlayerController::SetLeftClickEmpty()
-{
-    m_movingSystemComponent->groundLeftClickCallback = [](Vector3d pos) {};
-}
-
-
-void PlayerController::SetRightClickEmpty()
-{
-    m_movingSystemComponent->groundRightClickCallback = [](Vector3d pos) {};
-}
-
-void PlayerController::SetCurrentPlayerSerialNumber(Unit::UnitType p_num)
-{
-    if (playerComponentMap.find(p_num) != playerComponentMap.end()
-        || p_num == Unit::UnitType::AllPlayers)
+    else
     {
-        currentSelectedSerialNumber = p_num;
-
-        /// 비전투 상황일 때는 우클릭 함수 정의 이전에 Leader Unit으로 전환해주는 로직이 필요합니다.
-        if (!GameManager::Instance().IsBattleSystemOperating())
-            ChangeLeaderPlayerUnit(p_num);
-
-        SetRightClickFunction();
+        UnSelectSkill();
     }
 }
 
-void PlayerController::ReportBattleEnded()
+void PlayerController::SelectUnit(std::weak_ptr<Unit> unit)
 {
-    if (!playerComponentMap[currentSelectedSerialNumber]->GetActive())
+    SelectPlayerUnit(static_cast<PlayerCharacterType::Enum>(unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue));
+    selectedDebugCharacter = unit;
+}
+
+void PlayerController::OrderMove(Vector3d position)
+{
+    selectedCharacter.lock()->OrderMove(position);
+    UIManager::Instance().SummonMoveToFeedback(GetWorldCursorPosition());
+}
+
+void PlayerController::OrderAttackMove(Vector3d position)
+{
+    selectedCharacter.lock()->OrderAttackMove(position);
+    UIManager::Instance().SummonMoveToFeedback(GetWorldCursorPosition());
+}
+
+void PlayerController::OrderAttack(std::weak_ptr<Unit> unit)
+{
+    selectedCharacter.lock()->OrderAttack(unit);
+}
+
+void PlayerController::OrderInteraction(std::weak_ptr<IInteractableComponent> interactable)
+{
+    selectedCharacter.lock()->OrderMove(interactable.lock()->GetTransform()->GetWorldPosition());
+}
+
+void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
+{
+    if (state == State::Cinematic) return;
+    onSkillActivate[(int)skillType]();
+    switch (skillType)
     {
-        for (auto e : playerComponentMap)
+    case SkillType::ROBIN_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
+    case SkillType::ROBIN_W: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
+    case SkillType::URSULA_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
+    case SkillType::URSULA_W: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
+    case SkillType::HANSEL_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
+    case SkillType::HANSEL_W: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
+    }
+}
+
+void PlayerController::SelectSkill(SkillType::Enum skillType)
+{
+    //if (!GameManager::Instance().IsBattleSystemOperating()) return;
+    UnSelectSkill();
+    onSkillSelect[skillType]();
+    switch (skillType)
+    {
+    case SkillType::ROBIN_Q: case SkillType::ROBIN_W: SelectPlayerUnit(PlayerCharacterType::Robin); break;
+    case SkillType::URSULA_Q: case SkillType::URSULA_W: SelectPlayerUnit(PlayerCharacterType::Ursula); break;
+    case SkillType::HANSEL_Q: case SkillType::HANSEL_W: SelectPlayerUnit(PlayerCharacterType::Hansel); break;
+    }
+
+    // 즉발은 그냥 써버리고 나머지는 준비상태로 만든다.
+    switch (skillType)
+    {
+    case SkillType::ROBIN_W: ActivateSkill(SkillType::ROBIN_W, Vector3d::zero); break;
+    default:
+        selectedSkill = skillType;
+        break;
+    }
+}
+void PlayerController::SetState(State::Enum newState)
+{
+    state = newState;
+    switch (state)
+    {
+    case State::Peace:
+    case State::Cinematic:
+        UnSelectSkill();
+        break;
+    }
+}
+// 필요한 것들을 다 초기화한다.
+void PlayerController::Reset()
+{
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->DisableElement();
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Text)->DisableElement();
+    for (auto& each : onSkillActivate) each.Clear();
+    for (auto& each : onSkillSelect) each.Clear();
+    for (auto& each : blockSkillSelection) each = false;
+    if (cursorUnitDetector.expired())
+        cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionSphereCollider>();
+    std::for_each(skillByUI.begin(), skillByUI.end(), [&](auto& pair) {
+        auto& [ui, upgrade] = pair;
+        UIManager::Instance().GetUIElementByEnum(ui)->imageComponent.lock()->GetGI().SetColor({ 1,1,1,1 });
+        skillUpgraded[upgrade] = false;
+        });
+    skillPointsLeft = 0;
+}
+
+// 현재 카메라의 위치에 따라 카메라의 플레이어 기준 오프셋 위치와 회전각을 결정합니다.
+void PlayerController::SetCameraOffset()
+{
+    auto camPos = graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition();
+    camOffset = camPos - characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition();
+    camRotation = graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation();
+}
+
+void PlayerController::SetComboObjectives(const std::array<int, 3>& targetCombos)
+{
+    comboObjective = targetCombos;
+    comboAchieved.fill(false);
+    for (int i = 0; i < 3; i++)
+    {
+        comboAchieved[i] = false;
+        UIManager::Instance().GetUIElementByEnum(UIManager::comboNumbers[i])->SetNumber(comboObjective[i]);
+        UIManager::Instance().GetUIElementByEnum(UIManager::comboNumbers[i + 3])->SetNumber(comboObjective[i]);
+        UIManager::Instance().GetUIElementByEnum(UIManager::comboFinishedImgs[i])->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIManager::comboUnFinishedImgs[i])->EnableElement();
+        UIManager::Instance().GetUIElementByEnum(UIManager::comboCheckImgs[i])->DisableElement();
+    }
+}
+
+void PlayerController::AddCombo()
+{
+    currentCombo++;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->EnableElement();
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Text)->EnableElement();
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->SetNumber(currentCombo);
+    for (auto i = 0; i < 3; i++)
+    {
+        if (!comboAchieved[i] && comboObjective[i] > 0 && currentCombo >= comboObjective[i])
         {
-            if (e.second->GetActive())
-            {
-                currentSelectedSerialNumber = e.first;
-                InputManager::Instance().SelectPlayer(currentSelectedSerialNumber);
-                break;
-            }
+            comboAchieved[i] = true;
+            IncrementSkillPoint();
+            UIManager::Instance().GetUIElementByEnum(UIManager::comboCheckImgs[i])->EnableElement();
+            UIManager::Instance().GetUIElementByEnum(UIManager::comboFinishedImgs[i])->EnableElement();
+            UIManager::Instance().GetUIElementByEnum(UIManager::comboUnFinishedImgs[i])->DisableElement();
         }
     }
-
-    ChangeLeaderPlayerUnit(currentSelectedSerialNumber);
 }
 
-void PlayerController::ChangeLeaderPlayerUnit(Unit::UnitType p_num)
+void PlayerController::OnWaveStart(std::weak_ptr<PlaytimeWave> p_wave)
 {
-    for (auto e : playerComponentMap)
+}
+
+void PlayerController::OnWaveEnd(std::weak_ptr<PlaytimeWave> p_wave)
+{
+}
+
+void PlayerController::UnSelectSkill()
+{
+    switch (selectedSkill)
     {
-        e.second->ReportLeaderUnitChanged(p_num);
+    case SkillType::ROBIN_Q: SkillPreviewSystem::Instance().HideRobinQSkill(); break;
+    case SkillType::URSULA_Q: SkillPreviewSystem::Instance().HideUrsulaQSkill(); break;
+    case SkillType::URSULA_W: SkillPreviewSystem::Instance().HideUrsulaWSkill(); break;
+    case SkillType::HANSEL_Q: SkillPreviewSystem::Instance().HideHanselQSkill(); break;
+    case SkillType::HANSEL_W: SkillPreviewSystem::Instance().HideHanselWSkill(); break;
     }
-
-    currentSelectedSerialNumber = p_num;
-    m_movingSystemComponent->SetTarget(playerComponentMap.find(p_num)->second->GetGameObject());
-    SetRightClickFunction();
+    selectedSkill = SkillType::NONE;
 }
 
-std::unordered_map<Unit::UnitType, PlayerUnit*> PlayerController::GetPlayerMap() const
+void PlayerController::ShowSkillPreview()
 {
-    return playerComponentMap;
 }
 
-Unit* PlayerController::FindSelectedUnitByUnitType(Unit::UnitType p_type)
+// xz평면에 사영된 마우스 위치를 반환한다.
+Vector3d PlayerController::GetWorldCursorPosition()
 {
-    if (p_type != Unit::UnitType::AllPlayers)
-        return playerComponentMap.find(p_type)->second;
+    auto mainCam = yunutyEngine::graphics::Camera::GetMainCamera();
+    auto distToXZPlane = abs(mainCam->GetTransform()->GetWorldPosition().y);
+    auto projectedPoint = mainCam->GetProjectedPoint(Input::getMouseScreenPositionNormalizedZeroCenter(), distToXZPlane, Vector3d(0, 1, 0));
+    return projectedPoint;
 }
 
-PlayerUnit* PlayerController::GetCurrentSelectedPlayerUnit() const
+void PlayerController::ResetCombo()
 {
-    return playerComponentMap.find(currentSelectedSerialNumber)->second;
 }
-
-

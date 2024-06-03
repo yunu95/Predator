@@ -72,7 +72,7 @@ namespace application::editor::palette
                 for (int i = 0; i < comp->GetGI().GetMaterialCount(); ++i)
                 {
                     comp->GetGI().GetMaterial(i)->SetPixelShader(erm.GetShader("Debug_AlphaPS.cso"));
-                    comp->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,0,0,0.5 });
+                    comp->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,0,0,0.2 });
                 }
             }
         }

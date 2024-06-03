@@ -34,6 +34,7 @@
 #include "ContentsObserver.h"
 #include "ParticleTool_Manager.h"
 #include "UVAnimator.h"
+#include "VFXAnimator.h"
 #include "InitialLoadingScreen.h"
 #include "InstanceManager.h"
 
@@ -93,7 +94,6 @@ class TestComponent4 : public yunutyEngine::Component
 public:
     SkillPreviewSystem* system;
     yunutyEngine::GameObject* obj;
-    yunutyEngine::GameObject* camObj;
     bool isShow = false;
     virtual void Update() override
     {
@@ -150,18 +150,10 @@ public:
         {
             std::vector<Vector3d> a;
             a.push_back(Vector3d{ 0,0,0 });
-            a.push_back(Vector3d{ 0,0,1 });
+            a.push_back(Vector3d{ 0,0,0.5 });
             a.push_back(Vector3d{ 1,0,1 });
+            system->ShowRoute(SkillPreviewSystem::UnitType::Robin, a);
             //system->ShowRoute(a);
-
-            const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-            auto gobj = Scene::getCurrentScene()->AddGameObject();
-            gobj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{-90,0,0} });
-            auto renderer = gobj->AddComponent<graphics::StaticMeshRenderer>();
-            renderer->GetGI().SetMesh(_resourceManager->GetMesh(L"RouteMesh"));
-            renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, _resourceManager->GetTexture(L"Texture/move.png"));
-            renderer->GetGI().GetMaterial()->SetVertexShader(_resourceManager->GetShader(L"TextureVS.cso"));
-            renderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"GuideLinePS.cso"));
         }
         if (isShow)
         {
@@ -179,6 +171,10 @@ void GraphicsTest()
 {
     auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     camObj->AddComponent<tests::GraphicsTestCam>();
+    camObj->GetComponent<tests::GraphicsTestCam>()->GetGI().SetAsMain();
+
+    camObj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
+    //camObj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{ 90,0,0 } });
 
     auto skillPreviewSystem = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
     auto systemComponent = skillPreviewSystem->AddComponent<SkillPreviewSystem>();
@@ -186,7 +182,7 @@ void GraphicsTest()
     systemComponent->camObj = camObj;
 
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-
+    //_resourceManager->LoadFile("FBX/VFX");
     auto& animationList = _resourceManager->GetAnimationList();
     yunuGI::IAnimation* animation = nullptr;
     yunuGI::IAnimation* animation2 = nullptr;
@@ -215,19 +211,13 @@ void GraphicsTest()
 
 
     {
-        auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("Cube");
-        obj2->GetTransform()->SetLocalScale(Vector3d{ 0.01,0.01,0.01 });
-
-
-        auto obj3 = Scene::getCurrentScene()->AddGameObject();
+        //auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Wave");
+        //obj2->AddComponent<VFXAnimator>();
+        /*auto obj3 = Scene::getCurrentScene()->AddGameObject();
+        auto renderer = obj3->AddComponent<graphics::StaticMeshRenderer>();
         auto test = obj3->AddComponent<TestComponent4>();
         test->obj = obj2;
-        test->system = systemComponent;
-        test->camObj = camObj;
-    }
-
-    {
-
+        test->system = systemComponent;*/
     }
     yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
     //yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
@@ -349,8 +339,9 @@ void application::contents::ContentsLayer::Initialize()
     ShortcutInit();
     ScriptSystem::Instance();
     CinematicManager::Instance();
-    TutorialManager::Instance();
+    //TutorialManager::Instance();
     Scene::getCurrentScene()->AddGameObject()->AddComponent<ContentsInitializer>();
+    //SkillPreviewSystem::Instance().Init();
 }
 
 void application::contents::ContentsLayer::Update(float ts)
@@ -374,14 +365,11 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
     {
         UIManager::Instance().ImportUI("InWanderLand.iwui");
     }
-    SkillUpgradeSystem::SingleInstance().Reset();
     editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
     yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 
-    InputManager::Instance().SetInputManagerActive(true);
-    PlayerSkillManager::Instance();
-    GameManager::Instance().Reset();
+    PlayerController::Instance().Reset();
 
     auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
@@ -389,8 +377,8 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
     PlayableComponent::OnGameStartAll();
 
     ContentsObserver::Instance().OnPlayContents();
-	SkillPreviewSystem::Instance().Init();
-	SkillPreviewSystem::Instance().camObj = GameManager::Instance().rtscam->GetGameObject();
+    SkillPreviewSystem::Instance().Init();
+    SkillPreviewSystem::Instance().camObj = RTSCam::Instance().GetGameObject();
 }
 
 void application::contents::ContentsLayer::PauseContents()
@@ -459,7 +447,7 @@ void application::contents::ContentsLayer::ShortcutInit()
                     continue;
                 }
 
-                if (comp->GetUnitSide() == Unit::UnitSide::Player)
+                if (!comp->IsPlayerUnit())
                 {
                     auto& scsysIns = ShortcutSystem::Instance();
                     comp->GetGameObject()->SetSelfActive(scsysIns.GetTriggerSwitch(scsysIns.GetKeyIndex({ { KeyCode::Control, true }, { KeyCode::NUM_1, false } })));
@@ -477,7 +465,7 @@ void application::contents::ContentsLayer::ShortcutInit()
                     continue;
                 }
 
-                if (comp->GetUnitSide() == Unit::UnitSide::Enemy)
+                if (!comp->IsPlayerUnit())
                 {
                     auto& scsysIns = ShortcutSystem::Instance();
                     comp->GetGameObject()->SetSelfActive(scsysIns.GetTriggerSwitch(scsysIns.GetKeyIndex({ { KeyCode::Control, true }, { KeyCode::NUM_2, false } })));

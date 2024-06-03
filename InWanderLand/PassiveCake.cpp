@@ -80,7 +80,7 @@ void PassiveCake::OnTriggerEnter(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
 		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+		colliderUnitComponent->IsPlayerUnit())
 	{
 		m_mesh->SetActive(false);
 		m_collider->SetActive(false);

@@ -13,10 +13,11 @@ namespace application
 	public:
 		DEFINE_ACTION(SoundSetMusicVolume)
 
-		Action_SoundSetMusicVolume() = default;
-		Action_SoundSetMusicVolume(float fadeTIme,float volume);
-
 		virtual CoroutineObject<void> DoAction() override;
+
+		void SetFadeTime(float fadeTime);
+		void SetVolume(float volume);
+
 		virtual bool PreEncoding(json& data) const override;
 		virtual bool PostEncoding(json& data) const override;
 		virtual bool PreDecoding(const json& data) override;
@@ -24,6 +25,6 @@ namespace application
 
 	private:
 		float fadeTime = 0;
-		float volume = 0;
+		float volume = 1.0f;
 	};
 }

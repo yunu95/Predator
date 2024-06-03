@@ -43,6 +43,7 @@ public:
 
     DirectX::SimpleMath::Matrix GetPTM90ByResolution(float width, float height, float farPlane, float nearPlane);
 
+
 private:
     std::map<yunuGI::ICamera*, std::shared_ptr<NailCamera>> cameraMap;
     std::shared_ptr<NailCamera> mainCamera;

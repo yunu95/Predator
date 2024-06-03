@@ -35,7 +35,7 @@ void PlaytimeRegion::OnTriggerEnter(physics::Collider* collider)
 {
     // 조건 더 다듬을 것
     if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
-        colliderUnitComponent != nullptr && colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+        colliderUnitComponent != nullptr && colliderUnitComponent->IsPlayerUnit())
     {
         enteredPlayerColliders.insert(collider);
         if (!isOnceActivated)
@@ -52,11 +52,12 @@ void PlaytimeRegion::OnTriggerEnter(physics::Collider* collider)
             }
         }
         // 가려야 하는 장식물들을 가리는 부분
-        for (auto each : regionData->GetDisablingOrnaments())
+        if (disablingReferences.empty())
         {
-            if (auto instance = each->GetPaletteInstance())
+            for (auto each : regionData->GetDisablingOrnaments())
             {
-                instance->GetGameObject()->SetSelfActive(false);
+                std::transform(regionData->GetDisablingOrnaments().begin(), regionData->GetDisablingOrnaments().end(),
+                    std::back_inserter(disablingReferences), [each](auto each) { return each->AcquireDisablingReference(); });
             }
         }
 
@@ -67,23 +68,16 @@ void PlaytimeRegion::OnTriggerExit(physics::Collider* collider)
 {
     // 조건 더 다듬을 것
     if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
-        colliderUnitComponent != nullptr && colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+        colliderUnitComponent != nullptr && colliderUnitComponent->IsPlayerUnit())
     {
         enteredPlayerColliders.erase(collider);
-        for (auto& each : OnLeave)
-        {
-            each();
-        }
         if (enteredPlayerColliders.empty())
         {
-            // 가려져 있던 장식물들을 다시 보이게 하는 부분
-            for (auto each : regionData->GetDisablingOrnaments())
+            for (auto& each : OnLeave)
             {
-                if (auto instance = each->GetPaletteInstance())
-                {
-                    instance->GetGameObject()->SetSelfActive(true);
-                }
+                each();
             }
+            disablingReferences.clear();
         }
     }
 }

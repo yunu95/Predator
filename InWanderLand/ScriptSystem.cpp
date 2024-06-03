@@ -19,6 +19,8 @@ namespace application
         triggerList.push_back({ TriggerType::RepeatPeriodicallyRealTime, "RepeatPeriodicallyRealTime" });
         triggerList.push_back({ TriggerType::UnitAppear, "UnitAppear" });
         triggerList.push_back({ TriggerType::UnitDie, "UnitDie" });
+        triggerList.push_back({ TriggerType::InteractableTriggerEnter, "InteractableTriggerEnter" });
+        triggerList.push_back({ TriggerType::InteractableTriggerExit, "InteractableTriggerExit" });
 
         /// Condition
         conditionList.push_back({ ConditionType::CinematicModeOn, "CinematicModeOn" });
@@ -59,6 +61,10 @@ namespace application
         actionList.push_back({ ActionType::SoundPlayMusic,"SoundPlayMusic" });
         actionList.push_back({ ActionType::SoundSetMusicVolume,"SoundSetMusicVolume" });
         actionList.push_back({ ActionType::UISetActive,"UISetActive" });
+        actionList.push_back({ ActionType::OrnamentMoveWithRotateAndRescale,"OrnamentMoveWithRotateAndRescale" });
+        actionList.push_back({ ActionType::OrnamentShow,"OrnamentShow" });
+        actionList.push_back({ ActionType::OrnamentHide,"OrnamentHide" });
+        actionList.push_back({ ActionType::OrnamentFloating,"OrnamentFloating" });
     }
 
     Script* ScriptSystem::CreateScript()

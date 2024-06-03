@@ -31,14 +31,18 @@ namespace application
                 void ChangeTemplateData(const application::editor::OrnamentData* ornamentData);
                 void ChangeTemplateData(const application::editor::Ornament_TemplateData* ornamentTemplateData);
                 void ChangeResource(const std::string& fbxName);
-                virtual void HideEditorInstance() override {}
+                virtual void ShowEditorInstance() override;
+                virtual void HideEditorInstance() override;
                 const application::editor::OrnamentData* GetOrnamentData();
+
+                void ChangeGuideInstance();
 
             protected:
                 virtual void OnHover() { PaletteInstance::OnHover(); }
                 virtual void OnHoverLeft() { PaletteInstance::OnHoverLeft(); }
 
             private:
+                bool isGuide = false;
                 std::string currentFBX = "";
                 const application::editor::OrnamentData* ornamentData{};
                 const application::editor::Ornament_TemplateData* ornamentTemplateData;

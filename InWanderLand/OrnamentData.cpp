@@ -14,6 +14,18 @@ namespace application
     {
         TemplateDataManager& OrnamentData::templateDataManager = TemplateDataManager::GetSingletonInstance();
 
+        OrnamentData::DisablingReference::DisablingReference(application::editor::OrnamentData* ornament)
+        {
+            ornamentTransform = ornament->GetPaletteInstance()->GetGameObject()->GetComponentWeakPtr<Transform>();
+            ornamentTransform.lock()->GetGameObject()->SetSelfActive(false);
+        };
+        OrnamentData::DisablingReference::~DisablingReference()
+        {
+            if (!ornamentTransform.expired())
+            {
+                ornamentTransform.lock()->GetGameObject()->SetSelfActive(true);
+            }
+        };
         bool OrnamentData::EnterDataFromTemplate()
         {
             // 템플릿으로부터 초기화되는 데이터들 처리 영역	
@@ -102,9 +114,38 @@ namespace application
 
         void OrnamentData::ApplyAsPlaytimeObject()
         {
-            if (ornamentInstance == nullptr)
+            ApplyAsPaletteInstance();
+            if (!pod.isGuide)
             {
-                ApplyAsPaletteInstance();
+                ornamentInstance->GetGameObject()->SetSelfActive(true);
+
+                if (tookAction)
+                {
+                    GameObject* targetObj = nullptr;
+
+                    for (auto each : GetPaletteInstance()->GetGameObject()->GetChildren())
+                    {
+                        if (each->getName() != pod.templateData->pod.staticFBXName)
+                        {
+                            continue;
+                        }
+
+                        targetObj = each;
+                    }
+
+                    auto renderer = targetObj->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+
+                    if (renderer)
+                    {
+                        for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
+                        {
+                            static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+                            renderer->GetGI().SetMaterial(i, resourceManager->GetMaterial(renderer->GetGI().GetMaterial(i)->GetName()));
+                        }
+                    }
+
+                    tookAction = false;
+                }
             }
             PlayTimeRegionManager::Instance().RegisterOrnament(ornamentInstance->GetGameObject(), pod.stage);
         }
@@ -113,6 +154,16 @@ namespace application
         {
             auto& data = GlobalConstant::GetSingletonInstance().pod;
             return true;
+        }
+        std::shared_ptr<OrnamentData::DisablingReference> OrnamentData::AcquireDisablingReference()
+        {
+            if (disablingReference.expired())
+            {
+                auto ref = std::make_shared<DisablingReference>(this);
+                disablingReference = ref;
+                return disablingReference.lock();
+            }
+            return disablingReference.lock();
         }
 
         bool OrnamentData::PreEncoding(json& data) const

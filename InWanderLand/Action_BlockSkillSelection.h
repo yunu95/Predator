@@ -5,6 +5,9 @@
 
 #include "IAction.h"
 
+#include "IAction.h"
+#include "SkillType.h"
+
 namespace application
 {
     class Action_BlockSkillSelection
@@ -13,12 +16,10 @@ namespace application
     public:
         DEFINE_ACTION(BlockSkillSelection)
 
-        Action_BlockSkillSelection() = default;
-        Action_BlockSkillSelection(int skillIndex);
+            Action_BlockSkillSelection() = default;
+        Action_BlockSkillSelection(SkillType::Enum skillType);
 
         virtual CoroutineObject<void> DoAction() override;
-
-        void SetSkillIndex(int index);
 
         virtual bool PreEncoding(json& data) const override;
         virtual bool PostEncoding(json& data) const override;
@@ -26,8 +27,8 @@ namespace application
         virtual bool PostDecoding(const json& data) override;
 
     private:
-        bool blocking{ true };
-        bool applyExceptTarget{ false };
-        int index{ 0 };
+        POD_Enum<SkillType::Enum> skillType;
+        bool blocking;
+        bool applyExceptTarget;
     };
-}
+};
