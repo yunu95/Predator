@@ -183,9 +183,8 @@ void GraphicsTest()
 
     for (auto& i : animationList)
     {
-        if (i->GetName() == L"Ani_Ursula_Attack")
+        if (i->GetName() == L"root|Ani_SVFX_Wave")
         {
-            i->SetLoop(true);
             animation = i;
         }
 
@@ -202,15 +201,17 @@ void GraphicsTest()
         }
     }
 
-
     {
 
         
 
         auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SVFX_Wave");
+        auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
+        anim->PushAnimation(animation);
+        anim->Play(animation);
         obj2->GetTransform()->SetLocalScale(Vector3d{ 0.01,0.01,0.01 });
-        obj2->SetSelfActive(false);
         obj2->AddComponent<VFXAnimator>();
+        obj2->SetSelfActive(false);
         /*auto obj3 = Scene::getCurrentScene()->AddGameObject();
         auto renderer = obj3->AddComponent<graphics::StaticMeshRenderer>();
         auto test = obj3->AddComponent<TestComponent4>();

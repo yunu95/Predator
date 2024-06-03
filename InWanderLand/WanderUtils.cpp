@@ -76,7 +76,7 @@ coroutine::Coroutine wanderUtils::ResourceRecursiveLoader::LoadByCoroutine(strin
         {
             namespace fs = std::filesystem;
             resourceManager->LoadFile("FBXMaterial.scres");
-            std::set<std::string> validExtensions{ ".cso" ,".mp4" };
+            std::set<std::string> validExtensions{ ".cso" ,".mp4" ,".vfx"};
             std::set<std::string> textureExtensions{ ".jpg", ".bmp", ".tga", ".dds",".png" };
             std::set<std::string> soundExtensions{ ".wav", ".mp3", ".wma", ".ogg" };
             fs::path basePath{ rootFolder };
