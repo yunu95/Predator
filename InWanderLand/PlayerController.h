@@ -91,7 +91,6 @@ private:
     void OrderInteraction(std::weak_ptr<IInteractableComponent> interactable);
     void ActivateSkill(SkillType::Enum skillType, Vector3d pos);
     void UnSelectSkill();
-    void ShowSkillPreview();
     Vector3d GetWorldCursorPosition();
     // 연속으로 쌓은 콤보를 초기화한다.
     void ResetCombo();

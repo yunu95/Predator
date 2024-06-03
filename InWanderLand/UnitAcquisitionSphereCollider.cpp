@@ -11,13 +11,13 @@ void UnitAcquisitionSphereCollider::OnTriggerEnter(physics::Collider* other)
         int otherTeamIndex = unit->GetTeamIndex();
         if (teamIndex != otherTeamIndex)
         {
-            foes.insert(unit);
-            OnHostileEnter(unit);
+            enemies.insert(unit);
+            OnEnemyEnter(unit);
         }
         else
         {
-            allies.insert(unit);
-            OnAllyEnter(unit);
+            friends.insert(unit);
+            OnFriendEnter(unit);
         }
     }
 }
@@ -31,13 +31,13 @@ void UnitAcquisitionSphereCollider::OnTriggerExit(physics::Collider* other)
         OnUnitExit(unit);
         if (unit->GetTeamIndex() != GetTeamIndex())
         {
-            foes.erase(unit);
-            OnHostileExit(unit);
+            enemies.erase(unit);
+            OnEnemyExit(unit);
         }
         else
         {
-            allies.erase(unit);
-            OnAllyExit(unit);
+            friends.erase(unit);
+            OnFriendExit(unit);
         }
     }
 
@@ -55,13 +55,13 @@ void UnitAcquisitionSphereCollider::Update()
         return (!includeDeadUnits && !unit->IsAlive()) || (!includeInvulnerableUnits && unit->IsInvulenerable());
         };
     std::copy_if(units.begin(), units.end(), std::back_inserter(unitsToErase), ShouldErase);
-    std::copy_if(allies.begin(), allies.end(), std::back_inserter(alliesToErase), ShouldErase);
-    std::copy_if(foes.begin(), foes.end(), std::back_inserter(foesToErase), ShouldErase);
-    std::erase_if(foes, ShouldErase);
-    std::erase_if(allies, ShouldErase);
+    std::copy_if(friends.begin(), friends.end(), std::back_inserter(alliesToErase), ShouldErase);
+    std::copy_if(enemies.begin(), enemies.end(), std::back_inserter(foesToErase), ShouldErase);
+    std::erase_if(enemies, ShouldErase);
+    std::erase_if(friends, ShouldErase);
     std::erase_if(units, ShouldErase);
-    std::for_each(foesToErase.begin(), foesToErase.end(), [this](Unit* each) { OnHostileExit(each); });
-    std::for_each(alliesToErase.begin(), alliesToErase.end(), [this](Unit* each) { OnAllyExit(each); });
+    std::for_each(foesToErase.begin(), foesToErase.end(), [this](Unit* each) { OnEnemyExit(each); });
+    std::for_each(alliesToErase.begin(), alliesToErase.end(), [this](Unit* each) { OnFriendExit(each); });
     std::for_each(unitsToErase.begin(), unitsToErase.end(), [this](Unit* each) { OnUnitExit(each); });
 }
 

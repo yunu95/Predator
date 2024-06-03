@@ -34,20 +34,20 @@ float getDeltaAngle(float difference) {
 }
 std::weak_ptr<Unit> Unit::GetClosestEnemy()
 {
-    auto minIt = std::min_element(attackRange.lock()->GetFoes().begin(), attackRange.lock()->GetFoes().end(), [this](const Unit* const a, const Unit* const b)
+    auto minIt = std::min_element(attackRange.lock()->GetEnemies().begin(), attackRange.lock()->GetEnemies().end(), [this](const Unit* const a, const Unit* const b)
         {
             return (GetTransform()->GetWorldPosition() - a->GetTransform()->GetWorldPosition()).MagnitudeSqr() <
                 (GetTransform()->GetWorldPosition() - b->GetTransform()->GetWorldPosition()).MagnitudeSqr();
         });
-    if (minIt != attackRange.lock()->GetFoes().end())
+    if (minIt != attackRange.lock()->GetEnemies().end())
         return (*minIt)->GetWeakPtr<Unit>();
 
-    minIt = std::min_element(acquisitionRange.lock()->GetFoes().begin(), acquisitionRange.lock()->GetFoes().end(), [this](const Unit* const a, const Unit* const b)
+    minIt = std::min_element(acquisitionRange.lock()->GetEnemies().begin(), acquisitionRange.lock()->GetEnemies().end(), [this](const Unit* const a, const Unit* const b)
         {
             return (GetTransform()->GetWorldPosition() - a->GetTransform()->GetWorldPosition()).MagnitudeSqr() <
                 (GetTransform()->GetWorldPosition() - b->GetTransform()->GetWorldPosition()).MagnitudeSqr();
         });
-    if (minIt != acquisitionRange.lock()->GetFoes().end())
+    if (minIt != acquisitionRange.lock()->GetEnemies().end())
         return (*minIt)->GetWeakPtr<Unit>();
 
     return std::weak_ptr<Unit>();
@@ -399,7 +399,7 @@ void Unit::OnEnable()
 }
 void Unit::OnDisable()
 {
-    navAgentComponent.lock()->GetGameObject()->SetSelfActive(true);
+    navAgentComponent.lock()->GetGameObject()->SetSelfActive(false);
 }
 void Unit::Start()
 {
@@ -736,7 +736,7 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::Chasing][UnitBehaviourTree::Attack].enteringCondtion = [this]()
         {
-            return !attackRange.lock()->GetFoes().contains(currentTargetUnit.lock().get()) || !coroutineAttack.expired();
+            return !attackRange.lock()->GetEnemies().contains(currentTargetUnit.lock().get()) || !coroutineAttack.expired();
         };
     unitBehaviourTree[UnitBehaviourTree::Chasing][UnitBehaviourTree::Attack].onEnter = [this]()
         {
@@ -774,7 +774,7 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Attack].enteringCondtion = [this]()
         {
-            return !attackRange.lock()->GetFoes().empty() || !coroutineAttack.expired();
+            return !attackRange.lock()->GetEnemies().empty() || !coroutineAttack.expired();
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Attack].onEnter = [this]()
         {
@@ -791,7 +791,7 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Move].enteringCondtion = [this]()
         {
-            return !acquisitionRange.lock()->GetFoes().empty();
+            return !acquisitionRange.lock()->GetEnemies().empty();
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Move].onEnter = [this]()
         {
@@ -841,7 +841,7 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Attack].enteringCondtion = [this]()
         {
-            return !attackRange.lock()->GetFoes().empty() || !coroutineAttack.expired();
+            return !attackRange.lock()->GetEnemies().empty() || !coroutineAttack.expired();
         };
     unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Attack].onEnter = [this]()
         {

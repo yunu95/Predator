@@ -275,7 +275,7 @@ void PlayerController::OrderInteraction(std::weak_ptr<IInteractableComponent> in
 void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 {
     if (state == State::Cinematic) return;
-    onSkillActivate[(int)skillType]();
+    onSkillActivate[skillType]();
     switch (skillType)
     {
     case SkillType::ROBIN_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
@@ -285,6 +285,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
     case SkillType::HANSEL_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
     case SkillType::HANSEL_W: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
     }
+    // 스킬 프리뷰를 비활성화시킨다.
 }
 
 void PlayerController::SelectSkill(SkillType::Enum skillType)
@@ -305,6 +306,7 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
     case SkillType::ROBIN_W: ActivateSkill(SkillType::ROBIN_W, Vector3d::zero); break;
     default:
         selectedSkill = skillType;
+        // 스킬 프리뷰를 활성화시킨다.
         break;
     }
 }
@@ -398,10 +400,6 @@ void PlayerController::UnSelectSkill()
     case SkillType::HANSEL_W: SkillPreviewSystem::Instance().HideHanselWSkill(); break;
     }
     selectedSkill = SkillType::NONE;
-}
-
-void PlayerController::ShowSkillPreview()
-{
 }
 
 // xz평면에 사영된 마우스 위치를 반환한다.

@@ -14,7 +14,7 @@ void Projectile::Update()
         }
     }
 }
-void Projectile::OnHostileEnter(Unit* unit)
+void Projectile::OnEnemyEnter(Unit* unit)
 {
     if (!traveling)
         return;

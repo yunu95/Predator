@@ -2,7 +2,9 @@
 
 float wanderUtils::ResourceRecursiveLoader::coroutineDeltaTimeThreshold = 0.02f;
 bool wanderUtils::ResourceRecursiveLoader::isLoadingResources = false;
+#ifdef EDITOR
 std::unordered_map<string, float> wanderUtils::ResourceRecursiveLoader::timeTookToLoadResources;
+#endif
 bool wanderUtils::ResourceRecursiveLoader::IsLoadingResources()
 {
     return isLoadingResources;
@@ -126,8 +128,8 @@ coroutine::Coroutine wanderUtils::ResourceRecursiveLoader::LoadByCoroutine(strin
     {
         auto directorList = application::editor::fileSystem::GetSubdirectories("FBX");
 #ifdef EDITOR
-#endif
         startTime = std::chrono::high_resolution_clock::now();
+#endif
         // FBX 로드는 스레드로 처리해도 오류발생의 위험은 크게 없는 것 같다.
         std::future<void> futureFBX = std::async(std::launch::async, [&]()
             {
