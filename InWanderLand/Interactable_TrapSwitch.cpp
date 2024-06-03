@@ -59,7 +59,7 @@ void Interactable_TrapSwitch::OnTriggerEnter(physics::Collider* collider)
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
 		//GameManager::Instance().IsBattleSystemOperating() &&
 		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+		colliderUnitComponent->IsPlayerUnit())
 	{
 		triggerStay.insert(collider);
 		triggerOn = true;
@@ -77,7 +77,7 @@ void Interactable_TrapSwitch::OnTriggerExit(physics::Collider* collider)
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
 		//GameManager::Instance().IsBattleSystemOperating() &&
 		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+		colliderUnitComponent->IsPlayerUnit())
 	{
 		if (triggerStay.size() == 1 && triggerOn)
 		{

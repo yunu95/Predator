@@ -46,7 +46,7 @@ public:
 	virtual void Start() override;
 	virtual Component* GetComponent() override { return this; };
 public:
-	virtual void ObjectInitializer(graphics::StaticMeshRenderer* comp) override;
+	virtual void ObjectInitializer(std::weak_ptr<graphics::StaticMeshRenderer> comp) override;
 	
 	void Init();
 #pragma region RobinQSkill

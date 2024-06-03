@@ -107,7 +107,7 @@ void Interactable_ChessRook::OnTriggerEnter(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
 		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+		colliderUnitComponent->IsPlayerUnit())
 	{
 		OnInteractableTriggerEnter();
 	}

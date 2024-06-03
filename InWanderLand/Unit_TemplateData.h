@@ -6,6 +6,9 @@
 
 #include "ITemplateData.h"
 #include "GlobalConstant.h"
+#include "UnitStatusBarType.h"
+#include "PlayerCharacterType.h"
+#include "UnitAttackType.h"
 
 #include <string>
 
@@ -18,6 +21,19 @@ namespace application
         struct POD_Unit_TemplateData
         {
             std::string skinnedFBXName = std::string();
+            // 플레이어 유닛인지의 여부와 종류를 나타내는 열거형
+            POD_Enum<PlayerCharacterType::Enum> playerUnitType;
+            // 화면에 뜨는 체력창의 타입
+            POD_Enum<UnitStatusBarType::Enum> unitStatusBar;
+            // 체력창을 유닛의 위치로부터 얼마나 멀리 띄울 것인가?
+            POD_Vector2<float> statusBarOffset;
+            // 발사체가 생성되는 위치
+            POD_Vector3<float> projectileOffset;
+            float projectileSpeed{ 5 };
+            // 생성될때 걸리는 시간, 생성시 번아웃 효과 연출 시간과 같다.
+            float spawnTime{ 0.5 };
+            // 사망할 때 번아웃 효과가 연출되는 시간
+            float deathBurnTime{ 0.5 };
 
             int unitType;
             float max_Health;
@@ -34,11 +50,15 @@ namespace application
             float collisionSize = 0.5f;
             float m_idRadius;
             float m_atkRadius;
+            float m_atkCooltime = 2.1f;
             float m_unitSpeed;
+            float rotationSpeed = 180.0f;
 
-            float m_attackEngageDelay;
-            int m_attackTimingFrame;
-            float m_attackOffset;
+            // 유닛의 공격방식, 근거리 혹은 원거리
+            POD_Enum<UnitAttackType::Enum> attackType;
+            std::string projectile_staticFBXName;
+            float m_attackPreDelay = 0.5f;
+            float m_attackPostDelay = 0.5f;
 
             int isEliteMonster;
             int chessType;

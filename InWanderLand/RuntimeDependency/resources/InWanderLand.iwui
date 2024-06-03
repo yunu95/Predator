@@ -43739,7 +43739,7 @@
             "soundOnClick_delay": 0.0,
             "soundOnHover": "",
             "soundOnHover_delay": 0.0,
-            "soundOnEnable": "sounds/button2.mp3",
+            "soundOnEnable": "sounds/AIsound/robin opening speech_1.wav",
             "soundOnEnable_delay": 0.0,
             "soundOnDisable": "",
             "soundOnDisable_delay": 0.0,
@@ -44079,7 +44079,7 @@
             "soundOnClick_delay": 0.0,
             "soundOnHover": "",
             "soundOnHover_delay": 0.0,
-            "soundOnEnable": "sounds/button2.mp3",
+            "soundOnEnable": "sounds/AIsound/robin opening speech_2.wav",
             "soundOnEnable_delay": 0.0,
             "soundOnDisable": "",
             "soundOnDisable_delay": 0.0,
@@ -44375,9 +44375,11 @@
             "parentUIIndex": 385,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
-            "openTargets": [],
+            "openTargets": [
+                395
+            ],
             "closeTargets": [
-                385
+                392
             ],
             "hoverEnableTargets": [],
             "color": [
@@ -44417,7 +44419,7 @@
             "soundOnClick_delay": 0.0,
             "soundOnHover": "",
             "soundOnHover_delay": 0.0,
-            "soundOnEnable": "sounds/button2.mp3",
+            "soundOnEnable": "sounds/AIsound/robin opening2 speech.wav",
             "soundOnEnable_delay": 0.0,
             "soundOnDisable": "",
             "soundOnDisable_delay": 0.0,
@@ -44713,9 +44715,11 @@
             "parentUIIndex": 385,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
-            "openTargets": [],
+            "openTargets": [
+                398
+            ],
             "closeTargets": [
-                385
+                395
             ],
             "hoverEnableTargets": [],
             "color": [
@@ -45051,9 +45055,11 @@
             "parentUIIndex": 385,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
-            "openTargets": [],
+            "openTargets": [
+                401
+            ],
             "closeTargets": [
-                385
+                398
             ],
             "hoverEnableTargets": [],
             "color": [
@@ -45093,7 +45099,7 @@
             "soundOnClick_delay": 0.0,
             "soundOnHover": "",
             "soundOnHover_delay": 0.0,
-            "soundOnEnable": "sounds/button2.mp3",
+            "soundOnEnable": "sounds/AIsound/hansel opening speech.wav",
             "soundOnEnable_delay": 0.0,
             "soundOnDisable": "",
             "soundOnDisable_delay": 0.0,
@@ -45431,7 +45437,7 @@
             "soundOnClick_delay": 0.0,
             "soundOnHover": "",
             "soundOnHover_delay": 0.0,
-            "soundOnEnable": "sounds/button2.mp3",
+            "soundOnEnable": "sounds/AIsound/hansel opening2 speech.wav",
             "soundOnEnable_delay": 0.0,
             "soundOnDisable": "",
             "soundOnDisable_delay": 0.0,
@@ -45722,7 +45728,7 @@
             "soundEnumID": 0
         },
         {
-            "uiName": "third discussion",
+            "uiName": "EnemyIntro",
             "uiIndex": 404,
             "parentUIIndex": -1,
             "imagePath": "",
@@ -45878,7 +45884,7 @@
             "soundOnClick_delay": 0.0,
             "soundOnHover": "",
             "soundOnHover_delay": 0.0,
-            "soundOnEnable": "sounds/button2.mp3",
+            "soundOnEnable": "sounds/AIsound/hansel 1battle speech.wav",
             "soundOnEnable_delay": 0.0,
             "soundOnDisable": "",
             "soundOnDisable_delay": 0.0,
@@ -46514,9 +46520,11 @@
             "parentUIIndex": 404,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
-            "openTargets": [],
+            "openTargets": [
+                414
+            ],
             "closeTargets": [
-                404
+                411
             ],
             "hoverEnableTargets": [],
             "color": [
@@ -46556,7 +46564,7 @@
             "soundOnClick_delay": 0.0,
             "soundOnHover": "",
             "soundOnHover_delay": 0.0,
-            "soundOnEnable": "sounds/button2.mp3",
+            "soundOnEnable": "sounds/AIsound/robin 1battle speech.wav",
             "soundOnEnable_delay": 0.0,
             "soundOnDisable": "",
             "soundOnDisable_delay": 0.0,
@@ -46894,7 +46902,7 @@
             "soundOnClick_delay": 0.0,
             "soundOnHover": "",
             "soundOnHover_delay": 0.0,
-            "soundOnEnable": "sounds/button2.mp3",
+            "soundOnEnable": "sounds/AIsound/hansel 1battle_2 speech.wav",
             "soundOnEnable_delay": 0.0,
             "soundOnDisable": "",
             "soundOnDisable_delay": 0.0,
@@ -47297,7 +47305,9 @@
             "parentUIIndex": 417,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
-            "openTargets": [],
+            "openTargets": [
+                421
+            ],
             "closeTargets": [
                 418
             ],
@@ -47635,7 +47645,9 @@
             "parentUIIndex": 417,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
-            "openTargets": [],
+            "openTargets": [
+                424
+            ],
             "closeTargets": [
                 421
             ],
@@ -47975,7 +47987,7 @@
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                424
+                417
             ],
             "hoverEnableTargets": [],
             "color": [
@@ -48420,7 +48432,7 @@
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                428
+                427
             ],
             "hoverEnableTargets": [],
             "color": [

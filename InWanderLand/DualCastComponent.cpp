@@ -8,7 +8,7 @@ void DualCastComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 	auto debuggingMesh = DebuggingMeshPool::Instance().Borrow();
 	debuggingMesh->SetUnitObject(opponentUnit);
 
-	if (opponentUnit->GetUnitSide() == Unit::UnitSide::Player)
+	if (opponentUnit->IsPlayerUnit())
 	{
 		/// 이로운 효과 적용
 		debuggingMesh->PopMeshUP(yunuGI::Color::blue(), MaterialNum::Green);

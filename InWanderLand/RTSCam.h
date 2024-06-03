@@ -4,6 +4,7 @@
 #include "Unit.h"
 #include "UIManager.h"
 #include "ContentsObservee.h"
+#include "SingletonComponent.h"
 
 using namespace yunutyEngine;
 
@@ -15,7 +16,7 @@ namespace application
     }
 }
 
-class RTSCam : public yunutyEngine::graphics::Camera, public ContentsObservee
+class RTSCam : public yunutyEngine::graphics::Camera, public SingletonComponent<RTSCam>, public ContentsObservee
 {
 public:
     // 카메라가 타겟팅하는 게임 오브젝트가 여러개일 경우 distance에 곱해질 스케일러
@@ -32,17 +33,14 @@ public:
 
     virtual void Start();
     void Update();
-    // 카메라가 지역 밖으로 나가지 못하게 가둠.
-    void UnConstrainRegion();
-    // 카메라가 지역 밖으로 나가지 못하게 가둠.
-    void ConstrainByRegion(const application::editor::RegionData* region);
-    void SetTarget(GameObject* target);
-    void SetTargets(const std::vector<GameObject*>& targets);
     float GetCameraSpeed() const;
 
     void SetUpdateability(bool updateability) { this->updateability = updateability; }
     bool GetUpdateability() { return updateability; }
+    void SetIdealPosition(const Vector3d& position);
+    void SetIdealRotation(const Quaternion& rotation);
     Vector3d GetIdealPosition();
+    Quaternion GetIdealRotation();
     Quaternion GetInitRotation() { return ingameInitRot; }
     Vector3d GetInitScale() { return ingameInitScale; }
     float GetInitVerticalFOV() { return initFov; }
@@ -60,6 +58,8 @@ private:
     // 복수의 타겟이 지정되면, 타겟들의 중점을 따라가게 됩니다.
     std::vector<GameObject*> targets;
     Vector3d distance;
+    Vector3d idealPosition;
+    Quaternion idealRotation;
 
     Vector3d positionDelta = Vector3d();
 

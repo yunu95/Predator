@@ -15,5 +15,5 @@ public:
 	static float GetSFXVolume();
 private:
 	float localSFXVolume = 1.0f;
-	float ratio = 2.f;
+	float ratio = 10.f;
 };

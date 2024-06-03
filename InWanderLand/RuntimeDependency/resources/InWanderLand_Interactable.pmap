@@ -102859,7 +102859,7 @@
                     "1029fc16-a537-4caa-bd7e-0b57b7377755": {
                         "0_Pre": {
                             "distance": 2.0,
-                            "roundTripTime": 2.0
+                            "roundTripTime": 3.0
                         },
                         "1_Post": {
                             "targetOrnament": "93002dfc-7efb-4746-9f30-72e1050cb9af"

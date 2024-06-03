@@ -499,7 +499,8 @@ void RenderSystem::RenderFinal()
 
     static auto deferredFinal = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_Final"));
     deferredFinal->PushGraphicsData();
-    ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();
+    static auto rectangleMesh = ResourceManager::Instance.Get().GetMesh(L"Rectangle");
+    rectangleMesh->Render();
 }
 
 void RenderSystem::RenderBackBuffer()
@@ -522,8 +523,12 @@ void RenderSystem::RenderBackBuffer()
     /////matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
     ///NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
-    std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"BackBufferMaterial"))->PushGraphicsData();
-    ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();
+    // backBufferMaterial처럼 항상 상수 키로 쓰이는 버퍼는 static을 넣어 한번만 초기화한다.
+    // 이렇게 해야 리소스 로딩 스레드와의 충돌 가능성을 줄일 수 있다. 
+    static auto backBufferMaterial = ResourceManager::Instance.Get().GetMaterial(L"BackBufferMaterial");
+    std::static_pointer_cast<Material>(backBufferMaterial)->PushGraphicsData();
+    static auto rectangleMesh = ResourceManager::Instance.Get().GetMesh(L"Rectangle");
+    rectangleMesh->Render();
 }
 
 void RenderSystem::RenderUI()
@@ -716,7 +721,8 @@ void RenderSystem::DrawDeferredInfo()
         matrixBuffer.WVP = wtm * DirectX::SimpleMath::Matrix::Identity * CameraManager::Instance.Get().GetMainCamera()->GetVTMOrtho();
 
         NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
-        ResourceManager::Instance.Get().GetMesh(L"Rectangle")->Render();
+        static auto rectangleMesh = ResourceManager::Instance.Get().GetMesh(L"Rectangle");
+        rectangleMesh->Render();
     }
 }
 

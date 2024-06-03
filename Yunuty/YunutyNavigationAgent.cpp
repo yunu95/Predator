@@ -131,6 +131,7 @@ void yunutyEngine::NavigationAgent::Relocate(Vector3f destination)
         ag->state = DT_CROWDAGENT_STATE_INVALID;
 
     ag->targetState = DT_CROWDAGENT_TARGET_NONE;
+    Update();
 }
 void yunutyEngine::NavigationAgent::MoveTo(Vector3f destination)
 {
