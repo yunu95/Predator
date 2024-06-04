@@ -688,9 +688,6 @@
     <Filter Include="VFX">
       <UniqueIdentifier>{327458f4-5bdd-4125-a01e-6651c65ad310}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\InteractableComponent\InteractableList\ChessUtil">
-      <UniqueIdentifier>{df324316-e5ab-418b-bee1-b9b625d862ec}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents_Refactored\DelegateCallback">
       <UniqueIdentifier>{aaf1e6d5-3b76-4c12-8e84-94ddede45168}</UniqueIdentifier>
     </Filter>
@@ -709,8 +706,8 @@
     <Filter Include="Contents_Refactored\Reference">
       <UniqueIdentifier>{db595c79-ba0f-49ef-9361-0e68f82a8f2d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\GameManager\SFX">
-      <UniqueIdentifier>{07744a7a-8ce4-453a-9e6b-0abf7d344981}</UniqueIdentifier>
+    <Filter Include="Contents_Refactored\Skill\UrsulaQSkill">
+      <UniqueIdentifier>{d0f02a8e-6e22-4eec-9de7-121b20d316b9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1746,11 +1743,12 @@
     <ClInclude Include="Reference.h">
       <Filter>Contents_Refactored\Reference</Filter>
     </ClInclude>
-    <ClInclude Include="SFXManager.h">
-      <Filter>Contents\GameManager\SFX</Filter>
-    </ClInclude>
     <ClInclude Include="VFXAnimator.h">
       <Filter>VFX</Filter>
+    </ClInclude>
+    <ClInclude Include="SFXManager.h" />
+    <ClInclude Include="UrsulaQSkill.h">
+      <Filter>Contents_Refactored\Skill\UrsulaQSkill</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2629,11 +2627,12 @@
     <ClCompile Include="Interactable_TrapSwitch.cpp" />
     <ClCompile Include="Interactable_TrapArms.cpp" />
     <ClCompile Include="Interactable_ChessPool.cpp" />
-    <ClCompile Include="SFXManager.cpp">
-      <Filter>Contents\GameManager\SFX</Filter>
-    </ClCompile>
     <ClCompile Include="VFXAnimator.cpp">
       <Filter>VFX</Filter>
+    </ClCompile>
+    <ClCompile Include="SFXManager.cpp" />
+    <ClCompile Include="UrsulaQSkill.cpp">
+      <Filter>Contents_Refactored\Skill\UrsulaQSkill</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
