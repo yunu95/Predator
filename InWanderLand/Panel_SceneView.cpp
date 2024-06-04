@@ -130,13 +130,13 @@ namespace application
                         if (eim.IsMouseButtonUp(MouseCode::Left))
                         {
                             if (isGuizmoControl)
-							{
-								int idx = 0;
+                            {
+                                int idx = 0;
                                 std::vector<std::tuple<IEditableData*, TransformData, TransformData>> vecList;
                                 for (auto& each : pm->GetCurrentPalette()->GetSelections())
                                 {
                                     each->GetPaletteInstance()->GetGameObject();
-                                    vecList.push_back({ each, beforeTS[idx], each->GetPaletteInstance()->GetGameObject()->GetTransform()});
+                                    vecList.push_back({ each, beforeTS[idx], each->GetPaletteInstance()->GetGameObject()->GetTransform() });
                                     idx++;
                                 }
                                 CommandManager::GetSingletonInstance().AddQueue(std::make_shared<TransformEditCommand>(vecList));
@@ -312,7 +312,7 @@ namespace application
                     operation = ImGuizmo::SCALE;
                 }
             }
-            
+
             ImGuizmo::SetDrawlist();
             float left = ImGui::GetWindowPos().x + imageStartPos.first;
             float top = ImGui::GetWindowPos().y + imageStartPos.second;
@@ -339,7 +339,8 @@ namespace application
                 Vector3d startPosition = Vector3d();
                 if (selections.size() == 1)
                 {
-                    tm = (*selections.begin())->GetPaletteInstance()->GetTransform()->GetWorldTM();
+                    if ((*selections.begin())->GetPaletteInstance())
+                        tm = (*selections.begin())->GetPaletteInstance()->GetTransform()->GetWorldTM();
                 }
                 else
                 {
