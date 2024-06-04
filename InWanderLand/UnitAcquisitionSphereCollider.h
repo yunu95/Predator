@@ -14,6 +14,7 @@ public:
     const std::unordered_set<Unit*>& GetFriends() { return friends; }
     bool includeDeadUnits = false;
     bool includeInvulnerableUnits = false;
+    virtual void OnEnable() override { physics::SphereCollider::OnEnable(); };
 protected:
     virtual void OnUnitEnter(Unit* unit) {};
     virtual void OnUnitExit(Unit* unit) {};

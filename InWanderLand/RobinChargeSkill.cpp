@@ -8,7 +8,6 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
-    owner.lock()->SetDesiredRotation(direction);
     if (deltaPos.Magnitude() > GlobalConstant::GetSingletonInstance().pod.robinQSkillMaxDistance)
     {
         deltaPos = direction * GlobalConstant::GetSingletonInstance().pod.robinQSkillMaxDistance;

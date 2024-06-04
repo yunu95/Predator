@@ -190,6 +190,7 @@ void Unit::OnStateUpdate<UnitBehaviourTree::Skill>()
     if (coroutineSkill.expired() && pendingSkill.get())
     {
         assert(pendingSkill.get() != nullptr);
+        SetDesiredRotation(pendingSkill.get()->targetPos - GetTransform()->GetWorldPosition());
         onGoingSkill = std::move(pendingSkill);
         coroutineSkill = StartCoroutine(onGoingSkill.get()->operator()());
     }
@@ -407,7 +408,7 @@ void Unit::UpdateRotation()
     else {
         currentRotation = normalizeAngle(currentRotation - currentRotationSpeed * Time::GetDeltaTime());
     }
-    GetTransform()->SetWorldRotation(Vector3d(0, -currentRotation, 0));
+    GetTransform()->SetWorldRotation(Vector3d(0, -currentRotation + 90, 0));
 }
 void Unit::OnContentsStop()
 {
@@ -466,7 +467,7 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     animatorComponent = skinnedMeshGameObject->GetComponentWeakPtr<graphics::Animator>();
     skinnedMeshGameObject->SetParent(GetGameObject());
     skinnedMeshGameObject->GetTransform()->SetLocalPosition(Vector3d::zero);
-    skinnedMeshGameObject->GetTransform()->SetLocalRotation(Quaternion{ {0,-90,0} });
+    skinnedMeshGameObject->GetTransform()->SetLocalRotation(Quaternion{ {0,180,0} });
     skinnedMeshGameObject->GetTransform()->SetLocalScale(Vector3d::one);
     //wanderResources::PushAnimations(animatorComponent.lock().get(), unitTemplateData->pod.skinnedFBXName);
     defaultAnimation = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Idle);

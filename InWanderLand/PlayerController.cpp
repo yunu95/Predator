@@ -7,6 +7,7 @@
 #include "SkillPreviewSystem.h"
 #include "GameManager.h"
 #include "UIManager.h"
+#include "EnemyImpaleSkill.h"
 
 const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> PlayerController::skillByUI
 {
@@ -116,7 +117,10 @@ void PlayerController::Update()
         {
             wsstream << wstring(L"[") + yutility::GetWString(POD_Enum<UnitBehaviourTree::Keywords>::GetEnumNameMap().at(each->GetNodeKey())) + wstring(L"]");
         }
-        wsstream << selectedDebugCharacter.lock()->acquisitionRange.lock()->GetUnits().size();
+        wsstream << selectedDebugCharacter.lock()->GetTransform()->GetWorldRotation().Forward().x << L",";
+        wsstream << selectedDebugCharacter.lock()->GetTransform()->GetWorldRotation().Forward().y << L",";
+        wsstream << selectedDebugCharacter.lock()->GetTransform()->GetWorldRotation().Forward().z << L",";
+        wsstream << selectedDebugCharacter.lock()->currentRotation << L",";
 
         text_State->GetGI().SetText(wsstream.str());
     }
@@ -278,12 +282,12 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
     onSkillActivate[skillType]();
     switch (skillType)
     {
-    case SkillType::ROBIN_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
-    case SkillType::ROBIN_W: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
-    case SkillType::URSULA_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
-    case SkillType::URSULA_W: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
-    case SkillType::HANSEL_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
-    case SkillType::HANSEL_W: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
+    case SkillType::ROBIN_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{  }, pos); break;
+    case SkillType::ROBIN_W: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{  }, pos); break;
+    case SkillType::URSULA_Q: selectedCharacter.lock()->OrderSkill(EnemyImpaleSkill{ }, pos); break;
+    case SkillType::URSULA_W: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ }, pos); break;
+    case SkillType::HANSEL_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ }, pos); break;
+    case SkillType::HANSEL_W: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ }, pos); break;
     }
     // 스킬 프리뷰를 비활성화시킨다.
 }
