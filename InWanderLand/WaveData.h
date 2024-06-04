@@ -58,7 +58,7 @@ namespace application
             int comboObjective3{ 3 };
 
             TO_JSON(POD_Wave)
-                FROM_JSON(POD_Wave)
+            FROM_JSON(POD_Wave)
         };
 
         class WaveData : public IEditableData, public StaticInstanceRegistry<WaveData>

@@ -580,9 +580,6 @@
     <Filter Include="Contents_Refactored\Skill">
       <UniqueIdentifier>{101a2a8a-50c0-47ee-8e7b-aba12af85880}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents_Refactored\Skill\RobinChargeSkill">
-      <UniqueIdentifier>{0ffa0272-1cd4-4c2a-ae94-f7e9f3c508fd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents_Refactored\Projectile">
       <UniqueIdentifier>{b4c54747-02b8-4112-8689-258612d883a2}</UniqueIdentifier>
     </Filter>
@@ -706,8 +703,36 @@
     <Filter Include="Contents_Refactored\Reference">
       <UniqueIdentifier>{db595c79-ba0f-49ef-9361-0e68f82a8f2d}</UniqueIdentifier>
     </Filter>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Robin">
+      <UniqueIdentifier>{e94285ee-c0a8-4f5e-a365-b8bc3b5922d9}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Contents_Refactored\Skill\EnemyImpaleSkill">
       <UniqueIdentifier>{c72c6472-8cd7-4cea-a022-6eb538423d8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Robin\RobinChargeSkill">
+      <UniqueIdentifier>{0ffa0272-1cd4-4c2a-ae94-f7e9f3c508fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Robin\RobinTauntSkill">
+      <UniqueIdentifier>{71b19ae8-375f-4188-ae24-6a437c69abc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Ursula">
+      <UniqueIdentifier>{40b6c894-d7c4-400f-b11d-3357ba7983b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Hansel">
+      <UniqueIdentifier>{d2fefb3b-7254-41fc-8c0b-cd3d9e6c8bd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Ursula\UrsulaBlindSkill">
+      <UniqueIdentifier>{21109b98-13e9-48cb-a47b-86b8dfd3e11c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Ursula\UrsulaParalysisSkill">
+      <UniqueIdentifier>{42e27a0c-b6ce-45bf-a2f4-adb2de41913c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Hansel\HanselProjectileSkill">
+      <UniqueIdentifier>{15ab29da-91fc-40a2-a9cc-24574d940684}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Hansel\HanselChargeSkill">
+      <UniqueIdentifier>{a725de1f-cb1f-4053-b9e7-3996ae5e2679}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contents_Refactored\FBXPool">
       <UniqueIdentifier>{3c939899-2079-444a-a4c1-e32b0eea6f60}</UniqueIdentifier>
@@ -1685,7 +1710,7 @@
       <Filter>Contents_Refactored\Skill</Filter>
     </ClInclude>
     <ClInclude Include="RobinChargeSkill.h">
-      <Filter>Contents_Refactored\Skill\RobinChargeSkill</Filter>
+      <Filter>Contents_Refactored\Skill\Robin\RobinChargeSkill</Filter>
     </ClInclude>
     <ClInclude Include="Projectile.h">
       <Filter>Contents_Refactored\Projectile</Filter>
@@ -1753,6 +1778,23 @@
       <Filter>VFX</Filter>
     </ClInclude>
     <ClInclude Include="SFXManager.h" />
+      <Filter>Contents\GameManager\SFX</Filter>
+    </ClInclude>
+    <ClInclude Include="RobinTauntSkill.h">
+      <Filter>Contents_Refactored\Skill\Robin\RobinTauntSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="UrsulaBlindSkill.h">
+      <Filter>Contents_Refactored\Skill\Ursula\UrsulaBlindSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="UrsulaParalysisSkill.h">
+      <Filter>Contents_Refactored\Skill\Ursula\UrsulaParalysisSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="HanselChargeSkill.h">
+      <Filter>Contents_Refactored\Skill\Hansel\HanselChargeSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="HanselProjectileSkill.h">
+      <Filter>Contents_Refactored\Skill\Hansel\HanselProjectileSkill</Filter>
+    </ClInclude>
     <ClInclude Include="WanderFBX.h">
       <Filter>Contents_Refactored\wanderResources\WanderFBX</Filter>
     </ClInclude>
@@ -2594,7 +2636,7 @@
       <Filter>Contents_Refactored\Unit</Filter>
     </ClCompile>
     <ClCompile Include="RobinChargeSkill.cpp">
-      <Filter>Contents_Refactored\Skill\RobinChargeSkill</Filter>
+      <Filter>Contents_Refactored\Skill\Robin\RobinChargeSkill</Filter>
     </ClCompile>
     <ClCompile Include="wanderResources.cpp">
       <Filter>Contents_Refactored\wanderResources</Filter>
@@ -2643,6 +2685,23 @@
       <Filter>VFX</Filter>
     </ClCompile>
     <ClCompile Include="SFXManager.cpp" />
+      <Filter>Contents\GameManager\SFX</Filter>
+    </ClCompile>
+    <ClCompile Include="RobinTauntSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Robin\RobinTauntSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="UrsulaBlindSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Ursula\UrsulaBlindSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="UrsulaParalysisSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Ursula\UrsulaParalysisSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="HanselChargeSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Hansel\HanselChargeSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="HanselProjectileSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Hansel\HanselProjectileSkill</Filter>
+    </ClCompile>
     <ClCompile Include="EnemyImpaleSkill.cpp">
       <Filter>Contents_Refactored\Skill\EnemyImpaleSkill</Filter>
     </ClCompile>
