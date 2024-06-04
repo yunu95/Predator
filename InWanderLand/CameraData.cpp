@@ -117,11 +117,11 @@ namespace application
                 return;
             }
 
-            auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+            //auto camObj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
             auto camComp = &RTSCam::Instance();
-            camObj->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
-            camObj->GetTransform()->SetWorldRotation({ pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z });
-            camObj->GetTransform()->SetWorldScale({ pod.scale.x,pod.scale.y,pod.scale.z });
+            camComp->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
+            camComp->GetTransform()->SetWorldRotation({ pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z });
+            camComp->GetTransform()->SetWorldScale({ pod.scale.x,pod.scale.y,pod.scale.z });
 
             camComp->GetGI().SetVerticalFOV(pod.vertical_FOV);
             camComp->GetGI().SetNear(pod.dis_Near);
@@ -130,6 +130,7 @@ namespace application
 
             /// Main 으로 등록해야 추후 Editor Camera 로직에서 처리 가능합니다.
             camComp->SetCameraMain();
+            PlayerController::Instance().SetCameraOffset();
 
             auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 

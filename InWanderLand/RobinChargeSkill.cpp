@@ -8,6 +8,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
+    owner.lock()->SetDesiredRotation(direction);
     if (deltaPos.Magnitude() > GlobalConstant::GetSingletonInstance().pod.robinQSkillMaxDistance)
     {
         deltaPos = direction * GlobalConstant::GetSingletonInstance().pod.robinQSkillMaxDistance;
@@ -18,15 +19,15 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     owner.lock()->PlayAnimation(UnitAnimType::Rush, true);
     const application::POD_GlobalConstant& gc = GlobalConstant::GetSingletonInstance().pod;
     coroutine::ForSeconds forSeconds{ static_cast<float>(deltaPos.Magnitude()) / gc.robinQSkillRushSpeed };
-    auto rushCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-    rushCollider.lock()->SetRadius(gc.robinQSkillRushKnockbackRadius);
+    knockbackCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+    knockbackCollider.lock()->SetRadius(gc.robinQSkillRushKnockbackRadius);
     while (forSeconds.Tick())
     {
         currentPos += direction * gc.robinQSkillRushSpeed * Time::GetDeltaTime();
-        rushCollider.lock()->GetTransform()->SetWorldPosition(currentPos);
+        knockbackCollider.lock()->GetTransform()->SetWorldPosition(currentPos);
         owner.lock()->GetTransform()->SetWorldPosition(currentPos);
         co_await std::suspend_always{};
-        for (auto& each : rushCollider.lock()->GetEnemies())
+        for (auto& each : knockbackCollider.lock()->GetEnemies())
         {
             Vector3d delta = gc.robinQSkillRushKnockbackDistance * (each->GetTransform()->GetWorldPosition() - currentPos).Normalized();
             each->KnockBack(each->GetTransform()->GetWorldPosition() + delta, gc.robinQSkillRushKnockbackDuration);
@@ -35,9 +36,10 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     }
 
     owner.lock()->PlayAnimation(UnitAnimType::Slam, false);
-    rushCollider.lock()->SetRadius(gc.robinQSkillImpactKnockbackRadius);
+    owner.lock()->SetDefaultAnimation(UnitAnimType::Idle);
+    knockbackCollider.lock()->SetRadius(gc.robinQSkillImpactKnockbackRadius);
     co_await std::suspend_always{};
-    for (auto& each : rushCollider.lock()->GetEnemies())
+    for (auto& each : knockbackCollider.lock()->GetEnemies())
     {
         Vector3d delta = gc.robinQSkillImpactKnockbackDistance * (each->GetTransform()->GetWorldPosition() - currentPos).Normalized();
         each->KnockBack(each->GetTransform()->GetWorldPosition() + delta, gc.robinQSkillImpactKnockbackDuration);
@@ -47,6 +49,12 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(currentPos);
-    co_yield coroutine::WaitForSeconds(0.2);
+    co_yield coroutine::WaitForSeconds(1.2);
+    OnInterruption();
     co_return;
+}
+
+void RobinChargeSkill::OnInterruption()
+{
+    UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackCollider);
 }

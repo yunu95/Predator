@@ -279,11 +279,11 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
     switch (skillType)
     {
     case SkillType::ROBIN_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
-    case SkillType::ROBIN_W: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
-    case SkillType::URSULA_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
-    case SkillType::URSULA_W: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
-    case SkillType::HANSEL_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
-    case SkillType::HANSEL_W: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{ pos }); break;
+    case SkillType::ROBIN_W: selectedCharacter.lock()->OrderSkill(RobinTauntSkill{ pos }); break;
+    case SkillType::URSULA_Q: selectedCharacter.lock()->OrderSkill(UrsulaBlindSkill{ pos }); break;
+    case SkillType::URSULA_W: selectedCharacter.lock()->OrderSkill(UrsulaParalysisSkill{ pos }); break;
+    case SkillType::HANSEL_Q: selectedCharacter.lock()->OrderSkill(HanselChargeSkill{ pos }); break;
+    case SkillType::HANSEL_W: selectedCharacter.lock()->OrderSkill(HanselProjectileSkill{ pos }); break;
     }
     // 스킬 프리뷰를 비활성화시킨다.
 }
@@ -342,6 +342,8 @@ void PlayerController::Reset()
 // 현재 카메라의 위치에 따라 카메라의 플레이어 기준 오프셋 위치와 회전각을 결정합니다.
 void PlayerController::SetCameraOffset()
 {
+    if (characters[PlayerCharacterType::Robin].expired())
+        return;
     auto camPos = graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition();
     camOffset = camPos - characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition();
     camRotation = graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation();

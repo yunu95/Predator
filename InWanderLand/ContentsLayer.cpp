@@ -334,13 +334,17 @@ class ContentsInitializer : public yunutyEngine::Component
 		}
 #endif
 #endif
-		Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-		co_return;
-	}
-	virtual void Start() override
-	{
-		StartCoroutine(Initialize());
-	}
+#ifndef EDITOR
+        DebugGraphic::SetDebugGraphicsEnabled(false);
+#endif
+
+        Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+        co_return;
+    }
+    virtual void Start() override
+    {
+        StartCoroutine(Initialize());
+    }
 };
 void application::contents::ContentsLayer::Initialize()
 {
