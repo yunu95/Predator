@@ -66,6 +66,9 @@ namespace application
         GC<float>	robinESkillCoolTime = 2.0f;
         GC<float>	robinESkillCost = 10.0f;
         GC<float>	robinESkillRadius = 6.0f;
+        GC<float>	robinESkillDamage = 5.0f;
+        GC<float>	robinESkillPlayTime = 2.0f;
+        GC<float>	robinESkillTauntTime = 3.0f;
 
         GC<float>	ursulaQSkillCoolTime = 2.0f;
         GC<float>	ursulaQSkillCost = 10.0f;

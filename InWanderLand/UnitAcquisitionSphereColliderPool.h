@@ -11,6 +11,6 @@ public:
     void Return(std::weak_ptr<UnitAcquisitionSphereCollider> collider);
     int poolObjectsSize();
     int expendableObjectsSize();
-    virtual void ObjectInitializer(std::weak_ptr<UnitAcquisitionSphereCollider> comp) override {};
+    virtual void ObjectInitializer(std::weak_ptr<UnitAcquisitionSphereCollider> comp) override {}
 private:
 };

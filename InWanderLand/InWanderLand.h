@@ -72,3 +72,4 @@
 #include "ParticleTool_Manager.h"
 #include "wanderResources.h"
 #include "WanderFBX.h"
+#include "SFXManager.h"
