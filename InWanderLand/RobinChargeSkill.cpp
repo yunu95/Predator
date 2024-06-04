@@ -55,5 +55,6 @@ coroutine::Coroutine RobinChargeSkill::operator()()
 
 void RobinChargeSkill::OnInterruption()
 {
+    knockbackCollider.lock()->SetRadius(0.5);
     UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackCollider);
 }

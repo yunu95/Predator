@@ -30,7 +30,7 @@ public:
 	virtual const yunuGI::IShader* GetPixelShader() const override;
 	virtual const yunuGI::IShader* GetVertexShader() const override;
 	virtual yunuGI::ITexture* GetTexture(yunuGI::Texture_Type textureType) override;
-
+	virtual yunuGI::IMaterial* GetMaterial() override;
 public:
 	void PushGraphicsData();
 	void UnBindGraphicsData();

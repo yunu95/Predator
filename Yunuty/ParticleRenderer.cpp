@@ -13,7 +13,6 @@ yunutyEngine::graphics::ParticleRenderer::ParticleRenderer() :
 {
 	disableParticles.assign(this->maxParticle, yunuGI::ParticleRenderInfo{});
 	GetGI().SetParticleInfoList(this->ableParticles);
-
 }
 
 void ParticleRenderer::SetPlayAwake(bool playAwake)

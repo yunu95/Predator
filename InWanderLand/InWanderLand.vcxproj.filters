@@ -580,9 +580,6 @@
     <Filter Include="Contents_Refactored\Skill">
       <UniqueIdentifier>{101a2a8a-50c0-47ee-8e7b-aba12af85880}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents_Refactored\Skill\RobinChargeSkill">
-      <UniqueIdentifier>{0ffa0272-1cd4-4c2a-ae94-f7e9f3c508fd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents_Refactored\Projectile">
       <UniqueIdentifier>{b4c54747-02b8-4112-8689-258612d883a2}</UniqueIdentifier>
     </Filter>
@@ -714,6 +711,51 @@
     </Filter>
     <Filter Include="Contents_Refactored\wanderResources\WanderFBX">
       <UniqueIdentifier>{9ae875e6-c63f-4af2-8367-bdd6d43c5a37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\GameManager\SFXManager">
+      <UniqueIdentifier>{0a07857e-7566-405a-bc75-0102a82d5393}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\InteractableComponent\InteractableList\ChessUtil">
+      <UniqueIdentifier>{3c62e98a-e0d8-4e5f-a512-bd48f067905f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\InteractableComponent\InteractableList\ChessUtil\ChessPool">
+      <UniqueIdentifier>{b0801621-4320-44ec-b56c-8531f7320ca5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Robin">
+      <UniqueIdentifier>{2668370f-82c3-4b7b-8949-8ad38941aad6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Ursula">
+      <UniqueIdentifier>{2b6fccc4-cd2c-458d-a755-8bde8ce91073}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Hansel">
+      <UniqueIdentifier>{781f9771-e9a4-487e-ad9d-097b62d3b8dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Hansel\Q">
+      <UniqueIdentifier>{3b48b7ff-d128-4a8c-8d34-5236e3dc00af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Hansel\W">
+      <UniqueIdentifier>{2a43a5ae-5de4-45f2-beca-a68c18417c0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Ursula\Q">
+      <UniqueIdentifier>{1347d3a1-b60c-49d2-a7b2-993bd6f69364}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Ursula\W">
+      <UniqueIdentifier>{a486494c-b444-47fc-87ec-dd1ad917a4f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Robin\W">
+      <UniqueIdentifier>{92d8caa6-2380-42a7-a0b7-8e1e8a146b2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Robin\Q">
+      <UniqueIdentifier>{91d3c36e-0ea5-45bb-800d-eeebd3eea587}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\SkillPreviewSystem\MoveEndPreviewPool">
+      <UniqueIdentifier>{5615a1ce-f5b1-49c9-9b9a-837b511edcf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\BehaviourTree">
+      <UniqueIdentifier>{0d427776-90e5-4171-a954-36e252b6c261}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitBehaviourTree">
+      <UniqueIdentifier>{9d73307d-396f-481a-9995-7af1d80ce8db}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1684,9 +1726,6 @@
     <ClInclude Include="Skill.h">
       <Filter>Contents_Refactored\Skill</Filter>
     </ClInclude>
-    <ClInclude Include="RobinChargeSkill.h">
-      <Filter>Contents_Refactored\Skill\RobinChargeSkill</Filter>
-    </ClInclude>
     <ClInclude Include="Projectile.h">
       <Filter>Contents_Refactored\Projectile</Filter>
     </ClInclude>
@@ -1732,17 +1771,12 @@
     <ClInclude Include="DelegateCallback.h">
       <Filter>Contents_Refactored\DelegateCallback</Filter>
     </ClInclude>
-    <ClInclude Include="Interactable_TrapSwitch.h" />
-    <ClInclude Include="Interactable_TrapArms.h" />
-    <ClInclude Include="Interactable_UI.h" />
-    <ClInclude Include="ChessBombComponent.h" />
     <ClInclude Include="UnitStatusBarType.h">
       <Filter>Contents_Refactored\Unit\UnitStatusBarType</Filter>
     </ClInclude>
     <ClInclude Include="SkillUpgradeType.h">
       <Filter>Contents_Refactored\Skill\SkillUpgradeType</Filter>
     </ClInclude>
-    <ClInclude Include="Interactable_ChessPool.h" />
     <ClInclude Include="UnitAttackType.h">
       <Filter>Contents_Refactored\Unit\UnitAttackType</Filter>
     </ClInclude>
@@ -1752,7 +1786,6 @@
     <ClInclude Include="VFXAnimator.h">
       <Filter>VFX</Filter>
     </ClInclude>
-    <ClInclude Include="SFXManager.h" />
     <ClInclude Include="WanderFBX.h">
       <Filter>Contents_Refactored\wanderResources\WanderFBX</Filter>
     </ClInclude>
@@ -1761,6 +1794,51 @@
     </ClInclude>
     <ClInclude Include="FBXPool.h">
       <Filter>Contents_Refactored\FBXPool</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_TrapSwitch.h">
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_TrapArms.h">
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="SFXManager.h">
+      <Filter>Contents_Refactored\GameManager\SFXManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ChessBombComponent.h">
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList\ChessUtil</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_UI.h">
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_ChessPool.h">
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList\ChessUtil\ChessPool</Filter>
+    </ClInclude>
+    <ClInclude Include="RobinChargeSkill.h">
+      <Filter>Contents_Refactored\Skill\Robin\Q</Filter>
+    </ClInclude>
+    <ClInclude Include="RobinTauntSkill.h">
+      <Filter>Contents_Refactored\Skill\Robin\W</Filter>
+    </ClInclude>
+    <ClInclude Include="UrsulaParalysisSkill.h">
+      <Filter>Contents_Refactored\Skill\Ursula\W</Filter>
+    </ClInclude>
+    <ClInclude Include="UrsulaBlindSkill.h">
+      <Filter>Contents_Refactored\Skill\Ursula\Q</Filter>
+    </ClInclude>
+    <ClInclude Include="HanselChargeSkill.h">
+      <Filter>Contents_Refactored\Skill\Hansel\Q</Filter>
+    </ClInclude>
+    <ClInclude Include="HanselProjectileSkill.h">
+      <Filter>Contents_Refactored\Skill\Hansel\W</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveEndPreviewPool.h">
+      <Filter>Contents_Refactored\SkillPreviewSystem\MoveEndPreviewPool</Filter>
+    </ClInclude>
+    <ClInclude Include="BehaviourTree.h">
+      <Filter>Contents_Refactored\BehaviourTree</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitBehaviourTree.h">
+      <Filter>Contents_Refactored\Unit\UnitBehaviourTree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2593,9 +2671,6 @@
     <ClCompile Include="Unit.cpp">
       <Filter>Contents_Refactored\Unit</Filter>
     </ClCompile>
-    <ClCompile Include="RobinChargeSkill.cpp">
-      <Filter>Contents_Refactored\Skill\RobinChargeSkill</Filter>
-    </ClCompile>
     <ClCompile Include="wanderResources.cpp">
       <Filter>Contents_Refactored\wanderResources</Filter>
     </ClCompile>
@@ -2635,19 +2710,50 @@
     <ClCompile Include="UnitBuff.cpp">
       <Filter>Contents_Refactored\Unit\UnitBuff</Filter>
     </ClCompile>
-    <ClCompile Include="ChessBombComponent.cpp" />
-    <ClCompile Include="Interactable_TrapSwitch.cpp" />
-    <ClCompile Include="Interactable_TrapArms.cpp" />
-    <ClCompile Include="Interactable_ChessPool.cpp" />
     <ClCompile Include="VFXAnimator.cpp">
       <Filter>VFX</Filter>
     </ClCompile>
-    <ClCompile Include="SFXManager.cpp" />
     <ClCompile Include="EnemyImpaleSkill.cpp">
       <Filter>Contents_Refactored\Skill\EnemyImpaleSkill</Filter>
     </ClCompile>
     <ClCompile Include="FBXPool.cpp">
       <Filter>Contents_Refactored\FBXPool</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_TrapArms.cpp">
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_TrapSwitch.cpp">
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="SFXManager.cpp">
+      <Filter>Contents_Refactored\GameManager\SFXManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessBombComponent.cpp">
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList\ChessUtil</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_ChessPool.cpp">
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList\ChessUtil\ChessPool</Filter>
+    </ClCompile>
+    <ClCompile Include="RobinChargeSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Robin\Q</Filter>
+    </ClCompile>
+    <ClCompile Include="RobinTauntSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Robin\W</Filter>
+    </ClCompile>
+    <ClCompile Include="UrsulaParalysisSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Ursula\W</Filter>
+    </ClCompile>
+    <ClCompile Include="UrsulaBlindSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Ursula\Q</Filter>
+    </ClCompile>
+    <ClCompile Include="HanselChargeSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Hansel\Q</Filter>
+    </ClCompile>
+    <ClCompile Include="HanselProjectileSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Hansel\W</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveEndPreviewPool.cpp">
+      <Filter>Contents_Refactored\SkillPreviewSystem\MoveEndPreviewPool</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

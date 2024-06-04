@@ -428,7 +428,7 @@ void Unit::Start()
 void Unit::Relocate(const Vector3d& pos)
 {
     navAgentComponent.lock()->Relocate(pos);
-    OrderHold();
+    //OrderHold();
 }
 void Unit::OrderMove(Vector3d position)
 {
@@ -686,7 +686,9 @@ void Unit::Summon(const application::editor::UnitData* unitData)
 
     unitCollider.lock()->SetRadius(unitTemplateData->pod.collisionSize);
     attackRange.lock()->SetRadius(unitTemplateData->pod.m_atkRadius);
+    attackRange.lock()->SetColor(yunuGI::Color::red());
     acquisitionRange.lock()->SetRadius(unitTemplateData->pod.m_idRadius);
+    acquisitionRange.lock()->SetColor(yunuGI::Color::gray());
     // 공격 범위
     //AttachDebugMesh(attackRange.lock()->GetGameObject()->AddGameObject(), DebugMeshType::Sphere)->GetTransform()->SetLocalScale(Vector3d{ 1,0.25,1 } *2 * unitTemplateData->pod.m_atkRadius);
     // 인식 범위

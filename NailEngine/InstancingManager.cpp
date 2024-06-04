@@ -562,7 +562,7 @@ void InstancingManager::RenderSkinnedShadow()
 {
 	ClearData();
 
-	for (auto& pair : this->skinnedMeshCache)
+	for (auto& pair : this->skinnedMeshDeferredCache)
 	{
 		const std::set<std::shared_ptr<SkinnedRenderInfo>>& renderInfoVec = pair.second;
 
@@ -698,7 +698,7 @@ void InstancingManager::RenderSkinnedPointLightShadow(DirectX::SimpleMath::Matri
 {
 	ClearData();
 
-	for (auto& pair : this->skinnedMeshCache)
+	for (auto& pair : this->skinnedMeshDeferredCache)
 	{
 		const std::set<std::shared_ptr<SkinnedRenderInfo>>& renderInfoVec = pair.second;
 
@@ -808,12 +808,24 @@ void InstancingManager::RegisterStaticForwardData(std::shared_ptr<RenderInfo>& r
 	}
 }
 
-void InstancingManager::RegisterSkinnedData(std::shared_ptr<SkinnedRenderInfo>& renderInfo)
+void InstancingManager::RegisterSkinnedDeferredData(std::shared_ptr<SkinnedRenderInfo>& renderInfo)
 {
 	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->renderInfo.mesh, (unsigned __int64)renderInfo->renderInfo.material);
 	InstanceID instanceID = std::make_pair(renderInfo->renderInfo.mesh, renderInfo->renderInfo.material);
 
-	this->skinnedMeshCache[instanceID].insert(renderInfo);
+	this->skinnedMeshDeferredCache[instanceID].insert(renderInfo);
+
+	if (_buffers.find(instanceID) == _buffers.end())
+	{
+		_buffers[instanceID] = std::make_shared<InstanceBuffer>();
+	}
+}
+
+void InstancingManager::RegisterSkinnedForwardData(std::shared_ptr<SkinnedRenderInfo>& renderInfo)
+{
+	InstanceID instanceID = std::make_pair(renderInfo->renderInfo.mesh, renderInfo->renderInfo.material);
+
+	this->skinnedMeshForwardCache[instanceID].insert(renderInfo);
 
 	if (_buffers.find(instanceID) == _buffers.end())
 	{
@@ -881,18 +893,33 @@ void InstancingManager::PopStaticForwardData(std::shared_ptr<RenderInfo>& render
 	}
 }
 
-void InstancingManager::PopSkinnedData(std::shared_ptr<SkinnedRenderInfo>& renderInfo)
+void InstancingManager::PopSkinnedDeferredData(std::shared_ptr<SkinnedRenderInfo>& renderInfo)
 {
 	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->renderInfo.mesh, (unsigned __int64)renderInfo->renderInfo.material);
 	InstanceID instanceID = std::make_pair(renderInfo->renderInfo.mesh, renderInfo->renderInfo.material);
 
-	auto iter = this->skinnedMeshCache.find(instanceID);
-	if (iter != this->skinnedMeshCache.end())
+	auto iter = this->skinnedMeshDeferredCache.find(instanceID);
+	if (iter != this->skinnedMeshDeferredCache.end())
 	{
-		this->skinnedMeshCache[instanceID].erase(renderInfo);
-		if (this->skinnedMeshCache[instanceID].empty())
+		this->skinnedMeshDeferredCache[instanceID].erase(renderInfo);
+		if (this->skinnedMeshDeferredCache[instanceID].empty())
 		{
-			this->skinnedMeshCache.erase(instanceID);
+			this->skinnedMeshDeferredCache.erase(instanceID);
+		}
+	}
+}
+
+void InstancingManager::PopSkinnedForwardData(std::shared_ptr<SkinnedRenderInfo>& renderInfo)
+{
+	InstanceID instanceID = std::make_pair(renderInfo->renderInfo.mesh, renderInfo->renderInfo.material);
+
+	auto iter = this->skinnedMeshForwardCache.find(instanceID);
+	if (iter != this->skinnedMeshForwardCache.end())
+	{
+		this->skinnedMeshForwardCache[instanceID].erase(renderInfo);
+		if (this->skinnedMeshForwardCache[instanceID].empty())
+		{
+			this->skinnedMeshForwardCache.erase(instanceID);
 		}
 	}
 }
@@ -902,11 +929,82 @@ void InstancingManager::RegisterParticleRenderInfo(ParticleSystem* particleSyste
 	this->particleRenderInfoMap.insert({ particleSystem, particleInfoList });
 }
 
-void InstancingManager::RenderSkinned()
+void InstancingManager::RenderSkinnedDeferred()
 {
 	ClearData();
 
-	for (auto& pair : this->skinnedMeshCache)
+	for (auto& pair : this->skinnedMeshDeferredCache)
+	{
+		const std::set<std::shared_ptr<SkinnedRenderInfo>>& renderInfoVec = pair.second;
+
+		const InstanceID instanceID = pair.first;
+
+		{
+			int descIndex = 0;
+			int index = 0;
+			for (auto& i : renderInfoVec)
+			{
+				if (i->renderInfo.isActive == false) continue;
+
+				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+				auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm, i->renderInfo.materialIndex);
+
+				if (frustum.Intersects(aabb) == false)
+				{
+					continue;
+				}
+
+				const RenderInfo& renderInfo = i->renderInfo;
+				InstancingData data;
+				data.wtm = renderInfo.wtm;
+				AddData(instanceID, data);
+				this->instanceTransitionDesc->transitionDesc[descIndex++] = i->animator->GetTransitionDesc();
+
+				lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo.lightMapIndex;
+				lightMapUVBuffer->lightMapUV[index].scaling = renderInfo.uvScaling;
+				lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo.uvOffset;
+
+				index++;
+			}
+
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
+				sizeof(LightMapUVBuffer),
+				static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
+
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::INST_TRANSITION))->PushGraphicsData(this->instanceTransitionDesc.get(),
+				sizeof(InstanceTransitionDesc), static_cast<int>(CB_TYPE::INST_TRANSITION));
+
+			auto animationGroup = ResourceManager::Instance.Get().GetAnimationGroup((*renderInfoVec.begin())->modelName);
+			animationGroup->Bind();
+
+			if (renderInfoVec.size() != 0)
+			{
+				if ((*renderInfoVec.begin())->renderInfo.mesh == nullptr) continue;
+
+				ExposureBuffer exposurrBuffer;
+				exposurrBuffer.diffuseExposure = (*renderInfoVec.begin())->renderInfo.mesh->GetDiffuseExposure();
+				exposurrBuffer.ambientExposure = (*renderInfoVec.begin())->renderInfo.mesh->GetAmbientExposure();;
+				NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&exposurrBuffer,
+					sizeof(ExposureBuffer),
+					static_cast<int>(CB_TYPE::EXPOSURE), false);
+
+				auto& buffer = _buffers[instanceID];
+				if (buffer->GetCount() > 0)
+				{
+					(*renderInfoVec.begin())->renderInfo.material->PushGraphicsData();
+					buffer->PushData();
+					(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
+				}
+			}
+		}
+	}
+}
+
+void InstancingManager::RenderSkinnedForward()
+{
+	ClearData();
+
+	for (auto& pair : this->skinnedMeshForwardCache)
 	{
 		const std::set<std::shared_ptr<SkinnedRenderInfo>>& renderInfoVec = pair.second;
 

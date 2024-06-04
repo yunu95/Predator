@@ -57,7 +57,8 @@ public:
     void PushLightData();
     void PushCameraData();
     void RenderObject();
-    void RenderSkinned();
+    void RenderSkinnedDeferred();
+    void RenderSkinnedForward();
     void RenderShadow();
     void RenderPointLightShadow();
     void RenderLight();
