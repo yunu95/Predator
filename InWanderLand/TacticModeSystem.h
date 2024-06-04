@@ -28,8 +28,6 @@ public:
     virtual void Start() override;
     virtual void Update() override;
 
-	virtual void OnContentsStop() override;
-    virtual void OnContentsPlay() override; 
     virtual Component* GetComponent() override { return this; }
 
 public:
