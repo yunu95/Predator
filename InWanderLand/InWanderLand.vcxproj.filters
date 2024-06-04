@@ -706,9 +706,6 @@
     <Filter Include="Contents_Refactored\Reference">
       <UniqueIdentifier>{db595c79-ba0f-49ef-9361-0e68f82a8f2d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents_Refactored\Skill\UrsulaQSkill">
-      <UniqueIdentifier>{d0f02a8e-6e22-4eec-9de7-121b20d316b9}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1747,9 +1744,6 @@
       <Filter>VFX</Filter>
     </ClInclude>
     <ClInclude Include="SFXManager.h" />
-    <ClInclude Include="UrsulaQSkill.h">
-      <Filter>Contents_Refactored\Skill\UrsulaQSkill</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2631,8 +2625,5 @@
       <Filter>VFX</Filter>
     </ClCompile>
     <ClCompile Include="SFXManager.cpp" />
-    <ClCompile Include="UrsulaQSkill.cpp">
-      <Filter>Contents_Refactored\Skill\UrsulaQSkill</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

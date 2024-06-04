@@ -1948,7 +1948,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UnitPool.h" />
     <ClInclude Include="UnitStatusBarType.h" />
     <ClInclude Include="Unit_TemplateData.h" />
-    <ClInclude Include="UrsulaQSkill.h" />
     <ClInclude Include="UrsulaSkillDevelopmentSystem.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGraphicsExe|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnitTests|x64'">true</ExcludedFromBuild>
@@ -2929,7 +2928,6 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="TestCasePhysics.cpp" />
     <ClCompile Include="TestCaseTemplate.cpp" />
     <ClCompile Include="TestComponent2.cpp" />
-    <ClCompile Include="UrsulaQSkill.cpp" />
     <ClCompile Include="UrsulaSkillDevelopmentSystem.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGraphicsExe|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnitTests|x64'">true</ExcludedFromBuild>
