@@ -498,7 +498,7 @@ yunuGI::IMesh* SkillPreviewSystem::ShowRoute(UnitType unitType, std::vector<Vect
 	this->rendererMap.insert({ mesh, renderer.lock().get() });
 
 
-	this->ShowMoveEndImage(unitType, vertexList.back());
+	this->ShowMoveEndImage(unitType, vertexList.back(),mesh);
 
 
 	switch (unitType)
@@ -506,19 +506,16 @@ yunuGI::IMesh* SkillPreviewSystem::ShowRoute(UnitType unitType, std::vector<Vect
 		case SkillPreviewSystem::UnitType::Robin:
 		{
 			renderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,0.3 });
-			moveEndRenderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,0.3 });
 		}
 		break;
 		case SkillPreviewSystem::UnitType::Ursula:
 		{
 			renderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,0.3 });
-			moveEndRenderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,0.3 });
 		}
 		break;
 		case SkillPreviewSystem::UnitType::Hansel:
 		{
 			renderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,0.3 });
-			moveEndRenderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,0.3 });
 		}
 		break;
 		default:
@@ -592,6 +589,27 @@ void SkillPreviewSystem::ShowMoveEndImage(UnitType unitType, Vector3d pos, yunuG
 	auto moveEndRenderer = MoveEndPreviewPool::SingleInstance().Borrow();
 	this->moveEndRendererMap.insert({ mesh, moveEndRenderer.lock().get() });
 	moveEndRenderer.lock()->GetGameObject()->GetTransform()->SetLocalPosition(pos);
+	switch (unitType)
+	{
+		case SkillPreviewSystem::UnitType::Robin:
+		{
+			moveEndRenderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,0.3 });
+		}
+		break;
+		case SkillPreviewSystem::UnitType::Ursula:
+		{
+			moveEndRenderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,0.3 });
+		}
+		break;
+		case SkillPreviewSystem::UnitType::Hansel:
+		{
+			moveEndRenderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,0.3 });
+		}
+		break;
+		default:
+		{}
+		break;
+	}
 }
 
 void SkillPreviewSystem::HideShowMoveEndImage(yunuGI::IMesh* mesh)
