@@ -132,7 +132,10 @@ float yunutyEngine::graphics::Animator::GetCurrentFrame()
 
 void Animator::OnEnable()
 {
-	this->Play(this->GetGI().GetCurrentAnimation());
+    if (this->GetGI().GetCurrentAnimation())
+    {
+        this->Play(this->GetGI().GetCurrentAnimation());
+    }
 }
 
 void Animator::OnDisable()
