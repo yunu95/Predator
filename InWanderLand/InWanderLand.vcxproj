@@ -1033,6 +1033,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="AnimationEventManager.h" />
     <ClInclude Include="AnimationEvents.h" />
     <ClInclude Include="AttackMoveController.h" />
+    <ClInclude Include="BehaviourTree.h" />
     <ClInclude Include="DelegateCallback.h" />
     <ClInclude Include="EnemyImpaleSkill.h" />
     <ClInclude Include="Factor.h" />
@@ -1933,6 +1934,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UISpriteAnimation.h" />
     <ClInclude Include="UnitAcquisitionSphereCollider.h" />
     <ClInclude Include="UnitAttackType.h" />
+    <ClInclude Include="UnitBehaviourTree.h" />
     <ClInclude Include="UnitBuff.h" />
     <ClInclude Include="UnitBuffBleeding.h" />
     <ClInclude Include="UnitCommand.h" />

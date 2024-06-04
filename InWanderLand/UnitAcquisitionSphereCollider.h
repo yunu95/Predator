@@ -17,6 +17,7 @@ public:
     void SetColor(yunuGI::Color color);
     bool includeDeadUnits = false;
     bool includeInvulnerableUnits = false;
+    virtual void OnEnable() override { physics::SphereCollider::OnEnable(); };
 protected:
     virtual void OnUnitEnter(Unit* unit) {};
     virtual void OnUnitExit(Unit* unit) {};
