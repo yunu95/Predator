@@ -1039,6 +1039,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="HanselChargeSkill.h" />
     <ClInclude Include="HanselProjectileSkill.h" />
     <ClInclude Include="FBXPool.h" />
+    <ClInclude Include="MoveEndPreviewPool.h" />
     <ClInclude Include="Multiplier.h" />
     <ClInclude Include="ProjectilePool.h" />
     <ClInclude Include="Reference.h" />
@@ -2249,6 +2250,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="LocalTimeEntity.cpp" />
     <ClCompile Include="LocalTimeEntityManager.cpp" />
     <ClCompile Include="LinearClippingTimer.cpp" />
+    <ClCompile Include="MoveEndPreviewPool.cpp" />
     <ClCompile Include="ObservationTarget.cpp" />
     <ClCompile Include="ParticleBrush.cpp" />
     <ClCompile Include="ParticleData.cpp" />

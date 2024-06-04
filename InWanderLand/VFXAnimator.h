@@ -21,15 +21,17 @@ private:
 	struct CurFrameInfo
 	{
 		float sumTime;
-		int frame;
+		int curFrame;
+		int nextFrame;
+		bool isDone = false;
 	};
 
 private:
-	yunutyEngine::graphics::StaticMeshRenderer* renderer;
+	yunuGI::IMeshRenderer* renderer;
 	float frameRate;
 
 	// 키프레임의 UV좌표 값
-	std::vector<std::vector<yunuGI::VFXInfo>> frameInfo;
+	std::vector<std::vector<yunuGI::VFXInfo>> frameInfoVec;
 
 	// 현재 프레임에 관련된 정보를 보관하는 vector
 	std::vector<CurFrameInfo> curFrameVec;

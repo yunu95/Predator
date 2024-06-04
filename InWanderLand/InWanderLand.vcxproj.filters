@@ -748,6 +748,9 @@
     <Filter Include="Contents_Refactored\Skill\Robin\Q">
       <UniqueIdentifier>{91d3c36e-0ea5-45bb-800d-eeebd3eea587}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents_Refactored\SkillPreviewSystem\MoveEndPreviewPool">
+      <UniqueIdentifier>{5615a1ce-f5b1-49c9-9b9a-837b511edcf8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1822,6 +1825,9 @@
     <ClInclude Include="HanselProjectileSkill.h">
       <Filter>Contents_Refactored\Skill\Hansel\W</Filter>
     </ClInclude>
+    <ClInclude Include="MoveEndPreviewPool.h">
+      <Filter>Contents_Refactored\SkillPreviewSystem\MoveEndPreviewPool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2733,6 +2739,9 @@
     </ClCompile>
     <ClCompile Include="HanselProjectileSkill.cpp">
       <Filter>Contents_Refactored\Skill\Hansel\W</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveEndPreviewPool.cpp">
+      <Filter>Contents_Refactored\SkillPreviewSystem\MoveEndPreviewPool</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

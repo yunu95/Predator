@@ -130,6 +130,16 @@ float yunutyEngine::graphics::Animator::GetCurrentFrame()
     return desc.curr.currFrame;
 }
 
+void Animator::OnEnable()
+{
+	this->Play(this->GetGI().GetCurrentAnimation());
+}
+
+void Animator::OnDisable()
+{
+
+}
+
 void Animator::Update()
 {
     auto& gi = this->GetGI();
