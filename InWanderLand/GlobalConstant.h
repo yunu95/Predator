@@ -69,10 +69,8 @@ namespace application
 
         GC<float>	ursulaQSkillCoolTime = 2.0f;
         GC<float>	ursulaQSkillCost = 10.0f;
-        GC<float>	ursulaQSkillMaxDistance = 12.0f;
         GC<float>	ursulaQSkillRadius = 3;
         GC<float>	ursulaQSkillProjectileSpeed = 15;
-        GC<float>	ursulaQSkillShootDelay = 1.5f;
         GC<float>	ursulaQSkillBlindDuration = 3.0f;
         GC<float>	ursulaQSkillFieldDuration = 3.0f;
         GC<float>	ursulaQSkillFieldDamagePerTick = 1.0f;
