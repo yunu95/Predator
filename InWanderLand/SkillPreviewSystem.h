@@ -50,38 +50,38 @@ public:
 	
 	void Init();
 #pragma region RobinQSkill
-	// objectPos는 사거리 표시의 시작위치, maxDistance는 스킬 최대 사거리 입니다.
-	void ShowRobinQSkill(const Vector3d& objectPos, float maxDistance);
+	// objectPos는 사거리 표시의 시작위치 즉, 유닛의 월드포지션입니다.
+	void ShowRobinQSkill(const Vector3d& objectPos);
 	void HideRobinQSkill();
 #pragma endregion
 
-#pragma region RobinQSkill
+#pragma region RobinWSkill
 	// objectPos는 유닛의 현재 월드 포지션, circleRadius는 스킬 범위 입니다.
 	void ShowRobinWSkill(const Vector3d& objectPos, float circleRadius);
 	void HideRobinWSkill();
 #pragma endregion
 
 #pragma region UrsulaQSkill
-	// objectPos는 사거리 표시의 시작위치, maxDistance는 스킬 최대 사거리, circle의 pos들은 원의 위치들, circleRadius가 Vector3d인 이유는 원 3개의 반지름을 다양하게 설정할 수 있도록 만들었습니다.
-	void ShowUrsulaQSkill(const Vector3d& objectPos, float maxDistance, const Vector3d& circleOnePos, const Vector3d& circleTwoPos, const Vector3d& circleThreePos, Vector3d circleRadius);
+	// 각각 원 3개의 월드 포지션값을 받으며 마지막 circleRadius는 x,y,z순으로 circleOne,circleTwo,circleThree의 크기입니다.
+	void ShowUrsulaQSkill(const Vector3d& circleOnePos, const Vector3d& circleTwoPos, const Vector3d& circleThreePos, Vector3d circleRadius);
 	void HideUrsulaQSkill();
 #pragma endregion
 
-#pragma region UrsulaQSkill
-	// 우르술라의 W스킬은 objectPos, 스킬 사거리, 원의 반지름을 입력해주면 알아서 렌더링되게 만들었습니다.
-	void ShowUrsulaWSkill(const Vector3d& objectPos ,float maxDistance, float circleRadius);
+#pragma region UrsulaWSkill
+	// 원 하나의 월드포지션 값을 받습니다.
+	void ShowUrsulaWSkill(const Vector3d& circlePos, float circleRadius);
 	void HideUrsulaWSkill();
 #pragma endregion
 
 #pragma region HanselQSkill
-	// 헨젤의 Q 스킬은 원의 위치는 마우스의 위치로 고정되어 있어 원의 위치는 받지 않고 반지름만 받게 만들었습니다.
-	void ShowHanselQSkill(const Vector3d& objectPos, float maxDistance, float circleRadius, Vector3d circlePos);
+	// 원 하나의 월드포지션 값을 받습니다.
+	void ShowHanselQSkill(const Vector3d& circlePos, float circleRadius);
 	void HideHanselQSkill();
 #pragma endregion
 
 #pragma region HanselWSkill
-	// objectPos는 사거리 표시의 시작위치, maxDistance는 스킬 최대 사거리 입니다.
-	void ShowHanselWSkill(const Vector3d& objectPos, float maxDistance);
+	// objectPos는 사거리 표시의 시작위치 즉, 유닛의 월드포지션입니다.
+	void ShowHanselWSkill(const Vector3d& objectPos);
 	void HideHanselWSkill();
 #pragma endregion
 
@@ -90,6 +90,7 @@ public:
 	// 매 프레임 불리는 함수 마우스를 따라다니며 임시 경로를 보여줍니다.
 	void ShowTemporaryRoute(UnitType unitType , std::vector<Vector3d>& vertexList);
 	// 이동 할 경로가 확정되면 불러 줄 함수 삭제 요청이 들어오기 전까지 화면에 보여집니다.
+	// 이동경로의 마지막 지점에 이동 끝 이미지까지 보여줍니다.
 	yunuGI::IMesh* ShowRoute(UnitType unitType, std::vector<Vector3d>& vertexList);
 	// 생성된 경로 메쉬를 삭제해줄 함수
 	void DeleteRouteMesh(yunuGI::IMesh* mesh);
@@ -98,8 +99,16 @@ public:
 #pragma region SkillMaxRange
 	// 스킬을 눌렀을 때 유닛의 포지션에 나오는 스킬 최대 사거리를 보여주는 원형 이미지입니다.
 	// 로빈, 우르술라, 헨젤이 모두 이 함수를 부르면 됩니다.
+	// pos는 유닛의 월드포지션입니다.
 	void ShowSkillMaxRange(UnitType unitType, Vector3d pos, float maxRange);
 	void HideSkillMaxRange();
+#pragma endregion
+
+
+private:
+#pragma region MoveEnd
+	void ShowMoveEndImage(UnitType unitType, Vector3d pos, yunuGI::IMesh* mesh);
+	void HideShowMoveEndImage(yunuGI::IMesh* mesh);
 #pragma endregion
 
 private:
@@ -119,6 +128,7 @@ private:
 	yunutyEngine::GameObject* hanselWSkillPreviewObj;
 
 	yunutyEngine::GameObject* skillMaxRangePreviewObj;
+	yunutyEngine::graphics::StaticMeshRenderer* skillMaxRangePreviewRenderer;
 
 	// 매 프레임 메쉬가 바뀔 때 바뀌는 메쉬를 보여주는 변수들
 	yunutyEngine::GameObject* temporaryRouteMeshRendererObj;
@@ -127,6 +137,8 @@ private:
 
 	// 생성된 메쉬랑 맵핑된 renderer를 보관하는 컨테이너
 	std::map<yunuGI::IMesh*, graphics::StaticMeshRenderer*> rendererMap;
+	// 이동 끝 메쉬를 비활성화하기위한 컨테이너 키값으로 생성된 경로 메쉬를 사용한다.
+	std::map<yunuGI::IMesh*, graphics::StaticMeshRenderer*> moveEndRendererMap;
 	unsigned int routeMeshID = 0;
 };
 
