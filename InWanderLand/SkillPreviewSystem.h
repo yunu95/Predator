@@ -11,10 +11,12 @@ private:
 		ArrowHead,
 		ArrowBody
 	};
+	enum class RobinWSkillInfo
+	{
+		CircleOne
+	};
 	enum class UrsulaQSkillInfo
 	{
-		ArrowHead,
-		ArrowBody,
 		CircleOne,
 		CircleTwo,
 		CircleThree,
@@ -25,8 +27,6 @@ private:
 	};
 	enum class HanselQSkillInfo
 	{
-		ArrowHead,
-		ArrowBody,
 		CircleOne,
 	};
 	enum class HanselWSkillInfo
@@ -55,6 +55,12 @@ public:
 	void HideRobinQSkill();
 #pragma endregion
 
+#pragma region RobinQSkill
+	// objectPos는 유닛의 현재 월드 포지션, circleRadius는 스킬 범위 입니다.
+	void ShowRobinWSkill(const Vector3d& objectPos, float circleRadius);
+	void HideRobinWSkill();
+#pragma endregion
+
 #pragma region UrsulaQSkill
 	// objectPos는 사거리 표시의 시작위치, maxDistance는 스킬 최대 사거리, circle의 pos들은 원의 위치들, circleRadius가 Vector3d인 이유는 원 3개의 반지름을 다양하게 설정할 수 있도록 만들었습니다.
 	void ShowUrsulaQSkill(const Vector3d& objectPos, float maxDistance, const Vector3d& circleOnePos, const Vector3d& circleTwoPos, const Vector3d& circleThreePos, Vector3d circleRadius);
@@ -69,7 +75,7 @@ public:
 
 #pragma region HanselQSkill
 	// 헨젤의 Q 스킬은 원의 위치는 마우스의 위치로 고정되어 있어 원의 위치는 받지 않고 반지름만 받게 만들었습니다.
-	void ShowHanselQSkill(const Vector3d& objectPos, float maxDistance, float circleRadius);
+	void ShowHanselQSkill(const Vector3d& objectPos, float maxDistance, float circleRadius, Vector3d circlePos);
 	void HideHanselQSkill();
 #pragma endregion
 
@@ -89,6 +95,13 @@ public:
 	void DeleteRouteMesh(yunuGI::IMesh* mesh);
 #pragma endregion
 
+#pragma region SkillMaxRange
+	// 스킬을 눌렀을 때 유닛의 포지션에 나오는 스킬 최대 사거리를 보여주는 원형 이미지입니다.
+	// 로빈, 우르술라, 헨젤이 모두 이 함수를 부르면 됩니다.
+	void ShowSkillMaxRange(UnitType unitType, Vector3d pos, float maxRange);
+	void HideSkillMaxRange();
+#pragma endregion
+
 private:
 	yunuGI::IMesh* CreateRouteMesh(std::vector<Vector3d>& vertexList);
 
@@ -97,12 +110,15 @@ public:
 
 private:
 	yunutyEngine::GameObject* robinQSkillPreviewObj;
+	yunutyEngine::GameObject* robinWSkillPreviewObj;
 
 	yunutyEngine::GameObject* ursulaQSkillPreviewObj;
 	yunutyEngine::GameObject* ursulaWSkillPreviewObj;
 
 	yunutyEngine::GameObject* hanselQSkillPreviewObj;
 	yunutyEngine::GameObject* hanselWSkillPreviewObj;
+
+	yunutyEngine::GameObject* skillMaxRangePreviewObj;
 
 	// 매 프레임 메쉬가 바뀔 때 바뀌는 메쉬를 보여주는 변수들
 	yunutyEngine::GameObject* temporaryRouteMeshRendererObj;

@@ -22,7 +22,10 @@ void VFXAnimator::Start()
 			{
 				auto name = renderer->GetMaterial(i)->GetName();
 				auto temp = _resourceManager->GetVFXInfo(name);
-				this->frameRate = temp.first;
+				if (this->frameRate == 0.f)
+				{
+					this->frameRate = temp.first;
+				}
 				this->frameInfoVec.push_back(temp.second);
 
 
@@ -58,11 +61,8 @@ void VFXAnimator::Update()
 		{
 			if (this->curFrameVec[i].sumTime >= duration)
 			{
+				this->curFrameVec[i].isDone = true;
 				continue;
-				/*if (this->isLoop)
-				{
-					this->Reset();
-				}*/
 			}
 
 			this->curFrameVec[i].curFrame = static_cast<__int32>(this->curFrameVec[i].sumTime * ratio);
@@ -77,26 +77,15 @@ void VFXAnimator::Update()
 		}
 	}
 
+	for (auto& each : this->curFrameVec)
+	{
+		if (each.isDone == false)
+		{
+			continue;
+		}
 
-	//auto currentAnimation = gi.GetCurrentAnimation();
-	//float duration = currentAnimation->GetDuration();
-	//int totalFrame = currentAnimation->GetTotalFrame();
-	//desc.curr.speed = currentAnimation->GetPlaySpeed();
-	//__int32 ratio = static_cast<__int32>(totalFrame / duration);
-
-	//desc.curr.sumTime += (desc.curr.speed * Time::GetDeltaTime());
-	//if (desc.curr.sumTime >= currentAnimation->GetDuration())
-	//{
-	//	if (currentAnimation->GetLoop())
-	//	{
-	//		desc.curr.sumTime -= currentAnimation->GetDuration();
-	//	}
-	//}
-
-	//desc.curr.currFrame = static_cast<__int32>(desc.curr.sumTime * ratio);
-	//desc.curr.currFrame = min(static_cast<int>(desc.curr.currFrame), totalFrame - 1);
-	//desc.curr.nextFrame = min(static_cast<int>(desc.curr.currFrame + 1), totalFrame - 1);
-	//desc.curr.ratio = static_cast<float>(desc.curr.sumTime - static_cast<float>(desc.curr.currFrame) / ratio);
+		//GetGameObject()->SetSelfActive(false);
+	}
 }
 
 void VFXAnimator::OnEnable()
@@ -116,5 +105,6 @@ void VFXAnimator::Reset()
 		each.curFrame = 0;
 		each.nextFrame = 0;
 		each.sumTime = 0.f;
+		each.isDone = false;
 	}
 }

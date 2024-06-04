@@ -69,38 +69,6 @@ unsigned long long Animator::PushAnimationWithFunc(yunuGI::IAnimation* animation
 
 	this->animationEventMap[animation][functorIndex] = animationEvent;
 	return functorIndex++;
-
-	//if (func)
-	//{
-	//	AnimationEvent animationEvent;
-	//	animationEvent.frame = frame;
-	//	animationEvent.func = func;
-	//	animationEvent.isFirst = true;
-
-
-	//	auto iter = this->animationEventMap.find(animation);
-
-	//	if (iter == this->animationEventMap.end())
-	//	{
-	//		std::vector<AnimationEvent> tempVec;
-	//		tempVec.emplace_back(animationEvent);
-	//		this->animationEventMap.insert({ animation, tempVec });
-	//	}
-	//	else
-	//	{
-	//		for (auto& each : this->animationEventMap[animation])
-	//		{
-	//          /// frame 값이 같다고 해서 animationEvent 가 등록 안되게 하는지 이유를 잘 모르겠습니다.
-	//          /// 특정 frame 에 여러 이벤트가 발생했을 때에도 대응해야 합니다.
-	//			if (each.frame == frame)
-	//			{
-	//				return;
-	//			}
-	//		}
-
-	//		this->animationEventMap[animation].emplace_back(animationEvent);
-	//	}
-	//}
 }
 
 bool Animator::EraseAnimationFunc(yunuGI::IAnimation* animation, unsigned long long index)
@@ -120,6 +88,16 @@ float yunutyEngine::graphics::Animator::GetCurrentFrame()
 	auto& desc = gi.GetTransitionDesc();
 
 	return desc.curr.currFrame;
+}
+
+void Animator::OnEnable()
+{
+	this->Play(this->GetGI().GetCurrentAnimation());
+}
+
+void Animator::OnDisable()
+{
+
 }
 
 void Animator::Update()

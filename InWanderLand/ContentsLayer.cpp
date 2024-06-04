@@ -185,9 +185,8 @@ void GraphicsTest()
 			animation = i;
 		}
 
-		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
+		if (i->GetName() == L"root|Ani_SVFX_Tentacle")
 		{
-			i->SetLoop(true);
 			animation2 = i;
 		}
 
@@ -207,30 +206,32 @@ void GraphicsTest()
 	//	test->effect = effect;
 
 	//}
-	//{
-	//	auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-	//	obj2->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
-	//}
 	{
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stage1_Floor");
+	}
+	{
+		auto parent = Scene::getCurrentScene()->AddGameObject();
+		parent->SetSelfActive(false);
+
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SVFX_Wave");
+		auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
+		anim->PushAnimation(animation);
+		anim->Play(animation);
+		obj2->AddComponent<VFXAnimator>();
 
 
+		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SVFX_Tentacle");
+		auto anim2 = obj3->GetComponent<yunutyEngine::graphics::Animator>();
+		anim2->PushAnimation(animation2);
+		anim2->Play(animation2);
+		
 
-		      auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SVFX_Wave");
-		      auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
-		      anim->PushAnimation(animation);
-		      anim->Play(animation);
-		      obj2->GetTransform()->SetLocalScale(Vector3d{ 0.01,0.01,0.01 });
-		      obj2->AddComponent<VFXAnimator>();
-		      obj2->SetSelfActive(false);
-		      /*auto obj3 = Scene::getCurrentScene()->AddGameObject();
-		      auto renderer = obj3->AddComponent<graphics::StaticMeshRenderer>();
-		      auto test = obj3->AddComponent<TestComponent4>();
-		      test->obj = obj2;
-		      test->system = systemComponent;*/
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		auto test = obj->AddComponent<TestComponent4>();
+		test->obj = parent;
 
-			  auto obj = Scene::getCurrentScene()->AddGameObject();
-			  auto test = obj->AddComponent<TestComponent4>();
-		      test->obj = obj2;
+		obj2->SetParent(parent);
+		obj3->SetParent(parent);
 	}
 	yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
 	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
@@ -437,7 +438,7 @@ void application::contents::ContentsLayer::AssignTestInitializer(std::function<v
 		application::Application::GetInstance().AddMainLoopTodo([=]() {
 			Assert::Fail(yunutyEngine::yutility::GetWString(e.what()).c_str());
 			});
-	};
+		};
 }
 #endif
 

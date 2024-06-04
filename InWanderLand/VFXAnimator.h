@@ -23,6 +23,7 @@ private:
 		float sumTime;
 		int curFrame;
 		int nextFrame;
+		bool isDone = false;
 	};
 
 private:
@@ -34,7 +35,5 @@ private:
 
 	// 현재 프레임에 관련된 정보를 보관하는 vector
 	std::vector<CurFrameInfo> curFrameVec;
-
-	bool isLoop = true;
 };
 
