@@ -68,6 +68,11 @@ namespace application
             }
             void WavePalette::OnSelectSingleInstance(IEditableData* data)
             {
+                if (dynamic_cast<WaveData*>(data) != nullptr)
+                {
+                    selection.clear();
+                    selection.insert(data);
+                }
                 switch (wavePaletteState)
                 {
                 case WavePaletteState::None:
@@ -82,12 +87,25 @@ namespace application
                     break;
                 }
             }
-            void WavePalette::Reset() 
+            void WavePalette::Reset()
             {
                 Palette::Reset();
                 currentSelectedWaveIndex = -1;
                 currentSelectedWaveTimeOffset = 0;
                 currentWaveData = nullptr;
+            }
+            void WavePalette::Delete(IEditableData* data)
+            {
+                auto waveData = dynamic_cast<WaveData*>(data);
+                if (waveData)
+                {
+                    //auto wave = unitData->pod.waveData;
+                    for (auto each : waveData->waveUnitDatasVector)
+                    {
+                        InstanceManager::GetSingletonInstance().DeleteInstance(each->GetUUID());
+                    }
+                }
+                Palette::Delete(data);
             }
         }
     }

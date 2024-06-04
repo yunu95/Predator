@@ -18,6 +18,7 @@
 #include "ParticleTool_Manager.h"
 #include "BrushList.h"
 #include "Module_ScriptEditor.h"
+#include "WavePalette.h"
 
 #include "YunutyEngine.h"
 #include "WanderUtils.h"
@@ -842,6 +843,7 @@ namespace application
                         if (ImGui::Selectable(ss.str().c_str(), selectedWave == each))
                         {
                             selectedWave = each;
+                            palette::WavePalette::SingleInstance().OnSelectSingleInstance(each);
                         }
                         if (selectedWave == each)
                             ImGui::SetItemDefaultFocus();
@@ -1752,7 +1754,7 @@ namespace application
                                 static std::vector<std::string> selections = std::vector<std::string>();
 
                                 static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-                                
+
                                 if (selections.size() == 0)
                                 {
                                     for (auto each : resourceManager->GetTextureList())
@@ -1760,7 +1762,7 @@ namespace application
                                         selections.push_back(std::string(each->GetName().begin(), each->GetName().end()));
                                     }
                                 }
-                                
+
                                 for (int i = 0; i < selections.size(); i++)
                                 {
                                     const bool is_selected = (interactable->pod.guideUI == selections[i]);

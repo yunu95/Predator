@@ -31,6 +31,7 @@ namespace application
                 // 유닛 팔레트에서 유닛을 생성할 때 연계되는 웨이브의 인덱스,
                 // currentWave가 null이 아니고 currentSelectedWaveIndex가 0보다 크거나 같으면 유닛 팔레트는 웨이브 유닛 생성 모드로 인식된다.
                 int currentSelectedWaveIndex{ -1 };
+                virtual void OnSelectSingleInstance(IEditableData* data) override;
             protected:
                 virtual IEditableData* PlaceInstance(Vector3d worldPosition) override { return nullptr; }
                 virtual bool ShouldSelect(IEditableData* instance)
@@ -41,9 +42,9 @@ namespace application
                 };
                 virtual void OnStartPalette() override;
                 virtual void OnStandbyPalette() override;
-                virtual void OnSelectSingleInstance(IEditableData* data) override;
             private:
                 virtual void Reset() override;
+                virtual void Delete(IEditableData* data)override;
                 WavePaletteState wavePaletteState{ WavePaletteState::None };
                 float currentSelectedWaveTimeOffset{ 0 };
                 // 웨이브 유닛 배치정보를 수정할 때 생성시점이 오래된 유닛들은 숨김처리한다.
