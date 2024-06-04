@@ -320,6 +320,10 @@ class ContentsInitializer : public yunutyEngine::Component
         }
 #endif
 #endif
+#ifndef EDITOR
+        DebugGraphic::SetDebugGraphicsEnabled(false);
+#endif
+
         Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
         co_return;
     }

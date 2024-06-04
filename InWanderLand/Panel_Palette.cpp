@@ -853,6 +853,11 @@ namespace application
             }
             if (selectedWave)
             {
+                if(ImGui::Button("Delete Wave"))
+                {
+                    /// Delete 로직
+                }
+
                 if (imgui::BeginSection_2Col(countIdx, "Wave info", ImGui::GetContentRegionAvail().x))
                 {
                     ImGui::TableNextRow();
