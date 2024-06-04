@@ -104,6 +104,7 @@ namespace application
         GC<float>   impaleSkillAriseDistancePerSpear = 0.5f;
         GC<float>   impaleSkillAriseTimeNoisePerSpear = 0.5f;
         GC<float>   impaleSkillAriseDistanceNoisePerSpear = 0.5f;
+        GC<float>   impaleSkillDuration = 2.0f;
         GC<float>   impaleSkillKnockbackDistance = 2.0f;
         GC<float>   impaleSkillKnockbackDuration = 2.0f;
 

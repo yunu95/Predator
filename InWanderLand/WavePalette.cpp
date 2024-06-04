@@ -96,6 +96,7 @@ namespace application
             }
             void WavePalette::Delete(IEditableData* data)
             {
+                currentWaveData = nullptr;
                 auto waveData = dynamic_cast<WaveData*>(data);
                 if (waveData)
                 {

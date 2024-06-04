@@ -246,7 +246,8 @@ namespace application::editor::palette
         if (selection.find(instance) == selection.end())
         {
             selection.insert(instance);
-            instance->GetPaletteInstance()->OnSelected();
+            if (instance->GetPaletteInstance())
+                instance->GetPaletteInstance()->OnSelected();
         }
 
     }
@@ -255,13 +256,17 @@ namespace application::editor::palette
         if (selection.find(instance) != selection.end())
         {
             selection.erase(instance);
-            instance->GetPaletteInstance()->OnDeselected();
+            if (instance->GetPaletteInstance())
+                instance->GetPaletteInstance()->OnDeselected();
         }
     }
     void Palette::ClearSelection()
     {
         for (auto each : selection)
-            each->GetPaletteInstance()->OnDeselected();
+        {
+            if (each->GetPaletteInstance())
+                each->GetPaletteInstance()->OnDeselected();
+        }
         selection.clear();
     }
     void Palette::HoverClosestInstance()

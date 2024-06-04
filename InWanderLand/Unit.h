@@ -54,7 +54,7 @@ public:
     void OrderAttack(std::weak_ptr<Unit> opponent);
     void OrderHold();
     template<typename SkillType>
-    void OrderSkill(const SkillType& skill);
+    void OrderSkill(const SkillType& skill, Vector3d pos);
     template<typename BuffType>
     void ApplyBuff(const BuffType& buff);
     void Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
@@ -196,11 +196,13 @@ bool Unit::CanProcessOrder()
     };
 }
 template<typename SkillType>
-void Unit::OrderSkill(const SkillType& skill)
+void Unit::OrderSkill(const SkillType& skill, Vector3d pos)
 {
     static_assert(std::is_base_of<Skill, SkillType>::value, "SkillType must be derived from Skill");
     pendingSkill = std::make_shared<SkillType>(skill);
     static_cast<Skill*>(pendingSkill.get())->owner = GetWeakPtr<Unit>();
+    static_cast<Skill*>(pendingSkill.get())->selfWeakPtr = std::dynamic_pointer_cast<Skill>(pendingSkill);
+    static_cast<Skill*>(pendingSkill.get())->targetPos = pos;
     pendingOrderType = UnitOrderType::Skill;
 }
 template<typename BuffType>

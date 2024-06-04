@@ -751,6 +751,12 @@
     <Filter Include="Contents_Refactored\SkillPreviewSystem\MoveEndPreviewPool">
       <UniqueIdentifier>{5615a1ce-f5b1-49c9-9b9a-837b511edcf8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents_Refactored\BehaviourTree">
+      <UniqueIdentifier>{0d427776-90e5-4171-a954-36e252b6c261}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitBehaviourTree">
+      <UniqueIdentifier>{9d73307d-396f-481a-9995-7af1d80ce8db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1827,6 +1833,12 @@
     </ClInclude>
     <ClInclude Include="MoveEndPreviewPool.h">
       <Filter>Contents_Refactored\SkillPreviewSystem\MoveEndPreviewPool</Filter>
+    </ClInclude>
+    <ClInclude Include="BehaviourTree.h">
+      <Filter>Contents_Refactored\BehaviourTree</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitBehaviourTree.h">
+      <Filter>Contents_Refactored\Unit\UnitBehaviourTree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
