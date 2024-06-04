@@ -57,6 +57,7 @@
 #include "UnitBuff.h"
 #include "Projectile.h"
 #include "ProjectilePool.h"
+#include "FBXPool.h"
 #include "PlayerController.h"
 #include "PlaytimeWave.h"
 #include "SingleNavigationField.h"
@@ -64,3 +65,5 @@
 #include "WanderUtils.h"
 #include "ParticleToolData.h"
 #include "ParticleTool_Manager.h"
+#include "wanderResources.h"
+#include "WanderFBX.h"

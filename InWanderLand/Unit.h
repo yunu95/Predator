@@ -65,6 +65,7 @@ public:
     void Paralyze(float paralyzeDuration);
     yunutyEngine::coroutine::Coroutine KnockBackCoroutine(Vector3d targetPosition, float knockBackDuration);
     void PlayAnimation(UnitAnimType animType, bool repeat = false);
+    void SetDefaultAnimation(UnitAnimType animType);
     void SetDesiredRotation(const Vector3d& facingDirection);
     std::weak_ptr<coroutine::Coroutine> SetRotation(const Vector3d& facingDirection, float rotatingTime);
     std::weak_ptr<coroutine::Coroutine> SetRotation(float facingAngle, float rotatingTime);
@@ -128,7 +129,7 @@ private:
     };
     std::weak_ptr<Unit> GetClosestEnemy();
     template<UnitOrderType orderType>
-    bool CanProceedOrder();
+    bool CanProcessOrder();
     // 상대 유닛에 대해 다가가서 때리기 좋은 위치를 반환합니다.
     Vector3d GetAttackPosition(std::weak_ptr<Unit> opponent);
     yunutyEngine::coroutine::Coroutine AttackCoroutine(std::weak_ptr<Unit> opponent);
@@ -148,6 +149,7 @@ private:
     std::weak_ptr<yunutyEngine::physics::SphereCollider> unitCollider;
     std::unordered_map<UnitBuff::Type, std::shared_ptr<UnitBuff>> buffs;
     std::shared_ptr<Skill> onGoingSkill;
+    std::shared_ptr<Skill> pendingSkill;
     std::weak_ptr<BurnEffect> burnEffect;
     std::weak_ptr<Unit> currentTargetUnit;					// Attack이나 Chase 때 사용할 적군  오브젝트
     std::weak_ptr<Unit> pendingTargetUnit;					// Attack이나 Chase 때 사용할 적군  오브젝트
@@ -186,7 +188,7 @@ private:
     friend PlayerController;
 };
 template<UnitOrderType orderType>
-bool Unit::CanProceedOrder()
+bool Unit::CanProcessOrder()
 {
     {
         return (currentOrderType == orderType && pendingOrderType == currentOrderType) ||
@@ -197,11 +199,9 @@ template<typename SkillType>
 void Unit::OrderSkill(const SkillType& skill)
 {
     static_assert(std::is_base_of<Skill, SkillType>::value, "SkillType must be derived from Skill");
-    std::shared_ptr<SkillType> skillInstance = std::make_shared<SkillType>(skill);
-    skillInstance = std::make_shared<SkillType>(skill);
-    static_cast<Skill*>(skillInstance.get())->owner = GetWeakPtr<Unit>();
-    onGoingSkill = skillInstance;
-    coroutineSkill = StartCoroutine(skillInstance.get()->operator()());
+    pendingSkill = std::make_shared<SkillType>(skill);
+    static_cast<Skill*>(pendingSkill.get())->owner = GetWeakPtr<Unit>();
+    pendingOrderType = UnitOrderType::Skill;
 }
 template<typename BuffType>
 void Unit::ApplyBuff(const BuffType& buff)
