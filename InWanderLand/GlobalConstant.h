@@ -90,6 +90,7 @@ namespace application
         GC<float>   hanselQSkillStompRadius = 10.0f;
         GC<float>	hanselESkillCoolTime = 2.0f;
         GC<float>	hanselESkillCost = 10.0f;
+        GC<float>   impaleSkillDamage = 20.0f;
         GC<float>   impaleSkillCoolTime = 2.0f;
         GC<float>   impaleSkillRange = 8.0f;
         GC<float>   impaleSkillWidth = 2.0f;
