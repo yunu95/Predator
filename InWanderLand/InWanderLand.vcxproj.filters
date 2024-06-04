@@ -703,8 +703,12 @@
     <Filter Include="Contents_Refactored\Reference">
       <UniqueIdentifier>{db595c79-ba0f-49ef-9361-0e68f82a8f2d}</UniqueIdentifier>
     </Filter>
+    </Filter>
     <Filter Include="Contents_Refactored\Skill\Robin">
       <UniqueIdentifier>{e94285ee-c0a8-4f5e-a365-b8bc3b5922d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\EnemyImpaleSkill">
+      <UniqueIdentifier>{c72c6472-8cd7-4cea-a022-6eb538423d8c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contents_Refactored\Skill\Robin\RobinChargeSkill">
       <UniqueIdentifier>{0ffa0272-1cd4-4c2a-ae94-f7e9f3c508fd}</UniqueIdentifier>
@@ -729,6 +733,12 @@
     </Filter>
     <Filter Include="Contents_Refactored\Skill\Hansel\HanselChargeSkill">
       <UniqueIdentifier>{a725de1f-cb1f-4053-b9e7-3996ae5e2679}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\FBXPool">
+      <UniqueIdentifier>{3c939899-2079-444a-a4c1-e32b0eea6f60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\wanderResources\WanderFBX">
+      <UniqueIdentifier>{9ae875e6-c63f-4af2-8367-bdd6d43c5a37}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1768,6 +1778,8 @@
       <Filter>VFX</Filter>
     </ClInclude>
     <ClInclude Include="SFXManager.h" />
+      <Filter>Contents\GameManager\SFX</Filter>
+    </ClInclude>
     <ClInclude Include="RobinTauntSkill.h">
       <Filter>Contents_Refactored\Skill\Robin\RobinTauntSkill</Filter>
     </ClInclude>
@@ -1782,6 +1794,15 @@
     </ClInclude>
     <ClInclude Include="HanselProjectileSkill.h">
       <Filter>Contents_Refactored\Skill\Hansel\HanselProjectileSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="WanderFBX.h">
+      <Filter>Contents_Refactored\wanderResources\WanderFBX</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyImpaleSkill.h">
+      <Filter>Contents_Refactored\Skill\EnemyImpaleSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="FBXPool.h">
+      <Filter>Contents_Refactored\FBXPool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2664,6 +2685,8 @@
       <Filter>VFX</Filter>
     </ClCompile>
     <ClCompile Include="SFXManager.cpp" />
+      <Filter>Contents\GameManager\SFX</Filter>
+    </ClCompile>
     <ClCompile Include="RobinTauntSkill.cpp">
       <Filter>Contents_Refactored\Skill\Robin\RobinTauntSkill</Filter>
     </ClCompile>
@@ -2678,6 +2701,12 @@
     </ClCompile>
     <ClCompile Include="HanselProjectileSkill.cpp">
       <Filter>Contents_Refactored\Skill\Hansel\HanselProjectileSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyImpaleSkill.cpp">
+      <Filter>Contents_Refactored\Skill\EnemyImpaleSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="FBXPool.cpp">
+      <Filter>Contents_Refactored\FBXPool</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1034,9 +1034,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="AnimationEvents.h" />
     <ClInclude Include="AttackMoveController.h" />
     <ClInclude Include="DelegateCallback.h" />
+    <ClInclude Include="EnemyImpaleSkill.h" />
     <ClInclude Include="Factor.h" />
     <ClInclude Include="HanselChargeSkill.h" />
     <ClInclude Include="HanselProjectileSkill.h" />
+    <ClInclude Include="FBXPool.h" />
     <ClInclude Include="Multiplier.h" />
     <ClInclude Include="ProjectilePool.h" />
     <ClInclude Include="Reference.h" />
@@ -1967,6 +1969,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     </ClInclude>
     <ClInclude Include="Action_WaitForSeconds.h" />
     <ClInclude Include="UVAnimator.h" />
+    <ClInclude Include="WanderFBX.h" />
     <ClInclude Include="wanderResources.h" />
     <ClInclude Include="VFXAnimator.h" />
     <ClInclude Include="WanderUtils.h" />
@@ -2186,6 +2189,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="CameraData.cpp" />
     <ClCompile Include="HanselChargeSkill.cpp" />
     <ClCompile Include="HanselProjectileSkill.cpp" />
+    <ClCompile Include="EnemyImpaleSkill.cpp" />
+    <ClCompile Include="FBXPool.cpp" />
     <ClCompile Include="Interactable_ChessPool.cpp" />
     <ClCompile Include="DebuggingMesh.cpp" />
     <ClCompile Include="DeleteInstanceCommand.cpp" />

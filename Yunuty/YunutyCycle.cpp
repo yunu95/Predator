@@ -162,6 +162,8 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
             StartComponent(updateTargetComponents[i]);
         for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
         {
+            if (!updateTargetComponents[i]->GetActive() || !updateTargetComponents[i]->GetGameObject()->GetActive())
+                continue;
             UpdateComponent(updateTargetComponents[i]);
             for (auto coroutine : updateTargetComponents[i]->coroutines)
             {
