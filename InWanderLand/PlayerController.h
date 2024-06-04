@@ -108,6 +108,9 @@ private:
     SkillUpgradeType::Enum skillUpgradeTarget;
     UIEnumID skillUpgradeUITarget;
     std::array<bool, SkillUpgradeType::END> skillUpgraded;
+    //std::array<float, SkillType::SKILL_NUM> skillCooltime;
+    //std::array<float, SkillType::SKILL_NUM> manaCost;
+    std::array<float, SkillType::SKILL_NUM> skillCooltimeLeft;
     int skillPointsLeft{ 5 };
     Vector3d camOffset;
     Quaternion camRotation;

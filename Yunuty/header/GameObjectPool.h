@@ -43,6 +43,7 @@ namespace yunutyEngine
     protected:
         deque<std::weak_ptr<RepresenstativeComponent>> poolObjects;
         deque<std::weak_ptr<RepresenstativeComponent>> expendableObjects;
+        std::unordered_set<RepresenstativeComponent*> expendableObjectSet;
     };
 }
 template<typename RepresenstativeComponent>
@@ -58,6 +59,7 @@ std::weak_ptr<RepresenstativeComponent> GameObjectPool<RepresenstativeComponent>
     }
     auto target = expendableObjects.front();
     expendableObjects.pop_front();
+    expendableObjectSet.erase(target.lock().get());
     OnBorrow(target);
     target.lock()->GetGameObject()->SetSelfActive(true);
     return target;
@@ -65,6 +67,11 @@ std::weak_ptr<RepresenstativeComponent> GameObjectPool<RepresenstativeComponent>
 template<typename RepresenstativeComponent>
 void GameObjectPool<RepresenstativeComponent>::Return(std::weak_ptr<RepresenstativeComponent> obj)
 {
+    if (expendableObjectSet.contains(obj.lock().get()))
+    {
+        return;
+    }
     expendableObjects.push_back(obj);
+    expendableObjectSet.insert(obj.lock().get());
     obj.lock()->GetGameObject()->SetSelfActive(false);
 }

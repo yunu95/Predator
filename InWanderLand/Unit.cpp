@@ -81,7 +81,7 @@ void Unit::Update()
     lastPosition = GetTransform()->GetWorldPosition();
     // 재생중인 애니메이션이 없다면 기본 애니메이션 출력
     // 어떤게 기본 애니메이션인지는 행동트리의 상태에 따라 바뀔 수 있다.
-    if (!animatorComponent.lock()->IsPlaying())
+    if (animatorComponent.lock()->IsDone())
     {
         animatorComponent.lock()->Play(defaultAnimation);
     }
@@ -179,6 +179,22 @@ void Unit::OnStateUpdate<UnitBehaviourTree::Move>()
     SetDesiredRotation(GetTransform()->GetWorldPosition() - lastPosition);
 }
 template<>
+void Unit::OnStateEngage<UnitBehaviourTree::Skill>()
+{
+    onStateEngage[UnitBehaviourTree::Skill]();
+    currentOrderType = UnitOrderType::Skill;
+}
+template<>
+void Unit::OnStateUpdate<UnitBehaviourTree::Skill>()
+{
+    if (coroutineSkill.expired() && pendingSkill.get())
+    {
+        assert(pendingSkill.get() != nullptr);
+        onGoingSkill = std::move(pendingSkill);
+        coroutineSkill = StartCoroutine(onGoingSkill.get()->operator()());
+    }
+}
+template<>
 void Unit::OnStateExit<UnitBehaviourTree::Skill>()
 {
     onStateExit[UnitBehaviourTree::Skill]();
@@ -242,7 +258,7 @@ void Unit::Heal(float healingPoint)
 
 void Unit::SetUnitCurrentHp(float p_newHp)
 {
-    currentHitPoint = p_newHp;
+    currentHitPoint = std::fmax(0, p_newHp);
     if (p_newHp <= 0)
     {
         isAlive = false;
@@ -306,17 +322,21 @@ void Unit::PlayAnimation(UnitAnimType animType, bool repeat)
 {
     auto anim = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, animType);
 
-    if (animatorComponent.lock()->IsPlaying())
+    if (animatorComponent.lock()->IsDone())
     {
-        //animatorComponent.lock()->ChangeAnimation(anim, 0.1f, 1.0f);
         animatorComponent.lock()->Play(anim);
     }
     else
     {
-        animatorComponent.lock()->Play(anim);
+        animatorComponent.lock()->ChangeAnimation(anim, 0.1f, 1.0f);
+        //animatorComponent.lock()->Play(anim);
     }
     if (repeat)
         defaultAnimation = anim;
+}
+void Unit::SetDefaultAnimation(UnitAnimType animType)
+{
+    defaultAnimation = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, animType);
 }
 float normalizeAngle(float angle) {
     while (angle < 0) angle += 360;
@@ -719,12 +739,28 @@ void Unit::InitBehaviorTree()
         {
             return referencePause.BeingReferenced();
         };
+    unitBehaviourTree[UnitBehaviourTree::Skill].enteringCondtion = [this]()
+        {
+            return !coroutineSkill.expired() || CanProcessOrder<UnitOrderType::Skill>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Skill].onEnter = [this]()
+        {
+            OnStateEngage<UnitBehaviourTree::Skill>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Skill].onUpdate = [this]()
+        {
+            OnStateUpdate<UnitBehaviourTree::Skill>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Skill].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Skill>();
+        };
 
     unitBehaviourTree[UnitBehaviourTree::Chasing].enteringCondtion = [this]()
         {
             return !currentTargetUnit.expired()
                 && currentTargetUnit.lock()->IsAlive()
-                && CanProceedOrder<UnitOrderType::AttackUnit>();
+                && CanProcessOrder<UnitOrderType::AttackUnit>();
         };
     unitBehaviourTree[UnitBehaviourTree::Chasing].onEnter = [this]()
         {
@@ -763,14 +799,62 @@ void Unit::InitBehaviorTree()
             moveDestination = GetAttackPosition(currentTargetUnit);
             OnStateEngage<UnitBehaviourTree::Move>();
         };
+    unitBehaviourTree[UnitBehaviourTree::Hold].enteringCondtion = [this]()
+        {
+            return CanProcessOrder<UnitOrderType::Hold>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Hold].onEnter = [this]()
+        {
+            currentOrderType = UnitOrderType::Hold;
+        };
+    unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Attack].enteringCondtion = [this]()
+        {
+            return !attackRange.lock()->GetEnemies().empty() || !coroutineAttack.expired();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Attack].onEnter = [this]()
+        {
+            currentTargetUnit = GetClosestEnemy();
+            OnStateEngage<UnitBehaviourTree::Attack>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Attack].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Attack>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Attack].onUpdate = [this]()
+        {
+            OnStateUpdate<UnitBehaviourTree::Attack>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Stop].enteringCondtion = [this]()
+        {
+            return true;
+        };
+    unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Stop].onEnter = [this]()
+        {
+            OnStateEngage<UnitBehaviourTree::Stop>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Move].enteringCondtion = [this]()
+        {
+            return CanProcessOrder<UnitOrderType::Move>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Move].onEnter = [this]()
+        {
+            currentOrderType = pendingOrderType;
+            OnStateEngage<UnitBehaviourTree::Move>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Move].onUpdate = [this]()
+        {
+            OnStateUpdate<UnitBehaviourTree::Move>();
+        };
 
     unitBehaviourTree[UnitBehaviourTree::AttackMove].enteringCondtion = [this]()
         {
-            return CanProceedOrder<UnitOrderType::AttackMove>();
+            //return CanProceedOrder<UnitOrderType::AttackMove>();
+            return true;
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove].onEnter = [this]()
         {
-            currentOrderType = pendingOrderType;
+            //currentOrderType = pendingOrderType;
+            currentOrderType = UnitOrderType::AttackMove;
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Attack].enteringCondtion = [this]()
         {
@@ -807,60 +891,6 @@ void Unit::InitBehaviorTree()
             return true;
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Stop].onEnter = [this]()
-        {
-            OnStateEngage<UnitBehaviourTree::Stop>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Move].enteringCondtion = [this]()
-        {
-            return CanProceedOrder<UnitOrderType::Move>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Move].onEnter = [this]()
-        {
-            currentOrderType = pendingOrderType;
-            OnStateEngage<UnitBehaviourTree::Move>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Move].onUpdate = [this]()
-        {
-            OnStateUpdate<UnitBehaviourTree::Move>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Skill].enteringCondtion = [this]()
-        {
-            return !coroutineSkill.expired();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Skill].onExit = [this]()
-        {
-            OnStateExit<UnitBehaviourTree::Skill>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Hold].enteringCondtion = [this]()
-        {
-            return true;
-        };
-    unitBehaviourTree[UnitBehaviourTree::Hold].onEnter = [this]()
-        {
-            currentOrderType = UnitOrderType::Hold;
-        };
-    unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Attack].enteringCondtion = [this]()
-        {
-            return !attackRange.lock()->GetEnemies().empty() || !coroutineAttack.expired();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Attack].onEnter = [this]()
-        {
-            currentTargetUnit = GetClosestEnemy();
-            OnStateEngage<UnitBehaviourTree::Attack>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Attack].onExit = [this]()
-        {
-            OnStateExit<UnitBehaviourTree::Attack>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Attack].onUpdate = [this]()
-        {
-            OnStateUpdate<UnitBehaviourTree::Attack>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Stop].enteringCondtion = [this]()
-        {
-            return true;
-        };
-    unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Stop].onEnter = [this]()
         {
             OnStateEngage<UnitBehaviourTree::Stop>();
         };

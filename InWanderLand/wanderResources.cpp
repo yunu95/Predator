@@ -94,13 +94,14 @@ yunuGI::IAnimation* wanderResources::GetAnimation(const std::string& fbx, UnitAn
         InitAnimMap();
     return animMap.at(fbx).at(animType);
 }
-void wanderResources::PushAnimations(graphics::Animator* animator, const std::string& fbx)
+constexpr const std::string& wanderResources::GetFBXName(WanderFBX::Enum fbxType)
 {
-    if (animMap.empty())
-        InitAnimMap();
-    auto key = yutility::GetWString(fbx);
-    for (auto& each : animMap.at(fbx))
+    switch (fbxType)
     {
-        animator->PushAnimation(each.second);
+    case wanderResources::WanderFBX::None: return "";
+    case wanderResources::WanderFBX::IMPALING_SPIKE: return "";
+    case wanderResources::WanderFBX::NUM: return "";
+    default:
+        break;
     }
-}
+};

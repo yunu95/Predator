@@ -688,9 +688,6 @@
     <Filter Include="VFX">
       <UniqueIdentifier>{327458f4-5bdd-4125-a01e-6651c65ad310}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\InteractableComponent\InteractableList\ChessUtil">
-      <UniqueIdentifier>{df324316-e5ab-418b-bee1-b9b625d862ec}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents_Refactored\DelegateCallback">
       <UniqueIdentifier>{aaf1e6d5-3b76-4c12-8e84-94ddede45168}</UniqueIdentifier>
     </Filter>
@@ -709,8 +706,14 @@
     <Filter Include="Contents_Refactored\Reference">
       <UniqueIdentifier>{db595c79-ba0f-49ef-9361-0e68f82a8f2d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\GameManager\SFX">
-      <UniqueIdentifier>{07744a7a-8ce4-453a-9e6b-0abf7d344981}</UniqueIdentifier>
+    <Filter Include="Contents_Refactored\Skill\EnemyImpaleSkill">
+      <UniqueIdentifier>{c72c6472-8cd7-4cea-a022-6eb538423d8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\FBXPool">
+      <UniqueIdentifier>{3c939899-2079-444a-a4c1-e32b0eea6f60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\wanderResources\WanderFBX">
+      <UniqueIdentifier>{9ae875e6-c63f-4af2-8367-bdd6d43c5a37}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1746,11 +1749,18 @@
     <ClInclude Include="Reference.h">
       <Filter>Contents_Refactored\Reference</Filter>
     </ClInclude>
-    <ClInclude Include="SFXManager.h">
-      <Filter>Contents\GameManager\SFX</Filter>
-    </ClInclude>
     <ClInclude Include="VFXAnimator.h">
       <Filter>VFX</Filter>
+    </ClInclude>
+    <ClInclude Include="SFXManager.h" />
+    <ClInclude Include="WanderFBX.h">
+      <Filter>Contents_Refactored\wanderResources\WanderFBX</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyImpaleSkill.h">
+      <Filter>Contents_Refactored\Skill\EnemyImpaleSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="FBXPool.h">
+      <Filter>Contents_Refactored\FBXPool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2629,11 +2639,15 @@
     <ClCompile Include="Interactable_TrapSwitch.cpp" />
     <ClCompile Include="Interactable_TrapArms.cpp" />
     <ClCompile Include="Interactable_ChessPool.cpp" />
-    <ClCompile Include="SFXManager.cpp">
-      <Filter>Contents\GameManager\SFX</Filter>
-    </ClCompile>
     <ClCompile Include="VFXAnimator.cpp">
       <Filter>VFX</Filter>
+    </ClCompile>
+    <ClCompile Include="SFXManager.cpp" />
+    <ClCompile Include="EnemyImpaleSkill.cpp">
+      <Filter>Contents_Refactored\Skill\EnemyImpaleSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="FBXPool.cpp">
+      <Filter>Contents_Refactored\FBXPool</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

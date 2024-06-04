@@ -90,6 +90,18 @@ namespace application
         GC<float>   hanselQSkillStompRadius = 10.0f;
         GC<float>	hanselESkillCoolTime = 2.0f;
         GC<float>	hanselESkillCost = 10.0f;
+        GC<float>   impaleSkillCoolTime = 2.0f;
+        GC<float>   impaleSkillRange = 8.0f;
+        GC<float>   impaleSkillWidth = 2.0f;
+        GC<float>   impaleSkillFirstSpearOffset = 0.5f;
+        GC<float>   impaleSkillMaxHeightPerSpear = 2.5f;
+        GC<float>   impaleSkillMinHeightPerSpear = 0.0f;
+        GC<float>   impaleSkillDurationPerSpear = 0.5f;
+        GC<float>   impaleSkillAriseDistancePerSpear = 0.5f;
+        GC<float>   impaleSkillAriseTimeNoisePerSpear = 0.5f;
+        GC<float>   impaleSkillAriseDistanceNoisePerSpear = 0.5f;
+        GC<float>   impaleSkillKnockbackDistance = 2.0f;
+        GC<float>   impaleSkillKnockbackDuration = 2.0f;
 
         GC<float>	skillGaugeRecoveryPerSecond = 2.0f;
 
