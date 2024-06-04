@@ -342,6 +342,8 @@ void PlayerController::Reset()
 // 현재 카메라의 위치에 따라 카메라의 플레이어 기준 오프셋 위치와 회전각을 결정합니다.
 void PlayerController::SetCameraOffset()
 {
+    if (characters[PlayerCharacterType::Robin].expired())
+        return;
     auto camPos = graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition();
     camOffset = camPos - characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition();
     camRotation = graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation();
