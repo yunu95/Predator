@@ -105,12 +105,15 @@ public:
     DelegateCallback<void()> onRotationFinish;
     Reference referencePause;
     Reference referenceBlockFollowingNavAgent;
+    Reference referenceBlockAnimLoop;
     Reference referenceParalysis;
     Reference referenceBlockPendingOrder;
     Reference referenceBlockRotation;
     Reference referenceInvulnerable;
     Reference referenceBlockAttack;
     Reference referenceDisableNavAgent;
+
+    std::weak_ptr<yunutyEngine::graphics::Animator> GetAnimator() { return animatorComponent; }
 private:
     void SetNavObstacleActive(bool active);
     void UpdateRotation();

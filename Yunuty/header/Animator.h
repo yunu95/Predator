@@ -34,6 +34,7 @@ namespace yunutyEngine::graphics
         void Update();
         virtual ~Animator() {};
         void Pause();
+        void Resume();
         void Play(yunuGI::IAnimation* animation);
         void PushAnimation(yunuGI::IAnimation* animation);
         void SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame);
@@ -49,8 +50,6 @@ namespace yunutyEngine::graphics
         unsigned long long PushAnimationWithFunc(yunuGI::IAnimation* animation, unsigned int frame, std::function<void()> func);
         bool EraseAnimationFunc(yunuGI::IAnimation* animation, unsigned long long index);
 
-        /// Animation 이 플레이 중인 경우 해당 프레임을 반환하는 함수입니다.
-        /// 플레이 중이지 않을 경우, 0을 return 합니다.
         float GetCurrentFrame();
 
     private:

@@ -89,7 +89,7 @@ namespace application
         GC<float>	hanselQSkillCoolTime = 2.0f;
         GC<float>	hanselQSkillCost = 10.0f;
         GC<float>	hanselQSkillMaxDistance = 10.0f;
-        GC<float>	hanselQSkillSpeed = 5.0f;
+        GC<float>	hanselQSkillRushSpeed = 5.0f;
         GC<float>	hanselQSkillMaxJumpDistance = 5.0f;
         GC<float>	hanselQSkillStompDelay = 2.0f;
         GC<int>	    hanselQSkillStompRepeat = 4;
