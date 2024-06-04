@@ -43,6 +43,25 @@ void UnitAcquisitionSphereCollider::OnTriggerExit(physics::Collider* other)
 
 }
 
+UnitAcquisitionSphereCollider::UnitAcquisitionSphereCollider()
+    : SphereCollider()
+{
+    debugMesh = GetGameObject()->AddGameObject();
+    AttachDebugMesh(debugMesh, DebugMeshType::Sphere, yunuGI::Color::green());
+}
+
+void UnitAcquisitionSphereCollider::SetRadius(float radius)
+{
+    physics::SphereCollider::SetRadius(radius);
+    debugMesh->GetTransform()->SetWorldScale(radius * Vector3d::one);
+}
+
+void UnitAcquisitionSphereCollider::SetColor(yunuGI::Color color)
+{
+    auto dm = debugMesh->GetComponent<DebugStaticMesh>();
+    dm->GetGI().GetMaterial()->SetColor(color);
+}
+
 void UnitAcquisitionSphereCollider::Update()
 {
     static std::vector<Unit*> foesToErase;
