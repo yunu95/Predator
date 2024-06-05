@@ -18,8 +18,8 @@ class HanselProjectileSkill : public Skill
 {
 private:
     coroutine::Coroutine ThrowingPie();
-    std::weak_ptr<UnitAcquisitionSphereCollider> pieCollider;
-    std::unordered_set<Unit*> onceCollidedUnits;
+    //std::weak_ptr<UnitAcquisitionSphereCollider> pieCollider;
+    //std::unordered_set<Unit*> onceCollidedUnits;
 
 public:
     HanselProjectileSkill() {}

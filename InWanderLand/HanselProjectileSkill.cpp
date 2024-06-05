@@ -16,13 +16,16 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie()
     Vector3d currentPos = startPos;
 
     coroutine::ForSeconds forSeconds{ static_cast<float>(deltaPos.Magnitude()) / pod.projectileSpeed };
-    pieCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+    auto pieCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
     auto pieObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Pie");
+    std::unordered_set<Unit*> onceCollidedUnits;
+    co_await std::suspend_always{};
 
     pieCollider.lock()->SetRadius(pod.projectileRadius);
     pieCollider.lock()->GetTransform()->SetWorldRotation(direction);
-    pieObject->GetTransform()->SetWorldRotation(direction);
-    pieObject->GetTransform()->SetWorldRotation(pieObject->GetTransform()->GetWorldRotation().Up() * -1);
+    //pieObject->GetTransform()->SetWorldRotation(direction);
+    pieObject->GetTransform()->SetWorldScale({3,3,3});
+    //pieObject->GetTransform()->SetWorldRotation(pieObject->GetTransform()->GetWorldRotation().Up() * -1);
     
     while (forSeconds.Tick())
     {
