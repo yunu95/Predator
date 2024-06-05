@@ -3,7 +3,12 @@
 
 struct POD_HanselChargeSkill
 {
-    
+    float	coolTime = 2.0f;
+    float	skillCost = 10.0f;
+    float	maxRange = 10.0f;
+    float	maxJumpHeight = 5.0f;
+    float   damage = 10.0f;
+    float   stompRadius = 10.0f;
 
     TO_JSON(POD_HanselChargeSkill)
     FROM_JSON(POD_HanselChargeSkill)
@@ -12,9 +17,9 @@ struct POD_HanselChargeSkill
 class HanselChargeSkill : public Skill
 {
 public:
-    Vector3d targetPos;
-    HanselChargeSkill(Vector3d targetPos) : targetPos(targetPos) {}
+    HanselChargeSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::HANSEL_Q; }
+    virtual float GetCastRange() override;
     virtual coroutine::Coroutine operator()()override;
 
     static POD_HanselChargeSkill pod;

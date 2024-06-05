@@ -7,18 +7,23 @@ POD_HanselChargeSkill HanselChargeSkill::pod = POD_HanselChargeSkill();
 #include <math.h>
 
 const float jumpTimingFrame = 35.0f;
-const float stompTimingFrame = 100.0f;
+const float stompTimingFrame = 91.0f;
+const float endFrame = 145.0f;
+const float	duration = 0.7f;
+
+float HanselChargeSkill::GetCastRange()
+{
+    return pod.maxRange;
+}
 
 coroutine::Coroutine HanselChargeSkill::operator()()
 {
-    const application::POD_GlobalConstant& gc = GlobalConstant::GetSingletonInstance().pod;
-
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 
     stompCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-    stompCollider.lock()->SetRadius(gc.hanselQSkillStompRadius);
+    stompCollider.lock()->SetRadius(pod.stompRadius);
 
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
@@ -26,36 +31,29 @@ coroutine::Coroutine HanselChargeSkill::operator()()
     owner.lock()->SetDesiredRotation(direction);
     Vector3d endPos = startPos + deltaPos;
     Vector3d currentPos = startPos;
-    ///
-    /// Animation 을 totalTime 이 되었을 때 내려 찍는 프레임이 되도록
-    /// 내려찍기 전까지 애니메이션을 멈췄다가 Resume 해주기.
-    ///
+
     owner.lock()->PlayAnimation(UnitAnimType::Skill1, false);
     auto animator = owner.lock()->GetAnimator();
 
-    float rushSpeed = static_cast<float>(deltaPos.Magnitude()) / gc.hanselQSkillDuration;
-    coroutine::ForSeconds forSeconds{ gc.hanselQSkillDuration };
+    float rushSpeed = static_cast<float>(deltaPos.Magnitude()) / duration;
+    coroutine::ForSeconds forSeconds{ duration };
 
     // y = vy0 * t - 0.5 * a * t^2
     // y가 0일 때, t는 Duration이고, t = Duration / 2 일 때, y는 jumpDistance.
-    // 연립방정식 풀면, a = (8 * jumpDistance) / Duration^2
+    // 연립방정식 풀면,
+    // a = (8 * jumpDistance) / Duration^2
     // vy0 = 4 * jumpDistance / Duration
 
-    float vy0 = 4 * gc.hanselQSkillMaxJumpDistance / gc.hanselQSkillDuration;
-    float acc = (8 * gc.hanselQSkillMaxJumpDistance) / (gc.hanselQSkillDuration * gc.hanselQSkillDuration);
-
-
+    float vy0 = 4 * pod.maxJumpHeight / duration;
+    float acc = (8 * pod.maxJumpHeight) / (duration * duration);
     while (jumpTimingFrame >= animator.lock()->GetCurrentFrame())
     {
         co_await std::suspend_always{};
     }
 
-    //animator.lock()->Pause();
-
     bool isAnimationOncePaused = false;
     bool isAnimationOnceResumed = false;
     float yPos = 0.0f;
-
     while (forSeconds.Tick())
     {
         stompCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
@@ -72,12 +70,8 @@ coroutine::Coroutine HanselChargeSkill::operator()()
 
     for (auto each : stompCollider.lock()->GetEnemies())
     {
-        each->Damaged(owner, gc.hanselQSkillStompDamage);
+        each->Damaged(owner, pod.damage);
     }
-
-    ///
-    /// Animation 의 PlaySpeed 를 원래대로 회복하는 로직
-    ///
     
     while (stompTimingFrame >= animator.lock()->GetCurrentFrame())
     {
@@ -86,8 +80,19 @@ coroutine::Coroutine HanselChargeSkill::operator()()
 
     for (auto each : stompCollider.lock()->GetEnemies())
     {
-        each->Damaged(owner, gc.hanselQSkillStompDamage);
+        each->Damaged(owner, pod.damage);
     }
+
+    while (endFrame - 1 >= animator.lock()->GetCurrentFrame())
+    {
+        float temp = animator.lock()->GetCurrentFrame();
+        co_await std::suspend_always{};
+    }
+
+    //while (!animator.lock()->IsDone())
+    //{
+    //    co_await std::suspend_always{};
+    //}
 
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
