@@ -21,6 +21,5 @@ protected:
 	Vector3d targetPos;
 	bool isDone;
 
-
 };
 
