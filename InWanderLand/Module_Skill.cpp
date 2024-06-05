@@ -57,7 +57,7 @@ namespace application
 			static auto spacing = ImGui::GetStyle().ItemSpacing;
 
 			static int idx = 0;
-			imgui::BeginSection_2Col(idx, "##ModuleSkill", ImGui::GetContentRegionAvail().x, 0.2f);
+			imgui::BeginSection_2Col(idx, "Skill Module", ImGui::GetContentRegionAvail().x, 0.2f);
 			imgui::DropdownEnum_2Col("Selected Skill", selectedSkill);
 			auto region = ImGui::GetContentRegionAvail();
 			imgui::ShiftCursorY(10);

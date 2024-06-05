@@ -28,7 +28,7 @@ namespace application
 
 		void SkillManager::Clear()
 		{
-			list.clear();
+			/// 예외적으로 재활용하는 방식을 사용합니다.
 		}
 
 		bool SkillManager::PreEncoding(json& data) const
@@ -39,7 +39,7 @@ namespace application
 				uuidStr = UUID_To_String(uuid);
 
 				data["SkillList"][uuidStr]["type"] = (int)ptr->type;
-				if (!ptr->PreEncoding(data["InstanceList"][uuidStr]["0_Pre"]))
+				if (!ptr->PreEncoding(data["SkillList"][uuidStr]["0_Pre"]))
 				{
 					return false;
 				}
@@ -79,12 +79,19 @@ namespace application
 			{
 				uuid = String_To_UUID(uuidStr);
 
-				auto temp = std::make_shared<Skill_Instance>();
-				temp->type = (SkillType::Enum)skillData["type"];
-				temp->SetUUID(uuid);
-				list[uuid] = temp;
+				for (auto& [tempUuid, instance] : list)
+				{
+					if (instance->type == (SkillType::Enum)skillData["type"])
+					{
+						auto sptr = instance;
+						list.erase(tempUuid);
+						sptr->SetUUID(uuid);
+						list[uuid] = sptr;
+						break;
+					}
+				}
 
-				if (!temp->PreDecoding(skillData["0_Pre"]))
+				if (!list[uuid]->PreDecoding(skillData["0_Pre"]))
 				{
 					Clear();
 					return false;
