@@ -233,6 +233,7 @@ void PlayerController::OnLeftClick()
     else
     {
         ActivateSkill(selectedSkill, GetWorldCursorPosition());
+        selectedSkill = SkillType::NONE;
     }
 }
 

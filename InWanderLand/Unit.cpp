@@ -185,18 +185,26 @@ void Unit::OnStateEngage<UnitBehaviourTree::Skill>()
     currentOrderType = UnitOrderType::Skill;
 }
 template<>
-void Unit::OnStateUpdate<UnitBehaviourTree::Skill>()
+void Unit::OnStateUpdate<UnitBehaviourTree::SkillCasting>()
 {
-    if (coroutineSkill.expired() && pendingSkill.get())
+    if (coroutineSkill.expired())
     {
-        assert(pendingSkill.get() != nullptr);
-        SetDesiredRotation(pendingSkill.get()->targetPos - GetTransform()->GetWorldPosition());
-        onGoingSkill = std::move(pendingSkill);
-        coroutineSkill = StartCoroutine(onGoingSkill.get()->operator()());
+        if (pendingSkill.get())
+        {
+            assert(pendingSkill.get() != nullptr);
+            SetDesiredRotation(pendingSkill.get()->targetPos - GetTransform()->GetWorldPosition());
+            onGoingSkill = std::move(pendingSkill);
+            coroutineSkill = StartCoroutine(onGoingSkill.get()->operator()());
+        }
+        else
+        {
+            onGoingSkill.reset();
+            OrderAttackMove(GetTransform()->GetWorldPosition());
+        }
     }
 }
 template<>
-void Unit::OnStateExit<UnitBehaviourTree::Skill>()
+void Unit::OnStateExit<UnitBehaviourTree::SkillCasting>()
 {
     onStateExit[UnitBehaviourTree::Skill]();
     DeleteCoroutine(coroutineSkill);
@@ -750,13 +758,40 @@ void Unit::InitBehaviorTree()
         {
             OnStateEngage<UnitBehaviourTree::Skill>();
         };
-    unitBehaviourTree[UnitBehaviourTree::Skill].onUpdate = [this]()
+    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillCasting].enteringCondtion = [this]()
         {
-            OnStateUpdate<UnitBehaviourTree::Skill>();
+            return !coroutineSkill.expired() ||
+                onGoingSkill.get() ||
+                (pendingSkill.get() != nullptr && DistanceTo(pendingSkill.get()->targetPos) < pendingSkill.get()->GetCastRange());
         };
-    unitBehaviourTree[UnitBehaviourTree::Skill].onExit = [this]()
+    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillCasting].onEnter = [this]()
         {
-            OnStateExit<UnitBehaviourTree::Skill>();
+            OnStateEngage<UnitBehaviourTree::SkillCasting>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillCasting].onUpdate = [this]()
+        {
+            OnStateUpdate<UnitBehaviourTree::SkillCasting>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillCasting].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::SkillCasting>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::Move].enteringCondtion = [this]()
+        {
+            return true;
+        };
+    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::Move].onEnter = [this]()
+        {
+            moveDestination = pendingSkill.get()->targetPos;
+            OnStateEngage<UnitBehaviourTree::Move>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::Move].onUpdate = [this]()
+        {
+            OnStateUpdate<UnitBehaviourTree::Move>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::Move].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Move>();
         };
 
     unitBehaviourTree[UnitBehaviourTree::Chasing].enteringCondtion = [this]()
@@ -878,7 +913,8 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Move].enteringCondtion = [this]()
         {
-            return !acquisitionRange.lock()->GetEnemies().empty();
+            constexpr float epsilon = 0.001f;
+            return !acquisitionRange.lock()->GetEnemies().empty() || (attackMoveDestination - GetTransform()->GetWorldPosition()).Magnitude() > epsilon;
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Move].onEnter = [this]()
         {
@@ -922,6 +958,10 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
     blockCommand.reset();
     StartCoroutine(referenceBlockAttack.AcquireForSecondsCoroutine(unitTemplateData->pod.m_atkCooltime - unitTemplateData->pod.m_attackPostDelay - unitTemplateData->pod.m_attackPreDelay));
     co_return;
+}
+float Unit::DistanceTo(const Vector3d& target)
+{
+    return (GetTransform()->GetWorldPosition() - target).Magnitude();
 }
 const editor::Unit_TemplateData& Unit::GetUnitTemplateData()const
 {

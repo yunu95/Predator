@@ -111,7 +111,10 @@ public:
     Reference referenceBlockRotation;
     Reference referenceInvulnerable;
     Reference referenceBlockAttack;
+    // NavAgent 객체를 아예 비활성화함.
     Reference referenceDisableNavAgent;
+    // NavObstacle 객체를 활성화함.
+    Reference referenceEnableNavObstacle;
 
     std::weak_ptr<yunutyEngine::graphics::Animator> GetAnimator() { return animatorComponent; }
 private:
@@ -136,10 +139,10 @@ private:
     // 상대 유닛에 대해 다가가서 때리기 좋은 위치를 반환합니다.
     Vector3d GetAttackPosition(std::weak_ptr<Unit> opponent);
     yunutyEngine::coroutine::Coroutine AttackCoroutine(std::weak_ptr<Unit> opponent);
+    float DistanceTo(const Vector3d& target);
     UnitBehaviourTree unitBehaviourTree;
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateEngage;
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateExit;
-    Reference referenceEnableNavObstacle;
     std::shared_ptr<Reference::Guard> enableNavObstacle;
     std::shared_ptr<Reference::Guard> disableNavAgent;
     // 공격범위와 적 포착범위
