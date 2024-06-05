@@ -1033,12 +1033,14 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="AnimationEventManager.h" />
     <ClInclude Include="AnimationEvents.h" />
     <ClInclude Include="AttackMoveController.h" />
+    <ClInclude Include="BehaviourTree.h" />
     <ClInclude Include="DelegateCallback.h" />
     <ClInclude Include="EnemyImpaleSkill.h" />
     <ClInclude Include="Factor.h" />
     <ClInclude Include="HanselChargeSkill.h" />
     <ClInclude Include="HanselProjectileSkill.h" />
     <ClInclude Include="FBXPool.h" />
+    <ClInclude Include="MoveEndPreviewPool.h" />
     <ClInclude Include="Multiplier.h" />
     <ClInclude Include="ProjectilePool.h" />
     <ClInclude Include="Reference.h" />
@@ -1932,6 +1934,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UISpriteAnimation.h" />
     <ClInclude Include="UnitAcquisitionSphereCollider.h" />
     <ClInclude Include="UnitAttackType.h" />
+    <ClInclude Include="UnitBehaviourTree.h" />
     <ClInclude Include="UnitBuff.h" />
     <ClInclude Include="UnitBuffBleeding.h" />
     <ClInclude Include="UnitCommand.h" />
@@ -2249,6 +2252,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="LocalTimeEntity.cpp" />
     <ClCompile Include="LocalTimeEntityManager.cpp" />
     <ClCompile Include="LinearClippingTimer.cpp" />
+    <ClCompile Include="MoveEndPreviewPool.cpp" />
     <ClCompile Include="ObservationTarget.cpp" />
     <ClCompile Include="ParticleBrush.cpp" />
     <ClCompile Include="ParticleData.cpp" />

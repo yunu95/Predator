@@ -86,6 +86,8 @@ namespace yunuGIAdapter
 
 		virtual void SetMaterial(unsigned int index, yunuGI::IMaterial* material, bool isOrigin = false) override
 		{
+			material = (material)->GetMaterial();
+
 			// 새로운 Material이라면
 			if (index + 1 > this->materialVec.size())
 			{
@@ -152,8 +154,14 @@ namespace yunuGIAdapter
 		};
 		virtual yunuGI::IMaterial* GetMaterial(unsigned int index = 0, bool isInstance = true)override
 		{
-			//return this->materialVec[index]->GetVariation(isInstance);
-			return this->materialVec[index].get();
+			if (isInstance)
+			{
+				return this->materialVec[index].get();
+			}
+			else
+			{
+				return this->materialVec[index].get()->GetMaterial();
+			}
 		};
 
 

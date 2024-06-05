@@ -19,10 +19,11 @@ void FBXPool::Return(std::weak_ptr<ManagedFBX> fbx)
     poolsByFBX.at(fbx.lock().get()).lock()->Return(fbx);
 }
 
-void FBXPool::PoolByMesh::ObjectInitializer(std::weak_ptr<ManagedFBX> projectile)
+void FBXPool::PoolByMesh::ObjectInitializer(std::weak_ptr<ManagedFBX> mesh)
 {
     auto gameObj = Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName);
-    FBXPool::SingleInstance().poolsByFBX[projectile.lock().get()] = FBXPool::SingleInstance().poolsByMeshName.at(fbxName);
+    gameObj->SetParent(mesh.lock()->GetGameObject());
+    FBXPool::SingleInstance().poolsByFBX[mesh.lock().get()] = FBXPool::SingleInstance().poolsByMeshName.at(fbxName);
 }
 
 void ManagedFBX::OnContentsStop()

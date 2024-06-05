@@ -16,7 +16,9 @@ namespace yunutyEngine
         class YUNUTY_API Random
         {
         public:
-            static int GetRandomInt(int min,int max);
+            static int GetRandomInt(int min, int max);
+            static float GetRandomFloat(float min, float max);
+            static float GetRandomFloat(float amplitude);
         private:
             Random();
             static Random* SingleInstance();

@@ -66,8 +66,7 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
     else
     {
         if (fbxNode->materialVec.size() != 0)
-        {
-            auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::SkinnedMesh>();
+        {            auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::SkinnedMesh>();
             auto mesh = graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(fbxNode->meshName);
             renderer->GetGI().SetMesh(mesh);
             renderer->GetGI().SetBone(std::wstring{ fbxName.begin(), fbxName.end() });

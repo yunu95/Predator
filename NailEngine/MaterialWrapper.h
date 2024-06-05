@@ -46,11 +46,34 @@ public:
 
 	virtual void SetPixelShader(const yunuGI::IShader* shader) override
 	{
+		if (renderable->IsStatic() == false)
+		{
+			if (static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]->renderInfo.material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+			{
+				InstancingManager::Instance.Get().PopSkinnedDeferredData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
+			}
+			else
+			{
+				InstancingManager::Instance.Get().PopSkinnedForwardData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
+			}
+		}
+
 		GetVariation()->SetPixelShader(shader);
 
 		if (renderable->IsStatic())
 		{
 			RenderSystem::Instance.Get().ReSortRenderInfo(renderable.get(), this->index);
+		}
+		else
+		{
+			if (static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]->renderInfo.material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+			{
+				InstancingManager::Instance.Get().RegisterSkinnedDeferredData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
+			}
+			else
+			{
+				InstancingManager::Instance.Get().RegisterSkinnedForwardData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
+			}
 		}
 	};
 
@@ -98,7 +121,7 @@ public:
 	{
 		return nullptr;
 	};
-	Material* GetMaterial()
+	virtual yunuGI::IMaterial* GetMaterial() override
 	{
 		if (usingOriginal)
 			return original;
@@ -146,7 +169,6 @@ public:
 					}
 				}
 
-
 				yunuGI::IMaterial* tempMaterial = ResourceManager::Instance.Get().GetInstanceMaterial(original->GetName()).get();
 				if (tempMaterial)
 				{
@@ -157,7 +179,7 @@ public:
 
 					if (renderable->IsStatic() == false)
 					{
-						InstancingManager::Instance.Get().PopSkinnedData(std::static_pointer_cast<SkinnedMesh>(renderable)->renderInfoVec[this->index]);
+						InstancingManager::Instance.Get().PopSkinnedDeferredData(std::static_pointer_cast<SkinnedMesh>(renderable)->renderInfoVec[this->index]);
 					}
 
 					variation = ResourceManager::Instance.Get().CreateInstanceMaterial(original);

@@ -31,6 +31,7 @@ using namespace DirectX::PackedVector;
 
 #include "ModelLoader.h"
 #include "Video.h"
+#include "MaterialWrapper.h"
 
 
 
@@ -291,6 +292,7 @@ Material* ResourceManager::CreateInstanceMaterial(const Material* material)
 
 yunuGI::IMaterial* ResourceManager::CloneMaterial(std::wstring materialName, yunuGI::IMaterial* material)
 {
+    material = (material)->GetMaterial();
     if (this->materialMap.find(materialName) != this->materialMap.end())
     {
         return this->materialMap[materialName].get();
@@ -448,7 +450,28 @@ void ResourceManager::LoadVFXFrameInfo(const std::wstring& vfxPath)
             locationVec.push_back(info);
         }
 
-        this->vfxFrameInfoMap.insert({ wMaterialName,{frameRate, locationVec} });
+        // 비어있는 프레임을 채우는 부분
+        std::vector<yunuGI::VFXInfo> frameVec;
+        frameVec.resize(locationVec.back().frame + 1);
+        for (int i = 0; i < locationVec.size() - 1; ++i)
+        {
+            int curFrameCount = locationVec[i].frame;
+            int nextFrameCount = locationVec[i + 1].frame;
+            int totalFrame = nextFrameCount - curFrameCount;
+
+            int count = 0;
+            for (int j = curFrameCount; j < nextFrameCount; ++j)
+            {
+                float ratio = ((float)count / totalFrame);
+
+                auto lerpLocation = yunuGI::Vector2::Lerp(locationVec[i].location, locationVec[i+1].location, ratio);
+                frameVec[j].frame = j;
+                frameVec[j].location = lerpLocation;
+                count++;
+            }
+        }
+
+        this->vfxFrameInfoMap.insert({ wMaterialName,{frameRate, frameVec} });
         locationVec.clear();
 	}
 }
@@ -691,6 +714,13 @@ FBXNode* ResourceManager::GetFBXNode(const std::wstring& fbxName)
 
 std::pair<float, std::vector<yunuGI::VFXInfo>>& ResourceManager::GetVFXInfo(const std::wstring& materialName) 
 {
+    size_t pos = materialName.find(L"_instance");
+    if (pos != std::wstring::npos)
+    {
+        std::wstring result = materialName.substr(0, pos);
+        return this->vfxFrameInfoMap[result];
+    }
+
     return this->vfxFrameInfoMap[materialName];
 }
 
@@ -1052,6 +1082,7 @@ void ResourceManager::CreateDefaultShader()
     CreateShader(L"Skinned_PointLightShadowVS.cso");
     CreateShader(L"ParticleVS.cso");
     CreateShader(L"TextureAnimVS.cso");
+    CreateShader(L"SkinnedVFX_VS.cso");
 #pragma endregion
 
 #pragma region PS
@@ -1080,6 +1111,7 @@ void ResourceManager::CreateDefaultShader()
     CreateShader(L"RimForwardPS.cso");
     CreateShader(L"GuideLinePS.cso");
     CreateShader(L"Stage1FloorNoBlendPS.cso");
+	CreateShader(L"VFX_PS.cso");
 #pragma endregion
 
 #pragma region GS

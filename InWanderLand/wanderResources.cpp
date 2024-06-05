@@ -94,12 +94,12 @@ yunuGI::IAnimation* wanderResources::GetAnimation(const std::string& fbx, UnitAn
         InitAnimMap();
     return animMap.at(fbx).at(animType);
 }
-constexpr const std::string& wanderResources::GetFBXName(WanderFBX::Enum fbxType)
+constexpr const std::string wanderResources::GetFBXName(WanderFBX::Enum fbxType)
 {
     switch (fbxType)
     {
     case wanderResources::WanderFBX::None: return "";
-    case wanderResources::WanderFBX::IMPALING_SPIKE: return "";
+    case wanderResources::WanderFBX::IMPALING_SPIKE: return "SM_Spike02";
     case wanderResources::WanderFBX::NUM: return "";
     default:
         break;

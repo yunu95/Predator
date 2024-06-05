@@ -198,7 +198,7 @@ void RenderSystem::Render()
     RenderObject();
 
     // 스킨드 오브젝트 렌더
-    RenderSkinned();
+    RenderSkinnedDeferred();
 
     // 그림자 맵 생성
     RenderShadow();
@@ -214,6 +214,7 @@ void RenderSystem::Render()
     // Final 출력
     RenderFinal();
     RenderForward();
+    RenderSkinnedForward();
     RenderParticle();
     RenderBackBuffer();
 
@@ -253,7 +254,7 @@ void RenderSystem::RenderObject()
     InstancingManager::Instance.Get().RenderStaticDeferred();
 }
 
-void RenderSystem::RenderSkinned()
+void RenderSystem::RenderSkinnedDeferred()
 {
     MatrixBuffer matrixBuffer;
     //matrixBuffer.WTM = e.wtm;
@@ -264,7 +265,21 @@ void RenderSystem::RenderSkinned()
     //matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
     NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
-    InstancingManager::Instance.Get().RenderSkinned();
+    InstancingManager::Instance.Get().RenderSkinnedDeferred();
+}
+
+void RenderSystem::RenderSkinnedForward()
+{
+	MatrixBuffer matrixBuffer;
+	//matrixBuffer.WTM = e.wtm;
+	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
+	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
+	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
+
+	InstancingManager::Instance.Get().RenderSkinnedForward();
 }
 
 void RenderSystem::RenderShadow()
@@ -752,7 +767,7 @@ void RenderSystem::PopSkinnedRenderableObject(nail::IRenderable* renderable)
 {
     for (int i = 0; i < static_cast<SkinnedMesh*>(renderable)->renderInfoVec.size(); ++i)
     {
-        InstancingManager::Instance.Get().PopSkinnedData(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[i]);
+        InstancingManager::Instance.Get().PopSkinnedDeferredData(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[i]);
         this->skinnedSet.erase(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[i]);
     }
 
@@ -867,7 +882,7 @@ void RenderSystem::RegisterSkinnedRenderInfo(nail::IRenderable* renderable, std:
         skinnedMeshRenderInfoMap[renderable].emplace_back(renderInfo);
         skinnedSet.insert(renderInfo);
 
-        InstancingManager::Instance.Get().RegisterSkinnedData(renderInfo);
+        InstancingManager::Instance.Get().RegisterSkinnedDeferredData(renderInfo);
     }
 }
 
