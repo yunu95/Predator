@@ -45,11 +45,6 @@ namespace application
         GC<float>	bossSkillFourDelay = 0.0f;
         GC<int>		bossSkillFourTimingFrame = 15;
 
-        GC<float>	spikeTrapSkillDelay = 3.0f;
-        GC<float>	chessTrapSkillDelay = 2.0f;
-        GC<float>	triggeredTrapSkillDelay;
-        GC<int>		triggeredTrapSkillTimingFrame;
-
         GC<float>	robinQSkillCoolTime = 2.0f;
         GC<float>	robinQSkillCost = 10.0f;
         GC<float>	robinQSkillMaxDistance = 8.0f;
@@ -63,28 +58,6 @@ namespace application
         GC<float>	robinQSkillImpactStunDuration = 2.0f;
         GC<float>	robinQSkillRushKnockbackRadius = 1.0f;
         GC<float>	robinQSkillImpactKnockbackRadius = 5.0f;
-        GC<float>	robinESkillCoolTime = 2.0f;
-        GC<float>	robinESkillCost = 10.0f;
-        GC<float>	robinESkillRadius = 6.0f;
-        GC<float>	robinESkillDamage = 5.0f;
-        GC<float>	robinESkillPlayTime = 2.0f;
-        GC<float>	robinESkillTauntTime = 3.0f;
-
-        GC<float>	ursulaQSkillCoolTime = 2.0f;
-        GC<float>	ursulaQSkillCost = 10.0f;
-        GC<float>	ursulaQSkillRadius = 3.f;
-        GC<float>	ursulaQSkillProjectileSpeed = 15.f;
-        GC<float>	ursulaQSkillBlindDuration = 3.0f;
-        GC<float>	ursulaQSkillFieldDuration = 3.0f;
-        GC<float>	ursulaQSkillFieldDamagePerTick = 1.0f;
-        GC<float>	ursulaQSkillFieldDamageInterval = 0.3f;
-        GC<float>	ursulaESkillCoolTime = 2.0f;
-        GC<float>	ursulaESkillCost = 10.0f;
-        GC<float>	ursulaESkillDamageInterval = 0.3f;
-        GC<float>	ursulaESkillDamagePerTick = 1.0f;
-        GC<float>	ursulaESkillStunDuration = 1.0f;
-        GC<float>	ursulaESkillPullingDuration = 0.5f;
-        GC<float>	ursulaESkillRadius = 4.f;
 
         GC<float>	hanselQSkillCoolTime = 2.0f;
         GC<float>	hanselQSkillCost = 10.0f;
