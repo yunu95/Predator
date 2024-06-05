@@ -18,6 +18,7 @@ enum class UnitAnimType
     Skill4,  // 스킬4
     Birth,  // 탄생 혹은 부활
     Rush,   // 돌진
+    Throw,
     BattleStart,  // 전투 시작
     BattleEnd,   // 전투 끝
     End
