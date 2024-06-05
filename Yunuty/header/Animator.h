@@ -24,7 +24,7 @@ namespace yunutyEngine::graphics
         std::function<void()> func;
     };
 
-	class YUNUTY_API Animator : public Renderable<yunuGI::IAnimator>
+    class YUNUTY_API Animator : public Renderable<yunuGI::IAnimator>
     {
     protected:
     public:
@@ -32,14 +32,15 @@ namespace yunutyEngine::graphics
         yunuGI::IAnimator& GetGI() { return Renderable<yunuGI::IAnimator>::GetGI(); }
         Animator();
         void Update();
-		virtual void OnDisable() override;
-		virtual void OnEnable() override;
-		virtual ~Animator() {};
-		void Pause();
-		void Play(yunuGI::IAnimation* animation);
-		void PushAnimation(yunuGI::IAnimation* animation);
-		void SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame);
-		void ChangeAnimation(yunuGI::IAnimation* animation, float transitionDuration, float transitionSpeed);
+        virtual void OnDisable() override;
+        virtual void OnEnable() override;
+        virtual ~Animator() {};
+        void Pause();
+        void Resume();
+        void Play(yunuGI::IAnimation* animation);
+        void PushAnimation(yunuGI::IAnimation* animation);
+        void SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame);
+        void ChangeAnimation(yunuGI::IAnimation* animation, float transitionDuration, float transitionSpeed);
 
         /// isPlay 값을 리턴합니다.
         bool IsPlaying() { return isPlay; }
@@ -65,6 +66,5 @@ namespace yunutyEngine::graphics
         unsigned long long functorIndex = 1;
     };
 }
-
 
 
