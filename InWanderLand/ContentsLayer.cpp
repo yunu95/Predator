@@ -208,8 +208,18 @@ void GraphicsTest()
 
 	//}
 	// 
+	for(int i =0; i <10;++i)
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Pie");
+		for (int j = 0; j < 10; ++j)
+		{
+			auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Pie");
+			obj2->GetTransform()->SetLocalPosition(Vector3d{ (double)2 * i,0,(double)2*j});
+		}
+	}
+	{
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Hansel");
+		obj2->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-5 });
+		auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
 	}
 	// 
 	//{
@@ -239,6 +249,7 @@ void GraphicsTest()
 	//	obj2->SetParent(parent);
 	//	obj3->SetParent(parent);
 	//}
+	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 	yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
 	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 }
