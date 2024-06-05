@@ -88,6 +88,7 @@ namespace application
             editorModuleList[(int)Module_List::GlobalConstant] = &Module_GlobalConstant::GetSingletonInstance();
             editorModuleList[(int)Module_List::TemplateDataEditor] = &Module_TemplateDataEditor::GetSingletonInstance();
             editorModuleList[(int)Module_List::ScriptEditor] = &Module_ScriptEditor::GetSingletonInstance();
+            editorModuleList[(int)Module_List::Skill] = &Module_Skill::GetSingletonInstance();
 
             for (auto& each : editorPanelList)
             {
@@ -134,6 +135,11 @@ namespace application
                 if (eim.IsKeyboardPressed(KeyCode::F4))
                 {
                     editorModuleList[(int)Module_List::ScriptEditor]->SetActivation(!editorModuleList[(int)Module_List::ScriptEditor]->GetActivation());
+                }
+
+                if (eim.IsKeyboardPressed(KeyCode::F5))
+                {
+                    editorModuleList[(int)Module_List::Skill]->SetActivation(!editorModuleList[(int)Module_List::Skill]->GetActivation());
                 }
 
                 /// Ctrl 조합
@@ -507,6 +513,19 @@ namespace application
                     else
                     {
                         editorModuleList[(int)Module_List::ScriptEditor]->SetActivation(true);
+                    }
+                }
+
+                bool ske = editorModuleList[(int)Module_List::Skill]->GetActivation();
+                if (ImGui::MenuItem("Skill Editor", "F5", ske))
+                {
+                    if (ske)
+                    {
+                        editorModuleList[(int)Module_List::Skill]->SetActivation(false);
+                    }
+                    else
+                    {
+                        editorModuleList[(int)Module_List::Skill]->SetActivation(true);
                     }
                 }
 

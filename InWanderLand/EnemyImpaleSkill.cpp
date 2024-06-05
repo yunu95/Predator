@@ -1,6 +1,8 @@
 #include "InWanderLand.h"
 #include "EnemyImpaleSkill.h"
 
+POD_EnemyImpaleSkill EnemyImpaleSkill::pod = POD_EnemyImpaleSkill();
+
 struct Spear
 {
     Vector2d position;
