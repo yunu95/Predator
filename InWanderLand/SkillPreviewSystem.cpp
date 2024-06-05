@@ -21,6 +21,10 @@
 #define URSULA_W_TEXTURE L"Texture/circle.png"
 #define HANSEL_Q_TEXTURE L"Texture/circle.png"
 
+#define ROBIN_COLOR yunuGI::Color{ 1,0,0,1 }
+#define URSULA_COLOR yunuGI::Color{ 0.545,0,1,1 }
+#define HANSEL_COLOR yunuGI::Color{ 1,0.5,0,1 }
+
 
 
 void SkillPreviewSystem::Start()
@@ -90,7 +94,7 @@ void SkillPreviewSystem::Init()
 		arrowRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
 		arrowRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
 		arrowRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, arrowHeadTexture);
-		arrowRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,1 });
+		arrowRenderer->GetGI().GetMaterial()->SetColor(ROBIN_COLOR);
 
 		auto arrowBody = Scene::getCurrentScene()->AddGameObjectFromFBX("Guideline");
 		arrowBody->SetParent(this->robinQSkillPreviewObj);
@@ -98,7 +102,7 @@ void SkillPreviewSystem::Init()
 		bodyRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
 		bodyRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
 		bodyRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, arrowBodyTexture);
-		bodyRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,1 });
+		bodyRenderer->GetGI().GetMaterial()->SetColor(ROBIN_COLOR);
 
 		this->robinQSkillPreviewObj->SetSelfActive(false);
 	}
@@ -116,7 +120,7 @@ void SkillPreviewSystem::Init()
 			circleOneRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
 			circleOneRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
 			circleOneRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, robinWSkillTexture);
-			circleOneRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,1 });
+			circleOneRenderer->GetGI().GetMaterial()->SetColor(ROBIN_COLOR);
 		}
 		this->robinWSkillPreviewObj->SetSelfActive(false);
 	}
@@ -134,7 +138,7 @@ void SkillPreviewSystem::Init()
 			circleOneRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
 			circleOneRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
 			circleOneRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, ursulaQSkillTexture);
-			circleOneRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,1 });
+			circleOneRenderer->GetGI().GetMaterial()->SetColor(URSULA_COLOR);
 		}
 		{
 			auto circleTwo = Scene::getCurrentScene()->AddGameObject();
@@ -145,7 +149,7 @@ void SkillPreviewSystem::Init()
 			circleTwoRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
 			circleTwoRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
 			circleTwoRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, ursulaQSkillTexture);
-			circleTwoRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,1 });
+			circleTwoRenderer->GetGI().GetMaterial()->SetColor(URSULA_COLOR);
 		}
 		{
 			auto circleThree = Scene::getCurrentScene()->AddGameObject();
@@ -156,7 +160,7 @@ void SkillPreviewSystem::Init()
 			circleThreeRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
 			circleThreeRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
 			circleThreeRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, ursulaQSkillTexture);
-			circleThreeRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,1 });
+			circleThreeRenderer->GetGI().GetMaterial()->SetColor(URSULA_COLOR);
 		}
 		this->ursulaQSkillPreviewObj->SetSelfActive(false);
 	}
@@ -174,7 +178,7 @@ void SkillPreviewSystem::Init()
 			circleOneRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
 			circleOneRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
 			circleOneRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, ursulaWSkillTexture);
-			circleOneRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,1 });
+			circleOneRenderer->GetGI().GetMaterial()->SetColor(URSULA_COLOR);
 		}
 		this->ursulaWSkillPreviewObj->SetSelfActive(false);
 	}
@@ -190,7 +194,7 @@ void SkillPreviewSystem::Init()
 			arrowRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
 			arrowRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
 			arrowRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, arrowHeadTexture);
-			arrowRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,1 });
+			arrowRenderer->GetGI().GetMaterial()->SetColor(HANSEL_COLOR);
 		}
 		{
 			auto arrowBody = Scene::getCurrentScene()->AddGameObjectFromFBX("Guideline");
@@ -199,7 +203,7 @@ void SkillPreviewSystem::Init()
 			bodyRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
 			bodyRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
 			bodyRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, arrowBodyTexture);
-			bodyRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,1 });
+			bodyRenderer->GetGI().GetMaterial()->SetColor(HANSEL_COLOR);
 		}
 
 		{
@@ -211,7 +215,7 @@ void SkillPreviewSystem::Init()
 			circleOneRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
 			circleOneRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
 			circleOneRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, hanselQSkillTexture);
-			circleOneRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,1 });
+			circleOneRenderer->GetGI().GetMaterial()->SetColor(HANSEL_COLOR);
 		}
 		this->hanselQSkillPreviewObj->SetSelfActive(false);
 	}
@@ -226,7 +230,7 @@ void SkillPreviewSystem::Init()
 		arrowRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
 		arrowRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
 		arrowRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, arrowHeadTexture);
-		arrowRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,1 });
+		arrowRenderer->GetGI().GetMaterial()->SetColor(HANSEL_COLOR);
 
 		auto arrowBody = Scene::getCurrentScene()->AddGameObjectFromFBX("Guideline");
 		arrowBody->SetParent(this->hanselWSkillPreviewObj);
@@ -234,7 +238,7 @@ void SkillPreviewSystem::Init()
 		bodyRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
 		bodyRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
 		bodyRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, arrowBodyTexture);
-		bodyRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,1 });
+		bodyRenderer->GetGI().GetMaterial()->SetColor(HANSEL_COLOR);
 
 		this->hanselWSkillPreviewObj->SetSelfActive(false);
 	}
@@ -469,17 +473,17 @@ void SkillPreviewSystem::ShowTemporaryRoute(UnitType unitType, std::vector<Vecto
 	{
 		case SkillPreviewSystem::UnitType::Robin:
 		{
-			this->temporaryRouteMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,1 });
+			this->temporaryRouteMeshRenderer->GetGI().GetMaterial()->SetColor(ROBIN_COLOR);
 		}
 		break;
 		case SkillPreviewSystem::UnitType::Ursula:
 		{
-			this->temporaryRouteMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,1 });
+			this->temporaryRouteMeshRenderer->GetGI().GetMaterial()->SetColor(URSULA_COLOR);
 		}
 		break;
 		case SkillPreviewSystem::UnitType::Hansel:
 		{
-			this->temporaryRouteMeshRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,1 });
+			this->temporaryRouteMeshRenderer->GetGI().GetMaterial()->SetColor(HANSEL_COLOR);
 		}
 		break;
 		default:
@@ -505,17 +509,17 @@ yunuGI::IMesh* SkillPreviewSystem::ShowRoute(UnitType unitType, std::vector<Vect
 	{
 		case SkillPreviewSystem::UnitType::Robin:
 		{
-			renderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,0.3 });
+			renderer.lock()->GetGI().GetMaterial()->SetColor(ROBIN_COLOR);
 		}
 		break;
 		case SkillPreviewSystem::UnitType::Ursula:
 		{
-			renderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,0.3 });
+			renderer.lock()->GetGI().GetMaterial()->SetColor(URSULA_COLOR);
 		}
 		break;
 		case SkillPreviewSystem::UnitType::Hansel:
 		{
-			renderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,0.3 });
+			renderer.lock()->GetGI().GetMaterial()->SetColor(HANSEL_COLOR);
 		}
 		break;
 		default:
@@ -557,17 +561,17 @@ void SkillPreviewSystem::ShowSkillMaxRange(UnitType unitType, Vector3d pos, floa
 	{
 		case SkillPreviewSystem::UnitType::Robin:
 		{
-			skillMaxRangePreviewRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,0.3 });
+			skillMaxRangePreviewRenderer->GetGI().GetMaterial()->SetColor(ROBIN_COLOR);
 		}
 		break;
 		case SkillPreviewSystem::UnitType::Ursula:
 		{
-			skillMaxRangePreviewRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,0.3 });
+			skillMaxRangePreviewRenderer->GetGI().GetMaterial()->SetColor(URSULA_COLOR);
 		}
 		break;
 		case SkillPreviewSystem::UnitType::Hansel:
 		{
-			skillMaxRangePreviewRenderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,0.3 });
+			skillMaxRangePreviewRenderer->GetGI().GetMaterial()->SetColor(HANSEL_COLOR);
 		}
 		break;
 		default:
@@ -593,17 +597,17 @@ void SkillPreviewSystem::ShowMoveEndImage(UnitType unitType, Vector3d pos, yunuG
 	{
 		case SkillPreviewSystem::UnitType::Robin:
 		{
-			moveEndRenderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,0.3 });
+			moveEndRenderer.lock()->GetGI().GetMaterial()->SetColor(ROBIN_COLOR);
 		}
 		break;
 		case SkillPreviewSystem::UnitType::Ursula:
 		{
-			moveEndRenderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0.545,0,1,0.3 });
+			moveEndRenderer.lock()->GetGI().GetMaterial()->SetColor(URSULA_COLOR);
 		}
 		break;
 		case SkillPreviewSystem::UnitType::Hansel:
 		{
-			moveEndRenderer.lock()->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0.5,0,0.3 });
+			moveEndRenderer.lock()->GetGI().GetMaterial()->SetColor(HANSEL_COLOR);
 		}
 		break;
 		default:
