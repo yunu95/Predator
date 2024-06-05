@@ -1,7 +1,7 @@
 #include "MoveEndPreviewPool.h"
 
+#include "wanderResources.h"
 
-#define MOVE_END_TEXTURE L"Texture/T_VFX_SkillRange_Move.dds"
 
 
 void MoveEndPreviewPool::ObjectInitializer(std::weak_ptr<graphics::StaticMeshRenderer> comp)
@@ -9,7 +9,7 @@ void MoveEndPreviewPool::ObjectInitializer(std::weak_ptr<graphics::StaticMeshRen
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	yunuGI::IShader* vs = _resourceManager->GetShader(L"TextureVS.cso");
 	yunuGI::IShader* ps = _resourceManager->GetShader(L"GuideLinePS.cso");
-	yunuGI::ITexture* move = _resourceManager->GetTexture(MOVE_END_TEXTURE);
+	yunuGI::ITexture* move = _resourceManager->GetTexture(wanderResources::texture::MOVE_END_TEXTURE);
 	yunuGI::IMesh* quadMesh = _resourceManager->GetMesh(L"Rectangle");
 	comp.lock()->GetGameObject()->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
 	comp.lock()->GetGI().GetMaterial()->SetVertexShader(vs);

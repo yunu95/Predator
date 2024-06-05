@@ -207,33 +207,38 @@ void GraphicsTest()
 	//	test->effect = effect;
 
 	//}
+	// 
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stage1_Floor");
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Pie");
 	}
-	{
-		auto parent = Scene::getCurrentScene()->AddGameObject();
-		parent->SetSelfActive(false);
+	// 
+	//{
+	//	auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stage1_Floor");
+	//}
+	//{
+	//	auto parent = Scene::getCurrentScene()->AddGameObject();
+	//	parent->SetSelfActive(false);
 
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SVFX_Wave");
-		auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
-		anim->PushAnimation(animation);
-		anim->Play(animation);
-		obj2->AddComponent<VFXAnimator>();
+	//	auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SVFX_Wave");
+	//	auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
+	//	anim->PushAnimation(animation);
+	//	anim->Play(animation);
+	//	obj2->AddComponent<VFXAnimator>();
 
 
-		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SVFX_Tentacle");
-		auto anim2 = obj3->GetComponent<yunutyEngine::graphics::Animator>();
-		anim2->PushAnimation(animation2);
-		anim2->Play(animation2);
-		
+	//	auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SVFX_Tentacle");
+	//	auto anim2 = obj3->GetComponent<yunutyEngine::graphics::Animator>();
+	//	anim2->PushAnimation(animation2);
+	//	anim2->Play(animation2);
+	//	
 
-		auto obj = Scene::getCurrentScene()->AddGameObject();
-		auto test = obj->AddComponent<TestComponent4>();
-		test->obj = parent;
+	//	auto obj = Scene::getCurrentScene()->AddGameObject();
+	//	auto test = obj->AddComponent<TestComponent4>();
+	//	test->obj = parent;
 
-		obj2->SetParent(parent);
-		obj3->SetParent(parent);
-	}
+	//	obj2->SetParent(parent);
+	//	obj3->SetParent(parent);
+	//}
 	yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
 	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 }

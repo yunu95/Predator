@@ -6,9 +6,9 @@ POD_RobinTauntSkill RobinTauntSkill::pod = POD_RobinTauntSkill();
 coroutine::Coroutine RobinTauntSkill::operator()()
 {
     owner.lock()->PlayAnimation(UnitAnimType::Taunt, true);
-    coroutine::ForSeconds forSeconds{ pod.robinESkillPlayTime };
+    coroutine::ForSeconds forSeconds{ pod.skillPlayTime };
     tauntCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-    tauntCollider.lock()->SetRadius(pod.robinESkillRadius);
+    tauntCollider.lock()->SetRadius(pod.skillRadius);
     while (forSeconds.Tick())
     {
         tauntCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
@@ -21,10 +21,10 @@ coroutine::Coroutine RobinTauntSkill::operator()()
                 continue;
             }
             tauntList.insert(each);
-            each->Damaged(owner, pod.robinESkillDamage);
+            each->Damaged(owner, pod.skillDamage);
 
             /// 도발
-            /// 도발 대상은 robinESkillTauntTime 동안 Robin 공격하게 되어야 함
+            /// 도발 대상은 skillTauntTime 동안 Robin 공격하게 되어야 함
         }
     }
     OnInterruption();

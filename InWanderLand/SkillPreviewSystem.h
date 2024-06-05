@@ -139,5 +139,10 @@ private:
 	// 이동 끝 메쉬를 비활성화하기위한 컨테이너 키값으로 생성된 경로 메쉬를 사용한다.
 	std::map<yunuGI::IMesh*, graphics::StaticMeshRenderer*> moveEndRendererMap;
 	unsigned int routeMeshID = 0;
+
+	const float OFFSET = 1.414;
+	const Vector3d AXIS = {-1,0,0};
+	const float Y_OFFSET = 0.1;
+	const float VERTEX_OFFSET = 0.1;
 };
 
