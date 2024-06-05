@@ -192,6 +192,7 @@ private:
     yunuGI::IAnimation* defaultAnimation;
     UnitAnimType defaultAnimationType;
     bool blendWithDefaultAnimTrigger{ false };
+    int navAgentEnableFrameCount{ 0 };
     friend UnitBuff;
     friend UnitPool;
     friend PlayerController;

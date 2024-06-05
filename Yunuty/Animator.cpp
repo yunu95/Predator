@@ -231,7 +231,7 @@ void Animator::Update()
                 ClearAnimationEvent(gi.GetCurrentAnimation());
 
                 desc.curr = desc.next;
-                desc.curr.sumTime = 0.f;
+                desc.curr.sumTime = desc.next.sumTime;
                 desc.ClearNextAnimation();
                 gi.SetCurrentAnimation(nextAnimation);
                 gi.SetNextAnimation(nullptr);

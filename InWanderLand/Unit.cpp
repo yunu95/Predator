@@ -54,8 +54,20 @@ std::weak_ptr<Unit> Unit::GetClosestEnemy()
 }
 void Unit::Update()
 {
-    navAgentComponent.lock()->SetActive(!referenceDisableNavAgent.BeingReferenced());
+    if (referenceDisableNavAgent.BeingReferenced())
+    {
+        navAgentEnableFrameCount = 0;
+        navAgentComponent.lock()->SetActive(false);
+    }
+    else
+    {
+        // navAgent 복구는 한 프레임 이후에 진행된다.
+        if (navAgentEnableFrameCount >= 1)
+            navAgentComponent.lock()->SetActive(!referenceDisableNavAgent.BeingReferenced());
+        navAgentEnableFrameCount++;
+    }
     navObstacle.lock()->SetActive(referenceEnableNavObstacle.BeingReferenced());
+    //navObstacle.lock()->SetActive(false);
 
     if (!referenceBlockFollowingNavAgent.BeingReferenced())
         GetTransform()->SetWorldPosition(navAgentComponent.lock()->GetTransform()->GetWorldPosition());
@@ -164,7 +176,7 @@ void Unit::OnStateEngage<UnitBehaviourTree::Move>()
 {
     onStateEngage[UnitBehaviourTree::Move]();
     navAgentComponent.lock()->SetSpeed(unitTemplateData->pod.m_unitSpeed);
-    StartCoroutine(ShowPath(SingleNavigationField::Instance().GetSmoothPath(GetTransform()->GetWorldPosition(), moveDestination)));
+    StartCoroutine(ShowPath(SingleNavigationField::Instance().GetSmoothPath(GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * unitTemplateData->pod.collisionSize, moveDestination)));
     PlayAnimation(UnitAnimType::Move, true);
 }
 template<>
@@ -327,7 +339,7 @@ void Unit::PlayAnimation(UnitAnimType animType, bool repeat)
     }
     else
     {
-        animatorComponent.lock()->ChangeAnimation(anim, 0.1, 1);
+        animatorComponent.lock()->ChangeAnimation(anim, GlobalConstant::GetSingletonInstance().pod.defaultAnimBlendTime, 1);
     }
     if (repeat)
     {
@@ -386,15 +398,15 @@ void Unit::SetNavObstacleActive(bool active)
     {
         enableNavObstacle = referenceEnableNavObstacle.Acquire();
         disableNavAgent = referenceDisableNavAgent.Acquire();
-        navAgentComponent.lock()->SetActive(false);
-        navObstacle.lock()->SetActive(true);
+        //navAgentComponent.lock()->SetActive(false);
+        //navObstacle.lock()->SetActive(true);
     }
     else
     {
         enableNavObstacle.reset();
         disableNavAgent.reset();
-        navObstacle.lock()->SetActive(false);
-        navAgentComponent.lock()->SetActive(true);
+        //navObstacle.lock()->SetActive(false);
+        //navAgentComponent.lock()->SetActive(true);
     }
 }
 void Unit::UpdateRotation()

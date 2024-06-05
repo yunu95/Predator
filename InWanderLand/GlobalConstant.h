@@ -102,6 +102,7 @@ namespace application
         GC<float> chessBlockUnitOffset = 0.1f;
         GC<float> chessSummonedExplosionDelay = 1.5f;
         GC<float> vibeMaxOffset = 0.12f;
+        GC<float> defaultAnimBlendTime = 0.32f;
 
         TO_JSON(POD_GlobalConstant)
         FROM_JSON(POD_GlobalConstant)
