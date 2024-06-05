@@ -45,6 +45,7 @@ void InitAnimMap()
     animMap["SKM_Hansel"][UnitAnimType::Taunt] = localAnimMap[L"Rig_Robin|Ani_Hansel_Skill2"];
     animMap["SKM_Hansel"][UnitAnimType::Slam] = localAnimMap[L"Rig_Robin|Ani_Hansel_Attack"];
     animMap["SKM_Hansel"][UnitAnimType::Skill1] = localAnimMap[L"Rig_Robin|Ani_Hansel_Skill1"];
+    animMap["SKM_Hansel"][UnitAnimType::Throw] = localAnimMap[L"Rig_Robin|Ani_Hansel_Skill2"];
 
     animMap["SKM_Monster1"][UnitAnimType::Slam] = localAnimMap[L"Ani_Monster1_Attack"];
     animMap["SKM_Monster1"][UnitAnimType::Attack] = localAnimMap[L"Ani_Monster1_Attack"];

@@ -16,35 +16,6 @@ namespace application
         GC<int> gravitySpeed = 10;
         GC<int> magicPower = 40;
 
-        GC<float>	playerOneQSkillDelay = 0.0f;
-        GC<int>		playerOneQSkillTimingFrame = 10;
-        GC<float>	playerOneWSkillDelay = 0.0f;
-        GC<int>		playerOneWSkillTimingFrame = 10;
-
-        GC<float>	playerTwoQSkillDelay = 0.0f;
-        GC<int>		playerTwoQSkillTimingFrame = 10;
-        GC<float>	playerTwoWSkillDelay = 0.0f;
-        GC<int>		playerTwoWSkillTimingFrame = 10;
-
-        GC<float>	playerThreeQSkillDelay = 0.0f;
-        GC<int>		playerThreeQSkillTimingFrame = 10;
-        GC<float>	playerThreeWSkillDelay = 0.0f;
-        GC<int>		playerThreeWSkillTimingFrame = 10;
-
-        GC<float>	eliteMeleeEnemySkillDelay = 0.0f;
-        GC<int>		eliteMeleeEnemySkillTimingFrame = 0;
-        GC<float>	eliteRangedEnemySkillDelay = 0.0f;
-        GC<int>		eliteRangedEnemySkillTimingFrame = 0;
-
-        GC<float>	bossSkillOneDelay = 0.0f;
-        GC<int>		bossSkillOneTimingFrame = 15;
-        GC<float>	bossSkillTwoDelay = 0.0f;
-        GC<int>		bossSkillTwoTimingFrame = 15;
-        GC<float>	bossSkillThreeDelay = 0.0f;
-        GC<int>		bossSkillThreeTimingFrame = 15;
-        GC<float>	bossSkillFourDelay = 0.0f;
-        GC<int>		bossSkillFourTimingFrame = 15;
-
         GC<float>	robinQSkillCoolTime = 2.0f;
         GC<float>	robinQSkillCost = 10.0f;
         GC<float>	robinQSkillMaxDistance = 8.0f;
@@ -59,20 +30,6 @@ namespace application
         GC<float>	robinQSkillRushKnockbackRadius = 1.0f;
         GC<float>	robinQSkillImpactKnockbackRadius = 5.0f;
 
-        GC<float>	hanselQSkillCoolTime = 2.0f;
-        GC<float>	hanselQSkillCost = 10.0f;
-        GC<float>	hanselQSkillMaxDistance = 10.0f;
-        GC<float>	hanselQSkillDuration = 4.25f;
-        GC<float>	hanselQSkillMaxJumpDistance = 5.0f;
-        GC<float>	hanselQSkillStompDelay = 2.0f;
-        GC<int>	    hanselQSkillStompRepeat = 4;
-        GC<float>   hanselQSkillStompDamage = 10.0f;
-        GC<float>   hanselQSkillStompRadius = 10.0f;
-        //GC<float>	hanselESkillThrowingStartDelay = 2.0f;
-        //GC<float>	hanselESkillProjectileSpeed = 5.0f;
-        //GC<float>	hanselESkillProjectileRadius = 4.0f;
-        //GC<float>	hanselESkillCoolTime = 2.0f;
-        //GC<float>	hanselESkillCost = 10.0f;
         GC<float>   impaleSkillDamage = 20.0f;
         GC<float>   impaleSkillCoolTime = 2.0f;
         GC<float>   impaleSkillRange = 8.0f;
