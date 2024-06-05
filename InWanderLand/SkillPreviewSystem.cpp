@@ -12,14 +12,14 @@
 #define VERTEX_OFFSET 0.1
 
 
-#define MAX_SKILL_RANGE_TEXTURE L"Texture/circle.png"
+#define MAX_SKILL_RANGE_TEXTURE L"Texture/T_VFX_SkillRange_Cicle.dds"
 #define MOVE_TEXTURE L"Texture/move.png"
-#define ARROW_HEAD_TEXTURE L"Texture/triangle.png"
-#define ARROW_BODY_TEXTURE L"Texture/quad.png"
-#define ROBIN_W_TEXTURE L"Texture/circle.png"
-#define URSULA_Q_TEXTURE L"Texture/circle.png"
-#define URSULA_W_TEXTURE L"Texture/circle.png"
-#define HANSEL_Q_TEXTURE L"Texture/circle.png"
+#define ARROW_HEAD_TEXTURE L"Texture/T_VFX_SkillLengthFinish.dds"
+#define ARROW_BODY_TEXTURE L"Texture/T_VFX_SkillLength.dds"
+#define ROBIN_W_TEXTURE L"Texture/T_VFX_SkillRange_Clock.dds"
+#define URSULA_Q_TEXTURE L"Texture/T_VFX_SkillRange_Clock.dds"
+#define URSULA_W_TEXTURE L"Texture/T_VFX_SkillRange_Clock.dds"
+#define HANSEL_Q_TEXTURE L"Texture/T_VFX_SkillRange_Clock.dds"
 
 #define ROBIN_COLOR yunuGI::Color{ 1,0,0,1 }
 #define URSULA_COLOR yunuGI::Color{ 0.545,0,1,1 }
