@@ -1840,6 +1840,15 @@
     <ClInclude Include="UnitBehaviourTree.h">
       <Filter>Contents_Refactored\Unit\UnitBehaviourTree</Filter>
     </ClInclude>
+    <ClInclude Include="Module_Skill.h">
+      <Filter>Editor\Panel\List\Module\List</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillManager.h">
+      <Filter>Contents_Refactored\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillList.h">
+      <Filter>Contents_Refactored\Skill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2754,6 +2763,15 @@
     </ClCompile>
     <ClCompile Include="MoveEndPreviewPool.cpp">
       <Filter>Contents_Refactored\SkillPreviewSystem\MoveEndPreviewPool</Filter>
+    </ClCompile>
+    <ClCompile Include="Module_Skill.cpp">
+      <Filter>Editor\Panel\List\Module\List</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillManager.cpp">
+      <Filter>Contents_Refactored\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Skill.cpp">
+      <Filter>Contents_Refactored\Skill</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

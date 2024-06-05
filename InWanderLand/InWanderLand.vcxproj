@@ -1040,11 +1040,14 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="HanselChargeSkill.h" />
     <ClInclude Include="HanselProjectileSkill.h" />
     <ClInclude Include="FBXPool.h" />
+    <ClInclude Include="Module_Skill.h" />
     <ClInclude Include="MoveEndPreviewPool.h" />
     <ClInclude Include="Multiplier.h" />
     <ClInclude Include="ProjectilePool.h" />
     <ClInclude Include="Reference.h" />
     <ClInclude Include="RobinTauntSkill.h" />
+    <ClInclude Include="SkillList.h" />
+    <ClInclude Include="SkillManager.h" />
     <ClInclude Include="SkillType.h" />
     <ClInclude Include="SkillUpgradeType.h" />
     <ClInclude Include="UnitAcquisitionSphereColliderPool.h" />
@@ -2252,6 +2255,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="LocalTimeEntity.cpp" />
     <ClCompile Include="LocalTimeEntityManager.cpp" />
     <ClCompile Include="LinearClippingTimer.cpp" />
+    <ClCompile Include="Module_Skill.cpp" />
     <ClCompile Include="MoveEndPreviewPool.cpp" />
     <ClCompile Include="ObservationTarget.cpp" />
     <ClCompile Include="ParticleBrush.cpp" />
@@ -2512,6 +2516,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGraphicsExe|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugEditorExe|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Skill.cpp" />
     <ClCompile Include="SkillDevelopmentSystem.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGraphicsExe|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnitTests|x64'">true</ExcludedFromBuild>
@@ -2524,6 +2529,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGraphicsExe|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugEditorExe|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="SkillManager.cpp" />
     <ClCompile Include="SkillUnit.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGraphicsExe|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnitTests|x64'">true</ExcludedFromBuild>

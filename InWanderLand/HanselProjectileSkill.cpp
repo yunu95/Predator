@@ -1,6 +1,8 @@
 #include "InWanderLand.h"
 #include "HanselProjectileSkill.h"
 
+POD_HanselProjectileSkill HanselProjectileSkill::pod = POD_HanselProjectileSkill();
+
 coroutine::Coroutine HanselProjectileSkill::ThrowingPie()
 {
     const application::POD_GlobalConstant& gc = GlobalConstant::GetSingletonInstance().pod;

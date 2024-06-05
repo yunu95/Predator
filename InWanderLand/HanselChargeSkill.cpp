@@ -1,6 +1,8 @@
 #include "InWanderLand.h"
 #include "HanselChargeSkill.h"
 
+POD_HanselChargeSkill HanselChargeSkill::pod = POD_HanselChargeSkill();
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 
