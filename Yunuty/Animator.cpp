@@ -236,11 +236,11 @@ void Animator::Update()
                 {
                     desc.next.sumTime = 0;
                 }
-                desc.next.currFrame = 0;
-                desc.next.nextFrame = 1;
-                //desc.next.currFrame = static_cast<__int32>(desc.next.sumTime * ratio);
-                //desc.next.currFrame = min(static_cast<int>(desc.next.currFrame), totalFrame - 1);
-                //desc.next.nextFrame = min(static_cast<int>(desc.next.currFrame + 1), totalFrame - 1);
+                //desc.next.currFrame = 0;
+                //desc.next.nextFrame = 1;
+                desc.next.currFrame = static_cast<__int32>(desc.next.sumTime * ratio);
+                desc.next.currFrame = min(static_cast<int>(desc.next.currFrame), totalFrame - 1);
+                desc.next.nextFrame = min(static_cast<int>(desc.next.currFrame + 1), totalFrame - 1);
                 desc.next.ratio = static_cast<float>(desc.next.sumTime - static_cast<float>(desc.next.currFrame) / ratio);
             }
         }
