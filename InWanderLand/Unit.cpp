@@ -93,7 +93,7 @@ void Unit::Update()
     lastPosition = GetTransform()->GetWorldPosition();
     // 재생중인 애니메이션이 없다면 기본 애니메이션 출력
     // 어떤게 기본 애니메이션인지는 행동트리의 상태에 따라 바뀔 수 있다.
-    if (animatorComponent.lock()->IsDone() || blendWithDefaultAnimTrigger)
+    if ((animatorComponent.lock()->IsDone() || blendWithDefaultAnimTrigger) && defaultAnimationType != UnitAnimType::None)
     {
         blendWithDefaultAnimTrigger = false;
         PlayAnimation(defaultAnimationType);
@@ -113,6 +113,7 @@ void Unit::OnStateEngage<UnitBehaviourTree::Death>()
 {
     onStateEngage[UnitBehaviourTree::Death]();
     PlayAnimation(UnitAnimType::Death);
+    defaultAnimationType = UnitAnimType::None;
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Paralysis>()
@@ -953,6 +954,7 @@ Vector3d Unit::GetAttackPosition(std::weak_ptr<Unit> opponent)
 yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opponent)
 {
     auto blockAttack = referenceBlockAttack.Acquire();
+    defaultAnimationType = UnitAnimType::Idle;
     PlayAnimation(UnitAnimType::Attack, false);
     co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPreDelay);
     switch (unitTemplateData->pod.attackType.enumValue)

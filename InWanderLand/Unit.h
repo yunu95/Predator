@@ -189,7 +189,6 @@ private:
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineKnockBack;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineAttack;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineSkill;
-    yunuGI::IAnimation* defaultAnimation;
     UnitAnimType defaultAnimationType;
     bool blendWithDefaultAnimTrigger{ false };
     int navAgentEnableFrameCount{ 0 };
