@@ -17,7 +17,7 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie()
 
     coroutine::ForSeconds forSeconds{ static_cast<float>(deltaPos.Magnitude()) / pod.projectileSpeed };
     pieCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-    auto pieObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Fork");
+    auto pieObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Pie");
 
     pieCollider.lock()->SetRadius(pod.projectileRadius);
     pieCollider.lock()->GetTransform()->SetWorldRotation(direction);

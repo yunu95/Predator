@@ -83,7 +83,12 @@ coroutine::Coroutine HanselChargeSkill::operator()()
         each->Damaged(owner, pod.damage);
     }
 
-    while (endFrame - 1 >= animator.lock()->GetCurrentFrame())
+    //while (endFrame - 1 >= animator.lock()->GetCurrentFrame())
+    //{
+    //    co_await std::suspend_always{};
+    //}
+
+    while (!animator.lock()->IsDone())
     {
         co_await std::suspend_always{};
     }
