@@ -8,11 +8,9 @@ struct POD_UrsulaBlindSkill
     float skillRange = 6.f;
     float skillRadius = 3.f;
     float skillOffset = 1.f;
-    float skillProjectileSpeed = 15.f;
-    float skillBlindDuration = 3.0f;
-    float skillFieldDuration = 3.0f;
-    float skillFieldDamagePerTick = 1.0f;
-    float skillFieldDamageInterval = 0.3f;
+    float skillDamage = 5.f;
+    float skillBlindTime = 3.0f;
+
 
     TO_JSON(POD_UrsulaBlindSkill)
         FROM_JSON(POD_UrsulaBlindSkill)
@@ -36,7 +34,6 @@ public:
 private:
     static Vector3d lastSkillPos;
     static Vector3d lastSkillDir;
-    std::weak_ptr<UnitAcquisitionSphereCollider> projectile;
     std::weak_ptr<UnitAcquisitionSphereCollider> circle_Top;
     std::weak_ptr<UnitAcquisitionSphereCollider> circle_Left;
     std::weak_ptr<UnitAcquisitionSphereCollider> circle_Right;

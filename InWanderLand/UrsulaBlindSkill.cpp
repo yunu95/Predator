@@ -14,19 +14,63 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
     lastSkillDir = (lastSkillPos - owner.lock()->GetGameObject()->GetTransform()->GetWorldPosition()).Normalized();
     co_await std::suspend_always{};
 
-    /// 투사체 던짐
-    
+    owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
+    auto anim = wanderResources::GetAnimation(owner.lock()->name, UnitAnimType::Skill1);
+    coroutine::ForSeconds forSeconds{ anim->GetDuration() };
+    circle_Top = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+    circle_Top.lock()->SetRadius(pod.skillRadius);
+    circle_Left = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+    circle_Left.lock()->SetRadius(pod.skillRadius);
+    circle_Right = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+    circle_Right.lock()->SetRadius(pod.skillRadius);
 
+    circle_Top.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Top());
+    circle_Left.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Left());
+    circle_Right.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Right());
+
+    co_await std::suspend_always{};
+
+    /// Ursula 가 머리 내릴 때 수행해야 함
+
+    while (forSeconds.Tick())
+    {
+        for (auto& each : circle_Top.lock()->GetEnemies())
+        {
+            each->Damaged(owner, pod.skillDamage);
+            
+            /// 실명
+            /// 실명 대상은 skillBlindTime 동안 실명 상태
+        }
+
+        for (auto& each : circle_Left.lock()->GetEnemies())
+        {
+            each->Damaged(owner, pod.skillDamage);
+
+            /// 실명
+            /// 실명 대상은 skillBlindTime 동안 실명 상태
+        }
+
+        for (auto& each : circle_Right.lock()->GetEnemies())
+        {
+            each->Damaged(owner, pod.skillDamage);
+
+            /// 실명
+            /// 실명 대상은 skillBlindTime 동안 실명 상태
+        }
+
+        /// 우선은 여러 영역 겹칠 경우, 중복하여 대미지 계산함
+        co_await std::suspend_always{};
+    }
+
+    OnInterruption();
     co_return;
 }
 
 void UrsulaBlindSkill::OnInterruption()
 {
-    projectile.lock()->SetRadius(0.5);
     circle_Top.lock()->SetRadius(0.5);
     circle_Left.lock()->SetRadius(0.5);
     circle_Right.lock()->SetRadius(0.5);
-    UnitAcquisitionSphereColliderPool::SingleInstance().Return(projectile);
     UnitAcquisitionSphereColliderPool::SingleInstance().Return(circle_Top);
     UnitAcquisitionSphereColliderPool::SingleInstance().Return(circle_Left);
     UnitAcquisitionSphereColliderPool::SingleInstance().Return(circle_Right);
