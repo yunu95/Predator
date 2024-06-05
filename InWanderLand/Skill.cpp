@@ -1,5 +1,7 @@
 #include "Skill.h"
 
+#include "Storable.h"
+#include "imgui_ModuleData.h"
 #include "SkillList.h"
 
 bool Skill::SkillPodFieldPreEncoding(SkillType::Enum type, json& data)

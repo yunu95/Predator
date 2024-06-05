@@ -1,8 +1,6 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "SkillType.h"
-#include "Storable.h"
-#include "imgui_ModuleData.h"
 
 class Unit;
 class Skill

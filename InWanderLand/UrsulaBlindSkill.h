@@ -3,6 +3,15 @@
 
 struct POD_UrsulaBlindSkill
 {
+    float ursulaQSkillCoolTime = 2.0f;
+    float ursulaQSkillCost = 10.0f;
+    float ursulaQSkillRadius = 3.f;
+    float ursulaQSkillOffset = 3.f;
+    float ursulaQSkillProjectileSpeed = 15.f;
+    float ursulaQSkillBlindDuration = 3.0f;
+    float ursulaQSkillFieldDuration = 3.0f;
+    float ursulaQSkillFieldDamagePerTick = 1.0f;
+    float ursulaQSkillFieldDamageInterval = 0.3f;
 
     TO_JSON(POD_UrsulaBlindSkill)
         FROM_JSON(POD_UrsulaBlindSkill)

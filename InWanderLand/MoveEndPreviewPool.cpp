@@ -1,7 +1,7 @@
 #include "MoveEndPreviewPool.h"
 
 
-#define MOVE_END_TEXTURE L"Texture/circle.png"
+#define MOVE_END_TEXTURE L"Texture/T_VFX_SkillRange_Move.dds"
 
 
 void MoveEndPreviewPool::ObjectInitializer(std::weak_ptr<graphics::StaticMeshRenderer> comp)

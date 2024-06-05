@@ -72,10 +72,8 @@ namespace application
 
         GC<float>	ursulaQSkillCoolTime = 2.0f;
         GC<float>	ursulaQSkillCost = 10.0f;
-        GC<float>	ursulaQSkillMaxDistance = 6.0f;
-        GC<float>	ursulaQSkillRadius = 3;
-        GC<float>	ursulaQSkillOffset = 1;
-        GC<float>	ursulaQSkillProjectileSpeed = 15;
+        GC<float>	ursulaQSkillRadius = 3.f;
+        GC<float>	ursulaQSkillProjectileSpeed = 15.f;
         GC<float>	ursulaQSkillBlindDuration = 3.0f;
         GC<float>	ursulaQSkillFieldDuration = 3.0f;
         GC<float>	ursulaQSkillFieldDamagePerTick = 1.0f;
@@ -86,15 +84,22 @@ namespace application
         GC<float>	ursulaESkillDamagePerTick = 1.0f;
         GC<float>	ursulaESkillStunDuration = 1.0f;
         GC<float>	ursulaESkillPullingDuration = 0.5f;
-        GC<float>	ursulaESkillRadius = 4;
+        GC<float>	ursulaESkillRadius = 4.f;
 
         GC<float>	hanselQSkillCoolTime = 2.0f;
         GC<float>	hanselQSkillCost = 10.0f;
+        GC<float>	hanselQSkillMaxDistance = 10.0f;
+        GC<float>	hanselQSkillDuration = 4.25f;
+        GC<float>	hanselQSkillMaxJumpDistance = 5.0f;
+        GC<float>	hanselQSkillStompDelay = 2.0f;
         GC<int>	    hanselQSkillStompRepeat = 4;
         GC<float>   hanselQSkillStompDamage = 10.0f;
         GC<float>   hanselQSkillStompRadius = 10.0f;
-        GC<float>	hanselESkillCoolTime = 2.0f;
-        GC<float>	hanselESkillCost = 10.0f;
+        //GC<float>	hanselESkillThrowingStartDelay = 2.0f;
+        //GC<float>	hanselESkillProjectileSpeed = 5.0f;
+        //GC<float>	hanselESkillProjectileRadius = 4.0f;
+        //GC<float>	hanselESkillCoolTime = 2.0f;
+        //GC<float>	hanselESkillCost = 10.0f;
         GC<float>   impaleSkillDamage = 20.0f;
         GC<float>   impaleSkillCoolTime = 2.0f;
         GC<float>   impaleSkillRange = 8.0f;
@@ -126,7 +131,7 @@ namespace application
         GC<float> vibeMaxOffset = 0.12f;
 
         TO_JSON(POD_GlobalConstant)
-            FROM_JSON(POD_GlobalConstant)
+        FROM_JSON(POD_GlobalConstant)
     };
 
     class GlobalConstant

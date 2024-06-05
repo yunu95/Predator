@@ -18,6 +18,10 @@ public:
     virtual coroutine::Coroutine operator()()override;
 
     static POD_HanselChargeSkill pod;
+    virtual void OnInterruption()override;
+private:
+    std::weak_ptr<UnitAcquisitionSphereCollider> stompCollider;
+
 };
 
 
