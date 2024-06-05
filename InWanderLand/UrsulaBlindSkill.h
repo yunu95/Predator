@@ -3,15 +3,16 @@
 
 struct POD_UrsulaBlindSkill
 {
-    float ursulaQSkillCoolTime = 2.0f;
-    float ursulaQSkillCost = 10.0f;
-    float ursulaQSkillRadius = 3.f;
-    float ursulaQSkillOffset = 3.f;
-    float ursulaQSkillProjectileSpeed = 15.f;
-    float ursulaQSkillBlindDuration = 3.0f;
-    float ursulaQSkillFieldDuration = 3.0f;
-    float ursulaQSkillFieldDamagePerTick = 1.0f;
-    float ursulaQSkillFieldDamageInterval = 0.3f;
+    float skillCoolTime = 2.0f;
+    float skillCost = 10.0f;
+    float skillRange = 6.f;
+    float skillRadius = 3.f;
+    float skillOffset = 1.f;
+    float skillProjectileSpeed = 15.f;
+    float skillBlindDuration = 3.0f;
+    float skillFieldDuration = 3.0f;
+    float skillFieldDamagePerTick = 1.0f;
+    float skillFieldDamageInterval = 0.3f;
 
     TO_JSON(POD_UrsulaBlindSkill)
         FROM_JSON(POD_UrsulaBlindSkill)
@@ -20,9 +21,9 @@ struct POD_UrsulaBlindSkill
 class UrsulaBlindSkill : public Skill
 {
 public:
-    Vector3d targetPos;
-    UrsulaBlindSkill(Vector3d targetPos) : targetPos(targetPos) {}
+    UrsulaBlindSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::URSULA_Q; }
+    virtual float GetCastRange() override { return skillRange; }
     virtual coroutine::Coroutine operator()()override;
     virtual void OnInterruption()override;
 

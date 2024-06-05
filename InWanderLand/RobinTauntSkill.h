@@ -3,12 +3,12 @@
 
 struct POD_RobinTauntSkill
 {
-    float	robinESkillCoolTime = 2.0f;
-    float	robinESkillCost = 10.0f;
-    float	robinESkillRadius = 6.0f;
-    float	robinESkillDamage = 5.0f;
-    float	robinESkillPlayTime = 2.0f;
-    float	robinESkillTauntTime = 3.0f;
+    float	coolTime = 2.0f;
+    float	skillCost = 10.0f;
+    float	skillRadius = 6.0f;
+    float	skillDamage = 5.0f;
+    float	skillPlayTime = 2.0f;
+    float	skillTauntTime = 3.0f;
 
     TO_JSON(POD_RobinTauntSkill)
     FROM_JSON(POD_RobinTauntSkill)
@@ -18,9 +18,9 @@ class UnitAcquisitionSphereCollider;
 class RobinTauntSkill : public Skill
 {
 public:
-    Vector3d targetPos;
-    RobinTauntSkill(Vector3d targetPos) : targetPos(targetPos) {}
+    RobinTauntSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::ROBIN_W; }
+    virtual float GetCastRange() override { return skillRadius; }
     virtual coroutine::Coroutine operator()()override;
     virtual void OnInterruption()override;
 

@@ -34,20 +34,20 @@ void UrsulaBlindSkill::OnInterruption()
 
 Vector3d UrsulaBlindSkill::GetSkillObjectPos_Top()
 {
-    auto length = pod.ursulaQSkillRadius * 2 + pod.ursulaQSkillOffset;
+    auto length = pod.skillRadius * 2 + pod.skillOffset;
     return lastSkillPos + std::sqrt(3) / 3 * lastSkillDir * length;
 }
 
 Vector3d UrsulaBlindSkill::GetSkillObjectPos_Left()
 {
-    auto length = pod.ursulaQSkillRadius * 2 + pod.ursulaQSkillOffset;
+    auto length = pod.skillRadius * 2 + pod.skillOffset;
     auto left = Vector3d::Cross(lastSkillDir, Vector3d::up).Normalized();
     return lastSkillPos - std::sqrt(3) / 6 * lastSkillDir * length + left * length / 2;
 }
 
 Vector3d UrsulaBlindSkill::GetSkillObjectPos_Right()
 {
-    auto length = pod.ursulaQSkillRadius * 2 + pod.ursulaQSkillOffset;
+    auto length = pod.skillRadius * 2 + pod.skillOffset;
     auto right = Vector3d::Cross(-lastSkillDir, Vector3d::up).Normalized();
     return lastSkillPos - std::sqrt(3) / 6 * lastSkillDir * length + right * length / 2;
 }
