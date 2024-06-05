@@ -18,6 +18,7 @@ namespace application
 		class InstanceManager;
 		class TemplateDataManager;
 		class CommandManager;
+		class SkillManager;
 	}
 }
 
@@ -47,6 +48,7 @@ namespace application
 			InstanceManager& instanceManager;
 			TemplateDataManager& templateDataManager;
 			CommandManager& commandManager;
+			SkillManager& skillManager;
 
 			std::string currentMapPath;
 		};

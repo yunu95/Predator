@@ -1,6 +1,10 @@
 #include "InWanderLand.h"
 #include "RobinChargeSkill.h"
 
+POD_RobinChargeSkill RobinChargeSkill::pod = POD_RobinChargeSkill();
+
+
+
 coroutine::Coroutine RobinChargeSkill::operator()()
 {
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();

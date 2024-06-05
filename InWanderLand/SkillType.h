@@ -12,6 +12,7 @@ struct SkillType
         URSULA_W,
         HANSEL_Q,
         HANSEL_W,
+        EnemyImpale,
         SKILL_NUM
     };
 };
@@ -28,6 +29,7 @@ const std::unordered_map<int, std::string>& application::POD_Enum<SkillType::Enu
         { (int)SkillType::URSULA_W, "Ursula_W" },
         { (int)SkillType::HANSEL_Q, "Hansel_Q" },
         { (int)SkillType::HANSEL_W, "Hansel_W" },
+        { (int)SkillType::EnemyImpale, "EnemyImpale" },
         { (int)SkillType::SKILL_NUM, "Skill_Num"}
     };
     return enumNameMap;
