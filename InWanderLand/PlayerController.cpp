@@ -233,6 +233,7 @@ void PlayerController::OnLeftClick()
     else
     {
         ActivateSkill(selectedSkill, GetWorldCursorPosition());
+        selectedSkill = SkillType::NONE;
     }
 }
 
@@ -286,8 +287,8 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
     case SkillType::ROBIN_W: selectedCharacter.lock()->OrderSkill(RobinTauntSkill{ pos }, pos); break;
     case SkillType::URSULA_Q: selectedCharacter.lock()->OrderSkill(UrsulaBlindSkill{ pos }, pos); break;
     case SkillType::URSULA_W: selectedCharacter.lock()->OrderSkill(UrsulaParalysisSkill{ pos }, pos); break;
-    case SkillType::HANSEL_Q: selectedCharacter.lock()->OrderSkill(HanselChargeSkill{ pos }, pos); break;
-    case SkillType::HANSEL_W: selectedCharacter.lock()->OrderSkill(HanselProjectileSkill{ pos }, pos); break;
+    case SkillType::HANSEL_Q: selectedCharacter.lock()->OrderSkill(HanselChargeSkill{}, pos); break;
+    case SkillType::HANSEL_W: selectedCharacter.lock()->OrderSkill(HanselProjectileSkill{}, pos); break;
     }
     // 스킬 프리뷰를 비활성화시킨다.
 }

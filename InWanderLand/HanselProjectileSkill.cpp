@@ -1,11 +1,9 @@
 #include "InWanderLand.h"
 #include "HanselProjectileSkill.h"
 
-const float hanselESkillThrowingStartDelay = 1.5f;
-const float hanselESkillProjectileSpeed = 10.0f;
-const float hanselESkillProjectileRadius = 4.0f;
-
 const float throwingPieTimingFrame = 70.0f;
+
+POD_HanselProjectileSkill HanselProjectileSkill::pod = POD_HanselProjectileSkill();
 
 coroutine::Coroutine HanselProjectileSkill::ThrowingPie()
 {
@@ -17,18 +15,18 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie()
     Vector3d endPos = startPos + deltaPos;
     Vector3d currentPos = startPos;
 
-    coroutine::ForSeconds forSeconds{ static_cast<float>(deltaPos.Magnitude()) / hanselESkillProjectileSpeed };
+    coroutine::ForSeconds forSeconds{ static_cast<float>(deltaPos.Magnitude()) / pod.projectileSpeed };
     pieCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
     auto pieObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Fork");
 
-    pieCollider.lock()->SetRadius(hanselESkillProjectileRadius);
+    pieCollider.lock()->SetRadius(pod.projectileRadius);
     pieCollider.lock()->GetTransform()->SetWorldRotation(direction);
     pieObject->GetTransform()->SetWorldRotation(direction);
     pieObject->GetTransform()->SetWorldRotation(pieObject->GetTransform()->GetWorldRotation().Up() * -1);
     
     while (forSeconds.Tick())
     {
-        currentPos += direction * hanselESkillProjectileSpeed * Time::GetDeltaTime();
+        currentPos += direction * pod.projectileSpeed * Time::GetDeltaTime();
         pieCollider.lock()->GetTransform()->SetWorldPosition(currentPos);
         pieObject->GetTransform()->SetWorldPosition(currentPos);
         //pieObject->GetTransform()->SetWorldRotation(direction);
@@ -60,6 +58,11 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie()
     co_return;
 }
 
+float HanselProjectileSkill::GetCastRange()
+{
+    return pod.maxRange;
+}
+
 coroutine::Coroutine HanselProjectileSkill::operator()()
 {
     const application::POD_GlobalConstant& gc = GlobalConstant::GetSingletonInstance().pod;
@@ -69,7 +72,7 @@ coroutine::Coroutine HanselProjectileSkill::operator()()
     Vector3d direction = deltaPos.Normalized();
     owner.lock()->SetDesiredRotation(direction);
 
-    coroutine::ForSeconds forThrowingSeconds{ hanselESkillThrowingStartDelay };
+    coroutine::ForSeconds forThrowingSeconds{ pod.throwingStartDelay };
 
     owner.lock()->PlayAnimation(UnitAnimType::Throw, true);
 
