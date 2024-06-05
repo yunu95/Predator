@@ -105,6 +105,7 @@ public:
     DelegateCallback<void()> onRotationFinish;
     Reference referencePause;
     Reference referenceBlockFollowingNavAgent;
+    Reference referenceBlockAnimLoop;
     Reference referenceParalysis;
     Reference referenceBlockPendingOrder;
     Reference referenceBlockRotation;
@@ -114,6 +115,8 @@ public:
     Reference referenceDisableNavAgent;
     // NavObstacle 객체를 활성화함.
     Reference referenceEnableNavObstacle;
+
+    std::weak_ptr<yunutyEngine::graphics::Animator> GetAnimator() { return animatorComponent; }
 private:
     void SetNavObstacleActive(bool active);
     void UpdateRotation();

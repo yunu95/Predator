@@ -14,6 +14,11 @@ void Animator::Pause()
     isPlay = false;
 }
 
+void yunutyEngine::graphics::Animator::Resume()
+{
+    isPlay = true;
+}
+
 
 void Animator::ClearAnimationEvent(yunuGI::IAnimation* animation)
 {

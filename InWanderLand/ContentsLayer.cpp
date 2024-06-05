@@ -190,7 +190,8 @@ void GraphicsTest()
 			animation2 = i;
 		}
 
-		if (i->GetName() == L"Ani_Monster2_Skill")
+
+		if (i->GetName() == L"Rig_Robin|Ani_Hansel_Attack")
 		{
 			i->SetLoop(true);
 			animation3 = i;
