@@ -65,6 +65,7 @@ public:
     void Paralyze(float paralyzeDuration);
     yunutyEngine::coroutine::Coroutine KnockBackCoroutine(Vector3d targetPosition, float knockBackDuration);
     void PlayAnimation(UnitAnimType animType, bool repeat = false);
+    void BlendWithDefaultAnimation();
     void SetDefaultAnimation(UnitAnimType animType);
     void SetDesiredRotation(const Vector3d& facingDirection);
     std::weak_ptr<coroutine::Coroutine> SetRotation(const Vector3d& facingDirection, float rotatingTime);
@@ -189,6 +190,8 @@ private:
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineAttack;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineSkill;
     yunuGI::IAnimation* defaultAnimation;
+    UnitAnimType defaultAnimationType;
+    bool blendWithDefaultAnimTrigger{ false };
     friend UnitBuff;
     friend UnitPool;
     friend PlayerController;

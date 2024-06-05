@@ -278,6 +278,12 @@ Vector3<real> yunutyEngine::Vector3<real>::operator/(const double& scalar)const
     ret /= scalar;
     return ret;
 }
+template<typename real>
+std::wostream& operator<<(std::wostream& os, const yunutyEngine::Vector3<real>& vec)
+{
+    os << L"(" << vec.x << L", " << vec.y << L", " << vec.z << L")";
+    return os;
+}
 
 template<typename real>
 const Vector3<real> yunutyEngine::Vector3<real>::one = Vector3<real>(1, 1, 1);

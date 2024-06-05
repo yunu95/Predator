@@ -81,9 +81,10 @@ void Unit::Update()
     lastPosition = GetTransform()->GetWorldPosition();
     // 재생중인 애니메이션이 없다면 기본 애니메이션 출력
     // 어떤게 기본 애니메이션인지는 행동트리의 상태에 따라 바뀔 수 있다.
-    if (animatorComponent.lock()->IsDone())
+    if (animatorComponent.lock()->IsDone() || blendWithDefaultAnimTrigger)
     {
-        animatorComponent.lock()->Play(defaultAnimation);
+        blendWithDefaultAnimTrigger = false;
+        PlayAnimation(defaultAnimationType);
     }
 }
 
@@ -170,7 +171,7 @@ template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Move>()
 {
     SetNavObstacleActive(false);
-    static constexpr float epsilon = 0.001f;
+    static constexpr float epsilon = 0.1f;
     if ((moveDestination - GetTransform()->GetWorldPosition()).MagnitudeSqr() < epsilon)
     {
         OrderAttackMove(moveDestination);
@@ -185,29 +186,18 @@ void Unit::OnStateEngage<UnitBehaviourTree::Skill>()
     currentOrderType = UnitOrderType::Skill;
 }
 template<>
-void Unit::OnStateUpdate<UnitBehaviourTree::SkillCasting>()
+void Unit::OnStateExit<UnitBehaviourTree::SkillOnGoing>()
 {
-    if (coroutineSkill.expired())
-    {
-        if (pendingSkill.get())
-        {
-            assert(pendingSkill.get() != nullptr);
-            SetDesiredRotation(pendingSkill.get()->targetPos - GetTransform()->GetWorldPosition());
-            onGoingSkill = std::move(pendingSkill);
-            coroutineSkill = StartCoroutine(onGoingSkill.get()->operator()());
-        }
-        else
-        {
-            onGoingSkill.reset();
-            OrderAttackMove(GetTransform()->GetWorldPosition());
-        }
-    }
+    DeleteCoroutine(coroutineSkill);
+    onGoingSkill.reset();
 }
 template<>
-void Unit::OnStateExit<UnitBehaviourTree::SkillCasting>()
+void Unit::OnStateEngage<UnitBehaviourTree::SkillCasting>()
 {
-    onStateExit[UnitBehaviourTree::Skill]();
-    DeleteCoroutine(coroutineSkill);
+    assert(pendingSkill.get() != nullptr);
+    SetDesiredRotation(pendingSkill.get()->targetPos - GetTransform()->GetWorldPosition());
+    onGoingSkill = std::move(pendingSkill);
+    coroutineSkill = StartCoroutine(onGoingSkill.get()->operator()());
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Stop>()
@@ -331,17 +321,24 @@ void Unit::PlayAnimation(UnitAnimType animType, bool repeat)
 {
     auto anim = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, animType);
 
-    if (animatorComponent.lock()->IsDone())
+    if (animatorComponent.lock()->GetGI().GetCurrentAnimation() == nullptr || animatorComponent.lock()->GetGI().GetCurrentAnimation() == anim)
     {
         animatorComponent.lock()->Play(anim);
     }
     else
     {
-        animatorComponent.lock()->ChangeAnimation(anim, 0.1f, 1.0f);
-        //animatorComponent.lock()->Play(anim);
+        animatorComponent.lock()->ChangeAnimation(anim, 0.1, 1);
     }
     if (repeat)
-        defaultAnimation = anim;
+    {
+        blendWithDefaultAnimTrigger = true;
+        defaultAnimationType = animType;
+        //defaultAnimation = anim;
+    }
+}
+void Unit::BlendWithDefaultAnimation()
+{
+    blendWithDefaultAnimTrigger = true;
 }
 void Unit::SetDefaultAnimation(UnitAnimType animType)
 {
@@ -752,25 +749,27 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::Skill].enteringCondtion = [this]()
         {
-            return !coroutineSkill.expired() || CanProcessOrder<UnitOrderType::Skill>();
+            return !coroutineSkill.expired() || (CanProcessOrder<UnitOrderType::Skill>() && pendingSkill.get());
         };
     unitBehaviourTree[UnitBehaviourTree::Skill].onEnter = [this]()
         {
             OnStateEngage<UnitBehaviourTree::Skill>();
         };
+    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillOnGoing].enteringCondtion = [this]()
+        {
+            return !coroutineSkill.expired();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillOnGoing].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::SkillOnGoing>();
+        };
     unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillCasting].enteringCondtion = [this]()
         {
-            return !coroutineSkill.expired() ||
-                onGoingSkill.get() ||
-                (pendingSkill.get() != nullptr && DistanceTo(pendingSkill.get()->targetPos) < pendingSkill.get()->GetCastRange());
+            return DistanceTo(pendingSkill.get()->targetPos) < pendingSkill.get()->GetCastRange();
         };
     unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillCasting].onEnter = [this]()
         {
             OnStateEngage<UnitBehaviourTree::SkillCasting>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillCasting].onUpdate = [this]()
-        {
-            OnStateUpdate<UnitBehaviourTree::SkillCasting>();
         };
     unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillCasting].onExit = [this]()
         {
@@ -913,7 +912,7 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Move].enteringCondtion = [this]()
         {
-            constexpr float epsilon = 0.001f;
+            constexpr float epsilon = 0.1f;
             return !acquisitionRange.lock()->GetEnemies().empty() || (attackMoveDestination - GetTransform()->GetWorldPosition()).Magnitude() > epsilon;
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Move].onEnter = [this]()

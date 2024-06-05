@@ -117,10 +117,9 @@ void PlayerController::Update()
         {
             wsstream << wstring(L"[") + yutility::GetWString(POD_Enum<UnitBehaviourTree::Keywords>::GetEnumNameMap().at(each->GetNodeKey())) + wstring(L"]");
         }
-        wsstream << selectedDebugCharacter.lock()->GetTransform()->GetWorldRotation().Forward().x << L",";
-        wsstream << selectedDebugCharacter.lock()->GetTransform()->GetWorldRotation().Forward().y << L",";
-        wsstream << selectedDebugCharacter.lock()->GetTransform()->GetWorldRotation().Forward().z << L",";
-        wsstream << selectedDebugCharacter.lock()->currentRotation << L",";
+        wsstream << L"\nacq : " << selectedDebugCharacter.lock()->acquisitionRange.lock()->GetEnemies().size();
+        wsstream << L"\ncurrent pos : " << selectedDebugCharacter.lock()->GetTransform()->GetWorldPosition();
+        wsstream << L"\nattack target pos : " << selectedDebugCharacter.lock()->attackMoveDestination;
 
         text_State->GetGI().SetText(wsstream.str());
     }

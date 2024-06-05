@@ -39,7 +39,15 @@ bool Animator::IsDone()
 {
     if (auto currentAnim = GetGI().GetCurrentAnimation(); currentAnim)
     {
-        return GetGI().GetTransitionDesc().curr.sumTime >= currentAnim->GetDuration();
+        // 애니메이션 보간중이 아닐 때
+        if (GetGI().GetTransitionDesc().next.animIndex == -1)
+        {
+            return GetGI().GetTransitionDesc().curr.sumTime >= currentAnim->GetDuration();
+        }
+        else
+        {
+            return false;
+        }
     }
     return true;
 }

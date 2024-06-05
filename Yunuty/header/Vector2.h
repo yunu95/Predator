@@ -285,6 +285,13 @@ const Vector2<real> yunutyEngine::Vector2<real>::up = Vector2<real>(0, 1);
 template<typename real>
 const Vector2<real> yunutyEngine::Vector2<real>::down = Vector2<real>(0, -1);
 
+template<typename real>
+std::wostream& operator<<(std::wostream& os, const yunutyEngine::Vector2<real>& vec)
+{
+    os << L"(" << vec.x << L", " << vec.y << L")";
+    return os;
+}
+
 template <typename real>
 struct std::hash<Vector2<real>>
 {
