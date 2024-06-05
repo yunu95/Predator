@@ -284,9 +284,9 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
     switch (skillType)
     {
     case SkillType::ROBIN_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{  }, pos); break;
-    case SkillType::ROBIN_W: selectedCharacter.lock()->OrderSkill(RobinTauntSkill{ pos }, pos); break;
-    case SkillType::URSULA_Q: selectedCharacter.lock()->OrderSkill(UrsulaBlindSkill{ pos }, pos); break;
-    case SkillType::URSULA_W: selectedCharacter.lock()->OrderSkill(UrsulaParalysisSkill{ pos }, pos); break;
+    case SkillType::ROBIN_W: selectedCharacter.lock()->OrderSkill(RobinTauntSkill{  }, pos); break;
+    case SkillType::URSULA_Q: selectedCharacter.lock()->OrderSkill(UrsulaBlindSkill{  }, pos); break;
+    case SkillType::URSULA_W: selectedCharacter.lock()->OrderSkill(UrsulaParalysisSkill{  }, pos); break;
     case SkillType::HANSEL_Q: selectedCharacter.lock()->OrderSkill(HanselChargeSkill{ pos }, pos); break;
     case SkillType::HANSEL_W: selectedCharacter.lock()->OrderSkill(HanselProjectileSkill{ pos }, pos); break;
     }

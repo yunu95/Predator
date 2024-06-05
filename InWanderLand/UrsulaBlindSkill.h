@@ -23,7 +23,7 @@ class UrsulaBlindSkill : public Skill
 public:
     UrsulaBlindSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::URSULA_Q; }
-    virtual float GetCastRange() override { return skillRange; }
+    virtual float GetCastRange() override { return pod.skillRange; }
     virtual coroutine::Coroutine operator()()override;
     virtual void OnInterruption()override;
 

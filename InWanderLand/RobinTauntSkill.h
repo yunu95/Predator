@@ -20,7 +20,7 @@ class RobinTauntSkill : public Skill
 public:
     RobinTauntSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::ROBIN_W; }
-    virtual float GetCastRange() override { return skillRadius; }
+    virtual float GetCastRange() override { return pod.skillRadius; }
     virtual coroutine::Coroutine operator()()override;
     virtual void OnInterruption()override;
 

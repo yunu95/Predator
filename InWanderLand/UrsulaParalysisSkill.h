@@ -21,7 +21,7 @@ class UrsulaParalysisSkill : public Skill
 public:
     UrsulaParalysisSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::URSULA_W; }
-    virtual float GetCastRange() override { return skillRange; }
+    virtual float GetCastRange() override { return pod.skillRange; }
     virtual coroutine::Coroutine operator()()override;
 
     static POD_UrsulaParalysisSkill pod;
