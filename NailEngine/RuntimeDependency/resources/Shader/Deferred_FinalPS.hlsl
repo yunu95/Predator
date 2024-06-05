@@ -32,18 +32,20 @@ float4 main(PixelIn input) : SV_Target
     
     if (util.x == -1)
     {
-        output = diffuseLight * (1 - shadowFactor.x) + ambientLight + emissive;
-        //output = diffuseLight * (1 - shadowFactor.x) + ambientLight + emissive;
-        //output = diffuseLight  + ambientLight + emissive;
+        output = diffuseLight * (1 - (shadowFactor.x)) + ambientLight + emissive;
     }
     else
     {
         float4 albedoColor = Temp0Map.Sample(sam, input.uv);
-        //float4 temp = (albedoColor * (1 - shadowFactor.x)) + ambientLight;
-        float4 temp = (albedoColor * (1 - shadowFactor.x));
+        float4 shadowColor = float4(1, 1, 1, 1);
+        if (shadowFactor.x > 0)
+        {
+            shadowColor = 0.8;
+        }
 
-        output =  temp + emissive;
-        //output = albedoColor + emissive;
+        float4 temp = (albedoColor * shadowColor);
+
+        output = temp + emissive;
     }
     
     
