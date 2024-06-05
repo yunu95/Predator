@@ -355,7 +355,7 @@ void Unit::BlendWithDefaultAnimation()
 }
 void Unit::SetDefaultAnimation(UnitAnimType animType)
 {
-    defaultAnimation = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, animType);
+    defaultAnimationType = animType;
 }
 float normalizeAngle(float angle) {
     while (angle < 0) angle += 360;
@@ -488,7 +488,6 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     skinnedMeshGameObject->GetTransform()->SetLocalRotation(Quaternion{ {0,180,0} });
     skinnedMeshGameObject->GetTransform()->SetLocalScale(Vector3d::one);
     //wanderResources::PushAnimations(animatorComponent.lock().get(), unitTemplateData->pod.skinnedFBXName);
-    defaultAnimation = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Idle);
     unitCollider = GetGameObject()->AddComponentAsWeakPtr<physics::SphereCollider>();
     auto rigidBody = GetGameObject()->AddComponentAsWeakPtr<physics::RigidBody>();
     rigidBody.lock()->SetAsKinematic(true);
