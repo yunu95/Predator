@@ -34,7 +34,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
         }
     }
 
-    owner.lock()->PlayAnimation(UnitAnimType::Slam, false);
+    owner.lock()->PlayAnimation(UnitAnimType::Slam);
     owner.lock()->SetDefaultAnimation(UnitAnimType::Idle);
     knockbackCollider.lock()->SetRadius(gc.robinQSkillImpactKnockbackRadius);
     co_await std::suspend_always{};
@@ -48,7 +48,9 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(currentPos);
-    co_yield coroutine::WaitForSeconds(1.2);
+    co_yield coroutine::WaitForSeconds(0.8);
+    owner.lock()->PlayAnimation(UnitAnimType::Idle, true);
+    co_yield coroutine::WaitForSeconds(0.2);
     OnInterruption();
     co_return;
 }

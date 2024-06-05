@@ -14,6 +14,9 @@ public:
         std::vector<Node*> childrenInOrder;
     public:
         int GetNodeKey() const { return nodeKey; };
+        // 행동 트리의 onEnter는 이전 프레임에서 active가 아니었던 노드가 active가 되었을 때 호출됩니다.
+        // 
+        void EnforceOnEnter();
         std::function<void()> onEnter = []() {};
         std::function<void()> onExit = []() {};
         std::function<void()> onUpdate = []() {};

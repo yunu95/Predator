@@ -41,7 +41,7 @@ void InitAnimMap()
     animMap["SKM_Hansel"][UnitAnimType::Death] = localAnimMap[L"Rig_Robin|Ani_Hansel_Death"];
     animMap["SKM_Hansel"][UnitAnimType::BattleStart] = localAnimMap[L"Rig_Robin|Ani_Hansel_Live"];
     animMap["SKM_Hansel"][UnitAnimType::Rush] = localAnimMap[L"Rig_Robin|Ani_Hansel_Walk"];
-    animMap["SKM_Hansel"][UnitAnimType::Attack] = localAnimMap[L"Rig_Robin|Ani_Hansel_Attack"];
+    animMap["SKM_Hansel"][UnitAnimType::Attack] = localAnimMap[L"Rig_Robin|Ani_Hansel_Attack "];
     animMap["SKM_Hansel"][UnitAnimType::Taunt] = localAnimMap[L"Rig_Robin|Ani_Hansel_Skill2"];
     animMap["SKM_Hansel"][UnitAnimType::Slam] = localAnimMap[L"Rig_Robin|Ani_Hansel_Attack"];
 
