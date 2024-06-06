@@ -8,7 +8,7 @@ struct PlayerCharacterType
         Robin,
         Ursula,
         Hansel,
-        End,
+        Num,
     };
 };
 
@@ -21,7 +21,7 @@ const std::unordered_map<int, std::string>& application::POD_Enum<PlayerCharacte
         { (int)PlayerCharacterType::Robin, "Robin" },
         { (int)PlayerCharacterType::Ursula, "Ursula" },
         { (int)PlayerCharacterType::Hansel, "Hansel" },
-        { (int)PlayerCharacterType::End, "End"}
+        { (int)PlayerCharacterType::Num, "Num"}
     };
     return enumNameMap;
 }

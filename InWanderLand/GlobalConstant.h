@@ -16,6 +16,15 @@ namespace application
         GC<int> gravitySpeed = 10;
         GC<int> magicPower = 40;
 
+        // 몇초마다 유닛들을 플레이어 캐릭터들에게 분배해주는가
+        GC<float> enemyAggroUpdateInterval = 1;
+        // +- 몇초씩 랜덤하게 주기에 변화를 주는가.
+        GC<float> enemyAggroUpdateIntervalNoise = 1;
+        // 유닛들을 플레이어들에게 분배할 때 분배할 유닛 수의 할당량
+        GC<float> enemyAggroUpdateQuota = 2;
+        // +- 몇명씩 랜덤하게 분배해주는가
+        GC<float> enemyAggroUpdateQuotaNoise = 2;
+
         GC<float>	robinQSkillCoolTime = 2.0f;
         GC<float>	robinQSkillCost = 10.0f;
         GC<float>	robinQSkillMaxDistance = 8.0f;
@@ -61,7 +70,7 @@ namespace application
         GC<float> defaultAnimBlendTime = 0.32f;
 
         TO_JSON(POD_GlobalConstant)
-        FROM_JSON(POD_GlobalConstant)
+            FROM_JSON(POD_GlobalConstant)
     };
 
     class GlobalConstant

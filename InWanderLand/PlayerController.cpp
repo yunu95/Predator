@@ -29,7 +29,7 @@ const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> PlayerController::ski
     {UIEnumID::SkillUpgradeButtonHansel21,SkillUpgradeType::NONE},
     {UIEnumID::SkillUpgradeButtonHansel22,SkillUpgradeType::NONE},
 };
-void PlayerController::RegisterPlayer(std::weak_ptr<Unit> unit)
+void PlayerController::RegisterUnit(std::weak_ptr<Unit> unit)
 {
     if (unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue == PlayerCharacterType::None)
         return;
@@ -326,6 +326,18 @@ void PlayerController::SetState(State::Enum newState)
         UnSelectSkill();
         break;
     }
+}
+std::array<float, (int)PlayerCharacterType::Num> PlayerController::GetAggroProportions() const
+{
+    std::array<float, (int)PlayerCharacterType::Num> proportions;
+    float sum = 0;
+    sum = proportions[PlayerCharacterType::Robin] = characters.at(PlayerCharacterType::Robin).lock()->GetUnitTemplateData().pod.playerAggroRatio;
+    sum += proportions[PlayerCharacterType::Ursula] = characters.at(PlayerCharacterType::Ursula).lock()->GetUnitTemplateData().pod.playerAggroRatio;
+    sum += proportions[PlayerCharacterType::Hansel] = characters.at(PlayerCharacterType::Hansel).lock()->GetUnitTemplateData().pod.playerAggroRatio;
+    proportions[PlayerCharacterType::Robin] /= sum;
+    proportions[PlayerCharacterType::Ursula] /= sum;
+    proportions[PlayerCharacterType::Hansel] /= sum;
+    return proportions;
 }
 // 필요한 것들을 다 초기화한다.
 void PlayerController::Reset()

@@ -2,7 +2,6 @@
 #include "YunutyEngine.h"
 #include "SkillUpgradeType.h"
 #include <map>
-#include "PermanentObservee.h"
 #include "UnitController.h"
 #include "UIManager.h"
 #include "DelegateCallback.h"   
@@ -28,7 +27,7 @@ namespace application
 // GameManager의 역할 중 전투 시작과 전투 끝에 포즈를 잡는 것, 비전투 상태를 관리하는 것, 콤보를 출력하는 역할도 모두
 // 이 클래스가 담당한다.
 // 전술 모드에 진입하는 것도 이 클래스에서 진입한다.
-class PlayerController : public SingletonComponent<PlayerController>, public UnitController, public PermanentObservee
+class PlayerController : public SingletonComponent<PlayerController>, public UnitController
 {
 public:
     struct State
@@ -44,12 +43,14 @@ public:
             Cinematic,
         };
     };
-    void RegisterPlayer(std::weak_ptr<Unit> unit);
+    virtual void RegisterUnit(std::weak_ptr<Unit> unit)override;
+    virtual void UnRegisterUnit(std::weak_ptr<Unit> unit) override {};
     void SelectPlayerUnit(PlayerCharacterType::Enum charType);
     void SelectSkill(SkillType::Enum skillType);
     State::Enum GetState() const { return state; }
     void SetState(State::Enum newState);
-    std::array<std::weak_ptr<Unit>, (int)PlayerCharacterType::End>& GetPlayers() { return characters; }
+    const std::array<std::weak_ptr<Unit>, (int)PlayerCharacterType::Num>& GetPlayers() const { return characters; }
+    std::array<float, (int)PlayerCharacterType::Num> GetAggroProportions()const;
     void Reset();
     void SetCameraOffset();
     void SetComboObjectives(const std::array<int, 3>& targetCombos);
@@ -101,7 +102,7 @@ private:
     SkillType::Enum selectedSkill = SkillType::NONE;
     PlayerCharacterType::Enum selectedCharacterType = PlayerCharacterType::None;
     std::weak_ptr<UnitAcquisitionSphereCollider> cursorUnitDetector;
-    std::array<std::weak_ptr<Unit>, (int)PlayerCharacterType::End> characters;
+    std::array<std::weak_ptr<Unit>, (int)PlayerCharacterType::Num> characters;
     std::weak_ptr<Unit> selectedCharacter;
     std::weak_ptr<Unit> selectedDebugCharacter;
     const application::editor::RegionData* camLockRegion{ nullptr };

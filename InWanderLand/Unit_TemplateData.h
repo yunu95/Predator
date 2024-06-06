@@ -9,6 +9,7 @@
 #include "UnitStatusBarType.h"
 #include "PlayerCharacterType.h"
 #include "UnitAttackType.h"
+#include "UnitControllerType.h"
 
 #include <string>
 
@@ -23,8 +24,12 @@ namespace application
             std::string skinnedFBXName = std::string();
             // 플레이어 유닛인지의 여부와 종류를 나타내는 열거형
             POD_Enum<PlayerCharacterType::Enum> playerUnitType;
+            // aggroRatio가 높을수록 적의 이목을 더 잘 끈다.
+            float playerAggroRatio{ 1.0f };
             // 화면에 뜨는 체력창의 타입
             POD_Enum<UnitStatusBarType::Enum> unitStatusBar;
+            // 플레이어 유닛인지의 여부와 종류를 나타내는 열거형
+            POD_Enum<UnitControllerType::Enum> unitControllerType;
             // 체력창을 유닛의 위치로부터 얼마나 멀리 띄울 것인가?
             POD_Vector2<float> statusBarOffset;
             // 발사체가 생성되는 위치
@@ -64,6 +69,7 @@ namespace application
             int chessType;
 
             float unit_scale{ 1.0f };
+            float projectile_scale{ 1.0f };
 
             TO_JSON(POD_Unit_TemplateData)
                 FROM_JSON(POD_Unit_TemplateData)
