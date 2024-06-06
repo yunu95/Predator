@@ -7,6 +7,7 @@
 #include "ChessBombComponent.h"
 #include "YunutyWaitForSeconds.h"
 #include "SFXManager.h"
+#include "BossSummonChessSkill.h"
 
 void Interactable_ChessBishop::Start()
 {
@@ -206,7 +207,7 @@ void Interactable_ChessBishop::SetDataFromEditorData(const application::editor::
 	initScale.x = data.pod.scale.x;
 	initScale.y = data.pod.scale.y;
 	initScale.z = data.pod.scale.z;
-	chessSummonedExplosionDelay = application::GlobalConstant::GetSingletonInstance().pod.chessSummonedExplosionDelay;
+	chessSummonedExplosionDelay = BossSummonChessSkill::pod.chessSummonedExplosionDelay;
 	chessBlockUnitLength = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitLength;
 	chessBlockUnitOffset = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitOffset;
 	vibeMaxOffset = application::GlobalConstant::GetSingletonInstance().pod.vibeMaxOffset;

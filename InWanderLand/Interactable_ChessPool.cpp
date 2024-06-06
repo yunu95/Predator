@@ -6,6 +6,7 @@
 #include "GlobalConstant.h"
 #include "TemplateDataManager.h"
 #include "Interactable_TemplateData.h"
+#include "BossSummonChessSkill.h"
 
 class Interactable_ChessPawnPool :
 	public GameObjectPool<Interactable_ChessPawn>, public SingletonComponent<Interactable_ChessPawnPool>, public Component, public PermanentObservee
@@ -15,7 +16,7 @@ public:
 	{
 		comp.lock()->isSummoned = true;
 
-		comp.lock()->chessSummonedExplosionDelay = application::GlobalConstant::GetSingletonInstance().pod.chessSummonedExplosionDelay;
+		comp.lock()->chessSummonedExplosionDelay = BossSummonChessSkill::pod.summonTime + BossSummonChessSkill::pod.chessSummonedExplosionDelay;
 		comp.lock()->chessBlockUnitLength = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitLength;
 		comp.lock()->chessBlockUnitOffset = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitOffset;
 		comp.lock()->vibeMaxOffset = application::GlobalConstant::GetSingletonInstance().pod.vibeMaxOffset;
@@ -66,7 +67,7 @@ public:
 	{
 		comp.lock()->isSummoned = true;
 
-		comp.lock()->chessSummonedExplosionDelay = application::GlobalConstant::GetSingletonInstance().pod.chessSummonedExplosionDelay;
+		comp.lock()->chessSummonedExplosionDelay = BossSummonChessSkill::pod.summonTime + BossSummonChessSkill::pod.chessSummonedExplosionDelay;
 		comp.lock()->chessBlockUnitLength = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitLength;
 		comp.lock()->chessBlockUnitOffset = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitOffset;
 		comp.lock()->vibeMaxOffset = application::GlobalConstant::GetSingletonInstance().pod.vibeMaxOffset;
@@ -111,7 +112,7 @@ public:
 	{
 		comp.lock()->isSummoned = true;
 
-		comp.lock()->chessSummonedExplosionDelay = application::GlobalConstant::GetSingletonInstance().pod.chessSummonedExplosionDelay;
+		comp.lock()->chessSummonedExplosionDelay = BossSummonChessSkill::pod.summonTime + BossSummonChessSkill::pod.chessSummonedExplosionDelay;
 		comp.lock()->chessBlockUnitLength = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitLength;
 		comp.lock()->chessBlockUnitOffset = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitOffset;
 		comp.lock()->vibeMaxOffset = application::GlobalConstant::GetSingletonInstance().pod.vibeMaxOffset;

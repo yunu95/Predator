@@ -9,6 +9,7 @@ class Interactable_ChessRook
 	: public IInteractableComponent
 {
 	friend class Interactable_ChessRookPool;
+	friend class BossSummonChessSkill;
 
 public:
 	virtual void Start() override;

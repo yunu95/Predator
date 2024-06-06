@@ -9,6 +9,7 @@ class Interactable_ChessBishop
 	: public IInteractableComponent
 {
 	friend class Interactable_ChessBishopPool;
+	friend class BossSummonChessSkill;
 
 public:
 	virtual void Start() override;

@@ -26,5 +26,5 @@ public:
 	virtual Component* GetComponent() override { return this; }
 
 private:
-	int initContainerSize = 8;
+	int initContainerSize = 16;
 };
