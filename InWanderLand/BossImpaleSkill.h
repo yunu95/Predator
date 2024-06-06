@@ -1,11 +1,27 @@
 #pragma once
 #include "Skill.h"
 
+class UnitAcquisitionSphereCollider;
+
 struct POD_BossImpaleSkill
 {
+	float impaleSkillDamage = 20.0f;
+	float impaleSkillCoolTime = 2.0f;
+	float impaleSkillRange = 8.0f;
+	float impaleSkillWidth = 2.0f;
+	float impaleSkillFirstSpearOffset = 0.5f;
+	float impaleSkillMaxHeightPerSpear = 2.5f;
+	float impaleSkillMinHeightPerSpear = 0.0f;
+	float impaleSkillDurationPerSpear = 0.5f;
+	float impaleSkillAriseDistancePerSpear = 0.5f;
+	float impaleSkillAriseTimeNoisePerSpear = 0.5f;
+	float impaleSkillAriseDistanceNoisePerSpear = 0.5f;
+	float impaleSkillDuration = 2.0f;
+	float impaleSkillKnockbackDistance = 2.0f;
+	float impaleSkillKnockbackDuration = 2.0f;
 
 	TO_JSON(POD_BossImpaleSkill)
-		FROM_JSON(POD_BossImpaleSkill)
+	FROM_JSON(POD_BossImpaleSkill)
 };
 
 class BossImpaleSkill : public Skill
@@ -14,9 +30,14 @@ public:
 	BossImpaleSkill() {}
 	virtual SkillType::Enum GetSkillType() { return SkillType::Enum::BossSkill_Two; }
 	virtual coroutine::Coroutine operator()() override;
+	virtual void OnInterruption() override;
 
 	static POD_BossImpaleSkill pod;
-	virtual void OnInterruption() override;
+
+private:
+	coroutine::Coroutine SpearArise(std::weak_ptr<BossImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, Vector2d pos);
+	std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
+	std::unordered_set<Unit*> damagedUnits;
 };
 
 
