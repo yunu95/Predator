@@ -66,15 +66,13 @@ private:
 	void AddData(const InstanceID& id, InstancingData& instancingData);
 
 private:
-	//std::map<InstanceID, std::set<std::shared_ptr<RenderInfo>, CameraDistanceCompare>, BoundingBoxCompare> staticMeshDeferredCache;
-
+	//
 	std::map<InstanceID, unsigned int> staticMeshInstanceIDIndexMap;
 	std::unordered_map<std::shared_ptr<RenderInfo>, unsigned int> staticMeshRenderInfoIndexMap;
+	std::vector<std::pair<InstanceID, std::vector<std::shared_ptr<RenderInfo>>>> staticMeshDeferredRenderVec;
+	//
 
 	std::map<InstanceID, std::set<std::shared_ptr<RenderInfo>>> staticMeshDeferredMap;
-	std::vector<std::pair<InstanceID, std::vector<std::shared_ptr<RenderInfo>>>> staticMeshDeferredRenderVec;
-	// 
-
 	std::map<InstanceID, std::set<std::shared_ptr<RenderInfo>>> staticMeshForwardCache;
 
 	std::map<InstanceID, std::set<std::shared_ptr<SkinnedRenderInfo>>> skinnedMeshDeferredCache;

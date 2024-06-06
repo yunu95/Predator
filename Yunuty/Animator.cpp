@@ -24,7 +24,12 @@ void Animator::ClearAnimationEvent(yunuGI::IAnimation* animation)
 {
     for (auto& [key, each] : this->animationEventMap[animation])
     {
+        if (each.isExecute == false)
+        {
+            each.func();
+        }
         each.isFirst = true;
+        each.isExecute = false;
     }
 }
 
@@ -179,6 +184,9 @@ void Animator::Update()
             desc.curr.sumTime += (desc.curr.speed * Time::GetDeltaTime());
             if (desc.curr.sumTime >= currentAnimation->GetDuration())
             {
+                // 현재 애니메이션의 마지막 프레임에 왔다면 이벤트를 클리어해준다.
+                ClearAnimationEvent(currentAnimation);
+
                 if (currentAnimation->GetLoop())
                 {
                     desc.curr.sumTime -= currentAnimation->GetDuration();
@@ -202,6 +210,7 @@ void Animator::Update()
                     {
                         if (each2.isFirst && (each2.func != nullptr))
                         {
+                            each2.isExecute = true;
                             each2.isFirst = false;
                             each2.func();
                         }
@@ -250,6 +259,31 @@ void Animator::Update()
                 desc.next.currFrame = min(static_cast<int>(desc.next.currFrame), totalFrame - 1);
                 desc.next.nextFrame = min(static_cast<int>(desc.next.currFrame + 1), totalFrame - 1);
                 desc.next.ratio = static_cast<float>(desc.next.sumTime - static_cast<float>(desc.next.currFrame) / ratio);
+
+                // 다음 애니메이션에 대한 이벤트까지 처리
+				for (auto& each : this->animationEventMap)
+				{
+					auto nextAnimation = gi.GetNextAnimation();
+					for (auto& [key, each2] : each.second)
+					{
+						if (nextAnimation->GetName() == each.first->GetName())
+						{
+							if (each2.frame == desc.next.currFrame)
+							{
+								if (each2.isFirst && (each2.func != nullptr))
+								{
+                                    each2.isExecute = true;
+									each2.isFirst = false;
+									each2.func();
+								}
+							}
+							else
+							{
+								each2.isFirst = true;
+							}
+						}
+					}
+				}
             }
         }
 

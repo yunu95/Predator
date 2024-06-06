@@ -165,6 +165,11 @@ void ResourceManager::DeleteMaterial(yunuGI::IMaterial* mat)
 {
 }
 
+void ResourceManager::OrganizeResource()
+{
+
+}
+
 yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec, const std::vector<yunuGI::Vector2>& uvVec)
 {
     std::shared_ptr<Mesh> tempMesh = std::make_shared<Mesh>();
@@ -261,6 +266,10 @@ void ResourceManager::PushFBXNode(const std::wstring fbxName, FBXNode* fbxNode)
 
 yunuGI::IMaterial* ResourceManager::CrateMaterial(std::wstring materialName)
 {
+    if (materialName == L"Material")
+    {
+        int a = 1;
+    }
     std::shared_ptr<Material> material = std::make_shared<Material>();
 
     if (materialName.empty())
