@@ -1873,7 +1873,7 @@
     <ClInclude Include="BossSummonMobSkill.h">
       <Filter>Contents_Refactored\Skill\Boss\Skill3</Filter>
     </ClInclude>
-    <ClInclude Include="BossDebuffFieldSkill.h">
+    <ClInclude Include="BossSummonChessSkill.h">
       <Filter>Contents_Refactored\Skill\Boss\Skill4</Filter>
     </ClInclude>
   </ItemGroup>
@@ -2809,7 +2809,7 @@
     <ClCompile Include="BossSummonMobSkill.cpp">
       <Filter>Contents_Refactored\Skill\Boss\Skill3</Filter>
     </ClCompile>
-    <ClCompile Include="BossDebuffFieldSkill.cpp">
+    <ClCompile Include="BossSummonChessSkill.cpp">
       <Filter>Contents_Refactored\Skill\Boss\Skill4</Filter>
     </ClCompile>
   </ItemGroup>

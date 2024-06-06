@@ -199,6 +199,26 @@ void Skill::DrawSkillPod(SkillType::Enum type)
 			application::editor::imgui::data::DrawDataField(EnemyImpaleSkill::pod);
 			break;
 		}
+		case SkillType::BossSkill_One:
+		{
+			application::editor::imgui::data::DrawDataField(BossSpinAttackSkill::pod);
+			break;
+		}
+		case SkillType::BossSkill_Two:
+		{
+			application::editor::imgui::data::DrawDataField(BossImpaleSkill::pod);
+			break;
+		}
+		case SkillType::BossSkill_Three:
+		{
+			application::editor::imgui::data::DrawDataField(BossSummonMobSkill::pod);
+			break;
+		}
+		case SkillType::BossSkill_Four:
+		{
+			application::editor::imgui::data::DrawDataField(BossSummonChessSkill::pod);
+			break;
+		}
 		default:
 			break;
 	}
