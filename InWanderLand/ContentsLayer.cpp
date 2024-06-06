@@ -162,31 +162,35 @@ void GraphicsTest()
 
 	//}
 	
+	//{
+	//	auto obj = Scene::getCurrentScene()->AddGameObject();
+	//	auto test = obj->AddComponent<TestComponent4>();
+
+	//	auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+	//	auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
+	//	anim->PushAnimation(animation);
+	//	auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+	//	obj3->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
+	//	obj3->SetSelfActive(false);
+	//	anim->PushAnimationWithFunc(animation2, 0, [=]() 
+	//		{
+	//			obj3->SetSelfActive(true);
+	//		});
+
+	//	anim->PushAnimationWithFunc(animation2, 29, [=]()
+	//		{
+	//			obj3->SetSelfActive(false);
+	//		});
+
+	//	anim->Play(animation2);
+
+	//	test->anim = anim;
+	//	test->idleAnimation = animation;
+	//	test->walkAnimation = animation2;
+	//}
+
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObject();
-		auto test = obj->AddComponent<TestComponent4>();
-
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-		auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
-		anim->PushAnimation(animation);
-		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-		obj3->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
-		obj3->SetSelfActive(false);
-		anim->PushAnimationWithFunc(animation2, 0, [=]() 
-			{
-				obj3->SetSelfActive(true);
-			});
-
-		anim->PushAnimationWithFunc(animation2, 29, [=]()
-			{
-				obj3->SetSelfActive(false);
-			});
-
-		anim->Play(animation2);
-
-		test->anim = anim;
-		test->idleAnimation = animation;
-		test->walkAnimation = animation2;
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_HeartQueen");
 	}
 	
 	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
