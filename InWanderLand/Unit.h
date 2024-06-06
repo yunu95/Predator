@@ -62,8 +62,10 @@ public:
     void Heal(float healingPoint);
     void SetUnitCurrentHp(float p_newHp);
     void KnockBack(Vector3d targetPosition, float knockBackDuration);
+    /// Unit 의 위치로부터 입력한 위치벡터(월드 좌표계 기준)에 KnockBack 을 수행합니다.
+    void KnockBackRelativeVector(Vector3d relativeVector, float knockBackDuration);
     void Paralyze(float paralyzeDuration);
-    yunutyEngine::coroutine::Coroutine KnockBackCoroutine(Vector3d targetPosition, float knockBackDuration);
+    yunutyEngine::coroutine::Coroutine KnockBackCoroutine(Vector3d targetPosition, float knockBackDuration, bool relative = false);
     void PlayAnimation(UnitAnimType animType, bool repeat = false);
     void BlendWithDefaultAnimation();
     void SetDefaultAnimation(UnitAnimType animType);
