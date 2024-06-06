@@ -300,12 +300,18 @@ void Unit::KnockBack(Vector3d targetPosition, float knockBackDuration)
     coroutineKnockBack = StartCoroutine(KnockBackCoroutine(targetPosition, knockBackDuration));
 }
 
+void Unit::KnockBackRelativeVector(Vector3d relativeVector, float knockBackDuration)
+{
+    DeleteCoroutine(coroutineKnockBack);
+    coroutineKnockBack = StartCoroutine(KnockBackCoroutine(relativeVector, knockBackDuration, true));
+}
+
 void Unit::Paralyze(float paralyzeDuration)
 {
     StartCoroutine(referenceParalysis.AcquireForSecondsCoroutine(paralyzeDuration));
 }
 
-yunutyEngine::coroutine::Coroutine Unit::KnockBackCoroutine(Vector3d targetPosition, float knockBackDuration)
+yunutyEngine::coroutine::Coroutine Unit::KnockBackCoroutine(Vector3d targetPosition, float knockBackDuration, bool relative)
 {
     auto blockFollowingNavAgent = referenceBlockFollowingNavAgent.Acquire();
     auto paralyzed = referenceParalysis.Acquire();
@@ -317,6 +323,12 @@ yunutyEngine::coroutine::Coroutine Unit::KnockBackCoroutine(Vector3d targetPosit
     float vy0 = 0.5 * constant.gravitySpeed * knockBackDuration;
     float y;
     Vector3d startPos = GetTransform()->GetWorldPosition();
+
+    if (relative)
+    {
+        targetPosition = startPos + targetPosition;
+    }
+
     navAgentComponent.lock()->Relocate(targetPosition);
     navAgentComponent.lock()->MoveTo(targetPosition);
 

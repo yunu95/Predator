@@ -27,13 +27,17 @@ public:
 
     static POD_UrsulaBlindSkill pod;
 
+    /// 스킬 가이드를 위해서 출발지와 도착지를 세팅하는 부분입니다.
+    /// 스킬을 시전할 때에는 owner Pos 와 targetPos 를 통해 자동으로 갱신합니다.
+    static void UpdatePosition(const Vector3d& start, const Vector3d& dest);
+
     /// 삼각형 대형으로 보았을 때, Top / Left / Right 위치값을 반환합니다.
     static Vector3d GetSkillObjectPos_Top();
     static Vector3d GetSkillObjectPos_Left();
     static Vector3d GetSkillObjectPos_Right();
 private:
-    static Vector3d lastSkillPos;
-    static Vector3d lastSkillDir;
+    static Vector3d skillStart;
+    static Vector3d skillDestination;
     std::weak_ptr<UnitAcquisitionSphereCollider> circle_Top;
     std::weak_ptr<UnitAcquisitionSphereCollider> circle_Left;
     std::weak_ptr<UnitAcquisitionSphereCollider> circle_Right;
