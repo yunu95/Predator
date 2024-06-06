@@ -85,10 +85,7 @@ yunutyEngine::coroutine::Coroutine Interactable_SpikeTrap::DoInteraction()
 
     for (auto each : units)
     {
-        /// 경직
-        each->KnockBack((GetTransform()->GetWorldPosition() - 5 * (GetTransform()->GetWorldPosition() - each->GetTransform()->GetWorldPosition()).Normalized()), 1);
-
-        /// 대미지도 주려면 주기
+        each->KnockBackRelativeVector(5 * (each->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition()).Normalized(), 1);
         each->Damaged(damage);
         SFXManager::PlaySoundfile3D("sounds/trap/Damage_Zone.wav", each->GetTransform()->GetWorldPosition());
     }

@@ -5,12 +5,11 @@ struct POD_UrsulaParalysisSkill
 {
     float skillCoolTime = 2.0f;
     float skillCost = 10.0f;
-    float skillRange = 6.0f;
+    float skillRange = 6.f;
     float skillRadius = 3.f;
-    float skillDamageInterval = 0.3f;
-    float skillDamagePerTick = 1.0f;
-    float skillStunDuration = 1.0f;
-    float skillPullingDuration = 0.5f;
+    float skillDamage = 5.f;
+    float skillParalysisTime = 3.0f;
+
 
     TO_JSON(POD_UrsulaParalysisSkill)
         FROM_JSON(POD_UrsulaParalysisSkill)
@@ -23,8 +22,11 @@ public:
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::URSULA_W; }
     virtual float GetCastRange() override { return pod.skillRange; }
     virtual coroutine::Coroutine operator()()override;
+    virtual void OnInterruption()override;
 
     static POD_UrsulaParalysisSkill pod;
+private:
+    std::weak_ptr<UnitAcquisitionSphereCollider> skillCollider;
 };
 
 

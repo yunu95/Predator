@@ -64,6 +64,8 @@
 #include "ProjectilePool.h"
 #include "FBXPool.h"
 #include "PlayerController.h"
+#include "EnemyController.h"
+#include "EnemyAggroController.h"
 #include "PlaytimeWave.h"
 #include "SingleNavigationField.h"
 #include "DebugBeacon.h"

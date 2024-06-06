@@ -118,6 +118,15 @@ namespace application
 
         void UnitData::ApplyAsPlaytimeObject()
         {
+            onAttack.Clear();
+            onAttackHit.Clear();
+            onDamaged.Clear();
+            onCreated.Clear();
+            onRotationFinish.Clear();
+            for (auto& each : onStateEngage)
+                each.Clear();
+            for (auto& each : onStateExit)
+                each.Clear();
             if (pod.isGuide || pod.waveData != nullptr)
             {
                 return;

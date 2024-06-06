@@ -35,3 +35,13 @@ void EnemyController::Update()
         }
     }
 }
+//
+//const std::vector<std::weak_ptr<Unit>>& EnemyController::GetClosestUnits(const Vector3d& from std::weak_ptr<Unit> unit)
+//{
+//    static std::vector<std::weak_ptr<Unit>> sortedUnits;
+//    sortedUnits.clear();
+//    std::transform(unitRoutines.begin(), unitRoutines.end(), std::back_inserter(sortedUnits), [](const std::pair<Unit*, CoroutineHandle>& each) { return each.first->GetWeakPtr<Unit>(); });
+//    std::sort(sortedUnits.begin(), sortedUnits.end(), [from](const std::weak_ptr<Unit>& a, const std::weak_ptr<Unit>& b) { return (a.lock()->GetTransform()->GetWorldPosition() - from).() < (a.lock()->GetTransform()->GetWorldPosition() - from).sqrMagnitude(); });
+//    return sortedUnits;
+//}
+

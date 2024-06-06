@@ -29,6 +29,7 @@ class UnitBehaviourTree;
 class UnitAcquisitionSphereCollider;
 class UnitPool;
 class PlayerController;
+class UnitController;
 namespace application
 {
     namespace editor
@@ -48,6 +49,7 @@ public:
     void Reset();
     const application::editor::Unit_TemplateData& GetUnitTemplateData()const;
     int GetTeamIndex() const;
+    std::weak_ptr<Unit> GetAttackTarget() const;
     void Relocate(const Vector3d& pos);
     void OrderMove(Vector3d position);
     void OrderAttackMove(Vector3d position);
@@ -62,8 +64,10 @@ public:
     void Heal(float healingPoint);
     void SetUnitCurrentHp(float p_newHp);
     void KnockBack(Vector3d targetPosition, float knockBackDuration);
+    /// Unit 의 위치로부터 입력한 위치벡터(월드 좌표계 기준)에 KnockBack 을 수행합니다.
+    void KnockBackRelativeVector(Vector3d relativeVector, float knockBackDuration);
     void Paralyze(float paralyzeDuration);
-    yunutyEngine::coroutine::Coroutine KnockBackCoroutine(Vector3d targetPosition, float knockBackDuration);
+    yunutyEngine::coroutine::Coroutine KnockBackCoroutine(Vector3d targetPosition, float knockBackDuration, bool relative = false);
     void PlayAnimation(UnitAnimType animType, bool repeat = false);
     void BlendWithDefaultAnimation();
     void SetDefaultAnimation(UnitAnimType animType);
@@ -141,6 +145,7 @@ private:
     Vector3d GetAttackPosition(std::weak_ptr<Unit> opponent);
     yunutyEngine::coroutine::Coroutine AttackCoroutine(std::weak_ptr<Unit> opponent);
     float DistanceTo(const Vector3d& target);
+    std::vector<UnitController*> controllers;
     UnitBehaviourTree unitBehaviourTree;
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateEngage;
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateExit;

@@ -44,11 +44,13 @@ public:
         };
     };
     virtual void RegisterUnit(std::weak_ptr<Unit> unit)override;
+    virtual void UnRegisterUnit(std::weak_ptr<Unit> unit) override {};
     void SelectPlayerUnit(PlayerCharacterType::Enum charType);
     void SelectSkill(SkillType::Enum skillType);
     State::Enum GetState() const { return state; }
     void SetState(State::Enum newState);
-    std::array<std::weak_ptr<Unit>, (int)PlayerCharacterType::End>& GetPlayers() { return characters; }
+    const std::array<std::weak_ptr<Unit>, (int)PlayerCharacterType::Num>& GetPlayers() const { return characters; }
+    std::array<float, (int)PlayerCharacterType::Num> GetAggroProportions()const;
     void Reset();
     void SetCameraOffset();
     void SetComboObjectives(const std::array<int, 3>& targetCombos);
@@ -100,7 +102,7 @@ private:
     SkillType::Enum selectedSkill = SkillType::NONE;
     PlayerCharacterType::Enum selectedCharacterType = PlayerCharacterType::None;
     std::weak_ptr<UnitAcquisitionSphereCollider> cursorUnitDetector;
-    std::array<std::weak_ptr<Unit>, (int)PlayerCharacterType::End> characters;
+    std::array<std::weak_ptr<Unit>, (int)PlayerCharacterType::Num> characters;
     std::weak_ptr<Unit> selectedCharacter;
     std::weak_ptr<Unit> selectedDebugCharacter;
     const application::editor::RegionData* camLockRegion{ nullptr };

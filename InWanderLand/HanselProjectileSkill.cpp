@@ -7,8 +7,6 @@ POD_HanselProjectileSkill HanselProjectileSkill::pod = POD_HanselProjectileSkill
 
 coroutine::Coroutine HanselProjectileSkill::ThrowingPie()
 {
-    const application::POD_GlobalConstant& gc = GlobalConstant::GetSingletonInstance().pod;
-
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
@@ -22,17 +20,24 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie()
     co_await std::suspend_always{};
 
     pieCollider.lock()->SetRadius(pod.projectileRadius);
+    pieObject->GetTransform()->SetWorldScale({ 3,3,3 });
     pieCollider.lock()->GetTransform()->SetWorldRotation(direction);
-    //pieObject->GetTransform()->SetWorldRotation(direction);
-    pieObject->GetTransform()->SetWorldScale({3,3,3});
+	pieObject->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction.up * -1, direction));
     //pieObject->GetTransform()->SetWorldRotation(pieObject->GetTransform()->GetWorldRotation().Up() * -1);
-    
+    float rotatePerFrame = 0.0f;
+
     while (forSeconds.Tick())
     {
         currentPos += direction * pod.projectileSpeed * Time::GetDeltaTime();
         pieCollider.lock()->GetTransform()->SetWorldPosition(currentPos);
-        pieObject->GetTransform()->SetWorldPosition(currentPos);
-        //pieObject->GetTransform()->SetWorldRotation(direction);
+        pieObject->GetTransform()->SetWorldPosition(currentPos + Vector3d(0, pod.pieHeight, 0 ));
+
+        rotatePerFrame += pod.pieRotateSpeed * Time::GetDeltaTime();
+
+        Vector3d directionPerFrame = (endPos - currentPos).Normalized();
+		//pieObject->GetTransform()->SetWorldRotation(pieObject->GetTransform()->GetWorldRotation() + Vector3d(rotatePerFrame, 0, 0));
+        //pieObject->GetTransform()->SetWorldRotation(Quaternion::MakeAxisAngleQuaternion((pieObject->GetTransform()->GetWorldPosition() + directionPerFrame).right, rotatePerFrame));
+
         co_await std::suspend_always{};
         for (auto& each : pieCollider.lock()->GetEnemies())
         {
@@ -68,8 +73,6 @@ float HanselProjectileSkill::GetCastRange()
 
 coroutine::Coroutine HanselProjectileSkill::operator()()
 {
-    const application::POD_GlobalConstant& gc = GlobalConstant::GetSingletonInstance().pod;
-
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
 	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();

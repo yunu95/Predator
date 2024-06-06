@@ -1,7 +1,8 @@
 #pragma once
-#include "InWanderLand.h"
+//#include "InWanderLand.h"
 #include "YunutyEngine.h"
 #include "FileSystem.h"
+#include "Unit.h"
 
 #include <string>
 #include <future>
@@ -10,6 +11,21 @@
 using namespace application;
 namespace wanderUtils
 {
+    struct CompareDistance
+    {
+        Vector3d from;
+        CompareDistance(const Vector3d& from) : from(from) {}
+
+        bool operator()(const std::weak_ptr<Unit>& a, const std::weak_ptr<Unit>& b) const {
+            if (auto a_ptr = a.lock()) {
+                if (auto b_ptr = b.lock()) {
+                    return (from - a_ptr->GetTransform()->GetWorldPosition()).MagnitudeSqr() <
+                        (from - b_ptr->GetTransform()->GetWorldPosition()).MagnitudeSqr();
+                }
+            }
+            return false;
+        }
+    };
     class ResourceRecursiveLoader
     {
     public:

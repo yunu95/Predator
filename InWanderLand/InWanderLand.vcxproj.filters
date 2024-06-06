@@ -568,9 +568,6 @@
     <Filter Include="Contents_Refactored\UnitController\PlayerController">
       <UniqueIdentifier>{e38b554b-48ad-47f3-9339-359425c3455a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents_Refactored\UnitController\AttackMoveController">
-      <UniqueIdentifier>{c2503de5-8ae4-45c4-9cd3-791e8ea5bada}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents_Refactored\PlayerStatusManager">
       <UniqueIdentifier>{424d61c0-5c28-4669-b8f1-8d22299f7e82}</UniqueIdentifier>
     </Filter>
@@ -759,6 +756,33 @@
     </Filter>
     <Filter Include="Contents_Refactored\UnitController\UnitControllerType">
       <UniqueIdentifier>{265e5a50-668c-4df1-a66e-8d0c7dee834d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Boss">
+      <UniqueIdentifier>{27bf9416-b645-4f7f-9232-3c3c0bf41e59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Boss\Skill4">
+      <UniqueIdentifier>{05af4126-3c4c-4f28-97c2-4f499463069f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Boss\Skill3">
+      <UniqueIdentifier>{d303218b-177b-4e0a-86a8-b703eae0c705}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Boss\Skill2">
+      <UniqueIdentifier>{39c3c1d6-5b5b-465e-b15c-00d8b36f4c60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Boss\Skill1">
+      <UniqueIdentifier>{1e8cf35f-479e-46f8-a753-aa6147f19d71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\PlayerCharacterType">
+      <UniqueIdentifier>{29cd007c-08ad-4069-88e0-f37314005db7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\UnitController\EnemyAggroController">
+      <UniqueIdentifier>{04e79efc-5c10-46da-9c0c-07cfad73a2eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\UnitController\EnemyController">
+      <UniqueIdentifier>{f24f6e3b-088a-4437-95b3-84472f220d50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Factor">
+      <UniqueIdentifier>{b994b5bd-5b65-4afe-a6db-d27d5c52659a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1744,9 +1768,6 @@
     <ClInclude Include="UnitBuff.h">
       <Filter>Contents_Refactored\Unit\UnitBuff</Filter>
     </ClInclude>
-    <ClInclude Include="AttackMoveController.h">
-      <Filter>Contents_Refactored\UnitController\AttackMoveController</Filter>
-    </ClInclude>
     <ClInclude Include="UnitController.h">
       <Filter>Contents_Refactored\UnitController</Filter>
     </ClInclude>
@@ -1765,9 +1786,6 @@
     <ClInclude Include="PlayerController.h">
       <Filter>Contents_Refactored\UnitController\PlayerController</Filter>
     </ClInclude>
-    <ClInclude Include="Adder.h" />
-    <ClInclude Include="Factor.h" />
-    <ClInclude Include="Multiplier.h" />
     <ClInclude Include="SkillType.h">
       <Filter>Contents_Refactored\Skill\SkillType</Filter>
     </ClInclude>
@@ -1852,8 +1870,38 @@
     <ClInclude Include="SkillList.h">
       <Filter>Contents_Refactored\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="BossSpinAttackSkill.h">
+      <Filter>Contents_Refactored\Skill\Boss\Skill1</Filter>
+    </ClInclude>
+    <ClInclude Include="BossImpaleSkill.h">
+      <Filter>Contents_Refactored\Skill\Boss\Skill2</Filter>
+    </ClInclude>
+    <ClInclude Include="BossSummonMobSkill.h">
+      <Filter>Contents_Refactored\Skill\Boss\Skill3</Filter>
+    </ClInclude>
+    <ClInclude Include="BossSummonChessSkill.h">
+      <Filter>Contents_Refactored\Skill\Boss\Skill4</Filter>
+    </ClInclude>
     <ClInclude Include="UnitControllerType.h">
       <Filter>Contents_Refactored\UnitController\UnitControllerType</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCharacterType.h">
+      <Filter>Contents_Refactored\Unit\PlayerCharacterType</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyAggroController.h">
+      <Filter>Contents_Refactored\UnitController\EnemyAggroController</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyController.h">
+      <Filter>Contents_Refactored\UnitController\EnemyController</Filter>
+    </ClInclude>
+    <ClInclude Include="Multiplier.h">
+      <Filter>Contents_Refactored\Factor</Filter>
+    </ClInclude>
+    <ClInclude Include="Factor.h">
+      <Filter>Contents_Refactored\Factor</Filter>
+    </ClInclude>
+    <ClInclude Include="Adder.h">
+      <Filter>Contents_Refactored\Factor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2698,9 +2746,6 @@
     <ClCompile Include="UnitAcquisitionSphereCollider.cpp">
       <Filter>Contents_Refactored\Unit\UnitAcquisitionSphereCollider</Filter>
     </ClCompile>
-    <ClCompile Include="AttackMoveController.cpp">
-      <Filter>Contents_Refactored\UnitController\AttackMoveController</Filter>
-    </ClCompile>
     <ClCompile Include="UnitController.cpp">
       <Filter>Contents_Refactored\UnitController</Filter>
     </ClCompile>
@@ -2778,6 +2823,24 @@
     </ClCompile>
     <ClCompile Include="Skill.cpp">
       <Filter>Contents_Refactored\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSpinAttackSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Boss\Skill1</Filter>
+    </ClCompile>
+    <ClCompile Include="BossImpaleSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Boss\Skill2</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSummonMobSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Boss\Skill3</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSummonChessSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Boss\Skill4</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyAggroController.cpp">
+      <Filter>Contents_Refactored\UnitController\EnemyAggroController</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyController.cpp">
+      <Filter>Contents_Refactored\UnitController\EnemyController</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
