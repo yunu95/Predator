@@ -12,6 +12,9 @@
 
 #include "YunutyEngine.h"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 namespace application
 {
 	Action_OrnamentMoveWithRotateAndRescale::~Action_OrnamentMoveWithRotateAndRescale()
@@ -350,6 +353,8 @@ namespace application
 
 		if (renderer)
 		{
+			targetOrnament->tookAction = true;
+
 			float localTimer = 0;
 			float ratio = 0;
 			while (ratio < 1)
@@ -364,15 +369,13 @@ namespace application
 
 				for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
 				{
-					/// 셰이더를 바꾸는 등 부가적인 동작이 필요할 수 있으므로
-					/// Graphics 팀장님과 협의가 필요
+					/// 추후 셰이더 교체까지 해줘야 함
 					renderer->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,1,1, ratio });
-
-					/// 특히, Action 으로 변경된 Resource 에 대해서 다시 복구하는 과정을 어떻게 넣을지 구상이 필요함
 				}
 				co_await std::suspend_always();
 			}
 		}
+
 		co_return;
 	}
 
@@ -549,6 +552,8 @@ namespace application
 
 		if (renderer)
 		{
+			targetOrnament->tookAction = true;
+
 			float localTimer = 0;
 			float ratio = 0;
 			while (ratio < 1)
@@ -563,15 +568,13 @@ namespace application
 
 				for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
 				{
-					/// 셰이더를 바꾸는 등 부가적인 동작이 필요할 수 있으므로
-					/// Graphics 팀장님과 협의가 필요
+					/// 추후 셰이더 교체까지 해줘야 함
 					renderer->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,1,1, 1 - ratio });
-
-					/// 특히, Action 으로 변경된 Resource 에 대해서 다시 복구하는 과정을 어떻게 넣을지 구상이 필요함
 				}
 				co_await std::suspend_always();
 			}
 		}
+
 		co_return;
 	}
 
@@ -733,10 +736,8 @@ namespace application
 
 		auto ts = targetOrnament->GetPaletteInstance()->GetTransform();
 		auto startPos = ts->GetWorldPosition();
-		auto endPos = startPos + Vector3d(0, distance, 0);
 		float localTimer = 0;
 		float ratio = 0;
-		bool upDir = true;
 		while (true)
 		{
 			localTimer += yunutyEngine::Time::GetDeltaTime();
@@ -745,17 +746,9 @@ namespace application
 			{
 				localTimer = 0;
 				ratio = 0;
-				upDir = !upDir;
 			}
 
-			if (upDir)
-			{
-				ts->SetWorldPosition(Vector3d::Lerp(startPos, endPos, ratio));
-			}
-			else
-			{
-				ts->SetWorldPosition(Vector3d::Lerp(endPos, startPos, ratio));
-			}
+			ts->SetWorldPosition(Vector3d(startPos.x, startPos.y + distance * ((-std::cos(ratio * 2 * M_PI) + 1) * 0.5), startPos.z));
 			co_await std::suspend_always();
 		}
 	}

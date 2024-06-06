@@ -50,7 +50,15 @@ namespace yunuGIAdapter
             {
                 ResourceManager::Instance.Get().CreateTexture(wFilePath);
             }
+            else if (ext == L".vfx")
+            {
+                ResourceManager::Instance.Get().LoadVFXFrameInfo(wFilePath);
+            }
         };
+        virtual void CreateTextures(const std::vector<std::wstring>& texturePaths) const override
+        {
+            ResourceManager::Instance.Get().CreateTextures(texturePaths);
+        }
         virtual yunuGI::IMaterial* CreateMaterial(std::wstring materialName) const
         {
             return ResourceManager::Instance.Get().CrateMaterial(materialName);
@@ -61,7 +69,7 @@ namespace yunuGIAdapter
         };
         virtual yunuGI::IMesh* CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec, const std::vector<yunuGI::Vector2>& uvVec = {})const override
         {
-            return ResourceManager::Instance.Get().CreateMesh(meshName, posVec, idxVec, normalVec,uvVec);
+            return ResourceManager::Instance.Get().CreateMesh(meshName, posVec, idxVec, normalVec, uvVec);
         };
         void DeleteMesh(yunuGI::IMesh* mesh) const
         {
@@ -77,6 +85,13 @@ namespace yunuGIAdapter
         }
         virtual yunuGI::ITexture* GetTexture(const std::wstring& textureName)const
         {
+            // dds 파일이 존재한다면 dds 파일로 불러온다.
+            std::wstring ddsTextureName = textureName;
+            ddsTextureName.replace(ddsTextureName.size() - 4, 4, L".dds");
+            if (auto ddsTexture = ResourceManager::Instance.Get().GetTexture(ddsTextureName.c_str()).get(); ddsTexture)
+            {
+                return ddsTexture;
+            }
             return ResourceManager::Instance.Get().GetTexture(textureName.c_str()).get();
         }
         virtual yunuGI::IShader* GetShader(const std::wstring& shaderName)const
@@ -175,6 +190,11 @@ namespace yunuGIAdapter
         virtual void LoadFBXData(std::filesystem::path path)const override
         {
             ResourceManager::Instance.Get().LoadFBXData(path);
+        };
+
+        virtual std::pair<float, std::vector<yunuGI::VFXInfo>>& GetVFXInfo(const std::wstring& materialName)const override
+        {
+            return ResourceManager::Instance.Get().GetVFXInfo(materialName);
         };
     };
 }

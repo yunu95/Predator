@@ -24,6 +24,7 @@ namespace application
         namespace palette
         {
             class WaveEditorInstance;
+            class WavePalette;
         }
     }
 }
@@ -57,7 +58,7 @@ namespace application
             int comboObjective3{ 3 };
 
             TO_JSON(POD_Wave)
-                FROM_JSON(POD_Wave)
+            FROM_JSON(POD_Wave)
         };
 
         class WaveData : public IEditableData, public StaticInstanceRegistry<WaveData>
@@ -110,14 +111,15 @@ namespace application
             unordered_map<UnitData*, WaveUnitData> waveUnitDataMap;
             vector<UnitData*> waveUnitDatasVector;
 
-			WaveData();
-			WaveData(const std::string& name);
-			WaveData(const WaveData& prototype);
-			std::wstring MakeUpName();
-			WaveData& operator=(const WaveData& prototype);
-			friend PlaytimeWave;
-			friend TacticModeSystem;
-		};
-	}
+            WaveData();
+            WaveData(const std::string& name);
+            WaveData(const WaveData& prototype);
+            std::wstring MakeUpName();
+            WaveData& operator=(const WaveData& prototype);
+            friend PlaytimeWave;
+            friend palette::WavePalette;
+            friend TacticModeSystem;
+        };
+    }
 }
 

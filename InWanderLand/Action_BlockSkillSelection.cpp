@@ -1,5 +1,7 @@
 #include "Action_BlockSkillSelection.h"
 #include "LocalTimeEntityManager.h"
+#include "Skill.h"
+#include "DelegateCallback.h"
 
 #include "EditorLayer.h"
 #include "YunutyEngine.h"
@@ -7,94 +9,63 @@
 
 namespace application
 {
-    Action_BlockSkillSelection::Action_BlockSkillSelection(int skillIndex)
+    Action_BlockSkillSelection::Action_BlockSkillSelection(SkillType::Enum skillType)
     {
-        this->index = skillIndex;
-    }
+        this->skillType.enumValue = skillType;
+        this->skillType.enumName = POD_Enum<SkillType::Enum>::GetEnumNameMap().at(skillType);
+    };
 
     CoroutineObject<void> Action_BlockSkillSelection::DoAction()
     {
-        Unit::UnitType unitType = Unit::UnitType::Warrior;
-        Unit::SkillEnum skillType;
-        switch (index)
+        if (!applyExceptTarget)
         {
-        case 1: case 2:
-            unitType = Unit::UnitType::Warrior;
-            break;
-        case 3: case 4:
-            unitType = Unit::UnitType::Magician;
-            break;
-        case 5: case 6:
-            unitType = Unit::UnitType::Healer;
-            break;
-        };
-        switch (index)
-        {
-        case 1: case 3:case 5:
-            skillType = Unit::SkillEnum::Q;
-            break;
-        case 2:case 4: case 6:
-            skillType = Unit::SkillEnum::W;
-            break;
-        };
-        if (applyExceptTarget)
-        {
-            bool before = InputManager::Instance().canPrepareSkill[unitType][skillType];
-
-            InputManager::Instance().canPrepareSkill[Unit::UnitType::Warrior][Unit::SkillEnum::Q] = !blocking;
-            InputManager::Instance().canPrepareSkill[Unit::UnitType::Warrior][Unit::SkillEnum::W] = !blocking;
-            InputManager::Instance().canPrepareSkill[Unit::UnitType::Magician][Unit::SkillEnum::Q] = !blocking;
-            InputManager::Instance().canPrepareSkill[Unit::UnitType::Magician][Unit::SkillEnum::W] = !blocking;
-            InputManager::Instance().canPrepareSkill[Unit::UnitType::Healer][Unit::SkillEnum::Q] = !blocking;
-            InputManager::Instance().canPrepareSkill[Unit::UnitType::Healer][Unit::SkillEnum::W] = !blocking;
-
-            InputManager::Instance().canPrepareSkill[unitType][skillType] = before;
+            PlayerController::Instance().blockSkillSelection[skillType.enumValue] = blocking;
         }
         else
         {
-            InputManager::Instance().canPrepareSkill[unitType][skillType] = !blocking;
+            for (auto i = (int)SkillType::NONE; i < SkillType::SKILL_NUM; i++)
+            {
+                if (i == skillType.enumValue)
+                {
+                    continue;
+                }
+                PlayerController::Instance().blockSkillSelection[(int)i] = blocking;
+            }
         }
         co_return;
-    }
-
-    void Action_BlockSkillSelection::SetSkillIndex(int index)
-    {
-        this->index = index;
-    }
+    };
 
     void Action_BlockSkillSelection::ImGui_DrawDataPopup(Action_BlockSkillSelection* data)
     {
-        if (ImGui::MenuItem("SetSkillIndex - 1:RobinQ 2:RobinW 3:UruslaQ 4:UruslaW 5:HanselQ 6::HanselW"))
+        if (ImGui::MenuItem("SetSkillType"))
         {
             editor::EditorLayer::SetInputControl(false);
-            static int index = 0;
-            static bool blocking{ true };
-            static bool applyExceptTarget{ false };
-            index = data->index;
-            blocking = data->blocking;
+            static POD_Enum<SkillType::Enum> skillType;
+            static bool block;
+            static bool applyExceptTarget;
+            skillType = data->skillType;
+            block = data->blocking;
             applyExceptTarget = data->applyExceptTarget;
-
-            editor::imgui::ShowMessageBox("SetSkillIndex - 1:RobinQ 2:RobinW 3:UruslaQ 4:UruslaW 5:HanselQ 6::HanselW", [data]()
+            editor::imgui::ShowMessageBox("SetSkillType", [data]()
                 {
                     editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
                     ImGui::Separator();
 
                     ImGui::SetNextItemWidth(-1);
-                    ImGui::Checkbox("ApplyExceptTargetSkill##ApplyExceptTarget", &applyExceptTarget);
-                    ImGui::InputInt("SkillIndex##BlockSkillSelectionIndex", &index);
-                    ImGui::Checkbox("Blocking##Blocking", &blocking);
+                    ImGui::Checkbox("applyExceptTarget##applyExceptTarget", &applyExceptTarget);
+                    imgui::data::DrawData("SkillType", skillType);
+                    ImGui::Checkbox("blocking##blocking", &block);
 
                     ImGui::Separator();
-                    index = clamp(index, 1, 6);
 
                     if (ImGui::Button("OK"))
                     {
-                        data->SetSkillIndex(index);
-                        data->blocking = blocking;
                         data->applyExceptTarget = applyExceptTarget;
+                        data->skillType = skillType;
+                        data->blocking = block;
                         ImGui::CloseCurrentPopup();
-                        editor::imgui::CloseMessageBox("SetSkillIndex - 1:RobinQ 2:RobinW 3:UruslaQ 4:UruslaW 5:HanselQ 6::HanselW");
+                        editor::imgui::CloseMessageBox("SetSkillType");
                         editor::EditorLayer::SetInputControl(true);
                     }
                     ImGui::SameLine();
@@ -102,7 +73,7 @@ namespace application
                     if (ImGui::Button("Cancel"))
                     {
                         ImGui::CloseCurrentPopup();
-                        editor::imgui::CloseMessageBox("SetSkillIndex - 1:RobinQ 2:RobinW 3:UruslaQ 4:UruslaW 5:HanselQ 6::HanselW");
+                        editor::imgui::CloseMessageBox("SetSkillType");
                         editor::EditorLayer::SetInputControl(true);
                     }
                 }, 300);
@@ -111,9 +82,9 @@ namespace application
 
     bool Action_BlockSkillSelection::PreEncoding(json& data) const
     {
+        data["skillType"] = skillType.enumName;
         data["blocking"] = blocking;
         data["applyExceptTarget"] = applyExceptTarget;
-        data["index"] = index;
         return true;
     }
 
@@ -124,9 +95,18 @@ namespace application
 
     bool Action_BlockSkillSelection::PreDecoding(const json& data)
     {
-        index = data["index"];
+        if (data.contains("index"))
+        {
+            skillType.enumValue = data["index"].get<int>();
+            skillType.enumName = POD_Enum<SkillType::Enum>::GetEnumNameMap().at(skillType.enumValue);
+        }
+        else
+        {
+            skillType.enumName = data["skillType"];
+            skillType.enumValue = POD_Enum<SkillType::Enum>::GetNameEnumMap().at(skillType.enumName);
+        }
         blocking = data["blocking"];
-        applyExceptTarget = data["applyExceptTarget"];
+        applyExceptTarget = applyExceptTarget["applyExceptTarget"];
         return true;
     }
 

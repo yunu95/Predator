@@ -28,7 +28,7 @@ namespace application
     }
 }
 
-namespace yunutyEnigne
+namespace yunutyEngine
 {
     class GameObject;
 }

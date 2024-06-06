@@ -7,6 +7,7 @@
 #include "IMaterial.h"
 
 #include "FBXData.h"
+#include "VFXInfo.h"
 
 #include <filesystem>
 
@@ -21,6 +22,7 @@ namespace yunuGI
     {
     public:
         virtual void LoadFile(const char* filePath)const = 0;
+        virtual void CreateTextures(const std::vector<std::wstring>& texturePaths)const = 0;
         virtual yunuGI::IMaterial* CreateMaterial(std::wstring materialName)const = 0;
         virtual yunuGI::IMaterial* CloneMaterial(std::wstring materialName, yunuGI::IMaterial* material)const = 0;
         virtual yunuGI::IMesh* CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec, const std::vector<yunuGI::Vector2>& uvVec = {})const = 0;
@@ -31,6 +33,7 @@ namespace yunuGI
         virtual yunuGI::IShader* GetShader(const std::wstring& shaderName)const = 0;
         virtual std::weak_ptr<yunuGI::IVideo> GetVideoData(const std::wstring& videoPath) const = 0;
         virtual bool GetFBXData(const std::string& fbxName, yunuGI::FBXData*& fbxData)const = 0;
+        virtual std::pair<float, std::vector<yunuGI::VFXInfo>>& GetVFXInfo(const std::wstring& materialName)const = 0;
         virtual bool GetFBXBoneData(const std::string& fbxName, yunuGI::BoneInfo& boneInfo)const = 0;
         virtual std::vector<yunuGI::IAnimation*>& GetFBXAnimationList(std::wstring fbxName)const = 0;
         virtual void UnloadResources()const = 0;

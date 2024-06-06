@@ -7,6 +7,8 @@
 #include <limits>  
 #include <locale>  
 #include <sstream> 
+#include <thread>
+#include <future>
 
 #include "SimpleMath.h"
 using namespace DirectX::PackedVector;
@@ -29,6 +31,7 @@ using namespace DirectX::PackedVector;
 
 #include "ModelLoader.h"
 #include "Video.h"
+#include "MaterialWrapper.h"
 
 
 
@@ -158,6 +161,10 @@ void ResourceManager::DeleteDeferredTexture()
     }
 }
 
+void ResourceManager::DeleteMaterial(yunuGI::IMaterial* mat)
+{
+}
+
 yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yunuGI::Vector3>& posVec, std::vector<unsigned int>& idxVec, std::vector<yunuGI::Vector3>& normalVec, const std::vector<yunuGI::Vector2>& uvVec)
 {
     std::shared_ptr<Mesh> tempMesh = std::make_shared<Mesh>();
@@ -166,16 +173,16 @@ yunuGI::IMesh* ResourceManager::CreateMesh(std::wstring meshName, std::vector<yu
 
     std::vector<Vertex> vertices;
 
-	for (int i = 0; i < posVec.size(); ++i)
-	{
-		DirectX::SimpleMath::Vector3 tempNormal = normalVec.size() == 0 ? DirectX::SimpleMath::Vector3{ 0.f, 0.f, 0.f } : DirectX::SimpleMath::Vector3{ normalVec[i].x,normalVec[i].y ,normalVec[i].z };
-		vertices.emplace_back(Vertex{ DirectX::SimpleMath::Vector3{posVec[i].x, posVec[i].y, posVec[i].z},
-						  DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
-						  uvVec.empty() ? DirectX::SimpleMath::Vector2{0.5f,0.5f} : DirectX::SimpleMath::Vector2{uvVec[i].x,uvVec[i].y},
-						  DirectX::SimpleMath::Vector2{0.5f,0.5f},
-						  tempNormal,
-						  DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } });
-	}
+    for (int i = 0; i < posVec.size(); ++i)
+    {
+        DirectX::SimpleMath::Vector3 tempNormal = normalVec.size() == 0 ? DirectX::SimpleMath::Vector3{ 0.f, 0.f, 0.f } : DirectX::SimpleMath::Vector3{ normalVec[i].x,normalVec[i].y ,normalVec[i].z };
+        vertices.emplace_back(Vertex{ DirectX::SimpleMath::Vector3{posVec[i].x, posVec[i].y, posVec[i].z},
+                          DirectX::SimpleMath::Vector4{1.f,1.f,1.f,1.f},
+                          uvVec.empty() ? DirectX::SimpleMath::Vector2{0.5f,0.5f} : DirectX::SimpleMath::Vector2{uvVec[i].x,uvVec[i].y},
+                          DirectX::SimpleMath::Vector2{0.5f,0.5f},
+                          tempNormal,
+                          DirectX::SimpleMath::Vector3{0.0f, 0, -1.f } });
+    }
 
 
     DirectX::SimpleMath::Vector3 minPoint = vertices[0].pos;
@@ -285,6 +292,7 @@ Material* ResourceManager::CreateInstanceMaterial(const Material* material)
 
 yunuGI::IMaterial* ResourceManager::CloneMaterial(std::wstring materialName, yunuGI::IMaterial* material)
 {
+    material = (material)->GetMaterial();
     if (this->materialMap.find(materialName) != this->materialMap.end())
     {
         return this->materialMap[materialName].get();
@@ -313,6 +321,63 @@ void ResourceManager::CreateTexture(const std::wstring& texturePath)
 
         textureMap.insert({ texturePath, texture });
         textureVec.push_back(texture.get());
+    }
+}
+// 비동기적으로 텍스처를 생성
+void ResourceManager::CreateTextures(const std::vector<std::wstring>& texturePaths)
+{
+    static constexpr int textureCountPerThread = 10000;
+    std::vector<std::future<std::vector<std::shared_ptr<Texture>>>> textures;
+    for (int i = 0; i < texturePaths.size(); i += textureCountPerThread)
+    {
+        std::vector<std::wstring> tempTexturePaths;
+        for (int j = 0; j < textureCountPerThread; ++j)
+        {
+            if (i + j >= texturePaths.size())
+                break;
+            tempTexturePaths.push_back(texturePaths[i + j]);
+        }
+        textures.push_back(std::async(std::launch::async, [tempTexturePaths]() {
+            std::vector<std::shared_ptr<Texture>> textureChunk;
+            for (int i = 0; i < tempTexturePaths.size(); ++i)
+            {
+                std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+                texture->LoadTexture(tempTexturePaths[i]);
+                texture->SetName(tempTexturePaths[i]);
+                textureChunk.push_back(texture);
+            }
+            return textureChunk;
+            }));
+    }
+    /*for (auto& each : texturePaths)
+    {
+        auto iter = textureMap.find(each);
+        if (iter == textureMap.end())
+        {
+            textures.push_back(std::async(std::launch::async, [each]() {
+                try
+                {
+
+                    std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+                    texture->LoadTexture(each);
+                    texture->SetName(each);
+                    return texture;
+                }
+                catch (const std::exception& e)
+                {
+                    return std::shared_ptr<Texture>();
+                }
+                }));
+        }
+    }*/
+    for (auto& each : textures)
+    {
+        auto eachChunk = each.get();
+        for (auto& texture : eachChunk)
+        {
+            textureMap.insert({ texture->GetName(), texture });
+            textureVec.push_back(texture.get());
+        }
     }
 }
 
@@ -350,6 +415,65 @@ std::shared_ptr<Texture>& ResourceManager::CreateTextureFromResource(const std::
     textureMap.insert({ texturePath, texture });
 
     return texture;
+}
+
+void ResourceManager::LoadVFXFrameInfo(const std::wstring& vfxPath)
+{
+	std::ifstream file(vfxPath);
+
+	if (!file.is_open())
+	{
+		return;
+	}
+
+
+	nlohmann::json jsonData;
+	file >> jsonData;
+
+	file.close();
+
+	for (const auto& frameJson : jsonData)
+	{
+        std::string MaterialName = frameJson.at("material_name").get<std::string>();;
+        std::wstring wMaterialName = this->String_To_Wstring(MaterialName);
+        float frameRate = frameJson.at("frame_rate").get<float>();;
+        
+        std::vector<yunuGI::VFXInfo> locationVec;
+        float frame;
+        for (const auto& loc : frameJson.at("location_data"))
+        {
+            yunuGI::VFXInfo info;
+            info.frame = loc.at("frame").get<int>();
+            const auto& locationJson = loc.at("location");
+            info.location.x = locationJson[0].get<float>();
+            info.location.y = locationJson[1].get<float>();
+            locationVec.push_back(info);
+        }
+
+        // 비어있는 프레임을 채우는 부분
+        std::vector<yunuGI::VFXInfo> frameVec;
+        frameVec.resize(locationVec.back().frame + 1);
+        for (int i = 0; i < locationVec.size() - 1; ++i)
+        {
+            int curFrameCount = locationVec[i].frame;
+            int nextFrameCount = locationVec[i + 1].frame;
+            int totalFrame = nextFrameCount - curFrameCount;
+
+            int count = 0;
+            for (int j = curFrameCount; j < nextFrameCount; ++j)
+            {
+                float ratio = ((float)count / totalFrame);
+
+                auto lerpLocation = yunuGI::Vector2::Lerp(locationVec[i].location, locationVec[i+1].location, ratio);
+                frameVec[j].frame = j;
+                frameVec[j].location = lerpLocation;
+                count++;
+            }
+        }
+
+        this->vfxFrameInfoMap.insert({ wMaterialName,{frameRate, frameVec} });
+        locationVec.clear();
+	}
 }
 
 void ResourceManager::LoadFBX(const char* filePath)
@@ -587,6 +711,19 @@ FBXNode* ResourceManager::GetFBXNode(const std::wstring& fbxName)
 {
     return this->fbxNodeMap.find(fbxName)->second;
 }
+
+std::pair<float, std::vector<yunuGI::VFXInfo>>& ResourceManager::GetVFXInfo(const std::wstring& materialName) 
+{
+    size_t pos = materialName.find(L"_instance");
+    if (pos != std::wstring::npos)
+    {
+        std::wstring result = materialName.substr(0, pos);
+        return this->vfxFrameInfoMap[result];
+    }
+
+    return this->vfxFrameInfoMap[materialName];
+}
+
 std::vector<yunuGI::IMesh*>& ResourceManager::GetMeshList() { return this->meshVec; };
 std::vector<yunuGI::ITexture*>& ResourceManager::GetTextureList()
 {
@@ -945,6 +1082,7 @@ void ResourceManager::CreateDefaultShader()
     CreateShader(L"Skinned_PointLightShadowVS.cso");
     CreateShader(L"ParticleVS.cso");
     CreateShader(L"TextureAnimVS.cso");
+    CreateShader(L"SkinnedVFX_VS.cso");
 #pragma endregion
 
 #pragma region PS
@@ -971,8 +1109,9 @@ void ResourceManager::CreateDefaultShader()
     CreateShader(L"UIPreProcessPS.cso");
     CreateShader(L"TextureAnimPS.cso");
     CreateShader(L"RimForwardPS.cso");
-	CreateShader(L"GuideLinePS.cso");
-	CreateShader(L"Stage1FloorNoBlendPS.cso");
+    CreateShader(L"GuideLinePS.cso");
+    CreateShader(L"Stage1FloorNoBlendPS.cso");
+	CreateShader(L"VFX_PS.cso");
 #pragma endregion
 
 #pragma region GS

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "YunutyEngine.h"
 #include "Component.h"
 #include "GameObject.h"
@@ -32,6 +33,10 @@ Component::Component()
     guid = addComponentDesc.guid;
     guidPtrMap[guid] = this;
 
+}
+std::weak_ptr<Component> yunutyEngine::Component::GetWeakPtrFromGameObject()const
+{
+    return gameObject->components.at(const_cast<yunutyEngine::Component*>(this));
 }
 Component::~Component()
 {

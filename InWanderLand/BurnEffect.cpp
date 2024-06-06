@@ -52,7 +52,7 @@ void BurnEffect::Start()
 
 			for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
 			{
-				auto material = renderer->GetGI().GetMaterial(i, false);
+				auto material = renderer->GetGI().GetMaterial(i,false);
 
 				this->originMaterialVec.push_back(material);
 
@@ -63,10 +63,7 @@ void BurnEffect::Start()
 				burnMaterial->SetTexture(yunuGI::Texture_Type::Temp0, _resourceManager->GetTexture(L"Texture/Dissolve.jpg"));
 				burnMaterial->SetPixelShader(_resourceManager->GetShader(L"DissolvePS.cso"));
 
-				renderer->GetGI().SetMaterial(i, burnMaterial);
-				this->burnMaterialVec.push_back(renderer->GetGI().GetMaterial(i));
-
-				renderer->GetGI().SetMaterial(i, originMaterialVec.back());
+				this->burnMaterialVec.push_back(burnMaterial);
 			}
 		}
 	}

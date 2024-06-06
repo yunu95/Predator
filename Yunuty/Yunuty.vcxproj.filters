@@ -349,6 +349,12 @@
     <Filter Include="yunutyEngine\Graphics\_YunuGIObjects\Component\VideoPlayer">
       <UniqueIdentifier>{991a6bfd-4dde-4b1f-b592-e0c6f77a8d4d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="yunutyEngine\Coroutine\ForSeconds">
+      <UniqueIdentifier>{700e58f7-cb7b-49b6-bae3-575955ea0b35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\ScopedDestroyer">
+      <UniqueIdentifier>{374935f2-d0fb-4bb8-96a7-954e934f7006}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -560,6 +566,9 @@
     </ClCompile>
     <ClCompile Include="VideoPlayer.cpp">
       <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\VideoPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="YunutyForSeconds.cpp">
+      <Filter>yunutyEngine\Coroutine\ForSeconds</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -850,6 +859,12 @@
     </ClInclude>
     <ClInclude Include="header\VideoPlayer.h">
       <Filter>yunutyEngine\Graphics\_YunuGIObjects\Component\VideoPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="header\YunutyForSeconds.h">
+      <Filter>yunutyEngine\Coroutine\ForSeconds</Filter>
+    </ClInclude>
+    <ClInclude Include="header\ScopedDestroyer.h">
+      <Filter>yunutyEngine\ScopedDestroyer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

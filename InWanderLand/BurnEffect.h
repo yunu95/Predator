@@ -3,7 +3,7 @@
 #include "YunuGraphicsInterface.h"
 #include "ContentsObservee.h"
 
-class BurnEffect : public Component, public ContentsObservee
+class BurnEffect : public Component
 {
 public:
 	void SetEdgeColor(yunuGI::Color color);
@@ -16,7 +16,6 @@ public:
 
 	void Start() override;
 	void Update() override;
-	virtual Component* GetComponent() override { return this; }
 
 private:
 	void Reset();

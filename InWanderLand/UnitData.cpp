@@ -22,6 +22,7 @@
 #include "BurnEffect.h"
 #include "ParticleTool_Manager.h"
 #include "AnimationEventManager.h"
+#include "SFXManager.h"
 
 namespace application
 {
@@ -36,7 +37,7 @@ namespace application
             return true;
         }
 
-        ITemplateData* UnitData::GetTemplateData()
+        Unit_TemplateData* UnitData::GetTemplateData()
         {
             return pod.templateData;
         }
@@ -117,283 +118,16 @@ namespace application
 
         void UnitData::ApplyAsPlaytimeObject()
         {
-            if (pod.isGuide)
+            if (pod.isGuide || pod.waveData != nullptr)
             {
                 return;
             }
+            UnitPool::SingleInstance().Borrow(this);
+        }
 
-            // 함정과 같은 특수 기믹 객체들도 유닛과 유사하게 위치를 지정해주면 되기 때문에 UnitType에 Bomb, Trap, Bbang/th같은
-            // 타입을 확장하여 유닛 생성 로직에서 같이 처리할 수 있게 만들 수 있다.
-            //UnitClassifier::SingleInstance().SendPODToClassifier(pod);
-            pod.waveData->pod.waveUnitUUIDS;
-            /// 2024.03.20 추가
-            // 이제 templateData에서 UnitType에 대한 int값을 가져올 수 있다.
-            // 이 값을 통해 타입을 분류해 유닛을 배치해보자.
-            Vector3d startPosition = Vector3d(pod.position.x, 0, pod.position.z);
-            Quaternion startRotation = Quaternion(pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z);
-
-            if (!isSelectorInitialized)
-            {
-                productorSelector.push_back(&WarriorProductor::Instance());
-                productorSelector.push_back(&HealerProductor::Instance());
-                productorSelector.push_back(&MagicianProductor::Instance());
-                productorSelector.push_back(&MeleeEnemyProductor::Instance());
-                productorSelector.push_back(&RangedEnemyProductor::Instance());
-                productorSelector.push_back(&SpikeTrapProductor::Instance());
-                productorSelector.push_back(&BossProductor::Instance());
-                isSelectorInitialized = true;
-            }
-
-            if (isSelectorInitialized)
-            {
-                for (auto e : productorSelector)
-                {
-                    e->SetUnitData();
-                }
-            }
-
-            UnitProductor* currentSelectedProductor{ nullptr };
-
-            int tempShortCutIndex = 0;
-
-            if (pod.templateData->pod.skinnedFBXName == "SKM_Monster1")
-            {
-				currentSelectedProductor = &MeleeEnemyProductor::Instance();
-				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-				MeleeEnemyPool::Instance().SetStageNumber(pod.stage);
-				MeleeEnemyPool::Instance().SetStartPosition(startPosition);
-
-				if (pod.templateData->pod.isEliteMonster == true)
-				{
-					inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-					inGameUnit->GetGameObject()->GetComponent<BurnEffect>()->Appear();
-				}
-				else
-					inGameUnit = MeleeEnemyPool::Instance().Borrow()->m_pairUnit;
-
-				tempShortCutIndex = 2;
-            }
-            else if (pod.templateData->pod.skinnedFBXName == "SKM_Monster2")
-            {
-                currentSelectedProductor = &RangedEnemyProductor::Instance();
-                currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-                RangedEnemyPool::Instance().SetStartPosition(startPosition);
-
-				if (pod.templateData->pod.isEliteMonster == true)
-				{
-					inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-					inGameUnit->GetGameObject()->GetComponent<BurnEffect>()->Appear();
-				}
-				else
-					inGameUnit = RangedEnemyPool::Instance().Borrow()->m_pairUnit;
-
-                tempShortCutIndex = 2;
-            }
-            else if (pod.templateData->pod.skinnedFBXName == "SKM_HeartQueen")
-            {
-				currentSelectedProductor = &BossProductor::Instance();
-				currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-				inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-				tempShortCutIndex = 2;
-            }
-            else
-            {
-                tempShortCutIndex = 1;
-
-                if (pod.templateData->pod.skinnedFBXName == "SKM_Robin")
-                {
-					currentSelectedProductor = &WarriorProductor::Instance();
-                }
-                else if (pod.templateData->pod.skinnedFBXName == "SKM_Ursula")
-                {
-					currentSelectedProductor = &MagicianProductor::Instance();
-                }
-                else if (pod.templateData->pod.skinnedFBXName == "SKM_Hansel")
-                {
-                    currentSelectedProductor = &HealerProductor::Instance();;
-                }
-                currentSelectedProductor->MappingUnitData(pod.templateData->pod);
-                inGameUnit = currentSelectedProductor->CreateUnit(startPosition);
-            }
-
-            inGameUnit->GetTransform()->SetWorldRotation(startRotation);
-
-            if (inGameUnit)
-            {
-                auto& ptm = particle::ParticleTool_Manager::GetSingletonInstance();
-                const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-                auto obj = inGameUnit->GetGameObject();
-                auto animator = obj->GetComponent<graphics::Animator>();
-                std::wstring fbxNameW;
-                fbxNameW.assign(pod.templateData->pod.skinnedFBXName.begin(), pod.templateData->pod.skinnedFBXName.end());
-
-                /// Particle Setting
-                for (auto& eachPI : ptm.GetChildrenParticleInstanceList(pod.templateData->pod.skinnedFBXName))
-                {
-                    auto pObj = obj->AddGameObject();
-                    auto sptr = eachPI.lock();
-                    pObj->GetTransform()->SetLocalPosition(sptr->offsetPos);
-                    pObj->GetTransform()->SetLocalRotation(sptr->rotation);
-                    pObj->GetTransform()->SetLocalScale(sptr->scale);
-                    pObj->setName(sptr->name);
-                    auto pr = pObj->AddComponent<graphics::ParticleRenderer>();
-                    pr->SetParticleShape((yunutyEngine::graphics::ParticleShape)sptr->particleData.shape);
-                    pr->SetParticleMode((yunutyEngine::graphics::ParticleMode)sptr->particleData.particleMode);
-                    pr->SetLoop(sptr->particleData.isLoop);
-                    pr->SetDuration(sptr->particleData.duration);
-                    pr->SetLifeTime(sptr->particleData.lifeTime);
-                    pr->SetSpeed(sptr->particleData.speed);
-                    pr->SetStartScale(sptr->particleData.startScale);
-                    pr->SetEndScale(sptr->particleData.endScale);
-                    pr->SetMaxParticle(sptr->particleData.maxParticle);
-                    pr->SetPlayAwake(sptr->particleData.playAwake);
-                    pr->SetRadius(sptr->particleData.radius);
-                    pr->SetAngle(sptr->particleData.angle);
-
-                    pr->SetRateOverTime(sptr->particleData.rateOverTime);
-                    
-                    pr->SetBurstsCount(sptr->particleData.burstsCount);
-                    pr->SetInterval(sptr->particleData.interval);
-
-                    std::wstring texturePath;
-                    texturePath.assign(sptr->particleData.texturePath.begin(), sptr->particleData.texturePath.end());
-                    auto texturePtr = resourceManager->GetTexture(texturePath);
-                    if (texturePtr)
-                    {
-                        pr->SetTexture(texturePtr);
-                    }
-
-                    pObj->SetSelfActive(false);
-                }
-
-                /// Animation Event Setting
-                auto& list = resourceManager->GetFBXAnimationList(fbxNameW);
-                for (auto& each : list)
-                {
-                    std::string aniName;
-                    aniName.assign(each->GetName().begin(), each->GetName().end());
-
-                    for (auto& eventWeak : ptm.GetAnimationEventList(ptm.GetMatchingIAnimation(pod.templateData->pod.skinnedFBXName, aniName)))
-                    {
-                        auto event = eventWeak.lock();
-                        auto type = event->GetType();
-                        switch (type)
-                        {
-                            case application::AnimationEventType::GameObject_ActivateEvent:
-                            {
-                                auto ptr = static_cast<GameObject_ActivateEvent*>(event.get());
-                                GameObject* particle = nullptr;
-                                for (auto& child : obj->GetChildren())
-                                {
-                                    if (child->getName() == ptr->objName)
-                                    {
-                                        particle = child;
-                                        break;
-                                    }
-                                }
-
-                                animator->PushAnimationWithFunc(each, event->frame, [=]()
-                                    {
-                                        particle->SetSelfActive(true);
-                                        auto ptr = particle->GetComponent<graphics::ParticleRenderer>();
-                                        ptr->Play();
-                                    });
-
-                                break;
-                            }
-                            case application::AnimationEventType::GameObject_DisabledEvent:
-                            {
-                                auto ptr = static_cast<GameObject_DisabledEvent*>(event.get());
-                                GameObject* particle = nullptr;
-                                for (auto& child : obj->GetChildren())
-                                {
-                                    if (child->getName() == ptr->objName)
-                                    {
-                                        particle = child;
-                                        break;
-                                    }
-                                }
-
-                                animator->PushAnimationWithFunc(each, event->frame, [=]()
-                                    {
-                                        particle->SetSelfActive(false);
-                                    });
-
-                                break;
-                            }
-                            case application::AnimationEventType::GameObject_TransformEditEvent:
-                            {
-                                auto ptr = static_cast<GameObject_TransformEditEvent*>(event.get());
-                                GameObject* particle = nullptr;
-                                for (auto& child : obj->GetChildren())
-                                {
-                                    if (child->getName() == ptr->objName)
-                                    {
-                                        particle = child;
-                                        break;
-                                    }
-                                }
-
-                                for (int i = 0; i < each->GetTotalFrame(); i++)
-                                {
-                                    animator->PushAnimationWithFunc(each, i, [=]()
-                                        {
-                                            auto& aem = AnimationEventManager::GetSingletonInstance();
-                                            auto target = aem.GetLerpPoint(ptr->editData, i);
-                                            particle->GetTransform()->SetLocalPosition(target->GetLocalPosition());
-                                            particle->GetTransform()->SetLocalRotation(target->GetLocalRotation());
-                                            particle->GetTransform()->SetLocalScale(target->GetLocalScale());
-                                        });
-                                }
-
-                                break;
-                            }
-                            case application::AnimationEventType::Sound_PlayOnceEvent:
-                            {
-                                auto ptr = static_cast<Sound_PlayOnceEvent*>(event.get());
-                                animator->PushAnimationWithFunc(each, event->frame, [=]()
-                                    {
-                                        yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animator->GetGameObject()->GetTransform()->GetWorldPosition());
-                                    });
-                                break;
-                            } 
-                            case application::AnimationEventType::GameObject_AwakeEvent:
-                            {
-                                auto ptr = static_cast<GameObject_AwakeEvent*>(event.get());
-                                GameObject* particle = nullptr;
-                                for (auto& child : obj->GetChildren())
-                                {
-                                    if (child->getName() == ptr->objName)
-                                    {
-                                        particle = child;
-                                        break;
-                                    }
-                                }
-
-                                animator->PushAnimationWithFunc(each, event->frame, [=]()
-                                    {
-                                        auto ptr = particle->GetComponent<graphics::ParticleRenderer>();
-						                ptr->Reset();
-                                    });
-
-                                break;
-                            }
-                            default:
-                                break;
-                        }
-                    }
-                }
-            }
-		}
-
-		void UnitData::PostApplyAsPlaytimeObject()
-		{
-			if (pod.waveData != nullptr)
-			{
-				inGameUnit->GetGameObject()->SetSelfActive(false);
-			}
-
-		}
+        void UnitData::PostApplyAsPlaytimeObject()
+        {
+        }
 
         bool UnitData::EnterDataFromGlobalConstant()
         {

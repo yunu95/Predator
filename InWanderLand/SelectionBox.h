@@ -19,7 +19,7 @@ namespace application
                 virtual void Start() override
                 {
                     auto rsrcManager = graphics::Renderer::SingleInstance().GetResourceManager();
-                    boxMesh = AttachDebugMesh(GetGameObject(), DebugMeshType::Rectangle, yunuGI::Color::green(), true);
+                    boxMesh = AttachDebugMesh(GetGameObject(), DebugMeshType::Cube, yunuGI::Color::green(), true);
                     boxMesh->GetGI().SetMaterial(0, GetColoredDebugMaterialTransparent({ 0,1,0,0.2 }));
                     boxCollider = GetGameObject()->AddComponent<yunutyEngine::physics::BoxCollider>();
                     //debugBoxColliderNear = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::physics::BoxCollider>();

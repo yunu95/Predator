@@ -226,6 +226,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClCompile Include="YunutyBoxCollider.cpp" />
     <ClCompile Include="YunutyCapsuleCollider.cpp" />
     <ClCompile Include="YunutyCollider.cpp" />
+    <ClCompile Include="YunutyForSeconds.cpp" />
     <ClCompile Include="YunutyNavigationAgent.cpp" />
     <ClCompile Include="YunutyNavigationField.cpp" />
     <ClCompile Include="NavigationField2D.cpp" />
@@ -318,6 +319,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$(configuration)" "$(targetdir
     <ClInclude Include="header\YunutyWaitForSeconds.h" />
     <ClInclude Include="header\YunutyYieldInstruction.h" />
     <ClInclude Include="header\VideoPlayer.h" />
+    <ClInclude Include="header\YunutyForSeconds.h" />
+    <ClInclude Include="header\ScopedDestroyer.h" />
     <ClInclude Include="_YunutyBoxColliderImpl.h" />
     <ClInclude Include="_YunutyCapsuleColliderImpl.h" />
     <ClInclude Include="_YunutyColliderImpl.h" />

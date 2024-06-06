@@ -41,7 +41,8 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 	const aiScene* scene = importer.ReadFile(filePath, flag);
 	auto temp = importer.GetErrorString();
 
-	if (!scene) {
+	if (!scene) 
+	{
 		assert(FALSE&& "FBX 파일 로드에 실패했습니다. 파일이 있는지 확인해주세요.");
 	}
 
@@ -233,10 +234,7 @@ void ModelLoader::ParseMaterial(const aiScene* scene, const aiMesh* mesh, FBXMes
 
 	// Material Name
 	fbxMeshData.material.materialName = aiStringToWString(material->GetName());
-	if (fbxMeshData.material.materialName == L"M_Wood")
-	{
-		int a = 1;
-	}
+
 	auto materialPtr = ResourceManager::Instance.Get().GetMaterial(fbxMeshData.material.materialName);
 
 	// Albedo Texture

@@ -12,10 +12,10 @@
 class DebuggingMeshPool : public GameObjectPool<DebuggingMesh>, public SingletonComponent<DebuggingMeshPool>, public Component, public PermanentObservee
 {
 private:
-	virtual void ObjectInitializer(DebuggingMesh* comp) override
+	virtual void ObjectInitializer(std::weak_ptr<DebuggingMesh> comp) override
 	{
-		comp->m_staticMeshRendererComp = AttachDebugMesh(comp->GetGameObject(), DebugMeshType::Sphere, yunuGI::Color::red(), false);
-		comp->m_staticMeshRendererComp->SetActive(false);
+		comp.lock()->m_staticMeshRendererComp = AttachDebugMesh(comp.lock()->GetGameObject(), DebugMeshType::Sphere, yunuGI::Color::red(), false);
+		comp.lock()->m_staticMeshRendererComp->SetActive(false);
 	}
 	virtual void Start() override;
 	virtual void OnContentsStop() override;

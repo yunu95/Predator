@@ -11,76 +11,89 @@
 
 namespace yunuGIAdapter
 {
-    class SkinnedMeshAdapter : public yunuGIAdapter::RenderableAdapter, public yunuGI::ISkinnedMesh
-    {
-    public:
-        SkinnedMeshAdapter() :RenderableAdapter()
-        {
-            renderable = std::make_shared<SkinnedMesh>();
-            RenderSystem::Instance.Get().PushSkinnedRenderableObject(renderable.get());
+	class SkinnedMeshAdapter : public yunuGIAdapter::RenderableAdapter, public yunuGI::ISkinnedMesh
+	{
+	public:
+		SkinnedMeshAdapter() :RenderableAdapter()
+		{
+			renderable = std::make_shared<SkinnedMesh>();
+			RenderSystem::Instance.Get().PushSkinnedRenderableObject(renderable.get());
 
-            std::shared_ptr<MaterialWrapper> material = std::make_shared<MaterialWrapper>(false, 0);
-            material->SetRenderable(this->renderable);
-            //renderable->SetMaterial(0, material->GetMaterial());
-            this->materialVec.emplace_back(material);
-        }
+			std::shared_ptr<MaterialWrapper> material = std::make_shared<MaterialWrapper>(false, 0);
+			material->SetRenderable(this->renderable);
+			//renderable->SetMaterial(0, material->GetMaterial());
+			this->materialVec.emplace_back(material);
+		}
 
-        ~SkinnedMeshAdapter()
-        {
-            RenderSystem::Instance.Get().PopSkinnedRenderableObject(renderable.get());
-        }
+		~SkinnedMeshAdapter()
+		{
 
-        virtual void SetBone(std::wstring fbxName) override
-        {
-            renderable->SetBone(fbxName);
-        }
+			for (int i = 0; i < static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec.size(); ++i)
+			{
+				if (static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[i]->renderInfo.material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+				{
+					InstancingManager::Instance.Get().PopSkinnedDeferredData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[i]);
+				}
+				else
+				{
+					InstancingManager::Instance.Get().PopSkinnedForwardData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[i]);
+				}
+			}
+		}
 
-        virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)
-        {
-            renderable->SetWorldTM(reinterpret_cast<const DirectX::SimpleMath::Matrix&>(worldTM));
-        };
+		virtual void SetBone(std::wstring fbxName) override
+		{
+			renderable->SetBone(fbxName);
+		}
 
-        virtual void SetActive(bool isActive)
-        {
-            renderable->SetActive(isActive);
-        };
+		virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)
+		{
+			renderable->SetWorldTM(reinterpret_cast<const DirectX::SimpleMath::Matrix&>(worldTM));
+		};
+
+		virtual void SetActive(bool isActive)
+		{
+			renderable->SetActive(isActive);
+		};
 		virtual bool IsActive() override
 		{
-            return true;
+			return true;
 		}
-        virtual void SetMesh(yunuGI::IMesh* mesh)  override
-        {
-            renderable->SetMesh(reinterpret_cast<Mesh*>(mesh));
-        };
+		virtual void SetMesh(yunuGI::IMesh* mesh)  override
+		{
+			renderable->SetMesh(reinterpret_cast<Mesh*>(mesh));
+		};
 
-        virtual yunuGI::IMesh* GetMesh() const override
-        {
-            return renderable->GetMesh();
-        };
+		virtual yunuGI::IMesh* GetMesh() const override
+		{
+			return renderable->GetMesh();
+		};
 
-        virtual void SetAnimatorIndex(int animatorIndex) override
-        {
-            renderable->SetAnimatorIndex(animatorIndex);
-        };
+		virtual void SetAnimatorIndex(int animatorIndex) override
+		{
+			renderable->SetAnimatorIndex(animatorIndex);
+		};
 
-        virtual void SetPickingMode(bool isPickingModeOn) {}
+		virtual void SetPickingMode(bool isPickingModeOn) {}
 
-        virtual void SetMaterial(unsigned int index, yunuGI::IMaterial* material,bool isOrigin = false) override
-        {
-            // 새로운 Material이라면
-            if (index + 1 > this->materialVec.size())
-            {
-                std::shared_ptr<MaterialWrapper> tempMaterial = std::make_shared<MaterialWrapper>(index);
-                tempMaterial->SetRenderable(this->renderable);
-                this->materialVec.emplace_back(tempMaterial);
+		virtual void SetMaterial(unsigned int index, yunuGI::IMaterial* material, bool isOrigin = false) override
+		{
+			material = (material)->GetMaterial();
 
-                if (isOrigin)
-                {
-                    this->materialVec.back()->original = reinterpret_cast<Material*>(material);
-                    this->materialVec.back()->SetIsOrigin(isOrigin);
-                }
-                else
-                {
+			// 새로운 Material이라면
+			if (index + 1 > this->materialVec.size())
+			{
+				std::shared_ptr<MaterialWrapper> tempMaterial = std::make_shared<MaterialWrapper>(index);
+				tempMaterial->SetRenderable(this->renderable);
+				this->materialVec.emplace_back(tempMaterial);
+
+				if (isOrigin)
+				{
+					this->materialVec.back()->original = reinterpret_cast<Material*>(material);
+					this->materialVec.back()->SetIsOrigin(isOrigin);
+				}
+				else
+				{
 					if (this->materialVec.back()->IsOrigin())
 					{
 						this->materialVec.back()->original = reinterpret_cast<Material*>(material);
@@ -89,17 +102,17 @@ namespace yunuGIAdapter
 					{
 						this->materialVec.back()->variation = reinterpret_cast<Material*>(material);
 					}
-                }
-            }
-            else
-            {
-                if (isOrigin)
-                {
-                    this->materialVec[index]->original = reinterpret_cast<Material*>(material);
-                    this->materialVec[index]->SetIsOrigin(isOrigin);
-                }
-                else
-                {
+				}
+			}
+			else
+			{
+				if (isOrigin)
+				{
+					this->materialVec[index]->original = reinterpret_cast<Material*>(material);
+					this->materialVec[index]->SetIsOrigin(isOrigin);
+				}
+				else
+				{
 					if (this->materialVec[index]->IsOrigin())
 					{
 						this->materialVec[index]->original = reinterpret_cast<Material*>(material);
@@ -108,15 +121,22 @@ namespace yunuGIAdapter
 					{
 						this->materialVec[index]->variation = reinterpret_cast<Material*>(material);
 					}
-                }
-            }
+				}
+			}
 
-            renderable->SetMaterial(index, material);
-        };
+			renderable->SetMaterial(index, material);
+		};
 
 		virtual yunuGI::IMaterial* GetMaterial(unsigned int index = 0, bool isInstance = true)override
 		{
-			return this->materialVec[index]->GetVariation(isInstance);
+			if (isInstance)
+			{
+				return this->materialVec[index].get();
+			}
+			else
+			{
+				return this->materialVec[index].get()->GetMaterial();
+			}
 		};
 
 		virtual int GetMaterialCount() override

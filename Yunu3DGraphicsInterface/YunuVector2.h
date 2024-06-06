@@ -25,5 +25,14 @@ namespace yunuGI
 			temp.y += val;
 			return temp;
 		}
+
+		static Vector2 Lerp(const Vector2& start, const Vector2& end, float t)
+		{
+			return Vector2
+			(
+				start.x + t * (end.x - start.x),
+				start.y + t * (end.y - start.y)
+			);
+		}
 	};
 }

@@ -31,6 +31,11 @@ namespace yunutyEngine
         Vector3(const Vector2<real>& rhs);
         template<typename real2>
         Vector3(const Vector3<real2>& rhs);
+        Vector3(const yunuGI::Vector3& other) :
+            x(static_cast<real>(other.x)),
+            y(static_cast<real>(other.y)),
+            z(static_cast<real>(other.z))
+        {};
         static const Vector3 zero;
         static const Vector3 one;
         static const Vector3 right;
@@ -100,6 +105,7 @@ template<typename real2>
 yunutyEngine::Vector3<real>::Vector3(const Vector3<real2>& rhs) :
     Vector3<real>(static_cast<real>(rhs.x), static_cast<real>(rhs.y), static_cast<real>(rhs.z))
 { }
+
 template<typename real>
 real yunutyEngine::Vector3<real>::Dot(const Vector3<real>& lhs, const Vector3<real>& rhs)
 {
@@ -271,6 +277,12 @@ Vector3<real> yunutyEngine::Vector3<real>::operator/(const double& scalar)const
     Vector3<real> ret(*this);
     ret /= scalar;
     return ret;
+}
+template<typename real>
+std::wostream& operator<<(std::wostream& os, const yunutyEngine::Vector3<real>& vec)
+{
+    os << L"(" << vec.x << L", " << vec.y << L", " << vec.z << L")";
+    return os;
 }
 
 template<typename real>

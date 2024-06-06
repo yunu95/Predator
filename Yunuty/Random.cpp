@@ -13,6 +13,16 @@ int Random::GetRandomInt(int min, int max)
     std::uniform_int_distribution<int> dis(min, max);
     return dis(SingleInstance()->gen);
 }
+float Random::GetRandomFloat(float min, float max)
+{
+    std::uniform_real_distribution<float> dis(min, max);
+    return dis(SingleInstance()->gen);
+}
+float Random::GetRandomFloat(float amplitude)
+{
+    std::uniform_real_distribution<float> dis(-amplitude, amplitude);
+    return dis(SingleInstance()->gen);
+}
 Random* Random::SingleInstance()
 {
     if (instance == nullptr)

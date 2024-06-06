@@ -15,52 +15,56 @@
 
 namespace yunutyEngine::graphics
 {
-	class YunutyCycle;
+    class YunutyCycle;
 
-	struct AnimationEvent
-	{
-		unsigned int frame;
-		bool isFirst;
-		std::function<void()> func;
-	};
+    struct AnimationEvent
+    {
+        unsigned int frame;
+        bool isFirst;
+        std::function<void()> func;
+    };
 
-	class YUNUTY_API Animator : public Renderable<yunuGI::IAnimator>
-	{
-	protected:
-	public:
-		// GI는 Graphics Interface라는 뜻임.
-		yunuGI::IAnimator& GetGI() { return Renderable<yunuGI::IAnimator>::GetGI(); }
-		Animator();
-		void Update();
-		virtual ~Animator() {};
-		void Pause();
-		void Play(yunuGI::IAnimation* animation);
-		void PushAnimation(yunuGI::IAnimation* animation);
-		void SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame);
-		void ChangeAnimation(yunuGI::IAnimation* animation, float transitionDuration, float transitionSpeed);
-		
-		/// isPlay 값을 리턴합니다.
-		bool IsPlaying() { return isPlay; }
+    class YUNUTY_API Animator : public Renderable<yunuGI::IAnimator>
+    {
+    protected:
+    public:
+        // GI는 Graphics Interface라는 뜻임.
+        yunuGI::IAnimator& GetGI() { return Renderable<yunuGI::IAnimator>::GetGI(); }
+        Animator();
+        void Update();
+        virtual void OnDisable() override;
+        virtual void OnEnable() override;
+        virtual ~Animator() {};
+        void Pause();
+        void Resume();
+        void Play(yunuGI::IAnimation* animation);
+        void PushAnimation(yunuGI::IAnimation* animation);
+        void SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame);
+        void ChangeAnimation(yunuGI::IAnimation* animation, float transitionDuration, float transitionSpeed);
 
-		/// AnimationEvent 의 경우, Push 뿐만이 아니라 Erase 에 대한 대처도 필요합니다.
-		/// 일반적인 Push 상황과 별개로 functor 를 등록하는 경우에는 Index 를 리턴받도록 합니다.
-		unsigned long long PushAnimationWithFunc(yunuGI::IAnimation* animation, unsigned int frame, std::function<void()> func);
-		bool EraseAnimationFunc(yunuGI::IAnimation* animation, unsigned long long index);
+        /// isPlay 값을 리턴합니다.
+        bool IsPlaying() { return isPlay; }
+        // 재생한 애니메이션이 끝났다면 true를 리턴합니다.
+        bool IsDone();
 
-		/// Animation 이 플레이 중인 경우 해당 프레임을 반환하는 함수입니다.
-		/// 플레이 중이지 않을 경우, 0을 return 합니다.
-		float GetCurrentFrame();
+        /// AnimationEvent 의 경우, Push 뿐만이 아니라 Erase 에 대한 대처도 필요합니다.
+        /// 일반적인 Push 상황과 별개로 functor 를 등록하는 경우에는 Index 를 리턴받도록 합니다.
+        unsigned long long PushAnimationWithFunc(yunuGI::IAnimation* animation, unsigned int frame, std::function<void()> func);
+        bool EraseAnimationFunc(yunuGI::IAnimation* animation, unsigned long long index);
 
-	private:
-		void ClearAnimationEvent(yunuGI::IAnimation* animation);
+        /// Animation 이 플레이 중인 경우 해당 프레임을 반환하는 함수입니다.
+        /// 플레이 중이지 않을 경우, 0을 return 합니다.
+        float GetCurrentFrame();
 
-	private:
-		bool isChange = false;
-		bool isPlay = false;
-		std::map<yunuGI::IAnimation*, std::map<unsigned long long, AnimationEvent>> animationEventMap;
-		unsigned long long functorIndex = 1;
-	};
+    private:
+        void ClearAnimationEvent(yunuGI::IAnimation* animation);
+
+    private:
+        bool isChange = false;
+        bool isPlay = false;
+        std::map<yunuGI::IAnimation*, std::map<unsigned long long, AnimationEvent>> animationEventMap;
+        unsigned long long functorIndex = 1;
+    };
 }
-
 
 

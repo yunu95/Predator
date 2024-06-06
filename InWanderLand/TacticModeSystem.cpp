@@ -4,7 +4,6 @@
 #include "RTSCam.h"
 #include "PlayerController.h"
 #include "SkillPreviewSystem.h"
-#include "CursorDetector.h"
 #include "PlaytimeWave.h"
 #include "WaveData.h"
 #include "LocalTimeEntityManager.h"
@@ -551,15 +550,6 @@ void TacticModeSystem::Update()
 		UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Overlay)->adjuster->SetTargetFloat(1);
 		UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Cooltime_Number)->DisableElement();
 	}
-}
-
-void TacticModeSystem::OnContentsStop()
-{
-
-}
-
-void TacticModeSystem::OnContentsPlay()
-{
 }
 
 void TacticModeSystem::OperateTacticSystem()

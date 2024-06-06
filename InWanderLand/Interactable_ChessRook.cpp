@@ -6,6 +6,7 @@
 #include "TacticModeSystem.h"
 #include "ChessBombComponent.h"
 #include "YunutyWaitForSeconds.h"
+#include "SFXManager.h"
 
 void Interactable_ChessRook::Start()
 {
@@ -106,7 +107,7 @@ void Interactable_ChessRook::OnTriggerEnter(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
 		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+		colliderUnitComponent->IsPlayerUnit())
 	{
 		OnInteractableTriggerEnter();
 	}
@@ -183,7 +184,7 @@ yunutyEngine::coroutine::Coroutine Interactable_ChessRook::DoInteraction()
 		each->Damaged(damage);
 	}
 
-	yunutyEngine::SoundSystem::PlaySoundfile3D("sounds/trap/EXPLOSION_gimmik.mp3", GetTransform()->GetWorldPosition());
+	SFXManager::PlaySoundfile3D("sounds/trap/EXPLOSION_gimmik.mp3", GetTransform()->GetWorldPosition());
 
 	if (particleEffectTime == 0)
 	{

@@ -1,7 +1,11 @@
 #include "DebugGraphic.h"
 
 unordered_set<graphics::Renderable<yunuGI::IRenderable>*> DebugGraphic::debugGraphics;
-bool DebugGraphic::isEnabled{true};
+#ifdef EDITOR
+bool DebugGraphic::isEnabled{ true };
+#else
+bool DebugGraphic::isEnabled{ false };
+#endif
 
 void DebugGraphic::SetDebugGraphicsEnabled(bool enabled)
 {

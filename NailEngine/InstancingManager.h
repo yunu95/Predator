@@ -41,15 +41,18 @@ public:
 
 	void RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& renderInfo);
 	void RegisterStaticForwardData(std::shared_ptr<RenderInfo>& renderInfo);
-	void RegisterSkinnedData(std::shared_ptr<SkinnedRenderInfo>& renderInfo);
+	void RegisterSkinnedDeferredData(std::shared_ptr<SkinnedRenderInfo>& renderInfo);
+	void RegisterSkinnedForwardData(std::shared_ptr<SkinnedRenderInfo>& renderInfo);
 
 	void PopStaticDeferredData(std::shared_ptr<RenderInfo>& renderInfo);
 	void PopStaticForwardData(std::shared_ptr<RenderInfo>& renderInfo);
-	void PopSkinnedData(std::shared_ptr<SkinnedRenderInfo>& renderInfo);
+	void PopSkinnedDeferredData(std::shared_ptr<SkinnedRenderInfo>& renderInfo);
+	void PopSkinnedForwardData(std::shared_ptr<SkinnedRenderInfo>& renderInfo);
 
 	void RegisterParticleRenderInfo(ParticleSystem* particleSystem, std::list<yunuGI::ParticleRenderInfo>* particleInfoList);
 
-	void RenderSkinned();
+	void RenderSkinnedDeferred();
+	void RenderSkinnedForward();
 	void ClearData();
 
 	void PopParticleSystem(ParticleSystem* system);
@@ -74,7 +77,8 @@ private:
 
 	std::map<InstanceID, std::set<std::shared_ptr<RenderInfo>>> staticMeshForwardCache;
 
-	std::map<InstanceID, std::set<std::shared_ptr<SkinnedRenderInfo>>> skinnedMeshCache;
+	std::map<InstanceID, std::set<std::shared_ptr<SkinnedRenderInfo>>> skinnedMeshDeferredCache;
+	std::map<InstanceID, std::set<std::shared_ptr<SkinnedRenderInfo>>> skinnedMeshForwardCache;
 
 	std::map<ParticleSystem*, std::list<yunuGI::ParticleRenderInfo>*> particleRenderInfoMap;
 

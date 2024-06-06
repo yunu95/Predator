@@ -8,6 +8,7 @@
 
 #include "YunutyWaitForSeconds.h"
 #include "ParticleTool_Manager.h"
+#include "SFXManager.h"
 
 void Interactable_TrapArms::Start()
 {
@@ -97,7 +98,7 @@ void Interactable_TrapArms::OnTriggerEnter(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
 		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+		colliderUnitComponent->IsPlayerUnit())
 	{
 		triggerStay.insert(collider);
 	}
@@ -107,7 +108,7 @@ void Interactable_TrapArms::OnTriggerExit(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
 		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+		colliderUnitComponent->IsPlayerUnit())
 	{
 		triggerStay.erase(collider);
 	}
@@ -152,7 +153,7 @@ yunutyEngine::coroutine::Coroutine Interactable_TrapArms::DoInteraction()
 
 	particleObj->SetSelfActive(true);
 	particleObj->GetComponent<graphics::ParticleRenderer>()->Play();
-	yunutyEngine::SoundSystem::PlaySoundfile3D("sounds/trap/Trigger_Impact.wav", GetGameObject()->GetTransform()->GetWorldPosition());
+	SFXManager::PlaySoundfile3D("sounds/trap/Trigger_Impact.wav", GetGameObject()->GetTransform()->GetWorldPosition());
 
 	for (auto each : triggerStay)
 	{

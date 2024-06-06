@@ -17,12 +17,12 @@ class Interactable_ChessPool
 {
 public:
 	virtual void Start() override;
-	Interactable_ChessPawn* BorrowPawn();
-	Interactable_ChessRook* BorrowRook();
-	Interactable_ChessBishop* BorrowBishop();
-	void Return(Interactable_ChessPawn* chess);
-	void Return(Interactable_ChessRook* chess);
-	void Return(Interactable_ChessBishop* chess);
+	std::weak_ptr<Interactable_ChessPawn> BorrowPawn();
+	std::weak_ptr<Interactable_ChessRook> BorrowRook();
+	std::weak_ptr<Interactable_ChessBishop> BorrowBishop();
+	void Return(std::weak_ptr<Interactable_ChessPawn> chess);
+	void Return(std::weak_ptr<Interactable_ChessRook> chess);
+	void Return(std::weak_ptr<Interactable_ChessBishop> chess);
 	virtual Component* GetComponent() override { return this; }
 
 private:

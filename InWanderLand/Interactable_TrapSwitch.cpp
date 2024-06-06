@@ -5,6 +5,7 @@
 
 #include "Unit.h"
 #include "GameManager.h"
+#include "SFXManager.h"
 
 void Interactable_TrapSwitch::Start()
 {
@@ -58,7 +59,7 @@ void Interactable_TrapSwitch::OnTriggerEnter(physics::Collider* collider)
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
 		//GameManager::Instance().IsBattleSystemOperating() &&
 		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+		colliderUnitComponent->IsPlayerUnit())
 	{
 		triggerStay.insert(collider);
 		triggerOn = true;
@@ -66,7 +67,7 @@ void Interactable_TrapSwitch::OnTriggerEnter(physics::Collider* collider)
 		{
 			OnInteractableTriggerEnter();
 			isInteracting = true;
-			yunutyEngine::SoundSystem::PlaySoundfile3D("sounds/trap/Trigger_Active.wav", GetGameObject()->GetTransform()->GetWorldPosition());
+			SFXManager::PlaySoundfile3D("sounds/trap/Trigger_Active.wav", GetGameObject()->GetTransform()->GetWorldPosition());
 		}
 	}
 }
@@ -76,7 +77,7 @@ void Interactable_TrapSwitch::OnTriggerExit(physics::Collider* collider)
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
 		//GameManager::Instance().IsBattleSystemOperating() &&
 		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Player)
+		colliderUnitComponent->IsPlayerUnit())
 	{
 		if (triggerStay.size() == 1 && triggerOn)
 		{

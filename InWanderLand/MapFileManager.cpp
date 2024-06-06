@@ -23,6 +23,7 @@
 #include "PlayableComponent.h"
 #include "EditorPopupManager.h"
 #include "EditableDataList.h"
+#include "SkillManager.h"
 
 #include <fstream>
 
@@ -35,6 +36,7 @@ namespace application
 			instanceManager(InstanceManager::GetSingletonInstance()),
 			templateDataManager(TemplateDataManager::GetSingletonInstance()),
 			commandManager(CommandManager::GetSingletonInstance()),
+			skillManager(SkillManager::GetSingletonInstance()),
 			currentMapPath()
 		{
 
@@ -191,13 +193,13 @@ namespace application
 
 				auto& scriptSystem = ScriptSystem::Instance();
 
-				if (!globalConstant.PreDecoding(mapData) || !scriptSystem.PreDecoding(mapData) || !instanceManager.PreDecoding(mapData) || !templateDataManager.PreDecoding(mapData))
+				if (!globalConstant.PreDecoding(mapData) || !scriptSystem.PreDecoding(mapData) || !instanceManager.PreDecoding(mapData) || !templateDataManager.PreDecoding(mapData) || !skillManager.PreDecoding(mapData))
 				{
 					loadFile.close();
 					return false;
 				}
 
-				if (!scriptSystem.PostDecoding(mapData) || !instanceManager.PostDecoding(mapData) || !templateDataManager.PostDecoding(mapData))
+				if (!scriptSystem.PostDecoding(mapData) || !instanceManager.PostDecoding(mapData) || !templateDataManager.PostDecoding(mapData) || !skillManager.PostDecoding(mapData))
 				{
 					loadFile.close();
 					return false;
@@ -236,13 +238,13 @@ namespace application
 			}
 
 			// Pre
-			if (!globalConstant.PreEncoding(mapData) || !scriptSystem.PreEncoding(mapData) || !instanceManager.PreEncoding(mapData) || !templateDataManager.PreEncoding(mapData))
+			if (!globalConstant.PreEncoding(mapData) || !scriptSystem.PreEncoding(mapData) || !instanceManager.PreEncoding(mapData) || !templateDataManager.PreEncoding(mapData) || !skillManager.PreEncoding(mapData))
 			{
 				return false;
 			}
 
 			// Post
-			if (!scriptSystem.PostEncoding(mapData) || !instanceManager.PostEncoding(mapData) || !templateDataManager.PostEncoding(mapData))
+			if (!scriptSystem.PostEncoding(mapData) || !instanceManager.PostEncoding(mapData) || !templateDataManager.PostEncoding(mapData) || !skillManager.PostEncoding(mapData))
 			{
 				return false;
 			}
@@ -313,6 +315,7 @@ namespace application
 			PlayableComponent::PreMapLoadAll();
 			instanceManager.Clear();
 			templateDataManager.Clear();
+			skillManager.Clear();
 			UUIDManager::GetSingletonInstance().Clear();
 		}
 	}
