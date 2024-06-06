@@ -71,7 +71,7 @@ void InitAnimMap()
     animMap["SKM_HeartQueen"][UnitAnimType::Death] = localAnimMap[L"Ani_HeartQueen_Death"];
     animMap["SKM_HeartQueen"][UnitAnimType::Idle] = localAnimMap[L"Ani_HeartQueen_Idle"];
     animMap["SKM_HeartQueen"][UnitAnimType::BattleIdle] = localAnimMap[L"Ani_HeartQueen_Idle"];
-    animMap["SKM_HeartQueen"][UnitAnimType::Skill1] = localAnimMap[L"Ani_HeartQueen_Skill1"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Spin] = localAnimMap[L"Ani_HeartQueen_Skill1"];
     animMap["SKM_HeartQueen"][UnitAnimType::Skill2] = localAnimMap[L"Ani_HeartQueen_Skill2"];
     animMap["SKM_HeartQueen"][UnitAnimType::Skill3] = localAnimMap[L"Ani_HeartQueen_Skill3"];
     animMap["SKM_HeartQueen"][UnitAnimType::Skill4] = localAnimMap[L"Ani_HeartQueen_Skill4"];

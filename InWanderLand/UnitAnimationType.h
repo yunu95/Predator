@@ -19,6 +19,7 @@ enum class UnitAnimType
     Birth,  // 탄생 혹은 부활
     Rush,   // 돌진
     Throw,
+    Spin,
     BattleStart,  // 전투 시작
     BattleEnd,   // 전투 끝
     End
